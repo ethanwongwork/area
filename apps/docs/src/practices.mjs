@@ -103,7 +103,7 @@ export const PRACTICES = {
   avatar: [
     `Pass ${code("src")} first and fall back to ${code("fallback")} initials when the image is missing.`,
     `Keep initials to one or two characters, uppercase, derived from the entity name. No emoji and no punctuation.`,
-    `Give ${code("alt")} the literal entity name — ${code("Irene Yamaguchi")}, not ${code("Avatar of Irene Yamaguchi")}. The role is already announced.`,
+    `Give ${code("alt")} the literal entity name — ${code("David Tee")}, not ${code("Avatar of David Tee")}. The role is already announced.`,
     `Pick a size that matches adjacent type: 24px beside ${code("text-sm")}, 32px beside ${code("text-md")}, 48px in a header.`,
   ],
   table: [

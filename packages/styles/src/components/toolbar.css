@@ -17,7 +17,9 @@
     block-size: calc(var(--_height) + 2 * var(--_toolbar-inset));
     max-inline-size: 100%;
     padding: var(--_toolbar-inset);
-    border-radius: min(calc(var(--_toolbar-radius) + var(--_toolbar-inset) * var(--area-radius-concentric)), calc((var(--_height) + 2 * var(--_toolbar-inset)) * var(--area-radius-cap) + var(--area-radius-shift)));
+    /* Concentric with its commands: their corner plus the inset, 8 + 8 = 16 (Figma 13 = 5 + 8), at most a
+       pill. (The 2026-10-03 radius rewrite capped it at a 48px control's own corner, 12; restored.) */
+    border-radius: min(calc(var(--_toolbar-radius) + var(--_toolbar-inset) * var(--area-radius-concentric)), calc(var(--_height) / 2 + var(--_toolbar-inset)));
     background: var(--_toolbar-bg);
     box-shadow: var(--_toolbar-shadow);
   }

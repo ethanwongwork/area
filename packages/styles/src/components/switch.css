@@ -1,6 +1,9 @@
 /* Switch: a pill-shaped glyph with an independent native hit target. */
 @layer area.components {
   .area-switch {
+    --_switch-pill: var(--area-pill-switch);
+    --_track-radius: calc(max(var(--area-radius-min), round(down, calc(var(--_h) * var(--area-radius-factor)), 2px)) + var(--_switch-pill) * var(--area-radius-full));
+    --_thumb-radius: max(var(--area-radius-floor), calc(var(--_track-radius) - var(--_inset)));
     /* spec: the thumb travels 12px at every size, as in ChatGPT (32 x 20) and Notion (30 x 18). */
     --_travel: var(--area-space-12);
     --_w: calc(var(--_h) + var(--_travel));
@@ -67,7 +70,9 @@
     block-size: var(--_h);
     margin-block-start: calc((var(--_leading) - var(--_h)) / 2);
     border: var(--area-stroke-width) solid var(--_edge);
-    border-radius: var(--area-radius-full);
+    /* A pill while data-area-pills lists `switch` (the default); otherwise the radius setting's corner
+       for the track, the thumb concentric. React pill / pill={false} override. */
+    border-radius: var(--_track-radius);
     background: var(--_off);
     transition: background var(--area-duration-fast) var(--area-ease-out);
     pointer-events: none;
@@ -80,7 +85,7 @@
     inset-inline-start: calc(var(--_inset) - var(--area-stroke-width));
     inline-size: var(--_thumb-width);
     block-size: var(--_thumb);
-    border-radius: var(--area-radius-full);
+    border-radius: var(--_thumb-radius);
     background: var(--area-bg-surface);
     box-shadow: var(--area-shadow-1);
     transition: inset-inline-start var(--area-duration-slow) var(--area-ease-out), inline-size var(--area-duration-fast) var(--area-ease-out);
@@ -132,4 +137,6 @@
     .area-switch__control:focus-visible ~ .area-switch__track,
     .area-switch[data-focus-visible] .area-switch__track { outline-color: Highlight; }
   }
+  .area-switch--pill { --_switch-pill: 1; }
+  .area-switch--rounded { --_switch-pill: 0; }
 }

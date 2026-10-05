@@ -1,160 +1,69 @@
 /**
- * Radius.
+ * Radius: the system's one corner setting (owner, 2026-10-03: "i just want 1 corner radius setting
+ * that controls everything").
  *
- * Radius is a size curve owned entirely by this axis. Each family has a reference value
- * at the default 32px control, then scales deliberately for smaller and larger boxes.
- * This makes a standard small Button 6px and a standard medium Button 8px while keeping
- * same-size text and icon Buttons identical.
+ * A preset is one number, the corner it gives the default 32px Button: 0 (Sharp), 2, 4, 6, 8
+ * (default), 10, 12, 14, and Pill (owner, 2026-10-04: one number, everything scales off it).
+ * Every other corner follows from it, so each preset is one coherent theme:
  *
- * Containers sit at 12px, the single most agreed-upon number in the survey: Primer
- * overlays, OpenAI's popover, dialog and alert, and Linear's cards all use it.
+ * - Shapes on the height ladder scale with their height: corner = setting x height / 32, rounded
+ *   down to even pixels, never under 2 (emit/base.ts). So every height goes square together at
+ *   Sharp and reaches half its height together at Pill (16 on a 32px control); 8 gives the audited
+ *   ladder exactly, 4 / 6 / 6 / 8 / 10 / 12 for 20-48px boxes, at either density.
+ * - Surfaces (the container role) take their own ladder, 4px a step above 4 (owner: two step sizes;
+ *   a 2px step is a quarter of a Button but a sixth of a surface): 0, 2, 4, 8, 12, 16, 20, 24.
+ *   At Pill they stay finite at 24 (owner, 2026-10-03: "every control is a pill"), as Radix Themes'
+ *   `full` keeps cards at its large ladder while controls go round.
+ * - Nested shapes are their shell less the inset, never sharper than min(4, setting): only Sharp is
+ *   square anywhere (owner: "0 corner radius should apply everywhere. 2 and up the corner radius
+ *   should use math for all inset").
+ *
+ * Replaces the hand-written families (Subtle 4, Soft 6, Standard 8, Round 10, Rotund 12) and the
+ * roundness offset. See docs/research/radius-audit-2026-10-03.md, "One corner setting".
  */
 import { type AxisDefinition, tokens } from "./schema.ts";
 
-type ControlRadii = { xs: number; sm: number; md: number; lg: number; xl: number };
-
-interface RadiusPreset {
-  /**
-   * A value per control tier. The curve changes only where box height changes; controls
-   * at the same painted height always read the same token.
-   */
-  control: ControlRadii;
-  /** Cards, dialogs, menus, popovers. */
-  container: number;
-  /** Badges, swatches, and other small nested shapes. */
-  small: number;
-  /**
-   * A full-width row's backplate: a sidebar item, a table of contents entry, a nav link.
-   *
-   * Its own step because a row is neither a control nor a nested shape. It has a control's
-   * height but a container's width, and both of the other tokens get it wrong: `small` at
-   * 4px reads as a rectangle with the corners filed off, and `control` at 6px is tuned for
-   * a box roughly as wide as it is tall.
-   *
-   * An earlier version of this comment derived 8 as "a quarter of OpenAI's 40px row". That
-   * was wrong twice over, and the correction is worth keeping. Their row is not 40px: the
-   * shipped tokens give `--menu-item-padding` as 6px 8px on 14/20 type, which is a 32px row
-   * -- the same height Area already uses. The 40 was read off a screenshot rather than
-   * measured, and the ratio was then built on it.
-   *
-   * What is actually measurable: OpenAI's radius scale carries an 8px step (`--radius-md`)
-   * between 6 and 10, their menu *panel* is 12px, and an item nested in that panel resolves
-   * concentrically to 12 less its 6px gutter, which is 6. A sidebar row sits in no panel, so
-   * nothing constrains it concentrically and the choice is free. 8 is one step rounder than
-   * a control, which is the amount that stops a full-width plate reading as a filed-off
-   * rectangle without turning it into a pill.
-   */
-  row: number;
-  /**
-   * The most of a box's height a radius may claim, as a fraction.
-   *
-   * A radius is an absolute length and the boxes it lands on are not: the same 12px reads
-   * as a gentle round on a 48px control and as a pill on a 20px one, because the browser
-   * clamps `border-radius` to half the shorter side. Measured across the ladder, presets
-   * 10, 12 and pill all painted the same 10px on a compact extra-small control -- three
-   * distinct choices, one result, and that result a pill.
-   *
-   * 0.4 keeps the smallest control visibly a rounded rectangle. The top preset is the
-   * exception at 0.5, because a pill is the one case where reaching half the height is the
-   * intent rather than an accident.
-   *
-   * This does not make every preset distinct on every box. Nothing can, short of scaling
-   * radius with height, which this system deliberately does not do -- Primer, Vercel,
-   * Linear and Notion all ship one flat radius. What it does is bound the failure: on a box
-   * too small to tell 10 from 12, both render as the same rounded rectangle rather than as
-   * the same pill.
-   */
-  cap: number;
-  /**
-   * Button-only upper bound. The Pill preset is intentionally full only on actions;
-   * editable fields and navigation rows stay recognisably rectangular.
-   */
-  buttonCap: number;
-  /**
-   * How much of a shell's distance joins its corner (audit S3, owner 2026-09-30). A shell
-   * that holds a control (Card, Composer, Message, Toolbar, Segmented track) is concentric
-   * with it: control radius + distance. At Sharp the control radius is 0 but the distance is
-   * not, so shells stayed rounded; 0 here makes them square with everything else.
-   */
-  concentric: 0 | 1;
-  /**
-   * The same family for the dense UI scale (compact pass, owner 2026-10-01: corners one step
-   * down). Radius follows painted height, and compact paints every tier one rung shorter, so
-   * a compact tier takes the curve's value for the next box down (md 28 reads sm's, sm 24
-   * reads xs's); xs and the shapes step down by about a third (12 -> 8, as VS Code's 8px
-   * surfaces and 4-6px rows). Standard's xs holds 4: Cursor's 20px buttons and VS Code's 22px
-   * icon buttons are 4 (cursor-desktop.md, 2026-10-02). The UI scale selects the ladder; emit/base.ts derives the
-   * public radius tokens from both, so neither axis writes the other's tokens.
-   */
-  dense: { control: ControlRadii; container: number; small: number; row: number };
-}
-
-function radiusTokens({ control, container, small, row, cap, buttonCap, concentric, dense }: RadiusPreset) {
-  const out: Record<string, string> = {};
-  for (const [ladder, values] of [["base", { control, container, small, row }], ["dense", dense]] as const) {
-    for (const tier of ["xs", "sm", "md", "lg", "xl"] as const) out[`radius-${ladder}-control-${tier}`] = `${values.control[tier]}px`;
-    out[`radius-${ladder}-container`] = `${values.container}px`;
-    out[`radius-${ladder}-small`] = `${values.small}px`;
-    out[`radius-${ladder}-row`] = `${values.row}px`;
-  }
-  return {
-    ...out,
-    // Unitless, because the box it applies to is only known where it is used. Radius owns
-    // both caps: UI scale owns box dimensions, never a shape decision.
-    "radius-cap": String(cap),
-    "radius-button-cap": String(buttonCap),
-    "radius-concentric": String(concentric),
-  };
-}
-
-/**
- * Public names describe visible character rather than duplicating component-size labels.
- * The 32px reference ladder is Sharp 0, Subtle 4, Soft 6, Standard 8, Round 10, Rotund 12,
- * and Pill. Standard is the default family.
- */
-const PRESETS: ReadonlyArray<RadiusPreset & { id: string; note: string }> = [
-  { id: "sharp", control: { xs: 0, sm: 0, md: 0, lg: 0, xl: 0 }, small: 0, row: 0, container: 0, cap: 0.4, buttonCap: 0.4, concentric: 0, dense: { control: { xs: 0, sm: 0, md: 0, lg: 0, xl: 0 }, container: 0, small: 0, row: 0 }, note: "Square corners throughout." },
-  { id: "subtle", control: { xs: 2, sm: 3, md: 4, lg: 5, xl: 6 }, small: 2, row: 4, container: 6, cap: 0.4, buttonCap: 0.4, concentric: 1, dense: { control: { xs: 2, sm: 2, md: 3, lg: 4, xl: 5 }, container: 6, small: 2, row: 3 }, note: "A restrained 4px medium-control family." },
-  { id: "soft", control: { xs: 3, sm: 4, md: 6, lg: 8, xl: 10 }, small: 4, row: 6, container: 8, cap: 0.4, buttonCap: 0.4, concentric: 1, dense: { control: { xs: 2, sm: 3, md: 4, lg: 6, xl: 8 }, container: 8, small: 3, row: 4 }, note: "A soft 6px medium-control family." },
-  // The default curve by painted height, the same at both densities, all even (owner, 2026-10-03):
-  // 20 -> 4, 24 -> 6, 28 -> 6, 32 -> 8, 40 -> 10, 48 -> 12. 24 was 4 (radius audit: Figma 5, 114
-  // elements; Cursor 6; VS Code 4), then 5; 6 is Cursor's and a quarter of the height, as 32, 40
-  // and 48 are. Surfaces are 12
-  // at both densities (audit D1, owner 2026-10-03: Figma 13, Cursor 12-14; compact was 8), and so
-  // is every family's (roundness work, 2026-10-03: surfaces never step down at compact).
-  { id: "standard", control: { xs: 6, sm: 6, md: 8, lg: 10, xl: 12 }, small: 6, row: 8, container: 12, cap: 0.4, buttonCap: 0.4, concentric: 1, dense: { control: { xs: 4, sm: 6, md: 6, lg: 8, xl: 10 }, container: 12, small: 4, row: 6 }, note: "Default: 6px small, 8px medium, and 10px large Buttons." },
-  { id: "round", control: { xs: 5, sm: 8, md: 10, lg: 12, xl: 14 }, small: 8, row: 10, container: 14, cap: 0.4, buttonCap: 0.4, concentric: 1, dense: { control: { xs: 4, sm: 5, md: 8, lg: 10, xl: 12 }, container: 14, small: 6, row: 8 }, note: "A round 10px medium-control family." },
-  { id: "rotund", control: { xs: 6, sm: 10, md: 12, lg: 14, xl: 16 }, small: 10, row: 12, container: 16, cap: 0.4, buttonCap: 0.4, concentric: 1, dense: { control: { xs: 5, sm: 6, md: 10, lg: 12, xl: 14 }, container: 16, small: 8, row: 10 }, note: "The roundest finite family: 12px at medium." },
-  {
-    id: "pill",
-    control: { xs: 999, sm: 999, md: 999, lg: 999, xl: 999 },
-    small: 9999,
-    row: 9999,
-    container: 24,
-    cap: 0.4,
-    buttonCap: 0.5,
-    concentric: 1,
-    dense: { control: { xs: 999, sm: 999, md: 999, lg: 999, xl: 999 }, container: 24, small: 9999, row: 9999 },
-    note: "Fully round buttons. Other controls and containers stay finite, since a pill field or card obscures its role.",
-  },
+/** [id, Button corner, surface corner]. Pill's 16 is half of 32: every height takes h / 2. */
+const STEPS: ReadonlyArray<readonly [string, number, number]> = [
+  ["0", 0, 0],
+  ["2", 2, 2],
+  ["4", 4, 4],
+  ["6", 6, 8],
+  ["8", 8, 12],
+  ["10", 10, 16],
+  ["12", 12, 20],
+  ["14", 14, 24],
+  ["pill", 16, 24],
 ];
+
+const describe = (id: string, button: number, surface: number) =>
+  id === "0" ? "Sharp: square corners everywhere."
+    : id === "pill" ? "Every control is a pill; surfaces stay finite at 24, as round as their pill rows allow."
+      : `${button}px on a medium Button, ${surface}px on surfaces${id === "8" ? " (default)" : ""}.`;
 
 export const RADIUS_AXIS: AxisDefinition = {
   id: "radius",
   label: "Radius",
-  description: "How rounded controls and containers are, grouped by visual character.",
-  defaultPreset: "standard",
+  description: "One corner setting, from Sharp to Pill: controls scale with their height, surfaces and nested shapes follow.",
+  defaultPreset: "8",
   namespaces: [
-    "--area-radius-base-",
-    "--area-radius-dense-",
-    "--area-radius-cap",
-    "--area-radius-button-cap",
+    "--area-radius-factor",
+    "--area-radius-min",
+    "--area-radius-surface",
     "--area-radius-concentric",
   ],
-  presets: PRESETS.map(({ id, note, ...preset }) => ({
+  presets: STEPS.map(([id, button, surface]) => ({
     id,
-    label: id.slice(0, 1).toUpperCase() + id.slice(1),
-    description: note,
-    tokens: tokens(radiusTokens(preset)),
+    label: id === "pill" ? "Pill" : id,
+    description: describe(id, button, surface),
+    tokens: tokens({
+      // The corner per pixel of height: the Button's corner over its 32px.
+      "radius-factor": String(button / 32),
+      // The smallest corner a rounded preset draws; only Sharp reaches 0.
+      "radius-min": button === 0 ? "0px" : "2px",
+      "radius-surface": `${surface}px`,
+      // How much of a shell's distance joins its concentric corner: 0 at Sharp, so shells are square.
+      "radius-concentric": button === 0 ? "0" : "1",
+    }),
   })),
 };

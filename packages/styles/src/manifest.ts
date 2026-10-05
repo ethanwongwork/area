@@ -49,7 +49,7 @@ export const button = {
     size: ["sm", "md", "lg"],
     align: ["start", "end"],
   },
-  booleans: ["full-width", "icon-only", "pill"],
+  booleans: ["full-width", "icon-only", "pill", "rounded"], // pill / rounded override data-area-pills (2026-10-04)
   states: ["disabled", "loading", "selected"],
   elements: ["icon", "label"],
   defaults: { variant: "solid", tone: "neutral", size: "md" },
@@ -85,10 +85,12 @@ export const alignmentPicker = {
   block: "area-alignment-picker",
   description: "Chooses one of nine physical alignment positions.",
   // `soft` names the field fill it borrows; `surface` means a lifted plate elsewhere (audit F-20).
-  variants: { variant: ["soft", "plain"], size: ["sm", "md", "lg"] },
-  booleans: ["stretch"],
+  // Responsive (owner, 2026-10-04): fills its parent; sizes and the stretch layouts were removed.
+  variants: { variant: ["soft", "plain"] },
+  // `preview`: the cell shows the glyph it would set (a static hover hook for docs, data-preview).
+  states: ["preview"],
   elements: ["cell", "dot"],
-  defaults: { variant: "soft", size: "md" },
+  defaults: { variant: "soft" },
 } as const satisfies ComponentManifest;
 
 export const colorPicker = {
@@ -266,7 +268,7 @@ export const switchControl = {
     labelPosition: ["end", "start"],
     track: ["short", "long"],
   },
-  booleans: ["full-width"],
+  booleans: ["full-width", "pill", "rounded"], // pill / rounded override data-area-pills (2026-10-04)
   states: ["checked", "disabled", "read-only", "loading", "hover", "active", "focus-visible"],
   stateAttributes: { checked: "checked" },
   elements: ["control", "track", "thumb", "text", "label", "description", "loading"],
@@ -299,7 +301,7 @@ export const chip = {
   block: "area-chip",
   description: "Toggles a filter, or holds an input value, in a set that wraps (each chip toggles on its own).",
   variants: { kind: ["assist", "filter", "input", "suggestion"], size: ["sm", "md", "lg"] },
-  booleans: ["swatch-only", "link", "link-icon"], // pill dropped: chips are pill-only (audit C-18)
+  booleans: ["swatch-only", "link", "link-icon", "pill", "rounded"], // pill / rounded override data-area-pills (2026-10-04)
   states: ["selected", "disabled", "invalid"],
   elements: ["swatch", "icon", "trailing-icon", "avatar", "image", "label", "action", "remove"],
   defaults: { kind: "filter", size: "md" },
@@ -328,7 +330,7 @@ export const badge = {
     tone: ["neutral", "info", "success", "warning", "caution", "danger", "discovery", "inverse"],
     size: ["sm", "md", "lg"],
   },
-  booleans: ["dot", "dot-only", "icon-only", "truncate"], // pill dropped: badges are pill-only (audit C-18)
+  booleans: ["dot", "dot-only", "icon-only", "truncate", "pill", "rounded"], // pill / rounded override data-area-pills (2026-10-04)
   elements: ["dot", "leading-icon", "label", "trailing-icon", "avatar", "flag", "dismiss"],
   defaults: { variant: "soft", tone: "neutral", size: "md" },
 } as const satisfies ComponentManifest;
@@ -343,6 +345,7 @@ export const indicator = {
 export const count = {
   block: "area-count", description: "Shows how many items the element it sits in holds, beside that element's label.",
   variants: { variant: ["plain", "soft"], size: ["sm", "md"] },
+  booleans: ["pill", "rounded"], // pill / rounded override data-area-pills (2026-10-04)
   elements: ["label"],
   defaults: { variant: "plain", size: "md" },
 } as const satisfies ComponentManifest;
@@ -396,7 +399,7 @@ export const avatar = {
   },
   booleans: ["active"],
   elements: ["image", "icon"],
-  defaults: { size: "md", shape: "circle", tone: "neutral" },
+  defaults: { size: "md", tone: "neutral" }, // shape unset: data-area-pills decides (circle by default)
 } as const satisfies ComponentManifest;
 
 export const avatarGroup = {

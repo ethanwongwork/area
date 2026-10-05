@@ -20,14 +20,16 @@ export interface CountProps extends Omit<HTMLAttributes<HTMLSpanElement>, "child
   label?: ReactNode;
   variant?: CountVariants["variant"];
   size?: CountVariants["size"];
+  /** Unset: a pill while the theme's `pills` list names this component (the default). `true` forces a pill, `false` the radius setting's corner. */
+  pill?: boolean;
 }
 
 export const Count = forwardRef<HTMLSpanElement, CountProps>(function Count(
-  { count, max = 99, showZero = true, label, variant, size, className, ...rest }, ref,
+  { count, max = 99, showZero = true, label, variant, size, pill, className, ...rest }, ref,
 ) {
   if (!showZero && normalizeCount(count) === 0) return null;
   return (
-    <span ref={ref} {...rest} className={countVariants({ variant, size }, className)}>
+    <span ref={ref} {...rest} className={countVariants({ variant, size, pill: pill === true, rounded: pill === false }, className)}>
       {formatCount(count, max)}
       {label ? <span className="area-count__label"> {label}</span> : null}
     </span>

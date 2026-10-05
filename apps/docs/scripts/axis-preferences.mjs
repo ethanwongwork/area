@@ -15,9 +15,10 @@ export function restoreAxisPreferences(storage, presets) {
   }
   delete next.density;
   delete next.type;
-  // Radius families used component-size labels until 2026-09-17. Preserve the closest
-  // visual intent for stored docs preferences, including the older numeric ramp.
-  const radiusMigration = { '0': 'sharp', '2': 'subtle', '4': 'subtle', '6': 'soft', '8': 'standard', '10': 'round', '12': 'rotund', xs: 'subtle', sm: 'soft', md: 'standard', lg: 'round', xl: 'rotund' };
+  // Radius is one number, the medium Button's corner (2026-10-03; Sharp became 0 on 2026-10-04).
+  // Earlier stores held 'sharp', named families (until 2026-10-03) or component-size labels
+  // (until 2026-09-17); map each to the step with the same Button corner.
+  const radiusMigration = { sharp: '0', subtle: '4', soft: '6', standard: '8', round: '10', rotund: '12', xs: '4', sm: '6', md: '8', lg: '10', xl: '12' };
   if (typeof next.radius === 'string' && radiusMigration[next.radius]) next.radius = radiusMigration[next.radius];
   const result = Object.fromEntries(Object.entries(next).filter(([axis,value]) =>
     Object.hasOwn(presets,axis) && presets[axis].includes(value)));

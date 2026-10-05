@@ -19,7 +19,10 @@
     inline-size: var(--_size);
     block-size: var(--_size);
     flex-shrink: 0;
-    border-radius: var(--area-radius-full);
+    /* A circle while data-area-pills lists `avatar` (the default); otherwise its own corner, capped at
+       7/16 of the side so it stays a rounded square at Pill. shape="circle" / "square" override. */
+    --_avatar-pill: var(--area-pill-avatar);
+    border-radius: calc(min(max(var(--area-radius-min), round(down, calc(var(--_size) * var(--area-radius-factor)), 2px)), round(down, calc(var(--_size) * 7 / 16), 2px)) + var(--_avatar-pill) * var(--area-radius-full));
     background-color: var(--_bg);
     color: var(--_fg);
     box-shadow: var(--_group-ring), var(--_active-ring);
@@ -46,8 +49,8 @@
 
   .area-avatar__icon > svg { inline-size: 100%; block-size: 100%; }
 
-  .area-avatar--circle { border-radius: var(--area-radius-full); }
-  .area-avatar--square { border-radius: min(var(--area-radius-control), calc(var(--_size) * var(--area-radius-cap) + var(--area-radius-shift))); }
+  .area-avatar--circle { --_avatar-pill: 1; }
+  .area-avatar--square { --_avatar-pill: 0; }
 
   .area-avatar--neutral {
     --_bg: var(--area-bg-component-active);
@@ -153,8 +156,8 @@
     --_skeleton-fill: light-dark(rgb(143 143 143 / 0.1), var(--area-bg-component)); /* spec */
     --_skeleton-band: light-dark(rgb(143 143 143 / 0.16), var(--area-bg-component-active)); /* spec */
     /* spec: corners cap at 4 (Primer 3, Radix 3, Fluent 4, MUI 4, Mantine 4, Chakra 4, antd 4,
-       Polaris 4, Atlassian 4); the radius axis still squares them at the sharp preset. */
-    --_skeleton-radius: min(var(--area-radius-small), calc(4px + var(--area-radius-shift))); /* spec: 4, shifted by roundness */
+       Polaris 4, Atlassian 4); square at Sharp. */
+    --_skeleton-radius: max(var(--area-radius-min), round(down, calc(16px * var(--area-radius-factor)), 2px)); /* spec: 4 at the default, a 16px box's corner, scaling with the setting */
     display: block;
     border-radius: var(--_skeleton-radius);
     background-color: var(--_skeleton-fill);

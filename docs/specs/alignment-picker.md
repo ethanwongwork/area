@@ -167,7 +167,7 @@ theme, forced colours.
 Compared the seven `alignment-picker/area--*` captures with `button-group/figma--align-group`,
 `number-field/figma--number-field` and `color-picker/figma--paint-type-row--rest--light`.
 Build and test results are in [the audit](../research/cohesion-audit.md#verification).
-Unverified: Figma's nine-position control, hover and focus captures.
+Unverified: Figma's focus state (rest and hover captured 2026-10-04).
 
 ## Feedback log
 
@@ -185,3 +185,21 @@ Unverified: Figma's nine-position control, hover and focus captures.
 - 2026-09-30 · audit F-31 (owner pick A) → the two picker ladders stay (swatch cells 24 / 28 / 32, alignment cells 22 / 24 / 28 at default density); Figma's 88 × 56 grid sized to the layout is answered later as a separate layout option (backlog in COMPONENTS.md), not a change to the square cells.
 - 2026-10-03 · radius audit → cells are concentric with the picker, floored at the smallest control's corner (compact r2 → r4, default r4 → r5; `alignment-picker.css:31`). `docs/research/radius-audit-2026-10-03.md`.
 - 2026-10-03 · all even (owner) → cells floor at `radius-floor` 4 (`alignment-picker.css:31`).
+- 2026-10-04 · owner: responsive, no sizes; Figma's hover preview; the inspector-sized grid
+  (COMPONENTS.md backlog) → the grid fills its parent's width, and its height when the parent sets
+  one, with a default proportion otherwise (provisional 88 : 56 from the 2026-09-29 audit, to be
+  measured); `size` and `stretch` are removed (React props kept as ignored, deprecated); cells are a
+  third of the grid; hovering an unselected cell shows its glyph in the muted ink (provisional: Figma's
+  hover is not yet captured), with `data-preview` as the static hook; demos frame it at 112. Reopened
+  for review (`component-status.mjs`). Unverified: Figma's grid size, padding, hover ink and plate,
+  pending a live capture in Claude in Chrome.
+- 2026-10-04 · Figma captured live in Claude in Chrome (`figma--auto-layout-alignment--rest--light`,
+  `--hover--light`; owner's file, selection only, nothing changed): the grid is 88 × 56, fill #f5,
+  radius 5, inset 5 top and bottom and 1 at the sides, cells about 28.7 × 15.3, dots 2 × 2 at 30% black;
+  the chosen glyph is a 16 box of three 2px bars 2px apart (7 / 10 / 5 long, Figma blue, vertical for a
+  horizontal flow); hover previews that glyph at 50% black with no cell fill, plus a tooltip
+  ("Align bottom right"). Applied: default proportion 88 : 56 (confirmed), no hover fill, preview in
+  the dots' ink (fg-muted; Figma's preview is darker than its dots, Area's dots are already fg-muted),
+  demos framed at 88. Kept (owner decisions): the 1px edge, 4 inset all round, horizontal bars and
+  the neutral selection ink. Open: a per-cell tooltip, as Figma's.
+

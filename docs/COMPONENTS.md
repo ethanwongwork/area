@@ -90,7 +90,7 @@ built next; this list is an inventory, not an order of work.
    pinning are a separate composition because opposing anchors may be selected together.
    The single-choice contract follows the [WAI radio group pattern](https://www.w3.org/WAI/ARIA/apg/patterns/radio/)
    and [Base UI radio group](https://base-ui.com/react/components/radio-group); spatial arrows follow the visible grid.
-   Backlog: a layout option that sizes the grid to the inspector layout, as Figma's 88 × 56 grid (one field
+   In progress (2026-10-04): the grid is responsive and fills its parent like Figma's 88 × 56 layout grid, with a hover preview (one field
    column by two field rows, non-square cells); the square-cell ladder stays as is (audit F-31 A, owner 2026-09-30).
 5. **Color controls — ColorField, ColorSwatch, ColorSwatchPicker and ColorPicker built,
    Complete.** ColorField edits canonical 6/8-digit hex with draft/commit behavior. ColorSwatch

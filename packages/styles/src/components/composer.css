@@ -22,8 +22,10 @@
      * radius (Button md, capped as Button caps it) plus the inset, 8 + 8 = 16. A pill send button
      * makes a pill composer (below), so ChatGPT's shape is one Button option away.
      */
-    --_composer-button-radius: min(var(--area-radius-control-md), calc(var(--_composer-action) * var(--area-radius-button-cap) + var(--area-radius-shift)));
-    border-radius: calc(var(--_composer-button-radius) + var(--_composer-inset) * var(--area-radius-concentric));
+    --_composer-button-radius: calc(min(var(--area-radius-control-md), max(var(--area-radius-min), round(down, calc(var(--_composer-action) * var(--area-radius-factor)), 2px))) + var(--area-pill-button) * var(--area-radius-full)); /* pill buttons make a pill composer */
+    /* The inset joins the corner unless the setting is Sharp; a pill send button keeps it (composer-pill read 16 at 0). */
+    --_composer-concentric: max(var(--area-radius-concentric), var(--area-pill-button));
+    border-radius: calc(var(--_composer-button-radius) + var(--_composer-inset) * var(--_composer-concentric));
     background: var(--area-input-bg);
     /* spec (owner 2026-09-26): no shadow at rest, as every control; the border carries the edge. */
     box-shadow: none;
@@ -65,5 +67,5 @@
   .area-composer__footer { justify-content: space-between; }
   .area-composer__actions > .area-button { flex: none; }
   /* The send action is an Area Button (solid neutral, icon-only, md); it keeps its own shape and states. */
-  .area-composer:has(.area-composer__submit.area-button--pill) { --_composer-button-radius: calc(var(--_composer-action) / 2); }
+  .area-composer:has(.area-composer__submit.area-button--pill) { --_composer-button-radius: calc(var(--_composer-action) / 2); --_composer-concentric: 1; }
 }

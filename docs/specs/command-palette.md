@@ -156,3 +156,6 @@ keycap-to-label gap inside the Open plate, taken from the visible plate here.
 - 2026-10-03 · roundness work → rows count the palette's border (12 − 4 − 1 = 7, was 8) and the palette's corner adds it back (12) (`command-palette.css:29-33`). `docs/research/radius-audit-2026-10-03.md`, "Roundness".
 - 2026-10-03 · roundness → the palette's corner is the surface corner, capped by its rows plus inset where the rows can't follow (Pill), so it steps by 2 (`command-palette.css`, `--_palette-radius`).
 - 2026-10-03 · all even (owner) → rows 12 − 4 = 8 (border left out); the palette corner is the surface corner.
+- 2026-10-03 · two roundness step sizes (owner) → palette and rows step by 4 with the surface; the rows' cap reads `radius-shift-surface` (`command-palette.css`). `docs/research/radius-audit-2026-10-03.md`, "Step size for large shapes".
+- 2026-10-03 · one corner setting (owner: one radius setting, Sharp and Pill as ends; "every control is a pill") → rows as Menu's, 8 at both densities up to a pill; palette = min(surface, rows + inset) (`command-palette.css`). `docs/research/radius-audit-2026-10-03.md`, "One corner setting".
+- 2026-10-04 · pill shapes and list rows (owner) → rows and palette use `radius-list-row` / `radius-list`, as Menu (`command-palette.css`). `docs/research/radius-audit-2026-10-03.md`, "Pill shapes and list rows".

@@ -45,9 +45,14 @@
     --_card-step: calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense)); /* spec */
     /* The control a header action holds: a default Button, a small one in a small card. */
     --_card-action: var(--area-control-md);
-    /* The control radius is capped as Button caps its own, so the Pill preset keeps cards finite (audit H-1);
-       the distance joins the corner through radius-concentric, so Sharp cards are square (audit S3). */
-    --_card-radius: calc(min(var(--area-radius-control-md), calc(var(--area-control-md) * var(--area-radius-cap) + var(--area-radius-shift))) + var(--_card-inset) * var(--area-radius-concentric));
+    /* The surface corner plus 4 (owner, 2026-10-03: card and dialog follow the surface), so it steps by
+       4 with the radius setting as every surface does; was the default Button's corner plus the inset (8 + 8),
+       which stepped by 2. Sharp is square: the container is 0 there. */
+    --_card-radius: max(var(--area-radius-floor), calc(var(--area-radius-container) + min(var(--_card-term), var(--area-radius-container))));
+    /* What the card adds to the surface corner: its inset less the default Button's corner (8 - 4 =
+       4, compact 6 - 6 = 0), so the card reads 16 / 12 as before (sm 14 / 10, lg 20 / 14). Never more
+       than the surface corner itself, so a square surface makes a square card. */
+    --_card-term: calc((var(--_card-inset) - var(--area-space-4) - var(--area-space-2) * var(--area-ui-dense)) * var(--area-radius-concentric));
     --_card-border: var(--area-border-width);
     /* spec (consistency pass): one title role and one body role at every size. */
     /* The surface title role, held in compact as Dialog's (audit H-7). */
@@ -73,7 +78,7 @@
     --_card-text-inset: calc(var(--_card-inset) + var(--_card-content-padding));
     --_card-padding: calc(var(--_card-inset) - var(--_card-border));
     --_card-gap: var(--_card-inset);
-    --_card-media-radius: max(0px, calc(var(--_card-radius) - var(--_card-inset)));
+    --_card-media-radius: max(var(--area-radius-floor), calc(var(--_card-radius) - var(--_card-inset)));
     --_card-columns: minmax(0, 1fr);
     display: grid;
     grid-template-columns: var(--_card-columns);
@@ -103,15 +108,15 @@
   .area-card--sm {
     --_card-inset: calc(var(--area-space-6) - var(--area-space-2) * var(--area-ui-dense)); /* spec: 6, compact 4 */
     --_card-action: var(--area-control-sm);
-    --_card-radius: calc(min(var(--area-radius-control-md), calc(var(--area-control-md) * var(--area-radius-cap) + var(--area-radius-shift))) + var(--_card-inset) * var(--area-radius-concentric));
+    --_card-radius: max(var(--area-radius-floor), calc(var(--area-radius-container) + min(var(--_card-term), var(--area-radius-container))));
   }
   .area-card--md {
     --_card-inset: calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense)); /* spec: 8, compact 6 */
-    --_card-radius: calc(min(var(--area-radius-control-md), calc(var(--area-control-md) * var(--area-radius-cap) + var(--area-radius-shift))) + var(--_card-inset) * var(--area-radius-concentric));
+    --_card-radius: max(var(--area-radius-floor), calc(var(--area-radius-container) + min(var(--_card-term), var(--area-radius-container))));
   }
   .area-card--lg {
     --_card-inset: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)); /* spec: 12, compact 8 */
-    --_card-radius: calc(min(var(--area-radius-control-md), calc(var(--area-control-md) * var(--area-radius-cap) + var(--area-radius-shift))) + var(--_card-inset) * var(--area-radius-concentric));
+    --_card-radius: max(var(--area-radius-floor), calc(var(--area-radius-container) + min(var(--_card-term), var(--area-radius-container))));
   }
 
   /* Layout. */
@@ -353,7 +358,7 @@
     --_card-step: var(--area-space-4);
     --_card-action: var(--area-control-sm);
     /* Concentric with the well, floored at radius-floor, 4 (radius audit D5). */
-    --_card-radius: max(min(var(--area-radius-floor), calc(var(--area-control-sm) * var(--area-radius-cap) + var(--area-radius-shift))), var(--_card-well-radius));
+    --_card-radius: max(min(var(--area-radius-floor), max(var(--area-radius-min), round(down, calc(var(--area-control-sm) * var(--area-radius-factor)), 2px))), var(--_card-well-radius));
   }
 
   /* Overlay: a Badge or an icon Button pinned to a corner of the media, or of the whole card.
@@ -562,7 +567,7 @@
     border: var(--area-border-width) solid var(--_border);
     /* A one-line bar takes the control curve for its height, 40 -> 10 (compact 32 -> 8); a multiline
        alert is a surface (radius audit D2, owner 2026-10-03; was the container 12, banner 6). */
-    border-radius: var(--_alert-radius, min(var(--area-radius-control-lg), calc(var(--area-control-lg) * var(--area-radius-cap) + var(--area-radius-shift))));
+    border-radius: var(--_alert-radius, var(--area-radius-control-lg));
     background-color: var(--_bg);
     color: var(--_fg);
   }
@@ -827,15 +832,10 @@
      * capture behind the earlier compact 12 (R8). */
     --_dialog-outer: var(--area-space-16);
     --_dialog-inset: calc(var(--_dialog-outer) - var(--area-border-width));
-    /*
-     * spec: concentric with the corner close. The close sits 8 in (inset minus half the
-     * control's padding), so the corner is its radius plus 8: 16 at the standard preset
-     * (ChatGPT 16). Capped at twice the system container radius so Sharp stays square. Reads
-     * the dialog's own inset, so the corner stays concentric when the close's radius changes.
-     */
-    /* Capped at the surface corner plus 4 (0 at Sharp), not twice it: a doubled cap halved twice as fast
-       as the roundness steps (16, 8, 4). 2px steps from 4 to 28 (roundness work, 2026-10-03). */
-    --_dialog-radius: min(calc(var(--area-radius-container) + var(--area-space-4) * var(--area-radius-concentric)), calc(var(--area-radius-control-md) + var(--_dialog-outer) - (var(--area-control-md) - var(--area-icon-md)) / 2)); /* 8 + 16 - 8 = 16, compact 6 + 16 - 6 = 16 (Figma 13, VS Code 8) */
+    /* The surface corner plus 4 (owner, 2026-10-03: card and dialog follow the surface), so it steps by
+       4 with the setting. At the default it equals the close's corner plus its 8px inset (8 + 8); away
+       from the default the close keeps the control step and is no longer concentric. */
+    --_dialog-radius: calc(var(--area-radius-container) + min(var(--area-space-4) * var(--area-radius-concentric), var(--area-radius-container))); /* 12 + 4 = 16 at both densities (ChatGPT 16, Figma 13); 4px steps, square with a square surface */
     display: flex;
     flex-direction: column;
     gap: var(--area-inset-surface-md);
@@ -938,7 +938,10 @@
     /* Floating frame: the decorative rung in light, ChatGPT's dark menu hairline in dark, so a
        menu stays distinct over another surface (audit S21c). */
     border: var(--area-border-width) solid var(--area-border-float);
-    border-radius: var(--area-radius-container);
+    /* The list corner: the surface's, but no rounder than its rows plus the padding (radius-list):
+       12 at the default, 14 / 16 / 18 at 10 / 12 / 14, 20 at Pill (owner, 2026-10-04). Popover
+       replaces it with the surface corner below. */
+    border-radius: var(--area-radius-list);
     /* spec: floating surfaces share one lift. Notion's popover geometry (0 20 24, 0 5 8), with the
        theme-aware shadow colour at full and half strength; ChatGPT's menu (0 8 16 -4) and Figma's
        picker (0 10 16) agree on a soft, deep blur rather than a 1px edge shadow. */
@@ -953,11 +956,10 @@
      * popovers inset 16 (Cursor's upsell popover, Figma's Edit text style and color picker); none
      * shows 8. Holds the default rather than exceed it. */
     --_inset: calc(var(--area-space-12) - var(--area-border-width));
-    /* spec: compact keeps the corner concentric with the header close (a small ghost Button whose
-     * box sits 8 in at radius 4: 12, Cursor's popover 12, Figma 13), capped at twice the container
-     * radius (Sharp stays square) and at the container radius, which no longer steps down at compact.
-     * Default keeps the container radius under every preset. */
-    --_popover-radius: calc(var(--area-radius-container) + (min(calc(var(--area-radius-container) * 2), var(--area-radius-container), calc(var(--area-radius-control-sm) + var(--_inset) + var(--area-border-width) - (var(--area-control-sm) - var(--area-icon-sm)) / 2)) - var(--area-radius-container)) * var(--area-ui-dense));
+    /* spec: the surface corner at both densities, 12 (Cursor's popover 12, Figma 13), stepping by 4
+     * with the radius setting (owner, 2026-10-03). At the default it is also concentric with the compact
+     * header close (6 + 12 - 6); the old min() against the close only differed away from it. */
+    --_popover-radius: var(--area-radius-container);
     border-radius: var(--_popover-radius);
     position: relative;
     isolation: isolate;
@@ -1049,7 +1051,7 @@
   .area-popover__body { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-ui-cluster); }
   .area-popover__footer { justify-content: flex-end; flex-wrap: wrap; }
   .area-popover__footer > :first-child { margin-inline-end: auto; }
-  .area-popover__media { inline-size: 100%; aspect-ratio: 5 / 2; overflow: hidden; border-radius: max(0px, calc(var(--_popover-radius) - var(--_inset) - var(--area-border-width))); background: var(--area-bg-component); }
+  .area-popover__media { inline-size: 100%; aspect-ratio: 5 / 2; overflow: hidden; border-radius: max(var(--area-radius-floor), calc(var(--_popover-radius) - var(--_inset) - var(--area-border-width))); background: var(--area-bg-component); }
   .area-popover__media > :is(img, video) { display: block; inline-size: 100%; block-size: 100%; object-fit: cover; }
   .area-menu {
     /* spec: icon-to-label gap (docs/specs/menu.md). Row sides come from inset.css. */
@@ -1080,15 +1082,11 @@
     padding-inline: var(--area-space-8);
     border: 0;
     /*
-     * Concentric, inward: the panel's radius less the padding it insets by. Guarded at both
-     * ends -- `max(0px, ...)` because the sharp preset makes the subtraction negative, and
-     * the cap because the pill preset makes it larger than the row can carry, leaving a
-     * "pill" menu whose items were the only rectangles in it.
+     * Concentric, inward: the panel's radius less the padding it insets by, floored, no rounder
+     * than a medium Button and short of a pill until Pill (radius-list-row, emit/base.ts). The
+     * panel is radius-list, its rows plus the padding, so the two stay concentric.
      */
-    border-radius: min(
-      max(0px, calc(var(--area-radius-container) - var(--_inset))), /* padding only, so the row stays even: 8 (owner, 2026-10-03) */
-      round(down, calc(var(--area-ui-row) * var(--area-radius-cap) + var(--area-radius-shift)), 2px) /* even pixels: a 24 row caps at 8 */
-    );
+    border-radius: var(--area-radius-list-row);
     background: transparent;
     color: inherit;
     font-size: var(--area-ui-size);
@@ -1395,7 +1393,7 @@
     padding: calc(var(--area-inset-surface-sm) + (var(--area-icon-md) - var(--area-ui-leading)) / 2 - var(--area-border-width)) calc(var(--area-inset-surface-sm) - var(--area-border-width));
     border: var(--area-border-width) solid var(--area-border-float);
     /* One line is a bar on the control curve, as Alert (radius audit D2); a titled toast is a surface. */
-    border-radius: min(var(--area-radius-control-lg), calc(var(--area-control-lg) * var(--area-radius-cap) + var(--area-radius-shift)));
+    border-radius: var(--area-radius-control-lg);
     background-color: var(--area-bg-surface);
     /* spec: the floating-surface lift; see Popover and Menu. */
     --_elevation: var(--area-shadow-float);

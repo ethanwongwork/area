@@ -57,9 +57,9 @@
   }
 
   .area-checkbox__control {
-    /* Small glyphs must not become circles as the global radius family grows: a quarter of the box
-       in even pixels (16 and 20: 4), moved by roundness, never past the small role. */
-    border-radius: min(var(--area-radius-small), calc(round(down, calc(var(--_size) / 4), 2px) + var(--area-radius-shift)));
+    /* The box's own corner, a quarter of it at the default (16 and 20: 4), capped at 7/16 of the side
+       so Pill leaves a rounded square: a round checkbox reads as a radio (owner, 2026-10-03). */
+    border-radius: min(max(var(--area-radius-min), round(down, calc(var(--_size) * var(--area-radius-factor)), 2px)), round(down, calc(var(--_size) * 7 / 16), 2px));
   }
 
   /* The mark is a glyph, but its visible label owns a 24px minimum activation lane. It stays 24

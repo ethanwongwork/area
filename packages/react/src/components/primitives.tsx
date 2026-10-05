@@ -57,6 +57,7 @@ type Div = HTMLAttributes<HTMLDivElement>;
 
 export interface AvatarProps extends Omit<HTMLAttributes<HTMLSpanElement>, "children"> {
   size?: VariantProps<typeof MANIFESTS.avatar>["size"];
+  /** Unset: a circle while the theme's `pills` list names `avatar` (the default), else a rounded square. Set it where context decides: people circle, teams and workspaces square. */
   shape?: VariantProps<typeof MANIFESTS.avatar>["shape"];
   tone?: VariantProps<typeof MANIFESTS.avatar>["tone"];
   /** Draws the current-person or active-participant ring around the Avatar. */
@@ -846,7 +847,7 @@ export interface ChipProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>,
   /** Interaction role: assist action, selectable filter, removable input, or suggestion. */
   kind?: VariantProps<typeof MANIFESTS.chip>["kind"];
   size?: VariantProps<typeof MANIFESTS.chip>["size"];
-  /** @deprecated Chips are pill-only; this changes nothing (audit C-18). */
+  /** Unset: a pill while the theme's `pills` list names this component (the default). `true` forces a pill, `false` the radius setting's corner. */
   pill?: boolean;
   /** A colour this chip stands for, shown as a dot before the label. */
   swatch?: string;
@@ -883,14 +884,14 @@ export interface ChipProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>,
 }
 
 export const Chip = /* @__PURE__ */ forwardRef<HTMLButtonElement, ChipProps>(function Chip(
-  { kind = "filter", size, pill: _pill, swatch, icon, avatar, image, imageAlt, selected, defaultSelected = false, onSelectedChange, onClick, onDismiss: onDismissProp, onRemove, clickable, dismissIcon, removeIcon, dismissLabel, removeLabel, invalid, swatchOnly, className, children, disabled, ...rest },
+  { kind = "filter", size, pill, swatch, icon, avatar, image, imageAlt, selected, defaultSelected = false, onSelectedChange, onClick, onDismiss: onDismissProp, onRemove, clickable, dismissIcon, removeIcon, dismissLabel, removeLabel, invalid, swatchOnly, className, children, disabled, ...rest },
   ref,
 ) {
   const [localSelected, setLocalSelected] = useState(defaultSelected);
   const currentSelected = selected ?? localSelected;
   const selectable = kind === "filter";
   const primaryInteractive = selectable || clickable || Boolean(onClick);
-  const classes = chipVariants({ kind, size, swatchOnly }, className);
+  const classes = chipVariants({ kind, size, swatchOnly, pill: pill === true, rounded: pill === false }, className);
   const state = {
     ...(selectable && currentSelected ? { "data-selected": "" } : {}),
     ...(disabled ? { "data-disabled": "" } : {}),

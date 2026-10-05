@@ -252,3 +252,4 @@ semantics (toggles are `aria-pressed`; a track is not a radio group).
 - 2026-10-01 · audit A-7 → a Toolbar's `size` reaches SplitButton, Segmented and Select through the `ToolbarSize` context when they have no size of their own → toolbar-context.ts, Toolbar.tsx.
 - 2026-10-01 · audit A-9 → forced colours paint the separator `ButtonText` (it is a painted box) → forced-colors.css.
 - 2026-10-01 · compact pass round 5 → the surface inset and the group gap read `ui-cluster` (8, compact 6); the concentric corner follows (16, compact 12). Default unchanged. docs/research/compact-pass-2026-10-01.md.
+- 2026-10-04 · quality pass after the one corner setting → the surface corner is the commands' corner plus the inset, capped at a pill (16 at the default, compact 12; a pill at Pill); the radius rewrite had capped it at a 48px control's own corner, 12, which broke concentricity (`toolbar.css`). `docs/research/radius-audit-2026-10-03.md`, "Quality pass".
