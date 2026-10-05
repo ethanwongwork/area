@@ -159,10 +159,10 @@ test("ContextMenu wraps its area without a box and keeps a closed, named popover
 
 test("HoverCard anchors a Popover-surface card to its link and adds nothing to the link's name", async () => {
   const { HoverCard } = await import("../dist/modules/index.js");
-  const html = renderToString(h(HoverCard, { trigger: h("a", { href: "#irene" }, "@irene") }, "Irene Yamaguchi"));
+  const html = renderToString(h(HoverCard, { trigger: h("a", { href: "#david" }, "@david") }, "David Tee"));
   // Positioned by the shared engine (audit S16): no CSS anchor wrapper around the link.
-  assert.match(html, /^<a href="#irene">@irene<\/a>/);
-  assert.match(html, /<div id="[^"]+-hover-card" popover="manual" class="area-popover area-popover--bottom area-hover-card">Irene Yamaguchi<\/div>/);
+  assert.match(html, /^<a href="#david">@david<\/a>/);
+  assert.match(html, /<div id="[^"]+-hover-card" popover="manual" class="area-popover area-popover--bottom area-hover-card">David Tee<\/div>/);
   assert.doesNotMatch(html, /aria-describedby|role="tooltip"/);
 });
 

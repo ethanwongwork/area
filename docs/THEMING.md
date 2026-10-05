@@ -12,16 +12,22 @@ The registry in `packages/tokens/src/axes/registry.ts` defines ten axes:
 - `accent`: configurable chromatic accent; blue is the default (owner, 2026-09-29; was indigo). The focus ring follows it.
 - `action`: neutral or accent, the colour of committing actions (solid Buttons). Neutral is the default.
 - `selection`: neutral or accent, the colour of state (checked, on, selected, current, filled). Neutral is the default.
-- `ui`: default or compact, combining typography, control sizes, icons and gaps (including `gap-row`, the list-row icon gap). Control side padding has no token: inset.css derives it from the height (owner 2026-10-02, `gutter-*` removed). It also owns the static mark ladder `mark-sm/md/lg` (16 / 20 / 24 at both densities: Switch track, Presence, ColorSwatch, the Indicator count), the text-label ladder `mark-label-sm/md/lg` (Badge, Count, Kbd) and the surface insets `inset-surface-sm/md` (12 / 16, compact 8 / 12: Toast, Panel, Calendar, Alert, section gaps; Popover and Dialog hold 12 and 16, 2026-10-02), added by audit S21a (owner 2026-09-30). Compact is a proportional step-down (owner, 2026-10-01, checked against vscode.dev): 12/16 UI type, 24px list rows (`ui-row`, glyph edge `ui-row-inset` 8 at both densities, `gap-row` 8), surface insets 8 / 12, text-label marks `mark-label-*` 16 / 16 / 20 (static marks `mark-*` hold), layout steps `ui-stack` 6 / 4 and `ui-cluster` 8 / 6, and corners one step smaller. Corners are a cross-axis derivation: the radius axis publishes `radius-base-*` and `radius-dense-*`, the UI scale sets `ui-dense`, and `emit/base.ts` derives `radius-control-*`, `radius-container`, `radius-small` and `radius-row` ([compact pass](research/compact-pass-2026-10-01.md)).
-- `radius`: sharp, subtle, soft, standard, round, rotund or pill. Besides the corner roles it
-  owns `radius-cap`, `radius-button-cap` and `radius-concentric` (0 at Sharp: how much of a
-  shell's distance joins its concentric corner).
-- `roundness`: −12 to +12 in 2px steps (default 0). Moves every corner the radius family draws
-  (control tiers, rows, small shapes, surfaces): `clamp(0, min(family, height × radius-cap) +
-  offset, height / 2)`, so every shape can reach square and pill; inset shapes stay concentric
-  and shells follow what they hold. Owns `radius-offset`; `emit/base.ts` applies it and
-  publishes `radius-shift` for corners drawn from a component's own size. Sharp ignores it.
-  See `docs/research/radius-audit-2026-10-03.md` and the gallery's `roundness.html`.
+- `ui`: default or compact, combining typography, control sizes, icons and gaps (including `gap-row`, the list-row icon gap). Control side padding has no token: inset.css derives it from the height (owner 2026-10-02, `gutter-*` removed). It also owns the static mark ladder `mark-sm/md/lg` (16 / 20 / 24 at both densities: Switch track, Presence, ColorSwatch, the Indicator count), the text-label ladder `mark-label-sm/md/lg` (Badge, Count, Kbd) and the surface insets `inset-surface-sm/md` (12 / 16, compact 8 / 12: Toast, Panel, Calendar, Alert, section gaps; Popover and Dialog hold 12 and 16, 2026-10-02), added by audit S21a (owner 2026-09-30). Compact is a proportional step-down (owner, 2026-10-01, checked against vscode.dev): 12/16 UI type, 24px list rows (`ui-row`, glyph edge `ui-row-inset` 8 at both densities, `gap-row` 8), surface insets 8 / 12, text-label marks `mark-label-*` 16 / 16 / 20 (static marks `mark-*` hold), layout steps `ui-stack` 6 / 4 and `ui-cluster` 8 / 6, and corners that follow the shorter heights. Corners are a cross-axis derivation: the radius axis publishes a corner per pixel of height, the UI scale the heights, and `emit/base.ts` derives `radius-control-*`, `radius-small` and `radius-row` from both ([compact pass](research/compact-pass-2026-10-01.md)).
+- `radius`: one corner setting, `0` (Sharp), `2`, `4`, `6`, `8` (default), `10`, `12`, `14` or
+  `pill`: one number, the medium Button's corner, that everything scales off (owner, 2026-10-03; replaces the named families and
+  the roundness offset). Owns `radius-factor` (corner per pixel of height: setting ÷ 32, 0.5 at
+  Pill), `radius-min` (2, 0 at Sharp), `radius-surface` (0, 2, 4, 8, 12, 16, 20, 24, 24) and
+  `radius-concentric` (0 at Sharp). `emit/base.ts` derives `radius-control-*` from the control
+  heights, `radius-row`, `radius-small`, `radius-container`, `radius-step`, `radius-floor`
+  (min(4, setting)), and `radius-list-row` / `radius-list` for floating lists (rows no rounder
+  than a medium Button and a pill only at Pill; the list is rows + 4). See `docs/research/radius-audit-2026-10-03.md` and `roundness.html`.
+- `data-area-pills` (not an axis: a set, `axes/pills.ts`): the components that draw a pill instead
+  of the radius corner, as a space-separated list on any element (`Theme pills={[...]}` in React).
+  Shapes: `button`, `field`, `segmented`, `chip`, `badge`, `count`, `switch`, `avatar`. No attribute:
+  chip, badge, count, switch and avatar are pills. A scope with the attribute lists exactly its
+  pills (`""` makes every one follow the radius). Each sets `--area-pill-<id>` (0 / 1), which the
+  component adds as `flag × radius-full`, so concentric parts follow. Instance props override it
+  (`pill`, Avatar's `shape`).
 - `surface`: flat, outlined, raised or elevated. Besides `border-width` and `shadow-1`…`4` it
   owns `shadow-card` (Card's halo) and `shadow-float` (the shared floating lift); Flat sets
   both to `none`.

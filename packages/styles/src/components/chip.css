@@ -17,6 +17,9 @@
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-chip {
+    --_chip-pill: var(--area-pill-chip);
+    --_chip-radius: calc(max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px)) + var(--_chip-pill) * var(--area-radius-full));
+    --_chip-inner-radius: max(var(--area-radius-floor), calc(var(--_chip-radius) - var(--area-space-4)));
     /* The md tier, the manifest default, so framework-free markup matches the React default. */
     --_height: var(--area-control-md);
     --_gap: var(--area-gap-md);
@@ -41,8 +44,9 @@
 
     block-size: var(--_height);
     border: var(--area-stroke-width) solid var(--_border);
-    /* A pill by identity; it does not follow the radius presets. */
-    border-radius: var(--area-radius-full);
+    /* A pill while data-area-pills lists `chip` (the default); otherwise the radius setting's corner for
+       its height, swatch and remove button concentric. React pill / pill={false} override. */
+    border-radius: var(--_chip-radius);
 
     background-color: var(--_bg);
     color: var(--_fg);
@@ -130,7 +134,7 @@
     flex-shrink: 0;
     inline-size: var(--_visual);
     block-size: var(--_visual);
-    border-radius: var(--area-radius-full);
+    border-radius: var(--_chip-inner-radius);
     /* ColorSwatch's solid, very light edge, so the colour never bleeds into it; the chip keeps its
        round shape (audit F-30 A; was a 20% ink ring). */
     box-shadow: inset 0 0 0 var(--area-border-width) var(--area-bg-component);
@@ -217,7 +221,7 @@
     flex: 0 0 var(--_remove);
     inline-size: var(--_remove);
     block-size: var(--_remove);
-    border-radius: var(--area-radius-full);
+    border-radius: var(--_chip-inner-radius);
     color: var(--area-fg-muted);
     cursor: pointer;
   }
@@ -259,4 +263,6 @@
     flex-wrap: wrap;
     gap: var(--area-ui-cluster); /* Material's chip set, 8 / 8, compact 6 (audit C-27 A; was 4) */
   }
+  .area-chip--pill { --_chip-pill: 1; }
+  .area-chip--rounded { --_chip-pill: 0; }
 }

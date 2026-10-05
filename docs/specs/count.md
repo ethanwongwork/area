@@ -150,3 +150,5 @@ tabs compositions), both zoomed:
 - 2026-09-28 · owner: approved (batch 4); Count keeps the pill shape.
 - 2026-09-30 · audit S6a (owner) → no Count change; Badge neutral soft and Chip input now take Count's soft plate (were `bg-component` #f7) → badge.css:17, 58; chip.css:80.
 - 2026-10-01 · compact pass → the gutter is `(height − 8) / 2` (6 at 20, 4 at 16), so compact md (16) is drawn as default sm. VS Code count badges are 19 at 10px. docs/research/compact-pass-2026-10-01.md.
+- 2026-10-03 · one corner setting (owner: one radius setting, Sharp and Pill as ends; "every control is a pill") → a pill by default; `pill={false}` (`--rounded`) takes the setting's corner for its height (`count.css`, `Count.tsx`). `docs/research/radius-audit-2026-10-03.md`, "One corner setting".
+- 2026-10-04 · pill shapes and list rows (owner) → the pill is the `count` entry of data-area-pills (default on); `pill` three-way (`count.css`). `docs/research/radius-audit-2026-10-03.md`, "Pill shapes and list rows".

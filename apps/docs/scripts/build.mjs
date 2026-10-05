@@ -3,7 +3,7 @@ import { buildInsetFixture } from "./inset-fixture.mjs";
 import { docsOutput } from "./output.mjs";
 import { baseTokens } from "../../../packages/tokens/src/emit/base.ts";
 import { buildLab } from "./lab.mjs";
-import { componentGalleryPage, roundnessPage } from "./component-gallery.mjs";
+import { componentGalleryPage, reviewPage, roundnessPage } from "./component-gallery.mjs";
 /**
  * Builds the documentation site.
  *
@@ -31,7 +31,7 @@ import {
 import { ICONS } from "./icons.generated.mjs";
 import { CATALOG } from "./icons.catalog.mjs";
 import { COMPONENT_PAGES } from "../src/pages.mjs";
-import { COMPLETE_COMPONENTS, RECENT_COMPONENTS, componentStatus } from "../src/component-status.mjs";
+import { COMPLETE_COMPONENTS, RECENT_COMPONENTS, REVIEW_BATCHES, REVIEW_COMPONENTS, componentStatus } from "../src/component-status.mjs";
 import { PRACTICES } from "../src/practices.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -74,10 +74,10 @@ const orderedComponents = [...COMPONENT_PAGES].sort((a, b) =>
  *   a short unordered set, all labels tiny -> Segmented  (neutral, density)
  *   a long unordered set                   -> Chip       (accent: eleven hues)
  *   a set whose labels do not fit a track  -> Select     (typography, surface, motion)
- *   an ordered ramp with a direction       -> Slider     (radius: 0 to pill)
+ *   an ordered ramp of exact settings      -> Select     (radius: Sharp to Pill)
  *
  * A panel of eight identical segmented controls -- which is what this was -- says every
- * axis is the same kind of choice. They are not: radius is a ramp you scrub, accent is a
+ * axis is the same kind of choice. They are not: radius is a ramp of exact themes, accent is a
  * palette you pick from, and dark mode is a thing you turn on.
  *
  * Every control carries `data-axis`, and every option `data-value`, so one delegated
@@ -360,14 +360,11 @@ function gallerySpecimenTable() {
     ],
     "alignment-picker": [
       { id: "default", title: "Default", demo: "GalleryAlignmentPickerDefault" },
-      { id: "landscape", title: "Landscape", demo: "GalleryAlignmentPickerLandscape" },
-      { id: "portrait", title: "Portrait", demo: "GalleryAlignmentPickerPortrait" },
+      { id: "state-hover", title: "State / hover preview", demo: "GalleryAlignmentPickerHover" },
+      { id: "layout-fill", title: "Layout / fills its parent", demo: "GalleryAlignmentPickerFill" },
       { id: "plain", title: "Plain", demo: "GalleryAlignmentPickerPlain" },
       { id: "selection-accent", title: "Selection / accent", demo: "GalleryAlignmentPickerAccent" },
       { id: "disabled", title: "Disabled", demo: "GalleryAlignmentPickerDisabled" },
-      { id: "size-sm", title: "Size / sm", demo: "GalleryAlignmentPickerSizeSm" },
-      { id: "size-md", title: "Size / md", demo: "GalleryAlignmentPickerSizeMd" },
-      { id: "size-lg", title: "Size / lg", demo: "GalleryAlignmentPickerSizeLg" },
     ],
     toolbar: [
       { id: "default", title: "Default", demo: "GalleryToolbarPlain" },
@@ -543,6 +540,7 @@ function gallerySpecimenTable() {
     ],
     badge: [
       { id: "default", title: "Default", demo: "BadgeDefault" },
+      { id: "rounded", title: "Shape / rounded", demo: "BadgeRounded" },
       ...[["sm", "small"], ["md", "medium"], ["lg", "large"]].map(([size]) => ({ id: `size-${size}`, title: `Size / ${size}`, demo: `GalleryBadgeSize${titleCase(size)}` })),
       ...badgeVariants.flatMap((variant) => badgeTones.map((tone) => ({
         id: `variant-${variant}-tone-${tone}`,
@@ -789,6 +787,7 @@ function gallerySpecimenTable() {
     ],
     chip: [
       { id: "default", title: "Default", demo: "GalleryChip" },
+      { id: "rounded", title: "Shape / rounded", demo: "GalleryChipRounded" },
       { id: "size-sm", title: "Size / sm", demo: "GalleryChipSmall" },
       { id: "size-md", title: "Size / md", demo: "GalleryChipMedium" },
       { id: "size-lg", title: "Size / lg", demo: "GalleryChipLarge" },
@@ -843,6 +842,7 @@ function gallerySpecimenTable() {
     count: [
       { id: "default", title: "Default", demo: "GalleryCount" },
       { id: "variant-soft", title: "Variant / soft", demo: "GalleryCountSoft" },
+      { id: "rounded", title: "Shape / rounded", demo: "GalleryCountRounded" },
       { id: "size-sm", title: "Size / sm", demo: "GalleryCountSizeSm" },
       { id: "size-md", title: "Size / md", demo: "GalleryCountSizeMd" },
       { id: "single-digit", title: "Content / single digit", demo: "GalleryCountSingleDigit" },
@@ -1012,7 +1012,7 @@ function gallerySpecimenTable() {
       { id: "rows", title: "Visible rows", demo: "TextareaRows" },
       { id: "resize-none", title: "Resize / none", demo: "TextareaResizeNone" },
     ],
-    switch: ["SwitchDefault", "SwitchSizeSm", "SwitchSizeMd", "SwitchSizeLg", "SwitchChecked", "SwitchAccent", "SwitchCustom", "SwitchLong", "SwitchHover", "SwitchActive", "SwitchFocus", "SwitchDisabled", "SwitchDisabledChecked", "SwitchReadOnly", "SwitchLoading", "SwitchLabelEnd", "SwitchLabelStart", "SwitchDescription", "SwitchHiddenLabel", "SwitchSettingsRow", "SwitchList"].map(name => ({
+    switch: ["SwitchDefault", "SwitchSizeSm", "SwitchSizeMd", "SwitchSizeLg", "SwitchChecked", "SwitchRounded", "SwitchAccent", "SwitchCustom", "SwitchLong", "SwitchHover", "SwitchActive", "SwitchFocus", "SwitchDisabled", "SwitchDisabledChecked", "SwitchReadOnly", "SwitchLoading", "SwitchLabelEnd", "SwitchLabelStart", "SwitchDescription", "SwitchHiddenLabel", "SwitchSettingsRow", "SwitchList"].map(name => ({
       id: name.slice(6).toLowerCase(),
       title: name.slice(6).replace(/([a-z])([A-Z])/g, "$1 $2"),
       demo: name,
@@ -1873,26 +1873,26 @@ function radiusPage() {
   const axis = tokens.axes.find((a) => a.id === "radius");
 
   const body = `<div class="docs-prose">
-<p>Radius is a named visual family, not a component-size alias. The default <code class='area-code'>standard</code> family is 6px on a small Button, 8px on a medium Button, and 10px on a large Button. Same-size icon-only and text Buttons always share that exact corner.</p>
-<p>Compact UI keeps the same family but applies a tighter safe cap to the smaller 20–36px ladder. Containers and small nested shapes retain their own semantic steps, so a 12px dialog corner does not force a 12px button corner.</p>
+<p>Radius is one corner setting for the whole system, named by the corner it gives a medium Button: Sharp, 2, 4, 6, <code class='area-code'>8</code> (default), 10, 12, 14 and Pill. Every component follows from it, so each preset is one coherent theme.</p>
+<p>Controls, rows and anything on the height ladder take the setting's corner per pixel of height (setting × height ÷ 32, rounded down to even pixels, never under 2), so every height goes square together at Sharp and becomes a pill together at Pill. Surfaces take their own ladder, 4px a step; Card and Dialog are the surface plus 4. Nested shapes are their shell less its inset, never sharper than 4 (2 at the 2 setting), so only Sharp is square anywhere. Badge, Chip, Count and Switch stay pills unless given <code class='area-code'>pill={false}</code>; a checkbox and a square avatar stay rounded squares at Pill.</p>
 </div>
 ${tokenSection({
   id: "presets",
   title: "Presets",
-  description: "Each preset sets three radii: controls, containers, and small nested shapes.",
+  description: "Each preset sets the medium Button's corner (the rest of the height ladder scales with it) and the surface corner.",
   rows: axis.presets.map((p) => ({
     id: p.id,
     label: p.label,
-    control: p.tokens["--area-radius-control"],
-    container: p.tokens["--area-radius-container"],
-    small: p.tokens["--area-radius-small"],
+    control: `${Math.round(Number(p.tokens["--area-radius-factor"]) * 32)}px`,
+    container: p.tokens["--area-radius-surface"],
+    small: `${Math.min(4, Math.round(Number(p.tokens["--area-radius-factor"]) * 32))}px`,
     isDefault: p.id === axis.defaultPreset,
   })),
   columns: [
     { header: "Preset", cell: (r) => tokenChip(`radius/${r.id}`) },
-    { header: "Control", cell: (r) => `<span class="docs-mono">${r.control}</span>` },
-    { header: "Container", cell: (r) => `<span class="docs-mono">${r.container}</span>` },
-    { header: "Small", cell: (r) => `<span class="docs-mono">${r.small}</span>` },
+    { header: "Button (32px)", cell: (r) => `<span class="docs-mono">${r.id === "pill" ? "pill" : r.control}</span>` },
+    { header: "Surface", cell: (r) => `<span class="docs-mono">${r.container}</span>` },
+    { header: "Nested floor", cell: (r) => `<span class="docs-mono">${r.small}</span>` },
     {
       header: "Preview",
       cell: (r) =>
@@ -1902,7 +1902,7 @@ ${tokenSection({
   card: (r) =>
     tokenCard({
       name: `radius/${r.id}${r.isDefault ? " (default)" : ""}`,
-      meta: [`Control: ${r.control}`, `Container: ${r.container}`],
+      meta: [`Button: ${r.id === "pill" ? "pill" : r.control}`, `Surface: ${r.container}`],
       figure: `<div class="docs-specimen__box" data-area-radius="${r.id}" style="inline-size:var(--area-control-xl);block-size:var(--area-control-xl);border-radius:var(--area-radius-control)"></div>`,
     }),
 })}
@@ -1931,7 +1931,7 @@ ${tokenSection({
   return page({
     slug: "radius",
     title: "Radius",
-    lede: "How rounded controls and containers are.",
+    lede: "One corner setting, from Sharp to Pill.",
     body,
     toc: [
       { id: "presets", title: "Presets" },
@@ -2106,7 +2106,7 @@ ${axisPresetTable(a.id)}`,
 function indexPage() {
   const body = `<div class="docs-prose">
 <p>Area is a component library built on shared tokens, with seven customization axes: theme, neutral, accent, UI scale, radius, surface and motion. Components consume only semantic tokens, so changing an axis reflows the whole system without touching a single component.</p>
-<p>The default medium control is 32px with 14/20 text. Radius uses named visual families: <code class='area-code'>standard</code> gives an 8px medium control and 12px container, while <code class='area-code'>rotund</code> reaches 12px at medium. Each family has a tier curve; compact UI applies a tighter cap so smaller controls do not become lozenges.</p>
+<p>The default medium control is 32px with 14/20 text. Radius is one setting from Sharp to Pill, named by the medium Button's corner: the default <code class='area-code'>8</code> gives an 8px medium control and a 12px surface. Controls scale with their height, so compact's shorter controls take smaller corners and Pill rounds every one.</p>
 </div>
 <h2 class="docs-h2" id="install">Installation</h2>
 ${codeBlock("npm install @area/react @area/styles")}
@@ -2117,7 +2117,7 @@ ${codeBlock(`import { Button } from "@area/react";\nimport "@area/styles/area.cs
 <p class="docs-note">All ${[...COMPLETE_COMPONENTS].map(slug => COMPONENT_PAGES.find(page => page.slug === slug).name).join(", ")} are owner-confirmed complete. Refining a family reopens it as in review; see the <a href="./gallery.html">component gallery</a>.</p>
 <h2 class="docs-h2" id="principles">Principles</h2>
 <div class="docs-prose">
-<p><strong>Every number traces to a token.</strong> A control's corner radius comes from the radius preset and is capped against its height; a menu item's radius is its panel's radius less the panel's padding, floored at zero and capped against the row. These relationships stay true under every combination of axes.</p>
+<p><strong>Every number traces to a token.</strong> A control's corner comes from the radius setting and its own height; a menu item's radius is its panel's radius less the panel's padding, floored at 4 (0 only at Sharp) and capped by the row's own corner. These relationships stay true under every combination of axes.</p>
 <p><strong>Contrast is a test gate.</strong> The test suite checks colour pairings under WCAG 2.2 across all 66 shipped themes, with APCA also enforced in dark themes. Documented exceptions are tracked separately. Run the tests as well as the build before releasing.</p>
 <p><strong>One shared variant contract.</strong> CSS and typed React helpers share a manifest. The build checks selector parity; component behavior and wrapper markup still need verification.</p>
 <p><strong>Documentation cannot lie.</strong> Every preview on this site is the real component rendered, and every snippet is that same demo's source.</p>
@@ -2156,6 +2156,15 @@ const pages = [
     specimensOf: componentSpecimens,
     demos,
     demoMarkup,
+    clients: ["badge-demos.js", "switch-demos.js", "slider-demos.js", "number-field-demos.js", "chip-demos.js", "alert-demos.js", "avatar-demos.js", "code-block-demos.js"],
+  })],
+  ["review.html", await reviewPage({
+    components: [...COMPONENT_PAGES].filter(component => !component.docsOnly),
+    specimensOf: componentSpecimens,
+    demos,
+    demoMarkup,
+    batches: REVIEW_BATCHES,
+    status: slug => COMPLETE_COMPONENTS.has(slug) ? "Complete" : REVIEW_COMPONENTS.has(slug) ? "In review" : "Not approved",
     clients: ["badge-demos.js", "switch-demos.js", "slider-demos.js", "number-field-demos.js", "chip-demos.js", "alert-demos.js", "avatar-demos.js", "code-block-demos.js"],
   })],
   ["roundness.html", await roundnessPage({

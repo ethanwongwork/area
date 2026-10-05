@@ -1,28 +1,26 @@
 /**
  * Tile fitting for the component gallery.
  *
- * Tiles are 4:3 and share the canvas width (component-gallery.mjs: as many columns as fit at
- * --docs-tile-min, stretched to fill). A specimen that fits its tile's view is shown at 1:1, so
- * controls and marks keep exact pixels. One that doesn't shrinks uniformly to fit. Below FLOOR
- * it would be too small to read, and a specimen that stretches to its tile mustn't truncate to
- * fit, so either takes a 2 x 2 tile instead, which keeps the 4:3 shape.
+ * Tiles are 5:4, all one size, and share the canvas width (component-gallery.mjs: as many columns
+ * as fit at --docs-tile-min, stretched to fill). Every specimen is shown smaller than life inside
+ * a generous view (owner, 2026-10-04, after Frame Supply's component grid): at most MAX (0.8), so
+ * a Button reads as a specimen on a plate, and smaller still where it needs to, uniformly, until
+ * it fits. A dialog or a table shrinks further rather than taking a larger tile.
  *
- * The shape is decided once, at the default UI scale and the smallest tile the grid allows, so
- * neither density nor window width ever reflows the grid. The scale follows the specimen and
- * the tile live: a wider window or a compact specimen refits in place.
+ * A specimen that stretches to its container is laid out wider than the view (the view / MAX, and
+ * wider again if its text would truncate there), then scaled to fit, so it shows its natural
+ * layout rather than one squeezed to the tile.
  *
- * Sizes are measured, not declared: a new specimen gets its shape from what it renders.
+ * Sizes are measured, not declared: a new specimen gets its scale from what it renders. Fluid
+ * widths are decided once at the default UI scale; scale follows the specimen and the tile live.
  */
 
-/** The smallest scale a specimen is shown at before it takes a larger tile. */
-const FLOOR = 0.5;
-type Shape = readonly [columns: number, rows: number];
-const CELL: Shape = [1, 1];
-const LARGE: Shape = [2, 2];
+/** The largest scale a specimen is shown at. */
+const MAX = 0.8;
 /** A width no specimen fills unless it stretches to its container: tells fluid from fixed. */
 const PROBE = 1040;
-/** Tile height over width. */
-const ASPECT = 3 / 4;
+/** How much wider than its view a fluid specimen may be laid out to keep its text whole. */
+const WIDEN = [1, 1.25, 1.5, 2];
 
 interface Box { w: number; h: number }
 interface Tile {
@@ -31,6 +29,8 @@ interface Tile {
   stage: HTMLElement;
   fluid: boolean;
   natural: number;
+  /** For a fluid specimen: its layout width over the view's room at MAX. */
+  widen: number;
 }
 
 /*
@@ -79,12 +79,8 @@ function truncates(stage: HTMLElement) {
   return false;
 }
 
-/*
- * Within SLACK counts as fitting: a specimen a few pixels over spills into the view's 8 margin
- * rather than take a 0.997 scale, which only blurs it.
- */
-const SLACK = 4;
-const fit = (room: Box, size: Box) => Math.min(1, (room.w + SLACK) / Math.max(1, size.w), (room.h + SLACK) / Math.max(1, size.h));
+/* The scale that fits a specimen in its room, never above MAX. */
+const fit = (room: Box, size: Box) => Math.min(MAX, room.w / Math.max(1, size.w), room.h / Math.max(1, size.h));
 
 /** The room a tile's view gives its specimen now. */
 function roomOf(view: HTMLElement): Box {
@@ -102,22 +98,11 @@ export function fitTiles(canvas: HTMLElement) {
     stage: tile.querySelector<HTMLElement>(".gallery-tile__stage")!,
     fluid: false,
     natural: 0,
+    widen: 1,
   }));
-  const [sample] = tiles;
-  if (!sample) return;
+  if (!tiles.length) return;
 
-  // The room at the smallest tile: what the tile's label and insets leave of its 4:3 box.
-  const grid = getComputedStyle(sample.tile.parentElement!);
-  const minimum = parseFloat(grid.getPropertyValue("--docs-tile-min"));
-  const gap = parseFloat(grid.columnGap);
-  const live = roomOf(sample.view);
-  const chrome = { w: sample.tile.offsetWidth - live.w, h: sample.tile.offsetHeight - live.h };
-  const smallest = ([columns, rows]: Shape): Box => ({
-    w: columns * minimum + (columns - 1) * gap - chrome.w,
-    h: rows * minimum * ASPECT + (rows - 1) * gap - chrome.h,
-  });
-
-  // Shapes are chosen at the default UI scale, whatever the canvas shows.
+  // Fluid or fixed, and how wide a fluid specimen needs to be, at the default UI scale.
   const density = canvas.getAttribute("data-area-ui");
   canvas.setAttribute("data-area-ui", "default");
   for (const entry of tiles) { entry.stage.style.scale = ""; entry.stage.style.inlineSize = `${PROBE}px`; }
@@ -125,24 +110,27 @@ export function fitTiles(canvas: HTMLElement) {
     entry.natural = Math.ceil(extent(entry.stage).w);
     entry.fluid = entry.natural >= PROBE - 40;
   }
-  const room = smallest(CELL);
-  for (const entry of tiles) entry.stage.style.inlineSize = `${Math.floor(entry.fluid ? room.w : Math.max(room.w, entry.natural))}px`;
-  const large = new Set(tiles.filter(entry => (entry.fluid && truncates(entry.stage)) || fit(room, extent(entry.stage)) < FLOOR));
-  if (density) canvas.setAttribute("data-area-ui", density); else canvas.removeAttribute("data-area-ui");
-  for (const entry of tiles) {
-    if (large.has(entry)) entry.tile.dataset.span = LARGE.join("x"); else delete entry.tile.dataset.span;
-    // A stretching specimen fills its view; a fixed one keeps its own width, or the view's if wider.
-    entry.stage.style.inlineSize = entry.fluid ? "100%" : `max(100%, ${entry.natural}px)`;
+  // A fluid specimen takes the first width at which nothing truncates (a few specimens, a few tries).
+  for (const entry of tiles.filter(tile => tile.fluid)) {
+    const room = roomOf(entry.view).w / MAX;
+    entry.widen = WIDEN.find(factor => { entry.stage.style.inlineSize = `${Math.floor(room * factor)}px`; return !truncates(entry.stage); }) ?? WIDEN.at(-1)!;
   }
+  if (density) canvas.setAttribute("data-area-ui", density); else canvas.removeAttribute("data-area-ui");
+  // A fixed specimen keeps its own width, or the view's if wider (loose text inside it wraps to the stage).
+  for (const entry of tiles) if (!entry.fluid) entry.stage.style.inlineSize = `max(100%, ${entry.natural}px)`;
 
   // Scale follows the specimen and its tile: on first fit, and whenever either changes size
   // (window width, density, hydration, a disclosure opening inside the tile).
   const owner = new Map<Element, Tile>();
   for (const entry of tiles) { owner.set(entry.view, entry); owner.set(entry.stage, entry); }
   const rescale = (list: Iterable<Tile>) => {
-    // Read every size before writing any scale: one layout, however many tiles changed.
-    const scored = [...new Set(list)].map(entry => [entry, fit(roomOf(entry.view), extent(entry.stage))] as const);
-    for (const [entry, scale] of scored) entry.stage.style.scale = scale < 1 ? scale.toFixed(3) : "";
+    const batch = [...new Set(list)];
+    // Read every room, write fluid widths, then read every extent and write every scale: two
+    // layouts, however many tiles changed.
+    const rooms = batch.map(entry => roomOf(entry.view));
+    batch.forEach((entry, index) => { if (entry.fluid) entry.stage.style.inlineSize = `${Math.floor(rooms[index]!.w / MAX * entry.widen)}px`; });
+    const scales = batch.map((entry, index) => fit(rooms[index]!, extent(entry.stage)));
+    batch.forEach((entry, index) => { entry.stage.style.scale = scales[index]!.toFixed(3); });
   };
   rescale(tiles);
   canvas.setAttribute("data-fitted", "");

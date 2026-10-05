@@ -188,3 +188,4 @@ row and value row. Build and test results are in the
 - 2026-10-01 · audit B-10 → InputGroupText takes `fg-disabled` with a disabled group → input-group.css.
 - 2026-10-01 · audit B-11 → forced colours: `CanvasText` edge on the group, `Highlight` focus ring on the group only (children draw none), dashed invalid → forced-colors.css.
 - 2026-10-01 · audit B-14 → InputGroup takes Field's `disabled` and validation and passes them to its Input, NumberField and Select through `InputGroupContext`; the group gets `aria-disabled` → InputGroup.tsx, input-group-context.ts.
+- 2026-10-04 · pill shapes and list rows (owner) → `--area-pill-field` makes the group a pill (`input-group.css`). `docs/research/radius-audit-2026-10-03.md`, "Pill shapes and list rows".

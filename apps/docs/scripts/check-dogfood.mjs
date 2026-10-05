@@ -35,6 +35,7 @@ const ALLOWED = new Map([
   ["--docs-card-sm", "Minimum width of a cell in the icon browser's grid."],
   ["--docs-customizer-panel", "Width of the customizer's axis panel."],
   ["--docs-tile-min", "Narrowest component gallery tile: how many columns the canvas holds."],
+  ["--docs-tile-radius", "Gallery tile frames' corner, fixed outside the canvas's radius setting."],
   ["--docs-roundness-stage", "Height of a specimen window on the roundness page."],
   ["--docs-roundness-cell", "Narrowest step cell on the roundness page."],
 ]);

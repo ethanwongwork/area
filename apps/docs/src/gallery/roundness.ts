@@ -1,14 +1,14 @@
 /**
- * The roundness page: each row is one specimen, laid out at every roundness step (2px apart,
- * axes/roundness.ts) in its own scope, measured, and trimmed to the steps that say something:
- * one square step, then every step up to the first pill. Each cell shows the painted corner
+ * The corner radius page: each row is one specimen, laid out at every radius setting (Sharp, 2 ...
+ * 14, Pill; axes/radius.ts) in its own scope, measured, and trimmed to the steps that say
+ * something: Sharp, then every step up to the first pill. Each cell shows the painted corner
  * magnified at the row's shared scale, so the steps compare; inset rows also draw the shell, the
  * concentric corner it implies and the nested shape.
  */
 
-const STEPS = [-12, -10, -8, -6, -4, -2, 0, 2, 4, 6, 8, 10, 12];
-const stepId = (step: number) => (step > 0 ? `+${step}` : String(step));
-const stepLabel = (step: number) => stepId(step).replace("-", "−");
+const STEPS = ["0", "2", "4", "6", "8", "10", "12", "14", "pill"];
+const DEFAULT_STEP = "8";
+const stepLabel = (step: string) => (step === "0" ? "0 Sharp" : step === "pill" ? "Pill" : step);
 const SVG = "http://www.w3.org/2000/svg";
 const LOUPE = 64;
 
@@ -101,11 +101,11 @@ function tag(text: string) {
   return badge;
 }
 
-function makeCell(row: HTMLElement, template: HTMLTemplateElement, step: number, copy: number) {
+function makeCell(row: HTMLElement, template: HTMLTemplateElement, step: string, copy: number) {
   const cell = document.createElement("div");
   cell.className = "roundness-cell";
-  cell.setAttribute("data-area-roundness", stepId(step));
-  if (step === 0) cell.setAttribute("data-default", "");
+  cell.setAttribute("data-area-radius", step);
+  if (step === DEFAULT_STEP) cell.setAttribute("data-default", "");
   const head = document.createElement("div");
   head.className = "roundness-cell__head";
   head.setAttribute("data-area-ui", "compact");
@@ -151,21 +151,19 @@ function buildRow(row: HTMLElement) {
   if (!template) return;
   row.querySelectorAll(".roundness-cell").forEach(node => node.remove());
   const { outer, inner } = row.dataset;
-  const zero = STEPS.indexOf(0);
+  const zero = STEPS.indexOf(DEFAULT_STEP);
   const cells = STEPS.map(step => makeCell(row, template, step, ++copies));
   const main = outer ? null : mainShape(cells[zero]!.stage);
   const measured = cells.map(entry => measure(entry.stage, outer, inner, main));
   const base = measured[zero];
 
-  // From the default outwards: sharper while the corner keeps getting sharper (it stops at square,
-  // or where a shell can go no further than its inset, Card's 8), rounder up to and including the
-  // first pill. A shape that is round at every step or has no corner at rest keeps its default.
-  const corner = (index: number) => measured[index]?.r ?? 0;
-  let first = zero, last = zero;
-  if (base && !base.pill) {
-    while (first > 0 && measured[first - 1] && corner(first - 1) < corner(first) - 0.05) first--;
-    while (last < STEPS.length - 1 && measured[last + 1] && !measured[last]!.pill && corner(last + 1) > corner(last) + 0.05) last++;
-  }
+  // Every setting from Sharp up to and including the first pill, so a corner that holds (a nested
+  // shape at its floor) shows as held. A shape that is round at every step or has no corner at
+  // rest keeps only its default.
+  let first = 0, last = STEPS.length - 1;
+  if (!base || base.pill) first = last = zero;
+  else { last = measured.findIndex(m => m?.pill); if (last < 0) last = STEPS.length - 1; }
+
   cells.forEach((entry, index) => { if (index < first || index > last) entry.cell.remove(); });
   const kept = cells.slice(first, last + 1), shown = measured.slice(first, last + 1);
 
@@ -174,7 +172,7 @@ function buildRow(row: HTMLElement) {
     const m = shown[index];
     if (!m) { entry.value.append("none at rest"); return; }
     entry.value.append(m.pill && !m.inner ? "pill" : m.r === 0 ? "square" : `${fmt(m.r)}px`);
-    if (entry.step === 0) entry.value.append(tag("default"));
+    if (entry.step === DEFAULT_STEP) entry.value.append(tag("default"));
     entry.view.append(loupe(size, m));
     if (m.inner) {
       const concentric = Math.max(0, m.outer - m.inner.d);

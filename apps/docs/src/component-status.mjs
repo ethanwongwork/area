@@ -35,7 +35,7 @@ export const COMPLETE_COMPONENTS = new Set([
   'card', 'model-picker', 'scroll-to-latest',
   // Approved 2026-09-28 (batch 22: lighter ground, brighter syntax; code and separator were already approved).
   'code-block',
-  'alignment-picker', 'badge', 'box-field', 'breadcrumb',
+  'badge', 'box-field', 'breadcrumb',
   'button', 'button-group', 'code',
   'color-field', 'color-picker', 'color-swatch', 'color-swatch-picker', 'composer',
   'dialog', 'field', 'input-group',
@@ -44,7 +44,8 @@ export const COMPLETE_COMPONENTS = new Set([
 ]);
 
 /** Built/refined and awaiting owner approval; not completion. */
-export const REVIEW_COMPONENTS = new Set(['disclosure']);
+// alignment-picker reopened 2026-10-04: responsive grid, hover preview, sizes removed.
+export const REVIEW_COMPONENTS = new Set(['disclosure', 'alignment-picker']);
 export const componentStatus = slug => COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
 export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined' })[status];
 
@@ -91,6 +92,28 @@ export const APPROVAL_BATCHES = [
   { name: 'Disclosure', families: ['disclosure'] },
 ];
 export const batchOf = slug => APPROVAL_BATCHES.findIndex(batch => batch.families.includes(slug));
+
+/*
+ * The Review page (review.html, owner 2026-10-04: "each new component as a dedicated preview to
+ * scale for me to look at and approve ... in batches"). Each batch shows its families' specimens
+ * at 1:1. `planned` lists components approved for building that have no family yet; each turns into
+ * a family entry when it is built. Approval is still the owner's word, recorded in
+ * COMPLETE_COMPONENTS.
+ */
+export const REVIEW_BATCHES = [
+  { name: 'In review', note: 'Reworked or new; waiting on your approval.', families: ['alignment-picker', 'disclosure'] },
+  {
+    name: 'New components, batch 1',
+    note: 'Chosen 2026-10-04. Each is measured from its reference in Claude in Chrome, specced, built, then previewed here.',
+    families: [],
+    planned: [
+      { name: 'Custom Select', reference: "Notion's and Figma's dropdowns: rows with icons, checks and descriptions", reuses: 'Combobox listbox, Menu rows, overlay' },
+      { name: 'Tag picker', reference: "Notion's select and multi-select properties: coloured tags, create on type", reuses: 'Combobox, Chip, Field' },
+      { name: 'Date picker', reference: "Notion's date property: a field that opens a calendar", reuses: 'Calendar, Popover, Input group, Field' },
+      { name: 'Drawer and confirm dialog', reference: "An edge sheet, and a forced-choice confirm (delete chat / page)", reuses: 'Dialog, Button' },
+    ],
+  },
+];
 
 // Most recently designed first. Move a family to the front when its design is worked on.
 export const RECENT_COMPONENTS = ['disclosure', 'badge-group', 'card', 'checkbox', 'radio', 'dialog', 'count', 'alert', 'toolbar', 'switch', 'code-block', 'chip', 'table', 'model-picker', 'scroll-to-latest', 'message', 'prompt-suggestions', 'hover-card', 'context-menu', 'command-palette', 'combobox', 'panel', 'composer', 'box-field', 'property-list', 'number-field', 'toast', 'popover', 'menu', 'split-button', 'button-group', 'button', 'tree-view', 'breadcrumb', 'tooltip', 'badge', 'indicator', 'icon-pilot', 'color-picker', 'color-swatch-picker', 'color-field', 'color-swatch', 'alignment-picker', 'input-group', 'avatar', 'input', 'nav', 'progress', 'segmented', 'select', 'skeleton', 'spinner', 'calendar'];

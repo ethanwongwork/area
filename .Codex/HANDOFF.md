@@ -23,10 +23,36 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   corners and the inset arithmetic. Dialog cap is surface + 4, palette = surface, so both step
   by 2. All even (owner): 24px -> 6, `radius-floor` 4 for nested shapes, menu rows 8 (border
   left out), 2px rounding for swatches, checkbox, split trigger and caps.
-- Next (owner decided, not built): two roundness step sizes, 2px for controls / rows / bars /
-  control-holding shells, 4px for surfaces (container role) and what is concentric inside them;
-  Card and Dialog follow the surface (16 = surface + 4). Plan in the note, "Step size for large
-  shapes".
+- One corner setting (built 2026-10-03, branch `claude/corner-radius-segmented-slider-0a6b56`,
+  uncommitted): the `radius` axis is `sharp`, `2` … `14`, `pill`, named by the md Button's corner
+  (default `8`); the roundness axis and the families Subtle…Rotund are gone. Corner = setting ×
+  height ÷ 32 in even pixels, min 2 (`emit/base.ts`), so all heights go square / pill together;
+  surfaces 0, 2, 4, 8, 12, 16, 20, 24 (24 at Pill), Card = surface + inset − 4, Dialog = surface + 4;
+  nested floor min(4, setting); floating-surface rows up to a pill, surface ≤ row pill + inset (20).
+  Badge, Chip, Count, Switch: pill by default, `pill={false}` (`--rounded`) follows. Checkbox and
+  square Avatar cap at 7/16 (rounded square at Pill). Preset ids are one number (`0` = Sharp, …, `pill`). Gallery Radius is a Select; `roundness.html`
+  is the Corner radius page. 8 reproduces the previous values (swept both densities). Open: small
+  boxes repeat values between neighbouring settings (24px: 2 at 2 and 4; 6 at 8 and 10).
+- Pills (2026-10-04, same branch): `data-area-pills` lists the components drawn as pills (button,
+  field, segmented, chip, badge, count, switch, avatar; default chip badge count switch avatar),
+  `Theme pills`, gallery Pills row; `pill` props are three-way, Avatar `shape` unset by default.
+  Floating-list rows use `radius-list-row` (pill only at Pill), lists `radius-list` (rows + 4).
+  Corner radius page has "Components by group". Open: list surfaces lag other surfaces from 10 up
+  (Menu 16 vs Popover 20 at 12); compact list rows plateau at 10.
+
+## Review page and new components (2026-10-04, same branch)
+
+- `review.html` (gallery nav: Review): `REVIEW_BATCHES` in `component-status.mjs`, specimens at 1:1.
+  Batch "In review": Alignment picker (reopened: responsive grid, hover preview, sizes removed) and
+  Disclosure. Batch 1 of new components (owner pick): Custom Select, Tag picker, Date picker, Drawer
+  + confirm dialog, listed as planned; each needs captures in Claude in Chrome first.
+- Alignment picker measured 2026-10-04 in Claude in Chrome (owner's Figma file, selection only):
+  `captures/alignment-picker/figma--auto-layout-alignment--{rest,hover}--light.json` and Area's
+  `area--default--{rest,hover}--light.json`. 88 x 56 default (min cell = 16 glyph), no hover fill,
+  preview glyph in fg-muted. Open: per-cell tooltip like Figma's. Chrome tip: the injected
+  area-capture.js must match `capture-compare.mjs --fingerprint` (091bb143); copy JSON out with a
+  full-viewport button + clipboard (base64 output is blocked); select nodes with the page's `figma`
+  global, never edit.
 
 ## Component gallery (2026-10-02, branch `claude/component-gallery-theme-99e822`)
 
@@ -39,16 +65,17 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   only (saved as `area-gallery-theme`, restored before paint). The rails inherit the root
   defaults. Section and tile labels pin `data-area-ui="default"`; tile frames use
   `radius-base-container`. When measuring compact here, read the canvas scope, not `<html>`.
-- Layout (owner, 2026-10-03): modelled on Cursor; rails pinned to compact, resizable Panels
-  (nav 200, 160–360; theme 248, the narrowest where "Compact" fits its 1 : 1.5 Field row),
+- Layout (owner, 2026-10-03): modelled on Cursor; rails pinned to default density and radius 10
+  (owner 2026-10-04; were compact), resizable Panels (nav 200, 160–360; theme 240, 200–400; rows stack
+  their labels below 296, where "Compact" stops fitting beside its label),
   widths saved as `area-gallery-rails`. Theme rows are horizontal Fields with Segmented; the
   bar reads "Theme · Canvas". Canvas ground neutral 25 (dark neutral 975); 8 for canvas margin,
   row and column gaps.
-- Tiles: 4:3, title top left, columns as many as fit at `--docs-tile-min` 280 (3 at 1440, 5 at
-  1920) stretched to fill. `src/gallery/fit.ts`: 1:1 when the specimen fits its view (within 4px
-  slack; 615 of 706), uniform scale otherwise, 2x2 when it would fall below 0.5 or truncate
-  (35). Shapes decided at default density and the minimum tile, so neither density nor window
-  width reflows the grid; ResizeObserver rescales. Smallest scale 0.54.
+- Tiles: 5:4 (owner 2026-10-04), title top left, all one size, columns as many as fit at `--docs-tile-min` 280 (3 at
+  1440, 5 at 1920). Owner 2026-10-04 (Frame Supply reference): tile inset 12, view margin 24 / 32,
+  every specimen at 0.8 at most and scaled down to fit (`src/gallery/fit.ts`; fluid specimens laid
+  out at view / 0.8, widened until nothing truncates). No 2x2 tiles; smallest scale 0.18 (Figma
+  properties panel recipe). Tile frames read `--docs-tile-radius`, resolved outside the canvas.
 - Alert corners (owner asked 2026-10-03): consistent by role, per alert.md: in-place 12
   (`radius-container`), banner 6 (`radius-control-sm`, OpenAI and Primer 6), flush 0. Open.
 - Add a control: an entry in `apps/docs/src/gallery/controls.ts`. Add a family: `src/pages.mjs`

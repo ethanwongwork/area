@@ -18,15 +18,19 @@ export interface AlignmentPickerProps extends Omit<HTMLAttributes<HTMLDivElement
   onValueChange?: (value: AlignmentPosition, event: ChangeEvent<HTMLInputElement>) => void;
   /** `soft` (the field fill, default) or `plain`. `"surface"` is a deprecated alias of `soft` (audit F-20). */
   variant?: VariantProps<typeof MANIFESTS.alignmentPicker>["variant"] | "surface";
-  size?: VariantProps<typeof MANIFESTS.alignmentPicker>["size"];
+  /** @deprecated The picker fills its parent and its marks follow the UI scale (2026-10-04). Ignored. */
+  size?: "sm" | "md" | "lg";
+  /** @deprecated The picker always fills its parent, width and height (2026-10-04). Ignored. */
   stretch?: boolean;
+  /** Shows a position's glyph as the pointer would preview it (a static hover state for docs). */
+  "data-preview"?: AlignmentPosition;
   disabled?: boolean;
   required?: boolean;
 }
 
 /** A physical 3×3 position choice. Arrow keys wrap within their row or column. */
 export const AlignmentPicker = forwardRef<HTMLDivElement, AlignmentPickerProps>(function AlignmentPicker(
-  { label, name, value, defaultValue = "center", onValueChange, variant, size, stretch, disabled, required, className, onKeyDown, ...rest }, ref,
+  { label, name, value, defaultValue = "center", onValueChange, variant, size: _size, stretch: _stretch, "data-preview": preview, disabled, required, className, onKeyDown, ...rest }, ref,
 ) {
   const generatedName = useId();
   const root = useRef<HTMLDivElement | null>(null);
@@ -70,8 +74,8 @@ export const AlignmentPicker = forwardRef<HTMLDivElement, AlignmentPickerProps>(
     if (typeof ref === "function") ref(node);
     else if (ref) ref.current = node;
   }} {...rest} role="radiogroup" aria-label={rest["aria-label"] ?? label} aria-disabled={disabled || undefined} dir="ltr"
-    className={alignmentPickerVariants({ variant: variant === "surface" ? "soft" : variant, size, stretch }, className)} onKeyDown={move}>
-    {ALIGNMENT_POSITIONS.map((position, index) => <label className="area-alignment-picker__cell" key={position}>
+    className={alignmentPickerVariants({ variant: variant === "surface" ? "soft" : variant }, className)} onKeyDown={move}>
+    {ALIGNMENT_POSITIONS.map((position, index) => <label className="area-alignment-picker__cell" key={position} data-preview={preview === position && selected !== position ? "" : undefined}>
       <input ref={node => { inputs.current[index] = node; }} type="radio" name={name ?? generatedName} value={position}
         checked={selected === position} disabled={disabled} required={required} aria-label={position.replace("-", " ")}
         onChange={event => {

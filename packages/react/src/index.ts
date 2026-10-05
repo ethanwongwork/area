@@ -51,7 +51,7 @@ export type { OverlayAlign, OverlaySide, Position, PositionOptions } from "./com
 export * from "./components/forms.tsx";
 export * from "./variants.ts";
 
-export { Theme, useTheme, type ThemeProps, type AxisSelection } from "./components/Theme.tsx";
+export { Theme, useTheme, type ThemeProps, type AxisSelection, type PillShape } from "./components/Theme.tsx";
 
 export { Badge, type BadgeProps } from "./components/Badge.tsx";
 export { BadgeGroup, type BadgeGroupProps } from "./components/BadgeGroup.tsx";

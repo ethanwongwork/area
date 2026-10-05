@@ -38,8 +38,8 @@ test('presence sizes, Area-drawn marks, out-of-office shapes, and accessible ove
   assert.match(render(h(Presence, {'aria-label':'Disponible'})), /aria-label="Disponible"/);
 });
 test('anchor hides decorative overlays from accessibility while preserving owner', () => {
-  const html=render(h(IndicatorAnchor,{placement:'bottom-end',indicator:h(Presence)},h('button',{'aria-label':'Irene Yamaguchi, available'},'Irene Yamaguchi')));
-  assert.match(html,/aria-label="Irene Yamaguchi, available"/);
+  const html=render(h(IndicatorAnchor,{placement:'bottom-end',indicator:h(Presence)},h('button',{'aria-label':'David Tee, available'},'David Tee')));
+  assert.match(html,/aria-label="David Tee, available"/);
   assert.match(html,/area-indicator-anchor__indicator" aria-hidden="true" inert=""/);
   assert.match(html,/area-indicator-anchor--bottom-end/);
 });

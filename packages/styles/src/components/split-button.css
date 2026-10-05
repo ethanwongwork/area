@@ -91,10 +91,10 @@
     inline-size: calc(var(--_height) / 2); /* spec: Figma 16 at 32 */
     --_icon: var(--area-icon-xs);
   }
-  /* A plate half as wide takes Button's radius cap against its own width, so it keeps corners
-     instead of turning into a pill (Figma 5 on its 16px chevron plate). */
+  /* A plate half as wide keeps corners instead of turning into a pill at the default (Figma 5 on its
+     16px chevron plate): the corner of a box three quarters the Button's height, 6 (compact 4). */
   .area-split-button--ghost.area-split-button--icon-only > .area-split-button__trigger {
-    border-radius: min(var(--_radius), round(down, calc(var(--_height) / 2 * var(--area-radius-button-cap) + var(--area-radius-shift)), 2px)); /* even pixels: 6, compact 4 (radius audit D6; all even) */
+    border-radius: min(var(--_radius), max(var(--area-radius-min), round(down, calc(var(--_height) * 0.75 * var(--area-radius-factor)), 2px))); /* even pixels: 6, compact 4 (radius audit D6; all even) */
   }
 
   .area-split-button__trigger > .area-button__icon > svg { transition: transform var(--area-duration-base) var(--area-ease-out); }

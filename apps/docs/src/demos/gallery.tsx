@@ -62,22 +62,22 @@ export const GalleryAlertDismissible = () => {
 };
 
 export const GalleryAvatar = () => (
-  <Avatar fallback="I" alt="Irene Yamaguchi" />
+  <Avatar fallback="D" alt="David Tee" />
 );
 
-export const GalleryAvatarImage = () => <Avatar src="/images/irene-yamaguchi.jpg" fallback="I" alt="Irene Yamaguchi" />;
-export const GalleryAvatarImageFallback = () => <Avatar src="/images/avatar-missing.png" fallback="I" alt="Irene Yamaguchi" />;
-export const GalleryAvatarTwoInitials = () => <Avatar fallback="IY" alt="Irene Yamaguchi" />;
-export const GalleryAvatarIcon = () => <Avatar icon={<PersonIcon />} alt="Irene Yamaguchi" />;
-export const GalleryAvatarGroup = () => <AvatarGroup max={3} aria-label="Irene Yamaguchi and 4 teams"><Avatar src="/images/irene-yamaguchi.jpg" fallback="IY" alt="Irene Yamaguchi" /><Avatar shape="square" fallback="D" alt="Design team" /><Avatar shape="square" fallback="R" alt="Research team" /><Avatar shape="square" fallback="P" alt="Platform team" /><Avatar shape="square" fallback="S" alt="Support team" /></AvatarGroup>;
-export const GalleryAvatarActive = () => <Avatar active fallback="I" alt="Irene Yamaguchi" />;
-export const GalleryAvatarAvailability = () => <IndicatorAnchor inset placement="bottom-end" overlap="circular" indicator={<Indicator status="available" size="sm" />}><Avatar fallback="I" role="img" aria-label="Irene Yamaguchi, available" /></IndicatorAnchor>;
-export const GalleryAvatarNotification = () => <IndicatorAnchor inset placement="top-end" overlap="circular" indicator={<Indicator count={2} />}><Avatar src="/images/irene-yamaguchi.jpg" fallback="I" alt="Irene Yamaguchi, 2 notifications" /></IndicatorAnchor>;
-export const GalleryAvatarInverse = () => <Avatar tone="inverse" fallback="I" alt="Irene Yamaguchi" />;
+export const GalleryAvatarImage = () => <Avatar src="/images/david-tee.jpg" fallback="D" alt="David Tee" />;
+export const GalleryAvatarImageFallback = () => <Avatar src="/images/avatar-missing.png" fallback="D" alt="David Tee" />;
+export const GalleryAvatarTwoInitials = () => <Avatar fallback="DT" alt="David Tee" />;
+export const GalleryAvatarIcon = () => <Avatar icon={<PersonIcon />} alt="David Tee" />;
+export const GalleryAvatarGroup = () => <AvatarGroup max={3} aria-label="David Tee and 4 teams"><Avatar src="/images/david-tee.jpg" fallback="DT" alt="David Tee" /><Avatar shape="square" fallback="D" alt="Design team" /><Avatar shape="square" fallback="R" alt="Research team" /><Avatar shape="square" fallback="P" alt="Platform team" /><Avatar shape="square" fallback="S" alt="Support team" /></AvatarGroup>;
+export const GalleryAvatarActive = () => <Avatar active fallback="D" alt="David Tee" />;
+export const GalleryAvatarAvailability = () => <IndicatorAnchor inset placement="bottom-end" overlap="circular" indicator={<Indicator status="available" size="sm" />}><Avatar fallback="D" role="img" aria-label="David Tee, available" /></IndicatorAnchor>;
+export const GalleryAvatarNotification = () => <IndicatorAnchor inset placement="top-end" overlap="circular" indicator={<Indicator count={2} />}><Avatar src="/images/david-tee.jpg" fallback="D" alt="David Tee, 2 notifications" /></IndicatorAnchor>;
+export const GalleryAvatarInverse = () => <Avatar tone="inverse" fallback="D" alt="David Tee" />;
 export const GalleryAvatarSquare = () => <Avatar shape="square" fallback="D" alt="Design team" />;
-export const GalleryAvatarSmall = () => <Avatar size="sm" fallback="I" alt="Irene Yamaguchi" />;
-export const GalleryAvatarMedium = () => <Avatar size="md" fallback="I" alt="Irene Yamaguchi" />;
-export const GalleryAvatarLarge = () => <Avatar size="lg" fallback="I" alt="Irene Yamaguchi" />;
+export const GalleryAvatarSmall = () => <Avatar size="sm" fallback="D" alt="David Tee" />;
+export const GalleryAvatarMedium = () => <Avatar size="md" fallback="D" alt="David Tee" />;
+export const GalleryAvatarLarge = () => <Avatar size="lg" fallback="D" alt="David Tee" />;
 
 export const GalleryBadge = () => (
   <Badge tone="success" dot>Badge</Badge>
@@ -287,9 +287,6 @@ export const GalleryColorFieldSizeSm = () => (
 export const GalleryColorSwatchSizeSm = () => (
   <ColorSwatch color="#00A797" size="sm" />
 );
-export const GalleryAlignmentPickerSizeSm = () => (
-  <AlignmentPicker label="Object alignment" size="sm" />
-);
 export const GalleryToolbarSizeSm = () => (
   <Toolbar size="sm" variant="surface" aria-label="Text formatting">
     <ToolbarGroup aria-label="Style">
@@ -310,9 +307,6 @@ export const GalleryColorFieldSizeMd = () => (
 );
 export const GalleryColorSwatchSizeMd = () => (
   <ColorSwatch color="#00A797" size="md" />
-);
-export const GalleryAlignmentPickerSizeMd = () => (
-  <AlignmentPicker label="Object alignment" size="md" />
 );
 export const GalleryToolbarSizeMd = () => (
   <Toolbar size="md" variant="surface" aria-label="Text formatting">
@@ -335,9 +329,6 @@ export const GalleryColorFieldSizeLg = () => (
 export const GalleryColorSwatchSizeLg = () => (
   <ColorSwatch color="#00A797" size="lg" />
 );
-export const GalleryAlignmentPickerSizeLg = () => (
-  <AlignmentPicker label="Object alignment" size="lg" />
-);
 export const GalleryToolbarSizeLg = () => (
   <Toolbar size="lg" variant="surface" aria-label="Text formatting">
     <ToolbarGroup aria-label="Style">
@@ -348,28 +339,27 @@ export const GalleryToolbarSizeLg = () => (
     <Segmented size="lg" iconOnly aria-label="Alignment" defaultValue="left" items={textAligns} />
   </Toolbar>
 );
-export const GalleryAlignmentPickerDefault = () => <AlignmentPicker label="Object alignment" />;
+/* The picker fills its parent (2026-10-04); demos frame it at Figma's Layout column, 88 wide (88 x 56). */
+const AlignmentFrame = ({ children }: { children: ReactNode }) => <div style={{ inlineSize: "88px" }}>{children}</div>;
+export const GalleryAlignmentPickerDefault = () => <AlignmentFrame><AlignmentPicker label="Object alignment" /></AlignmentFrame>;
 export const GalleryAlignmentPicker = () => {
   const [position, setPosition] = useState<AlignmentPosition>("center");
   return <div style={{ display: "flex", alignItems: "center", gap: "var(--area-space-16)" }}>
-    <AlignmentPicker label="Object alignment" value={position} onValueChange={setPosition} />
+    <AlignmentFrame><AlignmentPicker label="Object alignment" value={position} onValueChange={setPosition} /></AlignmentFrame>
     <span role="status">{position.replace("-", " ")}</span>
   </div>;
 };
-export const GalleryAlignmentPickerPlain = () => <AlignmentPicker label="Image anchor" variant="plain" defaultValue="top-left" />;
-export const GalleryAlignmentPickerSizes = () => (
-  <div style={{ display: "flex", alignItems: "center", gap: "var(--area-space-16)" }}>
-  {(["sm", "md", "lg"] as const).map(size => <AlignmentPicker key={size} label={`${size} alignment`} size={size} />)}
-  </div>
-);
-export const GalleryAlignmentPickerDisabled = () => <AlignmentPicker label="Locked position" defaultValue="bottom-right" disabled />;
+/** Hover previews the position under the pointer (Figma's alignment grid). */
+export const GalleryAlignmentPickerHover = () => <AlignmentFrame><AlignmentPicker label="Object alignment" defaultValue="top-left" data-preview="bottom-right" /></AlignmentFrame>;
+export const GalleryAlignmentPickerPlain = () => <AlignmentFrame><AlignmentPicker label="Image anchor" variant="plain" defaultValue="top-left" /></AlignmentFrame>;
+export const GalleryAlignmentPickerDisabled = () => <AlignmentFrame><AlignmentPicker label="Locked position" defaultValue="bottom-right" disabled /></AlignmentFrame>;
 export const GalleryAlignmentPickerForm = () => {
   const [submitted, setSubmitted] = useState("");
   return <form onReset={() => setSubmitted("")} onSubmit={event => {
     event.preventDefault();
     setSubmitted(String(new FormData(event.currentTarget).get("alignment") ?? ""));
   }} style={{ display: "flex", alignItems: "center", gap: "var(--area-space-12)" }}>
-    <AlignmentPicker label="Saved alignment" name="alignment" defaultValue="top-left" />
+    <AlignmentFrame><AlignmentPicker label="Saved alignment" name="alignment" defaultValue="top-left" /></AlignmentFrame>
     <Button type="reset" variant="ghost" size="sm">Reset</Button>
     <Button type="submit" variant="soft" size="sm">Apply</Button>
     <output>{submitted}</output>
@@ -552,6 +542,8 @@ export const GalleryChip = () => (
   <Chip>Chip</Chip>
 );
 
+/** Follows the radius setting instead of a pill (2026-10-03). */
+export const GalleryChipRounded = () => <Chip pill={false}>Chip</Chip>;
 export const GalleryChipSmall = () => <Chip size="sm">Chip</Chip>;
 export const GalleryChipMedium = () => <Chip size="md">Chip</Chip>;
 export const GalleryChipLarge = () => <Chip size="lg">Chip</Chip>;
@@ -568,14 +560,14 @@ export const GalleryChipClickableDelete = () => <Chip kind="input" clickable onC
 export const GalleryChipCustomDelete = () => <Chip kind="input" onDismiss={() => {}} dismissIcon={<TrashIcon />} dismissLabel="Delete">Chip</Chip>;
 export const GalleryChipLinkUnderline = () => <ChipLink href="#gallery-section-chip">Link</ChipLink>;
 export const GalleryChipLinkIcon = () => <ChipLink href="#gallery-section-chip" treatment="icon" trailingIcon={<OpenIcon />}>Link out</ChipLink>;
-export const GalleryChipAvatarInitials = () => <Chip avatar={<Avatar fallback="IY" alt="" />}>Irene Yamaguchi</Chip>;
-export const GalleryChipAvatarPhoto = () => <Chip avatar={<Avatar src="/images/irene-yamaguchi.jpg" alt="" />}>Irene Yamaguchi</Chip>;
+export const GalleryChipAvatarInitials = () => <Chip avatar={<Avatar fallback="DT" alt="" />}>David Tee</Chip>;
+export const GalleryChipAvatarPhoto = () => <Chip avatar={<Avatar src="/images/david-tee.jpg" alt="" />}>David Tee</Chip>;
 export const GalleryChipImageFilter = () => <Chip image="/images/chip-pixels.png" imageAlt="">Image</Chip>;
 export const GalleryChipInvalid = () => <Chip kind="input" invalid onDismiss={() => {}}>Chip</Chip>;
 
 export const GalleryCode = () => <Code>Code</Code>;
 export const CodeSubtle = () => <Code subtle>Code</Code>;
-export const CodeOnColor = () => <div style={{ alignSelf: "stretch", blockSize: "100%", boxSizing: "border-box", display: "flex", alignItems: "center", justifyContent: "center", inlineSize: "100%", background: "var(--area-accent-solid)", borderRadius: "var(--area-space-24)", color: "var(--area-fg-on-accent)", padding: "var(--area-space-24)" }}><Code onColor>Code</Code></div>;
+export const CodeOnColor = () => <div style={{ alignSelf: "stretch", blockSize: "100%", boxSizing: "border-box", display: "flex", alignItems: "center", justifyContent: "center", inlineSize: "100%", background: "var(--area-accent-solid)", borderRadius: "var(--area-radius-container)", color: "var(--area-fg-on-accent)", padding: "var(--area-space-24)" }}><Code onColor>Code</Code></div>;
 export const CodeTokenSwatch = () => <Code swatch="var(--area-accent-solid)">--area-accent-solid</Code>;
 
 export const CodeInTable = () => (
@@ -628,7 +620,7 @@ export const CodeBlockDiff = () => (
     language="ts"
     marks={{ 2: "removed", 3: "added" }}
     style={{ inlineSize: "100%" }}
-    html={highlight('export const theme = {\n  accent: "indigo",\n  accent: "purple",\n  radius: "standard",\n};')}
+    html={highlight('export const theme = {\n  accent: "indigo",\n  accent: "purple",\n  radius: "8",\n};')}
   />
 );
 
@@ -946,14 +938,14 @@ export const GalleryComboboxCreate = () => {
 };
 export const GalleryComboboxRich = () => (
   <div style={comboFrame}><Combobox fullWidth aria-label="Assignee" placeholder="Assign to" items={[
-    { value: "irene-yamaguchi", label: "Irene Yamaguchi", icon: <PersonSmallIcon />, description: "Owner" },
+    { value: "david-tee", label: "David Tee", icon: <PersonSmallIcon />, description: "Owner" },
     { value: "design", label: "Design team", icon: <PersonSmallIcon />, description: "Editors" },
     { value: "engineering", label: "Engineering team", icon: <PersonSmallIcon />, description: "Viewers" },
   ]} /></div>
 );
 export const GalleryComboboxDisabledOption = () => (
   <div style={comboFrame}><Combobox fullWidth aria-label="Assignee" placeholder="Assign to" items={[
-    { value: "irene-yamaguchi", label: "Irene Yamaguchi" },
+    { value: "david-tee", label: "David Tee" },
     { value: "design", label: "Design team" },
     { value: "guest", label: "Guest", description: "Invited", disabled: true },
   ]} /></div>
@@ -1025,14 +1017,14 @@ export const GalleryContextMenuDisabled = () => (
  * link for 700ms (or on keyboard focus), closed 300ms after it leaves both.
  */
 const personCard = <>
-  <div className="area-hover-card__identity"><Avatar size="lg" fallback="IY" /><div><PopoverTitle level={false}>Irene Yamaguchi</PopoverTitle><span className="area-hover-card__meta">@irene</span></div></div>
+  <div className="area-hover-card__identity"><Avatar size="lg" fallback="DT" /><div><PopoverTitle level={false}>David Tee</PopoverTitle><span className="area-hover-card__meta">@david</span></div></div>
   <PopoverDescription>Description</PopoverDescription>
   <div className="area-hover-card__meta"><span>Label</span><span>Value</span></div>
 </>;
 /* A div, not a p: the card holds blocks, and an HTML parser closes a <p> at the first block,
    so server HTML inside a paragraph would not match the React tree it hydrates. */
 export const GalleryHoverCard = () => (
-  <div>Reviewed by <HoverCard trigger={<a href="#irene">@irene</a>}>{personCard}</HoverCard> yesterday.</div>
+  <div>Reviewed by <HoverCard trigger={<a href="#david">@david</a>}>{personCard}</HoverCard> yesterday.</div>
 );
 export const GalleryHoverCardPage = () => (
   <div>Body text <HoverCard trigger={<a href="#title">Title</a>}>
@@ -1047,7 +1039,7 @@ export const GalleryHoverCardSource = () => (
   </HoverCard>.</div>
 );
 export const GalleryHoverCardTop = () => (
-  <div>Owned by <HoverCard side="top" trigger={<a href="#irene-top">@irene</a>}>{personCard}</HoverCard></div>
+  <div>Owned by <HoverCard side="top" trigger={<a href="#david-top">@david</a>}>{personCard}</HoverCard></div>
 );
 
 /*
@@ -1387,8 +1379,8 @@ export const GalleryNavSidebar = () => (
       </Nav>
     </div>
     <div style={{ display: "flex", alignItems: "center", gap: "var(--area-space-8)", padding: "var(--area-space-12) var(--area-space-16)" }}>
-      <Avatar size="sm" fallback="IY" role="img" aria-label="Irene Yamaguchi" />
-      <span style={{ display: "grid" }}><span>Irene Yamaguchi</span><span style={{ color: "var(--area-fg-muted)", fontSize: "var(--area-text-xs-size)", lineHeight: "var(--area-text-xs-leading)" }}>Plus</span></span>
+      <Avatar size="sm" fallback="DT" role="img" aria-label="David Tee" />
+      <span style={{ display: "grid" }}><span>David Tee</span><span style={{ color: "var(--area-fg-muted)", fontSize: "var(--area-text-xs-size)", lineHeight: "var(--area-text-xs-leading)" }}>Plus</span></span>
     </div>
   </aside>
 );
@@ -1943,8 +1935,8 @@ export const GalleryColorFieldSplit = () => (
   {["#1E1E1E", "#D9D9D9", "#FFFFFF"].map((color, i) => <ColorField key={color} alpha variant="soft" defaultValue={color} aria-label={`Fill ${i + 1}`} opacityLabel={`Fill ${i + 1} opacity`} />)}
 </div>
 );
-export const GalleryAlignmentPickerLandscape = () => <div style={{inlineSize: "220px", blockSize: "112px"}}><AlignmentPicker label="Landscape alignment" stretch defaultValue="top-left" /></div>;
-export const GalleryAlignmentPickerPortrait = () => <div style={{inlineSize: "112px", blockSize: "200px"}}><AlignmentPicker label="Portrait alignment" stretch defaultValue="bottom-right" /></div>;
+/** In a parent that sets both dimensions, the grid fills it. */
+export const GalleryAlignmentPickerFill = () => <div style={{ inlineSize: "220px", blockSize: "112px" }}><AlignmentPicker label="Fill alignment" defaultValue="center" /></div>;
 const pickerSwatches = [
   {value: "#01AA4E", label: "Green 500"}, {value: "#006DF5", label: "Blue 500"},
   {value: "#5C5DFE", label: "Indigo 500"}, {value: "#8D4DF3", label: "Purple 500"},
@@ -2028,4 +2020,4 @@ export const GalleryCalendarDisabled = () => <Calendar aria-label="Locked date" 
 export const GalleryCheckboxAccent = () => <SelectionAccent><Checkbox label="Label" defaultChecked /></SelectionAccent>;
 export const GalleryRadioAccent = () => <SelectionAccent><Radio name="gallery-radio-accent" value="accent" label="Label" defaultChecked /></SelectionAccent>;
 export const GalleryChipAccent = () => <SelectionAccent><ChipGroup aria-label="Filters"><Chip defaultSelected>Selected</Chip><Chip>Item</Chip></ChipGroup></SelectionAccent>;
-export const GalleryAlignmentPickerAccent = () => <SelectionAccent><AlignmentPicker label="Object alignment" defaultValue="top-left" /></SelectionAccent>;
+export const GalleryAlignmentPickerAccent = () => <SelectionAccent><AlignmentFrame><AlignmentPicker label="Object alignment" defaultValue="top-left" /></AlignmentFrame></SelectionAccent>;

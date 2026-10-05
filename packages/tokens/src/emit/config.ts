@@ -1,4 +1,5 @@
 import { AXES, defaultPresetOf, assertAxisIntegrity } from '../axes/registry.ts';
+import { PILL_SHAPES, DEFAULT_PILLS } from '../axes/pills.ts';
 
 /** Small, DOM-free public configuration helpers generated from the actual registry. */
 export function emitConfig(): string {
@@ -23,6 +24,16 @@ export function mergeAxes(parent = DEFAULT_AXES, overrides = {}) {
   return Object.freeze(result);
 }
 
+/** Components that can draw a pill instead of the radius corner (axes/pills.ts), and the default pills. */
+export const PILL_SHAPES = Object.freeze(${JSON.stringify(PILL_SHAPES.map(shape=>shape.id))});
+export const DEFAULT_PILLS = Object.freeze(${JSON.stringify(DEFAULT_PILLS)});
+
+/** The data-area-pills value for a list of pill shapes; unknown names throw. */
+export function pillsAttribute(pills = DEFAULT_PILLS) {
+  for (const pill of pills) if (!PILL_SHAPES.includes(pill)) throw new RangeError('Unknown Area pill shape: ' + pill);
+  return [...new Set(pills)].join(' ');
+}
+
 export function themeAttributes(selection = DEFAULT_AXES) {
   return Object.fromEntries(Object.entries(mergeAxes(DEFAULT_AXES, selection)).map(([axis,value])=>['data-area-'+axis,value]));
 }
@@ -37,6 +48,10 @@ ${AXES.map(axis=>`  ${axis.id}: ${axis.presets.map(p=>JSON.stringify(p.id)).join
 export declare const AXIS_PRESETS: Readonly<{ [K in keyof AxisSelection]: readonly AxisSelection[K][] }>;
 export declare const DEFAULT_AXES: Readonly<AxisSelection>;
 export declare function mergeAxes(parent?: Partial<AxisSelection>, overrides?: Partial<AxisSelection>): Readonly<AxisSelection>;
+export type PillShape = ${PILL_SHAPES.map(shape=>JSON.stringify(shape.id)).join(' | ')};
+export declare const PILL_SHAPES: readonly PillShape[];
+export declare const DEFAULT_PILLS: readonly PillShape[];
+export declare function pillsAttribute(pills?: readonly PillShape[]): string;
 export declare function themeAttributes(selection?: Partial<AxisSelection>): { [K in keyof AxisSelection as \`data-area-\${K}\`]: AxisSelection[K] };
 `;
 }

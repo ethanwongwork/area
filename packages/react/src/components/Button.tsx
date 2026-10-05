@@ -21,7 +21,7 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
   fullWidth?: boolean;
   /** Square button with no label. Requires `aria-label`. */
   iconOnly?: boolean;
-  /** Fully round. */
+  /** Unset: a pill only while the theme's `pills` list names `button`. `true` forces a pill, `false` the radius corner. */
   pill?: boolean;
   /**
    * Pulls the button back by its own padding so the *label* lines up with the text
@@ -95,7 +95,7 @@ export const Button = /* @__PURE__ */ forwardRef<HTMLButtonElement, ButtonProps>
       ref={ref}
       type={type}
       className={buttonVariants(
-        { variant, tone, size, fullWidth, iconOnly, pill, align },
+        { variant, tone, size, fullWidth, iconOnly, pill: pill === true, rounded: pill === false, align },
         className,
       )}
       disabled={disabled}

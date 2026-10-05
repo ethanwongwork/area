@@ -3,6 +3,8 @@ import { Count, Nav, NavItem, Tabs } from "@area/react";
 
 export const GalleryCount = () => <Count count={12} />;
 export const GalleryCountSoft = () => <Count variant="soft" count={12} />;
+/** Follows the radius setting instead of a pill (2026-10-03). */
+export const GalleryCountRounded = () => <Count variant="soft" pill={false} count={12} />;
 export const GalleryCountSizeSm = () => <Count size="sm" count={12} />;
 export const GalleryCountSizeMd = () => <Count size="md" count={12} />;
 export const GalleryCountSingleDigit = () => <Count variant="soft" count={3} />;

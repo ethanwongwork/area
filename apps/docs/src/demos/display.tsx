@@ -2,44 +2,44 @@ import { useState } from "react";
 import { Alert, Avatar, AvatarGroup, Badge, Indicator, IndicatorAnchor, Button, Checkbox, Chip, ChipGroup, Dialog, Field, Input, Kbd, KbdGroup, Label, Menu, MenuItem, Panel, PanelSection, PanelStack, Popover, PopoverDescription, PopoverHeader, PopoverTitle, Progress, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Tooltip } from "@area/react";
 import { AlertIcon, AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, ArrowIcon, CheckIcon, DismissIcon, DotsFourIcon, InfoIcon, PersonIcon, PlusIcon, SearchIcon, TokenIcon } from "../icons.tsx";
 
-export const AvatarDefault = () => <Avatar fallback="I" alt="Irene Yamaguchi" />;
+export const AvatarDefault = () => <Avatar fallback="D" alt="David Tee" />;
 
 export const AvatarImage = () => (
-  <Avatar src="/images/irene-yamaguchi.jpg" fallback="I" alt="Irene Yamaguchi" />
+  <Avatar src="/images/david-tee.jpg" fallback="D" alt="David Tee" />
 );
 
 export const AvatarImageFallback = () => (
-  <Avatar src="/images/avatar-missing.png" fallback="I" alt="Irene Yamaguchi" />
+  <Avatar src="/images/avatar-missing.png" fallback="D" alt="David Tee" />
 );
 
-export const AvatarInitials = () => <><Avatar fallback="I" alt="Irene Yamaguchi" /><Avatar fallback="IY" alt="Irene Yamaguchi" /></>;
+export const AvatarInitials = () => <><Avatar fallback="D" alt="David Tee" /><Avatar fallback="DT" alt="David Tee" /></>;
 
-export const AvatarIcon = () => <Avatar icon={<PersonIcon />} alt="Irene Yamaguchi" />;
+export const AvatarIcon = () => <Avatar icon={<PersonIcon />} alt="David Tee" />;
 
 export const AvatarGrouped = () => (
-  <AvatarGroup max={3} aria-label="Irene Yamaguchi and 4 teams"><Avatar src="/images/irene-yamaguchi.jpg" fallback="IY" alt="Irene Yamaguchi" /><Avatar shape="square" fallback="D" alt="Design team" /><Avatar shape="square" fallback="R" alt="Research team" /><Avatar shape="square" fallback="P" alt="Platform team" /><Avatar shape="square" fallback="S" alt="Support team" /></AvatarGroup>
+  <AvatarGroup max={3} aria-label="David Tee and 4 teams"><Avatar src="/images/david-tee.jpg" fallback="DT" alt="David Tee" /><Avatar shape="square" fallback="D" alt="Design team" /><Avatar shape="square" fallback="R" alt="Research team" /><Avatar shape="square" fallback="P" alt="Platform team" /><Avatar shape="square" fallback="S" alt="Support team" /></AvatarGroup>
 );
 
-export const AvatarActive = () => <Avatar active fallback="I" alt="Irene Yamaguchi" />;
+export const AvatarActive = () => <Avatar active fallback="D" alt="David Tee" />;
 
-export const AvatarAvailability = () => <IndicatorAnchor inset placement="bottom-end" overlap="circular" indicator={<Indicator status="available" size="sm" />}><Avatar fallback="I" role="img" aria-label="Irene Yamaguchi, available" /></IndicatorAnchor>;
+export const AvatarAvailability = () => <IndicatorAnchor inset placement="bottom-end" overlap="circular" indicator={<Indicator status="available" size="sm" />}><Avatar fallback="D" role="img" aria-label="David Tee, available" /></IndicatorAnchor>;
 
-export const AvatarNotification = () => <IndicatorAnchor inset placement="top-end" overlap="circular" indicator={<Indicator count={2} />}><Avatar src="/images/irene-yamaguchi.jpg" fallback="I" alt="Irene Yamaguchi, 2 notifications" /></IndicatorAnchor>;
+export const AvatarNotification = () => <IndicatorAnchor inset placement="top-end" overlap="circular" indicator={<Indicator count={2} />}><Avatar src="/images/david-tee.jpg" fallback="D" alt="David Tee, 2 notifications" /></IndicatorAnchor>;
 
-export const AvatarTones = () => <><Avatar fallback="I" alt="Irene Yamaguchi" /><Avatar tone="inverse" fallback="I" alt="Irene Yamaguchi" /></>;
+export const AvatarTones = () => <><Avatar fallback="D" alt="David Tee" /><Avatar tone="inverse" fallback="D" alt="David Tee" /></>;
 
 export const AvatarShapes = () => (
   <>
-    <Avatar fallback="I" alt="Irene Yamaguchi" />
+    <Avatar fallback="D" alt="David Tee" />
     <Avatar shape="square" fallback="D" alt="Design team" />
   </>
 );
 
 export const AvatarSizes = () => (
   <>
-    <Avatar size="sm" fallback="I" alt="Irene Yamaguchi" />
-    <Avatar size="md" fallback="I" alt="Irene Yamaguchi" />
-    <Avatar size="lg" fallback="I" alt="Irene Yamaguchi" />
+    <Avatar size="sm" fallback="D" alt="David Tee" />
+    <Avatar size="md" fallback="D" alt="David Tee" />
+    <Avatar size="lg" fallback="D" alt="David Tee" />
   </>
 );
 

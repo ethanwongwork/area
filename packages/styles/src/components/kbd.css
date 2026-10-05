@@ -17,14 +17,10 @@
     --_leading: var(--area-size-10);
     /* spec: 6 at every size and in every host (owner 2026-09-28: "keep 6px for everything as a
        rule"; 4 read too sharp, a concentric 2 far too sharp). */
-    /* Code's corner role, radius-small, capped by its height (audit G-10; was control-sm, 6 either
-       way at Standard). Finite under Pill (audit H-1). */
-    /* The small role's base value, so compact keeps 6 too (radius audit D4, owner 2026-10-03; the
-       density-scaled role made compact 4), moved by roundness like every derived corner
-       (axes/roundness.ts); the cap rounds down to whole pixels, 16 -> 6, and moves too. */
-    --_radius: min(
-      max(0px, calc(var(--area-radius-base-small) + var(--area-radius-shift))),
-      round(down, calc(var(--_height) * var(--area-radius-cap) + var(--area-radius-shift)), 2px));
+    /* 6 at the default as the corner of a 24px box, so it scales with the radius setting like every
+       corner (2 ... 6 ... 10, a pill at Pill, where the browser's half-height clamp takes it); the
+       same at both densities (radius audit D4). */
+    --_radius: max(var(--area-radius-min), round(down, calc(24px * var(--area-radius-factor)), 2px));
 
     display: inline-flex;
     align-items: center;
