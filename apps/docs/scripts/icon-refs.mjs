@@ -102,7 +102,7 @@ for (const key of keys) {
     rows++;
   }
 }
-const css = `body{font:13px system-ui;margin:16px;color:#1a1a1a;--area-weight-icon:1.125px}
+const css = `body{font:13px system-ui;margin:16px;color:#1a1a1a;--area-weight-icon:1.125px;--_icon-overlap:4.5px}
 .g{font-size:20px;font-weight:600;padding:16px 0 6px;border-bottom:2px solid #1a1a1a}
 .r{display:flex;align-items:center;border-bottom:1px solid #eee;padding:6px 0}.h{color:#888;font-weight:600}
 .l{width:150px;display:flex;flex-direction:column}.l em{font-style:normal;color:#999;font-size:11px}

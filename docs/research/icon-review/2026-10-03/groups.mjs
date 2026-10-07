@@ -10,7 +10,7 @@ export const GROUPS = {
   "Transport and places": "car truck plane rocket navigation route waypoints map location location-off locate compass compass-dot globe anchor life-buoy home building bank store",
   "Weather and nature": "cloud cloud-upload cloud-download cloud-check cloud-alert cloud-off cloud-rain cloud-snow cloud-lightning cloud-sun sun moon brightness snowflake wind thermometer umbrella flame flash zap-off leaf tree mountain paw",
   "People": "person person-add person-remove person-check person-x person-settings person-key person-chat person-circle person-square people id-card shield-user accessibility hand handshake thumbs-up fingerprint scan-face scan-check smile smile-plus frown meh square-smile",
-  "Agents and AI": "agent agent-circle agent-square bot bot-agent bot-automator bot-builder bot-designer bot-generator bot-guard bot-lead bot-researcher bot-scholar sparkle wand brain brain-off lightbulb crystal-ball grid-sparkle corners-sparkle",
+  "Agents and AI": "agent bot bot-agent bot-automator bot-builder bot-designer bot-generator bot-guard bot-lead bot-researcher bot-scholar sparkle wand brain brain-off lightbulb crystal-ball grid-sparkle corners-sparkle",
   "Chat and mail": "chat chat-add chat-more chat-dot chat-code chat-question chat-warning chat-off chat-multiple chat-sparkle mail mail-open mail-plus mail-dot send reply reply-all at megaphone",
   "Calls and alerts": "call call-incoming call-outgoing call-end phone-missed voicemail bell bell-dot bell-ring bell-off alarm",
   "Media": "play pause stop play-circle pause-circle stop-circle record skip-forward fast-forward music piano volume volume-low volume-off mic mic-off headphones headset waveform disc captions video video-off camera camera-off film clapperboard",

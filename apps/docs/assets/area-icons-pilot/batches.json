@@ -15,7 +15,7 @@
         "dismiss": "approved",
         "document": "review",
         "eye": "review",
-        "folder": "approved",
+        "folder": "review",
         "info": "review",
         "link": "approved",
         "more-horizontal": "approved",
@@ -69,7 +69,7 @@
         "dots-four": "approved",
         "eye-off": "approved",
         "flip": "approved",
-        "flow": "approved",
+        "flow": "review",
         "flow-wrap": "approved",
         "flow-free": "approved",
         "gap": "approved",
@@ -147,7 +147,7 @@
         "zoom-in": "review",
         "zoom-out": "review",
         "flag": "approved",
-        "archive": "approved",
+        "archive": "review",
         "cloud": "approved",
         "phone": "approved",
         "camera": "review",
@@ -167,10 +167,10 @@
         "at": "approved",
         "key": "review",
         "shield": "approved",
-        "gift": "approved",
+        "gift": "review",
         "map": "review",
         "chart": "approved",
-        "table": "approved"
+        "table": "review"
       }
     },
     {
@@ -246,13 +246,13 @@
       "note": "Person add (people's figure and a plus), history (reset round clock hands), save, bug, eyedropper, paintbrush, puzzle piece and ruler.",
       "icons": {
         "person-add": "review",
-        "history": "approved",
+        "history": "review",
         "save": "review",
         "bug": "review",
-        "eyedropper": "approved",
+        "eyedropper": "review",
         "paintbrush": "review",
         "puzzle": "review",
-        "ruler": "approved"
+        "ruler": "review"
       }
     },
     {
@@ -682,8 +682,6 @@
       "note": "The agent mark (owner round: not the pointer, which read as Cursor’s cursor) is Fluent’s agents shape: a hexagon split by a steep slash into two halves. The sparkle sits on chat’s corner as Fluent’s chat sparkle.",
       "icons": {
         "agent": "review",
-        "agent-circle": "review",
-        "agent-square": "review",
         "chat-sparkle": "review",
         "grid-sparkle": "review",
         "grid-plus": "review",
@@ -1003,6 +1001,46 @@
         "chart-bar-horizontal": "review",
         "equal": "review",
         "person-square": "review"
+      }
+    },
+    {
+      "id": "batch-67",
+      "title": "Batch 67 · Pen",
+      "note": "The pen, drawn as the pencil's twin (owner, 2026-10-05: pen and pencil the same size and shape; the pen has a round top and a clip).",
+      "icons": {
+        "pen": "review"
+      }
+    },
+    {
+      "id": "batch-68",
+      "title": "Batch 68 · Audit gaps",
+      "note": "Concepts the whole-set consistency audit (2026-10-05) found missing: state variants of existing bases (copy, document, calendar, folder, timer, call, sparkle, person, shield, battery), editor and type pairs (justify, list-minus, lowercase, headings, regex, replace), arrange pairs (send to back, ungroup) and screen controls (minimize, loader-circle, arrow from line). Each is its family base plus the shared modifier.",
+      "icons": {
+        "copy-check": "review",
+        "document-dismiss": "review",
+        "calendar-x": "review",
+        "folder-search": "review",
+        "timer-off": "review",
+        "call-off": "review",
+        "sparkle-off": "review",
+        "person-lock": "review",
+        "shield-lock": "review",
+        "battery-full": "review",
+        "battery-medium": "review",
+        "maximize": "review",
+        "minimize": "review",
+        "loader-circle": "review",
+        "text-align-justify": "review",
+        "list-minus": "review",
+        "case-lower": "review",
+        "regex": "review",
+        "replace": "review",
+        "heading-1": "review",
+        "heading-2": "review",
+        "heading-3": "review",
+        "send-to-back": "review",
+        "ungroup": "review",
+        "arrow-up-from-line": "review"
       }
     }
   ]
