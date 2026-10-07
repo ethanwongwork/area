@@ -49,11 +49,14 @@ function useRailWidth(rail: keyof typeof RAILS) {
 export interface GallerySection {
   slug: string;
   name: string;
+  /** Shown at the end of the row (the icon page's category sizes). */
+  count?: number;
 }
 
-/** The gallery's pages: every component, and how the radius setting shapes each one. */
+/** The gallery's pages: every component, every icon, and how the radius setting shapes each one. */
 export const GALLERY_PAGES = [
   { id: "components", href: "./index.html", label: "Components" },
+  { id: "icons", href: "./icons.html", label: "Icons" },
   { id: "review", href: "./review.html", label: "Review" },
   { id: "roundness", href: "./roundness.html", label: "Corner radius" },
 ] as const;
@@ -70,9 +73,10 @@ export function GalleryNav({ sections, page = "components" }: { sections: readon
   const nav = useRef<HTMLElement>(null);
 
   // The current item follows the canvas's scroll: the last section whose heading has passed
-  // the reading line, or the last section once the canvas reaches its end.
+  // the reading line, or the last section once the canvas reaches its end. A page that scrolls
+  // inside the canvas (the icon browser, under its toolbar) marks its scroller data-gallery-scroll.
   useEffect(() => {
-    const canvas = document.getElementById(GALLERY_CANVAS_ID);
+    const canvas = document.getElementById(GALLERY_CANVAS_ID)?.querySelector<HTMLElement>("[data-gallery-scroll]") ?? document.getElementById(GALLERY_CANVAS_ID);
     if (!canvas) return;
     const targets = sections.map(section => document.getElementById(sectionId(section.slug))).filter((node): node is HTMLElement => node !== null);
     let frame = 0;
@@ -80,9 +84,10 @@ export function GalleryNav({ sections, page = "components" }: { sections: readon
       frame = 0;
       const line = canvas.getBoundingClientRect().top + READING_LINE;
       const atEnd = canvas.scrollTop + canvas.clientHeight >= canvas.scrollHeight - 1;
-      let active = targets[0];
-      if (atEnd) active = targets[targets.length - 1];
-      else for (const target of targets) {
+      const shown = targets.filter(target => !target.hidden);
+      let active = shown[0];
+      if (atEnd) active = shown[shown.length - 1];
+      else for (const target of shown) {
         if (target.getBoundingClientRect().top > line) break;
         active = target;
       }
@@ -110,7 +115,8 @@ export function GalleryNav({ sections, page = "components" }: { sections: readon
           <NavSeparator />
           <NavGroup>
             {sections.map(section => (
-              <NavItem key={section.slug} href={`#${sectionId(section.slug)}`} current={section.slug === current} onClick={() => setCurrent(section.slug)}>
+              <NavItem key={section.slug} href={`#${sectionId(section.slug)}`} current={section.slug === current} onClick={() => setCurrent(section.slug)}
+                trailing={section.count === undefined ? undefined : <span className="gallery-nav__count">{section.count}</span>}>
                 {section.name}
               </NavItem>
             ))}
