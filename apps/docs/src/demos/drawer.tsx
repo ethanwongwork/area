@@ -4,29 +4,29 @@ import type { CSSProperties } from "react";
 import { Button, ConfirmDialog, Drawer, Field, Input } from "@area/react";
 
 /* A page-shaped frame so an inline drawer sits against its edge, as it would against the screen. */
-const stage: CSSProperties = { position: "relative", inlineSize: 440, blockSize: 300, overflow: "hidden", borderRadius: 8, background: "var(--area-bg-subtle, var(--area-bg-component))" };
+const stage: CSSProperties = { inlineSize: 440, blockSize: 300 };
 
-const ProfileFields = () => <div style={{ display: "grid", gap: 16 }}>
+const ProfileFields = () => <div style={{ display: "grid", gap: "var(--area-space-16)" }}>
   <Field label="Name"><Input fullWidth defaultValue="David Tee" /></Field>
   <Field label="Username"><Input fullWidth defaultValue="@davidtee" /></Field>
 </div>;
 const footer = <><Button variant="soft" tone="neutral">Cancel</Button><Button>Save changes</Button></>;
 
 export const GalleryDrawer = () => (
-  <div style={stage}><Drawer inline title="Edit profile" description="Make changes to your profile here." footer={footer}><ProfileFields /></Drawer></div>
+  <div className="docs-edge-stage" style={stage}><Drawer inline title="Edit profile" description="Make changes to your profile here." footer={footer}><ProfileFields /></Drawer></div>
 );
 export const GalleryDrawerStart = () => (
-  <div style={stage}><Drawer inline side="start" title="Edit profile" description="Make changes to your profile here." footer={footer}><ProfileFields /></Drawer></div>
+  <div className="docs-edge-stage" style={stage}><Drawer inline side="start" title="Edit profile" description="Make changes to your profile here." footer={footer}><ProfileFields /></Drawer></div>
 );
 export const GalleryDrawerBottom = () => (
-  <div style={stage}><Drawer inline side="bottom" title="Edit profile" description="Make changes to your profile here." footer={footer} /></div>
+  <div className="docs-edge-stage" style={stage}><Drawer inline side="bottom" title="Edit profile" description="Make changes to your profile here." footer={footer} /></div>
 );
 export const GalleryDrawerNoClose = () => (
-  <div style={stage}><Drawer inline showCloseButton={false} title="Edit profile" footer={footer}><ProfileFields /></Drawer></div>
+  <div className="docs-edge-stage" style={stage}><Drawer inline showCloseButton={false} title="Edit profile" footer={footer}><ProfileFields /></Drawer></div>
 );
 /* shadcn's Sheet: the primary action first, both full width. */
 export const GalleryDrawerStacked = () => (
-  <div style={stage}><Drawer inline actions="stacked" title="Edit profile" description="Make changes to your profile here."
+  <div className="docs-edge-stage" style={stage}><Drawer inline actions="stacked" title="Edit profile" description="Make changes to your profile here."
     footer={<><Button>Save changes</Button><Button variant="soft" tone="neutral">Cancel</Button></>}><ProfileFields /></Drawer></div>
 );
 /* Notion's side peek: no scrim, the page behind stays usable; Escape or the close control closes it. */
