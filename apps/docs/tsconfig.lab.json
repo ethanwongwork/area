@@ -1,5 +1,5 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": { "noEmit": true, "jsx": "react-jsx", "types": ["node"] },
-  "include": ["src/lab", "src/demos", "src/icons.tsx", "src/badge-client.tsx", "src/switch-client.tsx", "src/gallery", "src/gallery-client.tsx"]
+  "include": ["src/lab", "src/demos", "src/icons.tsx", "src/badge-client.tsx", "src/switch-client.tsx", "src/gallery", "src/gallery-client.tsx", "src/icons-client.tsx"]
 }

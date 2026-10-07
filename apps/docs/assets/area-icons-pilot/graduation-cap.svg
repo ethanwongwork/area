@@ -1,6 +1,5 @@
 <svg data-set="area-pilot" data-keyline="horizontal" data-angles="free" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path data-filled="solid" d="M8.431 3.206L13.431 5.598A1 1 0 0 1 13.431 7.402L8.431 9.794A1 1 0 0 1 7.569 9.794L2.569 7.402A1 1 0 0 1 2.569 5.598L7.569 3.206A1 1 0 0 1 8.431 3.206Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="solid" d="M4.5 8.326V11A3.5 2 0 0 0 11.5 11V8.326" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M14 6.5V10.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="gap" d="M-0.623 7.122L7.083 10.809A2.125 2.125 0 0 0 8.917 10.809L16.623 7.122" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-halo="" data-filled="solid" d="M8.447 3.106L13.447 5.606A1 1 0 0 1 13.447 7.394L8.447 9.894A1 1 0 0 1 7.553 9.894L2.553 7.394A1 1 0 0 1 2.553 5.606L7.553 3.106A1 1 0 0 1 8.447 3.106Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="solid" d="M4.5 8.368V11A3.5 2 0 0 0 11.5 11V8.368" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M13.5 7.25V10.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

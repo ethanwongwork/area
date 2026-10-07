@@ -1,0 +1,5 @@
+<svg data-set="area-pilot" data-keyline="circle" data-angles="free" data-group="fingerprint" data-label="8 · Two arches and a stem (Tabler)" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M2.5 13V8A5.5 5.5 0 0 1 13.5 8V11" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M5 12.5V8A3 3 0 0 1 11 8V13" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M8 8V14" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

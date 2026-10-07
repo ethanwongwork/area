@@ -1108,5 +1108,157 @@
       "phosphor": "paint-brush",
       "huge": "PaintBrush01"
     }
+  },
+  "filled-crossing": {
+    "$title": "Filled: a part that crosses the solid's edge (owner, 2026-10-06)",
+    "import": {
+      "area": "import",
+      "fluent": "arrow_import",
+      "lucide": "import",
+      "phosphor": "tray-arrow-down",
+      "huge": "FileImport"
+    },
+    "cloud-upload": {
+      "area": "cloud-upload",
+      "fluent": "cloud_arrow_up",
+      "lucide": "cloud-upload",
+      "phosphor": "cloud-arrow-up",
+      "huge": "CloudUpload"
+    },
+    "cloud-download": {
+      "area": "cloud-download",
+      "fluent": "cloud_arrow_down",
+      "lucide": "cloud-download",
+      "phosphor": "cloud-arrow-down",
+      "huge": "CloudDownload"
+    },
+    "cloud-lightning": {
+      "area": "cloud-lightning",
+      "fluent": "weather_thunderstorm",
+      "lucide": "cloud-lightning",
+      "phosphor": "cloud-lightning",
+      "huge": "CloudLightning"
+    },
+    "notebook": {
+      "area": "notebook",
+      "fluent": "notebook",
+      "lucide": "notebook",
+      "phosphor": "notebook",
+      "huge": "Notebook"
+    },
+    "chat-sparkle": {
+      "area": "chat-sparkle",
+      "fluent": "chat_sparkle"
+    },
+    "file-pen": {
+      "area": "file-pen",
+      "fluent": "document_edit",
+      "lucide": "file-pen",
+      "phosphor": "note-pencil",
+      "huge": "FileEdit"
+    }
+  },
+  "redraw-2026-10-06": {
+    "$title": "Owner's redraw list (2026-10-06)",
+    "graduation cap": {
+      "area": "graduation-cap",
+      "fluent": "hat_graduation",
+      "lucide": "graduation-cap",
+      "phosphor": "graduation-cap",
+      "huge": "Mortarboard01"
+    },
+    "bandage": {
+      "area": "bandage",
+      "lucide": "bandage",
+      "phosphor": "bandaids",
+      "huge": "Bandage"
+    },
+    "qr code": {
+      "area": "qr-code",
+      "fluent": "qr_code",
+      "lucide": "qr-code",
+      "phosphor": "qr-code",
+      "huge": "QrCode"
+    },
+    "desktop check": {
+      "area": "desktop-check",
+      "fluent": "desktop_checkmark",
+      "lucide": "monitor-check",
+      "phosphor": "monitor",
+      "huge": "ComputerCheck"
+    },
+    "globe": {
+      "area": "globe",
+      "fluent": "globe",
+      "lucide": "globe",
+      "phosphor": "globe",
+      "huge": "Globe02"
+    },
+    "plane": {
+      "area": "plane",
+      "fluent": "airplane",
+      "lucide": "plane",
+      "phosphor": "airplane",
+      "huge": "Airplane01"
+    },
+    "fingerprint": {
+      "area": "fingerprint",
+      "fluent": "fingerprint",
+      "lucide": "fingerprint",
+      "phosphor": "fingerprint",
+      "huge": "FingerprintPattern"
+    }
+  },
+  "arrow-containers": {
+    "$title": "An arrow into or out of a container (owner, 2026-10-06: import vs share)",
+    "download": {
+      "area": "download",
+      "fluent": "arrow_download",
+      "lucide": "download",
+      "phosphor": "tray-arrow-down",
+      "huge": "Download04"
+    },
+    "upload": {
+      "area": "upload",
+      "fluent": "arrow_upload",
+      "lucide": "upload",
+      "phosphor": "tray-arrow-up",
+      "huge": "Upload04"
+    },
+    "share": {
+      "area": "share",
+      "fluent": "share_ios",
+      "lucide": "share",
+      "phosphor": "export",
+      "huge": "Share05"
+    },
+    "import": {
+      "area": "import",
+      "fluent": "arrow_import",
+      "lucide": "import",
+      "phosphor": "arrow-square-in",
+      "huge": "FileImport"
+    },
+    "open": {
+      "area": "open",
+      "fluent": "open",
+      "lucide": "square-arrow-out-up-right",
+      "phosphor": "arrow-square-out",
+      "huge": "LinkSquare01"
+    },
+    "log-in": {
+      "area": "log-in",
+      "fluent": "arrow_enter",
+      "lucide": "log-in",
+      "phosphor": "sign-in",
+      "huge": "Login01"
+    },
+    "log-out": {
+      "area": "log-out",
+      "fluent": "arrow_exit",
+      "lucide": "log-out",
+      "phosphor": "sign-out",
+      "huge": "Logout01"
+    }
   }
 }

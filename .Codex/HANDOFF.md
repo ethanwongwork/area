@@ -20,6 +20,32 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
 - Tooling: headless Edge `--dump-dom` can hang when given a private `--user-data-dir`; the shared
   sheet scripts write into `apps/docs/.cache` (create it in a fresh worktree).
 
+## Icon browser (2026-10-05, branch `claude/icon-gallery-organization-4a1c05`)
+
+- `icons.html` (gallery nav: Icons, in the component gallery shell): every icon grouped by category
+  (`apps/docs/src/icon-categories.ts`; the build fails if an icon has no category), Cursor-style
+  toolbar (search, Outline/Filled, size 12–64 on the size curve), Names / Rotations / review-mark
+  options, and a docked preview (size 16–256, 16–48 strip, rotations family, facts, Copy / Download
+  SVG with token weights resolved). Source `src/gallery/icon-browser.tsx`, hydrated by
+  `src/icons-client.tsx`. New icons need a line in `icon-categories.ts`. The old Icons page is now
+  "Icon review" (`gallery-icons.html`).
+- `npm run dev` doesn't publish on current main: the dogfood audit fails on numeric `r:` inline
+  styles from the icon generator (pre-existing). Build with `node apps/docs/scripts/build.mjs` and
+  serve `apps/docs/scripts/serve.mjs` meanwhile.
+
+## Filled audit and size-curve hold (2026-10-06, same branch)
+
+- Filled audit of the whole set (spec "Filled consistency audit and the size curve's hold"; sheets and
+  tools in `docs/research/icon-review/2026-10-06/`): a part is one colour. import, cloud-upload and
+  cloud-download now cut round their arrow (halo) like cloud-lightning; notebook's rings join the body.
+- The size curve holds at 24 (`SIZE_CURVE_MAX`): 32 and 48 are the 24px drawing scaled (1.8 / 2.7px).
+- Redrawn on owner notes: desktop-check, qr-code, globe, plane (cockpit window), fingerprint (concentric
+  tracks), graduation-cap, bandage (filled). All delegated items are listed as open in the README.
+- Second round: import is a line glyph like share; every filled cut is one line weight at every size
+  (halo = 3 weights; gaps follow the curve; 15 front-part gaps became `data-halo`, dots included);
+  fingerprint has an S core (fourth round); person-key carries the key icon; ? gap = ! gap; icons-inside-icons audit in `embedded.mjs`. Fifth round: person family on person's proportions with one lower-right badge bite, faces centred, cart wheels on the bar, ten fingerprint candidates in `explore/` awaiting a pick. Open: the outline's geometric overlap cut is 1.5×
+  the line above 24px.
+
 ## Icon quality pass (2026-10-03–04, branch `claude/icon-library-quality-pass-009345`)
 
 - Whole set reviewed in 32 groups; 20 icons fixed (filled slivers, islands, negatives, broken

@@ -196,6 +196,23 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
   Fluent's pyramid (peak on the diagonal), so image-off's slash covers its right slope; image-plus's + sits on the lower-right corner. A basket is Lucide's (legs that don't meet); a peaked
   handle on a tall body reads as a cupcake. A shape whose parts must sit on x.5 may sit 0.5 off
   centre on both axes (chip, delegated).
+- **Person family and faces (owner, 2026-10-06):** person-* marks sit at the lower right (about 12.5, 12.25)
+  on the standalone person moved left, all but the key in one shared round bite (`2026-10-06/person-family.mjs`);
+  this replaces "beside: at head height". Faces centre their features in the shape (smile: eyes 6, 6 / 10, 6
+  over the mouth's corners). The cart's wheels sit on its bottom bar.
+- **Filled cuts are the line's weight (owner, 2026-10-06):** every filled cut, halo and gap is one line
+  weight at every size; a gap that offsets a front part is `data-halo` on that part (dots included), so
+  it stays flush. An arrow through a frame (import, share, open, trays, doors) fills by weight; only a
+  body that is the object (cloud, page, square) fills. fingerprint: concentric arcs 2.5 apart round an S core (a reverse arc tangent to the core's top). A
+  smaller copy of an icon inside another is that icon's drawing scaled (person-key carries key, diagonal,
+  lower right, the figure cut round it); simplify only where it can't fit and record it
+  (`2026-10-06/embedded.mjs` lists every composite). The ? sits 2.25 above its dot, as the ! does.
+- **Filled audit, 2026-10-06** (spec "Filled consistency audit and the size curve's hold"): a part is
+  one colour (knockout inside, ink with a halo when it crosses the edge in front, ink joined when
+  attached); the curve holds at the 24px master. Owner notes applied: desktop-check's check centred,
+  qr-code's data modules r 0.5, the plane's cockpit window, the fingerprint's ridges on concentric
+  tracks, the globe's lens meridian, the graduation cap's 1 : 2 board and x.5 tassel, bandage filled as
+  Phosphor's (front band solid, back band a line).
 - **Audit, 2026-10-05** (spec "Consistency audit, 2026-10-05"): bot hats fill their main mass,
   and a band bounded by two outline lines stays open when filled (owner, bot-guard: the cap's top
   and the visor fill, the middle band stays open; bot-automator follows; bot-designer's crown and
@@ -453,9 +470,12 @@ or the accessory fills instead (video_person, incognito; the bots' hats). Judge 
     never stopping a hair short. A gap between parts is space, so its ends are sawn.
   - *Marks inside containers* are plain knockouts (placement, above). Lines beside a solid stay
     lines.
-  - *An arrow that crosses a solid's edge keeps its whole length:* the part over the solid is a
-    knockout and the part outside is ink (a filled-only `stroke`), meeting flush on the edge
-    (`stroke-linecap="butt"` or `data-clip`): import, cloud-upload, cloud-download, notebook's rings.
+  - *Filled keeps the outline's relationships; a part is one colour* (2026-10-06, delegated, owner to
+    confirm; replaces the split arrow, which turned one arrow from white to black at the edge). Wholly
+    over the solid: a knockout. Crossing the edge and cut round in the outline (a part in front: the
+    bolt, an arrow over a cloud): it stays ink and the solid is cut back by one line weight (`halo`: cloud-lightning, cloud-upload, cloud-download, chat-sparkle). Crossing the edge
+    and joined in the outline (an attached part: pegs, notebook's rings): it stays ink and joins the
+    solid. `docs/research/icon-review/2026-10-06/escapes.mjs` lists knockouts that leave their solid.
   - *Secondary parts stay lines* (owner, 2026-10-04): the body fills; a header, tab, lid or rim, the
     page or fold behind, a page on top and an attachment (clip, pegs) keep the outline's drawing with
     their inside open, and nothing is cut round them (calendar, folder, archive, gift, shopping-bag,
@@ -610,17 +630,20 @@ at 24:
 | Line | 1.0 | 1.125 | 1.24 | 1.35 | 1.54 |
 
 Uniform scaling made large icons too thick (2.25px at 32) and small ones too light (0.84 at
-12). Pass `size` to a pilot icon, or `size` to `Glyph` (base.css holds the factors), and
+12). **The curve holds at 24** (2026-10-06, delegated): above 24 an icon is the 24px drawing scaled
+whole (1.8px at 32, 2.7 at 48; Fluent's masters are 2 and 2.5), because the drawing's gaps stay
+fixed in its units and kept growing against a thinning line (`SIZE_CURVE_MAX` in the generator). Pass `size` to a pilot icon, or `size` to `Glyph` (base.css holds the factors), and
 the line follows the curve. At 12px the tight gap falls to about 0.9px, so a dense icon
 that must read at 12px on 1× screens gets its own 12px cut.
 
 In the filled variant (owner, 2026-10-03: "the negative space looks way thicker than the
 monoline strokes"), lines drawn as negative space (knockouts, cuts) follow the curve, so they
 match the outline's line at every size. Silhouettes and lines drawn over or beside solids follow
-the curve too (owner, 2026-10-04), so both styles share one weight at every size; gaps between two
-solids keep the 16px clearance. A part in front of a solid is parted from it by the outline's
-overlap cut at every size: a `halo` round a line, or `data-halo` on a solid in front (a clock, gear
-or lock on a page). A hole inside a line is cut to the line's centre-line (a wheel, a sheet, a clip),
+the curve too (owner, 2026-10-04), so both styles share one weight at every size; gaps follow it as
+well (2026-10-06). A part in front of a solid is parted from it by one line weight at every size: a
+`halo` round a line, or `data-halo` on a solid in front (a clock, gear or lock on a page, a notification
+dot, a front coin or figure). Draw a part-in-front separation as `data-halo`, never as a `gap` offset
+from the front, which leaves a hair of the back solid on the front's edge once the line thins. A hole inside a line is cut to the line's centre-line (a wheel, a sheet, a clip),
 so it stays flush as the line thins. The shared slash's
 gap moves with the line (`slashGap`: the slash shifted one weight). A gap that must stay flush
 with a cut is drawn to the cut's centre-line (file-cog, file-pen), so a thinner cut opens no
