@@ -38,6 +38,10 @@ Component CSS consumes semantic colors, not numbered palette rungs. During the v
 phase, a measured color with no matching role may be a `light-dark()` spec literal. Tone means meaning;
 treatment means emphasis. Reuse `neutral`, `info`, `success`, `warning`, `caution`,
 `danger` and `discovery` where applicable; `accent` is an emphasis role, not a tone (below). Additional roles require a clear job.
+`pink`, `gray` and `brown` (2026-10-06) are label colours without a meaning, for Tag (Notion's tag palette): `pink`
+and `brown` are full tonal blocks (brown is the palette's 15th family, a muted orange outside the accent set); `gray` is the warm cast of the neutral grey with tints and inks only (no outline or
+solid: a near-neutral scale has no tinted stroke that clears the outline floor). Both have light and dark pairs
+checked by the contrast tests, including each tone's strong ink on its active tint (a tag label).
 Foreground does not change on hover. Weight (owner, audit S2, 2026-09-30): 400 for running
 text, descriptions, field labels, rows and titles set larger than the body; 500 for surface
 titles set at body size (14/20, 16/24), where size cannot set them apart: Popover, Dialog,

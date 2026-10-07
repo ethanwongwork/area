@@ -154,10 +154,10 @@ rgba(33,27,23,.05) }`, `.xayv9eh:active` at twice the alpha (10%); ChatGPT's che
 | plain · title type | text md 16/24 (compact 14/20), regular 400, `fg-default` | Notion 16/24 400 | — |
 | plain · content start | the label's column (chevron box + gap) | Area alignment rule: content shares the title's column (Code block, Tree view columns) | Notion's child blocks start 6 earlier, at the title box's edge, and add their own text padding |
 | divided · chevron | trailing `chevron-down` 16, muted; rotated 180° while open | shadcn `size-4 text-muted-foreground`, `rotate-180` (`:43`) | — |
-| divided · trigger | padding-block `inset-surface-md` 16 (compact 12); title–chevron gap 16 | shadcn `py-4`, `gap-4` (`:37`) | — |
+| divided · trigger | padding-block 10 (compact 8); title–chevron gap 16 | shadcn rendered py 10 (2026-10-06); `gap-4` (`:37`) | Was 16 from the pinned source's `py-4` |
 | divided · title type | size's text role, weight strong 500 | shadcn `font-medium`; ChatGPT 500; Figma 550 | — |
 | divided · rule | 1px `border-divider` after every item but the last | shadcn `border-b last:border-b-0` (`:21`); Separator's ink | — |
-| divided · content | padding-block-end `inset-surface-md` 16 (compact 12) | shadcn `pb-4` (`:60`) | — |
+| divided · content | padding-block-end 10 (compact 8) | shadcn rendered pb 10 (2026-10-06) | Was 16 (`pb-4`, pinned source) |
 | title hover | underline (divided); the chevron plate (plain); ink fixed | shadcn `hover:underline`; DESIGN_SYSTEM shared rule (foreground fixed) | — |
 | sm title | text sm 14/20 (compact 12/16) | ChatGPT 14, shadcn `text-sm` | ChatGPT's 18 leading is its sidebar's; Area's 14 role is 14/20 |
 | motion | chevron rotates over `duration-fast` with `ease-out`; content shows at once | ChatGPT 150ms transform | No height animation: no target product animates its toggle's content |
@@ -235,3 +235,8 @@ paint"); one label weight per role (plain 400 like body text; divided 500 like h
 
 - 2026-10-02 · owner: build Disclosure → spec written from Notion, ChatGPT, Figma (panel) captures
   and shadcn source.
+- 2026-10-06 · owner: "is disclosure the same as accordion? the gaps between the text in each disclosure row
+  and the dividers below is quite large, is that intended?" → Disclosure divided + DisclosureGroup is the
+  accordion. The gap followed shadcn's pinned source (py-4, 16); shadcn's rendered accordion today
+  (Base UI, ui.shadcn.com, measured in the built-in browser) is py 10 around a 14/20 title (42 row) and
+  content pb 10. Divided trigger and content end 16 → 10 (compact 12 → 8). Plain (Notion) unchanged.

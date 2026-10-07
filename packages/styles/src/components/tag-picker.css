@@ -1,0 +1,138 @@
+/* ---------------------------------------------------------------------------
+ * Tag picker
+ *
+ * Several values from a list that grows: the chosen ones sit in the field as coloured tags
+ * (Tag, with its remove ×), typing filters the list and offers to create a tag. Notion's
+ * select and multi-select properties (captures/tag-picker/notion--select-property-editor--*).
+ * The field is Input's chrome, wrapping; the list is Menu's surface and rows, as Combobox's.
+ * docs/specs/tag-picker.md.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-tag-picker {
+    --_bg: var(--area-input-bg);
+    --_border: var(--area-input-edge);
+    --_border-hover: var(--area-input-edge-hover);
+    --_border-focus: var(--area-field-focus-color);
+    --_focus-outline: var(--area-field-focus-color);
+    --_focus-halo: var(--area-field-focus-halo-color);
+    --_height: var(--area-control-md);
+    --_radius: var(--area-radius-control-md);
+    --_text: var(--area-control-md-text);
+    --_leading: var(--area-control-md-leading);
+    /* The tag's own height (Tag sm, 20: Notion's tags are 20, notion--select-property-editor). */
+    --_tag: var(--area-mark-label-md); /* Tag sm, 20: Notion's tag */
+    display: inline-flex;
+    vertical-align: middle;
+    inline-size: var(--area-input-inline-size);
+    max-inline-size: 100%;
+    min-inline-size: 0;
+  }
+  .area-tag-picker--outline { --_bg: var(--area-input-bg); }
+  .area-tag-picker--soft {
+    --_bg: var(--area-input-bg-soft);
+    --_border: transparent;
+    --_border-hover: var(--area-input-edge);
+  }
+  .area-tag-picker--sm { --_height: var(--area-control-sm); --_radius: var(--area-radius-control-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
+  .area-tag-picker--md { --_height: var(--area-control-md); --_radius: var(--area-radius-control-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-tag-picker--lg { --_height: var(--area-control-lg); --_radius: var(--area-radius-control-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); --_tag: var(--area-mark-label-lg); }
+  .area-tag-picker--full-width { display: flex; inline-size: 100%; }
+
+  /*
+   * The field. Tags sit as far from the edge as from the top (equal insets, owner 2026-10-01):
+   * (height − tag) / 2 − border each side, 5 at md. It wraps onto more rows of tags and grows;
+   * each row is the tag's height, with Notion's 6 between tags (notion--select-property-editor:
+   * gap 6). The input takes the rest of the last row.
+   */
+  .area-tag-picker__field {
+    --_tag-inset: max(0px, calc((var(--_height) - var(--_tag)) / 2 - var(--area-stroke-width)));
+    box-sizing: border-box;
+    display: flex;
+    flex: 1;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--_tag-inset) var(--area-space-6); /* spec: Notion's tag gap */
+    min-inline-size: 0;
+    min-block-size: var(--_height);
+    padding: var(--_tag-inset);
+    border: var(--area-stroke-width) solid var(--_border);
+    border-radius: calc(min(var(--_radius), max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px))) + var(--area-pill-field) * var(--area-radius-full));
+    background-color: var(--_bg);
+    color: var(--area-input-text);
+    font-size: var(--_text);
+    line-height: var(--_leading);
+    cursor: text;
+    transition: var(--area-transition);
+  }
+  @media (hover: hover) {
+    .area-tag-picker__field:hover:not([data-disabled]):not(:focus-within) { border-color: var(--_border-hover); }
+  }
+  .area-tag-picker__field:focus-within {
+    border-color: var(--_border-focus);
+    box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
+    outline: var(--area-field-focus-outline-width) solid var(--_focus-outline);
+  }
+  /* Open: the field keeps its focused edge while the list shows (focus is in the input). */
+  .area-tag-picker[data-open] > .area-tag-picker__field { border-color: var(--_border-focus); }
+  .area-tag-picker__field[aria-invalid="true"] {
+    --_border: var(--area-input-invalid-color);
+    --_border-hover: var(--area-input-invalid-color);
+    --_border-focus: var(--area-input-invalid-color);
+    --_focus-outline: var(--area-input-invalid-color);
+    --_focus-halo: var(--area-input-invalid-halo-color);
+  }
+  .area-tag-picker__field[data-disabled] {
+    --_bg: var(--area-input-bg-disabled);
+    --_border: var(--area-border-faint);
+    color: var(--area-fg-disabled);
+    cursor: not-allowed;
+  }
+  .area-tag-picker--soft > .area-tag-picker__field[data-disabled] { --_border: transparent; }
+  
+
+  /* The text input: Input's bare control, a tag tall, at least a few characters wide. Before any
+     tag it starts on Input's text column (the cap-centred inset), not the tag inset. */
+  .area-tag-picker__input {
+    flex: 1 0 var(--area-space-48);
+    min-inline-size: 0;
+    block-size: var(--_tag);
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    outline: none;
+  }
+  .area-tag-picker__input:first-child {
+    padding-inline-start: max(0px, calc(round(nearest, calc((var(--_height) - 1cap) / 2 - var(--area-stroke-width)), 1px) - var(--_tag-inset)));
+  }
+  .area-tag-picker__input::placeholder { color: var(--area-input-placeholder); opacity: 1; }
+  .area-tag-picker__input:disabled { cursor: not-allowed; }
+
+  /* The list: Combobox's (placement, width, height), Menu's rows. */
+  .area-tag-picker__listbox[popover] {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    max-block-size: min(324px, var(--area-overlay-available-height, 50vh)); /* spec: combobox.md */
+    min-inline-size: max(var(--area-overlay-anchor-width, 0px), calc(var(--area-space-96) * 2 + var(--area-space-32)));
+  }
+  .area-tag-picker__listbox:focus-visible { outline: none; }
+  /* spec: Notion heads the list with "Select an option or create one", 12px muted. Menu's label. */
+  .area-tag-picker__hint { flex: none; }
+  /* A tag in a row keeps its own size; the row's check marks the chosen ones. */
+  .area-tag-picker__option > .area-tag { flex: none; max-inline-size: 100%; }
+  .area-tag-picker__option[aria-selected="false"] > .area-menu__check { visibility: hidden; }
+  /* "Create" names the action in the row's ink, then shows the tag it would make. */
+  .area-tag-picker__create { gap: var(--area-space-6); }
+  .area-tag-picker__empty {
+    display: flex;
+    align-items: center;
+    block-size: var(--area-ui-row);
+    padding-inline: calc((var(--area-ui-row) - 1cap) / 2);
+    color: var(--area-fg-muted);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+  }
+}

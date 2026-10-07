@@ -34,6 +34,10 @@ export const ROLES = [
   "success",
   "info",
   "discovery",
+  /* Tag tones (owner 2026-10-06): Notion's pink and gray, from existing palette families. */
+  "pink",
+  "gray",
+  "brown",
 ] as const;
 export type Role = (typeof ROLES)[number];
 
@@ -89,6 +93,21 @@ function tonalBlock(role: Role, prefix: string): Record<string, Alias> {
     [`fg-${prefix}-vivid`]: vivid(role),
     [`fg-${prefix}-strong`]: at(role, "textTonalStrong"),
     [`fg-on-${prefix}`]: contrast(role),
+  };
+}
+
+/**
+ * A tint and its inks, without the outline, solid fill or vivid rung: a tag tone on a neutral
+ * cast (gray is `warm`). A near-neutral scale has no tinted stroke that clears the outline floor,
+ * and a tag needs none.
+ */
+function tagToneBlock(role: Role, prefix: string): Record<string, Alias> {
+  return {
+    [`${prefix}-surface`]: tonalSurface(role, "rest"),
+    [`${prefix}-surface-hover`]: tonalSurface(role, "hover"),
+    [`${prefix}-surface-active`]: tonalSurface(role, "active"),
+    [`fg-${prefix}`]: tonalForeground(role),
+    [`fg-${prefix}-strong`]: at(role, "textTonalStrong"),
   };
 }
 
@@ -196,6 +215,9 @@ export const SEMANTIC_ALIASES: Record<string, Alias> = {
   ...tonalBlock("success", "success"),
   ...tonalBlock("info", "info"),
   ...tonalBlock("discovery", "discovery"),
+  ...tonalBlock("pink", "pink"),
+  ...tagToneBlock("gray", "gray"),
+  ...tonalBlock("brown", "brown"),
 };
 
 export type SemanticTokenName = keyof typeof SEMANTIC_ALIASES;

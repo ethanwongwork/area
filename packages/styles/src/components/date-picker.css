@@ -1,0 +1,134 @@
+/* ---------------------------------------------------------------------------
+ * Date picker
+ *
+ * A field showing a date that opens a Popover with the date as text (type it) above a
+ * Calendar (pick it), and a Clear row. Notion's date property (captures/date-picker/
+ * notion--date-property-editor--open--light). The field shares Select's chrome, the panel is
+ * Popover with a plain Calendar inside it. docs/specs/date-picker.md.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-date-picker {
+    --_bg: var(--area-select-bg);
+    --_bg-hover: var(--_bg);
+    --_border: var(--area-select-edge);
+    --_border-hover: var(--area-select-edge-hover);
+    --_border-focus: var(--area-field-focus-color);
+    --_focus-outline: var(--area-field-focus-color);
+    --_focus-halo: var(--area-field-focus-halo-color);
+    --_trigger-width: var(--area-select-inline-size);
+    --_height: var(--area-control-md);
+    --_radius: var(--area-radius-control-md);
+    --_icon: var(--area-icon-md);
+    --_gap: var(--area-gap-md);
+    --_text: var(--area-control-md-text);
+    --_leading: var(--area-control-md-leading);
+    display: inline-flex;
+    vertical-align: middle;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+  }
+  .area-date-picker--outline { --_bg: var(--area-select-bg); }
+  .area-date-picker--soft {
+    --_bg: var(--area-input-bg-soft);
+    --_border: transparent;
+    --_border-hover: var(--area-input-edge);
+  }
+  /* Notion's property value: no chrome until hovered, as wide as its text (Custom select ghost). */
+  .area-date-picker--ghost {
+    --_bg: transparent;
+    --_bg-hover: var(--area-bg-component-hover);
+    --_border: transparent;
+    --_border-hover: transparent;
+    --_trigger-width: auto;
+  }
+  .area-date-picker--sm { --_height: var(--area-control-sm); --_radius: var(--area-radius-control-sm); --_gap: var(--area-gap-sm); --_icon: var(--area-icon-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
+  .area-date-picker--md { --_height: var(--area-control-md); --_radius: var(--area-radius-control-md); --_gap: var(--area-gap-md); --_icon: var(--area-icon-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-date-picker--lg { --_height: var(--area-control-lg); --_radius: var(--area-radius-control-lg); --_gap: var(--area-gap-lg); --_icon: var(--area-icon-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+  .area-date-picker--full-width { display: flex; inline-size: 100%; }
+  .area-date-picker--full-width > .area-date-picker__trigger { flex: 1; inline-size: auto; }
+
+  /* The field: Select's chrome and corner; sides from the inset contract (inset.css). */
+  .area-date-picker__trigger {
+    appearance: none;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--_gap);
+    inline-size: var(--_trigger-width);
+    max-inline-size: 100%;
+    min-inline-size: 0;
+    block-size: var(--_height);
+    margin: 0;
+    border: var(--area-stroke-width) solid var(--_border);
+    border-radius: calc(min(var(--_radius), max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px))) + var(--area-pill-field) * var(--area-radius-full));
+    background-color: var(--_bg);
+    color: var(--area-select-text);
+    font: inherit;
+    font-size: var(--_text);
+    line-height: var(--_leading);
+    text-align: start;
+    cursor: pointer;
+    outline: none;
+    transition: var(--area-transition);
+  }
+  @media (hover: hover) {
+    .area-date-picker__trigger:hover:not(:disabled, [aria-expanded="true"]) {
+      border-color: var(--_border-hover);
+      background-color: var(--_bg-hover);
+    }
+  }
+  .area-date-picker__trigger:focus-visible,
+  .area-date-picker[data-open] > .area-date-picker__trigger {
+    border-color: var(--_border-focus);
+  }
+  .area-date-picker__trigger:focus-visible {
+    box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
+    outline: var(--area-field-focus-outline-width) solid var(--_focus-outline);
+    outline-offset: 0;
+  }
+  .area-date-picker--ghost[data-open] > .area-date-picker__trigger { border-color: transparent; background-color: var(--area-bg-component-active); }
+  .area-date-picker__trigger[aria-invalid="true"] {
+    --_border: var(--area-select-invalid-color);
+    --_border-hover: var(--area-select-invalid-color);
+    --_border-focus: var(--area-select-invalid-color);
+    --_focus-outline: var(--area-select-invalid-color);
+    --_focus-halo: var(--area-select-invalid-halo-color);
+  }
+  .area-date-picker__trigger:disabled {
+    --_border: var(--area-border-faint);
+    background-color: var(--area-select-bg-disabled);
+    color: var(--area-fg-disabled);
+    cursor: not-allowed;
+  }
+  .area-date-picker--ghost > .area-date-picker__trigger:disabled { --_border: transparent; background-color: transparent; }
+  /* A leading calendar glyph in the field's icon ink, as InputGroup's. */
+  .area-date-picker__icon {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    inline-size: var(--_icon);
+    block-size: var(--_icon);
+    color: var(--area-input-icon);
+  }
+  .area-date-picker__icon > svg { inline-size: 100%; block-size: 100%; }
+  .area-date-picker__trigger:disabled .area-date-picker__icon { color: inherit; }
+  .area-date-picker__value {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .area-date-picker__value[data-placeholder] { color: var(--area-input-placeholder); }
+  .area-date-picker__trigger:disabled .area-date-picker__value[data-placeholder] { color: inherit; }
+
+  /*
+   * The panel: a Popover. spec (notion--date-property-editor): the typed date sits in a small
+   * field above the month, the month below it, a ruled-off Clear row last. Popover's inset and
+   * gap hold them; the Clear row runs to the surface's padding as a menu row does.
+   */
+  .area-date-picker__panel { inline-size: max-content; }
+  .area-date-picker__panel > .area-calendar { margin-inline: auto; }
+  .area-date-picker__footer { display: flex; flex-direction: column; margin-block-start: calc(var(--area-space-6) * -1); }
+  .area-date-picker__footer > .area-menu__separator { margin-inline: 0; }
+}

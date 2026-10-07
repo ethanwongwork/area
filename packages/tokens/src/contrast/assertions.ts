@@ -23,7 +23,9 @@ export interface ContrastAssertion {
   note: string;
 }
 
-const TONES = ["accent", "danger", "warning", "caution", "success", "info", "discovery"] as const;
+const TONES = ["accent", "danger", "warning", "caution", "success", "info", "discovery", "pink", "brown"] as const;
+/** Tag-only tones: a tint and its inks, no outline or solid (aliases.ts, tagToneBlock). */
+const TAG_TONES = ["gray"] as const;
 
 /**
  * The four tones a code block paints with: keywords, tags, attributes and strings.
@@ -80,6 +82,16 @@ function textAssertions(): ContrastAssertion[] {
 
 function tonalAssertions(): ContrastAssertion[] {
   const out: ContrastAssertion[] = [];
+  // A tag paints its strongest ink on its active tint (Tag, docs/specs/tag.md), in every tone.
+  for (const tone of [...TONES.filter(tone => tone !== "accent"), ...TAG_TONES]) {
+    out.push({ fg: `fg-${tone}-strong`, bg: `${tone}-surface-active`, wcag: WCAG.TEXT, apca: APCA.CONTENT, note: `${tone} tag label` });
+  }
+  for (const tone of TAG_TONES) {
+    for (const bg of ["bg-page", "bg-surface", "bg-subtle", `${tone}-surface`, `${tone}-surface-hover`, `${tone}-surface-active`]) {
+      out.push({ fg: `fg-${tone}`, bg, wcag: WCAG.TEXT, apca: APCA.CONTENT, note: `${tone} text` });
+      out.push({ fg: `fg-${tone}-strong`, bg, wcag: WCAG.TEXT, apca: APCA.CONTENT, note: `${tone} strong text (a tag label)` });
+    }
+  }
   for (const tone of TONES) {
     // Tonal text on the page, on a quiet surface, and on its own tint. `bg-subtle` is in
     // this list because syntax highlighting puts tonal foregrounds on a code block, which

@@ -1,0 +1,142 @@
+/* ---------------------------------------------------------------------------
+ * Drawer
+ *
+ * A panel that slides in from an edge of the screen over a scrim, for a task beside the page:
+ * a record's details, settings, a form. Full height (or full width from the bottom), flush with
+ * its edge, the rest of Dialog's anatomy: header with title, description and close, a body that
+ * scrolls, a footer. shadcn's Sheet (docs/specs/drawer.md); Dialog's insets, type and close.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  /* The native modal fills the viewport; the surface sits against one edge of it. */
+  .area-drawer__modal {
+    --_drawer-duration: var(--area-duration-base);
+    position: fixed;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    max-inline-size: 100%;
+    max-block-size: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    overflow: hidden;
+    transition: overlay var(--_drawer-duration) allow-discrete, display var(--_drawer-duration) allow-discrete;
+  }
+  /* spec: Dialog's scrim (ChatGPT 13% black; shadcn's Sheet 10% with a 4px blur). */
+  .area-drawer__modal::backdrop {
+    background: var(--area-scrim);
+    opacity: 1;
+    transition: opacity var(--_drawer-duration) var(--area-ease-out), overlay var(--_drawer-duration) allow-discrete, display var(--_drawer-duration) allow-discrete;
+  }
+  .area-drawer__modal:not([open])::backdrop { opacity: 0; }
+  html:has(.area-drawer__modal:modal) { overflow: hidden; }
+
+  .area-drawer {
+    /* Dialog's 16 inset, border included (shadcn's Sheet: 16 header, body sides and footer). */
+    --_drawer-outer: var(--area-space-16);
+    --_drawer-inset: calc(var(--_drawer-outer) - var(--area-border-width));
+    /* spec: shadcn's Sheet is 384 wide (max-w-sm, shadcn--sheet-right); md is Dialog's 480. */
+    --_drawer-size: 384px; /* spec */
+    --_drawer-from: translateX(100%);
+    position: absolute;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: var(--area-inset-surface-md);
+    inset-block: 0;
+    inset-inline-end: 0;
+    inline-size: min(var(--_drawer-size), calc(100% - var(--area-space-48)));
+    padding: var(--_drawer-inset);
+    border: 0 solid var(--area-border-float);
+    border-inline-start-width: var(--area-border-width);
+    background-color: var(--area-bg-surface);
+    color: var(--area-fg-default);
+    box-shadow: var(--area-shadow-float);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+    text-align: start;
+    translate: none;
+    transition: transform var(--_drawer-duration) var(--area-ease-out);
+  }
+  .area-drawer--md { --_drawer-size: calc(var(--area-space-96) * 5); }
+  .area-drawer--sm { --_drawer-size: 384px; /* spec */ }
+  .area-drawer--end { --_drawer-from: translateX(100%); }
+  .area-drawer--end:dir(rtl) { --_drawer-from: translateX(-100%); }
+  .area-drawer--start {
+    --_drawer-from: translateX(-100%);
+    inset-inline: 0 auto;
+    border-inline-start-width: 0;
+    border-inline-end-width: var(--area-border-width);
+  }
+  .area-drawer--start:dir(rtl) { --_drawer-from: translateX(100%); }
+  /* From the bottom: full width, as tall as its content up to most of the screen, the top
+     corners rounded as Dialog's surface (a sheet lifting off the edge). */
+  .area-drawer--bottom {
+    --_drawer-from: translateY(100%);
+    inset: auto 0 0 0;
+    inline-size: 100%;
+    max-block-size: calc(100% - var(--area-space-48));
+    border-inline-start-width: 0;
+    border-block-start-width: var(--area-border-width);
+    border-start-start-radius: var(--area-radius-container);
+    border-start-end-radius: var(--area-radius-container);
+  }
+  /* Enter and exit: the surface slides from its edge while the scrim fades (motion tokens, so the
+     "none" motion preset and reduced motion make it instant). */
+  .area-drawer__modal:not([open], :popover-open) > .area-drawer { transform: var(--_drawer-from); }
+  @starting-style {
+    .area-drawer__modal:is([open], :popover-open) > .area-drawer { transform: var(--_drawer-from); }
+    .area-drawer__modal[open]::backdrop { opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .area-drawer__modal, .area-drawer { --_drawer-duration: 0s; }
+  }
+
+  /* Header, title, description and close: Dialog's (surface.css), so the two read as one family. */
+  .area-drawer__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--area-inset-surface-md);
+    flex-shrink: 0;
+  }
+  .area-drawer__header:has(> .area-drawer__close) { margin-block-start: calc((var(--area-icon-md) - var(--area-leading-24)) / 2); }
+  .area-drawer__header > .area-drawer__close {
+    margin-block: calc((var(--area-leading-24) - var(--_height)) / 2);
+    margin-inline-end: calc((var(--_icon) - var(--_height)) / 2);
+  }
+  .area-drawer__heading { min-inline-size: 0; display: grid; gap: var(--area-space-4); }
+  .area-drawer__title {
+    margin: 0;
+    overflow-wrap: anywhere;
+    font-size: var(--area-title-xs-size);
+    line-height: var(--area-title-xs-leading);
+    letter-spacing: var(--area-title-xs-tracking);
+    font-weight: var(--area-weight-strong);
+  }
+  .area-drawer__description { margin: 0; overflow-wrap: anywhere; color: var(--area-fg-muted); }
+  /* The body scrolls between a fixed header and footer, with Dialog's bleed for focus rings. */
+  .area-drawer__body {
+    --_drawer-bleed: calc(var(--area-focus-width) + var(--area-focus-offset));
+    flex: 1 1 auto;
+    min-block-size: 0;
+    padding: var(--_drawer-bleed);
+    margin: calc(-1 * var(--_drawer-bleed));
+    overflow-y: auto;
+  }
+  .area-drawer__footer { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: var(--area-ui-cluster); flex-shrink: 0; }
+  /* spec: shadcn's Sheet stacks its actions full width, 8 apart (owner 2026-10-06: a variant). The
+     first action in source order is the primary one, on top. */
+  .area-drawer--stacked > .area-drawer__footer { flex-direction: column; flex-wrap: nowrap; gap: var(--area-space-8); }
+  .area-drawer--stacked > .area-drawer__footer > * { inline-size: 100%; }
+  .area-drawer--row > .area-drawer__footer { flex-direction: row; }
+
+  /*
+   * Non-modal (owner 2026-10-06, Notion's side peek): no scrim and the page stays usable. A manual
+   * popover in the top layer; it still spans the viewport so the surface keeps its edge, but it
+   * lets the pointer through everywhere except the surface.
+   */
+  .area-drawer__modal:not(:modal) { pointer-events: none; }
+  .area-drawer__modal:not(:modal) > .area-drawer { pointer-events: auto; }
+}

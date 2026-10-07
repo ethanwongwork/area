@@ -10,7 +10,7 @@
  * the fixed semantic tones (danger, warning, success, info), and the shadow colour.
  */
 import { type AxisDefinition, type AxisPreset, type TokenMap, tokens } from "./schema.ts";
-import { CHROMATIC_SCALES, NEUTRAL_SCALES, SCALE_DESCRIPTIONS } from "../color/presets.ts";
+import { CHROMATIC_SCALES, MUTED_SCALES, NEUTRAL_SCALES, SCALE_DESCRIPTIONS } from "../color/presets.ts";
 import { type Theme } from "../color/scale.ts";
 import { type ResolvedTheme, DEFAULT_SELECTION, resolveTheme } from "../semantic/resolve.ts";
 import { SEMANTIC_ALIASES, type Alias } from "../semantic/aliases.ts";
@@ -74,13 +74,14 @@ function themePreset(t: Theme): AxisPreset {
   // the namespace, the achromatic cast is reached through it, and `cool` and `warm` keep
   // their own primitive ramps for anything that needs to name a specific cast.
   const ramps: Record<string, string> = {};
-  for (const spec of [...NEUTRAL_SCALES, ...CHROMATIC_SCALES]) {
+  for (const spec of [...NEUTRAL_SCALES, ...CHROMATIC_SCALES, ...MUTED_SCALES]) {
     if (spec.id === NEUTRAL_ALIAS) continue;
     Object.assign(ramps, primitiveRamp(resolved, spec.id));
   }
 
   const fixedTones: Record<string, string> = {};
-  for (const role of ["danger", "warning", "caution", "success", "info", "discovery"]) {
+  // pink and gray are the tag tones (owner 2026-10-06; docs/specs/tag.md).
+  for (const role of ["danger", "warning", "caution", "success", "info", "discovery", "pink", "gray", "brown"]) {
     Object.assign(fixedTones, tokensForRole(resolved, role));
   }
 
@@ -104,7 +105,7 @@ export const THEME_AXIS: AxisDefinition = {
   description: "Light or dark.",
   defaultPreset: "light",
   namespaces: [
-    ...[...NEUTRAL_SCALES, ...CHROMATIC_SCALES]
+    ...[...NEUTRAL_SCALES, ...CHROMATIC_SCALES, ...MUTED_SCALES]
       .filter((s) => s.id !== NEUTRAL_ALIAS)
       .map((s) => `--area-${s.id}-`),
     "--area-danger-",
@@ -113,18 +114,24 @@ export const THEME_AXIS: AxisDefinition = {
     "--area-success-",
     "--area-info-",
     "--area-discovery-",
+    "--area-gray-",
     "--area-fg-danger",
     "--area-fg-warning",
     "--area-fg-caution",
     "--area-fg-success",
     "--area-fg-info",
     "--area-fg-discovery",
+    "--area-fg-pink",
+    "--area-fg-gray",
+    "--area-fg-brown",
     "--area-fg-on-danger",
     "--area-fg-on-warning",
     "--area-fg-on-caution",
     "--area-fg-on-success",
     "--area-fg-on-info",
     "--area-fg-on-discovery",
+    "--area-fg-on-pink",
+    "--area-fg-on-brown",
     "--area-shadow-color",
   ],
   presets: [themePreset("light"), themePreset("dark")],

@@ -269,7 +269,7 @@ ${railToggle("nav", "Show navigation", { corner: true })}
 ${railToggle("panel", "Show customize panel", { corner: true })}
 <script>${DOCS_SCRIPT}</script>
 ${slug === "switch" ? '<script type="module" src="./switch-demos.js"></script>' : ""}
-${slug === "tree-view" || slug === "property-list" || slug === "box-field" || slug === "combobox" || slug === "command-palette" || slug === "context-menu" || slug === "hover-card" || slug === "prompt-suggestions" || slug === "message" || slug === "scroll-to-latest" || slug === "model-picker" || slug === "panel" || slug === "dialog" || slug === "popover" || slug === "composer" || slug === "toolbar" || slug === "alignment-picker" || slug === "color-field" || slug === "color-picker" || slug === "color-swatch-picker" || slug === "calendar" || slug === "menu" || slug === "tooltip" || slug === "toast" || slug === "breadcrumb" || slug === "disclosure" ? '<script type="module" src="./switch-demos.js"></script>' : ""}
+${slug === "tree-view" || slug === "property-list" || slug === "box-field" || slug === "combobox" || slug === "custom-select" || slug === "tag" || slug === "tag-picker" || slug === "date-picker" || slug === "drawer" || slug === "confirm-dialog" || slug === "command-palette" || slug === "context-menu" || slug === "hover-card" || slug === "prompt-suggestions" || slug === "message" || slug === "scroll-to-latest" || slug === "model-picker" || slug === "panel" || slug === "dialog" || slug === "popover" || slug === "composer" || slug === "toolbar" || slug === "alignment-picker" || slug === "color-field" || slug === "color-picker" || slug === "color-swatch-picker" || slug === "calendar" || slug === "menu" || slug === "tooltip" || slug === "toast" || slug === "breadcrumb" || slug === "disclosure" ? '<script type="module" src="./switch-demos.js"></script>' : ""}
 ${["badge", "badge-group", "indicator", "presence"].includes(slug) ? '<script type="module" src="./badge-demos.js"></script>' : ""}
 ${slug === "slider" ? '<script type="module" src="./slider-demos.js"></script>' : ""}
 ${slug === "number-field" || slug === "input-group" ? '<script type="module" src="./number-field-demos.js"></script>' : ""}
@@ -453,6 +453,77 @@ function gallerySpecimenTable() {
       { id: "modal", title: "Modal", demo: "GalleryCommandPaletteModal" },
       { id: "empty", title: "No results", demo: "GalleryCommandPaletteEmpty" },
       { id: "no-footer", title: "Without key hints", demo: "GalleryCommandPaletteNoFooter" },
+    ],
+    drawer: [
+      { id: "default", title: "Default", demo: "GalleryDrawer" },
+      { id: "side-start", title: "Layout / start", demo: "GalleryDrawerStart" },
+      { id: "side-bottom", title: "Layout / bottom", demo: "GalleryDrawerBottom" },
+      { id: "no-close", title: "Composition / no close", demo: "GalleryDrawerNoClose" },
+      { id: "layout-stacked", title: "Layout / stacked actions", demo: "GalleryDrawerStacked" },
+      { id: "behavior-non-modal", title: "Behavior / non-modal", demo: "GalleryDrawerNonModal" },
+      { id: "size-sm", title: "Size / sm", demo: "GalleryDrawerModal" },
+      { id: "size-md", title: "Size / md", demo: "GalleryDrawerMd" },
+    ],
+    "confirm-dialog": [
+      { id: "default", title: "Default", demo: "GalleryConfirmDialog" },
+      { id: "tone-neutral", title: "Tone / neutral", demo: "GalleryConfirmDialogNeutral" },
+      { id: "behavior-modal", title: "Behavior / modal", demo: "GalleryConfirmDialogModal" },
+    ],
+    "date-picker": [
+      { id: "default", title: "Default", demo: "GalleryDatePicker" },
+      { id: "content-no-icon", title: "Content / no icon", demo: "GalleryDatePickerNoIcon" },
+      { id: "variant-soft", title: "Variant / soft", demo: "GalleryDatePickerSoft" },
+      { id: "variant-ghost", title: "Variant / ghost", demo: "GalleryDatePickerGhost" },
+      { id: "size-sm", title: "Size / sm", demo: "GalleryDatePickerSm" },
+      { id: "size-md", title: "Size / md", demo: "GalleryDatePickerMd" },
+      { id: "size-lg", title: "Size / lg", demo: "GalleryDatePickerLg" },
+      { id: "behavior-limits", title: "Behavior / limits", demo: "GalleryDatePickerLimits" },
+      { id: "state-placeholder", title: "State / placeholder", demo: "GalleryDatePickerPlaceholder" },
+      { id: "state-disabled", title: "State / disabled", demo: "GalleryDatePickerDisabled" },
+      { id: "state-invalid", title: "State / invalid", demo: "GalleryDatePickerInvalid" },
+    ],
+    tag: [
+      { id: "default", title: "Default", demo: "GalleryTag" },
+      { id: "tone-neutral", title: "Tone / neutral", demo: "GalleryTagNeutral" },
+      { id: "tone-info", title: "Tone / info", demo: "GalleryTagInfo" },
+      { id: "tone-success", title: "Tone / success", demo: "GalleryTagSuccess" },
+      { id: "tone-warning", title: "Tone / warning", demo: "GalleryTagWarning" },
+      { id: "tone-caution", title: "Tone / caution", demo: "GalleryTagCaution" },
+      { id: "tone-danger", title: "Tone / danger", demo: "GalleryTagDanger" },
+      { id: "tone-discovery", title: "Tone / discovery", demo: "GalleryTagDiscovery" },
+      { id: "tone-gray", title: "Tone / gray", demo: "GalleryTagGray" },
+      { id: "tone-brown", title: "Tone / brown", demo: "GalleryTagBrown" },
+      { id: "tone-pink", title: "Tone / pink", demo: "GalleryTagPink" },
+      { id: "size-sm", title: "Size / sm", demo: "GalleryTagSm" },
+      { id: "size-md", title: "Size / md", demo: "GalleryTagMd" },
+      { id: "behavior-removable", title: "Behavior / removable", demo: "GalleryTagRemovable" },
+      { id: "content-icon", title: "Content / icon", demo: "GalleryTagIcon" },
+      { id: "state-disabled", title: "State / disabled", demo: "GalleryTagDisabled" },
+    ],
+    "tag-picker": [
+      { id: "default", title: "Default", demo: "GalleryTagPicker" },
+      { id: "content-wrap", title: "Content / wrapping", demo: "GalleryTagPickerWrap" },
+      { id: "variant-soft", title: "Variant / soft", demo: "GalleryTagPickerSoft" },
+      { id: "size-sm", title: "Size / sm", demo: "GalleryTagPickerSm" },
+      { id: "size-md", title: "Size / md", demo: "GalleryTagPickerMd" },
+      { id: "size-lg", title: "Size / lg", demo: "GalleryTagPickerLg" },
+      { id: "state-placeholder", title: "State / placeholder", demo: "GalleryTagPickerPlaceholder" },
+      { id: "state-disabled", title: "State / disabled", demo: "GalleryTagPickerDisabled" },
+      { id: "state-invalid", title: "State / invalid", demo: "GalleryTagPickerInvalid" },
+    ],
+    "custom-select": [
+      { id: "default", title: "Default", demo: "GalleryCustomSelect" },
+      { id: "icons", title: "Content / icons", demo: "GalleryCustomSelectIcons" },
+      { id: "groups", title: "Composition / groups", demo: "GalleryCustomSelectGroups" },
+      { id: "variant-soft", title: "Variant / soft", demo: "GalleryCustomSelectSoft" },
+      { id: "variant-ghost", title: "Variant / ghost", demo: "GalleryCustomSelectGhost" },
+      { id: "size-sm", title: "Size / sm", demo: "GalleryCustomSelectSm" },
+      { id: "size-md", title: "Size / md", demo: "GalleryCustomSelectMd" },
+      { id: "size-lg", title: "Size / lg", demo: "GalleryCustomSelectLg" },
+      { id: "state-placeholder", title: "State / placeholder", demo: "GalleryCustomSelectPlaceholder" },
+      { id: "state-disabled-option", title: "State / disabled option", demo: "GalleryCustomSelectDisabledOption" },
+      { id: "state-disabled", title: "State / disabled", demo: "GalleryCustomSelectDisabled" },
+      { id: "state-invalid", title: "State / invalid", demo: "GalleryCustomSelectInvalid" },
     ],
     combobox: [
       { id: "default", title: "Default", demo: "GalleryCombobox" },
@@ -1191,6 +1262,11 @@ function demoMarkup(name, html) {
   if (["GalleryPanel", "GalleryPanelSections", "GalleryPanelFooter", "GalleryPanelSm", "GalleryPanelMd", "GalleryPanelFlush", "GalleryPanelBareBar", "GalleryPanelFigma", "GalleryPanelCollapsible", "GalleryPanelResizable", "GalleryPanelResizableSidebar", "GalleryPropertyListFills", "GalleryPropertyListSingle", "GalleryPropertyListEffects", "GalleryModelPicker", "GalleryModelPickerHeading", "GalleryScrollToLatest", "GalleryMessage", "GalleryMessageStreaming", "GalleryMessageLong", "GalleryPromptSuggestions", "GalleryPromptSuggestionsPlain", "GalleryPromptSuggestionsChips", "GalleryHoverCard", "GalleryHoverCardPage", "GalleryHoverCardSource", "GalleryHoverCardTop", "GalleryContextMenu", "GalleryContextMenuTree", "GalleryContextMenuDisabled", "GalleryCommandPalette", "GalleryKbdInCommandPalette", "GalleryCommandPaletteModal", "GalleryCommandPaletteEmpty", "GalleryCommandPaletteNoFooter", "GalleryCombobox", "GalleryComboboxCustom", "GalleryComboboxGroups", "GalleryComboboxCreate", "GalleryComboboxRich", "GalleryComboboxSm", "GalleryComboboxLg", "GalleryComboboxDisabled", "GalleryComboboxInvalid", "GalleryBoxFieldPadding", "GalleryBoxFieldPaddingIndividual", "GalleryBoxFieldPaddingMixed", "GalleryBoxFieldCorners", "GalleryBoxFieldCornersIndividual", "GalleryBoxFieldSoft", "GalleryBoxFieldSm", "GalleryBoxFieldLg", "GalleryBoxFieldDisabled", "GalleryNavActions", "GalleryNavExpandable", "GalleryTabs", "GalleryTabsDisabled", "GalleryTabsVertical", "GalleryTabsSmall", "GalleryTabsTrack", "GalleryTabsIcons", "GalleryTabsCounts", "GalleryToastAction", "GalleryToaster", "GalleryBreadcrumbCollapsed", "GalleryDisclosure", "GalleryDisclosureClosed", "GalleryDisclosureSizeSm", "GalleryDisclosureSizeMd", "GalleryDisclosureDisabled", "GalleryDisclosureNested", "GalleryDisclosureLongTitle", "GalleryDisclosureDivided", "GalleryDisclosureDividedMd", "GalleryDisclosureGroupMultiple"].includes(name)) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   // The carousel's previous / next Buttons page the row.
   if (name === "GalleryCardCarousel") return `<div data-switch-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (name.startsWith("GalleryDrawer") || name.startsWith("GalleryConfirmDialog")) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (name.startsWith("GalleryDatePicker")) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (/^GalleryTag(?!Picker)/.test(name)) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (name.startsWith("GalleryTagPicker")) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (name.startsWith("GalleryCustomSelect")) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("GalleryMenu")) return `<div data-switch-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name === "GalleryMenuControls") return `<div data-switch-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("Switch")) return `<div data-switch-demo="${name}" style="${["SwitchList", "SwitchSettingsRow"].includes(name) ? "inline-size:100%;" : ""}max-inline-size:100%;min-inline-size:0">${html}</div>`;

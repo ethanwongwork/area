@@ -1,0 +1,166 @@
+/* ---------------------------------------------------------------------------
+ * Custom select
+ *
+ * One value from a short, fixed list whose options need more than text: a leading icon, a
+ * description under the label, a check on the chosen row, groups. A button trigger (WAI
+ * select-only combobox) opens a listbox drawn with Menu's surface and rows, so its options
+ * look exactly like a menu's and a Combobox's. docs/specs/custom-select.md.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-custom-select {
+    /* Field chrome: the same roles as Select (navigation.css), so the two sit side by side. */
+    --_bg: var(--area-select-bg);
+    --_bg-hover: var(--_bg);
+    --_bg-open: var(--_bg);
+    --_border: var(--area-select-edge);
+    --_border-hover: var(--area-select-edge-hover);
+    --_border-focus: var(--area-field-focus-color);
+    --_focus-outline: var(--area-field-focus-color);
+    --_focus-halo: var(--area-field-focus-halo-color);
+    --_trigger-width: var(--area-select-inline-size);
+    --_height: var(--area-control-md);
+    --_radius: var(--area-radius-control-md);
+    --_icon: var(--area-icon-md);
+    --_gap: var(--area-gap-md);
+    --_text: var(--area-control-md-text);
+    --_leading: var(--area-control-md-leading);
+    display: inline-flex;
+    vertical-align: middle;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+  }
+  .area-custom-select--outline { --_bg: var(--area-select-bg); }
+  /* Soft matches Select, Input and NumberField soft, so an inspector holds one field style. */
+  .area-custom-select--soft {
+    --_bg: var(--area-input-bg-soft);
+    --_border: transparent;
+    --_border-hover: var(--area-input-edge);
+  }
+  /*
+   * spec: Notion's inline select (Share popover access levels, captures/custom-select/
+   * notion--*-trigger--rest--light): no fill or edge at rest, radius 6 at 28, text 8 in, a 16
+   * chevron in a quieter ink at the end. Area paints it as a neutral ghost Button: the row hover
+   * plate under the pointer, the pressed plate while its list is open (button.css), and it is as
+   * wide as its value.
+   */
+  .area-custom-select--ghost {
+    --_bg: transparent;
+    --_bg-hover: var(--area-bg-component-hover);
+    --_bg-open: var(--area-bg-component-active);
+    --_border: transparent;
+    --_border-hover: transparent;
+    --_trigger-width: auto;
+  }
+  .area-custom-select--sm { --_height: var(--area-control-sm); --_radius: var(--area-radius-control-sm); --_gap: var(--area-gap-sm); --_icon: var(--area-icon-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
+  .area-custom-select--md { --_height: var(--area-control-md); --_radius: var(--area-radius-control-md); --_gap: var(--area-gap-md); --_icon: var(--area-icon-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-custom-select--lg { --_height: var(--area-control-lg); --_radius: var(--area-radius-control-lg); --_gap: var(--area-gap-lg); --_icon: var(--area-icon-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+  .area-custom-select--full-width { display: flex; inline-size: 100%; }
+  .area-custom-select--full-width > .area-custom-select__trigger { flex: 1; inline-size: auto; }
+
+  /* The trigger. Sides come from the inset contract (inset.css): the value's cap (or its icon)
+     at the start, the chevron's square at the end, as Select's native chevron. */
+  .area-custom-select__trigger {
+    appearance: none;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--_gap);
+    inline-size: var(--_trigger-width);
+    max-inline-size: 100%;
+    min-inline-size: 0;
+    block-size: var(--_height);
+    margin: 0;
+    border: var(--area-stroke-width) solid var(--_border);
+    /* Select's corner: the tier's control radius, capped against its own height, or a pill. */
+    border-radius: calc(min(var(--_radius), max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px))) + var(--area-pill-field) * var(--area-radius-full));
+    background-color: var(--_bg);
+    color: var(--area-select-text);
+    font: inherit;
+    font-size: var(--_text);
+    line-height: var(--_leading);
+    text-align: start;
+    box-shadow: none;
+    cursor: pointer;
+    outline: none;
+    transition: var(--area-transition);
+  }
+  @media (hover: hover) {
+    .area-custom-select:not([data-open]) > .area-custom-select__trigger:hover:not(:disabled) {
+      border-color: var(--_border-hover);
+      background-color: var(--_bg-hover);
+    }
+  }
+  .area-custom-select__trigger:focus-visible {
+    border-color: var(--_border-focus);
+    box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
+    outline: var(--area-field-focus-outline-width) solid var(--_focus-outline);
+    outline-offset: 0;
+  }
+  /* Open: a field keeps its focused edge while its list shows (focus stays on the trigger, so a
+     pointer opening shows no ring otherwise); a ghost trigger keeps the pressed plate. */
+  .area-custom-select[data-open] > .area-custom-select__trigger {
+    border-color: var(--_border-focus);
+    background-color: var(--_bg-open);
+  }
+  .area-custom-select--ghost[data-open] > .area-custom-select__trigger { border-color: transparent; }
+  .area-custom-select__trigger[aria-invalid="true"] {
+    --_border: var(--area-select-invalid-color);
+    --_border-hover: var(--area-select-invalid-color);
+    --_border-focus: var(--area-select-invalid-color);
+    --_focus-outline: var(--area-select-invalid-color);
+    --_focus-halo: var(--area-select-invalid-halo-color);
+  }
+  .area-custom-select__trigger:disabled {
+    --_border: var(--area-border-faint);
+    background-color: var(--area-select-bg-disabled);
+    color: var(--area-fg-disabled);
+    cursor: not-allowed;
+  }
+  .area-custom-select--ghost > .area-custom-select__trigger:disabled { --_border: transparent; background-color: transparent; }
+
+  .area-custom-select__icon {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    inline-size: var(--_icon);
+    block-size: var(--_icon);
+  }
+  .area-custom-select__icon > svg { inline-size: 100%; block-size: 100%; }
+  .area-custom-select__value {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .area-custom-select__value[data-placeholder] { color: var(--area-input-placeholder); }
+  .area-custom-select__trigger:disabled .area-custom-select__value[data-placeholder] { color: inherit; }
+  /* The field's icon ink, as Select's and Combobox's chevrons. */
+  .area-custom-select__chevron {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    inline-size: var(--_icon);
+    block-size: var(--_icon);
+    margin-inline-start: auto;
+    color: var(--area-input-icon);
+  }
+  .area-custom-select__chevron > svg { inline-size: 100%; block-size: 100%; }
+  .area-custom-select__trigger:disabled .area-custom-select__chevron { color: inherit; }
+
+  /* The list: Menu's surface and rows, placed by the shared overlay engine (Combobox's rules:
+     4 below, flips, at least the trigger's width and a menu's 224, 324 tall at most). */
+  .area-custom-select__listbox[popover] {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    max-block-size: min(324px, var(--area-overlay-available-height, 50vh)); /* spec: combobox.md */
+    min-inline-size: max(var(--area-overlay-anchor-width, 0px), calc(var(--area-space-96) * 2 + var(--area-space-32)));
+  }
+  .area-custom-select__listbox:focus-visible { outline: none; }
+  /* The chosen value shows the active plate and the check, as Select and Combobox (audit S13 C). */
+  .area-custom-select__option[aria-selected="false"] > .area-menu__check { visibility: hidden; }
+  .area-custom-select__group { display: flex; flex-direction: column; gap: var(--area-ui-row-gap); }
+  /* spec: Notion's access menu rules its sections off (1px, 12 in; captures/custom-select/
+     notion--member-access-menu--open--light); Menu's separator, between groups only. */
+  .area-custom-select__separator { flex: none; }
+}
