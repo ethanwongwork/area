@@ -406,11 +406,21 @@ async function renderChrome(sections, page = "components") {
  * family reads as one block of containers rather than a heading per group.
  */
 function section(component, specimens, { demos, demoMarkup, sectionId }) {
+  const id = sectionId(component.slug);
+  return `<section class="gallery-section" id="${id}" data-slug="${component.slug}" aria-labelledby="${id}-title">
+      <h2 class="gallery-section__title" id="${id}-title" data-area-ui="compact">${escapeHtml(component.name)}</h2>
+      <div class="gallery-grid">${galleryTiles(component, specimens, { demos, demoMarkup })}</div>
+    </section>`;
+}
+
+/* A family's tiles, labelled group / value and in group order: the gallery's and the Review page's
+   (owner 2026-10-06: the Review page's containers match the gallery's). */
+function galleryTiles(component, specimens, { demos, demoMarkup, prefix = "gallery" }) {
   const hasDefault = specimens.some(example => specimenName(example, component.slug) === "default");
   const tiles = specimens.map((example, index) => {
     const demo = demos[example.demo];
     if (!demo) throw new Error(`Gallery specimen missing: ${example.demo}`);
-    const id = `gallery-${component.slug}-${example.id}`;
+    const id = `${prefix}-${component.slug}-${example.id}`;
     const name = specimenName(example, component.slug);
     const group = !hasDefault && index === 0 ? "Default" : (example.group ?? specimenGroup(name, component.slug));
     const value = group === "Default" && !hasDefault ? name : specimenLabel(name, group);
@@ -420,11 +430,7 @@ function section(component, specimens, { demos, demoMarkup, sectionId }) {
           <div class="gallery-tile__view"><div class="gallery-tile__stage">${demoMarkup(example.demo, demo.html)}</div></div>
         </article>` };
   }).sort((a, b) => a.order - b.order);
-  const id = sectionId(component.slug);
-  return `<section class="gallery-section" id="${id}" data-slug="${component.slug}" aria-labelledby="${id}-title">
-      <h2 class="gallery-section__title" id="${id}-title" data-area-ui="compact">${escapeHtml(component.name)}</h2>
-      <div class="gallery-grid">${tiles.map(tile => tile.html).join("\n")}</div>
-    </section>`;
+  return tiles.map(tile => tile.html).join("\n");
 }
 
 /*
@@ -578,8 +584,8 @@ const RADIUS_GROUPS = [
 ];
 
 /**
- * The Review page: batches of families waiting on the owner, every specimen at 1:1 in a tile sized to
- * its content, and the components approved for building that are not built yet.
+ * The Review page: batches of families waiting on the owner, in the gallery's own tiles (same grid,
+ * ratio and fit), and the components approved for building that are not built yet.
  */
 export async function reviewPage({ components, specimensOf, demos, demoMarkup, batches, status, clients }) {
   const bySlug = new Map(components.map(component => [component.slug, component]));
@@ -590,18 +596,10 @@ export async function reviewPage({ components, specimensOf, demos, demoMarkup, b
     const families = batch.families.map(familySlug => {
       const component = bySlug.get(familySlug);
       if (!component) throw new Error(`Review family missing: ${familySlug}`);
-      const tiles = specimensOf(component).map(example => {
-        const demo = demos[example.demo];
-        if (!demo) throw new Error(`Review specimen missing: ${example.demo}`);
-        const id = `review-${familySlug}-${example.id}`;
-        return `<article class="review-tile" id="${id}" aria-labelledby="${id}-title">
-          <h4 class="gallery-tile__label" id="${id}-title" data-area-ui="compact">${escapeHtml(example.title ?? specimenName(example, familySlug))}</h4>
-          <div class="review-tile__stage">${demoMarkup(example.demo, demo.html)}</div>
-        </article>`;
-      }).join("");
+      const tiles = galleryTiles(component, specimensOf(component), { demos, demoMarkup, prefix: "review" });
       return `<section class="review-family" id="${chrome.sectionId(familySlug)}" data-slug="${familySlug}">
         <div class="review-family__head" data-area-ui="compact"><h3 class="review-family__name">${escapeHtml(component.name)}</h3><span class="review-family__status">${escapeHtml(status(familySlug))}</span></div>
-        <div class="review-grid">${tiles}</div>
+        <div class="gallery-grid">${tiles}</div>
       </section>`;
     }).join("");
     const planned = (batch.planned ?? []).map(item => `<article class="review-tile review-planned">
@@ -615,7 +613,7 @@ export async function reviewPage({ components, specimensOf, demos, demoMarkup, b
       ${families}${planned ? `<div class="review-grid">${planned}</div>` : ""}
     </section>`;
   }).join("\n");
-  return shell({ title: "Review", description: "Components waiting on approval, each specimen at 1:1.", chrome, sections, page: "review", canvas: body, clients });
+  return shell({ title: "Review", description: "Components waiting on approval, in the gallery's tiles.", chrome, sections, page: "review", canvas: body, clients });
 }
 
 /** How the radius setting reaches each component, and how an inset corner follows its shell. */

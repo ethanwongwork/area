@@ -1568,8 +1568,10 @@ export const Dialog = /* @__PURE__ */ forwardRef<HTMLDivElement, DialogProps>(fu
   }, [open]);
   // The name belongs to the element with the dialog role: the surface inline, the native
   // <dialog> with a trigger. A consumer's aria-label names a dialog without a title.
-  const { "aria-label": ariaLabel, "aria-labelledby": ariaLabelledBy, "aria-describedby": ariaDescribedBy, ...surfaceRest } = rest;
+  const { "aria-label": ariaLabel, "aria-labelledby": ariaLabelledBy, "aria-describedby": ariaDescribedBy, role, ...surfaceRest } = rest;
+  // `role="alertdialog"` (a confirmation) lands on the element that carries the dialog role.
   const labelled = {
+    role,
     "aria-label": ariaLabel,
     "aria-labelledby": ariaLabelledBy ?? (title ? `${id}-title` : undefined),
     "aria-describedby": ariaDescribedBy ?? (description ? `${id}-description` : undefined),
@@ -1577,7 +1579,7 @@ export const Dialog = /* @__PURE__ */ forwardRef<HTMLDivElement, DialogProps>(fu
   const surface = (
     <div
       ref={ref}
-      {...(isModal ? {} : { role: "dialog", "aria-modal": "true" as const, ...labelled })}
+      {...(isModal ? {} : { role: role ?? "dialog", "aria-modal": "true" as const, "aria-label": ariaLabel, "aria-labelledby": labelled["aria-labelledby"], "aria-describedby": labelled["aria-describedby"] })}
       className={cx("area-dialog", className)}
       {...surfaceRest}
     >

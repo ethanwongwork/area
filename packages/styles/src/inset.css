@@ -6,7 +6,7 @@
  * (owner 2026-10-02), so text starts on the pixel grid. There are no padding tokens.
  */
 @layer area.components {
-  .area-button, .area-input, .area-number-field, .area-chip, .area-select,
+  .area-button, .area-input, .area-number-field, .area-chip, .area-select, .area-custom-select__trigger, .area-date-picker__trigger,
   .area-segmented__item, .area-nav__item, .area-nav__label,
   .area-menu__item, .area-menu__label, .area-tabs__tab, .area-badge, .area-panel__bar {
     --_box-height: var(--_height);
@@ -136,6 +136,12 @@
     background-position: right var(--_chevron-inset) center;
   }
   .area-select:dir(rtl) { background-position: left var(--_chevron-inset) center; }
+  /* Custom select's chevron is an element: the end inset centres it in its square, as Select's;
+     a leading option icon moves the start onto the icon's square. */
+  .area-custom-select__trigger { --_box-end: var(--_icon); }
+  .area-custom-select__trigger:has(> .area-custom-select__icon:first-child) { --_box-start: var(--_icon); }
+  /* Date picker: text at both ends, or its calendar glyph's square at the start. */
+  .area-date-picker__trigger:has(> .area-date-picker__icon:first-child) { --_box-start: var(--_icon); }
 
   /* A nested backplate is measured by its own box, not by the parent's icon tier. */
   .area-input:has(> .area-button:last-child) {

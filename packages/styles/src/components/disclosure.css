@@ -49,7 +49,10 @@
   /* Divided (shadcn's accordion): a trailing chevron, a rule after each item but the last, and
      the title underlines on hover. */
   .area-disclosure--divided {
-    --_trigger-pad: var(--area-inset-surface-md); /* spec: shadcn py-4, 16 (compact 12) */
+    /* spec: shadcn's rendered accordion (Base UI, ui.shadcn.com, 2026-10-06): py 10 around a 14/20
+       title, a 42 row; was py-4 (16) from the 2026-10-02 pinned source, which read as a loose gap
+       between the title and its rule (owner 2026-10-06). Compact steps down by 2 as rows do. */
+    --_trigger-pad: calc(10px - var(--area-space-2) * var(--area-ui-dense)); /* spec */
     --_trigger-gap: var(--area-space-16); /* spec: shadcn gap-4 */
     --_weight: var(--area-weight-strong); /* spec: shadcn font-medium 500 */
     --_chevron-order: 1;
@@ -60,7 +63,7 @@
     --_plate-active: transparent;
     --_label-hover-line: underline;
     --_content-start: 0px;
-    --_content-end: var(--area-inset-surface-md); /* spec: shadcn pb-4 */
+    --_content-end: calc(10px - var(--area-space-2) * var(--area-ui-dense)); /* spec: shadcn's rendered content pb 10 */
     --_rule-width: var(--area-stroke-width); /* spec: shadcn border-b, last none */
   }
 

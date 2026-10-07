@@ -34,7 +34,7 @@ actual specimens. Current families include:
 - Actions and choices: Button, ButtonGroup, SplitButton, Toolbar, Checkbox/CheckboxGroup,
   Radio/RadioGroup, Switch, Slider/SliderRange, Chip/ChipGroup, Segmented and AlignmentPicker.
 - Forms: Field, Input/InputAction, InputGroup/InputGroupText, NumberField, BoxField, Textarea,
-  Composer, native Select, Combobox, ColorField, ColorSwatch, ColorSwatchPicker, ColorPicker,
+  Composer, native Select, Combobox, CustomSelect, TagPicker, DatePicker, ConfirmDialog, Drawer (in review, 2026-10-05), ColorField, ColorSwatch, ColorSwatchPicker, ColorPicker,
   Calendar and PropertyList.
 - Navigation and commands: Nav, Tabs, Menu, ContextMenu, CommandPalette, TreeView and
   Breadcrumb (linked ancestors, a current page and an optional collapsed marker).

@@ -533,6 +533,64 @@ export const combobox = {
   defaults: {},
 } as const satisfies ComponentManifest;
 
+export const customSelect = {
+  block: "area-custom-select",
+  description: "Picks one value from a short list whose options carry icons, descriptions and groups.",
+  variants: { variant: ["outline", "soft", "ghost"], size: ["sm", "md", "lg"] },
+  booleans: ["full-width"],
+  states: ["open", "disabled", "invalid"],
+  stateAttributes: { disabled: "disabled", invalid: "aria-invalid" },
+  elements: ["trigger", "icon", "value", "chevron", "listbox", "option", "group", "separator"],
+  defaults: { variant: "outline", size: "md" },
+} as const satisfies ComponentManifest;
+
+export const tag = {
+  block: "area-tag",
+  description: "A coloured label for a chosen or typed value, optionally removable.",
+  variants: { tone: ["neutral", "gray", "brown", "info", "success", "warning", "caution", "danger", "discovery", "pink"], size: ["sm", "md"] },
+  states: ["disabled"],
+  elements: ["icon", "label", "remove"],
+  defaults: { tone: "neutral", size: "sm" },
+} as const satisfies ComponentManifest;
+
+export const tagPicker = {
+  block: "area-tag-picker",
+  description: "Picks several values, shown as coloured tags in the field, from a list that filters and can grow.",
+  variants: { variant: ["outline", "soft"], size: ["sm", "md", "lg"] },
+  booleans: ["full-width"],
+  states: ["open", "disabled", "invalid"],
+  stateAttributes: { invalid: "aria-invalid" },
+  elements: ["field", "input", "listbox", "hint", "option", "create", "empty"],
+  defaults: { variant: "outline", size: "md" },
+} as const satisfies ComponentManifest;
+
+export const datePicker = {
+  block: "area-date-picker",
+  description: "Shows a date in a field and opens a calendar, with the date as text, to change it.",
+  variants: { variant: ["outline", "soft", "ghost"], size: ["sm", "md", "lg"] },
+  booleans: ["full-width"],
+  states: ["open", "disabled", "invalid"],
+  stateAttributes: { disabled: "disabled", invalid: "aria-invalid" },
+  elements: ["trigger", "icon", "value", "panel", "footer"],
+  defaults: { variant: "outline", size: "md" },
+} as const satisfies ComponentManifest;
+
+export const confirmDialog = {
+  block: "area-confirm-dialog",
+  description: "Asks for a forced choice before an action that can't be undone.",
+  variants: {},
+  elements: [],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const drawer = {
+  block: "area-drawer",
+  description: "Slides a panel in from an edge of the screen for a task beside the page.",
+  variants: { side: ["end", "start", "bottom"], size: ["sm", "md"], actions: ["row", "stacked"] },
+  elements: ["modal", "header", "heading", "title", "description", "close", "body", "footer"],
+  defaults: { side: "end", size: "sm", actions: "row" },
+} as const satisfies ComponentManifest;
+
 export const boxField = {
   block: "area-box-field",
   description: "Edits padding or corner radius linked, or one field per side or corner.",
@@ -766,6 +824,12 @@ export const MANIFESTS = {
   propertyList,
   boxField,
   combobox,
+  customSelect,
+  tag,
+  tagPicker,
+  datePicker,
+  confirmDialog,
+  drawer,
   commandPalette,
   contextMenu,
   hoverCard,

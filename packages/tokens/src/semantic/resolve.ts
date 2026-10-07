@@ -62,6 +62,9 @@ export function resolveTheme(selection: ThemeSelection): ResolvedTheme {
     success: scaleFor(ROLE_SCALES.success, theme),
     info: scaleFor(ROLE_SCALES.info, theme),
     discovery: scaleFor(ROLE_SCALES.discovery, theme),
+    pink: scaleFor(ROLE_SCALES.pink, theme),
+    gray: scaleFor(ROLE_SCALES.gray, theme),
+    brown: scaleFor(ROLE_SCALES.brown, theme),
   };
 
   // Keyed by level rather than by position, so a semantic entry says which *colour* it

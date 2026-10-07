@@ -87,10 +87,14 @@
   }
   /* The preview is the dots' own ink, fg-muted, so it reads as "this would go here" and never as chosen
      (Figma: dots 30% black, preview 50%, chosen blue; Area's dots are already fg-muted, an owner pick). */
-  .area-alignment-picker__cell[data-preview] { --_mark: var(--area-fg-muted); }
+  /* Owner, 2026-10-04: the soft hover plate comes back alongside the preview glyph. bg-hover, the
+     translucent plate on a component's own track (as Segmented); was removed after Figma's capture
+     showed no cell fill. */
+  .area-alignment-picker__cell[data-preview] { --_mark: var(--area-fg-muted); background: var(--area-bg-hover); }
   @media (hover: hover) {
     .area-alignment-picker__cell:hover:not(:has(input:checked, input:disabled)) {
       --_mark: var(--area-fg-muted);
+      background: var(--area-bg-hover);
     }
     .area-alignment-picker__cell:hover:not(:has(input:checked, input:disabled)) .area-alignment-picker__dot {
       inline-size: var(--area-icon-md);

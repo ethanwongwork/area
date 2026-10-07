@@ -1,0 +1,106 @@
+/* ---------------------------------------------------------------------------
+ * Tag
+ *
+ * A coloured label for a value someone chose or typed: a select or multi-select option, a
+ * topic, a status. Notion's select tags (captures/tag/notion--tag-removable--*): 20 tall,
+ * corner 4, body text (14, regular) in the tone's dark ink on its tint, 6 at the start, and a
+ * remove × at the end. Not Badge (a 12px strong caption for metadata) and not Chip (a 24+ control
+ * that toggles or filters). docs/specs/tag.md.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-tag {
+    /* spec: 20, Notion's tag (notion--tag-removable--rest--light), the mark ladder's md. */
+    --_height: var(--area-mark-label-md);
+    /* spec: 6 before the text (Notion padding 0 0 0 6); the end matches when there's no ×. */
+    --_side: var(--area-space-6); /* spec */
+    /* The remove box: a square 4 shorter than the tag, 2 in from its end and top (Notion's × box
+       ends 1.99 from the tag's end); its glyph 12, whose ink (7.5) is Notion's (7.4). */
+    --_remove: calc(var(--_height) - var(--area-space-4));
+    --_remove-inset: var(--area-space-2);
+    --_bg: light-dark(rgb(42 28 0 / 0.07), rgb(255 255 255 / 0.1)); /* spec: Notion's default tag */
+    /* Dark (owner 2026-10-06, option 1): the tone's readable ink at 20% over whatever is behind, the
+       same translucent recipe as Notion's light tints (18-28% of the hue), so a dark tag weighs what a
+       light one does. Was the tone's surface-active, a saturated block (blue #003b8c). */
+    --_dark-tint: 20%;
+    --_fg: var(--area-fg-default);
+    display: inline-flex;
+    align-items: center;
+    box-sizing: border-box;
+    vertical-align: middle;
+    flex-shrink: 0;
+    max-inline-size: 100%;
+    block-size: var(--_height);
+    gap: var(--area-space-2);
+    padding-inline: var(--_side);
+    /* The radius setting's corner for this height, 4 at the default (Notion 4). */
+    border-radius: max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px));
+    background: var(--_bg);
+    color: var(--_fg);
+    font-family: var(--area-font-sans);
+    font-size: var(--area-ui-size);
+    line-height: var(--_height);
+    font-weight: var(--area-weight-regular);
+    white-space: nowrap;
+  }
+  .area-tag:has(> .area-tag__remove) { padding-inline-end: var(--_remove-inset); }
+  /* spec: 24, for a tag beside 32px controls; the same 14px text. */
+  .area-tag--sm { --_height: var(--area-mark-label-md); }
+  .area-tag--md { --_height: var(--area-mark-label-lg); }
+
+  /*
+   * Tones: Notion's tag palette in light (measured: captures/badge/notion--tag-*,
+   * notion--select-*, notion--multi-select-many, tag-picker/notion--select-property-editor), a
+   * translucent tint under a dark muted ink; Area's tone inks at 20% in dark (option 1, owner 2026-10-06; Notion dark not measured).
+   * Was the tone's surface-active and fg-strong in light too, which read saturated beside Notion
+   * (Claude in Chrome review, 2026-10-06). Map: default neutral, blue info, green success, orange
+   * warning, yellow caution, red danger, purple discovery plus Notion's gray, pink and brown as their own tones (brown: the palette's new brown family).
+   */
+  .area-tag--neutral { --_bg: light-dark(rgb(42 28 0 / 0.07), rgb(255 255 255 / 0.1)); --_fg: var(--area-fg-default); } /* spec */
+  .area-tag--info { --_bg: light-dark(rgb(0 118 217 / 0.204), color-mix(in oklab, var(--area-fg-info) var(--_dark-tint), transparent)); --_fg: light-dark(rgb(38 74 114), var(--area-fg-info-strong)); } /* spec */
+  .area-tag--success { --_bg: light-dark(rgb(0 96 38 / 0.157), color-mix(in oklab, var(--area-fg-success) var(--_dark-tint), transparent)); --_fg: light-dark(rgb(42 83 60), var(--area-fg-success-strong)); } /* spec */
+  .area-tag--warning { --_bg: light-dark(rgb(196 88 0 / 0.204), color-mix(in oklab, var(--area-fg-warning) var(--_dark-tint), transparent)); --_fg: light-dark(rgb(106 66 34), var(--area-fg-warning-strong)); } /* spec */
+  .area-tag--caution { --_bg: light-dark(rgb(209 156 0 / 0.282), color-mix(in oklab, var(--area-fg-caution) var(--_dark-tint), transparent)); --_fg: light-dark(rgb(101 81 33), var(--area-fg-caution-strong)); } /* spec */
+  .area-tag--danger { --_bg: light-dark(rgb(206 24 0 / 0.165), color-mix(in oklab, var(--area-fg-danger) var(--_dark-tint), transparent)); --_fg: light-dark(rgb(109 53 49), var(--area-fg-danger-strong)); } /* spec */
+  /* Gray: Notion's gray, warm and a step firmer than the default; Area's gray role is the warm cast
+     of the neutral grey (tokens, 2026-10-06). Pink: the palette's pink family. */
+  .area-tag--gray { --_bg: light-dark(rgb(28 19 1 / 0.11), color-mix(in oklab, var(--area-fg-gray) var(--_dark-tint), transparent)); --_fg: light-dark(rgb(73 72 70), var(--area-fg-gray-strong)); } /* spec */
+  .area-tag--pink { --_bg: light-dark(rgb(183 0 78 / 0.153), color-mix(in oklab, var(--area-fg-pink) var(--_dark-tint), transparent)); --_fg: light-dark(rgb(104 53 78), var(--area-fg-pink-strong)); } /* spec */
+  .area-tag--brown { --_bg: light-dark(rgb(127 51 0 / 0.157), color-mix(in oklab, var(--area-fg-brown) var(--_dark-tint), transparent)); --_fg: light-dark(rgb(88 68 55), var(--area-fg-brown-strong)); } /* spec */
+  .area-tag--discovery { --_bg: light-dark(rgb(92 0 163 / 0.14), color-mix(in oklab, var(--area-fg-discovery) var(--_dark-tint), transparent)); --_fg: light-dark(rgb(85 59 105), var(--area-fg-discovery-strong)); } /* spec */
+
+  .area-tag__icon { display: inline-grid; place-items: center; flex: none; inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); }
+  .area-tag__icon > svg { inline-size: 100%; block-size: 100%; }
+  .area-tag__label { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; }
+
+  /*
+   * The remove control. At rest it is just the ×, in the tag's ink. Under the pointer it gets a
+   * plate that fits the tag's corner (concentric: the tag's radius less the 2 inset), in the ×'s
+   * ink at 12%, so the foreground stays fixed (system rule; Notion instead dims the × to 80%).
+   * It was Badge's round plate, which met the tag's square corner at a different curve.
+   */
+  .area-tag__remove {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    inline-size: var(--_remove);
+    block-size: var(--_remove);
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: max(var(--area-space-2), calc(max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px)) - var(--_remove-inset)));
+    background: transparent;
+    /* spec: Notion's × is its muted ink (fill rgb(142,139,134)), not the tag's; Area's muted role. */
+    color: var(--area-fg-muted);
+    cursor: pointer;
+    transition: var(--area-transition);
+  }
+  .area-tag__remove > svg { inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); }
+  @media (hover: hover) { .area-tag__remove:hover { background: color-mix(in srgb, currentColor 12%, transparent); } }
+  .area-tag__remove:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: 0; }
+  /* An invisible 24px target (44 on coarse pointers) centred on the box (WCAG 2.5.8), as Badge's. */
+  .area-tag__remove::after { content: ""; position: absolute; inset: 50% auto auto 50%; translate: -50% -50%; inline-size: var(--area-space-24); block-size: var(--area-space-24); }
+  @media (pointer: coarse) { .area-tag__remove::after { inline-size: calc(var(--area-space-40) + var(--area-space-4)); block-size: calc(var(--area-space-40) + var(--area-space-4)); } }
+  .area-tag[data-disabled] { opacity: var(--area-opacity-disabled); }
+  @media (forced-colors: active) { .area-tag { border: 1px solid CanvasText; } }
+}
