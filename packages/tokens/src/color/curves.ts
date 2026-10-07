@@ -1,7 +1,8 @@
 /**
  * The shape of every Area colour scale.
  *
- * Area starts from the Area palette, vendored verbatim as `palette.json` -- 14 families x
+ * Area starts from the Area palette, vendored verbatim as `palette.json` -- 15 families (brown added
+ * 2026-10-06 by the owner, generated from orange; docs/specs/tag.md) x
  * 23 rungs, exported from the system that shipped them. `scale.ts` reads that table and
  * applies the bounded, documented refinements below without changing the source file.
  *

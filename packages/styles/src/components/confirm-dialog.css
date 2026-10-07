@@ -1,0 +1,14 @@
+/* ---------------------------------------------------------------------------
+ * Confirm dialog
+ *
+ * A forced choice before an action that can't be undone: a title naming the action, a line
+ * saying what happens, Cancel and the action. Dialog's surface, insets and type; narrower, with
+ * no close control (Escape and Cancel close it). ChatGPT's "Delete chat?" (docs/specs/
+ * confirm-dialog.md). The buttons are Button: soft neutral Cancel, soft danger or solid action.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  /* spec: ChatGPT's delete confirm is 420 wide (chatgpt--delete-chat-confirm--open--light). */
+  .area-confirm-dialog { inline-size: min(calc(100vw - var(--area-space-32)), 420px); /* spec */ }
+  /* The action is the reason for the dialog, so the footer leaves the body no gap to fill. */
+  .area-confirm-dialog > .area-dialog__footer { margin-block-start: var(--area-space-4); }
+}

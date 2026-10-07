@@ -96,6 +96,40 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   full-viewport button + clipboard (base64 output is blocked); select nodes with the page's `figma`
   global, never edit.
 
+## Batch 1 new components and the alignment picker plate (2026-10-04–05, branch `claude/alignment-picker-backplate-962951`)
+
+- Alignment picker: the soft `bg-hover` plate is back under the hover preview glyph (owner).
+- Built, on the Review page, in review (each spec lists open questions):
+  - `CustomSelect` (select-only combobox; Select's chrome plus ghost; Menu rows with icons,
+    descriptions, check, group labels and rules). Notion Share-popover captures.
+  - `TagPicker` (multi-select: Badge tags in an Input-chrome field that wraps; Menu rows with a
+    check; create on type; Backspace removes). Notion select-property editor captures.
+  - `DatePicker` (field opening a Popover: typed date Input, plain Calendar, Clear row). Notion
+    date-property editor capture.
+- Avatar demo image (`apps/docs/public/images/david-tee.jpg`) is now the owner's crayon drawing,
+  square-cropped to full height with the green bus's face centred left to right (owner, 2026-10-05).
+  - `Tag` (2026-10-06): Notion's tag (20, 14 regular, radius 4, Notion palette in light, muted ×
+    with a concentric hover plate); Tag picker uses it. Review page now uses the gallery's tiles.
+    Disclosure divided rows 16 → 10 (shadcn's rendered accordion). Tokens: new semantic tones `pink`
+    (pink family, full block) and `gray` (warm cast, tints + inks only), light/dark, contrast-checked;
+    `brown` is a new palette family
+    (generated from orange, `MUTED_SCALES`, owner 2026-10-06); Tag has 10 tones, dark tints are the tone
+    ink at 20% (option 1).
+  - `ConfirmDialog` (alertdialog on Dialog, 420 wide, focus on Cancel, async confirm) from ChatGPT's
+    "Delete chat?" (opened from a chat menu and cancelled with the owner's OK; nothing deleted).
+  - `Drawer` (native modal sheet from end / start / bottom, sm 384 / md 480, Dialog's anatomy)
+    from shadcn's Sheet. Dialog now passes `role` to its `<dialog>`. 2026-10-06 (owner): `actions`
+    variant (row / stacked) and `modal={false}` (manual popover, Notion side-peek behaviour);
+    ConfirmDialog keeps Dialog's 16/24 title and 16 inset (owner likes it; four references agree).
+  - Batch 1 is complete (all five in review). shadcn Sheet and all Area tiles captured 2026-10-06.
+    ChatGPT's confirm file is not saved: reopening the delete confirm was refused by the permission
+    check; the owner decides whether to re-capture.
+- Claude in Chrome: `visibilityState` reads `hidden` even when the window renders; trust the DOM,
+  not lagging screenshots, and click by `find` refs (a stale screenshot once opened a property
+  menu instead of a value). Docs dogfood fails on main (icon-page inline styles; separate task),
+  so the dev server only shows a fresh `node apps/docs/scripts/build.mjs` after a restart; the
+  hidden browser pane doesn't run rAF (DatePicker's select-on-open looks broken there).
+
 ## Component gallery (2026-10-02, branch `claude/component-gallery-theme-99e822`)
 
 - `index.html` is the component gallery: one grid of tiles per family (alphabetical, tiles in

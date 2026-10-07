@@ -109,13 +109,13 @@ cells meet with no gap. md: 4 + 3 × 24 + 4 = 80. Cell radius = container 8 − 
 | unselected mark | 2px dot `fg-muted` rgb(102) | Owner (prior decision) | — |
 | selected mark | three 2px bars in a 16px box, aligned by column; `fg-selection` (neutral: `fg-default`; `alignment-picker.css:23`) | Owner (prior decision, 2026-09-26 tone note); Figma's alignment glyphs are black | Was `fg-accent` |
 | selected backplate | none (`alignment-picker.css:52-54`) | Owner (prior decision) | Figma fills the selected cell (rgb 245) |
-| hover | `bg-hover` light-dark(#1414140d, #fcfcfc24) on unselected, enabled cells (`alignment-picker.css:51`) | Audit rule: translucent hover on a component's own track (as Segmented) | Dark value 14% white since the second pass (audit decision 1), so it composites to the opaque hover step |
+| hover | `bg-hover` light-dark(#1414140d, #fcfcfc24) plate plus the position's glyph in `fg-muted` on unselected, enabled cells (`alignment-picker.css`, hover block; static hook `data-preview`) | Audit rule: translucent hover on a component's own track (as Segmented); glyph preview from Figma | Figma draws no hover fill; owner asked for the soft plate back with the glyph (2026-10-04) |
 
 ## States
 
 | State | Slot · property changes | Evidence |
 |---|---|---|
-| hover | translucent plate; marks fixed | not captured |
+| hover | translucent plate and the position's glyph in fg-muted | `figma--auto-layout-alignment--hover--light`, `area--default--hover--light` (before the plate returned) |
 | checked | bars replace the dot | all tiles |
 | focus-visible | 2px focus ring on the cell, raised (`alignment-picker.css:84-88`) | not captured |
 | disabled | cells 50% (`alignment-picker.css:89`) | `area--disabled` |
@@ -202,4 +202,6 @@ Unverified: Figma's focus state (rest and hover captured 2026-10-04).
   the dots' ink (fg-muted; Figma's preview is darker than its dots, Area's dots are already fg-muted),
   demos framed at 88. Kept (owner decisions): the 1px edge, 4 inset all round, horizontal bars and
   the neutral selection ink. Open: a per-cell tooltip, as Figma's.
-
+- 2026-10-04 · owner: "add a soft backplate back in addition to the icon change" → the hovered (and
+  `data-preview`) cell gets the `bg-hover` plate again under the fg-muted preview glyph; checked cells
+  keep no plate. Departs from Figma's hover (no fill) by owner choice.

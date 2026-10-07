@@ -51,6 +51,18 @@ export const CHROMATIC_SCALES: readonly ScaleSpec[] = [
   { id: "pink", kind: "chromatic" },
 ];
 
+/**
+ * Muted hues: chromatic, but deliberately low in chroma, so they are not accent candidates and
+ * stay out of the cross-family chroma balance the accent hues are held to. Built and emitted in
+ * both themes like every family.
+ *
+ * brown (added 2026-10-06, owner; docs/specs/tag.md): orange's lightness at every rung, hue +2,
+ * chroma x 0.35 -- Notion's brown tag (ink oklch 0.40 0.035 55) sits at a third of orange's chroma.
+ */
+export const MUTED_SCALES: readonly ScaleSpec[] = [
+  { id: "brown", kind: "chromatic" },
+];
+
 /** The three casts of one grey. Identical lightness, so contrast is invariant across them. */
 export const NEUTRAL_SCALES: readonly ScaleSpec[] = [
   { id: "neutral", kind: "neutral" },
@@ -58,7 +70,7 @@ export const NEUTRAL_SCALES: readonly ScaleSpec[] = [
   { id: "warm", kind: "neutral" },
 ];
 
-export const ALL_SCALES: readonly ScaleSpec[] = [...NEUTRAL_SCALES, ...CHROMATIC_SCALES];
+export const ALL_SCALES: readonly ScaleSpec[] = [...NEUTRAL_SCALES, ...CHROMATIC_SCALES, ...MUTED_SCALES];
 
 /** One sentence per scale, rendered above its ramp in the documentation. */
 export const SCALE_DESCRIPTIONS: Record<string, string> = {
@@ -75,7 +87,8 @@ export const SCALE_DESCRIPTIONS: Record<string, string> = {
   blue: "The default accent hue, and the fixed info tone. The focus ring follows the accent.",
   indigo: "A blue-violet, set apart from the blue of info and the default accent.",
   purple: "The discovery tone. Marks AI features and newly-introduced surfaces.",
-  pink: "A warm magenta. Not bound to a semantic role.",
+  pink: "A warm magenta. The pink tag tone.",
+  brown: "Orange at a third of its chroma: an earth tone for tags. The brown tag tone.",
 };
 
 export type ChromaticScaleId = (typeof CHROMATIC_SCALES)[number]["id"];
@@ -98,4 +111,9 @@ export const ROLE_SCALES = {
   success: "green",
   info: "blue",
   discovery: "purple",
+  /* Tag tones (owner 2026-10-06; docs/specs/tag.md): Notion's pink and gray. Gray is the warm
+     cast of the neutral grey (Notion's gray is warm, hue ~70), so it reads apart from neutral. */
+  pink: "pink",
+  gray: "warm",
+  brown: "brown",
 } as const;

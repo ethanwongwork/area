@@ -218,6 +218,9 @@ export function table(headers, rows, { className = "" } = {}) {
  * a local custom property up top so it is named rather than scattered.
  */
 export const DOCS_CSS = `
+/* A page-shaped frame for edge-anchored specimens (Drawer inline): the surface sits against its edge. */
+.docs-edge-stage { position: relative; overflow: hidden; border-radius: var(--area-radius-container); background: var(--area-bg-subtle); }
+
   .docs-paired-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--area-space-16); inline-size: 320px; max-inline-size: 100%; }
 @layer area.base {
   :root {
