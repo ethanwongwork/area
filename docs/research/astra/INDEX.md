@@ -10,6 +10,7 @@ broken research.
 
 | Date | Topic | Question | Status |
 | --- | --- | --- | --- |
+| 2026-10-07 | [materials/01-taxonomy](materials/01-taxonomy/README.md) | What are the requested styles made of, and which shared layer model should later materials tasks use? | unreviewed |
 | 2026-10-07 | [unverified-inventory](unverified-inventory/README.md) | What do all 68 Unverified paragraphs require, where can they be checked, and what are the exact steps? | unreviewed |
 | 2026-10-07 | [date-picker-survey](date-picker-survey/README.md) | How do ten libraries compose date fields and pickers, with pinned geometry, keyboard, ARIA and Calendar reuse? | unreviewed |
 | 2026-10-07 | [drift recheck](drift/2026-10-07.md) | Which of D01–D40 are fixed, open or changed, and what new drift exists in changed families and corners? | unreviewed |
