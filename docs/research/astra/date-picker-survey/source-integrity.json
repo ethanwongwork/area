@@ -1,0 +1,680 @@
+[
+  {
+    "library": "shadcn",
+    "path": "apps/v4/examples/base/date-picker-basic.tsx",
+    "sha256": "3a362e0d7d7458fe3a1a6b1267841d83145fa7028d48c14062ccab5c9a168aa2",
+    "lines": 44
+  },
+  {
+    "library": "shadcn",
+    "path": "apps/v4/examples/base/date-picker-input.tsx",
+    "sha256": "3f9601a170b0dc21996e761f097462bed504e3195fa801d6bcd549b3011a04a6",
+    "lines": 108
+  },
+  {
+    "library": "shadcn",
+    "path": "apps/v4/examples/base/date-picker-range.tsx",
+    "sha256": "d3a623938f4dc9f66cc89295af62947e00ba8813fd845b0fb45f395770bbe140",
+    "lines": 62
+  },
+  {
+    "library": "shadcn",
+    "path": "apps/v4/package.json",
+    "sha256": "8289140a04d253d448b6b7de4aa8fe7776325ea0a51ca258e2000d8f0cec8bec",
+    "lines": 172
+  },
+  {
+    "library": "shadcn",
+    "path": "apps/v4/registry/bases/base/ui/button.tsx",
+    "sha256": "74f982d7ad7a764e3c95a519fc063a671e66ad758ea31dc89d747838e20c2487",
+    "lines": 50
+  },
+  {
+    "library": "shadcn",
+    "path": "apps/v4/registry/bases/base/ui/calendar.tsx",
+    "sha256": "0a492edf3888b88a5505786c48165159285cfde7e6c52eb5e4c2fdc44b09ba21",
+    "lines": 245
+  },
+  {
+    "library": "shadcn",
+    "path": "apps/v4/registry/bases/base/ui/input.tsx",
+    "sha256": "00213ec177e4556e69b6680128c18023d859a8e4eaf4106fbcf6abdc4f2c419b",
+    "lines": 19
+  },
+  {
+    "library": "shadcn",
+    "path": "apps/v4/registry/bases/base/ui/popover.tsx",
+    "sha256": "935bab728b60fd867384ebc6097d6a46c937423e015503e0251999b686f38bb7",
+    "lines": 89
+  },
+  {
+    "library": "radix",
+    "path": "packages/react/radix-ui/src/index.ts",
+    "sha256": "530c9fdcf18446736d6eca537eac7416078ee3d333d48a40653ae52811b9d6b5",
+    "lines": 35
+  },
+  {
+    "library": "radix-themes",
+    "path": "packages/radix-ui-themes/src/components/index.tsx",
+    "sha256": "42f4a4f65f0696396c041d4022af07a3ce0a896f4fe063081b9249249bce7918",
+    "lines": 69
+  },
+  {
+    "library": "adobe",
+    "path": "packages/@react-spectrum/s2/src/Calendar.tsx",
+    "sha256": "1237e10f4110bb52906c24c5f1ba1995d8377aacc9578db535b441eb2b27c07a",
+    "lines": 792
+  },
+  {
+    "library": "adobe",
+    "path": "packages/@react-spectrum/s2/src/DateField.tsx",
+    "sha256": "6e6f7626fbf375e911652777fb0c3f031558da8e86591fd55d895827e704c54f",
+    "lines": 220
+  },
+  {
+    "library": "adobe",
+    "path": "packages/@react-spectrum/s2/src/DatePicker.tsx",
+    "sha256": "e5edf45f8502e121c81866c4d625b8749446d3d70fde95f6b5db27301c5d57f3",
+    "lines": 359
+  },
+  {
+    "library": "adobe",
+    "path": "packages/@react-spectrum/s2/src/DateRangePicker.tsx",
+    "sha256": "d192cdf1e6ff098b684234ae348d8f5bf772ae7867394d615093cf380f2b03cc",
+    "lines": 250
+  },
+  {
+    "library": "adobe",
+    "path": "packages/@react-spectrum/s2/src/RangeCalendar.tsx",
+    "sha256": "3fac2743cba541d0d8eb74c685fd6e7872e28b64bebf2a62682c7014b92bc860",
+    "lines": 157
+  },
+  {
+    "library": "adobe",
+    "path": "packages/@react-spectrum/s2/src/TextField.tsx",
+    "sha256": "a83ea80b8d08512bb4f5b925c3b60634d8dbf46561d8196336ff7e8ed77f21ba",
+    "lines": 300
+  },
+  {
+    "library": "adobe",
+    "path": "packages/react-aria-components/src/DateField.tsx",
+    "sha256": "eade9ee01db33d0b480a2eabe1ed755f2f374f1b65486e079b2bb2ec38da4a86",
+    "lines": 550
+  },
+  {
+    "library": "adobe",
+    "path": "packages/react-aria-components/src/DatePicker.tsx",
+    "sha256": "fdd006ddbe6fecc07fa649bba6b031d929b6de08098eaa1af6c47b5a6c22b879",
+    "lines": 382
+  },
+  {
+    "library": "adobe",
+    "path": "packages/react-aria/src/calendar/useCalendarBase.ts",
+    "sha256": "bf20b18c69938f63d83490019da7cdbb531cca692ebd1ff4e50ecea5aaa4d223",
+    "lines": 140
+  },
+  {
+    "library": "adobe",
+    "path": "packages/react-aria/src/calendar/useCalendarCell.ts",
+    "sha256": "1ce39e6ce7d2c107f439ef13ab6636263b55e374501e769ebb953cf4f51a50ed",
+    "lines": 414
+  },
+  {
+    "library": "adobe",
+    "path": "packages/react-aria/src/calendar/useCalendarGrid.ts",
+    "sha256": "9091bd02519a888183ab636678346884d9d59db23b3642ab9e6935cae87ee136",
+    "lines": 199
+  },
+  {
+    "library": "adobe",
+    "path": "packages/react-aria/src/datepicker/useDateField.ts",
+    "sha256": "8b4422ea35ce124968340ca139eeae21cdbf38a3bf760f3682df6405b44f4912",
+    "lines": 253
+  },
+  {
+    "library": "adobe",
+    "path": "packages/react-aria/src/datepicker/useDatePicker.ts",
+    "sha256": "78edc223d48786c61579a9ed92645aae892691b8a09f98b6828229cfefb1e589",
+    "lines": 223
+  },
+  {
+    "library": "adobe",
+    "path": "packages/react-aria/src/datepicker/useDatePickerGroup.ts",
+    "sha256": "cf175dba572cfbf8e8cdc5c9cbb2a9f234ba3345ca02e610d751ea760537e88d",
+    "lines": 156
+  },
+  {
+    "library": "adobe",
+    "path": "packages/react-aria/src/datepicker/useDateRangePicker.ts",
+    "sha256": "00a167f8edde73827edf3c7c437dc27006ffa209c591611520284a7922b805b9",
+    "lines": 286
+  },
+  {
+    "library": "adobe",
+    "path": "packages/react-aria/src/datepicker/useDateSegment.ts",
+    "sha256": "eb77cc483cf0cfca71acf7d3482aa78371e26fefd3a54bfb50340067bff1b50c",
+    "lines": 440
+  },
+  {
+    "library": "adobe",
+    "path": "packages/react-stately/src/datepicker/types.ts",
+    "sha256": "96074ccdaedeaf0cb0ad48a98d5c3cd998b8b51bee3e583ed5d369484c2bc650",
+    "lines": 167
+  },
+  {
+    "library": "base-ui",
+    "path": "packages/react/package.json",
+    "sha256": "b95ab03ae94e6d8b874079eb5feb0c8db92791a80c8058616ec7ac49306b8447",
+    "lines": 180
+  },
+  {
+    "library": "base-ui",
+    "path": "packages/react/src/index.ts",
+    "sha256": "bdc94b38f7d1ab96c528b46d28b87db4e20caaf65629acec6ffd9b5f16bb90ed",
+    "lines": 44
+  },
+  {
+    "library": "primer",
+    "path": "packages/react/package.json",
+    "sha256": "2ccbfddfc66c8eef7528f529dd4810e169ebc73d1fcf15001a86f024610ac901",
+    "lines": 204
+  },
+  {
+    "library": "primer",
+    "path": "packages/react/src/index.ts",
+    "sha256": "02cbd5adbdfa061878f24d5c8460703409b42bfb9d2187c48d63b8bead76fa72",
+    "lines": 254
+  },
+  {
+    "library": "fluent",
+    "path": "packages/react-components/react-calendar-compat/library/src/components/Calendar/Calendar.types.ts",
+    "sha256": "dfbe2847a1f5cfd44b623f458dc8b305a573007ff2f9af0eaf76813a781bff8d",
+    "lines": 251
+  },
+  {
+    "library": "fluent",
+    "path": "packages/react-components/react-calendar-compat/library/src/components/Calendar/useCalendarStyles.styles.ts",
+    "sha256": "8c7dcb6e70620da6e4e487c8e1478976ebe0a4a4c6da48cd12eb68783fee769d",
+    "lines": 145
+  },
+  {
+    "library": "fluent",
+    "path": "packages/react-components/react-calendar-compat/library/src/components/CalendarDayGrid/CalendarDayGrid.types.ts",
+    "sha256": "25f2207de596357fb603c3d2cf5b0b21b9719a95d7cb31aed868a3c4097efc4c",
+    "lines": 301
+  },
+  {
+    "library": "fluent",
+    "path": "packages/react-components/react-calendar-compat/library/src/components/CalendarDayGrid/useCalendarDayGridStyles.styles.ts",
+    "sha256": "b32602ec9b66c3f5b42fde8733ae20a703c767cfdec0448594db7eb2cd389d04",
+    "lines": 395
+  },
+  {
+    "library": "fluent",
+    "path": "packages/react-components/react-calendar-compat/library/src/components/CalendarDayGrid/useWeekCornerStyles.styles.ts",
+    "sha256": "4e85d829aabe0c2260d593696e0607e870e8f83b40ff5542c4681dc4615e202d",
+    "lines": 159
+  },
+  {
+    "library": "fluent",
+    "path": "packages/react-components/react-calendar-compat/library/src/components/CalendarDayGrid/useWeeks.ts",
+    "sha256": "0ac6aa8467b4ed111363d9ffa7fe334a7c6c26467bc39bdc6a52dc8743d6f4da",
+    "lines": 60
+  },
+  {
+    "library": "fluent",
+    "path": "packages/react-components/react-datepicker-compat/library/src/components/DatePicker/DatePicker.types.ts",
+    "sha256": "086cc5a80e2b6255b99d195f43e773f36aee1284c7e037171f41973c87ab578e",
+    "lines": 240
+  },
+  {
+    "library": "fluent",
+    "path": "packages/react-components/react-datepicker-compat/library/src/components/DatePicker/renderDatePicker.tsx",
+    "sha256": "ed769f03965189ae2a25857cc0f6fa846640c5d6febcc068d151afbc47af4b13",
+    "lines": 33
+  },
+  {
+    "library": "fluent",
+    "path": "packages/react-components/react-datepicker-compat/library/src/components/DatePicker/useDatePicker.tsx",
+    "sha256": "89a5b3da11e686dbc5637bc4339a0fced820cfbf010cbf1c2833b5a34d99be20",
+    "lines": 495
+  },
+  {
+    "library": "fluent",
+    "path": "packages/react-components/react-datepicker-compat/library/src/components/DatePicker/useDatePickerStyles.styles.ts",
+    "sha256": "e057052bad7bdbaac883c3ae351a00f64a09efc9501e43cf6e7a9efb5b5f46bc",
+    "lines": 77
+  },
+  {
+    "library": "fluent",
+    "path": "packages/react-components/react-input/library/src/components/Input/useInputStyles.styles.ts",
+    "sha256": "09f042c86214d67d9ec8333b9f284b14f796496bbbcee53cf679089265be6b73",
+    "lines": 388
+  },
+  {
+    "library": "carbon",
+    "path": "packages/react/package.json",
+    "sha256": "f31dd3fc5b55a0108cf6d8e4c70bc811602d1e42da387e97255770f5bbfb3ac3",
+    "lines": 136
+  },
+  {
+    "library": "carbon",
+    "path": "packages/react/src/components/DatePicker/DatePicker.tsx",
+    "sha256": "55ba529d931626a2947d13842848925e53857148a438fac9147d0d417e7a3b84",
+    "lines": 1208
+  },
+  {
+    "library": "carbon",
+    "path": "packages/react/src/components/DatePicker/next/index.tsx",
+    "sha256": "2a8236f8ed8a12af33cd04673d843f1510fc1ee837c86c34f99618f0b698466b",
+    "lines": 16
+  },
+  {
+    "library": "carbon",
+    "path": "packages/react/src/components/DatePickerInput/DatePickerInput.tsx",
+    "sha256": "bdb75e9e6aa2c60643f2b00249eadd6bff620dc620f4ee4f116d31599228f5f5",
+    "lines": 526
+  },
+  {
+    "library": "carbon",
+    "path": "packages/styles/scss/components/date-picker/_date-picker-next.scss",
+    "sha256": "b34e8e948c0957d1fd3a91c3663a1c685158a6e71a6f3be05f15a91898c09414",
+    "lines": 482
+  },
+  {
+    "library": "carbon",
+    "path": "packages/styles/scss/components/date-picker/_date-picker.scss",
+    "sha256": "54276c7931a1f53bb635c5f495e1b7818bf0b032fd1543e3706ef36053ef27fc",
+    "lines": 339
+  },
+  {
+    "library": "carbon",
+    "path": "packages/styles/scss/components/date-picker/_flatpickr.scss",
+    "sha256": "9c53e9a129318b0ff978dc8f1fbc48ce34b8e906f1c9a47891b9bea671001ef5",
+    "lines": 622
+  },
+  {
+    "library": "carbon",
+    "path": "packages/styles/scss/utilities/_layout.scss",
+    "sha256": "54afe6ab1aacd966897f105fd90eb3a788b7e07468c6942aaa684f0c37570dcb",
+    "lines": 211
+  },
+  {
+    "library": "ant",
+    "path": "components/calendar/generateCalendar.tsx",
+    "sha256": "0d4404428d58d761d849627cd70c0597ebb8cd7e22599be08fbcc0930d2ed1bd",
+    "lines": 445
+  },
+  {
+    "library": "ant",
+    "path": "components/date-picker/generatePicker/generateRangePicker.tsx",
+    "sha256": "447ef7f7663951ad82f87cf2d79d0d8cd0a326a53aa6695831fc35c032e6ec66",
+    "lines": 234
+  },
+  {
+    "library": "ant",
+    "path": "components/date-picker/generatePicker/generateSinglePicker.tsx",
+    "sha256": "f5d941ecf84732d7df3b36bc566e6021c69b155cd9eded2898961d43870736a3",
+    "lines": 294
+  },
+  {
+    "library": "ant",
+    "path": "components/date-picker/index.en-US.md",
+    "sha256": "d7193bd2f1ebc35029b2553286217a4125381ae0b846635af5e6f7fe3bf9f9f3",
+    "lines": 323
+  },
+  {
+    "library": "ant",
+    "path": "components/date-picker/index.tsx",
+    "sha256": "cab24ace5d8b9f1a3e331f222a53e76d838d5427af989bfe49e3d032a1189adc",
+    "lines": 42
+  },
+  {
+    "library": "ant",
+    "path": "components/date-picker/style/index.ts",
+    "sha256": "21ca12ee3e33e7cd8e18d14fca2552bdd1fd476a0d81bdf43b8fd1704b12cffd",
+    "lines": 564
+  },
+  {
+    "library": "ant",
+    "path": "components/date-picker/style/panel.ts",
+    "sha256": "8e01ad12815e4ddd909a5faea175a22ab1f6f758de7018edef6b311dff99f71e",
+    "lines": 683
+  },
+  {
+    "library": "ant",
+    "path": "components/date-picker/style/token.ts",
+    "sha256": "8717e04a049650c4cf452539a39b2161fa6cc7969086ef7146880e3147e96a41",
+    "lines": 208
+  },
+  {
+    "library": "ant",
+    "path": "components/input/style/token.ts",
+    "sha256": "2bbb8bcab910ac5af811440fdb2c10d45c1bfb3492e32752138560f45bc0bd67",
+    "lines": 168
+  },
+  {
+    "library": "ant",
+    "path": "components/theme/themes/seed.ts",
+    "sha256": "a39bd3b0c29f23b22f4a78b68f0af7df46e90bb51e0f129c9da5e568fb0e11f1",
+    "lines": 87
+  },
+  {
+    "library": "ant",
+    "path": "package.json",
+    "sha256": "4b3459456f691417cb0673f6d0e555e7e401474e10853a77d7bfc9007b020c89",
+    "lines": 357
+  },
+  {
+    "library": "mui-x",
+    "path": "packages/x-date-pickers-pro/src/DateRangeCalendar/DateRangeCalendar.tsx",
+    "sha256": "a0bb0bccde7988d1e41358eb812f8eac788509eed9d47b215899c0c2f50c0706",
+    "lines": 908
+  },
+  {
+    "library": "mui-x",
+    "path": "packages/x-date-pickers-pro/src/DateRangePicker/DateRangePicker.tsx",
+    "sha256": "3d83b4cd336b2ec84694e73e2c577db5052c6f37ce7e693b11338172a745d685",
+    "lines": 372
+  },
+  {
+    "library": "mui-x",
+    "path": "packages/x-date-pickers-pro/src/DesktopDateRangePicker/DesktopDateRangePicker.tsx",
+    "sha256": "dd564a928a33bba9fecf1883269915b89ea5f4b6e61a2ebdbcf36b3deb038b50",
+    "lines": 407
+  },
+  {
+    "library": "mui-x",
+    "path": "packages/x-date-pickers-pro/src/SingleInputDateRangeField/SingleInputDateRangeField.tsx",
+    "sha256": "1f04b0c59f06b27e53e013181775d1ff81fca601e7561116849d5a4b83924b94",
+    "lines": 347
+  },
+  {
+    "library": "mui-x",
+    "path": "packages/x-date-pickers/src/DateCalendar/DateCalendar.tsx",
+    "sha256": "de779c1b96d0a3a59e2ed5b4867b2778ddacfc6c332d0ec183a8a8d1ff618aa4",
+    "lines": 633
+  },
+  {
+    "library": "mui-x",
+    "path": "packages/x-date-pickers/src/DateCalendar/DayCalendar.tsx",
+    "sha256": "1c67823b229dc6cf17f871491319f81d640b41dbd4576a3e8a4fb9f967559b17",
+    "lines": 619
+  },
+  {
+    "library": "mui-x",
+    "path": "packages/x-date-pickers/src/DateField/DateField.tsx",
+    "sha256": "350e708a01f080e4afdf27d1842ef2cca0b73b03f90b956237630770bf57a449",
+    "lines": 350
+  },
+  {
+    "library": "mui-x",
+    "path": "packages/x-date-pickers/src/DatePicker/DatePicker.tsx",
+    "sha256": "37ca0d1a943d398ed11fac6be5808bdb7302ba9f135660c7afc1f4e3f7e56196",
+    "lines": 396
+  },
+  {
+    "library": "mui-x",
+    "path": "packages/x-date-pickers/src/DesktopDatePicker/DesktopDatePicker.tsx",
+    "sha256": "4070b7b22d51e1cc8d947c182aebdaef10528acb94d5af05d9a6d0a45c0f5727",
+    "lines": 432
+  },
+  {
+    "library": "mui-x",
+    "path": "packages/x-date-pickers/src/PickersTextField/PickersInputBase/PickersInputBase.tsx",
+    "sha256": "a43e4d89fee869a4f33fafcdc2c050ede7dbc4fb1a27e6f30b7d4ac3a957eed6",
+    "lines": 618
+  },
+  {
+    "library": "mui-x",
+    "path": "packages/x-date-pickers/src/PickersTextField/PickersOutlinedInput/PickersOutlinedInput.tsx",
+    "sha256": "e13e0fcf6eb87aac84400c894b789350cb8746c6ed2692224b7449a54be94058",
+    "lines": 275
+  },
+  {
+    "library": "mui-x",
+    "path": "packages/x-date-pickers/src/internals/hooks/useField/useFieldRootProps.ts",
+    "sha256": "8c27c167bf2f803377e924d008ecb54e94f5706757ef8514a7cd7e652e8e0149",
+    "lines": 585
+  },
+  {
+    "library": "mui-x",
+    "path": "packages/x-date-pickers/src/internals/hooks/useField/useFieldSectionContentProps.ts",
+    "sha256": "e05116571575cc0820375497f724b4d201ec3bd7b8f72ac5ef9596df58d281ad",
+    "lines": 317
+  },
+  {
+    "library": "shadcn",
+    "path": "apps/v4/registry/styles/style-nova.css",
+    "sha256": "5d5751579c015b61e77cf0822862a43ac79f3e6fed236a17624be8e6d1ebea1d",
+    "lines": 1748
+  },
+  {
+    "library": "adobe",
+    "path": "packages/@react-spectrum/s2/src/style-utils.ts",
+    "sha256": "7a84152b5a2876b5aacca2c25df378303ac42ec3ec6377b9549fe2dc2ddaa6a6",
+    "lines": 425
+  },
+  {
+    "library": "adobe",
+    "path": "packages/@react-spectrum/s2/src/Field.tsx",
+    "sha256": "18aa98232426c9d5a0a7859927a13f430c4ca15d3462408b80ebeedca2685e7e",
+    "lines": 504
+  },
+  {
+    "library": "adobe",
+    "path": "packages/@react-spectrum/s2/style/style-macro.ts",
+    "sha256": "f921d9ac60deeff433502b7cd0b718cff6f5de9697889e3b1d0d39bef997f109",
+    "lines": 1155
+  },
+  {
+    "library": "adobe",
+    "path": "packages/react-aria/src/spinbutton/useSpinButton.ts",
+    "sha256": "3a775fac0222d810bc07dc4d38bdac1a39324f7ae90b8916dff2cdc0ad0a0da7",
+    "lines": 327
+  },
+  {
+    "library": "fluent",
+    "path": "packages/tokens/src/global/borderRadius.ts",
+    "sha256": "156bf14d20515100a28356daa7c07c9766a1108a0e4efef86ae171ee8c505f34",
+    "lines": 15
+  },
+  {
+    "library": "carbon",
+    "path": "packages/layout/scss/_spacing.scss",
+    "sha256": "71fe25d8563413c37fe9f30f9fcaca0726b17a75dae3ebbf9270607ac4a7b099",
+    "lines": 10
+  },
+  {
+    "library": "carbon",
+    "path": "packages/layout/scss/_border-radius.scss",
+    "sha256": "2084d1aa9e60e6e83aa8fad7319a9930dbc9b093a04015fd6c4124da7aeb1262",
+    "lines": 8
+  },
+  {
+    "library": "radix-themes",
+    "path": "packages/radix-ui-themes/src/index.ts",
+    "sha256": "4df4da6e7bbe3ad62bd90f0fe36d1ee434697b3712e8b257b91eae573d1e8e0b",
+    "lines": 1
+  },
+  {
+    "library": "primer",
+    "path": "packages/react/src/experimental/index.ts",
+    "sha256": "fe86eda848020cbf33a09b4c59d333ee70bd9237627d9bc13909a4275a73873f",
+    "lines": 113
+  },
+  {
+    "library": "mui-x",
+    "path": "packages/x-date-pickers/src/dateViewRenderers/dateViewRenderers.tsx",
+    "sha256": "285e69a83a108687f3e99f598dc97ea7de79a04ae69b70aa6efd9c501eeb7153",
+    "lines": 97
+  },
+  {
+    "library": "mui-x",
+    "path": "packages/x-date-pickers-pro/src/dateRangeViewRenderers/dateRangeViewRenderers.tsx",
+    "sha256": "0ad626d784d0315ad8f7532d70ed0b47eec5ac9c79adb44dce911f5ad1720d4e",
+    "lines": 95
+  },
+  {
+    "library": "day-picker",
+    "path": "src/DayPicker.tsx",
+    "sha256": "ee41e38a95a8b72891a5bb6f4af0a090620add9631e174115bc7158d46ad0232",
+    "lines": 729
+  },
+  {
+    "library": "day-picker",
+    "path": "src/useFocus.ts",
+    "sha256": "cdd204cd96904abe6e5871be73c8017a1ee06b832dbe96c81f55940282796d1a",
+    "lines": 100
+  },
+  {
+    "library": "day-picker",
+    "path": "src/helpers/getNextFocus.tsx",
+    "sha256": "9f31efeafcafcb6400d2c1362402c9c7e34858e401efa5bfb2051c78ab1fc8f9",
+    "lines": 83
+  },
+  {
+    "library": "day-picker",
+    "path": "src/components/DayButton.tsx",
+    "sha256": "eca531494dd7358648d7de0560c9c6ed4069c3eb2cfcde4bcfd9206729b88af4",
+    "lines": 29
+  },
+  {
+    "library": "flatpickr",
+    "path": "src/index.ts",
+    "sha256": "96cfbc4841347cc01e86a07574ecef8704379dcafcde254341662e4729d7cf91",
+    "lines": 3040
+  },
+  {
+    "library": "flatpickr",
+    "path": "src/types/options.ts",
+    "sha256": "ab129ca8f7a0623ae83c0c9cfee054adf8321a84ad11d850a5d6df1f7ca2c7e3",
+    "lines": 424
+  },
+  {
+    "library": "rc-picker",
+    "path": "src/PickerInput/Selector/Input.tsx",
+    "sha256": "ebc20596fc40ecfcabbc0fe23fe0d011525c9d05c436c0a6956bfc9d326cbae9",
+    "lines": 430
+  },
+  {
+    "library": "rc-picker",
+    "path": "src/PickerInput/Selector/hooks/useInputProps.ts",
+    "sha256": "ebaa37a238949b16dd82f112ae0f3bb1cdcf898f2840b55cde9c44f132528676",
+    "lines": 236
+  },
+  {
+    "library": "rc-picker",
+    "path": "src/PickerPanel/PanelBody.tsx",
+    "sha256": "60167af12dc06df9556ffe9c9d4c86716515a16c97a140f3074968558dbaafa6",
+    "lines": 199
+  },
+  {
+    "library": "rc-picker",
+    "path": "src/PickerInput/SinglePicker.tsx",
+    "sha256": "287e1f447ef635d027bb63046d0856fb06387b78298c3519554ab887fe1c468a",
+    "lines": 746
+  },
+  {
+    "library": "rc-picker",
+    "path": "src/PickerInput/RangePicker.tsx",
+    "sha256": "088c3536d68331bfa11a776c9a99ecf07d88c5c0069e6fa5a79f885bffb7ab64",
+    "lines": 838
+  },
+  {
+    "library": "adobe",
+    "path": "packages/@react-spectrum/s2/style/spectrum-theme.ts",
+    "sha256": "462d450c139f01b01890773ff7dbfd381f1da0f7f0592b2b2672a08c7fbaea5c",
+    "lines": 1443
+  },
+  {
+    "library": "adobe",
+    "path": "packages/@react-spectrum/s2/style/tokens.ts",
+    "sha256": "91c9cf627b9daa949fc9833cf0b77787e905036df22102fae6ff01f02f1ea40d",
+    "lines": 236
+  },
+  {
+    "library": "fluent",
+    "path": "packages/tokens/src/global/spacings.ts",
+    "sha256": "63a64eba054236a88c80293f3128f89e988f22da90e7b4637a53ad92a89f9c2d",
+    "lines": 44
+  },
+  {
+    "library": "fluent",
+    "path": "packages/react-components/react-calendar-compat/library/src/components/CalendarDayGrid/CalendarDayGrid.tsx",
+    "sha256": "d30e2d4bbb62dd21056b5b6816cafd84e32c72ea85c5d32be1cb588fad086710",
+    "lines": 260
+  },
+  {
+    "library": "fluent",
+    "path": "packages/react-components/react-calendar-compat/library/src/components/CalendarDayGrid/CalendarGridDayCell.tsx",
+    "sha256": "0e3599f46ac098ecfaebce6a5ad2763c1f2249e9113773ff8ec46460c3cc5c91",
+    "lines": 260
+  },
+  {
+    "library": "carbon",
+    "path": "packages/react/src/components/DatePicker/next/MIGRATION.md",
+    "sha256": "94eeea803fac8bbb788990dd7c5c79d6ed1ebd9b250890cebca4457d101fe881",
+    "lines": 77
+  },
+  {
+    "library": "carbon",
+    "path": "packages/react/src/components/DatePicker/next/components/DatePicker.tsx",
+    "sha256": "eb459ee85bb664031d3b89722989490b918f5a3afb973d42d6835f261afe1802",
+    "lines": 325
+  },
+  {
+    "library": "carbon",
+    "path": "packages/react/src/components/DatePicker/next/components/Calendar.tsx",
+    "sha256": "4b9d8bb5609644dcfa0f0a02eb61df12257a67d5134675f525275aa588a52281",
+    "lines": 297
+  },
+  {
+    "library": "carbon",
+    "path": "packages/react/src/components/DatePicker/next/hooks/useDatePicker.ts",
+    "sha256": "ebdd1b41528adf1791d2edad58a808d62da35a1f40d0edc114c5e9916053a3a4",
+    "lines": 654
+  },
+  {
+    "library": "ant",
+    "path": "components/theme/themes/shared/genControlHeight.ts",
+    "sha256": "50c6c72dfb9f5311e27912f51a2a9a8c6b0de111cff86a8c9639d41c73b0ccdc",
+    "lines": 13
+  },
+  {
+    "library": "ant",
+    "path": "components/theme/util/alias.ts",
+    "sha256": "90c7b1aabd241fb1af71f137ef1bbbe237506c22f1bab1a545213f8601724f86",
+    "lines": 221
+  },
+  {
+    "library": "rc-picker",
+    "path": "src/PickerPanel/DatePanel/index.tsx",
+    "sha256": "b53a6131ddb6b48ed87c38cea41a3b1f74b19ca80a97ab921fc7fd6dcf1bbb6d",
+    "lines": 222
+  },
+  {
+    "library": "rc-picker",
+    "path": "src/PickerPanel/index.tsx",
+    "sha256": "e80a598b56d6a9adb47953693672561502cb86a5e4f083bbdd6b3c8ec1d9f07b",
+    "lines": 470
+  },
+  {
+    "library": "carbon",
+    "path": "packages/layout/src/tokens.ts",
+    "sha256": "952a662dca6d7716b3f0bcdae6143b1f7bcbaeafc93fc232ea4073a0d971bc6f",
+    "lines": 56
+  },
+  {
+    "library": "carbon",
+    "path": "packages/layout/src/index.ts",
+    "sha256": "7b637e855660792005793cc5bece9b079a0adf9da2db4a216f92a4633cf953f6",
+    "lines": 221
+  },
+  {
+    "library": "carbon",
+    "path": "packages/layout/src/dtcg/layout.json",
+    "sha256": "b337e0e6c8ee8be4845f0a8b2fa0320930bd2999ffbd53c83748afb12723e821",
+    "lines": 432
+  }
+]

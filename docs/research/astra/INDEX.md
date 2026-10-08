@@ -10,6 +10,9 @@ broken research.
 
 | Date | Topic | Question | Status |
 | --- | --- | --- | --- |
+| 2026-10-07 | [unverified-inventory](unverified-inventory/README.md) | What do all 68 Unverified paragraphs require, where can they be checked, and what are the exact steps? | unreviewed |
+| 2026-10-07 | [date-picker-survey](date-picker-survey/README.md) | How do ten libraries compose date fields and pickers, with pinned geometry, keyboard, ARIA and Calendar reuse? | unreviewed |
+| 2026-10-07 | [drift recheck](drift/2026-10-07.md) | Which of D01–D40 are fixed, open or changed, and what new drift exists in changed families and corners? | unreviewed |
 | 2026-10-07 | [materials](materials/README.md) | Brief for the materials series (owner goal, constraints, reference board); reports follow in its subfolders | brief |
 | 2026-10-07 | [phase-status](phase-status/README.md) | Where do all 65 families stand in the four approval phases, and what remains unverified? | unreviewed |
 | 2026-10-02 | [drift](drift/2026-10-02.md) | Where do each family's spec, CSS, manifest, React props and demo disagree? (40 mismatches in 64 families) | unreviewed |

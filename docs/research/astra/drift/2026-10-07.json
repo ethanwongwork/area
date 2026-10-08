@@ -1,0 +1,1707 @@
+{
+  "baseline": "0aa0a5224804f1d2a2fb0be0cea79e8f599736bc",
+  "snapshot": "4c1854202a8e109479d5b83ef24a8325231da056",
+  "previous": [
+    {
+      "id": "D01",
+      "title": "D01 \u00b7 button \u00b7 Tone count",
+      "status": "still open",
+      "explanation": "Manifest, React and spec agree. Recommendation: correct the page count.",
+      "comparison": [
+        "Includes discovery; seven semantic tones. [packages/styles/src/components/button.css:287](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/button.css#L287-L290)",
+        "Lists seven tones. [docs/specs/button.md:43](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/button.md#L43-L46)",
+        "Says \u201cButtonTone (8 values)\u201d. [apps/docs/src/pages.mjs:248](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L248-L251)"
+      ],
+      "refs": [
+        {
+          "path": "packages/styles/src/components/button.css",
+          "old_line": 284,
+          "line": 287
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 35,
+          "line": 35
+        },
+        {
+          "path": "packages/react/src/components/Button.tsx",
+          "old_line": 12,
+          "line": 12
+        },
+        {
+          "path": "docs/specs/button.md",
+          "old_line": 43,
+          "line": 43
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 248,
+          "line": 248
+        }
+      ]
+    },
+    {
+      "id": "D02",
+      "title": "D02 \u00b7 split-button \u00b7 Ghost omitted from page variant list",
+      "status": "still open",
+      "explanation": "Implementation and spec agree. Recommendation: include ghost in the page API.",
+      "comparison": [
+        "Ghost has explicit CSS. [packages/styles/src/components/split-button.css:86](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/split-button.css#L86-L89)",
+        "Includes ghost. [docs/specs/split-button.md:55](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/split-button.md#L55-L58)",
+        "Variant list omits ghost. [apps/docs/src/pages.mjs:339](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L339-L342)"
+      ],
+      "refs": [
+        {
+          "path": "packages/styles/src/components/split-button.css",
+          "old_line": 86,
+          "line": 86
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 66,
+          "line": 66
+        },
+        {
+          "path": "packages/react/src/components/SplitButton.tsx",
+          "old_line": 14,
+          "line": 14
+        },
+        {
+          "path": "docs/specs/split-button.md",
+          "old_line": 55,
+          "line": 55
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 339,
+          "line": 339
+        }
+      ]
+    },
+    {
+      "id": "D03",
+      "title": "D03 \u00b7 split-button \u00b7 Tone count",
+      "status": "still open",
+      "explanation": "Button manifest is authoritative for the inherited tone type. Recommendation: correct the count.",
+      "comparison": [
+        "Composes Button tone styling. [packages/styles/src/components/split-button.css:70](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/split-button.css#L70-L73)",
+        "Lists the Button tones. [docs/specs/split-button.md:56](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/split-button.md#L56-L59)",
+        "Says eight ButtonTone values. [apps/docs/src/pages.mjs:340](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L340-L343)"
+      ],
+      "refs": [
+        {
+          "path": "packages/styles/src/components/split-button.css",
+          "old_line": 70,
+          "line": 70
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 35,
+          "line": 35
+        },
+        {
+          "path": "packages/react/src/components/SplitButton.tsx",
+          "old_line": 19,
+          "line": 19
+        },
+        {
+          "path": "docs/specs/split-button.md",
+          "old_line": 56,
+          "line": 56
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 340,
+          "line": 340
+        }
+      ]
+    },
+    {
+      "id": "D04",
+      "title": "D04 \u00b7 toolbar \u00b7 Pressed button described as raised plate",
+      "status": "still open",
+      "explanation": "Spec removal and ordinary Button selection agree. Recommendation: remove the raised-plate claim.",
+      "comparison": [
+        "Sizes child Buttons; selected styling comes from Button. [packages/styles/src/components/toolbar.css:49](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/toolbar.css#L49-L52)",
+        "Real Segmented for a track; selected Buttons use their fill; [docs/specs/toolbar.md:59](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/toolbar.md#L59-L62) [docs/specs/toolbar.md:58](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/toolbar.md#L58-L61)",
+        "\u201ca pressed toggle rises as a plate\u201d. [apps/docs/src/pages.mjs:153](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L153-L156)"
+      ],
+      "refs": [
+        {
+          "path": "packages/styles/src/components/toolbar.css",
+          "old_line": 47,
+          "line": 49
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 75,
+          "line": 75
+        },
+        {
+          "path": "packages/react/src/components/Toolbar.tsx",
+          "old_line": 77,
+          "line": 77
+        },
+        {
+          "path": "docs/specs/toolbar.md",
+          "old_line": 59,
+          "line": 59
+        },
+        {
+          "path": "docs/specs/toolbar.md",
+          "old_line": 58,
+          "line": 58
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 153,
+          "line": 153
+        }
+      ]
+    },
+    {
+      "id": "D05",
+      "title": "D05 \u00b7 textarea \u00b7 Removed lg tier still documented",
+      "status": "still open",
+      "explanation": "Manifest, React and CSS agree on sm/md. Recommendation: reconcile the spec size table and example note.",
+      "comparison": [
+        "Only sm and md size selectors. [packages/styles/src/components/textarea.css:131](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/textarea.css#L131-L133)",
+        "Variants still list sm/md/lg. [docs/specs/textarea.md:30](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/textarea.md#L30-L33)",
+        "Sizes note says three tiers; page API already marks lg removed. [apps/docs/src/pages.mjs:632](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L632-L635)"
+      ],
+      "refs": [
+        {
+          "path": "packages/styles/src/components/textarea.css",
+          "old_line": 131,
+          "line": 131
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 198,
+          "line": 200
+        },
+        {
+          "path": "packages/react/src/components/forms.tsx",
+          "old_line": 65,
+          "line": 65
+        },
+        {
+          "path": "docs/specs/textarea.md",
+          "old_line": 30,
+          "line": 30
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 632,
+          "line": 632
+        }
+      ]
+    },
+    {
+      "id": "D06",
+      "title": "D06 \u00b7 checkbox \u00b7 Removed sm size in page API",
+      "status": "still open",
+      "explanation": "Spec, CSS and typed API agree. Recommendation: remove sm from page API.",
+      "comparison": [
+        "Shared choice CSS exposes md/lg. [packages/styles/src/components/choice.css:418](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/choice.css#L418-L421)",
+        "Documents md/lg and removal of sm. [docs/specs/checkbox.md:29](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/checkbox.md#L29-L32)",
+        "API advertises sm/md/lg. [apps/docs/src/pages.mjs:668](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L668-L671)"
+      ],
+      "refs": [
+        {
+          "path": "packages/styles/src/components/choice.css",
+          "old_line": 417,
+          "line": 418
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 224,
+          "line": 226
+        },
+        {
+          "path": "packages/react/src/components/forms.tsx",
+          "old_line": 8,
+          "line": 8
+        },
+        {
+          "path": "docs/specs/checkbox.md",
+          "old_line": 29,
+          "line": 29
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 668,
+          "line": 668
+        }
+      ]
+    },
+    {
+      "id": "D07",
+      "title": "D07 \u00b7 radio \u00b7 Removed sm size in page API",
+      "status": "still open",
+      "explanation": "Spec, CSS and typed API agree. Recommendation: remove sm from page API.",
+      "comparison": [
+        "Shared choice CSS exposes md/lg. [packages/styles/src/components/choice.css:418](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/choice.css#L418-L421)",
+        "Documents md/lg and removal of sm. [docs/specs/radio.md:29](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/radio.md#L29-L32)",
+        "API advertises sm/md/lg. [apps/docs/src/pages.mjs:699](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L699-L702)"
+      ],
+      "refs": [
+        {
+          "path": "packages/styles/src/components/choice.css",
+          "old_line": 417,
+          "line": 418
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 242,
+          "line": 244
+        },
+        {
+          "path": "packages/react/src/components/forms.tsx",
+          "old_line": 8,
+          "line": 8
+        },
+        {
+          "path": "docs/specs/radio.md",
+          "old_line": 29,
+          "line": 29
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 699,
+          "line": 699
+        }
+      ]
+    },
+    {
+      "id": "D08",
+      "title": "D08 \u00b7 badge \u00b7 Pill described as optional shape control",
+      "status": "changed",
+      "explanation": "The former ignored-pill mismatch is superseded: Badge now supports true / false / unset and the page documents all three. However, the current spec still excludes rounded badges as pill-only. Reconcile the spec with the restored override; do not restore the old deprecated-prop advice.",
+      "comparison": [],
+      "refs": [
+        {
+          "path": "packages/styles/src/components/badge.css",
+          "old_line": 18,
+          "line": 18
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 323,
+          "line": 325
+        },
+        {
+          "path": "packages/react/src/components/Badge.tsx",
+          "old_line": 9,
+          "line": 8
+        },
+        {
+          "path": "docs/specs/badge.md",
+          "old_line": 92,
+          "line": 92
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 826,
+          "line": 829
+        }
+      ]
+    },
+    {
+      "id": "D09",
+      "title": "D09 \u00b7 badge \u00b7 Unsupported uppercase prop",
+      "status": "still open",
+      "explanation": "Manifest, props and explicit spec removal agree. Recommendation: delete uppercase from the API list.",
+      "comparison": [
+        "No uppercase modifier; normal label rendering. [packages/styles/src/components/badge.css:41](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/badge.css#L41-L44)",
+        "Uppercase removed. [docs/specs/badge.md:90](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/badge.md#L90-L93)",
+        "Lists uppercase as a boolean. [apps/docs/src/pages.mjs:829](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L829-L832)"
+      ],
+      "refs": [
+        {
+          "path": "packages/styles/src/components/badge.css",
+          "old_line": 38,
+          "line": 41
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 323,
+          "line": 325
+        },
+        {
+          "path": "packages/react/src/components/Badge.tsx",
+          "old_line": 20,
+          "line": 20
+        },
+        {
+          "path": "docs/specs/badge.md",
+          "old_line": 90,
+          "line": 90
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 826,
+          "line": 829
+        }
+      ]
+    },
+    {
+      "id": "D10",
+      "title": "D10 \u00b7 chip \u00b7 Pill described as live boolean",
+      "status": "changed",
+      "explanation": "The old ignored-pill mismatch is superseded: Chip now implements the override and the page documents unset/true/false. Its current Decisions still prescribe radius-full without the theme/override qualification. Update the shape contract, not the restored prop.",
+      "comparison": [],
+      "refs": [
+        {
+          "path": "packages/styles/src/components/chip.css",
+          "old_line": 45,
+          "line": 47
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 298,
+          "line": 300
+        },
+        {
+          "path": "packages/react/src/components/primitives.tsx",
+          "old_line": 849,
+          "line": 850
+        },
+        {
+          "path": "docs/specs/chip.md",
+          "old_line": 36,
+          "line": 36
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 791,
+          "line": 793
+        }
+      ]
+    },
+    {
+      "id": "D11",
+      "title": "D11 \u00b7 kbd \u00b7 Unsupported quiet boolean",
+      "status": "still open",
+      "explanation": "KbdProps supports variant/appearance, with no quiet boolean adapter. Recommendation: remove the boolean entry.",
+      "comparison": [
+        "Quiet is a variant selector. [packages/styles/src/components/kbd.css:91](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/kbd.css#L91-L94)",
+        "Quiet documented as a variant. [docs/specs/kbd.md:38](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/kbd.md#L38-L41)",
+        "Advertises deprecated quiet boolean. [apps/docs/src/pages.mjs:1443](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L1443-L1446)"
+      ],
+      "refs": [
+        {
+          "path": "packages/styles/src/components/kbd.css",
+          "old_line": 90,
+          "line": 91
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 698,
+          "line": 759
+        },
+        {
+          "path": "packages/react/src/components/primitives.tsx",
+          "old_line": 2107,
+          "line": 2110
+        },
+        {
+          "path": "docs/specs/kbd.md",
+          "old_line": 38,
+          "line": 38
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 1321,
+          "line": 1443
+        }
+      ]
+    },
+    {
+      "id": "D12",
+      "title": "D12 \u00b7 switch \u00b7 Deprecated tone presented as design axis",
+      "status": "still open",
+      "explanation": "CSS and ignored React tone show a customization hook rather than a live prop axis. Recommendation: mark tone compatibility-only.",
+      "comparison": [
+        "Color controlled by CSS custom property/Selection role. [packages/styles/src/components/switch.css:18](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/switch.css#L18-L21)",
+        "Lists neutral/custom tone axis. [docs/specs/switch.md:34](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/switch.md#L34-L37)",
+        "Documents the custom color hook. [apps/docs/src/pages.mjs:726](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L726-L729)"
+      ],
+      "refs": [
+        {
+          "path": "packages/styles/src/components/switch.css",
+          "old_line": 15,
+          "line": 18
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 260,
+          "line": 262
+        },
+        {
+          "path": "packages/react/src/components/Switch.tsx",
+          "old_line": 11,
+          "line": 13
+        },
+        {
+          "path": "docs/specs/switch.md",
+          "old_line": 34,
+          "line": 34
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 726,
+          "line": 726
+        }
+      ]
+    },
+    {
+      "id": "D13",
+      "title": "D13 \u00b7 switch \u00b7 Short-track dimensions in docs",
+      "status": "still open",
+      "explanation": "CSS formula and spec agree. Recommendation: update the page note; these are source-derived dimensions, not screenshot estimates.",
+      "comparison": [
+        "Short width = mark height + 12; [packages/tokens/src/axes/density.ts:60](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/tokens/src/axes/density.ts#L60-L63) supplies heights 16/20/24, hence widths 28/32/36. [packages/styles/src/components/switch.css:8](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/switch.css#L8-L11)",
+        "Current short-track table agrees with the formula. [docs/specs/switch.md:96](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/switch.md#L96-L99)",
+        "Claims 28\u00d716, 36\u00d720 and 44\u00d724. [apps/docs/src/pages.mjs:735](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L735-L738)"
+      ],
+      "refs": [
+        {
+          "path": "packages/tokens/src/axes/density.ts",
+          "old_line": 60,
+          "line": 60
+        },
+        {
+          "path": "packages/styles/src/components/switch.css",
+          "old_line": 5,
+          "line": 8
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 260,
+          "line": 262
+        },
+        {
+          "path": "packages/react/src/components/Switch.tsx",
+          "old_line": 7,
+          "line": 7
+        },
+        {
+          "path": "docs/specs/switch.md",
+          "old_line": 96,
+          "line": 96
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 733,
+          "line": 735
+        }
+      ]
+    },
+    {
+      "id": "D14",
+      "title": "D14 \u00b7 color-picker \u00b7 OKLCH missing from model API list",
+      "status": "still open",
+      "explanation": "React model union and spec agree. Recommendation: include oklch in the page API.",
+      "comparison": [
+        "OKLCH channel styling exists. [packages/styles/src/components/color.css:314](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/color.css#L314-L317)",
+        "Documents OKLCH among models. [docs/specs/color-picker.md:49](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/color-picker.md#L49-L52)",
+        "Model union omits oklch. [apps/docs/src/pages.mjs:73](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L73-L76)"
+      ],
+      "refs": [
+        {
+          "path": "packages/styles/src/components/color.css",
+          "old_line": 307,
+          "line": 314
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 94,
+          "line": 96
+        },
+        {
+          "path": "packages/react/src/components/ColorPicker.tsx",
+          "old_line": 29,
+          "line": 29
+        },
+        {
+          "path": "docs/specs/color-picker.md",
+          "old_line": 49,
+          "line": 49
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 72,
+          "line": 73
+        }
+      ]
+    },
+    {
+      "id": "D15",
+      "title": "D15 \u00b7 context-menu \u00b7 Accessible name routed to wrong element in spec",
+      "status": "still open",
+      "explanation": "React is decisive: root aria-label stays on the wrapper; menuLabel names the menu. Recommendation: correct the spec naming contract.",
+      "comparison": [
+        "Wrapper and menu are separate elements. [packages/styles/src/components/context-menu.css:9](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/context-menu.css#L9-L12)",
+        "Says aria-label names the menu. [docs/specs/context-menu.md:40](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/context-menu.md#L40-L43)",
+        "Documents menuLabel. [apps/docs/src/pages.mjs:978](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L978-L981)"
+      ],
+      "refs": [
+        {
+          "path": "packages/styles/src/components/context-menu.css",
+          "old_line": 9,
+          "line": 9
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 506,
+          "line": 509
+        },
+        {
+          "path": "packages/react/src/components/ContextMenu.tsx",
+          "old_line": 90,
+          "line": 90
+        },
+        {
+          "path": "docs/specs/context-menu.md",
+          "old_line": 40,
+          "line": 40
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 973,
+          "line": 978
+        }
+      ]
+    },
+    {
+      "id": "D16",
+      "title": "D16 \u00b7 indicator \u00b7 Deprecated hide prop presented as canonical",
+      "status": "still open",
+      "explanation": "React and later spec agree. Recommendation: document hidden and mark disabled as compatibility-only.",
+      "comparison": [
+        "CSS styles rendered indicator; hiding happens in React. [packages/styles/src/components/indicator.css:3](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/indicator.css#L3-L6)",
+        "Feedback records hidden replacing disabled. [docs/specs/indicator.md:387](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/indicator.md#L387-L390)",
+        "Lists disabled to hide; omits hidden and its deprecation. [apps/docs/src/pages.mjs:45](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L45-L48)"
+      ],
+      "refs": [
+        {
+          "path": "packages/styles/src/components/indicator.css",
+          "old_line": 3,
+          "line": 3
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 336,
+          "line": 338
+        },
+        {
+          "path": "packages/react/src/components/Indicator.tsx",
+          "old_line": 11,
+          "line": 11
+        },
+        {
+          "path": "docs/specs/indicator.md",
+          "old_line": 387,
+          "line": 387
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 44,
+          "line": 45
+        }
+      ]
+    },
+    {
+      "id": "D17",
+      "title": "D17 \u00b7 code \u00b7 Swatch prop has wrong type",
+      "status": "still open",
+      "explanation": "React and page agree on a color string. Manifest boolean is the CSS presence hook, not a conflicting React API. Recommendation: correct spec type.",
+      "comparison": [
+        "Shares Token styling; swatch modifier signals presence, not the color value. [packages/styles/src/components/code.css:101](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/code.css#L101-L104)",
+        "Calls swatch boolean. [docs/specs/code.md:29](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/code.md#L29-L32)",
+        "Lists swatch as string. [apps/docs/src/pages.mjs:187](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L187-L190)"
+      ],
+      "refs": [
+        {
+          "path": "packages/styles/src/components/code.css",
+          "old_line": 101,
+          "line": 101
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 655,
+          "line": 716
+        },
+        {
+          "path": "packages/react/src/components/primitives.tsx",
+          "old_line": 1743,
+          "line": 1746
+        },
+        {
+          "path": "docs/specs/code.md",
+          "old_line": 29,
+          "line": 29
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 187,
+          "line": 187
+        }
+      ]
+    },
+    {
+      "id": "D18",
+      "title": "D18 \u00b7 nav \u00b7 Compact row inset",
+      "status": "still open",
+      "explanation": "Current density source and shared inset win; compact icon gap is 8 with a 16px glyph, giving label column 32. Recommendation: refresh the current value table.",
+      "comparison": [
+        "Shared row box uses ui-row-inset. [packages/styles/src/inset.css:51](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/inset.css#L51-L54) Compact rowInset is 8. [packages/tokens/src/axes/density.ts:69](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/tokens/src/axes/density.ts#L69-L72) The compact md icon remains 16. [packages/tokens/src/axes/density.ts:159](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/tokens/src/axes/density.ts#L159-L162)",
+        "Claims compact inset 6 (Menu also claims label column 30). [docs/specs/nav.md:118](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/nav.md#L118-L121)",
+        "Page/demo has no conflicting claim for this value. [apps/docs/src/pages.mjs:1464](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L1464-L1467)"
+      ],
+      "refs": [
+        {
+          "path": "packages/styles/src/inset.css",
+          "old_line": 51,
+          "line": 51
+        },
+        {
+          "path": "packages/tokens/src/axes/density.ts",
+          "old_line": 69,
+          "line": 69
+        },
+        {
+          "path": "packages/tokens/src/axes/density.ts",
+          "old_line": 159,
+          "line": 159
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 676,
+          "line": 737
+        },
+        {
+          "path": "packages/react/src/components/Nav.tsx",
+          "old_line": 13,
+          "line": 13
+        },
+        {
+          "path": "docs/specs/nav.md",
+          "old_line": 118,
+          "line": 118
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 1342,
+          "line": 1464
+        }
+      ]
+    },
+    {
+      "id": "D19",
+      "title": "D19 \u00b7 menu \u00b7 Compact row inset",
+      "status": "still open",
+      "explanation": "Current density source and shared inset win; compact icon gap is 8 with a 16px glyph, giving label column 32. Recommendation: refresh the current value table.",
+      "comparison": [
+        "Shared row box uses ui-row-inset. [packages/styles/src/inset.css:51](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/inset.css#L51-L54) Compact rowInset is 8. [packages/tokens/src/axes/density.ts:69](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/tokens/src/axes/density.ts#L69-L72) The compact md icon remains 16. [packages/tokens/src/axes/density.ts:159](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/tokens/src/axes/density.ts#L159-L162)",
+        "Claims compact inset 6 (Menu also claims label column 30). [docs/specs/menu.md:90](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/menu.md#L90-L93)",
+        "Page/demo has no conflicting claim for this value. [apps/docs/src/pages.mjs:1345](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L1345-L1348)"
+      ],
+      "refs": [
+        {
+          "path": "packages/styles/src/inset.css",
+          "old_line": 51,
+          "line": 51
+        },
+        {
+          "path": "packages/tokens/src/axes/density.ts",
+          "old_line": 69,
+          "line": 69
+        },
+        {
+          "path": "packages/tokens/src/axes/density.ts",
+          "old_line": 159,
+          "line": 159
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 580,
+          "line": 641
+        },
+        {
+          "path": "packages/react/src/components/primitives.tsx",
+          "old_line": 1177,
+          "line": 1178
+        },
+        {
+          "path": "docs/specs/menu.md",
+          "old_line": 90,
+          "line": 90
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 1223,
+          "line": 1345
+        }
+      ]
+    },
+    {
+      "id": "D20",
+      "title": "D20 \u00b7 panel \u00b7 Compact md inset",
+      "status": "still open",
+      "explanation": "CSS explicitly records the later evidence decision; spec feedback also records it. Recommendation: bring the introductory inset paragraph forward.",
+      "comparison": [
+        "md explicitly holds space-16 at both densities. [packages/styles/src/components/panel.css:359](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/panel.css#L359-L362)",
+        "Says compact md steps to 12. [docs/specs/panel.md:50](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/panel.md#L50-L53)",
+        "Page/demo has no conflicting claim for this value. [apps/docs/src/pages.mjs:1190](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L1190-L1193)"
+      ],
+      "refs": [
+        {
+          "path": "packages/styles/src/components/panel.css",
+          "old_line": 359,
+          "line": 359
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 445,
+          "line": 448
+        },
+        {
+          "path": "packages/react/src/components/primitives.tsx",
+          "old_line": 458,
+          "line": 459
+        },
+        {
+          "path": "docs/specs/panel.md",
+          "old_line": 50,
+          "line": 50
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 1068,
+          "line": 1190
+        }
+      ]
+    },
+    {
+      "id": "D21",
+      "title": "D21 \u00b7 inspector \u00b7 Trailing action column claimed unconditional",
+      "status": "still open",
+      "explanation": "Panel CSS, React and page agree on opt-in reservation. Recommendation: align Inspector recipe text with Panel actionColumn.",
+      "comparison": [
+        "Third column only with an action or action-column modifier. [packages/styles/src/components/panel.css:272](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/panel.css#L272-L275)",
+        "Says trailing column is always reserved. [docs/specs/inspector.md:45](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/inspector.md#L45-L48)",
+        "[apps/docs/src/pages.mjs:1190](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L1190-L1193) describes actionColumn as opt-in."
+      ],
+      "refs": [
+        {
+          "path": "packages/styles/src/components/panel.css",
+          "old_line": 272,
+          "line": 272
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 445,
+          "line": 448
+        },
+        {
+          "path": "packages/react/src/components/primitives.tsx",
+          "old_line": 458,
+          "line": 459
+        },
+        {
+          "path": "docs/specs/inspector.md",
+          "old_line": 45,
+          "line": 45
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 1068,
+          "line": 1190
+        }
+      ]
+    },
+    {
+      "id": "D22",
+      "title": "D22 \u00b7 box-field \u00b7 Caption recipe omits standalone context",
+      "status": "still open",
+      "explanation": "CSS distinguishes contexts; no public size prop selects this recipe. Recommendation: qualify caption values as Panel-context values.",
+      "comparison": [
+        "Standalone label reads ui type and fg-default; Panel overrides to muted and panel label scale. [packages/styles/src/components/box-field.css:28](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/box-field.css#L28-L31)",
+        "Unconditionally says 12/16 muted. [docs/specs/box-field.md:63](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/box-field.md#L63-L66)",
+        "Page/demo has no conflicting claim for this value. [apps/docs/src/pages.mjs:1147](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L1147-L1150)"
+      ],
+      "refs": [
+        {
+          "path": "packages/styles/src/components/box-field.css",
+          "old_line": 28,
+          "line": 28
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 533,
+          "line": 594
+        },
+        {
+          "path": "packages/react/src/components/BoxField.tsx",
+          "old_line": 11,
+          "line": 11
+        },
+        {
+          "path": "docs/specs/box-field.md",
+          "old_line": 63,
+          "line": 63
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 1025,
+          "line": 1147
+        }
+      ]
+    },
+    {
+      "id": "D23",
+      "title": "D23 \u00b7 color-field \u00b7 Swatch radius",
+      "status": "fixed",
+      "explanation": "Fixed for the originally cited default sm swatch: even-pixel rounding maps 16 \u00d7 0.2 to 4, and the ColorField concentric cap preserves 4 at the default setting. The old 3.2-versus-4 discrepancy no longer holds. Other radius settings intentionally vary; this is not a claim that all swatches always have radius 4.",
+      "comparison": [],
+      "refs": [
+        {
+          "path": "packages/styles/src/components/color.css",
+          "old_line": 32,
+          "line": 32
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 124,
+          "line": 126
+        },
+        {
+          "path": "packages/react/src/components/ColorField.tsx",
+          "old_line": 77,
+          "line": 77
+        },
+        {
+          "path": "docs/specs/color-field.md",
+          "old_line": 94,
+          "line": 94
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 95,
+          "line": 96
+        }
+      ]
+    },
+    {
+      "id": "D24",
+      "title": "D24 \u00b7 color-picker \u00b7 Small-control typography",
+      "status": "still open",
+      "explanation": "Density tokens and CSS agree. Recommendation: distinguish default and compact.",
+      "comparison": [
+        "Reads control-sm; [packages/tokens/src/axes/density.ts:140](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/tokens/src/axes/density.ts#L140-L143) gives 14/20 default, [packages/tokens/src/axes/density.ts:158](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/tokens/src/axes/density.ts#L158-L161) gives 12/16 compact. [packages/styles/src/components/color.css:229](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/color.css#L229-L232)",
+        "Says control-sm 12/16 without density qualification. [docs/specs/color-picker.md:159](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/color-picker.md#L159-L162)",
+        "Page/demo has no conflicting claim for this value. [apps/docs/src/pages.mjs:72](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L72-L75)"
+      ],
+      "refs": [
+        {
+          "path": "packages/tokens/src/axes/density.ts",
+          "old_line": 140,
+          "line": 140
+        },
+        {
+          "path": "packages/tokens/src/axes/density.ts",
+          "old_line": 158,
+          "line": 158
+        },
+        {
+          "path": "packages/styles/src/components/color.css",
+          "old_line": 222,
+          "line": 229
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 94,
+          "line": 96
+        },
+        {
+          "path": "packages/react/src/components/ColorPicker.tsx",
+          "old_line": 97,
+          "line": 97
+        },
+        {
+          "path": "docs/specs/color-picker.md",
+          "old_line": 159,
+          "line": 159
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 71,
+          "line": 72
+        }
+      ]
+    },
+    {
+      "id": "D25",
+      "title": "D25 \u00b7 color-picker \u00b7 Internal rule color",
+      "status": "still open",
+      "explanation": "Later spec feedback explicitly adopts border-decorative. Recommendation: reconcile the decision table with that recorded decision.",
+      "comparison": [
+        "Header rule border-decorative; swatches use the same at [packages/styles/src/components/color.css:381](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/color.css#L381-L384). [packages/styles/src/components/color.css:245](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/color.css#L245-L248)",
+        "Header decision says border-faint; swatch row at [docs/specs/color-picker.md:158](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/color-picker.md#L158-L161) does too. [docs/specs/color-picker.md:148](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/color-picker.md#L148-L151)",
+        "Page/demo has no conflicting claim for this value. [apps/docs/src/pages.mjs:72](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L72-L75)"
+      ],
+      "refs": [
+        {
+          "path": "packages/styles/src/components/color.css",
+          "old_line": 374,
+          "line": 381
+        },
+        {
+          "path": "packages/styles/src/components/color.css",
+          "old_line": 238,
+          "line": 245
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 94,
+          "line": 96
+        },
+        {
+          "path": "packages/react/src/components/ColorPicker.tsx",
+          "old_line": 97,
+          "line": 97
+        },
+        {
+          "path": "docs/specs/color-picker.md",
+          "old_line": 158,
+          "line": 158
+        },
+        {
+          "path": "docs/specs/color-picker.md",
+          "old_line": 148,
+          "line": 148
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 71,
+          "line": 72
+        }
+      ]
+    },
+    {
+      "id": "D26",
+      "title": "D26 \u00b7 color-swatch-picker \u00b7 Selection ring token",
+      "status": "still open",
+      "explanation": "Spec source note already records the Selection role at docs/specs/color-swatch-picker.md:27. Recommendation: update decision table so accent overrides are documented.",
+      "comparison": [
+        "Checked ring uses fg-selection. [packages/styles/src/components/color.css:115](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/color.css#L115-L118)",
+        "Decision table still says fg-default. [docs/specs/color-swatch-picker.md:94](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/color-swatch-picker.md#L94-L97)",
+        "Page/demo has no conflicting claim for this value. [apps/docs/src/pages.mjs:85](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L85-L88)"
+      ],
+      "refs": [
+        {
+          "path": "packages/styles/src/components/color.css",
+          "old_line": 113,
+          "line": 115
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 116,
+          "line": 118
+        },
+        {
+          "path": "packages/react/src/components/ColorSwatchPicker.tsx",
+          "old_line": 16,
+          "line": 16
+        },
+        {
+          "path": "docs/specs/color-swatch-picker.md",
+          "old_line": 94,
+          "line": 94
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 84,
+          "line": 85
+        },
+        {
+          "path": "docs/specs/color-swatch-picker.md",
+          "old_line": 27,
+          "line": 27
+        }
+      ]
+    },
+    {
+      "id": "D27",
+      "title": "D27 \u00b7 tooltip \u00b7 Dark surface and ring recipe",
+      "status": "still open",
+      "explanation": "CSS cites later dark-product captures; current table contradicts that implementation. Recommendation: record the dark annotation recipe.",
+      "comparison": [
+        "Dark uses neutral-800 and fg-default; [packages/styles/src/components/surface.css:1325](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/surface.css#L1325-L1328) adds white 5% inset edge. [packages/styles/src/components/surface.css:1319](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/surface.css#L1319-L1322)",
+        "Says no ring because tooltip inverts in dark. [docs/specs/tooltip.md:104](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/tooltip.md#L104-L107)",
+        "Page/demo has no conflicting claim for this value. [apps/docs/src/pages.mjs:1338](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L1338-L1341)"
+      ],
+      "refs": [
+        {
+          "path": "packages/styles/src/components/surface.css",
+          "old_line": 1316,
+          "line": 1325
+        },
+        {
+          "path": "packages/styles/src/components/surface.css",
+          "old_line": 1310,
+          "line": 1319
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 591,
+          "line": 652
+        },
+        {
+          "path": "packages/react/src/components/primitives.tsx",
+          "old_line": 1074,
+          "line": 1075
+        },
+        {
+          "path": "docs/specs/tooltip.md",
+          "old_line": 104,
+          "line": 104
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 1216,
+          "line": 1338
+        }
+      ]
+    },
+    {
+      "id": "D28",
+      "title": "D28 \u00b7 overlay \u00b7 Menu keyboard focus ring",
+      "status": "still open",
+      "explanation": "Menu spec explicitly says plate-only at docs/specs/menu.md:94. Recommendation: align umbrella Overlay spec with Menu.",
+      "comparison": [
+        "Highlighted/focused menu item uses hover plate and outline:none. [packages/styles/src/components/surface.css:1111](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/surface.css#L1111-L1114)",
+        "Says keyboard focus adds shared ring. [docs/specs/overlay.md:91](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/overlay.md#L91-L94)",
+        "[apps/docs/src/pages.mjs:1345](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L1345-L1348) exposes Menu items; no separate overlay visual API."
+      ],
+      "refs": [
+        {
+          "path": "packages/styles/src/components/surface.css",
+          "old_line": 1103,
+          "line": 1111
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 580,
+          "line": 641
+        },
+        {
+          "path": "packages/react/src/components/Overlays.tsx",
+          "old_line": 35,
+          "line": 35
+        },
+        {
+          "path": "docs/specs/overlay.md",
+          "old_line": 91,
+          "line": 91
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 1223,
+          "line": 1345
+        },
+        {
+          "path": "docs/specs/menu.md",
+          "old_line": 94,
+          "line": 94
+        }
+      ]
+    },
+    {
+      "id": "D29",
+      "title": "D29 \u00b7 card \u00b7 Dark shadow strength",
+      "status": "still open",
+      "explanation": "Surface token comment pins removal to the later dark audit. Recommendation: update the dark recipe, keeping Flat behavior documented.",
+      "comparison": [
+        "Dark card halo is transparent. [packages/tokens/src/axes/surface.ts:17](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/tokens/src/axes/surface.ts#L17-L20) CSS consumes shadow-card. [packages/styles/src/components/surface.css:72](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/surface.css#L72-L75)",
+        "Claims dark shadow 16% black. [docs/specs/card.md:142](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/card.md#L142-L145)",
+        "Page/demo has no conflicting claim for this value. [apps/docs/src/pages.mjs:1229](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L1229-L1232)"
+      ],
+      "refs": [
+        {
+          "path": "packages/tokens/src/axes/surface.ts",
+          "old_line": 17,
+          "line": 17
+        },
+        {
+          "path": "packages/styles/src/components/surface.css",
+          "old_line": 66,
+          "line": 72
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 542,
+          "line": 603
+        },
+        {
+          "path": "packages/react/src/components/primitives.tsx",
+          "old_line": 213,
+          "line": 214
+        },
+        {
+          "path": "docs/specs/card.md",
+          "old_line": 142,
+          "line": 142
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 1107,
+          "line": 1229
+        }
+      ]
+    },
+    {
+      "id": "D30",
+      "title": "D30 \u00b7 code \u00b7 Relative font floor omitted",
+      "status": "still open",
+      "explanation": "CSS enforces a caption floor; pure scaling can predict a smaller result in compact/small text. Recommendation: document the max formula and its scope.",
+      "comparison": [
+        "font-size max(text-xs-size, 0.875em). [packages/styles/src/components/code.css:140](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/code.css#L140-L143)",
+        "Unqualified 0.875em rule. [docs/specs/code.md:90](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/code.md#L90-L93)",
+        "Page/demo has no conflicting claim for this value. [apps/docs/src/pages.mjs:186](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L186-L189)"
+      ],
+      "refs": [
+        {
+          "path": "packages/styles/src/components/code.css",
+          "old_line": 141,
+          "line": 140
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 655,
+          "line": 716
+        },
+        {
+          "path": "packages/react/src/components/primitives.tsx",
+          "old_line": 1741,
+          "line": 1744
+        },
+        {
+          "path": "docs/specs/code.md",
+          "old_line": 90,
+          "line": 90
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 186,
+          "line": 186
+        }
+      ]
+    },
+    {
+      "id": "D31",
+      "title": "D31 \u00b7 spinner \u00b7 Button-hosted size ladder",
+      "status": "still open",
+      "explanation": "Inheritance rule is correct but the listed ladder is stale. Recommendation: document the host icon token instead of the obsolete numeric ladder.",
+      "comparison": [
+        "Button spinner inherits --_icon; [packages/tokens/src/axes/density.ts:140](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/tokens/src/axes/density.ts#L140-L143) through lg defines 16/16/16. [packages/styles/src/components/display.css:260](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/display.css#L260-L263)",
+        "Calls Button icon boxes 12/16/20. [docs/specs/spinner.md:73](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/spinner.md#L73-L76)",
+        "Page/demo has no conflicting claim for this value. [apps/docs/src/pages.mjs:1308](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L1308-L1311)"
+      ],
+      "refs": [
+        {
+          "path": "packages/tokens/src/axes/density.ts",
+          "old_line": 140,
+          "line": 140
+        },
+        {
+          "path": "packages/styles/src/components/display.css",
+          "old_line": 257,
+          "line": 260
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 428,
+          "line": 431
+        },
+        {
+          "path": "packages/react/src/components/primitives.tsx",
+          "old_line": 392,
+          "line": 393
+        },
+        {
+          "path": "docs/specs/spinner.md",
+          "old_line": 73,
+          "line": 73
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 1186,
+          "line": 1308
+        }
+      ]
+    },
+    {
+      "id": "D32",
+      "title": "D32 \u00b7 checkbox \u00b7 Compact md label gap",
+      "status": "still open",
+      "explanation": "CSS and density agree. Recommendation: correct compact value; default remains 6.",
+      "comparison": [
+        "Reads gap-md; [packages/tokens/src/axes/density.ts:159](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/tokens/src/axes/density.ts#L159-L162) sets compact gap 4. [packages/styles/src/components/choice.css:9](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/choice.css#L9-L12)",
+        "Claims compact md gap 6. [docs/specs/checkbox.md:98](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/checkbox.md#L98-L101)",
+        "Page/demo has no conflicting claim for this value. [apps/docs/src/pages.mjs:662](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L662-L665)"
+      ],
+      "refs": [
+        {
+          "path": "packages/tokens/src/axes/density.ts",
+          "old_line": 159,
+          "line": 159
+        },
+        {
+          "path": "packages/styles/src/components/choice.css",
+          "old_line": 9,
+          "line": 9
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 224,
+          "line": 226
+        },
+        {
+          "path": "packages/react/src/components/forms.tsx",
+          "old_line": 118,
+          "line": 118
+        },
+        {
+          "path": "docs/specs/checkbox.md",
+          "old_line": 98,
+          "line": 98
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 662,
+          "line": 662
+        }
+      ]
+    },
+    {
+      "id": "D33",
+      "title": "D33 \u00b7 chip \u00b7 Compact avatar initials font size",
+      "status": "still open",
+      "explanation": "Current compact floor is explicit in density source. Recommendation: refresh compact annotation.",
+      "comparison": [
+        "Reads control-xs-text; [packages/tokens/src/axes/density.ts:157](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/tokens/src/axes/density.ts#L157-L160) sets compact 12. [packages/styles/src/components/chip.css:178](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/chip.css#L178-L181)",
+        "Claims compact 11. [docs/specs/chip.md:118](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/chip.md#L118-L121)",
+        "Page/demo has no conflicting claim for this value. [apps/docs/src/pages.mjs:780](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L780-L783)"
+      ],
+      "refs": [
+        {
+          "path": "packages/tokens/src/axes/density.ts",
+          "old_line": 157,
+          "line": 157
+        },
+        {
+          "path": "packages/styles/src/components/chip.css",
+          "old_line": 174,
+          "line": 178
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 298,
+          "line": 300
+        },
+        {
+          "path": "packages/react/src/components/primitives.tsx",
+          "old_line": 845,
+          "line": 846
+        },
+        {
+          "path": "docs/specs/chip.md",
+          "old_line": 118,
+          "line": 118
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 778,
+          "line": 780
+        }
+      ]
+    },
+    {
+      "id": "D34",
+      "title": "D34 \u00b7 typography \u00b7 Applied spec still labels old ramp \u201cCurrent\u201d",
+      "status": "still open",
+      "explanation": "Implemented token tables and the applied proposal later in this spec agree. Recommendation: mark the old census historical or replace the Current section.",
+      "comparison": [
+        "Current text and title roles. [packages/tokens/src/axes/typography.ts:49](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/tokens/src/axes/typography.ts#L49-L52) [packages/tokens/src/axes/typography.ts:61](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/tokens/src/axes/typography.ts#L61-L64) Current default control ladder. [packages/tokens/src/axes/density.ts:135](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/tokens/src/axes/density.ts#L135-L138)",
+        "Current section retains removed text/title roles and old control-sm 13/18. [docs/specs/typography.md:8](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/typography.md#L8-L11)",
+        "No dedicated component page; theme demo. [apps/docs/src/demos/theme.tsx:1](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/demos/theme.tsx#L1-L4)"
+      ],
+      "refs": [
+        {
+          "path": "packages/tokens/src/axes/typography.ts",
+          "old_line": 49,
+          "line": 49
+        },
+        {
+          "path": "packages/tokens/src/axes/typography.ts",
+          "old_line": 61,
+          "line": 61
+        },
+        {
+          "path": "packages/tokens/src/axes/density.ts",
+          "old_line": 135,
+          "line": 135
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 1,
+          "line": 1
+        },
+        {
+          "path": "packages/react/src/components/Theme.tsx",
+          "old_line": 9,
+          "line": 9
+        },
+        {
+          "path": "docs/specs/typography.md",
+          "old_line": 8,
+          "line": 8
+        },
+        {
+          "path": "apps/docs/src/demos/theme.tsx",
+          "old_line": 1,
+          "line": 1
+        }
+      ]
+    },
+    {
+      "id": "D35",
+      "title": "D35 \u00b7 typography \u00b7 Compact proposal values superseded",
+      "status": "still open",
+      "explanation": "Density source explicitly names those pairs as replaced. Recommendation: qualify or supersede the applied proposal paragraph.",
+      "comparison": [
+        "Compact control xs/sm/md use 12/16; content type is independent. [packages/tokens/src/axes/density.ts:149](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/tokens/src/axes/density.ts#L149-L152)",
+        "Claims compact caption 11/14 and UI 13/18. [docs/specs/typography.md:68](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/typography.md#L68-L71)",
+        "No dedicated component page; theme demo. [apps/docs/src/demos/theme.tsx:1](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/demos/theme.tsx#L1-L4)"
+      ],
+      "refs": [
+        {
+          "path": "packages/tokens/src/axes/density.ts",
+          "old_line": 149,
+          "line": 149
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 1,
+          "line": 1
+        },
+        {
+          "path": "packages/react/src/components/Theme.tsx",
+          "old_line": 9,
+          "line": 9
+        },
+        {
+          "path": "docs/specs/typography.md",
+          "old_line": 68,
+          "line": 68
+        },
+        {
+          "path": "apps/docs/src/demos/theme.tsx",
+          "old_line": 1,
+          "line": 1
+        }
+      ]
+    },
+    {
+      "id": "D36",
+      "title": "D36 \u00b7 input \u00b7 Current inset formula omits pixel rounding",
+      "status": "still open",
+      "explanation": "The unrounded fraction cannot describe the current rounded declaration. Recommendation: state the rounded formula; remeasure before publishing replacement computed dimensions.",
+      "comparison": [
+        "Shared shell inset uses round(nearest, \u2026, 1px). [packages/styles/src/inset.css:22](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/inset.css#L22-L25)",
+        "Current decision still gives fractional cap-based inset. [docs/specs/input.md:105](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/input.md#L105-L108)",
+        "Page/demo has no conflicting claim for this value. [apps/docs/src/pages.mjs:415](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L415-L418)"
+      ],
+      "refs": [
+        {
+          "path": "packages/styles/src/inset.css",
+          "old_line": 22,
+          "line": 22
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 143,
+          "line": 145
+        },
+        {
+          "path": "packages/react/src/components/Input.tsx",
+          "old_line": 10,
+          "line": 10
+        },
+        {
+          "path": "docs/specs/input.md",
+          "old_line": 105,
+          "line": 105
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 415,
+          "line": 415
+        }
+      ]
+    },
+    {
+      "id": "D37",
+      "title": "D37 \u00b7 select \u00b7 Current inset formula omits pixel rounding",
+      "status": "still open",
+      "explanation": "The unrounded fraction cannot describe the current rounded declaration. Recommendation: state the rounded formula; remeasure before publishing replacement computed dimensions.",
+      "comparison": [
+        "Shared shell inset uses round(nearest, \u2026, 1px). [packages/styles/src/inset.css:22](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/inset.css#L22-L25)",
+        "Current decision still gives fractional cap-based inset. [docs/specs/select.md:106](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/select.md#L106-L109)",
+        "Page/demo has no conflicting claim for this value. [apps/docs/src/pages.mjs:645](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L645-L648)"
+      ],
+      "refs": [
+        {
+          "path": "packages/styles/src/inset.css",
+          "old_line": 22,
+          "line": 22
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 213,
+          "line": 215
+        },
+        {
+          "path": "packages/react/src/components/forms.tsx",
+          "old_line": 13,
+          "line": 13
+        },
+        {
+          "path": "docs/specs/select.md",
+          "old_line": 106,
+          "line": 106
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 645,
+          "line": 645
+        }
+      ]
+    },
+    {
+      "id": "D38",
+      "title": "D38 \u00b7 color-picker \u00b7 Opacity checker tile size",
+      "status": "still open",
+      "explanation": "The dedicated track formula matches the later three-row checker decision. Recommendation: document this formula separately from the swatch checker.",
+      "comparison": [
+        "Tile is track \u00d7 2 / 3; the track is 16 at [packages/styles/src/components/color.css:214](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/color.css#L214-L217), so the tile is 32/3 CSS px. [packages/styles/src/components/color.css:221](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/color.css#L221-L224)",
+        "Claims an 8px tile shared with ColorSwatch. [docs/specs/color-picker.md:154](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/color-picker.md#L154-L157)",
+        "Page/demo has no conflicting claim for this value. [apps/docs/src/pages.mjs:72](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L72-L75)"
+      ],
+      "refs": [
+        {
+          "path": "packages/styles/src/components/color.css",
+          "old_line": 207,
+          "line": 214
+        },
+        {
+          "path": "packages/styles/src/components/color.css",
+          "old_line": 214,
+          "line": 221
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 94,
+          "line": 96
+        },
+        {
+          "path": "packages/react/src/components/ColorPicker.tsx",
+          "old_line": 97,
+          "line": 97
+        },
+        {
+          "path": "docs/specs/color-picker.md",
+          "old_line": 154,
+          "line": 154
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 71,
+          "line": 72
+        }
+      ]
+    },
+    {
+      "id": "D39",
+      "title": "D39 \u00b7 indicator \u00b7 Status glyph construction and obsolete xs size",
+      "status": "still open",
+      "explanation": "React, manifest and page agree; the spec feedback also removes xs. Recommendation: replace the stale construction/size row.",
+      "comparison": [
+        "Presence draws Area marks with the icon weight. [packages/styles/src/components/presence.css:13](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/presence.css#L13-L16)",
+        "Current Decisions table says Fluent Regular cuts 10/12/16/20. [docs/specs/indicator.md:225](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/indicator.md#L225-L228)",
+        "Correctly describes Area-drawn presence glyphs. [apps/docs/src/pages.mjs:47](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L47-L50)"
+      ],
+      "refs": [
+        {
+          "path": "packages/styles/src/components/presence.css",
+          "old_line": 13,
+          "line": 13
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 364,
+          "line": 367
+        },
+        {
+          "path": "packages/react/src/components/Presence.tsx",
+          "old_line": 7,
+          "line": 7
+        },
+        {
+          "path": "docs/specs/indicator.md",
+          "old_line": 225,
+          "line": 225
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 46,
+          "line": 47
+        }
+      ]
+    },
+    {
+      "id": "D40",
+      "title": "D40 \u00b7 radio \u00b7 Card variant and item layout omitted from contract docs",
+      "status": "still open",
+      "explanation": "Manifest, React and CSS agree these options exist. Recommendation: document the variant and distinguish item layout from RadioGroup orientation.",
+      "comparison": [
+        "Card and tile selectors are shared with Checkbox. [packages/styles/src/components/choice.css:102](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/choice.css#L102-L105)",
+        "Variants list size, state, group layout and description; no card or item row/tile. [docs/specs/radio.md:25](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/radio.md#L25-L28)",
+        "API likewise omits variant/card and layout/row/tile. [apps/docs/src/pages.mjs:699](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L699-L702)"
+      ],
+      "refs": [
+        {
+          "path": "packages/styles/src/components/choice.css",
+          "old_line": 101,
+          "line": 102
+        },
+        {
+          "path": "packages/styles/src/manifest.ts",
+          "old_line": 242,
+          "line": 244
+        },
+        {
+          "path": "packages/react/src/components/forms.tsx",
+          "old_line": 344,
+          "line": 344
+        },
+        {
+          "path": "docs/specs/radio.md",
+          "old_line": 25,
+          "line": 25
+        },
+        {
+          "path": "apps/docs/src/pages.mjs",
+          "old_line": 699,
+          "line": 699
+        }
+      ]
+    }
+  ],
+  "new": [
+    {
+      "id": "N01",
+      "title": "Tag picker \u2014 old Badge contract survives the Tag replacement",
+      "text": "The implementation imports Tag and exposes TagTone, including gray/brown/pink; the page still calls option tone a Badge tone, while the spec anatomy, size row and Decisions still name Badge. The later feedback records the replacement, so these current contract sections should be reconciled.",
+      "refs": [
+        "[packages/react/src/components/TagPicker.tsx:4](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/react/src/components/TagPicker.tsx#L4)",
+        "[packages/react/src/components/TagPicker.tsx:15](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/react/src/components/TagPicker.tsx#L15)",
+        "[apps/docs/src/pages.mjs:1072](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L1072)",
+        "[docs/specs/tag-picker.md:84](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/tag-picker.md#L84)",
+        "[docs/specs/tag-picker.md:129](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/tag-picker.md#L129)"
+      ]
+    },
+    {
+      "id": "N02",
+      "title": "Tag picker \u2014 conditional hint documented as unconditional",
+      "text": "Without onCreate, the default heading is Select tags; with onCreate it is Select a tag or create one. The page gives only the latter as the default. Document both branches.",
+      "refs": [
+        "[packages/react/src/components/TagPicker.tsx:179](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/react/src/components/TagPicker.tsx#L179)",
+        "[apps/docs/src/pages.mjs:1075](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L1075)"
+      ]
+    },
+    {
+      "id": "N03",
+      "title": "Tag and corner setting \u2014 Sharp remove plate stays rounded",
+      "text": "The Tag shell goes square at radius 0, but the remove control floors its corner at the fixed space-2. This contradicts the corner setting\u2019s square-everywhere contract. Derivation: max(2px, 0px \u2212 2px) = 2px. Recommend using the radius floor or another Sharp-aware nested recipe after owner review.",
+      "refs": [
+        "[packages/styles/src/components/tag.css:91](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/tag.css#L91)",
+        "[packages/styles/src/components/tag.css:36](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/tag.css#L36)",
+        "[packages/tokens/src/axes/radius.ts:40](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/tokens/src/axes/radius.ts#L40)",
+        "[packages/tokens/src/emit/base.ts:259](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/tokens/src/emit/base.ts#L259)"
+      ]
+    },
+    {
+      "id": "N04",
+      "title": "Disclosure \u2014 current inset equation retains pre-change spacing",
+      "text": "The current Anatomy/inset equations still say divided trigger/content padding 16 (compact 12); the corrected Decisions and CSS now use 10 (compact 8). The historical 2026-10-02 Visual pass can stay dated, but the live equation needs updating.",
+      "refs": [
+        "[docs/specs/disclosure.md:95](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/disclosure.md#L95-L96)",
+        "[docs/specs/disclosure.md:157](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/disclosure.md#L157)",
+        "[packages/styles/src/components/disclosure.css:55](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/disclosure.css#L55)",
+        "[packages/styles/src/components/disclosure.css:66](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/disclosure.css#L66)"
+      ]
+    },
+    {
+      "id": "N05",
+      "title": "Card \u2014 current corner table predates the new setting",
+      "text": "The current Decisions table still gives 22/24/28 and a Button-plus-text-column formula. Current CSS derives the corner from radius-container plus the inset term: at default radius 8 and default density, surface 12 plus 2/4/8 gives 14/16/20 for sm/md/lg. Compact is 10/12/14. Update the formula and default table; do not change the new corner behavior to match stale prose.",
+      "refs": [
+        "[docs/specs/card.md:144](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/card.md#L144)",
+        "[packages/styles/src/components/surface.css:51](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/surface.css#L51-L58)",
+        "[packages/styles/src/components/surface.css:108](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/surface.css#L108-L120)",
+        "[packages/tokens/src/axes/radius.ts:32](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/tokens/src/axes/radius.ts#L32)",
+        "[packages/tokens/src/emit/base.ts:259](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/tokens/src/emit/base.ts#L259)"
+      ]
+    },
+    {
+      "id": "N06",
+      "title": "Alignment picker \u2014 removed size and stretch still in spec",
+      "text": "React keeps size/stretch only as ignored compatibility inputs; the manifest has neither size nor stretch and CSS fills its parent. The spec Variants still offers sm/md/lg and stretch, and current inset equations still prescribe an 80px square. Update those contract sections to the responsive model recorded later in the feedback.",
+      "refs": [
+        "[docs/specs/alignment-picker.md:45](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/alignment-picker.md#L45)",
+        "[docs/specs/alignment-picker.md:73](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/alignment-picker.md#L73-L74)",
+        "[packages/react/src/components/AlignmentPicker.tsx:21](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/react/src/components/AlignmentPicker.tsx#L21-L24)",
+        "[packages/styles/src/manifest.ts:84](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/manifest.ts#L84-L94)"
+      ]
+    },
+    {
+      "id": "N07",
+      "title": "Date picker \u2014 calendar locale/week-start default differs from page",
+      "text": "The page says browser locale and locale-derived week start. DatePicker passes possibly-undefined locale and firstDayOfWeek into Calendar, whose defaults are en-US and Sunday (0). Its outer date label uses Intl with the possibly-undefined locale, so an implicit non-US browser locale can disagree with the calendar. Recommend one documented locale/week-start policy and an explicit propagation decision.",
+      "refs": [
+        "[apps/docs/src/pages.mjs:1094](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L1094)",
+        "[packages/react/src/components/DatePicker.tsx:71](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/react/src/components/DatePicker.tsx#L71)",
+        "[packages/react/src/components/DatePicker.tsx:132](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/react/src/components/DatePicker.tsx#L132)",
+        "[packages/react/src/components/Calendar.tsx:77](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/react/src/components/Calendar.tsx#L77)"
+      ]
+    },
+    {
+      "id": "N08",
+      "title": "Tag \u2014 compact dimensions absent from current contract",
+      "text": "Spec and page give sm 20 / md 24 and a 16px remove box without density qualification. CSS reads mark-label-md/lg, which become 16/20 in compact; the remove box becomes 12/16. This is documentation drift, not evidence that compact scaling is wrong. Document the compact mapping explicitly.",
+      "refs": [
+        "[docs/specs/tag.md:29](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/tag.md#L29)",
+        "[docs/specs/tag.md:59](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/specs/tag.md#L59)",
+        "[packages/styles/src/components/tag.css:13](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/tag.css#L13)",
+        "[packages/styles/src/components/tag.css:18](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/tag.css#L18)",
+        "[packages/styles/src/components/tag.css:48](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/styles/src/components/tag.css#L48)",
+        "[packages/tokens/src/axes/density.ts:69](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/tokens/src/axes/density.ts#L69)",
+        "[apps/docs/src/pages.mjs:1057](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/apps/docs/src/pages.mjs#L1057)"
+      ]
+    }
+  ]
+}
