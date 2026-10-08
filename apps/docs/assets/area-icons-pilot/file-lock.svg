@@ -1,5 +1,5 @@
 <svg data-set="area-pilot" data-keyline="vertical" data-angles="free" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path data-filled="fill" d="M5.5 2H8V5A1.5 1.5 0 0 0 9.5 6.5H12.5V12A2 2 0 0 1 10.5 14H9.062A2.75 2.75 0 0 0 9.25 13V11A2.75 2.75 0 0 0 8.178 8.822A3.25 3.25 0 0 0 3.5 6.617V4A2 2 0 0 1 5.5 2Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="fill" d="M5.5 2H8V5A1.5 1.5 0 0 0 9.5 6.5H12.5V12A2 2 0 0 1 10.5 14H9.062A2.75 2.75 0 0 0 9.25 13V11A2.75 2.75 0 0 0 8.344 8.96A0.75 0.75 0 0 1 8.125 8.609A3.25 3.25 0 0 0 3.5 6.617V4A2 2 0 0 1 5.5 2Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path data-filled="line" d="M3.5 6.617V4A2 2 0 0 1 5.5 2H8M12.5 6.5V12A2 2 0 0 1 10.5 14H9.062" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path data-part="fold" data-shift="0.7071 0" d="M8 2.4V4.6" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path data-part="fold" data-shift="0.7071 -0.7071" d="M8 4.6V5A1.5 1.5 0 0 0 9.5 6.5H9.9" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>

@@ -7,5 +7,5 @@
 <path data-part="fold" d="M8 2L8.588 2A0.5 0.5 0 0 1 8.941 2.146L12.354 5.559A0.5 0.5 0 0 1 12.5 5.912" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <circle data-filled="solid" cx="5" cy="11.5" r="2" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M5 9.5L5 8.75M6.732 10.5L7.382 10.125M6.732 12.5L7.382 12.875M5 13.5L5 14.25M3.268 12.5L2.618 12.875M3.268 10.5L2.618 10.125" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="gap" d="M5.5625 11.5A0.5625 0.5625 0 1 1 4.4375 11.5A0.5625 0.5625 0 1 1 5.5625 11.5Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="gap" d="M6 11.5A1 1 0 1 1 4 11.5A1 1 0 1 1 6 11.5Z" stroke="none" fill="currentColor"/>
 </svg>

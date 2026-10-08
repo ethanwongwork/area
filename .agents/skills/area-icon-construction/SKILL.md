@@ -27,7 +27,9 @@ questions: take the recommended option, record it as delegated here (Owner prefe
 overturn it. When the owner asks for decisions, send a simple decision sheet that shows each
 option rendered (explore candidates or `icon-sheet.mjs`), not a text list.
 
-0. **Set up** a fresh worktree with `npm ci`. Serve the gallery with `PORT=<free port> npm run
+0. **Set up** a fresh worktree with `npm ci`. Sheet scripts drive headless Edge; if they hang, stop stray
+   `Microsoft Edge … --headless` processes (orphans hold the profile; `2026-10-07/edge.mjs` stops Edge as
+   soon as its output is written). Serve the gallery with `PORT=<free port> npm run
    dev` (other worktrees may hold 3000 and 4321). In zsh a `$VAR` holding several icon names
    stays one word: pass names directly, comma-separated, or as a batch id.
 1. **Find first.** `npm run icons:find -- <concept …>` searches names (with turns), demo
@@ -52,17 +54,21 @@ option rendered (explore candidates or `icon-sheet.mjs`), not a text list.
    transforms and a gap check. Solve values; don't nudge by eye.
 5. **Lint loop:** `node apps/docs/scripts/gen-pilot-icons.mjs --only <name,name>` answers in
    under a second; every near miss names the distance to the nearest step (Lint messages).
-6. **Look:** `icon-sheet.mjs sheet|strip out.png <names>` from the sources; after `npm run
-   icons:pilot`, `filled`, `filled-large` or `compare out.png batch-NN` (Area outline and
-   filled beside Fluent's regular and filled).
+6. **Look:** `node docs/research/icon-review/2026-10-07/look.mjs out.png name,… [ref.svg …]
+   [--before] [--slivers]` renders straight from the sources, outline and filled at 16 / 24 / 32 /
+   48 and 96 over the grid, with reference rows (Fluent, Lucide, Phosphor files) and the sliver check;
+   it writes nothing shared, so parallel sessions can use it. After `npm run icons:pilot`,
+   `icon-sheet.mjs filled`, `filled-large` or `compare out.png batch-NN` still work.
 7. **Record:** write a batch file (id, title, date, note, and per icon its name, label, Fluent
    stem and construction line, plus an optional `extra` paragraph for what was dropped and
    why) and run `npm run icons:batch -- batch.json`. It updates batches.json (new icons in
    review), the spec's batch section, the demo label and Fluent plate, regenerates, and lints
    the batch.
-8. **Gate:** `npm run icons:pilot` (the full lint, about a minute) and `npm run typecheck`;
-   check the batch's cards on `gallery-icons.html`; send the owner a `compare` or `filled`
-   sheet.
+8. **Gate:** `npm run icons:pilot` (the full lint, about two minutes) and `npm run typecheck`;
+   `node docs/research/icon-review/2026-10-07/geometry-audit.mjs <names>` (the lint's blind spots:
+   near-tangent kinks, gaps between subpaths of one path, 45° segments off the lattice in `free`
+   icons); the sliver check at 16 and 48; check the batch's cards on `gallery-icons.html`; send the
+   owner a sheet (Area alone at 16–48, or beside the libraries).
 9. **Hand off:** update the icon line in `.Codex/HANDOFF.md`. Only the owner marks approvals.
 
 ## Owner preferences
@@ -148,8 +154,8 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
   the family. The overlap cut is not relaxed: every crossing leaves exactly 1.125.
 - **Type family (owner, 2026-09-28):** every type icon uses text's T built one way: bar,
   end ticks, stem and a foot about 0.45 of the bar. Sizes: text 11 (ticks 2, foot 5), the
-  medium 6 × 6 T (ticks 1, foot 3) in line-height, letter-spacing, superscript and
-  subscript, and text-size's pair (8 × 10 with ticks 1.5 and foot 4; 4 × 5.5 with ticks 1 and foot 2).
+  medium 6 × 6 T (ticks 1, foot 3) in line-height and letter-spacing, a 7 × 8 T in superscript
+  and subscript (partition F), and text-size's pair (8 × 10 with ticks 1.5 and foot 4; 4 × 5.5 with ticks 1 and foot 2).
 - **Rain** lines are different lengths (owner). qr-code is square like a real code (owner,
   2026-09-28): finders 5 × 5 at r 1 (not the container radius), square 2 × 2 modules (r 0.25)
   for the finders' centres and the four data modules, 3 apart.
@@ -197,7 +203,7 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
   handle on a tall body reads as a cupcake. A shape whose parts must sit on x.5 may sit 0.5 off
   centre on both axes (chip, delegated).
 - **Person family and faces (owner, 2026-10-06):** person-* marks sit at the lower right (about 12.5, 12.25)
-  on the standalone person moved left, all but the key in one shared round bite (`2026-10-06/person-family.mjs`);
+  on the standalone person moved left, all but the key in one shared round bite (`2026-10-07/scripts/family.mjs`; the 10-06 script writes the old body);
   this replaces "beside: at head height". Faces centre their features in the shape (smile: eyes 6, 6 / 10, 6
   over the mouth's corners). The cart's wheels sit on its bottom bar.
 - **Filled cuts are the line's weight (owner, 2026-10-06):** every filled cut, halo and gap is one line
@@ -207,6 +213,27 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
   smaller copy of an icon inside another is that icon's drawing scaled (person-key carries key, diagonal,
   lower right, the figure cut round it); simplify only where it can't fit and record it
   (`2026-10-06/embedded.mjs` lists every composite). The ? sits 2.25 above its dot, as the ! does.
+- **Quality pass, 2026-10-07** (spec "Quality and consistency pass, 2026-10-07"): clapperboard is
+  Fluent's movies_and_tv exactly (owner): a taller body, the board hinged on its top-left corner at 1 : 3
+  with line-weight stripes; filled, only the body fills. The 16 open round-2 "replace" verdicts are applied
+  on the named library: key (Phosphor; person-key carries it), handshake, camera, pushpin, palette, shapes,
+  gamepad, chess-rook (Lucide), bank, building, lightbulb, lasso, translate (Fluent; translate is a "a" and
+  "あ"), piano, hammer, trash (Phosphor); bot-generator a full wizard's cone with a bent tip; the person's
+  head-to-body gap is 2 (the framed figures'). Other open owner notes applied: car wider with the wheels in
+  line with its sides, vault centred (Fluent's 13 × 9), gallery's card larger, vr-goggles' lens line higher,
+  quote's tail tangent, newspaper even, party-popper's confetti apart, calculator's display larger, piggy
+  rounder, the handset's inner curve smooth, call arrows balanced, frown's mouth back up. Delegated (owner
+  to confirm): palette's wells ⌀2 (the paint is the icon's mark), building's window grid
+  `data-gap="aligned"`, shapes' 2.5 / 3 gaps.
+- **Geometry rules learned, 2026-10-07:** solve arcs exactly (an arc whose radius is under half its chord is
+  enlarged by SVG and kinks at both ends: the heart); draw separate parts as separate paths (the lint
+  measures gaps only between elements: captions' C's sat 0.5 apart); `data-angles="free"` drops the
+  lattice check for the whole icon, so check its 45° segments with `geometry-audit.mjs`; a hub or hole is
+  `stroke="none" fill="currentColor"`, never a stroked gap (it leaves a dot); the convex point where two
+  offset curves of an overlap cut meet is rounded r 0.75; a knockout that starts on a seam between two
+  solids is read as an edge exit (start it 0.5 off the seam); parts 1.0 apart touch only at 16 (join them
+  or part them by a step); a solid with no stroke is crisp on whole-pixel edges; a container's − centres
+  where the family's + sits; content in a clipboard centres under the clip; heavy bases sit high, not low.
 - **Filled audit, 2026-10-06** (spec "Filled consistency audit and the size curve's hold"): a part is
   one colour (knockout inside, ink with a halo when it crosses the edge in front, ink joined when
   attached); the curve holds at the 24px master. Owner notes applied: desktop-check's check centred,
@@ -349,7 +376,7 @@ the lint prints every gap and counter with `--report`.
   open); log-in and log-out stop standard (3) from the door's back, the nearest the lattice
   allows;
 - **mark pass rules (owner, 2026-10-02; spec "Mark pass"):** the ! and the i have a ⌀1.5 dot 2.25 below
-  the stem's end (ink gap 0.94; owner 2026-10-03: the old 2.75 read loose), stems 0.5 longer; the ? dot 2.5
+  the stem's end (ink gap 0.94; owner 2026-10-03: the old 2.75 read loose), stems 0.5 longer; the ? dot 2.25
   below a longer hook; ring,
   shield and square containers take the ring's marks; corner arrows sit in the plus's 4 × 4 box 1 in
   from the edge they point at, 2px heads, so no barb leaves a triangle of fill against the edge;
@@ -384,7 +411,9 @@ the lint prints every gap and counter with `--report`.
   Geist's own dots are rounded squares at 1.05× (i) and 1.3× (!) its stem. A circle needs
   a little more width than a square to look the same size, and 1.56× read too big.
   `data-dot="free"` records an owner-approved exception: quote's solid marks, rocket's ⌀2.5
-  window;
+  window. It also takes the dot off the size curve, so a standard ⌀2 or ⌀1.5 dot never carries it
+  (square-dot and circle-dot-dashed kept a stale one and grew heavy above 16; 2026-10-07). quote's drop
+  is a stroked ring with a solid core, so it stays tangent to its tail at every weight;
 - hub or pupil: r 1.5;
 - satellites: the bell's clapper is a U cup 4 wide and 2.5 deep, joined to the base. The !
   and the i share the ⌀1.5 dot and the tight gap to their stem;
@@ -406,8 +435,8 @@ the lint prints every gap and counter with `--report`.
   below the end, the pen ends round (r 1.414) with a clip. pencil-off keeps the pencil whole; a pen inside another icon
   (compose, file-pen) is the pen, slimmer (2.12 wide) and without its clip; signature's slim pen
   keeps the clip at its scale (owner, 2026-10-05);
-- figure: person is the standalone figure (head r 3, 2.5 from the body between centre-lines, a dome body; owner 2026-10-03: bigger head,
-  smaller gap). Beside a mark or in a group the figure is the small cut (head r 2.5); in a frame
+- figure: person is the standalone figure (head r 3 at 8, 5, 2 from the body between centre-lines, a dome body
+  10 × 3.5 from 10; owner 2026-10-03: bigger head, smaller gap; 2026-10-07: smaller still, the framed figures' 2). Beside a mark or in a group the figure is the small cut (head r 2.5); in a frame
   (circle, square, shield) the head is r 2, identical in person-add, person-remove and people's front figure (people
   sits 1 lower to fill the circle keyline); a second figure behind is overlap-cut;
 - bars: 8 × 3 and 5 × 3, r 1, 3px between centre-lines (align family).
@@ -762,6 +791,12 @@ they fit?"); name the simplification in the icon's construction line.
 | an off icon draws the shared slash | `M2 2L14 14`, the shape cut one-sided (`icon-geometry slash`). |
 | a knockout lies outside every solid | The detail isn't over a solid: draw it as a plain line, or as a line with a `halo`. |
 | a dot is r 1 or r 0.75 | ⌀2 for marks, ⌀1.5 for details inside a shape; `data-dot="free"` for a recorded solid. |
+
+The lint does not see three things; `docs/research/icon-review/2026-10-07/geometry-audit.mjs [names]`
+lists them (2026-10-07): a join that bends by 2–25° (a near-tangent kink; deliberate corners such as the
+book's spine or a shield's top show too), a gap between subpaths of one path that is off the scale, and a
+45° segment off the lattice in an icon marked `data-angles="free"` or `"radial"` (recorded exceptions:
+the fold's fixed diagonal, the pen axis, octagon, rocket, eyedropper, wrench).
 
 ## Geometry toolkit
 
