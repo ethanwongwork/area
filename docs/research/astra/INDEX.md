@@ -10,6 +10,7 @@ broken research.
 
 | Date | Topic | Question | Status |
 | --- | --- | --- | --- |
+| 2026-10-07 | [materials](materials/README.md) | Brief for the materials series (owner goal, constraints, reference board); reports follow in its subfolders | brief |
 | 2026-10-07 | [phase-status](phase-status/README.md) | Where do all 65 families stand in the four approval phases, and what remains unverified? | unreviewed |
 | 2026-10-02 | [drift](drift/2026-10-02.md) | Where do each family's spec, CSS, manifest, React props and demo disagree? (40 mismatches in 64 families) | unreviewed |
 | 2026-10-02 | [checks](checks/2026-10-02.md) | Do all ten repository checks pass twice from a clean checkout? | unreviewed |
