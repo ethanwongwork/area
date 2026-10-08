@@ -1,0 +1,21 @@
+# Astra research index
+
+Newest first. Status is `unreviewed` until Claude reviews the topic; then `reviewed`, with
+where the findings went.
+
+Topics dated before 2026-10-07 began on separate `astra/*` and `codex/*` branches and were
+moved here on 2026-10-07. Their snapshot commits are older than current `main`; their
+validators compare against code that has since changed, so failures there are drift, not
+broken research.
+
+| Date | Topic | Question | Status |
+| --- | --- | --- | --- |
+| 2026-10-02 | [drift](drift/2026-10-02.md) | Where do each family's spec, CSS, manifest, React props and demo disagree? (40 mismatches in 64 families) | unreviewed |
+| 2026-10-02 | [checks](checks/2026-10-02.md) | Do all ten repository checks pass twice from a clean checkout? | unreviewed |
+| 2026-09-29 | [contracts](contracts/README.md) | Framework-neutral contract for every manifest family (69 families, 101 axes, 277 values) | unreviewed |
+| 2026-09-29 | [variant-independence](variant-independence/README.md) | Which variant values depend on other values or parts? | unreviewed |
+| 2026-09-29 | [option-schema](option-schema/README.md) | Which literal visual values do components use, and which could become Foundation options? | unreviewed |
+| 2026-09-28 | [library-range](library-range/README-1.md) | What range of variants do outside libraries ship for each family? Runs [1](library-range/README-1.md), [2](library-range/README-2.md), [3](library-range/README-3.md) | unreviewed |
+| 2026-09-28 | [patterns](patterns/README.md) | Catalogue of 52 screen patterns across 18 categories, mapped to Area parts | unreviewed |
+| 2026-09-28 | [landscape](landscape/README.md) | How 34 design-system tools compare | unreviewed |
+| 2026-09-28 | [import-survey](import-survey/README.md) | How 19 design systems structure tokens and components, for an importer | unreviewed |
