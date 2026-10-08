@@ -3935,3 +3935,305 @@ Owner notes on the decisions sheet (`12`, `13`), same day; sheets `14-round2-siz
 | arrow-up-from-line | arrow-right-to-line's construction reversed: a 3px head tipped at 8, 3 on a shaft to 10.5, a standard 3 above a 10px bar at 13.5 (3–13); ink centre 8, 8.25 for the lattice. Turns: arrow-right-from-line 90, arrow-down-from-line 180, arrow-left-from-line 270 |
 
 Derived names declared on existing sources (their drawings unchanged): insert-row → insert-column (transpose); corner-down-right → corner-up-right (flipy), corner-up-left (180) — corner-down-left is return itself, so it is not added; rotate → rotate-ccw (flipx). Considered and left out: the owner's niche removals (2026-10-02), file-audio/video, database variants, chart-candlestick, transport (train, bus), weather extras.
+
+## Filled consistency audit and the size curve's hold, 2026-10-06
+
+Owner: "do an audit of all the filled icons and make sure there is consistency with how they are
+filled. things like the cloud lightning using a cutout but the arrow in import is just an inverse
+shape. also at larger preview sizes the strokes and shapes do not scale equally and it throws off the
+visual design." Sheets and tools: `docs/research/icon-review/2026-10-06/` (README).
+
+**Audit.** Every icon, outline and filled at 32 and 16px, was reviewed category by category, with
+siblings side by side (`audit.mjs`, the icon browser's categories), and checked by machine for
+knockouts that leave their solid (`escapes.mjs`) and for slivers (`2026-10-02/slivers.mjs`). One class
+was inconsistent: a part that crosses the solid's edge. cloud-lightning and chat-sparkle kept the part
+ink and cut the solid round it (`halo`), while import, cloud-upload, cloud-download and notebook switched
+the part to a knockout inside the solid and ink outside it, so one arrow changed colour at the edge. No
+reference library does that (Fluent's thunderstorm cuts round the bolt; Phosphor keeps its arrows inside).
+`escapes.mjs` finds no other icon whose knockout leaves its solid (chess-rook's crenels exit the top by
+design). Everything else follows the filled story as recorded.
+
+**Rule: filled keeps the outline's relationships** (delegated, owner to confirm). A part is one colour.
+- Wholly over the solid: a knockout (marks in containers, a keyhole, hands).
+- Crossing the edge, and cut round in the outline (a part in front: the bolt, an arrow over a cloud or
+  into a tray): it stays ink and the solid is cut back by the same overlap cut (`halo`). import,
+  cloud-upload and cloud-download now follow cloud-lightning.
+- Crossing the edge and joined in the outline (an attached part: calendar's pegs, notebook's rings): it
+  stays ink and joins the solid. notebook's rings are now ink stubs on the filled body (Fluent's
+  notebook), not knockouts.
+The 2026-10-04 line "an arrow that crosses a solid's edge keeps its whole length: the part over the
+solid is a knockout and the part outside is ink" is replaced. Owner note, 2026-10-03 (cloud-download):
+Phosphor moves the arrow up inside the cloud when filled; still an option for the arrow pair.
+
+**The size curve holds at the 24px master** (delegated, owner to confirm). The line followed size^0.45
+at every size while the drawing's gaps and cuts stayed fixed in its units, so above 24 the space grew
+against the line: at 48 an overlap cut was 2.7× the line, at 128 about 5×. Fluent's masters grow their
+line 1 → 1.5 → 2 → 2.5px at 16 / 24 / 32 / 48 (`subtract`, `add`: about size^0.8 above 24). The curve now
+runs to 24 and holds: a larger icon is the 24px drawing scaled whole (`SIZE_CURVE_MAX`, gen-pilot-icons).
+
+| Size | 12 | 16 | 20 | 24 | 32 | 48 | 128 |
+|---|---|---|---|---|---|---|---|
+| Line, before | 1.0 | 1.125 | 1.24 | 1.35 | 1.54 | 1.84 | 2.88 |
+| Line, now | 1.0 | 1.125 | 1.24 | 1.35 | 1.8 | 2.7 | 7.2 |
+| Fluent × 1.125 | 1.125 | 1.125 | 1.125 | 1.69 | 2.25 | 2.81 | – |
+
+Components draw at 12–24 (Glyph), so they are unchanged; 32 and 48 (sheets, the icon browser, empty
+states) and every preview now keep the 24px proportions.
+
+**Owner's redraw list.**
+
+| name | construction |
+|---|---|
+| desktop-check | the 2 / 4 check centred in the screen: `M5 7L7 9L11 5` (was 0.5 right of centre, 8.5 vs 8). |
+| qr-code | owner (reviews2): the four data modules rounder, r 0.5 (was 0.25), the finder's 1 : 5 corner ratio. |
+| globe | the meridian is a lens of two r 10 arcs through the poles (Lucide's construction), still 4 wide, so the thirds hold; it meets the ring at 53° instead of running tangent into it, which thickened both poles. Parallels unchanged. |
+| plane | owner (reviews2, today): a cockpit window, a dash `M9.5 8H11` on the fuselage's axis behind the nose (2.5 from the nose, 2 from the top and belly, detail); a knockout when filled. |
+| fingerprint | owner (reviews2): every ridge on one track. Arches are circles about 8, 8 (r 3, 5.5); legs continue them as arcs tangent at y 8, concentric about (−6, 8) on the right and (22, 8) on the left (r + 14), so legs on a side stay 2.5 apart and curve in like a pad; the centre line is the r 0 track. Breaks lie on their ridge's track (outer right leg to 9.5, its dash 12–13.5; the middle arch's left end at 200°, its dash 9.4–10.75), each break ≥ 2.4 so it holds at the filled 1.5 line. |
+| graduation-cap | the board on exact 1 : 2 slopes (vertices 0.764 / 15.236, 6.5 and 8, 2.882 / 10.118, r 1 fillets, so its extremes land on 2, 14, 3, 10); the skirt meets the new edges at 8.368; the tassel moved to x 13.5 (was 14: a whole-pixel line, and its cap made a bump on the corner) from inside the corner's stroke to 10.5. The filled V gap is re-offset (one weight under the lower edges, r 2.125 at the vertex). |
+| bandage | filled after Phosphor's bandaids: the front band fills with the dot knocked out and the back band keeps its outline (a secondary part stays a line), meeting the front band with no gap. Before, the gap cut the back band into two blobs that read as %. Outline unchanged (one plane, crossing whole). |
+
+### Owner round, 2026-10-06 (second)
+
+Owner: "why do import and share have different visual treatments for fill. also the lightning should be
+the same treatment as the arrow right? … the cutout negative space around it at larger sizes is way too
+large, i want the size to be evened out … fix the fingerprint again, make the loops of lines smooth and
+consistent like apple's but not as many layers". Sheets `4-refs-arrow-containers.png`, `5a`, `5b`.
+
+- **An arrow through a frame fills by weight.** import's box is a frame the arrow passes through, like
+  share, open, download, upload, log-in and log-out (Fluent fills all of them by weight). It is now a line
+  glyph; before, it alone filled its box. Bodies that are the object (a cloud, a page, a square) fill.
+- **Every filled cut is the line's weight at every size.** A halo is three line weights wide (the line
+  and one weight of space each side), so the bolt, the cloud arrows and chat-sparkle's sparkle sit in a
+  cut equal to their line; it was the outline's fixed 2.25 between centre-lines, 1.5× the line from 24px
+  up. Filled-only gaps follow the size curve too (they kept the 16px weight, 1.25× above 24).
+- **A gap that offsets a front part became data-halo on that part**, so the space stays flush with the
+  front's edge as the line thins (`gap-to-halo.mjs`; a fixed offset left a hair of the back solid on the
+  front's edge): bell-dot, chat-dot, mail-dot, compass-dot, square-badge (the dot), smile-plus (the badge),
+  coins, people (both parts of the front figure), shapes, cloud-sun, crystal-ball, devices,
+  graduation-cap and bot-scholar. data-halo on an unstroked solid (a dot) cuts two weights on its edge
+  and restores the fill alone. Centred separations (kanban, table, layout, brain, cube, package, the
+  slash gaps) keep their gap, now at the line's weight. `--_icon-overlap` (base.css) is gone.
+- **The outline keeps its geometric overlap cut** (2.25 between centre-lines), so above 24px an outline
+  crossing's space is 1.5× its line while the filled cut is 1×. Open: matching it needs the outline to be
+  drawn whole and masked like the filled variant.
+
+| name | construction |
+|---|---|
+| fingerprint | after Apple's Touch ID with three layers: nested loops about 8, 8.5, each a semicircle on two straight legs, 2.5 apart (r 1.5 core with legs to 14 and 12.5; r 4 ridge with legs to 13 and 12, broken top-left between 230° and 268°; r 6.5 outer arcs 170°–250° and 285°–360°, then a short right leg to 10). Every line is a true offset of the core, so the spacing never varies. |
+| import | a line glyph: the box (open round the arrow) and the arrow, filled by weight like share. |
+
+### Fingerprint after Android's, 2026-10-06 (third)
+
+Owner: "i want the fingerprint icon to be curved like androids icon". Constructed, not traced: a
+two-centre spiral (`docs/research/icon-review/2026-10-06/fingerprint-spiral.mjs`). Half-turn k is a
+semicircle about A = (7.75, 8.75) when even (over the top) and about B = A + (1.25, 0) when odd (under),
+radius 1.25 (k + 1), so neighbouring turns are 2.5 apart everywhere and every curve is smooth. Four
+strokes on the spiral: the core curl (t 0–1.55), a loop over the top (t 1.9–3) that drops into a straight
+left leg to 12.75, a short dash on the outer track at lower right (t 3.62–3.85), and the outer turn as an
+arc over the top (t 4.11–4.89, 20°–160°). Breaks are ≥ 2.4 along the spiral, so they hold at the filled
+1.5 line. Ink 12.9 × 12, centre 7.75, 7.95 (the vertical leg must sit on x 4, so x sits 0.25 left).
+Replaces the nested loops from earlier the same day.
+
+### Owner round, 2026-10-06 (fourth): fingerprint, the ? and icons inside icons
+
+Owner: "retry the fingerprint [reference: arcs over the top round an S-shaped core]. the question mark top
+seems further away from the dot than the exclamation mark please fix all instances of question mark. make
+the key in person key the same as the actual key icon. see if there are other instances of icons in other
+icons as a smaller piece and make sure the design considers it, or if its different … that its intentional".
+Sheets `7-fingerprint-key-question.png`, `8a-embedded.png`, `8b-embedded.png` (`embedded.mjs`).
+
+| name | construction |
+|---|---|
+| fingerprint | arcs about 8, 9.25, 2.5 apart: an outer arc r 6.25 over the top (160°–20°), a loop r 3.75 from 240° over the top to the right, and the core: an r 1.25 arc from 240° over the top whose right end turns into an S, an r 3.75 reverse arc about 13, 9.25 (tangent where they meet) sweeping out to the lower right (to 80°). Replaces the spiral. |
+| help, chat-question | the ? hook runs on straight 0.25 (`V9`, `V7`), so its end is 2.25 above the dot like every !; the gap is 0.94 in both marks (was 1.19). The dot and the glyph's height are unchanged. |
+| person-key | the key icon at 0.59, still diagonal: bow r 2 at 12, 8 (filled round a ⌀1.5 hole), the shaft on x + y = 20 to 7.25, 12.75, and the key's square tooth (side 2.12, corners on the lattice: 9.5, 10.5 / 11, 12 / 9.5, 13.5 / 8, 12). Placed lower right like person-settings' gear and Fluent's person_key; the body's outline is cut round it by the overlap cut, and the filled body by a one-weight halo (bow `data-halo`, shaft and tooth `halo`), trimmed to x + y ≤ 21 so no pocket of body is left between the halos. Keyline square → circle (as person-settings). |
+
+**Icons inside icons, checked** (each base beside every icon that holds a smaller copy):
+- Same drawing, scaled or moved: settings' gear (person-settings, file-cog), search's lens (file-search,
+  folder-search, square-search, replace), clock's face and hands (calendar-clock, clock-alert, history,
+  watch, alarm, timer), sparkle (chat-sparkle, grid-sparkle, corners-sparkle, wand), sun (cloud-sun), code's
+  chevrons (file-code, chat-code, code-block), desktop (devices, screen-share, desktop-check, desktop-play),
+  phone (devices, tablet), smile (smile-plus, square-smile), undo (archive-restore), play (play-circle,
+  desktop-play), chef-hat (bot-automator), cart (cart-add), crown (bot-lead, its body squashed to fit).
+- Different on purpose (recorded): the lock in person-lock, shield-lock, file-lock and folder-lock drops
+  its keyhole (a 4 × 3 body has no room); cloud-lightning and battery-charging use a line bolt, not flash's
+  zap (an outline zap holds no counter at 4–6px); compose and file-pen use the slim pen without its clip,
+  signature keeps it; framed and grouped figures use the small figure sizes; bot-scholar's board is flatter
+  than graduation-cap's so the skirt keeps room; bot-lead's crown lost its balls (owner); brightness's rays
+  are dots, sun's are dashes; playlist's note is one of music's two; the arrowhead classes by role.
+- Fixed: person-key (above).
+
+### Owner round, 2026-10-06 (fifth): the person family, faces, the cart, fingerprint candidates
+
+Owner: "the placement of all of these icons are pretty inconsistent, … make the ratio of the head to the
+body size slightly closer to the original person icon"; "the top part of the stroke of the wheels should be
+right in line with the line stroke … across the bottom of the cart"; "the smile and all faces should be more
+centered … make sure the other faces are intentional about the placement as well"; "fingerprint still needs
+work … make a bunch of versions of it like 10". Sheets `9`–`11b`; `person-family.mjs` builds the family.
+
+- **Person family** (person-add, -remove, -check, -x, -lock, -settings, -key): the figure is the standalone
+  person moved left (head r 3 at 6.5, 5; body 1.5–11.5 × 10.5–14, r 3.5 shoulders), so head : body is
+  person's (was ⌀5 on 7 × 3.5). Every mark sits at the lower right, about 12.5, 12.25 (+ and − on 12.5 rows;
+  × 3.5 on 10.75–14.25; ✓ 1.5 / 3 from 10, 11; the lock 4 × 3 with the lock icon's shackle proportions; a
+  smaller gear, ring r 1.5 with ticks to 2.25 and a ⌀1.5 hub cut when filled). All but the key share one
+  round bite: the body stops on a circle about 12.5, 12.25 through 8.25, 14 (r 4.6), in both styles; filled,
+  each mark also has a one-weight halo. The key keeps the key icon's drawing and its own cut. Fluent's
+  person_* set places every mark this way. Keyline circle for the family.
+- **Faces**: features centred in their shape (they sat 0.9 low). smile: eyes ⌀1.5 at 6, 6 and 10, 6 above
+  the mouth's corners, mouth 6 → 10 with an r 2.5 curve to 10 (every gap to the ring on the scale; the
+  3.5-apart eyes at y 6 left near misses). frown: the same eyes, mouth 6 → 10 at 10.5 curving up to 9.5. meh:
+  mouth 5.5 → 10.5 at 10. square-smile and scan-face: eyes at 5.75 / 10.25, 5.75 (a standard gap from the
+  frame), square-smile's mouth 5.5 → 10.5 (r 3.625). smile-plus: the smile at 0.75 in its r 4.5 face (eyes 5,
+  5 / 8, 5; mouth 5 → 8 at 7.25, r 1.875). bot: eyes 8.5–10, mouth dot 10.75 (centred in the head); the hatted
+  bots keep 9–10.5 and 11.25, which centres the face in what the hat leaves (checked).
+- **cart, cart-add**: wheels r 1.5 at 5.5 / 12.5, 12, so their top stroke is the bottom bar's (y 10.5); the bar
+  runs to 12.5. A 0.5 shift instead would have put the bar on a whole pixel.
+- **Fingerprint candidates** (`explore/fingerprint-*.svg`, `fingerprint-candidates.mjs`, sheet
+  `10-fingerprint-candidates.png` beside `9-fingerprint-libraries.png`): swirl, spiral, nested loops, tracks,
+  original, broken arches (Fluent), leaning arcs (Heroicons), two arches and a stem (Tabler), swirl with legs,
+  tilted loops. The icon stays the swirl until the owner picks.
+
+## Quality and consistency pass, 2026-10-07
+
+Owner: "first i want you to fix the clapperboard, make it look exactly like fluent. then … a very deep,
+visual quality and consistency pass across all the icons again, make sure everything is visually polished,
+accurate, consistent, cohesive, and intentional across all icons both monoline and filled. take in all the
+context, feedback, and fixes ive provided into account".
+
+**Method.** The 592 base icons were split by the icon browser's categories into ten groups, and each group
+was reviewed icon by icon, outline and filled, at 16 / 24 / 32 / 48 and 96px, against the skill, the newest
+spec record, the icon's family and every owner note from the review page (rounds `reviews` to `reviews5`,
+566 rows). Machine findings fed each group: the lint report, the optical audit, parts drift, slivers at 16
+and 48, knockout escapes, and a new geometry audit (`2026-10-07/geometry-audit.mjs`: near-tangent kinks, gaps
+between the subpaths of one path, 45° lattice inside `data-angles="free"` icons, all three blind spots of the
+lint). A second phase redrew the 16 round-2 "replace" verdicts that were still open ("Still open from
+`reviews2`" above). Reports, scripts and sheets: `docs/research/icon-review/2026-10-07/`. 94 sources changed;
+all are in review.
+
+### Clapperboard (owner: "exactly like fluent")
+
+| name | construction |
+|---|---|
+| clapperboard | Fluent movies_and_tv: an 11 × 6.5 body (2.5–13.5 × 7.5–14) with square top corners and r 2 bottom corners; the board raised at 1 : 3 (18.4°, Fluent's 18°) about a hinge on the body's top-left corner, 11 × 2.75 on the centre-line (Fluent's 11 × 2.75), r 2 top corners, sharp bottom-right; three line-weight stripes at 45° to the board, 3.13 apart, starting 1.465 along it (Fluent's places), clipped to the board's outline. Filled: the body fills and the board keeps its drawing, as Fluent's filled cut does. Ink 12.46 × 13.18, centre 7.83, 7.97; stripe pockets 0.93–1.25 (detail). Built by `scripts/clapperboard.mjs`. Replaces the 12 × 6 box with knocked-out stripes. |
+
+### Fixes from the review groups
+
+| name | change |
+|---|---|
+| square-dot, circle-dot-dashed | a stale `data-dot="free"` removed: it kept the ⌀2 centre dot off the size curve, so above 16 it read heavier than crosshair's and target's |
+| option | the bar starts at 9.25 (standard 1.93 from the diagonal; 2.13 was a near miss) and is its own path so the lint measures it |
+| calendar-check | the check is document-check's (`M6 10L7.5 11.5L10.5 8.5`), on the lattice and centred; a stale `data-angles="free"` that hid the lattice miss removed |
+| compose | the box's right end at 8 (was 9, from the old pencil), symmetric about the pen's axis; both gaps 1.70 |
+| split | corner heads at the keyline corners (expand's), legs on x.5; 1.88 under the keyline before |
+| scissors | blades run to 14; centred (was 7.75) |
+| replace | handle from 10.75, search's handle exactly (its cap reached the lens) |
+| clipboard-check, clipboard-list | content centred under the clip (1 up), as desktop-check's check |
+| paint-bucket | whole drawing moved (0.5, 0.5), which keeps the lattice: centred, level line on x.5 |
+| quote | owner r2 ("stroke sticks out of the base"): each drop is a stroked ring (centre-line r 1.438) with a solid core, the tail running on from the ring, so the edges stay tangent at every weight; ⌀4 at 16 as before |
+| strikethrough | the upper bowl one exact ellipse arc mirroring the lower (a 7.3° kink) |
+| superscript, subscript | the 2 rebuilt as list-numbered's at rx 1.125 (an 8.4° kink) |
+| case-upper | the B's lower bowl larger than its upper (bar at 7.5; r 1.5 / r 2), the owner's B rule |
+| square-list | lines end at 10.75, margins even |
+| stroke-weight | solid bars 2–14 at y 2–3, 6–8, 11–14: whole-pixel edges (solids are crisp on whole pixels), equal open 3 gaps, 12 × 12 centred |
+| pen-tool | r 0.5 top corners and shoulders (the pen family's), the tip sharp |
+| file-cog | the filled hub a solid ⌀2 hole (`stroke="none"`), not a stroked gap that left a dot in the middle |
+| newspaper | owner r2 ("everything should be all even"): picture block 3 × 3.5 at 7.5, short lines at 8 and 10.5; every margin and the headline gap 1.375–1.44; the filled sliver between the lines gone |
+| document-remove, folder-remove | the − centred where the family's + sits (y 10, y 9.5), `data-gap="aligned"`, as calendar-remove |
+| notebook | rings at 4.5 / 7.5 / 10.5 (the three-line stack rule) |
+| file-lock, folder-lock, file-search, cart-add | filled: the point where two offset curves of the overlap cut meet is rounded r 0.75 (`scripts/fillet.mjs`); owner r3 ("cutouts … not very clean edges") |
+| call, call-outgoing, call-incoming, phone-missed, call-off, call-end | owner r2 ("the inside stroke … is not smooth"): the handset's inner bowl is three tangent arcs (r 1.25 / 4 / 1.25) with no straight pieces; pad ends r 0.5 |
+| call-incoming, call-outgoing | owner r2 ("arrow tail too long"): a 2.5 head on the 3.5 box, shaft : head about 2 (Fluent 1.9) |
+| chat-code | code-block's 2-leg chevrons, moved up 1 to the bubble's centre |
+| flag-off | a pole drawn twice removed (it darkened the edge at 1×) |
+| brain, brain-off | filled: the midline stubs start 0.5 off the seam (`M8.5 5.5H9.5`, `M7.5 12H7`) so they end round inside the gap instead of sawing a tooth into the other half |
+| bot-designer | a neck joins the cap's button to the crown (it split off from 24px up) |
+| chat-sparkle | filled: the bubble's top-right corner is chorded inside the halo (a speck at 32+) |
+| printer | tray and sheet r 1 corners (Lucide) |
+| gallery | owner r2 ("main shape larger, gaps smaller"): card 7 × 11, lines at 2 and 4.5 (tight 1.38) |
+| vr-goggles | owner r2 ("move the line closer to the top"): lens line `M5 8.627A7.5 7.5 0 0 1 11 8.627`, a detail gap under the brow |
+| car | owner r2 ("wider, the wheels should align with the lines of the car"): Phosphor's car made wider (keyline horizontal, mirror 1.5–14.5 at 6.5); body and wheels one outline, the sides running straight into 3-wide wheels (2.5–5.5, 10.5–13.5) ending at 12.5, r 1; the cabin's roof corners over the wheels' inner edges |
+| vault | owner r2 ("more centered"): Fluent's 13 × 9 body (1.5–14.5, r 2), handle at 4.5; the dial 1.63 from the right, top and bottom walls |
+| route | rows 3.5 / 7.5 / 11.5 (0.5 high, the stack rule) |
+| truck | moved up 0.5: box top, chassis and base on x.5, centre 7.75 (the skill's heavy-base rule is high, not low) |
+| battery-charging | bolt `M7.25 6.5L6.25 8H7.75L6.75 9.5`, centred on the body's 7 |
+| party-popper | owner r2 ("strokes too close"): cone moved (−0.5, 0.5); confetti as separate paths, every gap tight (1.0–1.7) |
+| chess-rook | filled: the open crown closed by a filled-only `fill` (the round caps grew knobs above the flat top) |
+| atom | orbits 7.937 × 3 at ±45°, extremes on 2 and 14 (3.62 under the keyline before); nucleus gap 1.47 |
+| thermometer | the tube 0.5 taller, centred (it read 27% small and sat low) |
+| briefcase | body 5.5–13.5, handle top 2.5: every horizontal on x.5, belt and clasp centred |
+| calculator | owner r2 ("larger top part"): display 3.5–6.5 (3 tall), margins even; filled, the display hole is cut to its centre-line (as Fluent) |
+
+### The owner's open round-2 verdicts
+
+| name | verdict | construction |
+|---|---|---|
+| person, person-add, -remove, -check, -x, -lock, -settings, -key | "gap between the head and shoulders is still too big" | head r 3 at 8, 5; body `M3 13.5A3.5 3.5 0 0 1 6.5 10H9.5A3.5 3.5 0 0 1 13 13.5Z`, so the gap is 2 between centre-lines (the framed figures' gap, 0.88 detail); ink centre 8, 7.75 (heavy base). The family's marks stay at about 12.5, 12.25; the shared bite is r 4.67 about it (`scripts/family.mjs 0 8 4.67`, `bite.mjs`). Framed and grouped figures unchanged. |
+| key, person-key | replace → Phosphor | Phosphor's key: bow r 4.5 at 9.5, 6.5 with Phosphor's off-centre ⌀1.5 dot at 10.75, 5.25 (a hole when filled); blade 3.54 wide on x + y = 16, square end, a two-step bit. Ink centre 7.75, 8.25 (13.62 on the 0.5 grid can't centre). person-key carries it at about 0.56: bow r 2.5 at 12, 10.5, a 2.12 blade, one step, the dot centred (simplified, recorded). `scripts/key.mjs`, `pkey.mjs`. |
+| handshake | replace → Lucide | Lucide's handshake at 2/3, which puts every 45° line on the lattice: three r 1.414 fingertips 4 apart, the thumb tip, a 90° r 2 knuckle and an r 4 top; cuffs pulled in 0.67 and their slant cut to 0.375 over 8, Lucide's wrist dip dropped (simplified, recorded). Keyline circle, ink 13.12 × 13.04 centred; fills by weight. `scripts/handshake3.mjs`. |
+| bank | replace → Fluent (again) | the remaining differences from building_bank: one rounded plinth 2–14 × 11.5–14 (r 1 shoulders flaring from the colonnade), five columns (3, 5.5, 8, 10.5, 13), the pediment's eaves to the plinth's width; ⌀1.5 hole at 8, 4.75. Filled: pediment and plinth solid, columns lines. |
+| building | replace → Fluent | Fluent's stepped silhouette: a tower 3–10.5 × 1.5–14 (r 1.5 top corners) and a wing 10.5–13 from 6.5 (r 1, sharp inner step), seven ⌀1.5 windows (5.5 / 8 / 10.5 × 4 / 6.5 / 9, the third column on row 3 only), home's arched door; `data-gap="aligned"` for the window grid (delegated, owner to confirm; two rows is the only fit without it) |
+| piano | replace → Phosphor (again) | Phosphor's piano-keys with outlined black keys (4.5–7 and 9–11.5, down to 9) and off-centre dividers at 6 and 10; filled, the keys fill and the frame stays a line |
+| chess-rook | replace → Lucide: "thicker and wider" | Lucide's proportions: the body twice as thick at the top (3 → 6), crown 9 wide, base 10; the body from the crown's arc ends to the base's flat top; crown bottom at 7; the flat filled crown kept |
+| hammer | replace → Phosphor: "the handle should be longer … without the stroke at the end" | on the 45° lattice: handle 12k against a 15k head (0.80; Phosphor 0.77, before 0.63), head 4k thick, handle 3k wide, claw one r 5.745 arc, face cap with its cut, no tail; centre 8.3 |
+| trash | replace → Phosphor: "wider base and wider handle" | body 3.5–12.5 (9 wide), handle 5.5–10.5 (5 wide, 2.5 tall for its pocket), lid overhanging 1; keyline square |
+| camera, camera-off | replace → Lucide | Lucide's camera: a 12 × 8 body (2–14 × 5–13, r 2), a low hump (5, 5) → (6, 3) → (10, 3) → (11, 5) with r 1 corners (63° sides), an r 2 lens at 8, 9; camera-off is it under the flat slash, the lens knockout recut one-sided |
+| lightbulb | replace → Fluent: "wider" | bulb r 4.5 at 8, 6.5 (10.12 wide, was 9.12), Fluent's concave turn into a 1 : 4 tapering neck, band 4.5 wide at 11.5, cap flat at 14 (r 0.75); band a `cut` filled |
+| lasso | replace → Fluent: "loop should be more circular and round" | an r 5.5 circle at 8, 7.5 from 130° clockwise down to its own bottom, turning into an r 1.25 eye and a straight 45° tail (x − y = −1); keyline circle |
+| pushpin, unpin | replace → Lucide: "add more detail" | Lucide's pin upright: an 8 × 2.5 head with round ends, a 4-wide column, a flare to a 9-wide base at 11.5 (r 1 fillets, r 0.5 corners), needle 11.5–14.5; unpin is it under the flat slash, its filled gap-side strip removed by a filled-only gap |
+| palette | replace → Lucide | the thumb indent exactly Lucide's (scaled 0.583) and the wells at Lucide's places (9, 4.75 · 11.25, 7 · 4.75, 8.25 · 6, 5.25) at ⌀2: the wells are the paint, the icon's marks (delegated, owner to confirm; ⌀1.5 candidate kept) |
+| shapes | replace → Lucide | Lucide's triangle over a square and a circle: square 4.5 × 4.5 (2–6.5 × 9.5–14, r 1), circle r 2.25 at 11.75, 11.75, 3 apart; triangle centred, base angles 57.8°, r 0.75, base at 7 (2.5 above the square); all three solid filled |
+| gamepad | replace → Lucide: "handles need to be bigger" | Lucide's gamepad-2 on the full keyline: 13 × 10 (1.5–14.5 × 3–13), r 3 top corners, the bridge flat at 10.5 from 6.5 to 9.5 by 45° steps, grips 2.5 deep ending in round lobes (r 1.879 outer); d-pad at 5.5, 7, ⌀1.5 buttons at 10, 8 and 12, 6 |
+| bot-generator | "make the wizards hat look more like a wizards hat and make it bigger" | a full cone on the family's brim (3.5–12.5) with a smooth apex at 1.5, the tip bent over and drooping to 13, 3, a straight fold back to 11, 3.5; filled, the whole cone; the band and its `data-counter="sliver"` dropped |
+| translate | replace → Fluent | Fluent's design: a two-storey Latin "a" top left (arch into an x.5 stem at 6.5, bowl 1.5 : 1) and the hiragana "あ" bottom right with its three strokes correct; fills by weight. Replaces Phosphor's 文A. |
+
+### Integration
+
+| name | change |
+|---|---|
+| backspace | Fluent's composition: right side at 13.5 (crisp), × centred at 9 (`M7.25 6.25L10.75 9.75…`); the × crowded the right side (1.125 against 2.06) |
+| import, share | the arrow runs to 11 (the tray rule's tight 2.5, as download and upload); 3.5 was a near miss |
+| frown | mouth `M5.5 10A3.625 3.625 0 0 1 10.5 10` (top at 9): the 10-06 centring had reopened the eye–mouth gap the owner closed in round 1; features centre at 7.9 like smile and meh |
+| copy-check | check `M5 10L6 11L8 9`, on the lattice (it was hidden by `free`) with tight gaps both sides |
+| sort-ascending | shaft `M11.5 12.5V3.5`, level with the bottom bar; centred (sort-descending follows) |
+| piggy-bank | owner r2 ("more round on the bottom rather than angled"): the back arc runs into a vertical rear leg, a round chin, 2-wide feet on x.5 |
+| heart, heart-off | the lobes are true semicircles tangent to the 45° cleft and sides (centres 4.75 / 11.25, 5.75, r 2.828; V at 8, 5): the old arcs' chord needed r 3.01, so SVG enlarged them and both ends kinked 3.4°, and the cleft was off the lattice; ink 13.28 × 11 (was 13.14 × 11.18). heart-off: the thin crescent left above the slash is sawn off flush with the cleft (a filled-only gap) |
+| cloud-upload, cloud-download | the arrow's tip at 8, 7 (on the lattice; 7.75 was not), the barbs' halo clear of the cloud's foot; download's shaft from 7 so the pair matches (7 long, 2.5 heads) |
+| captions | each C opens ±61° (was ±45°): its tips sat 0.50 from the next C, under the gap scale, so the letters ran together at 16 |
+| basketball | side seams r 6.1 (was 6): 0.84 to the vertical seam was a near miss |
+
+### Rules learned (written into the skill)
+
+- `data-angles="free"` and `"radial"` drop the lattice check for the whole icon: three checks shipped off the
+  lattice. Run `geometry-audit.mjs` on any free-angle icon; it lists true 45° segments off the lattice.
+- `data-dot="free"` also takes a dot off the size curve; keep it only for real solid exceptions.
+- The lint does not measure gaps between subpaths of one path: draw separate parts as separate paths
+  (option's bar, party-popper's confetti, captions' letters), or check with `geometry-audit.mjs`.
+- An arc whose radius is smaller than half its chord is silently enlarged, which breaks tangency (heart):
+  solve arcs exactly. Near-tangent kinks show in `geometry-audit.mjs`.
+- A hub or hole is `stroke="none" fill="currentColor"`, never a stroked gap. The convex point where two
+  offset curves of an overlap cut meet is rounded r 0.75. A knockout that starts on a seam between two
+  solids is read as an edge exit: start it 0.5 off the seam. Parts 1.0 apart touch only at 16; join or part
+  them. Solids (no stroke) are crisp on whole-pixel edges.
+- Container − marks centre with the family's +; content in a clipboard centres under the clip.
+
+### Record corrections (older rows that no longer describe the source)
+
+square-dot: the ⌀2 centre dot (r 1), a hole when filled, on the size curve. square-slash: the slash is the
+falling one (5.5, 5.5 → 10.5, 10.5). prohibited: fills by weight (no knockout). auto-layout: r 1 boxes.
+square-dashed: 0.5 + r 1.5 corners with 2px dashes. gallery is Lucide's gallery-horizontal-end and images
+the layered image (the 2026-10-02 rows read the other way round). replace's handle starts at 10.75. Type
+family: superscript's and subscript's T is 7 × 8 (not 6 × 6). The ? sits 2.25 above its dot.
+
+### Still open (proposals; candidates in the reports)
+
+- waypoints wider (Lucide, ±5 with r 1.25 rings, smaller than the set's r 1.5 nodes); gap's brackets on x.5
+  (costs the dot's tight gap); link and link-off 0.5 up (three strokes on whole pixels); diamond larger
+  (±7, r 1.5); plane longer (1.88 under its keyline); lock and unlock larger (1.88 under; the composites use
+  their own small lock).
+- bug-off: drop the two corner legs along the slash (the r2 note "legs on monoline only" is unclear).
+- image's ⌀2 sun sits on a half-pixel row (10, 5.5): neither whole position keeps image-plus's gaps, so the
+  family keeps 5.5.
+- spell-check's check is off the lattice; both lattice moves fail (a near miss to the C, or the check left of
+  the word), so the owner's 2026-10-05 coordinates stay.
+- Delegated today, owner to confirm: building's `data-gap="aligned"` window grid; palette's ⌀2 wells; shapes'
+  2.5 / 3 gaps (an equal 3 / 3 with a smaller triangle is in the report); the key's off-centre ink (7.75, 8.25).

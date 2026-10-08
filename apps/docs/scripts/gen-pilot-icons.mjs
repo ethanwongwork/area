@@ -70,6 +70,10 @@ const FILLED_ROLES = ["solid", "knockout", "hole", "cut", "gap", "line", "fill",
 const SOLID_ROLES = ["solid", "fill"];
 const FILLED_WEIGHT_RATIO = 4 / 3;
 const SIZE_CURVE = 0.45;             // line ∝ size^0.45: Cursor's 1.25px at 16 → 1.5px at 24   // 1.125 → 1.5px, Fluent's filled line weight
+// The curve runs to the 24px master and holds there: above 24 the drawing scales whole, so lines,
+// cuts and gaps keep the 24px proportions (owner, 2026-10-06: large previews thinned the line while
+// the gaps grew). Fluent's own masters: 1.5px at 24, 2 at 32, 2.5 at 48; held, Area is 1.8 and 2.7.
+const SIZE_CURVE_MAX = 24;
 const BOLD = WEIGHT * FILLED_WEIGHT_RATIO;
 const BOLD_GAP_MIN = 0.875;          // detail round (owner, 2026-09-28): the detail step survives the filled line (was 1.0, Cursor's floor)
 const RASTER = 8;              // samples per px for the counter check
@@ -602,11 +606,9 @@ const STROKE_CUT = `style={{ strokeWidth: sw(weight, size) }} strokeLinecap="but
 // A halo cuts the solids back round a line in front of them by one icon weight each side
 // (Fluent's thunderstorm bolt): three weights wide, round, under the line drawn on top.
 const STROKE_HALO = `style={{ strokeWidth: haloWidth(weight, size) }} strokeLinecap="round" strokeLinejoin="round"`;
-// Filled: silhouettes and the gaps that part one solid from another stay the 16px drawing enlarged
-// (their clearances are drawn for the 16px line, so thinning them would open strips of fill at
-// 32px), and so do lines drawn over or beside them. Lines drawn as negative space (knockouts,
-// cuts) follow the size curve, so they match the outline's line at every size.
-const uniform = style => style.replace("sw(weight, size", "sw(weight, undefined");
+const STROKE_HALO_EDGE = `style={{ strokeWidth: sw(weight, size, 2) }} strokeLinecap="round" strokeLinejoin="round"`;
+// Filled: every line, drawn as ink or as negative space (knockouts, cuts, gaps, halos), follows the
+// size curve, so the space in a filled icon is the outline's line at every size (owner, 2026-10-06).
 const jsx = (el, paint) => {
   const { "data-shift": shift, "data-part": _part, "data-halo": _halo, ...attrs } = { ...el.attrs, ...paint?.attrs };
   const props = Object.entries(attrs).map(([k, v]) => `${camel(k)}="${v}"`);
@@ -644,23 +646,26 @@ const filledBody = icon => {
     .map(el => el.stroked ? bold(el) : jsx(el.tag === "circle" ? boldDot(el) : el));
   // Solids and the lines beside them follow the size curve, as the outline does, so the filled
   // variant's edges and lines are the outline's weight at every size (owner, 2026-10-04: "why is the
-  // filled [drawn with] thicker strokes at the largest sizes"). Gaps keep the 16px clearance.
+  // filled [drawn with] thicker strokes at the largest sizes"). Gaps follow the curve too (2026-10-06).
   const solid = icon.elements.filter(el => SOLID_ROLES.includes(el.filled)).map(el => jsx(el, { attrs: { fill: "currentColor" }, stroke: el.stroked, strokeStyle: STROKE }));
-  // Halos part a line (`halo`) or a solid in front (`data-halo`: a clock or gear on a page) from the
-  // solids behind by the outline's overlap cut, 2.25 between centre-lines, so the space stays flush
-  // with the part's edge and matches the outline at every size. In the mask: the black halos, then
+  // Halos part a line (`halo`) or a solid in front (`data-halo`: a clock or gear on a page, a
+  // notification dot, a front coin or figure) from the solids behind by one line weight, flush with
+  // the part's edge at every size (2026-10-06; it was the outline's fixed 2.25, 1.5× the line above
+  // 24px). In the mask: the black halos, then
   // the data-halo solids restored in white (so a halo round a gear's teeth never cuts the gear),
   // then every other cut (a solid's own knockouts still cut it).
   const fronts = icon.elements.filter(el => SOLID_ROLES.includes(el.filled) && el.attrs["data-halo"] !== undefined);
+  // An unstroked front (a notification dot, a badge) has its edge on the path itself: its halo is
+  // two weights wide on that edge and it is restored without a stroke.
   const frontCuts = [
-    ...fronts.map(el => jsx(el, { attrs: { fill: "none" }, stroke: true, color: "black", strokeStyle: STROKE_HALO })),
+    ...fronts.map(el => jsx(el, { attrs: { fill: "none" }, stroke: true, color: "black", strokeStyle: el.stroked ? STROKE_HALO : STROKE_HALO_EDGE })),
     ...icon.elements.filter(el => el.filled === "halo").map(el => jsx(el, { attrs: { fill: "none" }, stroke: true, color: "black", strokeStyle: STROKE_HALO })),
-    ...fronts.map(el => jsx(el, { attrs: { fill: "white" }, stroke: true, color: "white", strokeStyle: STROKE })),
+    ...fronts.map(el => el.stroked ? jsx(el, { attrs: { fill: "white" }, stroke: true, color: "white", strokeStyle: STROKE }) : jsx(el, { attrs: { fill: "white" }, stroke: false })),
   ];
   const cuts = frontCuts.concat(icon.elements.filter(el => ["knockout", "hole", "cut", "gap"].includes(el.filled)).map(el =>
     el.filled === "knockout" ? jsx(el, { attrs: { fill: "none" }, stroke: true, color: "black" })
     : el.filled === "hole" || (el.filled === "gap" && !el.stroked) ? jsx(el, { attrs: { fill: "black" }, stroke: false })
-    : jsx(el, { attrs: { fill: "none", ...(el.cutD ? { d: el.cutD } : {}) }, stroke: true, color: "black", strokeStyle: el.filled === "gap" && el.attrs.d !== SLASH_GAP ? uniform(STROKE_CUT) : STROKE_CUT }))
+    : jsx(el, { attrs: { fill: "none", ...(el.cutD ? { d: el.cutD } : {}) }, stroke: true, color: "black", strokeStyle: STROKE_CUT }))
     .concat(icon.elements.filter(el => el.exitD).map(el => jsx({ tag: "path", attrs: { d: el.exitD } }, { attrs: { fill: "none" }, stroke: true, color: "black", strokeStyle: STROKE_CUT }))));
   // Unmarked strokes beside solids stay strokes at the icon weight: the solids carry the
   // emphasis, so the lines keep the outline's exact length and gaps (Fluent's filled cuts).
@@ -707,19 +712,18 @@ import { useId, type SVGProps } from "react";
  *  the line then follows the size curve instead of scaling with the drawing. */
 export type PilotIconProps = Omit<SVGProps<SVGSVGElement>, "stroke"> & { weight?: number; size?: number };
 /** Size curve (docs/specs/icons.md, "Sizes"): the line grows with size^${SIZE_CURVE}, Cursor's
- *  16 → 24px step (1.25 → 1.5px). In drawing units that is a factor of (size / 16)^${(SIZE_CURVE - 1).toFixed(2)}. */
-export const sizeFactor = (size?: number) => size ? Math.pow(size / 16, ${(SIZE_CURVE - 1).toFixed(2)}) : 1;
+ *  16 → 24px step (1.25 → 1.5px), up to the ${SIZE_CURVE_MAX}px master; larger icons are that master scaled
+ *  whole. In drawing units that is a factor of (min(size, ${SIZE_CURVE_MAX}) / 16)^${(SIZE_CURVE - 1).toFixed(2)}. */
+export const sizeFactor = (size?: number) => size ? Math.pow(Math.min(size, ${SIZE_CURVE_MAX}) / 16, ${(SIZE_CURVE - 1).toFixed(2)}) : 1;
 export const sw = (weight: number | undefined, size: number | undefined, ratio = 1) => {
   const k = ratio * sizeFactor(size);
   if (weight !== undefined) return weight * k;
   return k === 1 ? "var(--area-weight-icon)" : \`calc(var(--area-weight-icon) * \${k.toFixed(4)})\`;
 };
-/** A halo's width: the outline's overlap cut (2.25 between centre-lines) on each side, less the line.
- *  The token weight reads the cut from --_icon-overlap (base.css), so no length is written inline. */
-export const haloWidth = (weight: number | undefined, size: number | undefined) => {
-  const w = sw(weight, size);
-  return typeof w === "number" ? 4.5 - w : \`calc(var(--_icon-overlap) - \${w})\`;
-};
+/** A halo's width: the line and one line of space on each side, so the cut round a part in front is
+ *  the line's own weight at every size (owner, 2026-10-06: the overlap cut's fixed 2.25 grew to 1.5×
+ *  the line above 24px). */
+export const haloWidth = (weight: number | undefined, size: number | undefined) => sw(weight, size, 3);
 /** data-shift: a line moved by (dx, dy) × (the 16px weight − the rendered weight). Returns the line's
  *  stroke props, as slashGap does: a numeric weight shifts by the SVG transform attribute in user
  *  units, the token weight by a CSS transform computed from the token. */

@@ -3,7 +3,7 @@ import { buildInsetFixture } from "./inset-fixture.mjs";
 import { docsOutput } from "./output.mjs";
 import { baseTokens } from "../../../packages/tokens/src/emit/base.ts";
 import { buildLab } from "./lab.mjs";
-import { componentGalleryPage, reviewPage, roundnessPage } from "./component-gallery.mjs";
+import { componentGalleryPage, iconsPage, reviewPage, roundnessPage } from "./component-gallery.mjs";
 /**
  * Builds the documentation site.
  *
@@ -1189,7 +1189,7 @@ const GALLERY_PAGES = [
   ["index.html", "Components"],
   ["gallery-typeRamp.html", "Type ramp"],
   ["gallery-iconography.html", "Iconography"],
-  ["gallery-icons.html", "Icons"],
+  ["gallery-icons.html", "Icon review"],
   ["gallery-color.html", "Color"],
   ["gallery-scale.html", "UI scale"],
   ["gallery-radius.html", "Radius"],
@@ -2250,6 +2250,7 @@ const pages = [
     demos,
     clients: [],
   })],
+  ["icons.html", await iconsPage({ clients: ["icons-browser.js"] })],
   ["gallery.html", redirectPage("index.html")],
   ["gallery-components.html", redirectPage("index.html")],
   ["gallery-typeRamp.html", galleryShell({ current: "gallery-typeRamp.html", title: "Type ramp", body: `<div class="docs-gallery-foundation">${bodyOf(typographyPage)}</div>` })],
@@ -2287,6 +2288,7 @@ await (await import("esbuild")).build({ entryPoints: [join(root, "src/chip-clien
 await (await import("esbuild")).build({ entryPoints: [join(root, "src/alert-client.tsx")], outfile: join(out, "alert-demos.js"), bundle: true, platform: "browser", format: "esm", jsx: "automatic", define: { "process.env.NODE_ENV": '"production"' } });
 await (await import("esbuild")).build({ entryPoints: [join(root, "src/avatar-client.tsx")], outfile: join(out, "avatar-demos.js"), bundle: true, platform: "browser", format: "esm", jsx: "automatic", define: { "process.env.NODE_ENV": '"production"' } });
 await (await import("esbuild")).build({ entryPoints: [join(root, "src/gallery-client.tsx")], outfile: join(out, "gallery.js"), bundle: true, platform: "browser", format: "esm", jsx: "automatic", define: { "process.env.NODE_ENV": '"production"' } });
+await (await import("esbuild")).build({ entryPoints: [join(root, "src/icons-client.tsx")], outfile: join(out, "icons-browser.js"), bundle: true, minify: true, platform: "browser", format: "esm", jsx: "automatic", define: { "process.env.NODE_ENV": '"production"' } });
 await (await import("esbuild")).build({ entryPoints: [join(root, "src/code-block-client.tsx")], outfile: join(out, "code-block-demos.js"), bundle: true, platform: "browser", format: "esm", jsx: "automatic", define: { "process.env.NODE_ENV": '"production"' } });
 await (await import("./build-switch-fixture.mjs")).buildSwitchFixture(root, out);
 
@@ -2298,7 +2300,7 @@ await (await import("./build-switch-fixture.mjs")).buildSwitchFixture(root, out)
  * the documentation back. Test fixtures (inset, switch audit) keep their pages.
  */
 const DOCS_ARCHIVED = true;
-const ARCHIVE_KEEP = /^(index|review|roundness|gallery(-[a-zA-Z-]+)?|inset(-before)?|switch-audit)\.html$/;
+const ARCHIVE_KEEP = /^(index|icons|review|roundness|gallery(-[a-zA-Z-]+)?|inset(-before)?|switch-audit)\.html$/;
 if (DOCS_ARCHIVED) {
   for (const name of readdirSync(out)) {
     if (name.endsWith(".html") && !ARCHIVE_KEEP.test(name)) writeFileSync(join(out, name), redirectPage("index.html"), "utf8");

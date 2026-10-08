@@ -304,6 +304,15 @@ mail-check, repeat-1, location-add, bot-off.
 | breakpoint | drawn: batch-60 | breakpoint shapes and states (circle, diamond, hexagon, dashed) | — | debugger |
 | stack-frame | drawn: batch-60 | a stack frame and the active frame | — | debugger |
 
+### Candidates 2026-10-07 (owner deciding on the review page)
+
+43 technical concepts Area lacks, from the product surfaces (Cursor and VS Code, Figma's inspector, Notion,
+ChatGPT, GitHub) checked against Lucide, Phosphor, Material Symbols and Fluent:
+`docs/research/icon-review/2026-10-07/candidates.json` (use and references for each). The owner marks Build,
+Later or Skip on the review page's "New icons" tab (`candidates1` collection); build only what is marked Build.
+The owner's 2026-10-02 removals stay out (bug-play, folder-dashed, chat-dashed, satellite, compass-check,
+brain-thinking, cost tiers, beach).
+
 ## Not planned
 
 | concept | plan | what it shows | references | uses |

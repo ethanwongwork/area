@@ -1,8 +1,11 @@
 // Finds thin slivers of ink or space (narrower than ~0.6px at 16px) in every icon, outline and filled.
-import { build } from "esbuild"; import { writeFileSync, readFileSync } from "node:fs"; import { execFileSync } from "node:child_process";
-const cache = process.cwd() + "/apps/docs/.cache", only = process.argv[2]?.split(",");
-writeFileSync(cache + "/sl.tsx", `import { createElement as h } from "react"; import { renderToStaticMarkup } from "react-dom/server"; import { PILOT_ICONS } from "../src/pilot-icons.tsx";
-export const all = PILOT_ICONS.filter(p => !p.derivedFrom).map(p => ({ name: p.name, o: renderToStaticMarkup(h(p.Icon, { weight: 1.125, width: 128, height: 128 })), f: renderToStaticMarkup(h(p.Filled, { weight: 1.125, width: 128, height: 128 })) }));`);
+import { build } from "esbuild"; import { writeFileSync, readFileSync } from "node:fs"; import { edgeShot, edgeDump } from "../2026-10-07/edge.mjs";
+// SLIVER_SIZE=48 renders through the size prop (the size curve) instead of the 16px drawing enlarged.
+const SIZE = process.env.SLIVER_SIZE ? `size: ${Number(process.env.SLIVER_SIZE)}, ` : "";
+// LOOK_CACHE and PILOT_TSX (absolute) let parallel sessions check their own emitted icons (2026-10-07).
+const cache = process.env.LOOK_CACHE || process.cwd() + "/apps/docs/.cache", only = process.argv[2]?.split(",");
+writeFileSync(cache + "/sl.tsx", `import { createElement as h } from "react"; import { renderToStaticMarkup } from "react-dom/server"; import { PILOT_ICONS } from "${process.env.PILOT_TSX || "../src/pilot-icons.tsx"}";
+export const all = PILOT_ICONS.filter(p => !p.derivedFrom).map(p => ({ name: p.name, o: renderToStaticMarkup(h(p.Icon, { weight: 1.125, ${SIZE}width: 128, height: 128 })), f: renderToStaticMarkup(h(p.Filled, { weight: 1.125, ${SIZE}width: 128, height: 128 })) }));`);
 await build({ entryPoints: [cache + "/sl.tsx"], bundle: true, format: "esm", platform: "node", outfile: cache + "/sl.out.mjs", external: ["react", "react-dom", "react-dom/server"], jsx: "automatic", logLevel: "error" });
 let { all } = await import(cache + "/sl.out.mjs?" + Date.now());
 if (only) all = all.filter(a => only.includes(a.name));
@@ -47,6 +50,7 @@ const comps = (m) => { const seen = new Uint8Array(N * N), out = []; for (let i 
 })();
 </script>`;
 writeFileSync(cache + "/sl.html", page);
-if (SHOT) execFileSync("/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge", ["--headless=new", "--disable-gpu", "--hide-scrollbars", "--virtual-time-budget=600000", "--window-size=1200,900", "--screenshot=" + SHOT, "file://" + cache + "/sl.html"], { stdio: "ignore", timeout: 600000 });
-const dom = execFileSync("/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge", ["--headless=new", "--disable-gpu", "--virtual-time-budget=600000", "--dump-dom", "file://" + cache + "/sl.html"], { maxBuffer: 1 << 26, timeout: 600000 }).toString();
+if (SHOT) await edgeShot(["--disable-gpu", "--hide-scrollbars", "--virtual-time-budget=600000", "--window-size=1200,900"], SHOT, "file://" + cache + "/sl.html", 600000);
+// A headless run can outlive its output (2026-10-07): edge.mjs stops Edge once the DOM is out.
+const dom = await edgeDump(["--disable-gpu", "--virtual-time-budget=600000"], "file://" + cache + "/sl.html");
 console.log(dom.match(/<pre id="out">([\s\S]*?)<\/pre>/)?.[1] ?? dom.slice(0, 500));

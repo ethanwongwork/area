@@ -226,8 +226,156 @@ export const GALLERY_CSS = `
   .review-tile__stage { display: flex; align-items: center; justify-content: center; padding: var(--area-space-24) var(--area-space-32); }
   .review-planned { display: grid; gap: var(--area-space-4); }
   .review-planned__reference, .review-planned__reuses { margin: 0; color: var(--area-fg-muted); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); }
+  /* Icon page (icons.html), after Cursor's icon library: the canvas holds a toolbar, the grouped grid
+     scrolling under it, a footer of display options, and the selected icon's preview docked at the
+     end. --_size is the icon size, set by src/gallery/icon-browser.tsx; a cell is twice the icon
+     (16 -> 32 plus room), never less than the icon plus 32, so small icons keep a target. */
+  .gallery-canvas--flush { display: flex; flex-direction: column; padding: 0; overflow: hidden; }
+  .gallery-icons-root { display: flex; flex: 1; min-block-size: 0; }
+  .gallery-nav__count { color: var(--area-fg-muted); font-variant-numeric: tabular-nums; }
+  .icon-browser {
+    --_size: var(--area-space-24);
+    --_cell: max(calc(var(--_size) * 2), calc(var(--_size) + var(--area-space-32)));
+    display: grid;
+    flex: 1;
+    grid-template-columns: minmax(0, 1fr) auto;
+    min-inline-size: 0;
+    min-block-size: 0;
+  }
+  .icon-browser__main { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; min-inline-size: 0; min-block-size: 0; }
+  .icon-browser__toolbar,
+  .icon-browser__footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--area-space-8) var(--area-space-16);
+    padding: var(--area-space-8) var(--area-space-12);
+    color: var(--area-fg-default);
+  }
+  .icon-browser__toolbar { border-block-end: var(--area-border-width) solid var(--area-border-decorative); }
+  .icon-browser__footer { justify-content: center; border-block-start: var(--area-border-width) solid var(--area-border-decorative); }
+  .icon-browser__search { flex: 1 1 calc(var(--area-space-96) * 2); min-inline-size: 0; }
+  .icon-browser__size-row { display: grid; grid-template-columns: minmax(0, 1fr) var(--area-space-80); align-items: center; gap: var(--area-space-8); }
+  .icon-browser__size-row--toolbar { flex: 0 1 calc(var(--area-space-96) * 2 + var(--area-space-32)); }
+  .icon-browser__count { margin-inline-start: auto; color: var(--area-fg-muted); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .icon-browser__scroll { overflow: auto; padding: var(--area-space-8) var(--area-space-12) var(--area-space-24); outline: none; }
+  .icon-browser__section { scroll-margin-block-start: var(--area-space-8); }
+  .icon-browser__section[hidden] { display: none; }
+  .icon-browser__section-count { margin-inline-start: var(--area-space-4); color: var(--area-fg-muted); font-weight: var(--area-weight-regular); }
+  .icon-browser__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(var(--_cell), 1fr)); gap: var(--area-space-2); }
+  .icon-browser[data-names] .icon-browser__grid { grid-template-columns: repeat(auto-fill, minmax(max(var(--_cell), var(--area-space-96) + var(--area-space-16)), 1fr)); }
+  .icon-browser__cell {
+    position: relative;
+    display: grid;
+    place-items: center;
+    align-content: center;
+    gap: var(--area-space-6);
+    min-inline-size: 0;
+    min-block-size: var(--_cell);
+    margin: 0;
+    padding: var(--area-space-8) var(--area-space-4);
+    border: 0;
+    border-radius: var(--area-radius-small);
+    background: transparent;
+    color: var(--area-fg-default);
+    font: inherit;
+    cursor: default;
+  }
+  .icon-browser__cell svg { display: block; flex: none; }
+  .icon-browser__cell:hover { background: var(--area-bg-hover); }
+  .icon-browser__cell[aria-pressed="true"] { background: var(--area-bg-active); }
+  .icon-browser__cell:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(var(--area-focus-width) * -1); }
+  .icon-browser[data-review] .icon-browser__cell[data-in-review]::after {
+    content: "";
+    position: absolute;
+    inset-block-start: var(--area-space-6);
+    inset-inline-end: var(--area-space-6);
+    inline-size: var(--area-space-6);
+    block-size: var(--area-space-6);
+    border-radius: 50%;
+    background: var(--area-fg-caution);
+  }
+  .icon-browser__name {
+    max-inline-size: 100%;
+    overflow: hidden;
+    color: var(--area-fg-muted);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .icon-browser__empty { padding: var(--area-space-48) var(--area-space-16); color: var(--area-fg-muted); text-align: center; font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
+  /* The preview: a square stage the largest preview fits, the icon centred in it. */
+  .icon-browser__dock { display: grid; min-block-size: 0; }
+  /* A narrow canvas keeps the grid's width: the preview floats over the grid's end instead. */
+  .icon-browser { position: relative; }
+  @container (max-width: 760px) {
+    .icon-browser__dock { position: absolute; inset-block: 0; inset-inline-end: 0; z-index: 1; box-shadow: var(--area-shadow-float); }
+  }
+  .icon-browser__stage {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1;
+    margin-block-end: var(--area-space-12);
+    overflow: hidden;
+    border-radius: var(--area-radius-small);
+    background: var(--area-bg-subtle);
+    color: var(--area-fg-default);
+  }
+  .icon-browser__stage svg { max-inline-size: 100%; max-block-size: 100%; }
+  .icon-browser__strip { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); align-items: center; justify-items: center; row-gap: var(--area-space-8); color: var(--area-fg-default); }
+  .icon-browser__strip-cell { display: grid; place-items: center; block-size: var(--area-space-48); }
+  .icon-browser__strip-label { color: var(--area-fg-muted); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); font-variant-numeric: tabular-nums; }
+  .icon-browser__family { display: grid; grid-template-columns: repeat(auto-fill, minmax(var(--area-space-40), 1fr)); gap: var(--area-space-2); }
+  .icon-browser__family .icon-browser__cell { min-block-size: var(--area-space-40); padding: 0; }
+  .icon-browser__facts { display: grid; gap: var(--area-space-8); margin: 0; font-size: var(--area-ui-size); line-height: var(--area-ui-leading); }
+  .icon-browser__facts > div { display: grid; grid-template-columns: var(--area-space-80) minmax(0, 1fr); gap: var(--area-space-8); }
+  .icon-browser__facts dt { color: var(--area-fg-muted); }
+  .icon-browser__facts dd { margin: 0; overflow-wrap: anywhere; color: var(--area-fg-default); }
+  .icon-browser__mono { font-family: var(--area-font-mono); }
+  .icon-browser__link,
+  .icon-browser__review-link {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--area-fg-accent);
+    font: inherit;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .icon-browser__link:hover,
+  .icon-browser__review-link:hover { text-decoration: underline; }
+  .icon-browser__review-link { display: inline-flex; align-items: center; gap: var(--area-space-4); margin-block-start: var(--area-space-12); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); }
+  .icon-browser__review-link svg { inline-size: var(--area-icon-sm); block-size: var(--area-icon-sm); }
+  .icon-browser__actions { display: grid; grid-template-columns: 1fr 1fr; gap: var(--area-space-8); }
+  .icon-browser__actions > :last-child { grid-column: 1 / -1; }
 }
 `;
+
+/** Renders the icon browser at its defaults with the id prefix src/icons-client.tsx hydrates. */
+async function renderIconBrowser() {
+  const outdir = join(root, ".cache");
+  mkdirSync(outdir, { recursive: true });
+  const outfile = join(outdir, `icon-browser.${Date.now()}.mjs`);
+  await build({
+    entryPoints: [join(root, "src/gallery/icon-browser.tsx")],
+    outfile,
+    bundle: true,
+    format: "esm",
+    platform: "node",
+    jsx: "automatic",
+    external: ["react", "react-dom", "react/jsx-runtime", "react-dom/server"],
+    logLevel: "silent",
+  });
+  try {
+    const { IconBrowser, ICON_BROWSER_ID, ICON_SECTIONS, ICON_NAMES } = await import(pathToFileURL(outfile).href);
+    const { renderToString } = await import("react-dom/server");
+    const { createElement } = await import("react");
+    return { id: ICON_BROWSER_ID, sections: ICON_SECTIONS, names: ICON_NAMES, html: renderToString(createElement(IconBrowser), { identifierPrefix: "icon-browser-" }) };
+  } finally {
+    rmSync(outfile, { force: true });
+  }
+}
 
 /** Renders the chrome to HTML with the same module and id prefixes the client hydrates. */
 async function renderChrome(sections, page = "components") {
@@ -318,7 +466,7 @@ const collapseScript = `(function () {
 })();`;
 
 /** The page around a canvas: nav, canvas with the restored theme selection, theme panel. */
-function shell({ title, description, chrome, sections, page, canvas, clients }) {
+function shell({ title, description, chrome, sections, page, canvas, clients, flush = false }) {
   const canvasAxes = GALLERY_CONTROLS.map(control => `data-area-${control.axis}="${control.defaultValue}"`).join(" ");
   return `<!doctype html>
 <html lang="en">
@@ -333,7 +481,7 @@ function shell({ title, description, chrome, sections, page, canvas, clients }) 
 <body>
 <div class="gallery-app">
   <div class="gallery-app__rail" id="gallery-nav" data-area-ui="default" data-area-radius="10">${chrome.nav}</div>
-  <main class="gallery-canvas" id="${GALLERY_CANVAS_ID}" ${canvasAxes} aria-label="${escapeHtml(title)}">
+  <main class="gallery-canvas${flush ? " gallery-canvas--flush" : ""}" id="${GALLERY_CANVAS_ID}" ${canvasAxes} aria-label="${escapeHtml(title)}">
     <script>${restoreScript}</script>
     ${canvas}
   </main>
@@ -360,6 +508,29 @@ export async function componentGalleryPage({ components, specimensOf, demos, dem
   const chrome = await renderChrome(sections);
   const canvas = components.map(component => section(component, specimensOf(component), { demos, demoMarkup, sectionId: chrome.sectionId })).join("\n");
   return shell({ title: "Components", description: "Every Area component and variant, themed from one panel.", chrome, sections, page: "components", canvas, clients });
+}
+
+/* --- Icons ----------------------------------------------------------------- */
+
+/**
+ * Every Area icon, grouped by category (src/icon-categories.ts), with a preview of the selected one.
+ * Fails the build when an icon has no category or a category names something that is not an icon.
+ */
+export async function iconsPage({ clients }) {
+  const { ICON_CATEGORIES } = await import(pathToFileURL(join(root, "src/icon-categories.ts")).href);
+  const browser = await renderIconBrowser();
+  const icons = browser.names;
+  const placed = ICON_CATEGORIES.flatMap(category => category.icons);
+  const known = new Set(icons);
+  const unknown = placed.filter(name => !known.has(name));
+  const twice = placed.filter((name, index) => placed.indexOf(name) !== index);
+  const missing = icons.filter(name => !placed.includes(name));
+  if (unknown.length || twice.length || missing.length) {
+    throw new Error(`Icon categories (src/icon-categories.ts) are out of date.${missing.length ? ` No category: ${missing.join(", ")}.` : ""}${unknown.length ? ` Not icons: ${unknown.join(", ")}.` : ""}${twice.length ? ` Listed twice: ${twice.join(", ")}.` : ""}`);
+  }
+  const chrome = await renderChrome(browser.sections, "icons");
+  const canvas = `<div class="gallery-icons-root" id="${browser.id}">${browser.html}</div>`;
+  return shell({ title: "Icons", description: "Every Area icon, grouped by category, with a preview, sizes and SVG export.", chrome, sections: browser.sections, page: "icons", canvas, clients, flush: true });
 }
 
 /* --- Roundness ------------------------------------------------------------- */

@@ -29,17 +29,11 @@
   }
 
   /* Size curve: the line grows with size^0.45 (Cursor: 1.25px at 16, 1.5px at 24), so in
-     drawing units it is multiplied by (size / 16)^-0.55. */
+     drawing units it is multiplied by (size / 16)^-0.55. It holds at 24: a larger icon is the 24px
+     drawing scaled (docs/specs/icons.md), so no slot above 24 needs a factor. */
   [data-area-glyph-size="12"] path { stroke-width: calc(var(--area-weight-icon) * 1.1715); }
   [data-area-glyph-size="20"] path { stroke-width: calc(var(--area-weight-icon) * 0.8846); }
   [data-area-glyph-size="24"] path { stroke-width: calc(var(--area-weight-icon) * 0.8000); }
-
-  /* Drawn icons' overlap cut (docs/specs/icons.md, "Shared parts"): 2.25 between centre-lines on
-     each side of a part in front, in the 16px drawing's units. A filled icon's halo is this less the
-     rendered line, so it stays flush at every size. */
-  :root {
-    --_icon-overlap: 4.5px;
-  }
 }
 
 @layer area.utilities {

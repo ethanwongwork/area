@@ -1,11 +1,11 @@
-# Handoff — 2026-10-05
+# Handoff — 2026-10-07
 
 Each session starts from `main` in its own worktree (`claude/*` branch) and merges through a
 pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/docs/src/component-status.mjs` (Indicator and Tooltip are Complete).
 
-## Review decisions applied (2026-10-08, same branch, uncommitted)
+## Review decisions applied (2026-10-08, merged in the 2026-10-08 PR)
 
 - Approved (component-status.mjs): Accordion, Alignment picker, Custom select, Drawer, Tag. Changes
   requested and applied, back in review: Confirm dialog (Default specimen is the neutral confirm, danger
@@ -18,7 +18,7 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
 - Review page republished with only the unapproved families (`--unapproved`). Second round (same day):
   Confirm dialog, Date picker and Tag picker approved too, so nothing is in review.
 
-## Component review page and archived docs (2026-10-07, same branch, uncommitted)
+## Component review page and archived docs (2026-10-07, merged in the 2026-10-08 PR)
 
 - Component review artifact (owner): https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG — every
   gallery family at 100% (hydrated), Before (the build at 5bb91df, static, in a frame) / After / side
@@ -31,7 +31,7 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   non-gallery page into a redirect to the gallery; check-dogfood skips the Field page check while
   archived. Set it to false to bring the docs back.
 
-## Motion and crispness pass (2026-10-07, same branch, uncommitted)
+## Motion and crispness pass (2026-10-07, merged in the 2026-10-08 PR)
 
 - Contract: `docs/MOTION.md` (tokens, per-interaction recipes, crispness rules, reduced motion);
   research in `docs/research/motion-2026-10-07/` (packages and craft, design systems incl. ChatGPT /
@@ -49,7 +49,7 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   hidden tabs (computed styles, getAnimations, rects); hidden pages also never opened the Dialog or
   Drawer demos, so open/close needs a look in a visible browser.
 
-## Review components, Chrome audit (2026-10-06–07, branch `claude/tag-picker-design-039723`, uncommitted)
+## Review components, Chrome audit (2026-10-06–07, branch `claude/tag-picker-design-039723`, merged 2026-10-08)
 
 - Tag: owner asked for lighter tints, more vibrant ink → opaque OKLCH L 0.955 / C 0.035 tints under
   `fg-*` inks (dark: vivid ink on 16%); × in the tag's ink, drawn at its 12 line (`Glyph size={12}`).
@@ -68,6 +68,25 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
 - area-capture.js: baseline by the ascent's share of the content box (canvas rounds system-font
   ascents; Notion text had read 0.67 low). Alignment picker test no longer expects removed sizes.
 
+## Icon quality pass (2026-10-07, branch `claude/icon-quality-consistency-dade1f`)
+
+- clapperboard is Fluent's movies_and_tv (owner: "exactly like fluent"). Whole set reviewed again icon by
+  icon in ten groups plus four redraws; 94 sources changed, all in review (spec "Quality and consistency
+  pass, 2026-10-07"; sheets, reports, scripts and open decisions in `docs/research/icon-review/2026-10-07/`).
+- The 16 round-2 "replace" verdicts are applied on the named libraries (key, handshake, camera, pushpin,
+  palette, shapes, gamepad, chess-rook, bank, building, lightbulb, lasso, translate, piano, hammer, trash),
+  plus bot-generator's wizard hat and the person's smaller head gap (2) across its family. Other open owner
+  notes applied (car, vault, gallery, vr-goggles, quote, newspaper, party-popper, calculator, piggy-bank, the
+  handset curve, call arrows, frown).
+- Tools: `2026-10-07/look.mjs` (render from sources, parallel-safe, `--before --slivers`, reference rows),
+  `geometry-audit.mjs` (kinks, subpath gaps, lattice in `free` icons: the lint's blind spots),
+  `edge.mjs` (stops headless Edge once its output is written; stray headless Edge runs hold the profile and
+  hang every later sheet: kill them). `2026-10-06/person-family.mjs` is superseded by `2026-10-07/scripts/family.mjs`.
+- Review page round 7 (same link, `reviews7`): 16 of the 94 approved so far (recorded in batches.json and
+  `2026-10-07/reviews7-approved.json`); the "New icons" tab holds 43 candidates (`candidates1`), undecided.
+  Open the page for the owner at the start of the next icon session.
+- Open: the delegated picks and proposals in that README.
+
 ## Icon consistency audit (2026-10-05, branch `claude/icon-audit-consistency-96540c`)
 
 - bot-guard filled: only the cap's top and the visor fill, the band stays open (owner); bot hats
@@ -82,6 +101,32 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   small face, bot-designer's brim runs past the head, spell-check's B has a larger lower bowl.
 - Tooling: headless Edge `--dump-dom` can hang when given a private `--user-data-dir`; the shared
   sheet scripts write into `apps/docs/.cache` (create it in a fresh worktree).
+
+## Icon browser (2026-10-05, branch `claude/icon-gallery-organization-4a1c05`)
+
+- `icons.html` (gallery nav: Icons, in the component gallery shell): every icon grouped by category
+  (`apps/docs/src/icon-categories.ts`; the build fails if an icon has no category), Cursor-style
+  toolbar (search, Outline/Filled, size 12–64 on the size curve), Names / Rotations / review-mark
+  options, and a docked preview (size 16–256, 16–48 strip, rotations family, facts, Copy / Download
+  SVG with token weights resolved). Source `src/gallery/icon-browser.tsx`, hydrated by
+  `src/icons-client.tsx`. New icons need a line in `icon-categories.ts`. The old Icons page is now
+  "Icon review" (`gallery-icons.html`).
+- `npm run dev` doesn't publish on current main: the dogfood audit fails on numeric `r:` inline
+  styles from the icon generator (pre-existing). Build with `node apps/docs/scripts/build.mjs` and
+  serve `apps/docs/scripts/serve.mjs` meanwhile.
+
+## Filled audit and size-curve hold (2026-10-06, same branch)
+
+- Filled audit of the whole set (spec "Filled consistency audit and the size curve's hold"; sheets and
+  tools in `docs/research/icon-review/2026-10-06/`): a part is one colour. import, cloud-upload and
+  cloud-download now cut round their arrow (halo) like cloud-lightning; notebook's rings join the body.
+- The size curve holds at 24 (`SIZE_CURVE_MAX`): 32 and 48 are the 24px drawing scaled (1.8 / 2.7px).
+- Redrawn on owner notes: desktop-check, qr-code, globe, plane (cockpit window), fingerprint (concentric
+  tracks), graduation-cap, bandage (filled). All delegated items are listed as open in the README.
+- Second round: import is a line glyph like share; every filled cut is one line weight at every size
+  (halo = 3 weights; gaps follow the curve; 15 front-part gaps became `data-halo`, dots included);
+  fingerprint has an S core (fourth round); person-key carries the key icon; ? gap = ! gap; icons-inside-icons audit in `embedded.mjs`. Fifth round: person family on person's proportions with one lower-right badge bite, faces centred, cart wheels on the bar, ten fingerprint candidates in `explore/` awaiting a pick. Open: the outline's geometric overlap cut is 1.5×
+  the line above 24px.
 
 ## Icon quality pass (2026-10-03–04, branch `claude/icon-library-quality-pass-009345`)
 
