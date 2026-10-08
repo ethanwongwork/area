@@ -73,6 +73,18 @@
   .area-tabs--vertical .area-tabs__tab:active:not([data-disabled]):not([data-selected])::after {
     background-color: var(--area-fg-muted);
   }
+  /*
+   * Motion (docs/MOTION.md, "Hover plate", "Press", "Selected"; docs/specs/tabs.md, "Motion and
+   * interaction, 2026-10-07"). The base `--area-transition` on the tab and its indicator is the
+   * leave (fast, ease-out); hover, press and selection land at once, so a click moves the bar
+   * without a cross-fade lag. The focus ring is an outline and never transitions.
+   */
+  @media (hover: hover) {
+    .area-tabs__tab:hover,
+    .area-tabs__tab:hover::after { transition-duration: 0s; }
+  }
+  .area-tabs__tab:is(:active, [data-selected]),
+  .area-tabs__tab:is(:active, [data-selected])::after { transition-duration: 0s; }
   .area-tabs__label { display: inline-flex; align-items: center; white-space: nowrap; }
   .area-tabs--track .area-tabs__list { border-block-end: var(--area-border-width) solid var(--area-border-divider); }
   /* The vertical track sits on the indicator's side, the start, as horizontal tabs put both at the
@@ -174,10 +186,12 @@
     vertical-align: middle;
   }
 
-  /* The hover plate paints the cells, so the transition belongs on them. */
-  .area-table tbody td {
+  /* The hover plate paints the cells, so the transition belongs on them; selection paints the row.
+     Both land at once and fade out on fast (docs/MOTION.md, "Hover plate", "Selected"). */
+  .area-table tbody :is(tr, td) {
     transition: background-color var(--area-duration-fast) var(--area-ease-out);
   }
+  @media (hover: hover) { .area-table--interactive tbody tr:hover td { transition-duration: 0s; } }
 
   /* Row plates follow Menu and Nav: hover is the component hover fill, selection the active fill. */
   @media (hover: hover) {
@@ -217,7 +231,7 @@
   .area-table--lg { --_cell-inset: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)); }
   .area-table--striped tbody tr:nth-child(even) { background: var(--area-bg-stripe); }
   .area-table--column-dividers :is(th, td):not(:last-child) { border-inline-end: var(--area-border-width) solid var(--area-border-divider); }
-  .area-table tbody tr:is([data-selected], [aria-selected="true"]) { background: var(--area-bg-component-active); }
+  .area-table tbody tr:is([data-selected], [aria-selected="true"]) { background: var(--area-bg-component-active); transition-duration: 0s; }
   .area-table caption { padding: var(--area-space-12); text-align: start; color: var(--area-fg-muted); }
 
   /* --- Select ------------------------------------------------------------- */
@@ -263,7 +277,14 @@
     box-shadow: none;
     cursor: pointer;
     outline: none;
-    transition: var(--area-transition);
+    /* Motion (docs/MOTION.md, 2026-10-07; as Input): edge, fill and ink (--_t-paint) and the focus
+       halo (--_t-halo) fade out on fast; hover, focus, tones and disabled set 0s so they land at once
+       (the halo used to fade in over 100ms, lagging the keyboard). */
+    --_t-paint: var(--area-duration-fast);
+    --_t-halo: var(--area-duration-fast);
+    transition-property: background-color, border-color, color, box-shadow;
+    transition-duration: var(--_t-paint), var(--_t-paint), var(--_t-paint), var(--_t-halo);
+    transition-timing-function: var(--area-ease-out);
 
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23888' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M4.5 6.5L8 10l3.5-3.5'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
@@ -284,9 +305,11 @@
   }
 
   .area-select--full-width { inline-size: 100%; }
-  @media (hover: hover) { .area-select:hover:not(:disabled):not(:focus) { border-color: var(--_border-hover); } }
+  @media (hover: hover) { .area-select:hover:not(:disabled):not(:focus) { --_t-paint: 0s; border-color: var(--_border-hover); } }
 
   .area-select:focus {
+    --_t-paint: 0s;
+    --_t-halo: 0s;
     border-color: var(--_border-focus);
     box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
     outline: var(--area-field-focus-outline-width) solid var(--_focus-outline);
@@ -318,6 +341,9 @@
     --_focus-halo: var(--area-select-warning-halo-color);
   }
 
+  /* A tone or disabled paint lands at once; clearing it fades on fast (as Input). */
+  .area-select:is([data-invalid], [aria-invalid="true"], [data-success], [data-warning], :disabled) { --_t-paint: 0s; }
+
   /* An empty-value option chosen is a placeholder: placeholder ink, as Input's (audit B-19). */
   .area-select:has(option:checked[value=""]) { color: var(--area-input-placeholder); }
 
@@ -338,7 +364,8 @@
   @supports (appearance: base-select) {
     .area-select, .area-select::picker(select) { appearance: base-select; }
     /* The chevron and the check are the Area glyphs (chevron-down, check: the paths in glyphs.ts
-       at the default 1.125 icon weight) in the field's icon ink, as Combobox draws them; the #888
+       at the default 1.125 icon weight); the chevron in the field's chevron ink (`input-chevron`,
+       custom-select.md Q5, owner 2026-10-08), as Combobox and Custom select draw it; the #888
        data URI above stays only for the native picker (audit B-3 B, owner 2026-09-30). */
     .area-select { position: relative; background-image: none; }
     .area-select::picker-icon {
@@ -349,7 +376,7 @@
       inline-size: var(--_icon);
       block-size: var(--_icon);
       margin-block: auto;
-      background-color: var(--area-input-icon);
+      background-color: var(--area-input-chevron);
       -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='black' stroke-width='1.125' stroke-linecap='round' stroke-linejoin='round' d='M3.5 5.5L8 10L12.5 5.5'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
       mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='black' stroke-width='1.125' stroke-linecap='round' stroke-linejoin='round' d='M3.5 5.5L8 10L12.5 5.5'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
     }
@@ -378,6 +405,26 @@
       font-family: var(--area-font-sans);
       font-size: var(--area-ui-size);
       line-height: var(--area-ui-leading);
+      /* Motion (docs/MOTION.md, "select list", as Popover and Menu): opacity and scale from 0.97 at
+         the trigger's corner, base ease-out in and fast out; it rests at opacity 1, scale 1. The
+         transition takes the clock of the state it goes to, so the closed rule carries the exit. */
+      transform-origin: top left;
+      opacity: 0;
+      scale: 0.97; /* spec: docs/MOTION.md overlay scale */
+      transition:
+        opacity var(--area-duration-fast) var(--area-ease-out),
+        scale var(--area-duration-fast) var(--area-ease-out),
+        overlay var(--area-duration-fast) allow-discrete,
+        display var(--area-duration-fast) allow-discrete;
+    }
+    .area-select:dir(rtl)::picker(select) { transform-origin: top right; }
+    .area-select:open::picker(select) {
+      opacity: 1;
+      scale: 1;
+      transition-duration: var(--area-duration-base);
+    }
+    @starting-style {
+      .area-select:open::picker(select) { opacity: 0; scale: 0.97; }
     }
     /* Options are Menu rows, the one list model (audit B-4): 32 at every trigger size, text on
        the inset contract (32 less a cap, halved: 11), the check's edge 8 from the end, 12 between
@@ -401,11 +448,18 @@
       background: transparent;
       color: var(--area-fg-default);
       cursor: pointer;
+      /* As Menu rows: the plate lands at once and fades out on fast as the pointer leaves; keyboard
+         movement is instant both ways, so no row trails a fade behind the arrow keys. */
+      transition: background-color var(--area-duration-fast) var(--area-ease-out);
     }
+    @media (hover: hover) { .area-select option:hover { transition-duration: 0s; } }
+    .area-select option:is(:focus-visible, :active),
+    .area-select:has(option:focus-visible) option { transition-duration: 0s; }
     .area-select option:first-child { margin-block-start: 0; }
     @media (hover: hover) { .area-select option:hover { background: var(--area-bg-component-hover); } }
     .area-select option:focus-visible { background: var(--area-bg-component-hover); }
-    .area-select option:checked { background: var(--area-bg-component-active); }
+    /* The chosen option shows the check alone (::checkmark), as Notion's and ChatGPT's lists; the
+       plate only means highlight (custom-select.md Q3, owner 2026-10-08; was the active plate). */
     /* Keyboard focus is the plate alone, as in Menu and Combobox rows (audit B-5). */
     .area-select option:disabled { color: var(--area-fg-disabled); cursor: not-allowed; }
     .area-select option::checkmark {

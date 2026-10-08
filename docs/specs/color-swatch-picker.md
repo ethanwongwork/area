@@ -147,6 +147,24 @@ Compared the Area captures (`color-swatch-picker/area--*`) with
 `color-picker/figma--swatches`. Build and test results are in the
 [cohesion audit](../research/cohesion-audit.md#verification).
 
+## Motion and interaction, 2026-10-07
+
+Per `docs/MOTION.md` (hover plate and selected colour: in at once, out on `fast`).
+
+| Interaction | Before | After |
+|---|---|---|
+| Cell hover plate | instant in and out | in at once, out on `fast` / `ease-out` (`background-color`) |
+| Selected ring (2px inset) and surface | instant in and out | in at once; the ring leaving a cell fades on `fast` / `ease-out` (also on arrow keys, one 100ms trail) |
+| Palette hover ring (1px white inset) | instant in and out | in at once, out on `fast` (the swatch's `box-shadow`, inherited by its colour layer) |
+| Palette selected rings | instant in and out | in at once, out on `fast`; the corner snaps square (radius never animates) |
+| Focus ring (outline) | instant | unchanged |
+| Disabled opacity | instant | unchanged |
+
+Verified on `color-swatch-picker.html`: a newly checked cell has `transition-duration: 0s` and no
+running animation; the cell it left runs `background-color` and `box-shadow` for 100ms. Open
+question: on keyboard arrowing, should the leaving ring also be instant (MOTION.md: keyboard-driven
+changes instant)? Recommendation: keep the 100ms fade; it is short enough not to lag.
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → no change; spec written → `color-swatch-picker/area--*`.
@@ -162,3 +180,4 @@ Compared the Area captures (`color-swatch-picker/area--*`) with
 - 2026-10-03 · radius audit D6 (owner) → the cell corner is the swatch's whole-pixel corner plus the inset: 20 → 6, 24 → 7, 28 → 8, 32 → 9 (was 6.4, 7.2, 8, 8.8) (`color.css`). `docs/research/radius-audit-2026-10-03.md`.
 - 2026-10-03 · roundness → cells are the swatch's shifted corner plus the inset (`color.css`). `docs/research/radius-audit-2026-10-03.md`, "Roundness".
 - 2026-10-03 · all even (owner) → cells are the even swatch corner plus 4: 6 / 8 / 8 / 8 (`color.css`).
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → hover plate and selection ring in at once, out on `fast` (`color.css`). See "Motion and interaction, 2026-10-07".

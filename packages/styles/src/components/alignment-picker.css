@@ -13,7 +13,10 @@
     /* spec: Figma's Layout-panel alignment grid is 88 x 56 (figma--auto-layout-alignment--rest). */
     --_aspect: 88 / 56;
     --_alignment-bg: var(--area-input-bg-soft);
-    --_alignment-edge: var(--area-border-decorative);
+    /* Owner 2026-10-08 (recommendation accepted): no edge in either theme, as Figma's inspector
+       controls and Area's soft NumberField (a transparent 1px edge, counted once in the 4 inset,
+       which forced colours still draw). Was border-decorative, invisible on the dark fill. */
+    --_alignment-edge: transparent;
     display: grid;
     grid-template: repeat(3, minmax(0, 1fr)) / repeat(3, minmax(0, 1fr));
     box-sizing: border-box;
@@ -25,13 +28,15 @@
     gap: 0;
     padding: calc(var(--area-space-4) - var(--area-stroke-width));
     border: var(--area-stroke-width) solid var(--_alignment-edge);
-    border-radius: var(--area-radius-control-md);
+    /* Owner 2026-10-08: the sm fields' corner (radius-control-sm, 6 at both densities), so the picker
+       matches the NumberFields beside it in a Panel row, as Figma's grid shares its fields' 5. */
+    border-radius: var(--area-radius-control-sm);
     background: var(--_alignment-bg);
   }
   .area-alignment-picker--soft {
     --_alignment-bg: var(--area-input-bg-soft);
   }
-  .area-alignment-picker--plain { --_alignment-bg: transparent; --_alignment-edge: transparent; }
+  .area-alignment-picker--plain { --_alignment-bg: transparent; }
   /* The selected bars are the Selection role's ink (DESIGN_SYSTEM.md, "Emphasis roles"). */
   .area-alignment-picker { --_selected-mark: var(--area-fg-selection); }
   .area-alignment-picker__cell {
@@ -41,9 +46,16 @@
     min-inline-size: 0;
     min-block-size: 0;
     /* Concentric with the picker, floored at radius-floor, 4 (radius audit 2026-10-03; all even 2026-10-03). */
-    border-radius: max(var(--area-radius-floor), calc(var(--area-radius-control-md) - var(--area-space-4)));
+    border-radius: max(var(--area-radius-floor), calc(var(--area-radius-control-sm) - var(--area-space-4)));
     cursor: pointer;
+    /* Motion (docs/MOTION.md): the hover plate appears at once and fades on fast ease-out, as every
+       other plate; was no transition. The glyph swaps at once (it is a preview, not a plate), and
+       the focus ring is an outline, never faded. */
+    transition: var(--area-transition);
+    transition-property: background-color;
   }
+  @media (hover: hover) { .area-alignment-picker__cell:hover { transition-duration: 0s; } }
+  .area-alignment-picker__cell:is(:active, :has(input:checked)) { transition-duration: 0s; }
   .area-alignment-picker__cell > input {
     position: absolute;
     inset: 0;
@@ -113,8 +125,12 @@
       background: var(--_mark);
     }
   }
+  /* Bar lengths on whole, even pixels so a centred bar sits exactly in the 16 box (MOTION.md,
+     crispness 5): 60 / 100 / 40% of 16 measured 9.6 / 16 / 6.4 and centred on 0.2px offsets;
+     now 10 / 16 / 6 (12 / 20 / 8 at a 20 icon). spec: Figma's 9.59 / 16 / 6.40. */
+  .area-alignment-picker__dot > i { --_line-width: round(nearest, calc(var(--area-icon-md) * 0.6), 2px); }
   .area-alignment-picker__dot > i:nth-child(2) { --_line-width: 100%; }
-  .area-alignment-picker__dot > i:nth-child(3) { --_line-width: 40%; }
+  .area-alignment-picker__dot > i:nth-child(3) { --_line-width: round(nearest, calc(var(--area-icon-md) * 0.4), 2px); }
   .area-alignment-picker__cell:nth-child(3n + 2) .area-alignment-picker__dot { align-items: center; }
   .area-alignment-picker__cell:nth-child(3n) .area-alignment-picker__dot { align-items: flex-end; }
   .area-alignment-picker__cell:has(input:focus-visible) {

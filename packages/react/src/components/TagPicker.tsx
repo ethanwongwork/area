@@ -173,6 +173,11 @@ export const TagPicker = forwardRef<HTMLInputElement, TagPickerProps>(function T
   };
 
   const activeId = open && active >= 0 ? `${id}-option-${active}` : undefined;
+  // While the list fades out it keeps the rows it last showed: closing clears the search, which
+  // would otherwise list every option during the exit (docs/MOTION.md).
+  const shownRows = useRef(rows);
+  if (open) shownRows.current = rows;
+  const listRows = open ? rows : shownRows.current;
   const label = rest["aria-label"];
   const tagSize = size === "lg" ? "md" : "sm";  // Tag 20, or 24 in the large field
   // Notion heads the list with what it does ("Select an option or create one"); `hint={null}` drops it.
@@ -205,8 +210,8 @@ export const TagPicker = forwardRef<HTMLInputElement, TagPickerProps>(function T
       aria-labelledby={typeof label === "string" ? undefined : rest["aria-labelledby"]}
       popover="manual" className="area-menu area-tag-picker__listbox" tabIndex={-1}>
       {hintText !== null ? <div className="area-menu__label area-tag-picker__hint" role="presentation">{hintText}</div> : null}
-      {rows.length === 0 ? <div className="area-tag-picker__empty" role="presentation">{emptyText}</div> : null}
-      {rows.map((row, index) => {
+      {listRows.length === 0 ? <div className="area-tag-picker__empty" role="presentation">{emptyText}</div> : null}
+      {listRows.map((row, index) => {
         const highlighted = index === active;
         if (row.kind === "create") {
           return <div key="__create" id={`${id}-option-${index}`} data-index={index} role="option" aria-selected={false}

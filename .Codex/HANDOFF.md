@@ -5,6 +5,69 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/docs/src/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Review decisions applied (2026-10-08, merged in the 2026-10-08 PR)
+
+- Approved (component-status.mjs): Accordion, Alignment picker, Custom select, Drawer, Tag. Changes
+  requested and applied, back in review: Confirm dialog (Default specimen is the neutral confirm, danger
+  a tone; soft/outline/ghost Buttons now weight 500 like solid), Date picker and the "black on black"
+  report (the review page's own unlayered button CSS, fixed there), Tag picker (× hover plate legibility:
+  Tag inks deepened to OKLCH L <= 0.49, contrast >= 4.5 under the plate; dark green/yellow calmed in Tag).
+- Recommendations applied: Alignment picker radius-control-sm and no edge; field chevrons inset 8
+  (`--_chevron-inset` in inset.css) and `--area-input-chevron` (stroke-control) ink; chosen rows in
+  Select / Combobox / Custom select show the check only.
+- Review page republished with only the unapproved families (`--unapproved`). Second round (same day):
+  Confirm dialog, Date picker and Tag picker approved too, so nothing is in review.
+
+## Component review page and archived docs (2026-10-07, merged in the 2026-10-08 PR)
+
+- Component review artifact (owner): https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG — every
+  gallery family at 100% (hydrated), Before (the build at 5bb91df, static, in a frame) / After / side
+  by side, light/dark, default/compact, the spec's dated changes, open questions and references, and
+  approve / needs changes / rethink with per-specimen flags. Decisions: ArtifactData collection
+  `components1` (doc id = family slug). Regenerate: `npm run build:docs`, then
+  `node apps/docs/scripts/component-review.mjs --before <old dist> --out <dir>` (page template
+  `apps/docs/src/component-review.html`), and republish to the same URL.
+- Docs site archived (owner): `DOCS_ARCHIVED` at the end of `apps/docs/scripts/build.mjs` turns every
+  non-gallery page into a redirect to the gallery; check-dogfood skips the Field page check while
+  archived. Set it to false to bring the docs back.
+
+## Motion and crispness pass (2026-10-07, merged in the 2026-10-08 PR)
+
+- Contract: `docs/MOTION.md` (tokens, per-interaction recipes, crispness rules, reduced motion);
+  research in `docs/research/motion-2026-10-07/` (packages and craft, design systems incl. ChatGPT /
+  Figma values, crispness and the pre-pass state). Tokens: `duration-moderate` (200), `ease-drawer`
+  (Vaul), softer `ease-in`; `ease-spring` deprecated and unused; reduced motion now wins over an
+  explicit `data-area-motion`.
+- "Pixelated": the gallery shrank specimens with transform `scale` (0.736 etc.); fit.ts now uses CSS
+  `zoom`. overlay.ts divides by `currentCSSZoom`, so anchored surfaces place correctly under zoom.
+- Eight agents applied the contract per component (instant hover/press/focus, `fast` fade out; one
+  chevron rule; anchored surfaces 150 in / 100 out from the trigger; Dialog 200/150; Drawer 250/200
+  ease-drawer; Toast enter/exit/reflow; Switch thumb by whole-pixel translate; Checkbox/Radio marks
+  1:1; Accordion and Code block height via interpolate-size; Progress by translate; whole-pixel
+  fixes in Dialog, Nav marker, Slider ticks, Indicator, Alignment picker bars). Each spec has
+  "Motion and interaction, 2026-10-07" with open questions. Not watched live: every check ran in
+  hidden tabs (computed styles, getAnimations, rects); hidden pages also never opened the Dialog or
+  Drawer demos, so open/close needs a look in a visible browser.
+
+## Review components, Chrome audit (2026-10-06–07, branch `claude/tag-picker-design-039723`, merged 2026-10-08)
+
+- Tag: owner asked for lighter tints, more vibrant ink → opaque OKLCH L 0.955 / C 0.035 tints under
+  `fg-*` inks (dark: vivid ink on 16%); × in the tag's ink, drawn at its 12 line (`Glyph size={12}`).
+- Disclosure renamed **Accordion** (owner): `Accordion` (stack, was DisclosureGroup) + `AccordionItem`
+  (was Disclosure); `area-accordion`, `area-accordion-item`, slug `accordion`, captures moved. Divided
+  hover is the chevron plate (only shadcn underlines; Google, Notion, Apple, Figma don't).
+- Gallery chrome: page links (Components, Review, Corner radius, Icons → gallery-icons.html, still the
+  old shell) are a sticky Panel section; the theme panel collapses from a ghost icon button that stays
+  in place (offsets in localStorage `area-gallery-rails`). check-dogfood exempts icon dots' `r:` styles.
+- Seven parallel Claude in Chrome audits (each spec's "Claude in Chrome audit, 2026-10-07"): fixes in
+  Drawer (16 insets, border once), Confirm dialog (footer gap 16), Date picker (Clear row at Menu's
+  inset), Custom select (no focus edge on a mouse open; 17 captures, pass-status entry), Accordion
+  (divided rows = half the line: sm 40, md 48). Open questions are in each spec. Blockers: the auto-mode
+  classifier refused JS reads on some third-party sites and any local capture relay; background tabs
+  can't copy captures out, so most numbers are computed reads, not capture files.
+- area-capture.js: baseline by the ascent's share of the content box (canvas rounds system-font
+  ascents; Notion text had read 0.67 low). Alignment picker test no longer expects removed sizes.
+
 ## Icon quality pass (2026-10-07, branch `claude/icon-quality-consistency-dade1f`)
 
 - clapperboard is Fluent's movies_and_tv (owner: "exactly like fluent"). Whole set reviewed again icon by

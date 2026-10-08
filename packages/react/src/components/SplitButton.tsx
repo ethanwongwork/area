@@ -109,8 +109,10 @@ export const SplitButton = /* @__PURE__ */ forwardRef<HTMLDivElement, SplitButto
         aria-label={iconOnly && typeof children === "string" ? children : actionProps?.["aria-label"]}>
         {iconOnly ? null : children}
       </Button>
+      {/* The icon-only trigger's chevron sits in a 12 box (split-button.css), so the glyph draws its
+          12 line rather than a 16 line shrunk by 0.75 (docs/MOTION.md, Crispness 4). */}
       <Button {...roving} ref={trigger} className="area-split-button__trigger" variant={variant} tone={tone} size={size} iconOnly
-        icon={<Glyph name="chevron-down" />} aria-label={menuLabel} aria-haspopup="menu" aria-expanded={open}
+        icon={<Glyph name="chevron-down" size={iconOnly ? 12 : 16} />} aria-label={menuLabel} aria-haspopup="menu" aria-expanded={open}
         aria-controls={menuId} disabled={disabled} popoverTarget={menuId} onKeyDown={onTriggerKeyDown} />
       <Menu ref={popup} id={menuId} popover="auto" aria-label={menuLabel}
         className="area-split-button__menu" onKeyDown={onMenuKeyDown}

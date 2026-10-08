@@ -193,6 +193,32 @@ gallery's Grouped and Icons tiles.
   4.5:1 text contrast.
 - Unverified: dark products, an accent Selection theme beside a product.
 
+## Motion and interaction, 2026-10-07
+
+Contract: `docs/MOTION.md`. Verified in the built-in browser on `/nav.html` and the gallery
+(computed transitions, `getAnimations()`, pseudo-element geometry at default and compact).
+
+| Interaction | Before | After |
+|---|---|---|
+| Item hover plate | `--area-transition` both ways (100 in, 100 out) | instant in, fast ease-out out |
+| Item press | eased 100 | instant (no press colour of its own; feedback is the hover plate) |
+| Current plate and ink | eased 100 in | instant in, fast out |
+| Row with actions (`__row`) hover / current plate | snapped both ways | instant in, fast ease-out out |
+| Marker (marker variant) | appeared and vanished with the pseudo-element | drawn on every marker row, painted on the current one: instant in, fast ease-out out |
+| Expandable chevron | snapped (`rotate` without transition) | `rotate` on fast ease-out, the one chevron rule |
+| Focus ring | outline, instant | unchanged |
+
+Crispness: the marker was `block-size: calc(1cap + 4px)` (≈13.94 at 14px) centred with
+`translate: 0 -50%`, so both ends fell on fractional pixels. It is now `round(nearest, 1cap + 4px,
+2px)` and centred by layout (`inset-block: 0; margin-block: auto`): measured 14 in a 32 row
+(offset 9) and 12 in a 24 compact row (offset 6), no translate.
+
+Selector fix: the collapsed rotation applied to any action with `aria-expanded`, which would have
+turned a menu trigger's icon (a ⋯ button with `aria-expanded="false"`) a quarter turn. It now
+skips `[aria-haspopup]`.
+
+Open questions: none.
+
 ## Verification
 
 Compared the ChatGPT, Notion and Figma row captures above with 10 Area captures
@@ -232,3 +258,4 @@ specificity, later wins) and as a row with actions (`nav.css:242` excludes it).
 - 2026-10-01 · owner: "the counts even on the default component look off from an inset equal padding view" → a plain Count has no plate, so its digits end on the row's glyph edge (8 default, 6 compact), mirroring the label's start; it was placed by its invisible box plus its 6px gutter (digits 17 from the end). A soft Count ends as far from the end as it sits from the top, as a Badge does. Row actions are concentric with the row plate (compact: 6 in a 6 row, was 4). Trailing Kbd and Badge rules read the mark roles, not literal 20/16. docs/research/compact-pass-2026-10-01.md.
 - 2026-10-02 · compact evidence audit → the row glyph edge holds at 8 at compact (was 6; Figma 8, VS Code 9) (R1) docs/research/compact-evidence-2026-10-02/README.md.
 - 2026-10-02 · compact evidence audit → rows and groups stack flush at compact (`ui-row-gap` 2 / 0; R7) docs/research/compact-evidence-2026-10-02/README.md.
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → hover, current and row plates land at once and fade out on fast; marker fades out and rests on whole pixels (14 / 12, layout-centred); expandable chevron turns on fast; menu triggers no longer rotate.

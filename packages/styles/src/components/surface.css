@@ -423,7 +423,9 @@
  /* Hover steps the edge to the control edge's hover, as Fluent's outline card and Radix's
      surface card do; the fill, lift and ink stay (ChatGPT's and Figma's cards keep their paint
      too). At rest a linked card looks like any other. */
-  @media (hover: hover) { .area-card:has(.area-card__link):hover { border-color: var(--area-edge-control-hover); } }
+  /* Motion (docs/MOTION.md, "Hover plate"; motion pass 2026-10-07): the edge steps at once and
+     eases back on `fast` (--area-transition) when the pointer leaves. */
+  @media (hover: hover) { .area-card:has(.area-card__link):hover { border-color: var(--area-edge-control-hover); transition-duration: 0s; } }
   .area-card__link {
     color: inherit;
     text-decoration: none;
@@ -791,34 +793,55 @@
     background: transparent;
     overflow: visible;
   }
+  /*
+   * Whole-pixel centring (MOTION.md, Crispness 1; motion pass 2026-10-07). `margin: auto` centres
+   * on a half pixel whenever the room left over is odd: a Confirm dialog measured 141.86 tall (its
+   * title's cap trim) and landed at 334.5 × 328.07. The room is made even (the viewport rounded
+   * down to 2px) and the modal's box even (its content rounded up to 2px, the extra under 2px and
+   * transparent), so the centre is a whole pixel; the surface rounds its own height up to 1px.
+   * Without calc-size() support the box stays fit-content, as before.
+   */
+  .area-dialog__modal {
+    inset-inline-end: calc(100% - round(down, 100%, 2px));
+    inset-block-end: calc(100% - round(down, 100%, 2px));
+    inline-size: calc-size(fit-content, round(up, size, 2px));
+    block-size: calc-size(fit-content, round(up, size, 2px));
+  }
+  .area-dialog__modal > .area-dialog { block-size: calc-size(auto, round(up, size, 1px)); }
   /* spec: a light scrim (ChatGPT 13% black, shadcn 10%); the lift separates the surface. */
   .area-dialog__modal::backdrop { background: var(--area-scrim); }
   /*
-   * Enter and exit (audit E-19 A, owner 2026-09-30): the anchored surfaces' 150ms fade and 0.97
-   * scale, with the scrim fading alongside. The durations are motion-axis tokens, so the "none"
-   * preset and prefers-reduced-motion make it instant (docs/specs/dialog.md).
+   * Enter and exit (audit E-19 A, owner 2026-09-30; motion pass 2026-10-07, docs/MOTION.md
+   * "Dialog"): a fade and a 0.97 scale from the centre, entering on `moderate` and leaving one
+   * step faster on `base`, both ease-out; the scrim fades on the same clocks. A transition takes
+   * the duration of the state it goes to, so the closed rules carry the exit clock. The durations
+   * are motion-axis tokens, so the "none" preset and prefers-reduced-motion make it instant.
    */
   .area-dialog__modal {
-    --_overlay-duration: var(--area-duration-base);
+    --_overlay-duration: var(--area-duration-moderate);
     --_overlay-scale: 0.97; /* spec: as the anchored overlays below */
     opacity: 1;
-    scale: 1;
+    scale: none; /* rest without a transform, so layout snaps the surface to whole pixels (MOTION.md, Crispness 2); interpolates as 1 */
     transition:
       opacity var(--_overlay-duration) var(--area-ease-out),
       scale var(--_overlay-duration) var(--area-ease-out),
       overlay var(--_overlay-duration) allow-discrete,
       display var(--_overlay-duration) allow-discrete;
   }
-  .area-dialog__modal:not([open]) { opacity: 0; scale: var(--_overlay-scale); }
-  /* The backdrop names the motion tokens directly rather than the dialog's private properties. */
+  .area-dialog__modal:not([open]) { --_overlay-duration: var(--area-duration-base); opacity: 0; scale: var(--_overlay-scale); }
+  /* The backdrop names the motion tokens directly: ::backdrop inherits from its dialog only since
+     Chrome 122, so the dialog's private properties may not reach it. */
   .area-dialog__modal::backdrop {
     opacity: 1;
     transition:
-      opacity var(--area-duration-base) var(--area-ease-out),
-      overlay var(--area-duration-base) allow-discrete,
-      display var(--area-duration-base) allow-discrete;
+      opacity var(--area-duration-moderate) var(--area-ease-out),
+      overlay var(--area-duration-moderate) allow-discrete,
+      display var(--area-duration-moderate) allow-discrete;
   }
-  .area-dialog__modal:not([open])::backdrop { opacity: 0; }
+  .area-dialog__modal:not([open])::backdrop {
+    opacity: 0;
+    transition-duration: var(--area-duration-base);
+  }
   @starting-style {
     .area-dialog__modal[open] { opacity: 0; scale: var(--_overlay-scale); }
     .area-dialog__modal[open]::backdrop { opacity: 0; }
@@ -988,7 +1011,9 @@
   /* A popover that holds only a Calendar (a date field's picker) hugs the month grid rather than
      taking the reading width, as Notion's date picker does (owner 2026-09-28: "extends too big"). */
   .area-popover:has(> .area-calendar:only-child) { inline-size: max-content; }
-  /* Custom SVG geometry: a 32×14 shoulder that curves smoothly out of the edge.
+  /* Custom SVG geometry: a 32×14 shoulder that curves smoothly out of the edge. Its centre is
+   * rounded down to a whole pixel (round(), after a 50% fallback), so on an odd-width popover
+   * the arrow and its 1px edge do not land between pixels (docs/MOTION.md, Crispness 1).
    * Its open stroke omits the base; the fill overlaps the shell border by one stroke. */
   .area-popover__arrow {
     position: absolute;
@@ -1001,10 +1026,10 @@
     pointer-events: none;
   }
   .area-popover__arrow-edge { fill: none; stroke: var(--area-border-float); stroke-width: var(--area-border-width); vector-effect: non-scaling-stroke; }
-  :is(.area-popover--top:not([data-side]), .area-popover[data-side="top"]) > .area-popover__arrow { left: 50%; top: 100%; transform: translate(-50%, 0); }
-  :is(.area-popover--bottom:not([data-side]), .area-popover[data-side="bottom"]) > .area-popover__arrow { left: 50%; top: 0; transform: translate(-50%, 0) rotate(180deg); transform-origin: center top; }
-  :is(.area-popover--left:not([data-side]), .area-popover[data-side="left"]) > .area-popover__arrow { left: 100%; top: 50%; transform: translate(-50%, -50%) rotate(-90deg) translateY(50%); }
-  :is(.area-popover--right:not([data-side]), .area-popover[data-side="right"]) > .area-popover__arrow { right: 100%; top: 50%; transform: translate(50%, -50%) rotate(90deg) translateY(50%); }
+  :is(.area-popover--top:not([data-side]), .area-popover[data-side="top"]) > .area-popover__arrow { left: 50%; left: round(down, 50%, 1px); top: 100%; transform: translate(-50%, 0); }
+  :is(.area-popover--bottom:not([data-side]), .area-popover[data-side="bottom"]) > .area-popover__arrow { left: 50%; left: round(down, 50%, 1px); top: 0; transform: translate(-50%, 0) rotate(180deg); transform-origin: center top; }
+  :is(.area-popover--left:not([data-side]), .area-popover[data-side="left"]) > .area-popover__arrow { left: 100%; top: 50%; top: round(down, 50%, 1px); transform: translate(-50%, -50%) rotate(-90deg) translateY(50%); }
+  :is(.area-popover--right:not([data-side]), .area-popover[data-side="right"]) > .area-popover__arrow { right: 100%; top: 50%; top: round(down, 50%, 1px); transform: translate(50%, -50%) rotate(90deg) translateY(50%); }
   .area-popover--arrow { overflow: visible; }
   .area-popover__footer { display: flex; align-items: center; gap: var(--area-ui-cluster); }
   /*
@@ -1033,7 +1058,9 @@
   /* spec: the title's cap sits on the 12px inset like the sides, not 5px below it: the header
    * gives back the leading above the cap (the cap-height reference inset.css uses). */
   @supports (text-box: trim-both cap alphabetic) {
-    .area-popover > .area-popover__header:first-child { margin-block-start: calc((1cap - 1lh) / 2); }
+    /* Rounded to a whole pixel (MOTION.md, Crispness 1): the cap gives -5.03 at 14/20, which left
+       every popover a fraction of a pixel short of whole and its trigger gap at 7.98. */
+    .area-popover > .area-popover__header:first-child { margin-block-start: round(nearest, calc((1cap - 1lh) / 2), 1px); }
   }
   /*
    * spec (pass 3): with a close button the corner sets the header. The close box sits the same
@@ -1112,6 +1139,14 @@
     background-color: var(--area-bg-component-hover);
     outline: none;
   }
+  /*
+   * Motion (docs/MOTION.md, "Hover plate", "Selected"; motion pass 2026-10-07): the plate lands at
+   * once and fades out on `fast` (--area-transition) as the pointer leaves. Keyboard movement is
+   * instant both ways: while a row has keyboard focus no row trails a fade behind the arrow keys.
+   */
+  @media (hover: hover) { .area-menu__item:hover { transition-duration: 0s; } }
+  .area-menu__item:is([data-highlighted], [data-selected], :focus-visible, :active, [aria-expanded="true"]),
+  .area-menu:has(.area-menu__item:focus-visible) .area-menu__item { transition-duration: 0s; }
 
   .area-menu__item[data-disabled] {
     cursor: not-allowed;
@@ -1239,8 +1274,14 @@
     /* A state mark: the Selection role's ink (DESIGN_SYSTEM.md, "Emphasis roles"). */
     color: var(--area-fg-selection);
   }
-  .area-menu__check > svg { inline-size: 100%; block-size: 100%; }
-  .area-menu__item[aria-checked="false"] > .area-menu__check { visibility: hidden; }
+  /* The check is a small mark (docs/MOTION.md): it fades and grows from 0.6 on `fast` ease-out,
+     resting at scale 1; unchecked, it keeps its column. */
+  .area-menu__check > svg {
+    inline-size: 100%;
+    block-size: 100%;
+    transition: opacity var(--area-duration-fast) var(--area-ease-out), scale var(--area-duration-fast) var(--area-ease-out);
+  }
+  .area-menu__item[aria-checked="false"] > .area-menu__check > svg { opacity: 0; scale: 0.6; /* spec: MOTION.md small mark */ }
   .area-menu__shortcut + :is(.area-menu__check, .area-menu__toggle) { margin-inline-start: 0; }
   .area-menu__toggle {
     margin-inline-start: auto;
@@ -1337,6 +1378,7 @@
     --_tooltip-inset-inline-end: calc(var(--_tooltip-inset-block) + var(--area-space-2));
   }
 
+  /* The diamond's 50% centre is rounded down to a whole pixel, as Popover's arrow (MOTION.md, Crispness 1). */
   .area-tooltip--arrow::after {
     content: "";
     position: absolute;
@@ -1348,10 +1390,10 @@
     z-index: 0;
     pointer-events: none;
   }
-  :is(.area-tooltip--top:not([data-side]), .area-tooltip[data-side="top"])::after { inset-inline-start: calc(50% - var(--area-space-8) / 2); inset-block-end: calc(var(--area-space-8) / -2); border-bottom-right-radius: var(--area-space-2); }
-  :is(.area-tooltip--right:not([data-side]), .area-tooltip[data-side="right"])::after { inset-inline-start: calc(var(--area-space-8) / -2); inset-block-start: calc(50% - var(--area-space-8) / 2); border-bottom-left-radius: var(--area-space-2); }
-  :is(.area-tooltip--bottom:not([data-side]), .area-tooltip[data-side="bottom"])::after { inset-inline-start: calc(50% - var(--area-space-8) / 2); inset-block-start: calc(var(--area-space-8) / -2); border-top-left-radius: var(--area-space-2); }
-  :is(.area-tooltip--left:not([data-side]), .area-tooltip[data-side="left"])::after { inset-inline-end: calc(var(--area-space-8) / -2); inset-block-start: calc(50% - var(--area-space-8) / 2); border-top-right-radius: var(--area-space-2); }
+  :is(.area-tooltip--top:not([data-side]), .area-tooltip[data-side="top"])::after { inset-inline-start: calc(50% - var(--area-space-8) / 2); inset-inline-start: calc(round(down, 50%, 1px) - var(--area-space-8) / 2); inset-block-end: calc(var(--area-space-8) / -2); border-bottom-right-radius: var(--area-space-2); }
+  :is(.area-tooltip--right:not([data-side]), .area-tooltip[data-side="right"])::after { inset-inline-start: calc(var(--area-space-8) / -2); inset-block-start: calc(50% - var(--area-space-8) / 2); inset-block-start: calc(round(down, 50%, 1px) - var(--area-space-8) / 2); border-bottom-left-radius: var(--area-space-2); }
+  :is(.area-tooltip--bottom:not([data-side]), .area-tooltip[data-side="bottom"])::after { inset-inline-start: calc(50% - var(--area-space-8) / 2); inset-inline-start: calc(round(down, 50%, 1px) - var(--area-space-8) / 2); inset-block-start: calc(var(--area-space-8) / -2); border-top-left-radius: var(--area-space-2); }
+  :is(.area-tooltip--left:not([data-side]), .area-tooltip[data-side="left"])::after { inset-inline-end: calc(var(--area-space-8) / -2); inset-block-start: calc(50% - var(--area-space-8) / 2); inset-block-start: calc(round(down, 50%, 1px) - var(--area-space-8) / 2); border-top-right-radius: var(--area-space-2); }
   :is(.area-tooltip--right:not([data-side]), .area-tooltip[data-side="right"]):dir(rtl)::after { border-bottom-left-radius: 0; border-top-right-radius: var(--area-space-2); }
   :is(.area-tooltip--left:not([data-side]), .area-tooltip[data-side="left"]):dir(rtl)::after { border-top-right-radius: 0; border-bottom-left-radius: var(--area-space-2); }
 
@@ -1381,6 +1423,29 @@
   .area-toaster[hidden] { display: none; }
   .area-toaster:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); border-radius: var(--area-radius-container); }
   .area-toaster__list { display: flex; flex-direction: column; gap: var(--area-space-8); margin: 0; padding: 0; list-style: none; }
+  /*
+   * Motion (docs/MOTION.md, "Toast"; motion pass 2026-10-07). A toast enters from the toaster's
+   * edge, 16 below (the toaster's own offset from the viewport edge), fading in on `slow`
+   * ease-out; it leaves one step faster on `base`, fading 8 towards the edge (`data-leaving`,
+   * written by Toaster.tsx, which removes it when the fade ends). The others reflow on `base`
+   * ease-in-out: Toaster.tsx sets each moved item's previous offset, in whole pixels, as a
+   * translate and lets it ease home. Every toast rests at opacity 1 and no translate.
+   */
+  .area-toaster__list > li { transition: translate var(--area-duration-base) var(--area-ease-in-out); }
+  .area-toaster__list > li > .area-toast {
+    transition:
+      opacity var(--area-duration-slow) var(--area-ease-out),
+      translate var(--area-duration-slow) var(--area-ease-out);
+  }
+  @starting-style {
+    .area-toaster__list > li > .area-toast { opacity: 0; translate: 0 var(--area-space-16); /* spec: MOTION.md toast travel 8–16 */ }
+  }
+  .area-toaster__list > li[data-leaving] { pointer-events: none; }
+  .area-toaster__list > li[data-leaving] > .area-toast {
+    opacity: 0;
+    translate: 0 var(--area-space-8); /* spec: MOTION.md toast travel 8–16 */
+    transition-duration: var(--area-duration-base);
+  }
 
   .area-toast {
     display: flex;
@@ -1446,16 +1511,23 @@
    * placed by the React layer (`left`, `top`, `data-side`, `transform-origin`, the available
    * height). These rules undo the browser's centred popover box and add the motion.
    */
+  /*
+   * Motion (docs/MOTION.md, "Popover, menu ..."; motion pass 2026-10-07): enter on `base`, leave one
+   * step faster on `fast`, both ease-out, as opacity and a 0.97 scale from the trigger
+   * (`transform-origin` is written by overlay.ts). A transition takes the duration of the state
+   * it goes to, so the closed rule below carries the exit clock. Rests at opacity 1, no scale.
+   */
   :is(.area-popover, .area-menu, .area-tooltip)[popover] {
-    /* spec: 150ms fade and scale from 0.97 at the trigger (shadcn 150ms; Radix Themes 0.97). */
+    /* spec: fade and scale from 0.97 at the trigger (shadcn 150ms; Radix Themes 0.97). */
     --_overlay-duration: var(--area-duration-base);
+    --_overlay-exit: var(--area-duration-fast);
     --_overlay-scale: 0.97;
     position: fixed;
     inset: auto;
     margin: 0;
     overflow: visible;
     opacity: 1;
-    scale: 1;
+    scale: none; /* rest without a transform, so layout snaps the surface to whole pixels (MOTION.md, Crispness 2); interpolates as 1 */
     transition:
       opacity var(--_overlay-duration) var(--area-ease-out),
       scale var(--_overlay-duration) var(--area-ease-out),
@@ -1463,12 +1535,15 @@
       display var(--_overlay-duration) allow-discrete;
   }
   /* The surfaces set their own display, which would otherwise override the browser's hidden popover. */
-  :is(.area-popover, .area-menu, .area-tooltip)[popover]:not(:popover-open) { display: none; opacity: 0; scale: var(--_overlay-scale); }
+  :is(.area-popover, .area-menu, .area-tooltip)[popover]:not(:popover-open) { --_overlay-duration: var(--_overlay-exit); display: none; opacity: 0; scale: var(--_overlay-scale); }
   @starting-style {
     :is(.area-popover, .area-menu, .area-tooltip)[popover]:popover-open { opacity: 0; scale: var(--_overlay-scale); }
   }
-  /* A tooltip only fades, over 100ms (Primer's tooltip); growing from its trigger reads as a jump. */
-  .area-tooltip[popover] { --_overlay-scale: 1; --_overlay-duration: var(--area-duration-fast); }
+  /* A tooltip appears on `fast` after its open delay, from 0.97 at its trigger, and leaves at once,
+     so two neighbours never show together (docs/MOTION.md, Tooltip; Radix Themes leaves at once).
+     Inside the skip window (`data-instant`, a neighbour just closed) it appears at once as well. */
+  .area-tooltip[popover] { --_overlay-duration: var(--area-duration-fast); --_overlay-exit: var(--area-duration-instant); }
+  .area-tooltip[popover][data-instant] { --_overlay-duration: var(--area-duration-instant); }
   /* Tooltip draws no edge: without this the browser's popover border (3px, the ink colour) made
      every triggered tooltip 34 tall instead of 28 (found in the PR 32 audit S16 pass, 2026-09-30). */
   .area-tooltip[popover] { border: 0; }

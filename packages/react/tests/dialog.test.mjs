@@ -132,7 +132,7 @@ test("Combobox is a WAI list-autocomplete combobox over a Menu-styled listbox", 
   assert.match(html, /class="area-input__action-button" aria-label="Show suggestions"/);
   assert.match(html, /tabindex="-1"/i);
   assert.match(html, new RegExp(`<div id="${list}" role="listbox" aria-label="Font" popover="manual" class="area-menu area-combobox__listbox"`));
-  assert.match(html, /role="option" aria-selected="true" class="area-menu__item area-combobox__option" data-selected=""><span class="area-menu__text">Inter<\/span>/);
+  assert.match(html, /role="option" aria-selected="true" class="area-menu__item area-combobox__option"><span class="area-menu__text">Inter<\/span>/);
   assert.match(html, /role="group" aria-labelledby="[^"]+" class="area-combobox__group"><div id="[^"]+" class="area-menu__label" role="presentation">Recent<\/div>/);
 });
 

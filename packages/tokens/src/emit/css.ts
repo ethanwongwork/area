@@ -174,10 +174,12 @@ export function emitAxes(): string {
   out.push(rule(axisBearing, derivedTokens()));
 
   out.push("");
-  out.push(`${INDENT}/* Reduced motion resolves to the same tokens as the "none" preset. */`);
+  // The system preference wins over a page's or subtree's own motion setting (motion pass,
+  // 2026-10-07): it used to apply only where no data-area-motion was set.
+  out.push(`${INDENT}/* Reduced motion resolves to the same tokens as the "none" preset, wherever motion is set. */`);
   out.push(`${INDENT}@media (prefers-reduced-motion: reduce) {`);
   const none = AXES.find((a) => a.id === "motion")!.presets.find((p) => p.id === "none")!;
-  out.push(rule(":root:not([data-area-motion])", none.tokens, INDENT + INDENT));
+  out.push(rule(":root, [data-area-motion]", none.tokens, INDENT + INDENT));
   out.push(`${INDENT}}`);
   out.push("}");
   out.push("");

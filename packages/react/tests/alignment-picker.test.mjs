@@ -14,5 +14,6 @@ test("AlignmentPicker renders one named native radio choice at each physical pos
   assert.equal((html.match(/name="alignment"/g) ?? []).length, 9);
   assert.equal((html.match(/required=""/g) ?? []).length, 9);
   assert.match(html, /<input[^>]*aria-label="bottom right"[^>]*checked="" value="bottom-right"/);
-  assert.deepEqual(MANIFESTS.alignmentPicker.variants.size, ["sm", "md", "lg"]);
+  // Sizes were removed 2026-10-04: the grid fills its parent (docs/specs/alignment-picker.md).
+  assert.equal(MANIFESTS.alignmentPicker.variants.size, undefined);
 });

@@ -173,6 +173,30 @@ Line pitch (20) matches; the corner, header scale and code size are the recorded
 - The Geist Mono defect found while writing the first spec is fixed: in `area--default` the
   `code` node carries no font-family of its own, so it inherits the `pre`'s Geist Mono.
 
+## Motion and interaction, 2026-10-07
+
+Contract: `docs/MOTION.md`. Research: `docs/research/motion-2026-10-07/crispness-and-current-state.md`.
+
+
+| Interaction | Before | After |
+|---|---|---|
+| Show / hide code | snapped (`max-block-size` 8 lines ↔ none) | where `interpolate-size` is supported: `max-block-size` 8 lines ↔ `max-content`, open `duration-slow`, close `duration-moderate`, both `--area-ease-in-out` (MOTION.md accordion body recipe); elsewhere it snaps as before |
+| Copy feedback | the check glyph swapped in at once | the check enters as a small mark: `scale` 0.6 → 1 + opacity, `duration-fast` `--area-ease-out`, ending at identity; returning to the copy glyph stays instant |
+| Copy button, language tabs, select | Button's, Tabs' and Select's own rules | unchanged here |
+| Toggle hover | underline only (no colour), `--area-transition` | unchanged (an underline does not transition) |
+| Line link hover / focus | underline; outline ring | unchanged |
+
+A collapsible block clips only its vertical axis open (`overflow-y: hidden`, horizontal scrolling
+kept), so the growing block never shows a vertical scrollbar; `max-content` includes the
+horizontal scrollbar (checked with a 12px classic scrollbar: height = scroll height). Verified on
+`/code-block.html`: opening ran a 250ms `max-height` transition (234px at the midpoint, 184 → 284)
+and rested at 284 = scroll height; collapsed computes `max-block-size 0.2s`; the copied state starts
+`area-code-copied` (100ms) on the glyph.
+
+Open question: the toggle moves from overlay to footer at once while the code grows. Animating the
+fade overlay out would need a second property on the toggle; recommendation: leave it, the jump is
+hidden by the growing edge.
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → tabs, line numbers and the show / hide toggle keep their ink
@@ -206,3 +230,4 @@ Line pitch (20) matches; the corner, header scale and code size are the recorded
 - 2026-10-02 · corner 24 → 12 (compact 22 → 8): measured GitHub Docs 6, Vercel Geist 8, shadcn docs 18, ChatGPT 24; each is concentric with its own header controls, and Area's header action gives 11. Owner chose 12; reverses audit G-27 A. Compact also stepped only to 22 because the formula hard-coded Card's 8 + 8.
 - 2026-10-02 · chat code block measured (GitHub Copilot, light) → no change. Shell corner 12 with a 1px #d1d9e0 edge on a #fcfdfd ground; header 41 tall (padding 16 / 16 / 4 / 24), 16px code octicon 8 before a 14/21 600 filename, expand icon 16 in a 28 box ending 16 from the end; code 14/20.3 Monaspace Neon, 24 sides, 12 top, no line numbers. Corner matches Area's default 12; Copilot's 24 sides are looser than Area's 12 (owner prior, Area tokens). Copilot runs at 14px default density, so it is evidence for the default block, not for compact (still Figma Dev Mode 8 / 5). `github-copilot--chat-code-block--rest--light`.
 - 2026-10-03 · radius audit D1 (owner) → the container role is 12 at compact too (was 8; Figma 13, Cursor 12-14), so this family's surface is 12 at both densities; rows concentric with a floating surface follow (compact 24 rows r8). `docs/research/radius-audit-2026-10-03.md`.
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → show and hide code animate their height (slow open, moderate close, ease-in-out, progressive enhancement); the copy check enters as a small mark → code.css. See "Motion and interaction, 2026-10-07".

@@ -83,10 +83,13 @@
       const range = document.createRange(); range.selectNodeContents(node);
       for (const r of range.getClientRects()) {
         if (!r.width) continue;
-        const baseline = r.top + f.ascent;
+        // Canvas rounds the font box (SF 14px reports ascent 14 for about 13.3), so place the baseline
+        // by the ascent's share of the rendered content box instead (tag audit, 2026-10-07).
+        const share = f.ascent + f.descent ? r.height / (f.ascent + f.descent) : 1;
+        const baseline = r.top + f.ascent * share;
         lines.push({ left: round(r.left - origin.left), right: round(r.right - origin.left),
           baseline: round(baseline - origin.top), capTop: round(baseline - f.cap - origin.top),
-          xTop: round(baseline - f.x - origin.top), descent: round(baseline + f.descent - origin.top) });
+          xTop: round(baseline - f.x - origin.top), descent: round(baseline + f.descent * share - origin.top) });
       }
     }
     const content = nodes.map(n => n.textContent.trim()).join(' ');

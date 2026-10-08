@@ -153,7 +153,7 @@ shadcn, React Aria, Radix, Base UI, Fluent 2, Primer, Carbon, Mantine, MUI, Ant 
 Chakra/Ark, Spectrum 2) across about 95 component jobs. Status as of 2026-09-26; items
 built since are noted in brackets.
 
-- **Missing, shipped by 8 or more systems:** Combobox/Autocomplete (11) [built], Accordion (10) [built as Disclosure / DisclosureGroup, 2026-10-02, in review],
+- **Missing, shipped by 8 or more systems:** Combobox/Autocomplete (11) [built], Accordion (10) [built 2026-10-02 as Disclosure, renamed Accordion / AccordionItem 2026-10-07, in review],
   the date family (10; Calendar now built), Link (8), Pagination (8), Drawer/Sheet (8).
 - **Partial:** custom Select (all 13 ship a listbox popup; Area's is native), overlay
   behavior for Popover, Tooltip, Menu and Dialog [built 2026-09-27], DataGrid, multi-select/tags, Toast queue, range Slider in Slider's API [SliderRange built].

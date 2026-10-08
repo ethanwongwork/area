@@ -52,6 +52,11 @@
   .area-prompt-suggestions__item:focus-visible { background-color: var(--area-bg-component-hover); }
   /* Pressed takes the shared pressed plate, one step firmer (audit G-18). */
   .area-prompt-suggestions__item:active { background-color: var(--area-bg-component-active); }
+  /* Motion (docs/MOTION.md, "Hover plate", "Press", "Focus ring"; Button's rule): the plate arrives
+     at once and fades out over the base rule's duration-fast. Hover is read from the row, so the
+     dismiss keeps the row's plate on while the pointer is over it. */
+  @media (hover: hover) { .area-prompt-suggestions__row:hover > .area-prompt-suggestions__item { transition-duration: 0s; } }
+  .area-prompt-suggestions__item:is(:active, :focus-visible) { transition-duration: 0s; }
   .area-prompt-suggestions__item:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(var(--area-focus-width) * -1); }
   /* The icon sits in a control-sized square 8 in, so its centre lines up with the composer's
    * leading action above (both 24 from the edge). */
@@ -88,6 +93,10 @@
   .area-prompt-suggestions--chips > .area-prompt-suggestions__row { max-inline-size: 100%; }
   .area-prompt-suggestions--chips .area-button { max-inline-size: 100%; }
   .area-prompt-suggestions--chips .area-button__label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  /* Reveal-on-hover fades on the one shared timing (audit F-38). */
+  /* Reveal-on-hover (audit F-38) follows the hover recipe (docs/MOTION.md): the dismiss appears with
+     the row's plate, at once, and fades out over duration-fast, ease-out. Was a fade both ways,
+     which showed the plate 100ms before its dismiss. */
   .area-prompt-suggestions__dismiss { transition: opacity var(--area-duration-fast) var(--area-ease-out); }
+  .area-prompt-suggestions__row:focus-within > .area-prompt-suggestions__dismiss { transition-duration: 0s; }
+  @media (hover: hover) { .area-prompt-suggestions__row:hover > .area-prompt-suggestions__dismiss { transition-duration: 0s; } }
 }

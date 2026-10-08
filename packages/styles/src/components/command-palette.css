@@ -17,6 +17,42 @@
     overflow: visible;
   }
   .area-command-palette__modal::backdrop { background: var(--area-scrim); /* Dialog's scrim */ }
+  /*
+   * Enter and exit are Dialog's (docs/MOTION.md, "Dialog, command palette, confirm dialog"; motion
+   * 2026-10-07; it used to snap open and shut): the surface fades and scales from 0.97 about its
+   * centre, the scrim fades with it. Opening runs on the moderate clock, closing one step faster
+   * on base, both ease-out; the scrim leaves on the surface's clock so it is never cut off when
+   * the dialog leaves the top layer. Durations are motion tokens: the "none" preset and reduced
+   * motion make it instant, and reduced motion also drops the scale.
+   */
+  .area-command-palette__modal {
+    --_palette-from: 0.97; /* spec: Dialog's and the anchored overlays' scale */
+    opacity: 1;
+    scale: 1;
+    transition:
+      opacity var(--area-duration-moderate) var(--area-ease-out),
+      scale var(--area-duration-moderate) var(--area-ease-out),
+      overlay var(--area-duration-moderate) allow-discrete,
+      display var(--area-duration-moderate) allow-discrete;
+  }
+  .area-command-palette__modal:not([open]) {
+    opacity: 0;
+    scale: var(--_palette-from);
+    transition-duration: var(--area-duration-base);
+  }
+  .area-command-palette__modal::backdrop {
+    opacity: 1;
+    transition:
+      opacity var(--area-duration-moderate) var(--area-ease-out),
+      overlay var(--area-duration-moderate) allow-discrete,
+      display var(--area-duration-moderate) allow-discrete;
+  }
+  .area-command-palette__modal:not([open])::backdrop { opacity: 0; transition-duration: var(--area-duration-base); }
+  @starting-style {
+    .area-command-palette__modal[open] { opacity: 0; scale: var(--_palette-from); }
+    .area-command-palette__modal[open]::backdrop { opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { .area-command-palette__modal { --_palette-from: 1; } }
 
   .area-command-palette {
     /* spec (list pass, 2026-09-26): Menu's list model — 4 inset, 32 rows 2 apart, radius 8 — so the
@@ -145,7 +181,9 @@
     cursor: pointer;
     transition: background-color var(--area-duration-fast) var(--area-ease-out);
   }
-  @media (hover: hover) { .area-command-palette__hint-button:hover:not(:disabled) { background-color: var(--area-bg-component-hover); } } /* the known palette ground takes the opaque row plate (audit D-25) */
+  @media (hover: hover) { .area-command-palette__hint-button:hover:not(:disabled) { background-color: var(--area-bg-component-hover); transition-duration: 0s; } } /* the known palette ground takes the opaque row plate (audit D-25) */
+  /* docs/MOTION.md: the plate appears at once on hover and press, and fades out on the fast clock. */
+  .area-command-palette__hint-button:active:not(:disabled) { transition-duration: 0s; }
   /* DESIGN_SYSTEM: disabled controls dim to 50% as a whole (Button's value). */
   .area-command-palette__hint-button:disabled { cursor: not-allowed; opacity: var(--area-opacity-disabled); }
   /* The Move hint holds two plates; they touch. Its label names both, so it sits outside them,

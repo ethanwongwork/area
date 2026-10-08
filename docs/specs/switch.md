@@ -119,9 +119,9 @@ Captures: `area--sizesm`, `area--sizemd`, `area--sizelg`, `area--long`, `area--d
 | State | Changes | Evidence |
 |---|---|---|
 | hover | off `edge-control-hover` #d4, edge the same (switch.css:94); on `selection-solid-hover`; ink fixed | `area--hover` |
-| pressed | thumb +2px wide | `area--active` |
+| pressed | thumb +2px wide, on the thumb's clock (`base` ease-in-out) | `area--active` |
 | focus-visible | 2px `focus-color` outline, 2px offset, on the track | `area--focus` (outline rgb(65, 45, 208)) |
-| checked | track and edge `--_on`; thumb moves 12px to the end | `area--checked` (thumb x 2 → 14) |
+| checked | track and edge `--_on`; thumb `translate` 12px to the end, track and thumb on `base` ease-in-out (Motion, 2026-10-07) | `area--checked` (thumb x 2 → 14) |
 | disabled | 50%, `not-allowed` cursor | `area--disabled`, `area--disabledchecked` |
 | read-only | full paint, default cursor, no hover | `area--readonly` (no opacity) |
 | loading | Spinner md after the track; changes blocked; `aria-busy`; `progress` cursor | `area--loading` |
@@ -131,7 +131,7 @@ Captures: `area--sizesm`, `area--sizemd`, `area--sizelg`, `area--long`, `area--d
 Native checkbox with `role="switch"` covering the label; controlled or uncontrolled with form
 reset (Switch.tsx:44-57); `onCheckedChange(checked, event)` passes the change event (Switch.tsx:12). Read-only and loading block changes in `onChange`/`onClick`;
 read-only sets `aria-readonly`. Thumb travel honours `data-area-motion="none"` and reduced
-motion (switch.css:112-113). Forced colours: Highlight/Canvas paint; only disabled greys (switch.css:115-125).
+motion through the duration tokens (Motion, 2026-10-07). Forced colours: Highlight/Canvas paint; only disabled greys (switch.css:115-125).
 Coarse pointers get a 44px minimum target (switch.css:114). Notion also keeps a native
 input (opacity 0) over the drawn track.
 
@@ -168,6 +168,42 @@ edge carries contrast). Owner: "lighten is better" → off track #e2 (was #d4), 
 captures. Build and test results are in the
 [cohesion audit](../research/cohesion-audit.md#verification).
 
+## Motion and interaction, 2026-10-07
+
+Contract: [`docs/MOTION.md`](../MOTION.md) (Switch thumb recipe).
+
+| Interaction | Before | After |
+|---|---|---|
+| thumb travel | `inset-inline-start` over `slow` (250) ease-out | `translate` over `base` (150) `ease-in-out`; the end offset is `round(nearest, track − 2 × inset − thumb, 1px)` (12 at every short size; 16 / 20 / 12 on long md / lg / sm); `:dir(rtl)` flips the sign |
+| track fill and edge on check | `background` over `fast` (100) ease-out; **the edge jumped** | `background-color` and `border-color` over `base` `ease-in-out`: the same clock as the thumb |
+| hover | track fill and edge swapped, eased over `fast` with the check | a hover layer (`.area-switch__track::before`, the hover colour over the border box) lands at once (`opacity` 0s) and fades out over `fast` ease-out; its colour follows a check on the thumb's clock. One background could not be at once on hover and on the thumb's clock on check |
+| press stretch (owner's, kept) | `inline-size` +2px over `fast` ease-out; the on-side offset via `inset-inline-start` | `inline-size` +2px on the thumb's clock (`base` ease-in-out); when on, the translate shortens by 2px so it grows toward the start |
+| focus-visible | outline on the track | unchanged (rings never fade) |
+| disabled, read-only, loading | no hover, no stretch | unchanged |
+| reduced motion | `transition: none` on the thumb (own `@media` and `data-area-motion="none"` rules) | the rules are removed: the duration tokens are zero wherever motion is set (`emit/css.ts`), which now also stops the track and hover layer |
+
+**Crispness.** The thumb rests on whole pixels: it is laid out once at the start inset and only
+`translate` moves it, by a rounded length. Mid-travel frames are fractional, as any motion is.
+The press stretch stays a layout width rather than `scale`: a 2px stretch of a 16px pill is
+`scale` 1.125, which ovals the pill ends and would hold a non-identity scale for as long as the
+pointer is down (MOTION.md "Crispness" 1). The thumb's `shadow-1` keeps its 0.5px offset
+(token, B12 in the crispness research).
+
+**Verified** (`/switch.html` and probes, Chromium, DPR 2): thumb start 2 / end gap 2 at sm, md,
+lg, short and long, on and off, RTL on and off; pressed md 18 wide, ends 2px from the far edge
+when on; `translate` computes `0px` / `12px`; the hover layer is `opacity 1` under `data-hover`
+and 0 when disabled, `#d4` off and `#1d` on; one click starts track `background-color`,
+the four `border-*-color`s, the layer's `background-color` and the thumb's `translate`, all
+150ms `cubic-bezier(0.65, 0, 0.35, 1)`. Not verified by eye (background tab), nor with a real
+pointer press.
+
+**Open questions.**
+1. The press stretch animates `inline-size`, which MOTION.md lists under "never". Recommendation:
+   keep it (2px, absolutely positioned, no sibling layout) and amend the recipe to allow the
+   stretch; the alternative is to drop the stretch.
+2. Hover adds a layer (`::before`) to the track. Recommendation: keep; the alternative is a
+   hover that fades in over `base` with the check.
+
 ## Feedback log
 
 - 2026-09-28 · owner approved batch 14 → Complete.
@@ -192,3 +228,4 @@ captures. Build and test results are in the
 - 2026-10-01 · owner (audit H-13): the `tone` axis is removed; `--area-switch-color` and `--area-switch-color-hover` set a custom on colour on any Switch (the `custom` tile keeps green 500 through the hook). The React `tone` prop is a deprecated no-op.
 - 2026-10-03 · one corner setting (owner: one radius setting, Sharp and Pill as ends; "every control is a pill") → a pill by default; `pill={false}` (`--rounded`) takes the setting's corner for the track's height, the thumb concentric (track − inset, floored) (`switch.css`, `Switch.tsx`). `docs/research/radius-audit-2026-10-03.md`, "One corner setting".
 - 2026-10-04 · pill shapes and list rows (owner) → the pill is the `switch` entry of data-area-pills (default on); `pill` three-way (`switch.css`). `docs/research/radius-audit-2026-10-03.md`, "Pill shapes and list rows".
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → thumb slides by a whole-pixel `translate` on `base` ease-in-out (was `inset-inline-start` over `slow`), track fill and edge on the same clock (the edge used to jump), hover through a layer that lands at once and fades over `fast`, press stretch kept on the same clock (`switch.css`; "Motion and interaction, 2026-10-07").

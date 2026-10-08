@@ -155,6 +155,28 @@ tiles and the Panel recipe at 2x.
 
 - Compact density: Figma's 24/11 fields and 5px radius belong to the compact axis.
 
+## Motion and interaction, 2026-10-07
+
+Per `docs/MOTION.md` (hover, focus, selected: in at once, out on `fast`; focus never fades in). The
+shell lists its transitioned properties explicitly (`background-color, border-color, color,
+box-shadow`) with two private clocks, `--_t-paint` for fill, edge and ink and `--_t-halo` for the
+focus halo, so a state can make paint instant while the halo still lets go softly.
+
+| Interaction | Before | After |
+|---|---|---|
+| Hover edge | `--area-transition`: border-color `fast` ease-out in and out | in at once (`--_t-paint: 0s` on `:hover`), out on `fast` / `ease-out` |
+| Focus edge | border-color `fast` ease-out in and out | in at once, out on `fast` / `ease-out` |
+| Focus halo (box-shadow) | faded in over `fast` (lagged the keyboard) | in at once (`--_t-halo: 0s`), out on `fast` / `ease-out`, also when the field is left while hovered |
+| Increased-contrast outline | never transitioned | unchanged: instant both ways |
+| Validation tone (invalid, success, warning) and disabled | edge faded in over `fast` | lands at once; clearing it while focused is instant (focus is 0s), clearing it at rest fades on `fast` |
+| Stepper plate (minus, plus) | no transition: instant in and out | hover and press in at once, out on `fast` / `ease-out`; a held press keeps the pressed plate; a stepper that hits its bound mid-press fades its plate out on `fast` |
+| Stepper press focusing the value | halo faded in | halo at once (focus rule) |
+| Scrub | cursor only, value follows the pointer | unchanged: direct manipulation is never eased |
+
+Crispness: shell, scrub square, steppers and their 16px glyph boxes measured on whole pixels on
+`number-field.html`. Open: the `add` / `subtract` glyphs centre ~1px strokes on integer
+coordinates and read as 2px grey bars at 1x (research B4, an icon-drawing change for the owner).
+
 ## Feedback log
 
 - 2026-09-26 · pass 1 ("do the next component, show me the images in chat"): Figma's handle
@@ -173,3 +195,4 @@ tiles and the Panel recipe at 2x.
 - 2026-10-03 · radius audit → steppers are concentric with the field, floored at the smallest control's corner (compact 20 r2 → r4, default 24 r4 → r5; `number-field.css:123`). `docs/research/radius-audit-2026-10-03.md`.
 - 2026-10-03 · all even (owner) → steppers floor at `radius-floor` 4 (`number-field.css:123`).
 - 2026-10-04 · pill shapes and list rows (owner) → `--area-pill-field` makes the field a pill, steppers concentric (`number-field.css`). `docs/research/radius-audit-2026-10-03.md`, "Pill shapes and list rows".
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → motion pass: hover and focus edge and the focus halo appear at once and fade out on `fast`; tones land at once; the stepper plates gain the same in-at-once, out-on-fast fade (`number-field.css`). See "Motion and interaction, 2026-10-07".

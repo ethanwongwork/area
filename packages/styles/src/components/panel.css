@@ -221,8 +221,9 @@
   }
   /* The glyph fits the inset (8 in a small panel, 12 at md), as Figma's 3 x 5 chevron fits its 16. */
   .area-panel__chevron svg { flex-shrink: 0; inline-size: min(var(--area-icon-sm), var(--_inset)); block-size: min(var(--area-icon-sm), var(--_inset)); max-inline-size: none; }
-  .area-panel__toggle:focus-visible .area-panel__chevron { opacity: 1; }
-  @media (hover: hover) { .area-panel__heading:hover .area-panel__chevron { opacity: 1; } }
+  /* Revealed at once on hover or focus, faded out on fast (MOTION.md, "Hover plate"). */
+  .area-panel__toggle:focus-visible .area-panel__chevron { opacity: 1; transition-duration: 0s; }
+  @media (hover: hover) { .area-panel__heading:hover .area-panel__chevron { opacity: 1; transition-duration: 0s; } }
   @media (hover: none) { .area-panel__chevron { opacity: 1; } }
   .area-panel__summary { display: flex; align-items: center; gap: var(--area-ui-cluster); flex-shrink: 0; color: var(--area-fg-muted); font-weight: var(--area-weight-regular); }
   /* The rows join the section's own column, so its 8px rhythm is unchanged when open. */
@@ -332,7 +333,9 @@
   .area-panel__resize:focus-visible::before {
     content: "";
     inline-size: 4px; /* spec: Figma 4 */
-    block-size: 50%; /* spec: Figma half the edge */
+    /* spec: Figma half the edge. Written as the edge less two whole-pixel quarters, so the pill
+       centres on whole pixels on an edge of either parity (MOTION.md, crispness 1). */
+    block-size: calc(100% - 2 * round(nearest, 25%, 1px));
     border-radius: var(--area-radius-full);
     background-color: var(--area-focus-color);
   }
@@ -360,8 +363,12 @@
 }
 
 @layer area.components {
-  /* A collapsed section's chevron points into the reading direction (audit F-34). */
-  .area-panel__chevron:dir(rtl) > svg { scale: -1 1; }
+  /* A collapsed section's chevron points into the reading direction (audit F-34). CSS turns it,
+     on fast ease-out, the one chevron rule (MOTION.md); the Glyph carries no rotate prop, whose SVG
+     transform used to snap. */
+  .area-panel__chevron svg { transition: rotate var(--area-duration-fast) var(--area-ease-out); }
+  .area-panel__toggle[aria-expanded="false"] .area-panel__chevron svg { rotate: -90deg; }
+  .area-panel__toggle[aria-expanded="false"] .area-panel__chevron:dir(rtl) svg { rotate: 90deg; }
   /* Reveal-on-hover fades on the one shared timing (audit F-38). */
   .area-panel__chevron { transition: opacity var(--area-duration-fast) var(--area-ease-out); }
 }

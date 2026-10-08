@@ -128,17 +128,26 @@
   .area-button--icon-only, .area-chip--swatch-only,
   .area-segmented__item:has(> .area-segmented__icon:only-child) { padding-inline: 0; }
 
+  /* A field's trailing chevron (Select, Custom select, Combobox's toggle) ends at the row's
+     side padding, the density's row inset (8), and centres in its square only where the field is
+     tall enough for that to be wider (lg). Owner 2026-10-08, custom-select.md Q4: references put
+     it 8-9 from the end at 28 and 32 (Notion 8-8.55, ChatGPT 9, shadcn 9); the centred square gave
+     6 at 28. `--_chevron-inset` is measured inside the border, so the glyph sits 8 from the edge. */
+  .area-select, .area-custom-select__trigger, .area-combobox > .area-input {
+    --_chevron-inset: max(
+      calc(var(--area-ui-row-inset) - var(--area-stroke-width)),
+      round(nearest, calc((var(--_height) - var(--_icon)) / 2 - var(--area-stroke-width)), 1px));
+  }
   /* Native select's background is positioned inside its padding box. */
   .area-select {
     --_box-end: var(--_icon);
-    --_chevron-inset: max(0px, round(nearest, calc((var(--_height) - var(--_icon)) / 2 - var(--area-stroke-width)), 1px));
     padding-inline-end: calc(var(--_chevron-inset) + var(--_icon) + var(--_gap));
     background-position: right var(--_chevron-inset) center;
   }
   .area-select:dir(rtl) { background-position: left var(--_chevron-inset) center; }
-  /* Custom select's chevron is an element: the end inset centres it in its square, as Select's;
+  /* Custom select's chevron is an element: the end inset is the chevron inset, as Select's;
      a leading option icon moves the start onto the icon's square. */
-  .area-custom-select__trigger { --_box-end: var(--_icon); }
+  .area-custom-select__trigger { --_inset-end: var(--_chevron-inset); }
   .area-custom-select__trigger:has(> .area-custom-select__icon:first-child) { --_box-start: var(--_icon); }
   /* Date picker: text at both ends, or its calendar glyph's square at the start. */
   .area-date-picker__trigger:has(> .area-date-picker__icon:first-child) { --_box-start: var(--_icon); }
@@ -153,6 +162,11 @@
    * icon slot; the outer Input reserves the action's larger box, keeping both inset layers
    * optically centered instead of letting a glyph touch its hit target. */
   .area-input:has(> .area-input__action:last-child) { --_box-end: var(--_action); }
+  /* Combobox's toggle is the field's chevron: its square action moves in so the glyph inside it
+     ends at the chevron inset, as Select's and Custom select's (the plate keeps its size). */
+  .area-combobox > .area-input:has(> .area-input__action:last-child) {
+    --_inset-end: max(0px, calc(var(--_chevron-inset) - (var(--_action) - var(--_icon)) / 2));
+  }
   .area-number-field:has(> .area-number-field__steppers:last-child) { --_box-end: var(--_step); }
   /* A shortcut in an Input's suffix is a nested backplate, placed like a Button's: the space
    * after it equals the space above and below it (Notion's search field ⌘K). */

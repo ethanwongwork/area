@@ -1,7 +1,8 @@
 # Confirm dialog spec
 
-**Status:** in review · 2026-10-05 (built; Review page batch "New components, batch 1")
-**Captures:** `docs/research/captures/confirm-dialog/area--confirm-dialog-danger--rest--light`. ChatGPT's
+**Status:** complete · 2026-10-08 (owner approved on the component review page after the requested changes)
+**Captures:** `docs/research/captures/confirm-dialog/area--confirm-dialog-danger--rest--light` (predates the
+2026-10-07 footer fix: 145.86 tall; now 141.9). ChatGPT's
 confirm was measured live (values below) but its file isn't saved: the first export was blocked
 (background tab, CSP), and reopening the delete confirm on 2026-10-06 was refused by the session's
 permission check as a possible deletion. Re-capturing it is the owner's call.
@@ -13,6 +14,17 @@ or solid action), Menu (the item that usually opens it)
 - 2026-10-04: batch 1 (owner pick): "a forced-choice confirm (delete chat / page)"; reuses Dialog, Button.
 - 2026-10-05: owner: "open the confirm and cancel" (ChatGPT's delete-chat confirm, opened from a
   chat's menu and cancelled; all chats still listed afterwards).
+- 2026-10-08 (review, "needs changes"):
+  - "the leave button text is black on a black button": the review page's own CSS repainted the
+    specimen's solid action ink; the lead fixed that page. The component was right (solid neutral
+    action, `fg-on-action` ink); no component change.
+  - "is the red delete chat a real button in the default? for default use a non semantic
+    negative button": the gallery's Default tile is now the neutral confirm ("Leave without
+    saving?", solid neutral action; `GalleryConfirmDialogNeutral`) and the red one moved to a
+    "Tone / danger" tile (`GalleryConfirmDialog`); Modal is "Behavior / modal". The lead made the
+    gallery change (`apps/docs/scripts/build.mjs`); the demo sources are unchanged.
+  - "go with your recs for open questions": no optional icon; one weight for both footer
+    buttons, applied in Button (label 500 on every variant; button.md, 2026-10-08).
 
 ## Job and boundaries
 
@@ -28,7 +40,7 @@ Toast (after the fact, with Undo when undo is possible: prefer that to a confirm
 | inset | 20 (form padding) | Dialog's 16 |
 | title | 20/28 600, #0d | Dialog's 16/24 strong |
 | description | 16/24 400, #8f, two lines, 4 below the title (gap 4) | Dialog's 14/20 muted, 4 apart |
-| footer | 12 above, end-aligned, 12 gap | Dialog's footer (end, `ui-cluster` gap) + 4 above |
+| footer | 12 above, end-aligned, 12 gap | Dialog's footer (end, `ui-cluster` gap), 16 above (was 20 until 2026-10-07) |
 | Cancel | pill, 31 tall (6 16 padding, 18 line), #f3 fill, 0.56px 10% edge | Button soft neutral md (32) |
 | action | pill, 31 tall, red 10% tint, rgb(224,46,42) ink | Button soft danger md |
 | close | none visible | none |
@@ -42,7 +54,8 @@ Toast (after the fact, with Undo when undo is possible: prefer that to a confirm
 | surface, insets, type | Dialog's | Peer: Dialog (accepted; its spec already weighed ChatGPT's 20/28 title) | ChatGPT 20 inset, 20/28 title, 16/24 text |
 | buttons | Button soft neutral Cancel; soft danger action (`tone="danger"`), solid neutral otherwise | ChatGPT (grey Cancel, red-tinted action) | Pills follow the theme's Pills setting |
 | close control | none; Escape, Cancel and the scrim cancel | ChatGPT | — |
-| initial focus | Cancel | WAI alertdialog (least destructive) | — |
+| initial focus | Cancel | WAI alertdialog (least destructive); Radix, Primer measured | — |
+| footer gap above | Dialog's section gap, 16 (12 compact) | shadcn, Radix Themes, Base UI, Atlassian 16 (audit 2026-10-07) | ChatGPT 12; was 20 (an extra 4 that matched no reference) |
 
 ## Behavior and accessibility
 
@@ -56,7 +69,68 @@ surface in place for documentation.
 
 Builds, parity, typecheck, Dialog and audit tests pass. Browser: the modal opens as `alertdialog`
 with focus on Cancel; the action spins and closes after its promise; Escape cancels; the inline
-surface is 420 wide. Unverified: dark, compact, screen reader.
+surface is 420 wide. 2026-10-07: dark and compact read in the browser (Visual pass); modal
+scrim 13.3%, `alertdialog` named and described, focus on Cancel. Unverified: screen reader.
+
+## Visual pass
+
+### Claude in Chrome audit, 2026-10-07
+
+Computed styles read live with a measuring snippet (the capture script could not be injected on
+third-party pages, and the tab ran hidden, so no files were exported; values below are the
+readings). shadcn values divided by its 0.95 open-scale, which never finished in the hidden tab.
+Owner products: not reopened (safety rule: no destructive confirms in the owner's accounts); the
+2026-10-05 ChatGPT reading above stands.
+
+Sources: shadcn Alert Dialog, Base UI variant (ui.shadcn.com/docs/components/base/alert-dialog;
+Basic and Destructive demos; light, and dark via the `dark` class) · Radix Themes Alert Dialog
+(radix-ui.com/themes/docs/components/alert-dialog, "Revoke access", light) · Base UI Alert Dialog
+(base-ui.com/react/components/alert-dialog, "Discard draft", light) · Primer ConfirmationDialog
+(primer.style/react/storybook, components-confirmationdialog--default, light) · Fluent 2 Dialog
+alert (storybooks.fluentui.dev/react, components-dialog--alert, light) · Atlassian Modal dialog,
+Danger (atlassian.design/components/modal-dialog/examples, light) · React Spectrum v3
+AlertDialog, destructive (react-spectrum.adobe.com/v3/AlertDialog.html, light) · Area
+(localhost:4377/confirm-dialog.html, light, dark, compact; modal opened from its demo trigger).
+Not measured: Material 3 (material-web.dev demos are in iframes that didn't load; m3.material.io
+is images), Apple HIG (images), Notion and Figma confirms (destructive; not opened).
+
+| Property | Area | ChatGPT | shadcn | Radix Th. | Base UI | Primer | Fluent 2 | Atlassian | Spectrum |
+|---|---|---|---|---|---|---|---|---|---|
+| width | 420 | 420 | 384 (sm 320) | 450 (demo) | 384 | 320 | 600 | 600 | 480 |
+| inset | 16 | 20 | 16 | 24 | 16 (+1 edge) | 16 | 24 | 24 | 40 |
+| radius | 16 | 24 | 14 | 12 | 0 (demo theme) | 12 | 8 | 12 | 4 |
+| title | 16/24 500 | 20/28 600 | 16/24 500 | 20/26 700 | 16/24 700 | 14/21 600 | 20/28 600 | 20/24 653 | 18/23.4 700 |
+| description ink | muted #666 | muted #8f | muted | default | muted | default, 16/24 | default | default | default |
+| description → buttons | 20 → **16** | 12 | 16 (+ footer band) | 16 | 16 | 32 (two paddings) | ~6 | 16 | 36 |
+| button height | 32 | 31 | 32 | 32 | 32 | 32 | 32 | 32 | 32 |
+| button gap | 8 | 12 | 8 | 12 | 12 | 8 | 8 | 8 | 16 |
+| order | Cancel, action | Cancel, action | Cancel, action | Cancel, action | Cancel, action | Cancel, action | action, Close | Cancel, action | Cancel, action |
+| danger action | soft (red tint, red ink) | soft (red 10%, red ink) | soft (red 10%, red ink; dark 20%) | solid red | white, red ink | grey fill, red ink | — | solid red | red outline |
+| close × | none | none | none | none | none | yes (32) | none | yes (32) | none |
+| icon | none | none | optional 40 media (destructive demo) | none | none | none | none | danger icon before title | none |
+| initial focus | Cancel | — | not read (hidden tab) | Cancel | not read | Cancel | primary | close × | not read |
+| scrim | 13.3% black (Dialog) | 13.3% | 10% + 4px blur (dark too) | 40% | — | grey 40% | 40% | — | — |
+
+Findings:
+
+1. **Footer sat 20 below the description** (Dialog's 16 gap + an extra 4). Four references put
+   it at 16, ChatGPT at 12; 20 matched none and split the confirm from its Dialog peer. Fixed.
+2. Width, title, muted description, Cancel-then-action order, 32 buttons, 8 gap, no close, Cancel
+   focus and the soft danger action all fall inside the reference spread and agree with ChatGPT;
+   unchanged. Soft danger matches ChatGPT and shadcn's destructive demo exactly (10% red tint, red
+   ink); Radix and Atlassian go solid.
+3. Cross-family, fixed in Button 2026-10-08 (owner): soft Cancel and soft danger render 14/400
+   while the solid action renders 14/500, so the neutral confirm ("Leave") reads heavier than the
+   danger one. Every reference sets both buttons alike (shadcn, Radix, Primer, Atlassian 500).
+4. Dark (Area): surface #1d1d1d, edge #4b4b4b, description #c5c5c5, Cancel #282828, danger
+   action rgb(130 0 34) fill with rgb(255 201 203) ink. shadcn dark keeps a 20% red tint on its
+   near-black surface. No ChatGPT dark confirm reading exists. Area's dark danger fill is
+   Button's; noted for the Button pass.
+5. Compact (Area): 12 section gap, 28 buttons, 12/16 description, title held at 16/24 (Dialog's
+   decision); after the fix the footer is 12 below the description.
+
+Changed: `confirm-dialog.css` drops the footer's extra `margin-block-start` (20 → 16; compact
+16 → 12). Questions 2 and 3 settled 2026-10-08 (below).
 
 ## Settled questions
 
@@ -65,10 +139,45 @@ surface is 420 wide. Unverified: dark, compact, screen reader.
    shortcuts dialog titles at 16/24 600, shadcn's Dialog at 16 (500) with 16 insets, Primer 16, and
    Figma's Share dialog 16 sides (dialog.md, Measurements and Decisions). ChatGPT's 20/28 title and 20
    inset on its delete confirm are the outlier.
+2. **No optional icon** (owner 2026-10-08, "go with your recs"). shadcn shows a 40px media square
+   on its destructive demo and Atlassian a danger icon before the title; ChatGPT, Radix, Base UI,
+   Primer and Fluent show none, and the red action already carries the tone. ConfirmDialog has no
+   icon slot.
+3. **One weight for both footer buttons** (owner 2026-10-08, "go with your recs"). Applied in
+   Button, not here: every Button variant's label is 500 (`button.css`, base `--_weight`), so the
+   soft Cancel, the soft danger action and the solid neutral action all render 14/500, as shadcn,
+   Radix, Primer and Atlassian do.
+
+## Motion and interaction, 2026-10-07
+
+Contract: `docs/MOTION.md`, "Dialog, command palette, confirm dialog". Confirm dialog is Dialog's
+native modal, so its motion is Dialog's (`surface.css`, sibling); nothing in `confirm-dialog.css`
+overrides it. Verified on `/confirm-dialog.html` in a background tab: enter `opacity` + `scale`
+200 `ease-out` with the scrim on 200; exit 150 (`opacity`, `scale`, `overlay`, `display`, scrim);
+focus lands on Cancel; `role="alertdialog"`.
+
+| Interaction | Before | After |
+|---|---|---|
+| enter / exit | Dialog's (base 150 both ways before the shared change) | Dialog's: moderate 200 in, base 150 out, inherited |
+| busy action | on success the action's spinner turned back into its label as the dialog closed, so the label flashed back during the fade | the action stays busy through the exit and resets when the dialog opens again; a failed action still returns to ready at once (ConfirmDialog.tsx) |
+| buttons | Button's (sibling) | unchanged |
+
+Crispness: at rest `scale: 1`, 420 wide, x 334.5 (layout centring, snaps at paint). Its height is
+fractional (141.86, from Dialog's `text-box` trim on the title), so the vertically centred surface
+starts at y 328.07. That is Dialog's, reported to the lead rather than changed here.
 
 ## Feedback log
+
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → motion is Dialog's (moderate in, base out), inherited; the busy action no longer flashes back to its label during the exit. ConfirmDialog.tsx.
+- 2026-10-07 · Claude in Chrome audit (8 public references, above): footer gap 20 → 16 to match
+  Dialog and the references; icon and button weight left open.
 
 - 2026-10-06 · owner: likes the current dialog type size; asked whether it is validated → yes (four
   references, above); kept.
 - 2026-10-05 · owner: open ChatGPT's confirm and cancel, then build → measured live, cancelled
   (nothing deleted); built on Dialog and Button; on the Review page.
+- 2026-10-08 · owner review "needs changes" → (a) black-on-black Leave was the review page's CSS
+  (fixed by the lead; no component change); (b) gallery Default is the neutral confirm, the red
+  one is "Tone / danger" (lead, build.mjs); (c) recs taken: no icon; one 500 weight on both
+  footer buttons via Button (button.css). No change to confirm-dialog.css or ConfirmDialog.tsx.
+- 2026-10-08 · owner: approved on the component review page (re-review after the requested changes).

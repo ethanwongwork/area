@@ -144,6 +144,38 @@ new file was saved. Area keeps its documented differences (28 tall, corner 10, 1
   `test:preview` (4), `npm test` (tokens and contrast), `git diff --check`: all pass.
 - Unverified: Figma capture file, dark theme. Hover/focus behaviour is implemented (2026-09-27, [overlay.md](overlay.md)); its timing has not been owner-reviewed (the batch 17 pass compared static paint).
 
+## Motion and interaction, 2026-10-07
+
+Contract: [MOTION.md](../MOTION.md), "Tooltip". Owner values kept: open delay 500 (`TOOLTIP_DELAY`),
+skip window 300 (`TOOLTIP_SKIP_DELAY`), `closeDelay` 0, keyboard focus opens at once; all are
+inside the contract (500–700, ~300).
+
+| Interaction | Before | After |
+|---|---|---|
+| open after the delay | `opacity` only, `duration-fast` 100, `ease-out` | `opacity` + `scale` 0.97 from the trigger (overlay.ts origin), `duration-fast`, `ease-out` |
+| open inside the skip window | no delay, but the 100 fade | at once, no fade (`data-instant` on the surface, set by `AnchoredTooltip`); Radix and Linear show follow-ons instantly |
+| close | 100 fade | at once (`--_overlay-exit: duration-instant`): two neighbours never show together while the pointer crosses a toolbar (Radix Themes leaves at once) |
+| keyboard focus | opens at once with the fade | unchanged (fast fade); inside the skip window, at once |
+| rest | `scale: 1` | `scale: none` |
+| skip window start | any pointer leave started it, even one before the tooltip had shown, so sweeping across a toolbar opened the next tooltip with no delay | only a tooltip that was shown starts it (Overlays.tsx) |
+
+Crispness: the arrow diamond's 50% centre is rounded down to a whole pixel (`round(down, 50%, 1px)`
+after a 50% fallback): a 106.77 tooltip's diamond starts at 49, was 49.38.
+
+Verification: gallery (`/`), two triggered tooltips: a sweep across A (100ms) into B left B
+closed after 100ms and opened it after the delay with `opacity/scale: 100` ease-out; at rest
+opacity 1, scale none, origin `40px 27.5px`; leaving B and entering A within 300 opened A at
+once with `data-instant` and `0s`. Verified on the dev server (background tab, so transitions were read from `getAnimations()` and computed styles, not watched; real-pointer hover could not be driven in a background tab, so hover rules were read from the stylesheet).
+
+Open questions:
+- The scale is new. The earlier CSS note said a tooltip "only fades ... growing from its trigger
+  reads as a jump" (no owner record); MOTION.md asks for 0.97. At 0.97 a 28px tooltip grows by
+  under 1px over 100ms. Recommendation: keep it; revert to fade-only if the owner sees a jump.
+- Close is instant rather than a `fast` fade (both are in the contract). Recommendation: instant,
+  since a fade out overlaps the neighbour that opens at once.
+- `data-instant` is a new runtime hook; it should be declared in `manifest.ts` (tooltip
+  `states`); proposed to the lead.
+
 ## Feedback log
 
 - 2026-09-25 · owner chose Tooltip after approving Badge group → radius 6, 12px-blur
@@ -165,3 +197,4 @@ new file was saved. Area keeps its documented differences (28 tall, corner 10, 1
 - 2026-10-01 · audit E-18 (owner pick A) → Tooltip and Hover card share `useHoverIntent`: mouse and pen open after the delay (was mouse only), touch never, `:focus-visible` at once, blur closes at once, one consuming capture-phase Escape → overlay.ts:108-145, Overlays.tsx:214-234.
 - 2026-10-02 · compact evidence audit → compact sides 10 → 8 (VS Code 9, Figma 8) and corner 8 → 4, the sm control corner of its 24 box (VS Code 3, Figma 5); default unchanged (R2, R3) docs/research/compact-evidence-2026-10-02/README.md.
 - 2026-10-03 · radius audit D3 (owner) → compact takes the large control corner too, 24 → 8 (was the sm corner, 4); default 10 unchanged, so the tooltip is rounder than a control at both densities (`surface.css`, `--_tooltip-radius`). `docs/research/radius-audit-2026-10-03.md`.
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → open fades and grows from 0.97 on `fast`; skip-window follow-ons and the close are instant (`data-instant`); the skip window starts only from a shown tooltip; arrow centre rounded (`surface.css`, `Overlays.tsx`).

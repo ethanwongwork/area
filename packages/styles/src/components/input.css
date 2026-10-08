@@ -46,7 +46,15 @@
     line-height: var(--_leading);
     /* spec (outline pass, docs/specs/number-field.md): controls at rest carry no shadow, as Button (ChatGPT, Notion, Figma fields). */
     box-shadow: none;
-    transition: var(--area-transition);
+    /* Motion (docs/MOTION.md, 2026-10-07): the edge, fill and ink (--_t-paint) and the focus halo
+       (--_t-halo) fade out on fast; the states below set 0s, so hover, focus and a validation tone
+       appear at once (a focus halo that fades in lags the keyboard). The halo keeps its fade into
+       hover, so a field left while hovered still lets go of its focus softly. */
+    --_t-paint: var(--area-duration-fast);
+    --_t-halo: var(--area-duration-fast);
+    transition-property: background-color, border-color, color, box-shadow;
+    transition-duration: var(--_t-paint), var(--_t-paint), var(--_t-paint), var(--_t-halo);
+    transition-timing-function: var(--area-ease-out);
   }
 
   /* Explicit for manifest parity; the base class remains the framework-free default. */
@@ -64,16 +72,22 @@
   .area-input--monospace { font-family: var(--area-font-mono); }
   @media (hover: hover) {
     .area-input:hover:not([data-disabled], [data-read-only]):not(:focus-within) {
+      --_t-paint: 0s;
       border-color: var(--_border-hover);
     }
   }
 
   .area-input:focus-within {
+    --_t-paint: 0s;
+    --_t-halo: 0s;
     border-color: var(--_border-focus);
     box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
     outline: var(--area-field-focus-outline-width) solid var(--_focus-outline);
     outline-offset: 0;
   }
+
+  /* A tone or disabled paint lands at once (motion, 2026-10-07); clearing it fades on fast. */
+  .area-input:is([data-invalid], [aria-invalid="true"], [data-success], [data-warning], [data-disabled]) { --_t-paint: 0s; }
 
   .area-input:is([data-invalid], [aria-invalid="true"]) {
     --_border: var(--area-input-invalid-color);
@@ -216,7 +230,12 @@
     background: transparent;
     color: var(--area-input-icon);
     cursor: pointer;
+    /* The plate appears at once on hover and press and fades on fast (docs/MOTION.md, 2026-10-07;
+       was instant both ways). The glyph's ink never moves. */
+    transition: background-color var(--area-duration-fast) var(--area-ease-out);
   }
+  @media (hover: hover) { .area-input__action-button:hover { transition-duration: 0s; } }
+  .area-input__action-button:active { transition-duration: 0s; }
 
   /* The row pair: hover #f3, pressed #ee, as the NumberField steppers beside it (audit B-8). */
   @media (hover: hover) { .area-input__action-button:hover:not(:disabled) { background-color: var(--area-bg-component-hover); } }

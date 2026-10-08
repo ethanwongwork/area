@@ -84,9 +84,29 @@ labelled buttons.
 - React test: names, structure, streaming cursor.
 - Unverified: dark theme, screen readers, RTL (the bubble moves to the start).
 
+## Motion and interaction, 2026-10-07
+
+Contract: `docs/MOTION.md`. Research: `docs/research/motion-2026-10-07/crispness-and-current-state.md`.
+
+
+| Interaction | Before | After |
+|---|---|---|
+| Streaming cursor | opacity 1 → 0.3 → 1, `slow × 4` (1s), literal `ease-in-out` keyword | same, `--area-ease-in-out`: each half of the breath eases, so the dot dwells at both ends and never kinks at the turn (the contract's "pulse: linear" would) |
+| Cursor, reduced motion / none | stopped | unchanged; stopped, the dot rests at full ink (the keyframes set only the 30% midpoint) |
+| User actions, pointer reveal | opacity `fast` ease-out both ways | unchanged: matches the system's other reveal-on-hover rows (Card overlay, Tree view actions) |
+| User actions, keyboard focus | faded in over `fast` | **instant** (`:focus-within` sets 0s): focus never waits on a fade |
+| Action buttons | Button's rules | unchanged here |
+
+Verified on `/message.html`: cursor `1s cubic-bezier(0.65, 0, 0.35, 1) infinite`; with motion none
+`animation-name: none` and opacity 1; focusing a user action gives `transition-duration: 0s`, opacity 1.
+
+Open question: should the pointer reveal also arrive at once (MOTION.md hover recipe) and fade out
+on `fast`? Recommendation: yes, but together with Card and Tree view so every reveal row moves alike.
+
 ## Feedback log
 
 - 2026-09-30 · audit S6b (owner) → actions no longer override Button ink to `fg-muted`; they take the ghost icon Button's quiet ink as every icon action does. Suggestion rows and Code block tabs keep `fg-muted` → message.css:50.
 - 2026-09-30 · audit S17 (API vocabulary, slice 3/4) → `author` is optional, default `"assistant"` (Message.tsx:7, :18); manifest default `author: "assistant"`, since the bare block already equals the assistant layout. No visual change.
 - 2026-10-01 · audit G-23 (owner pick A) → demos use the placeholder vocabulary (Body text, Item one, Option one, Placeholder, Label) and `authorName` "Assistant", per DESIGN_SYSTEM's Example copy; no component change.
 - 2026-10-01 · compact pass round 7 → gap 12 → 8 and bubble 10 × 16 → 6 × 12 at compact; the corner is the Composer's (control radius + `ui-cluster`), 16 / 12 (a literal +8 made it 14 at compact). docs/research/compact-pass-2026-10-01.md.
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → cursor pulse on the ease-in-out token (was the system's one literal easing); keyboard focus shows the person's actions at once → message.css. See "Motion and interaction, 2026-10-07".

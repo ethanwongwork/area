@@ -130,6 +130,22 @@ Box field tiles and the Panel recipe at 2x.
   panels, no value changed) to measure the split layouts?
 - CSS shorthand entry in a linked field.
 
+## Motion and interaction, 2026-10-07
+
+Per `docs/MOTION.md`. The research table listed Box field's hover plates as untransitioned; on
+reading the code, Box field draws no plate itself: its fields are NumberFields and its link toggle a
+ghost Button. Before → after:
+
+| Interaction | Before | After |
+|---|---|---|
+| Field hover and focus edge, focus halo | NumberField: `fast` in and out, halo faded in | NumberField's new rule: in at once, out on `fast` / `ease-out` |
+| Link toggle hover, press, selected | Button (`--area-transition`) | Button's own pass (not this file) |
+| Linked ↔ split | fields swap at once | unchanged: a layout change, never animated |
+
+Crispness: the rotated side and corner glyphs rotate a 16px box about its centre (matrix
+translations 0 / 16, whole pixels); every box measured on whole pixels on `box-field.html`.
+`box-field.css` is unchanged.
+
 ## Feedback log
 
 - 2026-09-28 · batch 8 Claude in Chrome side by side (Figma padding and radius rows) → no change →
@@ -137,3 +153,4 @@ Box field tiles and the Panel recipe at 2x.
 - 2026-09-28 · inside a panel the label, its gap and the field gap follow the panel tier (`--_panel-*`).
 - 2026-09-30 · audit S17 (API vocabulary, slice 3/4) → new `readOnly`, forwarded to each NumberField, with the link toggle disabled (BoxField.tsx:36, :105, :117); `variant` is typed from NumberField's manifest, a forwarding prop rather than a BoxField axis (BoxField.tsx:29).
 - 2026-10-02 · compact pass round 9 → outside a panel, the label gap reads `ui-stack` (6 / 4) and the field gap `ui-cluster` (8 / 6). docs/research/compact-pass-2026-10-01.md (round 9).
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → Box field draws no plate of its own; its NumberFields take the new focus and hover motion (no change to `box-field.css`). See "Motion and interaction, 2026-10-07".

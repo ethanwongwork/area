@@ -21,7 +21,13 @@
     font-size: var(--_group-text);
     line-height: var(--_group-leading);
     overflow: clip;
-    transition: var(--area-transition);
+    /* Motion (docs/MOTION.md, 2026-10-07), as Input: paint and the focus halo appear at once and
+       fade out on fast; the halo keeps its fade into hover. */
+    --_t-paint: var(--area-duration-fast);
+    --_t-halo: var(--area-duration-fast);
+    transition-property: background-color, border-color, color, box-shadow;
+    transition-duration: var(--_t-paint), var(--_t-paint), var(--_t-paint), var(--_t-halo);
+    transition-timing-function: var(--area-ease-out);
   }
   .area-input-group--outline { background-color: var(--area-input-bg); }
   .area-input-group--soft { background-color: var(--area-input-bg-soft); border-color: transparent; box-shadow: none; }
@@ -29,12 +35,16 @@
   .area-input-group--md { --_group-height: var(--area-control-md); --_group-radius: var(--area-radius-control-md); --_group-text: var(--area-control-md-text); --_group-leading: var(--area-control-md-leading); --_group-icon: var(--area-icon-md); --_group-gap: var(--area-gap-md); }
   .area-input-group--lg { --_group-height: var(--area-control-lg); --_group-radius: var(--area-radius-control-lg); --_group-text: var(--area-control-lg-text); --_group-leading: var(--area-control-lg-leading); --_group-icon: var(--area-icon-lg); --_group-gap: var(--area-gap-lg); }
   .area-input-group--full-width { inline-size: 100%; }
-  @media (hover: hover) { .area-input-group:hover:not(:focus-within, :has(:disabled, [data-disabled])) { border-color: var(--area-input-edge-hover); } }
+  @media (hover: hover) { .area-input-group:hover:not(:focus-within, :has(:disabled, [data-disabled])) { --_t-paint: 0s; border-color: var(--area-input-edge-hover); } }
+  /* A tone or disabled paint lands at once (motion, 2026-10-07); clearing it fades on fast. */
+  .area-input-group:is([aria-disabled="true"], :has([data-success], [data-warning], [aria-invalid="true"], [data-invalid], > :is(.area-input, .area-number-field)[data-disabled], > .area-select:disabled)) { --_t-paint: 0s; }
   /* Disabled uses field paint, like Input: the disabled fill, a faint edge and disabled ink. */
   .area-input-group:is([aria-disabled="true"], :has(> :is(.area-input, .area-number-field)[data-disabled], > .area-select:disabled)) { background-color: var(--area-input-bg-disabled); border-color: var(--area-border-faint); color: var(--area-fg-disabled); cursor: not-allowed; }
   .area-input-group:has([data-success]) { border-color: var(--area-input-success-color); }
   .area-input-group:has([data-warning]) { border-color: var(--area-input-warning-color); }
   .area-input-group:focus-within {
+    --_t-paint: 0s;
+    --_t-halo: 0s;
     border-color: var(--area-field-focus-color);
     box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-field-focus-halo-color);
     outline: var(--area-field-focus-outline-width) solid var(--area-field-focus-color);
@@ -89,7 +99,8 @@
     flex-shrink: 0;
     /* The equal-inset rule, as Input's prefix (inset.css): half of height less a cap, less the
        group's border, so "$" sits at the same place either way (audit B-18; was the gutter). */
-    padding-inline: max(0px, calc((var(--_group-height) - 1cap) / 2 - var(--area-stroke-width)));
+    /* Rounded to whole pixels, as inset.css rounds every derived inset (crispness, 2026-10-07). */
+    padding-inline: max(0px, round(nearest, calc((var(--_group-height) - 1cap) / 2 - var(--area-stroke-width)), 1px));
     color: var(--area-fg-muted);
     white-space: nowrap;
   }

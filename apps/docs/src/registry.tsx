@@ -20,7 +20,7 @@ import * as icons from "./demos/icons.tsx";
 import * as variants from "./demos/gallery-variants.tsx";
 import * as overlays from "./demos/overlays.tsx";
 import * as counts from "./demos/count.tsx";
-import * as disclosures from "./demos/disclosure.tsx";
+import * as accordions from "./demos/accordion.tsx";
 import * as customSelects from "./demos/custom-select.tsx";
 import * as tags from "./demos/tag.tsx";
 import * as tagPickers from "./demos/tag-picker.tsx";
@@ -29,7 +29,7 @@ import * as drawers from "./demos/drawer.tsx";
 
 const { BADGE_GALLERY_DEMOS, ...badgeDemos } = badge;
 const { ICON_REVIEW_DEMOS, ...iconDemos } = icons;
-const DEMO_MODULES: Record<string, object> = { BADGE_GALLERY_DEMOS, badge: badgeDemos, switches, button, form, display, nav, theme, gallery, cards, icons: iconDemos, ICON_REVIEW_DEMOS, variants, overlays, counts, disclosures, customSelects, tags, tagPickers, datePickers, drawers };
+const DEMO_MODULES: Record<string, object> = { BADGE_GALLERY_DEMOS, badge: badgeDemos, switches, button, form, display, nav, theme, gallery, cards, icons: iconDemos, ICON_REVIEW_DEMOS, variants, overlays, counts, accordions, customSelects, tags, tagPickers, datePickers, drawers };
 // One name, one demo. The server renders from this merged map, while hydration clients import a
 // module directly, so a name exported twice renders one demo and hydrates the other (a mismatch).
 const demoOwner = new Map<string, string>();
@@ -53,7 +53,7 @@ export const SOURCES = {
   variants: "src/demos/gallery-variants.tsx",
   overlays: "src/demos/overlays.tsx",
   counts: "src/demos/count.tsx",
-  disclosures: "src/demos/disclosure.tsx",
+  accordions: "src/demos/accordion.tsx",
   customSelects: "src/demos/custom-select.tsx",
   tags: "src/demos/tag.tsx",
   tagPickers: "src/demos/tag-picker.tsx",

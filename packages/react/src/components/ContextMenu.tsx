@@ -36,26 +36,49 @@ export const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(function
   const menuRef = useRef<HTMLDivElement | null>(null);
   const returnFocus = useRef<HTMLElement | null>(null);
   const [point, setPoint] = useState<{ x: number; y: number; keyboard: boolean; rtl?: boolean } | null>(null);
+  // The rows stay mounted while the menu fades out, so the exit shows the menu, not an empty box.
+  const [leaving, setLeaving] = useState(false);
+  const opened = useRef(false);
+  opened.current = point !== null;
 
   // Open at the point, then pull the menu back inside the viewport (flip across the pointer).
   useLayoutEffect(() => {
     const element = menuRef.current;
     if (!element || !point || typeof element.showPopover !== "function") return;
     if (!element.matches(":popover-open")) element.showPopover();
-    const rect = element.getBoundingClientRect();
+    // Layout size, not the bounding rect: the enter starts at scale 0.97, which the rect includes.
+    // Under CSS zoom (a scaled preview) the pointer is in viewport pixels, the menu's lengths in its own.
+    const zoom = (element as HTMLElement & { currentCSSZoom?: number }).currentCSSZoom || 1;
+    const width = element.offsetWidth * zoom, height = element.offsetHeight * zoom;
     const margin = 8;
-    let { x, y } = point;
+    // Whole pixels (motion 2026-10-07, crispness B10): a trackpad or page zoom gives fractional
+    // pointer coordinates, which would put the menu's text and edges between pixels.
+    const px = Math.round(point.x), py = Math.round(point.y);
+    let x = px, y = py;
     // A keyboard-opened menu starts at the element's start edge, which is its right in RTL.
-    if (point.rtl) x -= rect.width;
-    if (x + rect.width > innerWidth - margin) x = Math.max(margin, x - rect.width);
-    if (y + rect.height > innerHeight - margin) y = Math.max(margin, y - rect.height);
-    element.style.setProperty("--_context-x", `${x}px`);
-    element.style.setProperty("--_context-y", `${y}px`);
+    if (point.rtl) x -= Math.round(width);
+    if (x + width > innerWidth - margin) x = Math.max(margin, Math.round(x - width));
+    if (y + height > innerHeight - margin) y = Math.max(margin, Math.round(y - height));
+    element.style.setProperty("--_context-x", `${x / zoom}px`);
+    element.style.setProperty("--_context-y", `${y / zoom}px`);
+    // The menu grows from the pointer: its place inside the menu after any flip (docs/MOTION.md).
+    element.style.setProperty("--_context-origin-x", `${Math.min(Math.max(px - x, 0), width) / zoom}px`);
+    element.style.setProperty("--_context-origin-y", `${Math.min(Math.max(py - y, 0), height) / zoom}px`);
     // The pointer opens with nothing highlighted; the keyboard lands on the first row (WAI menu).
     (point.keyboard ? itemsOf(element)[0] : element)?.focus({ preventScroll: true });
   }, [point]);
 
+  // After the exit (its transitions finished, or none under reduced motion) the rows unmount.
+  useLayoutEffect(() => {
+    const element = menuRef.current;
+    if (!leaving || point) return;
+    const done = () => { if (!opened.current) setLeaving(false); };
+    if (!element || typeof element.getAnimations !== "function") { done(); return; }
+    Promise.all(element.getAnimations().map(animation => animation.finished)).then(done, done);
+  }, [leaving, point]);
+
   const close = (restore: boolean) => {
+    setLeaving(true);
     setPoint(null);
     onOpenChange?.(false);
     if (restore) returnFocus.current?.focus({ preventScroll: true });
@@ -97,7 +120,7 @@ export const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(function
         menuRef.current?.hidePopover();
         close(true);
       }}>
-      {point ? menu : null}
+      {point || leaving ? menu : null}
     </Menu>
   </div>;
 });

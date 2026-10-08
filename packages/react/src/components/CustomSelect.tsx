@@ -205,7 +205,7 @@ export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(fun
     return <div key={option.value} id={`${id}-option-${index}`} data-index={index} role="option" aria-selected={isSelected}
       aria-disabled={option.disabled || undefined} data-disabled={option.disabled ? "" : undefined}
       className="area-menu__item area-custom-select__option" data-highlighted={index === active ? "" : undefined}
-      data-selected={isSelected ? "" : undefined}
+     
       onPointerDown={event => event.preventDefault()}
       onPointerMove={() => { if (!option.disabled && index !== active) setActive(index); }}
       onClick={event => { if (option.disabled) return; choose(index, event); close(); triggerRef.current?.focus(); }}>

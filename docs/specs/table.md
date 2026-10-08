@@ -167,6 +167,16 @@ rows (`.area-table--interactive tbody tr:not([data-selected], [aria-selected="tr
 so the #ee selection plate stays; checked in the gallery's selection tile by rule and computed
 paint, not with a real pointer (the preview pane was hidden). Unverified: dark theme.
 
+## Motion and interaction, 2026-10-07
+
+Contract: `docs/MOTION.md`. Verified by computed transitions on `/table.html`.
+
+| Interaction | Before | After |
+|---|---|---|
+| Row hover (cells) | 100 both ways | instant in, fast ease-out out |
+| Row selected plate | snapped both ways | instant in, fast out |
+| Row link focus ring | outline, instant | unchanged |
+
 ## Verification
 
 Compared the four Notion table captures with 10 Area captures (`table/area--*`, re-taken
@@ -195,3 +205,4 @@ read from the CSS; no Area capture shows them.
 - 2026-10-01 · audit F-24 → a sort Button in a header cell overhangs the cell's block padding, keeping the row at its text height with the label on the column's text edge → navigation.css:197-200.
 - 2026-10-01 · compact pass round 6 → cell padding above and below steps down at compact (sm 4 → 2, md 8 → 6, lg 12 → 8); the side padding already followed `gutter-md` (12 → 8). docs/research/compact-pass-2026-10-01.md.
 - 2026-10-03 · radius audit D1 (owner) → the container role is 12 at compact too (was 8; Figma 13, Cursor 12-14), so this family's surface is 12 at both densities; rows concentric with a floating surface follow (compact 24 rows r8). `docs/research/radius-audit-2026-10-03.md`.
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → row hover and selection land at once and fade out on fast.

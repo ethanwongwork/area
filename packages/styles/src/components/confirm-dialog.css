@@ -9,6 +9,7 @@
 @layer area.components {
   /* spec: ChatGPT's delete confirm is 420 wide (chatgpt--delete-chat-confirm--open--light). */
   .area-confirm-dialog { inline-size: min(calc(100vw - var(--area-space-32)), 420px); /* spec */ }
-  /* The action is the reason for the dialog, so the footer leaves the body no gap to fill. */
-  .area-confirm-dialog > .area-dialog__footer { margin-block-start: var(--area-space-4); }
+  /* The footer keeps Dialog's section gap (16; 12 compact) above it: shadcn, Radix Themes,
+     Base UI and Atlassian all put their buttons 16 below the description (Claude in Chrome
+     audit 2026-10-07, docs/specs/confirm-dialog.md). The earlier extra 4 (20) matched none. */
 }

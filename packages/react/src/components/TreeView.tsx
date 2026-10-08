@@ -139,7 +139,8 @@ export const TreeView = forwardRef<HTMLDivElement, TreeViewProps>(function TreeV
         <span className="area-tree-view__chevron" aria-hidden="true" onClick={event => { if (!branch || node.disabled) return; event.stopPropagation(); setExpansion(node.id, !open, event); focusItem(node.id); }}>
           {branch && <Glyph name="chevron-down" />}
         </span>
-        {selectionMode === "checkbox" && <span className="area-tree-view__check" aria-hidden="true">{selected.has(node.id) && <Glyph name="check-inset" />}</span>}
+        {/* The mark is always drawn and shown by aria-checked, so it can fade both ways (MOTION.md). */}
+        {selectionMode === "checkbox" && <span className="area-tree-view__check" aria-hidden="true"><Glyph name="check-inset" /></span>}
         {node.icon && <span className="area-tree-view__icon" aria-hidden="true">{node.icon}</span>}
         <span className="area-tree-view__label">{node.label}</span>
         {node.trailing && <span className="area-tree-view__trailing">{node.trailing}</span>}

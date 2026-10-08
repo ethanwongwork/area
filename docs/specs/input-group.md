@@ -171,6 +171,26 @@ Compared the Area captures (`input-group/area--*`) with Figma's icon field, colo
 row and value row. Build and test results are in the
 [cohesion audit](../research/cohesion-audit.md#verification).
 
+## Motion and interaction, 2026-10-07
+
+Per `docs/MOTION.md` (hover, focus, selected: in at once, out on `fast`; focus never fades in). The
+shell lists its transitioned properties explicitly (`background-color, border-color, color,
+box-shadow`) with two private clocks, `--_t-paint` for fill, edge and ink and `--_t-halo` for the
+focus halo, so a state can make paint instant while the halo still lets go softly.
+
+| Interaction | Before | After |
+|---|---|---|
+| Hover edge | `--area-transition`: border-color `fast` ease-out in and out | in at once (`--_t-paint: 0s` on `:hover`), out on `fast` / `ease-out` |
+| Focus edge | border-color `fast` ease-out in and out | in at once, out on `fast` / `ease-out` |
+| Focus halo (box-shadow) | faded in over `fast` (lagged the keyboard) | in at once (`--_t-halo: 0s`), out on `fast` / `ease-out`, also when the field is left while hovered |
+| Increased-contrast outline | never transitioned | unchanged: instant both ways |
+| Validation tone (invalid, success, warning) and disabled | edge faded in over `fast` | lands at once; clearing it while focused is instant (focus is 0s), clearing it at rest fades on `fast` |
+
+The group owns the edge and halo; the Input, NumberField and Select inside it draw none, so their own
+clocks never show. Crispness: the passive text segment's inline inset is `round()`ed to whole pixels
+(was `(height − 1cap) / 2 − 1`, 9.9 at md), as inset.css rounds every derived inset; the segment's
+width still follows its text's advance (fractional by nature, the divider is pixel-snapped).
+
 ## Feedback log
 
 - 2026-09-28 · batch 12 Chrome side by side → no change; spec's resting shadow corrected to none
@@ -189,3 +209,4 @@ row and value row. Build and test results are in the
 - 2026-10-01 · audit B-11 → forced colours: `CanvasText` edge on the group, `Highlight` focus ring on the group only (children draw none), dashed invalid → forced-colors.css.
 - 2026-10-01 · audit B-14 → InputGroup takes Field's `disabled` and validation and passes them to its Input, NumberField and Select through `InputGroupContext`; the group gets `aria-disabled` → InputGroup.tsx, input-group-context.ts.
 - 2026-10-04 · pill shapes and list rows (owner) → `--area-pill-field` makes the group a pill (`input-group.css`). `docs/research/radius-audit-2026-10-03.md`, "Pill shapes and list rows".
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → motion pass: hover and focus edge and the focus halo appear at once and fade out on `fast`; tones land at once; the text segment inset rounded to whole pixels (`input-group.css`). See "Motion and interaction, 2026-10-07".

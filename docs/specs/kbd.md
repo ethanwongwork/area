@@ -161,6 +161,17 @@ Compared all seven `kbd/area--*` captures with `notion--shortcut-hint`,
 `tooltip/notion--shortcut-stacked--rest--light`. Build and test results are in
 [the audit](../research/cohesion-audit.md#verification). Unverified: dark theme, screen readers.
 
+## Motion and interaction, 2026-10-07
+
+Kbd is static: no hover, press, focus or transition of its own. Inside a Button it paints with
+the Button's `currentColor`, so a selected toggle's ink change reaches the keycap on the Button's
+clock. Crispness: the keycap's height (20 md, 16 sm and compact md) and padding (4 / 2) are whole
+pixels at both densities; widths follow the glyphs. The chord gap is `0.25ch` (about 1.7px), a
+fractional advance between keys that only shifts glyph positions, never an edge.
+
+Verified on `/kbd.html` (computed styles, default and compact): heights 20 / 16, padding 4 / 2,
+no transform or transition.
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → no change; small size's 11px text recorded as open → 7 Area
@@ -196,3 +207,4 @@ Compared all seven `kbd/area--*` captures with `notion--shortcut-hint`,
 - 2026-10-03 · radius audit D4 (owner) → reads `radius-base-small`, so compact keeps the owner's 6 (was 4 through the density-scaled small role) (`kbd.css:22`). `docs/research/radius-audit-2026-10-03.md`.
 - 2026-10-03 · roundness → 6 plus the shift, never below square, its whole-pixel height cap moving with the shift: 16px Kbd square, 2, 4, 6, 8, pill in 2px steps (`kbd.css:22-27`). `docs/research/radius-audit-2026-10-03.md`, "Roundness".
 - 2026-10-03 · one corner setting (owner: one radius setting, Sharp and Pill as ends; "every control is a pill") → a 24px box's corner, 6 at the default at every size, scaling with the setting; a pill at Pill (`kbd.css`). `docs/research/radius-audit-2026-10-03.md`, "One corner setting".
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → no change; Kbd has no motion and rests on whole-pixel heights at both densities.

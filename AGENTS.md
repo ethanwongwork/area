@@ -12,8 +12,8 @@ Read `README.md` and, when resuming, `.Codex/HANDOFF.md`. For component work, re
 `area-visual-language` skills (`.agents/skills/`, linked from `.claude/skills/`). Each
 component's evidence and decisions are in `docs/specs/<slug>.md`; shared cross-product
 values are in `docs/research/BASELINE.md`. Read only the relevant section of
-`docs/DESIGN_SYSTEM.md`; use `docs/THEMING.md` for scope changes and `docs/CONTRAST.md` for
-color, focus or state painting. `docs/COMPONENTS.md` is the inventory and backlog.
+`docs/DESIGN_SYSTEM.md`; use `docs/THEMING.md` for scope changes, `docs/CONTRAST.md` for
+color, focus or state painting, and `docs/MOTION.md` for transitions, animation and crispness. `docs/COMPONENTS.md` is the inventory and backlog.
 
 ## Work
 

@@ -443,6 +443,38 @@
     }
   }
 
+  /*
+   * Show and hide code (docs/MOTION.md, "Accordion body", the system's one height recipe; motion
+   * pass 2026-10-07). Where the browser can interpolate to an intrinsic size, the code opens on
+   * duration-slow and closes on duration-moderate, both ease-in-out; elsewhere it snaps, as before.
+   * Open, a collapsible block rests at max-content (its own height, horizontal scrollbar included)
+   * and clips only vertically, so the growing block never flashes a vertical scrollbar. The toggle
+   * moves between overlay and footer at once and rides the edge as it moves.
+   */
+  @supports (interpolate-size: allow-keywords) {
+    .area-code-block__body:has(> .area-code-block__toggle) > .area-code-block__pre {
+      interpolate-size: allow-keywords;
+      overflow-y: hidden;
+      transition: max-block-size var(--area-duration-slow) var(--area-ease-in-out);
+    }
+    .area-code-block:not([data-collapsed]) .area-code-block__body:has(> .area-code-block__toggle) > .area-code-block__pre {
+      max-block-size: max-content;
+    }
+    .area-code-block[data-collapsed] .area-code-block__body:has(> .area-code-block__toggle) > .area-code-block__pre {
+      transition-duration: var(--area-duration-moderate);
+    }
+  }
+
+  /*
+   * Copy feedback: the check enters as a small mark (MOTION.md: scale from 0.6 with opacity,
+   * duration-fast ease-out, ending at identity); the copy glyph returns at once. The button's plate
+   * follows Button's own hover and press.
+   */
+  .area-code-block__actions [data-copy-state="copied"] svg {
+    animation: area-code-copied var(--area-duration-fast) var(--area-ease-out);
+  }
+  @keyframes area-code-copied { from { opacity: 0; scale: 0.6; } }
+
   .area-code-block__toggle:focus-visible {
     outline: var(--area-focus-width) solid var(--area-focus-color);
     outline-offset: calc(var(--area-focus-offset) * -1);

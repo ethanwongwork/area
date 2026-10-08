@@ -26,6 +26,6 @@ test("a collapsed branch hides its children and reports aria-expanded=false", ()
 
 test("rows rest in body ink, chevrons mirror in RTL, and selection outranks hover (audit D-3, D-4, D-13)", () => {
   assert.match(css, /\.area-tree-view \{[^}]*color: var\(--area-fg-default\)/);
-  assert.match(css, /\[aria-expanded="false"\]:dir\(rtl\) \.area-tree-view__chevron svg \{ transform: rotate\(90deg\); \}/);
+  assert.match(css, /\[aria-expanded="false"\]:dir\(rtl\) \.area-tree-view__chevron svg \{ rotate: 90deg; \}/);
   assert.match(css, /\.area-tree-view \[role="treeitem"\]:hover:not\(\[data-disabled\], \[aria-current="page"\], \[aria-selected="true"\]\)/);
 });

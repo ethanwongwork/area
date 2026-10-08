@@ -442,7 +442,9 @@ export const Progress = /* @__PURE__ */ forwardRef<HTMLDivElement, ProgressProps
       {...(indeterminate ? { "data-indeterminate": "" } : {})}
       {...rest}
     >
-      <div className="area-progress__bar" style={indeterminate ? undefined : { inlineSize: `${pct}%` }} />
+      {/* The value moves a full-width bar by a rounded translate (display.css), so the fill animates on the
+          compositor and its end rests on a whole pixel (motion pass 2026-10-07; was inline-size). */}
+      <div className="area-progress__bar" style={indeterminate ? undefined : ({ "--_progress-value": pct } as CSSProperties)} />
     </div>
   );
 });
@@ -609,7 +611,7 @@ export const PanelSection = /* @__PURE__ */ forwardRef<HTMLDivElement, PanelSect
         <div className="area-panel__heading">
           <H className="area-panel__heading-text">
             <button type="button" className="area-panel__toggle" aria-expanded={open} aria-controls={`${id}-rows`} onClick={toggle}>
-              <span className="area-panel__chevron" aria-hidden="true"><Glyph name="chevron-down" rotate={open ? undefined : 270} /></span>
+              <span className="area-panel__chevron" aria-hidden="true"><Glyph name="chevron-down" size={12} /></span>
               <span className="area-panel__toggle-text">{heading}</span>
               {!open && summary ? <span className="area-panel__summary">{summary}</span> : null}
             </button>

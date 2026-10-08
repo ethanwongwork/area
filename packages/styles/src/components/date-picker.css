@@ -69,14 +69,20 @@
     text-align: start;
     cursor: pointer;
     outline: none;
+    /* Motion (docs/MOTION.md), as Custom select's trigger: colour enters a state at once and leaves
+       on fast ease-out; the focus halo is not in the list, so the ring never fades. */
     transition: var(--area-transition);
+    transition-property: background-color, border-color, color;
   }
   @media (hover: hover) {
     .area-date-picker__trigger:hover:not(:disabled, [aria-expanded="true"]) {
       border-color: var(--_border-hover);
       background-color: var(--_bg-hover);
     }
+    .area-date-picker__trigger:hover { transition-duration: 0s; }
   }
+  .area-date-picker__trigger:is(:active, :focus-visible),
+  .area-date-picker[data-open] > .area-date-picker__trigger { transition-duration: 0s; }
   .area-date-picker__trigger:focus-visible,
   .area-date-picker[data-open] > .area-date-picker__trigger {
     border-color: var(--_border-focus);
@@ -125,10 +131,23 @@
   /*
    * The panel: a Popover. spec (notion--date-property-editor): the typed date sits in a small
    * field above the month, the month below it, a ruled-off Clear row last. Popover's inset and
-   * gap hold them; the Clear row runs to the surface's padding as a menu row does.
+   * gap hold the field and the month.
+   * spec (Chrome audit 2026-10-07, notion node 188-192): the Clear section sits at Menu's inset,
+   * not the Popover's: Notion's row plate is 4 from the panel's sides and its rule 12 in. The
+   * footer bleeds from the Popover's 12 (border included) to Menu's 4 on the sides and bottom,
+   * so the row, its corner (radius-list-row, concentric at 4) and Menu's own separator inset (8,
+   * so 12 from the edge) are Menu's.
    */
-  .area-date-picker__panel { inline-size: max-content; }
+  .area-date-picker__panel {
+    inline-size: max-content;
+    --_footer-bleed: calc(var(--area-space-4) - var(--area-space-12)); /* spec */
+  }
   .area-date-picker__panel > .area-calendar { margin-inline: auto; }
-  .area-date-picker__footer { display: flex; flex-direction: column; margin-block-start: calc(var(--area-space-6) * -1); }
-  .area-date-picker__footer > .area-menu__separator { margin-inline: 0; }
+  /* Popover caps its children at the track (max-inline-size 100%); the bleed lifts that cap. */
+  .area-date-picker__panel > .area-date-picker__footer {
+    display: flex;
+    flex-direction: column;
+    max-inline-size: none;
+    margin: calc(var(--area-space-6) * -1) var(--_footer-bleed) var(--_footer-bleed);
+  }
 }

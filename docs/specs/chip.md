@@ -183,6 +183,34 @@ Compared `chip/area--{default,size-sm,size-lg,input,invalid,swatch,avatar-initia
 with `notion--board-tag` and `notion--select-tag`. No product capture of an interactive chip
 exists. Build and test results are in [the audit](../research/cohesion-audit.md#verification).
 
+## Motion and interaction, 2026-10-07
+
+Contract: [`docs/MOTION.md`](../MOTION.md).
+
+| Interaction | Before | After |
+|---|---|---|
+| hover (fill and edge) | `--area-transition` over `fast` ease-out, both ways | lands at once (`:hover` 0s), fades out over `fast` ease-out; ink fixed |
+| press | eased over `fast` | at once (`:active` 0s) |
+| selection toggle | eased over `fast` | by hand at once: pointer or Space is `:active`, Enter acts on a focus-visible chip (or its action button in a removable chip: `:has(> .area-chip__action:focus-visible)`); a change from script fades over `fast` |
+| remove plate hover | untimed: at once both ways | lands at once, fades out over `fast` ease-out (`background-color`) |
+| focus-visible | outline | unchanged |
+| link-icon underline | at once | unchanged (text decoration) |
+| reduced motion | tokens | tokens (no literal durations) |
+
+**Crispness.** The swatch's 1px ring was an inset `box-shadow` spread; it is now an inset
+`outline` (`outline-offset: -1px`), which snaps to device pixels (MOTION.md "Crispness" 3). Same
+colour (`bg-component`) and place. In forced colours the ring is now kept. The remove target is
+`height − 8` with a 16px glyph centred (4px each side at md): whole pixels.
+
+**Verified** (`/chip.html`, Chromium, DPR 2): chip transition is the four `--area-transition`
+properties at 100ms ease-out; the instant rules are in the served `area.css`
+(`.area-chip:is(:active, :focus-visible, :has(…))`, `.area-chip:hover`, `.area-chip__remove:hover`
+/ `:active`, all `0s`); the remove button transitions `background-color 0.1s` ease-out; a swatch
+computes `outline: 1px solid rgb(247, 247, 247); outline-offset: -1px; box-shadow: none`. Not
+verified by eye (background tab), nor with a real pointer or keyboard.
+
+**Open questions.** None.
+
 ## Feedback log
 
 - 2026-09-26 · earlier pass the same day → selected chips neutral tonal, `tone="accent"` added
@@ -208,3 +236,4 @@ exists. Build and test results are in [the audit](../research/cohesion-audit.md#
 - 2026-10-02 · compact pass round 9 → ChipGroup gap reads `ui-cluster` (8, compact 6). docs/research/compact-pass-2026-10-01.md (round 9).
 - 2026-10-03 · one corner setting (owner: one radius setting, Sharp and Pill as ends; "every control is a pill") → a pill by default; `pill={false}` (`--rounded`) takes the setting's corner for its height, swatch and remove button concentric; avatars and images stay round (`chip.css`). `docs/research/radius-audit-2026-10-03.md`, "One corner setting".
 - 2026-10-04 · pill shapes and list rows (owner) → the pill is the `chip` entry of data-area-pills (default on); `pill` three-way (`chip.css`). `docs/research/radius-audit-2026-10-03.md`, "Pill shapes and list rows".
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → hover and press land at once and fade over `fast`, selection by hand paints at once, the remove plate gains the same fade (was untimed), the swatch ring is an inset outline (was a box-shadow spread) (`chip.css`; "Motion and interaction, 2026-10-07").

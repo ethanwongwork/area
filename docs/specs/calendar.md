@@ -207,6 +207,27 @@ light. Geometry matches within 3px (header 28 vs 25). Area reads quieter: regula
 month label, neutral hover, accent selection. The two-month tile exposed repeated selection
 on outside days, fixed (see Decisions). Dark theme not compared.
 
+## Motion and interaction, 2026-10-07
+
+Contract: `docs/MOTION.md`; research finding: "Calendar day … hover has no transition, unlike
+every other plate" (`docs/research/motion-2026-10-07/crispness-and-current-state.md`, Part C).
+
+| Interaction | Before | After |
+|---|---|---|
+| Day hover plate (square, circle, range band hover) | none: snapped in and out | in: instant (`:hover` 0s, under `hover: hover`); out: `--area-transition` (fast 100, ease-out) |
+| Press | none | instant (`:active` 0s) |
+| Keyboard (focus moves, Enter selects) | none | instant (`:focus-visible` 0s); the focus ring is an outline and never fades |
+| Selected plate and ink | snapped | enters at once under the pointer or the keyboard; the day it leaves fades on fast ease-out |
+| Today ring (inset `box-shadow`), tile edge | snapped | same clock as the plate (in `--area-transition`) |
+| Range band (`::before`), markers | snapped | unchanged: the band is drawn by `data-range` and follows the pointer at once |
+| Month change | days re-render (keyed by date) | unchanged: new days mount, nothing fades across dates |
+| Nav buttons | Button's | unchanged (button.css) |
+
+Crispness, checked in the browser on `/calendar.html` (DPR 2): all 492 day plates and 5 markers
+on whole pixels; no resting transform or `will-change`. The month marker's `translate: -50%`
+moves a 4px dot by 2px, a whole pixel, so it stays. The today ring stays an inset `box-shadow`
+(a 1px ring at whole-pixel positions renders crisp; an outline would collide with the focus ring).
+
 ## Verification
 
 - 7 Notion captures and 4 Area captures; checksums verified.
@@ -248,3 +269,4 @@ on outside days, fixed (see Decisions). Dark theme not compared.
 - 2026-10-01 · audit F-22 → `headingLevel` (2–6, default 2) sets the month titles' level; only the first title is live → Calendar.tsx:61-62, :248-258.
 - 2026-10-01 · compact pass (owner: "do what's right with compact for calendar") → compact takes Notion's date picker geometry, the compact calibration: cells 32 around days 28 (corner 6 via the dense radius ladder), surface sides on `inset-surface-sm` (12, compact 8) and top 8 → 6. Default stays 36 / 32: the 2026-09-27 "too compact" call is about default density, where days sit beside 32px Buttons. docs/research/compact-pass-2026-10-01.md.
 - 2026-10-03 · radius audit D1 (owner) → the container role is 12 at compact too (was 8; Figma 13, Cursor 12-14), so this family's surface is 12 at both densities; rows concentric with a floating surface follow (compact 24 rows r8). `docs/research/radius-audit-2026-10-03.md`.
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → motion pass: day plates now appear at once and fade out on fast ease-out like every other plate (were snapped both ways); press and keyboard instant. "Motion and interaction, 2026-10-07".

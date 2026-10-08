@@ -118,6 +118,14 @@ Compared the Area captures (`color-swatch/area--*`) with `input-group/figma--col
 `color-picker/figma--fill-row` and `figma--swatches`. Build and test results are in the
 [cohesion audit](../research/cohesion-audit.md#verification).
 
+## Motion and interaction, 2026-10-07
+
+Per `docs/MOTION.md`. A swatch is static: no hover, no transition. Crispness: its size is a mark
+token and its corner whole-pixel even; edge and layers sit at whole-pixel insets. Inside a picker
+the rings it shows on hover and selection are the Color swatch picker's motion. Open question: the
+5-cell checker at 14px inner size draws 2.8px cells (owner's 5 cells), which rasterise soft at 1x;
+kept as the owner's choice.
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → no change; spec written → `color-swatch/area--*`.
@@ -170,3 +178,4 @@ Compared the Area captures (`color-swatch/area--*`) with `input-group/figma--col
 - 2026-10-03 · roundness → the whole-pixel 20% corner plus the shift, never below square; in 2px steps (`color.css`). `docs/research/radius-audit-2026-10-03.md`, "Roundness".
 - 2026-10-03 · all even (owner) → the 20% corner rounds to 2px: 12 → 2; 16, 20 and 24 → 4 (`color.css`).
 - 2026-10-03 · one corner setting (owner: one radius setting, Sharp and Pill as ends; "every control is a pill") → 20% of the side at the default (unchanged), times setting ÷ 8 elsewhere, nearest even pixel (`color.css`). `docs/research/radius-audit-2026-10-03.md`, "One corner setting".
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → a swatch has no motion; its picker rings take Color swatch picker's (no change). See "Motion and interaction, 2026-10-07".

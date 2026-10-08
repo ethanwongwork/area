@@ -97,8 +97,12 @@
     border-radius: min(var(--_radius), max(var(--area-radius-min), round(down, calc(var(--_height) * 0.75 * var(--area-radius-factor)), 2px))); /* even pixels: 6, compact 4 (radius audit D6; all even) */
   }
 
-  .area-split-button__trigger > .area-button__icon > svg { transition: transform var(--area-duration-base) var(--area-ease-out); }
-  .area-split-button__trigger[aria-expanded="true"] > .area-button__icon > svg { transform: rotate(180deg); }
+  /* Chevron (docs/MOTION.md, "Chevron rotation": one rule for every chevron, Accordion's): the
+     `rotate` property over duration-fast, ease-out, both ways; it rests at 0 or a half turn, both
+     whole-pixel, and the token goes to 0 under reduced motion and motion "none". Was `transform`
+     over duration-base, with its own reduced-motion rule. */
+  .area-split-button__trigger > .area-button__icon > svg { transition: rotate var(--area-duration-fast) var(--area-ease-out); }
+  .area-split-button__trigger[aria-expanded="true"] > .area-button__icon > svg { rotate: 180deg; }
 
   /* Native popover in the top layer, placed by the React layer like every anchored menu
      (left / top, flip and shift; surface.css "Anchored overlays"); Menu paints the surface. */
@@ -112,10 +116,6 @@
     color: var(--area-fg-default);
   }
   .area-split-button__menu:not(:popover-open) { display: none; }
-
-  @media (prefers-reduced-motion: reduce) {
-    .area-split-button__trigger > .area-button__icon > svg { transition: none; }
-  }
 
   /* Every part disabled: the joined control dims once as a whole, so the seam and edges where the
      parts overlap aren't dimmed twice (audit H-26). One disabled part still dims alone. */

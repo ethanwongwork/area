@@ -12,9 +12,13 @@
  * captures are missing. Validation is not owner acceptance (`component-status.mjs`).
  */
 export const VALIDATED_PASSES = {
-  disclosure: {
+  accordion: {
     date: "2026-10-02",
     against: "Notion's toggle block (row, chevron square, title column, hover plate); divided against shadcn's accordion source",
+  },
+  "custom-select": {
+    date: "2026-10-07",
+    against: "Notion's settings Theme select and Card size menu, ChatGPT's settings selects and model picker (triggers, open lists, chosen row, chevron), light",
   },
   toolbar: {
     date: "2026-09-27",
