@@ -1,0 +1,101 @@
+{
+  "mantine": {
+    "repo": "mantinedev/mantine",
+    "sha": "f38933cb4f1c534600f4ff59ee3ddbb4685a4bc4",
+    "path": ".cache/sources/mantine@f38933cb4f1c534600f4ff59ee3ddbb4685a4bc4",
+    "url": "https://github.com/mantinedev/mantine/tree/f38933cb4f1c534600f4ff59ee3ddbb4685a4bc4",
+    "checked": "2026-09-28"
+  },
+  "ant-design": {
+    "repo": "ant-design/ant-design",
+    "sha": "7ad64087106acd078dcc7d91a4adfdf38f5ce172",
+    "path": ".cache/sources/ant-design@7ad64087106acd078dcc7d91a4adfdf38f5ce172",
+    "url": "https://github.com/ant-design/ant-design/tree/7ad64087106acd078dcc7d91a4adfdf38f5ce172",
+    "checked": "2026-09-28"
+  },
+  "base-ui": {
+    "repo": "mui/base-ui",
+    "sha": "62b54e8c944784c4de992eb424286b77cea4415a",
+    "path": ".cache/sources/base-ui@62b54e8c944784c4de992eb424286b77cea4415a",
+    "url": "https://github.com/mui/base-ui/tree/62b54e8c944784c4de992eb424286b77cea4415a",
+    "checked": "2026-09-28"
+  },
+  "ark": {
+    "repo": "chakra-ui/ark",
+    "sha": "b561e95d20d6bd0e75cdc08e762e881628b110f7",
+    "path": ".cache/sources/ark@b561e95d20d6bd0e75cdc08e762e881628b110f7",
+    "url": "https://github.com/chakra-ui/ark/tree/b561e95d20d6bd0e75cdc08e762e881628b110f7",
+    "checked": "2026-09-28"
+  },
+  "react-spectrum": {
+    "repo": "adobe/react-spectrum",
+    "sha": "b90cbea6a1ab6ee12b66ac03d37a97fd661c8783",
+    "path": ".cache/sources/react-spectrum@b90cbea6a1ab6ee12b66ac03d37a97fd661c8783",
+    "url": "https://github.com/adobe/react-spectrum/tree/b90cbea6a1ab6ee12b66ac03d37a97fd661c8783",
+    "checked": "2026-09-28"
+  },
+  "shadcn": {
+    "repo": "shadcn-ui/ui",
+    "sha": "db2db460a26fa84fb65c8d903b213925fbdee9ed",
+    "path": ".cache/sources/shadcn@db2db460a26fa84fb65c8d903b213925fbdee9ed",
+    "url": "https://github.com/shadcn-ui/ui/tree/db2db460a26fa84fb65c8d903b213925fbdee9ed",
+    "checked": "2026-09-28"
+  },
+  "radix-themes": {
+    "repo": "radix-ui/themes",
+    "sha": "1faff10ac26ae17f09944d418c6949b93fc6b566",
+    "path": ".cache/sources/radix-themes@1faff10ac26ae17f09944d418c6949b93fc6b566",
+    "url": "https://github.com/radix-ui/themes/tree/1faff10ac26ae17f09944d418c6949b93fc6b566",
+    "checked": "2026-09-28"
+  },
+  "fluent": {
+    "repo": "microsoft/fluentui",
+    "sha": "8add8c8750c34c85acd811e32ab324abf8f1562e",
+    "path": ".cache/sources/fluent@8add8c8750c34c85acd811e32ab324abf8f1562e",
+    "url": "https://github.com/microsoft/fluentui/tree/8add8c8750c34c85acd811e32ab324abf8f1562e",
+    "checked": "2026-09-28"
+  },
+  "primer": {
+    "repo": "primer/react",
+    "sha": "a89299ae77e8f444599f94d7e9ca368c17be3f9a",
+    "path": ".cache/sources/primer@a89299ae77e8f444599f94d7e9ca368c17be3f9a",
+    "url": "https://github.com/primer/react/tree/a89299ae77e8f444599f94d7e9ca368c17be3f9a",
+    "checked": "2026-09-28"
+  },
+  "carbon": {
+    "repo": "carbon-design-system/carbon",
+    "sha": "650fcf4a8c5f86c5fdaa255d59229fe70fdb9757",
+    "path": ".cache/sources/carbon@650fcf4a8c5f86c5fdaa255d59229fe70fdb9757",
+    "url": "https://github.com/carbon-design-system/carbon/tree/650fcf4a8c5f86c5fdaa255d59229fe70fdb9757",
+    "checked": "2026-09-28"
+  },
+  "untitled": {
+    "repo": "untitleduico/react",
+    "sha": "4702dc0ea8d140c3491a85670c7b4fab47b722da",
+    "path": ".cache/sources/untitled@4702dc0ea8d140c3491a85670c7b4fab47b722da",
+    "url": "https://github.com/untitleduico/react/tree/4702dc0ea8d140c3491a85670c7b4fab47b722da",
+    "checked": "2026-09-28"
+  },
+  "material3": {
+    "repo": "material-components/material-components-android",
+    "sha": "60ff09436d5d477a4b9d02940f31eb01e1250620",
+    "path": ".cache/sources/material3@60ff09436d5d477a4b9d02940f31eb01e1250620",
+    "url": "https://github.com/material-components/material-components-android/tree/60ff09436d5d477a4b9d02940f31eb01e1250620",
+    "checked": "2026-09-28"
+  },
+  "atlassian": {
+    "repo": "atlassian/atlassian-frontend-mirror",
+    "host": "bitbucket.org",
+    "sha": "a33189b5ea7a152af1ad537c6106f803a1f7a651",
+    "path": ".cache/sources/atlassian-official@a33189b5ea7a152af1ad537c6106f803a1f7a651",
+    "url": "https://bitbucket.org/atlassian/atlassian-frontend-mirror/src/a33189b5ea7a152af1ad537c6106f803a1f7a651",
+    "checked": "2026-09-28"
+  },
+  "carbon-charts": {
+    "repo": "carbon-design-system/carbon-charts",
+    "sha": "26a7f620248caf53db3eaabd60df7f7ff44feb21",
+    "path": ".cache/sources/carbon-charts@26a7f620248caf53db3eaabd60df7f7ff44feb21",
+    "url": "https://github.com/carbon-design-system/carbon-charts/tree/26a7f620248caf53db3eaabd60df7f7ff44feb21",
+    "checked": "2026-09-28"
+  }
+}
