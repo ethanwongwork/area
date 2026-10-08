@@ -1,0 +1,143 @@
+/* Research examples, 2026-10-08. Every numeric optical value is authored for this lab,
+   not a measured Area preset. No public Area tokens are defined or registered here. */
+:root { color-scheme: light; --demo-page:#eef0f5; --demo-surface:#fff; --demo-ink:#202530;
+  --demo-edge:#737d90; --demo-accent:#435ed8; --demo-radius:26px; --demo-angle:135deg;
+  --demo-blur:14px; --demo-alpha:70%; --demo-warp:22; }
+:root[data-theme="dark"] { color-scheme:dark; --demo-page:#020202; --demo-surface:#17191f;
+  --demo-ink:#f4f5fa; --demo-edge:#9ca8bb; --demo-accent:#a6b6ff; }
+* { box-sizing:border-box; }
+body { margin:0; font:16px/1.55 system-ui,sans-serif; background:var(--demo-page); color:var(--demo-ink); }
+main { max-width:1120px; margin:auto; padding:36px 24px 72px; }
+nav { display:flex; flex-wrap:wrap; gap:8px 24px; margin-bottom:30px; }
+a { color:inherit; text-underline-offset:4px; }
+h1 { font-size:clamp(30px,5vw,48px); letter-spacing:-.04em; line-height:1.1; margin:12px 0; }
+h2 { font-size:24px; line-height:1.2; margin-top:40px; }
+h3 { font-size:17px; margin:0 0 5px; }
+p { max-width:78ch; }
+.eyebrow { font:12px/1.5 ui-monospace,monospace; text-transform:uppercase; letter-spacing:.12em; }
+.intro { max-width:72ch; }
+.controls { display:flex; flex-wrap:wrap; align-items:center; gap:16px 28px; padding:20px;
+  border:1px solid var(--demo-edge); border-radius:12px; margin:26px 0; background:var(--demo-surface); }
+.controls label { display:grid; gap:5px; min-width:150px; }
+.controls .check { display:flex; align-items:center; min-width:0; }
+input,select,button { font:inherit; accent-color:var(--demo-accent); }
+select { padding:4px; max-width:100%; }
+input[type="range"] { max-width:100%; }
+output { font-variant-numeric:tabular-nums; }
+button { cursor:pointer; }
+:focus-visible { outline:3px solid var(--demo-accent); outline-offset:5px; }
+.grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,245px),1fr)); gap:24px; }
+.tile { min-width:0; border:1px solid var(--demo-edge); border-radius:14px; padding:22px; }
+.tile p { font-size:14px; margin:16px 0 0; }
+/* Derive on EACH specimen and scope: inherited derived values cannot be late-bound
+   to an overridden child input. These names remain private to the research page. */
+.demo-scope,.specimen { --_body:var(--area-bg-surface,var(--demo-surface));
+  --_ink:var(--area-fg-default,var(--demo-ink)); --_accent:var(--area-fg-accent,var(--demo-accent));
+  --_edge:var(--area-edge-control,var(--demo-edge)); --_light:rgba(255,255,255,.7);
+  --_shade:rgba(0,0,0,.28); --_tint:rgba(97,126,237,.22); --_glass:rgba(255,255,255,.7); }
+[data-theme="dark"] .demo-scope,[data-theme="dark"] .specimen { --_glass:rgba(23,25,31,.7); }
+@supports (color:color-mix(in srgb,red,transparent)) {
+  .demo-scope,.specimen { --_tint:color-mix(in srgb,var(--_accent) 22%,transparent);
+    --_glass:color-mix(in srgb,var(--_body) var(--demo-alpha),transparent);
+    --_shade:color-mix(in srgb,var(--area-shadow-color,black) 28%,transparent); }
+}
+.specimen { position:relative; border:1px solid var(--_edge); border-radius:var(--demo-radius);
+  background:var(--_body); color:var(--_ink); padding:24px 16px; min-height:116px;
+  display:grid; place-items:center; text-align:center; font-weight:650; width:100%; }
+.specimen > span { position:relative; z-index:1; }
+/* T01 body paint. Stops are authored; multi-radial is a mesh-like approximation. */
+.linear { background:linear-gradient(var(--demo-angle),#ebf0ff,#b5c4f1); color:#202530; }
+.radial { background:radial-gradient(ellipse at 25% 20%,#fff,#adbfea); color:#202530; }
+.conic { background:#c6d4fc; color:#202530; }
+@supports (background:conic-gradient(red,blue)) {
+ .conic { background:conic-gradient(from 30deg at 50% 50%,#d4ddff,#a0d8cf,#ead6ff,#d4ddff); }
+}
+.mesh { background:radial-gradient(ellipse at 10% 10%,#ffdbad,transparent 65%),
+  radial-gradient(ellipse at 90% 20%,#c5c4ff,transparent 65%),
+  radial-gradient(ellipse at 60% 95%,#a6e8df,transparent 70%),#e8edfa; color:#202530; }
+/* T02 relief: first shadow paints on top. Cast and inset intents stay separate. */
+.paper { box-shadow:0 2px 3px var(--_shade),0 14px 24px -12px var(--_shade); }
+.recess { box-shadow:inset 3px 4px 9px var(--_shade),inset -1px -1px 1px var(--_light); }
+.bevel { box-shadow:inset 2px 2px 1px var(--_light),inset -2px -2px 2px var(--_shade); }
+.soft { box-shadow:7px 7px 14px var(--_shade),-7px -7px 14px var(--_light);
+  background:var(--demo-page); }
+.clay { box-shadow:inset 4px 4px 7px var(--_light),inset -6px -6px 12px var(--_shade),
+  0 12px 20px -10px var(--_shade); }
+/* T03 emission: halo alpha does not replace the readable foreground. */
+.inner-glow { box-shadow:inset 0 0 22px 3px var(--_accent); }
+.outer-glow { box-shadow:0 0 12px 1px var(--_tint),0 0 28px 7px var(--_tint); }
+/* T04 reflection is a separate decorative plane, never a focusable pseudo-control. */
+.gloss::before { content:""; position:absolute; inset:1px; border-radius:inherit;
+  background:linear-gradient(var(--demo-angle),rgba(255,255,255,.8),rgba(255,255,255,0) 48%);
+  pointer-events:none; }
+/* T05 grain: packaged deterministic SVG, not a downloaded texture. */
+.grain::before { content:""; position:absolute; inset:1px; border-radius:inherit;
+  background:url("grain.svg") repeat; background-size:96px 96px; opacity:.18; pointer-events:none; }
+/* T06 text relief stays on the glyph receiver, with a semantic readable base ink. */
+.letterpress span { text-shadow:0 1px 0 var(--_light),0 -1px 0 var(--_shade); }
+.letterpress { background:var(--demo-page); }
+.ink-glow span { text-shadow:0 0 7px var(--_tint),0 0 18px var(--_tint); }
+.shape { border-radius:var(--demo-radius); }
+@supports (corner-shape:squircle) { .shape { corner-shape:squircle; } }
+/* T07 rounded stroke: opaque double background versus transparent mask ring. */
+.stroke-double { border:3px solid transparent; background:
+  linear-gradient(var(--_body),var(--_body)) padding-box,
+  linear-gradient(var(--demo-angle),#788ce8,#df86b3,#79c8c8) border-box; }
+.stroke-mask { background:var(--_glass); border:3px solid var(--_edge); }
+@supports (mask-composite:exclude) {
+ .stroke-mask { border-color:transparent; }
+ .stroke-mask::after { content:""; position:absolute; inset:-3px; padding:3px;
+   border-radius:inherit; background:linear-gradient(var(--demo-angle),#788ce8,#df86b3,#79c8c8);
+   mask:linear-gradient(#000,#000) content-box,linear-gradient(#000,#000);
+   mask-composite:exclude; pointer-events:none; }
+}
+.stroke-border-image { border:3px solid; border-image:linear-gradient(var(--demo-angle),#788ce8,#df86b3,#79c8c8) 1;
+ background:var(--_body); }
+/* T08 backdrop acquisition. An opaque fallback remains until syntax is supported. */
+.scene { position:relative; padding:36px; border-radius:18px; background:
+  repeating-linear-gradient(90deg,rgba(30,50,130,.28) 0,rgba(30,50,130,.28) 2px,transparent 2px,transparent 32px),
+  linear-gradient(120deg,#ffa6c3,#bac6ff,#7ad6bf); }
+.scene .scene-label { color:#1b2542; font:700 21px/1.4 ui-monospace,monospace; margin:0 0 22px; }
+.glass { min-height:180px; background:var(--_body); }
+@supports ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))) {
+ .glass { background:var(--_glass); -webkit-backdrop-filter:blur(var(--demo-blur)) saturate(1.2);
+  backdrop-filter:blur(var(--demo-blur)) saturate(1.2); }
+}
+.scene-grid { margin-top:20px; }
+.scene-grid > article > p { color:#1b2542; }
+.art { width:100%; display:block; border:1px solid var(--demo-edge); border-radius:14px; background:#dce7f5; }
+.status { padding:14px 18px; border-inline-start:3px solid var(--demo-accent); font-size:14px;
+ background:var(--demo-surface); overflow-wrap:anywhere; }
+.demo-scope { background:var(--_body); color:var(--_ink); border:1px solid var(--_edge); border-radius:16px; padding:24px; }
+.demo-scope.nested { --demo-surface:#192421; --demo-ink:#edf8ef; --demo-accent:#85dcae; --demo-edge:#83a78e; margin-top:22px; }
+.swatches { display:flex; flex-wrap:wrap; gap:14px; margin:20px 0; }
+.swatch { width:100px; height:70px; border:1px solid var(--_edge); border-radius:12px; }
+.swatch.body { background:var(--_body); }.swatch.tint { background:var(--_tint); }
+.swatch.relative { background:var(--_accent); }
+@supports (color:oklch(from red calc(l + .04) c h)) {
+ .demo-scope,.specimen { --_relative:oklch(from var(--_accent) calc(l + .04) c h); }
+ .swatch.relative { background:var(--_relative); }
+}
+.action { min-height:48px; padding:10px 18px; border:1px solid var(--_edge); border-radius:10px;
+ background:var(--_body); color:var(--_ink); }
+.action:hover { background:var(--_tint); } /* Foreground stays fixed. */
+.action:disabled { cursor:default; border-style:dashed; }
+/* Consumer example uses one Surface cast-shadow on a wrapper. Never concatenate
+   a possibly-'none' Surface token into an inset shadow list. */
+.cast-shell { border-radius:var(--demo-radius); box-shadow:var(--area-shadow-card,0 8px 20px -12px rgba(0,0,0,.28)); }
+.cast-shell .specimen { box-shadow:inset 0 1px 0 var(--_light); }
+[data-reduced="true"] .glass { background:var(--_body); -webkit-backdrop-filter:none; backdrop-filter:none; }
+[data-reduced="true"] .specimen { box-shadow:none; text-shadow:none; }
+[data-reduced="true"] .specimen::before,[data-reduced="true"] .specimen::after { display:none; }
+[data-reduced="true"] .specimen { border-color:var(--_edge); }
+[data-reduced="true"] .letterpress span,[data-reduced="true"] .ink-glow span { text-shadow:none; }
+@media (prefers-reduced-motion:reduce) { *,*::before,*::after { transition:none !important; animation:none !important; } }
+@media (forced-colors:active) {
+ body,.controls,.tile,.scene,.specimen,.demo-scope,.status,.action { color:CanvasText; background:Canvas;
+   box-shadow:none; text-shadow:none; border-color:CanvasText; border-image:none; }
+ .specimen::before,.specimen::after { display:none; }
+ .specimen span { text-shadow:none; }
+ .glass { -webkit-backdrop-filter:none; backdrop-filter:none; }
+ :focus-visible { outline-color:Highlight; }
+}
+@media (max-width:560px) { main { padding:24px 16px 48px; }.scene { padding:22px; }.controls { gap:18px; } }

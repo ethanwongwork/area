@@ -10,6 +10,7 @@ broken research.
 
 | Date | Topic | Question | Status |
 | --- | --- | --- | --- |
+| 2026-10-08 | [materials/03-css-cookbook](materials/03-css-cookbook/README.md) | How can every material layer be rendered in CSS/SVG, with browser fallbacks and safe Area-token derivation? | unreviewed |
 | 2026-10-08 | [materials/02-prior-art](materials/02-prior-art/README.md) | Which systems expose shared materials and optical controls, and does open-source prior art already exist? | unreviewed |
 | 2026-10-07 | [materials/01-taxonomy](materials/01-taxonomy/README.md) | What are the requested styles made of, and which shared layer model should later materials tasks use? | unreviewed |
 | 2026-10-07 | [unverified-inventory](unverified-inventory/README.md) | What do all 68 Unverified paragraphs require, where can they be checked, and what are the exact steps? | unreviewed |
