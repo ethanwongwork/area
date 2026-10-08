@@ -1,0 +1,522 @@
+{
+  "primer-layout": {
+    "id": "primer-layout",
+    "requested_url": "https://primer.style/product/getting-started/foundations/layout/",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://primer.style/product/getting-started/foundations/layout/",
+    "bytes": 1214645,
+    "sha256": "5a38bd390b7cb35eddf7fc6ac85303dc458eab4b2cd0f5ae2e526c601cabc4a9",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "primer-navigation": {
+    "id": "primer-navigation",
+    "requested_url": "https://primer.style/product/ui-patterns/navigation/",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://primer.style/product/ui-patterns/navigation/",
+    "bytes": 1232836,
+    "sha256": "96dbc4b5bcc7878dd1cc7f62e2f41f879a7ff84ec05f63bbab5af8d09a920a14",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "primer-onboarding": {
+    "id": "primer-onboarding",
+    "requested_url": "https://primer.style/product/ui-patterns/feature-onboarding/",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://primer.style/product/ui-patterns/feature-onboarding/",
+    "bytes": 1215431,
+    "sha256": "90950f1e584659b2be0efb68b10e6f976fcc287ce86d0ac23623eee530e03d0a",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "primer-empty": {
+    "id": "primer-empty",
+    "requested_url": "https://primer.style/product/ui-patterns/empty-states/",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://primer.style/product/ui-patterns/empty-states/",
+    "bytes": 1156972,
+    "sha256": "f572d201858e32b6ac86b56a3973f96490c25805040a58ca2ec319c254e88f3c",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "primer-degraded": {
+    "id": "primer-degraded",
+    "requested_url": "https://primer.style/product/ui-patterns/degraded-experiences/",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://primer.style/product/ui-patterns/degraded-experiences/",
+    "bytes": 1250791,
+    "sha256": "0c0dc19d0c1c8d074f9ae72b20febff5287f3565b7652a33a68f13eb11e9c681",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "primer-loading": {
+    "id": "primer-loading",
+    "requested_url": "https://primer.style/product/ui-patterns/loading/",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://primer.style/product/ui-patterns/loading/",
+    "bytes": 1204823,
+    "sha256": "0eecadc8d12b80d8efcdcefc89cbf62eabffb41b9c20824a684f33669efc1445",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "carbon-filter": {
+    "id": "carbon-filter",
+    "requested_url": "https://carbondesignsystem.com/patterns/filtering/",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://carbondesignsystem.com/patterns/filtering/",
+    "bytes": 3022359,
+    "sha256": "e3900a5ad126680f0131460582f1864c397b8c670ceb9de9d457d069ef584dd7",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "carbon-login": {
+    "id": "carbon-login",
+    "requested_url": "https://carbondesignsystem.com/patterns/login-pattern/",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://carbondesignsystem.com/patterns/login-pattern/",
+    "bytes": 3054466,
+    "sha256": "02976e6b7665aafbca7b4abbb4ab6d78e7e3543d4a6e5b8e663acba87c68d954",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "carbon-notifications": {
+    "id": "carbon-notifications",
+    "requested_url": "https://carbondesignsystem.com/patterns/notification-pattern/",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://carbondesignsystem.com/patterns/notification-pattern/",
+    "bytes": 3063395,
+    "sha256": "78c42fdf1c410c8a5fd6c20dee4b1d0ff69051f381da41daf39e130599676d10",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "carbon-search": {
+    "id": "carbon-search",
+    "requested_url": "https://carbondesignsystem.com/patterns/search-pattern/",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://carbondesignsystem.com/patterns/search-pattern/",
+    "bytes": 3061634,
+    "sha256": "f626066399efb4039cb81e347ba9ed7a111d76fc5636d875f60d26479fd899ce",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "carbon-toolbar": {
+    "id": "carbon-toolbar",
+    "requested_url": "https://carbondesignsystem.com/patterns/text-toolbar-pattern/",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://carbondesignsystem.com/patterns/text-toolbar-pattern/",
+    "bytes": 3058188,
+    "sha256": "01632fa2e7994c78f9e56cadb115b008d8203bc5ce1d8246427506dd65f08224",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "carbon-table": {
+    "id": "carbon-table",
+    "requested_url": "https://carbondesignsystem.com/components/data-table/usage/",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://carbondesignsystem.com/components/data-table/usage/",
+    "bytes": 3120215,
+    "sha256": "ab42192575726dc89e8cf5047e4a451d76d6a2177fed6fb32445bfe797b64ffa",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "polaris-settings": {
+    "id": "polaris-settings",
+    "requested_url": "https://shopify.dev/docs/api/app-home/latest/patterns/templates/settings",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://shopify.dev/docs/api/app-home/latest/patterns/templates/settings",
+    "bytes": 642409,
+    "sha256": "c784ce0b521b5f7e46714607c60c9d0f498752eddb7d028bef3011531b5a40c7",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "polaris-home": {
+    "id": "polaris-home",
+    "requested_url": "https://shopify.dev/docs/api/app-home/latest/patterns/templates/homepage",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://shopify.dev/docs/api/app-home/latest/patterns/templates/homepage",
+    "bytes": 870918,
+    "sha256": "db8520a3d218b8eaeb091a22c548e04c7968cc8c7c7e45c6c41f903a76629e9a",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "polaris-details": {
+    "id": "polaris-details",
+    "requested_url": "https://shopify.dev/docs/api/app-home/latest/patterns/templates/details",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://shopify.dev/docs/api/app-home/latest/patterns/templates/details",
+    "bytes": 650131,
+    "sha256": "c844ff1023b2e9084d1caf87cca482e5c7bf487f5bfd3bb0dc672fcca2f4dbcf",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "polaris-index": {
+    "id": "polaris-index",
+    "requested_url": "https://shopify.dev/docs/api/app-home/latest/patterns/compositions/index-table",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://shopify.dev/docs/api/app-home/latest/patterns/compositions/index-table",
+    "bytes": 895402,
+    "sha256": "84457da7b791a17572a636c7908f65370aa92a54d4845f0c0486f7312d48a761",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "polaris-resources": {
+    "id": "polaris-resources",
+    "requested_url": "https://shopify.dev/docs/api/app-home/latest/patterns/compositions/resource-list",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://shopify.dev/docs/api/app-home/latest/patterns/compositions/resource-list",
+    "bytes": 734160,
+    "sha256": "c3f73bbea9568ad2fec58f9c31e575ec489683a10b04375177954eaadd05090f",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "polaris-setup": {
+    "id": "polaris-setup",
+    "requested_url": "https://shopify.dev/docs/api/app-home/latest/patterns/compositions/setup-guide",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://shopify.dev/docs/api/app-home/latest/patterns/compositions/setup-guide",
+    "bytes": 664961,
+    "sha256": "2406e86b778956fbd38a0dc4ce7486dc76ab94d5f011cfe80b5d029e16d24874",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "polaris-connect": {
+    "id": "polaris-connect",
+    "requested_url": "https://shopify.dev/docs/api/app-home/latest/patterns/compositions/account-connection",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://shopify.dev/docs/api/app-home/latest/patterns/compositions/account-connection",
+    "bytes": 476239,
+    "sha256": "58af589c520a11698e21c5e889a28a81f06212a2ee2baf967f3a29d6dfe4e460",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "atlassian-form": {
+    "id": "atlassian-form",
+    "requested_url": "https://atlassian.design/components/form/examples",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://atlassian.design/components/form/examples",
+    "bytes": 980553,
+    "sha256": "a17feda6b2ccb817d5a6c99e4d9ea2956f20fd85128fe2797e4b7687e10fc0fb",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "atlassian-comments": {
+    "id": "atlassian-comments",
+    "requested_url": "https://atlassian.design/components/comment/examples",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://atlassian.design/components/comment/examples",
+    "bytes": 588361,
+    "sha256": "fc96184b603fbd828fb2ccb2d905bed4bacd759ca3f5bab7db550a583eef9e86",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "atlassian-ai": {
+    "id": "atlassian-ai",
+    "requested_url": "https://atlassian.design/rovo-ui/ai-interaction-guidelines",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://atlassian.design/rovo-ui/ai-interaction-guidelines",
+    "bytes": 268299,
+    "sha256": "488364e089533a4a5d9790473bc90218bda718609bea77cbf83fbd2fcfdd5f7c",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "gov-question": {
+    "id": "gov-question",
+    "requested_url": "https://design-system.service.gov.uk/patterns/question-pages/",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://design-system.service.gov.uk/patterns/question-pages/",
+    "bytes": 144641,
+    "sha256": "ad2322c932d76a216470e9de9b78ca7ffbd3ff628fddad5ff6585ffd0baeae21",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "gov-review": {
+    "id": "gov-review",
+    "requested_url": "https://design-system.service.gov.uk/patterns/check-answers/",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://design-system.service.gov.uk/patterns/check-answers/",
+    "bytes": 95757,
+    "sha256": "6128b40499715afbbeb93cad6388b2ff9e3610d4cb79b116ea05785a012486a1",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "gov-validation": {
+    "id": "gov-validation",
+    "requested_url": "https://design-system.service.gov.uk/patterns/validation/",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://design-system.service.gov.uk/patterns/validation/",
+    "bytes": 61027,
+    "sha256": "89536cb4dfdc5bc00a451fef5a83123697c1245a45ad335b00ff336d25297412",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "gov-confirm": {
+    "id": "gov-confirm",
+    "requested_url": "https://design-system.service.gov.uk/patterns/confirmation-pages/",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://design-system.service.gov.uk/patterns/confirmation-pages/",
+    "bytes": 66371,
+    "sha256": "de29900441b53af6650705a2b364f984250250413597ea1c18117925d669832e",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "gov-account": {
+    "id": "gov-account",
+    "requested_url": "https://design-system.service.gov.uk/patterns/create-accounts/",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://design-system.service.gov.uk/patterns/create-accounts/",
+    "bytes": 57624,
+    "sha256": "ed59fce47efbbd0f690cefe3ecdd0c929cd3f393de9d366e51d170ce41e9d1ff",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "gov-email": {
+    "id": "gov-email",
+    "requested_url": "https://design-system.service.gov.uk/patterns/confirm-an-email-address/",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://design-system.service.gov.uk/patterns/confirm-an-email-address/",
+    "bytes": 59265,
+    "sha256": "de72533546811ad7509358d4adc17aa4ef3e26d65a53ea2df26406d7ea612981",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "gov-unavailable": {
+    "id": "gov-unavailable",
+    "requested_url": "https://design-system.service.gov.uk/patterns/service-unavailable-pages/",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://design-system.service.gov.uk/patterns/service-unavailable-pages/",
+    "bytes": 131271,
+    "sha256": "7a2677221ffabef570a8910b1785a298e369cfac2f68d766871636fccd773396",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "gov-not-found": {
+    "id": "gov-not-found",
+    "requested_url": "https://design-system.service.gov.uk/patterns/page-not-found-pages/",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://design-system.service.gov.uk/patterns/page-not-found-pages/",
+    "bytes": 71485,
+    "sha256": "166a5443a9585b1d1494cfcbd4db5a4ba8a216a8b1c005bba0aec5b4c0863756",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "gov-upload": {
+    "id": "gov-upload",
+    "requested_url": "https://design-system.service.gov.uk/components/file-upload/",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://design-system.service.gov.uk/components/file-upload/",
+    "bytes": 179228,
+    "sha256": "e8b8354d7e1acd71ff33eda01974d51714f2580f2b31061648f4de4e4bd61160",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "fluent-layout": {
+    "id": "fluent-layout",
+    "requested_url": "https://fluent2.microsoft.design/layout",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://fluent2.microsoft.design/layout",
+    "bytes": 127748,
+    "sha256": "227c25a1182465ad0bb5e9279049bc2795807b63b012df35d0ec520182f55b0f",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "fluent-nav": {
+    "id": "fluent-nav",
+    "requested_url": "https://fluent2.microsoft.design/components/web/react/core/nav/usage",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://fluent2.microsoft.design/components/web/react/core/nav/usage",
+    "bytes": 256939,
+    "sha256": "f0d17d16323014181e382456603c6a3fb3fa2a53cda7f2a5e38e5158a29c095b",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "fluent-drawer": {
+    "id": "fluent-drawer",
+    "requested_url": "https://fluent2.microsoft.design/components/web/react/core/drawer/usage",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://fluent2.microsoft.design/components/web/react/core/drawer/usage",
+    "bytes": 258841,
+    "sha256": "9b2254779b7a38fc46d99cc8a33f4cfad3e199f855f3eb0e9df787b5ff937339",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "material-layout": {
+    "id": "material-layout",
+    "requested_url": "https://developer.android.com/develop/ui/compose/layouts/adaptive/canonical-layouts",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://developer.android.com/develop/ui/compose/layouts/adaptive/canonical-layouts",
+    "bytes": 372340,
+    "sha256": "bb054cb92a2451560658c6c80fc0076f4be6a86c4899baa747b5fc17ef3e9c89",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "apple-panels": {
+    "id": "apple-panels",
+    "requested_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/panels.json",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/panels.json",
+    "bytes": 22973,
+    "sha256": "550616a3035d4072d138434de7b44e5cbff04d11ff3de82fad51fe37b1edc072",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "apple-sidebar": {
+    "id": "apple-sidebar",
+    "requested_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/sidebars.json",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/sidebars.json",
+    "bytes": 38566,
+    "sha256": "5aff188db0d343d4286e15a8ed6a7baadef4cfa60565ce374be0c51aae64859d",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "apple-onboarding": {
+    "id": "apple-onboarding",
+    "requested_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/onboarding.json",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://developer.apple.com/tutorials/data/design/human-interface-guidelines/onboarding.json",
+    "bytes": 21786,
+    "sha256": "9a85ebb1e3dd275d5f5dbfa1729a2e18429960fc26f5273921a68dc5b323dcda",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "untitled-settings": {
+    "id": "untitled-settings",
+    "requested_url": "https://www.untitledui.com/react/components/settings-pages",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://www.untitledui.com/react/components/settings-pages",
+    "bytes": 1168276,
+    "sha256": "209aebb4196ace3058fb967f47086badef3b4a14f237681b9c6457af9b343676",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "untitled-header-settings": {
+    "id": "untitled-header-settings",
+    "requested_url": "https://www.untitledui.com/react/components/settings-pages-02",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://www.untitledui.com/react/components/settings-pages-02",
+    "bytes": 1055240,
+    "sha256": "e7efee7f17bca83b4ef769aba6413fcf45a0ef786b3fde9896f44def7cff7f34",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "untitled-billing": {
+    "id": "untitled-billing",
+    "requested_url": "https://www.untitledui.com/react/components/settings-pages/settings-12",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://www.untitledui.com/react/components/settings-pages/settings-12",
+    "bytes": 744804,
+    "sha256": "c116c5c7966c1d6bf97bb25b34daec1a4d11ead9494e02cb2db89e2d63681bf8",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "untitled-payment": {
+    "id": "untitled-payment",
+    "requested_url": "https://www.untitledui.com/react/components/settings-pages/settings-14",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://www.untitledui.com/react/components/settings-pages/settings-14",
+    "bytes": 752122,
+    "sha256": "4616b8a1f8654e2c01a3886b16b068602e86adb85517bc032b68e39944cbfd65",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "untitled-messaging": {
+    "id": "untitled-messaging",
+    "requested_url": "https://www.untitledui.com/react/components/messaging",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://www.untitledui.com/react/components/messaging",
+    "bytes": 771765,
+    "sha256": "7424deb5770dc76f27513c8c3b361adf98c6681e8350e413f75f8192bdc8a733",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "untitled-upload": {
+    "id": "untitled-upload",
+    "requested_url": "https://www.untitledui.com/react/components/file-uploaders",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://www.untitledui.com/react/components/file-uploaders",
+    "bytes": 1439905,
+    "sha256": "37daf339fad8c64342569f7f49f8b1f30e589b4bb0cc96147beca321ecc16a58",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "untitled-command": {
+    "id": "untitled-command",
+    "requested_url": "https://www.untitledui.com/react/components/command-menus",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://www.untitledui.com/react/components/command-menus",
+    "bytes": 1443872,
+    "sha256": "82ec59aeedab1c13591b0d12d76c6acd71284b6cc74de128b752b0009bdd74bd",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "untitled-editor": {
+    "id": "untitled-editor",
+    "requested_url": "https://www.untitledui.com/react/components/text-editors",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://www.untitledui.com/react/components/text-editors",
+    "bytes": 485620,
+    "sha256": "2129bff0302b1ce8ba1caa4f2e0c8e2c453120270b5216079787aa2d487f5931",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "untitled-hero": {
+    "id": "untitled-hero",
+    "requested_url": "https://www.untitledui.com/react/marketing/hero-header-sections",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://www.untitledui.com/react/marketing/hero-header-sections",
+    "bytes": 849749,
+    "sha256": "43ca4f87a5a909df10dc8cfa8e9f353b7254b2c299b51531ea2ca373ba0b1e91",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "untitled-pricing": {
+    "id": "untitled-pricing",
+    "requested_url": "https://www.untitledui.com/react/marketing/pricing-sections",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://www.untitledui.com/react/marketing/pricing-sections",
+    "bytes": 647019,
+    "sha256": "41859e051762a182079abad40ef4dacae375339bcdeb066ce84842bef13f9d05",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "untitled-faq": {
+    "id": "untitled-faq",
+    "requested_url": "https://www.untitledui.com/react/marketing/faq-sections",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://www.untitledui.com/react/marketing/faq-sections",
+    "bytes": 645346,
+    "sha256": "b37191a8d4a8663ef08789a44d0df1b43b17c50c1b2301c9e23b0ad11eb3e626",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "untitled-faq-accordion": {
+    "id": "untitled-faq-accordion",
+    "requested_url": "https://www.untitledui.com/react/marketing/faq-sections/faq-accordion-02-brand",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://www.untitledui.com/react/marketing/faq-sections/faq-accordion-02-brand",
+    "bytes": 593402,
+    "sha256": "255e1e6928572560fac10cc43d01342e6e4be9e2b7cecd21725c1639749e4ac9",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "shadcn-blocks": {
+    "id": "shadcn-blocks",
+    "requested_url": "https://ui.shadcn.com/blocks",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://ui.shadcn.com/blocks",
+    "bytes": 2294165,
+    "sha256": "c30df8a05d5b6de811fa821f104e16a1e096e89d2c273c6516577bb2f4c6d6cd",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  },
+  "shadcn-login": {
+    "id": "shadcn-login",
+    "requested_url": "https://ui.shadcn.com/blocks/login",
+    "checked_on": "2026-09-28",
+    "http_status": 200,
+    "final_url": "https://ui.shadcn.com/blocks/login",
+    "bytes": 879027,
+    "sha256": "0bd56397448dbc7fb59ab570f3cb1ae8dbb2bddb94efda10b496b41e8d39ff2b",
+    "result": "retrieved; HTTP status alone does not verify the authored finding"
+  }
+}
