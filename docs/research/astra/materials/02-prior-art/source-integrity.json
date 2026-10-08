@@ -1,0 +1,254 @@
+[
+  {
+    "library": "radix",
+    "path": "packages/radix-ui-themes/src/components/theme.props.tsx",
+    "sha256": "c0b38b44b31749b2af5803bbb6934cb8977b6246b30533c9d0711251d2d58995",
+    "lines": 76
+  },
+  {
+    "library": "radix",
+    "path": "packages/radix-ui-themes/src/styles/tokens/color.css",
+    "sha256": "118592a4752ac2bd77171df6b1e4d8f14f3f779a425c01433d7b8611c472eb3e",
+    "lines": 1172
+  },
+  {
+    "library": "shadcn",
+    "path": "apps/v4/registry/styles.tsx",
+    "sha256": "78c2d54e8c52f0b2b7d59a9fc8872d6f871849a97c6ddaddd36146dacafe83db",
+    "lines": 190
+  },
+  {
+    "library": "shadcn",
+    "path": "apps/v4/content/docs/(root)/theming.mdx",
+    "sha256": "403a71fea629dd9d5eebdf3656baab6b8550972adfb4fc5ed0847d13b3dc73f0",
+    "lines": 304
+  },
+  {
+    "library": "tweakcn",
+    "path": "types/theme.ts",
+    "sha256": "50a62c4c47c6d9d679a7f3aab2b1bb85dcca9908ce3e2d5f5c9ff3fabc8aa2ce",
+    "lines": 110
+  },
+  {
+    "library": "tweakcn",
+    "path": "utils/shadows.ts",
+    "sha256": "5738b74092e15c9209e28507ab3800e738cb51c28679da516cb1e3f966868def",
+    "lines": 75
+  },
+  {
+    "library": "chakra",
+    "path": "packages/react/src/theme/semantic-tokens/shadows.ts",
+    "sha256": "593d71032d943c916a71c8db4cb86a06e9c8ca3cbe1bb2efaa134705092cec6c",
+    "lines": 58
+  },
+  {
+    "library": "chakra",
+    "path": "packages/react/src/theme/recipes/button.ts",
+    "sha256": "12c2dd26eca8bdd35c83a25ac0bc7d008a94d71e574f8ad531d403c5f871155e",
+    "lines": 188
+  },
+  {
+    "library": "mantine",
+    "path": "packages/@mantine/core/src/components/Paper/Paper.module.css",
+    "sha256": "e1eb64e2d805fd2d3055eb2cb9d217f7ee10ee41fb6ed1f35f986c930f7f822c",
+    "lines": 24
+  },
+  {
+    "library": "mantine",
+    "path": "packages/@mantine/core/src/core/MantineProvider/theme.types.ts",
+    "sha256": "47474d8a9d18beb9c519e018c3de13d56652992ee6cbc66af2f8f5c729f3926e",
+    "lines": 284
+  },
+  {
+    "library": "heroui",
+    "path": "apps/docs/content/docs/en/react/migration/(components)/card.mdx",
+    "sha256": "c5fac70995bbf3d2818562f889a4f82fa8c69d66c6aaf2d83988671dcacf0ed2",
+    "lines": 320
+  },
+  {
+    "library": "heroui",
+    "path": "packages/styles/themes/default/variables.css",
+    "sha256": "80efc8752b6e15c2acf285756bfeb26290749005335092fee643ed9ba9084f4c",
+    "lines": 331
+  },
+  {
+    "library": "park",
+    "path": "packages/preset/src/index.ts",
+    "sha256": "349996c4720ebe5d4c9b2cbd92f3b10b7ee9dfc189fec41068e206c88a517f15",
+    "lines": 70
+  },
+  {
+    "library": "park",
+    "path": "packages/preset/src/recipes/button.ts",
+    "sha256": "722e1a1c1302617d4eb57458058922715d1b48698f9a6654213e4d0f6331748f",
+    "lines": 110
+  },
+  {
+    "library": "carbon",
+    "path": "packages/styles/scss/layer/_layer-sets.scss",
+    "sha256": "4891d76581d6b3ea42f50a2e0ebdea0c843485a3c74ada02dfa2a5cf21177baa",
+    "lines": 95
+  },
+  {
+    "library": "carbon",
+    "path": "packages/styles/scss/layer/_layer-tokens.scss",
+    "sha256": "a9e35b5d8349ee8d7c7be81d2d39355d1a03e2b5451a43e4a0d4c64e14643de5",
+    "lines": 20
+  },
+  {
+    "library": "spectrum",
+    "path": "packages/@adobe/react-spectrum/src/provider/Provider.tsx",
+    "sha256": "abad7b923a87e6a742c64ec5a4bb08ac01d840b52c4927d80f8538908dd243d2",
+    "lines": 240
+  },
+  {
+    "library": "spectrum",
+    "path": "packages/@react-spectrum/s2/src/Provider.tsx",
+    "sha256": "aef43cc492a5439747e112f7d3adb974dedab7cf0c4505658b0fe82e71eb624d",
+    "lines": 134
+  },
+  {
+    "library": "polaris",
+    "path": "README.md",
+    "sha256": "92309a86b3a8419c8b75840137e46fdfab7131e11a4ab9a8b0ca9c4c5e242f53",
+    "lines": 78
+  },
+  {
+    "library": "polaris",
+    "path": "polaris-react/src/components/Box/Box.tsx",
+    "sha256": "77ba86e28413daf8341292235416e514c86f53a8266dad85055dcec7ea338481",
+    "lines": 346
+  },
+  {
+    "library": "geist",
+    "path": "components/themes/presets/shared.ts",
+    "sha256": "387c2e140c3377aa9ef886124d8c31c47fc76a9d73344d13bce57464e3a297bc",
+    "lines": 47
+  },
+  {
+    "library": "geist",
+    "path": "components/themes/presets/index.ts",
+    "sha256": "998e9e66669c2b94c46f4966b355497403324c35035f1b29068a2af01936c14a",
+    "lines": 96
+  },
+  {
+    "library": "98css",
+    "path": "style.css",
+    "sha256": "22f66e3d607eb6406b2832ae096716d8c1124d2a8124723adb287402dfdf82fa",
+    "lines": 994
+  },
+  {
+    "library": "7css",
+    "path": "gui/_variables.scss",
+    "sha256": "673c250057a9086bf4ee3f0b1fa29f9aa88974f531e7335f1ae387f7cb7a7ee4",
+    "lines": 36
+  },
+  {
+    "library": "7css",
+    "path": "gui/_window.scss",
+    "sha256": "9ff4af3de68bcd461935b3428d3b8f946bfabf2b9f8937c5431d8740b8a6a7f3",
+    "lines": 530
+  },
+  {
+    "library": "xpcss",
+    "path": "themes/XP/_buttons.scss",
+    "sha256": "7cacc1fcfd30589bf135852bd6765fb6d812e134d63cb518ffd84054a98de8ed",
+    "lines": 43
+  },
+  {
+    "library": "daisyui",
+    "path": "packages/daisyui/src/utilities/glass.css",
+    "sha256": "fe8790ea6fb90a0a3d2129f15df8eebe0a6c49d8a054097ecfccafdfe504b3cf",
+    "lines": 20
+  },
+  {
+    "library": "daisyui",
+    "path": "packages/daisyui/src/components/button.css",
+    "sha256": "0f7f6516909c9032201628a13b7a0ce8e293fa7abd1f15886c76ec717cea0d94",
+    "lines": 352
+  },
+  {
+    "library": "daisyui",
+    "path": "packages/daisyui/src/themes/light.css",
+    "sha256": "6384d462b607629485ba26fa7d65af21b50bd1f844d4e5733bae2dd4f56201f2",
+    "lines": 29
+  },
+  {
+    "library": "openglass",
+    "path": "LICENSE",
+    "sha256": "0bf987566dfd7e2ece76f013a68b3b1b7e02d06ba6a6618c73e45f73b4b15101",
+    "lines": 22
+  },
+  {
+    "library": "openglass",
+    "path": "docs/LIMITATIONS.md",
+    "sha256": "055ab183408d71e7ccd94681f1edac55e718ef8228c3f9739b80edaab7b96564",
+    "lines": 48
+  },
+  {
+    "library": "openglass",
+    "path": "docs/THEMING.md",
+    "sha256": "bc700331475ad4d3bc7850bb434e0074e781cb1a826645806e41599cebcdf292",
+    "lines": 290
+  },
+  {
+    "library": "openglass",
+    "path": "packages/react/src/theme.tsx",
+    "sha256": "a193b06d4737b0a239166649ad6ceb9b01230176b6ff31067f54b024414b2b1f",
+    "lines": 158
+  },
+  {
+    "library": "openglass",
+    "path": "packages/recipes/src/liquid.source.css",
+    "sha256": "e5dc817105a6d881c922655a294457d373403f05f326afb7447a7ecd75555536",
+    "lines": 1351
+  },
+  {
+    "library": "openglass",
+    "path": "packages/core/src/materials.ts",
+    "sha256": "55d50f03e5ddc7851c60c9fadb9c024762778c11e0ed28a0e2046311f1f8ea46",
+    "lines": 44
+  },
+  {
+    "library": "openglass",
+    "path": "packages/core/src/look.ts",
+    "sha256": "0ed19c83d1c34c8d3300ec500302d8377cdeb66aae8829393b43f6b806aba306",
+    "lines": 156
+  },
+  {
+    "library": "fluent",
+    "path": "controls/dev/Materials/Acrylic/AcrylicBrush.idl",
+    "sha256": "55175ec3f928b14d7f07f953eba0f847270a5539f3ca04202415357a31f13325",
+    "lines": 42
+  },
+  {
+    "library": "material",
+    "path": "compose/material3/material3/src/commonMain/kotlin/androidx/compose/material3/Surface.kt",
+    "sha256": "b82221978167354d62462943bade5838beb4724a71155209d75debc6003bd9e2",
+    "lines": 620
+  },
+  {
+    "library": "material",
+    "path": "compose/material3/material3/src/commonMain/kotlin/androidx/compose/material3/MaterialTheme.kt",
+    "sha256": "9dcf759d23217000822595f76021235c236a08ce4c8a71c3be38b69e3db628bb",
+    "lines": 294
+  },
+  {
+    "library": "neumorphism",
+    "path": "src/Configuration.js",
+    "sha256": "d528475610faa3ec64b6a1e1c0090f518d4e4ee7eebfb64d6e2b17c396319f2e",
+    "lines": 300
+  },
+  {
+    "library": "neumorphism",
+    "path": "src/App.js",
+    "sha256": "ad4483c406e2ec0e51352ec5b6311593e3b61a12b1bff5c433bcdd92d26ef3f1",
+    "lines": 161
+  },
+  {
+    "library": "nes",
+    "path": "scss/elements/buttons.scss",
+    "sha256": "21c5cb306fe86a8e010df39b67eba9d168a883afe89ccf0b92b20d69968da1a2",
+    "lines": 91
+  }
+]
