@@ -1,3 +1,4 @@
+// SUPERSEDED 2026-10-07: the person family now has a gap of 2 between head and body; rerunning this writes the old body. Use ../2026-10-07/scripts/family.mjs (node family.mjs 0 8 4.67) and pkey.mjs.
 // The person-mark family (owner, 2026-10-06: "the placement of all of these icons are pretty inconsistent, …
 // make the ratio of the head to the body size slightly closer to the original person icon"). One small
 // figure, the standalone person moved left (head ⌀6, body 10 × 3.5), and every mark centred on one point at

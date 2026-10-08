@@ -1,9 +1,28 @@
-# Handoff — 2026-10-05
+# Handoff — 2026-10-07
 
 Each session starts from `main` in its own worktree (`claude/*` branch) and merges through a
 pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/docs/src/component-status.mjs` (Indicator and Tooltip are Complete).
+
+## Icon quality pass (2026-10-07, branch `claude/icon-quality-consistency-dade1f`)
+
+- clapperboard is Fluent's movies_and_tv (owner: "exactly like fluent"). Whole set reviewed again icon by
+  icon in ten groups plus four redraws; 94 sources changed, all in review (spec "Quality and consistency
+  pass, 2026-10-07"; sheets, reports, scripts and open decisions in `docs/research/icon-review/2026-10-07/`).
+- The 16 round-2 "replace" verdicts are applied on the named libraries (key, handshake, camera, pushpin,
+  palette, shapes, gamepad, chess-rook, bank, building, lightbulb, lasso, translate, piano, hammer, trash),
+  plus bot-generator's wizard hat and the person's smaller head gap (2) across its family. Other open owner
+  notes applied (car, vault, gallery, vr-goggles, quote, newspaper, party-popper, calculator, piggy-bank, the
+  handset curve, call arrows, frown).
+- Tools: `2026-10-07/look.mjs` (render from sources, parallel-safe, `--before --slivers`, reference rows),
+  `geometry-audit.mjs` (kinks, subpath gaps, lattice in `free` icons: the lint's blind spots),
+  `edge.mjs` (stops headless Edge once its output is written; stray headless Edge runs hold the profile and
+  hang every later sheet: kill them). `2026-10-06/person-family.mjs` is superseded by `2026-10-07/scripts/family.mjs`.
+- Review page round 7 (same link, `reviews7`): 16 of the 94 approved so far (recorded in batches.json and
+  `2026-10-07/reviews7-approved.json`); the "New icons" tab holds 43 candidates (`candidates1`), undecided.
+  Open the page for the owner at the start of the next icon session.
+- Open: the delegated picks and proposals in that README.
 
 ## Icon consistency audit (2026-10-05, branch `claude/icon-audit-consistency-96540c`)
 

@@ -49,7 +49,7 @@
         "options": "approved",
         "color": "approved",
         "text": "approved",
-        "shapes": "review",
+        "shapes": "approved",
         "list": "approved",
         "square-dashed": "approved",
         "layers": "approved",
@@ -87,7 +87,7 @@
       "icons": {
         "lock": "approved",
         "star": "approved",
-        "heart": "approved",
+        "heart": "review",
         "calendar": "review",
         "clock": "approved",
         "pencil": "review",
@@ -132,7 +132,7 @@
         "terminal": "approved",
         "error": "approved",
         "unlock": "approved",
-        "share": "approved",
+        "share": "review",
         "globe": "review"
       }
     },
@@ -162,7 +162,7 @@
         "bold": "review",
         "italic": "approved",
         "underline": "approved",
-        "quote": "review",
+        "quote": "approved",
         "hash": "review",
         "at": "approved",
         "key": "review",
@@ -178,7 +178,7 @@
       "title": "Batch 10 · Editing & devices",
       "note": "Strikethrough, heading and bulleted list join the text toolbar (a numbered list's numerals cannot read at 16px); wi-fi, bluetooth, battery, plug and power; printer, headphones, video and inbox. Filled review: headphones' cups fill (not the band); printer's sheet separates; battery's terminal sits a tight gap away. Owner round: battery's terminal closer (an approved close gap), bluetooth after Fluent, strikethrough as a letter S at the type glyphs' cap height.",
       "icons": {
-        "strikethrough": "review",
+        "strikethrough": "approved",
         "heading": "approved",
         "list-bullet": "review",
         "wifi": "approved",
@@ -199,7 +199,7 @@
       "icons": {
         "thumbs-up": "approved",
         "smile": "review",
-        "briefcase": "approved",
+        "briefcase": "review",
         "building": "review",
         "compass": "review",
         "crop": "approved",
@@ -408,7 +408,7 @@
       "note": "Zoom to fit (a 4px square with move's four heads, legs 1.5), paint bucket (a tipped diamond with a level line, a handle stub and a solid drop; filled below the level), bottom panel (panel's frame with a 3px pane), and collapse and expand sidebar (panel-left with indent's chevron; right-hand versions mirror).",
       "icons": {
         "zoom-fit": "review",
-        "paint-bucket": "review",
+        "paint-bucket": "approved",
         "panel-bottom": "review",
         "panel-left-close": "review",
         "panel-left-open": "review"
@@ -423,7 +423,7 @@
         "list-checklist": "review",
         "bookmark-remove": "review",
         "filter-add": "review",
-        "pushpin": "review",
+        "pushpin": "approved",
         "palette": "review"
       }
     },
@@ -445,7 +445,7 @@
       "note": "Frame (the frame tool's lines at 4.5 and 11.5 through the whole keyline), pen tool (a nib with an r 1.5 eye and a slit), hand (2-wide fingers and a diagonal thumb, one path), spline (two r 1.5 nodes on an r 7.5 arc) and unpin (pushpin with the shared slash).",
       "icons": {
         "frame": "review",
-        "pen-tool": "review",
+        "pen-tool": "approved",
         "hand": "review",
         "spline": "review",
         "unpin": "review"
@@ -598,7 +598,7 @@
       "icons": {
         "text-size": "review",
         "superscript": "review",
-        "subscript": "review"
+        "subscript": "approved"
       }
     },
     {
@@ -607,7 +607,7 @@
       "note": "Thirteen icons first dropped as too dense for 16px, redrawn with one simplification each (owner: can they be simplified so they fit?): id-card, newspaper, file-image, file-code, git pull request, plane, paw, escape, shadow, blur, line height, letter spacing and translate.",
       "icons": {
         "id-card": "review",
-        "newspaper": "review",
+        "newspaper": "approved",
         "file-image": "review",
         "file-code": "review",
         "git-pull-request": "review",
@@ -634,7 +634,7 @@
         "square-arrow-up-right": "review",
         "square-text": "review",
         "square-text-cursor": "review",
-        "square-list": "review",
+        "square-list": "approved",
         "square-search": "review"
       }
     },
@@ -721,7 +721,7 @@
         "asterisk": "review",
         "plus-minus": "review",
         "brackets": "review",
-        "split": "review",
+        "split": "approved",
         "git-pull-request-closed": "review",
         "git-pull-request-draft": "review"
       }
@@ -860,13 +860,13 @@
         "chevron-last": "review",
         "navigation": "review",
         "mouse-pointer-click": "review",
-        "import": "review",
+        "import": "approved",
         "signature": "review",
         "text-color": "review",
         "bring-to-front": "review",
         "group": "review",
         "remove-formatting": "review",
-        "clipboard-check": "review",
+        "clipboard-check": "approved",
         "clipboard-paste": "review",
         "list-plus": "review",
         "list-tree": "review",
@@ -905,7 +905,7 @@
         "insert-row": "review",
         "spell-check": "review",
         "text-wrap": "review",
-        "file-search": "review",
+        "file-search": "approved",
         "file-spreadsheet": "review",
         "rss": "review",
         "file-pen": "review",
@@ -986,7 +986,7 @@
         "mail-plus": "review",
         "person-x": "review",
         "person-key": "review",
-        "file-cog": "review",
+        "file-cog": "approved",
         "file-download": "review",
         "password": "review",
         "volume-low": "review",
@@ -1034,7 +1034,7 @@
         "list-minus": "review",
         "case-lower": "review",
         "regex": "review",
-        "replace": "review",
+        "replace": "approved",
         "heading-1": "review",
         "heading-2": "review",
         "heading-3": "review",

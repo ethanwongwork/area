@@ -3,5 +3,5 @@
 <circle data-filled="hole" cx="5.5" cy="5.5" r="0.75" fill="currentColor"/>
 <circle data-filled="hole" cx="5.5" cy="8" r="0.75" fill="currentColor"/>
 <circle data-filled="hole" cx="5.5" cy="10.5" r="0.75" fill="currentColor"/>
-<path data-filled="knockout" d="M8 5.5H11M8 8H11M8 10.5H11" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="knockout" d="M8 5.5H10.75M8 8H10.75M8 10.5H10.75" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
