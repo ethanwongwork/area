@@ -152,6 +152,21 @@ Unverified: dark theme, the card tile's media corners at the new Card radius on 
 6 Area captures after the second pass read. Build and test results are in the
 [cohesion audit](../research/cohesion-audit.md#verification).
 
+## Motion and interaction, 2026-10-07
+
+Contract: `docs/MOTION.md`. Research: `docs/research/motion-2026-10-07/crispness-and-current-state.md`.
+
+
+| Interaction | Before | After |
+|---|---|---|
+| Shimmer | `background-position`, `slow × 12` (3s), `linear` keyword | same, `--area-ease-linear` (MOTION.md: shimmer linear and long) |
+| Reduced motion, motion none | no animation, no band | unchanged; the reduced-motion and motion-none rules now share one selector with Spinner and Progress |
+
+Stopped, the placeholder is flat: no band caught mid-sweep. Crispness: nothing at rest moves; text
+lines are whole-pixel (`(1lh − 1em) / 2` = 3 at 14/20, 4 at 16/24). Verified on `/skeleton.html`:
+8 `area-shimmer` animations at 3s linear, 0 with motion none and `background-image: none`.
+Open questions: none.
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → the shimmer stops under the motion axis →
@@ -173,3 +188,4 @@ Unverified: dark theme, the card tile's media corners at the new Card radius on 
 - 2026-09-28 · owner: approved (batch 6).
 - 2026-10-03 · roundness → the 4px block corner moves with the roundness shift (2 to 6), within the small role (`display.css`). `docs/research/radius-audit-2026-10-03.md`, "Roundness".
 - 2026-10-03 · one corner setting (owner: one radius setting, Sharp and Pill as ends; "every control is a pill") → a 16px box's corner, 4 at the default, scaling with the setting (`display.css`). `docs/research/radius-audit-2026-10-03.md`, "One corner setting".
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → shimmer easing on `--area-ease-linear`; stop rules unchanged (verified 8 → 0 animations under motion none) → display.css Skeleton.

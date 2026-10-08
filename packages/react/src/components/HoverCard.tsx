@@ -1,8 +1,10 @@
-import { cloneElement, forwardRef, useEffect, useId, useRef } from "react";
+import { cloneElement, forwardRef, useEffect, useId, useLayoutEffect, useRef } from "react";
 import type { HTMLAttributes, ReactElement, Ref } from "react";
 import { popoverVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { assignRef, useAnchoredPosition, useHoverIntent, useOpenState, type OverlayAlign } from "./overlay.ts";
 import { OVERLAY_PADDING, POPOVER_OFFSET } from "./Overlays.tsx";
+
+const useIsoLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 export interface HoverCardProps extends HTMLAttributes<HTMLDivElement> {
   /** The link or control the card previews. It must work on its own: the card is extra. */
@@ -44,17 +46,20 @@ export const HoverCard = forwardRef<HTMLDivElement, HoverCardProps>(function Hov
   const setOpen = (next: boolean) => { if (next !== current.current) { current.current = next; setOpenState(next); } };
   // Tooltip's input rules (audit E-18): mouse and pen, keyboard focus at once, one Escape handler.
   const { show, hide, clear, hovers, focused } = useHoverIntent(open, setOpen, { delay: openDelayMs, closeDelay });
-  // Popover's engine and gap (audit S16, E-5): flips and shifts, reports its side for the motion
-  // origin. spec: the card starts at the link's start rather than centring on it (GitHub's card
-  // starts 20 before its link), so a card for a link near the page edge stays on the page.
-  useAnchoredPosition(anchor, surface, open, { side, align, offset, padding: OVERLAY_PADDING });
-  useEffect(() => {
+  // Shown before it is placed, in a layout effect, as Popover's useNativePopover: the engine then
+  // measures the real card, so the enter starts at its final place and scales from the link
+  // (motion 2026-10-07: it was shown after paint and measured hidden, at 0 × 0, then re-placed).
+  useIsoLayoutEffect(() => {
     const element = surface.current;
     if (!element || typeof element.showPopover !== "function") return;
     const shown = element.matches(":popover-open");
     if (open && !shown) element.showPopover();
     if (!open && shown) element.hidePopover();
   }, [open]);
+  // Popover's engine and gap (audit S16, E-5): flips and shifts, reports its side for the motion
+  // origin. spec: the card starts at the link's start rather than centring on it (GitHub's card
+  // starts 20 before its link), so a card for a link near the page edge stays on the page.
+  useAnchoredPosition(anchor, surface, open, { side, align, offset, padding: OVERLAY_PADDING });
   const setRef = (element: HTMLDivElement | null) => {
     surface.current = element;
     if (typeof ref === "function") ref(element); else if (ref) ref.current = element;

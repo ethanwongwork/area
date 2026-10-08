@@ -155,6 +155,32 @@ decision.
 - Dialog's title group measures title baseline to description cap 8 (title 20/28, gap 8);
   Popover's is 15. Worth one rule for both in the Dialog pass.
 
+## Motion and interaction, 2026-10-07
+
+Contract: [MOTION.md](../MOTION.md), "Popover, menu ...". One enter and exit shared with Menu,
+Tooltip and every anchored surface built on `.area-popover` (Hover card, date panel).
+
+| Interaction | Before | After |
+|---|---|---|
+| open | `opacity` + `scale` 0.97 → 1, `duration-base` (150), `ease-out`, `@starting-style`, origin at the trigger (overlay.ts) | unchanged |
+| close | same clock as the open: `duration-base`, `ease-out` | one step faster: `duration-fast` (100), `ease-out` (`--_overlay-exit`, carried by the closed rule, since a transition takes the duration of the state it goes to); `display`/`overlay` `allow-discrete` keep the top layer for it |
+| rest | `scale: 1` (an identity transform on the resting surface) | `scale: none`: no transform at rest, so layout snaps it; `none` interpolates as 1 |
+| close button, footer buttons | Button's | Button's (not this pass) |
+| reduced motion / "none" | tokens 0, scale 1 | unchanged; no literal durations remain |
+
+Crispness: the arrow's 50% centre is `round(down, 50%, 1px)` (after a plain 50% fallback), so
+an odd-width popover's arrow and its 1px edge sit on whole pixels (a 321 popover: arrow 144
+from its edge, was 144.5). The header's cap offset `(1cap − 1lh) / 2` is rounded to a whole
+pixel (−5.03 → −5): popovers measured 63.98 and 151.98 tall and a top-side popover sat 7.98
+from its trigger; now 64 and 152.
+
+Verification: `/popover.html`, trigger opened: enter `opacity:150 scale:150` ease-out; close
+`display/opacity/overlay/scale: 100`; at rest opacity 1, `scale: none`, transform none, rect
+428 × 1162, 320 × 152 (whole). Under `data-area-motion="none"` the duration is 0s.
+Verified on the dev server (background tab, so transitions were read from `getAnimations()` and computed styles, not watched; real-pointer hover could not be driven in a background tab, so hover rules were read from the stylesheet).
+
+Open questions: none new.
+
 ## Feedback log
 
 - 2026-09-26 · owner: "go ahead with popover" → shared lift with Menu, 320 wide, 16 gaps,
@@ -179,3 +205,4 @@ decision.
 - 2026-10-03 · roundness → the compact cap reads the container role instead of the base leaf, so the corner follows the offset (`surface.css`, `--_popover-radius`). `docs/research/radius-audit-2026-10-03.md`, "Roundness".
 - 2026-10-03 · two roundness step sizes (owner) → the corner is the surface corner at both densities, stepping by 4; the min() against the compact close equalled it at the default and only differed away from it (`surface.css`, `--_popover-radius`). `docs/research/radius-audit-2026-10-03.md`, "Step size for large shapes".
 - 2026-10-03 · one corner setting (owner: one radius setting, Sharp and Pill as ends; "every control is a pill") → the surface corner; media floored at min(4, setting) (`surface.css`). `docs/research/radius-audit-2026-10-03.md`, "One corner setting".
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → the shared anchored close now one step faster (fast, was base); rests at `scale: none`; arrow centre and header cap offset rounded to whole pixels (`surface.css`).

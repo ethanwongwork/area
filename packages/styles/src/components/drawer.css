@@ -7,9 +7,19 @@
  * scrolls, a footer. shadcn's Sheet (docs/specs/drawer.md); Dialog's insets, type and close.
  * ------------------------------------------------------------------------- */
 @layer area.components {
+  /*
+   * Motion (docs/MOTION.md, "Drawer / sheet"; motion 2026-10-07): the surface slides its full size
+   * from its edge on Vaul's edge curve, in on the slow clock and out one step faster on moderate
+   * (was base 150 both ways, abrupt for a 384–480 panel). The scrim fades as Dialog's, ease-out on
+   * moderate, and leaves on the surface's clock so it is never cut when the dialog leaves the top
+   * layer. Motion tokens: the "none" preset and reduced motion make it instant.
+   */
+  .area-drawer__modal, .area-drawer {
+    --_drawer-in: var(--area-duration-slow);
+    --_drawer-out: var(--area-duration-moderate);
+  }
   /* The native modal fills the viewport; the surface sits against one edge of it. */
   .area-drawer__modal {
-    --_drawer-duration: var(--area-duration-base);
     position: fixed;
     inset: 0;
     inline-size: 100%;
@@ -21,15 +31,16 @@
     border: 0;
     background: transparent;
     overflow: hidden;
-    transition: overlay var(--_drawer-duration) allow-discrete, display var(--_drawer-duration) allow-discrete;
+    transition: overlay var(--_drawer-in) allow-discrete, display var(--_drawer-in) allow-discrete;
   }
+  .area-drawer__modal:not([open], :popover-open) { transition-duration: var(--_drawer-out); }
   /* spec: Dialog's scrim (ChatGPT 13% black; shadcn's Sheet 10% with a 4px blur). */
   .area-drawer__modal::backdrop {
     background: var(--area-scrim);
     opacity: 1;
-    transition: opacity var(--_drawer-duration) var(--area-ease-out), overlay var(--_drawer-duration) allow-discrete, display var(--_drawer-duration) allow-discrete;
+    transition: opacity var(--area-duration-moderate) var(--area-ease-out), overlay var(--_drawer-in) allow-discrete, display var(--_drawer-in) allow-discrete;
   }
-  .area-drawer__modal:not([open])::backdrop { opacity: 0; }
+  .area-drawer__modal:not([open])::backdrop { opacity: 0; transition-duration: var(--_drawer-out); }
   html:has(.area-drawer__modal:modal) { overflow: hidden; }
 
   .area-drawer {
@@ -38,7 +49,7 @@
     --_drawer-inset: calc(var(--_drawer-outer) - var(--area-border-width));
     /* spec: shadcn's Sheet is 384 wide (max-w-sm, shadcn--sheet-right); md is Dialog's 480. */
     --_drawer-size: 384px; /* spec */
-    --_drawer-from: translateX(100%);
+    --_drawer-from: 100% 0;
     position: absolute;
     box-sizing: border-box;
     display: flex;
@@ -47,7 +58,10 @@
     inset-block: 0;
     inset-inline-end: 0;
     inline-size: min(var(--_drawer-size), calc(100% - var(--area-space-48)));
-    padding: var(--_drawer-inset);
+    /* 16 from every edge, the border counted once: only the inner edge has one (audit 2026-10-07:
+       a uniform 15 left the three flush sides at 15). */
+    padding: var(--_drawer-outer);
+    padding-inline-start: var(--_drawer-inset);
     border: 0 solid var(--area-border-float);
     border-inline-start-width: var(--area-border-width);
     background-color: var(--area-bg-surface);
@@ -57,40 +71,43 @@
     line-height: var(--area-ui-leading);
     text-align: start;
     translate: none;
-    transition: transform var(--_drawer-duration) var(--area-ease-out);
+    transition: translate var(--_drawer-in) var(--area-ease-drawer);
   }
   .area-drawer--md { --_drawer-size: calc(var(--area-space-96) * 5); }
   .area-drawer--sm { --_drawer-size: 384px; /* spec */ }
-  .area-drawer--end { --_drawer-from: translateX(100%); }
-  .area-drawer--end:dir(rtl) { --_drawer-from: translateX(-100%); }
+  .area-drawer--end { --_drawer-from: 100% 0; }
+  .area-drawer--end:dir(rtl) { --_drawer-from: -100% 0; }
   .area-drawer--start {
-    --_drawer-from: translateX(-100%);
+    --_drawer-from: -100% 0;
     inset-inline: 0 auto;
+    padding-inline: var(--_drawer-outer) var(--_drawer-inset);
     border-inline-start-width: 0;
     border-inline-end-width: var(--area-border-width);
   }
-  .area-drawer--start:dir(rtl) { --_drawer-from: translateX(100%); }
+  .area-drawer--start:dir(rtl) { --_drawer-from: 100% 0; }
   /* From the bottom: full width, as tall as its content up to most of the screen, the top
      corners rounded as Dialog's surface (a sheet lifting off the edge). */
   .area-drawer--bottom {
-    --_drawer-from: translateY(100%);
+    --_drawer-from: 0 100%;
     inset: auto 0 0 0;
     inline-size: 100%;
     max-block-size: calc(100% - var(--area-space-48));
+    padding: var(--_drawer-outer);
+    padding-block-start: var(--_drawer-inset);
     border-inline-start-width: 0;
     border-block-start-width: var(--area-border-width);
     border-start-start-radius: var(--area-radius-container);
     border-start-end-radius: var(--area-radius-container);
   }
-  /* Enter and exit: the surface slides from its edge while the scrim fades (motion tokens, so the
-     "none" motion preset and reduced motion make it instant). */
-  .area-drawer__modal:not([open], :popover-open) > .area-drawer { transform: var(--_drawer-from); }
+  /* Enter and exit: the surface slides from its edge (a whole panel's length, so it rests at
+     translate none on whole pixels) while the scrim fades. */
+  .area-drawer__modal:not([open], :popover-open) > .area-drawer { translate: var(--_drawer-from); transition-duration: var(--_drawer-out); }
   @starting-style {
-    .area-drawer__modal:is([open], :popover-open) > .area-drawer { transform: var(--_drawer-from); }
+    .area-drawer__modal:is([open], :popover-open) > .area-drawer { translate: var(--_drawer-from); }
     .area-drawer__modal[open]::backdrop { opacity: 0; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .area-drawer__modal, .area-drawer { --_drawer-duration: 0s; }
+    .area-drawer__modal, .area-drawer { --_drawer-in: 0s; --_drawer-out: 0s; }
   }
 
   /* Header, title, description and close: Dialog's (surface.css), so the two read as one family. */
@@ -107,8 +124,11 @@
     margin-inline-end: calc((var(--_icon) - var(--_height)) / 2);
   }
   .area-drawer__heading { min-inline-size: 0; display: grid; gap: var(--area-space-4); }
+  .area-drawer__header:has(> .area-drawer__close) .area-drawer__title { text-box: none; }
   .area-drawer__title {
     margin: 0;
+    /* Dialog's: without a close, the cap sits on the inset. */
+    text-box: trim-start cap alphabetic;
     overflow-wrap: anywhere;
     font-size: var(--area-title-xs-size);
     line-height: var(--area-title-xs-leading);

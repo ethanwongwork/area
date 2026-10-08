@@ -11,6 +11,11 @@
  * wider again if its text would truncate there), then scaled to fit, so it shows its natural
  * layout rather than one squeezed to the tile.
  *
+ * The shrink is CSS `zoom`, not a transform (motion and crispness pass, 2026-10-07): zoom lays the
+ * specimen out again at the smaller size, so borders, rings and icon strokes snap to device pixels;
+ * a `scale` of 0.736 painted every 1px edge between pixels, the gallery's "pixelated" look
+ * (docs/research/motion-2026-10-07/crispness-and-current-state.md).
+ *
  * Sizes are measured, not declared: a new specimen gets its scale from what it renders. Fluid
  * widths are decided once at the default UI scale; scale follows the specimen and the tile live.
  */
@@ -62,7 +67,7 @@ function extent(stage: HTMLElement): Box {
     right = Math.max(right, rect.right); bottom = Math.max(bottom, rect.bottom);
   }
   if (!Number.isFinite(left)) return { w: 0, h: 0 };
-  const scale = Number(stage.style.scale) || 1;
+  const scale = Number(stage.style.zoom) || 1;
   return { w: (right - left) / scale, h: (bottom - top) / scale };
 }
 
@@ -105,7 +110,7 @@ export function fitTiles(canvas: HTMLElement) {
   // Fluid or fixed, and how wide a fluid specimen needs to be, at the default UI scale.
   const density = canvas.getAttribute("data-area-ui");
   canvas.setAttribute("data-area-ui", "default");
-  for (const entry of tiles) { entry.stage.style.scale = ""; entry.stage.style.inlineSize = `${PROBE}px`; }
+  for (const entry of tiles) { entry.stage.style.zoom = ""; entry.stage.style.inlineSize = `${PROBE}px`; }
   for (const entry of tiles) {
     entry.natural = Math.ceil(extent(entry.stage).w);
     entry.fluid = entry.natural >= PROBE - 40;
@@ -130,7 +135,7 @@ export function fitTiles(canvas: HTMLElement) {
     const rooms = batch.map(entry => roomOf(entry.view));
     batch.forEach((entry, index) => { if (entry.fluid) entry.stage.style.inlineSize = `${Math.floor(rooms[index]!.w / MAX * entry.widen)}px`; });
     const scales = batch.map((entry, index) => fit(rooms[index]!, extent(entry.stage)));
-    batch.forEach((entry, index) => { entry.stage.style.scale = scales[index]!.toFixed(3); });
+    batch.forEach((entry, index) => { entry.stage.style.zoom = scales[index]!.toFixed(3); });
   };
   rescale(tiles);
   canvas.setAttribute("data-fitted", "");

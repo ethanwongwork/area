@@ -77,7 +77,13 @@
     font: inherit; font-size: var(--_day-text, var(--area-text-xs-size)); line-height: var(--_day-leading, var(--area-text-xs-leading));
     font-variant-numeric: tabular-nums;
     cursor: pointer;
+    /* Motion (docs/MOTION.md): the plate, ink and today edge leave a state on fast ease-out and
+       enter it at once (hover, press, keyboard below); was no transition, the one plate in the
+       system that snapped out. The focus ring is an outline and never fades. */
+    transition: var(--area-transition);
   }
+  @media (hover: hover) { .area-calendar__day:hover { transition-duration: 0s; } }
+  .area-calendar__day:is(:active, :focus-visible) { transition-duration: 0s; }
   /* A neighbouring month's day is quieter but live: muted, not disabled ink (audit F-10). */
   .area-calendar__day[data-outside] { color: var(--area-fg-muted); }
   @media (hover: hover) { .area-calendar__day:hover:not(:disabled, [aria-disabled="true"], [data-selected]) { background: var(--area-bg-hover); } }

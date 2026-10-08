@@ -51,7 +51,7 @@ Shared with Checkbox (choice.css). Differences:
 
 ```
 control  input.area-radio__control  radius-full (choice.css:108-110)
-  ::after  dot, inset 30% of the padding box, radius-full (choice.css:145-148)
+  ::after  dot, --_dot (6 / 8) centred on the border box, radius-full (choice.css; 2026-10-07)
 ```
 
 The label's first line centres on the glyph through inset.css:185-195, which overrides
@@ -81,7 +81,7 @@ Captures: `area--size-small`, `-medium`, `-large`, `area--selected`, `area--tone
 |---|---|---|---|
 | control · size | **16 / 16 / 20** (choice.css:315-330) | Untitled 16 / 20; audit rule "one glyph ladder"; the products' glyphs are 16 | Was 12 / 16 / 20 |
 | rest edge | **`edge-control-hover` #d4d4d4** (choice.css:48) | Notion's glyph edge ≈ #d4; Untitled #d4d4d4 (second pass) | Was `edge-control` #e2e2e2 |
-| dot | 30% inset: 5.6 at 16, 7.2 at 20 | Untitled 6 / 8 | Proportional to the box rather than two literals; within 0.8px |
+| dot | **6 at 16, 8 at 20** (`--_dot`, 2026-10-07) | Untitled 6 / 8 | Was a 30% inset (5.6 / 7.2), which put the dot's edge on fractional pixels; an even dot in an even box centres exactly |
 | checked | `selection-solid` (neutral by default), dot `fg-on-selection` (choice.css:20-22) | Owner 2026-09-26; emphasis roles 2026-09-29 | Untitled brand-600 |
 | shadow, focus, hover | as Checkbox | Peer consistency | — |
 | label gap | 6 at md and lg, as Checkbox (choice.css:9, :404, :410) | Peer: Checkbox, Button (audit S14) | Was 8 |
@@ -95,7 +95,7 @@ Captures: `area--size-small`, `-medium`, `-large`, `area--selected`, `area--tone
 | hover, unchecked | edge → `border-hover` #b4b4b4 (choice.css:190-193) | not captured |
 | hover, checked | fill → `selection-solid-hover` | not captured |
 | focus-visible | 2px focus outline, 2px offset (choice.css:200-204) | not captured |
-| checked | fill `selection-solid`, dot scales 0 → 1 | `area--selected` |
+| checked | fill `selection-solid` at once; dot `scale` 0.6 → 1 + `opacity`, `fast` ease-out (Motion, 2026-10-07) | `area--selected` |
 | group invalid | unchecked edges `fg-danger-vivid`; the checked option `danger-solid` with `fg-on-danger` dot; message in danger ink | `area--invalid` |
 | disabled | 50% | `area--disabled` |
 
@@ -130,6 +130,35 @@ Unverified: dark theme, hover and focus in a product.
 10 Area captures after the second pass read (edges rgb(212) at rest). Build and test
 results are in the [cohesion audit](../research/cohesion-audit.md#verification).
 
+## Motion and interaction, 2026-10-07
+
+Contract: [`docs/MOTION.md`](../MOTION.md). Radio shares `choice.css` with Checkbox; see
+[checkbox.md](checkbox.md#motion-and-interaction-2026-10-07) for the shared mark motion.
+
+| Interaction | Before | After |
+|---|---|---|
+| hover (edge or checked fill) | `--area-transition`: colours over `fast` ease-out, both ways | lands at once (`:hover` 0s under `hover: hover`), fades out over `fast` ease-out |
+| press | colours ease over `fast` | at once (`:active` 0s) |
+| checking by hand | fill and edge ease over `fast` | at once: a pointer or Space press is `:active`, an arrow key moves a focus-visible radio (`:is(:active, :focus-visible)` 0s); the option given up, or a change from script, fades over `fast` ease-out |
+| mark enter / leave | `transform: scale(0 → 1)`, `fast`, `ease-spring` (overshoot) | `scale` 0.6 → 1 + `opacity` 0 → 1, `fast` `ease-out`, both ways (MOTION.md small-mark recipe); rests at `scale: 1` |
+| card edge (chosen, hover) | `--area-transition` both ways | same rule as the control: at once on hover, press or keyboard focus, `fast` fade out |
+| focus-visible | outline, not transitioned | unchanged: rings never fade |
+| disabled | none | none |
+| reduced motion | tokens zeroed on `:root` only | tokens zeroed wherever motion is set (`emit/css.ts`); no literal durations or keyframes here |
+
+**Crispness.** The dot was `inset: 30%` of the 14px padding box: a 5.6px dot at a 4.2px offset,
+soft on every side. It is now an even dot in an even box, so it centres on whole pixels:
+`--_dot` 6px at md (border-box 5–11) and 8px at lg (6–14), `inset: (size − dot) / 2 − 1px`.
+Untitled draws 6 / 8 (the Decisions row's basis), so the value now matches its source exactly.
+
+**Verified** (`/radio.html`, Chromium, DPR 2): `::after` computes `inset: 4px; width: 6px` at
+md and `5px / 8px` at lg; unchecked rests at `opacity 0, scale 0.6`, checked at `1 / 1`. Setting
+`checked` from script starts the fill and edge transitions (100ms ease-out) and the dot's
+`scale` and `opacity` (100ms ease-out). Not verified by eye (background tab), nor arrow-key
+selection with a real keyboard.
+
+**Open questions.** None beyond Checkbox's.
+
 ## Feedback log
 
 - 2026-09-28 · owner approved batch 14 → Complete.
@@ -158,3 +187,4 @@ results are in the [cohesion audit](../research/cohesion-audit.md#verification).
 - 2026-09-30 · audit S14 (owner) → the label gap is 6 at md and lg (was 8), shared with Checkbox (choice.css:9, :404, :410; density.ts:81-82).
 - 2026-10-02 · compact pass round 9 → horizontal options 16 → 12; the choice card inset 12 → 8 and the tile's icon gap 16 → 12 at compact (choice.css). Default unchanged. docs/research/compact-pass-2026-10-01.md (round 9).
 - 2026-10-03 · radius audit D1 (owner) → the container role is 12 at compact too (was 8; Figma 13, Cursor 12-14), so this family's surface is 12 at both densities; rows concentric with a floating surface follow (compact 24 rows r8). `docs/research/radius-audit-2026-10-03.md`.
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → dot 6 / 8 centred on whole pixels (was a 30% inset, 5.6 / 7.2); dot `scale` 0.6 → 1 + opacity on `fast` ease-out (was scale 0 on the spring); hover, press and arrow-key selection land at once and fade out over `fast` (`choice.css`; "Motion and interaction, 2026-10-07").

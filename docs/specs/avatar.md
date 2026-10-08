@@ -190,6 +190,18 @@ avatar-bearing control, a side-by-side with Figma's initials avatar.
 - `cohesion.test.mjs` fails if an Avatar marker paints in accent outside `--accent`
   selectors. Build and test results: see [the audit](../research/cohesion-audit.md#verification).
 
+## Motion and interaction, 2026-10-07
+
+Contract: `docs/MOTION.md`. Research: `docs/research/motion-2026-10-07/crispness-and-current-state.md`.
+
+
+Avatar and Avatar group have no interactions and no motion; nothing changed. Crispness: the group
+cutout (1px) and active ring (2 + 2px) are `box-shadow` spreads with no blur on boxes placed by
+layout (integer overlap of −8), so they rest on whole pixels; `outline` was considered for the
+active ring but cannot paint the surface-coloured gap that separates overlapping avatars.
+Open question: should an image avatar fade in on load (opacity, `fast`)? Recommendation: no;
+ChatGPT and Notion show the disc colour, then the image, with no fade.
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → active ring `neutral-solid`, accent avatars keep an accent
@@ -209,3 +221,4 @@ avatar-bearing control, a side-by-side with Figma's initials avatar.
 - 2026-10-03 · one corner setting (owner: one radius setting, Sharp and Pill as ends; "every control is a pill") → the square shape takes its own corner (setting × size ÷ 32: 24 → 6, 32 → 8, 40 → 10 at the default; was the md control corner, 8, at every size), capped at 7/16 so Pill keeps it square-ish; circles unchanged (`display.css`). `docs/research/radius-audit-2026-10-03.md`, "One corner setting".
 - 2026-10-04 · pill shapes and list rows (owner) → the circle is the `avatar` entry of data-area-pills (default on); `shape` is unset unless given (circle / square override it). People circle, teams and workspaces square, set per instance (`display.css`). `docs/research/radius-audit-2026-10-03.md`, "Pill shapes and list rows".
 - 2026-10-04 · example person (owner) → the demos' person is David Tee (initials D / DT), and the photo is the owner's drawing (`apps/docs/public/images/david-tee.jpg`: the full width of the original, a square from its top, 512px; replaces irene-yamaguchi.jpg). AGENTS.md updated.
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → no motion in Avatar; rings checked for whole-pixel rest; no change.

@@ -45,7 +45,13 @@
     box-shadow: none;
     resize: vertical;
     outline: none;
-    transition: var(--area-transition);
+    /* Motion (docs/MOTION.md, 2026-10-07), as Input: paint and the focus halo appear at once and
+       fade out on fast; the halo keeps its fade into hover. */
+    --_t-paint: var(--area-duration-fast);
+    --_t-halo: var(--area-duration-fast);
+    transition-property: background-color, border-color, color, box-shadow;
+    transition-duration: var(--_t-paint), var(--_t-paint), var(--_t-paint), var(--_t-halo);
+    transition-timing-function: var(--area-ease-out);
   }
 
 
@@ -75,16 +81,22 @@
   }
   @media (hover: hover) {
     .area-textarea:hover:not(:disabled, :read-only):not(:focus) {
+      --_t-paint: 0s;
       border-color: var(--_border-hover);
     }
   }
 
   .area-textarea:focus {
+    --_t-paint: 0s;
+    --_t-halo: 0s;
     border-color: var(--_border-focus);
     box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
     outline: var(--area-field-focus-outline-width) solid var(--_focus-outline);
     outline-offset: 0;
   }
+
+  /* A tone or disabled paint lands at once (motion, 2026-10-07); clearing it fades on fast. */
+  .area-textarea:is([data-invalid], [aria-invalid="true"], [data-success], [data-warning], :disabled) { --_t-paint: 0s; }
 
   .area-textarea[data-invalid],
   .area-textarea[aria-invalid="true"] {

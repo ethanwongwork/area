@@ -145,6 +145,14 @@ Compared the Area captures (`field/area--*`) with the Notion and Figma captures 
 Build and test results are in the
 [cohesion audit](../research/cohesion-audit.md#verification).
 
+## Motion and interaction, 2026-10-07
+
+Per `docs/MOTION.md`. Field has no interactive paint of its own: the label, description and
+validation message appear and change at once (no fade, no height animation), and the control's edge,
+halo and tones follow its own motion (Input, Textarea, NumberField, Input group, same date). Before →
+after: unchanged; nothing in `field.css` moves. Crispness: the label's first-line drop beside a
+Textarea is already `round()`ed; no transforms. Open question: none.
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → no change (6px label-to-control gap confirmed against Untitled
@@ -157,3 +165,4 @@ Build and test results are in the
 - 2026-09-30 · audit S17 (API vocabulary, slice 3/4) → docstring clarified: `validation` without `validationStatus` is an error (`aria-invalid`, `aria-errormessage`); help text belongs in `description` (Field.tsx:31-36; it used to call `validation` "non-error"). Behaviour unchanged.
 - 2026-10-01 · audit B-14 → a Field around an InputGroup disables and invalidates the controls inside it: the group takes `disabled` and validation and passes them on through `InputGroupContext` → InputGroup.tsx, input-group-context.ts.
 - 2026-10-01 · compact pass round 5 → the label-to-control gap reads `ui-stack` (6, compact 4) and a horizontal Field's gap `ui-cluster` (8, compact 6). Default unchanged. docs/research/compact-pass-2026-10-01.md.
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → Field has no motion of its own; its controls carry it (no change to `field.css`). See "Motion and interaction, 2026-10-07".

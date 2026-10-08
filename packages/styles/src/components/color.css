@@ -98,7 +98,12 @@
        2026-09-28). */
     border-radius: calc(max(var(--area-radius-min), round(nearest, calc(var(--_swatch-size) * 0.8 * var(--area-radius-factor)), 2px)) + (var(--_cell) - var(--_swatch-size)) / 2 * var(--area-radius-concentric));
     cursor: pointer;
+    /* Motion (docs/MOTION.md, 2026-10-07): the hover plate and the selection ring appear at once
+       and fade out on fast (was instant both ways); the focus ring (outline) never animates. */
+    transition: background-color var(--area-duration-fast) var(--area-ease-out), box-shadow var(--area-duration-fast) var(--area-ease-out);
   }
+  @media (hover: hover) { .area-color-swatch-picker__cell:hover { transition-duration: 0s; } }
+  .area-color-swatch-picker__cell:has(input:checked) { transition-duration: 0s; }
   .area-color-swatch-picker__cell > input {
     position: absolute;
     inset: 0;
@@ -143,10 +148,13 @@
   .area-color-swatch-picker--palette > .area-color-swatch-picker__cell { inline-size: auto; block-size: auto; aspect-ratio: 1; border-radius: 0; }
   .area-color-swatch-picker--palette > .area-color-swatch-picker__cell > .area-color-swatch {
     inline-size: 100%; block-size: 100%; --_radius: 0px; --_inner-radius: 0px; --_edge: 0px; box-shadow: none;
+    /* The rings are the swatch's (its colour layer inherits them): in at once, out on fast (motion, 2026-10-07). */
+    transition: box-shadow var(--area-duration-fast) var(--area-ease-out);
   }
   @media (hover: hover) {
     .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:hover:not(:has(input:checked, input:disabled)) > .area-color-swatch {
       box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.6); /* spec */
+      transition-duration: 0s;
     }
   }
   .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:has(input:checked) { z-index: 1; background: none; box-shadow: none; }
@@ -154,6 +162,7 @@
     --_radius: var(--area-radius-control-xs);
     --_inner-radius: var(--_radius);
     box-shadow: inset 0 0 0 2px #fff, 0 0 0 1px rgb(0 0 0 / 0.2), inset 0 0 0 3px rgb(0 0 0 / 0.2); /* spec */
+    transition-duration: 0s;
   }
   .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:has(input:focus-visible) { outline-offset: calc(var(--area-focus-width) * -1); z-index: 2; }
 
@@ -270,7 +279,13 @@
     background: var(--_thumb-color, var(--_swatch-color));
     box-shadow: 0 0 0 1px var(--_thumb-edge), inset 0 0 0 1px var(--_thumb-edge), var(--_thumb-lift);
   }
+  /* Whole pixels (docs/MOTION.md crispness, 2026-10-07): the value's percentage of the area is rounded,
+     and the 16px thumb's half is 8, so the ring and its edge never land on a half pixel. It follows
+     the pointer directly; a drag is never eased. */
   .area-color-picker__thumb { position: absolute; left: var(--_saturation); top: var(--_brightness); translate: -50% -50%; pointer-events: none; }
+  @supports (left: round(nearest, 50%, 1px)) {
+    .area-color-picker__thumb { left: round(nearest, var(--_saturation), 1px); top: round(nearest, var(--_brightness), 1px); }
+  }
   .area-color-picker__channel { position: absolute; inline-size: 1px; block-size: 1px; margin: 0; opacity: 0; pointer-events: none; }
   .area-color-picker__area:has(:focus-visible) > .area-color-picker__thumb { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   .area-color-picker__slider:focus-visible::-webkit-slider-thumb { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }

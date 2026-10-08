@@ -1,4 +1,4 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { cx } from "../variants.ts";
 import { Toast, type ToastProps } from "./primitives.tsx";
@@ -12,7 +12,8 @@ export interface ToastOptions extends Omit<ToastProps, "children" | "onDismiss">
   announcement?: string;
 }
 
-interface Entry extends ToastOptions { toastId: number }
+/** `leaving`: fading out (`data-leaving`); removed when the fade ends. */
+interface Entry extends ToastOptions { toastId: number; leaving?: boolean }
 
 export interface ToasterApi {
   /** Shows a toast and returns its id. */
@@ -42,6 +43,16 @@ export interface ToasterProps {
 
 const text = (node: ReactNode): string => typeof node === "string" || typeof node === "number" ? String(node) : "";
 
+/** The longest transition on a node, in ms: 0 under the "none" motion preset and reduced motion. */
+const transitionMs = (node: Element | null | undefined) => {
+  if (!node) return 0;
+  const style = getComputedStyle(node);
+  const ms = (list: string) => list.split(",").map(value => parseFloat(value) * (value.trim().endsWith("ms") ? 1 : 1000) || 0);
+  const durations = ms(style.transitionDuration);
+  const delays = ms(style.transitionDelay);
+  return Math.max(0, ...durations.map((duration, i) => duration + (delays[i % delays.length] ?? 0)));
+};
+
 /**
  * Hosts toasts (audit E-11 A, owner 2026-09-30). The live regions exist before any toast, so the
  * first message is announced; danger is assertive, as Alert's. Timers pause while the pointer or
@@ -57,12 +68,50 @@ export function Toaster({ children, label = "Notifications", duration = 5000, ho
   const paused = useRef(false);
   const timers = useRef(new Map<number, { left: number; started: number; handle?: ReturnType<typeof setTimeout> }>());
 
+  const items = useRef(new Map<number, HTMLLIElement>());
+  // Each item's offset from the toaster's bottom edge at the last layout, without its reflow translate.
+  const offsets = useRef(new Map<number, number>());
+  const removals = useRef(new Map<number, ReturnType<typeof setTimeout>>());
+
+  // Leaving is two steps (motion pass 2026-10-07, docs/MOTION.md "Toast"): mark the toast
+  // `data-leaving` so it fades out, then remove it when its transition has run.
   const dismiss = useCallback((id: number) => {
     const timer = timers.current.get(id);
     if (timer?.handle) clearTimeout(timer.handle);
     timers.current.delete(id);
-    setEntries(list => list.filter(entry => entry.toastId !== id));
+    setEntries(list => list.map(entry => entry.toastId === id && !entry.leaving ? { ...entry, leaving: true } : entry));
   }, []);
+  useEffect(() => {
+    for (const { toastId, leaving } of entries) {
+      if (!leaving || removals.current.has(toastId)) continue;
+      const wait = transitionMs(items.current.get(toastId)?.firstElementChild);
+      removals.current.set(toastId, setTimeout(() => {
+        removals.current.delete(toastId);
+        setEntries(list => list.filter(entry => entry.toastId !== toastId));
+      }, wait));
+    }
+  }, [entries]);
+  // Stack reflow (FLIP): a toast that layout moved starts from where it was shown, as a whole-pixel
+  // translate, and eases home on the list item's transition. Interrupted reflows continue from
+  // where they are.
+  useLayoutEffect(() => {
+    const edge = region.current?.getBoundingClientRect().bottom ?? 0;
+    const moved: [HTMLLIElement, number][] = [];
+    for (const id of offsets.current.keys()) if (!items.current.has(id)) offsets.current.delete(id);
+    for (const [id, item] of items.current) {
+      const zoom = (item as HTMLElement & { currentCSSZoom?: number }).currentCSSZoom || 1;
+      const shift = (parseFloat(getComputedStyle(item).translate.split(" ")[1] ?? "") || 0) * zoom;
+      const offset = item.getBoundingClientRect().top - shift - edge;
+      const before = offsets.current.get(id);
+      offsets.current.set(id, offset);
+      if (before === undefined || Math.abs(before - offset) < 0.5) continue;
+      moved.push([item, Math.round((before + shift - offset) / zoom)]);
+    }
+    if (!moved.length) return;
+    for (const [item, from] of moved) { item.style.transition = "none"; item.style.translate = `0 ${from}px`; }
+    void region.current?.offsetHeight;
+    for (const [item] of moved) { item.style.transition = ""; item.style.translate = ""; }
+  }, [entries]);
   const arm = useCallback((id: number) => {
     const timer = timers.current.get(id);
     if (!timer || paused.current || !Number.isFinite(timer.left)) return;
@@ -108,7 +157,10 @@ export function Toaster({ children, label = "Notifications", duration = 5000, ho
     addEventListener("keydown", onKey);
     return () => removeEventListener("keydown", onKey);
   }, [hotkey]);
-  useEffect(() => () => { for (const timer of timers.current.values()) if (timer.handle) clearTimeout(timer.handle); }, []);
+  useEffect(() => () => {
+    for (const timer of timers.current.values()) if (timer.handle) clearTimeout(timer.handle);
+    for (const handle of removals.current.values()) clearTimeout(handle);
+  }, []);
 
   const api = useMemo(() => ({ show, dismiss }), [show, dismiss]);
   return <ToasterContext.Provider value={api}>
@@ -120,7 +172,9 @@ export function Toaster({ children, label = "Notifications", duration = 5000, ho
       onPointerEnter={pause} onPointerLeave={() => { if (!region.current?.contains(document.activeElement)) resume(); }}
       onFocus={pause} onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget as Node | null) && !event.currentTarget.matches(":hover")) resume(); }}>
       <ol className="area-toaster__list">
-        {entries.map(({ toastId, message, duration: _duration, announcement: _announcement, ...toast }) => <li key={toastId}>
+        {entries.map(({ toastId, leaving, message, duration: _duration, announcement: _announcement, ...toast }) => <li key={toastId}
+          data-leaving={leaving ? "" : undefined}
+          ref={node => { if (node) items.current.set(toastId, node); else items.current.delete(toastId); }}>
           <Toast {...toast} live={false} onDismiss={() => dismiss(toastId)}>{message}</Toast>
         </li>)}
       </ol>

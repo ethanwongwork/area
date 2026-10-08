@@ -133,6 +133,13 @@ Unverified: dark theme (#333 on the dark surface), forced colours.
 5 Area captures after the second pass (rule rgb(226)) and 9 product captures read. Build
 and test results are in the [cohesion audit](../research/cohesion-audit.md#verification).
 
+## Motion and interaction, 2026-10-07
+
+Contract: `docs/MOTION.md`. Research: `docs/research/motion-2026-10-07/crispness-and-current-state.md`.
+
+
+Separator is static: a 1px background block, no motion, no transform. Nothing changed.
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → no change; spec written; colour gap to products recorded →
@@ -151,3 +158,4 @@ and test results are in the [cohesion audit](../research/cohesion-audit.md#verif
   to neutral 100. Separator, Nav, Table and Tabs keep `border-divider`; peers table updated
   (audit G-8).
 - 2026-10-01 · audit G-28 → `decorative` prop (`role="none"`); a vertical rule keeps a line's height outside a flex row; `--area-separator-inset` drives both orientations (horizontal was a fixed 16) → primitives.tsx:325-344, display.css:119-133.
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → static, no change.

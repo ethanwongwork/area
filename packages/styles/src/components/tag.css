@@ -18,10 +18,9 @@
     --_remove: calc(var(--_height) - var(--area-space-4));
     --_remove-inset: var(--area-space-2);
     --_bg: light-dark(rgb(42 28 0 / 0.07), rgb(255 255 255 / 0.1)); /* spec: Notion's default tag */
-    /* Dark (owner 2026-10-06, option 1): the tone's readable ink at 20% over whatever is behind, the
-       same translucent recipe as Notion's light tints (18-28% of the hue), so a dark tag weighs what a
-       light one does. Was the tone's surface-active, a saturated block (blue #003b8c). */
-    --_dark-tint: 20%;
+    /* Dark: the tone's vivid ink at 16% over whatever is behind (owner 2026-10-06: lighter plate,
+       more vibrant label; was the readable ink at 20% under the pale strong ink). */
+    --_dark-tint: 16%; /* spec */
     --_fg: var(--area-fg-default);
     display: inline-flex;
     align-items: center;
@@ -48,25 +47,32 @@
   .area-tag--md { --_height: var(--area-mark-label-lg); }
 
   /*
-   * Tones: Notion's tag palette in light (measured: captures/badge/notion--tag-*,
-   * notion--select-*, notion--multi-select-many, tag-picker/notion--select-property-editor), a
-   * translucent tint under a dark muted ink; Area's tone inks at 20% in dark (option 1, owner 2026-10-06; Notion dark not measured).
-   * Was the tone's surface-active and fg-strong in light too, which read saturated beside Notion
-   * (Claude in Chrome review, 2026-10-06). Map: default neutral, blue info, green success, orange
-   * warning, yellow caution, red danger, purple discovery plus Notion's gray, pink and brown as their own tones (brown: the palette's new brown family).
+   * Owner 2026-10-08 (accepted the audit's recommendations): light inks deepened to OKLCH L 0.49 or
+   * less (contrast 5.6+ on the tint, 4.5+ under the x's hover plate, which read faintly before); dark
+   * green and yellow inks calmed to the other tones' colourfulness (C 0.11) inside Tag only, since the
+   * shared vivid tokens also paint Badge and Alert.
+   * Tones. Light (owner 2026-10-06, "lighter background so the foreground can be more vibrant"):
+   * a pale opaque tint of the tone's hue, every tone at one lightness and colourfulness (OKLCH
+   * L 0.955, C 0.035; brown 0.018 and gray 0.007 stay quiet), under the tone's readable ink
+   * (literal inks at OKLCH L 0.49 or less since 2026-10-08; brown and gray read `fg-brown` / `fg-gray`;
+   * contrast 5.6-7.3 on the tint, 4.5-6.1 under the x's hover plate). Notion's tints (18-28% of the hue under a muted dark ink)
+   * read washed beside it. Dark: the tone's vivid ink on that ink at 16% over whatever is behind
+   * (contrast 6.0-10.7 on near-black), so the label carries the colour, not the plate.
+   * Map: default neutral, blue info, green success, orange warning, yellow caution, red danger,
+   * purple discovery, plus Notion's gray, pink and brown.
    */
   .area-tag--neutral { --_bg: light-dark(rgb(42 28 0 / 0.07), rgb(255 255 255 / 0.1)); --_fg: var(--area-fg-default); } /* spec */
-  .area-tag--info { --_bg: light-dark(rgb(0 118 217 / 0.204), color-mix(in oklab, var(--area-fg-info) var(--_dark-tint), transparent)); --_fg: light-dark(rgb(38 74 114), var(--area-fg-info-strong)); } /* spec */
-  .area-tag--success { --_bg: light-dark(rgb(0 96 38 / 0.157), color-mix(in oklab, var(--area-fg-success) var(--_dark-tint), transparent)); --_fg: light-dark(rgb(42 83 60), var(--area-fg-success-strong)); } /* spec */
-  .area-tag--warning { --_bg: light-dark(rgb(196 88 0 / 0.204), color-mix(in oklab, var(--area-fg-warning) var(--_dark-tint), transparent)); --_fg: light-dark(rgb(106 66 34), var(--area-fg-warning-strong)); } /* spec */
-  .area-tag--caution { --_bg: light-dark(rgb(209 156 0 / 0.282), color-mix(in oklab, var(--area-fg-caution) var(--_dark-tint), transparent)); --_fg: light-dark(rgb(101 81 33), var(--area-fg-caution-strong)); } /* spec */
-  .area-tag--danger { --_bg: light-dark(rgb(206 24 0 / 0.165), color-mix(in oklab, var(--area-fg-danger) var(--_dark-tint), transparent)); --_fg: light-dark(rgb(109 53 49), var(--area-fg-danger-strong)); } /* spec */
-  /* Gray: Notion's gray, warm and a step firmer than the default; Area's gray role is the warm cast
-     of the neutral grey (tokens, 2026-10-06). Pink: the palette's pink family. */
-  .area-tag--gray { --_bg: light-dark(rgb(28 19 1 / 0.11), color-mix(in oklab, var(--area-fg-gray) var(--_dark-tint), transparent)); --_fg: light-dark(rgb(73 72 70), var(--area-fg-gray-strong)); } /* spec */
-  .area-tag--pink { --_bg: light-dark(rgb(183 0 78 / 0.153), color-mix(in oklab, var(--area-fg-pink) var(--_dark-tint), transparent)); --_fg: light-dark(rgb(104 53 78), var(--area-fg-pink-strong)); } /* spec */
-  .area-tag--brown { --_bg: light-dark(rgb(127 51 0 / 0.157), color-mix(in oklab, var(--area-fg-brown) var(--_dark-tint), transparent)); --_fg: light-dark(rgb(88 68 55), var(--area-fg-brown-strong)); } /* spec */
-  .area-tag--discovery { --_bg: light-dark(rgb(92 0 163 / 0.14), color-mix(in oklab, var(--area-fg-discovery) var(--_dark-tint), transparent)); --_fg: light-dark(rgb(85 59 105), var(--area-fg-discovery-strong)); } /* spec */
+  .area-tag--info { --_bg: light-dark(#e2f1ff, color-mix(in oklab, var(--area-fg-info-vivid) var(--_dark-tint), transparent)); --_fg: light-dark(#0056cf, var(--area-fg-info-vivid)); } /* spec */
+  .area-tag--success { --_bg: light-dark(#e0f7e4, color-mix(in oklab, #85ce94 var(--_dark-tint), transparent)); --_fg: light-dark(#006f2c, #85ce94); } /* spec */
+  .area-tag--warning { --_bg: light-dark(#ffeadb, color-mix(in oklab, var(--area-fg-warning-vivid) var(--_dark-tint), transparent)); --_fg: light-dark(#994500, var(--area-fg-warning-vivid)); } /* spec */
+  .area-tag--caution { --_bg: light-dark(#fcefd6, color-mix(in oklab, #e2b968 var(--_dark-tint), transparent)); --_fg: light-dark(#7c5800, #e2b968); } /* spec */
+  .area-tag--danger { --_bg: light-dark(#ffe7e7, color-mix(in oklab, var(--area-fg-danger-vivid) var(--_dark-tint), transparent)); --_fg: light-dark(#bc002d, var(--area-fg-danger-vivid)); } /* spec */
+  .area-tag--discovery { --_bg: light-dark(#f2ecff, color-mix(in oklab, var(--area-fg-discovery-vivid) var(--_dark-tint), transparent)); --_fg: light-dark(#7322d7, var(--area-fg-discovery-vivid)); } /* spec */
+  .area-tag--pink { --_bg: light-dark(#ffe7f0, color-mix(in oklab, var(--area-fg-pink-vivid) var(--_dark-tint), transparent)); --_fg: light-dark(#b50060, var(--area-fg-pink-vivid)); } /* spec */
+  /* Brown: the palette's brown family. Gray: Notion's gray, the warm cast of the neutral grey, a
+     step firmer than the default tag. */
+  .area-tag--brown { --_bg: light-dark(#faede5, color-mix(in oklab, var(--area-fg-brown-vivid) var(--_dark-tint), transparent)); --_fg: light-dark(var(--area-fg-brown), var(--area-fg-brown-vivid)); } /* spec */
+  .area-tag--gray { --_bg: light-dark(#eeeae6, color-mix(in oklab, var(--area-fg-gray) var(--_dark-tint), transparent)); --_fg: var(--area-fg-gray); } /* spec */
 
   .area-tag__icon { display: inline-grid; place-items: center; flex: none; inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); }
   .area-tag__icon > svg { inline-size: 100%; block-size: 100%; }
@@ -90,13 +96,18 @@
     border: 0;
     border-radius: max(var(--area-space-2), calc(max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px)) - var(--_remove-inset)));
     background: transparent;
-    /* spec: Notion's × is its muted ink (fill rgb(142,139,134)), not the tag's; Area's muted role. */
-    color: var(--area-fg-muted);
+    /* The tag's own ink, as Badge's dismiss (owner 2026-10-06, after the vivid inks: a grey × on a
+       coloured tag read as a separate object). Notion's is its muted ink, rgb(142,139,134). */
+    color: inherit;
     cursor: pointer;
+    /* Motion (docs/MOTION.md): the plate appears at once under the pointer or a press and fades on
+       fast ease-out; the × keeps the tag's ink, so only the plate moves. */
     transition: var(--area-transition);
+    transition-property: background-color;
   }
   .area-tag__remove > svg { inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); }
-  @media (hover: hover) { .area-tag__remove:hover { background: color-mix(in srgb, currentColor 12%, transparent); } }
+  @media (hover: hover) { .area-tag__remove:hover { background: color-mix(in srgb, currentColor 12%, transparent); transition-duration: 0s; } }
+  .area-tag__remove:active { transition-duration: 0s; }
   .area-tag__remove:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: 0; }
   /* An invisible 24px target (44 on coarse pointers) centred on the box (WCAG 2.5.8), as Badge's. */
   .area-tag__remove::after { content: ""; position: absolute; inset: 50% auto auto 50%; translate: -50% -50%; inline-size: var(--area-space-24); block-size: var(--area-space-24); }

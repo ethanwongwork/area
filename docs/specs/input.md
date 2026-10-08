@@ -183,6 +183,33 @@ Compared the Area captures (`input/area--*`) with ChatGPT's search field, the th
 fields and Figma's search and hex fields. Build and test results are in the
 [cohesion audit](../research/cohesion-audit.md#verification).
 
+## Motion and interaction, 2026-10-07
+
+Per `docs/MOTION.md` (hover, focus, selected: in at once, out on `fast`; focus never fades in). The
+shell lists its transitioned properties explicitly (`background-color, border-color, color,
+box-shadow`) with two private clocks, `--_t-paint` for fill, edge and ink and `--_t-halo` for the
+focus halo, so a state can make paint instant while the halo still lets go softly.
+
+| Interaction | Before | After |
+|---|---|---|
+| Hover edge | `--area-transition`: border-color `fast` ease-out in and out | in at once (`--_t-paint: 0s` on `:hover`), out on `fast` / `ease-out` |
+| Focus edge | border-color `fast` ease-out in and out | in at once, out on `fast` / `ease-out` |
+| Focus halo (box-shadow) | faded in over `fast` (lagged the keyboard) | in at once (`--_t-halo: 0s`), out on `fast` / `ease-out`, also when the field is left while hovered |
+| Increased-contrast outline | never transitioned | unchanged: instant both ways |
+| Validation tone (invalid, success, warning) and disabled | edge faded in over `fast` | lands at once; clearing it while focused is instant (focus is 0s), clearing it at rest fades on `fast` |
+| Action button plate (InputAction, password reveal) | no transition: instant in and out | hover and press in at once, out on `fast` / `ease-out` (`background-color` only); glyph ink fixed |
+| Password reveal glyph swap | instant | unchanged (a swap, not a fade) |
+| Action focus ring (outline) | instant | unchanged |
+
+Crispness: no resting transform, no `will-change`; every shell, icon slot and action box measured on
+whole pixels at DPR 2 (`input.html`, 21 fields). Open: 12px icon slots (sm) still draw 16px glyphs at
+0.75 (system B5, icons, not this file).
+
+Open questions: (1) a field left by Tab while the pointer rests on it snaps its edge to the hover
+grey while the halo fades (the hover rule is 0s for paint); recommendation: keep, the halo carries
+the exit. (2) A tone cleared while the field is not focused fades on `fast`; a tone cleared while
+typing is instant. CSS cannot tell the direction; recommendation: keep.
+
 ## Feedback log
 
 - 2026-09-28 · batch 12 Chrome side by side → Input `suffix` centres a Kbd (found by the Kbd
@@ -216,3 +243,4 @@ fields and Figma's search and hex fields. Build and test results are in the
 - 2026-10-03 · radius audit → the action button is concentric with the field, floored at the smallest control's corner (20 r2 → r4 compact, 24 r4 → r5 default; `input.css:213`). `docs/research/radius-audit-2026-10-03.md`.
 - 2026-10-03 · all even (owner) → the action button floors at `radius-floor` 4 (`input.css:213`).
 - 2026-10-04 · pill shapes and list rows (owner) → `--area-pill-field` (data-area-pills="field") makes the field a pill, its action button concentric (`input.css`). `docs/research/radius-audit-2026-10-03.md`, "Pill shapes and list rows".
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → motion pass: hover and focus edge and the focus halo appear at once and fade out on `fast`; tones land at once; the action plate gains the same in-at-once, out-on-fast fade (`input.css`). See "Motion and interaction, 2026-10-07".

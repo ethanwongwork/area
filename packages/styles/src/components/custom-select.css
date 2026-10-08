@@ -82,26 +82,33 @@
     box-shadow: none;
     cursor: pointer;
     outline: none;
+    /* Motion (docs/MOTION.md): colour leaves a state on fast ease-out and enters it at once
+       (hover, press, focus, open below). The focus halo is not in the list: rings never fade. */
     transition: var(--area-transition);
+    transition-property: background-color, border-color, color;
   }
   @media (hover: hover) {
     .area-custom-select:not([data-open]) > .area-custom-select__trigger:hover:not(:disabled) {
       border-color: var(--_border-hover);
       background-color: var(--_bg-hover);
     }
+    .area-custom-select__trigger:hover { transition-duration: 0s; }
   }
+  .area-custom-select__trigger:is(:active, :focus-visible),
+  .area-custom-select[data-open] > .area-custom-select__trigger { transition-duration: 0s; }
   .area-custom-select__trigger:focus-visible {
     border-color: var(--_border-focus);
     box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
     outline: var(--area-field-focus-outline-width) solid var(--_focus-outline);
     outline-offset: 0;
   }
-  /* Open: a field keeps its focused edge while its list shows (focus stays on the trigger, so a
-     pointer opening shows no ring otherwise); a ghost trigger keeps the pressed plate. */
-  .area-custom-select[data-open] > .area-custom-select__trigger {
-    border-color: var(--_border-focus);
-    background-color: var(--_bg-open);
-  }
+  /* Open: the trigger holds its hover paint while its list shows (the hover edge on a field, the
+     pressed plate on a ghost); the focus ring stays a keyboard signal (:focus-visible above), as
+     Select's native trigger. spec: Notion's settings select keeps its hover plate and edge open,
+     ChatGPT's settings select keeps its edge (captures/custom-select/notion--settings-theme-
+     trigger--open--light, chatgpt--settings-language-trigger--open--light). */
+  .area-custom-select[data-open] > .area-custom-select__trigger { background-color: var(--_bg-open); }
+  .area-custom-select[data-open] > .area-custom-select__trigger:not(:focus-visible) { border-color: var(--_border-hover); }
   .area-custom-select--ghost[data-open] > .area-custom-select__trigger { border-color: transparent; }
   .area-custom-select__trigger[aria-invalid="true"] {
     --_border: var(--area-select-invalid-color);
@@ -135,7 +142,8 @@
   }
   .area-custom-select__value[data-placeholder] { color: var(--area-input-placeholder); }
   .area-custom-select__trigger:disabled .area-custom-select__value[data-placeholder] { color: inherit; }
-  /* The field's icon ink, as Select's and Combobox's chevrons. */
+  /* The field's chevron ink (`input-chevron`, a step lighter than its icons; Q5, owner 2026-10-08),
+     as Select's and Combobox's chevrons. */
   .area-custom-select__chevron {
     display: inline-grid;
     place-items: center;
@@ -143,7 +151,7 @@
     inline-size: var(--_icon);
     block-size: var(--_icon);
     margin-inline-start: auto;
-    color: var(--area-input-icon);
+    color: var(--area-input-chevron);
   }
   .area-custom-select__chevron > svg { inline-size: 100%; block-size: 100%; }
   .area-custom-select__trigger:disabled .area-custom-select__chevron { color: inherit; }
@@ -157,7 +165,9 @@
     min-inline-size: max(var(--area-overlay-anchor-width, 0px), calc(var(--area-space-96) * 2 + var(--area-space-32)));
   }
   .area-custom-select__listbox:focus-visible { outline: none; }
-  /* The chosen value shows the active plate and the check, as Select and Combobox (audit S13 C). */
+  /* The chosen value shows the check alone, as Select and Combobox: every product list measured
+     (Notion, ChatGPT) marks it so; the plate only means highlight (Q3, owner 2026-10-08; was the
+     active plate and the check, audit S13 C). */
   .area-custom-select__option[aria-selected="false"] > .area-menu__check { visibility: hidden; }
   .area-custom-select__group { display: flex; flex-direction: column; gap: var(--area-ui-row-gap); }
   /* spec: Notion's access menu rules its sections off (1px, 12 in; captures/custom-select/

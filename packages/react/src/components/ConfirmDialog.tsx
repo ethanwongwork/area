@@ -45,16 +45,24 @@ export const ConfirmDialog = forwardRef<HTMLDivElement, ConfirmDialogProps>(func
   const setOpen = (next: boolean) => {
     if (openProp === undefined) setOwn(next);
     onOpenChange?.(next);
-    if (!next) setBusy(false);
   };
   // Dialog opens the native modal in its own effect, which runs first; then focus moves to Cancel.
-  useEffect(() => { if (open && !inline) cancelRef.current?.focus(); }, [open, inline]);
+  // A busy action resets as the dialog opens again, not as it closes: the exit fades out what was
+  // on screen, the action still busy, instead of swapping its spinner back mid-fade (motion
+  // 2026-10-07).
+  useEffect(() => {
+    if (!open) return;
+    setBusy(false);
+    if (!inline) cancelRef.current?.focus();
+  }, [open, inline]);
 
   const confirm = async (event: MouseEvent<HTMLButtonElement>) => {
     const result = onConfirm?.(event);
     if (result && typeof (result as Promise<unknown>).then === "function") {
       setBusy(true);
-      try { await result; setOpen(false); } finally { setBusy(false); }
+      let done = false;
+      // A failed action stays open and ready again; a finished one closes still busy.
+      try { await result; done = true; setOpen(false); } finally { if (!done) setBusy(false); }
     } else setOpen(false);
   };
   return <Dialog ref={ref} role="alertdialog" className={confirmDialogVariants({}, className)} title={title} description={description}

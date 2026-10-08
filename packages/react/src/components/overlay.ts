@@ -191,12 +191,15 @@ export function useAnchoredPosition(trigger: RefObject<HTMLElement | null>, surf
       const rtl = getComputedStyle(anchor).direction === "rtl";
       const mirrored = rtl && align !== "center" ? (align === "start" ? "end" : "start") : align;
       const box = anchorRect ? anchorRect(anchor) : anchor.getBoundingClientRect();
-      const position = computePosition(box, { width: node.offsetWidth, height: node.offsetHeight }, { width: document.documentElement.clientWidth, height: document.documentElement.clientHeight }, { side, align: mirrored, offset, padding });
-      node.style.setProperty("left", `${position.x}px`);
-      node.style.setProperty("top", `${position.y}px`);
-      node.style.setProperty("--area-overlay-available-height", `${position.availableHeight}px`);
-      node.style.setProperty("--area-overlay-anchor-width", `${Math.round(box.width)}px`);
-      node.style.setProperty("transform-origin", `${position.originX}px ${position.originY}px`);
+      // Under CSS `zoom` (a scaled-down preview, a zoomed page region) the surface's own lengths are
+      // multiplied by its zoom: measure in viewport pixels, write in the surface's own.
+      const zoom = (node as HTMLElement & { currentCSSZoom?: number }).currentCSSZoom || 1;
+      const position = computePosition(box, { width: node.offsetWidth * zoom, height: node.offsetHeight * zoom }, { width: document.documentElement.clientWidth, height: document.documentElement.clientHeight }, { side, align: mirrored, offset, padding });
+      node.style.setProperty("left", `${position.x / zoom}px`);
+      node.style.setProperty("top", `${position.y / zoom}px`);
+      node.style.setProperty("--area-overlay-available-height", `${position.availableHeight / zoom}px`);
+      node.style.setProperty("--area-overlay-anchor-width", `${Math.round(box.width / zoom)}px`);
+      node.style.setProperty("transform-origin", `${position.originX / zoom}px ${position.originY / zoom}px`);
       node.dataset.side = position.side;
     };
     const schedule = () => { cancelAnimationFrame(frame.current); frame.current = requestAnimationFrame(place); };

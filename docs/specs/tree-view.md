@@ -127,6 +127,33 @@ hover plate, actions at the row's end). Notion swaps the page icon for the chevr
 and reveals + and ··· there; Area keeps a chevron column visible at rest, as Figma's layers
 panel does, so nesting reads without hovering. Area's rows are 32 against Notion's 30.
 
+## Motion and interaction, 2026-10-07
+
+Contract: `docs/MOTION.md`. Verified in the built-in browser on `/tree-view.html` (computed
+transitions, `getAnimations()` on expand and on check, rects).
+
+| Interaction | Before | After |
+|---|---|---|
+| Row hover plate | snapped both ways | instant in, `--area-transition` out (fast, ease-out) |
+| Selected / current plate | snapped | instant in, fast out |
+| Chevron turn | `transform: rotate()` with no transition (snapped) | `rotate` on fast ease-out, the one chevron rule |
+| Chevron hover plate | snapped | instant in, fast out |
+| Row actions reveal | opacity fast both ways | instant in, fast out (as every hover) |
+| Checkbox face (checkbox mode) | snapped | instant in, fast out |
+| Check mark | mounted and unmounted (no motion) | always rendered; `scale` 0.6 → 1 with `opacity` on fast ease-out, both ways, as Checkbox's mark; rests at scale 1 |
+| Focus ring | outline, instant | unchanged |
+
+Crispness: the check was the 16px drawing at 100% of the box's 14px content area (a 14/16 scale,
+MOTION.md crispness 4). It now covers the border box at 16 with a −1px margin, as Checkbox's mark:
+measured 16 wide at offset 0,0. Reset's `max-inline-size: 100%` is lifted for it.
+
+React: `TreeView.tsx` renders the check glyph on every checkbox row (shown by `aria-checked`), so
+it can fade out.
+
+Open questions:
+- Children appear and disappear at once on expand and collapse (Figma, Notion and VS Code do the
+  same). Recommendation: keep; animating a flat list of rows would need height motion on each row.
+
 ## Verification
 
 - 1 Notion capture; 3 Area captures before and 3 after; checksums verified.
@@ -178,3 +205,4 @@ panel does, so nesting reads without hovering. Area's rows are 32 against Notion
 - 2026-10-02 · compact evidence audit → the row glyph edge holds at 8 at compact (was 6; Figma 8, VS Code 9) (R1) docs/research/compact-evidence-2026-10-02/README.md.
 - 2026-10-02 · compact evidence audit → rows stack flush at compact (`ui-row-gap` 2 / 0; VS Code tree rows abut; R7) docs/research/compact-evidence-2026-10-02/README.md.
 - 2026-10-03 · roundness → the check box follows Checkbox: a quarter of the box plus the shift (`tree-view.css`). `docs/research/radius-audit-2026-10-03.md`, "Roundness".
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → row, selection and chevron plates land at once and fade out on fast; chevron turns on fast (was a snapping transform); check mark enters from 0.6 and is drawn 1:1 at 16 (was 14/16).

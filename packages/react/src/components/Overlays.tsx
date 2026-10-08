@@ -3,7 +3,7 @@
  * Each takes a `trigger` element and renders it followed by its surface, so the surface
  * follows the trigger in the tab order while the Popover API lifts it into the top layer.
  */
-import { cloneElement, isValidElement, useEffect, useId, useRef } from "react";
+import { cloneElement, isValidElement, useEffect, useId, useRef, useState } from "react";
 import type { FocusEvent as ReactFocusEvent, HTMLAttributes, KeyboardEvent as ReactKeyboardEvent, MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent, ReactElement, ReactNode, Ref, RefObject } from "react";
 import { assignRef, clearToolbar, useAnchoredPosition, useHoverIntent, useNativePopover, useOpenState } from "./overlay.ts";
 import type { OverlayAlign, OverlaySide } from "./overlay.ts";
@@ -201,8 +201,11 @@ export function AnchoredMenu({ trigger, open: openProp, defaultOpen, onOpenChang
 // React reports `window` as the related target when the pointer leaves its root.
 const within = (node: Element | null, target: EventTarget | null) => target instanceof Node && !!node?.contains(target);
 
-// When a tooltip closed recently, the next one opens without the delay.
+// When a tooltip closed recently, the next one opens without the delay, and without its fade
+// (`data-instant`; motion pass 2026-10-07, docs/MOTION.md "Tooltip"). Only a tooltip that was
+// shown starts the window: sweeping the pointer across a toolbar does not.
 let lastClosed = 0;
+const skipping = () => Date.now() - lastClosed < TOOLTIP_SKIP_DELAY;
 
 export function AnchoredTooltip({ trigger, open: openProp, defaultOpen, onOpenChange, side = "top", align = "center", offset, arrow, delay = TOOLTIP_DELAY, closeDelay = TOOLTIP_CLOSE_DELAY, describes = true, surface }: AnchoredProps & { arrow?: boolean; delay?: number; closeDelay?: number; /** False when the tooltip's text is already the trigger's name, so it isn't announced twice. */ describes?: boolean; surface: (props: Div & { ref: Ref<HTMLDivElement> }) => ReactNode }) {
   const id = useId();
@@ -211,24 +214,28 @@ export function AnchoredTooltip({ trigger, open: openProp, defaultOpen, onOpenCh
   const surfaceNode = useRef<HTMLDivElement | null>(null);
   useNativePopover(surfaceNode, { current: null }, open, setOpen);
   useAnchoredPosition(triggerNode, surfaceNode, open, { side, align, offset: offset ?? TOOLTIP_OFFSET + (arrow ? TOOLTIP_ARROW_REACH : 0), padding: OVERLAY_PADDING });
-  const { show, hide, clear, hovers, focused } = useHoverIntent(open, setOpen, { delay, closeDelay, onClose: () => { lastClosed = Date.now(); } });
+  const shown = useRef(open);
+  shown.current = open;
+  const [instant, setInstant] = useState(false);
+  const { show, hide, clear, hovers, focused } = useHoverIntent(open, setOpen, { delay, closeDelay, onClose: () => { if (shown.current) lastClosed = Date.now(); } });
   const t = trigger as Trigger;
   const describedBy = [t.props?.["aria-describedby"], describes ? id : undefined].filter(Boolean).join(" ") || undefined;
   return <>
     {isValidElement(trigger) ? cloneElement(t, {
       ref: triggerRef,
       "aria-describedby": describedBy,
-      onPointerEnter: compose(t.props.onPointerEnter, (event: ReactPointerEvent) => { if (hovers(event)) show(Date.now() - lastClosed < TOOLTIP_SKIP_DELAY ? 0 : delay); }),
+      onPointerEnter: compose(t.props.onPointerEnter, (event: ReactPointerEvent) => { if (!hovers(event)) return; const skip = skipping(); setInstant(skip); show(skip ? 0 : delay); }),
       // Moving onto the tooltip (or the bridge over the gap) keeps it open.
       onPointerLeave: compose(t.props.onPointerLeave, (event: ReactPointerEvent) => { if (!within(surfaceNode.current, event.relatedTarget)) hide(); }),
       onPointerDown: compose(t.props.onPointerDown, () => hide(0)),
-      onFocus: compose(t.props.onFocus, (event: ReactFocusEvent<HTMLElement>) => focused(event)),
+      onFocus: compose(t.props.onFocus, (event: ReactFocusEvent<HTMLElement>) => { setInstant(skipping()); focused(event); }),
       onBlur: compose(t.props.onBlur, () => hide(0)),
     }) : trigger}
     {surface({
       id,
       ref: surfaceNode,
       popover: "manual",
+      "data-instant": instant ? "" : undefined,
       // Content on hover stays while the pointer is over it (WCAG 1.4.13).
       onPointerEnter: () => clear(),
       onPointerLeave: (event: ReactPointerEvent) => { if (!within(triggerNode.current, event.relatedTarget)) hide(); },

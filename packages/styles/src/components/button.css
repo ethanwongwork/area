@@ -26,8 +26,9 @@
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
     --_radius: var(--area-radius-control-md);
-    /* spec: 400 on soft, outline and ghost; solid sets 500 (owner type ramp; docs/specs/button.md). */
-    --_weight: var(--area-weight-regular);
+    /* spec: 500 on every variant; one label weight beside a neighbour (owner 2026-10-08, via
+       Confirm dialog review; ChatGPT, Notion and Figma solid 500; docs/specs/button.md). */
+    --_weight: var(--area-weight-strong);
 
     /*
      * Tone: nine slots a tone repoints, and a variant reads. The base is `neutral`, the
@@ -150,6 +151,19 @@
     background-color: var(--_bg-active);
     background-image: var(--_wash-active);
   }
+
+  /*
+   * Motion (docs/MOTION.md, recipes "Hover plate", "Press", "Selected"; docs/specs/button.md,
+   * "Motion and interaction, 2026-10-07"). Feedback lands at once and only fades on the way out:
+   * the base rule's `--area-transition` (colours over duration-fast, ease-out) is the leave, and
+   * every state that paints sets 0s for its arrival (ChatGPT 0s; Linear 0s in, 150 out). Colours
+   * only: no press scale, no transform at rest. The focus ring is an outline, which is never
+   * transitioned, so it appears and leaves with the key.
+   */
+  @media (hover: hover) {
+    .area-button:hover { transition-duration: 0s; }
+  }
+  .area-button:is(:active, [data-selected], [aria-expanded="true"]) { transition-duration: 0s; }
 
   .area-button:focus-visible {
     box-shadow: var(--_shadow);
@@ -308,7 +322,6 @@
     --_bg-hover: var(--_solid-hover);
     --_bg-active: var(--_solid-hover);
     --_fg: var(--_on-solid);
-    --_weight: var(--area-weight-strong);
   }
 
   /*

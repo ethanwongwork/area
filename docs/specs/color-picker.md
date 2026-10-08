@@ -229,6 +229,21 @@ setting).
   RGB (126, 69, 217), no clipped value text at 280 and 240 widths.
 - Unverified: dark theme, screen readers, Firefox and Safari (no EyeDropper there), touch.
 
+## Motion and interaction, 2026-10-07
+
+Per `docs/MOTION.md`.
+
+| Interaction | Before | After |
+|---|---|---|
+| Area thumb, hue / alpha / channel thumbs | follow the pointer directly | unchanged: direct manipulation is never eased |
+| Area thumb position at rest | `left` / `top` at the raw percentage (68.31% of the area, a fractional pixel), so the 4px white ring and its 1px edge drew soft | `round(nearest, …, 1px)` on both (behind `@supports`; the 16px thumb's `translate: -50%` is 8, whole) |
+| Thumb focus ring (outline) | instant | unchanged |
+| Saved swatches | no transition | Color swatch picker's rule (below) |
+| Value fields, model Select, header Buttons, view Segmented | their own components | their own passes |
+
+Measured on `color-picker.html`: every thumb rect on whole pixels. Open question: the band edge's
+`drop-shadow` filter is a moving composited layer only during a drag; it rests at identity.
+
 ## Feedback log
 
 - 2026-09-26 · owner: more controls, a grid swatch picker like iOS, OKLCH, robust selection →
@@ -252,3 +267,4 @@ setting).
 - 2026-09-30 · audit F-32 (owner pick A) → kept: tracks and thumbs stay Figma's (16px pills, ringed thumbs), deliberately unlike Slider's 4px rail; recorded under Peers.
 - 2026-10-02 · compact evidence audit → the body inset holds at 16 at compact (was 12; Figma's color picker 16) (R5) docs/research/compact-evidence-2026-10-02/README.md.
 - 2026-10-03 · radius audit D1 (owner) → the container role is 12 at compact too (was 8; Figma 13, Cursor 12-14), so this family's surface is 12 at both densities; rows concentric with a floating surface follow (compact 24 rows r8). `docs/research/radius-audit-2026-10-03.md`.
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → the area thumb's resting position is rounded to whole pixels (`color.css`). See "Motion and interaction, 2026-10-07".

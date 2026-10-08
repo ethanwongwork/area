@@ -62,10 +62,25 @@
     font-size: var(--_text);
     line-height: var(--_leading);
     cursor: text;
+    /* Motion (docs/MOTION.md): the edge enters a state at once (hover, focus, open) and leaves on
+       fast ease-out; the focus halo is not in the list, so the ring never fades. */
     transition: var(--area-transition);
+    transition-property: background-color, border-color, color;
   }
   @media (hover: hover) {
     .area-tag-picker__field:hover:not([data-disabled]):not(:focus-within) { border-color: var(--_border-hover); }
+    .area-tag-picker__field:hover { transition-duration: 0s; }
+  }
+  .area-tag-picker__field:focus-within,
+  .area-tag-picker[data-open] > .area-tag-picker__field { transition-duration: 0s; }
+  /* A tag just chosen fades in on fast ease-out where the picker is in use (focus is in it), so it
+     lands rather than pops; opacity only, as scaling would soften its text. Tags already there on
+     load, and removals, don't move (Notion's are instant). */
+  .area-tag-picker__field:focus-within > .area-tag {
+    transition: opacity var(--area-duration-fast) var(--area-ease-out);
+  }
+  @starting-style {
+    .area-tag-picker__field:focus-within > .area-tag { opacity: 0; }
   }
   .area-tag-picker__field:focus-within {
     border-color: var(--_border-focus);

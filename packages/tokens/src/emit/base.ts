@@ -161,6 +161,11 @@ export function derivedTokens(): Record<string, string> {
     [`${PREFIX}input-text`]: `var(${PREFIX}fg-default)`,
     [`${PREFIX}input-placeholder`]: `var(${PREFIX}fg-placeholder)`,
     [`${PREFIX}input-icon`]: `var(${PREFIX}fg-muted)`,
+    // A field's trailing chevron (Select, Custom select, Combobox's toggle) is a non-text control
+    // indicator, a step lighter than its leading icons (Notion rgb(142), ChatGPT rgb(143);
+    // custom-select.md Q5, owner 2026-10-08). It reads the neutral control stroke, which the
+    // contrast gate holds to 3:1 on every surface and component plate a field paints, in both themes.
+    [`${PREFIX}input-chevron`]: `var(${PREFIX}stroke-control)`,
     // The invalid edge uses the most saturated readable danger endpoint. Its halo is the
     // same context colour at low alpha rather than an unrelated neutral shadow.
     [`${PREFIX}input-invalid-color`]: `var(${PREFIX}fg-danger-vivid)`,

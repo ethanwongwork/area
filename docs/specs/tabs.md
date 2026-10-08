@@ -166,6 +166,24 @@ gallery 32 tall, 20 apart, 14/20 400, selected #28 over rest #66 with the 2px ro
 Type size matches (14); weight stays 400 by the type ramp (Notion 500). No change. Unverified:
 dark theme.
 
+## Motion and interaction, 2026-10-07
+
+Contract: `docs/MOTION.md`. Verified on `/tabs.html` by switching `data-selected` and reading
+`getAnimations()` (the old tab fades ink and indicator over 100; the new one has none).
+
+| Interaction | Before | After |
+|---|---|---|
+| Pending indicator on hover | `--area-transition` both ways | instant in, fast ease-out out |
+| Pending indicator on press | eased 100 | instant |
+| Selection (ink and indicator) | cross-fade 100 both ways | instant on the new tab, fast fade on the old |
+| Focus ring | outline, instant | unchanged |
+
+Crispness: the indicator is 2px at the tab's bottom edge, no transform.
+
+Open question: a sliding indicator (one element moving by `translate` and width on `base`
+ease-in-out; Figma, Linear and Primer slide, Notion does not). Recommendation: try it as an
+opt-in after the owner sees it, since it changes the component's structure.
+
 ## Verification
 
 Compared the Notion and Figma tab captures above with 8 Area captures (`tabs/area--*`,
@@ -184,3 +202,4 @@ in [the audit](../research/cohesion-audit.md#verification).
 - 2026-09-30 · audit S17 (API vocabulary, slice 1) → `onValueChange(value, event)` passes the click or key event → `primitives.tsx:1221`.
 - 2026-09-30 · audit S17 (API vocabulary, slice 2, H-13) → manifest default `size: "md"` added (manifest.ts:590); the md modifier equals the base rule, no visual change.
 - 2026-10-02 · compact pass round 9 → sm tab gap 16 → 12 and the panel's top inset reads `inset-surface-md` (16 / 12) at compact. docs/research/compact-pass-2026-10-01.md (round 9).
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → hover, press and selection land at once and fade out on fast; sliding indicator left as an open question.

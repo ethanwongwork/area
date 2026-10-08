@@ -152,6 +152,39 @@ palette and Context menu.
   trigger row (audit D-10).
 - Unverified: dark theme, screen-reader announcement of menu items and submenus.
 
+## Motion and interaction, 2026-10-07
+
+Contract: [MOTION.md](../MOTION.md), "Popover, menu ...", "Hover plate", "Selected", "Small mark".
+
+| Interaction | Before | After |
+|---|---|---|
+| open (anchored Menu, MenuSub) | `opacity` + `scale` 0.97, `duration-base` 150, `ease-out`, origin at the trigger | unchanged |
+| close | same as open (150) | `duration-fast` 100, `ease-out` (shared rule; see popover.md) |
+| rest | `scale: 1` | `scale: none` (no resting transform) |
+| row hover (pointer) | `--area-transition`: the plate faded in and out over 100 | in at once (`:hover { transition-duration: 0s }` under `(hover: hover)`), out over `duration-fast` ease-out |
+| highlighted, selected, `:focus-visible`, `:active`, open submenu row | 100 in | at once; out over `fast` |
+| keyboard movement | the row left behind faded over 100 while the next one appeared | instant both ways while a row has keyboard focus (`.area-menu:has(.area-menu__item:focus-visible)`), so no tail trails the arrow keys |
+| check mark (checkbox and radio rows) | `visibility` flip | the 16px check fades and grows from `scale` 0.6 on `duration-fast` `ease-out` both ways; rests at scale 1; the column stays reserved |
+| danger row | red label, neutral plate | unchanged: foreground fixed on hover |
+| disabled | no plate | unchanged |
+| Context menu | its own `fast` clock and pointer origin (context-menu.css) | unaffected: it names its tokens directly |
+
+Crispness: popup menu rows rest on whole pixels (rects of every row and check `x % 1 = 0`,
+`y % 1 = 0` at rest, DPR 2). The docs page centres the inline specimens on .5 px (odd heights
+189, 121, 155 under `place-items: center`); that is the docs frame, layout-snapped, and fine at 2x.
+
+Verification: `/menu.html`: enter `opacity/scale: 150` ease-out, close `display/opacity/overlay/scale: 100`,
+rest opacity 1, origin `27px 155px`, `will-change: auto`; a highlighted row computes `0s`, a
+resting one `0.1s ×4`; an injected unchecked row's check computes opacity 0, scale 0.6, and on
+check runs `opacity/scale: 100` ease-out to opacity 1, scale none.
+Verified on the dev server (background tab, so transitions were read from `getAnimations()` and computed styles, not watched; real-pointer hover could not be driven in a background tab, so hover rules were read from the stylesheet).
+
+Open questions:
+- Combobox, Custom select, Tag picker and Command palette rows reuse `.area-menu__item`, so
+  they get the instant-in plate. Their keyboard highlight is `aria-activedescendant` (focus stays
+  in the field), so the keyboard rule above does not reach them and the row left behind fades
+  over 100. Recommendation: each owner adds the same rule keyed on its own keyboard state.
+
 ## Feedback log
 
 - 2026-09-26 · owner: "build the next component" → Menu evidence pass: label column 36,
@@ -181,3 +214,4 @@ palette and Context menu.
 - 2026-10-03 · two roundness step sizes (owner) → the surface steps by 4 and rows (surface − padding) with it; the rows' height cap moves by `radius-shift-surface`, so compact rows keep the 4px step (`surface.css`, `.area-menu__item`). `docs/research/radius-audit-2026-10-03.md`, "Step size for large shapes".
 - 2026-10-03 · one corner setting (owner: one radius setting, Sharp and Pill as ends; "every control is a pill") → rows are the surface less its padding (8 at both densities, floored at min(4, setting)) up to a pill; the menu stops at pill rows plus the padding, 20, so it stays concentric at 12, 14 and Pill (`surface.css`). `docs/research/radius-audit-2026-10-03.md`, "One corner setting".
 - 2026-10-04 · pill shapes and list rows (owner) → rows use `radius-list-row` (no rounder than a medium Button, a pill only at Pill) and the menu `radius-list` (rows + 4): 12 / 8 at the default, 16 / 12 at 12, 20 / 16 at Pill (owner: menu rows wait for Pill) (`surface.css`). `docs/research/radius-audit-2026-10-03.md`, "Pill shapes and list rows".
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → row plate in at once and out on `fast`, instant both ways under keyboard focus; menu checks fade and grow from 0.6 on `fast`; close one step faster than open (`surface.css`).

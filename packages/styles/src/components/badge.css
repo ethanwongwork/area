@@ -172,7 +172,10 @@
   /* Interactive badges: native links, and the button BadgeGroup renders for its overflow. */
   :is(a, button).area-badge { position: relative; cursor: pointer; }
   button.area-badge { margin: 0; appearance: none; }
-  @media (hover: hover) { :is(a, button).area-badge:hover { background: var(--_bg-hover); border-color: var(--_border-hover); } }
+  /* Motion (docs/MOTION.md, "Hover plate"; docs/specs/badge.md, 2026-10-07): the base rule's
+     --area-transition is the leave, on duration-fast ease-out; hover arrives at once. The focus ring
+     is an outline and never transitions. */
+  @media (hover: hover) { :is(a, button).area-badge:hover { background: var(--_bg-hover); border-color: var(--_border-hover); transition-duration: 0s; } }
   :is(a, button).area-badge:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   :is(a, button).area-badge::after { content: ""; position: absolute; inset: 50% auto auto 50%; translate: -50% -50%; min-inline-size: var(--area-space-24); min-block-size: var(--area-space-24); inline-size: 100%; block-size: 100%; }
   @media (pointer: coarse) { :is(a, button).area-badge::after { min-inline-size: calc(var(--area-space-40) + var(--area-space-4)); min-block-size: calc(var(--area-space-40) + var(--area-space-4)); } }
@@ -190,7 +193,7 @@
   .area-badge:has(> :is(.area-badge__dot, .area-badge__avatar, .area-badge__flag)) { gap: var(--_media-gap); }
   /* spec: the dismiss box already holds 2px of air around its glyph (Untitled gap-0.5). */
   .area-badge:has(> .area-badge__dismiss) { gap: var(--area-space-2); }
-  .area-badge__dismiss { display: inline-flex; align-items: center; justify-content: center; inline-size: var(--_media); block-size: var(--_media); flex: none; padding: 0; border: 0; border-radius: var(--_badge-radius); background: transparent; color: inherit; cursor: pointer; }
+  .area-badge__dismiss { display: inline-flex; align-items: center; justify-content: center; inline-size: var(--_media); block-size: var(--_media); flex: none; padding: 0; border: 0; border-radius: var(--_badge-radius); background: transparent; color: inherit; cursor: pointer; transition: background-color var(--area-duration-fast) var(--area-ease-out); }
   .area-badge__dismiss > svg { inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); }
   /* The visible box stays the badge's media square; an invisible 24px target (44 on coarse
      pointers) centred on it meets WCAG 2.5.8, as Badge links already do (audit C-5). */
@@ -199,7 +202,8 @@
   @media (pointer: coarse) { .area-badge__dismiss::after { inline-size: calc(var(--area-space-40) + var(--area-space-4)); block-size: calc(var(--area-space-40) + var(--area-space-4)); } }
 
  /* The pill close recipe (audit S9): a concentric circle hovering to 12% of the ink. */
-  @media (hover: hover) { .area-badge__dismiss:hover { background: color-mix(in srgb, currentColor 12%, transparent); } }
+  /* The plate appears at once and fades out on duration-fast (MOTION.md, "Hover plate"; it snapped both ways). */
+  @media (hover: hover) { .area-badge__dismiss:hover { background: color-mix(in srgb, currentColor 12%, transparent); transition-duration: 0s; } }
   .area-badge__dismiss:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   /* spec: Notion's multi-select cell, 6 between lines and 8 between tags
      (notion--multi-select-wrap; was Primer's 4 both ways). */

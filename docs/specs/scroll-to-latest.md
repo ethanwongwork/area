@@ -51,6 +51,26 @@ lightened every neutral ghost and outline Button to #56 (button.md), which now m
   above the composer, centre delta 0; a click scrolls to the end (0) and hides it.
 - React test: hidden, unfocusable round outline button.
 
+## Motion and interaction, 2026-10-07
+
+| Interaction | Before | After |
+|---|---|---|
+| appear | opacity over `duration-fast` (100) `ease-out`; visibility at once | opacity over **`duration-base` (150)** `ease-out`; visibility at once |
+| disappear | opacity over `fast` `ease-out`; visibility after 100 | unchanged: `fast` `ease-out`, hidden after it (exits one step faster than entrances, MOTION) |
+| button hover, press, focus | Button's | Button's new rule (instant in, `fast` out) |
+| scroll | smooth; a jump under reduced motion or motion "none" | unchanged |
+
+No transform: the button rests on layout (flex centring), never on a translate or scale. Every
+duration is a token, so reduced motion makes the show and hide instant.
+
+Verified on `/scroll-to-latest.html` (computed styles): showing starts one 150ms `opacity`
+transition with `visibility` immediate; hiding runs 100ms `opacity` and flips `visibility` at
+100ms; at rest the button is 32 × 32 at whole-pixel x and y, `transform: none`.
+
+Open question: ChatGPT's show and hide timing was not captured (only rest and hover). A small rise
+(4px translate) on enter is common, but nothing measured supports it; kept opacity only.
+
 ## Feedback log
 
 - 2026-10-01 · audit G-23 (owner pick A) → demos use the placeholder vocabulary (Body text, Item one, Option one, Placeholder, Label) and `authorName` "Assistant", per DESIGN_SYSTEM's Example copy; no component change.
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → appears over duration-base and leaves over duration-fast (was fast both ways), opacity only.

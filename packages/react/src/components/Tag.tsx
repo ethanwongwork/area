@@ -30,6 +30,6 @@ export const Tag = forwardRef<HTMLSpanElement, TagProps>(function Tag(
   return <span ref={ref} className={tagVariants({ tone, size }, className)} data-disabled={disabled ? "" : undefined} {...rest}>
     {icon ? <span className="area-tag__icon" aria-hidden="true">{icon}</span> : null}
     <span className="area-tag__label">{children}</span>
-    {onRemove && !disabled ? <button type="button" className="area-tag__remove" aria-label={label} onClick={onRemove}><Glyph name="dismiss" /></button> : null}
+    {onRemove && !disabled ? <button type="button" className="area-tag__remove" aria-label={label} onClick={onRemove}><Glyph name="dismiss" size={12} /></button> : null}
   </span>;
 });

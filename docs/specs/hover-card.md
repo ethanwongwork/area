@@ -75,6 +75,26 @@ description size across Popover, Card, Dialog and Hover card.
 - React test: anchor, manual popover, no added semantics.
 - Unverified: dark theme, screen readers (by design the card is not announced).
 
+## Motion and interaction, 2026-10-07
+
+Contract: `docs/MOTION.md` ("Popover, menu, … hover card"). Verified in a background tab of the
+built-in browser on `/hover-card.html` (computed transitions, `getAnimations()`, rects after
+`finish()`); animations do not tick in a background tab, so nothing was watched in motion.
+
+| Interaction | Before | After |
+|---|---|---|
+| open | after 700 ms (pointer), at once (keyboard focus); shown in a passive effect *after* the placement engine had measured the hidden card (0 × 0), then re-placed by the ResizeObserver a frame later | same delays; the card is shown in a layout effect *before* placement (Popover's order), so the enter starts at its final place with the origin at the link: verified `showPopover` runs with no inline position, then `left 570 / top 689`, `transform-origin 27px 132px`, flipped to top, 320 × 132 |
+| enter | `opacity` + `scale` 0.97→1, `duration-base` `ease-out` (shared rule) | unchanged, inherited from `surface.css` (verified 150) |
+| close | 300 ms close delay; exit `duration-base` | 300 ms; exit now `duration-fast` from the shared rule (verified 100: opacity, scale, overlay, display) |
+| reduced motion | tokens 0; scale 1 (shared) | unchanged |
+
+Crispness: resting card on whole pixels (570, 689, 320 × 132; `overlay.ts` rounds), `scale: 1`, no
+`will-change`. Nothing in `hover-card.css` overrides the shared motion; a comment now says so.
+
+Open questions: a warm-up window as Tooltip's (a second hover card within ~300 ms opens at
+once) for lists of mentions. Recommendation: not yet; no reference product does it for cards.
+
 ## Feedback log
 
 - 2026-10-01 · audit E-18 (owner pick A) → hover intent shared with Tooltip (`useHoverIntent`): keyboard focus opens at once (was after 700ms), blur closes at once, one consuming capture-phase Escape; mouse and pen open after the delay, touch never → overlay.ts:108-145, HoverCard.tsx:46-74.
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → HoverCard is shown before it is placed (layout effect, Popover's order), so the enter scales from the link at its final place; delays 700 / 300 kept; exit now fast via the shared rule. HoverCard.tsx, hover-card.css comment.

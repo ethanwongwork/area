@@ -121,7 +121,7 @@ export const calendarVariants = /* @__PURE__ */ createVariants(manifests.calenda
 
 export const indicatorVariants = /* @__PURE__ */ createVariants(manifests.indicator);
 export const countVariants = /* @__PURE__ */ createVariants(manifests.count);
-export const disclosureVariants = /* @__PURE__ */ createVariants(manifests.disclosure);
-export const disclosureGroupVariants = /* @__PURE__ */ createVariants(manifests.disclosureGroup);
+export const accordionItemVariants = /* @__PURE__ */ createVariants(manifests.accordionItem);
+export const accordionVariants = /* @__PURE__ */ createVariants(manifests.accordion);
 
 export const presenceVariants = /* @__PURE__ */ createVariants(manifests.presence);

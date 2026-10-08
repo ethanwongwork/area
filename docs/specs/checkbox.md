@@ -56,7 +56,7 @@ figma   div 216×24 grid (16px + 200px columns)
   label  11/16 450, starts at x 16 (no gap or padding in the captured layers)
 area   label.area-checkbox  inline-flex, align flex-start, min-block 24, gap --_gap   owns hit area
   control  input.area-checkbox__control  --_size square, 1px edge, radius min(small, size/4) (`shadow-1` at capture; removed since)
-    ::after  mask of the check (or dash) at 75% of the box, painted --_mark
+    ::after  mask of the check (or dash) drawn 1:1 on the border box (16 / 20 grid), painted --_mark
   visual   span.area-checkbox__visual  optional 16px decorative icon, fg-muted
   label    span.area-choice-label  cap-trimmed title (+ description 12/16 muted)
 ```
@@ -93,7 +93,7 @@ The gaps above predate audit S14: the label gap is now 6 at md and lg.
 | control · radius | min(`radius-small` 6, size / 4): 4 / 4 / 5 (choice.css:67) | Untitled 4 at 16 | Notion 3 and Figma 2 are squarer; kept (third pass), see below |
 | control · rest edge | **`edge-control-hover` #d4d4d4** (choice.css:48) | Notion 19% warm ≈ #d4, Untitled #d4d4d4 (second pass) | Was `edge-control` #e2e2e2, a field's edge, faint on a 16px box |
 | control · checked | `selection-solid` (neutral default #282828), mark `fg-on-selection` #fafafa (choice.css:20-22) | Owner 2026-09-26; emphasis roles 2026-09-29 | Notion fills its blue; Figma keeps a light face with a dark check. The accent comes from a theme's Selection role, not a tone |
-| mark · geometry | 1.75 stroke on a 16 viewBox, masked at 75% of the padding box (choice.css:132-140) | — | Derived: Notion's filled glyph is 9.17px, Figma's stroked path 6.5px, Untitled's check 12px |
+| mark · geometry | check 1.5 stroke and dash 2px bar, drawn 1:1 on the control's 16 / 20 grid (choice.css, "Sizes"; 2026-10-07) | Figma 1.5px check on a 16 grid (`figma--checkbox-checked`) | Was 1.75 on a 16 viewBox masked at 75% of the padding box (1.15px, off-grid). Notion's filled glyph is 9.17px, Untitled's check 12px |
 | control · shadow | none (computed 2026-09-28) | Outline pass: controls at rest carry no shadow; neither product nor Untitled has one | The audit had `shadow-1`; since removed |
 | gap | 6 at md and lg, `gap-md` / `gap-lg` (choice.css:9, :404, :410); compact md 6 | Control tier; peer Button (audit S14) | Untitled 8 / 12. Was 8 / 8 until audit S14 |
 | hit area | label, min-block 24 (choice.css:74) | WCAG 2.5.8 target; Figma's 24px row | — |
@@ -111,7 +111,7 @@ Area keeps `radius-small`, shared with every small control ([cohesion audit](../
 | hover, unchecked | edge → `border-hover` #b4b4b4 (choice.css:190-193) | not captured |
 | hover, checked | fill → `selection-solid-hover` (neutral #1d1d1d) (choice.css:178-183); mark fixed | not captured |
 | focus-visible | 2px `focus-color` outline, 2px offset (choice.css:200-204) | not captured |
-| checked / indeterminate | fill and edge `selection-solid`, mark scales 0 → 1 (`ease-spring`, 100ms) | `area--selected`, `area--partial` |
+| checked / indeterminate | fill and edge `selection-solid` at once; mark `scale` 0.6 → 1 + `opacity`, `fast` ease-out (Motion, 2026-10-07) | `area--selected`, `area--partial` |
 | invalid | edge and label `fg-danger-vivid`; checked becomes one danger fill | `area--invalid`, `area--invalid-selected` |
 | disabled | whole label 50% | `area--disabled*` (opacity 0.5) |
 
@@ -157,6 +157,52 @@ Unverified: dark theme, hover and focus in a product.
 Area tiles are being re-captured after the second pass (`area--*`); the rest-edge value
 above is from `area--size-medium` (edge rgb(212)). Build and test results are in the
 [cohesion audit](../research/cohesion-audit.md#verification).
+
+## Motion and interaction, 2026-10-07
+
+Contract: [`docs/MOTION.md`](../MOTION.md). Checkbox and Radio share `choice.css`.
+
+| Interaction | Before | After |
+|---|---|---|
+| hover (edge or checked fill) | `--area-transition`: colours over `fast` ease-out, both ways | lands at once (`:hover` 0s under `hover: hover`), fades out over `fast` ease-out |
+| press | colours ease over `fast` | at once (`:active` 0s) |
+| checking by hand | fill and edge ease over `fast` | at once: a pointer or Space press is `:active`, an arrow key moves a focus-visible radio (`:is(:active, :focus-visible)` 0s); the option given up, or a change from script, fades over `fast` ease-out |
+| mark enter / leave | `transform: scale(0 → 1)`, `fast`, `ease-spring` (overshoot) | `scale` 0.6 → 1 + `opacity` 0 → 1, `fast` `ease-out`, both ways (MOTION.md small-mark recipe); rests at `scale: 1` |
+| card edge (chosen, hover) | `--area-transition` both ways | same rule as the control: at once on hover, press or keyboard focus, `fast` fade out |
+| focus-visible | outline, not transitioned | unchanged: rings never fade |
+| disabled | none | none |
+| reduced motion | tokens zeroed on `:root` only | tokens zeroed wherever motion is set (`emit/css.ts`); no literal durations or keyframes here |
+
+**Crispness.** The mark used to be a 16-unit drawing masked at 75% of the 14px padding box: a
+10.5px mask at a 1.75px offset, so the check's stroke was 1.15px and the indeterminate dash
+(1.15px centred on y = 8) fell across two rows at 57% at 1x. The mark now covers the control's
+border box (`inset: -1px`) and its mask is drawn 1:1 on that box's pixel grid, one drawing per
+size (`--_check` / `--_dash` on `.area-checkbox--md` and `--lg`):
+
+| Mark | md (16) | lg (20) | Basis |
+|---|---|---|---|
+| check | `M5 8.5 l2 2 4-5`, 1.5 stroke, round caps; geometry centred on (8, 8) | `M6.5 10.5 l2.5 2.5 4.5-6`, 1.5 stroke; centred on (10, 10) | Figma's 16px inspector check: 1.5px stroke, 6.5 × 6 path (`figma--checkbox-checked`); 1.5 is 3 device px at 2x. Was 1.15 at md, 1.48 at lg |
+| dash | `M6 8h4`, 2 stroke: rows 7–8 solid, ink 5–11 | `M7 10h6`, 2 stroke: rows 9–10, ink 6–14 | An even bar in an even box centres on whole pixels at 1x and 2x (MOTION.md "Crispness" 5); was ink ≈ 6.7 × 1.15 |
+
+Rasterised in Chromium (OffscreenCanvas, 2026-10-07): the md dash is two fully opaque rows at 1x
+and four at 2x with only the round caps antialiased; the check's ink spans columns 4–11 and
+rows 5–10, centred on the box.
+
+**Verified** (`/checkbox.html`, Chromium, DPR 2): every mark's `::after` computes `inset: -1px`;
+unchecked marks rest at `opacity: 0; scale: 0.6`, checked and indeterminate at `1 / 1`;
+transitions read `scale 0.1s, opacity 0.1s cubic-bezier(0.16, 1, 0.3, 1)`; controls are 16 and
+20px squares. A programmatic check starts colour transitions at 100ms and the mark's two at
+100ms ease-out. Not verified by eye: the background tab does not repaint, so no screenshot of
+the new mark was taken, and hover / press timing was read from the rules, not from a pointer.
+Control positions on the docs page are fractional (x ≈ .28) from the specimen frame's centring;
+Chromium snaps box edges and masks to device pixels, so the marks stay on the grid.
+
+**Open questions.**
+1. The dash is 2px where the check is 1.5px: the only crisp, centred bar in a 16 box at 1x is
+   even. Recommendation: keep; the alternative is a 1px dash (crisp at 2x only) or a 1.5px dash
+   (soft at both).
+2. The check reads a little heavier than before (1.15 → 1.5 at md). Recommendation: keep
+   Figma's 1.5; if it reads heavy beside 14px labels, 1px is the whole-pixel step down.
 
 ## Feedback log
 
@@ -204,3 +250,4 @@ above is from `area--size-medium` (edge rgb(212)). Build and test results are in
 - 2026-10-03 · roundness → the box corner is a quarter of the box plus the roundness shift (16: 2 / 3 / 4 / 5 / 6), never past the small role (`choice.css:61`). `docs/research/radius-audit-2026-10-03.md`, "Roundness".
 - 2026-10-03 · all even (owner) → the box corner is a quarter of the box rounded down to 2px: 16 and 20 → 4 (`choice.css:61`).
 - 2026-10-03 · one corner setting (owner: one radius setting, Sharp and Pill as ends; "every control is a pill") → the box's own corner, a quarter of it at the default (unchanged), capped at 7/16 of the side so Pill leaves a rounded square (`choice.css`). `docs/research/radius-audit-2026-10-03.md`, "One corner setting".
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → mark redrawn 1:1 on the 16 / 20 grid (check 1.5 stroke, dash 2px on whole rows); tick `scale` 0.6 → 1 + opacity on `fast` ease-out (was scale 0 on the spring); hover, press and keyboard checks land at once and fade out over `fast` (`choice.css`; "Motion and interaction, 2026-10-07").

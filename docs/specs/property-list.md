@@ -59,6 +59,26 @@ tests cover the markup. Screenshots at 3× (hover and mid-drag) sent in chat.
 
 Unverified: touch drag on a device; screen reader output of the live region; dark theme.
 
+## Motion and interaction, 2026-10-07
+
+Contract: `docs/MOTION.md`. Verified on `/property-list.html` (computed transitions; toggling
+`data-dragging` and reading `getAnimations()`).
+
+| Interaction | Before | After |
+|---|---|---|
+| Reorder handle reveal | opacity fast both ways | instant in on hover, focus or drag; fast ease-out out |
+| Lifted row dim (0.4) | snapped both ways | instant on pick-up, fast ease-out back on drop |
+| Inactive value dim (0.5) | snapped both ways | instant in, fast out |
+| Drop line | moves with the pointer, instant | unchanged |
+| Handle focus ring | outline, instant | unchanged |
+
+Crispness: the drop line's offset was `gap / 2` from the measured rects, a half pixel when the
+gap is odd. `PropertyList.tsx` now rounds it (`Math.round`).
+
+Open question: rows jump to their new order on drop. A FLIP slide (translate from the old place on
+`base` ease-in-out) would read as Figma's. Recommendation: leave for now; Figma's inspector also
+reorders without a slide.
+
 ## Open questions
 
 - ~~A small panel's side inset is 8px (gutter-sm), so the handle's ink sits 1.5px from the
@@ -75,3 +95,4 @@ Unverified: touch drag on a device; screen reader output of the live region; dar
 - 2026-09-30 · audit S17 (API vocabulary, slice 3/4) → a consumer's `aria-label` wins over `label` on the list (PropertyList.tsx:131; `label` used to override it).
 - 2026-10-01 · audit F-28 (owner pick B) → gallery panels are sm, matching their sm controls (were md panels around sm controls); Panel tier context deferred to compact density → apps/docs/src/demos/gallery.tsx:801-808.
 - 2026-10-01 · compact pass round 6 → standalone gaps 8 → 6 at compact; inside a Panel it reads the Panel's gaps. docs/research/compact-pass-2026-10-01.md.
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → handle appears at once and fades out on fast; lifted and inactive dims land at once and return on fast; drop line rounded to whole pixels.

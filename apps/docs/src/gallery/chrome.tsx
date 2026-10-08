@@ -9,7 +9,8 @@
  * and gallery-client.tsx hydrates them.
  */
 import { useEffect, useRef, useState } from "react";
-import { Chip, ChipGroup, Field, Nav, NavGroup, NavItem, NavSeparator, Panel, PanelSection, Segmented, Select } from "@area/react";
+import { Button, Chip, ChipGroup, Field, Nav, NavGroup, NavItem, Panel, PanelSection, Segmented, Select } from "@area/react";
+import { PilotPanelRightIcon } from "../pilot-icons.tsx";
 import { GALLERY_CANVAS_ID, GALLERY_CONTROLS, GALLERY_STORAGE_KEY } from "./controls.ts";
 
 /*
@@ -51,11 +52,13 @@ export interface GallerySection {
   name: string;
 }
 
-/** The gallery's pages: every component, and how the radius setting shapes each one. */
+/** The gallery's pages: every component, the review batch, how the radius setting shapes each
+ *  one, and the icon review page (gallery-icons.html, its own older shell). */
 export const GALLERY_PAGES = [
   { id: "components", href: "./index.html", label: "Components" },
   { id: "review", href: "./review.html", label: "Review" },
   { id: "roundness", href: "./roundness.html", label: "Corner radius" },
+  { id: "icons", href: "./gallery-icons.html", label: "Icons" },
 ] as const;
 export type GalleryPage = (typeof GALLERY_PAGES)[number]["id"];
 
@@ -94,20 +97,34 @@ export function GalleryNav({ sections, page = "components" }: { sections: readon
     return () => { canvas.removeEventListener("scroll", schedule); cancelAnimationFrame(frame); };
   }, [sections]);
 
-  // Keep the current item in view as the canvas scrolls through a long list.
+  // Keep the current item in view as the canvas scrolls through a long list, below the sticky
+  // page links (scrollIntoView would tuck it under them).
   useEffect(() => {
-    nav.current?.querySelector<HTMLElement>(`[href="#${sectionId(current ?? "")}"]`)?.scrollIntoView({ block: "nearest" });
+    const item = nav.current?.querySelector<HTMLElement>(`[href="#${sectionId(current ?? "")}"]`);
+    const scroller = item?.closest<HTMLElement>(".area-panel__body");
+    const pages = scroller?.querySelector<HTMLElement>(".gallery-nav__pages");
+    if (!item || !scroller) return;
+    const view = scroller.getBoundingClientRect();
+    const box = item.getBoundingClientRect();
+    const top = view.top + (pages?.offsetHeight ?? 0);
+    if (box.top < top) scroller.scrollTop -= top - box.top;
+    else if (box.bottom > view.bottom) scroller.scrollTop += box.bottom - view.bottom;
   }, [current]);
 
   const rail = useRailWidth("nav");
+  // The page links are their own section, held at the top while the component list scrolls under
+  // them; Panel's full-width rule separates the two (owner, 2026-10-06).
   return (
-    <Panel size="sm" flush resizable="end" aria-label="Components" {...rail}>
-      <PanelSection>
-        <Nav ref={nav} aria-label="Components">
+    <Panel size="sm" flush resizable="end" aria-label="Gallery" {...rail}>
+      <PanelSection className="gallery-nav__pages">
+        <Nav aria-label="Gallery pages">
           <NavGroup>
             {GALLERY_PAGES.map(link => <NavItem key={link.id} href={link.href} current={link.id === page}>{link.label}</NavItem>)}
           </NavGroup>
-          <NavSeparator />
+        </Nav>
+      </PanelSection>
+      <PanelSection>
+        <Nav ref={nav} aria-label="Components">
           <NavGroup>
             {sections.map(section => (
               <NavItem key={section.slug} href={`#${sectionId(section.slug)}`} current={section.slug === current} onClick={() => setCurrent(section.slug)}>
@@ -119,6 +136,62 @@ export function GalleryNav({ sections, page = "components" }: { sections: readon
       </PanelSection>
     </Panel>
   );
+}
+
+/*
+ * The theme panel collapses from a ghost icon button in its bar (owner, 2026-10-06: in place of
+ * the "Canvas" note). Collapsed, the rail is empty and the same button stays exactly where it was:
+ * its offset from the rail's top and end edges is measured as it is pressed, kept with the rail
+ * widths, and the button is drawn there over the canvas's corner. The pre-paint script in
+ * component-gallery.mjs marks the rail collapsed so the panel never flashes on load.
+ */
+const COLLAPSE_KEY = "controls-collapsed";
+type Offset = { top: number; end: number };
+
+function useCollapse() {
+  // null until the saved state is read after hydration (the server renders the panel open).
+  const [offset, setOffset] = useState<Offset | null | undefined>(undefined);
+  const collapsed = offset != null;
+  const button = useRef<HTMLButtonElement>(null);
+  const refocus = useRef(false);
+  useEffect(() => {
+    let saved: Offset | null = null;
+    try {
+      const value = JSON.parse(localStorage.getItem(RAILS_KEY) ?? "{}")[COLLAPSE_KEY] as Offset | undefined;
+      if (value && Number.isFinite(value.top) && Number.isFinite(value.end)) saved = value;
+    } catch {}
+    setOffset(saved);
+  }, []);
+  useEffect(() => {
+    if (offset === undefined) return;
+    document.getElementById("gallery-controls")?.toggleAttribute("data-collapsed", collapsed);
+    if (refocus.current) { refocus.current = false; button.current?.focus(); }
+  }, [offset, collapsed]);
+  const save = (value: Offset | null) => {
+    try {
+      const all = JSON.parse(localStorage.getItem(RAILS_KEY) ?? "{}");
+      localStorage.setItem(RAILS_KEY, JSON.stringify({ ...all, [COLLAPSE_KEY]: value ?? undefined }));
+    } catch {}
+  };
+  const press = () => {
+    refocus.current = document.activeElement === button.current;
+    if (collapsed) { setOffset(null); save(null); return; }
+    const own = button.current?.getBoundingClientRect();
+    const railBox = document.getElementById("gallery-controls")?.getBoundingClientRect();
+    if (!own || !railBox) return;
+    const next = { top: own.top - railBox.top, end: railBox.right - own.right };
+    setOffset(next);
+    save(next);
+  };
+  const toggle = (
+    <Button ref={button} variant="ghost" tone="neutral" size="sm" iconOnly icon={<PilotPanelRightIcon />}
+      aria-label={collapsed ? "Show theme panel" : "Hide theme panel"} aria-expanded={!collapsed} title={collapsed ? "Show theme panel" : "Hide theme panel"}
+      onClick={press} />
+  );
+  const ghost = (
+    <div className="gallery-controls__ghost" style={offset ? { insetBlockStart: offset.top, insetInlineEnd: offset.end } : undefined}>{toggle}</div>
+  );
+  return { collapsed, toggle, ghost };
 }
 
 type Selection = Record<string, string>;
@@ -153,10 +226,12 @@ export function GalleryControls() {
   };
 
   const rail = useRailWidth("controls");
+  const collapse = useCollapse();
   // Label beside control, one row per setting: a horizontal Field inside a Panel; stacked when narrow.
   const stacked = rail.width < STACK;
+  if (collapse.collapsed) return collapse.ghost;
   return (
-    <Panel size="sm" flush resizable="start" title="Theme" action={<span className="gallery-controls__scope">Canvas</span>} {...rail}>
+    <Panel size="sm" flush resizable="start" title="Theme" action={collapse.toggle} {...rail}>
       <PanelSection>
         {GALLERY_CONTROLS.map(control => (
           <Field key={control.axis} label={control.label} orientation={control.kind === "chips" || stacked ? "vertical" : "horizontal"}>

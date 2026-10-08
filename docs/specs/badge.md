@@ -557,6 +557,23 @@ gallery, one variant per tile (the "Dot only" tile was added in the third pass).
   (no composition uses it), browsers without `text-box` (they keep the previous centring
   and its baseline behaviour).
 
+## Motion and interaction, 2026-10-07
+
+Contract: `docs/MOTION.md`. Research: `docs/research/motion-2026-10-07/crispness-and-current-state.md`.
+
+
+| Interaction | Before | After |
+|---|---|---|
+| Link / overflow-button hover | `--area-transition` both ways (100ms in) | **instant in** (`transition-duration: 0s` on `:hover`), `fast` ease-out out |
+| Dismiss plate hover | no transition: snapped in and out | instant in, `background-color` `fast` `--area-ease-out` out |
+| Focus ring | outline, never transitioned | unchanged |
+
+No press colour exists, so there is no press rule; foreground stays fixed. Crispness: the dismiss
+and link hit targets centre with `translate: -50% -50%` on invisible boxes only (24 and 44, even),
+so nothing painted moves. Verified on `/badge.html` with a real pointer hover: dismiss
+`transition-duration` 0s and the 12% plate at full strength at once; at rest the transition is
+`background-color 0.1s`.
+
 ## Feedback log
 
 - 2026-09-25 · owner: "I like where Badge is; open to suggestions from the new process" →
@@ -588,3 +605,4 @@ gallery, one variant per tile (the "Dot only" tile was added in the third pass).
 - 2026-10-02 · compact pass round 9 → BadgeGroup and its overflow popover gaps 6 × 8 → 4 × 6 at compact. docs/research/compact-pass-2026-10-01.md (round 9).
 - 2026-10-03 · one corner setting (owner: one radius setting, Sharp and Pill as ends; "every control is a pill") → a pill by default; `pill={false}` (`--rounded`) takes the radius setting's corner for its height (4 at the default, square at Sharp) (`badge.css`, `Badge.tsx`). `docs/research/radius-audit-2026-10-03.md`, "One corner setting".
 - 2026-10-04 · pill shapes and list rows (owner) → the pill is the `badge` entry of data-area-pills (default on); `pill` is three-way: unset follows the list, true `--pill`, false `--rounded` (`badge.css`). `docs/research/radius-audit-2026-10-03.md`, "Pill shapes and list rows".
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → hover arrives at once and fades out on fast (links, overflow button); the dismiss plate gains the fade-out (it snapped) → badge.css. See "Motion and interaction, 2026-10-07".

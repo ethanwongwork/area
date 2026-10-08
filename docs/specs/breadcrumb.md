@@ -116,6 +116,23 @@ ink fixed. Area in the gallery: 14/20 400, links #66 and the page #28, chevrons 
 past the text with a 6 corner on hover. Size, weight, plate geometry and the fixed ink match; the
 muted ancestors and chevron separator are the recorded decisions. No change.
 
+## Motion and interaction, 2026-10-07
+
+Contract: `docs/MOTION.md`. Verified by computed style and parsed rules on `/breadcrumb.html`.
+
+| Interaction | Before | After |
+|---|---|---|
+| Link hover plate | `--area-transition` both ways (100 in, 100 out) | instant in, fast ease-out out |
+| Ellipsis menu button hover and open plate | 100 both ways | instant in, fast out |
+| Focus ring (on the plate) | outline, instant | unchanged |
+
+Crispness: nothing at rest moves. The plate's insets (2 / 6) are whole pixels. The plain-HTML
+chevron is an 8px bordered box at 45°, which is its drawing, not a state; the React separator is
+the 16 glyph at 16 and mirrors with `scale: -1 1`, which keeps the grid.
+
+Open questions:
+- No press colour on links (Notion has none either). Recommendation: keep.
+
 ## Verification
 
 - 1 Notion capture; 3 Area captures after; checksums verified.
@@ -142,3 +159,4 @@ muted ancestors and chevron separator are the recorded decisions. No change.
 - 2026-10-01 · audit D-19 (owner pick A) → `BreadcrumbEllipsis items` makes the marker a menu button that opens a Menu of the hidden ancestors as link rows, with the link's hover plate and focus ring; without items it stays decorative → Breadcrumb.tsx:44-58, breadcrumb.css:41-48.
 - 2026-10-03 · radius audit D7 (owner) → the hover plate (24 tall, 20 compact) takes the control curve, `radius-control-xs`: 5, compact 4 (was `radius-small` 6 / 4; Notion measures 6) (`breadcrumb.css`). `docs/research/radius-audit-2026-10-03.md`.
 - 2026-10-03 · all even (owner) → the 24px plate reads the 24px control corner, now 6 (Notion's 6); compact 20 → 4.
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → link and ellipsis plates land at once and fade out on fast.

@@ -72,8 +72,8 @@ Read from the nodes of `area--size-small`, `area--default`, `area--size-large`,
 | in a Button | **arc `currentColor`, track `currentColor` at 25%** (display.css:211) | The host's label ink, so it shows on any fill (audit spec pass) | Was `neutral-solid` on a `neutral-solid` button: only the light track showed |
 | in a Button · size | the Button tier's icon box (`--_icon`: 12 / 16 / 20), not the Spinner's own size | Audit S18 (owner 2026-09-30): the spinner stands in for the leading icon | Was a fixed 16 at every tier |
 | track | the arc's ink at 25% (≈ #c9 on white; display.css:226-229) | Primer; ChatGPT 30% (2026-09-27 audit) | Darker than the rail (`edge-control` #e2); audit E-22 left open. Was `bg-component-active` #eee |
-| speed | **1s** per turn, linear (display.css:241-242) | Untitled, Primer, shadcn, Spectrum 1s (owner 2026-09-27) | Was 2s, the slowest of 14 systems; ChatGPT 2s |
-| motion | stops under `data-area-motion="none"` (display.css:304); reduced motion slows it to 1.8s a turn (display.css:321-323) | Audit rule "motion setting"; Fluent 1.8s, Carbon and Primer keep turning | A still quarter arc reads as a frozen screen. Reduced motion stopped it until 2026-09-27 |
+| speed | **1s** per turn, `--area-ease-linear`, fixed at every motion preset (display.css) | Untitled, Primer, shadcn, Spectrum 1s (owner 2026-09-27) | Was 2s, the slowest of 14 systems; ChatGPT 2s |
+| motion | stops under `data-area-motion="none"` and reduced motion (display.css, motion block) | docs/MOTION.md "Reduced motion" (2026-10-07) | Reduced motion slowed it to 1.8s from 2026-09-27 to 2026-10-07 (Fluent); open question below |
 
 ## States
 
@@ -81,7 +81,7 @@ Read from the nodes of `area--size-small`, `area--default`, `area--size-large`,
 |---|---|---|
 | running | rotates | all tiles (`animation-name: area-spin`) |
 | motion none | `animation: none`; the arc stays visible and still | display.css:304; not tiled |
-| reduced motion | 1.8s a turn | display.css:323; not tiled |
+| reduced motion | `animation: none`; the arc rests at its identity turn | display.css; not tiled |
 
 ## Behavior and accessibility
 
@@ -120,6 +120,29 @@ Nothing in Notion or Figma to compare. Unverified: dark theme, forced colours.
 9 Area captures after the second pass read. Build and test results are in the
 [cohesion audit](../research/cohesion-audit.md#verification).
 
+## Motion and interaction, 2026-10-07
+
+Contract: `docs/MOTION.md`. Research: `docs/research/motion-2026-10-07/crispness-and-current-state.md`.
+
+
+| Interaction | Before | After |
+|---|---|---|
+| Turn | `rotate`, `calc(slow × 4)` (1s subtle, 1.6s expressive), `linear` keyword | `rotate`, **1s fixed**, `--area-ease-linear` (MOTION.md: 0.6–1s a turn at every preset) |
+| Reduced motion | slowed to 1.8s a turn | **stops** (MOTION.md "Reduced motion": loops stop) |
+| `data-area-motion="none"` | stopped only because the zeroed token made the duration 0: the `:is(…, .area-spinner::before, …)` rule was dropped (a pseudo-element is invalid inside `:is()`) | stops by its own rule (`[data-area-motion="none"] .area-spinner::before`) |
+
+Stopped, the arc rests at its identity turn, 12 to 3 o'clock: the drawing itself, not a frame
+caught mid-loop. Crispness: no change needed (SVG masks; no resting transform, `rotate` only while
+turning). Verified on `/spinner.html`: one `area-spin` animation, 1s linear; with motion none the
+arc's `animation-name` is `none` and `rotate` is `none`. Reduced motion checked from the served
+stylesheet rule only (the pane cannot emulate the preference).
+
+**Open question (owner).** Stop or slow under the OS reduced-motion preference? The contract says
+stop; this spec slowed it to 1.8s from 2026-09-27 (Fluent 1.8s; Carbon and Primer keep turning) because a
+still arc can read as a frozen screen. Recommendation: keep the stop for now (one rule for every
+loop, and the spinner's live region names the state), and revisit only if a reduced-motion user
+reports a still spinner as a hang. `motion="none"` stops it either way.
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → the spinner stops under the motion axis (it kept turning with
@@ -139,3 +162,4 @@ Nothing in Notion or Figma to compare. Unverified: dark theme, forced colours.
 - 2026-09-28 · owner: "slightly pixelated … cant really tell that its pill shaped inside, should it be slightly wider track?" → ring and arc redrawn as anti-aliased SVG masks with round caps; stroke 1/8 of the size (lg 2 → 3, md stays 2, sm 1.5); a 2.5px md option shown in the Pass review (`GalleryReviewSpinner`) for the owner to choose → headless Edge 2x/4x comparison; `area--*` recaptured; motion rules moved to the arc (`::before`), lab probe updated.
 - 2026-09-28 · owner: approved (batch 6). The md stroke stays 2px (1/8); the 2.5px option was not taken.
 - 2026-09-30 · audit S5 (owner) → no Spinner change; the Progress and Slider rail it is compared with is now `edge-control` #e2 (was ≈ #dd) → display.css:265.
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → turn fixed at 1s with `--area-ease-linear` (was 4 × slow, 1.6s expressive); reduced motion stops it (was 1.8s); the motion-none stop now has its own rule (the `:is()` one dropped the pseudo-element) → display.css Spinner. See "Motion and interaction, 2026-10-07".

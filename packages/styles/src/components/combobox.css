@@ -22,8 +22,9 @@
     min-inline-size: max(var(--area-overlay-anchor-width, 0px), calc(var(--area-space-96) * 2 + var(--area-space-32)));
   }
 
-  /* Options are Menu rows. A value picker shows its value with the active plate and the check,
-     as Select does (audit S13 C, owner 2026-09-30; was the check alone). */
+  /* Options are Menu rows. A value picker shows its value with the check alone, as Select and
+     Custom select; the plate only means highlight (custom-select.md Q3, owner 2026-10-08; was the
+     active plate and the check, audit S13 C). */
   .area-combobox__option[aria-selected="false"] > .area-menu__check { visibility: hidden; }
   .area-combobox__description { margin-inline-start: auto; padding-inline-start: var(--area-space-8); color: var(--area-fg-muted); white-space: nowrap; }
   .area-combobox__description + .area-menu__check { margin-inline-start: var(--area-space-8); }
@@ -39,6 +40,8 @@
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
   }
+  /* The toggle is the field's chevron: `input-chevron` ink, as Select's and Custom select's (Q5). */
+  .area-combobox > .area-input:not([data-disabled]) .area-input__action-button:not(:disabled) { color: var(--area-input-chevron); }
   .area-combobox__group { display: flex; flex-direction: column; gap: var(--area-ui-row-gap); }
 }
 @layer area.components {

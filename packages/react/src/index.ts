@@ -63,7 +63,7 @@ export { Badge, type BadgeProps } from "./components/Badge.tsx";
 export { BadgeGroup, type BadgeGroupProps } from "./components/BadgeGroup.tsx";
 export { Indicator, IndicatorAnchor, type IndicatorProps, type IndicatorAnchorProps } from "./components/Indicator.tsx";
 export { Count, type CountProps } from "./components/Count.tsx";
-export { Disclosure, DisclosureGroup, type DisclosureProps, type DisclosureGroupProps } from "./components/Disclosure.tsx";
+export { AccordionItem, Accordion, type AccordionItemProps, type AccordionProps } from "./components/Accordion.tsx";
 
 export { ColorPicker, hexToHsv, hsvToHex, type ColorPickerProps, type ColorModel, type ColorView } from "./components/ColorPicker.tsx";
 export { AREA_COLOR_GRID } from "./components/color-grid.ts";
