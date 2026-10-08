@@ -1,0 +1,255 @@
+{
+  "slug": "hover-card",
+  "manifest": "hoverCard",
+  "parts": [
+    {
+      "id": "root",
+      "element": [
+        "div"
+      ],
+      "class": "area-hover-card",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": []
+    },
+    {
+      "id": "identity",
+      "element": "not found",
+      "class": "area-hover-card__identity",
+      "required": "not found",
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-space-12",
+          "selectors": [
+            ".area-hover-card__identity"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "meta",
+      "element": "not found",
+      "class": "area-hover-card__meta",
+      "required": "not found",
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-fg-muted",
+          "selectors": [
+            ".area-hover-card__meta"
+          ]
+        },
+        {
+          "name": "--area-space-12",
+          "selectors": [
+            ".area-hover-card__meta"
+          ]
+        },
+        {
+          "name": "--area-space-4",
+          "selectors": [
+            ".area-hover-card__meta"
+          ]
+        },
+        {
+          "name": "--area-text-xs-leading",
+          "selectors": [
+            ".area-hover-card__meta"
+          ]
+        },
+        {
+          "name": "--area-text-xs-size",
+          "selectors": [
+            ".area-hover-card__meta"
+          ]
+        }
+      ]
+    }
+  ],
+  "slots": [
+    {
+      "name": "HoverCard.trigger",
+      "part": "not found",
+      "element": "not found",
+      "class": "not found",
+      "required": true,
+      "allowedContent": [
+        "element"
+      ]
+    },
+    {
+      "name": "HoverCard.children",
+      "part": "root",
+      "element": [
+        "div"
+      ],
+      "class": "area-hover-card",
+      "required": "not found",
+      "allowedContent": "not found"
+    }
+  ],
+  "options": {},
+  "booleans": [],
+  "elementModifiers": {},
+  "states": [
+    {
+      "name": "popover-open",
+      "part": "root",
+      "kind": "pseudo",
+      "hook": ":popover-open",
+      "value": ".area-popover-anchor > .area-hover-card.area-popover--bottom[popover]:popover-open"
+    },
+    {
+      "name": "popover-open",
+      "part": "root",
+      "kind": "pseudo",
+      "hook": ":popover-open",
+      "value": ".area-popover-anchor > .area-hover-card.area-popover--top[popover]:popover-open"
+    }
+  ],
+  "keyboard": [
+    {
+      "key": "Escape",
+      "part": "root",
+      "action": "Close the hover card.",
+      "condition": "Hover card is shown."
+    }
+  ],
+  "accessibleName": [],
+  "composition": {
+    "allowedParents": "not found",
+    "allowedChildren": "not found",
+    "observedChildren": [],
+    "demoExamples": [
+      "apps/docs/src/demos/gallery.tsx:1074",
+      "apps/docs/src/demos/gallery.tsx:1077",
+      "apps/docs/src/demos/gallery.tsx:1083",
+      "apps/docs/src/demos/gallery.tsx:1089"
+    ]
+  },
+  "reference": {
+    "css": [
+      "packages/styles/src/components/hover-card.css"
+    ],
+    "spec": [
+      "docs/specs/hover-card.md"
+    ],
+    "reactExport": [
+      "HoverCard"
+    ]
+  },
+  "evidence": {
+    "/slug": {"status":"found","sources":["packages/styles/src/manifest.ts:477"],"note":"Direct source declaration or implementation."},
+    "/manifest": {"status":"found","sources":["packages/styles/src/manifest.ts:476"],"note":"Direct source declaration or implementation."},
+    "/parts": {"status":"found","sources":["packages/styles/src/manifest.ts:476","packages/react/src/components/HoverCard.tsx:62"],"note":"Manifest parts plus implementation-only structural elements; unclassed nodes retain explicit IDs."},
+    "/parts/0": {"status":"found","sources":["packages/react/src/components/HoverCard.tsx:62"],"note":"Direct source declaration or implementation."},
+    "/parts/0/id": {"status":"found","sources":["packages/react/src/components/HoverCard.tsx:62"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/0/class": {"status":"found","sources":["packages/react/src/components/HoverCard.tsx:62"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element": {"status":"found","sources":["packages/react/src/components/HoverCard.tsx:62"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/required": {"status":"found","sources":["packages/react/src/components/HoverCard.tsx:62"],"note":"Root of the rendered family surface."},
+    "/parts/0/allowedContent": {"status":"not found","sources":["packages/react/src/components/HoverCard.tsx:62"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/0/customProperties": {"status":"not found","sources":["packages/react/src/components/HoverCard.tsx:62"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/0/tokens": {"status":"not found","sources":["packages/react/src/components/HoverCard.tsx:62"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/1": {"status":"found","sources":["packages/styles/src/manifest.ts:476"],"note":"Direct source declaration or implementation."},
+    "/parts/1/id": {"status":"found","sources":["packages/styles/src/manifest.ts:476"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/1/class": {"status":"found","sources":["packages/styles/src/manifest.ts:480"],"note":"Direct source declaration or implementation."},
+    "/parts/1/element": {"status":"not found","sources":["packages/styles/src/manifest.ts:476"],"note":"not found: No native element resolved for this manifest part; searched JSX classes and class helpers."},
+    "/parts/1/required": {"status":"not found","sources":["packages/styles/src/manifest.ts:476"],"note":"not found: Family-wide mandatory/optional anatomy is not specified; presence at one JSX call site does not establish a composition rule."},
+    "/parts/1/allowedContent": {"status":"not found","sources":["packages/styles/src/manifest.ts:476"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/1/customProperties": {"status":"not found","sources":["packages/styles/src/manifest.ts:476"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/1/tokens/0": {"status":"found","sources":["packages/styles/src/components/hover-card.css:14"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens": {"status":"found","sources":["packages/styles/src/components/hover-card.css:14"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/2": {"status":"found","sources":["packages/styles/src/manifest.ts:476"],"note":"Direct source declaration or implementation."},
+    "/parts/2/id": {"status":"found","sources":["packages/styles/src/manifest.ts:476"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/2/class": {"status":"found","sources":["packages/styles/src/manifest.ts:480"],"note":"Direct source declaration or implementation."},
+    "/parts/2/element": {"status":"not found","sources":["packages/styles/src/manifest.ts:476"],"note":"not found: No native element resolved for this manifest part; searched JSX classes and class helpers."},
+    "/parts/2/required": {"status":"not found","sources":["packages/styles/src/manifest.ts:476"],"note":"not found: Family-wide mandatory/optional anatomy is not specified; presence at one JSX call site does not establish a composition rule."},
+    "/parts/2/allowedContent": {"status":"not found","sources":["packages/styles/src/manifest.ts:476"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/2/customProperties": {"status":"not found","sources":["packages/styles/src/manifest.ts:476"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/2/tokens/0": {"status":"found","sources":["packages/styles/src/components/hover-card.css:24"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1": {"status":"found","sources":["packages/styles/src/components/hover-card.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/2": {"status":"found","sources":["packages/styles/src/components/hover-card.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/3": {"status":"found","sources":["packages/styles/src/components/hover-card.css:26"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/4": {"status":"found","sources":["packages/styles/src/components/hover-card.css:25"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens": {"status":"found","sources":["packages/styles/src/components/hover-card.css:22","packages/styles/src/components/hover-card.css:23","packages/styles/src/components/hover-card.css:24","packages/styles/src/components/hover-card.css:25","packages/styles/src/components/hover-card.css:26"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/slots/0": {"status":"found","sources":["packages/react/src/components/HoverCard.tsx:7"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/part": {"status":"not found","sources":["packages/styles/src/manifest.ts:476","packages/react/src/components/HoverCard.tsx:20","docs/specs/hover-card.md:1"],"note":"not found: No single direct part resolved for HoverCard.trigger; conditional/delegated rendering requires review."},
+    "/slots/0/element": {"status":"not found","sources":["packages/styles/src/manifest.ts:476","packages/react/src/components/HoverCard.tsx:20","docs/specs/hover-card.md:1"],"note":"not found: No resolved part for HoverCard.trigger."},
+    "/slots/0/class": {"status":"not found","sources":["packages/styles/src/manifest.ts:476","packages/react/src/components/HoverCard.tsx:20","docs/specs/hover-card.md:1"],"note":"not found: No resolved part for HoverCard.trigger."},
+    "/slots/1": {"status":"found","sources":["packages/react/src/components/HoverCard.tsx:21"],"note":"Observed children slot inherited through native props; no local content grammar declared."},
+    "/slots/1/required": {"status":"not found","sources":["packages/react/src/components/HoverCard.tsx:21"],"note":"not found: Inherited native children; local content grammar/cardinality not found."},
+    "/slots/1/allowedContent": {"status":"not found","sources":["packages/react/src/components/HoverCard.tsx:21"],"note":"not found: Inherited native children; local content grammar/cardinality not found."},
+    "/slots/1/element": {"status":"found","sources":["packages/react/src/components/HoverCard.tsx:62"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/slots/1/class": {"status":"found","sources":["packages/react/src/components/HoverCard.tsx:62"],"note":"Direct source declaration or implementation."},
+    "/slots": {"status":"found","sources":["packages/react/src/components/HoverCard.tsx:7","packages/react/src/components/HoverCard.tsx:21"],"note":"Direct source declaration or implementation."},
+    "/options": {"status":"found","sources":["packages/styles/src/manifest.ts:479"],"note":"Direct source declaration or implementation."},
+    "/booleans": {"status":"found","sources":["packages/styles/src/manifest.ts:476"],"note":"Exact manifest boolean modifier list; absence means no declared booleans."},
+    "/elementModifiers": {"status":"found","sources":["packages/styles/src/manifest.ts:476"],"note":"Direct source declaration or implementation."},
+    "/states/0": {"status":"found","sources":["packages/styles/src/components/hover-card.css:35"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/1": {"status":"found","sources":["packages/styles/src/components/hover-card.css:36"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states": {"status":"found","sources":["packages/styles/src/components/hover-card.css:35","packages/styles/src/components/hover-card.css:36"],"note":"Direct source declaration or implementation."},
+    "/keyboard/0": {"status":"found","sources":["docs/specs/hover-card.md:66"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard": {"status":"found","sources":["docs/specs/hover-card.md:66"],"note":"Direct source declaration or implementation."},
+    "/accessibleName": {"status":"not found","sources":["packages/styles/src/manifest.ts:476","packages/react/src/components/HoverCard.tsx:20","docs/specs/hover-card.md:1"],"note":"not found: No explicit accessible-name rule or naming attribute found in scoped implementation; inherited native props are not treated as naming requirements."},
+    "/composition": {"status":"found","sources":["packages/styles/src/manifest.ts:476","packages/react/src/components/HoverCard.tsx:20","docs/specs/hover-card.md:1"],"note":"Allowed composition is distinct from examples and built-in child calls."},
+    "/composition/allowedParents": {"status":"not found","sources":["packages/styles/src/manifest.ts:476","packages/react/src/components/HoverCard.tsx:20","docs/specs/hover-card.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/allowedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:476","packages/react/src/components/HoverCard.tsx:20","docs/specs/hover-card.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/observedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:476","packages/react/src/components/HoverCard.tsx:20","docs/specs/hover-card.md:1"],"note":"not found: No child component call located."},
+    "/composition/demoExamples/0": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1074"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/1": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1077"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/2": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1083"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/3": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1089"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1074","apps/docs/src/demos/gallery.tsx:1077","apps/docs/src/demos/gallery.tsx:1083","apps/docs/src/demos/gallery.tsx:1089"],"note":"Direct source declaration or implementation."},
+    "/reference/css": {"status":"found","sources":["packages/styles/src/components/hover-card.css:11","packages/styles/src/components/hover-card.css:14","packages/styles/src/components/hover-card.css:15","packages/styles/src/components/hover-card.css:18","packages/styles/src/components/hover-card.css:28","packages/styles/src/components/hover-card.css:35","packages/styles/src/components/hover-card.css:36"],"note":"Direct source declaration or implementation."},
+    "/reference/css/0": {"status":"found","sources":["packages/styles/src/components/hover-card.css:11"],"note":"Direct source declaration or implementation."},
+    "/reference/spec": {"status":"found","sources":["docs/specs/hover-card.md:1"],"note":"Dedicated family spec."},
+    "/reference/reactExport/0": {"status":"found","sources":["packages/react/src/components/HoverCard.tsx:20","packages/react/src/index.ts:28"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport": {"status":"found","sources":["packages/react/src/components/HoverCard.tsx:20","packages/react/src/index.ts:28"],"note":"Direct source declaration or implementation."},
+    "/reference": {"status":"found","sources":["packages/styles/src/manifest.ts:476","packages/styles/src/components/hover-card.css:1","docs/specs/hover-card.md:1"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element/0": {"status":"found","sources":["packages/react/src/components/HoverCard.tsx:62"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/1/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/hover-card.css:14"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/hover-card.css:14"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/hover-card.css:14"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/hover-card.css:24"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/hover-card.css:24"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/hover-card.css:24"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/hover-card.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/hover-card.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/hover-card.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/hover-card.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/hover-card.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/hover-card.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/3/name": {"status":"found","sources":["packages/styles/src/components/hover-card.css:26"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/3/selectors": {"status":"found","sources":["packages/styles/src/components/hover-card.css:26"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/hover-card.css:26"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/4/name": {"status":"found","sources":["packages/styles/src/components/hover-card.css:25"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/4/selectors": {"status":"found","sources":["packages/styles/src/components/hover-card.css:25"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/4/selectors/0": {"status":"found","sources":["packages/styles/src/components/hover-card.css:25"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/slots/0/name": {"status":"found","sources":["packages/react/src/components/HoverCard.tsx:7"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/required": {"status":"found","sources":["packages/react/src/components/HoverCard.tsx:7"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/allowedContent": {"status":"found","sources":["packages/react/src/components/HoverCard.tsx:7"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/allowedContent/0": {"status":"found","sources":["packages/react/src/components/HoverCard.tsx:7"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/1/name": {"status":"found","sources":["packages/react/src/components/HoverCard.tsx:21"],"note":"Observed children slot inherited through native props; no local content grammar declared."},
+    "/slots/1/part": {"status":"found","sources":["packages/react/src/components/HoverCard.tsx:21"],"note":"Observed children slot inherited through native props; no local content grammar declared."},
+    "/slots/1/element/0": {"status":"found","sources":["packages/react/src/components/HoverCard.tsx:62"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/states/0/name": {"status":"found","sources":["packages/styles/src/components/hover-card.css:35"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/0/part": {"status":"found","sources":["packages/styles/src/components/hover-card.css:35"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/0/kind": {"status":"found","sources":["packages/styles/src/components/hover-card.css:35"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/0/hook": {"status":"found","sources":["packages/styles/src/components/hover-card.css:35"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/0/value": {"status":"found","sources":["packages/styles/src/components/hover-card.css:35"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/1/name": {"status":"found","sources":["packages/styles/src/components/hover-card.css:36"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/1/part": {"status":"found","sources":["packages/styles/src/components/hover-card.css:36"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/1/kind": {"status":"found","sources":["packages/styles/src/components/hover-card.css:36"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/1/hook": {"status":"found","sources":["packages/styles/src/components/hover-card.css:36"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/1/value": {"status":"found","sources":["packages/styles/src/components/hover-card.css:36"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/keyboard/0/key": {"status":"found","sources":["docs/specs/hover-card.md:66"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/0/part": {"status":"found","sources":["docs/specs/hover-card.md:66"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/0/action": {"status":"found","sources":["docs/specs/hover-card.md:66"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/0/condition": {"status":"found","sources":["docs/specs/hover-card.md:66"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/reference/spec/0": {"status":"found","sources":["docs/specs/hover-card.md:1"],"note":"Dedicated family spec."}
+  }
+}

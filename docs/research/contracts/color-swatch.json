@@ -1,0 +1,336 @@
+{
+  "slug": "color-swatch",
+  "manifest": "colorSwatch",
+  "parts": [
+    {
+      "id": "root",
+      "element": [
+        "span"
+      ],
+      "class": "area-color-swatch",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_checker-cells",
+          "selectors": [
+            ".area-color-swatch::before"
+          ]
+        },
+        {
+          "name": "--_checker-ink",
+          "selectors": [
+            ".area-color-swatch::before"
+          ]
+        },
+        {
+          "name": "--_checker-tile",
+          "selectors": [
+            ".area-color-swatch::before"
+          ]
+        },
+        {
+          "name": "--_edge",
+          "selectors": [
+            ".area-color-swatch",
+            ".area-color-swatch::before",
+            ".area-color-swatch::after"
+          ]
+        },
+        {
+          "name": "--_edge-color",
+          "selectors": [
+            ".area-color-swatch"
+          ]
+        },
+        {
+          "name": "--_icon",
+          "selectors": [
+            ".area-color-field .area-input__icon > .area-color-swatch"
+          ]
+        },
+        {
+          "name": "--_inner-radius",
+          "selectors": [
+            ".area-color-swatch::before",
+            ".area-color-swatch::after"
+          ]
+        },
+        {
+          "name": "--_radius",
+          "selectors": [
+            ".area-color-swatch"
+          ]
+        },
+        {
+          "name": "--_shape",
+          "selectors": [
+            ".area-color-swatch"
+          ]
+        },
+        {
+          "name": "--_size",
+          "selectors": [
+            ".area-color-swatch"
+          ]
+        },
+        {
+          "name": "--_swatch-color",
+          "selectors": [
+            ".area-color-swatch::after"
+          ]
+        },
+        {
+          "name": "--_swatch-size",
+          "selectors": [
+            ".area-color-swatch-picker__cell > .area-color-swatch"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-bg-surface",
+          "selectors": [
+            ":where(.area-color-swatch, .area-color-picker)"
+          ]
+        },
+        {
+          "name": "--area-border-width",
+          "selectors": [
+            ".area-color-swatch"
+          ]
+        },
+        {
+          "name": "--area-fg-default",
+          "selectors": [
+            ":where(.area-color-swatch, .area-color-picker)"
+          ]
+        },
+        {
+          "name": "--area-neutral-50",
+          "selectors": [
+            ".area-color-swatch"
+          ]
+        },
+        {
+          "name": "--area-neutral-800",
+          "selectors": [
+            ".area-color-swatch"
+          ]
+        },
+        {
+          "name": "--area-radius-control-xs",
+          "selectors": [
+            ".area-color-swatch-picker--palette > .area-color-swatch-picker__cell:has(input:checked) > .area-color-swatch"
+          ]
+        },
+        {
+          "name": "--area-space-16",
+          "selectors": [
+            ".area-color-swatch--sm"
+          ]
+        },
+        {
+          "name": "--area-space-20",
+          "selectors": [
+            ".area-color-swatch",
+            ".area-color-swatch--md"
+          ]
+        },
+        {
+          "name": "--area-space-24",
+          "selectors": [
+            ".area-color-swatch--lg"
+          ]
+        }
+      ]
+    }
+  ],
+  "slots": [],
+  "options": {
+    "size": {
+      "values": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "default": "md"
+    }
+  },
+  "booleans": [],
+  "elementModifiers": {},
+  "states": [],
+  "keyboard": [],
+  "accessibleName": [
+    {
+      "part": "root",
+      "rule": "Reference wiring: aria-label={ariaLabel ?? `Color ${color}`}."
+    }
+  ],
+  "composition": {
+    "allowedParents": "not found",
+    "allowedChildren": "not found",
+    "observedChildren": [],
+    "demoExamples": [
+      "apps/docs/src/demos/gallery.tsx:284",
+      "apps/docs/src/demos/gallery.tsx:308",
+      "apps/docs/src/demos/gallery.tsx:332",
+      "apps/docs/src/demos/gallery.tsx:380",
+      "apps/docs/src/demos/gallery.tsx:403",
+      "apps/docs/src/demos/gallery.tsx:404",
+      "apps/docs/src/demos/gallery.tsx:405",
+      "apps/docs/src/demos/gallery.tsx:410",
+      "apps/docs/src/demos/gallery.tsx:799"
+    ]
+  },
+  "reference": {
+    "css": [
+      "packages/styles/src/components/color.css"
+    ],
+    "spec": [
+      "docs/specs/color-swatch.md"
+    ],
+    "reactExport": [
+      "ColorSwatch"
+    ]
+  },
+  "evidence": {
+    "/slug": {"status":"found","sources":["packages/styles/src/manifest.ts:110"],"note":"Direct source declaration or implementation."},
+    "/manifest": {"status":"found","sources":["packages/styles/src/manifest.ts:109"],"note":"Direct source declaration or implementation."},
+    "/parts": {"status":"found","sources":["packages/styles/src/manifest.ts:109","packages/react/src/components/ColorSwatch.tsx:14"],"note":"Manifest parts plus implementation-only structural elements; unclassed nodes retain explicit IDs."},
+    "/parts/0": {"status":"found","sources":["packages/react/src/components/ColorSwatch.tsx:14"],"note":"Direct source declaration or implementation."},
+    "/parts/0/id": {"status":"found","sources":["packages/react/src/components/ColorSwatch.tsx:14"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/0/class": {"status":"found","sources":["packages/react/src/components/ColorSwatch.tsx:14"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element": {"status":"found","sources":["packages/react/src/components/ColorSwatch.tsx:14"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/required": {"status":"found","sources":["packages/react/src/components/ColorSwatch.tsx:14"],"note":"Root of the rendered family surface."},
+    "/parts/0/allowedContent": {"status":"not found","sources":["packages/react/src/components/ColorSwatch.tsx:14"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/0/customProperties/0": {"status":"found","sources":["packages/styles/src/components/color.css:61"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1": {"status":"found","sources":["packages/styles/src/components/color.css:60"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/2": {"status":"found","sources":["packages/styles/src/components/color.css:61"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/3": {"status":"found","sources":["packages/styles/src/components/color.css:37","packages/styles/src/components/color.css:52"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/4": {"status":"found","sources":["packages/styles/src/components/color.css:44"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/5": {"status":"found","sources":["packages/styles/src/components/color.css:158"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/6": {"status":"found","sources":["packages/styles/src/components/color.css:55"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/7": {"status":"found","sources":["packages/styles/src/components/color.css:37","packages/styles/src/components/color.css:43"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/8": {"status":"found","sources":["packages/styles/src/components/color.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/9": {"status":"found","sources":["packages/styles/src/components/color.css:27","packages/styles/src/components/color.css:28","packages/styles/src/components/color.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/10": {"status":"found","sources":["packages/styles/src/components/color.css:65"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/11": {"status":"found","sources":["packages/styles/src/components/color.css:108"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties": {"status":"found","sources":["packages/styles/src/components/color.css:27","packages/styles/src/components/color.css:28","packages/styles/src/components/color.css:34","packages/styles/src/components/color.css:37","packages/styles/src/components/color.css:43","packages/styles/src/components/color.css:52","packages/styles/src/components/color.css:44","packages/styles/src/components/color.css:55","packages/styles/src/components/color.css:60","packages/styles/src/components/color.css:61","packages/styles/src/components/color.css:65","packages/styles/src/components/color.css:108","packages/styles/src/components/color.css:158"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/0/tokens/0": {"status":"found","sources":["packages/styles/src/components/color.css:11"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1": {"status":"found","sources":["packages/styles/src/components/color.css:33"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2": {"status":"found","sources":["packages/styles/src/components/color.css:11"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3": {"status":"found","sources":["packages/styles/src/components/color.css:41"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4": {"status":"found","sources":["packages/styles/src/components/color.css:41"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5": {"status":"found","sources":["packages/styles/src/components/color.css:146","packages/styles/src/components/color.css:147"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6": {"status":"found","sources":["packages/styles/src/components/color.css:68"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7": {"status":"found","sources":["packages/styles/src/components/color.css:22","packages/styles/src/components/color.css:69"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8": {"status":"found","sources":["packages/styles/src/components/color.css:70"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens": {"status":"found","sources":["packages/styles/src/components/color.css:11","packages/styles/src/components/color.css:22","packages/styles/src/components/color.css:69","packages/styles/src/components/color.css:33","packages/styles/src/components/color.css:41","packages/styles/src/components/color.css:68","packages/styles/src/components/color.css:70","packages/styles/src/components/color.css:146","packages/styles/src/components/color.css:147"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/slots": {"status":"not found","sources":["packages/styles/src/manifest.ts:109","packages/react/src/components/ColorSwatch.tsx:11","docs/specs/color-swatch.md:1"],"note":"not found: No locally declared ReactNode/ReactElement slot props; native inherited children and delegated interfaces require review."},
+    "/options": {"status":"found","sources":["packages/styles/src/manifest.ts:112"],"note":"Direct source declaration or implementation."},
+    "/options/size": {"status":"found","sources":["packages/styles/src/manifest.ts:112"],"note":"Direct source declaration or implementation."},
+    "/options/size/default": {"status":"found","sources":["packages/styles/src/manifest.ts:113"],"note":"Direct source declaration or implementation."},
+    "/booleans": {"status":"found","sources":["packages/styles/src/manifest.ts:109"],"note":"Exact manifest boolean modifier list; absence means no declared booleans."},
+    "/elementModifiers": {"status":"found","sources":["packages/styles/src/manifest.ts:109"],"note":"Direct source declaration or implementation."},
+    "/states": {"status":"not found","sources":["packages/styles/src/manifest.ts:109","packages/react/src/components/ColorSwatch.tsx:11","docs/specs/color-swatch.md:1"],"note":"not found: No runtime hooks found in manifest, family markup or directly targeted CSS selectors."},
+    "/keyboard": {"status":"not found","sources":["packages/styles/src/manifest.ts:109","packages/react/src/components/ColorSwatch.tsx:11","docs/specs/color-swatch.md:1"],"note":"not found: No reviewed key-to-action contract found. Native behavior is not invented from a tag name."},
+    "/accessibleName/0": {"status":"found","sources":["packages/react/src/components/ColorSwatch.tsx:14"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName": {"status":"found","sources":["packages/react/src/components/ColorSwatch.tsx:14"],"note":"Direct source declaration or implementation."},
+    "/composition": {"status":"found","sources":["packages/styles/src/manifest.ts:109","packages/react/src/components/ColorSwatch.tsx:11","docs/specs/color-swatch.md:1"],"note":"Allowed composition is distinct from examples and built-in child calls."},
+    "/composition/allowedParents": {"status":"not found","sources":["packages/styles/src/manifest.ts:109","packages/react/src/components/ColorSwatch.tsx:11","docs/specs/color-swatch.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/allowedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:109","packages/react/src/components/ColorSwatch.tsx:11","docs/specs/color-swatch.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/observedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:109","packages/react/src/components/ColorSwatch.tsx:11","docs/specs/color-swatch.md:1"],"note":"not found: No child component call located."},
+    "/composition/demoExamples/0": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:284"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/1": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:308"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/2": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:332"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/3": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:380"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/4": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:403"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/5": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:404"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/6": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:405"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/7": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:410"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/8": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:799"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:284","apps/docs/src/demos/gallery.tsx:308","apps/docs/src/demos/gallery.tsx:332","apps/docs/src/demos/gallery.tsx:380","apps/docs/src/demos/gallery.tsx:403","apps/docs/src/demos/gallery.tsx:404","apps/docs/src/demos/gallery.tsx:405","apps/docs/src/demos/gallery.tsx:410","apps/docs/src/demos/gallery.tsx:799"],"note":"Direct source declaration or implementation."},
+    "/reference/css": {"status":"found","sources":["packages/styles/src/components/color.css:9","packages/styles/src/components/color.css:21","packages/styles/src/components/color.css:46","packages/styles/src/components/color.css:58","packages/styles/src/components/color.css:63","packages/styles/src/components/color.css:68","packages/styles/src/components/color.css:69","packages/styles/src/components/color.css:70","packages/styles/src/components/color.css:108","packages/styles/src/components/color.css:138","packages/styles/src/components/color.css:141","packages/styles/src/components/color.css:145","packages/styles/src/components/color.css:158"],"note":"Direct source declaration or implementation."},
+    "/reference/css/0": {"status":"found","sources":["packages/styles/src/components/color.css:9"],"note":"Direct source declaration or implementation."},
+    "/reference/spec": {"status":"found","sources":["docs/specs/color-swatch.md:1"],"note":"Dedicated family spec."},
+    "/reference/reactExport/0": {"status":"found","sources":["packages/react/src/components/ColorSwatch.tsx:11","packages/react/src/index.ts:21"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport": {"status":"found","sources":["packages/react/src/components/ColorSwatch.tsx:11","packages/react/src/index.ts:21"],"note":"Direct source declaration or implementation."},
+    "/reference": {"status":"found","sources":["packages/styles/src/manifest.ts:109","packages/styles/src/components/color.css:1","docs/specs/color-swatch.md:1"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element/0": {"status":"found","sources":["packages/react/src/components/ColorSwatch.tsx:14"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/color.css:61"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/color.css:61"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/color.css:61"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/name": {"status":"found","sources":["packages/styles/src/components/color.css:60"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/selectors": {"status":"found","sources":["packages/styles/src/components/color.css:60"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/color.css:60"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/2/name": {"status":"found","sources":["packages/styles/src/components/color.css:61"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/2/selectors": {"status":"found","sources":["packages/styles/src/components/color.css:61"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/color.css:61"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/3/name": {"status":"found","sources":["packages/styles/src/components/color.css:37","packages/styles/src/components/color.css:52"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/3/selectors": {"status":"found","sources":["packages/styles/src/components/color.css:37","packages/styles/src/components/color.css:52"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/color.css:37","packages/styles/src/components/color.css:52"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/3/selectors/1": {"status":"found","sources":["packages/styles/src/components/color.css:37","packages/styles/src/components/color.css:52"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/3/selectors/2": {"status":"found","sources":["packages/styles/src/components/color.css:37","packages/styles/src/components/color.css:52"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/4/name": {"status":"found","sources":["packages/styles/src/components/color.css:44"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/4/selectors": {"status":"found","sources":["packages/styles/src/components/color.css:44"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/4/selectors/0": {"status":"found","sources":["packages/styles/src/components/color.css:44"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/5/name": {"status":"found","sources":["packages/styles/src/components/color.css:158"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/5/selectors": {"status":"found","sources":["packages/styles/src/components/color.css:158"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/5/selectors/0": {"status":"found","sources":["packages/styles/src/components/color.css:158"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/6/name": {"status":"found","sources":["packages/styles/src/components/color.css:55"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/6/selectors": {"status":"found","sources":["packages/styles/src/components/color.css:55"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/6/selectors/0": {"status":"found","sources":["packages/styles/src/components/color.css:55"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/6/selectors/1": {"status":"found","sources":["packages/styles/src/components/color.css:55"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/7/name": {"status":"found","sources":["packages/styles/src/components/color.css:37","packages/styles/src/components/color.css:43"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/7/selectors": {"status":"found","sources":["packages/styles/src/components/color.css:37","packages/styles/src/components/color.css:43"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/7/selectors/0": {"status":"found","sources":["packages/styles/src/components/color.css:37","packages/styles/src/components/color.css:43"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/8/name": {"status":"found","sources":["packages/styles/src/components/color.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/8/selectors": {"status":"found","sources":["packages/styles/src/components/color.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/8/selectors/0": {"status":"found","sources":["packages/styles/src/components/color.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/9/name": {"status":"found","sources":["packages/styles/src/components/color.css:27","packages/styles/src/components/color.css:28","packages/styles/src/components/color.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/9/selectors": {"status":"found","sources":["packages/styles/src/components/color.css:27","packages/styles/src/components/color.css:28","packages/styles/src/components/color.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/9/selectors/0": {"status":"found","sources":["packages/styles/src/components/color.css:27","packages/styles/src/components/color.css:28","packages/styles/src/components/color.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/10/name": {"status":"found","sources":["packages/styles/src/components/color.css:65"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/10/selectors": {"status":"found","sources":["packages/styles/src/components/color.css:65"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/10/selectors/0": {"status":"found","sources":["packages/styles/src/components/color.css:65"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/11/name": {"status":"found","sources":["packages/styles/src/components/color.css:108"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/11/selectors": {"status":"found","sources":["packages/styles/src/components/color.css:108"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/11/selectors/0": {"status":"found","sources":["packages/styles/src/components/color.css:108"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/color.css:11"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/color.css:11"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/color.css:11"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/color.css:33"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/color.css:33"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/color.css:33"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/color.css:11"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/color.css:11"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/color.css:11"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/name": {"status":"found","sources":["packages/styles/src/components/color.css:41"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/selectors": {"status":"found","sources":["packages/styles/src/components/color.css:41"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/color.css:41"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/name": {"status":"found","sources":["packages/styles/src/components/color.css:41"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/selectors": {"status":"found","sources":["packages/styles/src/components/color.css:41"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/selectors/0": {"status":"found","sources":["packages/styles/src/components/color.css:41"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5/name": {"status":"found","sources":["packages/styles/src/components/color.css:146","packages/styles/src/components/color.css:147"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5/selectors": {"status":"found","sources":["packages/styles/src/components/color.css:146","packages/styles/src/components/color.css:147"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5/selectors/0": {"status":"found","sources":["packages/styles/src/components/color.css:146","packages/styles/src/components/color.css:147"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/name": {"status":"found","sources":["packages/styles/src/components/color.css:68"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/selectors": {"status":"found","sources":["packages/styles/src/components/color.css:68"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/selectors/0": {"status":"found","sources":["packages/styles/src/components/color.css:68"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/name": {"status":"found","sources":["packages/styles/src/components/color.css:22","packages/styles/src/components/color.css:69"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/selectors": {"status":"found","sources":["packages/styles/src/components/color.css:22","packages/styles/src/components/color.css:69"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/selectors/0": {"status":"found","sources":["packages/styles/src/components/color.css:22","packages/styles/src/components/color.css:69"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/selectors/1": {"status":"found","sources":["packages/styles/src/components/color.css:22","packages/styles/src/components/color.css:69"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8/name": {"status":"found","sources":["packages/styles/src/components/color.css:70"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8/selectors": {"status":"found","sources":["packages/styles/src/components/color.css:70"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8/selectors/0": {"status":"found","sources":["packages/styles/src/components/color.css:70"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/options/size/values": {"status":"found","sources":["packages/styles/src/manifest.ts:112"],"note":"Direct source declaration or implementation."},
+    "/options/size/values/0": {"status":"found","sources":["packages/styles/src/manifest.ts:112"],"note":"Direct source declaration or implementation."},
+    "/options/size/values/1": {"status":"found","sources":["packages/styles/src/manifest.ts:112"],"note":"Direct source declaration or implementation."},
+    "/options/size/values/2": {"status":"found","sources":["packages/styles/src/manifest.ts:112"],"note":"Direct source declaration or implementation."},
+    "/accessibleName/0/part": {"status":"found","sources":["packages/react/src/components/ColorSwatch.tsx:14"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/0/rule": {"status":"found","sources":["packages/react/src/components/ColorSwatch.tsx:14"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/reference/spec/0": {"status":"found","sources":["docs/specs/color-swatch.md:1"],"note":"Dedicated family spec."}
+  }
+}

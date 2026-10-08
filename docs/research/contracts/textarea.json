@@ -1,0 +1,877 @@
+{
+  "slug": "textarea",
+  "manifest": "textarea",
+  "parts": [
+    {
+      "id": "root",
+      "element": [
+        "textarea"
+      ],
+      "class": "area-textarea",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_bg",
+          "selectors": [
+            ".area-textarea"
+          ]
+        },
+        {
+          "name": "--_border",
+          "selectors": [
+            ".area-textarea"
+          ]
+        },
+        {
+          "name": "--_border-focus",
+          "selectors": [
+            ".area-textarea:focus"
+          ]
+        },
+        {
+          "name": "--_border-hover",
+          "selectors": [
+            ".area-textarea:hover:not(:disabled):not(:focus)"
+          ]
+        },
+        {
+          "name": "--_box-text",
+          "selectors": [
+            ".area-textarea"
+          ]
+        },
+        {
+          "name": "--_focus-halo",
+          "selectors": [
+            ".area-textarea:focus"
+          ]
+        },
+        {
+          "name": "--_focus-outline",
+          "selectors": [
+            ".area-textarea:focus"
+          ]
+        },
+        {
+          "name": "--_gutter-block",
+          "selectors": [
+            ".area-textarea",
+            ".area-textarea:not([rows])"
+          ]
+        },
+        {
+          "name": "--_gutter-inline",
+          "selectors": [
+            ".area-textarea"
+          ]
+        },
+        {
+          "name": "--_height",
+          "selectors": [
+            ".area-textarea"
+          ]
+        },
+        {
+          "name": "--_leading",
+          "selectors": [
+            ".area-textarea",
+            ".area-textarea:not([rows])"
+          ]
+        },
+        {
+          "name": "--_text",
+          "selectors": [
+            ".area-textarea"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-border-faint",
+          "selectors": [
+            ".area-textarea:disabled"
+          ]
+        },
+        {
+          "name": "--area-control-lg",
+          "selectors": [
+            ".area-textarea--lg"
+          ]
+        },
+        {
+          "name": "--area-control-lg-leading",
+          "selectors": [
+            ".area-textarea--lg"
+          ]
+        },
+        {
+          "name": "--area-control-lg-text",
+          "selectors": [
+            ".area-textarea--lg"
+          ]
+        },
+        {
+          "name": "--area-control-md",
+          "selectors": [
+            ".area-textarea",
+            ".area-textarea--md"
+          ]
+        },
+        {
+          "name": "--area-control-md-leading",
+          "selectors": [
+            ".area-textarea",
+            ".area-textarea--md"
+          ]
+        },
+        {
+          "name": "--area-control-md-text",
+          "selectors": [
+            ".area-textarea",
+            ".area-textarea--md"
+          ]
+        },
+        {
+          "name": "--area-control-sm",
+          "selectors": [
+            ".area-textarea--sm"
+          ]
+        },
+        {
+          "name": "--area-control-sm-leading",
+          "selectors": [
+            ".area-textarea--sm"
+          ]
+        },
+        {
+          "name": "--area-control-sm-text",
+          "selectors": [
+            ".area-textarea--sm"
+          ]
+        },
+        {
+          "name": "--area-fg-disabled",
+          "selectors": [
+            ".area-textarea:disabled",
+            ".area-textarea:disabled::placeholder"
+          ]
+        },
+        {
+          "name": "--area-field-focus-color",
+          "selectors": [
+            ".area-textarea"
+          ]
+        },
+        {
+          "name": "--area-field-focus-halo-width",
+          "selectors": [
+            ".area-textarea:focus"
+          ]
+        },
+        {
+          "name": "--area-field-focus-outline-width",
+          "selectors": [
+            ".area-textarea:focus"
+          ]
+        },
+        {
+          "name": "--area-focus-offset",
+          "selectors": [
+            ".area-textarea:focus"
+          ]
+        },
+        {
+          "name": "--area-focus-width",
+          "selectors": [
+            ".area-textarea:focus"
+          ]
+        },
+        {
+          "name": "--area-radius-cap",
+          "selectors": [
+            ".area-textarea"
+          ]
+        },
+        {
+          "name": "--area-radius-control",
+          "selectors": [
+            ".area-textarea"
+          ]
+        },
+        {
+          "name": "--area-shadow-color",
+          "selectors": [
+            ".area-textarea"
+          ]
+        },
+        {
+          "name": "--area-space-2",
+          "selectors": [
+            ".area-textarea"
+          ]
+        },
+        {
+          "name": "--area-space-4",
+          "selectors": [
+            ".area-textarea"
+          ]
+        },
+        {
+          "name": "--area-stroke-width",
+          "selectors": [
+            ".area-textarea",
+            ".area-textarea:not([rows])"
+          ]
+        },
+        {
+          "name": "--area-textarea-bg",
+          "selectors": [
+            ".area-textarea",
+            ".area-textarea--outline"
+          ]
+        },
+        {
+          "name": "--area-textarea-bg-disabled",
+          "selectors": [
+            ".area-textarea:disabled"
+          ]
+        },
+        {
+          "name": "--area-textarea-bg-soft",
+          "selectors": [
+            ".area-textarea--soft",
+            ".area-textarea:read-only"
+          ]
+        },
+        {
+          "name": "--area-textarea-edge",
+          "selectors": [
+            ".area-textarea",
+            ".area-textarea--soft"
+          ]
+        },
+        {
+          "name": "--area-textarea-edge-hover",
+          "selectors": [
+            ".area-textarea"
+          ]
+        },
+        {
+          "name": "--area-textarea-inline-size",
+          "selectors": [
+            ".area-textarea"
+          ]
+        },
+        {
+          "name": "--area-textarea-invalid-color",
+          "selectors": [
+            ".area-textarea[data-invalid]",
+            ".area-textarea[aria-invalid=\"true\"]"
+          ]
+        },
+        {
+          "name": "--area-textarea-invalid-halo-color",
+          "selectors": [
+            ".area-textarea[data-invalid]",
+            ".area-textarea[aria-invalid=\"true\"]"
+          ]
+        },
+        {
+          "name": "--area-textarea-placeholder",
+          "selectors": [
+            ".area-textarea::placeholder"
+          ]
+        },
+        {
+          "name": "--area-textarea-success-color",
+          "selectors": [
+            ".area-textarea[data-success]"
+          ]
+        },
+        {
+          "name": "--area-textarea-success-halo-color",
+          "selectors": [
+            ".area-textarea[data-success]"
+          ]
+        },
+        {
+          "name": "--area-textarea-text",
+          "selectors": [
+            ".area-textarea"
+          ]
+        },
+        {
+          "name": "--area-textarea-warning-color",
+          "selectors": [
+            ".area-textarea[data-warning]"
+          ]
+        },
+        {
+          "name": "--area-textarea-warning-halo-color",
+          "selectors": [
+            ".area-textarea[data-warning]"
+          ]
+        },
+        {
+          "name": "--area-transition",
+          "selectors": [
+            ".area-textarea"
+          ]
+        }
+      ]
+    }
+  ],
+  "slots": [],
+  "options": {
+    "variant": {
+      "values": [
+        "outline",
+        "soft"
+      ],
+      "default": "outline"
+    },
+    "size": {
+      "values": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "default": "md"
+    },
+    "resize": {
+      "values": [
+        "vertical",
+        "horizontal",
+        "both",
+        "none"
+      ],
+      "default": "vertical"
+    }
+  },
+  "booleans": [
+    "full-width"
+  ],
+  "elementModifiers": {},
+  "states": [
+    {
+      "name": "invalid",
+      "part": "root",
+      "kind": "aria",
+      "hook": "aria-invalid",
+      "value": "{invalidState ? true : ariaInvalid}"
+    },
+    {
+      "name": "invalid",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-invalid",
+      "value": "\"\""
+    },
+    {
+      "name": "success",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-success",
+      "value": "\"\""
+    },
+    {
+      "name": "warning",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-warning",
+      "value": "\"\""
+    },
+    {
+      "name": "hover",
+      "part": "root",
+      "kind": "pseudo",
+      "hook": ":hover",
+      "value": ".area-textarea:hover:not(:disabled):not(:focus)"
+    },
+    {
+      "name": "focus",
+      "part": "root",
+      "kind": "pseudo",
+      "hook": ":focus",
+      "value": ".area-textarea:focus"
+    },
+    {
+      "name": "invalid",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-invalid",
+      "value": "present"
+    },
+    {
+      "name": "invalid",
+      "part": "root",
+      "kind": "aria",
+      "hook": "aria-invalid",
+      "value": "\"true\""
+    },
+    {
+      "name": "success",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-success",
+      "value": "present"
+    },
+    {
+      "name": "warning",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-warning",
+      "value": "present"
+    },
+    {
+      "name": "read-only",
+      "part": "root",
+      "kind": "pseudo",
+      "hook": ":read-only",
+      "value": ".area-textarea:read-only"
+    },
+    {
+      "name": "disabled",
+      "part": "root",
+      "kind": "pseudo",
+      "hook": ":disabled",
+      "value": ".area-textarea:disabled"
+    },
+    {
+      "name": "disabled",
+      "part": "root",
+      "kind": "pseudo",
+      "hook": ":disabled",
+      "value": ".area-textarea:disabled::placeholder"
+    },
+    {
+      "name": "disabled",
+      "part": "not found",
+      "kind": "native",
+      "hook": "disabled",
+      "value": "present"
+    },
+    {
+      "name": "read-only",
+      "part": "not found",
+      "kind": "native",
+      "hook": "readonly",
+      "value": "present"
+    }
+  ],
+  "keyboard": [],
+  "accessibleName": [],
+  "composition": {
+    "allowedParents": "not found",
+    "allowedChildren": "not found",
+    "observedChildren": [],
+    "demoExamples": [
+      "apps/docs/src/demos/display.tsx:380",
+      "apps/docs/src/demos/form.tsx:154",
+      "apps/docs/src/demos/form.tsx:156",
+      "apps/docs/src/demos/form.tsx:158",
+      "apps/docs/src/demos/form.tsx:162",
+      "apps/docs/src/demos/form.tsx:163",
+      "apps/docs/src/demos/form.tsx:164",
+      "apps/docs/src/demos/form.tsx:168",
+      "apps/docs/src/demos/form.tsx:170",
+      "apps/docs/src/demos/form.tsx:172",
+      "apps/docs/src/demos/form.tsx:174",
+      "apps/docs/src/demos/form.tsx:176",
+      "apps/docs/src/demos/form.tsx:180",
+      "apps/docs/src/demos/form.tsx:184",
+      "apps/docs/src/demos/form.tsx:188",
+      "apps/docs/src/demos/form.tsx:192",
+      "apps/docs/src/demos/gallery.tsx:1971",
+      "apps/docs/src/demos/gallery.tsx:1973",
+      "apps/docs/src/demos/gallery.tsx:1974",
+      "apps/docs/src/demos/gallery.tsx:1975",
+      "apps/docs/src/demos/gallery.tsx:1978"
+    ]
+  },
+  "reference": {
+    "css": [
+      "packages/styles/src/components/textarea.css",
+      "packages/styles/src/forced-colors.css"
+    ],
+    "spec": [
+      "docs/specs/textarea.md"
+    ],
+    "reactExport": [
+      "Textarea"
+    ]
+  },
+  "evidence": {
+    "/slug": {"status":"found","sources":["packages/styles/src/manifest.ts:199"],"note":"Direct source declaration or implementation."},
+    "/manifest": {"status":"found","sources":["packages/styles/src/manifest.ts:198"],"note":"Direct source declaration or implementation."},
+    "/parts": {"status":"found","sources":["packages/styles/src/manifest.ts:198","packages/react/src/components/forms.tsx:86"],"note":"Manifest parts plus implementation-only structural elements; unclassed nodes retain explicit IDs."},
+    "/parts/0": {"status":"found","sources":["packages/react/src/components/forms.tsx:86"],"note":"Direct source declaration or implementation."},
+    "/parts/0/id": {"status":"found","sources":["packages/react/src/components/forms.tsx:86"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/0/class": {"status":"found","sources":["packages/react/src/components/forms.tsx:86"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element": {"status":"found","sources":["packages/react/src/components/forms.tsx:86"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/required": {"status":"found","sources":["packages/react/src/components/forms.tsx:86"],"note":"Root of the rendered family surface."},
+    "/parts/0/allowedContent": {"status":"not found","sources":["packages/react/src/components/forms.tsx:86"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/0/customProperties/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1": {"status":"found","sources":["packages/styles/src/components/textarea.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/2": {"status":"found","sources":["packages/styles/src/components/textarea.css:82"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/3": {"status":"found","sources":["packages/styles/src/components/textarea.css:78"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/4": {"status":"found","sources":["packages/styles/src/components/textarea.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/5": {"status":"found","sources":["packages/styles/src/components/textarea.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/6": {"status":"found","sources":["packages/styles/src/components/textarea.css:84"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/7": {"status":"found","sources":["packages/styles/src/components/textarea.css:31","packages/styles/src/components/textarea.css:53"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/8": {"status":"found","sources":["packages/styles/src/components/textarea.css:23","packages/styles/src/components/textarea.css:32"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/9": {"status":"found","sources":["packages/styles/src/components/textarea.css:21","packages/styles/src/components/textarea.css:30","packages/styles/src/components/textarea.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/10": {"status":"found","sources":["packages/styles/src/components/textarea.css:40","packages/styles/src/components/textarea.css:53"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/11": {"status":"found","sources":["packages/styles/src/components/textarea.css:39"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties": {"status":"found","sources":["packages/styles/src/components/textarea.css:21","packages/styles/src/components/textarea.css:30","packages/styles/src/components/textarea.css:35","packages/styles/src/components/textarea.css:23","packages/styles/src/components/textarea.css:32","packages/styles/src/components/textarea.css:31","packages/styles/src/components/textarea.css:53","packages/styles/src/components/textarea.css:34","packages/styles/src/components/textarea.css:36","packages/styles/src/components/textarea.css:39","packages/styles/src/components/textarea.css:40","packages/styles/src/components/textarea.css:78","packages/styles/src/components/textarea.css:82","packages/styles/src/components/textarea.css:83","packages/styles/src/components/textarea.css:84"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/0/tokens/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:120"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1": {"status":"found","sources":["packages/styles/src/components/textarea.css:132"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2": {"status":"found","sources":["packages/styles/src/components/textarea.css:132"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3": {"status":"found","sources":["packages/styles/src/components/textarea.css:132"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4": {"status":"found","sources":["packages/styles/src/components/textarea.css:10","packages/styles/src/components/textarea.css:131"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5": {"status":"found","sources":["packages/styles/src/components/textarea.css:25","packages/styles/src/components/textarea.css:131"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6": {"status":"found","sources":["packages/styles/src/components/textarea.css:24","packages/styles/src/components/textarea.css:131"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7": {"status":"found","sources":["packages/styles/src/components/textarea.css:130"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8": {"status":"found","sources":["packages/styles/src/components/textarea.css:130"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9": {"status":"found","sources":["packages/styles/src/components/textarea.css:130"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/10": {"status":"found","sources":["packages/styles/src/components/textarea.css:121","packages/styles/src/components/textarea.css:126"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/11": {"status":"found","sources":["packages/styles/src/components/textarea.css:13","packages/styles/src/components/textarea.css:14"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/12": {"status":"found","sources":["packages/styles/src/components/textarea.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/13": {"status":"found","sources":["packages/styles/src/components/textarea.css:84"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/14": {"status":"found","sources":["packages/styles/src/forced-colors.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/15": {"status":"found","sources":["packages/styles/src/forced-colors.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/16": {"status":"found","sources":["packages/styles/src/components/textarea.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/17": {"status":"found","sources":["packages/styles/src/components/textarea.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/18": {"status":"found","sources":["packages/styles/src/components/textarea.css:15"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/19": {"status":"found","sources":["packages/styles/src/components/textarea.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/20": {"status":"found","sources":["packages/styles/src/components/textarea.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/21": {"status":"found","sources":["packages/styles/src/components/textarea.css:31","packages/styles/src/components/textarea.css:32","packages/styles/src/components/textarea.css:34","packages/styles/src/components/textarea.css:53"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/22": {"status":"found","sources":["packages/styles/src/components/textarea.css:16","packages/styles/src/components/textarea.css:57"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/23": {"status":"found","sources":["packages/styles/src/components/textarea.css:119"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/24": {"status":"found","sources":["packages/styles/src/components/textarea.css:61","packages/styles/src/components/textarea.css:114"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/25": {"status":"found","sources":["packages/styles/src/components/textarea.css:11","packages/styles/src/components/textarea.css:63"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/26": {"status":"found","sources":["packages/styles/src/components/textarea.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/27": {"status":"found","sources":["packages/styles/src/components/textarea.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/28": {"status":"found","sources":["packages/styles/src/components/textarea.css:90","packages/styles/src/components/textarea.css:91","packages/styles/src/components/textarea.css:92","packages/styles/src/components/textarea.css:93"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/29": {"status":"found","sources":["packages/styles/src/components/textarea.css:94"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/30": {"status":"found","sources":["packages/styles/src/components/textarea.css:74"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/31": {"status":"found","sources":["packages/styles/src/components/textarea.css:98","packages/styles/src/components/textarea.css:99","packages/styles/src/components/textarea.css:100","packages/styles/src/components/textarea.css:101"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/32": {"status":"found","sources":["packages/styles/src/components/textarea.css:102"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/33": {"status":"found","sources":["packages/styles/src/components/textarea.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/34": {"status":"found","sources":["packages/styles/src/components/textarea.css:106","packages/styles/src/components/textarea.css:107","packages/styles/src/components/textarea.css:108","packages/styles/src/components/textarea.css:109"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/35": {"status":"found","sources":["packages/styles/src/components/textarea.css:110"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/36": {"status":"found","sources":["packages/styles/src/components/textarea.css:45"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens": {"status":"found","sources":["packages/styles/src/components/textarea.css:10","packages/styles/src/components/textarea.css:131","packages/styles/src/components/textarea.css:11","packages/styles/src/components/textarea.css:63","packages/styles/src/components/textarea.css:12","packages/styles/src/components/textarea.css:13","packages/styles/src/components/textarea.css:14","packages/styles/src/components/textarea.css:15","packages/styles/src/components/textarea.css:16","packages/styles/src/components/textarea.css:57","packages/styles/src/components/textarea.css:23","packages/styles/src/components/textarea.css:24","packages/styles/src/components/textarea.css:25","packages/styles/src/components/textarea.css:28","packages/styles/src/components/textarea.css:31","packages/styles/src/components/textarea.css:32","packages/styles/src/components/textarea.css:34","packages/styles/src/components/textarea.css:53","packages/styles/src/components/textarea.css:35","packages/styles/src/components/textarea.css:37","packages/styles/src/components/textarea.css:45","packages/styles/src/components/textarea.css:61","packages/styles/src/components/textarea.css:114","packages/styles/src/components/textarea.css:74","packages/styles/src/components/textarea.css:83","packages/styles/src/components/textarea.css:84","packages/styles/src/components/textarea.css:90","packages/styles/src/components/textarea.css:91","packages/styles/src/components/textarea.css:92","packages/styles/src/components/textarea.css:93","packages/styles/src/components/textarea.css:94","packages/styles/src/components/textarea.css:98","packages/styles/src/components/textarea.css:99","packages/styles/src/components/textarea.css:100","packages/styles/src/components/textarea.css:101","packages/styles/src/components/textarea.css:102","packages/styles/src/components/textarea.css:106","packages/styles/src/components/textarea.css:107","packages/styles/src/components/textarea.css:108","packages/styles/src/components/textarea.css:109","packages/styles/src/components/textarea.css:110","packages/styles/src/components/textarea.css:119","packages/styles/src/components/textarea.css:120","packages/styles/src/components/textarea.css:121","packages/styles/src/components/textarea.css:126","packages/styles/src/components/textarea.css:130","packages/styles/src/components/textarea.css:132","packages/styles/src/forced-colors.css:29","packages/styles/src/forced-colors.css:30"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/slots": {"status":"not found","sources":["packages/styles/src/manifest.ts:198","packages/react/src/components/forms.tsx:67","docs/specs/textarea.md:1"],"note":"not found: No locally declared ReactNode/ReactElement slot props; native inherited children and delegated interfaces require review."},
+    "/options": {"status":"found","sources":["packages/styles/src/manifest.ts:201"],"note":"Direct source declaration or implementation."},
+    "/options/variant": {"status":"found","sources":["packages/styles/src/manifest.ts:202"],"note":"Direct source declaration or implementation."},
+    "/options/variant/default": {"status":"found","sources":["packages/styles/src/manifest.ts:210"],"note":"Direct source declaration or implementation."},
+    "/options/size": {"status":"found","sources":["packages/styles/src/manifest.ts:203"],"note":"Direct source declaration or implementation."},
+    "/options/size/default": {"status":"found","sources":["packages/styles/src/manifest.ts:210"],"note":"Direct source declaration or implementation."},
+    "/options/resize": {"status":"found","sources":["packages/styles/src/manifest.ts:204"],"note":"Direct source declaration or implementation."},
+    "/options/resize/default": {"status":"found","sources":["packages/styles/src/manifest.ts:210"],"note":"Direct source declaration or implementation."},
+    "/booleans": {"status":"found","sources":["packages/styles/src/manifest.ts:206"],"note":"Exact manifest boolean modifier list; absence means no declared booleans."},
+    "/elementModifiers": {"status":"found","sources":["packages/styles/src/manifest.ts:198"],"note":"Direct source declaration or implementation."},
+    "/states/0": {"status":"found","sources":["packages/react/src/components/forms.tsx:89"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1": {"status":"found","sources":["packages/react/src/components/forms.tsx:90"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/2": {"status":"found","sources":["packages/react/src/components/forms.tsx:91"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/3": {"status":"found","sources":["packages/react/src/components/forms.tsx:92"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/4": {"status":"found","sources":["packages/styles/src/components/textarea.css:77"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/5": {"status":"found","sources":["packages/styles/src/components/textarea.css:81"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/6": {"status":"found","sources":["packages/styles/src/components/textarea.css:88"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/7": {"status":"found","sources":["packages/styles/src/components/textarea.css:88"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/8": {"status":"found","sources":["packages/styles/src/components/textarea.css:97"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/9": {"status":"found","sources":["packages/styles/src/components/textarea.css:105"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/10": {"status":"found","sources":["packages/styles/src/components/textarea.css:113"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/11": {"status":"found","sources":["packages/styles/src/components/textarea.css:118"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/12": {"status":"found","sources":["packages/styles/src/components/textarea.css:126"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/13": {"status":"found","sources":["packages/styles/src/manifest.ts:208"],"note":"Manifest native/ARIA exception; state-bearing input control when present."},
+    "/states/13/part": {"status":"not found","sources":["packages/styles/src/manifest.ts:198","packages/react/src/components/forms.tsx:67","docs/specs/textarea.md:1"],"note":"not found: Carrier for disabled is not resolved."},
+    "/states/14": {"status":"found","sources":["packages/styles/src/manifest.ts:208"],"note":"Manifest native/ARIA exception; state-bearing input control when present."},
+    "/states/14/part": {"status":"not found","sources":["packages/styles/src/manifest.ts:198","packages/react/src/components/forms.tsx:67","docs/specs/textarea.md:1"],"note":"not found: Carrier for readonly is not resolved."},
+    "/states": {"status":"found","sources":["packages/react/src/components/forms.tsx:89","packages/react/src/components/forms.tsx:90","packages/react/src/components/forms.tsx:91","packages/react/src/components/forms.tsx:92","packages/styles/src/components/textarea.css:77","packages/styles/src/components/textarea.css:81","packages/styles/src/components/textarea.css:88","packages/styles/src/components/textarea.css:97","packages/styles/src/components/textarea.css:105","packages/styles/src/components/textarea.css:113","packages/styles/src/components/textarea.css:118","packages/styles/src/components/textarea.css:126","packages/styles/src/manifest.ts:208"],"note":"Direct source declaration or implementation."},
+    "/keyboard": {"status":"not found","sources":["packages/styles/src/manifest.ts:198","packages/react/src/components/forms.tsx:67","docs/specs/textarea.md:1"],"note":"not found: No reviewed key-to-action contract found. Native behavior is not invented from a tag name."},
+    "/accessibleName": {"status":"not found","sources":["packages/styles/src/manifest.ts:198","packages/react/src/components/forms.tsx:67","docs/specs/textarea.md:1"],"note":"not found: No explicit accessible-name rule or naming attribute found in scoped implementation; inherited native props are not treated as naming requirements."},
+    "/composition": {"status":"found","sources":["packages/styles/src/manifest.ts:198","packages/react/src/components/forms.tsx:67","docs/specs/textarea.md:1"],"note":"Allowed composition is distinct from examples and built-in child calls."},
+    "/composition/allowedParents": {"status":"not found","sources":["packages/styles/src/manifest.ts:198","packages/react/src/components/forms.tsx:67","docs/specs/textarea.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/allowedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:198","packages/react/src/components/forms.tsx:67","docs/specs/textarea.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/observedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:198","packages/react/src/components/forms.tsx:67","docs/specs/textarea.md:1"],"note":"not found: No child component call located."},
+    "/composition/demoExamples/0": {"status":"found","sources":["apps/docs/src/demos/display.tsx:380"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/1": {"status":"found","sources":["apps/docs/src/demos/form.tsx:154"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/2": {"status":"found","sources":["apps/docs/src/demos/form.tsx:156"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/3": {"status":"found","sources":["apps/docs/src/demos/form.tsx:158"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/4": {"status":"found","sources":["apps/docs/src/demos/form.tsx:162"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/5": {"status":"found","sources":["apps/docs/src/demos/form.tsx:163"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/6": {"status":"found","sources":["apps/docs/src/demos/form.tsx:164"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/7": {"status":"found","sources":["apps/docs/src/demos/form.tsx:168"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/8": {"status":"found","sources":["apps/docs/src/demos/form.tsx:170"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/9": {"status":"found","sources":["apps/docs/src/demos/form.tsx:172"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/10": {"status":"found","sources":["apps/docs/src/demos/form.tsx:174"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/11": {"status":"found","sources":["apps/docs/src/demos/form.tsx:176"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/12": {"status":"found","sources":["apps/docs/src/demos/form.tsx:180"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/13": {"status":"found","sources":["apps/docs/src/demos/form.tsx:184"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/14": {"status":"found","sources":["apps/docs/src/demos/form.tsx:188"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/15": {"status":"found","sources":["apps/docs/src/demos/form.tsx:192"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/16": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1971"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/17": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1973"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/18": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1974"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/19": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1975"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/20": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1978"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples": {"status":"found","sources":["apps/docs/src/demos/display.tsx:380","apps/docs/src/demos/form.tsx:154","apps/docs/src/demos/form.tsx:156","apps/docs/src/demos/form.tsx:158","apps/docs/src/demos/form.tsx:162","apps/docs/src/demos/form.tsx:163","apps/docs/src/demos/form.tsx:164","apps/docs/src/demos/form.tsx:168","apps/docs/src/demos/form.tsx:170","apps/docs/src/demos/form.tsx:172","apps/docs/src/demos/form.tsx:174","apps/docs/src/demos/form.tsx:176","apps/docs/src/demos/form.tsx:180","apps/docs/src/demos/form.tsx:184","apps/docs/src/demos/form.tsx:188","apps/docs/src/demos/form.tsx:192","apps/docs/src/demos/gallery.tsx:1971","apps/docs/src/demos/gallery.tsx:1973","apps/docs/src/demos/gallery.tsx:1974","apps/docs/src/demos/gallery.tsx:1975","apps/docs/src/demos/gallery.tsx:1978"],"note":"Direct source declaration or implementation."},
+    "/reference/css": {"status":"found","sources":["packages/styles/src/components/textarea.css:9","packages/styles/src/components/textarea.css:49","packages/styles/src/components/textarea.css:52","packages/styles/src/components/textarea.css:57","packages/styles/src/components/textarea.css:59","packages/styles/src/components/textarea.css:66","packages/styles/src/components/textarea.css:68","packages/styles/src/components/textarea.css:69","packages/styles/src/components/textarea.css:70","packages/styles/src/components/textarea.css:71","packages/styles/src/components/textarea.css:73","packages/styles/src/components/textarea.css:77","packages/styles/src/components/textarea.css:81","packages/styles/src/components/textarea.css:88","packages/styles/src/components/textarea.css:97","packages/styles/src/components/textarea.css:105","packages/styles/src/components/textarea.css:113","packages/styles/src/components/textarea.css:118","packages/styles/src/components/textarea.css:126","packages/styles/src/components/textarea.css:130","packages/styles/src/components/textarea.css:131","packages/styles/src/components/textarea.css:132","packages/styles/src/forced-colors.css:4","packages/styles/src/forced-colors.css:22","packages/styles/src/forced-colors.css:25"],"note":"Direct source declaration or implementation."},
+    "/reference/css/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:9"],"note":"Direct source declaration or implementation."},
+    "/reference/css/1": {"status":"found","sources":["packages/styles/src/forced-colors.css:4"],"note":"Direct source declaration or implementation."},
+    "/reference/spec": {"status":"found","sources":["docs/specs/textarea.md:1"],"note":"Dedicated family spec."},
+    "/reference/reactExport/0": {"status":"found","sources":["packages/react/src/components/forms.tsx:67","packages/react/src/index.ts:49"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport": {"status":"found","sources":["packages/react/src/components/forms.tsx:67","packages/react/src/index.ts:49"],"note":"Direct source declaration or implementation."},
+    "/reference": {"status":"found","sources":["packages/styles/src/manifest.ts:198","packages/styles/src/components/textarea.css:1","packages/styles/src/forced-colors.css:1","docs/specs/textarea.md:1"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element/0": {"status":"found","sources":["packages/react/src/components/forms.tsx:86"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/2/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:82"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/2/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:82"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:82"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/3/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:78"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/3/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:78"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:78"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/4/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/4/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/4/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/5/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/5/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/5/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/6/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:84"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/6/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:84"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/6/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:84"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/7/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:31","packages/styles/src/components/textarea.css:53"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/7/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:31","packages/styles/src/components/textarea.css:53"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/7/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:31","packages/styles/src/components/textarea.css:53"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/7/selectors/1": {"status":"found","sources":["packages/styles/src/components/textarea.css:31","packages/styles/src/components/textarea.css:53"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/8/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:23","packages/styles/src/components/textarea.css:32"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/8/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:23","packages/styles/src/components/textarea.css:32"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/8/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:23","packages/styles/src/components/textarea.css:32"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/9/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:21","packages/styles/src/components/textarea.css:30","packages/styles/src/components/textarea.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/9/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:21","packages/styles/src/components/textarea.css:30","packages/styles/src/components/textarea.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/9/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:21","packages/styles/src/components/textarea.css:30","packages/styles/src/components/textarea.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/10/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:40","packages/styles/src/components/textarea.css:53"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/10/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:40","packages/styles/src/components/textarea.css:53"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/10/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:40","packages/styles/src/components/textarea.css:53"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/10/selectors/1": {"status":"found","sources":["packages/styles/src/components/textarea.css:40","packages/styles/src/components/textarea.css:53"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/11/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:39"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/11/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:39"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/11/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:39"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:120"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:120"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:120"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:132"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:132"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:132"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:132"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:132"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:132"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:132"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:132"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:132"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:10","packages/styles/src/components/textarea.css:131"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:10","packages/styles/src/components/textarea.css:131"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:10","packages/styles/src/components/textarea.css:131"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/selectors/1": {"status":"found","sources":["packages/styles/src/components/textarea.css:10","packages/styles/src/components/textarea.css:131"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:25","packages/styles/src/components/textarea.css:131"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:25","packages/styles/src/components/textarea.css:131"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:25","packages/styles/src/components/textarea.css:131"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5/selectors/1": {"status":"found","sources":["packages/styles/src/components/textarea.css:25","packages/styles/src/components/textarea.css:131"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:24","packages/styles/src/components/textarea.css:131"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:24","packages/styles/src/components/textarea.css:131"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:24","packages/styles/src/components/textarea.css:131"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/selectors/1": {"status":"found","sources":["packages/styles/src/components/textarea.css:24","packages/styles/src/components/textarea.css:131"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:130"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:130"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:130"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:130"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:130"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:130"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:130"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:130"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:130"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/10/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:121","packages/styles/src/components/textarea.css:126"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/10/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:121","packages/styles/src/components/textarea.css:126"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/10/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:121","packages/styles/src/components/textarea.css:126"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/10/selectors/1": {"status":"found","sources":["packages/styles/src/components/textarea.css:121","packages/styles/src/components/textarea.css:126"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/11/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:13","packages/styles/src/components/textarea.css:14"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/11/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:13","packages/styles/src/components/textarea.css:14"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/11/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:13","packages/styles/src/components/textarea.css:14"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/12/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/12/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/12/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:83"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/13/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:84"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/13/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:84"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/13/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:84"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/14/name": {"status":"found","sources":["packages/styles/src/forced-colors.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/14/selectors": {"status":"found","sources":["packages/styles/src/forced-colors.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/14/selectors/0": {"status":"found","sources":["packages/styles/src/forced-colors.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/15/name": {"status":"found","sources":["packages/styles/src/forced-colors.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/15/selectors": {"status":"found","sources":["packages/styles/src/forced-colors.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/15/selectors/0": {"status":"found","sources":["packages/styles/src/forced-colors.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/16/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/16/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/16/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/17/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/17/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/17/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:35"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/18/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:15"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/18/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:15"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/18/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:15"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/19/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/19/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/19/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/20/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/20/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/20/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/21/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:31","packages/styles/src/components/textarea.css:32","packages/styles/src/components/textarea.css:34","packages/styles/src/components/textarea.css:53"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/21/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:31","packages/styles/src/components/textarea.css:32","packages/styles/src/components/textarea.css:34","packages/styles/src/components/textarea.css:53"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/21/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:31","packages/styles/src/components/textarea.css:32","packages/styles/src/components/textarea.css:34","packages/styles/src/components/textarea.css:53"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/21/selectors/1": {"status":"found","sources":["packages/styles/src/components/textarea.css:31","packages/styles/src/components/textarea.css:32","packages/styles/src/components/textarea.css:34","packages/styles/src/components/textarea.css:53"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/22/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:16","packages/styles/src/components/textarea.css:57"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/22/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:16","packages/styles/src/components/textarea.css:57"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/22/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:16","packages/styles/src/components/textarea.css:57"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/22/selectors/1": {"status":"found","sources":["packages/styles/src/components/textarea.css:16","packages/styles/src/components/textarea.css:57"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/23/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:119"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/23/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:119"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/23/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:119"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/24/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:61","packages/styles/src/components/textarea.css:114"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/24/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:61","packages/styles/src/components/textarea.css:114"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/24/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:61","packages/styles/src/components/textarea.css:114"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/24/selectors/1": {"status":"found","sources":["packages/styles/src/components/textarea.css:61","packages/styles/src/components/textarea.css:114"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/25/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:11","packages/styles/src/components/textarea.css:63"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/25/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:11","packages/styles/src/components/textarea.css:63"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/25/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:11","packages/styles/src/components/textarea.css:63"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/25/selectors/1": {"status":"found","sources":["packages/styles/src/components/textarea.css:11","packages/styles/src/components/textarea.css:63"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/26/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/26/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/26/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/27/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/27/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/27/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/28/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:90","packages/styles/src/components/textarea.css:91","packages/styles/src/components/textarea.css:92","packages/styles/src/components/textarea.css:93"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/28/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:90","packages/styles/src/components/textarea.css:91","packages/styles/src/components/textarea.css:92","packages/styles/src/components/textarea.css:93"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/28/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:90","packages/styles/src/components/textarea.css:91","packages/styles/src/components/textarea.css:92","packages/styles/src/components/textarea.css:93"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/28/selectors/1": {"status":"found","sources":["packages/styles/src/components/textarea.css:90","packages/styles/src/components/textarea.css:91","packages/styles/src/components/textarea.css:92","packages/styles/src/components/textarea.css:93"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/29/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:94"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/29/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:94"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/29/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:94"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/29/selectors/1": {"status":"found","sources":["packages/styles/src/components/textarea.css:94"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/30/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:74"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/30/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:74"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/30/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:74"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/31/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:98","packages/styles/src/components/textarea.css:99","packages/styles/src/components/textarea.css:100","packages/styles/src/components/textarea.css:101"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/31/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:98","packages/styles/src/components/textarea.css:99","packages/styles/src/components/textarea.css:100","packages/styles/src/components/textarea.css:101"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/31/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:98","packages/styles/src/components/textarea.css:99","packages/styles/src/components/textarea.css:100","packages/styles/src/components/textarea.css:101"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/32/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:102"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/32/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:102"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/32/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:102"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/33/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/33/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/33/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/34/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:106","packages/styles/src/components/textarea.css:107","packages/styles/src/components/textarea.css:108","packages/styles/src/components/textarea.css:109"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/34/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:106","packages/styles/src/components/textarea.css:107","packages/styles/src/components/textarea.css:108","packages/styles/src/components/textarea.css:109"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/34/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:106","packages/styles/src/components/textarea.css:107","packages/styles/src/components/textarea.css:108","packages/styles/src/components/textarea.css:109"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/35/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:110"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/35/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:110"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/35/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:110"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/36/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:45"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/36/selectors": {"status":"found","sources":["packages/styles/src/components/textarea.css:45"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/36/selectors/0": {"status":"found","sources":["packages/styles/src/components/textarea.css:45"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/options/variant/values": {"status":"found","sources":["packages/styles/src/manifest.ts:202"],"note":"Direct source declaration or implementation."},
+    "/options/variant/values/0": {"status":"found","sources":["packages/styles/src/manifest.ts:202"],"note":"Direct source declaration or implementation."},
+    "/options/variant/values/1": {"status":"found","sources":["packages/styles/src/manifest.ts:202"],"note":"Direct source declaration or implementation."},
+    "/options/size/values": {"status":"found","sources":["packages/styles/src/manifest.ts:203"],"note":"Direct source declaration or implementation."},
+    "/options/size/values/0": {"status":"found","sources":["packages/styles/src/manifest.ts:203"],"note":"Direct source declaration or implementation."},
+    "/options/size/values/1": {"status":"found","sources":["packages/styles/src/manifest.ts:203"],"note":"Direct source declaration or implementation."},
+    "/options/size/values/2": {"status":"found","sources":["packages/styles/src/manifest.ts:203"],"note":"Direct source declaration or implementation."},
+    "/options/resize/values": {"status":"found","sources":["packages/styles/src/manifest.ts:204"],"note":"Direct source declaration or implementation."},
+    "/options/resize/values/0": {"status":"found","sources":["packages/styles/src/manifest.ts:204"],"note":"Direct source declaration or implementation."},
+    "/options/resize/values/1": {"status":"found","sources":["packages/styles/src/manifest.ts:204"],"note":"Direct source declaration or implementation."},
+    "/options/resize/values/2": {"status":"found","sources":["packages/styles/src/manifest.ts:204"],"note":"Direct source declaration or implementation."},
+    "/options/resize/values/3": {"status":"found","sources":["packages/styles/src/manifest.ts:204"],"note":"Direct source declaration or implementation."},
+    "/booleans/0": {"status":"found","sources":["packages/styles/src/manifest.ts:206"],"note":"Exact manifest boolean modifier list; absence means no declared booleans."},
+    "/states/0/name": {"status":"found","sources":["packages/react/src/components/forms.tsx:89"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/part": {"status":"found","sources":["packages/react/src/components/forms.tsx:89"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/kind": {"status":"found","sources":["packages/react/src/components/forms.tsx:89"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/hook": {"status":"found","sources":["packages/react/src/components/forms.tsx:89"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/value": {"status":"found","sources":["packages/react/src/components/forms.tsx:89"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/name": {"status":"found","sources":["packages/react/src/components/forms.tsx:90"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/1/part": {"status":"found","sources":["packages/react/src/components/forms.tsx:90"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/1/kind": {"status":"found","sources":["packages/react/src/components/forms.tsx:90"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/1/hook": {"status":"found","sources":["packages/react/src/components/forms.tsx:90"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/1/value": {"status":"found","sources":["packages/react/src/components/forms.tsx:90"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/2/name": {"status":"found","sources":["packages/react/src/components/forms.tsx:91"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/2/part": {"status":"found","sources":["packages/react/src/components/forms.tsx:91"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/2/kind": {"status":"found","sources":["packages/react/src/components/forms.tsx:91"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/2/hook": {"status":"found","sources":["packages/react/src/components/forms.tsx:91"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/2/value": {"status":"found","sources":["packages/react/src/components/forms.tsx:91"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/3/name": {"status":"found","sources":["packages/react/src/components/forms.tsx:92"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/3/part": {"status":"found","sources":["packages/react/src/components/forms.tsx:92"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/3/kind": {"status":"found","sources":["packages/react/src/components/forms.tsx:92"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/3/hook": {"status":"found","sources":["packages/react/src/components/forms.tsx:92"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/3/value": {"status":"found","sources":["packages/react/src/components/forms.tsx:92"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/4/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:77"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/4/part": {"status":"found","sources":["packages/styles/src/components/textarea.css:77"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/4/kind": {"status":"found","sources":["packages/styles/src/components/textarea.css:77"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/4/hook": {"status":"found","sources":["packages/styles/src/components/textarea.css:77"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/4/value": {"status":"found","sources":["packages/styles/src/components/textarea.css:77"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/5/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:81"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/5/part": {"status":"found","sources":["packages/styles/src/components/textarea.css:81"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/5/kind": {"status":"found","sources":["packages/styles/src/components/textarea.css:81"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/5/hook": {"status":"found","sources":["packages/styles/src/components/textarea.css:81"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/5/value": {"status":"found","sources":["packages/styles/src/components/textarea.css:81"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/6/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:88"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/6/part": {"status":"found","sources":["packages/styles/src/components/textarea.css:88"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/6/kind": {"status":"found","sources":["packages/styles/src/components/textarea.css:88"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/6/hook": {"status":"found","sources":["packages/styles/src/components/textarea.css:88"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/6/value": {"status":"found","sources":["packages/styles/src/components/textarea.css:88"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/7/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:88"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/7/part": {"status":"found","sources":["packages/styles/src/components/textarea.css:88"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/7/kind": {"status":"found","sources":["packages/styles/src/components/textarea.css:88"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/7/hook": {"status":"found","sources":["packages/styles/src/components/textarea.css:88"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/7/value": {"status":"found","sources":["packages/styles/src/components/textarea.css:88"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/8/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:97"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/8/part": {"status":"found","sources":["packages/styles/src/components/textarea.css:97"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/8/kind": {"status":"found","sources":["packages/styles/src/components/textarea.css:97"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/8/hook": {"status":"found","sources":["packages/styles/src/components/textarea.css:97"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/8/value": {"status":"found","sources":["packages/styles/src/components/textarea.css:97"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/9/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:105"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/9/part": {"status":"found","sources":["packages/styles/src/components/textarea.css:105"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/9/kind": {"status":"found","sources":["packages/styles/src/components/textarea.css:105"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/9/hook": {"status":"found","sources":["packages/styles/src/components/textarea.css:105"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/9/value": {"status":"found","sources":["packages/styles/src/components/textarea.css:105"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/10/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:113"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/10/part": {"status":"found","sources":["packages/styles/src/components/textarea.css:113"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/10/kind": {"status":"found","sources":["packages/styles/src/components/textarea.css:113"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/10/hook": {"status":"found","sources":["packages/styles/src/components/textarea.css:113"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/10/value": {"status":"found","sources":["packages/styles/src/components/textarea.css:113"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/11/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:118"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/11/part": {"status":"found","sources":["packages/styles/src/components/textarea.css:118"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/11/kind": {"status":"found","sources":["packages/styles/src/components/textarea.css:118"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/11/hook": {"status":"found","sources":["packages/styles/src/components/textarea.css:118"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/11/value": {"status":"found","sources":["packages/styles/src/components/textarea.css:118"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/12/name": {"status":"found","sources":["packages/styles/src/components/textarea.css:126"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/12/part": {"status":"found","sources":["packages/styles/src/components/textarea.css:126"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/12/kind": {"status":"found","sources":["packages/styles/src/components/textarea.css:126"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/12/hook": {"status":"found","sources":["packages/styles/src/components/textarea.css:126"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/12/value": {"status":"found","sources":["packages/styles/src/components/textarea.css:126"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/13/name": {"status":"found","sources":["packages/styles/src/manifest.ts:208"],"note":"Manifest native/ARIA exception; state-bearing input control when present."},
+    "/states/13/kind": {"status":"found","sources":["packages/styles/src/manifest.ts:208"],"note":"Manifest native/ARIA exception; state-bearing input control when present."},
+    "/states/13/hook": {"status":"found","sources":["packages/styles/src/manifest.ts:208"],"note":"Manifest native/ARIA exception; state-bearing input control when present."},
+    "/states/13/value": {"status":"found","sources":["packages/styles/src/manifest.ts:208"],"note":"Manifest native/ARIA exception; state-bearing input control when present."},
+    "/states/14/name": {"status":"found","sources":["packages/styles/src/manifest.ts:208"],"note":"Manifest native/ARIA exception; state-bearing input control when present."},
+    "/states/14/kind": {"status":"found","sources":["packages/styles/src/manifest.ts:208"],"note":"Manifest native/ARIA exception; state-bearing input control when present."},
+    "/states/14/hook": {"status":"found","sources":["packages/styles/src/manifest.ts:208"],"note":"Manifest native/ARIA exception; state-bearing input control when present."},
+    "/states/14/value": {"status":"found","sources":["packages/styles/src/manifest.ts:208"],"note":"Manifest native/ARIA exception; state-bearing input control when present."},
+    "/reference/spec/0": {"status":"found","sources":["docs/specs/textarea.md:1"],"note":"Dedicated family spec."}
+  }
+}

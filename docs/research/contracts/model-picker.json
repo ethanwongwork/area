@@ -1,0 +1,262 @@
+{
+  "slug": "model-picker",
+  "manifest": "modelPicker",
+  "parts": [
+    {
+      "id": "root",
+      "element": [
+        "div"
+      ],
+      "class": "area-model-picker",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_model-anchor",
+          "selectors": [
+            ".area-model-picker"
+          ]
+        }
+      ],
+      "tokens": []
+    },
+    {
+      "id": "trigger",
+      "element": [
+        "button"
+      ],
+      "class": "area-model-picker__trigger",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_bg-hover",
+          "selectors": [
+            ".area-model-picker__trigger[aria-expanded=\"true\"]"
+          ]
+        }
+      ],
+      "tokens": []
+    },
+    {
+      "id": "menu",
+      "element": [
+        "div"
+      ],
+      "class": "area-model-picker__menu",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_model-anchor",
+          "selectors": [
+            ".area-model-picker__menu[popover]:popover-open"
+          ]
+        }
+      ],
+      "tokens": []
+    }
+  ],
+  "slots": [
+    {
+      "name": "ModelPicker.heading",
+      "part": "not found",
+      "element": "not found",
+      "class": "not found",
+      "required": false,
+      "allowedContent": [
+        "renderable content (text, elements, fragments, or empty content)"
+      ]
+    }
+  ],
+  "options": {},
+  "booleans": [],
+  "elementModifiers": {},
+  "states": [
+    {
+      "name": "haspopup",
+      "part": "not found",
+      "kind": "not found",
+      "hook": "not found",
+      "value": "\"menu\""
+    },
+    {
+      "name": "expanded",
+      "part": "not found",
+      "kind": "not found",
+      "hook": "not found",
+      "value": "{open}"
+    },
+    {
+      "name": "expanded",
+      "part": "trigger",
+      "kind": "aria",
+      "hook": "aria-expanded",
+      "value": "\"true\""
+    },
+    {
+      "name": "popover-open",
+      "part": "menu",
+      "kind": "pseudo",
+      "hook": ":popover-open",
+      "value": ".area-model-picker__menu[popover]:popover-open"
+    }
+  ],
+  "keyboard": [
+    {
+      "key": "Escape",
+      "part": "menu",
+      "action": "Close the model menu and return focus to the trigger.",
+      "condition": "Menu is open; prevent the default key action."
+    }
+  ],
+  "accessibleName": [
+    {
+      "part": "trigger",
+      "rule": "Reference wiring: aria-label={`${label}: ${currentModel?.label ?? \"\"}`}."
+    },
+    {
+      "part": "menu",
+      "rule": "Reference wiring: aria-label={label}."
+    }
+  ],
+  "composition": {
+    "allowedParents": "not found",
+    "allowedChildren": "not found",
+    "observedChildren": [
+      "Button",
+      "Glyph",
+      "Menu",
+      "MenuLabel",
+      "MenuItem"
+    ],
+    "demoExamples": [
+      "apps/docs/src/demos/gallery.tsx:1198",
+      "apps/docs/src/demos/gallery.tsx:1202"
+    ]
+  },
+  "reference": {
+    "css": [
+      "packages/styles/src/components/model-picker.css"
+    ],
+    "spec": [
+      "docs/specs/model-picker.md"
+    ],
+    "reactExport": [
+      "ModelPicker"
+    ]
+  },
+  "evidence": {
+    "/slug": {"status":"found","sources":["packages/styles/src/manifest.ts:444"],"note":"Direct source declaration or implementation."},
+    "/manifest": {"status":"found","sources":["packages/styles/src/manifest.ts:443"],"note":"Direct source declaration or implementation."},
+    "/parts": {"status":"found","sources":["packages/styles/src/manifest.ts:443","packages/react/src/components/ModelPicker.tsx:58","packages/react/src/components/ModelPicker.tsx:60","packages/react/src/components/ModelPicker.tsx:65"],"note":"Manifest parts plus implementation-only structural elements; unclassed nodes retain explicit IDs."},
+    "/parts/0": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:58"],"note":"Direct source declaration or implementation."},
+    "/parts/0/id": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:58"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/0/class": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:58"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:58"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/required": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:58"],"note":"Root of the rendered family surface."},
+    "/parts/0/allowedContent": {"status":"not found","sources":["packages/react/src/components/ModelPicker.tsx:58"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/0/customProperties/0": {"status":"found","sources":["packages/styles/src/components/model-picker.css:9"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties": {"status":"found","sources":["packages/styles/src/components/model-picker.css:9"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/0/tokens": {"status":"not found","sources":["packages/react/src/components/ModelPicker.tsx:58"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/1": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:60"],"note":"Direct source declaration or implementation."},
+    "/parts/1/id": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:60"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/1/class": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:60"],"note":"Direct source declaration or implementation."},
+    "/parts/1/element": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:60","packages/react/src/components/Button.tsx:72"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/1/required": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:60"],"note":"Unconditional native child on the primary component return path."},
+    "/parts/1/allowedContent": {"status":"not found","sources":["packages/react/src/components/ModelPicker.tsx:60"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/1/customProperties/0": {"status":"found","sources":["packages/styles/src/components/model-picker.css:11"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties": {"status":"found","sources":["packages/styles/src/components/model-picker.css:11"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/1/tokens": {"status":"not found","sources":["packages/react/src/components/ModelPicker.tsx:60"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/2": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:65"],"note":"Direct source declaration or implementation."},
+    "/parts/2/id": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:65"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/2/class": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:65"],"note":"Direct source declaration or implementation."},
+    "/parts/2/element": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:65","packages/react/src/components/Combobox.tsx:230","packages/react/src/components/primitives.tsx:1078","packages/react/src/components/primitives.tsx:1109"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/2/required": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:65"],"note":"Unconditional native child on the primary component return path."},
+    "/parts/2/allowedContent": {"status":"not found","sources":["packages/react/src/components/ModelPicker.tsx:65"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/2/customProperties/0": {"status":"found","sources":["packages/styles/src/components/model-picker.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties": {"status":"found","sources":["packages/styles/src/components/model-picker.css:16"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/2/tokens": {"status":"not found","sources":["packages/react/src/components/ModelPicker.tsx:65"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/slots/0": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:24"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/part": {"status":"not found","sources":["packages/styles/src/manifest.ts:443","packages/react/src/components/ModelPicker.tsx:29","docs/specs/model-picker.md:1"],"note":"not found: No single direct part resolved for ModelPicker.heading; conditional/delegated rendering requires review."},
+    "/slots/0/element": {"status":"not found","sources":["packages/styles/src/manifest.ts:443","packages/react/src/components/ModelPicker.tsx:29","docs/specs/model-picker.md:1"],"note":"not found: No resolved part for ModelPicker.heading."},
+    "/slots/0/class": {"status":"not found","sources":["packages/styles/src/manifest.ts:443","packages/react/src/components/ModelPicker.tsx:29","docs/specs/model-picker.md:1"],"note":"not found: No resolved part for ModelPicker.heading."},
+    "/slots": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:24"],"note":"Direct source declaration or implementation."},
+    "/options": {"status":"found","sources":["packages/styles/src/manifest.ts:446"],"note":"Direct source declaration or implementation."},
+    "/booleans": {"status":"found","sources":["packages/styles/src/manifest.ts:443"],"note":"Exact manifest boolean modifier list; absence means no declared booleans."},
+    "/elementModifiers": {"status":"found","sources":["packages/styles/src/manifest.ts:443"],"note":"Direct source declaration or implementation."},
+    "/states/0": {"status":"not found","sources":["packages/react/src/components/ModelPicker.tsx:61"],"note":"not found: Forwarded aria-haspopup prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/0/part": {"status":"not found","sources":["packages/styles/src/manifest.ts:443","packages/react/src/components/ModelPicker.tsx:29","docs/specs/model-picker.md:1"],"note":"not found: Carrier for not found is not resolved."},
+    "/states/1": {"status":"not found","sources":["packages/react/src/components/ModelPicker.tsx:61"],"note":"not found: Forwarded aria-expanded prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/1/part": {"status":"not found","sources":["packages/styles/src/manifest.ts:443","packages/react/src/components/ModelPicker.tsx:29","docs/specs/model-picker.md:1"],"note":"not found: Carrier for not found is not resolved."},
+    "/states/2": {"status":"found","sources":["packages/styles/src/components/model-picker.css:11"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/3": {"status":"found","sources":["packages/styles/src/components/model-picker.css:15"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:61","packages/styles/src/components/model-picker.css:11","packages/styles/src/components/model-picker.css:15"],"note":"Direct source declaration or implementation."},
+    "/keyboard/0": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:67"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:67"],"note":"Direct source declaration or implementation."},
+    "/accessibleName/0": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:61"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/1": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:65"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:61","packages/react/src/components/ModelPicker.tsx:65"],"note":"Direct source declaration or implementation."},
+    "/composition": {"status":"found","sources":["packages/styles/src/manifest.ts:443","packages/react/src/components/ModelPicker.tsx:29","docs/specs/model-picker.md:1"],"note":"Allowed composition is distinct from examples and built-in child calls."},
+    "/composition/allowedParents": {"status":"not found","sources":["packages/styles/src/manifest.ts:443","packages/react/src/components/ModelPicker.tsx:29","docs/specs/model-picker.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/allowedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:443","packages/react/src/components/ModelPicker.tsx:29","docs/specs/model-picker.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/observedChildren/0": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:60"],"note":"Observed child component call; not an allowed-child restriction."},
+    "/composition/observedChildren/1": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:62"],"note":"Observed child component call; not an allowed-child restriction."},
+    "/composition/observedChildren/2": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:65"],"note":"Observed child component call; not an allowed-child restriction."},
+    "/composition/observedChildren/3": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:68"],"note":"Observed child component call; not an allowed-child restriction."},
+    "/composition/observedChildren/4": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:69"],"note":"Observed child component call; not an allowed-child restriction."},
+    "/composition/observedChildren": {"status":"found","sources":["packages/styles/src/manifest.ts:443","packages/react/src/components/ModelPicker.tsx:29","docs/specs/model-picker.md:1"],"note":"Direct source declaration or implementation."},
+    "/composition/demoExamples/0": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1198"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/1": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1202"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1198","apps/docs/src/demos/gallery.tsx:1202"],"note":"Direct source declaration or implementation."},
+    "/reference/css": {"status":"found","sources":["packages/styles/src/components/model-picker.css:9","packages/styles/src/components/model-picker.css:11","packages/styles/src/components/model-picker.css:12","packages/styles/src/components/model-picker.css:13","packages/styles/src/components/model-picker.css:15"],"note":"Direct source declaration or implementation."},
+    "/reference/css/0": {"status":"found","sources":["packages/styles/src/components/model-picker.css:9"],"note":"Direct source declaration or implementation."},
+    "/reference/spec": {"status":"found","sources":["docs/specs/model-picker.md:1"],"note":"Dedicated family spec."},
+    "/reference/reactExport/0": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:29","packages/react/src/index.ts:24"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:29","packages/react/src/index.ts:24"],"note":"Direct source declaration or implementation."},
+    "/reference": {"status":"found","sources":["packages/styles/src/manifest.ts:443","packages/styles/src/components/model-picker.css:1","docs/specs/model-picker.md:1"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element/0": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:58"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/model-picker.css:9"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/model-picker.css:9"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/model-picker.css:9"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/element/0": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:60","packages/react/src/components/Button.tsx:72"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/1/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/model-picker.css:11"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/model-picker.css:11"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/model-picker.css:11"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/element/0": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:65","packages/react/src/components/Combobox.tsx:230","packages/react/src/components/primitives.tsx:1078","packages/react/src/components/primitives.tsx:1109"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/2/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/model-picker.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/model-picker.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/model-picker.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/slots/0/name": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:24"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/required": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:24"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/allowedContent": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:24"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/allowedContent/0": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:24"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/states/0/name": {"status":"not found","sources":["packages/react/src/components/ModelPicker.tsx:61"],"note":"not found: Forwarded aria-haspopup prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/0/kind": {"status":"not found","sources":["packages/react/src/components/ModelPicker.tsx:61"],"note":"not found: Forwarded aria-haspopup prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/0/hook": {"status":"not found","sources":["packages/react/src/components/ModelPicker.tsx:61"],"note":"not found: Forwarded aria-haspopup prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/0/value": {"status":"not found","sources":["packages/react/src/components/ModelPicker.tsx:61"],"note":"not found: Forwarded aria-haspopup prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/1/name": {"status":"not found","sources":["packages/react/src/components/ModelPicker.tsx:61"],"note":"not found: Forwarded aria-expanded prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/1/kind": {"status":"not found","sources":["packages/react/src/components/ModelPicker.tsx:61"],"note":"not found: Forwarded aria-expanded prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/1/hook": {"status":"not found","sources":["packages/react/src/components/ModelPicker.tsx:61"],"note":"not found: Forwarded aria-expanded prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/1/value": {"status":"not found","sources":["packages/react/src/components/ModelPicker.tsx:61"],"note":"not found: Forwarded aria-expanded prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/2/name": {"status":"found","sources":["packages/styles/src/components/model-picker.css:11"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/2/part": {"status":"found","sources":["packages/styles/src/components/model-picker.css:11"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/2/kind": {"status":"found","sources":["packages/styles/src/components/model-picker.css:11"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/2/hook": {"status":"found","sources":["packages/styles/src/components/model-picker.css:11"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/2/value": {"status":"found","sources":["packages/styles/src/components/model-picker.css:11"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/3/name": {"status":"found","sources":["packages/styles/src/components/model-picker.css:15"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/3/part": {"status":"found","sources":["packages/styles/src/components/model-picker.css:15"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/3/kind": {"status":"found","sources":["packages/styles/src/components/model-picker.css:15"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/3/hook": {"status":"found","sources":["packages/styles/src/components/model-picker.css:15"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/3/value": {"status":"found","sources":["packages/styles/src/components/model-picker.css:15"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/keyboard/0/key": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:67"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/0/part": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:67"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/0/action": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:67"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/0/condition": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:67"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/accessibleName/0/part": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:61"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/0/rule": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:61"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/1/part": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:65"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/1/rule": {"status":"found","sources":["packages/react/src/components/ModelPicker.tsx:65"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/reference/spec/0": {"status":"found","sources":["docs/specs/model-picker.md:1"],"note":"Dedicated family spec."}
+  }
+}

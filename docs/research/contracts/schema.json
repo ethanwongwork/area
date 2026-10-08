@@ -1,0 +1,389 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://area.local/research/contracts/schema.json",
+  "title": "Area framework-neutral component definition (source-backed draft)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "slug",
+    "manifest",
+    "parts",
+    "slots",
+    "options",
+    "booleans",
+    "elementModifiers",
+    "states",
+    "keyboard",
+    "accessibleName",
+    "composition",
+    "reference",
+    "evidence"
+  ],
+  "properties": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "manifest": {
+      "type": "string",
+      "minLength": 1
+    },
+    "parts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/part"
+      }
+    },
+    "slots": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/slot"
+      }
+    },
+    "options": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/option"
+      }
+    },
+    "booleans": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "uniqueItems": true
+    },
+    "elementModifiers": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/strings"
+      }
+    },
+    "states": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/state"
+      }
+    },
+    "keyboard": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/key"
+      }
+    },
+    "accessibleName": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/rule"
+      }
+    },
+    "composition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "allowedParents",
+        "allowedChildren",
+        "observedChildren",
+        "demoExamples"
+      ],
+      "properties": {
+        "allowedParents": {
+          "$ref": "#/$defs/stringsOrMissing"
+        },
+        "allowedChildren": {
+          "$ref": "#/$defs/stringsOrMissing"
+        },
+        "observedChildren": {
+          "$ref": "#/$defs/strings"
+        },
+        "demoExamples": {
+          "$ref": "#/$defs/strings"
+        }
+      }
+    },
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "css",
+        "spec",
+        "reactExport"
+      ],
+      "properties": {
+        "css": {
+          "$ref": "#/$defs/strings"
+        },
+        "spec": {
+          "$ref": "#/$defs/stringsOrMissing"
+        },
+        "reactExport": {
+          "$ref": "#/$defs/stringsOrMissing"
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/$defs/evidence"
+      }
+    }
+  },
+  "$defs": {
+    "strings": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "uniqueItems": true
+    },
+    "stringsOrMissing": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/strings"
+        },
+        {
+          "const": "not found"
+        }
+      ]
+    },
+    "part": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "element",
+        "class",
+        "required",
+        "allowedContent",
+        "customProperties",
+        "tokens"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "element": {
+          "$ref": "#/$defs/stringsOrMissing"
+        },
+        "class": {
+          "type": "string",
+          "minLength": 1
+        },
+        "required": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "const": "not found"
+            }
+          ]
+        },
+        "allowedContent": {
+          "$ref": "#/$defs/stringsOrMissing"
+        },
+        "customProperties": {
+          "$ref": "#/$defs/reads"
+        },
+        "tokens": {
+          "$ref": "#/$defs/reads"
+        }
+      }
+    },
+    "reads": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "selectors"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^--"
+          },
+          "selectors": {
+            "$ref": "#/$defs/strings"
+          }
+        }
+      }
+    },
+    "slot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "part",
+        "required",
+        "allowedContent",
+        "element",
+        "class"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "part": {
+          "type": "string"
+        },
+        "required": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "const": "not found"
+            }
+          ]
+        },
+        "allowedContent": {
+          "$ref": "#/$defs/stringsOrMissing"
+        },
+        "element": {
+          "$ref": "#/$defs/stringsOrMissing"
+        },
+        "class": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "option": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "values",
+        "default"
+      ],
+      "properties": {
+        "values": {
+          "$ref": "#/$defs/strings"
+        },
+        "default": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "part",
+        "kind",
+        "hook",
+        "value"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "part": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": [
+            "native",
+            "aria",
+            "data",
+            "pseudo",
+            "native-property",
+            "not found"
+          ]
+        },
+        "hook": {
+          "type": "string",
+          "minLength": 1
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "key": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "part",
+        "action",
+        "condition"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "minLength": 1
+        },
+        "part": {
+          "type": "string",
+          "minLength": 1
+        },
+        "action": {
+          "type": "string",
+          "minLength": 1
+        },
+        "condition": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "part",
+        "rule"
+      ],
+      "properties": {
+        "part": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rule": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "sources",
+        "note"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "found",
+            "not found"
+          ]
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[^:]+:[1-9][0-9]*$"
+          }
+        },
+        "note": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

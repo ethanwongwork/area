@@ -1,0 +1,825 @@
+{
+  "slug": "input-group",
+  "manifest": "inputGroup",
+  "parts": [
+    {
+      "id": "root",
+      "element": [
+        "div"
+      ],
+      "class": "area-input-group",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_color-field-width",
+          "selectors": [
+            ".area-input-group.area-color-field--alpha"
+          ]
+        },
+        {
+          "name": "--_group-height",
+          "selectors": [
+            ".area-input-group"
+          ]
+        },
+        {
+          "name": "--_group-leading",
+          "selectors": [
+            ".area-input-group"
+          ]
+        },
+        {
+          "name": "--_group-text",
+          "selectors": [
+            ".area-input-group"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-border-faint",
+          "selectors": [
+            ".area-input-group:has(> :is(.area-input, .area-number-field)[data-disabled], > .area-select:disabled)"
+          ]
+        },
+        {
+          "name": "--area-control-lg",
+          "selectors": [
+            ".area-input-group--lg"
+          ]
+        },
+        {
+          "name": "--area-control-lg-leading",
+          "selectors": [
+            ".area-input-group--lg"
+          ]
+        },
+        {
+          "name": "--area-control-lg-text",
+          "selectors": [
+            ".area-input-group--lg"
+          ]
+        },
+        {
+          "name": "--area-control-md",
+          "selectors": [
+            ".area-input-group",
+            ".area-input-group--md"
+          ]
+        },
+        {
+          "name": "--area-control-md-leading",
+          "selectors": [
+            ".area-input-group",
+            ".area-input-group--md"
+          ]
+        },
+        {
+          "name": "--area-control-md-text",
+          "selectors": [
+            ".area-input-group",
+            ".area-input-group--md"
+          ]
+        },
+        {
+          "name": "--area-control-sm",
+          "selectors": [
+            ".area-input-group--sm"
+          ]
+        },
+        {
+          "name": "--area-control-sm-leading",
+          "selectors": [
+            ".area-input-group--sm"
+          ]
+        },
+        {
+          "name": "--area-control-sm-text",
+          "selectors": [
+            ".area-input-group--sm"
+          ]
+        },
+        {
+          "name": "--area-fg-disabled",
+          "selectors": [
+            ".area-input-group:has(> :is(.area-input, .area-number-field)[data-disabled], > .area-select:disabled)"
+          ]
+        },
+        {
+          "name": "--area-field-focus-color",
+          "selectors": [
+            ".area-input-group:focus-within"
+          ]
+        },
+        {
+          "name": "--area-field-focus-halo-width",
+          "selectors": [
+            ".area-input-group:focus-within",
+            ".area-input-group:has([data-success]):focus-within",
+            ".area-input-group:has([data-warning]):focus-within",
+            ".area-input-group:has([aria-invalid=\"true\"], [data-invalid]):focus-within"
+          ]
+        },
+        {
+          "name": "--area-field-focus-outline-width",
+          "selectors": [
+            ".area-input-group:focus-within"
+          ]
+        },
+        {
+          "name": "--area-gap-lg",
+          "selectors": [
+            ".area-input-group--lg"
+          ]
+        },
+        {
+          "name": "--area-gap-md",
+          "selectors": [
+            ".area-input-group",
+            ".area-input-group--md"
+          ]
+        },
+        {
+          "name": "--area-gap-sm",
+          "selectors": [
+            ".area-input-group--sm"
+          ]
+        },
+        {
+          "name": "--area-gutter-lg",
+          "selectors": [
+            ".area-input-group--lg"
+          ]
+        },
+        {
+          "name": "--area-gutter-md",
+          "selectors": [
+            ".area-input-group",
+            ".area-input-group--md"
+          ]
+        },
+        {
+          "name": "--area-gutter-sm",
+          "selectors": [
+            ".area-input-group--sm"
+          ]
+        },
+        {
+          "name": "--area-icon-lg",
+          "selectors": [
+            ".area-input-group--lg"
+          ]
+        },
+        {
+          "name": "--area-icon-md",
+          "selectors": [
+            ".area-input-group",
+            ".area-input-group--md"
+          ]
+        },
+        {
+          "name": "--area-icon-sm",
+          "selectors": [
+            ".area-input-group--sm"
+          ]
+        },
+        {
+          "name": "--area-input-bg",
+          "selectors": [
+            ".area-input-group",
+            ".area-input-group--outline"
+          ]
+        },
+        {
+          "name": "--area-input-bg-disabled",
+          "selectors": [
+            ".area-input-group:has(> :is(.area-input, .area-number-field)[data-disabled], > .area-select:disabled)"
+          ]
+        },
+        {
+          "name": "--area-input-bg-soft",
+          "selectors": [
+            ".area-input-group--soft"
+          ]
+        },
+        {
+          "name": "--area-input-edge",
+          "selectors": [
+            ".area-input-group"
+          ]
+        },
+        {
+          "name": "--area-input-edge-hover",
+          "selectors": [
+            ".area-input-group:hover:not(:focus-within, :has(:disabled, [data-disabled]))"
+          ]
+        },
+        {
+          "name": "--area-input-inline-size",
+          "selectors": [
+            ".area-input-group"
+          ]
+        },
+        {
+          "name": "--area-input-invalid-color",
+          "selectors": [
+            ".area-input-group:has([aria-invalid=\"true\"], [data-invalid])",
+            ".area-input-group:has([aria-invalid=\"true\"], [data-invalid]):focus-within"
+          ]
+        },
+        {
+          "name": "--area-input-invalid-halo-color",
+          "selectors": [
+            ".area-input-group:has([aria-invalid=\"true\"], [data-invalid]):focus-within"
+          ]
+        },
+        {
+          "name": "--area-input-success-color",
+          "selectors": [
+            ".area-input-group:has([data-success])",
+            ".area-input-group:has([data-success]):focus-within"
+          ]
+        },
+        {
+          "name": "--area-input-success-halo-color",
+          "selectors": [
+            ".area-input-group:has([data-success]):focus-within"
+          ]
+        },
+        {
+          "name": "--area-input-text",
+          "selectors": [
+            ".area-input-group"
+          ]
+        },
+        {
+          "name": "--area-input-warning-color",
+          "selectors": [
+            ".area-input-group:has([data-warning])",
+            ".area-input-group:has([data-warning]):focus-within"
+          ]
+        },
+        {
+          "name": "--area-input-warning-halo-color",
+          "selectors": [
+            ".area-input-group:has([data-warning]):focus-within"
+          ]
+        },
+        {
+          "name": "--area-radius-cap",
+          "selectors": [
+            ".area-input-group"
+          ]
+        },
+        {
+          "name": "--area-radius-control",
+          "selectors": [
+            ".area-input-group"
+          ]
+        },
+        {
+          "name": "--area-shadow-color",
+          "selectors": [
+            ".area-input-group:focus-within"
+          ]
+        },
+        {
+          "name": "--area-space-48",
+          "selectors": [
+            ".area-input-group.area-color-field--alpha"
+          ]
+        },
+        {
+          "name": "--area-stroke-width",
+          "selectors": [
+            ".area-input-group"
+          ]
+        },
+        {
+          "name": "--area-transition",
+          "selectors": [
+            ".area-input-group"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "text",
+      "element": [
+        "span"
+      ],
+      "class": "area-input-group__text",
+      "required": "not found",
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_group-gutter",
+          "selectors": [
+            ".area-input-group__text"
+          ]
+        },
+        {
+          "name": "--_group-height",
+          "selectors": [
+            ".area-input-group__text[data-visual]"
+          ]
+        },
+        {
+          "name": "--_group-leading",
+          "selectors": [
+            ".area-input-group__text[data-visual]"
+          ]
+        },
+        {
+          "name": "--_group-text",
+          "selectors": [
+            ".area-input-group__text[data-visual]"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-fg-muted",
+          "selectors": [
+            ".area-input-group__text"
+          ]
+        }
+      ]
+    }
+  ],
+  "slots": [],
+  "options": {
+    "variant": {
+      "values": [
+        "outline",
+        "soft"
+      ],
+      "default": "outline"
+    },
+    "size": {
+      "values": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "default": "md"
+    }
+  },
+  "booleans": [
+    "full-width"
+  ],
+  "elementModifiers": {},
+  "states": [
+    {
+      "name": "visual",
+      "part": "text",
+      "kind": "data",
+      "hook": "data-visual",
+      "value": "{visual ? \"\" : undefined}"
+    },
+    {
+      "name": "hover",
+      "part": "root",
+      "kind": "pseudo",
+      "hook": ":hover",
+      "value": ".area-input-group:hover:not(:focus-within, :has(:disabled, [data-disabled]))"
+    },
+    {
+      "name": "disabled",
+      "part": "root",
+      "kind": "pseudo",
+      "hook": ":disabled",
+      "value": ".area-input-group:has(> :is(.area-input, .area-number-field)[data-disabled], > .area-select:disabled)"
+    },
+    {
+      "name": "disabled",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-disabled",
+      "value": "present"
+    },
+    {
+      "name": "focus-within",
+      "part": "root",
+      "kind": "pseudo",
+      "hook": ":focus-within",
+      "value": ".area-input-group:focus-within"
+    },
+    {
+      "name": "focus-within",
+      "part": "root",
+      "kind": "pseudo",
+      "hook": ":focus-within",
+      "value": ".area-input-group:has([data-success]):focus-within"
+    },
+    {
+      "name": "focus-within",
+      "part": "root",
+      "kind": "pseudo",
+      "hook": ":focus-within",
+      "value": ".area-input-group:has([data-warning]):focus-within"
+    },
+    {
+      "name": "focus-within",
+      "part": "root",
+      "kind": "pseudo",
+      "hook": ":focus-within",
+      "value": ".area-input-group:has([aria-invalid=\"true\"], [data-invalid]):focus-within"
+    },
+    {
+      "name": "visual",
+      "part": "text",
+      "kind": "data",
+      "hook": "data-visual",
+      "value": "present"
+    }
+  ],
+  "keyboard": [],
+  "accessibleName": [
+    {
+      "part": "text",
+      "rule": "Include the affix or segment caption meaning in the neighboring control accessible name."
+    }
+  ],
+  "composition": {
+    "allowedParents": "not found",
+    "allowedChildren": "not found",
+    "observedChildren": [],
+    "demoExamples": [
+      "apps/docs/src/demos/gallery-variants.tsx:36",
+      "apps/docs/src/demos/gallery-variants.tsx:41",
+      "apps/docs/src/demos/gallery-variants.tsx:44",
+      "apps/docs/src/demos/gallery-variants.tsx:47",
+      "apps/docs/src/demos/gallery.tsx:859",
+      "apps/docs/src/demos/gallery.tsx:860",
+      "apps/docs/src/demos/gallery.tsx:1303",
+      "apps/docs/src/demos/gallery.tsx:1304",
+      "apps/docs/src/demos/gallery.tsx:1305",
+      "apps/docs/src/demos/gallery.tsx:1306",
+      "apps/docs/src/demos/gallery.tsx:1307",
+      "apps/docs/src/demos/gallery.tsx:1308",
+      "apps/docs/src/demos/gallery.tsx:1309",
+      "apps/docs/src/demos/gallery.tsx:1310",
+      "apps/docs/src/demos/gallery.tsx:1314"
+    ]
+  },
+  "reference": {
+    "css": [
+      "packages/styles/src/components/color.css",
+      "packages/styles/src/components/input-group.css"
+    ],
+    "spec": [
+      "docs/specs/input-group.md"
+    ],
+    "reactExport": [
+      "InputGroup",
+      "InputGroupText"
+    ]
+  },
+  "evidence": {
+    "/slug": {"status":"found","sources":["packages/styles/src/manifest.ts:164"],"note":"Direct source declaration or implementation."},
+    "/manifest": {"status":"found","sources":["packages/styles/src/manifest.ts:163"],"note":"Direct source declaration or implementation."},
+    "/parts": {"status":"found","sources":["packages/styles/src/manifest.ts:163","packages/react/src/components/InputGroup.tsx:15","packages/react/src/components/InputGroup.tsx:27"],"note":"Manifest parts plus implementation-only structural elements; unclassed nodes retain explicit IDs."},
+    "/parts/0": {"status":"found","sources":["packages/react/src/components/InputGroup.tsx:15"],"note":"Direct source declaration or implementation."},
+    "/parts/0/id": {"status":"found","sources":["packages/react/src/components/InputGroup.tsx:15"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/0/class": {"status":"found","sources":["packages/react/src/components/InputGroup.tsx:15"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element": {"status":"found","sources":["packages/react/src/components/InputGroup.tsx:15"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/required": {"status":"found","sources":["packages/react/src/components/InputGroup.tsx:15"],"note":"Root of the rendered family surface."},
+    "/parts/0/allowedContent": {"status":"not found","sources":["packages/react/src/components/InputGroup.tsx:15"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/0/customProperties/0": {"status":"found","sources":["packages/styles/src/components/color.css:164"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1": {"status":"found","sources":["packages/styles/src/components/input-group.css:13","packages/styles/src/components/input-group.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/2": {"status":"found","sources":["packages/styles/src/components/input-group.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/3": {"status":"found","sources":["packages/styles/src/components/input-group.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties": {"status":"found","sources":["packages/styles/src/components/color.css:164","packages/styles/src/components/input-group.css:13","packages/styles/src/components/input-group.css:16","packages/styles/src/components/input-group.css:21","packages/styles/src/components/input-group.css:22"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/0/tokens/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1": {"status":"found","sources":["packages/styles/src/components/input-group.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2": {"status":"found","sources":["packages/styles/src/components/input-group.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3": {"status":"found","sources":["packages/styles/src/components/input-group.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4": {"status":"found","sources":["packages/styles/src/components/input-group.css:4","packages/styles/src/components/input-group.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5": {"status":"found","sources":["packages/styles/src/components/input-group.css:6","packages/styles/src/components/input-group.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6": {"status":"found","sources":["packages/styles/src/components/input-group.css:5","packages/styles/src/components/input-group.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7": {"status":"found","sources":["packages/styles/src/components/input-group.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8": {"status":"found","sources":["packages/styles/src/components/input-group.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9": {"status":"found","sources":["packages/styles/src/components/input-group.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/10": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/11": {"status":"found","sources":["packages/styles/src/components/input-group.css:38","packages/styles/src/components/input-group.css:40"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/12": {"status":"found","sources":["packages/styles/src/components/input-group.css:39","packages/styles/src/components/input-group.css:43","packages/styles/src/components/input-group.css:44","packages/styles/src/components/input-group.css:46"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/13": {"status":"found","sources":["packages/styles/src/components/input-group.css:40"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/14": {"status":"found","sources":["packages/styles/src/components/input-group.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/15": {"status":"found","sources":["packages/styles/src/components/input-group.css:8","packages/styles/src/components/input-group.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/16": {"status":"found","sources":["packages/styles/src/components/input-group.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/17": {"status":"found","sources":["packages/styles/src/components/input-group.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/18": {"status":"found","sources":["packages/styles/src/components/input-group.css:9","packages/styles/src/components/input-group.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/19": {"status":"found","sources":["packages/styles/src/components/input-group.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/20": {"status":"found","sources":["packages/styles/src/components/input-group.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/21": {"status":"found","sources":["packages/styles/src/components/input-group.css:7","packages/styles/src/components/input-group.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/22": {"status":"found","sources":["packages/styles/src/components/input-group.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/23": {"status":"found","sources":["packages/styles/src/components/input-group.css:17","packages/styles/src/components/input-group.css:26"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/24": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/25": {"status":"found","sources":["packages/styles/src/components/input-group.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/26": {"status":"found","sources":["packages/styles/src/components/input-group.css:15"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/27": {"status":"found","sources":["packages/styles/src/components/input-group.css:32"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/28": {"status":"found","sources":["packages/styles/src/components/input-group.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/29": {"status":"found","sources":["packages/styles/src/components/input-group.css:45","packages/styles/src/components/input-group.css:46"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/30": {"status":"found","sources":["packages/styles/src/components/input-group.css:46"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/31": {"status":"found","sources":["packages/styles/src/components/input-group.css:35","packages/styles/src/components/input-group.css:43"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/32": {"status":"found","sources":["packages/styles/src/components/input-group.css:43"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/33": {"status":"found","sources":["packages/styles/src/components/input-group.css:20"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/34": {"status":"found","sources":["packages/styles/src/components/input-group.css:36","packages/styles/src/components/input-group.css:44"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/35": {"status":"found","sources":["packages/styles/src/components/input-group.css:44"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/36": {"status":"found","sources":["packages/styles/src/components/input-group.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/37": {"status":"found","sources":["packages/styles/src/components/input-group.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/38": {"status":"found","sources":["packages/styles/src/components/input-group.css:39"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/39": {"status":"found","sources":["packages/styles/src/components/color.css:164"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/40": {"status":"found","sources":["packages/styles/src/components/input-group.css:15"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/41": {"status":"found","sources":["packages/styles/src/components/input-group.css:24"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens": {"status":"found","sources":["packages/styles/src/components/color.css:164","packages/styles/src/components/input-group.css:4","packages/styles/src/components/input-group.css:29","packages/styles/src/components/input-group.css:5","packages/styles/src/components/input-group.css:6","packages/styles/src/components/input-group.css:7","packages/styles/src/components/input-group.css:8","packages/styles/src/components/input-group.css:9","packages/styles/src/components/input-group.css:12","packages/styles/src/components/input-group.css:15","packages/styles/src/components/input-group.css:16","packages/styles/src/components/input-group.css:17","packages/styles/src/components/input-group.css:26","packages/styles/src/components/input-group.css:20","packages/styles/src/components/input-group.css:24","packages/styles/src/components/input-group.css:27","packages/styles/src/components/input-group.css:28","packages/styles/src/components/input-group.css:30","packages/styles/src/components/input-group.css:32","packages/styles/src/components/input-group.css:34","packages/styles/src/components/input-group.css:35","packages/styles/src/components/input-group.css:43","packages/styles/src/components/input-group.css:36","packages/styles/src/components/input-group.css:44","packages/styles/src/components/input-group.css:38","packages/styles/src/components/input-group.css:40","packages/styles/src/components/input-group.css:39","packages/styles/src/components/input-group.css:46","packages/styles/src/components/input-group.css:45"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/1": {"status":"found","sources":["packages/react/src/components/InputGroup.tsx:27"],"note":"Direct source declaration or implementation."},
+    "/parts/1/id": {"status":"found","sources":["packages/react/src/components/InputGroup.tsx:27"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/1/class": {"status":"found","sources":["packages/react/src/components/InputGroup.tsx:27"],"note":"Direct source declaration or implementation."},
+    "/parts/1/element": {"status":"found","sources":["packages/react/src/components/InputGroup.tsx:27"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/1/required": {"status":"not found","sources":["packages/react/src/components/InputGroup.tsx:27"],"note":"not found: Family-wide mandatory/optional anatomy is not specified; presence at one JSX call site does not establish a composition rule."},
+    "/parts/1/allowedContent": {"status":"not found","sources":["packages/react/src/components/InputGroup.tsx:27"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/1/customProperties/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:91"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/1": {"status":"found","sources":["packages/styles/src/components/input-group.css:96","packages/styles/src/components/input-group.css:97"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/2": {"status":"found","sources":["packages/styles/src/components/input-group.css:100"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/3": {"status":"found","sources":["packages/styles/src/components/input-group.css:99"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties": {"status":"found","sources":["packages/styles/src/components/input-group.css:91","packages/styles/src/components/input-group.css:96","packages/styles/src/components/input-group.css:97","packages/styles/src/components/input-group.css:99","packages/styles/src/components/input-group.css:100"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/1/tokens/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:92"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens": {"status":"found","sources":["packages/styles/src/components/input-group.css:92"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/slots": {"status":"not found","sources":["packages/styles/src/manifest.ts:163","packages/react/src/components/InputGroup.tsx:12","packages/react/src/components/InputGroup.tsx:24","docs/specs/input-group.md:1"],"note":"not found: No locally declared ReactNode/ReactElement slot props; native inherited children and delegated interfaces require review."},
+    "/options": {"status":"found","sources":["packages/styles/src/manifest.ts:166"],"note":"Direct source declaration or implementation."},
+    "/options/variant": {"status":"found","sources":["packages/styles/src/manifest.ts:166"],"note":"Direct source declaration or implementation."},
+    "/options/variant/default": {"status":"found","sources":["packages/styles/src/manifest.ts:169"],"note":"Direct source declaration or implementation."},
+    "/options/size": {"status":"found","sources":["packages/styles/src/manifest.ts:166"],"note":"Direct source declaration or implementation."},
+    "/options/size/default": {"status":"found","sources":["packages/styles/src/manifest.ts:169"],"note":"Direct source declaration or implementation."},
+    "/booleans": {"status":"found","sources":["packages/styles/src/manifest.ts:167"],"note":"Exact manifest boolean modifier list; absence means no declared booleans."},
+    "/elementModifiers": {"status":"found","sources":["packages/styles/src/manifest.ts:163"],"note":"Direct source declaration or implementation."},
+    "/states/0": {"status":"found","sources":["packages/react/src/components/InputGroup.tsx:27"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1": {"status":"found","sources":["packages/styles/src/components/input-group.css:32"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/2": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/3": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/4": {"status":"found","sources":["packages/styles/src/components/input-group.css:37"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/5": {"status":"found","sources":["packages/styles/src/components/input-group.css:43"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/6": {"status":"found","sources":["packages/styles/src/components/input-group.css:44"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/7": {"status":"found","sources":["packages/styles/src/components/input-group.css:46"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/8": {"status":"found","sources":["packages/styles/src/components/input-group.css:95"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states": {"status":"found","sources":["packages/react/src/components/InputGroup.tsx:27","packages/styles/src/components/input-group.css:32","packages/styles/src/components/input-group.css:34","packages/styles/src/components/input-group.css:37","packages/styles/src/components/input-group.css:43","packages/styles/src/components/input-group.css:44","packages/styles/src/components/input-group.css:46","packages/styles/src/components/input-group.css:95"],"note":"Direct source declaration or implementation."},
+    "/keyboard": {"status":"not found","sources":["packages/styles/src/manifest.ts:163","packages/react/src/components/InputGroup.tsx:12","packages/react/src/components/InputGroup.tsx:24","docs/specs/input-group.md:1"],"note":"not found: No reviewed key-to-action contract found. Native behavior is not invented from a tag name."},
+    "/accessibleName/0": {"status":"found","sources":["packages/react/src/components/InputGroup.tsx:23"],"note":"Direct source declaration or implementation."},
+    "/accessibleName": {"status":"found","sources":["packages/react/src/components/InputGroup.tsx:23"],"note":"Direct source declaration or implementation."},
+    "/composition": {"status":"found","sources":["packages/styles/src/manifest.ts:163","packages/react/src/components/InputGroup.tsx:12","packages/react/src/components/InputGroup.tsx:24","docs/specs/input-group.md:1"],"note":"Allowed composition is distinct from examples and built-in child calls."},
+    "/composition/allowedParents": {"status":"not found","sources":["packages/styles/src/manifest.ts:163","packages/react/src/components/InputGroup.tsx:12","packages/react/src/components/InputGroup.tsx:24","docs/specs/input-group.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/allowedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:163","packages/react/src/components/InputGroup.tsx:12","packages/react/src/components/InputGroup.tsx:24","docs/specs/input-group.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/observedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:163","packages/react/src/components/InputGroup.tsx:12","packages/react/src/components/InputGroup.tsx:24","docs/specs/input-group.md:1"],"note":"not found: No child component call located."},
+    "/composition/demoExamples/0": {"status":"found","sources":["apps/docs/src/demos/gallery-variants.tsx:36"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/1": {"status":"found","sources":["apps/docs/src/demos/gallery-variants.tsx:41"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/2": {"status":"found","sources":["apps/docs/src/demos/gallery-variants.tsx:44"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/3": {"status":"found","sources":["apps/docs/src/demos/gallery-variants.tsx:47"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/4": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:859"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/5": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:860"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/6": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1303"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/7": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1304"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/8": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1305"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/9": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1306"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/10": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1307"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/11": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1308"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/12": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1309"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/13": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1310"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/14": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1314"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples": {"status":"found","sources":["apps/docs/src/demos/gallery-variants.tsx:36","apps/docs/src/demos/gallery-variants.tsx:41","apps/docs/src/demos/gallery-variants.tsx:44","apps/docs/src/demos/gallery-variants.tsx:47","apps/docs/src/demos/gallery.tsx:859","apps/docs/src/demos/gallery.tsx:860","apps/docs/src/demos/gallery.tsx:1303","apps/docs/src/demos/gallery.tsx:1304","apps/docs/src/demos/gallery.tsx:1305","apps/docs/src/demos/gallery.tsx:1306","apps/docs/src/demos/gallery.tsx:1307","apps/docs/src/demos/gallery.tsx:1308","apps/docs/src/demos/gallery.tsx:1309","apps/docs/src/demos/gallery.tsx:1310","apps/docs/src/demos/gallery.tsx:1314"],"note":"Direct source declaration or implementation."},
+    "/reference/css": {"status":"found","sources":["packages/styles/src/components/color.css:164","packages/styles/src/components/color.css:169","packages/styles/src/components/color.css:174","packages/styles/src/components/color.css:180","packages/styles/src/components/color.css:181","packages/styles/src/components/color.css:335","packages/styles/src/components/color.css:337","packages/styles/src/components/color.css:340","packages/styles/src/components/color.css:344","packages/styles/src/components/color.css:345","packages/styles/src/components/color.css:346","packages/styles/src/components/color.css:347","packages/styles/src/components/color.css:351","packages/styles/src/components/color.css:352","packages/styles/src/components/input-group.css:3","packages/styles/src/components/input-group.css:26","packages/styles/src/components/input-group.css:27","packages/styles/src/components/input-group.css:28","packages/styles/src/components/input-group.css:29","packages/styles/src/components/input-group.css:30","packages/styles/src/components/input-group.css:31","packages/styles/src/components/input-group.css:32","packages/styles/src/components/input-group.css:34","packages/styles/src/components/input-group.css:35","packages/styles/src/components/input-group.css:36","packages/styles/src/components/input-group.css:37","packages/styles/src/components/input-group.css:43","packages/styles/src/components/input-group.css:44","packages/styles/src/components/input-group.css:45","packages/styles/src/components/input-group.css:46","packages/styles/src/components/input-group.css:47","packages/styles/src/components/input-group.css:64","packages/styles/src/components/input-group.css:71","packages/styles/src/components/input-group.css:85","packages/styles/src/components/input-group.css:95","packages/styles/src/components/input-group.css:102","packages/styles/src/components/input-group.css:103","packages/styles/src/components/input-group.css:107","packages/styles/src/components/input-group.css:108","packages/styles/src/components/input-group.css:109","packages/styles/src/components/input-group.css:110","packages/styles/src/components/input-group.css:111"],"note":"Direct source declaration or implementation."},
+    "/reference/css/0": {"status":"found","sources":["packages/styles/src/components/color.css:164"],"note":"Direct source declaration or implementation."},
+    "/reference/css/1": {"status":"found","sources":["packages/styles/src/components/input-group.css:3"],"note":"Direct source declaration or implementation."},
+    "/reference/spec": {"status":"found","sources":["docs/specs/input-group.md:1"],"note":"Dedicated family spec."},
+    "/reference/reactExport/0": {"status":"found","sources":["packages/react/src/components/InputGroup.tsx:12","packages/react/src/index.ts:17"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport/1": {"status":"found","sources":["packages/react/src/components/InputGroup.tsx:24","packages/react/src/index.ts:17"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport": {"status":"found","sources":["packages/react/src/components/InputGroup.tsx:12","packages/react/src/index.ts:17","packages/react/src/components/InputGroup.tsx:24"],"note":"Direct source declaration or implementation."},
+    "/reference": {"status":"found","sources":["packages/styles/src/manifest.ts:163","packages/styles/src/components/color.css:1","packages/styles/src/components/input-group.css:1","docs/specs/input-group.md:1"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element/0": {"status":"found","sources":["packages/react/src/components/InputGroup.tsx:15"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/color.css:164"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/color.css:164"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/color.css:164"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:13","packages/styles/src/components/input-group.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:13","packages/styles/src/components/input-group.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:13","packages/styles/src/components/input-group.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/2/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/2/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/3/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/3/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:4","packages/styles/src/components/input-group.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:4","packages/styles/src/components/input-group.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:4","packages/styles/src/components/input-group.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/selectors/1": {"status":"found","sources":["packages/styles/src/components/input-group.css:4","packages/styles/src/components/input-group.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:6","packages/styles/src/components/input-group.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:6","packages/styles/src/components/input-group.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:6","packages/styles/src/components/input-group.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5/selectors/1": {"status":"found","sources":["packages/styles/src/components/input-group.css:6","packages/styles/src/components/input-group.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:5","packages/styles/src/components/input-group.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:5","packages/styles/src/components/input-group.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:5","packages/styles/src/components/input-group.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/selectors/1": {"status":"found","sources":["packages/styles/src/components/input-group.css:5","packages/styles/src/components/input-group.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/10/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/10/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/10/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/11/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:38","packages/styles/src/components/input-group.css:40"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/11/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:38","packages/styles/src/components/input-group.css:40"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/11/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:38","packages/styles/src/components/input-group.css:40"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/12/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:39","packages/styles/src/components/input-group.css:43","packages/styles/src/components/input-group.css:44","packages/styles/src/components/input-group.css:46"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/12/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:39","packages/styles/src/components/input-group.css:43","packages/styles/src/components/input-group.css:44","packages/styles/src/components/input-group.css:46"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/12/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:39","packages/styles/src/components/input-group.css:43","packages/styles/src/components/input-group.css:44","packages/styles/src/components/input-group.css:46"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/12/selectors/1": {"status":"found","sources":["packages/styles/src/components/input-group.css:39","packages/styles/src/components/input-group.css:43","packages/styles/src/components/input-group.css:44","packages/styles/src/components/input-group.css:46"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/12/selectors/2": {"status":"found","sources":["packages/styles/src/components/input-group.css:39","packages/styles/src/components/input-group.css:43","packages/styles/src/components/input-group.css:44","packages/styles/src/components/input-group.css:46"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/12/selectors/3": {"status":"found","sources":["packages/styles/src/components/input-group.css:39","packages/styles/src/components/input-group.css:43","packages/styles/src/components/input-group.css:44","packages/styles/src/components/input-group.css:46"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/13/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:40"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/13/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:40"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/13/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:40"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/14/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/14/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/14/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/15/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:8","packages/styles/src/components/input-group.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/15/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:8","packages/styles/src/components/input-group.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/15/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:8","packages/styles/src/components/input-group.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/15/selectors/1": {"status":"found","sources":["packages/styles/src/components/input-group.css:8","packages/styles/src/components/input-group.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/16/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/16/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/16/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/17/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/17/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/17/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/18/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:9","packages/styles/src/components/input-group.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/18/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:9","packages/styles/src/components/input-group.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/18/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:9","packages/styles/src/components/input-group.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/18/selectors/1": {"status":"found","sources":["packages/styles/src/components/input-group.css:9","packages/styles/src/components/input-group.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/19/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/19/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/19/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/20/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/20/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/20/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/21/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:7","packages/styles/src/components/input-group.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/21/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:7","packages/styles/src/components/input-group.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/21/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:7","packages/styles/src/components/input-group.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/21/selectors/1": {"status":"found","sources":["packages/styles/src/components/input-group.css:7","packages/styles/src/components/input-group.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/22/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/22/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/22/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/23/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:17","packages/styles/src/components/input-group.css:26"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/23/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:17","packages/styles/src/components/input-group.css:26"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/23/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:17","packages/styles/src/components/input-group.css:26"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/23/selectors/1": {"status":"found","sources":["packages/styles/src/components/input-group.css:17","packages/styles/src/components/input-group.css:26"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/24/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/24/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/24/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/25/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/25/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/25/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/26/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:15"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/26/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:15"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/26/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:15"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/27/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:32"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/27/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:32"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/27/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:32"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/28/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/28/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/28/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/29/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:45","packages/styles/src/components/input-group.css:46"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/29/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:45","packages/styles/src/components/input-group.css:46"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/29/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:45","packages/styles/src/components/input-group.css:46"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/29/selectors/1": {"status":"found","sources":["packages/styles/src/components/input-group.css:45","packages/styles/src/components/input-group.css:46"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/30/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:46"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/30/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:46"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/30/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:46"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/31/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:35","packages/styles/src/components/input-group.css:43"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/31/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:35","packages/styles/src/components/input-group.css:43"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/31/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:35","packages/styles/src/components/input-group.css:43"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/31/selectors/1": {"status":"found","sources":["packages/styles/src/components/input-group.css:35","packages/styles/src/components/input-group.css:43"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/32/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:43"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/32/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:43"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/32/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:43"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/33/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:20"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/33/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:20"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/33/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:20"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/34/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:36","packages/styles/src/components/input-group.css:44"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/34/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:36","packages/styles/src/components/input-group.css:44"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/34/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:36","packages/styles/src/components/input-group.css:44"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/34/selectors/1": {"status":"found","sources":["packages/styles/src/components/input-group.css:36","packages/styles/src/components/input-group.css:44"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/35/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:44"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/35/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:44"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/35/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:44"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/36/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/36/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/36/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/37/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/37/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/37/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/38/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:39"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/38/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:39"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/38/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:39"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/39/name": {"status":"found","sources":["packages/styles/src/components/color.css:164"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/39/selectors": {"status":"found","sources":["packages/styles/src/components/color.css:164"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/39/selectors/0": {"status":"found","sources":["packages/styles/src/components/color.css:164"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/40/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:15"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/40/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:15"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/40/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:15"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/41/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:24"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/41/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:24"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/41/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:24"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/element/0": {"status":"found","sources":["packages/react/src/components/InputGroup.tsx:27"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/1/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:91"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:91"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:91"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/1/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:96","packages/styles/src/components/input-group.css:97"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/1/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:96","packages/styles/src/components/input-group.css:97"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:96","packages/styles/src/components/input-group.css:97"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/2/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:100"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/2/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:100"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:100"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/3/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:99"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/3/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:99"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:99"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:92"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:92"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:92"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/options/variant/values": {"status":"found","sources":["packages/styles/src/manifest.ts:166"],"note":"Direct source declaration or implementation."},
+    "/options/variant/values/0": {"status":"found","sources":["packages/styles/src/manifest.ts:166"],"note":"Direct source declaration or implementation."},
+    "/options/variant/values/1": {"status":"found","sources":["packages/styles/src/manifest.ts:166"],"note":"Direct source declaration or implementation."},
+    "/options/size/values": {"status":"found","sources":["packages/styles/src/manifest.ts:166"],"note":"Direct source declaration or implementation."},
+    "/options/size/values/0": {"status":"found","sources":["packages/styles/src/manifest.ts:166"],"note":"Direct source declaration or implementation."},
+    "/options/size/values/1": {"status":"found","sources":["packages/styles/src/manifest.ts:166"],"note":"Direct source declaration or implementation."},
+    "/options/size/values/2": {"status":"found","sources":["packages/styles/src/manifest.ts:166"],"note":"Direct source declaration or implementation."},
+    "/booleans/0": {"status":"found","sources":["packages/styles/src/manifest.ts:167"],"note":"Exact manifest boolean modifier list; absence means no declared booleans."},
+    "/states/0/name": {"status":"found","sources":["packages/react/src/components/InputGroup.tsx:27"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/part": {"status":"found","sources":["packages/react/src/components/InputGroup.tsx:27"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/kind": {"status":"found","sources":["packages/react/src/components/InputGroup.tsx:27"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/hook": {"status":"found","sources":["packages/react/src/components/InputGroup.tsx:27"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/value": {"status":"found","sources":["packages/react/src/components/InputGroup.tsx:27"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:32"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/1/part": {"status":"found","sources":["packages/styles/src/components/input-group.css:32"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/1/kind": {"status":"found","sources":["packages/styles/src/components/input-group.css:32"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/1/hook": {"status":"found","sources":["packages/styles/src/components/input-group.css:32"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/1/value": {"status":"found","sources":["packages/styles/src/components/input-group.css:32"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/2/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/2/part": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/2/kind": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/2/hook": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/2/value": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/3/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/3/part": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/3/kind": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/3/hook": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/3/value": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/4/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:37"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/4/part": {"status":"found","sources":["packages/styles/src/components/input-group.css:37"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/4/kind": {"status":"found","sources":["packages/styles/src/components/input-group.css:37"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/4/hook": {"status":"found","sources":["packages/styles/src/components/input-group.css:37"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/4/value": {"status":"found","sources":["packages/styles/src/components/input-group.css:37"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/5/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:43"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/5/part": {"status":"found","sources":["packages/styles/src/components/input-group.css:43"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/5/kind": {"status":"found","sources":["packages/styles/src/components/input-group.css:43"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/5/hook": {"status":"found","sources":["packages/styles/src/components/input-group.css:43"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/5/value": {"status":"found","sources":["packages/styles/src/components/input-group.css:43"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/6/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:44"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/6/part": {"status":"found","sources":["packages/styles/src/components/input-group.css:44"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/6/kind": {"status":"found","sources":["packages/styles/src/components/input-group.css:44"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/6/hook": {"status":"found","sources":["packages/styles/src/components/input-group.css:44"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/6/value": {"status":"found","sources":["packages/styles/src/components/input-group.css:44"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/7/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:46"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/7/part": {"status":"found","sources":["packages/styles/src/components/input-group.css:46"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/7/kind": {"status":"found","sources":["packages/styles/src/components/input-group.css:46"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/7/hook": {"status":"found","sources":["packages/styles/src/components/input-group.css:46"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/7/value": {"status":"found","sources":["packages/styles/src/components/input-group.css:46"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/8/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:95"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/8/part": {"status":"found","sources":["packages/styles/src/components/input-group.css:95"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/8/kind": {"status":"found","sources":["packages/styles/src/components/input-group.css:95"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/8/hook": {"status":"found","sources":["packages/styles/src/components/input-group.css:95"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/8/value": {"status":"found","sources":["packages/styles/src/components/input-group.css:95"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/accessibleName/0/part": {"status":"found","sources":["packages/react/src/components/InputGroup.tsx:23"],"note":"Direct source declaration or implementation."},
+    "/accessibleName/0/rule": {"status":"found","sources":["packages/react/src/components/InputGroup.tsx:23"],"note":"Direct source declaration or implementation."},
+    "/reference/spec/0": {"status":"found","sources":["docs/specs/input-group.md:1"],"note":"Dedicated family spec."}
+  }
+}

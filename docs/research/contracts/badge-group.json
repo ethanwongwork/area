@@ -1,0 +1,306 @@
+{
+  "slug": "badge-group",
+  "manifest": "badgeGroup",
+  "parts": [
+    {
+      "id": "root",
+      "element": [
+        "div"
+      ],
+      "class": "area-badge-group",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-space-4",
+          "selectors": [
+            ".area-badge-group"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "item",
+      "element": [
+        "span"
+      ],
+      "class": "area-badge-group__item",
+      "required": "not found",
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": []
+    },
+    {
+      "id": "overflow-trigger",
+      "element": [
+        "button"
+      ],
+      "class": "area-badge-group__overflow-trigger",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_overflow-anchor",
+          "selectors": [
+            ".area-badge-group__overflow-trigger"
+          ]
+        }
+      ],
+      "tokens": []
+    },
+    {
+      "id": "overflow-content",
+      "element": [
+        "div"
+      ],
+      "class": "area-badge-group__overflow-content",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_overflow-anchor",
+          "selectors": [
+            ".area-badge-group__overflow-content"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-space-32",
+          "selectors": [
+            ".area-popover.area-badge-group__overflow-content"
+          ]
+        },
+        {
+          "name": "--area-space-4",
+          "selectors": [
+            ".area-badge-group__overflow-content:popover-open",
+            ".area-badge-group__overflow-content"
+          ]
+        }
+      ]
+    }
+  ],
+  "slots": [
+    {
+      "name": "BadgeGroup.children",
+      "part": "not found",
+      "element": "not found",
+      "class": "not found",
+      "required": "not found",
+      "allowedContent": "not found"
+    }
+  ],
+  "options": {
+    "overflow": {
+      "values": [
+        "inline",
+        "overlay"
+      ],
+      "default": "inline"
+    }
+  },
+  "booleans": [],
+  "elementModifiers": {},
+  "states": [
+    {
+      "name": "hidden",
+      "part": "overflow-trigger",
+      "kind": "native",
+      "hook": "hidden",
+      "value": "{!hidden}"
+    },
+    {
+      "name": "hidden",
+      "part": "overflow-trigger",
+      "kind": "native",
+      "hook": "hidden",
+      "value": "present"
+    },
+    {
+      "name": "popover-open",
+      "part": "overflow-content",
+      "kind": "pseudo",
+      "hook": ":popover-open",
+      "value": ".area-badge-group__overflow-content:popover-open"
+    }
+  ],
+  "keyboard": [
+    {
+      "key": "Escape",
+      "part": "overflow-content",
+      "action": "Dismiss the native overflow popover and restore focus.",
+      "condition": "Overflow popover is open."
+    }
+  ],
+  "accessibleName": [
+    {
+      "part": "overflow-trigger",
+      "rule": "Reference wiring: aria-label={`${overflowLabel}, ${hidden} more`}."
+    },
+    {
+      "part": "overflow-content",
+      "rule": "Reference wiring: aria-label={overflowLabel}."
+    }
+  ],
+  "composition": {
+    "allowedParents": "not found",
+    "allowedChildren": "not found",
+    "observedChildren": [
+      "Popover"
+    ],
+    "demoExamples": [
+      "apps/docs/src/demos/badge.tsx:27",
+      "apps/docs/src/demos/badge.tsx:37",
+      "apps/docs/src/demos/badge.tsx:47",
+      "apps/docs/src/demos/badge.tsx:91",
+      "apps/docs/src/demos/badge.tsx:94",
+      "apps/docs/src/demos/badge.tsx:97",
+      "apps/docs/src/demos/badge.tsx:101",
+      "apps/docs/src/demos/card.tsx:194"
+    ]
+  },
+  "reference": {
+    "css": [
+      "packages/styles/src/components/badge.css"
+    ],
+    "spec": [
+      "docs/specs/badge-group.md"
+    ],
+    "reactExport": [
+      "BadgeGroup"
+    ]
+  },
+  "evidence": {
+    "/slug": {"status":"found","sources":["packages/styles/src/manifest.ts:361"],"note":"Direct source declaration or implementation."},
+    "/manifest": {"status":"found","sources":["packages/styles/src/manifest.ts:360"],"note":"Direct source declaration or implementation."},
+    "/parts": {"status":"found","sources":["packages/styles/src/manifest.ts:360","packages/react/src/components/BadgeGroup.tsx:68","packages/react/src/components/BadgeGroup.tsx:69","packages/react/src/components/BadgeGroup.tsx:70","packages/react/src/components/BadgeGroup.tsx:71","packages/react/src/components/BadgeGroup.tsx:72"],"note":"Manifest parts plus implementation-only structural elements; unclassed nodes retain explicit IDs."},
+    "/parts/0": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:68"],"note":"Direct source declaration or implementation."},
+    "/parts/0/id": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:68"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/0/class": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:68"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:68"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/required": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:68"],"note":"Root of the rendered family surface."},
+    "/parts/0/allowedContent": {"status":"not found","sources":["packages/react/src/components/BadgeGroup.tsx:68"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/0/customProperties": {"status":"not found","sources":["packages/react/src/components/BadgeGroup.tsx:68"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/0/tokens/0": {"status":"found","sources":["packages/styles/src/components/badge.css:205"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens": {"status":"found","sources":["packages/styles/src/components/badge.css:205"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/1": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:69","packages/react/src/components/BadgeGroup.tsx:72"],"note":"Direct source declaration or implementation."},
+    "/parts/1/id": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:69","packages/react/src/components/BadgeGroup.tsx:72"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/1/class": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:69","packages/react/src/components/BadgeGroup.tsx:72"],"note":"Direct source declaration or implementation."},
+    "/parts/1/element": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:69","packages/react/src/components/BadgeGroup.tsx:72"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/1/required": {"status":"not found","sources":["packages/react/src/components/BadgeGroup.tsx:69","packages/react/src/components/BadgeGroup.tsx:72"],"note":"not found: Family-wide mandatory/optional anatomy is not specified; presence at one JSX call site does not establish a composition rule."},
+    "/parts/1/allowedContent": {"status":"not found","sources":["packages/react/src/components/BadgeGroup.tsx:69","packages/react/src/components/BadgeGroup.tsx:72"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/1/customProperties": {"status":"not found","sources":["packages/react/src/components/BadgeGroup.tsx:69","packages/react/src/components/BadgeGroup.tsx:72"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/1/tokens": {"status":"not found","sources":["packages/react/src/components/BadgeGroup.tsx:69","packages/react/src/components/BadgeGroup.tsx:72"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/2": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:70"],"note":"Direct source declaration or implementation."},
+    "/parts/2/id": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:70"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/2/class": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:70"],"note":"Direct source declaration or implementation."},
+    "/parts/2/element": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:70"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/2/required": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:70"],"note":"Unconditional native child on the primary component return path."},
+    "/parts/2/allowedContent": {"status":"not found","sources":["packages/react/src/components/BadgeGroup.tsx:70"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/2/customProperties/0": {"status":"found","sources":["packages/styles/src/components/badge.css:216"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties": {"status":"found","sources":["packages/styles/src/components/badge.css:216"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/2/tokens": {"status":"not found","sources":["packages/react/src/components/BadgeGroup.tsx:70"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/3": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:71"],"note":"Direct source declaration or implementation."},
+    "/parts/3/id": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:71"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/3/class": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:71"],"note":"Direct source declaration or implementation."},
+    "/parts/3/element": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:71","packages/react/src/components/HoverCard.tsx:62","packages/react/src/components/primitives.tsx:1037"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/3/required": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:71"],"note":"Unconditional native child on the primary component return path."},
+    "/parts/3/allowedContent": {"status":"not found","sources":["packages/react/src/components/BadgeGroup.tsx:71"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/3/customProperties/0": {"status":"found","sources":["packages/styles/src/components/badge.css:218"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/customProperties": {"status":"found","sources":["packages/styles/src/components/badge.css:218"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/3/tokens/0": {"status":"found","sources":["packages/styles/src/components/badge.css:212"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/1": {"status":"found","sources":["packages/styles/src/components/badge.css:213","packages/styles/src/components/badge.css:220"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens": {"status":"found","sources":["packages/styles/src/components/badge.css:212","packages/styles/src/components/badge.css:213","packages/styles/src/components/badge.css:220"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/slots/0": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:14"],"note":"Observed children slot inherited through native props; no local content grammar declared."},
+    "/slots/0/required": {"status":"not found","sources":["packages/react/src/components/BadgeGroup.tsx:14"],"note":"not found: Inherited native children; local content grammar/cardinality not found."},
+    "/slots/0/allowedContent": {"status":"not found","sources":["packages/react/src/components/BadgeGroup.tsx:14"],"note":"not found: Inherited native children; local content grammar/cardinality not found."},
+    "/slots/0/element": {"status":"not found","sources":["packages/styles/src/manifest.ts:360","packages/react/src/components/BadgeGroup.tsx:13","docs/specs/badge-group.md:1"],"note":"not found: No unique direct part for inherited children."},
+    "/slots/0/class": {"status":"not found","sources":["packages/styles/src/manifest.ts:360","packages/react/src/components/BadgeGroup.tsx:13","docs/specs/badge-group.md:1"],"note":"not found: No unique direct part for inherited children."},
+    "/slots": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:14"],"note":"Direct source declaration or implementation."},
+    "/options": {"status":"found","sources":["packages/styles/src/manifest.ts:363"],"note":"Direct source declaration or implementation."},
+    "/options/overflow": {"status":"found","sources":["packages/styles/src/manifest.ts:363"],"note":"Direct source declaration or implementation."},
+    "/options/overflow/default": {"status":"found","sources":["packages/styles/src/manifest.ts:365"],"note":"Direct source declaration or implementation."},
+    "/booleans": {"status":"found","sources":["packages/styles/src/manifest.ts:360"],"note":"Exact manifest boolean modifier list; absence means no declared booleans."},
+    "/elementModifiers": {"status":"found","sources":["packages/styles/src/manifest.ts:360"],"note":"Direct source declaration or implementation."},
+    "/states/0": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:70"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1": {"status":"found","sources":["packages/styles/src/components/badge.css:209"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/2": {"status":"found","sources":["packages/styles/src/components/badge.css:213"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:70","packages/styles/src/components/badge.css:209","packages/styles/src/components/badge.css:213"],"note":"Direct source declaration or implementation."},
+    "/keyboard/0": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:12"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:12"],"note":"Direct source declaration or implementation."},
+    "/accessibleName/0": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:70"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/1": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:71"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:70","packages/react/src/components/BadgeGroup.tsx:71"],"note":"Direct source declaration or implementation."},
+    "/composition": {"status":"found","sources":["packages/styles/src/manifest.ts:360","packages/react/src/components/BadgeGroup.tsx:13","docs/specs/badge-group.md:1"],"note":"Allowed composition is distinct from examples and built-in child calls."},
+    "/composition/allowedParents": {"status":"not found","sources":["packages/styles/src/manifest.ts:360","packages/react/src/components/BadgeGroup.tsx:13","docs/specs/badge-group.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/allowedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:360","packages/react/src/components/BadgeGroup.tsx:13","docs/specs/badge-group.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/observedChildren/0": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:71"],"note":"Observed child component call; not an allowed-child restriction."},
+    "/composition/observedChildren": {"status":"found","sources":["packages/styles/src/manifest.ts:360","packages/react/src/components/BadgeGroup.tsx:13","docs/specs/badge-group.md:1"],"note":"Direct source declaration or implementation."},
+    "/composition/demoExamples/0": {"status":"found","sources":["apps/docs/src/demos/badge.tsx:27"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/1": {"status":"found","sources":["apps/docs/src/demos/badge.tsx:37"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/2": {"status":"found","sources":["apps/docs/src/demos/badge.tsx:47"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/3": {"status":"found","sources":["apps/docs/src/demos/badge.tsx:91"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/4": {"status":"found","sources":["apps/docs/src/demos/badge.tsx:94"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/5": {"status":"found","sources":["apps/docs/src/demos/badge.tsx:97"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/6": {"status":"found","sources":["apps/docs/src/demos/badge.tsx:101"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/7": {"status":"found","sources":["apps/docs/src/demos/card.tsx:194"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples": {"status":"found","sources":["apps/docs/src/demos/badge.tsx:27","apps/docs/src/demos/badge.tsx:37","apps/docs/src/demos/badge.tsx:47","apps/docs/src/demos/badge.tsx:91","apps/docs/src/demos/badge.tsx:94","apps/docs/src/demos/badge.tsx:97","apps/docs/src/demos/badge.tsx:101","apps/docs/src/demos/card.tsx:194"],"note":"Direct source declaration or implementation."},
+    "/reference/css": {"status":"found","sources":["packages/styles/src/components/badge.css:205","packages/styles/src/components/badge.css:206","packages/styles/src/components/badge.css:207","packages/styles/src/components/badge.css:208","packages/styles/src/components/badge.css:209","packages/styles/src/components/badge.css:210","packages/styles/src/components/badge.css:212","packages/styles/src/components/badge.css:213","packages/styles/src/components/badge.css:216","packages/styles/src/components/badge.css:217"],"note":"Direct source declaration or implementation."},
+    "/reference/css/0": {"status":"found","sources":["packages/styles/src/components/badge.css:205"],"note":"Direct source declaration or implementation."},
+    "/reference/spec": {"status":"found","sources":["docs/specs/badge-group.md:1"],"note":"Dedicated family spec."},
+    "/reference/reactExport/0": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:13","packages/react/src/index.ts:55"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:13","packages/react/src/index.ts:55"],"note":"Direct source declaration or implementation."},
+    "/reference": {"status":"found","sources":["packages/styles/src/manifest.ts:360","packages/styles/src/components/badge.css:1","docs/specs/badge-group.md:1"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element/0": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:68"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/badge.css:205"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/badge.css:205"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/badge.css:205"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/element/0": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:69","packages/react/src/components/BadgeGroup.tsx:72"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/2/element/0": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:70"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/2/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/badge.css:216"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/badge.css:216"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/badge.css:216"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/element/0": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:71","packages/react/src/components/HoverCard.tsx:62","packages/react/src/components/primitives.tsx:1037"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/3/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/badge.css:218"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/badge.css:218"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/badge.css:218"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/badge.css:212"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/badge.css:212"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/badge.css:212"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/badge.css:213","packages/styles/src/components/badge.css:220"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/badge.css:213","packages/styles/src/components/badge.css:220"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/badge.css:213","packages/styles/src/components/badge.css:220"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/1/selectors/1": {"status":"found","sources":["packages/styles/src/components/badge.css:213","packages/styles/src/components/badge.css:220"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/slots/0/name": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:14"],"note":"Observed children slot inherited through native props; no local content grammar declared."},
+    "/slots/0/part": {"status":"not found","sources":["packages/react/src/components/BadgeGroup.tsx:14"],"note":"not found: No value resolved; see the cited declaration and family review."},
+    "/options/overflow/values": {"status":"found","sources":["packages/styles/src/manifest.ts:363"],"note":"Direct source declaration or implementation."},
+    "/options/overflow/values/0": {"status":"found","sources":["packages/styles/src/manifest.ts:363"],"note":"Direct source declaration or implementation."},
+    "/options/overflow/values/1": {"status":"found","sources":["packages/styles/src/manifest.ts:363"],"note":"Direct source declaration or implementation."},
+    "/states/0/name": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:70"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/part": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:70"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/kind": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:70"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/hook": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:70"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/value": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:70"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/name": {"status":"found","sources":["packages/styles/src/components/badge.css:209"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/1/part": {"status":"found","sources":["packages/styles/src/components/badge.css:209"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/1/kind": {"status":"found","sources":["packages/styles/src/components/badge.css:209"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/1/hook": {"status":"found","sources":["packages/styles/src/components/badge.css:209"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/1/value": {"status":"found","sources":["packages/styles/src/components/badge.css:209"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/2/name": {"status":"found","sources":["packages/styles/src/components/badge.css:213"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/2/part": {"status":"found","sources":["packages/styles/src/components/badge.css:213"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/2/kind": {"status":"found","sources":["packages/styles/src/components/badge.css:213"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/2/hook": {"status":"found","sources":["packages/styles/src/components/badge.css:213"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/2/value": {"status":"found","sources":["packages/styles/src/components/badge.css:213"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/keyboard/0/key": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:12"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/0/part": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:12"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/0/action": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:12"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/0/condition": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:12"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/accessibleName/0/part": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:70"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/0/rule": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:70"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/1/part": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:71"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/1/rule": {"status":"found","sources":["packages/react/src/components/BadgeGroup.tsx:71"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/reference/spec/0": {"status":"found","sources":["docs/specs/badge-group.md:1"],"note":"Dedicated family spec."}
+  }
+}
