@@ -5,6 +5,18 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/docs/src/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Link (2026-10-08, same branch)
+
+- Owner: "move on to the next component" → Link (next on the list after Pagination). In review with
+  Pagination (Review page batch "New: Pagination and Link"). `Link` + `linkVariants`, `link.css`, manifest
+  (variant inline / standalone, ink inherit / muted / action), 7 tiles, docs entry, `link.test.mjs`; `open`
+  added to the package glyphs (`PACKAGE_GLYPHS` in gen-pilot-icons.mjs; only glyphs.ts changed).
+- Evidence: ChatGPT (logged-out composer note) and Notion (an inline link, owner's Chrome, read-only)
+  captures; Primer rules; Untitled source classes. Underline: currentColor at 40% (Notion), 1 stroke, 2 below.
+- Owner went with the recommendations: Link's open questions resolved; the peer underlines move to Link's line (next section).
+- Tooling: a form POST (`target=_blank`) to the 127.0.0.1 relay saves captures from https pages in both
+  browsers without the clipboard (fetch is blocked there).
+
 ## Pagination (2026-10-08, branch `claude/next-component-5018a1`)
 
 - Owner picked Pagination as the next component. Built and in review (`REVIEW_COMPONENTS`, Review page

@@ -110,3 +110,6 @@ captures. Promote an agreement into Area only through a spec's decision table.
   agree on 32px page squares 2 apart (shadcn; Untitled UI 36, 2 apart; Primer 32, 4 apart) and differ on
   the current page: a plate (Untitled UI), an outline (shadcn) or the accent fill (Primer)
   (`pagination/uui--*`, `pagination/shadcn--*`).
+- 2026-10-08 (Link): ChatGPT and Notion keep a link in the ink and size of the text around it and always
+  underline it in prose, about 2px below (ChatGPT 0.125rem in the text colour; Notion 10%, a 0.05em line at
+  40% warm grey, the text at 70% opacity). Neither colours links (`link/chatgpt--*`, `link/notion--*`).

@@ -57,6 +57,10 @@ export const glyphs = {
     "M2 8A1 1 0 1 0 4 8A1 1 0 1 0 2 8Z",
     "M7 8A1 1 0 1 0 9 8A1 1 0 1 0 7 8Z",
     "M12 8A1 1 0 1 0 14 8A1 1 0 1 0 12 8Z"
+  ],
+  "open": [
+    "M8 2.5H4.5A2 2 0 0 0 2.5 4.5V11.5A2 2 0 0 0 4.5 13.5H11.5A2 2 0 0 0 13.5 11.5V8",
+    "M10.5 2.5H13.5V5.5M13.5 2.5L8 8"
   ]
 } as const;
 export type GlyphName = keyof typeof glyphs;

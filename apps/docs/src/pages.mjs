@@ -173,6 +173,23 @@ export const COMPONENT_PAGES = [
     ],
   },
   {
+    slug: "link", name: "Link", manifest: "link",
+    imports: "Link, linkVariants",
+    api: [
+      ["variant", '"inline" (always underlined) | "standalone" (underlined on hover and focus)', '"inline"'],
+      ["ink", '"inherit" | "muted" | "action" (the Action role: neutral until a theme makes actions the accent)', '"inherit"'],
+      ["external", "boolean (new tab, rel noopener noreferrer, the external mark, announced)", "false"],
+      ["newTabLabel", "string", '"(opens in a new tab)"'],
+      ["linkVariants", "({ variant, ink }) => class names, for a router's own anchor", "—"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "In running text a link keeps the text's size and ink and is underlined, the line at 40% of the ink (Notion), one stroke 2px below the text (ChatGPT). Hover and focus draw the line at full ink; the ink itself never changes.", demo: "GalleryLink" },
+      { id: "standalone", title: "Standalone", note: "Outside a sentence (Learn more, View all) the underline appears on hover and focus.", demo: "GalleryLinkStandalone" },
+      { id: "caption", title: "In a caption", note: "Nothing to set: the link inherits the caption's 12px and muted ink, as ChatGPT's composer note does.", demo: "GalleryLinkCaption" },
+      { id: "external", title: "External", note: "Opens in a new tab with the external mark, centred on the cap height, and says so to assistive tech.", demo: "GalleryLinkExternal" },
+    ],
+  },
+  {
     slug: "pagination", name: "Pagination", manifest: "pagination",
     imports: "Pagination",
     api: [

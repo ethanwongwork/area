@@ -501,6 +501,15 @@ function gallerySpecimenTable() {
       { id: "content-icon", title: "Content / icon", demo: "GalleryTagIcon" },
       { id: "state-disabled", title: "State / disabled", demo: "GalleryTagDisabled" },
     ],
+    link: [
+      { id: "default", title: "Default", demo: "GalleryLink" },
+      { id: "variant-standalone", title: "Variant / standalone", demo: "GalleryLinkStandalone" },
+      { id: "ink-muted", title: "Ink / muted", demo: "GalleryLinkMuted" },
+      { id: "ink-action", title: "Ink / action", demo: "GalleryLinkAction" },
+      { id: "content-caption", title: "Content / caption", demo: "GalleryLinkCaption" },
+      { id: "content-external", title: "Content / external", demo: "GalleryLinkExternal" },
+      { id: "content-wrap", title: "Content / wrapping", demo: "GalleryLinkWrapped" },
+    ],
     pagination: [
       { id: "default", title: "Default", demo: "GalleryPagination" },
       { id: "layout-compact", title: "Layout / compact", demo: "GalleryPaginationCompact" },

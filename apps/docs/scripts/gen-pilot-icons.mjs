@@ -22,7 +22,7 @@ const GLYPHS_OUT = join(ROOT, "../../packages/react/src/components/glyphs.ts");
 // Pilot icons that components draw themselves, replacing Fluent family by family
 // (docs/specs/icons.md, "Components"). A glyph is a whole icon, or one element of one
 // (check-inset is the check inside the Available ring, for boxed checks).
-const PACKAGE_GLYPHS = { "add": ["add"], "arrow-up": ["arrow-up"], "check": ["check"], "check-inset": ["status-available", 1], "chevron-down": ["chevron-down"], "dismiss": ["dismiss"], "grip": ["grip"], "subtract": ["subtract"], "corner": ["corner"], "corners": ["corners"], "padding-side": ["padding-side"], "padding-axis": ["padding-axis"], "sides": ["sides"], "search": ["search"], "stop": ["stop", undefined, "solid"], "more": ["more-horizontal"] };
+const PACKAGE_GLYPHS = { "add": ["add"], "arrow-up": ["arrow-up"], "check": ["check"], "check-inset": ["status-available", 1], "chevron-down": ["chevron-down"], "dismiss": ["dismiss"], "grip": ["grip"], "subtract": ["subtract"], "corner": ["corner"], "corners": ["corners"], "padding-side": ["padding-side"], "padding-axis": ["padding-axis"], "sides": ["sides"], "search": ["search"], "stop": ["stop", undefined, "solid"], "more": ["more-horizontal"], "open": ["open"] };
 const LIVE = [1.5, 14.5];      // stroke centrelines stay inside this box (ink 0.94–15.06 at 1.125px)
 const LIVE_FILL = [1, 15];     // filled shapes (dots) stay inside this box
 const WEIGHT = 1.125;          // --area-weight-icon; keylines and gaps are judged at this weight

@@ -179,6 +179,14 @@ export const breadcrumb = {
   defaults: {},
 } as const satisfies ComponentManifest;
 
+export const link = {
+  block: "area-link",
+  description: "Goes to another page or place, inline in text or on its own.",
+  variants: { variant: ["inline", "standalone"], ink: ["inherit", "muted", "action"] },
+  elements: ["icon"],
+  defaults: { variant: "inline", ink: "inherit" },
+} as const satisfies ComponentManifest;
+
 export const pagination = {
   block: "area-pagination",
   description: "Moves between the pages of a long list or result set.",
@@ -802,6 +810,7 @@ export const MANIFESTS = {
   numberField,
   inputGroup,
   breadcrumb,
+  link,
   pagination,
   treeView,
   composer,
