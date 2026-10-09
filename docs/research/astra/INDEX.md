@@ -10,6 +10,7 @@ broken research.
 
 | Date | Topic | Question | Status |
 | --- | --- | --- | --- |
+| 2026-10-08 | [materials/07-controls](materials/07-controls/README.md) | Which global and per-role controls fit the layer model, and should Material sit beside Surface or extend it? | unreviewed |
 | 2026-10-08 | [materials/06-references](materials/06-references/README.md) | Which public sources publish exact material-layer values for all 25 styles, and how do they cover the 17 board items? | unreviewed |
 | 2026-10-08 | [materials/05-absorption](materials/05-absorption/README.md) | How do all 25 styles paint 12 roles, with absorption caps, family context guards and nesting rules? | unreviewed |
 | 2026-10-08 | [materials/04-role-map](materials/04-role-map/README.md) | Which material role and relative depth belong to every visual part of all 78 Area contracts, including shared compositions? | unreviewed |
