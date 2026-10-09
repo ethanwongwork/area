@@ -76,6 +76,7 @@
 @import "./components/pagination.css";
 @import "./components/link.css";
 @import "./components/scroll-area.css";
+@import "./components/file-upload.css";
 @import "./components/segmented.css";
 @import "./components/code.css";
 @import "./components/token.css";

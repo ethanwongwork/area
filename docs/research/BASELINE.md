@@ -117,4 +117,7 @@ captures. Promote an agreement into Area only through a spec's decision table.
   6px round thumb 2px in, #b3b3b3 at 50%, shown while the panel is hovered); ChatGPT thins the native bar for every
   element (its ink at 30% on a transparent track); Notion leaves the native bar, the system's overlay on macOS
   (`scroll-area/figma--*`; ChatGPT and Notion as rule readouts in the spec).
+- 2026-10-09 (File upload): no product shows an upload surface we could measure without uploading the owner's data
+  (ChatGPT's 10 recent chats carry no attachment; a test upload declined). Untitled UI is the basis (readout in
+  `docs/specs/file-upload.md`).
 

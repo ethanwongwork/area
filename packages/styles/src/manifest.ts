@@ -179,6 +179,30 @@ export const breadcrumb = {
   defaults: {},
 } as const satisfies ComponentManifest;
 
+export const fileUpload = {
+  block: "area-file-upload",
+  description: "Takes files by click or drag and drop.",
+  variants: {},
+  states: ["dragging", "invalid", "disabled"],
+  elements: ["icon", "text", "prompt", "action", "hint", "input"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const fileUploadList = {
+  block: "area-file-upload-list",
+  description: "Lists the files being or already uploaded.",
+  variants: {},
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const fileUploadItem = {
+  block: "area-file-upload-item",
+  description: "Shows one file's upload: name, size, progress, and remove or retry.",
+  variants: { status: ["uploading", "complete", "error"] },
+  elements: ["icon", "body", "header", "text", "name", "meta", "separator", "status", "actions", "progress", "percent"],
+  defaults: { status: "uploading" },
+} as const satisfies ComponentManifest;
+
 export const scrollArea = {
   block: "area-scroll-area",
   description: "Scrolls its content with a thin overlay scrollbar.",
@@ -819,6 +843,9 @@ export const MANIFESTS = {
   numberField,
   inputGroup,
   breadcrumb,
+  fileUpload,
+  fileUploadList,
+  fileUploadItem,
   scrollArea,
   link,
   pagination,

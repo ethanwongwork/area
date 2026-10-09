@@ -72,6 +72,7 @@ Completion is recorded only in `apps/docs/src/component-status.mjs`; a spec stat
 | [Pagination](pagination.md) | in review | New, 2026-10-08: 32 squares with a 2 gap (shadcn, Untitled UI), the selected plate on the current page, ghost Button steps, compact "Page 2 of 10"; no target product has a pager |
 | [Link](link.md) | in review | New, 2026-10-08: inherited ink and type, underline at 40% of the ink (Notion) one stroke 2 below (ChatGPT); standalone, muted, action, external |
 | [Scroll area](scroll-area.md) | in review | New, 2026-10-09: native scroller with Figma's overlay bar (10 track, 6 round thumb 2 in), shown on hover, scroll or always |
+| [File upload](file-upload.md) | in review | New, 2026-10-09: drop zone (Untitled's 16/24, 12 gap, the field's edge) and upload rows (Progress lg, ghost sm actions, uploading / complete / error) |
 | [Overlay behavior](overlay.md) | accepted | 2026-09-27: anchoring, dismissal, focus and keyboard for Popover, Menu and Tooltip; ChatGPT menu captured, nine design systems read |
 | [Tooltip](tooltip.md) | accepted | First pass: 10px radius and 10px text sides (owner, after ChatGPT), 12px-blur lift; ChatGPT, Notion captured, Figma read |
 | [Badge group](badge-group.md) | accepted | First pass: badge-shaped +N overflow at the group size, overlay at content width; Primer is the reference |

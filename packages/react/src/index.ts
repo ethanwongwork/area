@@ -40,6 +40,7 @@ export { Drawer, type DrawerProps } from "./components/Drawer.tsx";
 export { BoxField, type BoxFieldProps, type BoxValue } from "./components/BoxField.tsx";
 export { PropertyList, PropertyListItem, type PropertyListProps, type PropertyListItemProps } from "./components/PropertyList.tsx";
 export { TreeView, type TreeViewProps, type TreeViewNode } from "./components/TreeView.tsx";
+export { FileUpload, FileUploadList, FileUploadItem, fileMatchesAccept, formatFileSize, type FileUploadProps, type FileUploadItemProps, type FileRejection } from "./components/FileUpload.tsx";
 export { ScrollArea, type ScrollAreaProps } from "./components/ScrollArea.tsx";
 export { Link, linkVariants, type LinkProps } from "./components/Link.tsx";
 export { Pagination, paginationRange, type PaginationProps, type PaginationLabels, type PaginationItem } from "./components/Pagination.tsx";

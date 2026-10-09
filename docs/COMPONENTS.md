@@ -35,7 +35,7 @@ actual specimens. Current families include:
   Radio/RadioGroup, Switch, Slider/SliderRange, Chip/ChipGroup, Segmented and AlignmentPicker.
 - Forms: Field, Input/InputAction, InputGroup/InputGroupText, NumberField, BoxField, Textarea,
   Composer, native Select, Combobox, CustomSelect, TagPicker, DatePicker, ConfirmDialog, Drawer (in review, 2026-10-05), ColorField, ColorSwatch, ColorSwatchPicker, ColorPicker,
-  Calendar and PropertyList.
+  Calendar, PropertyList and FileUpload (in review, 2026-10-09: drop zone and upload rows).
 - Navigation and commands: Nav, Tabs, Menu, ContextMenu, CommandPalette, TreeView,
   Breadcrumb (linked ancestors, a current page and an optional collapsed marker) and
   Pagination (in review, 2026-10-08: numbered pages or a compact "Page 2 of 10", buttons or links)
@@ -122,7 +122,7 @@ built next; this list is an inventory, not an order of work.
 ### Broader coverage after the inspector foundation
 
 - **Entry and forms:** SearchField, PasswordField, MultiSelect (Combobox is built),
-  TagPicker, editable text, OTP input, FileUpload/DropZone, Form validation and error
+  TagPicker, editable text, OTP input, Form validation and error
   summary. Reuse Input/Field for search and password anatomy; promote a wrapper when
   behavior such as reveal, clear, filtering or async suggestions is included.
 - **Date and time:** Calendar is built (Complete, [spec](specs/calendar.md)): single,
@@ -162,7 +162,7 @@ built since are noted in brackets.
 - **Recommended order** (owner chooses): overlay behavior → custom Select → Combobox with a
   tag mode → Menu keyboard, submenus, ContextMenu and CommandPalette → ColorPicker paints →
   Disclosure/Accordion → DatePicker family → Resizable and ScrollArea → Drawer and
-  AlertDialog → chat message primitives → FileUpload → HoverCard and Toggletip.
+  AlertDialog → chat message primitives → FileUpload [built 2026-10-09] → HoverCard and Toggletip.
 ### Count and Banner, from the 2026-09-27 survey (built 2026-09-28, Complete)
 
 [Survey](research/split-count-banner-survey.md):

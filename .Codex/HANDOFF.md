@@ -5,6 +5,15 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/docs/src/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## File upload (2026-10-09, same branch)
+
+- Owner: "move on to the next component" → File upload, the last of the four. In review. `FileUpload` (zone: accept,
+  maxSize, multiple, name, onFiles / onReject), `FileUploadList`, `FileUploadItem` (uploading / complete / error,
+  progress, retry, remove), helpers `fileMatchesAccept`, `formatFileSize`; `file-upload.css`; 8 tiles (one an
+  interactive simulated flow); `upload`, `document`, `reset` added to the package glyphs.
+- Evidence: Untitled UI readout only; owner declined a ChatGPT test upload. Open questions resolved as recommended
+  (field edge kept, `document` kept, Composer chip later).
+
 ## Scroll area (2026-10-09, same branch)
 
 - Owner: "move on to the next component" → Scroll area. In review (Review batch "New: Pagination, Link and

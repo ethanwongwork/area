@@ -173,6 +173,21 @@ export const COMPONENT_PAGES = [
     ],
   },
   {
+    slug: "file-upload", name: "File upload", exportName: "FileUpload", manifest: "fileUpload",
+    imports: "FileUpload, FileUploadList, FileUploadItem",
+    api: [
+      ["onFiles / onReject", "(files: File[]) => void / (rejections: { file, reason: \"type\" | \"size\" | \"count\" }[]) => void", "—"],
+      ["accept / multiple / maxSize", "as the file input / boolean / bytes", "—"],
+      ["hint / invalid / disabled / name", "ReactNode / boolean / boolean / string (a form submits the files)", "—"],
+      ["labels", "{ action, drag }", '"Click to upload", "or drag and drop"'],
+      ["FileUploadItem", "name, size (bytes), status (uploading | complete | error), progress (0-100), error, onRemove, onRetry, icon, labels", "uploading"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "Click anywhere in the zone, or Tab to its button, to choose files; or drop them on it. Files that miss accept, maxSize or multiple come back through onReject with the reason.", demo: "GalleryFileUpload" },
+      { id: "flow", title: "Upload flow", note: "Each accepted file becomes a row that shows its progress, then Complete; a rejected one shows why, with retry and remove. The upload here is simulated.", demo: "GalleryFileUploadFlow" },
+    ],
+  },
+  {
     slug: "scroll-area", name: "Scroll area", exportName: "ScrollArea", manifest: "scrollArea",
     imports: "ScrollArea",
     api: [
