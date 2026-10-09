@@ -10,6 +10,7 @@ broken research.
 
 | Date | Topic | Question | Status |
 | --- | --- | --- | --- |
+| 2026-10-08 | [materials/04-role-map](materials/04-role-map/README.md) | Which material role and relative depth belong to every visual part of all 78 Area contracts, including shared compositions? | unreviewed |
 | 2026-10-08 | [materials/03-css-cookbook](materials/03-css-cookbook/README.md) | How can every material layer be rendered in CSS/SVG, with browser fallbacks and safe Area-token derivation? | unreviewed |
 | 2026-10-08 | [materials/02-prior-art](materials/02-prior-art/README.md) | Which systems expose shared materials and optical controls, and does open-source prior art already exist? | unreviewed |
 | 2026-10-07 | [materials/01-taxonomy](materials/01-taxonomy/README.md) | What are the requested styles made of, and which shared layer model should later materials tasks use? | unreviewed |
