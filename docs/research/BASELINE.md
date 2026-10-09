@@ -113,3 +113,8 @@ captures. Promote an agreement into Area only through a spec's decision table.
 - 2026-10-08 (Link): ChatGPT and Notion keep a link in the ink and size of the text around it and always
   underline it in prose, about 2px below (ChatGPT 0.125rem in the text colour; Notion 10%, a 0.05em line at
   40% warm grey, the text at 70% opacity). Neither colours links (`link/chatgpt--*`, `link/notion--*`).
+- 2026-10-09 (Scroll area): the three products disagree. Figma draws its own bar in the editor (a 10px track, a
+  6px round thumb 2px in, #b3b3b3 at 50%, shown while the panel is hovered); ChatGPT thins the native bar for every
+  element (its ink at 30% on a transparent track); Notion leaves the native bar, the system's overlay on macOS
+  (`scroll-area/figma--*`; ChatGPT and Notion as rule readouts in the spec).
+

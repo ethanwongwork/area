@@ -43,7 +43,7 @@ actual specimens. Current families include:
 - Labels and identity: Badge/BadgeGroup, Count, Indicator/IndicatorAnchor, Presence (the
   status mark, audit H-25), Avatar, Kbd/KbdGroup and Code (Token is deprecated: use `<Code swatch>`).
 - Feedback: Alert (with the banner layout), Toast, Tooltip, Progress, Spinner and Skeleton.
-- Structure and content: Card, Panel (with `resizable`), Dialog, Popover, HoverCard,
+- Structure and content: Card, Panel (with `resizable`), Dialog, Popover, HoverCard, ScrollArea (in review, 2026-10-09),
   Separator, Table and CodeBlock.
 - Conversation: Message/MessageActions, PromptSuggestions, ModelPicker and ScrollToLatest.
 
@@ -138,7 +138,7 @@ built next; this list is an inventory, not an order of work.
   TransferList, Rating, ToggleButtonGroup and drag/reorder handles. Choice cards can
   reuse Checkbox/Radio compositions; AvatarGroup and range Slider already exist.
 - **Surfaces and layout:** Accordion/Disclosure, Drawer/Sheet, AlertDialog, a two-region
-  Splitter, ScrollArea and responsive layout primitives (HoverCard and Panel `resizable` are
+  Splitter and responsive layout primitives (HoverCard, Panel `resizable` and ScrollArea are
   built). PageHeader, Sidebar,
   application shell and dockable inspector are compositions.
 - **Data and feedback:** DescriptionList, Stat, Timeline, EmptyState, Result/ErrorState,
@@ -208,7 +208,7 @@ catalogue names. Each would be measured in its product like every other componen
   (Combobox with previews and weight axis), VariableChip (a bound token in a field, detach
   on hover).
 - **Shared and small:** SearchField (clear, shortcut hint), EmptyState, KeyboardShortcut
-  overlay (a sheet of Kbd groups), Pagination, Stepper, Meter, circular Progress, ScrollArea,
+  overlay (a sheet of Kbd groups), Pagination, Stepper, Meter, circular Progress, ScrollArea (built 2026-10-09),
   Splitter (two resizable regions), Sheet / Drawer, Banner, Stat, DescriptionList,
   DateField / Calendar / DatePicker.
 

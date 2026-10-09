@@ -179,6 +179,15 @@ export const breadcrumb = {
   defaults: {},
 } as const satisfies ComponentManifest;
 
+export const scrollArea = {
+  block: "area-scroll-area",
+  description: "Scrolls its content with a thin overlay scrollbar.",
+  variants: { type: ["hover", "scroll", "always"] },
+  states: ["scrolling", "overflow-x", "overflow-y"],
+  elements: ["viewport", "content", "scrollbar", "thumb"],
+  defaults: { type: "hover" },
+} as const satisfies ComponentManifest;
+
 export const link = {
   block: "area-link",
   description: "Goes to another page or place, inline in text or on its own.",
@@ -810,6 +819,7 @@ export const MANIFESTS = {
   numberField,
   inputGroup,
   breadcrumb,
+  scrollArea,
   link,
   pagination,
   treeView,

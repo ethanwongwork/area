@@ -173,6 +173,21 @@ export const COMPONENT_PAGES = [
     ],
   },
   {
+    slug: "scroll-area", name: "Scroll area", exportName: "ScrollArea", manifest: "scrollArea",
+    imports: "ScrollArea",
+    api: [
+      ["type", '"hover" (while hovered or scrolling) | "scroll" (while scrolling) | "always"', '"hover"'],
+      ["scrollHideDelay", "number (ms the bar stays after scrolling stops)", "600"],
+      ["viewportRef", "Ref to the native scroller", "—"],
+      ["viewportProps", "props for the scroller (aria-label, tabIndex)", "tabIndex 0"],
+      ["style / className", "size the region on the root (block-size or max-block-size)", "—"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "A native scroller with its platform bar hidden and Figma's overlay bar: a 6px round thumb 2px in from the edge, shown while the region is hovered or scrolling. It takes no width, so content lays out the same on every platform. Drag the thumb, or press the track to bring the thumb to the pointer. The scroller is a Tab stop, so arrow keys scroll it.", demo: "GalleryScrollArea" },
+      { id: "both", title: "Both directions", note: "A bar appears only for an axis that overflows; with both, each stops short of the other's corner.", demo: "GalleryScrollAreaBoth" },
+    ],
+  },
+  {
     slug: "link", name: "Link", manifest: "link",
     imports: "Link, linkVariants",
     api: [

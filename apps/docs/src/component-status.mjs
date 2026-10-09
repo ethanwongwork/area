@@ -51,7 +51,7 @@ export const COMPLETE_COMPONENTS = new Set([
 // alignment-picker reopened 2026-10-04: responsive grid, hover preview, sizes removed.
 // pagination: new 2026-10-08 (owner picked it as the next component); link: new 2026-10-08 ("move on to the next component");
 // alert, card and chip reopened 2026-10-08: their always-on underlines moved to Link's line (link.md).
-export const REVIEW_COMPONENTS = new Set(['pagination', 'link', 'alert', 'card', 'chip']);
+export const REVIEW_COMPONENTS = new Set(['pagination', 'link', 'scroll-area', 'alert', 'card', 'chip']);
 export const componentStatus = slug => COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
 export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined' })[status];
 
@@ -94,6 +94,7 @@ export const APPROVAL_BATCHES = [
   { name: 'Conversation', families: ['message', 'composer', 'prompt-suggestions'] },
   { name: 'Conversation controls', families: ['model-picker', 'scroll-to-latest'] },
   { name: 'Page navigation', families: ['tabs', 'breadcrumb', 'pagination', 'link'] },
+  { name: 'Scrolling', families: ['scroll-area'] },
   { name: 'Code and rules', families: ['code', 'code-block', 'separator'] },
   { name: 'Accordion', families: ['accordion'] },
 ];
@@ -108,9 +109,9 @@ export const batchOf = slug => APPROVAL_BATCHES.findIndex(batch => batch.familie
  */
 export const REVIEW_BATCHES = [
   {
-    name: 'New: Pagination and Link',
-    note: 'Built 2026-10-08, the two navigation gaps eight catalogues share. Batch 1, Accordion and Alignment picker were approved on 2026-10-08.',
-    families: ['pagination', 'link'],
+    name: 'New: Pagination, Link and Scroll area',
+    note: 'Built 2026-10-08 and 09: the two navigation gaps eight catalogues share, and the overlay scrollbar. Batch 1, Accordion and Alignment picker were approved on 2026-10-08.',
+    families: ['pagination', 'link', 'scroll-area'],
   },
   {
     name: "Link's underline in peers",
@@ -120,4 +121,4 @@ export const REVIEW_BATCHES = [
 ];
 
 // Most recently designed first. Move a family to the front when its design is worked on.
-export const RECENT_COMPONENTS = ['link', 'pagination', 'tag', 'drawer', 'confirm-dialog', 'date-picker', 'tag-picker', 'custom-select', 'accordion', 'badge-group', 'card', 'checkbox', 'radio', 'dialog', 'count', 'alert', 'toolbar', 'switch', 'code-block', 'chip', 'table', 'model-picker', 'scroll-to-latest', 'message', 'prompt-suggestions', 'hover-card', 'context-menu', 'command-palette', 'combobox', 'panel', 'composer', 'box-field', 'property-list', 'number-field', 'toast', 'popover', 'menu', 'split-button', 'button-group', 'button', 'tree-view', 'breadcrumb', 'tooltip', 'badge', 'indicator', 'icon-pilot', 'color-picker', 'color-swatch-picker', 'color-field', 'color-swatch', 'alignment-picker', 'input-group', 'avatar', 'input', 'nav', 'progress', 'segmented', 'select', 'skeleton', 'spinner', 'calendar'];
+export const RECENT_COMPONENTS = ['scroll-area', 'link', 'pagination', 'tag', 'drawer', 'confirm-dialog', 'date-picker', 'tag-picker', 'custom-select', 'accordion', 'badge-group', 'card', 'checkbox', 'radio', 'dialog', 'count', 'alert', 'toolbar', 'switch', 'code-block', 'chip', 'table', 'model-picker', 'scroll-to-latest', 'message', 'prompt-suggestions', 'hover-card', 'context-menu', 'command-palette', 'combobox', 'panel', 'composer', 'box-field', 'property-list', 'number-field', 'toast', 'popover', 'menu', 'split-button', 'button-group', 'button', 'tree-view', 'breadcrumb', 'tooltip', 'badge', 'indicator', 'icon-pilot', 'color-picker', 'color-swatch-picker', 'color-field', 'color-swatch', 'alignment-picker', 'input-group', 'avatar', 'input', 'nav', 'progress', 'segmented', 'select', 'skeleton', 'spinner', 'calendar'];

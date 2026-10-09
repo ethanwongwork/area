@@ -1,0 +1,110 @@
+/* ---------------------------------------------------------------------------
+ * Scroll area
+ *
+ * A region that scrolls with a thin overlay scrollbar instead of the platform's (docs/specs/scroll-area.md).
+ * The viewport is a native scroller, so wheel, touch, keyboard and find-in-page work as usual; its
+ * own scrollbar is hidden and an overlay bar is drawn over the content edge. Figma, the only target
+ * product that draws its own bar, sets the geometry: a 10px track, a 6px round thumb 2px in from the
+ * edge and the track's ends, shown while the region is hovered. The bar takes no layout space, so
+ * the content keeps its width on every platform.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-scroll-area {
+    /* spec: Figma's track 10 with 2 padding (a 6 thumb); shadcn 10 with a 7 thumb. */
+    --_track: 10px; /* spec */
+    --_inset: var(--area-space-2);
+    /* spec: Figma's thumb, #b3b3b3 at 50%, composites to 217 on white; the same depth taken from the
+       default ink (18% of rgb 40 is 217 on white) so the dark theme draws a light thumb. ChatGPT
+       draws its native thin thumb at 30% of its ink, a step darker. */
+    --_thumb: color-mix(in oklab, var(--area-fg-default) 18%, transparent); /* spec */
+
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-block-size: 0;
+    overflow: hidden;
+  }
+
+  .area-scroll-area__viewport {
+    flex: 1 1 auto;
+    min-block-size: 0;
+    inline-size: 100%;
+    overflow: auto;
+    overscroll-behavior: contain;
+    /* The platform bar is hidden; the overlay below replaces it. */
+    scrollbar-width: none;
+    border-radius: inherit;
+  }
+  .area-scroll-area__viewport::-webkit-scrollbar { display: none; }
+  /* Holds the children, so a change in their size is observed; contains their margins. */
+  .area-scroll-area__content { display: flow-root; }
+  /* A scrollable region is a Tab stop so the keyboard can scroll it; the ring sits inside the edge,
+     which the region clips. */
+  .area-scroll-area__viewport:focus-visible {
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: calc(-1 * var(--area-focus-width));
+  }
+
+  .area-scroll-area__scrollbar {
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    box-sizing: border-box;
+    padding: var(--_inset);
+    touch-action: none;
+    user-select: none;
+    opacity: 0;
+    pointer-events: none;
+    /* Motion (docs/MOTION.md, "Hover plate"): appears at once, fades out on fast. */
+    transition: opacity var(--area-duration-fast) var(--area-ease-out);
+  }
+  .area-scroll-area__scrollbar[data-orientation="vertical"] {
+    inset-block: 0;
+    inset-inline-end: 0;
+    inline-size: var(--_track);
+  }
+  .area-scroll-area__scrollbar[data-orientation="horizontal"] {
+    inset-inline: 0;
+    inset-block-end: 0;
+    block-size: var(--_track);
+  }
+  /* With both bars, each stops short of the other's corner. */
+  .area-scroll-area[data-overflow-x][data-overflow-y] > .area-scroll-area__scrollbar[data-orientation="vertical"] { inset-block-end: var(--_track); }
+  .area-scroll-area[data-overflow-x][data-overflow-y] > .area-scroll-area__scrollbar[data-orientation="horizontal"] { inset-inline-end: var(--_track); }
+  /* A bar exists only for an axis that overflows. */
+  .area-scroll-area:not([data-overflow-y]) > .area-scroll-area__scrollbar[data-orientation="vertical"],
+  .area-scroll-area:not([data-overflow-x]) > .area-scroll-area__scrollbar[data-orientation="horizontal"] { display: none; }
+
+  /* The thumb: sized and moved by the script through two properties, in whole pixels. */
+  .area-scroll-area__thumb {
+    flex: none;
+    border-radius: var(--area-radius-full);
+    background-color: var(--_thumb);
+  }
+  .area-scroll-area__scrollbar[data-orientation="vertical"] > .area-scroll-area__thumb {
+    inline-size: 100%;
+    block-size: var(--_thumb-size, 0px);
+    translate: 0 var(--_thumb-offset, 0px);
+  }
+  .area-scroll-area__scrollbar[data-orientation="horizontal"] > .area-scroll-area__thumb {
+    block-size: 100%;
+    inline-size: var(--_thumb-size, 0px);
+    translate: var(--_thumb-offset, 0px) 0;
+  }
+  .area-scroll-area__scrollbar[data-orientation="horizontal"]:dir(rtl) > .area-scroll-area__thumb { translate: calc(-1 * var(--_thumb-offset, 0px)) 0; }
+
+  /* Type: when the bar shows. `hover` while the pointer is over the region or it scrolls (Figma;
+     Radix's default); `scroll` only while it scrolls (macOS overlay scrollbars); `always` (shadcn). */
+  .area-scroll-area--hover {}
+  .area-scroll-area--scroll {}
+  .area-scroll-area--always > .area-scroll-area__scrollbar { opacity: 1; pointer-events: auto; }
+  @media (hover: hover) {
+    .area-scroll-area--hover:hover > .area-scroll-area__scrollbar { opacity: 1; pointer-events: auto; transition-duration: 0s; }
+  }
+  .area-scroll-area[data-scrolling] > .area-scroll-area__scrollbar,
+  .area-scroll-area > .area-scroll-area__scrollbar[data-dragging] { opacity: 1; pointer-events: auto; transition-duration: 0s; }
+
+  @media (forced-colors: active) {
+    .area-scroll-area__thumb { forced-color-adjust: none; background-color: CanvasText; }
+  }
+}

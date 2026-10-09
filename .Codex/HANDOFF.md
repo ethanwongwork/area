@@ -1,9 +1,19 @@
-# Handoff — 2026-10-08
+# Handoff — 2026-10-09
 
 Each session starts from `main` in its own worktree (`claude/*` branch) and merges through a
 pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/docs/src/component-status.mjs` (Indicator and Tooltip are Complete).
+
+## Scroll area (2026-10-09, same branch)
+
+- Owner: "move on to the next component" → Scroll area. In review (Review batch "New: Pagination, Link and
+  Scroll area"). `ScrollArea` (type hover / scroll / always; viewportRef, viewportProps), `scroll-area.css`,
+  5 tiles, docs entry, `scroll-area.test.mjs`. Native viewport with the platform bar hidden; Figma's overlay bar.
+- Evidence: Figma editor panel captures (a community file, viewed only); ChatGPT, Notion, shadcn readouts.
+- Open: adopt it in Menu / Command palette / lists / Drawer / Panel (reopens each).
+- Tooling: Figma's CSP blocks form posts; open `127.0.0.1:8791/recv.html` from a button and `postMessage` the
+  captures to it. The gallery re-fits tile zoom after a pause: clear it and capture in the same script.
 
 ## Link (2026-10-08, same branch)
 
