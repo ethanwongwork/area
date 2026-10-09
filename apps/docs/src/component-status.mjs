@@ -49,8 +49,8 @@ export const COMPLETE_COMPONENTS = new Set([
 
 /** Built/refined and awaiting owner approval; not completion. */
 // alignment-picker reopened 2026-10-04: responsive grid, hover preview, sizes removed.
-// Nothing waiting on approval (2026-10-08: every reviewed family approved).
-export const REVIEW_COMPONENTS = new Set([]);
+// pagination: new 2026-10-08 (owner picked it as the next component).
+export const REVIEW_COMPONENTS = new Set(['pagination']);
 export const componentStatus = slug => COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
 export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined' })[status];
 
@@ -92,7 +92,7 @@ export const APPROVAL_BATCHES = [
   { name: 'Command surfaces', families: ['context-menu', 'command-palette'] },
   { name: 'Conversation', families: ['message', 'composer', 'prompt-suggestions'] },
   { name: 'Conversation controls', families: ['model-picker', 'scroll-to-latest'] },
-  { name: 'Page navigation', families: ['tabs', 'breadcrumb'] },
+  { name: 'Page navigation', families: ['tabs', 'breadcrumb', 'pagination'] },
   { name: 'Code and rules', families: ['code', 'code-block', 'separator'] },
   { name: 'Accordion', families: ['accordion'] },
 ];
@@ -107,11 +107,11 @@ export const batchOf = slug => APPROVAL_BATCHES.findIndex(batch => batch.familie
  */
 export const REVIEW_BATCHES = [
   {
-    name: 'Nothing waiting',
-    note: 'Batch 1 (Custom select, Tag, Tag picker, Date picker, Drawer, Confirm dialog) and Accordion and Alignment picker were approved on 2026-10-08.',
-    families: [],
+    name: 'New: Pagination',
+    note: 'Built 2026-10-08 after the owner picked it as the next component. Batch 1, Accordion and Alignment picker were approved on 2026-10-08.',
+    families: ['pagination'],
   },
 ];
 
 // Most recently designed first. Move a family to the front when its design is worked on.
-export const RECENT_COMPONENTS = ['tag', 'drawer', 'confirm-dialog', 'date-picker', 'tag-picker', 'custom-select', 'accordion', 'badge-group', 'card', 'checkbox', 'radio', 'dialog', 'count', 'alert', 'toolbar', 'switch', 'code-block', 'chip', 'table', 'model-picker', 'scroll-to-latest', 'message', 'prompt-suggestions', 'hover-card', 'context-menu', 'command-palette', 'combobox', 'panel', 'composer', 'box-field', 'property-list', 'number-field', 'toast', 'popover', 'menu', 'split-button', 'button-group', 'button', 'tree-view', 'breadcrumb', 'tooltip', 'badge', 'indicator', 'icon-pilot', 'color-picker', 'color-swatch-picker', 'color-field', 'color-swatch', 'alignment-picker', 'input-group', 'avatar', 'input', 'nav', 'progress', 'segmented', 'select', 'skeleton', 'spinner', 'calendar'];
+export const RECENT_COMPONENTS = ['pagination', 'tag', 'drawer', 'confirm-dialog', 'date-picker', 'tag-picker', 'custom-select', 'accordion', 'badge-group', 'card', 'checkbox', 'radio', 'dialog', 'count', 'alert', 'toolbar', 'switch', 'code-block', 'chip', 'table', 'model-picker', 'scroll-to-latest', 'message', 'prompt-suggestions', 'hover-card', 'context-menu', 'command-palette', 'combobox', 'panel', 'composer', 'box-field', 'property-list', 'number-field', 'toast', 'popover', 'menu', 'split-button', 'button-group', 'button', 'tree-view', 'breadcrumb', 'tooltip', 'badge', 'indicator', 'icon-pilot', 'color-picker', 'color-swatch-picker', 'color-field', 'color-swatch', 'alignment-picker', 'input-group', 'avatar', 'input', 'nav', 'progress', 'segmented', 'select', 'skeleton', 'spinner', 'calendar'];

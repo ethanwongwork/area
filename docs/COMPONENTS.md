@@ -36,8 +36,9 @@ actual specimens. Current families include:
 - Forms: Field, Input/InputAction, InputGroup/InputGroupText, NumberField, BoxField, Textarea,
   Composer, native Select, Combobox, CustomSelect, TagPicker, DatePicker, ConfirmDialog, Drawer (in review, 2026-10-05), ColorField, ColorSwatch, ColorSwatchPicker, ColorPicker,
   Calendar and PropertyList.
-- Navigation and commands: Nav, Tabs, Menu, ContextMenu, CommandPalette, TreeView and
-  Breadcrumb (linked ancestors, a current page and an optional collapsed marker).
+- Navigation and commands: Nav, Tabs, Menu, ContextMenu, CommandPalette, TreeView,
+  Breadcrumb (linked ancestors, a current page and an optional collapsed marker) and
+  Pagination (in review, 2026-10-08: numbered pages or a compact "Page 2 of 10", buttons or links).
 - Labels and identity: Badge/BadgeGroup, Count, Indicator/IndicatorAnchor, Presence (the
   status mark, audit H-25), Avatar, Kbd/KbdGroup and Code (Token is deprecated: use `<Code swatch>`).
 - Feedback: Alert (with the banner layout), Toast, Tooltip, Progress, Spinner and Skeleton.
@@ -129,8 +130,8 @@ built next; this list is an inventory, not an order of work.
   DateField (segmented entry), DatePicker and DateRangePicker (field + popover, after overlay
   behavior), TimeField and duration input. Keep segmented date editing distinct from a text
   field with a mask.
-- **Navigation and commands:** Link, Pagination, Stepper and MenuBar (Breadcrumb, TreeView,
-  ContextMenu and CommandPalette are built). Add keyboard behaviors to existing Menu
+- **Navigation and commands:** Link, Stepper and MenuBar (Breadcrumb, TreeView,
+  ContextMenu, CommandPalette and Pagination are built). Add keyboard behaviors to existing Menu
   before multiplying menu-shaped components.
 - **Selection and collections:** ListBox, selectable List, TreeSelect/Cascader,
   TransferList, Rating, ToggleButtonGroup and drag/reorder handles. Choice cards can
@@ -154,7 +155,7 @@ Chakra/Ark, Spectrum 2) across about 95 component jobs. Status as of 2026-09-26;
 built since are noted in brackets.
 
 - **Missing, shipped by 8 or more systems:** Combobox/Autocomplete (11) [built], Accordion (10) [built 2026-10-02 as Disclosure, renamed Accordion / AccordionItem 2026-10-07, in review],
-  the date family (10; Calendar now built), Link (8), Pagination (8), Drawer/Sheet (8).
+  the date family (10; Calendar now built), Link (8), Pagination (8) [built 2026-10-08, in review], Drawer/Sheet (8).
 - **Partial:** custom Select (all 13 ship a listbox popup; Area's is native), overlay
   behavior for Popover, Tooltip, Menu and Dialog [built 2026-09-27], DataGrid, multi-select/tags, Toast queue, range Slider in Slider's API [SliderRange built].
 - **Recommended order** (owner chooses): overlay behavior → custom Select → Combobox with a

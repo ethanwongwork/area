@@ -173,6 +173,26 @@ export const COMPONENT_PAGES = [
     ],
   },
   {
+    slug: "pagination", name: "Pagination", manifest: "pagination",
+    imports: "Pagination",
+    api: [
+      ["pageCount", "number", "—"],
+      ["page / defaultPage / onPageChange", "number (from 1) / (page, event) => void", "1"],
+      ["layout", '"pages" | "compact" ("Page 2 of 10" between the steps)', '"pages"'],
+      ["size", '"sm" (28) | "md" (32) | "lg" (40), as Button', '"md"'],
+      ["siblingCount / boundaryCount", "number (pages beside the current one / at each end)", "1 / 1"],
+      ["stepLabels", "boolean (Previous and Next beside their chevrons)", "true"],
+      ["getHref", "(page) => string (every item a link)", "—"],
+      ["labels", "{ nav, previous, next, page(n), status(page, count) }", '"Pagination", "Previous", "Next", "Page n"'],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "The first and last pages, one page each side of the current one, and an ellipsis for each skipped run. A run of one page shows the page, so the row keeps seven items and never jumps as the page moves. The current page is announced with aria-current.", demo: "GalleryPagination" },
+      { id: "compact", title: "Compact", note: "For a narrow column: the steps as chevrons and the position as text, announced politely when it changes.", demo: "GalleryPaginationCompact" },
+      { id: "first", title: "At the first page", note: "Previous stays focusable and is announced as unavailable, so focus is not dropped when a step reaches the end.", demo: "GalleryPaginationFirst" },
+      { id: "links", title: "Links", note: "With getHref every item is a link (rel prev and next on the steps), so pages open in a new tab and work without script.", demo: "GalleryPaginationLinks" },
+    ],
+  },
+  {
     slug: "tree-view", name: "Tree view", exportName: "TreeView", manifest: "treeView",
     api: [["items", "TreeViewNode[]", "—"], ["selectionMode", '"navigation" | "checkbox"', '"navigation"'], ["expandedIds / defaultExpandedIds", "string[]", "—"], ["selectedIds / defaultSelectedIds", "string[]", "—"], ["onExpandedChange / onSelectedChange", "(ids: string[]) => void", "—"], ["onActivate", "(id: string) => void", "—"], ["currentId", "string", "—"], ["TreeViewNode", "{ id, label, children?, icon?, trailing?, actions?, disabled? }", "—"]],
     examples: [{ id: "files", title: "Project files", demo: "GalleryTreeViewFiles" }, { id: "filters", title: "Checkbox filters", demo: "GalleryTreeViewFilters" }, { id: "collapsed", title: "Collapsed", demo: "GalleryTreeViewCollapsed" }, { id: "filled-folders", title: "Filled folders", demo: "GalleryTreeViewFilledFolders" }, { id: "layers", title: "Layers with row controls", note: "Row controls are outside the single Tab stop: give each tabIndex={-1} and a keyboard equivalent. data-pinned keeps a state control visible.", demo: "GalleryTreeViewLayers" }, { id: "disabled", title: "Disabled row", note: "Disabled rows are skipped by arrow keys and typeahead.", demo: "GalleryTreeViewDisabled" }],

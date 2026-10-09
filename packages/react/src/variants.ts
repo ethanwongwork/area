@@ -70,6 +70,7 @@ export const fieldVariants = /* @__PURE__ */ createVariants(manifests.field);
 export const inputVariants = /* @__PURE__ */ createVariants(manifests.input);
 export const numberFieldVariants = /* @__PURE__ */ createVariants(manifests.numberField);
 export const inputGroupVariants = /* @__PURE__ */ createVariants(manifests.inputGroup);
+export const paginationVariants = /* @__PURE__ */ createVariants(manifests.pagination);
 export const treeViewVariants = /* @__PURE__ */ createVariants(manifests.treeView);
 export const composerVariants = /* @__PURE__ */ createVariants(manifests.composer);
 export const indicatorAnchorVariants = /* @__PURE__ */ createVariants(manifests.indicatorAnchor);

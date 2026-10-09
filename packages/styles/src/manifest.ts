@@ -179,6 +179,14 @@ export const breadcrumb = {
   defaults: {},
 } as const satisfies ComponentManifest;
 
+export const pagination = {
+  block: "area-pagination",
+  description: "Moves between the pages of a long list or result set.",
+  variants: { layout: ["pages", "compact"], size: ["sm", "md", "lg"] },
+  elements: ["list", "item", "page", "ellipsis", "status", "value", "step"],
+  defaults: { layout: "pages", size: "md" },
+} as const satisfies ComponentManifest;
+
 export const treeView = {
   block: "area-tree-view",
   description: "Navigates or selects items in an expandable hierarchy.",
@@ -794,6 +802,7 @@ export const MANIFESTS = {
   numberField,
   inputGroup,
   breadcrumb,
+  pagination,
   treeView,
   composer,
   textarea,

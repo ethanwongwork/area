@@ -105,3 +105,8 @@ captures. Promote an agreement into Area only through a spec's decision table.
   stay dark (#1e–#2c) with a 5% white edge rather than inverting. Cards drop their shadow
   (Notion 5% white fill; Figma 1px #444 edge). Menu row hover is a white wash (ChatGPT 10%,
   Notion 5.5%) or Figma's accent. Scrims disagree (Notion 80% #0f0f0f; ChatGPT none).
+- 2026-10-08 (Pagination): none of the products shows a numbered pager. ChatGPT lists response
+  versions behind a "See versions" action; Notion's long boards append as they scroll. Design systems
+  agree on 32px page squares 2 apart (shadcn; Untitled UI 36, 2 apart; Primer 32, 4 apart) and differ on
+  the current page: a plate (Untitled UI), an outline (shadcn) or the accent fill (Primer)
+  (`pagination/uui--*`, `pagination/shadcn--*`).

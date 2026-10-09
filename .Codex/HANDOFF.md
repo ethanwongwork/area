@@ -1,9 +1,23 @@
-# Handoff — 2026-10-07
+# Handoff — 2026-10-08
 
 Each session starts from `main` in its own worktree (`claude/*` branch) and merges through a
 pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/docs/src/component-status.mjs` (Indicator and Tooltip are Complete).
+
+## Pagination (2026-10-08, branch `claude/next-component-5018a1`)
+
+- Owner picked Pagination as the next component. Built and in review (`REVIEW_COMPONENTS`, Review page
+  batch "New: Pagination"): `Pagination` (+ `paginationRange`), `pagination.css`, manifest (layout
+  pages / compact, size sm / md / lg), 10 gallery tiles, docs entry, `pagination.test.mjs`. Spec
+  `docs/specs/pagination.md`; its three open questions were resolved as recommended (owner, same day). Awaits approval.
+- Evidence: Untitled UI and shadcn captures, Primer as a readout; ChatGPT and Notion have no pager
+  (searched read-only in the owner's Chrome). Steps are ghost Buttons; the current page is the shared
+  selected plate; 32 squares, 2 gap.
+- Tooling: the built-in pane can't reach a local relay from https pages (fetch and script tags fail), so
+  references needed the capture script pasted in; captures left through the clipboard until the owner
+  copied something else. From localhost pages, `fetch` to a 127.0.0.1 relay works. `.claude/launch.json`
+  (untracked) serves the static docs on 4395; restart it after each `build:docs`.
 
 ## Review decisions applied (2026-10-08, merged in the 2026-10-08 PR)
 

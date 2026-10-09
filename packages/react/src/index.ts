@@ -40,6 +40,7 @@ export { Drawer, type DrawerProps } from "./components/Drawer.tsx";
 export { BoxField, type BoxFieldProps, type BoxValue } from "./components/BoxField.tsx";
 export { PropertyList, PropertyListItem, type PropertyListProps, type PropertyListItemProps } from "./components/PropertyList.tsx";
 export { TreeView, type TreeViewProps, type TreeViewNode } from "./components/TreeView.tsx";
+export { Pagination, paginationRange, type PaginationProps, type PaginationLabels, type PaginationItem } from "./components/Pagination.tsx";
 export { Composer, type ComposerProps } from "./components/Composer.tsx";
 export { Field, Label, type FieldProps, type LabelProps } from "./components/Field.tsx";
 export {
