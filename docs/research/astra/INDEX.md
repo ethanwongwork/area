@@ -10,6 +10,7 @@ broken research.
 
 | Date | Topic | Question | Status |
 | --- | --- | --- | --- |
+| 2026-10-09 | [materials/11-performance](materials/11-performance/README.md) | What do local Chromium and Safari measurements show for blur, layered shadows, refraction, grain and gradient strokes, and what budgets fit each role? | unreviewed |
 | 2026-10-09 | [materials/10-states](materials/10-states/README.md) | How do all 25 styles express seven interaction states with fixed hover ink, independent required cues, motion and reduced-motion fallbacks? | unreviewed |
 | 2026-10-09 | [materials/09-dark-density](materials/09-dark-density/README.md) | How do all 25 styles translate to near-black, compact and sm/md/lg, with concentric rims at every radius setting? | unreviewed |
 | 2026-10-08 | [materials/08-accessibility](materials/08-accessibility/README.md) | How do all 25 styles retain contrast and focus across hostile backdrops and preferences, with per-role fallbacks and additive tests? | unreviewed |
