@@ -153,3 +153,4 @@ Open questions: under reduced motion the panel appears at once. A short opacity 
   `dialog.show()`, which painted under the gallery's rail). Verified: non-modal opens at 710 / 384,
   the page beside it takes clicks, Escape closes and returns focus; stacked buttons 353 wide.
 - 2026-10-05 · owner: build drawer → built from shadcn's Sheet on Dialog's anatomy; on the Review page.
+- 2026-10-09 · owner went with Scroll area's recommendation to adopt it in the scrolling families (docs/specs/scroll-area.md, "Adoption") → the scroll container is a Scroll area: Figma's overlay bar instead of the platform's, its inset moved into the scroller so rows keep their place → back in review.

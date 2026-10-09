@@ -1,9 +1,57 @@
-# Handoff — 2026-10-07
+# Handoff — 2026-10-09
 
 Each session starts from `main` in its own worktree (`claude/*` branch) and merges through a
 pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/docs/src/component-status.mjs` (Indicator and Tooltip are Complete).
+
+## File upload (2026-10-09, same branch)
+
+- Owner: "move on to the next component" → File upload, the last of the four. In review. `FileUpload` (zone: accept,
+  maxSize, multiple, name, onFiles / onReject), `FileUploadList`, `FileUploadItem` (uploading / complete / error,
+  progress, retry, remove), helpers `fileMatchesAccept`, `formatFileSize`; `file-upload.css`; 8 tiles (one an
+  interactive simulated flow); `upload`, `document`, `reset` added to the package glyphs.
+- Evidence: Untitled UI readout only; owner declined a ChatGPT test upload. Open questions resolved as recommended
+  (field edge kept, `document` kept, Composer chip later).
+
+## Scroll area (2026-10-09, same branch)
+
+- Owner: "move on to the next component" → Scroll area. In review (Review batch "New: Pagination, Link and
+  Scroll area"). `ScrollArea` (type hover / scroll / always; viewportRef, viewportProps), `scroll-area.css`,
+  5 tiles, docs entry, `scroll-area.test.mjs`. Native viewport with the platform bar hidden; Figma's overlay bar.
+- Evidence: Figma editor panel captures (a community file, viewed only); ChatGPT, Notion, shadcn readouts.
+- Owner went with the recommendations: adopted in Menu (anchored), Combobox, Custom select, Tag picker, Command
+  palette, Drawer and Panel (scroll-area.md, "Adoption"); those seven are back in review. Dialog body and Nav's
+  overflow menu still use the platform bar.
+- Tooling: Figma's CSP blocks form posts; open `127.0.0.1:8791/recv.html` from a button and `postMessage` the
+  captures to it. The gallery re-fits tile zoom after a pause: clear it and capture in the same script.
+
+## Link (2026-10-08, same branch)
+
+- Owner: "move on to the next component" → Link (next on the list after Pagination). In review with
+  Pagination (Review page batch "New: Pagination and Link"). `Link` + `linkVariants`, `link.css`, manifest
+  (variant inline / standalone, ink inherit / muted / action), 7 tiles, docs entry, `link.test.mjs`; `open`
+  added to the package glyphs (`PACKAGE_GLYPHS` in gen-pilot-icons.mjs; only glyphs.ts changed).
+- Evidence: ChatGPT (logged-out composer note) and Notion (an inline link, owner's Chrome, read-only)
+  captures; Primer rules; Untitled source classes. Underline: currentColor at 40% (Notion), 1 stroke, 2 below.
+- Owner went with the recommendations: Link's open questions resolved; Alert's link, Card's action and Chip's
+  link label moved to Link's line (link.md, "Peers aligned"), so Alert, Card and Chip are back in review.
+- Tooling: a form POST (`target=_blank`) to the 127.0.0.1 relay saves captures from https pages in both
+  browsers without the clipboard (fetch is blocked there).
+
+## Pagination (2026-10-08, branch `claude/next-component-5018a1`)
+
+- Owner picked Pagination as the next component. Built and in review (`REVIEW_COMPONENTS`, Review page
+  batch "New: Pagination"): `Pagination` (+ `paginationRange`), `pagination.css`, manifest (layout
+  pages / compact, size sm / md / lg), 10 gallery tiles, docs entry, `pagination.test.mjs`. Spec
+  `docs/specs/pagination.md`; its three open questions were resolved as recommended (owner, same day). Awaits approval.
+- Evidence: Untitled UI and shadcn captures, Primer as a readout; ChatGPT and Notion have no pager
+  (searched read-only in the owner's Chrome). Steps are ghost Buttons; the current page is the shared
+  selected plate; 32 squares, 2 gap.
+- Tooling: the built-in pane can't reach a local relay from https pages (fetch and script tags fail), so
+  references needed the capture script pasted in; captures left through the clipboard until the owner
+  copied something else. From localhost pages, `fetch` to a 127.0.0.1 relay works. `.claude/launch.json`
+  (untracked) serves the static docs on 4395; restart it after each `build:docs`.
 
 ## Review decisions applied (2026-10-08, merged in the 2026-10-08 PR)
 

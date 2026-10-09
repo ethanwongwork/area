@@ -3,6 +3,7 @@ import type { KeyboardEvent, ReactNode, SyntheticEvent } from "react";
 import { comboboxVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
 import { scrollOptionIntoList, useAnchoredPosition } from "./overlay.ts";
+import { ScrollArea } from "./ScrollArea.tsx";
 import { MENU_OFFSET, OVERLAY_PADDING } from "./Overlays.tsx";
 import { Input, InputAction, type InputProps } from "./Input.tsx";
 /** The empty collection, one reference so effects keyed on it stay still. */
@@ -265,9 +266,9 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
     {/* "No results" is announced through a status outside the listbox, which may hold only
         options (audit B-31). */}
     <span className="area-sr-only" role="status">{open && rows.length === 0 ? emptyText : ""}</span>
-    <div ref={listRef} id={listId} role="listbox" aria-label={typeof rest["aria-label"] === "string" ? rest["aria-label"] : undefined}
+    <ScrollArea ref={listRef} id={listId} role="listbox" aria-label={typeof rest["aria-label"] === "string" ? rest["aria-label"] : undefined}
       aria-labelledby={typeof rest["aria-label"] === "string" ? undefined : rest["aria-labelledby"]}
-      popover="manual" className="area-menu area-combobox__listbox" tabIndex={-1}>
+      popover="manual" className="area-menu area-combobox__listbox" tabIndex={-1} viewportProps={{ tabIndex: undefined }}>
       {listRows.length === 0 ? <div className="area-combobox__empty" role="presentation">{emptyText}</div> : null}
       {[...groups].map(([group, list]) => group
         ? <div key={group} role="group" aria-labelledby={`${id}-group-${group}`} className="area-combobox__group">
@@ -275,6 +276,6 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
             {list.map(renderRow)}
           </div>
         : list.map(renderRow))}
-    </div>
+    </ScrollArea>
   </div>;
 });

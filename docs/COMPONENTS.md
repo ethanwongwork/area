@@ -35,13 +35,15 @@ actual specimens. Current families include:
   Radio/RadioGroup, Switch, Slider/SliderRange, Chip/ChipGroup, Segmented and AlignmentPicker.
 - Forms: Field, Input/InputAction, InputGroup/InputGroupText, NumberField, BoxField, Textarea,
   Composer, native Select, Combobox, CustomSelect, TagPicker, DatePicker, ConfirmDialog, Drawer (in review, 2026-10-05), ColorField, ColorSwatch, ColorSwatchPicker, ColorPicker,
-  Calendar and PropertyList.
-- Navigation and commands: Nav, Tabs, Menu, ContextMenu, CommandPalette, TreeView and
-  Breadcrumb (linked ancestors, a current page and an optional collapsed marker).
+  Calendar, PropertyList and FileUpload (in review, 2026-10-09: drop zone and upload rows).
+- Navigation and commands: Nav, Tabs, Menu, ContextMenu, CommandPalette, TreeView,
+  Breadcrumb (linked ancestors, a current page and an optional collapsed marker) and
+  Pagination (in review, 2026-10-08: numbered pages or a compact "Page 2 of 10", buttons or links)
+  and Link (in review, 2026-10-08: inline or standalone, inherited, muted or Action ink, external).
 - Labels and identity: Badge/BadgeGroup, Count, Indicator/IndicatorAnchor, Presence (the
   status mark, audit H-25), Avatar, Kbd/KbdGroup and Code (Token is deprecated: use `<Code swatch>`).
 - Feedback: Alert (with the banner layout), Toast, Tooltip, Progress, Spinner and Skeleton.
-- Structure and content: Card, Panel (with `resizable`), Dialog, Popover, HoverCard,
+- Structure and content: Card, Panel (with `resizable`), Dialog, Popover, HoverCard, ScrollArea (in review, 2026-10-09),
   Separator, Table and CodeBlock.
 - Conversation: Message/MessageActions, PromptSuggestions, ModelPicker and ScrollToLatest.
 
@@ -120,7 +122,7 @@ built next; this list is an inventory, not an order of work.
 ### Broader coverage after the inspector foundation
 
 - **Entry and forms:** SearchField, PasswordField, MultiSelect (Combobox is built),
-  TagPicker, editable text, OTP input, FileUpload/DropZone, Form validation and error
+  TagPicker, editable text, OTP input, Form validation and error
   summary. Reuse Input/Field for search and password anatomy; promote a wrapper when
   behavior such as reveal, clear, filtering or async suggestions is included.
 - **Date and time:** Calendar is built (Complete, [spec](specs/calendar.md)): single,
@@ -129,14 +131,14 @@ built next; this list is an inventory, not an order of work.
   DateField (segmented entry), DatePicker and DateRangePicker (field + popover, after overlay
   behavior), TimeField and duration input. Keep segmented date editing distinct from a text
   field with a mask.
-- **Navigation and commands:** Link, Pagination, Stepper and MenuBar (Breadcrumb, TreeView,
-  ContextMenu and CommandPalette are built). Add keyboard behaviors to existing Menu
+- **Navigation and commands:** Stepper and MenuBar (Breadcrumb, TreeView,
+  ContextMenu, CommandPalette, Pagination and Link are built). Add keyboard behaviors to existing Menu
   before multiplying menu-shaped components.
 - **Selection and collections:** ListBox, selectable List, TreeSelect/Cascader,
   TransferList, Rating, ToggleButtonGroup and drag/reorder handles. Choice cards can
   reuse Checkbox/Radio compositions; AvatarGroup and range Slider already exist.
 - **Surfaces and layout:** Accordion/Disclosure, Drawer/Sheet, AlertDialog, a two-region
-  Splitter, ScrollArea and responsive layout primitives (HoverCard and Panel `resizable` are
+  Splitter and responsive layout primitives (HoverCard, Panel `resizable` and ScrollArea are
   built). PageHeader, Sidebar,
   application shell and dockable inspector are compositions.
 - **Data and feedback:** DescriptionList, Stat, Timeline, EmptyState, Result/ErrorState,
@@ -154,13 +156,13 @@ Chakra/Ark, Spectrum 2) across about 95 component jobs. Status as of 2026-09-26;
 built since are noted in brackets.
 
 - **Missing, shipped by 8 or more systems:** Combobox/Autocomplete (11) [built], Accordion (10) [built 2026-10-02 as Disclosure, renamed Accordion / AccordionItem 2026-10-07, in review],
-  the date family (10; Calendar now built), Link (8), Pagination (8), Drawer/Sheet (8).
+  the date family (10; Calendar now built), Link (8) [built 2026-10-08, in review], Pagination (8) [built 2026-10-08, in review], Drawer/Sheet (8).
 - **Partial:** custom Select (all 13 ship a listbox popup; Area's is native), overlay
   behavior for Popover, Tooltip, Menu and Dialog [built 2026-09-27], DataGrid, multi-select/tags, Toast queue, range Slider in Slider's API [SliderRange built].
 - **Recommended order** (owner chooses): overlay behavior → custom Select → Combobox with a
   tag mode → Menu keyboard, submenus, ContextMenu and CommandPalette → ColorPicker paints →
   Disclosure/Accordion → DatePicker family → Resizable and ScrollArea → Drawer and
-  AlertDialog → chat message primitives → FileUpload → HoverCard and Toggletip.
+  AlertDialog → chat message primitives → FileUpload [built 2026-10-09] → HoverCard and Toggletip.
 ### Count and Banner, from the 2026-09-27 survey (built 2026-09-28, Complete)
 
 [Survey](research/split-count-banner-survey.md):
@@ -205,8 +207,8 @@ catalogue names. Each would be measured in its product like every other componen
   AlignmentPicker), UnitField (px / % / auto switch inside a NumberField), FontPicker
   (Combobox with previews and weight axis), VariableChip (a bound token in a field, detach
   on hover).
-- **Shared and small:** Link, SearchField (clear, shortcut hint), EmptyState, KeyboardShortcut
-  overlay (a sheet of Kbd groups), Pagination, Stepper, Meter, circular Progress, ScrollArea,
+- **Shared and small:** SearchField (clear, shortcut hint), EmptyState, KeyboardShortcut
+  overlay (a sheet of Kbd groups), Pagination, Stepper, Meter, circular Progress, ScrollArea (built 2026-10-09),
   Splitter (two resizable regions), Sheet / Drawer, Banner, Stat, DescriptionList,
   DateField / Calendar / DatePicker.
 

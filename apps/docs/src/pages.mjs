@@ -173,6 +173,73 @@ export const COMPONENT_PAGES = [
     ],
   },
   {
+    slug: "file-upload", name: "File upload", exportName: "FileUpload", manifest: "fileUpload",
+    imports: "FileUpload, FileUploadList, FileUploadItem",
+    api: [
+      ["onFiles / onReject", "(files: File[]) => void / (rejections: { file, reason: \"type\" | \"size\" | \"count\" }[]) => void", "—"],
+      ["accept / multiple / maxSize", "as the file input / boolean / bytes", "—"],
+      ["hint / invalid / disabled / name", "ReactNode / boolean / boolean / string (a form submits the files)", "—"],
+      ["labels", "{ action, drag }", '"Click to upload", "or drag and drop"'],
+      ["FileUploadItem", "name, size (bytes), status (uploading | complete | error), progress (0-100), error, onRemove, onRetry, icon, labels", "uploading"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "Click anywhere in the zone, or Tab to its button, to choose files; or drop them on it. Files that miss accept, maxSize or multiple come back through onReject with the reason.", demo: "GalleryFileUpload" },
+      { id: "flow", title: "Upload flow", note: "Each accepted file becomes a row that shows its progress, then Complete; a rejected one shows why, with retry and remove. The upload here is simulated.", demo: "GalleryFileUploadFlow" },
+    ],
+  },
+  {
+    slug: "scroll-area", name: "Scroll area", exportName: "ScrollArea", manifest: "scrollArea",
+    imports: "ScrollArea",
+    api: [
+      ["type", '"hover" (while hovered or scrolling) | "scroll" (while scrolling) | "always"', '"hover"'],
+      ["scrollHideDelay", "number (ms the bar stays after scrolling stops)", "600"],
+      ["viewportRef", "Ref to the native scroller", "—"],
+      ["viewportProps", "props for the scroller (aria-label, tabIndex)", "tabIndex 0"],
+      ["style / className", "size the region on the root (block-size or max-block-size)", "—"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "A native scroller with its platform bar hidden and Figma's overlay bar: a 6px round thumb 2px in from the edge, shown while the region is hovered or scrolling. It takes no width, so content lays out the same on every platform. Drag the thumb, or press the track to bring the thumb to the pointer. The scroller is a Tab stop, so arrow keys scroll it.", demo: "GalleryScrollArea" },
+      { id: "both", title: "Both directions", note: "A bar appears only for an axis that overflows; with both, each stops short of the other's corner.", demo: "GalleryScrollAreaBoth" },
+    ],
+  },
+  {
+    slug: "link", name: "Link", manifest: "link",
+    imports: "Link, linkVariants",
+    api: [
+      ["variant", '"inline" (always underlined) | "standalone" (underlined on hover and focus)', '"inline"'],
+      ["ink", '"inherit" | "muted" | "action" (the Action role: neutral until a theme makes actions the accent)', '"inherit"'],
+      ["external", "boolean (new tab, rel noopener noreferrer, the external mark, announced)", "false"],
+      ["newTabLabel", "string", '"(opens in a new tab)"'],
+      ["linkVariants", "({ variant, ink }) => class names, for a router's own anchor", "—"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "In running text a link keeps the text's size and ink and is underlined, the line at 40% of the ink (Notion), one stroke 2px below the text (ChatGPT). Hover and focus draw the line at full ink; the ink itself never changes.", demo: "GalleryLink" },
+      { id: "standalone", title: "Standalone", note: "Outside a sentence (Learn more, View all) the underline appears on hover and focus.", demo: "GalleryLinkStandalone" },
+      { id: "caption", title: "In a caption", note: "Nothing to set: the link inherits the caption's 12px and muted ink, as ChatGPT's composer note does.", demo: "GalleryLinkCaption" },
+      { id: "external", title: "External", note: "Opens in a new tab with the external mark, centred on the cap height, and says so to assistive tech.", demo: "GalleryLinkExternal" },
+    ],
+  },
+  {
+    slug: "pagination", name: "Pagination", manifest: "pagination",
+    imports: "Pagination",
+    api: [
+      ["pageCount", "number", "—"],
+      ["page / defaultPage / onPageChange", "number (from 1) / (page, event) => void", "1"],
+      ["layout", '"pages" | "compact" ("Page 2 of 10" between the steps)', '"pages"'],
+      ["size", '"sm" (28) | "md" (32) | "lg" (40), as Button', '"md"'],
+      ["siblingCount / boundaryCount", "number (pages beside the current one / at each end)", "1 / 1"],
+      ["stepLabels", "boolean (Previous and Next beside their chevrons)", "true"],
+      ["getHref", "(page) => string (every item a link)", "—"],
+      ["labels", "{ nav, previous, next, page(n), status(page, count) }", '"Pagination", "Previous", "Next", "Page n"'],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "The first and last pages, one page each side of the current one, and an ellipsis for each skipped run. A run of one page shows the page, so the row keeps seven items and never jumps as the page moves. The current page is announced with aria-current.", demo: "GalleryPagination" },
+      { id: "compact", title: "Compact", note: "For a narrow column: the steps as chevrons and the position as text, announced politely when it changes.", demo: "GalleryPaginationCompact" },
+      { id: "first", title: "At the first page", note: "Previous stays focusable and is announced as unavailable, so focus is not dropped when a step reaches the end.", demo: "GalleryPaginationFirst" },
+      { id: "links", title: "Links", note: "With getHref every item is a link (rel prev and next on the steps), so pages open in a new tab and work without script.", demo: "GalleryPaginationLinks" },
+    ],
+  },
+  {
     slug: "tree-view", name: "Tree view", exportName: "TreeView", manifest: "treeView",
     api: [["items", "TreeViewNode[]", "—"], ["selectionMode", '"navigation" | "checkbox"', '"navigation"'], ["expandedIds / defaultExpandedIds", "string[]", "—"], ["selectedIds / defaultSelectedIds", "string[]", "—"], ["onExpandedChange / onSelectedChange", "(ids: string[]) => void", "—"], ["onActivate", "(id: string) => void", "—"], ["currentId", "string", "—"], ["TreeViewNode", "{ id, label, children?, icon?, trailing?, actions?, disabled? }", "—"]],
     examples: [{ id: "files", title: "Project files", demo: "GalleryTreeViewFiles" }, { id: "filters", title: "Checkbox filters", demo: "GalleryTreeViewFilters" }, { id: "collapsed", title: "Collapsed", demo: "GalleryTreeViewCollapsed" }, { id: "filled-folders", title: "Filled folders", demo: "GalleryTreeViewFilledFolders" }, { id: "layers", title: "Layers with row controls", note: "Row controls are outside the single Tab stop: give each tabIndex={-1} and a keyboard equivalent. data-pinned keeps a state control visible.", demo: "GalleryTreeViewLayers" }, { id: "disabled", title: "Disabled row", note: "Disabled rows are skipped by arrow keys and typeahead.", demo: "GalleryTreeViewDisabled" }],

@@ -246,7 +246,12 @@ export function assignRef<T>(ref: ((value: T | null) => void) | { current: T | n
  */
 export function scrollOptionIntoList(list: HTMLElement | null | undefined, option: HTMLElement | null | undefined) {
   if (!list || !option) return;
-  const box = list.getBoundingClientRect(), item = option.getBoundingClientRect();
-  if (item.top < box.top) list.scrollTop -= box.top - item.top;
-  else if (item.bottom > box.bottom) list.scrollTop += item.bottom - box.bottom;
+  // A list drawn as a Scroll area scrolls its viewport, not its root (docs/specs/scroll-area.md, "Adoption").
+  const viewport = option.closest<HTMLElement>(".area-scroll-area__viewport");
+  const scroller = viewport && list.contains(viewport) ? viewport : list;
+  const box = scroller.getBoundingClientRect(), item = option.getBoundingClientRect();
+  // Rects are in viewport pixels and scrollTop in the scroller's own, which differ under CSS zoom.
+  const zoom = (scroller as HTMLElement & { currentCSSZoom?: number }).currentCSSZoom || 1;
+  if (item.top < box.top) scroller.scrollTop -= (box.top - item.top) / zoom;
+  else if (item.bottom > box.bottom) scroller.scrollTop += (item.bottom - box.bottom) / zoom;
 }

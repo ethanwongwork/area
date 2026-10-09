@@ -147,9 +147,10 @@ test('SliderRange is a component: two named native ranges, distinct field names,
 test('a Menu with a trigger keeps the consumer id and name (audit D-12); checkbox rows stay open (D-11)', () => {
   const html = renderToString(h(Menu, { id: 'file-menu', 'aria-label': 'File', trigger: h(Button, null, 'File') }, h(MenuItem, null, 'New')));
   assert.match(html, /aria-controls="file-menu"/);
-  assert.match(html, /<div role="menu"[^>]*id="file-menu"/);
+  // The anchored menu is a Scroll area (scroll-area.md, "Adoption").
+  assert.match(html, /<div class="area-scroll-area area-scroll-area--hover area-menu" role="menu" id="file-menu"/);
   assert.match(html, /aria-label="File"/);
-  assert.doesNotMatch(html, /<div role="menu"[^>]*aria-labelledby=/);
+  assert.doesNotMatch(html, /role="menu"[^>]*aria-labelledby=/);
   assert.match(css, /\[aria-expanded="false"\]:dir\(rtl\) \.area-tree-view__chevron svg \{ rotate: 90deg; \}/);
 });
 

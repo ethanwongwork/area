@@ -214,3 +214,4 @@ None.
   calmer dark green/yellow; lead); × on plate verified ≥ 4.5 in this field (light 4.72-5.13); recs
   taken: check on chosen rows kept, opacity-only fade kept. Stays in review.
 - 2026-10-08 · owner: approved on the component review page (re-review after the requested changes).
+- 2026-10-09 · owner went with Scroll area's recommendation to adopt it in the scrolling families (docs/specs/scroll-area.md, "Adoption") → the scroll container is a Scroll area: Figma's overlay bar instead of the platform's, its inset moved into the scroller so rows keep their place → back in review.

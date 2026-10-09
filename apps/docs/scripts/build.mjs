@@ -269,7 +269,7 @@ ${railToggle("nav", "Show navigation", { corner: true })}
 ${railToggle("panel", "Show customize panel", { corner: true })}
 <script>${DOCS_SCRIPT}</script>
 ${slug === "switch" ? '<script type="module" src="./switch-demos.js"></script>' : ""}
-${slug === "tree-view" || slug === "property-list" || slug === "box-field" || slug === "combobox" || slug === "custom-select" || slug === "tag" || slug === "tag-picker" || slug === "date-picker" || slug === "drawer" || slug === "confirm-dialog" || slug === "command-palette" || slug === "context-menu" || slug === "hover-card" || slug === "prompt-suggestions" || slug === "message" || slug === "scroll-to-latest" || slug === "model-picker" || slug === "panel" || slug === "dialog" || slug === "popover" || slug === "composer" || slug === "toolbar" || slug === "alignment-picker" || slug === "color-field" || slug === "color-picker" || slug === "color-swatch-picker" || slug === "calendar" || slug === "menu" || slug === "tooltip" || slug === "toast" || slug === "breadcrumb" || slug === "accordion" ? '<script type="module" src="./switch-demos.js"></script>' : ""}
+${slug === "tree-view" || slug === "property-list" || slug === "box-field" || slug === "combobox" || slug === "custom-select" || slug === "tag" || slug === "tag-picker" || slug === "date-picker" || slug === "drawer" || slug === "confirm-dialog" || slug === "command-palette" || slug === "context-menu" || slug === "hover-card" || slug === "prompt-suggestions" || slug === "message" || slug === "scroll-to-latest" || slug === "model-picker" || slug === "panel" || slug === "dialog" || slug === "popover" || slug === "composer" || slug === "toolbar" || slug === "alignment-picker" || slug === "color-field" || slug === "color-picker" || slug === "color-swatch-picker" || slug === "calendar" || slug === "menu" || slug === "tooltip" || slug === "toast" || slug === "breadcrumb" || slug === "pagination" || slug === "scroll-area" || slug === "file-upload" || slug === "accordion" ? '<script type="module" src="./switch-demos.js"></script>' : ""}
 ${["badge", "badge-group", "indicator", "presence"].includes(slug) ? '<script type="module" src="./badge-demos.js"></script>' : ""}
 ${slug === "slider" ? '<script type="module" src="./slider-demos.js"></script>' : ""}
 ${slug === "number-field" || slug === "input-group" ? '<script type="module" src="./number-field-demos.js"></script>' : ""}
@@ -500,6 +500,44 @@ function gallerySpecimenTable() {
       { id: "behavior-removable", title: "Behavior / removable", demo: "GalleryTagRemovable" },
       { id: "content-icon", title: "Content / icon", demo: "GalleryTagIcon" },
       { id: "state-disabled", title: "State / disabled", demo: "GalleryTagDisabled" },
+    ],
+    "file-upload": [
+      { id: "default", title: "Default", demo: "GalleryFileUpload" },
+      { id: "state-dragging", title: "State / dragging", demo: "GalleryFileUploadDragging" },
+      { id: "state-invalid", title: "State / invalid", demo: "GalleryFileUploadInvalid" },
+      { id: "state-disabled", title: "State / disabled", demo: "GalleryFileUploadDisabled" },
+      { id: "content-uploading", title: "Content / uploading", demo: "GalleryFileUploadItemUploading" },
+      { id: "content-complete", title: "Content / complete", demo: "GalleryFileUploadItemComplete" },
+      { id: "content-error", title: "Content / error", demo: "GalleryFileUploadItemError" },
+      { id: "behavior-flow", title: "Behavior / upload flow", demo: "GalleryFileUploadFlow" },
+    ],
+    "scroll-area": [
+      { id: "default", title: "Default", demo: "GalleryScrollArea" },
+      { id: "behavior-scroll", title: "Behavior / shown while scrolling", demo: "GalleryScrollAreaScroll" },
+      { id: "behavior-always", title: "Behavior / always shown", demo: "GalleryScrollAreaAlways" },
+      { id: "layout-horizontal", title: "Layout / horizontal", demo: "GalleryScrollAreaHorizontal" },
+      { id: "layout-both", title: "Layout / both", demo: "GalleryScrollAreaBoth" },
+    ],
+    link: [
+      { id: "default", title: "Default", demo: "GalleryLink" },
+      { id: "variant-standalone", title: "Variant / standalone", demo: "GalleryLinkStandalone" },
+      { id: "ink-muted", title: "Ink / muted", demo: "GalleryLinkMuted" },
+      { id: "ink-action", title: "Ink / action", demo: "GalleryLinkAction" },
+      { id: "content-caption", title: "Content / caption", demo: "GalleryLinkCaption" },
+      { id: "content-external", title: "Content / external", demo: "GalleryLinkExternal" },
+      { id: "content-wrap", title: "Content / wrapping", demo: "GalleryLinkWrapped" },
+    ],
+    pagination: [
+      { id: "default", title: "Default", demo: "GalleryPagination" },
+      { id: "layout-compact", title: "Layout / compact", demo: "GalleryPaginationCompact" },
+      { id: "content-iconSteps", title: "Content / icon steps", demo: "GalleryPaginationIconSteps" },
+      { id: "content-few", title: "Content / few pages", demo: "GalleryPaginationFew" },
+      { id: "content-many", title: "Content / many pages", demo: "GalleryPaginationMany" },
+      { id: "size-sm", title: "Size / sm", demo: "GalleryPaginationSm" },
+      { id: "size-md", title: "Size / md", demo: "GalleryPaginationMd" },
+      { id: "size-lg", title: "Size / lg", demo: "GalleryPaginationLg" },
+      { id: "state-first", title: "State / first page", demo: "GalleryPaginationFirst" },
+      { id: "behavior-links", title: "Behavior / links", demo: "GalleryPaginationLinks" },
     ],
     "tag-picker": [
       { id: "default", title: "Default", demo: "GalleryTagPicker" },
@@ -1266,6 +1304,9 @@ function demoMarkup(name, html) {
   if (name.startsWith("GalleryDrawer") || name.startsWith("GalleryConfirmDialog")) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("GalleryDatePicker")) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (/^GalleryTag(?!Picker)/.test(name)) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (name.startsWith("GalleryFileUpload")) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (name.startsWith("GalleryScrollArea")) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (name.startsWith("GalleryPagination")) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("GalleryTagPicker")) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("GalleryCustomSelect")) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("GalleryMenu")) return `<div data-switch-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;

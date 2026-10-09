@@ -530,13 +530,20 @@
     outline: var(--area-focus-width) solid var(--area-focus-color);
     outline-offset: var(--area-focus-offset);
   }
+  /* Link's underline (docs/specs/link.md, peers aligned 2026-10-08): 40% of the ink at rest, full ink on
+     hover and focus, one stroke 2 below; the ink never changes. */
   .area-card__action {
     color: var(--area-fg-default);
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
     text-decoration: underline;
+    text-decoration-color: color-mix(in oklab, currentColor 40%, transparent); /* spec */
+    text-decoration-thickness: var(--area-stroke-width);
     text-underline-offset: var(--area-space-2);
+    transition: text-decoration-color var(--area-duration-fast) var(--area-ease-out);
   }
+  @media (hover: hover) { .area-card__action:hover { text-decoration-color: currentColor; transition-duration: 0s; } }
+  .area-card__action:focus-visible { text-decoration-color: currentColor; transition-duration: 0s; }
   .area-card__action:focus-visible {
     outline: var(--area-focus-width) solid var(--area-focus-color);
     outline-offset: var(--area-focus-offset);
@@ -609,9 +616,14 @@
     color: var(--_fg);
     font-weight: var(--area-weight-regular);
     text-decoration: underline;
+    /* Link's underline (docs/specs/link.md, peers aligned 2026-10-08). */
+    text-decoration-color: color-mix(in oklab, currentColor 40%, transparent); /* spec */
     text-decoration-thickness: var(--area-stroke-width);
     text-underline-offset: var(--area-space-2);
+    transition: text-decoration-color var(--area-duration-fast) var(--area-ease-out);
   }
+  @media (hover: hover) { .area-alert__link a:hover { text-decoration-color: currentColor; transition-duration: 0s; } }
+  .area-alert__link a:focus-visible { text-decoration-color: currentColor; transition-duration: 0s; }
 
   .area-alert__actions {
     grid-area: actions;
@@ -685,13 +697,8 @@
     grid-area: link;
     margin-inline-start: 0;
   }
-  .area-alert--banner > .area-alert__link a {
-    color: var(--_fg);
-    font-weight: var(--area-weight-regular);
-    text-decoration: underline;
-    text-decoration-thickness: var(--area-stroke-width);
-    text-underline-offset: var(--area-space-2);
-  }
+  /* The banner's link is `.area-alert__link a` above (tone ink, Link's underline); a second copy of the
+     rule here had the same specificity and came later, so it held the rest underline under the pointer. */
   .area-alert--banner > .area-alert__link a:focus-visible {
     outline: var(--area-focus-width) solid var(--area-focus-color);
     outline-offset: var(--area-focus-offset);
@@ -1561,6 +1568,13 @@
     max-block-size: var(--area-overlay-available-height, none);
     overflow-y: auto;
   }
+  /* A menu surface that scrolls is a Scroll area (docs/specs/scroll-area.md, "Adoption"): the frame stays
+     on the surface; the inset and the row stack move into the scroller, so the overlay bar sits at the
+     frame's edge, as Figma's does, and rows keep their place. */
+  .area-menu.area-scroll-area { padding: 0; gap: 0; }
+  .area-menu.area-scroll-area[popover] { overflow: hidden; }
+  .area-menu > .area-scroll-area__viewport { padding: var(--_inset); }
+  .area-menu > .area-scroll-area__viewport > .area-scroll-area__content { display: flex; flex-direction: column; gap: var(--area-ui-row-gap); }
   .area-popover[popover]:focus-visible,
   .area-menu[popover]:focus-visible { outline: none; }
   @media (prefers-reduced-motion: reduce) {

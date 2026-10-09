@@ -124,6 +124,11 @@
     flex-direction: column;
     gap: 0;
   }
+  /* The body is a Scroll area (docs/specs/scroll-area.md, "Adoption"): the inset moves into the scroller, so
+     the bar sits at the panel's edge, as Figma's panels draw it; sections keep their stack. */
+  .area-panel__body.area-scroll-area { padding: 0; overflow: hidden; }
+  .area-panel__body > .area-scroll-area__viewport { padding: 0 var(--_inset) var(--_inset); }
+  .area-panel__body > .area-scroll-area__viewport > .area-scroll-area__content { display: flex; flex-direction: column; gap: 0; }
   /* A section without a heading starts one inset below the bar or rule. */
   .area-panel__section:not(:has(> .area-panel__heading:first-child)) { padding-block-start: var(--_inset); }
 

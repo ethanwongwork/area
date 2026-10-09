@@ -179,6 +179,55 @@ export const breadcrumb = {
   defaults: {},
 } as const satisfies ComponentManifest;
 
+export const fileUpload = {
+  block: "area-file-upload",
+  description: "Takes files by click or drag and drop.",
+  variants: {},
+  states: ["dragging", "invalid", "disabled"],
+  elements: ["icon", "text", "prompt", "action", "hint", "input"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const fileUploadList = {
+  block: "area-file-upload-list",
+  description: "Lists the files being or already uploaded.",
+  variants: {},
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const fileUploadItem = {
+  block: "area-file-upload-item",
+  description: "Shows one file's upload: name, size, progress, and remove or retry.",
+  variants: { status: ["uploading", "complete", "error"] },
+  elements: ["icon", "body", "header", "text", "name", "meta", "separator", "status", "actions", "progress", "percent"],
+  defaults: { status: "uploading" },
+} as const satisfies ComponentManifest;
+
+export const scrollArea = {
+  block: "area-scroll-area",
+  description: "Scrolls its content with a thin overlay scrollbar.",
+  variants: { type: ["hover", "scroll", "always"] },
+  states: ["scrolling", "overflow-x", "overflow-y"],
+  elements: ["viewport", "content", "scrollbar", "thumb"],
+  defaults: { type: "hover" },
+} as const satisfies ComponentManifest;
+
+export const link = {
+  block: "area-link",
+  description: "Goes to another page or place, inline in text or on its own.",
+  variants: { variant: ["inline", "standalone"], ink: ["inherit", "muted", "action"] },
+  elements: ["icon"],
+  defaults: { variant: "inline", ink: "inherit" },
+} as const satisfies ComponentManifest;
+
+export const pagination = {
+  block: "area-pagination",
+  description: "Moves between the pages of a long list or result set.",
+  variants: { layout: ["pages", "compact"], size: ["sm", "md", "lg"] },
+  elements: ["list", "item", "page", "ellipsis", "status", "value", "step"],
+  defaults: { layout: "pages", size: "md" },
+} as const satisfies ComponentManifest;
+
 export const treeView = {
   block: "area-tree-view",
   description: "Navigates or selects items in an expandable hierarchy.",
@@ -794,6 +843,12 @@ export const MANIFESTS = {
   numberField,
   inputGroup,
   breadcrumb,
+  fileUpload,
+  fileUploadList,
+  fileUploadItem,
+  scrollArea,
+  link,
+  pagination,
   treeView,
   composer,
   textarea,

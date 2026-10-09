@@ -4,6 +4,7 @@ import { tagPickerVariants, type VariantProps, MANIFESTS } from "../variants.ts"
 import { Tag, type TagTone } from "./Tag.tsx";
 import { Glyph } from "./Glyph.tsx";
 import { scrollOptionIntoList, useAnchoredPosition } from "./overlay.ts";
+import { ScrollArea } from "./ScrollArea.tsx";
 import { MENU_OFFSET, OVERLAY_PADDING } from "./Overlays.tsx";
 /** The empty collection, one reference so effects keyed on it stay still. */
 const NO_ITEMS: never[] = [];
@@ -206,9 +207,9 @@ export const TagPicker = forwardRef<HTMLInputElement, TagPickerProps>(function T
     </div>
     {name ? chosen.map(item => <input key={item} type="hidden" name={name} form={form} disabled={disabled} value={item} />) : null}
     <span className="area-sr-only" role="status">{announcement}</span>
-    <div ref={listRef} id={listId} role="listbox" aria-multiselectable="true" aria-label={typeof label === "string" ? label : undefined}
+    <ScrollArea ref={listRef} id={listId} role="listbox" aria-multiselectable="true" aria-label={typeof label === "string" ? label : undefined}
       aria-labelledby={typeof label === "string" ? undefined : rest["aria-labelledby"]}
-      popover="manual" className="area-menu area-tag-picker__listbox" tabIndex={-1}>
+      popover="manual" className="area-menu area-tag-picker__listbox" tabIndex={-1} viewportProps={{ tabIndex: undefined }}>
       {hintText !== null ? <div className="area-menu__label area-tag-picker__hint" role="presentation">{hintText}</div> : null}
       {listRows.length === 0 ? <div className="area-tag-picker__empty" role="presentation">{emptyText}</div> : null}
       {listRows.map((row, index) => {
@@ -232,6 +233,6 @@ export const TagPicker = forwardRef<HTMLInputElement, TagPickerProps>(function T
           <span className="area-menu__check" aria-hidden="true"><Glyph name="check" /></span>
         </div>;
       })}
-    </div>
+    </ScrollArea>
   </div>;
 });

@@ -330,3 +330,4 @@ announcement, RTL, forced colours, Figma side by side.
   `input-chevron` token (tokens emit/base.ts → `stroke-control`, rgb(131) / rgb(147)); list
   alignment and still chevrons kept. Verified on `#component-custom-select` (computed styles and
   rects, light/dark, default/compact); `npm test` passes.
+- 2026-10-09 · owner went with Scroll area's recommendation to adopt it in the scrolling families (docs/specs/scroll-area.md, "Adoption") → the scroll container is a Scroll area: Figma's overlay bar instead of the platform's, its inset moved into the scroller so rows keep their place → back in review.
