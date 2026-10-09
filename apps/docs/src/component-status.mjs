@@ -8,7 +8,7 @@
 // chip, badge-group, box-field and tabs keep Complete (docs/research/compact-evidence-2026-10-02/).
 export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-09-27 after all phases (batches 1-3).
-  'toolbar', 'split-button', 'segmented', 'nav', 'menu', 'toast',
+  'toolbar', 'split-button', 'segmented', 'nav', 'toast',
   // Approved 2026-09-28 (batch 4).
   'count',
   // Approved 2026-09-28 (batch 5).
@@ -18,7 +18,6 @@ export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-09-28 (batch 7; popover was already approved).
   'calendar',
   // Approved 2026-09-28 (batch 8; number-field and box-field were already approved).
-  'panel',
   // Approved 2026-09-28 (batch 11: 6px keycap everywhere, no stroke, plain menu shortcuts).
   'kbd',
   // Approved 2026-09-28 (batch 12; input-group was already approved).
@@ -26,11 +25,10 @@ export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-09-28 (batch 14: cards, sm removed, lighter Switch off track).
   'checkbox', 'radio', 'switch',
   // Approved 2026-09-28 (batch 13; select and field were already approved).
-  'combobox',
   // Approved 2026-09-28 (batch 15: group gap 6 / 8; slider was already approved).
   'badge-group',
   // Approved 2026-09-28 (batches 17-19; dialog, tooltip and composer were already approved).
-  'hover-card', 'context-menu', 'command-palette', 'message', 'prompt-suggestions',
+  'hover-card', 'context-menu', 'message', 'prompt-suggestions',
   // Approved 2026-09-28 (batch 16 again after the 16 column; batch 20).
   'model-picker', 'scroll-to-latest',
   // Approved 2026-09-28 (batch 22: lighter ground, brighter syntax; code and separator were already approved).
@@ -42,16 +40,17 @@ export const COMPLETE_COMPONENTS = new Set([
   'number-field', 'popover', 'progress', 'property-list', 'select', 'separator', 'slider',
   'table', 'tabs', 'tooltip', 'tree-view',
   // Approved 2026-10-08 on the component review page (recommendations for open questions accepted).
-  'accordion', 'alignment-picker', 'custom-select', 'drawer', 'tag',
+  'accordion', 'alignment-picker', 'tag',
   // Approved 2026-10-08 after their requested changes.
-  'confirm-dialog', 'date-picker', 'tag-picker',
-]);
+  'confirm-dialog', 'date-picker', ]);
 
 /** Built/refined and awaiting owner approval; not completion. */
 // alignment-picker reopened 2026-10-04: responsive grid, hover preview, sizes removed.
 // pagination: new 2026-10-08 (owner picked it as the next component); link: new 2026-10-08 ("move on to the next component");
 // alert, card and chip reopened 2026-10-08: their always-on underlines moved to Link's line (link.md).
-export const REVIEW_COMPONENTS = new Set(['pagination', 'link', 'scroll-area', 'alert', 'card', 'chip']);
+// menu, combobox, custom-select, tag-picker, command-palette, drawer and panel reopened 2026-10-09: their scroll
+// containers are Scroll areas (scroll-area.md, "Adoption").
+export const REVIEW_COMPONENTS = new Set(['pagination', 'link', 'scroll-area', 'alert', 'card', 'chip', 'menu', 'combobox', 'custom-select', 'tag-picker', 'command-palette', 'drawer', 'panel']);
 export const componentStatus = slug => COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
 export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined' })[status];
 
@@ -117,6 +116,11 @@ export const REVIEW_BATCHES = [
     name: "Link's underline in peers",
     note: "Reopened 2026-10-08: Alert's link, Card's action and Chip's link label draw Link's line (40% of the ink at rest, full on hover and focus).",
     families: ['alert', 'card', 'chip'],
+  },
+  {
+    name: 'Scroll area in scrolling surfaces',
+    note: "Reopened 2026-10-09: menus, the three list pickers, Command palette, Drawer and Panel scroll with Scroll area's overlay bar; rows keep their place.",
+    families: ['menu', 'combobox', 'custom-select', 'tag-picker', 'command-palette', 'drawer', 'panel'],
   },
 ];
 

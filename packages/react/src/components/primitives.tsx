@@ -4,6 +4,7 @@ import { MANIFESTS } from "../variants.ts";
 import { Button, type ButtonProps } from "./Button.tsx";
 import { Glyph } from "./Glyph.tsx";
 import { Select } from "./forms.tsx";
+import { ScrollArea } from "./ScrollArea.tsx";
 import { AnchoredMenu, AnchoredPopover, AnchoredTooltip, MENU_OFFSET, OVERLAY_PADDING, TYPEAHEAD_RESET } from "./Overlays.tsx";
 import { assignRef, useAnchoredPosition, useNativePopover, useOpenState } from "./overlay.ts";
 import type { OverlayAlign, OverlaySide } from "./overlay.ts";
@@ -573,7 +574,7 @@ export const Panel = /* @__PURE__ */ forwardRef<HTMLDivElement, PanelProps>(func
           {action}
         </header>
       ) : null}
-      <div className="area-panel__body">{children}</div>
+      <ScrollArea className="area-panel__body" viewportProps={{ tabIndex: undefined }}>{children}</ScrollArea>
       {footer ? <footer className="area-panel__footer">{footer}</footer> : null}
     </div>
   );
@@ -1206,7 +1207,9 @@ export const Menu = /* @__PURE__ */ forwardRef<HTMLDivElement, MenuProps>(functi
     const surface = (extra: Div & { ref?: Ref<HTMLDivElement> }) => {
       const chain = <E extends { defaultPrevented: boolean }>(theirs: ((event: E) => void) | undefined, ours: ((event: E) => void) | undefined) =>
         theirs && ours ? (event: E) => { theirs(event); if (!event.defaultPrevented) ours(event); } : theirs ?? ours;
-      return <div role="menu" className={menuVariants({}, className)} {...rest} {...extra}
+      // An anchored menu can outgrow the room beside its trigger, so it scrolls as a Scroll area
+      // (docs/specs/scroll-area.md, "Adoption"); focus stays on its items, so the scroller is no Tab stop.
+      return <ScrollArea role="menu" className={menuVariants({}, className)} {...rest} {...extra} viewportProps={{ tabIndex: undefined }}
         aria-labelledby={rest["aria-labelledby"] ?? (rest["aria-label"] ? undefined : extra["aria-labelledby"])}
         onKeyDown={chain(onKeyDown, extra.onKeyDown)} onClick={chain(rest.onClick, extra.onClick)} onPointerMove={chain(rest.onPointerMove, extra.onPointerMove)}
         ref={node => { assignRef(ref, node); assignRef(extra.ref as never, node); }} />;

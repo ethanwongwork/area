@@ -131,7 +131,9 @@ test("Combobox is a WAI list-autocomplete combobox over a Menu-styled listbox", 
   assert.match(html, /<input class="area-input__control" aria-label="Font" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="[^"]+" autoComplete="off" value="Inter"/);
   assert.match(html, /class="area-input__action-button" aria-label="Show suggestions"/);
   assert.match(html, /tabindex="-1"/i);
-  assert.match(html, new RegExp(`<div id="${list}" role="listbox" aria-label="Font" popover="manual" class="area-menu area-combobox__listbox"`));
+  assert.match(html, new RegExp(`<div class="area-scroll-area area-scroll-area--hover area-menu area-combobox__listbox" id="${list}" role="listbox" aria-label="Font" popover="manual" tabindex="-1">`));
+  // Options sit in the Scroll area's scroller; the scroller is no Tab stop (focus stays on the field).
+  assert.match(html, /<div class="area-scroll-area__viewport"><div class="area-scroll-area__content">/);
   assert.match(html, /role="option" aria-selected="true" class="area-menu__item area-combobox__option"><span class="area-menu__text">Inter<\/span>/);
   assert.match(html, /role="group" aria-labelledby="[^"]+" class="area-combobox__group"><div id="[^"]+" class="area-menu__label" role="presentation">Recent<\/div>/);
 });
@@ -142,7 +144,7 @@ test("CommandPalette is a search combobox over a grouped listbox of Menu rows", 
   const html = renderToString(h(CommandPalette, { inline: true, items }));
   assert.match(html, /^<div role="search" aria-label="Command palette" class="area-command-palette area-command-palette--inline">/);
   assert.match(html, /<input class="area-command-palette__input" role="combobox" aria-label="Command palette" aria-expanded="true" aria-controls="([^"]+)" aria-autocomplete="list" aria-activedescendant="[^"]+-item-0"/);
-  assert.match(html, /role="listbox" aria-label="Command palette" class="area-command-palette__list"/);
+  assert.match(html, /<div class="area-scroll-area area-scroll-area--hover area-command-palette__list" id="[^"]+" role="listbox" aria-label="Command palette">/);
   assert.equal((html.match(/role="group"/g) ?? []).length, 2);
   assert.match(html, /role="option" aria-selected="false" aria-disabled="true" data-disabled="" class="area-menu__item area-command-palette__item"/);
   // Kbd names its keys with visually hidden text (kbd.md), not aria-label.
@@ -204,6 +206,6 @@ test("ModelPicker is a ghost menu button over single-choice Menu rows with notes
   // Menu's own trigger path (audit G-11): one placement engine and one menu-button contract.
   assert.match(html, /aria-label="Model: Instant" id="([^"]+)-trigger" aria-haspopup="menu" aria-expanded="false" aria-controls="\1"/);
   // The consumer's aria-label names the menu; it no longer loses to the trigger's labelledby (audit D-12).
-  assert.match(html, /<div role="menu" class="area-menu" aria-label="Model" id="[^"]+" popover="auto" tabindex="-1">/);
+  assert.match(html, /<div class="area-scroll-area area-scroll-area--hover area-menu" role="menu" aria-label="Model" id="[^"]+" popover="auto" tabindex="-1">/);
   assert.match(html, /role="menuitemradio" aria-checked="true"[^>]*><span class="area-menu__lines"><span class="area-menu__text">Instant<\/span><span class="area-menu__description">Answers right away<\/span><\/span>/);
 });

@@ -20,7 +20,7 @@ test("Toolbar creates one entry stop while keeping native command buttons", () =
   // Overflow is a ghost icon Button that opens a Menu (audit S16, A-8).
   assert.match(html, /<button[^>]*class="area-button area-button--ghost[^"]*area-button--icon-only[^"]*"[^>]*aria-label="More actions"[^>]*aria-haspopup="menu"|aria-haspopup="menu"[^>]*aria-label="More actions"/);
   assert.match(html, /data-area-glyph="more"/);
-  assert.match(html, /role="menu" class="area-menu"[^>]*popover="auto"|popover="auto"[^>]*role="menu"/);
+  assert.match(html, /class="area-scroll-area area-scroll-area--hover area-menu" role="menu"[^>]*popover="auto"/);
   assert.deepEqual(MANIFESTS.toolbar.variants.size, ["sm", "md", "lg"]);
 });
 

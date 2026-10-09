@@ -144,6 +144,31 @@ as Figma's do. Fixed during the pass: dragging under the gallery's 0.8 tile zoom
 (zoom correction added); the two visibility tiles were named `type-*`, which the gallery filed under Content (now
 `behavior-*`).
 
+## Adoption, 2026-10-09
+
+Owner: "go with your recommendations" (open question 1). Each surface's scroll container is now a Scroll area
+root that keeps its class, name, role and popover; its padding moves into the scroller and its row stack into
+the content, so the bar sits at the surface's edge (Figma) and every row keeps its place. The scroller is no
+Tab stop in these families (focus stays on the field, the items or the dialog's controls; Chromium makes a
+scroller without focusable content focusable on its own).
+
+| Family | Scroller | Inset moved into the scroller | Measured after (gallery) |
+|---|---|---|---|
+| Menu (anchored) | `.area-menu[popover]` | `--_inset` 4 | first row 0.6 border + 4, as before; focus on the menu |
+| Combobox, Custom select, Tag picker | `.area-menu` listbox popovers | `--_inset` 4 | first option 0.6 + 4; at 120px tall, ArrowDown keeps every highlighted option in view |
+| Command palette | `.area-command-palette__list` | `--_list-inset` 4 | first row 4, 4 |
+| Drawer | `.area-drawer__body` | `--_drawer-bleed` 4 (the body keeps its negative margin) | first child 4, 4 |
+| Panel | `.area-panel__body` | `0 --_inset --_inset` (12) | sections from the body's top, 12 sides |
+
+Menu's other users (Context menu, Split button, Toolbar overflow, Model picker, Breadcrumb's ellipsis menu) draw the
+same surface and pick up the bar when they overflow. Dialog's body and Nav's overflow menu still use the platform bar.
+
+Found and fixed while adopting:
+- Scroll area's private `--_inset` (its 2px track padding) shadowed the surface's own `--_inset` in its scroller
+  (Panel read 2, not 12). Its private properties are now `--_bar-track`, `--_bar-inset`, `--_bar-thumb`.
+- `scrollOptionIntoList` (overlay.ts) scrolls the option's Scroll area viewport, and divides by the scroller's
+  `currentCSSZoom`: under the gallery's 0.8 tile zoom it had scrolled 0.8 of the distance (a bug from before).
+
 ## Verification
 
 - 6 Area captures and 2 Figma captures; checksums verified. ChatGPT, Notion and shadcn as readouts.

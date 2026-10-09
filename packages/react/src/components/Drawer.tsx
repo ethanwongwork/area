@@ -4,6 +4,7 @@ import { drawerVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Button } from "./Button.tsx";
 import { Glyph } from "./Glyph.tsx";
 import { useOpenState } from "./overlay.ts";
+import { ScrollArea } from "./ScrollArea.tsx";
 
 type Manifest = VariantProps<typeof MANIFESTS.drawer>;
 
@@ -84,7 +85,7 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(function Drawer(
       {showCloseButton ? <Button variant="ghost" tone="neutral" size="md" iconOnly className="area-drawer__close" aria-label={dismissLabel}
         icon={<Glyph name="dismiss" />} onClick={() => setOpen(false)} /> : null}
     </div> : null}
-    {children ? <div className="area-drawer__body">{children}</div> : null}
+    {children ? <ScrollArea className="area-drawer__body" viewportProps={{ tabIndex: undefined }}>{children}</ScrollArea> : null}
     {footer ? <div className="area-drawer__footer">{footer}</div> : null}
   </div>;
   if (inline) return surface;

@@ -11,12 +11,12 @@
 @layer area.components {
   .area-scroll-area {
     /* spec: Figma's track 10 with 2 padding (a 6 thumb); shadcn 10 with a 7 thumb. */
-    --_track: 10px; /* spec */
-    --_inset: var(--area-space-2);
+    --_bar-track: 10px; /* spec */
+    --_bar-inset: var(--area-space-2);
     /* spec: Figma's thumb, #b3b3b3 at 50%, composites to 217 on white; the same depth taken from the
        default ink (18% of rgb 40 is 217 on white) so the dark theme draws a light thumb. ChatGPT
        draws its native thin thumb at 30% of its ink, a step darker. */
-    --_thumb: color-mix(in oklab, var(--area-fg-default) 18%, transparent); /* spec */
+    --_bar-thumb: color-mix(in oklab, var(--area-fg-default) 18%, transparent); /* spec */
 
     position: relative;
     display: flex;
@@ -50,7 +50,7 @@
     z-index: 1;
     display: flex;
     box-sizing: border-box;
-    padding: var(--_inset);
+    padding: var(--_bar-inset);
     touch-action: none;
     user-select: none;
     opacity: 0;
@@ -61,16 +61,16 @@
   .area-scroll-area__scrollbar[data-orientation="vertical"] {
     inset-block: 0;
     inset-inline-end: 0;
-    inline-size: var(--_track);
+    inline-size: var(--_bar-track);
   }
   .area-scroll-area__scrollbar[data-orientation="horizontal"] {
     inset-inline: 0;
     inset-block-end: 0;
-    block-size: var(--_track);
+    block-size: var(--_bar-track);
   }
   /* With both bars, each stops short of the other's corner. */
-  .area-scroll-area[data-overflow-x][data-overflow-y] > .area-scroll-area__scrollbar[data-orientation="vertical"] { inset-block-end: var(--_track); }
-  .area-scroll-area[data-overflow-x][data-overflow-y] > .area-scroll-area__scrollbar[data-orientation="horizontal"] { inset-inline-end: var(--_track); }
+  .area-scroll-area[data-overflow-x][data-overflow-y] > .area-scroll-area__scrollbar[data-orientation="vertical"] { inset-block-end: var(--_bar-track); }
+  .area-scroll-area[data-overflow-x][data-overflow-y] > .area-scroll-area__scrollbar[data-orientation="horizontal"] { inset-inline-end: var(--_bar-track); }
   /* A bar exists only for an axis that overflows. */
   .area-scroll-area:not([data-overflow-y]) > .area-scroll-area__scrollbar[data-orientation="vertical"],
   .area-scroll-area:not([data-overflow-x]) > .area-scroll-area__scrollbar[data-orientation="horizontal"] { display: none; }
@@ -79,7 +79,7 @@
   .area-scroll-area__thumb {
     flex: none;
     border-radius: var(--area-radius-full);
-    background-color: var(--_thumb);
+    background-color: var(--_bar-thumb);
   }
   .area-scroll-area__scrollbar[data-orientation="vertical"] > .area-scroll-area__thumb {
     inline-size: 100%;

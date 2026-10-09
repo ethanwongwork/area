@@ -3,6 +3,7 @@ import type { HTMLAttributes, KeyboardEvent, ReactNode } from "react";
 import { commandPaletteVariants } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
 import { scrollOptionIntoList } from "./overlay.ts";
+import { ScrollArea } from "./ScrollArea.tsx";
 import { Kbd } from "./primitives.tsx";
 
 export interface CommandItem {
@@ -188,7 +189,7 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
     </div>
     {/* The result count, or the empty text, is announced while a query is typed (audit D-29). */}
     <span className="area-sr-only" role="status">{query ? (rows.length ? resultsLabel(rows.length) : typeof emptyText === "string" ? emptyText : "") : ""}</span>
-    <div ref={listRef} id={listId} role="listbox" aria-label={label} className="area-command-palette__list">
+    <ScrollArea ref={listRef} id={listId} role="listbox" aria-label={label} className="area-command-palette__list" viewportProps={{ tabIndex: undefined }}>
       {rows.length === 0 ? <div className="area-command-palette__empty" role="presentation">{emptyText}</div> : null}
       {groups.map(([group, list], g) => group
         ? <div key={`${group}-${g}`} role="group" aria-labelledby={`${id}-group-${g}`} className="area-command-palette__group">
@@ -196,7 +197,7 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
             {list.map(renderRow)}
           </div>
         : <div key={`ungrouped-${g}`} role="presentation" className="area-command-palette__group">{list.map(renderRow)}</div>)}
-    </div>
+    </ScrollArea>
     {footer === false ? null : <div className="area-command-palette__footer" aria-hidden={footer ? undefined : true}>
       {footer ?? <>
         {/* The hints also work by pointer. They stay out of the tab order and keep focus in the

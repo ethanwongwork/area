@@ -129,6 +129,11 @@
     padding: var(--_list-inset);
   }
   .area-command-palette__list .area-command-palette__item { border-radius: var(--_row-radius); }
+  /* The list is a Scroll area (docs/specs/scroll-area.md, "Adoption"): its inset and row stack move into
+     the scroller, so the bar sits at the list's edge. */
+  .area-command-palette__list.area-scroll-area { padding: 0; gap: 0; overflow: hidden; }
+  .area-command-palette__list > .area-scroll-area__viewport { padding: var(--_list-inset); }
+  .area-command-palette__list > .area-scroll-area__viewport > .area-scroll-area__content { display: flex; flex-direction: column; gap: var(--area-ui-row-gap); }
   .area-command-palette__group { display: flex; flex-direction: column; gap: var(--area-ui-row-gap); }
   /* Group headings are Menu's label rows (32, muted, on the rows' column); groups follow each
    * other with the list's 2 gap, as a Menu's do. */

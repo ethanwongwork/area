@@ -1568,6 +1568,13 @@
     max-block-size: var(--area-overlay-available-height, none);
     overflow-y: auto;
   }
+  /* A menu surface that scrolls is a Scroll area (docs/specs/scroll-area.md, "Adoption"): the frame stays
+     on the surface; the inset and the row stack move into the scroller, so the overlay bar sits at the
+     frame's edge, as Figma's does, and rows keep their place. */
+  .area-menu.area-scroll-area { padding: 0; gap: 0; }
+  .area-menu.area-scroll-area[popover] { overflow: hidden; }
+  .area-menu > .area-scroll-area__viewport { padding: var(--_inset); }
+  .area-menu > .area-scroll-area__viewport > .area-scroll-area__content { display: flex; flex-direction: column; gap: var(--area-ui-row-gap); }
   .area-popover[popover]:focus-visible,
   .area-menu[popover]:focus-visible { outline: none; }
   @media (prefers-reduced-motion: reduce) {

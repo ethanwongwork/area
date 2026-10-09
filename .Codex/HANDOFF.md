@@ -11,7 +11,9 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   Scroll area"). `ScrollArea` (type hover / scroll / always; viewportRef, viewportProps), `scroll-area.css`,
   5 tiles, docs entry, `scroll-area.test.mjs`. Native viewport with the platform bar hidden; Figma's overlay bar.
 - Evidence: Figma editor panel captures (a community file, viewed only); ChatGPT, Notion, shadcn readouts.
-- Open: adopt it in Menu / Command palette / lists / Drawer / Panel (reopens each).
+- Owner went with the recommendations: adopted in Menu (anchored), Combobox, Custom select, Tag picker, Command
+  palette, Drawer and Panel (scroll-area.md, "Adoption"); those seven are back in review. Dialog body and Nav's
+  overflow menu still use the platform bar.
 - Tooling: Figma's CSP blocks form posts; open `127.0.0.1:8791/recv.html` from a button and `postMessage` the
   captures to it. The gallery re-fits tile zoom after a pause: clear it and capture in the same script.
 

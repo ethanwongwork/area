@@ -145,6 +145,10 @@
     margin: calc(-1 * var(--_drawer-bleed));
     overflow-y: auto;
   }
+  /* The body is a Scroll area (docs/specs/scroll-area.md, "Adoption"): the focus-ring bleed moves into the
+     scroller; the body keeps the negative margin, so the clip still clears a ring at the content edge. */
+  .area-drawer__body.area-scroll-area { padding: 0; overflow: hidden; }
+  .area-drawer__body > .area-scroll-area__viewport { padding: var(--_drawer-bleed); }
   .area-drawer__footer { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: var(--area-ui-cluster); flex-shrink: 0; }
   /* spec: shadcn's Sheet stacks its actions full width, 8 apart (owner 2026-10-06: a variant). The
      first action in source order is the primary one, on top. */
