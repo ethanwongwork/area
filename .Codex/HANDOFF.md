@@ -13,7 +13,8 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   added to the package glyphs (`PACKAGE_GLYPHS` in gen-pilot-icons.mjs; only glyphs.ts changed).
 - Evidence: ChatGPT (logged-out composer note) and Notion (an inline link, owner's Chrome, read-only)
   captures; Primer rules; Untitled source classes. Underline: currentColor at 40% (Notion), 1 stroke, 2 below.
-- Owner went with the recommendations: Link's open questions resolved; the peer underlines move to Link's line (next section).
+- Owner went with the recommendations: Link's open questions resolved; Alert's link, Card's action and Chip's
+  link label moved to Link's line (link.md, "Peers aligned"), so Alert, Card and Chip are back in review.
 - Tooling: a form POST (`target=_blank`) to the 127.0.0.1 relay saves captures from https pages in both
   browsers without the clipboard (fetch is blocked there).
 

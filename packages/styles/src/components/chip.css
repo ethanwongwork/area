@@ -189,11 +189,16 @@
 
   .area-chip__image > img { object-fit: cover; }
 
+  /* Link's underline (docs/specs/link.md, peers aligned 2026-10-08): 40% of the ink at rest, full ink when
+     the chip is hovered or focused. */
   .area-chip--link .area-chip__label {
     text-decoration: underline;
+    text-decoration-color: color-mix(in oklab, currentColor 40%, transparent); /* spec */
     text-decoration-thickness: var(--area-stroke-width);
     text-underline-offset: var(--area-space-2);
   }
+  @media (hover: hover) { .area-chip--link:hover .area-chip__label { text-decoration-color: currentColor; } }
+  .area-chip--link:focus-visible .area-chip__label { text-decoration-color: currentColor; }
 
   @media (hover: hover) { .area-chip--link-icon:hover .area-chip__label { text-decoration: underline; text-decoration-thickness: var(--area-stroke-width); text-underline-offset: var(--area-space-2); } }
   .area-chip--link-icon:focus-visible .area-chip__label {

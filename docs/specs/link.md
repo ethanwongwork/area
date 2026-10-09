@@ -140,6 +140,22 @@ caption's 12px and muted ink with nothing set; the external mark sits on the cap
 every line. Fixed during the pass: focus drew the underline over the 100ms fade (alpha 0.81 when read); focus now
 lands at once, as hover does.
 
+## Peers aligned, 2026-10-08
+
+Owner: "go with your recommendations" (open question 1). The underlines that show at rest now draw Link's
+line: 40% of the ink, full ink on hover and focus, one stroke 2 below, the ink fixed.
+
+| Family | Element | Before | After |
+|---|---|---|---|
+| Alert | `.area-alert__link a` (inline and banner) | full ink | Link's line; the banner's duplicate rule removed (same specificity, later in source, it held the rest line under the pointer) |
+| Card | `.area-card__action` | full ink, thickness auto | Link's line, 1 stroke |
+| Chip | `.area-chip--link .area-chip__label` | full ink | Link's line; full when the chip is hovered or focused |
+| Chip `link-icon`, Code block line numbers and toggle | underline on hover only | full ink | unchanged: already Link's standalone behaviour |
+
+Measured in the gallery: Alert and Chip links rest at `oklab(0.277 0 0 / 0.4)` on rgb(40) text; the banner link
+under the real pointer reads rgb(40, 40, 40) for both ink and line. No gallery tile shows Card's action. Alert,
+Card and Chip are back in review (`REVIEW_COMPONENTS`, Review batch "Link's underline in peers").
+
 ## Verification
 
 - 8 Area captures, 1 ChatGPT, 1 Notion; checksums verified. Primer and Untitled UI from rules and source classes.

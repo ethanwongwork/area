@@ -10,7 +10,7 @@ export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-09-27 after all phases (batches 1-3).
   'toolbar', 'split-button', 'segmented', 'nav', 'menu', 'toast',
   // Approved 2026-09-28 (batch 4).
-  'count', 'alert',
+  'count',
   // Approved 2026-09-28 (batch 5).
   'avatar', 'indicator', // badge was already approved
   // Approved 2026-09-28 (batch 6; progress was already approved).
@@ -28,11 +28,11 @@ export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-09-28 (batch 13; select and field were already approved).
   'combobox',
   // Approved 2026-09-28 (batch 15: group gap 6 / 8; slider was already approved).
-  'chip', 'badge-group',
+  'badge-group',
   // Approved 2026-09-28 (batches 17-19; dialog, tooltip and composer were already approved).
   'hover-card', 'context-menu', 'command-palette', 'message', 'prompt-suggestions',
   // Approved 2026-09-28 (batch 16 again after the 16 column; batch 20).
-  'card', 'model-picker', 'scroll-to-latest',
+  'model-picker', 'scroll-to-latest',
   // Approved 2026-09-28 (batch 22: lighter ground, brighter syntax; code and separator were already approved).
   'code-block',
   'badge', 'box-field', 'breadcrumb',
@@ -49,8 +49,9 @@ export const COMPLETE_COMPONENTS = new Set([
 
 /** Built/refined and awaiting owner approval; not completion. */
 // alignment-picker reopened 2026-10-04: responsive grid, hover preview, sizes removed.
-// pagination: new 2026-10-08 (owner picked it as the next component); link: new 2026-10-08 ("move on to the next component").
-export const REVIEW_COMPONENTS = new Set(['pagination', 'link']);
+// pagination: new 2026-10-08 (owner picked it as the next component); link: new 2026-10-08 ("move on to the next component");
+// alert, card and chip reopened 2026-10-08: their always-on underlines moved to Link's line (link.md).
+export const REVIEW_COMPONENTS = new Set(['pagination', 'link', 'alert', 'card', 'chip']);
 export const componentStatus = slug => COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
 export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined' })[status];
 
@@ -110,6 +111,11 @@ export const REVIEW_BATCHES = [
     name: 'New: Pagination and Link',
     note: 'Built 2026-10-08, the two navigation gaps eight catalogues share. Batch 1, Accordion and Alignment picker were approved on 2026-10-08.',
     families: ['pagination', 'link'],
+  },
+  {
+    name: "Link's underline in peers",
+    note: "Reopened 2026-10-08: Alert's link, Card's action and Chip's link label draw Link's line (40% of the ink at rest, full on hover and focus).",
+    families: ['alert', 'card', 'chip'],
   },
 ];
 
