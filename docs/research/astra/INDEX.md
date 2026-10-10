@@ -10,6 +10,7 @@ broken research.
 
 | Date | Topic | Question | Status |
 | --- | --- | --- | --- |
+| 2026-10-10 | [materials/14-tooling](materials/14-tooling/README.md) | How could the gallery build and share materials, and what survives or is missing in DTCG, Tokens Studio, Figma, Tailwind and CSS exports? | unreviewed |
 | 2026-10-09 | [materials/13-presets](materials/13-presets/README.md) | Which eight light/dark presets cover every role, how do their controls derive from references, and which of the 25 styles combine or conflict? | unreviewed |
 | 2026-10-09 | [materials/12-glyphs-text](materials/12-glyphs-text/README.md) | Which glyph and text materials preserve Area's stroked geometry, need semantic parts or filled variants, and remain suitable for review at 12–16px? | unreviewed |
 | 2026-10-09 | [materials/11-performance](materials/11-performance/README.md) | What do local Chromium and Safari measurements show for blur, layered shadows, refraction, grain and gradient strokes, and what budgets fit each role? | unreviewed |

@@ -1,0 +1,2250 @@
+{
+  "label": "Glass with optional popup glint disabled",
+  "status": "unreviewed research example",
+  "integrity": {
+    "algorithm": "sha256",
+    "serialization": "sorted-key-utf8-compact-json-v1",
+    "payloadSha256": "86aecd9dd34a7c866348e0cf406a33e9ab4b411b1f7faf7b71ce614b642fd94e"
+  },
+  "payload": {
+    "kind": "area-material-research",
+    "schemaVersion": 1,
+    "profileRevision": "3a9a1b61e748741e9bc5e578b536ad978d3b1986",
+    "requiredPolicy": {
+      "controlContract": "materials/07-controls",
+      "recipeContract": "materials/13-presets/contract.md",
+      "revision": "3a9a1b61e748741e9bc5e578b536ad978d3b1986"
+    },
+    "compilerContract": "proposal-only-07-option-a",
+    "recipeSnapshot": {
+      "id": "glass",
+      "name": "Glass",
+      "refs": [
+        "R03",
+        "R17"
+      ],
+      "styles": [
+        "glassmorphism",
+        "transparency",
+        "gradient-stroke"
+      ],
+      "intent": "A clear frosted perimeter around opaque reading islands, using a single local backdrop owner.",
+      "difference": "R03 publishes 5px blur and .5 white fill. Only its 5px blur is retained as a trial input; proposed tint alpha .82/.92 and rims are adaptations.",
+      "light": "A pale transmitting shell; dark ink is protected by opaque content islands.",
+      "dark": "A near-black page; dark shell tint transmits less, with a narrow light rim.",
+      "states": [
+        "Strengthen the existing body/edge; do not change tint transparency or blur.",
+        "Suppress the optional glint; use active body.",
+        "Keep semantic selection; no extra glass on the mark."
+      ],
+      "sourceStatus": "reference-inspired authored proposal; not native parity or approved Area preset",
+      "modes": {
+        "light": {
+          "globalControls": {
+            "amount": "quiet",
+            "light": {
+              "angleDeg": 225,
+              "heightDeg": 45,
+              "ambient": 0.5
+            },
+            "body": {
+              "source": "receiver.body",
+              "transparency": 0.18
+            },
+            "backdrop": {
+              "source": "local",
+              "mapping": "unchanged",
+              "blurPx": 5
+            },
+            "relief": {
+              "profile": "flush",
+              "depthPx": 0,
+              "softnessPx": 0,
+              "spreadPx": 0,
+              "strength": 0
+            },
+            "glow": {
+              "source": "context",
+              "strength": 0,
+              "placement": "outer",
+              "spreadPx": 0,
+              "softnessPx": 0
+            },
+            "gradients": {
+              "edge": {
+                "target": "edge",
+                "kind": "linear",
+                "angleDeg": 180,
+                "interpolation": "srgb",
+                "stops": [
+                  {
+                    "id": "top",
+                    "position": 0,
+                    "source": "highlight-white",
+                    "alpha": 0.12
+                  },
+                  {
+                    "id": "bottom",
+                    "position": 100,
+                    "source": "highlight-white",
+                    "alpha": 0
+                  }
+                ]
+              }
+            },
+            "stroke": {
+              "coverage": "all",
+              "paint": "gradient",
+              "profile": "plain",
+              "opacity": 0.14
+            },
+            "grain": {
+              "source": "seeded-static-tile",
+              "strength": 0,
+              "scalePx": 1,
+              "seed": 13,
+              "blend": "source-over",
+              "clip": "perimeter-excluding-content"
+            },
+            "gloss": {
+              "source": "key",
+              "strength": 0.1,
+              "extent": 0.15,
+              "softnessPx": 0,
+              "mask": "perimeter-excluding-content"
+            },
+            "surfaceControls": {
+              "direction": "source",
+              "liftGain": 1,
+              "softnessGain": 1,
+              "spreadDeltaPx": 0,
+              "strengthGain": 1
+            },
+            "content": {
+              "ink": "receiver.ink",
+              "decoration": "none"
+            },
+            "filters": []
+          },
+          "roles": {
+            "page": {
+              "profile": "plain",
+              "controls": {
+                "amount": "none",
+                "light": {
+                  "angleDeg": 225,
+                  "heightDeg": 45,
+                  "ambient": 0.5
+                },
+                "body": {
+                  "source": "receiver.body",
+                  "transparency": 0
+                },
+                "backdrop": {
+                  "source": "none",
+                  "mapping": "unchanged",
+                  "blurPx": 0
+                },
+                "relief": {
+                  "profile": "flush",
+                  "depthPx": 0,
+                  "softnessPx": 0,
+                  "spreadPx": 0,
+                  "strength": 0
+                },
+                "glow": {
+                  "source": "context",
+                  "strength": 0,
+                  "placement": "outer",
+                  "spreadPx": 0,
+                  "softnessPx": 0
+                },
+                "gradients": {},
+                "stroke": {
+                  "coverage": "none",
+                  "paint": "solid",
+                  "profile": "plain",
+                  "opacity": 0
+                },
+                "grain": {
+                  "source": "seeded-static-tile",
+                  "strength": 0,
+                  "scalePx": 1,
+                  "seed": 13,
+                  "blend": "source-over",
+                  "clip": "perimeter-excluding-content"
+                },
+                "gloss": {
+                  "source": "key",
+                  "strength": 0,
+                  "extent": 0.15,
+                  "softnessPx": 0,
+                  "mask": "perimeter-excluding-content"
+                },
+                "surfaceControls": {
+                  "direction": "source",
+                  "liftGain": 1,
+                  "softnessGain": 1,
+                  "spreadDeltaPx": 0,
+                  "strengthGain": 1
+                },
+                "content": {
+                  "ink": "receiver.ink",
+                  "decoration": "none"
+                },
+                "filters": []
+              },
+              "castEligibility": "none",
+              "guard": "Keep existing page body (near-black in dark); no self-cast, blur, transmitted page, or inherited scene. Optional artwork is a separate declared scene, off by default.",
+              "referenceHeightPx": null,
+              "geometry": "existing-used-shape; concentric-rims; no material radius",
+              "fallback": "F0",
+              "provenance": "authored-proposal; see preset source transfer record"
+            },
+            "container": {
+              "profile": "glass-shell",
+              "controls": {
+                "amount": "quiet",
+                "light": {
+                  "angleDeg": 225,
+                  "heightDeg": 45,
+                  "ambient": 0.5
+                },
+                "body": {
+                  "source": "receiver.body",
+                  "transparency": 0.18
+                },
+                "backdrop": {
+                  "source": "local",
+                  "mapping": "unchanged",
+                  "blurPx": 5
+                },
+                "relief": {
+                  "profile": "flush",
+                  "depthPx": 0,
+                  "softnessPx": 0,
+                  "spreadPx": 0,
+                  "strength": 0
+                },
+                "glow": {
+                  "source": "context",
+                  "strength": 0,
+                  "placement": "outer",
+                  "spreadPx": 0,
+                  "softnessPx": 0
+                },
+                "gradients": {
+                  "edge": {
+                    "target": "edge",
+                    "kind": "linear",
+                    "angleDeg": 180,
+                    "interpolation": "srgb",
+                    "stops": [
+                      {
+                        "id": "top",
+                        "position": 0,
+                        "source": "highlight-white",
+                        "alpha": 0.12
+                      },
+                      {
+                        "id": "bottom",
+                        "position": 100,
+                        "source": "highlight-white",
+                        "alpha": 0
+                      }
+                    ]
+                  }
+                },
+                "stroke": {
+                  "coverage": "all",
+                  "paint": "gradient",
+                  "profile": "plain",
+                  "opacity": 0.14
+                },
+                "grain": {
+                  "source": "seeded-static-tile",
+                  "strength": 0,
+                  "scalePx": 1,
+                  "seed": 13,
+                  "blend": "source-over",
+                  "clip": "perimeter-excluding-content"
+                },
+                "gloss": {
+                  "source": "key",
+                  "strength": 0.1,
+                  "extent": 0.15,
+                  "softnessPx": 0,
+                  "mask": "perimeter-excluding-content"
+                },
+                "surfaceControls": {
+                  "direction": "source",
+                  "liftGain": 1,
+                  "softnessGain": 1,
+                  "spreadDeltaPx": 0,
+                  "strengthGain": 1
+                },
+                "content": {
+                  "ink": "receiver.ink",
+                  "decoration": "none"
+                },
+                "filters": []
+              },
+              "castEligibility": "existing-bound-source-only; dark Card remains none",
+              "guard": "Only an actual painted shell; layout wrappers stay unpainted. Dense body is opaque Trace; perimeter can be Quiet. Respect Card/Panel or no-cast binding.",
+              "referenceHeightPx": null,
+              "geometry": "existing-used-shape; concentric-rims; no material radius",
+              "fallback": "F0",
+              "provenance": "authored-proposal; see preset source transfer record"
+            },
+            "floating-surface": {
+              "profile": "glass-shell",
+              "controls": {
+                "amount": "quiet",
+                "light": {
+                  "angleDeg": 225,
+                  "heightDeg": 45,
+                  "ambient": 0.5
+                },
+                "body": {
+                  "source": "receiver.body",
+                  "transparency": 0.18
+                },
+                "backdrop": {
+                  "source": "local",
+                  "mapping": "unchanged",
+                  "blurPx": 5
+                },
+                "relief": {
+                  "profile": "flush",
+                  "depthPx": 0,
+                  "softnessPx": 0,
+                  "spreadPx": 0,
+                  "strength": 0
+                },
+                "glow": {
+                  "source": "context",
+                  "strength": 0,
+                  "placement": "outer",
+                  "spreadPx": 0,
+                  "softnessPx": 0
+                },
+                "gradients": {
+                  "edge": {
+                    "target": "edge",
+                    "kind": "linear",
+                    "angleDeg": 180,
+                    "interpolation": "srgb",
+                    "stops": [
+                      {
+                        "id": "top",
+                        "position": 0,
+                        "source": "highlight-white",
+                        "alpha": 0.12
+                      },
+                      {
+                        "id": "bottom",
+                        "position": 100,
+                        "source": "highlight-white",
+                        "alpha": 0
+                      }
+                    ]
+                  }
+                },
+                "stroke": {
+                  "coverage": "all",
+                  "paint": "gradient",
+                  "profile": "plain",
+                  "opacity": 0.14
+                },
+                "grain": {
+                  "source": "seeded-static-tile",
+                  "strength": 0,
+                  "scalePx": 1,
+                  "seed": 13,
+                  "blend": "source-over",
+                  "clip": "perimeter-excluding-content"
+                },
+                "gloss": {
+                  "source": "key",
+                  "strength": 0.1,
+                  "extent": 0.15,
+                  "softnessPx": 0,
+                  "mask": "perimeter-excluding-content"
+                },
+                "surfaceControls": {
+                  "direction": "source",
+                  "liftGain": 1,
+                  "softnessGain": 1,
+                  "spreadDeltaPx": 0,
+                  "strengthGain": 1
+                },
+                "content": {
+                  "ink": "receiver.ink",
+                  "decoration": "none"
+                },
+                "filters": []
+              },
+              "castEligibility": "existing-bound-float-or-exception-source",
+              "guard": "Quiet shell, one acquisition and one existing cast owner. Tooltip reduces to Trace and its own opaque recipe. Arrow continues shell with no separate effects.",
+              "referenceHeightPx": null,
+              "geometry": "existing-used-shape; concentric-rims; no material radius",
+              "fallback": "F0",
+              "provenance": "authored-proposal; see preset source transfer record"
+            },
+            "raised-control": {
+              "profile": "glass-control",
+              "controls": {
+                "amount": "trace",
+                "light": {
+                  "angleDeg": 225,
+                  "heightDeg": 45,
+                  "ambient": 0.5
+                },
+                "body": {
+                  "source": "receiver.body",
+                  "transparency": 0
+                },
+                "backdrop": {
+                  "source": "none",
+                  "mapping": "unchanged",
+                  "blurPx": 0
+                },
+                "relief": {
+                  "profile": "flush",
+                  "depthPx": 0,
+                  "softnessPx": 0,
+                  "spreadPx": 0,
+                  "strength": 0
+                },
+                "glow": {
+                  "source": "context",
+                  "strength": 0,
+                  "placement": "outer",
+                  "spreadPx": 0,
+                  "softnessPx": 0
+                },
+                "gradients": {
+                  "edge": {
+                    "target": "edge",
+                    "kind": "linear",
+                    "angleDeg": 180,
+                    "interpolation": "srgb",
+                    "stops": [
+                      {
+                        "id": "top",
+                        "position": 0,
+                        "source": "highlight-white",
+                        "alpha": 0.12
+                      },
+                      {
+                        "id": "bottom",
+                        "position": 100,
+                        "source": "highlight-white",
+                        "alpha": 0
+                      }
+                    ]
+                  }
+                },
+                "stroke": {
+                  "coverage": "all",
+                  "paint": "gradient",
+                  "profile": "plain",
+                  "opacity": 0.14
+                },
+                "grain": {
+                  "source": "seeded-static-tile",
+                  "strength": 0,
+                  "scalePx": 1,
+                  "seed": 13,
+                  "blend": "source-over",
+                  "clip": "perimeter-excluding-content"
+                },
+                "gloss": {
+                  "source": "key",
+                  "strength": 0,
+                  "extent": 0.15,
+                  "softnessPx": 0,
+                  "mask": "perimeter-excluding-content"
+                },
+                "surfaceControls": {
+                  "direction": "source",
+                  "liftGain": 1,
+                  "softnessGain": 1,
+                  "spreadDeltaPx": 0,
+                  "strengthGain": 1
+                },
+                "content": {
+                  "ink": "receiver.ink",
+                  "decoration": "none"
+                },
+                "filters": []
+              },
+              "castEligibility": "none",
+              "guard": "Quiet only for sparse actions, Trace for repeated actions; no external cast. Transparent/ghost/row controls keep their existing lack of body until state paints it.",
+              "referenceHeightPx": 32,
+              "geometry": "existing-used-shape; concentric-rims; no material radius",
+              "fallback": "F0",
+              "provenance": "authored-proposal; see preset source transfer record"
+            },
+            "recessed-field-track": {
+              "profile": "well",
+              "controls": {
+                "amount": "trace",
+                "light": {
+                  "angleDeg": 225,
+                  "heightDeg": 45,
+                  "ambient": 0.5
+                },
+                "body": {
+                  "source": "receiver.body",
+                  "transparency": 0
+                },
+                "backdrop": {
+                  "source": "none",
+                  "mapping": "unchanged",
+                  "blurPx": 0
+                },
+                "relief": {
+                  "profile": "concave",
+                  "depthPx": 0.5,
+                  "softnessPx": 1,
+                  "spreadPx": 0,
+                  "strength": 0.1
+                },
+                "glow": {
+                  "source": "context",
+                  "strength": 0,
+                  "placement": "outer",
+                  "spreadPx": 0,
+                  "softnessPx": 0
+                },
+                "gradients": {},
+                "stroke": {
+                  "coverage": "none",
+                  "paint": "solid",
+                  "profile": "plain",
+                  "opacity": 0
+                },
+                "grain": {
+                  "source": "seeded-static-tile",
+                  "strength": 0,
+                  "scalePx": 1,
+                  "seed": 13,
+                  "blend": "source-over",
+                  "clip": "perimeter-excluding-content"
+                },
+                "gloss": {
+                  "source": "key",
+                  "strength": 0,
+                  "extent": 0.15,
+                  "softnessPx": 0,
+                  "mask": "perimeter-excluding-content"
+                },
+                "surfaceControls": {
+                  "direction": "source",
+                  "liftGain": 1,
+                  "softnessGain": 1,
+                  "spreadDeltaPx": 0,
+                  "strengthGain": 1
+                },
+                "content": {
+                  "ink": "receiver.ink",
+                  "decoration": "none"
+                },
+                "filters": []
+              },
+              "castEligibility": "none",
+              "guard": "Trace, opaque editing/reading center. Only local cavity; focus/invalid are separate. Track and well geometry unchanged.",
+              "referenceHeightPx": null,
+              "geometry": "existing-used-shape; concentric-rims; no material radius",
+              "fallback": "F0",
+              "provenance": "authored-proposal; see preset source transfer record"
+            },
+            "thumb-knob": {
+              "profile": "glass-thumb",
+              "controls": {
+                "amount": "quiet",
+                "light": {
+                  "angleDeg": 225,
+                  "heightDeg": 45,
+                  "ambient": 0.5
+                },
+                "body": {
+                  "source": "receiver.body",
+                  "transparency": 0
+                },
+                "backdrop": {
+                  "source": "none",
+                  "mapping": "unchanged",
+                  "blurPx": 0
+                },
+                "relief": {
+                  "profile": "flush",
+                  "depthPx": 0,
+                  "softnessPx": 0,
+                  "spreadPx": 0,
+                  "strength": 0
+                },
+                "glow": {
+                  "source": "context",
+                  "strength": 0,
+                  "placement": "outer",
+                  "spreadPx": 0,
+                  "softnessPx": 0
+                },
+                "gradients": {
+                  "edge": {
+                    "target": "edge",
+                    "kind": "linear",
+                    "angleDeg": 180,
+                    "interpolation": "srgb",
+                    "stops": [
+                      {
+                        "id": "top",
+                        "position": 0,
+                        "source": "highlight-white",
+                        "alpha": 0.12
+                      },
+                      {
+                        "id": "bottom",
+                        "position": 100,
+                        "source": "highlight-white",
+                        "alpha": 0
+                      }
+                    ]
+                  }
+                },
+                "stroke": {
+                  "coverage": "all",
+                  "paint": "gradient",
+                  "profile": "plain",
+                  "opacity": 0.14
+                },
+                "grain": {
+                  "source": "seeded-static-tile",
+                  "strength": 0,
+                  "scalePx": 1,
+                  "seed": 13,
+                  "blend": "source-over",
+                  "clip": "perimeter-excluding-content"
+                },
+                "gloss": {
+                  "source": "key",
+                  "strength": 0.1,
+                  "extent": 0.15,
+                  "softnessPx": 0,
+                  "mask": "perimeter-excluding-content"
+                },
+                "surfaceControls": {
+                  "direction": "source",
+                  "liftGain": 1,
+                  "softnessGain": 1,
+                  "spreadDeltaPx": 0,
+                  "strengthGain": 1
+                },
+                "content": {
+                  "ink": "receiver.ink",
+                  "decoration": "none"
+                },
+                "filters": []
+              },
+              "castEligibility": "existing-bound-shadow-1-only",
+              "guard": "Quiet local convex cue, original dimensions/travel, Surface shadow-1 only where already bound; no independent backdrop.",
+              "referenceHeightPx": 16,
+              "geometry": "existing-used-shape; concentric-rims; no material radius",
+              "fallback": "F0",
+              "provenance": "authored-proposal; see preset source transfer record"
+            },
+            "indicator-fill": {
+              "profile": "plain",
+              "controls": {
+                "amount": "none",
+                "light": {
+                  "angleDeg": 225,
+                  "heightDeg": 45,
+                  "ambient": 0.5
+                },
+                "body": {
+                  "source": "receiver.semantic-or-literal-core",
+                  "transparency": 0
+                },
+                "backdrop": {
+                  "source": "none",
+                  "mapping": "unchanged",
+                  "blurPx": 0
+                },
+                "relief": {
+                  "profile": "flush",
+                  "depthPx": 0,
+                  "softnessPx": 0,
+                  "spreadPx": 0,
+                  "strength": 0
+                },
+                "glow": {
+                  "source": "context",
+                  "strength": 0,
+                  "placement": "outer",
+                  "spreadPx": 0,
+                  "softnessPx": 0
+                },
+                "gradients": {},
+                "stroke": {
+                  "coverage": "none",
+                  "paint": "solid",
+                  "profile": "plain",
+                  "opacity": 0
+                },
+                "grain": {
+                  "source": "seeded-static-tile",
+                  "strength": 0,
+                  "scalePx": 1,
+                  "seed": 13,
+                  "blend": "source-over",
+                  "clip": "perimeter-excluding-content"
+                },
+                "gloss": {
+                  "source": "key",
+                  "strength": 0,
+                  "extent": 0.15,
+                  "softnessPx": 0,
+                  "mask": "perimeter-excluding-content"
+                },
+                "surfaceControls": {
+                  "direction": "source",
+                  "liftGain": 1,
+                  "softnessGain": 1,
+                  "spreadDeltaPx": 0,
+                  "strengthGain": 1
+                },
+                "content": {
+                  "ink": "receiver.ink",
+                  "decoration": "none"
+                },
+                "filters": []
+              },
+              "castEligibility": "none",
+              "guard": "Semantic/literal core unchanged and opaque as already specified. Trace optional halo only outside truthful data geometry and with clearance; none on literal color data.",
+              "referenceHeightPx": null,
+              "geometry": "existing-used-shape; concentric-rims; no material radius",
+              "fallback": "F0",
+              "provenance": "authored-proposal; see preset source transfer record"
+            },
+            "divider": {
+              "profile": "plain",
+              "controls": {
+                "amount": "none",
+                "light": {
+                  "angleDeg": 225,
+                  "heightDeg": 45,
+                  "ambient": 0.5
+                },
+                "body": {
+                  "source": "none",
+                  "transparency": 0
+                },
+                "backdrop": {
+                  "source": "none",
+                  "mapping": "unchanged",
+                  "blurPx": 0
+                },
+                "relief": {
+                  "profile": "flush",
+                  "depthPx": 0,
+                  "softnessPx": 0,
+                  "spreadPx": 0,
+                  "strength": 0
+                },
+                "glow": {
+                  "source": "context",
+                  "strength": 0,
+                  "placement": "outer",
+                  "spreadPx": 0,
+                  "softnessPx": 0
+                },
+                "gradients": {},
+                "stroke": {
+                  "coverage": "none",
+                  "paint": "solid",
+                  "profile": "plain",
+                  "opacity": 0
+                },
+                "grain": {
+                  "source": "seeded-static-tile",
+                  "strength": 0,
+                  "scalePx": 1,
+                  "seed": 13,
+                  "blend": "source-over",
+                  "clip": "perimeter-excluding-content"
+                },
+                "gloss": {
+                  "source": "key",
+                  "strength": 0,
+                  "extent": 0.15,
+                  "softnessPx": 0,
+                  "mask": "perimeter-excluding-content"
+                },
+                "surfaceControls": {
+                  "direction": "source",
+                  "liftGain": 1,
+                  "softnessGain": 1,
+                  "spreadDeltaPx": 0,
+                  "strengthGain": 1
+                },
+                "content": {
+                  "ink": "receiver.ink",
+                  "decoration": "none"
+                },
+                "filters": []
+              },
+              "castEligibility": "none",
+              "guard": "Existing structural line stays. Trace supplementary relief only; no cast, grain or glow network.",
+              "referenceHeightPx": null,
+              "geometry": "existing-used-shape; concentric-rims; no material radius",
+              "fallback": "F0",
+              "provenance": "authored-proposal; see preset source transfer record"
+            },
+            "edge": {
+              "profile": "glass-edge",
+              "controls": {
+                "amount": "quiet",
+                "light": {
+                  "angleDeg": 225,
+                  "heightDeg": 45,
+                  "ambient": 0.5
+                },
+                "body": {
+                  "source": "none",
+                  "transparency": 0
+                },
+                "backdrop": {
+                  "source": "none",
+                  "mapping": "unchanged",
+                  "blurPx": 0
+                },
+                "relief": {
+                  "profile": "flush",
+                  "depthPx": 0,
+                  "softnessPx": 0,
+                  "spreadPx": 0,
+                  "strength": 0
+                },
+                "glow": {
+                  "source": "context",
+                  "strength": 0,
+                  "placement": "outer",
+                  "spreadPx": 0,
+                  "softnessPx": 0
+                },
+                "gradients": {
+                  "edge": {
+                    "target": "edge",
+                    "kind": "linear",
+                    "angleDeg": 180,
+                    "interpolation": "srgb",
+                    "stops": [
+                      {
+                        "id": "top",
+                        "position": 0,
+                        "source": "highlight-white",
+                        "alpha": 0.12
+                      },
+                      {
+                        "id": "bottom",
+                        "position": 100,
+                        "source": "highlight-white",
+                        "alpha": 0
+                      }
+                    ]
+                  }
+                },
+                "stroke": {
+                  "coverage": "all",
+                  "paint": "gradient",
+                  "profile": "plain",
+                  "opacity": 0.14
+                },
+                "grain": {
+                  "source": "seeded-static-tile",
+                  "strength": 0,
+                  "scalePx": 1,
+                  "seed": 13,
+                  "blend": "source-over",
+                  "clip": "perimeter-excluding-content"
+                },
+                "gloss": {
+                  "source": "key",
+                  "strength": 0,
+                  "extent": 0.15,
+                  "softnessPx": 0,
+                  "mask": "perimeter-excluding-content"
+                },
+                "surfaceControls": {
+                  "direction": "source",
+                  "liftGain": 1,
+                  "softnessGain": 1,
+                  "spreadDeltaPx": 0,
+                  "strengthGain": 1
+                },
+                "content": {
+                  "ink": "receiver.ink",
+                  "decoration": "none"
+                },
+                "filters": []
+              },
+              "castEligibility": "none",
+              "guard": "This is the owner shell perimeter reference, not a second edge pass. Required control/focus/invalid edges bypass Material. Surface decorative width may disable this edge.",
+              "referenceHeightPx": null,
+              "geometry": "existing-used-shape; concentric-rims; no material radius",
+              "fallback": "F0",
+              "provenance": "authored-proposal; see preset source transfer record"
+            },
+            "glyph": {
+              "profile": "plain",
+              "controls": {
+                "amount": "none",
+                "light": {
+                  "angleDeg": 225,
+                  "heightDeg": 45,
+                  "ambient": 0.5
+                },
+                "body": {
+                  "source": "none",
+                  "transparency": 0
+                },
+                "backdrop": {
+                  "source": "none",
+                  "mapping": "unchanged",
+                  "blurPx": 0
+                },
+                "relief": {
+                  "profile": "flush",
+                  "depthPx": 0,
+                  "softnessPx": 0,
+                  "spreadPx": 0,
+                  "strength": 0
+                },
+                "glow": {
+                  "source": "context",
+                  "strength": 0,
+                  "placement": "outer",
+                  "spreadPx": 0,
+                  "softnessPx": 0
+                },
+                "gradients": {},
+                "stroke": {
+                  "coverage": "none",
+                  "paint": "solid",
+                  "profile": "plain",
+                  "opacity": 0
+                },
+                "grain": {
+                  "source": "seeded-static-tile",
+                  "strength": 0,
+                  "scalePx": 1,
+                  "seed": 13,
+                  "blend": "source-over",
+                  "clip": "perimeter-excluding-content"
+                },
+                "gloss": {
+                  "source": "key",
+                  "strength": 0,
+                  "extent": 0.15,
+                  "softnessPx": 0,
+                  "mask": "perimeter-excluding-content"
+                },
+                "surfaceControls": {
+                  "direction": "source",
+                  "liftGain": 1,
+                  "softnessGain": 1,
+                  "spreadDeltaPx": 0,
+                  "strengthGain": 1
+                },
+                "content": {
+                  "ink": "receiver.ink",
+                  "decoration": "none"
+                },
+                "filters": []
+              },
+              "castEligibility": "none",
+              "guard": "None; plain semantic ink, intrinsic media unchanged. No filters, gradients, glow or engraving inherited from the host.",
+              "referenceHeightPx": null,
+              "geometry": "existing-used-shape; concentric-rims; no material radius",
+              "fallback": "F0",
+              "provenance": "authored-proposal; see preset source transfer record"
+            },
+            "text": {
+              "profile": "plain",
+              "controls": {
+                "amount": "none",
+                "light": {
+                  "angleDeg": 225,
+                  "heightDeg": 45,
+                  "ambient": 0.5
+                },
+                "body": {
+                  "source": "none",
+                  "transparency": 0
+                },
+                "backdrop": {
+                  "source": "none",
+                  "mapping": "unchanged",
+                  "blurPx": 0
+                },
+                "relief": {
+                  "profile": "flush",
+                  "depthPx": 0,
+                  "softnessPx": 0,
+                  "spreadPx": 0,
+                  "strength": 0
+                },
+                "glow": {
+                  "source": "context",
+                  "strength": 0,
+                  "placement": "outer",
+                  "spreadPx": 0,
+                  "softnessPx": 0
+                },
+                "gradients": {},
+                "stroke": {
+                  "coverage": "none",
+                  "paint": "solid",
+                  "profile": "plain",
+                  "opacity": 0
+                },
+                "grain": {
+                  "source": "seeded-static-tile",
+                  "strength": 0,
+                  "scalePx": 1,
+                  "seed": 13,
+                  "blend": "source-over",
+                  "clip": "perimeter-excluding-content"
+                },
+                "gloss": {
+                  "source": "key",
+                  "strength": 0,
+                  "extent": 0.15,
+                  "softnessPx": 0,
+                  "mask": "perimeter-excluding-content"
+                },
+                "surfaceControls": {
+                  "direction": "source",
+                  "liftGain": 1,
+                  "softnessGain": 1,
+                  "spreadDeltaPx": 0,
+                  "strengthGain": 1
+                },
+                "content": {
+                  "ink": "receiver.ink",
+                  "decoration": "none"
+                },
+                "filters": []
+              },
+              "castEligibility": "none",
+              "guard": "None; keep font metrics, readable ink, syntax and value paint. No letterpress, blur, glow or global transparency.",
+              "referenceHeightPx": null,
+              "geometry": "existing-used-shape; concentric-rims; no material radius",
+              "fallback": "F0",
+              "provenance": "authored-proposal; see preset source transfer record"
+            },
+            "scrim": {
+              "profile": "plain",
+              "controls": {
+                "amount": "none",
+                "light": {
+                  "angleDeg": 225,
+                  "heightDeg": 45,
+                  "ambient": 0.5
+                },
+                "body": {
+                  "source": "receiver.functional-occlusion",
+                  "transparency": 0
+                },
+                "backdrop": {
+                  "source": "none",
+                  "mapping": "unchanged",
+                  "blurPx": 0
+                },
+                "relief": {
+                  "profile": "flush",
+                  "depthPx": 0,
+                  "softnessPx": 0,
+                  "spreadPx": 0,
+                  "strength": 0
+                },
+                "glow": {
+                  "source": "context",
+                  "strength": 0,
+                  "placement": "outer",
+                  "spreadPx": 0,
+                  "softnessPx": 0
+                },
+                "gradients": {},
+                "stroke": {
+                  "coverage": "none",
+                  "paint": "solid",
+                  "profile": "plain",
+                  "opacity": 0
+                },
+                "grain": {
+                  "source": "seeded-static-tile",
+                  "strength": 0,
+                  "scalePx": 1,
+                  "seed": 13,
+                  "blend": "source-over",
+                  "clip": "perimeter-excluding-content"
+                },
+                "gloss": {
+                  "source": "key",
+                  "strength": 0,
+                  "extent": 0.15,
+                  "softnessPx": 0,
+                  "mask": "perimeter-excluding-content"
+                },
+                "surfaceControls": {
+                  "direction": "source",
+                  "liftGain": 1,
+                  "softnessGain": 1,
+                  "spreadDeltaPx": 0,
+                  "strengthGain": 1
+                },
+                "content": {
+                  "ink": "receiver.ink",
+                  "decoration": "none"
+                },
+                "filters": []
+              },
+              "castEligibility": "none",
+              "guard": "None added material; retain existing functional occlusion/local fade and modal behavior. No independent blur, grain, gloss or new alpha.",
+              "referenceHeightPx": null,
+              "geometry": "existing-used-shape; concentric-rims; no material radius",
+              "fallback": "F0",
+              "provenance": "authored-proposal; see preset source transfer record"
+            }
+          }
+        },
+        "dark": {
+          "globalControls": {
+            "amount": "quiet",
+            "light": {
+              "angleDeg": 225,
+              "heightDeg": 45,
+              "ambient": 0.5
+            },
+            "body": {
+              "source": "receiver.body",
+              "transparency": 0.08
+            },
+            "backdrop": {
+              "source": "local",
+              "mapping": "unchanged",
+              "blurPx": 5
+            },
+            "relief": {
+              "profile": "flush",
+              "depthPx": 0,
+              "softnessPx": 0,
+              "spreadPx": 0,
+              "strength": 0
+            },
+            "glow": {
+              "source": "context",
+              "strength": 0,
+              "placement": "outer",
+              "spreadPx": 0,
+              "softnessPx": 0
+            },
+            "gradients": {
+              "edge": {
+                "target": "edge",
+                "kind": "linear",
+                "angleDeg": 180,
+                "interpolation": "srgb",
+                "stops": [
+                  {
+                    "id": "top",
+                    "position": 0,
+                    "source": "highlight-white",
+                    "alpha": 0.08
+                  },
+                  {
+                    "id": "bottom",
+                    "position": 100,
+                    "source": "highlight-white",
+                    "alpha": 0
+                  }
+                ]
+              }
+            },
+            "stroke": {
+              "coverage": "all",
+              "paint": "gradient",
+              "profile": "plain",
+              "opacity": 0.22
+            },
+            "grain": {
+              "source": "seeded-static-tile",
+              "strength": 0,
+              "scalePx": 1,
+              "seed": 13,
+              "blend": "source-over",
+              "clip": "perimeter-excluding-content"
+            },
+            "gloss": {
+              "source": "key",
+              "strength": 0.06,
+              "extent": 0.15,
+              "softnessPx": 0,
+              "mask": "perimeter-excluding-content"
+            },
+            "surfaceControls": {
+              "direction": "source",
+              "liftGain": 1,
+              "softnessGain": 1,
+              "spreadDeltaPx": 0,
+              "strengthGain": 1
+            },
+            "content": {
+              "ink": "receiver.ink",
+              "decoration": "none"
+            },
+            "filters": []
+          },
+          "roles": {
+            "page": {
+              "profile": "plain",
+              "controls": {
+                "amount": "none",
+                "light": {
+                  "angleDeg": 225,
+                  "heightDeg": 45,
+                  "ambient": 0.5
+                },
+                "body": {
+                  "source": "receiver.body",
+                  "transparency": 0
+                },
+                "backdrop": {
+                  "source": "none",
+                  "mapping": "unchanged",
+                  "blurPx": 0
+                },
+                "relief": {
+                  "profile": "flush",
+                  "depthPx": 0,
+                  "softnessPx": 0,
+                  "spreadPx": 0,
+                  "strength": 0
+                },
+                "glow": {
+                  "source": "context",
+                  "strength": 0,
+                  "placement": "outer",
+                  "spreadPx": 0,
+                  "softnessPx": 0
+                },
+                "gradients": {},
+                "stroke": {
+                  "coverage": "none",
+                  "paint": "solid",
+                  "profile": "plain",
+                  "opacity": 0
+                },
+                "grain": {
+                  "source": "seeded-static-tile",
+                  "strength": 0,
+                  "scalePx": 1,
+                  "seed": 13,
+                  "blend": "source-over",
+                  "clip": "perimeter-excluding-content"
+                },
+                "gloss": {
+                  "source": "key",
+                  "strength": 0,
+                  "extent": 0.15,
+                  "softnessPx": 0,
+                  "mask": "perimeter-excluding-content"
+                },
+                "surfaceControls": {
+                  "direction": "source",
+                  "liftGain": 1,
+                  "softnessGain": 1,
+                  "spreadDeltaPx": 0,
+                  "strengthGain": 1
+                },
+                "content": {
+                  "ink": "receiver.ink",
+                  "decoration": "none"
+                },
+                "filters": []
+              },
+              "castEligibility": "none",
+              "guard": "Keep existing page body (near-black in dark); no self-cast, blur, transmitted page, or inherited scene. Optional artwork is a separate declared scene, off by default.",
+              "referenceHeightPx": null,
+              "geometry": "existing-used-shape; concentric-rims; no material radius",
+              "fallback": "F0",
+              "provenance": "authored-proposal; see preset source transfer record"
+            },
+            "container": {
+              "profile": "glass-shell",
+              "controls": {
+                "amount": "quiet",
+                "light": {
+                  "angleDeg": 225,
+                  "heightDeg": 45,
+                  "ambient": 0.5
+                },
+                "body": {
+                  "source": "receiver.body",
+                  "transparency": 0.08
+                },
+                "backdrop": {
+                  "source": "local",
+                  "mapping": "unchanged",
+                  "blurPx": 5
+                },
+                "relief": {
+                  "profile": "flush",
+                  "depthPx": 0,
+                  "softnessPx": 0,
+                  "spreadPx": 0,
+                  "strength": 0
+                },
+                "glow": {
+                  "source": "context",
+                  "strength": 0,
+                  "placement": "outer",
+                  "spreadPx": 0,
+                  "softnessPx": 0
+                },
+                "gradients": {
+                  "edge": {
+                    "target": "edge",
+                    "kind": "linear",
+                    "angleDeg": 180,
+                    "interpolation": "srgb",
+                    "stops": [
+                      {
+                        "id": "top",
+                        "position": 0,
+                        "source": "highlight-white",
+                        "alpha": 0.08
+                      },
+                      {
+                        "id": "bottom",
+                        "position": 100,
+                        "source": "highlight-white",
+                        "alpha": 0
+                      }
+                    ]
+                  }
+                },
+                "stroke": {
+                  "coverage": "all",
+                  "paint": "gradient",
+                  "profile": "plain",
+                  "opacity": 0.22
+                },
+                "grain": {
+                  "source": "seeded-static-tile",
+                  "strength": 0,
+                  "scalePx": 1,
+                  "seed": 13,
+                  "blend": "source-over",
+                  "clip": "perimeter-excluding-content"
+                },
+                "gloss": {
+                  "source": "key",
+                  "strength": 0.06,
+                  "extent": 0.15,
+                  "softnessPx": 0,
+                  "mask": "perimeter-excluding-content"
+                },
+                "surfaceControls": {
+                  "direction": "source",
+                  "liftGain": 1,
+                  "softnessGain": 1,
+                  "spreadDeltaPx": 0,
+                  "strengthGain": 1
+                },
+                "content": {
+                  "ink": "receiver.ink",
+                  "decoration": "none"
+                },
+                "filters": []
+              },
+              "castEligibility": "existing-bound-source-only; dark Card remains none",
+              "guard": "Only an actual painted shell; layout wrappers stay unpainted. Dense body is opaque Trace; perimeter can be Quiet. Respect Card/Panel or no-cast binding.",
+              "referenceHeightPx": null,
+              "geometry": "existing-used-shape; concentric-rims; no material radius",
+              "fallback": "F0",
+              "provenance": "authored-proposal; see preset source transfer record"
+            },
+            "floating-surface": {
+              "profile": "glass-shell",
+              "controls": {
+                "amount": "quiet",
+                "light": {
+                  "angleDeg": 225,
+                  "heightDeg": 45,
+                  "ambient": 0.5
+                },
+                "body": {
+                  "source": "receiver.body",
+                  "transparency": 0.08
+                },
+                "backdrop": {
+                  "source": "local",
+                  "mapping": "unchanged",
+                  "blurPx": 5
+                },
+                "relief": {
+                  "profile": "flush",
+                  "depthPx": 0,
+                  "softnessPx": 0,
+                  "spreadPx": 0,
+                  "strength": 0
+                },
+                "glow": {
+                  "source": "context",
+                  "strength": 0,
+                  "placement": "outer",
+                  "spreadPx": 0,
+                  "softnessPx": 0
+                },
+                "gradients": {
+                  "edge": {
+                    "target": "edge",
+                    "kind": "linear",
+                    "angleDeg": 180,
+                    "interpolation": "srgb",
+                    "stops": [
+                      {
+                        "id": "top",
+                        "position": 0,
+                        "source": "highlight-white",
+                        "alpha": 0.08
+                      },
+                      {
+                        "id": "bottom",
+                        "position": 100,
+                        "source": "highlight-white",
+                        "alpha": 0
+                      }
+                    ]
+                  }
+                },
+                "stroke": {
+                  "coverage": "all",
+                  "paint": "gradient",
+                  "profile": "plain",
+                  "opacity": 0.22
+                },
+                "grain": {
+                  "source": "seeded-static-tile",
+                  "strength": 0,
+                  "scalePx": 1,
+                  "seed": 13,
+                  "blend": "source-over",
+                  "clip": "perimeter-excluding-content"
+                },
+                "gloss": {
+                  "source": "key",
+                  "strength": 0.06,
+                  "extent": 0.15,
+                  "softnessPx": 0,
+                  "mask": "perimeter-excluding-content"
+                },
+                "surfaceControls": {
+                  "direction": "source",
+                  "liftGain": 1,
+                  "softnessGain": 1,
+                  "spreadDeltaPx": 0,
+                  "strengthGain": 1
+                },
+                "content": {
+                  "ink": "receiver.ink",
+                  "decoration": "none"
+                },
+                "filters": []
+              },
+              "castEligibility": "existing-bound-float-or-exception-source",
+              "guard": "Quiet shell, one acquisition and one existing cast owner. Tooltip reduces to Trace and its own opaque recipe. Arrow continues shell with no separate effects.",
+              "referenceHeightPx": null,
+              "geometry": "existing-used-shape; concentric-rims; no material radius",
+              "fallback": "F0",
+              "provenance": "authored-proposal; see preset source transfer record"
+            },
+            "raised-control": {
+              "profile": "glass-control",
+              "controls": {
+                "amount": "trace",
+                "light": {
+                  "angleDeg": 225,
+                  "heightDeg": 45,
+                  "ambient": 0.5
+                },
+                "body": {
+                  "source": "receiver.body",
+                  "transparency": 0
+                },
+                "backdrop": {
+                  "source": "none",
+                  "mapping": "unchanged",
+                  "blurPx": 0
+                },
+                "relief": {
+                  "profile": "flush",
+                  "depthPx": 0,
+                  "softnessPx": 0,
+                  "spreadPx": 0,
+                  "strength": 0
+                },
+                "glow": {
+                  "source": "context",
+                  "strength": 0,
+                  "placement": "outer",
+                  "spreadPx": 0,
+                  "softnessPx": 0
+                },
+                "gradients": {
+                  "edge": {
+                    "target": "edge",
+                    "kind": "linear",
+                    "angleDeg": 180,
+                    "interpolation": "srgb",
+                    "stops": [
+                      {
+                        "id": "top",
+                        "position": 0,
+                        "source": "highlight-white",
+                        "alpha": 0.08
+                      },
+                      {
+                        "id": "bottom",
+                        "position": 100,
+                        "source": "highlight-white",
+                        "alpha": 0
+                      }
+                    ]
+                  }
+                },
+                "stroke": {
+                  "coverage": "all",
+                  "paint": "gradient",
+                  "profile": "plain",
+                  "opacity": 0.22
+                },
+                "grain": {
+                  "source": "seeded-static-tile",
+                  "strength": 0,
+                  "scalePx": 1,
+                  "seed": 13,
+                  "blend": "source-over",
+                  "clip": "perimeter-excluding-content"
+                },
+                "gloss": {
+                  "source": "key",
+                  "strength": 0,
+                  "extent": 0.15,
+                  "softnessPx": 0,
+                  "mask": "perimeter-excluding-content"
+                },
+                "surfaceControls": {
+                  "direction": "source",
+                  "liftGain": 1,
+                  "softnessGain": 1,
+                  "spreadDeltaPx": 0,
+                  "strengthGain": 1
+                },
+                "content": {
+                  "ink": "receiver.ink",
+                  "decoration": "none"
+                },
+                "filters": []
+              },
+              "castEligibility": "none",
+              "guard": "Quiet only for sparse actions, Trace for repeated actions; no external cast. Transparent/ghost/row controls keep their existing lack of body until state paints it.",
+              "referenceHeightPx": 32,
+              "geometry": "existing-used-shape; concentric-rims; no material radius",
+              "fallback": "F0",
+              "provenance": "authored-proposal; see preset source transfer record"
+            },
+            "recessed-field-track": {
+              "profile": "well",
+              "controls": {
+                "amount": "trace",
+                "light": {
+                  "angleDeg": 225,
+                  "heightDeg": 45,
+                  "ambient": 0.5
+                },
+                "body": {
+                  "source": "receiver.body",
+                  "transparency": 0
+                },
+                "backdrop": {
+                  "source": "none",
+                  "mapping": "unchanged",
+                  "blurPx": 0
+                },
+                "relief": {
+                  "profile": "concave",
+                  "depthPx": 0.5,
+                  "softnessPx": 1,
+                  "spreadPx": 0,
+                  "strength": 0.08
+                },
+                "glow": {
+                  "source": "context",
+                  "strength": 0,
+                  "placement": "outer",
+                  "spreadPx": 0,
+                  "softnessPx": 0
+                },
+                "gradients": {},
+                "stroke": {
+                  "coverage": "none",
+                  "paint": "solid",
+                  "profile": "plain",
+                  "opacity": 0
+                },
+                "grain": {
+                  "source": "seeded-static-tile",
+                  "strength": 0,
+                  "scalePx": 1,
+                  "seed": 13,
+                  "blend": "source-over",
+                  "clip": "perimeter-excluding-content"
+                },
+                "gloss": {
+                  "source": "key",
+                  "strength": 0,
+                  "extent": 0.15,
+                  "softnessPx": 0,
+                  "mask": "perimeter-excluding-content"
+                },
+                "surfaceControls": {
+                  "direction": "source",
+                  "liftGain": 1,
+                  "softnessGain": 1,
+                  "spreadDeltaPx": 0,
+                  "strengthGain": 1
+                },
+                "content": {
+                  "ink": "receiver.ink",
+                  "decoration": "none"
+                },
+                "filters": []
+              },
+              "castEligibility": "none",
+              "guard": "Trace, opaque editing/reading center. Only local cavity; focus/invalid are separate. Track and well geometry unchanged.",
+              "referenceHeightPx": null,
+              "geometry": "existing-used-shape; concentric-rims; no material radius",
+              "fallback": "F0",
+              "provenance": "authored-proposal; see preset source transfer record"
+            },
+            "thumb-knob": {
+              "profile": "glass-thumb",
+              "controls": {
+                "amount": "quiet",
+                "light": {
+                  "angleDeg": 225,
+                  "heightDeg": 45,
+                  "ambient": 0.5
+                },
+                "body": {
+                  "source": "receiver.body",
+                  "transparency": 0
+                },
+                "backdrop": {
+                  "source": "none",
+                  "mapping": "unchanged",
+                  "blurPx": 0
+                },
+                "relief": {
+                  "profile": "flush",
+                  "depthPx": 0,
+                  "softnessPx": 0,
+                  "spreadPx": 0,
+                  "strength": 0
+                },
+                "glow": {
+                  "source": "context",
+                  "strength": 0,
+                  "placement": "outer",
+                  "spreadPx": 0,
+                  "softnessPx": 0
+                },
+                "gradients": {
+                  "edge": {
+                    "target": "edge",
+                    "kind": "linear",
+                    "angleDeg": 180,
+                    "interpolation": "srgb",
+                    "stops": [
+                      {
+                        "id": "top",
+                        "position": 0,
+                        "source": "highlight-white",
+                        "alpha": 0.08
+                      },
+                      {
+                        "id": "bottom",
+                        "position": 100,
+                        "source": "highlight-white",
+                        "alpha": 0
+                      }
+                    ]
+                  }
+                },
+                "stroke": {
+                  "coverage": "all",
+                  "paint": "gradient",
+                  "profile": "plain",
+                  "opacity": 0.22
+                },
+                "grain": {
+                  "source": "seeded-static-tile",
+                  "strength": 0,
+                  "scalePx": 1,
+                  "seed": 13,
+                  "blend": "source-over",
+                  "clip": "perimeter-excluding-content"
+                },
+                "gloss": {
+                  "source": "key",
+                  "strength": 0.06,
+                  "extent": 0.15,
+                  "softnessPx": 0,
+                  "mask": "perimeter-excluding-content"
+                },
+                "surfaceControls": {
+                  "direction": "source",
+                  "liftGain": 1,
+                  "softnessGain": 1,
+                  "spreadDeltaPx": 0,
+                  "strengthGain": 1
+                },
+                "content": {
+                  "ink": "receiver.ink",
+                  "decoration": "none"
+                },
+                "filters": []
+              },
+              "castEligibility": "existing-bound-shadow-1-only",
+              "guard": "Quiet local convex cue, original dimensions/travel, Surface shadow-1 only where already bound; no independent backdrop.",
+              "referenceHeightPx": 16,
+              "geometry": "existing-used-shape; concentric-rims; no material radius",
+              "fallback": "F0",
+              "provenance": "authored-proposal; see preset source transfer record"
+            },
+            "indicator-fill": {
+              "profile": "plain",
+              "controls": {
+                "amount": "none",
+                "light": {
+                  "angleDeg": 225,
+                  "heightDeg": 45,
+                  "ambient": 0.5
+                },
+                "body": {
+                  "source": "receiver.semantic-or-literal-core",
+                  "transparency": 0
+                },
+                "backdrop": {
+                  "source": "none",
+                  "mapping": "unchanged",
+                  "blurPx": 0
+                },
+                "relief": {
+                  "profile": "flush",
+                  "depthPx": 0,
+                  "softnessPx": 0,
+                  "spreadPx": 0,
+                  "strength": 0
+                },
+                "glow": {
+                  "source": "context",
+                  "strength": 0,
+                  "placement": "outer",
+                  "spreadPx": 0,
+                  "softnessPx": 0
+                },
+                "gradients": {},
+                "stroke": {
+                  "coverage": "none",
+                  "paint": "solid",
+                  "profile": "plain",
+                  "opacity": 0
+                },
+                "grain": {
+                  "source": "seeded-static-tile",
+                  "strength": 0,
+                  "scalePx": 1,
+                  "seed": 13,
+                  "blend": "source-over",
+                  "clip": "perimeter-excluding-content"
+                },
+                "gloss": {
+                  "source": "key",
+                  "strength": 0,
+                  "extent": 0.15,
+                  "softnessPx": 0,
+                  "mask": "perimeter-excluding-content"
+                },
+                "surfaceControls": {
+                  "direction": "source",
+                  "liftGain": 1,
+                  "softnessGain": 1,
+                  "spreadDeltaPx": 0,
+                  "strengthGain": 1
+                },
+                "content": {
+                  "ink": "receiver.ink",
+                  "decoration": "none"
+                },
+                "filters": []
+              },
+              "castEligibility": "none",
+              "guard": "Semantic/literal core unchanged and opaque as already specified. Trace optional halo only outside truthful data geometry and with clearance; none on literal color data.",
+              "referenceHeightPx": null,
+              "geometry": "existing-used-shape; concentric-rims; no material radius",
+              "fallback": "F0",
+              "provenance": "authored-proposal; see preset source transfer record"
+            },
+            "divider": {
+              "profile": "plain",
+              "controls": {
+                "amount": "none",
+                "light": {
+                  "angleDeg": 225,
+                  "heightDeg": 45,
+                  "ambient": 0.5
+                },
+                "body": {
+                  "source": "none",
+                  "transparency": 0
+                },
+                "backdrop": {
+                  "source": "none",
+                  "mapping": "unchanged",
+                  "blurPx": 0
+                },
+                "relief": {
+                  "profile": "flush",
+                  "depthPx": 0,
+                  "softnessPx": 0,
+                  "spreadPx": 0,
+                  "strength": 0
+                },
+                "glow": {
+                  "source": "context",
+                  "strength": 0,
+                  "placement": "outer",
+                  "spreadPx": 0,
+                  "softnessPx": 0
+                },
+                "gradients": {},
+                "stroke": {
+                  "coverage": "none",
+                  "paint": "solid",
+                  "profile": "plain",
+                  "opacity": 0
+                },
+                "grain": {
+                  "source": "seeded-static-tile",
+                  "strength": 0,
+                  "scalePx": 1,
+                  "seed": 13,
+                  "blend": "source-over",
+                  "clip": "perimeter-excluding-content"
+                },
+                "gloss": {
+                  "source": "key",
+                  "strength": 0,
+                  "extent": 0.15,
+                  "softnessPx": 0,
+                  "mask": "perimeter-excluding-content"
+                },
+                "surfaceControls": {
+                  "direction": "source",
+                  "liftGain": 1,
+                  "softnessGain": 1,
+                  "spreadDeltaPx": 0,
+                  "strengthGain": 1
+                },
+                "content": {
+                  "ink": "receiver.ink",
+                  "decoration": "none"
+                },
+                "filters": []
+              },
+              "castEligibility": "none",
+              "guard": "Existing structural line stays. Trace supplementary relief only; no cast, grain or glow network.",
+              "referenceHeightPx": null,
+              "geometry": "existing-used-shape; concentric-rims; no material radius",
+              "fallback": "F0",
+              "provenance": "authored-proposal; see preset source transfer record"
+            },
+            "edge": {
+              "profile": "glass-edge",
+              "controls": {
+                "amount": "quiet",
+                "light": {
+                  "angleDeg": 225,
+                  "heightDeg": 45,
+                  "ambient": 0.5
+                },
+                "body": {
+                  "source": "none",
+                  "transparency": 0
+                },
+                "backdrop": {
+                  "source": "none",
+                  "mapping": "unchanged",
+                  "blurPx": 0
+                },
+                "relief": {
+                  "profile": "flush",
+                  "depthPx": 0,
+                  "softnessPx": 0,
+                  "spreadPx": 0,
+                  "strength": 0
+                },
+                "glow": {
+                  "source": "context",
+                  "strength": 0,
+                  "placement": "outer",
+                  "spreadPx": 0,
+                  "softnessPx": 0
+                },
+                "gradients": {
+                  "edge": {
+                    "target": "edge",
+                    "kind": "linear",
+                    "angleDeg": 180,
+                    "interpolation": "srgb",
+                    "stops": [
+                      {
+                        "id": "top",
+                        "position": 0,
+                        "source": "highlight-white",
+                        "alpha": 0.08
+                      },
+                      {
+                        "id": "bottom",
+                        "position": 100,
+                        "source": "highlight-white",
+                        "alpha": 0
+                      }
+                    ]
+                  }
+                },
+                "stroke": {
+                  "coverage": "all",
+                  "paint": "gradient",
+                  "profile": "plain",
+                  "opacity": 0.22
+                },
+                "grain": {
+                  "source": "seeded-static-tile",
+                  "strength": 0,
+                  "scalePx": 1,
+                  "seed": 13,
+                  "blend": "source-over",
+                  "clip": "perimeter-excluding-content"
+                },
+                "gloss": {
+                  "source": "key",
+                  "strength": 0,
+                  "extent": 0.15,
+                  "softnessPx": 0,
+                  "mask": "perimeter-excluding-content"
+                },
+                "surfaceControls": {
+                  "direction": "source",
+                  "liftGain": 1,
+                  "softnessGain": 1,
+                  "spreadDeltaPx": 0,
+                  "strengthGain": 1
+                },
+                "content": {
+                  "ink": "receiver.ink",
+                  "decoration": "none"
+                },
+                "filters": []
+              },
+              "castEligibility": "none",
+              "guard": "This is the owner shell perimeter reference, not a second edge pass. Required control/focus/invalid edges bypass Material. Surface decorative width may disable this edge.",
+              "referenceHeightPx": null,
+              "geometry": "existing-used-shape; concentric-rims; no material radius",
+              "fallback": "F0",
+              "provenance": "authored-proposal; see preset source transfer record"
+            },
+            "glyph": {
+              "profile": "plain",
+              "controls": {
+                "amount": "none",
+                "light": {
+                  "angleDeg": 225,
+                  "heightDeg": 45,
+                  "ambient": 0.5
+                },
+                "body": {
+                  "source": "none",
+                  "transparency": 0
+                },
+                "backdrop": {
+                  "source": "none",
+                  "mapping": "unchanged",
+                  "blurPx": 0
+                },
+                "relief": {
+                  "profile": "flush",
+                  "depthPx": 0,
+                  "softnessPx": 0,
+                  "spreadPx": 0,
+                  "strength": 0
+                },
+                "glow": {
+                  "source": "context",
+                  "strength": 0,
+                  "placement": "outer",
+                  "spreadPx": 0,
+                  "softnessPx": 0
+                },
+                "gradients": {},
+                "stroke": {
+                  "coverage": "none",
+                  "paint": "solid",
+                  "profile": "plain",
+                  "opacity": 0
+                },
+                "grain": {
+                  "source": "seeded-static-tile",
+                  "strength": 0,
+                  "scalePx": 1,
+                  "seed": 13,
+                  "blend": "source-over",
+                  "clip": "perimeter-excluding-content"
+                },
+                "gloss": {
+                  "source": "key",
+                  "strength": 0,
+                  "extent": 0.15,
+                  "softnessPx": 0,
+                  "mask": "perimeter-excluding-content"
+                },
+                "surfaceControls": {
+                  "direction": "source",
+                  "liftGain": 1,
+                  "softnessGain": 1,
+                  "spreadDeltaPx": 0,
+                  "strengthGain": 1
+                },
+                "content": {
+                  "ink": "receiver.ink",
+                  "decoration": "none"
+                },
+                "filters": []
+              },
+              "castEligibility": "none",
+              "guard": "None; plain semantic ink, intrinsic media unchanged. No filters, gradients, glow or engraving inherited from the host.",
+              "referenceHeightPx": null,
+              "geometry": "existing-used-shape; concentric-rims; no material radius",
+              "fallback": "F0",
+              "provenance": "authored-proposal; see preset source transfer record"
+            },
+            "text": {
+              "profile": "plain",
+              "controls": {
+                "amount": "none",
+                "light": {
+                  "angleDeg": 225,
+                  "heightDeg": 45,
+                  "ambient": 0.5
+                },
+                "body": {
+                  "source": "none",
+                  "transparency": 0
+                },
+                "backdrop": {
+                  "source": "none",
+                  "mapping": "unchanged",
+                  "blurPx": 0
+                },
+                "relief": {
+                  "profile": "flush",
+                  "depthPx": 0,
+                  "softnessPx": 0,
+                  "spreadPx": 0,
+                  "strength": 0
+                },
+                "glow": {
+                  "source": "context",
+                  "strength": 0,
+                  "placement": "outer",
+                  "spreadPx": 0,
+                  "softnessPx": 0
+                },
+                "gradients": {},
+                "stroke": {
+                  "coverage": "none",
+                  "paint": "solid",
+                  "profile": "plain",
+                  "opacity": 0
+                },
+                "grain": {
+                  "source": "seeded-static-tile",
+                  "strength": 0,
+                  "scalePx": 1,
+                  "seed": 13,
+                  "blend": "source-over",
+                  "clip": "perimeter-excluding-content"
+                },
+                "gloss": {
+                  "source": "key",
+                  "strength": 0,
+                  "extent": 0.15,
+                  "softnessPx": 0,
+                  "mask": "perimeter-excluding-content"
+                },
+                "surfaceControls": {
+                  "direction": "source",
+                  "liftGain": 1,
+                  "softnessGain": 1,
+                  "spreadDeltaPx": 0,
+                  "strengthGain": 1
+                },
+                "content": {
+                  "ink": "receiver.ink",
+                  "decoration": "none"
+                },
+                "filters": []
+              },
+              "castEligibility": "none",
+              "guard": "None; keep font metrics, readable ink, syntax and value paint. No letterpress, blur, glow or global transparency.",
+              "referenceHeightPx": null,
+              "geometry": "existing-used-shape; concentric-rims; no material radius",
+              "fallback": "F0",
+              "provenance": "authored-proposal; see preset source transfer record"
+            },
+            "scrim": {
+              "profile": "plain",
+              "controls": {
+                "amount": "none",
+                "light": {
+                  "angleDeg": 225,
+                  "heightDeg": 45,
+                  "ambient": 0.5
+                },
+                "body": {
+                  "source": "receiver.functional-occlusion",
+                  "transparency": 0
+                },
+                "backdrop": {
+                  "source": "none",
+                  "mapping": "unchanged",
+                  "blurPx": 0
+                },
+                "relief": {
+                  "profile": "flush",
+                  "depthPx": 0,
+                  "softnessPx": 0,
+                  "spreadPx": 0,
+                  "strength": 0
+                },
+                "glow": {
+                  "source": "context",
+                  "strength": 0,
+                  "placement": "outer",
+                  "spreadPx": 0,
+                  "softnessPx": 0
+                },
+                "gradients": {},
+                "stroke": {
+                  "coverage": "none",
+                  "paint": "solid",
+                  "profile": "plain",
+                  "opacity": 0
+                },
+                "grain": {
+                  "source": "seeded-static-tile",
+                  "strength": 0,
+                  "scalePx": 1,
+                  "seed": 13,
+                  "blend": "source-over",
+                  "clip": "perimeter-excluding-content"
+                },
+                "gloss": {
+                  "source": "key",
+                  "strength": 0,
+                  "extent": 0.15,
+                  "softnessPx": 0,
+                  "mask": "perimeter-excluding-content"
+                },
+                "surfaceControls": {
+                  "direction": "source",
+                  "liftGain": 1,
+                  "softnessGain": 1,
+                  "spreadDeltaPx": 0,
+                  "strengthGain": 1
+                },
+                "content": {
+                  "ink": "receiver.ink",
+                  "decoration": "none"
+                },
+                "filters": []
+              },
+              "castEligibility": "none",
+              "guard": "None added material; retain existing functional occlusion/local fade and modal behavior. No independent blur, grain, gloss or new alpha.",
+              "referenceHeightPx": null,
+              "geometry": "existing-used-shape; concentric-rims; no material radius",
+              "fallback": "F0",
+              "provenance": "authored-proposal; see preset source transfer record"
+            }
+          }
+        }
+      },
+      "statePolicy": {
+        "hover": "Strengthen the existing body/edge; do not change tint transparency or blur.",
+        "press": "Suppress the optional glint; use active body.",
+        "focus-visible": "Keep required focus; remove optional glow, gloss and reflected body overlays on the focused receiver.",
+        "selected-checked": "Keep semantic selection; no extra glass on the mark.",
+        "open": "Resolve the opened receiver independently, one shell; preserve actual expanded state.",
+        "disabled": "Use existing disabled paint once and opaque body; remove optional glow/gloss/relief/grain/gradients/strokes, keep selected value.",
+        "invalid": "Keep danger context and combined invalid-focus geometry; suppress optional glow/gloss, reflected body overlays and decorative edge gradient."
+      }
+    },
+    "patch": {
+      "light": {
+        "roles": {
+          "floating-surface": {
+            "gloss": {
+              "strength": 0
+            }
+          }
+        }
+      },
+      "dark": {
+        "roles": {
+          "floating-surface": {
+            "gloss": {
+              "strength": 0
+            }
+          }
+        }
+      }
+    },
+    "preview": {
+      "fixture": "popup-with-reading-island",
+      "baseline": "material-none",
+      "axes": {
+        "surface": "outlined",
+        "ui": "default",
+        "radius": "8"
+      },
+      "mode": "light"
+    }
+  }
+}

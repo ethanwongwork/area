@@ -1,0 +1,209 @@
+{
+  "checked": "2026-10-10",
+  "areaCommit": "3bcc6a93b93f73aa6bef410dbe88d93b0caddb7e",
+  "researchCommit": "3a9a1b61e748741e9bc5e578b536ad978d3b1986",
+  "area": [
+    {
+      "id": "A01",
+      "title": "Gallery control registry",
+      "path": "apps/docs/src/gallery/controls.ts",
+      "start": 1,
+      "end": 39
+    },
+    {
+      "id": "A02",
+      "title": "Canvas mutation and persistence",
+      "path": "apps/docs/src/gallery/chrome.tsx",
+      "start": 201,
+      "end": 263
+    },
+    {
+      "id": "A03",
+      "title": "Theme API and portal context",
+      "path": "packages/react/src/components/Theme.tsx",
+      "start": 8,
+      "end": 33
+    },
+    {
+      "id": "A04",
+      "title": "Existing JSON output schema",
+      "path": "packages/tokens/src/emit/json.ts",
+      "start": 25,
+      "end": 79
+    },
+    {
+      "id": "A05",
+      "title": "Scope derivations",
+      "path": "packages/tokens/src/emit/css.ts",
+      "start": 164,
+      "end": 174
+    },
+    {
+      "id": "A06",
+      "title": "Current part/variant manifest",
+      "path": "packages/styles/src/manifest.ts",
+      "start": 1,
+      "end": 31
+    },
+    {
+      "id": "A07",
+      "title": "Surface token ownership",
+      "path": "packages/tokens/src/axes/surface.ts",
+      "start": 15,
+      "end": 81
+    },
+    {
+      "id": "A08",
+      "title": "Contrast and fixed hover foreground",
+      "path": "docs/CONTRAST.md",
+      "start": 7,
+      "end": 76
+    }
+  ],
+  "public": [
+    {
+      "id": "D01",
+      "title": "DTCG published format 2025.10",
+      "url": "https://www.designtokens.org/TR/2025.10/format/",
+      "scope": "Status; sections 5.2.3, 8, 9.4, 9.6, 9.7. Published 2025-10-28; identifies itself as latest published version."
+    },
+    {
+      "id": "D02",
+      "title": "DTCG resolver 2025.10",
+      "url": "https://www.designtokens.org/TR/2025.10/resolver/",
+      "scope": "Sets, modifiers, contexts and resolutionOrder; not CSS runtime material evaluation."
+    },
+    {
+      "id": "D03",
+      "title": "DTCG project",
+      "url": "https://www.designtokens.org/",
+      "scope": "Publication cross-check; target a named published version, not a moving editor draft."
+    },
+    {
+      "id": "T01",
+      "title": "Tokens Studio format selector",
+      "url": "https://docs.tokens.studio/manage-settings/token-format",
+      "scope": "DTCG-prefix mode and remaining future type support; do not equate prefix conversion with complete 2025.10 compatibility."
+    },
+    {
+      "id": "T02",
+      "title": "Tokens Studio shadows",
+      "url": "https://docs.tokens.studio/manage-tokens/token-types/box-shadow",
+      "scope": "Multiple inner/drop lobes, Effect Styles, documented boxShadow versus shadow differences."
+    },
+    {
+      "id": "T03",
+      "title": "Tokens Studio gradients",
+      "url": "https://docs.tokens.studio/manage-tokens/token-types/color/gradient",
+      "scope": "CSS-like color values; linear export limit and style references."
+    },
+    {
+      "id": "T04",
+      "title": "Tokens Studio border",
+      "url": "https://docs.tokens.studio/manage-tokens/token-types/border",
+      "scope": "Composite node application and independent-side color limitation."
+    },
+    {
+      "id": "T05",
+      "title": "Tokens Studio Other",
+      "url": "https://docs.tokens.studio/manage-tokens/token-types/other",
+      "scope": "Stores nonstandard decisions but does not visually apply them."
+    },
+    {
+      "id": "T06",
+      "title": "Tokens Studio skipped variables",
+      "url": "https://docs.tokens.studio/figma/export/variables-skipped",
+      "scope": "Composite/gradient values skipped as whole variables; modes subject to plan. Four-type wording differs from current Figma API."
+    },
+    {
+      "id": "T07",
+      "title": "Tokens Studio styles with references",
+      "url": "https://docs.tokens.studio/figma/export/styles-variable-references",
+      "scope": "Leaf variables can remain referenced by supported styles."
+    },
+    {
+      "id": "F01",
+      "title": "Figma variable types",
+      "url": "https://developers.figma.com/docs/plugins/api/VariableResolvedDataType/",
+      "scope": "Current documented union includes BOOLEAN, COLOR, EASING, FLOAT, STRING, TIMING."
+    },
+    {
+      "id": "F02",
+      "title": "Figma effect fields",
+      "url": "https://developers.figma.com/docs/plugins/api/VariableBindableEffectField/",
+      "scope": "Shadow radius/color/spread/offsetX/offsetY and blur radius binding."
+    },
+    {
+      "id": "F03",
+      "title": "Figma gradient stop binding",
+      "url": "https://developers.figma.com/docs/plugins/api/VariableBindableColorStopField/",
+      "scope": "Color is the documented bindable stop field."
+    },
+    {
+      "id": "F04",
+      "title": "Figma paint",
+      "url": "https://developers.figma.com/docs/plugins/api/Paint/",
+      "scope": "Gradient kinds, transforms and stops; solid alpha is paint opacity."
+    },
+    {
+      "id": "F05",
+      "title": "Figma effects",
+      "url": "https://developers.figma.com/docs/plugins/api/Effect/",
+      "scope": "Shadow geometry, progressive blur, beta noise/texture/glass, shader effect; no variable binding on noise/texture/glass."
+    },
+    {
+      "id": "F06",
+      "title": "Figma effect styles",
+      "url": "https://developers.figma.com/docs/plugins/api/EffectStyle/",
+      "scope": "An effect list and supported variable references."
+    },
+    {
+      "id": "F07",
+      "title": "Figma paint styles",
+      "url": "https://developers.figma.com/docs/plugins/api/PaintStyle/",
+      "scope": "Paint list for fills/strokes; not a complete border or component material."
+    },
+    {
+      "id": "F08",
+      "title": "Figma variable collections",
+      "url": "https://developers.figma.com/docs/plugins/api/VariableCollection/",
+      "scope": "Modes and IDs; adapter must map logical names to destination identifiers."
+    },
+    {
+      "id": "W01",
+      "title": "Tailwind theme variables",
+      "url": "https://tailwindcss.com/docs/theme",
+      "scope": "Current CSS-first theme namespaces and @theme inline variable references."
+    },
+    {
+      "id": "W02",
+      "title": "Tailwind shadows",
+      "url": "https://tailwindcss.com/docs/box-shadow",
+      "scope": "Box/inset shadows and utility composition; distinct from filter drop-shadow."
+    },
+    {
+      "id": "W03",
+      "title": "Tailwind custom utilities",
+      "url": "https://tailwindcss.com/docs/adding-custom-styles",
+      "scope": "@utility and variants; not an Area guard/part compiler."
+    },
+    {
+      "id": "C01",
+      "title": "CSS backgrounds and borders",
+      "url": "https://www.w3.org/TR/css-backgrounds-3/#box-shadow",
+      "scope": "Layered/inset box shadows and rounded background/border painting."
+    },
+    {
+      "id": "C02",
+      "title": "CSS images gradients",
+      "url": "https://www.w3.org/TR/css-images-3/#gradients",
+      "scope": "Gradient geometry is part of the rendering syntax."
+    },
+    {
+      "id": "C03",
+      "title": "MDN backdrop-filter",
+      "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/backdrop-filter",
+      "scope": "Backdrop acquisition differs from element blur; transparent body and backdrop-root context matter."
+    }
+  ]
+}
