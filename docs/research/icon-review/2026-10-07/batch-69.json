@@ -1,0 +1,261 @@
+{
+  "id": "batch-69",
+  "title": "Batch 69 · New icons",
+  "date": "2026-10-07",
+  "note": "Drawn from the 43 new-icon candidates on the review page (Cursor, VS Code, Figma, Notion and ChatGPT uses; Lucide, Phosphor, Material Symbols and Fluent references), owner picks pending. square-terminal was not drawn: Area's terminal is already a framed window. Owner review (2026-10-08): 27 approved; 15 fixed or redrawn on the named library (api, stamp on Phosphor; brain-circuit on Fluent; slice, swatch-book, telescope on Lucide), and file-diff takes diff's ± spacing.",
+  "icons": [
+    {
+      "name": "whole-word",
+      "label": "Match whole word",
+      "fluent": "text_whole_word",
+      "spec": "horizontal; case-sensitive's lowercase a (r 2 bowl at 4.5, 7.5 with a tangent stem) and its mirror b (stem 3–9.5, bowl at 11.5, 7.5), stems 3 apart (standard), over Lucide's/Fluent's U bracket 1.5–14.5 at 12.5 (r 1 corners, uprights from 10.5, tight 1.12 to the bowls); sits 0.25 high so the bracket is on x.5 (heavy-base rule); line glyph, fills by weight"
+    },
+    {
+      "name": "text-search",
+      "label": "Search in files",
+      "fluent": "",
+      "spec": "horizontal; Lucide text-search: list's 2–14 line at 3.5 and two short lines 2–6 at 7.5 / 11.5 (stack rows), file-search's lens exactly (r 2 at 10.5, 9.5, handle 1.5 → 3 out on the diagonal), both short lines standard 1.80 from the lens; centred 8, 8; fills by weight"
+    },
+    {
+      "name": "list-filter",
+      "label": "Filter list",
+      "fluent": "",
+      "spec": "horizontal; Lucide list-filter / Phosphor funnel-simple: three centred lines 12, 8, 4 wide (Lucide's 20 / 12 / 6 ratio) on the three-line stack rows 3.5 / 7.5 / 11.5 (0.5 high, crisp); fills by weight"
+    },
+    {
+      "name": "git-graph",
+      "label": "Commit graph",
+      "fluent": "",
+      "spec": "square; Lucide git-graph on the git family: git-branch's left lane (r 1.5 rings at 4, 4 and 4, 12 with its stem) and top-right ring, a through lane 8, 2.5–13.5 (tight 1.38 to both columns), the right ring's lane git-branch's own curve (r 3 quarter arc from 12, 5.5 to 9, 8.5, then flat into the through lane at 8, 8.5); filled, rings fill as the family; no free angles"
+    },
+    {
+      "name": "git-branch-plus",
+      "label": "New branch",
+      "fluent": "",
+      "spec": "square; git-branch copied verbatim plus the family's 4px + (10–14 at 12, 12, filter-add's / list-plus's) in the empty lower-right corner (Lucide git-branch-plus), tight 1.28 to the branch curve; ink centre 8.25, 8.25 as the + family's corner marks; filled, rings fill"
+    },
+    {
+      "name": "git-pull-request-create",
+      "label": "Create pull request",
+      "fluent": "",
+      "spec": "square; git-pull-request verbatim with its target ring replaced by the 4px + at 12, 12 (Lucide git-pull-request-create), the hook (with its 2px head) shortened to 7.5 so it stops tight 1.38 above the +; ink centre 8.25, 8; filled, rings fill"
+    },
+    {
+      "name": "diff",
+      "label": "Diff",
+      "fluent": "",
+      "spec": "square; the square container family (square-plus's 11 × 11 r 2 frame) holding a ± from the 4px + (stem 5–9, bar at 7) over a 4px − at 11, 2 apart (detail gap 0.88, closer than plus-minus's standalone 3), the group 5–11 centred on 8 like square-plus's whole-pixel bar, tight 1.38 to the frame top and bottom; filled, square fills, ± a knockout"
+    },
+    {
+      "name": "repository",
+      "label": "Repository",
+      "fluent": "book",
+      "spec": "vertical; Lucide book-marked / Phosphor book-bookmark (GitHub's repo): a 9 × 12 cover 3.5–12.5 × 2–14 (r 2 spine corner, r 1 cover corners) with a 3-tall page block at the foot, its left end an r 1.5 semicircle tangent to the spine, and a 4-wide ribbon 6.5–10.5 hanging from the top edge to 7.5 with a sharp 90° notch at 8.5, 5.5 (45° sides on the lattice, sharp points, data-acute=sharp as flag's swallowtail; detail 0.88 to the cover's right side); filled: the cover above the page line fills round the ribbon (a secondary part, its inside open, as Phosphor's fill), page block stays a line"
+    },
+    {
+      "name": "issue",
+      "label": "Issue",
+      "fluent": "",
+      "spec": "circle; Lucide circle-dot / GitHub issue-opened: the ring (r 6 at 8, 8) with the ⌀2 centre mark dot (square-dot's and circle-dot-dashed's, on the size curve); filled, ring solid and the dot a hole as square-dot"
+    },
+    {
+      "name": "folder-git",
+      "label": "Repository folder",
+      "fluent": "",
+      "spec": "horizontal; folder verbatim with git-commit's node (r 1.5 ring, git nodes) and 2-long stubs inside the body, centred at 8, 9.5 where the family's + sits (Lucide folder-git: a commit inside the folder); stubs 3.5 under the flap, data-gap=\"aligned\" as folder-remove; filled: the body fills, stubs knock out and the node is a ⌀3 hole (ring outline-only, a gap disk), since the full ⌀4.1 hole left a sliver to the bottom edge at 16"
+    },
+    {
+      "name": "folder-code",
+      "label": "Code folder",
+      "fluent": "",
+      "spec": "horizontal; folder verbatim with file-code's 3-tall two-leg chevrons (M7 8L5.5 9.5L7 11, mirrored) centred in the body at 8, 9.5 (Lucide folder-code); detail gaps to the flap and floor; filled: body fills, chevrons knock out"
+    },
+    {
+      "name": "folder-tree",
+      "label": "File tree",
+      "fluent": "text_bullet_list_tree",
+      "spec": "square; Lucide folder-tree: list-tree's trunk at x 2 with r 2 branches (the top one curving off the trunk's start) to two small folders 6.5 × 4.5 (7.5–14, tops 2 and 9) with the folder's left tab and a 45° 1-step, r 1 corners, flap dropped at this size (simplified); branches stop tight (2.5) short of the folders at their body middles 4.5 / 11.5; centre 8, 7.75 (lattice puts both folder tops on whole y); filled: the folders fill, the trunk stays a line"
+    },
+    {
+      "name": "folder-input",
+      "label": "Move to folder",
+      "fluent": "folder_arrow_right",
+      "spec": "horizontal; folder verbatim with its left wall cut open round an arrow (overlap cut below, wall resumes at 10.75; above, the wall ends at the flap's corner 2, 6, no stub under it) that enters from the wall at 2, 8.5 and ends at 11.5 with a 2 head (Lucide folder-input); filled: the body fills and the arrow is a knockout that runs out through the left edge"
+    },
+    {
+      "name": "file-json",
+      "label": "JSON file",
+      "fluent": "braces",
+      "spec": "vertical; document verbatim (fold and all) with a pair of 3.5-tall braces 8.5–12 (centred in the body below the fold, detail 0.88 to the fold line and the floor), stems at 6 / 10, r 0.75 end hooks, 0.5 straight runs and r 0.5 cusped tips at 5.5 / 10.5, ends 2.5 apart (1 : 2.8 like braces and Lucide's 1 : 3) (Lucide file-json); filled: page fills, braces knock out"
+    },
+    {
+      "name": "file-warning",
+      "label": "File problem",
+      "fluent": "document_error",
+      "spec": "vertical; document verbatim with the container ! (2.25 stem 7–9.25, ⌀1.5 dot 2.25 below at 11.5, chat-warning's) inside the body at x 6.5: at x 8 the fold's pocket corner leaves room only for a 1.4 stem, so the ! moves left into the free L under the fold, detail gap 0.98 to the fold curve and 0.94 to the floor (Lucide file-warning; Fluent's circled badge is too dense at 16); filled: page fills, ! knocks out (stem knockout, dot hole)"
+    },
+    {
+      "name": "logs",
+      "label": "Logs",
+      "fluent": "text_bullet_list_square",
+      "spec": "horizontal; Lucide logs: three rows at 3.5 / 7.5 / 11.5 (three-line stack rule, 0.5 high), each two 1-long dashes (2–3, 5.5–6.5) and a line 9–14, tight 1.38 gaps along the row; a line glyph, fills by weight (gaps 1.0 at 1.5)"
+    },
+    {
+      "name": "pipeline",
+      "label": "Pipeline",
+      "fluent": "pipeline",
+      "spec": "horizontal; Fluent pipeline: two 3 × 10 capsule flanges (1.5–4.5 and 11.5–14.5, r 1.5) joined by a 7 × 7 pipe body whose top and bottom lines (4.5, 11.5) run between them; filled: flanges solid with data-halo, the body a filled-only fill cut back one line weight from each flange (Fluent's filled cut), the body lines outline-only"
+    },
+    {
+      "name": "container",
+      "label": "Container",
+      "fluent": "",
+      "spec": "Outline unchanged (Lucide's container on package's 1 : 2 slopes, ribs at x 8 and 11). Filled: the box solid, its face edges cut and running out through the silhouette (package's); each rib becomes a round-ended slot centred in its panel's height (x 8: 9 to 11.25; x 11: 7.5 to 9.75), standing free with about 1.1 of ink above and below."
+    },
+    {
+      "name": "server-cog",
+      "label": "Server settings",
+      "fluent": "",
+      "spec": "server's two units copied exactly, person-settings' gear mark (r 1.5 ring, six teeth to 2.25, ⌀1.5 hub) at 12, 11 (moved 0.5 in and up from the person family's 12.5, 12 so the teeth stay inside the square keyline and 1.125 below the top unit); the lower unit ends in a round bite r 4.5 about it (2.25 clear of the teeth). Filled: the units fill (the lower one closed by the bite), lights holes, gear solid with halo and hub hole, as person-settings. Lucide server-cog for the concept."
+    },
+    {
+      "name": "database-search",
+      "label": "Database search",
+      "fluent": "database_search",
+      "spec": "database copied exactly with file-search's lens mark (r 2, 1.5 diagonal handle) at 10.5, 10.5 on the lower right; the body and band cut round it by the overlap cut (icon-geometry cut), right wall ending at 7.5 (Lucide, Fluent). Filled: top ellipse and body solid with the base's band gaps; the body stops on a bite r 4.25 about the lens, run to the circle's top and chorded under the top cut so no wedge is left at the wall; the lens stays a line."
+    },
+    {
+      "name": "database-zap",
+      "label": "Database cache",
+      "fluent": "database_lightning",
+      "spec": "Outline unchanged (the bolt crosses the wall there and is now a `line`). Filled: lid solid, lid gap through, body solid. The bolt is an inset parallelogram zigzag 11.875,8.95 → 10.25,10.75 → 12.375,10.75 → 10.75,12.55 (2.125 × 3.6, parallel diagonals). It was solved so the fill round it is exactly even: 1.00 w to the right wall, 1.00 w to the lid gap above, 1.03 w to the bottom edge. The middle band gap (an inset) runs from the left edge (sawn) along the offset ellipse and ends with a round cap at the curve's lowest point, 8,11.1875, directly under the lid's centre, 1.04 w from the bolt."
+    },
+    {
+      "name": "cloud-sync",
+      "label": "Cloud sync",
+      "fluent": "cloud_sync",
+      "spec": "Outline unchanged. Filled: two inset sync marks, 4 wide (x 6–10), with arcs at r 2.236 (the outline mark's r : chord ratio) and hooks 1.25 long (were 1.5). Upper mark: hook 6,4.5 → 6,5.75 → 7.25,5.75, then an arc over to 10,5.75. Lower mark: 10,10 → 10,8.75 → 8.75,8.75, then an arc under to 6,8.75. The marks are 3 apart on centre (1.75 clear, was 1.25)."
+    },
+    {
+      "name": "api",
+      "label": "API",
+      "fluent": "plug_connected",
+      "spec": "square keyline, free angles; Phosphor's plugs-connected: one face bar along the diagonal (5.75 → 10.25) shared by two rotated plugs (sides on x + y = 13 / 19, backs on x − y = ±5, r 1.5 back corners, square face corners), cords from each back's middle to 13.875, 2.125 and 2.125, 13.875, and Phosphor's four spark dashes at full length (6.08, 2.24 → 6.56, 3.44 and the 90° turns); filled (Phosphor's fill): both plug bodies solid, the face bar stays a line attached to the lower-left plug, and the upper-right plug is set back from the bar by a one-line gap (data-shift keeps it flush at every size); cords and dashes stay lines"
+    },
+    {
+      "name": "memory",
+      "label": "Memory",
+      "fluent": "ram",
+      "spec": "Phosphor's memory: a 13 × 7 board (1.5–14.5 × 3.5–10.5, r 1.5), two 3 × 3 r 0.5 chips at 3.5 and 9.5 (a detail gap to the board, standard between), four contact pins 2 long on x 3.5 / 6.5 / 9.5 / 12.5 in line with the chips' edges. Filled: the board solid, the chips knocked out, the pins lines."
+    },
+    {
+      "name": "brain-circuit",
+      "label": "AI model",
+      "fluent": "brain_circuit",
+      "spec": "square keyline; brain's hemispheres (same paths as the restored brain) with three traces from the midline to ⌀2 nodes (5.5, 6; 5.5, 9.5; 10.5, 6); the traces start 0.5 off the midline (7.5 / 8.5), so in the outline they meet the midline line and in the filled variant they open into the midline gap; nodes are holes"
+    },
+    {
+      "name": "toolbox",
+      "label": "Toolbox",
+      "fluent": "box_toolbox",
+      "spec": "Lucide's toolbox: a 12 × 8 body (2–14 × 5.5–13.5) with 45° chamfered shoulders from 4.5 / 11.5 to 8 (r 1 fillets, r 1.5 bottom corners), briefcase's handle copied exactly, a band at 9.5 and two latches on the handle's lines (x 5.5 / 10.5, 8.5–10.5). Filled: the body solid, the band a cut through the silhouette (briefcase's), latches knocked out."
+    },
+    {
+      "name": "telescope",
+      "label": "Telescope",
+      "fluent": "",
+      "spec": "Lucide telescope on its own axis (rise 1 : 4): a tapered tube 2.25 wide at the eyepiece and 3.25 at the objective (r 0.5 front corners) with Lucide's band across it 2.2 from the eyepiece end; an objective 2 × 4.6 (r 0.75 inner, r 0.5 outer corners) the tube's edges end on; an r 1.25 pivot ring at 8.25, 8.75 sitting over the tube's lower edge, which ends on the ring (joined, as Lucide); legs radial from the ring to 5.97 and 10.53 at 13.5. data-angles free. Filled: tube solid with the band a cut, the objective solid with a halo, the ring stays a ring (joined to the tube, its inside open) and the legs stay lines."
+    },
+    {
+      "name": "scan-text",
+      "label": "Scan text",
+      "fluent": "scan_text",
+      "spec": "scan-check's four corners copied exactly round three left-aligned text lines (Lucide scan-text) at 5.5 / 8 / 10.5, x 5 to 10 / 11 / 8.5 (square-list's 2.5 rhythm, tight 1.375; 2.5 clear of the corners), centred on 8. A line glyph: fills by weight."
+    },
+    {
+      "name": "siren",
+      "label": "Siren",
+      "fluent": "",
+      "spec": "square keyline; Phosphor's siren on Area's grid: an r 4.5 dome centred 8, 9.5 on straight sides 3.5 and 12.5 down to 11.5, an 11 × 2.5 base (2.5–13.5, 11.5–14, r 1), an r 2.25 highlight arc concentric with the dome from 8.5, 7.31 to 10.25, 9.5, and three short rays (8, 2–2.75; 4, 4 → 3.5, 3.5 and mirrored, on the 45° lattice, 1.0 clear of the dome); filled: the dome is solid with the highlight knocked out, the base stays a line (Phosphor's fill)"
+    },
+    {
+      "name": "square-mouse-pointer",
+      "label": "Select element",
+      "fluent": "",
+      "spec": "Keyline square; Lucide square-mouse-pointer: the shared r 2 frame (2.5–13.5) cut open round mouse-pointer-click's pointer copied verbatim (behind, 2.25), its lower-right corner dropped; ends at 6.21 on both sides. Filled: the pointer fills, the frame stays a line (framed figures)."
+    },
+    {
+      "name": "text-select",
+      "label": "Select text",
+      "fluent": "select_all_on",
+      "spec": "Keyline square; square-dashed exactly with three text lines (Lucide text-select) at 5.5 / 8 / 10.5 from x 5, lengths 4 / 6 / 3.5, centred on 8; line ends placed for standard/tight/open gaps to the dashes. Filled: fills by weight (dashed frame has no body)."
+    },
+    {
+      "name": "table-of-contents",
+      "label": "Table of contents",
+      "fluent": "text_bullet_list_tree",
+      "spec": "Keyline square; Lucide table-of-contents (lines with page-number dots) on list-bullet's rows 4.5 / 7.5 / 10.5 and ⌀2 dots (at 13), the middle entry indented to 5.5 for hierarchy (Notion TOC); lines end 9.5, a standard 1.94 to the dots. Filled: by weight."
+    },
+    {
+      "name": "layout-template",
+      "label": "Template",
+      "fluent": "",
+      "spec": "Keyline square; Lucide layout-template on layout-dashboard's r 1 panes and 3 spacing: a full-width header 11 × 4 over a 5 × 4 and a 3 × 4 pane (the narrow pane at the 1.875 counter floor). Filled: all three panes solid."
+    },
+    {
+      "name": "timeline",
+      "label": "Timeline",
+      "fluent": "timeline",
+      "spec": "Keyline square; Fluent timeline: two r 1 cards 5.5 × 4 (2.5–8, 2.5–6.5 and 9.5–13.5) beside a vertical track at x 12 with git-commit's r 1.5 node joined at 8; the node now clears the cards' corners by 1.97 (standard), matching the 1.88 channel between the cards. Filled: cards and node solid, track a line."
+    },
+    {
+      "name": "milestone",
+      "label": "Milestone",
+      "fluent": "",
+      "spec": "Keyline square; Lucide milestone / Phosphor signpost: a 5-tall sign (2.5–11.5 then a 90° 45° point to 14, 6 on the lattice), r 1 corners and r 0.75 tip, on a post at x 8 joined above (2–3.5) and below (8.5–13.5). Filled: sign solid, post a line."
+    },
+    {
+      "name": "monitor-cog",
+      "label": "Display settings",
+      "fluent": "",
+      "spec": "Keyline square; desktop copied exactly with person-settings' gear (r 1.5 ring, six 0.75 teeth) turned 30° so its teeth clear the screen, centred inside the screen at 8, 7 as desktop-check's check (marks inside containers; Lucide monitor-cog's cog, moved in): tight 1.38 to the top, detail 0.93 to the bottom. Filled: the screen fills and the gear is a knockout (the ring's centre stays solid as the hub), stand a line. Replaces a top-right badge whose r 4.5 bite turned the filled screen into a crescent."
+    },
+    {
+      "name": "stamp",
+      "label": "Stamp",
+      "fluent": "",
+      "spec": "Keyline square; Phosphor stamp: a tapered handle (two r 1.5 shoulders about 7.25 / 8.75, 4 with a flat top at 2.5, straight sides narrowing to 3 wide at 6.75–9.25), a rectangular 11 × 2.5 base block (2.5–13.5, 8.5–11, r 0.75) and an 11-long imprint line at 13.5, as wide as the base (tight 1.38). data-angles free. Filled: handle and base one solid mass, the line stays a line."
+    },
+    {
+      "name": "component",
+      "label": "Component",
+      "fluent": "",
+      "spec": "Keyline circle; Figma's / Lucide component: four diamonds (half-diagonal 2, r 0.5 corners) at 8 ± 4 on the lattice, facing edges 1.70 apart (tight). Filled: four solid diamonds."
+    },
+    {
+      "name": "slice",
+      "label": "Slice",
+      "fluent": "",
+      "spec": "Keyline square; Lucide slice followed closely: one silhouette, a sharp blade tip at 2.5, 13.5 on the handle's top edge (x + y = 16), a 2.83-wide 45° handle (x + y = 16 / 20) with a round cap about 12, 6, the lower edge breaking at a knuckle (8, 12) into a short vertical blade edge down to a flat foot at 13.5 (r 0.5 corner), and Lucide's heel as a perpendicular line across the whole handle (6, 10 → 8, 12). Filled: solid with the heel a cut."
+    },
+    {
+      "name": "blend",
+      "label": "Blend mode",
+      "fluent": "",
+      "spec": "Keyline circle; Lucide blend: two r 4 rings at 6, 10 and 10, 6 crossing whole (shapes on one plane), lens counter 1.4. Filled: the rings stay lines and the overlap lens fills (a filled-only fill), the blend being the identity."
+    },
+    {
+      "name": "swatch-book",
+      "label": "Swatches",
+      "fluent": "",
+      "spec": "Keyline square; Lucide swatch-book as a fan about the rivet (5, 11): the front card 5 wide with a semicircular foot and a ⌀1.5 rivet; the middle card starts on the front card's side at 7.5, 5.5 (upper edge x + y = 13), r 1.5 corners on its far end (x − y = 6), and its lower edge (x + y = 19.5) runs all the way down into the front card's foot at 7, 12.5 (near-tangent, as Lucide); the back card's top leaves that diagonal at 11, 8.5 and its bottom runs back to the rivet's x at 13.5. data-angles free. Filled: the front card fills with the rivet a hole, the others stay lines."
+    },
+    {
+      "name": "line-style",
+      "label": "Stroke style",
+      "fluent": "line_style",
+      "spec": "Keyline horizontal; solid, dashed and dotted rows at 3.5 / 7.5 / 11.5 across 2–14 (Material line_style's order): square-dashed's 2px dashes 3 apart, five ⌀1.5 dots 2.875 apart (tight 1.38). Filled: by weight. Distinct from stroke-weight (three solid bars)."
+    }
+  ],
+  "extra": "Not drawn: square-terminal (terminal is already a window; alias candidate). Delegated calls to confirm are listed in docs/research/icon-review/2026-10-07/README.md, round 8."
+}
