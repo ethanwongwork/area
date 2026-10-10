@@ -62,11 +62,14 @@ const COUNTERS = { detail: [0.875, 1.25], tight: [1.25, 1.75], standard: [1.75, 
 //   wider (stroke pieces), so both keep their gap beside the slash.
 // fill: a solid drawn only in the filled variant. A slashed icon's outline is cut open
 //   round the slash (line pieces); its filled variant is the whole shape, parted by gaps.
+// inset: a knockout drawn only in the filled variant, round-ended at the line weight. A part
+//   that crosses the solid's edge in the outline moves wholly inside it when filled (the
+//   cloud arrows, bolt and sync mark; owner 2026-10-08: a negative cutout, not a halo).
 // A mark or arrow over a solid (a container's plus, a cloud's arrow) is a knockout too: in the
 //   filled variant every detail over a solid is negative space. Where it runs out through the
 //   silhouette's edge it leaves a notch; the part beyond the edge is not drawn.
 // Line glyphs (no solid shape) fill by weight: every stroke at FILLED_WEIGHT_RATIO.
-const FILLED_ROLES = ["solid", "knockout", "hole", "cut", "gap", "line", "fill", "stroke", "halo"];
+const FILLED_ROLES = ["inset", "solid", "knockout", "hole", "cut", "gap", "line", "fill", "stroke", "halo"];
 const SOLID_ROLES = ["solid", "fill"];
 const FILLED_WEIGHT_RATIO = 4 / 3;
 const SIZE_CURVE = 0.45;             // line ∝ size^0.45: Cursor's 1.25px at 16 → 1.5px at 24   // 1.125 → 1.5px, Fluent's filled line weight
@@ -334,7 +337,7 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
   for (const [, tag, body] of text.matchAll(/<(path|circle|rect)\b([^>]*)\/>/g)) {
     const a = attrs(body);
     const stroked = a.stroke && a.stroke !== "none";
-    if (["gap", "fill", "stroke", "halo"].includes(a["data-filled"])) {  // filled-only: no outline checks
+    if (["gap", "fill", "stroke", "halo", "inset"].includes(a["data-filled"])) {  // filled-only: no outline checks
       if (tag !== "path") fail(name, `a ${a["data-filled"]} is a path`);
       const { stroke, "stroke-width": _w, "stroke-linecap": cap, "stroke-linejoin": _j, "data-filled": filled, "data-clip": clip, ...rest } = a;
       // A fill keeps its samples (for the knockout check); gaps and counters skip filled-only shapes.
@@ -662,8 +665,8 @@ const filledBody = icon => {
     ...icon.elements.filter(el => el.filled === "halo").map(el => jsx(el, { attrs: { fill: "none" }, stroke: true, color: "black", strokeStyle: STROKE_HALO })),
     ...fronts.map(el => el.stroked ? jsx(el, { attrs: { fill: "white" }, stroke: true, color: "white", strokeStyle: STROKE }) : jsx(el, { attrs: { fill: "white" }, stroke: false })),
   ];
-  const cuts = frontCuts.concat(icon.elements.filter(el => ["knockout", "hole", "cut", "gap"].includes(el.filled)).map(el =>
-    el.filled === "knockout" ? jsx(el, { attrs: { fill: "none" }, stroke: true, color: "black" })
+  const cuts = frontCuts.concat(icon.elements.filter(el => ["knockout", "inset", "hole", "cut", "gap"].includes(el.filled)).map(el =>
+    ["knockout", "inset"].includes(el.filled) ? jsx(el, { attrs: { fill: "none" }, stroke: true, color: "black" })
     : el.filled === "hole" || (el.filled === "gap" && !el.stroked) ? jsx(el, { attrs: { fill: "black" }, stroke: false })
     : jsx(el, { attrs: { fill: "none", ...(el.cutD ? { d: el.cutD } : {}) }, stroke: true, color: "black", strokeStyle: STROKE_CUT }))
     .concat(icon.elements.filter(el => el.exitD).map(el => jsx({ tag: "path", attrs: { d: el.exitD } }, { attrs: { fill: "none" }, stroke: true, color: "black", strokeStyle: STROKE_CUT }))));
@@ -695,10 +698,12 @@ const filledBody = icon => {
 // The shared slash's gap is the one cut that must stay flush with a line drawn over
 // the fill: it is emitted as the slash itself, shifted one line weight up and right at render
 // time (\`slashGap\`), so a thinner line at 32px opens no strip of fill beside the slash.
-const SLASH_GAP = "M0.909 -0.682L16.909 15.318";
-const filledUniform = (icon, lines) => lines.map(line => line.includes(`d="${SLASH_GAP}"`)
-  ? line.replace(`d="${SLASH_GAP}"`, `d="M-1 -1L17 17"`).replace("style={{ strokeWidth: sw(weight, size) }}", "{...slashGap(weight, size)}")
-  : line);
+// SLASH_GAP_BELOW is the same gap on the slash's lower-left side, for an icon whose upper-right
+// side would leave a strip thinner than a line (unpin: the pin's right neck and flare).
+const SLASH_GAP = "M0.909 -0.682L16.909 15.318", SLASH_GAP_BELOW = "M-0.682 0.909L15.318 16.909";
+const filledUniform = (icon, lines) => lines.map(line => [[SLASH_GAP, ""], [SLASH_GAP_BELOW, ", -1"]].reduce((l, [d, side]) => l.includes(`d="${d}"`)
+  ? l.replace(`d="${d}"`, `d="M-1 -1L17 17"`).replace("style={{ strokeWidth: sw(weight, size) }}", `{...slashGap(weight, size${side})}`)
+  : l, line));
 const tsx = `/**
  * Area icon pilot, generated from apps/docs/assets/area-icons-pilot by
  * scripts/gen-pilot-icons.mjs. Do not edit by hand. Construction: docs/specs/icons.md.
@@ -738,13 +743,13 @@ export const lineShift = (weight: number | undefined, size: number | undefined, 
  *  Returns the slash's stroke props. A numeric weight is drawing units like the path, so the
  *  shift is the SVG transform attribute in user units; the token weight is a CSS length, so
  *  its shift is a CSS transform computed from the token. */
-export const slashGap = (weight: number | undefined, size: number | undefined) => {
+export const slashGap = (weight: number | undefined, size: number | undefined, side = 1) => {
   const w = sw(weight, size);
   if (typeof w === "number") {
-    const t = (w * Math.SQRT1_2).toFixed(4);
-    return { style: { strokeWidth: w }, transform: \`translate(\${t} -\${t})\` };
+    const t = side * w * Math.SQRT1_2;
+    return { style: { strokeWidth: w }, transform: \`translate(\${t.toFixed(4)} \${(-t).toFixed(4)})\` };
   }
-  const t = \`calc(\${w.startsWith("calc") ? w.slice(5, -1) : w} * 0.7071)\`;
+  const t = \`calc(\${w.startsWith("calc") ? w.slice(5, -1) : w} * \${(side * 0.7071).toFixed(4)})\`;
   return { style: { strokeWidth: w, transform: \`translate(\${t}, calc(-1 * \${t}))\` } };
 };
 const base = { viewBox: "0 0 16 16", width: 16, height: 16, fill: "none", "aria-hidden": true, focusable: false } as const;

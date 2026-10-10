@@ -235,8 +235,8 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
   or part them by a step); a solid with no stroke is crisp on whole-pixel edges; a container's − centres
   where the family's + sits; content in a clipboard centres under the clip; heavy bases sit high, not low.
 - **Filled audit, 2026-10-06** (spec "Filled consistency audit and the size curve's hold"): a part is
-  one colour (knockout inside, ink with a halo when it crosses the edge in front, ink joined when
-  attached); the curve holds at the 24px master. Owner notes applied: desktop-check's check centred,
+  one colour (knockout inside, ink joined when attached; the halo for a part crossing the edge in front
+  was overturned 2026-10-08, see "Filled is simple" below); the curve holds at the 24px master. Owner notes applied: desktop-check's check centred,
   qr-code's data modules r 0.5, the plane's cockpit window, the fingerprint's ridges on concentric
   tracks, the globe's lens meridian, the graduation cap's 1 : 2 board and x.5 tassel, bandage filled as
   Phosphor's (front band solid, back band a line).
@@ -499,12 +499,18 @@ or the accessory fills instead (video_person, incognito; the bots' hats). Judge 
     never stopping a hair short. A gap between parts is space, so its ends are sawn.
   - *Marks inside containers* are plain knockouts (placement, above). Lines beside a solid stay
     lines.
-  - *Filled keeps the outline's relationships; a part is one colour* (2026-10-06, delegated, owner to
-    confirm; replaces the split arrow, which turned one arrow from white to black at the edge). Wholly
-    over the solid: a knockout. Crossing the edge and cut round in the outline (a part in front: the
-    bolt, an arrow over a cloud): it stays ink and the solid is cut back by one line weight (`halo`: cloud-lightning, cloud-upload, cloud-download, chat-sparkle). Crossing the edge
-    and joined in the outline (an attached part: pegs, notebook's rings): it stays ink and joins the
-    solid. `docs/research/icon-review/2026-10-06/escapes.mjs` lists knockouts that leave their solid.
+  - *Filled is simple: negative cutouts, not halos* (owner, 2026-10-08, overturning the 2026-10-06
+    delegated halo rule; reference sheet: mic, database, smile, sparkle, pin, speaker, kanban, send, bug).
+    The body is solid; a mark over it is a plain knockout at line weight; attached parts outside it
+    (stems, needles, legs, waves) stay lines; no cut outline round a part. An overlapping element
+    (an arrow, bolt or sync over a cloud, a bolt on a cylinder, a sparkle on a bubble) either sits wholly on
+    the body as an `inset` cutout with even fill round it (≥ 1 weight each side: the clouds, database-zap)
+    or stays ink with a negative-space outline (`halo`: chat-sparkle) — owner, 2026-10-09, after the
+    notebook-style split was tried on the clouds. notebook's rings (attached, crossing the cover) keep the
+    split: knockout over the cover, ink beyond. Attached parts that only meet the edge (calendar's pegs, stems, legs) stay ink. notebook's
+    whole cover is solid with the band as a cut (kanban's dividers).
+    Separate badges beside a body (person badges, dots, server-cog's gear, chat-sparkle's corner mark)
+    keep their bite. `docs/research/icon-review/2026-10-06/escapes.mjs` lists knockouts that leave their solid.
   - *Secondary parts stay lines* (owner, 2026-10-04): the body fills; a header, tab, lid or rim, the
     page or fold behind, a page on top and an attachment (clip, pegs) keep the outline's drawing with
     their inside open, and nothing is cut round them (calendar, folder, archive, gift, shopping-bag,

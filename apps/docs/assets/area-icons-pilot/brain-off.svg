@@ -1,10 +1,11 @@
 <svg data-set="area-pilot" data-keyline="circle" data-angles="free" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path data-filled="line" d="M8 2.5A2 2 0 0 0 5 3.5A2.25 2.25 0 0 0 3 7A2.25 2.25 0 0 0 3.5 11A2 2 0 0 0 5.5 13.5A1.5 1.5 0 0 0 8 13.5Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path data-filled="line" d="M8 2.5A2 2 0 0 1 11 3.5A2.25 2.25 0 0 1 13 7A2.25 2.25 0 0 1 12.5 11A2 2 0 0 1 10.5 13.5A1.5 1.5 0 0 1 8 13.5Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="line" d="M3 7H4A1.5 1.5 0 0 1 5.5 8.5V9M7.5 12H7M12.5 11H12A1.5 1.5 0 0 1 10.5 9.5V9M8.5 5.5H9.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="line" d="M3 7A1.611 1.611 0 0 1 5.5 8.343V9M7.5 12H7M12.5 11A1.504 1.504 0 0 1 10.5 9.58V9M8.5 5.5H9.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path data-filled="fill" d="M8 2.5A2 2 0 0 0 5 3.5A2.25 2.25 0 0 0 3 7A2.25 2.25 0 0 0 3.5 11A2 2 0 0 0 5.5 13.5A1.5 1.5 0 0 0 8 13.5Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path data-filled="fill" d="M8 2.5A2 2 0 0 1 11 3.5A2.25 2.25 0 0 1 13 7A2.25 2.25 0 0 1 12.5 11A2 2 0 0 1 10.5 13.5A1.5 1.5 0 0 1 8 13.5Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="knockout" d="M7.75 12H7" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="inset" d="M3.889 6.732A1.611 1.611 0 0 1 5.5 8.343V9M7.5 12H7M8.5 5.5H9.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="gap" d="M3.889 6.732H1.25" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path data-filled="gap" d="M8 1V15" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path data-filled="gap" d="M0.909 -0.682L16.909 15.318" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M2 2L14 14" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
