@@ -9,6 +9,9 @@
 @layer area.components {
   /* Without hover (touch), the link is simply followed; the card never shows. */
   @media (hover: none) { .area-hover-card { display: none; } }
+  /* Motion is Popover's anchored-surface recipe (surface.css; docs/MOTION.md): opacity and scale
+     from 0.97 at the link, after the 700 open delay; the close waits 300 so the pointer can cross
+     the gap. Nothing here overrides it. */
 
   /* Who or what the card is about: an avatar or icon, then its name over a quiet handle. */
   .area-hover-card__identity { display: flex; align-items: center; gap: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)); min-inline-size: 0; }

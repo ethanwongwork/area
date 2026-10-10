@@ -62,9 +62,22 @@ ghost and outline Button instead (#56, button.md), so the trigger reads quiet, a
   closes and returns focus to the trigger, which now reads Thinking.
 - React test: trigger semantics, menu, radio row with its note.
 
+## Motion and interaction, 2026-10-07
+
+Model picker is a ghost Button over Menu's anchored path, so every interaction is inherited and
+nothing in `model-picker.css` or ModelPicker.tsx moves on its own. Verified on
+`/model-picker.html` in a background tab: the menu enters with `opacity` + `scale` on 150 from a
+`transform-origin` at the trigger (`168px 158px`, opening up from the trigger's end) and rests on
+whole pixels (556, 741, 224 × 158); the trigger's colour transition is the shared 100 `ease-out`,
+and while open it holds the pressed plate with `transition-duration: 0s` (Button's rule). The
+trailing chevron does not rotate, as ChatGPT's does not.
+
+Open questions: none.
+
 ## Feedback log
 
 - 2026-09-30 · audit S13 (owner) → rows use `MenuItem radio` instead of passing `role` (ModelPicker.tsx:52; primitives.tsx:1143-1161). A menu of choices shows the check only; no visible change.
 - 2026-09-30 · audit S17 (API vocabulary, slice 3/4) → new `triggerProps` (props and ref for the trigger Button; `ref` and the rest stay on the wrapper; ModelPicker.tsx:22, :49); `onValueChange(value, event)` passes the click event (ModelPicker.tsx:20). No visual change.
 - 2026-10-01 · audit D-12 → the menu is named by its `aria-label` (`label`, default "Model"), which now wins over the trigger's labelledby → ModelPicker.tsx:48, primitives.tsx:1125.
 - 2026-10-01 · audit G-23 (owner pick A) → demos use the placeholder vocabulary (Body text, Item one, Option one, Placeholder, Label) and `authorName` "Assistant", per DESIGN_SYSTEM's Example copy; no component change. The Verification run above predates it and used product model names.
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → no change: trigger and menu motion inherited from Button and Menu, verified (enter 150 from the trigger, whole-pixel rest).

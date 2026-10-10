@@ -3,6 +3,7 @@ import type { ButtonHTMLAttributes, KeyboardEvent, ReactNode, SyntheticEvent } f
 import { customSelectVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
 import { scrollOptionIntoList, useAnchoredPosition } from "./overlay.ts";
+import { ScrollArea } from "./ScrollArea.tsx";
 import { MENU_OFFSET, OVERLAY_PADDING } from "./Overlays.tsx";
 /** The empty collection, one reference so effects keyed on it stay still. */
 const NO_ITEMS: never[] = [];
@@ -205,7 +206,7 @@ export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(fun
     return <div key={option.value} id={`${id}-option-${index}`} data-index={index} role="option" aria-selected={isSelected}
       aria-disabled={option.disabled || undefined} data-disabled={option.disabled ? "" : undefined}
       className="area-menu__item area-custom-select__option" data-highlighted={index === active ? "" : undefined}
-      data-selected={isSelected ? "" : undefined}
+     
       onPointerDown={event => event.preventDefault()}
       onPointerMove={() => { if (!option.disabled && index !== active) setActive(index); }}
       onClick={event => { if (option.disabled) return; choose(index, event); close(); triggerRef.current?.focus(); }}>
@@ -232,16 +233,16 @@ export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(fun
     </button>
     {/* The form gets the option's value, never its label. */}
     {name ? <input type="hidden" name={name} form={form} disabled={disabled} value={selected ?? ""} /> : null}
-    <div ref={listRef} id={listId} role="listbox" aria-label={typeof label === "string" ? label : undefined}
+    <ScrollArea ref={listRef} id={listId} role="listbox" aria-label={typeof label === "string" ? label : undefined}
       aria-labelledby={typeof label === "string" ? undefined : labelledBy}
-      popover="manual" className="area-menu area-custom-select__listbox" tabIndex={-1}>
+      popover="manual" className="area-menu area-custom-select__listbox" tabIndex={-1} viewportProps={{ tabIndex: undefined }}>
       {[...groups].map(([group, indexes], position) => group
         ? [position > 0 ? <div key={`${group}-rule`} className="area-menu__separator area-custom-select__separator" role="presentation" /> : null,
           <div key={group} role="group" aria-labelledby={`${id}-group-${position}`} className="area-custom-select__group">
-            <div id={`${id}-group-${position}`} className="area-menu__label" role="presentation">{group}</div>
+            <div id={`${id}-group-${position}`} className="area-menu__label" role="presentation"><span className="area-menu__label-text">{group}</span></div>
             {indexes.map(renderRow)}
           </div>]
         : indexes.map(renderRow))}
-    </div>
+    </ScrollArea>
   </div>;
 });

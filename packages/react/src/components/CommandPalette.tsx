@@ -3,6 +3,7 @@ import type { HTMLAttributes, KeyboardEvent, ReactNode } from "react";
 import { commandPaletteVariants } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
 import { scrollOptionIntoList } from "./overlay.ts";
+import { ScrollArea } from "./ScrollArea.tsx";
 import { Kbd } from "./primitives.tsx";
 
 export interface CommandItem {
@@ -75,6 +76,13 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
   const dialogRef = useRef<HTMLDialogElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const listRef = useRef<HTMLDivElement | null>(null);
+  // While the modal fades out the surface stays as it was when it closed (the cleared query does
+  // not refill the list mid-exit), then unmounts once the exit's transitions finish.
+  const [present, setPresent] = useState(open);
+  if (open && !present) setPresent(true);
+  const openNow = useRef(open);
+  openNow.current = open;
+  const frozen = useRef<ReactNode>(null);
 
   const setOpen = (next: boolean) => {
     if (openProp === undefined) setOwnOpen(next);
@@ -108,6 +116,11 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
     if (!dialog || typeof dialog.showModal !== "function") return;
     if (open && !dialog.open) { dialog.showModal(); inputRef.current?.focus(); }
     if (!open && dialog.open) dialog.close();
+    if (!open && present) {
+      const done = () => { if (!openNow.current) setPresent(false); };
+      if (typeof dialog.getAnimations !== "function") done();
+      else Promise.all(dialog.getAnimations().map(animation => animation.finished)).then(done, done);
+    }
   }, [open, inline]);
   useEffect(() => {
     if (!hotkey || inline) return;
@@ -176,15 +189,15 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
     </div>
     {/* The result count, or the empty text, is announced while a query is typed (audit D-29). */}
     <span className="area-sr-only" role="status">{query ? (rows.length ? resultsLabel(rows.length) : typeof emptyText === "string" ? emptyText : "") : ""}</span>
-    <div ref={listRef} id={listId} role="listbox" aria-label={label} className="area-command-palette__list">
+    <ScrollArea ref={listRef} id={listId} role="listbox" aria-label={label} className="area-command-palette__list" viewportProps={{ tabIndex: undefined }}>
       {rows.length === 0 ? <div className="area-command-palette__empty" role="presentation">{emptyText}</div> : null}
       {groups.map(([group, list], g) => group
         ? <div key={`${group}-${g}`} role="group" aria-labelledby={`${id}-group-${g}`} className="area-command-palette__group">
-            <div id={`${id}-group-${g}`} className="area-menu__label" role="presentation">{group}</div>
+            <div id={`${id}-group-${g}`} className="area-menu__label" role="presentation"><span className="area-menu__label-text">{group}</span></div>
             {list.map(renderRow)}
           </div>
         : <div key={`ungrouped-${g}`} role="presentation" className="area-command-palette__group">{list.map(renderRow)}</div>)}
-    </div>
+    </ScrollArea>
     {footer === false ? null : <div className="area-command-palette__footer" aria-hidden={footer ? undefined : true}>
       {footer ?? <>
         {/* The hints also work by pointer. They stay out of the tab order and keep focus in the
@@ -208,6 +221,6 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
   return <dialog ref={dialogRef} className="area-command-palette__modal" aria-label={label}
     onCancel={event => { event.preventDefault(); if (query) setQuery(""); else setOpen(false); }}
     onClick={event => { if (event.target === event.currentTarget) setOpen(false); }}>
-    {open ? surface : null}
+    {open ? (frozen.current = surface) : present ? frozen.current : null}
   </dialog>;
 });

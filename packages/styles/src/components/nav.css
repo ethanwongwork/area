@@ -149,6 +149,18 @@
     color: var(--area-fg-default);
   }
 
+  /*
+   * Motion (docs/MOTION.md, "Hover plate", "Selected"; docs/specs/nav.md, "Motion and
+   * interaction, 2026-10-07"). The base `--area-transition` is the leave (fast, ease-out); hover,
+   * press and current land at once. The focus ring is an outline and never transitions.
+   */
+  @media (hover: hover) {
+    .area-nav__item:hover,
+    .area-nav__row:hover { transition-duration: 0s; }
+  }
+  .area-nav__item:is(:active, [aria-current]:not([aria-current="false"])),
+  .area-nav__row:has(> .area-nav__item[aria-current]:not([aria-current="false"])) { transition-duration: 0s; }
+
   /* A marker is navigation's quiet current-location treatment. Unlike a menu's action
    * highlight, it persists as the reader moves through an outline or sidebar. */
   .area-nav--marker .area-nav__item {
@@ -163,18 +175,27 @@
     font-weight: var(--area-weight-regular);
   }
 
-  .area-nav--marker .area-nav__item[aria-current]:not([aria-current="false"])::before {
+  /* The marker is drawn on every marker row and painted only on the current one, so it lands at
+     once and fades out on fast (MOTION.md, "Selected"). It is centred by layout (inset-block 0 and
+     auto margins) at a height rounded to even pixels, so on the even row it rests on whole pixels
+     (MOTION.md, crispness 1; it was a −50% translate of a ~13.94px bar). */
+  .area-nav--marker .area-nav__item::before {
     content: "";
     position: absolute;
     inset-inline-start: var(--area-space-6);
-    inset-block-start: 50%;
-    translate: 0 -50%;
+    inset-block: 0;
+    margin-block: auto;
     inline-size: calc(var(--area-space-2) + var(--area-stroke-width));
-    block-size: calc(1cap + var(--area-space-4));
+    block-size: round(nearest, calc(1cap + var(--area-space-4)), 2px); /* spec: cap + 4, even */
     border-radius: var(--area-radius-full);
+    background-color: transparent;
+    transition: background-color var(--area-duration-fast) var(--area-ease-out);
+  }
+  .area-nav--marker .area-nav__item[aria-current]:not([aria-current="false"])::before {
     /* The Selection role's ink (DESIGN_SYSTEM.md, "Emphasis roles"): the current label's ink
        by default. The current row's plate stays neutral in every theme. */
     background-color: var(--_marker, var(--area-fg-selection));
+    transition-duration: 0s;
   }
 
   .area-nav__item:focus-visible {
@@ -243,6 +264,7 @@
     gap: var(--area-space-2);
     padding-inline-end: calc((var(--area-ui-row) - var(--area-control-sm)) / 2);
     border-radius: var(--area-radius-row);
+    transition: var(--area-transition);
   }
   @media (hover: hover) { .area-nav__row:has(> .area-nav__item:not([data-disabled], [aria-current]:not([aria-current="false"]))):hover { background: var(--area-bg-component-hover); } }
   /* Any current value (page, location, step) marks the row, as it marks the item (audit D-29). */
@@ -256,9 +278,12 @@
   .area-nav__actions > .area-button { --_radius: max(var(--area-radius-floor), calc(var(--area-radius-row) - (var(--area-ui-row) - var(--area-control-sm)) / 2)); }
   /* Nested row controls hover with the translucent wash (audit S11c). */
   .area-nav__actions .area-button.area-button--ghost { --_bg-hover: var(--area-bg-hover); --_bg-active: var(--area-bg-active); }
-  .area-nav__actions [aria-expanded="false"] svg { rotate: -90deg; }
-  /* Collapsed points along the reading direction, so it mirrors in right-to-left text (audit D-13). */
-  .area-nav__actions [aria-expanded="false"]:dir(rtl) svg { rotate: 90deg; }
+  /* An expandable item's chevron: collapsed points along the reading direction, so it mirrors in
+     right-to-left text (audit D-13). It turns on fast ease-out, the one chevron rule (MOTION.md).
+     A popup trigger (a menu's ⋯) also carries aria-expanded, so it is left unrotated. */
+  .area-nav__actions [aria-expanded]:not([aria-haspopup]) svg { transition: rotate var(--area-duration-fast) var(--area-ease-out); }
+  .area-nav__actions [aria-expanded="false"]:not([aria-haspopup]) svg { rotate: -90deg; }
+  .area-nav__actions [aria-expanded="false"]:not([aria-haspopup]):dir(rtl) svg { rotate: 90deg; }
 
   .area-nav--horizontal .area-nav__separator {
     inline-size: var(--area-border-width);

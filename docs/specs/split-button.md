@@ -216,6 +216,30 @@ the iOS 27 kit, read only) and the gallery's Toolbar / Tools tile:
   menu opens 4px below and flips at the viewport edge.
 - Unverified: dark theme, screen reader announcement, forced colors, RTL divider position.
 
+## Motion and interaction, 2026-10-07
+
+| Interaction | Before | After |
+|---|---|---|
+| chevron turn on open / close | `transform: rotate(180deg)` over `duration-base` (150) `ease-out`, own reduced-motion rule | the `rotate` property over **`duration-fast` (100)** `ease-out`, both ways: MOTION's one chevron rule, shared with Accordion. The reduced-motion `@media` rule is gone; the token is 0 there and under motion "none" |
+| trigger plate while open | `fast` fade in | **instant** (Button's `[aria-expanded="true"]` rule), `fast` out as the menu closes |
+| either part's hover, press, selected | Button's | Button's new rule: instant in, `fast` out |
+| menu enter / exit | shared overlay (`surface.css`) | unchanged here; owned by the overlay pass |
+
+Crispness: the icon-only trigger's chevron sits in a 12px box but drew the 16 glyph's line shrunk
+by 0.75 (0.84px). `SplitButton.tsx` now passes `Glyph size={12}` there, so the line is the size
+curve's 12 weight (about 0.99px rendered, `base.css`); text Split buttons keep 16. The chevron
+rests at 0 or a half turn about the centre of an even box, so both rests are whole-pixel.
+
+Verified on `/split-button.html` and `/toolbar.html` (computed styles): `transition: rotate 0.1s
+cubic-bezier(0.16, 1, 0.3, 1)`; setting `aria-expanded="true"` starts one 100ms `rotate`
+transition and no plate transition; after it finishes `rotate: 180deg`, `transform: none`, the
+glyph's rect unchanged; closing runs a 100ms `rotate` and a 100ms `background-color`. Icon-only
+triggers report `data-area-glyph-size="12"`. The docs pages are not hydrated, so the open state was
+set by attribute; React's `aria-expanded` wiring is covered by `test:split-button`.
+
+Open question: the 12px chevron is still the 16-grid drawing scaled. A native 12 drawing belongs to
+`area-icon-construction` (research B5).
+
 ## Feedback log
 
 - 2026-09-26 · owner: separate component if systems usually do; build ButtonGroup and
@@ -242,3 +266,4 @@ the iOS 27 kit, read only) and the gallery's Toolbar / Tools tile:
 - 2026-10-03 · radius audit D6 (owner) → the ghost icon-only trigger's capped corner rounds down to whole pixels: 6, compact 5 (was 6.4 / 5.6; Figma 5) (`split-button.css`). `docs/research/radius-audit-2026-10-03.md`.
 - 2026-10-03 · all even (owner) → the ghost icon-only trigger's cap rounds down to 2px: 6, compact 4 (`split-button.css`).
 - 2026-10-03 · one corner setting (owner: one radius setting, Sharp and Pill as ends; "every control is a pill") → the icon-only ghost trigger takes the corner of a box three quarters the Button's height: 6, compact 4, as before (`split-button.css`). `docs/research/radius-audit-2026-10-03.md`, "One corner setting".
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → chevron turns with `rotate` over duration-fast (was transform over base); the open plate lands instantly; the icon-only chevron draws its 12 line (SplitButton.tsx).

@@ -98,6 +98,28 @@ keeps its recorded decisions. No change.
 `npm test` (tokens and contrast), capture checksums: all pass. Unverified: dark theme, focus ring on screen, ChatGPT's
 multi-line radius (would require typing), hover states.
 
+## Motion and interaction, 2026-10-07
+
+Contract: `docs/MOTION.md`. Research: `docs/research/motion-2026-10-07/crispness-and-current-state.md`.
+
+
+| Interaction | Before | After |
+|---|---|---|
+| Hover (edge) | `--area-transition` both ways | instant in, `border-color` `fast` `--area-ease-out` out |
+| Focus (edge, 2px outline, halo) | the halo (`box-shadow`) faded in and out over 100ms while the outline snapped | instant in; on blur the outline and halo leave at once and the edge colour fades on `fast` |
+| Disabled | colours on `fast` | unchanged |
+| Send button, actions | Button's rules | unchanged here |
+| Height growing with text | `field-sizing: content` / JS measure, no animation | unchanged (a growing field must follow typing) |
+
+The shell's transition is now `background-color`, `border-color` and `color` on `duration-fast`
+`--area-ease-out` (was `--area-transition`, which also eases `box-shadow`). Crispness: the shell rests
+on whole pixels (480 × 48 at 261, 891 on `/composer.html`); the JS fallback writes whole
+`scrollHeight` pixels. Verified: focus has no running transitions; blur runs only the four
+border-colour transitions (100ms).
+
+Open question: the edge fades out on blur while the outline leaves at once (CSS cannot tell a blur
+from a hover-out). Recommendation: keep; the outline carries the ring, and it is instant both ways.
+
 ## Feedback log
 
 - 2026-09-25 · owner: "do the next component, I'll review all changes later" → Composer
@@ -117,3 +139,4 @@ multi-line radius (would require typing), hover states.
 - 2026-10-03 · bug: the send Button's capped corner went negative at compact −12 (28 × 0.4 − 12), so the composer read 5.2 → floored at 0 (`composer.css`, `--_composer-button-radius`).
 - 2026-10-03 · one corner setting (owner: one radius setting, Sharp and Pill as ends; "every control is a pill") → the send Button's corner (setting × height ÷ 32) plus the inset: 16 / 12 at the default, a pill at Pill (`composer.css`). `docs/research/radius-audit-2026-10-03.md`, "One corner setting".
 - 2026-10-04 · quality pass after the one corner setting → the inset joins the corner at Sharp too when the send Button is a pill (pill composer read 16 at 0) (`composer.css`). `docs/research/radius-audit-2026-10-03.md`, "Quality pass".
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → hover and focus arrive at once; the focus halo no longer fades (box-shadow left out of the shell's transition) → composer.css. See "Motion and interaction, 2026-10-07".

@@ -142,9 +142,9 @@ alias (`primitives.tsx:1289-1294`, `:1341-1344`). Verified in the
 gallery with a real pointer: opens modal with the 13% scrim, focus on the close, Escape
 closes and refocuses the trigger, a scrim click closes, a click inside does not.
 
-Enter and exit (audit E-19 A, owner 2026-09-30): the modal fades and scales from 0.97 over
-150ms (`--area-duration-base`, `--area-ease-out`), as the anchored surfaces do, and the scrim
-fades alongside; the entry runs from `@starting-style`, the exit keeps the top layer with
+Enter and exit (audit E-19 A, owner 2026-09-30; clocks from the motion pass 2026-10-07, below):
+the modal fades and scales from 0.97, entering over `--area-duration-moderate` (200) and leaving
+over `--area-duration-base` (150), `--area-ease-out`, and the scrim fades alongside; the entry runs from `@starting-style`, the exit keeps the top layer with
 `overlay` and `display` transitions (`allow-discrete`). The motion axis's "none" preset sets
 the duration to 0, so it is instant, and `prefers-reduced-motion` drops the scale as well
 (`surface.css:767-797`). Was instant.
@@ -183,6 +183,43 @@ change.
 
 - AlertDialog (confirmation without a close, focus on the safe action) is a backlog item.
 
+## Motion and interaction, 2026-10-07
+
+Contract: [MOTION.md](../MOTION.md), "Dialog, command palette, confirm dialog".
+
+| Interaction | Before | After |
+|---|---|---|
+| open | `opacity` + `scale` 0.97 from the centre, `duration-base` 150, `ease-out`, `@starting-style` | `duration-moderate` (200), `ease-out` |
+| close | same as open (150) | one step faster: `duration-base` (150), `ease-out`, carried by `:not([open])`; `overlay`/`display` `allow-discrete` |
+| scrim | `opacity`, `duration-base` both ways | `duration-moderate` in, `duration-base` out, `ease-out` |
+| rest | `scale: 1` (identity transform) | `scale: none` |
+| close button, footer buttons | Button's | Button's (not this pass) |
+| focus | native `showModal()` focus, no animation delay | unchanged: focus never waits for the transition |
+| reduced motion / "none" | tokens 0, scale 1 | unchanged; no literal durations |
+
+Confirm dialog shares `.area-dialog__modal` and picks this up; Command palette has its own
+modal (command-palette.css, not this pass).
+
+Crispness: the modal now rests without a transform, and its centre is a whole pixel.
+`margin: auto` centred on .5 whenever the room left over was odd, and a dialog without a close
+(Confirm dialog) was 141.86 tall from its title's cap trim, so it rested at 334.5 × 328.07 (lead,
+from the overlay-variants pass). Now the modal's room is even (`inset-*-end: calc(100% −
+round(down, 100%, 2px))`), the modal box is even (`calc-size(fit-content, round(up, size, 2px))`,
+the extra under 2px transparent below and beside the surface), and the surface rounds its own
+height up (`calc-size(auto, round(up, size, 1px))`, +0.14 here). Without `calc-size()` support
+it stays fit-content, as before.
+
+Verification of the centring: `/confirm-dialog.html` at 1089 × 798: 334 × 328, 420 × 142 (was
+334.5 × 328.07, 420 × 141.86); `/dialog.html` at 801 × 501: 160 × 170, 480 × 160; a 40-paragraph
+injected dialog at 801 × 501: body scrolls, surface 437 (the `100dvh − 64` cap), modal 438 at
+160 × 31, footer inside. All whole CSS pixels, so whole at DPR 1.
+
+Verification: `/dialog.html`, trigger: enter `opacity:200 scale:200` ease-out and backdrop
+`opacity:200`; close `display/opacity/overlay/scale: 150` and backdrop `opacity:150`; rest
+opacity 1, scale none, backdrop opacity 1. Verified on the dev server (background tab, so transitions were read from `getAnimations()` and computed styles, not watched; real-pointer hover could not be driven in a background tab, so hover rules were read from the stylesheet).
+
+Open questions: none new.
+
 ## Feedback log
 
 - 2026-09-26 · owner (Popover pass 3): the close should sit evenly in the corner with the
@@ -209,3 +246,4 @@ change.
 - 2026-10-03 · two roundness step sizes (owner) → the corner is the surface corner plus 4 (never more than the surface corner, so square with a square surface), 16 at both densities, stepping by 4; the close keeps the control step, so it is concentric only at the default (`surface.css`, `--_dialog-radius`). `docs/research/radius-audit-2026-10-03.md`, "Step size for large shapes".
 - 2026-10-03 · one corner setting (owner: one radius setting, Sharp and Pill as ends; "every control is a pill") → unchanged at the default (16); Pill 28 (`surface.css`). `docs/research/radius-audit-2026-10-03.md`, "One corner setting".
 - 2026-10-05 · Confirm dialog needs `role="alertdialog"` on the native modal → Dialog passes a `role` prop to its `<dialog>` (inline: the surface); attribute order unchanged (dialog tests).
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → enter on `moderate` (200, was 150), exit one step faster on `base`; scrim on the same clocks; rests at `scale: none` and on a whole-pixel centre (lead: Confirm dialog rested at 334.5 × 328.07) (`surface.css`).

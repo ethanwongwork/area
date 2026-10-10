@@ -74,8 +74,27 @@
        for the track, the thumb concentric. React pill / pill={false} override. */
     border-radius: var(--_track-radius);
     background: var(--_off);
-    transition: background var(--area-duration-fast) var(--area-ease-out);
+    /* Motion (docs/MOTION.md, 2026-10-07): the track's fill and edge change with the thumb, on
+       one clock (base, ease-in-out); the edge used to jump while the fill faded over fast. */
+    transition:
+      background-color var(--area-duration-base) var(--area-ease-in-out),
+      border-color var(--area-duration-base) var(--area-ease-in-out);
     pointer-events: none;
+  }
+
+  /* Hover is a layer over the track, so it can land at once and fade out over fast while a
+     check still crossfades with the thumb (a single background cannot take both clocks). It
+     covers the border box with the track's own corner, so the edge darkens with the fill. */
+  .area-switch__track::before {
+    content: "";
+    position: absolute;
+    inset: calc(-1 * var(--area-stroke-width));
+    border-radius: inherit;
+    background-color: var(--_off-hover);
+    opacity: 0;
+    transition:
+      opacity var(--area-duration-fast) var(--area-ease-out),
+      background-color var(--area-duration-base) var(--area-ease-in-out);
   }
 
   .area-switch__thumb {
@@ -88,20 +107,32 @@
     border-radius: var(--_thumb-radius);
     background: var(--area-bg-surface);
     box-shadow: var(--area-shadow-1);
-    transition: inset-inline-start var(--area-duration-slow) var(--area-ease-out), inline-size var(--area-duration-fast) var(--area-ease-out);
+    /* The thumb slides by translate, rounded to whole pixels, on the track's clock (was
+       inset-inline-start over slow while the track took fast). The press stretch stays a 2px
+       inline-size change on the same clock: a scale would oval the pill ends and rest at a
+       fractional scale while held. */
+    --_dir: 1;
+    --_x: 0px;
+    translate: calc(var(--_x) * var(--_dir)) 0;
+    transition:
+      translate var(--area-duration-base) var(--area-ease-in-out),
+      inline-size var(--area-duration-base) var(--area-ease-in-out);
   }
+  .area-switch:dir(rtl) .area-switch__thumb { --_dir: -1; }
 
   .area-switch__control:checked ~ .area-switch__track,
   .area-switch__track[data-checked] { background: var(--_on); border-color: var(--_on); }
+  .area-switch__control:checked ~ .area-switch__track::before,
+  .area-switch__track[data-checked]::before { background-color: var(--_on-hover); }
+  /* On: the thumb's start edge moves to the far side; whole pixels (track − 2 insets − thumb). */
   /* data-checked: a display-only switch whose state lives on its host (a menu's checkable row). */
-  .area-switch__track[data-checked] .area-switch__thumb { inset-inline-start: calc(100% - var(--_inset) + var(--area-stroke-width) - var(--_thumb-width)); }
-  .area-switch__control:checked ~ .area-switch__track .area-switch__thumb { inset-inline-start: calc(100% - var(--_inset) + var(--area-stroke-width) - var(--_thumb-width)); }
-  .area-switch[data-hover]:not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__track { background: var(--_off-hover); border-color: var(--_off-hover); }
-  @media (hover: hover) { .area-switch:hover:not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__track { background: var(--_off-hover); border-color: var(--_off-hover); } }
-  .area-switch[data-hover]:not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__control:checked ~ .area-switch__track { background: var(--_on-hover); border-color: var(--_on-hover); }
-  @media (hover: hover) { .area-switch:hover:not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__control:checked ~ .area-switch__track { background: var(--_on-hover); border-color: var(--_on-hover); } }
+  .area-switch__track[data-checked] .area-switch__thumb,
+  .area-switch__control:checked ~ .area-switch__track .area-switch__thumb { --_x: round(nearest, calc(var(--_w) - var(--_inset) * 2 - var(--_thumb-width)), 1px); }
+  .area-switch[data-hover]:not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__track::before { opacity: 1; transition-duration: 0s, var(--area-duration-base); }
+  @media (hover: hover) { .area-switch:hover:not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__track::before { opacity: 1; transition-duration: 0s, var(--area-duration-base); } }
+  /* Press stretch: the thumb grows 2px toward the far side; when on, it grows back toward the start. */
   .area-switch:is(:active, [data-active]):not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__thumb { inline-size: calc(var(--_thumb-width) + var(--area-space-2)); }
-  .area-switch:is(:active, [data-active]):not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__control:checked ~ .area-switch__track .area-switch__thumb { inset-inline-start: calc(100% - var(--_inset) + var(--area-stroke-width) - var(--_thumb-width) - var(--area-space-2)); }
+  .area-switch:is(:active, [data-active]):not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__control:checked ~ .area-switch__track .area-switch__thumb { --_x: round(nearest, calc(var(--_w) - var(--_inset) * 2 - var(--_thumb-width) - var(--area-space-2)), 1px); }
   .area-switch__control:focus-visible ~ .area-switch__track,
   .area-switch[data-focus-visible] .area-switch__track { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
 
@@ -122,8 +153,8 @@
   .area-switch--full-width { display: flex; inline-size: 100%; }
   .area-switch--full-width .area-switch__text { order: -2; flex: 1; }
 
-  [data-area-motion="none"] .area-switch__thumb { transition: none; }
-  @media (prefers-reduced-motion: reduce) { .area-switch__thumb { transition: none; } }
+  /* Reduced motion and data-area-motion="none" zero every duration token (emit/css.ts), so the
+     thumb, track and hover layer all stop without a rule of their own. */
   @media (pointer: coarse) { .area-switch { min-block-size: calc(var(--area-space-40) + var(--area-space-4)); min-inline-size: calc(var(--area-space-40) + var(--area-space-4)); } }
   @media (forced-colors: active) {
     .area-switch { --_on: Highlight; --_on-hover: Highlight; --_off: Canvas; --_off-hover: Canvas; --_edge: CanvasText; }

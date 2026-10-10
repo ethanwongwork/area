@@ -1,0 +1,149 @@
+/* ---------------------------------------------------------------------------
+ * File upload
+ *
+ * A drop zone that takes files by click or drag, and the rows that show each file's upload
+ * (docs/specs/file-upload.md). Untitled UI is the reference: the products show no upload surface
+ * we could measure without uploading the owner's data (ChatGPT's attachment card declined by the
+ * owner, 2026-10-09). Area's own parts carry the shared roles: the field's edge, Link for the
+ * action, Progress for the bar, ghost Buttons for remove and retry.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-file-upload {
+    --_edge: var(--area-input-edge);
+    --_edge-hover: var(--area-input-edge-hover);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* spec: Untitled UI, a 12 gap and 16 / 24 padding inside a 1px edge, corner 12 (the surface corner). */
+    gap: var(--area-space-12);
+    /* The edge is counted once: content 16 / 24 from the outside, as Untitled's inset ring (owner, review round 2,
+       2026-10-09: "make sure gaps, padding, margins are all accurate"; it was 17 / 25). */
+    padding: calc(var(--area-space-16) - var(--area-border-width)) calc(var(--area-space-24) - var(--area-border-width));
+    border: var(--area-border-width) solid var(--_edge);
+    border-radius: var(--area-radius-surface);
+    background-color: var(--area-bg-surface);
+    color: var(--area-fg-muted);
+    text-align: center;
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+    cursor: pointer;
+    transition: var(--area-transition);
+  }
+  /* Motion (docs/MOTION.md, "Hover plate"): the edge darkens at once and fades back on fast. */
+  @media (hover: hover) {
+    .area-file-upload:hover:not([data-disabled]) { border-color: var(--_edge-hover); transition-duration: 0s; }
+  }
+  /* Files over the zone: the selection edge and the row plate, until they leave or drop. */
+  .area-file-upload[data-dragging] {
+    border-color: var(--area-selection-edge);
+    background-color: var(--area-bg-component-hover);
+    transition-duration: 0s;
+  }
+  .area-file-upload[data-invalid] { --_edge: var(--area-input-invalid-color); --_edge-hover: var(--area-input-invalid-color); }
+  .area-file-upload[data-disabled] { cursor: not-allowed; opacity: var(--area-opacity-disabled); }
+
+  /* spec: Untitled UI's 40 icon tile with a 20 glyph; the corner of a 40 control (Button lg). */
+  .area-file-upload__icon,
+  .area-file-upload-item__icon {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    inline-size: var(--area-control-lg);
+    block-size: var(--area-control-lg);
+    box-sizing: border-box;
+    border: var(--area-border-width) solid var(--area-input-edge);
+    border-radius: var(--area-radius-control-lg);
+    background-color: var(--area-bg-surface);
+    color: var(--area-fg-muted);
+  }
+  .area-file-upload__icon > svg,
+  .area-file-upload-item__icon > svg { inline-size: 20px; block-size: 20px; /* spec: Untitled UI's 20 glyph in its 40 tile */ }
+
+  .area-file-upload__text { display: flex; flex-direction: column; gap: var(--area-space-4); }
+  .area-file-upload__prompt { margin: 0; }
+  /* The action is a Link drawn on a button: no box, the Action ink, Untitled's emphasis. */
+  .area-file-upload__action {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    font-weight: var(--area-weight-strong);
+  }
+  /* spec: Untitled UI 12/18; Area's caption, 12/16. */
+  .area-file-upload__hint { margin: 0; font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); }
+  .area-file-upload__input { display: none; }
+
+  /* --- The list and its rows ------------------------------------------------ */
+  .area-file-upload-list {
+    display: flex;
+    flex-direction: column;
+    /* spec: Untitled UI 12 between rows. */
+    gap: var(--area-space-12);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .area-file-upload-item {
+    display: flex;
+    align-items: flex-start;
+    /* spec: Untitled UI, padding 16, a 12 gap, the zone's edge and corner. */
+    gap: var(--area-space-12);
+    /* 16 from the outside, the edge counted once (was 17). */
+    padding: calc(var(--area-space-16) - var(--area-border-width));
+    border: var(--area-border-width) solid var(--area-input-edge);
+    border-radius: var(--area-radius-surface);
+    background-color: var(--area-bg-surface);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+  }
+  .area-file-upload-item--uploading {}
+  .area-file-upload-item--complete {}
+  .area-file-upload-item--error { border-color: var(--area-input-invalid-color); }
+
+  .area-file-upload-item__body { display: flex; flex-direction: column; gap: var(--area-space-4); flex: 1 1 auto; min-inline-size: 0; }
+  .area-file-upload-item__header { display: flex; align-items: flex-start; gap: var(--area-space-4); }
+  .area-file-upload-item__text { display: flex; flex-direction: column; flex: 1 1 auto; min-inline-size: 0; }
+  /* spec: Untitled UI's name 14/20 500 in the stronger ink, one line. */
+  .area-file-upload-item__name {
+    margin: 0;
+    overflow: hidden;
+    color: var(--area-fg-default);
+    font-weight: var(--area-weight-strong);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  /* spec: Untitled UI's size and status 14/20 in the muted ink, split by a 1 x 12 rule 8 apart. */
+  .area-file-upload-item__meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--area-space-8);
+    /* spec: Untitled UI's size line sits 2 under the name (mt-0.5). */
+    margin: var(--area-space-2) 0 0;
+    color: var(--area-fg-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .area-file-upload-item__separator {
+    inline-size: var(--area-border-width);
+    block-size: var(--area-space-12);
+    background-color: var(--area-border-subtle);
+  }
+  .area-file-upload-item__status { display: inline-flex; align-items: center; gap: var(--area-space-4); }
+  .area-file-upload-item__status > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
+  .area-file-upload-item--complete .area-file-upload-item__status { color: var(--area-fg-success); }
+  .area-file-upload-item--error .area-file-upload-item__status { color: var(--area-fg-danger); }
+  /* Remove and retry are ghost Buttons at sm (28, Untitled's 28) in the row's top corner, pulled 8 up and 8 in so
+     they sit 8 from the top and 8 from the side, evenly (Untitled UI: -mt-2 -mr-2 inside its 16 padding; owner,
+     review round 2: the inset around the buttons looked unequal, 12 above and 16 beside). */
+  .area-file-upload-item__actions { display: flex; flex: none; gap: var(--area-space-2); margin-block-start: calc(var(--area-space-8) - var(--area-space-16)); margin-inline-end: calc(var(--area-space-8) - var(--area-space-16)); }
+  /* spec: Untitled UI, an 8 bar (Progress lg) and the percentage 12 after it, 14/20 500. */
+  .area-file-upload-item__progress { display: flex; align-items: center; gap: var(--area-space-12); }
+  .area-file-upload-item__percent { flex: none; min-inline-size: 4ch; color: var(--area-fg-default); font-weight: var(--area-weight-strong); font-variant-numeric: tabular-nums; text-align: end; }
+
+  @media (forced-colors: active) {
+    .area-file-upload[data-dragging] { border-color: Highlight; }
+  }
+}

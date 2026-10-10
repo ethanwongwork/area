@@ -138,6 +138,24 @@ Unverified: dark theme, forced colours.
   now sets `--_code-bg` as well as `--_token-bg` (`token.css:44-50`), and `area--treatments`
   paints rgb(247, 247, 247) against the default's rgb(250, 250, 250).
 
+## Token: motion and crispness, 2026-10-07
+
+Token (`token.css`) is static: no motion. Crispness (`docs/MOTION.md` rule 1): its height, swatch and
+inline inset were `1em`-based and Code's text is `max(text-xs, 0.875em)` (12.25 in 14px copy), so the
+box, the swatch's 1px ring and the inset landed on fractions. They are now `round(nearest, …, 1px)`:
+height `1em + 10`, swatch `1em`, inset `(height − 1cap) / 2 − 1`. At whole-pixel font sizes nothing
+changes (measured on `code.html`: 24 high, 14 swatch).
+
+## Motion and interaction, 2026-10-07
+
+
+Inline Code is static: no motion. Crispness: its `max(text-xs, 0.875em)` text (12.25 in 14px copy)
+stays, because audit G-26 (owner pick A) keeps it em-relative; Token's pass (above) already rounds
+the box, swatch and inset around it. Open question: round the text itself, `max(text-xs,
+round(nearest, 0.875em, 1px))` (12 in 14px copy, 14 in 16px prose), which keeps it following the
+prose but shapes it on whole pixels? Recommendation: yes, but it is a 0.25px type change and the
+owner's pick, so it waits for a yes.
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → no change; confirmed against Untitled UI's inline code
@@ -159,3 +177,5 @@ Unverified: dark theme, forced colours.
 - 2026-10-01 · audit H-25 (owner pick A) → the React `Token` and `TokenProps` are marked `@deprecated` (use `<Code swatch>`, which renders the same element and swatch); Token stays exported so existing markup renders; Presence stays the status mark → primitives.tsx:2152, :2176-2178.
 - 2026-10-01 · compact pass → inline Code is `max(text-xs, 0.875em)`: compact's 12px chrome made it 10.5, under the ramp; unchanged wherever the surrounding text is 14 or larger. docs/research/compact-pass-2026-10-01.md.
 - 2026-10-04 · quality pass after the one corner setting → the corner is the small role capped at a pill for its height; the radius rewrite had capped it at its own height's corner (12px code in a Table read 4, now 6 again); the swatch is nested, host − 4, floored at small − 2 (`code.css`, `token.css`). `docs/research/radius-audit-2026-10-03.md`, "Quality pass".
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → Token's height, swatch and inline inset rounded to whole pixels (`token.css`). See "Token: motion and crispness, 2026-10-07".
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → inline Code static; whole-pixel text rounding left as an open question (owner pick G-26).

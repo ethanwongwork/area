@@ -229,8 +229,8 @@ Sources:
 
 Indicator has no interactive states of its own; it is decorative inside an owner. Hover
 and focus belong to the owner (the button keeps its own hover fill; the dot does not
-change). Visibility toggles scale 0 → 1 with the existing transition; reduced motion
-removes it.
+change). Visibility toggles `scale` 0.6 ↔ 1 with opacity on `duration-fast` ease-out (the
+small-mark recipe, 2026-10-07; was scale 0 on `duration-base`); reduced motion removes it.
 
 ## Behavior and accessibility
 
@@ -352,6 +352,33 @@ Sources:
   Figma multiplayer avatars; counts on rectangular owners in any product; cross-engine,
   screen-reader and forced-colors execution.
 
+## Motion and interaction, 2026-10-07
+
+Contract: `docs/MOTION.md`. Research: `docs/research/motion-2026-10-07/crispness-and-current-state.md`.
+
+
+| Interaction | Before | After |
+|---|---|---|
+| Anchor show / hide (`invisible`) | `transform: translate(…) scale(0 ↔ 1)` + opacity, `duration-base` ease-out both ways | the small-mark recipe: `scale` 0.6 ↔ 1 + `opacity`, `duration-fast` `--area-ease-out` both ways; placement no longer transitions |
+| Placement | `translate(±50%, ±50%)` of the mark's own size; insets as computed | `translate: round(nearest, ±50%, 1px)` per axis; insets `round(nearest, overlap + inset, 1px)` |
+| Processing pulse | `transform: scale(0 → 2.8)`, opacity .6 → 0, `slow × 4`, `linear` keyword | same values on the individual `scale` property, `--area-ease-linear` |
+| Reduced motion, motion none | pulse stopped; anchor transition none | unchanged; stopped, the pulse copy rests exactly behind the mark (scale 1), so no ring is left mid-pulse |
+
+Crispness: a content-sized count is often odd or fractional ("99+" is 29.44 wide), so the half-size
+translate left its digits and its 1px cutout on half pixels; the circular count's 45° inset was
+−3.31 on a 32px avatar. Both now round: on an injected test the "99+" count's translate was 15px
+(was 14.72) and the avatar count's inset −3px. A count whose own width is fractional still has a
+fractional left edge (its right edge rests on the owner's corner); only a whole-pixel min-width
+would change that. Verified on `/indicator.html`: transition `scale 0.1s, opacity 0.1s`; hidden
+computes to `scale 0.6`, `opacity 0`; showing and hiding each start `scale` and `opacity` transitions.
+
+Open question: round the count's own width up to a whole pixel (`inline-size: round(up, …)` needs a
+measured width; JS could do it)? Recommendation: no; layout snaps its box at paint, and the text
+inside is positioned at subpixel x by design.
+
+Presence (`presence.css`) is static: no motion; its sizes (12 / 16 / 20) are even, so it centres
+exactly, and as an attachment it takes the rounded placement above.
+
 ## Feedback log
 
 - 2026-09-25 · Buttons and tabs too inset; tab count over the label; avatar 2px further
@@ -385,6 +412,7 @@ Sources:
   clear of the initial → `indicator.css` `.area-indicator--count`.
 - 2026-10-01 · audit C-19 (owner pick A) → Presence `xs` (10) removed; status sizes are sm 12, md 16, lg 20. Checkbox and Radio keep lg → manifest.ts:353, presence.css.
 - 2026-10-01 · audit C-25 (owner pick A) → `hidden` replaces `disabled` (kept as a deprecated alias) for an indicator that renders nothing; new `label` prop, a string or `(count) => string`, as Count's → Indicator.tsx:11-31.
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → indicator placement rounded to whole pixels (translate and insets); show/hide is the small-mark recipe (scale from 0.6 + opacity, fast, was scale 0 over base); pulse easing on the linear token → indicator.css. See "Motion and interaction, 2026-10-07".
 
 ## Stroke findings (2026-09-25)
 

@@ -68,6 +68,17 @@ cleanly (sm 28, lg 40 keep the same divider). No change.
   `border-decorative`. Pass review (`GalleryReviewButtonGroup`) checked on screen at 1× and 3×.
 - Unverified: dark theme, focus ring over the divider in every size.
 
+## Motion and interaction, 2026-10-07
+
+No group-level motion: every child is a Button and takes Button's rules (`button.md`, "Motion and
+interaction, 2026-10-07"): hover, press and selected land instantly and fade out over
+`duration-fast` `ease-out`; focus is an outline. The dividers are 1px pseudo-elements in layout
+and never move. The selected child's `z-index: 1` changes at once.
+
+Verified on `/button-group.html` (computed styles): no resting transforms; group and child heights
+are whole pixels; selecting a child creates no transition, deselecting fades `background-color`
+and `color` over 100ms.
+
 ## Feedback log
 
 - 2026-09-28 · batch 11 Chrome side by side (Figma's Present pair) → no change; visual pass
@@ -80,3 +91,4 @@ cleanly (sm 28, lg 40 keep the same divider). No change.
 - 2026-09-30 · audit S14, S15b (owner) → children keep Button's own 6 icon gap; the group no longer overrides `--_gap` (button-group.css:26-38; was 4 / 8 / 8). A neutral soft Split button now paints as the soft group (split-button.css:70-77; peer row).
 - 2026-10-01 · audit A-23 (owner pick A) → a disabled button's seam is drawn by the enabled neighbour at full strength (was ~75% under the dimmed button) → button-group.css:83-94.
 - 2026-10-01 · audit H-26 → a group whose buttons are all disabled dims once as a whole (one disabled part still dims alone) → button-group.css:98-102.
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → no group change; children inherit Button's instant-in, fast-out rule.

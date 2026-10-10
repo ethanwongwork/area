@@ -191,12 +191,15 @@ export function useAnchoredPosition(trigger: RefObject<HTMLElement | null>, surf
       const rtl = getComputedStyle(anchor).direction === "rtl";
       const mirrored = rtl && align !== "center" ? (align === "start" ? "end" : "start") : align;
       const box = anchorRect ? anchorRect(anchor) : anchor.getBoundingClientRect();
-      const position = computePosition(box, { width: node.offsetWidth, height: node.offsetHeight }, { width: document.documentElement.clientWidth, height: document.documentElement.clientHeight }, { side, align: mirrored, offset, padding });
-      node.style.setProperty("left", `${position.x}px`);
-      node.style.setProperty("top", `${position.y}px`);
-      node.style.setProperty("--area-overlay-available-height", `${position.availableHeight}px`);
-      node.style.setProperty("--area-overlay-anchor-width", `${Math.round(box.width)}px`);
-      node.style.setProperty("transform-origin", `${position.originX}px ${position.originY}px`);
+      // Under CSS `zoom` (a scaled-down preview, a zoomed page region) the surface's own lengths are
+      // multiplied by its zoom: measure in viewport pixels, write in the surface's own.
+      const zoom = (node as HTMLElement & { currentCSSZoom?: number }).currentCSSZoom || 1;
+      const position = computePosition(box, { width: node.offsetWidth * zoom, height: node.offsetHeight * zoom }, { width: document.documentElement.clientWidth, height: document.documentElement.clientHeight }, { side, align: mirrored, offset, padding });
+      node.style.setProperty("left", `${position.x / zoom}px`);
+      node.style.setProperty("top", `${position.y / zoom}px`);
+      node.style.setProperty("--area-overlay-available-height", `${position.availableHeight / zoom}px`);
+      node.style.setProperty("--area-overlay-anchor-width", `${Math.round(box.width / zoom)}px`);
+      node.style.setProperty("transform-origin", `${position.originX / zoom}px ${position.originY / zoom}px`);
       node.dataset.side = position.side;
     };
     const schedule = () => { cancelAnimationFrame(frame.current); frame.current = requestAnimationFrame(place); };
@@ -243,7 +246,12 @@ export function assignRef<T>(ref: ((value: T | null) => void) | { current: T | n
  */
 export function scrollOptionIntoList(list: HTMLElement | null | undefined, option: HTMLElement | null | undefined) {
   if (!list || !option) return;
-  const box = list.getBoundingClientRect(), item = option.getBoundingClientRect();
-  if (item.top < box.top) list.scrollTop -= box.top - item.top;
-  else if (item.bottom > box.bottom) list.scrollTop += item.bottom - box.bottom;
+  // A list drawn as a Scroll area scrolls its viewport, not its root (docs/specs/scroll-area.md, "Adoption").
+  const viewport = option.closest<HTMLElement>(".area-scroll-area__viewport");
+  const scroller = viewport && list.contains(viewport) ? viewport : list;
+  const box = scroller.getBoundingClientRect(), item = option.getBoundingClientRect();
+  // Rects are in viewport pixels and scrollTop in the scroller's own, which differ under CSS zoom.
+  const zoom = (scroller as HTMLElement & { currentCSSZoom?: number }).currentCSSZoom || 1;
+  if (item.top < box.top) scroller.scrollTop -= (box.top - item.top) / zoom;
+  else if (item.bottom > box.bottom) scroller.scrollTop += (item.bottom - box.bottom) / zoom;
 }

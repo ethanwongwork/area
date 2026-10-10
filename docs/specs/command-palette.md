@@ -144,6 +144,33 @@ with the text so close to the arrow." The label names both arrows, so it cannot 
 it now sits 6 from the ↓ plate's edge (was 2, so the hover wash met the text). 6 is the
 keycap-to-label gap inside the Open plate, taken from the visible plate here.
 
+## Motion and interaction, 2026-10-07
+
+Contract: `docs/MOTION.md`, "Dialog, command palette, confirm dialog". Verified on
+`/command-palette.html` in a background tab.
+
+| Interaction | Before | After |
+|---|---|---|
+| open | snapped open; no scrim fade (research Part C) | Dialog's: `opacity` + `scale` 0.97→1 about the centre, `duration-moderate` 200 `ease-out`; scrim `opacity` on the same clock; `@starting-style` (verified) |
+| close | snapped shut; the surface unmounted at once, so even a fade would have shown an empty dialog | one step faster, `duration-base` 150 `ease-out`, `overlay`/`display` `allow-discrete`; the scrim leaves on 150 too so it is never cut when the dialog leaves the top layer. The surface stays mounted, frozen as it was, until the exit finishes: choosing a result clears the query, and the list no longer refills mid-fade (verified: 3 filtered rows during the exit, unmounted after, 7 rows and an empty field on reopen) |
+| interrupted (reopen mid-exit) | — | reverses from where it is; the live surface replaces the frozen one (verified) |
+| reduced motion | — | durations are tokens (0); the scale is dropped as well |
+| rows | Menu rows, `data-highlighted` | unchanged (Menu's rule, sibling) |
+| footer hint plates | `background-color` 100 ease-out both ways | hover and press appear at once (`transition-duration: 0s` on `:hover`, `:active`), fade out on `duration-fast` |
+
+Crispness: resting palette `scale: 1`, top at 77, 600 × 403. Its x was 244.5 in a 1089-wide window:
+layout centring (`margin: auto`), which snaps at paint (`docs/MOTION.md`, Crispness 1); no
+transform at rest.
+
+Open questions: the scale origin is the centre (Dialog's). A top-anchored palette could grow
+from its top edge (Raycast, Linear grow from the centre). Recommendation: keep the centre, one
+recipe for every modal.
+
+## Review note, 2026-10-09
+
+- **What changed:** The up and down arrows in the footer now sit centred in their hover plates. Before, each arrow sat 4px from the plate's left edge and 11.5px from its right. Also visible in Kbd's command-palette tile.
+- **Why:** You said the arrow buttons' backplate was wrong; the plate was a 24px square with its narrow arrow packed to one side.
+
 ## Feedback log
 
 - 2026-09-30 · audit S10–S12 (owner) → the lift is the Surface axis role `--area-shadow-float` (command-palette.css:42); rows and the search row take the density token `--area-gap-row` (12, labels at 36; command-palette.css:28, :56); quiet keys render in the UI font 12/16 400, and Escape is written "Esc" (kbd.css:89-102).
@@ -159,3 +186,7 @@ keycap-to-label gap inside the Open plate, taken from the visible plate here.
 - 2026-10-03 · two roundness step sizes (owner) → palette and rows step by 4 with the surface; the rows' cap reads `radius-shift-surface` (`command-palette.css`). `docs/research/radius-audit-2026-10-03.md`, "Step size for large shapes".
 - 2026-10-03 · one corner setting (owner: one radius setting, Sharp and Pill as ends; "every control is a pill") → rows as Menu's, 8 at both densities up to a pill; palette = min(surface, rows + inset) (`command-palette.css`). `docs/research/radius-audit-2026-10-03.md`, "One corner setting".
 - 2026-10-04 · pill shapes and list rows (owner) → rows and palette use `radius-list-row` / `radius-list`, as Menu (`command-palette.css`). `docs/research/radius-audit-2026-10-03.md`, "Pill shapes and list rows".
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → Dialog's enter and exit (moderate in, base out, scale 0.97, scrim fade), surface frozen and kept through the exit, hint plates instant on hover and press. command-palette.css, CommandPalette.tsx.
+- 2026-10-09 · owner went with Scroll area's recommendation to adopt it in the scrolling families (docs/specs/scroll-area.md, "Adoption") → the scroll container is a Scroll area: Figma's overlay bar instead of the platform's, its inset moved into the scroller so rows keep their place → back in review.
+- 2026-10-09 · owner, review round 2 (needs changes): "move arrow buttons backplate is wrong" → open; the arrows sat 4 / 11.5 inside their 24 plates;
+  hint buttons now centre their content → command-palette.css.

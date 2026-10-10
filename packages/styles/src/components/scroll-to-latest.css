@@ -19,9 +19,17 @@
        the fade out and at the start of the fade in. */
     opacity: 0;
     visibility: hidden;
+    /* Motion (docs/MOTION.md, anchored-surface recipe; docs/specs/scroll-to-latest.md, 2026-10-07):
+       opacity only, so the button never rests on a transform. It leaves over duration-fast and
+       arrives one step slower, over duration-base, both ease-out (was fast both ways). */
     transition: opacity var(--area-duration-fast) var(--area-ease-out), visibility 0s linear var(--area-duration-fast);
   }
-  .area-scroll-to-latest[data-visible] { opacity: 1; visibility: visible; transition-delay: 0s; }
+  .area-scroll-to-latest[data-visible] {
+    opacity: 1;
+    visibility: visible;
+    transition-duration: var(--area-duration-base), 0s;
+    transition-delay: 0s;
+  }
   .area-scroll-to-latest[data-visible] > .area-button { pointer-events: auto; }
   /* The button is Button outline neutral, icon-only, pill: 32 round with the surface fill under its
    * ring, so it covers the prose it floats over (ChatGPT: 252 fill, 10% ring, no shadow). */

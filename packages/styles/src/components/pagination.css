@@ -1,0 +1,138 @@
+/* ---------------------------------------------------------------------------
+ * Pagination
+ *
+ * Moves between the pages of a long list (docs/specs/pagination.md). Previous and Next are
+ * ghost Buttons, so they are the Button and never a copy of it; the page numbers are options
+ * in a set and paint like the other sets: muted ink at rest, the default ink and the selected
+ * plate on the current page (DESIGN_SYSTEM.md, "Shared state paint"). No target product shows
+ * a numbered pager (ChatGPT, Notion searched 2026-10-08), so geometry follows the design
+ * systems that agree: 32 squares and a 2 gap (shadcn, Untitled UI's 2), Area's control tiers.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-pagination {
+    --_height: var(--area-control-md);
+    --_radius: var(--area-radius-control-md);
+    --_icon: var(--area-icon-md);
+    --_text: var(--area-control-md-text);
+    --_leading: var(--area-control-md-leading);
+    /* spec: a page number grows past its square from here, as Primer's 32 minimum with 6 sides;
+       Untitled and shadcn fix the square, which clips four digits. */
+    --_page-inset: var(--area-space-6);
+
+    display: flex;
+    font-size: var(--_text);
+    line-height: var(--_leading);
+  }
+  .area-pagination--sm {
+    --_height: var(--area-control-sm);
+    --_radius: var(--area-radius-control-sm);
+    --_icon: var(--area-icon-sm);
+    --_text: var(--area-control-sm-text);
+    --_leading: var(--area-control-sm-leading);
+  }
+  .area-pagination--md {}
+  .area-pagination--lg {
+    --_height: var(--area-control-lg);
+    --_radius: var(--area-radius-control-lg);
+    --_icon: var(--area-icon-lg);
+    --_text: var(--area-control-lg-text);
+    --_leading: var(--area-control-lg-leading);
+  }
+
+  .area-pagination__list {
+    display: flex;
+    /* One line, as every reference sets it: a pager that wraps reads as two. */
+    flex-wrap: nowrap;
+    align-items: center;
+    /* spec: Untitled UI 2 (`gap-0.5`), shadcn 2; Primer 4. One gap between every item, steps
+       included, as shadcn sets it. */
+    gap: var(--area-space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .area-pagination__item { display: flex; }
+  /* Layout: `pages` lists the numbers; `compact` replaces them with the status (below). */
+  .area-pagination--pages {}
+  .area-pagination--compact {}
+
+  /* A page number: a square at the tier's control height, Button's corner, the set's inks. */
+  .area-pagination__page {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    min-inline-size: var(--_height);
+    block-size: var(--_height);
+    margin: 0;
+    padding-block: 0;
+    padding-inline: var(--_page-inset);
+    border: 0;
+    /* Button's corner formula: capped against the tier's height, and a pill where the theme's
+       pills list names `button`, so the numbers keep the shape of the steps beside them. */
+    border-radius: calc(min(var(--_radius), max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px))) + var(--area-pill-button) * var(--area-radius-full));
+    background-color: transparent;
+    color: var(--area-fg-muted);
+    font-family: inherit;
+    font-size: var(--_text);
+    line-height: var(--_leading);
+    /* spec: 500 (Untitled UI, shadcn), one weight for every page so choosing one never reflows
+       the row, as Segmented keeps one weight on every option. */
+    font-weight: var(--area-weight-strong);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    text-decoration: none;
+    cursor: pointer;
+    user-select: none;
+    transition: var(--area-transition);
+  }
+  /* Motion (docs/MOTION.md, "Hover plate"): the plate lands at once and fades out on fast. */
+  @media (hover: hover) {
+    .area-pagination__page:hover { background-color: var(--area-bg-component-hover); transition-duration: 0s; }
+  }
+  .area-pagination__page:active { background-color: var(--area-bg-component-active); transition-duration: 0s; }
+  /* The current page is the selected option: the active plate and the default ink, and the plate
+     stays under the pointer (shared state paint). Untitled UI paints its current page with a
+     plate too; shadcn outlines it, Primer fills it with the accent. */
+  .area-pagination__page[aria-current="page"] {
+    background-color: var(--area-bg-component-active);
+    color: var(--area-fg-default);
+    cursor: default;
+    transition-duration: 0s;
+  }
+  .area-pagination__page:focus-visible {
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-offset);
+  }
+
+  /* The skipped range: the page's square, not interactive (all three systems). */
+  .area-pagination__ellipsis {
+    display: inline-grid;
+    place-items: center;
+    inline-size: var(--_height);
+    block-size: var(--_height);
+    color: var(--area-fg-muted);
+  }
+  .area-pagination__ellipsis > svg { inline-size: var(--_icon); block-size: var(--_icon); }
+
+  /* Compact layout: "Page 2 of 10" between the steps (Untitled UI's minimal pagination), set as a
+     Button label is, so its sides follow the shared text inset (inset.css). */
+  .area-pagination__status {
+    display: inline-flex;
+    align-items: center;
+    block-size: var(--_height);
+    padding-inline: max(0px, round(nearest, calc((var(--_height) - 1cap) / 2 - var(--area-stroke-width)), 1px));
+    color: var(--area-fg-muted);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  /* spec: Untitled UI sets the two numbers at 500 in the stronger ink. */
+  .area-pagination__value { color: var(--area-fg-default); font-weight: var(--area-weight-strong); }
+
+  /* Previous and Next point the way the text runs. */
+  .area-pagination__step:dir(rtl) .area-button__icon > svg { scale: -1 1; }
+
+  @media (forced-colors: active) {
+    .area-pagination__page[aria-current="page"] { forced-color-adjust: none; background-color: Highlight; color: HighlightText; }
+  }
+}

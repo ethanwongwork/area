@@ -136,6 +136,23 @@ Compared the Area captures (`textarea/area--*`) with the Notion and Figma single
 fields named in Sources. Build and test results are in the
 [cohesion audit](../research/cohesion-audit.md#verification).
 
+## Motion and interaction, 2026-10-07
+
+Per `docs/MOTION.md` (hover, focus, selected: in at once, out on `fast`; focus never fades in). The
+shell lists its transitioned properties explicitly (`background-color, border-color, color,
+box-shadow`) with two private clocks, `--_t-paint` for fill, edge and ink and `--_t-halo` for the
+focus halo, so a state can make paint instant while the halo still lets go softly.
+
+| Interaction | Before | After |
+|---|---|---|
+| Hover edge | `--area-transition`: border-color `fast` ease-out in and out | in at once (`--_t-paint: 0s` on `:hover`), out on `fast` / `ease-out` |
+| Focus edge | border-color `fast` ease-out in and out | in at once, out on `fast` / `ease-out` |
+| Focus halo (box-shadow) | faded in over `fast` (lagged the keyboard) | in at once (`--_t-halo: 0s`), out on `fast` / `ease-out`, also when the field is left while hovered |
+| Increased-contrast outline | never transitioned | unchanged: instant both ways |
+| Validation tone (invalid, success, warning) and disabled | edge faded in over `fast` | lands at once; clearing it while focused is instant (focus is 0s), clearing it at rest fades on `fast` |
+
+Crispness: shell, insets (already `round()`ed) and boxes measured on whole pixels on `textarea.html`.
+
 ## Feedback log
 
 - 2026-09-28 · owner approved batch 12 → Complete.
@@ -153,3 +170,4 @@ fields named in Sources. Build and test results are in the
   (outline shadow, neutral focus) → [cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open).
 - 2026-09-30 · audit S4 (owner) → radius follows the tier as Button: sm 6, md 8, lg 10 (`--_radius` per size, `textarea.css:36`, `:131-133`); was 8 at every size.
 - 2026-10-01 · audit B-9 (owner pick B) → read-only keeps its variant's rest paint (was the soft fill), no hover edge, default cursor; a soft field never gains an edge when disabled → textarea.css:76-80, :115-128.
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → motion pass: hover and focus edge and the focus halo appear at once and fade out on `fast`; tones land at once (`textarea.css`). See "Motion and interaction, 2026-10-07".

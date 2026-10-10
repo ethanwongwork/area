@@ -18,8 +18,10 @@
 
   .area-code--swatch,
   .area-token:has(> :is(.area-code__swatch, .area-token__swatch)) {
-    --_token-height: calc(1em + var(--area-space-10));
-    --_token-swatch-size: 1em;
+    /* Whole pixels (docs/MOTION.md crispness, 2026-10-07): Code's text is 0.875em (12.25 in 14px
+       copy), so the box, the swatch and its 1px ring and the insets landed on fractions and drew soft. */
+    --_token-height: round(nearest, calc(1em + var(--area-space-10)), 1px);
+    --_token-swatch-size: round(nearest, 1em, 1px);
 
     display: inline-flex;
     align-items: center;
@@ -28,7 +30,7 @@
     max-inline-size: 100%;
     block-size: var(--_token-height);
     padding-block: 0;
-    padding-inline: calc((var(--_token-height) - 1cap) / 2 - var(--area-border-width));
+    padding-inline: round(nearest, calc((var(--_token-height) - 1cap) / 2 - var(--area-border-width)), 1px);
     white-space: nowrap;
   }
 

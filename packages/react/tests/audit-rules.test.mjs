@@ -147,10 +147,11 @@ test('SliderRange is a component: two named native ranges, distinct field names,
 test('a Menu with a trigger keeps the consumer id and name (audit D-12); checkbox rows stay open (D-11)', () => {
   const html = renderToString(h(Menu, { id: 'file-menu', 'aria-label': 'File', trigger: h(Button, null, 'File') }, h(MenuItem, null, 'New')));
   assert.match(html, /aria-controls="file-menu"/);
-  assert.match(html, /<div role="menu"[^>]*id="file-menu"/);
+  // The anchored menu is a Scroll area (scroll-area.md, "Adoption").
+  assert.match(html, /<div class="area-scroll-area area-scroll-area--hover area-menu" role="menu" id="file-menu"/);
   assert.match(html, /aria-label="File"/);
-  assert.doesNotMatch(html, /<div role="menu"[^>]*aria-labelledby=/);
-  assert.match(css, /\[aria-expanded="false"\]:dir\(rtl\) \.area-tree-view__chevron svg \{ transform: rotate\(90deg\); \}/);
+  assert.doesNotMatch(html, /role="menu"[^>]*aria-labelledby=/);
+  assert.match(css, /\[aria-expanded="false"\]:dir\(rtl\) \.area-tree-view__chevron svg \{ rotate: 90deg; \}/);
 });
 
 test('MenuSub is a menuitem that opens a nested auto popover menu (audit D-10)', async () => {
@@ -196,5 +197,6 @@ test('conversation and code: composer disables its actions, honours inputProps.i
 test('a linked card lifts every control above its stretched link; RTL arrows mirror (audit F-29, F-34)', () => {
   assert.match(css, /\.area-card:has\(\.area-card__link\) :is\(a, button, input, select, textarea, \[tabindex\]\):not\(\.area-card__link\) \{\s*position: relative;\s*z-index: 2;/);
   assert.match(css, /\.area-calendar:dir\(rtl\) :is\(\.area-calendar__nav, \.area-calendar__header, \.area-calendar__week\) > \.area-button svg \{ scale: -1 1; \}/);
-  assert.match(css, /\.area-panel__chevron:dir\(rtl\) > svg \{ scale: -1 1; \}/);
+  // A collapsed section's chevron turns into the reading direction (rotate, the one chevron rule).
+  assert.match(css, /\.area-panel__toggle\[aria-expanded="false"\] \.area-panel__chevron:dir\(rtl\) svg \{ rotate: 90deg; \}/);
 });

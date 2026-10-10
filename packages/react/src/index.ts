@@ -40,6 +40,11 @@ export { Drawer, type DrawerProps } from "./components/Drawer.tsx";
 export { BoxField, type BoxFieldProps, type BoxValue } from "./components/BoxField.tsx";
 export { PropertyList, PropertyListItem, type PropertyListProps, type PropertyListItemProps } from "./components/PropertyList.tsx";
 export { TreeView, type TreeViewProps, type TreeViewNode } from "./components/TreeView.tsx";
+export { FileUpload, FileUploadList, FileUploadItem, fileMatchesAccept, formatFileSize, type FileUploadProps, type FileUploadItemProps, type FileRejection } from "./components/FileUpload.tsx";
+export { ScrollArea, type ScrollAreaProps } from "./components/ScrollArea.tsx";
+export { Link, linkVariants, type LinkProps } from "./components/Link.tsx";
+export { Toggletip, type ToggletipProps } from "./components/Toggletip.tsx";
+export { Pagination, paginationRange, type PaginationProps, type PaginationLabels, type PaginationItem } from "./components/Pagination.tsx";
 export { Composer, type ComposerProps } from "./components/Composer.tsx";
 export { Field, Label, type FieldProps, type LabelProps } from "./components/Field.tsx";
 export {
@@ -63,7 +68,7 @@ export { Badge, type BadgeProps } from "./components/Badge.tsx";
 export { BadgeGroup, type BadgeGroupProps } from "./components/BadgeGroup.tsx";
 export { Indicator, IndicatorAnchor, type IndicatorProps, type IndicatorAnchorProps } from "./components/Indicator.tsx";
 export { Count, type CountProps } from "./components/Count.tsx";
-export { Disclosure, DisclosureGroup, type DisclosureProps, type DisclosureGroupProps } from "./components/Disclosure.tsx";
+export { AccordionItem, Accordion, type AccordionItemProps, type AccordionProps } from "./components/Accordion.tsx";
 
 export { ColorPicker, hexToHsv, hsvToHex, type ColorPickerProps, type ColorModel, type ColorView } from "./components/ColorPicker.tsx";
 export { AREA_COLOR_GRID } from "./components/color-grid.ts";

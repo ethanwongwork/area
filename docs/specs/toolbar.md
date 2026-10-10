@@ -221,6 +221,20 @@ parity, token references and the React tests pass. Unverified: Figma's dark them
 needs the owner), keyboard focus ring in the new track, a screen reader on toggle and track
 semantics (toggles are `aria-pressed`; a track is not a radio group).
 
+## Motion and interaction, 2026-10-07
+
+Toolbar owns no motion. Tool hover, press and selection are Button's (instant in, `duration-fast`
+`ease-out` out; `button.md`, "Motion and interaction, 2026-10-07"), so choosing a tool fills it at
+once and the previous tool's fill fades. Tool chevrons are Split button's (`rotate` over
+`duration-fast`, `ease-out`) and, for icon tools, now draw the 12 line (`split-button.md`). The bar's
+focus ring is an outline and is instant. The surface bar's halo is a soft `box-shadow` by spec, not
+a hairline, so it is not a crispness risk.
+
+Verified on `/toolbar.html` (computed styles): no transition on the bar, every command's height
+and y are whole pixels, selected tools report `transition-duration: 0s`, icon tool chevrons are 12
+with `data-area-glyph-size="12"`. Some bars are centred at x .5 in the docs specimen; layout snaps
+them.
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → overflow content `shadow-2` → floating lift (0 20px 24px,
@@ -253,3 +267,4 @@ semantics (toggles are `aria-pressed`; a track is not a radio group).
 - 2026-10-01 · audit A-9 → forced colours paint the separator `ButtonText` (it is a painted box) → forced-colors.css.
 - 2026-10-01 · compact pass round 5 → the surface inset and the group gap read `ui-cluster` (8, compact 6); the concentric corner follows (16, compact 12). Default unchanged. docs/research/compact-pass-2026-10-01.md.
 - 2026-10-04 · quality pass after the one corner setting → the surface corner is the commands' corner plus the inset, capped at a pill (16 at the default, compact 12; a pill at Pill); the radius rewrite had capped it at a 48px control's own corner, 12, which broke concentricity (`toolbar.css`). `docs/research/radius-audit-2026-10-03.md`, "Quality pass".
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → no toolbar change; tools take Button's instant-in, fast-out rule and Split button's chevron.

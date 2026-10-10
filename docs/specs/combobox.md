@@ -9,6 +9,10 @@ Popover (anchoring)
 
 - 2026-09-26: "do each of them subsequently" — the product-specific inventory in
   COMPONENTS.md, starting with the recommended foundation, Combobox.
+- owner 2026-10-08: approved, recommendations accepted (custom-select.md open questions 3–7,
+  shared by this family): the chosen option shows the check alone; the toggle's glyph ends at
+  the field chevron inset in `input-chevron` ink; the chevron stays still. Supersedes audit S13
+  C's plate here.
 
 ## Job and boundaries
 
@@ -44,10 +48,10 @@ list itself was measured only from its offscreen measurement nodes (24 rows, 26 
 | Slot · property | Area value | Basis | Reason when it differs |
 |---|---|---|---|
 | field | Input (outline default, sizes 28/32/40), `role="combobox"`, `aria-autocomplete="list"` | Figma input combobox; WAI | Area's field |
-| toggle | InputAction chevron at the end, `tabindex=-1`, "Show suggestions"; shows every option | WAI (the button is not a tab stop) | — |
+| toggle | InputAction chevron at the end, `tabindex=-1`, "Show suggestions"; shows every option. The field's end padding moves the action in so its glyph ends at the field chevron inset (8 from the edge at sm/md, 12 at lg; compact 8), as Select's; glyph in `input-chevron` ink (`stroke-control`) | WAI (the button is not a tab stop); owner 2026-10-08 (custom-select.md Q4–Q5) | Was 6 / 8 / 12 from the end in `input-icon` ink |
 | list surface | Menu: 12 radius, 4 inset, border, floating lift (`--area-shadow-float`) | menu.md | Figma's lists are dark; Area's menus are light (ChatGPT, Notion) |
 | rows | Menu rows (32, radius 8, 5% wash on hover and highlight); an icon takes Menu's `--area-gap-row` gap (12), so labels sit at 36 | menu.md | Figma 24/28 rows belong to compact density |
-| selected | active plate (`bg-component-active`, via `data-selected` on the chosen option; Combobox.tsx:216, surface.css:1055) plus the trailing check in a reserved column | Select's value rows; Figma's check column | A value picker, so it shows its value as Select does (audit S13 C, family call B-6 settled). Was the check alone. Area puts the check at the end (ChatGPT's model picker) |
+| selected | the trailing check in a reserved column (`aria-selected`), no plate; the hover plate when highlighted | Notion and ChatGPT value lists (custom-select.md, 2026-10-07 audit); owner 2026-10-08 | Was the active plate plus check (audit S13 C, `data-selected`), 2026-09-30 to 2026-10-08. Area puts the check at the end (ChatGPT's model picker) |
 | position | top layer (native popover), placed by the shared JS engine (`useAnchoredPosition`: side bottom, align start, offset 4 = `MENU_OFFSET`, viewport padding 8), so it works without CSS anchor positioning; flips and shifts; min width max(field width, 224) | overlay.md (menu gap 4, audit S16 owner 2026-09-30); Figma list ≥ field | Was CSS anchor positioning |
 | height | min(324, the room beside the field), then scrolls; 50vh only before the engine reports the room | Figma (324, its font list viewport) | Was min(324, 50vh) |
 | empty | "No results", muted, a row tall, not an option | — | — |
@@ -78,6 +82,23 @@ is 172 wide, 10 padding, corner 16, 90% white, 2 below its trigger, two-line row
 12 corner; Area's listbox is Menu's (4 padding, corner 12, 32 rows with an 8 corner, 4 below the
 field), matched to Notion's menu when Menu was approved. No change. Unverified: dark theme.
 
+## Motion and interaction, 2026-10-07
+
+Contract: `docs/MOTION.md`. Combobox draws no motion of its own; it is Input (field) plus Menu
+(list), so its hover, focus and list motion are theirs.
+
+| Interaction | Before | After |
+|---|---|---|
+| Field hover, focus | Input's (`--area-transition`, fast, ease-out) | unchanged here; Input's pass owns it |
+| List enter | Menu: `opacity` + `scale` 0.97, base, ease-out, `@starting-style` | unchanged (surface.css) |
+| List exit | Menu: same as enter | unchanged here (surface.css takes exits to fast) |
+| List content during the exit | committing set the text to the option's label, which re-listed every option while the list faded | the list keeps the rows it last showed until it is hidden (`Combobox.tsx`, `shownRows`) |
+| Toggle chevron | static | static (open question) |
+
+Crispness: nothing resting is transformed; the list ends at `scale: 1` and its origin and
+position are rounded by `overlay.ts`. Verified in the browser: computed transitions and a
+commit with a filtered list (rows held while closing).
+
 ## Verification
 
 - Headless Edge, real keys and pointer (`scratchpad/combo.mjs`): "sa" filters to four
@@ -92,6 +113,10 @@ field), matched to Notion's menu when Menu was approved. No change. Unverified: 
 
 - Match highlighting (bold the typed part) was left out; none of the products measured
   showed it in these lists.
+- *Settled 2026-10-08 (owner, recommendation accepted): the chevron stays still.* Motion, 2026-10-07: rotate the toggle's chevron while the list is open? MOTION.md lists selects
+  among the chevrons that rotate, but native Select, ChatGPT's and Notion's select chevrons (as
+  captured) stay still. Recommendation: keep it still for Select, Combobox, Custom select and
+  Date picker alike; if the owner wants a flip, `rotate: 180deg` on fast ease-out, one rule.
 
 ## Feedback log
 
@@ -103,3 +128,6 @@ field), matched to Notion's menu when Menu was approved. No change. Unverified: 
 - 2026-10-03 · roundness work → list rows are Menu's rows: border counted, 12 → 7 (was 8). `docs/research/radius-audit-2026-10-03.md`, "Roundness".
 - 2026-10-03 · all even (owner) → list rows back to 8 (border left out).
 - 2026-10-04 · pill shapes and list rows (owner) → list rows follow Menu's `radius-list-row`; the field takes `--area-pill-field`. `docs/research/radius-audit-2026-10-03.md`, "Pill shapes and list rows".
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → motion pass: the list keeps its rows while it fades out (a commit no longer re-lists every option mid-exit); field and list motion stay Input's and Menu's. "Motion and interaction, 2026-10-07".
+- 2026-10-08 · owner: recommendations accepted (custom-select.md Q3–Q7) → `data-selected` no longer set on options (Combobox.tsx), so the chosen row is the check alone and highlight is the only plate; the field's end padding is the chevron inset less half the action's free space (`inset.css`: sm 3 → 5, glyph 6 → 8 from the edge; md and lg unchanged; compact sm 24 → 7, glyph 8); toggle glyph `input-chevron` (combobox.css; rgb(131) / dark rgb(147)). Verified in the gallery (computed rects, light/dark, default/compact; chosen Geist row transparent when not highlighted). Note: in dark, the soft field's pressed toggle plate (`bg-active` over #28) puts the chevron at about 2.6:1 for the press only; rest, hover and every opaque field fill are ≥ 3:1.
+- 2026-10-09 · owner went with Scroll area's recommendation to adopt it in the scrolling families (docs/specs/scroll-area.md, "Adoption") → the scroll container is a Scroll area: Figma's overlay bar instead of the platform's, its inset moved into the scroller so rows keep their place → back in review.

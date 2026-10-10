@@ -54,7 +54,10 @@
   /* The person's actions show on hover or focus (ChatGPT hides them until then); the latest
    * assistant turn keeps its actions shown. */
   .area-message--user > .area-message__actions { opacity: 0; transition: opacity var(--area-duration-fast) var(--area-ease-out); }
-  .area-message--user:focus-within > .area-message__actions { opacity: 1; }
+  /* Keyboard focus shows them at once (MOTION.md: focus is instant, nothing opened from the keyboard
+     waits on a fade); the pointer's reveal keeps the duration-fast fade both ways, as the system's
+     other reveal-on-hover rows (Card, Tree view) do. */
+  .area-message--user:focus-within > .area-message__actions { opacity: 1; transition-duration: 0s; }
   @media (hover: hover) { .area-message--user:hover > .area-message__actions { opacity: 1; } }
   @media (hover: none) { .area-message--user > .area-message__actions { opacity: 1; } }
 
@@ -67,8 +70,12 @@
     border-radius: var(--area-radius-full);
     background-color: currentColor;
     vertical-align: middle;
-    animation: area-message-pulse calc(var(--area-duration-slow) * 4) ease-in-out infinite; /* spec: 1s at the default preset, 4 x slow (audit H-20) */
+    /* spec: 1s at the default preset, 4 x slow (audit H-20). The curve is the ease-in-out token (was
+       the keyword, the system's one literal easing): each half of the breath eases, so the dot
+       dwells at full ink and at 30% and never kinks at the turn as a linear fade would. */
+    animation: area-message-pulse calc(var(--area-duration-slow) * 4) var(--area-ease-in-out) infinite; /* spec */
   }
+  /* Stopped, the dot rests at full ink (the keyframes only set the 30% midpoint), never mid-fade. */
   @media (prefers-reduced-motion: reduce) { .area-message__cursor { animation: none; } }
   [data-area-motion="none"] .area-message__cursor { animation: none; }
   /* Forced colours drop authored backgrounds; keep the dot in the text colour. */

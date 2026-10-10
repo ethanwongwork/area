@@ -192,12 +192,45 @@ docs example (`PanelEverything`, `apps/docs/src/demos/display.tsx:316`) is the d
 panel with medium rows and soft fields. This spec's author did not inspect screenshots.
 Unverified: dark theme and a side-by-side with Figma's inspector at the same zoom.
 
+## Motion and interaction, 2026-10-07
+
+Contract: `docs/MOTION.md`. Verified in the built-in browser on `/panel.html` (computed rotation
+of the svg and its `g`, `getAnimations()` on toggle; the pill formula at edge heights 437, 438,
+300 and 41).
+
+| Interaction | Before | After |
+|---|---|---|
+| Section chevron reveal | opacity fast both ways | instant in on hover or focus, fast out |
+| Section chevron turn | the Glyph's `rotate={270}` (an SVG `transform` on a `g` that mounts and unmounts): snapped | CSS `rotate` on the svg (−90° collapsed, 90° in RTL) on fast ease-out; `svg > g { transform: none }` cancels the Glyph's own turn |
+| Toggle focus ring | outline, instant | unchanged |
+| Resize handle focus pill | instant | unchanged |
+| Rows on collapse | `display: contents` / `hidden`: snap | unchanged (a `display: contents` run has no box to animate) |
+
+Crispness: the resize focus pill was `block-size: 50%`, centred: on an odd edge it fell on a half
+pixel. It is now `calc(100% − 2 × round(25%, 1px))`, half the edge to the pixel, with a whole-pixel
+offset on either parity (437 → 219 at 109; 438 → 218 at 110). RTL used `scale: -1 1` on the
+collapsed glyph; it now rotates 90°.
+
+Proposed TSX (primitives.tsx, not edited here): drop the Glyph's turn, which the CSS now draws, so
+the `g` override can go: `<Glyph name="chevron-down" rotate={open ? undefined : 270} />` →
+`<Glyph name="chevron-down" size={12} />` (size 12 also sets the 12px line weight; the glyph is
+drawn at `min(icon-sm, inset)`, 12 at md, 8 in a small panel, but currently strokes at the 16 weight).
+
+Open questions:
+- The sm panel's chevron is 8px (the inset), a 16 drawing at half size. Recommendation: accept
+  (Figma's own is a 3×5 mark) unless the owner sees it as soft; a 12 cut would overhang the inset.
+
 ## Verification
 
 - 4 Area captures (re-taken after the second pass) and 5 Figma inspector captures compared
   above; Notion popover kept for contrast.
 - Build and test results: see [the audit](../research/cohesion-audit.md#verification).
 - The docs API table lists `bareBar` (`apps/docs/src/pages.mjs:834`).
+
+## Review note, 2026-10-09
+
+- **What changed:** Everything is 2px tighter: the side inset is 14px at md (was 17 with the border) and 10px at sm (was 13), gaps between fields and rows are 10 and 6 (were 12 and 8), and labels sit 4px over their fields. In the resizable inspector, the Dimensions row now carries Figma's constrain toggle in the action column, so its fields reach the same edge as the rest. A collapsible section's chevron now stays centred on its title when the section opens; it used to jump up.
+- **Why:** You asked for the panel to be about 2px more compact everywhere, for the large right margin in the resizable tile, and for the chevron's movement on open to be fixed. The right margin was an empty action column; the chevron was centred on a box that shrinks when a section opens.
 
 ## Feedback log
 
@@ -241,3 +274,11 @@ Unverified: dark theme and a side-by-side with Figma's inspector at the same zoo
 - 2026-10-02 · compact pass round 9 → the md label gap reads `ui-stack` (6, compact 4). docs/research/compact-pass-2026-10-01.md (round 9).
 - 2026-10-02 · compact evidence audit → md sides hold at 16 at compact (was 12; Figma's inspector 16) (R4) docs/research/compact-evidence-2026-10-02/README.md.
 - 2026-10-03 · radius audit D1 (owner) → the container role is 12 at compact too (was 8; Figma 13, Cursor 12-14), so this family's surface is 12 at both densities; rows concentric with a floating surface follow (compact 24 rows r8). `docs/research/radius-audit-2026-10-03.md`.
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → section chevron turns on fast (was a snapping SVG transform) and appears at once on hover; resize focus pill centred on whole pixels.
+- 2026-10-09 · owner went with Scroll area's recommendation to adopt it in the scrolling families (docs/specs/scroll-area.md, "Adoption") → the scroll container is a Scroll area: Figma's overlay bar instead of the platform's, its inset moved into the scroller so rows keep their place → back in review.
+- 2026-10-09 · owner, review round 2 (rethink): density, gaps, padding and margins look a bit too big at every size;
+  more compact, "maybe by like 2px", evenly across everything. Content / resizable: the right margin is far too large.
+  Collapsible sections: the chevron's placement moves wrongly once a section opens → every step 2 smaller (md
+  14 / 10 / 4, sm 10 / 6 / 4), the edge counted once (`--_side`); the resizable demo's Dimensions row carries Figma's
+  constrain toggle in its reserved action column; the chevron is centred on the title row, not the heading box →
+  panel.css, inset.css, gallery.tsx.

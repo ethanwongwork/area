@@ -173,6 +173,42 @@ lines a slider up with the same-size controls beside it, so sm stays. The hover 
 15 Area captures read (shell and readout; see Sources on pseudo-elements). Build and test
 results are in the [cohesion audit](../research/cohesion-audit.md#verification).
 
+## Motion and interaction, 2026-10-07
+
+Contract: [`docs/MOTION.md`](../MOTION.md). Covers Slider and SliderRange (`slider.css`).
+
+| Interaction | Before | After |
+|---|---|---|
+| drag, keyboard step | native: the thumb follows at once | unchanged (keyboard-driven changes are instant) |
+| hover (fill and thumb dot darken) | paints are gradients, which do not interpolate: at once both ways | unchanged; see open question 1 |
+| focus-visible | outline on the thumb | unchanged |
+| thumb `transition` | `--area-transition` | unchanged; inert (no transitioned property changes on the thumb) |
+| reduced motion | nothing to stop | nothing to stop |
+
+**Crispness.**
+- Step marks: each 1px tick sat at its percentage and was pulled back by
+  `translateX(-50%)`, so every tick straddled two device columns (B8 in the crispness research).
+  Each tick now starts at `round(nearest, mark − 0.5px, 1px)`, no transform: it lands on a whole
+  pixel, within 0.5px of the thumb's centre at that value.
+- Mark strip and SliderRange rails: centred by layout (`inset-block: 0; margin-block: auto`)
+  instead of `top: 50%` plus `translateY(-50%)`; the top-label layout spans the control row
+  (`inset-block: calc(100% − height) 0`). Same position; no resting transform.
+- The native thumb's position is the browser's: Chromium places it in layout units and snaps
+  its box to device pixels when it paints.
+
+**Verified** (`/slider.html`, Chromium, DPR 2): the md mark strip sits 11px down a 32px row, 10
+tall, `transform: none`; its four ticks start at 127 / 255 / 382 / 510 of 638 (absolute x 396,
+524, 651, 779, all whole); the 20% tick covers the thumb centre (135.6). The range rail and fill
+compute `top: 0; height: 4px; transform: none` in a 32px track (y = 14 by layout). Not verified by
+eye (background tab).
+
+**Open questions.**
+1. Hover-out on the thumb dot and fill is instant, not a `fast` fade, because both are gradient
+   paints. Recommendation: leave it; a fade would need the dot rebuilt as a separate layer (or a
+   registered colour property), for a 100ms change on a 16px dot.
+2. MOTION.md has no recipe for a hover or drag response on the thumb (halo, shadow); the
+   Feedback log's owner note lists it. Recommendation: none until the owner asks.
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → no change; rail confirmed as the shared rail (Progress moved
@@ -197,3 +233,4 @@ results are in the [cohesion audit](../research/cohesion-audit.md#verification).
 - 2026-10-01 · audit C-11 → RTL: the fill gradient follows `:dir(rtl)` on the input (`--_fill-dir: to left`); the `[dir=rtl]` track mirroring is removed, it put Chromium's thumb back on the left (checked live in Chromium: ancestor `dir` and the input's own both correct) → slider.css:189-208.
 - 2026-10-01 · audit C-12 (owner pick A) → new `SliderRange` component replaces the docs-only composition: `[start, end]` value API, sm / md / lg, optional number fields, `minLabel` / `maxLabel`, `name` / `form`, `disabled`, RTL-aware pointer mapping, focus kept on the chosen handle; fill is the Selection role → SliderRange.tsx, manifest.ts:277-284, slider.css:92-159.
 - 2026-10-01 · audit C-31 (owner pick A) → Shift+arrow moves ten steps; the thumb stays 16 at md → primitives.tsx:813-820.
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → step ticks start on rounded whole pixels with no translate (was −0.5px, a 2px smear at 1x); the mark strip and SliderRange rails centre by layout instead of `translateY(-50%)`; native drag and keyboard steps stay instant (`slider.css`; "Motion and interaction, 2026-10-07").

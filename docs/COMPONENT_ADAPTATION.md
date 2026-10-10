@@ -288,6 +288,12 @@ States, Behavior; see `specimenGroup` in `apps/docs/scripts/specimen-names.mjs`)
 scales to fit, and one that would fall below half size takes a 2 x 2 tile.
 The gallery's Mode and Density controls change only the canvas. Then give the owner:
 
+- the component review page (`apps/docs/scripts/component-review.mjs`, republished to the same
+  Artifact). Each family leads with its spec's latest `## Review note, <date>` section: **What
+  changed** and **Why**, in a sentence each, in plain words. The page renders every specimen in the
+  Before build and the current one and labels each variant Changed (with the modes it changed in),
+  New or Unchanged; changed variants show Before and After side by side, with a 2× zoom, and
+  unchanged ones fold away (owner, 2026-10-09);
 - the gallery link for each variant,
 - the spec's comparison table with the Area column,
 - the side-by-side observations,

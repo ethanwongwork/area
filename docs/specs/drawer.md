@@ -1,6 +1,6 @@
 # Drawer spec
 
-**Status:** in review · 2026-10-05 (built; Review page batch "New components, batch 1")
+**Status:** complete · 2026-10-08 (owner approved on the component review page; recommendations accepted)
 **Captures:** `docs/research/captures/drawer/`: `shadcn--sheet-right--open--light`,
 `shadcn--sheet-overlay--open--light` (Claude in Chrome, 2026-10-06, viewport 1504 × 719),
 `area--drawer-sm--open--light`, `area--drawer-stacked--rest--light`.
@@ -61,7 +61,7 @@ Area's float lift 0 20 24 at 6% / 0 5 8 at 3%.
 | edge | inner-edge 1px `border-float`, no radius against the screen edge; bottom: top corners `radius-container` | shadcn (flush, 1px edge) | — |
 | anatomy, insets, type, close | Dialog's | Peer: Dialog (accepted) | shadcn close at 12 and stacked footer |
 | scrim | Dialog's | Peer: Dialog | shadcn 10% + blur |
-| motion | slide from the edge + scrim fade, `duration-base`, none under reduced motion | Dialog's motion tokens | shadcn 200ms |
+| motion | `translate` 100% from the edge, in on `duration-slow` (250), out on `duration-moderate` (200), `ease-drawer` both ways; scrim fade `moderate` ease-out; instant under reduced motion (2026-10-07, below) | docs/MOTION.md, "Drawer / sheet"; Vaul's curve | shadcn 200ms ease-in-out; was `duration-base` ease-out |
 
 ## Behavior and accessibility
 
@@ -77,6 +77,40 @@ Builds, parity, typecheck and tests pass. Browser: opens as `:modal` at 710 / 38
 Unverified: dark, compact, RTL, screen reader, the exit slide on browsers without
 `transition-behavior`.
 
+## Visual pass
+
+### Claude in Chrome audit, 2026-10-07 (incomplete)
+
+Sources: `localhost:4377/drawer.html` (Area, modal "Open drawer", light, viewport 1504 × 719,
+tab in the background); `ui.shadcn.com/docs/components/base/drawer` (opened, then Escape; not
+measured). Stopped early: the session's permission classifier refused further JavaScript
+measurement and the capture relay, so no capture files were saved and no reference was measured
+this pass. Notion side peek, ChatGPT sidebar, Figma panels, Vaul, Fluent, Atlassian, Material 3:
+not visited.
+
+| Slot · property | Area (measured, before) | Dialog rule | shadcn Sheet (2026-10-06) |
+|---|---|---|---|
+| surface | 1120 / 0, 384 × 719, 1px `border-float` inner edge, float lift | — | 384, flush, 1px edge |
+| content from the inner (bordered) edge | 16 (1 + 15) | 16, border included | 16 |
+| content from the top, outer side, bottom | **15** (no border, padding 15) | 16 | 16 |
+| title top (with close) | 11 | 12 (16 − (24 − 16) / 2) | 16 |
+| close | 32 at 7 / 7 from the corner | 8 / 8 | 28 at 12 / 12 |
+| scrim | 13.3% black, no blur | the same | 10% + 4px blur |
+| motion | transform 150ms `cubic-bezier(0.16, 1, 0.3, 1)` | `duration-base`, ease-out | 200ms |
+
+Findings: (1) the surface padding was `16 − border` on all four sides while only the inner edge
+has a border, so the three flush sides sat at 15 and the close at 7 / 7, one off Dialog's 16 and
+8 / 8. (2) The title lacked Dialog's `text-box` rule, so without a close its cap didn't sit on the
+inset as Dialog's does.
+
+Changed (`drawer.css`): padding 16 on every side, `16 − border` only on the bordered side (end:
+inline start; start: inline end; bottom: block start); the title takes Dialog's cap trim without a
+close and `text-box: none` with one. Expected after the rebuild: content 16 from every edge, title
+top 12, close 8 / 8. Not re-measured (see above).
+
+Still open for a later audit: widths per size against Notion side peek and Fluent/Atlassian;
+flush vs floating inset; scrim and dark-mode lift; compact; motion duration (150 vs shadcn 200).
+
 ## Settled questions
 
 1. **Non-modal: a mode on Drawer** (owner: "up to you"). Notion's side peek is the primary content
@@ -86,10 +120,37 @@ Unverified: dark, compact, RTL, screen reader, the exit slide on browsers withou
    and returns focus.
 2. **Footer: a variant** (owner: "could be a variant"): `actions="row"` (default) or `"stacked"`.
 
+## Motion and interaction, 2026-10-07
+
+Contract: `docs/MOTION.md`, "Drawer / sheet". Verified on `/drawer.html` in a background tab
+(modal and non-modal), with `getAnimations()` read at the start of each transition and rects
+after `finish()`.
+
+| Interaction | Before | After |
+|---|---|---|
+| enter | `transform` translate(±100%), `duration-base` 150 `ease-out` | `translate` (the individual property) 100% on the edge axis, `duration-slow` 250 `ease-drawer` (Vaul) |
+| exit | the same 150 `ease-out` | one step faster, `duration-moderate` 200 `ease-drawer`; `overlay`/`display` `allow-discrete` on 200 |
+| scrim | `opacity` 150 `ease-out` | `opacity` `duration-moderate` 200 `ease-out` in, and out on the surface's 200 so it is never cut |
+| non-modal (side peek) | as modal, no scrim | the same slide clocks (verified 250 in, 200 out) |
+| reduced motion | local `@media` set the duration to 0 | the tokens are 0; the local rule now zeroes both clocks |
+| close button, footer | Button's (sibling) | unchanged |
+
+Crispness: the panel rests at `translate: none` on whole pixels (705, 0, 384 × 798); the travel is
+the panel's own size, so no resting fraction; no `will-change`.
+
+Open questions: under reduced motion the panel appears at once. A short opacity fade instead
+(Apple, Emil Kowalski) is the system-wide question in `docs/MOTION.md`; follow it there.
+
 ## Feedback log
+
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → slide in on slow (250) and out on moderate (200) with ease-drawer, `translate` instead of `transform`, scrim on moderate. drawer.css.
+- 2026-10-07 · audit (Claude in Chrome, stopped early by a permission refusal): flush sides at 15,
+  close at 7 / 7 → padding 16 per side with the border counted once on the inner edge; title cap
+  trim as Dialog's. Evidence: live Area measurement above; not re-measured after the change.
 
 - 2026-10-06 · owner: stacked footer "could be a variant", non-modal "up to you" → `actions`
   variant (row / stacked) and `modal={false}` (manual popover in the top layer; first tried
   `dialog.show()`, which painted under the gallery's rail). Verified: non-modal opens at 710 / 384,
   the page beside it takes clicks, Escape closes and returns focus; stacked buttons 353 wide.
 - 2026-10-05 · owner: build drawer → built from shadcn's Sheet on Dialog's anatomy; on the Review page.
+- 2026-10-09 · owner went with Scroll area's recommendation to adopt it in the scrolling families (docs/specs/scroll-area.md, "Adoption") → the scroll container is a Scroll area: Figma's overlay bar instead of the platform's, its inset moved into the scroller so rows keep their place → back in review.

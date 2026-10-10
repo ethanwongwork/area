@@ -149,6 +149,16 @@ tall, as Notion's two-line cell. The "+N" trigger keeps the column gap.
 - 2026-09-28: 2 Notion captures (public page, redacted) and the 4 Area captures retaken after
   the gap change; checksums verified. The wrap tile is 46 tall, as Notion's two-line cell.
 
+## Motion and interaction, 2026-10-07
+
+Contract: `docs/MOTION.md`. Research: `docs/research/motion-2026-10-07/crispness-and-current-state.md`.
+
+
+The overflow trigger is a `button.area-badge`, so it takes Badge's hover (instant in, `fast` out).
+The overflow popover enters and leaves on the shared overlay rules (`surface.css`, not owned here).
+No group-specific motion was added: badges do not animate when they move into or out of the
+overflow (they are measured and re-rendered; a reflow animation would lag the resize).
+
 ## Feedback log
 
 - 2026-09-25 · owner chose Badge group as the next component → first pass: badge-shaped
@@ -163,3 +173,4 @@ tall, as Notion's two-line cell. The "+N" trigger keeps the column gap.
   multi-select tags 20 tall, corner 4, 6 sides (Badge md matches), flex gaps 6 between lines and
   8 between tags. Area's group gap 4 / 4 (Primer) → 6 / 8, in the group and its overflow
   Popover. Back to In review.
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → the overflow trigger takes Badge's hover recipe; popover motion is the shared overlay's; no change here.

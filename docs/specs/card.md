@@ -152,10 +152,10 @@ no change in any of 30 nodes (hidden window).
 | bleed | opt-in; inset stays default | Fluent, Primer, Radix; ChatGPT, Figma, Notion | Owner references inset their media |
 | linked DOM | link in the title, stretched `::after`; nested controls z 2 | Heydon Pickering, Adrian Roselli; Carbon, Radix use real `<a>` | A wrapping `<a>` would read the whole card as the link name and forbid nested buttons |
 | linked hover | edge: the card edge → `edge-control-hover` (#ee → #d4); no fill, lift or ink change; at rest a linked card looks like any other | Fluent outline (stroke step), Radix surface (ring step); ChatGPT and Figma keep paint | Notion swaps the fill; Area's card has media, where a fill change reads as a grey patch |
-| linked transition | `--area-transition` (100ms ease-out) | Notion 0.1s; Radix 120ms; Carbon 150ms | — |
+| linked transition | in at once, out over `--area-transition` (100ms ease-out) (motion pass 2026-10-07) | Notion 0.1s; Radix 120ms; Carbon 150ms; MOTION.md hover plate | — |
 | linked focus | 2px focus outline on the card, `focus-offset` outside | Every system rings the card edge; Area's shared focus offset | Fluent and Carbon inset it (−2px) |
 | pressed | none | Not every system has one; none of the products | — |
-| reveal | opacity 0 → 1 over 200ms on hover or focus-within; always on with no hover | Notion 0.2s; ChatGPT reveals actions | — |
+| reveal | opacity 0 → 1 over `duration-fast` (100; audit F-38, was 200) on hover or focus-within; always on with no hover | Notion 0.2s; ChatGPT reveals actions | — |
 | nested actions | allowed, few | Apple widgets, Notion, ChatGPT; block-link pattern | Fluent, Carbon and M3 say a clickable card holds no actions; documented as a trade-off |
 | type | **three roles at every size**: title `text-md` 16/24 500; description `text-sm` 14/20 muted; value `title-lg` 32/40; lists take the body size in content ink | Owner (simplify the ramp) | Replaces per-size titles (14 / 16 / 20) and the sm description (12) |
 | default size | md for every tile and template; a card nested in a card is one size down | Owner | Weather and stat were sm, news, plan and feature lg |
@@ -201,6 +201,35 @@ any value (now only a widget's closing figure). Carousel paging logic verified b
 scroll events; smooth scrolling itself was not observed (both browser windows were in the
 background). Unverified: Firefox and Safari (`text-box`, `cap`, container queries, `:has()`),
 forced colours, screen readers.
+
+## Motion and interaction, 2026-10-07
+
+Contract: [MOTION.md](../MOTION.md), "Hover plate".
+
+| Interaction | Before | After |
+|---|---|---|
+| linked hover (edge → `edge-control-hover`) | `--area-transition`, 100 both ways | in at once (`transition-duration: 0s` on `:hover`, under `(hover: hover)`), out over `duration-fast` `ease-out` |
+| linked focus | 2px outline, instant | unchanged |
+| press | none | none |
+| reveal overlay | `opacity`, `duration-fast` 100 both ways (the Decisions table now says so; it read 200ms) | unchanged: one reveal timing with Message actions, Tree view and Property list |
+| nested controls | their own components' | unchanged |
+
+Crispness: no transforms or `will-change` on a card. Card heights land on fractions (for
+example .61) from the text-box cap trim of their titles; that is layout, so edges snap, and it
+belongs with the inset rounding (crispness report B11), not this pass.
+
+Verification: `/card.html`: linked cards compute `--area-transition` (`0.1s ×4`); the served
+stylesheet has `.area-card:has(.area-card__link):hover { …; transition-duration: 0s }` under
+`(hover: hover)`; reveal computes `opacity 0.1s` ease-out. Verified on the dev server (background tab, so transitions were read from `getAnimations()` and computed styles, not watched; real-pointer hover could not be driven in a background tab, so hover rules were read from the stylesheet).
+
+Open questions:
+- Reveal-on-hover is not hover feedback, so it keeps a `fast` fade both ways. Recommendation:
+  keep, as one timing for every reveal (Notion fades its card toolbar).
+
+## Review note, 2026-10-09
+
+- **What changed:** The underline under a card's action link is now the link's own colour at rest (it was 40%), matching Link. No gallery tile shows a card action yet, so every tile reads unchanged.
+- **Why:** Link's line changed in this round, and Card's action draws Link's line.
 
 ## Feedback log
 
@@ -265,3 +294,5 @@ forced colours, screen readers.
 - 2026-10-03 · two roundness step sizes (owner: card and dialog follow the surface) → the corner is the surface corner plus the inset less the default Button's corner, never more than the surface corner: 16 / 12 as before (sm 14 / 10, lg 20 / 14), stepping by 4 with roundness; media stay corner − inset (`surface.css`, `--_card-term`). `docs/research/radius-audit-2026-10-03.md`, "Step size for large shapes".
 - 2026-10-03 · one corner setting (owner: one radius setting, Sharp and Pill as ends; "every control is a pill") → unchanged at the default (16 / 12); media floored at min(4, setting) so only Sharp is square; Pill 28 (`surface.css`). `docs/research/radius-audit-2026-10-03.md`, "One corner setting".
 - 2026-10-04 · quality pass after the one corner setting → the card never goes square above Sharp (compact sm at 2 read 0): floored at radius-floor (`surface.css`). `docs/research/radius-audit-2026-10-03.md`, "Quality pass".
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → linked edge in at once and out on `fast`; reveal unchanged (`surface.css`).
+- 2026-10-08 · owner went with Link's recommendation to align Area's underlines (docs/specs/link.md, "Peers aligned") → the action's underline is Link's line: 40% of the ink at rest, full on hover and focus, one stroke (was thickness auto) (surface.css) → back in review.

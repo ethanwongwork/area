@@ -80,7 +80,8 @@ export const PropertyList = forwardRef<HTMLUListElement, PropertyListProps>(func
     const gap = second ? second.top - first.bottom : 0;
     const top = at ? at.top - gap / 2 : last.bottom + gap / 2;
     // Dropping beside the dragged row itself changes nothing, so no line is drawn there.
-    return { slot, top: top - list.top, noop: slot === from || slot === from + 1 };
+    // Rounded, so the 2px line rests on whole pixels when the gap is odd (MOTION.md, crispness 1).
+    return { slot, top: Math.round(top - list.top), noop: slot === from || slot === from + 1 };
   };
   const context: ListContext = {
     count, reorderable, dragging,

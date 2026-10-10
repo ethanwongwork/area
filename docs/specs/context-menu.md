@@ -69,7 +69,30 @@ step larger on Area's scale (Notion's 28 rows belong to the compact density). No
 
 - Long-press to open on touch.
 
+## Motion and interaction, 2026-10-07
+
+Contract: `docs/MOTION.md`, "Context menu": `fast` ease-out in and out, `opacity` + `scale` from
+0.97, origin at the pointer. Verified on `/context-menu.html` in a background tab (computed
+styles, `getAnimations()`, inline custom properties).
+
+| Interaction | Before | After |
+|---|---|---|
+| enter | Menu's `duration-base` 150, scaled from the menu's centre | `duration-fast` 100 `ease-out` (`context-menu.css`), `transform-origin` at the pointer: `--_context-origin-x/y`, the pointer's place inside the menu after any flip (verified: `0 0` opening down-right, `224px 0` flipped left, `0 155px` flipped up) |
+| exit | 150, and the rows unmounted the moment it closed, so the fade showed an empty box | `duration-fast` 100; the rows stay mounted until the exit's transitions finish (`getAnimations()`), then unmount (verified: 4 rows during the exit, 0 after) |
+| keyboard open (Shift+F10, Menu key) | as pointer | same 100 clock; focus is not delayed by the animation |
+| rows: hover, press, focus, checked | Menu's (sibling) | unchanged, inherited |
+
+Crispness (research B10): the pointer is rounded to whole pixels before the flip and the flipped
+corner is rounded too; the size used for flipping is the layout size (`offsetWidth`), not the
+bounding rect, which the 0.97 enter scale shrank by 3%. Under CSS `zoom` (a scaled preview) the
+position and origin are divided by the menu's zoom, as `overlay.ts` does. Resting menu: 488, 666,
+224 × 155, `scale: 1`. Fractional pointer coordinates could not be produced by synthetic events
+(Chrome truncates them), so the rounding is checked by reading the code only.
+
+Open question: none new.
+
 ## Feedback log
 
 - 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `aria-label` names the menu (`label` deprecated alias); opening stays uncontrolled, a documented exception (its position comes from the pointer or focused element).
 - 2026-10-03 · radius audit D1 (owner) → the container role is 12 at compact too (was 8; Figma 13, Cursor 12-14), so this family's surface is 12 at both densities; rows concentric with a floating surface follow (compact 24 rows r8). `docs/research/radius-audit-2026-10-03.md`.
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → fast enter and exit (100) from the pointer: origin written after the flip, coordinates rounded (B10), flip measured on the layout size, rows kept through the exit. context-menu.css, ContextMenu.tsx.

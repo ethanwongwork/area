@@ -31,14 +31,19 @@
     box-shadow: none;
     color: var(--area-input-text);
     font-family: var(--area-font-sans); /* the one font reference; the field inherits it */
-    transition: var(--area-transition);
+    /* Motion (docs/MOTION.md; docs/specs/composer.md, 2026-10-07): colours leave on duration-fast
+       ease-out and arrive at once (hover and focus set 0s below). The focus halo is a box-shadow and
+       is left out of the list, so the ring, its outline and its halo, appears and leaves with the
+       key instead of the halo fading after the outline (it was --area-transition, which eases
+       box-shadow). */
+    transition: background-color var(--area-duration-fast) var(--area-ease-out), border-color var(--area-duration-fast) var(--area-ease-out), color var(--area-duration-fast) var(--area-ease-out);
   }
   .area-composer--inline { min-block-size: var(--_composer-height); }
   .area-composer--stacked { gap: var(--area-ui-cluster); }
 
  /* The Input hover step (audit S7a). */
-  @media (hover: hover) { .area-composer:hover:not(:focus-within, [data-disabled]) { border-color: var(--area-input-edge-hover); } }
-  .area-composer:focus-within { border-color: var(--area-composer-focus-color); outline: var(--area-field-focus-outline-width) solid var(--area-composer-focus-color); box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-shadow-color); }
+  @media (hover: hover) { .area-composer:hover:not(:focus-within, [data-disabled]) { border-color: var(--area-input-edge-hover); transition-duration: 0s; } }
+  .area-composer:focus-within { border-color: var(--area-composer-focus-color); outline: var(--area-field-focus-outline-width) solid var(--area-composer-focus-color); box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-shadow-color); transition-duration: 0s; }
   /* A text field shows disabled with Textarea's field paint, not opacity (cohesion audit), so the
      actions keep Button's own 50% instead of compounding to about 30%. */
   .area-composer[data-disabled] { background: var(--area-textarea-bg-disabled); border-color: var(--area-border-faint); color: var(--area-fg-disabled); cursor: not-allowed; }

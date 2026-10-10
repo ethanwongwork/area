@@ -90,3 +90,21 @@ Measured: A rows 48, gap 2, radius 16; B 24 below, 32 tall, 8 apart, starting at
 - 2026-10-01 · audit G-23 (owner pick A) → demos use the placeholder vocabulary (Body text, Item one, Option one, Placeholder, Label) and `authorName` "Assistant", per DESIGN_SYSTEM's Example copy; no component change.
 - 2026-10-02 · compact family pass → compact rows 44 → 40, so a row is the compact composer's height again (its own rule); Cursor's follow-up composer 42, dense list rows 28–36 → prompt-suggestions.css `min-block-size`; docs/research/compact-evidence-2026-10-02/cursor-desktop.md.
 - 2026-10-02 · owner question (preview page: "is the gap between the composer and the items below it supposed to be this large") → the 24 offset is ChatGPT's at default, but the demos held it in compact; now 24, compact 16 → gallery.tsx `GalleryPromptSuggestions`, `GalleryPromptSuggestionsChips`.
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → row plate and dismiss appear instantly with hover, press and focus and fade out over duration-fast (was a 100ms fade in).
+
+## Motion and interaction, 2026-10-07
+
+| Interaction | Before | After |
+|---|---|---|
+| row hover plate | `--area-transition` (`fast` `ease-out`) both ways | **instant** in, `fast` out |
+| press | `fast` | **instant** in, `fast` out |
+| focus-visible plate | `fast` | **instant** in (ring and plate arrive together), `fast` out |
+| dismiss reveal on hover / focus-within | opacity `fast` both ways (the plate led the dismiss by 100ms) | **instant** in, with the plate; opacity `fast` `ease-out` out |
+| chips | Button's | Button's new rule |
+
+Crispness: rows are whole-pixel (480 × 48 at default); no transform, and the dismiss is positioned
+by layout (`inset-block: 0` with flex centring).
+
+Verified on `/prompt-suggestions.html` (computed styles): focusing a row shows the dismiss at once
+(`transition-duration: 0s`, no animation), blurring fades it over 100ms; the hover and press rules
+were confirmed in the served CSSOM (a pointer hover cannot be driven in a background tab).

@@ -87,7 +87,7 @@ Figma.
 
 | State | Changes | Evidence |
 |---|---|---|
-| determinate | bar width transitions with `duration-slow` | `area--default` |
+| determinate | the bar's offset (`translate`) transitions on `duration-slow` ease-out; width while React still writes `inline-size` | `area--default` |
 | indeterminate | travelling segment; stops under `data-area-motion="none"` and reduced motion (display.css:271, 274-281) | `area--indeterminate` |
 
 No hover, focus or disabled: Progress is not interactive.
@@ -137,6 +137,28 @@ reads one step darker. Not checked on screen: the RTL segment, dark theme.
 7 Area captures after the second pass and 1 Figma capture read. Build and test results are
 in the [cohesion audit](../research/cohesion-audit.md#verification).
 
+## Motion and interaction, 2026-10-07
+
+Contract: `docs/MOTION.md`. Research: `docs/research/motion-2026-10-07/crispness-and-current-state.md`.
+
+
+| Interaction | Before | After |
+|---|---|---|
+| Value change | `inline-size`, `duration-slow`, `ease-out` (a layout property) | `translate` on a full-width bar, `duration-slow`, `--area-ease-out`; offset `round(nearest, (value − 100)%, 1px)`, so the end rests on a whole pixel; `:dir(rtl)` flips the sign |
+| Indeterminate loop | translate keyframes, `base × 12` (1.8s), `linear` keyword | same, `--area-ease-linear` |
+| Reduced motion | segment slowed to 5.4s | **stops** as a full still stripe, the motion-none rendering (MOTION.md: loops stop; a stopped 35% segment would read as 35% done) |
+
+The fill keeps its look: the track's pill clips the start, the bar's pill draws the end (identical
+from 2% up; at 1% the end is a lens instead of a 3px pill). The value moves by transform only once
+React writes `--_progress-value` instead of `inline-size` (`primitives.tsx` is shared; the one-line
+change is proposed to the lead). Until then the bar rests at `translate: 0` and eases its width as
+before, so nothing renders differently. Verified on `/progress.html`: with the bar switched to
+`--_progress-value: 62` a `translate` transition ran and the end landed at 174px of a 280px track
+(the width-based end was 173.59).
+
+Open question: none. Value easing stays ease-out rather than the easing table's "linear for
+progress", which describes the indeterminate loop; a value change is a state change.
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → rail moved to Slider's (`bg-component-active` #eee →
@@ -151,3 +173,4 @@ in the [cohesion audit](../research/cohesion-audit.md#verification).
 - 2026-09-28 · owner: approved (batch 6).
 - 2026-09-30 · audit S5 (owner) → rail fallback `edge-control` #e2 (was ≈ #dd), the one off-track grey of Switch and Slider; the open Figma #e6 against #dd question is settled → display.css:265.
 - 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → Progress is named with `aria-label` (`label` deprecated alias).
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → value moves by `translate` (rounded) instead of `inline-size` once React writes `--_progress-value`; reduced motion shows the still stripe (was a slowed 5.4s segment); loop easing on the linear token → display.css Progress. See "Motion and interaction, 2026-10-07".

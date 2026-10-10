@@ -163,6 +163,40 @@ Compared `segmented/area--{size-small,size-medium,size-large,icon-only,default,d
 [the audit](../research/cohesion-audit.md#verification). Unverified: hover and focus
 captures, dark theme.
 
+## Motion and interaction, 2026-10-07
+
+Contract: [`docs/MOTION.md`](../MOTION.md).
+
+| Interaction | Before | After |
+|---|---|---|
+| hover (unselected option) | `--area-transition`: `bg-hover` over `fast` ease-out, both ways | lands at once (`:hover` 0s), fades out over `fast` ease-out |
+| press | eased over `fast` | at once (`:active` 0s) |
+| selection | both options eased over `fast`: the old plate faded out while the new one faded in | the chosen option is raised at once (`[data-selected]` 0s, so pointer and arrow keys alike); the option given up fades out over `fast` ease-out. There is still one plate per option; nothing slides |
+| focus-visible | outline | unchanged |
+| disabled | 50% | unchanged |
+| reduced motion | tokens | tokens (no literal durations) |
+
+**Crispness.** The track's 1px edge was an inset `box-shadow` spread, which does not snap to
+device pixels under `zoom` or a fractional position; it is now `outline: 1px` with
+`outline-offset: -1px` (MOTION.md "Crispness" 3): same place, same colour, still outside layout.
+In forced colours the outline is kept (a box-shadow was dropped), so the track gains a
+system-colour edge there. Option widths follow their labels and are fractional (44.68 at md);
+Chromium snaps each box's edges to device pixels, so the selected plate's border stays sharp, and
+no CSS rounding is possible for intrinsic widths.
+
+**Verified** (`/segmented.html`, Chromium, DPR 2): every track computes
+`outline: 1px solid rgb(243, 243, 243); outline-offset: -1px; box-shadow: none`; options sit 2px
+in; the selected option's `transition-duration` is `0s`, an unselected one keeps the four
+`--area-transition` properties at 100ms ease-out. Not verified by eye (background tab).
+
+**Open questions.**
+1. **A sliding thumb** (owner's call): one indicator element under the options, moved with
+   `translate` and sized with `inline-size` (whole pixels, from the selected option's rounded
+   offset and width) over `base` `ease-in-out`, as Figma's and Linear's segmented controls do
+   and as MOTION.md's Tabs / Segmented recipe allows. Recommendation: build it, shared with Tabs'
+   underbar, in one pass: it is the most visible "polish" gap in this family. It needs a
+   measured indicator in React (ResizeObserver) and a no-JS fallback (today's per-option plate).
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → one 500 weight for every option (was 400 / 500 selected) →
@@ -185,3 +219,4 @@ captures, dark theme.
 - 2026-10-03 · radius audit (owner: "the segmented control even in compact is super sharp") → items are concentric with the track but never sharper than the smallest control: `max(min(radius-control-xs, item × radius-cap), track − inset)` (compact sm items 20 r2 → r4, default sm 24 r4 → r5); the compact sm track 24 r4 → r5 with the curve (`segmented.css:66`, `radius.ts:122`). Evidence: Figma segments r5 on a r5 track and r3 inside r5 at a 2 inset; `docs/research/radius-audit-2026-10-03.md`.
 - 2026-10-03 · all even (owner) → items floor at `radius-floor` 4 (was the smallest control's corner, now 6); the sm track at 24 is 6 (was 5) (`segmented.css:66`).
 - 2026-10-04 · pill shapes and list rows (owner) → `--area-pill-segmented` makes the track a pill, items concentric (`segmented.css`). `docs/research/radius-audit-2026-10-03.md`, "Pill shapes and list rows".
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → hover and press land at once and fade over `fast`; the chosen option is raised at once while the old one fades; the track edge is an inset outline (was a box-shadow spread, which does not snap); a sliding thumb is an open question (`segmented.css`; "Motion and interaction, 2026-10-07").

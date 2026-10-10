@@ -143,6 +143,16 @@ tabs compositions), both zoomed:
   typecheck and docs build pass.
 - Unverified: dark theme, forced colours, screen-reader reading of `label`.
 
+## Motion and interaction, 2026-10-07
+
+Contract: `docs/MOTION.md`. Research: `docs/research/motion-2026-10-07/crispness-and-current-state.md`.
+
+
+Count is static (ink fixed with the owner's hover and selection): no motion. Crispness: whole-pixel
+height, gutter `(height − 8) / 2` (6 and 4) and tabular digits. A changing number does not animate.
+Open question: a number tick (roll or fade) when the count changes? Recommendation: no; Notion,
+Linear and GitHub swap the digits in place.
+
 ## Feedback log
 
 - 2026-09-27 · owner: build Count → built from the survey's proposal; Nav and Tabs demos now use
@@ -152,3 +162,4 @@ tabs compositions), both zoomed:
 - 2026-10-01 · compact pass → the gutter is `(height − 8) / 2` (6 at 20, 4 at 16), so compact md (16) is drawn as default sm. VS Code count badges are 19 at 10px. docs/research/compact-pass-2026-10-01.md.
 - 2026-10-03 · one corner setting (owner: one radius setting, Sharp and Pill as ends; "every control is a pill") → a pill by default; `pill={false}` (`--rounded`) takes the setting's corner for its height (`count.css`, `Count.tsx`). `docs/research/radius-audit-2026-10-03.md`, "One corner setting".
 - 2026-10-04 · pill shapes and list rows (owner) → the pill is the `count` entry of data-area-pills (default on); `pill` three-way (`count.css`). `docs/research/radius-audit-2026-10-03.md`, "Pill shapes and list rows".
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → static, no change.

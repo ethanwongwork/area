@@ -225,6 +225,35 @@ inset, link at the end. Differences kept on purpose: Daybreak's title is 600 and
 marketing paint. Dark theme unchecked. No target product (ChatGPT, Notion, Figma) showed a banner during this
 session: ChatGPT reserves an empty root banner slot and a composer banner portal.
 
+## Motion and interaction, 2026-10-07
+
+Contract: [MOTION.md](../MOTION.md). Alert is in-place content: it has no surface hover, press or
+open state of its own.
+
+| Interaction | Before | After |
+|---|---|---|
+| surface | static | static (no change) |
+| link | underline in the tone ink, no hover change | unchanged (nothing to animate) |
+| banner link focus | 2px outline, instant | unchanged (rings never fade in) |
+| action, dismiss | Button's | Button's (not this pass) |
+| appear / dismiss | the parent renders or removes it | unchanged |
+
+Crispness: checked the slot offsets: every halved difference is even (20 − 16, 20 − 28, 16 − 24),
+so the icon, controls and badges land on whole pixels at both densities; no transforms, no
+box-shadow hairlines.
+
+Verification: CSS read; no rule in the Alert section transitions anything.
+
+Open questions:
+- Animate a dismissed Alert? Recommendation: no. Removing in-place content would need a height
+  animation (a layout property) and MOTION.md has no Alert recipe; Primer and Polaris banners
+  leave at once.
+
+## Review note, 2026-10-09
+
+- **What changed:** The underline under the alert's link is now the link's own colour at rest (it was 40%), matching Link.
+- **Why:** Link's line changed in this round, and Alert's link draws Link's line.
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → dismiss at full ink (was 0.72, 1 on hover), radius
@@ -249,3 +278,5 @@ session: ChatGPT reserves an empty root banner slot and a composer banner portal
 - 2026-09-30 · audit S19 A (owner) → the neutral icon is `fg-muted` (#666 on #f7, 5.36:1, measured live), as Toast's; was the text's `fg-default`. Tones are listed in Badge's order (neutral, info, success, warning, danger), the same set as Toast (`surface.css` `.area-alert`, `.area-alert--neutral`; manifest).
 - 2026-10-01 · equal-inset sweep (owner) → an empty grid track still took its 8px column gap, so an alert with an action and no dismiss put the action 14 from the side, not 6; the slots now carry their own spacing. The insets follow Toast's derivation (default unchanged; compact 8, controls 4 in), the last control's end equals its top inset by formula, and a banner's trailing Badge ends as far from the side as it sits from the top (12 / 12, was 12 / 16). docs/research/compact-pass-2026-10-01.md.
 - 2026-10-03 · radius audit D2 (owner) → a one-line Alert and the banner are bars on the control curve, `radius-control-lg` capped (default 40 / 44 → 10, compact 32 → 8); multiline keeps the container 12; flush 0. Was 12 in place, 6 banner (`surface.css`, `.area-alert`, `.area-alert--multiline`). Departs from OpenAI / Primer's 6 for one family across all alerts. `docs/research/radius-audit-2026-10-03.md`.
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → inventory only: no motion of its own, offsets whole; no change.
+- 2026-10-08 · owner went with Link's recommendation to align Area's underlines (docs/specs/link.md, "Peers aligned") → the link's underline (inline and banner) is Link's line: 40% of the tone ink at rest, full on hover and focus; the banner's duplicate link rule removed (surface.css) → back in review.

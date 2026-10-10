@@ -28,7 +28,13 @@
     line-height: var(--_leading);
     /* spec (outline pass, docs/specs/number-field.md): controls at rest carry no shadow, as Button (ChatGPT, Notion, Figma fields). */
     box-shadow: none;
-    transition: var(--area-transition);
+    /* Motion (docs/MOTION.md, 2026-10-07), as Input: paint and the focus halo appear at once and
+       fade out on fast; the halo keeps its fade into hover. */
+    --_t-paint: var(--area-duration-fast);
+    --_t-halo: var(--area-duration-fast);
+    transition-property: background-color, border-color, color, box-shadow;
+    transition-duration: var(--_t-paint), var(--_t-paint), var(--_t-paint), var(--_t-halo);
+    transition-timing-function: var(--area-ease-out);
   }
   .area-number-field--outline { --_bg: var(--area-input-bg); }
   .area-number-field--soft { box-shadow: none; --_bg: var(--area-input-bg-soft); --_border: transparent; --_border-hover: var(--area-input-edge); }
@@ -36,14 +42,18 @@
   .area-number-field--md { --_height: var(--area-control-md); --_radius: var(--area-radius-control-md); --_icon: var(--area-icon-md); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
   .area-number-field--lg { --_height: var(--area-control-lg); --_radius: var(--area-radius-control-lg); --_icon: var(--area-icon-lg); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
   .area-number-field--full-width { inline-size: 100%; }
-  @media (hover: hover) { .area-number-field:hover:not([data-disabled], [data-read-only]):not(:focus-within) { border-color: var(--_border-hover); } }
+  @media (hover: hover) { .area-number-field:hover:not([data-disabled], [data-read-only]):not(:focus-within) { --_t-paint: 0s; border-color: var(--_border-hover); } }
   /* Tones set slots and the one focus rule reads them, as Input, Textarea and Select (audit B-28). */
   .area-number-field:focus-within {
+    --_t-paint: 0s;
+    --_t-halo: 0s;
     border-color: var(--_border-focus);
     box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo, var(--area-field-focus-halo-color));
     outline: var(--area-field-focus-outline-width) solid var(--_focus-outline, var(--area-field-focus-color));
     outline-offset: 0;
   }
+  /* A tone or disabled paint lands at once (motion, 2026-10-07); clearing it fades on fast. */
+  .area-number-field:is([data-invalid], [aria-invalid="true"], [data-success], [data-warning], [data-disabled]) { --_t-paint: 0s; }
   .area-number-field:is([data-invalid], [aria-invalid="true"]) { --_border: var(--area-input-invalid-color); --_border-hover: var(--area-input-invalid-color); --_border-focus: var(--area-input-invalid-color); --_focus-outline: var(--area-input-invalid-color); --_focus-halo: var(--area-input-invalid-halo-color); }
   .area-number-field[data-success] { --_border: var(--area-input-success-color); --_border-hover: var(--area-input-success-color); --_border-focus: var(--area-input-success-color); --_focus-outline: var(--area-input-success-color); --_focus-halo: var(--area-input-success-halo-color); }
   .area-number-field[data-warning] { --_border: var(--area-input-warning-color); --_border-hover: var(--area-input-warning-color); --_border-focus: var(--area-input-warning-color); --_focus-outline: var(--area-input-warning-color); --_focus-halo: var(--area-input-warning-halo-color); }
@@ -125,7 +135,12 @@
     color: var(--area-input-icon);
     cursor: pointer;
     touch-action: manipulation;
+    /* The plate appears at once on hover and press and fades on fast (docs/MOTION.md, 2026-10-07;
+       was instant both ways), as Input's action. A held press keeps the pressed plate. */
+    transition: background-color var(--area-duration-fast) var(--area-ease-out);
   }
+  @media (hover: hover) { .area-number-field__step:hover { transition-duration: 0s; } }
+  .area-number-field__step:active { transition-duration: 0s; }
   .area-number-field__step svg { display: block; inline-size: var(--_icon); block-size: var(--_icon); }
   @media (hover: hover) { .area-number-field__step:hover:not(:disabled) { background-color: var(--area-bg-component-hover); } }
   .area-number-field__step:active:not(:disabled) { background-color: var(--area-bg-component-active); }

@@ -1,0 +1,160 @@
+/* ---------------------------------------------------------------------------
+ * Accordion
+ *
+ * AccordionItem: a title the reader clicks to show or hide the content under it (Notion's
+ * toggle block, on its own). Accordion: a stack of items, one open at a time unless multiple
+ * (renamed from Disclosure / DisclosureGroup, owner 2026-10-07). Plain: a leading chevron, content on
+ * the title's column. Divided: a trailing chevron and a rule after each item (shadcn).
+ * Variants set local properties on their own root, so an item nested in another of a
+ * different variant keeps its own. docs/specs/accordion.md.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-accordion-item {
+    --_gap: var(--area-gap-md); /* spec: Notion 6 after the caret box (compact 4) */
+    --_rotate: var(--_rotate-closed);
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+    border-block-end: var(--_rule-width) solid var(--area-border-divider);
+    color: var(--area-fg-default);
+    font-size: var(--_text);
+    line-height: var(--_leading);
+  }
+  .area-accordion-item:dir(rtl) { --_rotate: var(--_rotate-closed-rtl); }
+  .area-accordion-item[data-open] { --_rotate: var(--_rotate-open); }
+  .area-accordion-item:last-child { --_rule-width: 0px; }
+
+  /* spec: the title's text role, md 16/24 (Notion), sm 14/20 (ChatGPT, shadcn); both step
+     down with the UI scale (compact 14/20 and 12/16). */
+  .area-accordion-item--md { --_text: var(--area-text-md-size); --_leading: var(--area-text-md-leading); }
+  .area-accordion-item--sm { --_text: var(--area-text-sm-size); --_leading: var(--area-text-sm-leading); }
+
+  /* Plain (Notion's toggle): a leading chevron with its own hover plate, a 2px pad around the
+     title's line (28 at md, 24 at sm), content on the title's column. */
+  .area-accordion-item--plain {
+    --_trigger-pad: var(--area-space-2); /* spec: Notion 2 + 24 + 2 */
+    --_trigger-gap: var(--_gap);
+    --_weight: var(--area-weight-regular); /* spec: Notion 400 */
+    --_chevron-order: 0;
+    --_rotate-closed: -90deg;
+    --_rotate-closed-rtl: 90deg; /* closed points along the reading direction, as Tree view */
+    --_rotate-open: 0deg;
+    --_plate-hover: var(--area-bg-hover); /* spec: Notion 5% hover, 10% pressed */
+    --_plate-active: var(--area-bg-active);
+    --_content-start: calc(var(--_leading) + var(--_gap));
+    --_content-end: 0px;
+    --_rule-width: 0px;
+  }
+
+  /* Divided (the accordion): a trailing chevron, a rule after each item but the last. Hover paints
+     the chevron's plate, as plain does (Google's "People also ask" darkens the chevron's circle);
+     the title never underlines (Claude in Chrome, 2026-10-06: only shadcn underlines; Google, Notion, Apple and
+     Figma do not). */
+  .area-accordion-item--divided {
+    /* spec: half the title's line above and below it. sm: shadcn's rendered py 10 around 14/20
+       (ui.shadcn.com, 2026-10-06; was py-4 = 16, a loose gap, owner 2026-10-06). md: 12 around
+       16/24, a 48 row (MUI 12 + 24 + 12; Google "People also ask" 52 and Notion's FAQ 56 sit above,
+       Fluent large 44 below; Claude in Chrome audit 2026-10-07). Compact follows the line: 8, 10. */
+    --_trigger-pad: calc(var(--_leading) / 2); /* spec */
+    --_trigger-gap: var(--area-space-16); /* spec: shadcn gap-4 */
+    --_weight: var(--area-weight-strong); /* spec: shadcn font-medium 500 */
+    --_chevron-order: 1;
+    --_rotate-closed: 0deg;
+    --_rotate-closed-rtl: 0deg;
+    --_rotate-open: 180deg; /* spec: shadcn rotate-180 */
+    --_plate-hover: var(--area-bg-hover);
+    --_plate-active: var(--area-bg-active);
+    --_content-start: 0px;
+    --_content-end: calc(var(--_leading) / 2); /* spec: as the trigger; shadcn's rendered content pb 10 at sm */
+    --_rule-width: var(--area-stroke-width); /* spec: shadcn border-b, last none */
+  }
+
+  .area-accordion-item__heading { margin: 0; font: inherit; }
+
+  .area-accordion-item__trigger {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--_trigger-gap);
+    inline-size: 100%;
+    margin: 0;
+    padding: var(--_trigger-pad) 0;
+    border: 0;
+    border-radius: var(--area-radius-small);
+    background: none;
+    color: inherit;
+    font: inherit;
+    font-weight: var(--_weight);
+    text-align: start;
+    cursor: pointer;
+  }
+  .area-accordion-item__trigger:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  .area-accordion-item__trigger:disabled { cursor: not-allowed; opacity: var(--area-opacity-disabled); }
+
+  .area-accordion-item__label { flex: 1 1 auto; min-inline-size: 0; }
+
+  /* The chevron is a square as tall as the title's line, so it centres on the first line of a
+     title that wraps (inset.css: first-line alignment). Its plate fills the square. */
+  .area-accordion-item__chevron {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    place-items: center;
+    flex: 0 0 var(--_leading);
+    order: var(--_chevron-order);
+    block-size: var(--_leading);
+    color: var(--area-fg-muted);
+  }
+  /* Motion (docs/MOTION.md): the plate appears at once on hover and press and fades out on fast;
+     the chevron turns on fast ease-out, the one rule for every chevron. Reduced motion zeroes the
+     duration tokens, so nothing here needs its own media rule. */
+  .area-accordion-item__chevron::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: var(--area-radius-small);
+    transition: var(--area-transition);
+  }
+  @media (hover: hover) { .area-accordion-item__trigger:enabled:hover .area-accordion-item__chevron::before { background: var(--_plate-hover); transition-duration: 0s; } }
+  .area-accordion-item__trigger:enabled:active .area-accordion-item__chevron::before { background: var(--_plate-active); transition-duration: 0s; }
+  .area-accordion-item__chevron svg {
+    inline-size: var(--area-icon-md);
+    block-size: var(--area-icon-md);
+    rotate: var(--_rotate);
+    transition: rotate var(--area-duration-fast) var(--area-ease-out);
+  }
+
+  .area-accordion-item__content {
+    min-inline-size: 0;
+    padding-inline-start: var(--_content-start);
+    padding-block-end: var(--_content-end);
+  }
+  /* Closed content is hidden="until-found" after hydration: content-visibility: hidden, not
+     display: none, so its own padding would still take space (10px under a closed divided item). */
+  .area-accordion-item__content[hidden] { padding-block-end: 0; }
+
+  /* The body (docs/MOTION.md, accordion recipe): height and opacity open on slow and close on
+     moderate, both ease-in-out, where the browser can interpolate to auto; elsewhere it snaps.
+     content-visibility and display are held for the whole close (allow-discrete), so the content
+     stays painted while it shrinks. The body clips only while it moves: clip lands at once on close
+     and lifts one slow step after an open, so focus rings and shadows are never cut at rest. */
+  @supports (interpolate-size: allow-keywords) {
+    .area-accordion-item__content {
+      interpolate-size: allow-keywords;
+      transition-property: block-size, padding-block-end, opacity, content-visibility, display, overflow;
+      transition-duration: var(--area-duration-slow), var(--area-duration-slow), var(--area-duration-slow), var(--area-duration-slow), var(--area-duration-slow), 0s;
+      transition-delay: 0s, 0s, 0s, 0s, 0s, var(--area-duration-slow);
+      transition-timing-function: var(--area-ease-in-out);
+      transition-behavior: allow-discrete;
+    }
+    .area-accordion-item__content[hidden] {
+      block-size: 0;
+      opacity: 0;
+      overflow: clip;
+      transition-duration: var(--area-duration-moderate), var(--area-duration-moderate), var(--area-duration-moderate), var(--area-duration-moderate), var(--area-duration-moderate), 0s;
+      transition-delay: 0s;
+    }
+  }
+
+  .area-accordion { display: flex; flex-direction: column; min-inline-size: 0; }
+}

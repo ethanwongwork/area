@@ -24,6 +24,10 @@
   caption role (text-xs, 12/16), so they do not change.
 - 2026-09-26: "do what you can for soft's hover while keeping the stroke"; show the trailing
   icon; asked whether ButtonGroup or a split button is next.
+- 2026-10-08 (via the Confirm dialog review, endorsing its recommendation): one label weight on
+  every variant, **500**. A soft Cancel at 400 beside a solid action at 500 read as two type
+  styles in one footer; ChatGPT, Notion and Figma set 500 on their solid buttons and Notion on
+  outline. This supersedes the 2026-09-25 "400 on soft, outline and ghost" decision for Button.
 - 2026-09-26: accepted. Owner: "consider every component that you have built to be approved. if i havent given any feedback to change anything consider them approved."
 
 ## Job and boundaries
@@ -222,7 +226,7 @@ filtered to the shell, text and icon rows (full tables: run the command on the s
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| label · weight | **400** on soft, outline and ghost; **500** on solid | Owner type ramp; ChatGPT soft and ghost 400, Notion ghost 400, Notion solid 500 | Was 500 on every variant. Notion's outline is 500; the owner's rule reserves 500 for fills |
+| label · weight | **500** on every variant (`button.css:29-31`, the base `--_weight`; solid no longer sets its own) | Owner 2026-10-08 (Confirm dialog review); ChatGPT solid 500, Notion solid and outline 500, Figma Share 450 at 11px | Was 500 everywhere, then 400 on soft, outline and ghost (2026-09-25 type ramp) until the owner chose one weight. ChatGPT soft and ghost and Notion ghost are 400 |
 | icon → label gap | **6** at sm, md and lg, the density tokens `--area-gap-sm/md/lg` (button.css:26, :436, :446, :456; density.ts:80-82); compact sm 4 | Notion 6 (28 and 32); peer Tree view 6 | Was 8, then a literal 6 at md and lg with sm at 4 (audit S14 moved sm to 6 and put the value in the tokens). ChatGPT 4 and Untitled 4 + 2 bracket it |
 | shadow | **none** on solid, soft and outline | ChatGPT and Notion: no shadow on any button | Was `shadow-1` (0 0.5px 1px −0.5px). Untitled's ring-and-shade is its own look |
 | height | sm 28, md 32, lg 40 (unchanged) | Notion 28/32; all three show 32 | lg 40 matches Untitled; no product shows 40 (ChatGPT 36). Open question |
@@ -262,7 +266,7 @@ which carries `aria-keyshortcuts` instead, so the name isn't "Button Command plu
 | Peer | Shared role | Peer value | Button | Match / reason |
 |---|---|---|---|---|
 | Tree view | glyph → label gap | 6 | 6 (sm, md, lg) | Match |
-| Type ramp | label weight | 400; 500 on fills | 400; 500 on solid | Match |
+| Type ramp | label weight | 400; 500 on fills | 500 on every variant | Differs by owner decision (2026-10-08): a Button label is one weight whatever its fill |
 | Kbd | nested shortcut | `currentColor` 14% plate, inherited ink, own 6 corner (`kbd.css:131-135`) | every variant and state | Match (audit S12c): the plate follows the Button's ink, so it survives hover, press and selected fills |
 | Tree view, Nav | ghost Button on a row | hover `bg-hover`, press `bg-active` (`tree-view.css:74`, `nav.css:243`) | neutral ghost default `bg-component-hover` (`button.css:385-388`) | Row hosts override (audit S11c), so the plate shows on a hovered or current row |
 
@@ -291,6 +295,42 @@ chevron, as ChatGPT's model picker).
   and ghost before-states recreated through the private properties (`before/*hover-before*`).
 - Unverified: dark theme (products not switched), Figma hover, disabled/loading/selected against references, compact density
   (the gap follows density since audit S14; compact sm is 4).
+
+## Motion and interaction, 2026-10-07
+
+Contract: `docs/MOTION.md`. Button is the system's reference interaction: feedback lands at once,
+fades out over `duration-fast` with `ease-out`, colours only (`button.css`, "Motion").
+
+| Interaction | Before | After |
+|---|---|---|
+| hover in | colours over `duration-fast` (100) `ease-out` | **instant** (`:hover { transition-duration: 0s }` under `@media (hover: hover)`) |
+| hover out | colours over `fast` `ease-out` | unchanged: `fast` `ease-out` (`--area-transition`) |
+| press (`:active`) | colours over `fast` `ease-out` | **instant** in; release to rest `fast`, release while still hovered instant (it lands on the hover state, also 0s) |
+| selected on / off (`data-selected`) | `fast` both ways | **instant** on, `fast` off |
+| menu open (`aria-expanded="true"`) | `fast` both ways | **instant** on, `fast` off as the menu closes |
+| focus-visible | outline, not transitioned | unchanged: instant both ways |
+| disabled | opacity, not transitioned | unchanged |
+| loading | Spinner swaps in for the leading icon at once; the hover plate fades out (`fast`) as `data-loading` takes hover away | unchanged; the spinner's turn is Spinner's (`display.css`, 1s linear, slowed under reduced motion, stopped by motion "none") |
+| press scale, transforms | none | none (no target product shrinks controls) |
+
+Crispness: no resting transform, `will-change` or `box-shadow` edge (the border is a real
+`border`, the ring an `outline`). Heights are whole pixels at every tier; widths follow the label
+and are fractional, which layout snaps. Reduced motion: every Button duration is a token, so the
+system rule (`emit/css.ts`, `:root, [data-area-motion]`) takes all of them to 0.
+
+Verified 2026-10-07 on `/button.html` (Chrome, DPR 2, computed styles, background tab):
+`transition-duration` 0.1s at rest and 0s with `data-selected` and `aria-expanded="true"`;
+toggling `data-selected` on a ghost Button creates no transition on the way in and
+`background-color` + `color` transitions of 100ms `cubic-bezier(0.16, 1, 0.3, 1)` on the way out;
+`data-area-motion="none"` gives 0s. The `:hover` and `:active` rules were confirmed in the served
+CSSOM; a real pointer hover could not be driven in a background tab.
+
+Open questions:
+1. ~~Soft Buttons render 14/400 and solid 14/500.~~ Resolved 2026-10-08: 500 on every variant.
+2. Loading adds the spinner where a Button had no icon, so the Button grows by icon + gap (65.7 →
+   84.7 on "Button" at md) and its neighbours move. Recommendation: keep the width by laying the
+   spinner over a hidden label (Primer, Radix) for text-only Buttons. Needs owner approval; it is
+   a layout change, not motion.
 
 ## Feedback log
 
@@ -328,3 +368,14 @@ chevron, as ChatGPT's model picker).
 - 2026-10-01 · owner (audit H-13): the manifest `align` values are `start | end` (classes `area-button--start` / `--end`; were `align-start` / `align-end`). React `align` is unchanged.
 - 2026-10-01 · compact pass → a trailing Kbd's end inset reads the mark role (was a literal 20), so at compact the Kbd sits 6 from the top and the end (was 6 / 4). docs/research/compact-pass-2026-10-01.md.
 - 2026-10-04 · pill shapes and list rows (owner) → `--area-pill-button` (data-area-pills="button") makes every Button a pill; `pill` is now three-way: unset follows the list, true forces a pill, false (`--rounded`) the radius corner (`button.css`, `Button.tsx`). `docs/research/radius-audit-2026-10-03.md`, "Pill shapes and list rows".
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → hover, press, selected and menu-open land instantly and fade out over duration-fast (button.css, "Motion"); no press scale; focus ring unchanged (instant).
+- 2026-10-08 · owner (Confirm dialog review: "go with your recs"; one weight for both footer
+  buttons) → Button's label weight is 500 on every variant (`button.css:29-31`; the solid rule's
+  own 500 removed). Knock-on, all through Button with no host override: Button group, Split
+  button and Toolbar text items, Prompt suggestions (outline), Model picker trigger (ghost),
+  Confirm dialog and Dialog footers, Card footers now set 500 labels. Icon-only Buttons, Chip,
+  Segmented (already 500) and Calendar days (not Buttons) are unchanged. No geometry change
+  besides label width: Geist 14 at 500 is 2.6-2.8% wider ("Button" 42.50 → 43.71, "Keep editing"
+  79.24 → 81.33). Browser 2026-10-08 (gallery, light): solid, soft, outline and ghost all compute
+  500; 169 visible text Buttons across Button group, Split button, Toolbar, Prompt suggestions and
+  Model picker are all 500 with no label overflow and unchanged heights.

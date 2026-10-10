@@ -1,0 +1,71 @@
+/* ---------------------------------------------------------------------------
+ * Link
+ *
+ * Goes somewhere: inline in running text, or standalone ("Learn more", "View all"). Text, not a
+ * control: it takes the type it sits in and adds only an underline (docs/specs/link.md).
+ *
+ * ChatGPT and Notion agree that a link keeps the ink of the text around it and is always
+ * underlined in prose, about 2px below the text. The line is the link's own ink, as ChatGPT draws it
+ * (owner, review round 2, 2026-10-09: "should the underline be the same color as the foreground?";
+ * it was Notion's 40%). A UI link can be blue (`ink="blue"`), as ChatGPT's and Figma's are.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-link {
+    /* spec: the link's own ink (ChatGPT's prose links, 0.125rem below in the text colour; owner 2026-10-09).
+       Notion's lighter line (40%) read as decoration rather than a link. */
+    --_line: currentColor;
+    --_line-hover: currentColor;
+
+    color: var(--_ink, inherit);
+    text-decoration-line: underline;
+    text-decoration-color: var(--_line);
+    /* spec: one stroke, as Area's other underlines (Alert, Card, Chip, Code block); ChatGPT's
+       auto line is 1px at 12px, Notion's 0.05em (0.8 at 16). */
+    text-decoration-thickness: var(--area-stroke-width);
+    /* spec: ChatGPT 0.125rem (2px); Notion 10% (1.6 at 16); Area's other underlines 2. */
+    text-underline-offset: var(--area-space-2);
+    text-decoration-skip-ink: auto;
+    border-radius: var(--area-radius-min);
+    cursor: pointer;
+    /* Motion (docs/MOTION.md, "Hover plate"): the underline lands at once and fades on fast. */
+    transition: text-decoration-color var(--area-duration-fast) var(--area-ease-out);
+  }
+  @media (hover: hover) {
+    .area-link:hover { text-decoration-color: var(--_line-hover); transition-duration: 0s; }
+  }
+  .area-link:focus-visible {
+    text-decoration-color: var(--_line-hover);
+    transition-duration: 0s;
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-offset);
+  }
+
+  /* Variant: inline links are always underlined; a standalone link is underlined on hover and
+     focus only (Primer's default Link; Untitled UI's link buttons). */
+  .area-link--inline {}
+  .area-link--standalone { --_line: transparent; }
+
+  /* Ink: the surrounding text's (ChatGPT, Notion), the muted ink (Primer's muted link), or the
+     Action role, neutral until a theme makes actions the accent (DESIGN_SYSTEM.md, "Emphasis
+     roles"); never a tone. */
+  .area-link--inherit {}
+  .area-link--muted { --_ink: var(--area-fg-muted); }
+  .area-link--action { --_ink: var(--area-fg-action); }
+  /* spec: the link blue of product UI (owner, review round 2: "should there be a blue text and underline
+     version?"): ChatGPT's settings links rgb(44, 103, 197) (its text-info), Figma's file browser rgb(0, 123, 229);
+     Area's info ink, #0160d9 (5.6:1 on white), #a0c5fd in dark. Neither product underlines them; Area keeps the
+     variant's underline, so a blue link in a sentence is still underlined and a standalone one underlines on hover. */
+  .area-link--blue { --_ink: var(--area-fg-info); }
+
+  /* The external mark: Area's `open` glyph at 12, centred on the cap height so it sits with the
+     text at any size, 4 after the label (the xs icon gap). It carries no underline. */
+  .area-link__icon {
+    display: inline-block;
+    inline-size: var(--area-icon-xs);
+    block-size: var(--area-icon-xs);
+    margin-inline-start: var(--area-gap-xs);
+    vertical-align: calc((1cap - var(--area-icon-xs)) / 2);
+  }
+  .area-link__icon > svg { display: block; inline-size: 100%; block-size: 100%; }
+  .area-link__icon:dir(rtl) > svg { scale: -1 1; }
+}

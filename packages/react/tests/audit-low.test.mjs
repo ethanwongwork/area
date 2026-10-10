@@ -21,9 +21,10 @@ test("Calendar draws its floating plate by default; plain drops it (audit F-21)"
 });
 
 test("the modal Dialog and its scrim fade and scale in on the motion axis (audit E-19)", () => {
-  assert.match(css, /\.area-dialog__modal:not\(\[open\]\) \{ opacity: 0; scale: var\(--_overlay-scale\); \}/);
+  // Closed carries the exit clock (one step faster, docs/MOTION.md): base out, moderate in.
+  assert.match(css, /\.area-dialog__modal:not\(\[open\]\) \{ --_overlay-duration: var\(--area-duration-base\); opacity: 0; scale: var\(--_overlay-scale\); \}/);
   assert.match(css, /@starting-style \{\s*\.area-dialog__modal\[open\] \{ opacity: 0; scale: var\(--_overlay-scale\); \}\s*\.area-dialog__modal\[open\]::backdrop \{ opacity: 0; \}/);
-  assert.match(css, /\.area-dialog__modal \{[^}]*--_overlay-duration: var\(--area-duration-base\)/);
+  assert.match(css, /\.area-dialog__modal \{[^}]*--_overlay-duration: var\(--area-duration-moderate\)/);
 });
 
 test("Popover has a close part and its title level is settable (audit E-8)", async () => {

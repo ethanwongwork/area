@@ -165,36 +165,45 @@
 
   /*
    * The mark is drawn with a mask rather than a pseudo-element glyph, so it inherits the
-   * checked foreground and scales exactly with the control instead of depending on a
-   * font metric.
+   * checked foreground instead of depending on a font metric. Motion and crispness
+   * (docs/MOTION.md, 2026-10-07): the mark covers the control's border box and its mask is
+   * drawn 1:1 on that box's own pixel grid (a 16 drawing at md, a 20 drawing at lg), so its
+   * geometry is whole pixels at rest; it was a 16 drawing at 75% of the 14px padding box
+   * (1.15px stroke at a 1.75px offset). It enters from scale 0.6 with opacity on fast
+   * ease-out and leaves the same way (was scale 0 → 1 on the deprecated spring), and rests
+   * at scale 1.
    */
   .area-checkbox__control::after,
   .area-radio__control::after {
     content: "";
     display: block;
     position: absolute;
-    inset: 0;
+    inset: calc(-1 * var(--area-stroke-width));
     background-color: var(--_mark);
-    transform: scale(0);
-    transition: transform var(--area-duration-fast) var(--area-ease-spring);
+    opacity: 0;
+    scale: 0.6; /* spec: docs/MOTION.md small-mark recipe */
+    transition:
+      scale var(--area-duration-fast) var(--area-ease-out),
+      opacity var(--area-duration-fast) var(--area-ease-out);
   }
 
   .area-checkbox__control::after {
-    -webkit-mask: var(--_check) center / 75% no-repeat;
-    mask: var(--_check) center / 75% no-repeat;
-    --_check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23000' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round' d='M3.25 8.5l3.25 3.25 6.25-7'/%3E%3C/svg%3E");
+    -webkit-mask: var(--_check) center / 100% no-repeat;
+    mask: var(--_check) center / 100% no-repeat;
   }
 
   .area-checkbox__control:is(:indeterminate, [data-indeterminate])::after {
-    -webkit-mask: var(--_dash) center / 75% no-repeat;
-    mask: var(--_dash) center / 75% no-repeat;
-    --_dash: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23000' stroke-width='1.75' stroke-linecap='round' d='M3.75 8h8.5'/%3E%3C/svg%3E");
-    transform: scale(1);
+    -webkit-mask: var(--_dash) center / 100% no-repeat;
+    mask: var(--_dash) center / 100% no-repeat;
+    opacity: 1;
+    scale: 1;
   }
 
+  /* The dot is an even size in an even box, so it centres on whole pixels: 6 in 16, 8 in 20
+     (was inset 30% of the padding box: a 5.6px dot at a 4.2px offset). */
   .area-radio__control::after {
     border-radius: var(--area-radius-full);
-    inset: 30%;
+    inset: calc((var(--_size) - var(--_dot)) / 2 - var(--area-stroke-width));
   }
 
   .area-checkbox__control:checked,
@@ -207,7 +216,23 @@
 
   .area-checkbox__control:checked::after,
   .area-radio__control:checked::after {
-    transform: scale(1);
+    opacity: 1;
+    scale: 1;
+  }
+
+  /* Hover, press and checking land at once and fade out over fast (docs/MOTION.md recipes). A
+     pointer or Space press is :active and an arrow key moves a focus-visible radio, so checking
+     by hand paints at once; the option given up, or a change from script, fades. Focus rings
+     are outlines, which --area-transition does not animate. */
+  .area-checkbox__control:is(:active, :focus-visible),
+  .area-radio__control:is(:active, :focus-visible),
+  .area-checkbox--card:is(:active, :has(> .area-checkbox__control:focus-visible)),
+  .area-radio--card:is(:active, :has(> .area-radio__control:focus-visible)) { transition-duration: 0s; }
+  @media (hover: hover) {
+    .area-checkbox__control:hover,
+    .area-radio__control:hover,
+    .area-checkbox--card:hover,
+    .area-radio--card:hover { transition-duration: 0s; }
   }
 
   .area-checkbox__control:is([data-invalid], [aria-invalid="true"]) {
@@ -415,6 +440,19 @@
   /* One glyph ladder for both controls: 16px at md, 20px at lg (Untitled UI's 16 / 20 boxes;
      Notion and Figma ship one 16px size). sm was removed (owner 2026-09-28): once small
      controls moved to 14/20 text it differed from md only by a 4px label gap. */
+  /* Marks are drawn per size on the control's own grid (choice.css "The mark"): the check is a
+     1.5px stroke (Figma's 16px check, figma--checkbox-checked: 1.5px), the dash a 2px bar
+     centred on whole pixels, 6 wide at 16 and 8 at 20; the radio dot 6 / 8. */
+  .area-checkbox, .area-checkbox--md {
+    --_check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M5 8.5l2 2 4-5'/%3E%3C/svg%3E"); /* spec */
+    --_dash: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' d='M6 8h4'/%3E%3C/svg%3E"); /* spec */
+  }
+  .area-radio, .area-radio--md { --_dot: 6px; /* spec */ }
+  .area-checkbox--lg {
+    --_check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M6.5 10.5l2.5 2.5 4.5-6'/%3E%3C/svg%3E"); /* spec */
+    --_dash: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' d='M7 10h6'/%3E%3C/svg%3E"); /* spec */
+  }
+  .area-radio--lg { --_dot: 8px; /* spec */ }
   .area-checkbox--md, .area-radio--md {
     --_size: var(--area-space-16);
     --_text: var(--area-control-md-text);

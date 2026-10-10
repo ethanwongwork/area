@@ -14,7 +14,7 @@ Completion is recorded only in `apps/docs/src/component-status.mjs`; a spec stat
 |---|---|---|
 | [Indicator](indicator.md) (count, activity, presence status) | accepted | Pilot. 24 captures; dot, count, cutout and placement rebuilt from them and owner feedback |
 | [Model picker](model-picker.md) | accepted | Ghost trigger in the composer, Menu of radio rows with notes (48), 4 below, flips above |
-| [Disclosure](disclosure.md) | in review | Plain (Notion toggle: leading chevron, title column) and divided (shadcn accordion); DisclosureGroup single or multiple |
+| [Accordion](accordion.md) | in review | Plain (Notion toggle: leading chevron, title column) and divided (trailing chevron, rules); Accordion single or multiple; AccordionItem stands alone. Was Disclosure |
 | [Scroll to latest](scroll-to-latest.md) | accepted | Round outline icon Button, 24 above the composer and centred (ChatGPT), shown 200 from the end |
 | [Message](message.md) | accepted | ChatGPT turns: bubble 10/16 at 70% (composer corner 16), prose 16/24, muted 32 icon actions on the text edge, streaming dot |
 | [Prompt suggestions](prompt-suggestions.md) | accepted | ChatGPT home rows: composer width, 24 below, 48 rows, icons under the composer's "+" |
@@ -69,6 +69,11 @@ Completion is recorded only in `apps/docs/src/component-status.mjs`; a spec stat
 | [Calendar](calendar.md) | accepted | New: single, range and multiple selection, two months, bounds; Notion's react-day-picker geometry (32/28 cells), shadcn and React Aria behavior |
 | [Color picker](color-picker.md) | accepted | Figma pass: ten-row width, 16px pill tracks, ringed thumbs, eyedropper, Hex/RGB/CSS/HSL/HSB value row, header slot. 11 Figma captures |
 | [Breadcrumb](breadcrumb.md) | accepted | First pass: current-page ink bug fixed, 400, separators rgb(131) with 4px gaps, Notion hover plate |
+| [Pagination](pagination.md) | in review | New, 2026-10-08: 32 squares with a 2 gap (shadcn, Untitled UI), the selected plate on the current page, ghost Button steps, compact "Page 2 of 10"; no target product has a pager |
+| [Link](link.md) | in review | New, 2026-10-08: inherited ink and type, underline at 40% of the ink (Notion) one stroke 2 below (ChatGPT); standalone, muted, action, external |
+| [Scroll area](scroll-area.md) | in review | New, 2026-10-09: native scroller with Figma's overlay bar (10 track, 6 round thumb 2 in), shown on hover, scroll or always |
+| [File upload](file-upload.md) | in review | New, 2026-10-09: drop zone (Untitled's 16/24, 12 gap, the field's edge) and upload rows (Progress lg, ghost sm actions, uploading / complete / error) |
+| [Toggletip](toggletip.md) | in review | New, 2026-10-09: a 16 info or help mark in a box one text line tall (stroke-control ink, the ghost Button's plates); Tooltip's surface for the note; previews on hover and focus (ChatGPT, Notion), a press pins it (Fluent, Spectrum, Carbon) |
 | [Overlay behavior](overlay.md) | accepted | 2026-09-27: anchoring, dismissal, focus and keyboard for Popover, Menu and Tooltip; ChatGPT menu captured, nine design systems read |
 | [Tooltip](tooltip.md) | accepted | First pass: 10px radius and 10px text sides (owner, after ChatGPT), 12px-blur lift; ChatGPT, Notion captured, Figma read |
 | [Badge group](badge-group.md) | accepted | First pass: badge-shaped +N overflow at the group size, overlay at content width; Primer is the reference |

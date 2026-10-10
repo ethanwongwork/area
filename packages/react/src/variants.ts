@@ -70,6 +70,13 @@ export const fieldVariants = /* @__PURE__ */ createVariants(manifests.field);
 export const inputVariants = /* @__PURE__ */ createVariants(manifests.input);
 export const numberFieldVariants = /* @__PURE__ */ createVariants(manifests.numberField);
 export const inputGroupVariants = /* @__PURE__ */ createVariants(manifests.inputGroup);
+export const fileUploadVariants = /* @__PURE__ */ createVariants(manifests.fileUpload);
+export const fileUploadListVariants = /* @__PURE__ */ createVariants(manifests.fileUploadList);
+export const fileUploadItemVariants = /* @__PURE__ */ createVariants(manifests.fileUploadItem);
+export const scrollAreaVariants = /* @__PURE__ */ createVariants(manifests.scrollArea);
+export const linkVariants = /* @__PURE__ */ createVariants(manifests.link);
+export const toggletipVariants = /* @__PURE__ */ createVariants(manifests.toggletip);
+export const paginationVariants = /* @__PURE__ */ createVariants(manifests.pagination);
 export const treeViewVariants = /* @__PURE__ */ createVariants(manifests.treeView);
 export const composerVariants = /* @__PURE__ */ createVariants(manifests.composer);
 export const indicatorAnchorVariants = /* @__PURE__ */ createVariants(manifests.indicatorAnchor);
@@ -121,7 +128,7 @@ export const calendarVariants = /* @__PURE__ */ createVariants(manifests.calenda
 
 export const indicatorVariants = /* @__PURE__ */ createVariants(manifests.indicator);
 export const countVariants = /* @__PURE__ */ createVariants(manifests.count);
-export const disclosureVariants = /* @__PURE__ */ createVariants(manifests.disclosure);
-export const disclosureGroupVariants = /* @__PURE__ */ createVariants(manifests.disclosureGroup);
+export const accordionItemVariants = /* @__PURE__ */ createVariants(manifests.accordionItem);
+export const accordionVariants = /* @__PURE__ */ createVariants(manifests.accordion);
 
 export const presenceVariants = /* @__PURE__ */ createVariants(manifests.presence);

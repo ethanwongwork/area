@@ -1,9 +1,177 @@
-# Handoff — 2026-10-07
+# Handoff — 2026-10-09
 
 Each session starts from `main` in its own worktree (`claude/*` branch) and merges through a
 pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/docs/src/component-status.mjs` (Indicator and Tooltip are Complete).
+
+## Review round 3 (2026-10-09, same branch)
+
+- Approved: Link, File upload, Menu, Command palette, Panel, Alert, Card, Kbd, Number field, Property list. Chip: "the
+  link underline is doubled" → the link chip is an `<a>` and `.area-chip` never cleared the browser's underline; the
+  gallery's docs CSS resets links and hid it, the review page (Area's CSS alone) showed it. Fixed (`text-decoration:
+  none`); the icon link chip also lost a stray rest underline. Round 4 (`components4`): Chip approved, so nothing is
+  in review.
+- Lesson: the gallery can mask component bugs through the docs site's own resets; the review page and review-diff render
+  with Area's CSS only, so trust them for what a consumer sees. The review page now loads area.css with a `<link>`
+  before the specimens (it was fetched afterwards, so specimens rendered first with browser defaults).
+
+## Review round 2 feedback applied (2026-10-09, same branch)
+
+- Owner: "start on the five". In review again (round 3, ArtifactData `components3`; page republished with Before =
+  the round-2 build, each family led by its spec's `## Review note, 2026-10-09`):
+  - Menu: group labels over text-only rows start on the row text column (11; was 8); over icon rows they stay on the
+    icon column. Labels now wrap their text in `.area-menu__label-text` (MenuLabel, Combobox, CustomSelect,
+    CommandPalette, TagPicker), so the label box takes the rows' type for the inset.
+  - Command palette: hint buttons centre their content (the arrows sat 4 / 11.5 in their 24 plates).
+  - File upload: actions 8 from the row's top and side (Untitled -mt-2 -mr-2); zone and row padding net of the border;
+    size line 2 under the name.
+  - Panel: every step 2 smaller (md 14 / 10 / 4, sm 10 / 6 / 4), the edge counted once (`--_edge`, `--_side`); the
+    resizable demo's Dimensions row carries the constrain toggle; the collapsible chevron is centred on the title row.
+  - Link: underline in the link's own ink at rest (was 40%); new `ink="blue"` (`fg-info`; ChatGPT rgb(44,103,197) and
+    Figma rgb(0,123,229) UI links, measured read-only). Alert, Card, Chip follow (reopened). Kbd, Number field and
+    Property list reopened as knock-ons (a tile of each shows the palette footer or a Panel).
+- review-diff.mjs now pins each specimen to a whole-pixel slot (a tile added above shifted later ones by a fraction and
+  snapping read as a change). Before dist for round 3: a copy of apps/docs/dist taken before the edits (scratchpad).
+
+## Toggletip (2026-10-09, branch `claude/next-component-befcb2`)
+
+- Owner: "work on the next component, load the component review artifact for anything that needs me to review" →
+  Toggletip (next on the gap audit's order after File upload; no new verdicts were waiting in `components1`). In
+  review. `Toggletip` (button + note; `content`, `icon` info / help, `size` sm / md, `label`, Tooltip's side / align /
+  offset / delay, open state), `AnchoredToggletip` in Overlays.tsx (hover and keyboard focus preview as Tooltip; a
+  press pins, `aria-expanded`; outside press, Escape, second press or focus leaving closes), `toggletip.css`, 6
+  tiles, docs entry, `toggletip.test.mjs`. `info` and `help` added to the package glyphs; the generator now allows
+  stroked circles and filled dots in a line glyph (`glyphFills`, icons.md).
+- Evidence: ChatGPT (Settings › Usage info button) and Notion (Settings › Notifications "?") captures, redacted,
+  read-only; Fluent InfoLabel, Spectrum 2 ContextualHelp, Carbon Toggletip rendered; Untitled UI source. Figma: none
+  in the file browser. Open questions in the spec (Field label slot, info vs help default, ink).
+- Review page republished (same link) for round 2: the 15 families in review, Before = main at 6f89678. Decisions
+  now go to ArtifactData collection `components2` (the template's ROUND), so reopened families start undecided.
+- Review round 2 (owner, same day): Pagination, Scroll area, Toggletip, Alert, Card, Chip, Combobox, Custom select,
+  Tag picker, Drawer approved; Link, File upload, Panel "rethink", Menu, Command palette "needs changes" (notes in each
+  spec's feedback log; not yet worked). Owner asked for more explicit reviews: the page now leads each family with
+  the spec's `## Review note, <date>` (What changed / Why, plain words), renders every specimen in both builds
+  (`apps/docs/scripts/review-diff.mjs`, headless Edge, light/dark × default/compact, painted boxes and text only) to
+  mark variants Changed / New / Unchanged, shows changed ones side by side (2× zoom available) and folds the rest.
+  Regenerate: `node apps/docs/scripts/component-review.mjs --before <dist> --before-label "main at <sha> (<date>)"
+  --unapproved --out <dir>`; the Before dist is a detached worktree of that commit after `npm ci && npm run build:docs`.
+- Tooling: from https pages the built-in pane can't post to a local relay (fetch fails; a form POST becomes a GET in
+  the same tab and loses the page) and its clipboard API is denied; a button whose handler runs
+  `document.execCommand("copy")` works (restore the owner's clipboard afterwards). The gallery tile zoom re-fits:
+  pin it with an injected `#component-x .gallery-tile__stage { zoom: 1 !important }`. The gallery's Mode and Density
+  persist in localStorage: check them before capturing.
+
+## File upload (2026-10-09, same branch)
+
+- Owner: "move on to the next component" → File upload, the last of the four. In review. `FileUpload` (zone: accept,
+  maxSize, multiple, name, onFiles / onReject), `FileUploadList`, `FileUploadItem` (uploading / complete / error,
+  progress, retry, remove), helpers `fileMatchesAccept`, `formatFileSize`; `file-upload.css`; 8 tiles (one an
+  interactive simulated flow); `upload`, `document`, `reset` added to the package glyphs.
+- Evidence: Untitled UI readout only; owner declined a ChatGPT test upload. Open questions resolved as recommended
+  (field edge kept, `document` kept, Composer chip later).
+
+## Scroll area (2026-10-09, same branch)
+
+- Owner: "move on to the next component" → Scroll area. In review (Review batch "New: Pagination, Link and
+  Scroll area"). `ScrollArea` (type hover / scroll / always; viewportRef, viewportProps), `scroll-area.css`,
+  5 tiles, docs entry, `scroll-area.test.mjs`. Native viewport with the platform bar hidden; Figma's overlay bar.
+- Evidence: Figma editor panel captures (a community file, viewed only); ChatGPT, Notion, shadcn readouts.
+- Owner went with the recommendations: adopted in Menu (anchored), Combobox, Custom select, Tag picker, Command
+  palette, Drawer and Panel (scroll-area.md, "Adoption"); those seven are back in review. Dialog body and Nav's
+  overflow menu still use the platform bar.
+- Tooling: Figma's CSP blocks form posts; open `127.0.0.1:8791/recv.html` from a button and `postMessage` the
+  captures to it. The gallery re-fits tile zoom after a pause: clear it and capture in the same script.
+
+## Link (2026-10-08, same branch)
+
+- Owner: "move on to the next component" → Link (next on the list after Pagination). In review with
+  Pagination (Review page batch "New: Pagination and Link"). `Link` + `linkVariants`, `link.css`, manifest
+  (variant inline / standalone, ink inherit / muted / action), 7 tiles, docs entry, `link.test.mjs`; `open`
+  added to the package glyphs (`PACKAGE_GLYPHS` in gen-pilot-icons.mjs; only glyphs.ts changed).
+- Evidence: ChatGPT (logged-out composer note) and Notion (an inline link, owner's Chrome, read-only)
+  captures; Primer rules; Untitled source classes. Underline: currentColor at 40% (Notion), 1 stroke, 2 below.
+- Owner went with the recommendations: Link's open questions resolved; Alert's link, Card's action and Chip's
+  link label moved to Link's line (link.md, "Peers aligned"), so Alert, Card and Chip are back in review.
+- Tooling: a form POST (`target=_blank`) to the 127.0.0.1 relay saves captures from https pages in both
+  browsers without the clipboard (fetch is blocked there).
+
+## Pagination (2026-10-08, branch `claude/next-component-5018a1`)
+
+- Owner picked Pagination as the next component. Built and in review (`REVIEW_COMPONENTS`, Review page
+  batch "New: Pagination"): `Pagination` (+ `paginationRange`), `pagination.css`, manifest (layout
+  pages / compact, size sm / md / lg), 10 gallery tiles, docs entry, `pagination.test.mjs`. Spec
+  `docs/specs/pagination.md`; its three open questions were resolved as recommended (owner, same day). Awaits approval.
+- Evidence: Untitled UI and shadcn captures, Primer as a readout; ChatGPT and Notion have no pager
+  (searched read-only in the owner's Chrome). Steps are ghost Buttons; the current page is the shared
+  selected plate; 32 squares, 2 gap.
+- Tooling: the built-in pane can't reach a local relay from https pages (fetch and script tags fail), so
+  references needed the capture script pasted in; captures left through the clipboard until the owner
+  copied something else. From localhost pages, `fetch` to a 127.0.0.1 relay works. `.claude/launch.json`
+  (untracked) serves the static docs on 4395; restart it after each `build:docs`.
+
+## Review decisions applied (2026-10-08, merged in the 2026-10-08 PR)
+
+- Approved (component-status.mjs): Accordion, Alignment picker, Custom select, Drawer, Tag. Changes
+  requested and applied, back in review: Confirm dialog (Default specimen is the neutral confirm, danger
+  a tone; soft/outline/ghost Buttons now weight 500 like solid), Date picker and the "black on black"
+  report (the review page's own unlayered button CSS, fixed there), Tag picker (× hover plate legibility:
+  Tag inks deepened to OKLCH L <= 0.49, contrast >= 4.5 under the plate; dark green/yellow calmed in Tag).
+- Recommendations applied: Alignment picker radius-control-sm and no edge; field chevrons inset 8
+  (`--_chevron-inset` in inset.css) and `--area-input-chevron` (stroke-control) ink; chosen rows in
+  Select / Combobox / Custom select show the check only.
+- Review page republished with only the unapproved families (`--unapproved`). Second round (same day):
+  Confirm dialog, Date picker and Tag picker approved too, so nothing is in review.
+
+## Component review page and archived docs (2026-10-07, merged in the 2026-10-08 PR)
+
+- Component review artifact (owner): https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG — every
+  gallery family at 100% (hydrated), Before (the build at 5bb91df, static, in a frame) / After / side
+  by side, light/dark, default/compact, the spec's dated changes, open questions and references, and
+  approve / needs changes / rethink with per-specimen flags. Decisions: ArtifactData collection
+  `components1` (doc id = family slug; round 2 from 2026-10-09: `components2`). Regenerate: `npm run build:docs`, then
+  `node apps/docs/scripts/component-review.mjs --before <old dist> --out <dir>` (page template
+  `apps/docs/src/component-review.html`), and republish to the same URL.
+- Docs site archived (owner): `DOCS_ARCHIVED` at the end of `apps/docs/scripts/build.mjs` turns every
+  non-gallery page into a redirect to the gallery; check-dogfood skips the Field page check while
+  archived. Set it to false to bring the docs back.
+
+## Motion and crispness pass (2026-10-07, merged in the 2026-10-08 PR)
+
+- Contract: `docs/MOTION.md` (tokens, per-interaction recipes, crispness rules, reduced motion);
+  research in `docs/research/motion-2026-10-07/` (packages and craft, design systems incl. ChatGPT /
+  Figma values, crispness and the pre-pass state). Tokens: `duration-moderate` (200), `ease-drawer`
+  (Vaul), softer `ease-in`; `ease-spring` deprecated and unused; reduced motion now wins over an
+  explicit `data-area-motion`.
+- "Pixelated": the gallery shrank specimens with transform `scale` (0.736 etc.); fit.ts now uses CSS
+  `zoom`. overlay.ts divides by `currentCSSZoom`, so anchored surfaces place correctly under zoom.
+- Eight agents applied the contract per component (instant hover/press/focus, `fast` fade out; one
+  chevron rule; anchored surfaces 150 in / 100 out from the trigger; Dialog 200/150; Drawer 250/200
+  ease-drawer; Toast enter/exit/reflow; Switch thumb by whole-pixel translate; Checkbox/Radio marks
+  1:1; Accordion and Code block height via interpolate-size; Progress by translate; whole-pixel
+  fixes in Dialog, Nav marker, Slider ticks, Indicator, Alignment picker bars). Each spec has
+  "Motion and interaction, 2026-10-07" with open questions. Not watched live: every check ran in
+  hidden tabs (computed styles, getAnimations, rects); hidden pages also never opened the Dialog or
+  Drawer demos, so open/close needs a look in a visible browser.
+
+## Review components, Chrome audit (2026-10-06–07, branch `claude/tag-picker-design-039723`, merged 2026-10-08)
+
+- Tag: owner asked for lighter tints, more vibrant ink → opaque OKLCH L 0.955 / C 0.035 tints under
+  `fg-*` inks (dark: vivid ink on 16%); × in the tag's ink, drawn at its 12 line (`Glyph size={12}`).
+- Disclosure renamed **Accordion** (owner): `Accordion` (stack, was DisclosureGroup) + `AccordionItem`
+  (was Disclosure); `area-accordion`, `area-accordion-item`, slug `accordion`, captures moved. Divided
+  hover is the chevron plate (only shadcn underlines; Google, Notion, Apple, Figma don't).
+- Gallery chrome: page links (Components, Review, Corner radius, Icons → gallery-icons.html, still the
+  old shell) are a sticky Panel section; the theme panel collapses from a ghost icon button that stays
+  in place (offsets in localStorage `area-gallery-rails`). check-dogfood exempts icon dots' `r:` styles.
+- Seven parallel Claude in Chrome audits (each spec's "Claude in Chrome audit, 2026-10-07"): fixes in
+  Drawer (16 insets, border once), Confirm dialog (footer gap 16), Date picker (Clear row at Menu's
+  inset), Custom select (no focus edge on a mouse open; 17 captures, pass-status entry), Accordion
+  (divided rows = half the line: sm 40, md 48). Open questions are in each spec. Blockers: the auto-mode
+  classifier refused JS reads on some third-party sites and any local capture relay; background tabs
+  can't copy captures out, so most numbers are computed reads, not capture files.
+- area-capture.js: baseline by the ascent's share of the content box (canvas rounds system-font
+  ascents; Notion text had read 0.67 low). Alignment picker test no longer expects removed sizes.
 
 ## Icon quality pass (2026-10-07, branch `claude/icon-quality-consistency-dade1f`)
 

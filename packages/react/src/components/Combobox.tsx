@@ -3,6 +3,7 @@ import type { KeyboardEvent, ReactNode, SyntheticEvent } from "react";
 import { comboboxVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
 import { scrollOptionIntoList, useAnchoredPosition } from "./overlay.ts";
+import { ScrollArea } from "./ScrollArea.tsx";
 import { MENU_OFFSET, OVERLAY_PADDING } from "./Overlays.tsx";
 import { Input, InputAction, type InputProps } from "./Input.tsx";
 /** The empty collection, one reference so effects keyed on it stay still. */
@@ -226,7 +227,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
     const isSelected = option.value === selected;
     return <div key={option.value} id={`${id}-option-${current}`} data-index={current} role="option" aria-selected={isSelected}
       aria-disabled={option.disabled || undefined} data-disabled={option.disabled ? "" : undefined} className="area-menu__item area-combobox__option"
-      data-highlighted={highlighted ? "" : undefined} data-selected={isSelected ? "" : undefined}
+      data-highlighted={highlighted ? "" : undefined}
       onPointerDown={event => event.preventDefault()} onPointerMove={() => { if (!option.disabled) setActive(current); }}
       onClick={event => { if (!option.disabled) commitRow(row, event); }}>
       {option.icon ? <span className="area-menu__icon" aria-hidden="true">{option.icon}</span> : null}
@@ -235,8 +236,13 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
       <span className="area-menu__check" aria-hidden="true"><Glyph name="check" /></span>
     </div>;
   };
+  // While the list fades out it keeps the rows it last showed: committing sets the text to the
+  // option's label, which would otherwise list every option during the exit (docs/MOTION.md).
+  const shownRows = useRef(rows);
+  if (open) shownRows.current = rows;
+  const listRows = open ? rows : shownRows.current;
   const groups = new Map<string | undefined, Row[]>();
-  for (const row of rows) {
+  for (const row of listRows) {
     const key = row.kind === "option" ? row.option.group : undefined;
     groups.set(key, [...(groups.get(key) ?? []), row]);
   }
@@ -260,16 +266,16 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
     {/* "No results" is announced through a status outside the listbox, which may hold only
         options (audit B-31). */}
     <span className="area-sr-only" role="status">{open && rows.length === 0 ? emptyText : ""}</span>
-    <div ref={listRef} id={listId} role="listbox" aria-label={typeof rest["aria-label"] === "string" ? rest["aria-label"] : undefined}
+    <ScrollArea ref={listRef} id={listId} role="listbox" aria-label={typeof rest["aria-label"] === "string" ? rest["aria-label"] : undefined}
       aria-labelledby={typeof rest["aria-label"] === "string" ? undefined : rest["aria-labelledby"]}
-      popover="manual" className="area-menu area-combobox__listbox" tabIndex={-1}>
-      {rows.length === 0 ? <div className="area-combobox__empty" role="presentation">{emptyText}</div> : null}
+      popover="manual" className="area-menu area-combobox__listbox" tabIndex={-1} viewportProps={{ tabIndex: undefined }}>
+      {listRows.length === 0 ? <div className="area-combobox__empty" role="presentation">{emptyText}</div> : null}
       {[...groups].map(([group, list]) => group
         ? <div key={group} role="group" aria-labelledby={`${id}-group-${group}`} className="area-combobox__group">
-            <div id={`${id}-group-${group}`} className="area-menu__label" role="presentation">{group}</div>
+            <div id={`${id}-group-${group}`} className="area-menu__label" role="presentation"><span className="area-menu__label-text">{group}</span></div>
             {list.map(renderRow)}
           </div>
         : list.map(renderRow))}
-    </div>
+    </ScrollArea>
   </div>;
 });

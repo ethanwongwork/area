@@ -128,6 +128,36 @@ the action and dismiss hover on screen.
 - ~~A toaster (placement, stacking, timer) is out of scope by the prior decision.~~ Built:
   `Toaster` / `useToaster` (audit E-11 A, owner 2026-09-30).
 
+## Motion and interaction, 2026-10-07
+
+Contract: [MOTION.md](../MOTION.md), "Toast". Applies inside a Toaster only; a Toast placed on
+its own (docs, inline) does not animate.
+
+| Interaction | Before | After |
+|---|---|---|
+| enter | none: toasts popped in | `opacity` 0 → 1 and `translate` 0 16 → none (from the toaster's edge: 16 is the toaster's own offset), `duration-slow` 250, `ease-out`, `@starting-style` |
+| exit | none: removed at once | `data-leaving` on the list item: `opacity` → 0 and `translate` 8 towards the edge, `duration-base` 150, `ease-out`; Toaster.tsx removes the item when its transition has run (the computed duration, 0 under "none" and reduced motion); `pointer-events: none` while it leaves |
+| stack reflow | jump | FLIP: each moved item starts from its previous place as a whole-pixel `translate` and eases home over `duration-base`, `ease-in-out`; an interrupted reflow continues from where it is; works under CSS `zoom` |
+| action, dismiss | Button's | Button's (not this pass) |
+| pause on hover and focus, F8 | unchanged | unchanged; a leaving toast's timer is already cleared |
+
+Crispness: every toast rests at opacity 1, translate none; reflow offsets are rounded to whole
+pixels (`Math.round`).
+
+Verification: gallery (`/`) Toaster tile (zoom 0.8): enter `opacity/translate: 250` ease-out;
+a second toast moved the first by its local 47px (39 + 8 under zoom) with `translate:150`
+`cubic-bezier(0.65, 0, 0.35, 1)`; rest translate none, opacity 1; Undo marked `data-leaving`
+(`pointer-events: none`, `opacity/translate: 150` ease-out), the item was gone 300ms later and the
+remaining toast reflowed from `0px -47px`; the last one leaving hid the region. Under
+`data-area-motion="none"` the leaving toast computes `0s`. Verified on the dev server (background tab, so transitions were read from `getAnimations()` and computed styles, not watched; real-pointer hover could not be driven in a background tab, so hover rules were read from the stylesheet).
+
+Open questions:
+- Exit direction: 8px towards the bottom edge, into the stack gap, so it never overlaps the toast
+  below. Sonner slides the whole height; recommendation: keep 8 (subtle).
+- `data-leaving` is a new runtime hook; it should be declared in `manifest.ts` (toaster
+  `states`); proposed to the lead.
+- Swipe to dismiss is not built; no change proposed.
+
 ## Feedback log
 
 - 2026-09-26 · pass 1 after the Dialog type and radius pass: Popover's inset and corner rule,
@@ -143,3 +173,4 @@ the action and dismiss hover on screen.
 - 2026-10-01 · audit E-11 (owner pick A) → `Toaster` / `useToaster` host toasts with pre-existing polite and assertive live regions, pausing timers, an F8 hotkey and end-corner stacking; Toast gains `live` (default true) and a danger Toast is `role="alert"` → Toaster.tsx, primitives.tsx:1411-1427, surface.css:1319-1333.
 - 2026-10-01 · compact pass (owner: "the toast action inset radius pairing looks incorrect" at compact) → the block inset was a literal 10 stepped to 6, which put the 24px action 2 from the top, 4 from the end, its 4px corner off the 8px corner. The block inset is now `inset-surface-sm + (icon − leading) / 2 − border`: default 10 (unchanged), compact 8, so the toast is 32 tall with the action 4 in on every side, concentric (8 − 4). Verified live; docs/research/compact-pass-2026-10-01.md.
 - 2026-10-03 · radius audit D2 (owner) → a one-line toast takes `radius-control-lg` capped (40 → 10, compact 32 → 8), a titled toast the container 12 (`.area-toast:has(.area-toast__title)`). Was 12 / 8. `docs/research/radius-audit-2026-10-03.md`.
+- 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → enter from the toaster's edge (16, `slow` ease-out), exit faster (`data-leaving`, 8, `base`), stack reflow by FLIP on `base` ease-in-out (`surface.css`, `Toaster.tsx`).

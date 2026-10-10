@@ -7,12 +7,20 @@
  */
 import { type AxisDefinition, tokens } from "./schema.ts";
 
+/*
+ * Easings (docs/MOTION.md; research in docs/research/motion-2026-10-07/). ease-out is what ChatGPT
+ * and Radix Themes ship; ease-in-out is Figma's and Primer's; ease-drawer is Vaul's edge-sheet curve.
+ * ease-in was expo-in (0.7, 0, 0.84, 0), so slow to start that a 100ms exit read as a pause; it is
+ * now the standard accelerate (Material, Polaris). ease-spring overshoots ~10% and is kept only for
+ * compatibility: no component uses it (an overshoot reads as play, not as Area).
+ */
 const EASINGS = {
   "ease-linear": "linear",
   "ease-out": "cubic-bezier(0.16, 1, 0.3, 1)",
-  "ease-in": "cubic-bezier(0.7, 0, 0.84, 0)",
+  "ease-in": "cubic-bezier(0.4, 0, 1, 1)",
   "ease-in-out": "cubic-bezier(0.65, 0, 0.35, 1)",
-  /** Slight overshoot. For elements that enter, never for colour or opacity. */
+  "ease-drawer": "cubic-bezier(0.32, 0.72, 0, 1)",
+  /** Deprecated: slight overshoot; no component uses it. */
   "ease-spring": "cubic-bezier(0.34, 1.56, 0.64, 1)",
 };
 
@@ -31,6 +39,7 @@ export const MOTION_AXIS: AxisDefinition = {
         "duration-instant": "0ms",
         "duration-fast": "0ms",
         "duration-base": "0ms",
+        "duration-moderate": "0ms",
         "duration-slow": "0ms",
         ...EASINGS,
       }),
@@ -43,6 +52,7 @@ export const MOTION_AXIS: AxisDefinition = {
         "duration-instant": "0ms",
         "duration-fast": "100ms",
         "duration-base": "150ms",
+        "duration-moderate": "200ms",
         "duration-slow": "250ms",
         ...EASINGS,
       }),
@@ -55,6 +65,7 @@ export const MOTION_AXIS: AxisDefinition = {
         "duration-instant": "0ms",
         "duration-fast": "150ms",
         "duration-base": "250ms",
+        "duration-moderate": "320ms",
         "duration-slow": "400ms",
         ...EASINGS,
       }),

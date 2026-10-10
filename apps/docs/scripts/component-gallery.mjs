@@ -51,12 +51,18 @@ export const GALLERY_CSS = `
     grid-template-rows: minmax(0, 1fr);
     min-block-size: 0;
   }
-  .gallery-controls__scope {
-    color: var(--area-fg-muted);
-    font-size: var(--area-ui-size);
-    line-height: var(--area-ui-leading);
-    font-weight: var(--area-weight-regular);
+  /* The page links stay at the top of the nav while the component list scrolls under them. */
+  .gallery-nav__pages {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 1;
+    background: var(--area-bg-page);
   }
+  /* The theme panel's toggle: collapsed, the rail's track closes and the toggle stays where it
+     was, drawn over the canvas's corner (offsets measured in src/gallery/chrome.tsx). */
+  #gallery-controls { position: relative; }
+  .gallery-app:has(> #gallery-controls[data-collapsed]) { grid-template-columns: auto minmax(0, 1fr) 0; }
+  .gallery-controls__ghost { position: absolute; z-index: 2; display: flex; }
   .gallery-canvas {
     container-type: inline-size;
     min-inline-size: 0;
@@ -451,6 +457,14 @@ const restoreScript = `(function (canvas) {
   } catch (error) {}
 })(document.currentScript.parentElement);`;
 
+/* Marks the theme panel collapsed before it paints, so a collapsed panel never flashes open. */
+const collapseScript = `(function () {
+  try {
+    var saved = JSON.parse(localStorage.getItem("area-gallery-rails") || "{}")["controls-collapsed"];
+    if (saved && isFinite(saved.top) && isFinite(saved.end)) document.getElementById("gallery-controls").setAttribute("data-collapsed", "");
+  } catch (error) {}
+})();`;
+
 /** The page around a canvas: nav, canvas with the restored theme selection, theme panel. */
 function shell({ title, description, chrome, sections, page, canvas, clients, flush = false }) {
   const canvasAxes = GALLERY_CONTROLS.map(control => `data-area-${control.axis}="${control.defaultValue}"`).join(" ");
@@ -472,6 +486,7 @@ function shell({ title, description, chrome, sections, page, canvas, clients, fl
     ${canvas}
   </main>
   <div class="gallery-app__rail" id="gallery-controls" data-area-ui="default" data-area-radius="10">${chrome.controls}</div>
+  <script>${collapseScript}</script>
 </div>
 <script type="application/json" id="gallery-nav-data">${JSON.stringify({ sections, page }).replaceAll("<", "\\u003c")}</script>
 <script src="./area-capture.js"></script>
@@ -558,7 +573,7 @@ const INSET_EXAMPLES = [
  */
 const RADIUS_GROUPS = [
   ["Controls by height", "setting × height ÷ 32, even pixels, never under 2; a pill at Pill",
-    "32px (md, 8): Button, Split button, Button group, Toolbar buttons, Input, Select, Combobox, Number field, Input group, Color field, Box field, Field, Segmented track, Tabs, Alignment picker, Calendar days. 28px (sm, 6) and 40px (lg, 10): the same components at their small and large sizes. 24px (xs, 6): Breadcrumb plate, inline Code, Disclosure plate, Property list actions. A text input is a control: a medium Input is 32px, so it shares the medium Button's corner."],
+    "32px (md, 8): Button, Split button, Button group, Toolbar buttons, Input, Select, Combobox, Number field, Input group, Color field, Box field, Field, Segmented track, Tabs, Alignment picker, Calendar days. 28px (sm, 6) and 40px (lg, 10): the same components at their small and large sizes. 24px (xs, 6): Breadcrumb plate, inline Code, Accordion plate, Property list actions. A text input is a control: a medium Input is 32px, so it shares the medium Button's corner."],
   ["Rows by height", "the row's height (32, compact 24): 8, compact 6",
     "Nav rows, Tree view rows, Prompt suggestions."],
   ["One-line bars", "the 40px control corner: 10, compact 8; a pill at Pill",
