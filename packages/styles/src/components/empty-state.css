@@ -1,0 +1,106 @@
+/* ---------------------------------------------------------------------------
+ * Empty state
+ *
+ * Says a region has nothing to show yet, and how to fill it (docs/specs/empty-state.md): an
+ * icon on a soft tile, a title, a muted line and actions, centred. md is ChatGPT's (Trash,
+ * Sites: a 48 tile, 18/24 title, 16 / 8 / 16 apart) for a page or a main region; sm is Notion's
+ * (Library: 14/20 title 2 above its line, 12 under the icon, 8 above the action) for a panel,
+ * a list or a popover, with File upload's 40 tile. Untitled UI, shadcn and Primer fill the rest.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    inline-size: 100%;
+    padding: var(--_padding);
+    color: var(--area-fg-default);
+    text-align: center;
+  }
+  .area-empty-state--md {
+    /* spec: Primer Blankslate medium 32 around (the products centre it in their region); compact steps with the inset. */
+    --_padding: calc(var(--area-inset-surface-md) * 2);
+    /* spec: ChatGPT's 48 tile with a 24 glyph (Untitled UI lg 48); the control-xl step, 40 / 20 in compact. */
+    --_tile: var(--area-control-xl);
+    --_tile-radius: var(--area-radius-control-xl);
+    --_glyph: calc(24px - 4px * var(--area-ui-dense)); /* spec */
+    /* The glyph's line for a 24 slot (1.2 × the 16 line), 20 in compact (base.css size curve). */
+    --_glyph-line: calc(var(--area-weight-icon) * (0.8 + 0.0846 * var(--area-ui-dense)));
+    /* spec: ChatGPT 16 under the tile, 8 between title and line, 16 above the actions. */
+    --_media-gap: var(--area-space-16);
+    --_title-gap: var(--area-space-8);
+    --_actions-gap: var(--area-space-16);
+    /* spec: ChatGPT 18/24 500; compact the 16/24 title. */
+    --_title-size: calc(18px - 2px * var(--area-ui-dense)); /* spec */
+    --_title-leading: 24px; /* spec */
+    /* spec: ChatGPT's column, max-w-xl 576 (Notion's Skills 600). */
+    --_measure: 576px; /* spec */
+  }
+  .area-empty-state--sm {
+    /* spec: Primer Blankslate small 16 around; compact 12 with the surface inset. */
+    --_padding: var(--area-inset-surface-md);
+    /* spec: File upload's 40 tile with a 20 glyph (shadcn's 40 icon tile); 32 / 16 in compact. */
+    --_tile: var(--area-control-lg);
+    --_tile-radius: var(--area-radius-control-lg);
+    --_glyph: calc(20px - 4px * var(--area-ui-dense)); /* spec */
+    --_glyph-line: calc(var(--area-weight-icon) * (0.8846 + 0.1154 * var(--area-ui-dense)));
+    /* spec: Notion 12 under the icon, 2 between title and line, 8 above the action. */
+    --_media-gap: var(--area-space-12);
+    --_title-gap: var(--area-space-2);
+    --_actions-gap: var(--area-space-8);
+    /* spec: Notion 14/20 500, the UI type (12/16 in compact). */
+    --_title-size: var(--area-ui-size);
+    --_title-leading: var(--area-ui-leading);
+    /* spec: Notion's Favorites column, 340. */
+    --_measure: 340px; /* spec */
+  }
+
+  /* The tile: the soft fill (ChatGPT #f3f3f3; shadcn bg-muted) with the glyph in the default ink. */
+  .area-empty-state__icon {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    inline-size: var(--_tile);
+    block-size: var(--_tile);
+    margin-block-end: var(--_media-gap);
+    border-radius: var(--_tile-radius);
+    background-color: var(--area-bg-component);
+    color: var(--area-fg-default);
+  }
+  .area-empty-state__icon > svg { inline-size: var(--_glyph); block-size: var(--_glyph); }
+  /* An Area glyph keeps the line of the size it is shown at, whatever size it was drawn for. */
+  .area-empty-state__icon > svg[data-area-glyph] path { stroke-width: var(--_glyph-line); }
+
+  .area-empty-state__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--_title-gap);
+    max-inline-size: var(--_measure);
+  }
+  .area-empty-state__title {
+    margin: 0;
+    font-size: var(--_title-size);
+    line-height: var(--_title-leading);
+    font-weight: var(--area-weight-strong);
+    text-wrap: balance;
+  }
+  /* spec: ChatGPT and Notion 14/20 in the muted ink; the body step, 12/16 in compact. */
+  .area-empty-state__description {
+    margin: 0;
+    color: var(--area-fg-muted);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
+    text-wrap: balance;
+  }
+  /* spec: ChatGPT's actions row, 8 apart, centred. */
+  .area-empty-state__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--area-space-8);
+    margin-block-start: var(--_actions-gap);
+  }
+}

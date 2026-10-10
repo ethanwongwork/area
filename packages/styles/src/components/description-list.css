@@ -1,0 +1,99 @@
+/* ---------------------------------------------------------------------------
+ * Description list
+ *
+ * Labelled values: a term and its value per row (docs/specs/description-list.md). columns is
+ * Notion's page properties (a 160 term column, a muted term with an optional 16 icon, the value
+ * after it; rows 34 tall, 4 apart). justified is ChatGPT's settings card (term at the start,
+ * value at the end, rows 12 / 16 padded, dividers inset by the row's side padding). divided
+ * draws those rules; framed puts the list in Table's frame.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-description-list {
+    /* spec: Notion's 160 property-name column; set --area-description-list-term to change it. */
+    --_term: var(--area-description-list-term, 160px);
+    /* spec: Notion's 34 rows (the 32 UI row + 2; 26 in compact), 4 apart (2 × the row gap; 0 in compact). */
+    --_row: calc(var(--area-ui-row) + 2px);
+    --_row-gap: calc(var(--area-ui-row-gap) * 2);
+    /* spec: Notion insets the term and the value 6 inside their cells. */
+    --_inset: var(--area-space-6);
+    --_pad-block: 0px;
+    --_divider: transparent;
+    display: flex;
+    flex-direction: column;
+    gap: var(--_row-gap);
+    margin: 0;
+    padding: 0;
+    color: var(--area-fg-default);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+  }
+  .area-description-list__item {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-block-size: var(--_row);
+    box-sizing: border-box;
+    padding-block: var(--_pad-block);
+  }
+  .area-description-list__term {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-6); /* spec: Notion's icon to name, 6 */
+    flex: none;
+    box-sizing: border-box;
+    inline-size: var(--_term);
+    min-inline-size: 0;
+    margin: 0;
+    padding-inline: var(--_inset);
+    color: var(--area-fg-muted);
+    overflow-wrap: anywhere;
+  }
+  /* spec: Notion's 16 property icon in the term's muted ink. */
+  .area-description-list__icon { display: inline-grid; place-items: center; flex: none; inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
+  .area-description-list__icon > svg { inline-size: 100%; block-size: 100%; }
+  .area-description-list__value {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    /* spec: Notion's value cell starts 4 after the term column, its plate 4 inside that, and the text 6 inside the
+       plate: the value's text 14 after the column (174 in a 160 column). */
+    margin: 0 0 0 var(--area-space-8);
+    padding-inline: var(--_inset);
+    overflow-wrap: anywhere;
+  }
+
+  /* --- justified: ChatGPT's settings rows ---------------------------------- */
+  .area-description-list--justified {
+    /* spec: ChatGPT rows pad 12 / 16 (44 tall with 14/20 type), no gap between rows. */
+    --_row: auto;
+    --_row-gap: 0px;
+    --_pad-block: var(--area-space-12);
+    --_inset: var(--area-space-16);
+  }
+  .area-description-list--justified > .area-description-list__item { justify-content: space-between; gap: var(--area-space-24); /* spec: ChatGPT 24 */ padding-inline: var(--_inset); }
+  /* spec: ChatGPT's term 14/20 500 in the default ink, its value at the end. */
+  .area-description-list--justified .area-description-list__term { inline-size: auto; flex: 0 1 auto; padding-inline: 0; color: var(--area-fg-default); font-weight: var(--area-weight-strong); }
+  .area-description-list--justified .area-description-list__value { flex: 0 1 auto; margin: 0; padding-inline: 0; text-align: end; }
+  .area-description-list--columns { --_pad-block: 0px; }
+
+  /* --- divided and framed --------------------------------------------------- */
+  /* spec: ChatGPT's 1px rule under each row but the last, inset by the row's side padding (Table's divider role). */
+  .area-description-list--divided { --_divider: var(--area-border-divider); }
+  .area-description-list--divided > .area-description-list__item:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    inset-inline: var(--_inset);
+    inset-block-end: calc(-1 * var(--_row-gap) / 2 - var(--area-border-width) / 2);
+    block-size: var(--area-border-width);
+    background-color: var(--_divider);
+    pointer-events: none;
+  }
+  /* The frame: Table's (divider edge, container corner, surface), as ChatGPT's settings card. */
+  .area-description-list--framed {
+    border: var(--area-border-width) solid var(--area-border-divider);
+    border-radius: var(--area-radius-container);
+    background-color: var(--area-bg-surface);
+  }
+  /* Framed columns keep ChatGPT's card inset for the text: 12 from the top (5 + the row's 7 above a 20 line) and
+     16 from the side (10 + the term's 6). */
+  .area-description-list--framed.area-description-list--columns { padding: 5px 10px; /* spec */ }
+}

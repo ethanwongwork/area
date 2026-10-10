@@ -188,6 +188,67 @@ export const COMPONENT_PAGES = [
     ],
   },
   {
+    slug: "meter", name: "Meter", exportName: "Meter", manifest: "meter",
+    imports: "Meter",
+    api: [
+      ["value / min / max", "number (clamped to the range)", "— / 0 / 100"],
+      ["label / description", "ReactNode (names the meter) / ReactNode (a line under the bar)", "—"],
+      ["valueText", "ReactNode | null (end of the label's row; a string is announced)", "the percentage"],
+      ["tone / size", "\"neutral\" | \"warning\" | \"danger\" / \"sm\" | \"md\" | \"lg\" (Progress's bar)", "neutral / md"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "A measurement in a range, not a task in progress (that is Progress). The label names it; the row under it says what the number means.", demo: "GalleryMeter" },
+      { id: "warning", title: "Near a limit", note: "tone=\"warning\" or \"danger\" when the value means trouble; say so in the text too, since color alone is not read.", demo: "GalleryMeterWarning" },
+    ],
+  },
+  {
+    slug: "description-list", name: "Description list", exportName: "DescriptionList", manifest: "descriptionList",
+    imports: "DescriptionList, DescriptionListItem",
+    api: [
+      ["layout", "\"columns\" (a term column, Notion's properties) | \"justified\" (term at the start, value at the end, ChatGPT's settings)", "columns"],
+      ["divided / framed", "boolean (a rule between rows) / boolean (Table's frame)", "—"],
+      ["DescriptionListItem", "term (ReactNode), icon (16px, decorative), children (the value), and native div props", "—"],
+      ["--area-description-list-term", "CSS length: the term column's width (columns)", "160px"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "A dl of term and value pairs. Terms sit in a 160px column in the muted ink, with an optional icon; values follow in the default ink and wrap.", demo: "GalleryDescriptionList" },
+      { id: "framed", title: "Framed", note: "layout=\"justified\" with divided and framed: facts in a settings page, each value at the row's end.", demo: "GalleryDescriptionListFramed" },
+      { id: "rich", title: "Rich values", note: "A value can be any content: a Badge, a person, a Link.", demo: "GalleryDescriptionListRich" },
+    ],
+  },
+  {
+    slug: "toggle-group", name: "Toggle group", exportName: "ToggleGroup", manifest: "toggleGroup",
+    imports: "ToggleGroup, ToggleGroupItem",
+    api: [
+      ["value / defaultValue / onValueChange", "string[] (the pressed toggles' values), controlled or not", "[]"],
+      ["selectionMode", "\"multiple\" (any number) | \"single\" (at most one; press again to release)", "multiple"],
+      ["variant / size", "\"soft\" | \"outline\" (joined) | \"ghost\" (apart, as a Toolbar group) / \"sm\" | \"md\" | \"lg\"", "soft / md"],
+      ["fullWidth / disabled", "boolean / boolean (every toggle)", "—"],
+      ["ToggleGroupItem", "value, children (the name; with iconOnly it is read, not shown), icon, iconOnly, disabled, and Button's native props", "—"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "Any number pressed. Tab reaches the group once; arrow keys move between toggles, Space or Enter presses one. Name the group with aria-label.", demo: "GalleryToggleGroup" },
+      { id: "single", title: "At most one", note: "selectionMode=\"single\" for an either-or that may also be neither: pressing the pressed toggle releases it. A choice that always has an answer is a Segmented.", demo: "GalleryToggleGroupSingle" },
+      { id: "toolbar", title: "In a toolbar", note: "Use the ghost variant. Its toggles become the toolbar's items, so the whole bar is one Tab stop.", demo: "GalleryToggleGroupToolbar" },
+    ],
+  },
+  {
+    slug: "empty-state", name: "Empty state", exportName: "EmptyState", manifest: "emptyState",
+    imports: "EmptyState, Button",
+    api: [
+      ["title / description", "ReactNode (a few words / one or two sentences)", "—"],
+      ["icon", "ReactNode (an Area icon at 24 for md, 20 for sm; decorative)", "—"],
+      ["actions", "ReactNode (one or two Buttons, or a Link)", "—"],
+      ["size", "\"sm\" (a panel, list or popover) | \"md\" (a page or main region)", "md"],
+      ["titleAs", "\"h2\" … \"h6\" | \"p\" (the title's element)", "h2"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "Say what is missing in the title and how it fills in the line under it. The icon is decorative; the title is a heading at the page's next level.", demo: "GalleryEmptyState" },
+      { id: "actions", title: "With actions", note: "One or two Buttons, the main one first. Leave them out when the region fills on its own.", demo: "GalleryEmptyStateActions" },
+      { id: "sm", title: "In a panel", note: "size=\"sm\" for a panel, list or popover: the UI type and a smaller tile.", demo: "GalleryEmptyStateSm" },
+    ],
+  },
+  {
     slug: "toggletip", name: "Toggletip", exportName: "Toggletip", manifest: "toggletip",
     imports: "Toggletip",
     api: [

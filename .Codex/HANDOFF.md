@@ -1,9 +1,71 @@
-# Handoff — 2026-10-09
+# Handoff — 2026-10-10
 
 Each session starts from `main` in its own worktree (`claude/*` branch) and merges through a
 pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/docs/src/component-status.mjs` (Indicator and Tooltip are Complete).
+
+## Review round 6 → 7 (2026-10-10, same branch)
+
+- Round 6 (`components6`): Toggle group approved (Complete). Meter "needs changes": "are the type sizes too small? is
+  the gaps/spacing consistent with current area components" → laid out as a Field: label and value (now the UI type,
+  14/20 muted, was 12/16) on one row, the bar, the description under it in Field's description type, each `ui-stack`
+  apart (6, 4 compact; were ChatGPT's 4 and 5). Still in review; owner: "go with your recommendations, then open a PR
+  and merge it". Round-6 captures in `meter/before/`.
+
+## Meter (2026-10-10, same branch)
+
+- After the round-6 rethink, "keep building" → Meter (next tier of the gap audit). In review. `Meter` (`value`, `min`,
+  `max`, `label`, `description`, `valueText`, `tone` neutral / warning / danger, `size`; `role="meter"`) over Progress's
+  bar, `meter.css`, 7 tiles, docs entry, tests. Evidence: ChatGPT Settings › Usage (read-only), Figma's usage card
+  from the Progress spec. Circular meter and Stepper remain on the list; editable text waits for the Chrome window.
+
+## Review round 5 → 6 (2026-10-10, same branch)
+
+- Round 5 (`components5`): Empty state and Description list approved (Complete). Toggle group "rethink": "should there
+  be strokes around it? are the hover states correct?" → soft was ButtonGroup soft, hover one rung from rest (247 →
+  243), pressed one more (238); soft is now Segmented's track (hairline, hover wash, pressed raised white plate, any
+  number raised); outline and ghost unchanged. Round 6 (`components6`) shows it against a round-5 Before (current dist
+  with the round-5 area.css and the old soft classes patched in).
+- Tooling: the built-in pane reports `visibilityState` hidden, so CSS transitions don't finish there: inject
+  `*{transition:none!important}` before reading computed colours, and cache-bust stylesheets after a rebuild. The dev
+  server (`npm run dev`) served an empty page twice this session; serving `apps/docs/dist` statically after
+  `build:docs` works. `git mv -k` silently skips untracked files.
+
+## Description list (2026-10-10, same branch)
+
+- Owner: "go with your recommendations, keep building" → Description list (editable inline text is next on the list
+  but needs its edit mode captured with Chrome's window in front; Notion's Library rename was seen in passing and is in
+  the baseline). In review. `DescriptionList` (`dl`; `layout` columns / justified, `divided`, `framed`) and
+  `DescriptionListItem` (`term`, `icon`, value as children), `description-list.css`, 6 tiles, docs entry, tests.
+- Evidence: Notion page properties (a "tasks" page opened by its link) and ChatGPT Settings › Account, read-only and
+  redacted. Copying out of Notion needs a window-level capture `copy` listener (Notion's own copy handler empties a
+  textarea copy).
+
+## Toggle group (2026-10-10, same branch)
+
+- Owner: "keep building" → Toggle group (next tier of the gap audit; SliderRange already covers the range slider). In
+  review. `ToggleGroup` / `ToggleGroupItem` (`value` / `defaultValue` / `onValueChange` string[], `selectionMode`
+  multiple / single with release, `variant` soft / outline joined through ButtonGroup's classes or ghost 8 apart,
+  `size`, `fullWidth`, `disabled`; one Tab stop and arrow keys, or the Toolbar's roving inside a Toolbar),
+  `toggle-group.css`, 10 tiles, docs entry, `toggle-group.test.mjs`.
+- Evidence is design-system only (Untitled UI's ButtonGroup is a React Aria toggle group; shadcn / Radix ToggleGroup).
+  Notion's formatting bar was not captured: with Chrome's window hidden a double-click in the page opened its block
+  menu (nothing changed, page still "Edited 2h ago"); don't drive Notion's editor blind.
+
+## Empty state (2026-10-10, branch `claude/next-component-537b57`)
+
+- Owner: "work on the next component" → Empty state (the twelve gap-audit priorities are built; the next tier was
+  Link, EmptyState, Pagination). In review. `EmptyState` (icon on a soft tile, title as `titleAs` h2…p, muted
+  description, actions; `size` md / sm), `empty-state.css`, 6 tiles, docs entry, `empty-state.test.mjs`.
+- Evidence: ChatGPT Space › Trash / Sites / Favorites (md: 48 tile, 18/24 title, 16 / 8 / 16), Notion Library ›
+  Favorites / Skills / no-match (sm: 14/20 title, 12 / 2 / 8), Figma file browser (one 11/16 line); all redacted,
+  read-only, light only. Untitled UI, shadcn and Primer sources pinned in the spec. Open questions resolved as
+  recommended (owner): File upload keeps its edged tile, sm keeps a tile, the title stays in the default ink.
+- Review page republished (same link), round 5: ArtifactData `components5`, Before = main at 3bcc6a9.
+- Tooling: Chrome reported `visibilityState` hidden all session (rest captures fine, no hover); full navigations drop
+  injected scripts, so stay on in-app navigation between captures; the extension blocks base64 results, use the
+  execCommand copy button. Area captures can go out through a local relay (`fetch` from localhost to 127.0.0.1 works).
 
 ## Review round 3 (2026-10-09, same branch)
 
