@@ -32,7 +32,7 @@ The manifest and React exports are authoritative for supported API; the gallery 
 actual specimens. Current families include:
 
 - Actions and choices: Button, ButtonGroup, SplitButton, Toolbar, Checkbox/CheckboxGroup,
-  Radio/RadioGroup, Switch, Slider/SliderRange, Chip/ChipGroup, Segmented and AlignmentPicker.
+  Radio/RadioGroup, Switch, Slider/SliderRange, Chip/ChipGroup, Segmented, ToggleGroup (in review, 2026-10-10: a set of toggle Buttons, any number or at most one pressed) and AlignmentPicker.
 - Forms: Field, Input/InputAction, InputGroup/InputGroupText, NumberField, BoxField, Textarea,
   Composer, native Select, Combobox, CustomSelect, TagPicker, DatePicker, ConfirmDialog, Drawer (in review, 2026-10-05), ColorField, ColorSwatch, ColorSwatchPicker, ColorPicker,
   Calendar, PropertyList and FileUpload (in review, 2026-10-09: drop zone and upload rows).
@@ -43,7 +43,8 @@ actual specimens. Current families include:
 - Labels and identity: Badge/BadgeGroup, Count, Indicator/IndicatorAnchor, Presence (the
   status mark, audit H-25), Avatar, Kbd/KbdGroup and Code (Token is deprecated: use `<Code swatch>`).
 - Feedback: Alert (with the banner layout), Toast, Tooltip, Toggletip (in review, 2026-10-09: an info or help
-  button beside a label whose note previews on hover and focus and pins on a press), Progress, Spinner and Skeleton.
+  button beside a label whose note previews on hover and focus and pins on a press), EmptyState (in review, 2026-10-10: icon tile, title, muted line and
+  actions for a region with nothing in it; md after ChatGPT, sm after Notion), Progress, Spinner and Skeleton.
 - Structure and content: Card, Panel (with `resizable`), Dialog, Popover, HoverCard, ScrollArea (in review, 2026-10-09),
   Separator, Table and CodeBlock.
 - Conversation: Message/MessageActions, PromptSuggestions, ModelPicker and ScrollToLatest.
@@ -142,8 +143,8 @@ built next; this list is an inventory, not an order of work.
   Splitter and responsive layout primitives (HoverCard, Panel `resizable` and ScrollArea are
   built). PageHeader, Sidebar,
   application shell and dockable inspector are compositions.
-- **Data and feedback:** DescriptionList, Stat, Timeline, EmptyState, Result/ErrorState,
-  Meter (Banner is built as an Alert layout), circular Progress, live notification queue, DataGrid and TreeGrid.
+- **Data and feedback:** DescriptionList [built 2026-10-10], Stat, Timeline, EmptyState [built 2026-10-10], Result/ErrorState,
+  Meter [built 2026-10-10] (Banner is built as an Alert layout), circular Progress, live notification queue, DataGrid and TreeGrid.
   DataGrid needs editing, resizing, selection and virtualization contracts beyond Table.
 - **Content and advanced tools:** image/media preview, Carousel, rich text and code-editor
   integrations, charts, gradient editor, easing/curve editor and shortcut recorder.
@@ -164,6 +165,8 @@ built since are noted in brackets.
   tag mode → Menu keyboard, submenus, ContextMenu and CommandPalette → ColorPicker paints →
   Disclosure/Accordion → DatePicker family → Resizable and ScrollArea → Drawer and
   AlertDialog → chat message primitives → FileUpload [built 2026-10-09] → HoverCard and Toggletip [built 2026-10-09].
+  Next tier: Link and Pagination [built 2026-10-08], EmptyState, Toggle group, DescriptionList and Meter [built 2026-10-10];
+  editable inline text waits for product captures of its edit mode.
 ### Count and Banner, from the 2026-09-27 survey (built 2026-09-28, Complete)
 
 [Survey](research/split-count-banner-survey.md):
@@ -208,7 +211,7 @@ catalogue names. Each would be measured in its product like every other componen
   AlignmentPicker), UnitField (px / % / auto switch inside a NumberField), FontPicker
   (Combobox with previews and weight axis), VariableChip (a bound token in a field, detach
   on hover).
-- **Shared and small:** SearchField (clear, shortcut hint), EmptyState, KeyboardShortcut
+- **Shared and small:** SearchField (clear, shortcut hint), EmptyState (built 2026-10-10), KeyboardShortcut
   overlay (a sheet of Kbd groups), Pagination, Stepper, Meter, circular Progress, ScrollArea (built 2026-10-09),
   Splitter (two resizable regions), Sheet / Drawer, Banner, Stat, DescriptionList,
   DateField / Calendar / DatePicker.

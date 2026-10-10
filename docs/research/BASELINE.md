@@ -124,4 +124,16 @@ captures. Promote an agreement into Area only through a spec's decision table.
   info button, #8f8f8f, 4 after the label; Notion a 16 "?", rgb(173, 169, 163), 6 after) and show the note on their
   dark tooltip 6 from the mark, on hover only (ChatGPT also on focus; a press does not pin it). Neither plates the mark;
   ChatGPT darkens it on hover (`toggletip/chatgpt--*`, `toggletip/notion--*`; Figma: none found in the file browser).
-
+- 2026-10-10 (Empty state): ChatGPT centres a 48 soft tile (#f3f3f3, corner 12, 24 glyph in the default ink), an 18/24
+  500 title, a 14/20 muted line (#5d5d5d) and a pill button, 16 / 8 / 16 apart, in a 576 column. Notion is quieter: a
+  bare 32 muted glyph, a 14/20 500 title in the same muted ink as its 14/20 line, 12 / 2 apart, a 340 column. Figma's
+  file browser shows one 11/16 450 line at 50% black. All three agree on a 14/20 (Figma 11/16) muted line under a
+  500-weight title (`empty-state/*`).
+- 2026-10-10 (Description list): Notion's page properties are 34 rows 4 apart, a 160 name column (padding 6, a 16 icon
+  in an 18 box, 6 to the name, 14/20 muted rgb(125, 122, 117)), the value's text at 174 in the default ink ("Empty" in
+  rgb(161, 158, 153)). ChatGPT's settings card: rows padded 12 / 16, the term 14/20 500 in the default ink, the value at
+  the end, 1px rgba(0, 0, 0, 0.1) rules inset 16, a 1px frame of the same ink, corner 16 (`description-list/*`). Notion's
+  Library rename (seen in passing): a floating 392 × 38 field, corner 6, popover shadow with a 1px ring, padding 8 / 9.
+- 2026-10-10 (Meter): ChatGPT's usage meter is a label 14/20 500, 4 below it a 12/16 rgb(93) line (reset time at the
+  start, "60% left" at the end), 5 below that a 6px pill `<progress>`: track its ink at 10%, value #0d0d0d
+  (`meter/chatgpt--usage`).

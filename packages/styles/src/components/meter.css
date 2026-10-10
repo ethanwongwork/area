@@ -1,0 +1,36 @@
+/* ---------------------------------------------------------------------------
+ * Meter
+ *
+ * A value within a known range, such as usage against a limit or storage used
+ * (docs/specs/meter.md). Not Progress: a meter is a measurement that can sit anywhere in its
+ * range, not a task moving to done. Laid out as a Field (owner, review round 6: "are the type
+ * sizes too small? is the gaps/spacing consistent with current area components"): the label
+ * and the value on one row in the UI type, the bar under it, a description under the bar in
+ * Field's description type, each the Field stack apart. The bar is Progress's.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-meter {
+    display: flex;
+    flex-direction: column;
+    /* spec: Field's stack, 6 (4 in compact), between the label row, the bar and the description. */
+    gap: var(--area-ui-stack);
+    min-inline-size: 0;
+    color: var(--area-fg-default);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+  }
+  /* The label and the value share the row: the value at its end (Spectrum, React Aria; Figma's card leads with it). */
+  .area-meter__header { display: flex; justify-content: space-between; align-items: baseline; gap: var(--area-space-12); }
+  /* spec: Field's label and ChatGPT's, 14/20 500 in the default ink. */
+  .area-meter__label { min-inline-size: 0; margin: 0; font-weight: var(--area-weight-strong); }
+  /* spec: the UI type in the muted ink with tabular numbers, as File upload's percentage takes the UI type. */
+  .area-meter__value { flex: none; margin-inline-start: auto; color: var(--area-fg-muted); font-variant-numeric: tabular-nums; }
+  /* spec: Field's description, 12/16 muted, under the bar (Figma's caption sits under its bar too). */
+  .area-meter__description { margin: 0; color: var(--area-fg-muted); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); }
+
+  /* Tones: the fill takes the status's solid when the value means something (Spectrum Meter's notice / negative). */
+  .area-meter--neutral { --_meter-fill: var(--area-selection-solid); }
+  .area-meter--warning { --_meter-fill: var(--area-warning-solid); }
+  .area-meter--danger { --_meter-fill: var(--area-danger-solid); }
+  .area-meter > .area-meter__track { --_progress-fill: var(--_meter-fill); }
+}

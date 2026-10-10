@@ -63,6 +63,14 @@ export const buttonGroup = {
   defaults: { variant: "soft", size: "md" },
 } as const satisfies ComponentManifest;
 
+export const toggleGroup = {
+  block: "area-toggle-group",
+  description: "Keeps a set of toggle buttons: any number pressed, or at most one.",
+  variants: { variant: ["soft", "outline", "ghost"], size: ["sm", "md", "lg"] },
+  booleans: ["full-width"],
+  defaults: { variant: "soft", size: "md" },
+} as const satisfies ComponentManifest;
+
 export const splitButton = {
   block: "area-split-button",
   description: "Joins a default action to a menu of related actions.",
@@ -201,6 +209,31 @@ export const fileUploadItem = {
   variants: { status: ["uploading", "complete", "error"] },
   elements: ["icon", "body", "header", "text", "name", "meta", "separator", "status", "actions", "progress", "percent"],
   defaults: { status: "uploading" },
+} as const satisfies ComponentManifest;
+
+export const meter = {
+  block: "area-meter",
+  description: "Shows a value within a known range, such as usage against a limit.",
+  variants: { tone: ["neutral", "warning", "danger"] },
+  elements: ["header", "label", "value", "track", "description"],
+  defaults: { tone: "neutral" },
+} as const satisfies ComponentManifest;
+
+export const descriptionList = {
+  block: "area-description-list",
+  description: "Lists labelled values: a term and its value per row.",
+  variants: { layout: ["columns", "justified"] },
+  booleans: ["divided", "framed"],
+  elements: ["item", "term", "icon", "value"],
+  defaults: { layout: "columns" },
+} as const satisfies ComponentManifest;
+
+export const emptyState = {
+  block: "area-empty-state",
+  description: "Says a region has nothing to show yet, and how to fill it.",
+  variants: { size: ["sm", "md"] },
+  elements: ["icon", "content", "title", "description", "actions"],
+  defaults: { size: "md" },
 } as const satisfies ComponentManifest;
 
 export const scrollArea = {
@@ -856,6 +889,10 @@ export const MANIFESTS = {
   fileUpload,
   fileUploadList,
   fileUploadItem,
+  emptyState,
+  toggleGroup,
+  descriptionList,
+  meter,
   scrollArea,
   link,
   toggletip,
