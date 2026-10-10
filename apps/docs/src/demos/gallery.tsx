@@ -892,7 +892,9 @@ const resizeStage: CSSProperties = { display: "flex", inlineSize: 520, maxInline
 const resizeCanvas: CSSProperties = { flex: 1, minInlineSize: 0, background: "var(--area-bg-subtle)" };
 const ResizableRows = () => <>
   <PanelSection heading="Layout">
-    <PanelRow label="Dimensions">
+    {/* The action column is reserved on every row (actionColumn), so Dimensions carries Figma's constrain toggle
+        there; empty, it read as a wide right margin (owner, review round 2, 2026-10-09). */}
+    <PanelRow label="Dimensions" action={inspectorButton("Constrain proportions", <AspectRatioIcon />)}>
       <NumberField size="sm" variant="soft" fullWidth aria-label="Width" defaultValue={1202} min={0} grouping={false} scrub="W" />
       <NumberField size="sm" variant="soft" fullWidth aria-label="Height" defaultValue={815} min={0} grouping={false} scrub="H" />
     </PanelRow>

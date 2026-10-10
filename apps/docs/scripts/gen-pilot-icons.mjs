@@ -22,7 +22,7 @@ const GLYPHS_OUT = join(ROOT, "../../packages/react/src/components/glyphs.ts");
 // Pilot icons that components draw themselves, replacing Fluent family by family
 // (docs/specs/icons.md, "Components"). A glyph is a whole icon, or one element of one
 // (check-inset is the check inside the Available ring, for boxed checks).
-const PACKAGE_GLYPHS = { "add": ["add"], "arrow-up": ["arrow-up"], "check": ["check"], "check-inset": ["status-available", 1], "chevron-down": ["chevron-down"], "dismiss": ["dismiss"], "grip": ["grip"], "subtract": ["subtract"], "corner": ["corner"], "corners": ["corners"], "padding-side": ["padding-side"], "padding-axis": ["padding-axis"], "sides": ["sides"], "search": ["search"], "stop": ["stop", undefined, "solid"], "more": ["more-horizontal"], "open": ["open"], "upload": ["upload"], "document": ["document"], "reset": ["reset"] };
+const PACKAGE_GLYPHS = { "add": ["add"], "arrow-up": ["arrow-up"], "check": ["check"], "check-inset": ["status-available", 1], "chevron-down": ["chevron-down"], "dismiss": ["dismiss"], "grip": ["grip"], "subtract": ["subtract"], "corner": ["corner"], "corners": ["corners"], "padding-side": ["padding-side"], "padding-axis": ["padding-axis"], "sides": ["sides"], "search": ["search"], "stop": ["stop", undefined, "solid"], "more": ["more-horizontal"], "open": ["open"], "upload": ["upload"], "document": ["document"], "reset": ["reset"], "info": ["info"], "help": ["help"] };
 const LIVE = [1.5, 14.5];      // stroke centrelines stay inside this box (ink 0.94–15.06 at 1.125px)
 const LIVE_FILL = [1, 15];     // filled shapes (dots) stay inside this box
 const WEIGHT = 1.125;          // --area-weight-icon; keylines and gaps are judged at this weight
@@ -827,14 +827,18 @@ const circleD = ({ cx, cy, r }) => {
   return `M${x - rr} ${y}A${rr} ${rr} 0 1 0 ${x + rr} ${y}A${rr} ${rr} 0 1 0 ${x - rr} ${y}Z`;
 };
 const glyphPaint = {};
+// A line drawing may carry filled dots (the i's dot, the ?'s point): their indexes, painted as fills.
+const glyphFills = {};
 const glyphData = Object.fromEntries(Object.entries(PACKAGE_GLYPHS).map(([glyph, [source, index, paint]]) => {
   const icon = icons.find(i => i.name === source);
   if (!icon) throw new Error(`glyph ${glyph}: no pilot icon ${source}`);
   const elements = (index === undefined ? icon.elements : [icon.elements[index]]).filter(el => !el.filledOnly);
-  const dots = elements.every(el => !el.stroked && el.tag === "circle");
-  if (!dots && elements.some(el => !el.stroked || (el.tag !== "path" && el.tag !== "rect"))) throw new Error(`glyph ${glyph}: only stroked paths and rects, or filled circles alone, are supported`);
+  const dot = el => !el.stroked && el.tag === "circle";
+  const dots = elements.every(dot);
+  if (!dots && elements.some(el => !dot(el) && (!el.stroked || !["path", "rect", "circle"].includes(el.tag)))) throw new Error(`glyph ${glyph}: only stroked paths, rects and circles, with filled dots, are supported`);
   if (dots) glyphPaint[glyph] = "fill";
   else if (paint === "solid") glyphPaint[glyph] = "solid";
+  else if (elements.some(dot)) glyphFills[glyph] = elements.flatMap((el, i) => dot(el) ? [i] : []);
   return [glyph, elements.map(el => el.tag === "rect" ? rectD(el.attrs) : el.tag === "circle" ? circleD(el.attrs) : el.attrs.d)];
 }));
 writeFileSync(GLYPHS_OUT, `/** Area-drawn component glyphs, generated from apps/docs/assets/area-icons-pilot by
@@ -845,5 +849,7 @@ export type GlyphName = keyof typeof glyphs;
 /** Glyphs that are not line drawings: "solid" also fills inside the centre-line (the filled
  * variant's solid role); "fill" is filled shapes with no stroke (dots). */
 export const glyphPaint: Partial<Record<GlyphName, "solid" | "fill">> = ${JSON.stringify(glyphPaint)};
+/** Filled dots inside a line drawing, by path index (the i's dot, the ?'s point). */
+export const glyphFills: Partial<Record<GlyphName, readonly number[]>> = ${JSON.stringify(glyphFills)};
 `);
 console.log("wrote packages/react/src/components/glyphs.ts");

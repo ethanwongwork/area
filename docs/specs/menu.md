@@ -185,6 +185,11 @@ Open questions:
   in the field), so the keyboard rule above does not reach them and the row left behind fades
   over 100. Recommendation: each owner adds the same rule keyed on its own keyboard state.
 
+## Review note, 2026-10-09
+
+- **What changed:** Section titles in menus whose rows have no icon now start where the row text starts (11px in), not 3px short of it (8px). Menus whose rows lead with an icon, like Command palette, keep the title on the icon, as Notion's palette does.
+- **Why:** You asked for the titles to line up with the row text; they sat 3px left of it.
+
 ## Feedback log
 
 - 2026-09-26 · owner: "build the next component" → Menu evidence pass: label column 36,
@@ -216,3 +221,5 @@ Open questions:
 - 2026-10-04 · pill shapes and list rows (owner) → rows use `radius-list-row` (no rounder than a medium Button, a pill only at Pill) and the menu `radius-list` (rows + 4): 12 / 8 at the default, 16 / 12 at 12, 20 / 16 at Pill (owner: menu rows wait for Pill) (`surface.css`). `docs/research/radius-audit-2026-10-03.md`, "Pill shapes and list rows".
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → row plate in at once and out on `fast`, instant both ways under keyboard focus; menu checks fade and grow from 0.6 on `fast`; close one step faster than open (`surface.css`).
 - 2026-10-09 · owner went with Scroll area's recommendation to adopt it in the scrolling families (docs/specs/scroll-area.md, "Adoption") → the scroll container is a Scroll area: Figma's overlay bar instead of the platform's, its inset moved into the scroller so rows keep their place → back in review.
+- 2026-10-09 · owner, review round 2 (needs changes): "the small section titles in the menu should line up with the
+  text in the rows?" → open; the label takes the rows' own text inset (11 at 32) over text-only rows; over icon rows it stays on the icon column → inset.css, surface.css (`.area-menu__label-text`), MenuLabel, Combobox, CustomSelect, CommandPalette, TagPicker.

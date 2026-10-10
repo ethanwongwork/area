@@ -1,0 +1,75 @@
+/* ---------------------------------------------------------------------------
+ * Toggletip
+ *
+ * A short note behind a small info or help button beside a label. The button is a square box
+ * exactly one text line tall, so it sits in the label's line without moving it; the note is
+ * Tooltip's surface, which wraps. docs/specs/toggletip.md.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-toggletip {
+    /* spec: the box is the line it sits in (14/20 → 20; compact 12/16 → 16), so a label with the
+       button keeps its height (Fluent's 24 box overhangs a 20 line by 2 each side). */
+    --_box: var(--area-ui-leading);
+    /* spec: a 16 mark beside 14/20 text (Notion, Fluent md, Carbon, Untitled UI); compact 12, as sm. */
+    --_icon: calc(var(--area-icon-sm) - var(--area-space-4) * var(--area-ui-dense));
+
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    inline-size: var(--_box);
+    block-size: var(--_box);
+    margin: 0;
+    padding: 0;
+    border: 0;
+    /* The control corner for this height, as Tag's: 4 on the 20 box at the default radius (Spectrum 6 on 20). */
+    border-radius: max(var(--area-radius-min), round(down, calc(var(--_box) * var(--area-radius-factor)), 2px));
+    background: transparent;
+    /* spec: a quiet mark, the field chevrons' ink (stroke-control, #838383 light): ChatGPT #8f8f8f,
+       Notion rgb(173, 169, 163), Untitled UI's quaternary. Fixed on hover; the plate moves. */
+    color: var(--area-input-chevron);
+    /* In running text the box takes the line box's top, so it fills the line instead of standing on the baseline. */
+    vertical-align: top;
+    cursor: pointer;
+    /* Motion (docs/MOTION.md, "Hover plate"): the plate lands at once and fades on fast ease-out. */
+    transition: var(--area-transition);
+    transition-property: background-color;
+  }
+
+  .area-toggletip--md {
+    --_box: var(--area-ui-leading);
+    --_icon: calc(var(--area-icon-sm) - var(--area-space-4) * var(--area-ui-dense));
+  }
+
+  /* spec: beside a 12/16 caption, a 12 mark in a 16 box (ChatGPT's 12 mark; Fluent sm 12 in 20). */
+  .area-toggletip--sm {
+    --_box: var(--area-text-xs-leading);
+    --_icon: var(--area-icon-xs);
+  }
+
+  .area-toggletip > svg { inline-size: var(--_icon); block-size: var(--_icon); }
+  /* The md mark is drawn at 16 and shown at 12 in compact: keep the 12px line of the size curve (base.css). */
+  .area-toggletip--md > svg path { stroke-width: calc(var(--area-weight-icon) * (1 + 0.1715 * var(--area-ui-dense))); }
+
+  /* Hover: the neutral ghost Button's plate (bg-component-hover, the row plate), the ink fixed
+     (ChatGPT, Fluent and Untitled darken the ink instead; Spectrum plates). Pressed and pinned keep
+     the pressed plate, as an open menu trigger. */
+  @media (hover: hover) {
+    .area-toggletip:hover { background-color: var(--area-bg-component-hover); transition-duration: 0s; }
+  }
+  .area-toggletip:active,
+  .area-toggletip[aria-expanded="true"] { background-color: var(--area-bg-component-active); transition-duration: 0s; }
+  .area-toggletip:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: 0; }
+
+  /* An invisible 24px target (44 on coarse pointers) centred on the box (WCAG 2.5.8), as Tag's remove. */
+  .area-toggletip::after { content: ""; position: absolute; inset: 50% auto auto 50%; translate: -50% -50%; inline-size: var(--area-space-24); block-size: var(--area-space-24); }
+  @media (pointer: coarse) {
+    .area-toggletip::after { inline-size: calc(var(--area-space-40) + var(--area-space-4)); block-size: calc(var(--area-space-40) + var(--area-space-4)); }
+  }
+
+  /* The note is Tooltip's surface (inverse, 10 corner, 4 / 10 inset, 288 wide): ChatGPT and Notion
+     show these notes on their tooltip, Carbon on its dark one. A sentence and a link flow as text, so
+     it is a block; untrimmed, as Tooltip's flex box is, so each line keeps Tooltip's 28 rhythm
+     (two lines 48: ChatGPT's two-line note 48). */
+  .area-tooltip.area-toggletip__surface { display: block; text-box: none; text-wrap: pretty; }
+}

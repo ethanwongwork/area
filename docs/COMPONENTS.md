@@ -42,7 +42,8 @@ actual specimens. Current families include:
   and Link (in review, 2026-10-08: inline or standalone, inherited, muted or Action ink, external).
 - Labels and identity: Badge/BadgeGroup, Count, Indicator/IndicatorAnchor, Presence (the
   status mark, audit H-25), Avatar, Kbd/KbdGroup and Code (Token is deprecated: use `<Code swatch>`).
-- Feedback: Alert (with the banner layout), Toast, Tooltip, Progress, Spinner and Skeleton.
+- Feedback: Alert (with the banner layout), Toast, Tooltip, Toggletip (in review, 2026-10-09: an info or help
+  button beside a label whose note previews on hover and focus and pins on a press), Progress, Spinner and Skeleton.
 - Structure and content: Card, Panel (with `resizable`), Dialog, Popover, HoverCard, ScrollArea (in review, 2026-10-09),
   Separator, Table and CodeBlock.
 - Conversation: Message/MessageActions, PromptSuggestions, ModelPicker and ScrollToLatest.
@@ -162,7 +163,7 @@ built since are noted in brackets.
 - **Recommended order** (owner chooses): overlay behavior → custom Select → Combobox with a
   tag mode → Menu keyboard, submenus, ContextMenu and CommandPalette → ColorPicker paints →
   Disclosure/Accordion → DatePicker family → Resizable and ScrollArea → Drawer and
-  AlertDialog → chat message primitives → FileUpload [built 2026-10-09] → HoverCard and Toggletip.
+  AlertDialog → chat message primitives → FileUpload [built 2026-10-09] → HoverCard and Toggletip [built 2026-10-09].
 ### Count and Banner, from the 2026-09-27 survey (built 2026-09-28, Complete)
 
 [Survey](research/split-count-banner-survey.md):

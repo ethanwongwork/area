@@ -226,6 +226,11 @@ Open questions:
 - Reveal-on-hover is not hover feedback, so it keeps a `fast` fade both ways. Recommendation:
   keep, as one timing for every reveal (Notion fades its card toolbar).
 
+## Review note, 2026-10-09
+
+- **What changed:** The underline under a card's action link is now the link's own colour at rest (it was 40%), matching Link. No gallery tile shows a card action yet, so every tile reads unchanged.
+- **Why:** Link's line changed in this round, and Card's action draws Link's line.
+
 ## Feedback log
 
 - 2026-09-28 · owner: text and buttons offset, less offset from images, corner from the button,

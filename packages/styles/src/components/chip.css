@@ -54,6 +54,9 @@
     font-size: var(--_text);
     line-height: var(--_leading);
     white-space: nowrap;
+    /* A link chip is an <a>: the browser's underline would sit under the label's own (owner, review round 3,
+       2026-10-09: "the link underline is doubled"; the docs site's link reset hid it in the gallery). */
+    text-decoration: none;
     cursor: pointer;
     user-select: none;
     transition: var(--area-transition);
@@ -189,11 +192,11 @@
 
   .area-chip__image > img { object-fit: cover; }
 
-  /* Link's underline (docs/specs/link.md, peers aligned 2026-10-08): 40% of the ink at rest, full ink when
-     the chip is hovered or focused. */
+  /* Link's underline (docs/specs/link.md): the link's own ink, one stroke 2 below (40% at rest until review
+     round 2, 2026-10-09). */
   .area-chip--link .area-chip__label {
     text-decoration: underline;
-    text-decoration-color: color-mix(in oklab, currentColor 40%, transparent); /* spec */
+    text-decoration-color: currentColor; /* spec: Link's line, the link's own ink (link.md, review round 2) */
     text-decoration-thickness: var(--area-stroke-width);
     text-underline-offset: var(--area-space-2);
   }

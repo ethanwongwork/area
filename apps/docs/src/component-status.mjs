@@ -19,8 +19,7 @@ export const COMPLETE_COMPONENTS = new Set([
   'calendar',
   // Approved 2026-09-28 (batch 8; number-field and box-field were already approved).
   // Approved 2026-09-28 (batch 11: 6px keycap everywhere, no stroke, plain menu shortcuts).
-  'kbd',
-  // Approved 2026-09-28 (batch 12; input-group was already approved).
+    // Approved 2026-09-28 (batch 12; input-group was already approved).
   'input', 'textarea',
   // Approved 2026-09-28 (batch 14: cards, sm removed, lighter Switch off track).
   'checkbox', 'radio', 'switch',
@@ -37,20 +36,21 @@ export const COMPLETE_COMPONENTS = new Set([
   'button', 'button-group', 'code',
   'color-field', 'color-picker', 'color-swatch', 'color-swatch-picker', 'composer',
   'dialog', 'field', 'input-group',
-  'number-field', 'popover', 'progress', 'property-list', 'select', 'separator', 'slider',
+  'popover', 'progress', 'select', 'separator', 'slider',
   'table', 'tabs', 'tooltip', 'tree-view',
   // Approved 2026-10-08 on the component review page (recommendations for open questions accepted).
   'accordion', 'alignment-picker', 'tag',
   // Approved 2026-10-08 after their requested changes.
-  'confirm-dialog', 'date-picker', ]);
+  'confirm-dialog', 'date-picker',
+  // Approved 2026-10-09 on the review page, round 2 (components2).
+  'pagination', 'scroll-area', 'toggletip', 'combobox', 'custom-select', 'tag-picker', 'drawer',
+  // Approved 2026-10-09 on the review page, round 3 (components3), after the round-2 feedback.
+  'link', 'file-upload', 'menu', 'command-palette', 'panel', 'alert', 'card', 'kbd', 'number-field', 'property-list',
+  // Approved 2026-10-09 on the review page, round 4 (components4): one underline on link chips.
+  'chip', ]);
 
 /** Built/refined and awaiting owner approval; not completion. */
-// alignment-picker reopened 2026-10-04: responsive grid, hover preview, sizes removed.
-// pagination: new 2026-10-08 (owner picked it as the next component); link: new 2026-10-08 ("move on to the next component");
-// alert, card and chip reopened 2026-10-08: their always-on underlines moved to Link's line (link.md).
-// menu, combobox, custom-select, tag-picker, command-palette, drawer and panel reopened 2026-10-09: their scroll
-// containers are Scroll areas (scroll-area.md, "Adoption").
-export const REVIEW_COMPONENTS = new Set(['pagination', 'link', 'scroll-area', 'file-upload', 'alert', 'card', 'chip', 'menu', 'combobox', 'custom-select', 'tag-picker', 'command-palette', 'drawer', 'panel']);
+export const REVIEW_COMPONENTS = new Set([]);
 export const componentStatus = slug => COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
 export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined' })[status];
 
@@ -95,6 +95,7 @@ export const APPROVAL_BATCHES = [
   { name: 'Page navigation', families: ['tabs', 'breadcrumb', 'pagination', 'link'] },
   { name: 'Scrolling', families: ['scroll-area'] },
   { name: 'Uploading', families: ['file-upload'] },
+  { name: 'Contextual help', families: ['toggletip'] },
   { name: 'Code and rules', families: ['code', 'code-block', 'separator'] },
   { name: 'Accordion', families: ['accordion'] },
 ];
@@ -107,23 +108,7 @@ export const batchOf = slug => APPROVAL_BATCHES.findIndex(batch => batch.familie
  * a family entry when it is built. Approval is still the owner's word, recorded in
  * COMPLETE_COMPONENTS.
  */
-export const REVIEW_BATCHES = [
-  {
-    name: 'New: Pagination, Link, Scroll area and File upload',
-    note: 'Built 2026-10-08 and 09: the two navigation gaps eight catalogues share, the overlay scrollbar and the drop zone with upload rows. Batch 1, Accordion and Alignment picker were approved on 2026-10-08.',
-    families: ['pagination', 'link', 'scroll-area', 'file-upload'],
-  },
-  {
-    name: "Link's underline in peers",
-    note: "Reopened 2026-10-08: Alert's link, Card's action and Chip's link label draw Link's line (40% of the ink at rest, full on hover and focus).",
-    families: ['alert', 'card', 'chip'],
-  },
-  {
-    name: 'Scroll area in scrolling surfaces',
-    note: "Reopened 2026-10-09: menus, the three list pickers, Command palette, Drawer and Panel scroll with Scroll area's overlay bar; rows keep their place.",
-    families: ['menu', 'combobox', 'custom-select', 'tag-picker', 'command-palette', 'drawer', 'panel'],
-  },
-];
+export const REVIEW_BATCHES = [];
 
 // Most recently designed first. Move a family to the front when its design is worked on.
-export const RECENT_COMPONENTS = ['file-upload', 'scroll-area', 'link', 'pagination', 'tag', 'drawer', 'confirm-dialog', 'date-picker', 'tag-picker', 'custom-select', 'accordion', 'badge-group', 'card', 'checkbox', 'radio', 'dialog', 'count', 'alert', 'toolbar', 'switch', 'code-block', 'chip', 'table', 'model-picker', 'scroll-to-latest', 'message', 'prompt-suggestions', 'hover-card', 'context-menu', 'command-palette', 'combobox', 'panel', 'composer', 'box-field', 'property-list', 'number-field', 'toast', 'popover', 'menu', 'split-button', 'button-group', 'button', 'tree-view', 'breadcrumb', 'tooltip', 'badge', 'indicator', 'icon-pilot', 'color-picker', 'color-swatch-picker', 'color-field', 'color-swatch', 'alignment-picker', 'input-group', 'avatar', 'input', 'nav', 'progress', 'segmented', 'select', 'skeleton', 'spinner', 'calendar'];
+export const RECENT_COMPONENTS = ['panel', 'link', 'file-upload', 'menu', 'command-palette', 'toggletip', 'scroll-area', 'pagination', 'tag', 'drawer', 'confirm-dialog', 'date-picker', 'tag-picker', 'custom-select', 'accordion', 'badge-group', 'card', 'checkbox', 'radio', 'dialog', 'count', 'alert', 'toolbar', 'switch', 'code-block', 'chip', 'table', 'model-picker', 'scroll-to-latest', 'message', 'prompt-suggestions', 'hover-card', 'context-menu', 'combobox', 'composer', 'box-field', 'property-list', 'number-field', 'toast', 'popover', 'split-button', 'button-group', 'button', 'tree-view', 'breadcrumb', 'tooltip', 'badge', 'indicator', 'icon-pilot', 'color-picker', 'color-swatch-picker', 'color-field', 'color-swatch', 'alignment-picker', 'input-group', 'avatar', 'input', 'nav', 'progress', 'segmented', 'select', 'skeleton', 'spinner', 'calendar'];

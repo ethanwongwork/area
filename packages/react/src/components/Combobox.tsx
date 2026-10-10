@@ -272,7 +272,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
       {listRows.length === 0 ? <div className="area-combobox__empty" role="presentation">{emptyText}</div> : null}
       {[...groups].map(([group, list]) => group
         ? <div key={group} role="group" aria-labelledby={`${id}-group-${group}`} className="area-combobox__group">
-            <div id={`${id}-group-${group}`} className="area-menu__label" role="presentation">{group}</div>
+            <div id={`${id}-group-${group}`} className="area-menu__label" role="presentation"><span className="area-menu__label-text">{group}</span></div>
             {list.map(renderRow)}
           </div>
         : list.map(renderRow))}

@@ -215,9 +215,19 @@ export const scrollArea = {
 export const link = {
   block: "area-link",
   description: "Goes to another page or place, inline in text or on its own.",
-  variants: { variant: ["inline", "standalone"], ink: ["inherit", "muted", "action"] },
+  variants: { variant: ["inline", "standalone"], ink: ["inherit", "muted", "action", "blue"] },
   elements: ["icon"],
   defaults: { variant: "inline", ink: "inherit" },
+} as const satisfies ComponentManifest;
+
+export const toggletip = {
+  block: "area-toggletip",
+  description: "Shows a short note about a label from a small info or help button.",
+  variants: { size: ["sm", "md"] },
+  // expanded: pinned open by a press (aria-expanded); the hover and focus preview leaves it false.
+  states: ["expanded"],
+  elements: ["surface"],
+  defaults: { size: "md" },
 } as const satisfies ComponentManifest;
 
 export const pagination = {
@@ -693,7 +703,7 @@ export const menu = {
   variants: {},
   states: ["disabled", "highlighted", "selected"],
   // `search-surface` is deprecated (audit D-22): a searchable list is a Combobox or Command palette.
-  elements: ["item", "icon", "text", "lines", "description", "label", "separator", "shortcut", "check", "toggle", "search-surface", "sub-chevron"],
+  elements: ["item", "icon", "text", "lines", "description", "label", "label-text", "separator", "shortcut", "check", "toggle", "search-surface", "sub-chevron"],
   elementModifiers: { item: ["danger", "sub"] },
   defaults: {},
 } as const satisfies ComponentManifest;
@@ -848,6 +858,7 @@ export const MANIFESTS = {
   fileUploadItem,
   scrollArea,
   link,
+  toggletip,
   pagination,
   treeView,
   composer,

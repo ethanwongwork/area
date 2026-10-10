@@ -222,8 +222,17 @@ Resolved 2026-10-09 (owner: "go with your recommendations"):
 2. Rows keep the `document` glyph until the icon review settles it.
 3. A Composer attachment chip is later work, measured once a ChatGPT test attachment is allowed.
 
+## Review note, 2026-10-09
+
+- **What changed:** The remove and retry buttons now sit 8px from the row's top and 8px from its side, evenly. Before, they sat 12px from the top and 16px from the side. Everything inside the zone and the rows now starts 16px from the outside (it was 17, because the 1px border was counted on top of the padding). The size line sits 2px under the file name, as in Untitled UI.
+- **Why:** You said the inset around the buttons looked unequal and asked for every gap to be accurate; Untitled UI pulls its button 8 up and 8 in, and counts its edge once.
+
 ## Feedback log
 
 - 2026-10-09 · owner: "move on to the next component" → File upload built from Untitled UI and Area's parts; owner declined a
   ChatGPT test upload → 8 captures, gallery tiles, in review.
 - 2026-10-09 · owner: "go with your recommendations" → open questions resolved as recommended; no code change.
+- 2026-10-09 · owner, review round 2 (rethink): "padding around buttons inset doesnt look equal, make sure gaps,
+  padding, margins, are all accurate" → actions 8 from the top and side (Untitled -mt-2 -mr-2,
+  was 12 / 16); zone and row padding net of the border (16 / 24 from outside, was 17 / 25); size line 2 under the name
+  (Untitled mt-0.5) → file-upload.css.

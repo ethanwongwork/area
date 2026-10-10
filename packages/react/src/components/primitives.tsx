@@ -1249,8 +1249,9 @@ export const Menu = /* @__PURE__ */ forwardRef<HTMLDivElement, MenuProps>(functi
 });
 
 /** A non-interactive heading that names the following group of menu items. */
-export const MenuLabel = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function MenuLabel({ className, ...rest }, ref) {
-  return <div ref={ref} className={cx("area-menu__label", className)} {...rest} />;
+export const MenuLabel = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function MenuLabel({ className, children, ...rest }, ref) {
+  // The text has its own element so the label can take the rows' text inset (inset.css).
+  return <div ref={ref} className={cx("area-menu__label", className)} {...rest}><span className="area-menu__label-text">{children}</span></div>;
 });
 
 /** A visual and semantic boundary between related groups of menu actions. */

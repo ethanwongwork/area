@@ -75,6 +75,7 @@ export const fileUploadListVariants = /* @__PURE__ */ createVariants(manifests.f
 export const fileUploadItemVariants = /* @__PURE__ */ createVariants(manifests.fileUploadItem);
 export const scrollAreaVariants = /* @__PURE__ */ createVariants(manifests.scrollArea);
 export const linkVariants = /* @__PURE__ */ createVariants(manifests.link);
+export const toggletipVariants = /* @__PURE__ */ createVariants(manifests.toggletip);
 export const paginationVariants = /* @__PURE__ */ createVariants(manifests.pagination);
 export const treeViewVariants = /* @__PURE__ */ createVariants(manifests.treeView);
 export const composerVariants = /* @__PURE__ */ createVariants(manifests.composer);

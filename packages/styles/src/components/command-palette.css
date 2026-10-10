@@ -174,6 +174,9 @@
   .area-command-palette__hint-button {
     display: inline-flex;
     align-items: center;
+    /* A lone arrow is narrower than the 24 square: centred in its plate (owner, review round 2, 2026-10-09:
+       "move arrow buttons backplate is wrong"; the arrow sat 4 from the plate's start and 11.5 from its end). */
+    justify-content: center;
     gap: var(--area-gap-md);
     block-size: var(--area-control-xs);
     min-inline-size: var(--area-control-xs);

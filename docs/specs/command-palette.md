@@ -166,6 +166,11 @@ Open questions: the scale origin is the centre (Dialog's). A top-anchored palett
 from its top edge (Raycast, Linear grow from the centre). Recommendation: keep the centre, one
 recipe for every modal.
 
+## Review note, 2026-10-09
+
+- **What changed:** The up and down arrows in the footer now sit centred in their hover plates. Before, each arrow sat 4px from the plate's left edge and 11.5px from its right. Also visible in Kbd's command-palette tile.
+- **Why:** You said the arrow buttons' backplate was wrong; the plate was a 24px square with its narrow arrow packed to one side.
+
 ## Feedback log
 
 - 2026-09-30 · audit S10–S12 (owner) → the lift is the Surface axis role `--area-shadow-float` (command-palette.css:42); rows and the search row take the density token `--area-gap-row` (12, labels at 36; command-palette.css:28, :56); quiet keys render in the UI font 12/16 400, and Escape is written "Esc" (kbd.css:89-102).
@@ -183,3 +188,5 @@ recipe for every modal.
 - 2026-10-04 · pill shapes and list rows (owner) → rows and palette use `radius-list-row` / `radius-list`, as Menu (`command-palette.css`). `docs/research/radius-audit-2026-10-03.md`, "Pill shapes and list rows".
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → Dialog's enter and exit (moderate in, base out, scale 0.97, scrim fade), surface frozen and kept through the exit, hint plates instant on hover and press. command-palette.css, CommandPalette.tsx.
 - 2026-10-09 · owner went with Scroll area's recommendation to adopt it in the scrolling families (docs/specs/scroll-area.md, "Adoption") → the scroll container is a Scroll area: Figma's overlay bar instead of the platform's, its inset moved into the scroller so rows keep their place → back in review.
+- 2026-10-09 · owner, review round 2 (needs changes): "move arrow buttons backplate is wrong" → open; the arrows sat 4 / 11.5 inside their 24 plates;
+  hint buttons now centre their content → command-palette.css.

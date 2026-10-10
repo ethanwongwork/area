@@ -5,6 +5,63 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/docs/src/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Review round 3 (2026-10-09, same branch)
+
+- Approved: Link, File upload, Menu, Command palette, Panel, Alert, Card, Kbd, Number field, Property list. Chip: "the
+  link underline is doubled" → the link chip is an `<a>` and `.area-chip` never cleared the browser's underline; the
+  gallery's docs CSS resets links and hid it, the review page (Area's CSS alone) showed it. Fixed (`text-decoration:
+  none`); the icon link chip also lost a stray rest underline. Round 4 (`components4`): Chip approved, so nothing is
+  in review.
+- Lesson: the gallery can mask component bugs through the docs site's own resets; the review page and review-diff render
+  with Area's CSS only, so trust them for what a consumer sees. The review page now loads area.css with a `<link>`
+  before the specimens (it was fetched afterwards, so specimens rendered first with browser defaults).
+
+## Review round 2 feedback applied (2026-10-09, same branch)
+
+- Owner: "start on the five". In review again (round 3, ArtifactData `components3`; page republished with Before =
+  the round-2 build, each family led by its spec's `## Review note, 2026-10-09`):
+  - Menu: group labels over text-only rows start on the row text column (11; was 8); over icon rows they stay on the
+    icon column. Labels now wrap their text in `.area-menu__label-text` (MenuLabel, Combobox, CustomSelect,
+    CommandPalette, TagPicker), so the label box takes the rows' type for the inset.
+  - Command palette: hint buttons centre their content (the arrows sat 4 / 11.5 in their 24 plates).
+  - File upload: actions 8 from the row's top and side (Untitled -mt-2 -mr-2); zone and row padding net of the border;
+    size line 2 under the name.
+  - Panel: every step 2 smaller (md 14 / 10 / 4, sm 10 / 6 / 4), the edge counted once (`--_edge`, `--_side`); the
+    resizable demo's Dimensions row carries the constrain toggle; the collapsible chevron is centred on the title row.
+  - Link: underline in the link's own ink at rest (was 40%); new `ink="blue"` (`fg-info`; ChatGPT rgb(44,103,197) and
+    Figma rgb(0,123,229) UI links, measured read-only). Alert, Card, Chip follow (reopened). Kbd, Number field and
+    Property list reopened as knock-ons (a tile of each shows the palette footer or a Panel).
+- review-diff.mjs now pins each specimen to a whole-pixel slot (a tile added above shifted later ones by a fraction and
+  snapping read as a change). Before dist for round 3: a copy of apps/docs/dist taken before the edits (scratchpad).
+
+## Toggletip (2026-10-09, branch `claude/next-component-befcb2`)
+
+- Owner: "work on the next component, load the component review artifact for anything that needs me to review" →
+  Toggletip (next on the gap audit's order after File upload; no new verdicts were waiting in `components1`). In
+  review. `Toggletip` (button + note; `content`, `icon` info / help, `size` sm / md, `label`, Tooltip's side / align /
+  offset / delay, open state), `AnchoredToggletip` in Overlays.tsx (hover and keyboard focus preview as Tooltip; a
+  press pins, `aria-expanded`; outside press, Escape, second press or focus leaving closes), `toggletip.css`, 6
+  tiles, docs entry, `toggletip.test.mjs`. `info` and `help` added to the package glyphs; the generator now allows
+  stroked circles and filled dots in a line glyph (`glyphFills`, icons.md).
+- Evidence: ChatGPT (Settings › Usage info button) and Notion (Settings › Notifications "?") captures, redacted,
+  read-only; Fluent InfoLabel, Spectrum 2 ContextualHelp, Carbon Toggletip rendered; Untitled UI source. Figma: none
+  in the file browser. Open questions in the spec (Field label slot, info vs help default, ink).
+- Review page republished (same link) for round 2: the 15 families in review, Before = main at 6f89678. Decisions
+  now go to ArtifactData collection `components2` (the template's ROUND), so reopened families start undecided.
+- Review round 2 (owner, same day): Pagination, Scroll area, Toggletip, Alert, Card, Chip, Combobox, Custom select,
+  Tag picker, Drawer approved; Link, File upload, Panel "rethink", Menu, Command palette "needs changes" (notes in each
+  spec's feedback log; not yet worked). Owner asked for more explicit reviews: the page now leads each family with
+  the spec's `## Review note, <date>` (What changed / Why, plain words), renders every specimen in both builds
+  (`apps/docs/scripts/review-diff.mjs`, headless Edge, light/dark × default/compact, painted boxes and text only) to
+  mark variants Changed / New / Unchanged, shows changed ones side by side (2× zoom available) and folds the rest.
+  Regenerate: `node apps/docs/scripts/component-review.mjs --before <dist> --before-label "main at <sha> (<date>)"
+  --unapproved --out <dir>`; the Before dist is a detached worktree of that commit after `npm ci && npm run build:docs`.
+- Tooling: from https pages the built-in pane can't post to a local relay (fetch fails; a form POST becomes a GET in
+  the same tab and loses the page) and its clipboard API is denied; a button whose handler runs
+  `document.execCommand("copy")` works (restore the owner's clipboard afterwards). The gallery tile zoom re-fits:
+  pin it with an injected `#component-x .gallery-tile__stage { zoom: 1 !important }`. The gallery's Mode and Density
+  persist in localStorage: check them before capturing.
+
 ## File upload (2026-10-09, same branch)
 
 - Owner: "move on to the next component" → File upload, the last of the four. In review. `FileUpload` (zone: accept,
@@ -72,7 +129,7 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   gallery family at 100% (hydrated), Before (the build at 5bb91df, static, in a frame) / After / side
   by side, light/dark, default/compact, the spec's dated changes, open questions and references, and
   approve / needs changes / rethink with per-specimen flags. Decisions: ArtifactData collection
-  `components1` (doc id = family slug). Regenerate: `npm run build:docs`, then
+  `components1` (doc id = family slug; round 2 from 2026-10-09: `components2`). Regenerate: `npm run build:docs`, then
   `node apps/docs/scripts/component-review.mjs --before <old dist> --out <dir>` (page template
   `apps/docs/src/component-review.html`), and republish to the same URL.
 - Docs site archived (owner): `DOCS_ARCHIVED` at the end of `apps/docs/scripts/build.mjs` turns every

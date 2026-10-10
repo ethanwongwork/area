@@ -439,6 +439,11 @@ paths and rects, or filled circles alone, and writes a `glyphPaint` map to `glyp
 `fill` glyphs (more) are filled with no stroke, so the dots keep their drawn radius.
 `Glyph.tsx` paints by that map; every other glyph stays a stroked line.
 
+2026-10-09 (Toggletip): PACKAGE_GLYPHS also exports `info` and `help`, the pilot drawings unchanged. A line
+drawing may now carry filled dots (the i's dot, the ?'s point) and stroked circles (the ring, as a centre-line
+path): the generator writes their path indexes to a `glyphFills` map, and `Glyph.tsx` fills those paths with no
+stroke, so the dot keeps its drawn 0.75 radius at every size.
+
 **Sixth pass, same day: status marks and arrow.**
 - The lint now holds status marks to every rule except keylines (grid, lattice, gaps,
   counters).

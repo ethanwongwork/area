@@ -5,15 +5,15 @@
  * control: it takes the type it sits in and adds only an underline (docs/specs/link.md).
  *
  * ChatGPT and Notion agree that a link keeps the ink of the text around it and is always
- * underlined in prose, about 2px below the text; Notion, the primary product for content, draws
- * the line lighter than the text (40%). Hover changes only the underline, as every Area hover
- * changes only a plate, edge or underline.
+ * underlined in prose, about 2px below the text. The line is the link's own ink, as ChatGPT draws it
+ * (owner, review round 2, 2026-10-09: "should the underline be the same color as the foreground?";
+ * it was Notion's 40%). A UI link can be blue (`ink="blue"`), as ChatGPT's and Figma's are.
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-link {
-    /* spec: Notion's decoration alpha (rgba(55, 53, 47, .4)), applied to the link's own ink so it
-       follows a muted or toned paragraph and the dark theme. */
-    --_line: color-mix(in oklab, currentColor 40%, transparent); /* spec */
+    /* spec: the link's own ink (ChatGPT's prose links, 0.125rem below in the text colour; owner 2026-10-09).
+       Notion's lighter line (40%) read as decoration rather than a link. */
+    --_line: currentColor;
     --_line-hover: currentColor;
 
     color: var(--_ink, inherit);
@@ -51,6 +51,11 @@
   .area-link--inherit {}
   .area-link--muted { --_ink: var(--area-fg-muted); }
   .area-link--action { --_ink: var(--area-fg-action); }
+  /* spec: the link blue of product UI (owner, review round 2: "should there be a blue text and underline
+     version?"): ChatGPT's settings links rgb(44, 103, 197) (its text-info), Figma's file browser rgb(0, 123, 229);
+     Area's info ink, #0160d9 (5.6:1 on white), #a0c5fd in dark. Neither product underlines them; Area keeps the
+     variant's underline, so a blue link in a sentence is still underlined and a standalone one underlines on hover. */
+  .area-link--blue { --_ink: var(--area-fg-info); }
 
   /* The external mark: Area's `open` glyph at 12, centred on the cap height so it sits with the
      text at any size, 4 after the label (the xs icon gap). It carries no underline. */

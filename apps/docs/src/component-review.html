@@ -1,4 +1,7 @@
+<meta charset="utf-8">
 <title>Area Component Review</title>
+<!-- Area's stylesheet loads before the specimens, so none renders first with browser defaults (blue links). -->
+<link rel="stylesheet" href="area.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
 <style>
@@ -48,19 +51,32 @@ body { background: var(--bg); color: var(--fg); font-family: var(--sans); font-s
 .seg button:disabled { opacity: 0.4; cursor: default }
 .toolbar .lbl { font-size: 12px; color: var(--muted) }
 .tiles { display: grid; gap: 12px }
+/* The summary leads each family: what changed and why in plain words (the spec's Review note), then which
+   variants look different from Before, which are new, and how many look the same. */
+.summary { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: grid; gap: 10px }
+.summary .md p { margin: 2px 0; max-width: 90ch } .summary .md ul { margin: 2px 0 }
+.summary .missing { color: var(--fix) }
+.vlist { display: grid; gap: 4px; font-size: 13px }
+.vlist b { font-weight: 600; margin-right: 6px }
+.badge { display: inline-flex; align-items: center; padding: 1px 8px; border-radius: 999px; font-size: 11px; font-weight: 600; letter-spacing: 0.01em }
+.badge.changed { background: var(--fix-bg); color: var(--fix) } .badge.new { background: var(--accent-bg); color: var(--accent) }
+.badge.same { background: var(--soft); color: var(--muted); font-weight: 500 }
+.tile.is-changed { border-color: var(--fix) }
+details.rest > summary { cursor: pointer; font-size: 13px; color: var(--muted); padding: 4px 2px 10px }
 .tile { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; display: grid; min-width: 0 }
 .tile header { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-bottom: 1px solid var(--line); font-size: 13px }
-.tile header .t { font-weight: 500 } .tile header .same { font: 11px var(--mono); color: var(--muted) }
+.tile header .t { font-weight: 500 }
 .tile header .flag { margin-left: auto; border: 1px solid var(--line); background: transparent; border-radius: 999px; padding: 2px 10px; font-size: 12px; cursor: pointer }
 .tile header .flag[aria-pressed="true"] { background: var(--fix-bg); border-color: var(--fix); color: var(--fix) }
 .views { display: grid; grid-template-columns: minmax(0, 1fr) }
 .views.split { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) }
 @media (max-width: 760px) { .views.split { grid-template-columns: minmax(0, 1fr) } }
-.view { display: grid; min-width: 0; border-radius: 0 0 12px 12px }
+.view { display: grid; align-content: start; min-width: 0; border-radius: 0 0 12px 12px } /* Before and After start level, so a shift reads as a shift */
 .views.split .view + .view { border-left: 1px solid var(--line) }
 .view .cap { font: 11px var(--mono); color: var(--muted); padding: 6px 12px 0 }
 .canvas { padding: 32px 24px; display: grid; place-items: center; overflow-x: auto; min-height: 120px; background: var(--area-bg-surface, #fff) }
 .canvas > * { max-width: 100% }
+.canvas[data-zoom="2"] > * { zoom: 2 } /* the specimen, not its frame, so Before and After stay level */
 .view iframe { width: 100%; border: 0; display: block; min-height: 120px; background: transparent }
 .none { color: var(--muted); font-size: 13px; padding: 24px; text-align: center }
 .notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 12px }
@@ -120,6 +136,11 @@ details.panel > summary { cursor: pointer; font-size: 12px; font-weight: 500; co
     <span class="pos" id="pos"></span>
   </div>
 
+  <section class="summary" aria-label="What changed">
+    <div class="md" id="note"></div>
+    <div class="vlist" id="vlist"></div>
+  </section>
+
   <div class="toolbar">
     <span class="lbl">View</span>
     <div class="seg" id="viewseg" role="group" aria-label="View"><button data-v="after">After</button><button data-v="before">Before</button><button data-v="split">Side by side</button></div>
@@ -127,13 +148,15 @@ details.panel > summary { cursor: pointer; font-size: 12px; font-weight: 500; co
     <div class="seg" id="themeseg" role="group" aria-label="Specimen theme"><button data-t="light">Light</button><button data-t="dark">Dark</button></div>
     <span class="lbl">Density</span>
     <div class="seg" id="uiseg" role="group" aria-label="Specimen density"><button data-u="default">Default</button><button data-u="compact">Compact</button></div>
+    <span class="lbl">Zoom</span>
+    <div class="seg" id="zoomseg" role="group" aria-label="Specimen zoom"><button data-z="1">1×</button><button data-z="2">2×</button></div>
     <span class="hint" id="beforehint"></span>
   </div>
 
   <div id="families"></div>
 
   <div class="notes">
-    <details class="panel" id="p-changes" open><summary>What changed</summary><div class="md" id="changes"></div></details>
+    <details class="panel" id="p-changes"><summary>Details from the spec</summary><div class="md" id="changes"></div></details>
     <details class="panel" id="p-questions" open><summary>Open questions</summary><div class="md" id="questions"></div></details>
     <details class="panel" id="p-refs"><summary>References and measurements</summary><div class="md" id="refs"></div></details>
   </div>
@@ -166,23 +189,39 @@ details.panel > summary { cursor: pointer; font-size: 12px; font-weight: 500; co
 const FAMILIES = window.FAMILIES || [];
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
-const ROUND = "components1", KEY = "area-component-review-1";
+// One collection per review round, so a family reopened after approval starts undecided (round 4: 2026-10-09).
+const ROUND = "components4", KEY = "area-component-review-4";
 const pref = (k, d) => { try { return localStorage.getItem("area-cr-" + k) || d; } catch { return d; } };
 const setPref = (k, v) => { try { localStorage.setItem("area-cr-" + k, v); } catch {} };
-let view = pref("view", "after"), theme = pref("theme", "light"), ui = pref("ui", "default");
+// Side by side by default (owner 2026-10-09: "be more explicit about the before and after"); only changed
+// variants get a Before column.
+let view = pref("view2", "split"), theme = pref("theme", "light"), ui = pref("ui", "default");
+// 2× makes a subtle change (an underline's ink, a 2px inset) visible without a screenshot.
+let zoom = pref("zoom", "1");
 let store = {}, col = null, order = [], at = 0, draft = null, beforeCss = null;
 try { store = JSON.parse(localStorage.getItem(KEY) || "{}"); } catch {}
 const HAS_BEFORE = FAMILIES.some(f => f.tiles.some(t => t.before));
+const BEFORE = window.REVIEW?.before || "the earlier build";
 
-$("families").innerHTML = FAMILIES.map(f => `<section class="fam" data-slug="${f.slug}" hidden><div class="tiles">${f.tiles.map(t => `
-  <article class="tile" data-tile="${t.id}">
-    <header><span class="t">${esc(t.label)}</span>${t.before == null ? '<span class="same">new</span>' : t.same ? '<span class="same">markup unchanged</span>' : ""}<button class="flag" data-flag="${t.id}" aria-pressed="false">Flag</button></header>
+/* A specimen's change, measured by rendering it in both builds (scripts/review-diff.mjs): changed, new or unchanged,
+   and for a change seen only in some modes, which. Changed variants come first; unchanged ones fold away. */
+const state = t => t.change?.state ?? (t.before == null ? "new" : "unknown");
+const where = t => t.change?.modes?.length && t.change.modes.length < 4 ? " in " + t.change.modes.join(", ") : "";
+const badge = t => ({ changed: `<span class="badge changed">Changed${esc(where(t))}</span>`, new: '<span class="badge new">New</span>', unchanged: '<span class="badge same">Unchanged</span>' })[state(t)] ?? "";
+const RANK = { changed: 0, new: 1, unknown: 2, unchanged: 3 };
+const tileHtml = t => `
+  <article class="tile${state(t) === "changed" ? " is-changed" : ""}" data-tile="${t.id}">
+    <header><span class="t">${esc(t.label)}</span>${badge(t)}<button class="flag" data-flag="${t.id}" aria-pressed="false">Flag</button></header>
     <div class="views"><div class="view after"><div class="cap">After</div><div class="canvas area-scope" data-area-theme="light" data-area-ui="default">${t.html}</div></div></div>
-  </article>`).join("")}</div></section>`).join("");
+  </article>`;
+$("families").innerHTML = FAMILIES.map(f => {
+  const tiles = [...f.tiles].sort((a, b) => RANK[state(a)] - RANK[state(b)]);
+  const shown = tiles.filter(t => state(t) !== "unchanged"), same = tiles.filter(t => state(t) === "unchanged");
+  return `<section class="fam" data-slug="${f.slug}" hidden><div class="tiles">${shown.map(tileHtml).join("")}</div>${same.length ? `<details class="rest"${shown.length ? "" : " open"}><summary>${same.length} variant${same.length === 1 ? "" : "s"} unchanged, for context</summary><div class="tiles">${same.map(tileHtml).join("")}</div></details>` : ""}</section>`;
+}).join("");
 </script>
 <!--CLIENTS-->
 <script>
-fetch("area.css").then(r => r.ok ? r.text() : "").then(css => { const s = document.createElement("style"); s.textContent = css; document.head.prepend(s); }).catch(() => {});
 const loadBefore = () => beforeCss ?? (beforeCss = fetch("area-before.css").then(r => r.ok ? r.text() : "").catch(() => ""));
 
 const fam = () => FAMILIES[order[at]];
@@ -201,13 +240,14 @@ async function paintBefore(section) {
   const css = await loadBefore();
   section.querySelectorAll(".tile").forEach(tile => {
     const t = fam().tiles.find(x => x.id === tile.dataset.tile), views = tile.querySelector(".views");
+    if (!["changed", "unknown"].includes(state(t))) return; // nothing to compare: new, or looks the same
     let b = views.querySelector(".view.before");
-    if (!b) { b = document.createElement("div"); b.className = "view before"; b.innerHTML = '<div class="cap">Before</div>'; views.prepend(b); }
+    if (!b) { b = document.createElement("div"); b.className = "view before"; b.innerHTML = `<div class="cap">Before · ${esc(BEFORE)}</div>`; views.prepend(b); }
     b.querySelector("iframe, .none")?.remove();
     if (!t.before) { b.insertAdjacentHTML("beforeend", '<p class="none">New in this pass: nothing to compare.</p>'); return; }
     const frame = document.createElement("iframe");
     frame.title = t.label + " before";
-    frame.srcdoc = `<!doctype html><html><head><meta charset="utf-8"><base href="${esc(location.href)}"><style>${css}</style><style>html,body{margin:0;background:transparent}body{display:grid;place-items:center;min-height:120px}.c{padding:32px 24px;display:grid;place-items:center;width:100%;box-sizing:border-box;background:var(--area-bg-surface)}</style></head><body><div class="c" data-area-theme="${theme}" data-area-ui="${ui}">${t.before}</div></body></html>`;
+    frame.srcdoc = `<!doctype html><html><head><meta charset="utf-8"><base href="${esc(location.href)}"><style>${css}</style><style>html,body{margin:0;background:transparent}body{display:grid;place-items:center;min-height:120px}.c{padding:32px 24px;display:grid;place-items:center;width:100%;box-sizing:border-box;background:var(--area-bg-surface)}.c[data-zoom="2"]>*{zoom:2}</style></head><body><div class="c" data-zoom="${zoom}" data-area-theme="${theme}" data-area-ui="${ui}">${t.before}</div></body></html>`;
     frame.onload = () => { try { frame.style.height = frame.contentDocument.documentElement.scrollHeight + "px"; } catch {} };
     b.append(frame);
   });
@@ -216,12 +256,14 @@ function paintView() {
   document.querySelectorAll("#viewseg button").forEach(b => { b.setAttribute("aria-pressed", b.dataset.v === view); b.disabled = !HAS_BEFORE && b.dataset.v !== "after"; });
   document.querySelectorAll("#themeseg button").forEach(b => b.setAttribute("aria-pressed", b.dataset.t === theme));
   document.querySelectorAll("#uiseg button").forEach(b => b.setAttribute("aria-pressed", b.dataset.u === ui));
-  $("beforehint").textContent = HAS_BEFORE ? "Before is the gallery at the start of the 2026-10-06 session (static)." : "";
-  document.querySelectorAll(".canvas.area-scope").forEach(c => { c.dataset.areaTheme = theme; c.dataset.areaUi = ui; });
+  $("beforehint").textContent = HAS_BEFORE ? `Before is ${BEFORE} (static); only changed variants show it.` : "";
+  document.querySelectorAll("#zoomseg button").forEach(b => b.setAttribute("aria-pressed", b.dataset.z === zoom));
+  document.querySelectorAll(".canvas.area-scope").forEach(c => { c.dataset.areaTheme = theme; c.dataset.areaUi = ui; c.dataset.zoom = zoom; });
   const section = document.querySelector(`.fam[data-slug="${fam().slug}"]`);
   section.querySelectorAll(".views").forEach(v => {
-    v.classList.toggle("split", view === "split");
-    v.querySelector(".view.after").hidden = view === "before";
+    const compared = ["changed", "unknown"].includes(state(fam().tiles.find(x => x.id === v.closest(".tile").dataset.tile)));
+    v.classList.toggle("split", compared && view === "split");
+    v.querySelector(".view.after").hidden = compared && view === "before";
     const b = v.querySelector(".view.before"); if (b) b.hidden = view === "after";
   });
   if (view !== "after" && HAS_BEFORE) paintBefore(section);
@@ -234,6 +276,15 @@ function render() {
   $("decision").innerHTML = chip(store[f.slug]);
   $("meta").textContent = `${f.tiles.length} specimen${f.tiles.length === 1 ? "" : "s"}`;
   $("pos").textContent = `${at + 1} / ${order.length}`;
+  $("note").innerHTML = f.summary || '<p class="missing">No review note in this spec yet: see "Details from the spec".</p>';
+  const by = st => f.tiles.filter(t => state(t) === st);
+  const names = list => list.map(t => esc(t.label) + (where(t) ? ` <span class="hint">(${esc(where(t).trim())})</span>` : "")).join(", ");
+  $("vlist").innerHTML = [
+    by("changed").length ? `<div><span class="badge changed">Changed</span> ${by("changed").length}: ${names(by("changed"))}</div>` : "",
+    by("new").length ? `<div><span class="badge new">New</span> ${by("new").length}: ${names(by("new"))}</div>` : "",
+    by("unchanged").length ? `<div><span class="badge same">Unchanged</span> ${by("unchanged").length} variant${by("unchanged").length === 1 ? "" : "s"} look the same as Before in light, dark, default and compact</div>` : "",
+    !HAS_BEFORE ? '<div class="hint">No Before build was given, so every variant counts as new.</div>' : "",
+  ].join("");
   $("changes").innerHTML = f.changes || f.log || '<p>No dated changes in this component\'s spec.</p>';
   $("questions").innerHTML = f.questions || "<p>None recorded.</p>";
   $("refs").innerHTML = f.refs || "<p>No sources table in this component's spec.</p>";
@@ -281,9 +332,10 @@ document.querySelectorAll("#opts .opt").forEach(b => b.onclick = () => choose(b.
 $("families").addEventListener("click", e => { const b = e.target.closest(".flag"); if (!b) return; const id = b.dataset.flag;
   draft.flagged = draft.flagged.includes(id) ? draft.flagged.filter(x => x !== id) : [...draft.flagged, id];
   if (draft.flagged.length && !draft.verdict) draft.verdict = "changes"; paintDecision(); });
-document.querySelectorAll("#viewseg button").forEach(b => b.onclick = () => { view = b.dataset.v; setPref("view", view); paintView(); });
+document.querySelectorAll("#viewseg button").forEach(b => b.onclick = () => { view = b.dataset.v; setPref("view2", view); paintView(); });
 document.querySelectorAll("#themeseg button").forEach(b => b.onclick = () => { theme = b.dataset.t; setPref("theme", theme); paintView(); });
 document.querySelectorAll("#uiseg button").forEach(b => b.onclick = () => { ui = b.dataset.u; setPref("ui", ui); paintView(); });
+document.querySelectorAll("#zoomseg button").forEach(b => b.onclick = () => { zoom = b.dataset.z; setPref("zoom", zoom); paintView(); });
 $("copy").onclick = async () => {
   const text = JSON.stringify(store, null, 2);
   try { await navigator.clipboard.writeText(text); $("status").textContent = `Copied ${Object.keys(store).length} decisions`; }

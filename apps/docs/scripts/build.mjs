@@ -269,7 +269,7 @@ ${railToggle("nav", "Show navigation", { corner: true })}
 ${railToggle("panel", "Show customize panel", { corner: true })}
 <script>${DOCS_SCRIPT}</script>
 ${slug === "switch" ? '<script type="module" src="./switch-demos.js"></script>' : ""}
-${slug === "tree-view" || slug === "property-list" || slug === "box-field" || slug === "combobox" || slug === "custom-select" || slug === "tag" || slug === "tag-picker" || slug === "date-picker" || slug === "drawer" || slug === "confirm-dialog" || slug === "command-palette" || slug === "context-menu" || slug === "hover-card" || slug === "prompt-suggestions" || slug === "message" || slug === "scroll-to-latest" || slug === "model-picker" || slug === "panel" || slug === "dialog" || slug === "popover" || slug === "composer" || slug === "toolbar" || slug === "alignment-picker" || slug === "color-field" || slug === "color-picker" || slug === "color-swatch-picker" || slug === "calendar" || slug === "menu" || slug === "tooltip" || slug === "toast" || slug === "breadcrumb" || slug === "pagination" || slug === "scroll-area" || slug === "file-upload" || slug === "accordion" ? '<script type="module" src="./switch-demos.js"></script>' : ""}
+${slug === "tree-view" || slug === "property-list" || slug === "box-field" || slug === "combobox" || slug === "custom-select" || slug === "tag" || slug === "tag-picker" || slug === "date-picker" || slug === "drawer" || slug === "confirm-dialog" || slug === "command-palette" || slug === "context-menu" || slug === "hover-card" || slug === "prompt-suggestions" || slug === "message" || slug === "scroll-to-latest" || slug === "model-picker" || slug === "panel" || slug === "dialog" || slug === "popover" || slug === "composer" || slug === "toolbar" || slug === "alignment-picker" || slug === "color-field" || slug === "color-picker" || slug === "color-swatch-picker" || slug === "calendar" || slug === "menu" || slug === "tooltip" || slug === "toast" || slug === "breadcrumb" || slug === "pagination" || slug === "scroll-area" || slug === "file-upload" || slug === "toggletip" || slug === "accordion" ? '<script type="module" src="./switch-demos.js"></script>' : ""}
 ${["badge", "badge-group", "indicator", "presence"].includes(slug) ? '<script type="module" src="./badge-demos.js"></script>' : ""}
 ${slug === "slider" ? '<script type="module" src="./slider-demos.js"></script>' : ""}
 ${slug === "number-field" || slug === "input-group" ? '<script type="module" src="./number-field-demos.js"></script>' : ""}
@@ -511,6 +511,14 @@ function gallerySpecimenTable() {
       { id: "content-error", title: "Content / error", demo: "GalleryFileUploadItemError" },
       { id: "behavior-flow", title: "Behavior / upload flow", demo: "GalleryFileUploadFlow" },
     ],
+    "toggletip": [
+      { id: "default", title: "Default", demo: "GalleryToggletip" },
+      { id: "size-sm", title: "Size / sm", demo: "GalleryToggletipSm" },
+      { id: "content-help", title: "Content / help", demo: "GalleryToggletipHelp" },
+      { id: "content-link", title: "Content / link", demo: "GalleryToggletipLink" },
+      { id: "content-wrap", title: "Content / wrapped", demo: "GalleryToggletipWrapped" },
+      { id: "state-open", title: "State / open", demo: "GalleryToggletipOpen" },
+    ],
     "scroll-area": [
       { id: "default", title: "Default", demo: "GalleryScrollArea" },
       { id: "behavior-scroll", title: "Behavior / shown while scrolling", demo: "GalleryScrollAreaScroll" },
@@ -523,6 +531,7 @@ function gallerySpecimenTable() {
       { id: "variant-standalone", title: "Variant / standalone", demo: "GalleryLinkStandalone" },
       { id: "ink-muted", title: "Ink / muted", demo: "GalleryLinkMuted" },
       { id: "ink-action", title: "Ink / action", demo: "GalleryLinkAction" },
+      { id: "ink-blue", title: "Ink / blue", demo: "GalleryLinkBlue" },
       { id: "content-caption", title: "Content / caption", demo: "GalleryLinkCaption" },
       { id: "content-external", title: "Content / external", demo: "GalleryLinkExternal" },
       { id: "content-wrap", title: "Content / wrapping", demo: "GalleryLinkWrapped" },
@@ -1305,6 +1314,7 @@ function demoMarkup(name, html) {
   if (name.startsWith("GalleryDatePicker")) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (/^GalleryTag(?!Picker)/.test(name)) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("GalleryFileUpload")) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (name.startsWith("GalleryToggletip")) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("GalleryScrollArea")) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("GalleryPagination")) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("GalleryTagPicker")) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;

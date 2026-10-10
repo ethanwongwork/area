@@ -227,6 +227,11 @@ Open questions:
 - Build and test results: see [the audit](../research/cohesion-audit.md#verification).
 - The docs API table lists `bareBar` (`apps/docs/src/pages.mjs:834`).
 
+## Review note, 2026-10-09
+
+- **What changed:** Everything is 2px tighter: the side inset is 14px at md (was 17 with the border) and 10px at sm (was 13), gaps between fields and rows are 10 and 6 (were 12 and 8), and labels sit 4px over their fields. In the resizable inspector, the Dimensions row now carries Figma's constrain toggle in the action column, so its fields reach the same edge as the rest. A collapsible section's chevron now stays centred on its title when the section opens; it used to jump up.
+- **Why:** You asked for the panel to be about 2px more compact everywhere, for the large right margin in the resizable tile, and for the chevron's movement on open to be fixed. The right margin was an empty action column; the chevron was centred on a box that shrinks when a section opens.
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → no change; `shadow-2` confirmed as an in-flow region, outside
@@ -271,3 +276,9 @@ Open questions:
 - 2026-10-03 · radius audit D1 (owner) → the container role is 12 at compact too (was 8; Figma 13, Cursor 12-14), so this family's surface is 12 at both densities; rows concentric with a floating surface follow (compact 24 rows r8). `docs/research/radius-audit-2026-10-03.md`.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → section chevron turns on fast (was a snapping SVG transform) and appears at once on hover; resize focus pill centred on whole pixels.
 - 2026-10-09 · owner went with Scroll area's recommendation to adopt it in the scrolling families (docs/specs/scroll-area.md, "Adoption") → the scroll container is a Scroll area: Figma's overlay bar instead of the platform's, its inset moved into the scroller so rows keep their place → back in review.
+- 2026-10-09 · owner, review round 2 (rethink): density, gaps, padding and margins look a bit too big at every size;
+  more compact, "maybe by like 2px", evenly across everything. Content / resizable: the right margin is far too large.
+  Collapsible sections: the chevron's placement moves wrongly once a section opens → every step 2 smaller (md
+  14 / 10 / 4, sm 10 / 6 / 4), the edge counted once (`--_side`); the resizable demo's Dimensions row carries Figma's
+  constrain toggle in its reserved action column; the chevron is centred on the title row, not the heading box →
+  panel.css, inset.css, gallery.tsx.

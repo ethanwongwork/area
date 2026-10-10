@@ -249,6 +249,11 @@ Open questions:
   animation (a layout property) and MOTION.md has no Alert recipe; Primer and Polaris banners
   leave at once.
 
+## Review note, 2026-10-09
+
+- **What changed:** The underline under the alert's link is now the link's own colour at rest (it was 40%), matching Link.
+- **Why:** Link's line changed in this round, and Alert's link draws Link's line.
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → dismiss at full ink (was 0.72, 1 on hover), radius

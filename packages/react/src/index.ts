@@ -43,6 +43,7 @@ export { TreeView, type TreeViewProps, type TreeViewNode } from "./components/Tr
 export { FileUpload, FileUploadList, FileUploadItem, fileMatchesAccept, formatFileSize, type FileUploadProps, type FileUploadItemProps, type FileRejection } from "./components/FileUpload.tsx";
 export { ScrollArea, type ScrollAreaProps } from "./components/ScrollArea.tsx";
 export { Link, linkVariants, type LinkProps } from "./components/Link.tsx";
+export { Toggletip, type ToggletipProps } from "./components/Toggletip.tsx";
 export { Pagination, paginationRange, type PaginationProps, type PaginationLabels, type PaginationItem } from "./components/Pagination.tsx";
 export { Composer, type ComposerProps } from "./components/Composer.tsx";
 export { Field, Label, type FieldProps, type LabelProps } from "./components/Field.tsx";

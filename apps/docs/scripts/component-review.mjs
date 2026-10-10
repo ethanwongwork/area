@@ -4,16 +4,20 @@
  * spec's latest changes, references and open questions, and an approval strip.
  *
  *   npm run build:docs                      # the current gallery (apps/docs/dist)
- *   node apps/docs/scripts/component-review.mjs [--before <dist of an earlier build>] [--out <dir>]
+ *   node apps/docs/scripts/component-review.mjs [--before <dist of an earlier build>] [--before-label <text>]
+ *     [--unapproved] [--out <dir>]
  *
  * --before points at the dist of an earlier build (a worktree of the commit to compare against,
- * built with npm run build && npm run build:docs); its tiles and stylesheet become the Before view.
+ * built with npm run build && npm run build:docs); its tiles and stylesheet become the Before view, and every
+ * specimen is rendered in both builds to tell which variants look different (review-diff.mjs). Each family leads
+ * with its spec's latest "Review note" section: what changed and why, in plain words.
  * The output folder holds the page, data.js, both stylesheets, the demo bundles that hydrate the
  * specimens, and the images they use. Publish the page with those files beside it.
  */
 import { cpSync, existsSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { visualChanges } from "./review-diff.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const repo = resolve(root, "../..");
@@ -104,7 +108,8 @@ function sections(md) {
   });
   return found;
 }
-const RECENT = /2026-10-0[67]/;
+// Spec sections and log lines dated in the open review rounds (2026-10-06 to 09).
+const RECENT = /2026-10-0[6-9]/;
 function notesOf(slug) {
   const file = join(repo, "docs/specs", `${slug}.md`);
   if (!existsSync(file)) return { changes: "", questions: "", refs: "", log: "", changed: false };
@@ -114,7 +119,12 @@ function notesOf(slug) {
   const pick = re => all.find(s => re.test(s.title));
   const log = pick(/^Feedback log/i)?.text.split("\n").filter(l => RECENT.test(l)).join("\n") ?? "";
   const refs = [pick(/^Sources/i), pick(/^Measurements/i)].filter(Boolean);
+  // The plain summary the page leads with: the spec's latest "Review note" section (component-build skill, step 5).
+  const notes = all.filter(s => /^Review note/i.test(s.title));
+  const note = notes[notes.length - 1];
   return {
+    summary: note ? markdown(note.text) : "",
+    summaryTitle: note?.title ?? "",
     changes: dated.map(s => `## ${s.title}\n\n${s.text}`).map(markdown).join("\n"),
     questions: [pick(/^Open questions/i)].filter(Boolean).map(s => markdown(s.text)).join(""),
     refs: refs.map(s => `<h3>${esc(s.title)}</h3>` + markdown(s.text)).join("\n"),
@@ -134,13 +144,20 @@ const families = [...now.values()].filter(f => !onlyOpen || status(f.slug) !== "
   const priorTiles = new Map(prior?.tiles.map(t => [t.id, t.html]) ?? []);
   return {
     slug: f.slug, name: f.name, status: status(f.slug), ...notesOf(f.slug),
-    tiles: f.tiles.map(t => ({ ...t, before: priorTiles.get(t.id) ?? null, same: priorTiles.get(t.id) === t.html })),
+    tiles: f.tiles.map(t => ({ ...t, before: priorTiles.get(t.id) ?? null })),
   };
 });
 
+// What each specimen looks like now against before, by rendering both (review-diff.mjs). Without --before every
+// specimen counts as new.
+const changes = beforeDist ? visualChanges({ dist, beforeDist, tiles: families.flatMap(f => f.tiles.map(t => ({ key: `${f.slug}/${t.id}`, now: t.html, before: t.before }))) }) : {};
+for (const f of families) for (const t of f.tiles) t.change = changes[`${f.slug}/${t.id}`] ?? { state: "new", modes: [] };
+
 rmSync(out, { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
-writeFileSync(join(out, "data.js"), `window.FAMILIES = ${JSON.stringify(families).replaceAll("</script", "<\\/script")};\n`);
+// --before-label names the Before build on the page, e.g. "main at 6f89678 (2026-10-08)".
+const review = { before: arg("--before-label") ?? (beforeDist ? "the earlier build" : null) };
+writeFileSync(join(out, "data.js"), `window.REVIEW = ${JSON.stringify(review)};\nwindow.FAMILIES = ${JSON.stringify(families).replaceAll("</script", "<\\/script")};\n`);
 cpSync(join(dist, "area.css"), join(out, "area.css"));
 if (beforeDist) cpSync(join(beforeDist, "area.css"), join(out, "area-before.css"));
 const clients = readFileSync(join(dist, "index.html"), "utf8").match(/src="\.\/([a-z-]+-demos\.js)"/g).map(s => s.slice(7, -1));
@@ -149,4 +166,7 @@ mkdirSync(join(out, "images"));
 for (const file of readdirSync(join(dist, "images"))) cpSync(join(dist, "images", file), join(out, "images", file));
 const page = readFileSync(join(root, "src/component-review.html"), "utf8").replace("<!--CLIENTS-->", clients.map(f => `<script type="module" src="${f}"></script>`).join("\n"));
 writeFileSync(join(out, "component-review.html"), page);
-console.log(`component review: ${families.length} families, ${families.reduce((n, f) => n + f.tiles.length, 0)} specimens, ${families.filter(f => f.changed).length} changed -> ${out}`);
+const count = state => families.reduce((n, f) => n + f.tiles.filter(t => t.change.state === state).length, 0);
+console.log(`component review: ${families.length} families, ${families.reduce((n, f) => n + f.tiles.length, 0)} specimens (${count("changed")} changed, ${count("new")} new, ${count("unchanged")} unchanged) -> ${out}`);
+const missing = families.filter(f => !f.summary).map(f => f.slug);
+if (missing.length) console.warn(`no "Review note" section in: ${missing.join(", ")} (docs/specs/<slug>.md)`);
