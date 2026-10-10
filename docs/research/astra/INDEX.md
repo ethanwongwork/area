@@ -10,6 +10,7 @@ broken research.
 
 | Date | Topic | Question | Status |
 | --- | --- | --- | --- |
+| 2026-10-10 | [materials/16-specimen](materials/16-specimen/README.md) | How do Paper, Glass and Tactile render on compiled Area across mode, density and backdrop, with live controls and explicit recipe limits? | unreviewed |
 | 2026-10-10 | [materials/15-consistency](materials/15-consistency/README.md) | Do all fourteen materials reports agree on names, counts, controls, role budgets and fallbacks, and which source should win each conflict? | unreviewed |
 | 2026-10-10 | [materials/14-tooling](materials/14-tooling/README.md) | How could the gallery build and share materials, and what survives or is missing in DTCG, Tokens Studio, Figma, Tailwind and CSS exports? | unreviewed |
 | 2026-10-09 | [materials/13-presets](materials/13-presets/README.md) | Which eight light/dark presets cover every role, how do their controls derive from references, and which of the 25 styles combine or conflict? | unreviewed |
