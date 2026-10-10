@@ -10,7 +10,7 @@ type LinkVariants = VariantProps<typeof MANIFESTS.link>;
 export interface LinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   /** `inline` is always underlined, for links in running text; `standalone` is underlined on hover and focus. */
   variant?: LinkVariants["variant"];
-  /** `inherit` takes the surrounding text's ink; `muted` the muted ink; `action` the Action role (neutral until a theme makes actions the accent). */
+  /** `inherit` takes the surrounding text's ink; `muted` the muted ink; `action` the Action role (neutral until a theme makes actions the accent); `blue` the link blue of product UI (ChatGPT, Figma). */
   ink?: LinkVariants["ink"];
   /**
    * Leaves the site: opens in a new tab (`target="_blank"`, `rel="noopener noreferrer"` unless set),

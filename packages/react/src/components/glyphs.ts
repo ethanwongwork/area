@@ -77,9 +77,21 @@ export const glyphs = {
   "reset": [
     "M3 5.5A5.59 5.59 0 1 1 2.6 9.447",
     "M3 2.5V5.5H6"
+  ],
+  "info": [
+    "M2 8A6 6 0 1 0 14 8A6 6 0 1 0 2 8Z",
+    "M8 7.25V11",
+    "M7.25 5A0.75 0.75 0 1 0 8.75 5A0.75 0.75 0 1 0 7.25 5Z"
+  ],
+  "help": [
+    "M2 8A6 6 0 1 0 14 8A6 6 0 1 0 2 8Z",
+    "M6.5 6A1.5 1.5 0 1 1 8.75 7.299Q8 7.732 8 8.75V9",
+    "M7.25 11.25A0.75 0.75 0 1 0 8.75 11.25A0.75 0.75 0 1 0 7.25 11.25Z"
   ]
 } as const;
 export type GlyphName = keyof typeof glyphs;
 /** Glyphs that are not line drawings: "solid" also fills inside the centre-line (the filled
  * variant's solid role); "fill" is filled shapes with no stroke (dots). */
 export const glyphPaint: Partial<Record<GlyphName, "solid" | "fill">> = {"stop":"solid","more":"fill"};
+/** Filled dots inside a line drawing, by path index (the i's dot, the ?'s point). */
+export const glyphFills: Partial<Record<GlyphName, readonly number[]>> = {"info":[2],"help":[2]};

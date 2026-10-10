@@ -172,6 +172,11 @@ fractional advance between keys that only shifts glyph positions, never an edge.
 Verified on `/kbd.html` (computed styles, default and compact): heights 20 / 16, padding 4 / 2,
 no transform or transition.
 
+## Review note, 2026-10-09
+
+- **What changed:** Only the command-palette template changed: its up and down arrows now sit centred in their hover plates. Kbd itself is unchanged.
+- **Why:** Command palette's footer was fixed in this round, and this tile shows that footer.
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → no change; small size's 11px text recorded as open → 7 Area

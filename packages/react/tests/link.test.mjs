@@ -26,3 +26,8 @@ test("an explicit target or rel wins over external's defaults; the label is rena
   assert.match(html, /target="docs" rel="noopener"/);
   assert.match(html, /\(nouvel onglet\)/);
 });
+
+test("ink blue: the link blue of product UI, with the variant's underline", () => {
+  assert.match(render(h(Link, { href: "#", ink: "blue" }, "Learn more")), /class="area-link area-link--inline area-link--blue"/);
+  assert.equal(linkVariants({ ink: "blue", variant: "standalone" }), "area-link area-link--standalone area-link--blue");
+});

@@ -120,4 +120,8 @@ captures. Promote an agreement into Area only through a spec's decision table.
 - 2026-10-09 (File upload): no product shows an upload surface we could measure without uploading the owner's data
   (ChatGPT's 10 recent chats carry no attachment; a test upload declined). Untitled UI is the basis (readout in
   `docs/specs/file-upload.md`).
+- 2026-10-09 (Toggletip): ChatGPT and Notion put contextual help behind a quiet mark after a 14/20 label (ChatGPT a 12
+  info button, #8f8f8f, 4 after the label; Notion a 16 "?", rgb(173, 169, 163), 6 after) and show the note on their
+  dark tooltip 6 from the mark, on hover only (ChatGPT also on focus; a press does not pin it). Neither plates the mark;
+  ChatGPT darkens it on hover (`toggletip/chatgpt--*`, `toggletip/notion--*`; Figma: none found in the file browser).
 

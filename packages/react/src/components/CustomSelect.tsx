@@ -239,7 +239,7 @@ export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(fun
       {[...groups].map(([group, indexes], position) => group
         ? [position > 0 ? <div key={`${group}-rule`} className="area-menu__separator area-custom-select__separator" role="presentation" /> : null,
           <div key={group} role="group" aria-labelledby={`${id}-group-${position}`} className="area-custom-select__group">
-            <div id={`${id}-group-${position}`} className="area-menu__label" role="presentation">{group}</div>
+            <div id={`${id}-group-${position}`} className="area-menu__label" role="presentation"><span className="area-menu__label-text">{group}</span></div>
             {indexes.map(renderRow)}
           </div>]
         : indexes.map(renderRow))}

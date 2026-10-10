@@ -211,6 +211,14 @@ verified by eye (background tab), nor with a real pointer or keyboard.
 
 **Open questions.** None.
 
+## Review note, 2026-10-09 (round 4)
+
+- **What changed:** a link chip now shows one underline, under its label. It showed two where only Area's stylesheet is
+  loaded: the browser's link underline and the label's. The link chip with an icon also lost a stray underline at rest;
+  it underlines only on hover and focus, as designed.
+- **Why:** you saw the underline doubled; the chip is a link element and never cleared the browser's default underline.
+  The gallery hid it because the docs site resets links.
+
 ## Feedback log
 
 - 2026-09-26 · earlier pass the same day → selected chips neutral tonal, `tone="accent"` added
@@ -238,3 +246,7 @@ verified by eye (background tab), nor with a real pointer or keyboard.
 - 2026-10-04 · pill shapes and list rows (owner) → the pill is the `chip` entry of data-area-pills (default on); `pill` three-way (`chip.css`). `docs/research/radius-audit-2026-10-03.md`, "Pill shapes and list rows".
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → hover and press land at once and fade over `fast`, selection by hand paints at once, the remove plate gains the same fade (was untimed), the swatch ring is an inset outline (was a box-shadow spread) (`chip.css`; "Motion and interaction, 2026-10-07").
 - 2026-10-08 · owner went with Link's recommendation to align Area's underlines (docs/specs/link.md, "Peers aligned") → a `link` chip's label underline is Link's line: 40% at rest, full when the chip is hovered or focused; `link-icon` unchanged (chip.css) → back in review.
+- 2026-10-09 · owner, review round 3 (needs changes): "the link underline is doubled" → the link chip is an `<a>` and
+  `.area-chip` never cleared the browser's underline, so it drew under the label's own; the gallery's docs CSS resets
+  links, which hid it, and the review page (Area's CSS alone) showed it → `.area-chip { text-decoration: none }`
+  (chip.css). Every other Area part that renders as a link already clears it.

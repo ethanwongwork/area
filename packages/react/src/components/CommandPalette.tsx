@@ -193,7 +193,7 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
       {rows.length === 0 ? <div className="area-command-palette__empty" role="presentation">{emptyText}</div> : null}
       {groups.map(([group, list], g) => group
         ? <div key={`${group}-${g}`} role="group" aria-labelledby={`${id}-group-${g}`} className="area-command-palette__group">
-            <div id={`${id}-group-${g}`} className="area-menu__label" role="presentation">{group}</div>
+            <div id={`${id}-group-${g}`} className="area-menu__label" role="presentation"><span className="area-menu__label-text">{group}</span></div>
             {list.map(renderRow)}
           </div>
         : <div key={`ungrouped-${g}`} role="presentation" className="area-command-palette__group">{list.map(renderRow)}</div>)}

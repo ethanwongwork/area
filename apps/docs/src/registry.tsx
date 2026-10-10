@@ -30,10 +30,11 @@ import * as paginations from "./demos/pagination.tsx";
 import * as links from "./demos/link.tsx";
 import * as scrollAreas from "./demos/scroll-area.tsx";
 import * as fileUploads from "./demos/file-upload.tsx";
+import * as toggletips from "./demos/toggletip.tsx";
 
 const { BADGE_GALLERY_DEMOS, ...badgeDemos } = badge;
 const { ICON_REVIEW_DEMOS, ...iconDemos } = icons;
-const DEMO_MODULES: Record<string, object> = { BADGE_GALLERY_DEMOS, badge: badgeDemos, switches, button, form, display, nav, theme, gallery, cards, icons: iconDemos, ICON_REVIEW_DEMOS, variants, overlays, counts, accordions, customSelects, tags, tagPickers, datePickers, drawers, paginations, links, scrollAreas, fileUploads };
+const DEMO_MODULES: Record<string, object> = { BADGE_GALLERY_DEMOS, badge: badgeDemos, switches, button, form, display, nav, theme, gallery, cards, icons: iconDemos, ICON_REVIEW_DEMOS, variants, overlays, counts, accordions, customSelects, tags, tagPickers, datePickers, drawers, paginations, links, scrollAreas, fileUploads, toggletips };
 // One name, one demo. The server renders from this merged map, while hydration clients import a
 // module directly, so a name exported twice renders one demo and hydrates the other (a mismatch).
 const demoOwner = new Map<string, string>();
@@ -66,5 +67,6 @@ export const SOURCES = {
   links: "src/demos/link.tsx",
   scrollAreas: "src/demos/scroll-area.tsx",
   fileUploads: "src/demos/file-upload.tsx",
+  toggletips: "src/demos/toggletip.tsx",
   drawers: "src/demos/drawer.tsx",
 };

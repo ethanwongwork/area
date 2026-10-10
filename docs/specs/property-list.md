@@ -86,6 +86,11 @@ reorders without a slide.
   so the handle has the 12px inset this question asked for.
 - Nesting (effects with sub-settings popovers) and multi-select are out of scope.
 
+## Review note, 2026-10-09
+
+- **What changed:** The rows sit 2px closer to the panel's edge and to each other, because the Panel around them is tighter. Property list's own geometry is unchanged.
+- **Why:** Panel's spacing was tightened in this round, and every Property list tile sits in a Panel.
+
 ## Feedback log
 
 - 2026-09-28 · owner: truncation in this batch → inspector tiles at 280, Color field and Select fixes

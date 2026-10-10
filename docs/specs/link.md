@@ -170,9 +170,19 @@ Resolved 2026-10-08 (owner: "go with your recommendations"):
 2. `inherit` stays the default ink; `action` is opt-in.
 3. No Figma search; the ChatGPT and Notion basis stands.
 
+## Review note, 2026-10-09
+
+- **What changed:** The underline is now the link's own colour at rest (it was 40% of it), so a link in a sentence reads as a link at a glance. A new blue ink (`ink="blue"`) gives the link blue that ChatGPT and Figma use for links in their interface; in a sentence it stays underlined, and a standalone one underlines on hover. The default still takes the surrounding text's colour, as ChatGPT and Notion do in running text.
+- **Why:** You asked whether links should be more obviously links, whether there should be a blue version, and whether the underline should match the text. ChatGPT draws its underline in the text colour; ChatGPT's settings links are rgb(44, 103, 197) and Figma's rgb(0, 123, 229).
+
 ## Feedback log
 
 - 2026-10-08 · owner: "move on to the next component" → Link built from ChatGPT and Notion links, Primer and
   Untitled UI; `open` added to the package glyphs → 10 captures, gallery tiles, in review.
 - 2026-10-08 · owner: "go with your recommendations" → open questions resolved as recommended; peers aligned
   in a follow-up commit.
+- 2026-10-09 · owner, review round 2 (rethink): "should the link be more obviously a link? should there be a blue
+  text and underline version? should the underline be the same color as the foreground?" → measured: ChatGPT settings links
+  rgb(44, 103, 197) and Figma's file browser rgb(0, 123, 229), neither underlined; ChatGPT's prose underline in the text
+  colour; Notion's in-page line a light border. Underline now the link's own ink at rest; new `ink="blue"`
+  (`fg-info`); default stays inherit → link.css, manifest, Link.tsx, tile `ink-blue`; Alert, Card and Chip follow.

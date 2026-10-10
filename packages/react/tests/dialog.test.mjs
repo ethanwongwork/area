@@ -135,7 +135,7 @@ test("Combobox is a WAI list-autocomplete combobox over a Menu-styled listbox", 
   // Options sit in the Scroll area's scroller; the scroller is no Tab stop (focus stays on the field).
   assert.match(html, /<div class="area-scroll-area__viewport"><div class="area-scroll-area__content">/);
   assert.match(html, /role="option" aria-selected="true" class="area-menu__item area-combobox__option"><span class="area-menu__text">Inter<\/span>/);
-  assert.match(html, /role="group" aria-labelledby="[^"]+" class="area-combobox__group"><div id="[^"]+" class="area-menu__label" role="presentation">Recent<\/div>/);
+  assert.match(html, /role="group" aria-labelledby="[^"]+" class="area-combobox__group"><div id="[^"]+" class="area-menu__label" role="presentation"><span class="area-menu__label-text">Recent<\/span><\/div>/);
 });
 
 test("CommandPalette is a search combobox over a grouped listbox of Menu rows", async () => {

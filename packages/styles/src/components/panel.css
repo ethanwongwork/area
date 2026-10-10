@@ -21,18 +21,25 @@
        12 at sm and 16 at md, for the sides and the last field above a rule. A section heading and the
        bar are rows (Figma's header is 40: a 24 button with 8 above and below; VS Code's pane header a
        22 row) whose button has one field gap above and below (8 / 12), the title centred on it. */
-    --_inset: var(--area-space-16); /* spec: 16 at both densities; Figma's inspector keeps 16 (evidence audit 2026-10-02) */
+    /* spec (owner, review round 2, 2026-10-09: "a bit too big for all sizes … more compact, maybe by like 2px, evenly"):
+       every spacing step 2 smaller than the measured Figma values: md inset 14 (Figma 16), gaps 10 (12), labels 4 (6);
+       sm inset 10 (12), gaps 6 (8). The inset is measured from the outside, the edge counted once (it sat 1 deeper). */
+    --_inset: calc(var(--area-space-16) - var(--area-space-2)); /* spec: 14 at both densities */
+    /* The side inset inside the panel's edge: the inset less the border, so content sits --_inset from the
+       outside (inset.css: the border counted once). A flush panel has no edge. */
+    --_edge: var(--area-border-width);
+    --_side: calc(var(--_inset) - var(--_edge));
     /* Published under the panel prefix for nested parts (PropertyList), so a Popover's or a
        ColorPicker's own --_inset can't leak into them (audit F-27). */
-    --_panel-inset: var(--_inset);
+    --_panel-inset: var(--_side);
     /* spec (owner, 2026-09-28: "shouldn't there be differences in text size and gaps between medium and
        small?"): the panel's own text and gaps step with the tier; controls keep their tier's text (14/20
        at sm and md, the control scale). Published as --_panel-* so BoxField and PropertyList rows inside
        a panel follow them. md: section titles and labels 14/20, bar title 16/24, fields 12 apart (and
        from their row's action), rows 12 apart, labels 6 over their controls. */
-    --_panel-gap: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)); /* spec: 12, compact 8 */
-    --_panel-row-gap: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)); /* spec: 12, compact 8 */
-    --_panel-label-gap: var(--area-ui-stack); /* Field's label gap, 6 / compact 4 */
+    --_panel-gap: calc(var(--area-space-10) - var(--area-space-4) * var(--area-ui-dense)); /* spec: 10, compact 6 */
+    --_panel-row-gap: calc(var(--area-space-10) - var(--area-space-4) * var(--area-ui-dense)); /* spec: 10, compact 6 */
+    --_panel-label-gap: calc(var(--area-ui-stack) - var(--area-space-2)); /* Field's label gap less 2: 4 / compact 2 */
     --_panel-label-text: var(--area-text-sm-size);
     --_panel-label-leading: var(--area-text-sm-leading);
     --_panel-title-text: var(--area-text-md-size);
@@ -43,8 +50,8 @@
      * agree without either restating the formula: a control, a compact header inset above and below it,
      * and the hairline under it.
      */
-    /* The bar's button has one field gap above and below, the title centred: sm 8 + 28 + 8 + 1 = 45,
-       md 12 + 32 + 12 + 1 = 57. */
+    /* The bar's button has one field gap above and below, the title centred: sm 6 + 28 + 6 + 1 = 41,
+       md 10 + 32 + 10 + 1 = 53. */
     --_bar: calc(var(--_row) + var(--_panel-gap) * 2 + var(--area-border-width));
 
     display: flex;
@@ -73,6 +80,7 @@
    * a docked panel and a floating one are the same panel.
    */
   .area-panel--flush {
+    --_edge: 0px;
     border: 0;
     border-radius: 0;
     background-color: var(--area-bg-page);
@@ -90,7 +98,7 @@
     flex-shrink: 0;
 
     block-size: var(--_bar);
-    padding-inline: var(--_inset);
+    padding-inline: var(--_side);
     font-size: var(--_panel-title-text);
     line-height: var(--_panel-title-leading);
     border-block-end: var(--area-border-width) solid var(--area-border-decorative);
@@ -119,7 +127,7 @@
     overflow-y: auto;
     /* The first heading row brings its own air from the bar; a section's padding and the next heading's
        air make the space around each rule. */
-    padding: 0 var(--_inset) var(--_inset);
+    padding: 0 var(--_side) var(--_side);
     display: flex;
     flex-direction: column;
     gap: 0;
@@ -127,7 +135,7 @@
   /* The body is a Scroll area (docs/specs/scroll-area.md, "Adoption"): the inset moves into the scroller, so
      the bar sits at the panel's edge, as Figma's panels draw it; sections keep their stack. */
   .area-panel__body.area-scroll-area { padding: 0; overflow: hidden; }
-  .area-panel__body > .area-scroll-area__viewport { padding: 0 var(--_inset) var(--_inset); }
+  .area-panel__body > .area-scroll-area__viewport { padding: 0 var(--_side) var(--_side); }
   .area-panel__body > .area-scroll-area__viewport > .area-scroll-area__content { display: flex; flex-direction: column; gap: 0; }
   /* A section without a heading starts one inset below the bar or rule. */
   .area-panel__section:not(:has(> .area-panel__heading:first-child)) { padding-block-start: var(--_inset); }
@@ -153,8 +161,8 @@
     display: flex;
     flex-direction: column;
     gap: var(--_panel-row-gap);
-    margin-inline: calc(var(--_inset) * -1);
-    padding-inline: var(--_inset);
+    margin-inline: calc(var(--_side) * -1);
+    padding-inline: var(--_side);
     /* spec (batch 8, figma--section-auto-layout): the rule sits midway, one inset below the last field
        and one inset above the next title's cap (Figma 16 / 16.5). */
     padding-block-end: var(--_inset);
@@ -176,8 +184,8 @@
     box-sizing: content-box;
     margin: 0;
     padding-block: var(--_air) calc(var(--_air) - var(--_panel-row-gap));
-    margin-inline: calc(var(--_inset) * -1);
-    padding-inline: var(--_inset);
+    margin-inline: calc(var(--_side) * -1);
+    padding-inline: var(--_side);
     font-size: var(--_panel-label-text);
     line-height: var(--_panel-label-leading);
     /* spec (docs/specs/inspector.md): a section title is strong, as every title (Figma 550). */
@@ -215,17 +223,22 @@
   .area-panel__chevron {
     position: absolute;
     inset-inline-start: 0;
-    inset-block: 0;
+    /* On the title's row, not the heading box: an open section's heading has less air below than a closed
+       one's, so a box-centred chevron moved up when the section opened (owner, review round 2, 2026-10-09). */
+    inset-block-start: var(--_air);
+    block-size: var(--_row);
     display: flex;
     align-items: center;
     justify-content: center;
-    inline-size: var(--_inset);
+    inline-size: var(--_side);
     color: var(--area-fg-muted);
     opacity: 0;
     pointer-events: none;
   }
-  /* The glyph fits the inset (8 in a small panel, 12 at md), as Figma's 3 x 5 chevron fits its 16. */
-  .area-panel__chevron svg { flex-shrink: 0; inline-size: min(var(--area-icon-sm), var(--_inset)); block-size: min(var(--area-icon-sm), var(--_inset)); max-inline-size: none; }
+  /* A native cut, 16 at md and 12 at sm, centred in the side inset (13 / 9): its ink (9 / 7 wide) fits inside it
+     though the cut's box is wider, as Figma's 3 x 5 chevron sits in its 16. */
+  .area-panel__chevron svg { flex-shrink: 0; inline-size: var(--_chevron, var(--area-icon-sm)); block-size: var(--_chevron, var(--area-icon-sm)); max-inline-size: none; }
+  .area-panel--sm .area-panel__chevron svg { --_chevron: var(--area-icon-xs); }
   /* Revealed at once on hover or focus, faded out on fast (MOTION.md, "Hover plate"). */
   .area-panel__toggle:focus-visible .area-panel__chevron { opacity: 1; transition-duration: 0s; }
   @media (hover: hover) { .area-panel__heading:hover .area-panel__chevron { opacity: 1; transition-duration: 0s; } }
@@ -299,7 +312,7 @@
    */
   .area-panel__footer {
     flex-shrink: 0;
-    padding: var(--_inset);
+    padding: var(--_side);
     border-block-start: var(--area-border-width) solid var(--area-border-decorative);
   }
 
@@ -359,12 +372,12 @@
    * belong to compact density, not to a smaller panel; 40px rows were too loose for an inspector. */
   /* sm: section titles and labels 12/16, bar title 14/20, fields 8 apart, rows 8 apart, labels 4 over. */
   .area-panel--sm {
-    --_inset: var(--area-inset-surface-sm); --_row: var(--area-control-sm); /* 12, compact 8 */
-    --_panel-gap: calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense)); --_panel-row-gap: calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense)); --_panel-label-gap: var(--area-space-4); /* spec: 8, compact 6 */
+    --_inset: calc(var(--area-inset-surface-sm) - var(--area-space-2)); --_row: var(--area-control-sm); /* 10, compact 6 */
+    --_panel-gap: calc(var(--area-space-6) - var(--area-space-2) * var(--area-ui-dense)); --_panel-row-gap: calc(var(--area-space-6) - var(--area-space-2) * var(--area-ui-dense)); --_panel-label-gap: var(--area-space-4); /* spec: 6, compact 4; labels stay 4 over */
     --_panel-label-text: var(--area-text-xs-size); --_panel-label-leading: var(--area-text-xs-leading);
     --_panel-title-text: var(--area-ui-size); --_panel-title-leading: var(--area-ui-leading);
   }
-  .area-panel--md { --_inset: var(--area-space-16); --_row: var(--area-control-md); }
+  .area-panel--md { --_inset: calc(var(--area-space-16) - var(--area-space-2)); --_row: var(--area-control-md); }
 }
 
 @layer area.components {

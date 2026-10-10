@@ -530,14 +530,14 @@
     outline: var(--area-focus-width) solid var(--area-focus-color);
     outline-offset: var(--area-focus-offset);
   }
-  /* Link's underline (docs/specs/link.md, peers aligned 2026-10-08): 40% of the ink at rest, full ink on
-     hover and focus, one stroke 2 below; the ink never changes. */
+  /* Link's underline (docs/specs/link.md): the link's own ink, one stroke 2 below; the ink never changes (40% at
+     rest until review round 2, 2026-10-09). */
   .area-card__action {
     color: var(--area-fg-default);
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
     text-decoration: underline;
-    text-decoration-color: color-mix(in oklab, currentColor 40%, transparent); /* spec */
+    text-decoration-color: currentColor; /* spec: Link's line, the link's own ink (link.md, review round 2) */
     text-decoration-thickness: var(--area-stroke-width);
     text-underline-offset: var(--area-space-2);
     transition: text-decoration-color var(--area-duration-fast) var(--area-ease-out);
@@ -617,7 +617,7 @@
     font-weight: var(--area-weight-regular);
     text-decoration: underline;
     /* Link's underline (docs/specs/link.md, peers aligned 2026-10-08). */
-    text-decoration-color: color-mix(in oklab, currentColor 40%, transparent); /* spec */
+    text-decoration-color: currentColor; /* spec: Link's line, the link's own ink (link.md, review round 2) */
     text-decoration-thickness: var(--area-stroke-width);
     text-underline-offset: var(--area-space-2);
     transition: text-decoration-color var(--area-duration-fast) var(--area-ease-out);
@@ -1233,9 +1233,19 @@
     block-size: var(--area-ui-row);
     padding-inline: var(--area-space-8);
     color: var(--area-fg-muted);
+    /* The label box is set in the rows' type, so inset.css can give it the rows' own text inset; the
+       caption size is the text's (owner 2026-10-09: section titles line up with the row text). */
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+    font-weight: var(--area-weight-regular);
+  }
+  .area-menu__label-text {
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     font-size: var(--area-text-xs-size);
     line-height: var(--area-text-xs-leading);
-    font-weight: var(--area-weight-regular);
   }
 
   .area-menu__separator {

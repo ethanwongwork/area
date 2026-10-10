@@ -81,7 +81,20 @@ overrides both.
    from what the specimen renders; don't set a span. After a visual pass compared side by side
    in Claude in Chrome, record it in `apps/docs/src/pass-status.mjs`. For a subtle change, send
    the owner before / after crops at 1x and 3x rather than adding rows to the gallery.
-5. Report to the owner: gallery links, the comparison table, visual-pass observations,
-   open questions, and anything unverified. Status stays In review until the owner
-   accepts it in `apps/docs/src/component-status.mjs`.
+5. Write the spec's review note, then put the family on the component review page (owner,
+   2026-10-09: "be more explicit about the before and after, with a short simple explanation for
+   what changed and why, and make it clear what variants have actually changed"). The note is a
+   `## Review note, <date>` section with two bullets in plain words, no values or file names
+   unless they are the point:
+
+       - **What changed:** the menu's section titles now start where the row text starts.
+       - **Why:** you asked for them to line up; Notion and Figma align them too.
+
+   A new component's note says what it is for and what it is based on. Regenerate the page with
+   `--before` at the commit the owner last saw (`--before-label "main at <sha> (<date>)"`): the
+   generator renders every specimen in both builds and marks each variant Changed, New or
+   Unchanged, so describe only what the page will show as changed. Report to the owner: the
+   review page, gallery links, the comparison table, visual-pass observations, open questions,
+   and anything unverified. Status stays In review until the owner accepts it in
+   `apps/docs/src/component-status.mjs`.
 6. Log owner feedback in the spec (observation → change → evidence) before changing code.

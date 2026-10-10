@@ -188,6 +188,21 @@ export const COMPONENT_PAGES = [
     ],
   },
   {
+    slug: "toggletip", name: "Toggletip", exportName: "Toggletip", manifest: "toggletip",
+    imports: "Toggletip",
+    api: [
+      ["content", "ReactNode (a sentence or two; a Link with ink=\"inherit\")", "—"],
+      ["icon / size", "\"info\" | \"help\" / \"sm\" | \"md\"", "info / md"],
+      ["label", "string (the button's name)", '"More information" or "Help"'],
+      ["side / align / offset / delay", "as Tooltip", "top / center / 4 / 500"],
+      ["open / defaultOpen / onOpenChange", "controlled or uncontrolled; defaultOpen starts pinned", "—"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "Hover or Tab to the button to preview the note; press it to pin the note open, so touch reaches it. Press again, Escape or a press outside closes it.", demo: "GalleryToggletip" },
+      { id: "link", title: "With a link", note: "Pinned, the note keeps focus in reach: Tab moves from the button into the link.", demo: "GalleryToggletipLink" },
+    ],
+  },
+  {
     slug: "scroll-area", name: "Scroll area", exportName: "ScrollArea", manifest: "scrollArea",
     imports: "ScrollArea",
     api: [
@@ -207,7 +222,7 @@ export const COMPONENT_PAGES = [
     imports: "Link, linkVariants",
     api: [
       ["variant", '"inline" (always underlined) | "standalone" (underlined on hover and focus)', '"inline"'],
-      ["ink", '"inherit" | "muted" | "action" (the Action role: neutral until a theme makes actions the accent)', '"inherit"'],
+      ["ink", '"inherit" | "muted" | "action" (the Action role: neutral until a theme makes actions the accent) | "blue" (the link blue of product UI)', '"inherit"'],
       ["external", "boolean (new tab, rel noopener noreferrer, the external mark, announced)", "false"],
       ["newTabLabel", "string", '"(opens in a new tab)"'],
       ["linkVariants", "({ variant, ink }) => class names, for a router's own anchor", "—"],

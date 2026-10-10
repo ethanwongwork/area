@@ -177,6 +177,11 @@ Crispness: shell, scrub square, steppers and their 16px glyph boxes measured on 
 `number-field.html`. Open: the `add` / `subtract` glyphs centre ~1px strokes on integer
 coordinates and read as 2px grey bars at 1x (research B4, an icon-drawing change for the owner).
 
+## Review note, 2026-10-09
+
+- **What changed:** Only the inspector tile changed: the Panel around the fields is 2px tighter. Number field itself is unchanged.
+- **Why:** Panel's spacing was tightened in this round, and this tile sits in a Panel.
+
 ## Feedback log
 
 - 2026-09-26 · pass 1 ("do the next component, show me the images in chat"): Figma's handle

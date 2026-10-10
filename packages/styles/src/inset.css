@@ -26,7 +26,8 @@
   }
   .area-panel__bar {
     --_box-height: var(--_bar);
-    --_box-border: 0px;
+    /* The panel's edge, counted once (panel.css --_edge; 0 when flush), so the title shares the rows' column. */
+    --_box-border: var(--_edge, 0px);
     /* A panel title shares its content column with the body below it. */
     --_box-start: calc(var(--_box-height) - var(--_inset) * 2);
     font-size: var(--area-ui-size);
@@ -54,7 +55,11 @@
    * follows the icon viewport rather than a font-specific cap measurement: group names,
    * icon ink, and shell identity can share one optical leading edge. */
   .area-nav__label, .area-menu__label { --_box-start: var(--_box-icon); }
-  /* A menu group label sits on the icon column, as Nav's (audit D-15; was cap-centred, 11.7). */
+  /* A menu group label sits on the icon column, as Nav's (audit D-15; was cap-centred, 11.7), when the rows
+     lead with an icon (Command palette; Notion's palette labels share the icon edge). Over text-only rows it
+     starts on their text column instead, the same cap-centred inset in the rows' type (11 at 32), so the title
+     and the rows line up (owner, review round 2, 2026-10-09; it sat 3 short at 8). */
+  :has(> .area-menu__label):not(:has(.area-menu__icon:first-child)) > .area-menu__label { --_box-start: var(--_box-text); }
   /* A destination without a leading icon belongs on that same heading column. This is
    * intentionally asymmetric with generic text-only controls: in a Nav, visual scanning
    * follows the group column, not each row's cap-height-centred text inset. */

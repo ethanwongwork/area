@@ -210,7 +210,7 @@ export const TagPicker = forwardRef<HTMLInputElement, TagPickerProps>(function T
     <ScrollArea ref={listRef} id={listId} role="listbox" aria-multiselectable="true" aria-label={typeof label === "string" ? label : undefined}
       aria-labelledby={typeof label === "string" ? undefined : rest["aria-labelledby"]}
       popover="manual" className="area-menu area-tag-picker__listbox" tabIndex={-1} viewportProps={{ tabIndex: undefined }}>
-      {hintText !== null ? <div className="area-menu__label area-tag-picker__hint" role="presentation">{hintText}</div> : null}
+      {hintText !== null ? <div className="area-menu__label area-tag-picker__hint" role="presentation"><span className="area-menu__label-text">{hintText}</span></div> : null}
       {listRows.length === 0 ? <div className="area-tag-picker__empty" role="presentation">{emptyText}</div> : null}
       {listRows.map((row, index) => {
         const highlighted = index === active;
