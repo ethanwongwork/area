@@ -254,6 +254,19 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   Open the page for the owner at the start of the next icon session.
 - Open: the delegated picks and proposals in that README.
 
+## Icon batch 69 and filled rules (2026-10-07–10, branch `claude/icon-design-review-460199`)
+
+- Batch 69: 42 new icons from the review page's candidates, through owner rounds 8–23 on
+  https://claude.ai/artifact/4sGs7JYAfNQexTPW9TQR9w (`reviews7`; page data `docs/research/icon-review/2026-10-07/review-data.mjs`,
+  which marks redrawn icons and voids the verdict a redraw answers). Log of every round: that folder's README.
+- Filled rules now (spec "Filled is simple…" + revisions): body solid, marks inside are knockouts, attached parts stay
+  lines; an overlapping element sits wholly on the body as an `inset` (new generator role) with ≥ 1 weight of fill, or
+  keeps a halo; notebook's attached rings split (knockout over the cover, ink beyond). Research:
+  `docs/research/icon-review/2026-10-09/` (inventory, taxonomy, references).
+- Cloud family redrawn on option D (three humps, big middle left of centre; `2026-10-10/`). tree's crown still uses
+  the old cloud. Generator also gained `SLASH_GAP_BELOW` (unused after unpin reverted).
+- Open: square-terminal alias (New icons tab); bookmark tips vs repository's sharp ribbon.
+
 ## Icon consistency audit (2026-10-05, branch `claude/icon-audit-consistency-96540c`)
 
 - bot-guard filled: only the cap's top and the visor fill, the band stays open (owner); bot hats

@@ -1,4 +1,4 @@
 <svg data-set="area-pilot" data-keyline="horizontal" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
 <rect data-filled="solid" x="2" y="3.5" width="12" height="9" rx="2" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="knockout" d="M6.727 6.688A1.5 1.5 0 1 0 6.727 9.312M10.727 6.688A1.5 1.5 0 1 0 10.727 9.312" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="knockout" d="M7 6.586A1.5 1.5 0 1 0 7 9.414M11 6.586A1.5 1.5 0 1 0 11 9.414" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
