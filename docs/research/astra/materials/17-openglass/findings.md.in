@@ -1,0 +1,85 @@
+# Strengths, defects and bounded gaps
+
+All conclusions below come from pinned source. “Inference” means tracing declarations/control flow, not a verified cross-browser outcome. The local demo supports F01, but pixels are not the source of its values.
+
+## What it gets right
+
+- **Real shared controls with differentiated recipes.** Input fields are typed and bounded; liquid controls, wells, handles, content surfaces and sheets consume different shared paint. Quiet buttons and menu rows do not get independent backdrop filters. This materially satisfies part of the owner's hypothesis in task 02. {og:look:8-155} {og:l:392-411} {og:l:452-483} {og:l:766-780} {og:l:810-880} {og:l:1069-1100}
+- **Perimeter and state are separate in many controls.** The masked ring is decorative and pointer-transparent; focus uses a separate outline on the listed buttons. Native inputs, labels, state attributes and focus/dismissal logic are retained rather than drawn in a canvas. This does not certify all custom painted states. {og:l:179-227} {og:l:428-444} {og:i:308-421} {og:a:1003-1032} {og:a:619-682}
+- **Portable default and explicit enhancement.** Renderer auto is CSS-first; forced colors/reduced transparency short-circuit to CSS. Glass handles unsupported blur and opaque fallback centrally; CSS recipe fallbacks exist too. SDF generation has a shared cache and happens in a client effect. {og:cap:124-139} {og:css:212-255} {og:l:1155-1203} {og:packages/react/src/filters.tsx:22-24} {og:packages/react/src/filters.tsx:104-126}
+- **Practical theme and portal support.** Provider emits theme tokens and design/appearance markers; overlays explicitly copy them. The issue in F03 is incomplete effective-state capture, not absence of portal support. {og:theme:108-148} {og:i:793-817} {og:a:685-743} {og:a:951-958}
+- **Meaningful upstream tests.** Source tests assert forty distinct specimens, interaction behavior, Axe results on the showcased pages, palette contrast and renderer/fallback behavior. Those bounded tests are useful; they should not be read as an arbitrary-style contrast proof. {og:tests/e2e/component-atlas.spec.ts:26-59} {og:tests/e2e/component-atlas.spec.ts:61-129} {og:packages/core/src/theme.test.ts:9-64}
+
+## F01 — An unpositioned close button makes a panel-sized ring
+
+**Defect, source-derived and reproduced locally.** The shared ring selector includes `.ogui-overlay__header > button`; its `::after` is absolute with inset zero and inherits the button's radius. The base close button has width 2rem, aspect ratio 1 and radius 50%, but no positioning. The liquid close rule adds fill/shadow/transition, also no positioning. The positioned ancestor is the overlay surface. Consequently the circular close ring is laid out against the panel, producing an ellipse across it instead of a ring around the close control. {og:l:179-227} {og:b:1099-1118} {og:b:1153-1171} {og:l:965-973}
+
+Dialog and Drawer share that markup; this is not a showcase-only recipe. Reproduce in the shipped atlas by opening “Open publish dialog”; inspect the close button's static position and absolute `::after`. No upstream fix was made. **Proposed fix:** establish the intended containing block on every ring receiver, then test pseudo-element bounds on Dialog, Drawer, trigger/restore, ToggleButton and selected Pagination, not only normal Button. {og:a:705-722} {og:a:748-755}
+
+## F02 — Sparse presets and local derivation are not reset semantics
+
+**Contract limitation / inference.** Nested `theme.glass='liquid'` emits no look tokens, so it keeps ancestor look values in CSS; it does not restore default glass. A parent mode-specific tint can also defeat a child generic tint: the fill checks `tint-dark`/`tint-light` before `tint`. Example: parent smoked preset + child generic red still resolves the parent's mode-specific tint for a surface. {og:look:65-83} {og:look:99-118} {og:look:138-155} {og:l:85-96} {og:l:148-159}
+
+A direct `--ogui-glass-blur` style on an ordinary Button is not equivalent to a new provider: ancestor-derived `--ogui-lg-blur` has already resolved there. Glass and Theme mark their own design/tone boundary; a plain Button does not. Certain directly read ring values can change while derived colors/filter values do not. **Proposed Area lesson:** distinguish partial override, complete recipe switch and explicit reset, and derive again on a marked control-only scope. {og:l:41-84} {og:theme:139-148} {og:glass:150-162} {og:i:178-223}
+
+## F03 — Portals can lose the effective inherited look
+
+**Control-flow defect / inference; counterexample not browser-executed here.** Parent Theme emits blur=4. A nested Theme emits only rim=0 and its own palette. In-flow descendants inherit blur=4; the nested React context's token record contains only that provider's emitted look fields, not the parent blur. Menu/Popover copies those tokens into a body portal, so its blur falls back to 1. Dialog/Drawer and ToastProvider copy the same kind of record. Normal explicitly complete provider look values are copied correctly. {og:theme:108-130} {og:i:642-652} {og:i:793-817} {og:a:588-607} {og:a:685-743} {og:a:928-958}
+
+The same issue affects a local `<Glass look={...}>` ancestor around a trigger, since local CSS look does not update Theme context. Provider `style` values absent from the token key set are applied to its DOM but not added to `effectiveTokens`. **Proposed fix:** preserve resolved raw input/provenance in React context and re-emit at the portal, with an explicit bridge for CSS-only scopes. {og:glass:110-120} {og:theme:119-148}
+
+## F04 — The classic-scope guard is finite, not a nearest-ancestor resolver
+
+**Selector inference.** The generated guard excludes a node under classic unless it is also under any `classic liquid` ancestor chain. In `liquid → classic → liquid → classic → Button`, the last Button satisfies both historical chains, so the inner exemption admits liquid paint although its nearest design is classic. The generator uses that guard on the first compound after its liquid scope. It does not inspect the nearest boundary. This counterexample follows directly from the selector; it was not rendered as a custom fixture. {og:scripts/generate-liquid-css.mjs:21-23} {og:scripts/generate-liquid-css.mjs:43-66}
+
+**Proposed fix:** test alternation deeper than a single classic island and a single liquid re-entry, or use a scope/receiver scheme whose matching boundary is explicit. Do not take a stylesheet comment promising nearest scope as implementation proof.
+
+## F05 — Some globals are partial, and nesting adds independent effects
+
+**Scope/design limit, not every fixed treatment is a bug.** `shadow=0` removes shared lift but leaves primary Button casts, fixed knob shadows, checked-checkbox/radio shadows, and status glow. `rim=0` leaves the lensing band. `highlight=0` leaves pointer glint and the Card gradient. The source interface's whole-edge description is broader than its implementation. {og:look:23-36} {og:l:64-75} {og:l:99-100} {og:l:303-328} {og:l:367-385} {og:l:810-821} {og:l:1121-1132}
+
+The library has no shared role allowance/optical owner consulted by these component selectors. An outer Card plus inner secondary Button requests both filters; a Dialog requests its own heavy filter and a fixed blurred scrim. Input wells and quiet menu rows are useful exceptions, but no general “glass in glass” policy suppresses redundant acquisition. This is a source-level count of filter declarations, not a measured compositor cost claim. {og:l:303-319} {og:l:766-780} {og:l:810-821} {og:l:922-935}
+
+**Proposed Area lesson:** caps should return effective outputs and reasons, while preserving semantic state, rather than promising that one scalar changes every shadow or that a smaller scalar makes dense nesting safe.
+
+## F06 — Reduced transparency is implemented, but has uncovered states
+
+**Source counterexamples.** The liquid media rule substitutes opaque fill, well, surface, sheet and thumb variables and clears the three shared filter tiers. It removes Card/Toast/Accordion background images. Those are substantive fallbacks. {og:l:1173-1203}
+
+However, pressed Switch still sets a literal translucent white body and `blur(1px) saturate(2.2) brightness(1.12)`, outside those variables. Pressed range thumbs use literal translucent white. Overlay scrim keeps its literal `blur(10px) saturate(1.3)`; the preference changes scrim alpha, not that filter. Alert/Banner and semantic Badge backgrounds, plus Dropzone's drag/focus tint, are independently translucent expressions. The fallback does not replace them. These conclusions come from declarations and the complete preference block, not a claim about unsupported operating-system emulation. {og:l:609-626} {og:l:668-718} {og:l:922-925} {og:l:897-913} {og:b:592-596} {og:b:910-923} {og:l:1146-1148} {og:l:1173-1203}
+
+A functional translucent scrim need not become an opaque wall; the important gap is retained optional optical filtering. Unsupported-backdrop CSS uses near-opaque rather than fully opaque fills and does not replace every well/thumb/tone state. Glass's centralized fallback is distinct from these ordinary DOM recipes. {og:l:1155-1170} {og:css:212-255}
+
+**Proposed fix:** apply fallback gates at the final effective filter/body channel, including pseudo-elements and state overrides. Preserve required semantics and functional scrim occlusion.
+
+## F07 — Contrast is a palette check, not a composited-glass guarantee
+
+**Concrete counterexample from source arithmetic.** `readableForeground` chooses whichever of `#101214` and `#f9f8f3` has the higher ratio, without a minimum-ratio repair. `createGlassTheme('dark', {accent:'#777777'})` therefore selects `#f9f8f3` with `accentContrast = 4.211349069950931`, below the 4.5 threshold used by the source's own tests. This is calculated by the pinned luminance implementation and was reproduced from the built core module; it is not an image estimate. {og:palette:149-181} {og:palette:189-205} {og:palette:240-241} {og:packages/core/src/theme.test.ts:20-27}
+
+Even passing that palette pair would not qualify a glass button: primary paint includes a white-mixed gradient, a translucent stop, pointer glint and a whole-element hover filter. Plain glass can vary opacity, brightness and tint without recomputing ink. For example, light appearance plus an opaque black surface tint is allowed while light-mode dark text remains fixed. That is a source-derived unsafe input configuration, not a measured general failure of the default preset. {og:l:367-389} {og:look:85-94} {og:look:138-155} {og:l:148-159} {og:palette:208-214}
+
+Focus is selected for contrast against the fixed palette canvas, not every local filtered backdrop. `contrast='high'` changes muted/border palette choices; it is not a solver for final body/edge/focus pixels. Capability detection and provider media listeners enumerate motion, transparency and forced colors but **not `prefers-contrast`**. {og:palette:194-228} {og:cap:86-107} {og:provider:90-114}
+
+**Evidence boundary:** source unit tests cover selected accent/focus pairs; the atlas e2e test checks the displayed accent ratio and runs Axe on those pages. A worst-case composited backdrop sampler for all forty and all GlassLook extrema was **not found in** core theme/look, renderer CSS, recipe CSS/tests or `tests/e2e` examined here. This bounded absence does not mean there is no external/manual audit. {og:packages/core/src/theme.test.ts:9-64} {og:tests/e2e/component-atlas.spec.ts:44-48} {og:tests/e2e/component-atlas.spec.ts:131-175}
+
+**Proposed fix:** validate the opaque palette pair first, then qualify the actual composited receiver domain or force an appropriate opaque fallback. Keep required edge/focus testing independent of decorative rims.
+
+## F08 — Forced-color handling is substantive, but focus remains a review gap
+
+Glass supplies Canvas/CanvasText and strips filter/shadow; CSS removes decorative rings, restores real CanvasText borders for listed parts and sets explicit selected system-color pairs. Base CSS also suppresses an unchecked check glyph and supplies a structural selected-tab mark. {og:css:218-235} {og:l:1268-1351} {og:b:1768-1803}
+
+**Risk to test, not a certified failure:** fields set `outline:0`; their liquid focus cue is box-shadow while border-color is transparent. The forced-color list removes box-shadow and restores borders with a different selector specificity. This deserves an actual forced-colors focused/invalid field test, rather than inferring success from the existence of the block. Also, mask/conic edge support is not independently gated by the backdrop-only `@supports` fallback. {og:b:1380-1397} {og:l:1069-1100} {og:l:1300-1332} {og:l:205-227} {og:l:1155-1170}
+
+## F09 — Reduced motion is not a uniform stop-all-optics policy
+
+**Source counterexamples/policy differences.** Liquid shortens transitions for named controls, removes entrance animations and suppresses Switch press scale. Base rules remove shimmer, but intentionally slow Spinner rather than stop it. Native range pseudo-thumb transitions and active scaling are not in the liquid motion lists; applying `transition:none` to an input is not applying it to its pseudo-element. Dock hover transform is explicitly removed only in the explicit-motion-off branch. {og:l:652-718} {og:l:1206-1265} {og:b:1705-1766}
+
+Button's pointer handler still updates glint coordinates directly, without reading runtime motion; Glass's own optional pointer field is gated by runtime motion. These are separate paths. SVG/WebGL are separate too: direct WebGLGlassSurface initialization gates on WebGL availability, not reduced transparency/forced colors, and its video callback loop precedes the motion-gated continuous animation branch. A consumer must not assume the Glass selector's fallback governs a separately mounted canvas. {og:i:192-209} {og:glass:73-76} {og:packages/react/src/webgl-surface.tsx:103-112} {og:packages/react/src/webgl-surface.tsx:165-199}
+
+**Proposed Area lesson:** distinguish semantic media/loading motion from optional moving material; stop the latter across CSS, pointer handlers and renderer backends. This report does not claim native video should automatically freeze.
+
+## F10 — Design selection changes more than optics
+
+Liquid changes default radius, button height/padding/weight, capsule geometry, hover/press transforms and typography tracking. Some hover states change ink, and primary Button filters the whole element, including foreground pixels. Those choices can be coherent for OpenGlass but conflict with Area's existing separation of material from geometry/density/type and fixed hover foreground. {og:theme:96-105} {og:l:303-359} {og:l:388-389} {og:l:516-542} {og:b:969-975} {area:docs/DESIGN_SYSTEM.md:24-45} {area:docs/CONTRAST.md:36-64}
+
+No change to OpenGlass or Area is made by this report. Proposed repairs are candidates for owner review, not approved implementation work.

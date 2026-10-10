@@ -1,0 +1,2299 @@
+{
+  "schema": 1,
+  "checked": "2026-10-10",
+  "upstream_commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+  "scope": "forty atlas components; audit role crosswalk, not upstream role API",
+  "common_sources": [
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/react/src/theme.tsx",
+      "start": 67,
+      "end": 106,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/react/src/theme.tsx#L67-L106"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/theme.ts",
+      "start": 189,
+      "end": 241,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/theme.ts#L189-L241"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/react/src/theme.tsx",
+      "start": 108,
+      "end": 148,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/react/src/theme.tsx#L108-L148"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 18,
+      "end": 22,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L18-L22"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 41,
+      "end": 165,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L41-L165"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/renderers/src/css.ts",
+      "start": 300,
+      "end": 309,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/renderers/src/css.ts#L300-L309"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 76,
+      "end": 84,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L76-L84"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 139,
+      "end": 147,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L139-L147"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/renderers/src/css.ts",
+      "start": 34,
+      "end": 60,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/renderers/src/css.ts#L34-L60"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/renderers/src/css.ts",
+      "start": 142,
+      "end": 157,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/renderers/src/css.ts#L142-L157"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/renderers/src/css.ts",
+      "start": 169,
+      "end": 209,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/renderers/src/css.ts#L169-L209"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 43,
+      "end": 51,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L43-L51"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 85,
+      "end": 102,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L85-L102"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 110,
+      "end": 118,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L110-L118"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 148,
+      "end": 164,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L148-L164"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 85,
+      "end": 96,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L85-L96"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 148,
+      "end": 159,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L148-L159"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/renderers/src/css.ts",
+      "start": 169,
+      "end": 187,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/renderers/src/css.ts#L169-L187"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/renderers/src/css.ts",
+      "start": 201,
+      "end": 208,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/renderers/src/css.ts#L201-L208"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 48,
+      "end": 69,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L48-L69"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 97,
+      "end": 100,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L97-L100"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 54,
+      "end": 69,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L54-L69"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 303,
+      "end": 328,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L303-L328"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 810,
+      "end": 821,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L810-L821"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 67,
+      "end": 75,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L67-L75"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 207,
+      "end": 217,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L207-L217"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 64,
+      "end": 65,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L64-L65"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 128,
+      "end": 129,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L128-L129"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/renderers/src/css.ts",
+      "start": 188,
+      "end": 200,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/renderers/src/css.ts#L188-L200"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 70,
+      "end": 75,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L70-L75"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 133,
+      "end": 138,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L133-L138"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 381,
+      "end": 385,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L381-L385"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 99,
+      "end": 100,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L99-L100"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1121,
+      "end": 1132,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1121-L1132"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 205,
+      "end": 206,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L205-L206"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/renderers/src/css.ts",
+      "start": 142,
+      "end": 209,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/renderers/src/css.ts#L142-L209"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/renderers/src/css.ts",
+      "start": 212,
+      "end": 297,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/renderers/src/css.ts#L212-L297"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 179,
+      "end": 227,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L179-L227"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 303,
+      "end": 425,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L303-L425"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 452,
+      "end": 519,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L452-L519"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 522,
+      "end": 563,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L522-L563"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1044,
+      "end": 1062,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1044-L1062"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 569,
+      "end": 725,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L569-L725"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 810,
+      "end": 880,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L810-L880"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 791,
+      "end": 803,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L791-L803"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 922,
+      "end": 973,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L922-L973"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1069,
+      "end": 1148,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1069-L1148"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 979,
+      "end": 1041,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L979-L1041"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 771,
+      "end": 780,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L771-L780"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 897,
+      "end": 917,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L897-L917"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1014,
+      "end": 1041,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1014-L1041"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 922,
+      "end": 935,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L922-L935"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 249,
+      "end": 297,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L249-L297"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/renderers/src/css.ts",
+      "start": 162,
+      "end": 167,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/renderers/src/css.ts#L162-L167"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/react/src/theme.tsx",
+      "start": 67,
+      "end": 148,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/react/src/theme.tsx#L67-L148"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 303,
+      "end": 319,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L303-L319"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 766,
+      "end": 780,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L766-L780"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/renderers/src/capabilities.ts",
+      "start": 108,
+      "end": 139,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/renderers/src/capabilities.ts#L108-L139"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1155,
+      "end": 1351,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1155-L1351"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/renderers/src/css.ts",
+      "start": 212,
+      "end": 255,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/renderers/src/css.ts#L212-L255"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 569,
+      "end": 626,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L569-L626"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 633,
+      "end": 721,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L633-L721"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 731,
+      "end": 749,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L731-L749"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 731,
+      "end": 756,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L731-L756"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 452,
+      "end": 483,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L452-L483"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 760,
+      "end": 780,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L760-L780"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 760,
+      "end": 764,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L760-L764"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 633,
+      "end": 725,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L633-L725"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 979,
+      "end": 996,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L979-L996"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 999,
+      "end": 1002,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L999-L1002"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1005,
+      "end": 1011,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1005-L1011"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 810,
+      "end": 855,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L810-L855"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 916,
+      "end": 917,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L916-L917"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1014,
+      "end": 1031,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1014-L1031"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1014,
+      "end": 1017,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1014-L1017"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1038,
+      "end": 1041,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1038-L1041"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1033,
+      "end": 1034,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1033-L1034"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 897,
+      "end": 913,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L897-L913"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 452,
+      "end": 462,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L452-L462"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1044,
+      "end": 1057,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1044-L1057"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 858,
+      "end": 870,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L858-L870"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 960,
+      "end": 973,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L960-L973"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 873,
+      "end": 894,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L873-L894"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1104,
+      "end": 1128,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1104-L1128"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1104,
+      "end": 1114,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1104-L1114"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1130,
+      "end": 1137,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1130-L1137"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1069,
+      "end": 1094,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1069-L1094"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1069,
+      "end": 1100,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1069-L1100"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 303,
+      "end": 344,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L303-L344"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1060,
+      "end": 1062,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1060-L1062"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1140,
+      "end": 1148,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1140-L1148"
+    }
+  ],
+  "components": [
+    {
+      "component": "Button",
+      "recipe_ids": [
+        "B"
+      ],
+      "roles": [
+        "raised-control",
+        "edge",
+        "glyph",
+        "text"
+      ],
+      "flow": "Secondary follows B; primary keeps fixed accent gradient/casts and filters the whole button on hover. Quiet has no backdrop filter; danger uses semantic danger accent inherited from base CSS. No tint control on its white body.",
+      "fallback_and_nesting": "CSS recipe fallback; fixed primary/danger paint remains outside generic fill replacement.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/index.tsx",
+          "start": 178,
+          "end": 223,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L178-L223"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 303,
+          "end": 425,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L303-L425"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 30,
+          "end": 143,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L30-L143"
+        }
+      ]
+    },
+    {
+      "component": "IconButton",
+      "recipe_ids": [
+        "B"
+      ],
+      "roles": [
+        "raised-control",
+        "edge",
+        "glyph"
+      ],
+      "flow": "Delegates to Button; quiet by default. Its icon is content inside the label slot, not a separate refractive role.",
+      "fallback_and_nesting": "Same variant/fallback limits as Button.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/index.tsx",
+          "start": 229,
+          "end": 247,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L229-L247"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 303,
+          "end": 425,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L303-L425"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 145,
+          "end": 158,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L145-L158"
+        }
+      ]
+    },
+    {
+      "component": "SegmentedControl",
+      "recipe_ids": [
+        "W/I"
+      ],
+      "roles": [
+        "recessed-field-track",
+        "thumb-knob",
+        "text",
+        "edge"
+      ],
+      "flow": "Fixed well and thumb alpha; shared filter/rim/lift; moving indicator receives measured geometry. Hover of unselected labels changes ink.",
+      "fallback_and_nesting": "Opaque well/thumb substitutions; forced selection retains Highlight/HighlightText; indicator motion shortened.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/index.tsx",
+          "start": 264,
+          "end": 300,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L264-L300"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 452,
+          "end": 519,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L452-L519"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 160,
+          "end": 195,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L160-L195"
+        }
+      ]
+    },
+    {
+      "component": "Switch",
+      "recipe_ids": [
+        "K"
+      ],
+      "roles": [
+        "recessed-field-track",
+        "thumb-knob",
+        "indicator-fill",
+        "text"
+      ],
+      "flow": "Native hidden checkbox owns state. White knob, fixed casts and selected accent bypass GlassLook. Press adds fixed translucent lens/filter.",
+      "fallback_and_nesting": "Rest well resolves opaque; pressed hard-coded lens survives reduced transparency. Reduced motion removes active scale but keeps state position.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/index.tsx",
+          "start": 308,
+          "end": 366,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L308-L366"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 569,
+          "end": 626,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L569-L626"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 197,
+          "end": 274,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L197-L274"
+        }
+      ]
+    },
+    {
+      "component": "Slider",
+      "recipe_ids": [
+        "K"
+      ],
+      "roles": [
+        "recessed-field-track",
+        "thumb-knob",
+        "indicator-fill",
+        "text"
+      ],
+      "flow": "Native range; exact value fill, fixed knob, fixed active lens. Main optical parts do not consume Look controls.",
+      "fallback_and_nesting": "Well substitutes; active thumb alpha and pseudo-element transition are not in shared fallback overrides.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/index.tsx",
+          "start": 373,
+          "end": 421,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L373-L421"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 633,
+          "end": 721,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L633-L721"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 276,
+          "end": 303,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L276-L303"
+        }
+      ]
+    },
+    {
+      "component": "Toolbar",
+      "recipe_ids": [
+        "G",
+        "B"
+      ],
+      "roles": [
+        "container",
+        "raised-control",
+        "edge",
+        "glyph",
+        "text"
+      ],
+      "flow": "Glass regular shell plus caller children; quiet buttons are locally quiet. Shell consumes all Look fields; no child ownership policy enforces quiet variants.",
+      "fallback_and_nesting": "Glass runtime fallback for shell, CSS fallback separately for children.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/index.tsx",
+          "start": 429,
+          "end": 453,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L429-L453"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 731,
+          "end": 749,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L731-L749"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 305,
+          "end": 319,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L305-L319"
+        }
+      ]
+    },
+    {
+      "component": "Dock",
+      "recipe_ids": [
+        "G",
+        "B"
+      ],
+      "roles": [
+        "container",
+        "raised-control",
+        "edge",
+        "glyph",
+        "text"
+      ],
+      "flow": "Glass regular nav shell; child buttons retain their own recipe and hover translation/scale.",
+      "fallback_and_nesting": "Glass shell fallback; explicit motion off removes dock hover transform, OS reduced-motion path mainly shortens transitions.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/index.tsx",
+          "start": 460,
+          "end": 481,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L460-L481"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 731,
+          "end": 756,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L731-L756"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 305,
+          "end": 324,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L305-L324"
+        }
+      ]
+    },
+    {
+      "component": "Tabs",
+      "recipe_ids": [
+        "W/I"
+      ],
+      "roles": [
+        "recessed-field-track",
+        "thumb-knob",
+        "text",
+        "container"
+      ],
+      "flow": "Fixed well/selection plate with shared filter/rim/lift; panel is content, not another automatic glass sheet.",
+      "fallback_and_nesting": "Opaque plate/well; fallback selected-button paint before indicator ready; forced selected ink/marker retained.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/index.tsx",
+          "start": 498,
+          "end": 600,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L498-L600"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 452,
+          "end": 483,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L452-L483"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 522,
+          "end": 563,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L522-L563"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 326,
+          "end": 364,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L326-L364"
+        }
+      ]
+    },
+    {
+      "component": "Menu",
+      "recipe_ids": [
+        "G"
+      ],
+      "roles": [
+        "floating-surface",
+        "raised-control",
+        "text",
+        "edge"
+      ],
+      "flow": "DisclosureSurface portals a Glass frosted shell with copied provider tokens. Trigger is caller content; rows consume local hover fill without independent blur.",
+      "fallback_and_nesting": "Glass shell fallback; portal cannot retain unrecorded CSS look inheritance.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/index.tsx",
+          "start": 912,
+          "end": 925,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L912-L925"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 760,
+          "end": 780,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L760-L780"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 366,
+          "end": 404,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L366-L404"
+        },
+        {
+          "file": "packages/recipes/src/index.tsx",
+          "start": 617,
+          "end": 821,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L617-L821"
+        }
+      ]
+    },
+    {
+      "component": "MenuItem",
+      "recipe_ids": [
+        "row"
+      ],
+      "roles": [
+        "raised-control",
+        "text",
+        "glyph"
+      ],
+      "flow": "Transparent command row; hover uses Look opacity through fill-hover; destructive ink is semantic. No own lens/blur/cast/ring.",
+      "fallback_and_nesting": "Hover fill substitutes; depends on containing menu for readable ground. Inherits whichever portal scope is actually emitted.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/index.tsx",
+          "start": 930,
+          "end": 958,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L930-L958"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 771,
+          "end": 780,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L771-L780"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 406,
+          "end": 421,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L406-L421"
+        }
+      ]
+    },
+    {
+      "component": "Popover",
+      "recipe_ids": [
+        "G"
+      ],
+      "roles": [
+        "floating-surface",
+        "container",
+        "text",
+        "edge"
+      ],
+      "flow": "Same portalled Glass frosted shell as Menu; content has dialog role and may contain independently painted children.",
+      "fallback_and_nesting": "Glass fallback and recorded-token portal limitation; no automatic nesting cap.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/index.tsx",
+          "start": 963,
+          "end": 977,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L963-L977"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 760,
+          "end": 764,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L760-L764"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 366,
+          "end": 399,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L366-L399"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 423,
+          "end": 427,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L423-L427"
+        },
+        {
+          "file": "packages/recipes/src/index.tsx",
+          "start": 617,
+          "end": 821,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L617-L821"
+        }
+      ]
+    },
+    {
+      "component": "Tooltip",
+      "recipe_ids": [
+        "F"
+      ],
+      "roles": [
+        "floating-surface",
+        "text",
+        "edge"
+      ],
+      "flow": "Inline wrapper and bubble, not a portal; sheet, rim/lift and heavy blur. All Look fields through shared body/ring/filter/lift.",
+      "fallback_and_nesting": "CSS opaque sheet/no heavy blur; forced-color real edge; remains subject to ancestor clipping.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/index.tsx",
+          "start": 984,
+          "end": 1010,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L984-L1010"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 791,
+          "end": 803,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L791-L803"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 429,
+          "end": 474,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L429-L474"
+        }
+      ]
+    },
+    {
+      "component": "MediaControls",
+      "recipe_ids": [
+        "B",
+        "K"
+      ],
+      "roles": [
+        "container",
+        "raised-control",
+        "recessed-field-track",
+        "thumb-knob",
+        "indicator-fill",
+        "glyph",
+        "text"
+      ],
+      "flow": "Quiet IconButtons plus native seek range and time output; container is not a Glass surface. K paint is fixed; buttons receive B subset.",
+      "fallback_and_nesting": "Combined quiet-button/range fallbacks; no automatic WebGL media surface.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/index.tsx",
+          "start": 1055,
+          "end": 1117,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L1055-L1117"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 633,
+          "end": 725,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L633-L725"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 476,
+          "end": 498,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L476-L498"
+        }
+      ]
+    },
+    {
+      "component": "Badge",
+      "recipe_ids": [
+        "D"
+      ],
+      "roles": [
+        "indicator-fill",
+        "text",
+        "edge"
+      ],
+      "flow": "Neutral body uses opacity fill; control filter, lensing and ring. Tone variants keep fixed semantic fill/ink and an additional tone inset. No generic tint or shared cast.",
+      "fallback_and_nesting": "Control blur disabled in reduced transparency; semantic fixed-alpha body bypasses fill substitution.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/atlas.tsx",
+          "start": 37,
+          "end": 40,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L37-L40"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 979,
+          "end": 996,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L979-L996"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 559,
+          "end": 596,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L559-L596"
+        }
+      ]
+    },
+    {
+      "component": "Avatar",
+      "recipe_ids": [
+        "D"
+      ],
+      "roles": [
+        "glyph",
+        "edge"
+      ],
+      "flow": "Image or initials on fixed radial/accent body. Shared lensing/lift/ring respond; no backdrop blur, tint or opacity body control.",
+      "fallback_and_nesting": "No normal blur to remove; forced mode removes ring. Intrinsic image is not transformed into a new material.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/atlas.tsx",
+          "start": 47,
+          "end": 72,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L47-L72"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 999,
+          "end": 1002,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L999-L1002"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 598,
+          "end": 632,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L598-L632"
+        }
+      ]
+    },
+    {
+      "component": "AvatarGroup",
+      "recipe_ids": [
+        "D"
+      ],
+      "roles": [
+        "container",
+        "glyph",
+        "edge"
+      ],
+      "flow": "Layout grouping only; child Avatars carry D recipe. Fixed canvas outline and overlap, hover lift; no new group shell.",
+      "fallback_and_nesting": "Child fallback; reduced motion suppresses transition but can leave instantaneous hover offset.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/atlas.tsx",
+          "start": 73,
+          "end": 76,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L73-L76"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 1005,
+          "end": 1011,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1005-L1011"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 634,
+          "end": 652,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L634-L652"
+        }
+      ]
+    },
+    {
+      "component": "Card",
+      "recipe_ids": [
+        "S"
+      ],
+      "roles": [
+        "container",
+        "edge",
+        "text",
+        "divider"
+      ],
+      "flow": "Surface tint/gradient, rim/bloom/lift/filter; optional interactive hover uses high lift and transform. Footer uses hairline, labels use semantic ink.",
+      "fallback_and_nesting": "CSS opaque surface and removed background image; children remain independent paint consumers.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/atlas.tsx",
+          "start": 85,
+          "end": 130,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L85-L130"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 810,
+          "end": 855,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L810-L855"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 654,
+          "end": 720,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L654-L720"
+        }
+      ]
+    },
+    {
+      "component": "Stat",
+      "recipe_ids": [
+        "text"
+      ],
+      "roles": [
+        "text",
+        "indicator-fill"
+      ],
+      "flow": "No optical shell. Label/value/change are semantic type/tone; liquid adjusts tracking. No direct GlassLook field affects its own body.",
+      "fallback_and_nesting": "Depends on host readability; no extra optical layer to fall back.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/atlas.tsx",
+          "start": 138,
+          "end": 147,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L138-L147"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 916,
+          "end": 917,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L916-L917"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 722,
+          "end": 745,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L722-L745"
+        }
+      ]
+    },
+    {
+      "component": "Progress",
+      "recipe_ids": [
+        "data"
+      ],
+      "roles": [
+        "recessed-field-track",
+        "indicator-fill",
+        "text"
+      ],
+      "flow": "Native progress with fixed well and accent gradient/glow; dimensions/value remain native. GlassLook does not tune the value gradient/glow.",
+      "fallback_and_nesting": "Well substitution does not remove fixed optional fill glow; browser-specific pseudo-element declarations differ.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/atlas.tsx",
+          "start": 154,
+          "end": 168,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L154-L168"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 1014,
+          "end": 1031,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1014-L1031"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 747,
+          "end": 799,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L747-L799"
+        }
+      ]
+    },
+    {
+      "component": "Meter",
+      "recipe_ids": [
+        "data"
+      ],
+      "roles": [
+        "recessed-field-track",
+        "indicator-fill",
+        "text"
+      ],
+      "flow": "Native meter receives well on host; platform internals and thresholds own the value presentation. No custom Look-driven fill recipe.",
+      "fallback_and_nesting": "Well token fallback is not evidence of identical native meter appearance across engines.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/atlas.tsx",
+          "start": 179,
+          "end": 207,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L179-L207"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 1014,
+          "end": 1017,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1014-L1017"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 768,
+          "end": 778,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L768-L778"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 801,
+          "end": 814,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L801-L814"
+        }
+      ]
+    },
+    {
+      "component": "Spinner",
+      "recipe_ids": [
+        "data"
+      ],
+      "roles": [
+        "indicator-fill",
+        "text"
+      ],
+      "flow": "Fixed border ring, accent top, semantic status text. No Look-controlled blur/cast.",
+      "fallback_and_nesting": "Base reduced-motion and explicit off slow rotation to 1.6s rather than remove it; this is its explicit status policy.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/atlas.tsx",
+          "start": 208,
+          "end": 220,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L208-L220"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 1038,
+          "end": 1041,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1038-L1041"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 816,
+          "end": 834,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L816-L834"
+        }
+      ]
+    },
+    {
+      "component": "Skeleton",
+      "recipe_ids": [
+        "data"
+      ],
+      "roles": [
+        "indicator-fill"
+      ],
+      "flow": "Fixed well body and animated fixed-alpha shimmer; no Look controls on its own paint.",
+      "fallback_and_nesting": "Opaque well; base reduced-motion/off removes shimmer animation.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/atlas.tsx",
+          "start": 221,
+          "end": 235,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L221-L235"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 1033,
+          "end": 1034,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1033-L1034"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 836,
+          "end": 860,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L836-L860"
+        }
+      ]
+    },
+    {
+      "component": "Alert",
+      "recipe_ids": [
+        "feedback"
+      ],
+      "roles": [
+        "container",
+        "indicator-fill",
+        "text",
+        "raised-control",
+        "edge"
+      ],
+      "flow": "Fixed semantic translucent body and signal glow; shared rim/lift/control filter and conic edge. Dismiss action has semantic hover fill.",
+      "fallback_and_nesting": "Shared blur stops; fixed tone body/glow does not become an opaque surface via fill replacement.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/atlas.tsx",
+          "start": 242,
+          "end": 270,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L242-L270"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 897,
+          "end": 913,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L897-L913"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 862,
+          "end": 908,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L862-L908"
+        }
+      ]
+    },
+    {
+      "component": "Banner",
+      "recipe_ids": [
+        "feedback"
+      ],
+      "roles": [
+        "container",
+        "indicator-fill",
+        "text",
+        "raised-control",
+        "edge"
+      ],
+      "flow": "Fixed accent-alpha body and flare; shared rim/lift/control filter/ring. Caller action can be another independent B recipe.",
+      "fallback_and_nesting": "Shared blur stops; accent body/flare remain outside generic opaque-fill substitutions.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/atlas.tsx",
+          "start": 278,
+          "end": 322,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L278-L322"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 897,
+          "end": 913,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L897-L913"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 910,
+          "end": 945,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L910-L945"
+        }
+      ]
+    },
+    {
+      "component": "Breadcrumbs",
+      "recipe_ids": [
+        "text"
+      ],
+      "roles": [
+        "text",
+        "glyph"
+      ],
+      "flow": "Semantic links/current text and slash separators; no material shell. Hover changes ink.",
+      "fallback_and_nesting": "Host must provide readable ground; no per-crumb optical effect or Look control.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/atlas.tsx",
+          "start": 328,
+          "end": 352,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L328-L352"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 947,
+          "end": 975,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L947-L975"
+        }
+      ]
+    },
+    {
+      "component": "Pagination",
+      "recipe_ids": [
+        "W/I"
+      ],
+      "roles": [
+        "recessed-field-track",
+        "raised-control",
+        "thumb-knob",
+        "text",
+        "edge"
+      ],
+      "flow": "Well/filter group; fixed-alpha selected page body with rim/lift/ring. Unselected hover uses fill-hover and changes ink.",
+      "fallback_and_nesting": "Opaque well/thumb and forced selected pair; ordinary text retains host dependency.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/atlas.tsx",
+          "start": 381,
+          "end": 425,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L381-L425"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 452,
+          "end": 462,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L452-L462"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 1044,
+          "end": 1057,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1044-L1057"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 977,
+          "end": 1011,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L977-L1011"
+        }
+      ]
+    },
+    {
+      "component": "Accordion",
+      "recipe_ids": [
+        "S"
+      ],
+      "roles": [
+        "container",
+        "divider",
+        "raised-control",
+        "glyph",
+        "text",
+        "edge"
+      ],
+      "flow": "Whole accordion gets surface recipe; sections use hairlines, header buttons/content stay plain. No separate blur per row.",
+      "fallback_and_nesting": "Opaque shared surface/image removal; existing expand glyph/content motion receives base fallback.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/atlas.tsx",
+          "start": 432,
+          "end": 496,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L432-L496"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 810,
+          "end": 821,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L810-L821"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 858,
+          "end": 870,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L858-L870"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 1013,
+          "end": 1065,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1013-L1065"
+        }
+      ]
+    },
+    {
+      "component": "Dialog",
+      "recipe_ids": [
+        "F",
+        "B"
+      ],
+      "roles": [
+        "floating-surface",
+        "scrim",
+        "raised-control",
+        "edge",
+        "text"
+      ],
+      "flow": "Overlay helper portals tokens. Fixed scrim filter plus heavy shell; built-in trigger uses B; close uses fill/lensing/ring. Close ring lacks local positioning (F01).",
+      "fallback_and_nesting": "Opaque sheet/heavy filter removal; scrim fixed blur survives transparency preference; portal record limitation.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/atlas.tsx",
+          "start": 748,
+          "end": 751,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L748-L751"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 922,
+          "end": 935,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L922-L935"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 960,
+          "end": 973,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L960-L973"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 1067,
+          "end": 1179,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1067-L1179"
+        },
+        {
+          "file": "packages/recipes/src/atlas.tsx",
+          "start": 575,
+          "end": 746,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L575-L746"
+        }
+      ]
+    },
+    {
+      "component": "Drawer",
+      "recipe_ids": [
+        "F",
+        "B"
+      ],
+      "roles": [
+        "floating-surface",
+        "scrim",
+        "raised-control",
+        "edge",
+        "text"
+      ],
+      "flow": "Same Overlay helper and close-ring defect, with edge-mounted geometry/slide animation. All Look fields reach sheet, not scrim.",
+      "fallback_and_nesting": "Same sheet/scrim/portal limits as Dialog; reduced-motion removes entrance animation.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/atlas.tsx",
+          "start": 752,
+          "end": 755,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L752-L755"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 922,
+          "end": 973,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L922-L973"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 1067,
+          "end": 1179,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1067-L1179"
+        },
+        {
+          "file": "packages/recipes/src/atlas.tsx",
+          "start": 575,
+          "end": 746,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L575-L746"
+        }
+      ]
+    },
+    {
+      "component": "Toast",
+      "recipe_ids": [
+        "S",
+        "B"
+      ],
+      "roles": [
+        "floating-surface",
+        "indicator-fill",
+        "raised-control",
+        "text",
+        "edge"
+      ],
+      "flow": "Sheet/high lift/heavy filter; fixed success-mark glow; built-in restore uses B. Standalone Toast is inline; ToastProvider supplies optional portal viewport.",
+      "fallback_and_nesting": "Opaque sheet, removed image/heavy filter; fixed status glow remains. Provider portal copies recorded tokens only.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/atlas.tsx",
+          "start": 767,
+          "end": 891,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L767-L891"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 873,
+          "end": 894,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L873-L894"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 1181,
+          "end": 1250,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1181-L1250"
+        },
+        {
+          "file": "packages/recipes/src/atlas.tsx",
+          "start": 918,
+          "end": 986,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L918-L986"
+        }
+      ]
+    },
+    {
+      "component": "Checkbox",
+      "recipe_ids": [
+        "E"
+      ],
+      "roles": [
+        "recessed-field-track",
+        "indicator-fill",
+        "glyph",
+        "text"
+      ],
+      "flow": "Native checkbox plus visible well/check. Checked accent relief/glow is fixed; ordinary Look fields do not tune the mark.",
+      "fallback_and_nesting": "Opaque well; forced checked system pair and unchecked glyph suppression; independent native focus outline.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/atlas.tsx",
+          "start": 1003,
+          "end": 1032,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L1003-L1032"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 1104,
+          "end": 1128,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1104-L1128"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 1252,
+          "end": 1326,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1252-L1326"
+        }
+      ]
+    },
+    {
+      "component": "RadioGroup",
+      "recipe_ids": [
+        "E"
+      ],
+      "roles": [
+        "container",
+        "recessed-field-track",
+        "indicator-fill",
+        "text"
+      ],
+      "flow": "Native grouped radios with well and selected thick accent border. Selected cast is fixed; no per-role Look patch.",
+      "fallback_and_nesting": "Opaque well and system/native behavior; source does not prove all forced-color radio outcomes.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/atlas.tsx",
+          "start": 1051,
+          "end": 1106,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L1051-L1106"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 1104,
+          "end": 1114,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1104-L1114"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 1130,
+          "end": 1137,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1130-L1137"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 1277,
+          "end": 1353,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1277-L1353"
+        }
+      ]
+    },
+    {
+      "component": "Select",
+      "recipe_ids": [
+        "E"
+      ],
+      "roles": [
+        "recessed-field-track",
+        "glyph",
+        "text"
+      ],
+      "flow": "Custom well shell around native select, chevron; explicit colorScheme. Rest fixed, focus fill consumes opacity; OS popup is not glass recipe.",
+      "fallback_and_nesting": "Opaque well; focus follows CSS; native popup requires platform check, not inferred optical coverage.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/atlas.tsx",
+          "start": 1118,
+          "end": 1146,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L1118-L1146"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 1069,
+          "end": 1094,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1069-L1094"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 1355,
+          "end": 1378,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1355-L1378"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 1413,
+          "end": 1442,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1413-L1442"
+        }
+      ]
+    },
+    {
+      "component": "TextField",
+      "recipe_ids": [
+        "E"
+      ],
+      "roles": [
+        "recessed-field-track",
+        "text",
+        "edge"
+      ],
+      "flow": "Fixed well; focus opacity fill and focus shadow, semantic invalid halo/message. No independent blur or general tint.",
+      "fallback_and_nesting": "Opaque well/fill substitutions; forced-color focus needs special review because ordinary outline is zero and visible cue is box-shadow.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/atlas.tsx",
+          "start": 1153,
+          "end": 1185,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L1153-L1185"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 1069,
+          "end": 1100,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1069-L1100"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 1355,
+          "end": 1411,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1355-L1411"
+        }
+      ]
+    },
+    {
+      "component": "Textarea",
+      "recipe_ids": [
+        "E"
+      ],
+      "roles": [
+        "recessed-field-track",
+        "text",
+        "edge"
+      ],
+      "flow": "Same E focus/error chain as TextField, native resize and multiline content. No new blur across prose.",
+      "fallback_and_nesting": "Same fallback limits as TextField; native resize internals are not Look-controlled.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/atlas.tsx",
+          "start": 1192,
+          "end": 1224,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L1192-L1224"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 1069,
+          "end": 1100,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1069-L1100"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 1355,
+          "end": 1411,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1355-L1411"
+        }
+      ]
+    },
+    {
+      "component": "SearchField",
+      "recipe_ids": [
+        "E"
+      ],
+      "roles": [
+        "recessed-field-track",
+        "glyph",
+        "text",
+        "raised-control"
+      ],
+      "flow": "Capsule well, search glyph, native input and clear action. Focus fill consumes opacity; action hover may use control-hover.",
+      "fallback_and_nesting": "Opaque well/focus fill; clear action semantics preserved; no glass filter in the field recipe.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/atlas.tsx",
+          "start": 1233,
+          "end": 1275,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L1233-L1275"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 1069,
+          "end": 1094,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1069-L1094"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 1444,
+          "end": 1478,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1444-L1478"
+        }
+      ]
+    },
+    {
+      "component": "NumberField",
+      "recipe_ids": [
+        "E"
+      ],
+      "roles": [
+        "recessed-field-track",
+        "raised-control",
+        "text"
+      ],
+      "flow": "Shared well around step buttons and numeric value; focus-within fill/halo. No independent Button glass on its plain step buttons.",
+      "fallback_and_nesting": "Opaque well/focus fill; native constraints remain separate from optics.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/atlas.tsx",
+          "start": 1286,
+          "end": 1369,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L1286-L1369"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 1069,
+          "end": 1094,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1069-L1094"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 1480,
+          "end": 1521,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1480-L1521"
+        }
+      ]
+    },
+    {
+      "component": "Stepper",
+      "recipe_ids": [
+        "text"
+      ],
+      "roles": [
+        "indicator-fill",
+        "raised-control",
+        "text"
+      ],
+      "flow": "Ordered steps with native buttons, semantic current/completed accent disks and control-fill upcoming disks. No Look lens/blur/cast; upcoming disk fill can inherit opacity through control remapping.",
+      "fallback_and_nesting": "Upcoming fill substitution; current/completed marks retain semantic/forced-system cues.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/atlas.tsx",
+          "start": 1376,
+          "end": 1413,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L1376-L1413"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 1523,
+          "end": 1606,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1523-L1606"
+        }
+      ]
+    },
+    {
+      "component": "ToggleButton",
+      "recipe_ids": [
+        "B"
+      ],
+      "roles": [
+        "raised-control",
+        "indicator-fill",
+        "glyph",
+        "text",
+        "edge"
+      ],
+      "flow": "B shell/filter/rim; pressed body switches to semantic accent and ink, independent of tint. Does not run Button pointer handler.",
+      "fallback_and_nesting": "CSS fill fallback and forced selected pair; fixed press paint not generic tint.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/atlas.tsx",
+          "start": 1421,
+          "end": 1453,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L1421-L1453"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 303,
+          "end": 344,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L303-L344"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 1060,
+          "end": 1062,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1060-L1062"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 1608,
+          "end": 1628,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1608-L1628"
+        }
+      ]
+    },
+    {
+      "component": "FileDropzone",
+      "recipe_ids": [
+        "E"
+      ],
+      "roles": [
+        "recessed-field-track",
+        "indicator-fill",
+        "glyph",
+        "text"
+      ],
+      "flow": "Fieldset well plus native file input, glyph and live result. Drag/focus uses fixed 12% accent body, not Look opacity.",
+      "fallback_and_nesting": "Opaque rest well; fixed drag/focus alpha bypasses substitution. File behavior is separate from material.",
+      "sources": [
+        {
+          "file": "packages/recipes/src/atlas.tsx",
+          "start": 1465,
+          "end": 1612,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L1465-L1612"
+        },
+        {
+          "file": "packages/recipes/src/liquid.source.css",
+          "start": 1140,
+          "end": 1148,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1140-L1148"
+        },
+        {
+          "file": "packages/recipes/src/styles.css",
+          "start": 1630,
+          "end": 1693,
+          "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+          "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1630-L1693"
+        }
+      ]
+    }
+  ]
+}
