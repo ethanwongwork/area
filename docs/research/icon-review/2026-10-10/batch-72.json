@@ -1,0 +1,51 @@
+{
+ "id": "batch-72",
+ "title": "Batch 72 · New icons",
+ "date": "2026-10-10",
+ "note": "Seven more product concepts: premium (gem), PDF files, tips (hand-coins), delivered orders, A→Z and 0→9 sorting, private mode (incognito).",
+ "icons": [
+  {
+   "name": "gem",
+   "label": "Premium",
+   "fluent": "premium",
+   "spec": "square, free angles; Fluent premium / Lucide gem: a faceted gem, distinct from diamond's plain square: a 7-wide table at 2.5 (4.5–11.5, r 1 corners), 45°-steep crown sides down to a girdle 2–14 at 6.5 (r 0.75 shoulders), and a pavilion to a point at 8, 13.5 (69°, so no data-acute and no fillet: the point stays sharp, the round join softens it). The girdle line runs 2.182–13.818, ending on the shoulder arcs. Lucide's facets: crown facets from the table at 6.5 / 9.5 to the girdle at 5 / 11 (crown pockets 1.41 / 2.93), and pavilion facets from those girdle points to the point. Every horizontal is on x.5. Ink 12.76 × 12.12, centred 8, 8. Filled (Fluent premium_filled): the gem is solid, the girdle and the crown facets are gaps run out through the silhouette (package's), and the pavilion facets become filled-only inset knockouts that stop at 9.854 (2.0 apart, 1.19 of fill to each side), as Fluent's stop short of the point. Run to the point they would leave fill slivers in the 17° wedge. No slivers at 16 or 48."
+  },
+  {
+   "name": "file-pdf",
+   "label": "PDF",
+   "fluent": "document_pdf",
+   "spec": "square, free angles (the fold's); Phosphor file-pdf / Huge Pdf01: document's top copied exactly (top edge, r 2 top-left corner, the 4.5 fold with its data-shift parts). The left side ends at 6, tight 1.41 above the P, and the page below the fold is replaced by a PDF label in gif's and spell-check's lettering, 5 tall (8.5–13.5, every stem and long edge on x.5). P: stem at 1.5 with a 1.5-long top and an r 1.5 bowl to 11.5, 3 wide. D: stem at 6.5 with 0.5 runs and an r 2.5 semicircle, 3 wide (counter 1.93). F: stem at 11.5 with gif's 2-long top arm and 1.5-long middle arm at 11. Letters are 2 apart between centre-lines (detail 0.88, gif's), and the F's arm ends 1.94 under the fold. Ink 13.12 × 12.62, centre 7.5, 7.75. Fluent's construction (a full page with the label at its lower left) does not fit: the label is 12 wide on a 9-wide page, so the right edge or the floor would cut through the F. Filled (Phosphor's fill): the page cap fills down to 6 with the dog-ear open, and the letters stay ink. Readable at 1× (px.mjs)."
+  },
+  {
+   "name": "hand-coins",
+   "label": "Tip",
+   "fluent": "money_hand",
+   "spec": "square; Lucide hand-coins on Area's 45° lattice: a 45° cuff line M2 10L6 14. The wrist rises from the cuff at 3, 11 on x + y = 14 (r 1.5 corner) into the palm top at 8.5. An r 1.5 thumb tip curls to 11.5 with a short underside back to 6.75 (standard 1.88 from the wrist). The lower hand runs from the cuff at 5.5, 13.5 (3 below the thumb) and turns up at 45° (r 1.5) into a 2.83-wide finger band (x + y = 20 / 24) with an r 1.414 tip at 12.5, 9.5. The band's upper edge ends on the thumb tip at 9.354, 10.646, joined as Lucide's. Coins are r 2 rings (the lens size). The front coin is at 10, 4.5 (detail 0.98 from the fingertip, tight 1.23 from the thumb). The back coin sits beside it at 6.5, 4, cut by the overlap cut 2.25 (icon-geometry behind) as coins.svg's back coin. Two equal coins side by side read as eyes. Ink 13.04 × 13.12, centre 7.96, 8. Filled: the front coin is solid. The back coin stays a line (the multiples rule: the front fills, the back stays a line). The hand is an open line drawing and keeps its weight. No slivers."
+  },
+  {
+   "name": "package-check",
+   "label": "Delivered",
+   "fluent": "box_checkmark",
+   "spec": "square, free angles; Lucide package-check / Fluent box_checkmark / Huge PackageCheck: package copied exactly (box, Y and tape) with the check on the lower-right corner. The inside placement does not fit: package's right face is 6 wide between its edges and leaves 2 for a mark. The 1.5 / 3 check reaches the right side only at 9.5 → 14, 1.5 from the Y stem, which would cut the stem to 9.8 and remove the box's bottom point. So it is copy-check's and clock-check's 1 / 2 check (the next size down, contained-marks rule): M10.5 12.5L11.5 13.5L13.5 11.5 on the lattice, stem and bottom point whole. The outline is cut 2.25 round it (icon-geometry cut): the right side ends at 9.306 and the bottom edge at 8.583, 13.677 on the bottom arc (detail 1.12, tight 1.38). Filled: package's gaps. The box is a fill that stops on the 2.25 offset of the check (r 2.25 about each end, the long arm's offset line, an r 0.75 fillet at the convex point where the start's arc meets it). Right of the stem gap the fill ends on the gap's centre-line, so no hairline is left under the bite. The check stays ink beside it (mail-check). No slivers at 16 or 48."
+  },
+  {
+   "name": "sort-alpha",
+   "label": "Sort A to Z",
+   "fluent": "text_sort_ascending",
+   "spec": "square, free angles (the A's legs); Fluent text_sort_ascending / Lucide arrow-down-a-z / Huge SortingAZ01: sort-ascending's arrow exactly, turned down as its sort-descending flip (M11.5 3.5V12.5, 2.5 head M9 10L11.5 12.5L14 10; every A to Z reference points down), beside a 4 x 4 letter box at x 2.5-6.5 holding a stacked A (2.5-6.5) over a Z (9.5-13.5), a standard 3 between the rows (1.88). The A is the type family's A (case-upper / spell-check): straight legs from 2.5, 6.5 and 6.5, 6.5 to an r 0.5 apex whose top sits on the cap line 2.5 (solved: M2.5 6.5L4.038 2.808A0.5 0.5 0 0 1 4.962 2.808L6.5 6.5) and a crossbar 1 above the base on x.5 (M2.917 5.5H6.083, spell-check's ratio; counter 1.04). The Z is 4 x 4, so its diagonal is 45 degrees on the lattice (x + y = 16), with both bars on x.5 (M2.5 9.5H6.5L2.5 13.5H6.5, round joins, no fillet: an r 0.75 fillet takes 1.8 off each 4-long bar). Letters stand 2.5 from the arrow's barbs and 5 from the shaft. Ink 12.62 x 12.12, centre 8.25, 8: the letter box starts at 2.5 so the Z stays on the lattice, and the arrow keeps sort-ascending's x 11.5 (crisp). A line glyph: fills by weight"
+  },
+  {
+   "name": "sort-numeric",
+   "label": "Sort 0 to 9",
+   "fluent": "",
+   "spec": "square; Lucide arrow-down-0-1 / Huge ArrowDown01, the pair of sort-alpha: the same arrow (M11.5 3.5V12.5M9 10L11.5 12.5L14 10) and the same 4-tall rows (2.5-6.5 and 9.5-13.5, standard 1.9 between), both numerals left-aligned on the letter box's x 2.5 so the ink box matches sort-alpha's exactly (12.62 x 12.12, centre 8.25, 8). The 0 is a 3 x 4 stadium (rect 2.5-5.5 x 2.5-6.5, rx 1.5, as Lucide's 0; counter 1.93), its sides on x.5: a 4-wide 0 in the 4-tall row is a circle and read as an O. The 1 is list-numbered's 1 exactly (a 1 x 1 45-degree flag on the lattice and a stem on x 4.5), its stem 0.5 longer to fill the 4-tall row: M3.5 10.5L4.5 9.5V13.5. No free angles. A line glyph: fills by weight (the 0 stays a ring, as letters do)"
+  },
+  {
+   "name": "incognito",
+   "label": "Private mode",
+   "fluent": "incognito",
+   "spec": "circle (13.12 wide, the horizontal keyline's width, but 12.62 tall), free angles (the crown's 1 : 2 sides); Fluent incognito / Lucide hat-glasses / Phosphor detective / Huge Incognito: a hat over glasses. The brim is a straight line 2-14 at 6.5 (Lucide / Phosphor; Fluent's slight curve dropped). The crown is Fluent's flat-topped trapezoid: top 6.118-9.882 on 2.5 and sides falling 1 : 2 to 3.5 and 12.5 on the brim (r 1 top corners, icon-geometry open-fillet), so the brim runs 1.5 past it on each side, as Fluent's does. The glasses are two r 2.5 rings at 4.5, 11.5 and 11.5, 11.5 (x 2-14, the brim's width), tight 1.38 below the brim, joined by Fluent's straight bridge M7 11.5H9 on x.5 between the rings' inner points. Lucide's r 1 arched bridge was tried and merged with the rings into a grey block at 1x. Ink centre 8, 8.25: the brim and bridge stay on x.5, and the glasses are the base. Filled: the crown is solid (the open path closes along the brim, where the edge is), and the brim and glasses stay lines with the lenses open (Fluent's filled cut; the skill names incognito: a frame whose features would invert keeps its lines and the accessory fills)"
+  }
+ ],
+ "extra": "Not drawn: replace-all. No \"all\" mark fits on an exact copy of Area's replace (a lens drawn as an arrow arc); the options are a smaller replace lens with reply-all's doubled head, or Lucide's box construction for both replace and replace-all. Delegated calls: docs/research/icon-review/2026-10-10/README.md (Batch 72)."
+}

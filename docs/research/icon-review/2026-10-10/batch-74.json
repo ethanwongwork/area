@@ -1,0 +1,21 @@
+{
+ "id": "batch-74",
+ "title": "Batch 74 · New icons",
+ "date": "2026-10-10",
+ "note": "Bottom panel toggles (VS Code and Cursor terminal panel), with their top-panel flips.",
+ "icons": [
+  {
+   "name": "panel-bottom-open",
+   "label": "Open bottom panel",
+   "fluent": "panel_bottom_expand",
+   "spec": "horizontal; Lucide panel-bottom-open / Fluent panel_bottom_expand (the VS Code / Cursor terminal panel toggle): panel-bottom copied exactly (frame 2–14 × 3.5–12.5 r 2, the 3px pane M2 9.5V10.5A2 2 0 0 0 4 12.5H12A2 2 0 0 0 14 10.5V9.5Z, solid when filled) with panel-left-open's 2-leg frame-contained chevron turned to point up, away from the pane (open): M6.5 7.5L8.5 5.5L10.5 7.5. The 3.5–9.5 main area is 6 tall and the chevron 2, so on the lattice (x ± y whole) only the centred 5.5–7.5 row passes the gap scale: detail 0.88 to the frame top and detail 0.88 to the pane line; a tip on whole 5 or 6 at x 8 leaves 0.38 to one side. The tip on 5.5 needs x.5, so the chevron sits 0.5 right of centre (the lattice-bound mark offset, as calendar-check / vote); tip and legs on pixel centres, crisp at 1×. panel-left-open sits a tight 2.5 from its pane; the bottom pane's shorter main area gives detail 2 / 2 instead (trade-off recorded). Ink 13.12 × 10.12, centre 8, 8. Filled: the pane solid, the chevron stays a line in the open main area (panel-left-open's). panel-top-open is its flipy (data-rotations)"
+  },
+  {
+   "name": "panel-bottom-close",
+   "label": "Close bottom panel",
+   "fluent": "panel_bottom_contract",
+   "spec": "horizontal; Lucide panel-bottom-close / Fluent panel_bottom_contract: panel-bottom-open mirrored about the main area's centre line y 6.5, so the chevron points down toward the pane (as panel-left-close points at its pane): M6.5 5.5L8.5 7.5L10.5 5.5, the same 0.5-right column, detail 0.88 to the frame top and the pane line; panel-bottom copied exactly. Ink 13.12 × 10.12, centre 8, 8. Filled: the pane solid, the chevron a line. panel-top-close is its flipy (data-rotations)"
+  }
+ ],
+ "extra": "Delegated calls: docs/research/icon-review/2026-10-10/README.md (Batch 74)."
+}

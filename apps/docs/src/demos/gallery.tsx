@@ -2,7 +2,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import type { CSSProperties, ReactNode, MouseEvent } from "react";
 import { AREA_COLOR_GRID, SliderRange, Alert, AlignmentPicker, Avatar, Calendar, AvatarGroup, Badge, Indicator, IndicatorAnchor, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, ButtonGroup, Card, CardContent, CardMedia, Checkbox, CheckboxGroup, Chip, Count, ChipGroup, ChipLink, Code, CodeBlock, ColorField, ColorPicker, ColorSwatch, ColorSwatchPicker, Composer, Dialog, Field, Input, InputAction, InputGroup, InputGroupText, Kbd, KbdGroup, Menu, MenuItem, MenuLabel, MenuSeparator, MenuSub, Nav, NavGroup, NavItem, NumberField, Panel, PanelSection, Popover, PopoverBody, PopoverClose, PopoverDescription, PopoverFooter, PopoverHeader, PopoverMedia, PopoverTitle, Progress, Radio, RadioGroup, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Toaster, useToaster, Toolbar, ToolbarGroup, ToolbarItem, ToolbarOverflow, ToolbarSeparator, Tooltip, TreeView, type AlignmentPosition, BoxField, Combobox, CommandPalette, ContextMenu, HoverCard, Message, MessageActions, ModelPicker, PromptSuggestions, ScrollToLatest, SplitButton, PanelRow, PropertyList, PropertyListItem, type BoxValue, type ComboboxOption, type CommandItem, type TreeViewNode } from "@area/react";
-import { FluentPanelLeftIcon, FluentRefPointerIcon, FluentFrameIcon, FluentRectangleIcon, FluentPenIcon, FluentTextTIcon, FluentCommentIcon, FluentRefPaintbrushIcon, FluentDesignIcon, FluentPlayIcon, FluentRefCodeIcon, FluentBoldIcon, FluentRefItalicIcon, FluentRefUnderlineIcon, FluentStrikethroughIcon, FluentTextAlignLeftIcon, FluentTextAlignCenterIcon, FluentTextAlignRightIcon, AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, CheckIcon, ChevronIcon, DismissIcon, DocumentIcon, DotsFourIcon, EyeIcon, EyeSlashIcon, FolderIcon, InfoIcon, OpacityIcon, RotateIcon, OpenIcon, PersonSmallIcon, PersonIcon, PlusIcon, SearchIcon, TokenIcon, TrashIcon, EditIcon, ThumbLikeIcon, ThumbDislikeIcon, SpeakerIcon, RegenerateIcon, FluentCopyIcon, AlertIcon, AlignCenterHorizontalIcon, AlignLeftIcon, AlignRightIcon, AngleIcon, AspectRatioIcon, AutoLayoutIcon, BarsThreeIcon, CornerRadiusIcon, CornersIcon, FlipHorizontalIcon, FlipVerticalIcon, FlowFreeIcon, FlowHorizontalIcon, FlowVerticalIcon, FlowWrapIcon, LinkIcon, MoreIcon, SettingsIcon, SlidersIcon, SubtractIcon, FluentRefCalendarIcon } from "../icons.tsx";
+import { PanelLeftIcon, PointerIcon, FrameIcon, RectangleIcon, PenIcon, TextIcon, CommentIcon, PaintbrushIcon, DesignIcon, PlayIcon, CodeIcon, BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon, TextAlignLeftIcon, TextAlignCenterIcon, TextAlignRightIcon, AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, CheckIcon, ChevronIcon, DismissIcon, DocumentIcon, DotsFourIcon, EyeIcon, EyeSlashIcon, FolderIcon, InfoIcon, OpacityIcon, RotateIcon, OpenIcon, PersonSmallIcon, PersonIcon, PlusIcon, SearchIcon, TokenIcon, TrashIcon, EditIcon, ThumbLikeIcon, ThumbDislikeIcon, SpeakerIcon, RegenerateIcon, CopyIcon, AlertIcon, AlignCenterHorizontalIcon, AlignLeftIcon, AlignRightIcon, AngleIcon, AspectRatioIcon, AutoLayoutIcon, BarsThreeIcon, CornerRadiusIcon, CornersIcon, FlipHorizontalIcon, FlipVerticalIcon, FlowFreeIcon, FlowHorizontalIcon, FlowVerticalIcon, FlowWrapIcon, LinkIcon, MoreIcon, SettingsIcon, SlidersIcon, SubtractIcon, CalendarIcon } from "../icons.tsx";
 import { PilotArrowDownIcon, PilotArrowUpIcon, PilotDocumentIcon, PilotFolderFilledIcon, PilotMoreHorizontalIcon, PilotPaletteIcon, PilotCornerIcon, PilotTextIcon, PilotGridIcon, PilotLayersIcon, PilotSunIcon, PilotListIcon, PilotKanbanIcon } from "../pilot-icons.tsx";
 // @ts-expect-error — the docs' own highlighter is authored in JavaScript.
 import { highlight } from "../../scripts/layout.mjs";
@@ -125,12 +125,12 @@ export const GallerySplitButtonGhostText = () => <SplitDemo label="Action" varia
 /* Figma's tool with its menu (figma--split-tool--*): icon-only ghost, the plates 1px apart. */
 export const GallerySplitButtonGhostIcon = () => {
   const [tool, setTool] = useState("move");
-  return <SplitButton variant="ghost" iconOnly icon={<FluentRefPointerIcon />} selected menuLabel="Move tools"
+  return <SplitButton variant="ghost" iconOnly icon={<PointerIcon />} selected menuLabel="Move tools"
     menu={([["move", "Move", "V"], ["hand", "Hand tool", "H"], ["scale", "Scale", "K"]] as const).map(([id, label, key]) =>
       <MenuItem key={id} checked={tool === id} shortcut={key} onClick={() => setTool(id)}>{label}</MenuItem>)}>Move</SplitButton>;
 };
 export const GallerySplitButtonGhostIconRest = () => (
-  <SplitButton variant="ghost" iconOnly icon={<FluentFrameIcon />} menuLabel="Frame tools"
+  <SplitButton variant="ghost" iconOnly icon={<FrameIcon />} menuLabel="Frame tools"
     menu={<><MenuItem shortcut="F">Frame</MenuItem><MenuItem shortcut="⇧S">Section</MenuItem></>}>Frame</SplitButton>
 );
 export const GallerySplitButtonDisabled = () => <SplitDemo label="Action" disabled items={saveItems} menuLabel="More options" />;
@@ -169,18 +169,18 @@ export const GalleryButtonGroupDisabled = () => <GroupDemo variant="outline" lab
  * Segmented control. The chosen tool takes Button's selected fill.
  */
 const figmaTools = [
-  { id: "move", label: "Move", icon: <FluentRefPointerIcon />, menu: [["move", "Move", "V"], ["hand", "Hand tool", "H"], ["scale", "Scale", "K"]] },
-  { id: "frame", label: "Frame", icon: <FluentFrameIcon />, menu: [["frame", "Frame", "F"], ["section", "Section", "⇧S"], ["slice", "Slice", "S"]] },
-  { id: "rectangle", label: "Rectangle", icon: <FluentRectangleIcon />, menu: [["rectangle", "Rectangle", "R"], ["line", "Line", "L"], ["ellipse", "Ellipse", "O"]] },
-  { id: "pen", label: "Pen", icon: <FluentPenIcon />, menu: [["pen", "Pen", "P"], ["pencil", "Pencil", "⇧P"]] },
-  { id: "text", label: "Text", icon: <FluentTextTIcon /> },
-  { id: "comment", label: "Comment", icon: <FluentCommentIcon /> },
+  { id: "move", label: "Move", icon: <PointerIcon />, menu: [["move", "Move", "V"], ["hand", "Hand tool", "H"], ["scale", "Scale", "K"]] },
+  { id: "frame", label: "Frame", icon: <FrameIcon />, menu: [["frame", "Frame", "F"], ["section", "Section", "⇧S"], ["slice", "Slice", "S"]] },
+  { id: "rectangle", label: "Rectangle", icon: <RectangleIcon />, menu: [["rectangle", "Rectangle", "R"], ["line", "Line", "L"], ["ellipse", "Ellipse", "O"]] },
+  { id: "pen", label: "Pen", icon: <PenIcon />, menu: [["pen", "Pen", "P"], ["pencil", "Pencil", "⇧P"]] },
+  { id: "text", label: "Text", icon: <TextIcon /> },
+  { id: "comment", label: "Comment", icon: <CommentIcon /> },
 ] as const;
 const figmaModes = [
-  { value: "draw", label: "Draw", icon: <FluentRefPaintbrushIcon /> },
-  { value: "design", label: "Design", icon: <FluentDesignIcon /> },
-  { value: "prototype", label: "Present", icon: <FluentPlayIcon /> },
-  { value: "dev", label: "Code", icon: <FluentRefCodeIcon /> },
+  { value: "draw", label: "Draw", icon: <PaintbrushIcon /> },
+  { value: "design", label: "Design", icon: <DesignIcon /> },
+  { value: "prototype", label: "Present", icon: <PlayIcon /> },
+  { value: "dev", label: "Code", icon: <CodeIcon /> },
 ];
 export const GalleryToolbar = () => {
   const [tool, setTool] = useState("move");
@@ -198,8 +198,8 @@ export const GalleryToolbar = () => {
   </Toolbar>;
 };
 /* Text formatting (owner references, 2026-09-27): soft fields, pressed toggles, alignment as a Segmented control. */
-const textStyles = [{ id: "bold", label: "Bold", icon: <FluentBoldIcon /> }, { id: "italic", label: "Italic", icon: <FluentRefItalicIcon /> }, { id: "underline", label: "Underline", icon: <FluentRefUnderlineIcon /> }];
-const textAligns = [{ value: "left", label: "Align left", icon: <FluentTextAlignLeftIcon /> }, { value: "center", label: "Align center", icon: <FluentTextAlignCenterIcon /> }, { value: "right", label: "Align right", icon: <FluentTextAlignRightIcon /> }];
+const textStyles = [{ id: "bold", label: "Bold", icon: <BoldIcon /> }, { id: "italic", label: "Italic", icon: <ItalicIcon /> }, { id: "underline", label: "Underline", icon: <UnderlineIcon /> }];
+const textAligns = [{ value: "left", label: "Align left", icon: <TextAlignLeftIcon /> }, { value: "center", label: "Align center", icon: <TextAlignCenterIcon /> }, { value: "right", label: "Align right", icon: <TextAlignRightIcon /> }];
 export const GalleryToolbarFormatting = () => {
   const [styles, setStyles] = useState<string[]>(["bold"]);
   return <Toolbar aria-label="Text formatting" variant="surface">
@@ -228,10 +228,10 @@ export const GalleryToolbarFullWidth = () => (
 export const GalleryToolbarPlain = () => (
   <Toolbar aria-label="Editing commands">
     <ToolbarGroup aria-label="Text style">
-      <ToolbarItem><Button variant="ghost" iconOnly icon={<FluentBoldIcon />} aria-label="Bold" selected /></ToolbarItem>
-      <ToolbarItem><Button variant="ghost" iconOnly icon={<FluentRefItalicIcon />} aria-label="Italic" /></ToolbarItem>
-      <ToolbarItem><Button variant="ghost" iconOnly icon={<FluentRefUnderlineIcon />} aria-label="Underline" /></ToolbarItem>
-      <ToolbarItem><Button variant="ghost" iconOnly icon={<FluentStrikethroughIcon />} aria-label="Strikethrough" /></ToolbarItem>
+      <ToolbarItem><Button variant="ghost" iconOnly icon={<BoldIcon />} aria-label="Bold" selected /></ToolbarItem>
+      <ToolbarItem><Button variant="ghost" iconOnly icon={<ItalicIcon />} aria-label="Italic" /></ToolbarItem>
+      <ToolbarItem><Button variant="ghost" iconOnly icon={<UnderlineIcon />} aria-label="Underline" /></ToolbarItem>
+      <ToolbarItem><Button variant="ghost" iconOnly icon={<StrikethroughIcon />} aria-label="Strikethrough" /></ToolbarItem>
     </ToolbarGroup>
     <ToolbarSeparator />
     <ToolbarItem><Button variant="ghost" iconOnly icon={<LinkIcon />} aria-label="Link" /></ToolbarItem>
@@ -250,8 +250,8 @@ export const GalleryToolbarSizes = () => (
   <div style={{ display: "grid", gap: "var(--area-space-16)", justifyItems: "start" }}>
   {(["sm", "md", "lg"] as const).map(size => <Toolbar key={size} size={size} variant="surface" aria-label={`${size} toolbar`}>
     <ToolbarGroup aria-label="Style">
-      <ToolbarItem><Button variant="ghost" iconOnly icon={<FluentBoldIcon />} aria-label="Bold" selected /></ToolbarItem>
-      <ToolbarItem><Button variant="ghost" iconOnly icon={<FluentRefItalicIcon />} aria-label="Italic" /></ToolbarItem>
+      <ToolbarItem><Button variant="ghost" iconOnly icon={<BoldIcon />} aria-label="Bold" selected /></ToolbarItem>
+      <ToolbarItem><Button variant="ghost" iconOnly icon={<ItalicIcon />} aria-label="Italic" /></ToolbarItem>
     </ToolbarGroup>
     <ToolbarSeparator />
     <Segmented iconOnly aria-label="Alignment" defaultValue="left" items={textAligns} />
@@ -290,8 +290,8 @@ export const GalleryColorSwatchSizeSm = () => (
 export const GalleryToolbarSizeSm = () => (
   <Toolbar size="sm" variant="surface" aria-label="Text formatting">
     <ToolbarGroup aria-label="Style">
-      <ToolbarItem><Button variant="ghost" iconOnly icon={<FluentBoldIcon />} aria-label="Bold" selected /></ToolbarItem>
-      <ToolbarItem><Button variant="ghost" iconOnly icon={<FluentRefItalicIcon />} aria-label="Italic" /></ToolbarItem>
+      <ToolbarItem><Button variant="ghost" iconOnly icon={<BoldIcon />} aria-label="Bold" selected /></ToolbarItem>
+      <ToolbarItem><Button variant="ghost" iconOnly icon={<ItalicIcon />} aria-label="Italic" /></ToolbarItem>
     </ToolbarGroup>
     <ToolbarSeparator />
     <Segmented iconOnly aria-label="Alignment" defaultValue="left" items={textAligns} />
@@ -311,8 +311,8 @@ export const GalleryColorSwatchSizeMd = () => (
 export const GalleryToolbarSizeMd = () => (
   <Toolbar size="md" variant="surface" aria-label="Text formatting">
     <ToolbarGroup aria-label="Style">
-      <ToolbarItem><Button variant="ghost" iconOnly icon={<FluentBoldIcon />} aria-label="Bold" selected /></ToolbarItem>
-      <ToolbarItem><Button variant="ghost" iconOnly icon={<FluentRefItalicIcon />} aria-label="Italic" /></ToolbarItem>
+      <ToolbarItem><Button variant="ghost" iconOnly icon={<BoldIcon />} aria-label="Bold" selected /></ToolbarItem>
+      <ToolbarItem><Button variant="ghost" iconOnly icon={<ItalicIcon />} aria-label="Italic" /></ToolbarItem>
     </ToolbarGroup>
     <ToolbarSeparator />
     <Segmented iconOnly aria-label="Alignment" defaultValue="left" items={textAligns} />
@@ -332,8 +332,8 @@ export const GalleryColorSwatchSizeLg = () => (
 export const GalleryToolbarSizeLg = () => (
   <Toolbar size="lg" variant="surface" aria-label="Text formatting">
     <ToolbarGroup aria-label="Style">
-      <ToolbarItem><Button variant="ghost" iconOnly icon={<FluentBoldIcon />} aria-label="Bold" selected /></ToolbarItem>
-      <ToolbarItem><Button variant="ghost" iconOnly icon={<FluentRefItalicIcon />} aria-label="Italic" /></ToolbarItem>
+      <ToolbarItem><Button variant="ghost" iconOnly icon={<BoldIcon />} aria-label="Bold" selected /></ToolbarItem>
+      <ToolbarItem><Button variant="ghost" iconOnly icon={<ItalicIcon />} aria-label="Italic" /></ToolbarItem>
     </ToolbarGroup>
     <ToolbarSeparator />
     <Segmented size="lg" iconOnly aria-label="Alignment" defaultValue="left" items={textAligns} />
@@ -735,7 +735,7 @@ const DateInput = ({ defaultValue, ...field }: { defaultValue: string } & Record
   useEffect(() => { if (open) surface.current?.querySelector<HTMLElement>("[role=grid] [tabindex='0']")?.focus(); }, [open]);
   return <Popover ref={surface} open={open} onOpenChange={setOpen} anchor={shell} align="start" aria-label="Choose date"
     trigger={<Input {...field} ref={(node: HTMLInputElement | null) => { input.current = node; shell.current = node?.closest(".area-input") ?? null; }}
-      readOnly value={formatDate(value)} trailingIcon={<FluentRefCalendarIcon />}
+      readOnly value={formatDate(value)} trailingIcon={<CalendarIcon />}
       /* A text input is not a popover invoker: open it here rather than through popovertarget. */
       onClick={event => { event.preventDefault(); setOpen(true); }}
       onKeyDown={event => { if (event.key === "ArrowDown" || event.key === "Enter" || event.key === " ") { event.preventDefault(); setOpen(true); } }} />}>
@@ -1080,10 +1080,10 @@ export const GalleryPromptSuggestionsChips = () => {
  */
 const actionButton = (label: string, icon: ReactNode) => <Button variant="ghost" tone="neutral" iconOnly aria-label={label} icon={icon} />;
 const assistantActions = <MessageActions>
-  {actionButton("Copy", <FluentCopyIcon />)}{actionButton("Good response", <ThumbLikeIcon />)}{actionButton("Bad response", <ThumbDislikeIcon />)}
+  {actionButton("Copy", <CopyIcon />)}{actionButton("Good response", <ThumbLikeIcon />)}{actionButton("Bad response", <ThumbDislikeIcon />)}
   {actionButton("Read aloud", <SpeakerIcon />)}{actionButton("Regenerate", <RegenerateIcon />)}{actionButton("More actions", <MoreIcon />)}
 </MessageActions>;
-const userActions = <MessageActions>{actionButton("Copy message", <FluentCopyIcon />)}{actionButton("Edit message", <EditIcon />)}</MessageActions>;
+const userActions = <MessageActions>{actionButton("Copy message", <CopyIcon />)}{actionButton("Edit message", <EditIcon />)}</MessageActions>;
 const conversation: CSSProperties = { display: "grid", gap: "var(--area-space-24)", inlineSize: "calc(var(--area-space-96) * 5)", maxInlineSize: "100%" };
 export const GalleryMessage = () => (
   <div style={conversation}>
@@ -1358,7 +1358,7 @@ export const GalleryNavSidebar = () => (
       <span>Area</span>
       <span style={{ display: "flex" }}>
         <Button variant="ghost" iconOnly icon={<SearchIcon />} aria-label="Search chats" />
-        <Button variant="ghost" iconOnly icon={<FluentPanelLeftIcon />} aria-label="Close sidebar" />
+        <Button variant="ghost" iconOnly icon={<PanelLeftIcon />} aria-label="Close sidebar" />
       </span>
     </div>
     <div style={{ flex: 1, minBlockSize: 0, overflowY: "auto", padding: "0 var(--area-space-8)" }}>

@@ -849,6 +849,120 @@ const MAP = {
   FluentRefTimelineFilledIcon: "timeline_20_filled",
   FluentRefLineStyleIcon: "line_style_20_regular",
   FluentRefLineStyleFilledIcon: "line_style_20_filled",
+  FluentRefFileXIcon: "document_dismiss_16_regular",
+  FluentRefFileXFilledIcon: "document_dismiss_16_filled",
+  FluentRefFileQuestionIcon: "document_question_mark_16_regular",
+  FluentRefFileQuestionFilledIcon: "document_question_mark_16_filled",
+  FluentRefFileUserIcon: "document_person_16_regular",
+  FluentRefFileUserFilledIcon: "document_person_16_filled",
+  FluentRefFolderSyncIcon: "folder_sync_16_regular",
+  FluentRefFolderSyncFilledIcon: "folder_sync_16_filled",
+  FluentRefFormIcon: "form_20_regular",
+  FluentRefFormFilledIcon: "form_20_filled",
+  FluentRefTableCellsMergeIcon: "table_cells_merge_16_regular",
+  FluentRefTableCellsMergeFilledIcon: "table_cells_merge_16_filled",
+  FluentRefTableCellsSplitIcon: "table_cells_split_16_regular",
+  FluentRefTableCellsSplitFilledIcon: "table_cells_split_16_filled",
+  FluentRefPersonSearchIcon: "person_search_16_regular",
+  FluentRefPersonSearchFilledIcon: "person_search_16_filled",
+  FluentRefPersonPenIcon: "person_edit_16_regular",
+  FluentRefPersonPenFilledIcon: "person_edit_16_filled",
+  FluentRefPersonStarIcon: "person_star_16_regular",
+  FluentRefPersonStarFilledIcon: "person_star_16_filled",
+  FluentRefShieldCogIcon: "shield_settings_16_regular",
+  FluentRefShieldCogFilledIcon: "shield_settings_16_filled",
+  FluentRefMailCheckIcon: "mail_checkmark_16_regular",
+  FluentRefMailCheckFilledIcon: "mail_checkmark_16_filled",
+  FluentRefMailWarningIcon: "mail_alert_16_regular",
+  FluentRefMailWarningFilledIcon: "mail_alert_16_filled",
+  FluentRefHandWaveIcon: "hand_wave_16_regular",
+  FluentRefHandWaveFilledIcon: "hand_wave_16_filled",
+  FluentRefGifIcon: "gif_16_regular",
+  FluentRefGifFilledIcon: "gif_16_filled",
+  FluentRefCalendarOffIcon: "calendar_cancel_16_regular",
+  FluentRefCalendarOffFilledIcon: "calendar_cancel_16_filled",
+  FluentRefCalendarSearchIcon: "calendar_search_16_regular",
+  FluentRefCalendarSearchFilledIcon: "calendar_search_16_filled",
+  FluentRefCalendarSyncIcon: "calendar_sync_16_regular",
+  FluentRefCalendarSyncFilledIcon: "calendar_sync_16_filled",
+  FluentRefScanQrIcon: "scan_qr_code_24_regular",
+  FluentRefScanQrFilledIcon: "scan_qr_code_24_filled",
+  FluentRefWifiLowIcon: "wifi_3_20_regular",
+  FluentRefWifiLowFilledIcon: "wifi_3_20_filled",
+  FluentRefGlobeOffIcon: "globe_off_16_regular",
+  FluentRefGlobeOffFilledIcon: "globe_off_16_filled",
+  FluentRefBookAddIcon: "book_add_20_regular",
+  FluentRefBookAddFilledIcon: "book_add_20_filled",
+  FluentRefGavelIcon: "gavel_16_regular",
+  FluentRefGavelFilledIcon: "gavel_16_filled",
+  FluentRefTagsIcon: "tag_multiple_16_regular",
+  FluentRefTagsFilledIcon: "tag_multiple_16_filled",
+  FluentRefVoteIcon: "vote_16_regular",
+  FluentRefVoteFilledIcon: "vote_16_filled",
+  FluentRefTextQuoteIcon: "text_quote_16_regular",
+  FluentRefTextQuoteFilledIcon: "text_quote_16_filled",
+  FluentRefLocationAddIcon: "location_add_16_regular",
+  FluentRefLocationAddFilledIcon: "location_add_16_filled",
+  FluentRefArrowUpRightCircleIcon: "arrow_circle_up_right_16_regular",
+  FluentRefArrowUpRightCircleFilledIcon: "arrow_circle_up_right_16_filled",
+  FluentRefRepeatOnceIcon: "arrow_repeat_1_16_regular",
+  FluentRefRepeatOnceFilledIcon: "arrow_repeat_1_16_filled",
+  FluentRefSwitchCameraIcon: "camera_switch_20_regular",
+  FluentRefSwitchCameraFilledIcon: "camera_switch_20_filled",
+  FluentRefEjectIcon: "arrow_eject_20_regular",
+  FluentRefEjectFilledIcon: "arrow_eject_20_filled",
+  FluentRefCaptionsOffIcon: "closed_caption_off_16_regular",
+  FluentRefCaptionsOffFilledIcon: "closed_caption_off_16_filled",
+  FluentRefVibrateIcon: "phone_vibrate_20_regular",
+  FluentRefVibrateFilledIcon: "phone_vibrate_20_filled",
+  FluentRefSimCardIcon: "sim_16_regular",
+  FluentRefSimCardFilledIcon: "sim_16_filled",
+  FluentRefMonitorOffIcon: "desktop_off_20_regular",
+  FluentRefMonitorOffFilledIcon: "desktop_off_20_filled",
+  FluentRefMegaphoneOffIcon: "megaphone_off_16_regular",
+  FluentRefMegaphoneOffFilledIcon: "megaphone_off_16_filled",
+  FluentRefKeyboardOffIcon: "keyboard_off_16_regular",
+  FluentRefKeyboardOffFilledIcon: "keyboard_off_16_filled",
+  FluentRefTagPlusIcon: "tag_add_16_regular",
+  FluentRefTagPlusFilledIcon: "tag_add_16_filled",
+  FluentRefPaintRollerIcon: "paint_brush_16_regular",
+  FluentRefPaintRollerFilledIcon: "paint_brush_16_filled",
+  FluentRefSquareRootIcon: "math_formula_16_regular",
+  FluentRefSquareRootFilledIcon: "math_formula_16_filled",
+  FluentRefFileUploadIcon: "document_arrow_up_16_regular",
+  FluentRefFileUploadFilledIcon: "document_arrow_up_16_filled",
+  FluentRefChartAreaIcon: "data_area_20_regular",
+  FluentRefChartAreaFilledIcon: "data_area_20_filled",
+  FluentRefGiftCardIcon: "gift_card_16_regular",
+  FluentRefGiftCardFilledIcon: "gift_card_16_filled",
+  FluentRefGemIcon: "premium_16_regular",
+  FluentRefGemFilledIcon: "premium_16_filled",
+  FluentRefFilePdfIcon: "document_pdf_16_regular",
+  FluentRefFilePdfFilledIcon: "document_pdf_16_filled",
+  FluentRefHandCoinsIcon: "money_hand_16_regular",
+  FluentRefHandCoinsFilledIcon: "money_hand_16_filled",
+  FluentRefPackageCheckIcon: "box_checkmark_16_regular",
+  FluentRefPackageCheckFilledIcon: "box_checkmark_16_filled",
+  FluentRefSortAlphaIcon: "text_sort_ascending_16_regular",
+  FluentRefSortAlphaFilledIcon: "text_sort_ascending_16_filled",
+  FluentRefIncognitoIcon: "incognito_16_regular",
+  FluentRefIncognitoFilledIcon: "incognito_16_filled",
+  FluentRefMoveHorizontalIcon: "arrow_bidirectional_left_right_16_regular",
+  FluentRefMoveHorizontalFilledIcon: "arrow_bidirectional_left_right_16_filled",
+  FluentRefUnfoldHorizontalIcon: "arrow_autofit_width_20_regular",
+  FluentRefUnfoldHorizontalFilledIcon: "arrow_autofit_width_20_filled",
+  FluentRefChatCheckIcon: "chat_checkmark_16_regular",
+  FluentRefChatCheckFilledIcon: "chat_checkmark_16_filled",
+  FluentRefListXIcon: "text_bullet_list_dismiss_20_regular",
+  FluentRefListXFilledIcon: "text_bullet_list_dismiss_20_filled",
+  FluentRefSignalLowIcon: "cellular_data_3_20_regular",
+  FluentRefSignalLowFilledIcon: "cellular_data_3_20_filled",
+  FluentRefSignalMediumIcon: "cellular_data_2_20_regular",
+  FluentRefSignalMediumFilledIcon: "cellular_data_2_20_filled",
+  FluentRefPanelBottomOpenIcon: "panel_bottom_expand_20_regular",
+  FluentRefPanelBottomOpenFilledIcon: "panel_bottom_expand_20_filled",
+  FluentRefPanelBottomCloseIcon: "panel_bottom_contract_20_regular",
+  FluentRefPanelBottomCloseFilledIcon: "panel_bottom_contract_20_filled",
   // icon-batch.mjs adds Fluent references for new batches above this line.
   FluentRefDatabaseIcon: "database_16_regular",
   FluentRefDatabaseFilledIcon: "database_16_filled",
@@ -1130,6 +1244,48 @@ const TOOLBAR = {
 const pascal = (name) => name.replace(/(^|-)([a-z])/g, (_, __, c) => c.toUpperCase());
 
 /*
+ * The demo swap (docs/specs/icons.md, "Demo swap"): the icons the component demos use render Area's
+ * own drawings from pilot-icons.tsx. Each name keeps its import, so no demo changes; the Fluent cut a
+ * swapped name used stays available as FluentCut<Name> for the Iconography page's comparisons.
+ * Value: the Area icon name, or [name, size] for a component-sized slot (Avatar's 20px person).
+ */
+const AREA_SWAP = {
+  PlusIcon: "add", BellIcon: "bell", SearchIcon: "search", CheckIcon: "check", InfoIcon: "info",
+  AlertIcon: "warning", ArrowIcon: "arrow-right", ArrowUpIcon: "arrow-up", ChevronIcon: "chevron-down",
+  FolderIcon: "folder", DocumentIcon: "document", DismissIcon: "dismiss", TrashIcon: "trash", LinkIcon: "link",
+  OpenIcon: "open", PersonSmallIcon: "person", PersonIcon: ["person", 20], AlignTopIcon: "align-top",
+  AlignMiddleIcon: "align-middle", AlignBottomIcon: "align-bottom", MoreIcon: "more-horizontal",
+  SettingsIcon: "settings", AlignLeftIcon: "align-left", AlignCenterHorizontalIcon: "align-center",
+  AlignRightIcon: "align-right", SubtractIcon: "subtract", ThumbLikeIcon: "thumbs-up",
+  ThumbDislikeIcon: "thumbs-down", SpeakerIcon: "volume", RegenerateIcon: "refresh", EditIcon: "pencil",
+  // Area's older vendored inspector marks, now redrawn in the pilot set.
+  AngleIcon: "angle", AspectRatioIcon: "aspect-ratio", AutoLayoutIcon: "auto-layout", BarsThreeIcon: "menu",
+  CornerRadiusIcon: "corner", CornersIcon: "corners", DotsFourIcon: "dots-four", EyeIcon: "eye",
+  EyeSlashIcon: "eye-off", FlipHorizontalIcon: "flip", FlipVerticalIcon: "flip-vertical", FlowFreeIcon: "flow-free",
+  FlowHorizontalIcon: "flow", FlowVerticalIcon: "flow-vertical", FlowWrapIcon: "flow-wrap", OpacityIcon: "opacity",
+  RotateIcon: "rotate", SlidersIcon: "sliders", TokenIcon: "token",
+  // Generic names for the Fluent* icons the component demos (card, toggle group, gallery) used.
+  TrendingIcon: "trending-up", ArrowUpRightIcon: "arrow-up-right", BoldIcon: "bold", ItalicIcon: "italic",
+  UnderlineIcon: "underline", StrikethroughIcon: "strikethrough", ChevronLeftIcon: "chevron-left",
+  ChevronRightIcon: "chevron-right", CommentIcon: "chat", CopyIcon: "copy", DesignIcon: "pen-tool", FrameIcon: "frame",
+  HeartIcon: "heart", NextFilledIcon: "skip-forward:filled", PauseFilledIcon: "pause:filled",
+  PreviousFilledIcon: "skip-back:filled", PanelLeftIcon: "panel-left", PenIcon: "pen-tool", PlayIcon: "play",
+  RectangleIcon: "rectangle", CalendarIcon: "calendar", CodeIcon: "code", PaintbrushIcon: "paintbrush",
+  PointerIcon: "pointer", TextAlignCenterIcon: "text-align-center", TextAlignLeftIcon: "text-align-left",
+  TextAlignRightIcon: "text-align-right", TextIcon: "text", SunIcon: "sun",
+};
+const pilotFor = (value) => {
+  const [spec, size] = Array.isArray(value) ? value : [value];
+  const [name, style] = spec.split(":");
+  return { component: `Pilot${pascal(name)}${style === "filled" ? "Filled" : ""}Icon`, size };
+};
+const areaSwap = (name) => {
+  const { component, size } = pilotFor(AREA_SWAP[name]);
+  return `/** Area \`${AREA_SWAP[name]}\` (the demo swap). */\nexport const ${name} = (props: PilotIconProps) => <${component}${size ? ` size={${size}}` : ""} {...props} />;`;
+};
+for (const name of Object.keys(AREA_SWAP)) if (MAP["FluentCut" + name]) throw new Error(`FluentCut${name} already exists in MAP`);
+
+/*
  * SVG attributes are hyphenated; JSX wants them camelCased. Only the attributes this set
  * actually uses are converted -- an unknown one would be passed through and silently
  * dropped by React, so the list is deliberately closed rather than a general rule.
@@ -1170,8 +1326,13 @@ const tsx = `/**
  * and they are optically corrected per size, so a component-owned 20px slot uses the
  * 20px cut rather than scaling a 16px path.
  *
+ * The component demos' icons are Area's own drawings (AREA_SWAP in gen-icons.mjs, the demo swap):
+ * those names render pilot-icons.tsx, and their Fluent cuts stay here as FluentCut<Name>.
+ *
  * Regenerate with \`node scripts/gen-icons.mjs\` after changing the map there.
  */
+import { ${[...new Set(Object.values(AREA_SWAP).map((v) => pilotFor(v).component))].sort().join(", ")}, type PilotIconProps } from "./pilot-icons.tsx";
+
 const base = {
   viewBox: "0 0 16 16",
   // Fluent's own intrinsic size. A slot that owns an icon token overrides it in CSS;
@@ -1190,12 +1351,15 @@ ${Object.entries(MAP)
     ([name, definition]) => {
       const { id, size = 16 } = typeof definition === "string" ? { id: definition, size: 16 } : definition;
       const iconBase = size === 16 ? "base" : `base${size}`;
-      return `/** Fluent \`${id}\`. */\nexport const ${name} = () => (\n  <svg {...${iconBase}}>\n${path(id)
+      const fluent = `/** Fluent \`${id}\`. */\nexport const ${AREA_SWAP[name] ? "FluentCut" + name : name} = () => (\n  <svg {...${iconBase}}>\n${path(id)
         .map((d) => `    <path d="${d}" />`)
         .join("\n")}\n  </svg>\n);`;
+      return AREA_SWAP[name] ? `${areaSwap(name)}\n\n${fluent}` : fluent;
     },
   )
   .join("\n\n")}
+
+${Object.keys(AREA_SWAP).filter((name) => !MAP[name] && !AREA[name.replace(/Icon$/, "").replace(/[A-Z]/g, (c, i) => (i ? "-" : "") + c.toLowerCase())]).map(areaSwap).join("\n\n")}
 
 /*
  * Area's marks. They are stroked rather than filled, so they take their own base: the
@@ -1207,7 +1371,9 @@ const areaBase = { ...base, fill: "none" };
 ${Object.entries(AREA)
   .map(
     ([name, inner]) =>
-      `/** Area \`${name}\`. */\nexport const ${pascal(name)}Icon = () => (\n  <svg {...areaBase}>\n    ${jsx(inner)}\n  </svg>\n);`,
+      AREA_SWAP[`${pascal(name)}Icon`]
+        ? areaSwap(`${pascal(name)}Icon`)
+        : `/** Area \`${name}\`. */\nexport const ${pascal(name)}Icon = () => (\n  <svg {...areaBase}>\n    ${jsx(inner)}\n  </svg>\n);`,
   )
   .join("\n\n")}
 `;

@@ -1,0 +1,153 @@
+{
+ "id": "batch-71",
+ "title": "Batch 71 · New icons",
+ "date": "2026-10-10",
+ "note": "24 more concepts with a product use (media and calls, off states, reminders and labels, editor blocks, file types, charts, checkout), each on its family. monitor-off is an alias of screen-share-off.",
+ "icons": [
+  {
+   "name": "repeat-once",
+   "label": "Repeat once",
+   "fluent": "arrow_repeat_1_16",
+   "spec": "square; Fluent arrow_repeat_1's placement (the 1 replaces the loop's lower-right turn), not Lucide's / Phosphor's centred 1: repeat copied exactly except its lower path, whose right arc is dropped and whose rail ends at 10.25 (the overlap cut 2.25 round the 1; the cut left only a 1.5 arc stub, so the stub goes too); list-numbered's 1 exactly (3.5 stem, 1 x 1 flag on the lattice, M12.5 11.5L13.5 10.5V14) at the lower right on x 13.5 (crisp at 1x), tight 1.13 from the rail end. The centred 1 the brief asked for does not fit: repeat's inner barb ends (10, 7) and (6, 9) are 4.47 apart, so every point of the centre is at most 2.24 from one of them, under the 2.375 the filled line needs (lint: 0.5 and 0.63 left at 1.5); a 3-tall 1 at x 8 passes the outline only. Ink 12.62 x 13.12, centre 7.75, 8. Line glyph: fills by weight"
+  },
+  {
+   "name": "switch-camera",
+   "label": "Switch camera",
+   "fluent": "camera_switch",
+   "spec": "square, free angles (camera's); Phosphor camera-rotate: camera copied exactly with its lens replaced by folder-sync's small sync mark (one r 2.236 circle broken by two chords 2 apart, reset-style L heads 1.25) turned 90 degrees and centred at 8, 9 where the lens sat (arcs 7-11 tall, 5.75-10.25 wide; heads at the upper right and lower left). Turned because the family's orientation cannot sit on the grid under the camera's shoulders: with horizontal chords the mark is 4.5 tall in an 8-tall interior, and centre 8.5 or 9 leaves the upper hook 0.65 from the left shoulder or the lower hook 0.63 from the base. Detail 0.88 to the base; tight 1.17 from the upper head to the right shoulder. Filled: body solid, the mark a knockout (marks inside a container)"
+  },
+  {
+   "name": "eject",
+   "label": "Eject",
+   "fluent": "arrow_eject",
+   "spec": "square, free angles; Fluent arrow_eject / Lucide eject: skip-forward's triangle exactly (play scaled 0.769, r 0.962 back corners, r 0.769 tip) turned to point up, its base on y 10.5 (x 4.648-11.352, crisp), over skip's bar laid flat: M3.5 13.5H12.5, as wide as the triangle (ink 10.1 vs 9.8), a standard 3 below the base (1.88). Ink 10.12 x 12.18, centre 8, 7.97. Filled: the triangle solid, the bar stays a line (skip-forward's)"
+  },
+  {
+   "name": "headphones-off",
+   "label": "Headphones off",
+   "fluent": "",
+   "spec": "circle; Lucide headphone-off / SF headphones.slash: headphones copied exactly under the shared slash M2 2L14 14, flat in the outline (band and right cup outline-only lines, left cup solid; the band's sides end at the cups' tops at 9, so the cups' outer edges are drawn once: the base draws them twice). data-counter=\"sliver\" for the 0.82 pocket where the slash crosses the right cup's top-left corner. Filled: left cup solid; right cup a fill parted by the shared slash gap (mic-off's structure); the band a filled-only stroke cut one-sided round the slash (icon-geometry slash, 2.25: ends 4.111, 4.111 and 6.042, 2.86) and ending on the right cup's top (ending it at 10.318 left fill beside the line at 48). No Fluent headphones_off cut exists"
+  },
+  {
+   "name": "captions-off",
+   "label": "Captions off",
+   "fluent": "closed_caption_off",
+   "spec": "circle (the slash's 12 x 12 run breaks the horizontal keyline, as video-off); Fluent closed_caption_off / Lucide captions-off: captions copied exactly under the shared slash M2 2L14 14, flat in the outline (frame an outline-only line; data-counter not needed, every pocket is on the scale). Filled: the frame a fill parted by the shared slash gap; the left C a knockout from its top (6.5, 6.5, on the slash) round to its lower end, its 0.5 upper tip an outline-only line, so no stroke is drawn twice; the right C a whole knockout, of which only the arc above the gap shows, joined to the gap's space (Fluent's filled cut shows the same partial C). Slivers none at 16 and 48"
+  },
+  {
+   "name": "vibrate",
+   "label": "Vibrate",
+   "fluent": "phone_vibrate",
+   "spec": "square; Lucide vibrate: a phone body 5 x 11 (5.5-10.5 x 2.5-13.5, r 1.5; phone's 9 x 13 r 2 body narrowed to make room, its home bar dropped because a 5-wide body leaves 0.31 beside a 2-long bar; Lucide and Phosphor have none) between two four-segment zigzags on the 45 degree lattice, x 2-3.5, y 5-11, ends outward (Lucide's: M2 5L3.5 6.5L2 8L3.5 9.5L2 11, mirrored), inner points detail 0.88 from the body. All long edges on x.5. Ink 13.12 x 12.12, centred 8, 8. Filled: body solid, zigzags stay lines"
+  },
+  {
+   "name": "sim-card",
+   "label": "SIM card",
+   "fluent": "sim",
+   "spec": "vertical; Lucide card-sim / Phosphor sim-card / Fluent sim: phone's 9 x 13 frame (3.5-12.5 x 1.5-14.5, r 2; every edge on x.5, the real card's 0.7 ratio) with its top-right corner clipped by a 3-long 45 degree edge (9.5, 1.5 to 12.5, 4.5, on the lattice) with r 1 fillets; a 5 x 4 chip (5.5-10.5 x 8.5-12.5, r 1, crisp) with Fluent's vertical divider at x 8, a detail 0.88 from the sides and the base; pockets 1.43 (tight satellites). Filled: card solid, chip and divider knock out (camera's lens: the pockets stay solid)"
+  },
+  {
+   "name": "monitor-off",
+   "label": "Monitor off",
+   "fluent": "desktop_off",
+   "spec": "square; alias of screen-share-off (data-alias-of, linted identical): desktop under the shared slash M2 2L14 14, flat, is already screen-share-off's drawing, so a second source would duplicate it (Fluent desktop_off, Lucide monitor-off, Huge MonitorOff); filled: screen a fill parted by the slash gap, stand a line"
+  },
+  {
+   "name": "megaphone-off",
+   "label": "Megaphone off",
+   "fluent": "megaphone_off",
+   "spec": "square, free angles (megaphone's); Fluent megaphone_off / Lucide megaphone-off / Huge MegaphoneOff: megaphone's body copied exactly, drawn whole as an outline-only line under the shared slash M2 2L14 14, flat (bell-off's structure); the handle copied but cut by the overlap cut round the slash (ends at 8.492, 11.674, tight 1.13): uncut, its right leg sat 0.58 beside the slash, and it does not cross it to lie flat (Lucide and Huge cut it there too). Filled: the body a fill parted by the shared slash gap, the handle stays a line (attached part)"
+  },
+  {
+   "name": "lightbulb-off",
+   "label": "Lightbulb off",
+   "fluent": "",
+   "spec": "square (was vertical: the slash spans 2-14), free angles (lightbulb's); Lucide lightbulb-off / Huge LightbulbOff / SF lightbulb.slash: lightbulb's bulb copied exactly as an outline-only line under the shared slash, flat (it enters the dome and leaves through the right neck), and its base cut at 11.5 kept as the cut (wholly below the slash). Filled: the bulb a fill parted by the shared slash gap, the base band a cut as lightbulb; no slivers at 16 or 48"
+  },
+  {
+   "name": "keyboard-off",
+   "label": "Keyboard off",
+   "fluent": "keyboard_off",
+   "spec": "circle (13 x 10 frame plus the slash, video-off's keyline); Fluent keyboard_off / Lucide keyboard-off / Huge KeyboardOff: keyboard's r 2 frame copied exactly as an outline-only line under the shared slash, flat (it crosses both rounded corners at 58 degrees). Keys the slash covers or nearly touches are dropped (4.06/6.69, 5.5 and 8, 8 under it; 5.375 / 10.625, 8 at 0.55, a near miss), as alarm-off drops its hand; the two top-right keys stay (9.3125 and 11.9375, 5.5; tight 1.38 from the slash). The spacebar keeps its start and runs to the slash's centre-line (M4.5 10.5H10.5), flat: its 1-long stub beyond the slash would read as a nub (Fluent and Lucide stop it there too). Filled: the frame a fill parted by the shared slash gap, keys holes, spacebar a knockout"
+  },
+  {
+   "name": "power-off",
+   "label": "Power off",
+   "fluent": "",
+   "spec": "circle; Lucide power-off / Huge PowerOff / SF poweroff: power's r 5.5 ring arc copied exactly under the shared slash, flat (its left end already ends on the slash, 0.35 off its centre-line, so the cap lies under the slash); the stem shortened to 2-4.5 (tight 1.35 above the slash): power's 2-7.5 stem ended on the slash and read as a T joined to it (Lucide and Huge shorten it the same way). Line glyph: fills by weight; filled ring pieces as link-off (the lower-left piece runs to the slash, the upper-right piece stops 2.5 from it at 13.343, 9.806), the stem a both-styles line (0.97 from the slash at 1.5)"
+  },
+  {
+   "name": "bell-plus",
+   "label": "Add reminder",
+   "fluent": "",
+   "spec": "square; Lucide bell-plus / Huge BellPlus for the concept: bell copied exactly (body and clapper) with the container's 4px + inside, centred at 8, 6 in the dome (inside placement: the bell is a closed shape whose interior holds the + with a detail 0.88 gap to the dome and tight 1.31 to the shoulders, as bookmark-add / chat-add); Lucide's corner + would cut away the bell's whole top-right quarter (a 2.25 cut round a + at bell-dot's 12.5, 3.5 runs down the right side to 7.75), and the outline is the bell's identity. At 8, 6.5 (concentric with the dome) the + sits 2.48 from the clapper, a lint near miss; at 8, 7 2.08. Filled: bell solid, + a knockout, clapper a line"
+  },
+  {
+   "name": "calendar-range",
+   "label": "Date range",
+   "fluent": "",
+   "spec": "square; Lucide calendar-range / Huge CalendarRange: calendar's frame, header at 6.5 and pegs copied exactly (as calendar-add), the date grid replaced by Lucide's range rows: a ⌀1.5 date dot at 5, 9 and a range bar 7.5-11 at 9 (tight 1.19), then a bar 5-8.5 at 11.5 (the range continuing into the next week). Rows 2.5 apart are the only pair that fits a dot 2.44+ from the header and a bar 2+ from the base, so row 1 sits on whole-pixel 9 (a 3.5-long bar, grey at 1x); the second row's dot is dropped (at 11, 11.5 it sat 0.69 from the base). Gaps: tight to the header, frame sides and between rows, detail 0.88 from the second bar to the base. Filled: calendar's (body fill below the header, frame, header and pegs lines), dot a hole, bars knockouts"
+  },
+  {
+   "name": "bookmark-check",
+   "label": "Saved",
+   "fluent": "",
+   "spec": "vertical, free angles (bookmark's); Lucide bookmark-check / Huge BookmarkCheck: bookmark copied exactly with the check inside where bookmark-add holds its + (centred on 7 vertically); the 2 / 4 check is 6 wide and leaves 0.38 to the sides, so it is the 1.5 / 3 check M6 7L7.5 8.5L10.5 5.5, 0.25 right of centre for the lattice as calendar-check and vote (tight 1.38 left, detail 0.88 right). Filled: bookmark solid, check a knockout"
+  },
+  {
+   "name": "tag-plus",
+   "label": "Add tag",
+   "fluent": "tag_add",
+   "spec": "square; Fluent tag_add / Lucide tag-plus: tag copied exactly (eyelet kept) with the container's 4px + inside, centred in the tag's body at 8.5, 8.5 (inside placement, as location-add: a closed shape whose interior holds the + with tight 1.70 to both 45-degree sides and the far edge, open 2.83 from the eyelet; at 8, 8 the eyelet was a 2.17 near miss); every arm on x.5, crisp at 1x. Fluent's corner badge and Lucide's cut corner + would cut the tag's outline, its identity. Filled: tag solid, eyelet a hole, + a knockout"
+  },
+  {
+   "name": "paint-roller",
+   "label": "Format painter",
+   "fluent": "paint_brush",
+   "spec": "square; Lucide paint-roller / Phosphor paint-roller on Area's grid: a 9 × 4 roller (2.5–11.5 × 2.5–6.5, r 1.5, counter 2.93) with an arm leaving its right end at mid-height (4.5) out to 13.5, down to 9.5 and back to x 8 (r 1 corners), a standard 3 below the roller, then down onto a 3 × 3 grip (6.5–9.5 × 10.5–13.5, r 1, counter 1.93; Lucide's 2 : 3 grip shortened so every long edge is on x.5 and the ink centres at 8, 8); ink 12.12 square; filled: roller and grip solid, the arm stays a line"
+  },
+  {
+   "name": "square-root",
+   "label": "Equation",
+   "fluent": "math_formula",
+   "spec": "square, free angles; Lucide radical / Huge Radical / SF squareroot in the type family's cap height 2.5–13.5: a 1.5 entry tick at 9 (2.5–4), a short down-stroke to a 1-wide flat foot at 13.5 (6–7; Lucide's rounded foot, which keeps both foot corners at 105–119° instead of one 44° point), a long up-stroke to 10, 2.5 and the vinculum to 13.5; r 0.5 fillets at the four bends (soft transitions); ink 12.12 square centred 8, 8; a line glyph (unframed), fills by weight"
+  },
+  {
+   "name": "list-collapse",
+   "label": "Toggle list",
+   "fluent": "",
+   "spec": "square; Lucide list-collapse / Huge ListCollapse on indent's construction: indent's three lines 6.5–13.5 on the three-line stack rows 3.5 / 7.5 / 11.5 (0.5 high, crisp) and two of indent's 2px chevrons (M2 2L4 4L2 6 and M2 9L4 11L2 13) beside the first and last rows, centred 0.5 inside them as Lucide's sit between rows; chevrons a standard 1.88 apart, tight 1.42 tip to line; ink 12.62 × 12.12, centre 7.75, 7.5; fills by weight"
+  },
+  {
+   "name": "file-video",
+   "label": "Video file",
+   "fluent": "",
+   "spec": "vertical; document verbatim with play-circle's play exactly (the r 0.75-cornered solid triangle, data-dot free as play-circle) moved 2.125 down into the free interior below the fold (6.5–10.44 × 7.9–12.35), the container's solid-mark exception (play, dots); detail 0.96 to the floor, tight 1.37 to the left side and fold; Phosphor / Lucide / Huge draw a camera, which needs a 2-part mark too dense under Area's 4.5 fold; filled: page fills, the play is a hole"
+  },
+  {
+   "name": "file-audio",
+   "label": "Audio file",
+   "fluent": "",
+   "spec": "vertical; Lucide file-music / Material audio_file: document verbatim with an eighth note inside below the fold: a solid r 1.25 head at 6.75, 11.25 (data-dot free, as the play), a stem at x 7.5 from the head's right edge up to 8, and Lucide's straight flag 7.5, 8 → 10, 9.25; stem top tight 1.38 from the fold curve, head detail 0.94 to the floor; music's ringed heads don't fit (a ring head left of the stem meets the left side) so the head is the solid-mark exception; filled: page fills, head a hole, stem and flag knock out"
+  },
+  {
+   "name": "file-upload",
+   "label": "Upload file",
+   "fluent": "document_arrow_up",
+   "spec": "vertical; document verbatim with file-download's arrow turned 180° (data-rotations can't give it: it would turn the page): the same 1.5 head on the lattice (M6.5 10.5L8 9L9.5 10.5) and a 3-long shaft 9–12; turned exactly about its centre the head falls off the 45° lattice (x + y 16.5), and lifting the tip to 8 to keep the 3.5 shaft leaves a 0.73 near miss to the fold curve, so the shaft is 0.5 shorter; tight 1.65 to the fold, detail 0.88 to the floor (download's); filled: page fills, arrow knocks out"
+  },
+  {
+   "name": "chart-area",
+   "label": "Area chart",
+   "fluent": "data_area",
+   "spec": "square; Lucide chart-area / Fluent data_area on the chart family: chart's axes M2.5 2.5V13.5H13.5 exactly, with an area shape standard 3 from both axes (left side x 5.5, base 10.5, right side 13.5): its top a lattice zigzag 5.5, 7.5 → 7.5, 5.5 → 9.5, 7.5 → 13.5, 3.5 (chart's rise-dip-rise), r 0.5 fillets at the 90° and 135° bends and r 1 at the 45° top-right corner and the base corners; every edge on x.5; counter 3.12; ink 12.12 square centred 8, 8; filled: the area solid, axes stay lines"
+  },
+  {
+   "name": "gift-card",
+   "label": "Gift card",
+   "fluent": "gift_card",
+   "spec": "horizontal; Fluent gift_card: credit-card's 12 × 9 r 2 card (2–14 × 3.5–12.5) with a ribbon across at x 6.5 and a band at 9.5 (both x.5), and gift's bow redrawn at card size on the crossing: two loops 2.5 wide × 2.75 tall (gift's teardrop with an r 1 top) from the knot at 6.5, 9.5, the left one detail 0.88 from the card's side, loop counters 1.13; no tails (gift has none, and the 3-tall lower panel has no room); filled: card solid, ribbon and band cuts through the silhouette (credit-card's stripe), the loops knockouts with their small insides left solid, as Fluent's filled cut (no islands flagged at 16 / 48)"
+  }
+ ],
+ "extra": "Delegated calls to confirm are listed in docs/research/icon-review/2026-10-10/README.md (Batch 71)."
+}
