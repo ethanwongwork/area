@@ -9,7 +9,7 @@
     "apps/*"
   ],
   "scripts": {
-    "build": "npm run build -w @area/tokens && npm run build -w @area/styles && npm run build -w @area/react",
+    "build": "npm run build -w @area/tokens && npm run build -w @area/styles && npm run build -w @area/react && npm run build -w @area/icons",
     "build:docs": "npm run build && npm run build -w @area/docs",
     "test": "npm run test -w @area/tokens",
     "typecheck": "npm run typecheck --workspaces --if-present",
@@ -33,7 +33,8 @@
     "icons:batch": "node apps/docs/scripts/icon-batch.mjs",
     "icons:sheet": "node apps/docs/scripts/icon-sheet.mjs",
     "icons:geometry": "node apps/docs/scripts/icon-geometry.mjs",
-    "lint:icons": "node apps/docs/scripts/gen-pilot-icons.mjs --check"
+    "lint:icons": "node apps/docs/scripts/gen-pilot-icons.mjs --check",
+    "test:icons": "npm test -w @area/icons"
   },
   "engines": {
     "node": "^22.18.0 || ^24.0.0 || >=26.0.0"

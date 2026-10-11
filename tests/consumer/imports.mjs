@@ -43,3 +43,10 @@ const themeSource=await readFile(new URL(import.meta.resolve('@area/react/theme'
 const rootSource=await readFile(new URL(import.meta.resolve('@area/react')),'utf8');assert.ok(!rootSource.startsWith('"use client"'));
 await writeFile('ssr.html',html);
 console.log(JSON.stringify({imports:'pass (tokens root/config/types, React root/theme/variants, manifest, CSS)',runtime:'all manifest variants and invalid values pass',ssr:'pass, no DOM globals, nested Theme inherits',browser:'JS + CSS bundle passes',helperBytes:helpers.outputFiles[0].contents.length,buttonBytes:button.outputFiles[0].contents.length,treeShaking:'unused components and manifests removed',boundary:'Theme directive preserved; RSC framework integration remains unverified'},null,2));
+
+const Icons=await import('@area/icons'),{icons}=await import('@area/icons/meta');
+assert.ok(icons.length>0&&icons.filter(i=>i.status==='approved').every(i=>typeof Icons[i.component]==='function'));
+assert.match(renderToString(h(Icons.SearchIcon,{size:24})),/^<svg[^>]*width="24"/);
+for(const f of ['@area/icons/sprite.svg','@area/icons/icons.json','@area/icons/svg/16/search.svg'])assert.ok((await readFile(new URL(import.meta.resolve(f)),'utf8')).length>0,f);
+const iconBundle=await build({stdin:{contents:"import { SearchIcon } from '@area/icons'; console.log(SearchIcon);",resolveDir:process.cwd()},bundle:true,write:false,format:'esm',external:['react','react/jsx-runtime'],minify:true});
+assert.ok(iconBundle.outputFiles[0].contents.length<4000,'one icon tree-shakes to its own module (bytes: '+iconBundle.outputFiles[0].contents.length+')');

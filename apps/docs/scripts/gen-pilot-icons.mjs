@@ -7,9 +7,10 @@
 //                     the quick loop while drawing; the full run still gates every icon
 //   --only names --emit file.tsx  also write just those icons' components to file.tsx (a private
 //                     preview for parallel drawing; src/pilot-icons.tsx is untouched)
+//   --package   lint, then write only @area/icons' generated sources (packages/icons/src/generated)
 // Construction rules: docs/specs/icons.md. Sources are stroked centre-line drawings on a
 // 16px grid; the generated component takes the stroke width as a prop.
-import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -517,7 +518,7 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
     if (w > kw + 0.25 || h > kh + 0.25) fail(name, `ink ${r2(w)}×${r2(h)} exceeds the ${keyline} keyline ${kw}×${kh}`);
   }
   sink = errors;
-  icons.push({ name, keyline, elements, ink: ink.map(r2), gaps, counters: counters.map(r2), notes, label: root["data-label"] ?? name, group: root["data-group"] ?? "", rotations: root["data-rotations"] ?? "", off: root["data-off"] });
+  icons.push({ name, keyline, elements, ink: ink.map(r2), gaps, counters: counters.map(r2), notes, label: root["data-label"] ?? name, aliasOf, group: root["data-group"] ?? "", rotations: root["data-rotations"] ?? "", off: root["data-off"] });
 }
 return icons;
 }
@@ -704,16 +705,8 @@ const SLASH_GAP = "M0.909 -0.682L16.909 15.318", SLASH_GAP_BELOW = "M-0.682 0.90
 const filledUniform = (icon, lines) => lines.map(line => [[SLASH_GAP, ""], [SLASH_GAP_BELOW, ", -1"]].reduce((l, [d, side]) => l.includes(`d="${d}"`)
   ? l.replace(`d="${d}"`, `d="M-1 -1L17 17"`).replace("style={{ strokeWidth: sw(weight, size) }}", `{...slashGap(weight, size${side})}`)
   : l, line));
-const tsx = `/**
- * Area icon pilot, generated from apps/docs/assets/area-icons-pilot by
- * scripts/gen-pilot-icons.mjs. Do not edit by hand. Construction: docs/specs/icons.md.
- * Each icon is a stroked 16px drawing. The line weight follows --area-weight-icon (1.125px for
- * Geist); pass \`weight\` in CSS pixels to override it, as the gallery comparison does.
- * Filled variants are derived from each shape's data-filled role; cut-outs use a mask.
- */
-import { useId, type SVGProps } from "react";
-
-/** weight: line in CSS px at 16px (overrides --area-weight-icon). size: rendered size in px;
+// The size curve, stroke helpers and mask ids every component shares (pilot-icons.tsx and @area/icons).
+const RUNTIME = `/** weight: line in CSS px at 16px (overrides --area-weight-icon). size: rendered size in px;
  *  the line then follows the size curve instead of scaling with the drawing. */
 export type PilotIconProps = Omit<SVGProps<SVGSVGElement>, "stroke"> & { weight?: number; size?: number };
 /** Size curve (docs/specs/icons.md, "Sizes"): the line grows with size^${SIZE_CURVE}, Cursor's
@@ -755,19 +748,31 @@ export const slashGap = (weight: number | undefined, size: number | undefined, s
 const base = { viewBox: "0 0 16 16", width: 16, height: 16, fill: "none", "aria-hidden": true, focusable: false } as const;
 const useMaskId = () => "area-icon-" + useId().replace(/[^A-Za-z0-9-]/g, "");
 
-${icons.map(icon => `export const ${component(icon)}Icon = ({ weight, size, ...props }: PilotIconProps) => (
+`;
+// One icon's outline and filled components, named by `name` (Pilot… for the docs, plain for @area/icons).
+const iconSource = (icon, name = component(icon)) => `export const ${name}Icon = ({ weight, size, ...props }: PilotIconProps) => (
   <svg {...base} {...(size ? { width: size, height: size } : {})} {...props}>
     ${turn(icon, icon.elements.filter(el => !el.filledOnly).map(el => jsx(el))).join("\n    ")}
   </svg>
 );` + (hasFilled(icon) ? `
 
-export const ${component(icon)}FilledIcon = ({ weight, size, ...props }: PilotIconProps) => {
+export const ${name}FilledIcon = ({ weight, size, ...props }: PilotIconProps) => {
   ${filledBody(icon).some(line => line.includes("mask")) ? "const id = useMaskId();\n  " : ""}return (
     <svg {...base} {...(size ? { width: size, height: size } : {})} {...props}>
       ${turn(icon, filledUniform(icon, filledBody(icon))).join("\n      ")}
     </svg>
   );
-};` : "")).join("\n\n")}
+};` : "");
+const tsx = `/**
+ * Area icon pilot, generated from apps/docs/assets/area-icons-pilot by
+ * scripts/gen-pilot-icons.mjs. Do not edit by hand. Construction: docs/specs/icons.md.
+ * Each icon is a stroked 16px drawing. The line weight follows --area-weight-icon (1.125px for
+ * Geist); pass \`weight\` in CSS pixels to override it, as the gallery comparison does.
+ * Filled variants are derived from each shape's data-filled role; cut-outs use a mask.
+ */
+import { useId, type SVGProps } from "react";
+
+${RUNTIME}${icons.map(icon => iconSource(icon)).join("\n\n")}
 
 /** Review batches and owner status, from assets/area-icons-pilot/batches.json. */
 export const PILOT_BATCHES = ${JSON.stringify(JSON.parse(readFileSync(join(SRC, "batches.json"), "utf8")).batches.map(({ id, title, icons }) => ({ id, title, icons })))} as const;
@@ -777,6 +782,40 @@ ${icons.map(icon => `  { name: "${icon.name}", keyline: "${icon.keyline}", deriv
 ] as const;
 `;
 if (EMIT) { writeFileSync(EMIT, tsx); process.exit(0); }
+
+// @area/icons (docs/specs/icons.md, "Package"): one module per icon under packages/icons/src/generated, without the
+// Pilot prefix, an index of the approved icons and one of those still in review, and the metadata. The output is
+// gitignored and rebuilt by the package's build; --package writes only it (after the lint).
+const PKG = join(ROOT, "../../packages/icons/src/generated");
+const BATCHES = JSON.parse(readFileSync(join(SRC, "batches.json"), "utf8")).batches;
+const statusIn = Object.fromEntries(BATCHES.flatMap(b => Object.entries(b.icons).map(([name, status]) => [name, { status, batch: b.id }])));
+const byName = new Map(icons.map(i => [i.name, i]));
+// A turn or mirror follows its base drawing, an alias the icon it copies (batches.json's note).
+const reviewOf = icon => statusIn[icon.name] ?? (icon.derivedFrom ? reviewOf(byName.get(icon.derivedFrom)) : icon.aliasOf && byName.has(icon.aliasOf) ? reviewOf(byName.get(icon.aliasOf)) : { status: "review", batch: null });
+const categoryOf = Object.fromEntries([...readFileSync(join(ROOT, "src/icon-categories.ts"), "utf8").matchAll(/\{ slug: "([^"]+)", name: "[^"]+", icons: \[([^\]]*)\]/g)]
+  .flatMap(([, slug, list]) => [...list.matchAll(/"([^"]+)"/g)].map(m => [m[1], slug])));
+const pkgName = icon => camel("-" + icon.name);
+const iconMeta = icons.map(icon => {
+  const { status, batch } = reviewOf(icon);
+  return { name: icon.name, component: pkgName(icon) + "Icon", filledComponent: pkgName(icon) + "FilledIcon", category: categoryOf[icon.name] ?? null,
+    keyline: icon.keyline, fill: icon.elements.some(el => SOLID_ROLES.includes(el.filled)) ? "solid" : "weight", status, batch,
+    ...(icon.derivedFrom ? { derivedFrom: icon.derivedFrom, turn: icon.rotate ? `rotate(${icon.rotate})` : icon.flip } : {}), ...(icon.aliasOf ? { aliasOf: icon.aliasOf } : {}) };
+});
+const GEN = "/** Generated by apps/docs/scripts/gen-pilot-icons.mjs from apps/docs/assets/area-icons-pilot. Do not edit by hand. */\n";
+rmSync(PKG, { recursive: true, force: true }); mkdirSync(join(PKG, "icons"), { recursive: true });
+writeFileSync(join(PKG, "runtime.ts"), GEN + `import { useId, type SVGProps } from "react";\n\n` + RUNTIME.replaceAll("PilotIconProps", "IconProps")
+  .replace("const base = {", "export const base = {").replace("const useMaskId = ", "export const useMaskId = "));
+for (const icon of icons) {
+  const code = iconSource(icon, pkgName(icon)).replaceAll("PilotIconProps", "IconProps");
+  const used = ["sw", "haloWidth", "lineShift", "slashGap", "useMaskId"].filter(f => new RegExp(`\\b${f}\\(`).test(code));
+  writeFileSync(join(PKG, "icons", icon.name + ".tsx"), GEN + `import { base, ${[...used, "type IconProps"].join(", ")} } from "../runtime.ts";\n\n` + (icon.label !== icon.name ? `/** ${icon.label}. */\n` + code.replace("\n\nexport const", `\n\n/** ${icon.label}, filled. */\nexport const`) : code) + "\n");
+}
+for (const [file, status] of [["approved.ts", "approved"], ["review.ts", "review"]])
+  writeFileSync(join(PKG, file), GEN + iconMeta.filter(m => (m.status === "approved") === (status === "approved"))
+    .map(m => `export { ${m.component}, ${m.filledComponent} } from "./icons/${m.name}.tsx";`).join("\n") + "\n");
+writeFileSync(join(PKG, "meta.ts"), GEN + `import type { IconMeta } from "../meta-types.ts";\n\nexport const icons: readonly IconMeta[] = ${JSON.stringify(iconMeta, null, 1)};\n`);
+console.log(`wrote packages/icons/src/generated (${icons.length} icons, ${iconMeta.filter(m => m.status === "approved").length} approved)`);
+if (process.argv.includes("--package")) process.exit(0);
 writeFileSync(OUT, tsx);
 console.log(`wrote ${OUT.replace(ROOT + "/", "")}`);
 

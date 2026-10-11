@@ -74,12 +74,29 @@ Objects:
 
 Not changed: the tree's crown keeps its own symmetric construction. It is not a moved cloud.
 
-### Open: batches.json status lags the review page
+### batches.json synced with the review page (2026-10-10, later session)
 
-396 icons in `batches.json` are still `review`, but for 356 of them the owner's latest verdict on the review page is
-"approve". For 271 of those, the approval is newer than the icon's last commit. The sync was not applied this session
-and waits for the owner. The other 85 were committed after their approval, so they need a look. 22 batch-68 icons have
-no verdict at all, and 18 icons' latest verdict is an old round-2 or round-5 fix or replace.
+Every row in `reviews` … `reviews7` was read (`reviews6` is empty). An icon became `approved` when the owner's latest
+verdict is "approve" and either the approval is newer than the icon's last commit (226) or the drawing is unchanged
+since the approval apart from the dropped `data-angles="free"` (35). 261 icons moved; batches.json now has 486
+approved and 224 in review:
+
+- **103 never reviewed:** batch 68 (21), compass-dot, and batches 70–74's new icons. They are on the review page now.
+- **103 changed after approval:** 19 are the quality pass's redraws held on the page; the other 84 changed in later
+  commits (filled story, the whole-set audit, round fixes) without a new verdict, so they need a look.
+- **18 last verdict fix or replace** (round 2 or round 5): cart, smile, database, fingerprint, umbrella, qr-code,
+  plane, agent, bug-off, square-smile, crystal-ball, bot-scholar, bot-guard, bot-automator, signature, spell-check,
+  scan-face, chat-question. They were redrawn on 2026-10-07 but have no verdict since.
+
+Three of the 84 (corner-down-right, rotate, insert-row) render exactly as they did at the approval, so they were
+approved too (489 approved, 221 in review).
+
+Owner: "add them to the page". The review page (same link, `reviews7`) now holds the 103 plus 121 reopened icons: the
+81 changed after approval, the 18 old fix verdicts and the 22 never-reviewed (batch 68, compass-dot). The filter
+"Changed since your verdict, or never reviewed" shows them; Before is the drawing committed at the verdict, and the
+note lists the commits since. A reopened icon's verdict counts only if it is newer than `staleAt`. Rebuild:
+`reopen.mjs <published data.js> reopen.json <before.tsx> <out data.js>`. `review-page.html` is the page template
+(publish it with the data as `data.js`).
 
 ## Quality and consistency pass (owner: "pause making new icons here")
 
@@ -218,12 +235,14 @@ Decisions are in its `iconswap1` collection.
 The owner asked what Area's set still lacks, besides review, to be an industry-grade library. Summary, in suggested
 order:
 
-1. **Finish the reviews:** 103 icons are held on the review page. Then sync the approvals into batches.json (about 271
-   are approved on the page but still marked `review`; see "Open: batches.json status lags the review page"). Only
-   approved icons should ship.
-2. **Ship an `@area/icons` package:** one tree-shakable module per icon (no `Pilot` prefix), raw SVGs, a sprite, and a
-   metadata JSON (name, keywords, aliases, category, rtl-mirror flag, status). Today the full set lives only in
-   apps/docs/src/pilot-icons.tsx, and `@area/react` ships about 24 component glyphs.
+1. **Finish the reviews:** 103 icons are held on the review page, plus 84 changed after approval and 18 old fix
+   verdicts (see "batches.json synced with the review page"). The approvals that stand are synced. Only approved icons
+   should ship.
+2. **Ship an `@area/icons` package:** done (`packages/icons`, spec "Package: @area/icons, 2026-10-10"): one module
+   per icon with plain names, approved icons in the main entry and the rest in `@area/icons/review`, raw SVGs at
+   16 / 20 / 24, a sprite, and metadata (name, components, category, keyline, fill, status, batch, turn, alias).
+   Keywords, other libraries' names and the RTL flag come with items 3 and 4. The docs still render
+   `pilot-icons.tsx`; switching them to the package is part of item 9.
 3. **Icon component API:** an accessible label (`title` / `aria-label`, which switches the icon to `role="img"`), and
    right-to-left mirroring for directional icons.
 4. **Keywords and an alias map** for search, including Lucide, Material and Fluent names (user→person, file→document,
