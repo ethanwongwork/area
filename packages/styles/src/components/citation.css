@@ -1,0 +1,68 @@
+/* ---------------------------------------------------------------------------
+ * Citation
+ *
+ * A source pill inside generated text (docs/specs/citation.md): ChatGPT's answer citations
+ * (captures/citation/chatgpt--citation-*): round, 4 before a 12 round favicon and 8 after the text, 4
+ * between the parts, the site's name cut at 15 characters, "+1" for more sources, a #f3 plate with the
+ * secondary ink. Round 8 (owner: "maybe even 12 should be considered"): 12px text on a 20 pill, as
+ * AI Elements' InlineCitation (shadcn Badge, text-xs) and prompt-kit's Source (h-5, text-xs) set it.
+ * It sits on the sentence's baseline 4 after the last word. A link: it opens the source, and a Hover
+ * card can preview it.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-citation {
+    /* spec: 20 (prompt-kit h-5; AI Elements about 22; ChatGPT 18 at 9px), the 20 mark tier (16 compact);
+       ps-1 / pe-2 (4 / 8, ChatGPT and prompt-kit), gap 4. */
+    --_height: var(--area-mark-label-md);
+    --_pad-start: var(--area-space-4);
+    --_pad-end: var(--area-space-8);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--area-space-4);
+    box-sizing: border-box;
+    block-size: var(--_height);
+    max-inline-size: 100%;
+    /* spec: ChatGPT ms-1, 4 after the sentence's last word. */
+    margin-inline-start: var(--area-space-4);
+    padding-inline: var(--_pad-start) var(--_pad-end);
+    /* The label's baseline on the sentence's: the pill's middle then sits on the text's x-height, as
+       ChatGPT's does, without its -1.5 / +2 px nudges. */
+    vertical-align: baseline;
+    border-radius: var(--area-radius-full);
+    /* spec: ChatGPT bg-secondary-soft rgb(243) = bg-component-hover; text-secondary-solid rgb(93) → fg-muted. */
+    background-color: var(--area-bg-component-hover);
+    color: var(--area-fg-muted);
+    /* spec: 12 500 (AI Elements text-xs font-medium; prompt-kit text-xs; ChatGPT 9 500), Area's xs type. */
+    font-family: var(--area-font-sans);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+    font-weight: var(--area-weight-strong);
+    text-decoration: none;
+    white-space: nowrap;
+    user-select: none;
+    cursor: pointer;
+    transition: background-color var(--area-duration-fast) var(--area-ease-out);
+  }
+  /* Without a favicon the text keeps the end's 8 at the start too. */
+  .area-citation:not(:has(> .area-citation__icon)) { --_pad-start: var(--_pad-end); }
+  /* The plate darkens on hover and press; the ink stays (DESIGN_SYSTEM.md, fixed foreground). */
+  @media (hover: hover) { .area-citation:hover { background-color: var(--area-bg-component-active); transition-duration: 0s; } }
+  .area-citation:active { background-color: var(--area-bg-component-active); transition-duration: 0s; }
+  .area-citation:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+
+  /* spec: ChatGPT's favicon, 12 round. */
+  .area-citation__icon {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    inline-size: 12px; /* spec */
+    block-size: 12px; /* spec */
+    border-radius: var(--area-radius-full);
+    overflow: hidden;
+  }
+  .area-citation__icon > :is(img, svg) { inline-size: 100%; block-size: 100%; object-fit: contain; }
+
+  /* spec: ChatGPT cuts the name at 15ch with an ellipsis. */
+  .area-citation__label { min-inline-size: 0; max-inline-size: 15ch; overflow: hidden; text-overflow: ellipsis; }
+  .area-citation__count { flex: none; font-variant-numeric: tabular-nums; }
+}

@@ -1,0 +1,15 @@
+/* ---------------------------------------------------------------------------
+ * Search field
+ *
+ * An Input for a query (docs/specs/search-field.md): the shell, sizes, variants, focus and the
+ * trailing action are Input's, and the browser's own search chrome is already gone there
+ * (input.css). The search glyph leads; once there is text the clear action (InputAction's box,
+ * the dismiss glyph) ends the field, and while it is empty an optional shortcut hint does, as a
+ * Kbd in the suffix (inset.css places both). Nothing is drawn here: the class is the block hook.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-search-field {}
+  /* The clear action is InputAction's ghost plate, out of the Tab order; the hint is a Kbd. */
+  .area-search-field__clear {}
+  .area-search-field__shortcut {}
+}

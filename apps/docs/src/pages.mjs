@@ -202,6 +202,105 @@ export const COMPONENT_PAGES = [
     ],
   },
   {
+    slug: "search-field", name: "Search field", exportName: "SearchField", manifest: "searchField",
+    imports: "SearchField",
+    api: [
+      ["value / defaultValue / onValueChange", "string / string / (value) => void (typed or cleared)", "— / \"\" / —"],
+      ["onClear / onSubmit", "() => void (after clear or Escape) / (value) => void (Enter)", "—"],
+      ["shortcut", "string[] (Kbd keys shown while empty; also aria-keyshortcuts; the page binds them)", "—"],
+      ["clearLabel / placeholder", "string", "\"Clear search\" / \"Search\""],
+      ["leadingIcon", "ReactNode | null", "the search glyph"],
+      ["variant / size / loading / disabled / readOnly / fullWidth", "as Input", "outline / md"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "An Input with the search glyph. Once there is text, the clear action ends the field; it stays out of the Tab order and keeps focus in the field, and Escape does the same from the keyboard.", demo: "GallerySearchFieldFilled" },
+      { id: "shortcut", title: "Shortcut", note: "shortcut shows the keys that focus the field while it is empty, as Notion's search does. It is a hint: the page binds the keys.", demo: "GallerySearchFieldShortcut" },
+      { id: "filter", title: "Filtering a list", note: "Controlled with value and onValueChange. On an empty field Escape is left to the page, so a dialog around it can close.", demo: "GallerySearchFieldFilter" },
+    ],
+  },
+  {
+    slug: "board", name: "Board", exportName: "Board", manifest: "boardColumn",
+    imports: "Board, BoardColumn, BoardCard",
+    api: [
+      ["BoardColumn.title", "ReactNode (the group's name, plain text)", "—"],
+      ["BoardColumn.color", "\"neutral\" | \"gray\" | \"brown\" | \"orange\" | \"yellow\" | \"green\" | \"blue\" | \"purple\" | \"pink\" | \"red\" (tint, count, add row, card edge)", "neutral"],
+      ["BoardColumn.count / actions", "number (a Badge) / ReactNode (buttons at the header's end)", "—"],
+      ["BoardColumn.onAdd / addLabel / footer", "(event) => void (shows the Add new row) / ReactNode / ReactNode (a custom row instead)", "— / \"Add new\" / —"],
+      ["BoardCard.title / href and anchor props", "ReactNode; the link covers the card", "—"],
+      ["BoardCard.icon / children / actions", "ReactNode (page icon) / properties under the title / controls on hover or focus", "—"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "Columns 12 apart, each a header (the name, a count Badge, buttons) over a tinted list of cards and an Add new row, in the column's colour.", demo: "GalleryBoard" },
+      { id: "properties", title: "Card properties", note: "Children under the title: Tags, a date, the assignee.", demo: "GalleryBoardCardProperties" },
+      { id: "actions", title: "Card actions", note: "actions show at the card's top end on hover or keyboard focus.", demo: "GalleryBoardCardActions" },
+    ],
+  },
+  {
+    slug: "zoom-control", name: "Zoom control", exportName: "ZoomControl", manifest: "zoomControl",
+    imports: "ZoomControl, MenuItem",
+    api: [
+      ["value / defaultValue / onValueChange", "number (a scale: 1 is 100%)", "— / 1 / —"],
+      ["min / max / step", "number (scales; in and out multiply and divide by step)", "0.02 / 256 / 2"],
+      ["presets", "number[] (rows \"Zoom to 50%\"; the current one checked)", "[0.5, 1, 2]"],
+      ["onZoomToFit", "() => void (shows the Zoom to fit row)", "—"],
+      ["shortcuts", "{ zoomIn, zoomOut, zoomToFit, presets: { [scale]: ReactNode } }", "—"],
+      ["children", "MenuItem rows after the zoom rows (view toggles)", "—"],
+      ["size / variant / tone / disabled and button props", "as Button", "sm / ghost / neutral"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "Figma's zoom and view options: the percentage opens a Menu with a typed zoom (Enter applies it), Zoom in and out, Zoom to fit, and the preset zooms.", demo: "GalleryZoomControl" },
+      { id: "view", title: "View toggles", note: "children add rows after the zoom rows, such as Figma's Pixel grid and Rulers.", demo: "GalleryZoomControlView" },
+    ],
+  },
+  {
+    slug: "citation", name: "Citation", exportName: "Citation", manifest: "citation",
+    imports: "Citation, HoverCard",
+    api: [
+      ["label", "string (the source's short name; cut at 15 characters)", "—"],
+      ["title", "string (the page's title, added to the accessible name)", "—"],
+      ["icon", "string (a favicon URL) | ReactNode (12px)", "—"],
+      ["more", "number (more sources, shown as +N)", "0"],
+      ["href / target / rel and anchor props", "as a, opening in a new tab", "_blank / noopener noreferrer"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "ChatGPT's source pill, 4 after the sentence it supports, on the text's baseline.", demo: "GalleryCitationMore" },
+      { id: "hover-card", title: "With a preview", note: "Wrap it in a HoverCard to preview the source on hover or focus.", demo: "GalleryCitationHoverCard" },
+    ],
+  },
+  {
+    slug: "date-range-picker", name: "Date range picker", exportName: "DateRangePicker", manifest: "dateRangePicker",
+    imports: "DateRangePicker",
+    api: [
+      ["value / defaultValue / onValueChange", "{ start, end } (\"YYYY-MM-DD\") | null", "— / null / —"],
+      ["presets", "{ label, value: { start, end } }[] (rows above the month)", "—"],
+      ["visibleMonths", "1 | 2", "1"],
+      ["placeholder / icon / formatOptions", "ReactNode / ReactNode / Intl.DateTimeFormatOptions (short month)", "\"Pick dates\" / — / short"],
+      ["min / max / isDateUnavailable / today / locale / firstDayOfWeek", "as Calendar", "—"],
+      ["variant / size / fullWidth / invalid / disabled / clearable / name", "as Date picker; name submits <name>-start and <name>-end", "outline / md"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "Date picker's field showing \"Oct 4 – 10, 2026\". Its panel is a range Calendar: pick the first day, then the last; the band follows the pointer. A finished range sets the value and closes.", demo: "GalleryDateRangePicker" },
+      { id: "presets", title: "Presets", note: "Notion's search date filter: rows that set a range at once, the chosen one checked.", demo: "GalleryDateRangePickerPresets" },
+      { id: "two-months", title: "Two months", demo: "GalleryDateRangePickerTwoMonths" },
+    ],
+  },
+  {
+    slug: "shortcut-list", name: "Shortcut list", exportName: "ShortcutList", manifest: "shortcutList",
+    imports: "ShortcutList, ShortcutListItem",
+    api: [
+      ["title / titleAs", "ReactNode (names the group) / \"h2\"…\"h6\" | \"p\"", "— / h3"],
+      ["quiet", "boolean (keys as muted text instead of keycaps)", "false"],
+      ["ShortcutListItem.label", "ReactNode (what the shortcut does)", "—"],
+      ["ShortcutListItem.keys", "string[] (one chord) | string[][] (alternatives)", "—"],
+      ["ShortcutListItem.shortcut", "ReactNode (custom keys, such as a KbdGroup sequence)", "—"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "One row per command: what it does, then its keys at the end as Kbd keycaps. Several lists stack 32 apart.", demo: "GalleryShortcutList" },
+      { id: "dialog", title: "In a dialog", note: "A Keyboard shortcuts sheet, as ChatGPT's (cmd+/) and Figma's Help › Keyboard shortcuts.", demo: "GalleryShortcutListDialog" },
+      { id: "alternates", title: "Alternatives and sequences", note: "keys as a list of chords for alternatives (read with \"or\"); shortcut for a KbdGroup pressed in sequence.", demo: "GalleryShortcutListAlternates" },
+    ],
+  },
+  {
     slug: "description-list", name: "Description list", exportName: "DescriptionList", manifest: "descriptionList",
     imports: "DescriptionList, DescriptionListItem",
     api: [

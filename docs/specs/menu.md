@@ -1,6 +1,6 @@
 # Menu spec
 
-**Status:** accepted · 2026-09-26 (was: in review · 2026-09-26 (first pass under the capture workflow; reopened from Complete))
+**Status:** accepted · 2026-10-11 (review round 7, components7)
 **Captures:** `docs/research/captures/menu/` (pass-0 in `before/`)
 **Peers:** SplitButton (hosts a Menu in a popover), Toolbar overflow, Nav (row insets),
 Tree view (row wash), Kbd (shortcuts), Popover (surface family)
@@ -190,6 +190,13 @@ Open questions:
 - **What changed:** Section titles in menus whose rows have no icon now start where the row text starts (11px in), not 3px short of it (8px). Menus whose rows lead with an icon, like Command palette, keep the title on the icon, as Notion's palette does.
 - **Why:** You asked for the titles to line up with the row text; they sat 3px left of it.
 
+## Review note, 2026-10-10
+
+- **What changed:** In a menu that has rows with a check, the plain rows now leave the check's space empty at the end,
+  so their keyboard shortcuts line up with the check rows' shortcuts. Menus without check rows look the same.
+- **Why:** You agreed to fix it in Menu itself (Zoom control, question 2): a plain row's shortcut sat at the row's end,
+  a check's width right of the check rows' shortcuts, and Figma keeps every shortcut in one column.
+
 ## Feedback log
 
 - 2026-09-26 · owner: "build the next component" → Menu evidence pass: label column 36,
@@ -223,3 +230,8 @@ Open questions:
 - 2026-10-09 · owner went with Scroll area's recommendation to adopt it in the scrolling families (docs/specs/scroll-area.md, "Adoption") → the scroll container is a Scroll area: Figma's overlay bar instead of the platform's, its inset moved into the scroller so rows keep their place → back in review.
 - 2026-10-09 · owner, review round 2 (needs changes): "the small section titles in the menu should line up with the
   text in the rows?" → open; the label takes the rows' own text inset (11 at 32) over text-only rows; over icon rows it stays on the icon column → inset.css, surface.css (`.area-menu__label-text`), MenuLabel, Combobox, CustomSelect, CommandPalette, TagPicker.
+- 2026-10-10 · owner: "go with your recommendations" (zoom-control.md Q2) → in a menu with check rows, a plain row ending
+  in a shortcut ends on the icon box and reserves the check column (16 + the row gap), so shortcuts align: 36 from the
+  row's end in every row (was 39 / 36) → inset.css (`--_box-end`), surface.css (margin); new tile "Content / plain and
+  check rows" (`GalleryMenuMixedRows`). Back in review.
+- 2026-10-11 · owner, review round 7: approved (shortcut column in mixed menus).

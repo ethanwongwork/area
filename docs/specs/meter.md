@@ -1,6 +1,6 @@
 # Meter spec
 
-**Status:** in review · 2026-10-10
+**Status:** accepted · 2026-10-11 (review round 7, components7)
 **Captures:** `docs/research/captures/meter/`
 **Peers:** Progress (the bar: rail, sizes, fill), Description list and settings rows (where meters sit), Badge tones (status fills)
 
@@ -141,3 +141,4 @@ the value now ends the label's row.
   with current area components" → value 12/16 → the UI type at the end of the label row; description under the bar in
   Field's description type; gaps 4 / 5 → Field's stack (6, 4 compact); owner: "go with your recommendations" →
   meter.css, Meter.tsx, tests; recaptured.
+- 2026-10-11 · owner, review round 7: "go with your recs for the open questions" → approved; open questions resolved as recommended (shared rail; circular meter waits).

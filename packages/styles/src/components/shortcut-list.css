@@ -1,0 +1,72 @@
+/* ---------------------------------------------------------------------------
+ * Shortcut list
+ *
+ * A sheet of keyboard shortcuts (docs/specs/shortcut-list.md): an optional group title, then one
+ * row per command with what it does at the start and its keys at the end. ChatGPT's Keyboard
+ * shortcuts dialog (rows 8 / 12 padded around a 20 line, 5% rules, a muted 500 group title) and
+ * Figma's Help › Keyboard shortcuts table (name, then the keys at the end). The keys are Kbd:
+ * keycaps by default (Figma boxes every key), quiet text with `quiet` (ChatGPT). Groups stack 32
+ * apart; the list sits in a Dialog, Popover or Panel, which owns the outer inset.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-shortcut-list {
+    /* spec: ChatGPT's rows are 8 above and below a 20 line (36 without its editable 36 pill): the UI row + 4
+       (32 + 4; 24 + 4 in compact), as Description list grows Notion's rows by 2. */
+    --_row: calc(var(--area-ui-row) + var(--area-space-4));
+    /* The surface around the list (Dialog, Popover, Panel) owns the content inset, so the text lines up with its
+       title and the rules run the content width. ChatGPT's rows add 12 / 16 inside a 12-padded list because its
+       list bleeds to the dialog's edge; Area's surfaces inset their content instead (docs/specs/shortcut-list.md). */
+    --_inset: 0px;
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+    margin: 0;
+    color: var(--area-fg-default);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+  }
+  /* spec: ChatGPT's groups are 32 apart. */
+  .area-shortcut-list + .area-shortcut-list { margin-block-start: var(--area-space-32); }
+
+  /* spec: ChatGPT's group title, 14 500 in the muted ink, 28 tall (2 + 24 + 2): the UI type with 4 above and below. */
+  .area-shortcut-list__title {
+    margin: 0;
+    padding: var(--area-space-4) var(--_inset);
+    color: var(--area-fg-muted);
+    font: inherit;
+    font-weight: var(--area-weight-strong);
+  }
+
+  .area-shortcut-list__items { display: flex; flex-direction: column; margin: 0; padding: 0; }
+
+  .area-shortcut-list__item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* spec: ChatGPT and Description list justified, 24 between the name and the value at the end. */
+    gap: var(--area-space-24);
+    min-block-size: var(--_row);
+    box-sizing: border-box;
+    padding-inline: var(--_inset);
+  }
+  /* spec: ChatGPT's 1px rule under each row but the last, the row's full width (Table's divider role). */
+  .area-shortcut-list__item:not(:last-child) { border-block-end: var(--area-border-width) solid var(--area-border-divider); }
+
+  /* spec: ChatGPT's command name, 14/20 400 in the default ink. */
+  .area-shortcut-list__label { min-inline-size: 0; margin: 0; overflow-wrap: anywhere; }
+
+  .area-shortcut-list__keys {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+    /* Alternatives (ChatGPT's "⇧⌘Delete" and "⇧⌘Backspace"): Kbd's sequence gap, 8. */
+    gap: var(--area-space-8);
+    flex: none;
+    margin: 0;
+    color: var(--area-fg-muted);
+  }
+
+  /* Quiet keys: ChatGPT sets the combination as text in its secondary ink, no keycaps. */
+  .area-shortcut-list--quiet {}
+}

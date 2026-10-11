@@ -108,8 +108,8 @@ function sections(md) {
   });
   return found;
 }
-// Spec sections and log lines dated in the open review rounds (2026-10-06 to 09).
-const RECENT = /2026-10-0[6-9]/;
+// Spec sections and log lines dated in the open review rounds (from 2026-10-06).
+const RECENT = /2026-10-(0[6-9]|[12][0-9]|3[01])/;
 function notesOf(slug) {
   const file = join(repo, "docs/specs", `${slug}.md`);
   if (!existsSync(file)) return { changes: "", questions: "", refs: "", log: "", changed: false };

@@ -1278,6 +1278,16 @@ export const GalleryMenu = () => (
   </Menu>
 );
 export const GalleryMenuShortcuts = () => <Menu aria-label="Label"><MenuItem shortcut={<Kbd keys={["cmd", "K"]} variant="quiet" />}><span className="area-menu__text">Item one</span></MenuItem><MenuItem shortcut={<Kbd keys={["cmd", "N"]} variant="quiet" />}><span className="area-menu__text">Item two</span></MenuItem></Menu>;
+/* Plain rows and check rows with shortcuts: the plain rows keep the check's column, so the shortcuts line up. */
+export const GalleryMenuMixedRows = () => (
+  <Menu aria-label="View">
+    <MenuItem shortcut={<Kbd keys={["cmd", "+"]} variant="quiet" />}><span className="area-menu__text">Zoom in</span></MenuItem>
+    <MenuItem shortcut={<Kbd keys={["cmd", "-"]} variant="quiet" />}><span className="area-menu__text">Zoom out</span></MenuItem>
+    <MenuSeparator />
+    <MenuItem checked shortcut={<Kbd keys={["shift", "R"]} variant="quiet" />}><span className="area-menu__text">Rulers</span></MenuItem>
+    <MenuItem checked={false} shortcut={<Kbd keys={["shift", "G"]} variant="quiet" />}><span className="area-menu__text">Layout guides</span></MenuItem>
+  </Menu>
+);
 
 export const GalleryMenuSelected = () => (
   <Menu aria-label="Label">

@@ -1300,6 +1300,11 @@
   }
   .area-menu__item[aria-checked="false"] > .area-menu__check > svg { opacity: 0; scale: 0.6; /* spec: MOTION.md small mark */ }
   .area-menu__shortcut + :is(.area-menu__check, .area-menu__toggle) { margin-inline-start: 0; }
+  /* In a menu with check rows, a plain row keeps the check's column empty, so every shortcut ends on one line, as
+     Figma's zoom and view menu does (owner 2026-10-10, zoom-control.md Q2; was scoped to Zoom control). */
+  .area-menu:has(.area-menu__item[aria-checked]) .area-menu__item:not([aria-checked]) > .area-menu__shortcut:last-child {
+    margin-inline-end: calc(var(--area-icon-md) + var(--_menu-gap, var(--area-gap-md)));
+  }
   .area-menu__toggle {
     margin-inline-start: auto;
     min-block-size: 0;

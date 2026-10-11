@@ -35,10 +35,16 @@ import * as emptyStates from "./demos/empty-state.tsx";
 import * as toggleGroups from "./demos/toggle-group.tsx";
 import * as descriptionLists from "./demos/description-list.tsx";
 import * as meters from "./demos/meter.tsx";
+import * as searchFields from "./demos/search-field.tsx";
+import * as shortcutLists from "./demos/shortcut-list.tsx";
+import * as dateRangePickers from "./demos/date-range-picker.tsx";
+import * as citations from "./demos/citation.tsx";
+import * as zoomControls from "./demos/zoom-control.tsx";
+import * as boards from "./demos/board.tsx";
 
 const { BADGE_GALLERY_DEMOS, ...badgeDemos } = badge;
 const { ICON_REVIEW_DEMOS, ...iconDemos } = icons;
-const DEMO_MODULES: Record<string, object> = { BADGE_GALLERY_DEMOS, badge: badgeDemos, switches, button, form, display, nav, theme, gallery, cards, icons: iconDemos, ICON_REVIEW_DEMOS, variants, overlays, counts, accordions, customSelects, tags, tagPickers, datePickers, drawers, paginations, links, scrollAreas, fileUploads, toggletips, emptyStates, toggleGroups, descriptionLists, meters };
+const DEMO_MODULES: Record<string, object> = { BADGE_GALLERY_DEMOS, badge: badgeDemos, switches, button, form, display, nav, theme, gallery, cards, icons: iconDemos, ICON_REVIEW_DEMOS, variants, overlays, counts, accordions, customSelects, tags, tagPickers, datePickers, drawers, paginations, links, scrollAreas, fileUploads, toggletips, emptyStates, toggleGroups, descriptionLists, meters, searchFields, shortcutLists, dateRangePickers, citations, zoomControls, boards };
 // One name, one demo. The server renders from this merged map, while hydration clients import a
 // module directly, so a name exported twice renders one demo and hydrates the other (a mismatch).
 const demoOwner = new Map<string, string>();
@@ -76,5 +82,11 @@ export const SOURCES = {
   toggleGroups: "src/demos/toggle-group.tsx",
   descriptionLists: "src/demos/description-list.tsx",
   meters: "src/demos/meter.tsx",
+  searchFields: "src/demos/search-field.tsx",
+  shortcutLists: "src/demos/shortcut-list.tsx",
+  dateRangePickers: "src/demos/date-range-picker.tsx",
+  citations: "src/demos/citation.tsx",
+  zoomControls: "src/demos/zoom-control.tsx",
+  boards: "src/demos/board.tsx",
   drawers: "src/demos/drawer.tsx",
 };

@@ -123,15 +123,14 @@ built next; this list is an inventory, not an order of work.
 
 ### Broader coverage after the inspector foundation
 
-- **Entry and forms:** SearchField, PasswordField, MultiSelect (Combobox is built),
+- **Entry and forms:** SearchField [built 2026-10-10], PasswordField, MultiSelect (Combobox is built),
   TagPicker, editable text, OTP input, Form validation and error
   summary. Reuse Input/Field for search and password anatomy; promote a wrapper when
   behavior such as reveal, clear, filtering or async suggestions is included.
 - **Date and time:** Calendar is built (Complete, [spec](specs/calendar.md)): single,
   range and multiple selection, one or two months, bounds and unavailable dates, square /
   circle / tile days, event markers and a week strip. Next:
-  DateField (segmented entry), DatePicker and DateRangePicker (field + popover, after overlay
-  behavior), TimeField and duration input. Keep segmented date editing distinct from a text
+  DateField (segmented entry), DatePicker [built 2026-10-05] and DateRangePicker [built 2026-10-10] (field + popover), TimeField and duration input. Keep segmented date editing distinct from a text
   field with a mask.
 - **Navigation and commands:** Stepper and MenuBar (Breadcrumb, TreeView,
   ContextMenu, CommandPalette, Pagination and Link are built). Add keyboard behaviors to existing Menu
@@ -194,7 +193,7 @@ catalogue names. Each would be measured in its product like every other componen
   (Notion's page peek, link previews).
 - **Conversation (ChatGPT):** Message (user bubble and assistant prose, streaming state),
   MessageActions (copy, thumbs, regenerate, shown on hover), ThinkingDisclosure (collapsible
-  reasoning with a live timer), SourceChip / citation pill, AttachmentCard (file in the
+  reasoning with a live timer), SourceChip / citation pill [built 2026-10-10 as Citation], AttachmentCard (file in the
   composer, with upload progress and remove), PromptSuggestions (starter chips), ModelPicker
   (a Menu recipe with descriptions and a check), ScrollToLatest (floating round button),
   VoiceInput (record button and waveform).
@@ -202,17 +201,17 @@ catalogue names. Each would be measured in its product like every other componen
   tone, recent), Callout (icon + tinted block), ToggleBlock (disclosure in running text),
   TagPicker / multi-select property (coloured option tags, create-on-type), PeoplePicker
   (avatars, search, invite), Reactions (emoji counts, add), CommentThread, InlineEditableTitle,
-  FloatingFormatBar (selection toolbar), DatabaseCard (board card with properties),
+  FloatingFormatBar (selection toolbar), DatabaseCard (board card with properties; built 2026-10-10 as Board),
   PropertyValue (the typed value cell: date, select, person, checkbox, URL).
 - **Design tools (Figma):** ColorArea and ColorSlider (the picker's parts), GradientEditor
   (stops on a track), EyedropperButton, ScrubbableAngle (dial), EasingCurveEditor,
-  ShortcutRecorder, ZoomControl (percentage menu with fit and 100%), LayerRow badges
+  ShortcutRecorder, ZoomControl (percentage menu with fit and 100%; built 2026-10-10), LayerRow badges
   (component, instance, mask markers), ConstraintsPicker (pin to edges; multi-select, unlike
   AlignmentPicker), UnitField (px / % / auto switch inside a NumberField), FontPicker
   (Combobox with previews and weight axis), VariableChip (a bound token in a field, detach
   on hover).
-- **Shared and small:** SearchField (clear, shortcut hint), EmptyState (built 2026-10-10), KeyboardShortcut
-  overlay (a sheet of Kbd groups), Pagination, Stepper, Meter, circular Progress, ScrollArea (built 2026-10-09),
+- **Shared and small:** SearchField (clear, shortcut hint; built 2026-10-10), EmptyState (built 2026-10-10), KeyboardShortcut
+  overlay (a sheet of Kbd groups; built 2026-10-10 as Shortcut list), Pagination, Stepper, Meter, circular Progress, ScrollArea (built 2026-10-09),
   Splitter (two resizable regions), Sheet / Drawer, Banner, Stat, DescriptionList,
   DateField / Calendar / DatePicker.
 

@@ -1,9 +1,92 @@
-# Handoff — 2026-10-10
+# Handoff — 2026-10-11
 
 Each session starts from `main` in its own worktree (`claude/*` branch) and merges through a
 pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/docs/src/component-status.mjs` (Indicator and Tooltip are Complete).
+
+## Review round 7 → 8 (2026-10-11, same branch)
+
+- Round 7 (`components7`): Meter, Shortcut list, Date range picker, Zoom control and Menu approved (Complete). Rethink:
+  Board (plain title, Badge count, header buttons, custom colours with neutral default, a card-sized "Add new" row in
+  the column's colour), Citation (12px on a 20 pill after AI Elements and prompt-kit), Search field (focus question:
+  identical to Input; pickers differ by design). All applied; round 8 (`components8`) republished with a round-7 Before
+  (scratchpad `before8`). Search field's clear is now `dismiss-circle` (icon PR 60 merged; Glyph.tsx knockout mask).
+- Owner wrote "approved 8/8" in chat while the page held three rethinks with notes; the page's verdicts were followed
+  and that was flagged.
+
+## Board (2026-10-10, same branch)
+
+- Owner: "can you keep working, ill bring chrome to the front later" → Board (in review): `Board`, `BoardColumn` (Tag-toned
+  header + Count, the tone's ink as the tint at Notion's alpha, footer), `BoardCard` (title link stretched over the card,
+  icon, properties, hover / focus actions), `board.css`, 13 tiles (one per tone), docs entry, tests. Evidence: Notion's
+  "tasks" board at rest (redacted). Timeline still waits for Chrome in front (Figma version history).
+
+## Menu reopened; Citation and Zoom control decisions (2026-10-10, same branch)
+
+- Owner: "go with your recommendations then keep working". Citation: 11px, ink fixed (no change). Zoom control: light
+  Menu kept; its shortcut-column fix moved into Menu (inset.css `--_box-end` + surface.css margin for plain rows ending
+  in a shortcut in a menu with check rows; shortcuts 36 from the end in every row). Menu is back In review (removed
+  from COMPLETE) with a new "Content / plain and check rows" tile; its round-7 Before is the Menu section of the pre-change
+  dist added to the scratchpad Before (`add-section.mjs`).
+- Next tried: Timeline from Figma's version history (File menu › Show version history, or ⌥⌘H). Not started: Chrome's
+  window was hidden, and Figma opens neither its file menu nor the shortcut there. Needs the window in front. Password
+  field was skipped: Area's reveal is already an Input + InputAction demo, and a packaged one needs eye / eye-off
+  package glyphs from the icon session.
+
+## Zoom control (2026-10-10, same branch)
+
+- Owner: "keep working". ThinkingDisclosure first: no reasoning line in the owner's recent ChatGPT chats, and one
+  can't be produced read-only, so → Zoom control (in review): `ZoomControl` (ghost Button sm with the percentage and a
+  chevron; Menu with a typed zoom Input, in / out ×÷`step`, fit, presets as radio rows, children for view toggles),
+  `zoom-control.css` (tabular value; plain rows reserve Menu's check column so shortcuts align), 5 tiles, docs entry,
+  tests. Evidence: Figma's "48%" zoom and view options (button and open menu, read-only). Open: Menu-wide check
+  column reserve. Review page round 7 republished.
+
+## Citation; round-7 recommendations (2026-10-10, same branch)
+
+- Owner: "go with your recommendations then keep working". Date range picker and Shortcut list open questions resolved
+  as recommended (no code change). Then Citation (in review): `Citation` (a link pill: `label`, `title`, `icon` URL or
+  element, `more` → "+N"), `citation.css`, 5 tiles in an assistant Message (one with a HoverCard preview), docs entry,
+  tests. Evidence: ChatGPT's `chatgpt-citation` pills in an earlier chat (read-only, redacted). 11px type over
+  ChatGPT's 9 (Area's floor); baseline-aligned, no nudge. Review page round 7 republished.
+- Gallery tip: don't override a tile's grid span when isolating it; the fit collapses the stage to 0 height.
+
+## Date range picker (2026-10-10, same branch)
+
+- Owner: "continue working" → Date range picker (date family; Date picker's open question 1 as a sibling, so the
+  approved Date picker is unchanged). In review. `DateRangePicker` (Date picker's classes and field, `presets`
+  rows above a range Calendar with Menu's rows / check / separator, `visibleMonths` 1 | 2, formatRange short month,
+  Clear, `<name>-start/-end`), `date-range-picker.css` (presets bleed), 6 tiles, docs entry, tests. Evidence: Notion's
+  search date filter (Calendar pass captures); React Aria, shadcn, Untitled UI. Review page round 7 republished.
+
+## Shortcut list; Search field decisions (2026-10-10, same branch)
+
+- Owner: "proceed with your suggestions and keep building". Search field: clear shown whenever there is text; the
+  filled circled × is the icon session's `error` icon, but the glyph pipeline can't paint a solid with a knockout yet.
+  Agreed split with the Icon work session (cross-session messages): it adds a "knockout" glyphPaint plus
+  `glyphKnockouts` and `"dismiss-circle": ["error", undefined, "knockout"]` after its quality pass; this side then
+  renders knockouts in Glyph.tsx with a mask and switches SearchField's clear to `dismiss-circle`. Done on this side:
+  Glyph.tsx renders "knockout" (reads `glyphKnockouts` from the module, so it builds before the data lands). After
+  `claude/icon-work-95225c` merges: SearchField.tsx `<Glyph name="dismiss" />` → `"dismiss-circle"`, rebuild, recapture.
+- Shortcut list (in review): `ShortcutList` (section + optional title, `quiet`) / `ShortcutListItem` (`label`, `keys`
+  chord or alternatives, `shortcut` override) over Kbd; 36 rows, divider role, no side inset (the surface owns it),
+  groups 32 apart. Evidence: ChatGPT's ⌘/ Keyboard shortcuts dialog (read-only; its bindings are editable, nothing
+  inside was clicked) and Figma's shortcuts panel from the Kbd pass; Notion not found. 5 tiles, docs entry, tests.
+- Review page round 7 republished with Meter, Search field and Shortcut list (`components7`).
+
+## Search field and review round 7 (2026-10-10, branch `claude/component-work-93f50e`)
+
+- Owner: "continue the component work" → Search field (first in "Entry and forms" and "Shared and small"). In review.
+  `SearchField` (Input + search glyph; clear InputAction with the dismiss glyph once there is text, `tabindex=-1`,
+  focus kept in the field; Escape clears a query and is left to the page when empty; `onSubmit` on Enter; `shortcut`
+  Kbd while empty + `aria-keyshortcuts`), `search-field.css` (block hook only), 10 tiles, docs entry,
+  `search-field.test.mjs`. Evidence: ChatGPT GPTs search, Notion database search, Figma Assets search and Find
+  (redacted, read-only; Chrome's window reported hidden, so no hover); React Aria, Fluent, Untitled sources pinned.
+  Open: a filled circled × (ChatGPT, Notion) needs a new Area icon from the icon session.
+- Review page republished (same link), round 7: ArtifactData `components7`; Meter (7 changed) against its round-6
+  build, rebuilt from the round-6 page's data.js and area.css (the old session's scratchpad `review10`), and Search
+  field (10 new). component-review.mjs's date window now runs past 10-09.
 
 ## Icons: batch 70 (2026-10-10, branch `claude/icon-work-95225c`)
 
