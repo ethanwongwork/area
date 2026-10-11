@@ -95,7 +95,7 @@ export const SearchField = /* @__PURE__ */ forwardRef<HTMLInputElement, SearchFi
       trailingAction={query !== "" && editable ? (
         <InputAction
           className="area-search-field__clear"
-          icon={<Glyph name="dismiss" />}
+          icon={<Glyph name="dismiss-circle" />}
           tooltip={clearLabel}
           // Out of the Tab order (Escape does the same), and pressing it keeps the caret in the field.
           tabIndex={-1}

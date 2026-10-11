@@ -1,9 +1,19 @@
-# Handoff — 2026-10-10
+# Handoff — 2026-10-11
 
 Each session starts from `main` in its own worktree (`claude/*` branch) and merges through a
 pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/docs/src/component-status.mjs` (Indicator and Tooltip are Complete).
+
+## Review round 7 → 8 (2026-10-11, same branch)
+
+- Round 7 (`components7`): Meter, Shortcut list, Date range picker, Zoom control and Menu approved (Complete). Rethink:
+  Board (plain title, Badge count, header buttons, custom colours with neutral default, a card-sized "Add new" row in
+  the column's colour), Citation (12px on a 20 pill after AI Elements and prompt-kit), Search field (focus question:
+  identical to Input; pickers differ by design). All applied; round 8 (`components8`) republished with a round-7 Before
+  (scratchpad `before8`). Search field's clear is now `dismiss-circle` (icon PR 60 merged; Glyph.tsx knockout mask).
+- Owner wrote "approved 8/8" in chat while the page held three rethinks with notes; the page's verdicts were followed
+  and that was flagged.
 
 ## Board (2026-10-10, same branch)
 
@@ -77,6 +87,7 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
 - Review page republished (same link), round 7: ArtifactData `components7`; Meter (7 changed) against its round-6
   build, rebuilt from the round-6 page's data.js and area.css (the old session's scratchpad `review10`), and Search
   field (10 new). component-review.mjs's date window now runs past 10-09.
+
 ## Icons: batch 70 (2026-10-10, branch `claude/icon-work-95225c`)
 
 - Every `reviews7` verdict was an approval, so a fresh library gap pass led to 39 new icons. They are in review on the

@@ -1,49 +1,57 @@
-// Board: Notion's board view. Columns of cards, each column a Tag-toned group with a count; cards are links with
-// optional properties and hover actions. docs/specs/board.md.
+// Board: columns of cards, each column a coloured group with a title, a count Badge, header actions and an
+// "Add new" row; cards are links with optional properties and hover actions. docs/specs/board.md.
 import { forwardRef, useId } from "react";
-import type { AnchorHTMLAttributes, HTMLAttributes, ReactNode } from "react";
+import type { AnchorHTMLAttributes, HTMLAttributes, MouseEvent, ReactNode } from "react";
 import { cx, type VariantProps, MANIFESTS } from "../variants.ts";
-import { Count } from "./Count.tsx";
-import { Tag } from "./Tag.tsx";
+import { Badge } from "./Badge.tsx";
+import { Glyph } from "./Glyph.tsx";
 
-type Tone = VariantProps<typeof MANIFESTS.tag>["tone"];
+type Color = VariantProps<typeof MANIFESTS.boardColumn>["color"];
 
 /** Columns side by side; scrolls sideways when they outgrow the space. */
 export const Board = /* @__PURE__ */ forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(function Board({ className, ...rest }, ref) {
   return <div ref={ref} className={cx("area-board", className)} {...rest} />;
 });
 
-export interface BoardColumnProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
-  /** The group's value ("work"). Shown as a Tag in the column's tone, or as plain text with `plainTitle`. */
+export interface BoardColumnProps extends Omit<HTMLAttributes<HTMLElement>, "title" | "color"> {
+  /** The group's name ("In progress"), in plain text. */
   title: ReactNode;
-  /** Tag's tones; the column's tint and its cards' edge follow it. */
-  tone?: Tone;
-  /** The group has no value (Notion's "No Status"): the title is plain text, not a Tag. */
-  plainTitle?: boolean;
-  /** How many cards the group holds (may exceed those shown). */
+  /** The column's colour: its tint, its count, its cards' edge and its add row. Neutral by default. */
+  color?: Color;
+  /** How many cards the group holds (may exceed those shown), as a Badge. */
   count?: number;
-  /** Controls at the header's end (add, more). */
+  /** Buttons at the header's end (add, more). */
   actions?: ReactNode;
-  /** A row under the cards, such as a "New page" button. */
+  /** Shows the "Add new" row under the cards. */
+  onAdd?: (event: MouseEvent<HTMLButtonElement>) => void;
+  /** The add row's label. */
+  addLabel?: ReactNode;
+  /** A custom row under the cards, in place of the add row. */
   footer?: ReactNode;
 }
 
 /** One group of a Board: its header and a list of BoardCards. */
 export const BoardColumn = /* @__PURE__ */ forwardRef<HTMLElement, BoardColumnProps>(function BoardColumn(
-  { title, tone = "neutral", plainTitle = false, count, actions, footer, className, children, "aria-labelledby": labelledBy, ...rest },
+  { title, color = "neutral", count, actions, onAdd, addLabel = "Add new", footer, className, children, "aria-labelledby": labelledBy, ...rest },
   ref,
 ) {
   const id = useId();
   return (
-    <section ref={ref} className={cx("area-board-column", `area-board-column--${tone}`, className)} aria-labelledby={labelledBy ?? `${id}-title`} {...rest}>
+    <section ref={ref} className={cx("area-board-column", `area-board-column--${color}`, className)} aria-labelledby={labelledBy ?? `${id}-title`} {...rest}>
       <div className="area-board-column__header">
-        {plainTitle ? <span id={`${id}-title`} className="area-board-column__title">{title}</span>
-          : <Tag id={`${id}-title`} tone={tone}>{title}</Tag>}
-        {count != null ? <Count count={count} showZero /> : null}
+        <span id={`${id}-title`} className="area-board-column__title">{title}</span>
+        {count != null ? <Badge size="sm" className="area-board-column__count">{count}</Badge> : null}
         {actions ? <div className="area-board-column__actions">{actions}</div> : null}
       </div>
       <ul className="area-board-column__cards">{children}</ul>
-      {footer ? <div className="area-board-column__footer">{footer}</div> : null}
+      {footer ?? (onAdd ? (
+        <div className="area-board-column__footer">
+          <button type="button" className="area-board-column__add" onClick={onAdd}>
+            <span className="area-board-column__add-icon" aria-hidden="true"><Glyph name="add" /></span>
+            {addLabel}
+          </button>
+        </div>
+      ) : null)}
     </section>
   );
 });

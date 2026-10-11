@@ -3,17 +3,13 @@
 // (Cursor's 16 → 24px step): pass the slot's size, and base.css sets the line from
 // --area-weight-icon for that size, so a 12px slot draws about 1px and a 24px slot about 1.35px.
 import { useId } from "react";
-import * as glyphData from "./glyphs.ts";
-import { glyphFills, glyphPaint, glyphs, type GlyphName } from "./glyphs.ts";
-
 // A "knockout" glyph (the filled dismiss-circle) is a solid with marks cut out of it, listed by path index in
-// glyphKnockouts. Read from the module so this renders before and after the generator emits that table.
-const glyphKnockouts: Partial<Record<string, readonly number[]>> =
-  (glyphData as { glyphKnockouts?: Partial<Record<string, readonly number[]>> }).glyphKnockouts ?? {};
+// glyphKnockouts.
+import { glyphFills, glyphKnockouts, glyphPaint, glyphs, type GlyphName } from "./glyphs.ts";
 
 export function Glyph({ name, rotate, size = 16 }: { name: GlyphName; rotate?: 90 | 180 | 270; size?: 12 | 16 | 20 | 24 }) {
   const maskId = useId();
-  const paint = glyphPaint[name] as "solid" | "fill" | "knockout" | undefined;
+  const paint = glyphPaint[name];
   const fills: readonly number[] = glyphFills[name] ?? [];
   const cuts: readonly number[] = paint === "knockout" ? glyphKnockouts[name] ?? [] : [];
   const drawn = glyphs[name].flatMap((d, i) => cuts.includes(i) ? [] : [[d, i] as const]);

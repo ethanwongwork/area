@@ -2,23 +2,27 @@
 import { Avatar, Board, BoardCard, BoardColumn, Button, Tag } from "@area/react";
 import { DocumentIcon, EditIcon, MoreIcon, PlusIcon } from "../icons.tsx";
 
-const newPage = <Button variant="ghost" tone="neutral" size="sm" icon={<PlusIcon />}>New page</Button>;
+const headerActions = (name: string) => <>
+  <Button variant="ghost" tone="neutral" size="sm" iconOnly icon={<PlusIcon />} aria-label={`Add to ${name}`} />
+  <Button variant="ghost" tone="neutral" size="sm" iconOnly icon={<MoreIcon />} aria-label={`${name} options`} />
+</>;
 const cardActions = <>
   <Button variant="ghost" tone="neutral" size="sm" iconOnly icon={<EditIcon />} aria-label="Edit title" />
   <Button variant="ghost" tone="neutral" size="sm" iconOnly icon={<MoreIcon />} aria-label="More actions" />
 </>;
+const add = () => {};
 
 export const GalleryBoard = () => (
   <Board aria-label="Tasks">
-    <BoardColumn title="No status" plainTitle count={2} footer={newPage}>
+    <BoardColumn title="To do" count={2} actions={headerActions("To do")} onAdd={add}>
       <BoardCard href="#board" icon={<DocumentIcon />} title="Launch checklist" />
       <BoardCard href="#board" icon={<DocumentIcon />} title="Hiring plan" />
     </BoardColumn>
-    <BoardColumn title="In progress" tone="discovery" count={2} footer={newPage}>
+    <BoardColumn title="In progress" color="purple" count={2} actions={headerActions("In progress")} onAdd={add}>
       <BoardCard href="#board" icon={<DocumentIcon />} title="Design review notes" />
       <BoardCard href="#board" title="Quarterly plan: goals, owners and the three outcomes we commit to" />
     </BoardColumn>
-    <BoardColumn title="Done" tone="success" count={1} footer={newPage}>
+    <BoardColumn title="Done" color="green" count={1} actions={headerActions("Done")} onAdd={add}>
       <BoardCard href="#board" icon={<DocumentIcon />} title="Team offsite" />
     </BoardColumn>
   </Board>
@@ -26,7 +30,7 @@ export const GalleryBoard = () => (
 
 /* Properties under the title: a Tag, a date and the assignee. */
 export const GalleryBoardCardProperties = () => (
-  <BoardColumn title="In progress" tone="discovery" count={1}>
+  <BoardColumn title="In progress" color="purple" count={1} onAdd={add}>
     <BoardCard href="#board" icon={<DocumentIcon />} title="Design review notes">
       <Tag tone="info">Design</Tag>
       <span>Oct 14</span>
@@ -35,26 +39,26 @@ export const GalleryBoardCardProperties = () => (
   </BoardColumn>
 );
 
-/* Notion's edit and more buttons, shown on hover or focus. */
+/* Edit and more buttons on a card, shown on hover or focus. */
 export const GalleryBoardCardActions = () => (
-  <BoardColumn title="In progress" tone="discovery" count={1}>
+  <BoardColumn title="In progress" color="purple" count={1} onAdd={add}>
     <BoardCard href="#board" icon={<DocumentIcon />} title="Design review notes" actions={cardActions} />
   </BoardColumn>
 );
 
-const toneColumn = (tone: "neutral" | "gray" | "brown" | "info" | "success" | "warning" | "caution" | "danger" | "discovery" | "pink", title: string) => (
-  <BoardColumn title={title} tone={tone} count={2}>
+const colorColumn = (color: "neutral" | "gray" | "brown" | "orange" | "yellow" | "green" | "blue" | "purple" | "pink" | "red", title: string) => (
+  <BoardColumn title={title} color={color} count={2} actions={headerActions(title)} onAdd={add}>
     <BoardCard href="#board" icon={<DocumentIcon />} title="Launch checklist" />
     <BoardCard href="#board" icon={<DocumentIcon />} title="Hiring plan" />
   </BoardColumn>
 );
-export const GalleryBoardColumnNeutral = () => toneColumn("neutral", "Backlog");
-export const GalleryBoardColumnGray = () => toneColumn("gray", "Later");
-export const GalleryBoardColumnBrown = () => toneColumn("brown", "Research");
-export const GalleryBoardColumnInfo = () => toneColumn("info", "Personal");
-export const GalleryBoardColumnSuccess = () => toneColumn("success", "Done");
-export const GalleryBoardColumnWarning = () => toneColumn("warning", "Blocked");
-export const GalleryBoardColumnCaution = () => toneColumn("caution", "Waiting");
-export const GalleryBoardColumnDanger = () => toneColumn("danger", "Urgent");
-export const GalleryBoardColumnDiscovery = () => toneColumn("discovery", "Work");
-export const GalleryBoardColumnPink = () => toneColumn("pink", "Ideas");
+export const GalleryBoardColumnNeutral = () => colorColumn("neutral", "Backlog");
+export const GalleryBoardColumnGray = () => colorColumn("gray", "Later");
+export const GalleryBoardColumnBrown = () => colorColumn("brown", "Research");
+export const GalleryBoardColumnOrange = () => colorColumn("orange", "Blocked");
+export const GalleryBoardColumnYellow = () => colorColumn("yellow", "Waiting");
+export const GalleryBoardColumnGreen = () => colorColumn("green", "Done");
+export const GalleryBoardColumnBlue = () => colorColumn("blue", "Personal");
+export const GalleryBoardColumnPurple = () => colorColumn("purple", "Work");
+export const GalleryBoardColumnPink = () => colorColumn("pink", "Ideas");
+export const GalleryBoardColumnRed = () => colorColumn("red", "Urgent");

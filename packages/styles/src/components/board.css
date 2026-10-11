@@ -1,9 +1,10 @@
 /* ---------------------------------------------------------------------------
  * Board
  *
- * Notion's board view (docs/specs/board.md; captures/board/notion--*): columns side by side, each a
- * group header (a Tag, or plain text, and a count) over a tinted body of cards. A column takes one
- * of Tag's tones; its tint and its cards' edge are that tone's ink, mixed thin. Cards are white,
+ * Notion's board view, made Area's (docs/specs/board.md; captures/board/notion--*): columns side by
+ * side, each a header (the group's name in plain text, a count Badge, buttons at the end) over a
+ * tinted body of cards and an "Add new" row. A column takes a custom colour (Tag's inks); its tint,
+ * count, add row and its cards' edge follow it, mixed thin. Cards are white,
  * radius 10, with Notion's soft lift; the title is a link stretched over the card, and actions show
  * on hover or focus.
  * ------------------------------------------------------------------------- */
@@ -18,9 +19,10 @@
   }
 
   .area-board-column {
-    /* The tone's ink, as Tag's (tag.css); neutral is Notion's default warm grey. */
-    --_tone: light-dark(rgb(66 35 3), rgb(255 255 255));
-    /* spec: Notion's tints run 3% (default, purple) to 6.3% (yellow); measured per hue, others 3.5. */
+    /* The column's colour: Tag's ink for the same colour (tag.css), so a column and a Tag of one colour match.
+       Neutral uses the default ink. */
+    --_color: var(--area-fg-default);
+    /* spec: Notion's column tints run 3% (default, purple) to 6.3% (yellow); unmeasured colours 3.5%. */
     --_tint: 3%;
     display: flex;
     flex-direction: column;
@@ -29,32 +31,38 @@
     inline-size: 276px; /* spec */
     max-inline-size: 100%;
     border-radius: var(--area-radius-container);
-    background-color: color-mix(in oklab, var(--_tone) var(--_tint), transparent);
+    background-color: color-mix(in oklab, var(--_color) var(--_tint), transparent);
     color: var(--area-fg-default);
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
   }
-  .area-board-column--neutral { --_tone: light-dark(rgb(66 35 3), rgb(255 255 255)); --_tint: 3%; } /* spec: Notion rgba(66,35,3,.03) */
-  .area-board-column--gray { --_tone: var(--area-fg-gray); --_tint: 3.5%; }
-  .area-board-column--brown { --_tone: light-dark(var(--area-fg-brown), var(--area-fg-brown-vivid)); --_tint: 3.5%; }
-  .area-board-column--info { --_tone: light-dark(rgb(0 128 213), var(--area-fg-info-vivid)); --_tint: 4.7%; } /* spec: Notion rgba(0,128,213,.047) */
-  .area-board-column--success { --_tone: light-dark(rgb(3 87 31), #85ce94); --_tint: 3.5%; } /* spec: Notion rgba(3,87,31,.035) */
-  .area-board-column--warning { --_tone: light-dark(#994500, var(--area-fg-warning-vivid)); --_tint: 3.5%; }
-  .area-board-column--caution { --_tone: light-dark(rgb(207 175 0), #e2b968); --_tint: 6.3%; } /* spec: Notion rgba(207,175,0,.063) */
-  .area-board-column--danger { --_tone: light-dark(#bc002d, var(--area-fg-danger-vivid)); --_tint: 3.5%; }
-  .area-board-column--discovery { --_tone: light-dark(rgb(98 3 161), var(--area-fg-discovery-vivid)); --_tint: 3%; } /* spec: Notion rgba(98,3,161,.03) */
-  .area-board-column--pink { --_tone: light-dark(#b50060, var(--area-fg-pink-vivid)); --_tint: 3.5%; }
+  /* Custom colours (owner, round 7: "custom colors rather than semantic"), each Tag's ink of that colour. */
+  .area-board-column--neutral { --_color: var(--area-fg-default); --_tint: 3%; } /* spec: Notion's default rgba(66,35,3,.03) */
+  .area-board-column--gray { --_color: var(--area-fg-gray); --_tint: 3.5%; }
+  .area-board-column--brown { --_color: light-dark(var(--area-fg-brown), var(--area-fg-brown-vivid)); --_tint: 3.5%; }
+  .area-board-column--orange { --_color: light-dark(#994500, var(--area-fg-warning-vivid)); --_tint: 3.5%; } /* spec: Tag orange */
+  .area-board-column--yellow { --_color: light-dark(#7c5800, #e2b968); --_tint: 6.3%; } /* spec: Tag yellow; Notion rgba(207,175,0,.063) */
+  .area-board-column--green { --_color: light-dark(#006f2c, #85ce94); --_tint: 3.5%; } /* spec: Tag green; Notion rgba(3,87,31,.035) */
+  .area-board-column--blue { --_color: light-dark(#0056cf, var(--area-fg-info-vivid)); --_tint: 4.7%; } /* spec: Tag blue; Notion rgba(0,128,213,.047) */
+  .area-board-column--purple { --_color: light-dark(#7322d7, var(--area-fg-discovery-vivid)); --_tint: 3%; } /* spec: Tag purple; Notion rgba(98,3,161,.03) */
+  .area-board-column--pink { --_color: light-dark(#b50060, var(--area-fg-pink-vivid)); --_tint: 3.5%; } /* spec: Tag pink */
+  .area-board-column--red { --_color: light-dark(#bc002d, var(--area-fg-danger-vivid)); --_tint: 3.5%; } /* spec: Tag red */
 
-  /* spec: Notion's group header, 40 tall, 8 at the sides, the tag 11 from the edge (8 + its 3 button inset). */
+  /* spec: Notion's group header, 40 tall; the title starts on the cards' text (8 + the card's 10). */
   .area-board-column__header {
     display: flex;
     align-items: center;
-    gap: var(--area-space-4);
+    gap: var(--area-space-6);
     min-block-size: 40px; /* spec */
-    padding-inline: calc(var(--area-space-8) + 3px); /* spec */
+    padding-inline: calc(var(--area-space-8) + 10px) var(--area-space-8); /* spec */
   }
-  /* A column without a tone value names itself in plain text, as Notion's "No Status". */
-  .area-board-column__title { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* The group's name in plain text (owner, round 7: no badge title), the UI type at the strong weight. */
+  .area-board-column__title { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: var(--area-weight-strong); }
+  /* The count is a soft Badge; in a coloured column it takes the colour, as the tint does. */
+  .area-board-column:not(.area-board-column--neutral) .area-board-column__count {
+    --_surface: color-mix(in oklab, var(--_color) 12%, transparent);
+    --_tone-fg: var(--_color);
+  }
   .area-board-column__actions { display: flex; align-items: center; gap: var(--area-space-2); margin-inline-start: auto; }
 
   /* spec: Notion's body pads 0 8 8; cards are 8 apart (40 cards on a 48 pitch). */
@@ -67,9 +75,41 @@
     list-style: none;
   }
 
-  /* A row under the cards (Notion's "+ New page"), at the start, inside the body's 8 sides; the cards' list keeps
-     its 8 below, so the row sits 8 under the last card, and 8 more close the column. */
-  .area-board-column__footer { display: flex; padding: 0 var(--area-space-8) var(--area-space-8); }
+  /* The add row: under the cards, as wide and as tall as a card, its text at the card's start (owner, round 7: "full
+     width but still left aligned, same size as the blocks above it"). Muted in a neutral column; in a coloured one
+     the text and the hover plate take the colour. */
+  .area-board-column__footer { display: flex; flex-direction: column; padding: 0 var(--area-space-8) var(--area-space-8); }
+  .area-board-column__add {
+    --_add-ink: var(--area-fg-muted);
+    --_add-plate: var(--area-bg-hover);
+    --_add-plate-active: var(--area-bg-active);
+    appearance: none;
+    display: flex;
+    align-items: center;
+    gap: var(--area-gap-md);
+    inline-size: 100%;
+    min-block-size: calc(var(--area-ui-leading) + var(--area-space-8) * 2);
+    margin: 0;
+    padding: var(--area-space-8) 10px; /* spec: the card's 8 10 */
+    border: 0;
+    border-radius: var(--area-radius-container);
+    background: transparent;
+    color: var(--_add-ink);
+    font: inherit;
+    text-align: start;
+    cursor: pointer;
+    transition: background-color var(--area-duration-fast) var(--area-ease-out);
+  }
+  .area-board-column:not(.area-board-column--neutral) .area-board-column__add {
+    --_add-ink: var(--_color);
+    --_add-plate: color-mix(in oklab, var(--_color) 8%, transparent);
+    --_add-plate-active: color-mix(in oklab, var(--_color) 12%, transparent);
+  }
+  @media (hover: hover) { .area-board-column__add:hover { background-color: var(--_add-plate); transition-duration: 0s; } }
+  .area-board-column__add:active { background-color: var(--_add-plate-active); transition-duration: 0s; }
+  .area-board-column__add:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  .area-board-column__add-icon { display: inline-grid; place-items: center; flex: none; inline-size: var(--area-ui-leading); block-size: var(--area-ui-leading); }
+  .area-board-column__add-icon > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
 
   .area-board-card {
     position: relative;
@@ -83,7 +123,7 @@
     /* spec: Notion's card lift, 0 4 12 rgba(25,25,25,.027) and 0 1 2 rgba(25,25,25,.02), and a 1px ring in the
        column's tone at 8% (rgba(102,0,178,.08) in a purple column). */
     box-shadow: 0 4px 12px rgb(25 25 25 / 0.027), 0 1px 2px rgb(25 25 25 / 0.02), /* spec */
-      0 0 0 var(--area-border-width) color-mix(in oklab, var(--_tone, var(--area-fg-default)) 8%, transparent); /* spec */
+      0 0 0 var(--area-border-width) color-mix(in oklab, var(--_color, var(--area-fg-default)) 8%, transparent); /* spec */
     transition: background-color var(--area-duration-fast) var(--area-ease-out);
   }
   /* Hover darkens the card as a row plate would; the ink stays. */

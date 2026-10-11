@@ -1,6 +1,6 @@
 # Board spec
 
-**Status:** in review · 2026-10-10
+**Status:** in review · 2026-10-11 (round 8)
 **Captures:** `docs/research/captures/board/`
 **Peers:** Tag (the column's value and tone), Count (the header's number), Card (a surface; the board card is lighter),
 Description list (properties), Button (header and card actions), Avatar (people)
@@ -98,8 +98,30 @@ end; a card with a Tag, a date and David Tee's avatar wraps its properties under
 - **Why:** It was on the Notion list, and the board is something I could measure while Chrome stays in the background.
   The sizes, tints and card shadow are Notion's; the tags, counts and buttons are Area's own.
 
+## Round 8 (2026-10-11): made Area's
+
+Owner, round 7 (rethink), applied:
+
+| Slot · property | Area value | Was | Reason |
+|---|---|---|---|
+| title | the group's name in plain text, UI type 500, starting on the cards' text (18 from the column's edge) | a Tag in the column's tone | "it doesnt need a badge title at the top, just regular text" |
+| header buttons | `actions` at the header's end (the demos: add and more, ghost sm icon Buttons) | Notion shows them on hover | "add buttons to the right side" |
+| count | a soft Badge sm; in a coloured column its plate and ink take the colour (12% / the colour's ink) | Count, muted | "make the counter a badge instead" |
+| colours | `color`: neutral (default), gray, brown, orange, yellow, green, blue, purple, pink, red, each Tag's ink of that colour | `tone` with semantic names | "focus on the colors as just custom colors rather than semantic. the default should just be neutral" |
+| add row | `onAdd` shows "Add new" (`addLabel`): full width, start-aligned, a card's size (8 10 padding, 36 tall, container corner), the add glyph; muted in neutral, the colour's ink with an 8% / 12% hover / pressed plate in a colour | Notion's "+ New page" button | "the new page button should be add new ... full width but still left aligned, same size as the blocks above it ... colored like the custom color" |
+
+## Review note, 2026-10-11 (round 8)
+
+- **What changed:** The column header is now the column's name in plain text, a count badge and add / more buttons at
+  the end. Colours are named colours (gray to red) with neutral as the default, and the count, tint and an "Add new" row
+  at the bottom follow the colour. "Add new" is a full-width row the size of a card, its text at the start.
+- **Why:** You asked to move it away from Notion's look: no tag as the title, buttons on the right, a badge for the
+  count, plain colours instead of status names, and a full-width add row in the column's colour.
+
 ## Feedback log
 
 - 2026-10-10 · owner: "can you keep working, ill bring chrome to the front later" → Board from Notion's board view; 13
   gallery tiles, in review.
 - 2026-10-11 · owner, review round 7 (rethink): "are there any ways you can differentiate it from notion, maybe it doesnt need a badge title at the top, just regular text, also add buttons to the right side, make the counter a badge instead. and just focus on the colors as just custom colors rather than semantic. the default should just be neutral. also the new page button should be add new, and the button should be full width but still left aligned, same size as the blocks above it. also for the custom colored versions the button backplate and/or text should be colored like the custom color" → reworked (see the round-8 review note).
+- 2026-10-11 · round 8 → plain title, Badge count, header actions, `color` (custom colours, neutral default), "Add new"
+  row (`onAdd`, card-sized, coloured) → Board.tsx, board.css, manifest (`color`), demos, tests.

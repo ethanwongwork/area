@@ -880,10 +880,10 @@ export const board = {
 
 export const boardColumn = {
   block: "area-board-column",
-  description: "One group of a board: a toned header with a count over a list of cards.",
-  variants: { tone: ["neutral", "gray", "brown", "info", "success", "warning", "caution", "danger", "discovery", "pink"] },
-  elements: ["header", "title", "actions", "cards", "footer"],
-  defaults: { tone: "neutral" },
+  description: "One group of a board: a coloured header with a count over a list of cards and an add row.",
+  variants: { color: ["neutral", "gray", "brown", "orange", "yellow", "green", "blue", "purple", "pink", "red"] },
+  elements: ["header", "title", "count", "actions", "cards", "footer", "add", "add-icon"],
+  defaults: { color: "neutral" },
 } as const satisfies ComponentManifest;
 
 export const boardCard = {

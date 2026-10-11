@@ -1,6 +1,6 @@
 # Search field spec
 
-**Status:** in review · 2026-10-10
+**Status:** in review · 2026-10-11 (round 8)
 **Captures:** `docs/research/captures/search-field/`
 **Peers:** Input (the shell, sizes, variants, focus, InputAction), Kbd (the shortcut hint), Combobox (a field with
 suggestions), Command palette (search in a dialog), Empty state (no results)
@@ -166,6 +166,15 @@ Resolved 2026-10-10 (owner: "proceed with your suggestions"); kept for the recor
   sizes, edges and focus match every other field; the clear and Escape behavior follow ChatGPT, Notion and Figma and
   React Aria.
 
+## Review note, 2026-10-11 (round 8)
+
+- **What changed:** The clear button is now the filled circled × (the cut-out version of Area's `error` icon), as ChatGPT
+  and Notion draw it. Its focus state is unchanged.
+- **Why:** You approved the circled × earlier, and the icon landed on main. On the focus question: Search field's focus
+  is Input's exactly (the blue edge and a 2px halo on any focus), as Number field, Combobox and Textarea. The different
+  look is the picker fields (Select, Custom select, Date picker): they ring only from the keyboard and keep their hover
+  edge while open.
+
 ## Feedback log
 
 - 2026-10-10 · owner: "continue the component work" → Search field from ChatGPT's GPTs search, Notion's database search
@@ -179,3 +188,6 @@ Resolved 2026-10-10 (owner: "proceed with your suggestions"); kept for the recor
   gradient; the field at sm, md, lg), then reverted. The switch to `dismiss-circle` is one line once the icon branch
   is on main.
 - 2026-10-11 · owner, review round 7 (rethink): "is this selected state the same as other input components? i thought i saw a different selected state" → checking the focus state against Input, Combobox, Select and Date picker.
+- 2026-10-11 · round 8 → focus measured identical to Input, Combobox and Number field (edge `focus-color`, 2px 14% halo),
+  so no change; the picker triggers differ by design (keyboard-only ring). Clear glyph → `dismiss-circle` (icon branch
+  merged in PR 60; Glyph.tsx's knockout mask).
