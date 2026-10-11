@@ -160,6 +160,14 @@ export const input = {
   defaults: { variant: "outline", size: "md" },
 } as const satisfies ComponentManifest;
 
+export const searchField = {
+  block: "area-search-field",
+  description: "A field for a search query: a search glyph, a clear action once there is text, Escape to clear.",
+  variants: {},
+  elements: ["clear", "shortcut"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
 export const numberField = {
   block: "area-number-field",
   description: "Edits a number with optional units, stepping and scrubbing.",
@@ -862,6 +870,63 @@ export const kbd = {
   defaults: { size: "md", variant: "default" },
 } as const satisfies ComponentManifest;
 
+export const board = {
+  block: "area-board",
+  description: "Lays out board columns side by side.",
+  variants: {},
+  elements: [],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const boardColumn = {
+  block: "area-board-column",
+  description: "One group of a board: a toned header with a count over a list of cards.",
+  variants: { tone: ["neutral", "gray", "brown", "info", "success", "warning", "caution", "danger", "discovery", "pink"] },
+  elements: ["header", "title", "actions", "cards", "footer"],
+  defaults: { tone: "neutral" },
+} as const satisfies ComponentManifest;
+
+export const boardCard = {
+  block: "area-board-card",
+  description: "One item on a board: a title that links to it, its properties and hover actions.",
+  variants: {},
+  elements: ["heading", "icon", "title", "properties", "actions"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const zoomControl = {
+  block: "area-zoom-control",
+  description: "Shows a canvas's zoom and opens a menu to type, step, fit or pick a zoom.",
+  variants: {},
+  elements: ["value", "menu", "field"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const citation = {
+  block: "area-citation",
+  description: "Links a source from the text it supports, as a small pill.",
+  variants: {},
+  elements: ["icon", "label", "count"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const dateRangePicker = {
+  block: "area-date-range-picker",
+  description: "A field showing a range of dates that opens presets and a range calendar.",
+  variants: {},
+  elements: ["presets", "preset"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const shortcutList = {
+  block: "area-shortcut-list",
+  description: "Lists keyboard shortcuts: what each does, and its keys at the end.",
+  variants: {},
+  booleans: ["quiet"],
+  elements: ["title", "items", "item", "label", "keys"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
 export const kbdGroup = {
   block: "area-kbd-group",
   description: "Groups chord hints into a keyboard shortcut sequence.",
@@ -893,6 +958,14 @@ export const MANIFESTS = {
   toggleGroup,
   descriptionList,
   meter,
+  searchField,
+  shortcutList,
+  dateRangePicker,
+  citation,
+  zoomControl,
+  board,
+  boardColumn,
+  boardCard,
   scrollArea,
   link,
   toggletip,

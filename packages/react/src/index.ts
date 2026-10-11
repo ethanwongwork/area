@@ -42,6 +42,12 @@ export { PropertyList, PropertyListItem, type PropertyListProps, type PropertyLi
 export { TreeView, type TreeViewProps, type TreeViewNode } from "./components/TreeView.tsx";
 export { FileUpload, FileUploadList, FileUploadItem, fileMatchesAccept, formatFileSize, type FileUploadProps, type FileUploadItemProps, type FileRejection } from "./components/FileUpload.tsx";
 export { Meter, type MeterProps } from "./components/Meter.tsx";
+export { SearchField, type SearchFieldProps } from "./components/SearchField.tsx";
+export { Board, BoardColumn, BoardCard, type BoardColumnProps, type BoardCardProps } from "./components/Board.tsx";
+export { ZoomControl, type ZoomControlProps } from "./components/ZoomControl.tsx";
+export { Citation, type CitationProps } from "./components/Citation.tsx";
+export { DateRangePicker, type DateRangePickerProps, type DateRangePreset } from "./components/DateRangePicker.tsx";
+export { ShortcutList, ShortcutListItem, type ShortcutListProps, type ShortcutListItemProps } from "./components/ShortcutList.tsx";
 export { DescriptionList, DescriptionListItem, type DescriptionListProps, type DescriptionListItemProps } from "./components/DescriptionList.tsx";
 export { ToggleGroup, ToggleGroupItem, type ToggleGroupProps, type ToggleGroupItemProps } from "./components/ToggleGroup.tsx";
 export { EmptyState, type EmptyStateProps } from "./components/EmptyState.tsx";

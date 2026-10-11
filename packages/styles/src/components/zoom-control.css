@@ -1,0 +1,21 @@
+/* ---------------------------------------------------------------------------
+ * Zoom control
+ *
+ * A canvas's zoom as a percentage button that opens a Menu (docs/specs/zoom-control.md): Figma's
+ * "48%" zoom and view options in the design panel's header (captures/zoom-control/figma--*). The
+ * button is a ghost Button sm with the trailing chevron (Figma: 24, radius 5, 11/16, a 16
+ * chevron); the menu is Area's Menu, end-aligned under it: a typed zoom field, a rule, Zoom in,
+ * Zoom out, Zoom to fit and the preset zooms (the current one checked), then any view toggles.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  /* The percentage in tabular figures, so 48% and 100% step without the digits shifting. */
+  .area-zoom-control { font-variant-numeric: tabular-nums; }
+  .area-zoom-control__value { white-space: nowrap; }
+
+  /* Menu keeps the check column on plain rows when any row is checkable (surface.css), so Zoom in, out and fit
+     end their shortcuts on the presets' line. */
+  .area-zoom-control__menu {}
+  /* spec: Figma's typed zoom field is the menu's first row, above a rule. Here it is a soft Input sm on the rows'
+     4 inset (the Menu's padding), so its text lines up with the rows' text. */
+  .area-zoom-control__field { display: flex; }
+}

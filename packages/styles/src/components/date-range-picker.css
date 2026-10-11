@@ -1,0 +1,25 @@
+/* ---------------------------------------------------------------------------
+ * Date range picker
+ *
+ * Date picker's field and panel for a range (docs/specs/date-range-picker.md): the root also carries
+ * .area-date-picker and its variant and size classes, the trigger and the Clear footer are Date
+ * picker's, the month is Calendar's range selection. What is its own is the presets section: Notion's
+ * search date filter (captures/calendar/notion--search-date-filter-popover--rest--light) puts Today,
+ * Last 7 days and Last 30 days as menu rows above the month, the rows 4 from the panel's sides and
+ * top, then a rule. The section bleeds from the Popover's inset to Menu's, as Date picker's footer
+ * does at the bottom.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-date-range-picker {}
+
+  /* spec: Notion's preset rows: 28 tall, plate 4 from the panel's sides and top (its section padding 4),
+     the rule after them 12 in. Menu's row, corner and separator; the bleed is Date picker's footer's. */
+  .area-date-range-picker__presets {
+    display: flex;
+    flex-direction: column;
+    max-inline-size: none;
+    margin: var(--_footer-bleed) var(--_footer-bleed) calc(var(--area-space-6) * -1);
+  }
+  /* The chosen preset shows Menu's check at the row's end. */
+  .area-date-range-picker__preset { justify-content: space-between; }
+}

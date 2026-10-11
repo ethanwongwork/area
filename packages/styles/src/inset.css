@@ -75,6 +75,9 @@
   .area-menu__item { gap: var(--_menu-gap, var(--area-gap-md)); }
   /* A trailing check or switch is a glyph edge: 8px from the row's end (Notion's toggle 8). */
   .area-menu__item:has(> :is(.area-menu__check, .area-menu__toggle, .area-menu__sub-chevron):last-child) { --_box-end: var(--_box-icon); }
+  /* In a menu with check rows, a plain row's shortcut stands where a check row's does: the row ends on the same icon
+     box (surface.css reserves the empty check column after the shortcut). */
+  .area-menu:has(.area-menu__item[aria-checked]) .area-menu__item:not([aria-checked]):has(> .area-menu__shortcut:last-child) { --_box-end: var(--_box-icon); }
   .area-tabs__tab {
     --_height: var(--_tab-height);
     --_box-border: 0px;
