@@ -1,0 +1,63 @@
+{
+ "id": "batch-73",
+ "title": "Batch 73 · New icons",
+ "date": "2026-10-10",
+ "note": "Nine concepts from a product-surface pass (Cursor and VS Code, Figma, Notion, Linear, GitHub): resize and fold arrows, the Space key, resolve thread, clear list, priority levels, urgent. move-horizontal is an alias of arrow-left-right.",
+ "icons": [
+  {
+   "name": "move-horizontal",
+   "label": "Move horizontal",
+   "fluent": "arrow_bidirectional_left_right",
+   "spec": "horizontal; alias of arrow-left-right (data-alias-of, linted identical): Area's arrow-left-right is already one double-headed arrow, a 12px shaft (M2 8H14) with 3px heads at both ends (the double arrow's recorded head size; 4 crowded it), which is Lucide move-horizontal, Phosphor arrows-horizontal, Huge MoveHorizontal and Fluent arrow_bidirectional_left_right, so a second drawing would duplicate it; move-vertical is its 90° turn (data-rotations, identical to arrow-up-down); line glyph, fills by weight"
+  },
+  {
+   "name": "fold-horizontal",
+   "label": "Fold horizontal",
+   "fluent": "",
+   "spec": "square; Lucide fold-horizontal / Phosphor arrows-in-line-horizontal on arrow-right-to-line's construction: a solid centre line 7.5, 2.5–13.5 (on x.5 for 1×, so the whole icon sits 0.5 left, ink centre 7.5, 8), two arrows pointing in to it, shafts 2–5 and 13–10 at y 8 with the short-frame 2px heads (tips 5, 8 and 10, 8 on the lattice), each tip a tight 2.5 from the line (ink 1.38; the arrow-meets-frame gap); the line is solid, not Lucide's dashes (Phosphor; no stroke opened for style); fold-vertical is its 90° turn; line glyph, fills by weight"
+  },
+  {
+   "name": "unfold-horizontal",
+   "label": "Unfold horizontal",
+   "fluent": "arrow_autofit_width",
+   "spec": "square; fold-horizontal with each arrow reversed in place (Lucide unfold-horizontal, Phosphor arrows-out-line-horizontal): the same 7.5, 2.5–13.5 line, the same 2px heads, shafts 5–2 and 10–13 at y 8 starting a tight 2.5 from the line, tips 2, 8 and 13, 8 on the lattice, so fold and unfold share one box (ink 12.12 × 12.12, centre 7.5, 8); unfold-vertical is its 90° turn; line glyph, fills by weight"
+  },
+  {
+   "name": "space",
+   "label": "Space",
+   "fluent": "",
+   "spec": "horizontal; the ⎵ key glyph (Lucide space, Huge Space) on the key family's width (2.5–13.5, as option and return): uprights 6.5–8.5 at x 2.5 / 13.5 into whole-word's bracket corners (r 1) and a floor at 9.5, 3 deep (Huge's proportion; Lucide's 2 read as a bare underline beside shift), every edge on x.5, ink centred 8, 8; ink 12.12 × 4.12 (1.88 under the keyline, as option); line glyph, fills by weight"
+  },
+  {
+   "name": "chat-check",
+   "label": "Resolve thread",
+   "fluent": "chat_checkmark",
+   "spec": "square; Lucide message-square-check / Fluent chat_checkmark / Huge MessageSquareCheck: chat's bubble copied exactly (chat-add's), with the check inside where chat-add holds its + (inside placement: a closed shape, as bookmark-check / shield-check). The 2 / 4 check is the inside-a-shape check, the partner of the bubble's 4px +, and it fits: M5 7L7 9L11 5, centred on chat-add's + centre 8, 7 (x 5-11, y 5-9, the same 4-tall band as chat-add's + and chat-code's chevrons), on the lattice, tight 1.38 to the bubble's top, bottom and both sides. The 1.5 / 3 check (bookmark-check's fallback) was rendered and looked lost in the bubble. Ink 12.12 x 12.06, centre 8, 7.97 (chat's). Filled: bubble solid, check a knockout (chat-add's)"
+  },
+  {
+   "name": "list-x",
+   "label": "Clear list",
+   "fluent": "text_bullet_list_dismiss",
+   "spec": "horizontal; Lucide list-x / Fluent text_bullet_list_dismiss / Huge ListX: list-plus copied exactly (2-14 lines at 3.5 / 6.5, 2-7.5 lines at 9.5 / 12.5) with its 4px + replaced by the 3.5 x at the same centre 12, 11 (filter-dismiss's x moved up 1): M10.25 9.25L13.75 12.75M13.75 9.25L10.25 12.75, arms on the lattice; tight 1.63 from both short lines' ends. Ink 13.12 x 10.37, centre 8, 8.13. Line glyph: fills by weight"
+  },
+  {
+   "name": "signal-low",
+   "label": "Low priority",
+   "fluent": "cellular_data_3_20",
+   "spec": "square; Lucide signal-low / Phosphor cell-signal-low / Fluent cellular_data_3: signal's first two bars exactly at their positions (M3.5 13.5V11.5M6.5 13.5V8.5), the upper two dropped, as wifi-low keeps wifi's inner arc. Area's signal has four bars and no baseline dot, so its first bar plays Lucide's / Phosphor's dot: low = 2 bars, medium = 3, signal (high) = 4, an even series. The dropped bars vanish rather than stay as baseline stubs: ⌀1.5 dots and 0.5 stubs were both rendered and read as an ellipsis after the bars at 16, and every reference (Lucide, Phosphor, Fluent) lets them vanish. It sits under its keyline (ink 4.12 x 6.12, centre 5, 11) so it lines up with signal in a set, as wifi-low does. Line glyph: fills by weight"
+  },
+  {
+   "name": "signal-medium",
+   "label": "Medium priority",
+   "fluent": "cellular_data_2_20",
+   "spec": "square; Lucide signal-medium / Phosphor cell-signal-medium / Fluent cellular_data_2: signal's first three bars exactly at their positions (M3.5 13.5V11.5M6.5 13.5V8.5M9.5 13.5V5.5), the tallest dropped, one bar more than signal-low; the dropped bar vanishes as signal-low's. Ink 7.12 x 9.12, centre 6.5, 9.5, under its keyline so it lines up with signal. Line glyph: fills by weight"
+  },
+  {
+   "name": "square-alert",
+   "label": "Urgent",
+   "fluent": "",
+   "spec": "square; SF exclamationmark.square / Linear's urgent priority: stop's square (11 x 11, r 2, 2.5-13.5) as square-x / square-plus, holding the ring's ! exactly (alert-circle's, info turned: stem M8 5V8.75, ⌀1.5 dot at 8, 11, 2.25 below the stem's end), since square containers take the ring's marks; the stem's top is square-plus's + top (5), tight 1.38 to the frame top, dot tight 1.19 to the base, stem-to-dot 0.94 as the ring's. Ink 12.12 square, centre 8, 8. Filled: square solid, stem a knockout, dot a hole (square-dot's)"
+  }
+ ],
+ "extra": "Delegated calls: docs/research/icon-review/2026-10-10/README.md (Batch 73)."
+}

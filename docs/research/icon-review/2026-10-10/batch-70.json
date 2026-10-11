@@ -1,0 +1,243 @@
+{
+ "id": "batch-70",
+ "title": "Batch 70 · New icons",
+ "date": "2026-10-10",
+ "note": "39 concepts Area lacked, each with a product use (a fresh library gap pass over Fluent, Lucide, Phosphor, Hugeicons and SF Symbols), drawn on the families they belong to. eye-closed and file-x are aliases of eye-off and document-dismiss.",
+ "icons": [
+  {
+   "name": "file-x",
+   "label": "Invalid file",
+   "fluent": "document_dismiss",
+   "spec": "vertical; alias of document-dismiss (data-alias-of, linted identical): document with the container × (3 × 3, 6.5–9.5 × 8.5–11.5, centred below the fold) is already file-x in every reference (Lucide file-x, Phosphor file-x, Huge FileX); filled: page fills, × knocks out"
+  },
+  {
+   "name": "file-clock",
+   "label": "Recent file",
+   "fluent": "",
+   "spec": "vertical; Lucide file-clock / Huge FileClock: document verbatim with a clock on the bottom-left corner, as file-cog / file-lock / file-search place their marks (overhanging the left edge 0.5, its base on the page's base line): an r 3 ring at 6, 11.5 (centre on the 45° lattice) with clock's hands (vertical 1 to 10.5, 45° 0.625 to 6.625, 12.125; calendar-clock's 1.25 / 0.75 at r 3: detail 0.88 / 0.99 to the ring); the page ends on the overlap cut r 5.25 (left edge at 6.883, base at 10.617), standard 1.76 to the fold, so the filled bite clears the fold corner (at 6, 11 it passed 0.2 under it and left a fill sliver at 48); filled: page fill stops on the same bite, ring solid, hands knock out (calendar-clock)"
+  },
+  {
+   "name": "file-question",
+   "label": "Unknown file type",
+   "fluent": "document_question_mark",
+   "spec": "vertical; Lucide file-question-mark / Fluent document_question_mark: document verbatim with chat-question's ? (r 0.875 hook, 60° exit and Q into the stem) in the free L under the fold at x 6.5 like file-warning's !: hook top 7.375 (centre 8.25), stem end 9.5 (chat's 0.25 straight stem dropped so it fits), ⌀1.5 dot 2.25 below at 11.75; detail 0.92 to the fold curve, 1.0 to the left edge, 0.94 to the floor; filled: page fills, ? knocks out, dot a hole"
+  },
+  {
+   "name": "file-user",
+   "label": "My file",
+   "fluent": "document_person",
+   "spec": "vertical; Fluent document_person (Lucide/Huge put the figure inside, but Area's 4.5 fold leaves no room for a head and body below it): document verbatim with person-chat's small figure (head r 1.5 at 5.5, 8.5; dome body 6 × 2, r 1.5, 2.5–8.5 × 12–14, 2 between head and body) on the bottom-left corner as the family's composite marks, body on the page's base line, overhanging the left edge 1; the page ends on the overlap cut round the figure (left edge at 5.328, base consumed to 10.75, 13.984 on the bottom-right corner), tight 1.19 head to fold; filled: page fill stops on the union bite (r 3.75 about the body corner and head), head and body solid (person-chat)"
+  },
+  {
+   "name": "file-zip",
+   "label": "Zip file",
+   "fluent": "",
+   "spec": "vertical; Lucide file-archive / Huge FileZip with folder-zip's zipper (Fluent's) on the page: three solid 1.5 × 1 teeth alternating about a column at x 8 (left 8–9, right 9–10, left 10–11; folder-zip's four did not fit under the fold: a fourth at 7 sits 0.44 from the fold line), detail-plus 1.29 to the fold curve; folder-zip's hollow tab (6.5–9.5, r 1.5 top at 11.5) joined to the last tooth and crossing the page's base, which ends on the tab's sides; tab 0.5 shorter than folder-zip's (3 tall, bottom 14.5) so the ink box stays 13.62 tall; filled: page fills, teeth holes, tab stays a hollow line (folder-zip)"
+  },
+  {
+   "name": "folder-cog",
+   "label": "Folder settings",
+   "fluent": "",
+   "spec": "horizontal; Lucide folder-cog / Huge FolderCog: folder verbatim with person-settings' gear (r 1.5 ring, six 0.75 teeth to 2.25, ⌀1.5 hub) at 11.5, 10.5, inside the lower-right corner where folder-lock's lock sits; the folder ends on the overlap cut r 4.5 (right side at 6.759, base at 7.759), teeth 2.58+ open from the flap; filled: folder fill stops on the same bite, ring solid with the hub a hole (file-cog)"
+  },
+  {
+   "name": "folder-sync",
+   "label": "Synced folder",
+   "fluent": "folder_sync",
+   "spec": "horizontal; Lucide folder-sync / Fluent folder_sync: folder verbatim with cloud-sync's mark at 0.8 (one r 2.236 circle about 12, 10.5 broken into two arcs with chords 4 wide at 9.5 and 11.5, reset-style L heads 1.25 at the upper-left and lower-right ends, the spec's small sync proportions) in the lower-right corner as folder-lock's lock; the folder ends on the exact overlap cut round the mark (right side at 6.484, base at 8.275), open 2.59 to the flap; filled: folder fill stops on the offset boundary (r 4.486 about the circle, r 2.25 round the upper head's tip, x 7.75 beside the left ends), the mark stays a line (an arrow beside a solid)"
+  },
+  {
+   "name": "form",
+   "label": "Form",
+   "fluent": "form",
+   "spec": "square; Lucide form / Huge Form: two 12 × 3 fields (r 1, the align bars' height and radius) at 3.5–6.5 and 10.5–13.5, each under a label line (1.5, 2–9.5 and 8.5, 2–6.5, Lucide's 10 : 6 lengths), detail 0.88 label to field, 2 between centre-lines throughout; rows on x.5 and 0.5 high (three-line stack rule: crisp at 1× over centring); filled: fields solid, labels stay lines"
+  },
+  {
+   "name": "table-cells-merge",
+   "label": "Merge cells",
+   "fluent": "table_cells_merge",
+   "spec": "square; Lucide table-cells-merge / Huge TableCellsMerge: table's r 2 frame and row lines (5.5, 9.5) verbatim, its column moved to the centre (x 8, columns' divider) and drawn only in the top and bottom rows, so the middle row reads as one merged cell; filled: frame solid, rows cut through the silhouette, column stubs gaps run out through the top and bottom edges"
+  },
+  {
+   "name": "table-cells-split",
+   "label": "Split cell",
+   "fluent": "table_cells_split",
+   "spec": "square; Lucide table-cells-split / Huge TableCellsSplit / Fluent's divided middle row: table-cells-merge's frame and rows with the x 8 column only in the middle row (5.5–9.5), the pair's complement; filled: frame solid, rows cut, the column a gap between the two row cuts"
+  },
+  {
+   "name": "person-search",
+   "label": "Find people",
+   "fluent": "person_search",
+   "spec": "circle; Lucide user-search / Fluent person_search on the person family: head r 3 at 6.5, 5 and body 1.5–11.5 × 10–13.5 (r 3.5) copied; file-search's lens mark exactly (r 2 ring, 1.5 diagonal handle starting 1.5 out) at 11, 11, handle to 14, 14 (lattice x − y whole; at 11.5, 11.5 the head gap was a 2.08 near miss, at 11, 11 it is tight 1.38); the lens is 5 × 5, too large for the shared r 4.67 bite, so the body takes its own overlap cut like person-key: a round bite r 4.25 about the lens centre (2.25 from the ring), body line ending at 7.563, 13.5 and 6.869, 10; filled: head and body solid (the body closed along the bite arc, not a chord, so the fill stays 1.125 from the ring), the lens stays a line with the family's halo copy"
+  },
+  {
+   "name": "person-pen",
+   "label": "Edit profile",
+   "fluent": "person_edit",
+   "spec": "circle, free angles; Lucide user-pen / Fluent person_edit on the person family (head and body copied); file-pen's slim pen (2.12 wide, 60° tip, r 0.5 shoulders, round r 1.061 end, no clip) moved whole by 6.5, 0.5 so its tip sits at 8.5, 14.5 and its end at the lower right, the diagonal object placed as person-key's key; the body cut round it by the overlap cut (icon-geometry behind, as pkey.mjs), line ending at 6.439, 13.5 and a short shoulder stub to 8.305, 10.013; filled: head and body solid (body closed by its chord, as person-key), the pen solid with data-halo; the pen sides inherit file-pen's off-lattice axis (x + y = 21.5 / 24.5), the recorded pen-axis exception"
+  },
+  {
+   "name": "person-star",
+   "label": "Favourite contact",
+   "fluent": "person_star",
+   "spec": "circle, free angles; Lucide user-star / Fluent person_star on the person family with the shared round bite exactly (person-x's body line and A4.67 close, family.mjs DY 0); star.svg scaled 0.36 about its box centre and centred at 12.25, 12.25 (centre-line box 10.08–14.42 × 10.17–14.33, about the gear's 4.5), 2.39 from the remaining body so it sits inside the shared bite (0.38 or a centre at 12.5, 12.5 would breach the live area or the bite); counter 1.57 (tight); filled: the star solid with data-halo, as person-lock's body"
+  },
+  {
+   "name": "shield-cog",
+   "label": "Security settings",
+   "fluent": "shield_settings",
+   "spec": "circle, free angles; Lucide shield-cog on the shield family: shield copied exactly with person-settings' gear (r 1.5 ring, six teeth 1.5 → 2.25, teeth vertical as person-settings) inside, centred at 8, 7.5 (the shield's top-heavy interior; at 8, 8 the teeth sat a 2.34 near miss from the shoulders, and ring and teeth were 2.5/2.3 near misses at every rotation and 0.5 step from 7 to 9); ring and teeth drawn as one knockout path, its nearest point a tooth 1.99 (standard) from the shoulder curve; filled: shield solid, the gear a knockout with the ring's centre left solid as the hub (monitor-cog's filled gear)"
+  },
+  {
+   "name": "eye-closed",
+   "label": "Password hidden",
+   "fluent": "",
+   "spec": "horizontal; alias of eye-off (data-alias-of, body identical): Area's eye-off is already the closed eye with lashes (owner pick, data-off=\"own\"), which is exactly Lucide's and Phosphor's eye-closed, so a second drawing would duplicate it; no Fluent eye_closed cut exists (Fluent uses eye_off)"
+  },
+  {
+   "name": "mail-check",
+   "label": "Email verified",
+   "fluent": "mail_checkmark",
+   "spec": "horizontal, free angles; mail copied exactly with the 1.5 / 3 corner check (person-check's 4.5 × 3) where mail-plus's + sits: M9.5 5.5L11 7L14 4 (mail-plus's + centre 12, 5.5, moved 0.25 left so the arms stay on the 45° lattice); the outline and flap cut 2.25 round it as mail-plus (top line ends 8.469, right side resumes 7.182, flap ends 8.879, 8.061 just past its arc); filled: mail-plus's construction, the body a fill bounded by the 2.25 offset of the check (arcs r 2.25 about its ends and vertex, 45° offset lines) with the flap cut's square notch at the arc end (8.419, 7.662 → 8.923, 8.668, mail-plus's exact points), the check stays ink beside it"
+  },
+  {
+   "name": "mail-warning",
+   "label": "Delivery failed",
+   "fluent": "mail_alert",
+   "spec": "horizontal, free angles; mail copied exactly with the container ! (2.25 stem, ⌀1.5 dot 2.25 below; chat-warning's / file-warning's) in mail-plus's place: stem x 12 from 3.5 (the mail's top line, the +'s top) to 5.75, dot at 12, 8; outline and flap cut 2.25 round the stem and 2.4375 round the dot (its r 0.75 + 1.125 + 0.5625), top line ends 9.75, right side resumes 9.393, flap ends 9.58, 7.711 (mail-plus's 9.58, 7.71); a ! centred on the +'s 5.5 left the flap a 2.17 near miss to the stem; filled: the body a fill bounded by those offsets with mail-plus's flap notch, the ! stays ink (stem and dot) beside it"
+  },
+  {
+   "name": "hand-wave",
+   "label": "Wave",
+   "fluent": "hand_wave",
+   "spec": "circle, free angles; Fluent hand_wave / SF hand.wave: hand.svg copied exactly (all three paths) and moved -0.5, 0.5 (keeps the thumb's 45° on the lattice and puts the fingers on x.5), under bell-ring's two motion arcs copied exactly (r 7 about 8, 6.5, 22° each, ending on the diagonals); unmoved, the pinky sat 0.87 (a hair under detail) from the right arc; moved, the arcs are tight 1.57 from the pinky and 1.71 from the index finger; filled: the hand's own filled treatment (palm and fingers solid), arcs stay lines"
+  },
+  {
+   "name": "gif",
+   "label": "GIF",
+   "fluent": "gif",
+   "spec": "horizontal, free angles; Fluent gif (a framed GIF): a 13 × 10 r 2 frame (1.5–14.5 × 3–13, the horizontal keyline) holding spell-check-style sans letters 5 tall (5.5–10.5): a G 2.5 wide as a stadium of r 1.25 arcs with spell-check's C terminal (-30°), a right side up to 8 and a 1-long bar, an I at 8.5, an F stem at 10.5 with a 2 top arm and 1.5 middle arm at 8; letter gaps 2 between centre-lines (detail 0.88: the widths G 2.5 + F 2 leave no room for 2.5 in a 13 frame), frame 2.5 (tight) from the G and the letters' top/bottom, 2 (detail) from the F's arm; filled: frame solid, letters knocked out (Fluent's filled cut)"
+  },
+  {
+   "name": "calendar-off",
+   "label": "Unavailable",
+   "fluent": "calendar_cancel",
+   "spec": "square; Lucide calendar-off / Phosphor calendar-slash: calendar's frame (11 × 10, r 2), header at 6.5 and pegs copied exactly, date grid dropped (variants drop content), drawn whole as outline-only lines under the shared slash M2 2L14 14, flat (bell-off's structure). Filled: the body below the header a fill parted by the shared slash gap; the header stays open as filled-only stroke pieces cut one-sided (2.25) round the slash (top edge and corners down to the header, right peg); the left peg falls inside the cut and is dropped; the header line in filled is the fill's own top edge (a separate header piece left a fill wedge at 48)"
+  },
+  {
+   "name": "calendar-search",
+   "label": "Find a date",
+   "fluent": "calendar_search",
+   "spec": "square; Lucide calendar-search / Fluent calendar_search: calendar's frame, header and pegs exactly (no date grid) with file-search's lens mark exactly (r 2 at 10.5, 10.5, handle 12, 12 → 13.5, 13.5 replacing the lower-right corner), the frame cut round it by the overlap cut (right side and bottom end at 7.49); header kept whole, a detail 0.88 above the lens. Filled: body fill below the header stopping on a bite r 4.25 about the lens (database-search's), so the fill ends where the outline does; lens and handle stay lines, the lens open inside"
+  },
+  {
+   "name": "calendar-sync",
+   "label": "Calendar synced",
+   "fluent": "calendar_sync",
+   "spec": "square; Lucide calendar-sync / Fluent calendar_sync: calendar's frame, header and pegs exactly (no date grid) with cloud-sync's outline sync mark exactly (two r 2.795 arcs of one circle, 5 wide, L hooks 2) moved 3.5, -0.5 onto the lower-right corner as calendar-clock places its clock (hooks at x 9 and 14, foot on the body's bottom edge 13.5); frame and header cut round it by the overlap cut (header ends 6.806, right side 5.618, bottom 7.64). Ink 12.62 square, centre 8.25, 7.75. Filled: body fill below the header with a bite (r 2.25 round the upper hook, then r 5.045 about the mark's centre 11.5, 10.25, joined by an r 0.75 fillet) that meets every outline cut end, as calendar-clock's bite; the sync mark stays a line"
+  },
+  {
+   "name": "alarm-off",
+   "label": "Alarm off",
+   "fluent": "",
+   "spec": "circle; Lucide alarm-clock-off / SF alarm.slash: alarm's r 4.5 ring, closed bells and legs copied exactly under the shared slash M2 2L14 14, flat; the hand is dropped (it runs 0.71 off the slash, parallel, and read as a thickened slash; Lucide drops its hands too). data-counter=\"sliver\" (the right leg lies 0.71 beside the slash's end) and data-gap=\"aligned\" for the right bell's inner end, 2.43 from the slash. Filled: ring a fill parted by the shared slash gap; the left bell a filled-only stroke cut one-sided (2.25); right bell and legs stay lines"
+  },
+  {
+   "name": "clock-check",
+   "label": "On time",
+   "fluent": "",
+   "spec": "circle; Lucide clock-check / Huge ClockCheck: clock exactly (r 6 ring, hands M8 4.5V8L10.5 10.5) with copy-check's 1 / 2 check (M11 13L12 14L14 12, on the lattice) beside it on the lower right, the ring cut open round it by the overlap cut (ends 8.949, 13.925 and 13.734, 9.766); tight 1.42 from the hand's end. Lower right (Lucide's side) because there the check's long arm runs along the ring; on clock-alert's lower-left side it points radially into the face. The 1.5 / 3 check doesn't fit: with its short arm clear of the hand, the long arm leaves the 14.5 live area. Filled: the disc fills, hands knock out, the check stays a line with a halo"
+  },
+  {
+   "name": "search-alert",
+   "label": "Search error",
+   "fluent": "",
+   "spec": "circle; Lucide search-alert / SF exclamationmark.magnifyingglass: zoom-in exactly (r 5 lens at 7, 7, handle 10.75 → 14) with the container ! (chat-warning's: stem 4.75–7 at x 7, ⌀1.5 dot 2.25 below at 9.25) centred in the lens where zoom-in's + sits, tight 1.63 / 1.44 to the lens. The ring's own 3.75 stem left a 0.69 gap to the lens, so the mark is the next size down (contained marks rule). Filled: lens solid, stem a knockout, dot a hole (zoom-in's)"
+  },
+  {
+   "name": "scan-qr",
+   "label": "Scan QR code",
+   "fluent": "scan_qr_code",
+   "spec": "square; Fluent scan_qr_code / Lucide scan-qr-code: scan-check's four r 2.5 corner brackets exactly round a reduced QR code: qr-code's finders and modules don't fit in the 6 × 6 interior (two outlined finders need 2 × 1.75 squares, with 0.6 counters), so it is simplified to solid modules (ladder step 2, Fluent's): five 2 × 2 solid squares in a checker X (5–11, corners touching, whole-pixel edges), standard 1.94 to the brackets. A line glyph with solid exceptions: fills by weight"
+  },
+  {
+   "name": "webcam",
+   "label": "Webcam",
+   "fluent": "",
+   "spec": "vertical; Lucide webcam / Phosphor webcam: an r 5 head at 8, 7 with an r 2 lens ring (standard 1.875 between; camera's lens a step smaller), a short neck 12–13.5 joined to the head and desktop's foot line at 13.5, 6 wide (5–11). Ink 11.12 × 12.62, centre 8, 7.75 (the head is the mass). Filled: head solid, lens a knockout ring (camera's), neck and foot lines"
+  },
+  {
+   "name": "wifi-low",
+   "label": "Weak connection",
+   "fluent": "wifi_3_20",
+   "spec": "horizontal; Lucide wifi-low / Phosphor wifi-low: wifi exactly with only its inner r 3.5 arc and the ⌀2 source dot at 8, 12.5, in the same positions (the two outer arcs dropped, as volume-low relates to volume). wifi had no level variants. It sits under its keyline (8.1 under), as volume-low does, so it lines up with wifi in a strength set. Line glyph: fills by weight"
+  },
+  {
+   "name": "globe-off",
+   "label": "Offline",
+   "fluent": "globe_off",
+   "spec": "circle; Fluent globe_off / Lucide globe-off: globe's ring, r 10 lens meridian and parallels at 6 / 10 drawn whole as outline-only lines under the shared slash M2 2L14 14, flat; data-counter=\"sliver\" because the slash runs through the grid's nodes at 6, 6 and 10, 10, leaving 0.82 pockets. Filled: disc fill parted by the shared slash gap. Knockouts: parallel 6 whole; parallel 10 and both meridian arcs up to the slash on its far side; on the gap side only the right meridian from the pole to parallel 6. Knocking out every line left islands at 16 and 48; this leaves none"
+  },
+  {
+   "name": "book-add",
+   "label": "Add book",
+   "fluent": "book_add",
+   "spec": "vertical; the closed-book form, because the open book has no room: each of book's pages is 4.88 inside, too narrow for the 4px + (5.13 ink) or the 3px +. All three references draw a closed book (Lucide book-plus, Fluent book_add, Huge BookPlus). repository's cover and page block are copied exactly (9 × 12, 3.5–12.5 × 2–14, r 2 spine corner, r 1 cover corners, the page block at 11–14 with an r 1.5 end) with the ribbon dropped. The container's 4px + (6–10 × 4.5–8.5) is centred in the cover's free interior above the page line, tight 1.38 on all four sides. Filled: the cover above the page line fills (repository's fill), the page block stays a line, and the + is a knockout."
+  },
+  {
+   "name": "scroll",
+   "label": "Scroll",
+   "fluent": "",
+   "spec": "square; Lucide scroll on Area's grid: a 7-wide sheet (5.5–12.5, top 2.5, r 1.5 top-right corner). The top roll is an r 1.75 semicircle at 3.75, 4.25 that the top edge leaves tangentially; it runs down x 2 with an r 1 corner into a 6.5 base line that joins the sheet's left side (counter 2.43). At the foot, the sheet's left side curls through an r 1.5 semicircle (5.5 → 8.5, bottom 13.5) into a 3-tall rolled ledge (8.5–14 × 10.5–13.5, r 1 top corners, r 1.5 bottom-right corner, counter 1.93). The ledge's bottom line is tangent to the curl, and the sheet's right side ends on the ledge top. Ink 13.1 × 12.1, centred 8, 8. No text lines (Lucide; Phosphor and Huge add them). Filled (Phosphor's scroll fill): the sheet fills down into the curl, and the top roll and the ledge stay lines with their insides open (secondary parts)."
+  },
+  {
+   "name": "gavel",
+   "label": "Gavel",
+   "fluent": "gavel",
+   "spec": "square; Lucide gavel / Phosphor gavel on the 45° lattice, symmetric about the handle axis x + y = 16. The head is a 7.07 × 2.83 block (long sides x − y = 1 / 5, ends x + y = 11 / 21; counter 1.88). Its striking faces are bars on the ends that run 1 lattice unit past each long side (x − y 0 → 6), as Lucide's faces do. The handle is 2.83 wide (Lucide's), with sides on x + y = 14 / 18. It joins the head's lower long side and ends in an r 1.414 semicircle at 4, 12. The face bar is a detail gap of 1.0 from the handle's start (x + y = 11 vs 14; the first try at 12 left 0.29). Ink 12.04 × 12.04, centre 8.04, 7.96. There is no sound block (Lucide and Phosphor have none; Fluent and Huge do). Filled: the head and handle are solid as one mass (hammer's), and the face bars stay ink on top."
+  },
+  {
+   "name": "tags",
+   "label": "Tags",
+   "fluent": "tag_multiple",
+   "spec": "square; the multiples rule (Phosphor layering) on tag. tag itself cannot take a 3 offset inside the keyline: it spans 11.9, so with the offset it would span 14.9. The front is tag's construction shortened, with tag's radii and eyelet kept: the corner at 2, 5, a 5-long top and left edge (tag 6), the far edge at x + y = 21 (fillet r 1.5, r 1, r 1.5, r 1.5, r 1 as tag), and the ⌀1.5 eyelet 2.75 from the corner at 4.75, 7.75 (tight 1.44 as tag). The back copy is the same shape offset 3 up and right (5, 2). Only its uncovered top edge, upper diagonal and tip are drawn, stopping one overlap cut short of the front (icon-geometry behind, 2.3; 1.17 tight). Ink 13 × 13, centre 7.94, 7.94 (tag's). Filled: the front fills with the eyelet a hole, and the back stays a line."
+  },
+  {
+   "name": "vote",
+   "label": "Vote",
+   "fluent": "vote",
+   "spec": "horizontal; Lucide vote / Huge Vote, a ballot card entering a box's slot line. The card is 9 × 9 (3.5–12.5 × 3.5–12.5) with r 1.5 top corners, and its sides end on a 12-long slot line (2–14 at 12.5) that runs 1.5 past each side. Inside is the container's 1.5 / 3 check M6 8L7.5 9.5L10.5 6.5, which sits 0.25 left of centre to keep the lattice, as calendar-check sits 0.25 right (tight 1.38 left, detail 0.88 right, standard 1.88 above and below). The 2 / 4 check would leave 0.38 at the sides. Ink 13.1 × 10.1, centred 8, 8. Filled: the card fills, closed along the slot line, the check knocks out and the slot line stays a line. Fluent's tilted ballot over a box is too dense at 16."
+  },
+  {
+   "name": "text-quote",
+   "label": "Quote block",
+   "fluent": "text_quote",
+   "spec": "square; Lucide text-quote / Huge TextQuote (Notion's quote block) on the three-line stack rows 3.5 / 7.5 / 11.5, 0.5 high as text-align. The first row is text-align-left's first line exactly (2.5–10.5). Below it, a vertical quote bar at x 2.5 spans rows 2–3 (7.5–11.5), and two lines 5.5–13.5 run beside it, a standard 1.88 from the bar. Fluent's 99 quote is the existing quote icon. Line glyph: it fills by weight."
+  },
+  {
+   "name": "copyright",
+   "label": "Copyright",
+   "fluent": "",
+   "spec": "circle; the ring (r 6 at 8, 8) with a C as the ring's glyph: an arc of token's and target's r 3 inner ring, opened 90° on the right with its ends at ±45° (Lucide copyright's opening): M10.121 5.879A3 3 0 1 0 10.121 10.121. The gap to the ring is a standard 1.87. r 2.5 (closer to Lucide's 0.4 ratio) leaves 2.37, a near miss. Filled: the ring fills and the C knocks out (as add-circle)."
+  },
+  {
+   "name": "divide",
+   "label": "Divide",
+   "fluent": "",
+   "spec": "square; minus's 11px bar (2.5–13.5) with two ⌀2 mark dots on whole-pixel centres at 8, 4 and 8, 11, each a standard 1.94 from the bar (Lucide divide, Phosphor divide). The bar sits at 7.5 rather than minus's 8: with ⌀2 dots on whole-pixel centres, a symmetric standard gap needs a bar on x.5, so the ÷ sits 0.5 high and is crisp at 1× (the three-line stack precedent). Ink 12.12 × 9. Line glyph: it fills by weight, and the dots follow the curve."
+  },
+  {
+   "name": "location-add",
+   "label": "Add location",
+   "fluent": "location_add",
+   "spec": "vertical; location's pin copied exactly with its hole replaced by the 4px + (6–10 × 4.5–8.5), centred in the head at 8, 6.5. Inside placement, because the pin is a closed shape whose head holds the + with tight 1.63 at each arm (Fluent location_add, Phosphor map-pin-plus, Lucide map-pin-plus-inside), as bookmark-add. Lucide's corner + beside the pin would cut the pin's outline, which is its identity. Filled: the pin fills and the + knocks out."
+  },
+  {
+   "name": "arrow-up-right-circle",
+   "label": "Arrow up right circle",
+   "fluent": "arrow_circle_up_right",
+   "spec": "circle; arrow-up-circle's ring copied exactly, with its contained arrow turned 45° onto the lattice: the shaft is 5.5, 10.5 → 10.5, 5.5 and the head M7 5.5H10.5V9 (3.5 legs, the turned 2.5 head's 3.54). It is the same arrow as square-arrow-up-right's, on x.5 so it stays crisp at 1×. The shaft is 7.07 long against the straight 6, the longer of the two lattice choices, as arrow-up-right's 12.7 against 12. Tight 1.34 to the ring at the tip and tail. The other diagonals come from data-rotations arrow-down-right-circle:90, arrow-down-left-circle:180 and arrow-up-left-circle:270 (arrow-up-circle's and arrow-up-right's naming). Filled: the ring fills and the arrow knocks out."
+  }
+ ],
+ "extra": "Not changed: tree's crown keeps its own symmetric four-lobe construction; it is not a moved cloud, so the cloud's option D does not apply. Delegated calls to confirm are listed in docs/research/icon-review/2026-10-10/README.md."
+}

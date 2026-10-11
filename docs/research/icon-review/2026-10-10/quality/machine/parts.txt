@@ -1,0 +1,167 @@
+icon lint ok (746 icons, 7 status marks)
+parts drift — share of the base's ink a member no longer covers, at the best shift (⚠ over 20%)
+  ⚠ eye-closed               from eye               69%  moved 0, -3
+  ⚠ cloud-sun                from cloud             57%  moved 2, 0.75
+  ⚠ table-of-contents        from table             56%  moved 0, 1.75
+  ⚠ mouse-pointer-click      from mouse             56%  moved -1.25, 0.25
+  ⚠ call-end                 from call              55%  moved 0.5, -2.75
+  ⚠ smile-plus               from smile             53%  moved 0.5, -1
+  ⚠ phone-missed             from phone             47%  moved -1.25, 0.5
+  ⚠ book-add                 from book              46%  moved -1.25, 2.75
+  ⚠ flow-free                from flow              46%  moved 0, 1.25
+  ⚠ send-to-back             from send              45%  moved -0.5, -0.75
+  ⚠ play-circle              from play              45%  moved -0.25, -2.5
+  ⚠ pen-tool                 from pen               43%  moved -1, 1
+  ⚠ person-chat              from person            42%  moved -1, -0.5
+  ⚠ pause-circle             from pause             41%  moved -0.25, 0
+  ⚠ chat-multiple            from chat              33%  moved 0, 0.25
+  ⚠ folder-tree              from folder            31%  moved -0.25, -1.75
+  ⚠ volume-low               from volume            27%  moved 0, -0.25
+  ⚠ person-circle            from person            27%  moved 0, 0.25
+  ⚠ radio-button             from radio             26%  moved 0, -1.75
+  ⚠ chat-sparkle             from chat              24%  moved -0.25, 0
+  ⚠ git-pull-request-draft   from git-pull-request  24%  moved 0.25, 0
+  ⚠ layout-template          from layout            24%  moved 0.25, 0.25
+  ⚠ layout-dashboard         from layout            23%
+  ⚠ chat-dot                 from chat              22%  moved -0.25, 0
+  ⚠ person-square            from person            21%  moved 0, 0.25
+  ⚠ calendar-sync            from calendar          21%  moved 0.25, 0
+  ⚠ padding-side             from padding           20%  moved -0.25, 0
+  ⚠ stop-circle              from stop              20%
+    calendar-search          from calendar          19%  moved -0.25, -0.25
+    folder-open              from folder            19%  moved -0.25, -0.25
+    chat-more                from chat              18%  moved 0, 0.25
+    mail-warning             from mail              16%  moved -0.25, 0.25
+    flow-wrap                from flow              16%  moved 0.25, 0
+    bot-lead                 from bot               16%  moved 0, 0.25
+    mail-open                from mail              16%  moved 0, 1.25
+    git-pull-request-closed  from git-pull-request  15%  moved 0.25, 0
+    calendar-clock           from calendar          15%  moved -0.25, 0
+    clipboard-paste          from clipboard         15%  moved -1, -0.25
+    grid-plus                from grid              15%
+    bot-generator            from bot               15%  moved 0, 0.25
+    document-remove          from document          15%  moved 0, -0.25
+    location-add             from location          14%
+    calendar-remove          from calendar          14%  moved 0, 0.25
+    archive-restore          from archive           14%  moved -0.25, -0.25
+    chat-add                 from chat              14%  moved 0, -0.25
+    chat-warning             from chat              13%  moved 0, 0.25
+    bot-agent                from bot               13%  moved 0, 0.25
+    chat-off                 from chat              13%  moved 0, -0.25
+    calendar-off             from calendar          13%  moved 0, -0.25
+    padding-axis             from padding           12%
+    padding-sides            from padding           12%
+    bot-builder              from bot               12%  moved 0, 0.25
+    mail-check               from mail              11%  moved -0.25, 0
+    person-remove            from person            11%  moved -1.75, 0
+    mail-plus                from mail              11%  moved -0.25, 0.25
+    database-search          from database          11%  moved -0.25, -0.25
+    person-add               from person            11%  moved -1.75, 0
+    square-arrow-up-right    from square-arrow-up   10%  moved 0, -0.25
+    grid-sparkle             from grid              10%
+    image-plus               from image             10%  moved 0, -0.25
+    screen-share-off         from screen-share      10%  moved -0.25, 0
+    chat-question            from chat              10%  moved 0, 0.25
+    folder-cog               from folder            10%  moved -0.25, -0.25
+    document-add             from document           9%  moved -0.25, 0
+    filter-dismiss           from filter             9%  moved 0.25, 0
+    document-check           from document           9%  moved 0, -0.25
+    bot-automator            from bot                9%  moved 0, 0.25
+    bot-scholar              from bot                9%  moved 0, 0.25
+    calendar-add             from calendar           9%  moved 0, 0.25
+    person-search            from person             8%  moved -1.5, -0.25
+    calendar-check           from calendar           8%  moved 0, -0.25
+    calendar-x               from calendar           8%  moved 0.25, 0
+    cart-add                 from cart               8%  moved -0.25, 0
+    git-pull-request-create  from git-pull-request   8%
+    person-check             from person             8%  moved -1.75, 0
+    person-key               from person             8%  moved -1.5, 0.25
+    square-text-cursor       from square-text        8%  moved -0.25, 0
+    server-cog               from server             7%  moved -0.25, 0
+    table-cells-merge        from table              7%  moved 0, -0.25
+    table-cells-split        from table              7%  moved 0, -0.25
+    cloud-sync               from cloud              7%  moved -0.25, -1
+    bot-researcher           from bot                7%  moved 0, -0.25
+    brain-circuit            from brain              7%  moved 0, -0.25
+    cloud-download           from cloud              7%  moved 0, -1.25
+    person-lock              from person             6%  moved -1.75, 0
+    clock-check              from clock              6%  moved 0.25, 0
+    person-x                 from person             6%  moved -1.25, 0
+    clock-alert              from clock              6%  moved 0.25, 0
+    bot-designer             from bot                6%  moved 0, 0.25
+    folder-lock              from folder             6%  moved -0.25, -0.25
+    database-zap             from database           5%  moved -0.25, 0
+    chat-code                from chat               5%  moved 0.25, 0
+    person-star              from person             5%  moved -1.75, 0
+    person-pen               from person             5%  moved -1.75, 0
+    mail-dot                 from mail               5%  moved -0.25, 0
+    folder-sync              from folder             5%  moved 0, -0.25
+    person-settings          from person             4%  moved -1.5, 0
+    bot-guard                from bot                4%  moved 0, 0.25
+    cloud-lightning          from cloud              4%  moved 0, -1.25
+    cloud-upload             from cloud              4%  moved -0.25, -1
+    filter-add               from filter             4%  moved 0.25, 0
+    folder-input             from folder             4%  moved 0, -0.25
+    bell-dot                 from bell               3%  moved 0, -0.25
+    document-dismiss         from document           3%  moved -0.25, 0
+    alarm-off                from alarm              3%  moved 0, -0.25
+    compass-dot              from compass            2%
+    folder-zip               from folder             2%  moved 0, 0.25
+    badge-check              from badge              0%  moved 0, -0.25
+    battery-charging         from battery            0%  moved 0, -0.25
+    battery-full             from battery            0%  moved 0, -0.25
+    battery-low              from battery            0%  moved 0, -0.25
+    battery-medium           from battery            0%  moved 0, -0.25
+    bell-off                 from bell               0%  moved 0, -0.25
+    bell-ring                from bell               0%  moved 0, -0.25
+    bookmark-add             from bookmark           0%  moved 0, -0.25
+    bookmark-off             from bookmark           0%  moved 0, -0.25
+    bookmark-remove          from bookmark           0%  moved 0, -0.25
+    brain-off                from brain              0%  moved 0, -0.25
+    bug-off                  from bug                0%  moved 0, -0.25
+    call-incoming            from call               0%  moved 0, -0.25
+    call-outgoing            from call               0%  moved 0, -0.25
+    camera-off               from camera             0%  moved 0, -0.25
+    clipboard-check          from clipboard          0%  moved 0, -0.25
+    clipboard-list           from clipboard          0%  moved 0, -0.25
+    cloud-alert              from cloud              0%  moved 0, -0.25
+    cloud-check              from cloud              0%  moved 0, -0.25
+    cloud-off                from cloud              0%  moved 0, -0.25
+    cloud-rain               from cloud              0%  moved 0, -1.25
+    cloud-snow               from cloud              0%  moved 0, -1.25
+    copy-check               from copy               0%  moved 0, -0.25
+    cube-wireframe           from cube               0%  moved 0, -0.25
+    desktop-check            from desktop            0%  moved 0, -0.25
+    desktop-play             from desktop            0%  moved 0, -0.25
+    flag-off                 from flag               0%  moved 0, -0.25
+    flask-off                from flask              0%  moved 0, -0.25
+    folder-add               from folder             0%  moved 0, -0.25
+    folder-check             from folder             0%  moved 0, -0.25
+    folder-code              from folder             0%  moved 0, -0.25
+    folder-git               from folder             0%  moved 0, -0.25
+    folder-remove            from folder             0%  moved 0, -0.25
+    folder-search            from folder             0%  moved 0, -0.25
+    git-branch-plus          from git-branch         0%  moved 0, -0.25
+    globe-off                from globe              0%  moved 0, -0.25
+    hand-wave                from hand               0%  moved -0.5, 0.25
+    heart-off                from heart              0%  moved 0, -0.25
+    image-off                from image              0%  moved 0, -0.25
+    location-off             from location           0%  moved 0, -0.25
+    mic-off                  from mic                0%  moved 0, -0.25
+    octagon-alert            from octagon            0%  moved 0, -0.25
+    panel-left-close         from panel-left         0%  moved 0, -0.25
+    panel-left-open          from panel-left         0%  moved 0, -0.25
+    pencil-off               from pencil             0%  moved 0, -0.25
+    shield-alert             from shield             0%  moved 0, -0.25
+    shield-check             from shield             0%  moved 0, -0.25
+    shield-cog               from shield             0%  moved 0, -0.25
+    shield-lock              from shield             0%  moved 0, -0.25
+    shield-off               from shield             0%  moved 0, -0.25
+    shield-plus              from shield             0%  moved 0, -0.25
+    shield-user              from shield             0%  moved 0, -0.25
+    shield-x                 from shield             0%  moved 0, -0.25
+    sparkle-off              from sparkle            0%  moved 0, -0.25
+    star-half                from star               0%  moved 0, -0.25
+    star-off                 from star               0%  moved 0, -0.25
+    timer-off                from timer              0%  moved 0, -0.25
+    video-off                from video              0%  moved 0, -0.25

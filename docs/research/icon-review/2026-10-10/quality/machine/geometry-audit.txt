@@ -1,0 +1,266 @@
+agent	kink	5.6° at 3.89,4.5	gap
+agent	kink	5.6° at 12.11,4.5	gap
+agent	lattice	9.604,11.354 → 8.354,10.104 (x − y = -1.75)	
+agent	lattice	7.646,10.104 → 6.396,11.354 (x + y = 17.75)	
+atom	kink	2.9° at 13.61,13.61	
+atom	kink	2.9° at 2.39,2.39	
+atom	kink	2.9° at 13.61,2.39	
+atom	kink	2.9° at 2.39,13.61	
+attach	lattice	13.25,8 → 8,13.25 (x + y = 21.25)	
+attach	lattice	3.5,8.75 → 9.75,2.5 (x + y = 12.25)	
+attach	lattice	12.75,5.5 → 6.5,11.75 (x + y = 18.25)	
+attach	lattice	5,10.25 → 10.25,5 (x + y = 15.25)	
+bandage	lattice	5.841,2.659 → 13.341,10.159 (x − y = 3.182)	
+bandage	lattice	10.159,13.341 → 2.659,5.841 (x − y = -3.182)	
+bandage	lattice	10.159,2.659 → 2.659,10.159 (x + y = 12.818)	solid
+bandage	lattice	5.841,13.341 → 13.341,5.841 (x + y = 19.182)	solid
+binoculars	kink	23.3° at 4.5,3.5	solid
+binoculars	kink	23.3° at 11.5,3.5	solid
+book	kink	12.8° at 8,5.5	solid
+book	kink	12.8° at 8,5.5	solid
+bot-agent	kink	5.6° at 3.89,4.5	gap
+bot-agent	kink	5.6° at 12.11,4.5	gap
+bot-agent	lattice	9.604,11.354 → 8.354,10.104 (x − y = -1.75)	
+bot-agent	lattice	7.646,10.104 → 6.396,11.354 (x + y = 17.75)	
+bot-researcher	lattice	9.104,11.354 → 8.53,10.78 (x − y = -2.25)	solid
+bot-researcher	lattice	7.47,10.78 → 6.896,11.354 (x + y = 18.25)	solid
+brain-off	subgap	2.23 between subpaths 1 and 2	line
+brain-off	subgap	2.48 between subpaths 2 and 3	line
+brain-off	subgap	2.23 between subpaths 1 and 2	inset
+brain	subgap	2.23 between subpaths 1 and 2	line
+brain	subgap	2.48 between subpaths 2 and 3	line
+brain	subgap	2.23 between subpaths 1 and 2	inset
+brain	subgap	2.48 between subpaths 2 and 3	inset
+broom	kink	14.0° at 4.5,7.5	
+broom	kink	14.0° at 8.5,11.5	
+call-end	lattice	13.208,6.958 → 13.5,7.25 (x − y = 6.25)	solid
+call-end	lattice	13.5,10.75 → 13.333,10.917 (x + y = 24.25)	solid
+call-end	lattice	3.167,10.917 → 3,10.75 (x − y = -7.75)	solid
+call-end	lattice	3,7.25 → 3.292,6.958 (x + y = 10.25)	solid
+chip	subgap	0.29 between subpaths 1 and 7	
+chip	subgap	0.29 between subpaths 3 and 10	
+chip	subgap	0.29 between subpaths 4 and 9	
+chip	subgap	0.29 between subpaths 6 and 12	
+clock-alert	kink	22.6° at 4.75,12.56	fill
+cloud-check	lattice	6.25,8.5 → 7.25,9.5 (x − y = -2.25)	knockout
+cloud-check	lattice	7.25,9.5 → 9.25,7.5 (x + y = 16.75)	knockout
+cloud-download	lattice	5.25,7.5 → 7.75,10 (x − y = -2.25)	inset
+cloud-download	lattice	7.75,10 → 10.25,7.5 (x + y = 17.75)	inset
+cloud-upload	lattice	5.25,7.5 → 7.75,5 (x + y = 12.75)	inset
+cloud-upload	lattice	7.75,5 → 10.25,7.5 (x − y = 2.75)	inset
+compose	lattice	11.5,3 → 6.125,8.375 (x + y = 14.5)	solid
+compose	lattice	7.625,9.875 → 13,4.5 (x + y = 17.5)	solid
+copy-check	lattice	5,9.5 → 6,10.5 (x − y = -4.5)	knockout
+copy-check	lattice	6,10.5 → 8,8.5 (x + y = 16.5)	knockout
+database-search	kink	9.4° at 10.5,6.25	fill
+document-add	lattice	8.941,2.146 → 12.354,5.559 (x − y = 6.795)	
+document-check	lattice	8.941,2.146 → 12.354,5.559 (x − y = 6.795)	
+document-dismiss	lattice	8.941,2.146 → 12.354,5.559 (x − y = 6.795)	
+document-remove	lattice	8.941,2.146 → 12.354,5.559 (x − y = 6.795)	
+document	lattice	8.941,2.146 → 12.354,5.559 (x − y = 6.795)	
+eye-closed	subgap	2.42 between subpaths 1 and 2	
+eye-closed	subgap	2.42 between subpaths 1 and 3	
+eye-off	subgap	2.42 between subpaths 1 and 2	
+eye-off	subgap	2.42 between subpaths 1 and 3	
+eyedropper	lattice	8.084,6.149 → 9.851,7.916 (x − y = 1.935)	
+eyedropper	lattice	9.851,7.916 → 4.195,13.573 (x + y = 17.767)	
+eyedropper	lattice	7.73,5.795 → 10.735,2.79 (x + y = 13.525)	solid
+eyedropper	lattice	13.21,5.265 → 10.205,8.27 (x + y = 18.475)	solid
+eyedropper	lattice	10.205,8.27 → 7.73,5.795 (x − y = 1.935)	solid
+eyedropper	lattice	6.846,4.911 → 11.089,9.154 (x − y = 1.935)	
+fast-forward	lattice	9.707,4.207 → 12.97,7.47 (x − y = 5.5)	solid
+fast-forward	lattice	12.97,8.53 → 9.707,11.793 (x + y = 21.5)	solid
+file-clock	lattice	8.941,2.146 → 12.354,5.559 (x − y = 6.795)	
+file-clock	lattice	6,11.5 → 6.625,12.125 (x − y = -5.5)	knockout
+file-code	lattice	8.941,2.146 → 12.354,5.559 (x − y = 6.795)	
+file-cog	lattice	8.941,2.146 → 12.354,5.559 (x − y = 6.795)	
+file-cog	subgap	0.87 between subpaths 1 and 2	
+file-cog	subgap	2.34 between subpaths 1 and 3	
+file-cog	subgap	2.34 between subpaths 1 and 5	
+file-cog	subgap	0.87 between subpaths 1 and 6	
+file-cog	subgap	2.34 between subpaths 2 and 4	
+file-cog	subgap	2.34 between subpaths 2 and 6	
+file-cog	subgap	0.87 between subpaths 3 and 4	
+file-cog	subgap	2.34 between subpaths 3 and 5	
+file-cog	subgap	0.87 between subpaths 4 and 5	
+file-cog	subgap	2.34 between subpaths 4 and 6	
+file-download	lattice	8.941,2.146 → 12.354,5.559 (x − y = 6.795)	
+file-export	lattice	8.941,2.146 → 12.354,5.559 (x − y = 6.795)	
+file-image	lattice	8.941,2.146 → 12.354,5.559 (x − y = 6.795)	
+file-json	lattice	8.941,2.146 → 12.354,5.559 (x − y = 6.795)	
+file-lock	lattice	8.941,2.146 → 12.354,5.559 (x − y = 6.795)	
+file-pen	lattice	8.941,2.146 → 12.354,5.559 (x − y = 6.795)	
+file-pen	lattice	6,8.5 → 2.625,11.875 (x + y = 14.5)	solid
+file-pen	lattice	4.125,13.375 → 7.5,10 (x + y = 17.5)	solid
+file-question	lattice	8.941,2.146 → 12.354,5.559 (x − y = 6.795)	
+file-search	lattice	8.941,2.146 → 12.354,5.559 (x − y = 6.795)	
+file-spreadsheet	lattice	8.941,2.146 → 12.354,5.559 (x − y = 6.795)	
+file-spreadsheet	subgap	2.41 between subpaths 1 and 4	knockout
+file-spreadsheet	subgap	2.41 between subpaths 2 and 3	knockout
+file-user	lattice	8.941,2.146 → 12.354,5.559 (x − y = 6.795)	
+file-warning	lattice	8.941,2.146 → 12.354,5.559 (x − y = 6.795)	
+file-x	lattice	8.941,2.146 → 12.354,5.559 (x − y = 6.795)	
+file-zip	lattice	8.941,2.146 → 12.354,5.559 (x − y = 6.795)	
+files	lattice	7.441,4.646 → 9.854,7.059 (x − y = 2.795)	
+files	lattice	10.441,1.646 → 12.854,4.059 (x − y = 8.795)	
+flask-off	kink	21.8° at 12.64,12	fill
+folder-cog	subgap	0.37 between subpaths 1 and 2	
+folder-cog	subgap	0.37 between subpaths 1 and 6	
+folder-cog	subgap	0.38 between subpaths 2 and 3	
+folder-cog	subgap	0.37 between subpaths 3 and 4	
+folder-cog	subgap	0.37 between subpaths 4 and 5	
+folder-cog	subgap	0.38 between subpaths 5 and 6	
+globe-off	subgap	2.44 between subpaths 1 and 2	knockout
+leaf	lattice	8,1.636 → 11.182,4.818 (x − y = 6.364)	solid
+leaf	lattice	4.818,4.818 → 8,1.636 (x + y = 9.636)	solid
+link-off	subgap	2.23 between subpaths 2 and 3	stroke
+monitor-cog	subgap	0.37 between subpaths 1 and 2	knockout
+monitor-cog	subgap	0.37 between subpaths 1 and 6	knockout
+monitor-cog	subgap	0.38 between subpaths 2 and 3	knockout
+monitor-cog	subgap	0.37 between subpaths 3 and 4	knockout
+monitor-cog	subgap	0.37 between subpaths 4 and 5	knockout
+monitor-cog	subgap	0.38 between subpaths 5 and 6	knockout
+mountain	lattice	5.748,6.313 → 6.874,7.438 (x − y = -0.565)	cut
+mountain	lattice	8,6.313 → 9.126,7.438 (x − y = 1.687)	cut
+octagon-alert	lattice	10.793,2.293 → 13.707,5.207 (x − y = 8.5)	solid
+octagon-alert	lattice	13.707,10.793 → 10.793,13.707 (x + y = 24.5)	solid
+octagon-alert	lattice	5.207,13.707 → 2.293,10.793 (x − y = -8.5)	solid
+octagon-alert	lattice	2.293,5.207 → 5.207,2.293 (x + y = 7.5)	solid
+octagon	lattice	10.793,2.293 → 13.707,5.207 (x − y = 8.5)	solid
+octagon	lattice	13.707,10.793 → 10.793,13.707 (x + y = 24.5)	solid
+octagon	lattice	5.207,13.707 → 2.293,10.793 (x − y = -8.5)	solid
+octagon	lattice	2.293,5.207 → 5.207,2.293 (x + y = 7.5)	solid
+pen	lattice	12.75,5.25 → 13.543,6.043 (x − y = 7.5)	
+person-pen	lattice	12.5,9 → 9.125,12.375 (x + y = 21.5)	solid
+person-pen	lattice	10.625,13.875 → 14,10.5 (x + y = 24.5)	solid
+person-settings	subgap	0.37 between subpaths 1 and 2	
+person-settings	subgap	0.37 between subpaths 1 and 6	
+person-settings	subgap	0.38 between subpaths 2 and 3	
+person-settings	subgap	0.37 between subpaths 3 and 4	
+person-settings	subgap	0.37 between subpaths 4 and 5	
+person-settings	subgap	0.38 between subpaths 5 and 6	
+person-settings	subgap	0.37 between subpaths 1 and 2	halo
+person-settings	subgap	0.37 between subpaths 1 and 6	halo
+person-settings	subgap	0.38 between subpaths 2 and 3	halo
+person-settings	subgap	0.37 between subpaths 3 and 4	halo
+person-settings	subgap	0.37 between subpaths 4 and 5	halo
+person-settings	subgap	0.38 between subpaths 5 and 6	halo
+plug-off	lattice	12,7.5 → 12.25,7.25 (x + y = 19.5)	solid
+plug-off	lattice	8.75,3.75 → 8.5,4 (x + y = 12.5)	solid
+plug-off	lattice	4,8.5 → 3.75,8.75 (x + y = 12.5)	solid
+plug-off	lattice	7.25,12.25 → 7.5,12 (x + y = 19.5)	solid
+rocket	lattice	4.818,6.939 → 8.145,3.612 (x + y = 11.757)	solid
+rocket	lattice	12.388,7.855 → 9.061,11.182 (x + y = 20.243)	solid
+rocket	lattice	8.354,11.182 → 4.818,7.646 (x − y = -2.828)	solid
+rocket	lattice	11.207,12.571 → 11.182,12.596 (x + y = 23.778)	solid
+rocket	lattice	9.768,12.596 → 8.707,11.536 (x − y = -2.828)	solid
+rocket	lattice	3.429,4.793 → 3.404,4.818 (x + y = 8.222)	solid
+rocket	lattice	3.404,6.232 → 4.464,7.293 (x − y = -2.828)	solid
+rocket	lattice	6.586,12.596 → 5.525,13.657 (x + y = 19.182)	
+rocket	lattice	3.404,9.414 → 2.343,10.475 (x + y = 12.818)	
+scale	kink	24.0° at 1.5,7.5	
+scale	kink	24.0° at 5.5,7.5	
+scale	kink	24.0° at 10.5,7.5	
+scale	kink	24.0° at 14.5,7.5	
+server-cog	subgap	0.37 between subpaths 1 and 2	
+server-cog	subgap	0.37 between subpaths 1 and 6	
+server-cog	subgap	0.38 between subpaths 2 and 3	
+server-cog	subgap	0.37 between subpaths 3 and 4	
+server-cog	subgap	0.37 between subpaths 4 and 5	
+server-cog	subgap	0.38 between subpaths 5 and 6	
+server-cog	subgap	0.37 between subpaths 1 and 2	halo
+server-cog	subgap	0.37 between subpaths 1 and 6	halo
+server-cog	subgap	0.38 between subpaths 2 and 3	halo
+server-cog	subgap	0.37 between subpaths 3 and 4	halo
+server-cog	subgap	0.37 between subpaths 4 and 5	halo
+server-cog	subgap	0.38 between subpaths 5 and 6	halo
+share-nodes	subgap	0.66 between subpaths 1 and 2	
+shield-alert	kink	3.4° at 8.22,14.4	solid
+shield-alert	kink	3.4° at 7.78,14.4	solid
+shield-alert	kink	5.7° at 3.27,3.5	solid
+shield-alert	kink	7.9° at 7.56,1.8	solid
+shield-alert	kink	7.9° at 8.44,1.8	solid
+shield-alert	kink	5.7° at 12.73,3.5	solid
+shield-check	kink	3.4° at 8.22,14.4	solid
+shield-check	kink	3.4° at 7.78,14.4	solid
+shield-check	kink	5.7° at 3.27,3.5	solid
+shield-check	kink	7.9° at 7.56,1.8	solid
+shield-check	kink	7.9° at 8.44,1.8	solid
+shield-check	kink	5.7° at 12.73,3.5	solid
+shield-cog	kink	3.4° at 8.22,14.4	solid
+shield-cog	kink	3.4° at 7.78,14.4	solid
+shield-cog	kink	5.7° at 3.27,3.5	solid
+shield-cog	kink	7.9° at 7.56,1.8	solid
+shield-cog	kink	7.9° at 8.44,1.8	solid
+shield-cog	kink	5.7° at 12.73,3.5	solid
+shield-cog	subgap	0.37 between subpaths 2 and 3	knockout
+shield-cog	subgap	0.37 between subpaths 2 and 7	knockout
+shield-cog	subgap	0.38 between subpaths 3 and 4	knockout
+shield-cog	subgap	0.37 between subpaths 4 and 5	knockout
+shield-cog	subgap	0.37 between subpaths 5 and 6	knockout
+shield-cog	subgap	0.38 between subpaths 6 and 7	knockout
+shield-lock	kink	3.4° at 8.22,14.4	
+shield-lock	kink	3.4° at 7.78,14.4	
+shield-lock	kink	5.7° at 3.27,3.5	
+shield-lock	kink	7.9° at 7.56,1.8	
+shield-lock	kink	7.9° at 8.44,1.8	
+shield-lock	kink	5.7° at 12.73,3.5	
+shield-off	kink	3.4° at 8.22,14.4	line
+shield-off	kink	3.4° at 7.78,14.4	line
+shield-off	kink	5.7° at 3.27,3.5	line
+shield-off	kink	7.9° at 7.56,1.8	line
+shield-off	kink	7.9° at 8.44,1.8	line
+shield-off	kink	5.7° at 12.73,3.5	line
+shield-off	kink	3.4° at 8.22,14.4	fill
+shield-off	kink	3.4° at 7.78,14.4	fill
+shield-off	kink	5.7° at 3.27,3.5	fill
+shield-off	kink	7.9° at 7.56,1.8	fill
+shield-off	kink	7.9° at 8.44,1.8	fill
+shield-off	kink	5.7° at 12.73,3.5	fill
+shield-plus	kink	3.4° at 8.22,14.4	solid
+shield-plus	kink	3.4° at 7.78,14.4	solid
+shield-plus	kink	5.7° at 3.27,3.5	solid
+shield-plus	kink	7.9° at 7.56,1.8	solid
+shield-plus	kink	7.9° at 8.44,1.8	solid
+shield-plus	kink	5.7° at 12.73,3.5	solid
+shield-user	kink	3.4° at 8.22,14.4	
+shield-user	kink	3.4° at 7.78,14.4	
+shield-user	kink	5.7° at 3.27,3.5	
+shield-user	kink	7.9° at 7.56,1.8	
+shield-user	kink	7.9° at 8.44,1.8	
+shield-user	kink	5.7° at 12.73,3.5	
+shield-user	kink	3.4° at 8.22,14.4	solid
+shield-user	kink	3.4° at 7.78,14.4	solid
+shield-x	kink	3.4° at 8.22,14.4	solid
+shield-x	kink	3.4° at 7.78,14.4	solid
+shield-x	kink	5.7° at 3.27,3.5	solid
+shield-x	kink	7.9° at 7.56,1.8	solid
+shield-x	kink	7.9° at 8.44,1.8	solid
+shield-x	kink	5.7° at 12.73,3.5	solid
+shield	kink	3.4° at 8.22,14.4	solid
+shield	kink	3.4° at 7.78,14.4	solid
+shield	kink	5.7° at 3.27,3.5	solid
+shield	kink	7.9° at 7.56,1.8	solid
+shield	kink	7.9° at 8.44,1.8	solid
+shield	kink	5.7° at 12.73,3.5	solid
+signature	lattice	10.5,3 → 5.125,8.375 (x + y = 13.5)	solid
+signature	lattice	6.625,9.875 → 12,4.5 (x + y = 16.5)	solid
+snowflake	lattice	9.75,2.5 → 8,4.25 (x + y = 12.25)	
+snowflake	lattice	8,4.25 → 6.25,2.5 (x − y = 3.75)	
+snowflake	lattice	6.25,13.5 → 8,11.75 (x + y = 19.75)	
+snowflake	lattice	8,11.75 → 9.75,13.5 (x − y = -3.75)	
+spell-check	lattice	5.5,11 → 7,12.5 (x − y = -5.5)	
+spell-check	lattice	7,12.5 → 10,9.5 (x + y = 19.5)	
+square-text-cursor	subgap	2.38 between subpaths 2 and 3	knockout
+sticky-note	lattice	13.354,9.441 → 9.441,13.354 (x + y = 22.795)	
+subscript	kink	8.3° at 13.25,11.19	
+superscript	kink	8.3° at 12.75,4.69	
+swatch-book	lattice	11.689,7.811 → 7,12.5 (x + y = 19.5)	
+thumbs-up	kink	2.2° at 9.8,4.4	solid
+waypoints	subgap	0.02 between subpaths 1 and 2	
+waypoints	subgap	0.02 between subpaths 2 and 3	
+wifi-off	subgap	2.42 between subpaths 2 and 3	stroke
+wifi-off	subgap	2.04 between subpaths 2 and 5	stroke
+wrench	lattice	2.823,11.621 → 6.408,8.036 (x + y = 14.444)	solid
+wrench	lattice	9.469,5.47 → 10.53,6.531 (x − y = 3.999)	solid
+wrench	lattice	7.964,9.592 → 4.379,13.177 (x + y = 17.556)	solid

@@ -1,0 +1,10 @@
+brain-off	filled	fill beside a line	94	5.4	6.6
+file-cog	filled	fill beside a line	552	4.9	11.1
+file-zip	filled	fill beside a line	88	7.2	9.4
+folder-cog	filled	fill beside a line	322	11.4	10.4
+folder-zip	filled	fill beside a line	90	11.3	5.5
+folder-zip	filled	fill beside a line	88	11.1	7.4
+folder-zip	filled	fill beside a line	88	9.7	8.4
+person-settings	filled	fill beside a line	313	12.4	12
+server-cog	filled	fill beside a line	313	11.9	11
+unpin	filled	fill beside a line	180	11.7	8.8

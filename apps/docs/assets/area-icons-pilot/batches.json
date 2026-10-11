@@ -106,7 +106,7 @@
       "icons": {
         "minus": "approved",
         "send": "review",
-        "home": "approved",
+        "home": "review",
         "mail": "approved",
         "chat": "review",
         "image": "approved",
@@ -181,7 +181,7 @@
         "strikethrough": "approved",
         "heading": "approved",
         "list-bullet": "review",
-        "wifi": "approved",
+        "wifi": "review",
         "bluetooth": "approved",
         "battery": "approved",
         "plug": "approved",
@@ -200,7 +200,7 @@
         "thumbs-up": "approved",
         "smile": "review",
         "briefcase": "approved",
-        "building": "approved",
+        "building": "review",
         "compass": "review",
         "crop": "approved",
         "trophy": "approved",
@@ -265,7 +265,7 @@
         "video-off": "review",
         "calculator": "approved",
         "graduation-cap": "review",
-        "car": "approved",
+        "car": "review",
         "package": "review"
       }
     },
@@ -597,8 +597,8 @@
       "note": "Text size (text's T large and small), superscript and subscript (an X with list-numbered's 2).",
       "icons": {
         "text-size": "review",
-        "superscript": "approved",
-        "subscript": "approved"
+        "superscript": "review",
+        "subscript": "review"
       }
     },
     {
@@ -790,7 +790,7 @@
         "case-sensitive": "review",
         "wrench": "review",
         "bandage": "review",
-        "atom": "approved"
+        "atom": "review"
       }
     },
     {
@@ -1086,10 +1086,126 @@
         "monitor-cog": "approved",
         "stamp": "approved",
         "component": "approved",
-        "slice": "approved",
+        "slice": "review",
         "blend": "approved",
         "swatch-book": "approved",
         "line-style": "approved"
+      }
+    },
+    {
+      "id": "batch-70",
+      "title": "Batch 70 · New icons",
+      "note": "39 concepts Area lacked, each with a product use (a fresh library gap pass over Fluent, Lucide, Phosphor, Hugeicons and SF Symbols), drawn on the families they belong to. eye-closed and file-x are aliases of eye-off and document-dismiss.",
+      "icons": {
+        "file-x": "review",
+        "file-clock": "review",
+        "file-question": "review",
+        "file-user": "review",
+        "file-zip": "review",
+        "folder-cog": "review",
+        "folder-sync": "review",
+        "form": "review",
+        "table-cells-merge": "review",
+        "table-cells-split": "review",
+        "person-search": "review",
+        "person-pen": "review",
+        "person-star": "review",
+        "shield-cog": "review",
+        "eye-closed": "review",
+        "mail-check": "review",
+        "mail-warning": "review",
+        "hand-wave": "review",
+        "gif": "review",
+        "calendar-off": "review",
+        "calendar-search": "review",
+        "calendar-sync": "review",
+        "alarm-off": "review",
+        "clock-check": "review",
+        "search-alert": "review",
+        "scan-qr": "review",
+        "webcam": "review",
+        "wifi-low": "review",
+        "globe-off": "review",
+        "book-add": "review",
+        "scroll": "review",
+        "gavel": "review",
+        "tags": "review",
+        "vote": "review",
+        "text-quote": "review",
+        "copyright": "review",
+        "divide": "review",
+        "location-add": "review",
+        "arrow-up-right-circle": "review"
+      }
+    },
+    {
+      "id": "batch-71",
+      "title": "Batch 71 · New icons",
+      "note": "24 more concepts with a product use (media and calls, off states, reminders and labels, editor blocks, file types, charts, checkout), each on its family. monitor-off is an alias of screen-share-off.",
+      "icons": {
+        "repeat-once": "review",
+        "switch-camera": "review",
+        "eject": "review",
+        "headphones-off": "review",
+        "captions-off": "review",
+        "vibrate": "review",
+        "sim-card": "review",
+        "monitor-off": "review",
+        "megaphone-off": "review",
+        "lightbulb-off": "review",
+        "keyboard-off": "review",
+        "power-off": "review",
+        "bell-plus": "review",
+        "calendar-range": "review",
+        "bookmark-check": "review",
+        "tag-plus": "review",
+        "paint-roller": "review",
+        "square-root": "review",
+        "list-collapse": "review",
+        "file-video": "review",
+        "file-audio": "review",
+        "file-upload": "review",
+        "chart-area": "review",
+        "gift-card": "review"
+      }
+    },
+    {
+      "id": "batch-72",
+      "title": "Batch 72 · New icons",
+      "note": "Seven more product concepts: premium (gem), PDF files, tips (hand-coins), delivered orders, A→Z and 0→9 sorting, private mode (incognito).",
+      "icons": {
+        "gem": "review",
+        "file-pdf": "review",
+        "hand-coins": "review",
+        "package-check": "review",
+        "sort-alpha": "review",
+        "sort-numeric": "review",
+        "incognito": "review"
+      }
+    },
+    {
+      "id": "batch-73",
+      "title": "Batch 73 · New icons",
+      "note": "Nine concepts from a product-surface pass (Cursor and VS Code, Figma, Notion, Linear, GitHub): resize and fold arrows, the Space key, resolve thread, clear list, priority levels, urgent. move-horizontal is an alias of arrow-left-right.",
+      "icons": {
+        "move-horizontal": "review",
+        "fold-horizontal": "review",
+        "unfold-horizontal": "review",
+        "space": "review",
+        "chat-check": "review",
+        "list-x": "review",
+        "signal-low": "review",
+        "signal-medium": "review",
+        "square-alert": "review"
+      }
+    },
+    {
+      "id": "batch-74",
+      "title": "Batch 74 · New icons",
+      "note": "Bottom panel toggles (VS Code and Cursor terminal panel), with their top-panel flips.",
+      "icons": {
+        "panel-bottom-open": "review",
+        "panel-bottom-close": "review"
       }
     }
   ]

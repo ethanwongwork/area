@@ -1,0 +1,674 @@
+icon lint ok (746 icons, 7 status marks)
+  accessibility     circle     ink 12.12×13.62  centre 8,7.75  gaps 0.88 detail  counters 1.88, 3.21
+  activity          horizontal ink 14.12×11.12  centre 8,8
+  add               square     ink 12.12×12.12  centre 8,8
+  add-circle        circle     ink 13.12×13.12  centre 8,8  gaps 1.88 standard  counters 3.93
+  agent             circle     ink 14.12×12.12  centre 8,8  gaps 1.19 tight, 1.05 detail, 1.31 tight, 1.12 detail, 1.31 tight, 3.74 open  counters 1.18, 1.43, 2.68
+  alarm             circle     ink 13.12×11.64  centre 8,8.24  gaps 1.25 tight, 1.73 tight, 1.73 tight, 1.25 tight, 2.88 open, 4.13 open, 4.13 open  counters 2.19, 2.19, 3.53
+  alarm-off         circle     ink 13.12×13.12  centre 8,8  gaps 2.88 open, 4.13 open, 7.76 open, 2.43 aligned, 4.08 open  counters 2.19, 0.29, 1.7, 2.76, 4.18
+  align-center      square     ink 12.12×12.12  centre 8,8  gaps 1.88 standard  counters 1.94, 1.93
+  align-left        square     ink 12.12×12.12  centre 8,8  gaps 1.88 standard, 1.88 standard, 1.88 standard  counters 1.93, 1.93
+  anchor            square     ink 11.12×12.62  centre 8,7.75  counters 1.88
+  angle             square     ink 12.12×12.12  centre 8,8  counters 3.93
+  api               square     ink 12.88×12.88  centre 8,8  gaps 1 detail, 1 detail, 2.55 open, 1.32 tight, 3.37 open  counters 2.59, 2.59
+  app-window        square     ink 12.12×12.12  centre 8,8  gaps 1.19 tight, 1.19 tight, 1.19 tight, 1.19 tight, 1.19 tight, 1.19 tight, 1 detail, 3.5 open, 1 detail  counters 2.43, 4.93
+  archive           horizontal ink 14.12×11.12  centre 8,8  gaps 1.88 standard, 1.88 standard  counters 1.94, 3.68
+  archive-restore   horizontal ink 14.12×11.12  centre 8,8  gaps 0.88 detail, 1.13 tight  counters 1.94
+  arrow-left-right  horizontal ink 13.12×7.12  centre 8,8
+  arrow-right-left  square     ink 12.12×11.12  centre 8,8  gaps 1.38 tight
+  arrow-right-to-line square     ink 11.62×11.12  centre 7.75,8  gaps 1.88 standard
+  arrow-up          vertical   ink 11.12×13.12  centre 8,8
+  arrow-up-circle   circle     ink 13.12×13.12  centre 8,8  gaps 1.88 standard  counters 4.19
+  arrow-up-from-line square     ink 11.12×11.62  centre 8,8.25  gaps 1.88 standard
+  arrow-up-right    square     ink 10.12×10.12  centre 8,8  ⚠ 2.88 under its keyline
+  arrow-up-right-circle circle     ink 13.12×13.12  centre 8,8  gaps 1.34 tight  counters 4.53
+  aspect-ratio      square     ink 12.12×12.12  centre 8,8  gaps 1.88 standard, 1.88 standard, 3.12 open  counters 4.93
+  asterisk          square     ink 10.66×12.12  centre 8,8
+  at                circle     ink 13.12×13.12  centre 8,8  counters 4.87
+  atom              circle     ink 13.16×13.16  centre 8,8  gaps 1.47 tight, 1.47 tight  counters 3.34, 3.34, 2.05, 3.34, 3.34
+  attach            circle     ink 11.92×13.42  centre 7.97,8.03
+  auto-layout       square     ink 12.12×12.12  centre 8,8  gaps 1.88 standard, 1.38 tight, 2.97 open  counters 2.93, 2.93
+  award             vertical   ink 10.12×13.28  centre 8,8.08  gaps 1.37 tight, 1.59 tight  counters 1.54, 2.88, 1.92
+  backspace         horizontal ink 12.21×10.12  centre 7.96,8  gaps 1.35 tight  counters 3.83  ⚠ 1.79 under its keyline
+  badge             circle     ink 13.24×13.24  centre 8,8  counters 9.39
+  badge-check       circle     ink 13.24×13.24  centre 8,8  gaps 1.27 tight  counters 4.66
+  bandage           square     ink 13.12×13.12  centre 8,8  gaps 0.94 detail, 0.94 detail  counters 3.55, 3.55, 1.43, 3.55, 3.55
+  bank              square     ink 13.18×13.12  centre 8,8  gaps 0.94 detail, 3.38 open, 0.94 detail, 5.44 open  counters 2.43, 1.43, 1.43, 1.43, 1.43, 1.43
+  banknote          horizontal ink 13.12×10.12  centre 8,8  gaps 1.38 tight, 1.38 tight  counters 1.16, 2.84, 1.16, 2.88, 1.16, 1.16
+  bar-chart         square     ink 12.12×12.12  centre 8,8  gaps 1.38 tight
+  barcode           horizontal ink 13.62×11.12  centre 7.75,8  gaps 1.38 tight
+  basket            square     ink 13.12×12.12  centre 8,8  gaps 1.88 standard, 1.56 tight, 1.56 tight, 1.89 standard, 1.88 standard  counters 1.93, 1.93, 1.93, 1.43, 1.93, 1.43
+  basketball        circle     ink 13.12×13.12  centre 8,8  counters 2.45, 2.45, 1.93, 1.93, 1.93, 2.45, 2.45, 1.93
+  battery           horizontal ink 14.12×8.12  centre 8,8  gaps 0.88 detail  counters 5.93
+  battery-charging  horizontal ink 14.12×8.12  centre 8,8  gaps 0.88 detail, 0.88 detail, 5.63 open  counters 3.93
+  battery-full      horizontal ink 14.12×8.12  centre 8,8  gaps 0.88 detail, 1.38 tight, 3.88 open  counters 2.14
+  battery-low       horizontal ink 14.12×8.12  centre 8,8  gaps 0.88 detail, 1.38 tight, 8.88 open  counters 5.93
+  battery-medium    horizontal ink 14.12×8.12  centre 8,8  gaps 0.88 detail, 1.38 tight, 6.38 open  counters 4.43
+  bell              square     ink 12.12×13.12  centre 8,8  counters 7.93, 1.43
+  bell-dot          square     ink 12.12×13.12  centre 8,8  gaps 1.12 detail, 6.32 open  counters 1.43
+  bell-off          square     ink 13.12×13.12  centre 8,8  counters 4.53, 3.68, 1.43
+  bell-ring         circle     ink 14.02×13.57  centre 8,7.78  gaps 1.38 tight, 7.8 open  counters 7.93, 1.43
+  binary            square     ink 9.62×12.12  centre 7.75,8  gaps 4.02 open, 1.65 tight, 1.88 standard, 1.88 standard, 1.65 tight, 3.88 open  counters 1.93, 1.93
+  binoculars        horizontal ink 14.12×11  centre 8,8.06  gaps 1.87 standard, 1.88 standard, 1.87 standard, 1.88 standard, 1.97 standard, 1.97 standard  counters 2.18, 2.18, 3.88, 3.88
+  blend             circle     ink 13.12×13.12  centre 8,8  counters 4.67, 4.67, 1.4
+  blocks            square     ink 13.12×13.12  centre 8,8  gaps 0.88 detail  counters 3.93, 3.93, 3.93, 3.93
+  bluetooth         vertical   ink 9.12×13.12  centre 8,8  counters 1.93, 1.93
+  bluetooth-connected circle     ink 12.5×13.12  centre 8,8  gaps 1.99 standard, 1.99 standard, 9.5 open  counters 1.93, 1.93
+  bluetooth-off     square     ink 13.12×13.12  centre 8,8  counters 1.93, 1.68
+  blur              circle     ink 13.12×13.12  centre 8,8  gaps 1.88 standard
+  bold              vertical   ink 8.12×12.12  centre 8,8  counters 3.93, 4.93  ⚠ 1.88 under its keyline
+  book              horizontal ink 13.12×10.89  centre 8,8.12  counters 4.93, 4.93
+  book-add          vertical   ink 10.12×13.12  centre 8,8  gaps 1.38 tight  counters 3.44, 1.93
+  bookmark          vertical   ink 10.12×13.1  centre 8,7.99  counters 7.93
+  bookmark-add      vertical   ink 10.12×13.1  centre 8,7.99  gaps 1.38 tight  counters 3.93
+  bookmark-off      square     ink 13.12×13.12  centre 8,8  counters 5.18, 4.36
+  bookmark-remove   vertical   ink 10.12×13.1  centre 8,7.99  gaps 1.38 tight  counters 4.52
+  boolean-exclude   square     ink 12.12×12.12  centre 8,8  counters 3.93
+  boolean-intersect square     ink 12.12×12.12  centre 8,8  counters 2.95, 2.95
+  boolean-subtract  square     ink 12.12×12.12  centre 8,8  counters 3.93, 2.95
+  boolean-union     square     ink 12.12×12.12  centre 8,8  counters 7.31
+  bot               square     ink 13.12×12.62  centre 8,7.75  gaps 1.38 tight, 1.44 tight, 2.78 open, 3.44 open, 1.78 standard  counters 1.42, 3.68
+  bot-agent         circle     ink 14.12×12.12  centre 8,8  gaps 1.19 tight, 1.05 detail, 1.31 tight, 1.12 detail, 1.31 tight, 3.74 open  counters 1.18, 1.43, 2.68
+  bot-automator     circle     ink 13.12×13.12  centre 8,7.5  gaps 0.88 detail, 1.88 standard, 0.94 detail, 3.88 open, 5.94 open, 0.92 detail, 2.81 open, 1.78 standard  counters 1.43, 2.18, 3.18
+  bot-builder       circle     ink 14.12×12.93  centre 8,7.6  gaps 3.04 open, 1.88 standard, 0.94 detail, 0.93 detail, 2.81 open, 1.45 tight, 0.92 detail, 2.81 open, 3.62 open, 5.6 open, 1.78 standard  counters 2.77, 3.18
+  bot-designer      circle     ink 14×13.12  centre 8,7.5  gaps 6.13 open, 5 open, 1.88 standard, 0.94 detail, 2 standard, 4.31 open, 3.56 open, 6.71 open, 8.44 open, 3.68 open, 4.69 open, 0.94 detail, 3.25 open, 1.78 standard  counters 2.43, 2.43, 3.5
+  bot-generator     circle     ink 14.12×13.12  centre 8,7.5  gaps 1.88 standard, 0.94 detail, 0.92 detail, 2.81 open, 0.92 detail, 2.81 open, 1.78 standard  counters 3.9, 3.18
+  bot-guard         circle     ink 13.12×12.62  centre 8,7.75  gaps 1.23 tight, 1.88 standard, 0.94 detail, 1.52 tight, 3.86 open, 5.81 open, 1.67 tight, 3.56 open, 1.14 tight, 2.63 open, 1.78 standard  counters 1.18, 1.27, 2.98
+  bot-lead          circle     ink 13.12×12.15  centre 8,7.99  gaps 1.88 standard, 0.94 detail, 0.88 detail, 2.94 open, 1.78 standard  counters 3.43, 3.18
+  bot-researcher    circle     ink 14.12×12.62  centre 8,7.75  gaps 0.88 detail  counters 1.42, 0.93, 2.43, 1.68
+  bot-scholar       circle     ink 13.12×13.1  centre 8,7.51  gaps 1.5 tight, 1.88 standard, 0.94 detail, 0.92 detail, 2.81 open, 4.25 open, 5.71 open, 1.78 standard  counters 1.55, 2.28, 3.18
+  braces            square     ink 12.12×12.12  centre 8,8
+  brackets          square     ink 10.12×12.12  centre 8,8
+  brain             square     ink 13.14×13.13  centre 8,8.17  counters 3.13, 3.12
+  brain-circuit     square     ink 13.14×13.13  centre 8,8.17  gaps 0.94 detail, 0.94 detail, 0.94 detail, 0.94 detail, 0.94 detail, 0.94 detail, 3.4 open, 1.92 standard, 1.97 standard, 1.44 tight, 1.57 tight, 2.94 open, 5.15 open, 3.05 open, 1.44 tight, 1.5 tight, 3 open, 4.1 open  counters 2.26, 3.22
+  brain-off         circle     ink 13.14×13.29  centre 8,8.09  counters 2.18, 3.12, 2.83, 2.35
+  breakpoint        circle     ink 10.12×10.12  centre 8,8  counters 7.87  ⚠ 3.88 under its keyline
+  briefcase         square     ink 13.12×12.12  centre 8,8  gaps 1.94 standard, 2.88 open, 2.54 open  counters 1.93, 2.93, 2.93
+  brightness        circle     ink 13×13  centre 8,8  gaps 1.94 standard, 1.94 standard, 1.94 standard, 1.94 standard, 1.94 standard, 1.94 standard, 1.94 standard, 1.94 standard, 2.9 open, 6.63 open, 9.12 open, 10 open, 9.12 open, 6.63 open, 2.9 open, 2.9 open, 6.63 open, 9.12 open, 10 open, 9.12 open, 6.63 open, 2.9 open, 6.63 open, 9.12 open, 10 open, 9.12 open, 2.9 open, 6.63 open, 9.12 open, 10 open, 2.9 open, 6.63 open, 9.12 open, 2.9 open, 6.63 open, 2.9 open  counters 3.88
+  bring-to-front    square     ink 12.12×12.12  centre 8,8  gaps 1.88 standard, 1.88 standard, 5.95 open  counters 3.93
+  broadcast         circle     ink 13.12×9.62  centre 8,8  gaps 1.88 standard, 3.12 open, 5.58 open, 1.44 tight, 5.58 open, 7.36 open, 4.44 open, 1.88 standard, 1.44 tight, 4.44 open
+  broom             square     ink 12.16×12.16  centre 7.98,8.02  gaps 1.7 tight  counters 1.88, 1.88
+  bug               square     ink 12.12×13.12  centre 8,8  gaps 1.78 standard  counters 4.93
+  bug-off           square     ink 13.12×13.12  centre 8,8  gaps 1.78 standard, 1.78 standard, 1.06 detail, 1.35 tight  counters 0.29, 2.76, 3.11
+  building          vertical   ink 11.12×13.62  centre 8,7.75  gaps 1.19 tight, 1.19 tight, 1.19 tight, 1.19 tight, 1.19 tight, 2.22 aligned, 1.19 tight, 1 detail, 1 detail, 2.04 aligned, 3.5 open, 4.09 open, 5.57 open, 6.42 open, 8.74 open, 2.04 aligned, 1 detail, 4.09 open, 3.5 open, 4.09 open, 6.19 open, 8.69 open, 1 detail, 1 detail, 2.04 aligned, 4.09 open, 4.01 open, 6.25 open, 2.04 aligned, 1 detail, 2.04 aligned, 3.69 open, 6.19 open, 1 detail, 3.5 open, 1.72 tight, 3.79 open, 1 detail, 1.19 tight, 3.69 open, 1.72 tight, 3.79 open  counters 2.93, 1.43
+  calculator        vertical   ink 11.12×14.12  centre 8,8  gaps 0.88 detail, 0.94 detail, 3.69 open, 0.94 detail, 0.94 detail, 1.19 tight, 0.94 detail, 1.27 tight, 1.19 tight, 1.27 tight, 4.23 open, 4.19 open, 4.23 open, 1.25 tight, 4 open, 1.5 tight, 2.57 open, 4.77 open, 1.25 tight, 2.57 open, 1.5 tight, 2.57 open, 4.77 open, 2.57 open, 1.5 tight, 1.25 tight, 4 open, 1.25 tight  counters 2.57, 1.93
+  calendar          square     ink 12.12×12.62  centre 8,7.75  gaps 1.69 tight, 3.44 open, 1.69 tight, 0.94 detail, 0.94 detail, 0.88 detail, 0.94 detail, 0.94 detail, 0.94 detail, 3.44 open, 3.44 open, 2.94 open, 3.62 open, 2.94 open, 5.44 open, 5.89 open, 1 detail, 3.5 open, 1 detail, 2.04 aligned, 1 detail, 2.04 aligned, 1 detail, 4.09 open, 2.04 aligned, 1 detail  counters 1.93, 3.68
+  calendar-add      square     ink 12.12×12.62  centre 8,7.75  gaps 0.88 detail, 0.88 detail, 0.88 detail, 3.59 open  counters 1.93, 3.43
+  calendar-check    square     ink 12.12×12.62  centre 8,7.75  gaps 0.88 detail, 0.88 detail, 0.88 detail, 2.88 open  counters 1.93, 3.68
+  calendar-clock    square     ink 12.12×12.62  centre 8,7.75  gaps 1.13 tight, 3.69 open, 0.88 detail, 1.13 tight, 3.96 open, 0.9 detail, 3.15 open, 1.13 detail  counters 2.54
+  calendar-off      square     ink 13.12×13.12  centre 8,8  gaps 0.88 detail  counters 1.93, 1.35, 5.43, 3.12
+  calendar-remove   square     ink 12.12×12.62  centre 8,7.75  gaps 2.38 aligned, 0.88 detail, 2.38 aligned, 4.47 open  counters 1.93, 3.43
+  calendar-search   square     ink 12.12×12.62  centre 8,7.75  gaps 1.12 detail, 3.63 open, 0.88 detail, 0.88 detail, 4.38 open, 2.88 open, 6.52 open  counters 1.93, 2.88
+  calendar-sync     square     ink 12.12×12.62  centre 8,7.75  gaps 1.12 detail, 1.12 detail, 0.88 detail, 1.13 tight, 4.34 open, 1.85 standard, 5.95 open, 1.38 tight
+  calendar-x        square     ink 12.12×12.62  centre 8,7.75  gaps 0.88 detail, 0.88 detail, 0.88 detail, 3 open  counters 1.93, 3.49
+  call              square     ink 13.12×13.12  centre 8,8  counters 3.93
+  call-end          horizontal ink 13.08×7.32  centre 8.25,8  counters 3.12
+  call-incoming     square     ink 13.12×13.12  centre 8,8  gaps 1.98 standard  counters 3.93
+  call-off          square     ink 13.12×13.12  centre 8,8  counters 3.93, 3.93
+  call-outgoing     square     ink 13.12×13.12  centre 8,8  gaps 1.98 standard  counters 3.93
+  camera            square     ink 13.12×11.12  centre 8,8  gaps 0.88 detail  counters 3.43, 2.88
+  camera-off        square     ink 13.12×13.12  centre 8,8  gaps 0.88 detail, 0.88 detail  counters 3.43, 3.43, 1.7, 0.29
+  caps-lock         square     ink 11×12.21  centre 8,7.96  gaps 1.38 tight  counters 5.23
+  captions          horizontal ink 13.12×10.12  centre 8,8  gaps 1.87 standard  counters 2.95
+  car               horizontal ink 14.12×11.12  centre 8,8  gaps 0.88 detail, 3.38 open, 3.38 open, 0.88 detail, 1.79 standard, 1.38 tight  counters 2.43, 3.43, 0.93, 0.93
+  cards             square     ink 12.12×12.12  centre 8,8  gaps 0.88 detail, 2.88 open, 0.88 detail  counters 5.93
+  cart              square     ink 13.12×12.62  centre 8,7.75  gaps 1.38 tight, 1.38 tight, 2.88 open  counters 2.93, 1.88, 1.88
+  cart-add          square     ink 13.12×12.62  centre 8,7.75  gaps 1.38 tight, 1.57 tight, 1.01 detail, 3.38 open, 2.88 open, 6.22 open, 3.4 open  counters 1.88, 1.88
+  case-lower        horizontal ink 12.12×8.12  centre 8,8  gaps 1.88 standard, 1.88 standard, 1.88 standard, 1.88 standard  counters 2.88, 2.88  ⚠ 1.88 under its keyline
+  case-sensitive    horizontal ink 12.12×7.95  centre 8,8.09  gaps 4.88 open, 1.29 tight, 5.5 open, 1.5 tight  counters 1.68, 2.88  ⚠ 1.88 under its keyline
+  case-upper        horizontal ink 13.12×8.12  centre 8,8  gaps 1.88 standard, 2.5 open  counters 2.43, 1.68, 2.43
+  cast              square     ink 13.06×12.06  centre 8.03,7.97  gaps 1.38 tight, 5.94 open, 0.94 detail
+  chart             square     ink 12.12×12.12  centre 8,8  gaps 1.38 tight
+  chart-bar-horizontal square     ink 12.12×12.12  centre 8,8  gaps 1.38 tight
+  chart-gantt       square     ink 12.12×12.12  centre 8,8  gaps 1.88 standard
+  chart-scatter     square     ink 12.12×12.12  centre 8,8  gaps 1.94 standard, 7.94 open, 3.94 open, 1.94 standard, 2.94 open, 4.08 open, 1.61 tight, 4 open, 5.07 open, 3.66 open, 7.22 open, 4.08 open, 1.61 tight, 1.61 tight, 3.1 open
+  chat              square     ink 12.12×12.06  centre 8,7.97  gaps 1.88 standard  counters 4
+  chat-add          square     ink 12.12×12.06  centre 8,7.97  gaps 1.38 tight  counters 3.88
+  chat-code         square     ink 12.12×12.06  centre 8,7.97  gaps 1.38 tight  counters 3.18
+  chat-dot          square     ink 12.12×12.06  centre 8,7.97  gaps 1.13 tight
+  chat-more         square     ink 12.12×12.06  centre 8,7.97  gaps 1.19 tight, 3.19 open, 1.19 tight, 1.5 tight, 4.5 open, 1.5 tight  counters 3.7
+  chat-multiple     square     ink 12.12×12.06  centre 8,7.97  gaps 1.17 tight  counters 4.93
+  chat-off          square     ink 13.12×13.12  centre 8,8  counters 5.43, 4.26
+  chat-question     square     ink 12.12×12.06  centre 8,7.97  gaps 0.88 detail, 0.94 detail, 0.94 detail  counters 4.67
+  chat-sparkle      square     ink 12.62×12.56  centre 8.25,7.72  gaps 1.13 tight  counters 1.07
+  chat-warning      square     ink 12.12×12.06  centre 8,7.97  gaps 1.13 detail, 0.94 detail, 0.94 detail  counters 4.67
+  check             horizontal ink 11.62×8.12  centre 8.25,8  ⚠ 2.38 under its keyline
+  check-check       horizontal ink 13.62×7.12  centre 8.25,8  gaps 1.35 tight
+  checkbox          square     ink 12.12×12.12  centre 8,8  gaps 1.38 tight  counters 5.18
+  chef-hat          square     ink 13.12×11.62  centre 8,8.25  counters 6.09, 1.93
+  chess-rook        vertical   ink 11.12×14.12  centre 8,8  gaps 1.88 standard, 3.88 open, 2.88 open, 7.88 open, 3.15 open, 7.88 open  counters 2.93, 3.93, 1.43
+  chevron-down      horizontal ink 10.12×5.62  centre 8,7.75  ⚠ 3.88 under its keyline
+  chevron-down-circle circle     ink 13.12×13.12  centre 8,8  gaps 1.71 tight  counters 5.59
+  chevron-last      square     ink 8.62×11.12  centre 8.25,8  gaps 1.88 standard  ⚠ 1.88 under its keyline
+  chevrons-down-up  vertical   ink 8.12×12.12  centre 8,8  gaps 2.88 open  ⚠ 1.88 under its keyline
+  chevrons-right    square     ink 9.62×10.12  centre 7.75,8  gaps 1.7 tight  ⚠ 2.88 under its keyline
+  chevrons-up-down  vertical   ink 8.12×13.12  centre 8,8  gaps 3.88 open
+  chip              square     ink 12.12×12.12  centre 7.5,7.5  gaps 1.38 tight, 1.38 tight  counters 2.12, 1.93
+  circle-check-dashed circle     ink 13.12×13.12  centre 8,8  gaps 1.29 tight
+  circle-dashed     circle     ink 13.12×13.12  centre 8,8
+  circle-dot-dashed circle     ink 13.12×13.12  centre 8,8  gaps 4.44 open
+  circuit-board     square     ink 12.12×12.12  centre 8,8  gaps 0.88 detail, 0.88 detail, 1.53 tight  counters 2.68, 1.88, 1.88
+  clapperboard      square     ink 12.46×13.18  centre 7.83,7.97  counters 1.22, 0.93, 1.25, 1.18, 5.43
+  clipboard         vertical   ink 11.12×13.62  centre 8,7.75  counters 1.93, 8.43
+  clipboard-check   vertical   ink 11.12×13.62  centre 8,7.75  gaps 0.88 detail, 1.68 tight  counters 1.93, 4.36
+  clipboard-list    vertical   ink 11.12×13.62  centre 8,7.75  gaps 1.19 tight, 1.19 tight, 1.38 tight, 1.81 standard, 4.76 open, 1.88 standard, 1.5 tight, 1.19 tight, 1.19 tight  counters 1.93, 2.83
+  clipboard-paste   circle     ink 13.12×13.62  centre 8,7.75  gaps 1.13 tight, 1.47 tight  counters 1.93, 4.93
+  clock             circle     ink 13.12×13.12  centre 8,8  gaps 1.34 tight  counters 5.05
+  clock-alert       circle     ink 12.81×13.12  centre 8.16,8  gaps 1.34 tight, 1.12 detail, 1.12 detail, 4.38 open, 6.47 open, 0.94 detail
+  clock-check       circle     ink 13.12×13.12  centre 8,8  gaps 1.38 tight, 1.12 detail, 1.42 tight
+  cloud             horizontal ink 13.12×11.12  centre 8,8  counters 7.78
+  cloud-alert       horizontal ink 13.12×11.12  centre 8,8  gaps 1.6 tight, 1.44 tight, 0.94 detail  counters 5.38
+  cloud-check       horizontal ink 13.12×11.12  centre 8,8  gaps 1.26 tight  counters 4.89
+  cloud-download    square     ink 13.12×13.12  centre 8,8  gaps 1.13 tight
+  cloud-lightning   square     ink 13.12×13.12  centre 8,8  gaps 1.13 tight
+  cloud-off         square     ink 13.12×13.12  centre 8,8  counters 3.29, 4.98
+  cloud-rain        square     ink 13.12×13.12  centre 8,8  counters 7.78
+  cloud-snow        circle     ink 13.12×13.56  centre 8,8.22  gaps 0.94 detail, 0.94 detail, 0.94 detail, 1.5 tight, 4.5 open, 1.5 tight  counters 7.78
+  cloud-sun         square     ink 13.13×13.12  centre 8.01,8  gaps 1.13 tight  counters 4.45
+  cloud-sync        square     ink 13.12×13.12  centre 8,8  gaps 1.22 tight, 1.13 tight, 1.38 tight
+  cloud-upload      square     ink 13.12×13.12  centre 8,8  gaps 1.13 detail
+  code              horizontal ink 13.12×9.12  centre 8,8
+  code-block        horizontal ink 13.12×10.12  centre 8,8  gaps 1.38 tight  counters 3.43
+  coffee            square     ink 12.87×13.12  centre 7.88,8  gaps 1.88 standard, 3 open  counters 4.93, 2.18
+  coins             square     ink 13.12×13.12  centre 8,8  gaps 1.13 tight, 0.87 detail, 3.13 open  counters 1.05, 2.88
+  collapse          square     ink 12.12×12.12  centre 8,8  gaps 3.12 open
+  color             vertical   ink 11.12×13.46  centre 8,8.08  counters 8.88
+  columns           square     ink 12.12×12.12  centre 8,8  counters 4.43, 4.43
+  command           square     ink 12.12×12.12  centre 8,8  counters 1.93, 1.93, 3.93, 1.93, 1.93
+  compass           circle     ink 13.12×13.12  centre 8,8  gaps 1.31 tight  counters 3.26, 2.61
+  compass-dot       circle     ink 13.12×13.12  centre 8,8  gaps 1.31 tight, 1.13 tight, 2.51 open  counters 2.61
+  component         circle     ink 12.72×12.72  centre 8,8  gaps 3.29 open, 1.7 tight, 1.7 tight, 1.7 tight, 1.7 tight, 3.29 open  counters 1.7, 1.7, 1.7, 1.7
+  compose           square     ink 12.12×12.12  centre 8,8  gaps 1.7 tight  counters 1.17
+  container         square     ink 13.12×12.78  centre 8,8  counters 1.68, 1.93, 1.93, 1.93, 1.93
+  contrast          circle     ink 13.12×13.12  centre 8,8  counters 5.55
+  cookie            circle     ink 13.12×13.12  centre 8,8  gaps 1.35 tight, 1.49 tight, 1.15 tight, 1.88 standard, 1.44 tight, 1.39 tight, 1.98 standard, 1.86 standard, 1.79 standard, 4.36 open, 4.99 open, 4.14 open, 1.9 standard, 1.79 standard, 3.72 open, 1.35 tight, 4.83 open, 3.98 open, 1.98 standard, 1.75 standard, 1.16 tight  counters 2.95
+  copy              square     ink 12.12×12.12  centre 8,8  gaps 1.18 tight  counters 6.93
+  copy-check        square     ink 12.12×12.12  centre 8,8  gaps 1.18 tight, 1.38 tight, 3.99 open  counters 3.43
+  copyright         circle     ink 13.12×13.12  centre 8,8  gaps 1.87 standard  counters 4.88
+  corner            square     ink 10.12×10.12  centre 8,8  ⚠ 2.88 under its keyline
+  corner-down-right square     ink 12.12×12.12  centre 8,8
+  corners           square     ink 12.12×12.12  centre 8,8  gaps 2.88 open, 9.48 open, 2.88 open, 2.88 open, 9.48 open, 2.88 open
+  corners-sparkle   square     ink 12.12×12.12  centre 8,8  gaps 1.7 tight  counters 1.94
+  credit-card       horizontal ink 13.12×10.12  centre 8,8  gaps 1.38 tight, 1.88 standard  counters 1.93, 4.93
+  crop              square     ink 13.12×13.12  centre 8,8  counters 5.93
+  crosshair         circle     ink 13.12×13.12  centre 8,8  gaps 4.44 open, 1.44 tight  counters 4.05
+  crown             square     ink 13×11.56  centre 8,7.78  gaps 1.12 detail, 1.1 detail, 1.12 detail, 4.19 open, 5.94 open, 4.19 open, 3.77 open, 9 open, 3.77 open  counters 2.72, 1.43
+  crystal-ball      vertical   ink 9.12×13.12  centre 8,8  gaps 0.87 detail, 1.13 tight, 4.29 open  counters 4.75
+  cube              square     ink 13.12×12.66  centre 8,8  counters 4.26, 4.36, 4.36
+  cube-wireframe    square     ink 13.12×12.66  centre 8,8  counters 2.68, 2.68, 2.67, 2.67, 2.68, 2.68
+  currency-euro     vertical   ink 10.3×12.12  centre 8.09,8  ⚠ 1.88 under its keyline
+  database          square     ink 12.12×13.12  centre 8,8  gaps 1.88 standard  counters 2.93, 3.03, 3.03
+  database-search   square     ink 12.12×13.12  centre 8,8  gaps 1.88 standard, 1.54 tight, 5.27 open, 1.12 detail, 3.27 open, 1.12 detail, 4.96 open  counters 2.93, 2.88
+  database-zap      square     ink 12.12×13.12  centre 8,8  gaps 1.88 standard, 1.69 tight, 1.13 tight, 1.13 tight  counters 2.93
+  debug-step-over   square     ink 11.93×10.37  centre 8.1,7.82  gaps 4.79 open, 4.48 open
+  desktop           square     ink 13.12×12.12  centre 8,8  counters 7.43
+  desktop-check     square     ink 13.12×12.12  centre 8,8  gaps 0.88 detail, 1.11 detail  counters 4.36
+  desktop-play      square     ink 13.12×12.12  centre 8,8  gaps 1.79 standard, 1.88 standard  counters 4.18
+  devices           square     ink 13.12×12.12  centre 8,8  gaps 1.13 detail, 1.38 tight  counters 2.43
+  diamond           circle     ink 12.3×12.3  centre 8,8  counters 7.36  ⚠ 1.7 under its keyline
+  dice              square     ink 12.12×12.12  centre 8,8  gaps 1.94 standard, 1.94 standard, 4.19 open, 1.94 standard, 1.94 standard, 3 open, 1.68 tight, 3 open, 4.86 open, 1.68 tight, 4.86 open, 3 open, 1.68 tight, 1.68 tight, 3 open  counters 3.44
+  diff              square     ink 12.12×12.12  centre 8,8  gaps 1.38 tight  counters 3.69
+  disc              circle     ink 13.12×13.12  centre 8,8  gaps 2.87 open  counters 3.05, 2.88
+  discount          circle     ink 13.24×13.24  centre 8,8  gaps 1.66 tight, 1.47 tight, 1.47 tight, 1.52 tight, 1.52 tight, 4.16 open  counters 3.6
+  dismiss           circle     ink 11.12×11.12  centre 8,8  ⚠ 2.88 under its keyline
+  distribute-horizontal square     ink 12.12×12.12  centre 8,8  gaps 2.88 open  counters 1.93
+  divide            square     ink 12.12×9  centre 8,7.5  gaps 1.94 standard, 1.94 standard, 5 open
+  document          vertical   ink 10.12×13.12  centre 8,8  gaps 1.38 tight, 0.88 detail, 0.88 detail, 0.88 detail, 0.88 detail  counters 3.68, 2.12
+  document-add      vertical   ink 10.12×13.12  centre 8,8  gaps 1.38 tight, 1.18 tight, 1.18 tight, 1.18 tight, 1.18 tight  counters 3.94, 2.12
+  document-check    vertical   ink 10.12×13.12  centre 8,8  gaps 0.88 detail, 0.88 detail, 0.88 detail, 0.88 detail, 0.88 detail  counters 4.19, 2.12
+  document-dismiss  vertical   ink 10.12×13.12  centre 8,8  gaps 1.38 tight, 0.88 detail, 0.88 detail, 0.88 detail, 0.88 detail  counters 3.68, 2.12
+  document-remove   vertical   ink 10.12×13.12  centre 8,8  gaps 1.88 standard, 2.38 aligned, 2.38 aligned, 2.38 aligned, 2.38 aligned  counters 4.21, 2.12
+  dollar            vertical   ink 7.62×14.12  centre 8,8
+  dots-four         square     ink 12.12×12.12  centre 8,8  gaps 1.88 standard, 1.88 standard, 4.77 open, 4.77 open, 1.88 standard, 1.88 standard  counters 2.88, 2.88, 2.88, 2.88
+  download          square     ink 12.12×12.12  centre 8,8  gaps 1.38 tight
+  dumbbell          horizontal ink 14.12×10.12  centre 8,8  gaps 1.88 standard  counters 0.93, 0.93, 0.93, 0.93
+  duplicate         square     ink 12.12×12.12  centre 8,8  gaps 1.18 tight, 0.88 detail, 3.24 open  counters 2.93
+  ellipse           circle     ink 13.12×13.12  centre 8,8  counters 10.87
+  equal             square     ink 12.12×4.12  centre 8,8
+  eraser            square     ink 11.8×12.21  centre 8.25,7.96  gaps 0.88 detail  counters 4.71, 1.88
+  error             circle     ink 13.12×13.12  centre 8,8  gaps 1.34 tight  counters 3.93
+  escape            circle     ink 12.12×12.12  centre 8,8  gaps 1.38 tight  ⚠ 1.88 under its keyline
+  exit-door         square     ink 13.12×12.94  centre 8,8.05  gaps 4.28 open, 1.19 tight  counters 4.6, 1.93
+  expand            square     ink 12.12×12.12  centre 8,8  gaps 3.12 open
+  eye               horizontal ink 14.02×10.12  centre 8,8  gaps 1.38 tight  counters 3.19, 2.88
+  eye-closed        horizontal ink 14.12×6.62  centre 8,8.25
+  eye-off           horizontal ink 14.12×6.62  centre 8,8.25
+  eyedropper        square     ink 12.55×12.55  centre 8.01,7.99  counters 2.55, 1.55
+  fast-forward      square     ink 11.81×9.3  centre 7.85,8  counters 3.47, 3.47
+  file-clock        vertical   ink 11.12×13.12  centre 7.5,8  gaps 1.12 detail, 3.22 open, 1.18 tight, 3.4 open, 1.18 tight, 3.4 open, 1.18 tight, 3.4 open, 1.18 tight, 3.4 open, 0.88 detail  counters 2.12, 2.05
+  file-code         vertical   ink 10.12×13.12  centre 8,8  gaps 0.88 detail, 1.41 tight, 1.41 tight, 1.41 tight, 1.41 tight  counters 3.93, 2.12
+  file-cog          vertical   ink 11×13.37  centre 7.56,8.13  gaps 1.88 standard, 1.12 detail, 3.28 open, 2.92 open, 3.28 open, 2.92 open, 3.28 open, 2.92 open, 3.28 open, 2.92 open  counters 2.12, 2.88
+  file-diff         vertical   ink 10.12×13.12  centre 8,8  gaps 1 detail  counters 3.64
+  file-download     vertical   ink 10.12×13.12  centre 8,8  gaps 0.88 detail, 1.18 tight, 1.18 tight, 1.18 tight, 1.18 tight  counters 3.94, 2.12
+  file-export       vertical   ink 10.12×13.12  centre 8,8  gaps 1.38 tight, 1.02 detail, 1.02 detail, 1.02 detail, 1.02 detail  counters 4.18, 2.12
+  file-image        vertical   ink 10.12×13.12  centre 8,8  gaps 0.94 detail, 2.96 open, 1.24 tight, 2.96 open, 1.24 tight, 2.96 open, 1.24 tight, 2.96 open, 1.24 tight, 1.83 standard  counters 3.68, 2.12, 2.23
+  file-json         vertical   ink 10.12×13.12  centre 8,8  gaps 0.88 detail, 0.88 detail, 0.88 detail, 0.88 detail, 0.88 detail  counters 3.68, 2.12
+  file-lock         vertical   ink 10.62×13.12  centre 7.75,8  gaps 1.13 tight, 1.12 detail, 3.58 open, 2.74 open, 3.58 open, 2.74 open, 3.58 open, 2.74 open, 3.58 open, 2.74 open  counters 2.12, 0.93, 1.93
+  file-pen          square     ink 11.62×13.12  centre 7.25,8  gaps 1.13 tight, 1.4 tight, 1.4 tight, 1.4 tight, 1.4 tight  counters 2.12, 1.17
+  file-question     vertical   ink 10.12×13.12  centre 8,8  gaps 1 detail, 0.94 detail, 0.92 detail, 4.57 open, 0.92 detail, 4.57 open, 0.92 detail, 4.57 open, 0.92 detail, 4.57 open, 0.94 detail  counters 4.93, 2.12
+  file-search       vertical   ink 11.12×13.12  centre 7.5,8  gaps 1.13 tight, 1.13 tight, 2.81 open, 5.2 open, 2.81 open, 5.2 open, 2.81 open, 5.2 open, 2.81 open, 5.2 open  counters 2.12, 2.88
+  file-spreadsheet  vertical   ink 10.12×13.12  centre 8,8  gaps 1.38 tight, 1.38 tight, 1.38 tight, 1.38 tight, 1.38 tight  counters 3.83, 2.12
+  file-user         vertical   ink 11.12×13.12  centre 7.5,8  gaps 1.13 tight, 1.13 tight, 1.19 tight, 4.74 open, 1.19 tight, 4.74 open, 1.19 tight, 4.74 open, 1.19 tight, 4.74 open, 0.88 detail  counters 2.12, 1.88, 0.93
+  file-warning      vertical   ink 10.12×13.12  centre 8,8  gaps 1.88 standard, 1.19 tight, 0.98 detail, 4.35 open, 0.98 detail, 4.35 open, 0.98 detail, 4.35 open, 0.98 detail, 4.35 open, 0.94 detail  counters 5.15, 2.12
+  file-x            vertical   ink 10.12×13.12  centre 8,8  gaps 1.38 tight, 0.88 detail, 0.88 detail, 0.88 detail, 0.88 detail  counters 3.68, 2.12
+  file-zip          vertical   ink 10.12×13.62  centre 8,8.25  gaps 1.94 standard, 1.29 tight, 4.01 open, 1.29 tight, 4.01 open, 1.29 tight, 4.01 open, 1.29 tight, 4.01 open  counters 3.68, 2.12, 1.93
+  files             vertical   ink 11.12×14.12  centre 8,8  gaps 0.88 detail, 1.18 tight, 1.88 standard, 1.18 tight, 1.88 standard, 1.18 tight, 1.88 standard, 1.18 tight, 1.88 standard, 1.18 tight, 3.18 open  counters 3.18, 1.43
+  film              square     ink 13.12×13.12  centre 8,8  counters 1.81, 4.93, 1.81, 1.93, 1.93, 1.93, 4.93, 1.93, 1.81, 1.81
+  filter            square     ink 12.42×12.31  centre 8,8.1  counters 5.02
+  filter-add        square     ink 12.77×12.62  centre 8.18,8.25  gaps 1.12 detail
+  filter-dismiss    square     ink 12.52×12.37  centre 8.05,8.13  gaps 1.12 detail
+  fingerprint       circle     ink 12.88×11.07  centre 8,7.98  gaps 1.38 tight, 3.88 open, 1.37 tight
+  flag              square     ink 12.12×12.12  centre 8,8  counters 4.93
+  flag-off          square     ink 13.12×13.12  centre 8,8  counters 3.82, 2.43
+  flame             circle     ink 11.92×13.32  centre 8,7.9  counters 5.92
+  flash             vertical   ink 10.3×13.7  centre 8,8  counters 3.47
+  flask             vertical   ink 10.68×12.12  centre 8,8  gaps 6.88 open  counters 3.35, 1.93  ⚠ 1.88 under its keyline
+  flask-off         square     ink 13.12×13.12  centre 8,8  gaps 6.88 open, 1 detail, 6.88 open, 1.13 tight  counters 1.93, 2.01, 1.93
+  flip              square     ink 13.12×12.12  centre 8,8  gaps 1.28 tight, 1.28 tight, 3.68 open  counters 2.18, 2.18
+  flow              square     ink 12.12×12.62  centre 8,8.25  gaps 1.88 standard, 3.88 open, 1.38 tight  counters 2.93, 2.93
+  flow-free         square     ink 12.12×12.12  centre 8,8  gaps 1.88 standard, 1.88 standard, 1.82 standard  counters 2.93, 2.93, 2.93
+  flow-wrap         square     ink 12.12×12.12  centre 8,8  gaps 1.88 standard, 1.88 standard, 3.95 open, 3.95 open, 1.88 standard, 1.88 standard  counters 2.93, 2.93, 2.93, 2.93
+  folder            horizontal ink 13.12×11.12  centre 8,8  counters 1.93, 7.18
+  folder-add        horizontal ink 13.12×11.12  centre 8,8  gaps 0.88 detail, 1.11 detail  counters 1.93, 4.58
+  folder-check      horizontal ink 13.12×11.12  centre 8,8  gaps 1.38 tight, 1.88 standard  counters 1.93, 4.18
+  folder-code       horizontal ink 13.12×11.12  centre 8,8  gaps 0.88 detail, 0.88 detail  counters 1.93, 3.93
+  folder-cog        horizontal ink 13.12×11.12  centre 8,8  gaps 1.87 standard, 1.13 tight, 3.74 open, 3.11 open  counters 1.93, 1.88
+  folder-git        horizontal ink 13.12×11.12  centre 8,8  gaps 0.88 detail, 1.38 tight, 1.02 detail, 2.38 aligned  counters 1.93, 3.93, 1.88
+  folder-input      horizontal ink 13.12×11.12  centre 8,8  gaps 0.88 detail, 1 detail  counters 1.93
+  folder-lock       horizontal ink 13.12×11.12  centre 8,8  gaps 1.13 tight, 1.13 tight, 3.38 open, 2.82 open  counters 1.93, 0.93, 1.93
+  folder-open       horizontal ink 13.16×11.12  centre 8.02,8  counters 3.43, 4.43
+  folder-remove     horizontal ink 13.12×11.12  centre 8,8  gaps 2.38 aligned, 2.38 aligned  counters 1.93, 4.58
+  folder-search     horizontal ink 13.12×11.12  centre 8,8  gaps 1.38 tight, 0.88 detail, 0.91 detail, 4.18 open  counters 1.93, 5.18, 1.88
+  folder-sync       horizontal ink 13.12×11.12  centre 8,8  gaps 1.13 tight, 1.13 tight, 2.59 open, 5.14 open, 0.88 detail  counters 1.93
+  folder-tree       square     ink 13.12×12.62  centre 8,7.75  gaps 1.38 tight, 1.38 tight, 1.38 tight  counters 3.12, 3.12
+  folder-zip        square     ink 13.12×12.12  centre 8,8.5  gaps 0.94 detail, 1.41 tight, 4.32 open  counters 1.93, 5.93, 1.93
+  folders           square     ink 13.12×12.12  centre 8,8  gaps 1.18 tight, 3.07 open  counters 1.93, 5.18
+  form              square     ink 13.12×13.12  centre 8,7.5  gaps 0.88 detail, 0.88 detail, 2.88 open  counters 1.93, 1.93
+  frame             square     ink 13.12×13.12  centre 8,8  counters 5.93
+  frown             circle     ink 13.12×13.12  centre 8,8  gaps 1.86 standard, 1.86 standard, 1.67 tight, 2.5 open, 1.98 standard, 1.98 standard  counters 3.93
+  function          vertical   ink 7.12×12.12  centre 8,8  ⚠ 1.88 under its keyline
+  gallery           square     ink 13.12×12.12  centre 8,8  gaps 1.38 tight, 3.88 open, 1.38 tight  counters 5.93
+  gamepad           horizontal ink 14.12×11.12  centre 8,8  gaps 1.23 tight, 1.34 tight, 1.19 tight, 1.85 standard, 3.79 open, 1.33 tight  counters 3.93
+  gap               square     ink 12.12×12.12  centre 8,8  gaps 1.44 tight, 4.88 open, 1.44 tight
+  gauge             horizontal ink 13.12×8.31  centre 8,8.1  gaps 1.26 tight
+  gavel             square     ink 12.04×12.04  centre 8.04,7.96  gaps 1 detail  counters 1.88, 1.88
+  gif               horizontal ink 14.12×11.12  centre 8,8  gaps 1.37 tight, 1.38 tight, 0.88 detail, 0.88 detail, 2.88 open, 0.88 detail  counters 3.02
+  gift              square     ink 12.12×12.12  centre 8,8  gaps 1.88 standard, 1.88 standard  counters 1.62, 1.62, 1.94, 1.94, 3.43, 3.43
+  git-branch        square     ink 12.12×12.12  centre 8,8  gaps 3.88 open, 3.88 open, 1.88 standard, 7.19 open, 0.88 detail, 5.51 open  counters 1.88, 1.88, 1.88
+  git-branch-plus   square     ink 12.62×12.62  centre 8.25,8.25  gaps 3.88 open, 3.88 open, 1.88 standard, 7.38 open, 7.19 open, 0.88 detail, 3.38 open, 5.51 open, 3.38 open, 5.06 open, 1.28 tight  counters 1.88, 1.88, 1.88
+  git-commit        horizontal ink 13.12×4.12  centre 8,8  counters 1.88
+  git-compare       square     ink 12.12×13.12  centre 8,8  gaps 7.19 open, 1.38 tight, 1.38 tight, 3.15 open  counters 1.88, 1.88
+  git-fork          square     ink 12.12×12.12  centre 8,8  gaps 3.88 open, 4.82 open, 3.4 open, 4.82 open, 3.4 open, 0.88 detail  counters 1.88, 1.88, 1.88
+  git-graph         square     ink 12.12×12.12  centre 8,8  gaps 3.88 open, 3.88 open, 1.38 tight, 3.4 open, 7.19 open, 1.38 tight, 2.69 open, 5.51 open, 1.38 tight, 2.88 open, 2.88 open  counters 1.88, 1.88, 1.88
+  git-merge         square     ink 12.12×12.12  centre 8,8  gaps 3.88 open, 5.58 open, 4.26 open, 1.01 detail, 5.38 open  counters 1.88, 1.88, 1.88
+  git-pull-request  square     ink 12.12×12.62  centre 8,7.75  gaps 3.88 open, 7.19 open, 1.38 tight, 3.88 open, 5.51 open, 5.51 open, 3.15 open  counters 1.88, 1.88, 1.88
+  git-pull-request-closed square     ink 12.37×12.37  centre 8.13,7.88  gaps 3.88 open, 7.19 open, 6.32 open, 3.87 open, 3.88 open, 5.51 open, 6.21 open, 5.51 open, 3.87 open, 6.88 open, 5.13 open, 1.73 tight  counters 1.88, 1.88, 1.88
+  git-pull-request-create square     ink 12.62×13.12  centre 8.25,8  gaps 3.88 open, 1.38 tight, 7.38 open, 5.86 open, 3.38 open, 3.15 open, 5.06 open, 1.38 tight  counters 1.88, 1.88
+  git-pull-request-draft square     ink 12.12×12.12  centre 8,8  gaps 3.88 open, 7.19 open, 5.92 open, 5.38 open, 3.88 open, 6.32 open, 8.34 open, 5.51 open, 1.38 tight, 4.88 open, 6.88 open, 6.94 open, 1.38 tight  counters 1.88, 1.88, 1.88
+  globe             circle     ink 13.12×13.12  centre 8,8  counters 1.93, 1.93, 1.62, 2.93, 2.93, 2.93, 1.93, 1.62, 1.93
+  globe-off         circle     ink 13.12×13.12  centre 8,8  counters 1.37, 1.93, 1.62, 0.82, 2.93, 1.35, 2.93, 1.35, 1.93, 1.62, 0.82, 1.37
+  goal              circle     ink 13.12×13.12  centre 8,8  gaps 1.87 standard, 3.01 open, 1.13 tight, 4.44 open, 1.17 tight, 1.13 tight, 1.44 tight, 1.27 tight  counters 1.35
+  graduation-cap    horizontal ink 13.12×11.12  centre 8,8  gaps 0.88 detail  counters 5.36, 2.18
+  grid              square     ink 12.12×12.12  centre 8,8  gaps 1.88 standard, 1.88 standard, 3.95 open, 3.95 open, 1.88 standard, 1.88 standard  counters 2.93, 2.93, 2.93, 2.93
+  grid-plus         square     ink 12.12×12.12  centre 8,8  gaps 1.88 standard, 1.88 standard, 5.09 open, 3.95 open, 1.88 standard, 1.88 standard  counters 2.93, 2.93, 2.93
+  grid-sparkle      square     ink 12.62×12.62  centre 8.25,8.25  gaps 1.88 standard, 1.88 standard, 4.82 open, 3.95 open, 1.38 tight, 1.38 tight  counters 2.93, 2.93, 2.93, 1.07
+  grip              horizontal ink 6.12×4.12  centre 8,8  ⚠ 7.88 under its keyline
+  grip-vertical     vertical   ink 6×10  centre 8,8  gaps 2 standard, 2 standard, 3.66 open, 6 open, 6.94 open, 3.66 open, 2 standard, 6.94 open, 6 open, 2 standard, 2 standard, 3.66 open, 3.66 open, 2 standard, 2 standard  ⚠ 4 under its keyline
+  group             square     ink 12.12×12.12  centre 8,8  gaps 1.38 tight, 3.35 open  counters 1.93, 1.93
+  hammer            square     ink 12.9×11.4  centre 8.3,7.95  gaps 1 detail  counters 1.88, 1.17, 1.17
+  hand              square     ink 11.41×12.62  centre 7.86,7.75  counters 5.44
+  hand-wave         circle     ink 14.02×13.57  centre 8,7.78  gaps 1.57 tight, 3.41 open  counters 5.44
+  handshake         circle     ink 13.12×13.04  centre 8,7.96  gaps 1.27 tight, 4.81 open, 4.8 open, 7.34 open, 1.65 tight  counters 3.4, 3.73
+  hard-drive        horizontal ink 13.12×10.12  centre 8,8  gaps 1.19 tight, 1.19 tight  counters 2.93, 3.93
+  hash              square     ink 12.12×12.12  centre 8,8  counters 3.87
+  heading           square     ink 10.12×12.12  centre 8,8
+  heading-1         horizontal ink 12.12×10.12  centre 8,8  gaps 1.88 standard  ⚠ 1.88 under its keyline
+  heading-2         horizontal ink 13.12×10.12  centre 8.5,8  gaps 1.88 standard
+  heading-3         horizontal ink 13.12×10.12  centre 8.5,8  gaps 1.97 standard
+  headphones        circle     ink 12.12×12.12  centre 8,8  gaps 2.88 open  counters 2.43, 2.43  ⚠ 1.88 under its keyline
+  headset           circle     ink 12.12×13.12  centre 8,8  gaps 2.88 open  counters 2.43, 2.43
+  heart             circle     ink 13.28×11  centre 8,7.86  counters 5.59
+  heart-off         circle     ink 13.28×13.12  centre 8,8  counters 4.71, 2.59
+  help              circle     ink 13.12×13.12  centre 8,8  gaps 1.37 tight, 1.44 tight, 0.94 detail  counters 4.93
+  hexagon           circle     ink 12.12×13.52  centre 8,8  counters 9.88
+  highlighter       square     ink 11.12×13.12  centre 8,8  gaps 1.38 tight  counters 1.43, 3.58
+  history           circle     ink 12.11×12.3  centre 8.1,8  gaps 1.47 tight, 1.38 tight  ⚠ 1.7 under its keyline
+  home              square     ink 12.12×12.21  centre 8,7.96  counters 4.36, 1.93
+  hourglass         vertical   ink 10.12×13.12  centre 8,8  counters 3.93, 3.93
+  id-card           horizontal ink 13.12×11.12  centre 8,8  gaps 1.44 tight, 0.94 detail, 1.38 tight, 1 detail, 1.44 tight, 0.99 detail  counters 2.83
+  image             square     ink 12.12×12.12  centre 8,8  gaps 1.44 tight, 1.83 standard  counters 5.48, 3.47
+  image-off         square     ink 13.12×13.12  centre 8,8  gaps 1.44 tight, 1.64 tight, 1.62 tight  counters 3.6, 3.47, 3.47
+  image-plus        square     ink 12.12×12.12  centre 8,8  gaps 1.44 tight, 1.13 tight, 1.83 standard, 1.12 detail, 2.71 open
+  images            square     ink 13.12×12.12  centre 8,8  gaps 0.94 detail, 1.18 tight, 1.63 tight, 1.92 standard, 6.25 open  counters 4.61, 1.43
+  import            square     ink 12.12×12.62  centre 8,7.75  gaps 1.38 tight
+  inbox             square     ink 13.12×11.62  centre 8,7.75  counters 5.95, 3.43
+  indent            square     ink 12.12×9.12  centre 8,7.5  gaps 1.38 tight
+  infinity          horizontal ink 13.12×6.12  centre 8,8  counters 3.88, 3.88
+  info              circle     ink 13.12×13.12  centre 8,8  gaps 1.88 standard, 1.69 tight, 0.94 detail  counters 4.93
+  insert-row        square     ink 12.12×12.12  centre 8,8  gaps 1.88 standard, 1.41 tight, 1.41 tight  counters 2.93, 2.93
+  issue             circle     ink 13.12×13.12  centre 8,8  gaps 4.44 open  counters 4.61
+  italic            vertical   ink 10.12×12.12  centre 8,8  ⚠ 1.88 under its keyline
+  kanban            square     ink 12.12×12.12  centre 8,8  counters 1.93, 2.93, 1.93, 2.93
+  key               circle     ink 13.62×13.62  centre 7.75,8.25  gaps 1.42 tight  counters 5.23
+  keyboard          horizontal ink 14.12×11.12  centre 8,8  gaps 1.19 tight, 1.19 tight, 1.19 tight, 1.19 tight, 2.56 open, 3.69 open, 2.56 open, 1.38 tight, 1.13 detail, 3.75 open, 6.38 open, 1.32 tight, 3.16 open, 5.52 open, 3.71 open, 1.13 detail, 3.75 open, 1.32 tight, 1.32 tight, 3.16 open, 3.69 open, 1.13 detail, 3.16 open, 1.32 tight, 1.32 tight, 3.69 open, 5.52 open, 3.16 open, 1.32 tight, 3.71 open, 1.13 detail, 3.75 open, 1.19 tight, 1.13 detail, 1.19 tight, 1.19 tight  counters 2.88
+  laptop            horizontal ink 12.88×11.12  centre 8,8  counters 5.93, 1.93
+  lasso             circle     ink 12.12×13.12  centre 8,8  counters 1.46
+  layers            square     ink 11.12×13.16  centre 8,8  gaps 1.52 tight, 4.17 open, 1.53 tight  counters 4.5
+  layout            square     ink 12.12×12.12  centre 8,8  counters 1.93, 2.93, 5.93
+  layout-dashboard  square     ink 12.12×12.12  centre 8,8  gaps 1.88 standard, 1.88 standard, 2.71 open, 5.48 open, 1.88 standard, 1.88 standard  counters 2.93, 1.93, 2.93, 1.93
+  layout-template   square     ink 12.12×12.12  centre 8,8  gaps 1.88 standard, 1.88 standard, 1.88 standard  counters 2.93, 2.93, 1.93
+  leaf              vertical   ink 10.12×13.99  centre 8,8.07  counters 3.43
+  letter-spacing    square     ink 12.12×12.12  centre 8,8  gaps 1.38 tight
+  library           square     ink 13.08×12.42  centre 7.98,7.85  gaps 1.09 detail, 1.41 tight, 1.33 tight, 1.41 tight  counters 1.55, 1.43, 2.53, 3.43, 1.53, 1.43
+  life-buoy         circle     ink 13.12×13.12  centre 8,8  gaps 2.87 open  counters 3.05, 3.05, 3.05, 2.87, 3.05
+  lightbulb         vertical   ink 10.12×13.12  centre 8,8  counters 7.88, 1.43
+  line              square     ink 12.12×12.12  centre 8,8
+  line-height       square     ink 12.12×12.12  centre 8,8  gaps 1.38 tight
+  line-style        horizontal ink 13.12×9.31  centre 8,7.6  gaps 2.88 open, 6.69 open, 6.69 open, 6.69 open, 6.69 open, 6.69 open, 2.69 open, 2.84 open, 2.69 open, 2.84 open, 2.69 open, 1.38 tight, 4.25 open, 7.13 open, 10 open, 1.38 tight, 4.25 open, 7.13 open, 1.38 tight, 4.25 open, 1.38 tight
+  link              horizontal ink 13.12×7.12  centre 8,8  gaps 1.88 standard, 1.88 standard, 1.88 standard
+  link-off          square     ink 13.12×13.12  centre 8,8  gaps 1.88 standard, 1.88 standard, 1.88 standard
+  list              horizontal ink 13.12×10.12  centre 8,8
+  list-bullet       square     ink 12.06×8  centre 8.03,7.5  gaps 1 detail, 4 open, 1.44 tight, 1 detail, 1.44 tight, 1.44 tight
+  list-checklist    square     ink 12.12×10.12  centre 8,7.5  gaps 3.12 open, 1.79 standard, 1.79 standard
+  list-filter       horizontal ink 13.12×9.12  centre 8,7.5
+  list-minus        horizontal ink 13.12×10.12  centre 8,8  gaps 1.79 standard
+  list-numbered     square     ink 11.62×11.12  centre 8.25,7.5  gaps 1.88 standard, 3.88 open, 2.9 open
+  list-plus         horizontal ink 13.12×10.62  centre 8,8.25  gaps 1.38 tight
+  list-tree         horizontal ink 13.12×9.12  centre 8,7.5  gaps 1.38 tight
+  loader            circle     ink 13.12×13.12  centre 8,8
+  loader-circle     circle     ink 13.12×13.12  centre 8,8
+  locate            circle     ink 13.12×13.12  centre 8,8  gaps 1.87 standard, 1.88 standard  counters 2.05, 1.88
+  location          vertical   ink 10.62×13.36  centre 8,7.87  gaps 1.62 tight  counters 3.43, 2.88
+  location-add      vertical   ink 10.62×13.36  centre 8,7.87  gaps 1.63 tight  counters 3.43
+  location-off      circle     ink 13.12×13.37  centre 8,7.88  gaps 1.62 tight  counters 1.8, 3.18, 2.06
+  lock              vertical   ink 10.12×12.12  centre 8,8  gaps 1.38 tight, 2.78 open  counters 3.93, 3.44  ⚠ 1.88 under its keyline
+  log-in            square     ink 11.62×12.12  centre 7.75,8  gaps 1.88 standard
+  log-out           square     ink 11.12×12.12  centre 8,8  gaps 1.88 standard
+  logs              horizontal ink 13.12×9.12  centre 8,7.5
+  magnet            square     ink 12.12×12.12  centre 8,8  counters 1.93, 1.93, 2.55
+  mail              horizontal ink 13.12×10.12  centre 8,8  counters 3.68, 4.36
+  mail-check        horizontal ink 13.12×10.12  centre 8,8  gaps 1.13 tight, 1.13 tight
+  mail-dot          horizontal ink 13.12×10.12  centre 8,8  gaps 1.13 tight, 1.13 tight
+  mail-open         square     ink 13.12×11.96  centre 8,8.08  counters 6.01, 3.58
+  mail-plus         horizontal ink 13.12×10.12  centre 8,8  gaps 1.13 tight, 1.12 detail
+  mail-warning      horizontal ink 13.12×10.12  centre 8,8  gaps 1.13 detail, 1.13 tight, 1.99 standard, 1.12 detail, 0.94 detail
+  map               square     ink 13.12×12.12  centre 8,8  counters 2.93, 2.93, 2.93
+  markdown          horizontal ink 14.12×11.12  centre 8,8  gaps 0.88 detail, 0.88 detail, 0.88 detail  counters 3.02
+  mask              square     ink 12.12×12.12  centre 8,8  gaps 1.38 tight  counters 2.93, 4.87
+  maximize          square     ink 12.12×12.12  centre 8,8  gaps 3.12 open
+  megaphone         square     ink 12.12×11.75  centre 8,8.19  counters 6.23, 2.17
+  meh               circle     ink 13.12×13.12  centre 8,8  gaps 1.86 standard, 1.86 standard, 1.67 tight, 2.5 open, 2.69 open, 2.69 open  counters 3.68
+  memory            horizontal ink 14.12×10.12  centre 8,8  gaps 0.88 detail, 0.88 detail, 1.88 standard, 0.92 detail, 0.92 detail  counters 2.25, 1.93, 1.93
+  menu              square     ink 13.12×9.12  centre 8,7.5
+  merge             square     ink 11.12×13.12  centre 8,8
+  mic               vertical   ink 10.12×13.12  centre 8,8  gaps 0.9 detail  counters 3.93
+  mic-off           square     ink 13.12×13.12  centre 8,8  gaps 0.9 detail, 0.9 detail  counters 3.93, 0.82
+  milestone         square     ink 12.31×12.62  centre 8.1,7.75  counters 3.93
+  minimize          square     ink 12.12×12.12  centre 8,8  gaps 3.12 open
+  minus             square     ink 12.12×1.12  centre 8,8
+  monitor-cog       square     ink 13.12×12.12  centre 8,8  gaps 1.38 tight, 0.93 detail, 1.38 tight, 1.21 tight  counters 3.93, 1.88
+  moon              circle     ink 12.86×12.86  centre 7.87,8.13  counters 5.14
+  more-circle       circle     ink 13.12×13.12  centre 8,8  gaps 1.44 tight, 4.44 open, 1.44 tight, 1 detail, 4 open, 1 detail  counters 4.61
+  more-horizontal   horizontal ink 12×2  centre 8,8  gaps 3 open, 8 open, 3 open  ⚠ 2 under its keyline
+  mountain          horizontal ink 13.62×10.12  centre 8,8  counters 1.87, 4.26
+  mouse             vertical   ink 10.12×14.12  centre 8,8  counters 2.93, 2.93, 6.93
+  mouse-pointer-click square     ink 12.95×12.95  centre 7.92,7.92  gaps 1.46 tight  counters 3.46
+  move              circle     ink 13.12×13.12  centre 8,8
+  music             square     ink 12.62×13.12  centre 7.75,8  gaps 2.52 open  counters 1.99, 2.88, 2.88
+  navigation        square     ink 12.21×12.21  centre 8,8  counters 5.42
+  network           square     ink 12.12×12.12  centre 8,8  gaps 4.03 open, 4.03 open, 1.88 standard  counters 1.93, 1.93, 1.93
+  newspaper         horizontal ink 14.12×11.12  centre 8,8  gaps 1.44 tight, 1.38 tight, 5.26 open, 1.42 tight, 0.94 detail  counters 2.18, 1.43
+  notebook          vertical   ink 10.12×13.12  centre 8,8  gaps 2.88 open  counters 3.49, 1.43
+  octagon           circle     ink 13.12×13.12  centre 8,8  counters 10.9
+  octagon-alert     circle     ink 13.12×13.12  centre 8,8  gaps 1.88 standard, 1.69 tight, 0.94 detail  counters 5.03
+  opacity           square     ink 12.12×12.12  centre 8,8  gaps 1.19 tight, 4.19 open, 1.19 tight, 1.19 tight, 1.19 tight, 1.19 tight, 2.74 open, 1.5 tight, 6.99 open, 5.21 open, 4.5 open, 1.5 tight, 2.74 open, 1.5 tight, 2.74 open, 5.21 open, 2.74 open, 1.5 tight, 1.5 tight, 4.5 open, 1.5 tight  counters 5.22
+  open              square     ink 12.12×12.12  centre 8,8  gaps 1.38 tight
+  option            horizontal ink 12.12×8.12  centre 8,8  gaps 1.93 standard  ⚠ 1.88 under its keyline
+  options           square     ink 13.12×11.12  centre 8,8  gaps 5.88 open, 4.38 open, 4.38 open, 3.94 open  counters 1.88, 1.88
+  outdent           square     ink 12.12×9.12  centre 8,7.5  gaps 2.91 open
+  package           square     ink 13.12×12.66  centre 8,8  counters 1.46, 1.99, 4.36, 4.36
+  padding           square     ink 12.12×12.12  centre 8,8  gaps 1.88 standard  counters 2.88, 3.93
+  padding-axis      square     ink 12.12×12.12  centre 8,8  gaps 1.88 standard  counters 4
+  padding-side      square     ink 12.12×12.12  centre 8,8  gaps 1.88 standard  counters 6.93
+  padding-sides     square     ink 12.12×12.12  centre 8,8  gaps 1.88 standard  counters 4
+  paint-bucket      square     ink 12.55×12.67  centre 8.15,8.09  gaps 1.24 tight, 1.88 standard, 1.7 tight, 6.9 open  counters 3.47
+  paintbrush        vertical   ink 10.12×13.12  centre 8,8  gaps 1.88 standard  counters 3.68, 3.12
+  palette           circle     ink 13.12×13.12  centre 8,8  gaps 1.06 detail, 1.13 tight, 1.18 tight, 1.04 detail, 1.18 tight, 3.51 open, 1.04 detail, 4.62 open, 3.53 open, 1.25 tight  counters 4.82
+  panel-bottom      horizontal ink 13.12×10.12  centre 8,8  counters 4.93, 1.93
+  panel-left        horizontal ink 13.12×10.12  centre 8,8  counters 3.43, 6.43
+  panel-left-close  horizontal ink 13.12×10.12  centre 8,8  gaps 1.38 tight, 1.38 tight  counters 3.43, 3.12
+  panel-left-open   horizontal ink 13.12×10.12  centre 8,8  gaps 1.38 tight, 1.38 tight  counters 3.43, 3.43
+  party-popper      square     ink 12.79×13.04  centre 7.92,7.96  gaps 1 detail, 1.7 tight, 2.76 open, 1 detail, 4.54 open, 5.24 open, 6.3 open, 4.53 open, 1.6 tight, 4.47 open, 5.59 open, 1.44 tight, 2.83 open, 1.14 tight  counters 2.59, 1.88, 1.19
+  password          horizontal ink 14.12×10.12  centre 8,8  gaps 1.94 standard, 3.19 open, 1.94 standard, 1.75 tight, 5 open, 1.75 tight  counters 3.85
+  pause             vertical   ink 10.12×13.12  centre 8,8  gaps 1.88 standard  counters 1.93, 1.93
+  pause-circle      circle     ink 13.12×13.12  centre 8,8  gaps 1.96 standard  counters 3.43
+  paw               circle     ink 14.12×12.37  centre 8,8.13  gaps 0.9 detail, 1.09 detail, 1.09 detail, 0.9 detail, 0.99 detail, 4.65 open, 6.88 open, 0.88 detail, 4.65 open, 0.99 detail  counters 1.38, 1.38, 1.38, 1.38, 4.56
+  pen               square     ink 12.46×12.04  centre 8.17,8.04  counters 1.88
+  pen-tool          vertical   ink 10.9×13.12  centre 8,8  gaps 1.44 tight  counters 2.97, 1.88
+  pencil            square     ink 12.42×12.42  centre 8.15,7.85  counters 1.17, 1.88
+  pencil-off        square     ink 13.12×13.12  centre 8,8  gaps 3.82 open  counters 1.17, 1.88, 1.88
+  pentagon          circle     ink 13.64×13.12  centre 8,8  counters 9.86
+  people            circle     ink 13.12×13.62  centre 8,8.25  gaps 1.38 tight, 1.12 detail, 1.44 tight, 4.03 open, 1.13 tight, 1.38 tight  counters 3.88, 2.43
+  percent           square     ink 11.12×12.12  centre 8,8  gaps 5.1 open, 1.97 standard, 1.97 standard  counters 1.93, 1.93
+  person            vertical   ink 11.12×12.62  centre 8,7.75  gaps 0.88 detail  counters 4.87, 2.43
+  person-add        circle     ink 14.12×13.62  centre 8,8.25  gaps 0.88 detail, 4.01 open, 1.57 tight  counters 4.87
+  person-chat       square     ink 12.12×12.06  centre 8,7.97  gaps 0.88 detail, 0.88 detail  counters 3.43, 1.88, 0.93
+  person-check      circle     ink 14.12×12.62  centre 8,7.75  gaps 0.88 detail, 3.7 open, 1.38 tight  counters 4.87
+  person-circle     circle     ink 13.12×13.12  centre 8,8  gaps 1.38 tight, 0.88 detail  counters 3.55, 2.88, 2.43
+  person-key        circle     ink 14.12×13.62  centre 8,8.25  gaps 0.88 detail, 1.16 tight, 3.47 open, 1.13 detail, 3.44 open, 1.19 tight  counters 4.87, 1.68
+  person-lock       circle     ink 14.12×13.62  centre 8,8.25  gaps 0.88 detail, 3.7 open, 2.51 open, 1.38 tight, 1.51 tight  counters 4.87, 1.43, 1.93
+  person-pen        circle     ink 13.91×13.62  centre 7.9,8.25  gaps 0.88 detail, 2.95 open, 1.12 detail  counters 4.87, 1.17
+  person-remove     circle     ink 14.12×12.62  centre 8,7.75  gaps 0.88 detail, 3.51 open, 1.45 tight  counters 4.87
+  person-search     circle     ink 13.62×13.12  centre 7.75,8  gaps 0.88 detail, 1.38 tight, 5.48 open, 1.13 tight, 3.91 open  counters 4.87, 2.88
+  person-settings   circle     ink 14.07×13.37  centre 7.98,8.13  gaps 0.88 detail, 3.6 open, 3.01 open, 1.93 standard, 1.19 tight  counters 4.87, 1.88
+  person-square     square     ink 12.12×12.12  centre 8,8  gaps 0.88 detail, 0.88 detail  counters 3.18, 2.88, 1.93
+  person-star       circle     ink 14.05×13.45  centre 7.97,8.17  gaps 0.88 detail, 3.44 open, 1.26 tight  counters 4.87, 1.57
+  person-x          circle     ink 13.87×13.37  centre 7.88,8.13  gaps 0.88 detail, 3.03 open, 1.34 tight  counters 4.87
+  phone             vertical   ink 10.12×14.12  centre 8,8  gaps 1.38 tight  counters 7.93
+  phone-missed      square     ink 13.12×13.12  centre 8,8  gaps 1.75 standard  counters 3.93
+  piano             square     ink 13.12×13.12  centre 8,8  gaps 0.88 detail  counters 2.93, 1.43, 2.93, 1.43, 2.93
+  picture-in-picture square     ink 13.12×12.12  centre 8,8  gaps 1.38 tight  counters 3.93
+  pie-chart         circle     ink 13.12×13.12  centre 8,8  counters 5.05, 3.93
+  piggy-bank        square     ink 13.12×12.12  centre 8,8  gaps 1.12 detail, 1.09 detail, 2.5 open  counters 2.81
+  pilcrow           square     ink 10.12×12.12  centre 8,8  counters 3.93
+  pipeline          horizontal ink 14.12×11.12  centre 8,8  gaps 5.88 open  counters 1.93, 1.93, 5.93
+  plane             horizontal ink 12.12×10.62  centre 8,8.25  gaps 0.88 detail, 0.88 detail  counters 3.43, 1.53  ⚠ 1.88 under its keyline
+  play              circle     ink 11.59×12.34  centre 8.24,8  counters 6.51  ⚠ 1.66 under its keyline
+  play-circle       circle     ink 13.12×13.12  centre 8,8  gaps 2.92 open  counters 4.05
+  playlist          horizontal ink 13.12×10.62  centre 8,8.25  gaps 1.5 tight, 1.88 standard  counters 1.88
+  plug              vertical   ink 10.12×14.12  centre 8,8  counters 5.93
+  plug-off          square     ink 12.12×12.12  centre 8,8  gaps 3.12 open, 1.7 tight, 7.01 open, 5.74 open  counters 2.93, 2.93
+  plus-minus        square     ink 10.12×13.12  centre 8,8  gaps 1.88 standard
+  pointer           square     ink 11.91×11.91  centre 7.91,7.91  counters 4.85
+  polygon           circle     ink 12.98×12.45  centre 8,7.84  counters 7.07
+  power             circle     ink 12.12×13.12  centre 8,8  gaps 2.76 open
+  presentation      square     ink 13.12×12.12  centre 8,8  gaps 6.38 open  counters 6.43
+  printer           square     ink 13.12×13.12  centre 8,8  gaps 2.97 open  counters 1.93, 3.26, 3.93
+  prohibited        circle     ink 13.12×13.12  centre 8,8  counters 5.04, 5.04
+  pushpin           vertical   ink 10.12×13.62  centre 8,8.25  counters 3.93
+  puzzle            square     ink 13.12×13.12  centre 8,8  counters 6.79
+  qr-code           square     ink 13.12×13.12  centre 8,8  gaps 0.88 detail, 0.88 detail, 0.94 detail, 2.94 open, 2.94 open, 2.18 aligned, 5.1 open, 5.1 open, 7.13 open, 2.53 open, 2.94 open, 0.94 detail, 4.91 open, 0.94 detail, 0.94 detail, 4.44 open, 4.44 open, 2.94 open, 4.91 open, 0.94 detail, 0.94 detail, 4.44 open, 0.94 detail, 4.44 open, 5 open, 5 open, 4.55 open, 7.41 open, 7.41 open, 9.5 open, 7.28 open, 3.01 open, 3.01 open, 6.5 open, 6.5 open, 3.01 open, 6.5 open, 3.01 open, 6.5 open, 1 detail, 1 detail, 1.83 standard, 1.83 standard, 1 detail, 1 detail  counters 1.27, 1.27, 1.27
+  quote             horizontal ink 11.2×7.88  centre 8.6,8.06  gaps 3.12 open, 2.56 open, 2.56 open, 2 standard  ⚠ 2.8 under its keyline
+  radar             circle     ink 13.12×13.12  centre 8,8  gaps 1.44 tight
+  radio             horizontal ink 13.12×11.12  centre 8,8  gaps 0.88 detail, 1.38 tight, 4.09 open, 1.38 tight, 1.65 tight  counters 2.47, 1.88
+  radio-button      circle     ink 13.12×13.12  centre 8,8  gaps 1.94 standard  counters 2.12
+  receipt           square     ink 12.12×12.12  centre 8,8  gaps 1.38 tight, 1.57 tight  counters 3.02, 1.93
+  record            circle     ink 13.12×13.12  centre 8,8  gaps 2.94 open  counters 3.11
+  rectangle         horizontal ink 13.12×10.12  centre 8,8  counters 7.93
+  regex             square     ink 12.03×12.06  centre 8.02,7.97  gaps 4.16 open
+  remove-circle     circle     ink 13.12×13.12  centre 8,8  gaps 1.88 standard  counters 4.93
+  remove-formatting square     ink 12.87×12.37  centre 7.88,8.13  gaps 1.45 tight
+  repeat            square     ink 13.12×13.12  centre 8,8  gaps 1.42 tight
+  replace           circle     ink 12.88×13.12  centre 8.12,8  gaps 6.66 open
+  reply             square     ink 12.12×11.62  centre 8,7.75
+  reply-all         square     ink 12.12×11.62  centre 8,7.75
+  repository        vertical   ink 10.12×13.12  centre 8,8  counters 3.47, 2.45, 1.93
+  reset             circle     ink 12.11×12.3  centre 8.1,8  ⚠ 1.7 under its keyline
+  return            square     ink 12.12×12.12  centre 8,8
+  rocket            square     ink 12.27×12.27  centre 7.92,8.09  gaps 1.19 tight, 1.13 tight, 1.43 tight, 5.62 open, 1.25 tight  counters 3.58, 1.28, 1.28
+  rotate            circle     ink 12.3×11.71  centre 8,7.71  gaps 4.03 open, 1.64 tight  ⚠ 1.7 under its keyline
+  route             square     ink 13.12×12.12  centre 8,7.5  gaps 7.92 open  counters 1.88, 1.88
+  rss               square     ink 12.12×12.12  centre 8,8  gaps 2.82 open
+  ruler             vertical   ink 10.12×13.12  centre 8,8  counters 5.44
+  save              square     ink 12.12×12.12  centre 8,8  gaps 1.88 standard  counters 1.93, 3.26, 3.93
+  scale             horizontal ink 14.12×11.12  centre 8,8  gaps 3.88 open  counters 1.53, 1.53, 0.93, 0.93
+  scan-check        square     ink 12.12×12.12  centre 8,8  gaps 1.38 tight
+  scan-face         square     ink 12.12×12.12  centre 8,8  gaps 1.94 standard, 1.94 standard, 2.52 open, 3 open, 1.95 standard, 1.95 standard
+  scan-qr           square     ink 12.12×12.12  centre 8,8  gaps 1.94 standard
+  scan-text         square     ink 12.12×12.12  centre 8,8  gaps 1.38 tight
+  scissors          circle     ink 13.12×13.12  centre 8,8  gaps 2.88 open  counters 2.88, 2.88
+  screen-share      square     ink 13.12×12.12  centre 8,8  gaps 0.88 detail, 0.88 detail  counters 4.18
+  screen-share-off  square     ink 13.12×13.12  centre 8,8  gaps 1 detail, 1 detail  counters 5.68, 4.18
+  scroll            square     ink 13.12×12.12  centre 8,8  counters 5.93, 2.43, 1.93
+  search            circle     ink 13.12×13.12  centre 8,8  counters 8.87
+  search-alert      circle     ink 13.12×13.12  centre 8,8  gaps 1.63 tight, 1.44 tight, 4.18 open, 2.73 open, 0.94 detail  counters 4.05
+  search-off        circle     ink 13.12×13.12  centre 8,8  gaps 2.76 open  counters 5.42, 2.59
+  send              square     ink 11.57×11.92  centre 8.11,8  counters 3.18
+  send-to-back      square     ink 12.12×12.12  centre 8,8  gaps 1.53 tight, 1.9 standard, 1.9 standard, 1.9 standard, 1.9 standard, 8.77 open  counters 3.93, 3.93
+  server            square     ink 13.12×13.12  centre 8,8  gaps 1.88 standard, 0.94 detail, 3.94 open, 3.94 open, 0.94 detail, 6 open  counters 3.43, 3.43
+  server-cog        square     ink 13.12×13.12  centre 8,8  gaps 1.88 standard, 0.94 detail, 3.94 open, 1.88 standard, 1.13 tight, 3.94 open, 0.94 detail, 1.87 standard, 1.2 tight, 6 open, 6.91 open, 6.25 open, 4.23 open, 3.75 open  counters 3.43, 1.88
+  settings          circle     ink 11.66×12.12  centre 8,8  gaps 1.38 tight  counters 2.01, 1.88  ⚠ 1.88 under its keyline
+  shadow            square     ink 12.06×12.06  centre 7.97,7.97  gaps 1.44 tight  counters 6.93
+  shapes            square     ink 13.12×13.12  centre 8,8  gaps 1.39 tight, 1.59 tight, 1.88 standard  counters 2.91, 3.43, 3.38
+  share             vertical   ink 10.12×12.62  centre 8,7.75  gaps 1.38 tight
+  share-nodes       square     ink 12.12×12.12  centre 8,8  gaps 2.7 open, 2.7 open, 1.88 standard  counters 2.88, 2.88, 2.88
+  shield            circle     ink 12.12×13.95  centre 8,8.03  counters 9.93
+  shield-alert      circle     ink 12.12×13.95  centre 8,8.03  gaps 1.99 standard, 2.64 open, 0.94 detail  counters 4.65
+  shield-check      circle     ink 12.12×13.95  centre 8,8.03  gaps 1.38 tight  counters 5.09
+  shield-cog        circle     ink 12.12×13.95  centre 8,8.03  gaps 1.99 standard  counters 3.6, 1.88
+  shield-lock       circle     ink 12.12×13.95  centre 8,8.03  gaps 1.23 tight, 1.6 tight  counters 3.18, 1.43, 2.43
+  shield-off        circle     ink 13.12×13.95  centre 8,8.03  counters 5.06, 4.87
+  shield-plus       circle     ink 12.12×13.95  centre 8,8.03  gaps 1.38 tight  counters 3.92
+  shield-user       circle     ink 12.12×13.95  centre 8,8.03  gaps 1.1 detail, 0.88 detail  counters 3.17, 2.88, 2.86
+  shield-x          circle     ink 12.12×13.95  centre 8,8.03  gaps 1.16 tight  counters 4.18
+  shift             square     ink 11×12.21  centre 8,7.96  counters 5.23
+  shopping-bag      square     ink 12.12×12.62  centre 8,7.75  gaps 1.88 standard, 1.38 tight  counters 1.43, 3.93
+  shuffle           square     ink 12.12×12.12  centre 8,8  gaps 1.14 tight
+  sides             square     ink 12.12×12.12  centre 8,8
+  sigma             vertical   ink 7.66×12.12  centre 8.23,8  ⚠ 1.88 under its keyline
+  signal            square     ink 10.12×12.12  centre 8,8
+  signature         square     ink 12.12×11.91  centre 8,8.11  gaps 1.35 tight, 3.11 open  counters 1.17
+  siren             square     ink 12.12×13.12  centre 8,8  gaps 1.12 detail, 1.13 detail, 0.88 detail, 6.38 open, 3.43 open  counters 4.36, 1.44
+  skip-forward      square     ink 12.12×12.12  centre 8,8  gaps 1.82 standard  counters 4.76
+  slice             square     ink 12.04×10.04  centre 7.96,9.04  counters 1.88, 1.88
+  smile             circle     ink 13.12×13.12  centre 8,8  gaps 1.86 standard, 1.86 standard, 2.64 open, 2.5 open, 1.69 tight, 1.69 tight  counters 3.68
+  smile-plus        circle     ink 13.62×13.62  centre 8.25,8.25  gaps 1.07 detail, 1.07 detail, 1.7 tight, 1.59 tight, 1.5 tight, 0.94 detail, 7.99 open, 0.94 detail, 5.79 open, 4.43 open  counters 2.43
+  snowflake         circle     ink 12.84×13.12  centre 8,8
+  sort              square     ink 13.12×11.12  centre 8,8  gaps 3.35 open
+  sort-ascending    square     ink 13.12×10.12  centre 8,8  gaps 1.88 standard
+  sparkle           circle     ink 13.62×13.62  centre 8,8  counters 4.36
+  sparkle-off       circle     ink 13.62×13.62  centre 8,8  counters 1.88, 1.88
+  speaker           vertical   ink 10.12×14.12  centre 8,8  gaps 1.38 tight, 1.94 standard, 1.94 standard  counters 3.7, 2.88
+  spell-check       horizontal ink 13.96×11.12  centre 7.92,7.5  gaps 1.38 tight, 6.46 open, 3 open, 1.38 tight, 1.76 standard, 2.59 open  counters 0.93, 0.96, 1.43
+  spline            square     ink 13.12×13.12  centre 8,8  gaps 8.6 open  counters 1.88, 1.88
+  split             square     ink 12.12×12.12  centre 8,8
+  square-arrow-up   square     ink 12.12×12.12  centre 8,8  gaps 1.38 tight  counters 4.43
+  square-arrow-up-right square     ink 12.12×12.12  centre 8,8  gaps 1.88 standard  counters 4.18
+  square-badge      square     ink 12.12×12.12  centre 8,8  gaps 1.13 tight
+  square-dashed     square     ink 12.12×12.12  centre 8,8  gaps 5.88 open, 11.6 open, 5.88 open, 1.38 tight, 5.88 open, 11.6 open, 1.38 tight, 5.88 open, 1.38 tight, 1.38 tight
+  square-dot        square     ink 12.12×12.12  centre 8,8  gaps 3.94 open  counters 5.07
+  square-list       square     ink 12.12×12.12  centre 8,8  gaps 1.69 tight, 1.69 tight, 1.69 tight, 1.63 tight, 1 detail, 3.5 open, 1.19 tight, 1 detail, 1.19 tight, 1.19 tight  counters 2.43
+  square-minus      square     ink 12.12×12.12  centre 8,8  gaps 1.38 tight  counters 4.43
+  square-mouse-pointer square     ink 12.45×12.45  centre 8.17,8.17  gaps 1.12 detail  counters 3.46
+  square-plus       square     ink 12.12×12.12  centre 8,8  gaps 1.38 tight  counters 4.43
+  square-search     square     ink 12.12×12.12  centre 8,8  gaps 1.88 standard, 1.88 standard  counters 3.83, 2.88
+  square-slash      square     ink 12.12×12.12  centre 8,8  gaps 1.88 standard  counters 5.43
+  square-smile      square     ink 12.12×12.12  centre 8,8  gaps 1.94 standard, 1.94 standard, 1.88 standard, 3 open, 1.95 standard, 1.95 standard  counters 4.17
+  square-text       square     ink 12.12×12.12  centre 8,8  gaps 1.38 tight  counters 4.37
+  square-text-cursor square     ink 12.12×12.12  centre 8,8  gaps 1.38 tight  counters 4.43
+  square-x          square     ink 12.12×12.12  centre 8,8  gaps 1.88 standard  counters 3.47
+  stack-frame       square     ink 12.62×12.12  centre 7.75,8  gaps 1.38 tight  counters 2.93
+  stamp             square     ink 12.12×12.12  centre 8,8  gaps 3.88 open, 1.38 tight  counters 3.14, 1.44
+  star              circle     ink 13.2×12.68  centre 8,8.16  counters 6.25
+  star-half         circle     ink 13.2×12.68  centre 8,8.16  counters 3.71
+  star-off          circle     ink 13.2×13.12  centre 8,8  counters 2.95, 3.68
+  status-available  circle     ink 13.12×13.12  centre 8,8  gaps 1.27 tight  counters 5.48
+  sticky-note       square     ink 12.12×12.12  centre 8,8  counters 6.48, 2.43
+  stop              square     ink 12.12×12.12  centre 8,8  counters 9.93
+  stop-circle       circle     ink 13.12×13.12  centre 8,8  gaps 3.02 open  counters 3.55
+  store             square     ink 13.12×12.12  centre 8,8  gaps 1.38 tight  counters 3.25, 2.97, 1.93
+  strikethrough     square     ink 11.12×12.12  centre 8,8
+  stroke-weight     square     ink 12×12  centre 8,8  gaps 3 open, 8 open, 3 open
+  subscript         square     ink 12.87×11.12  centre 7.88,8  gaps 2.66 open
+  subtract          square     ink 12.12×1.12  centre 8,8
+  sun               circle     ink 13.12×13.12  centre 8,8  gaps 1.88 standard  counters 2.88
+  superscript       square     ink 12.37×11.12  centre 7.63,8  gaps 1.92 standard
+  swatch-book       square     ink 12.12×12.12  centre 8,8  gaps 1.19 tight, 1.19 tight, 1.19 tight  counters 3.93, 3.29, 3.43
+  sync              circle     ink 12.3×12.3  centre 8,8  gaps 5.28 open, 1.44 tight, 1.44 tight, 1.44 tight  ⚠ 1.7 under its keyline
+  table             square     ink 12.12×12.12  centre 8,8  counters 1.93, 2.93, 2.93, 2.93, 2.93
+  table-cells-merge square     ink 12.12×12.12  centre 8,8  counters 1.93, 1.93, 2.93, 2.93, 2.93
+  table-cells-split square     ink 12.12×12.12  centre 8,8  gaps 1.88 standard  counters 1.93, 2.93, 2.93, 2.93
+  table-of-contents square     ink 12.06×8  centre 7.97,7.5  gaps 1.94 standard, 1.94 standard, 1.94 standard, 1 detail, 4 open, 1 detail
+  tablet            horizontal ink 13.12×10.12  centre 8,8  gaps 1.38 tight  counters 5.68
+  tag               square     ink 13×13  centre 7.94,7.94  gaps 1.44 tight  counters 7.54
+  tags              square     ink 13×13  centre 7.94,7.94  gaps 1.44 tight, 1.17 tight, 3.76 open  counters 4.89
+  target            circle     ink 13.12×13.12  centre 8,8  gaps 1.87 standard, 4.44 open, 1.44 tight  counters 2.05, 1.61
+  telescope         square     ink 11.96×11.87  centre 7.84,8.13  gaps 0.88 detail, 5.6 open, 1.19 tight, 2.52 open, 0.88 detail, 2.72 open  counters 1.03, 1.97, 0.89, 1.38
+  terminal          horizontal ink 13.12×10.12  centre 8,8  gaps 1.38 tight  counters 5.43
+  text              square     ink 12.12×12.12  centre 8,8
+  text-align-center square     ink 12.12×9.12  centre 8,7.5
+  text-align-justify square     ink 12.12×9.12  centre 8,7.5
+  text-align-left   square     ink 12.12×9.12  centre 8,7.5
+  text-color        square     ink 11×12.06  centre 8,7.97  gaps 1.94 standard
+  text-cursor       vertical   ink 7.12×13.12  centre 8,8
+  text-quote        square     ink 12.12×9.12  centre 8,7.5  gaps 1.88 standard
+  text-search       horizontal ink 13.12×10.12  centre 8,8  gaps 1.8 standard, 4.9 open  counters 2.88
+  text-select       square     ink 12.12×12.12  centre 8,8  gaps 5.88 open, 11.6 open, 5.88 open, 1.38 tight, 1.57 tight, 5.88 open, 11.6 open, 1.38 tight, 2.78 open, 5.88 open, 1.38 tight, 3.12 open, 1.38 tight, 1.57 tight, 1.38 tight
+  text-size         horizontal ink 13.62×11.12  centre 8.25,8  gaps 1.92 standard
+  text-wrap         square     ink 12.12×11.12  centre 8,8.5
+  thermometer       vertical   ink 7.12×13.12  centre 8,8  gaps 1.44 tight  counters 2.12
+  thumbs-up         square     ink 13.02×13.12  centre 7.95,8  counters 6.04, 1.93
+  ticket            horizontal ink 13.12×10.12  centre 8,8  counters 5.28
+  timeline          square     ink 12.12×12.12  centre 8,8  gaps 1.88 standard, 1.97 standard, 2.88 open, 1.97 standard, 2.88 open  counters 2.93, 1.88, 2.93
+  timer             circle     ink 12.12×14.12  centre 8,8  gaps 1.38 tight, 3.08 open, 1.38 tight, 2.86 open  counters 4.54
+  timer-off         circle     ink 13.12×14.12  centre 8,8  gaps 1.38 tight, 2.86 open, 3.67 open  counters 3.82, 4.54
+  toggle            horizontal ink 13.12×8.12  centre 8,8  gaps 0.94 detail  counters 5.93
+  toggle-off        horizontal ink 13.12×8.12  centre 8,8  gaps 0.94 detail  counters 5.93
+  token             circle     ink 13.12×13.12  centre 8,8  gaps 1.87 standard  counters 2.05, 4.87
+  toolbox           square     ink 13.12×12.12  centre 8,8  gaps 1.7 tight, 2.88 open, 1.88 standard  counters 1.93, 2.93, 2.93
+  toy-brick         square     ink 13.12×11.12  centre 8,8  counters 1.43, 1.43, 6.43
+  translate         square     ink 13.2×12.39  centre 7.93,7.99  gaps 1.25 tight, 1.25 tight, 1.25 tight, 1.29 tight, 1.29 tight, 1.29 tight  counters 2.06, 0.88, 1.35
+  trash             square     ink 12.12×13.12  centre 8,8  gaps 1.38 tight, 1.57 tight, 1.38 tight  counters 1.43, 2.35
+  tree              square     ink 13.12×13.12  centre 8,8  counters 7.18, 1.43
+  trending-up       horizontal ink 13.12×7.12  centre 8,8
+  trophy            square     ink 13.12×13.12  centre 8,8  gaps 1.38 tight, 1.87 standard, 3.08 open  counters 4.93, 1.93, 1.93, 1.93
+  truck             square     ink 13.12×11.62  centre 8,7.75  gaps 1.38 tight, 1.38 tight, 2.88 open  counters 3.93, 2.18, 2.93, 1.88, 1.88
+  tv                square     ink 13.12×12.12  centre 8,8  counters 7.43
+  umbrella          square     ink 13.08×13.12  centre 8,8  gaps 0.88 detail, 0.88 detail  counters 2.73, 2.73, 2.52
+  underline         vertical   ink 10.12×12.12  centre 8,8  gaps 1.38 tight  ⚠ 1.88 under its keyline
+  undo              square     ink 12.12×12.12  centre 8,8
+  ungroup           square     ink 12.12×12.12  centre 8,8  gaps 1.88 standard  counters 2.93, 2.93
+  unlock            vertical   ink 10.12×12.12  centre 8,8  gaps 1.38 tight, 2.78 open  counters 3.44  ⚠ 1.88 under its keyline
+  unpin             circle     ink 13.12×13.62  centre 8,8.25  gaps 2.88 open, 4.49 open, 1.17 tight, 1.35 tight  counters 2.93
+  upload            square     ink 12.12×11.62  centre 8,8.25  gaps 1.38 tight
+  usb               vertical   ink 9.12×14.12  centre 8,8  gaps 0.94 detail, 0.94 detail, 0.94 detail, 0.94 detail, 1 detail  counters 1.43, 6.93
+  utensils          square     ink 11.62×13.12  centre 7.75,8  gaps 1.88 standard  counters 1.43
+  variable          square     ink 12.12×12.12  centre 8,8  gaps 1.38 tight
+  vault             horizontal ink 14.12×10.12  centre 8,8  gaps 1.88 standard, 1.88 standard, 1.63 tight, 2.88 open, 2.63 open  counters 3.13, 1.88
+  video             horizontal ink 13.62×9.12  centre 7.75,8  counters 6.93, 2.43
+  video-off         circle     ink 13.62×13.12  centre 7.75,8  counters 5.18, 2.76, 2.43
+  voicemail         horizontal ink 13.12×5.62  centre 8,7.75  gaps 1.88 standard  counters 3.38, 3.38
+  volume            square     ink 12.99×10.12  centre 7.94,8  gaps 1.38 tight  counters 3.65
+  volume-low        square     ink 10.67×9.36  centre 6.78,8  gaps 1.38 tight  counters 3.65  ⚠ 2.33 under its keyline
+  volume-off        square     ink 12.87×9.36  centre 7.88,8  gaps 1.13 tight  counters 3.65
+  vote              horizontal ink 13.12×10.12  centre 8,8  gaps 0.88 detail, 1.88 standard  counters 3.93
+  vr-goggles        horizontal ink 13.12×9.62  centre 8,7.75  gaps 0.88 detail, 0.88 detail, 2.88 open  counters 2.92
+  wallet            square     ink 13.12×11.12  centre 8,8  gaps 1.88 standard, 3.15 open  counters 1.93, 5.93
+  wand              square     ink 13.12×13.12  centre 8,8  gaps 2.7 open  counters 1.51
+  warning           circle     ink 12.98×12.45  centre 8,7.84  gaps 1.45 tight, 1.44 tight, 0.94 detail  counters 3.93
+  watch             vertical   ink 9.12×13.12  centre 8,8  gaps 1.38 tight, 1.47 tight  counters 1.18, 3.04, 1.18
+  waveform          square     ink 13.12×13.12  centre 8.5,8
+  waypoints         square     ink 12.12×12.12  centre 8,8  gaps 1.53 tight, 1.53 tight, 3.88 open, 3.88 open, 1.53 tight, 1.53 tight  counters 1.88, 1.88, 1.88, 1.88
+  webcam            vertical   ink 11.12×12.62  centre 8,7.75  gaps 1.87 standard, 1.88 standard  counters 2.05, 2.88
+  webhook           circle     ink 13.62×12.62  centre 8,7.75  counters 5.52
+  whole-word        horizontal ink 14.12×10.62  centre 8,7.75  gaps 1.88 standard, 1.88 standard, 1.12 detail, 1.88 standard, 1.88 standard, 1.88 standard, 1.88 standard, 1.12 detail  counters 2.88, 2.88
+  wifi              horizontal ink 14.08×11.06  centre 8,7.97  gaps 1.94 standard
+  wifi-low          horizontal ink 5.9×5.06  centre 8,10.97  gaps 1.94 standard  ⚠ 8.1 under its keyline
+  wifi-off          circle     ink 14.08×13.12  centre 8,8  gaps 1.94 standard, 1.94 standard, 1.62 tight, 1.62 tight
+  wind              square     ink 12.12×13.12  centre 8,8  gaps 1.38 tight, 3.88 open, 1.37 tight
+  workflow          square     ink 12.12×12.12  centre 8,8  gaps 3.95 open  counters 2.93, 2.93
+  wrench            square     ink 12.12×12.12  centre 8,8  counters 2.78
+  zap-off           circle     ink 13.12×13.7  centre 8,8  counters 2.41, 2.41
+  zoom-fit          square     ink 13.12×13.12  centre 8,8  gaps 1.41 tight  counters 2.93
+  zoom-in           circle     ink 13.12×13.12  centre 8,8  gaps 1.88 standard, 3.01 open  counters 3.18
+  zoom-out          circle     ink 13.12×13.12  centre 8,8  gaps 1.88 standard, 3.01 open  counters 3.93
