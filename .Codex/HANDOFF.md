@@ -77,6 +77,30 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
 - Review page republished (same link), round 7: ArtifactData `components7`; Meter (7 changed) against its round-6
   build, rebuilt from the round-6 page's data.js and area.css (the old session's scratchpad `review10`), and Search
   field (10 new). component-review.mjs's date window now runs past 10-09.
+## Icons: batch 70 (2026-10-10, branch `claude/icon-work-95225c`)
+
+- Every `reviews7` verdict was an approval, so a fresh library gap pass led to 39 new icons. They are in review on the
+  icon review page (same link, filter "New icons not yet reviewed (batch 70)", decisions in `reviews7`). Record:
+  `docs/research/icon-review/2026-10-10/README.md`, which also lists the delegated calls to confirm, and the spec section
+  "Batch 70 · New icons".
+- Open: `batches.json` still marks 356 icons `review` that the owner approved on the page (the sync waits for the
+  owner; see the README).
+- Then (owner: "pause making new icons") a whole-set quality and consistency pass: eleven group reviewers, then
+  integration. 34 icons changed and are in review on the page (filter "Changed in the quality pass"); 89 sources only
+  dropped a stale `data-angles="free"`. Proposals for the owner are in the spec section "Quality and consistency pass,
+  2026-10-10" and `docs/research/icon-review/2026-10-10/quality/`. New checks: `quality/tools/px.mjs` (1× view),
+  `quality/tools/dups.mjs` (strokes drawn twice).
+- Demo swap (owner: "implementing them into the actual components"): AREA_SWAP in gen-icons.mjs makes the component
+  demos' icons Area drawings (137 specimens in 35 families changed). Review page: https://claude.ai/artifact/EyvzqrhCmbDrrc1qdcBEqz
+  (`iconswap1`). Fluent cuts stay as FluentCut<Name> for the icon pages. The toolbar (icons.generated.mjs) is still Fluent.
+- Next icon session: start from README "Next icon session: production gaps" (packaging, metadata, accessibility and RTL,
+  12px cuts, licence and versioning, catalogue, coverage).
+- Package glyph `dismiss-circle` (`error` with a new "knockout" paint, `glyphKnockouts` in glyphs.ts) for the component
+  session's Search field; that session renders it with a mask in Glyph.tsx once this is on main.
+- Owner then: "keep working on any new icons, hold the ones that were updated so i can review them all at once" →
+  batch 71 (24), batch 72 (7) and batch 73 (9, from a product-surface pass) and batch 74 (bottom panel toggles; README "Batch 71"–"Batch 74"). The review page now holds 103 for one review: the quality pass's 34 changes,
+  batch 70's other 27 and the 42 of batches 71–74. The library gap list is nearly exhausted (what's left is niche or
+  drawn under another name); replace-all waits on an owner call (README "Batch 72"). Nothing else was changed in existing icons (noticed items are listed).
 
 ## Review round 6 → 7 (2026-10-10, same branch)
 

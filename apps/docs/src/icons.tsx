@@ -10,8 +10,13 @@
  * and they are optically corrected per size, so a component-owned 20px slot uses the
  * 20px cut rather than scaling a 16px path.
  *
+ * The component demos' icons are Area's own drawings (AREA_SWAP in gen-icons.mjs, the demo swap):
+ * those names render pilot-icons.tsx, and their Fluent cuts stay here as FluentCut<Name>.
+ *
  * Regenerate with `node scripts/gen-icons.mjs` after changing the map there.
  */
+import { PilotAddIcon, PilotAlignBottomIcon, PilotAlignCenterIcon, PilotAlignLeftIcon, PilotAlignMiddleIcon, PilotAlignRightIcon, PilotAlignTopIcon, PilotAngleIcon, PilotArrowRightIcon, PilotArrowUpIcon, PilotArrowUpRightIcon, PilotAspectRatioIcon, PilotAutoLayoutIcon, PilotBellIcon, PilotBoldIcon, PilotCalendarIcon, PilotChatIcon, PilotCheckIcon, PilotChevronDownIcon, PilotChevronLeftIcon, PilotChevronRightIcon, PilotCodeIcon, PilotCopyIcon, PilotCornerIcon, PilotCornersIcon, PilotDismissIcon, PilotDocumentIcon, PilotDotsFourIcon, PilotEyeIcon, PilotEyeOffIcon, PilotFlipIcon, PilotFlipVerticalIcon, PilotFlowFreeIcon, PilotFlowIcon, PilotFlowVerticalIcon, PilotFlowWrapIcon, PilotFolderIcon, PilotFrameIcon, PilotHeartIcon, PilotInfoIcon, PilotItalicIcon, PilotLinkIcon, PilotMenuIcon, PilotMoreHorizontalIcon, PilotOpacityIcon, PilotOpenIcon, PilotPaintbrushIcon, PilotPanelLeftIcon, PilotPauseFilledIcon, PilotPenToolIcon, PilotPencilIcon, PilotPersonIcon, PilotPlayIcon, PilotPointerIcon, PilotRectangleIcon, PilotRefreshIcon, PilotRotateIcon, PilotSearchIcon, PilotSettingsIcon, PilotSkipBackFilledIcon, PilotSkipForwardFilledIcon, PilotSlidersIcon, PilotStrikethroughIcon, PilotSubtractIcon, PilotSunIcon, PilotTextAlignCenterIcon, PilotTextAlignLeftIcon, PilotTextAlignRightIcon, PilotTextIcon, PilotThumbsDownIcon, PilotThumbsUpIcon, PilotTokenIcon, PilotTrashIcon, PilotTrendingUpIcon, PilotUnderlineIcon, PilotVolumeIcon, PilotWarningIcon, type PilotIconProps } from "./pilot-icons.tsx";
+
 const base = {
   viewBox: "0 0 16 16",
   // Fluent's own intrinsic size. A slot that owns an icon token overrides it in CSS;
@@ -25,155 +30,221 @@ const base = {
 
 const base20 = { ...base, viewBox: "0 0 20 20", width: 20, height: 20 };
 
+/** Area `add` (the demo swap). */
+export const PlusIcon = (props: PilotIconProps) => <PilotAddIcon {...props} />;
+
 /** Fluent `add_16_regular`. */
-export const PlusIcon = () => (
+export const FluentCutPlusIcon = () => (
   <svg {...base}>
     <path d="M8 2c.28 0 .5.22.5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5c0-.28.22-.5.5-.5" />
   </svg>
 );
 
+/** Area `bell` (the demo swap). */
+export const BellIcon = (props: PilotIconProps) => <PilotBellIcon {...props} />;
+
 /** Fluent `alert_16_regular`. */
-export const BellIcon = () => (
+export const FluentCutBellIcon = () => (
   <svg {...base}>
     <path d="M8 2a4.5 4.5 0 0 0-4.5 4.5v2.4l-.96 2.41A.5.5 0 0 0 3 12h3a2 2 0 1 0 4 0h3a.5.5 0 0 0 .46-.69l-.96-2.4V6.5A4.5 4.5 0 0 0 8 2m1 10a1 1 0 0 1-1 1 1 1 0 0 1-1-1zM4.5 6.5a3.5 3.5 0 1 1 7 0V9q0 .09.04.18l.72 1.82H3.74l.72-1.82L4.5 9z" />
   </svg>
 );
 
+/** Area `search` (the demo swap). */
+export const SearchIcon = (props: PilotIconProps) => <PilotSearchIcon {...props} />;
+
 /** Fluent `search_16_regular`. */
-export const SearchIcon = () => (
+export const FluentCutSearchIcon = () => (
   <svg {...base}>
     <path d="M11.02 11.73a5.5 5.5 0 1 1 .7-.7l3.13 3.12a.5.5 0 0 1-.7.7zM12 7.5a4.5 4.5 0 1 0-9 0 4.5 4.5 0 0 0 9 0" />
   </svg>
 );
 
+/** Area `check` (the demo swap). */
+export const CheckIcon = (props: PilotIconProps) => <PilotCheckIcon {...props} />;
+
 /** Fluent `checkmark_16_regular`. */
-export const CheckIcon = () => (
+export const FluentCutCheckIcon = () => (
   <svg {...base}>
     <path d="M13.86 3.66a.5.5 0 0 1-.02.7l-7.93 7.48a.6.6 0 0 1-.84-.02L2.4 9.1a.5.5 0 0 1 .72-.7l2.4 2.44 7.65-7.2a.5.5 0 0 1 .7.02" />
   </svg>
 );
 
+/** Area `info` (the demo swap). */
+export const InfoIcon = (props: PilotIconProps) => <PilotInfoIcon {...props} />;
+
 /** Fluent `info_16_regular`. */
-export const InfoIcon = () => (
+export const FluentCutInfoIcon = () => (
   <svg {...base}>
     <path d="M8.5 7.5a.5.5 0 1 0-1 0v3a.5.5 0 0 0 1 0zm.25-2a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1M2 8a6 6 0 1 1 12 0A6 6 0 0 1 2 8" />
   </svg>
 );
 
+/** Area `warning` (the demo swap). */
+export const AlertIcon = (props: PilotIconProps) => <PilotWarningIcon {...props} />;
+
 /** Fluent `warning_16_regular`. */
-export const AlertIcon = () => (
+export const FluentCutAlertIcon = () => (
   <svg {...base}>
     <path d="M5.82 2.28a2.5 2.5 0 0 1 4.36 0l4.5 8A2.5 2.5 0 0 1 12.5 14h-9a2.5 2.5 0 0 1-2.18-3.72zm3.49.48a1.5 1.5 0 0 0-2.62 0l-4.5 8a1.5 1.5 0 0 0 1.31 2.24h9a1.5 1.5 0 0 0 1.3-2.23zM8 9.5A.75.75 0 1 1 8 11a.75.75 0 0 1 0-1.5M8 5c.28 0 .5.22.5.5V8a.5.5 0 0 1-1 0V5.5c0-.28.22-.5.5-.5" />
   </svg>
 );
 
+/** Area `arrow-right` (the demo swap). */
+export const ArrowIcon = (props: PilotIconProps) => <PilotArrowRightIcon {...props} />;
+
 /** Fluent `arrow_right_16_regular`. */
-export const ArrowIcon = () => (
+export const FluentCutArrowIcon = () => (
   <svg {...base}>
     <path d="M2.5 7.5a.5.5 0 1 0 0 1h9.7l-4.03 3.63a.5.5 0 1 0 .66.74l5-4.5a.5.5 0 0 0 0-.74l-5-4.5a.5.5 0 0 0-.66.74L12.2 7.5z" />
   </svg>
 );
 
+/** Area `arrow-up` (the demo swap). */
+export const ArrowUpIcon = (props: PilotIconProps) => <PilotArrowUpIcon {...props} />;
+
 /** Fluent `arrow_up_16_regular`. */
-export const ArrowUpIcon = () => (
+export const FluentCutArrowUpIcon = () => (
   <svg {...base}>
     <path d="M7.5 13.5a.5.5 0 0 0 1 0V3.8l3.63 4.03a.5.5 0 0 0 .74-.66l-4.5-5a.5.5 0 0 0-.74 0l-4.5 5a.5.5 0 0 0 .74.66L7.5 3.8z" />
   </svg>
 );
 
+/** Area `chevron-down` (the demo swap). */
+export const ChevronIcon = (props: PilotIconProps) => <PilotChevronDownIcon {...props} />;
+
 /** Fluent `chevron_down_16_regular`. */
-export const ChevronIcon = () => (
+export const FluentCutChevronIcon = () => (
   <svg {...base}>
     <path d="M3.15 5.65c.2-.2.5-.2.7 0L8 9.79l4.15-4.14a.5.5 0 0 1 .7.7l-4.5 4.5a.5.5 0 0 1-.7 0l-4.5-4.5a.5.5 0 0 1 0-.7" />
   </svg>
 );
 
+/** Area `folder` (the demo swap). */
+export const FolderIcon = (props: PilotIconProps) => <PilotFolderIcon {...props} />;
+
 /** Fluent `folder_16_regular`. */
-export const FolderIcon = () => (
+export const FluentCutFolderIcon = () => (
   <svg {...base}>
     <path d="M2 4.5V6h3.59a.5.5 0 0 0 .35-.15L7.29 4.5 5.94 3.15A.5.5 0 0 0 5.59 3H3.5C2.67 3 2 3.67 2 4.5m-1 0A2.5 2.5 0 0 1 3.5 2h2.09c.4 0 .78.16 1.06.44L8.2 4h4.29A2.5 2.5 0 0 1 15 6.5v5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 11.5zM2 7v4.5c0 .83.67 1.5 1.5 1.5h9c.83 0 1.5-.67 1.5-1.5v-5c0-.83-.67-1.5-1.5-1.5H8.2L6.66 6.56A1.5 1.5 0 0 1 5.59 7z" />
   </svg>
 );
 
+/** Area `document` (the demo swap). */
+export const DocumentIcon = (props: PilotIconProps) => <PilotDocumentIcon {...props} />;
+
 /** Fluent `document_16_regular`. */
-export const DocumentIcon = () => (
+export const FluentCutDocumentIcon = () => (
   <svg {...base}>
     <path d="M5 1a2 2 0 0 0-2 2v10c0 1.1.9 2 2 2h6a2 2 0 0 0 2-2V5.41c0-.4-.16-.78-.44-1.06L9.65 1.44A1.5 1.5 0 0 0 8.59 1zM4 3a1 1 0 0 1 1-1h3v2.5C8 5.33 8.67 6 9.5 6H12v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zm7.8 2H9.5a.5.5 0 0 1-.5-.5V2.2z" />
   </svg>
 );
 
+/** Area `dismiss` (the demo swap). */
+export const DismissIcon = (props: PilotIconProps) => <PilotDismissIcon {...props} />;
+
 /** Fluent `dismiss_16_regular`. */
-export const DismissIcon = () => (
+export const FluentCutDismissIcon = () => (
   <svg {...base}>
     <path d="m2.59 2.72.06-.07a.5.5 0 0 1 .63-.06l.07.06L8 7.29l4.65-4.64a.5.5 0 0 1 .7.7L8.71 8l4.64 4.65c.18.17.2.44.06.63l-.06.07a.5.5 0 0 1-.63.06l-.07-.06L8 8.71l-4.65 4.64a.5.5 0 0 1-.7-.7L7.29 8 2.65 3.35a.5.5 0 0 1-.06-.63l.06-.07z" />
   </svg>
 );
 
+/** Area `trash` (the demo swap). */
+export const TrashIcon = (props: PilotIconProps) => <PilotTrashIcon {...props} />;
+
 /** Fluent `delete_16_regular`. */
-export const TrashIcon = () => (
+export const FluentCutTrashIcon = () => (
   <svg {...base}>
     <path d="M7 3h2a1 1 0 0 0-2 0M6 3a2 2 0 1 1 4 0h4a.5.5 0 0 1 0 1h-.56l-1.2 8.84A2.5 2.5 0 0 1 9.74 15h-3.5a2.5 2.5 0 0 1-2.48-2.16L2.57 4H2a.5.5 0 0 1 0-1zm1 3.5a.5.5 0 0 0-1 0v5a.5.5 0 0 0 1 0zM9.5 6c.28 0 .5.22.5.5v5a.5.5 0 0 1-1 0v-5c0-.28.22-.5.5-.5m-4.74 6.7c.1.75.74 1.3 1.49 1.3h3.5a1.5 1.5 0 0 0 1.5-1.3L12.42 4H3.57z" />
   </svg>
 );
 
+/** Area `link` (the demo swap). */
+export const LinkIcon = (props: PilotIconProps) => <PilotLinkIcon {...props} />;
+
 /** Fluent `link_16_regular`. */
-export const LinkIcon = () => (
+export const FluentCutLinkIcon = () => (
   <svg {...base}>
     <path d="M9.5 4h1a3.5 3.5 0 0 1 .2 7H9.5a.5.5 0 0 1-.1-.99h.1l1-.01a2.5 2.5 0 0 0 .16-5H9.5a.5.5 0 0 1-.09-1zh1zm-4 0h1a.5.5 0 0 1 .09 1H5.5a2.5 2.5 0 0 0-.16 5H6.5a.5.5 0 0 1 .09 1H5.5a3.5 3.5 0 0 1-.2-7zh1zm0 3h5a.5.5 0 0 1 .09 1H5.5a.5.5 0 0 1-.09-1z" />
   </svg>
 );
 
+/** Area `open` (the demo swap). */
+export const OpenIcon = (props: PilotIconProps) => <PilotOpenIcon {...props} />;
+
 /** Fluent `open_16_regular`. */
-export const OpenIcon = () => (
+export const FluentCutOpenIcon = () => (
   <svg {...base}>
     <path d="M4.5 3C3.67 3 3 3.67 3 4.5v7c0 .83.67 1.5 1.5 1.5h7c.83 0 1.5-.67 1.5-1.5V9.27a.5.5 0 0 1 1 0v2.23a2.5 2.5 0 0 1-2.5 2.5h-7A2.5 2.5 0 0 1 2 11.5v-7A2.5 2.5 0 0 1 4.5 2h2.23a.5.5 0 0 1 0 1zm4.27-.5c0-.28.22-.5.5-.5h4.23c.28 0 .5.22.5.5v4.23a.5.5 0 0 1-1 0V3.71L9.62 7.08a.5.5 0 1 1-.7-.7L12.29 3H9.27a.5.5 0 0 1-.5-.5" />
   </svg>
 );
 
+/** Area `person` (the demo swap). */
+export const PersonSmallIcon = (props: PilotIconProps) => <PilotPersonIcon {...props} />;
+
 /** Fluent `person_16_regular`. */
-export const PersonSmallIcon = () => (
+export const FluentCutPersonSmallIcon = () => (
   <svg {...base}>
     <path d="M11.5 8c.83 0 1.5.67 1.5 1.5v.5c0 1.97-1.86 4-5 4s-5-2.03-5-4v-.5C3 8.67 3.67 8 4.5 8zm0 1h-7a.5.5 0 0 0-.5.5v.5c0 1.44 1.43 3 4 3s4-1.56 4-3v-.5a.5.5 0 0 0-.5-.5M8 1.5A2.75 2.75 0 1 1 8 7a2.75 2.75 0 0 1 0-5.5m0 1A1.75 1.75 0 1 0 8 6a1.75 1.75 0 0 0 0-3.5" />
   </svg>
 );
 
+/** Area `person,20` (the demo swap). */
+export const PersonIcon = (props: PilotIconProps) => <PilotPersonIcon size={20} {...props} />;
+
 /** Fluent `person_20_regular`. */
-export const PersonIcon = () => (
+export const FluentCutPersonIcon = () => (
   <svg {...base20}>
     <path d="M10 2a4 4 0 1 0 0 8 4 4 0 0 0 0-8M7 6a3 3 0 1 1 6 0 3 3 0 0 1-6 0m-2 5a2 2 0 0 0-2 2c0 1.7.83 2.97 2.13 3.8A9 9 0 0 0 10 18c1.85 0 3.58-.39 4.87-1.2A4.4 4.4 0 0 0 17 13a2 2 0 0 0-2-2zm-1 2a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1c0 1.3-.62 2.28-1.67 2.95A8 8 0 0 1 10 17a8 8 0 0 1-4.33-1.05A3.4 3.4 0 0 1 4 13" />
   </svg>
 );
 
+/** Area `align-top` (the demo swap). */
+export const AlignTopIcon = (props: PilotIconProps) => <PilotAlignTopIcon {...props} />;
+
 /** Fluent `align_top_16_regular`. */
-export const AlignTopIcon = () => (
+export const FluentCutAlignTopIcon = () => (
   <svg {...base}>
     <path d="M1.5 2a.5.5 0 0 0 0 1h13a.5.5 0 0 0 0-1zM2 5.75C2 4.78 2.78 4 3.75 4h1.5C6.22 4 7 4.78 7 5.75v6.5C7 13.22 6.22 14 5.25 14h-1.5C2.78 14 2 13.22 2 12.25zM3.75 5a.75.75 0 0 0-.75.75v6.5c0 .41.34.75.75.75h1.5c.41 0 .75-.34.75-.75v-6.5A.75.75 0 0 0 5.25 5zM9 5.75C9 4.78 9.78 4 10.75 4h1.5c.97 0 1.75.78 1.75 1.75v4.5c0 .97-.78 1.75-1.75 1.75h-1.5C9.78 12 9 11.22 9 10.25zM10.75 5a.75.75 0 0 0-.75.75v4.5c0 .41.34.75.75.75h1.5c.41 0 .75-.34.75-.75v-4.5a.75.75 0 0 0-.75-.75z" />
   </svg>
 );
 
+/** Area `align-middle` (the demo swap). */
+export const AlignMiddleIcon = (props: PilotIconProps) => <PilotAlignMiddleIcon {...props} />;
+
 /** Fluent `align_center_vertical_16_regular`. */
-export const AlignMiddleIcon = () => (
+export const FluentCutAlignMiddleIcon = () => (
   <svg {...base}>
     <path d="M8.5 15a.5.5 0 0 1-.5-.5V14H6.75C5.78 14 5 13.22 5 12.25v-1.5C5 9.78 5.78 9 6.75 9H8V7H5.75C4.78 7 4 6.22 4 5.25v-1.5C4 2.78 4.78 2 5.75 2H8v-.5a.5.5 0 0 1 1 0V2h2.25c.97 0 1.75.78 1.75 1.75v1.5C13 6.22 12.22 7 11.25 7H9v2h1.25c.97 0 1.75.78 1.75 1.75v1.5c0 .97-.78 1.75-1.75 1.75H9v.5a.5.5 0 0 1-.5.5M5.75 3a.75.75 0 0 0-.75.75v1.5c0 .41.34.75.75.75h5.5c.41 0 .75-.34.75-.75v-1.5a.75.75 0 0 0-.75-.75zm1 7a.75.75 0 0 0-.75.75v1.5c0 .41.34.75.75.75h3.5c.41 0 .75-.34.75-.75v-1.5a.75.75 0 0 0-.75-.75z" />
   </svg>
 );
 
+/** Area `align-bottom` (the demo swap). */
+export const AlignBottomIcon = (props: PilotIconProps) => <PilotAlignBottomIcon {...props} />;
+
 /** Fluent `align_bottom_16_regular`. */
-export const AlignBottomIcon = () => (
+export const FluentCutAlignBottomIcon = () => (
   <svg {...base}>
     <path d="M1.5 14a.5.5 0 0 1 0-1h13a.5.5 0 0 1 0 1zm.5-3.75c0 .97.78 1.75 1.75 1.75h1.5C6.22 12 7 11.22 7 10.25v-6.5C7 2.78 6.22 2 5.25 2h-1.5C2.78 2 2 2.78 2 3.75zm1.75.75a.75.75 0 0 1-.75-.75v-6.5c0-.41.34-.75.75-.75h1.5c.41 0 .75.34.75.75v6.5c0 .41-.34.75-.75.75zM9 10.25c0 .97.78 1.75 1.75 1.75h1.5c.97 0 1.75-.78 1.75-1.75v-4.5C14 4.78 13.22 4 12.25 4h-1.5C9.78 4 9 4.78 9 5.75zm1.75.75a.75.75 0 0 1-.75-.75v-4.5c0-.41.34-.75.75-.75h1.5c.41 0 .75.34.75.75v4.5c0 .41-.34.75-.75.75z" />
   </svg>
 );
 
+/** Area `more-horizontal` (the demo swap). */
+export const MoreIcon = (props: PilotIconProps) => <PilotMoreHorizontalIcon {...props} />;
+
 /** Fluent `more_horizontal_16_regular`. */
-export const MoreIcon = () => (
+export const FluentCutMoreIcon = () => (
   <svg {...base}>
     <path d="M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0m3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2" />
   </svg>
 );
 
+/** Area `settings` (the demo swap). */
+export const SettingsIcon = (props: PilotIconProps) => <PilotSettingsIcon {...props} />;
+
 /** Fluent `settings_16_regular`. */
-export const SettingsIcon = () => (
+export const FluentCutSettingsIcon = () => (
   <svg {...base}>
     <path d="M8 6a2 2 0 1 0 0 4 2 2 0 0 0 0-4M7 8a1 1 0 1 1 2 0 1 1 0 0 1-2 0m3.62-3.6a.7.7 0 0 1-.83-.57l-.26-1.42a.4.4 0 0 0-.27-.28 6 6 0 0 0-2.52 0 .4.4 0 0 0-.27.29L6.2 3.83l-.03.11a.7.7 0 0 1-.9.43L3.9 3.88a.4.4 0 0 0-.38.1q-.86.96-1.26 2.17-.06.23.1.38l1.1.93a.7.7 0 0 1 0 1.08l-1.1.93q-.16.16-.1.38.4 1.21 1.26 2.17.17.16.38.1l1.36-.49.11-.03a.7.7 0 0 1 .83.57l.26 1.41q.05.23.27.29a6 6 0 0 0 2.52 0 .4.4 0 0 0 .27-.29l.26-1.41.03-.11a.7.7 0 0 1 .9-.43l1.37.49q.21.06.38-.1.86-.96 1.26-2.17a.4.4 0 0 0-.1-.38l-1.1-.93-.09-.08a.7.7 0 0 1 .08-1l1.1-.93q.18-.16.11-.38-.4-1.21-1.26-2.17a.4.4 0 0 0-.38-.1l-1.36.49zM4 4.98l.94.33a1.7 1.7 0 0 0 2.25-1.3l.18-.97a5 5 0 0 1 1.26 0l.18.97a1.7 1.7 0 0 0 2.25 1.3l.94-.33q.39.5.63 1.08l-.75.64a1.7 1.7 0 0 0 0 2.6l.75.64q-.24.59-.63 1.08l-.94-.33a1.7 1.7 0 0 0-2.25 1.3l-.18.97a5 5 0 0 1-1.26 0l-.18-.97a1.7 1.7 0 0 0-2.25-1.3l-.94.33q-.39-.5-.63-1.08l.75-.64a1.7 1.7 0 0 0 0-2.6l-.75-.64q.24-.58.63-1.08" />
   </svg>
@@ -186,64 +257,91 @@ export const FluentEyeIcon = () => (
   </svg>
 );
 
+/** Area `align-left` (the demo swap). */
+export const AlignLeftIcon = (props: PilotIconProps) => <PilotAlignLeftIcon {...props} />;
+
 /** Fluent `align_left_16_regular`. */
-export const AlignLeftIcon = () => (
+export const FluentCutAlignLeftIcon = () => (
   <svg {...base}>
     <path d="M2 1.5a.5.5 0 0 1 1 0v13a.5.5 0 0 1-1 0zm3.75.5C4.78 2 4 2.78 4 3.75v1.5C4 6.22 4.78 7 5.75 7h6.5C13.22 7 14 6.22 14 5.25v-1.5C14 2.78 13.22 2 12.25 2zM5 3.75c0-.41.34-.75.75-.75h6.5c.41 0 .75.34.75.75v1.5c0 .41-.34.75-.75.75h-6.5A.75.75 0 0 1 5 5.25zM5.75 9C4.78 9 4 9.78 4 10.75v1.5c0 .97.78 1.75 1.75 1.75h4.5c.97 0 1.75-.78 1.75-1.75v-1.5C12 9.78 11.22 9 10.25 9zM5 10.75c0-.41.34-.75.75-.75h4.5c.41 0 .75.34.75.75v1.5c0 .41-.34.75-.75.75h-4.5a.75.75 0 0 1-.75-.75z" />
   </svg>
 );
 
+/** Area `align-center` (the demo swap). */
+export const AlignCenterHorizontalIcon = (props: PilotIconProps) => <PilotAlignCenterIcon {...props} />;
+
 /** Fluent `align_center_horizontal_16_regular`. */
-export const AlignCenterHorizontalIcon = () => (
+export const FluentCutAlignCenterHorizontalIcon = () => (
   <svg {...base}>
     <path d="M15 7.5a.5.5 0 0 1-.5.5H14v1.25c0 .97-.78 1.75-1.75 1.75h-1.5C9.78 11 9 10.22 9 9.25V8H7v2.25C7 11.22 6.22 12 5.25 12h-1.5C2.78 12 2 11.22 2 10.25V8h-.5a.5.5 0 0 1 0-1H2V4.75C2 3.78 2.78 3 3.75 3h1.5C6.22 3 7 3.78 7 4.75V7h2V5.75C9 4.78 9.78 4 10.75 4h1.5c.97 0 1.75.78 1.75 1.75V7h.5c.28 0 .5.22.5.5M3 10.25c0 .41.34.75.75.75h1.5c.41 0 .75-.34.75-.75v-5.5A.75.75 0 0 0 5.25 4h-1.5a.75.75 0 0 0-.75.75zm7-1c0 .41.34.75.75.75h1.5c.41 0 .75-.34.75-.75v-3.5a.75.75 0 0 0-.75-.75h-1.5a.75.75 0 0 0-.75.75z" />
   </svg>
 );
 
+/** Area `align-right` (the demo swap). */
+export const AlignRightIcon = (props: PilotIconProps) => <PilotAlignRightIcon {...props} />;
+
 /** Fluent `align_right_16_regular`. */
-export const AlignRightIcon = () => (
+export const FluentCutAlignRightIcon = () => (
   <svg {...base}>
     <path d="M14 1.5a.5.5 0 0 0-1 0v13a.5.5 0 0 0 1 0zm-3.75.5c.97 0 1.75.78 1.75 1.75v1.5C12 6.22 11.22 7 10.25 7h-6.5C2.78 7 2 6.22 2 5.25v-1.5C2 2.78 2.78 2 3.75 2zM11 3.75a.75.75 0 0 0-.75-.75h-6.5a.75.75 0 0 0-.75.75v1.5c0 .41.34.75.75.75h6.5c.41 0 .75-.34.75-.75zM10.25 9c.97 0 1.75.78 1.75 1.75v1.5c0 .97-.78 1.75-1.75 1.75h-4.5C4.78 14 4 13.22 4 12.25v-1.5C4 9.78 4.78 9 5.75 9zm.75 1.75a.75.75 0 0 0-.75-.75h-4.5a.75.75 0 0 0-.75.75v1.5c0 .41.34.75.75.75h4.5c.41 0 .75-.34.75-.75z" />
   </svg>
 );
 
+/** Area `subtract` (the demo swap). */
+export const SubtractIcon = (props: PilotIconProps) => <PilotSubtractIcon {...props} />;
+
 /** Fluent `subtract_16_regular`. */
-export const SubtractIcon = () => (
+export const FluentCutSubtractIcon = () => (
   <svg {...base}>
     <path d="M3 8c0-.28.22-.5.5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 8" />
   </svg>
 );
 
+/** Area `thumbs-up` (the demo swap). */
+export const ThumbLikeIcon = (props: PilotIconProps) => <PilotThumbsUpIcon {...props} />;
+
 /** Fluent `thumb_like_16_regular`. */
-export const ThumbLikeIcon = () => (
+export const FluentCutThumbLikeIcon = () => (
   <svg {...base}>
     <path d="M8.03 1.92c.21-.52.8-1.08 1.55-.87.6.17.97.52 1.2 1 .2.44.25.96.26 1.46a8 8 0 0 1-.24 1.74q-.09.4-.19.74h1.38a2 2 0 0 1 1.92 2.56l-1.36 4.65a2.5 2.5 0 0 1-3.15 1.68L4.05 13.2A2 2 0 0 1 2.77 12l-.52-1.4a2 2 0 0 1 .86-2.42l1.87-1.1.02-.01.1-.09q.15-.1.4-.4c.35-.39.82-1.03 1.3-2.04.2-.44.37-.78.53-1.1.25-.5.46-.92.7-1.52m-2.51 6-.02.01-1.88 1.11a1 1 0 0 0-.43 1.22l.52 1.38a1 1 0 0 0 .64.6l5.35 1.68c.8.26 1.65-.2 1.89-1l1.36-4.65A1 1 0 0 0 12 6.99H9.93a.5.5 0 0 1-.48-.67c.1-.28.26-.77.38-1.3.13-.54.22-1.08.2-1.5q0-.68-.16-1.05a.8.8 0 0 0-.56-.45q-.06-.03-.16.03a.5.5 0 0 0-.19.25c-.25.63-.5 1.11-.76 1.65q-.24.45-.5 1.01a10 10 0 0 1-1.45 2.28 5 5 0 0 1-.7.66zm-.54-.84Z" />
   </svg>
 );
 
+/** Area `thumbs-down` (the demo swap). */
+export const ThumbDislikeIcon = (props: PilotIconProps) => <PilotThumbsDownIcon {...props} />;
+
 /** Fluent `thumb_dislike_16_regular`. */
-export const ThumbDislikeIcon = () => (
+export const FluentCutThumbDislikeIcon = () => (
   <svg {...base}>
     <path d="m10.58 10 .05.45a11 11 0 0 1-.02 2.68c-.07.44-.2.88-.44 1.23-.25.38-.64.64-1.17.64s-.83-.37-1.02-.7c-.2-.31-.36-.75-.54-1.2l-.01-.03c-.55-1.4-1.3-3.31-3.3-4.65q-.47-.3-.86-.46c-.7-.3-1.32-1.06-1.16-1.94l.23-1.2a2 2 0 0 1 1.43-1.55l4.95-1.38a3.5 3.5 0 0 1 4.37 2.73l.46 2.42A2.5 2.5 0 0 1 11.09 10zm1.53-5.2a2.5 2.5 0 0 0-3.13-1.94L4.03 4.23a1 1 0 0 0-.71.78l-.22 1.2c-.06.28.16.66.55.82q.47.2 1.03.55c2.28 1.53 3.13 3.7 3.67 5.11l.01.02q.28.74.47 1.08A1 1 0 0 0 9 14q.2.01.35-.2.19-.27.28-.83a10 10 0 0 0-.08-3.12l-.03-.2-.01-.05V9.6A.5.5 0 0 1 10 9h1.09a1.5 1.5 0 0 0 1.47-1.78z" />
   </svg>
 );
 
+/** Area `volume` (the demo swap). */
+export const SpeakerIcon = (props: PilotIconProps) => <PilotVolumeIcon {...props} />;
+
 /** Fluent `speaker_2_16_regular`. */
-export const SpeakerIcon = () => (
+export const FluentCutSpeakerIcon = () => (
   <svg {...base}>
     <path d="M8.7 2.04q.29.14.3.46v11a.5.5 0 0 1-.85.36l-2.93-2.88H3.5A1.5 1.5 0 0 1 2 9.48V6.5C2 5.66 2.67 5 3.5 5h1.72l2.93-2.85a.5.5 0 0 1 .54-.1M8 3.69 5.78 5.85a.5.5 0 0 1-.35.14H3.5a.5.5 0 0 0-.5.5v3c0 .27.22.5.5.5h1.93a.5.5 0 0 1 .35.13L8 12.32zm2.11 1.5a.5.5 0 0 1 .7-.08h.01l.02.02.19.18c.1.12.26.3.4.54.3.48.57 1.2.57 2.15a4 4 0 0 1-.97 2.69l-.2.2h-.01s-.45.24-.7-.08a.5.5 0 0 1 .07-.7l.02-.01.08-.09q.12-.12.29-.38c.2-.35.42-.88.42-1.63a3 3 0 0 0-.7-2l-.11-.11a.5.5 0 0 1-.08-.7m1.7-2.08a.5.5 0 1 0-.62.78l.01.01.25.24A5.5 5.5 0 0 1 13 8a5.5 5.5 0 0 1-1.8 4.1h-.01a.5.5 0 0 0 .62.8l.04-.04.32-.3A6.5 6.5 0 0 0 14 8a6.5 6.5 0 0 0-2.15-4.86l-.03-.02zM10.2 5.89Z" />
   </svg>
 );
 
+/** Area `refresh` (the demo swap). */
+export const RegenerateIcon = (props: PilotIconProps) => <PilotRefreshIcon {...props} />;
+
 /** Fluent `arrow_clockwise_16_regular`. */
-export const RegenerateIcon = () => (
+export const FluentCutRegenerateIcon = () => (
   <svg {...base}>
     <path d="M3 8a5 5 0 0 1 9-3h-2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 0-1 0v1.53A5.99 5.99 0 0 0 2 8a6 6 0 0 0 11.98.54.5.5 0 0 0-1-.08A5 5 0 0 1 3 8" />
   </svg>
 );
 
+/** Area `pencil` (the demo swap). */
+export const EditIcon = (props: PilotIconProps) => <PilotPencilIcon {...props} />;
+
 /** Fluent `edit_16_regular`. */
-export const EditIcon = () => (
+export const FluentCutEditIcon = () => (
   <svg {...base}>
     <path d="M14.24 1.76a2.6 2.6 0 0 0-3.71 0L2.66 9.64q-.57.57-.78 1.35l-.86 3.39a.5.5 0 0 0 .6.6l3.39-.86q.78-.21 1.35-.78l7.88-7.87a2.6 2.6 0 0 0 0-3.7m-3 .71a1.62 1.62 0 1 1 2.29 2.3l-.78.77-2.3-2.29zM9.75 3.96l2.3 2.29-6.4 6.39q-.37.37-.89.5l-2.57.67.66-2.57q.14-.52.51-.9z" />
   </svg>
@@ -5705,6 +5803,811 @@ export const FluentRefLineStyleFilledIcon = () => (
   </svg>
 );
 
+/** Fluent `document_dismiss_16_regular`. */
+export const FluentRefFileXIcon = () => (
+  <svg {...base}>
+    <path d="M4 3c0-1.1.9-2 2-2h3.59c.4 0 .78.16 1.06.44l2.91 2.91c.28.28.44.67.44 1.06V13a2 2 0 0 1-2 2H8.66q.6-.42 1.08-1H12a1 1 0 0 0 1-1V6h-2.5A1.5 1.5 0 0 1 9 4.5V2H6a1 1 0 0 0-1 1v2.02q-.51.05-1 .19zm6.5 2h2.3L10 2.2v2.3c0 .28.22.5.5.5M2.32 7.32a4.5 4.5 0 1 0 6.36 6.36 4.5 4.5 0 0 0-6.36-6.36m4.95 4.95a.5.5 0 0 1-.7 0L5.5 11.2l-1.06 1.06a.5.5 0 0 1-.7-.7l1.05-1.07-1.06-1.06a.5.5 0 0 1 .7-.7L5.5 9.78l1.06-1.06a.5.5 0 0 1 .7.7L6.22 10.5l1.06 1.06c.2.2.2.51 0 .7" />
+  </svg>
+);
+
+/** Fluent `document_dismiss_16_filled`. */
+export const FluentRefFileXFilledIcon = () => (
+  <svg {...base}>
+    <path d="M9 4.5V1H5.5C4.67 1 4 1.67 4 2.5v2.7A5.5 5.5 0 0 1 8.66 15h3.84c.83 0 1.5-.67 1.5-1.5V6h-3.5A1.5 1.5 0 0 1 9 4.5m1 0V1.25L13.75 5H10.5a.5.5 0 0 1-.5-.5M2.32 7.32a4.5 4.5 0 1 0 6.36 6.36 4.5 4.5 0 0 0-6.36-6.36m4.95 4.95a.5.5 0 0 1-.7 0L5.5 11.2l-1.06 1.06a.5.5 0 0 1-.7-.7l1.05-1.07-1.06-1.06a.5.5 0 0 1 .7-.7L5.5 9.78l1.06-1.06a.5.5 0 0 1 .7.7L6.22 10.5l1.06 1.06c.2.2.2.51 0 .7" />
+  </svg>
+);
+
+/** Fluent `document_question_mark_16_regular`. */
+export const FluentRefFileQuestionIcon = () => (
+  <svg {...base}>
+    <path d="M6 1a2 2 0 0 0-2 2v2.2q.49-.13 1-.18V3a1 1 0 0 1 1-1h3v2.5c0 .83.67 1.5 1.5 1.5H13v7a1 1 0 0 1-1 1H9.74q-.46.57-1.07 1H12a2 2 0 0 0 2-2V5.42q-.01-.62-.44-1.06l-2.92-2.92A1.5 1.5 0 0 0 9.58 1zm4 3.5V2.21l2.8 2.8h-2.3a.5.5 0 0 1-.5-.5m0 6a4.5 4.5 0 1 0-9 0 4.5 4.5 0 0 0 9 0m-4.5 1.88a.62.62 0 1 1 0 1.25.62.62 0 0 1 0-1.25m0-4.88c1.03 0 1.85.85 1.85 1.95 0 .59-.21.91-.72 1.32l-.28.22c-.25.19-.33.3-.35.44v.16a.5.5 0 0 1-1-.09c0-.57.21-.88.72-1.29l.27-.21c.3-.23.36-.35.36-.55 0-.55-.38-.95-.85-.95-.5 0-.86.37-.85.95a.5.5 0 0 1-1 0c-.01-1.13.8-1.95 1.85-1.95" />
+  </svg>
+);
+
+/** Fluent `document_question_mark_16_filled`. */
+export const FluentRefFileQuestionFilledIcon = () => (
+  <svg {...base}>
+    <path d="M6 1h3v3.5c0 .83.67 1.5 1.5 1.5H14v7a2 2 0 0 1-2 2H8.67A5.5 5.5 0 0 0 4 5.2V3c0-1.1.9-2 2-2m4.5 4H14l-4-4v3.5c0 .28.22.5.5.5m-.5 5.5a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0m-4.5 1.88a.62.62 0 1 0 0 1.25.62.62 0 0 0 0-1.25m0-4.88c-1.05 0-1.86.82-1.85 1.96a.5.5 0 0 0 1-.01c0-.58.36-.95.85-.95.47 0 .85.4.85.95 0 .2-.07.32-.36.55l-.27.21c-.51.4-.72.72-.72 1.29a.5.5 0 0 0 1 .09v-.16c.02-.14.1-.25.35-.44l.28-.22c.5-.4.72-.73.72-1.32 0-1.1-.82-1.95-1.85-1.95" />
+  </svg>
+);
+
+/** Fluent `document_person_16_regular`. */
+export const FluentRefFileUserIcon = () => (
+  <svg {...base}>
+    <path d="M5 1a2 2 0 0 0-2 2v2.4q.45-.26 1-.36V3a1 1 0 0 1 1-1h3v2.5C8 5.33 8.67 6 9.5 6H12v7a1 1 0 0 1-1 1H8.63q-.28.55-.8.98L7.8 15H11a2 2 0 0 0 2-2V5.41c0-.4-.16-.78-.44-1.06L9.65 1.44A1.5 1.5 0 0 0 8.59 1zm6.8 4H9.5a.5.5 0 0 1-.5-.5V2.2zM6.5 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0M8 12.5C8 13.75 7 15 4.5 15S1 13.75 1 12.5c0-.83.67-1.5 1.5-1.5h4c.83 0 1.5.67 1.5 1.5" />
+  </svg>
+);
+
+/** Fluent `document_person_16_filled`. */
+export const FluentRefFileUserFilledIcon = () => (
+  <svg {...base}>
+    <path d="M8 1v3.5C8 5.33 8.67 6 9.5 6H13v7.5c0 .83-.67 1.5-1.5 1.5H7.81l.02-.02A3.2 3.2 0 0 0 9 12.5c0-1.3-1-2.38-2.27-2.49A3 3 0 0 0 3 5.41V2.5C3 1.67 3.67 1 4.5 1zm1 .25V4.5c0 .28.22.5.5.5h3.25zM6.5 8a2 2 0 1 1-4 0 2 2 0 0 1 4 0M8 12.5C8 13.75 7 15 4.5 15S1 13.75 1 12.5c0-.83.67-1.5 1.5-1.5h4c.83 0 1.5.67 1.5 1.5" />
+  </svg>
+);
+
+/** Fluent `folder_sync_16_regular`. */
+export const FluentRefFolderSyncIcon = () => (
+  <svg {...base}>
+    <path d="M2 4.5V6h3.59a.5.5 0 0 0 .35-.15L7.29 4.5 5.94 3.15A.5.5 0 0 0 5.59 3H3.5C2.67 3 2 3.67 2 4.5m-1 0A2.5 2.5 0 0 1 3.5 2h2.09c.4 0 .78.16 1.06.44L8.2 4h4.29A2.5 2.5 0 0 1 15 6.5v.76a6 6 0 0 0-1-.66v-.1c0-.83-.67-1.5-1.5-1.5H8.2L6.66 6.56A1.5 1.5 0 0 1 5.59 7H2v4.5c0 .83.67 1.5 1.5 1.5h2.7q.16.52.4 1H3.5A2.5 2.5 0 0 1 1 11.5zm6 7a4.5 4.5 0 1 0 9 0 4.5 4.5 0 0 0-9 0m6.5-3c.28 0 .5.22.5.5v1.5a.5.5 0 0 1-.5.5H12a.5.5 0 0 1 0-1h.47a2 2 0 0 0-1.72-.1 2 2 0 0 0-.66.44.5.5 0 0 1-.71-.71A3 3 0 0 1 13 9.15V9c0-.28.22-.5.5-.5m-.88 5.53a3 3 0 0 1-2.62-.18V14a.5.5 0 0 1-1 0v-1.5c0-.28.22-.5.5-.5H11a.5.5 0 0 1 0 1h-.47a2 2 0 0 0 .94.25 2 2 0 0 0 1.44-.59.5.5 0 0 1 .71.71 3 3 0 0 1-1 .66" />
+  </svg>
+);
+
+/** Fluent `folder_sync_16_filled`. */
+export const FluentRefFolderSyncFilledIcon = () => (
+  <svg {...base}>
+    <path d="M1 4.5A2.5 2.5 0 0 1 3.5 2h2.09c.4 0 .78.16 1.06.44L8 3.79 5.94 5.85a.5.5 0 0 1-.35.15H1zM1 7v4.5A2.5 2.5 0 0 0 3.5 14h3.1q-.58-1.14-.6-2.5a5.5 5.5 0 0 1 9-4.24V6.5A2.5 2.5 0 0 0 12.5 4H9.2L6.66 6.56A1.5 1.5 0 0 1 5.59 7zm6 4.5a4.5 4.5 0 1 0 9 0 4.5 4.5 0 0 0-9 0m6.5-3c.28 0 .5.22.5.5v1.5a.5.5 0 0 1-.5.5H12a.5.5 0 0 1 0-1h.47a2 2 0 0 0-1.72-.1 2 2 0 0 0-.66.44.5.5 0 0 1-.71-.71A3 3 0 0 1 13 9.15V9c0-.28.22-.5.5-.5m-.88 5.53a3 3 0 0 1-2.62-.18V14a.5.5 0 0 1-1 0v-1.5c0-.28.22-.5.5-.5H11a.5.5 0 0 1 0 1h-.47a2 2 0 0 0 .94.25 2 2 0 0 0 1.44-.59.5.5 0 0 1 .71.71 3 3 0 0 1-1 .66" />
+  </svg>
+);
+
+/** Fluent `form_20_regular`. */
+export const FluentRefFormIcon = () => (
+  <svg {...base}>
+    <path d="M5.5 5a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm1 6a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3m0-1a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1M8 13.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m-1 0a.5.5 0 1 0-1 0 .5.5 0 0 0 1 0m2-4c0-.28.22-.5.5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5m.5 3.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1zM6 3a3 3 0 0 0-3 3v8a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3V6a3 3 0 0 0-3-3zM4 6c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z" />
+  </svg>
+);
+
+/** Fluent `form_20_filled`. */
+export const FluentRefFormFilledIcon = () => (
+  <svg {...base}>
+    <path d="M6.5 10a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1m.5 3.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0M3 6a3 3 0 0 1 3-3h8a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3zm2.5-1a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1zm1 6a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3M8 13.5a1.5 1.5 0 1 0-3 0 1.5 1.5 0 0 0 3 0m1-4c0 .28.22.5.5.5h5a.5.5 0 0 0 0-1h-5a.5.5 0 0 0-.5.5m.5 3.5a.5.5 0 0 0 0 1h5a.5.5 0 0 0 0-1z" />
+  </svg>
+);
+
+/** Fluent `table_cells_merge_16_regular`. */
+export const FluentRefTableCellsMergeIcon = () => (
+  <svg {...base}>
+    <path d="M6.35 6.15c.2.2.2.5 0 .7l-.64.65h4.58l-.64-.65a.5.5 0 1 1 .7-.7l1.5 1.5c.2.2.2.5 0 .7l-1.5 1.5a.5.5 0 0 1-.7-.7l.64-.65H5.71l.64.65a.5.5 0 1 1-.7.7l-1.5-1.5a.5.5 0 0 1 0-.7l1.5-1.5c.2-.2.5-.2.7 0M4.5 2A2.5 2.5 0 0 0 2 4.5v7A2.5 2.5 0 0 0 4.5 14h7a2.5 2.5 0 0 0 2.5-2.5v-7A2.5 2.5 0 0 0 11.5 2zm8.41 2H3.1c.2-.58.76-1 1.41-1h7c.65 0 1.2.42 1.41 1M3 5h10v6H3zm.09 7h9.82c-.2.58-.76 1-1.41 1h-7a1.5 1.5 0 0 1-1.41-1" />
+  </svg>
+);
+
+/** Fluent `table_cells_merge_16_filled`. */
+export const FluentRefTableCellsMergeFilledIcon = () => (
+  <svg {...base}>
+    <path d="M4.5 2a2.5 2.5 0 0 0-2.45 2h11.9a2.5 2.5 0 0 0-2.45-2zM2 11V5h12v6zm4.35-4.85a.5.5 0 0 0-.7 0l-1.5 1.5a.5.5 0 0 0 0 .7l1.5 1.5a.5.5 0 0 0 .7-.7l-.64-.65h4.58l-.64.65a.5.5 0 1 0 .7.7l1.5-1.5a.5.5 0 0 0 0-.7l-1.5-1.5a.5.5 0 0 0-.7.7l.64.65H5.71l.64-.65a.5.5 0 0 0 0-.7m7.6 5.85a2.5 2.5 0 0 1-2.45 2h-7a2.5 2.5 0 0 1-2.45-2z" />
+  </svg>
+);
+
+/** Fluent `table_cells_split_16_regular`. */
+export const FluentRefTableCellsSplitIcon = () => (
+  <svg {...base}>
+    <path d="M2 4.5A2.5 2.5 0 0 1 4.5 2h7A2.5 2.5 0 0 1 14 4.5v7a2.5 2.5 0 0 1-2.5 2.5h-7A2.5 2.5 0 0 1 2 11.5zM3.09 4H7V3H4.5c-.65 0-1.2.42-1.41 1M8 3v1h4.91c-.2-.58-.76-1-1.41-1zm5 2H3v6h10zm-.09 7H8v1h3.5c.65 0 1.2-.42 1.41-1M7 13v-1H3.09c.2.58.76 1 1.41 1zm0-3V6h1v4z" />
+  </svg>
+);
+
+/** Fluent `table_cells_split_16_filled`. */
+export const FluentRefTableCellsSplitFilledIcon = () => (
+  <svg {...base}>
+    <path d="M8 4h5.95a2.5 2.5 0 0 0-2.45-2H8zM7 2H4.5a2.5 2.5 0 0 0-2.45 2H7zm1 12h3.5a2.5 2.5 0 0 0 2.45-2H8zm-1-2H2.05a2.5 2.5 0 0 0 2.45 2H7zm-5-1V5h12v6zm5-5v4h1V6z" />
+  </svg>
+);
+
+/** Fluent `person_search_16_regular`. */
+export const FluentRefPersonSearchIcon = () => (
+  <svg {...base}>
+    <path d="M12.5 8c.83 0 1.5.67 1.5 1.5v.5c0 1.74-1.45 3.53-3.96 3.92L9.12 13c2.5-.05 3.88-1.58 3.88-3v-.5a.5.5 0 0 0-.5-.5H8.74q-.19-.54-.5-1zM9 1.5A2.75 2.75 0 1 1 9 7a2.75 2.75 0 0 1 0-5.5m0 1A1.75 1.75 0 1 0 9 6a1.75 1.75 0 0 0 0-3.5M4.5 14c.79 0 1.51-.26 2.1-.7l2.55 2.55a.5.5 0 1 0 .7-.7L7.3 12.6A3.5 3.5 0 1 0 4.5 14m0-1a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5" />
+  </svg>
+);
+
+/** Fluent `person_search_16_filled`. */
+export const FluentRefPersonSearchFilledIcon = () => (
+  <svg {...base}>
+    <path d="M12.5 8c.83 0 1.5.67 1.5 1.5v.5c0 1.74-1.45 3.53-3.96 3.92l-1.48-1.48A4.5 4.5 0 0 0 8.24 8zM9 1.5A2.75 2.75 0 1 1 9 7a2.75 2.75 0 0 1 0-5.5M4.5 14c.79 0 1.51-.26 2.1-.7l2.55 2.55a.5.5 0 1 0 .7-.7L7.3 12.6A3.5 3.5 0 1 0 4.5 14m0-1a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5" />
+  </svg>
+);
+
+/** Fluent `person_edit_16_regular`. */
+export const FluentRefPersonPenIcon = () => (
+  <svg {...base}>
+    <path d="M10.5 8q.2 0 .4.05L9.93 9H3.5a.5.5 0 0 0-.5.5v.5c0 1.34 1.24 2.78 3.48 2.98l-.05.18-.2.8C3.56 13.66 2 11.8 2 10v-.5C2 8.67 2.67 8 3.5 8zM7 1.5A2.75 2.75 0 1 1 7 7a2.75 2.75 0 0 1 0-5.5m0 1A1.75 1.75 0 1 0 7 6a1.75 1.75 0 0 0 0-3.5m.98 9.88 4.83-4.83a1.87 1.87 0 1 1 2.64 2.64l-4.83 4.83a2 2 0 0 1-1.02.58l-1.5.37a.9.9 0 0 1-1.07-1.07l.37-1.5q.15-.6.58-1.02" />
+  </svg>
+);
+
+/** Fluent `person_edit_16_filled`. */
+export const FluentRefPersonPenFilledIcon = () => (
+  <svg {...base}>
+    <path d="M10.5 8q.2 0 .4.05l-3.63 3.62q-.62.63-.84 1.49l-.2.8C3.56 13.66 2 11.8 2 10v-.5C2 8.67 2.67 8 3.5 8zM7 1.5A2.75 2.75 0 1 1 7 7a2.75 2.75 0 0 1 0-5.5m.98 10.88 4.83-4.83a1.87 1.87 0 1 1 2.64 2.64l-4.83 4.83a2 2 0 0 1-1.02.58l-1.5.37a.9.9 0 0 1-1.07-1.07l.37-1.5q.15-.6.58-1.02" />
+  </svg>
+);
+
+/** Fluent `person_star_16_regular`. */
+export const FluentRefPersonStarIcon = () => (
+  <svg {...base}>
+    <path d="M2 10c0 1.8 1.55 3.65 4.22 3.96a6 6 0 0 1-.72-1.16C3.88 12.33 3 11.13 3 10v-.5c0-.28.22-.5.5-.5h1.7q.16-.52.4-1H3.5C2.67 8 2 8.67 2 9.5zm7.75-5.75q0 .43-.12.82-.73.12-1.39.41A1.74 1.74 0 0 0 7 2.5a1.75 1.75 0 1 0 .4 3.45q-.6.42-1.07.97a2.75 2.75 0 1 1 3.42-2.67M15 10.5a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0m-4.02-2.64a.5.5 0 0 0-.96 0L9.55 9.4H8c-.48 0-.68.65-.3.95l1.26.94-.48 1.53c-.15.49.38.89.77.59l1.25-.95 1.25.95c.4.3.92-.1.77-.59l-.48-1.53 1.25-.94c.4-.3.2-.95-.3-.95h-1.54z" />
+  </svg>
+);
+
+/** Fluent `person_star_16_filled`. */
+export const FluentRefPersonStarFilledIcon = () => (
+  <svg {...base}>
+    <path d="M6.33 6.92a5.5 5.5 0 0 1 3.3-1.85 2.75 2.75 0 1 0-3.3 1.85M5 10.5q.02-1.36.6-2.5H3.5C2.67 8 2 8.67 2 9.5v.5c0 1.8 1.55 3.65 4.22 3.96A5.5 5.5 0 0 1 5 10.5m10 0a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0m-4.02-2.64a.5.5 0 0 0-.96 0L9.55 9.4H8c-.48 0-.68.65-.3.95l1.26.94-.48 1.53c-.15.49.38.89.77.59l1.25-.95 1.25.95c.4.3.92-.1.77-.59l-.48-1.53 1.25-.94c.4-.3.2-.95-.3-.95h-1.54z" />
+  </svg>
+);
+
+/** Fluent `shield_settings_16_regular`. */
+export const FluentRefShieldCogIcon = () => (
+  <svg {...base}>
+    <path d="M9.07 6.75a2 2 0 0 0 2.9 0l.33-.35q.45.21.84.52l-.13.42a2 2 0 0 0 1.46 2.52l.35.09a5 5 0 0 1 0 1.01l-.45.12a2 2 0 0 0-1.43 2.48l.15.55q-.38.3-.82.5l-.34-.36a2 2 0 0 0-2.9 0l-.33.35q-.45-.21-.84-.52l.13-.42a2 2 0 0 0-1.46-2.52l-.35-.09a5 5 0 0 1 0-1.01l.46-.12a2 2 0 0 0 1.43-2.48l-.16-.56q.38-.3.82-.5zm-1.42-4.6c.2-.2.5-.2.7 0A5.7 5.7 0 0 0 12.5 4c.28 0 .5.22.5.5v1.1q-.48-.25-1-.4v-.22a6.6 6.6 0 0 1-4-1.8 6.7 6.7 0 0 1-4 1.8V7.5q.02 2.13 1.02 3.44.08 1 .49 1.86Q3 10.97 3 7.5v-3c0-.28.22-.5.5-.5q2.29 0 4.15-1.85M10.5 9.5a1 1 0 1 0 0 2 1 1 0 0 0 0-2" />
+  </svg>
+);
+
+/** Fluent `shield_settings_16_filled`. */
+export const FluentRefShieldCogFilledIcon = () => (
+  <svg {...base}>
+    <path d="M9.07 6.75a2 2 0 0 0 2.9 0l.33-.35q.45.21.84.52l-.13.42a2 2 0 0 0 1.46 2.52l.35.09a5 5 0 0 1 0 1.01l-.45.12a2 2 0 0 0-1.43 2.48l.15.55q-.38.3-.82.5l-.34-.36a2 2 0 0 0-2.9 0l-.33.35q-.45-.21-.84-.52l.13-.42a2 2 0 0 0-1.46-2.52l-.35-.09a5 5 0 0 1 0-1.01l.46-.12a2 2 0 0 0 1.43-2.48l-.16-.56q.38-.3.82-.5zm-1.42-4.6c.2-.2.5-.2.7 0A5.7 5.7 0 0 0 12.5 4c.28 0 .5.22.5.5v1.1q-1.14-.58-2.5-.6a5.5 5.5 0 0 0-5 7.8Q3.02 10.97 3 7.5v-3c0-.28.22-.5.5-.5q2.29 0 4.15-1.85M10.5 9.5a1 1 0 1 0 0 2 1 1 0 0 0 0-2" />
+  </svg>
+);
+
+/** Fluent `mail_checkmark_16_regular`. */
+export const FluentRefMailCheckIcon = () => (
+  <svg {...base}>
+    <path d="M15 5.5a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0m-2.15-1.85a.5.5 0 0 0-.7 0L9.5 6.29l-.65-.64a.5.5 0 1 0-.7.7l1 1c.2.2.5.2.7 0l3-3a.5.5 0 0 0 0-.7M12 13v-2.2q.52-.15 1-.4V13a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7c0-1.1.9-2 2-2h2.02a6 6 0 0 0 0 1H3a1 1 0 0 0-1 1v.74l5 2.7.54-.3q.53.33 1.1.54l-1.4.76a.5.5 0 0 1-.48 0L2 8.88V13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1" />
+  </svg>
+);
+
+/** Fluent `mail_checkmark_16_filled`. */
+export const FluentRefMailCheckFilledIcon = () => (
+  <svg {...base}>
+    <path d="M15 5.5a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0m-2.15-1.85a.5.5 0 0 0-.7 0L9.5 6.29l-.65-.64a.5.5 0 1 0-.7.7l1 1c.2.2.5.2.7 0l3-3a.5.5 0 0 0 0-.7M10.5 11q1.36-.02 2.5-.6V13a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8.34l5.76 3.1a.5.5 0 0 0 .48 0l1.4-.76q.89.31 1.86.32M3 5h2.02L5 5.5a5.5 5.5 0 0 0 2.54 4.64l-.54.3L1 7.2V7c0-1.1.9-2 2-2" />
+  </svg>
+);
+
+/** Fluent `mail_alert_16_regular`. */
+export const FluentRefMailWarningIcon = () => (
+  <svg {...base}>
+    <path d="M7.5 4a3 3 0 0 1 6 0v2l1.32 1.12a.5.5 0 0 1-.33.88H6.5a.5.5 0 0 1-.32-.88L7.5 6zm3 6a1.5 1.5 0 0 1-1.42-1h2.83c-.2.58-.76 1-1.41 1M3 5h3.5v.54L5.95 6H3a1 1 0 0 0-1 1v.74l5 2.7 1.32-.72q.26.46.67.77l-1.75.95a.5.5 0 0 1-.48 0L2 8.88V13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-2.5q.6-.46.86-1.17l.12-.33H13v4a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V7c0-1.1.9-2 2-2" />
+  </svg>
+);
+
+/** Fluent `mail_alert_16_filled`. */
+export const FluentRefMailWarningFilledIcon = () => (
+  <svg {...base}>
+    <path d="M7.5 4a3 3 0 0 1 6 0v2l1.32 1.12a.5.5 0 0 1-.33.88H6.5a.5.5 0 0 1-.32-.88L7.5 6zm3 6a1.5 1.5 0 0 1-1.42-1h2.83c-.2.58-.76 1-1.41 1M3 5h3.5v.54l-.97.82A1.5 1.5 0 0 0 6.5 9h1.52l.12.33q.07.2.18.39l-1.33.71L1 7.2V7c0-1.1.9-2 2-2m7.5 6q-.87-.02-1.51-.51l-1.76.95a.5.5 0 0 1-.48 0L1 8.34V13c0 1.1.9 2 2 2h7.98a2 2 0 0 0 2-2V9l-.12.33A2.5 2.5 0 0 1 10.5 11" />
+  </svg>
+);
+
+/** Fluent `hand_wave_16_regular`. */
+export const FluentRefHandWaveIcon = () => (
+  <svg {...base}>
+    <path d="M9.68 2.75q-.31.07-.56.25a1.5 1.5 0 0 0-1.43-1q-.51 0-.92.32l-.08-.24A1.5 1.5 0 0 0 5.25 1 1.5 1.5 0 0 0 4 1.63q-.14.21-.21.45a1.6 1.6 0 0 0-2 2l1.45 4.66a2.3 2.3 0 0 0-1.92.65 1 1 0 0 0-.31.89 1.3 1.3 0 0 0 .78 1 11 11 0 0 1 3 2.44A4 4 0 0 0 7.69 15q.5 0 1-.14l1.78-.53a2.5 2.5 0 0 0 1.73-2q.3-1.92.31-3.87-.2-2.41-1-4.71a1.54 1.54 0 0 0-1.83-1m1.52 9.46a1.4 1.4 0 0 1-1 1.16l-1.79.53a2.9 2.9 0 0 1-2.9-.9 11 11 0 0 0-3.3-2.66c-.14-.07-.21-.19-.2-.24a1.4 1.4 0 0 1 1.77-.1.51.51 0 0 0 .7-.6L2.76 3.81a.6.6 0 0 1 .31-.74.6.6 0 0 1 .51 0 .6.6 0 0 1 .36.37L5 6.66q.05.14.16.22.15.1.33.12h.16l.12-.07A.4.4 0 0 0 6 6.72v-.36L4.76 2.67a.5.5 0 0 1 .07-.46.54.54 0 0 1 .91.15L7 6.64q.05.15.17.24.13.12.31.12h.14A.5.5 0 0 0 8 6.36l-.8-2.67a.5.5 0 0 1 .08-.47.55.55 0 0 1 1 .19l.32 1.25.48 2q.05.17.2.28.07.04.14.06h.2a.5.5 0 0 0 .38-.62l-.49-2a.58.58 0 0 1 .82-.65q.2.1.26.31.73 2.16.92 4.43 0 1.88-.31 3.74M13.8 1.1a.5.5 0 1 0-.6.8 4.2 4.2 0 0 1 1.32 4.46.5.5 0 0 0 .34.62L15 7a.5.5 0 0 0 .48-.36A5.2 5.2 0 0 0 13.8 1.1m-1.19 1.41.18.08a3.4 3.4 0 0 1 1.17 2.95.5.5 0 0 1-.5.46.5.5 0 0 1-.46-.54 2.4 2.4 0 0 0-.8-2.06.5.5 0 0 1-.1-.69.5.5 0 0 1 .51-.2" />
+  </svg>
+);
+
+/** Fluent `hand_wave_16_filled`. */
+export const FluentRefHandWaveFilledIcon = () => (
+  <svg {...base}>
+    <path d="M2.07 2.02c.4-.1.8.15.9.55l.97 3.86a.58.58 0 1 0 1.14-.29l-1.06-4.2a.75.75 0 1 1 1.46-.37L6.6 6.1a.59.59 0 0 0 1.14-.28l-.72-2.91a.75.75 0 1 1 1.45-.36l.8 3.22a.6.6 0 1 0 1.14-.3L10 3.92a.75.75 0 0 1 1.45-.37l.75 2.75v.01l.03.09c.14.7.25 1.43.27 2.09.03 1.22-.16 2.8-.3 3.87-.15.95-.83 1.7-1.74 1.97l-1.78.53a3.9 3.9 0 0 1-3.9-1.17 11 11 0 0 0-3-2.43 1.4 1.4 0 0 1-.7-.76 1 1 0 0 1 .24-1.11 2.4 2.4 0 0 1 1.65-.67L1.52 2.93c-.1-.4.15-.8.55-.9m11.36-1.01a.5.5 0 0 1 .37.09 5.2 5.2 0 0 1 1.68 5.54A.5.5 0 0 1 15 7l-.14-.02a.5.5 0 0 1-.34-.62A4.2 4.2 0 0 0 13.2 1.9a.5.5 0 0 1 .23-.9m-.64 1.58a.5.5 0 0 0-.69.12.5.5 0 0 0 .1.69 2.4 2.4 0 0 1 .8 2.06.5.5 0 0 0 .46.54.5.5 0 0 0 .5-.46 3.4 3.4 0 0 0-1.17-2.95" />
+  </svg>
+);
+
+/** Fluent `gif_16_regular`. */
+export const FluentRefGifIcon = () => (
+  <svg {...base}>
+    <path d="M5.05 6.7c.48-.04.85.04.99.1a.5.5 0 1 0 .45-.89 3 3 0 0 0-1.54-.2c-.96.1-1.95.94-1.95 2.3 0 1.38 1.05 2.3 2.3 2.3.58 0 1.1-.27 1.4-.55.26-.25.3-.58.3-.79v-.96a.5.5 0 0 0-.5-.5h-.8a.5.5 0 1 0 0 1H6v.53c-.15.13-.42.27-.7.27C4.57 9.3 4 8.8 4 8c0-.82.57-1.25 1.05-1.3M9 6.2a.5.5 0 0 0-1 0v3.6a.5.5 0 1 0 1 0zm1.5-.5a.5.5 0 0 0-.5.5v3.6a.5.5 0 0 0 1 0V8.5h1a.5.5 0 0 0 0-1h-1v-.8h1.5a.5.5 0 0 0 0-1zM3.5 2A2.5 2.5 0 0 0 1 4.5v7A2.5 2.5 0 0 0 3.5 14h9a2.5 2.5 0 0 0 2.5-2.5v-7A2.5 2.5 0 0 0 12.5 2zM2 4.5C2 3.67 2.67 3 3.5 3h9c.83 0 1.5.67 1.5 1.5v7c0 .83-.67 1.5-1.5 1.5h-9A1.5 1.5 0 0 1 2 11.5z" />
+  </svg>
+);
+
+/** Fluent `gif_16_filled`. */
+export const FluentRefGifFilledIcon = () => (
+  <svg {...base}>
+    <path d="M1 4.5A2.5 2.5 0 0 1 3.5 2h9A2.5 2.5 0 0 1 15 4.5v7a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 11.5zm4.05 2.2c.48-.04.85.04.99.1a.5.5 0 1 0 .45-.89 3 3 0 0 0-1.54-.2c-.96.1-1.95.94-1.95 2.3 0 1.38 1.05 2.3 2.3 2.3.58 0 1.1-.27 1.4-.55.26-.25.3-.58.3-.79v-.96a.5.5 0 0 0-.5-.5h-.8a.5.5 0 0 0 0 1H6v.53c-.15.13-.42.27-.7.27C4.57 9.3 4 8.8 4 8c0-.82.57-1.25 1.05-1.3M9 6.2a.5.5 0 0 0-1 0v3.6a.5.5 0 0 0 1 0zm1.5-.5a.5.5 0 0 0-.5.5v3.6a.5.5 0 0 0 1 0V8.5h1a.5.5 0 0 0 0-1h-1v-.8h1.5a.5.5 0 0 0 0-1z" />
+  </svg>
+);
+
+/** Fluent `calendar_cancel_16_regular`. */
+export const FluentRefCalendarOffIcon = () => (
+  <svg {...base}>
+    <path d="M11.5 2A2.5 2.5 0 0 1 14 4.5v2.1q-.48-.24-1-.4V6H3v5.5c0 .83.67 1.5 1.5 1.5h1.7q.16.52.4 1H4.5A2.5 2.5 0 0 1 2 11.5v-7A2.5 2.5 0 0 1 4.5 2zm0 1h-7C3.67 3 3 3.67 3 4.5V5h10v-.5c0-.83-.67-1.5-1.5-1.5m4.5 8.5a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0m-2.65-1.15a.5.5 0 0 0-.7-.7l-1.15 1.14-1.15-1.14a.5.5 0 0 0-.7.7l1.14 1.15-1.14 1.15a.5.5 0 0 0 .7.7l1.15-1.14 1.15 1.14a.5.5 0 0 0 .7-.7l-1.14-1.15z" />
+  </svg>
+);
+
+/** Fluent `calendar_cancel_16_filled`. */
+export const FluentRefCalendarOffFilledIcon = () => (
+  <svg {...base}>
+    <path d="M11.5 6H2v5.5A2.5 2.5 0 0 0 4.5 14h2.1q-.58-1.14-.6-2.5A5.5 5.5 0 0 1 11.5 6M14 4.5A2.5 2.5 0 0 0 11.5 2h-7A2.5 2.5 0 0 0 2 4.5V5h12zm2 7a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0m-2.65-1.15a.5.5 0 0 0-.7-.7l-1.15 1.14-1.15-1.14a.5.5 0 0 0-.7.7l1.14 1.15-1.14 1.15a.5.5 0 0 0 .7.7l1.15-1.14 1.15 1.14a.5.5 0 0 0 .7-.7l-1.14-1.15z" />
+  </svg>
+);
+
+/** Fluent `calendar_search_16_regular`. */
+export const FluentRefCalendarSearchIcon = () => (
+  <svg {...base}>
+    <path d="M11.5 2A2.5 2.5 0 0 1 14 4.5v7a2.5 2.5 0 0 1-2.5 2.5H9.12l-1-1h3.38c.83 0 1.5-.67 1.5-1.5V6H3v.03q-.52.05-1 .23V4.5A2.5 2.5 0 0 1 4.5 2zm0 1h-7C3.67 3 3 3.67 3 4.5V5h10v-.5c0-.83-.67-1.5-1.5-1.5m-8 11c.79 0 1.51-.26 2.1-.7l2.55 2.55a.5.5 0 1 0 .7-.7L6.3 12.6A3.5 3.5 0 1 0 3.5 14m0-1a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5" />
+  </svg>
+);
+
+/** Fluent `calendar_search_16_filled`. */
+export const FluentRefCalendarSearchFilledIcon = () => (
+  <svg {...base}>
+    <path d="M14 11.5V6H3.5a4.5 4.5 0 0 1 4.06 6.44L9.12 14h2.38a2.5 2.5 0 0 0 2.5-2.5m0-7A2.5 2.5 0 0 0 11.5 2h-7A2.5 2.5 0 0 0 2 4.5V5h12zM3.5 14c.79 0 1.51-.26 2.1-.7l2.55 2.55a.5.5 0 1 0 .7-.7L6.3 12.6A3.5 3.5 0 1 0 3.5 14m0-1a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5" />
+  </svg>
+);
+
+/** Fluent `calendar_sync_16_regular`. */
+export const FluentRefCalendarSyncIcon = () => (
+  <svg {...base}>
+    <path d="M11.5 2A2.5 2.5 0 0 1 14 4.5v2.1q-.48-.24-1-.4V6H3v5.5c0 .83.67 1.5 1.5 1.5h1.7q.16.52.4 1H4.5A2.5 2.5 0 0 1 2 11.5v-7A2.5 2.5 0 0 1 4.5 2zm0 1h-7C3.67 3 3 3.67 3 4.5V5h10v-.5c0-.83-.67-1.5-1.5-1.5M7 11.5a4.5 4.5 0 1 0 9 0 4.5 4.5 0 0 0-9 0m6.5-3c.28 0 .5.22.5.5v1.5a.5.5 0 0 1-.5.5H12a.5.5 0 0 1 0-1h.47a2 2 0 0 0-1.72-.1 2 2 0 0 0-.66.44.5.5 0 0 1-.71-.71A3 3 0 0 1 13 9.15V9c0-.28.22-.5.5-.5m-.88 5.53a3 3 0 0 1-2.62-.18V14a.5.5 0 0 1-1 0v-1.5c0-.28.22-.5.5-.5H11a.5.5 0 0 1 0 1h-.47a2 2 0 0 0 .94.25 2 2 0 0 0 1.44-.59.5.5 0 0 1 .71.71 3 3 0 0 1-1 .66" />
+  </svg>
+);
+
+/** Fluent `calendar_sync_16_filled`. */
+export const FluentRefCalendarSyncFilledIcon = () => (
+  <svg {...base}>
+    <path d="M11.5 6H2v5.5A2.5 2.5 0 0 0 4.5 14h2.1q-.58-1.14-.6-2.5A5.5 5.5 0 0 1 11.5 6M14 4.5A2.5 2.5 0 0 0 11.5 2h-7A2.5 2.5 0 0 0 2 4.5V5h12zm-7 7a4.5 4.5 0 1 0 9 0 4.5 4.5 0 0 0-9 0m6.5-3c.28 0 .5.22.5.5v1.5a.5.5 0 0 1-.5.5H12a.5.5 0 0 1 0-1h.47a2 2 0 0 0-1.72-.1 2 2 0 0 0-.66.44.5.5 0 0 1-.71-.71A3 3 0 0 1 13 9.15V9c0-.28.22-.5.5-.5m-.88 5.53a3 3 0 0 1-2.62-.18V14a.5.5 0 0 1-1 0v-1.5c0-.28.22-.5.5-.5H11a.5.5 0 0 1 0 1h-.47a2 2 0 0 0 .94.25 2 2 0 0 0 1.44-.59.5.5 0 0 1 .71.71 3 3 0 0 1-1 .66" />
+  </svg>
+);
+
+/** Fluent `scan_qr_code_24_regular`. */
+export const FluentRefScanQrIcon = () => (
+  <svg {...base}>
+    <path d="M5.25 3.5c-.97 0-1.75.78-1.75 1.75v3a.75.75 0 0 1-1.5 0v-3C2 3.45 3.46 2 5.25 2h3a.75.75 0 0 1 0 1.5zm0 17c-.97 0-1.75-.78-1.75-1.75v-3a.75.75 0 0 0-1.5 0v3C2 20.55 3.46 22 5.25 22h3a.75.75 0 0 0 0-1.5zM20.5 5.25c0-.97-.78-1.75-1.75-1.75h-3a.75.75 0 0 1 0-1.5h3C20.55 2 22 3.46 22 5.25v3a.75.75 0 0 1-1.5 0zM18.75 20.5c.97 0 1.75-.78 1.75-1.75v-3a.75.75 0 0 1 1.5 0v3c0 1.8-1.46 3.25-3.25 3.25h-3a.75.75 0 0 1 0-1.5zM7 7h3v3H7zm7 3h-4v4H7v3h3v-3h4v3h3v-3h-3zm0 0V7h3v3z" />
+  </svg>
+);
+
+/** Fluent `scan_qr_code_24_filled`. */
+export const FluentRefScanQrFilledIcon = () => (
+  <svg {...base}>
+    <path d="M5.25 4C4.56 4 4 4.56 4 5.25V8a1 1 0 0 1-2 0V5.25C2 3.45 3.46 2 5.25 2H8a1 1 0 0 1 0 2zm0 16C4.56 20 4 19.44 4 18.75V16a1 1 0 1 0-2 0v2.75C2 20.55 3.46 22 5.25 22H8a1 1 0 1 0 0-2zM20 5.25C20 4.56 19.44 4 18.75 4H16a1 1 0 1 1 0-2h2.75C20.55 2 22 3.46 22 5.25V8a1 1 0 1 1-2 0zM18.75 20c.69 0 1.25-.56 1.25-1.25V16a1 1 0 1 1 2 0v2.75c0 1.8-1.46 3.25-3.25 3.25H16a1 1 0 1 1 0-2zM7 7h3v3H7zm7 3h-4v4H7v3h3v-3h4v3h3v-3h-3zm0 0V7h3v3z" />
+  </svg>
+);
+
+/** Fluent `wifi_3_20_regular`. */
+export const FluentRefWifiLowIcon = () => (
+  <svg {...base}>
+    <path d="M12.89 11.85q.53.55.85 1.26a.5.5 0 1 1-.92.4 3.03 3.03 0 0 0-5.56-.01.5.5 0 0 1-.92-.4q.3-.72.84-1.25a4.03 4.03 0 0 1 5.7 0m-1.93 1.94a1.3 1.3 0 1 1-1.83 1.83 1.3 1.3 0 0 1 1.83-1.83" />
+  </svg>
+);
+
+/** Fluent `wifi_3_20_filled`. */
+export const FluentRefWifiLowFilledIcon = () => (
+  <svg {...base}>
+    <path d="M12.95 11.84q.56.55.87 1.28a.75.75 0 0 1-1.37.6q-.2-.47-.56-.82a2.63 2.63 0 0 0-4.26.81.75.75 0 1 1-1.38-.6q.32-.71.86-1.27a4.13 4.13 0 0 1 5.84 0m-2.03 2.04a1.24 1.24 0 1 1-1.76 1.76 1.24 1.24 0 0 1 1.76-1.76" />
+  </svg>
+);
+
+/** Fluent `globe_off_16_regular`. */
+export const FluentRefGlobeOffIcon = () => (
+  <svg {...base}>
+    <path d="M11.87 12.58a6 6 0 0 1-8.46-8.46L1.16 1.86a.5.5 0 1 1 .7-.7l13 13a.5.5 0 0 1-.7.7zm-.7-.7-.63-.63a7 7 0 0 1-.58 1.35 5 5 0 0 0 1.2-.73M9.28 10 6.07 6.77a11 11 0 0 0 .1 3.23zM5 8q0-1.05.16-2H3.42a5 5 0 0 0 0 4h1.74Q5 9.05 5 8m.78 4.1q-.23-.5-.4-1.1H4c.52.7 1.23 1.25 2.04 1.6q-.14-.24-.26-.5m3.53-.42q.14-.3.26-.68H6.43q.12.37.26.68C7.12 12.64 7.63 13 8 13s.88-.36 1.31-1.32M9.82 6q.16.87.18 1.88l.97.97A13 13 0 0 0 10.84 6h1.74a5 5 0 0 1 0 4h-.46l1.05 1.05Q13.98 9.68 14 8a6 6 0 0 0-9.05-5.17L6.61 4.5l.08-.17C7.12 3.36 7.63 3 8 3s.88.36 1.31 1.32q.14.3.26.68H7.12l1 1zM12 5h-1.38a8 8 0 0 0-.66-1.6c.81.35 1.52.9 2.04 1.6" />
+  </svg>
+);
+
+/** Fluent `globe_off_16_filled`. */
+export const FluentRefGlobeOffFilledIcon = () => (
+  <svg {...base}>
+    <path d="m11.87 12.58 2.28 2.27a.5.5 0 0 0 .7-.7l-13-13a.5.5 0 1 0-.7.7l2.27 2.28q-.35.4-.62.87h1.5l1.75 1.75A16 16 0 0 0 6.12 10H9.3l1.36 1.36q-.16.78-.42 1.42-.2.53-.45.95a6 6 0 0 0 2.1-1.15M6.45 4.33l.67.67h2.59q-.17-.8-.4-1.42a4 4 0 0 0-.7-1.23C8.35 2.08 8.15 2 8 2s-.36.08-.6.35q-.38.4-.7 1.23-.13.35-.25.75M8.12 6 10 7.88q0-1-.12-1.88zm2.86 2.86L12.12 10h1.54a6 6 0 0 0 0-4h-2.78a17 17 0 0 1 .1 2.86M13.12 11l.05.05.03-.05zM4.95 2.83l.7.7a8 8 0 0 1 .57-1.26q-.67.21-1.27.56M5.12 10a17 17 0 0 1 0-4H2.34a6 6 0 0 0 0 4zM2.8 11h2.47q.2.99.5 1.78.2.53.45.95A6 6 0 0 1 2.8 11m6.9 0q-.15.8-.4 1.42-.32.83-.7 1.23c-.24.27-.44.35-.6.35s-.36-.08-.6-.35a4 4 0 0 1-.7-1.23q-.25-.63-.4-1.42zm1.03-6h2.47a6 6 0 0 0-3.42-2.73q.26.42.45.95.3.8.5 1.78" />
+  </svg>
+);
+
+/** Fluent `book_add_20_regular`. */
+export const FluentRefBookAddIcon = () => (
+  <svg {...base}>
+    <path d="M14 3H6a1 1 0 0 0-1 1v11h4.02q.05.51.19 1H5a1 1 0 0 0 1 1h3.6q.27.54.66 1H6a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2v5.2q-.49-.13-1-.18V4a1 1 0 0 0-1-1M6 5v1a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1m1 0h6v1H7zm12 9.5a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0m-4-2a.5.5 0 0 0-1 0V14h-1.5a.5.5 0 0 0 0 1H14v1.5a.5.5 0 0 0 1 0V15h1.5a.5.5 0 0 0 0-1H15z" />
+  </svg>
+);
+
+/** Fluent `book_add_20_filled`. */
+export const FluentRefBookAddFilledIcon = () => (
+  <svg {...base}>
+    <path d="M4 4c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2v5.2A5.5 5.5 0 0 0 9.2 16H5a1 1 0 0 0 1 1h3.6q.27.54.66 1H6a2 2 0 0 1-2-2zm10.5 15a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9m0-7c.28 0 .5.22.5.5V14h1.5a.5.5 0 0 1 0 1H15v1.5a.5.5 0 0 1-1 0V15h-1.5a.5.5 0 0 1 0-1H14v-1.5c0-.28.22-.5.5-.5M6.75 4a.75.75 0 0 0-.75.75v.5c0 .41.34.75.75.75h6.5c.41 0 .75-.34.75-.75v-.5a.75.75 0 0 0-.75-.75z" />
+  </svg>
+);
+
+/** Fluent `gavel_16_regular`. */
+export const FluentRefGavelIcon = () => (
+  <svg {...base}>
+    <path d="M7.47 2.2a.5.5 0 0 1 .78.09l.3.46-2.8 2.8-.46-.3a.5.5 0 0 1-.08-.78zm-.86 3.9L9.1 3.6l1.11 1.73q.18.27.45.45L12.4 6.9 9.9 9.4 8.8 7.66a2 2 0 0 0-.45-.45zm6.64 1.36.46.3c.27.17.3.54.08.77l-2.26 2.26a.5.5 0 0 1-.78-.08l-.3-.46zM9.09 1.75a1.5 1.5 0 0 0-2.32-.25L4.5 3.77a1.5 1.5 0 0 0 .25 2.32L6.17 7 1.6 11.6a2 2 0 1 0 2.82 2.83L9 9.83l.91 1.42c.52.8 1.65.93 2.32.25l2.27-2.27a1.5 1.5 0 0 0-.25-2.32L11.2 4.95a1 1 0 0 1-.15-.15zm-.65 7.22-4.73 4.74a1 1 0 0 1-1.42-1.41l4.74-4.74.77.5a1 1 0 0 1 .15.14zM8 14.5c0-.28.22-.5.5-.5H10a.5.5 0 0 1 0-1h3a.5.5 0 1 1 0 1h1.5a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5" />
+  </svg>
+);
+
+/** Fluent `gavel_16_filled`. */
+export const FluentRefGavelFilledIcon = () => (
+  <svg {...base}>
+    <path d="M6.77 1.5a1.5 1.5 0 0 1 2.32.25l.18.28-4.24 4.24-.28-.18a1.5 1.5 0 0 1-.25-2.32zm-.88 5.32L9.82 2.9l1.23 1.9a1 1 0 0 0 .15.16l1.91 1.23-3.93 3.93-1.23-1.9a1 1 0 0 0-.15-.16zm3.84 4.15.18.28c.52.8 1.65.93 2.32.25l2.27-2.27a1.5 1.5 0 0 0-.25-2.32l-.28-.18zM5.88 8.01l-4.44 4.43a1.5 1.5 0 1 0 2.12 2.12L8 10.13l-.84-1.3zM10 13a.5.5 0 0 0 0 1H8.5a.5.5 0 0 0 0 1h6a.5.5 0 0 0 0-1H13a.5.5 0 0 0 0-1z" />
+  </svg>
+);
+
+/** Fluent `tag_multiple_16_regular`. */
+export const FluentRefTagsIcon = () => (
+  <svg {...base}>
+    <path d="M11.36 4.66c-.3.3-.8.3-1.1 0a.76.76 0 0 1 0-1.08c.3-.3.8-.3 1.1 0s.3.78 0 1.08m-8.82 4.5a2 2 0 0 1 0-2.83L7.29 1.6c.38-.37.89-.58 1.42-.59L11.97 1A2 2 0 0 1 14 3.02l-.03 3.37a2 2 0 0 1-.59 1.4L8.7 12.45c-.78.78-2.06.78-2.84 0zm.7-2.12a1 1 0 0 0 0 1.41l3.32 3.3c.39.38 1.03.38 1.42 0l4.69-4.67a1 1 0 0 0 .3-.7l.02-3.37A1 1 0 0 0 11.98 2l-3.27.01q-.41 0-.7.3zM2 9.75a2 2 0 0 0 .46 2.11l1.96 1.97a4 4 0 0 0 5.66 0l3.48-3.48c.28-.28.44-.67.44-1.06V8.5l-3.92 3.92-.21.2-.5.5a3 3 0 0 1-4.24 0l-.5-.5-.2-.2-1.97-1.97A2 2 0 0 1 2 9.75" />
+  </svg>
+);
+
+/** Fluent `tag_multiple_16_filled`. */
+export const FluentRefTagsFilledIcon = () => (
+  <svg {...base}>
+    <path d="M7.3 1.6 2.52 6.33a2 2 0 0 0 0 2.83l3.31 3.28c.8.78 2.07.78 2.85 0l4.7-4.65a2 2 0 0 0 .58-1.4L14 3A2 2 0 0 0 11.97 1l-3.26.01c-.53 0-1.04.22-1.42.59m4.05 3.06c-.3.3-.79.3-1.09 0a.76.76 0 0 1 0-1.08c.3-.3.8-.3 1.1 0s.3.78 0 1.08M2 9.75a2 2 0 0 0 .46 2.11l1.96 1.97a4 4 0 0 0 5.66 0l3.48-3.48c.28-.28.44-.67.44-1.06V8.5l-3.92 3.92-.21.2-.5.5a3 3 0 0 1-4.24 0l-.5-.5-.2-.2-1.97-1.97A2 2 0 0 1 2 9.75" />
+  </svg>
+);
+
+/** Fluent `vote_16_regular`. */
+export const FluentRefVoteIcon = () => (
+  <svg {...base}>
+    <path d="M7.38 2.5a1 1 0 0 1 1.37-.37L11 3.43a1 1 0 0 1 .37 1.37L10.09 7H11a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1h.67a1 1 0 0 1-.18-1.23zM7.62 7h1.32l1.56-2.7L8.25 3 6.36 6.27zm-3.1-2h.26l-.15.27a2 2 0 0 0-.26.75.5.5 0 0 0-.26.19L2.1 9H13.9l-2-2.8-.12-.1.46-.8.04-.08q.26.15.44.4l2.01 2.83q.28.39.28.87v3.18c0 .83-.67 1.5-1.5 1.5h-11A1.5 1.5 0 0 1 1 12.5V9.32q0-.48.28-.87l2.01-2.82c.29-.4.74-.63 1.22-.63M14 10H2v2.5c0 .28.22.5.5.5h11a.5.5 0 0 0 .5-.5z" />
+  </svg>
+);
+
+/** Fluent `vote_16_filled`. */
+export const FluentRefVoteFilledIcon = () => (
+  <svg {...base}>
+    <path d="M7.38 2.5a1 1 0 0 1 1.37-.37L11 3.43a1 1 0 0 1 .37 1.37L10.09 7H11a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1h.67a1 1 0 0 1-.18-1.23zM7.62 7h1.32l1.56-2.7L8.25 3 6.36 6.27zM4.78 5h-.27c-.48 0-.93.23-1.22.63L1.28 8.45a1.5 1.5 0 0 0-.28.87v3.18c0 .83.67 1.5 1.5 1.5h11c.83 0 1.5-.67 1.5-1.5V9.32q0-.48-.28-.87l-2.01-2.82a2 2 0 0 0-.44-.4l-.04.07-.46.8.12.1 2 2.8H2.1l2-2.8a.5.5 0 0 1 .26-.18 2 2 0 0 1 .26-.75z" />
+  </svg>
+);
+
+/** Fluent `text_quote_16_regular`. */
+export const FluentRefTextQuoteIcon = () => (
+  <svg {...base}>
+    <path d="M11 4a1 1 0 1 1 0 2 1 1 0 0 1 0-2m.89 2.8a7.3 7.3 0 0 1-2.24 4.35.5.5 0 0 0 .7.7C12.47 9.73 13 7.6 13 5a2 2 0 1 0-1.11 1.8M5 4a1 1 0 1 1 0 2 1 1 0 0 1 0-2m.89 2.8a7.3 7.3 0 0 1-2.24 4.35.5.5 0 0 0 .7.7C6.47 9.73 7 7.6 7 5a2 2 0 1 0-1.11 1.8" />
+  </svg>
+);
+
+/** Fluent `text_quote_16_filled`. */
+export const FluentRefTextQuoteFilledIcon = () => (
+  <svg {...base}>
+    <path d="M9.65 11.15a7.3 7.3 0 0 0 2.24-4.36A2 2 0 1 1 13 5c0 2.6-.53 4.74-2.65 6.86a.5.5 0 0 1-.7-.7m-6 0a7.3 7.3 0 0 0 2.24-4.36A2 2 0 1 1 7 5c0 2.6-.53 4.74-2.65 6.86a.5.5 0 0 1-.7-.7" />
+  </svg>
+);
+
+/** Fluent `location_add_16_regular`. */
+export const FluentRefLocationAddIcon = () => (
+  <svg {...base}>
+    <path d="M8 4c.28 0 .5.22.5.5V6H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V7H6a.5.5 0 0 1 0-1h1.5V4.5c0-.28.22-.5.5-.5m6 3c0 2.87-3.1 6.02-4.84 7.56-.67.59-1.65.59-2.32 0C5.1 13.02 2 9.87 2 7a6 6 0 1 1 12 0m-1 0A5 5 0 0 0 3 7c0 1.1.61 2.4 1.57 3.68a21 21 0 0 0 2.93 3.13c.3.25.7.25 1 0 .84-.75 2-1.87 2.93-3.13C12.39 9.4 13 8.11 13 7" />
+  </svg>
+);
+
+/** Fluent `location_add_16_filled`. */
+export const FluentRefLocationAddFilledIcon = () => (
+  <svg {...base}>
+    <path d="M9.16 14.54C10.9 13.01 14 9.88 14 7A6 6 0 0 0 2 7c0 2.88 3.1 6.01 4.84 7.54.67.6 1.65.6 2.32 0M8 4c.28 0 .5.22.5.5V6H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V7H6a.5.5 0 0 1 0-1h1.5V4.5c0-.28.22-.5.5-.5" />
+  </svg>
+);
+
+/** Fluent `arrow_circle_up_right_16_regular`. */
+export const FluentRefArrowUpRightCircleIcon = () => (
+  <svg {...base}>
+    <path d="M2 8a6 6 0 1 1 12 0A6 6 0 0 1 2 8m6-7a7 7 0 1 0 0 14A7 7 0 0 0 8 1m3 4.5a.5.5 0 0 0-.5-.5H6a.5.5 0 0 0 0 1h3.3L5.64 9.65a.5.5 0 0 0 .7.7L10 6.71V10a.5.5 0 0 0 1 0z" />
+  </svg>
+);
+
+/** Fluent `arrow_circle_up_right_16_filled`. */
+export const FluentRefArrowUpRightCircleFilledIcon = () => (
+  <svg {...base}>
+    <path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m10-2.5V10a.5.5 0 0 1-1 0V6.7l-3.65 3.65a.5.5 0 0 1-.7-.7L9.29 6H6a.5.5 0 0 1 0-1h4.5c.28 0 .5.22.5.5" />
+  </svg>
+);
+
+/** Fluent `arrow_repeat_1_16_regular`. */
+export const FluentRefRepeatOnceIcon = () => (
+  <svg {...base}>
+    <path d="M12.9 5.24A4 4 0 0 1 14 8.25a5 5 0 0 0-1-.22V8a3 3 0 0 0-.87-2.1.5.5 0 0 1 .69-.72zM8.25 11q-.18.48-.23 1H6.7l1.15 1.15c.17.17.19.44.05.64l-.05.07a.5.5 0 0 1-.64.05l-.07-.05-2-2a.5.5 0 0 1-.06-.64l.06-.07 2-2a.5.5 0 0 1 .76.63l-.05.07L6.7 11zm.52-8.91.07.05 2 2 .06.08a.5.5 0 0 1 0 .56l-.05.07-2 2-.08.06a.5.5 0 0 1-.56 0l-.07-.05-.06-.07a.5.5 0 0 1 0-.57l.06-.07L9.29 5H6a3 3 0 0 0-3 2.82V8c0 .82.33 1.56.86 2.1a.5.5 0 0 1-.71.7A4 4 0 0 1 5.8 4h3.5L8.14 2.85l-.06-.07a.5.5 0 0 1 .7-.7M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0m-2.95-2.66a.6.6 0 0 0-.68.23c-.21.3-.58.73-1.1.98a.5.5 0 1 0 .45.9q.45-.24.78-.53v3.08a.5.5 0 0 0 1 0v-4.08a.6.6 0 0 0-.45-.58" />
+  </svg>
+);
+
+/** Fluent `arrow_repeat_1_16_filled`. */
+export const FluentRefRepeatOnceFilledIcon = () => (
+  <svg {...base}>
+    <path d="M12.75 5.51q.4.01.62.33l.04.06a4 4 0 0 1 .58 2.35A5 5 0 0 0 12.5 8q0-.76-.4-1.34a.75.75 0 0 1 .64-1.14M8 12.5v-.06L7.55 12h.48q.08-.8.44-1.5h-.91l.72-.72.07-.09a.75.75 0 0 0-1.13-.97l-2 2-.08.08c-.22.3-.2.71.08.98l2 2 .08.07c.27.2.64.2.9 0A5 5 0 0 1 8 12.5M7.72 2.22a.75.75 0 0 1 .98-.07l.08.07 2 2 .07.08c.2.26.2.62.01.89l-.08.09-2 2-.08.07c-.26.2-.62.2-.89.01l-.09-.08-.07-.08a.75.75 0 0 1-.01-.88l.08-.1.72-.72H6a2.5 2.5 0 0 0-2.5 2.34V8q0 .64.29 1.17l.1.18q.1.17.11.38a.75.75 0 0 1-1.39.4A4 4 0 0 1 5.8 4L6 4h2.44l-.72-.72-.07-.09a.75.75 0 0 1 .07-.97M16 12.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0m-2.95-2.66a.6.6 0 0 0-.68.23c-.21.3-.58.73-1.1.98a.5.5 0 1 0 .45.9q.45-.24.78-.53v3.08a.5.5 0 0 0 1 0v-4.08a.6.6 0 0 0-.45-.58" />
+  </svg>
+);
+
+/** Fluent `camera_switch_20_regular`. */
+export const FluentRefSwitchCameraIcon = () => (
+  <svg {...base}>
+    <path d="M14.85 2.15a.5.5 0 0 0-.7.7L15.29 4H4a2 2 0 0 0-2 2v6.5a.5.5 0 0 0 1 0V6a1 1 0 0 1 1-1h11.3l-1.15 1.15a.5.5 0 0 0 .7.7l2-2a.5.5 0 0 0 0-.7zM16 15a1 1 0 0 0 1-1V7.5a.5.5 0 0 1 1 0V14a2 2 0 0 1-2 2H4.7l1.15 1.15a.5.5 0 0 1-.7.7l-2-2a.5.5 0 0 1 0-.7l2-2a.5.5 0 0 1 .7.7L4.71 15zm-3-5a3 3 0 1 1-6 0 3 3 0 0 1 6 0m-1 0a2 2 0 1 0-4 0 2 2 0 0 0 4 0" />
+  </svg>
+);
+
+/** Fluent `camera_switch_20_filled`. */
+export const FluentRefSwitchCameraFilledIcon = () => (
+  <svg {...base}>
+    <path d="M14.15 2.15c.2-.2.5-.2.7 0l2 2c.2.2.2.5 0 .7l-2 2a.5.5 0 0 1-.7-.7L15.29 5H4a1 1 0 0 0-1 1v6.5a.5.5 0 0 1-1 0V6c0-1.1.9-2 2-2h11.3l-1.15-1.15a.5.5 0 0 1 0-.7M17 14a1 1 0 0 1-1 1H4.7l1.15-1.15a.5.5 0 0 0-.7-.7l-2 2a.5.5 0 0 0 0 .7l2 2a.5.5 0 0 0 .7-.7L4.71 16H16a2 2 0 0 0 2-2V7.5a.5.5 0 0 0-1 0zm-4-4a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+  </svg>
+);
+
+/** Fluent `arrow_eject_20_regular`. */
+export const FluentRefEjectIcon = () => (
+  <svg {...base}>
+    <path d="M9.6 5.2a.5.5 0 0 1 .8 0l4.5 6a.5.5 0 0 1-.4.8h-9a.5.5 0 0 1-.4-.8zm1.6-.6c-.6-.8-1.8-.8-2.4 0l-4.5 6A1.5 1.5 0 0 0 5.5 13h9a1.5 1.5 0 0 0 1.2-2.4zM4 15a.5.5 0 0 0 0 1h12a.5.5 0 0 0 0-1z" />
+  </svg>
+);
+
+/** Fluent `arrow_eject_20_filled`. */
+export const FluentRefEjectFilledIcon = () => (
+  <svg {...base}>
+    <path d="M11.2 4.6c-.6-.8-1.8-.8-2.4 0l-4.5 6A1.5 1.5 0 0 0 5.5 13h9a1.5 1.5 0 0 0 1.2-2.4zM4 15a.5.5 0 0 0 0 1h12a.5.5 0 0 0 0-1z" />
+  </svg>
+);
+
+/** Fluent `closed_caption_off_16_regular`. */
+export const FluentRefCaptionsOffIcon = () => (
+  <svg {...base}>
+    <path d="m12.3 13 1.85 1.85a.5.5 0 0 0 .7-.7l-13-13a.5.5 0 1 0-.7.7L2.5 3.21A2.5 2.5 0 0 0 1 5.5v5A2.5 2.5 0 0 0 3.5 13zm-1-1H3.5A1.5 1.5 0 0 1 2 10.5v-5c0-.76.57-1.4 1.3-1.49l1.76 1.76C4.4 6.15 4 6.93 4 8c0 1.14.46 1.94 1.18 2.3.7.34 1.52.2 2.07-.35a.5.5 0 1 0-.7-.7.8.8 0 0 1-.93.15C5.34 9.26 5 8.86 5 8s.34-1.26.62-1.4l.2-.07zM8.45 6.34l.73.72a1 1 0 0 1 .43-.46.8.8 0 0 1 .93.15.5.5 0 0 0 .7-.7 1.8 1.8 0 0 0-2.07-.35q-.43.21-.72.64M14 10.5q-.01.58-.38 1l.7.7a2.5 2.5 0 0 0 .68-1.7v-5A2.5 2.5 0 0 0 12.5 3H5.12l1 1h6.38c.83 0 1.5.67 1.5 1.5z" />
+  </svg>
+);
+
+/** Fluent `closed_caption_off_16_filled`. */
+export const FluentRefCaptionsOffFilledIcon = () => (
+  <svg {...base}>
+    <path d="m12.3 13 1.85 1.85a.5.5 0 0 0 .7-.7l-13-13a.5.5 0 1 0-.7.7L2.5 3.21A2.5 2.5 0 0 0 1 5.5v5A2.5 2.5 0 0 0 3.5 13zM5.81 6.53l-.2.07C5.34 6.74 5 7.14 5 8s.34 1.26.62 1.4c.3.15.68.1.93-.15a.5.5 0 1 1 .7.7 1.8 1.8 0 0 1-2.07.35C4.46 9.94 4 9.14 4 8c0-1.07.41-1.85 1.06-2.23zm3.8.07a1 1 0 0 0-.43.46l5.14 5.15A2.5 2.5 0 0 0 15 10.5v-5A2.5 2.5 0 0 0 12.5 3H5.12l3.34 3.34q.29-.42.72-.64a1.8 1.8 0 0 1 2.07.35.5.5 0 0 1-.7.7.8.8 0 0 0-.93-.15" />
+  </svg>
+);
+
+/** Fluent `phone_vibrate_20_regular`. */
+export const FluentRefVibrateIcon = () => (
+  <svg {...base}>
+    <path d="M8.5 14.5a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1zM7 2a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h6a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zM6 4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1zM2.92 7.22a.5.5 0 0 0-.84.56l.38.57c.29.42.32.97.1 1.43-.4.78-.34 1.7.14 2.43l.38.57a.5.5 0 1 0 .84-.56l-.38-.57a1.4 1.4 0 0 1-.1-1.43c.4-.78.34-1.7-.14-2.43zm13.3-.14a.5.5 0 0 1 .7.14l.38.57c.48.73.54 1.65.15 2.43-.23.46-.2 1 .09 1.43l.38.57a.5.5 0 1 1-.84.56l-.38-.57a2.4 2.4 0 0 1-.15-2.43c.23-.46.2-1-.09-1.43l-.38-.57a.5.5 0 0 1 .14-.7" />
+  </svg>
+);
+
+/** Fluent `phone_vibrate_20_filled`. */
+export const FluentRefVibrateFilledIcon = () => (
+  <svg {...base}>
+    <path d="M5 4c0-1.1.9-2 2-2h6a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2zm3.5 10.5a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1zM2.92 7.22a.5.5 0 0 0-.84.56l.38.57c.29.42.32.97.1 1.43-.4.78-.34 1.7.14 2.43l.38.57a.5.5 0 1 0 .84-.56l-.38-.57a1.4 1.4 0 0 1-.1-1.43c.4-.78.34-1.7-.14-2.43zm13.3-.14a.5.5 0 0 1 .7.14l.38.57c.48.73.54 1.65.15 2.43-.23.46-.2 1 .09 1.43l.38.57a.5.5 0 1 1-.84.56l-.38-.57a2.4 2.4 0 0 1-.15-2.43c.23-.46.2-1-.09-1.43l-.38-.57a.5.5 0 0 1 .14-.7" />
+  </svg>
+);
+
+/** Fluent `sim_16_regular`. */
+export const FluentRefSimCardIcon = () => (
+  <svg {...base}>
+    <path d="M5 9.5C5 8.67 5.67 8 6.5 8h3c.83 0 1.5.67 1.5 1.5v2c0 .83-.67 1.5-1.5 1.5h-3A1.5 1.5 0 0 1 5 11.5zM6.5 9a.5.5 0 0 0-.5.5v2c0 .28.22.5.5.5H8V9zM9 9v3h.5a.5.5 0 0 0 .5-.5v-2a.5.5 0 0 0-.5-.5zM3 3.5A2.5 2.5 0 0 1 5.5 1h3.17c.66 0 1.3.26 1.77.73l1.83 1.83c.47.47.73 1.1.73 1.77v7.17a2.5 2.5 0 0 1-2.5 2.5h-5A2.5 2.5 0 0 1 3 12.5zM5.5 2C4.67 2 4 2.67 4 3.5v9c0 .83.67 1.5 1.5 1.5h5c.83 0 1.5-.67 1.5-1.5V5.33c0-.4-.16-.78-.44-1.06L9.73 2.44A1.5 1.5 0 0 0 8.67 2z" />
+  </svg>
+);
+
+/** Fluent `sim_16_filled`. */
+export const FluentRefSimCardFilledIcon = () => (
+  <svg {...base}>
+    <path d="M5.5 1A2.5 2.5 0 0 0 3 3.5v9A2.5 2.5 0 0 0 5.5 15h5a2.5 2.5 0 0 0 2.5-2.5V5.33c0-.66-.26-1.3-.73-1.77l-1.83-1.83A2.5 2.5 0 0 0 8.67 1zm1 7H8v5H6.5A1.5 1.5 0 0 1 5 11.5v-2C5 8.67 5.67 8 6.5 8M9 8h.5c.83 0 1.5.67 1.5 1.5v2c0 .83-.67 1.5-1.5 1.5H9z" />
+  </svg>
+);
+
+/** Fluent `desktop_off_20_regular`. */
+export const FluentRefMonitorOffIcon = () => (
+  <svg {...base}>
+    <path d="m2.28 2.98-.13-.13a.5.5 0 1 1 .7-.7l15 15a.5.5 0 0 1-.7.7L14.29 15H13v2h1.5a.5.5 0 0 1 0 1h-9a.5.5 0 0 1 0-1H7v-2H4a2 2 0 0 1-2-2V4a2 2 0 0 1 .28-1.02M13.29 14 3.03 3.74 3 4v9a1 1 0 0 0 1 1zM17 13a1 1 0 0 1-.89 1l.8.78A2 2 0 0 0 18 13V4a2 2 0 0 0-2-2H4.12l1 1H16a1 1 0 0 1 1 1zm-5 2H8v2h4z" />
+  </svg>
+);
+
+/** Fluent `desktop_off_20_filled`. */
+export const FluentRefMonitorOffFilledIcon = () => (
+  <svg {...base}>
+    <path d="m14.3 15 2.85 2.85a.5.5 0 0 0 .7-.7l-15-15a.5.5 0 0 0-.7.7Q2 3.15 2 3.5v10c0 .83.67 1.5 1.5 1.5H7v2H5.5a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1H13v-2zm3.7-1.5c0 .64-.4 1.2-.97 1.4L4.13 2H16.5c.83 0 1.5.67 1.5 1.5zM12 15v2H8v-2z" />
+  </svg>
+);
+
+/** Fluent `megaphone_off_16_regular`. */
+export const FluentRefMegaphoneOffIcon = () => (
+  <svg {...base}>
+    <path d="m13.3 14 .85.85a.5.5 0 0 0 .7-.7l-13-13a.5.5 0 1 0-.7.7L4.3 5.02l-2.29.78A1.5 1.5 0 0 0 1 7.22v1.56c0 .65.4 1.22 1.02 1.42l1.98.68V12a3 3 0 0 0 5.87.87l3.15 1.07zm-1.56-1.55-9.4-3.2A.5.5 0 0 1 2 8.79V7.22c0-.22.14-.4.34-.48l2.76-.93zm-2.82.1A2 2 0 0 1 5 12v-.78zM14 3.5v8.38l.96.96q.04-.15.04-.33v-9c0-1.03-1-1.76-1.98-1.43l-6.6 2.23.8.79 6.12-2.07a.5.5 0 0 1 .66.47" />
+  </svg>
+);
+
+/** Fluent `megaphone_off_16_filled`. */
+export const FluentRefMegaphoneOffFilledIcon = () => (
+  <svg {...base}>
+    <path d="m13.3 14 .85.85a.5.5 0 0 0 .7-.7l-13-13a.5.5 0 1 0-.7.7L4.3 5.02l-2.29.78A1.5 1.5 0 0 0 1 7.22v1.56c0 .65.4 1.22 1.02 1.42l1.98.68V12a3 3 0 0 0 5.87.87l3.15 1.07zM5 11.22l3.92 1.33A2 2 0 0 1 5 12zm10 1.3q0 .16-.04.32L6.43 4.31l6.59-2.23A1.5 1.5 0 0 1 15 3.5z" />
+  </svg>
+);
+
+/** Fluent `keyboard_off_16_regular`. */
+export const FluentRefKeyboardOffIcon = () => (
+  <svg {...base}>
+    <path d="M1.15 1.15c.2-.2.5-.2.7 0l13 13a.5.5 0 1 1-.7.7L12.29 13H2.75C1.78 13 1 12.22 1 11.25v-6.5c0-.83.57-1.52 1.34-1.7l-1.2-1.2a.5.5 0 0 1 0-.7M13.25 3c.97 0 1.75.78 1.75 1.75v6.5q-.01.69-.46 1.17l-.7-.7q.15-.2.16-.47v-6.5a.75.75 0 0 0-.75-.75H6.12l-1-1zM2.75 4a.75.75 0 0 0-.75.75v6.5c0 .41.34.75.75.75h8.54l-1-1H3.5a.5.5 0 1 1 0-1h5.8l-6-6zm2.5 3.5a.75.75 0 1 1 0 1.5.75.75 0 0 1 0-1.5m6 0a.75.75 0 1 1 0 1.5.75.75 0 0 1 0-1.5m-8-2a.75.75 0 1 1 0 1.5.75.75 0 0 1 0-1.5m6 0a.75.75 0 1 1 0 1.5.75.75 0 0 1 0-1.5m3 0a.75.75 0 1 1 0 1.5.75.75 0 0 1 0-1.5" />
+  </svg>
+);
+
+/** Fluent `keyboard_off_16_filled`. */
+export const FluentRefKeyboardOffFilledIcon = () => (
+  <svg {...base}>
+    <path d="M1.15 1.15c.2-.2.5-.2.7 0l13 13a.5.5 0 1 1-.7.7L12.29 13H2.75C1.78 13 1 12.22 1 11.25v-6.5c0-.83.57-1.52 1.34-1.7l-1.2-1.2a.5.5 0 0 1 0-.7M13.25 3c.97 0 1.75.78 1.75 1.75v6.5q-.01.69-.46 1.17L11.11 9l.14.01a.75.75 0 1 0-.74-.6l-1.4-1.41.14.01a.75.75 0 1 0-.74-.6L5.12 3zM3.5 10a.5.5 0 0 0 0 1h6.8l-1-1zm1.75-2.5a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5m-2-2a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5m9 0a.75.75 0 1 0 0 1.5.75.75 0 0 0 0-1.5" />
+  </svg>
+);
+
+/** Fluent `tag_add_16_regular`. */
+export const FluentRefTagPlusIcon = () => (
+  <svg {...base}>
+    <path d="M10 5a1 1 0 1 1 0-2 1 1 0 0 1 0 2M1.59 9.14a2 2 0 0 1 0-2.83L6.33 1.6c.37-.37.88-.58 1.4-.59L11 1A2 2 0 0 1 13 3l-.02 2.59q-.48-.25-1-.39L12 3a1 1 0 0 0-1-1L7.73 2a1 1 0 0 0-.7.3L2.3 7.01a1 1 0 0 0 0 1.41l2.74 2.73q.11.9.48 1.68a2 2 0 0 1-.64-.42zM15 10.5a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0m-4-2a.5.5 0 0 0-1 0V10H8.5a.5.5 0 0 0 0 1H10v1.5a.5.5 0 0 0 1 0V11h1.5a.5.5 0 0 0 0-1H11z" />
+  </svg>
+);
+
+/** Fluent `tag_add_16_filled`. */
+export const FluentRefTagPlusFilledIcon = () => (
+  <svg {...base}>
+    <path d="M1.59 6.31a2 2 0 0 0 0 2.83l3.3 3.28a2 2 0 0 0 .63.42 5.5 5.5 0 0 1 7.46-7.25L13 3.01A2 2 0 0 0 10.99 1l-3.25.01c-.53 0-1.04.22-1.41.59zM10 5a1 1 0 1 1 0-2 1 1 0 0 1 0 2m5 5.5a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0m-4-2a.5.5 0 0 0-1 0V10H8.5a.5.5 0 0 0 0 1H10v1.5a.5.5 0 0 0 1 0V11h1.5a.5.5 0 0 0 0-1H11z" />
+  </svg>
+);
+
+/** Fluent `paint_brush_16_regular`. */
+export const FluentRefPaintRollerIcon = () => (
+  <svg {...base}>
+    <path d="M3.5 1a.5.5 0 0 0-.5.5V9c0 1.1.9 2 2 2h1v2a2 2 0 1 0 4 0v-2h1a2 2 0 0 0 2-2V1.5a.5.5 0 0 0-.5-.5zM4 7V2h4v1.5a.5.5 0 0 0 1 0V2h1v2.5a.5.5 0 0 0 1 0V2h1v5zm0 1h8v1a1 1 0 0 1-1 1H9.5a.5.5 0 0 0-.5.5V13a1 1 0 1 1-2 0v-2.5a.5.5 0 0 0-.5-.5H5a1 1 0 0 1-1-1z" />
+  </svg>
+);
+
+/** Fluent `paint_brush_16_filled`. */
+export const FluentRefPaintRollerFilledIcon = () => (
+  <svg {...base}>
+    <path d="M10 4.5V1H9v2.5a.5.5 0 0 1-1 0V1H3.5a.5.5 0 0 0-.5.5V7h10V1.5a.5.5 0 0 0-.5-.5H11v3.5a.5.5 0 0 1-1 0M13 8H3v1c0 1.1.9 2 2 2h1.5v2.5a1.5 1.5 0 0 0 3 0V11H11a2 2 0 0 0 2-2z" />
+  </svg>
+);
+
+/** Fluent `math_formula_16_regular`. */
+export const FluentRefSquareRootIcon = () => (
+  <svg {...base}>
+    <path d="M8.33 1.23a2.5 2.5 0 0 0-3.52 2.1L4.7 5H3.5a.5.5 0 0 0 0 1h1.13l-.44 6.6a1.5 1.5 0 0 1-2.11 1.26l-.38-.17a.5.5 0 0 0-.4.92l.37.17a2.5 2.5 0 0 0 3.52-2.12L5.63 6H7.5a.5.5 0 1 0 0-1H5.7l.1-1.6a1.5 1.5 0 0 1 2.12-1.26l.37.17a.5.5 0 1 0 .42-.92z" />
+    <path d="M8.16 8.05a.25.25 0 0 1 .4.05l1.32 2.32-2.73 2.73a.5.5 0 1 0 .7.7l2.54-2.53 1.19 2.08c.4.71 1.39.84 1.97.26l.3-.3a.5.5 0 0 0-.7-.71l-.3.3a.25.25 0 0 1-.4-.05l-1.33-2.32 2.73-2.73a.5.5 0 1 0-.7-.7L10.6 9.68 9.42 7.6a1.25 1.25 0 0 0-1.97-.26l-.3.3a.5.5 0 1 0 .7.71z" />
+  </svg>
+);
+
+/** Fluent `math_formula_16_filled`. */
+export const FluentRefSquareRootFilledIcon = () => (
+  <svg {...base}>
+    <path d="M8.75 1.5a2.65 2.65 0 0 0-4.23 1.95L4.45 4.5h-.7a.75.75 0 0 0 0 1.5h.6l-.42 6.3c-.06.82-.9 1.37-1.68 1.08l-.24-.09a.75.75 0 0 0-.52 1.41l.25.1a2.75 2.75 0 0 0 3.69-2.4L5.85 6h1.4a.75.75 0 1 0 0-1.5h-1.3l.07-.95c.06-.92 1.1-1.4 1.83-.85l.2.15a.75.75 0 1 0 .9-1.2z" />
+    <path d="M9.64 7.67a1.5 1.5 0 0 0-2.34-.28l-.33.33a.75.75 0 0 0 1.06 1.06l.33-.33 1.2 1.94-2.34 2.33a.75.75 0 0 0 1.06 1.06l2.08-2.08 1 1.63c.51.83 1.66.96 2.34.28l.33-.33a.75.75 0 0 0-1.06-1.06l-.33.33-1.2-1.94 2.34-2.33a.75.75 0 0 0-1.06-1.06L10.64 9.3z" />
+  </svg>
+);
+
+/** Fluent `document_arrow_up_16_regular`. */
+export const FluentRefFileUploadIcon = () => (
+  <svg {...base}>
+    <path d="M4 3c0-1.1.9-2 2-2h3.59c.4 0 .78.16 1.06.44l2.91 2.91c.28.28.44.67.44 1.06V13a2 2 0 0 1-2 2H8.66q.6-.42 1.08-1H12a1 1 0 0 0 1-1V6h-2.5A1.5 1.5 0 0 1 9 4.5V2H6a1 1 0 0 0-1 1v2.02q-.51.05-1 .19zm6.5 2h2.3L10 2.2v2.3c0 .28.22.5.5.5m-5 10a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9m2.35-4.85a.5.5 0 0 1-.7.7L6 9.71v2.79a.5.5 0 0 1-1 0V9.7l-1.15 1.15a.5.5 0 0 1-.7-.7l2-2A.5.5 0 0 1 5.5 8a.5.5 0 0 1 .35.14z" />
+  </svg>
+);
+
+/** Fluent `document_arrow_up_16_filled`. */
+export const FluentRefFileUploadFilledIcon = () => (
+  <svg {...base}>
+    <path d="M9 4.5V1H5.5C4.67 1 4 1.67 4 2.5v2.7A5.5 5.5 0 0 1 8.66 15h3.84c.83 0 1.5-.67 1.5-1.5V6h-3.5A1.5 1.5 0 0 1 9 4.5m1 0V1.25L13.75 5H10.5a.5.5 0 0 1-.5-.5M5.5 15a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9m2.35-4.85a.5.5 0 0 1-.7.7L6 9.71v2.79a.5.5 0 0 1-1 0V9.7l-1.15 1.15a.5.5 0 0 1-.7-.7l2-2A.5.5 0 0 1 5.5 8a.5.5 0 0 1 .35.14z" />
+  </svg>
+);
+
+/** Fluent `data_area_20_regular`. */
+export const FluentRefChartAreaIcon = () => (
+  <svg {...base}>
+    <path d="M2.5 2c.28 0 .5.22.5.5v6.23l3.8-1.69a.5.5 0 0 1 .45.03l3.2 1.83L15.2 5.1a.5.5 0 0 1 .81.39V17h1.5a.5.5 0 0 1 0 1h-13A2.5 2.5 0 0 1 2 15.5v-13c0-.28.22-.5.5-.5M15 17V6.54l-4.19 3.35a.5.5 0 0 1-.56.04L6.97 8.06 3 9.82v5.68c0 .83.67 1.5 1.5 1.5z" />
+  </svg>
+);
+
+/** Fluent `data_area_20_filled`. */
+export const FluentRefChartAreaFilledIcon = () => (
+  <svg {...base}>
+    <path d="M2.75 2c.41 0 .75.34.75.75v12.5c0 .69.56 1.25 1.25 1.25h12.5a.75.75 0 0 1 0 1.5H4.75A2.75 2.75 0 0 1 2 15.25V2.75c0-.41.34-.75.75-.75M16 5.5v10H4.75a.25.25 0 0 1-.25-.25V8.06l2.3-1.02a.5.5 0 0 1 .45.03l3.2 1.83L15.2 5.1a.5.5 0 0 1 .81.39" />
+  </svg>
+);
+
+/** Fluent `gift_card_16_regular`. */
+export const FluentRefGiftCardIcon = () => (
+  <svg {...base}>
+    <path d="M1 5c0-1.1.9-2 2-2h10a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2zm12 7a1 1 0 0 0 1-1V8H6.7l1.15 1.15a.5.5 0 1 1-.7.7L6 8.71V12zM7.91 7H14V5a1 1 0 0 0-1-1H6v1.09A1.5 1.5 0 0 1 7.91 7M6.5 7a.5.5 0 1 0-.5-.5V7zM5 5.09V4H3a1 1 0 0 0-1 1v2h1.09A1.5 1.5 0 0 1 5 5.09M4.5 7H5v-.5a.5.5 0 1 0-.5.5m-.2 1H2v3a1 1 0 0 0 1 1h2V8.7L3.85 9.86a.5.5 0 0 1-.7-.7z" />
+  </svg>
+);
+
+/** Fluent `gift_card_16_filled`. */
+export const FluentRefGiftCardFilledIcon = () => (
+  <svg {...base}>
+    <path d="M3 3h2v2.09A1.5 1.5 0 0 0 3.09 7H1V5c0-1.1.9-2 2-2" />
+    <path d="m6 8.7 1.15 1.15a.5.5 0 0 0 .7-.7L6.71 8H15v3a2 2 0 0 1-2 2H6z" />
+    <path d="M4.3 8 3.14 9.15a.5.5 0 1 0 .7.7L5 8.71V13H3a2 2 0 0 1-2-2V8z" />
+    <path d="M7.91 7A1.5 1.5 0 0 0 6 5.09V3h7a2 2 0 0 1 2 2v2z" />
+    <path d="M6 6.5V7h.5a.5.5 0 1 0-.5-.5" />
+    <path d="M5 6.5V7h-.5a.5.5 0 1 1 .5-.5" />
+  </svg>
+);
+
+/** Fluent `premium_16_regular`. */
+export const FluentRefGemIcon = () => (
+  <svg {...base}>
+    <path d="M3.5 2a.5.5 0 0 0-.45.28l-2 4a.5.5 0 0 0 .06.54l6.5 8a.5.5 0 0 0 .78 0l6.5-8a.5.5 0 0 0 .06-.54l-2-4A.5.5 0 0 0 12.5 2zM2.3 6l1.5-3h2.06l-.75 3zm.25 1h2.58l1.62 5.16zm3.63 0h3.64L8 12.82zm4.69 0h2.58l-4.2 5.16zm2.82-1h-2.8l-.75-3h2.05zM9.86 6H6.14l.75-3h2.22z" />
+  </svg>
+);
+
+/** Fluent `premium_16_filled`. */
+export const FluentRefGemFilledIcon = () => (
+  <svg {...base}>
+    <path d="M3.75 2a.8.8 0 0 0-.66.4l-2 3.75a.8.8 0 0 0 .07.81l6.25 8a.75.75 0 0 0 1.18 0l6.25-8a.8.8 0 0 0 .07-.81l-2-3.75a.8.8 0 0 0-.66-.4zm-.88 4L4.2 3.5h1.28L4.85 6zm.61 1.5h1.55l1.03 3.3zm3.12 0h2.8L8 11.99zm4.37 0h1.55l-2.58 3.3zM13.13 6h-1.98l-.63-2.5h1.28zM9.6 6H6.4l.62-2.5h1.96z" />
+  </svg>
+);
+
+/** Fluent `document_pdf_16_regular`. */
+export const FluentRefFilePdfIcon = () => (
+  <svg {...base}>
+    <path d="M2.5 10a1.5 1.5 0 0 1 0 3H2v1.5a.5.5 0 0 1-1 0v-4c0-.28.22-.5.5-.5zM2 12h.5a.5.5 0 0 0 0-1H2zm4-2c.83 0 1.5.67 1.5 1.5v2c0 .83-.67 1.5-1.5 1.5H5a.5.5 0 0 1-.5-.5v-4c0-.28.22-.5.5-.5zm-.5 4H6a.5.5 0 0 0 .5-.5v-2A.5.5 0 0 0 6 11h-.5zm5.5-4a.5.5 0 0 1 0 1H9.5v1h1a.5.5 0 0 1 0 1h-1v1.5a.5.5 0 0 1-1 0v-4c0-.28.22-.5.5-.5zM9.59 1c.39 0 .78.16 1.06.44l2.91 2.91c.28.28.44.67.44 1.06V13a2 2 0 0 1-2 2h-1.59q.09-.24.09-.5V14H12a1 1 0 0 0 1-1V6h-2.5A1.5 1.5 0 0 1 9 4.5V2H6a1 1 0 0 0-1 1v6q-.58.02-1 .38V3c0-1.1.9-2 2-2zM10 4.5c0 .28.22.5.5.5h2.29L10 2.21z" />
+  </svg>
+);
+
+/** Fluent `document_pdf_16_filled`. */
+export const FluentRefFilePdfFilledIcon = () => (
+  <svg {...base}>
+    <path d="M2.5 10a1.5 1.5 0 0 1 0 3H2v1.5a.5.5 0 0 1-1 0v-4c0-.28.22-.5.5-.5zM2 12h.5a.5.5 0 0 0 0-1H2zm4-2c.83 0 1.5.67 1.5 1.5v2c0 .83-.67 1.5-1.5 1.5H5a.5.5 0 0 1-.5-.5v-4c0-.28.22-.5.5-.5zm-.5 4H6a.5.5 0 0 0 .5-.5v-2A.5.5 0 0 0 6 11h-.5zm5.5-4a.5.5 0 0 1 0 1H9.5v1h1a.5.5 0 0 1 0 1h-1v1.5a.5.5 0 0 1-1 0v-4c0-.28.22-.5.5-.5zM9 4.5c0 .83.67 1.5 1.5 1.5H14v7.5c0 .83-.67 1.5-1.5 1.5h-2.09q.09-.24.09-.5V14a1.5 1.5 0 0 0 1.3-2.24A1.5 1.5 0 0 0 11 9H9c-.53 0-1 .28-1.27.7A2.5 2.5 0 0 0 6 9H5q-.58.02-1 .38V2.5C4 1.67 4.67 1 5.5 1H9zm4.75.5H10.5a.5.5 0 0 1-.5-.5V1.25z" />
+  </svg>
+);
+
+/** Fluent `money_hand_16_regular`. */
+export const FluentRefHandCoinsIcon = () => (
+  <svg {...base}>
+    <path d="M3 2.75V3h.5a.5.5 0 0 0 .5-.5V2h-.25a.75.75 0 0 0-.75.75M3.75 1h4.5C9.22 1 10 1.78 10 2.75v.54l2.97 2.98A3.5 3.5 0 0 1 14 8.74v5.76a.5.5 0 0 1-1 0V8.74c0-.66-.26-1.3-.73-1.77L10 4.71v2.58l.85.86a.5.5 0 0 1-.7.7l-.99-.98-.03-.03L7.91 6.6a.74.74 0 1 0-1.05 1.05l1.5 1.49q.14.14.14.35v1a1 1 0 0 0 1 1c.28 0 .5.22.5.5v1.25c0 .97-.78 1.75-1.75 1.75h-4.5C2.78 15 2 14.22 2 13.25V2.75C2 1.78 2.78 1 3.75 1M8 14h.25c.41 0 .75-.34.75-.75V13h-.5a.5.5 0 0 0-.5.5zm.21-1.97a2 2 0 0 1-.7-1.53v-.8l-.2-.19A2 2 0 1 1 6.07 6a1.75 1.75 0 0 1 2.54-.1l.39.4V4h-.5A1.5 1.5 0 0 1 7 2.5V2H5v.5C5 3.33 4.33 4 3.5 4H3v8h.5c.83 0 1.5.67 1.5 1.5v.5h2v-.5c0-.73.52-1.34 1.21-1.47M8.5 3H9v-.25A.75.75 0 0 0 8.25 2H8v.5c0 .28.22.5.5.5M3 13v.25c0 .41.34.75.75.75H4v-.5a.5.5 0 0 0-.5-.5zm3.6-4.2-.44-.44a1.7 1.7 0 0 1-.51-1.3A1 1 0 1 0 6.6 8.8" />
+  </svg>
+);
+
+/** Fluent `money_hand_16_filled`. */
+export const FluentRefHandCoinsFilledIcon = () => (
+  <svg {...base}>
+    <path d="M2 2.75C2 1.78 2.78 1 3.75 1h4.5C9.22 1 10 1.78 10 2.75v.54l2.97 2.98A3.5 3.5 0 0 1 14 8.74v5.76a.5.5 0 1 1-1 0V8.74c0-.66-.26-1.3-.73-1.77L10 4.71v2.58l.85.86a.5.5 0 0 1-.7.7L8.12 6.82l-.4-.34a.74.74 0 0 0-.86 1.18l1.5 1.49q.14.14.14.35v1a1 1 0 0 0 1 1c.28 0 .5.22.5.5v1.25c0 .97-.78 1.75-1.75 1.75h-4.5C2.78 15 2 14.22 2 13.25zm7 10v-.31a2 2 0 0 1-.79-.41A1.5 1.5 0 0 0 7 13.5v.5h.75q.13 0 .25-.03v-.47c0-.28.22-.5.5-.5h.47q.03-.12.03-.25M7.3 9.51 6.17 8.36A1.74 1.74 0 0 1 6.06 6H6a2 2 0 1 0 1.3 3.51M5 2.5V2h-.75q-.13 0-.25.02v.48a.5.5 0 0 1-.5.5h-.48L3 3.25V4h.5C4.33 4 5 3.33 5 2.5M3.5 12H3v.75q0 .13.02.25h.48c.28 0 .5.22.5.5v.47q.12.03.25.03H5v-.5c0-.83-.67-1.5-1.5-1.5M8 2.5v-.48L7.75 2H7v.5C7 3.33 7.67 4 8.5 4H9v-.75q0-.13-.03-.25H8.5a.5.5 0 0 1-.5-.5" />
+  </svg>
+);
+
+/** Fluent `box_checkmark_16_regular`. */
+export const FluentRefPackageCheckIcon = () => (
+  <svg {...base}>
+    <path d="M6.92 1.38a3 3 0 0 1 2.16 0l4.96 1.9c.58.23.96.79.96 1.4v2.58a6 6 0 0 0-1-.66V4.97L11.6 6a5.5 5.5 0 0 0-4.1 1.73v-.4L2 4.97v6.34c0 .21.13.4.32.47l3.99 1.53q.25.72.68 1.34l-.07-.03-4.96-1.9a1.5 1.5 0 0 1-.96-1.4V4.68c0-.62.38-1.18.96-1.4zm1.8.93a2 2 0 0 0-1.44 0l-1.38.53 5.59 2.12 1.95-.83zM2.56 4.13 8 6.46l2.16-.93L4.5 3.38zM16 11.5a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0m-5.15 1.85 3-3a.5.5 0 0 0-.7-.7l-2.65 2.64-.65-.64a.5.5 0 0 0-.7.7l1 1c.2.2.5.2.7 0" />
+  </svg>
+);
+
+/** Fluent `box_checkmark_16_filled`. */
+export const FluentRefPackageCheckFilledIcon = () => (
+  <svg {...base}>
+    <path d="m4.04 2.49 6.6 2.83L8 6.46 1.43 3.64q.22-.23.53-.35zm1.33-.52 1.55-.6a3 3 0 0 1 2.16 0l4.96 1.92q.31.12.53.35l-2.65 1.14zM15 4.55 11.6 6c1.3.02 2.47.5 3.4 1.26V4.55M7.5 7.33v.4a5.5 5.5 0 0 0-.51 6.92l-.07-.03-4.96-1.9a1.5 1.5 0 0 1-.96-1.4V4.54zM16 11.5a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0m-5.15 1.85 3-3a.5.5 0 0 0-.7-.7l-2.65 2.64-.65-.64a.5.5 0 0 0-.7.7l1 1c.2.2.5.2.7 0" />
+  </svg>
+);
+
+/** Fluent `text_sort_ascending_16_regular`. */
+export const FluentRefSortAlphaIcon = () => (
+  <svg {...base}>
+    <path d="M5.46 1.3a.5.5 0 0 0-.92 0l-2.5 6a.5.5 0 0 0 .92.4l.7-1.7h2.67l.7 1.7a.5.5 0 1 0 .93-.4zM4.08 5 5 2.8 5.92 5zM2.5 9.5c0-.28.22-.5.5-.5h3.5a.5.5 0 0 1 .41.79L3.96 14H6.5a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.4-.79L5.53 10H3a.5.5 0 0 1-.5-.5m10-8.5c.28 0 .5.22.5.5v11.8l1.15-1.15a.5.5 0 0 1 .7.7l-2 2a.5.5 0 0 1-.7 0l-2-2a.5.5 0 0 1 .7-.7L12 13.29V1.5c0-.28.22-.5.5-.5" />
+  </svg>
+);
+
+/** Fluent `text_sort_ascending_16_filled`. */
+export const FluentRefSortAlphaFilledIcon = () => (
+  <svg {...base}>
+    <path d="M5.2 1.5a.75.75 0 0 0-1.4 0L1.8 7a.75.75 0 1 0 1.4.5L3.4 7H5.6l.19.5A.75.75 0 1 0 7.2 7zm-1.27 4 .57-1.56.57 1.56zM2 9.75c0-.41.34-.75.75-.75h3.5a.75.75 0 0 1 .6 1.21L4.27 13.5h1.97a.75.75 0 0 1 0 1.5h-3.5a.75.75 0 0 1-.6-1.21l2.57-3.29H2.75A.75.75 0 0 1 2 9.75M12.25 1c.41 0 .75.34.75.75v10.69l.72-.72a.75.75 0 1 1 1.06 1.06l-2 2c-.3.3-.77.3-1.06 0l-2-2a.75.75 0 1 1 1.06-1.06l.72.72V1.75c0-.41.34-.75.75-.75" />
+  </svg>
+);
+
+/** Fluent `incognito_16_regular`. */
+export const FluentRefIncognitoIcon = () => (
+  <svg {...base}>
+    <path d="M12 8a3 3 0 1 1-2.96 3.5H6.96a3 3 0 1 1 0-1h2.08A3 3 0 0 1 12 8M4 9a2 2 0 1 0 0 4 2 2 0 0 0 0-4m8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4M8 5.5a45 45 0 0 1 6.58.5.5.5 0 0 1-.16 1q-.26-.05-.5-.08A41 41 0 0 0 8 6.5a44 44 0 0 0-6.29.47L1.6 7a.5.5 0 0 1-.17-.98l.14-.03a28 28 0 0 1 1.81-.23A45 45 0 0 1 8 5.5M10.88 2c.57 0 1.1.32 1.34.83l.73 1.45a.5.5 0 0 1-.9.44l-.72-1.44a.5.5 0 0 0-.45-.28H5.12a.5.5 0 0 0-.45.28l-.72 1.44a.5.5 0 0 1-.9-.44l.73-1.45c.25-.5.77-.83 1.34-.83zm3.7 4" />
+  </svg>
+);
+
+/** Fluent `incognito_16_filled`. */
+export const FluentRefIncognitoFilledIcon = () => (
+  <svg {...base}>
+    <path d="M12 8a3 3 0 1 1-2.96 3.5H6.96a3 3 0 1 1 0-1h2.08A3 3 0 0 1 12 8M4 9a2 2 0 1 0 0 4 2 2 0 0 0 0-4m8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-1.12-7c.57 0 1.09.32 1.34.83l1.53 3.06.3.04.4.05.13.03a.5.5 0 0 1-.16.98l-.13-.02a26 26 0 0 0-1.77-.22A44 44 0 0 0 8 6.5a44 44 0 0 0-6.29.47L1.6 7a.5.5 0 0 1-.17-.98l.14-.03.39-.05.3-.04 1.53-3.06c.25-.5.77-.83 1.34-.83z" />
+  </svg>
+);
+
+/** Fluent `arrow_bidirectional_left_right_16_regular`. */
+export const FluentRefMoveHorizontalIcon = () => (
+  <svg {...base}>
+    <path d="M2.15 8.85a.5.5 0 0 1 0-.7l3-3a.5.5 0 1 1 .7.7L3.71 8h8.58l-2.14-2.15a.5.5 0 0 1 .7-.7l3 3c.2.2.2.5 0 .7l-3 3a.5.5 0 0 1-.7-.7L12.29 9H3.71l2.14 2.15a.5.5 0 1 1-.7.7z" />
+  </svg>
+);
+
+/** Fluent `arrow_bidirectional_left_right_16_filled`. */
+export const FluentRefMoveHorizontalFilledIcon = () => (
+  <svg {...base}>
+    <path d="M6.03 5.22c.3.3.3.77 0 1.06L4.56 7.75h6.88L9.97 6.28a.75.75 0 0 1 1.06-1.06l2.75 2.75c.3.3.3.77 0 1.06l-2.75 2.75a.75.75 0 1 1-1.06-1.06l1.47-1.47H4.56l1.47 1.47a.75.75 0 1 1-1.06 1.06L2.22 9.03a.75.75 0 0 1 0-1.06l2.75-2.75c.3-.3.77-.3 1.06 0" />
+  </svg>
+);
+
+/** Fluent `arrow_autofit_width_20_regular`. */
+export const FluentRefUnfoldHorizontalIcon = () => (
+  <svg {...base}>
+    <path d="m16.37 15-1.18 1.14a.5.5 0 1 0 .7.72l1.88-1.82c.3-.3.3-.78 0-1.08l-1.88-1.82a.5.5 0 1 0-.7.72L16.38 14H12.5a.5.5 0 1 0 0 1zM15 3a2 2 0 0 1 2 2v4.5a.5.5 0 0 1-1 0V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v4.5a.5.5 0 0 1-1 0V5c0-1.1.9-2 2-2zM4.81 16.14 3.63 15H7.5a.5.5 0 1 0 0-1H3.63l1.18-1.14a.5.5 0 0 0-.7-.72l-1.88 1.82c-.3.3-.3.79 0 1.08l1.89 1.82a.5.5 0 1 0 .69-.72" />
+  </svg>
+);
+
+/** Fluent `arrow_autofit_width_20_filled`. */
+export const FluentRefUnfoldHorizontalFilledIcon = () => (
+  <svg {...base}>
+    <path d="m15.5 15-.73.71a.75.75 0 1 0 1.04 1.08l1.89-1.82a1 1 0 0 0 0-1.44l-1.89-1.82a.75.75 0 0 0-1.04 1.08l.74.71h-2.76a.75.75 0 0 0 0 1.5zM15 3a2 2 0 0 1 2 2v4.25a.75.75 0 0 1-1.5 0V5a.5.5 0 0 0-.5-.5H5a.5.5 0 0 0-.5.5v4.25a.75.75 0 0 1-1.5 0V5c0-1.1.9-2 2-2zM5.23 15.71l-.73-.7h2.75a.75.75 0 1 0 0-1.5H4.5l.73-.72a.75.75 0 0 0-1.04-1.08l-1.88 1.82a1 1 0 0 0 0 1.44l1.88 1.82a.75.75 0 0 0 1.04-1.08" />
+  </svg>
+);
+
+/** Fluent `chat_checkmark_16_regular`. */
+export const FluentRefChatCheckIcon = () => (
+  <svg {...base}>
+    <path d="M8 1a7 7 0 1 1-3.54 13.04l-2.8.93a.5.5 0 0 1-.63-.63l.93-2.8A7 7 0 0 1 8 1m0 1a6 6 0 0 0-5.07 9.2q.12.2.05.43l-.69 2.08 2.08-.7q.22-.06.42.06A6 6 0 1 0 8 2m2.15 4.15a.5.5 0 0 1 .7.7L7.6 10.1a.5.5 0 0 1-.7 0L5.15 8.35a.5.5 0 0 1 .7-.7l1.4 1.4z" />
+  </svg>
+);
+
+/** Fluent `chat_checkmark_16_filled`. */
+export const FluentRefChatCheckFilledIcon = () => (
+  <svg {...base}>
+    <path d="M8 1a7 7 0 1 1-3.54 13.04l-2.8.93a.5.5 0 0 1-.63-.63l.93-2.8A7 7 0 0 1 8 1m2.85 5.15a.5.5 0 0 0-.7 0l-2.9 2.9-1.4-1.4a.5.5 0 0 0-.7.7L6.9 10.1c.2.2.5.2.7 0l3.25-3.25a.5.5 0 0 0 0-.7" />
+  </svg>
+);
+
+/** Fluent `text_bullet_list_dismiss_20_regular`. */
+export const FluentRefListXIcon = () => (
+  <svg {...base}>
+    <path d="M3 5.5a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3-1c0-.28.22-.5.5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5m0 5c0-.28.22-.5.5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5m4.02 5.5q.05-.51.19-1H6.5a.5.5 0 0 0 0 1zM4 14.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0m-1-4a1 1 0 1 0 0-2 1 1 0 0 0 0 2m17 5a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0m-3.8 0 1.15-1.15a.5.5 0 0 0-.7-.7l-1.15 1.14-1.15-1.14a.5.5 0 0 0-.7.7l1.14 1.15-1.14 1.15a.5.5 0 0 0 .7.7l1.15-1.14 1.15 1.14a.5.5 0 0 0 .7-.7z" />
+  </svg>
+);
+
+/** Fluent `text_bullet_list_dismiss_20_filled`. */
+export const FluentRefListXFilledIcon = () => (
+  <svg {...base}>
+    <path d="M3.25 6a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5M7 4.75c0-.41.34-.75.75-.75h9.5a.75.75 0 0 1 0 1.5h-9.5A.75.75 0 0 1 7 4.75M7.75 9a.75.75 0 0 0 0 1.5h5.46a5.5 5.5 0 0 1 4.39-.09.75.75 0 0 0-.35-1.41zm0 5h2.46q-.21.72-.21 1.5H7.75a.75.75 0 0 1 0-1.5M4.5 9.75a1.25 1.25 0 1 1-2.5 0 1.25 1.25 0 0 1 2.5 0M3.25 16a1.25 1.25 0 1 0 0-2.5 1.25 1.25 0 0 0 0 2.5M20 15.5a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0m-3.8 0 1.15-1.15a.5.5 0 0 0-.7-.7l-1.15 1.14-1.15-1.14a.5.5 0 0 0-.7.7l1.14 1.15-1.14 1.15a.5.5 0 0 0 .7.7l1.15-1.14 1.15 1.14a.5.5 0 0 0 .7-.7z" />
+  </svg>
+);
+
+/** Fluent `cellular_data_3_20_regular`. */
+export const FluentRefSignalLowIcon = () => (
+  <svg {...base}>
+    <path d="M7.5 10a.5.5 0 0 1 .5.41v5.09a.5.5 0 0 1-.99.09V10.5c0-.28.22-.5.5-.5m-3 2a.5.5 0 0 1 .5.41v3.1a.5.5 0 0 1-1 .08V12.5c0-.28.22-.5.5-.5m6-4a.5.5 0 0 1 .5.4v7.1a.5.5 0 0 1-1 .09V8.5c0-.28.22-.5.5-.5" />
+  </svg>
+);
+
+/** Fluent `cellular_data_3_20_filled`. */
+export const FluentRefSignalLowFilledIcon = () => (
+  <svg {...base}>
+    <path d="M4.75 12c.38 0 .69.28.74.64l.01.11v2.5a.75.75 0 0 1-1.5.1v-2.6c0-.41.34-.75.75-.75m3-2c.38 0 .69.28.74.64l.01.11v4.5a.75.75 0 0 1-1.5.1v-4.6c0-.41.34-.75.75-.75m3-2c.38 0 .69.28.74.64l.01.11v6.5a.75.75 0 0 1-1.5.11V8.75c0-.41.34-.75.75-.75" />
+  </svg>
+);
+
+/** Fluent `cellular_data_2_20_regular`. */
+export const FluentRefSignalMediumIcon = () => (
+  <svg {...base}>
+    <path d="M7.5 10a.5.5 0 0 1 .5.41v5.09a.5.5 0 0 1-.99.09V10.5c0-.28.22-.5.5-.5m-3 2a.5.5 0 0 1 .5.41v3.09a.5.5 0 0 1-1 .09V12.5c0-.28.22-.5.5-.5m6-4a.5.5 0 0 1 .5.4v7.1a.5.5 0 0 1-1 .09V8.5c0-.28.22-.5.5-.5m3-2a.5.5 0 0 1 .5.41v9.09a.5.5 0 0 1-1 .09V6.5c0-.27.22-.5.5-.5" />
+  </svg>
+);
+
+/** Fluent `cellular_data_2_20_filled`. */
+export const FluentRefSignalMediumFilledIcon = () => (
+  <svg {...base}>
+    <path d="M4.75 12c.38 0 .69.28.74.64l.01.11v2.5a.75.75 0 0 1-1.5.1v-2.6c0-.41.34-.75.75-.75m3-2c.38 0 .69.28.74.64l.01.11v4.5a.75.75 0 0 1-1.5.1v-4.6c0-.41.34-.75.75-.75m3-2c.38 0 .69.28.74.64v6.61a.75.75 0 0 1-1.48.11l-.01-.11v-6.5c0-.41.34-.75.75-.75m3-2c.38 0 .69.28.74.64v8.61a.75.75 0 0 1-1.48.11l-.01-.11v-8.5c0-.41.34-.75.75-.75" />
+  </svg>
+);
+
+/** Fluent `panel_bottom_expand_20_regular`. */
+export const FluentRefPanelBottomOpenIcon = () => (
+  <svg {...base}>
+    <path d="m10.5 8.83.87 1a.5.5 0 0 0 .76-.66l-1.75-2a.5.5 0 0 0-.76 0l-1.75 2a.5.5 0 0 0 .76.65l.87-1v3.68a.5.5 0 0 0 1 0zM4 4a2 2 0 0 0-2 2v8c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zM3 6a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v5h-5.5v1H17v2a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-2h5.5v-1H3z" />
+  </svg>
+);
+
+/** Fluent `panel_bottom_expand_20_filled`. */
+export const FluentRefPanelBottomOpenFilledIcon = () => (
+  <svg {...base}>
+    <path d="m10.5 8.83.87 1a.5.5 0 0 0 .76-.66l-1.75-2a.5.5 0 0 0-.76 0l-1.75 2a.5.5 0 0 0 .76.65l.87-1v3.68a.5.5 0 0 0 1 0zM4 4a2 2 0 0 0-2 2v8c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zM3 6a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v5h-5.5v1.5a1.5 1.5 0 1 1-3 0V11H3z" />
+  </svg>
+);
+
+/** Fluent `panel_bottom_contract_20_regular`. */
+export const FluentRefPanelBottomCloseIcon = () => (
+  <svg {...base}>
+    <path d="m10.5 11.17.87-1a.5.5 0 0 1 .76.66l-1.75 2a.5.5 0 0 1-.76 0l-1.75-2a.5.5 0 1 1 .76-.65l.87 1V7.5a.5.5 0 1 1 1 0zM4 4a2 2 0 0 0-2 2v8c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zM3 6a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v5h-3.83a2 2 0 0 1-.3.5l-.44.5H17v2a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-2h4.57l-.45-.5a2 2 0 0 1-.29-.5H3z" />
+  </svg>
+);
+
+/** Fluent `panel_bottom_contract_20_filled`. */
+export const FluentRefPanelBottomCloseFilledIcon = () => (
+  <svg {...base}>
+    <path d="m10.5 11.17.87-1a.5.5 0 0 1 .76.66l-1.75 2a.5.5 0 0 1-.76 0l-1.75-2a.5.5 0 1 1 .76-.65l.87 1V7.5a.5.5 0 1 1 1 0zM4 4a2 2 0 0 0-2 2v8c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zM3 6a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v5h-3.83a2 2 0 0 1-.3.5l-1.74 2a1.5 1.5 0 0 1-2.26 0l-1.75-2a2 2 0 0 1-.29-.5H3z" />
+  </svg>
+);
+
 /** Fluent `database_16_regular`. */
 export const FluentRefDatabaseIcon = () => (
   <svg {...base}>
@@ -7442,6 +8345,93 @@ export const FluentFlashFilledIcon = () => (
   </svg>
 );
 
+/** Area `trending-up` (the demo swap). */
+export const TrendingIcon = (props: PilotIconProps) => <PilotTrendingUpIcon {...props} />;
+
+/** Area `arrow-up-right` (the demo swap). */
+export const ArrowUpRightIcon = (props: PilotIconProps) => <PilotArrowUpRightIcon {...props} />;
+
+/** Area `bold` (the demo swap). */
+export const BoldIcon = (props: PilotIconProps) => <PilotBoldIcon {...props} />;
+
+/** Area `italic` (the demo swap). */
+export const ItalicIcon = (props: PilotIconProps) => <PilotItalicIcon {...props} />;
+
+/** Area `underline` (the demo swap). */
+export const UnderlineIcon = (props: PilotIconProps) => <PilotUnderlineIcon {...props} />;
+
+/** Area `strikethrough` (the demo swap). */
+export const StrikethroughIcon = (props: PilotIconProps) => <PilotStrikethroughIcon {...props} />;
+
+/** Area `chevron-left` (the demo swap). */
+export const ChevronLeftIcon = (props: PilotIconProps) => <PilotChevronLeftIcon {...props} />;
+
+/** Area `chevron-right` (the demo swap). */
+export const ChevronRightIcon = (props: PilotIconProps) => <PilotChevronRightIcon {...props} />;
+
+/** Area `chat` (the demo swap). */
+export const CommentIcon = (props: PilotIconProps) => <PilotChatIcon {...props} />;
+
+/** Area `copy` (the demo swap). */
+export const CopyIcon = (props: PilotIconProps) => <PilotCopyIcon {...props} />;
+
+/** Area `pen-tool` (the demo swap). */
+export const DesignIcon = (props: PilotIconProps) => <PilotPenToolIcon {...props} />;
+
+/** Area `frame` (the demo swap). */
+export const FrameIcon = (props: PilotIconProps) => <PilotFrameIcon {...props} />;
+
+/** Area `heart` (the demo swap). */
+export const HeartIcon = (props: PilotIconProps) => <PilotHeartIcon {...props} />;
+
+/** Area `skip-forward:filled` (the demo swap). */
+export const NextFilledIcon = (props: PilotIconProps) => <PilotSkipForwardFilledIcon {...props} />;
+
+/** Area `pause:filled` (the demo swap). */
+export const PauseFilledIcon = (props: PilotIconProps) => <PilotPauseFilledIcon {...props} />;
+
+/** Area `skip-back:filled` (the demo swap). */
+export const PreviousFilledIcon = (props: PilotIconProps) => <PilotSkipBackFilledIcon {...props} />;
+
+/** Area `panel-left` (the demo swap). */
+export const PanelLeftIcon = (props: PilotIconProps) => <PilotPanelLeftIcon {...props} />;
+
+/** Area `pen-tool` (the demo swap). */
+export const PenIcon = (props: PilotIconProps) => <PilotPenToolIcon {...props} />;
+
+/** Area `play` (the demo swap). */
+export const PlayIcon = (props: PilotIconProps) => <PilotPlayIcon {...props} />;
+
+/** Area `rectangle` (the demo swap). */
+export const RectangleIcon = (props: PilotIconProps) => <PilotRectangleIcon {...props} />;
+
+/** Area `calendar` (the demo swap). */
+export const CalendarIcon = (props: PilotIconProps) => <PilotCalendarIcon {...props} />;
+
+/** Area `code` (the demo swap). */
+export const CodeIcon = (props: PilotIconProps) => <PilotCodeIcon {...props} />;
+
+/** Area `paintbrush` (the demo swap). */
+export const PaintbrushIcon = (props: PilotIconProps) => <PilotPaintbrushIcon {...props} />;
+
+/** Area `pointer` (the demo swap). */
+export const PointerIcon = (props: PilotIconProps) => <PilotPointerIcon {...props} />;
+
+/** Area `text-align-center` (the demo swap). */
+export const TextAlignCenterIcon = (props: PilotIconProps) => <PilotTextAlignCenterIcon {...props} />;
+
+/** Area `text-align-left` (the demo swap). */
+export const TextAlignLeftIcon = (props: PilotIconProps) => <PilotTextAlignLeftIcon {...props} />;
+
+/** Area `text-align-right` (the demo swap). */
+export const TextAlignRightIcon = (props: PilotIconProps) => <PilotTextAlignRightIcon {...props} />;
+
+/** Area `text` (the demo swap). */
+export const TextIcon = (props: PilotIconProps) => <PilotTextIcon {...props} />;
+
+/** Area `sun` (the demo swap). */
+export const SunIcon = (props: PilotIconProps) => <PilotSunIcon {...props} />;
+
 /*
  * Area's marks. They are stroked rather than filled, so they take their own base: the
  * fill is off and the colour rides on the stroke. Fitted to Fluent's optical weight by
@@ -7449,31 +8439,14 @@ export const FluentFlashFilledIcon = () => (
  */
 const areaBase = { ...base, fill: "none" };
 
-/** Area `angle`. */
-export const AngleIcon = () => (
-  <svg {...areaBase}>
-    <path d="M2.5 2.5V13.5H13.5" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M2.5 8C5.5 8 8 10.5 8 13.5" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-);
+/** Area `angle` (the demo swap). */
+export const AngleIcon = (props: PilotIconProps) => <PilotAngleIcon {...props} />;
 
-/** Area `aspect-ratio`. */
-export const AspectRatioIcon = () => (
-  <svg {...areaBase}>
-    <rect x="2.5" y="2.5" width="11" height="11" rx="1.75" fill="none" stroke="currentColor" strokeWidth="1"/>
-    <path d="M5.5 8V5.5H8" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M10.5 8V10.5H8" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-);
+/** Area `aspect-ratio` (the demo swap). */
+export const AspectRatioIcon = (props: PilotIconProps) => <PilotAspectRatioIcon {...props} />;
 
-/** Area `auto-layout`. */
-export const AutoLayoutIcon = () => (
-  <svg {...areaBase}>
-    <rect x="2.5" y="2.5" width="4.5" height="11" rx="1.125" fill="none" stroke="currentColor" strokeWidth="1"/>
-    <rect x="9.5" y="3" width="4" height="4" rx="1" fill="none" stroke="currentColor" strokeWidth="1"/>
-    <path d="M9.5 11 11 12.5 13.5 9.5" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-);
+/** Area `auto-layout` (the demo swap). */
+export const AutoLayoutIcon = (props: PilotIconProps) => <PilotAutoLayoutIcon {...props} />;
 
 /** Area `auto-position`. */
 export const AutoPositionIcon = () => (
@@ -7483,14 +8456,8 @@ export const AutoPositionIcon = () => (
   </svg>
 );
 
-/** Area `bars-three`. */
-export const BarsThreeIcon = () => (
-  <svg {...areaBase}>
-    <rect x="2" y="4" width="2" height="8" rx="1" fill="currentColor"/>
-    <rect x="7" y="2" width="2" height="12" rx="1" fill="currentColor"/>
-    <rect x="12" y="4" width="2" height="8" rx="1" fill="currentColor"/>
-  </svg>
-);
+/** Area `menu` (the demo swap). */
+export const BarsThreeIcon = (props: PilotIconProps) => <PilotMenuIcon {...props} />;
 
 /** Area `corner-bottom-left`. */
 export const CornerBottomLeftIcon = () => (
@@ -7506,12 +8473,8 @@ export const CornerBottomRightIcon = () => (
   </svg>
 );
 
-/** Area `corner-radius`. */
-export const CornerRadiusIcon = () => (
-  <svg {...areaBase}>
-    <path d="M2.5 13.5V6.5C2.5 4.29 4.29 2.5 6.5 2.5H13.5" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-);
+/** Area `corner` (the demo swap). */
+export const CornerRadiusIcon = (props: PilotIconProps) => <PilotCornerIcon {...props} />;
 
 /** Area `corner-top-left`. */
 export const CornerTopLeftIcon = () => (
@@ -7527,99 +8490,35 @@ export const CornerTopRightIcon = () => (
   </svg>
 );
 
-/** Area `corners`. */
-export const CornersIcon = () => (
-  <svg {...areaBase}>
-    <path d="M6 2.5H5C3.62 2.5 2.5 3.62 2.5 5V6" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M10 2.5H11C12.38 2.5 13.5 3.62 13.5 5V6" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M13.5 10V11C13.5 12.38 12.38 13.5 11 13.5H10" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M6 13.5H5C3.62 13.5 2.5 12.38 2.5 11V10" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-);
+/** Area `corners` (the demo swap). */
+export const CornersIcon = (props: PilotIconProps) => <PilotCornersIcon {...props} />;
 
-/** Area `dots-four`. */
-export const DotsFourIcon = () => (
-  <svg {...areaBase}>
-    <circle cx="4.25" cy="4.25" r="2.25" fill="none" stroke="currentColor" strokeWidth="1"/>
-    <circle cx="11.75" cy="4.25" r="2.25" fill="none" stroke="currentColor" strokeWidth="1"/>
-    <circle cx="4.25" cy="11.75" r="2.25" fill="none" stroke="currentColor" strokeWidth="1"/>
-    <circle cx="11.75" cy="11.75" r="2.25" fill="none" stroke="currentColor" strokeWidth="1"/>
-  </svg>
-);
+/** Area `dots-four` (the demo swap). */
+export const DotsFourIcon = (props: PilotIconProps) => <PilotDotsFourIcon {...props} />;
 
-/** Area `eye-slash`. */
-export const EyeSlashIcon = () => (
-  <svg {...areaBase}>
-    <path d="M2 8C4 4.44 5.9 3 8 3C10.1 3 12 4.44 14 8C12 11.56 10.1 13 8 13C5.9 13 4 11.56 2 8Z" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-    <circle cx="8" cy="8" r="2" fill="none" stroke="currentColor" strokeWidth="1"/>
-    <path d="M3.3 12.7 12.7 3.3" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-);
+/** Area `eye-off` (the demo swap). */
+export const EyeSlashIcon = (props: PilotIconProps) => <PilotEyeOffIcon {...props} />;
 
-/** Area `eye`. */
-export const EyeIcon = () => (
-  <svg {...areaBase}>
-    <path d="M2 8C4 4.44 5.9 3 8 3C10.1 3 12 4.44 14 8C12 11.56 10.1 13 8 13C5.9 13 4 11.56 2 8Z" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-    <circle cx="8" cy="8" r="2" fill="none" stroke="currentColor" strokeWidth="1"/>
-  </svg>
-);
+/** Area `eye` (the demo swap). */
+export const EyeIcon = (props: PilotIconProps) => <PilotEyeIcon {...props} />;
 
-/** Area `flip-horizontal`. */
-export const FlipHorizontalIcon = () => (
-  <svg {...areaBase}>
-    <path d="M8 2.5V13.5" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M3.723 4.876L6.087 7.535Q6.5 8 6.087 8.465L3.723 11.124Q2.5 12.5 2.5 10.659L2.5 5.341Q2.5 3.5 3.723 4.876Z" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M12.277 4.876L9.913 7.535Q9.5 8 9.913 8.465L12.277 11.124Q13.5 12.5 13.5 10.659L13.5 5.341Q13.5 3.5 12.277 4.876Z" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-);
+/** Area `flip` (the demo swap). */
+export const FlipHorizontalIcon = (props: PilotIconProps) => <PilotFlipIcon {...props} />;
 
-/** Area `flip-vertical`. */
-export const FlipVerticalIcon = () => (
-  <svg {...areaBase}>
-    <path d="M2.5 8H13.5" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M4.876 3.723L7.535 6.087Q8 6.5 8.465 6.087L11.124 3.723Q12.5 2.5 10.659 2.5L5.341 2.5Q3.5 2.5 4.876 3.723Z" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M4.876 12.277L7.535 9.913Q8 9.5 8.465 9.913L11.124 12.277Q12.5 13.5 10.659 13.5L5.341 13.5Q3.5 13.5 4.876 12.277Z" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-);
+/** Area `flip-vertical` (the demo swap). */
+export const FlipVerticalIcon = (props: PilotIconProps) => <PilotFlipVerticalIcon {...props} />;
 
-/** Area `flow-free`. */
-export const FlowFreeIcon = () => (
-  <svg {...areaBase}>
-    <rect x="2.5" y="2.5" width="4.25" height="4.25" rx="1.0625" fill="none" stroke="currentColor" strokeWidth="1"/>
-    <rect x="9.25" y="5.25" width="4.25" height="4.25" rx="1.0625" fill="none" stroke="currentColor" strokeWidth="1"/>
-    <rect x="3.5" y="9.25" width="4.25" height="4.25" rx="1.0625" fill="none" stroke="currentColor" strokeWidth="1"/>
-  </svg>
-);
+/** Area `flow-free` (the demo swap). */
+export const FlowFreeIcon = (props: PilotIconProps) => <PilotFlowFreeIcon {...props} />;
 
-/** Area `flow-horizontal`. */
-export const FlowHorizontalIcon = () => (
-  <svg {...areaBase}>
-    <rect x="2.5" y="2.5" width="4" height="4" rx="1" fill="none" stroke="currentColor" strokeWidth="1"/>
-    <rect x="9.5" y="2.5" width="4" height="4" rx="1" fill="none" stroke="currentColor" strokeWidth="1"/>
-    <path d="M2.5 11.25H13.5" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M11.25 9 13.5 11.25 11.25 13.5" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-);
+/** Area `flow` (the demo swap). */
+export const FlowHorizontalIcon = (props: PilotIconProps) => <PilotFlowIcon {...props} />;
 
-/** Area `flow-vertical`. */
-export const FlowVerticalIcon = () => (
-  <svg {...areaBase}>
-    <rect x="2.5" y="2.5" width="4" height="4" rx="1" fill="none" stroke="currentColor" strokeWidth="1"/>
-    <rect x="2.5" y="9.5" width="4" height="4" rx="1" fill="none" stroke="currentColor" strokeWidth="1"/>
-    <path d="M11.25 2.5V13.5" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M9 11.25 11.25 13.5 13.5 11.25" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-);
+/** Area `flow-vertical` (the demo swap). */
+export const FlowVerticalIcon = (props: PilotIconProps) => <PilotFlowVerticalIcon {...props} />;
 
-/** Area `flow-wrap`. */
-export const FlowWrapIcon = () => (
-  <svg {...areaBase}>
-    <rect x="2.5" y="2.5" width="4" height="4" rx="1" fill="none" stroke="currentColor" strokeWidth="1"/>
-    <rect x="9.5" y="2.5" width="4" height="4" rx="1" fill="none" stroke="currentColor" strokeWidth="1"/>
-    <rect x="2.5" y="9.5" width="4" height="4" rx="1" fill="none" stroke="currentColor" strokeWidth="1"/>
-    <rect x="9.5" y="9.5" width="4" height="4" rx="1" fill="none" stroke="currentColor" strokeWidth="1"/>
-  </svg>
-);
+/** Area `flow-wrap` (the demo swap). */
+export const FlowWrapIcon = (props: PilotIconProps) => <PilotFlowWrapIcon {...props} />;
 
 /** Area `gap-horizontal`. */
 export const GapHorizontalIcon = () => (
@@ -7639,18 +8538,8 @@ export const GapVerticalIcon = () => (
   </svg>
 );
 
-/** Area `opacity`. */
-export const OpacityIcon = () => (
-  <svg {...areaBase}>
-    <rect x="2.5" y="2.5" width="11" height="11" rx="1.75" fill="none" stroke="currentColor" strokeWidth="1"/>
-    <circle cx="10.5" cy="5.5" r="0.55" fill="currentColor"/>
-    <circle cx="8" cy="8" r="0.55" fill="currentColor"/>
-    <circle cx="10.5" cy="8" r="0.55" fill="currentColor"/>
-    <circle cx="5.5" cy="10.5" r="0.55" fill="currentColor"/>
-    <circle cx="8" cy="10.5" r="0.55" fill="currentColor"/>
-    <circle cx="10.5" cy="10.5" r="0.55" fill="currentColor"/>
-  </svg>
-);
+/** Area `opacity` (the demo swap). */
+export const OpacityIcon = (props: PilotIconProps) => <PilotOpacityIcon {...props} />;
 
 /** Area `padding-horizontal`. */
 export const PaddingHorizontalIcon = () => (
@@ -7681,31 +8570,11 @@ export const PaddingIcon = () => (
   </svg>
 );
 
-/** Area `rotate`. */
-export const RotateIcon = () => (
-  <svg {...areaBase}>
-    <path d="M8.75 7.48L10.96 9.69Q11.71 10.44 10.96 11.19L8.75 13.4Q8 14.15 7.25 13.4L5.04 11.19Q4.29 10.44 5.04 9.69L7.25 7.48Q8 6.73 8.75 7.48Z" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M2.18 6.84C2.83 4.59 4.8 2.95 7.13 2.73C9.47 2.5 11.71 3.73 12.78 5.83" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M9.43 5.48 12.78 5.83 13.13 2.48" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-  </svg>
-);
+/** Area `rotate` (the demo swap). */
+export const RotateIcon = (props: PilotIconProps) => <PilotRotateIcon {...props} />;
 
-/** Area `sliders`. */
-export const SlidersIcon = () => (
-  <svg {...areaBase}>
-    <path d="M4.5 2.5V7.5" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M4.5 11.5V13.5" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-    <circle cx="4.5" cy="9.5" r="2" fill="none" stroke="currentColor" strokeWidth="1"/>
-    <path d="M11.5 2.5V4.5" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M11.5 8.5V13.5" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
-    <circle cx="11.5" cy="6.5" r="2" fill="none" stroke="currentColor" strokeWidth="1"/>
-  </svg>
-);
+/** Area `sliders` (the demo swap). */
+export const SlidersIcon = (props: PilotIconProps) => <PilotSlidersIcon {...props} />;
 
-/** Area `token`. */
-export const TokenIcon = () => (
-  <svg {...areaBase}>
-    <circle cx="8" cy="8" r="6.5" fill="none" stroke="currentColor" strokeWidth="1"/>
-    <circle cx="8" cy="8" r="3" fill="none" stroke="currentColor" strokeWidth="1"/>
-  </svg>
-);
+/** Area `token` (the demo swap). */
+export const TokenIcon = (props: PilotIconProps) => <PilotTokenIcon {...props} />;

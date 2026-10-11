@@ -3,15 +3,15 @@ import { Badge, BadgeGroup, Button, Card, CardCarousel, CardContent, CardDescrip
 import {
   ArrowIcon,
   CheckIcon,
-  FluentArrowTrendingIcon,
-  FluentArrowUpRightIcon,
-  FluentChevronLeftIcon,
-  FluentChevronRightIcon,
-  FluentHeartIcon,
-  FluentNextFilledIcon,
-  FluentPauseFilledIcon,
-  FluentPreviousFilledIcon,
-  FluentWeatherSunnyIcon,
+  TrendingIcon,
+  ArrowUpRightIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  HeartIcon,
+  NextFilledIcon,
+  PauseFilledIcon,
+  PreviousFilledIcon,
+  SunIcon,
   MoreIcon,
   PlusIcon,
 } from "../icons.tsx";
@@ -155,7 +155,7 @@ export const CardCornerAction = () => (
 const wellRow = (title: string) => (
   <Card key={title} size="sm">
     <CardContent>
-      <CardHeader action={<Button size="sm" variant="soft" iconOnly aria-label={`Open ${title}`} icon={<FluentArrowUpRightIcon />} />}>
+      <CardHeader action={<Button size="sm" variant="soft" iconOnly aria-label={`Open ${title}`} icon={<ArrowUpRightIcon />} />}>
         <CardTitle>{title}</CardTitle>
       </CardHeader>
     </CardContent>
@@ -212,8 +212,8 @@ export const GalleryCardCarousel = () => {
   return <Card role="region" aria-label="Collection" aria-roledescription="carousel" style={horizontal}>
     <CardContent>
       <CardHeader action={<>
-        <Button size="sm" variant="ghost" iconOnly aria-label="Previous items" icon={<FluentChevronLeftIcon />} disabled={edges.start} onClick={() => page(-1)} />
-        <Button size="sm" variant="ghost" iconOnly aria-label="Next items" icon={<FluentChevronRightIcon />} disabled={edges.end} onClick={() => page(1)} />
+        <Button size="sm" variant="ghost" iconOnly aria-label="Previous items" icon={<ChevronLeftIcon />} disabled={edges.start} onClick={() => page(-1)} />
+        <Button size="sm" variant="ghost" iconOnly aria-label="Next items" icon={<ChevronRightIcon />} disabled={edges.end} onClick={() => page(1)} />
       </>}>
         <CardTitle>Title</CardTitle>
       </CardHeader>
@@ -278,16 +278,16 @@ export const CardTemplateMusic = () => (
   <Card style={vertical}>
     <CardMedia aria-hidden="true" />
     <CardContent>
-      <CardHeader action={<Button variant="ghost" iconOnly aria-label="Like" icon={<FluentHeartIcon />} />}>
+      <CardHeader action={<Button variant="ghost" iconOnly aria-label="Like" icon={<HeartIcon />} />}>
         <CardTitle>Title</CardTitle>
         <CardDescription>Artist</CardDescription>
       </CardHeader>
       <Slider size="sm" aria-label="Position" defaultValue={40} />
       <CardFooter>
         <Toolbar aria-label="Playback">
-          <ToolbarItem><Button variant="ghost" iconOnly aria-label="Previous" icon={<FluentPreviousFilledIcon />} /></ToolbarItem>
-          <ToolbarItem><Button pill iconOnly aria-label="Pause" icon={<FluentPauseFilledIcon />} /></ToolbarItem>
-          <ToolbarItem><Button variant="ghost" iconOnly aria-label="Next" icon={<FluentNextFilledIcon />} /></ToolbarItem>
+          <ToolbarItem><Button variant="ghost" iconOnly aria-label="Previous" icon={<PreviousFilledIcon />} /></ToolbarItem>
+          <ToolbarItem><Button pill iconOnly aria-label="Pause" icon={<PauseFilledIcon />} /></ToolbarItem>
+          <ToolbarItem><Button variant="ghost" iconOnly aria-label="Next" icon={<NextFilledIcon />} /></ToolbarItem>
         </Toolbar>
       </CardFooter>
     </CardContent>
@@ -297,7 +297,7 @@ export const CardTemplateMusic = () => (
 export const CardTemplateWeather = () => (
   <Card style={widget}>
     <CardContent>
-      <CardHeader action={<FluentWeatherSunnyIcon />}>
+      <CardHeader action={<SunIcon />}>
         <CardTitle>City</CardTitle>
       </CardHeader>
       <CardValue>21°</CardValue>
@@ -309,7 +309,7 @@ export const CardTemplateWeather = () => (
 export const CardTemplateStat = () => (
   <Card style={widget}>
     <CardContent>
-      <CardHeader action={<FluentArrowTrendingIcon />}>
+      <CardHeader action={<TrendingIcon />}>
         <CardTitle>Label</CardTitle>
       </CardHeader>
       <CardValue>309.5</CardValue>

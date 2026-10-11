@@ -1,14 +1,14 @@
 /** Toggle group gallery specimens: one variant per tile. docs/specs/toggle-group.md. */
 import { useState } from "react";
 import { ToggleGroup, ToggleGroupItem, Toolbar, ToolbarSeparator } from "@area/react";
-import { FluentBoldIcon, FluentRefItalicIcon, FluentRefUnderlineIcon, FluentStrikethroughIcon } from "../icons.tsx";
+import { BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon } from "../icons.tsx";
 
 /* The formatting set every reference shows: any of bold, italic, underline and strikethrough. */
 const marks = [
-  { value: "bold", label: "Bold", icon: <FluentBoldIcon /> },
-  { value: "italic", label: "Italic", icon: <FluentRefItalicIcon /> },
-  { value: "underline", label: "Underline", icon: <FluentRefUnderlineIcon /> },
-  { value: "strikethrough", label: "Strikethrough", icon: <FluentStrikethroughIcon /> },
+  { value: "bold", label: "Bold", icon: <BoldIcon /> },
+  { value: "italic", label: "Italic", icon: <ItalicIcon /> },
+  { value: "underline", label: "Underline", icon: <UnderlineIcon /> },
+  { value: "strikethrough", label: "Strikethrough", icon: <StrikethroughIcon /> },
 ];
 const Marks = ({ only = marks.length }: { only?: number }) => <>{marks.slice(0, only).map(mark => <ToggleGroupItem key={mark.value} value={mark.value} iconOnly icon={mark.icon}>{mark.label}</ToggleGroupItem>)}</>;
 const days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
@@ -27,8 +27,8 @@ export const GalleryToggleGroupSingle = () => {
   const [value, setValue] = useState<string[]>(["underline"]);
   return (
     <ToggleGroup aria-label="Text decoration" selectionMode="single" value={value} onValueChange={setValue}>
-      <ToggleGroupItem value="underline" iconOnly icon={<FluentRefUnderlineIcon />}>Underline</ToggleGroupItem>
-      <ToggleGroupItem value="strikethrough" iconOnly icon={<FluentStrikethroughIcon />}>Strikethrough</ToggleGroupItem>
+      <ToggleGroupItem value="underline" iconOnly icon={<UnderlineIcon />}>Underline</ToggleGroupItem>
+      <ToggleGroupItem value="strikethrough" iconOnly icon={<StrikethroughIcon />}>Strikethrough</ToggleGroupItem>
     </ToggleGroup>
   );
 };
@@ -44,8 +44,8 @@ export const GalleryToggleGroupToolbar = () => (
     <ToggleGroup aria-label="Text style" variant="ghost" defaultValue={["bold", "italic"]}><Marks only={2} /></ToggleGroup>
     <ToolbarSeparator />
     <ToggleGroup aria-label="Text decoration" variant="ghost" selectionMode="single">
-      <ToggleGroupItem value="underline" iconOnly icon={<FluentRefUnderlineIcon />}>Underline</ToggleGroupItem>
-      <ToggleGroupItem value="strikethrough" iconOnly icon={<FluentStrikethroughIcon />}>Strikethrough</ToggleGroupItem>
+      <ToggleGroupItem value="underline" iconOnly icon={<UnderlineIcon />}>Underline</ToggleGroupItem>
+      <ToggleGroupItem value="strikethrough" iconOnly icon={<StrikethroughIcon />}>Strikethrough</ToggleGroupItem>
     </ToggleGroup>
   </Toolbar>
 );

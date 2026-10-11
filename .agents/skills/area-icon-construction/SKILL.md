@@ -67,7 +67,10 @@ option rendered (explore candidates or `icon-sheet.mjs`), not a text list.
 8. **Gate:** `npm run icons:pilot` (the full lint, about two minutes) and `npm run typecheck`;
    `node docs/research/icon-review/2026-10-07/geometry-audit.mjs <names>` (the lint's blind spots:
    near-tangent kinks, gaps between subpaths of one path, 45° segments off the lattice in `free`
-   icons); the sliver check at 16 and 48; check the batch's cards on `gallery-icons.html`; send the
+   icons); the sliver check at 16 and 48; the 1× pixel view
+   (`docs/research/icon-review/2026-10-10/quality/tools/px.mjs out.png name=path.svg …`: the 2× sheets hide a
+   whole-pixel stroke's grey double row) and the doubled-stroke scan (`quality/tools/dups.mjs
+   apps/docs/assets/area-icons-pilot <names>`); check the batch's cards on `gallery-icons.html`; send the
    owner a sheet (Area alone at 16–48, or beside the libraries).
 9. **Hand off:** update the icon line in `.Codex/HANDOFF.md`. Only the owner marks approvals.
 
@@ -154,8 +157,7 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
   the family. The overlap cut is not relaxed: every crossing leaves exactly 1.125.
 - **Type family (owner, 2026-09-28):** every type icon uses text's T built one way: bar,
   end ticks, stem and a foot about 0.45 of the bar. Sizes: text 11 (ticks 2, foot 5), the
-  medium 6 × 6 T (ticks 1, foot 3) in line-height and letter-spacing, a 7 × 8 T in superscript
-  and subscript (partition F), and text-size's pair (8 × 10 with ticks 1.5 and foot 4; 4 × 5.5 with ticks 1 and foot 2).
+  medium 6 × 6 T (ticks 1, foot 3) in line-height and letter-spacing, and text-size's pair (8 × 10 with ticks 1.5 and foot 4; 4 × 5.5 with ticks 1 and foot 2). superscript and subscript are an X with list-numbered's 2 (owner, 2026-10-08), not a T.
 - **Rain** lines are different lengths (owner). qr-code is square like a real code (owner,
   2026-09-28): finders 5 × 5 at r 1 (not the container radius), square 2 × 2 modules (r 0.25)
   for the finders' centres and the four data modules, 3 apart.
@@ -234,6 +236,16 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
   solids is read as an edge exit (start it 0.5 off the seam); parts 1.0 apart touch only at 16 (join them
   or part them by a step); a solid with no stroke is crisp on whole-pixel edges; a container's − centres
   where the family's + sits; content in a clipboard centres under the clip; heavy bases sit high, not low.
+- **Quality pass, 2026-10-10** (spec "Quality and consistency pass, 2026-10-10"): look at 1× as well as 2×; a
+  long stroke on a whole pixel moves 0.5 to x.5 even off centre (wifi, git-commit, blur, caps-lock; the stack rule
+  generalised). Each stroke is drawn once per style: never an outline-only `line` copy of a stroke that both styles
+  or a knockout already draw. Every convex point of fill where two offset curves of a bite meet gets the r 0.75
+  fillet, in every member of the family (mail marks, file and folder composites). Drop `data-angles="free"` once a
+  drawing no longer needs it. Run geometry-audit on every redraw before the owner sees it. A corner mark on a face
+  with hands sits where the hands are not (clock-check's check top right); its halo or bite clears every knockout by
+  a line weight. Small person marks share the family bite, large ones (key, lens, pen) take their own cut. The B:
+  semicircular bowls, the lower 0.5 wider, the bar at the cap's middle when that is on the grid, otherwise one step
+  above (spell-check). The numeral 2 is list-numbered's (superscript and subscript copy it).
 - **Filled audit, 2026-10-06** (spec "Filled consistency audit and the size curve's hold"): a part is
   one colour (knockout inside, ink joined when attached; the halo for a part crossing the edge in front
   was overturned 2026-10-08, see "Filled is simple" below); the curve holds at the 24px master. Owner notes applied: desktop-check's check centred,

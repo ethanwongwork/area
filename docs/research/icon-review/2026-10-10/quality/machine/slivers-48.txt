@@ -1,0 +1,11 @@
+brain-off	filled	fill beside a line	86	5.5	6.6
+file-zip	filled	fill beside a line	88	7.2	9.4
+folder-cog	filled	fill beside a line	370	11.4	10.4
+folder-zip	filled	fill beside a line	72	11.3	5.4
+folder-zip	filled	fill beside a line	88	11.1	7.4
+folder-zip	filled	fill beside a line	88	9.7	8.4
+person-settings	filled	fill beside a line	360	12.4	11.9
+server-cog	filled	fill beside a line	360	11.9	10.9
+smile-plus	filled	hairline space	44	15.8	12.4
+smile-plus	filled	hairline space	44	12.4	15.8
+truck	filled	fill beside a line	270	12.6	4.9
