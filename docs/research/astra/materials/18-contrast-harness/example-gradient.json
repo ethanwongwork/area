@@ -1,0 +1,20 @@
+{
+  "ink": "#000000",
+  "threshold": 4.5,
+  "body": "#ffffff",
+  "alpha": 0.5,
+  "stops": [
+    {
+      "position": 0,
+      "color": "#ff0000",
+      "alpha": 1
+    },
+    {
+      "position": 1,
+      "color": "#00ff00",
+      "alpha": 1
+    }
+  ],
+  "space": "srgb",
+  "blend": "source-over"
+}

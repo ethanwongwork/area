@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Area · Material contrast harness</title><link rel="stylesheet" href="viewer.css"><script type="module" src="viewer.js"></script></head>
+<body><main><header><p class="eyebrow">AREA / MATERIALS 18 / RESEARCH</p><h1>Contrast after composition.</h1>
+<p class="intro">Eight presets. Twelve roles. The worst backdrop, including the colors between black and white.</p>
+<p class="boundary">A numerical sRGB paint model, not browser conformance. Opaque ink; declared fill and gradient; every backdrop in an RGB box. Masks, layout and dark APCA remain separate checks.</p>
+<nav><a href="README.md">Read the findings</a><a href="method.md">Method & limits</a><a href="results.csv">Download matrix</a></nav></header>
+<section class="controls" aria-label="Result filters">
+<label>Preset<select id="preset"></select></label>
+<label>Mode<select id="mode"><option value="light">Light</option><option value="dark">Dark</option></select></label>
+<label>Paint contract<select id="scenario"><option value="guarded">Guarded reading areas</option><option value="requested">Raw shell probe</option><option value="f0">F0 opaque fallback</option></select></label>
+<label>Target<select id="target"><option value="text">Text · 4.5:1</option><option value="edge" selected>Required edge / mark · 3:1</option></select></label></section>
+<p id="status" role="status">Loading frozen results…</p>
+<section aria-labelledby="matrix-title"><h2 id="matrix-title">Role matrix</h2><p>Choose a role to inspect every bound token pair. Alias rows collect host results; they are not extra layers. N/A is not a pass.</p>
+<div class="scroll"><table><thead><tr><th>Role</th><th>Result</th><th>Lowest margin</th><th>Worst backdrop</th></tr></thead><tbody id="matrix"></tbody></table></div></section>
+<section class="detail" aria-labelledby="detail-title"><div><p class="eyebrow">WORST-CASE WITNESS</p><h2 id="detail-title">Select a role</h2><label class="pair-label">Bound pair<select id="pair"></select></label><p id="description"></p><p id="measurement"></p><a id="source" href="coverage.md">Pinned assertion source</a></div>
+<div class="swatches"><div id="backdrop" class="swatch"><span>Backdrop</span></div><div id="ground" class="swatch"><span>Composed ground</span></div><div id="ink" class="ink">Aa<span>Semantic ink</span></div></div></section>
+<aside><h2>Beyond the surface</h2><p id="outside"></p><p>These exterior probes remove the opaque page backing. An opaque body inside the control cannot protect an outline facing the scene outside it. A collar or verified adjacent ground needs a separate binding.</p></aside>
+<footer><p id="snapshot"></p><p>Author-proposed fixtures. No production token, preset, component or existing contrast test was changed.</p></footer>
+</main></body></html>
