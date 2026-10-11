@@ -10,7 +10,7 @@ const temp = await mkdtemp(join(tmpdir(), 'area-consumer-'));
 let failed = false;
 try {
   await cp(join(repo,'tests/consumer'), temp, {recursive:true});
-  for (const name of ['tokens','styles','react']) {
+  for (const name of ['tokens','styles','react','icons']) {
     const packed = JSON.parse(execFileSync('npm',['pack','--ignore-scripts','--json','--pack-destination',temp,'--cache',join(temp,'.npm-cache')],{cwd:join(repo,'packages',name),encoding:'utf8'}))[0];
     const target = join(temp,'node_modules/@area',name);
     await mkdir(target,{recursive:true});

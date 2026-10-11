@@ -1,0 +1,1167 @@
+{
+ "document": {
+  "round": "reviews4",
+  "verdict": "approve",
+  "at": "2026-10-05T07:50:40.229Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions",
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "folder": {
+  "round": "reviews3",
+  "verdict": "approve",
+  "at": "2026-10-05T06:32:27.084Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "flow": {
+  "round": "reviews",
+  "verdict": "approve",
+  "at": "2026-10-03T20:59:18.419Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "calendar": {
+  "round": "reviews3",
+  "verdict": "approve",
+  "at": "2026-10-05T06:34:43.000Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "pencil": {
+  "round": "reviews4",
+  "verdict": "approve",
+  "at": "2026-10-05T08:24:23.175Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "help": {
+  "round": "reviews2",
+  "verdict": "approve",
+  "at": "2026-10-05T01:58:19.590Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-07 Icons: browser page, filled audit, size-curve hold, owner rounds"
+  ]
+ },
+ "menu": {
+  "round": "reviews",
+  "verdict": "approve",
+  "at": "2026-10-03T20:39:28.772Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "globe": {
+  "round": "reviews2",
+  "verdict": "approve",
+  "at": "2026-10-05T01:24:37.764Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-10 Icons: batches 70–74, whole-set quality pass, demo swap to Area icons",
+   "2026-10-07 Icons: browser page, filled audit, size-curve hold, owner rounds"
+  ]
+ },
+ "people": {
+  "round": "reviews2",
+  "verdict": "approve",
+  "at": "2026-10-05T01:27:10.446Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-10 Icons: batches 70–74, whole-set quality pass, demo swap to Area icons",
+   "2026-10-07 Icons: browser page, filled audit, size-curve hold, owner rounds"
+  ]
+ },
+ "archive": {
+  "round": "reviews3",
+  "verdict": "approve",
+  "at": "2026-10-05T06:34:46.292Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "gift": {
+  "round": "reviews3",
+  "verdict": "approve",
+  "at": "2026-10-05T06:33:27.438Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-10 Icons: batches 70–74, whole-set quality pass, demo swap to Area icons",
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "map": {
+  "round": "reviews3",
+  "verdict": "approve",
+  "at": "2026-10-05T06:34:44.796Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "table": {
+  "round": "reviews",
+  "verdict": "approve",
+  "at": "2026-10-03T20:51:37.012Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "coffee": {
+  "round": "reviews2",
+  "verdict": "approve",
+  "at": "2026-10-05T01:44:57.829Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-10 Icons: batches 70–74, whole-set quality pass, demo swap to Area icons",
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "wallet": {
+  "round": "reviews2",
+  "verdict": "approve",
+  "at": "2026-10-05T01:41:35.013Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions",
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "receipt": {
+  "round": "reviews3",
+  "verdict": "approve",
+  "at": "2026-10-05T06:35:15.192Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "history": {
+  "round": "reviews",
+  "verdict": "approve",
+  "at": "2026-10-03T20:28:36.509Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "ruler": {
+  "round": "reviews",
+  "verdict": "approve",
+  "at": "2026-10-03T21:08:34.619Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "video-off": {
+  "round": "reviews",
+  "verdict": "approve",
+  "at": "2026-10-03T20:23:58.077Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "graduation-cap": {
+  "round": "reviews",
+  "verdict": "approve",
+  "at": "2026-10-03T21:20:03.773Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-07 Icons: browser page, filled audit, size-curve hold, owner rounds"
+  ]
+ },
+ "clipboard": {
+  "round": "reviews3",
+  "verdict": "approve",
+  "at": "2026-10-05T06:32:22.922Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-10 Icons: batches 70–74, whole-set quality pass, demo swap to Area icons",
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "sticky-note": {
+  "round": "reviews4",
+  "verdict": "approve",
+  "at": "2026-10-05T08:23:21.850Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "shopping-bag": {
+  "round": "reviews3",
+  "verdict": "approve",
+  "at": "2026-10-05T06:34:39.054Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "calendar-add": {
+  "round": "reviews3",
+  "verdict": "approve",
+  "at": "2026-10-05T06:33:09.501Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-10 Icons: batches 70–74, whole-set quality pass, demo swap to Area icons",
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "folder-add": {
+  "round": "reviews3",
+  "verdict": "approve",
+  "at": "2026-10-05T06:35:08.066Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-10 Icons: batches 70–74, whole-set quality pass, demo swap to Area icons",
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "document-add": {
+  "round": "reviews4",
+  "verdict": "approve",
+  "at": "2026-10-05T08:22:55.776Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "watch": {
+  "round": "reviews2",
+  "verdict": "approve",
+  "at": "2026-10-05T02:08:56.668Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "document-check": {
+  "round": "reviews4",
+  "verdict": "approve",
+  "at": "2026-10-05T07:50:42.000Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "layout": {
+  "round": "reviews",
+  "verdict": "approve",
+  "at": "2026-10-03T20:50:39.717Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "percent": {
+  "round": "reviews",
+  "verdict": "approve",
+  "at": "2026-10-03T20:30:03.562Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "eraser": {
+  "round": "reviews4",
+  "verdict": "approve",
+  "at": "2026-10-05T08:23:54.500Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "calendar-remove": {
+  "round": "reviews3",
+  "verdict": "approve",
+  "at": "2026-10-05T06:33:11.219Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-10 Icons: batches 70–74, whole-set quality pass, demo swap to Area icons",
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions",
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "list-numbered": {
+  "round": "reviews",
+  "verdict": "approve",
+  "at": "2026-10-03T20:48:22.959Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "filter-dismiss": {
+  "round": "reviews2",
+  "verdict": "approve",
+  "at": "2026-10-05T01:34:03.398Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "filter-add": {
+  "round": "reviews2",
+  "verdict": "approve",
+  "at": "2026-10-05T01:58:02.607Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "bot": {
+  "round": "reviews",
+  "verdict": "approve",
+  "at": "2026-10-03T20:06:07.239Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-07 Icons: browser page, filled audit, size-curve hold, owner rounds"
+  ]
+ },
+ "ticket": {
+  "round": "reviews",
+  "verdict": "approve",
+  "at": "2026-10-03T21:16:11.946Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "kanban": {
+  "round": "reviews",
+  "verdict": "approve",
+  "at": "2026-10-03T20:51:28.462Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "coins": {
+  "round": "reviews",
+  "verdict": "approve",
+  "at": "2026-10-03T21:14:57.947Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-07 Icons: browser page, filled audit, size-curve hold, owner rounds"
+  ]
+ },
+ "images": {
+  "round": "reviews2",
+  "verdict": "approve",
+  "at": "2026-10-05T01:58:36.599Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "code-block": {
+  "round": "reviews",
+  "verdict": "approve",
+  "at": "2026-10-03T19:37:01.826Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "banknote": {
+  "round": "reviews",
+  "verdict": "approve",
+  "at": "2026-10-03T21:14:23.374Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "award": {
+  "round": "reviews",
+  "verdict": "approve",
+  "at": "2026-10-03T21:20:11.119Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "file-image": {
+  "round": "reviews4",
+  "verdict": "approve",
+  "at": "2026-10-05T08:24:30.642Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions",
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "file-code": {
+  "round": "reviews4",
+  "verdict": "approve",
+  "at": "2026-10-05T08:24:33.442Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "bell-dot": {
+  "round": "reviews2",
+  "verdict": "approve",
+  "at": "2026-10-05T01:32:37.620Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-07 Icons: browser page, filled audit, size-curve hold, owner rounds"
+  ]
+ },
+ "chat-dot": {
+  "round": "reviews",
+  "verdict": "approve",
+  "at": "2026-10-03T20:16:41.204Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-07 Icons: browser page, filled audit, size-curve hold, owner rounds"
+  ]
+ },
+ "mail-dot": {
+  "round": "reviews",
+  "verdict": "approve",
+  "at": "2026-10-03T20:19:22.820Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-07 Icons: browser page, filled audit, size-curve hold, owner rounds"
+  ]
+ },
+ "square-badge": {
+  "round": "reviews",
+  "verdict": "approve",
+  "at": "2026-10-03T20:40:45.715Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-07 Icons: browser page, filled audit, size-curve hold, owner rounds"
+  ]
+ },
+ "folder-check": {
+  "round": "reviews3",
+  "verdict": "approve",
+  "at": "2026-10-05T06:32:28.867Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-10 Icons: batches 70–74, whole-set quality pass, demo swap to Area icons",
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "desktop-check": {
+  "round": "reviews",
+  "verdict": "approve",
+  "at": "2026-10-03T19:43:45.566Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-07 Icons: browser page, filled audit, size-curve hold, owner rounds"
+  ]
+ },
+ "files": {
+  "round": "reviews4",
+  "verdict": "approve",
+  "at": "2026-10-05T08:24:28.650Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "file-export": {
+  "round": "reviews4",
+  "verdict": "approve",
+  "at": "2026-10-05T08:23:17.417Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "plus-minus": {
+  "round": "reviews",
+  "verdict": "approve",
+  "at": "2026-10-03T20:29:29.746Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "chart-scatter": {
+  "round": "reviews2",
+  "verdict": "approve",
+  "at": "2026-10-05T01:54:35.050Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "check-check": {
+  "round": "reviews",
+  "verdict": "approve",
+  "at": "2026-10-03T20:29:27.259Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "presentation": {
+  "round": "reviews",
+  "verdict": "approve",
+  "at": "2026-10-03T20:51:52.254Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "folders": {
+  "round": "reviews3",
+  "verdict": "approve",
+  "at": "2026-10-05T06:32:59.234Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "app-window": {
+  "round": "reviews3",
+  "verdict": "approve",
+  "at": "2026-10-05T06:33:05.734Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions",
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "markdown": {
+  "round": "reviews",
+  "verdict": "approve",
+  "at": "2026-10-03T20:48:12.080Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "bandage": {
+  "round": "reviews2",
+  "verdict": "approve",
+  "at": "2026-10-05T01:44:10.095Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-07 Icons: browser page, filled audit, size-curve hold, owner rounds"
+  ]
+ },
+ "smile-plus": {
+  "round": "reviews2",
+  "verdict": "approve",
+  "at": "2026-10-05T01:28:32.325Z",
+  "notes": "face not centered",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-07 Icons: browser page, filled audit, size-curve hold, owner rounds",
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "toy-brick": {
+  "round": "reviews2",
+  "verdict": "approve",
+  "at": "2026-10-05T01:50:01.293Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "list-tree": {
+  "round": "reviews",
+  "verdict": "approve",
+  "at": "2026-10-03T20:48:35.172Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "archive-restore": {
+  "round": "reviews3",
+  "verdict": "approve",
+  "at": "2026-10-05T06:33:01.709Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "star-half": {
+  "round": "reviews",
+  "verdict": "approve",
+  "at": "2026-10-03T21:01:30.747Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "image-plus": {
+  "round": "reviews2",
+  "verdict": "approve",
+  "at": "2026-10-05T01:33:01.022Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-10 Icons: batches 70–74, whole-set quality pass, demo swap to Area icons",
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "calendar-clock": {
+  "round": "reviews4",
+  "verdict": "approve",
+  "at": "2026-10-05T08:23:56.212Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-10 Icons: batches 70–74, whole-set quality pass, demo swap to Area icons",
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions",
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "cards": {
+  "round": "reviews",
+  "verdict": "approve",
+  "at": "2026-10-03T20:51:46.371Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "file-spreadsheet": {
+  "round": "reviews4",
+  "verdict": "approve",
+  "at": "2026-10-05T08:23:19.893Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "file-pen": {
+  "round": "reviews4",
+  "verdict": "approve",
+  "at": "2026-10-05T08:23:04.921Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "cast": {
+  "round": "reviews",
+  "verdict": "approve",
+  "at": "2026-10-03T19:47:04.789Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "devices": {
+  "round": "reviews",
+  "verdict": "approve",
+  "at": "2026-10-03T19:44:11.308Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-07 Icons: browser page, filled audit, size-curve hold, owner rounds"
+  ]
+ },
+ "meh": {
+  "round": "reviews2",
+  "verdict": "approve",
+  "at": "2026-10-05T01:29:18.070Z",
+  "notes": "make sure the placement of the line mouth is the same as the happy face",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-07 Icons: browser page, filled audit, size-curve hold, owner rounds"
+  ]
+ },
+ "basket": {
+  "round": "reviews3",
+  "verdict": "approve",
+  "at": "2026-10-05T06:33:13.634Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "folder-zip": {
+  "round": "reviews4",
+  "verdict": "approve",
+  "at": "2026-10-05T08:24:27.050Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "broom": {
+  "round": "reviews4",
+  "verdict": "approve",
+  "at": "2026-10-05T08:23:59.862Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "pencil-off": {
+  "round": "reviews4",
+  "verdict": "approve",
+  "at": "2026-10-05T08:23:51.317Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "location-off": {
+  "round": "reviews2",
+  "verdict": "approve",
+  "at": "2026-10-05T01:12:06.691Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "file-download": {
+  "round": "reviews4",
+  "verdict": "approve",
+  "at": "2026-10-05T08:24:32.050Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "pen": {
+  "round": "reviews4",
+  "verdict": "approve",
+  "at": "2026-10-05T08:23:57.875Z",
+  "notes": "",
+  "hasBefore": false,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions",
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "cart": {
+  "round": "reviews2",
+  "verdict": "replace",
+  "at": "2026-10-05T01:54:04.283Z",
+  "notes": "make the wheels on the same level/aligned with the bottom stroke, like lucide",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-07 Icons: browser page, filled audit, size-curve hold, owner rounds"
+  ]
+ },
+ "smile": {
+  "round": "reviews2",
+  "verdict": "fix",
+  "at": "2026-10-05T02:03:21.581Z",
+  "notes": "face not centered",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-07 Icons: browser page, filled audit, size-curve hold, owner rounds"
+  ]
+ },
+ "database": {
+  "round": "reviews2",
+  "verdict": "fix",
+  "at": "2026-10-05T01:07:34.961Z",
+  "notes": "verify that the filled portion is accurate/even",
+  "hasBefore": true,
+  "commits": []
+ },
+ "fingerprint": {
+  "round": "reviews2",
+  "verdict": "fix",
+  "at": "2026-10-05T02:04:06.968Z",
+  "notes": "make sure the lines/strokes all align on the same track",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-10 Icons: batches 70–74, whole-set quality pass, demo swap to Area icons",
+   "2026-10-07 Icons: browser page, filled audit, size-curve hold, owner rounds"
+  ]
+ },
+ "umbrella": {
+  "round": "reviews2",
+  "verdict": "fix",
+  "at": "2026-10-05T01:13:35.300Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-10 Icons: batches 70–74, whole-set quality pass, demo swap to Area icons"
+  ]
+ },
+ "qr-code": {
+  "round": "reviews2",
+  "verdict": "fix",
+  "at": "2026-10-05T01:53:00.046Z",
+  "notes": "make the bottomr right squares slightly more round",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-07 Icons: browser page, filled audit, size-curve hold, owner rounds"
+  ]
+ },
+ "plane": {
+  "round": "reviews2",
+  "verdict": "fix",
+  "at": "2026-10-05T01:24:34.040Z",
+  "notes": "add a window(s)?",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-10 Icons: batches 70–74, whole-set quality pass, demo swap to Area icons",
+   "2026-10-07 Icons: browser page, filled audit, size-curve hold, owner rounds"
+  ]
+ },
+ "agent": {
+  "round": "reviews",
+  "verdict": "fix",
+  "at": "2026-10-03T20:05:48.139Z",
+  "notes": "not sure if this icon is needed",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "bug-off": {
+  "round": "reviews2",
+  "verdict": "fix",
+  "at": "2026-10-05T01:07:54.775Z",
+  "notes": "legs on monoline only",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-10 Icons: batches 70–74, whole-set quality pass, demo swap to Area icons"
+  ]
+ },
+ "square-smile": {
+  "round": "reviews2",
+  "verdict": "fix",
+  "at": "2026-10-05T02:03:00.676Z",
+  "notes": "fix face placement its not centered",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-07 Icons: browser page, filled audit, size-curve hold, owner rounds"
+  ]
+ },
+ "crystal-ball": {
+  "round": "reviews2",
+  "verdict": "fix",
+  "at": "2026-10-05T01:31:17.374Z",
+  "notes": "shouldnt the stroke connect on the bottom?",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-07 Icons: browser page, filled audit, size-curve hold, owner rounds"
+  ]
+ },
+ "bot-scholar": {
+  "round": "reviews2",
+  "verdict": "fix",
+  "at": "2026-10-05T01:30:48.774Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-07 Icons: browser page, filled audit, size-curve hold, owner rounds",
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "bot-guard": {
+  "round": "reviews5",
+  "verdict": "fix",
+  "at": "2026-10-05T08:45:38.594Z",
+  "notes": "maybe just fill the top of the hat?",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions",
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "bot-automator": {
+  "round": "reviews2",
+  "verdict": "fix",
+  "at": "2026-10-05T02:02:40.793Z",
+  "notes": "",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "signature": {
+  "round": "reviews5",
+  "verdict": "fix",
+  "at": "2026-10-05T08:45:47.906Z",
+  "notes": "add the clip",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: filled story consistency, exact folds, pens and pencils"
+  ]
+ },
+ "spell-check": {
+  "round": "reviews2",
+  "verdict": "replace",
+  "at": "2026-10-05T01:56:17.916Z",
+  "notes": "the letters are not even widths",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-05 Icons: whole-set consistency audit, batch 68, owner decisions"
+  ]
+ },
+ "scan-face": {
+  "round": "reviews2",
+  "verdict": "fix",
+  "at": "2026-10-05T01:28:16.154Z",
+  "notes": "face needs to be more centered",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-07 Icons: browser page, filled audit, size-curve hold, owner rounds"
+  ]
+ },
+ "chat-question": {
+  "round": "reviews2",
+  "verdict": "fix",
+  "at": "2026-10-05T02:00:34.365Z",
+  "notes": "? looks wrong",
+  "hasBefore": true,
+  "commits": [
+   "2026-10-07 Icons: browser page, filled audit, size-curve hold, owner rounds"
+  ]
+ },
+ "compass-dot": {
+  "verdict": null,
+  "batch": "Batch 46 · Notification dot",
+  "at": "",
+  "notes": "",
+  "commits": []
+ },
+ "document-dismiss": {
+  "verdict": null,
+  "batch": "Batch 68 · Audit gaps",
+  "at": "",
+  "notes": "",
+  "commits": []
+ },
+ "calendar-x": {
+  "verdict": null,
+  "batch": "Batch 68 · Audit gaps",
+  "at": "",
+  "notes": "",
+  "commits": []
+ },
+ "folder-search": {
+  "verdict": null,
+  "batch": "Batch 68 · Audit gaps",
+  "at": "",
+  "notes": "",
+  "commits": []
+ },
+ "timer-off": {
+  "verdict": null,
+  "batch": "Batch 68 · Audit gaps",
+  "at": "",
+  "notes": "",
+  "commits": []
+ },
+ "sparkle-off": {
+  "verdict": null,
+  "batch": "Batch 68 · Audit gaps",
+  "at": "",
+  "notes": "",
+  "commits": []
+ },
+ "shield-lock": {
+  "verdict": null,
+  "batch": "Batch 68 · Audit gaps",
+  "at": "",
+  "notes": "",
+  "commits": []
+ },
+ "battery-full": {
+  "verdict": null,
+  "batch": "Batch 68 · Audit gaps",
+  "at": "",
+  "notes": "",
+  "commits": []
+ },
+ "battery-medium": {
+  "verdict": null,
+  "batch": "Batch 68 · Audit gaps",
+  "at": "",
+  "notes": "",
+  "commits": []
+ },
+ "maximize": {
+  "verdict": null,
+  "batch": "Batch 68 · Audit gaps",
+  "at": "",
+  "notes": "",
+  "commits": []
+ },
+ "minimize": {
+  "verdict": null,
+  "batch": "Batch 68 · Audit gaps",
+  "at": "",
+  "notes": "",
+  "commits": []
+ },
+ "loader-circle": {
+  "verdict": null,
+  "batch": "Batch 68 · Audit gaps",
+  "at": "",
+  "notes": "",
+  "commits": []
+ },
+ "text-align-justify": {
+  "verdict": null,
+  "batch": "Batch 68 · Audit gaps",
+  "at": "",
+  "notes": "",
+  "commits": []
+ },
+ "list-minus": {
+  "verdict": null,
+  "batch": "Batch 68 · Audit gaps",
+  "at": "",
+  "notes": "",
+  "commits": []
+ },
+ "case-lower": {
+  "verdict": null,
+  "batch": "Batch 68 · Audit gaps",
+  "at": "",
+  "notes": "",
+  "commits": []
+ },
+ "regex": {
+  "verdict": null,
+  "batch": "Batch 68 · Audit gaps",
+  "at": "",
+  "notes": "",
+  "commits": []
+ },
+ "heading-1": {
+  "verdict": null,
+  "batch": "Batch 68 · Audit gaps",
+  "at": "",
+  "notes": "",
+  "commits": []
+ },
+ "heading-2": {
+  "verdict": null,
+  "batch": "Batch 68 · Audit gaps",
+  "at": "",
+  "notes": "",
+  "commits": []
+ },
+ "heading-3": {
+  "verdict": null,
+  "batch": "Batch 68 · Audit gaps",
+  "at": "",
+  "notes": "",
+  "commits": []
+ },
+ "send-to-back": {
+  "verdict": null,
+  "batch": "Batch 68 · Audit gaps",
+  "at": "",
+  "notes": "",
+  "commits": []
+ },
+ "ungroup": {
+  "verdict": null,
+  "batch": "Batch 68 · Audit gaps",
+  "at": "",
+  "notes": "",
+  "commits": []
+ },
+ "arrow-up-from-line": {
+  "verdict": null,
+  "batch": "Batch 68 · Audit gaps",
+  "at": "",
+  "notes": "",
+  "commits": []
+ }
+}

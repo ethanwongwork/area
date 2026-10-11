@@ -1,0 +1,51 @@
+{
+  "name": "@area/icons",
+  "version": "0.0.0",
+  "type": "module",
+  "sideEffects": false,
+  "description": "Area icons: one React component per icon (outline and filled), raw SVGs, a sprite and metadata.",
+  "exports": {
+    ".": {
+      "types": "./dist/modules/index.d.ts",
+      "import": "./dist/modules/index.js",
+      "default": "./dist/modules/index.js"
+    },
+    "./review": {
+      "types": "./dist/modules/review.d.ts",
+      "import": "./dist/modules/review.js",
+      "default": "./dist/modules/review.js"
+    },
+    "./meta": {
+      "types": "./dist/modules/meta.d.ts",
+      "import": "./dist/modules/meta.js",
+      "default": "./dist/modules/meta.js"
+    },
+    "./icons/*": {
+      "types": "./dist/modules/generated/icons/*.d.ts",
+      "import": "./dist/modules/generated/icons/*.js",
+      "default": "./dist/modules/generated/icons/*.js"
+    },
+    "./icons.json": "./dist/icons.json",
+    "./sprite.svg": "./dist/sprite.svg",
+    "./svg/*": "./dist/svg/*"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "generate": "node ../../apps/docs/scripts/gen-pilot-icons.mjs --package",
+    "build": "npm run generate && node ../../scripts/build-modules.mjs . && node scripts/build-assets.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "typecheck": "node scripts/ensure-generated.mjs && tsc --noEmit"
+  },
+  "peerDependencies": {
+    "react": "^18.3 || ^19"
+  },
+  "devDependencies": {
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "typescript": "^5.7.0"
+  }
+}
