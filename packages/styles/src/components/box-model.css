@@ -1,0 +1,103 @@
+/* ---------------------------------------------------------------------------
+ * Box model
+ *
+ * A read-only diagram of a layer's spacing for the inspector: the margin as a dashed outline (space,
+ * not a surface), the border box on the surface with its corner radii, the padding box filled in the
+ * tone, and the content's size at the centre. Every ring is a square of the smallest control, so
+ * corner radii sit on the diagonal, inset equally from both edges by the cap height (inset.css). The
+ * layout follows Figma Dev Mode's layer properties; the drawing is Area's (owner, review round 10:
+ * "more of an original design so its not just copying figma"). Not an editor: Box field edits
+ * padding and radius. docs/specs/box-model.md.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-box-model {
+    --_ring: var(--area-control-xs); /* spec: Figma's 24 rows, now square in both directions (compact 20) */
+    --_label-x: var(--area-space-8); /* spec: Figma's labels 8 in */
+    display: grid;
+    grid-template-columns: var(--_ring) minmax(0, 1fr) var(--_ring);
+    grid-template-rows: var(--_ring) auto var(--_ring);
+    position: relative;
+    min-inline-size: 0;
+    /* Margin is space around the element, so it is drawn as a dashed outline rather than a fill. */
+    border: var(--area-stroke-width) dashed var(--area-border-divider);
+    border-radius: var(--area-radius-container);
+    color: var(--area-fg-default);
+    font-size: var(--area-text-xs-size); /* spec: Figma 11/16; Area's smallest UI text */
+    line-height: var(--area-text-xs-leading);
+    font-variant-numeric: tabular-nums;
+  }
+  /* Tone paints the spacing (margin and padding values, the padding fill). info: a measuring blue, as the
+     owner's Dev Mode reference; neutral: greyscale. */
+  .area-box-model--info { --_space-ink: var(--area-info-solid); --_padding-bg: var(--area-info-surface); }
+  .area-box-model--neutral { --_space-ink: var(--area-fg-muted); --_padding-bg: var(--area-bg-subtle); }
+
+  .area-box-model__border, .area-box-model__padding {
+    position: relative;
+    display: grid;
+    grid-area: 2 / 2;
+    grid-template-columns: var(--_ring) minmax(0, 1fr) var(--_ring);
+    grid-template-rows: var(--_ring) auto var(--_ring);
+    min-inline-size: 0;
+  }
+  /* The border box: the element's surface in a 1px ring, its corner nested inside the outline's. */
+  .area-box-model__border {
+    border-radius: var(--area-radius-small);
+    background: var(--area-bg-surface);
+    box-shadow: 0 0 0 var(--area-stroke-width) var(--area-border-divider);
+  }
+  .area-box-model__padding { border-radius: var(--area-radius-min); background: var(--_padding-bg); }
+
+  /* A side's value, centred in its ring. Spacing values take the tone's ink; border widths the default. */
+  .area-box-model__side { display: grid; place-items: center; min-inline-size: 0; }
+  .area-box-model__side--top { grid-area: 1 / 2; }
+  .area-box-model__side--right { grid-area: 2 / 3; }
+  .area-box-model__side--bottom { grid-area: 3 / 2; }
+  .area-box-model__side--left { grid-area: 2 / 1; }
+  .area-box-model > .area-box-model__side, .area-box-model__padding > .area-box-model__side { color: var(--_space-ink); }
+  .area-box-model__value { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* "Margin", "Border" and "Padding" at their ring's start, muted; "Border" clears its corner's radius. */
+  .area-box-model__label {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    max-inline-size: 100%;
+    padding: var(--area-space-4) var(--_label-x);
+    overflow: hidden;
+    color: var(--area-fg-muted);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .area-box-model__border:has(> .area-box-model__corner) > .area-box-model__label { inset-inline-start: var(--_ring); }
+
+  /* A corner radius sits on the corner's diagonal: its cap box the same distance from the top (or bottom)
+     edge as from the side (owner, review round 10: "sit inset equally in the corners"). */
+  .area-box-model__corner {
+    --_inset: calc((var(--_ring) - 1cap) / 2);
+    position: absolute;
+    line-height: 1cap;
+    text-box: trim-both cap alphabetic;
+    color: var(--area-fg-muted);
+  }
+  .area-box-model__corner--top-left { inset-block-start: var(--_inset); inset-inline-start: var(--_inset); }
+  .area-box-model__corner--top-right { inset-block-start: var(--_inset); inset-inline-end: var(--_inset); }
+  .area-box-model__corner--bottom-right { inset-block-end: var(--_inset); inset-inline-end: var(--_inset); }
+  .area-box-model__corner--bottom-left { inset-block-end: var(--_inset); inset-inline-start: var(--_inset); }
+
+  /* The content's size: the focal value, on the surface. */
+  .area-box-model__content {
+    grid-area: 2 / 2;
+    display: grid;
+    place-items: center;
+    min-inline-size: 0;
+    padding: 0 var(--area-space-4);
+    border-radius: var(--area-radius-min);
+    background: var(--area-bg-surface);
+    font-weight: var(--area-weight-strong);
+  }
+  .area-box-model__caption { grid-area: 3 / 2 / 4 / 4; place-self: center end; padding-inline-end: var(--_label-x); color: var(--area-fg-muted); }
+
+  @media (forced-colors: active) {
+    .area-box-model__border, .area-box-model__padding, .area-box-model__content { border: var(--area-stroke-width) solid CanvasText; box-shadow: none; }
+  }
+}

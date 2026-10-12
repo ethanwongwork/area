@@ -32,7 +32,7 @@ export const COMPLETE_COMPONENTS = new Set([
   'model-picker', 'scroll-to-latest',
   // Approved 2026-09-28 (batch 22: lighter ground, brighter syntax; code and separator were already approved).
   'code-block',
-  'badge', 'box-field', 'breadcrumb',
+  'box-field', 'breadcrumb',
   'button', 'button-group', 'code',
   'color-field', 'color-picker', 'color-swatch', 'color-swatch-picker', 'composer',
   'dialog', 'field', 'input-group',
@@ -53,10 +53,14 @@ export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-10-10 on the review page, round 6 (components6), after the round-5 rethink.
   'toggle-group',
   // Approved 2026-10-11 on the review page, round 7 (components7); Menu after its shortcut-column change.
-  'meter', 'shortcut-list', 'date-range-picker', 'zoom-control', 'menu', ]);
+  'meter', 'shortcut-list', 'date-range-picker', 'zoom-control', 'menu',
+  // Approved 2026-10-11 on the review page, round 8 (components8).
+  'citation', 'search-field',
+  // Approved 2026-10-12 on the review page, round 9 (components9).
+  'badge', 'board', 'editable-text', 'timeline', ]);
 
 /** Built/refined and awaiting owner approval; not completion. */
-export const REVIEW_COMPONENTS = new Set(['search-field', 'citation', 'board']);
+export const REVIEW_COMPONENTS = new Set(['box-model']);
 export const componentStatus = slug => COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
 export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined' })[status];
 
@@ -102,6 +106,9 @@ export const APPROVAL_BATCHES = [
   { name: 'Sources', families: ['citation'] },
   { name: 'Canvas controls', families: ['zoom-control'] },
   { name: 'Boards', families: ['board'] },
+  { name: 'Timelines', families: ['timeline'] },
+  { name: 'Renaming in place', families: ['editable-text'] },
+  { name: 'Inspector', families: ['box-model'] },
   { name: 'Page navigation', families: ['tabs', 'breadcrumb', 'pagination', 'link'] },
   { name: 'Scrolling', families: ['scroll-area'] },
   { name: 'Uploading', families: ['file-upload'] },
@@ -127,4 +134,4 @@ export const batchOf = slug => APPROVAL_BATCHES.findIndex(batch => batch.familie
 export const REVIEW_BATCHES = [];
 
 // Most recently designed first. Move a family to the front when its design is worked on.
-export const RECENT_COMPONENTS = ['board', 'menu', 'zoom-control', 'citation', 'date-range-picker', 'shortcut-list', 'search-field', 'meter', 'description-list', 'toggle-group', 'empty-state', 'panel', 'link', 'file-upload', 'command-palette', 'toggletip', 'scroll-area', 'pagination', 'tag', 'drawer', 'confirm-dialog', 'date-picker', 'tag-picker', 'custom-select', 'accordion', 'badge-group', 'card', 'checkbox', 'radio', 'dialog', 'count', 'alert', 'toolbar', 'switch', 'code-block', 'chip', 'table', 'model-picker', 'scroll-to-latest', 'message', 'prompt-suggestions', 'hover-card', 'context-menu', 'combobox', 'composer', 'box-field', 'property-list', 'number-field', 'toast', 'popover', 'split-button', 'button-group', 'button', 'tree-view', 'breadcrumb', 'tooltip', 'badge', 'indicator', 'icon-pilot', 'color-picker', 'color-swatch-picker', 'color-field', 'color-swatch', 'alignment-picker', 'input-group', 'avatar', 'input', 'nav', 'progress', 'segmented', 'select', 'skeleton', 'spinner', 'calendar'];
+export const RECENT_COMPONENTS = ['box-model', 'editable-text', 'timeline', 'board', 'menu', 'zoom-control', 'citation', 'date-range-picker', 'shortcut-list', 'search-field', 'meter', 'description-list', 'toggle-group', 'empty-state', 'panel', 'link', 'file-upload', 'command-palette', 'toggletip', 'scroll-area', 'pagination', 'tag', 'drawer', 'confirm-dialog', 'date-picker', 'tag-picker', 'custom-select', 'accordion', 'badge-group', 'card', 'checkbox', 'radio', 'dialog', 'count', 'alert', 'toolbar', 'switch', 'code-block', 'chip', 'table', 'model-picker', 'scroll-to-latest', 'message', 'prompt-suggestions', 'hover-card', 'context-menu', 'combobox', 'composer', 'box-field', 'property-list', 'number-field', 'toast', 'popover', 'split-button', 'button-group', 'button', 'tree-view', 'breadcrumb', 'tooltip', 'badge', 'indicator', 'icon-pilot', 'color-picker', 'color-swatch-picker', 'color-field', 'color-swatch', 'alignment-picker', 'input-group', 'avatar', 'input', 'nav', 'progress', 'segmented', 'select', 'skeleton', 'spinner', 'calendar'];

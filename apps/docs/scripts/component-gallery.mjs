@@ -31,9 +31,9 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
  *
  * Tiles are 5:4 (owner, 2026-10-04; were 4:3) with the title in the top left (owner, 2026-10-03), all one size. The grid fits
  * as many columns as --docs-tile-min allows and stretches them to fill the canvas; rows are four
- * fifths of a column. One 8 step separates tiles, rows and the canvas edge. Inside, a generous
+ * fifths of a column. One 6 step separates tiles, rows and the canvas edge (8 before 2026-10-11). Inside, a generous
  * view (owner, 2026-10-04, after Frame Supply's grid): src/gallery/fit.ts shows every specimen
- * at 0.8 at most and smaller where it needs to fit.
+ * at 1:1 where it fits and smaller where it needs to (owner, 2026-10-11; was 0.8 at most).
  */
 export const GALLERY_CSS = `
 @layer area.base {
@@ -67,22 +67,23 @@ export const GALLERY_CSS = `
     container-type: inline-size;
     min-inline-size: 0;
     overflow: auto;
-    padding: var(--area-space-8);
+    padding: var(--area-space-6); /* owner 2026-10-11: gaps and margins down 2 (was 8) */
     background: light-dark(var(--area-neutral-25), var(--area-neutral-975)); /* spec: owner, neutral 25 */
     color: var(--area-fg-default);
   }
   .gallery-section { scroll-margin-block-start: var(--area-space-8); }
-  .gallery-section + .gallery-section { margin-block-start: var(--area-space-24); }
+  .gallery-section + .gallery-section { margin-block-start: var(--area-space-20); }
   .gallery-section__title {
-    margin: 0 0 var(--area-space-8);
+    margin: 0 0 var(--area-space-6);
     padding-inline: var(--area-space-4);
     font-size: var(--area-text-sm-size);
     line-height: var(--area-text-sm-leading);
     font-weight: var(--area-weight-strong);
   }
   .gallery-grid {
-    --docs-tile-min: 280px;
-    --_gap: var(--area-space-8);
+    /* Never narrower than 300 (owner 2026-10-11: minimum sizes, so specimens stay near 1:1). */
+    --docs-tile-min: 300px;
+    --_gap: var(--area-space-6);
     --_columns: max(1, round(down, calc((100cqw + var(--_gap)) / (var(--docs-tile-min) + var(--_gap))), 1));
     --_column: calc((100cqw - (var(--_columns) - 1) * var(--_gap)) / var(--_columns));
     display: grid;
@@ -97,7 +98,7 @@ export const GALLERY_CSS = `
     min-inline-size: 0;
     min-block-size: 0;
     /* inset.css: border + padding make the 12 inset, the border counted once. */
-    padding: calc(var(--area-space-12) - var(--area-border-width));
+    padding: calc(var(--area-space-8) - var(--area-border-width)); /* was 12 */
     overflow: clip;
     border: var(--area-border-width) solid var(--area-border-decorative);
     /* The site's surface corner, resolved outside the canvas so the canvas's radius setting
@@ -124,7 +125,7 @@ export const GALLERY_CSS = `
     place-items: unsafe center;
     min-block-size: 0;
     /* A wide margin round every specimen (Frame Supply's plates). */
-    padding: var(--area-space-24) var(--area-space-32);
+    padding: var(--area-space-20) calc(var(--area-space-24) + var(--area-space-4)); /* was 24 32 */
   }
   .gallery-tile__stage {
     position: relative;

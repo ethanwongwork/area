@@ -5,6 +5,63 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/docs/src/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Round 9 approvals; inspector components begin (2026-10-12, same branch)
+
+- Round 9 (`components9`): Badge, Board, Editable text, Timeline approved (Complete; page and chat agree).
+- Owner: "keep working, start on the inspector components" (the Dev Mode reference, parts A–J; plan: Box model,
+  Preview frame + Description list "show more", Link row / Asset row, Token row + compact Code block, then an
+  inspector rebuild). Dev Mode is paywalled on the owner's plan, but its real layout renders behind "Upgrade to
+  Professional" with placeholder bars: measured from there (Layer properties box model, List / Code tabs, CSS picker,
+  code heading and well), then switched back to Design Mode. Captures in `docs/research/captures/box-model/`.
+- Box model (in review): `BoxModel` (margin / border / padding per side, `radius` per corner, width × height, `caption`,
+  `labels`, tone info | neutral), 4 tiles, docs entry, tests. Round 10 rethink ("more like area ... not just copying
+  figma"; corners inset equally) → redrawn: dashed margin outline, plain values (spacing in the tone's ink), square
+  `control-xs` rings, Margin / Border / Padding labels, corner radii by cap box at (ring − 1cap) / 2 (7.7 from both
+  edges, measured). Round 11 (`components11`) published; its Before came from the live round-10 page's data and CSS.
+- Next: the remaining inspector parts. Evidence notes: Figma's "well" (`common--well`, rgb(245,245,245), radius 5) is
+  shared by the box model and should be the Preview frame's basis; the code well is a 1px rgba(0,0,0,.1) ring, radius
+  5, an 8-top 20-wide line-number gutter at 30% ink, 11/18 Roboto Mono lines (compact Code block basis); the List /
+  Code toggle is 24-tall tabs, selected rgb(245,245,245) 550; the language picker a 24 hug select with a 1px ring.
+
+## Review round 8 → 9 (2026-10-11, branch `claude/accordion-sizing-centering-5e1980`)
+
+- Round 8 (`components8`): Citation and Search field approved (Complete). Board needs changes (coloured card hover),
+  Badge rethink (smaller icons, less side spacing), Editable text rethink (not discoverable), Timeline rethink (chat
+  references: Linear activity, an activity feed, a run log; bare icons, gaps at the marks, dates too small).
+- Applied: Board card hover = column colour at 8% over the surface; Badge icon slot 12 at every size (Untitled), icon
+  centred in the pill end again (md 4 from the end); Editable text hover plate (`bg-hover`) + `hint` Tooltip; Timeline
+  bare icons in `--_mark-ink`, the line 4 short of each mark (`--_mark` by kind via :has), one line "title · meta ·
+  time" at 14/20 muted, titles 400 (new elements `line`, `sep`).
+- Round 9 published (same link, `components9`), Before = the round-8 build (scratchpad `before9-dist`). Board and
+  Editable text changes are hover-only, so the page lists them unchanged; their notes say to hover.
+
+## Accordion framing, Timeline, Badge icon side, gallery 1:1 (2026-10-11, branch `claude/accordion-sizing-centering-5e1980`)
+
+- Accordion (owner: "looks off center and also moves when i interact"): gallery framing only, component unchanged.
+  Tiles were a centred flex row, so a plain item shrank to its text and re-centred on toggle. Now every tile is a fixed
+  240 frame with a hidden inert "tallest" copy behind it (build.mjs `demoMarkup`), as shadcn's preview pins the top.
+- Timeline (in review): `Timeline` / `TimelineItem` (dot, icon or media marker in a 24 column, 1px divider line at
+  11.5, text at 36, title 14/20 500, meta 12/16 muted "time · meta", body), 5 tiles, docs entry, tests. Evidence:
+  Figma's version history and Notion's page updates (read-only, redacted). Chrome's window went hidden mid-capture:
+  the clipboard fails then, but `get_page_text` reads a temporary off-screen `<article>` holding the capture JSON.
+  Local-network fetches from product pages are blocked (Chrome would prompt); the built-in browser can POST to a
+  127.0.0.1 relay.
+- Badge (owner: icons too close to the side): icon side = text side − 2 (Untitled 6 / 8) in inset.css; back In review.
+- Gallery (owner: closer to actual size, minimum container sizes, gaps −2/4): fit MAX 1 (was 0.8), tile min 300,
+  canvas/grid gaps 6, tile padding 8, view padding 20 / 28. 589 of 892 tiles now show at 1:1. Wide compositions
+  (Toast 360, Meter's 384 frame, dialogs) still scale.
+- Owner: "keep working, what are your recs for the open questions" → Timeline recs: keep the default dot; no
+  success / danger tones until a product uses one. Review page republished (same link, still round `components8`, no
+  verdicts there yet): Board, Citation, Search field (Before = the live round-7 Before, kept), Badge (8 icon tiles
+  changed), Timeline (new), Editable text (new). Accordion stays Complete (gallery framing only).
+- Editable text (in review): `EditableText` (`label`, value / defaultValue / onValueChange per commit, `activation`
+  dblclick | click | focus, Enter / F2 opens from the keyboard, Enter commits, Escape cancels, blur commits, IME-safe,
+  `fill`, `placeholder`, `defaultEditing`, `inputProps`), `editable-text.css` (8 side padding in both states, field
+  width 0 / min 100% so it takes the hidden draft's width), 7 tiles (hydrated through switch-demos), docs entry, tests.
+  Evidence: Figma layer rename (double-click, Escape), Notion database title; ChatGPT's Rename field not captured
+  (its tab hung with the chat menu open; nothing renamed).
+- Scratch: a detached worktree of 8dfb834 sits in the session scratchpad (`before/`); removing it was declined, run
+  `git worktree prune` after the scratchpad is cleared.
 ## Icons: approvals synced, review reopened, @area/icons (branch `claude/icon-work-01002a`)
 
 - Every review-page collection read: all 150 `reviews7` rows were approvals. batches.json now marks 489 icons approved

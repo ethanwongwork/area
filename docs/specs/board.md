@@ -1,6 +1,6 @@
 # Board spec
 
-**Status:** in review · 2026-10-11 (round 8)
+**Status:** complete · 2026-10-12 (approved, review round 9)
 **Captures:** `docs/research/captures/board/`
 **Peers:** Tag (the column's value and tone), Count (the header's number), Card (a surface; the board card is lighter),
 Description list (properties), Button (header and card actions), Avatar (people)
@@ -118,6 +118,12 @@ Owner, round 7 (rethink), applied:
 - **Why:** You asked to move it away from Notion's look: no tag as the title, buttons on the right, a badge for the
   count, plain colours instead of status names, and a full-width add row in the column's colour.
 
+## Review note, 2026-10-11 (round 9)
+
+- **What changed:** in a coloured column, hovering a card now tints it with the column's colour instead of grey. It only
+  shows on hover, so the page lists the tiles as unchanged: hover a card in the purple, blue or green tile.
+- **Why:** you asked for the hover to be coloured too. It uses the same strength as the coloured "Add new" row's hover.
+
 ## Feedback log
 
 - 2026-10-10 · owner: "can you keep working, ill bring chrome to the front later" → Board from Notion's board view; 13
@@ -125,3 +131,5 @@ Owner, round 7 (rethink), applied:
 - 2026-10-11 · owner, review round 7 (rethink): "are there any ways you can differentiate it from notion, maybe it doesnt need a badge title at the top, just regular text, also add buttons to the right side, make the counter a badge instead. and just focus on the colors as just custom colors rather than semantic. the default should just be neutral. also the new page button should be add new, and the button should be full width but still left aligned, same size as the blocks above it. also for the custom colored versions the button backplate and/or text should be colored like the custom color" → reworked (see the round-8 review note).
 - 2026-10-11 · round 8 → plain title, Badge count, header actions, `color` (custom colours, neutral default), "Add new"
   row (`onAdd`, card-sized, coloured) → Board.tsx, board.css, manifest (`color`), demos, tests.
+- 2026-10-11 · owner, review round 8 (needs changes): "hover state of the board cards should be colored too?" → in a coloured column the card's hover is the column's colour mixed into the surface at 8% (the add row's hover strength); neutral columns keep `bg-component-hover`.
+- 2026-10-12 · owner, review round 9: approved → Complete in `component-status.mjs`.

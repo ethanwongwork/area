@@ -269,7 +269,7 @@ ${railToggle("nav", "Show navigation", { corner: true })}
 ${railToggle("panel", "Show customize panel", { corner: true })}
 <script>${DOCS_SCRIPT}</script>
 ${slug === "switch" ? '<script type="module" src="./switch-demos.js"></script>' : ""}
-${slug === "tree-view" || slug === "property-list" || slug === "box-field" || slug === "combobox" || slug === "custom-select" || slug === "tag" || slug === "tag-picker" || slug === "date-picker" || slug === "drawer" || slug === "confirm-dialog" || slug === "command-palette" || slug === "context-menu" || slug === "hover-card" || slug === "prompt-suggestions" || slug === "message" || slug === "scroll-to-latest" || slug === "model-picker" || slug === "panel" || slug === "dialog" || slug === "popover" || slug === "composer" || slug === "toolbar" || slug === "alignment-picker" || slug === "color-field" || slug === "color-picker" || slug === "color-swatch-picker" || slug === "calendar" || slug === "menu" || slug === "tooltip" || slug === "toast" || slug === "breadcrumb" || slug === "pagination" || slug === "scroll-area" || slug === "file-upload" || slug === "toggletip" || slug === "toggle-group" || slug === "search-field" || slug === "shortcut-list" || slug === "date-range-picker" || slug === "citation" || slug === "zoom-control" || slug === "board" || slug === "accordion" ? '<script type="module" src="./switch-demos.js"></script>' : ""}
+${slug === "tree-view" || slug === "property-list" || slug === "box-field" || slug === "combobox" || slug === "custom-select" || slug === "tag" || slug === "tag-picker" || slug === "date-picker" || slug === "drawer" || slug === "confirm-dialog" || slug === "command-palette" || slug === "context-menu" || slug === "hover-card" || slug === "prompt-suggestions" || slug === "message" || slug === "scroll-to-latest" || slug === "model-picker" || slug === "panel" || slug === "dialog" || slug === "popover" || slug === "composer" || slug === "toolbar" || slug === "alignment-picker" || slug === "color-field" || slug === "color-picker" || slug === "color-swatch-picker" || slug === "calendar" || slug === "menu" || slug === "tooltip" || slug === "toast" || slug === "breadcrumb" || slug === "pagination" || slug === "scroll-area" || slug === "file-upload" || slug === "toggletip" || slug === "toggle-group" || slug === "search-field" || slug === "shortcut-list" || slug === "date-range-picker" || slug === "citation" || slug === "zoom-control" || slug === "board" || slug === "accordion" || slug === "editable-text" ? '<script type="module" src="./switch-demos.js"></script>' : ""}
 ${["badge", "badge-group", "indicator", "presence"].includes(slug) ? '<script type="module" src="./badge-demos.js"></script>' : ""}
 ${slug === "slider" ? '<script type="module" src="./slider-demos.js"></script>' : ""}
 ${slug === "number-field" || slug === "input-group" ? '<script type="module" src="./number-field-demos.js"></script>' : ""}
@@ -531,6 +531,28 @@ function gallerySpecimenTable() {
       { id: "state-loading", title: "State / loading", demo: "GallerySearchFieldLoading" },
       { id: "state-disabled", title: "State / disabled", demo: "GallerySearchFieldDisabled" },
       { id: "behavior-filter", title: "Behavior / filter", demo: "GallerySearchFieldFilter" },
+    ],
+    "box-model": [
+      { id: "default", title: "Default", demo: "GalleryBoxModel" },
+      { id: "tone-neutral", title: "Tone / neutral", demo: "GalleryBoxModelNeutral" },
+      { id: "content-sides", title: "Content / per side", demo: "GalleryBoxModelSides" },
+      { id: "content-corners", title: "Content / per corner", demo: "GalleryBoxModelCorners" },
+    ],
+    "editable-text": [
+      { id: "default", title: "Default", demo: "GalleryEditableText" },
+      { id: "state-editing", title: "State / editing", demo: "GalleryEditableTextEditing" },
+      { id: "behavior-click", title: "Behavior / click to edit", demo: "GalleryEditableTextClick" },
+      { id: "layout-fill", title: "Layout / fill", demo: "GalleryEditableTextFill" },
+      { id: "content-placeholder", title: "Content / placeholder", demo: "GalleryEditableTextPlaceholder" },
+      { id: "content-long", title: "Content / long", demo: "GalleryEditableTextLong" },
+      { id: "state-disabled", title: "State / disabled", demo: "GalleryEditableTextDisabled" },
+    ],
+    timeline: [
+      { id: "default", title: "Default", demo: "GalleryTimeline" },
+      { id: "state-current", title: "State / current", demo: "GalleryTimelineAccent" },
+      { id: "content-icons", title: "Content / icons", demo: "GalleryTimelineIcons" },
+      { id: "content-avatars", title: "Content / avatars", demo: "GalleryTimelineAvatars" },
+      { id: "content-body", title: "Content / details", demo: "GalleryTimelineBody" },
     ],
     board: [
       { id: "default", title: "Default", demo: "GalleryBoard" },
@@ -1393,6 +1415,15 @@ function galleryShell({ current, title, body }) {
 /* --- Component pages -------------------------------------------------------- */
 
 function demoMarkup(name, html) {
+  // An accordion keeps its place while it opens and closes (shadcn's preview pins the accordion's
+  // top). Behind the live demo sits a hidden, inert copy at its tallest: every body shown, or as
+  // rendered for a one-open accordion (each body is the same) and a disabled item (never opens).
+  // The tile centres and scales on that copy, so the trigger stays put. docs/specs/accordion.md.
+  if (name.startsWith("GalleryAccordion")) {
+    const tallest = ["GalleryAccordionDivided", "GalleryAccordionDividedMd", "GalleryAccordionDisabled"].includes(name) ? html : html.replace(/\shidden(="[^"]*")?/g, "");
+    const copy = tallest.replace(/\s(id|aria-labelledby|aria-controls)="[^"]*"/g, "");
+    return `<div style="display:grid;justify-items:center;align-items:start;max-inline-size:100%;min-inline-size:0"><div data-switch-demo="${name}" style="grid-area:1/1;max-inline-size:100%;min-inline-size:0">${html}</div><div aria-hidden="true" inert style="grid-area:1/1;visibility:hidden;max-inline-size:100%;min-inline-size:0">${copy}</div></div>`;
+  }
   if (["GallerySegmented", "GallerySegmentedIcons", "GallerySegmentedFullWidth", "GallerySegmentedSmall", "GallerySegmentedMedium", "GallerySegmentedLarge", "SegmentedSizes"].includes(name)) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("GalleryOverlay")) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name === "GalleryDialogModal") return `<div data-switch-demo="${name}" style="inline-size:100%;min-inline-size:0;text-align:center">${html}</div>`;
@@ -1401,7 +1432,7 @@ function demoMarkup(name, html) {
   if (name.startsWith("CodeBlock")) return `<div data-code-block-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name === "GallerySegmentedIconOnly") return `<div data-switch-demo="${name}">${html}</div>`;
   if (["GalleryTableSelectable", "GalleryTextareaCount", "GalleryInputDate"].includes(name)) return `<div data-switch-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
-  if (["GalleryPanel", "GalleryPanelSections", "GalleryPanelFooter", "GalleryPanelSm", "GalleryPanelMd", "GalleryPanelFlush", "GalleryPanelBareBar", "GalleryPanelFigma", "GalleryPanelCollapsible", "GalleryPanelResizable", "GalleryPanelResizableSidebar", "GalleryPropertyListFills", "GalleryPropertyListSingle", "GalleryPropertyListEffects", "GalleryModelPicker", "GalleryModelPickerHeading", "GalleryScrollToLatest", "GalleryMessage", "GalleryMessageStreaming", "GalleryMessageLong", "GalleryPromptSuggestions", "GalleryPromptSuggestionsPlain", "GalleryPromptSuggestionsChips", "GalleryHoverCard", "GalleryHoverCardPage", "GalleryHoverCardSource", "GalleryHoverCardTop", "GalleryContextMenu", "GalleryContextMenuTree", "GalleryContextMenuDisabled", "GalleryCommandPalette", "GalleryKbdInCommandPalette", "GalleryCommandPaletteModal", "GalleryCommandPaletteEmpty", "GalleryCommandPaletteNoFooter", "GalleryCombobox", "GalleryComboboxCustom", "GalleryComboboxGroups", "GalleryComboboxCreate", "GalleryComboboxRich", "GalleryComboboxSm", "GalleryComboboxLg", "GalleryComboboxDisabled", "GalleryComboboxInvalid", "GalleryBoxFieldPadding", "GalleryBoxFieldPaddingIndividual", "GalleryBoxFieldPaddingMixed", "GalleryBoxFieldCorners", "GalleryBoxFieldCornersIndividual", "GalleryBoxFieldSoft", "GalleryBoxFieldSm", "GalleryBoxFieldLg", "GalleryBoxFieldDisabled", "GalleryNavActions", "GalleryNavExpandable", "GalleryTabs", "GalleryTabsDisabled", "GalleryTabsVertical", "GalleryTabsSmall", "GalleryTabsTrack", "GalleryTabsIcons", "GalleryTabsCounts", "GalleryToastAction", "GalleryToaster", "GalleryBreadcrumbCollapsed", "GalleryAccordion", "GalleryAccordionClosed", "GalleryAccordionSizeSm", "GalleryAccordionSizeMd", "GalleryAccordionDisabled", "GalleryAccordionNested", "GalleryAccordionLongTitle", "GalleryAccordionDivided", "GalleryAccordionDividedMd", "GalleryAccordionMultiple"].includes(name)) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (["GalleryPanel", "GalleryPanelSections", "GalleryPanelFooter", "GalleryPanelSm", "GalleryPanelMd", "GalleryPanelFlush", "GalleryPanelBareBar", "GalleryPanelFigma", "GalleryPanelCollapsible", "GalleryPanelResizable", "GalleryPanelResizableSidebar", "GalleryPropertyListFills", "GalleryPropertyListSingle", "GalleryPropertyListEffects", "GalleryModelPicker", "GalleryModelPickerHeading", "GalleryScrollToLatest", "GalleryMessage", "GalleryMessageStreaming", "GalleryMessageLong", "GalleryPromptSuggestions", "GalleryPromptSuggestionsPlain", "GalleryPromptSuggestionsChips", "GalleryHoverCard", "GalleryHoverCardPage", "GalleryHoverCardSource", "GalleryHoverCardTop", "GalleryContextMenu", "GalleryContextMenuTree", "GalleryContextMenuDisabled", "GalleryCommandPalette", "GalleryKbdInCommandPalette", "GalleryCommandPaletteModal", "GalleryCommandPaletteEmpty", "GalleryCommandPaletteNoFooter", "GalleryCombobox", "GalleryComboboxCustom", "GalleryComboboxGroups", "GalleryComboboxCreate", "GalleryComboboxRich", "GalleryComboboxSm", "GalleryComboboxLg", "GalleryComboboxDisabled", "GalleryComboboxInvalid", "GalleryBoxFieldPadding", "GalleryBoxFieldPaddingIndividual", "GalleryBoxFieldPaddingMixed", "GalleryBoxFieldCorners", "GalleryBoxFieldCornersIndividual", "GalleryBoxFieldSoft", "GalleryBoxFieldSm", "GalleryBoxFieldLg", "GalleryBoxFieldDisabled", "GalleryNavActions", "GalleryNavExpandable", "GalleryTabs", "GalleryTabsDisabled", "GalleryTabsVertical", "GalleryTabsSmall", "GalleryTabsTrack", "GalleryTabsIcons", "GalleryTabsCounts", "GalleryToastAction", "GalleryToaster", "GalleryBreadcrumbCollapsed"].includes(name)) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   // The carousel's previous / next Buttons page the row.
   if (name === "GalleryCardCarousel") return `<div data-switch-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("GalleryDrawer") || name.startsWith("GalleryConfirmDialog")) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
@@ -1413,6 +1444,7 @@ function demoMarkup(name, html) {
   if (/^GalleryTag(?!Picker)/.test(name)) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("GalleryFileUpload")) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name === "GalleryShortcutListDialog") return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (name.startsWith("GalleryEditableText")) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("GallerySearchField")) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("GalleryToggleGroup")) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("GalleryToggletip")) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;

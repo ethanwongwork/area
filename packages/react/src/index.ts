@@ -48,6 +48,9 @@ export { ZoomControl, type ZoomControlProps } from "./components/ZoomControl.tsx
 export { Citation, type CitationProps } from "./components/Citation.tsx";
 export { DateRangePicker, type DateRangePickerProps, type DateRangePreset } from "./components/DateRangePicker.tsx";
 export { ShortcutList, ShortcutListItem, type ShortcutListProps, type ShortcutListItemProps } from "./components/ShortcutList.tsx";
+export { BoxModel, type BoxModelProps, type BoxSides, type BoxCorners } from "./components/BoxModel.tsx";
+export { EditableText, type EditableTextProps } from "./components/EditableText.tsx";
+export { Timeline, TimelineItem, type TimelineProps, type TimelineItemProps } from "./components/Timeline.tsx";
 export { DescriptionList, DescriptionListItem, type DescriptionListProps, type DescriptionListItemProps } from "./components/DescriptionList.tsx";
 export { ToggleGroup, ToggleGroupItem, type ToggleGroupProps, type ToggleGroupItemProps } from "./components/ToggleGroup.tsx";
 export { EmptyState, type EmptyStateProps } from "./components/EmptyState.tsx";

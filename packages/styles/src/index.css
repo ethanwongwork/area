@@ -87,6 +87,9 @@
 @import "./components/citation.css";
 @import "./components/zoom-control.css";
 @import "./components/board.css";
+@import "./components/timeline.css";
+@import "./components/editable-text.css";
+@import "./components/box-model.css";
 @import "./components/toggletip.css";
 @import "./components/segmented.css";
 @import "./components/code.css";
