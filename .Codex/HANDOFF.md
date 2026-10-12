@@ -5,73 +5,128 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/docs/src/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Round 9 approvals; inspector components begin (2026-10-12, same branch)
+
+- Round 9 (`components9`): Badge, Board, Editable text, Timeline approved (Complete; page and chat agree).
+- Owner: "keep working, start on the inspector components" (the Dev Mode reference, parts A–J; plan: Box model,
+  Preview frame + Description list "show more", Link row / Asset row, Token row + compact Code block, then an
+  inspector rebuild). Dev Mode is paywalled on the owner's plan, but its real layout renders behind "Upgrade to
+  Professional" with placeholder bars: measured from there (Layer properties box model, List / Code tabs, CSS picker,
+  code heading and well), then switched back to Design Mode. Captures in `docs/research/captures/box-model/`.
+- Box model (in review): `BoxModel` (margin / border / padding per side, `radius` per corner, width × height, `caption`,
+  `labels`, tone info | neutral), 4 tiles, docs entry, tests. Round 10 rethink ("more like area ... not just copying
+  figma"; corners inset equally) → redrawn: dashed margin outline, plain values (spacing in the tone's ink), square
+  `control-xs` rings, Margin / Border / Padding labels, corner radii by cap box at (ring − 1cap) / 2 (7.7 from both
+  edges, measured). Round 11 (`components11`) published; its Before came from the live round-10 page's data and CSS.
+- Next: the remaining inspector parts. Evidence notes: Figma's "well" (`common--well`, rgb(245,245,245), radius 5) is
+  shared by the box model and should be the Preview frame's basis; the code well is a 1px rgba(0,0,0,.1) ring, radius
+  5, an 8-top 20-wide line-number gutter at 30% ink, 11/18 Roboto Mono lines (compact Code block basis); the List /
+  Code toggle is 24-tall tabs, selected rgb(245,245,245) 550; the language picker a 24 hug select with a 1px ring.
+
+## Review round 8 → 9 (2026-10-11, branch `claude/accordion-sizing-centering-5e1980`)
+
+- Round 8 (`components8`): Citation and Search field approved (Complete). Board needs changes (coloured card hover),
+  Badge rethink (smaller icons, less side spacing), Editable text rethink (not discoverable), Timeline rethink (chat
+  references: Linear activity, an activity feed, a run log; bare icons, gaps at the marks, dates too small).
+- Applied: Board card hover = column colour at 8% over the surface; Badge icon slot 12 at every size (Untitled), icon
+  centred in the pill end again (md 4 from the end); Editable text hover plate (`bg-hover`) + `hint` Tooltip; Timeline
+  bare icons in `--_mark-ink`, the line 4 short of each mark (`--_mark` by kind via :has), one line "title · meta ·
+  time" at 14/20 muted, titles 400 (new elements `line`, `sep`).
+- Round 9 published (same link, `components9`), Before = the round-8 build (scratchpad `before9-dist`). Board and
+  Editable text changes are hover-only, so the page lists them unchanged; their notes say to hover.
+
+## Accordion framing, Timeline, Badge icon side, gallery 1:1 (2026-10-11, branch `claude/accordion-sizing-centering-5e1980`)
+
+- Accordion (owner: "looks off center and also moves when i interact"): gallery framing only, component unchanged.
+  Tiles were a centred flex row, so a plain item shrank to its text and re-centred on toggle. Now every tile is a fixed
+  240 frame with a hidden inert "tallest" copy behind it (build.mjs `demoMarkup`), as shadcn's preview pins the top.
+- Timeline (in review): `Timeline` / `TimelineItem` (dot, icon or media marker in a 24 column, 1px divider line at
+  11.5, text at 36, title 14/20 500, meta 12/16 muted "time · meta", body), 5 tiles, docs entry, tests. Evidence:
+  Figma's version history and Notion's page updates (read-only, redacted). Chrome's window went hidden mid-capture:
+  the clipboard fails then, but `get_page_text` reads a temporary off-screen `<article>` holding the capture JSON.
+  Local-network fetches from product pages are blocked (Chrome would prompt); the built-in browser can POST to a
+  127.0.0.1 relay.
+- Badge (owner: icons too close to the side): icon side = text side − 2 (Untitled 6 / 8) in inset.css; back In review.
+- Gallery (owner: closer to actual size, minimum container sizes, gaps −2/4): fit MAX 1 (was 0.8), tile min 300,
+  canvas/grid gaps 6, tile padding 8, view padding 20 / 28. 589 of 892 tiles now show at 1:1. Wide compositions
+  (Toast 360, Meter's 384 frame, dialogs) still scale.
+- Owner: "keep working, what are your recs for the open questions" → Timeline recs: keep the default dot; no
+  success / danger tones until a product uses one. Review page republished (same link, still round `components8`, no
+  verdicts there yet): Board, Citation, Search field (Before = the live round-7 Before, kept), Badge (8 icon tiles
+  changed), Timeline (new), Editable text (new). Accordion stays Complete (gallery framing only).
+- Editable text (in review): `EditableText` (`label`, value / defaultValue / onValueChange per commit, `activation`
+  dblclick | click | focus, Enter / F2 opens from the keyboard, Enter commits, Escape cancels, blur commits, IME-safe,
+  `fill`, `placeholder`, `defaultEditing`, `inputProps`), `editable-text.css` (8 side padding in both states, field
+  width 0 / min 100% so it takes the hidden draft's width), 7 tiles (hydrated through switch-demos), docs entry, tests.
+  Evidence: Figma layer rename (double-click, Escape), Notion database title; ChatGPT's Rename field not captured
+  (its tab hung with the chat menu open; nothing renamed).
+- Scratch: a detached worktree of 8dfb834 sits in the session scratchpad (`before/`); removing it was declined, run
+  `git worktree prune` after the scratchpad is cleared.
+## Icons: approvals synced, review reopened, @area/icons (branch `claude/icon-work-01002a`)
+
+- Every review-page collection read: all 150 `reviews7` rows were approvals. batches.json now marks 489 icons approved
+  (those whose approval is newer than the drawing, or whose drawing is unchanged since). The review page (same link)
+  holds 224 for the owner: the 103 held icons plus 121 reopened (changed after approval, old fix verdicts, never
+  reviewed), filter "Changed since your verdict, or never reviewed". Record: README of
+  `docs/research/icon-review/2026-10-10/` ("batches.json synced"); `reopen.mjs` and `review-page.html` rebuild it.
+- New `packages/icons` (`@area/icons`): the generator's `iconSource`/`RUNTIME` now feed both `pilot-icons.tsx`
+  (unchanged output) and the package's gitignored `src/generated` (`--package`). Approved icons in the main entry,
+  the rest in `./review`; per-icon modules, raw SVGs 16/20/24, sprite, `icons.json`. `npm test -w @area/icons`;
+  `npm run test:consumer` covers it. Root `npm run build` now builds it too (the icon lint makes that ~4 minutes
+  longer). Next on the production list: label/RTL API, keywords and aliases.
+- `form` redrawn on the owner's reference (page, title line, two text lines, pen over the lower right; spec
+  batch 70 table). On the review page as redrawn, awaiting a verdict. Another icon session ran in parallel (batch 75 on
+  the review page); merge its branch onto this one.
+
+## Icons: coverage survey, batch 75 (2026-10-11, branch `claude/icon-work-chrome-d39913`)
+
+- Owner: "continue the icon work, chrome is at the front" → production gap 8, coverage by use, read live in the owner's
+  Chrome (read-only): ChatGPT's whole icon sprite (426 concepts), Notion's loaded icon names (206), Figma's 743 unnamed
+  24px editor icons on a contact-sheet overlay. Most is covered; 14 gaps drawn plus rectangle-vertical as a turn
+  (batch 75: the AI sparkle composites, people-group, person-dashed, circle-dollar, chat-pen, sun-moon, heading-4–6,
+  pilcrow-left/right). On the review page (same link, filter "batches 70–75"); 118 now held for one review. Record and
+  delegated calls: `docs/research/icon-review/2026-10-10/README.md` "Batch 75". trash-restore and folder-user were not
+  drawn (gap-scale and keyline conflicts; options in the README). Categories updated; full lint (808), build and
+  typecheck pass (typecheck needs `npm run build` first after the component merge).
+- Then synced with main (PR #62: approvals sync, reopen, @area/icons, form redraw) and took round 9 from the review page
+  (149 reviewed: 146 approve, 6 of them newly applied to batches.json) plus the owner's chat notes: form's lines 3 in
+  from both page edges, left-aligned; blur redrawn as a ring halved with 45° hatching (owner's droplet reference);
+  superscript, subscript and list-numbered share a 2 whose base starts left of the bowl, tangent diagonal. Page
+  republished (version 47) with the five as redrawn + Before. Record: `docs/research/icon-review/2026-10-11/README.md`,
+  spec "Owner review round 9". Build, typecheck, `npm test -w @area/icons`, consumer test and docs build pass.
+- Round 10 (owner): curved knockouts now run out square (generator fix: umbrella, banknote, basketball, globe-off); type
+  audit of the 60 glyph icons with fixes to the heading family, binary, whole-word, case-sensitive, remove-formatting and
+  text-size; the filled-treatment page https://claude.ai/artifact/1oCSG2MmsfkpxcNAtDnpBY (all 375 reviewed icons by
+  treatment, with reasons); shield-lock now fills like the shield family. Review page version 48. Record: spec "Owner review
+  round 10", `docs/research/icon-review/2026-10-11/README.md`. iCloud sync-conflict copies ("name 2.svg") appeared in the
+  icon folder and were removed; others remain in dist, captures and node_modules (untracked).
+- Round 11 (owner, 243 page decisions + chat): 195 approvals applied; 53 icons changed (Lucide's 1 everywhere, a
+  Lucide-like 2 with a wider base, `data-ends="keep"` so 1/2/Z keep proportions when filled, umbrella and globe cuts edge to
+  edge, the face and battery families, file marks centred, library redraws). Four parallel helpers did 37 of them. Review
+  page version 49. Record: spec "Owner review round 11", `docs/research/icon-review/2026-10-11/README.md` (calls to
+  confirm listed there). Full lint, build, typecheck, @area/icons tests and docs build pass.
 ## Desktop app: gallery homepage (2026-10-11, `claude/gallery-homepage-ui-2a0b30`)
 
-- Owner: new sessions work strictly on the app's gallery; the docs site is archived; reviews go through
-  artifacts. `apps/desktop` (Electron 44, React, esbuild): `npm run dev` (window, reloads on change),
-  `npm run preview` (browser, :4400), `npm run start -w @area/desktop`. Regions: **Titlebar**, **Sidebar**,
-  **Canvas**, **Inspector** (`src/studio.tsx`). Tabs: Language (the token axes, a preset tile each),
-  Components (the docs gallery's tiles, one family at a time), Typography, Icons, Color. Location is
-  `#<tab>/<item>`.
-- Shared with docs, unchanged output (docs build diffed byte-identical): the specimen table and demo
-  wrappers moved to `apps/docs/src/gallery/specimens.mjs`; `fitTiles` returns a cleanup;
-  `standaloneSvg` / `CopyButton` exported from the icon browser.
-- Spacing pass (owner: no Sidebar titles, group labels on the item text, no Titlebar tab icons, one
-  divider stroke): every region insets by Panel's 14 (tab text = Sidebar item and label text at 22; last
-  Titlebar button ends with the Inspector's controls); Canvas has a bar built to Panel's bar rules (41, 1px
-  top balance, cap-trimmed title) so Canvas and Inspector titles share a cap line, and the Sidebar's first
-  row centres on it (0.5px off); dividers are only Panel's seams, bar and section rules, the Titlebar's and
-  the Canvas bar's rule, all 1px --area-border-decorative. Inspector facts use src/facts.tsx (DescriptionList
-  inset its terms 6). Canvas edge 14, tile gap 8 (the docs gallery used 8 at the edge too).
-- Every Sidebar starts with **All** (the default): the Sidebar picks what the Canvas shows (All, or one
-  family / category / scale / role / setting, in the hash); clicks on the Canvas pick the Inspector's subject.
-  All components lazily renders and fits each family as it nears the view (all 887 tiles at once held the
-  Canvas ~2s). macOS tabs start at 84 (16 + 52 + 16). Container colours: surface #fff / #1d1d1d, border #f3f3f3
-  / #282828, on neutral 25 / 975.
-- Inspector (owner): one-row controls, the label beside the control (horizontal Field: Density, Radius,
-  Weight, Style, Size); chips and the sample Textarea stay stacked. Inspector is 256 (default and min),
-  measured as the narrowest at which "Compact" isn't clipped (51 > 47 at 240). Facts and props are Area
-  Tables (src/facts.tsx): term cells use Table's fit modifier.
-- Props moved to the Canvas under a family's tiles (owner): Prop / Type / Default Table, prop and default
-  columns fit, one name per line; the section pins compact and radius 8 so Canvas settings don't restyle it.
-- Canvas spacing is now 8 (owner: smaller): margin = tile / row / preset gap = 8, sections 16 apart with
-  the title 8 over its content; the Canvas bar title insets 8 too, on the tiles' edge (Panel's rule: the
-  title shares its content column). Sidebar / Inspector / Titlebar keep Panel's 14.
-- One container and one grid for every tab (owner: "go with your recommendations", after research on
-  17 systems: Carbon, Polaris, Primer, Storybook, Geist, Radix, shadcn, Tailwind, M3, Atlassian, ...):
-  src/tile.tsx Tile (frame, header label + value, stage fit / center / fill / plate / flow) on
-  .studio-grid: a 136 unit (2 x 136 + 8 = the old 280 tile), even column count so wide (2 x 2) tiles
-  sit on unit pairs, rows 4/5 of a unit (5:4 everywhere); row tiles stack full width. All shows overview
-  tiles (Color: ramp row per scale; Icons: label-free sheet per category; Typography: sample + values
-  row; Language: wide preset tiles per setting); one Sidebar item breaks into unit tiles (swatch + hex,
-  named icons) or detail rows (type weights and densities). Not done: Radix-style role groups over steps,
-  light/dark pairs per colour.
-- Round 2 (owner): tiles 16 (radius 10's container corner; stages nest at 4); Compact Canvas density is a
-  hairline contact sheet (square tiles, 1 gap, each tile a 1 ring, so lines draw once; Carbon); every tab's
-  Inspector has the Canvas density. Typography is a Geist-style table per group (Headings, Copy): the
-  example is the role's name in its own style ("Heading 72 with Strong"), then token + copy, then usage
-  (from where packages/styles uses each role); names are Geist's ("Heading 72", "Copy 14"). Language
-  shows one real-component moment per setting on a tinted plate (Primer's thumbnails): a Card for theme
-  and surface, a Nav for neutral, Publish + Switch + Link for accent, Cancel / Save for action, Segmented
-  + Checkbox + Switch for selection, Input + Go for UI scale, Input + Button + Chip for radius, a looping
-  Switch for motion. electron/main.cjs captures use an in-memory session; --store='{...}' seeds settings.
-- Round 3 (owner): tiles 24 (radius 14's container corner), inset 16; Canvas margin 16 > tile gap 8,
-  sections 16 apart. The visual is the container: colour tiles are painted (ink from each step's
-  contrast fg), a scale's ramp is one joined strip at the tile corner, a setting's tile is that setting's
-  scope on its subtle ground, an icon category is one sheet. Typography splits Regular and Strong into
-  separate ramps (Headings, Headings Strong, Copy, Copy Strong) with a Weight column. Every tab has view
-  controls in the Canvas bar (src/view-controls.tsx, saved per tab): grid / list (lists are Area Tables in
-  ListFrame, radius 14 = the tiles' 24) and a filter: Components status, Icons status, Typography weight,
-  Color value (Hex / OKLCH), Language presets (all / defaults).
-- Language illustrations (owner: real components "not great"; make abstract ones after the Frames X
-  references, one cohesive family): src/abstract.tsx + .abs-* in studio.css. Parts: Card (container
-  corner, card edge + shadow), Bar (6 high; strong = fg-default), Pill (action / accent / outline),
-  Dot, Check, Toggle, Field; one set of sizes (176 card, 12 pad, 8 gap, 16 rows). Every part reads live
-  tokens, so each setting's tile draws its effect (radius corners, surface lift, selection fills, ui
-  row height, motion timing via a looping toggle). "Defaults only" shows the nine defaults in one grid.
-- Picks, not measured: Titlebar 41, Sidebar 240, search 240, macOS traffic lights at (16, 14) with a
-  76 inset. Open: measure Cursor / Notion title bars and confirm.
-- `electron . --capture=<png> [--theme=dark]` saves one frame and quits (native traffic lights are not in it).
+- Owner: new sessions work on the app (`apps/desktop`, Electron); the docs site is archived; reviews go through
+  artifacts. `npm run dev` (window, reloads on change), `npm run preview` (browser, :4400). Regions: **Titlebar**,
+  **Sidebar**, **Canvas**, **Inspector** (`src/studio.tsx`); tabs Language, Components, Typography, Icons, Color;
+  location `#<tab>/<item>`. `electron . --capture=<png> [--theme=dark] [--hash=...] [--store='{...}']` saves one
+  frame from an in-memory session (native traffic lights not included).
+- Shared with docs: specimen table and demo wrappers in `apps/docs/src/gallery/specimens.mjs` (docs output
+  byte-identical when moved; main's Box model / Editable text / Timeline tiles and accordion copy ported in the
+  merge); `fitTiles` returns a cleanup; `standaloneSvg` / `CopyButton` exported.
+- Shell: Titlebar 41, text tabs from 14 (macOS 84); Sidebar has no title, starts with **All**, group labels on the
+  item text; Canvas and Inspector bars 41 on one cap line; one divider stroke (Panel seams and rules, 1px
+  decorative); Inspector 256 (narrowest without clipping), one-row controls, facts as Area Tables.
+- Canvas: one Tile (`src/tile.tsx`) on one grid (136 unit, even columns, wide 2x2, row spans; 5:4), corners 24,
+  inset 16, margin 16 > gap 8; compact density is a hairline contact sheet. The visual is the container (painted
+  swatches, ramp strips, setting-scoped tiles, icon sheets). Grid / list + a filter per tab
+  (`src/view-controls.tsx`). Typography: Geist-style table, Regular and Strong as separate ramps. Language:
+  abstract illustration family (`src/abstract.tsx`, `.abs-*`) drawn from live tokens. Props table under a family.
+- Picks, not measured: Titlebar 41, Sidebar 240, search 240, traffic lights (16, 14), tile unit 136, corner 24,
+  illustration sizes. Open: measure Cursor / Notion title bars; Radix-style role groups and light/dark pairs in
+  Color.
+
 
 ## Review round 7 → 8 (2026-10-11, same branch)
 

@@ -2,10 +2,11 @@
  * Tile fitting for the component gallery.
  *
  * Tiles are 5:4, all one size, and share the canvas width (component-gallery.mjs: as many columns
- * as fit at --docs-tile-min, stretched to fill). Every specimen is shown smaller than life inside
- * a generous view (owner, 2026-10-04, after Frame Supply's component grid): at most MAX (0.8), so
- * a Button reads as a specimen on a plate, and smaller still where it needs to, uniformly, until
- * it fits. A dialog or a table shrinks further rather than taking a larger tile.
+ * as fit at --docs-tile-min, stretched to fill). Every specimen is shown as close to its real size
+ * as its tile allows (owner, 2026-10-11: "i want all the components, especially the smaller
+ * components, to appear closer to their actual size"; was at most 0.8 from 2026-10-04): a Badge
+ * or a Button at 1:1, and anything larger scaled down uniformly until it fits. A dialog or a
+ * table shrinks rather than taking a larger tile.
  *
  * A specimen that stretches to its container is laid out wider than the view (the view / MAX, and
  * wider again if its text would truncate there), then scaled to fit, so it shows its natural
@@ -21,7 +22,7 @@
  */
 
 /** The largest scale a specimen is shown at. */
-const MAX = 0.8;
+const MAX = 1;
 /** A width no specimen fills unless it stretches to its container: tells fluid from fixed. */
 const PROBE = 1040;
 /** How much wider than its view a fluid specimen may be laid out to keep its text whole. */

@@ -124,7 +124,7 @@ built next; this list is an inventory, not an order of work.
 ### Broader coverage after the inspector foundation
 
 - **Entry and forms:** SearchField [built 2026-10-10], PasswordField, MultiSelect (Combobox is built),
-  TagPicker, editable text, OTP input, Form validation and error
+  TagPicker, editable text [built 2026-10-11], OTP input, Form validation and error
   summary. Reuse Input/Field for search and password anatomy; promote a wrapper when
   behavior such as reveal, clear, filtering or async suggestions is included.
 - **Date and time:** Calendar is built (Complete, [spec](specs/calendar.md)): single,
@@ -142,7 +142,7 @@ built next; this list is an inventory, not an order of work.
   Splitter and responsive layout primitives (HoverCard, Panel `resizable` and ScrollArea are
   built). PageHeader, Sidebar,
   application shell and dockable inspector are compositions.
-- **Data and feedback:** DescriptionList [built 2026-10-10], Stat, Timeline, EmptyState [built 2026-10-10], Result/ErrorState,
+- **Data and feedback:** DescriptionList [built 2026-10-10], Stat, Timeline [built 2026-10-11], EmptyState [built 2026-10-10], Result/ErrorState,
   Meter [built 2026-10-10] (Banner is built as an Alert layout), circular Progress, live notification queue, DataGrid and TreeGrid.
   DataGrid needs editing, resizing, selection and virtualization contracts beyond Table.
 - **Content and advanced tools:** image/media preview, Carousel, rich text and code-editor

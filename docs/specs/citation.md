@@ -1,6 +1,6 @@
 # Citation spec
 
-**Status:** in review · 2026-10-11 (round 8)
+**Status:** complete · 2026-10-11 (approved, review round 8)
 **Captures:** `docs/research/captures/citation/`
 **Peers:** Message (the prose it sits in), Hover card (the preview), Link (inline links), Count and Kbd (the tiny-chrome
 type role), Chip (a pill that is a control, not a source)
@@ -129,3 +129,4 @@ Resolved 2026-10-10 (owner: "go with your recommendations"); kept for the record
 - 2026-10-11 · owner, review round 7 (rethink): "go with recs for open questions, maybe even 12 should be considered for the type size? can you research more real examples of this component" → more references gathered; type size reconsidered.
 - 2026-10-11 · round 8 → 12 / 16 500 on the 20 mark tier; AI Elements and prompt-kit sources pinned; open questions
   resolved as recommended (ink fixed on hover).
+- 2026-10-11 · owner, review round 8: approved → Complete in `component-status.mjs`.

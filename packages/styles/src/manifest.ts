@@ -894,6 +894,42 @@ export const boardCard = {
   defaults: {},
 } as const satisfies ComponentManifest;
 
+export const boxModel = {
+  block: "area-box-model",
+  description: "Draws a layer's margin, border, padding and size as nested boxes, read-only.",
+  variants: { tone: ["info", "neutral"] },
+  elements: ["side", "value", "border", "padding", "content", "label", "corner", "caption"],
+  elementModifiers: { side: ["top", "right", "bottom", "left"], corner: ["top-left", "top-right", "bottom-right", "bottom-left"] },
+  defaults: { tone: "info" },
+} as const satisfies ComponentManifest;
+
+export const editableText = {
+  block: "area-editable-text",
+  description: "Shows text that turns into a field in place to rename it.",
+  variants: { activation: ["dblclick", "click", "focus"] },
+  booleans: ["fill"],
+  states: ["editing", "disabled"],
+  elements: ["preview", "input"],
+  defaults: { activation: "dblclick" },
+} as const satisfies ComponentManifest;
+
+export const timeline = {
+  block: "area-timeline",
+  description: "Lists events in order along one line, each with a marker.",
+  variants: {},
+  elements: [],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const timelineItem = {
+  block: "area-timeline-item",
+  description: "One event on a timeline: a dot, icon or avatar marker, a title, its time and details.",
+  variants: {},
+  booleans: ["current"],
+  elements: ["marker", "dot", "icon", "media", "content", "line", "title", "sep", "meta", "body"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
 export const zoomControl = {
   block: "area-zoom-control",
   description: "Shows a canvas's zoom and opens a menu to type, step, fit or pick a zoom.",
@@ -966,6 +1002,10 @@ export const MANIFESTS = {
   board,
   boardColumn,
   boardCard,
+  timeline,
+  timelineItem,
+  editableText,
+  boxModel,
   scrollArea,
   link,
   toggletip,

@@ -1,0 +1,105 @@
+/* ---------------------------------------------------------------------------
+ * Timeline
+ *
+ * Events in order, each with a marker on one vertical line: Figma's version history (a 24px
+ * marker column, a 1px line through its centre) and Notion's page updates (a 24px avatar).
+ * Content starts 36 from the column's start in both (24 + 12). After the owner's round-8 references
+ * (Linear's issue activity, an activity feed, a run log): a bare icon or a dot as the mark, the line
+ * stopping short of each, and the time on the event's line at the same size. docs/specs/timeline.md.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-timeline {
+    --_marker: var(--area-control-xs); /* spec: Figma's version icon and Notion's avatar, 24 (compact 20) */
+    --_gap: var(--area-space-12); /* spec: content 36 from the column start, Figma 4 + 8 and Notion 4 + 8 */
+    --_spacing: var(--area-space-16); /* spec: Figma, 8 below one row's text and 8 above the next */
+    --_line: var(--area-stroke-width); /* spec: Figma 1px */
+    --_dot: 6px; /* spec: Indicator's dot */
+    /* spec (owner, review round 8, after Linear's issue activity and an activity feed): the line stops short of
+       every marker, so each mark stands on its own. */
+    --_line-gap: var(--area-space-4); /* spec: owner, "small gaps around the indicators" */
+    --_leading: var(--area-text-sm-leading);
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--area-fg-default);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--_leading);
+  }
+
+  .area-timeline-item {
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--_marker) minmax(0, 1fr);
+    column-gap: var(--_gap);
+    padding-block-end: var(--_spacing);
+  }
+  .area-timeline-item:last-child { padding-block-end: 0; }
+  /* Marks stand on the line in the muted ink, with no plate behind them (owner, review round 8: "no backplate
+     around icons", after Linear and an activity feed). The current event paints the Selection role, which the
+     theme makes neutral or the accent (DESIGN_SYSTEM.md, "Emphasis roles"), as Figma marks its current version. */
+  .area-timeline-item { --_mark-ink: var(--area-fg-muted); }
+  .area-timeline-item--current { --_mark-ink: var(--area-selection-solid); }
+
+  /* The visible mark's height, so the line can stop the same gap short of a dot, an icon or an avatar. */
+  .area-timeline-item { --_mark: var(--_dot); }
+  .area-timeline-item:has(> .area-timeline-item__marker > .area-timeline-item__icon) { --_mark: var(--area-icon-sm); }
+  .area-timeline-item:has(> .area-timeline-item__marker > .area-timeline-item__media) { --_mark: var(--_marker); }
+
+  /* The line runs from below this mark to above the next one, a gap clear of each. */
+  .area-timeline-item:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    inset-block: calc(var(--_marker) / 2 + var(--_mark) / 2 + var(--_line-gap)) calc(var(--_marker) / -2 + var(--_mark) / 2 + var(--_line-gap));
+    inset-inline-start: calc((var(--_marker) - var(--_line)) / 2);
+    inline-size: var(--_line);
+    background: var(--area-border-divider); /* spec: Figma rgb(230, 230, 230) */
+  }
+
+  .area-timeline-item__marker {
+    position: relative;
+    display: grid;
+    place-items: center;
+    inline-size: var(--_marker);
+    block-size: var(--_marker);
+  }
+  .area-timeline-item__dot {
+    inline-size: var(--_dot);
+    block-size: var(--_dot);
+    border-radius: var(--area-radius-full);
+    background: var(--_mark-ink);
+  }
+  .area-timeline-item__icon {
+    display: grid;
+    place-items: center;
+    inline-size: 100%;
+    block-size: 100%;
+    color: var(--_mark-ink);
+  }
+  .area-timeline-item__icon svg { inline-size: var(--area-icon-sm); block-size: var(--area-icon-sm); }
+  .area-timeline-item__media { display: grid; place-items: center; inline-size: 100%; block-size: 100%; }
+  /* An Avatar fills the marker (Notion's 24 avatar), smaller than Avatar's own sm. */
+  .area-timeline-item__media > .area-avatar { --_size: var(--_marker); --_text: var(--area-text-xs-size); }
+
+  /* The title's first line centres on the marker (inset.css: first-line alignment). */
+  .area-timeline-item__content {
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+    padding-block-start: calc((var(--_marker) - var(--_leading)) / 2);
+  }
+  /* One line: what happened, then when and who after a dot, all in the UI text (owner, review round 8: "the dates
+     seem quite small"; Linear and the activity feed run the time on the same line, the same size, muted). */
+  .area-timeline-item__line { overflow-wrap: anywhere; }
+  .area-timeline-item__title { font-weight: var(--area-weight-regular); /* spec: Linear, the activity feed and the run log, 400 */ }
+  .area-timeline-item__meta { color: var(--area-fg-muted); }
+  .area-timeline-item__sep { margin-inline: var(--area-space-4); /* spec: Notion's separator, 4 either side */ }
+  .area-timeline-item__body { margin-block-start: var(--area-space-8); /* spec: Notion 8 under the time */ }
+  .area-timeline-item__body:first-child { margin-block-start: 0; }
+
+  @media (forced-colors: active) {
+    .area-timeline-item:not(:last-child)::before, .area-timeline-item__dot { background: CanvasText; }
+  }
+}

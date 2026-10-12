@@ -1,0 +1,386 @@
+<title>Area Icon Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one item at a time. A slim top bar (mode, progress, jump), a three-panel stage and the
+   decision strip under it. Two modes share the frame: the review of changed icons and new-icon candidates. */
+:root {
+  --bg: #f6f6f4; --panel: #ffffff; --fg: #18181a; --muted: #6b6b70; --line: #e3e3e0; --grid: #efefec;
+  --accent: #2f5bd3; --ok: #1f8a4c; --fix: #b86e00; --swap: #7a45c4; --later: #5b6b80;
+  --ok-bg: #e7f4ec; --fix-bg: #fbf0dc; --swap-bg: #f1eafb; --accent-bg: #e8eefc; --later-bg: #eceff3; --skip-bg: #f4e9e7; --skip: #a3412c;
+  --sans: "Geist", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #050505; --panel: #0e0e0f; --fg: #ececee; --muted: #8c8c92; --line: #222225; --grid: #171719;
+  --accent: #7d9cf5; --ok: #5cc98a; --fix: #e6a640; --swap: #b392f0; --later: #9aaac0;
+  --ok-bg: #0f2418; --fix-bg: #2a1d07; --swap-bg: #1d1430; --accent-bg: #121a33; --later-bg: #161b22; --skip-bg: #2a1410; --skip: #ef8a72; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #050505; --panel: #0e0e0f; --fg: #ececee; --muted: #8c8c92; --line: #222225; --grid: #171719;
+  --accent: #7d9cf5; --ok: #5cc98a; --fix: #e6a640; --swap: #b392f0; --later: #9aaac0;
+  --ok-bg: #0f2418; --fix-bg: #2a1d07; --swap-bg: #1d1430; --accent-bg: #121a33; --later-bg: #161b22; --skip-bg: #2a1410; --skip: #ef8a72; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 14px; line-height: 1.45 }
+.wrap { max-width: 1120px; margin: 0 auto; padding-inline: 16px; padding-block: 16px 40px; display: grid; gap: 14px }
+.bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px }
+.bar h1 { font-size: 15px; font-weight: 600; margin: 0; letter-spacing: -0.01em }
+.modes { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 2px; background: var(--panel) }
+.modes button { border: 0; background: transparent; border-radius: 999px; padding: 4px 12px; font-size: 13px; cursor: pointer; color: var(--muted) }
+.modes button[aria-pressed="true"] { background: var(--fg); color: var(--bg) }
+.prog { flex: 1 1 240px; min-width: 0; display: grid; gap: 4px }
+.prog .track { height: 6px; border-radius: 3px; background: var(--line); overflow: hidden; display: flex }
+.prog .track i { display: block; height: 100% }
+.prog .nums { font: 12px var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; display: flex; gap: 12px; flex-wrap: wrap }
+.dot { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 4px; vertical-align: 0 }
+select, button, textarea, input { font: inherit; color: inherit }
+select { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; max-width: 100% }
+.head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px }
+.head .name { font: 600 22px var(--mono); letter-spacing: -0.02em; margin: 0 }
+.head .meta { color: var(--muted); font-size: 13px }
+.head .pos { margin-left: auto; font: 12px var(--mono); color: var(--muted); font-variant-numeric: tabular-nums }
+.chip { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 999px; font-size: 12px; font-weight: 500 }
+.chip.approve, .chip.build { background: var(--ok-bg); color: var(--ok) } .chip.fix { background: var(--fix-bg); color: var(--fix) }
+.chip.replace { background: var(--swap-bg); color: var(--swap) } .chip.later { background: var(--later-bg); color: var(--later) } .chip.skip { background: var(--skip-bg); color: var(--skip) }
+.note { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; display: grid; gap: 6px; font-size: 13px }
+.note p { margin: 0; max-width: 90ch } .note .lbl { font-size: 11px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em }
+.note .prior { color: var(--muted) }
+.stage { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px }
+.stage.refs { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)) }
+@media (max-width: 760px) { .stage { grid-template-columns: 1fr } }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px; display: grid; gap: 10px; min-width: 0; align-content: start }
+.panel h2 { margin: 0; font-size: 12px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; display: flex; justify-content: space-between; gap: 8px; align-items: center }
+.big { aspect-ratio: 1; width: 100%; max-width: 100%; display: grid; place-items: center; border-radius: 8px;
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: calc(100% / 16) calc(100% / 16); color: var(--fg) }
+.big.before { color: var(--muted) }
+.big svg { width: 100%; height: 100%; display: block }
+.big.ref svg { width: 84%; height: 84% }
+.pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px }
+.sizes { display: flex; align-items: center; gap: 14px; min-height: 32px; color: var(--fg) }
+.sizes svg { display: block; flex: none }
+.sizes.small svg { width: 16px; height: 16px } .sizes .s24 svg { width: 24px; height: 24px }
+.sizes .lbl { font: 11px var(--mono); color: var(--muted); margin-left: auto }
+.tabs { display: flex; gap: 4px; flex-wrap: wrap }
+.tabs button { border: 1px solid var(--line); background: transparent; border-radius: 999px; padding: 2px 10px; font-size: 12px; cursor: pointer; text-transform: none; letter-spacing: 0 }
+.tabs button[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg) }
+.refname { font: 12px var(--mono); color: var(--muted) }
+.none { color: var(--muted); font-size: 13px; padding: 24px 0; text-align: center }
+.decide { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: grid; gap: 12px }
+.opts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px }
+.opts.three { grid-template-columns: repeat(3, minmax(0, 1fr)) }
+@media (max-width: 760px) { .opts, .opts.three { grid-template-columns: 1fr 1fr } }
+.opt { border: 1.5px solid var(--line); background: transparent; border-radius: 10px; padding: 10px 12px; text-align: left; cursor: pointer; display: grid; gap: 2px }
+.opt b { font-weight: 600; font-size: 14px } .opt span { font-size: 12px; color: var(--muted) }
+.opt kbd { font: 11px var(--mono); color: var(--muted); border: 1px solid var(--line); border-radius: 4px; padding: 0 4px; justify-self: start }
+.opt[aria-pressed="true"].approve, .opt[aria-pressed="true"].build { border-color: var(--ok); background: var(--ok-bg) }
+.opt[aria-pressed="true"].fixm, .opt[aria-pressed="true"].fixf { border-color: var(--fix); background: var(--fix-bg) }
+.opt[aria-pressed="true"].replace { border-color: var(--swap); background: var(--swap-bg) }
+.opt[aria-pressed="true"].later { border-color: var(--later); background: var(--later-bg) }
+.opt[aria-pressed="true"].skip { border-color: var(--skip); background: var(--skip-bg) }
+.sub { display: grid; gap: 8px }
+.subrow { display: flex; flex-wrap: wrap; align-items: center; gap: 6px }
+.subrow > span { font-size: 12px; color: var(--muted); min-width: 120px }
+.tog { border: 1px solid var(--line); background: transparent; border-radius: 999px; padding: 3px 10px; font-size: 12px; cursor: pointer }
+.tog[aria-pressed="true"] { background: var(--fix-bg); border-color: var(--fix); color: var(--fix) }
+.tog.lib[aria-pressed="true"] { background: var(--swap-bg); border-color: var(--swap); color: var(--swap) }
+textarea { width: 100%; min-height: 64px; resize: vertical; background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center }
+.btn { border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 7px 12px; cursor: pointer; font-weight: 500 }
+.btn.primary { background: var(--fg); color: var(--bg); border-color: var(--fg) }
+.btn:disabled { opacity: 0.45; cursor: default }
+.status { font-size: 12px; color: var(--muted); margin-left: auto }
+.hint { font-size: 12px; color: var(--muted) }
+button:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+.banner { background: var(--fix-bg); color: var(--fix); border-radius: 8px; padding: 8px 12px; font-size: 13px }
+.index { display: flex; flex-wrap: wrap; gap: 6px; align-items: center }
+.index .grp { font-size: 11px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; width: 100%; margin-top: 4px }
+.index button { border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 2px 9px; font: 12px var(--mono); cursor: pointer; display: inline-flex; align-items: center; gap: 5px }
+.index button[aria-current="true"] { border-color: var(--fg) }
+.index button i { width: 7px; height: 7px; border-radius: 2px; background: var(--line) }
+.index button.build i { background: var(--ok) } .index button.later i { background: var(--later) } .index button.skip i { background: var(--skip) }
+details.idx summary { cursor: pointer; font-size: 12px; color: var(--muted) }
+</style>
+
+<div class="wrap">
+  <div class="bar">
+    <h1>Area icon review</h1>
+    <div class="modes" role="group" aria-label="Mode">
+      <button id="m-review" aria-pressed="true">Review changes</button>
+      <button id="m-new" aria-pressed="false">New icons</button>
+    </div>
+    <div class="prog" aria-label="Progress">
+      <div class="track" id="track"></div>
+      <div class="nums" id="nums">Loading icons…</div>
+    </div>
+    <select id="group" aria-label="Jump to group"></select>
+    <select id="filter" aria-label="Show">
+      <option value="changed">To review (new + changed)</option>
+      <option value="redrawn">Changed in the quality pass</option>
+      <option value="new">New icons not yet reviewed (batches 70–74)</option>
+      <option value="reopened">Changed since your verdict, or never reviewed</option>
+      <option value="all">All icons</option>
+      <option value="todo">Not reviewed</option>
+      <option value="flagged">Flagged (fix or replace)</option>
+    </select>
+  </div>
+  <div id="banner" class="banner" hidden></div>
+  <details class="idx" id="idxwrap" hidden open><summary>All candidates</summary><div class="index" id="index"></div></details>
+
+  <div class="head">
+    <p class="name" id="name">…</p>
+    <span class="meta" id="meta"></span>
+    <span id="current"></span>
+    <span class="pos" id="pos"></span>
+  </div>
+  <div class="note" id="note" hidden></div>
+
+  <div class="stage" id="stage"></div>
+
+  <section class="decide" aria-label="Decision">
+    <div class="opts" id="opts"></div>
+    <div class="sub" id="sub"></div>
+    <label class="hint" for="notes">Your directions (optional)</label>
+    <textarea id="notes" placeholder="e.g. keep Fluent's proportions but make the stripes thinner"></textarea>
+    <div class="actions">
+      <button class="btn" id="prev">← Prev</button>
+      <button class="btn primary" id="save">Save &amp; next ↵</button>
+      <button class="btn" id="next">Skip →</button>
+      <button class="btn" id="clear">Clear decision</button>
+      <span class="status" id="status"></span>
+    </div>
+    <p class="hint" id="keys"></p>
+  </section>
+</div>
+
+<script src="data.js"></script>
+<script>
+const ICONS = window.ICONS || [], CANDS = window.CANDIDATES || [];
+const ROUND = "reviews7", CROUND = "candidates1";
+const ISSUES = ["Visual error", "Stroke error", "Negative space error"];
+const LIBS = ["Fluent", "Lucide", "Phosphor", "Material"];
+const CLIBS = { lucide: "Lucide", phosphor: "Phosphor", material: "Material", fluent: "Fluent" };
+const $ = id => document.getElementById(id);
+let mode = "review";
+const S = { review: { list: ICONS, store: {}, order: [], at: 0, col: null }, new: { list: CANDS, store: {}, order: CANDS.map((_, i) => i), at: 0, col: null } };
+let refLib = "Fluent", showBefore = false, draft = null, uid = 0;
+
+const svg = s => { const n = ++uid; return (s || "").replace(/area-icon-[A-Za-z0-9_-]+/g, m => m + "-" + n); };
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const KEY = { review: "area-icon-review-7", new: "area-icon-candidates-1" };
+const loadLocal = m => { try { return JSON.parse(localStorage.getItem(KEY[m]) || "{}"); } catch { return {}; } };
+const saveLocal = m => { try { localStorage.setItem(KEY[m], JSON.stringify(S[m].store)); } catch {} };
+const cur = () => S[mode].list[S[mode].order[S[mode].at]];
+// A redrawn or reopened icon's earlier verdict (the one the change answers) no longer counts as a decision.
+const recOf = ic => { const r = S.review.store[ic.name]; return r && !((ic.redrawn || ic.reopened) && (r.at || "") <= (ic.staleAt || "")) ? r : null; };
+
+function blank() { return { verdict: null, monoline: null, filled: null, library: null, notes: "" }; }
+function fromSaved(r) { return r ? { verdict: r.verdict || null, monoline: r.monoline ? [...r.monoline] : null, filled: r.filled ? [...r.filled] : null, library: r.library || null, notes: r.notes || "" } : blank(); }
+
+// ---------- review mode ----------
+function buildGroups() {
+  const sel = $("group"); const seen = [];
+  ICONS.forEach((ic, i) => { if (!seen.find(s => s.g === ic.group)) seen.push({ g: ic.group, i }); });
+  sel.innerHTML = '<option value="">Jump to group…</option>' + seen.map(s => `<option value="${s.i}">${esc(s.g)}</option>`).join("");
+  sel.onchange = () => { if (sel.value !== "") { $("filter").value = "all"; applyFilter(); go(S.review.order.indexOf(+sel.value)); } sel.value = ""; };
+}
+function applyFilter(keep) {
+  const R = S.review, f = $("filter").value, was = R.order[R.at];
+  R.order = ICONS.map((_, i) => i).filter(i => { const v = recOf(ICONS[i])?.verdict;
+    return (f === "changed" && ICONS[i].changed && !v) || (f === "new" && ICONS[i].isNew && !v) || (f === "redrawn" && ICONS[i].redrawn) || (f === "reopened" && ICONS[i].reopened && !v) || f === "all" || (f === "todo" && !v) || (f === "flagged" && (v === "fix" || v === "replace")); });
+  if (!R.order.length) R.order = [was ?? 0];
+  R.at = keep && R.order.includes(was) ? R.order.indexOf(was) : Math.min(R.at, R.order.length - 1);
+}
+function chipReview(r) {
+  const v = r?.verdict; if (!v) return "";
+  const label = v === "approve" ? "Approved" : v === "replace" ? "Replace" + (r.library ? " · " + r.library : "") : "Fix " + [r.monoline && "monoline", r.filled && "filled"].filter(Boolean).join(" + ");
+  return `<span class="chip ${v}">${label}</span>`;
+}
+function renderReview() {
+  const ic = cur(); if (!ic) return;
+  $("name").textContent = ic.name;
+  $("meta").textContent = (ic.isNew ? "New icon · " : "") + (ic.wasApproved && ic.changed && !ic.isNew ? "You approved the earlier drawing · " : "") + ic.group + (ic.fill ? " · filled by " + (ic.fill === "weight" ? "weight" : "solid") : "");
+  $("pos").textContent = `${S.review.at + 1} / ${S.review.order.length}`;
+  $("current").innerHTML = chipReview(recOf(ic));
+  const parts = [];
+  if (ic.changed) parts.push(`<span class="lbl">${ic.redrawn ? "Redrawn" : ic.reopened ? (ic.staleAt ? "Since your verdict" : "Not reviewed yet") : ic.isNew ? "New icon" : "What changed"}</span><p>${esc(ic.change || "Changed with its family.")}</p>`);
+  if (ic.prior) parts.push(`<p class="prior">Your last note (${esc(ic.prior.round.replace("reviews", "round ").replace(/round $/, "round 1"))}): ${esc(ic.prior.notes || ic.prior.verdict + (ic.prior.library ? " → " + ic.prior.library : ""))}</p>`);
+  $("note").hidden = !parts.length; $("note").innerHTML = parts.join("");
+  const b = ic.changed && ic.before && showBefore ? ic.before : ic;
+  const tog = ic.changed && ic.before ? `<span class="tabs"><button data-ba="0" aria-pressed="${!showBefore}">After</button><button data-ba="1" aria-pressed="${showBefore}">Before</button></span>` : "";
+  const cls = b === ic ? "big" : "big before";
+  $("stage").className = "stage";
+  $("stage").innerHTML = `
+    <section class="panel"><h2><span>Monoline</span>${tog}</h2><div class="${cls}">${svg(b.o)}</div><div class="sizes">${b.os.map(svg).join("")}<span class="lbl">16 · 24 · 32</span></div></section>
+    <section class="panel"><h2><span>Filled</span>${tog}</h2><div class="${cls}">${svg(b.f)}</div><div class="sizes">${b.fs.map(svg).join("")}<span class="lbl">16 · 24 · 32</span></div></section>
+    <section class="panel"><h2><span>Reference</span><span class="tabs" id="tabs"></span></h2><div id="ref"></div><div class="refname" id="refname"></div></section>`;
+  $("stage").querySelectorAll("[data-ba]").forEach(x => x.onclick = () => { showBefore = x.dataset.ba === "1"; renderReview(); });
+  const libs = LIBS.filter(l => ic.refs?.[l]);
+  if (!libs.includes(refLib)) refLib = libs[0] || "Fluent";
+  $("tabs").innerHTML = libs.map(l => `<button aria-pressed="${l === refLib}" data-lib="${l}">${l}</button>`).join("");
+  $("tabs").querySelectorAll("button").forEach(x => x.onclick = () => { refLib = x.dataset.lib; renderRef(); $("tabs").querySelectorAll("button").forEach(y => y.setAttribute("aria-pressed", y === x)); renderSub(); });
+  renderRef();
+  $("prev").disabled = S.review.at === 0;
+}
+function renderRef() {
+  const ic = cur(), r = ic.refs?.[refLib];
+  if (!r) { $("ref").innerHTML = '<p class="none">No library reference for this concept.</p>'; $("refname").textContent = ""; return; }
+  $("ref").innerHTML = `<div class="pair"><div class="big ref">${r.o}</div>${r.f ? `<div class="big ref">${r.f}</div>` : "<div></div>"}</div>`;
+  $("refname").textContent = `${refLib} · ${r.name}` + (r.f ? " · regular, filled" : "");
+}
+
+// ---------- new-icon mode ----------
+function renderIndex() {
+  let h = "", g = "";
+  CANDS.forEach((c, i) => { if (c.group !== g) { g = c.group; h += `<span class="grp">${esc(g)}</span>`; }
+    const v = S.new.store[c.name]?.verdict || ""; h += `<button class="${v}" data-i="${i}" aria-current="${i === S.new.order[S.new.at]}"><i></i>${esc(c.name)}</button>`; });
+  $("index").innerHTML = h;
+  $("index").querySelectorAll("button").forEach(x => x.onclick = () => go(+x.dataset.i));
+}
+function chipNew(r) { const v = r?.verdict; if (!v) return ""; return `<span class="chip ${v}">${v === "build" ? "Build" + (r.library ? " · " + r.library : "") : v === "later" ? "Later" : "Skip"}</span>`; }
+function renderNew() {
+  const c = cur(); if (!c) return;
+  $("name").textContent = c.name; $("meta").textContent = c.group;
+  $("pos").textContent = `${S.new.at + 1} / ${CANDS.length}`;
+  $("current").innerHTML = chipNew(S.new.store[c.name]);
+  $("note").hidden = false; $("note").innerHTML = `<span class="lbl">Where it would be used</span><p>${esc(c.use)}</p>`;
+  $("stage").className = "stage refs";
+  $("stage").innerHTML = Object.entries(c.refs).map(([k, r]) => `<section class="panel"><h2><span>${CLIBS[k]}</span><span class="refname">${esc(r.name)}</span></h2>
+    <div class="pair"><div class="big ref">${r.o}</div>${r.f ? `<div class="big ref">${r.f}</div>` : "<div></div>"}</div>
+    <div class="sizes small">${r.o}<span class="s24">${r.o}</span>${r.f ? r.f : ""}<span class="lbl">${r.f ? "16 · 24 · filled" : "16 · 24"}</span></div></section>`).join("");
+  $("prev").disabled = S.new.at === 0;
+  renderIndex();
+}
+
+// ---------- shared decision strip ----------
+function renderOpts() {
+  const v = draft.verdict;
+  if (mode === "review") {
+    $("opts").className = "opts";
+    $("opts").innerHTML = `<button class="opt approve" data-o="approve" aria-pressed="${v === "approve"}"><kbd>1</kbd><b>Approve</b><span>Both variants are right</span></button>
+      <button class="opt fixm" data-o="fixm" aria-pressed="${v === "fix" && !!draft.monoline}"><kbd>2</kbd><b>Fix monoline</b><span>Something is off in the outline</span></button>
+      <button class="opt fixf" data-o="fixf" aria-pressed="${v === "fix" && !!draft.filled}"><kbd>3</kbd><b>Fix filled</b><span>Something is off in the filled</span></button>
+      <button class="opt replace" data-o="replace" aria-pressed="${v === "replace"}"><kbd>4</kbd><b>Replace design</b><span>Redraw closer to a reference</span></button>`;
+    $("keys").textContent = "Keys: 1–4 choose · ← → move · Enter saves and moves on (⌘/Ctrl+Enter inside the notes box).";
+  } else {
+    $("opts").className = "opts three";
+    $("opts").innerHTML = `<button class="opt build" data-o="build" aria-pressed="${v === "build"}"><kbd>1</kbd><b>Build</b><span>Add it to Area</span></button>
+      <button class="opt later" data-o="later" aria-pressed="${v === "later"}"><kbd>2</kbd><b>Later</b><span>Useful, not now</span></button>
+      <button class="opt skip" data-o="skip" aria-pressed="${v === "skip"}"><kbd>3</kbd><b>Skip</b><span>Not needed</span></button>`;
+    $("keys").textContent = "Keys: 1–3 choose · ← → move · Enter saves and moves on (⌘/Ctrl+Enter inside the notes box).";
+  }
+  $("opts").querySelectorAll("[data-o]").forEach(x => x.onclick = () => choose(x.dataset.o));
+}
+function renderSub() {
+  let h = "";
+  if (mode === "review") {
+    const ic = cur();
+    const row = (key, label) => `<div class="subrow"><span>${label}</span>${ISSUES.map(x => `<button class="tog" data-k="${key}" data-v="${x}" aria-pressed="${(draft[key] || []).includes(x)}">${x}</button>`).join("")}</div>`;
+    if (draft.verdict === "fix" && draft.monoline) h += row("monoline", "Monoline issue");
+    if (draft.verdict === "fix" && draft.filled) h += row("filled", "Filled issue");
+    if (draft.verdict === "replace") {
+      const libs = LIBS.filter(l => ic.refs?.[l]); if (!draft.library) draft.library = libs.includes(refLib) ? refLib : (libs[0] || null);
+      h += `<div class="subrow"><span>Closer to</span>${(libs.length ? libs : LIBS).map(l => `<button class="tog lib" data-lib="${l}" aria-pressed="${draft.library === l}">${l}</button>`).join("")}</div>`;
+    }
+  } else if (draft.verdict === "build") {
+    const libs = Object.keys(cur().refs).map(k => CLIBS[k]);
+    h += `<div class="subrow"><span>Follow</span>${[...libs, "Area's own"].map(l => `<button class="tog lib" data-lib="${l}" aria-pressed="${draft.library === l}">${l}</button>`).join("")}</div>`;
+  }
+  $("sub").innerHTML = h;
+  $("sub").querySelectorAll(".tog[data-k]").forEach(x => x.onclick = () => { const k = x.dataset.k, v = x.dataset.v, a = draft[k] || []; draft[k] = a.includes(v) ? a.filter(y => y !== v) : [...a, v]; x.setAttribute("aria-pressed", draft[k].includes(v)); });
+  $("sub").querySelectorAll(".tog.lib").forEach(x => x.onclick = () => { draft.library = draft.library === x.dataset.lib && mode === "new" ? null : x.dataset.lib; renderSub(); });
+}
+function choose(which) {
+  const keep = { notes: $("notes").value };
+  if (mode === "new") { draft = { ...blank(), ...keep, verdict: draft.verdict === which ? null : which, library: which === "build" ? draft.library : null }; }
+  else if (which === "approve" || which === "replace") { draft = { ...blank(), ...keep, verdict: draft.verdict === which ? null : which }; }
+  else { const k = which === "fixm" ? "monoline" : "filled"; if (draft.verdict !== "fix") draft = { ...blank(), ...keep, verdict: "fix" }; draft[k] = draft[k] ? null : []; if (!draft.monoline && !draft.filled) draft.verdict = null; }
+  renderOpts(); renderSub();
+}
+function render() {
+  $("m-review").setAttribute("aria-pressed", mode === "review"); $("m-new").setAttribute("aria-pressed", mode === "new");
+  $("group").hidden = $("filter").hidden = mode !== "review"; $("idxwrap").hidden = mode !== "new";
+  $("notes").placeholder = mode === "review" ? "e.g. keep Fluent's proportions but make the stripes thinner" : "e.g. build it, but as a variant of terminal";
+  if (mode === "review") renderReview(); else renderNew();
+  const it = cur(); draft = fromSaved(it && (mode === "review" ? recOf(it) : S[mode].store[it.name])); $("notes").value = draft.notes;
+  renderOpts(); renderSub(); progress();
+}
+function progress() {
+  if (mode === "review") {
+    const pool = ICONS.filter(ic => ic.changed), n = pool.length, c = { approve: 0, fix: 0, replace: 0 };
+    pool.forEach(ic => { const v = recOf(ic)?.verdict; if (v) c[v]++; });
+    $("track").innerHTML = [["approve", "var(--ok)"], ["fix", "var(--fix)"], ["replace", "var(--swap)"]].map(([k, col]) => `<i style="width:${(c[k] / n) * 100}%;background:${col}"></i>`).join("");
+    $("nums").innerHTML = `<span>${c.approve + c.fix + c.replace} / ${n} new and changed icons reviewed</span><span><i class="dot" style="background:var(--ok)"></i>${c.approve} approved</span><span><i class="dot" style="background:var(--fix)"></i>${c.fix} to fix</span><span><i class="dot" style="background:var(--swap)"></i>${c.replace} to replace</span>`;
+  } else {
+    const n = CANDS.length, c = { build: 0, later: 0, skip: 0 };
+    CANDS.forEach(x => { const v = S.new.store[x.name]?.verdict; if (v) c[v]++; });
+    $("track").innerHTML = [["build", "var(--ok)"], ["later", "var(--later)"], ["skip", "var(--skip)"]].map(([k, col]) => `<i style="width:${(c[k] / n) * 100}%;background:${col}"></i>`).join("");
+    $("nums").innerHTML = `<span>${c.build + c.later + c.skip} / ${n} candidates decided</span><span><i class="dot" style="background:var(--ok)"></i>${c.build} build</span><span><i class="dot" style="background:var(--later)"></i>${c.later} later</span><span><i class="dot" style="background:var(--skip)"></i>${c.skip} skip</span>`;
+  }
+}
+async function save(advance) {
+  const it = cur(); draft.notes = $("notes").value.trim();
+  if (!draft.verdict && !draft.notes) { if (advance) go(S[mode].at + 1); return; }
+  const body = mode === "review"
+    ? { verdict: draft.verdict || "fix", monoline: draft.monoline, filled: draft.filled, library: draft.verdict === "replace" ? draft.library : null, notes: draft.notes, group: it.group, at: new Date().toISOString() }
+    : { verdict: draft.verdict || "later", library: draft.verdict === "build" ? draft.library : null, notes: draft.notes, group: it.group, at: new Date().toISOString() };
+  const m = mode; S[m].store[it.name] = body; saveLocal(m); progress();
+  $("status").textContent = "Saving…";
+  if (S[m].col) { try { await S[m].col.doc(it.name).set(body); $("status").textContent = "Saved " + it.name; } catch (e) { $("status").textContent = "Saved on this device only (" + (e && e.code || "error") + ")"; } }
+  else $("status").textContent = "Saved on this device";
+  if (advance) go(S[m].at + 1); else render();
+}
+async function clearOne() {
+  const it = cur(), m = mode; delete S[m].store[it.name]; saveLocal(m);
+  if (S[m].col) { try { await S[m].col.doc(it.name).delete(); } catch {} }
+  $("status").textContent = "Cleared " + it.name; render();
+}
+function go(i) {
+  if (mode === "review" && i >= S.review.order.length && $("filter").value !== "changed" && $("filter").value !== "all") {
+    $("filter").value = "changed"; applyFilter(); S.review.at = 0; showBefore = false; render(); window.scrollTo({ top: 0 });
+    $("status").textContent = "End of that list. Now showing every new or changed icon still to review."; return;
+  }
+  if (mode === "review" && i >= S.review.order.length) { $("status").textContent = "That was the last icon in this list."; }
+  if (mode === "review" && $("filter").value !== "all") {
+    const R = S.review, was = R.order[R.at], dir = i - R.at; applyFilter(true);
+    if (!R.order.includes(was)) { const k = R.order.findIndex(x => x > was); i = dir > 0 ? (k < 0 ? R.order.length : k) : (k < 0 ? R.order.length : k) - 1; }
+    if (i >= R.order.length && $("filter").value === "changed") $("status").textContent = R.order.length && recOf(ICONS[R.order[0]]) ? "Everything in this round is reviewed." : "That was the last icon in this list.";
+  }
+  const T = S[mode]; T.at = Math.max(0, Math.min(T.order.length - 1, i)); showBefore = false; render(); window.scrollTo({ top: 0 });
+}
+function setMode(m) { mode = m; try { localStorage.setItem("area-icon-review-mode", m); } catch {} $("status").textContent = ""; render(); }
+$("m-review").onclick = () => setMode("review");
+$("m-new").onclick = () => setMode("new");
+$("save").onclick = () => save(true);
+$("next").onclick = () => go(S[mode].at + 1);
+$("prev").onclick = () => go(S[mode].at - 1);
+$("clear").onclick = clearOne;
+$("filter").onchange = () => { applyFilter(); render(); };
+document.addEventListener("keydown", e => {
+  if (e.target.tagName === "TEXTAREA") { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) { e.preventDefault(); save(true); } return; }
+  if (e.target.tagName === "SELECT") return;
+  const map = mode === "review" ? { 1: "approve", 2: "fixm", 3: "fixf", 4: "replace" } : { 1: "build", 2: "later", 3: "skip" };
+  if (map[e.key]) choose(map[e.key]);
+  else if (e.key === "ArrowRight") go(S[mode].at + 1); else if (e.key === "ArrowLeft") go(S[mode].at - 1);
+  else if (e.key === "Enter") { e.preventDefault(); save(true); }
+});
+
+S.review.store = loadLocal("review"); S.new.store = loadLocal("new");
+try { const m = localStorage.getItem("area-icon-review-mode"); if (m === "new" || m === "review") mode = m; } catch {}
+if (location.hash === "#new") mode = "new"; else if (location.hash === "#review") mode = "review";
+if (!ICONS.length) { $("nums").textContent = "The icon data did not load."; }
+else { if (!CANDS.length || location.hash !== "#new") mode = "review"; if (!CANDS.length) $("m-new").hidden = true; buildGroups(); $("filter").value = ICONS.some(i => i.redrawn && !recOf(i)) ? "redrawn" : ICONS.some(i => i.isNew && !recOf(i)) ? "new" : ICONS.some(i => i.reopened && !recOf(i)) ? "reopened" : "changed"; applyFilter(); render(); }
+(async () => {
+  let db = null;
+  try { db = window.claude ? await window.claude.use("db") : null; } catch { db = null; }
+  if (!db) { $("banner").hidden = false; $("banner").textContent = "Decisions are saved on this device only. Open this page signed in to claude.ai so Claude can read them."; return; }
+  for (const [m, name] of [["review", ROUND], ["new", CROUND]]) {
+    const col = db.collection(name); S[m].col = col; let first = true;
+    col.limit(1000).onSnapshot(snap => {
+      const remote = {}; snap.docs.forEach(d => { if (d.exists) remote[d.id] = d.data(); });
+      if (first) { first = false; for (const [k, v] of Object.entries(S[m].store)) if (!remote[k] || (remote[k].at || "") < (v.at || "")) col.doc(k).set(v).catch(() => {}); }
+      S[m].store = { ...S[m].store, ...remote }; saveLocal(m);
+      if (m === mode) { progress(); const it = cur(); if (it) $("current").innerHTML = m === "review" ? chipReview(recOf(it)) : chipNew(S[m].store[it.name]); if (m === "new") renderIndex(); }
+    }, () => { $("banner").hidden = false; $("banner").textContent = "Lost the connection to saved decisions; new ones are kept on this device."; });
+  }
+})();
+</script>

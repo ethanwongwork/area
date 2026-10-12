@@ -256,6 +256,28 @@ function gallerySpecimenTable() {
       { id: "state-disabled", title: "State / disabled", demo: "GallerySearchFieldDisabled" },
       { id: "behavior-filter", title: "Behavior / filter", demo: "GallerySearchFieldFilter" },
     ],
+    "box-model": [
+      { id: "default", title: "Default", demo: "GalleryBoxModel" },
+      { id: "tone-neutral", title: "Tone / neutral", demo: "GalleryBoxModelNeutral" },
+      { id: "content-sides", title: "Content / per side", demo: "GalleryBoxModelSides" },
+      { id: "content-corners", title: "Content / per corner", demo: "GalleryBoxModelCorners" },
+    ],
+    "editable-text": [
+      { id: "default", title: "Default", demo: "GalleryEditableText" },
+      { id: "state-editing", title: "State / editing", demo: "GalleryEditableTextEditing" },
+      { id: "behavior-click", title: "Behavior / click to edit", demo: "GalleryEditableTextClick" },
+      { id: "layout-fill", title: "Layout / fill", demo: "GalleryEditableTextFill" },
+      { id: "content-placeholder", title: "Content / placeholder", demo: "GalleryEditableTextPlaceholder" },
+      { id: "content-long", title: "Content / long", demo: "GalleryEditableTextLong" },
+      { id: "state-disabled", title: "State / disabled", demo: "GalleryEditableTextDisabled" },
+    ],
+    timeline: [
+      { id: "default", title: "Default", demo: "GalleryTimeline" },
+      { id: "state-current", title: "State / current", demo: "GalleryTimelineAccent" },
+      { id: "content-icons", title: "Content / icons", demo: "GalleryTimelineIcons" },
+      { id: "content-avatars", title: "Content / avatars", demo: "GalleryTimelineAvatars" },
+      { id: "content-body", title: "Content / details", demo: "GalleryTimelineBody" },
+    ],
     board: [
       { id: "default", title: "Default", demo: "GalleryBoard" },
       { id: "content-properties", title: "Content / card properties", demo: "GalleryBoardCardProperties" },
@@ -974,6 +996,8 @@ export function componentSpecimens(component, hasDemo) {
  * demos by it) and the inline style that lets it size inside the tile. null: rendered bare.
  */
 export function demoWrapper(name) {
+  // An accordion's live demo; the docs build also stacks a hidden copy behind it (scripts/build.mjs).
+  if (name.startsWith("GalleryAccordion")) return { attribute: "data-switch-demo", style: "grid-area:1/1;max-inline-size:100%;min-inline-size:0" };
   if (["GallerySegmented", "GallerySegmentedIcons", "GallerySegmentedFullWidth", "GallerySegmentedSmall", "GallerySegmentedMedium", "GallerySegmentedLarge", "SegmentedSizes"].includes(name)) return { attribute: "data-switch-demo", style: `display:flex;justify-content:center;inline-size:100%;max-inline-size:100%;min-inline-size:0` };
   if (name.startsWith("GalleryOverlay")) return { attribute: "data-switch-demo", style: `display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0` };
   if (name === "GalleryDialogModal") return { attribute: "data-switch-demo", style: `inline-size:100%;min-inline-size:0;text-align:center` };
@@ -982,7 +1006,7 @@ export function demoWrapper(name) {
   if (name.startsWith("CodeBlock")) return { attribute: "data-code-block-demo", style: `inline-size:100%;max-inline-size:100%;min-inline-size:0` };
   if (name === "GallerySegmentedIconOnly") return { attribute: "data-switch-demo", style: "" };
   if (["GalleryTableSelectable", "GalleryTextareaCount", "GalleryInputDate"].includes(name)) return { attribute: "data-switch-demo", style: `inline-size:100%;max-inline-size:100%;min-inline-size:0` };
-  if (["GalleryPanel", "GalleryPanelSections", "GalleryPanelFooter", "GalleryPanelSm", "GalleryPanelMd", "GalleryPanelFlush", "GalleryPanelBareBar", "GalleryPanelFigma", "GalleryPanelCollapsible", "GalleryPanelResizable", "GalleryPanelResizableSidebar", "GalleryPropertyListFills", "GalleryPropertyListSingle", "GalleryPropertyListEffects", "GalleryModelPicker", "GalleryModelPickerHeading", "GalleryScrollToLatest", "GalleryMessage", "GalleryMessageStreaming", "GalleryMessageLong", "GalleryPromptSuggestions", "GalleryPromptSuggestionsPlain", "GalleryPromptSuggestionsChips", "GalleryHoverCard", "GalleryHoverCardPage", "GalleryHoverCardSource", "GalleryHoverCardTop", "GalleryContextMenu", "GalleryContextMenuTree", "GalleryContextMenuDisabled", "GalleryCommandPalette", "GalleryKbdInCommandPalette", "GalleryCommandPaletteModal", "GalleryCommandPaletteEmpty", "GalleryCommandPaletteNoFooter", "GalleryCombobox", "GalleryComboboxCustom", "GalleryComboboxGroups", "GalleryComboboxCreate", "GalleryComboboxRich", "GalleryComboboxSm", "GalleryComboboxLg", "GalleryComboboxDisabled", "GalleryComboboxInvalid", "GalleryBoxFieldPadding", "GalleryBoxFieldPaddingIndividual", "GalleryBoxFieldPaddingMixed", "GalleryBoxFieldCorners", "GalleryBoxFieldCornersIndividual", "GalleryBoxFieldSoft", "GalleryBoxFieldSm", "GalleryBoxFieldLg", "GalleryBoxFieldDisabled", "GalleryNavActions", "GalleryNavExpandable", "GalleryTabs", "GalleryTabsDisabled", "GalleryTabsVertical", "GalleryTabsSmall", "GalleryTabsTrack", "GalleryTabsIcons", "GalleryTabsCounts", "GalleryToastAction", "GalleryToaster", "GalleryBreadcrumbCollapsed", "GalleryAccordion", "GalleryAccordionClosed", "GalleryAccordionSizeSm", "GalleryAccordionSizeMd", "GalleryAccordionDisabled", "GalleryAccordionNested", "GalleryAccordionLongTitle", "GalleryAccordionDivided", "GalleryAccordionDividedMd", "GalleryAccordionMultiple"].includes(name)) return { attribute: "data-switch-demo", style: `display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0` };
+  if (["GalleryPanel", "GalleryPanelSections", "GalleryPanelFooter", "GalleryPanelSm", "GalleryPanelMd", "GalleryPanelFlush", "GalleryPanelBareBar", "GalleryPanelFigma", "GalleryPanelCollapsible", "GalleryPanelResizable", "GalleryPanelResizableSidebar", "GalleryPropertyListFills", "GalleryPropertyListSingle", "GalleryPropertyListEffects", "GalleryModelPicker", "GalleryModelPickerHeading", "GalleryScrollToLatest", "GalleryMessage", "GalleryMessageStreaming", "GalleryMessageLong", "GalleryPromptSuggestions", "GalleryPromptSuggestionsPlain", "GalleryPromptSuggestionsChips", "GalleryHoverCard", "GalleryHoverCardPage", "GalleryHoverCardSource", "GalleryHoverCardTop", "GalleryContextMenu", "GalleryContextMenuTree", "GalleryContextMenuDisabled", "GalleryCommandPalette", "GalleryKbdInCommandPalette", "GalleryCommandPaletteModal", "GalleryCommandPaletteEmpty", "GalleryCommandPaletteNoFooter", "GalleryCombobox", "GalleryComboboxCustom", "GalleryComboboxGroups", "GalleryComboboxCreate", "GalleryComboboxRich", "GalleryComboboxSm", "GalleryComboboxLg", "GalleryComboboxDisabled", "GalleryComboboxInvalid", "GalleryBoxFieldPadding", "GalleryBoxFieldPaddingIndividual", "GalleryBoxFieldPaddingMixed", "GalleryBoxFieldCorners", "GalleryBoxFieldCornersIndividual", "GalleryBoxFieldSoft", "GalleryBoxFieldSm", "GalleryBoxFieldLg", "GalleryBoxFieldDisabled", "GalleryNavActions", "GalleryNavExpandable", "GalleryTabs", "GalleryTabsDisabled", "GalleryTabsVertical", "GalleryTabsSmall", "GalleryTabsTrack", "GalleryTabsIcons", "GalleryTabsCounts", "GalleryToastAction", "GalleryToaster", "GalleryBreadcrumbCollapsed"].includes(name)) return { attribute: "data-switch-demo", style: `display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0` };
   // The carousel's previous / next Buttons page the row.
   if (name === "GalleryCardCarousel") return { attribute: "data-switch-demo", style: `max-inline-size:100%;min-inline-size:0` };
   if (name.startsWith("GalleryDrawer") || name.startsWith("GalleryConfirmDialog")) return { attribute: "data-switch-demo", style: `display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0` };
@@ -994,6 +1018,7 @@ export function demoWrapper(name) {
   if (/^GalleryTag(?!Picker)/.test(name)) return { attribute: "data-switch-demo", style: `display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0` };
   if (name.startsWith("GalleryFileUpload")) return { attribute: "data-switch-demo", style: `display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0` };
   if (name === "GalleryShortcutListDialog") return { attribute: "data-switch-demo", style: `display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0` };
+  if (name.startsWith("GalleryEditableText")) return { attribute: "data-switch-demo", style: `display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0` };
   if (name.startsWith("GallerySearchField")) return { attribute: "data-switch-demo", style: `display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0` };
   if (name.startsWith("GalleryToggleGroup")) return { attribute: "data-switch-demo", style: `display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0` };
   if (name.startsWith("GalleryToggletip")) return { attribute: "data-switch-demo", style: `display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0` };

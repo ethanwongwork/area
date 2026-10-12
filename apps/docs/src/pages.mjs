@@ -301,6 +301,56 @@ export const COMPONENT_PAGES = [
     ],
   },
   {
+    slug: "box-model", name: "Box model", exportName: "BoxModel", manifest: "boxModel",
+    imports: "BoxModel",
+    api: [
+      ["margin / border / padding", "a value for every side, [top, right, bottom, left], or { top, right, bottom, left }", "—"],
+      ["radius", "a value for every corner, or [top-left, top-right, bottom-right, bottom-left]", "—"],
+      ["width / height", "the content's size, shown in the dashed box", "—"],
+      ["caption / labels", "a note such as \"border-box\" / the border and padding labels", "— / Border, Padding"],
+      ["tone", "\"info\" (the measuring blue) | \"neutral\" (greyscale)", "info"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "Figma Dev Mode's layer properties: margin on a well, the border box with its corner radii, the padding box, and the size in a dashed box. One image to assistive technology, named by its values.", demo: "GalleryBoxModel" },
+      { id: "sides", title: "Per side", note: "Values in CSS order: top, right, bottom, left.", demo: "GalleryBoxModelSides" },
+    ],
+  },
+  {
+    slug: "editable-text", name: "Editable text", exportName: "EditableText", manifest: "editableText",
+    imports: "EditableText",
+    api: [
+      ["label", "what the text names, for assistive technology (required)", "—"],
+      ["value / defaultValue / onValueChange", "the text; onValueChange runs once per committed edit", "— / \"\" / —"],
+      ["activation", "\"dblclick\" (Figma) | \"click\" (Notion) | \"focus\"; Enter or F2 on the focused text always starts editing", "dblclick"],
+      ["fill", "boolean: fill the container's width", "false"],
+      ["placeholder / disabled / defaultEditing", "muted text when empty / boolean / start in the field", "—"],
+      ["inputProps", "props for the field, such as maxLength", "—"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "Double-click to rename, as Figma's layer names. Enter or leaving the field saves; Escape cancels. The field appears around the text without moving it.", demo: "GalleryEditableText" },
+      { id: "click", title: "Click to edit", note: "activation=\"click\": a page title, as Notion's. It takes the font of where it sits.", demo: "GalleryEditableTextClick" },
+      { id: "fill", title: "Fill", note: "fill stretches it to the row, as a layer name fills its row.", demo: "GalleryEditableTextFill" },
+    ],
+  },
+  {
+    slug: "timeline", name: "Timeline", exportName: "Timeline", manifest: "timelineItem",
+    imports: "Timeline, TimelineItem",
+    api: [
+      ["Timeline", "an ordered list of TimelineItems, and native ol props", "—"],
+      ["TimelineItem: title / meta / time", "what happened, then who or where and when on the same line, each after a dot, all one size", "—"],
+      ["dateTime", "ISO 8601 date for time; renders it as a time element", "—"],
+      ["icon / media", "a bare 16px icon, or an element that fills the 24px marker (an Avatar); otherwise a dot", "dot"],
+      ["current", "boolean: the current or latest event; its mark paints the Selection role and the item is aria-current", "false"],
+      ["children", "details under the time", "—"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "Events in order on one 1px line that stops 4 short of each mark. Each mark sits in a 24px column and the text starts 12 after it; the time follows the event on its line, muted, at the same size.", demo: "GalleryTimeline" },
+      { id: "current", title: "Current version", note: "current marks the latest event in the Selection role, as Figma marks the current version.", demo: "GalleryTimelineAccent" },
+      { id: "avatars", title: "Avatars", note: "media puts an Avatar in the marker: who did it, as in Notion's page updates.", demo: "GalleryTimelineAvatars" },
+      { id: "details", title: "Details", note: "Children add details under the time.", demo: "GalleryTimelineBody" },
+    ],
+  },
+  {
     slug: "description-list", name: "Description list", exportName: "DescriptionList", manifest: "descriptionList",
     imports: "DescriptionList, DescriptionListItem",
     api: [
