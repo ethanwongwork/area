@@ -1,7 +1,7 @@
 /** Date picker gallery specimens: one variant per tile. docs/specs/date-picker.md. */
 import type { CSSProperties } from "react";
 import { DatePicker } from "@area/react";
-import { PilotCalendarIcon } from "../pilot-icons.tsx";
+import { PilotCalendarIcon } from "../../../../docs/src/pilot-icons.tsx";
 
 /* A fixed today, so the specimens render the same month every day (as the Calendar tiles). */
 const today = "2026-10-05";

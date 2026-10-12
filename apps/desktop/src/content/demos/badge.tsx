@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import { Avatar, Badge, Indicator, IndicatorAnchor, BadgeGroup, Button, Table, Theme } from "@area/react";
-import { ArrowIcon, BellIcon, CheckIcon, DismissIcon, InfoIcon, LinkIcon, PlusIcon } from "../icons.tsx";
+import { ArrowIcon, BellIcon, CheckIcon, DismissIcon, InfoIcon, LinkIcon, PlusIcon } from "../../../../docs/src/icons.tsx";
 
 export const BadgeDefault = () => <Badge>Badge</Badge>;
 /** Follows the radius setting instead of a pill (2026-10-03). */

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Avatar, SliderRange, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Field, Input, InputAction, NumberField, Panel, PanelSection, Radio, RadioGroup, Select, Slider, Textarea } from "@area/react";
-import { CheckIcon, CornerRadiusIcon, DismissIcon, OpacityIcon, OpenIcon, RotateIcon, SearchIcon, TrashIcon } from "../icons.tsx";
+import { CheckIcon, CornerRadiusIcon, DismissIcon, OpacityIcon, OpenIcon, RotateIcon, SearchIcon, TrashIcon } from "../../../../docs/src/icons.tsx";
 
 export const InputDefault = () => <Input aria-label="Label" placeholder="Placeholder" />;
 

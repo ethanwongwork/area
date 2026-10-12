@@ -14,6 +14,7 @@
  *   Dot, Check, Toggle, Field   the small controls
  */
 import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
+import { CheckIcon } from "@area/icons";
 
 const Bar = ({ w, strong, tone }: { w: number; strong?: boolean; tone?: "accent" | "on-action" | "on-accent" }) => (
   <span className="abs-bar" data-strong={strong ? "" : undefined} data-tone={tone} style={{ "--_w": `${w}%` } as CSSProperties} />
@@ -22,7 +23,8 @@ const Pill = ({ kind = "action" }: { kind?: "action" | "accent" | "outline" }) =
   <span className="abs-pill" data-kind={kind}><Bar w={56} tone={kind === "outline" ? undefined : kind === "accent" ? "on-accent" : "on-action"} /></span>
 );
 const Dot = ({ kind }: { kind?: "window" }) => <span className="abs-dot" data-kind={kind} />;
-const Check = ({ on }: { on?: boolean }) => <span className="abs-check" data-on={on ? "" : undefined} />;
+// The tick is Area's own check icon at 12, drawn on whole pixels, not a rotated CSS corner.
+const Check = ({ on }: { on?: boolean }) => <span className="abs-check" data-on={on ? "" : undefined}>{on ? <CheckIcon size={12} aria-hidden="true" /> : null}</span>;
 const Toggle = ({ on }: { on?: boolean }) => <span className="abs-toggle" data-on={on ? "" : undefined} />;
 const Field = () => <span className="abs-field"><Bar w={40} /></span>;
 const Card = ({ children, kind }: { children: ReactNode; kind?: "float" | "back" }) => <span className="abs-card" data-kind={kind}>{children}</span>;

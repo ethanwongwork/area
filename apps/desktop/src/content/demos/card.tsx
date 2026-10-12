@@ -14,7 +14,7 @@ import {
   SunIcon,
   MoreIcon,
   PlusIcon,
-} from "../icons.tsx";
+} from "../../../../docs/src/icons.tsx";
 
 /*
  * Every card here is the default size (md) unless its tile shows a size, with inset media

@@ -5,7 +5,7 @@
  */
 import { useState, type ReactNode } from "react";
 import { Segmented, Select } from "@area/react";
-import { PilotGridIcon, PilotListIcon } from "../../docs/src/pilot-icons.tsx";
+import { GridIcon, ListIcon } from "@area/icons";
 import { readStored, writeStored } from "./storage.ts";
 
 export type ViewMode = "grid" | "list";
@@ -23,14 +23,14 @@ export function useViewOption<T extends string>(key: string, initial: T, allowed
 export function ViewSwitch({ value, onChange }: { value: ViewMode; onChange: (mode: ViewMode) => void }) {
   return (
     <Segmented size="sm" iconOnly aria-label="View" value={value} onValueChange={next => onChange(next as ViewMode)}
-      items={[{ value: "grid", label: "Grid", icon: <PilotGridIcon /> }, { value: "list", label: "List", icon: <PilotListIcon /> }]} />
+      items={[{ value: "grid", label: "Grid", icon: <GridIcon /> }, { value: "list", label: "List", icon: <ListIcon /> }]} />
   );
 }
 
 /** One filter: a small Select whose options name what they show ("All statuses", "In review"). */
 export function ViewFilter<T extends string>({ label, value, onChange, options }: { label: string; value: T; onChange: (value: T) => void; options: ReadonlyArray<{ value: T; label: string }> }) {
   return (
-    <Select size="sm" aria-label={label} title={label} value={value} onChange={event => onChange(event.currentTarget.value as T)}>
+    <Select size="sm" aria-label={label} value={value} onChange={event => onChange(event.currentTarget.value as T)}>
       {options.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
     </Select>
   );

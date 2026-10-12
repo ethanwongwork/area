@@ -1,5 +1,5 @@
 import { Button } from "@area/react";
-import { ArrowIcon, PlusIcon } from "../icons.tsx";
+import { ArrowIcon, PlusIcon } from "../../../../docs/src/icons.tsx";
 
 export const ButtonDefault = () => <Button>Button</Button>;
 

@@ -1,6 +1,6 @@
 /** Empty state gallery specimens: one variant per tile. docs/specs/empty-state.md. */
 import { Button, EmptyState } from "@area/react";
-import { PilotDocumentIcon, PilotInboxIcon, PilotSearchIcon, PilotTrashIcon } from "../pilot-icons.tsx";
+import { PilotDocumentIcon, PilotInboxIcon, PilotSearchIcon, PilotTrashIcon } from "../../../../docs/src/pilot-icons.tsx";
 
 /* The region the state centres in: a page column for md, a panel's width for sm. */
 const page = { inlineSize: "calc(var(--area-space-96) * 5)", maxInlineSize: "100%" };

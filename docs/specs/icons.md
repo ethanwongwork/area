@@ -459,7 +459,7 @@ stroke, so the dot keeps its drawn 0.75 radius at every size.
 ## Seventh pass: review page, folder, direction family, batch 3, 2026-09-25
 
 **Review page.** The gallery has a new *Icons* page (`gallery-icons.html`) with one tile per
-icon (`ICON_REVIEW_DEMOS` in `apps/docs/src/demos/icons.tsx`). Each tile shows:
+icon (`ICON_REVIEW_DEMOS` in `apps/desktop/src/content/demos/icons.tsx`). Each tile shows:
 - the icon at 12, 16, 20, 24 and 32px, and the filled variant at 16 and 20;
 - Area and Fluent at 4× on the pixel grid with the keyline, Area over Fluent, and both
   filled variants;

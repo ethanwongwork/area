@@ -6,9 +6,9 @@
  * The Inspector names the selected axis: what it controls, its attribute, presets and default.
  */
 import { useState } from "react";
-import { Count, Nav, NavGroup, NavItem, PanelSection, Table, TableLink } from "@area/react";
+import { Code, Count, EmptyState, Nav, NavGroup, NavItem, PanelSection, Table, TableLink } from "@area/react";
 import { SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
-import { CanvasSection, ListFrame, Tile, TileGrid } from "../tile.tsx";
+import { CanvasSection, Tile, TileGrid } from "../tile.tsx";
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
 import { Facts } from "../facts.tsx";
 import { Abstract } from "../abstract.tsx";
@@ -28,8 +28,11 @@ export function LanguagePage() {
   // The Sidebar's choice (All, or one setting) and the Inspector's (the setting clicked on the
   // Canvas; with one setting on the Canvas, that setting).
   const view = AXES.find(entry => entry.id === item);
-  const [selected, setSelected] = useState(AXES[0]!.id);
-  const axis = view ?? AXES.find(entry => entry.id === selected) ?? AXES[0]!;
+  // The selection is one preset of one setting ("<axis>:<preset>"); the Inspector names both.
+  const [selected, setSelected] = useState(`${AXES[0]!.id}:${AXES[0]!.defaultPreset}`);
+  const [selectedAxis, selectedPreset] = selected.split(":");
+  const axis = view ?? AXES.find(entry => entry.id === selectedAxis) ?? AXES[0]!;
+  const preset = axis.presets.find(entry => entry.id === (axis.id === selectedAxis ? selectedPreset : axis.defaultPreset));
   const onCanvas = view ? [view] : shown;
   const [mode, setMode] = useViewOption<ViewMode>("language", "grid", ["grid", "list"]);
   const [presets, setPresets] = useViewOption<"all" | "default">("language-presets", "all", ["all", "default"]);
@@ -58,23 +61,24 @@ export function LanguagePage() {
           <ViewSwitch value={mode} onChange={setMode} />
         </ViewControls>
       }
-      canvas={mode === "list" ? (
+      canvas={!onCanvas.length ? (
+        // No matches: the Sidebar keeps All, and the Canvas says so (product UI rule 10).
+        <EmptyState title="No settings" description={`Nothing matches “${query}”.`} />
+      ) : mode === "list" ? (
         // List: one row per preset, its attribute and whether it is the default.
-        <ListFrame>
-          <Table size="md" interactive aria-label="Settings">
+          <Table size="md" interactive flush aria-label="Settings">
             <thead><tr><th scope="col">Setting</th><th scope="col">Preset</th><th scope="col">Attribute</th><th scope="col">Default</th></tr></thead>
             <tbody>
               {onCanvas.flatMap(entry => presetsOf(entry).map(preset => (
-                <tr key={`${entry.id}-${preset.id}`} data-selected={entry.id === axis.id ? "" : undefined}>
-                  <td><TableLink href={`#language/${entry.id}`} onClick={event => { event.preventDefault(); setSelected(entry.id); }}>{entry.label}</TableLink></td>
+                <tr key={`${entry.id}-${preset.id}`} data-selected={selected === `${entry.id}:${preset.id}` ? "" : undefined}>
+                  <td><TableLink href={`#language/${entry.id}`} onClick={event => { event.preventDefault(); setSelected(`${entry.id}:${preset.id}`); }}>{entry.label}</TableLink></td>
                   <td>{preset.label}</td>
-                  <td><code className="studio-mono">data-area-{entry.id}="{preset.id}"</code></td>
+                  <td><Code>data-area-{entry.id}="{preset.id}"</Code></td>
                   <td>{preset.id === entry.defaultPreset ? "Default" : <span className="studio-muted">—</span>}</td>
                 </tr>
               )))}
             </tbody>
           </Table>
-        </ListFrame>
       ) : presets === "default" && !view ? (
         // Defaults only: the system as it ships, one tile per setting in one grid.
         <TileGrid span="wide">
@@ -82,7 +86,8 @@ export function LanguagePage() {
             const preset = entry.presets.find(item => item.id === entry.defaultPreset) ?? entry.presets[0]!;
             return (
               <Tile key={entry.id} span="wide" stage="center" inert label={entry.label} value={preset.label}
-                onSelect={() => setSelected(entry.id)} scope={{ [`data-area-${entry.id}`]: preset.id, ...ALSO[entry.id] }}>
+                selected={selected === `${entry.id}:${preset.id}`} onSelect={() => setSelected(`${entry.id}:${preset.id}`)}
+                scope={{ [`data-area-${entry.id}`]: preset.id, ...ALSO[entry.id] }}>
                 <Abstract axis={entry.id} />
               </Tile>
             );
@@ -99,7 +104,7 @@ export function LanguagePage() {
                 {presetsOf(entry).map(preset => (
                   <Tile key={preset.id} span="wide" stage="center" inert label={preset.label}
                     value={preset.id === entry.defaultPreset ? "Default" : undefined}
-                    onSelect={() => setSelected(entry.id)}
+                    selected={selected === `${entry.id}:${preset.id}`} onSelect={() => setSelected(`${entry.id}:${preset.id}`)}
                     scope={{ [`data-area-${entry.id}`]: preset.id, ...ALSO[entry.id] }}>
                     <Abstract axis={entry.id} />
                   </Tile>
@@ -116,9 +121,10 @@ export function LanguagePage() {
         <PanelSection heading="Setting">
           <Facts label="Setting" items={[
             ["Controls", axis.description],
-            ["Attribute", <code className="studio-mono">data-area-{axis.id}</code>],
+            ["Attribute", <Code>data-area-{axis.id}</Code>],
             ["Presets", axis.presets.map(preset => preset.label).join(", ")],
             ["Default", axis.presets.find(preset => preset.id === axis.defaultPreset)?.label ?? "—"],
+            preset ? ["Selected", preset.label] : null,
           ]} />
         </PanelSection>
         </>

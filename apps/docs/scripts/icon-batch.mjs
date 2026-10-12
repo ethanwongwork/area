@@ -2,7 +2,7 @@
 // Record a batch of Area icons in every place the review needs, from one JSON file:
 // batches.json (the gallery's review groups and owner status), the batch's construction
 // section in docs/specs/icons.md, the demo label and Fluent comparison plate
-// (src/demos/icons.tsx, scripts/gen-icons.mjs), then regenerate the icon modules.
+// (apps/desktop/src/content/demos/icons.tsx, scripts/gen-icons.mjs), then regenerate the icon modules.
 //   node apps/docs/scripts/icon-batch.mjs batch.json            # record (idempotent)
 //   node apps/docs/scripts/icon-batch.mjs batch.json --review a,b  # set changed icons back to review
 //   node apps/docs/scripts/icon-batch.mjs --fluent contact_card    # resolve a Fluent stem
@@ -74,7 +74,7 @@ else spec = spec.trimEnd() + "\n\n" + section;
 writeFileSync(specPath, spec);
 
 // Demo labels and the Fluent comparison plates.
-const demosPath = join(ROOT, "apps/docs/src/demos/icons.tsx"); let demos = readFileSync(demosPath, "utf8");
+const demosPath = join(ROOT, "apps/desktop/src/content/demos/icons.tsx"); let demos = readFileSync(demosPath, "utf8");
 const labelsStart = demos.indexOf("const LABELS"), labelsEnd = demos.indexOf("\n};", labelsStart);
 const labels = demos.slice(labelsStart, labelsEnd);
 const newLabels = batch.icons.filter(i => !labels.includes(`"${i.name}": `)).map(i => `"${i.name}": ${JSON.stringify(i.label)}`);

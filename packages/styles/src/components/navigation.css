@@ -200,6 +200,13 @@
     }
   }
 
+  /* Pressed (product UI rule 3, docs/PRODUCT_UI.md; DESIGN_SYSTEM.md "Shared state paint"): the row
+     takes the active fill while held, one step above hover, landing at once like the hover. */
+  .area-table--interactive tbody tr:not([data-selected], [aria-selected="true"]):active td {
+    background-color: var(--area-bg-component-active);
+    transition-duration: 0s;
+  }
+
   /* A clickable row (audit F-23 A): one stretched link covers the row, as CardLink covers a card;
      other controls in the row sit above it, and the row shows the link's focus. */
   .area-table tbody tr:has(.area-table__link) { position: relative; cursor: pointer; }
@@ -231,6 +238,42 @@
   .area-table--lg { --_cell-inset: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)); }
   .area-table--striped tbody tr:nth-child(even) { background: var(--area-bg-stripe); }
   .area-table--column-dividers :is(th, td):not(:last-child) { border-inline-end: var(--area-border-width) solid var(--area-border-divider); }
+
+  /*
+   * Flush: the table sits on its surface without a frame (Geist's type table, Cursor's icon sheet;
+   * docs/PRODUCT_UI.md, rule 11). No edge, corner or fill; the header keeps its muted labels on no
+   * ground. Its text and its rules share the content's edges (owner, 2026-10-12: "divider lines
+   * going almost all the way across … should align with the content"): the outer cells drop their
+   * side inset, and a row's hover and selected plate reaches that inset past each edge as a shadow
+   * of its own fill, so text never touches its plate while the rules stay on the content.
+   */
+  .area-table-wrapper:has(> .area-table--flush) {
+    border: 0;
+    border-radius: 0;
+    background-color: transparent;
+    overflow: visible;
+  }
+  .area-table--flush {
+    --_flush-side: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)); /* the cells' side inset */
+  }
+  .area-table--flush th { background-color: transparent; }
+  .area-table--flush :is(th, td):first-child { padding-inline-start: 0; }
+  .area-table--flush :is(th, td):last-child { padding-inline-end: 0; }
+  @media (hover: hover) {
+    .area-table--flush.area-table--interactive tbody tr:not([data-selected], [aria-selected="true"]):hover td:first-child { box-shadow: calc(var(--_flush-side) * -1) 0 0 0 var(--area-bg-component-hover); }
+    .area-table--flush.area-table--interactive tbody tr:not([data-selected], [aria-selected="true"]):hover td:last-child { box-shadow: var(--_flush-side) 0 0 0 var(--area-bg-component-hover); }
+  }
+  .area-table--flush.area-table--interactive tbody tr:not([data-selected], [aria-selected="true"]):active td:first-child { box-shadow: calc(var(--_flush-side) * -1) 0 0 0 var(--area-bg-component-active); }
+  .area-table--flush.area-table--interactive tbody tr:not([data-selected], [aria-selected="true"]):active td:last-child { box-shadow: var(--_flush-side) 0 0 0 var(--area-bg-component-active); }
+  .area-table--flush tbody tr:is([data-selected], [aria-selected="true"]) td:first-child { box-shadow: calc(var(--_flush-side) * -1) 0 0 0 var(--area-bg-component-active); }
+  .area-table--flush tbody tr:is([data-selected], [aria-selected="true"]) td:last-child { box-shadow: var(--_flush-side) 0 0 0 var(--area-bg-component-active); }
+  /* The overhang fades with the fill (docs/MOTION.md, "Hover plate"). */
+  .area-table--flush tbody td { transition: background-color var(--area-duration-fast) var(--area-ease-out), box-shadow var(--area-duration-fast) var(--area-ease-out); }
+
+  /* Baseline: every cell in a row lines up on its first line's baseline (inset.css, first-line
+     alignment), for rows whose cells are set at different sizes, such as a type specimen beside
+     its token. */
+  .area-table--baseline td { vertical-align: baseline; }
   .area-table tbody tr:is([data-selected], [aria-selected="true"]) { background: var(--area-bg-component-active); transition-duration: 0s; }
   .area-table caption { padding: var(--area-space-12); text-align: start; color: var(--area-fg-muted); }
 

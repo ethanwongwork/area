@@ -13,11 +13,9 @@
  * page (src/pages/) that fills the three panels through <Workspace>.
  */
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode, type Ref } from "react";
-import { Button, Count, Nav, NavGroup, NavItem, Panel, SearchField } from "@area/react";
-import {
-  PilotMoonIcon, PilotPanelLeftFilledIcon, PilotPanelLeftIcon, PilotPanelRightFilledIcon, PilotPanelRightIcon, PilotSunIcon,
-} from "../../docs/src/pilot-icons.tsx";
-import { GALLERY_CONTROLS } from "../../docs/src/gallery/controls.ts";
+import { Button, Count, Kbd, Nav, NavGroup, NavItem, Panel, SearchField, Tooltip } from "@area/react";
+import { MoonIcon, PanelLeftFilledIcon, PanelLeftIcon, PanelRightFilledIcon, PanelRightIcon, SunIcon } from "@area/icons";
+import { GALLERY_CONTROLS } from "./gallery/controls.ts";
 import { ComponentsPage } from "./pages/components.tsx";
 import { TypographyPage } from "./pages/typography.tsx";
 import { IconsPage } from "./pages/icons.tsx";
@@ -97,10 +95,14 @@ export function Studio() {
     window.areaDesktop?.setTheme(theme);
   }, [theme]);
 
-  // ⌘K / Ctrl+K focuses search, as the field's shortcut hint says.
+  // Shortcuts, as the Tooltips name them: ⌘K focuses search; ⌘B and ⌥⌘B show and hide the Sidebar
+  // and the Inspector (Cursor's and VS Code's primary and secondary side bars).
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
-      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") { event.preventDefault(); search.current?.focus(); search.current?.select(); }
+      if (!(event.metaKey || event.ctrlKey) || event.shiftKey) return;
+      const key = event.code === "KeyK" ? "k" : event.code === "KeyB" ? "b" : "";
+      if (key === "k" && !event.altKey) { event.preventDefault(); search.current?.focus(); search.current?.select(); }
+      else if (key === "b") { event.preventDefault(); togglePanel(event.altKey ? "inspector" : "sidebar"); }
     };
     addEventListener("keydown", onKey);
     return () => removeEventListener("keydown", onKey);
@@ -136,6 +138,10 @@ export function Studio() {
     <StudioContext.Provider value={state}>
       <div className="studio">
         <header className="studio-titlebar">
+          {/* The Sidebar's toggle sits at the Sidebar's edge, first in the bar after the traffic
+              lights (Cursor's icon tool and IDE); the Inspector's stays at the end, over it. */}
+          <ChromeButton label={panels.sidebar ? "Hide sidebar" : "Show sidebar"} keys={["⌘", "B"]} shortcut="Meta+B"
+            icon={panels.sidebar ? <PanelLeftFilledIcon /> : <PanelLeftIcon />} onClick={() => togglePanel("sidebar")} />
           <Nav orientation="horizontal" aria-label="Gallery" className="studio-titlebar__tabs">
             {TABS.map(entry => (
               <NavItem key={entry.id} href={`#${entry.id}`} current={entry.id === tab}
@@ -147,14 +153,12 @@ export function Studio() {
           <div className="studio-titlebar__end">
             <SearchField ref={search} size="sm" className="studio-titlebar__search" value={query} onValueChange={setQuery}
               placeholder={`Search ${current.label.toLowerCase()}`} aria-label={`Search ${current.label.toLowerCase()}`} shortcut={["⌘", "K"]} />
-            {/* Shown panels draw their side filled, as Cursor's layout toggles do. */}
-            <Button variant="ghost" tone="neutral" size="sm" iconOnly icon={panels.sidebar ? <PilotPanelLeftFilledIcon /> : <PilotPanelLeftIcon />}
-              aria-label={panels.sidebar ? "Hide sidebar" : "Show sidebar"} title={panels.sidebar ? "Hide sidebar" : "Show sidebar"} onClick={() => togglePanel("sidebar")} />
-            <Button variant="ghost" tone="neutral" size="sm" iconOnly icon={panels.inspector ? <PilotPanelRightFilledIcon /> : <PilotPanelRightIcon />}
-              aria-label={panels.inspector ? "Hide inspector" : "Show inspector"} title={panels.inspector ? "Hide inspector" : "Show inspector"} onClick={() => togglePanel("inspector")} />
-            <Button variant="ghost" tone="neutral" size="sm" iconOnly icon={theme === "dark" ? <PilotSunIcon /> : <PilotMoonIcon />}
-              aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"} title={theme === "dark" ? "Light mode" : "Dark mode"}
-              onClick={() => setTheme(theme === "dark" ? "light" : "dark")} />
+            {/* Shown panels draw their side filled, as Cursor's layout toggles do. Each names itself
+                in an Area Tooltip with its shortcut, not the browser's title. */}
+            <ChromeButton label={panels.inspector ? "Hide inspector" : "Show inspector"} keys={["⌥", "⌘", "B"]} shortcut="Alt+Meta+B"
+              icon={panels.inspector ? <PanelRightFilledIcon /> : <PanelRightIcon />} onClick={() => togglePanel("inspector")} />
+            <ChromeButton label={theme === "dark" ? "Light mode" : "Dark mode"}
+              icon={theme === "dark" ? <SunIcon /> : <MoonIcon />} onClick={() => setTheme(theme === "dark" ? "light" : "dark")} />
           </div>
         </header>
         {tab === "language" ? <LanguagePage /> :
@@ -163,6 +167,22 @@ export function Studio() {
           tab === "icons" ? <IconsPage /> : <ColorPage />}
       </div>
     </StudioContext.Provider>
+  );
+}
+
+/**
+ * An icon Button in the app's chrome (Titlebar, Inspector headings): ghost, neutral, small, named
+ * by its label, which an Area Tooltip shows below it with the shortcut, if any.
+ */
+export function ChromeButton({ label, icon, keys, shortcut, onClick, pressed }: { label: string; icon: ReactNode; keys?: string[]; shortcut?: string; onClick: () => void; pressed?: boolean }) {
+  // The tooltip repeats the name, so it only shows; the shortcut reaches assistive tech as
+  // aria-keyshortcuts ("Meta+B").
+  return (
+    <Tooltip side="bottom" describes={false} trigger={
+      <Button variant="ghost" tone="neutral" size="sm" iconOnly icon={icon} aria-label={label} aria-pressed={pressed} aria-keyshortcuts={shortcut} onClick={onClick} />
+    }>
+      {label}{keys ? <> <Kbd keys={keys} size="sm" /></> : null}
+    </Tooltip>
   );
 }
 

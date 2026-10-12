@@ -21,7 +21,7 @@
  * widths are decided once at the default UI scale; scale follows the specimen and the tile live.
  */
 
-/** The largest scale a specimen is shown at. */
+/** The largest scale a specimen is shown at, at 1x; a canvas inside [data-zoom="2"] allows 2. */
 const MAX = 1;
 /** A width no specimen fills unless it stretches to its container: tells fluid from fixed. */
 const PROBE = 1040;
@@ -85,8 +85,8 @@ function truncates(stage: HTMLElement) {
   return false;
 }
 
-/* The scale that fits a specimen in its room, never above MAX. */
-const fit = (room: Box, size: Box) => Math.min(MAX, room.w / Math.max(1, size.w), room.h / Math.max(1, size.h));
+/* The scale that fits a specimen in its room, never above the canvas's zoom. */
+const fit = (room: Box, size: Box, max: number) => Math.min(max, room.w / Math.max(1, size.w), room.h / Math.max(1, size.h));
 
 /** The room a tile's view gives its specimen now. */
 function roomOf(view: HTMLElement): Box {
@@ -108,6 +108,8 @@ export function fitTiles(canvas: HTMLElement): () => void {
     widen: 1,
   }));
   if (!tiles.length) return () => {};
+  // The app's zoom (owner, 2026-10-12: a 2x view of the specimens): the largest scale, read once.
+  const max = Number(canvas.closest("[data-zoom]")?.getAttribute("data-zoom")) || MAX;
 
   // Fluid or fixed, and how wide a fluid specimen needs to be, at the default UI scale.
   const density = canvas.getAttribute("data-area-ui");
@@ -119,6 +121,9 @@ export function fitTiles(canvas: HTMLElement): () => void {
   }
   // A fluid specimen takes the first width at which nothing truncates (a few specimens, a few tries).
   for (const entry of tiles.filter(tile => tile.fluid)) {
+    // Laid out for the tile at 1x whatever the zoom: zoom enlarges what has its own size (a Badge, a
+    // Button); a specimen that stretches to its tile just fills the larger tile (at 2x it was laid out at
+    // half the tile, then doubled: a Table wrapped and clipped).
     const room = roomOf(entry.view).w / MAX;
     entry.widen = WIDEN.find(factor => { entry.stage.style.inlineSize = `${Math.floor(room * factor)}px`; return !truncates(entry.stage); }) ?? WIDEN.at(-1)!;
   }
@@ -136,7 +141,7 @@ export function fitTiles(canvas: HTMLElement): () => void {
     // layouts, however many tiles changed.
     const rooms = batch.map(entry => roomOf(entry.view));
     batch.forEach((entry, index) => { if (entry.fluid) entry.stage.style.inlineSize = `${Math.floor(rooms[index]!.w / MAX * entry.widen)}px`; });
-    const scales = batch.map((entry, index) => fit(rooms[index]!, extent(entry.stage)));
+    const scales = batch.map((entry, index) => fit(rooms[index]!, extent(entry.stage), entry.fluid ? MAX : max));
     batch.forEach((entry, index) => { entry.stage.style.zoom = scales[index]!.toFixed(3); });
   };
   rescale(tiles);

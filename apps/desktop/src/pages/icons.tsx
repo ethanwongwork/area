@@ -5,17 +5,20 @@
  * (apps/docs/src/gallery/icon-browser.tsx).
  */
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import { EmptyState, Field, Nav, NavGroup, NavItem, Count, PanelSection, Segmented, Slider, Table, TableLink } from "@area/react";
-import { PILOT_BATCHES, PILOT_ICONS, PilotCopyIcon } from "../../../docs/src/pilot-icons.tsx";
+import { Badge, Button, Code, Count, EmptyState, Field, HoverCard, Nav, NavGroup, NavItem, PanelSection, Segmented, Slider, Table, TableLink } from "@area/react";
+import { PILOT_BATCHES, PILOT_ICONS } from "../../../docs/src/pilot-icons.tsx";
+import { CopyIcon, DownloadIcon } from "@area/icons";
 import { ICON_CATEGORIES } from "../../../docs/src/icon-categories.ts";
 import { CopyButton, standaloneSvg } from "../../../docs/src/gallery/icon-browser.tsx";
 import { SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
-import { CanvasSection, ListFrame, Tile, TileGrid } from "../tile.tsx";
+import { CanvasSection } from "../tile.tsx";
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { Facts } from "../facts.tsx";
 import { matches } from "../search.ts";
 import { readStored, writeStored } from "../storage.ts";
+import { ArrangeMenu, groupBy, PinButton, PinMenu, sortBy, useArrangement, usePins } from "../organize.tsx";
+import { onGridKeys } from "../grid-keys.ts";
 
 type Entry = (typeof PILOT_ICONS)[number];
 type Mode = "outline" | "filled";
@@ -27,11 +30,73 @@ const STATUS = new Map<string, { status: string; batch: string }>(
 );
 /** An icon's review status, from its batch (a variant shares its base icon's). */
 const statusOf = (name: string) => STATUS.get(BY_NAME.get(name)?.derivedFrom ?? name)?.status;
+/** An icon's review status as the components' status reads: a soft Badge, success when approved. */
+const StatusBadge = ({ name }: { name: string }) => statusOf(name) === "approved"
+  ? <Badge size="sm" tone="success" variant="soft">Approved</Badge>
+  : <Badge size="sm" tone="caution" variant="soft">In review</Badge>;
 const titleCase = (name: string) => name.split("-").map(word => word[0]!.toUpperCase() + word.slice(1)).join(" ");
 
-/* Sizes: the grid from Area's 12 floor to 32; the preview at the icon browser's 128. */
+/* Sort and group (src/organize.tsx). The default is the curated order: by category, each in the
+   order its category lists it. */
+const SORTS = [{ value: "category", label: "Category order" }, { value: "name", label: "Name" }] as const;
+const GROUPS = [{ value: "category", label: "Category" }, { value: "status", label: "Status" }, { value: "none", label: "None" }] as const;
+type Sort = (typeof SORTS)[number]["value"];
+type Group = (typeof GROUPS)[number]["value"];
+const ORDER = new Map(ICON_CATEGORIES.flatMap(category => category.icons).map((name, index) => [name, index] as const));
+const STATUS_LABEL = (name: string) => statusOf(name) === "approved" ? "Approved" : statusOf(name) === "review" ? "In review" : "Not reviewed";
+
+/* Sizes: the grid from Area's 12 floor to 32; the preview at the icon browser's 128, the hover
+   window's at 96 (three quarters of it, so the card stays a third of the Canvas or less). */
 const SIZE = { min: 12, max: 32, initial: 16 } as const;
 const PREVIEW = 128;
+const CARD_PREVIEW = 96;
+
+/** Saves an icon's SVG as a file (the browser's download; Electron asks where). */
+function download(svg: string, name: string) {
+  const url = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml" }));
+  const link = Object.assign(document.createElement("a"), { href: url, download: `${name}.svg` });
+  link.click();
+  setTimeout(() => URL.revokeObjectURL(url), 0);
+}
+
+/**
+ * The icon hover window (owner, 2026-10-12, after Cursor's icon gallery): resting on a cell opens
+ * an Area Hover card under it with the icon's name and category, the icon large, and Copy SVG,
+ * Download SVG and Copy name. Its rows are built only while it is open, so a sheet of hundreds of
+ * cells carries one empty surface each.
+ */
+function IconCell({ entry, style, size, selected, onChoose }: { entry: Entry; style: Mode; size: number; selected: boolean; onChoose: () => void }) {
+  const [open, setOpen] = useState(false);
+  const preview = useRef<HTMLDivElement>(null);
+  const Glyph = style === "filled" ? entry.Filled : entry.Icon;
+  const svg = () => {
+    const node = preview.current?.querySelector("svg");
+    return node ? standaloneSvg(node, entry.name) : "";
+  };
+  const category = CATEGORY_OF.get(entry.name);
+  return (
+    <HoverCard side="bottom" align="center" delay={500} open={open} onOpenChange={setOpen} className="studio-icon-card" aria-label={titleCase(entry.name)}
+      trigger={
+        <button type="button" className="studio-icons__cell" data-icon={entry.name} data-key={entry.name} data-name={titleCase(entry.name)}
+          aria-pressed={selected} aria-label={titleCase(entry.name)} onClick={onChoose}>
+          <Glyph size={size} aria-hidden="true" />
+        </button>
+      }>
+      {open ? <>
+        <div className="studio-icon-card__head">
+          <span className="studio-icon-card__name">{entry.name}</span>
+          {category ? <span className="studio-icon-card__meta">{category.name}</span> : null}
+        </div>
+        <div className="studio-icon-card__preview" ref={preview}><Glyph size={CARD_PREVIEW} aria-hidden="true" /></div>
+        <div className="studio-icon-card__actions">
+          <CopyButton label="Copy SVG" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(svg())} />
+          <Button variant="outline" size="sm" fullWidth icon={<DownloadIcon />} onClick={() => download(svg(), entry.name)}>Download SVG</Button>
+          <CopyButton label="Copy name" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(entry.name)} />
+        </div>
+      </> : null}
+    </HoverCard>
+  );
+}
 
 export function IconsPage() {
   const { query, item, select } = useStudio();
@@ -49,14 +114,29 @@ export function IconsPage() {
   const icon = BY_NAME.get(selected) ?? PILOT_ICONS[0]!;
   const [mode, setMode] = useViewOption<ViewMode>("icons", "grid", ["grid", "list"]);
   const [status, setStatus] = useViewOption<"all" | "approved" | "review">("icons-status", "all", ["all", "approved", "review"]);
-  const sections = useMemo(() => ICON_CATEGORIES.map(category => ({
+  const arrangement = useArrangement<Sort, Group>("icons", { sort: "category", descending: false, group: "category" }, SORTS, GROUPS);
+  const pins = usePins("icons");
+  const filtered = useMemo(() => ICON_CATEGORIES.map(category => ({
     ...category,
     shown: category.icons.filter(name => matches(query, name, category.name, BY_NAME.get(name)?.derivedFrom)
       && (status === "all" || statusOf(name) === status)),
   })), [query, status]);
-  const listed = sections.filter(section => section.shown.length);
-  const onCanvas = view ? sections.filter(section => section.slug === view.slug) : listed;
+  const listed = filtered.filter(section => section.shown.length);
+  // The Canvas's sections: one category (the Sidebar's choice), or every icon arranged.
+  const order = (names: readonly string[]) => arrangement.sort === "name"
+    ? sortBy(names, name => name, arrangement.descending)
+    : sortBy(names, name => ORDER.get(name) ?? 0, arrangement.descending);
+  const sections = useMemo(() => {
+    if (view) return filtered.filter(section => section.slug === view.slug).map(section => ({ ...section, shown: order(section.shown) }));
+    const every = order([...new Set(listed.flatMap(section => section.shown))]);
+    if (arrangement.group === "status") return groupBy(every, STATUS_LABEL, ["Approved", "In review", "Not reviewed"]).map(([name, shown]) => ({ slug: name.toLowerCase().replace(/\s+/g, "-"), name, shown }));
+    if (arrangement.group === "none") return every.length ? [{ slug: "all", name: "All icons", shown: every }] : [];
+    const categories = arrangement.sort === "name" ? sortBy(listed, section => section.name, arrangement.descending) : arrangement.descending ? [...listed].reverse() : listed;
+    return categories.map(section => ({ ...section, shown: order(section.shown) }));
+  }, [filtered, view, arrangement.sort, arrangement.descending, arrangement.group]);
+  const onCanvas = sections;
   const total = onCanvas.reduce((sum, section) => sum + section.shown.length, 0);
+  const pinned = pins.pins.filter(name => BY_NAME.has(name));
 
   // Keep the selected icon in view when it changes from the Sidebar or a link.
   const canvas = useRef<HTMLDivElement>(null);
@@ -75,11 +155,27 @@ export function IconsPage() {
 
   return (
     <Workspace
-      sidebar={<SidebarList>{
+      sidebar={<SidebarList><PinMenu pins={pins} label="Icons">{
         <Nav aria-label="Icon categories">
           <SidebarAll tab="icons" count={listed.reduce((sum, section) => sum + section.shown.length, 0)} current={!view} />
+          {pinned.length ? (
+            <NavGroup label="Pinned">
+              {pinned.map(name => {
+                const entry = BY_NAME.get(name)!;
+                const Glyph = style === "filled" ? entry.Filled : entry.Icon;
+                return (
+                  <NavItem key={name} href={`#icons`} data-key={name} data-name={titleCase(name)} icon={<Glyph size={16} aria-hidden="true" />}
+                    onClick={event => { event.preventDefault(); choose(name); }}>
+                    {titleCase(name)}
+                  </NavItem>
+                );
+              })}
+            </NavGroup>
+          ) : null}
           <NavGroup label="Categories">
-            {listed.map(section => (
+            {/* The categories in the Canvas's order (product UI rule 7): A to Z under Name, reversed
+                under descending; the curated order otherwise. */}
+            {(arrangement.sort === "name" ? sortBy(listed, section => section.name, arrangement.descending) : arrangement.descending ? [...listed].reverse() : listed).map(section => (
               <NavItem key={section.slug} href={`#icons/${section.slug}`} current={section.slug === view?.slug}
                 onClick={event => { event.preventDefault(); select(section.slug); }}
                 trailing={<Count count={section.shown.length} />}>
@@ -88,7 +184,7 @@ export function IconsPage() {
             ))}
           </NavGroup>
         </Nav>
-      }</SidebarList>}
+      }</PinMenu></SidebarList>}
       canvasTitle={view ? view.name : "All icons"}
       canvasMeta={<span className="studio-muted studio-tabular">{total}</span>}
       canvasRef={canvas}
@@ -96,70 +192,51 @@ export function IconsPage() {
         <ViewControls>
           <ViewFilter label="Status" value={status} onChange={setStatus}
             options={[{ value: "all", label: "All statuses" }, { value: "approved", label: "Approved" }, { value: "review", label: "In review" }]} />
+          <ArrangeMenu arrangement={arrangement} sorts={SORTS} groups={view ? undefined : GROUPS}
+            directions={arrangement.sort === "name" ? ["A to Z", "Z to A"] : ["First to last", "Last to first"]} />
           <ViewSwitch value={mode} onChange={setMode} />
         </ViewControls>
       }
       canvas={total ? (
-        <div className="studio-icons studio-sections" style={{ "--_size": `${size}px` } as CSSProperties}>
+        <PinMenu pins={pins} label="Icon">
+        <div className="studio-icons studio-sections" style={{ "--_size": `${size}px` } as CSSProperties} onKeyDown={onGridKeys}>
           {onCanvas.map(section => (
-            <CanvasSection key={section.slug} id={`icons-${section.slug}`} title={view ? undefined : <>{section.name} <span className="studio-muted">{section.shown.length}</span></>}>
+            <CanvasSection key={section.slug} id={`icons-${section.slug}`} title={view || onCanvas.length === 1 ? undefined : <>{section.name} <span className="studio-muted">{section.shown.length}</span></>}>
               {mode === "list" ? (
-                // List: one row per icon, drawn at the chosen size, with its facts.
-                <ListFrame>
-                  <Table size="md" interactive aria-label={section.name}>
-                    <thead><tr><th scope="col">Icon</th><th scope="col">Name</th><th scope="col">Keyline</th><th scope="col">Status</th></tr></thead>
-                    <tbody>
-                      {section.shown.map(name => {
-                        const entry = BY_NAME.get(name);
-                        if (!entry) return null;
-                        const Glyph = style === "filled" ? entry.Filled : entry.Icon;
-                        return (
-                          <tr key={name} data-selected={name === icon.name ? "" : undefined}>
-                            <td className="area-table__cell--fit"><span className="studio-icons__glyph" data-icon={name}><Glyph size={size} aria-hidden="true" /></span></td>
-                            <td><TableLink href={`#icons/${section.slug}`} onClick={event => { event.preventDefault(); choose(name); }}><code className="studio-mono">{name}</code></TableLink></td>
-                            <td><span className="studio-muted">{entry.keyline}</span></td>
-                            <td><span className="studio-muted">{statusOf(name) === "approved" ? "Approved" : statusOf(name) === "review" ? "In review" : "—"}</span></td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </Table>
-                </ListFrame>
-              ) : view ? (
-                // One category, grid: every icon its own unit tile, named, at the chosen size.
-                <TileGrid span="unit">
-                  {section.shown.map(name => {
-                    const entry = BY_NAME.get(name);
-                    if (!entry) return null;
-                    const Glyph = style === "filled" ? entry.Filled : entry.Icon;
-                    return (
-                      <Tile key={name} span="unit" stage="center" pressable label={name} aria-label={titleCase(name)}
-                        selected={name === icon.name} onSelect={() => choose(name)}>
-                        <Glyph size={size} aria-hidden="true" data-icon={name} />
-                      </Tile>
-                    );
-                  })}
-                </TileGrid>
+                // List: one row per icon on the Canvas's surface (a flush Table), drawn at the
+                // chosen size, with its facts.
+                <Table size="md" interactive flush aria-label={section.name}>
+                  <thead><tr><th scope="col">Icon</th><th scope="col">Name</th><th scope="col">Keyline</th><th scope="col">Status</th></tr></thead>
+                  <tbody>
+                    {section.shown.map(name => {
+                      const entry = BY_NAME.get(name);
+                      if (!entry) return null;
+                      const Glyph = style === "filled" ? entry.Filled : entry.Icon;
+                      return (
+                        <tr key={name} data-selected={name === icon.name ? "" : undefined}>
+                          <td className="area-table__cell--fit"><span className="studio-icons__glyph" data-icon={name}><Glyph size={size} aria-hidden="true" /></span></td>
+                          <td><TableLink href={`#icons`} onClick={event => { event.preventDefault(); choose(name); }}><Code>{name}</Code></TableLink></td>
+                          <td><span className="studio-muted">{entry.keyline}</span></td>
+                          <td>{statusOf(name) ? <StatusBadge name={name} /> : <span className="studio-muted">—</span>}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </Table>
               ) : (
-                // All, grid: the category's sheet is the container, label-free cells (Lucide, Primer);
-                // names on hover and in the Inspector.
+                // Grid: label-free cells straight on the Canvas's surface, no container (owner,
+                // 2026-10-12, after Cursor's icon gallery); names in the hover window and the Inspector.
                 <div className="studio-icons__sheet">
                   {section.shown.map(name => {
                     const entry = BY_NAME.get(name);
-                    if (!entry) return null;
-                    const Glyph = style === "filled" ? entry.Filled : entry.Icon;
-                    return (
-                      <button key={name} type="button" className="studio-icons__cell" data-icon={name} aria-pressed={name === icon.name}
-                        aria-label={titleCase(name)} title={name} onClick={() => choose(name)}>
-                        <Glyph size={size} aria-hidden="true" />
-                      </button>
-                    );
+                    return entry ? <IconCell key={name} entry={entry} style={style} size={size} selected={name === icon.name} onChoose={() => choose(name)} /> : null;
                   })}
                 </div>
               )}
             </CanvasSection>
           ))}
         </div>
+        </PinMenu>
       ) : <EmptyState title="No icons" description={`Nothing matches “${query}”.`} />}
       inspectorTitle={titleCase(icon.name)}
       inspector={
@@ -167,25 +244,25 @@ export function IconsPage() {
           <CanvasSettings axes={["ui"]} />
           <PanelSection>
             <div className="studio-icon-preview" ref={preview}><Draw size={PREVIEW} aria-hidden="true" /></div>
-            <CopyButton label="Copy SVG" icon={<PilotCopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(svg())} />
+            <CopyButton label="Copy SVG" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(svg())} />
           </PanelSection>
           <PanelSection heading="Display">
             <Field label="Style" orientation="horizontal">
               <Segmented size="sm" fullWidth value={style} onValueChange={value => setStyle(value as Mode)}
                 items={[{ value: "outline", label: "Outline" }, { value: "filled", label: "Filled" }]} />
             </Field>
-            <Field label={`Size · ${size}`} orientation="horizontal">
-              <Slider size="sm" min={SIZE.min} max={SIZE.max} step={4} value={size} aria-label="Icon size"
+            <Field label="Size" orientation="horizontal">
+              <Slider size="sm" min={SIZE.min} max={SIZE.max} step={4} value={size} readout
                 onChange={event => setSize(Number(event.currentTarget.value))} />
             </Field>
           </PanelSection>
-          <PanelSection heading="Icon">
+          <PanelSection heading="Icon" actions={<PinButton name={titleCase(icon.name)} pinned={pins.has(icon.name)} onToggle={() => pins.toggle(icon.name)} />}>
             <Facts label="Icon" items={[
-              ["Name", <code className="studio-mono">{icon.name}</code>],
+              ["Name", <Code>{icon.name}</Code>],
               category ? ["Category", category.name] : null,
               icon.derivedFrom ? ["From", icon.derivedFrom] : null,
               ["Keyline", icon.keyline],
-              iconStatus ? ["Status", iconStatus.status === "approved" ? "Approved" : "In review"] : null,
+              iconStatus ? ["Status", <StatusBadge name={icon.name} />] : null,
               iconStatus ? ["Batch", iconStatus.batch] : null,
             ]} />
           </PanelSection>

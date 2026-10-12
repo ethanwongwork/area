@@ -1,7 +1,7 @@
 /** Tag gallery specimens: one variant per tile. docs/specs/tag.md. */
 import { useState } from "react";
 import { Tag } from "@area/react";
-import { PilotGlobeIcon } from "../pilot-icons.tsx";
+import { PilotGlobeIcon } from "../../../../docs/src/pilot-icons.tsx";
 
 export const GalleryTag = () => <Tag tone="info">personal</Tag>;
 export const GalleryTagNeutral = () => <Tag>Draft</Tag>;

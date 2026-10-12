@@ -3,7 +3,7 @@
 Each session starts from `main` in its own worktree (`claude/*` branch) and merges through a
 pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
-session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/docs/src/component-status.mjs` (Indicator and Tooltip are Complete).
+session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
 ## Round 9 approvals; inspector components begin (2026-10-12, same branch)
 
@@ -105,6 +105,70 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   edge, the face and battery families, file marks centred, library redraws). Four parallel helpers did 37 of them. Review
   page version 49. Record: spec "Owner review round 11", `docs/research/icon-review/2026-10-11/README.md` (calls to
   confirm listed there). Full lint, build, typecheck, @area/icons tests and docs build pass.
+## Desktop app: sorting, pinning, interaction pass (2026-10-12, `claude/gallery-interactions-design-gaps-0ff0c1`)
+
+- Sort and group (`src/organize.tsx`): one ghost icon Menu at the end of the Canvas bar (Components, Icons, Color);
+  Sort by / Order / Group by radio rows that keep the menu open, Reset once changed; saved per tab
+  (`arrange:<tab>`). Components default = the old Sidebar (A to Z, In review first); the All Canvas now follows the
+  Sidebar's order. Icons group by Category / Status / None; Color by Neutrals and hues / None, sort incl. chroma.
+- Pins (`pins:<tab>`): Pinned group at the top of the Sidebar (Components, Icons); pin from the Inspector heading
+  or a right-click menu (`PinMenu`, rows carry `data-key` / `data-name`).
+- 2026-10-12 later: Sidebar toggle moved to the Titlebar's start (after the traffic lights); Icons and Typography
+  sit on the Canvas surface (no tiles or frames: icon sheets hang their plates into the margin, type grid = cells
+  with row plates, one role = ruled rows, lists = `Table flush baseline`, new Table booleans); icon cells open an
+  Area Hover card (name, category, icon at 96, Copy SVG / Download SVG / Copy name), built only while open.
+  PRODUCT_UI.md rules 11 (containers vs surface) and 12 (panel toggles at their sides).
+- Color (owner, 2026-10-12, brand-sheet references): every step is its own card (painted Tile, `ColorCard` in
+  pages/color.tsx) on the components' grid (wide tiles, 280 min, 5:4; owner), in All and one-scale views (the joined ramp strip
+  and the Hex / OKLCH filter are gone). Card: level 14 strong + contrast badge (grade · ratio, ink at 12%), hex, RGB,
+  full OKLCH at the foot. Painted tiles' edge = Color swatch picker's palette hairline (1px black / white
+  10%, outline inside); its states step that one outline (hover ink 24%, pressed 48%, selected 2px ink), never
+  a second ring (owner: hover read as a double stroke). Inspector adds RGB and contrast on white and on black.
+- `.claude/launch.json` "desktop-dist" serves `apps/desktop/dist` read-only on 4410, for hover checks in the
+  browser while `npm run dev` owns the build.
+- Trial (owner): the Canvas ground is `bg-page` (white light, near-black dark; was neutral 25), so every tab sits on
+  white. White component tiles then read only by their #f3 hairline.
+- Don't run `npm run preview` while `npm run dev` runs in the same worktree: both esbuild watchers write
+  `apps/desktop/dist/app.js` and interleave into a broken bundle ("Unexpected end of input").
+- Owner: "this electron app is the full source of truth" → AGENTS.md / README say so. Audit (styles + component
+  use) fixed in the app: chrome icons from `@area/icons` (no docs import), facts back as a real `Table` (owner: style it as the Table
+  component; DescriptionList's framed rules differed), `Code` for every token/name, `ColorSwatch` for colour marks, status as sm Badges, every list a
+  `Table flush`, Card's edge on tiles, pressed step on every tile, compact focus/hover above neighbours, bars from
+  Panel's bar formula, abstract check/toggle on the real controls' paint and Switch's clock, section-link focus
+  ring, Language tiles keyboard-selectable (`role=button` + aria-pressed when the stage is inert) with the
+  selected preset shown, Language EmptyState, Icons Sidebar follows the arrangement, no native titles left.
+  Remaining gaps listed in PRODUCT_UI.md.
+- Migration (owner: start here now). Step 1 DONE (git mv, imports rewritten; docs build, dogfood, react
+  264/264, contracts, consumer, both typechecks pass): content, status, specimens, names, registry, demos →
+  `apps/desktop/src/content/`, fit + controls → `src/gallery/`, `highlight`/`escapeHtml` → `content/highlight.mjs`
+  (docs layout re-exports). Sessions with uncommitted edits to the old paths: git's rename detection carries
+  them on merge. Remaining:
+  1. (done) `pages.mjs`, `component-status.mjs`, `gallery/specimens.mjs`, `scripts/specimen-names.mjs`, `registry.tsx`,
+     `demos/` (37 files), `gallery/fit.ts`, `gallery/controls.ts` → `apps/desktop/src/content/` and `src/gallery/`.
+  2. Icon sources (`assets/area-icons-pilot`, vendored Fluent cuts), `gen-pilot-icons.mjs` / `gen-icons.mjs` and the
+     icon tools, `icon-categories.ts` → `packages/icons`; the app's Icons tab reads `@area/icons` + `/meta`.
+  3. `CopyButton` → `@area/react`; `area-capture.js` → `tools/`.
+  4. Repoint skills, AGENTS, README, DEVELOPMENT, root scripts, react tests that read `apps/docs/dist`; then delete
+     the site (build, html, preview).
+- 2026-10-12 later: tile corner 20 (was 24, owner "slightly too round"); colour cards' level regular weight; ColorSwatch
+  edge = the palette's transparent 10% hairline everywhere (reverses the 2026-09-28 solid ring; spec logged); Panel:
+  seam counted once and Nav / Tree view hang their plates in a panel (Sidebar plates 6, text 14); `Table flush` rules
+  and text on the content edges, the row plate overhangs as a shadow; Code in fit cells doesn't wrap; Components
+  1x / 2x zoom in the Canvas bar (`view:components-zoom`; fit.ts reads [data-zoom]; only fixed-size specimens scale
+  past 1; units 204 at 2x).
+- Arrow keys across icon cells, swatches, ramp steps and type tiles (`src/grid-keys.ts`); selection follows focus.
+- States (studio.css): tile edge rest → hover `edge-control-hover` → press `border-hover` → selected; painted
+  tiles and ramp steps ring in their own ink; icon cells hover / press plates; all instant in, `fast` out. Fixed a
+  selected swatch drawing the selection stroke outside its ink ring.
+- Titlebar buttons use Area Tooltips (`ChromeButton`) with shortcuts: ⌘B Sidebar, ⌥⌘B Inspector.
+- Owner adopted the recs → `docs/PRODUCT_UI.md` (13 rules, linked from AGENTS.md; evidence in
+  `docs/research/product-ui-gaps-2026-10-12.md`). Built with it: row pressed plates (Nav, Menu, Tree view,
+  interactive Table: `bg-component-active` while held), `MenuItem keepOpen`, `Menu tooltip`, Tooltip `describes`,
+  icon-only Segmented options get Tooltips; the app's native `title`s became Area Tooltips (icon cells, ramp steps,
+  copy-token); Typography's empty search shows an EmptyState. Spec feedback logs updated. Open component gaps are
+  listed at the end of PRODUCT_UI.md. React tests 262/264 (the 2 failures read the archived `apps/docs/dist`).
+- The browser pane caches `studio.css`; open `/studio.css` once to refresh. `.claude/launch.json` now has autoPort.
+
 ## Desktop app: gallery homepage (2026-10-11, `claude/gallery-homepage-ui-2a0b30`)
 
 - Owner: new sessions work on the app (`apps/desktop`, Electron); the docs site is archived; reviews go through

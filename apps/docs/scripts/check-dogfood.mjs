@@ -95,7 +95,7 @@ const { GALLERY_CSS } = await import("./component-gallery.mjs");
 {
   const docsSources = [
     join(root, "scripts", "build.mjs"),
-    join(root, "src", "pages.mjs"),
+    join(root, "..", "desktop", "src", "content", "pages.mjs"),
     join(root, "src", "practices.mjs"),
   ];
   const legacy = docsSources.filter((file) => readFileSync(file, "utf8").includes("docs-code-inline"));

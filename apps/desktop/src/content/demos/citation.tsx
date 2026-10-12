@@ -1,8 +1,8 @@
 /** Citation gallery specimens: one variant per tile, each in an answer's prose. docs/specs/citation.md. */
 import type { CSSProperties, ReactNode } from "react";
 import { Citation, HoverCard, Message, PopoverDescription, PopoverTitle } from "@area/react";
-import { LinkIcon } from "../icons.tsx";
-import { PilotBookIcon } from "../pilot-icons.tsx";
+import { LinkIcon } from "../../../../docs/src/icons.tsx";
+import { PilotBookIcon } from "../../../../docs/src/pilot-icons.tsx";
 
 const column: CSSProperties = { inlineSize: "calc(var(--area-space-96) * 4)", maxInlineSize: "100%" };
 /* An assistant answer; the citation follows the sentence it supports. */

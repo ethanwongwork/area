@@ -1,13 +1,12 @@
 /**
- * The Inspector's information as Area Tables (owner, 2026-10-11): facts as term / value rows,
- * props as prop / type rows. A Table frames its rows and rules them, so a section of facts reads
- * as one block under its heading instead of loose lines of text.
+ * The Inspector's information as an Area Table (owner, 2026-10-11: facts as Tables; 2026-10-12: styled
+ * as the real Table component, not a look-alike): term / value rows in Table's frame and rules.
  *
  * Terms are plain cells, not row headers: Table's header cell paints the subtle header ground and
  * keeps the rule under the last row, both meant for a column header.
  */
 import type { ReactNode } from "react";
-import { Table } from "@area/react";
+import { Code, Table } from "@area/react";
 
 export type Fact = readonly [term: ReactNode, value: ReactNode];
 
@@ -34,7 +33,7 @@ export function Facts({ items, label }: { items: ReadonlyArray<Fact | null | fal
  */
 export function PropsTable({ api }: { api: ReadonlyArray<ReadonlyArray<string>> }) {
   return (
-    <Table size="md" aria-label="Props">
+    <Table size="md" flush aria-label="Props">
       <thead>
         <tr><th scope="col">Prop</th><th scope="col">Type</th><th scope="col">Default</th></tr>
       </thead>
@@ -42,10 +41,10 @@ export function PropsTable({ api }: { api: ReadonlyArray<ReadonlyArray<string>> 
         {api.map(([prop = "", type, fallback]) => (
           <tr key={prop}>
             <td className="area-table__cell--fit">
-              {prop.split(/ \/ |(?<=:) /).map((name, index) => <code key={index} className="studio-mono studio-prop">{name}</code>)}
+              {prop.split(/ \/ |(?<=:) /).map((name, index) => <Code key={index} className="studio-prop">{name}</Code>)}
             </td>
             <td>{type}</td>
-            <td className="area-table__cell--fit">{fallback && fallback !== "—" ? <code className="studio-mono">{fallback}</code> : <span className="studio-muted">—</span>}</td>
+            <td className="area-table__cell--fit">{fallback && fallback !== "—" ? <Code>{fallback}</Code> : <span className="studio-muted">—</span>}</td>
           </tr>
         ))}
       </tbody>

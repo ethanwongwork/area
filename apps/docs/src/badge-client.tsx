@@ -1,6 +1,6 @@
 import { createElement, type ReactNode } from "react";
 import { hydrateRoot } from "react-dom/client";
-import * as badge from "./demos/badge.tsx";
+import * as badge from "../../desktop/src/content/demos/badge.tsx";
 
 const { BADGE_GALLERY_DEMOS, ...staticDemos } = badge;
 const demos: Record<string, () => ReactNode> = { ...BADGE_GALLERY_DEMOS, ...staticDemos };

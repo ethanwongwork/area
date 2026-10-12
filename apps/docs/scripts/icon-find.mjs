@@ -22,7 +22,7 @@ for (const file of readdirSync(PILOT).filter(f => f.endsWith(".svg"))) {
   add(name);
   for (const spec of (svg.match(/data-rotations="([^"]*)"/)?.[1] ?? "").split(/\s+/).filter(Boolean)) add(spec.split(":")[0], name);
 }
-const labels = read(join(ROOT, "apps/docs/src/demos/icons.tsx")).split("const REF_NAMES")[0];
+const labels = read(join(ROOT, "apps/desktop/src/content/demos/icons.tsx")).split("const REF_NAMES")[0];
 for (const [, name, label] of labels.matchAll(/"([a-z0-9-]+)": "([^"]+)"/g)) if (icons.has(name)) icons.get(name).label = label;
 const camel = n => n.replace(/(^|-)([a-z0-9])/g, (_, __, c) => c.toUpperCase());
 const gen = read(join(HERE, "gen-icons.mjs"));

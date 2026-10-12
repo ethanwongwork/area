@@ -1,8 +1,8 @@
 /** Gallery specimens that complete each family's variant coverage: one per missing manifest value. */
 import { Alert, Badge, Button, Checkbox, CheckboxGroup, Chip, CodeBlock, Indicator, Input, InputGroup, InputGroupText, NumberField, Separator, Table, TableLink, Tabs, Toast } from "@area/react";
-import { InfoIcon, AlertIcon } from "../icons.tsx";
+import { InfoIcon, AlertIcon } from "../../../../docs/src/icons.tsx";
 // @ts-expect-error — the docs' own highlighter is authored in JavaScript.
-import { highlight } from "../../scripts/layout.mjs";
+import { highlight } from "../highlight.mjs";
 
 const tableRows = ["Item one", "Item two", "Item three"];
 

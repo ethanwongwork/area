@@ -15,8 +15,8 @@ import { mkdirSync, rmSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { DOCS_CSS, escapeHtml, table } from "./layout.mjs";
-import { SPECIMEN_GROUPS, specimenGroup, specimenLabel, specimenName } from "./specimen-names.mjs";
-import { GALLERY_CANVAS_ID, GALLERY_CONTROLS, GALLERY_STORAGE_KEY } from "../src/gallery/controls.ts";
+import { SPECIMEN_GROUPS, specimenGroup, specimenLabel, specimenName } from "../../desktop/src/content/specimen-names.mjs";
+import { GALLERY_CANVAS_ID, GALLERY_CONTROLS, GALLERY_STORAGE_KEY } from "../../desktop/src/gallery/controls.ts";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
