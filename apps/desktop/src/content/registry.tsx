@@ -44,10 +44,13 @@ import * as boards from "./demos/board.tsx";
 import * as timelines from "./demos/timeline.tsx";
 import * as editableTexts from "./demos/editable-text.tsx";
 import * as boxModels from "./demos/box-model.tsx";
+import * as tokenRows from "./demos/token-row.tsx";
+import * as assetRows from "./demos/asset-row.tsx";
+import * as inspectorRecipes from "./demos/inspector.tsx";
 
 const { BADGE_GALLERY_DEMOS, ...badgeDemos } = badge;
 const { ICON_REVIEW_DEMOS, ...iconDemos } = icons;
-const DEMO_MODULES: Record<string, object> = { BADGE_GALLERY_DEMOS, badge: badgeDemos, switches, button, form, display, nav, theme, gallery, cards, icons: iconDemos, ICON_REVIEW_DEMOS, variants, overlays, counts, accordions, customSelects, tags, tagPickers, datePickers, drawers, paginations, links, scrollAreas, fileUploads, toggletips, emptyStates, toggleGroups, descriptionLists, meters, searchFields, shortcutLists, dateRangePickers, citations, zoomControls, boards, timelines, editableTexts, boxModels };
+const DEMO_MODULES: Record<string, object> = { BADGE_GALLERY_DEMOS, badge: badgeDemos, switches, button, form, display, nav, theme, gallery, cards, icons: iconDemos, ICON_REVIEW_DEMOS, variants, overlays, counts, accordions, customSelects, tags, tagPickers, datePickers, drawers, paginations, links, scrollAreas, fileUploads, toggletips, emptyStates, toggleGroups, descriptionLists, meters, searchFields, shortcutLists, dateRangePickers, citations, zoomControls, boards, timelines, editableTexts, boxModels, tokenRows, assetRows, inspectorRecipes };
 // One name, one demo. The server renders from this merged map, while hydration clients import a
 // module directly, so a name exported twice renders one demo and hydrates the other (a mismatch).
 const demoOwner = new Map<string, string>();
@@ -95,5 +98,8 @@ export const SOURCES = {
   timelines: "demos/timeline.tsx",
   editableTexts: "demos/editable-text.tsx",
   boxModels: "demos/box-model.tsx",
+  tokenRows: "demos/token-row.tsx",
+  assetRows: "demos/asset-row.tsx",
+  inspectorRecipes: "demos/inspector.tsx",
   drawers: "demos/drawer.tsx",
 };

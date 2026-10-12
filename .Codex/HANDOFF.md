@@ -1,9 +1,147 @@
-# Handoff — 2026-10-11
+# Handoff — 2026-10-12
 
 Each session starts from `main` in its own worktree (`claude/*` branch) and merges through a
 pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
+
+## Description list show more; PR (2026-10-12, same branch)
+
+- Owner: "use Design-system evidence: build it from Ant Design, Polaris, Primer and similar collapse patterns ... then open
+  a pr and merge it". Survey `docs/research/show-more-survey.md`. `DescriptionList` takes `visibleCount`, `expanded` /
+  `defaultExpanded` / `onExpandedChange`, `moreLabel` / `lessLabel`: hidden rows keep `hidden`; a "Show {n} more" /
+  "Show less" button after the `dl` (`__more`, `__more-label`) with `aria-expanded` / `aria-controls`, a rotating 16
+  chevron in the term's icon slot, muted 400, underline on hover. Gallery tile "Behavior / show more" (hydrated:
+  `switch-client.tsx` now also loads description-list and inspector demos). Description list is In review.
+- The gallery's prod bundle can be cached by the browser after a rebuild: load it under a fresh name to check hydration.
+  Pre-existing: Date range picker demos mismatch on hydration (their date text), and React regenerates them.
+
+## Rounds 18 → 20: palette outline (2026-10-12, same branch)
+
+- Round 18 rethink with an iOS colour-grid screenshot ("maybe just an outline that goes around the swatch") → selected =
+  white outline straddling the cell, radius-min, cell raised, a fixed black 15% line inside; round 19 "is the stroke
+  thickness correct?" → pixel scan of the owner's screenshot: ring 3.5 of a 35 cell (10%), ~2.5 out / 1 in → Area 2px
+  (1 out, 1 in). Round 20: approved. Nothing is in review (`REVIEW_COMPONENTS` empty).
+- Description list "show more": Dev Mode's List view is unreachable under its dialog; Notion shows "N more properties"
+  only for databases with hide-when-empty properties (the owner's "tasks" pages show all), and setting that up changes
+  the owner's data. Waiting on the owner for a fixture or a go-ahead on design-system evidence.
+- All of today's work (Box model rounds, Code block sm, Token row, Asset row, swatch ring, colour picker and palette
+  states, the Dev Mode recipe, EXIF strip) is uncommitted on this branch.
+
+## Round 17 → 18: palette states (2026-10-12, same branch)
+
+- Round 17: Color picker approved (COMPLETE). Color swatch picker rethink (palette: "looks odd, can you look at other
+  real examples and how they do the hover/selected state") → survey `docs/research/swatch-palette-survey.md` → palette
+  hover `inset 2px bg-surface + 1px swatch ring`, selected `inset 2px fg-selection + 2px surface + 1px swatch ring`;
+  no outer edge, z-index raise or radius. Round 18 published (1 changed tile).
+- Also: the review page's `.wrap select` chrome rule leaked into Select specimens (overlapping chevron); now
+  `:not(.canvas *)`. The dev server stalled once on restart; `apps/docs/dist` served with `python3 -m http.server` works.
+- Open: a selected corner cell's ring is clipped by the palette's rounded corner; hover on dark cells in dark mode is faint.
+
+## Round 16 → 17: Color picker thumb edge (2026-10-12, same branch)
+
+- Round 16 (`components16`): Asset row, Code, Color field, Color swatch, Panel, Property list approved (COMPLETE); Color
+  swatch picker approved, then reopened for the palette change below. Color picker changes: "the slider circle
+  transparency on the outer stroke is kinda odd? ... is the color selected state correct/consistent? what are the selected
+  states for things like that and inputs when typing" → thumbs: outer edge opaque `border-subtle` (was black 20%, which
+  changed colour where the 16 thumb meets the 16 track), inner edge the swatch ring; the palette's selected cell the same.
+  States answered in color-picker.md "States compared" (selection = neutral `fg-selection` ring; focus and typing =
+  `focus-color`; no change).
+- Round 17 (`components17`) published: Color picker 13 changed, Color swatch picker 1 (layout-palette).
+
+## Round 15 → 16: swatch ring (2026-10-12, same branch)
+
+- Round 15 (`components15`): Token row approved (COMPLETE). Asset row changes: "should the image be full container?
+  should there be a light stroke too?" → images `cover` the 40 well (icons stay centred), a 1px ring over the well.
+- Owner: "yes apply the swatch fix" → `--area-token-swatch-ring` (tokens emit/base.ts) is
+  `light-dark(rgb(0 0 0 / 0.1), rgb(255 255 255 / 0.1))`, drawn over the colour: Code's swatch (its inset shadow),
+  ColorSwatch (root `box-shadow`, inherited by the colour layer; layers now fill the shape, `--_edge: 0`), Asset row's
+  preview (`::after`). Token tests (24,251) pass.
+- The ring changes swatch tiles in 7 approved families; reopened: code, color-swatch, color-field, color-picker,
+  color-swatch-picker, panel (also shows the Dev Mode recipe, new), property-list. Each spec has a "swatch ring" review note.
+- Round 16 (`components16`) published; Before = main 9e613c1's gallery + round 15's Asset row, styled by round 15's CSS:
+  29 changed (exactly the swatch tiles and Asset row), 1 new, 28 unchanged.
+
+## Round 14 → 15 (2026-10-12, same branch)
+
+- Round 14 (`components14`): both rethinks. Token row: "1 cohesive backplate, just styled like the existing token
+  component? ... outline only as a style is acceptable" → the row carries Code's token classes (`area-code
+  area-code--swatch area-token-row`), widened, value at the end; `outline` boolean. Asset row: "look up other asset rows,
+  not just figma" → survey `docs/research/asset-row-survey.md` (Penpot, Material 3, shadcn, Untitled UI, Fluent,
+  Polaris, Carbon, Atlassian, Zeplin; source at pinned commits) → 40 preview inset 8 in a 56 row, 12 gap, name strong,
+  action visible.
+- Owner asked why the swatch stroke shows only at corners: the edge is `bg-component` (#f7), merging with the light
+  ground on straight edges; corners antialias edge and fill on one curve, leaving grey fringe. Proposed (not applied,
+  needs the owner): a translucent ring over the colour, as Figma's, for Code's swatch and ColorSwatch.
+- Round 15 (`components15`) published; Before = round 14 (from the live page's data.js and area.css).
+
+## Dev Mode inspector recipe; EXIF (2026-10-12, same branch)
+
+- "Link row" not built: Dev Mode's header rows are a muted 16 icon + text/Link, which Link (standalone, muted) already
+  covers. Instead the plan's last step: Panel tile "Recipe / Dev Mode inspector" (`demos/inspector.tsx`,
+  `GalleryPanelDevMode`): header rows, Box model, Code block sm, copyable Token rows, an Asset row with download, in a
+  280 Panel sm. Panel is Complete, so it isn't on the review page (screenshots sent to the owner instead).
+- Owner asked (side task): `apps/docs/public/images/david-tee.jpg` stripped of EXIF (iPhone, GPS, date) and IPTC; JFIF +
+  Display P3 profile kept, pixels byte-identical (121,475 bytes, was 122,591). The original stays in git history (commits
+  11df493, e86180b): owner's call. `chip-filter.png` carries a C2PA "made by OpenAI gpt-image" credential (left in).
+- The session scratchpad was cleared mid-session; review builds are regenerated from `component-review.mjs` when needed.
+
+## Round 13 → 14: Token row rethink, Asset row (2026-10-12, same branch)
+
+- Round 13 (`components13`): Box model approved (COMPLETE). Token row rethink: "looks long, how does this fit in to the
+  existing token component?" → rebuilt on Code's token (hugs the name, its own swatch), value muted at the end of a 32
+  row; no box, swatch or icon slot of its own. Demos use Area palette tokens (the docs audit rejects literal hex).
+- Asset row (new, in review): `AssetRow` (`preview` URL or element, `previewAlt`, `name`, `meta`, `actions`): a 48 well
+  (`bg-subtle`, `radius-small`) in a 56 row, text 16 after it, 12/16 name and muted meta. File upload item was not a fit
+  (an upload card with progress). 5 tiles, docs entry, tests (2).
+- Round 14 (`components14`) published: Token row (4 changed, 1 new) and Asset row (5 new), Before = round 13.
+- Next: Link row from the layer-header capture (16 icon + 8 + text, rows 16 apart); Description list "show more" needs
+  Dev Mode's List view (not reachable under the dialog).
+- Note: `apps/docs/public/images/david-tee.jpg` carries iPhone EXIF with GPS data (pre-existing, not changed here).
+
+## Token row; review rounds 12 → 13 (2026-10-12, same branch)
+
+- Round 12 (`components12`): Code block approved (back in COMPLETE). Box model needs changes: "no dashed lines, the outer
+  container can be its own unique radius, that matches whatever component family it should be. but the inner radius
+  should be round. maybe" → solid `border-subtle` margin stroke at `radius-container` (12); inner corners kept 12 / 8 / 6;
+  content stroke in the tone's border.
+- Figma Dev Mode measured with the automation window in front (the copy's pages render only once visible; Component
+  Overview page, a "Section Header" instance; Dev Mode behind its dialog, then "Back to Design Mode"). Captures in
+  `docs/research/captures/inspector-rows/` (6, redacted): token row, colors group, asset row, assets panel, layer header,
+  Ready-for-development list row. Asset rows: 56 tall, a flush 56 grey preview square, details 16 in; layer header rows:
+  16 icon + 8 + text, 16 apart (Link row basis). The List / Code toggle isn't reachable under the dialog ("show more").
+- Token row (in review): `TokenRow` (`name`, `value`, `swatch` → ColorSwatch sm, `icon`, `copyable` / `copyText`),
+  `token-row.css` (control-xs ringed row, `border-divider`, `radius-small`, 12/16), 6 tiles, docs entry, tests (2).
+- Round 13 (`components13`) published, same link: Box model (4 changed) and Token row (6 new), Before = round 12.
+- Next: Asset row (with a Preview frame as its media) from the asset captures; Link row from the layer header.
+
+## Review round 11 → 12 (2026-10-12, same branch)
+
+- Round 11 (`components11`): both rethinks. Box model: "background can still be gray ... strokes at every container
+  level just the colors can be different ... i do like the margin in a box with lines ... corner radius rounder and the
+  layer shapes bigger". Applied: margin `bg-subtle` inside dashed `border-hover`; inset 1px strokes per level
+  (border `edge-control`, padding the tone's strong border, content `border-subtle`); rings `control-md` 32; corners
+  16 / 12 / 8 / 6. Code block sm: "inset corner radius for the copy button is not correct" → corner = copy radius +
+  inset + border (6 + 3 + 1 = 10, compact 9), header copy at the same inset (header 35).
+- Round 12 (`components12`) published, same link; Before = the round-11 page (a fake dist in the scratchpad built from
+  its data.js and area.css): 6 changed (4 Box model, 2 Code block sm), 11 unchanged.
+- The browser pane was hidden, so visuals were checked as headless Edge screenshots (light and dark at 2×).
+- Chrome: the automation window (tab "Foundation Doc Assets (Copy) – Figma") stays `hidden` even with Chrome in
+  front; it is a separate window. Figma Dev Mode work waits for that window to be brought forward.
+
+## Code block size sm (2026-10-12, branch `claude/component-work-afb752`)
+
+- Owner: "continue the component work". No verdicts in `components11` yet. Chrome's window was hidden
+  (`visibilityState` hidden), so Figma Dev Mode's preview / properties sections couldn't be measured; the part with
+  captures in hand went first: Code block `size` sm (the inspector's code well; Dev Mode's code from the Box model
+  captures): 12/18 mono (compact 12/16), 8 insets (6), gutter 28 with numbers 4 in (24), header 2 + Button sm + 2,
+  copy 3 from top and end. md is byte-identical (review diff: 11 unchanged, 2 new). Root-level `--_code-*`
+  properties now carry every metric; `.area-code-block--sm` overrides them. Back In review (removed from COMPLETE).
+- Review page republished (same link, still `components11`): Box model keeps its round-10 Before (spliced from the
+  live page's data.js and area-before.css), Code block's Before is main at 9e613c1.
+- Open: md's floating copy uses a literal 12 inset, so in compact it sits 4px low against line 1 (8 inset); left as
+  is (approved family). Next inspector parts need Chrome in front: Preview frame + Description list "show more"
+  (Figma's well rgb(245,245,245) radius 5), Link / Asset row, Token row; then the inspector rebuild.
 
 ## Round 9 approvals; inspector components begin (2026-10-12, same branch)
 

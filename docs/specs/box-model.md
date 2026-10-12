@@ -1,6 +1,6 @@
 # Box model spec
 
-**Status:** in review · 2026-10-12 (round 11, after the round-10 rethink)
+**Status:** complete · 2026-10-12 (approved, review round 13)
 **Captures:** `docs/research/captures/box-model/`
 **Peers:** Box field (edits padding and radius; this only shows them), Panel (the inspector it sits in), Count and
 Badge (small value chips), Code block (the inspector's other read-only block)
@@ -13,6 +13,12 @@ Badge (small value chips), Code block (the inspector's other read-only block)
 - 2026-10-12: "keep working, start on the inspector components" → Box model first: it had the best evidence (Dev
   Mode's real layout renders behind its upgrade dialog on the owner's Free plan).
 
+- 2026-10-12, review round 12 (needs changes): no dashed lines; the outer box takes its component family's corner; the
+  inner corners stay round.
+- 2026-10-12, review round 11 (rethink): "the background can still be gray and there can and should be strokes at
+  every container level just the colors can be different. i do like the margin in a box with lines actually, maybe the
+  corner radius can be rounder and the layer shapes bigger overall?" → the margin box keeps its dashed lines and gets
+  Figma's grey ground back; every box has a 1px stroke in its own colour; rings 24 → 32; corners 16 / 12 / 8 / 6.
 - 2026-10-12, review round 10 (rethink): "any ways to make it look more like area, more of an original design so its
   not just copying figma, also can you make sure the corner radius numbers sit inset equally in the corners?", with "go
   with your recommendations". Redrawn in Area's language: the margin as a dashed outline at the container corner (space,
@@ -101,10 +107,11 @@ Generated with `node scripts/capture-compare.mjs` (rows abbreviated).
 
 | Slot · property | Reference | Area | Basis | Reason when it differs |
 |---|---|---|---|---|
-| ring size | Figma 32 columns × 24 rows | 24 × 24 squares (`control-xs`, compact 20) | owner (round 10), Figma's rows | square rings put corner values on the diagonal |
-| margin | Figma: a grey well, values as chips on crossing lines | a dashed 1px divider outline at `radius-container`, plain values | owner (round 10: "more like area") | margin is space, not a surface |
-| border box | Figma: white, 1px rgb(230) ring, the element's radius | surface, 1px `border-divider` ring, `radius-small` | Figma's ring, Area's nested corner | — |
-| padding | Figma: grey (or blue) fill, 1px ring, radius 2 | the tone's fill, no ring, `radius-min` | the owner's reference blue | — |
+| ring size | Figma 32 columns × 24 rows | 32 × 32 squares (`control-md`, compact 28) | owner (round 10: square; round 11: "bigger"), Figma's 32 columns | square rings put corner values on the diagonal |
+| margin | Figma: a grey well rgb(245), radius 5, values as chips on crossing lines | `bg-subtle` (#f7) inside a solid 1px `border-subtle` (#d4) stroke, `radius-container` (12), plain values | owner (round 11: grey ground, a box with lines; round 12: no dashes, the family's corner) | the container family's corner, as Panel and Code block |
+| border box | Figma: white, 1px rgb(230) ring, the element's radius | surface, 1px inset `edge-control` stroke, `radius-container` (12) | Figma's ring; owner round 11 (strokes at every level, rounder) | — |
+| padding | Figma: grey (or blue) fill, 1px ring, radius 2 | the tone's fill and its strong border (neutral: `bg-active`, `border-subtle`), `radius-control-md` (8) | the owner's reference blue; round 11 strokes | — |
+| content | Figma: white, 1px dashed rgb(230), radius 2 | surface, 1px stroke in the tone's border (`info-border`; neutral `edge-control`), `radius-small` (6), at least one ring tall | Figma; round 11 strokes and corners | solid: the dashes belong to the margin |
 | values | Figma 11/16 450 | 12/16 tabular; spacing values in the tone's ink, border widths default, the size `weight-strong` | Area's smallest UI text | — |
 | corner radii | Figma: none drawn (the owner's reference: centred in 32 × 24 cells) | cap box (ring − 1cap) / 2 from both edges | owner ("sit inset equally in the corners"), inset.css cap reference | — |
 | labels | Figma 4 8 padding, Border and Padding | 4 8, Margin, Border and Padding | Figma | — |
@@ -157,9 +164,33 @@ None open. (Round 10's two were accepted; square rings replaced the 32 margin ro
 - **Why:** you asked for it to look more like Area than a copy of Figma, and for the corner numbers to be inset
   equally.
 
+## Review note, 2026-10-12 (round 12)
+
+- **What changed:** the margin is a grey box inside dashed lines again, every box has its own outline in its own colour,
+  the rings are bigger (32 instead of 24) and every corner is rounder, each nested inside the one around it.
+- **Why:** you asked for the grey background back, strokes at every level in different colours, the margin as a box
+  with lines, rounder corners and bigger shapes.
+
+## Review note, 2026-10-12 (round 13)
+
+- **What changed:** the margin box's outline is a solid line now, and its corner is the same as the inspector's other
+  containers (Panel, Code block). The inner boxes keep their rounded corners.
+- **Why:** you asked for no dashed lines and for the outer box to take its component family's corner, with the inner
+  corners still round.
+
 ## Feedback log
 
 - 2026-10-12 · owner: "keep working, start on the inspector components" → Box model from Figma Dev Mode's layer
   properties; 9 captures, 4 gallery tiles, in review.
 - 2026-10-12 · owner, review round 10 (rethink): more Area, less Figma; corners inset equally; "go with your
   recommendations" → redrawn as above; corner values measured 7.7 from both edges in all four corners. Round 11.
+- 2026-10-12 · owner, review round 11 (rethink): "the background can still be gray and there can and should be strokes at
+  every container level just the colors can be different. i do like the margin in a box with lines actually, maybe the
+  corner radius can be rounder and the layer shapes bigger overall?" → read as: the margin box gets its grey ground back
+  and keeps its dashed lines; every box (margin, border, padding, content) has a 1px stroke, each level its own colour;
+  rings 24 → 32 (`control-md`, Figma's 32 columns); corners rounder, nested (16 / 12 / 8 / 6). Round 12.
+- 2026-10-12 · owner, review round 12 (needs changes): "no dashed lines, the outer container can be its own unique radius,
+  that matches whatever component family it should be. but the inner radius should be round. maybe" → the margin box's
+  stroke is solid (`border-subtle`); its corner is the container family's (`radius-container`, 12, as Panel and Code
+  block); the inner boxes keep their rounded corners (12 / 8 / 6). Round 13.
+- 2026-10-12 · owner, review round 13: approved.

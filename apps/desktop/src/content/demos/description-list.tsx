@@ -1,6 +1,6 @@
 /** Description list gallery specimens: one variant per tile. docs/specs/description-list.md. */
 import { Avatar, Badge, DescriptionList, DescriptionListItem, Link } from "@area/react";
-import { PilotCalendarIcon, PilotCircleDashedIcon, PilotFolderIcon, PilotPersonIcon } from "../../../../docs/src/pilot-icons.tsx";
+import { PilotCalendarIcon, PilotCircleDashedIcon, PilotClockIcon, PilotFolderIcon, PilotPersonIcon, PilotTagIcon } from "../../../../docs/src/pilot-icons.tsx";
 
 /* A page's properties (Notion's columns) and an account's facts (ChatGPT's settings card). */
 const page = { inlineSize: "calc(var(--area-space-96) * 4)", maxInlineSize: "100%" };
@@ -48,5 +48,16 @@ export const GalleryDescriptionListFramed = () => (
     <DescriptionListItem term="Plan">Plus</DescriptionListItem>
     <DescriptionListItem term="Username">@davidtee</DescriptionListItem>
     <DescriptionListItem term="Member since">March 2024</DescriptionListItem>
+  </DescriptionList>
+);
+/* The first three properties, then "Show 3 more" (Notion's "N more properties"). */
+export const GalleryDescriptionListShowMore = () => (
+  <DescriptionList style={page} visibleCount={3}>
+    <DescriptionListItem term="Status" icon={<PilotCircleDashedIcon />}>In progress</DescriptionListItem>
+    <DescriptionListItem term="Owner" icon={<PilotPersonIcon />}>David Tee</DescriptionListItem>
+    <DescriptionListItem term="Due" icon={<PilotCalendarIcon />}>October 14, 2026</DescriptionListItem>
+    <DescriptionListItem term="Project" icon={<PilotFolderIcon />}>Website launch</DescriptionListItem>
+    <DescriptionListItem term="Tags" icon={<PilotTagIcon />}>Design, Launch</DescriptionListItem>
+    <DescriptionListItem term="Edited" icon={<PilotClockIcon />}>2 hours ago</DescriptionListItem>
   </DescriptionList>
 );

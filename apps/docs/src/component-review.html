@@ -36,7 +36,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--sans); font-s
 /* Page chrome only: these rules are unlayered, so they must never reach a specimen (they would
    beat Area's layered component styles, e.g. a solid Button's label ink). */
 :where(.wrap :is(select, button, textarea):not(.canvas *)) { font: inherit; color: inherit } /* zero specificity: .btn.primary and friends set their own ink */
-.wrap select { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; max-width: 100% }
+.wrap select:not(.canvas *) { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; max-width: 100% } /* page chrome only: it outranked the Select specimen (owner 2026-10-12: overlapping chevron) */
 .head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px }
 .head .name { font: 600 24px var(--sans); letter-spacing: -0.02em; margin: 0 }
 .head .meta { color: var(--muted); font-size: 13px }
@@ -190,7 +190,7 @@ const FAMILIES = window.FAMILIES || [];
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 // One collection per review round, so a family reopened after approval starts undecided (round 6: 2026-10-10).
-const ROUND = "components11", KEY = "area-component-review-11";
+const ROUND = "components20", KEY = "area-component-review-20";
 const pref = (k, d) => { try { return localStorage.getItem("area-cr-" + k) || d; } catch { return d; } };
 const setPref = (k, v) => { try { localStorage.setItem("area-cr-" + k, v); } catch {} };
 // Side by side by default (owner 2026-10-09: "be more explicit about the before and after"); only changed

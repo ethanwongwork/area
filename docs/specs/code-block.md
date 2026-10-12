@@ -1,6 +1,6 @@
 # Code block spec
 
-**Status:** accepted · 2026-09-28 (batch 22, lighter ground and brighter syntax; was: in review · 2026-09-26 (cohesion audit))
+**Status:** complete · 2026-10-12 (size sm approved, review round 12; was: accepted · 2026-09-28, batch 22)
 **Captures:** `docs/research/captures/code-block/`
 **Peers:** Code (inline form, shared ground), Tabs (language tabs), Select (language picker),
 Button sm ghost (copy), Nav and Tree view (neutral current marker), Card and Panel (container)
@@ -18,6 +18,8 @@ Button sm ghost (copy), Nav and Tree view (neutral current marker), Card and Pan
   follow the accent axis, so a pink accent produces pink strings.
 - 2026-09-26: Neutral by default, accent by override. The linked-line rail is neutral ink.
   Accent strings are syntax colour, not a selection marker, so they stay on the accent axis.
+- 2026-10-12: "keep working, start on the inspector components" (Figma Dev Mode reference; the plan named a compact
+  Code block for the inspector's code) → `size` sm, after Box model. md is unchanged.
 
 ## Job and boundaries
 
@@ -36,6 +38,7 @@ itself; the consumer passes pre-highlighted `html` or plain `code`.
 | line marks | highlighted, added, removed | Emphasis and diffs, glyph and colour | Gallery `highlighted`, `diff` |
 | linkLines | boolean | Shareable line references via `:target` | Gallery `linked` |
 | wrap / collapsed / flush | booleans | Fixed measures, long samples, embedding | Gallery `wrap`, `collapsed`, Layout / flush |
+| size | md (default), sm | md is the page block; sm is the inspector's code well beside Box model | Gallery `size-sm`, `size-sm-titled`; Figma Dev Mode's code |
 
 ## Sources
 
@@ -45,6 +48,7 @@ itself; the consumer passes pre-highlighted `html` or plain `code`.
 | area | this system | Ten gallery tiles, re-taken after the second pass | localhost gallery | — | `area--*` (10) |
 | notion | target product | No code block captured; divider ink from the Share popover and outline button (the header rule's role) | app.notion.com, second pass 2026-09-26 | evidence only | `button/notion--outline-button--rest--light` (edge rgba(28, 19, 1, 0.11)) |
 | figma | target product | No code block (Dev Mode not opened); divider ink from the select and file card | figma.com, second pass 2026-09-26 | evidence only | `card/figma--file-card--rest--light` (footer rule 1px #e6) |
+| figma-dev | target product | Dev Mode inspector's code: the code well, its heading and the List / Code tabs. Captured with Box model (Dev Mode renders behind its upgrade dialog with placeholder bars; nothing was upgraded) | figma.com, owner's file, 2026-10-12, light | evidence only | `box-model/figma-dev--code-block`, `figma-dev--code-heading`, `figma-dev--code-tabs` |
 | github-copilot | reference product (chat) | Chat answer code block: one throwaway chat created with the owner's permission (2026-10-02) | github.com/copilot, light | evidence only | `github-copilot--chat-code-block--rest--light` |
 
 Untitled UI has no code block ([reference](../research/untitled-ui-reference.md)).
@@ -111,6 +115,34 @@ ground; batch 22 moved syntax to the 500 rungs, see Decisions). Tabs (`area--lan
 | syntax | danger, discovery, info, accent vivid; punctuation and comments muted | Owner (prior); the vivid rung is each family's most saturated rung that clears 4.6:1 on the block's ground | On the white ground every family lands one rung lighter (500): keyword #e80945 4.61, tag #8d4df3 4.68, attr #006df5 4.66, string #5c5dfe 4.72 (was 550 on #fafafa, 5.4-5.5) |
 | toggle · label | UI 14/20, `fg-muted`, **400** (`code.css:447-450`) | Type ramp: 500 is for labels on fills; the toggle is transparent | Was 500 |
 | collapsed | 8 lines; toggle floats with a `bg-code` fade (`code.css:425-481`) | Area's own | — |
+
+## Size sm (2026-10-12)
+
+Figma Dev Mode's code well (`box-model/figma-dev--code-block--rest--light`):
+
+```
+figma  div.codeWell         287 wide, 1px rgba(0,0,0,.1) ring (box-shadow), radius 5, no fill, padding-top 8
+         lineNumbersColumn    20 wide (+1 column edge), numbers right-aligned, padding 0 4, 30% ink
+         codeLine             18 tall, padding 0 8, 11/18 Roboto Mono 400; bottom padding 8
+       heading row          32 tall above the well, 11/16, 16 sides (outside the well)
+```
+
+| Slot · property | Area sm (compact) | Basis | Reason when it differs |
+|---|---|---|---|
+| code type | 12 / 18 (12 / 16) mono | Figma 11/18 | 12 is Area's smallest UI text (as Box model, Citation) |
+| block inset | 8 (6) | Figma 8 top, 8 bottom | — |
+| gutter | 28 (24): numbers 4 in, code 28 in (number end 12 / 8 before it, as md) | Figma: numbers 4 in, code 29 in | Figma's 29 counts a 1px column edge Area doesn't draw |
+| diff gutter | 44 (40) | 4 + 8 marker + 4 + two digits + 12 | md's 48 formula at 12px |
+| text end / unnumbered start | 8 (6) | Figma line padding 8 | — |
+| header | 3 + Button sm (28) + 3 = 34 (+1 rule; compact 2 + 24 + 2), 12/16 UI, sides on the code column (8) | Figma's 32 heading row, 11/16 | the copy sits as far in as the floating one, so one corner serves both (owner, round 11) |
+| floating copy | centred on line 1: 8 + (18 − 28) / 2 = 3 from the top and the end; line 1 clears 3 + 28 + 8 | md's rule | — |
+| toggle | `control-sm` (28), 12/16 | md's toggle at the sm tier | — |
+| shell corner | the copy's radius + its inset + the border: 6 + 3 + 1 = **10** (compact 6 + 2 + 1 = 9); edge and ground as md | owner, round 11 ("inset corner radius for the copy button is not correct"): concentric with the copy | was `radius-container` 12, which left the copy's 6 corner 4 in under a 12 one |
+
+Area captures (`area--size-sm`, `area--size-sm-titled`) against `box-model/figma-dev--code-block`: code 12/18 in both,
+pre padding 8 / 8, numbers ending 17 from the shell's edge (1 + 28 − 12), code text 29 in (1 + 28; Figma 29), the
+floating copy 4 from the outer top and end (1 + 3), the titled header 33 (2 + 28 + 2 + 1 rule; round 12: 35, 3 + 28 + 3 + 1). Compact (checked live):
+16 lines, 6 insets, code 25 in, copy 3 + 1 in. Not captured: dark (sm changes no colour), Dev Mode's real code (paywalled).
 
 ## States
 
@@ -197,6 +229,19 @@ Open question: the toggle moves from overlay to footer at once while the code gr
 fade overlay out would need a second property on the toggle; recommendation: leave it, the jump is
 hidden by the growing edge.
 
+## Review note, 2026-10-12
+
+- **What changed:** Code block has a small size for the inspector: 12px code on 18px lines with 8px insets and a narrow
+  line-number gutter. The page-size block is unchanged.
+- **Why:** you asked for the inspector components from Figma's Dev Mode; its code panel uses this tighter well, and it
+  sits beside Box model at the panel's width.
+
+## Review note, 2026-10-12 (round 12)
+
+- **What changed:** the small code block's corner is now exactly the copy button's corner plus the gap around it, and
+  the copy button sits the same distance from the corner with or without a filename.
+- **Why:** you pointed out the copy button's corner didn't match the block's corner.
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → tabs, line numbers and the show / hide toggle keep their ink
@@ -231,3 +276,8 @@ hidden by the growing edge.
 - 2026-10-02 · chat code block measured (GitHub Copilot, light) → no change. Shell corner 12 with a 1px #d1d9e0 edge on a #fcfdfd ground; header 41 tall (padding 16 / 16 / 4 / 24), 16px code octicon 8 before a 14/21 600 filename, expand icon 16 in a 28 box ending 16 from the end; code 14/20.3 Monaspace Neon, 24 sides, 12 top, no line numbers. Corner matches Area's default 12; Copilot's 24 sides are looser than Area's 12 (owner prior, Area tokens). Copilot runs at 14px default density, so it is evidence for the default block, not for compact (still Figma Dev Mode 8 / 5). `github-copilot--chat-code-block--rest--light`.
 - 2026-10-03 · radius audit D1 (owner) → the container role is 12 at compact too (was 8; Figma 13, Cursor 12-14), so this family's surface is 12 at both densities; rows concentric with a floating surface follow (compact 24 rows r8). `docs/research/radius-audit-2026-10-03.md`.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → show and hide code animate their height (slow open, moderate close, ease-in-out, progressive enhancement); the copy check enters as a small mark → code.css. See "Motion and interaction, 2026-10-07".
+- 2026-10-12 · owner, review round 11 (rethink, size sm): "inset corner radius for the copy button is not correct" → the
+  copy (radius 6) sat 4 from the block's edge under a 12 corner, so the two corners weren't concentric (6 + 4 = 10).
+  sm's corner is now the copy's radius plus its inset from the outer edge, and the header copy uses the same inset as
+  the floating one. Round 12.
+- 2026-10-12 · owner, review round 12: approved.

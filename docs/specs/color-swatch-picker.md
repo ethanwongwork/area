@@ -1,6 +1,6 @@
 # ColorSwatchPicker spec
 
-**Status:** accepted (owner; Complete in `component-status.mjs`; was: in review · 2026-09-26 (cohesion audit; second pass with Notion and Figma))
+**Status:** complete · 2026-10-12 (approved, round 20); was: accepted (owner; Complete in `component-status.mjs`; was: in review · 2026-09-26 (cohesion audit; second pass with Notion and Figma))
 **Captures:** `docs/research/captures/color-swatch-picker/`
 **Peers:** ColorSwatch (cell content), ColorPicker (saved colours, grid view, thumb ring),
 Radio (single choice), AlignmentPicker and Segmented (selection marks), Chip swatch
@@ -165,6 +165,41 @@ running animation; the cell it left runs `background-color` and `box-shadow` for
 question: on keyboard arrowing, should the leaving ring also be instant (MOTION.md: keyboard-driven
 changes instant)? Recommendation: keep the 100ms fade; it is short enough not to lag.
 
+## Review note, 2026-10-12 (swatch ring)
+
+- **What changed:** its swatches take the new translucent outline (from Color swatch); the palette's flush tiles are unchanged.
+- **Why:** you asked why the swatch's outline only showed at its corners, then said to apply the fix: the outline is now
+  a light translucent line drawn over the colour, so it shows evenly all the way round on every colour.
+
+## Review note, 2026-10-12 (round 20)
+
+- **What changed:** the palette's selected outline is thinner: 2px (1 outside the cell, 1 inside) instead of 3, and the
+  hover outline thins to match.
+- **Why:** you asked whether the stroke thickness was correct. Measured on your iOS screenshot, the ring is about 10% of
+  a cell (3.5px on a 35px cell); Area's cells are about 20px, so 10% is 2px.
+
+## Review note, 2026-10-12 (round 19)
+
+- **What changed:** a selected colour in the palette now has a white outline around it, slightly over its edge with
+  lightly rounded corners, as in the iOS colour grid you shared; the colour itself stays as it is. A faint grey line
+  inside the white keeps it visible on white and pale colours. Hover is a lighter version of the same outline.
+- **Why:** you suggested "just an outline that goes around the swatch", with the iOS grid as the reference.
+
+## Review note, 2026-10-12 (round 18)
+
+- **What changed:** in the palette, a selected colour now gets the same ring as in the swatch rows (a dark ring with a
+  white gap inside it), drawn inside its square, and hover shows just the white gap. The raised, rounded cell and its
+  grey outer edge are gone.
+- **Why:** you said the palette's hover and selected states looked odd and asked how real examples do it. Real grids
+  (Apple's, Spectrum, Fluent, TinyMCE) keep the state inside the cell and pair a dark and a light tone so it shows on
+  every colour.
+
+## Review note, 2026-10-12 (round 17)
+
+- **What changed:** in the palette layout, the selected cell's outer edge is a solid light grey instead of a see-through
+  dark line; nothing else changed.
+- **Why:** it is the colour picker thumb's ring, which you said looked odd; both now use the same solid edge.
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → no change; spec written → `color-swatch-picker/area--*`.
@@ -181,3 +216,17 @@ changes instant)? Recommendation: keep the 100ms fade; it is short enough not to
 - 2026-10-03 · roundness → cells are the swatch's shifted corner plus the inset (`color.css`). `docs/research/radius-audit-2026-10-03.md`, "Roundness".
 - 2026-10-03 · all even (owner) → cells are the even swatch corner plus 4: 6 / 8 / 8 / 8 (`color.css`).
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → hover plate and selection ring in at once, out on `fast` (`color.css`). See "Motion and interaction, 2026-10-07".
+- 2026-10-12 · owner, review round 16: approved.
+- 2026-10-12 · reopened with Color picker's round-16 thumb-edge change (the palette's selected cell). Round 17.
+- 2026-10-12 · owner, review round 17 (rethink, palette): "looks odd, can you look at other real examples and how they do the hover/selected state" → survey `docs/research/swatch-palette-survey.md`.
+- 2026-10-12 · survey back (Fluent 2 and 8, Spectrum 2 and v3, TinyMCE, Closure, Ant, Mantine, CKEditor, Gutenberg from source; iOS estimated) → palette hover `inset 2px surface + 1px swatch ring`; selected `inset 2px fg-selection + 2px surface + 1px swatch ring`; no outer edge, raise or radius. Round 18.
+- 2026-10-12 · owner, review round 18 (rethink) with an iOS colour-grid screenshot: "maybe just an outline that goes
+  around the swatch" → selected: a 3px white outline straddling the cell edge (1 out, 2 in), radius-min corners, the
+  cell raised; a fixed black 15% line inside the white (the palette's colours ignore the theme, so the line does too);
+  hover: 2px white 70% inside + the same line. Checked at 3× in light and dark on white, pale, dark and saturated cells.
+  Round 19.
+- 2026-10-12 · owner, review round 19 (needs changes): "is the stroke thickness correct?" → measured on the owner's iOS
+  screenshot (pixel scan): cells 35.1 (12 across 421), ring ≈ 3.5 (10%), ≈ 2.5 outside and 1 inside the cell edge. Area's
+  cells ≈ 20.4 (224 / 11) → 2: 1 outside, 1 inside (was 1 + 2); hover 1px white 70% inside; the 15% line moves in to
+  match. Round 20.
+- 2026-10-12 · owner, review round 20: approved.

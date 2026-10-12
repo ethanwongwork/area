@@ -153,6 +153,12 @@ takes their motion: hover and focus edge and the focus halo in at once, out on `
 tones land at once (was: `fast` in and out, halo faded in). The swatch in the leading slot is static.
 No change in the Color field rules of `color.css`.
 
+## Review note, 2026-10-12 (swatch ring)
+
+- **What changed:** its swatch takes the new translucent outline (from Color swatch); nothing else changed.
+- **Why:** you asked why the swatch's outline only showed at its corners, then said to apply the fix: the outline is now
+  a light translucent line drawn over the colour, so it shows evenly all the way round on every colour.
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → no change; spec written → `color-field/area--*`.
@@ -168,3 +174,4 @@ No change in the Color field rules of `color.css`.
 - 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `onValueChange(value, event)` passes the committing event.
 - 2026-10-04 · quality pass after the one corner setting → the swatch is its own corner but never rounder than concentric with the field, floored (`color.css`; was 6 inside a 16 field 12 in, at 14). `docs/research/radius-audit-2026-10-03.md`, "Quality pass".
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → the hex field and group take Input's and Input group's in-at-once, out-on-fast motion. See "Motion and interaction, 2026-10-07".
+- 2026-10-12 · owner, review round 16: approved.

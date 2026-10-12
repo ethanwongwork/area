@@ -90,6 +90,8 @@
 @import "./components/timeline.css";
 @import "./components/editable-text.css";
 @import "./components/box-model.css";
+@import "./components/token-row.css";
+@import "./components/asset-row.css";
 @import "./components/toggletip.css";
 @import "./components/segmented.css";
 @import "./components/code.css";

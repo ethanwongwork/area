@@ -31,10 +31,13 @@ export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-09-28 (batch 16 again after the 16 column; batch 20).
   'model-picker', 'scroll-to-latest',
   // Approved 2026-09-28 (batch 22: lighter ground, brighter syntax; code and separator were already approved).
+  // code-block: reopened 2026-10-12 for size sm; approved again on the review page, round 12 (components12).
   'code-block',
   'box-field', 'breadcrumb',
-  'button', 'button-group', 'code',
-  'color-field', 'color-picker', 'color-swatch', 'color-swatch-picker', 'composer',
+  'button', 'button-group',
+  // code and color-swatch reopened 2026-10-12 for the translucent swatch ring (owner: "yes apply the swatch fix").
+  'composer',
+  // color-field, color-picker, color-swatch-picker, panel and property-list reopened 2026-10-12: their swatches take the ring.
   'dialog', 'field', 'input-group',
   'popover', 'progress', 'select', 'separator', 'slider',
   'table', 'tabs', 'tooltip', 'tree-view',
@@ -45,11 +48,13 @@ export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-10-09 on the review page, round 2 (components2).
   'pagination', 'scroll-area', 'toggletip', 'combobox', 'custom-select', 'tag-picker', 'drawer',
   // Approved 2026-10-09 on the review page, round 3 (components3), after the round-2 feedback.
-  'link', 'file-upload', 'command-palette', 'panel', 'alert', 'card', 'kbd', 'number-field', 'property-list',
+  'link', 'file-upload', 'command-palette', 'alert', 'card', 'kbd', 'number-field',
   // Approved 2026-10-09 on the review page, round 4 (components4): one underline on link chips.
   'chip',
   // Approved 2026-10-10 on the review page, round 5 (components5).
-  'empty-state', 'description-list',
+  'empty-state',
+  // description-list: reopened 2026-10-12 for show more (visibleCount).
+
   // Approved 2026-10-10 on the review page, round 6 (components6), after the round-5 rethink.
   'toggle-group',
   // Approved 2026-10-11 on the review page, round 7 (components7); Menu after its shortcut-column change.
@@ -57,10 +62,20 @@ export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-10-11 on the review page, round 8 (components8).
   'citation', 'search-field',
   // Approved 2026-10-12 on the review page, round 9 (components9).
-  'badge', 'board', 'editable-text', 'timeline', ]);
+  'badge', 'board', 'editable-text', 'timeline',
+  // Approved 2026-10-12 on the review page, round 13 (components13).
+  'box-model',
+  // Approved 2026-10-12 on the review page, round 15 (components15).
+  'token-row',
+  // Approved 2026-10-12 on the review page, round 16 (components16): Asset row and the swatch ring's families.
+  'asset-row', 'code', 'color-field', 'color-swatch', 'panel', 'property-list',
+  // Approved 2026-10-12 on the review page, round 17 (components17).
+  'color-picker',
+  // Approved 2026-10-12 on the review page, round 20 (components20): the palette's iOS-style outline.
+  'color-swatch-picker', ]);
 
 /** Built/refined and awaiting owner approval; not completion. */
-export const REVIEW_COMPONENTS = new Set(['box-model']);
+export const REVIEW_COMPONENTS = new Set(['description-list']);
 export const componentStatus = slug => COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
 export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined' })[status];
 
@@ -108,7 +123,7 @@ export const APPROVAL_BATCHES = [
   { name: 'Boards', families: ['board'] },
   { name: 'Timelines', families: ['timeline'] },
   { name: 'Renaming in place', families: ['editable-text'] },
-  { name: 'Inspector', families: ['box-model'] },
+  { name: 'Inspector', families: ['box-model', 'token-row', 'asset-row'] },
   { name: 'Page navigation', families: ['tabs', 'breadcrumb', 'pagination', 'link'] },
   { name: 'Scrolling', families: ['scroll-area'] },
   { name: 'Uploading', families: ['file-upload'] },
@@ -134,4 +149,4 @@ export const batchOf = slug => APPROVAL_BATCHES.findIndex(batch => batch.familie
 export const REVIEW_BATCHES = [];
 
 // Most recently designed first. Move a family to the front when its design is worked on.
-export const RECENT_COMPONENTS = ['box-model', 'editable-text', 'timeline', 'board', 'menu', 'zoom-control', 'citation', 'date-range-picker', 'shortcut-list', 'search-field', 'meter', 'description-list', 'toggle-group', 'empty-state', 'panel', 'link', 'file-upload', 'command-palette', 'toggletip', 'scroll-area', 'pagination', 'tag', 'drawer', 'confirm-dialog', 'date-picker', 'tag-picker', 'custom-select', 'accordion', 'badge-group', 'card', 'checkbox', 'radio', 'dialog', 'count', 'alert', 'toolbar', 'switch', 'code-block', 'chip', 'table', 'model-picker', 'scroll-to-latest', 'message', 'prompt-suggestions', 'hover-card', 'context-menu', 'combobox', 'composer', 'box-field', 'property-list', 'number-field', 'toast', 'popover', 'split-button', 'button-group', 'button', 'tree-view', 'breadcrumb', 'tooltip', 'badge', 'indicator', 'icon-pilot', 'color-picker', 'color-swatch-picker', 'color-field', 'color-swatch', 'alignment-picker', 'input-group', 'avatar', 'input', 'nav', 'progress', 'segmented', 'select', 'skeleton', 'spinner', 'calendar'];
+export const RECENT_COMPONENTS = ['asset-row', 'token-row', 'code-block', 'box-model', 'editable-text', 'timeline', 'board', 'menu', 'zoom-control', 'citation', 'date-range-picker', 'shortcut-list', 'search-field', 'meter', 'description-list', 'toggle-group', 'empty-state', 'panel', 'link', 'file-upload', 'command-palette', 'toggletip', 'scroll-area', 'pagination', 'tag', 'drawer', 'confirm-dialog', 'date-picker', 'tag-picker', 'custom-select', 'accordion', 'badge-group', 'card', 'checkbox', 'radio', 'dialog', 'count', 'alert', 'toolbar', 'switch', 'chip', 'table', 'model-picker', 'scroll-to-latest', 'message', 'prompt-suggestions', 'hover-card', 'context-menu', 'combobox', 'composer', 'box-field', 'property-list', 'number-field', 'toast', 'popover', 'split-button', 'button-group', 'button', 'tree-view', 'breadcrumb', 'tooltip', 'badge', 'indicator', 'icon-pilot', 'color-picker', 'color-swatch-picker', 'color-field', 'color-swatch', 'alignment-picker', 'input-group', 'avatar', 'input', 'nav', 'progress', 'segmented', 'select', 'skeleton', 'spinner', 'calendar'];

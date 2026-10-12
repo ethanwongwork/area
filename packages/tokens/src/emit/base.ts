@@ -226,8 +226,11 @@ export function derivedTokens(): Record<string, string> {
     // Dark `border-decorative` equals the stripe fill, so dark takes the faint edge (audit G-3).
     [`${PREFIX}token-edge`]: `light-dark(var(${PREFIX}border-decorative), var(${PREFIX}border-faint))`,
     [`${PREFIX}token-text`]: `var(${PREFIX}fg-default)`,
-    // ColorSwatch's solid, very light edge (audit F-30 A; was 15% of the token ink).
-    [`${PREFIX}token-swatch-ring`]: `var(${PREFIX}bg-component)`,
+    // The swatch ring, shared by Code's swatch, ColorSwatch and Asset row's preview: a translucent line drawn over
+    // the colour, so it shows evenly all round on any colour and still outlines white on white (Figma's swatch
+    // edge, black 10%; owner 2026-10-12, reversing the solid #f7 edge of 2026-09-28, which merged with light
+    // grounds on straight edges and showed only as fringe at the corners).
+    [`${PREFIX}token-swatch-ring`]: "light-dark(rgb(0 0 0 / 0.1), rgb(255 255 255 / 0.1))",
     // (radius-nested was pruned in audit S21b: concentric corners use radius-concentric, S3.)
     // Corners follow painted height (compact pass, owner 2026-10-01): the radius setting gives a
     // corner per pixel and the UI scale the heights. A live calc, so a `data-area-ui` or

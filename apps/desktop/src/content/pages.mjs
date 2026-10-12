@@ -316,6 +316,35 @@ export const COMPONENT_PAGES = [
     ],
   },
   {
+    slug: "token-row", name: "Token row", exportName: "TokenRow", manifest: "tokenRow",
+    imports: "TokenRow",
+    api: [
+      ["name", "the token's name", "—"],
+      ["value", "its resolved value, muted at the end", "—"],
+      ["swatch", "a CSS colour: the token shows its swatch, as Code's swatch", "—"],
+      ["outline", "the token's edge without its fill", "false"],
+      ["copyable / copyText", "a button that copies copyText, else the value, else the name", "false / —"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "Figma Dev Mode's Colors: the token's own plate (Code with its swatch) widened to the row, the name at its start and the value at its end.", demo: "GalleryTokenRow" },
+      { id: "plain", title: "Other tokens", note: "A spacing, radius or number token is the plain token, without a swatch.", demo: "GalleryTokenRowPlain" },
+      { id: "copy", title: "Copy", note: "copyable makes the row a button that copies the value and says Copied once.", demo: "GalleryTokenRowCopyable" },
+    ],
+  },
+  {
+    slug: "asset-row", name: "Asset row", exportName: "AssetRow", manifest: "assetRow",
+    imports: "AssetRow",
+    api: [
+      ["name / meta", "the asset's name / a detail line such as format and size", "—"],
+      ["preview / previewAlt", "an image URL or an element drawn in the 56px well / the image's text alternative", "— / \"\""],
+      ["actions", "trailing actions, such as a download button", "—"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "Figma Dev Mode's Assets: a 56px preview well, the asset's name and its format and size.", demo: "GalleryAssetRow" },
+      { id: "action", title: "With an action", note: "A trailing download or export button.", demo: "GalleryAssetRowAction" },
+    ],
+  },
+  {
     slug: "editable-text", name: "Editable text", exportName: "EditableText", manifest: "editableText",
     imports: "EditableText",
     api: [
@@ -354,6 +383,10 @@ export const COMPONENT_PAGES = [
     slug: "description-list", name: "Description list", exportName: "DescriptionList", manifest: "descriptionList",
     imports: "DescriptionList, DescriptionListItem",
     api: [
+      ["visibleCount", "rows shown before a Show N more button", "all"],
+      ["expanded / defaultExpanded / onExpandedChange", "every row shown, controlled or not", "— / false / —"],
+      ["moreLabel / lessLabel", "the button's labels; moreLabel may be a function of the hidden count", "Show {n} more / Show less"],
+      
       ["layout", "\"columns\" (a term column, Notion's properties) | \"justified\" (term at the start, value at the end, ChatGPT's settings)", "columns"],
       ["divided / framed", "boolean (a rule between rows) / boolean (Table's frame)", "—"],
       ["DescriptionListItem", "term (ReactNode), icon (16px, decorative), children (the value), and native div props", "—"],
@@ -506,6 +539,7 @@ export const COMPONENT_PAGES = [
       ["actions", "ReactNode", "—"],
       ["flush", "boolean", "false"],
       ["wrap", "boolean", "false"],
+      ["size", '"sm" | "md": sm is the inspector\'s code well (12px code on 18px lines, 8px insets)', '"md"'],
       ["…props", "HTMLAttributes<HTMLDivElement>", "—"],
     ],
     examples: [
@@ -520,6 +554,8 @@ export const COMPONENT_PAGES = [
       { id: "wrap", title: "Wrapped", note: "The default scrolls horizontally. Wrap instead inside a fixed measure, where a scrollbar would hide the end of the line.", demo: "CodeBlockWrap" },
       { id: "collapsed", title: "Collapsed", note: "collapsible shows a control over an excerpt; the block still renders its own source, so nothing is hidden from a reader who never opens it.", demo: "CodeBlockCollapsed" },
       { id: "flush", title: "Flush", note: "Use flush when the block is already framed by a parent example container.", demo: "CodeBlockFlush" },
+      { id: "size-sm", title: "Size sm", note: "The inspector's code well, after Figma Dev Mode: 12px code on 18px lines, 8px insets and a narrow gutter, at a panel's width.", demo: "CodeBlockSmall" },
+      { id: "size-sm-titled", title: "Size sm with filename", note: "The header steps down with it: a 28px copy control in a 32px row.", demo: "CodeBlockSmallTitled" },
     ],
   },
   {
