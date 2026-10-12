@@ -9,14 +9,15 @@
  * (packages/tokens/src/axes/typography.ts).
  */
 import { useState } from "react";
-import { Button, Field, Nav, NavGroup, NavItem, PanelSection, Segmented, Table, TableLink, Textarea } from "@area/react";
-import { PilotCheckIcon, PilotCopyIcon } from "../../../docs/src/pilot-icons.tsx";
+import { Code, EmptyState, Field, Nav, NavGroup, NavItem, PanelSection, Segmented, Table, TableLink, Textarea } from "@area/react";
+import { CheckIcon, CopyIcon } from "@area/icons";
 import { CanvasSettings } from "../canvas-settings.tsx";
-import { SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
-import { CanvasSection, ListFrame, Tile, TileGrid } from "../tile.tsx";
+import { ChromeButton, SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
+import { CanvasSection } from "../tile.tsx";
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
 import { Facts } from "../facts.tsx";
 import { matches } from "../search.ts";
+import { onGridKeys } from "../grid-keys.ts";
 import { TYPE_ROLES, type TypeRole } from "../tokens.ts";
 import { readStored, writeStored } from "../storage.ts";
 
@@ -61,8 +62,7 @@ const metrics = (role: TypeRole, density: "default" | "compact") => {
 function CopyToken({ token }: { token: string }) {
   const [done, setDone] = useState(false);
   return (
-    <Button variant="ghost" tone="neutral" size="sm" iconOnly icon={done ? <PilotCheckIcon /> : <PilotCopyIcon />}
-      aria-label={`Copy ${token}`} title="Copy"
+    <ChromeButton label={`Copy ${token}`} icon={done ? <CheckIcon /> : <CopyIcon />}
       onClick={async () => { try { await navigator.clipboard.writeText(`var(${token})`); setDone(true); setTimeout(() => setDone(false), 1600); } catch {} }} />
   );
 }
@@ -84,7 +84,7 @@ export function TypographyPage() {
 
   return (
     <Workspace
-      sidebar={<SidebarList>{shown.length ? (
+      sidebar={<SidebarList>{
         <Nav aria-label="Type roles">
           <SidebarAll tab="typography" count={shown.length} current={!view} />
           {GROUPS.map(group => {
@@ -101,7 +101,7 @@ export function TypographyPage() {
             ) : null;
           })}
         </Nav>
-      ) : <p className="studio-empty-note">No type roles match “{query}”.</p>}</SidebarList>}
+      }</SidebarList>}
       canvasActions={
         <ViewControls>
           <ViewFilter label="Weight" value={weights} onChange={setWeights}
@@ -112,22 +112,32 @@ export function TypographyPage() {
       canvasTitle={view ? view.name : "All roles"}
       canvasMeta={<span className="studio-muted studio-tabular">{view ? metrics(view, density) : shown.length}</span>}
       canvas={view ? (
-        // One role: at the Canvas's density in each weight, then at each density, in the sample line.
-        <TileGrid span="row">
+        // One role: at the Canvas's density in each weight, then at each density, in the sample line,
+        // as ruled rows on the Canvas's surface (owner, 2026-10-12: type sits on the surface; a
+        // specimen is text, which needs no container).
+        <div className="studio-type-rows">
           {([
             ["regular", undefined, "Regular"],
             ["strong", undefined, "Strong"],
             [weight, "default", "Default density"],
             [weight, "compact", "Compact density"],
           ] as const).filter(([w, ui]) => ui || weights === "all" || weights === w).map(([w, ui, label]) => (
-            <Tile key={label} span="row" stage="flow" label={label}
-              value={metrics(view, ui ?? density)} stageScope={ui ? { "data-area-ui": ui } : undefined}>
-              <span className="studio-type__sample" style={roleStyle(view, w)}>{sample || SAMPLE}</span>
-            </Tile>
+            <section key={label} className="studio-type-row" aria-label={label}>
+              <div className="studio-type-row__head" data-area-ui="compact">
+                <span>{label}</span>
+                <span className="studio-tabular">{metrics(view, ui ?? density)}</span>
+              </div>
+              <div {...(ui ? { "data-area-ui": ui } : {})}>
+                <span className="studio-type__sample" style={roleStyle(view, w)}>{sample || SAMPLE}</span>
+              </div>
+            </section>
           ))}
-        </TileGrid>
+        </div>
+      ) : !shown.length ? (
+        // No matches: the Sidebar keeps All, and the Canvas says so (product UI rule 10, docs/PRODUCT_UI.md).
+        <EmptyState title="No type roles" description={`Nothing matches “${query}”.`} />
       ) : (
-        <div className="studio-sections">
+        <div className="studio-sections" onKeyDown={onGridKeys}>
           {GROUPS.flatMap(group => WEIGHTS.filter(w => weights === "all" || weights === w.id).map(w => {
             const list = shown.filter(entry => (group.groups as readonly string[]).includes(entry.group));
             if (!list.length) return null;
@@ -136,21 +146,27 @@ export function TypographyPage() {
               <CanvasSection key={`${group.id}-${w.id}`} id={`type-${group.id}-${w.id}`} title={`${group.label}${w.suffix}`}
                 lede={w.id === "regular" ? group.lede : `The same ramp at the strong weight (${w.value}), for emphasis and titles that need it.`}>
                 {mode === "grid" ? (
-                  // Grid: every style a wide tile, its name and values over an "Aa" set in the style.
-                  <TileGrid span="wide">
+                  // Grid: every style a cell on the surface, its "Aa" set in the style over its name and
+                  // values, with the icon cells' plates (Cursor's sheet; no containers for type).
+                  <div className="studio-type-sheet">
                     {list.map(entry => (
-                      <Tile key={entry.id} span="wide" stage="center" pressable label={styleName(entry)} value={metrics(entry, density)}
-                        selected={entry.id === role.id} onSelect={() => setSelected(entry.id)}>
-                        <span style={roleStyle(entry, w.id)}>Aa</span>
-                      </Tile>
+                      <button key={entry.id} type="button" className="studio-type-cell" aria-pressed={entry.id === role.id}
+                        aria-label={`${styleName(entry)}, ${metrics(entry, density)}`} onClick={() => setSelected(entry.id)}>
+                        <span className="studio-type-cell__sample" style={roleStyle(entry, w.id)} aria-hidden="true">Aa</span>
+                        <span className="studio-type-cell__label" data-area-ui="compact" aria-hidden="true">
+                          <span>{styleName(entry)}</span>
+                          <span className="studio-muted studio-tabular">{metrics(entry, density)}</span>
+                        </span>
+                      </button>
                     ))}
-                  </TileGrid>
+                  </div>
                 ) : (
                   // List: Geist's table, each example its own name set in its own style.
-                  <ListFrame>
-                    <Table size="lg" interactive aria-label={`${group.label}${w.suffix}`}>
+                  // On the surface (a flush Table), every cell on its first baseline, so a 72 example
+                  // and its 14 token share a line.
+                  <Table size="lg" interactive flush baseline aria-label={`${group.label}${w.suffix}`}>
                       {/* One set of column widths for every table, so the columns line up down the Canvas. */}
-                      <colgroup><col style={{ inlineSize: "46%" }} /><col style={{ inlineSize: "20%" }} /><col style={{ inlineSize: "10%" }} /><col /></colgroup>
+                      <colgroup><col style={{ inlineSize: "40%" }} /><col style={{ inlineSize: "26%" }} /><col style={{ inlineSize: "10%" }} /><col /></colgroup>
                       <thead>
                         <tr><th scope="col">Example</th><th scope="col">Token</th><th scope="col">Weight</th><th scope="col">Usage</th></tr>
                       </thead>
@@ -163,14 +179,13 @@ export function TypographyPage() {
                                 {styleName(entry)}
                               </TableLink>
                             </td>
-                            <td><span className="studio-type__token"><code className="studio-mono">--area-{entry.id}</code><CopyToken token={`--area-${entry.id}-size`} /></span></td>
+                            <td><span className="studio-type__token"><Code>--area-{entry.id}</Code><CopyToken token={`--area-${entry.id}-size`} /></span></td>
                             <td><span className="studio-tabular">{w.value}</span></td>
                             <td><span className="studio-muted">{USAGE[entry.id]}</span></td>
                           </tr>
                         ))}
                       </tbody>
-                    </Table>
-                  </ListFrame>
+                  </Table>
                 )}
               </CanvasSection>
             );
@@ -194,7 +209,7 @@ export function TypographyPage() {
           ) : null}
           <PanelSection heading="Role">
             <Facts label="Role" items={[
-              ["Token", <code className="studio-mono">--area-{role.id}</code>],
+              ["Token", <Code>--area-{role.id}</Code>],
               ["Default", metrics(role, "default")],
               ["Compact", metrics(role, "compact")],
               ["Ratio", (role.metrics[density].leading / role.metrics[density].size).toFixed(2)],

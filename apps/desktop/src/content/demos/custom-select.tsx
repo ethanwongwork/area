@@ -1,7 +1,7 @@
 /** Custom select gallery specimens: one variant per tile. docs/specs/custom-select.md. */
 import type { CSSProperties } from "react";
 import { CustomSelect, type CustomSelectOption } from "@area/react";
-import { PilotGlobeIcon, PilotGalleryIcon, PilotKanbanIcon, PilotListIcon, PilotLockIcon, PilotTableIcon, PilotCalendarIcon } from "../pilot-icons.tsx";
+import { PilotGlobeIcon, PilotGalleryIcon, PilotKanbanIcon, PilotListIcon, PilotLockIcon, PilotTableIcon, PilotCalendarIcon } from "../../../../docs/src/pilot-icons.tsx";
 
 /* Notion's Share popover access levels: a label and a line saying what it allows. */
 const access: CustomSelectOption[] = [

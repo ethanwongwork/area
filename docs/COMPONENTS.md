@@ -10,7 +10,7 @@ Completion is owner-confirmed. Refining a family reopens it as **in review**; hi
 audits and passing builds do not confer approval.
 
 The single executable status source is
-[`component-status.mjs`](../apps/docs/src/component-status.mjs). Both the gallery and
+[`component-status.mjs`](../apps/desktop/src/content/component-status.mjs). Both the gallery and
 sidebar read it. Complete labels use green-500; unrefined labels use red-500/red-25 and
 specimen tiles use a red-500 edge while retaining the active themed surface. Explicit
 words accompany the colors in the gallery.

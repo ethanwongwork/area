@@ -1151,6 +1151,9 @@
    * once and fades out on `fast` (--area-transition) as the pointer leaves. Keyboard movement is
    * instant both ways: while a row has keyboard focus no row trails a fade behind the arrow keys.
    */
+  /* Pressed (product UI rule 3, docs/PRODUCT_UI.md; DESIGN_SYSTEM.md "Shared state paint"): the row
+     takes the active fill while held, one step above hover, landing at once like the hover. */
+  .area-menu__item:active:not([data-disabled], [data-selected]) { background-color: var(--area-bg-component-active); }
   @media (hover: hover) { .area-menu__item:hover { transition-duration: 0s; } }
   .area-menu__item:is([data-highlighted], [data-selected], :focus-visible, :active, [aria-expanded="true"]),
   .area-menu:has(.area-menu__item:focus-visible) .area-menu__item { transition-duration: 0s; }

@@ -19,7 +19,7 @@ marker (see [Build](#5-build)). Mapping them to shared tokens is a later, separa
    reference and from Area itself, produced by one script so they compare directly.
 3. **The implementation:** CSS, `manifest.ts`, React, source-shared demos, one variant per
    gallery tile, and the docs page, all agreeing.
-4. **Owner acceptance,** recorded in `apps/docs/src/component-status.mjs`. Until then the
+4. **Owner acceptance,** recorded in `apps/desktop/src/content/component-status.mjs`. Until then the
    component is In review, however complete the evidence looks.
 
 ## Evidence
@@ -281,10 +281,10 @@ acceptance stands until a change reopens it. To audit one:
 
 Show the result in the component gallery (`index.html`). Every variant the manifest exposes
 has a tile, ordered by the gallery's groups (Default, Variants, Tones, Sizes, Layout, Content,
-States, Behavior; see `specimenGroup` in `apps/docs/scripts/specimen-names.mjs`), labelled
+States, Behavior; see `specimenGroup` in `apps/desktop/src/content/specimen-names.mjs`), labelled
 `Group / value` and named by its category so it lands in the right group: `size-sm`,
 `tone-accent`, `state-disabled`, `layout-vertical`. Tile size is measured, not declared
-(`apps/docs/src/gallery/fit.ts`): a specimen that fits its 4:3 tile shows at 1:1, a larger one
+(`apps/desktop/src/gallery/fit.ts`): a specimen that fits its 4:3 tile shows at 1:1, a larger one
 scales to fit, and one that would fall below half size takes a 2 x 2 tile.
 The gallery's Mode and Density controls change only the canvas. Then give the owner:
 

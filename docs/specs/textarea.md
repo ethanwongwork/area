@@ -78,7 +78,7 @@ read-only keeps the default fill.
 `area--soft` has no shadow (it had `shadow-1` before the second pass). The radius was 8 at every
 size at capture; since audit S4 it is 6 sm, 8 md, 10 lg.
 
-The size tiles set `rows={3}` (`apps/docs/src/demos/gallery.tsx:957-959`): sm is 3 × 16 + 6 +
+The size tiles set `rows={3}` (`apps/desktop/src/content/demos/gallery.tsx:957-959`): sm is 3 × 16 + 6 +
 2 = 56; lg reaches its 2 × `control-lg` floor (80).
 
 ## Decisions

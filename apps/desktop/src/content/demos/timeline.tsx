@@ -1,6 +1,6 @@
 /** Timeline gallery specimens: one variant per tile. docs/specs/timeline.md. */
 import { Avatar, Timeline, TimelineItem } from "@area/react";
-import { CheckIcon, DocumentIcon, EditIcon, PlusIcon } from "../icons.tsx";
+import { CheckIcon, DocumentIcon, EditIcon, PlusIcon } from "../../../../docs/src/icons.tsx";
 
 const frame = { inlineSize: 280 };
 

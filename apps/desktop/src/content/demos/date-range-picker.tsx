@@ -1,7 +1,7 @@
 /** Date range picker gallery specimens: one variant per tile. docs/specs/date-range-picker.md. */
 import type { CSSProperties } from "react";
 import { DateRangePicker } from "@area/react";
-import { PilotCalendarIcon } from "../pilot-icons.tsx";
+import { PilotCalendarIcon } from "../../../../docs/src/pilot-icons.tsx";
 
 /* A fixed today, so the specimens render the same month every day (as Date picker's and Calendar's tiles). */
 const today = "2026-10-10";

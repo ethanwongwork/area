@@ -1,6 +1,6 @@
 /** Anchored overlays: Popover, Menu and Tooltip opened from a trigger. */
 import { Button, Field, Input, Kbd, Menu, MenuItem, MenuLabel, MenuSeparator, Popover, PopoverBody, PopoverDescription, PopoverHeader, PopoverTitle, Tooltip } from "@area/react";
-import { ChevronIcon, SearchIcon, SettingsIcon } from "../icons.tsx";
+import { ChevronIcon, SearchIcon, SettingsIcon } from "../../../../docs/src/icons.tsx";
 
 export const GalleryOverlayPopover = () => (
   <Popover trigger={<Button variant="outline">Open</Button>}>

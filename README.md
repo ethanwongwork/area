@@ -26,9 +26,12 @@ full size) and the **Inspector** (canvas settings and facts about the selection)
 compact UI scale and is built from Area's own components; the Canvas carries its own density,
 radius and pills from the Inspector.
 
-The documentation site (`apps/docs`, `npm run dev:docs`) is archived. The app still imports its
-demos, gallery specimens, page content and icons, so those stay in place. Reviews of icons and
-components are published as artifacts.
+**The app is the source of truth** (owner, 2026-10-12). Area consumes itself: the app is built only
+from Area, and it is the one place components, icons, type, colour and their states are shown and
+judged. The documentation site (`apps/docs`, `npm run dev:docs`) is archived and is not a source of
+truth. Component content and status, specimens and every demo now live in the app
+(`apps/desktop/src/content`); the icon pipeline still sits in the site's folder until it moves to
+`packages/icons`. Edit sources where they are and judge the result in the app. Reviews of icons and components are published as artifacts.
 
 ## Use the library
 
@@ -57,7 +60,8 @@ unpublished ESM workspaces; publishing them is separate work.
 - `packages/styles/`: component CSS and the shared variant manifest.
 - `packages/react/`: components, native behavior, composition and typed helpers.
 - `apps/desktop/`: the app (Electron): Titlebar, Sidebar, Canvas, Inspector.
-- `apps/docs/`: archived site; still the source of demos, specimens, page content and icons.
+- `apps/docs/`: archived site, not a source of truth; its icon sources and generator move to
+  `packages/icons` next, then the site is deleted.
 - `tests/` and `scripts/`: consumer checks, retained fixtures and package build helpers.
 
 ## Essential documentation
@@ -71,7 +75,7 @@ unpublished ESM workspaces; publishing them is separate work.
 - [Contrast](docs/CONTRAST.md): color, focus and accessibility constraints.
 - [Development](docs/DEVELOPMENT.md): architecture, commands, testing and generated files.
 
-The gallery's [completion registry](apps/docs/src/component-status.mjs) is authoritative.
+The gallery's [completion registry](apps/desktop/src/content/component-status.mjs) is authoritative.
 New and refined families stay In review until the owner accepts them.
 
 Session notes live in [the handoff](.Codex/HANDOFF.md); history lives in the journal

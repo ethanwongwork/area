@@ -1,6 +1,6 @@
 import { createElement } from "react";
 import { hydrateRoot } from "react-dom/client";
-import * as demos from "./demos/gallery.tsx";
+import * as demos from "../../desktop/src/content/demos/gallery.tsx";
 
 /*
  * Code blocks are hydrated wherever they are shown, because the copy control, the

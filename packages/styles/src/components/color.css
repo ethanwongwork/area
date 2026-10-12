@@ -30,8 +30,10 @@
        the side (Figma's document swatches and edge layer, `figma--swatches`). Was min(radius-small,
        size / 4): 25% up to 24px, then capped at 6, so larger swatches read squarer. */
     --_shape: 0.2; /* at the default; scales with the setting, square at Sharp */
-    /* Required: it keeps a white swatch visible, so it ignores the Surface axis (audit F-5). */
-    --_edge: var(--area-stroke-width);
+    /* The edge is the palette's transparent hairline, drawn over the colour (below), not a solid ring
+       outside it (owner, 2026-10-12: one swatch outline everywhere, the palette's and the colour
+       cards'). Required: it keeps a white swatch visible, so it ignores the Surface axis (audit F-5). */
+    --_edge: 0px;
     /* Rounded to even pixels (radius audit D6; all even, owner 2026-10-03): 12 -> 2, 16, 20 and
        24 -> 4 at the default; times setting / 8 elsewhere (4 x factor). */
     --_radius: max(var(--area-radius-min), round(nearest, calc(var(--_size) * var(--_shape) * 4 * var(--area-radius-factor)), 2px));
@@ -67,6 +69,12 @@
   :is(.area-color-picker__preview-new, .area-color-picker__preview-original)::after {
     background: var(--_swatch-color);
     box-shadow: inherit;
+  }
+  /* The swatch picker palette's hairline: 1px black 10% (white 10% in dark), inside the shape, so a
+     swatch is outlined on any ground and the colour shows through its rim (spec: color.css palette). */
+  .area-color-swatch {
+    outline: var(--area-border-width) solid light-dark(rgb(0 0 0 / 0.1), rgb(255 255 255 / 0.1)); /* spec */
+    outline-offset: calc(var(--area-border-width) * -1);
   }
   .area-color-swatch--sm { --_size: var(--area-mark-sm); }
   .area-color-swatch--md { --_size: var(--area-mark-md); }
@@ -147,7 +155,7 @@
   }
   .area-color-swatch-picker--palette > .area-color-swatch-picker__cell { inline-size: auto; block-size: auto; aspect-ratio: 1; border-radius: 0; }
   .area-color-swatch-picker--palette > .area-color-swatch-picker__cell > .area-color-swatch {
-    inline-size: 100%; block-size: 100%; --_radius: 0px; --_inner-radius: 0px; --_edge: 0px; box-shadow: none;
+    inline-size: 100%; block-size: 100%; --_radius: 0px; --_inner-radius: 0px; --_edge: 0px; box-shadow: none; outline: none;
     /* The rings are the swatch's (its colour layer inherits them): in at once, out on fast (motion, 2026-10-07). */
     transition: box-shadow var(--area-duration-fast) var(--area-ease-out);
   }

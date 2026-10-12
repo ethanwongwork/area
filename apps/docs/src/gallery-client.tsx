@@ -2,8 +2,8 @@ import { createElement } from "react";
 import { hydrateRoot } from "react-dom/client";
 import { GalleryControls, GalleryNav, type GalleryPage, type GallerySection } from "./gallery/chrome.tsx";
 import { annotateRoundness } from "./gallery/roundness.ts";
-import { GALLERY_CANVAS_ID } from "./gallery/controls.ts";
-import { fitTiles } from "./gallery/fit.ts";
+import { GALLERY_CANVAS_ID } from "../../desktop/src/gallery/controls.ts";
+import { fitTiles } from "../../desktop/src/gallery/fit.ts";
 
 // The prefixes match the build's renderToString calls (scripts/component-gallery.mjs).
 const nav = document.getElementById("gallery-nav");

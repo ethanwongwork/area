@@ -1,10 +1,10 @@
-import { specimenName, specimenGroup, specimenLabel, SPECIMEN_GROUPS } from "./specimen-names.mjs";
+import { specimenName, specimenGroup, specimenLabel, SPECIMEN_GROUPS } from "../../desktop/src/content/specimen-names.mjs";
 import { buildInsetFixture } from "./inset-fixture.mjs";
 import { docsOutput } from "./output.mjs";
 import { baseTokens } from "../../../packages/tokens/src/emit/base.ts";
 import { buildLab } from "./lab.mjs";
 import { componentGalleryPage, iconsPage, reviewPage, roundnessPage } from "./component-gallery.mjs";
-import { componentSpecimens as familySpecimens, demoWrapper } from "../src/gallery/specimens.mjs";
+import { componentSpecimens as familySpecimens, demoWrapper } from "../../desktop/src/content/specimens.mjs";
 /**
  * Builds the documentation site.
  *
@@ -31,8 +31,8 @@ import {
 } from "./layout.mjs";
 import { ICONS } from "./icons.generated.mjs";
 import { CATALOG } from "./icons.catalog.mjs";
-import { COMPONENT_PAGES } from "../src/pages.mjs";
-import { COMPLETE_COMPONENTS, RECENT_COMPONENTS, REVIEW_BATCHES, REVIEW_COMPONENTS, componentStatus } from "../src/component-status.mjs";
+import { COMPONENT_PAGES } from "../../desktop/src/content/pages.mjs";
+import { COMPLETE_COMPONENTS, RECENT_COMPONENTS, REVIEW_BATCHES, REVIEW_COMPONENTS, componentStatus } from "../../desktop/src/content/component-status.mjs";
 import { PRACTICES } from "../src/practices.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");

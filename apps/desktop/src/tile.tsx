@@ -15,7 +15,7 @@
  * A grid holds one span (TileGrid), so wide tiles always line up on pairs of units.
  *
  * The class names are the docs gallery's (gallery-tile, __view, __stage), so the shared fit
- * (apps/docs/src/gallery/fit.ts) still finds component specimens.
+ * (src/gallery/fit.ts) still finds component specimens.
  */
 import type { CSSProperties, ReactNode } from "react";
 
@@ -44,6 +44,9 @@ export interface TileProps {
   pressable?: boolean;
   /** Names the tile when the label alone would not ("Button: Sizes / sm"). */
   "aria-label"?: string;
+  /** What a pin menu pins (src/organize.tsx, PinMenu): the thing's key and its name. */
+  "data-key"?: string;
+  "data-name"?: string;
   /** The tile painted as its visual: a colour and the ink that reads on it. */
   paint?: { background: string; color: string };
   /**
@@ -58,7 +61,7 @@ export interface TileProps {
   children?: ReactNode;
 }
 
-export function Tile({ label, value, span, stage, selected, onSelect, pressable, "aria-label": ariaLabel, paint, scope, stageScope, inert, children }: TileProps) {
+export function Tile({ label, value, span, stage, selected, onSelect, pressable, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, paint, scope, stageScope, inert, children }: TileProps) {
   // A pressable tile is a button, which holds phrasing content only: its parts are spans there.
   const Part = pressable ? "span" : "div";
   const head = (
@@ -77,11 +80,24 @@ export function Tile({ label, value, span, stage, selected, onSelect, pressable,
     "data-painted": paint ? "" : undefined,
     "data-scoped": scope ? "" : undefined,
     "aria-label": ariaLabel,
+    "data-key": dataKey,
+    "data-name": dataName,
     style: paint ? ({ "--_paint": paint.background, "--_ink": paint.color } as CSSProperties) : undefined,
     ...scope,
   };
   if (pressable) {
     return <button type="button" {...shared} aria-pressed={selected ?? false} onClick={onSelect}>{head}{view}</button>;
+  }
+  // A tile whose stage is inert has nothing inside to focus, so the tile itself is the control: a
+  // Tab stop that Enter or Space selects, its state as aria-pressed (product UI rule 5). Its content
+  // can be block-level drawings, which a <button> may not hold.
+  if (inert && onSelect) {
+    return (
+      <article {...shared} role="button" tabIndex={0} aria-pressed={selected ?? false} onClick={onSelect}
+        onKeyDown={event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onSelect(); } }}>
+        {head}{view}
+      </article>
+    );
   }
   return (
     <article {...shared} data-selected={selected ? "" : undefined} onPointerDown={onSelect} onFocusCapture={onSelect}>
@@ -105,13 +121,4 @@ export function CanvasSection({ id, title, lede, children }: { id: string; title
       {children}
     </section>
   );
-}
-
-/**
- * A list view's frame: an Area Table at the tiles' corner. Radius 14 is the setting whose
- * container corner is the tiles' 24 (the surface ladder), so a list and a grid of the same things
- * share their shape.
- */
-export function ListFrame({ children }: { children: ReactNode }) {
-  return <div className="studio-list" data-area-radius="14">{children}</div>;
 }

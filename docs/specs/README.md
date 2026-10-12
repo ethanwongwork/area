@@ -7,7 +7,7 @@ from [the template](TEMPLATE.md). Raw measurements live in
 [`docs/research/captures/`](../research/captures/), and the shared cross-product baseline is
 [research/BASELINE.md](../research/BASELINE.md).
 
-Completion is recorded only in `apps/docs/src/component-status.mjs`; a spec status of
+Completion is recorded only in `apps/desktop/src/content/component-status.mjs`; a spec status of
 "accepted" mirrors it.
 
 | Component | Spec status | Notes |

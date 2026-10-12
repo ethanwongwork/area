@@ -1,7 +1,7 @@
 import { createElement } from "react";
 import { hydrateRoot } from "react-dom/client";
-import * as formDemos from "./demos/form.tsx";
-import { GalleryNumberFieldPlain, GalleryInputGroupAffixes, GalleryInputGroupPair, GalleryInputGroupIcon, GalleryInputGroupOpacity, GalleryInputGroupRotation, GalleryInputGroupLetter, GalleryInputGroupMode, GalleryInputGroupPhone, GalleryInputGroupAction } from "./demos/gallery.tsx";
+import * as formDemos from "../../desktop/src/content/demos/form.tsx";
+import { GalleryNumberFieldPlain, GalleryInputGroupAffixes, GalleryInputGroupPair, GalleryInputGroupIcon, GalleryInputGroupOpacity, GalleryInputGroupRotation, GalleryInputGroupLetter, GalleryInputGroupMode, GalleryInputGroupPhone, GalleryInputGroupAction } from "../../desktop/src/content/demos/gallery.tsx";
 
 const demos = { ...formDemos, GalleryNumberFieldPlain, GalleryInputGroupAffixes, GalleryInputGroupPair, GalleryInputGroupIcon, GalleryInputGroupOpacity, GalleryInputGroupRotation, GalleryInputGroupLetter, GalleryInputGroupMode, GalleryInputGroupPhone, GalleryInputGroupAction };
 

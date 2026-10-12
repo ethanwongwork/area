@@ -1,6 +1,6 @@
 /** Board gallery specimens: one variant per tile. docs/specs/board.md. */
 import { Avatar, Board, BoardCard, BoardColumn, Button, Tag } from "@area/react";
-import { DocumentIcon, EditIcon, MoreIcon, PlusIcon } from "../icons.tsx";
+import { DocumentIcon, EditIcon, MoreIcon, PlusIcon } from "../../../../docs/src/icons.tsx";
 
 const headerActions = (name: string) => <>
   <Button variant="ghost" tone="neutral" size="sm" iconOnly icon={<PlusIcon />} aria-label={`Add to ${name}`} />

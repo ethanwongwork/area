@@ -1,7 +1,7 @@
 /** Toggle group gallery specimens: one variant per tile. docs/specs/toggle-group.md. */
 import { useState } from "react";
 import { ToggleGroup, ToggleGroupItem, Toolbar, ToolbarSeparator } from "@area/react";
-import { BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon } from "../icons.tsx";
+import { BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon } from "../../../../docs/src/icons.tsx";
 
 /* The formatting set every reference shows: any of bold, italic, underline and strikethrough. */
 const marks = [

@@ -790,7 +790,7 @@ export const table = {
   block: "area-table",
   description: "Presents rows of structured data.",
   variants: { size: ["sm", "md", "lg"] },
-  booleans: ["interactive", "striped", "column-dividers"],
+  booleans: ["interactive", "striped", "column-dividers", "flush", "baseline"],
   elements: ["cell", "link"],
   elementModifiers: { cell: ["numeric", "fit"] },
   defaults: { size: "md" },

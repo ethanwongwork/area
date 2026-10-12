@@ -1,6 +1,6 @@
 /** Description list gallery specimens: one variant per tile. docs/specs/description-list.md. */
 import { Avatar, Badge, DescriptionList, DescriptionListItem, Link } from "@area/react";
-import { PilotCalendarIcon, PilotCircleDashedIcon, PilotFolderIcon, PilotPersonIcon } from "../pilot-icons.tsx";
+import { PilotCalendarIcon, PilotCircleDashedIcon, PilotFolderIcon, PilotPersonIcon } from "../../../../docs/src/pilot-icons.tsx";
 
 /* A page's properties (Notion's columns) and an account's facts (ChatGPT's settings card). */
 const page = { inlineSize: "calc(var(--area-space-96) * 4)", maxInlineSize: "100%" };

@@ -3,7 +3,7 @@
  * sits in. Shared by the docs build (scripts/build.mjs) and the desktop app (apps/desktop), so
  * both galleries show the same tiles from the same demos.
  */
-import { COMPONENT_PAGES } from "../pages.mjs";
+import { COMPONENT_PAGES } from "./pages.mjs";
 
 /*
  * Every family's gallery specimens: one tile per variant, read by the component gallery

@@ -235,3 +235,5 @@ Open questions:
   row's end in every row (was 39 / 36) → inset.css (`--_box-end`), surface.css (margin); new tile "Content / plain and
   check rows" (`GalleryMenuMixedRows`). Back in review.
 - 2026-10-11 · owner, review round 7: approved (shortcut column in mixed menus).
+- 2026-10-12 · owner adopted the product UI rules (docs/PRODUCT_UI.md, rule 3: rest → hover → press → selected, each a step firmer) → a held item (not a selected value row) takes `bg-component-active`, landing at once; replaces the hover-plate-only press → `surface.css, .area-menu__item:active`; desktop gallery.
+- 2026-10-12 · same adoption → `MenuItem keepOpen` (view-option menus stay open, `data-keep-open`) and `Menu tooltip` (an Area Tooltip on the trigger; a Tooltip cannot wrap a menu trigger from outside) → `primitives.tsx`, `Overlays.tsx` (`wrapTrigger`); the gallery's Sort and group menu.
