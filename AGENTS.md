@@ -7,6 +7,14 @@ specs matter more than speed.
 
 ## Start
 
+**New sessions work on the app itself: the gallery in `apps/desktop`** (Electron; later an
+IDE / VS Code fork). Its regions are the **Titlebar** (tabs: Language, Components, Typography,
+Icons, Color; search; layout toggles; light / dark), the **Sidebar** (left list), the **Canvas**
+(centre) and the **Inspector** (right). Build it from Area components at the compact UI scale.
+The documentation site (`apps/docs`) is archived: don't extend it; it stays only as the source
+of demos, specimens, page content and the icon pipeline that the app imports. Reviews of icons
+and components happen on artifacts, not in the docs site.
+
 Read `README.md` and, when resuming, `.Codex/HANDOFF.md`. For component work, read
 `docs/COMPONENT_ADAPTATION.md` (the process) and use the `area-component-build` and
 `area-visual-language` skills (`.agents/skills/`, linked from `.claude/skills/`). Each

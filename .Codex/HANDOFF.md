@@ -105,6 +105,28 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   edge, the face and battery families, file marks centred, library redraws). Four parallel helpers did 37 of them. Review
   page version 49. Record: spec "Owner review round 11", `docs/research/icon-review/2026-10-11/README.md` (calls to
   confirm listed there). Full lint, build, typecheck, @area/icons tests and docs build pass.
+## Desktop app: gallery homepage (2026-10-11, `claude/gallery-homepage-ui-2a0b30`)
+
+- Owner: new sessions work on the app (`apps/desktop`, Electron); the docs site is archived; reviews go through
+  artifacts. `npm run dev` (window, reloads on change), `npm run preview` (browser, :4400). Regions: **Titlebar**,
+  **Sidebar**, **Canvas**, **Inspector** (`src/studio.tsx`); tabs Language, Components, Typography, Icons, Color;
+  location `#<tab>/<item>`. `electron . --capture=<png> [--theme=dark] [--hash=...] [--store='{...}']` saves one
+  frame from an in-memory session (native traffic lights not included).
+- Shared with docs: specimen table and demo wrappers in `apps/docs/src/gallery/specimens.mjs` (docs output
+  byte-identical when moved; main's Box model / Editable text / Timeline tiles and accordion copy ported in the
+  merge); `fitTiles` returns a cleanup; `standaloneSvg` / `CopyButton` exported.
+- Shell: Titlebar 41, text tabs from 14 (macOS 84); Sidebar has no title, starts with **All**, group labels on the
+  item text; Canvas and Inspector bars 41 on one cap line; one divider stroke (Panel seams and rules, 1px
+  decorative); Inspector 256 (narrowest without clipping), one-row controls, facts as Area Tables.
+- Canvas: one Tile (`src/tile.tsx`) on one grid (136 unit, even columns, wide 2x2, row spans; 5:4), corners 24,
+  inset 16, margin 16 > gap 8; compact density is a hairline contact sheet. The visual is the container (painted
+  swatches, ramp strips, setting-scoped tiles, icon sheets). Grid / list + a filter per tab
+  (`src/view-controls.tsx`). Typography: Geist-style table, Regular and Strong as separate ramps. Language:
+  abstract illustration family (`src/abstract.tsx`, `.abs-*`) drawn from live tokens. Props table under a family.
+- Picks, not measured: Titlebar 41, Sidebar 240, search 240, traffic lights (16, 14), tile unit 136, corner 24,
+  illustration sizes. Open: measure Cursor / Notion title bars; Radix-style role groups and light/dark pairs in
+  Color.
+
 
 ## Review round 7 → 8 (2026-10-11, same branch)
 

@@ -24,7 +24,9 @@ load from a pinned external URL; custom consumers may supply their own font toke
 ## Daily commands
 
 ```sh
-npm run dev            # live preview at http://localhost:4321
+npm run dev            # the desktop app (Electron), reloading on change
+npm run preview        # the same app in a browser at http://localhost:4400
+npm run dev:docs       # the archived docs site at http://localhost:4321
 npm run build          # tokens, styles/manifest, React JS + declarations
 npm run build:docs     # package build, static site, docs audit
 npm run typecheck      # packages, demos and browser lab
@@ -36,9 +38,12 @@ resolve the compiled React declarations. Do not run competing full builds agains
 watcher: it may replace declarations during typecheck. Stop the dev process first when
 running the full verification sequence, then restart it for preview.
 
-The development server watches source changes, builds into an ignored staging directory
+The desktop app (`apps/desktop`) bundles `src/main.tsx` with esbuild into `apps/desktop/dist` and
+copies `area.css` beside it; a change under `packages/<name>/src` rebuilds the packages first.
+
+The archived docs site's development server watches source changes, builds into an ignored staging directory
 and swaps in a successful immutable snapshot. A failed build retains the prior preview.
-Restart after editing server/watcher code. `PORT=4322 npm run dev` chooses another port.
+Restart after editing server/watcher code. `PORT=4322 npm run dev:docs` chooses another port.
 `npm run build:docs` writes `apps/docs/dist`; the static server must restart to read a new
 snapshot. Completion status is source data under `apps/docs/src`, so the watcher sees it.
 
