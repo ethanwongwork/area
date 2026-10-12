@@ -5,6 +5,6 @@
 <path data-part="fold" data-shift="0.7071 -0.7071" d="M8 4.6V5A1.5 1.5 0 0 0 9.5 6.5H9.9" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path data-part="fold" data-shift="0 -0.7071" d="M9.9 6.5H12.5V6.2" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path data-part="fold" d="M8 2L8.588 2A0.5 0.5 0 0 1 8.941 2.146L12.354 5.559A0.5 0.5 0 0 1 12.5 5.912" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<circle data-filled="hole" cx="6.75" cy="11.25" r="1.25" fill="currentColor"/>
-<path data-filled="knockout" d="M7.5 11.25V8L10 9.25" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<circle data-filled="hole" cx="6.5" cy="11" r="1.5" fill="currentColor"/>
+<path data-filled="knockout" d="M7.5 11V8.25L10.5 9" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

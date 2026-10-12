@@ -85,12 +85,12 @@ export const ICON_CATEGORIES: readonly IconCategory[] = [
     "palette", "color", "contrast", "wand", "blend", "swatch-book",
   ] },
   { slug: "type", name: "Type", icons: [
-    "text", "text-size", "text-color", "heading", "heading-1", "heading-2", "heading-3",
+    "text", "text-size", "text-color", "heading", "heading-1", "heading-2", "heading-3", "heading-4", "heading-5", "heading-6",
     "bold", "italic", "underline", "strikethrough", "superscript", "subscript",
     "case-upper", "case-lower", "case-sensitive", "remove-formatting",
     "text-cursor", "square-text", "square-text-cursor",
     "line-height", "letter-spacing", "text-wrap",
-    "quote", "text-quote", "pilcrow", "spell-check", "translate", "markdown",
+    "quote", "text-quote", "pilcrow", "pilcrow-right", "pilcrow-left", "spell-check", "translate", "markdown",
   ] },
   { slug: "paragraphs", name: "Lists & paragraphs", icons: [
     "text-align-left", "text-align-center", "text-align-right", "text-align-justify",
@@ -115,7 +115,7 @@ export const ICON_CATEGORIES: readonly IconCategory[] = [
     "layers", "square-dashed", "token", "component", "slice",
   ] },
   { slug: "shapes", name: "Shapes", icons: [
-    "shapes", "rectangle", "ellipse", "polygon", "pentagon", "hexagon", "octagon", "diamond",
+    "shapes", "rectangle", "rectangle-vertical", "ellipse", "polygon", "pentagon", "hexagon", "octagon", "diamond",
     "cube", "cube-wireframe",
   ] },
   { slug: "files", name: "Files & documents", icons: [
@@ -132,7 +132,7 @@ export const ICON_CATEGORIES: readonly IconCategory[] = [
     "database", "database-zap", "database-search", "server", "server-cog", "hard-drive", "folder-git", "folder-code", "folder-tree", "folder-input",
   ] },
   { slug: "communication", name: "Chat & mail", icons: [
-    "chat", "chat-add", "chat-dot", "chat-more", "chat-question", "chat-warning", "chat-check", "chat-code", "chat-off",
+    "chat", "chat-add", "chat-dot", "chat-more", "chat-question", "chat-warning", "chat-check", "chat-code", "chat-pen", "chat-off",
     "chat-multiple", "gif", "vote",
     "mail", "mail-plus", "mail-check", "mail-warning", "mail-dot", "mail-open", "send",
     "call", "call-incoming", "call-outgoing", "call-end", "call-off", "phone-missed", "voicemail",
@@ -141,7 +141,7 @@ export const ICON_CATEGORIES: readonly IconCategory[] = [
   { slug: "people", name: "People", icons: [
     "person", "person-add", "person-remove", "person-check", "person-x",
     "person-key", "person-lock", "person-settings", "person-search", "person-pen", "person-star",
-    "person-circle", "person-square", "person-chat", "people",
+    "person-circle", "person-dashed", "person-square", "person-chat", "people", "people-group",
     "id-card", "handshake", "accessibility",
   ] },
   { slug: "reactions", name: "Reactions", icons: [
@@ -152,7 +152,7 @@ export const ICON_CATEGORIES: readonly IconCategory[] = [
     "flag", "flag-off", "tag", "tags", "tag-plus",
   ] },
   { slug: "ai", name: "AI & agents", icons: [
-    "sparkle", "sparkle-off", "chat-sparkle", "grid-sparkle",
+    "sparkle", "sparkle-off", "chat-sparkle", "grid-sparkle", "image-sparkle", "pencil-sparkle", "text-sparkle", "code-sparkle",
     "agent", "bot", "bot-agent", "bot-builder", "bot-researcher", "bot-scholar", "bot-guard",
     "bot-lead", "bot-designer", "bot-generator", "bot-automator",
     "brain", "brain-circuit", "brain-off",
@@ -208,11 +208,11 @@ export const ICON_CATEGORIES: readonly IconCategory[] = [
   ] },
   { slug: "commerce", name: "Commerce", icons: [
     "cart", "cart-add", "shopping-bag", "basket",
-    "credit-card", "wallet", "banknote", "coins", "hand-coins", "dollar", "currency-euro", "piggy-bank",
+    "credit-card", "wallet", "banknote", "coins", "hand-coins", "dollar", "circle-dollar", "currency-euro", "piggy-bank",
     "receipt", "discount", "gem", "ticket", "gift", "gift-card", "package", "package-check", "barcode", "qr-code",
   ] },
   { slug: "nature", name: "Weather & nature", icons: [
-    "sun", "moon", "brightness", "cloud-sun", "cloud-rain", "cloud-lightning", "cloud-snow",
+    "sun", "moon", "sun-moon", "brightness", "cloud-sun", "cloud-rain", "cloud-lightning", "cloud-snow",
     "wind", "snowflake", "umbrella", "thermometer",
     "flame", "leaf", "tree", "mountain", "paw",
   ] },

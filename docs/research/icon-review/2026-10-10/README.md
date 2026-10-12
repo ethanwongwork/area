@@ -222,6 +222,53 @@ After this, the remaining gap concepts are niche (food, animals, medical, weathe
 Cursor's grid also lists files-diff, diff-dot, brain-hourglass, a funnel chart and route-x; these were not drawn.
 brain-hourglass is close to brain-thinking, which the owner removed as niche. The others appear in one library at most.
 
+## Batch 75: coverage survey of live product surfaces (owner: "continue the icon work", coverage first)
+
+The production-gaps list's coverage item, done from the products themselves in the owner's Chrome (read-only):
+
+- **ChatGPT:** the whole icon sprite the app ships (`/cdn/assets/icons-*.svg`, 854 symbols, 426 concepts once sizes and
+  weights are folded). Concept names: `survey/chatgpt-concepts.txt`. Drawings were looked at, never traced.
+- **Notion:** the icon names its loaded bundles define (`…wt("name", …)`) and reference (`….nameIcon`): 206 concepts from
+  the sidebar and a database view. Only loaded chunks, so not the whole set.
+- **Figma:** the editor bundle's 1,039 icons (743 at 24px) have no names, so they were laid out as a numbered contact
+  sheet in an overlay on the open file (nothing in the file changed) and read by eye.
+
+Each concept was checked against Area's names, turns and aliases with `icons:find`. Most of the three sets is already
+covered. The real gaps, used in at least one product (most in two), became batch 75: image-sparkle, pencil-sparkle,
+text-sparkle, code-sparkle (the AI-action sparkle family: ChatGPT and Figma), people-group (ChatGPT, Figma),
+person-dashed (Notion, Figma: unassigned), circle-dollar (ChatGPT, Figma), chat-pen (ChatGPT, Notion), sun-moon
+(ChatGPT's theme), heading-4/5/6 (Figma, Notion), pilcrow-left/right (Figma's paragraph direction, tied to the RTL gap),
+and rectangle-vertical as a turn of rectangle (ChatGPT, Notion). Record: `batch-75.json` (spec "Batch 75"). Sheet:
+`9-batch-75-sizes.png`. On the review page under "New icons not yet reviewed (batches 70–75)", decisions in `reviews7`.
+
+### Calls to confirm (delegated)
+
+- **The AI sparkle family:** every "do it with AI" composite uses chat-sparkle's ±2.5 corner sparkle. image-sparkle sets
+  it in to 11, 5.5 (the corner position left it 2.06 from the mountain, between steps) and replaces image's sun, as
+  ChatGPT's and Fluent's do. code-sparkle puts it in place of the slash. pencil-sparkle uses the slim pencil (the
+  composites' pen body with pencil's square end and band) because the full pencil left the sparkle 1.77 away.
+- **people-group:** the front figure is smaller than people's (head r 2), so the back heads (r 1.5) show more; they are
+  still overlap-cut to arcs in the outline, Phosphor users-three's look. Filled reads as three heads (ChatGPT's).
+- **person-dashed:** circle-dashed's ring turned 22.5° so no dash meets the body; the two dashes beside it moved 1.5° up.
+- **sun-moon:** a half-size moon with sun's rays on the left half only. Its ink centre is 7.44: the diagonal rays need
+  whole shifts, so it can sit at 7.5 or 8.5, not 8.
+- **circle-dollar:** its own $ sized for the ring (2 × 1.5 bowls), not dollar scaled: dollar at half size had 0.75 ticks.
+- **heading-4:** stems 2.5 apart (at 2 the filled lines left a hairline); the left stem is on a whole pixel.
+- **pilcrows:** the pilcrow shortened to 2.5–8.5 over a full-width arrow; pilcrow-left moves the pilcrow right rather
+  than mirroring it. Their ink is 13.12 tall in the square keyline.
+
+### Not drawn (need a call)
+
+- **trash-restore** (ChatGPT trash-open-arrow-up, Notion's restore): every lattice position of a restore arrow inside the
+  trash lands between gap steps against the handle's feet (3.54 between centre-lines: 2.41 ink, under open). Options:
+  an open lid (ChatGPT's), the arrow as a corner badge (Fluent delete_arrow_back), or a handle 6 wide in this icon only.
+- **folder-user** (ChatGPT folder-person, Fluent folder_person): a person at the lower-right corner is taller than the
+  folder's keyline (11) allows, and a figure inside the folder read as a camera. Options: a small two-person mark inside
+  (ChatGPT's), or let this icon take the square keyline.
+- **chat-dashed** (ChatGPT's Temporary chat): you removed it as niche on 10-02; ChatGPT uses it in its main sidebar.
+- Seen but left out as niche or one-product: decimals (spreadsheets), text truncation, remove-background, screenshot,
+  gradient fills, noise, motion path, footprints (Figma's follow), spotlight, person-alert, repeat-off, chat-history.
+
 ## Demo swap (owner: "implementing them into the actual components")
 
 Component demos now render Area icons; see the spec section "Demo swap: components show Area icons, 2026-10-10". The
@@ -250,7 +297,7 @@ order:
 5. **12px cuts** for the dense icons components use at 12 (the spec planned these and they were never drawn).
 6. **Licence** for Area's drawings, semver, changelog and a deprecation policy.
 7. **A public, searchable catalogue** (copy SVG / JSX) and a Figma library.
-8. **Coverage**, by use: currencies (5 against Lucide's 27), file types, heading levels 4–6, digits and letters,
+8. **Coverage**, by use (2026-10-11: ChatGPT, Notion and Figma surveyed live, gaps drawn as batch 75): currencies (5 against Lucide's 27), file types, heading levels 4–6, digits and letters,
    transport basics, panel and layout states. Brands, flags and emoji stay out (separate libraries).
 9. **Retire the Fluent map**, including the docs toolbar (`icons.generated.mjs`).
 
