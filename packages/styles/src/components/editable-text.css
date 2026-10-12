@@ -1,0 +1,73 @@
+/* ---------------------------------------------------------------------------
+ * Editable text
+ *
+ * Text that turns into a field in place: Figma's layer names (double-click, a 1px blue inset outline
+ * on a pale blue fill, the whole name selected; Escape cancels) and Notion's titles (no chrome at
+ * all, a text cursor). Both pad the text 8 at its sides, so the field appears around the text
+ * without moving it. It takes the font of where it sits: a layer name, a heading.
+ * docs/specs/editable-text.md.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-editable-text {
+    --_pad-x: var(--area-space-8); /* spec: Figma 8, Notion 8 */
+    --_pad-y: var(--area-space-4); /* spec: Figma, a 16 line in a 24 field */
+    display: inline-grid;
+    grid-template: auto / minmax(0, auto);
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    vertical-align: top;
+  }
+  .area-editable-text--fill { display: grid; grid-template-columns: minmax(0, 1fr); inline-size: 100%; }
+
+  .area-editable-text__preview, .area-editable-text__input {
+    grid-area: 1 / 1;
+    box-sizing: border-box;
+    margin: 0;
+    padding: var(--_pad-y) var(--_pad-x);
+    border: 0;
+    border-radius: var(--area-radius-control-xs); /* spec: Figma 5 */
+    background: none;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    text-align: start;
+  }
+  .area-editable-text__preview {
+    min-inline-size: 0;
+    overflow: hidden;
+    white-space: pre;
+    text-overflow: ellipsis;
+    cursor: var(--_cursor);
+  }
+  /* Activation sets the pointer: Figma's double-click keeps the arrow, Notion's click-to-type shows a text cursor. */
+  .area-editable-text--dblclick { --_cursor: default; /* spec: Figma */ }
+  .area-editable-text--click, .area-editable-text--focus { --_cursor: text; /* spec: Notion */ }
+  .area-editable-text__preview[data-placeholder] { color: var(--area-fg-muted); }
+  /* Hover paints the shared row plate (owner, review round 8: "not very clear that the text is editable,
+     no hover state"), so the text reads as something you can act on; the ink stays. Figma's layer rows and
+     file name take a hover plate; Notion's title doesn't, which is why it read as plain text. */
+  .area-editable-text__preview { transition: background-color var(--area-duration-fast) var(--area-ease-out); }
+  @media (hover: hover) {
+    .area-editable-text:not([data-editing], [data-disabled]) .area-editable-text__preview:hover { background-color: var(--area-bg-hover); transition-duration: 0s; }
+  }
+  .area-editable-text__preview:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  /* While editing the preview keeps the draft's width under the field, so the field grows as you type. */
+  .area-editable-text[data-editing] .area-editable-text__preview { visibility: hidden; }
+
+  .area-editable-text__input {
+    /* The field takes the hidden draft's width, not a text input's default 20 characters: it adds
+       nothing to the column's size and stretches to fill it. */
+    inline-size: 0;
+    min-inline-size: 100%;
+    background: var(--area-selection-surface); /* spec: Figma rgb(242, 249, 255) */
+    outline: var(--area-stroke-width) solid var(--area-field-focus-color); /* spec: Figma 1px rgb(13, 153, 255), inset */
+    outline-offset: calc(var(--area-stroke-width) * -1);
+    cursor: text;
+  }
+
+  .area-editable-text[data-disabled] .area-editable-text__preview { cursor: not-allowed; opacity: var(--area-opacity-disabled); }
+
+  @media (forced-colors: active) {
+    .area-editable-text__input { outline-color: Highlight; background: Field; color: FieldText; }
+  }
+}

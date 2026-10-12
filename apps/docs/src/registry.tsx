@@ -41,10 +41,13 @@ import * as dateRangePickers from "./demos/date-range-picker.tsx";
 import * as citations from "./demos/citation.tsx";
 import * as zoomControls from "./demos/zoom-control.tsx";
 import * as boards from "./demos/board.tsx";
+import * as timelines from "./demos/timeline.tsx";
+import * as editableTexts from "./demos/editable-text.tsx";
+import * as boxModels from "./demos/box-model.tsx";
 
 const { BADGE_GALLERY_DEMOS, ...badgeDemos } = badge;
 const { ICON_REVIEW_DEMOS, ...iconDemos } = icons;
-const DEMO_MODULES: Record<string, object> = { BADGE_GALLERY_DEMOS, badge: badgeDemos, switches, button, form, display, nav, theme, gallery, cards, icons: iconDemos, ICON_REVIEW_DEMOS, variants, overlays, counts, accordions, customSelects, tags, tagPickers, datePickers, drawers, paginations, links, scrollAreas, fileUploads, toggletips, emptyStates, toggleGroups, descriptionLists, meters, searchFields, shortcutLists, dateRangePickers, citations, zoomControls, boards };
+const DEMO_MODULES: Record<string, object> = { BADGE_GALLERY_DEMOS, badge: badgeDemos, switches, button, form, display, nav, theme, gallery, cards, icons: iconDemos, ICON_REVIEW_DEMOS, variants, overlays, counts, accordions, customSelects, tags, tagPickers, datePickers, drawers, paginations, links, scrollAreas, fileUploads, toggletips, emptyStates, toggleGroups, descriptionLists, meters, searchFields, shortcutLists, dateRangePickers, citations, zoomControls, boards, timelines, editableTexts, boxModels };
 // One name, one demo. The server renders from this merged map, while hydration clients import a
 // module directly, so a name exported twice renders one demo and hydrates the other (a mismatch).
 const demoOwner = new Map<string, string>();
@@ -88,5 +91,8 @@ export const SOURCES = {
   citations: "src/demos/citation.tsx",
   zoomControls: "src/demos/zoom-control.tsx",
   boards: "src/demos/board.tsx",
+  timelines: "src/demos/timeline.tsx",
+  editableTexts: "src/demos/editable-text.tsx",
+  boxModels: "src/demos/box-model.tsx",
   drawers: "src/demos/drawer.tsx",
 };

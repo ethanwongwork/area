@@ -8,6 +8,18 @@ disclosure), Nav expandable group, Code block toggle (hover underline), Separato
 
 ## Owner decisions
 
+- 2026-10-11: "it looks off center and also moves when i interact with it" → a gallery framing fix;
+  the component is unchanged. Cause: the tile wrapped plain items in a centred flex row, so an item
+  shrank to its text, changed width when its body showed or hid, and the tile re-centred (and
+  re-scaled) it. Measured in Chrome before the fix: closing the default tile moved its chevron 16px
+  sideways and 10px down, divided tiles 12–14px down. No product or system moves the trigger: Notion's
+  toggle and shadcn's, Radix's and MUI's accordions are full-width blocks whose content pushes what
+  follows; shadcn's preview fixes the width (`w-full max-w-lg`, 384) and pins the top
+  (`data-align="start"`), measured 2026-10-11. Now every tile is 240 wide (320 until the 1:1 gallery pass the same day),
+  and a hidden inert copy at the tile's tallest state sits behind the live demo (build.mjs
+  `demoMarkup`), so the tile centres and scales on that and the trigger stays put (measured: no
+  movement on any tile).
+
 - 2026-10-08: "go with your recommendations" → every open question settled as recommended, no
   value changed: body motion kept (slow open, moderate close); Divided tile stays sm with divided md
   as the FAQ tile (manifest default md); plain chevron stays the muted outline chevron; divided md

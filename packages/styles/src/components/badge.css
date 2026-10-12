@@ -10,8 +10,10 @@
      * the inset contract, inset.css), icon and media 12 / 16 / 16, gap 2 / 4 / 4, media side
      * 2 / 2 / 4, media gap 4 / 4 / 6. So a mark
      * the UI scale shortens (compact md is 16) is drawn as the default mark of that height. */
-    --_icon: min(var(--area-icon-md), calc(var(--_height) - var(--area-space-4))); /* spec */
-    --_media: var(--_icon); /* spec */
+    /* spec (owner, review round 8: "can the icons be smaller?"): 12 at every size, as Untitled UI's
+       badges (12 at sm, md and lg); avatars and flags keep 12 / 16 / 16. */
+    --_icon: var(--area-icon-xs); /* spec */
+    --_media: min(var(--area-icon-md), calc(var(--_height) - var(--area-space-4))); /* spec */
     --_gap: min(var(--area-space-4), calc(var(--_height) / 2 - var(--area-space-6))); /* spec */
     --_media-gap: max(var(--area-space-4), calc(var(--_height) / 2 - var(--area-space-6))); /* spec */
     --_text: var(--area-control-xs-text); --_leading: var(--area-control-xs-leading); /* spec */

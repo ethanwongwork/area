@@ -92,6 +92,8 @@
    * slot (h - 8) / 2, avatar, flag and dismiss (h - media) / 2. */
   .area-badge { --_box-text: calc(var(--area-space-2) * 2); }
   .area-badge:has(> .area-badge__dot:first-child) { --_box-start: var(--area-space-8); }
+  /* An icon side centres the icon in the pill's end, as an avatar or flag does: with the 12 icon
+     (owner, review round 8: smaller icons, less side spacing) that is 4 from the end at md. */
   .area-badge:has(> .area-badge__leading-icon:first-child) { --_box-start: var(--_icon); }
   .area-badge:has(> .area-badge__trailing-icon:last-child) { --_box-end: var(--_icon); }
   .area-badge:has(> :is(.area-badge__avatar, .area-badge__flag):first-child) { --_box-start: var(--_media); }
