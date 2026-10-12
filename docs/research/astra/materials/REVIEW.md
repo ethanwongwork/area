@@ -4,8 +4,8 @@ Reviewed 2026-10-11 by Claude (Opus 5.5) at research tip `992458c`, against Area
 `9e613c1`. Covers tasks 01–18. Five reviewers checked the series in parallel against Area's source
 and the cited external sources. Claude also opened the task 16 specimen in a browser.
 
-The owner's answers to the decisions below are recorded on the decisions page; Claude copies
-them here once they are given.
+The owner answered all 16 decisions on 2026-10-11 (each the recommended option). They are listed
+under "Owner decisions" below and bind every later materials task.
 
 ## Verdict
 
@@ -112,3 +112,43 @@ focus via plate, solid emphasis fills, disabled group opacity); 08 forced-colors
 backdrop-filter, and sRGB gradient interpolation must be stated; 09 re-emission cite; 11 claims
 restated to match the data; 12 duotone vs knockouts; 13 Paper stroke, no None, Prism colours,
 Glass container; 16 caption bug and example person.
+
+## Owner decisions (2026-10-11)
+
+Binding for tasks 19 onward. Cite them as D1–D16.
+
+- **D1 Expression ceiling:** Area's current calm look is the None material's default, not a
+  limit. Hard limits always apply: contrast floors, visible focus, fixed hover ink, semantic
+  meaning, forced-colors and reduced-transparency fallbacks. Within them, materials may add
+  control shadows, label text effects and stronger container treatment.
+- **D2 Architecture:** a new Material axis beside Surface. Recipe structure switches with 0/1
+  gate tokens (as action/selection do), so nested scopes stay correct. Surface shadows split
+  into adjustable parts, starting with a pixel-identical refactor; the literal Tooltip and
+  Toolbar shadows move under Surface.
+- **D3 Adjustability:** presets first, then typed continuous controls on Theme. Bounds are
+  calibrated to cover the reference board and contrast-tested at the extremes. Caps become
+  numeric per-role strength multipliers.
+- **D4 First presets:** None (identity, default), Glass, Tactile, Soft. Paper is rebuilt as a
+  real opaque material later; Aero, Glow and Prism become finishes later.
+- **D5 Decorative colour:** derived from accent, neutral and tones; no literal hexes.
+- **D6 Rows:** a new row-plate role (Menu, Nav, Tree, Table, Select, Command palette, Calendar
+  days).
+- **D7 Glass safety:**
+  - Floating shells assume any backdrop.
+  - Failing edges use the opaque fallback.
+  - An app-level transparency setting sits beside `prefers-reduced-transparency`.
+  - Explicit forced-colors rules: opaque Canvas and `backdrop-filter: none`.
+- **D8 Refraction:** frosted blur plus rim now; SVG refraction later as a Chromium-only
+  enhancement.
+- **D9 Glass controls:** Figma's Glass parameter names; light angle 0 = top, clockwise.
+- **D10 Dark page:** tint or texture only within a fixed distance of #020202 (neutral 975).
+- **D11 Inner rims:** the radius floor applies at every setting except Sharp.
+- **D12 Cutouts and fades:** real transparent gaps with masks.
+- **D13 Glyphs and text:** no automatic effects on glyphs or small text; opt-in for display text
+  and button labels. Duotone: a small pilot later.
+- **D14 Performance:** rules rewritten to match the data; a 60Hz minimum device named by the
+  owner; re-measure including Firefox.
+- **D15 Positioning:** internally "the broadest multi-material layer with separable controls";
+  no public claim until it ships.
+- **D16 Separation:** a material never changes geometry, type or ink. A preset that sets several
+  axes is a bundle.

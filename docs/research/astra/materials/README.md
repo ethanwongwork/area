@@ -25,6 +25,13 @@ The research questions:
 The owner believes no open-source, customizable design system offers this layer today. That
 claim is a hypothesis to test (task 02), not a premise.
 
+## Owner decisions
+
+Tasks 01–18 are reviewed in [REVIEW.md](REVIEW.md). The owner's decisions D1–D16 at its end are
+binding from task 19 on. Where an earlier report disagrees with a decision, the decision wins. In
+particular, D1 replaces every earlier rule that treated Area's current restraint (no control
+shadows, no label effects, Trace-only containers) as a ceiling for all materials.
+
 ## Constraints
 
 - Research only. No component, token or axis changes; proposals go in the reports.
@@ -137,3 +144,18 @@ where the image itself prints them.
 | 14 | `14-tooling` | Builder, export formats and Figma |
 
 Run 01–04 first; 05 onwards build on them.
+
+Second round, after the review (follow D1–D16):
+
+| # | Folder | Question |
+| --- | --- | --- |
+| 19 | `19-corrections` | Fix the review's errors and refresh 04/05 against current main |
+| 20 | `20-limits-and-none` | Which rules are hard limits, and what exactly is the None material? |
+| 21 | `21-axis-design` | The Material axis in tokens: namespaces, gates, Surface split, Theme controls |
+| 22 | `22-calibration` | Numeric None/Glass/Tactile/Soft values and control ranges that reach the board |
+| 23 | `23-specimen-v2` | A specimen where the four presets are clearly different and the board is reproduced |
+| 24 | `24-glass-safety` | Fallbacks, transparency setting, forced colors and the contrast gate for real presets |
+| 25 | `25-masks` | Masked gaps for cutout rings and fades, identical on plain grounds |
+| 26 | `26-performance-v2` | Rules restated from the data and a re-measure plan on a 60Hz minimum device |
+
+Run 19 first, then 20 and 21, then 22 and 23. Tasks 24–26 can run once 21 is in.
