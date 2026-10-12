@@ -34,7 +34,7 @@ them. A clickable event puts a Link in its title.
 | marker | dot (default) | A small dot on the line for an event with no icon | Ant `Timeline` dot; Mantine bullet; Figma's autosave rows (line only) |
 | marker | icon | A 16 icon in a 24 circle | Figma's group and current-version markers; Primer `TimelineBadge` |
 | marker | media | An element that fills the 24 marker: an Avatar | Notion's page updates (24 avatar); Primer `TimelineItemAvatar` |
-| tone | neutral (default), accent | Accent fills the marker for the current or latest event | Figma's current version (filled blue circle, white check); Mantine `active`; Primer `variant` |
+| current | boolean | The current or latest event: its mark paints the Selection role (neutral or the accent, by theme) | Figma's current version (filled blue circle, white check); Mantine `active`; Primer `variant` |
 | content | title, time, meta, body | What happened, when, who or where, and details | Figma (date as title, author under it); Notion (title, time · page, property changes) |
 
 Excluded: alternating or opposite layouts (Mantine `align`, Ant `mode="alternate"`): no target product draws one. A
@@ -120,7 +120,7 @@ Generated with `node scripts/capture-compare.mjs` (rows abbreviated to the slots
 | spacing | Figma 16 between rows' text; Notion 32 | 16 | Figma (dense UI panel) | Notion's is its document feed |
 | dot | Figma none; Ant 10 ring; Mantine 20 | 6 dot, fg-muted | Indicator's dot (peer) | no product dot; the quietest mark that still reads on the line |
 | icon | Figma 24 circle; Linear and the feed a bare icon | a bare 16 icon, `fg-muted` | owner ("no backplate around icons") | — |
-| accent | Figma a filled blue circle; the run log a green check | the mark in `accent-solid` | the run log, without a plate | — |
+| current | Figma a filled blue circle; the run log a green check | the mark in `selection-solid`, `aria-current` | DESIGN_SYSTEM "Emphasis roles" (no component offers an accent tone) | neutral in the default theme, the accent in an accent theme |
 | body | Notion 8 below the time | 8 | Notion | — |
 
 ## States
@@ -184,3 +184,7 @@ window was hidden; measurements only).
   starts 4 below a 6 dot, a 16 icon and a 24 avatar and ends 4 above the next), the line at 14/20 with meta then time
   after dots, titles 400. Round 9.
 - 2026-10-12 · owner, review round 9: approved → Complete in `component-status.mjs`.
+- 2026-10-12 · system rule, found when merging main (`tone.test.mjs`: "no component offers an accent tone"; paint the
+  Selection role): `tone="accent"` → `current` (boolean, `--current`, `aria-current`), the mark in `selection-solid`.
+  In the default neutral theme the current mark is now the neutral solid, not the accent blue; an accent theme shows
+  the accent. Tile `tone-accent` → `state-current`.

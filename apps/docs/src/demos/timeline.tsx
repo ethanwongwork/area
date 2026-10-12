@@ -12,10 +12,10 @@ export const GalleryTimeline = () => (
   </Timeline>
 );
 
-/* The current version in the accent's ink, as Figma marks it; earlier versions as dots. */
+/* The current version in the Selection role, as Figma marks it; earlier versions as dots. */
 export const GalleryTimelineAccent = () => (
   <Timeline aria-label="Version history" style={frame}>
-    <TimelineItem tone="accent" icon={<CheckIcon />} title="Current version" />
+    <TimelineItem current icon={<CheckIcon />} title="Current version" />
     <TimelineItem title="Oct 10, 11:40 PM" meta="David Tee" />
     <TimelineItem title="Oct 10, 11:26 AM" meta="David Tee" />
     <TimelineItem title="Oct 9, 2:10 PM" meta="Design team" />
@@ -45,6 +45,6 @@ export const GalleryTimelineBody = () => (
     <TimelineItem media={<Avatar fallback="DT" alt="" />} title="David Tee commented" time="Oct 10" dateTime="2026-10-10">
       Moved the launch to Thursday so the docs can ship with it.
     </TimelineItem>
-    <TimelineItem icon={<CheckIcon />} tone="accent" title="Marked as done" meta="Design team" time="Oct 9" dateTime="2026-10-09" />
+    <TimelineItem icon={<CheckIcon />} title="Marked as done" meta="Design team" time="Oct 9" dateTime="2026-10-09" />
   </Timeline>
 );

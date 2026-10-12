@@ -549,7 +549,7 @@ function gallerySpecimenTable() {
     ],
     timeline: [
       { id: "default", title: "Default", demo: "GalleryTimeline" },
-      { id: "tone-accent", title: "Tone / accent", demo: "GalleryTimelineAccent" },
+      { id: "state-current", title: "State / current", demo: "GalleryTimelineAccent" },
       { id: "content-icons", title: "Content / icons", demo: "GalleryTimelineIcons" },
       { id: "content-avatars", title: "Content / avatars", demo: "GalleryTimelineAvatars" },
       { id: "content-body", title: "Content / details", demo: "GalleryTimelineBody" },

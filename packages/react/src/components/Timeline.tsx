@@ -2,9 +2,7 @@
 // history, Notion's page updates). An ordered list of list items. Spec: docs/specs/timeline.md.
 import { forwardRef } from "react";
 import type { HTMLAttributes, OlHTMLAttributes, ReactNode } from "react";
-import { timelineVariants, timelineItemVariants, type VariantProps, MANIFESTS } from "../variants.ts";
-
-type TimelineItemVariants = VariantProps<typeof MANIFESTS.timelineItem>;
+import { timelineVariants, timelineItemVariants } from "../variants.ts";
 
 export type TimelineProps = OlHTMLAttributes<HTMLOListElement>;
 
@@ -26,14 +24,14 @@ export interface TimelineItemProps extends Omit<HTMLAttributes<HTMLLIElement>, "
   icon?: ReactNode;
   /** An element that fills the marker instead, such as an Avatar. */
   media?: ReactNode;
-  /** `accent` draws the mark in the accent's ink: the current or finished event. */
-  tone?: TimelineItemVariants["tone"];
+  /** The current or latest event: its mark paints the Selection role, and the item is `aria-current`. */
+  current?: boolean;
   /** Details under the time: text, a quote, a card. */
   children?: ReactNode;
 }
 
 export const TimelineItem = forwardRef<HTMLLIElement, TimelineItemProps>(function TimelineItem(
-  { title, time, dateTime, meta, icon, media, tone, children, className, ...rest },
+  { title, time, dateTime, meta, icon, media, current, children, className, ...rest },
   ref,
 ) {
   const el = timelineItemVariants.element;
@@ -45,7 +43,7 @@ export const TimelineItem = forwardRef<HTMLLIElement, TimelineItemProps>(functio
   const after = [meta, when].filter(part => part != null && part !== false);
   const sep = <span className={el("sep")} aria-hidden="true">·</span>;
   return (
-    <li ref={ref} className={timelineItemVariants({ tone }, className)} {...rest}>
+    <li ref={ref} aria-current={current ? "true" : undefined} className={timelineItemVariants({ current }, className)} {...rest}>
       <span className={el("marker")} aria-hidden={media ? undefined : true}>{marker}</span>
       <div className={el("content")}>
         {title != null || after.length ? (

@@ -37,11 +37,11 @@
     padding-block-end: var(--_spacing);
   }
   .area-timeline-item:last-child { padding-block-end: 0; }
-  /* Tone paints the mark's ink; icons stand on the line with no plate behind them (owner, review round 8:
-     "no backplate around icons", after Linear and an activity feed). Accent: the current or finished event
-     in the accent's ink, as Figma marks its current version. */
-  .area-timeline-item--neutral { --_mark-ink: var(--area-fg-muted); }
-  .area-timeline-item--accent { --_mark-ink: var(--area-accent-solid); }
+  /* Marks stand on the line in the muted ink, with no plate behind them (owner, review round 8: "no backplate
+     around icons", after Linear and an activity feed). The current event paints the Selection role, which the
+     theme makes neutral or the accent (DESIGN_SYSTEM.md, "Emphasis roles"), as Figma marks its current version. */
+  .area-timeline-item { --_mark-ink: var(--area-fg-muted); }
+  .area-timeline-item--current { --_mark-ink: var(--area-selection-solid); }
 
   /* The visible mark's height, so the line can stop the same gap short of a dot, an icon or an avatar. */
   .area-timeline-item { --_mark: var(--_dot); }

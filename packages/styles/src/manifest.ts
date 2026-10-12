@@ -924,9 +924,10 @@ export const timeline = {
 export const timelineItem = {
   block: "area-timeline-item",
   description: "One event on a timeline: a dot, icon or avatar marker, a title, its time and details.",
-  variants: { tone: ["neutral", "accent"] },
+  variants: {},
+  booleans: ["current"],
   elements: ["marker", "dot", "icon", "media", "content", "line", "title", "sep", "meta", "body"],
-  defaults: { tone: "neutral" },
+  defaults: {},
 } as const satisfies ComponentManifest;
 
 export const zoomControl = {
