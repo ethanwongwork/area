@@ -1,6 +1,6 @@
 # Search field spec
 
-**Status:** in review · 2026-10-11 (round 8)
+**Status:** complete · 2026-10-11 (approved, review round 8)
 **Captures:** `docs/research/captures/search-field/`
 **Peers:** Input (the shell, sizes, variants, focus, InputAction), Kbd (the shortcut hint), Combobox (a field with
 suggestions), Command palette (search in a dialog), Empty state (no results)
@@ -191,3 +191,4 @@ Resolved 2026-10-10 (owner: "proceed with your suggestions"); kept for the recor
 - 2026-10-11 · round 8 → focus measured identical to Input, Combobox and Number field (edge `focus-color`, 2px 14% halo),
   so no change; the picker triggers differ by design (keyboard-only ring). Clear glyph → `dismiss-circle` (icon branch
   merged in PR 60; Glyph.tsx's knockout mask).
+- 2026-10-11 · owner, review round 8: approved → Complete in `component-status.mjs`.

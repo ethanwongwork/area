@@ -1,6 +1,6 @@
 # Badge spec
 
-**Status:** accepted · 2026-09-28 (owner, batch 5)
+**Status:** complete · 2026-10-12 (approved, review round 9)
 uppercase removal built and validated)
 **Captures:** `docs/research/captures/badge/`
 **Peers:** Indicator (dot, count numerals, tone paint), Chip (pill shape, interactive
@@ -574,7 +574,27 @@ so nothing painted moves. Verified on `/badge.html` with a real pointer hover: d
 `transition-duration` 0s and the 12% plate at full strength at once; at rest the transition is
 `background-color 0.1s`.
 
+## Review note, 2026-10-11
+
+- **What changed:** badges with an icon have more room between the icon and the badge's rounded end; avatars and
+  flags are unchanged.
+- **Why:** you said the icons sat too close to the side. Untitled UI sets a badge's icon 2 inside its text side
+  (6 against 8); Area now does the same at every size.
+
+## Review note, 2026-10-11 (round 9)
+
+- **What changed:** badge icons are smaller (12 at every size), and the icon now sits centred in the badge's rounded end, so
+  badges with an icon are narrower than in round 8.
+- **Why:** you said there was too much spacing at the sides and asked for smaller icons. Untitled UI uses 12 icons in all
+  its badge sizes.
+
 ## Feedback log
+
+- 2026-10-11 · owner: "the icons seem too close to the horizontal side of the container. the avatar, flag look okay
+  its just the icons" → the icon side of a badge is now the text side less 2 (inset.css: icon box = text box + 4):
+  sm 3 / md 5 / lg 7 padding (outer 4 / 6 / 8 with the border) where it was 1 / 1 / 3; text sides unchanged (5 / 7 / 9);
+  icons keep their native 16 (12 at sm). Basis: Untitled UI md, icon side 6 and text side 8 (`uui--icon-leading-md`).
+  Measured in the gallery at 1:1: md icon 6 from the end, label 8. Back to In review.
 
 - 2026-09-25 · owner: "I like where Badge is; open to suggestions from the new process" →
   audit only; three proposals → captures listed in Sources.
@@ -606,3 +626,5 @@ so nothing painted moves. Verified on `/badge.html` with a real pointer hover: d
 - 2026-10-03 · one corner setting (owner: one radius setting, Sharp and Pill as ends; "every control is a pill") → a pill by default; `pill={false}` (`--rounded`) takes the radius setting's corner for its height (4 at the default, square at Sharp) (`badge.css`, `Badge.tsx`). `docs/research/radius-audit-2026-10-03.md`, "One corner setting".
 - 2026-10-04 · pill shapes and list rows (owner) → the pill is the `badge` entry of data-area-pills (default on); `pill` is three-way: unset follows the list, true `--pill`, false `--rounded` (`badge.css`). `docs/research/radius-audit-2026-10-03.md`, "Pill shapes and list rows".
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → hover arrives at once and fades out on fast (links, overflow button); the dismiss plate gains the fade-out (it snapped) → badge.css. See "Motion and interaction, 2026-10-07".
+- 2026-10-11 · owner, review round 8 (rethink): "maybe too much spacing on the sides of the badges, can the icons be smaller?" → icon slot 12 at sm / md / lg (`icon-xs`; Untitled UI: 12 at every size), avatars, flags and dismiss keep 12 / 16 / 16; the round-8 "+4" icon side reverted, so the icon centres in the pill end: md icon 4 from the end (round 8: 6), label side 8, a 58-wide "Open" (measured). The 16 pilot drawings are scaled to 12 (no native 12 cuts yet; icon session gap).
+- 2026-10-12 · owner, review round 9: approved → Complete in `component-status.mjs`.

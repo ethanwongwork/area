@@ -128,6 +128,11 @@
   }
   /* Hover darkens the card as a row plate would; the ink stays. */
   @media (hover: hover) { .area-board-card:hover { background-color: var(--area-bg-component-hover); transition-duration: 0s; } }
+  /* In a coloured column the hover takes the colour too (owner, review round 8: "hover state of the board cards
+     should be colored too"): the card mixes the column's colour at the add row's hover strength, 8%. */
+  @media (hover: hover) {
+    .area-board-column:not(.area-board-column--neutral) .area-board-card:hover { background-color: color-mix(in oklab, var(--_color) 8%, var(--area-bg-surface)); /* spec */ }
+  }
 
   .area-board-card__heading { display: flex; align-items: flex-start; gap: var(--area-gap-md); min-inline-size: 0; }
   /* The page icon in a square one title line tall, its glyph the UI icon. */
