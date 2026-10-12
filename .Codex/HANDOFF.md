@@ -5,6 +5,74 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/docs/src/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Desktop app: gallery homepage (2026-10-11, `claude/gallery-homepage-ui-2a0b30`)
+
+- Owner: new sessions work strictly on the app's gallery; the docs site is archived; reviews go through
+  artifacts. `apps/desktop` (Electron 44, React, esbuild): `npm run dev` (window, reloads on change),
+  `npm run preview` (browser, :4400), `npm run start -w @area/desktop`. Regions: **Titlebar**, **Sidebar**,
+  **Canvas**, **Inspector** (`src/studio.tsx`). Tabs: Language (the token axes, a preset tile each),
+  Components (the docs gallery's tiles, one family at a time), Typography, Icons, Color. Location is
+  `#<tab>/<item>`.
+- Shared with docs, unchanged output (docs build diffed byte-identical): the specimen table and demo
+  wrappers moved to `apps/docs/src/gallery/specimens.mjs`; `fitTiles` returns a cleanup;
+  `standaloneSvg` / `CopyButton` exported from the icon browser.
+- Spacing pass (owner: no Sidebar titles, group labels on the item text, no Titlebar tab icons, one
+  divider stroke): every region insets by Panel's 14 (tab text = Sidebar item and label text at 22; last
+  Titlebar button ends with the Inspector's controls); Canvas has a bar built to Panel's bar rules (41, 1px
+  top balance, cap-trimmed title) so Canvas and Inspector titles share a cap line, and the Sidebar's first
+  row centres on it (0.5px off); dividers are only Panel's seams, bar and section rules, the Titlebar's and
+  the Canvas bar's rule, all 1px --area-border-decorative. Inspector facts use src/facts.tsx (DescriptionList
+  inset its terms 6). Canvas edge 14, tile gap 8 (the docs gallery used 8 at the edge too).
+- Every Sidebar starts with **All** (the default): the Sidebar picks what the Canvas shows (All, or one
+  family / category / scale / role / setting, in the hash); clicks on the Canvas pick the Inspector's subject.
+  All components lazily renders and fits each family as it nears the view (all 887 tiles at once held the
+  Canvas ~2s). macOS tabs start at 84 (16 + 52 + 16). Container colours: surface #fff / #1d1d1d, border #f3f3f3
+  / #282828, on neutral 25 / 975.
+- Inspector (owner): one-row controls, the label beside the control (horizontal Field: Density, Radius,
+  Weight, Style, Size); chips and the sample Textarea stay stacked. Inspector is 256 (default and min),
+  measured as the narrowest at which "Compact" isn't clipped (51 > 47 at 240). Facts and props are Area
+  Tables (src/facts.tsx): term cells use Table's fit modifier.
+- Props moved to the Canvas under a family's tiles (owner): Prop / Type / Default Table, prop and default
+  columns fit, one name per line; the section pins compact and radius 8 so Canvas settings don't restyle it.
+- Canvas spacing is now 8 (owner: smaller): margin = tile / row / preset gap = 8, sections 16 apart with
+  the title 8 over its content; the Canvas bar title insets 8 too, on the tiles' edge (Panel's rule: the
+  title shares its content column). Sidebar / Inspector / Titlebar keep Panel's 14.
+- One container and one grid for every tab (owner: "go with your recommendations", after research on
+  17 systems: Carbon, Polaris, Primer, Storybook, Geist, Radix, shadcn, Tailwind, M3, Atlassian, ...):
+  src/tile.tsx Tile (frame, header label + value, stage fit / center / fill / plate / flow) on
+  .studio-grid: a 136 unit (2 x 136 + 8 = the old 280 tile), even column count so wide (2 x 2) tiles
+  sit on unit pairs, rows 4/5 of a unit (5:4 everywhere); row tiles stack full width. All shows overview
+  tiles (Color: ramp row per scale; Icons: label-free sheet per category; Typography: sample + values
+  row; Language: wide preset tiles per setting); one Sidebar item breaks into unit tiles (swatch + hex,
+  named icons) or detail rows (type weights and densities). Not done: Radix-style role groups over steps,
+  light/dark pairs per colour.
+- Round 2 (owner): tiles 16 (radius 10's container corner; stages nest at 4); Compact Canvas density is a
+  hairline contact sheet (square tiles, 1 gap, each tile a 1 ring, so lines draw once; Carbon); every tab's
+  Inspector has the Canvas density. Typography is a Geist-style table per group (Headings, Copy): the
+  example is the role's name in its own style ("Heading 72 with Strong"), then token + copy, then usage
+  (from where packages/styles uses each role); names are Geist's ("Heading 72", "Copy 14"). Language
+  shows one real-component moment per setting on a tinted plate (Primer's thumbnails): a Card for theme
+  and surface, a Nav for neutral, Publish + Switch + Link for accent, Cancel / Save for action, Segmented
+  + Checkbox + Switch for selection, Input + Go for UI scale, Input + Button + Chip for radius, a looping
+  Switch for motion. electron/main.cjs captures use an in-memory session; --store='{...}' seeds settings.
+- Round 3 (owner): tiles 24 (radius 14's container corner), inset 16; Canvas margin 16 > tile gap 8,
+  sections 16 apart. The visual is the container: colour tiles are painted (ink from each step's
+  contrast fg), a scale's ramp is one joined strip at the tile corner, a setting's tile is that setting's
+  scope on its subtle ground, an icon category is one sheet. Typography splits Regular and Strong into
+  separate ramps (Headings, Headings Strong, Copy, Copy Strong) with a Weight column. Every tab has view
+  controls in the Canvas bar (src/view-controls.tsx, saved per tab): grid / list (lists are Area Tables in
+  ListFrame, radius 14 = the tiles' 24) and a filter: Components status, Icons status, Typography weight,
+  Color value (Hex / OKLCH), Language presets (all / defaults).
+- Language illustrations (owner: real components "not great"; make abstract ones after the Frames X
+  references, one cohesive family): src/abstract.tsx + .abs-* in studio.css. Parts: Card (container
+  corner, card edge + shadow), Bar (6 high; strong = fg-default), Pill (action / accent / outline),
+  Dot, Check, Toggle, Field; one set of sizes (176 card, 12 pad, 8 gap, 16 rows). Every part reads live
+  tokens, so each setting's tile draws its effect (radius corners, surface lift, selection fills, ui
+  row height, motion timing via a looping toggle). "Defaults only" shows the nine defaults in one grid.
+- Picks, not measured: Titlebar 41, Sidebar 240, search 240, macOS traffic lights at (16, 14) with a
+  76 inset. Open: measure Cursor / Notion title bars and confirm.
+- `electron . --capture=<png> [--theme=dark]` saves one frame and quits (native traffic lights are not in it).
+
 ## Review round 7 → 8 (2026-10-11, same branch)
 
 - Round 7 (`components7`): Meter, Shortcut list, Date range picker, Zoom control and Menu approved (Complete). Rethink:

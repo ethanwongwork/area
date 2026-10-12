@@ -96,7 +96,8 @@ function roomOf(view: HTMLElement): Box {
   };
 }
 
-export function fitTiles(canvas: HTMLElement) {
+/** Fits every tile in the canvas and keeps fitting them as they resize; returns the cleanup. */
+export function fitTiles(canvas: HTMLElement): () => void {
   const tiles: Tile[] = [...canvas.querySelectorAll<HTMLElement>(".gallery-tile")].map(tile => ({
     tile,
     view: tile.querySelector<HTMLElement>(".gallery-tile__view")!,
@@ -105,7 +106,7 @@ export function fitTiles(canvas: HTMLElement) {
     natural: 0,
     widen: 1,
   }));
-  if (!tiles.length) return;
+  if (!tiles.length) return () => {};
 
   // Fluid or fixed, and how wide a fluid specimen needs to be, at the default UI scale.
   const density = canvas.getAttribute("data-area-ui");
@@ -141,4 +142,5 @@ export function fitTiles(canvas: HTMLElement) {
   canvas.setAttribute("data-fitted", "");
   const observer = new ResizeObserver(records => rescale(records.flatMap(record => owner.get(record.target) ?? [])));
   for (const entry of tiles) { observer.observe(entry.view); observer.observe(entry.stage); }
+  return () => observer.disconnect();
 }
