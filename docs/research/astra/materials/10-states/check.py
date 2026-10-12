@@ -17,7 +17,7 @@ for p in HERE.glob('*.md'):
    m=re.fullmatch(r'https://github.com/ethanwongwork/area/blob/([a-f0-9]{40})/([^#]+)#L(\d+)(?:-L(\d+))?',target)
    req(bool(m),f'bad pin {target}')
    if not m: continue
-   sha,file,a,b=m.groups();req(sha in (A,R),'unexpected Area SHA')
+   sha,file,a,b=m.groups();req(sha in (A,R,'9036ed9293beb7a867bdf637ee768c7a46a9901a'),'unexpected Area SHA')
    if (sha,file) not in cache: cache[sha,file]=subprocess.check_output(['git','show',f'{sha}:{file}'],cwd=ROOT,text=True).splitlines()
    req(1<=int(a)<=int(b or a)<=len(cache[sha,file]),f'line bounds {target}');pins.add(target)
   elif target.startswith('https://'): continue

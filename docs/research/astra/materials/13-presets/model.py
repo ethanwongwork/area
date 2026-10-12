@@ -44,7 +44,7 @@ def edge(c, dark, kind='solid', profile='plain', strength=None):
 
 def gradient(c, target, dark, kind='reflection'):
  if kind=='prism':
-  stops=[dict(id='cool',position=0,source='decorative',alpha=.22 if dark else .16,customLight='#3653A5',customDark='#90AEFF'),dict(id='warm',position=100,source='decorative',alpha=.22 if dark else .16,customLight='#873F83',customDark='#D5A6E8')]
+  stops=[dict(id='cool',position=0,source='accent',alpha=.22 if dark else .16),dict(id='warm',position=100,source='neutral',alpha=.22 if dark else .16)]
  else:
   stops=[dict(id='top',position=0,source='highlight-white',alpha=.08 if dark else .12),dict(id='bottom',position=100,source='highlight-white',alpha=0)]
  c['gradients'][target]=dict(target=target,kind='linear',angleDeg=180 if kind!='prism' else 135,interpolation='srgb',stops=stops)
@@ -54,7 +54,7 @@ def profile(name,dark):
  if name=='plain': return c
  c['amount']='quiet'
  if name in ['matte','matte-edge']:
-  edge(c,dark); c['amount']='trace';return c
+  edge(c,dark,strength=1); c['amount']='trace';return c
  if name.startswith('glass'):
   edge(c,dark,'gradient');gradient(c,'edge',dark)
   c['gloss']['strength']=.06 if dark else .10
@@ -97,3 +97,26 @@ def resolved(p,role,dark):
  if role=='scrim':c['body']['source']='receiver.functional-occlusion'
  return dict(profile=name,controls=c,castEligibility=CAST[role],guard=NOTES[role],referenceHeightPx=32 if role=='raised-control' else 16 if role=='thumb-knob' else None,
    geometry='existing-used-shape; concentric-rims; no material radius',fallback='F0',provenance='authored-proposal; see preset source transfer record')
+
+# Task 19 corrections: keep historical seeds, add explicit identity and D6 receiver.
+for p in PRESETS:p['roles'].append('plain')
+ROLES.append('row-plate')
+NOTES['row-plate']='D6: semantic hover/focus/selected plate remains intact. This preset adds no row decoration until numeric role strengths are calibrated; see 05 for style-layer intent.'
+CAST['row-plate']='pending-D3-calibration; required state plate unchanged'
+PRESETS.insert(0,dict(id='none',name='None',refs=[],styles=['flat'],intent='D4 default identity: emit no material overrides; retain existing Area body, edge, Surface shadow, ink and state paint.',difference='Identity contract, not an imported visual reference. Neutral controls mean no emitted override, not removal of existing shadows/borders.',light='Existing Area light unchanged.',dark='Existing Area dark unchanged.',roles=['plain']*len(ROLES),states=['Existing hover and fixed foreground unchanged.','Existing pressed paint unchanged.','Existing selection/checked paint unchanged.']))
+# Wrap rather than erase historical profiles. None is an output-identity contract.
+_historical_resolved=resolved
+def resolved(p,role,dark):
+ r=_historical_resolved(p,role,dark)
+ r['reviewStatus']='historical seed; calibration pending task 22'
+ r['supersededDecisions']=['D1','D2','D3','D9','D11','D13','D14','D16']
+ r['strengthMultiplier']=None
+ if p['id']=='none':
+  r.update(identity=True,emitsMaterialDeclarations=False,reviewStatus='D4 identity contract; production implementation is task 20/21',supersededDecisions=[])
+ if p['id']=='paper':
+  r['reviewStatus']='D4 deferred: rebuild as a real opaque material; correction preserves existing stroke opacity, no 14%/22% fade'
+ if p['id']=='glass' and role=='container':
+  r['guard']='D1/D3 supersede the old Trace-only container ceiling. This historical shell recipe is now explicitly sparse-painted-shell-only; dense reading subplanes stay opaque. Numeric per-role strength is pending calibration; not approved for every container.'
+ if p['id']=='glass' and role=='floating-surface':
+  r['guard']='D7: arbitrary backdrop; failing required edges take opaque F0. App/OS transparency reduction and forced-colors disable acquisition and require opaque grounds.'
+ return r

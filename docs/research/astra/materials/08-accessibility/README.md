@@ -11,6 +11,18 @@ These are research proposals and analytical results, not browser conformance res
 
 **Snapshot:** checked **2026-10-08** (America/Los_Angeles), after `git fetch origin`. Area `origin/main`: [`6f896789a5200bcbd34fe87de458e60ca82141d6`](https://github.com/ethanwongwork/area/tree/6f896789a5200bcbd34fe87de458e60ca82141d6). Research inputs: [`666bdcefb602e371da81f4dd30f6f7061f61f482`](https://github.com/ethanwongwork/area/tree/666bdcefb602e371da81f4dd30f6f7061f61f482/docs/research/astra/materials), including the brief, taxonomy, role map, absorption policy, references and controls proposal. Read `docs/CONTRAST.md` first with the brief. Standards and browser-documentation URLs were checked on this date; they are documentation evidence, not execution evidence. No product settings, production files or component approvals changed.
 
+
+<!-- task19-changes -->
+## Changes after review — 2026-10-11
+
+Task 19 corrections, with the reason from [Corrections for Astra and D1–D16](../REVIEW.md). Older Answer/Snapshot passages below retain their original date and findings unless explicitly refreshed; the changes here and decision callouts govern subsequent work.
+
+- **C13 — Review reason:** Forced colors preserves background alpha and does not remove backdrop-filter. **Change:** Added explicit opaque Canvas and no-backdrop-filter fallback, app-level transparency preference and optical-layer cleanup; required state/focus paint stays functional. Files: [fallbacks.md](fallbacks.md). Decisions: D7.
+- **C14 — Review reason:** Gradient interpolation space was unstated. **Change:** Specified premultiplied sRGB composition/interpolation and matching CSS in srgb; a different interpolation space needs its own sampler. Files: [method.md](method.md), [tests.md](tests.md). Decisions: D3, D6, D7.
+
+Full change ledger and verification: [19-corrections](../19-corrections/README.md).
+<!-- /task19-changes -->
+
 ## Evidence and deliverables
 
 - [Standards and worst-case method](method.md): WCAG scope, compositing, gradients, focus and a bounded numerical neumorphism case.

@@ -17,6 +17,10 @@ Role keys normalize task 04's labels for identifiers; they do not change their m
 
 ## Global controls and token mapping
 
+<!-- task19-superseded 07-controls/controls.md ## Global -->
+> **Superseded policy — D2, D3, D9, D16 (owner, 2026-10-11):** Material sits beside Surface; recipe structure switches with inherited 0/1 gate tokens. Surface shadows require a pixel-identical split into adjustable parts, including Tooltip/Toolbar literal exceptions. Selector-switched recipes alone are not nested-scope safe. Ordinal caps and provisional control ranges are not limits. Numeric per-role strength multipliers and bounds must be calibrated to the board and contrast-tested at extremes; that work is pending tasks 20–22. Figma Glass parameter names govern the next API. Light angle is 0 at top, clockwise; the historical 0-at-right angle convention below is superseded, not silently reinterpreted. Material does not change geometry, typography or foreground ink. Multi-axis choices are bundles, not a material axis. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
+
 The table is a proposed control-to-leaf contract. `*` below means a named compiled layer or role, not a literal CSS token. Structural choices compile to static rules; CSS variables are numeric/paint inputs, not an imaginary runtime `if` language. Option B moves these Material inputs into Surface's optical namespace without changing their semantics.
 
 | Control / layer-model channel | Proposed API and units | Input / owner | Resolution and limits |
@@ -56,6 +60,10 @@ Use separate input and effective records. Clamp *derived* alpha and reduce chann
 New controls must not change typography, corner/pill settings, density, state semantics or motion settings. The existing constraints motivating this separation are [E03](evidence.md#e03-derivation-and-registrations) and [E05](evidence.md#e05-elevation-semantic-paint-and-hard-constraints). This task adds no animation control; changing a static key-light angle does not authorize motion on hover.
 
 ## Per-role overrides
+
+<!-- task19-superseded 07-controls/controls.md ## Per-role -->
+> **Superseded policy — D1, D3, D6, D13, D14 (owner, 2026-10-11):** Area’s calm no-cast/Trace-only expression is the None default, not a material ceiling. Contrast, focus, fixed hover ink and semantic meaning remain hard limits. Ordinal caps and provisional control ranges are not limits. Numeric per-role strength multipliers and bounds must be calibrated to the board and contrast-tested at extremes; that work is pending tasks 20–22. The current vocabulary has 13 roles including row-plate; 04/05 now cover 101 contracts. Historical 12-role/78-contract counts below describe their original snapshot only. No automatic effects on glyphs or small text; display text and button labels may explicitly opt in. A curated duotone pilot is later work. Performance rules must follow measured workloads, not universal no-row-blur/static-only caps. Owner names a 60Hz minimum device; a later rerun includes Firefox. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
 
 Proposed syntax: `material.roles[role]` narrows optical controls, while `surfaceControls.roles[role]` tunes an **already permitted** cast. A role override can lower amount, change permitted channel parameters or select a quieter compiled recipe. It cannot raise a family/nesting/accessibility cap, grant missing paint, convert intrinsic media to recolorable glyphs or change task 04 depth. Key light stays shared within a scope; changing it requires a nested scope, not twelve contradictory role lights.
 
@@ -110,6 +118,10 @@ Ordinary labels, values, prose and code remain None; overrides cannot introduce 
 None for additional material. Preserve functional occlusion/fade. Reject material blur/grain/gloss/body override on this role; a shell's glass does not convert the modal scrim to another glass pane. Existing scrim strength is a separate readability/modal policy, not Material's fill transparency.
 
 ## Resolution, resets and nested receivers
+
+<!-- task19-superseded 07-controls/controls.md ## Resolution -->
+> **Superseded policy — D2, D3 (owner, 2026-10-11):** Material sits beside Surface; recipe structure switches with inherited 0/1 gate tokens. Surface shadows require a pixel-identical split into adjustable parts, including Tooltip/Toolbar literal exceptions. Selector-switched recipes alone are not nested-scope safe. Ordinal caps and provisional control ranges are not limits. Numeric per-role strength multipliers and bounds must be calibrated to the board and contrast-tested at extremes; that work is pending tasks 20–22. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
 
 Proposed order:
 

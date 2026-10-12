@@ -11,6 +11,16 @@ These are proposals, with no calibrated new defaults, production implementation 
 
 **Snapshot:** checked **2026-10-08** (America/Los_Angeles), after `git fetch origin`. Area `origin/main`: [`6f896789a5200bcbd34fe87de458e60ca82141d6`](https://github.com/ethanwongwork/area/tree/6f896789a5200bcbd34fe87de458e60ca82141d6). Brief and tasks 01, 04 and 05 read at research commit [`33e8ee40fc3aa86295920b77baef4771e1f86064`](https://github.com/ethanwongwork/area/tree/33e8ee40fc3aa86295920b77baef4771e1f86064/docs/research/astra/materials). Task 04/05's implementation snapshot matches this Area snapshot. Evidence comes from the axis registry, schema, emitters, Theme, manifest, component CSS and repository design/contrast policies. Production files were read with `git show` at the pinned commit, not from the research checkout's older production tree. No new browser or product measurements.
 
+<!-- task19-changes -->
+## Changes after review — 2026-10-11
+
+Task 19 corrections, with the reason from [Corrections for Astra and D1–D16](../REVIEW.md). Older Answer/Snapshot passages below retain their original date and findings unless explicitly refreshed; the changes here and decision callouts govern subsequent work.
+
+- **C12 — Review reason:** Selector-switched recipes break nested scopes; Option A requires Surface migration. **Change:** Marked old selector, scope and migration prescriptions superseded; D2 requires inherited 0/1 recipe gates and pixel-identical Surface shadow decomposition. Marked angle, ordinal caps and API proposals superseded where D3/D9/D16 differ. Files: [architecture.md](architecture.md), [controls.md](controls.md). Decisions: D1, D2, D3, D6, D9, D13, D14, D16.
+
+Full change ledger and verification: [19-corrections](../19-corrections/README.md).
+<!-- /task19-changes -->
+
 ## Evidence and reading order
 
 1. [Evidence ledger](evidence.md): immutable source lines, including current API limits and scope behavior.
@@ -22,6 +32,10 @@ The starting model is task 01's channels, task 04's part/depth assignments and t
 Current Area emits complete Surface shadow strings, validates identical token keys for all presets, and only accepts preset IDs in `Theme.value`. Those facts make shadow decomposition, structural recipe compilation and typed continuous controls explicit engineering work—not capabilities that become available merely by adding `data-area-material`. [Surface](evidence.md#e04-surface-and-shadow-ink), [registry](evidence.md#e02-registry-contract), [Theme](evidence.md#e07-react-and-configuration).
 
 ## Proposals
+
+<!-- task19-superseded 07-controls/README.md ## Proposals -->
+> **Superseded policy — D1, D2, D3, D9, D16 (owner, 2026-10-11):** Area’s calm no-cast/Trace-only expression is the None default, not a material ceiling. Contrast, focus, fixed hover ink and semantic meaning remain hard limits. Material sits beside Surface; recipe structure switches with inherited 0/1 gate tokens. Surface shadows require a pixel-identical split into adjustable parts, including Tooltip/Toolbar literal exceptions. Selector-switched recipes alone are not nested-scope safe. Ordinal caps and provisional control ranges are not limits. Numeric per-role strength multipliers and bounds must be calibrated to the board and contrast-tested at extremes; that work is pending tasks 20–22. Figma Glass parameter names govern the next API. Light angle is 0 at top, clockwise; the historical 0-at-right angle convention below is superseded, not silently reinterpreted. Material does not change geometry, typography or foreground ink. Multi-axis choices are bundles, not a material axis. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
 
 Choose **Option A**, a new Material axis with a small compatible extension of Surface's input model. Preserve the existing semantic colors, radius, density, emphasis and required edges. Keep current rendering when material is off. The global editor can group controls by visible effect while routing each control to its sole token owner; editor organization need not create a conflicting axis namespace.
 

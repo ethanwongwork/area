@@ -54,6 +54,10 @@ Surface corners do not follow control height. Floating lists use their separate 
 
 ## Concentric rims and exceptions
 
+<!-- task19-superseded 09-dark-density/geometry.md ## Concentric -->
+> **Superseded policy — D11 (owner, 2026-10-11):** Inner rims keep the radius floor at every setting except Sharp. Historical max(0, outer-inset) examples and tabulated square inner rims are retained but superseded. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
+
 See [geometry contract](rules.md#concentric-geometry) for used-radius normalization, inset equations, pill overrides, nested-child floors, Sharp joins and connected regions. These tables apply to every style; a material must never select a different radius setting to preserve its appearance. [Per-style matrix](styles.md) states what gets simplified when its layers no longer fit.
 
 Regenerate with `python3 docs/research/astra/materials/09-dark-density/build.py`. This reads the immutable source commit through Git, not production files in the research checkout.

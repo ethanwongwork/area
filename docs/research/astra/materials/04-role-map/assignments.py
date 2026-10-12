@@ -239,3 +239,64 @@ NOTES={
 }
 # Manifest contracts sharing a spec, plus legacy compatibility names.
 SPEC_ALIASES={'checkboxGroup':'checkbox','radioGroup':'radio','choiceLabel':'checkbox','switch':'switch','sliderRange':'slider','chipGroup':'chip','presence':'indicator','indicatorAnchor':'indicator','accordionItem':'accordion','avatarGroup':'avatar','toaster':'toast','tableWrapper':'table','token':'code','kbdGroup':'kbd'}
+
+# Task 19 / D6: one role for state plates, including small hover plates.
+ROLES['W']='row-plate'
+MAP=MAP.replace('R:day ', 'W:day ').replace('menu F R:item ', 'menu F W:item ').replace('T:text,description,label,shortcut ', 'T:text,description,label,label-text,shortcut ')
+MAP=MAP.replace('R:option ', 'W:option ').replace('R:option D:', 'W:option D:').replace('R:option,create', 'W:option,create').replace('R:item,hint-button', 'W:item R:hint-button').replace('nav C C:group,trailing,row,actions T:label,text R:item', 'nav C C:group,trailing,actions W:row,item T:label,text')
+MAP += """
+fileUpload I C:icon,text T:prompt,action,hint I:input
+fileUploadList C
+fileUploadItem C C:icon,body,header,text,meta,status,actions,progress T:name,percent D:separator
+emptyState C C:icon,content,actions T:title,description
+toggleGroup C
+descriptionList C C:item,term,value G:icon
+meter C C:header T:label,value,description I:track
+searchField I R:clear C:shortcut
+shortcutList C T:title,label C:items,item,keys
+dateRangePicker C C:presets W:preset
+citation R G:icon T:label,count
+zoomControl R T:value F:menu C:field
+board C
+boardColumn C C:header,actions,cards,footer T:title S:count W:add G:add-icon
+boardCard C C:heading,properties G:icon T:title F:actions
+timeline C
+timelineItem C C:marker,content,line,body S:dot G:icon,media T:title,sep,meta
+editableText C W:preview I:input
+boxModel S C:side,corner S:border,padding,content T:value,label,caption
+scrollArea C C:viewport,content I:scrollbar K:thumb
+link T G:icon
+toggletip R F:surface
+pagination C C:list,item,status W:page G:ellipsis T:value R:step
+"""
+SPEC_ALIASES.update(fileUploadList='file-upload',fileUploadItem='file-upload',boardColumn='board',boardCard='board',timelineItem='timeline')
+PARENTS.update({
+ 'fileUpload':{'prompt':'text','action':'prompt','hint':'text'},
+ 'fileUploadItem':{'header':'body','text':'header','name':'text','meta':'text','separator':'meta','status':'meta','actions':'header','progress':'body','percent':'progress'},
+ 'emptyState':{'title':'content','description':'content'},
+ 'descriptionList':{'term':'item','icon':'term','value':'item'},
+ 'meter':{'label':'header','value':'header'},
+ 'shortcutList':{'item':'items','label':'item','keys':'item'},
+ 'dateRangePicker':{'preset':'presets'},
+ 'zoomControl':{'menu':'@host','field':'menu'},
+ 'boardColumn':{'title':'header','count':'header','actions':'header','add':'footer','add-icon':'add'},
+ 'boardCard':{'icon':'heading','title':'heading'},
+ 'timelineItem':{'dot':'marker','icon':'marker','media':'marker','line':'content','title':'line','sep':'line','meta':'line','body':'content'},
+ 'boxModel':{'padding':'border','content':'padding','value':'side','corner':'border'},
+ 'scrollArea':{'content':'viewport','thumb':'scrollbar'},
+ 'toggletip':{'surface':'@host'},
+ 'pagination':{'item':'list','page':'item','ellipsis':'item','value':'status'}
+})
+PARENTS['menu']['label-text']='label'
+DEPTH.update({'card.root':'raised','boardCard.root':'raised','boardCard.actions':'floating','zoomControl.menu':'floating','toggletip.surface':'floating'})
+NOTES['kbd.root']=('R','Passive keycap, not interactive. Default border reserves space but is transparent, with box-shadow:none; quiet removes backing and border width. No visible border or raised depth asserted.')
+NOTES['card.root']=('','Raised when Surface shadow-card is present; Flat and dark identity may remove the cast. Relative depth is conditional, not a second material shadow.')
+NOTES['fileUpload.input']=('','display:none native file picker receiver; no independent material paint.')
+NOTES['boxModel.root']=('C','Diagnostic diagram: nested boxes and tint encode margin/border/padding/content, not decorative containers. Repeated side/value parent denotes a template; border/padding sides and corner values reuse it.')
+NOTES['scrollArea.scrollbar']=('','Transparent track/hit region; thumb supplies visible paint. Inactive/overflow states change visibility, not role.')
+NOTES['fileUpload.icon']=('G','Painted icon housing; its SVG ink is a separate glyph supplement.')
+NOTES['fileUploadItem.icon']=('G','Painted file-type housing; supplied icon/media is a separate glyph supplement.')
+NOTES['emptyState.icon']=('G','Painted icon housing; consumer glyph is separately classified and never recolored as a shell.')
+NOTES['descriptionList.term']=('T','Term groups optional glyph and visible label; label ink is a separate supplement.')
+NOTES['timelineItem.sep']=('D','Textual separator between title and metadata; preserves text treatment, not a structural rule.')
+NOTES['boardColumn.count']=('C','Co-classed Badge; count plate uses Badge body, supplied text remains separate.')

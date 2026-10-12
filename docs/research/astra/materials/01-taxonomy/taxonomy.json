@@ -150,6 +150,12 @@
       "url": "https://drafts.csswg.org/filter-effects-2/#BackdropFilterProperty",
       "scope": "Work in progress, not an interoperable support guarantee; filtering and clipping model.",
       "checked": "2026-10-07"
+    },
+    "acrylic-active-graph": {
+      "title": "WinUI Acrylic active luminosity/tint graph",
+      "url": "https://github.com/microsoft/microsoft-ui-xaml/blob/901ffc065a1f3a1122bbfe6d222eb80a471f28a6/controls/dev/Materials/Acrylic/AcrylicBrush.cpp#L389-L414",
+      "scope": "Active nonopaque graph; unused exclusion constants are not additional layers. Correction from task 06 R04.",
+      "checked": "2026-10-11"
     }
   },
   "styles": [
@@ -253,13 +259,14 @@
       "id": "acrylic",
       "name": "Acrylic (Fluent)",
       "kind": "vendor material recipe",
-      "definition": "Microsoft’s translucent brush combines a backdrop, blur, an exclusion blend, tint and noise. Background acrylic samples behind the app; in-app acrylic samples within it. Microsoft supplies opaque fallbacks under conditions such as transparency being disabled.",
+      "definition": "Microsoft’s translucent brush combines a backdrop, blur, a luminosity blend, tint and noise. Background acrylic samples behind the app; in-app acrylic samples within it. Microsoft supplies opaque fallbacks under conditions such as transparency being disabled. The active WinUI nonopaque path is the scope of this definition; historical/unused exclusion constants are not additional active layers (task 19 correction; task 06 R04).",
       "canonical_example": "WinUI MenuFlyout, open ComboBox and AutoSuggestBox surfaces in Microsoft’s Acrylic guide.",
       "sources": [
-        "acrylic"
+        "acrylic",
+        "acrylic-active-graph"
       ],
       "ingredients": {
-        "fill": "Tint + exclusion blend",
+        "fill": "Luminosity blend + tint",
         "translucency": "Defining; opaque fallback",
         "blur": "Backdrop",
         "stroke_model": "Control-dependent",

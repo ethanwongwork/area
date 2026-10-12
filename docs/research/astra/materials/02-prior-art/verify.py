@@ -8,7 +8,7 @@ ROOT=HERE.parents[4]
 p=argparse.ArgumentParser(description=__doc__);p.add_argument('--fetch',action='store_true');p.add_argument('--render',action='store_true');args=p.parse_args()
 assert (ROOT/'docs/research/astra/README.md').exists()
 lock=json.loads((HERE/'source-lock.json').read_text());integrity=json.loads((HERE/'source-integrity.json').read_text());data=json.loads((HERE/'survey.json').read_text())
-expected={'apple','visionos','fluent','m3','m3-expressive','radix','shadcn','tweakcn','chakra','mantine','heroui','park','carbon','spectrum','polaris','geist','98css','7css','xpcss','nes','daisyui','generators','openglass'}
+expected={'apple','visionos','fluent','m3','m3-expressive','radix','shadcn','tweakcn','chakra','mantine','heroui','park','carbon','spectrum','polaris','geist','98css','7css','xpcss','nes','daisyui','generators','openglass','figma-glass','open-props','auraglass','liquid-glass-web'}
 assert len(data['entries'])==len(expected) and {r['id'] for r in data['entries']}==expected
 indexed={(lock[f['library']]['repo'],lock[f['library']]['commit'],f['path']):f for f in integrity}
 count=0
@@ -20,9 +20,9 @@ for r in data['entries']:
   repo,sha,path,lo,hi=match.groups();f=indexed[(repo,sha,unquote(path))]
   assert 1<=int(lo)<=int(hi)<=f['lines'],(ref,f['lines'])
   count+=1
-parts=['# Prior-art survey','', 'All documentation and source snapshots checked **2026-10-08**. Source links pin full commit SHAs and one-based line ranges. “Not found” is bounded to the named APIs, documents and source files; it is not a claim that arbitrary custom CSS is impossible. No vendor accessibility/performance claims were independently tested.','']
+parts=['# Prior-art survey','', 'Original documentation and source snapshots checked **2026-10-08**; task 19 additions and OpenGlass scale checked **2026-10-11**. Source links pin full commit SHAs and one-based line ranges. “Not found” is bounded to the named APIs, documents and source files; it is not a claim that arbitrary custom CSS is impossible. No vendor accessibility/performance claims were independently tested.','']
 for r in data['entries']:
- parts += [f'<a id="{r["id"]}"></a>',f'## {r["title"]}','',f'**Category:** {r["kind"]}.','',f'**Controls:** {r["controls"]}','',f'**Propagation:** {r["scope"]}','',f'**Limit / interpretation:** {r["gap"]}','',f'**Documentation:** {r["docs"]} (checked 2026-10-08).','']
+ parts += [f'<a id="{r["id"]}"></a>',f'## {r["title"]}','',f'**Category:** {r["kind"]}.','',f'**Controls:** {r["controls"]}','',f'**Propagation:** {r["scope"]}','',f'**Limit / interpretation:** {r["gap"]}','',f'**Documentation:** {r["docs"]} (checked {r.get('checked', '2026-10-08')}).','']
  if r['refs']:parts += ['**Pinned source:** '+ '; '.join(r['refs'])+'.','']
 body='\n'.join(parts)
 if args.render:(HERE/'survey.md').write_text(body)

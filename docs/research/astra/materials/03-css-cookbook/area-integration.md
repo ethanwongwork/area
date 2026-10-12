@@ -1,5 +1,9 @@
 # Reading Area tokens without changing Area
 
+<!-- task19-superseded 03-css-cookbook/area-integration.md * -->
+> **Superseded policy — D1, D2, D3, D6, D11, D12, D13, D16 (owner, 2026-10-11):** Area’s calm no-cast/Trace-only expression is the None default, not a material ceiling. Contrast, focus, fixed hover ink and semantic meaning remain hard limits. Material sits beside Surface; recipe structure switches with inherited 0/1 gate tokens. Surface shadows require a pixel-identical split into adjustable parts, including Tooltip/Toolbar literal exceptions. Selector-switched recipes alone are not nested-scope safe. Ordinal caps and provisional control ranges are not limits. Numeric per-role strength multipliers and bounds must be calibrated to the board and contrast-tested at extremes; that work is pending tasks 20–22. The current vocabulary has 13 roles including row-plate; 04/05 now cover 101 contracts. Historical 12-role/78-contract counts below describe their original snapshot only. Inner rims keep the radius floor at every setting except Sharp. Historical max(0, outer-inset) examples and tabulated square inner rims are retained but superseded. Cutout rings and fixed-color fades become real transparent gaps through masks; separately required occlusion and contrast paint remain functional. No automatic effects on glyphs or small text; display text and button labels may explicitly opt in. A curated duotone pilot is later work. Material does not change geometry, typography or foreground ink. Multi-axis choices are bundles, not a material axis. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
+
 **Area snapshot:** `origin/main` at `4c1854202a8e109479d5b83ef24a8325231da056`; checked 2026-10-08. This is an integration proposal, not a new axis, preset, approval or component patch.
 
 ## Evidence and ownership

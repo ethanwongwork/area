@@ -1,15 +1,22 @@
 """Generate and validate research only. Use --check for deterministic verification."""
 from pathlib import Path
+from copy import deepcopy
 from itertools import combinations
 import hashlib,json,subprocess,sys
 sys.dont_write_bytecode=True
 from model import AREA,RESEARCH,ROLES,NEUTRAL,PRESETS,resolved
 from combinations import REASONS,reason,PRESET_PAIRS
+PRESET_PAIRS=list(PRESET_PAIRS)+[('none',p['id'],'C','None emits no material declarations; the other recipe wins, not a concatenated second paint.') for p in PRESETS if p['id']!='none']
 HERE=Path(__file__).resolve().parent
 ROOT=next(p for p in HERE.parents if (p/'.git').exists())
 def read(path):return subprocess.check_output(['git','show',f'{RESEARCH}:docs/research/astra/materials/{path}'],cwd=ROOT,text=True)
 def jtext(x):return json.dumps(x,ensure_ascii=False,indent=2)+'\n'
 def emit(name,s):
+ if name=='combinations.md':
+  import importlib.util
+  spec=importlib.util.spec_from_file_location('review_annotations',HERE.parent/'19-corrections/supersede.py')
+  module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+  s,_=module.annotate('13-presets/'+name,s)
  s=s.rstrip()+'\n'
  assert len(s.encode())<1000000,(name,len(s.encode()))
  if '--check' in sys.argv:assert (HERE/name).read_text()==s,name
@@ -26,6 +33,8 @@ records=[]
 for p in PRESETS:
  r={k:v for k,v in p.items() if k!='roles'}
  r['sourceStatus']='reference-inspired authored proposal; not native parity or approved Area preset'
+ r['stage']='first-set' if p['id'] in ['none','glass','tactile','soft'] else 'deferred-paper-rebuild' if p['id']=='paper' else 'later-finish' if p['id'] in ['aero','glow','prism'] else 'research-only'
+ r['ownerDecisions']=['D1','D2','D3','D4','D5','D6','D7','D9','D11','D13','D14','D16']
  r['modes']={}
  for dark in [False,True]:
   mode='dark' if dark else 'light'
@@ -33,7 +42,7 @@ for p in PRESETS:
  r['statePolicy']={'hover':p['states'][0],'press':p['states'][1],'focus-visible':'Keep required focus; remove optional glow, gloss and reflected body overlays on the focused receiver.','selected-checked':p['states'][2],'open':'Resolve the opened receiver independently, one shell; preserve actual expanded state.','disabled':'Use existing disabled paint once and opaque body; remove optional glow/gloss/relief/grain/gradients/strokes, keep selected value.','invalid':'Keep danger context and combined invalid-focus geometry; suppress optional glow/gloss, reflected body overlays and decorative edge gradient.'}
  records.append(r)
 inputs={f'{i:02}':hashlib.sha256(read(next(x for x in subprocess.check_output(['git','ls-tree','-r','--name-only',RESEARCH,'docs/research/astra/materials'],cwd=ROOT,text=True).splitlines() if x.split('/')[-1]=='README.md' and x.split('/')[-2].startswith(f'{i:02}-')).split('materials/',1)[1]).encode()).hexdigest() for i in range(1,11)}
-out=dict(schemaVersion=1,status='unreviewed authored proposal; numeric seeds uncalibrated',checked='2026-10-09',areaCommit=AREA,researchCommit=RESEARCH,inputReadmeHashes=inputs,roles=ROLES,neutralControls=NEUTRAL,presets=records)
+out=dict(schemaVersion=1,status='task 19 corrected proposal; None identity added; first set None/Glass/Tactile/Soft; historical seeds uncalibrated',checked='2026-10-09',areaCommit=AREA,researchCommit=RESEARCH,inputReadmeHashes=inputs,roles=ROLES,neutralControls=NEUTRAL,presets=records)
 emit('presets.json',jtext(out))
 
 def summary(c):
@@ -55,7 +64,7 @@ def summary(c):
   if g['stops'][0].get('customLight'):stops=' → '.join(f"{s['position']}% {s['customLight']} light / {s['customDark']} dark α{s['alpha']}" for s in g['stops'])
   a.append(f"{key}: linear {g['angleDeg']}° sRGB [{stops}]")
  return '; '.join(a)
-lines=['# Eight proposed presets','', '**Authored complete specifications, not measured or shipping presets.** Every row resolves from the neutral control contract in [contract.md](contract.md); unlisted optional channels are explicitly off. All twelve roles and both modes are expanded without inheritance in [presets.json](presets.json). Numeric seeds are proposals; source values and intentional differences are recorded in [evidence.md](evidence.md).','', 'Each preset has a shared light at 225° toward the upper-left, height 45°, ambient .5. Cast controls remain source direction, lift/softness/strength gains 1, spread delta 0. These are authored compatibility/lighting choices. The following rows override the preset global profile, which is the floating-surface profile. Roles never inherit that full profile accidentally. Semantic ink and Surface policy survive every row.','']
+lines=['# Preset records after task 19','','> **Task 19 / D4–D7:** None is the identity default; Glass/Tactile/Soft are first-set candidates. Paper is deferred for a real opaque rebuild; its existing stroke no longer fades to 14%/22%. Prism stops derive from accent/neutral. Glass container is explicitly a sparse painted shell; D1/D3 supersede the old global cap. Required failing glass edges use F0. Numeric strengths remain uncalibrated.','', '> **Superseded — D1, D2, D3, D9, D11, D13, D14, D16:** historical caps, no-cast rules, angle convention and fixed geometry/Surface prescriptions below are preserved as proposals, not current requirements. First-set calibration and nested 0/1 gates are future tasks.','', '**Authored complete specifications, not measured or shipping presets.** Every row resolves from the neutral control contract in [contract.md](contract.md); unlisted optional channels are explicitly off. All thirteen roles and both modes are expanded without inheritance in [presets.json](presets.json). Numeric seeds are proposals; source values and intentional differences are recorded in [evidence.md](evidence.md).','', 'Each preset has a shared light at 225° toward the upper-left, height 45°, ambient .5. Cast controls remain source direction, lift/softness/strength gains 1, spread delta 0. These are authored compatibility/lighting choices. The following rows override the preset global profile, which is the floating-surface profile. Roles never inherit that full profile accidentally. Semantic ink and Surface policy survive every row.','']
 for p in records:
  lines += [f"## {p['name']} (`{p['id']}`)",'',p['intent'],'',f"**References:** "+', '.join(f"[{r}](evidence.md#{r.lower()})" for r in p['refs'])+'. **Transfer:** '+p['difference'],'',f"**Light:** {p['light']} **Dark:** {p['dark']}",'','| Role / cap | Light requested recipe | Dark requested recipe | Cast / context |','| --- | --- | --- | --- |']
  for role in ROLES:
@@ -99,7 +108,7 @@ for rid in used:
  lines += ['', '**Limit:** '+r['limits'],'']
 lines+=['## Public checks on 2026-10-09','', '- [Microsoft Acrylic guidance](https://learn.microsoft.com/en-us/windows/apps/design/style/acrylic): avoid stacked Acrylic planes; provide solid fallbacks and check text after tint changes. Its general historical graph is not substituted for R04’s pinned active WinUI code path.','- [W3C CSS Backgrounds and Borders](https://www.w3.org/TR/css-backgrounds-3/#box-shadow): shadows, borders and rounded clipping are separate operations.','- [Temani Afif gradient-edge technique](https://css-tip.com/border-gradient/): opaque-center double background and transparent-center mask are alternatives. The live newer border-area technique does not change our selected fallback path.','', '## Not found / not adopted','', 'No complete native Liquid Glass or active Mica numeric recipe was found in task 06’s inspected sources. Neither is marketed as a matching preset here. No original board images/public URLs are available; R19/R20 remain owner transcriptions. No evidence in 01–10 calibrates all-role dark/compact material numbers: the explicit seeds in model.py are new proposals. No source demonstrates these complete eight Area presets; the role translation and compatibility judgments are this task’s synthesis.','']
 emit('evidence.md','\n'.join(lines))
-assert len(records)==8 and len(pairs)==300 and len(lookup)==28
+assert len(records)==9 and len(pairs)==300 and len(lookup)==36
 for p in records:
  for mode in ['light','dark']:
   assert list(p['modes'][mode]['roles'])==ROLES
@@ -131,7 +140,7 @@ for p in records:
     assert all(0<=stop['alpha']<=1 for stop in g['stops'])
    assert c['surfaceControls']==NEUTRAL['surfaceControls']
    if role in ['glyph','text','scrim','page']:assert c['amount']=='none' and c['backdrop']['blurPx']==0
-assert len({p['id'] for p in records})==8
+assert len({p['id'] for p in records})==9
 assert len({frozenset([p['a'],p['b']]) for p in pairs})==300
 for pair in pairs:
  assert pair['references'] and set(pair['references'])<=set(refmap)
@@ -139,4 +148,4 @@ for pair in pairs:
 for p in records:assert set(p['refs'])<=set(refmap) and set(p['styles'])<=set(styles)
 for path in HERE.iterdir():
  if path.is_file():assert path.stat().st_size<1000000,path
-print('PASS: 8 presets × 12 roles × 2 modes; 300 style pairs; 28 preset pairs; deterministic outputs; each file <1 MB.')
+print('PASS: 9 records × 13 roles × 2 modes; 300 style pairs; 36 preset pairs; deterministic outputs; each file <1 MB.')

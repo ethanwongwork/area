@@ -1,0 +1,3852 @@
+[
+ {
+  "file": "packages/styles/src/components/button-group.css",
+  "old": [
+   73,
+   82
+  ],
+  "new": [
+   73,
+   82
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/split-button.css",
+  "old": [
+   45,
+   55
+  ],
+  "new": [
+   45,
+   55
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/alignment-picker.css",
+  "old": [
+   78,
+   104
+  ],
+  "new": [
+   78,
+   104
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/alignment-picker.css",
+  "old": [
+   59,
+   66
+  ],
+  "new": [
+   59,
+   66
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/color.css",
+  "old": [
+   49,
+   65
+  ],
+  "new": [
+   49,
+   65
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/color.css",
+  "old": [
+   66,
+   69
+  ],
+  "new": [
+   66,
+   69
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/color.css",
+  "old": [
+   107,
+   116
+  ],
+  "new": [
+   107,
+   116
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/color.css",
+  "old": [
+   274,
+   287
+  ],
+  "new": [
+   274,
+   287
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/color.css",
+  "old": [
+   301,
+   306
+  ],
+  "new": [
+   301,
+   306
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/color.css",
+  "old": [
+   49,
+   65
+  ],
+  "new": [
+   49,
+   65
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/color.css",
+  "old": [
+   66,
+   69
+  ],
+  "new": [
+   66,
+   69
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/color.css",
+  "old": [
+   49,
+   65
+  ],
+  "new": [
+   49,
+   65
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/color.css",
+  "old": [
+   66,
+   69
+  ],
+  "new": [
+   66,
+   69
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/color.css",
+  "old": [
+   343,
+   343
+  ],
+  "new": [
+   343,
+   343
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/color.css",
+  "old": [
+   352,
+   352
+  ],
+  "new": [
+   352,
+   352
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/color.css",
+  "old": [
+   348,
+   348
+  ],
+  "new": [
+   348,
+   348
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/color.css",
+  "old": [
+   346,
+   348
+  ],
+  "new": [
+   346,
+   348
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/calendar.css",
+  "old": [
+   113,
+   129
+  ],
+  "new": [
+   113,
+   129
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/input.css",
+  "old": [
+   171,
+   184
+  ],
+  "new": [
+   171,
+   184
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/input.css",
+  "old": [
+   162,
+   162
+  ],
+  "new": [
+   162,
+   162
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/input.css",
+  "old": [
+   160,
+   160
+  ],
+  "new": [
+   160,
+   160
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/number-field.css",
+  "old": [
+   109,
+   109
+  ],
+  "new": [
+   109,
+   109
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/number-field.css",
+  "old": [
+   144,
+   144
+  ],
+  "new": [
+   144,
+   144
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/breadcrumb.css",
+  "old": [
+   24,
+   31
+  ],
+  "new": [
+   24,
+   31
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/breadcrumb.css",
+  "old": [
+   46,
+   51
+  ],
+  "new": [
+   46,
+   51
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/tree-view.css",
+  "old": [
+   28,
+   60
+  ],
+  "new": [
+   28,
+   60
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/tree-view.css",
+  "old": [
+   60,
+   60
+  ],
+  "new": [
+   60,
+   60
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/tree-view.css",
+  "old": [
+   76,
+   89
+  ],
+  "new": [
+   76,
+   89
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/tree-view.css",
+  "old": [
+   78,
+   78
+  ],
+  "new": [
+   78,
+   78
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/tree-view.css",
+  "old": [
+   126,
+   135
+  ],
+  "new": [
+   126,
+   135
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/textarea.css",
+  "old": [
+   9,
+   49
+  ],
+  "new": [
+   9,
+   49
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/textarea.css",
+  "old": [
+   79,
+   79
+  ],
+  "new": [
+   79,
+   79
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/navigation.css",
+  "old": [
+   243,
+   285
+  ],
+  "new": [
+   243,
+   285
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/navigation.css",
+  "old": [
+   286,
+   297
+  ],
+  "new": [
+   286,
+   297
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/navigation.css",
+  "old": [
+   371,
+   386
+  ],
+  "new": [
+   371,
+   386
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/navigation.css",
+  "old": [
+   387,
+   410
+  ],
+  "new": [
+   387,
+   410
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/navigation.css",
+  "old": [
+   432,
+   464
+  ],
+  "new": [
+   432,
+   464
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/navigation.css",
+  "old": [
+   432,
+   464
+  ],
+  "new": [
+   432,
+   464
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/navigation.css",
+  "old": [
+   465,
+   476
+  ],
+  "new": [
+   465,
+   476
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/navigation.css",
+  "old": [
+   477,
+   488
+  ],
+  "new": [
+   477,
+   488
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/choice.css",
+  "old": [
+   176,
+   202
+  ],
+  "new": [
+   176,
+   202
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/choice.css",
+  "old": [
+   176,
+   217
+  ],
+  "new": [
+   176,
+   217
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/switch.css",
+  "old": [
+   88,
+   98
+  ],
+  "new": [
+   88,
+   98
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/slider.css",
+  "old": [
+   190,
+   199
+  ],
+  "new": [
+   190,
+   199
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/slider.css",
+  "old": [
+   200,
+   209
+  ],
+  "new": [
+   200,
+   209
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/slider.css",
+  "old": [
+   190,
+   209
+  ],
+  "new": [
+   190,
+   209
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/slider.css",
+  "old": [
+   224,
+   249
+  ],
+  "new": [
+   224,
+   249
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/slider.css",
+  "old": [
+   224,
+   249
+  ],
+  "new": [
+   224,
+   249
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/slider.css",
+  "old": [
+   59,
+   69
+  ],
+  "new": [
+   59,
+   69
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/slider.css",
+  "old": [
+   120,
+   129
+  ],
+  "new": [
+   120,
+   129
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/slider.css",
+  "old": [
+   131,
+   140
+  ],
+  "new": [
+   131,
+   140
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/badge.css",
+  "old": [
+   64,
+   64
+  ],
+  "new": [
+   66,
+   66
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/badge.css",
+  "old": [
+   180,
+   181
+  ],
+  "new": [
+   182,
+   183
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/badge.css",
+  "old": [
+   201,
+   202
+  ],
+  "new": [
+   203,
+   204
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/badge.css",
+  "old": [
+   197,
+   197
+  ],
+  "new": [
+   199,
+   199
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/chip.css",
+  "old": [
+   250,
+   259
+  ],
+  "new": [
+   258,
+   267
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/indicator.css",
+  "old": [
+   19,
+   23
+  ],
+  "new": [
+   19,
+   23
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/indicator.css",
+  "old": [
+   3,
+   13
+  ],
+  "new": [
+   3,
+   13
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/count.css",
+  "old": [
+   15,
+   45
+  ],
+  "new": [
+   15,
+   45
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/presence.css",
+  "old": [
+   12,
+   12
+  ],
+  "new": [
+   12,
+   12
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/accordion.css",
+  "old": [
+   110,
+   119
+  ],
+  "new": [
+   110,
+   119
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/display.css",
+  "old": [
+   9,
+   34
+  ],
+  "new": [
+   9,
+   34
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/display.css",
+  "old": [
+   366,
+   386
+  ],
+  "new": [
+   366,
+   386
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/display.css",
+  "old": [
+   246,
+   254
+  ],
+  "new": [
+   246,
+   254
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/panel.css",
+  "old": [
+   333,
+   341
+  ],
+  "new": [
+   351,
+   359
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/tag.css",
+  "old": [
+   108,
+   108
+  ],
+  "new": [
+   108,
+   108
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/tag.css",
+  "old": [
+   113,
+   114
+  ],
+  "new": [
+   113,
+   114
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/drawer.css",
+  "old": [
+   38,
+   43
+  ],
+  "new": [
+   38,
+   43
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/command-palette.css",
+  "old": [
+   19,
+   24
+  ],
+  "new": [
+   19,
+   24
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/surface.css",
+  "old": [
+   333,
+   341
+  ],
+  "new": [
+   333,
+   341
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/surface.css",
+  "old": [
+   166,
+   174
+  ],
+  "new": [
+   166,
+   174
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/surface.css",
+  "old": [
+   401,
+   406
+  ],
+  "new": [
+   401,
+   406
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/surface.css",
+  "old": [
+   407,
+   414
+  ],
+  "new": [
+   407,
+   414
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/surface.css",
+  "old": [
+   392,
+   406
+  ],
+  "new": [
+   392,
+   406
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/surface.css",
+  "old": [
+   434,
+   443
+  ],
+  "new": [
+   434,
+   443
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/surface.css",
+  "old": [
+   521,
+   530
+  ],
+  "new": [
+   521,
+   530
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/surface.css",
+  "old": [
+   608,
+   615
+  ],
+  "new": [
+   615,
+   627
+  ],
+  "changed": true,
+  "old_excerpt": "  .area-alert__link a {\n    color: var(--_fg);\n    font-weight: var(--area-weight-regular);\n    text-decoration: underline;\n    text-decoration-thickness: var(--area-stroke-width);\n    text-underline-offset: var(--area-space-2);\n  }\n",
+  "new_excerpt": "  .area-alert__link a {\n    color: var(--_fg);\n    font-weight: var(--area-weight-regular);\n    text-decoration: underline;\n    /* Link's underline (docs/specs/link.md, peers aligned 2026-10-08). */\n    text-decoration-color: currentColor; /* spec: Link's line, the link's own ink (link.md, review round 2) */\n    text-decoration-thickness: var(--area-stroke-width);\n    text-underline-offset: var(--area-space-2);\n    transition: text-decoration-color var(--area-duration-fast) var(--area-ease-out);\n  }\n  @media (hover: hover) { .area-alert__link a:hover { text-decoration-color: currentColor; transition-duration: 0s; } }\n  .area-alert__link a:focus-visible { text-decoration-color: currentColor; transition-duration: 0s; }\n"
+ },
+ {
+  "file": "packages/styles/src/components/surface.css",
+  "old": [
+   812,
+   817
+  ],
+  "new": [
+   819,
+   824
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/surface.css",
+  "old": [
+   882,
+   882
+  ],
+  "new": [
+   889,
+   889
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/surface.css",
+  "old": [
+   1081,
+   1082
+  ],
+  "new": [
+   1088,
+   1089
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/surface.css",
+  "old": [
+   1382,
+   1395
+  ],
+  "new": [
+   1404,
+   1417
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/surface.css",
+  "old": [
+   1332,
+   1369
+  ],
+  "new": [
+   1354,
+   1391
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/surface.css",
+  "old": [
+   1554,
+   1562
+  ],
+  "new": [
+   1576,
+   1584
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/surface.css",
+  "old": [
+   1434,
+   1445
+  ],
+  "new": [
+   1456,
+   1467
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/navigation.css",
+  "old": [
+   54,
+   68
+  ],
+  "new": [
+   54,
+   68
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/navigation.css",
+  "old": [
+   181,
+   194
+  ],
+  "new": [
+   181,
+   194
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/navigation.css",
+  "old": [
+   166,
+   179
+  ],
+  "new": [
+   166,
+   179
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/navigation.css",
+  "old": [
+   153,
+   174
+  ],
+  "new": [
+   153,
+   174
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/navigation.css",
+  "old": [
+   232,
+   234
+  ],
+  "new": [
+   232,
+   234
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/navigation.css",
+  "old": [
+   235,
+   235
+  ],
+  "new": [
+   235,
+   235
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/navigation.css",
+  "old": [
+   207,
+   212
+  ],
+  "new": [
+   207,
+   212
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/code.css",
+  "old": [
+   383,
+   383
+  ],
+  "new": [
+   383,
+   383
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/code.css",
+  "old": [
+   384,
+   384
+  ],
+  "new": [
+   384,
+   384
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/code.css",
+  "old": [
+   385,
+   385
+  ],
+  "new": [
+   385,
+   385
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/code.css",
+  "old": [
+   386,
+   386
+  ],
+  "new": [
+   386,
+   386
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/code.css",
+  "old": [
+   387,
+   387
+  ],
+  "new": [
+   387,
+   387
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/code.css",
+  "old": [
+   388,
+   388
+  ],
+  "new": [
+   388,
+   388
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/code.css",
+  "old": [
+   329,
+   342
+  ],
+  "new": [
+   329,
+   342
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/code.css",
+  "old": [
+   350,
+   354
+  ],
+  "new": [
+   350,
+   354
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/code.css",
+  "old": [
+   490,
+   503
+  ],
+  "new": [
+   490,
+   503
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/code.css",
+  "old": [
+   416,
+   435
+  ],
+  "new": [
+   416,
+   435
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/nav.css",
+  "old": [
+   182,
+   194
+  ],
+  "new": [
+   182,
+   194
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/nav.css",
+  "old": [
+   284,
+   287
+  ],
+  "new": [
+   284,
+   287
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/color.css",
+  "old": [
+   406,
+   406
+  ],
+  "new": [
+   406,
+   406
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/color.css",
+  "old": [
+   274,
+   280
+  ],
+  "new": [
+   274,
+   280
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/slider.css",
+  "old": [
+   224,
+   249
+  ],
+  "new": [
+   224,
+   249
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/navigation.css",
+  "old": [
+   387,
+   410
+  ],
+  "new": [
+   387,
+   410
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/surface.css",
+  "old": [
+   295,
+   303
+  ],
+  "new": [
+   295,
+   303
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/input.css",
+  "old": [
+   171,
+   184
+  ],
+  "new": [
+   171,
+   184
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/display.css",
+  "old": [
+   9,
+   34
+  ],
+  "new": [
+   9,
+   34
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/drawer.css",
+  "old": [
+   61,
+   69
+  ],
+  "new": [
+   61,
+   69
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/hover-card.css",
+  "old": [
+   31,
+   31
+  ],
+  "new": [
+   31,
+   31
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/hover-card.css",
+  "old": [
+   21,
+   31
+  ],
+  "new": [
+   21,
+   31
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/Button.tsx",
+  "old": [
+   91,
+   91
+  ],
+  "new": [
+   91,
+   91
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/ButtonGroup.tsx",
+  "old": [
+   13,
+   16
+  ],
+  "new": [
+   13,
+   16
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/SplitButton.tsx",
+  "old": [
+   107,
+   112
+  ],
+  "new": [
+   107,
+   112
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/SplitButton.tsx",
+  "old": [
+   114,
+   116
+  ],
+  "new": [
+   114,
+   116
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/SplitButton.tsx",
+  "old": [
+   117,
+   120
+  ],
+  "new": [
+   117,
+   120
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/Toolbar.tsx",
+  "old": [
+   111,
+   112
+  ],
+  "new": [
+   111,
+   112
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/Toolbar.tsx",
+  "old": [
+   111,
+   112
+  ],
+  "new": [
+   111,
+   112
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/Calendar.tsx",
+  "old": [
+   262,
+   265
+  ],
+  "new": [
+   262,
+   265
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/ColorSwatchPicker.tsx",
+  "old": [
+   119,
+   119
+  ],
+  "new": [
+   119,
+   119
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/ColorField.tsx",
+  "old": [
+   68,
+   79
+  ],
+  "new": [
+   68,
+   79
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/ColorField.tsx",
+  "old": [
+   82,
+   88
+  ],
+  "new": [
+   82,
+   88
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/ColorField.tsx",
+  "old": [
+   77,
+   77
+  ],
+  "new": [
+   77,
+   77
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/ColorField.tsx",
+  "old": [
+   85,
+   88
+  ],
+  "new": [
+   85,
+   88
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/ColorPicker.tsx",
+  "old": [
+   322,
+   323
+  ],
+  "new": [
+   322,
+   323
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/ColorPicker.tsx",
+  "old": [
+   346,
+   348
+  ],
+  "new": [
+   346,
+   348
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/ColorPicker.tsx",
+  "old": [
+   350,
+   351
+  ],
+  "new": [
+   350,
+   351
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/ColorPicker.tsx",
+  "old": [
+   360,
+   362
+  ],
+  "new": [
+   360,
+   362
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/ColorPicker.tsx",
+  "old": [
+   364,
+   369
+  ],
+  "new": [
+   364,
+   369
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/ColorPicker.tsx",
+  "old": [
+   275,
+   278
+  ],
+  "new": [
+   275,
+   278
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/ColorPicker.tsx",
+  "old": [
+   66,
+   72
+  ],
+  "new": [
+   66,
+   72
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/ColorPicker.tsx",
+  "old": [
+   366,
+   368
+  ],
+  "new": [
+   366,
+   368
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/ColorPicker.tsx",
+  "old": [
+   377,
+   378
+  ],
+  "new": [
+   377,
+   378
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/ColorPicker.tsx",
+  "old": [
+   375,
+   376
+  ],
+  "new": [
+   375,
+   376
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/Input.tsx",
+  "old": [
+   139,
+   139
+  ],
+  "new": [
+   139,
+   139
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/Input.tsx",
+  "old": [
+   77,
+   77
+  ],
+  "new": [
+   77,
+   77
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/Breadcrumb.tsx",
+  "old": [
+   57,
+   57
+  ],
+  "new": [
+   57,
+   57
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/Composer.tsx",
+  "old": [
+   111,
+   115
+  ],
+  "new": [
+   111,
+   115
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/forms.tsx",
+  "old": [
+   205,
+   223
+  ],
+  "new": [
+   205,
+   223
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/forms.tsx",
+  "old": [
+   280,
+   298
+  ],
+  "new": [
+   280,
+   298
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/forms.tsx",
+  "old": [
+   153,
+   187
+  ],
+  "new": [
+   153,
+   187
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/forms.tsx",
+  "old": [
+   318,
+   340
+  ],
+  "new": [
+   318,
+   340
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/Switch.tsx",
+  "old": [
+   106,
+   110
+  ],
+  "new": [
+   106,
+   110
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/SliderRange.tsx",
+  "old": [
+   103,
+   107
+  ],
+  "new": [
+   103,
+   107
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/SliderRange.tsx",
+  "old": [
+   105,
+   107
+  ],
+  "new": [
+   105,
+   107
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/SliderRange.tsx",
+  "old": [
+   88,
+   91
+  ],
+  "new": [
+   88,
+   91
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/primitives.tsx",
+  "old": [
+   1015,
+   1020
+  ],
+  "new": [
+   1016,
+   1021
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/Accordion.tsx",
+  "old": [
+   101,
+   120
+  ],
+  "new": [
+   101,
+   120
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/BadgeGroup.tsx",
+  "old": [
+   81,
+   85
+  ],
+  "new": [
+   81,
+   85
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/BadgeGroup.tsx",
+  "old": [
+   81,
+   85
+  ],
+  "new": [
+   81,
+   85
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/BadgeGroup.tsx",
+  "old": [
+   84,
+   88
+  ],
+  "new": [
+   84,
+   88
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/primitives.tsx",
+  "old": [
+   137,
+   139
+  ],
+  "new": [
+   138,
+   140
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/primitives.tsx",
+  "old": [
+   139,
+   139
+  ],
+  "new": [
+   140,
+   140
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/BoxField.tsx",
+  "old": [
+   105,
+   115
+  ],
+  "new": [
+   105,
+   115
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/BoxField.tsx",
+  "old": [
+   117,
+   119
+  ],
+  "new": [
+   117,
+   119
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/Combobox.tsx",
+  "old": [
+   251,
+   265
+  ],
+  "new": [
+   252,
+   266
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/Combobox.tsx",
+  "old": [
+   219,
+   235
+  ],
+  "new": [
+   220,
+   236
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/CustomSelect.tsx",
+  "old": [
+   207,
+   241
+  ],
+  "new": [
+   208,
+   242
+  ],
+  "changed": true,
+  "old_excerpt": "      className=\"area-menu__item area-custom-select__option\" data-highlighted={index === active ? \"\" : undefined}\n     \n      onPointerDown={event => event.preventDefault()}\n      onPointerMove={() => { if (!option.disabled && index !== active) setActive(index); }}\n      onClick={event => { if (option.disabled) return; choose(index, event); close(); triggerRef.current?.focus(); }}>\n      {option.icon ? <span className=\"area-menu__icon\" aria-hidden=\"true\">{option.icon}</span> : null}\n      {option.description\n        ? <span className=\"area-menu__lines\"><span className=\"area-menu__text\">{option.label}</span><span className=\"area-menu__description\">{option.description}</span></span>\n        : <span className=\"area-menu__text\">{option.label}</span>}\n      <span className=\"area-menu__check\" aria-hidden=\"true\"><Glyph name=\"check\" /></span>\n    </div>;\n  };\n\n  return <div ref={rootRef} className={customSelectVariants({ variant, size, fullWidth }, className)} style={style}\n    data-open={open ? \"\" : undefined}>\n    <button ref={node => { triggerRef.current = node; if (typeof ref === \"function\") ref(node); else if (ref) ref.current = node; }}\n      {...rest} type=\"button\" form={form} className=\"area-custom-select__trigger\" disabled={disabled}\n      role=\"combobox\" aria-haspopup=\"listbox\" aria-expanded={open} aria-controls={listId} aria-activedescendant={activeId}\n      aria-invalid={invalid || undefined} aria-required={required || undefined}\n      onClick={event => { onClick?.(event); if (event.defaultPrevented) return; if (open) close(); else openList(\"selected\"); }}\n      onKeyDown={handleKeyDown}\n      onBlur={event => { onBlur?.(event); close(); }}>\n      {selectedOption?.icon ? <span className=\"area-custom-select__icon\" aria-hidden=\"true\">{selectedOption.icon}</span> : null}\n      <span className=\"area-custom-select__value\" data-placeholder={selectedOption ? undefined : \"\"}>{selectedOption?.label ?? placeholder}</span>\n      <span className=\"area-custom-select__chevron\" aria-hidden=\"true\"><Glyph name=\"chevron-down\" /></span>\n    </button>\n    {/* The form gets the option's value, never its label. */}\n    {name ? <input type=\"hidden\" name={name} form={form} disabled={disabled} value={selected ?? \"\"} /> : null}\n    <div ref={listRef} id={listId} role=\"listbox\" aria-label={typeof label === \"string\" ? label : undefined}\n      aria-labelledby={typeof label === \"string\" ? undefined : labelledBy}\n      popover=\"manual\" className=\"area-menu area-custom-select__listbox\" tabIndex={-1}>\n      {[...groups].map(([group, indexes], position) => group\n        ? [position > 0 ? <div key={`${group}-rule`} className=\"area-menu__separator area-custom-select__separator\" role=\"presentation\" /> : null,\n          <div key={group} role=\"group\" aria-labelledby={`${id}-group-${position}`} className=\"area-custom-select__group\">\n            <div id={`${id}-group-${position}`} className=\"area-menu__label\" role=\"presentation\">{group}</div>",
+  "new_excerpt": "      className=\"area-menu__item area-custom-select__option\" data-highlighted={index === active ? \"\" : undefined}\n     \n      onPointerDown={event => event.preventDefault()}\n      onPointerMove={() => { if (!option.disabled && index !== active) setActive(index); }}\n      onClick={event => { if (option.disabled) return; choose(index, event); close(); triggerRef.current?.focus(); }}>\n      {option.icon ? <span className=\"area-menu__icon\" aria-hidden=\"true\">{option.icon}</span> : null}\n      {option.description\n        ? <span className=\"area-menu__lines\"><span className=\"area-menu__text\">{option.label}</span><span className=\"area-menu__description\">{option.description}</span></span>\n        : <span className=\"area-menu__text\">{option.label}</span>}\n      <span className=\"area-menu__check\" aria-hidden=\"true\"><Glyph name=\"check\" /></span>\n    </div>;\n  };\n\n  return <div ref={rootRef} className={customSelectVariants({ variant, size, fullWidth }, className)} style={style}\n    data-open={open ? \"\" : undefined}>\n    <button ref={node => { triggerRef.current = node; if (typeof ref === \"function\") ref(node); else if (ref) ref.current = node; }}\n      {...rest} type=\"button\" form={form} className=\"area-custom-select__trigger\" disabled={disabled}\n      role=\"combobox\" aria-haspopup=\"listbox\" aria-expanded={open} aria-controls={listId} aria-activedescendant={activeId}\n      aria-invalid={invalid || undefined} aria-required={required || undefined}\n      onClick={event => { onClick?.(event); if (event.defaultPrevented) return; if (open) close(); else openList(\"selected\"); }}\n      onKeyDown={handleKeyDown}\n      onBlur={event => { onBlur?.(event); close(); }}>\n      {selectedOption?.icon ? <span className=\"area-custom-select__icon\" aria-hidden=\"true\">{selectedOption.icon}</span> : null}\n      <span className=\"area-custom-select__value\" data-placeholder={selectedOption ? undefined : \"\"}>{selectedOption?.label ?? placeholder}</span>\n      <span className=\"area-custom-select__chevron\" aria-hidden=\"true\"><Glyph name=\"chevron-down\" /></span>\n    </button>\n    {/* The form gets the option's value, never its label. */}\n    {name ? <input type=\"hidden\" name={name} form={form} disabled={disabled} value={selected ?? \"\"} /> : null}\n    <ScrollArea ref={listRef} id={listId} role=\"listbox\" aria-label={typeof label === \"string\" ? label : undefined}\n      aria-labelledby={typeof label === \"string\" ? undefined : labelledBy}\n      popover=\"manual\" className=\"area-menu area-custom-select__listbox\" tabIndex={-1} viewportProps={{ tabIndex: undefined }}>\n      {[...groups].map(([group, indexes], position) => group\n        ? [position > 0 ? <div key={`${group}-rule`} className=\"area-menu__separator area-custom-select__separator\" role=\"presentation\" /> : null,\n          <div key={group} role=\"group\" aria-labelledby={`${id}-group-${position}`} className=\"area-custom-select__group\">\n            <div id={`${id}-group-${position}`} className=\"area-menu__label\" role=\"presentation\"><span className=\"area-menu__label-text\">{group}</span></div>"
+ },
+ {
+  "file": "packages/react/src/components/TagPicker.tsx",
+  "old": [
+   192,
+   195
+  ],
+  "new": [
+   193,
+   196
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/TagPicker.tsx",
+  "old": [
+   209,
+   232
+  ],
+  "new": [
+   210,
+   233
+  ],
+  "changed": true,
+  "old_excerpt": "    <div ref={listRef} id={listId} role=\"listbox\" aria-multiselectable=\"true\" aria-label={typeof label === \"string\" ? label : undefined}\n      aria-labelledby={typeof label === \"string\" ? undefined : rest[\"aria-labelledby\"]}\n      popover=\"manual\" className=\"area-menu area-tag-picker__listbox\" tabIndex={-1}>\n      {hintText !== null ? <div className=\"area-menu__label area-tag-picker__hint\" role=\"presentation\">{hintText}</div> : null}\n      {listRows.length === 0 ? <div className=\"area-tag-picker__empty\" role=\"presentation\">{emptyText}</div> : null}\n      {listRows.map((row, index) => {\n        const highlighted = index === active;\n        if (row.kind === \"create\") {\n          return <div key=\"__create\" id={`${id}-option-${index}`} data-index={index} role=\"option\" aria-selected={false}\n            className=\"area-menu__item area-tag-picker__option area-tag-picker__create\" data-highlighted={highlighted ? \"\" : undefined}\n            onPointerDown={event => event.preventDefault()} onPointerMove={() => setActive(index)} onClick={event => activate(row, event)}>\n            <span className=\"area-menu__text\">Create</span>\n            <Tag size={tagSize} tone=\"neutral\">{row.text}</Tag>\n          </div>;\n        }\n        const { option } = row;\n        const isChosen = chosen.includes(option.value);\n        return <div key={option.value} id={`${id}-option-${index}`} data-index={index} role=\"option\" aria-selected={isChosen}\n          aria-disabled={option.disabled || undefined} data-disabled={option.disabled ? \"\" : undefined}\n          className=\"area-menu__item area-tag-picker__option\" data-highlighted={highlighted ? \"\" : undefined}\n          onPointerDown={event => event.preventDefault()} onPointerMove={() => { if (!option.disabled) setActive(index); }}\n          onClick={event => activate(row, event)}>\n          <Tag size={tagSize} tone={option.tone ?? \"neutral\"}>{option.label}</Tag>\n          <span className=\"area-menu__check\" aria-hidden=\"true\"><Glyph name=\"check\" /></span>",
+  "new_excerpt": "    <ScrollArea ref={listRef} id={listId} role=\"listbox\" aria-multiselectable=\"true\" aria-label={typeof label === \"string\" ? label : undefined}\n      aria-labelledby={typeof label === \"string\" ? undefined : rest[\"aria-labelledby\"]}\n      popover=\"manual\" className=\"area-menu area-tag-picker__listbox\" tabIndex={-1} viewportProps={{ tabIndex: undefined }}>\n      {hintText !== null ? <div className=\"area-menu__label area-tag-picker__hint\" role=\"presentation\"><span className=\"area-menu__label-text\">{hintText}</span></div> : null}\n      {listRows.length === 0 ? <div className=\"area-tag-picker__empty\" role=\"presentation\">{emptyText}</div> : null}\n      {listRows.map((row, index) => {\n        const highlighted = index === active;\n        if (row.kind === \"create\") {\n          return <div key=\"__create\" id={`${id}-option-${index}`} data-index={index} role=\"option\" aria-selected={false}\n            className=\"area-menu__item area-tag-picker__option area-tag-picker__create\" data-highlighted={highlighted ? \"\" : undefined}\n            onPointerDown={event => event.preventDefault()} onPointerMove={() => setActive(index)} onClick={event => activate(row, event)}>\n            <span className=\"area-menu__text\">Create</span>\n            <Tag size={tagSize} tone=\"neutral\">{row.text}</Tag>\n          </div>;\n        }\n        const { option } = row;\n        const isChosen = chosen.includes(option.value);\n        return <div key={option.value} id={`${id}-option-${index}`} data-index={index} role=\"option\" aria-selected={isChosen}\n          aria-disabled={option.disabled || undefined} data-disabled={option.disabled ? \"\" : undefined}\n          className=\"area-menu__item area-tag-picker__option\" data-highlighted={highlighted ? \"\" : undefined}\n          onPointerDown={event => event.preventDefault()} onPointerMove={() => { if (!option.disabled) setActive(index); }}\n          onClick={event => activate(row, event)}>\n          <Tag size={tagSize} tone={option.tone ?? \"neutral\"}>{option.label}</Tag>\n          <span className=\"area-menu__check\" aria-hidden=\"true\"><Glyph name=\"check\" /></span>"
+ },
+ {
+  "file": "packages/react/src/components/TagPicker.tsx",
+  "old": [
+   231,
+   232
+  ],
+  "new": [
+   232,
+   233
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/TagPicker.tsx",
+  "old": [
+   220,
+   221
+  ],
+  "new": [
+   221,
+   222
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/DatePicker.tsx",
+  "old": [
+   119,
+   120
+  ],
+  "new": [
+   119,
+   120
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/DatePicker.tsx",
+  "old": [
+   126,
+   129
+  ],
+  "new": [
+   126,
+   129
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/DatePicker.tsx",
+  "old": [
+   130,
+   133
+  ],
+  "new": [
+   130,
+   133
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/DatePicker.tsx",
+  "old": [
+   134,
+   140
+  ],
+  "new": [
+   134,
+   140
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/ConfirmDialog.tsx",
+  "old": [
+   68,
+   73
+  ],
+  "new": [
+   68,
+   73
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/ConfirmDialog.tsx",
+  "old": [
+   71,
+   72
+  ],
+  "new": [
+   71,
+   72
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/Drawer.tsx",
+  "old": [
+   84,
+   86
+  ],
+  "new": [
+   85,
+   87
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/CommandPalette.tsx",
+  "old": [
+   162,
+   195
+  ],
+  "new": [
+   163,
+   196
+  ],
+  "changed": true,
+  "old_excerpt": "    return <div key={item.id} id={`${id}-item-${i}`} data-index={i} role=\"option\" aria-selected={i === current}\n      aria-disabled={item.disabled || undefined} data-disabled={item.disabled ? \"\" : undefined} className=\"area-menu__item area-command-palette__item\"\n      data-highlighted={i === current ? \"\" : undefined}\n      onPointerDown={event => event.preventDefault()} onPointerMove={() => { if (!item.disabled && i !== current) setActive(i); }}\n      onClick={() => run(item)}>\n      {item.icon ? <span className=\"area-menu__icon\" aria-hidden=\"true\">{item.icon}</span> : null}\n      <span className=\"area-menu__text area-command-palette__text\">{item.label}</span>\n      {item.description ? <span className=\"area-command-palette__description\">{item.description}</span> : null}\n      {item.shortcut ? <span className=\"area-menu__shortcut\"><Kbd keys={item.shortcut} size=\"sm\" variant=\"quiet\" /></span> : null}\n    </div>;\n  };\n  const groups: Array<[string | undefined, CommandItem[]]> = [];\n  for (const item of rows) {\n    const last = groups[groups.length - 1];\n    if (last && last[0] === item.group) last[1].push(item); else groups.push([item.group, [item]]);\n  }\n\n  const surface = <div ref={ref} role={inline ? \"search\" : undefined} aria-label={inline ? label : undefined}\n    className={commandPaletteVariants({ inline }, className)} {...rest}>\n    <div className=\"area-command-palette__search\">\n      <span className=\"area-command-palette__search-icon\" aria-hidden=\"true\"><Glyph name=\"search\" /></span>\n      <input ref={inputRef} className=\"area-command-palette__input\" role=\"combobox\" aria-label={label}\n        aria-expanded={true} aria-controls={listId} aria-autocomplete=\"list\"\n        aria-activedescendant={current >= 0 ? `${id}-item-${current}` : undefined}\n        autoComplete=\"off\" spellCheck={false} placeholder={placeholder} value={query}\n        onChange={event => setQuery(event.target.value)} onKeyDown={handleKeyDown} />\n    </div>\n    {/* The result count, or the empty text, is announced while a query is typed (audit D-29). */}\n    <span className=\"area-sr-only\" role=\"status\">{query ? (rows.length ? resultsLabel(rows.length) : typeof emptyText === \"string\" ? emptyText : \"\") : \"\"}</span>\n    <div ref={listRef} id={listId} role=\"listbox\" aria-label={label} className=\"area-command-palette__list\">\n      {rows.length === 0 ? <div className=\"area-command-palette__empty\" role=\"presentation\">{emptyText}</div> : null}\n      {groups.map(([group, list], g) => group\n        ? <div key={`${group}-${g}`} role=\"group\" aria-labelledby={`${id}-group-${g}`} className=\"area-command-palette__group\">\n            <div id={`${id}-group-${g}`} className=\"area-menu__label\" role=\"presentation\">{group}</div>",
+  "new_excerpt": "    return <div key={item.id} id={`${id}-item-${i}`} data-index={i} role=\"option\" aria-selected={i === current}\n      aria-disabled={item.disabled || undefined} data-disabled={item.disabled ? \"\" : undefined} className=\"area-menu__item area-command-palette__item\"\n      data-highlighted={i === current ? \"\" : undefined}\n      onPointerDown={event => event.preventDefault()} onPointerMove={() => { if (!item.disabled && i !== current) setActive(i); }}\n      onClick={() => run(item)}>\n      {item.icon ? <span className=\"area-menu__icon\" aria-hidden=\"true\">{item.icon}</span> : null}\n      <span className=\"area-menu__text area-command-palette__text\">{item.label}</span>\n      {item.description ? <span className=\"area-command-palette__description\">{item.description}</span> : null}\n      {item.shortcut ? <span className=\"area-menu__shortcut\"><Kbd keys={item.shortcut} size=\"sm\" variant=\"quiet\" /></span> : null}\n    </div>;\n  };\n  const groups: Array<[string | undefined, CommandItem[]]> = [];\n  for (const item of rows) {\n    const last = groups[groups.length - 1];\n    if (last && last[0] === item.group) last[1].push(item); else groups.push([item.group, [item]]);\n  }\n\n  const surface = <div ref={ref} role={inline ? \"search\" : undefined} aria-label={inline ? label : undefined}\n    className={commandPaletteVariants({ inline }, className)} {...rest}>\n    <div className=\"area-command-palette__search\">\n      <span className=\"area-command-palette__search-icon\" aria-hidden=\"true\"><Glyph name=\"search\" /></span>\n      <input ref={inputRef} className=\"area-command-palette__input\" role=\"combobox\" aria-label={label}\n        aria-expanded={true} aria-controls={listId} aria-autocomplete=\"list\"\n        aria-activedescendant={current >= 0 ? `${id}-item-${current}` : undefined}\n        autoComplete=\"off\" spellCheck={false} placeholder={placeholder} value={query}\n        onChange={event => setQuery(event.target.value)} onKeyDown={handleKeyDown} />\n    </div>\n    {/* The result count, or the empty text, is announced while a query is typed (audit D-29). */}\n    <span className=\"area-sr-only\" role=\"status\">{query ? (rows.length ? resultsLabel(rows.length) : typeof emptyText === \"string\" ? emptyText : \"\") : \"\"}</span>\n    <ScrollArea ref={listRef} id={listId} role=\"listbox\" aria-label={label} className=\"area-command-palette__list\" viewportProps={{ tabIndex: undefined }}>\n      {rows.length === 0 ? <div className=\"area-command-palette__empty\" role=\"presentation\">{emptyText}</div> : null}\n      {groups.map(([group, list], g) => group\n        ? <div key={`${group}-${g}`} role=\"group\" aria-labelledby={`${id}-group-${g}`} className=\"area-command-palette__group\">\n            <div id={`${id}-group-${g}`} className=\"area-menu__label\" role=\"presentation\"><span className=\"area-menu__label-text\">{group}</span></div>"
+ },
+ {
+  "file": "packages/react/src/components/CommandPalette.tsx",
+  "old": [
+   204,
+   214
+  ],
+  "new": [
+   205,
+   215
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/CommandPalette.tsx",
+  "old": [
+   170,
+   170
+  ],
+  "new": [
+   171,
+   171
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/ContextMenu.tsx",
+  "old": [
+   113,
+   116
+  ],
+  "new": [
+   113,
+   116
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/HoverCard.tsx",
+  "old": [
+   69,
+   83
+  ],
+  "new": [
+   69,
+   83
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/PromptSuggestions.tsx",
+  "old": [
+   39,
+   39
+  ],
+  "new": [
+   39,
+   39
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/PromptSuggestions.tsx",
+  "old": [
+   50,
+   52
+  ],
+  "new": [
+   50,
+   52
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/ScrollToLatest.tsx",
+  "old": [
+   58,
+   60
+  ],
+  "new": [
+   58,
+   60
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/ModelPicker.tsx",
+  "old": [
+   54,
+   60
+  ],
+  "new": [
+   54,
+   60
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/ModelPicker.tsx",
+  "old": [
+   54,
+   64
+  ],
+  "new": [
+   54,
+   64
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/primitives.tsx",
+  "old": [
+   205,
+   205
+  ],
+  "new": [
+   206,
+   206
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/primitives.tsx",
+  "old": [
+   1594,
+   1597
+  ],
+  "new": [
+   1598,
+   1601
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/primitives.tsx",
+  "old": [
+   1396,
+   1402
+  ],
+  "new": [
+   1400,
+   1406
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/primitives.tsx",
+  "old": [
+   1331,
+   1335
+  ],
+  "new": [
+   1335,
+   1339
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/primitives.tsx",
+  "old": [
+   1434,
+   1434
+  ],
+  "new": [
+   1438,
+   1438
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/Toaster.tsx",
+  "old": [
+   178,
+   178
+  ],
+  "new": [
+   178,
+   178
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/primitives.tsx",
+  "old": [
+   1064,
+   1076
+  ],
+  "new": [
+   1065,
+   1077
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/primitives.tsx",
+  "old": [
+   1927,
+   1955
+  ],
+  "new": [
+   1931,
+   1959
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/primitives.tsx",
+  "old": [
+   1963,
+   1974
+  ],
+  "new": [
+   1967,
+   1978
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/primitives.tsx",
+  "old": [
+   1981,
+   1992
+  ],
+  "new": [
+   1985,
+   1996
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/badge.css",
+  "old": [
+   190,
+   192
+  ],
+  "new": [
+   192,
+   194
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/chip.css",
+  "old": [
+   175,
+   183
+  ],
+  "new": [
+   178,
+   186
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/input-group.css",
+  "old": [
+   57,
+   78
+  ],
+  "new": [
+   57,
+   78
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/input-group.css",
+  "old": [
+   57,
+   78
+  ],
+  "new": [
+   57,
+   78
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/input-group.css",
+  "old": [
+   57,
+   78
+  ],
+  "new": [
+   57,
+   78
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/input-group.css",
+  "old": [
+   80,
+   92
+  ],
+  "new": [
+   80,
+   92
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/indicator.css",
+  "old": [
+   57,
+   66
+  ],
+  "new": [
+   57,
+   66
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/indicator.css",
+  "old": [
+   57,
+   66
+  ],
+  "new": [
+   57,
+   66
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/indicator.css",
+  "old": [
+   77,
+   77
+  ],
+  "new": [
+   77,
+   77
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/box-field.css",
+  "old": [
+   36,
+   36
+  ],
+  "new": [
+   36,
+   36
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/field.css",
+  "old": [
+   76,
+   107
+  ],
+  "new": [
+   76,
+   107
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/field.css",
+  "old": [
+   107,
+   109
+  ],
+  "new": [
+   107,
+   109
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/field.css",
+  "old": [
+   91,
+   97
+  ],
+  "new": [
+   91,
+   97
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/kbd.css",
+  "old": [
+   90,
+   93
+  ],
+  "new": [
+   90,
+   93
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/kbd.css",
+  "old": [
+   110,
+   121
+  ],
+  "new": [
+   110,
+   121
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/kbd.css",
+  "old": [
+   134,
+   147
+  ],
+  "new": [
+   134,
+   147
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/primitives.tsx",
+  "old": [
+   2161,
+   2167
+  ],
+  "new": [
+   2165,
+   2171
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/nav.css",
+  "old": [
+   278,
+   287
+  ],
+  "new": [
+   278,
+   287
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/navigation.css",
+  "old": [
+   32,
+   32
+  ],
+  "new": [
+   32,
+   32
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/navigation.css",
+  "old": [
+   213,
+   216
+  ],
+  "new": [
+   213,
+   216
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/surface.css",
+  "old": [
+   314,
+   315
+  ],
+  "new": [
+   314,
+   315
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/surface.css",
+  "old": [
+   481,
+   485
+  ],
+  "new": [
+   481,
+   485
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/surface.css",
+  "old": [
+   679,
+   684
+  ],
+  "new": [
+   691,
+   696
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/surface.css",
+  "old": [
+   1013,
+   1013
+  ],
+  "new": [
+   1020,
+   1020
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/surface.css",
+  "old": [
+   1054,
+   1073
+  ],
+  "new": [
+   1061,
+   1080
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/toolbar.css",
+  "old": [
+   45,
+   47
+  ],
+  "new": [
+   45,
+   47
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/toolbar.css",
+  "old": [
+   59,
+   62
+  ],
+  "new": [
+   59,
+   62
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/toolbar.css",
+  "old": [
+   59,
+   62
+  ],
+  "new": [
+   59,
+   62
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/tree-view.css",
+  "old": [
+   89,
+   113
+  ],
+  "new": [
+   89,
+   113
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/button.css",
+  "old": [
+   319,
+   320
+  ],
+  "new": [
+   319,
+   320
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/color.css",
+  "old": [
+   374,
+   376
+  ],
+  "new": [
+   374,
+   376
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/ColorPicker.tsx",
+  "old": [
+   336,
+   340
+  ],
+  "new": [
+   336,
+   340
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/calendar.css",
+  "old": [
+   32,
+   46
+  ],
+  "new": [
+   32,
+   46
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/Calendar.tsx",
+  "old": [
+   268,
+   273
+  ],
+  "new": [
+   268,
+   273
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/Composer.tsx",
+  "old": [
+   111,
+   115
+  ],
+  "new": [
+   111,
+   115
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/button.css",
+  "old": [
+   61,
+   98
+  ],
+  "new": [
+   61,
+   98
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/Input.tsx",
+  "old": [
+   77,
+   77
+  ],
+  "new": [
+   77,
+   77
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/surface.css",
+  "old": [
+   1332,
+   1369
+  ],
+  "new": [
+   1354,
+   1391
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/SliderRange.tsx",
+  "old": [
+   103,
+   107
+  ],
+  "new": [
+   103,
+   107
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/Combobox.tsx",
+  "old": [
+   219,
+   235
+  ],
+  "new": [
+   220,
+   236
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/surface.css",
+  "old": [
+   1105,
+   1137
+  ],
+  "new": [
+   1112,
+   1144
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/CustomSelect.tsx",
+  "old": [
+   207,
+   216
+  ],
+  "new": [
+   208,
+   217
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/surface.css",
+  "old": [
+   1105,
+   1137
+  ],
+  "new": [
+   1112,
+   1144
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/TagPicker.tsx",
+  "old": [
+   226,
+   232
+  ],
+  "new": [
+   227,
+   233
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/surface.css",
+  "old": [
+   1105,
+   1137
+  ],
+  "new": [
+   1112,
+   1144
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/drawer.css",
+  "old": [
+   46,
+   74
+  ],
+  "new": [
+   46,
+   74
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/drawer.css",
+  "old": [
+   22,
+   36
+  ],
+  "new": [
+   22,
+   36
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/HoverCard.tsx",
+  "old": [
+   74,
+   82
+  ],
+  "new": [
+   74,
+   82
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/surface.css",
+  "old": [
+   957,
+   977
+  ],
+  "new": [
+   964,
+   984
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/badge.css",
+  "old": [
+   217,
+   218
+  ],
+  "new": [
+   219,
+   220
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/surface.css",
+  "old": [
+   957,
+   977
+  ],
+  "new": [
+   964,
+   984
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/surface.css",
+  "old": [
+   744,
+   754
+  ],
+  "new": [
+   751,
+   761
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/ColorPicker.tsx",
+  "old": [
+   353,
+   356
+  ],
+  "new": [
+   353,
+   356
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/react/src/components/Switch.tsx",
+  "old": [
+   106,
+   113
+  ],
+  "new": [
+   106,
+   113
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/toolbar.css",
+  "old": [
+   32,
+   36
+  ],
+  "new": [
+   32,
+   36
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/calendar.css",
+  "old": [
+   32,
+   46
+  ],
+  "new": [
+   32,
+   46
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/calendar.css",
+  "old": [
+   46,
+   46
+  ],
+  "new": [
+   46,
+   46
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/color.css",
+  "old": [
+   242,
+   247
+  ],
+  "new": [
+   242,
+   247
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/color.css",
+  "old": [
+   248,
+   248
+  ],
+  "new": [
+   248,
+   248
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/surface.css",
+  "old": [
+   72,
+   102
+  ],
+  "new": [
+   72,
+   102
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/surface.css",
+  "old": [
+   72,
+   102
+  ],
+  "new": [
+   72,
+   102
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/panel.css",
+  "old": [
+   75,
+   81
+  ],
+  "new": [
+   82,
+   89
+  ],
+  "changed": true,
+  "old_excerpt": "  .area-panel--flush {\n    border: 0;\n    border-radius: 0;\n    background-color: var(--area-bg-page);\n    box-shadow: none;\n  }\n",
+  "new_excerpt": "  .area-panel--flush {\n    --_edge: 0px;\n    border: 0;\n    border-radius: 0;\n    background-color: var(--area-bg-page);\n    box-shadow: none;\n  }\n"
+ },
+ {
+  "file": "packages/styles/src/components/badge.css",
+  "old": [
+   188,
+   188
+  ],
+  "new": [
+   190,
+   190
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/segmented.css",
+  "old": [
+   103,
+   111
+  ],
+  "new": [
+   103,
+   111
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/command-palette.css",
+  "old": [
+   86,
+   87
+  ],
+  "new": [
+   86,
+   87
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/surface.css",
+  "old": [
+   1319,
+   1325
+  ],
+  "new": [
+   1341,
+   1347
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/code.css",
+  "old": [
+   490,
+   503
+  ],
+  "new": [
+   490,
+   503
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/surface.css",
+  "old": [
+   367,
+   380
+  ],
+  "new": [
+   367,
+   380
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/components/slider.css",
+  "old": [
+   286,
+   295
+  ],
+  "new": [
+   286,
+   295
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/forced-colors.css",
+  "old": [
+   73,
+   79
+  ],
+  "new": [
+   73,
+   79
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/forced-colors.css",
+  "old": [
+   80,
+   82
+  ],
+  "new": [
+   80,
+   82
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/base.css",
+  "old": [
+   5,
+   14
+  ],
+  "new": [
+   5,
+   14
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/base.css",
+  "old": [
+   7,
+   13
+  ],
+  "new": [
+   7,
+   13
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "docs/specs/typography.md",
+  "old": [
+   86,
+   107
+  ],
+  "new": [
+   86,
+   107
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/base.css",
+  "old": [
+   16,
+   19
+  ],
+  "new": [
+   16,
+   19
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/base.css",
+  "old": [
+   21,
+   23
+  ],
+  "new": [
+   21,
+   23
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/base.css",
+  "old": [
+   25,
+   36
+  ],
+  "new": [
+   25,
+   36
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "docs/specs/icons.md",
+  "old": [
+   3,
+   8
+  ],
+  "new": [
+   3,
+   8
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "packages/styles/src/base.css",
+  "old": [
+   39,
+   55
+  ],
+  "new": [
+   39,
+   55
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "docs/specs/inspector.md",
+  "old": [
+   17,
+   22
+  ],
+  "new": [
+   17,
+   22
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "docs/specs/resizable-panel.md",
+  "old": [
+   12,
+   19
+  ],
+  "new": [
+   12,
+   19
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "docs/specs/overlay.md",
+  "old": [
+   13,
+   20
+  ],
+  "new": [
+   13,
+   20
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "docs/specs/icons.md",
+  "old": [
+   3,
+   8
+  ],
+  "new": [
+   3,
+   8
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ },
+ {
+  "file": "docs/specs/typography.md",
+  "old": [
+   86,
+   107
+  ],
+  "new": [
+   86,
+   107
+  ],
+  "changed": false,
+  "old_excerpt": null,
+  "new_excerpt": null
+ }
+]

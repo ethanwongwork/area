@@ -14,6 +14,24 @@ Current Area permits explicit `data-area-contrast="standard"` to restore standar
 
 **F — `forced-colors: active`.** Browsers force common paint to system colors, suppress box/text shadows and non-URL background images; URL images can remain. Native element semantics affect chosen system colors. [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@media/forced-colors). Proposed material fallback disables decorative image grain, SVG lens/filter effects, gradients, gloss and bloom explicitly, and uses system-color bodies, real borders/outlines and actual state marks. Do not assume the browser removes every texture/filter, and do not set `forced-color-adjust: none` on a whole glass subtree. Retain narrowly justified literal-color/media exceptions with labels/boundaries; Area already has targeted system-color implementations. [Current forced-color rules](https://github.com/ethanwongwork/area/blob/6f896789a5200bcbd34fe87de458e60ca82141d6/packages/styles/src/forced-colors.css#L1-L106).
 
+**Task 19 correction / D7:** forced-color replacement preserves background alpha; `backdrop-filter` is not automatically reset. A system-color token alone can therefore leave glass translucent. On each actual material paint receiver, set `background: Canvas` (opaque, including clearing images), `backdrop-filter: none` and `-webkit-backdrop-filter: none`; remove optical pseudo-layer paint too. Keep inherited content opaque and preserve system-color focus/required edges and native semantics. Use `CanvasText` where appropriate for the receiver, with native field/button system colors where semantics require them. Do not force group opacity to 1 indiscriminately: the existing disabled-group owner remains responsible. [CSS Color Adjustment forced properties](https://drafts.csswg.org/css-color-adjust-1/#forced-colors-properties), checked 2026-10-11.
+
+```css
+@media (forced-colors: active) {
+  .research-material-receiver {
+    background: Canvas;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .research-material-receiver::before,
+  .research-material-receiver::after {
+    /* Only optical layers: functional marks/focus pseudos need separate adapters. */
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+```
+
 **M — `prefers-reduced-motion: reduce`.** The query detects a preference to reduce motion; it is independent of transparency. [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@media/prefers-reduced-motion). Proposed material fallback stops light tracking, parallax, elastic lensing, moving gloss, gradient travel, pulsing bloom and time-varying noise. Preserve immediate state feedback and loading/progress meaning through an existing static indicator/text; do not freeze a loop at its invisible frame. Cancel JS/RAF and SVG animation paths too, including on a preference change during playback. The current motion token fallback alone is not evidence those future paths would stop. [Current emitter](https://github.com/ethanwongwork/area/blob/6f896789a5200bcbd34fe87de458e60ca82141d6/packages/tokens/src/emit/css.ts#L177-L182).
 
 Native precedent: Microsoft documents solid acrylic fallback when transparency is disabled and user-selected backgrounds in high contrast. Apple describes distinct transparency/contrast/motion adaptations for native Liquid Glass. These support deliberate fallbacks; a web approximation does not receive native adaptation automatically. [Microsoft](https://learn.microsoft.com/en-us/windows/apps/design/style/acrylic), [Apple](https://developer.apple.com/videos/play/wwdc2025/219/).

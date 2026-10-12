@@ -3,7 +3,7 @@ from pathlib import Path
 import subprocess,re,json
 HERE=Path(__file__).resolve().parent
 ROOT=HERE.parents[4]
-SHA='6f896789a5200bcbd34fe87de458e60ca82141d6'
+SHA='9036ed9293beb7a867bdf637ee768c7a46a9901a'
 def read(path):return subprocess.check_output(['git','show',f'{SHA}:{path}'],cwd=ROOT,text=True)
 def paths(prefix):return subprocess.check_output(['git','ls-tree','-r','--name-only',SHA,prefix],cwd=ROOT,text=True).splitlines()
 def manifest():

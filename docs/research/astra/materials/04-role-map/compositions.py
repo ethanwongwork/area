@@ -1,9 +1,5 @@
-"""Explicit reuse with immutable instantiation evidence.
-family | mount | donor | included donor parts (* = all, except legacy search surface) |
-React source basename | first line | last line | context override/note
-Each binding imports the cited donor roles; it is not a duplicate paint operation.
-"""
-BINDINGS='''
+"""Curated current composition evidence."""
+BINDINGS="""
 button|icon|spinner|*|Button|91|91|Loading replaces the icon; ring and arc remain flat to the icon slot.
 buttonGroup|root|button|*|ButtonGroup|13|16|Child buttons; group CSS removes independent shadows and manages shared seams.
 splitButton|action|button|*|SplitButton|107|112|Same-element Button specialization; no second root plate.
@@ -39,32 +35,32 @@ switch|loading|spinner|*|Switch|106|110|Loading spinner is a sibling of track an
 sliderRange|root|slider|*|SliderRange|103|107|Start Slider; its native rail paint is transparent, shared range rail supplies it.
 sliderRange|end|slider|*|SliderRange|105|107|End Slider; native rails transparent; overlapping end thumb may be hidden.
 sliderRange|input|input|root,control,placeholder|SliderRange|88|91|Optional numeric end-value input; same-element Input specialization.
-chipGroup|root|chip|*|primitives|1015|1020|Grouping contract; supplied Chip children retain all their own parts.
+chipGroup|root|chip|*|primitives|1016|1021|Grouping contract; supplied Chip children retain all their own parts.
 accordion|root|accordionItem|*|Accordion|101|120|Stack of item components; no extra accordion material shell.
 badgeGroup|item|badge|*|BadgeGroup|81|85|Visible and overflow badges retain Badge's own roles.
 badgeGroup|overflow-trigger|badge|root,label|BadgeGroup|81|85|Same badge-shaped trigger, count label as text; root is a control in this context.
 badgeGroup|overflow-content|popover|root|BadgeGroup|84|88|Same-element Popover panel; contents are overflow badges.
-avatarGroup|item|avatar|*|primitives|137|139|Each visible Avatar paints its own content and overlap ring.
-avatarGroup|overflow|avatar|root,initials|primitives|139|139|Same-element passive count Avatar; no interactive trigger in current implementation.
+avatarGroup|item|avatar|*|primitives|138|140|Each visible Avatar paints its own content and overlap ring.
+avatarGroup|overflow|avatar|root,initials|primitives|140|140|Same-element passive count Avatar; no interactive trigger in current implementation.
 boxField|field|numberField|*|BoxField|105|115|Same-element NumberField; optional unit/steppers depend on props.
 boxField|toggle|button|*|BoxField|117|119|Same-element icon-only expand/collapse button, label absent.
-combobox|root|input|*|Combobox|251|265|Editable field with optional icon/clear/loading slots.
-combobox|listbox|menu|root,item,icon,text,check,label|Combobox|219|235|Menu paint reused by options, create row and group labels; wrapper instantiation at 270.
-customSelect|listbox|menu|root,item,icon,lines,text,description,check,label,separator|CustomSelect|207|241|Single Menu surface with option body, description, chosen check, group label and dividers.
-tagPicker|field|tag|*|TagPicker|192|195|Chosen tokens are Tag (not Badge); removal is optional.
-tagPicker|listbox|menu|root,item,text,label,check|TagPicker|209|232|Same Menu surface and rows; hint, create text, chosen check remain distinct.
-tagPicker|option|tag|root,label|TagPicker|231|232|Passive Tag within option; selection belongs to the Menu row.
-tagPicker|create|tag|root,label|TagPicker|220|221|Preview Tag follows the literal Create text.
+combobox|root|input|*|Combobox|252|266|Editable field with optional icon/clear/loading slots.
+combobox|listbox|menu|root,item,icon,text,check,label|Combobox|220|236|Menu paint reused by options, create row and group labels; wrapper instantiation at 270.
+customSelect|listbox|menu|root,item,icon,lines,text,description,check,label,separator|CustomSelect|208|242|Single Menu surface with option body, description, chosen check, group label and dividers.
+tagPicker|field|tag|*|TagPicker|193|196|Chosen tokens are Tag (not Badge); removal is optional.
+tagPicker|listbox|menu|root,item,text,label,check|TagPicker|210|233|Same Menu surface and rows; hint, create text, chosen check remain distinct.
+tagPicker|option|tag|root,label|TagPicker|232|233|Passive Tag within option; selection belongs to the Menu row.
+tagPicker|create|tag|root,label|TagPicker|221|222|Preview Tag follows the literal Create text.
 datePicker|panel|popover|root|DatePicker|119|120|Same-element floating panel; do not apply an extra inner Popover body.
 datePicker|panel|input|*|DatePicker|126|129|Editable date text field inside panel.
 datePicker|panel|calendar|*|DatePicker|130|133|Plain Calendar: root flush and unpainted; keep days, markers, range and navigation roles.
 datePicker|footer|menu|separator,item,text|DatePicker|134|140|Footer clear row and divider only; no nested Menu floating shell.
 confirmDialog|root|dialog|root,modal,header,heading,title,description,body,footer,scrim|ConfirmDialog|68|73|Same Dialog shell and modal backdrop; showCloseButton=false, so no close action.
 confirmDialog|root|button|*|ConfirmDialog|71|72|Cancel and confirm Buttons mounted in inherited footer. Loading icon only when busy.
-drawer|close|button|*|Drawer|84|86|Same-element ghost icon button, label absent.
-commandPalette|list|menu|item,icon,text,shortcut,label|CommandPalette|162|195|Rows and group labels only; no nested Menu surface.
-commandPalette|hint|kbd|*|CommandPalette|204|214|Quiet keycaps inside clickable footer hints; flat to hint control.
-commandPalette|item|kbd|*|CommandPalette|170|170|Optional quiet shortcut keys in trailing Menu shortcut slot.
+drawer|close|button|*|Drawer|85|87|Same-element ghost icon button, label absent.
+commandPalette|list|menu|item,icon,text,shortcut,label|CommandPalette|163|196|Rows and group labels only; no nested Menu surface.
+commandPalette|hint|kbd|*|CommandPalette|205|215|Quiet keycaps inside clickable footer hints; flat to hint control.
+commandPalette|item|kbd|*|CommandPalette|171|171|Optional quiet shortcut keys in trailing Menu shortcut slot.
 contextMenu|menu|menu|root,item,icon,text,lines,description,label,separator,shortcut,check,toggle,sub-chevron|ContextMenu|113|116|Same-element Menu surface; child content supplied through Menu items.
 hoverCard|root|popover|root,header,title,description,body,footer,media,media-pixels,arrow,arrow-edge|HoverCard|69|83|Popover paint specialization; optional content/arrow parts only when supplied.
 promptSuggestions|row|button|*|PromptSuggestions|39|39|Chips presentation uses Button instead of list item markup.
@@ -72,18 +68,18 @@ promptSuggestions|dismiss|button|*|PromptSuggestions|50|52|Child ghost icon-only
 scrollToLatest|root|button|*|ScrollToLatest|58|60|Only painted child; outline pill, no extra shadow supplied by wrapper.
 modelPicker|trigger|button|*|ModelPicker|54|60|Same-element ghost Button with selected model label and caret.
 modelPicker|root|menu|root,item,text,lines,description,check|ModelPicker|54|64|Menu surface and radio-option rows; menu floats relative to host.
-alert|dismiss|button|*|primitives|205|205|Child dismiss icon button, no label.
-dialog|close|button|*|primitives|1594|1597|Same-element ghost icon-only button.
-menu|toggle|switch|root,track,thumb|primitives|1396|1402|Visual-only Switch parts in checkable menu row; no extra native input/labels.
-menu|root|menu|root,item,icon,text,lines,description,label,separator,shortcut,check,toggle,sub-chevron|primitives|1331|1335|Submenu recursion: a separate floating Menu adjacent to its parent item, repeated per nesting level.
-toast|dismiss|button|*|primitives|1434|1434|Child ghost icon button; action is consumer supplied.
+alert|dismiss|button|*|primitives|206|206|Child dismiss icon button, no label.
+dialog|close|button|*|primitives|1598|1601|Same-element ghost icon-only button.
+menu|toggle|switch|root,track,thumb|primitives|1400|1406|Visual-only Switch parts in checkable menu row; no extra native input/labels.
+menu|root|menu|root,item,icon,text,lines,description,label,separator,shortcut,check,toggle,sub-chevron|primitives|1335|1339|Submenu recursion: a separate floating Menu adjacent to its parent item, repeated per nesting level.
+toast|dismiss|button|*|primitives|1438|1438|Child ghost icon button; action is consumer supplied.
 toaster|item|toast|*|Toaster|178|178|Each Toast is independently floating relative to host; list wrapper is unpainted.
-tableWrapper|root|table|*|primitives|1064|1076|Table is inside scroll wrapper; only wrapper provides outer rounded border.
-codeBlock|languages|tabs|root,list,tab,label,panel|primitives|1927|1955|Language tab strip; code body is its panel, not a separate elevated panel.
-codeBlock|select|select|*|primitives|1963|1974|Alternative language chooser; native popup handled by Select.
-codeBlock|actions|button|*|primitives|1981|1992|Copy icon Button, glyph changes to check; no label.
-badge|avatar|avatar|root,image,icon,initials,rings|css:badge|190|192|Optional Avatar composition inside badge media slot; intrinsic media preserved.
-chip|avatar|avatar|root,image,icon,initials,rings|css:chip|175|183|Optional Avatar composition within chip; no extra outer chip plate.
+tableWrapper|root|table|*|primitives|1065|1077|Table is inside scroll wrapper; only wrapper provides outer rounded border.
+codeBlock|languages|tabs|root,list,tab,label,panel|primitives|1931|1959|Language tab strip; code body is its panel, not a separate elevated panel.
+codeBlock|select|select|*|primitives|1967|1978|Alternative language chooser; native popup handled by Select.
+codeBlock|actions|button|*|primitives|1985|1996|Copy icon Button, glyph changes to check; no label.
+badge|avatar|avatar|root,image,icon,initials,rings|css:badge|192|194|Optional Avatar composition inside badge media slot; intrinsic media preserved.
+chip|avatar|avatar|root,image,icon,initials,rings|css:chip|178|186|Optional Avatar composition within chip; no extra outer chip plate.
 inputGroup|root|input|*|css:input-group|57|78|Optional grouped Input; donor root border/background suppressed so group paints shell once.
 inputGroup|root|numberField|*|css:input-group|57|78|Optional grouped NumberField; donor chrome suppressed, ink and controls remain.
 inputGroup|root|select|*|css:input-group|57|78|Optional grouped native Select; outer field chrome suppressed, picker still floats.
@@ -98,17 +94,48 @@ field|root|textarea|*|css:field|91|97|Optional multiline field child; arbitrary 
 menu|shortcut|kbd|*|css:kbd|90|93|Quiet keycaps in menu shortcut slot; no extra raised plate.
 tooltip|root|kbd|*|css:kbd|110|121|On-color tooltip keys; no change to tooltip surface depth.
 button|label|kbd|*|css:kbd|134|147|Optional shortcut keycap inside Button; concentric corner, not an extra interactive control.
-kbdGroup|root|kbd|*|primitives|2161|2167|Optional sequence of keycaps inside a layout-only group.
+kbdGroup|root|kbd|*|primitives|2165|2171|Optional sequence of keycaps inside a layout-only group.
 nav|actions|button|*|css:nav|278|287|Optional row actions; each Button is independent of row state plate.
 tabs|list|indicatorAnchor|root,indicator|css:navigation|32|32|Optional tab with attached status; do not recurse the anchor's Tab-content recipe again.
 table|head-cell|button|*|css:navigation|213|216|Optional sort button; flush to header cell, not a raised row.
 card|header-action|button|*|css:surface|314|315|Optional child Button rather than directly interactive header-action slot.
 card|footer|toolbar|*|css:surface|481|485|Optional footer toolbar; plain toolbar remains layout-only.
-alert|actions|badge|*|css:surface|679|684|Optional banner status Badge, not a command button.
-popover|root|calendar|*|css:surface|1013|1013|Optional sole Calendar child; variant determines whether nested shell is omitted.
-popover|header|button|*|css:surface|1054|1073|Optional header action Button owns plate and glyph.
+alert|actions|badge|*|css:surface|691|696|Optional banner status Badge, not a command button.
+popover|root|calendar|*|css:surface|1020|1020|Optional sole Calendar child; variant determines whether nested shell is omitted.
+popover|header|button|*|css:surface|1061|1080|Optional header action Button owns plate and glyph.
 toolbar|root|select|*|css:toolbar|45|47|Optional native field control in toolbar; picker remains floating.
 toolbar|group|segmented|*|css:toolbar|59|62|Documented one-of-many toolbar composition; selected segment retains its own lift.
 toolbar|group|splitButton|*|css:toolbar|59|62|Documented ghost split command; its menu floats relative to host.
 treeView|actions|button|*|css:tree-view|89|113|Optional trailing row commands; hover wash remains legible over selected row plate.
-'''
+fileUpload|action|link|root|FileUpload|77|82|Co-classed link action text.
+fileUploadItem|progress|progress|*|FileUpload|148|151|Uploading only; Progress owns track and semantic fill.
+fileUploadItem|actions|button|*|FileUpload|140|145|Optional retry/remove Button children.
+toggleGroup|root|button|*|ToggleGroup|131|145|ToggleGroupItem renders Button; selected state retained.
+toggleGroup|root|buttonGroup|root,join|ToggleGroup|66|76|Joined presentation co-classes ButtonGroup; do not paint twice.
+meter|track|progress|*|Meter|43|48|Co-classed Progress track and bar encode the measured value.
+searchField|root|input|*|SearchField|80|109|Input owns field shell, value, icon and action receiver.
+searchField|shortcut|kbd|*|SearchField|110|110|Optional Kbd child; preserve current quiet/context recipe.
+shortcutList|keys|kbd|*|ShortcutList|54|60|One keycap template per shortcut chord.
+dateRangePicker|root|datePicker|*|DateRangePicker|100|127|Shared date trigger/panel/footer classes; use range Calendar below.
+dateRangePicker|root|calendar|*|DateRangePicker|119|122|Plain range calendar inside acquired Popover shell.
+dateRangePicker|preset|menu|item,text,check|DateRangePicker|108|117|Co-classed Menu row; row-plate owns state.
+zoomControl|root|button|*|ZoomControl|73|75|Co-classed Button trigger.
+zoomControl|menu|menu|*|ZoomControl|72|90|Menu shell, entries and separators.
+zoomControl|field|input|*|ZoomControl|77|81|Editable zoom Input child.
+boardColumn|count|badge|*|Board|43|43|Badge paints the count; co-classed slot does not add paint.
+boardColumn|cards|boardCard|*|Board|46|46|Supplied cards instantiate the BoardCard contract.
+board|root|boardColumn|*|Board|12|13|Consumer children instantiate BoardColumn; host remains layout-only.
+editableText|preview|tooltip|*|EditableText|105|105|Optional hint Tooltip floats relative to host, not to text baseline.
+toggletip|surface|tooltip|*|Toggletip|51|51|Shared Tooltip CSS surface; interaction is Toggletip.
+pagination|step|button|*|Pagination|90|106|Previous/next controls co-class Button, with glyph and optional label.
+menu|root|scrollArea|*|primitives|1210|1215|Anchored Menu renders ScrollArea; no extra shell.
+panel|body|scrollArea|*|primitives|577|577|Panel body scroll receiver.
+customSelect|listbox|scrollArea|*|CustomSelect|236|242|Listbox uses ScrollArea; focus remains on options.
+tagPicker|listbox|scrollArea|*|TagPicker|210|213|Listbox uses ScrollArea.
+commandPalette|list|scrollArea|*|CommandPalette|192|196|Result list uses ScrollArea; active descendant focus remains on row.
+"""
+
+BINDINGS += """
+combobox|listbox|scrollArea|*|Combobox|269|274|Current listbox uses ScrollArea; focus remains active-descendant driven.
+drawer|body|scrollArea|*|Drawer|88|88|Current Drawer body uses ScrollArea.
+"""

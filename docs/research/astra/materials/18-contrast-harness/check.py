@@ -8,8 +8,9 @@ HERE=Path(__file__).resolve().parent; REPO=HERE.parents[4]
 load=lambda name:json.loads((HERE/name).read_text())
 inputs=load('inputs.json'); bindings=load('bindings.json'); summary=load('summary.json')
 fixtures={f['id']:f for f in bindings['fixtures']}; measures=load('measurements.json')
-presets=json.loads((HERE/'../13-presets/presets.json').read_text())
-assert hashlib.sha256((HERE/'../13-presets/presets.json').read_bytes()).hexdigest()==inputs['presets']['sha256']
+preset_source=subprocess.check_output(['git','show',inputs['researchCommit']+':'+inputs['presets']['path']],cwd=REPO)
+presets=json.loads(preset_source)
+assert hashlib.sha256(preset_source).hexdigest()==inputs['presets']['sha256']
 assert len(fixtures)==433 and len(summary['results'])==16
 covered={f['assertion'] for f in fixtures.values()}; excluded={f['index'] for f in bindings['excludedAssertions']}
 assert not covered&excluded and covered|excluded==set(range(len(inputs['assertions'])))

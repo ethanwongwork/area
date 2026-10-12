@@ -30,7 +30,7 @@
       "gap": "Closest native role vocabulary, but not a general material-family switch across every control. Mica and Acrylic have platform-specific acquisition/fallback behavior. No shared glass/paper/clay parameter schema found in the inspected brush API and Fluent guide.",
       "docs": "[Fluent material guide](https://fluent2.microsoft.design/material); [Acrylic](https://learn.microsoft.com/en-us/windows/apps/design/style/acrylic); [Mica](https://learn.microsoft.com/en-us/windows/apps/design/style/mica)",
       "refs": [
-        "[fluent: controls/dev/Materials/Acrylic/AcrylicBrush.idl L9\u201329](https://github.com/microsoft/microsoft-ui-xaml/blob/901ffc065a1f3a1122bbfe6d222eb80a471f28a6/controls/dev/Materials/Acrylic/AcrylicBrush.idl#L9-L29)"
+        "[fluent: controls/dev/Materials/Acrylic/AcrylicBrush.idl L9–29](https://github.com/microsoft/microsoft-ui-xaml/blob/901ffc065a1f3a1122bbfe6d222eb80a471f28a6/controls/dev/Materials/Acrylic/AcrylicBrush.idl#L9-L29)"
       ]
     },
     {
@@ -40,10 +40,10 @@
       "controls": "Compose MaterialTheme takes colorScheme, shapes, typography and motionScheme. Surface separates color, contentColor, shape, border, tonalElevation and shadowElevation. Tonal elevation accumulates with ancestor surfaces and changes the surface tint; shadow elevation does not change z-order.",
       "scope": "Components consume theme defaults and Surface provides parent-relative elevation/color behavior. Tonal elevation is color composition, not backdrop translucency.",
       "gap": "A substantial open implementation of one design language. Not found: interchangeable physical materials or controls for shared grain, directional gloss and refraction in these APIs.",
-      "docs": "[M2\u2192M3 tonal elevation](https://developer.android.com/develop/ui/compose/designsystems/material2-material3)",
+      "docs": "[M2→M3 tonal elevation](https://developer.android.com/develop/ui/compose/designsystems/material2-material3)",
       "refs": [
-        "[material: compose/material3/material3/src/commonMain/kotlin/androidx/compose/material3/Surface.kt L64\u2013123](https://github.com/androidx/androidx/blob/0f80bf7a8635fc07c5525f26952f1eb28709d98b/compose/material3/material3/src/commonMain/kotlin/androidx/compose/material3/Surface.kt#L64-L123)",
-        "[material: compose/material3/material3/src/commonMain/kotlin/androidx/compose/material3/MaterialTheme.kt L85\u2013104](https://github.com/androidx/androidx/blob/0f80bf7a8635fc07c5525f26952f1eb28709d98b/compose/material3/material3/src/commonMain/kotlin/androidx/compose/material3/MaterialTheme.kt#L85-L104)"
+        "[material: compose/material3/material3/src/commonMain/kotlin/androidx/compose/material3/Surface.kt L64–123](https://github.com/androidx/androidx/blob/0f80bf7a8635fc07c5525f26952f1eb28709d98b/compose/material3/material3/src/commonMain/kotlin/androidx/compose/material3/Surface.kt#L64-L123)",
+        "[material: compose/material3/material3/src/commonMain/kotlin/androidx/compose/material3/MaterialTheme.kt L85–104](https://github.com/androidx/androidx/blob/0f80bf7a8635fc07c5525f26952f1eb28709d98b/compose/material3/material3/src/commonMain/kotlin/androidx/compose/material3/MaterialTheme.kt#L85-L104)"
       ]
     },
     {
@@ -55,7 +55,7 @@
       "gap": "Do not infer blur, glass or adjustable lighting from the name Expressive. Its tonal/shadow foundations remain separate concepts.",
       "docs": "[MaterialExpressiveTheme API](https://developer.android.com/reference/kotlin/androidx/compose/material3/MaterialExpressiveTheme.composable)",
       "refs": [
-        "[material: compose/material3/material3/src/commonMain/kotlin/androidx/compose/material3/MaterialTheme.kt L215\u2013268](https://github.com/androidx/androidx/blob/0f80bf7a8635fc07c5525f26952f1eb28709d98b/compose/material3/material3/src/commonMain/kotlin/androidx/compose/material3/MaterialTheme.kt#L215-L268)"
+        "[material: compose/material3/material3/src/commonMain/kotlin/androidx/compose/material3/MaterialTheme.kt L215–268](https://github.com/androidx/androidx/blob/0f80bf7a8635fc07c5525f26952f1eb28709d98b/compose/material3/material3/src/commonMain/kotlin/androidx/compose/material3/MaterialTheme.kt#L215-L268)"
       ]
     },
     {
@@ -67,8 +67,8 @@
       "gap": "Narrower than a full material layer: the inspected API offers no shared light direction, grain, inner relief or refraction knobs; panel translucency does not mean every component becomes glass.",
       "docs": "[Theme API](https://www.radix-ui.com/themes/docs/components/theme); [color and panels](https://www.radix-ui.com/themes/docs/theme/color)",
       "refs": [
-        "[radix: packages/radix-ui-themes/src/components/theme.props.tsx L7\u201370](https://github.com/radix-ui/themes/blob/1faff10ac26ae17f09944d418c6949b93fc6b566/packages/radix-ui-themes/src/components/theme.props.tsx#L7-L70)",
-        "[radix: packages/radix-ui-themes/src/styles/tokens/color.css L126\u2013134](https://github.com/radix-ui/themes/blob/1faff10ac26ae17f09944d418c6949b93fc6b566/packages/radix-ui-themes/src/styles/tokens/color.css#L126-L134)"
+        "[radix: packages/radix-ui-themes/src/components/theme.props.tsx L7–70](https://github.com/radix-ui/themes/blob/1faff10ac26ae17f09944d418c6949b93fc6b566/packages/radix-ui-themes/src/components/theme.props.tsx#L7-L70)",
+        "[radix: packages/radix-ui-themes/src/styles/tokens/color.css L126–134](https://github.com/radix-ui/themes/blob/1faff10ac26ae17f09944d418c6949b93fc6b566/packages/radix-ui-themes/src/styles/tokens/color.css#L126-L134)"
       ]
     },
     {
@@ -77,24 +77,24 @@
       "kind": "Distributed component source + style/theme presets",
       "controls": "Semantic background/foreground, card, popover, action, border, chart/sidebar and radius tokens; create previews color, radius, fonts and icons. The pinned style registry includes Vega, Nova, Maia, Lyra, Mira and Luma, with different spacing/shape descriptions.",
       "scope": "Generated/copied source consumes CSS variables and style-specific recipes. A named style can affect more than the palette.",
-      "gap": "No shared optical parameter schema found in the inspected theming contract/style registry. Luma\u2019s \u201cluminous\u201d description alone is not evidence of configurable refraction or a role material system.",
+      "gap": "No shared optical parameter schema found in the inspected theming contract/style registry. Luma’s “luminous” description alone is not evidence of configurable refraction or a role material system.",
       "docs": "[Theming](https://ui.shadcn.com/docs/theming)",
       "refs": [
-        "[shadcn: apps/v4/content/docs/(root)/theming.mdx L8\u201337](https://github.com/shadcn-ui/ui/blob/97ddbf4274ed09d02aa7fd34375f2cf1e48cbbf0/apps/v4/content/docs/%28root%29/theming.mdx#L8-L37)",
-        "[shadcn: apps/v4/registry/styles.tsx L1\u2013120](https://github.com/shadcn-ui/ui/blob/97ddbf4274ed09d02aa7fd34375f2cf1e48cbbf0/apps/v4/registry/styles.tsx#L1-L120)"
+        "[shadcn: apps/v4/content/docs/(root)/theming.mdx L8–37](https://github.com/shadcn-ui/ui/blob/97ddbf4274ed09d02aa7fd34375f2cf1e48cbbf0/apps/v4/content/docs/%28root%29/theming.mdx#L8-L37)",
+        "[shadcn: apps/v4/registry/styles.tsx L1–120](https://github.com/shadcn-ui/ui/blob/97ddbf4274ed09d02aa7fd34375f2cf1e48cbbf0/apps/v4/registry/styles.tsx#L1-L120)"
       ]
     },
     {
       "id": "tweakcn",
       "title": "tweakcn and comparable theme generators",
       "kind": "Visual token editor",
-      "controls": "The schema exposes semantic colors, font families, radius, letter spacing, spacing and shadow color, opacity, blur, spread, x/y offsets. The shadow generator derives a size ladder from those inputs. shadcn/create and daisyUI\u2019s theme generator are additional examples of editing a known token contract.",
+      "controls": "The schema exposes semantic colors, font families, radius, letter spacing, spacing and shadow color, opacity, blur, spread, x/y offsets. The shadow generator derives a size ladder from those inputs. shadcn/create and daisyUI’s theme generator are additional examples of editing a known token contract.",
       "scope": "Changes reach components that consume the generated theme tokens; generators do not automatically add missing effect layers to copied component markup.",
       "gap": "Much closer on adjustable shadows than a color-only editor, but no shared grain/refraction/specular-role contract found in the inspected schema. User-written CSS can add these; that is authoring a new system, not a shipped feature.",
       "docs": "[tweakcn repository](https://github.com/jnsahaj/tweakcn); [shadcn/create](https://ui.shadcn.com/create); [daisyUI themes](https://daisyui.com/docs/themes/)",
       "refs": [
-        "[tweakcn: types/theme.ts L50\u201368](https://github.com/jnsahaj/tweakcn/blob/a3b47b37cba97dd637de517aab52c45ec0f83456/types/theme.ts#L50-L68)",
-        "[tweakcn: utils/shadows.ts L6\u201331](https://github.com/jnsahaj/tweakcn/blob/a3b47b37cba97dd637de517aab52c45ec0f83456/utils/shadows.ts#L6-L31)"
+        "[tweakcn: types/theme.ts L50–68](https://github.com/jnsahaj/tweakcn/blob/a3b47b37cba97dd637de517aab52c45ec0f83456/types/theme.ts#L50-L68)",
+        "[tweakcn: utils/shadows.ts L6–31](https://github.com/jnsahaj/tweakcn/blob/a3b47b37cba97dd637de517aab52c45ec0f83456/utils/shadows.ts#L6-L31)"
       ]
     },
     {
@@ -106,8 +106,8 @@
       "gap": "Not found: a default global glass/paper/clay material contract in the inspected theming configuration, shadow tokens and Button recipe. Custom recipes remain possible.",
       "docs": "[Theming architecture](https://chakra-ui.com/docs/theming/overview)",
       "refs": [
-        "[chakra: packages/react/src/theme/semantic-tokens/shadows.ts L1\u201315](https://github.com/chakra-ui/chakra-ui/blob/f799e4d478d31fdae1311fad6c6de7cca47b9d3e/packages/react/src/theme/semantic-tokens/shadows.ts#L1-L15)",
-        "[chakra: packages/react/src/theme/recipes/button.ts L115\u2013138](https://github.com/chakra-ui/chakra-ui/blob/f799e4d478d31fdae1311fad6c6de7cca47b9d3e/packages/react/src/theme/recipes/button.ts#L115-L138)"
+        "[chakra: packages/react/src/theme/semantic-tokens/shadows.ts L1–15](https://github.com/chakra-ui/chakra-ui/blob/f799e4d478d31fdae1311fad6c6de7cca47b9d3e/packages/react/src/theme/semantic-tokens/shadows.ts#L1-L15)",
+        "[chakra: packages/react/src/theme/recipes/button.ts L115–138](https://github.com/chakra-ui/chakra-ui/blob/f799e4d478d31fdae1311fad6c6de7cca47b9d3e/packages/react/src/theme/recipes/button.ts#L115-L138)"
       ]
     },
     {
@@ -119,8 +119,8 @@
       "gap": "No material selector or uniform optical controls found in the inspected theme interface. A custom material can be authored through component styles, but that requires the role mapping the owner wants supplied.",
       "docs": "[Theme object](https://mantine.dev/theming/theme-object/)",
       "refs": [
-        "[mantine: packages/@mantine/core/src/core/MantineProvider/theme.types.ts L85\u2013135](https://github.com/mantinedev/mantine/blob/f0e2bc6d28b0f0b8aaefb5b859937bf77f539df7/packages/%40mantine/core/src/core/MantineProvider/theme.types.ts#L85-L135)",
-        "[mantine: packages/@mantine/core/src/components/Paper/Paper.module.css L1\u201315](https://github.com/mantinedev/mantine/blob/f0e2bc6d28b0f0b8aaefb5b859937bf77f539df7/packages/%40mantine/core/src/components/Paper/Paper.module.css#L1-L15)"
+        "[mantine: packages/@mantine/core/src/core/MantineProvider/theme.types.ts L85–135](https://github.com/mantinedev/mantine/blob/f0e2bc6d28b0f0b8aaefb5b859937bf77f539df7/packages/%40mantine/core/src/core/MantineProvider/theme.types.ts#L85-L135)",
+        "[mantine: packages/@mantine/core/src/components/Paper/Paper.module.css L1–15](https://github.com/mantinedev/mantine/blob/f0e2bc6d28b0f0b8aaefb5b859937bf77f539df7/packages/%40mantine/core/src/components/Paper/Paper.module.css#L1-L15)"
       ]
     },
     {
@@ -132,8 +132,8 @@
       "gap": "No all-component optical switch found in the inspected v3 theme and migration contract. Record v2 examples as historical; do not claim their props are the current API.",
       "docs": "[v3 styling migration](https://heroui.com/en/docs/react/migration/styling)",
       "refs": [
-        "[heroui: packages/styles/themes/default/variables.css L21\u201378](https://github.com/heroui-inc/heroui/blob/83b92dfccf847856d277504fed64d954c2dd9066/packages/styles/themes/default/variables.css#L21-L78)",
-        "[heroui: apps/docs/content/docs/en/react/migration/(components)/card.mdx L65\u201382](https://github.com/heroui-inc/heroui/blob/83b92dfccf847856d277504fed64d954c2dd9066/apps/docs/content/docs/en/react/migration/%28components%29/card.mdx#L65-L82)"
+        "[heroui: packages/styles/themes/default/variables.css L21–78](https://github.com/heroui-inc/heroui/blob/83b92dfccf847856d277504fed64d954c2dd9066/packages/styles/themes/default/variables.css#L21-L78)",
+        "[heroui: apps/docs/content/docs/en/react/migration/(components)/card.mdx L65–82](https://github.com/heroui-inc/heroui/blob/83b92dfccf847856d277504fed64d954c2dd9066/apps/docs/content/docs/en/react/migration/%28components%29/card.mdx#L65-L82)"
       ]
     },
     {
@@ -141,12 +141,12 @@
       "title": "Park UI",
       "kind": "Panda preset + component recipes",
       "controls": "The preset imports semantic colors, shadows, layerStyles and recipes. Button variants include solid, surface, subtle and outline; their parts consume semantic colorPalette roles.",
-      "scope": "A shared visual system with extensible recipe infrastructure, but \u201csurface\u201d is a variant name rather than a transmissive-material model.",
+      "scope": "A shared visual system with extensible recipe infrastructure, but “surface” is a variant name rather than a transmissive-material model.",
       "gap": "Not found: a supplied material-family selector or global blur/grain/light parameters in the preset and Button source. Hosted theming URLs were unavailable in this run; the pinned source is the evidence.",
       "docs": "Public preset source below (docs URLs attempted: /docs/theme/overview and /docs/overview/theming).",
       "refs": [
-        "[park: packages/preset/src/index.ts L1\u201314](https://github.com/cschroeter/park-ui/blob/102769cc91a9d36753dbc5893c74b7954b495efe/packages/preset/src/index.ts#L1-L14)",
-        "[park: packages/preset/src/recipes/button.ts L32\u201378](https://github.com/cschroeter/park-ui/blob/102769cc91a9d36753dbc5893c74b7954b495efe/packages/preset/src/recipes/button.ts#L32-L78)"
+        "[park: packages/preset/src/index.ts L1–14](https://github.com/cschroeter/park-ui/blob/102769cc91a9d36753dbc5893c74b7954b495efe/packages/preset/src/index.ts#L1-L14)",
+        "[park: packages/preset/src/recipes/button.ts L32–78](https://github.com/cschroeter/park-ui/blob/102769cc91a9d36753dbc5893c74b7954b495efe/packages/preset/src/recipes/button.ts#L32-L78)"
       ]
     },
     {
@@ -158,8 +158,8 @@
       "gap": "A layer is an interface-background level, not glass/paper/neumorphic substance. No light/blur/grain/refraction controls found in the inspected layer module. Hosted pages failed to load; source is authoritative for this entry.",
       "docs": "Pinned layer module below; attempted Carbon layer/color usage docs were unavailable.",
       "refs": [
-        "[carbon: packages/styles/scss/layer/_layer-sets.scss L11\u201360](https://github.com/carbon-design-system/carbon/blob/35f38f48eefaf499bfd110c43577321c2e76cca5/packages/styles/scss/layer/_layer-sets.scss#L11-L60)",
-        "[carbon: packages/styles/scss/layer/_layer-tokens.scss L13\u201319](https://github.com/carbon-design-system/carbon/blob/35f38f48eefaf499bfd110c43577321c2e76cca5/packages/styles/scss/layer/_layer-tokens.scss#L13-L19)"
+        "[carbon: packages/styles/scss/layer/_layer-sets.scss L11–60](https://github.com/carbon-design-system/carbon/blob/35f38f48eefaf499bfd110c43577321c2e76cca5/packages/styles/scss/layer/_layer-sets.scss#L11-L60)",
+        "[carbon: packages/styles/scss/layer/_layer-tokens.scss L13–19](https://github.com/carbon-design-system/carbon/blob/35f38f48eefaf499bfd110c43577321c2e76cca5/packages/styles/scss/layer/_layer-tokens.scss#L13-L19)"
       ]
     },
     {
@@ -171,8 +171,8 @@
       "gap": "Not found: global transmissive/reflective controls in the inspected Provider interfaces. Keep Spectrum guidance, S1 theme customization and S2 style APIs distinct.",
       "docs": "[Background layers](https://spectrum.adobe.com/foundations/color/background-layers)",
       "refs": [
-        "[spectrum: packages/@adobe/react-spectrum/src/provider/Provider.tsx L38\u201364](https://github.com/adobe/react-spectrum/blob/2691598d3efcdaf6f49f29ad1a44bbc1741765a3/packages/%40adobe/react-spectrum/src/provider/Provider.tsx#L38-L64)",
-        "[spectrum: packages/@react-spectrum/s2/src/Provider.tsx L31\u201354](https://github.com/adobe/react-spectrum/blob/2691598d3efcdaf6f49f29ad1a44bbc1741765a3/packages/%40react-spectrum/s2/src/Provider.tsx#L31-L54)"
+        "[spectrum: packages/@adobe/react-spectrum/src/provider/Provider.tsx L38–64](https://github.com/adobe/react-spectrum/blob/2691598d3efcdaf6f49f29ad1a44bbc1741765a3/packages/%40adobe/react-spectrum/src/provider/Provider.tsx#L38-L64)",
+        "[spectrum: packages/@react-spectrum/s2/src/Provider.tsx L31–54](https://github.com/adobe/react-spectrum/blob/2691598d3efcdaf6f49f29ad1a44bbc1741765a3/packages/%40react-spectrum/s2/src/Provider.tsx#L31-L54)"
       ]
     },
     {
@@ -181,24 +181,24 @@
       "kind": "Shopify visual contract; historical React source",
       "controls": "Historical React Box exposes background, border color/style/radius and shadow from Polaris token types. The repository says React is deprecated in favor of Polaris Web Components.",
       "scope": "The current web-component documentation is a different delivery surface; old React source cannot establish its full current customization contract.",
-      "gap": "No shared optical material layer found in the inspected Box/token contract or current overview. The repository\u2019s custom license restricts usage to Shopify interoperability, so public source should not automatically be counted as unrestricted open-source prior art.",
+      "gap": "No shared optical material layer found in the inspected Box/token contract or current overview. The repository’s custom license restricts usage to Shopify interoperability, so public source should not automatically be counted as unrestricted open-source prior art.",
       "docs": "[Current web components](https://shopify.dev/docs/api/app-home/latest/web-components)",
       "refs": [
-        "[polaris: polaris-react/src/components/Box/Box.tsx L1\u201355](https://github.com/Shopify/polaris/blob/3f7954ae42fabf26d63cee68c23ceebfd7ef0972/polaris-react/src/components/Box/Box.tsx#L1-L55)",
-        "[polaris: README.md L10\u201315](https://github.com/Shopify/polaris/blob/3f7954ae42fabf26d63cee68c23ceebfd7ef0972/README.md#L10-L15)",
-        "[polaris: README.md L74\u201378](https://github.com/Shopify/polaris/blob/3f7954ae42fabf26d63cee68c23ceebfd7ef0972/README.md#L74-L78)"
+        "[polaris: polaris-react/src/components/Box/Box.tsx L1–55](https://github.com/Shopify/polaris/blob/3f7954ae42fabf26d63cee68c23ceebfd7ef0972/polaris-react/src/components/Box/Box.tsx#L1-L55)",
+        "[polaris: README.md L10–15](https://github.com/Shopify/polaris/blob/3f7954ae42fabf26d63cee68c23ceebfd7ef0972/README.md#L10-L15)",
+        "[polaris: README.md L74–78](https://github.com/Shopify/polaris/blob/3f7954ae42fabf26d63cee68c23ceebfd7ef0972/README.md#L74-L78)"
       ]
     },
     {
       "id": "geist",
       "title": "Geist: Vercel guidance vs community Geist UI",
       "kind": "Role-based surface presets; separate implementations",
-      "controls": "Vercel calls its bundled radii/fills/strokes/shadows \u201cMaterials\u201d: base/small/medium/large and tooltip/menu/modal/fullscreen. The separate community Geist UI theme has palette, layout/radius, expressiveness shadow sizes and portalOpacity.",
-      "scope": "Vercel\u2019s presets select chrome by elevation role. Community Geist UI exposes theme customization, but it is not proof of Vercel\u2019s internal component implementation.",
+      "controls": "Vercel calls its bundled radii/fills/strokes/shadows “Materials”: base/small/medium/large and tooltip/menu/modal/fullscreen. The separate community Geist UI theme has palette, layout/radius, expressiveness shadow sizes and portalOpacity.",
+      "scope": "Vercel’s presets select chrome by elevation role. Community Geist UI exposes theme customization, but it is not proof of Vercel’s internal component implementation.",
       "gap": "Vercel compositor/component source not found in the consulted public guide. Neither the guide nor the community theme interface supplies a multi-material optical-control contract.",
       "docs": "[Vercel materials](https://vercel.com/geist/materials); [Vercel colors](https://vercel.com/geist/colors)",
       "refs": [
-        "[geist: components/themes/presets/index.ts L42\u201395](https://github.com/geist-org/geist-ui/blob/6894bfdf12bca17ae292617cf2b69c63731fd5d4/components/themes/presets/index.ts#L42-L95)"
+        "[geist: components/themes/presets/index.ts L42–95](https://github.com/geist-org/geist-ui/blob/6894bfdf12bca17ae292617cf2b69c63731fd5d4/components/themes/presets/index.ts#L42-L95)"
       ]
     },
     {
@@ -206,11 +206,11 @@
       "title": "98.css",
       "kind": "Historical visual-language stylesheet",
       "controls": "CSS variables expose surface, button highlight/face/shadow, frame colors and spacing; bevel-like edges are implemented by component rules.",
-      "scope": "A coherent Windows-98-style treatment across the library\u2019s supported controls. It is meaningful component-wide style prior art.",
+      "scope": "A coherent Windows-98-style treatment across the library’s supported controls. It is meaningful component-wide style prior art.",
       "gap": "The supplied vocabulary is one historical theme, not independently adjustable physical material layers. No shared optical model for changing it into glass/paper/clay was found.",
       "docs": "Source stylesheet and project documentation at the pinned revision.",
       "refs": [
-        "[98css: style.css L8\u201324](https://github.com/jdan/98.css/blob/b1d7a907371bbe523d6f64e3af97f714fdbd6d6a/style.css#L8-L24)"
+        "[98css: style.css L8–24](https://github.com/jdan/98.css/blob/b1d7a907371bbe523d6f64e3af97f714fdbd6d6a/style.css#L8-L24)"
       ]
     },
     {
@@ -222,8 +222,8 @@
       "gap": "Strong example of role-specific visual language, but its knobs are window/component variables. No independent system-wide physical-material family abstraction found in those modules.",
       "docs": "Source variables and window recipe below.",
       "refs": [
-        "[7css: gui/_variables.scss L1\u201314](https://github.com/khang-nd/7.css/blob/76d29abe7e76598fc521e707933f9ffa1b320259/gui/_variables.scss#L1-L14)",
-        "[7css: gui/_window.scss L1\u201351](https://github.com/khang-nd/7.css/blob/76d29abe7e76598fc521e707933f9ffa1b320259/gui/_window.scss#L1-L51)"
+        "[7css: gui/_variables.scss L1–14](https://github.com/khang-nd/7.css/blob/76d29abe7e76598fc521e707933f9ffa1b320259/gui/_variables.scss#L1-L14)",
+        "[7css: gui/_window.scss L1–51](https://github.com/khang-nd/7.css/blob/76d29abe7e76598fc521e707933f9ffa1b320259/gui/_window.scss#L1-L51)"
       ]
     },
     {
@@ -235,7 +235,7 @@
       "gap": "Most optical values in the inspected Button recipe are literal authored values, not adjustable shared optical parameters. Theme replacement differs from independently tuning a reusable material layer.",
       "docs": "Source theme recipe below.",
       "refs": [
-        "[xpcss: themes/XP/_buttons.scss L1\u201343](https://github.com/botoxparty/XP.css/blob/376f42eb274361939eaad3b0943204c053ad26c4/themes/XP/_buttons.scss#L1-L43)"
+        "[xpcss: themes/XP/_buttons.scss L1–43](https://github.com/botoxparty/XP.css/blob/376f42eb274361939eaad3b0943204c053ad26c4/themes/XP/_buttons.scss#L1-L43)"
       ]
     },
     {
@@ -247,7 +247,7 @@
       "gap": "The sampled controls demonstrate a fixed pixel-art language, not a runtime multi-material compositor.",
       "docs": "Source button mixin below.",
       "refs": [
-        "[nes: scss/elements/buttons.scss L1\u201332](https://github.com/nostalgic-css/NES.css/blob/b1cc9944aae3274461c747d7ad1cab31df45e78c/scss/elements/buttons.scss#L1-L32)"
+        "[nes: scss/elements/buttons.scss L1–32](https://github.com/nostalgic-css/NES.css/blob/b1cc9944aae3274461c747d7ad1cab31df45e78c/scss/elements/buttons.scss#L1-L32)"
       ]
     },
     {
@@ -259,40 +259,98 @@
       "gap": "Close partial match, but the inspected glass utility is not a full role-specific material family mapping. No general separate controls for refraction, grain statistics or an arbitrary gradient/lighting stack found in these contracts.",
       "docs": "[Themes and generator](https://daisyui.com/docs/themes/)",
       "refs": [
-        "[daisyui: packages/daisyui/src/themes/light.css L22\u201329](https://github.com/saadeghi/daisyui/blob/9adbeaa259816be46b98bf497a09cd2ab127e3cf/packages/daisyui/src/themes/light.css#L22-L29)",
-        "[daisyui: packages/daisyui/src/components/button.css L31\u201356](https://github.com/saadeghi/daisyui/blob/9adbeaa259816be46b98bf497a09cd2ab127e3cf/packages/daisyui/src/components/button.css#L31-L56)",
-        "[daisyui: packages/daisyui/src/utilities/glass.css L1\u201318](https://github.com/saadeghi/daisyui/blob/9adbeaa259816be46b98bf497a09cd2ab127e3cf/packages/daisyui/src/utilities/glass.css#L1-L18)"
+        "[daisyui: packages/daisyui/src/themes/light.css L22–29](https://github.com/saadeghi/daisyui/blob/9adbeaa259816be46b98bf497a09cd2ab127e3cf/packages/daisyui/src/themes/light.css#L22-L29)",
+        "[daisyui: packages/daisyui/src/components/button.css L31–56](https://github.com/saadeghi/daisyui/blob/9adbeaa259816be46b98bf497a09cd2ab127e3cf/packages/daisyui/src/components/button.css#L31-L56)",
+        "[daisyui: packages/daisyui/src/utilities/glass.css L1–18](https://github.com/saadeghi/daisyui/blob/9adbeaa259816be46b98bf497a09cd2ab127e3cf/packages/daisyui/src/utilities/glass.css#L1-L18)"
       ]
     },
     {
       "id": "generators",
       "title": "Glass and neumorphism generators",
       "kind": "Single-object effect authoring",
-      "controls": "The Hype4 glass tool exposes blur, \u201crefraction\u201d and depth; its displayed CSS uses alpha, backdrop blur, shadows and highlight pseudo-elements, not a displacement filter. Neumorphism.io\u2019s source has color, size, radius, distance, blur, shape and intensity-related state.",
+      "controls": "The Hype4 glass tool exposes blur, “refraction” and depth; its displayed CSS uses alpha, backdrop blur, shadows and highlight pseudo-elements, not a displacement filter. Neumorphism.io’s source has color, size, radius, distance, blur, shape and intensity-related state.",
       "scope": "Useful ways to expose effect parameters and export a recipe for one preview object. A control label is not evidence of its physical simulation.",
       "gap": "No component catalogue, role absorption or shared runtime theme contract is established by these generators. Hype4 source/license was not found on its public tool page.",
       "docs": "[Glass generator](https://hype4.academy/tools/glassmorphism-generator); [Neumorphism.io](https://neumorphism.io/)",
       "refs": [
-        "[neumorphism: src/Configuration.js L11\u201323](https://github.com/adamgiebl/neumorphism/blob/8ab93a6bea6493cc464d45a334b5fb7a90d34308/src/Configuration.js#L11-L23)"
+        "[neumorphism: src/Configuration.js L11–23](https://github.com/adamgiebl/neumorphism/blob/8ab93a6bea6493cc464d45a334b5fb7a90d34308/src/Configuration.js#L11-L23)"
       ]
     },
     {
       "id": "openglass",
-      "title": "OpenGlass UI \u2014 strongest counterexample",
+      "title": "OpenGlass UI — strongest counterexample",
       "kind": "Shared, parameterized glass system",
       "controls": "Public GlassLook controls include blur, opacity, tint, saturation, brightness, rim, highlight, lightAngle, lightSpread, lensing and shadow. Presets include liquid/frosted/clear/smoked/lensed; design switches between liquid and classic. Controls become CSS variables at nested provider boundaries.",
       "scope": "MIT-licensed implementation. The recipe stylesheet remaps a broad component catalogue and gives buttons optical layers, Switch separate track/thumb treatments, and inputs recessed wells. This is implemented role absorption, not just a marketing claim.",
-      "gap": "Glass-focused, not the brief\u2019s whole material taxonomy. The public look interface lacks independent gradient-stop, grain and full shadow-geometry controls. Some geometry and type are bundled into the visual language. Lensing in the CSS look is an edge cue; the docs distinguish actual refraction renderers.",
-      "docs": "Pinned documentation and actual consumers below.",
+      "gap": "Glass-focused, not the brief’s whole material taxonomy. The public look interface lacks independent gradient-stop, grain and full shadow-geometry controls. Some geometry and type are bundled into the visual language. Lensing in the CSS look is an edge cue; the docs distinguish actual refraction renderers. Task 19 scale correction: GitHub metadata checked 2026-10-11 reports creation 2026-07-26 and one listed contributor (29 contributions). This is a young, single-listed-author comparator, not evidence of mature ecosystem adoption; 40 components are documented separately in task 17. The API contributor count does not prove absence of uncredited collaborators.",
+      "docs": "Pinned documentation and actual consumers below.; [repository metadata](https://api.github.com/repos/moekoelueker/open-glass-ui); [contributors metadata](https://api.github.com/repos/moekoelueker/open-glass-ui/contributors) (scale checked 2026-10-11)",
       "refs": [
-        "[openglass: LICENSE L1\u201313](https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/LICENSE#L1-L13)",
-        "[openglass: packages/core/src/look.ts L8\u201343](https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/look.ts#L8-L43)",
-        "[openglass: docs/THEMING.md L97\u2013162](https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/docs/THEMING.md#L97-L162)",
-        "[openglass: packages/recipes/src/liquid.source.css L249\u2013297](https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L249-L297)",
-        "[openglass: packages/recipes/src/liquid.source.css L303\u2013328](https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L303-L328)",
-        "[openglass: packages/recipes/src/liquid.source.css L574\u2013599](https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L574-L599)",
-        "[openglass: packages/recipes/src/liquid.source.css L1066\u20131094](https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1066-L1094)"
+        "[openglass: LICENSE L1–13](https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/LICENSE#L1-L13)",
+        "[openglass: packages/core/src/look.ts L8–43](https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/look.ts#L8-L43)",
+        "[openglass: docs/THEMING.md L97–162](https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/docs/THEMING.md#L97-L162)",
+        "[openglass: packages/recipes/src/liquid.source.css L249–297](https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L249-L297)",
+        "[openglass: packages/recipes/src/liquid.source.css L303–328](https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L303-L328)",
+        "[openglass: packages/recipes/src/liquid.source.css L574–599](https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L574-L599)",
+        "[openglass: packages/recipes/src/liquid.source.css L1066–1094](https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1066-L1094)"
       ]
+    },
+    {
+      "id": "figma-glass",
+      "title": "Figma native Glass effect",
+      "kind": "Native authoring effect, not an open-source component system",
+      "controls": "GlassEffect exposes lightIntensity, lightAngle, refraction, depth, dispersion and radius (frost), plus visibility. API ranges: intensity/refraction/dispersion 0–1; depth >=1. Glass effects currently have no variable bindings.",
+      "scope": "Effect records attach to design nodes; this is a usable control vocabulary for D9 and an export capability task 14 must include.",
+      "gap": "No general cross-component semantic role mapper is established by this API. It is proprietary rendering, not an open-source web material engine.",
+      "docs": "[Figma Effect API](https://developers.figma.com/docs/plugins/api/Effect/)",
+      "refs": [
+        "https://github.com/figma/plugin-typings/blob/07157d96c58add71d234b13bfd55b53abdce76b8/plugin-api.d.ts#L4549-L4586"
+      ],
+      "checked": "2026-10-11"
+    },
+    {
+      "id": "open-props",
+      "title": "Open Props shadow and noise tokens",
+      "kind": "Open-source CSS primitives",
+      "controls": "Shadow color/strength and layered shadow ladders are parameterized. Gradient module supplies noise SVGs plus noise-filter controls; noise scales/contrast are exposed as reusable custom properties.",
+      "scope": "Inherited CSS properties can feed any authored component. They supply composable optical ingredients without requiring one component framework.",
+      "gap": "In the inspected shadow and gradient modules, no complete material choice maps semantic roles across a component catalogue; consumers still write those recipes.",
+      "docs": "[Open Props](https://open-props.style/)",
+      "refs": [
+        "https://github.com/argyleink/open-props/blob/f39ab7c377a0e047f930982e3611bbc95254a260/src/props.shadows.js#L1-L48",
+        "https://github.com/argyleink/open-props/blob/f39ab7c377a0e047f930982e3611bbc95254a260/src/props.gradients.js#L65-L75"
+      ],
+      "checked": "2026-10-11"
+    },
+    {
+      "id": "auraglass",
+      "title": "AuraGlass",
+      "kind": "Open-source glass component system and theme engine",
+      "controls": "Provider inputs include transparency, glassOpacity, contrast, motion, scheme, density and continuous-motion policy. createGlassTheme exposes brand/accent, neutral hue, preset and radius scale, emitting scoped CSS variables with contrast adjustment.",
+      "scope": "Provider and theme engine connect preferences to component tokens; public exports include styles and theme APIs. This is a stronger glass-system comparator than an isolated generator.",
+      "gap": "Inspected APIs establish a glass-specific system with theme and preference axes, not a general interchangeable Paper/Glass/Soft/Tactile role-material layer. Radius/density/foreground adjustment in a theme bundle differ from D16 material-only separation. Component-wide conformance and performance were not tested here; do not repeat README component-count claims as audited facts.",
+      "docs": "[AuraGlass repository](https://github.com/auraoneai/auraglass)",
+      "refs": [
+        "https://github.com/auraoneai/auraglass/blob/51d1a58c3f980dde0452f2f863adc958f417ea18/src/theme/AuraGlassProvider.tsx#L56-L65",
+        "https://github.com/auraoneai/auraglass/blob/51d1a58c3f980dde0452f2f863adc958f417ea18/src/theme/createGlassTheme.ts#L74-L85",
+        "https://github.com/auraoneai/auraglass/blob/51d1a58c3f980dde0452f2f863adc958f417ea18/src/theme/createGlassTheme.ts#L173-L244",
+        "https://github.com/auraoneai/auraglass/blob/51d1a58c3f980dde0452f2f863adc958f417ea18/README.md#L80-L95"
+      ],
+      "checked": "2026-10-11"
+    },
+    {
+      "id": "liquid-glass-web",
+      "title": "Liquid Glass Web",
+      "kind": "Open-source optical renderer / enhancement library",
+      "controls": "Profiles expose refraction and surface parameters, tint, blur and saturation; live updates differ from changes that regenerate maps. Native Chromium acquisition differs from fallback copied-background or explicit scene paths.",
+      "scope": "Applies an optical treatment to supplied elements, with browser-specific acquisition. Its README documents frost fallback and optional scene duplication/reconstruction for Safari/Firefox.",
+      "gap": "A renderer is not a full component role taxonomy. Scene reconstruction carries synchronization and scrolling limits; it is not evidence Safari/Firefox support arbitrary SVG backdrop displacement.",
+      "docs": "[Liquid Glass Web](https://github.com/Meapri/liquid-glass-web)",
+      "refs": [
+        "https://github.com/Meapri/liquid-glass-web/blob/1613f8311dbc31bc2331afcfe51a143c56dd6308/README.md#L175-L200",
+        "https://github.com/Meapri/liquid-glass-web/blob/1613f8311dbc31bc2331afcfe51a143c56dd6308/README.md#L449-L522"
+      ],
+      "checked": "2026-10-11"
     }
-  ]
+  ],
+  "correction_checked": "2026-10-11"
 }

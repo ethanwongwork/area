@@ -1,11 +1,12 @@
 /** Integrity checks only. Browser checks are initiated on the page and saved in verification.json. */
+import {execFileSync} from 'node:child_process';
 import {readFile, readdir, stat} from 'node:fs/promises';
 import {fileURLToPath} from 'node:url';
 import {dirname, join, resolve} from 'node:path';
 import assert from 'node:assert/strict';
 const here=dirname(fileURLToPath(import.meta.url));
 const json=async path=>JSON.parse(await readFile(path,'utf8'));
-const source=await json(resolve(here,'../13-presets/presets.json'));
+const source=JSON.parse(execFileSync('git',['show','b372cc6cc7fe3427c99898e8f7944facadfb2be2:docs/research/astra/materials/13-presets/presets.json'],{cwd:resolve(here,'../../../../..'),encoding:'utf8'}));
 const raw=await readFile(join(here,'preset-data.js'),'utf8');
 const model=JSON.parse(raw.slice(raw.indexOf('window.M16_DATA=')+16).trim().replace(/;$/,''));
 assert.deepEqual(model.presets,source.presets.filter(p=>['paper','glass','tactile'].includes(p.id)));

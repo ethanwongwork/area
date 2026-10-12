@@ -115,3 +115,26 @@ GUARDS={
  'parts':'separator.root toolbar.separator panel.section.divider menu.separator table.cell.divider tabs.list.divider nav.separator buttonGroup.join splitButton.join',
  'cap':'Trace structural rule; semantic markers exempt from decorative attenuation'},
 }
+
+# Task 19 factual corrections and missing semantic guards (D1/D3/D6/D7/D12).
+GUARDS['scrim-and-overlay']['rule']='Drawer is modal by default (modal=false opts out). One functional scrim per modal boundary; no invented scrim for modeless overlays. Arrow continues the same shell without a second acquisition. D7: arbitrary backdrop for floating shells, failing edges take opaque fallback, with app transparency preference and opaque forced-colors Canvas plus backdrop-filter:none.'
+NEW_GUARDS={
+ 'cutout-gaps':('Cutout rings must transmit the real host','avatar indicator presence card','avatar.rings indicator.root presence.root card.media-scrim','A page-colored ring paints over a material host. D12 replaces the gap with a mask; do not recolor it to approximate the host or erase the semantic status ring.'),
+ 'fixed-colour-fades':('Fixed-color fades are not transparent gaps','card codeBlock','card.media-scrim codeBlock.toggle','Immersive and code fades can reveal a false page color. D12 requires actual alpha masking for the content gap; keep any separately required contrast scrim and control target.'),
+ 'translucent-washes':('Existing washes compose with material','kbd message boardColumn citation','kbd.root message.bubble boardColumn.root citation.root','Composite existing translucent washes with body, host and scene; do not treat the token color as opaque or apply the alpha twice. Preserve semantic ink and D7 fallback.'),
+ 'list-focus-plate':('Keyboard focus is the row plate','menu nav treeView table select combobox customSelect commandPalette calendar dateRangePicker tagPicker','menu.item nav.item treeView.row table.row select.option combobox.option customSelect.option commandPalette.item calendar.day dateRangePicker.preset tagPicker.option','D6 row-plate owns hover/highlight/focus/selection paint. Preserve the active-descendant plate as required state; adding a focus ring elsewhere does not replace it. Do not scale required state paint by decorative strength.'),
+ 'solid-emphasis':('Solid emphasis is semantic backing','button chip badge count','button.root chip.root badge.root count.root','Retain action/selection/tone backing and paired foreground on solid emphasis. Optional gloss/transmission cannot silently turn a solid semantic action into a ghost; test composed paint and fall back without changing hover ink.'),
+ 'disabled-group-opacity':('Disabled group opacity is applied once','buttonGroup toggleGroup fileUpload editableText switch','buttonGroup.root toggleGroup.root fileUpload.root editableText.preview switch.root','Resolve disabled opacity at its existing group owner; do not multiply child alpha or fade only material while leaving an enabled-looking foreground. Preserve the indicated disabled value and suppress misleading interactive effects.'),
+ 'diagnostic-extent':('Diagnostic geometry and timeline meaning are data','boxModel meter timeline timelineItem fileUploadItem','boxModel.root meter.track timelineItem.connector fileUploadItem.progress','Box-model colored regions encode dimensions; meter/upload progress encodes extent; timeline connectors encode sequence. Keep shape, fill extent and labels; materials cannot decorate them into false data.'),
+}
+for k,(title,fs,ps,rule) in NEW_GUARDS.items():GUARDS[k]=dict(title=title,families=fs,parts=ps,why=title+'. A role alone lacks this semantic/composition context.',rule=rule,cap='Hard semantic/accessibility guard; decorative strength pending D3 calibration')
+for key,extra in {
+ 'dense-rows':'dateRangePicker pagination',
+ 'shared-shell':'toggleGroup searchField zoomControl dateRangePicker',
+ 'intrinsic-media':'fileUpload fileUploadItem emptyState citation timelineItem',
+ 'unpainted-host':'fileUploadList emptyState descriptionList meter shortcutList board timeline scrollArea pagination',
+ 'state-edge':'editableText link toggletip fileUpload pagination',
+ 'scrim-and-overlay':'toggletip zoomControl dateRangePicker',
+ 'semantic-signal':'meter fileUploadItem timelineItem',
+}.items():
+ GUARDS[key]['families']+=' '+extra

@@ -1,0 +1,445 @@
+{
+  "checked": "2026-10-11",
+  "review": "d2f9b9772677b32997dc6c0be1ea64b40cd835c8",
+  "area": "9036ed9293beb7a867bdf637ee768c7a46a9901a",
+  "changes": [
+    {
+      "id": "C01",
+      "folder": "01-taxonomy",
+      "reason": "Acrylic blend contradicts the pinned WinUI active graph.",
+      "change": "Replaced exclusion with luminosity blend followed by tint, with the active-graph source; regenerated definition, ingredient matrix and sources.",
+      "files": [
+        "taxonomy.json",
+        "catalogue.md",
+        "ingredient-matrix.md",
+        "sources.md"
+      ],
+      "decisions": [
+        "D1",
+        "D2",
+        "D9",
+        "D13",
+        "D16"
+      ]
+    },
+    {
+      "id": "C02",
+      "folder": "02-prior-art",
+      "reason": "Missing Figma Glass, Open Props, AuraGlass and liquid-glass prior art; OpenGlass scale was not weighed.",
+      "change": "Added four source-pinned entries (27 total) and OpenGlass creation/listed-contributor metadata; bounded the verdict to the inspected implementations.",
+      "files": [
+        "survey.json",
+        "survey.md",
+        "source-lock.json",
+        "source-integrity.json",
+        "verify.py"
+      ],
+      "decisions": [
+        "D15"
+      ]
+    },
+    {
+      "id": "C03",
+      "folder": "03-css-cookbook",
+      "reason": "Chromium SVG backdrop refraction was described as unverified support.",
+      "change": "Added a dated support correction: Chromium enhancement, Safari/Firefox displacement fallback; retained the original run as a historical verification limit. Ordinary SVG filter support is a different question.",
+      "files": [
+        "refraction-correction.md",
+        "compatibility.md",
+        "cookbook.md"
+      ],
+      "decisions": [
+        "D8",
+        "D11"
+      ]
+    },
+    {
+      "id": "C04",
+      "folder": "04-role-map",
+      "reason": "Twenty-three newer contracts were missing.",
+      "change": "Refreshed all manifest/CSS/spec pins to current main, reviewed relocated ranges, added 23 contracts and their reuse bindings. Current inventory: 101 contracts, 83 specs, 773 parts/layers, 135 bindings.",
+      "files": [
+        "role-map.json",
+        "role-map.md",
+        "assignments.py",
+        "compositions.py",
+        "source.py"
+      ],
+      "decisions": [
+        "D6"
+      ]
+    },
+    {
+      "id": "C05",
+      "folder": "04-role-map",
+      "reason": "Table, Menu/Nav rows and hover plates had inconsistent roles.",
+      "change": "Added row-plate as role 13, assigned all repeated state plates and explicitly named hover-plate parts consistently, and retained one primary role per part.",
+      "files": [
+        "assignments.py",
+        "role-map.json"
+      ],
+      "decisions": [
+        "D6"
+      ]
+    },
+    {
+      "id": "C06",
+      "folder": "04-role-map",
+      "reason": "Kbd and Card depth notes were wrong.",
+      "change": "Recorded Kbd transparent default border/no shadow and conditional Card depth: raised only when its Surface shadow paints, otherwise flush.",
+      "files": [
+        "assignments.py",
+        "refinements.py",
+        "role-map.md"
+      ],
+      "decisions": [
+        "D1",
+        "D2"
+      ]
+    },
+    {
+      "id": "C07",
+      "folder": "04-role-map",
+      "reason": "Nonpaint count only counted hidden targets, omitting visible layout receivers.",
+      "change": "Counted 171 nonpaint records explicitly: 18 hidden targets/labels plus 153 visible layout-only receivers. Painted conditional shells stay separate.",
+      "files": [
+        "build.py",
+        "role-map.json"
+      ],
+      "decisions": [
+        "D6"
+      ]
+    },
+    {
+      "id": "C08",
+      "folder": "05-absorption",
+      "reason": "Anatomy and role coverage must follow refreshed 04.",
+      "change": "Expanded 25 styles to 13 roles (325 cells), all 101 contracts and 23 shared guards. Strength multipliers are explicitly uncalibrated, not fabricated numbers.",
+      "files": [
+        "recipes.py",
+        "recipes.md",
+        "absorption.json",
+        "family-exceptions.md"
+      ],
+      "decisions": [
+        "D1",
+        "D3",
+        "D6",
+        "D14"
+      ]
+    },
+    {
+      "id": "C09",
+      "folder": "05-absorption",
+      "reason": "Drawer is modal by default.",
+      "change": "Corrected Drawer default context and its scrim/opaque fallback responsibilities from current React/spec sources.",
+      "files": [
+        "guards.py",
+        "family-exceptions.md",
+        "policy.md"
+      ],
+      "decisions": [
+        "D7"
+      ]
+    },
+    {
+      "id": "C10",
+      "folder": "05-absorption",
+      "reason": "Surface does not own every existing literal shadow.",
+      "change": "Separated namespace ownership from actual component paint; pinned Toolbar/Tooltip literal shadows and recorded D2 migration as later work.",
+      "files": [
+        "policy.md",
+        "guards.py"
+      ],
+      "decisions": [
+        "D2"
+      ]
+    },
+    {
+      "id": "C11",
+      "folder": "05-absorption",
+      "reason": "Six guards were missing.",
+      "change": "Added cutout rings, fixed-colour fades, translucent washes, list focus via row plate, solid emphasis fills and once-only disabled group opacity; mapped current source parts/families. Added diagnostic/data-extent guard for newer contracts.",
+      "files": [
+        "guards.py",
+        "family-exceptions.md"
+      ],
+      "decisions": [
+        "D6",
+        "D7",
+        "D12",
+        "D16"
+      ]
+    },
+    {
+      "id": "C12",
+      "folder": "07-controls",
+      "reason": "Selector-switched recipes break nested scopes; Option A requires Surface migration.",
+      "change": "Marked old selector, scope and migration prescriptions superseded; D2 requires inherited 0/1 recipe gates and pixel-identical Surface shadow decomposition. Marked angle, ordinal caps and API proposals superseded where D3/D9/D16 differ.",
+      "files": [
+        "architecture.md",
+        "controls.md"
+      ],
+      "decisions": [
+        "D1",
+        "D2",
+        "D3",
+        "D6",
+        "D9",
+        "D13",
+        "D14",
+        "D16"
+      ]
+    },
+    {
+      "id": "C13",
+      "folder": "08-accessibility",
+      "reason": "Forced colors preserves background alpha and does not remove backdrop-filter.",
+      "change": "Added explicit opaque Canvas and no-backdrop-filter fallback, app-level transparency preference and optical-layer cleanup; required state/focus paint stays functional.",
+      "files": [
+        "fallbacks.md"
+      ],
+      "decisions": [
+        "D7"
+      ]
+    },
+    {
+      "id": "C14",
+      "folder": "08-accessibility",
+      "reason": "Gradient interpolation space was unstated.",
+      "change": "Specified premultiplied sRGB composition/interpolation and matching CSS in srgb; a different interpolation space needs its own sampler.",
+      "files": [
+        "method.md",
+        "tests.md"
+      ],
+      "decisions": [
+        "D3",
+        "D6",
+        "D7"
+      ]
+    },
+    {
+      "id": "C15",
+      "folder": "09-dark-density",
+      "reason": "Scope re-emission citation pointed at the wrong file.",
+      "change": "Corrected the pinned 163–174 citation from emit/base.ts to emit/css.ts. Marked historical square inner rims/radius arithmetic superseded by D11 and dark/scaling policy by D1/D3/D10/D14.",
+      "files": [
+        "evidence.md",
+        "rules.md",
+        "geometry.md",
+        "styles.md"
+      ],
+      "decisions": [
+        "D1",
+        "D3",
+        "D10",
+        "D11",
+        "D14"
+      ]
+    },
+    {
+      "id": "C16",
+      "folder": "10-states",
+      "reason": "List focus is the row plate; disabled opacity must be named.",
+      "change": "Added current Menu focus plate and ToggleGroup once-only disabled opacity pins; marked inherited cap/motion prescriptions superseded. State measurements/records are retained.",
+      "files": [
+        "policy.md",
+        "check.py"
+      ],
+      "decisions": [
+        "D1",
+        "D3",
+        "D6",
+        "D7",
+        "D12",
+        "D13",
+        "D14"
+      ]
+    },
+    {
+      "id": "C17",
+      "folder": "11-performance",
+      "reason": "Universal no-row-blur/static-only budgets did not follow the measurements.",
+      "change": "Kept benchmark measurements unchanged; restated measured risk cases (64 panes, animated 5–6-shadow stacks, Safari animated live grain). Marked old role caps superseded; owner minimum 60Hz device and Firefox rerun remain pending.",
+      "files": [
+        "budgets.md"
+      ],
+      "decisions": [
+        "D1",
+        "D3",
+        "D6",
+        "D14"
+      ]
+    },
+    {
+      "id": "C18",
+      "folder": "12-glyphs-text",
+      "reason": "Duotone part names collide with production filled-icon knockout grouping.",
+      "change": "Separated research labels into data-material-part/data-material-ink, updated fixture generator/CSS, and pinned the production knockout grouping source. Outline geometry remains unchanged.",
+      "files": [
+        "build-fixtures.py",
+        "fixtures.json",
+        "lab.css",
+        "treatments.md"
+      ],
+      "decisions": [
+        "D13"
+      ]
+    },
+    {
+      "id": "C19",
+      "folder": "13-presets",
+      "reason": "Paper faded existing borders to 14%/22%.",
+      "change": "Set its existing stroke opacity to 1 in light/dark; Paper remains deferred for a real opaque material rebuild, not promoted by this fix.",
+      "files": [
+        "model.py",
+        "presets.json",
+        "presets.md"
+      ],
+      "decisions": [
+        "D4"
+      ]
+    },
+    {
+      "id": "C20",
+      "folder": "13-presets",
+      "reason": "None identity/default was missing.",
+      "change": "Added None with identity:true and emitsMaterialDeclarations:false. There are now nine records, with None/Glass/Tactile/Soft identified as the first set.",
+      "files": [
+        "model.py",
+        "presets.json"
+      ],
+      "decisions": [
+        "D4"
+      ]
+    },
+    {
+      "id": "C21",
+      "folder": "13-presets",
+      "reason": "Prism colours were literal inventions and ignored accent.",
+      "change": "Replaced custom hex stops with accent/neutral-derived sources; retained the old numeric seeds as uncalibrated proposals.",
+      "files": [
+        "model.py",
+        "presets.json"
+      ],
+      "decisions": [
+        "D5"
+      ]
+    },
+    {
+      "id": "C22",
+      "folder": "13-presets",
+      "reason": "Glass container violated the old container cap.",
+      "change": "Made its sparse painted-shell binding explicit and marked the global Trace ceiling superseded by D1/D3; dense reading grounds remain opaque. Added D7 arbitrary-backdrop/failing-edge F0 requirements.",
+      "files": [
+        "model.py",
+        "presets.json",
+        "presets.md"
+      ],
+      "decisions": [
+        "D1",
+        "D3",
+        "D7"
+      ]
+    },
+    {
+      "id": "C23",
+      "folder": "13-presets",
+      "reason": "D6 adds a role and D3 supersedes ordinal cap enforcement.",
+      "change": "Expanded all nine records to 13 roles in both modes; added plain row-plate records and uncalibrated numeric-strength markers. Marked old angle, cast, geometry and cap policy superseded instead of pretending it implements D2/D3/D9.",
+      "files": [
+        "model.py",
+        "contract.md",
+        "presets.json",
+        "combinations.md"
+      ],
+      "decisions": [
+        "D1",
+        "D2",
+        "D3",
+        "D6",
+        "D9",
+        "D11",
+        "D13",
+        "D14",
+        "D16"
+      ]
+    },
+    {
+      "id": "C24",
+      "folder": "14-tooling",
+      "reason": "Old builder/export examples inherit the earlier role, angle and selector contracts.",
+      "change": "Marked affected sections and frozen schema/examples superseded by D2/D3/D6/D9/D16; kept valid format findings and old round-trip fixtures intact.",
+      "files": [
+        "builder.md",
+        "acceptance.md",
+        "exports.md"
+      ],
+      "decisions": [
+        "D2",
+        "D3",
+        "D4",
+        "D6",
+        "D9",
+        "D16"
+      ]
+    },
+    {
+      "id": "C25",
+      "folder": "15-consistency",
+      "reason": "Historical winners deferred to unmeasured caps.",
+      "change": "Marked C02–C07 winners locally superseded by D1/D3/D14; kept comparisons intact. Reproduction now reads its immutable original inputs, so corrected earlier folders cannot silently mutate the historical audit.",
+      "files": [
+        "findings.md",
+        "agreements.md",
+        "clarifications.md",
+        "audit.py"
+      ],
+      "decisions": [
+        "D1",
+        "D2",
+        "D3",
+        "D6",
+        "D9",
+        "D14"
+      ]
+    },
+    {
+      "id": "C26",
+      "folder": "16-specimen",
+      "reason": "Caption said Gloss softness undefined; example person was wrong.",
+      "change": "Corrected caption to state that blur is specified but not implemented; changed generated fixture person to Irene Yamaguchi. Pinned its original preset input and source link so the historical specimen stays reproducible.",
+      "files": [
+        "specimen.js",
+        "build.mjs",
+        "index.html",
+        "check.mjs"
+      ],
+      "decisions": [
+        "D1",
+        "D3",
+        "D4",
+        "D7",
+        "D9",
+        "D13",
+        "D14"
+      ]
+    },
+    {
+      "id": "C27",
+      "folder": "18-contrast-harness",
+      "reason": "Opaque passes test Area paint; arbitrary-scene exterior 1:1 is structural, and changing 13 would corrupt old reproduction.",
+      "change": "Documented those interpretation limits and pinned the eight-preset input at the original research commit. Preserved all original numerical results; this is not a rerun against task 19 presets.",
+      "files": [
+        "build.py",
+        "check.py",
+        "capture-inputs.mjs"
+      ],
+      "decisions": [
+        "D4",
+        "D6",
+        "D7"
+      ]
+    }
+  ]
+}

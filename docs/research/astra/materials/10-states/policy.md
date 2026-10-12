@@ -4,6 +4,10 @@
 
 ## State ownership
 
+<!-- task19-superseded 10-states/policy.md ## State ownership -->
+> **Superseded policy — D6, D7, D12 (owner, 2026-10-11):** The current vocabulary has 13 roles including row-plate; 04/05 now cover 101 contracts. Historical 12-role/78-contract counts below describe their original snapshot only. Floating shells assume arbitrary backdrops; failing edges use opaque F0. App-level transparency reduction sits beside the OS query. Forced colors explicitly sets opaque Canvas and backdrop-filter:none. Cutout rings and fixed-color fades become real transparent gaps through masks; separately required occlusion and contrast paint remain functional. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
+
 | State | Functional signal retained | Permitted material expression | Boundary |
 | --- | --- | --- | --- |
 | Hover | Existing eligible hover body/edge, unchanged foreground | Quiet tint, static stronger rim, bounded halo or changed reflection *paint* | Only interactive receivers; respect hover-capable input. No compulsory motion, elevation increase, text filter, sticky touch hover or page-wide response. |
@@ -30,6 +34,10 @@ Native checked controls, `aria-checked` where role-appropriate, `aria-selected` 
 
 ## Role and family limits inherited from 05
 
+<!-- task19-superseded 10-states/policy.md ## Role and family -->
+> **Superseded policy — D1, D3, D6, D13, D14 (owner, 2026-10-11):** Area’s calm no-cast/Trace-only expression is the None default, not a material ceiling. Contrast, focus, fixed hover ink and semantic meaning remain hard limits. Ordinal caps and provisional control ranges are not limits. Numeric per-role strength multipliers and bounds must be calibrated to the board and contrast-tested at extremes; that work is pending tasks 20–22. The current vocabulary has 13 roles including row-plate; 04/05 now cover 101 contracts. Historical 12-role/78-contract counts below describe their original snapshot only. No automatic effects on glyphs or small text; display text and button labels may explicitly opt in. A curated duotone pilot is later work. Performance rules must follow measured workloads, not universal no-row-blur/static-only caps. Owner names a 60Hz minimum device; a later rerun includes Firefox. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
+
 | Receiver/context | State material budget |
 | --- | --- |
 | Page, layout-only container, scrim | No hover/press material response. Functional modal scrim follows opening, with no extra glass/grain. |
@@ -47,6 +55,10 @@ Native checked controls, `aria-checked` where role-appropriate, `aria-selected` 
 These limits are the [05 policy](../05-absorption/policy.md) and [family guards](../05-absorption/family-exceptions.md) applied to state. Per-style entries cannot raise the caps. Materials remain beside Surface under [07's proposed architecture](../07-controls/architecture.md); this report introduces no second shadow owner or public state-token namespace.
 
 ## Motion contract
+
+<!-- task19-superseded 10-states/policy.md ## Motion -->
+> **Superseded policy — D14 (owner, 2026-10-11):** Performance rules must follow measured workloads, not universal no-row-blur/static-only caps. Owner names a 60Hz minimum device; a later rerun includes Firefox. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
 
 The following timing is **existing Area policy**, not measured new material tuning. [MOTION source](https://github.com/ethanwongwork/area/blob/6f896789a5200bcbd34fe87de458e60ca82141d6/docs/MOTION.md#L13-L64) and [axis source](https://github.com/ethanwongwork/area/blob/6f896789a5200bcbd34fe87de458e60ca82141d6/packages/tokens/src/axes/motion.ts#L27-L71).
 
@@ -82,3 +94,9 @@ All these are **proposed checks**, not performed browser or assistive-technology
 7. Validate disabled native and focusable ARIA-disabled separately: no action occurs; disabled checked remains checked; focusable unavailable controls still show keyboard location. CSS alone is not evidence of interaction blocking. Run real accessibility and browser checks before any implementation is accepted.
 
 No new production tests are added by this research. A future change must run the [unchanged contrast gate](https://github.com/ethanwongwork/area/blob/6f896789a5200bcbd34fe87de458e60ca82141d6/docs/CONTRAST.md#L66-L76) plus these material scene checks; no waiver, lowered threshold or altered baseline is proposed.
+
+## Task 19: row focus and disabled composition
+
+D6 adds `row-plate` for the visible keyboard or active-descendant plate as well as hover. Do not replace a Menu/Command/Select focus plate with an optional rim or suppress it with a decorative cap. [Current Menu state selectors](https://github.com/ethanwongwork/area/blob/9036ed9293beb7a867bdf637ee768c7a46a9901a/packages/styles/src/components/surface.css#L1138-L1156) are indexed precisely by the refreshed task 04 `menu.item` sources.
+
+Disabled groups already own `--area-opacity-disabled`. Apply that attenuation once, after resolving child decoration; where a group fades, children reset their disabled opacity to avoid multiplying it. Materials retain this state ownership instead of introducing a second fill-only or content opacity. [ToggleGroup](https://github.com/ethanwongwork/area/blob/9036ed9293beb7a867bdf637ee768c7a46a9901a/packages/styles/src/components/toggle-group.css#L65-L70). Existing state/semantic meaning and fixed hover ink remain hard requirements under D1; the earlier blanket no-effects rules are superseded.

@@ -1,0 +1,44 @@
+[
+  {
+    "repo": "moekoelueker/open-glass-ui",
+    "created_at": "2026-07-26T12:35:05Z",
+    "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+    "checked": "2026-10-11",
+    "contributors": [
+      {
+        "login": "moekoelueker",
+        "contributions": 29
+      }
+    ]
+  },
+  {
+    "repo": "figma/plugin-typings",
+    "created_at": "2020-04-27T20:43:28Z",
+    "commit": "07157d96c58add71d234b13bfd55b53abdce76b8",
+    "checked": "2026-10-11"
+  },
+  {
+    "repo": "argyleink/open-props",
+    "created_at": "2021-09-03T04:15:41Z",
+    "commit": "f39ab7c377a0e047f930982e3611bbc95254a260",
+    "checked": "2026-10-11"
+  },
+  {
+    "repo": "auraoneai/auraglass",
+    "created_at": "2025-09-08T18:24:04Z",
+    "commit": "51d1a58c3f980dde0452f2f863adc958f417ea18",
+    "checked": "2026-10-11"
+  },
+  {
+    "repo": "Meapri/liquid-glass-web",
+    "created_at": "2026-05-28T17:03:07Z",
+    "commit": "1613f8311dbc31bc2331afcfe51a143c56dd6308",
+    "checked": "2026-10-11"
+  },
+  {
+    "repo": "mdn/browser-compat-data",
+    "created_at": "2016-03-29T18:50:07Z",
+    "commit": "3b28abed321540dcbe571c16174af543c4e02ac0",
+    "checked": "2026-10-11"
+  }
+]

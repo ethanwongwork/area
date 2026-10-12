@@ -1,5 +1,9 @@
 # Shared material layer model — research vocabulary v1
 
+<!-- task19-superseded 01-taxonomy/layer-model.md * -->
+> **Superseded policy — D1, D2, D9, D13, D16 (owner, 2026-10-11):** Area’s calm no-cast/Trace-only expression is the None default, not a material ceiling. Contrast, focus, fixed hover ink and semantic meaning remain hard limits. Material sits beside Surface; recipe structure switches with inherited 0/1 gate tokens. Surface shadows require a pixel-identical split into adjustable parts, including Tooltip/Toolbar literal exceptions. Selector-switched recipes alone are not nested-scope safe. Figma Glass parameter names govern the next API. Light angle is 0 at top, clockwise; the historical 0-at-right angle convention below is superseded, not silently reinterpreted. No automatic effects on glyphs or small text; display text and button labels may explicitly opt in. A curated duotone pilot is later work. Material does not change geometry, typography or foreground ink. Multi-axis choices are bundles, not a material axis. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
+
 **Status:** proposed common vocabulary for materials tasks 02–14; unreviewed. This is a descriptive model, not new tokens, CSS, a renderer, or a change to component approval. It refines the [owner’s vocabulary](https://github.com/ethanwongwork/area/blob/832057ba7d302bd1a245c31ee5402f2dec1fe647/docs/research/astra/materials/README.md#L50-L62). That link pins research-brief provenance; all claims about implemented Area behavior below pin `origin/main` separately.
 
 ## Separate the names before combining their layers

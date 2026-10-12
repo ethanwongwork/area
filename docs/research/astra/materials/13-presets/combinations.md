@@ -6,16 +6,17 @@
 
 This matrix concerns combining two preset requests. C commonly means one supplies a body and the other an edge or a distinct child role. It never means concatenating both complete control objects. K and X require the resolution in the pair ledger.
 
-| Preset | Paper | Glass | Acrylic | Soft | Tactile | Aero | Glow | Prism |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Paper | C | K | K | K | C | K | K | C |
-| Glass | K | C | X | X | K | K | K | C |
-| Acrylic | K | X | C | X | K | X | K | K |
-| Soft | K | X | X | C | X | X | K | K |
-| Tactile | C | K | K | X | C | K | C | K |
-| Aero | K | K | X | X | K | C | K | K |
-| Glow | K | K | K | K | C | K | C | K |
-| Prism | C | C | K | K | K | K | K | C |
+| Preset | None | Paper | Glass | Acrylic | Soft | Tactile | Aero | Glow | Prism |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| None | C | C | C | C | C | C | C | C | C |
+| Paper | C | C | K | K | K | C | K | K | C |
+| Glass | C | K | C | X | X | K | K | K | C |
+| Acrylic | C | K | X | C | X | K | X | K | K |
+| Soft | C | K | X | X | C | X | X | K | K |
+| Tactile | C | C | K | K | X | C | K | C | K |
+| Aero | C | K | K | X | X | K | C | K | K |
+| Glow | C | K | K | K | K | C | K | C | K |
+| Prism | C | C | C | K | K | K | K | K | C |
 
 | Pair | Result | Reason / resolution |
 | --- | --- | --- |
@@ -47,6 +48,14 @@ This matrix concerns combining two preset requests. C commonly means one supplie
 | aero + glow | K | Aero reflection and Glow emission are different channels; keep one subordinate, omit both near dense copy/focus. |
 | aero + prism | K | One Aero body reflection and one Prism edge; remove duplicate Aero edge gradient. |
 | glow + prism | K | Choose either a sharp Prism gradient edge or a context-colored Glow emitter as primary. Do not infer a multicolor halo from one semantic source. |
+| none + paper | C | None emits no material declarations; the other recipe wins, not a concatenated second paint. |
+| none + glass | C | None emits no material declarations; the other recipe wins, not a concatenated second paint. |
+| none + acrylic | C | None emits no material declarations; the other recipe wins, not a concatenated second paint. |
+| none + soft | C | None emits no material declarations; the other recipe wins, not a concatenated second paint. |
+| none + tactile | C | None emits no material declarations; the other recipe wins, not a concatenated second paint. |
+| none + aero | C | None emits no material declarations; the other recipe wins, not a concatenated second paint. |
+| none + glow | C | None emits no material declarations; the other recipe wins, not a concatenated second paint. |
+| none + prism | C | None emits no material declarations; the other recipe wins, not a concatenated second paint. |
 
 ## All 25 taxonomy styles
 
@@ -431,6 +440,10 @@ Codes in the matrix are explained below. This is a same-receiver composition mat
 | letterpress + grain | K | content |
 
 ## Resolution examples
+
+<!-- task19-superseded 13-presets/combinations.md ## Resolution -->
+> **Superseded policy — D1, D2, D4, D5 (owner, 2026-10-11):** Area’s calm no-cast/Trace-only expression is the None default, not a material ceiling. Contrast, focus, fixed hover ink and semantic meaning remain hard limits. Material sits beside Surface; recipe structure switches with inherited 0/1 gate tokens. Surface shadows require a pixel-identical split into adjustable parts, including Tooltip/Toolbar literal exceptions. Selector-switched recipes alone are not nested-scope safe. The first set is None identity (default), Glass, Tactile and Soft. Paper needs an opaque rebuild; Aero, Glow and Prism are later finishes. Decorative colors derive from accent, neutral and tones; literal palette hexes are not the future preset contract. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
 
 - **Glass + Prism:** keep Glass body/transmission/acquisition, replace its decorative edge with one Prism mask, retain Area required edge/focus. Do not add the two edge strengths.
 - **Acrylic + grain:** edit Acrylic’s one texture layer. A second independent grain overlay is not the intended combination.

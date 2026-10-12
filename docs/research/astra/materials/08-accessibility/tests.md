@@ -1,5 +1,9 @@
 # Additive contrast verification proposal
 
+<!-- task19-superseded 08-accessibility/tests.md * -->
+> **Superseded policy — D1, D3, D6, D7 (owner, 2026-10-11):** Area’s calm no-cast/Trace-only expression is the None default, not a material ceiling. Contrast, focus, fixed hover ink and semantic meaning remain hard limits. Ordinal caps and provisional control ranges are not limits. Numeric per-role strength multipliers and bounds must be calibrated to the board and contrast-tested at extremes; that work is pending tasks 20–22. The current vocabulary has 13 roles including row-plate; 04/05 now cover 101 contracts. Historical 12-role/78-contract counts below describe their original snapshot only. Floating shells assume arbitrary backdrops; failing edges use opaque F0. App-level transparency reduction sits beside the OS query. Forced colors explicitly sets opaque Canvas and backdrop-filter:none. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
+
 **Proposals only.** Source observations refer to Area `6f896789a5200bcbd34fe87de458e60ca82141d6`; exact pins are grouped in [A1–A8](evidence.md#area-sources). No production test, baseline or exception file is changed by this report.
 
 ## What exists and what it does not prove

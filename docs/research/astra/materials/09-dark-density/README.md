@@ -11,6 +11,17 @@ These are uncalibrated research proposals, with no implementation, visual approv
 
 **Snapshot:** checked **2026-10-09** (America/Los_Angeles), after `git fetch origin`. Area `origin/main`: [`6f896789a5200bcbd34fe87de458e60ca82141d6`](https://github.com/ethanwongwork/area/tree/6f896789a5200bcbd34fe87de458e60ca82141d6). Research/brief/input snapshot: [`817c9eeeedacf7a5e477289d44f38f8e4f15f103`](https://github.com/ethanwongwork/area/tree/817c9eeeedacf7a5e477289d44f38f8e4f15f103/docs/research/astra/materials). Public sources: Apple HIG Dark Mode, Fluent 2 Elevation/Shapes, M3 Color roles and Android theming documentation, W3C rounded-border geometry; all checked 2026-10-09. Apple and M3 guidance was read in rendered public browser pages. Area production source was read at the pinned main commit, not the research checkout's older production tree. No product capture or rendered Area material experiment was performed.
 
+
+<!-- task19-changes -->
+## Changes after review — 2026-10-11
+
+Task 19 corrections, with the reason from [Corrections for Astra and D1–D16](../REVIEW.md). Older Answer/Snapshot passages below retain their original date and findings unless explicitly refreshed; the changes here and decision callouts govern subsequent work.
+
+- **C15 — Review reason:** Scope re-emission citation pointed at the wrong file. **Change:** Corrected the pinned 163–174 citation from emit/base.ts to emit/css.ts. Marked historical square inner rims/radius arithmetic superseded by D11 and dark/scaling policy by D1/D3/D10/D14. Files: [evidence.md](evidence.md), [rules.md](rules.md), [geometry.md](geometry.md), [styles.md](styles.md). Decisions: D1, D3, D10, D11, D14.
+
+Full change ledger and verification: [19-corrections](../19-corrections/README.md).
+<!-- /task19-changes -->
+
 ## Evidence and reading order
 
 1. [Evidence ledger](evidence.md): dated public guidance and pinned Area facts, including the compact surface-inset discrepancy.

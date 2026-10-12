@@ -7,12 +7,12 @@ failures remain report data during normal generation; never become waived passes
 from pathlib import Path
 from functools import lru_cache
 from collections import Counter
-import csv, hashlib, html, io, json, sys
+import csv, hashlib, html, io, json, sys, subprocess
 from paint import Paint, Stop, Unresolved, rgb, worst
 
 HERE=Path(__file__).resolve().parent
 INPUT=json.loads((HERE/'inputs.json').read_text())
-PRESET_SOURCE=(HERE/'../13-presets/presets.json').read_bytes()
+PRESET_SOURCE=subprocess.check_output(['git','show',INPUT['researchCommit']+':'+INPUT['presets']['path']],cwd=HERE.parents[4])
 assert hashlib.sha256(PRESET_SOURCE).hexdigest()==INPUT['presets']['sha256'], 'Preset lock changed'
 PRESETS=json.loads(PRESET_SOURCE)
 ROLES=PRESETS['roles']

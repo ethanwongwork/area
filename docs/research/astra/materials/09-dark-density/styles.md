@@ -6,6 +6,10 @@ All rows inherit [D/N/G/S/E/H/W/B/R](rules.md). G supplies sm/md/lg and compact 
 
 ## Every radius setting
 
+<!-- task19-superseded 09-dark-density/styles.md ## Every radius -->
+> **Superseded policy — D11 (owner, 2026-10-11):** Inner rims keep the radius floor at every setting except Sharp. Historical max(0, outer-inset) examples and tabulated square inner rims are retained but superseded. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
+
 This matrix explicitly covers every style × every setting. It selects a painting strategy; exact current radii for both densities and all sizes are in [geometry](geometry.md). “If fit/clear” means fitting between the actual outer contour and content exclusion zone, not an assumed size-class threshold. At small corners the optional inner contour may become square or be omitted. At all other settings use the same offset equation; larger corner labels do not increase opacity, blur or stroke width. Pill entries describe control capsules; containers use their finite surface radius. Pill overrides/intrinsic circles use their resulting contour even under Sharp.
 
 | Style | Sharp (0) | 2 | 4 | 6 | 8 | 10 | 12 | 14 | Pill |

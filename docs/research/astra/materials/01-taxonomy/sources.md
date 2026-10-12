@@ -133,3 +133,9 @@ Procedural turbulence/noise generator and illustrations.
 [CSS Working Group — Filter Effects Level 2, backdrop-filter](https://drafts.csswg.org/filter-effects-2/#BackdropFilterProperty)
 
 Work in progress, not an interoperable support guarantee; filtering and clipping model.
+
+## acrylic-active-graph
+
+[WinUI Acrylic active luminosity/tint graph](https://github.com/microsoft/microsoft-ui-xaml/blob/901ffc065a1f3a1122bbfe6d222eb80a471f28a6/controls/dev/Materials/Acrylic/AcrylicBrush.cpp#L389-L414)
+
+Active nonopaque graph; unused exclusion constants are not additional layers. Correction from task 06 R04.

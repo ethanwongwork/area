@@ -10,6 +10,21 @@ Start owner review with Paper, Glass and Tactile, then test the other five again
 
 **Snapshot:** Checked **2026-10-09**. Area `origin/main`: **3bcc6a93b93f73aa6bef410dbe88d93b0caddb7e**. Research inputs: **c0a97a34e6c76d97d025d19f79edac59ddadbf25** on `origin/astra/research`. Read the [brief](../README.md) and **01–10** before composing presets; immutable input links and README hashes are in [evidence.md](evidence.md) and [presets.json](presets.json). Task 06 source values retain their original **2026-10-08** check date; this task's three public documentation checks are separately dated. No production implementation, native-material parity, visual approval or contrast pass is claimed.
 
+
+<!-- task19-changes -->
+## Changes after review — 2026-10-11
+
+Task 19 corrections, with the reason from [Corrections for Astra and D1–D16](../REVIEW.md). Older Answer/Snapshot passages below retain their original date and findings unless explicitly refreshed; the changes here and decision callouts govern subsequent work.
+
+- **C19 — Review reason:** Paper faded existing borders to 14%/22%. **Change:** Set its existing stroke opacity to 1 in light/dark; Paper remains deferred for a real opaque material rebuild, not promoted by this fix. Files: [model.py](model.py), [presets.json](presets.json), [presets.md](presets.md). Decisions: D4.
+- **C20 — Review reason:** None identity/default was missing. **Change:** Added None with identity:true and emitsMaterialDeclarations:false. There are now nine records, with None/Glass/Tactile/Soft identified as the first set. Files: [model.py](model.py), [presets.json](presets.json). Decisions: D4.
+- **C21 — Review reason:** Prism colours were literal inventions and ignored accent. **Change:** Replaced custom hex stops with accent/neutral-derived sources; retained the old numeric seeds as uncalibrated proposals. Files: [model.py](model.py), [presets.json](presets.json). Decisions: D5.
+- **C22 — Review reason:** Glass container violated the old container cap. **Change:** Made its sparse painted-shell binding explicit and marked the global Trace ceiling superseded by D1/D3; dense reading grounds remain opaque. Added D7 arbitrary-backdrop/failing-edge F0 requirements. Files: [model.py](model.py), [presets.json](presets.json), [presets.md](presets.md). Decisions: D1, D3, D7.
+- **C23 — Review reason:** D6 adds a role and D3 supersedes ordinal cap enforcement. **Change:** Expanded all nine records to 13 roles in both modes; added plain row-plate records and uncalibrated numeric-strength markers. Marked old angle, cast, geometry and cap policy superseded instead of pretending it implements D2/D3/D9. Files: [model.py](model.py), [contract.md](contract.md), [presets.json](presets.json), [combinations.md](combinations.md). Decisions: D1, D2, D3, D6, D9, D11, D13, D14, D16.
+
+Full change ledger and verification: [19-corrections](../19-corrections/README.md).
+<!-- /task19-changes -->
+
 ## Evidence
 
 Start with [the role tables](presets.md), then [the shared contract](contract.md) for exact defaults, layer order, context reduction, nesting, density, corner geometry, states and fallbacks. [The source ledger](evidence.md) preserves exact reference values, source pins, transfer limits and the current Area constraints. [Reference data](reference-inputs.json) copies the fourteen selected 06 records without guessing missing values. A source's colors, sizes or blur are evidence for that specimen, not permission to transplant its complete treatment into Area.

@@ -4,6 +4,10 @@
 
 ## Option A — Material beside Surface (recommended)
 
+<!-- task19-superseded 07-controls/architecture.md ## Option A -->
+> **Superseded policy — D2 (owner, 2026-10-11):** Material sits beside Surface; recipe structure switches with inherited 0/1 gate tokens. Surface shadows require a pixel-identical split into adjustable parts, including Tooltip/Toolbar literal exceptions. Selector-switched recipes alone are not nested-scope safe. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
+
 Add `material` to the axis registry, selecting a **compiled role recipe profile**, initially with an identity `none` profile. Material owns optical inputs; Surface continues to decide decorative width and allowed cast recipes. Extend Surface's input representation to expose independent cast controls. Do not make Material write Surface properties. The editor may display these controls together while dispatching them to their respective owners.
 
 Conceptual example: `value={{ surface: 'flat', material: 'frosted' }}` requests glass body/edge optics and no cast shadow. `frosted` is a proposed name, not a shipping preset. A field or Table row still receives only its permitted role recipe. The same Material selection can coexist with a different Surface selection without duplicating the optical profile.
@@ -38,6 +42,10 @@ A proposed Surface lobe leaf family is `--area-surface-cast-<tier>-<lobe>-{x,y,b
 
 ## Option B — Expand Surface into a combined style axis
 
+<!-- task19-superseded 07-controls/architecture.md ## Option B -->
+> **Superseded policy — D2 (owner, 2026-10-11):** Material sits beside Surface; recipe structure switches with inherited 0/1 gate tokens. Surface shadows require a pixel-identical split into adjustable parts, including Tooltip/Toolbar literal exceptions. Selector-switched recipes alone are not nested-scope safe. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
+
 Keep one `surface` selection and make each preset a composite profile: elevation policy plus material role recipes. Preserve existing `flat`, `outlined`, `raised`, `elevated` as compatibility profiles with optical decoration disabled. Add profiles such as hypothetical `frosted-flat` and `frosted-outlined`; the names are examples, not recommendations for shipping presets.
 
 Surface is the sole axis owner of `--area-surface-` optical, light and cast inputs plus existing decorative width. No Material axis or `--area-material-` namespace. The same emitter owns `--area-paint-` outputs and the migrated public shadow lists; existing color/shape/state owners stay unchanged. Optical controls route under `surfaceControls.optics`, and role overrides under `surfaceControls.roles[role].optics/cast`. Base derivation and scope re-emission work exactly as in Option A, but there is no material preset attribute.
@@ -58,11 +66,19 @@ Continuous parameters, semantic guards, arbitrary CSS scopes, portal context and
 
 ## Recommendation
 
+<!-- task19-superseded 07-controls/architecture.md ## Recommendation -->
+> **Superseded policy — D2 (owner, 2026-10-11):** Material sits beside Surface; recipe structure switches with inherited 0/1 gate tokens. Surface shadows require a pixel-identical split into adjustable parts, including Tooltip/Toolbar literal exceptions. Selector-switched recipes alone are not nested-scope safe. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
+
 Choose **Option A**. The brief explicitly asks for independently adjustable layer ingredients while preserving Surface, color, emphasis and scope invariants. [Brief](evidence.md#e01-research-inputs). Keeping illumination/optics in Material and cast eligibility/width in Surface provides a clear ownership boundary. Shared derivation expresses the intentional interaction without duplicate writers. This recommendation is an architectural inference from those constraints, not a performance measurement or approved API decision.
 
 Do not replace Surface wholesale with a new `material` axis and discard the old names: that would force avoidable migration of existing shadow/width consumers and saved selections. A future complete theme preset can bundle several axes at a higher configuration layer, without changing their ownership.
 
 ## What derives in emit/base.ts
+
+<!-- task19-superseded 07-controls/architecture.md ## What derives -->
+> **Superseded policy — D2, D9 (owner, 2026-10-11):** Material sits beside Surface; recipe structure switches with inherited 0/1 gate tokens. Surface shadows require a pixel-identical split into adjustable parts, including Tooltip/Toolbar literal exceptions. Selector-switched recipes alone are not nested-scope safe. Figma Glass parameter names govern the next API. Light angle is 0 at top, clockwise; the historical 0-at-right angle convention below is superseded, not silently reinterpreted. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
 
 Proposed division of work:
 
@@ -112,6 +128,10 @@ Do not use `@property` on the derived output or either member of a paired color.
 
 ## Scope re-emission and local binding
 
+<!-- task19-superseded 07-controls/architecture.md ## Scope -->
+> **Superseded policy — D2 (owner, 2026-10-11):** Material sits beside Surface; recipe structure switches with inherited 0/1 gate tokens. Surface shadows require a pixel-identical split into adjustable parts, including Tooltip/Toolbar literal exceptions. Selector-switched recipes alone are not nested-scope safe. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
+
 Current `emit/css.ts` re-derives on registry axis attributes and contrast. Adding Material to the registry covers its **preset selector**, but does not cover a control-only element. [E06](evidence.md#e06-css-scope-emission). Propose an explicit `data-area-material-scope` marker for scalar/role override boundaries; it does not select or reset a preset. Surface-only control overrides also add this shared optical derivation marker.
 
 Re-emit the relevant derived groups at:
@@ -138,6 +158,10 @@ Part bindings must name the actual receiver, including pseudo-elements and nativ
 Family-context exceptions are policy guards, not CSS recipes named `table-glass` or `calendar-clay`. One guard can suppress backdrop on reading grounds across Table, CodeBlock, Message and Calendar; Slider preserves track/fill geometry while its thumb remains an eligible independent receiver. Shared-shell/nesting ownership comes from these bindings and explicit host context, not from guessing ancestor styles in JS. Prior decisions: [task 05](evidence.md#e01-research-inputs).
 
 ## React Theme and non-React configuration
+
+<!-- task19-superseded 07-controls/architecture.md ## React -->
+> **Superseded policy — D2, D3, D9, D16 (owner, 2026-10-11):** Material sits beside Surface; recipe structure switches with inherited 0/1 gate tokens. Surface shadows require a pixel-identical split into adjustable parts, including Tooltip/Toolbar literal exceptions. Selector-switched recipes alone are not nested-scope safe. Ordinal caps and provisional control ranges are not limits. Numeric per-role strength multipliers and bounds must be calibrated to the board and contrast-tested at extremes; that work is pending tasks 20–22. Figma Glass parameter names govern the next API. Light angle is 0 at top, clockwise; the historical 0-at-right angle convention below is superseded, not silently reinterpreted. Material does not change geometry, typography or foreground ink. Multi-axis choices are bundles, not a material axis. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
 
 ### Proposed API surface (Option A)
 
@@ -195,6 +219,10 @@ Theme renders the complete effective axis selection as today, plus the marker an
 For portals, an empty nested `<Theme>` at the destination inherits complete React context and re-emits it. The current implementation carries only axes; it must be extended to carry role patches, structural profile identity and raw control leaves too. This does not make Theme responsible for focus, positioning, dismissal or overlay state. Native top-layer ancestry and true React portal relocation should both be tested.
 
 ### Structural recipe / variable-length control boundary
+
+<!-- task19-superseded 07-controls/architecture.md ### Structural recipe -->
+> **Superseded policy — D2 (owner, 2026-10-11):** Material sits beside Surface; recipe structure switches with inherited 0/1 gate tokens. Surface shadows require a pixel-identical split into adjustable parts, including Tooltip/Toolbar literal exceptions. Selector-switched recipes alone are not nested-scope safe. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
 
 The existing axis schema uses a fixed flat token set; it does not interpret a nested gradient object. [E02](evidence.md#e02-registry-contract). Proposed handling:
 

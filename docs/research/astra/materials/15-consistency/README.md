@@ -11,6 +11,17 @@ All findings have both source locations and a recommended winner. Earlier folder
 
 **Snapshot:** Checked **2026-10-10**, America/Los_Angeles. Research input **b0768c8d809946b82d6b00139ecc33fe4e57f528** (`origin/astra/research` fetched at start); Area main **3bcc6a93b93f73aa6bef410dbe88d93b0caddb7e**. Brief and tasks 01–14 are the audit corpus. Research comparisons pin the former SHA; production shadow facts below pin the latter. Prior reports' older Area snapshots remain historical evidence. This does not remap 626 parts against a newer manifest or revalidate public sources, browser performance, WCAG compliance or product approvals.
 
+
+<!-- task19-changes -->
+## Changes after review — 2026-10-11
+
+Task 19 corrections, with the reason from [Corrections for Astra and D1–D16](../REVIEW.md). Older Answer/Snapshot passages below retain their original date and findings unless explicitly refreshed; the changes here and decision callouts govern subsequent work.
+
+- **C25 — Review reason:** Historical winners deferred to unmeasured caps. **Change:** Marked C02–C07 winners locally superseded by D1/D3/D14; kept comparisons intact. Reproduction now reads its immutable original inputs, so corrected earlier folders cannot silently mutate the historical audit. Files: [findings.md](findings.md), [agreements.md](agreements.md), [clarifications.md](clarifications.md), [audit.py](audit.py). Decisions: D1, D2, D3, D6, D9, D14.
+
+Full change ledger and verification: [19-corrections](../19-corrections/README.md).
+<!-- /task19-changes -->
+
 ## Evidence
 
 - [Contradictions](findings.md): **C01–C07**, with conditions, affected presets, both pins and which side should win.

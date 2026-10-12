@@ -16,7 +16,7 @@ Each row links to its definition and evidence. Public sources checked **2026-10-
 | [Material / paper](catalogue.md#paper) | Opaque sheet | None in this model | Shadow only | Optional edge |
 | [Transparency](catalogue.md#transparency) | Any alpha paint | Defining | — | Independent |
 | [Glassmorphism](catalogue.md#glassmorphism) | Tint or low-alpha gradient | Defining | Backdrop | Optional translucent/gradient rim |
-| [Acrylic (Fluent)](catalogue.md#acrylic) | Tint + exclusion blend | Defining; opaque fallback | Backdrop | Control-dependent |
+| [Acrylic (Fluent)](catalogue.md#acrylic) | Luminosity blend + tint | Defining; opaque fallback | Backdrop | Control-dependent |
 | [Mica](catalogue.md#mica) | Opaque wallpaper-informed tint | None | No live backdrop blur | Separate component edge |
 | [Liquid Glass (Apple, 2025)](catalogue.md#liquid-glass) | Adaptive tint | Regular / Clear | Scattering; adaptive | Optical silhouette; not plain stroke |
 | [Neumorphism](catalogue.md#neumorphism) | Matches surrounding body | Usually opaque | Shading softness | Shading-defined edge |

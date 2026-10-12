@@ -9,6 +9,17 @@ The model is unreviewed research; the report identifies unknown recipes rather t
 
 **Snapshot:** checked **2026-10-07** (America/Los_Angeles). Area `origin/main`: [`4c1854202a8e109479d5b83ef24a8325231da056`](https://github.com/ethanwongwork/area/tree/4c1854202a8e109479d5b83ef24a8325231da056). Started after fetching `origin`, from research tip `832057ba7d302bd1a245c31ee5402f2dec1fe647`. Evidence: [22 public sources with access dates](sources.md), pinned Area lines in the [layer model](layer-model.md), and explicitly identified owner-brief descriptions. No new product captures, source measurements or implementation changes. Research-branch links refer only to the brief’s provenance, because that document is not on `origin/main`.
 
+
+<!-- task19-changes -->
+## Changes after review — 2026-10-11
+
+Task 19 corrections, with the reason from [Corrections for Astra and D1–D16](../REVIEW.md). Older Answer/Snapshot passages below retain their original date and findings unless explicitly refreshed; the changes here and decision callouts govern subsequent work.
+
+- **C01 — Review reason:** Acrylic blend contradicts the pinned WinUI active graph. **Change:** Replaced exclusion with luminosity blend followed by tint, with the active-graph source; regenerated definition, ingredient matrix and sources. Files: [taxonomy.json](taxonomy.json), [catalogue.md](catalogue.md), [ingredient-matrix.md](ingredient-matrix.md), [sources.md](sources.md). Decisions: D1, D2, D9, D13, D16.
+
+Full change ledger and verification: [19-corrections](../19-corrections/README.md).
+<!-- /task19-changes -->
+
 ## Evidence and deliverables
 
 - [Sourced catalogue](catalogue.md): definitions, term classes and canonical references. “Canonical” means an authoritative platform example, the naming author’s worked example, a technical specification’s example or a documented historical reference; it does not claim an official standard for informal trends.

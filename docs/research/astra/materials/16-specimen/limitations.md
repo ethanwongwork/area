@@ -1,5 +1,9 @@
 # Requested recipe → effective specimen
 
+<!-- task19-superseded 16-specimen/limitations.md * -->
+> **Superseded policy — D1, D3, D4, D7, D9, D13, D14 (owner, 2026-10-11):** Area’s calm no-cast/Trace-only expression is the None default, not a material ceiling. Contrast, focus, fixed hover ink and semantic meaning remain hard limits. Ordinal caps and provisional control ranges are not limits. Numeric per-role strength multipliers and bounds must be calibrated to the board and contrast-tested at extremes; that work is pending tasks 20–22. The first set is None identity (default), Glass, Tactile and Soft. Paper needs an opaque rebuild; Aero, Glow and Prism are later finishes. Floating shells assume arbitrary backdrops; failing edges use opaque F0. App-level transparency reduction sits beside the OS query. Forced colors explicitly sets opaque Canvas and backdrop-filter:none. Figma Glass parameter names govern the next API. Light angle is 0 at top, clockwise; the historical 0-at-right angle convention below is superseded, not silently reinterpreted. No automatic effects on glyphs or small text; display text and button labels may explicitly opt in. A curated duotone pilot is later work. Performance rules must follow measured workloads, not universal no-row-blur/static-only caps. Owner names a 60Hz minimum device; a later rerun includes Firefox. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
+
 The exact Paper, Glass and Tactile records are retained in `preset-data.js`. The renderer does **not** claim literal fidelity to every request. This ledger distinguishes guarded reduction, implementation approximation and untested behavior. Source pins for every contract below are in [evidence.md](evidence.md); actual receiver decisions are in [verification.json](verification.json).
 
 ## Per-family result
@@ -18,6 +22,10 @@ The exact Paper, Glass and Tactile records are retained in `preset-data.js`. The
 - **Code block:** every preset keeps the existing opaque code ground, typography and code layout. All added container treatment is suppressed; no verified spare shell perimeter is present. No grain, blur or glow crosses code. This small snippet is not a syntax-color or long-code stress test.
 
 ## Cross-cutting approximations and omissions
+
+<!-- task19-superseded 16-specimen/limitations.md ## Cross-cutting -->
+> **Superseded policy — D1, D3, D14 (owner, 2026-10-11):** Area’s calm no-cast/Trace-only expression is the None default, not a material ceiling. Contrast, focus, fixed hover ink and semantic meaning remain hard limits. Ordinal caps and provisional control ranges are not limits. Numeric per-role strength multipliers and bounds must be calibrated to the board and contrast-tested at extremes; that work is pending tasks 20–22. Performance rules must follow measured workloads, not universal no-row-blur/static-only caps. Owner names a 60Hz minimum device; a later rerun includes Firefox. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
 
 **Border allocation is approximate for all three presets.** Task 13 allocates the existing decorative width to the requested edge. This lab retains the native border and draws an additional masked rim immediately inside it, because replacing the source border indiscriminately could erase required control/state paint. Double-rim splits that interior band; it does not prove that native and material edges have become one owner. Radius follows the used outer radius and inset radius for this fixed radius setting. Sharp/pill/squircle contours and fractional-raster quality were not tested. A production binding must identify decorative versus required edges explicitly.
 

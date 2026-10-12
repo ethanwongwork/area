@@ -1,21 +1,33 @@
 **Question:** Which material role belongs to every visual part of every Area family, and what is each part’s depth relative to its parent?
 
-**Answer:** The map covers all **78 manifest contracts** across **65 component specs**, plus the page and shared utilities.
-It records **626 parts and paint layers**, including **15 nonpaint targets/labels**, with one primary role and a pinned source for each.
-**107 composition bindings** include the reused parts of Button, Menu, Calendar, Input and other families without duplicating their paint.
-Role and relief are separate: current Buttons are flat, field/track roles do not imply inset shadows, and floating shells retain their overlay role even when shadows are disabled.
-Ambiguities, variant-dependent depth, semantic fills, intrinsic media and layout-only wrappers are recorded explicitly.
-The readable table and **346,737-byte JSON** are research assignments, not an approved material API.
+**Answer:** Refreshed against current main: **101 contracts, 83 component specs, 13 roles**, including D6 `row-plate`. The generated map has **773 parts/layers** and **135 reuse bindings**; **171 nonpaint records = 18 hidden targets/labels + 153 visible layout-only receivers**. All **533 manifest classes** and **540 normalized CSS classes** are covered. Hover-plate parts share `row-plate`. Kbd's default border is transparent; Card is raised only when its shadow paints. JSON remains below 1 MB. Classification is research inference, not approval.
 
-**Snapshot:** checked **2026-10-08** (America/Los_Angeles), after `git fetch origin`. Area `origin/main`: [`6f896789a5200bcbd34fe87de458e60ca82141d6`](https://github.com/ethanwongwork/area/tree/6f896789a5200bcbd34fe87de458e60ca82141d6). Research base: `e23dbbb061b088638bacc5702e43477cd337bdb1`. Sources: that immutable commit’s `packages/styles/src/manifest.ts`, all component CSS plus `base.css`, `inset.css`, `forced-colors.css`, all domain specs, and React composition markup where CSS alone cannot identify a part. Production reads use `git show <SHA>:<path>` rather than the research checkout’s older production files. No browser measurements or product captures were made.
+**Snapshot:** 2026-10-11; Area `9036ed9293beb7a867bdf637ee768c7a46a9901a`. Review `d2f9b9772677b32997dc6c0be1ea64b40cd835c8`. Current manifest/CSS/spec/React pins are in the generated table. The explanatory historical source links below retain their original snapshot; their present-day counts and D6 classification are superseded by this refresh.
+
+<!-- task19-changes -->
+## Changes after review — 2026-10-11
+
+Task 19 corrections, with the reason from [Corrections for Astra and D1–D16](../REVIEW.md). Older Answer/Snapshot passages below retain their original date and findings unless explicitly refreshed; the changes here and decision callouts govern subsequent work.
+
+- **C04 — Review reason:** Twenty-three newer contracts were missing. **Change:** Refreshed all manifest/CSS/spec pins to current main, reviewed relocated ranges, added 23 contracts and their reuse bindings. Current inventory: 101 contracts, 83 specs, 773 parts/layers, 135 bindings. Files: [role-map.json](role-map.json), [role-map.md](role-map.md), [assignments.py](assignments.py), [compositions.py](compositions.py), [source.py](source.py). Decisions: D6.
+- **C05 — Review reason:** Table, Menu/Nav rows and hover plates had inconsistent roles. **Change:** Added row-plate as role 13, assigned all repeated state plates and explicitly named hover-plate parts consistently, and retained one primary role per part. Files: [assignments.py](assignments.py), [role-map.json](role-map.json). Decisions: D6.
+- **C06 — Review reason:** Kbd and Card depth notes were wrong. **Change:** Recorded Kbd transparent default border/no shadow and conditional Card depth: raised only when its Surface shadow paints, otherwise flush. Files: [assignments.py](assignments.py), [refinements.py](refinements.py), [role-map.md](role-map.md). Decisions: D1, D2.
+- **C07 — Review reason:** Nonpaint count only counted hidden targets, omitting visible layout receivers. **Change:** Counted 171 nonpaint records explicitly: 18 hidden targets/labels plus 153 visible layout-only receivers. Painted conditional shells stay separate. Files: [build.py](build.py), [role-map.json](role-map.json). Decisions: D6.
+
+Full change ledger and verification: [19-corrections](../19-corrections/README.md).
+<!-- /task19-changes -->
 
 ## Evidence and deliverables
+
+<!-- task19-superseded 04-role-map/README.md ## Evidence -->
+> **Superseded policy — D6 (owner, 2026-10-11):** The current vocabulary has 13 roles including row-plate; 04/05 now cover 101 contracts. Historical 12-role/78-contract counts below describe their original snapshot only. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
 
 - [Readable role table](role-map.md): an index, a table for each contract, explicit reused-part lists, and the five specs that describe shared systems or recipes rather than independent manifest contracts.
 - [role-map.json](role-map.json): the same normalized inventory, with `file`, one-based `line`/`end`, and one top-level immutable SHA. Every part has `role`, `parent`, `depth`, `kind` and `sources`. `alternate_role`, `depth_variants` and `note` record exceptions.
 - [Curated assignments](assignments.py), [non-manifest parts](extras.py), [composition bindings](compositions.py), and [reviewed refinements](refinements.py): the editable research decisions. [build.py](build.py) produces and checks both outputs; [source.py](source.py) reads the pinned repository snapshot.
 
-Counts come from the generated inventory, not from gallery approval status. All **417 root/element contracts** and all **424 distinct normalized Area CSS classes** are accounted for. The seven classes outside the manifest are the six syntax-ink classes and `.area-sr-only`. Inspector, Resizable Panel, Overlay, Typography and Icons add source context, not five invented component shells. Their exact spec pins and coverage are in the table’s last section.
+Counts come from the generated inventory, not from gallery approval status. All **533 root/element contracts** and all **540 distinct normalized Area CSS classes** are accounted for. The seven classes outside the manifest are the six syntax-ink classes and `.area-sr-only`. Inspector, Resizable Panel, Overlay, Typography and Icons add source context, not five invented component shells. Their exact spec pins and coverage are in the table’s last section.
 
 ## How to read the assignment
 
@@ -27,6 +39,7 @@ The assignments are **inferences about material responsibility**, grounded in so
 | container | Groups content or provides a persistent backing. A layout-only container must not automatically gain fill or shadow. |
 | floating surface | Overlay shell or its arrow continuation. An arrow is flush relative to its own shell, even though the shell floats over the page. |
 | raised control | Action/choice plate. This names the material responsibility, not present elevation; Button, row controls and ghost actions can remain flat. |
+| row-plate | Flat repeated-row/state backing and separate hover-plate layers; includes keyboard/active-descendant focus. Never a second paint pass on the same receiver. |
 | recessed field/track | Editable receptacle, rail, channel or selection track. Recession is optional; current flat paint is recorded as flush. |
 | thumb/knob | Movable handle or grip; separate body, semantic mark and boundary when source paints them separately. |
 | indicator/fill | Progress, selection, availability, color data, placeholders and other information-bearing fill. Do not substitute decorative material colors for meaning. |
@@ -46,6 +59,10 @@ These are the author’s operational definitions. The source pins establish **wh
 
 ## Findings that matter for material absorption
 
+<!-- task19-superseded 04-role-map/README.md ## Findings -->
+> **Superseded policy — D1, D2 (owner, 2026-10-11):** Area’s calm no-cast/Trace-only expression is the None default, not a material ceiling. Contrast, focus, fixed hover ink and semantic meaning remain hard limits. Material sits beside Surface; recipe structure switches with inherited 0/1 gate tokens. Surface shadows require a pixel-identical split into adjustable parts, including Tooltip/Toolbar literal exceptions. Selector-switched recipes alone are not nested-scope safe. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
+
 1. **Do not raise everything called a control.** Button explicitly specifies no shadow on any variant. The selected Segmented item and Switch thumb actually consume `shadow-1`. Their role names alone cannot determine a uniform elevation recipe. [Button](https://github.com/ethanwongwork/area/blob/6f896789a5200bcbd34fe87de458e60ca82141d6/packages/styles/src/components/button.css#L319-L320), [Segmented](https://github.com/ethanwongwork/area/blob/6f896789a5200bcbd34fe87de458e60ca82141d6/packages/styles/src/components/segmented.css#L103-L111), [Switch](https://github.com/ethanwongwork/area/blob/6f896789a5200bcbd34fe87de458e60ca82141d6/packages/styles/src/components/switch.css#L100-L109).
 2. **Nested components frequently share one shell.** InputGroup removes child field chrome; DatePicker mounts Input and plain Calendar inside Popover; ColorPicker has a plain embedded mode. A material renderer would need the binding context as well as the donor role. [InputGroup](https://github.com/ethanwongwork/area/blob/6f896789a5200bcbd34fe87de458e60ca82141d6/packages/styles/src/components/input-group.css#L57-L92), [DatePicker](https://github.com/ethanwongwork/area/blob/6f896789a5200bcbd34fe87de458e60ca82141d6/packages/react/src/components/DatePicker.tsx#L119-L140), [ColorPicker](https://github.com/ethanwongwork/area/blob/6f896789a5200bcbd34fe87de458e60ca82141d6/packages/styles/src/components/color.css#L240-L248).
 3. **Property names are not roles.** Input autofill uses a large inset shadow as fill; CodeBlock uses an inset shadow as a target marker and a border rail in forced colors; Breadcrumb draws its chevron using borders. Those are fill, indicator and glyph, respectively—not physical recess, divider and perimeter. These exceptions are manually removed from the lexical edge census. [Autofill](https://github.com/ethanwongwork/area/blob/6f896789a5200bcbd34fe87de458e60ca82141d6/packages/styles/src/components/input.css#L160), [target marker](https://github.com/ethanwongwork/area/blob/6f896789a5200bcbd34fe87de458e60ca82141d6/packages/styles/src/components/code.css#L350-L356), [forced-color marker](https://github.com/ethanwongwork/area/blob/6f896789a5200bcbd34fe87de458e60ca82141d6/packages/styles/src/forced-colors.css#L73-L79), [chevron](https://github.com/ethanwongwork/area/blob/6f896789a5200bcbd34fe87de458e60ca82141d6/packages/styles/src/components/breadcrumb.css#L41).
@@ -56,7 +73,7 @@ These are the author’s operational definitions. The source pins establish **wh
 
 The build validates exact manifest root/element coverage; normalized CSS-class coverage; all domain-spec files; singular primary-role enums; local parent existence and acyclicity; donor IDs; immutable source line bounds; deterministic output; and the JSON byte cap. It does **not** prove visual polish, owner approval, rendering in every browser, or that a CSS declaration wins every cascade. The lexical selector scanner is a census aid, not a standards CSS parser. Roles and property-purpose exceptions are curated.
 
-Invisible radios, expanded hit areas, hidden labels and the tooltip pointer bridge are retained as nonpaint records so they cannot silently acquire material. Pure layout containers remain identifiable in their CSS pins and notes. Repeated options, rows, syntax spans, icons and consumer slots are templates rather than infinite per-instance records. Native OS select popups, scrollbars and textarea resize-grip internals are **not found as Area-owned painted subparts** in the manifest or component CSS; the map marks their browser ownership rather than inventing geometry. CSS corner/radius settings change the geometry of these same parts, not their count or primary roles.
+Invisible radios, expanded hit areas, hidden labels and the tooltip pointer bridge are retained as nonpaint records so they cannot silently acquire material. Visible layout-only receivers are now also counted explicitly as nonpaint; conditional painted shells are not silently discarded. ScrollArea now maps its Area-owned scrollbar track and thumb; the native scrollbar exclusion still applies only to OS-owned internals. Repeated options, rows, syntax spans, icons and consumer slots are templates rather than infinite per-instance records. Native OS select popups, native scrollbars and textarea resize-grip internals are **not found as Area-owned painted subparts** in the manifest or component CSS; the map marks their browser ownership rather than inventing geometry. CSS corner/radius settings change the geometry of these same parts, not their count or primary roles.
 
 Re-run after fetching the pinned commit, using Python 3 and Node with `node:module.stripTypeScriptTypes` (verified here with Node 26.7.0):
 

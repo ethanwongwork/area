@@ -15,6 +15,10 @@ A pinned baseline and a draft are separate records. “Reset preset” discards 
 
 ## Live controls
 
+<!-- task19-superseded 14-tooling/builder.md ## Live -->
+> **Superseded policy — D1, D3, D6, D9, D13 (owner, 2026-10-11):** Area’s calm no-cast/Trace-only expression is the None default, not a material ceiling. Contrast, focus, fixed hover ink and semantic meaning remain hard limits. Ordinal caps and provisional control ranges are not limits. Numeric per-role strength multipliers and bounds must be calibrated to the board and contrast-tested at extremes; that work is pending tasks 20–22. The current vocabulary has 13 roles including row-plate; 04/05 now cover 101 contracts. Historical 12-role/78-contract counts below describe their original snapshot only. Figma Glass parameter names govern the next API. Light angle is 0 at top, clockwise; the historical 0-at-right angle convention below is superseded, not silently reinterpreted. No automatic effects on glyphs or small text; display text and button labels may explicitly opt in. A curated duotone pilot is later work. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
+
 Use task 07's groups with a numeric field alongside continuous controls; discrete topology choices use selects. Keyboard editing must offer the same values as pointer dragging. Describe units and the key-light convention in help text. Preview adjustments do not change product settings or component specs.
 
 | Group | Controls | Feedback on the selected receiver |
@@ -45,6 +49,10 @@ Accessibility controls in the builder simulate fallbacks only inside the stage a
 
 ## Data flow and integration work
 
+<!-- task19-superseded 14-tooling/builder.md ## Data flow -->
+> **Superseded policy — D2, D9, D16 (owner, 2026-10-11):** Material sits beside Surface; recipe structure switches with inherited 0/1 gate tokens. Surface shadows require a pixel-identical split into adjustable parts, including Tooltip/Toolbar literal exceptions. Selector-switched recipes alone are not nested-scope safe. Figma Glass parameter names govern the next API. Light angle is 0 at top, clockwise; the historical 0-at-right angle convention below is superseded, not silently reinterpreted. Material does not change geometry, typography or foreground ink. Multi-axis choices are bundles, not a material axis. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
+
 ```mermaid
 flowchart LR
   Draft[Versioned draft and undo history] --> Validate[Validate named controls]
@@ -63,6 +71,10 @@ Add a typed Material builder state beside the gallery's present string-only sele
 Use the role companion bindings proposed in 07, checked against the manifest. Current scope derivation is emitted at axis/contrast boundaries, so new control-only and semantic painted-part boundaries need explicit re-emission from the shared generator. Do not copy formulas into gallery CSS, use docs overrides of `.area-*`, register derived colors, or make the gallery a second renderer. [A05–A08](evidence.md#area-snapshot).
 
 ## Shareable JSON and links
+
+<!-- task19-superseded 14-tooling/builder.md ## Shareable -->
+> **Superseded policy — D4, D6, D9 (owner, 2026-10-11):** The first set is None identity (default), Glass, Tactile and Soft. Paper needs an opaque rebuild; Aero, Glow and Prism are later finishes. The current vocabulary has 13 roles including row-plate; 04/05 now cover 101 contracts. Historical 12-role/78-contract counts below describe their original snapshot only. Figma Glass parameter names govern the next API. Light angle is 0 at top, clockwise; the historical 0-at-right angle convention below is superseded, not silently reinterpreted. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
 
 The canonical document is a **requested recipe**, with schema version, profile/compiler/policy revisions, provenance, both modes, global controls, role overrides and named layers. Keep source selectors symbolic until a target context resolves them. An optional preview block carries public fixture IDs and axis choices; it is not component data. No generated computed colors replace semantic references.
 

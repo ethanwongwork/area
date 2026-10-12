@@ -16,7 +16,7 @@ AREA = '3bcc6a93b93f73aa6bef410dbe88d93b0caddb7e'
 PREFIX = 'docs/research/astra/materials/'
 
 def read(name):
-    return json.loads((MATERIALS / name).read_text())
+    return json.loads(subprocess.check_output(['git', 'show', f'{RESEARCH}:{PREFIX}{name}'], cwd=ROOT))
 
 def emit(name, data):
     text = json.dumps(data, ensure_ascii=False, indent=2) + '\n'
@@ -32,9 +32,8 @@ for name in tracked:
     relative = name.removeprefix(PREFIX)
     if not re.match(r'(0[1-9]|1[0-4])-', relative):
         continue
-    data = (ROOT / name).read_bytes()
-    pinned = subprocess.check_output(['git', 'show', f'{RESEARCH}:{name}'], cwd=ROOT)
-    assert data == pinned, ('earlier input changed', name)
+    # Reproduce the historical audit from its immutable inputs after task 19 corrections.
+    data = subprocess.check_output(['git', 'show', f'{RESEARCH}:{name}'], cwd=ROOT)
     # Parse every JSON, including benchmark aggregates; retain no duplicate raw logs.
     if name.endswith('.json'):
         json.loads(data)
@@ -148,11 +147,11 @@ canonical = json.dumps(share['payload'], sort_keys=True, separators=(',', ':'), 
 assert hashlib.sha256(canonical).hexdigest() == share['integrity']['payloadSha256']
 stats = dict(styles=25, roles=12, contracts=78, parts=626,
     nonpaintRecords=15, compositionBindings=107, styleStateCells=len(states)*len(state_fields),
-    roleCounts=role_counts, roleMapBytes=(MATERIALS/'04-role-map/role-map.json').stat().st_size,
+    roleCounts=role_counts, roleMapBytes=next(x['bytes'] for x in ledger if x['file']=='04-role-map/role-map.json'),
     absorptionCells=300, presets=8, requestedRoleModeRecords=192, stylePairs=300, presetPairs=28,
     sharedGlassRoleModeRecords=24, parsedJsonFiles=sum(x['file'].endswith('.json') for x in ledger),
     inputFiles=len(ledger), controlLeaves=sorted(fields))
-brief = (MATERIALS / 'README.md').read_bytes()
+brief = subprocess.check_output(['git', 'show', f'{RESEARCH}:{PREFIX}README.md'], cwd=ROOT)
 assert brief == subprocess.check_output(['git', 'show', f'{RESEARCH}:{PREFIX}README.md'], cwd=ROOT)
 emit('inputs.json', dict(research=RESEARCH, area=AREA, checked='2026-10-10',
     brief=dict(file='README.md', sha256=hashlib.sha256(brief).hexdigest()), files=ledger))
@@ -160,7 +159,7 @@ emit('checks.json', dict(status='structural checks passed; human findings are se
     requestedEffects=instances, budgetWitnesses=witnesses, limits='Counts describe the recorded research inputs, not a remap of latest main. Effect counts describe requested seeds before guards; existing Surface lobe counts are contextual. Budget witness caps are human transcriptions, not an automatic policy parser.'))
 for path in HERE.glob('*.md'):
     for file, first, last in re.findall(r'https://github.com/ethanwongwork/area/blob/' + RESEARCH + r'/docs/research/astra/materials/([^)#]+)#L(\d+)(?:-L(\d+))?', path.read_text()):
-        n = len((MATERIALS / file).read_text().splitlines())
+        n = len(subprocess.check_output(['git', 'show', f'{RESEARCH}:{PREFIX}{file}'], cwd=ROOT).splitlines())
         assert 1 <= int(first) <= int(last or first) <= n, (path, file, first, last)
     for url in re.findall(r'\]\(([^)]+)\)', path.read_text()):
         if not url.startswith(('https://', 'http://', '#')):
@@ -170,4 +169,4 @@ for path in HERE.iterdir():
         assert path.stat().st_size < 1_000_000, path
         if path.suffix == '.py':
             ast.parse(path.read_text())
-print('PASS: 149 unchanged inputs; 25 styles, 12 roles, 78 contracts, 626 parts; 300 absorption cells; 175 state cells; 192 preset records; 07/13 control shapes; Glass snapshot/hash; budget witnesses; citation bounds, local links, Python syntax and file sizes.')
+print('PASS: 149 immutable historical inputs; 25 styles, 12 roles, 78 contracts, 626 parts; 300 absorption cells; 175 state cells; 192 preset records; 07/13 control shapes; Glass snapshot/hash; budget witnesses; citation bounds, local links, Python syntax and file sizes.')

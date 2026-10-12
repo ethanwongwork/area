@@ -9,6 +9,16 @@ Those reductions and remaining gaps are explicit in [limitations.md](limitations
 
 **Snapshot:** Checked **2026-10-10**. Area `origin/main`: **eaa9222ebf98f7c260f9e0dd448940523003d4d3**. Research/preset input: **b372cc6cc7fe3427c99898e8f7944facadfb2be2**. Read the materials brief, 05, 07 and 13; used 11 and 15 to interpret conflicts. `npm run build` succeeded in the main checkout; the research checkout serves that checkout's `packages/styles/dist/area.css` directly. CSS SHA-256: `696593187549339ac82234d4bf7a682306901d49a88730c4c817d0a73c35e76d`. Source pins are in [evidence.md](evidence.md).
 
+<!-- task19-changes -->
+## Changes after review — 2026-10-11
+
+Task 19 corrections, with the reason from [Corrections for Astra and D1–D16](../REVIEW.md). Older Answer/Snapshot passages below retain their original date and findings unless explicitly refreshed; the changes here and decision callouts govern subsequent work.
+
+- **C26 — Review reason:** Caption said Gloss softness undefined; example person was wrong. **Change:** Corrected caption to state that blur is specified but not implemented; changed generated fixture person to Irene Yamaguchi. Pinned its original preset input and source link so the historical specimen stays reproducible. Files: [specimen.js](specimen.js), [build.mjs](build.mjs), [index.html](index.html), [check.mjs](check.mjs). Decisions: D1, D3, D4, D7, D9, D13, D14.
+
+Full change ledger and verification: [19-corrections](../19-corrections/README.md).
+<!-- /task19-changes -->
+
 ## Open and reproduce
 
 The running specimen is [http://127.0.0.1:8767/16-specimen/](http://127.0.0.1:8767/16-specimen/). It requires the local server; opening HTML with `file:` does not resolve the root-relative compiled CSS URL.
@@ -52,6 +62,10 @@ For fresh browser evidence, open the page at its unmodified defaults, choose “
 ![Dark compact comparison](dark-compact.jpg)
 
 ## Proposals
+
+<!-- task19-superseded 16-specimen/README.md ## Proposals -->
+> **Superseded policy — D1, D3, D4, D7, D9, D13, D14 (owner, 2026-10-11):** Area’s calm no-cast/Trace-only expression is the None default, not a material ceiling. Contrast, focus, fixed hover ink and semantic meaning remain hard limits. Ordinal caps and provisional control ranges are not limits. Numeric per-role strength multipliers and bounds must be calibrated to the board and contrast-tested at extremes; that work is pending tasks 20–22. The first set is None identity (default), Glass, Tactile and Soft. Paper needs an opaque rebuild; Aero, Glow and Prism are later finishes. Floating shells assume arbitrary backdrops; failing edges use opaque F0. App-level transparency reduction sits beside the OS query. Forced colors explicitly sets opaque Canvas and backdrop-filter:none. Figma Glass parameter names govern the next API. Light angle is 0 at top, clockwise; the historical 0-at-right angle convention below is superseded, not silently reinterpreted. No automatic effects on glyphs or small text; display text and button labels may explicitly opt in. A curated duotone pilot is later work. Performance rules must follow measured workloads, not universal no-row-blur/static-only caps. Owner names a 60Hz minimum device; a later rerun includes Firefox. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
 
 **Recommend keeping this bounded renderer as a review instrument.** It makes the gaps visible without pretending the proposed axis, role bindings or masks already exist in Area. Accept the role budgets and edge allocation before translating it into production. A future implementation should give each component explicit content-exclusion and optical-owner parts rather than infer them from padding.
 

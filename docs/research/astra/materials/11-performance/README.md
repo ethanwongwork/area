@@ -2,7 +2,21 @@
 
 **Answer:** Across **756 trials (741 valid)** on this M5 Pro, Chromium’s dense blur and animated shadow stacks reached roughly **25–33ms p95**, while Safari’s animated live grain reached **139–161ms p95**. Static scrolling, animation and browser choice materially change the result. Recommend **no independent blur on rows, one backdrop owner per overlay group, static optical parameters and reused raster grain**. The report budgets all twelve roles; these are proposals grounded in local frame-cadence measurements, not universal GPU-cost limits.
 
+<!-- task19-superseded 11-performance/README.md **Answer:** -->
+> **Superseded policy — D1, D3, D14 (owner, 2026-10-11):** Area’s calm no-cast/Trace-only expression is the None default, not a material ceiling. Contrast, focus, fixed hover ink and semantic meaning remain hard limits. Ordinal caps and provisional control ranges are not limits. Numeric per-role strength multipliers and bounds must be calibrated to the board and contrast-tested at extremes; that work is pending tasks 20–22. Performance rules must follow measured workloads, not universal no-row-blur/static-only caps. Owner names a 60Hz minimum device; a later rerun includes Firefox. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
+
 **Snapshot:** checked **2026-10-09** (America/Los_Angeles), after `git fetch origin`. Area `origin/main`: [`6f896789a5200bcbd34fe87de458e60ca82141d6`](https://github.com/ethanwongwork/area/tree/6f896789a5200bcbd34fe87de458e60ca82141d6). Research input: [`c3d6664e56570e1fbf4ef530ccc172934806127c`](https://github.com/ethanwongwork/area/tree/c3d6664e56570e1fbf4ef530ccc172934806127c/docs/research/astra/materials). Read the full brief and task 03 first; task 04’s roles and task 05’s absorption/nesting inform the budget. Status **unreviewed**, research only; no production changes or approval claims.
+
+<!-- task19-changes -->
+## Changes after review — 2026-10-11
+
+Task 19 corrections, with the reason from [Corrections for Astra and D1–D16](../REVIEW.md). Older Answer/Snapshot passages below retain their original date and findings unless explicitly refreshed; the changes here and decision callouts govern subsequent work.
+
+- **C17 — Review reason:** Universal no-row-blur/static-only budgets did not follow the measurements. **Change:** Kept benchmark measurements unchanged; restated measured risk cases (64 panes, animated 5–6-shadow stacks, Safari animated live grain). Marked old role caps superseded; owner minimum 60Hz device and Firefox rerun remain pending. Files: [budgets.md](budgets.md). Decisions: D1, D3, D6, D14.
+
+Full change ledger and verification: [19-corrections](../19-corrections/README.md).
+<!-- /task19-changes -->
 
 ## Evidence and deliverables
 
@@ -17,6 +31,10 @@
 The values in the fixtures are authored stress settings, not Area presets or values measured from a target product. Role recommendations use the shared layer model: body/backdrop acquisition, shading, texture, edge/reflection, emission and readable content remain distinct. The performance suite measures particular implementations of five channels, not all combinations of all 25 named styles.
 
 ## Findings
+
+<!-- task19-superseded 11-performance/README.md ## Findings -->
+> **Superseded policy — D1, D3, D14 (owner, 2026-10-11):** Area’s calm no-cast/Trace-only expression is the None default, not a material ceiling. Contrast, focus, fixed hover ink and semantic meaning remain hard limits. Ordinal caps and provisional control ranges are not limits. Numeric per-role strength multipliers and bounds must be calibrated to the board and contrast-tested at extremes; that work is pending tasks 20–22. Performance rules must follow measured workloads, not universal no-row-blur/static-only caps. Owner names a 60Hz minimum device; a later rerun includes Firefox. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
 
 **Environment and validity.** The local host was an Apple M5 Pro with 24 GiB physical memory, macOS 27.2; installed Edge 154.0.4258.62 and Safari 27.2. The actual run environments are recorded separately: Edge viewport 1504×766, Safari 1472×793, both DPR 2 and the same 840×480 test stage. All three empty-stage cadence medians were 8.3ms in Edge and 17ms in Safari. Do not rank the browsers by raw p95 alone: they operated at different callback cadences and timestamp granularities. [Environment](environment.json), [Edge evidence](results/edge.json), [Safari evidence](results/safari.json).
 
@@ -50,7 +68,6 @@ Edge finished 378 trials: **363 valid**, with fifteen focus-loss trials retained
 
 **Interpretation:** use the browser disagreement to choose conservative shared fallbacks, not to detect a brand and enable an unlimited effect. The proposed role budgets suppress repeated filters, preserve semantic paint and leave required focus/contrast independent. No paint/GPU trace was captured, so a delay is attributed to the tested end-to-end recipe—not to a claimed isolated shader, paint or compositor stage.
 
-
 ## Reproduction and verification
 
 ```sh
@@ -68,6 +85,10 @@ node --check docs/research/astra/materials/11-performance/bench.js
 The [method](method.md#re-run) gives complete steps and caveats. A fixture edit requires new measurements; the analyzer will reject changed hashes. No production build or contrast test was needed because no production paint was changed. These checks validate the research artifact, not the proposed material’s accessibility or owner acceptance.
 
 ## Proposals
+
+<!-- task19-superseded 11-performance/README.md ## Proposals -->
+> **Superseded policy — D1, D3, D14 (owner, 2026-10-11):** Area’s calm no-cast/Trace-only expression is the None default, not a material ceiling. Contrast, focus, fixed hover ink and semantic meaning remain hard limits. Ordinal caps and provisional control ranges are not limits. Numeric per-role strength multipliers and bounds must be calibrated to the board and contrast-tested at extremes; that work is pending tasks 20–22. Performance rules must follow measured workloads, not universal no-row-blur/static-only caps. Owner names a 60Hz minimum device; a later rerun includes Firefox. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
 
 1. **Use structural role caps first.** Zero independent backdrop blur on list/Table/Menu/Calendar rows; one owner per eligible glass group; keep text, glyphs and semantic fills outside decorative filters. The [twelve-role table](budgets.md#default-caps) states the numerical starting points and exceptions.
 2. **Keep optical parameters static during interaction.** Use existing semantic state and shell motion. Compare actual production overlays before admitting animated blur, shadow stacks, grain frequency or displacement. Transform/opacity is a starting preference, not proof that a blurred layer is compositor-only. [Chrome animation guidance](https://web.dev/articles/animations-guide#animate_at_the_composite_stage), checked 2026-10-09.

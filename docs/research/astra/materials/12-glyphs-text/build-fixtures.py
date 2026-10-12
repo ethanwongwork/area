@@ -18,7 +18,7 @@ for name in ("Search", "Calendar"):
     for before, after in (("strokeLinecap", "stroke-linecap"), ("strokeLinejoin", "stroke-linejoin")):
         body = body.replace(before, after)
     # Research-only semantic annotations. Never use nth-child as a production API.
-    body = re.sub(r'<(path|rect|circle) ', lambda m: f'<{m[1]} data-ink="true" data-part="{("detail" if m[1] == "circle" else "frame")}" ', body)
+    body = re.sub(r'<(path|rect|circle) ', lambda m: f'<{m[1]} data-material-ink="true" data-material-part="{("detail" if m[1] == "circle" else "frame")}" ', body)
     fixtures[name.lower()] = {"source": f"{FILE}:{source[:start].count(chr(10))+1}", "svg": body}
 assert "{{" not in str(fixtures)
 (HERE / "fixtures.json").write_text(json.dumps({"commit": SHA, "fixtures": fixtures}, indent=2) + "\n")

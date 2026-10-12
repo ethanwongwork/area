@@ -7,7 +7,17 @@ Most other surveyed libraries provide semantic themes, elevation or recipe infra
 No full match to the brief’s multi-material breadth and complete independently adjustable ingredient set was found within this survey.
 Area’s plausible distinction is the breadth and separation of those controls, not inventing component-wide materials.
 
-**Snapshot:** checked **2026-10-08**, America/Los_Angeles. Area `origin/main`: [`4c1854202a8e109479d5b83ef24a8325231da056`](https://github.com/ethanwongwork/area/tree/4c1854202a8e109479d5b83ef24a8325231da056); research base `2fff2b9427e550f4d6c623f65d2b1779033e04a2`. Read the unchanged [brief](../README.md) and task 01’s [layer model](../01-taxonomy/layer-model.md). Evidence: [23 survey entries](survey.md), [repository snapshots](source-lock.json) and [source integrity records](source-integrity.json). Docs use public URL + access date; public implementation links use full SHA + lines. Proprietary native internals are explicitly unavailable rather than assigned invented source pins.
+**Snapshot:** checked **2026-10-08**, America/Los_Angeles. Area `origin/main`: [`4c1854202a8e109479d5b83ef24a8325231da056`](https://github.com/ethanwongwork/area/tree/4c1854202a8e109479d5b83ef24a8325231da056); research base `2fff2b9427e550f4d6c623f65d2b1779033e04a2`. Read the unchanged [brief](../README.md) and task 01’s [layer model](../01-taxonomy/layer-model.md). Evidence: [27 survey entries](survey.md), [repository snapshots](source-lock.json) and [source integrity records](source-integrity.json). Docs use public URL + access date; public implementation links use full SHA + lines. Proprietary native internals are explicitly unavailable rather than assigned invented source pins.
+
+<!-- task19-changes -->
+## Changes after review — 2026-10-11
+
+Task 19 corrections, with the reason from [Corrections for Astra and D1–D16](../REVIEW.md). Older Answer/Snapshot passages below retain their original date and findings unless explicitly refreshed; the changes here and decision callouts govern subsequent work.
+
+- **C02 — Review reason:** Missing Figma Glass, Open Props, AuraGlass and liquid-glass prior art; OpenGlass scale was not weighed. **Change:** Added four source-pinned entries (27 total) and OpenGlass creation/listed-contributor metadata; bounded the verdict to the inspected implementations. Files: [survey.json](survey.json), [survey.md](survey.md), [source-lock.json](source-lock.json), [source-integrity.json](source-integrity.json), [verify.py](verify.py). Decisions: D15.
+
+Full change ledger and verification: [19-corrections](../19-corrections/README.md).
+<!-- /task19-changes -->
 
 ## How the hypothesis was tested
 
@@ -50,6 +60,10 @@ Each boundary is documented with dated docs and pinned implementation lines in t
 
 ## Proposals for Area
 
+<!-- task19-superseded 02-prior-art/README.md ## Proposals -->
+> **Superseded policy — D15 (owner, 2026-10-11):** Internal positioning is “the broadest multi-material layer with separable controls”; no public claim until it ships. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
+
 **Positioning options:** claim a new material-layer category; claim a broader cross-material implementation of an existing idea; or postpone positioning until role/parameter coverage is tested. **Recommendation:** the second, with the third as a release gate. OpenGlass is concrete prior art, so an unqualified first-of-its-kind claim would be unsupported.
 
 **Architecture options:** replace Surface, expand Surface to own all optics, or keep new optical inputs beside Surface. **Recommendation:** keep task 01’s third option for now. Surface already owns decorative width and elevation under [surface.ts lines 21–40](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/packages/tokens/src/axes/surface.ts#L21-L40); disjoint namespaces and scope derivations remain required by [DESIGN_SYSTEM lines 20–27](https://github.com/ethanwongwork/area/blob/4c1854202a8e109479d5b83ef24a8325231da056/docs/DESIGN_SYSTEM.md#L20-L27). OpenGlass demonstrates propagation and role absorption worth studying, but copying its coupled font/shape/motion changes would conflict with the brief’s separation goals.
@@ -78,6 +92,14 @@ The optional fetch verifies immutable upstream file hashes and needs network acc
 
 ## Verdict
 
+<!-- task19-superseded 02-prior-art/README.md ## Verdict -->
+> **Superseded policy — D15 (owner, 2026-10-11):** Internal positioning is “the broadest multi-material layer with separable controls”; no public claim until it ships. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
+
 **Yes, there is open-source prior art for a shared adjustable material treatment across a component system.** OpenGlass UI’s MIT license, public GlassLook inputs, provider propagation and distinct Button/Switch/Input consumers directly establish that narrower claim: see the [pinned evidence](survey.md#openglass). It is the nearest match found, with daisyUI, Radix Themes and tweakcn covering useful subsets.
 
 **No complete match to the full Area brief was found in this bounded survey.** OpenGlass concentrates on glass and lacks the brief’s complete independently adjustable multi-material ingredient model; the other candidates fall short on parameter breadth, supplied role mapping, openness or platform portability. The evidence supports “broader, more separable materials across roles” as an Area research opportunity. It does not support “nobody has built a material layer.”
+
+## Current verdict after task 19
+
+The added [AuraGlass](survey.md#auraglass) provider is another concrete glass system with shared transparency/contrast controls and semantic component tokens; OpenGlass is not the only direct precedent. [Open Props](survey.md#open-props) supplies reusable parameterized shadow and noise ingredients, [Figma Glass](survey.md#figma-glass) supplies an editable effect contract, and [Liquid Glass Web](survey.md#liquid-glass-web) supplies a browser renderer. None of the inspected APIs demonstrates the brief's complete multi-material, per-role, separately adjustable layer model. This is a bounded source comparison, not a claim that none exists anywhere. OpenGlass's one listed contributor and July 2026 repository creation date reduce the evidence for maturity, not the existence of its implementation. D15 therefore governs positioning: internal breadth/separation only; no public superiority claim before shipping.

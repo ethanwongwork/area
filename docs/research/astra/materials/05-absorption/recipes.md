@@ -1,6 +1,8 @@
 # Style × role absorption recipes
 
-**All 300 cells are authored proposals, not captured recipes or native platform constants.** Read [amounts, resolution and nesting](policy.md) first. None removes added style, not required paint. Explicit family/context limits in [the exception ledger](family-exceptions.md) override the amount and channels here. Each row changes only the named layer channels; semantic ink, existing state and required boundaries are protected in every row.
+> **Superseded — D1, D2, D3, D14:** the historical ordinal ceilings, in-flow no-shadow and static/no-blur prohibitions below are retained as findings/proposals, not current requirements. D3 numeric multipliers await calibration. New D6 row-plate cells complete 25 × 13; their Trace label is historical formatting only. Hard semantic/contrast/focus limits remain.
+
+**All 325 cells are authored proposals, not captured recipes or native platform constants.** Read [amounts, resolution and nesting](policy.md) first. None removes added style, not required paint. Explicit family/context limits in [the exception ledger](family-exceptions.md) override the amount and channels here. Each row changes only the named layer channels; semantic ink, existing state and required boundaries are protected in every row.
 
 The source links establish the style vocabulary, available techniques and their limitations. They do not empirically validate these proposed role assignments or amounts. Definitions/public-source access dates remain those in task 01; no external compatibility update is claimed.
 
@@ -8,33 +10,33 @@ The source links establish the style vocabulary, available techniques and their 
 
 N = None · T = Trace · Q = Quiet · F = Full. These are ordinal caps, never opacity percentages.
 
-| Style | page | container | floating surface | raised control | recessed field/track | thumb/knob | indicator/fill | divider | edge | glyph | text | scrim |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| [Flat](#flat) | N | N | N | N | N | N | N | N | N | N | N | N |
-| [Material / paper](#paper) | T | Q | F | T | T | Q | T | T | T | N | N | N |
-| [Transparency](#transparency) | N | Q | Q | T | N | T | N | N | T | N | N | N |
-| [Glassmorphism](#glassmorphism) | N | Q | F | T | T | Q | T | T | Q | N | N | N |
-| [Acrylic (Fluent)](#acrylic) | N | T | F | T | N | T | N | T | T | N | N | N |
-| [Mica](#mica) | F | Q | T | T | T | T | N | T | T | N | N | N |
-| [Liquid Glass (Apple, 2025)](#liquid-glass) | N | T | F | Q | T | F | T | T | Q | N | N | N |
-| [Neumorphism](#neumorphism) | T | Q | Q | Q | Q | F | T | T | Q | N | N | N |
-| [Claymorphism](#claymorphism) | T | Q | Q | Q | T | F | T | T | Q | N | N | N |
-| [Skeuomorphism](#skeuomorphism) | Q | Q | Q | Q | Q | F | T | T | Q | T | N | N |
-| [Aqua](#aqua) | T | T | Q | Q | T | F | T | T | Q | N | N | N |
-| [Frutiger Aero](#frutiger-aero) | Q | T | Q | Q | T | Q | T | T | Q | N | N | N |
-| [Glow / neon](#glow-neon) | T | T | Q | T | N | Q | Q | N | Q | T | N | N |
-| [Gradient fill — linear](#linear-gradient) | Q | T | Q | Q | T | Q | T | N | N | N | N | N |
-| [Gradient fill — radial](#radial-gradient) | Q | T | Q | T | N | Q | T | N | N | N | N | N |
-| [Gradient fill — conic](#conic-gradient) | T | N | T | T | N | Q | N | N | T | N | N | N |
-| [Gradient fill — mesh](#mesh-gradient) | Q | T | T | T | N | T | N | N | N | N | N | N |
-| [Gradient stroke](#gradient-stroke) | N | T | Q | T | T | Q | T | T | F | N | N | N |
-| [Inner shadow](#inner-shadow) | N | T | N | T | Q | T | N | T | T | N | N | N |
-| [Inner glow](#inner-glow) | N | T | Q | T | N | Q | T | N | Q | N | N | N |
-| [Outer glow](#outer-glow) | N | T | Q | T | N | Q | Q | N | T | T | N | N |
-| [Drop shadow](#drop-shadow) | N | T | F | N | N | Q | N | N | N | N | N | N |
-| [Bevel / emboss](#bevel-emboss) | N | T | T | Q | Q | F | T | T | Q | T | N | N |
-| [Letterpress](#letterpress) | N | N | N | N | N | N | N | N | N | T | T | N |
-| [Grain](#grain) | Q | T | T | T | N | T | N | N | N | N | N | N |
+| Style | page | container | floating surface | raised control | recessed field/track | thumb/knob | indicator/fill | divider | edge | glyph | text | scrim | row-plate |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| [Flat](#flat) | N | N | N | N | N | N | N | N | N | N | N | N | T |
+| [Material / paper](#paper) | T | Q | F | T | T | Q | T | T | T | N | N | N | T |
+| [Transparency](#transparency) | N | Q | Q | T | N | T | N | N | T | N | N | N | T |
+| [Glassmorphism](#glassmorphism) | N | Q | F | T | T | Q | T | T | Q | N | N | N | T |
+| [Acrylic (Fluent)](#acrylic) | N | T | F | T | N | T | N | T | T | N | N | N | T |
+| [Mica](#mica) | F | Q | T | T | T | T | N | T | T | N | N | N | T |
+| [Liquid Glass (Apple, 2025)](#liquid-glass) | N | T | F | Q | T | F | T | T | Q | N | N | N | T |
+| [Neumorphism](#neumorphism) | T | Q | Q | Q | Q | F | T | T | Q | N | N | N | T |
+| [Claymorphism](#claymorphism) | T | Q | Q | Q | T | F | T | T | Q | N | N | N | T |
+| [Skeuomorphism](#skeuomorphism) | Q | Q | Q | Q | Q | F | T | T | Q | T | N | N | T |
+| [Aqua](#aqua) | T | T | Q | Q | T | F | T | T | Q | N | N | N | T |
+| [Frutiger Aero](#frutiger-aero) | Q | T | Q | Q | T | Q | T | T | Q | N | N | N | T |
+| [Glow / neon](#glow-neon) | T | T | Q | T | N | Q | Q | N | Q | T | N | N | T |
+| [Gradient fill — linear](#linear-gradient) | Q | T | Q | Q | T | Q | T | N | N | N | N | N | T |
+| [Gradient fill — radial](#radial-gradient) | Q | T | Q | T | N | Q | T | N | N | N | N | N | T |
+| [Gradient fill — conic](#conic-gradient) | T | N | T | T | N | Q | N | N | T | N | N | N | T |
+| [Gradient fill — mesh](#mesh-gradient) | Q | T | T | T | N | T | N | N | N | N | N | N | T |
+| [Gradient stroke](#gradient-stroke) | N | T | Q | T | T | Q | T | T | F | N | N | N | T |
+| [Inner shadow](#inner-shadow) | N | T | N | T | Q | T | N | T | T | N | N | N | T |
+| [Inner glow](#inner-glow) | N | T | Q | T | N | Q | T | N | Q | N | N | N | T |
+| [Outer glow](#outer-glow) | N | T | Q | T | N | Q | Q | N | T | T | N | N | T |
+| [Drop shadow](#drop-shadow) | N | T | F | N | N | Q | N | N | N | N | N | N | T |
+| [Bevel / emboss](#bevel-emboss) | N | T | T | Q | Q | F | T | T | Q | T | N | N | T |
+| [Letterpress](#letterpress) | N | N | N | N | N | N | N | N | N | T | T | N | T |
+| [Grain](#grain) | Q | T | T | T | N | T | N | N | N | N | N | N | T |
 
 ## Layer channel names
 
@@ -46,7 +48,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 **Kind:** visual language. **Definition evidence:** [task 01 pinned definition and original sources](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/01-taxonomy/catalogue.md#L9-L19).
 **Construction basis:** [T01](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L26-L41), [T07](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L106-L134). All are pinned task 03 technique sections, including fallback limits.
 
-**Boundary:** Strict-flat suppresses optional modeled relief; it does not erase required focus, state or scrims. Pair with Surface Flat; otherwise call the result flat-inspired, not strict flat.
+**Historical boundary (superseded D1/D2/D3/D14 where it limits expression):** Strict-flat suppresses optional modeled relief; it does not erase required focus, state or scrims. Pair with Surface Flat; otherwise call the result flat-inspired, not strict flat.
 
 | Role | Amount cap | Layer channels | Proposed treatment |
 | --- | --- | --- | --- |
@@ -62,6 +64,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 | glyph | None | `content.ink` | Plain semantic glyph ink; intrinsic media unchanged. |
 | text | None | `content.ink` | Plain readable ink, including placeholders and code. |
 | scrim | None | `body.paints` | Preserve functional scrim; flat does not remove modal occlusion. |
+| row-plate | Trace | `body.paints` | Uniform semantic state plate; no added modeling. |
 
 <a id="paper"></a>
 ## Material / paper
@@ -69,7 +72,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 **Kind:** material recipe + design language. **Definition evidence:** [task 01 pinned definition and original sources](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/01-taxonomy/catalogue.md#L20-L30).
 **Construction basis:** [T01](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L26-L41), [T02](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L42-L55). All are pinned task 03 technique sections, including fallback limits.
 
-**Boundary:** Paper here is the opaque sheet model from 01, not a full Material Design component system. Grain is not automatic. Surface can remove all cast while body remains paper-like.
+**Historical boundary (superseded D1/D2/D3/D14 where it limits expression):** Paper here is the opaque sheet model from 01, not a full Material Design component system. Grain is not automatic. Surface can remove all cast while body remains paper-like.
 
 | Role | Amount cap | Layer channels | Proposed treatment |
 | --- | --- | --- | --- |
@@ -85,6 +88,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 | glyph | None | `content.ink` | Printed glyph ink; no paper texture inside glyphs. |
 | text | None | `content.ink` | Printed readable ink without text shadow. |
 | scrim | None | `body.paints` | Existing neutral modal veil, independent of paper shade. |
+| row-plate | Trace | `body.paints`, `edges` | Opaque paper state backing with an optional subordinate edge; keep focus plate continuous. |
 
 <a id="transparency"></a>
 ## Transparency
@@ -92,7 +96,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 **Kind:** optical property. **Definition evidence:** [task 01 pinned definition and original sources](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/01-taxonomy/catalogue.md#L31-L41).
 **Construction basis:** [T08](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L135-L149), [T11](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L178-L197). All are pinned task 03 technique sections, including fallback limits.
 
-**Boundary:** Proposed role translation of the named layer only. Preserve semantic paint, current geometry and Surface; remove optional treatment when a guard or fallback requires it.
+**Historical boundary (superseded D1/D2/D3/D14 where it limits expression):** Proposed role translation of the named layer only. Preserve semantic paint, current geometry and Surface; remove optional treatment when a guard or fallback requires it.
 
 | Role | Amount cap | Layer channels | Proposed treatment |
 | --- | --- | --- | --- |
@@ -108,6 +112,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 | glyph | None | `content.ink` | Opaque semantic glyph; intrinsic media retains authored alpha only. |
 | text | None | `content.ink` | Opaque ink; transmission never applies to the content group. |
 | scrim | None | `body.paints` | Preserve the existing scrim's functional alpha; do not multiply it by material transmission. |
+| row-plate | Trace | `body.paints`, `body.transmission` | Transmit through the plate only after composing hover/selected/focus paint against the actual host. |
 
 <a id="glassmorphism"></a>
 ## Glassmorphism
@@ -115,7 +120,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 **Kind:** material recipe umbrella. **Definition evidence:** [task 01 pinned definition and original sources](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/01-taxonomy/catalogue.md#L42-L52).
 **Construction basis:** [T08](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L135-L149), [T04](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L67-L80), [T07](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L106-L134). All are pinned task 03 technique sections, including fallback limits.
 
-**Boundary:** Proposed role translation of the named layer only. Preserve semantic paint, current geometry and Surface; remove optional treatment when a guard or fallback requires it.
+**Historical boundary (superseded D1/D2/D3/D14 where it limits expression):** Proposed role translation of the named layer only. Preserve semantic paint, current geometry and Surface; remove optional treatment when a guard or fallback requires it.
 
 | Role | Amount cap | Layer channels | Proposed treatment |
 | --- | --- | --- | --- |
@@ -131,6 +136,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 | glyph | None | `content.ink` | Crisp unfiltered glyphs and unchanged media. |
 | text | None | `content.ink` | Unfiltered semantic ink over a validated reading ground. |
 | scrim | None | `body.paints` | Existing scrim, not another frost pane. |
+| row-plate | Trace | `body.paints`, `body.transmission`, `reflection`, `edges` | Inherit host frost acquisition; optional transmitted tint and rim on state plate, not a second glass pane by default. |
 
 <a id="acrylic"></a>
 ## Acrylic (Fluent)
@@ -138,7 +144,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 **Kind:** vendor material recipe. **Definition evidence:** [task 01 pinned definition and original sources](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/01-taxonomy/catalogue.md#L53-L63).
 **Construction basis:** [T08](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L135-L149), [T01](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L26-L41), [T05](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L81-L92). All are pinned task 03 technique sections, including fallback limits.
 
-**Boundary:** Native exclusion/tint/noise structure motivates the proposal; native constants, OS source acquisition and performance/adaptation parity are not supplied. Web result is a local-source approximation.
+**Historical boundary (superseded D1/D2/D3/D14 where it limits expression):** Native exclusion/tint/noise structure motivates the proposal; native constants, OS source acquisition and performance/adaptation parity are not supplied. Web result is a local-source approximation.
 
 | Role | Amount cap | Layer channels | Proposed treatment |
 | --- | --- | --- | --- |
@@ -154,6 +160,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 | glyph | None | `content.ink` | Unfiltered semantic glyph; no noise mask on ink. |
 | text | None | `content.ink` | Readable opaque ink; exclude texture from text decoration. |
 | scrim | None | `body.paints` | Functional neutral scrim; never a second full acrylic layer. |
+| row-plate | Trace | `body.paints`, `body.transmission`, `texture` | Host owns backdrop/noise acquisition; row uses shared tint, with opaque state fallback. |
 
 <a id="mica"></a>
 ## Mica
@@ -161,7 +168,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 **Kind:** vendor material recipe. **Definition evidence:** [task 01 pinned definition and original sources](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/01-taxonomy/catalogue.md#L64-L74).
 **Construction basis:** [T01](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L26-L41). All are pinned task 03 technique sections, including fallback limits.
 
-**Boundary:** Opaque theme/owned-reference approximation only. Ordinary CSS in 03 does not supply OS wallpaper acquisition. Never substitute live backdrop blur and call it Mica.
+**Historical boundary (superseded D1/D2/D3/D14 where it limits expression):** Opaque theme/owned-reference approximation only. Ordinary CSS in 03 does not supply OS wallpaper acquisition. Never substitute live backdrop blur and call it Mica.
 
 | Role | Amount cap | Layer channels | Proposed treatment |
 | --- | --- | --- | --- |
@@ -177,6 +184,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 | glyph | None | `content.ink` | Plain semantic ink, no wallpaper modulation. |
 | text | None | `content.ink` | Plain ink on stable opaque ground. |
 | scrim | None | `body.paints` | Existing modal veil; no wallpaper-tinted full-screen material layer. |
+| row-plate | Trace | `body.paints` | Use a locally opaque tonal state plate; do not invent another desktop acquisition per row. |
 
 <a id="liquid-glass"></a>
 ## Liquid Glass (Apple, 2025)
@@ -184,7 +192,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 **Kind:** vendor material + behavior system. **Definition evidence:** [task 01 pinned definition and original sources](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/01-taxonomy/catalogue.md#L75-L85).
 **Construction basis:** [T08](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L135-L149), [T09](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L150-L166), [T04](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L67-L80), [T07](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L106-L134). All are pinned task 03 technique sections, including fallback limits.
 
-**Boundary:** Web translation, not Apple parity. Keep Area hover ink fixed; native environmental adaptation/morphing is not implemented. Owned-source displacement is optional, and arbitrary-page lensing remains unverified in 03.
+**Historical boundary (superseded D1/D2/D3/D14 where it limits expression):** Web translation, not Apple parity. Keep Area hover ink fixed; native environmental adaptation/morphing is not implemented. Owned-source displacement is optional, and arbitrary-page lensing remains unverified in 03.
 
 | Role | Amount cap | Layer channels | Proposed treatment |
 | --- | --- | --- | --- |
@@ -200,6 +208,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 | glyph | None | `content.ink` | Crisp semantic glyph; native adaptive ink is not copied into hover recoloring. |
 | text | None | `content.ink` | Stable Area ink; solve backdrop legibility through the body, not text filtering or automatic foreground animation. |
 | scrim | None | `body.paints` | Functional neutral dimming; do not label a blurred scrim native Liquid Glass. |
+| row-plate | Trace | `body.paints`, `reflection`, `edges` | Frost/rim baseline; shared light and state plate, with D8 refraction deferred. |
 
 <a id="neumorphism"></a>
 ## Neumorphism
@@ -207,7 +216,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 **Kind:** material recipe. **Definition evidence:** [task 01 pinned definition and original sources](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/01-taxonomy/catalogue.md#L86-L96).
 **Construction basis:** [T02](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L42-L55), [T04](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L67-L80), [T12](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L198-L203). All are pinned task 03 technique sections, including fallback limits.
 
-**Boundary:** Classic paired external light/dark lobes conflict with current in-flow no-shadow and dark-halo policy. This proposal uses constrained intrinsic modeling; full classic extrusion needs a later explicit Surface contract decision.
+**Historical boundary (superseded D1/D2/D3/D14 where it limits expression):** Classic paired external light/dark lobes conflict with current in-flow no-shadow and dark-halo policy. This proposal uses constrained intrinsic modeling; full classic extrusion needs a later explicit Surface contract decision.
 
 | Role | Amount cap | Layer channels | Proposed treatment |
 | --- | --- | --- | --- |
@@ -223,6 +232,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 | glyph | None | `content.ink` | Plain glyph ink, not automatically embossed with the body. |
 | text | None | `content.ink` | Plain text; small labels must not acquire doubled relief edges. |
 | scrim | None | `body.paints` | Neutral scrim separates the floating layer; no embossed full-screen veil. |
+| row-plate | Trace | `body.paints`, `shading.inset`, `reflection` | Optional shallow inset/convex cue accompanies a independently legible state plate; shadow cannot be the only boundary. |
 
 <a id="claymorphism"></a>
 ## Claymorphism
@@ -230,7 +240,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 **Kind:** material recipe. **Definition evidence:** [task 01 pinned definition and original sources](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/01-taxonomy/catalogue.md#L97-L107).
 **Construction basis:** [T02](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L42-L55), [T04](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L67-L80), [T10](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L167-L177). All are pinned task 03 technique sections, including fallback limits.
 
-**Boundary:** Keep Area corner/size geometry. Full inflated geometry and extra cast would require a separate approved geometry/elevation change; this is a constrained paint translation.
+**Historical boundary (superseded D1/D2/D3/D14 where it limits expression):** Keep Area corner/size geometry. Full inflated geometry and extra cast would require a separate approved geometry/elevation change; this is a constrained paint translation.
 
 | Role | Amount cap | Layer channels | Proposed treatment |
 | --- | --- | --- | --- |
@@ -246,6 +256,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 | glyph | None | `content.ink` | Plain glyphs or preserved media, no inflated stroke treatment. |
 | text | None | `content.ink` | Plain semantic ink on a uniform center. |
 | scrim | None | `body.paints` | Existing scrim; no colored clay fog. |
+| row-plate | Trace | `body.paints`, `shading.inset`, `reflection` | Soft modeled state plate; retain parent geometry and opaque readable state ground. |
 
 <a id="skeuomorphism"></a>
 ## Skeuomorphism
@@ -253,7 +264,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 **Kind:** metaphor / visual language. **Definition evidence:** [task 01 pinned definition and original sources](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/01-taxonomy/catalogue.md#L108-L118).
 **Construction basis:** [T01](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L26-L41), [T02](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L42-L55), [T04](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L67-L80), [T05](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L81-L92), [T06](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L93-L105). All are pinned task 03 technique sections, including fallback limits.
 
-**Boundary:** Under-specified until a referent is chosen. The matrix supplies common responsibilities, not a universal physical-object recipe. Missing referent resolves to plain, not invented textures.
+**Historical boundary (superseded D1/D2/D3/D14 where it limits expression):** Under-specified until a referent is chosen. The matrix supplies common responsibilities, not a universal physical-object recipe. Missing referent resolves to plain, not invented textures.
 
 | Role | Amount cap | Layer channels | Proposed treatment |
 | --- | --- | --- | --- |
@@ -269,6 +280,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 | glyph | Trace | `content.decoration` | Optional simple inscription cue on sparse decorative glyphs; action icons remain recognizable and data/media unchanged. |
 | text | None | `content.ink` | Plain UI ink; optional display inscription requires a separate content-specific exception. |
 | scrim | None | `body.paints` | Functional neutral veil; do not simulate a physical curtain by default. |
+| row-plate | Trace | `body.paints`, `shading.inset`, `reflection` | Declared physical row insert may model relief; preserve semantic focus and reading ground. |
 
 <a id="aqua"></a>
 ## Aqua
@@ -276,7 +288,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 **Kind:** historical visual language. **Definition evidence:** [task 01 pinned definition and original sources](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/01-taxonomy/catalogue.md#L119-L129).
 **Construction basis:** [T01](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L26-L41), [T04](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L67-L80), [T07](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L106-L134). All are pinned task 03 technique sections, including fallback limits.
 
-**Boundary:** Aqua-inspired paint, not historical reproduction. Exact native gloss geometry was not specified in 01; all proposed ramps/rims here are authored synthesis, no platform constants.
+**Historical boundary (superseded D1/D2/D3/D14 where it limits expression):** Aqua-inspired paint, not historical reproduction. Exact native gloss geometry was not specified in 01; all proposed ramps/rims here are authored synthesis, no platform constants.
 
 | Role | Amount cap | Layer channels | Proposed treatment |
 | --- | --- | --- | --- |
@@ -292,6 +304,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 | glyph | None | `content.ink` | Crisp glyphs, no mandatory historical icon replacement. |
 | text | None | `content.ink` | Plain Area typography, not a claim to reproduce historical Aqua text rendering. |
 | scrim | None | `body.paints` | Existing neutral scrim. |
+| row-plate | Trace | `body.paints`, `reflection`, `edges` | Optional gloss/rim on the row perimeter, with continuous state backing beneath text. |
 
 <a id="frutiger-aero"></a>
 ## Frutiger Aero
@@ -299,7 +312,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 **Kind:** retrospective visual language. **Definition evidence:** [task 01 pinned definition and original sources](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/01-taxonomy/catalogue.md#L130-L140).
 **Construction basis:** [T01](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L26-L41), [T04](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L67-L80), [T08](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L135-L149). All are pinned task 03 technique sections, including fallback limits.
 
-**Boundary:** Paint subset of a broader art direction; do not silently change fonts, imagery, icons or behavior to claim the full historical language.
+**Historical boundary (superseded D1/D2/D3/D14 where it limits expression):** Paint subset of a broader art direction; do not silently change fonts, imagery, icons or behavior to claim the full historical language.
 
 | Role | Amount cap | Layer channels | Proposed treatment |
 | --- | --- | --- | --- |
@@ -315,6 +328,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 | glyph | None | `content.ink` | Keep existing glyph geometry and media; the role recipe does not supply a replacement icon language. |
 | text | None | `content.ink` | Plain Area ink/type; humanist historical art direction is outside this paint proposal. |
 | scrim | None | `body.paints` | Neutral functional scrim, not atmospheric imagery. |
+| row-plate | Trace | `body.paints`, `reflection`, `edges` | Host carries scenic/glassy identity; optional row tint and gloss stay subordinate to selected/focus plate. |
 
 <a id="glow-neon"></a>
 ## Glow / neon
@@ -322,7 +336,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 **Kind:** emissive style recipe. **Definition evidence:** [task 01 pinned definition and original sources](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/01-taxonomy/catalogue.md#L141-L151).
 **Construction basis:** [T03](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L56-L66), [T06](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L93-L105). All are pinned task 03 technique sections, including fallback limits.
 
-**Boundary:** Proposed role translation of the named layer only. Preserve semantic paint, current geometry and Surface; remove optional treatment when a guard or fallback requires it.
+**Historical boundary (superseded D1/D2/D3/D14 where it limits expression):** Proposed role translation of the named layer only. Preserve semantic paint, current geometry and Surface; remove optional treatment when a guard or fallback requires it.
 
 | Role | Amount cap | Layer channels | Proposed treatment |
 | --- | --- | --- | --- |
@@ -338,6 +352,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 | glyph | Trace | `content.decoration`, `emission` | Optional sparse decorative symbol bloom; action/status core remains plain, media excluded. |
 | text | None | `content.ink` | Plain reading text; glowing display lettering is not the default role recipe. |
 | scrim | None | `body.paints` | Neutral scrim does not radiate. |
+| row-plate | Trace | `body.paints`, `emission`, `edges` | Legible core state plate first; optional bounded perimeter emission never replaces focus. |
 
 <a id="linear-gradient"></a>
 ## Gradient fill — linear
@@ -345,7 +360,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 **Kind:** paint primitive. **Definition evidence:** [task 01 pinned definition and original sources](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/01-taxonomy/catalogue.md#L152-L162).
 **Construction basis:** [T01](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L26-L41). All are pinned task 03 technique sections, including fallback limits.
 
-**Boundary:** Proposed role translation of the named layer only. Preserve semantic paint, current geometry and Surface; remove optional treatment when a guard or fallback requires it.
+**Historical boundary (superseded D1/D2/D3/D14 where it limits expression):** Proposed role translation of the named layer only. Preserve semantic paint, current geometry and Surface; remove optional treatment when a guard or fallback requires it.
 
 | Role | Amount cap | Layer channels | Proposed treatment |
 | --- | --- | --- | --- |
@@ -361,6 +376,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 | glyph | None | `content.ink` | Solid semantic glyph ink. |
 | text | None | `content.ink` | Solid ink, never gradient-clipped UI text by inheritance. |
 | scrim | None | `body.paints` | Existing scrim; local readability fades retain their functional masks. |
+| row-plate | Trace | `body.paints` | Sample the full state-plate gradient domain behind text; derive stops from theme. |
 
 <a id="radial-gradient"></a>
 ## Gradient fill — radial
@@ -368,7 +384,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 **Kind:** paint primitive. **Definition evidence:** [task 01 pinned definition and original sources](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/01-taxonomy/catalogue.md#L163-L173).
 **Construction basis:** [T01](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L26-L41). All are pinned task 03 technique sections, including fallback limits.
 
-**Boundary:** Proposed role translation of the named layer only. Preserve semantic paint, current geometry and Surface; remove optional treatment when a guard or fallback requires it.
+**Historical boundary (superseded D1/D2/D3/D14 where it limits expression):** Proposed role translation of the named layer only. Preserve semantic paint, current geometry and Surface; remove optional treatment when a guard or fallback requires it.
 
 | Role | Amount cap | Layer channels | Proposed treatment |
 | --- | --- | --- | --- |
@@ -384,6 +400,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 | glyph | None | `content.ink` | Solid glyph ink and intrinsic media unchanged. |
 | text | None | `content.ink` | Plain semantic text. |
 | scrim | None | `body.paints` | Retain functional scrim mask; no decorative radial dimming replacing modal coverage. |
+| row-plate | Trace | `body.paints` | Radial state-plate tint, full interpolation-domain contrast checked; no glyph recoloring. |
 
 <a id="conic-gradient"></a>
 ## Gradient fill — conic
@@ -391,7 +408,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 **Kind:** paint primitive. **Definition evidence:** [task 01 pinned definition and original sources](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/01-taxonomy/catalogue.md#L174-L184).
 **Construction basis:** [T01](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L26-L41), [T07](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L106-L134). All are pinned task 03 technique sections, including fallback limits.
 
-**Boundary:** Proposed role translation of the named layer only. Preserve semantic paint, current geometry and Surface; remove optional treatment when a guard or fallback requires it.
+**Historical boundary (superseded D1/D2/D3/D14 where it limits expression):** Proposed role translation of the named layer only. Preserve semantic paint, current geometry and Surface; remove optional treatment when a guard or fallback requires it.
 
 | Role | Amount cap | Layer channels | Proposed treatment |
 | --- | --- | --- | --- |
@@ -407,6 +424,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 | glyph | None | `content.ink` | Plain semantic glyph. |
 | text | None | `content.ink` | Plain text; no angular color field in letters. |
 | scrim | None | `body.paints` | Existing uniform or functional scrim. |
+| row-plate | Trace | `body.paints` | Conic variation is optional perimeter treatment; preserve a continuous readable state core. |
 
 <a id="mesh-gradient"></a>
 ## Gradient fill — mesh
@@ -414,7 +432,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 **Kind:** paint primitive. **Definition evidence:** [task 01 pinned definition and original sources](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/01-taxonomy/catalogue.md#L185-L195).
 **Construction basis:** [T01](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L26-L41). All are pinned task 03 technique sections, including fallback limits.
 
-**Boundary:** Use an explicitly owned mesh asset or label a multi-radial approximation honestly, following 03; no native CSS mesh function is assumed.
+**Historical boundary (superseded D1/D2/D3/D14 where it limits expression):** Use an explicitly owned mesh asset or label a multi-radial approximation honestly, following 03; no native CSS mesh function is assumed.
 
 | Role | Amount cap | Layer channels | Proposed treatment |
 | --- | --- | --- | --- |
@@ -430,6 +448,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 | glyph | None | `content.ink` | Solid glyph or unchanged media. |
 | text | None | `content.ink` | Solid semantic ink, not mesh-filled text. |
 | scrim | None | `body.paints` | Functional neutral scrim; no mesh fog layer. |
+| row-plate | Trace | `body.paints` | Host may supply mesh scene; row foreground is tested over the entire composed plate range. |
 
 <a id="gradient-stroke"></a>
 ## Gradient stroke
@@ -437,7 +456,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 **Kind:** edge paint primitive. **Definition evidence:** [task 01 pinned definition and original sources](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/01-taxonomy/catalogue.md#L196-L206).
 **Construction basis:** [T07](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L106-L134). All are pinned task 03 technique sections, including fallback limits.
 
-**Boundary:** Proposed role translation of the named layer only. Preserve semantic paint, current geometry and Surface; remove optional treatment when a guard or fallback requires it.
+**Historical boundary (superseded D1/D2/D3/D14 where it limits expression):** Proposed role translation of the named layer only. Preserve semantic paint, current geometry and Surface; remove optional treatment when a guard or fallback requires it.
 
 | Role | Amount cap | Layer channels | Proposed treatment |
 | --- | --- | --- | --- |
@@ -453,6 +472,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 | glyph | None | `content.ink` | Do not turn glyph strokes into gradient material edges. |
 | text | None | `content.ink` | Plain text, no outline gradient inherited. |
 | scrim | None | `body.paints` | No gradient perimeter around a scrim. |
+| row-plate | Trace | `edges` | Optional theme-derived perimeter gradient; required focus/state paint remains separate. |
 
 <a id="inner-shadow"></a>
 ## Inner shadow
@@ -460,7 +480,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 **Kind:** shading primitive. **Definition evidence:** [task 01 pinned definition and original sources](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/01-taxonomy/catalogue.md#L207-L217).
 **Construction basis:** [T02](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L42-L55). All are pinned task 03 technique sections, including fallback limits.
 
-**Boundary:** Proposed role translation of the named layer only. Preserve semantic paint, current geometry and Surface; remove optional treatment when a guard or fallback requires it.
+**Historical boundary (superseded D1/D2/D3/D14 where it limits expression):** Proposed role translation of the named layer only. Preserve semantic paint, current geometry and Surface; remove optional treatment when a guard or fallback requires it.
 
 | Role | Amount cap | Layer channels | Proposed treatment |
 | --- | --- | --- | --- |
@@ -476,6 +496,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 | glyph | None | `content.ink` | No automatic inset glyph treatment; letterpress is a separate recipe. |
 | text | None | `content.ink` | Plain text. |
 | scrim | None | `body.paints` | No inset shadow on full-screen occlusion. |
+| row-plate | Trace | `shading.inset` | Optional cavity cue beneath content; do not erase keyboard row plate. |
 
 <a id="inner-glow"></a>
 ## Inner glow
@@ -483,7 +504,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 **Kind:** shading/emission primitive. **Definition evidence:** [task 01 pinned definition and original sources](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/01-taxonomy/catalogue.md#L218-L228).
 **Construction basis:** [T03](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L56-L66). All are pinned task 03 technique sections, including fallback limits.
 
-**Boundary:** Proposed role translation of the named layer only. Preserve semantic paint, current geometry and Surface; remove optional treatment when a guard or fallback requires it.
+**Historical boundary (superseded D1/D2/D3/D14 where it limits expression):** Proposed role translation of the named layer only. Preserve semantic paint, current geometry and Surface; remove optional treatment when a guard or fallback requires it.
 
 | Role | Amount cap | Layer channels | Proposed treatment |
 | --- | --- | --- | --- |
@@ -499,6 +520,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 | glyph | None | `content.ink` | No glow eating into small glyph strokes. |
 | text | None | `content.ink` | Plain text; interior glyph effects need a separate large-display treatment. |
 | scrim | None | `body.paints` | No luminous scrim edge. |
+| row-plate | Trace | `emission` | Optional inward emission with readable center and independent focus plate. |
 
 <a id="outer-glow"></a>
 ## Outer glow
@@ -506,7 +528,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 **Kind:** emission/halo primitive. **Definition evidence:** [task 01 pinned definition and original sources](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/01-taxonomy/catalogue.md#L229-L239).
 **Construction basis:** [T03](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L56-L66). All are pinned task 03 technique sections, including fallback limits.
 
-**Boundary:** Proposed role translation of the named layer only. Preserve semantic paint, current geometry and Surface; remove optional treatment when a guard or fallback requires it.
+**Historical boundary (superseded D1/D2/D3/D14 where it limits expression):** Proposed role translation of the named layer only. Preserve semantic paint, current geometry and Surface; remove optional treatment when a guard or fallback requires it.
 
 | Role | Amount cap | Layer channels | Proposed treatment |
 | --- | --- | --- | --- |
@@ -522,6 +544,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 | glyph | Trace | `content.decoration`, `emission` | Sparse decorative glyph only; no status/readability dependence on glow, no media alteration. |
 | text | None | `content.ink` | Plain reading ink. |
 | scrim | None | `body.paints` | Scrim remains nonemissive. |
+| row-plate | Trace | `emission` | Optional external emission only where adjacent content remains legible; numeric budget awaits calibration. |
 
 <a id="drop-shadow"></a>
 ## Drop shadow
@@ -529,7 +552,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 **Kind:** shading primitive. **Definition evidence:** [task 01 pinned definition and original sources](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/01-taxonomy/catalogue.md#L240-L250).
 **Construction basis:** [T02](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L42-L55). All are pinned task 03 technique sections, including fallback limits.
 
-**Boundary:** Proposed role translation of the named layer only. Preserve semantic paint, current geometry and Surface; remove optional treatment when a guard or fallback requires it.
+**Historical boundary (superseded D1/D2/D3/D14 where it limits expression):** Proposed role translation of the named layer only. Preserve semantic paint, current geometry and Surface; remove optional treatment when a guard or fallback requires it.
 
 | Role | Amount cap | Layer channels | Proposed treatment |
 | --- | --- | --- | --- |
@@ -545,6 +568,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 | glyph | None | `content.ink` | No automatic glyph drop shadow; irregular decorative artwork needs separate owned-art review. |
 | text | None | `content.ink` | No cast text shadow inherited from a surface. |
 | scrim | None | `body.paints` | Scrim has no receiving-surface shadow. |
+| row-plate | Trace | `shading.cast` | Optional row cast is an expressiveness choice, not prohibited by current None defaults; measure repetition cost. |
 
 <a id="bevel-emboss"></a>
 ## Bevel / emboss
@@ -552,7 +576,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 **Kind:** relief primitive. **Definition evidence:** [task 01 pinned definition and original sources](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/01-taxonomy/catalogue.md#L251-L261).
 **Construction basis:** [T02](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L42-L55), [T04](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L67-L80), [T07](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L106-L134). All are pinned task 03 technique sections, including fallback limits.
 
-**Boundary:** Proposed role translation of the named layer only. Preserve semantic paint, current geometry and Surface; remove optional treatment when a guard or fallback requires it.
+**Historical boundary (superseded D1/D2/D3/D14 where it limits expression):** Proposed role translation of the named layer only. Preserve semantic paint, current geometry and Surface; remove optional treatment when a guard or fallback requires it.
 
 | Role | Amount cap | Layer channels | Proposed treatment |
 | --- | --- | --- | --- |
@@ -568,6 +592,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 | glyph | Trace | `content.decoration` | Only sparse decorative glyph relief; UI/action symbols stay plain by default. |
 | text | None | `content.ink` | No automatic embossed small type; letterpress owns any explicit inscription exception. |
 | scrim | None | `body.paints` | No beveled scrim. |
+| row-plate | Trace | `shading.inset`, `reflection`, `edges` | Optional lit/shaded rim with D11 radius floor; row state remains continuous. |
 
 <a id="letterpress"></a>
 ## Letterpress
@@ -575,7 +600,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 **Kind:** text/glyph relief recipe. **Definition evidence:** [task 01 pinned definition and original sources](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/01-taxonomy/catalogue.md#L262-L272).
 **Construction basis:** [T06](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L93-L105). All are pinned task 03 technique sections, including fallback limits.
 
-**Boundary:** Text Trace is a conditional exception, not a blanket text-role default. Lack of a designated display-inscription context resolves to None; actual offsets/readability remain unmeasured.
+**Historical boundary (superseded D1/D2/D3/D14 where it limits expression):** Text Trace is a conditional exception, not a blanket text-role default. Lack of a designated display-inscription context resolves to None; actual offsets/readability remain unmeasured.
 
 | Role | Amount cap | Layer channels | Proposed treatment |
 | --- | --- | --- | --- |
@@ -591,6 +616,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 | glyph | Trace | `content.decoration`, `spatial.relief` | Optional debossed cue on a sparse decorative inscription; actual glyph ink/shape remains legible. |
 | text | Trace | `content.decoration`, `spatial.relief` | Trace only for explicitly designated large, short display inscription; all UI, dense, editable and code text is None. |
 | scrim | None | `body.paints` | Scrim unchanged. |
+| row-plate | Trace | `body.paints` | Keep ordinary row labels plain under D13; explicit opt-in button/display text is a separate content treatment. |
 
 <a id="grain"></a>
 ## Grain
@@ -598,7 +624,7 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 **Kind:** microtexture primitive. **Definition evidence:** [task 01 pinned definition and original sources](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/01-taxonomy/catalogue.md#L273-L282).
 **Construction basis:** [T05](https://github.com/ethanwongwork/area/blob/79f76ea0557d201777c29de1a8626c20bbc67575/docs/research/astra/materials/03-css-cookbook/cookbook.md#L81-L92). All are pinned task 03 technique sections, including fallback limits.
 
-**Boundary:** Proposed role translation of the named layer only. Preserve semantic paint, current geometry and Surface; remove optional treatment when a guard or fallback requires it.
+**Historical boundary (superseded D1/D2/D3/D14 where it limits expression):** Proposed role translation of the named layer only. Preserve semantic paint, current geometry and Surface; remove optional treatment when a guard or fallback requires it.
 
 | Role | Amount cap | Layer channels | Proposed treatment |
 | --- | --- | --- | --- |
@@ -614,3 +640,4 @@ Use the exact fields from 01. `filters` must name its target (backdrop, body, em
 | glyph | None | `content.ink` | Do not perforate glyph ink or modify intrinsic media. |
 | text | None | `content.ink` | No grain mask or animated noise on text. |
 | scrim | None | `body.paints` | Scrim remains functionally smooth, not a second texture layer. |
+| row-plate | Trace | `texture` | Prefer sharing host texture; evaluate composited text/state visibility and measured workload before per-row grain. |

@@ -250,5 +250,59 @@
     "path": "scss/elements/buttons.scss",
     "sha256": "21c5cb306fe86a8e010df39b67eba9d168a883afe89ccf0b92b20d69968da1a2",
     "lines": 91
+  },
+  {
+    "library": "figma-glass",
+    "path": "plugin-api.d.ts",
+    "sha256": "7102bde6771033114711975b1184210fbd9164c4616ebbaf6f11a7c281858bea",
+    "lines": 12854
+  },
+  {
+    "library": "open-props",
+    "path": "src/props.shadows.js",
+    "sha256": "b5a0f12701b3de2c9d142f6d5fb224d621cd9ffeeff3fdac3d631a2d6bfe0e2f",
+    "lines": 87
+  },
+  {
+    "library": "open-props",
+    "path": "src/props.gradients.js",
+    "sha256": "79be03be54e3bcaaa4179c2ae2b01ecefee1c31611d2aa3888221b138f7fd2ce",
+    "lines": 76
+  },
+  {
+    "library": "auraglass",
+    "path": "src/theme/AuraGlassProvider.tsx",
+    "sha256": "37aa1d3648de3fc1bc54b075caebfc18392ef2314a0475504ceaa0921361ad45",
+    "lines": 279
+  },
+  {
+    "library": "auraglass",
+    "path": "src/theme/createGlassTheme.ts",
+    "sha256": "376f11d7624127cc06aa8f8d107165e9d7a3ded7ada5612e2a0d9f40e70db7ac",
+    "lines": 303
+  },
+  {
+    "library": "auraglass",
+    "path": "src/theme/createGlassTheme.ts",
+    "sha256": "376f11d7624127cc06aa8f8d107165e9d7a3ded7ada5612e2a0d9f40e70db7ac",
+    "lines": 303
+  },
+  {
+    "library": "auraglass",
+    "path": "README.md",
+    "sha256": "be274507acf7aa49b51e7a9898d646a87aa6da67427074e735399b5492e81a1c",
+    "lines": 144
+  },
+  {
+    "library": "liquid-glass-web",
+    "path": "README.md",
+    "sha256": "72c50ff099c0d16fa0eb990ee4502dede018e439127cd186957407fa004e4282",
+    "lines": 544
+  },
+  {
+    "library": "liquid-glass-web",
+    "path": "README.md",
+    "sha256": "72c50ff099c0d16fa0eb990ee4502dede018e439127cd186957407fa004e4282",
+    "lines": 544
   }
 ]

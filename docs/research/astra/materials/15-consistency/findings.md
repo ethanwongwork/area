@@ -1,5 +1,9 @@
 # Confirmed conflicts and recommended winners
 
+<!-- task19-superseded 15-consistency/findings.md * -->
+> **Superseded policy — D1, D3, D6, D14 (owner, 2026-10-11):** Area’s calm no-cast/Trace-only expression is the None default, not a material ceiling. Contrast, focus, fixed hover ink and semantic meaning remain hard limits. Ordinal caps and provisional control ranges are not limits. Numeric per-role strength multipliers and bounds must be calibrated to the board and contrast-tested at extremes; that work is pending tasks 20–22. The current vocabulary has 13 roles including row-plate; 04/05 now cover 101 contracts. Historical 12-role/78-contract counts below describe their original snapshot only. Performance rules must follow measured workloads, not universal no-row-blur/static-only caps. Owner names a 60Hz minimum device; a later rerun includes Firefox. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
+
 All seven findings compare proposals at the README's pinned research snapshot. **Conflict** means the same proposed receiver/action cannot obey both statements as written. C02–C07 concern requested preset seeds versus proposed effective budgets: they are not claims that a shipped Area component currently violates performance requirements. Both light and dark are affected unless stated otherwise. A resolver could suppress the request, but task 13's listed effective gates do not explicitly include 11; 14 must not mistake serialization fidelity for policy conformance. [13-presets/contract.md:7–17](https://github.com/ethanwongwork/area/blob/b0768c8d809946b82d6b00139ecc33fe4e57f528/docs/research/astra/materials/13-presets/contract.md#L7-L17) [11-performance/budgets.md:3–9](https://github.com/ethanwongwork/area/blob/b0768c8d809946b82d6b00139ecc33fe4e57f528/docs/research/astra/materials/11-performance/budgets.md#L3-L9)
 
 ## C01 — Complete role replacement defeats global inheritance
@@ -14,6 +18,10 @@ All seven findings compare proposals at the README's pinned research snapshot. *
 
 ## C02 — Container relief/halo can exceed the combined two-lobe cap
 
+<!-- task19-superseded 15-consistency/findings.md ## C02 -->
+> **Superseded policy — D1, D3, D14 (owner, 2026-10-11):** Area’s calm no-cast/Trace-only expression is the None default, not a material ceiling. Contrast, focus, fixed hover ink and semantic meaning remain hard limits. Ordinal caps and provisional control ranges are not limits. Numeric per-role strength multipliers and bounds must be calibrated to the board and contrast-tested at extremes; that work is pending tasks 20–22. Performance rules must follow measured workloads, not universal no-row-blur/static-only caps. Owner names a 60Hz minimum device; a later rerun includes Firefox. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
+
 **Side A:** 11 caps a container at two permitted Surface/relief lobes and explicitly counts cast, inset relief and blurred glow together. [11-performance/budgets.md:9–14](https://github.com/ethanwongwork/area/blob/b0768c8d809946b82d6b00139ecc33fe4e57f528/docs/research/astra/materials/11-performance/budgets.md#L9-L14)
 
 **Side B:** Soft/Tactile containers add two inset lobes while retaining an existing bound Surface cast. Glow adds one blurred halo while retaining that cast. The two-inset interpretation and unchanged cast policy are explicit, not inferred from screenshots. [13-presets/model.py:20–23](https://github.com/ethanwongwork/area/blob/b0768c8d809946b82d6b00139ecc33fe4e57f528/docs/research/astra/materials/13-presets/model.py#L20-L23) [13-presets/model.py:39–40](https://github.com/ethanwongwork/area/blob/b0768c8d809946b82d6b00139ecc33fe4e57f528/docs/research/astra/materials/13-presets/model.py#L39-L40) [13-presets/model.py:67–82](https://github.com/ethanwongwork/area/blob/b0768c8d809946b82d6b00139ecc33fe4e57f528/docs/research/astra/materials/13-presets/model.py#L67-L82) [13-presets/contract.md:25–39](https://github.com/ethanwongwork/area/blob/b0768c8d809946b82d6b00139ecc33fe4e57f528/docs/research/astra/materials/13-presets/contract.md#L25-L39)
@@ -23,6 +31,10 @@ All seven findings compare proposals at the README's pinned research snapshot. *
 **Winner: 11's total budget, while retaining existing Surface eligibility/paint.** Remove or simplify optional local modeling until it fits the remaining allowance; do not drop an existing permitted Surface lobe merely to make room for a preset. Count after binding a real container and mode, not from the generic role alone. A separate measured exception remains possible.
 
 ## C03 — Floating recipes add lobes beyond the existing two-lobe float
+
+<!-- task19-superseded 15-consistency/findings.md ## C03 -->
+> **Superseded policy — D1, D3, D14 (owner, 2026-10-11):** Area’s calm no-cast/Trace-only expression is the None default, not a material ceiling. Contrast, focus, fixed hover ink and semantic meaning remain hard limits. Ordinal caps and provisional control ranges are not limits. Numeric per-role strength multipliers and bounds must be calibrated to the board and contrast-tested at extremes; that work is pending tasks 20–22. Performance rules must follow measured workloads, not universal no-row-blur/static-only caps. Owner names a 60Hz minimum device; a later rerun includes Firefox. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
 
 **Side A:** 11 specifies the existing two-lobe `shadow-float`, a ring and an optional static tile; its total-count rule includes inset and glow. Tooltip/Toolbar have separate documented exceptions. [11-performance/budgets.md:9–15](https://github.com/ethanwongwork/area/blob/b0768c8d809946b82d6b00139ecc33fe4e57f528/docs/research/astra/materials/11-performance/budgets.md#L9-L15)
 
@@ -34,6 +46,10 @@ All seven findings compare proposals at the README's pinned research snapshot. *
 
 ## C04 — Five thumb recipes exceed a single nonblurred highlight/rim
 
+<!-- task19-superseded 15-consistency/findings.md ## C04 -->
+> **Superseded policy — D1, D3, D14 (owner, 2026-10-11):** Area’s calm no-cast/Trace-only expression is the None default, not a material ceiling. Contrast, focus, fixed hover ink and semantic meaning remain hard limits. Ordinal caps and provisional control ranges are not limits. Numeric per-role strength multipliers and bounds must be calibrated to the board and contrast-tested at extremes; that work is pending tasks 20–22. Performance rules must follow measured workloads, not universal no-row-blur/static-only caps. Owner names a 60Hz minimum device; a later rerun includes Firefox. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
+
 **Side A:** 11 allows the existing single `shadow-1` plus at most one nonblurred highlight/rim. [11-performance/budgets.md:18–18](https://github.com/ethanwongwork/area/blob/b0768c8d809946b82d6b00139ecc33fe4e57f528/docs/research/astra/materials/11-performance/budgets.md#L18-L18)
 
 **Side B:** Glass thumb has a gradient edge plus separate gloss. Soft has paired inset relief, bevel and softened gloss; Tactile has paired relief, double rim and gloss. Aero has gradient double rim, separate body reflection and softened gloss. Glow has a 2px-softness halo. These are distinct enabled channels in the model and render order. [13-presets/model.py:18–23](https://github.com/ethanwongwork/area/blob/b0768c8d809946b82d6b00139ecc33fe4e57f528/docs/research/astra/materials/13-presets/model.py#L18-L23) [13-presets/model.py:58–82](https://github.com/ethanwongwork/area/blob/b0768c8d809946b82d6b00139ecc33fe4e57f528/docs/research/astra/materials/13-presets/model.py#L58-L82) [13-presets/contract.md:37–47](https://github.com/ethanwongwork/area/blob/b0768c8d809946b82d6b00139ecc33fe4e57f528/docs/research/astra/materials/13-presets/contract.md#L37-L47)
@@ -44,6 +60,10 @@ All seven findings compare proposals at the README's pinned research snapshot. *
 
 ## C05 — Soft divider uses blurred relief where only unblurred engraving is allowed
 
+<!-- task19-superseded 15-consistency/findings.md ## C05 -->
+> **Superseded policy — D1, D3, D14 (owner, 2026-10-11):** Area’s calm no-cast/Trace-only expression is the None default, not a material ceiling. Contrast, focus, fixed hover ink and semantic meaning remain hard limits. Ordinal caps and provisional control ranges are not limits. Numeric per-role strength multipliers and bounds must be calibrated to the board and contrast-tested at extremes; that work is pending tasks 20–22. Performance rules must follow measured workloads, not universal no-row-blur/static-only caps. Owner names a 60Hz minimum device; a later rerun includes Firefox. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
+
 **Side A:** 11 explicitly allows zero blurred lobes on a divider, at most a two-line unblurred engraved pair. [11-performance/budgets.md:20–20](https://github.com/ethanwongwork/area/blob/b0768c8d809946b82d6b00139ecc33fe4e57f528/docs/research/astra/materials/11-performance/budgets.md#L20-L20)
 
 **Side B:** `soft-rule` inherits `relief.softnessPx: 2`; its rule branch lowers depth to .5 and removes gloss but does not reset softness. Divider resolution removes the stroke, not the relief. [13-presets/model.py:67–70](https://github.com/ethanwongwork/area/blob/b0768c8d809946b82d6b00139ecc33fe4e57f528/docs/research/astra/materials/13-presets/model.py#L67-L70) [13-presets/model.py:89–94](https://github.com/ethanwongwork/area/blob/b0768c8d809946b82d6b00139ecc33fe4e57f528/docs/research/astra/materials/13-presets/model.py#L89-L94)
@@ -51,6 +71,10 @@ All seven findings compare proposals at the README's pinned research snapshot. *
 **Winner: 11.** A future Soft divider must use an unblurred pair or the unchanged structural line. Tactile's zero-softness paired divider fits this rule where space permits. Do not remove required division to meet the cap.
 
 ## C06 — Independent edge recipes add relief or halo outside the ring budget
+
+<!-- task19-superseded 15-consistency/findings.md ## C06 -->
+> **Superseded policy — D1, D3, D14 (owner, 2026-10-11):** Area’s calm no-cast/Trace-only expression is the None default, not a material ceiling. Contrast, focus, fixed hover ink and semantic meaning remain hard limits. Ordinal caps and provisional control ranges are not limits. Numeric per-role strength multipliers and bounds must be calibrated to the board and contrast-tested at extremes; that work is pending tasks 20–22. Performance rules must follow measured workloads, not universal no-row-blur/static-only caps. Owner names a 60Hz minimum device; a later rerun includes Firefox. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
 
 **Side A:** 11 budgets one solid or decorative gradient ring for the edge role. The introductory total-count rule prevents renaming relief/glow to evade an effect cap. [11-performance/budgets.md:9–9](https://github.com/ethanwongwork/area/blob/b0768c8d809946b82d6b00139ecc33fe4e57f528/docs/research/astra/materials/11-performance/budgets.md#L9-L9) [11-performance/budgets.md:21–21](https://github.com/ethanwongwork/area/blob/b0768c8d809946b82d6b00139ecc33fe4e57f528/docs/research/astra/materials/11-performance/budgets.md#L21-L21)
 
@@ -61,6 +85,10 @@ All seven findings compare proposals at the README's pinned research snapshot. *
 **Winner: 11 for independent edge paint.** Resolve to the single permitted ring. If a decorative emitter needs a halo, it needs explicitly reviewed eligibility and ownership; do not reclassify a required edge solely to evade its budget. “0 blur” in 11's introduction means backdrop filtering, so this finding relies on the ring allowance, not on misreading that phrase as a universal shadow-blur prohibition.
 
 ## C07 — Glow grants a semantic-indicator halo without the stricter decorative opt-in
+
+<!-- task19-superseded 15-consistency/findings.md ## C07 -->
+> **Superseded policy — D1, D3, D14 (owner, 2026-10-11):** Area’s calm no-cast/Trace-only expression is the None default, not a material ceiling. Contrast, focus, fixed hover ink and semantic meaning remain hard limits. Ordinal caps and provisional control ranges are not limits. Numeric per-role strength multipliers and bounds must be calibrated to the board and contrast-tested at extremes; that work is pending tasks 20–22. Performance rules must follow measured workloads, not universal no-row-blur/static-only caps. Owner names a 60Hz minimum device; a later rerun includes Firefox. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
 
 **Side A:** 05 permits a supplementary Trace halo/rim around an unchanged semantic core. 11 later tightens this to zero new blurred glows by default, with one small static halo only for an **explicitly decorative indicator**, separate from its semantic core. This is a deliberate cap refinement between 05 and 11. [05-absorption/policy.md:32–32](https://github.com/ethanwongwork/area/blob/b0768c8d809946b82d6b00139ecc33fe4e57f528/docs/research/astra/materials/05-absorption/policy.md#L32-L32) [11-performance/budgets.md:19–19](https://github.com/ethanwongwork/area/blob/b0768c8d809946b82d6b00139ecc33fe4e57f528/docs/research/astra/materials/11-performance/budgets.md#L19-L19)
 

@@ -4,6 +4,10 @@ Everything marked **proposal** below is an authored policy to test, not a captur
 
 ## Dark translation
 
+<!-- task19-superseded 09-dark-density/rules.md ## Dark -->
+> **Superseded policy — D1, D10 (owner, 2026-10-11):** Area’s calm no-cast/Trace-only expression is the None default, not a material ceiling. Contrast, focus, fixed hover ink and semantic meaning remain hard limits. The dark page may take tint/texture only within a fixed distance of #020202 (neutral 975); a numeric bound is not yet calibrated. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
+
 **D — proposal:** retain `bg-page` at the theme's near-black neutral role. Distinguish a foreground body with its existing semantic surface/control fill and edge before increasing decorative effects. Use a lighter *local top* only when the recipe models a lit body; a top highlight and a uniformly brighter plane serve different purposes. Cast shadows remain dark. A rim is reflected light; glow is emission; neither is a replacement color for `shadow-color`. Keep key-light direction coherent across convex and concave relief, with the recess reversing the lit/shaded edge relationship. Ambient fill, reflection and self-emission are separate channels under task 01.
 
 Apple's brighter elevated backgrounds, Fluent's retained dark casts and M3's paired surface roles support that hierarchy, not a requirement to brighten every raised object. [Public evidence](evidence.md#public-dark-and-shape-guidance). A selected solid, warning, error or inverse surface keeps its own semantic ink/body pairing. No global white wash, forced desaturation of meaning-bearing tones, foreground changes on hover, or monotonic white addition for every nested child. [Area policy](evidence.md#area-dark-and-ownership-constraints).
@@ -11,6 +15,10 @@ Apple's brighter elevated backgrounds, Fluent's retained dark casts and M3's pai
 **N — proposal:** enforce task 05's absorption and nesting caps before size scaling. Text-dense container bodies take Trace treatment, with Quiet perimeter at most; repeated rows/controls reduce to Trace. These are ordinal permissions, not opacity factors. A floating shell owns one backdrop acquisition and one permitted Surface cast; a nested child uses an opaque/tonal body or a rim instead of acquiring glass again. Recessed-in-raised keeps local cavity modeling without another floating cast. Pages, semantic glyph/text cores, data fills and scrims do not inherit panel gloss or glow. [Absorption input](../05-absorption/README.md).
 
 ## Scaling policy
+
+<!-- task19-superseded 09-dark-density/rules.md ## Scaling -->
+> **Superseded policy — D1, D3, D14 (owner, 2026-10-11):** Area’s calm no-cast/Trace-only expression is the None default, not a material ceiling. Contrast, focus, fixed hover ink and semantic meaning remain hard limits. Ordinal caps and provisional control ranges are not limits. Numeric per-role strength multipliers and bounds must be calibrated to the board and contrast-tested at extremes; that work is pending tasks 20–22. Performance rules must follow measured workloads, not universal no-row-blur/static-only caps. Owner names a 60Hz minimum device; a later rerun includes Firefox. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
 
 **G — proposed local geometry scale:** for an explicitly calibrated recipe with painted reference height `H_ref`, scale local relief offset, local inset-shadow blur/spread, decorative glow extent and highlight-band depth by `q = H_painted / H_ref`. Preserve signs of signed spreads. Do not scale opacity, light angle, semantic colors or cast lift by this factor. Compute q once from final geometry; do not apply an additional “compact multiplier”. For control recipes calibrated at default md 32, the following factors are derived from [Area tiers](evidence.md#density-and-geometry-inputs):
 
@@ -36,6 +44,10 @@ Those factors are an evaluation rule, not evidence that 32 is the right calibrat
 
 ## Concentric geometry
 
+<!-- task19-superseded 09-dark-density/rules.md ## Concentric -->
+> **Superseded policy — D11 (owner, 2026-10-11):** Inner rims keep the radius floor at every setting except Sharp. Historical max(0, outer-inset) examples and tabulated square inner rims are retained but superseded. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
+
 **R — observed geometry plus proposed painting contract:** use the actual used boundary of the role, not the corner-setting label as a literal radius. [All nine settings](geometry.md) show Area's current calculations. Compact controls can repeat a radius across adjacent settings because Area rounds down to even pixels; materials must accept these plateaus. Container corners hold, while list corners have their own cap. These are circular CSS corners, not a claim of continuous-curvature squircles.
 
 For a uniformly rounded rectangular body wide enough not to constrain its height, normalize the outer radius to the used value `R` after CSS overlap reduction. A same-body inner rim offset by uniform distance `d` uses `max(0, R-d)`. Its box shrinks by `2d` in each dimension. This is the CSS border/padding contour model, supported by [CSS §4.2 and §4.5](evidence.md#public-dark-and-shape-guidance), not an exact parallel-curve theorem for arbitrary ellipses. Mixed corner radii and unequal insets need each corner/axis and side recomputed; use native border/background clipping where possible.
@@ -51,6 +63,10 @@ For a double rim: assign one outer body contour; offset the second contour inwar
 Joined Table rows, Calendar range middles, split controls and grouped cells use the aggregate boundary and existing join geometry. Paint outer rims once; internal separators stay straight where the parts meet. A gradient stroke across a range cannot turn every date cell into a detached pill. Floating arrows and shells share one body treatment. These are proposed application rules under task 05's family guards, supported by [Fluent joined-shape guidance](evidence.md#public-dark-and-shape-guidance).
 
 ## Proposed acceptance checks
+
+<!-- task19-superseded 09-dark-density/rules.md ## Proposed -->
+> **Superseded policy — D11 (owner, 2026-10-11):** Inner rims keep the radius floor at every setting except Sharp. Historical max(0, outer-inset) examples and tabulated square inner rims are retained but superseded. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
 
 1. Check every style on near-black page, raised surface, solid tone and floating-over-floating scenes. Include dark neutral casts, long labels, dense Table/Code/Calendar, Slider and Switch. Preserve semantic colors and hover foreground.
 2. For every style run all nine radius settings × both UI densities × sm/md/lg wherever that family actually exposes those sizes. Include pill flags on/off, intrinsically round marks, nested child floors and connected selections; do not fabricate unsupported variants.

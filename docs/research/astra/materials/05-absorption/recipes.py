@@ -350,3 +350,39 @@ LIMITS={
 'mesh-gradient':'Use an explicitly owned mesh asset or label a multi-radial approximation honestly, following 03; no native CSS mesh function is assumed.',
 'letterpress':'Text Trace is a conditional exception, not a blanket text-role default. Lack of a designated display-inscription context resolves to None; actual offsets/readability remain unmeasured.',
 }
+
+# D6: row plates are a distinct receiver. These are layer proposals, not calibrated limits.
+ROLES['W']='row-plate'
+ROW_RECIPES={
+ 'flat':('B','Uniform semantic state plate; no added modeling.'),
+ 'paper':('B,E','Opaque paper state backing with an optional subordinate edge; keep focus plate continuous.'),
+ 'transparency':('B,A','Transmit through the plate only after composing hover/selected/focus paint against the actual host.'),
+ 'glassmorphism':('B,A,H,E','Inherit host frost acquisition; optional transmitted tint and rim on state plate, not a second glass pane by default.'),
+ 'acrylic':('B,A,N','Host owns backdrop/noise acquisition; row uses shared tint, with opaque state fallback.'),
+ 'mica':('B','Use a locally opaque tonal state plate; do not invent another desktop acquisition per row.'),
+ 'liquid-glass':('B,H,E','Frost/rim baseline; shared light and state plate, with D8 refraction deferred.'),
+ 'neumorphism':('B,I,H','Optional shallow inset/convex cue accompanies a independently legible state plate; shadow cannot be the only boundary.'),
+ 'claymorphism':('B,I,H','Soft modeled state plate; retain parent geometry and opaque readable state ground.'),
+ 'skeuomorphism':('B,I,H','Declared physical row insert may model relief; preserve semantic focus and reading ground.'),
+ 'aqua':('B,H,E','Optional gloss/rim on the row perimeter, with continuous state backing beneath text.'),
+ 'frutiger-aero':('B,H,E','Host carries scenic/glassy identity; optional row tint and gloss stay subordinate to selected/focus plate.'),
+ 'glow-neon':('B,M,E','Legible core state plate first; optional bounded perimeter emission never replaces focus.'),
+ 'linear-gradient':('B','Sample the full state-plate gradient domain behind text; derive stops from theme.'),
+ 'radial-gradient':('B','Radial state-plate tint, full interpolation-domain contrast checked; no glyph recoloring.'),
+ 'conic-gradient':('B','Conic variation is optional perimeter treatment; preserve a continuous readable state core.'),
+ 'mesh-gradient':('B','Host may supply mesh scene; row foreground is tested over the entire composed plate range.'),
+ 'gradient-stroke':('E','Optional theme-derived perimeter gradient; required focus/state paint remains separate.'),
+ 'inner-shadow':('I','Optional cavity cue beneath content; do not erase keyboard row plate.'),
+ 'inner-glow':('M','Optional inward emission with readable center and independent focus plate.'),
+ 'outer-glow':('M','Optional external emission only where adjacent content remains legible; numeric budget awaits calibration.'),
+ 'drop-shadow':('S','Optional row cast is an expressiveness choice, not prohibited by current None defaults; measure repetition cost.'),
+ 'bevel-emboss':('I,H,E','Optional lit/shaded rim with D11 radius floor; row state remains continuous.'),
+ 'letterpress':('B','Keep ordinary row labels plain under D13; explicit opt-in button/display text is a separate content treatment.'),
+ 'grain':('N','Prefer sharing host texture; evaluate composited text/state visibility and measured workload before per-row grain.')}
+# Preserve the original twelve cells as historical proposals; append one D6 cell to each style.
+sections=RECIPES.strip().split('[');out=[]
+for section in sections:
+ if not section:continue
+ key,body=section.split(']',1);channels,rule=ROW_RECIPES[key]
+ out.append('['+key+']'+body.rstrip()+'\nW|T|'+channels+'|'+rule+'\n')
+RECIPES=''.join(out)

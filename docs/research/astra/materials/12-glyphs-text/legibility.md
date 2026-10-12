@@ -1,5 +1,9 @@
 # Small-size policy, board coverage and validation
 
+<!-- task19-superseded 12-glyphs-text/legibility.md * -->
+> **Superseded policy — D1, D13 (owner, 2026-10-11):** Area’s calm no-cast/Trace-only expression is the None default, not a material ceiling. Contrast, focus, fixed hover ink and semantic meaning remain hard limits. No automatic effects on glyphs or small text; display text and button labels may explicitly opt in. A curated duotone pilot is later work. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
+
 **These are proposed acceptance rules, not a readability study.** Sources are in [the ledger](sources.md). Browser observation proves an effect renders; it cannot establish recognition speed, error rate or accessibility for people with low vision.
 
 ## What 12–16px means in Area

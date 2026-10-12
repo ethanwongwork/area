@@ -1,6 +1,6 @@
 # Prior-art survey
 
-All documentation and source snapshots checked **2026-10-08**. Source links pin full commit SHAs and one-based line ranges. “Not found” is bounded to the named APIs, documents and source files; it is not a claim that arbitrary custom CSS is impossible. No vendor accessibility/performance claims were independently tested.
+Original documentation and source snapshots checked **2026-10-08**; task 19 additions and OpenGlass scale checked **2026-10-11**. Source links pin full commit SHAs and one-based line ranges. “Not found” is bounded to the named APIs, documents and source files; it is not a claim that arbitrary custom CSS is impossible. No vendor accessibility/performance claims were independently tested.
 
 <a id="apple"></a>
 ## Apple HIG materials and Liquid Glass
@@ -337,8 +337,68 @@ All documentation and source snapshots checked **2026-10-08**. Source links pin 
 
 **Propagation:** MIT-licensed implementation. The recipe stylesheet remaps a broad component catalogue and gives buttons optical layers, Switch separate track/thumb treatments, and inputs recessed wells. This is implemented role absorption, not just a marketing claim.
 
-**Limit / interpretation:** Glass-focused, not the brief’s whole material taxonomy. The public look interface lacks independent gradient-stop, grain and full shadow-geometry controls. Some geometry and type are bundled into the visual language. Lensing in the CSS look is an edge cue; the docs distinguish actual refraction renderers.
+**Limit / interpretation:** Glass-focused, not the brief’s whole material taxonomy. The public look interface lacks independent gradient-stop, grain and full shadow-geometry controls. Some geometry and type are bundled into the visual language. Lensing in the CSS look is an edge cue; the docs distinguish actual refraction renderers. Task 19 scale correction: GitHub metadata checked 2026-10-11 reports creation 2026-07-26 and one listed contributor (29 contributions). This is a young, single-listed-author comparator, not evidence of mature ecosystem adoption; 40 components are documented separately in task 17. The API contributor count does not prove absence of uncredited collaborators.
 
-**Documentation:** Pinned documentation and actual consumers below. (checked 2026-10-08).
+**Documentation:** Pinned documentation and actual consumers below.; [repository metadata](https://api.github.com/repos/moekoelueker/open-glass-ui); [contributors metadata](https://api.github.com/repos/moekoelueker/open-glass-ui/contributors) (scale checked 2026-10-11) (checked 2026-10-08).
 
 **Pinned source:** [openglass: LICENSE L1–13](https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/LICENSE#L1-L13); [openglass: packages/core/src/look.ts L8–43](https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/look.ts#L8-L43); [openglass: docs/THEMING.md L97–162](https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/docs/THEMING.md#L97-L162); [openglass: packages/recipes/src/liquid.source.css L249–297](https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L249-L297); [openglass: packages/recipes/src/liquid.source.css L303–328](https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L303-L328); [openglass: packages/recipes/src/liquid.source.css L574–599](https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L574-L599); [openglass: packages/recipes/src/liquid.source.css L1066–1094](https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1066-L1094).
+
+<a id="figma-glass"></a>
+## Figma native Glass effect
+
+**Category:** Native authoring effect, not an open-source component system.
+
+**Controls:** GlassEffect exposes lightIntensity, lightAngle, refraction, depth, dispersion and radius (frost), plus visibility. API ranges: intensity/refraction/dispersion 0–1; depth >=1. Glass effects currently have no variable bindings.
+
+**Propagation:** Effect records attach to design nodes; this is a usable control vocabulary for D9 and an export capability task 14 must include.
+
+**Limit / interpretation:** No general cross-component semantic role mapper is established by this API. It is proprietary rendering, not an open-source web material engine.
+
+**Documentation:** [Figma Effect API](https://developers.figma.com/docs/plugins/api/Effect/) (checked 2026-10-11).
+
+**Pinned source:** https://github.com/figma/plugin-typings/blob/07157d96c58add71d234b13bfd55b53abdce76b8/plugin-api.d.ts#L4549-L4586.
+
+<a id="open-props"></a>
+## Open Props shadow and noise tokens
+
+**Category:** Open-source CSS primitives.
+
+**Controls:** Shadow color/strength and layered shadow ladders are parameterized. Gradient module supplies noise SVGs plus noise-filter controls; noise scales/contrast are exposed as reusable custom properties.
+
+**Propagation:** Inherited CSS properties can feed any authored component. They supply composable optical ingredients without requiring one component framework.
+
+**Limit / interpretation:** In the inspected shadow and gradient modules, no complete material choice maps semantic roles across a component catalogue; consumers still write those recipes.
+
+**Documentation:** [Open Props](https://open-props.style/) (checked 2026-10-11).
+
+**Pinned source:** https://github.com/argyleink/open-props/blob/f39ab7c377a0e047f930982e3611bbc95254a260/src/props.shadows.js#L1-L48; https://github.com/argyleink/open-props/blob/f39ab7c377a0e047f930982e3611bbc95254a260/src/props.gradients.js#L65-L75.
+
+<a id="auraglass"></a>
+## AuraGlass
+
+**Category:** Open-source glass component system and theme engine.
+
+**Controls:** Provider inputs include transparency, glassOpacity, contrast, motion, scheme, density and continuous-motion policy. createGlassTheme exposes brand/accent, neutral hue, preset and radius scale, emitting scoped CSS variables with contrast adjustment.
+
+**Propagation:** Provider and theme engine connect preferences to component tokens; public exports include styles and theme APIs. This is a stronger glass-system comparator than an isolated generator.
+
+**Limit / interpretation:** Inspected APIs establish a glass-specific system with theme and preference axes, not a general interchangeable Paper/Glass/Soft/Tactile role-material layer. Radius/density/foreground adjustment in a theme bundle differ from D16 material-only separation. Component-wide conformance and performance were not tested here; do not repeat README component-count claims as audited facts.
+
+**Documentation:** [AuraGlass repository](https://github.com/auraoneai/auraglass) (checked 2026-10-11).
+
+**Pinned source:** https://github.com/auraoneai/auraglass/blob/51d1a58c3f980dde0452f2f863adc958f417ea18/src/theme/AuraGlassProvider.tsx#L56-L65; https://github.com/auraoneai/auraglass/blob/51d1a58c3f980dde0452f2f863adc958f417ea18/src/theme/createGlassTheme.ts#L74-L85; https://github.com/auraoneai/auraglass/blob/51d1a58c3f980dde0452f2f863adc958f417ea18/src/theme/createGlassTheme.ts#L173-L244; https://github.com/auraoneai/auraglass/blob/51d1a58c3f980dde0452f2f863adc958f417ea18/README.md#L80-L95.
+
+<a id="liquid-glass-web"></a>
+## Liquid Glass Web
+
+**Category:** Open-source optical renderer / enhancement library.
+
+**Controls:** Profiles expose refraction and surface parameters, tint, blur and saturation; live updates differ from changes that regenerate maps. Native Chromium acquisition differs from fallback copied-background or explicit scene paths.
+
+**Propagation:** Applies an optical treatment to supplied elements, with browser-specific acquisition. Its README documents frost fallback and optional scene duplication/reconstruction for Safari/Firefox.
+
+**Limit / interpretation:** A renderer is not a full component role taxonomy. Scene reconstruction carries synchronization and scrolling limits; it is not evidence Safari/Firefox support arbitrary SVG backdrop displacement.
+
+**Documentation:** [Liquid Glass Web](https://github.com/Meapri/liquid-glass-web) (checked 2026-10-11).
+
+**Pinned source:** https://github.com/Meapri/liquid-glass-web/blob/1613f8311dbc31bc2331afcfe51a143c56dd6308/README.md#L175-L200; https://github.com/Meapri/liquid-glass-web/blob/1613f8311dbc31bc2331afcfe51a143c56dd6308/README.md#L449-L522.

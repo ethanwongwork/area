@@ -138,5 +138,25 @@
     "commit_date": "2021-07-19T23:41:46Z",
     "checked": "2026-10-08",
     "tree_truncated": false
+  },
+  "figma-glass": {
+    "repo": "figma/plugin-typings",
+    "commit": "07157d96c58add71d234b13bfd55b53abdce76b8",
+    "checked": "2026-10-11"
+  },
+  "open-props": {
+    "repo": "argyleink/open-props",
+    "commit": "f39ab7c377a0e047f930982e3611bbc95254a260",
+    "checked": "2026-10-11"
+  },
+  "auraglass": {
+    "repo": "auraoneai/auraglass",
+    "commit": "51d1a58c3f980dde0452f2f863adc958f417ea18",
+    "checked": "2026-10-11"
+  },
+  "liquid-glass-web": {
+    "repo": "Meapri/liquid-glass-web",
+    "commit": "1613f8311dbc31bc2331afcfe51a143c56dd6308",
+    "checked": "2026-10-11"
   }
 }

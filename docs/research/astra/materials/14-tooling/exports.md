@@ -75,6 +75,10 @@ Use this alias only on an explicitly eligible independent receiver. Avoid applyi
 
 ## Plain CSS
 
+<!-- task19-superseded 14-tooling/exports.md ## Plain CSS -->
+> **Superseded policy — D2, D6, D9, D16 (owner, 2026-10-11):** Material sits beside Surface; recipe structure switches with inherited 0/1 gate tokens. Surface shadows require a pixel-identical split into adjustable parts, including Tooltip/Toolbar literal exceptions. Selector-switched recipes alone are not nested-scope safe. The current vocabulary has 13 roles including row-plate; 04/05 now cover 101 contracts. Historical 12-role/78-contract counts below describe their original snapshot only. Figma Glass parameter names govern the next API. Light angle is 0 at top, clockwise; the historical 0-at-right angle convention below is superseded, not silently reinterpreted. Material does not change geometry, typography or foreground ink. Multi-axis choices are bundles, not a material axis. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
+
 CSS can describe layered/inset box shadows, gradients with geometry, borders and clips; backdrop-filter has its own acquisition behavior. It still requires structure, semantic input bindings and the appropriate backdrop. [C01](https://www.w3.org/TR/css-backgrounds-3/#box-shadow), [C02](https://www.w3.org/TR/css-images-3/#gradients), [C03](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/backdrop-filter).
 
 **Recommended export:** a scoped CSS bundle from the future shared compiler, input variables, required assets, a binding/integration manifest and Area JSON. The bundle contains complete preset neutral resets, role/part selectors, pseudo-element ownership, scope re-emission, nested optical-owner guards, browser feature fallbacks, preference rules and state composition. Keep token namespaces disjoint; raw Material inputs do not write `--area-fg-*`, Surface width or radius. Derived paint remains unregistered. No standalone `:root` dump can replace the painted-part context that 07 requires.

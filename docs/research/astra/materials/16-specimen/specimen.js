@@ -108,7 +108,7 @@ function paintReceiver(el,material,mode) {
  if(role==='container'&&casts.length+(relief?2:0)+(glow?1:0)>2){notes.push('Container budget · extra inset/halo omitted');relief=false;if(casts.length>=2)glow=false;}
  if(!CSS.supports('mask-composite','exclude')){relief=false;gloss=false;texture=false;edge=false;transmission=false;notes.push('F0 · content mask unsupported');}
  if(perimeter<1){gloss=false;texture=false;relief=false;notes.push('No verified spare perimeter');}
- if(c.gloss.softnessPx>0&&gloss){notes.push('Gloss softness undefined by 13 · gloss omitted');gloss=false;}
+ if(c.gloss.softnessPx>0&&gloss){notes.push('Gloss softness is specified in 13; this specimen does not implement its blur · gloss omitted');gloss=false;}
  if(transmission){
   if(!CSS.supports('backdrop-filter','blur(1px)')||padding<3||!body.match(/^(rgb|color|oklab)/)){transmission=false;notes.push('Glass F0 · unsupported or no reading mask');}
   else {el.dataset.m16Glass='true';notes.push('Glass perimeter + opaque reading island');}

@@ -145,9 +145,15 @@ A body with alpha participates in backdrop compositing while its text can remain
 }
 ```
 
+> **Correction / superseded D8 (2026-10-11):** Chromium supports SVG reference filters in `backdrop-filter`; Safari and Firefox do not provide the displacement path used here. The earlier lack of a local run remains a historical verification gap, not a browser-support verdict. Frost plus rim is the baseline. See [corrected support evidence](refraction-correction.md).
+
 **Support:** C07; colour derivation adds C15. **Pitfalls / fallback:** author an opaque background first; render support cannot be established by a parser check. Keep blur scoped to the intended surface and avoid promising a frame budget without measurement. The lab's Simplify effects switch selects an opaque body and removes backdrop filtering. Contrast still needs checks over adverse backdrops, especially at the lowest alpha. Area body roles feed the tint; existing semantic ink/focus stay fixed. CSS cannot obtain native behind-window or OS wallpaper material inputs through this property; the source must be identified, and platform-equivalent Mica/Acrylic/Liquid Glass behavior is not established by a frosted webpage.
 
 ## T09 — refraction approximation with SVG displacement
+
+<!-- task19-superseded 03-css-cookbook/cookbook.md ## T09 -->
+> **Superseded policy — D8 (owner, 2026-10-11):** Frost plus rim is baseline; native SVG backdrop refraction is a later Chromium-only enhancement. A historical unverified run is not a support verdict. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
 
 An SVG filter can use one image as a displacement map for another: select channels from the map and set a scale. The demo generates the map with turbulence and distorts only its owned grid/circle/rectangle artwork. A shaped map could model a lens-like edge; random turbulence is merely an obvious demonstration of image-space mapping. It is not a physically accurate glass surface. [MDN feDisplacementMap](https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feDisplacementMap), checked 2026-10-08.
 
@@ -162,9 +168,15 @@ An SVG filter can use one image as a displacement map for another: select channe
 <g filter="url(#lens)"><!-- owned artwork only --></g>
 ```
 
+> **Correction / superseded D8 (2026-10-11):** Chromium supports SVG reference filters in `backdrop-filter`; Safari and Firefox do not provide the displacement path used here. The earlier lack of a local run remains a historical verification gap, not a browser-support verdict. Frost plus rim is the baseline. See [corrected support evidence](refraction-correction.md).
+
 **Support:** C09+C10 for these SVG elements. Do **not** infer portable `backdrop-filter:url(#lens)` support from them: acquisition of arbitrary HTML backdrop plus URL filtering is a different pipeline, unverified in Chrome, Safari and Firefox here. The owned-art demo uses an SVG presentation attribute; the distinct CSS `filter`-on-SVG BCD subfeature has different support. **Pitfalls / fallback:** enlarge the filter region to prevent clipping; record map colour space/channel meanings and scaling. Repeating an owned background under a clipped lens must stay aligned during scrolling, resize and transforms; duplicating arbitrary live DOM is not a general solution. Avoid filtering readable labels. Preserve the undisplaced artwork when simplified. Area tokens can tint the surrounding shell; displacement amount/map geometry would be new private optical inputs, not existing radius or Surface shadows repurposed.
 
 ## T10 — squircle corners with corner-shape
+
+<!-- task19-superseded 03-css-cookbook/cookbook.md ## T10 -->
+> **Superseded policy — D11 (owner, 2026-10-11):** Inner rims keep the radius floor at every setting except Sharp. Historical max(0, outer-inset) examples and tabulated square inner rims are retained but superseded. The original passage/findings below remain for historical comparison. [Binding decisions](../REVIEW.md#owner-decisions-2026-10-11).
+<!-- /task19-superseded -->
 
 Apply `corner-shape:squircle` with a nonzero `border-radius`; otherwise there is no corner area to reshape. The native property describes a shared shape for backgrounds, borders, outlines and shadows. It is preferable to independently approximating each with a different SVG clip, once the target browser supports it. [MDN corner-shape](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/corner-shape), checked 2026-10-08.
 

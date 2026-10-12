@@ -11,6 +11,17 @@ These are proposals with pinned evidence, not calibrated material values, render
 
 **Snapshot:** checked **2026-10-09** (America/Los_Angeles), after `git fetch origin`. Area `origin/main`: [`6f896789a5200bcbd34fe87de458e60ca82141d6`](https://github.com/ethanwongwork/area/tree/6f896789a5200bcbd34fe87de458e60ca82141d6). Research/brief/task-05 input: [`2097df6d80ef9a0ca6a7f7e6f4db946e6749db01`](https://github.com/ethanwongwork/area/tree/2097df6d80ef9a0ca6a7f7e6f4db946e6749db01/docs/research/astra/materials). Public guidance: Apple HIG/WWDC25, Fluent 2, M3 states; checked 2026-10-09. Fluent React Button implementation pinned to `8abb0781d7d8bdb5e7bccaad16a6e4ba7efaf1aa`. Current Area files were read through Git at the pinned main commit. No target-product capture, production modification or new visual measurement.
 
+
+<!-- task19-changes -->
+## Changes after review — 2026-10-11
+
+Task 19 corrections, with the reason from [Corrections for Astra and D1–D16](../REVIEW.md). Older Answer/Snapshot passages below retain their original date and findings unless explicitly refreshed; the changes here and decision callouts govern subsequent work.
+
+- **C16 — Review reason:** List focus is the row plate; disabled opacity must be named. **Change:** Added current Menu focus plate and ToggleGroup once-only disabled opacity pins; marked inherited cap/motion prescriptions superseded. State measurements/records are retained. Files: [policy.md](policy.md), [check.py](check.py). Decisions: D1, D3, D6, D7, D12, D13, D14.
+
+Full change ledger and verification: [19-corrections](../19-corrections/README.md).
+<!-- /task19-changes -->
+
 ## Evidence and report
 
 - [Evidence ledger](evidence.md): primary public guidance, pinned Fluent source and Area state/motion/contrast rules. Vendor mechanisms and intentional Area differences are explicit.

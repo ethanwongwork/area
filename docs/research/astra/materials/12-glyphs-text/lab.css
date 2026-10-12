@@ -22,9 +22,9 @@ svg.glyph { width:var(--size); height:var(--size); flex:none; overflow:visible; 
 .embossed .glyph { filter:drop-shadow(0 -1px 0 var(--light)) drop-shadow(0 1px 0 var(--shade)); }
 .embossed .word { text-shadow:0 -1px 0 var(--light),0 1px 0 var(--shade); }
 .glowing-glyph .glyph { filter:drop-shadow(0 0 2px var(--halo)); }
-.duotone [data-part="detail"] { color:var(--secondary); }
-.gradient [data-ink][stroke="currentColor"] { stroke:var(--gradient-paint); }
-.gradient [data-ink][fill="currentColor"] { fill:var(--gradient-paint); }
+.duotone [data-material-part="detail"] { color:var(--secondary); }
+.gradient [data-material-ink][stroke="currentColor"] { stroke:var(--gradient-paint); }
+.gradient [data-material-ink][fill="currentColor"] { fill:var(--gradient-paint); }
 @supports (background-clip:text) {
   .gradient .word { background-color:var(--ink); background-image:linear-gradient(90deg,var(--start),var(--end)); background-clip:text; color:transparent; }
 }
@@ -32,14 +32,14 @@ svg.glyph { width:var(--size); height:var(--size); flex:none; overflow:visible; 
 .glowing-text .word { text-shadow:0 0 2px var(--halo),0 0 5px var(--halo); }
 :root[data-plain] .glyph { filter:none; }
 :root[data-plain] .word { text-shadow:none; background:none; color:var(--ink); }
-:root[data-plain] [data-ink][stroke="currentColor"] { stroke:currentColor; }
-:root[data-plain] [data-ink][fill="currentColor"] { fill:currentColor; }
-:root[data-plain] [data-part] { color:inherit; }
+:root[data-plain] [data-material-ink][stroke="currentColor"] { stroke:currentColor; }
+:root[data-plain] [data-material-ink][fill="currentColor"] { fill:currentColor; }
+:root[data-plain] [data-material-part] { color:inherit; }
 @media (forced-colors:active), (prefers-contrast:more), print {
   .glyph { filter:none !important; }
   .word { text-shadow:none !important; background:none !important; color:inherit !important; }
-  [data-part] { color:inherit !important; }
-  [data-ink][stroke="currentColor"] { stroke:currentColor !important; }
-  [data-ink][fill="currentColor"] { fill:currentColor !important; }
+  [data-material-part] { color:inherit !important; }
+  [data-material-ink][stroke="currentColor"] { stroke:currentColor !important; }
+  [data-material-ink][fill="currentColor"] { fill:currentColor !important; }
 }
 @media (max-width:740px) { .samples { grid-template-columns:1fr; } body { padding:20px; } }

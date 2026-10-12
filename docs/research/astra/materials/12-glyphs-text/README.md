@@ -6,6 +6,17 @@
 
 **Snapshot:** checked **2026-10-09**; Area `origin/main` **831f819e5b55b5ca0033fd628eeb9f95ccb92df7**; research input **35c0986eeccffbcd756ec552661fb804cf03bf7b**. Read the materials brief, icon spec, icon-construction guidance and tasks 01/03/05/08/11. [Sources](sources.md) pin Area lines separately from research proposals and date the public standards/docs. Research only; no production drawings, specs, tokens, approval statuses or APIs changed.
 
+
+<!-- task19-changes -->
+## Changes after review — 2026-10-11
+
+Task 19 corrections, with the reason from [Corrections for Astra and D1–D16](../REVIEW.md). Older Answer/Snapshot passages below retain their original date and findings unless explicitly refreshed; the changes here and decision callouts govern subsequent work.
+
+- **C18 — Review reason:** Duotone part names collide with production filled-icon knockout grouping. **Change:** Separated research labels into data-material-part/data-material-ink, updated fixture generator/CSS, and pinned the production knockout grouping source. Outline geometry remains unchanged. Files: [build-fixtures.py](build-fixtures.py), [fixtures.json](fixtures.json), [lab.css](lab.css), [treatments.md](treatments.md). Decisions: D13.
+
+Full change ledger and verification: [19-corrections](../19-corrections/README.md).
+<!-- /task19-changes -->
+
 ## Evidence
 
 - [Treatments and implementation boundaries](treatments.md): seven requested treatments, layer records, CSS/markup/filled distinctions, font handling and Area integration.

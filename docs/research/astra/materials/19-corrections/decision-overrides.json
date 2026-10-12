@@ -1,0 +1,585 @@
+{
+  "checked": "2026-10-11",
+  "decisions": {
+    "D1": "Area’s calm no-cast/Trace-only expression is the None default, not a material ceiling. Contrast, focus, fixed hover ink and semantic meaning remain hard limits.",
+    "D2": "Material sits beside Surface; recipe structure switches with inherited 0/1 gate tokens. Surface shadows require a pixel-identical split into adjustable parts, including Tooltip/Toolbar literal exceptions. Selector-switched recipes alone are not nested-scope safe.",
+    "D3": "Ordinal caps and provisional control ranges are not limits. Numeric per-role strength multipliers and bounds must be calibrated to the board and contrast-tested at extremes; that work is pending tasks 20–22.",
+    "D4": "The first set is None identity (default), Glass, Tactile and Soft. Paper needs an opaque rebuild; Aero, Glow and Prism are later finishes.",
+    "D5": "Decorative colors derive from accent, neutral and tones; literal palette hexes are not the future preset contract.",
+    "D6": "The current vocabulary has 13 roles including row-plate; 04/05 now cover 101 contracts. Historical 12-role/78-contract counts below describe their original snapshot only.",
+    "D7": "Floating shells assume arbitrary backdrops; failing edges use opaque F0. App-level transparency reduction sits beside the OS query. Forced colors explicitly sets opaque Canvas and backdrop-filter:none.",
+    "D8": "Frost plus rim is baseline; native SVG backdrop refraction is a later Chromium-only enhancement. A historical unverified run is not a support verdict.",
+    "D9": "Figma Glass parameter names govern the next API. Light angle is 0 at top, clockwise; the historical 0-at-right angle convention below is superseded, not silently reinterpreted.",
+    "D10": "The dark page may take tint/texture only within a fixed distance of #020202 (neutral 975); a numeric bound is not yet calibrated.",
+    "D11": "Inner rims keep the radius floor at every setting except Sharp. Historical max(0, outer-inset) examples and tabulated square inner rims are retained but superseded.",
+    "D12": "Cutout rings and fixed-color fades become real transparent gaps through masks; separately required occlusion and contrast paint remain functional.",
+    "D13": "No automatic effects on glyphs or small text; display text and button labels may explicitly opt in. A curated duotone pilot is later work.",
+    "D14": "Performance rules must follow measured workloads, not universal no-row-blur/static-only caps. Owner names a 60Hz minimum device; a later rerun includes Firefox.",
+    "D15": "Internal positioning is “the broadest multi-material layer with separable controls”; no public claim until it ships.",
+    "D16": "Material does not change geometry, typography or foreground ink. Multi-axis choices are bundles, not a material axis."
+  },
+  "passages": [
+    {
+      "file": "01-taxonomy/layer-model.md",
+      "anchor": "*",
+      "decisions": [
+        "D1",
+        "D2",
+        "D9",
+        "D13",
+        "D16"
+      ]
+    },
+    {
+      "file": "02-prior-art/README.md",
+      "anchor": "## Proposals",
+      "decisions": [
+        "D15"
+      ]
+    },
+    {
+      "file": "02-prior-art/README.md",
+      "anchor": "## Verdict",
+      "decisions": [
+        "D15"
+      ]
+    },
+    {
+      "file": "03-css-cookbook/area-integration.md",
+      "anchor": "*",
+      "decisions": [
+        "D1",
+        "D2",
+        "D3",
+        "D6",
+        "D11",
+        "D12",
+        "D13",
+        "D16"
+      ]
+    },
+    {
+      "file": "03-css-cookbook/cookbook.md",
+      "anchor": "## T09",
+      "decisions": [
+        "D8"
+      ]
+    },
+    {
+      "file": "03-css-cookbook/cookbook.md",
+      "anchor": "## T10",
+      "decisions": [
+        "D11"
+      ]
+    },
+    {
+      "file": "04-role-map/README.md",
+      "anchor": "## Evidence",
+      "decisions": [
+        "D6"
+      ]
+    },
+    {
+      "file": "04-role-map/README.md",
+      "anchor": "## Findings",
+      "decisions": [
+        "D1",
+        "D2"
+      ]
+    },
+    {
+      "file": "05-absorption/policy.md",
+      "anchor": "##",
+      "decisions": [
+        "D1",
+        "D2",
+        "D3",
+        "D6",
+        "D7",
+        "D10",
+        "D11",
+        "D12",
+        "D13",
+        "D14",
+        "D16"
+      ]
+    },
+    {
+      "file": "05-absorption/README.md",
+      "anchor": "## Main decisions",
+      "decisions": [
+        "D1",
+        "D3",
+        "D6",
+        "D14"
+      ]
+    },
+    {
+      "file": "05-absorption/README.md",
+      "anchor": "## Proposals",
+      "decisions": [
+        "D1",
+        "D2",
+        "D3",
+        "D6",
+        "D14"
+      ]
+    },
+    {
+      "file": "05-absorption/README.md",
+      "anchor": "## Open questions",
+      "decisions": [
+        "D1",
+        "D2",
+        "D3"
+      ]
+    },
+    {
+      "file": "07-controls/architecture.md",
+      "anchor": "## Option A",
+      "decisions": [
+        "D2"
+      ]
+    },
+    {
+      "file": "07-controls/architecture.md",
+      "anchor": "## Option B",
+      "decisions": [
+        "D2"
+      ]
+    },
+    {
+      "file": "07-controls/architecture.md",
+      "anchor": "## Recommendation",
+      "decisions": [
+        "D2"
+      ]
+    },
+    {
+      "file": "07-controls/architecture.md",
+      "anchor": "## What derives",
+      "decisions": [
+        "D2",
+        "D9"
+      ]
+    },
+    {
+      "file": "07-controls/architecture.md",
+      "anchor": "## Scope",
+      "decisions": [
+        "D2"
+      ]
+    },
+    {
+      "file": "07-controls/architecture.md",
+      "anchor": "## React",
+      "decisions": [
+        "D2",
+        "D3",
+        "D9",
+        "D16"
+      ]
+    },
+    {
+      "file": "07-controls/architecture.md",
+      "anchor": "### Structural recipe",
+      "decisions": [
+        "D2"
+      ]
+    },
+    {
+      "file": "07-controls/controls.md",
+      "anchor": "## Global",
+      "decisions": [
+        "D2",
+        "D3",
+        "D9",
+        "D16"
+      ]
+    },
+    {
+      "file": "07-controls/controls.md",
+      "anchor": "## Per-role",
+      "decisions": [
+        "D1",
+        "D3",
+        "D6",
+        "D13",
+        "D14"
+      ]
+    },
+    {
+      "file": "07-controls/controls.md",
+      "anchor": "## Resolution",
+      "decisions": [
+        "D2",
+        "D3"
+      ]
+    },
+    {
+      "file": "07-controls/README.md",
+      "anchor": "## Proposals",
+      "decisions": [
+        "D1",
+        "D2",
+        "D3",
+        "D9",
+        "D16"
+      ]
+    },
+    {
+      "file": "08-accessibility/tests.md",
+      "anchor": "*",
+      "decisions": [
+        "D1",
+        "D3",
+        "D6",
+        "D7"
+      ]
+    },
+    {
+      "file": "09-dark-density/rules.md",
+      "anchor": "## Dark",
+      "decisions": [
+        "D1",
+        "D10"
+      ]
+    },
+    {
+      "file": "09-dark-density/rules.md",
+      "anchor": "## Scaling",
+      "decisions": [
+        "D1",
+        "D3",
+        "D14"
+      ]
+    },
+    {
+      "file": "09-dark-density/rules.md",
+      "anchor": "## Concentric",
+      "decisions": [
+        "D11"
+      ]
+    },
+    {
+      "file": "09-dark-density/rules.md",
+      "anchor": "## Proposed",
+      "decisions": [
+        "D11"
+      ]
+    },
+    {
+      "file": "09-dark-density/geometry.md",
+      "anchor": "## Concentric",
+      "decisions": [
+        "D11"
+      ]
+    },
+    {
+      "file": "09-dark-density/styles.md",
+      "anchor": "## Every radius",
+      "decisions": [
+        "D11"
+      ]
+    },
+    {
+      "file": "10-states/policy.md",
+      "anchor": "## State ownership",
+      "decisions": [
+        "D6",
+        "D7",
+        "D12"
+      ]
+    },
+    {
+      "file": "10-states/policy.md",
+      "anchor": "## Role and family",
+      "decisions": [
+        "D1",
+        "D3",
+        "D6",
+        "D13",
+        "D14"
+      ]
+    },
+    {
+      "file": "10-states/policy.md",
+      "anchor": "## Motion",
+      "decisions": [
+        "D14"
+      ]
+    },
+    {
+      "file": "11-performance/budgets.md",
+      "anchor": "*",
+      "decisions": [
+        "D1",
+        "D3",
+        "D6",
+        "D14"
+      ]
+    },
+    {
+      "file": "11-performance/budgets.md",
+      "anchor": "## Family",
+      "decisions": [
+        "D1",
+        "D3",
+        "D6",
+        "D14"
+      ]
+    },
+    {
+      "file": "11-performance/budgets.md",
+      "anchor": "## Release",
+      "decisions": [
+        "D3",
+        "D14"
+      ]
+    },
+    {
+      "file": "11-performance/README.md",
+      "anchor": "**Answer:**",
+      "decisions": [
+        "D1",
+        "D3",
+        "D14"
+      ]
+    },
+    {
+      "file": "11-performance/README.md",
+      "anchor": "## Findings",
+      "decisions": [
+        "D1",
+        "D3",
+        "D14"
+      ]
+    },
+    {
+      "file": "11-performance/README.md",
+      "anchor": "## Proposals",
+      "decisions": [
+        "D1",
+        "D3",
+        "D14"
+      ]
+    },
+    {
+      "file": "12-glyphs-text/legibility.md",
+      "anchor": "*",
+      "decisions": [
+        "D1",
+        "D13"
+      ]
+    },
+    {
+      "file": "13-presets/contract.md",
+      "anchor": "*",
+      "decisions": [
+        "D1",
+        "D2",
+        "D3",
+        "D4",
+        "D5",
+        "D6",
+        "D7",
+        "D9",
+        "D11",
+        "D12",
+        "D13",
+        "D14",
+        "D16"
+      ]
+    },
+    {
+      "file": "13-presets/combinations.md",
+      "anchor": "## Resolution",
+      "decisions": [
+        "D1",
+        "D2",
+        "D4",
+        "D5"
+      ]
+    },
+    {
+      "file": "14-tooling/builder.md",
+      "anchor": "## Live",
+      "decisions": [
+        "D1",
+        "D3",
+        "D6",
+        "D9",
+        "D13"
+      ]
+    },
+    {
+      "file": "14-tooling/builder.md",
+      "anchor": "## Data flow",
+      "decisions": [
+        "D2",
+        "D9",
+        "D16"
+      ]
+    },
+    {
+      "file": "14-tooling/builder.md",
+      "anchor": "## Shareable",
+      "decisions": [
+        "D4",
+        "D6",
+        "D9"
+      ]
+    },
+    {
+      "file": "14-tooling/acceptance.md",
+      "anchor": "*",
+      "decisions": [
+        "D2",
+        "D3",
+        "D6",
+        "D9",
+        "D16"
+      ]
+    },
+    {
+      "file": "15-consistency/findings.md",
+      "anchor": "*",
+      "decisions": [
+        "D1",
+        "D3",
+        "D6",
+        "D14"
+      ]
+    },
+    {
+      "file": "15-consistency/findings.md",
+      "anchor": "## C02",
+      "decisions": [
+        "D1",
+        "D3",
+        "D14"
+      ]
+    },
+    {
+      "file": "15-consistency/findings.md",
+      "anchor": "## C03",
+      "decisions": [
+        "D1",
+        "D3",
+        "D14"
+      ]
+    },
+    {
+      "file": "15-consistency/findings.md",
+      "anchor": "## C04",
+      "decisions": [
+        "D1",
+        "D3",
+        "D14"
+      ]
+    },
+    {
+      "file": "15-consistency/findings.md",
+      "anchor": "## C05",
+      "decisions": [
+        "D1",
+        "D3",
+        "D14"
+      ]
+    },
+    {
+      "file": "15-consistency/findings.md",
+      "anchor": "## C06",
+      "decisions": [
+        "D1",
+        "D3",
+        "D14"
+      ]
+    },
+    {
+      "file": "15-consistency/findings.md",
+      "anchor": "## C07",
+      "decisions": [
+        "D1",
+        "D3",
+        "D14"
+      ]
+    },
+    {
+      "file": "15-consistency/agreements.md",
+      "anchor": "*",
+      "decisions": [
+        "D1",
+        "D3",
+        "D6",
+        "D14"
+      ]
+    },
+    {
+      "file": "15-consistency/clarifications.md",
+      "anchor": "*",
+      "decisions": [
+        "D1",
+        "D2",
+        "D3",
+        "D6",
+        "D9",
+        "D14"
+      ]
+    },
+    {
+      "file": "16-specimen/limitations.md",
+      "anchor": "*",
+      "decisions": [
+        "D1",
+        "D3",
+        "D4",
+        "D7",
+        "D9",
+        "D13",
+        "D14"
+      ]
+    },
+    {
+      "file": "16-specimen/limitations.md",
+      "anchor": "## Cross-cutting",
+      "decisions": [
+        "D1",
+        "D3",
+        "D14"
+      ]
+    },
+    {
+      "file": "14-tooling/exports.md",
+      "anchor": "## Plain CSS",
+      "decisions": [
+        "D2",
+        "D6",
+        "D9",
+        "D16"
+      ]
+    },
+    {
+      "file": "16-specimen/README.md",
+      "anchor": "## Proposals",
+      "decisions": [
+        "D1",
+        "D3",
+        "D4",
+        "D7",
+        "D9",
+        "D13",
+        "D14"
+      ]
+    },
+    {
+      "file": "18-contrast-harness/README.md",
+      "anchor": "## Proposals",
+      "decisions": [
+        "D4",
+        "D6",
+        "D7"
+      ]
+    }
+  ]
+}

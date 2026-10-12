@@ -55,11 +55,11 @@ A frosted-glass aesthetic combining a see-through surface with a softened backdr
 
 **Kind:** vendor material recipe.
 
-Microsoft’s translucent brush combines a backdrop, blur, an exclusion blend, tint and noise. Background acrylic samples behind the app; in-app acrylic samples within it. Microsoft supplies opaque fallbacks under conditions such as transparency being disabled.
+Microsoft’s translucent brush combines a backdrop, blur, a luminosity blend, tint and noise. Background acrylic samples behind the app; in-app acrylic samples within it. Microsoft supplies opaque fallbacks under conditions such as transparency being disabled. The active WinUI nonopaque path is the scope of this definition; historical/unused exclusion constants are not additional active layers (task 19 correction; task 06 R04).
 
 **Canonical reference:** WinUI MenuFlyout, open ComboBox and AutoSuggestBox surfaces in Microsoft’s Acrylic guide.
 
-**Evidence:** [Microsoft — Acrylic material](https://learn.microsoft.com/en-us/windows/apps/design/style/acrylic) (checked 2026-10-07).
+**Evidence:** [Microsoft — Acrylic material](https://learn.microsoft.com/en-us/windows/apps/design/style/acrylic), [WinUI Acrylic active luminosity/tint graph](https://github.com/microsoft/microsoft-ui-xaml/blob/901ffc065a1f3a1122bbfe6d222eb80a471f28a6/controls/dev/Materials/Acrylic/AcrylicBrush.cpp#L389-L414) (checked 2026-10-07).
 
 <a id="mica"></a>
 ## Mica

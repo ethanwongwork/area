@@ -3844,6 +3844,54 @@
       "b": "prism",
       "status": "K",
       "reason": "Choose either a sharp Prism gradient edge or a context-colored Glow emitter as primary. Do not infer a multicolor halo from one semantic source."
+    },
+    {
+      "a": "none",
+      "b": "paper",
+      "status": "C",
+      "reason": "None emits no material declarations; the other recipe wins, not a concatenated second paint."
+    },
+    {
+      "a": "none",
+      "b": "glass",
+      "status": "C",
+      "reason": "None emits no material declarations; the other recipe wins, not a concatenated second paint."
+    },
+    {
+      "a": "none",
+      "b": "acrylic",
+      "status": "C",
+      "reason": "None emits no material declarations; the other recipe wins, not a concatenated second paint."
+    },
+    {
+      "a": "none",
+      "b": "soft",
+      "status": "C",
+      "reason": "None emits no material declarations; the other recipe wins, not a concatenated second paint."
+    },
+    {
+      "a": "none",
+      "b": "tactile",
+      "status": "C",
+      "reason": "None emits no material declarations; the other recipe wins, not a concatenated second paint."
+    },
+    {
+      "a": "none",
+      "b": "aero",
+      "status": "C",
+      "reason": "None emits no material declarations; the other recipe wins, not a concatenated second paint."
+    },
+    {
+      "a": "none",
+      "b": "glow",
+      "status": "C",
+      "reason": "None emits no material declarations; the other recipe wins, not a concatenated second paint."
+    },
+    {
+      "a": "none",
+      "b": "prism",
+      "status": "C",
+      "reason": "None emits no material declarations; the other recipe wins, not a concatenated second paint."
     }
   ]
 }

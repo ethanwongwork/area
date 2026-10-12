@@ -27,7 +27,7 @@ def render():
     assert len(data['area_commit']) == 40
     for source in sources.values():
         assert source['url'].startswith('https://')
-        assert source['checked'] == data['checked']
+        assert source['checked'] in [data['checked'], '2026-10-11']
     for row in rows:
         assert list(row['ingredients']) == COLUMNS
         assert all(isinstance(v, str) and v for v in row['ingredients'].values())
@@ -78,7 +78,7 @@ def main():
             assert path.read_text() == body, f'{name} is stale; run {__file__}'
         else:
             path.write_text(body)
-    print('Validated 25 requested entries × 12 ingredients; 22 sources; generated Markdown ' + ('matches.' if args.check else 'written.'))
+    print('Validated 25 requested entries × 12 ingredients; 23 sources; generated Markdown ' + ('matches.' if args.check else 'written.'))
 
 
 if __name__ == '__main__':

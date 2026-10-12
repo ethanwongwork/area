@@ -10,6 +10,17 @@ No target alone preserves the complete role, nesting, semantic derivation and ac
 
 **Snapshot:** **2026-10-10**, after `git fetch origin`. Area `origin/main`: **3bcc6a93b93f73aa6bef410dbe88d93b0caddb7e**. Research input: **3a9a1b61e748741e9bc5e578b536ad978d3b1986**. Read the [brief](../README.md) and [07 controls/architecture](../07-controls/README.md) first. Area claims are pinned to source lines in [evidence.md](evidence.md); public specifications and official tool documentation were checked on this date. DTCG is a W3C Community Group report, not a W3C Recommendation. No product settings, Figma documents or production files were changed.
 
+
+<!-- task19-changes -->
+## Changes after review — 2026-10-11
+
+Task 19 corrections, with the reason from [Corrections for Astra and D1–D16](../REVIEW.md). Older Answer/Snapshot passages below retain their original date and findings unless explicitly refreshed; the changes here and decision callouts govern subsequent work.
+
+- **C24 — Review reason:** Old builder/export examples inherit the earlier role, angle and selector contracts. **Change:** Marked affected sections and frozen schema/examples superseded by D2/D3/D6/D9/D16; kept valid format findings and old round-trip fixtures intact. Files: [builder.md](builder.md), [acceptance.md](acceptance.md), [exports.md](exports.md). Decisions: D2, D3, D4, D6, D9, D16.
+
+Full change ledger and verification: [19-corrections](../19-corrections/README.md).
+<!-- /task19-changes -->
+
 ## Evidence
 
 - [Builder proposal](builder.md): gallery flow, all control groups, before/after isolation, diagnostics, state inspection, saving and sharing.
@@ -54,3 +65,7 @@ Omit `--check` to regenerate the fixtures and evidence files. The script finds t
 - Which compiled profile topologies and control bounds will be approved? Task 13's values remain uncalibrated proposals; the builder must not promote them to validated defaults.
 - What schema migration and transport budgets should a production importer enforce? The examples define the structure, not a production parser or a universal link-length limit.
 - Current role bindings, control-only scope derivation and optical masks remain future implementation work. Until those exist, a gallery cannot honestly preview all these controls across every family.
+
+## Status of the machine-readable examples after D6/D9
+
+The schema, example payloads and round-trip results in this folder intentionally remain the original 12-role, eight-preset control contract. Their original successful serialization findings still hold. **Superseded — D2, D3, D6, D9, D16:** these frozen examples are not a current Theme API, 13-role schema or Figma-angle adapter. The later v2 export task must version the schema and migrate the payload explicitly; this correction does not silently reinterpret stored angles or recompute old hashes.
