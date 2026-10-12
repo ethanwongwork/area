@@ -4589,3 +4589,114 @@ full set lived only in `apps/docs/src/pilot-icons.tsx`, and `@area/react` ships 
 - **Checks:** `npm test -w @area/icons` (entries split by status; every component renders exactly what its pilot
   component renders at 16, 20 and 24; SVGs and sprite cover every icon) and `npm run test:consumer` (packed install,
   strict NodeNext types, SSR render, files resolvable, one imported icon tree-shakes to its own module).
+
+## Batch 75: Coverage from product surfaces, 2026-10-10
+
+| Icon | Construction |
+|---|---|
+| image-sparkle | square; ChatGPT photo-sparkle (Create image), Figma's AI image actions, Fluent image_sparkle: image's frame and mountain copied exactly, the sun replaced by chat-sparkle's corner sparkle (±2.5, Q 0.3) set in to 11, 5.5 so its foot sits 2.12 from the mountain's slope (detail 1.0 in the outline; filled, its halo meets the mountain's cut, no sliver). The frame is cut round the sparkle by the overlap cut (top to 8.806, right from 7.798). Filled: the frame fills, closing on a chord between the sparkle's top and right tips inside its halo (the rounded corner left an island); the mountain stays a cut and the sparkle ink with a halo (chat-sparkle's). |
+| pencil-sparkle | square; ChatGPT pencil-sparkle: the slim pencil (2.12 wide, sides on x + y = 14.5 / 17.5, the composites' pen body with pencil's square r 0.5 end and its band 2.12 below the end) with the ±2.5 sparkle at 4.5, 4.5, detail 1.0 from the pencil's side. The full-width pencil left the sparkle 1.77 away or pushed the ink to 13.4 wide. Filled: pencil and sparkle solid, the band a cut. |
+| text-sparkle | square; Figma's AI text actions (lines with a sparkle): three text lines on pixel centres (6.5 to 7.5, 9.5 to 13.5, 12.5 to 10.5) with chat-sparkle's corner sparkle at 11.5, 4.5; the short top line ends a tight 2.5 from the sparkle's left tip and the sparkle's foot is 2.5 above the middle line. Ink centre sits 0.75 high (the sparkle is the top). Filled: the sparkle solid, the lines unchanged. |
+| code-sparkle | horizontal; Figma's code-sparkle: code's chevrons copied exactly with the ±2.5 sparkle in place of the slash, centred on 8, 8, tight 1.35 from both chevrons. Filled: the sparkle solid, the chevrons unchanged. |
+| people-group | circle; ChatGPT person-group, Figma's multiplayer avatars, Fluent people_team, Phosphor users-three: a front figure centred (head r 2 at 8, 6.5; body 5 to 11 from 11 to 14, r 2.5 shoulders) with two back figures (head r 1.5 at 3.5 / 12.5, 4.5; a 4-wide dome 8.5 to 12) cut by the overlap cut round the front figure (people's construction, mirrored). Back bodies sit 0.5 lower than first drawn so the front head clears them by a detail 0.9. Filled: the front figure solid with a halo, the back figures fill (people's). |
+| person-dashed | circle; Notion personCropCircleDashed (unassigned) and Figma's dashed person: person-circle's figure exactly (head r 2 at 8, 6.5; the body closing on the ring) inside circle-dashed's ring turned 22.5° so no dash meets the body; the two dashes beside the body sit at 21° / 159° (1.5° up) to clear its shoulders by a detail 0.98, the others at 45° steps. Six dashes of 15.2°. Filled: head and body solid, the dashes unchanged. |
+| circle-dollar | circle; ChatGPT dollarsign-circle, Figma's billing $, Lucide circle-dollar-sign: the ring with a $ sized for it, an S of two 2 × 1.5 elliptical bowls (6 to 10, 5 to 11, dollar's start and end angles) and ticks 4 to 5 and 11 to 12, detail 0.88 from the ring. Filled: the ring fills and the $ is a knockout (the ring's marks). |
+| chat-pen | square; ChatGPT pencil-and-chat-bubble, Notion commentPencil, Fluent comment_edit: chat's bubble opened round compose's slim pen by the overlap cut (top to 6.818, right from 5.168), the pen shortened 0.75 along its axis and moved 0.5 left and 1.5 up so its tip sits 2.5 from the bubble's left and bottom. Filled: the pen solid, the bubble a line (compose's). |
+| sun-moon | circle; ChatGPT moon-sun (theme), Lucide sun-moon: moon at half size (r 3, bite facing up and right) with sun's rays on the left half only (top, bottom, left and the two left diagonals), detail 0.88 from the moon, the whole moved 1 right so the ink centre is 7.44 (+2 put it at 8.5; the diagonal rays need whole shifts). Filled: the moon solid. |
+| heading-4 | horizontal; Figma H4, Notion heading 4: heading-1's H exactly with an open 4 (Lucide's): left stem 11 from 6.5 to 9, r 0.5 into the bar at 9.5 to 14.5, the full stem 13.5 from 6.5 to 12.5. The stems sit 2.5 apart: at 2 the filled lines left a hairline. |
+| heading-5 | horizontal; Figma H5: heading-1's H exactly with a 5: top bar 14 to 11.5 at 6.5, the stem down to 9.5 and heading-3's lower bowl (r 1.5) moved 0.5 left, centre 12.5, 11. |
+| heading-6 | horizontal; Figma H6: heading-1's H exactly with a 6: a ⌀3 bowl at 13, 11 (heading-3's bowl size) and a tail from 13.5, 6.5 on an r 6.06 arc tangent to the bowl's left side. |
+| pilcrow-right | square; Figma's paragraph direction, Lucide pilcrow-right: pilcrow at a shorter height (stems 6.5 and 9.5 from 2.5 to 8.5, an r 2 bowl, the top bar to 10.5) over a standalone-style arrow 2.5 to 13.5 at 12.5 with a 2px head. The pilcrow sits 1 left so the head's top barb is 2.83 from the right stem. The bowl's closing edge lies on the stem, as in pilcrow. Filled: the bowl solid. |
+| pilcrow-left | square; Lucide pilcrow-left: pilcrow-right's pilcrow moved 3 right (not mirrored: a pilcrow doesn't turn) over the arrow pointing left. Filled: the bowl solid. |
+
+rectangle-vertical is a new turn of rectangle (transpose; ChatGPT rectangle-portrait / aspect 9:16, Notion rectangleTall). Not drawn: trash-restore (ChatGPT trash-open-arrow-up): every lattice placement of a restore arrow in the trash body lands between gap steps against the handle's feet (3.54 between centre-lines). folder-user (ChatGPT folder-person): a corner figure is taller than the folder's keyline allows, and a figure inside reads as a camera. Both are in docs/research/icon-review/2026-10-10/README.md (Batch 75) with options.
+
+## Owner review round 9, 2026-10-11
+
+From the review page (`reviews7`): 149 of the new and changed icons reviewed, 146 approved. Six of those approvals were
+newer than their drawings and are now approved in batches.json (attach, file-clock, file-user, folder-sync, highlighter,
+slice); the rest were already synced, and atom, building, car, home and form keep `review` because their verdicts predate
+the latest drawing. Owner notes in chat applied with the page's fix and replace verdicts. Sheet:
+`docs/research/icon-review/2026-10-11/1-round-9-fixes.png` (after, with each before as a reference row).
+
+| name | change |
+|---|---|
+| form | Owner: the lines should be shorter and aligned so the filled page isn't thin beside them. All three lines start at 5.5, 3 in from the page's left edge, and end at 8.5, 3 from its right (title 5.5 to 8.5 at 4.5, then 5.5 to 8.5 and 5.5 to 7); before, the title was centred and two lines started at 4.5, leaving 0.88 of fill at the edge. |
+| blur | Replace (toward Fluent) on the owner's reference, a droplet halved by a centre line with diagonal hatching on one side; drawn as the ring, as Fluent's blur is a circle: ring r 6, a centre line 2 to 14, and three 45° hatches on x + y = 14, 17, 20 from the centre line to the ring (3 apart: at 4 apart the top pocket was 0.68). Filled: the left half solid, the hatches lines. |
+| superscript, subscript, list-numbered | Owner: the 2 looked too weak at its foot when filled. The 2 is list-numbered's, now with its base starting 0.67 left of the bowl (base 2.5 to 5.75 in list-numbered) and the diagonal tangent to the bowl at 5.311, 10.199 (solved, no kink). superscript and subscript had a narrowed copy (bowl 1.125, base 2.25); both now copy list-numbered's 2 exactly. subscript's X moved 0.5 down and right (on the lattice) to keep a tight gap to the wider 2 inside the keyline. |
+
+## Owner review round 10, 2026-10-11
+
+Owner: "make sure negative space strokes aren't visibly rounded" (umbrella's ribs, banknote's corners), a thorough audit of
+every letter and number, and a justification for each reviewed icon's filled treatment. Sheets in
+`docs/research/icon-review/2026-10-11/`; the treatments page is https://claude.ai/artifact/1oCSG2MmsfkpxcNAtDnpBY.
+
+- **Knockout run-outs follow the tangent.** The generator ran a knockout out through the silhouette only when its end was a
+  straight segment; a knockout made of arcs or curves kept its round cap at the edge. The run-out now follows the path's
+  tangent read from its samples (`gen-pilot-icons.mjs`; `AUDIT_ENDS=1` lists knockout ends 0.15–1.2 from an edge).
+  Changed: umbrella, banknote, basketball, globe-off. The audit's other near-edge ends are intended (brain-circuit's traces
+  meet the centre gap; bot-designer's stripe, archive-restore's barb and notebook's rings end inside the solid).
+- **Type audit.** One construction per glyph across the set:
+
+| name | change |
+|---|---|
+| heading, heading-1 … heading-6 | The H's crossbar moves from 8 to 7.5: crisp at 1× and at type's optical middle. |
+| heading-1 | The 1 takes the family's 1 × 1 45° flag (list-numbered, sort-numeric), off the lattice-free shallow flag. |
+| heading-2 | The 2 takes the family construction: r 1.5 bowl (heading-3, 5, 6), diagonal tangent at 14.2, 8.9, square corner at 11.5, 12.5, base to 14.5 (was a rounded r 0.75 corner). |
+| binary | The 1s are the family 1 (45° flag, no foot) in place of a slab 1 with a foot; the second column moves 0.5 so both 0s sit on pixel centres (rect x 9.5). |
+| whole-word | case-lower's ab exactly: the b's ascender starts at 2.5 (was 3). |
+| case-sensitive | case-upper's A in its place (2 to 7), so the gap to the a is standard (1.77) like AB and ab. |
+| remove-formatting | The T moves 0.5 right (stem on 6.5, crisp); the × moves 0.5 down and right to keep a tight gap. |
+| text-size | Both T's horizontals on pixel centres: big T 2.5 to 12.5 with 2-long ticks, small T 7.5 to 12.5. |
+
+  Kept, with reasons: the T stems of text, text-color, line-height, letter-spacing and square-text sit on 8 (they centre on
+  8, the skill's exception); text-size's big T stem sits on 6 (an 8-wide bar centres on a whole pixel and a 9-wide one
+  overflows the keyline); list-numbered's 1 is 3.5 tall (at 4 the filled 1 and 2 come within 0.69); spell-check's caps are
+  4.5 tall so its B keeps the larger lower bowl; translate keeps Fluent's double-storey a (your pick, 2026-10-07), while
+  case-lower, case-sensitive and whole-word use the geometric single-storey a.
+- **Filled treatments.** All 375 reviewed icons sort into six treatments (body fills and parts stay lines 187; a front part
+  parted by one line weight 32; a crossing part moved inside as an inset 8; details knocked out 64; one solid 11; by weight
+  73). shield-lock was the one icon whose treatment disagreed with its family: its shield now fills and the lock is knocked
+  out, like shield-check, shield-cog, shield-x and shield-plus.
+
+## Owner review round 11, 2026-10-11
+
+243 decisions on the review page (202 approve, 30 fix, 11 replace) and notes in chat on the 1, the 2, umbrella and globe-off. 195 approvals newer than their drawings are approved in batches.json. Generator: `data-ends="keep"` on a line-glyph path keeps its free ends when the filled weight thickens it (the 2's base had shortened against its bowl and the Z's bars had shifted). Records: `docs/research/icon-review/2026-10-11/README.md` (round 11).
+
+| name | change |
+|---|---|
+| list-numbered, sort-numeric, binary, heading-1 | Owner: Lucide's 1 wherever there is a 1. A flat flag, the stem and a foot centred under the stem (`data-ends="keep"`): flag 1.5 and foot 3 at 4 tall (list-numbered M3 2.5H4.5V6.5 with foot 3–6; sort-numeric's under its 0; binary's two, its pre-round-10 slab restored), heading-1 M11 6.5H12.5V12.5 with foot 11–14. |
+| list-numbered, superscript, subscript, heading-2 | Owner: the 2 like Lucide's, its bottom slightly wider than its top in both styles. A round bowl (r 1.25 at 4 tall, r 1.5 at 6 tall) from −137° over the top to its right side, a neck curving to the base's left corner, a base about 10% wider than the bowl and reaching further right (superscript 11–13.75 under a 10.75–13.25 bowl). `data-ends="keep"`, so the filled weight keeps the base's ratio to the bowl. list-numbered's 2 moves to 9.5–13.5 under the 1 (2.5–6.5). |
+| sort-alpha | Owner: the Z's ends were unequal when filled. The Z keeps its ends (`data-ends="keep"`), so both bars grow with their corners. |
+| umbrella | Owner: still wrong when filled. The ribs run from the apex to the bottom edge (one knockout path, no outline-only top), so both ends run out square; the canopy fills as three panels. |
+| globe, globe-off | Owner: the meridians should run through the ends like Fluent's. The lens is two open arcs ending at the poles, so the meridians cut through the ring at top and bottom; globe-off's lower lens is split at the pole the same way. |
+| smile, meh, frown, square-smile, smile-plus | Owner: the face sat half a pixel high. Eyes ⌀1.5 at 5.75, 6.5 / 10.25, 6.5 over the mouth's corners (smile M5.75 9.5A2.5 2.5 0 0 0 10.25 9.5; meh M5.75 10.5H10.25; frown M5.75 10.25A3.25 3.25 0 0 1 10.25 10.25; square-smile eyes at 6.5, mouth corners at 9.75); smile-plus at its 0.75 scale (eyes 4.75 / 8.25 at 5.25, mouth corners 7.75). |
+| battery-medium, battery-low | Owner: bars equally spaced with equal margins. Bars at 4 / 6.5 (pitch 2.5; left, gap, top and bottom margins all 2.5 − line); battery-low's bar at 4. battery-full keeps 4.5 / 7 / 9.5 (three bars can't be exactly even on the grid; a cell construction is the alternative). |
+| bell-plus | Owner: centre the plus. The 4px + at 8, 7 (M8 5V9M6 7H10); body and clapper share data-part="bell". |
+| panel-bottom-open, panel-bottom-close | Owner: the arrow wasn't centred. The 2-leg chevron centred on x 8 (M6 7.5L8 5.5L10 7.5), legs on the half-lattice, data-angles="free"; the top-panel flips follow. |
+| eraser | Owner: align with the bottom line. The lower corner is a plain join at 6.5, 13.5 on the base line's start (the r 0.5 fillet lifted it 0.21). |
+| blur | Owner: horizontal, evenly spaced lines. Lines at y 5, 8, 11 from the centre line to the ring, 3 apart and 3 from the ring's top and bottom (whole pixels; the crisp 4.5 / 7.5 / 10.5 set gives uneven end pockets). |
+| plane | Owner: the window as a row of dots. Three ⌀1.5 windows at 6.25, 8.75, 11.25 on y 7.75 (holes when filled); the fuselage is 5.5–10 with an r 2.25 nose so they fit; the fin moved up 0.5. |
+| gem | Fix filled. The girdle and crown facets are gaps run out through the silhouette; the pavilion facets are outline-only, so no filled cut ends inside the fill. |
+| mail-dot | Owner: the negative space hit the dot. The flap is an outline line; filled, a gap ends inside the dot's halo ring, so it merges with the halo and never touches the dot. |
+| calendar-off | Owner: small pocket above the slash. The left peg stops on the top edge (M5.5 2V3.5), so the space beside the slash is an open wedge. |
+| calendar-search | Fix filled. The body's cut round the lens leaves through the header line (as calendar-clock's), removing the hooked strip of fill. |
+| bug-off | Owner: legs in the outline but not the filled. All six legs show in both styles (bug's legs; the body fills, parted from the slash). |
+| graduation-cap | Owner: the tassel line poked through the board. It starts on the board's corner centre-line (13.5, 7.366). |
+| file-pdf | Owner: stroke error at the triangle's foot. The page ends on the fold's base line in both styles; the filled page's lower strip moves with the fold line (data-shift). |
+| bot | Owner: the other bots' faces aren't filled. The face, eyes and mouth stay lines and the antenna (bot's accessory) fills, as the other bots fill their hats. |
+| document-check, file-code, file-export, file-upload | Owner: marks not centred. The page's free interior centres on 8, 10.25: document-check's 1.5 / 3 check exactly there; file-code's chevrons centred (off the lattice); file-export's arrow centred on x (6 to 10 at y 10); file-upload's arrow with download's 3.5 shaft, centred on y, 0.5 left on x (the recorded convention). |
+| file-video | Owner: the play was too big. desktop-play's 4 × 5 play, centred at 10.25 below the fold. |
+| file-question | Owner: the ? was wrong. chat-question's ? one size down with its stem restored, ⌀1.5 dot 2.25 below, at x 6.5 like file-warning's !. |
+| file-audio | Owner: the note looked wrong. A solid r 1.5 head, a stem on its right edge and a shallow flag (slope 0.25), as Fluent's and Phosphor's. |
+| file-zip, folder-zip | Owner: the pull overlapped the teeth. The pull stands a detail gap below the teeth; file-zip keeps two teeth to make room; folder-zip's four teeth are unchanged and its pull hangs 1.5 below the folder. |
+| form | Owner: the lines weren't evenly spaced from the page edges. Margins of 3 on the top, left and right; lines 2 apart (M5.5 5.5H8.5M5.5 7.5H8.5M5.5 9.5H7), clear of the pen. |
+| divide | Replace toward Lucide: line M2.5 7.5H13.5, ⌀2 dots at 8, 3 and 8, 12. |
+| fingerprint | Replace toward Phosphor: concentric tops (r 1.25 / 3.75 / 6.25 about 8, 8), lower ends on arcs about a point to the left, breaks as Phosphor's; three ridges at the approved 2.5 pitch (Phosphor's 2 fails the filled gap). |
+| gavel | Replace toward Phosphor: a hollow block between two round-ended end bars, an outlined handle; filled, the parts are solid and the walls gaps. |
+| gift-card | Replace toward Fluent: ribbons at x 6.5 and y 7.5, a bow of two r 1 loops above the crossing and two 45° tails below. |
+| hand-wave | Replace toward Phosphor (the owner liked its hand lines): Phosphor's tilted hand, four digits on a round palm, finger lines ending in the palm, a thumb crease, two wave arcs. |
+| kanban | Replace toward Phosphor: three columns from one top edge at different heights, cards in the outer columns; filled, separate solid cards. |
+| paint-roller | Replace toward Lucide: a 9 × 3 roller, Lucide's handle path, a 3 × 4 grip under it. |
+| switch-camera | Replace toward Lucide: the frame broken into two chasing halves with chevrons, a lens in the centre; filled, the lens fills. |
+| table, table-cells-merge, table-cells-split | Owner: wider like Phosphor. Landscape 12 × 9 frame, three equal rows, a narrow first column; merge and split (toward Fluent) share the frame: merge a header strip and a ↔ across the body, split a header divider and a floating bar. |

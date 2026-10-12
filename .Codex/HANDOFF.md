@@ -21,6 +21,34 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   batch 70 table). On the review page as redrawn, awaiting a verdict. Another icon session ran in parallel (batch 75 on
   the review page); merge its branch onto this one.
 
+## Icons: coverage survey, batch 75 (2026-10-11, branch `claude/icon-work-chrome-d39913`)
+
+- Owner: "continue the icon work, chrome is at the front" → production gap 8, coverage by use, read live in the owner's
+  Chrome (read-only): ChatGPT's whole icon sprite (426 concepts), Notion's loaded icon names (206), Figma's 743 unnamed
+  24px editor icons on a contact-sheet overlay. Most is covered; 14 gaps drawn plus rectangle-vertical as a turn
+  (batch 75: the AI sparkle composites, people-group, person-dashed, circle-dollar, chat-pen, sun-moon, heading-4–6,
+  pilcrow-left/right). On the review page (same link, filter "batches 70–75"); 118 now held for one review. Record and
+  delegated calls: `docs/research/icon-review/2026-10-10/README.md` "Batch 75". trash-restore and folder-user were not
+  drawn (gap-scale and keyline conflicts; options in the README). Categories updated; full lint (808), build and
+  typecheck pass (typecheck needs `npm run build` first after the component merge).
+- Then synced with main (PR #62: approvals sync, reopen, @area/icons, form redraw) and took round 9 from the review page
+  (149 reviewed: 146 approve, 6 of them newly applied to batches.json) plus the owner's chat notes: form's lines 3 in
+  from both page edges, left-aligned; blur redrawn as a ring halved with 45° hatching (owner's droplet reference);
+  superscript, subscript and list-numbered share a 2 whose base starts left of the bowl, tangent diagonal. Page
+  republished (version 47) with the five as redrawn + Before. Record: `docs/research/icon-review/2026-10-11/README.md`,
+  spec "Owner review round 9". Build, typecheck, `npm test -w @area/icons`, consumer test and docs build pass.
+- Round 10 (owner): curved knockouts now run out square (generator fix: umbrella, banknote, basketball, globe-off); type
+  audit of the 60 glyph icons with fixes to the heading family, binary, whole-word, case-sensitive, remove-formatting and
+  text-size; the filled-treatment page https://claude.ai/artifact/1oCSG2MmsfkpxcNAtDnpBY (all 375 reviewed icons by
+  treatment, with reasons); shield-lock now fills like the shield family. Review page version 48. Record: spec "Owner review
+  round 10", `docs/research/icon-review/2026-10-11/README.md`. iCloud sync-conflict copies ("name 2.svg") appeared in the
+  icon folder and were removed; others remain in dist, captures and node_modules (untracked).
+- Round 11 (owner, 243 page decisions + chat): 195 approvals applied; 53 icons changed (Lucide's 1 everywhere, a
+  Lucide-like 2 with a wider base, `data-ends="keep"` so 1/2/Z keep proportions when filled, umbrella and globe cuts edge to
+  edge, the face and battery families, file marks centred, library redraws). Four parallel helpers did 37 of them. Review
+  page version 49. Record: spec "Owner review round 11", `docs/research/icon-review/2026-10-11/README.md` (calls to
+  confirm listed there). Full lint, build, typecheck, @area/icons tests and docs build pass.
+
 ## Review round 7 → 8 (2026-10-11, same branch)
 
 - Round 7 (`components7`): Meter, Shortcut list, Date range picker, Zoom control and Menu approved (Complete). Rethink:
