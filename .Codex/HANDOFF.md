@@ -62,6 +62,21 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   (its tab hung with the chat menu open; nothing renamed).
 - Scratch: a detached worktree of 8dfb834 sits in the session scratchpad (`before/`); removing it was declined, run
   `git worktree prune` after the scratchpad is cleared.
+## Icons: approvals synced, review reopened, @area/icons (branch `claude/icon-work-01002a`)
+
+- Every review-page collection read: all 150 `reviews7` rows were approvals. batches.json now marks 489 icons approved
+  (those whose approval is newer than the drawing, or whose drawing is unchanged since). The review page (same link)
+  holds 224 for the owner: the 103 held icons plus 121 reopened (changed after approval, old fix verdicts, never
+  reviewed), filter "Changed since your verdict, or never reviewed". Record: README of
+  `docs/research/icon-review/2026-10-10/` ("batches.json synced"); `reopen.mjs` and `review-page.html` rebuild it.
+- New `packages/icons` (`@area/icons`): the generator's `iconSource`/`RUNTIME` now feed both `pilot-icons.tsx`
+  (unchanged output) and the package's gitignored `src/generated` (`--package`). Approved icons in the main entry,
+  the rest in `./review`; per-icon modules, raw SVGs 16/20/24, sprite, `icons.json`. `npm test -w @area/icons`;
+  `npm run test:consumer` covers it. Root `npm run build` now builds it too (the icon lint makes that ~4 minutes
+  longer). Next on the production list: label/RTL API, keywords and aliases.
+- `form` redrawn on the owner's reference (page, title line, two text lines, pen over the lower right; spec
+  batch 70 table). On the review page as redrawn, awaiting a verdict. Another icon session ran in parallel (batch 75 on
+  the review page); merge its branch onto this one.
 
 ## Review round 7 → 8 (2026-10-11, same branch)
 

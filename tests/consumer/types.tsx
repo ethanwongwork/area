@@ -2,6 +2,9 @@ import { Button, Badge, Select, Checkbox, Switch, Panel, Slider, Chip, Theme, Co
 import { buttonVariants, selectVariants, checkboxVariants, classesFor, stateAttributes, MANIFESTS } from '@area/react/variants';
 import { mergeAxes, type AxisSelection } from '@area/tokens';
 import type { AreaToken } from '@area/tokens/types';
+import { SearchIcon, SearchFilledIcon, type IconProps } from '@area/icons';
+import { BellIcon } from '@area/icons/icons/bell';
+import { icons, type IconMeta } from '@area/icons/meta';
 const selection: Partial<AxisSelection> = {accent:'green',ui:'compact'};
 const token: AreaToken = '--area-accent-solid';
 export const valid = <Theme value={mergeAxes(undefined,selection)}><Button tone="danger" size="lg"/><Badge tone="neutral"/><Select size="lg"/><Panel size="sm"/><Slider size="lg"/><Chip size="lg"/><Checkbox size="lg"/><Switch size="lg"/><Nav selection="marker"/><CodeBlock wrap code={token}/></Theme>;
@@ -34,3 +37,9 @@ export const invalidCode = <CodeBlock toolbar/>;
 
 // @ts-expect-error generic helpers retain the exact manifest contract
 classesFor(MANIFESTS.button,{tone:"invalid"});
+
+const iconProps: IconProps = {size:24,weight:1.25,className:'x'};
+export const iconUse = <><SearchIcon {...iconProps}/><SearchFilledIcon/><BellIcon size={20}/></>;
+export const firstIcon: IconMeta | undefined = icons[0];
+// @ts-expect-error icons take no stroke colour prop
+export const invalidIcon = <SearchIcon stroke="red"/>;
