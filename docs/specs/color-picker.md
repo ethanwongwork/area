@@ -1,6 +1,6 @@
 # Color picker spec
 
-**Status:** accepted (owner; Complete in `component-status.mjs`; was: in review · 2026-09-26 (second pass: views, OKLCH, contrast, preview))
+**Status:** complete · 2026-10-12 (approved, round 17); was: accepted (owner; Complete in `component-status.mjs`; was: in review · 2026-09-26 (second pass: views, OKLCH, contrast, preview))
 **Captures:** `docs/research/captures/color-picker/`
 **Peers:** Popover (surface, Complete), Slider (thumb focus, Complete), Select (model menu,
 Complete), InputGroup and NumberField (value row, Complete), ColorField, ColorSwatch and
@@ -148,7 +148,7 @@ foreground/background popover (the background is a prop).
 | header | min 40, 16 start / 8 end, border-faint rule | Figma 40, divider rgb(230) | Figma's tab text sits at 16 (8 + tab padding); a plain title uses the same column. border-faint (226) is the role nearest rgb(230) |
 | area · size, radius | square, full width; radius-control-sm (6) | Figma 208 square, radius 5 = its control radius | Area's control radius for the sm tier |
 | area / track · hairline | inset 1px `light-dark(rgb(0 0 0 / .1), rgb(255 255 255 / .1))` spec | Figma rgba(0,0,0,.1) | Dark value not captured |
-| thumbs | 16px, 4px #fff ring, current-color fill, 1px .2 ring in and out, lift | Figma | Lift uses −2px spread to draw Figma's 12px shadow disc on one element |
+| thumbs | 16px, 4px #fff ring, current-color fill, an opaque 1px `border-subtle` outer edge, the swatch ring (black 10%) inside, lift | Figma; owner round 16 | Figma's outer edge is black 20% (translucent): it changed colour around the circle where the thumb meets the track. Lift uses −2px spread to draw Figma's 12px shadow disc on one element |
 | thumb · focus | Area focus ring (2px at 2px offset) | Peer: Slider, CONTRAST.md | Figma's 1px outline is below Area's focus width |
 | tracks | 16px pills, stops half a thumb in | Figma | — |
 | opacity checker | ColorSwatch's themed checker (8px tile) | Peer: ColorSwatch | Figma 10.67px #fff/#e1e1e1 |
@@ -244,6 +244,37 @@ Per `docs/MOTION.md`.
 Measured on `color-picker.html`: every thumb rect on whole pixels. Open question: the band edge's
 `drop-shadow` filter is a moving composited layer only during a drag; it rests at identity.
 
+## Review note, 2026-10-12 (swatch ring)
+
+- **What changed:** its swatches take the new translucent outline (from Color swatch); nothing else changed.
+- **Why:** you asked why the swatch's outline only showed at its corners, then said to apply the fix: the outline is now
+  a light translucent line drawn over the colour, so it shows evenly all the way round on every colour.
+
+## States compared, 2026-10-12 (owner, round 16)
+
+The owner asked whether the picker's selected state is correct and consistent, and what the selected states are for
+things like it and for inputs while typing. Area separates two roles (`docs/DESIGN_SYSTEM.md`, Selection; `CONTRAST.md`,
+focus):
+
+| What it shows | Where | Paint |
+|---|---|---|
+| **The current value** (what the picker is set to) | area, hue, alpha and channel thumbs | a 4px white ring on the colour, an opaque `border-subtle` outer edge, the swatch ring inside, the lift |
+| **The selected option** in a set (state) | saved colours (Color swatch picker) | Selection role: a 2px `fg-selection` ring on a surface plate around the swatch (neutral ink unless the theme makes selection the accent), as Calendar days, Chip, the Nav marker |
+| **The selected cell** in a contiguous palette | grid view (`layout="palette"`) | the thumb's ring drawn inside the cell (2px white, opaque outer edge, swatch ring), since cells touch and leave no room for an outside ring |
+| **Keyboard focus** (where input goes) | thumbs, tracks, swatches | the focus ring: 2px `focus-color` (#004cb0 light) at 2px offset |
+| **Typing in a field** | hex / channel inputs | field focus: the edge turns `focus-color` with a 14% halo |
+
+So selected (state) is neutral ink and focus (keyboard, typing) is the focus blue everywhere; the picker follows both
+rules. The one deliberate difference is the palette cell, which uses the thumb's ring because its cells have no gap.
+
+## Review note, 2026-10-12 (round 17)
+
+- **What changed:** the thumbs' outer edge is a solid light grey instead of a see-through dark line, so it looks the same
+  all the way round the circle; the line inside the white ring and the palette's selected cell match the new swatch
+  outline.
+- **Why:** you said the slider circle's outer stroke looked odd; it was see-through, so it showed darker over the colour
+  and grey over the panel, changing colour around the circle.
+
 ## Feedback log
 
 - 2026-09-26 · owner: more controls, a grid swatch picker like iOS, OKLCH, robust selection →
@@ -268,3 +299,9 @@ Measured on `color-picker.html`: every thumb rect on whole pixels. Open question
 - 2026-10-02 · compact evidence audit → the body inset holds at 16 at compact (was 12; Figma's color picker 16) (R5) docs/research/compact-evidence-2026-10-02/README.md.
 - 2026-10-03 · radius audit D1 (owner) → the container role is 12 at compact too (was 8; Figma 13, Cursor 12-14), so this family's surface is 12 at both densities; rows concentric with a floating surface follow (compact 24 rows r8). `docs/research/radius-audit-2026-10-03.md`.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → the area thumb's resting position is rounded to whole pixels (`color.css`). See "Motion and interaction, 2026-10-07".
+- 2026-10-12 · owner, review round 16 (needs changes): "the slider circle transparency on the outer stroke is kinda odd?
+  can you look into it? also is the color selected state correct/consistent? what are the selected states for things like
+  that and inputs when typing, etc" → the thumb is as tall as its track, so the translucent 20% outer edge sat half over
+  colour and half over the panel; now opaque `border-subtle`, the inner edge the swatch ring (10%); the palette's selected
+  cell takes the same. States compared above (no change to selection or focus: they follow the system's roles). Round 17.
+- 2026-10-12 · owner, review round 17: approved.

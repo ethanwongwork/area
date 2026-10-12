@@ -232,6 +232,12 @@ Open questions:
 - **What changed:** Everything is 2px tighter: the side inset is 14px at md (was 17 with the border) and 10px at sm (was 13), gaps between fields and rows are 10 and 6 (were 12 and 8), and labels sit 4px over their fields. In the resizable inspector, the Dimensions row now carries Figma's constrain toggle in the action column, so its fields reach the same edge as the rest. A collapsible section's chevron now stays centred on its title when the section opens; it used to jump up.
 - **Why:** You asked for the panel to be about 2px more compact everywhere, for the large right margin in the resizable tile, and for the chevron's movement on open to be fixed. The right margin was an empty action column; the chevron was centred on a box that shrinks when a section opens.
 
+## Review note, 2026-10-12 (swatch ring)
+
+- **What changed:** the Figma recipe's fill swatches take the new translucent outline (from Color swatch); nothing else changed.
+- **Why:** you asked why the swatch's outline only showed at its corners, then said to apply the fix: the outline is now
+  a light translucent line drawn over the colour, so it shows evenly all the way round on every colour.
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → no change; `shadow-2` confirmed as an in-flow region, outside
@@ -282,3 +288,4 @@ Open questions:
   14 / 10 / 4, sm 10 / 6 / 4), the edge counted once (`--_side`); the resizable demo's Dimensions row carries Figma's
   constrain toggle in its reserved action column; the chevron is centred on the title row, not the heading box →
   panel.css, inset.css, gallery.tsx.
+- 2026-10-12 · owner, review round 16: approved.

@@ -1,0 +1,63 @@
+/* ---------------------------------------------------------------------------
+ * Asset row
+ *
+ * One exportable asset of a layer, for the inspector: a 40 preview well (Box model's grey ground) inset 8 in a
+ * 56 row, the asset's name and a detail line, and an optional trailing action that stays visible. Redrawn from
+ * a survey beyond Figma (owner, review round 14: "look up other asset rows, not just figma";
+ * docs/research/asset-row-survey.md): every reference but Figma insets its preview; 40 is the common size
+ * (shadcn Attachment: 8 around a 40 preview = 56; Penpot, Polaris, Untitled UI 40); gaps 8-16, most often 12.
+ * docs/specs/asset-row.md.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-asset-row {
+    --_preview: var(--area-space-40); /* spec: shadcn Attachment, Penpot, Polaris, Untitled UI 40 */
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-12); /* spec: Untitled UI, Fluent, Polaris 12 */
+    min-inline-size: 0;
+    min-block-size: calc(var(--_preview) + 2 * var(--area-space-8)); /* spec: 56, Figma's row and shadcn's 8 + 40 + 8 */
+    padding: var(--area-space-8); /* spec: shadcn Attachment p-2 */
+    color: var(--area-fg-default);
+    font-size: var(--area-text-xs-size); /* spec: the inspector's 12/16 (Figma 11/16) */
+    line-height: var(--area-text-xs-leading);
+  }
+
+  .area-asset-row__preview {
+    display: grid;
+    place-items: center;
+    flex: none;
+    inline-size: var(--_preview);
+    block-size: var(--_preview);
+    padding: var(--area-space-4); /* spec: Penpot 2; a small margin around a drawn asset */
+    overflow: hidden;
+    border-radius: var(--area-radius-small); /* spec: Penpot 6, shadcn Item 6 */
+    background: var(--area-bg-subtle); /* spec: a neutral fill (Penpot, shadcn muted, Figma rgb(245)); Box model's ground */
+    color: var(--area-fg-default);
+  }
+  /* A light ring over the well and whatever fills it: the swatch ring (owner, round 15: "should there be a light
+     stroke too?"; Polaris's 1px 8% hairline). */
+  .area-asset-row__preview { position: relative; }
+  .area-asset-row__preview::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-token-swatch-ring);
+    pointer-events: none;
+  }
+  /* An image fills the well (owner, round 15: "should the image be full container?"; Material, Polaris and Atlassian
+     cover photos); an icon or vector stays centred on the ground. */
+  .area-asset-row__preview:has(> img) { padding: 0; }
+  .area-asset-row__preview > img { inline-size: 100%; block-size: 100%; object-fit: cover; }
+  .area-asset-row__preview > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
+
+  .area-asset-row__text { display: flex; flex-direction: column; flex: 1 1 auto; min-inline-size: 0; }
+  .area-asset-row__name, .area-asset-row__meta { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .area-asset-row__name { font-weight: var(--area-weight-strong); } /* spec: shadcn, Untitled UI 500; Fluent 600; File upload item */
+  .area-asset-row__meta { color: var(--area-fg-muted); font-variant-numeric: tabular-nums; }
+  .area-asset-row__actions { display: flex; flex: none; align-items: center; gap: var(--area-space-2); }
+
+  @media (forced-colors: active) {
+    .area-asset-row__preview { border: var(--area-border-width) solid CanvasText; }
+  }
+}

@@ -1,6 +1,6 @@
 # Code spec
 
-**Status:** accepted · 2026-09-26 (spec written in the cohesion audit; accepted earlier; subtle-ground fix since)
+**Status:** complete · 2026-10-12 (approved, round 16); was: in review · 2026-10-12 (swatch ring); was: accepted · 2026-09-26 (spec written in the cohesion audit; accepted earlier; subtle-ground fix since)
 **Captures:** `docs/research/captures/code/`
 **Peers:** Kbd (keycap in the same table cell), Token (deprecated: use `<Code swatch>`, audit H-25),
 Code block (block form), Badge (compact label on a fill)
@@ -156,6 +156,12 @@ round(nearest, 0.875em, 1px))` (12 in 14px copy, 14 in 16px prose), which keeps 
 prose but shapes it on whole pixels? Recommendation: yes, but it is a 0.25px type change and the
 owner's pick, so it waits for a yes.
 
+## Review note, 2026-10-12 (swatch ring)
+
+- **What changed:** the token's swatch outline is the same translucent line, over the colour.
+- **Why:** you asked why the swatch's outline only showed at its corners, then said to apply the fix: the outline is now
+  a light translucent line drawn over the colour, so it shows evenly all the way round on every colour.
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → no change; confirmed against Untitled UI's inline code
@@ -179,3 +185,10 @@ owner's pick, so it waits for a yes.
 - 2026-10-04 · quality pass after the one corner setting → the corner is the small role capped at a pill for its height; the radius rewrite had capped it at its own height's corner (12px code in a Table read 4, now 6 again); the swatch is nested, host − 4, floored at small − 2 (`code.css`, `token.css`). `docs/research/radius-audit-2026-10-03.md`, "Quality pass".
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → Token's height, swatch and inline inset rounded to whole pixels (`token.css`). See "Token: motion and crispness, 2026-10-07".
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → inline Code static; whole-pixel text rounding left as an open question (owner pick G-26).
+- 2026-10-12 · owner (Token row review): "why does the stroke around the swatch only show lightly on the corners, not
+  continuously around the whole swatch?" → the solid #f7 edge merged with light grounds on straight edges and showed only
+  as antialiasing fringe on the curves; owner: "yes apply the swatch fix" → the edge is a translucent ring drawn over the
+  colour, `--area-token-swatch-ring` = `light-dark(rgb(0 0 0 / 0.1), rgb(255 255 255 / 0.1))` (Figma's black 10%),
+  shared by Code's swatch, ColorSwatch and Asset row's preview. Checked at 2× in light and dark: continuous on dark,
+  white, translucent and saturated swatches; white still outlined on white.
+- 2026-10-12 · owner, review round 16: approved.

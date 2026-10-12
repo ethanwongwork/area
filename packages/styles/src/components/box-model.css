@@ -1,26 +1,29 @@
 /* ---------------------------------------------------------------------------
  * Box model
  *
- * A read-only diagram of a layer's spacing for the inspector: the margin as a dashed outline (space,
- * not a surface), the border box on the surface with its corner radii, the padding box filled in the
- * tone, and the content's size at the centre. Every ring is a square of the smallest control, so
- * corner radii sit on the diagonal, inset equally from both edges by the cap height (inset.css). The
- * layout follows Figma Dev Mode's layer properties; the drawing is Area's (owner, review round 10:
- * "more of an original design so its not just copying figma"). Not an editor: Box field edits
- * padding and radius. docs/specs/box-model.md.
+ * A read-only diagram of a layer's spacing for the inspector: four nested boxes, each with its own fill
+ * and a 1px stroke in its own colour (owner, review round 11: "strokes at every container level just the
+ * colors can be different"): the margin on grey in a solid line at the container corner, the
+ * border box on the surface in the control edge, the padding in the tone, and the content's size at the
+ * centre. Every ring is a square of control-md, so corner radii sit on the diagonal, inset equally from
+ * both edges by the cap height (inset.css), and the inner corners stay round (12 / 8 / 6). The layout follows
+ * Figma Dev Mode's layer properties. Not an editor: Box field edits padding and radius.
+ * docs/specs/box-model.md.
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-box-model {
-    --_ring: var(--area-control-xs); /* spec: Figma's 24 rows, now square in both directions (compact 20) */
+    --_ring: var(--area-control-md); /* spec: Figma's 32 columns, square in both directions (owner, round 11: "bigger"; compact 28) */
     --_label-x: var(--area-space-8); /* spec: Figma's labels 8 in */
     display: grid;
     grid-template-columns: var(--_ring) minmax(0, 1fr) var(--_ring);
     grid-template-rows: var(--_ring) auto var(--_ring);
     position: relative;
     min-inline-size: 0;
-    /* Margin is space around the element, so it is drawn as a dashed outline rather than a fill. */
-    border: var(--area-stroke-width) dashed var(--area-border-divider);
-    border-radius: var(--area-radius-container);
+    /* Margin is space around the element: a grey ground (Figma's well, rgb(245)) in a solid line (owner, round 12:
+       "no dashed lines"), at the container family's corner, as Panel and Code block. */
+    border: var(--area-stroke-width) solid var(--_margin-line);
+    border-radius: var(--area-radius-container); /* spec: 12 */
+    background: var(--area-bg-subtle);
     color: var(--area-fg-default);
     font-size: var(--area-text-xs-size); /* spec: Figma 11/16; Area's smallest UI text */
     line-height: var(--area-text-xs-leading);
@@ -28,8 +31,24 @@
   }
   /* Tone paints the spacing (margin and padding values, the padding fill). info: a measuring blue, as the
      owner's Dev Mode reference; neutral: greyscale. */
-  .area-box-model--info { --_space-ink: var(--area-info-solid); --_padding-bg: var(--area-info-surface); }
-  .area-box-model--neutral { --_space-ink: var(--area-fg-muted); --_padding-bg: var(--area-bg-subtle); }
+  /* One stroke colour per level (owner, round 11): the margin in the subtle border, the border box in the control edge
+     (it is the element's own edge), the padding in the tone's strong border, the content in the tone's border. */
+  .area-box-model {
+    --_margin-line: var(--area-border-subtle);
+    --_border-line: var(--area-edge-control);
+  }
+  .area-box-model--info {
+    --_space-ink: var(--area-info-solid);
+    --_padding-bg: var(--area-info-surface);
+    --_padding-line: var(--area-info-border-strong);
+    --_content-line: var(--area-info-border);
+  }
+  .area-box-model--neutral {
+    --_space-ink: var(--area-fg-muted);
+    --_padding-bg: var(--area-bg-active);
+    --_padding-line: var(--area-border-subtle);
+    --_content-line: var(--area-edge-control);
+  }
 
   .area-box-model__border, .area-box-model__padding {
     position: relative;
@@ -39,13 +58,18 @@
     grid-template-rows: var(--_ring) auto var(--_ring);
     min-inline-size: 0;
   }
-  /* The border box: the element's surface in a 1px ring, its corner nested inside the outline's. */
+  /* Each box draws its stroke inside its ring (an inset shadow, so the grid keeps whole-pixel rings), and its
+     corner nests one step inside its parent's: 12, 8, 6. */
   .area-box-model__border {
-    border-radius: var(--area-radius-small);
+    border-radius: var(--area-radius-container); /* spec: 12 */
     background: var(--area-bg-surface);
-    box-shadow: 0 0 0 var(--area-stroke-width) var(--area-border-divider);
+    box-shadow: inset 0 0 0 var(--area-stroke-width) var(--_border-line);
   }
-  .area-box-model__padding { border-radius: var(--area-radius-min); background: var(--_padding-bg); }
+  .area-box-model__padding {
+    border-radius: var(--area-radius-control-md); /* spec: 8 */
+    background: var(--_padding-bg);
+    box-shadow: inset 0 0 0 var(--area-stroke-width) var(--_padding-line);
+  }
 
   /* A side's value, centred in its ring. Spacing values take the tone's ink; border widths the default. */
   .area-box-model__side { display: grid; place-items: center; min-inline-size: 0; }
@@ -62,7 +86,8 @@
     inset-block-start: 0;
     inset-inline-start: 0;
     max-inline-size: 100%;
-    padding: var(--area-space-4) var(--_label-x);
+    /* Centred in its ring's row (8 at 32, Figma's 4 at 24). */
+    padding: calc((var(--_ring) - var(--area-text-xs-leading)) / 2) var(--_label-x);
     overflow: hidden;
     color: var(--area-fg-muted);
     text-overflow: ellipsis;
@@ -90,9 +115,11 @@
     display: grid;
     place-items: center;
     min-inline-size: 0;
+    min-block-size: var(--_ring);
     padding: 0 var(--area-space-4);
-    border-radius: var(--area-radius-min);
+    border-radius: var(--area-radius-small); /* spec: 6 */
     background: var(--area-bg-surface);
+    box-shadow: inset 0 0 0 var(--area-stroke-width) var(--_content-line);
     font-weight: var(--area-weight-strong);
   }
   .area-box-model__caption { grid-area: 3 / 2 / 4 / 4; place-self: center end; padding-inline-end: var(--_label-x); color: var(--area-fg-muted); }

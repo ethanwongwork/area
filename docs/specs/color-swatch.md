@@ -1,6 +1,6 @@
 # ColorSwatch spec
 
-**Status:** accepted · 2026-09-28 (owner, batch 9)
+**Status:** complete · 2026-10-12 (approved, round 16); was: in review · 2026-10-12 (translucent ring edge); was: accepted · 2026-09-28 (owner, batch 9)
 **Captures:** `docs/research/captures/color-swatch/`
 **Peers:** ColorSwatchPicker (cells), ColorField (leading preview), ColorPicker (preview and
 checker), Chip swatch, Avatar (small identity box)
@@ -70,7 +70,7 @@ From the capture nodes (node 0):
 |---|---|---|---|
 | size | 16 / 20 / 24 (`space-16/20/24`) | Figma 14 and 16 | sm fills Input's 16px icon slot |
 | radius | **20% of the side at every size** (`--_radius: size / 5`; 3.2 / 4 / 4.8 at sm / md / lg); layers inside the edge are concentric, `radius - edge` (`--_inner-radius`) | Owner (2026-09-28: "make it more consistent"); Figma 20% (`figma--swatches`, the edge layer) | Was `min(radius-small, size / 4)`: 25% to 24px, then capped at 6 |
-| edge | **1px border, solid `light-dark(neutral-50, neutral-800)`, fill clipped to the padding box**, one step off the surface in each theme (`color.css`) | Owner (2026-09-28: "make the stroke … a solid color, so the image and colors don't show through … neutral 25 or something very light") | Was `fg-default` at 22%, a translucent ink that darkened each colour and the checkerboard at the edge. Figma draws 2px black 10% (translucent). Trade-off: a white or near-white swatch on a white surface is barely outlined |
+| edge | **a 1px translucent ring over the colour**, `--area-token-swatch-ring` (black 10% light, white 10% dark); the layers fill the shape (`--_edge: 0`) | Owner (2026-10-12: "yes apply the swatch fix"); Figma's swatch edge, black 10% | Was (2026-09-28) a solid `bg-component` band around the colour: it merged with light grounds on straight edges and showed only as fringe at the corners. Before that, `fg-default` 22% (too dark) |
 | checker | **a 2 × 2 pixel tile used as a mask, 5 cells across at every size** (ink cells in all four corners), `fg-default` 16% over `bg-surface` (color.css:3-15) | Owner (2026-09-28: a pixel image that meets the edges exactly and scales) | Figma 10.67px #fff/#e1e1e1; Area's follows the theme while the colour does not (owner). Was 8px conic-gradient tiles |
 | colour | consumer value, unchanged by theme | Owner (above) | — |
 
@@ -126,6 +126,12 @@ the rings it shows on hover and selection are the Color swatch picker's motion. 
 5-cell checker at 14px inner size draws 2.8px cells (owner's 5 cells), which rasterise soft at 1x;
 kept as the owner's choice.
 
+## Review note, 2026-10-12 (swatch ring)
+
+- **What changed:** the swatch's outline is a thin translucent line over the colour (black 10%, white 10% in dark) instead of a solid very light band around it.
+- **Why:** you asked why the swatch's outline only showed at its corners, then said to apply the fix: the outline is now
+  a light translucent line drawn over the colour, so it shows evenly all the way round on every colour.
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → no change; spec written → `color-swatch/area--*`.
@@ -179,3 +185,10 @@ kept as the owner's choice.
 - 2026-10-03 · all even (owner) → the 20% corner rounds to 2px: 12 → 2; 16, 20 and 24 → 4 (`color.css`).
 - 2026-10-03 · one corner setting (owner: one radius setting, Sharp and Pill as ends; "every control is a pill") → 20% of the side at the default (unchanged), times setting ÷ 8 elsewhere, nearest even pixel (`color.css`). `docs/research/radius-audit-2026-10-03.md`, "One corner setting".
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → a swatch has no motion; its picker rings take Color swatch picker's (no change). See "Motion and interaction, 2026-10-07".
+- 2026-10-12 · owner (Token row review): "why does the stroke around the swatch only show lightly on the corners, not
+  continuously around the whole swatch?" → the solid #f7 edge merged with light grounds on straight edges and showed only
+  as antialiasing fringe on the curves; owner: "yes apply the swatch fix" → the edge is a translucent ring drawn over the
+  colour, `--area-token-swatch-ring` = `light-dark(rgb(0 0 0 / 0.1), rgb(255 255 255 / 0.1))` (Figma's black 10%),
+  shared by Code's swatch, ColorSwatch and Asset row's preview. Checked at 2× in light and dark: continuous on dark,
+  white, translucent and saturated swatches; white still outlined on white.
+- 2026-10-12 · owner, review round 16: approved.

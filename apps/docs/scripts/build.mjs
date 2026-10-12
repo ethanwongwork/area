@@ -269,7 +269,7 @@ ${railToggle("nav", "Show navigation", { corner: true })}
 ${railToggle("panel", "Show customize panel", { corner: true })}
 <script>${DOCS_SCRIPT}</script>
 ${slug === "switch" ? '<script type="module" src="./switch-demos.js"></script>' : ""}
-${slug === "tree-view" || slug === "property-list" || slug === "box-field" || slug === "combobox" || slug === "custom-select" || slug === "tag" || slug === "tag-picker" || slug === "date-picker" || slug === "drawer" || slug === "confirm-dialog" || slug === "command-palette" || slug === "context-menu" || slug === "hover-card" || slug === "prompt-suggestions" || slug === "message" || slug === "scroll-to-latest" || slug === "model-picker" || slug === "panel" || slug === "dialog" || slug === "popover" || slug === "composer" || slug === "toolbar" || slug === "alignment-picker" || slug === "color-field" || slug === "color-picker" || slug === "color-swatch-picker" || slug === "calendar" || slug === "menu" || slug === "tooltip" || slug === "toast" || slug === "breadcrumb" || slug === "pagination" || slug === "scroll-area" || slug === "file-upload" || slug === "toggletip" || slug === "toggle-group" || slug === "search-field" || slug === "shortcut-list" || slug === "date-range-picker" || slug === "citation" || slug === "zoom-control" || slug === "board" || slug === "accordion" || slug === "editable-text" ? '<script type="module" src="./switch-demos.js"></script>' : ""}
+${slug === "tree-view" || slug === "property-list" || slug === "box-field" || slug === "combobox" || slug === "custom-select" || slug === "tag" || slug === "tag-picker" || slug === "date-picker" || slug === "drawer" || slug === "confirm-dialog" || slug === "command-palette" || slug === "context-menu" || slug === "hover-card" || slug === "prompt-suggestions" || slug === "message" || slug === "scroll-to-latest" || slug === "model-picker" || slug === "panel" || slug === "dialog" || slug === "popover" || slug === "composer" || slug === "toolbar" || slug === "alignment-picker" || slug === "color-field" || slug === "color-picker" || slug === "color-swatch-picker" || slug === "calendar" || slug === "menu" || slug === "tooltip" || slug === "toast" || slug === "breadcrumb" || slug === "pagination" || slug === "scroll-area" || slug === "file-upload" || slug === "toggletip" || slug === "toggle-group" || slug === "search-field" || slug === "shortcut-list" || slug === "date-range-picker" || slug === "citation" || slug === "zoom-control" || slug === "board" || slug === "accordion" || slug === "editable-text" || slug === "description-list" ? '<script type="module" src="./switch-demos.js"></script>' : ""}
 ${["badge", "badge-group", "indicator", "presence"].includes(slug) ? '<script type="module" src="./badge-demos.js"></script>' : ""}
 ${slug === "slider" ? '<script type="module" src="./slider-demos.js"></script>' : ""}
 ${slug === "number-field" || slug === "input-group" ? '<script type="module" src="./number-field-demos.js"></script>' : ""}
@@ -397,6 +397,8 @@ function gallerySpecimenTable() {
       { id: "wrap", title: "Wrapped", demo: "CodeBlockWrap" },
       { id: "flush", title: "Layout / flush", demo: "GalleryCodeBlockFlush" },
       { id: "collapsed", title: "Collapsed", demo: "CodeBlockCollapsed" },
+      { id: "size-sm", title: "Size / sm", demo: "CodeBlockSmall" },
+      { id: "size-sm-titled", title: "Size / sm with filename", demo: "CodeBlockSmallTitled" },
     ],
     dialog: [
       { id: "default", title: "Default", demo: "GalleryDialog" },
@@ -538,6 +540,21 @@ function gallerySpecimenTable() {
       { id: "content-sides", title: "Content / per side", demo: "GalleryBoxModelSides" },
       { id: "content-corners", title: "Content / per corner", demo: "GalleryBoxModelCorners" },
     ],
+    "token-row": [
+      { id: "default", title: "Default", demo: "GalleryTokenRow" },
+      { id: "content-name-only", title: "Content / name only", demo: "GalleryTokenRowNameOnly" },
+      { id: "content-plain", title: "Content / no swatch", demo: "GalleryTokenRowPlain" },
+      { id: "style-outline", title: "Style / outline", demo: "GalleryTokenRowOutline" },
+      { id: "behavior-copy", title: "Behavior / copy", demo: "GalleryTokenRowCopyable" },
+      { id: "layout-group", title: "Layout / group", demo: "GalleryTokenRowGroup" },
+    ],
+    "asset-row": [
+      { id: "default", title: "Default", demo: "GalleryAssetRow" },
+      { id: "content-image", title: "Content / image", demo: "GalleryAssetRowImage" },
+      { id: "content-name-only", title: "Content / name only", demo: "GalleryAssetRowNameOnly" },
+      { id: "content-action", title: "Content / action", demo: "GalleryAssetRowAction" },
+      { id: "layout-group", title: "Layout / group", demo: "GalleryAssetRowGroup" },
+    ],
     "editable-text": [
       { id: "default", title: "Default", demo: "GalleryEditableText" },
       { id: "state-editing", title: "State / editing", demo: "GalleryEditableTextEditing" },
@@ -605,6 +622,7 @@ function gallerySpecimenTable() {
       { id: "variant-framed", title: "Variant / framed", demo: "GalleryDescriptionListFramed" },
       { id: "content-no-icons", title: "Content / no icons", demo: "GalleryDescriptionListNoIcons" },
       { id: "content-rich", title: "Content / rich values", demo: "GalleryDescriptionListRich" },
+      { id: "behavior-show-more", title: "Behavior / show more", demo: "GalleryDescriptionListShowMore" },
     ],
     "toggle-group": [
       { id: "default", title: "Default", demo: "GalleryToggleGroup" },
@@ -730,6 +748,7 @@ function gallerySpecimenTable() {
       { id: "resizable", title: "Resizable / inspector", demo: "GalleryPanelResizable" },
       { id: "resizable-sidebar", title: "Resizable / sidebar", demo: "GalleryPanelResizableSidebar" },
       { id: "figma", title: "Recipe / Figma properties panel", demo: "GalleryPanelFigma" },
+      { id: "dev-mode", title: "Recipe / Dev Mode inspector", demo: "GalleryPanelDevMode" },
     ],
     popover: [
       { id: "anchored", title: "Anchored to a trigger", demo: "GalleryPopoverTrigger" },
@@ -1419,7 +1438,8 @@ function demoMarkup(name, html) {
   // top). Behind the live demo sits a hidden, inert copy at its tallest: every body shown, or as
   // rendered for a one-open accordion (each body is the same) and a disabled item (never opens).
   // The tile centres and scales on that copy, so the trigger stays put. docs/specs/accordion.md.
-  if (name.startsWith("GalleryAccordion")) {
+  // Show more keeps its place the same way: the tile sizes on every row shown (docs/specs/description-list.md).
+  if (name.startsWith("GalleryAccordion") || name === "GalleryDescriptionListShowMore") {
     const tallest = ["GalleryAccordionDivided", "GalleryAccordionDividedMd", "GalleryAccordionDisabled"].includes(name) ? html : html.replace(/\shidden(="[^"]*")?/g, "");
     const copy = tallest.replace(/\s(id|aria-labelledby|aria-controls)="[^"]*"/g, "");
     return `<div style="display:grid;justify-items:center;align-items:start;max-inline-size:100%;min-inline-size:0"><div data-switch-demo="${name}" style="grid-area:1/1;max-inline-size:100%;min-inline-size:0">${html}</div><div aria-hidden="true" inert style="grid-area:1/1;visibility:hidden;max-inline-size:100%;min-inline-size:0">${copy}</div></div>`;
@@ -1432,7 +1452,7 @@ function demoMarkup(name, html) {
   if (name.startsWith("CodeBlock")) return `<div data-code-block-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name === "GallerySegmentedIconOnly") return `<div data-switch-demo="${name}">${html}</div>`;
   if (["GalleryTableSelectable", "GalleryTextareaCount", "GalleryInputDate"].includes(name)) return `<div data-switch-demo="${name}" style="inline-size:100%;max-inline-size:100%;min-inline-size:0">${html}</div>`;
-  if (["GalleryPanel", "GalleryPanelSections", "GalleryPanelFooter", "GalleryPanelSm", "GalleryPanelMd", "GalleryPanelFlush", "GalleryPanelBareBar", "GalleryPanelFigma", "GalleryPanelCollapsible", "GalleryPanelResizable", "GalleryPanelResizableSidebar", "GalleryPropertyListFills", "GalleryPropertyListSingle", "GalleryPropertyListEffects", "GalleryModelPicker", "GalleryModelPickerHeading", "GalleryScrollToLatest", "GalleryMessage", "GalleryMessageStreaming", "GalleryMessageLong", "GalleryPromptSuggestions", "GalleryPromptSuggestionsPlain", "GalleryPromptSuggestionsChips", "GalleryHoverCard", "GalleryHoverCardPage", "GalleryHoverCardSource", "GalleryHoverCardTop", "GalleryContextMenu", "GalleryContextMenuTree", "GalleryContextMenuDisabled", "GalleryCommandPalette", "GalleryKbdInCommandPalette", "GalleryCommandPaletteModal", "GalleryCommandPaletteEmpty", "GalleryCommandPaletteNoFooter", "GalleryCombobox", "GalleryComboboxCustom", "GalleryComboboxGroups", "GalleryComboboxCreate", "GalleryComboboxRich", "GalleryComboboxSm", "GalleryComboboxLg", "GalleryComboboxDisabled", "GalleryComboboxInvalid", "GalleryBoxFieldPadding", "GalleryBoxFieldPaddingIndividual", "GalleryBoxFieldPaddingMixed", "GalleryBoxFieldCorners", "GalleryBoxFieldCornersIndividual", "GalleryBoxFieldSoft", "GalleryBoxFieldSm", "GalleryBoxFieldLg", "GalleryBoxFieldDisabled", "GalleryNavActions", "GalleryNavExpandable", "GalleryTabs", "GalleryTabsDisabled", "GalleryTabsVertical", "GalleryTabsSmall", "GalleryTabsTrack", "GalleryTabsIcons", "GalleryTabsCounts", "GalleryToastAction", "GalleryToaster", "GalleryBreadcrumbCollapsed"].includes(name)) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
+  if (["GalleryPanel", "GalleryPanelSections", "GalleryPanelFooter", "GalleryPanelSm", "GalleryPanelMd", "GalleryPanelFlush", "GalleryPanelBareBar", "GalleryPanelFigma", "GalleryPanelDevMode", "GalleryPanelCollapsible", "GalleryPanelResizable", "GalleryPanelResizableSidebar", "GalleryPropertyListFills", "GalleryPropertyListSingle", "GalleryPropertyListEffects", "GalleryModelPicker", "GalleryModelPickerHeading", "GalleryScrollToLatest", "GalleryMessage", "GalleryMessageStreaming", "GalleryMessageLong", "GalleryPromptSuggestions", "GalleryPromptSuggestionsPlain", "GalleryPromptSuggestionsChips", "GalleryHoverCard", "GalleryHoverCardPage", "GalleryHoverCardSource", "GalleryHoverCardTop", "GalleryContextMenu", "GalleryContextMenuTree", "GalleryContextMenuDisabled", "GalleryCommandPalette", "GalleryKbdInCommandPalette", "GalleryCommandPaletteModal", "GalleryCommandPaletteEmpty", "GalleryCommandPaletteNoFooter", "GalleryCombobox", "GalleryComboboxCustom", "GalleryComboboxGroups", "GalleryComboboxCreate", "GalleryComboboxRich", "GalleryComboboxSm", "GalleryComboboxLg", "GalleryComboboxDisabled", "GalleryComboboxInvalid", "GalleryBoxFieldPadding", "GalleryBoxFieldPaddingIndividual", "GalleryBoxFieldPaddingMixed", "GalleryBoxFieldCorners", "GalleryBoxFieldCornersIndividual", "GalleryBoxFieldSoft", "GalleryBoxFieldSm", "GalleryBoxFieldLg", "GalleryBoxFieldDisabled", "GalleryNavActions", "GalleryNavExpandable", "GalleryTabs", "GalleryTabsDisabled", "GalleryTabsVertical", "GalleryTabsSmall", "GalleryTabsTrack", "GalleryTabsIcons", "GalleryTabsCounts", "GalleryToastAction", "GalleryToaster", "GalleryBreadcrumbCollapsed"].includes(name)) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;
   // The carousel's previous / next Buttons page the row.
   if (name === "GalleryCardCarousel") return `<div data-switch-demo="${name}" style="max-inline-size:100%;min-inline-size:0">${html}</div>`;
   if (name.startsWith("GalleryDrawer") || name.startsWith("GalleryConfirmDialog")) return `<div data-switch-demo="${name}" style="display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0">${html}</div>`;

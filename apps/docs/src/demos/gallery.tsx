@@ -682,6 +682,25 @@ export const CodeBlockCollapsed = () => (
   />
 );
 
+/* The inspector's code well: a layer's CSS at the panel's width (Figma Dev Mode's code). */
+export const CodeBlockSmall = () => (
+  <CodeBlock
+    size="sm"
+    style={{ inlineSize: 240 }}
+    html={highlight('display: flex;\npadding: 6px 12px;\nalign-items: center;\ngap: 8px;\nborder-radius: 8px;')}
+  />
+);
+
+export const CodeBlockSmallTitled = () => (
+  <CodeBlock
+    size="sm"
+    title="button.css"
+    language="css"
+    style={{ inlineSize: 240 }}
+    html={highlight('.button {\n  display: flex;\n  padding: 6px 12px;\n  gap: 8px;\n}')}
+  />
+);
+
 export const CodeBlockFlush = () => <CodeBlock flush code={'export default value;'} />;
 
 export const GalleryDialog = () => (

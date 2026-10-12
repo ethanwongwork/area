@@ -1851,12 +1851,15 @@ export interface CodeBlockProps extends Omit<Div, "title"> {
   flush?: boolean;
   /** Wrap long code lines instead of scrolling horizontally. */
   wrap?: boolean;
+  /** `sm` is the inspector's code well: 12px code on 18px lines with 8px insets. */
+  size?: "sm" | "md";
 }
 
 export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLDivElement, CodeBlockProps>(function CodeBlock(
   {
     flush,
     wrap,
+    size = "md",
     title,
     language,
     languages,
@@ -2011,7 +2014,7 @@ export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLDivElement, CodeBlockPro
     : {};
 
   return (
-    <div ref={ref} className={codeBlockVariants({ flush, wrap, unnumbered: !lineNumbers }, className)} {...(collapsed ? { "data-collapsed": "" } : {})} {...rest}>
+    <div ref={ref} className={codeBlockVariants({ size, flush, wrap, unnumbered: !lineNumbers }, className)} {...(collapsed ? { "data-collapsed": "" } : {})} {...rest}>
       {header}
       <div className="area-code-block__body" {...panel}>
         {/* Without the tab panel, the scrolling block itself takes focus so a keyboard can scroll it (audit G-21). */}
