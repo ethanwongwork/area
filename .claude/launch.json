@@ -1,0 +1,31 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "desktop",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "preview",
+        "-w",
+        "@area/desktop"
+      ],
+      "port": 4400,
+      "autoPort": true
+    },
+    {
+      "name": "desktop-dist",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "4410",
+        "--bind",
+        "127.0.0.1",
+        "--directory",
+        "apps/desktop/dist"
+      ],
+      "port": 4410
+    }
+  ]
+}

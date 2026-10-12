@@ -96,5 +96,5 @@ overrides both.
    Unchanged, so describe only what the page will show as changed. Report to the owner: the
    review page, gallery links, the comparison table, visual-pass observations, open questions,
    and anything unverified. Status stays In review until the owner accepts it in
-   `apps/docs/src/component-status.mjs`.
+   `apps/desktop/src/content/component-status.mjs`.
 6. Log owner feedback in the spec (observation → change → evidence) before changing code.

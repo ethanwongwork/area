@@ -29,6 +29,10 @@
        outside (inset.css: the border counted once). A flush panel has no edge. */
     --_edge: var(--area-border-width);
     --_side: calc(var(--_inset) - var(--_edge));
+    /* Per side, for a docked panel whose one seam is a border (below): that side's inset is the inset
+       less the seam, the other side the full inset, so content sits --_inset from the outside on both. */
+    --_side-start: var(--_side);
+    --_side-end: var(--_side);
     /* Published under the panel prefix for nested parts (PropertyList), so a Popover's or a
        ColorPicker's own --_inset can't leak into them (audit F-27). */
     --_panel-inset: var(--_side);
@@ -98,7 +102,7 @@
     flex-shrink: 0;
 
     block-size: var(--_bar);
-    padding-inline: var(--_side);
+    padding-inline: var(--_side-start) var(--_side-end);
     font-size: var(--_panel-title-text);
     line-height: var(--_panel-title-leading);
     border-block-end: var(--area-border-width) solid var(--area-border-decorative);
@@ -127,7 +131,7 @@
     overflow-y: auto;
     /* The first heading row brings its own air from the bar; a section's padding and the next heading's
        air make the space around each rule. */
-    padding: 0 var(--_side) var(--_side);
+    padding: 0 var(--_side-end) var(--_side) var(--_side-start);
     display: flex;
     flex-direction: column;
     gap: 0;
@@ -135,7 +139,20 @@
   /* The body is a Scroll area (docs/specs/scroll-area.md, "Adoption"): the inset moves into the scroller, so
      the bar sits at the panel's edge, as Figma's panels draw it; sections keep their stack. */
   .area-panel__body.area-scroll-area { padding: 0; overflow: hidden; }
-  .area-panel__body > .area-scroll-area__viewport { padding: 0 var(--_side) var(--_side); }
+  .area-panel__body > .area-scroll-area__viewport { padding: 0 var(--_side-end) var(--_side) var(--_side-start); }
+  /*
+   * Lists of rows in a panel (a Sidebar's Nav, a Tree view) hang their plates into the panel's inset by
+   * the row's own start inset, so their text, group labels and trailing counts sit on the panel's one
+   * text column (inset.css: one column per surface) and the plates 6 from the edge (owner, 2026-10-12:
+   * the Sidebar's rows stacked Panel's 14 and the row's 8, text at 22). Notion's sidebar plates sit 8
+   * from its edge, Figma's 8 (docs/specs/nav.md, "width").
+   */
+  .area-panel__body :is(.area-nav:not(.area-nav--horizontal), .area-tree-view) {
+    /* The panel sets the width: the list fills it, its own default measure (Nav's 240) set aside. */
+    inline-size: auto;
+    max-inline-size: none;
+    margin-inline: calc(var(--area-ui-row-inset) * -1);
+  }
   .area-panel__body > .area-scroll-area__viewport > .area-scroll-area__content { display: flex; flex-direction: column; gap: 0; }
   /* A section without a heading starts one inset below the bar or rule. */
   .area-panel__section:not(:has(> .area-panel__heading:first-child)) { padding-block-start: var(--_inset); }
@@ -161,8 +178,8 @@
     display: flex;
     flex-direction: column;
     gap: var(--_panel-row-gap);
-    margin-inline: calc(var(--_side) * -1);
-    padding-inline: var(--_side);
+    margin-inline: calc(var(--_side-start) * -1) calc(var(--_side-end) * -1);
+    padding-inline: var(--_side-start) var(--_side-end);
     /* spec (batch 8, figma--section-auto-layout): the rule sits midway, one inset below the last field
        and one inset above the next title's cap (Figma 16 / 16.5). */
     padding-block-end: var(--_inset);
@@ -184,8 +201,8 @@
     box-sizing: content-box;
     margin: 0;
     padding-block: var(--_air) calc(var(--_air) - var(--_panel-row-gap));
-    margin-inline: calc(var(--_side) * -1);
-    padding-inline: var(--_side);
+    margin-inline: calc(var(--_side-start) * -1) calc(var(--_side-end) * -1);
+    padding-inline: var(--_side-start) var(--_side-end);
     font-size: var(--_panel-label-text);
     line-height: var(--_panel-label-leading);
     /* spec (docs/specs/inspector.md): a section title is strong, as every title (Figma 550). */
@@ -230,7 +247,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    inline-size: var(--_side);
+    inline-size: var(--_side-start);
     color: var(--area-fg-muted);
     opacity: 0;
     pointer-events: none;
@@ -312,7 +329,7 @@
    */
   .area-panel__footer {
     flex-shrink: 0;
-    padding: var(--_side);
+    padding: var(--_side) var(--_side-end) var(--_side) var(--_side-start);
     border-block-start: var(--area-border-width) solid var(--area-border-decorative);
   }
 
@@ -326,6 +343,11 @@
   /* Docked, the seam it keeps is the edge it resizes from (Figma, Notion: a rule on that edge). */
   .area-panel--flush:has(> .area-panel__resize[data-edge="start"]) { border-inline-start: var(--area-border-width) solid var(--area-border-decorative); }
   .area-panel--flush:has(> .area-panel__resize[data-edge="end"]) { border-inline-end: var(--area-border-width) solid var(--area-border-decorative); }
+  /* The seam is counted once (inset.css): its side's content sits the inset from the outside, as the
+     other side's does (owner, 2026-10-12: a docked Sidebar's rows sat 14 from the window and 15 from
+     the outside of their seam). */
+  .area-panel--flush:has(> .area-panel__resize[data-edge="start"]) { --_side-start: calc(var(--_inset) - var(--area-border-width)); }
+  .area-panel--flush:has(> .area-panel__resize[data-edge="end"]) { --_side-end: calc(var(--_inset) - var(--area-border-width)); }
   .area-panel[data-resizing] { user-select: none; }
   .area-panel__resize {
     --_resize-hit: 8px; /* spec: Figma 8 */

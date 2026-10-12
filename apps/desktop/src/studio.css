@@ -1,0 +1,670 @@
+/*
+ * The app's layout: Titlebar over Sidebar | Canvas | Inspector, divided by single hairlines.
+ *
+ * One inset and one stroke throughout. The Titlebar, Sidebar and Inspector inset their content by
+ * Panel's 14 (its spec: 14 at both densities), so the first tab and the Sidebar's rows start on one
+ * line and the Titlebar's last button and the Inspector's controls end on one. The Canvas is a
+ * gallery and spaces itself by its own smaller step (8), its bar title on its content's edge.
+ * Every divider is the same stroke: --area-border-width in --area-border-decorative, the colour
+ * Panel draws its own bar and section rules in.
+ * Only the app's own classes are styled here; Area components keep their own CSS. Values are
+ * Area tokens at the compact UI scale the whole app runs at (data-area-ui="compact" on <html>);
+ * the Canvas carries its own density, radius and pills from the Inspector.
+ */
+@layer studio {
+  html, body, #studio { block-size: 100%; margin: 0; }
+  body {
+    overflow: hidden;
+    background: var(--area-bg-page);
+    color: var(--area-fg-default);
+    font-family: var(--area-font-sans);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+  }
+
+  .studio {
+    --_studio-inset: calc(var(--area-space-16) - var(--area-space-2)); /* spec: Panel's 14 */
+    --_studio-rule: var(--area-border-width) solid var(--area-border-decorative);
+    /* Every bar's height is Panel's bar (panel.css --_bar: a md row, the panel gap above and below,
+       and the rule), so the Titlebar, Canvas and Inspector bars stay one height at either density. */
+    --_studio-bar: calc(var(--area-control-md) + (var(--area-space-10) - var(--area-space-4) * var(--area-ui-dense)) * 2 + var(--area-border-width));
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    block-size: 100vh;
+    overflow: hidden;
+    background: var(--area-bg-page);
+  }
+
+  /* --- Titlebar ------------------------------------------------------------ */
+
+  /*
+   * One row: the Sidebar's toggle and the tabs at the start, search, the Inspector's toggle and
+   * light / dark at the end; each panel's toggle sits at its own side (owner, 2026-10-12, after
+   * Cursor's icon tool). A 24 control (sm) with 8
+   * above and below and the divider under it: 41, the height of the Canvas and Inspector bars
+   * below it (6 + 28 + 6 + 1), the border counted once (inset.css). The sides take the shared
+   * 14, so the first tab's text (14 + its 8 plate inset) sits over the Sidebar rows' text. In
+   * Electron on macOS the window has no title bar of its own; the bar is the drag region, and its
+   * start clears the traffic lights.
+   */
+  .studio-titlebar {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-8);
+    box-sizing: border-box;
+    block-size: var(--_studio-bar); /* 41 at compact */
+    padding-inline: var(--_studio-inset);
+    border-block-end: var(--_studio-rule);
+    background: var(--area-bg-page);
+    user-select: none;
+    -webkit-app-region: drag;
+  }
+  .studio-titlebar :is(a, button, input, select, [role="separator"]) { -webkit-app-region: no-drag; }
+  /* macOS traffic lights (electron/main.cjs): 12px buttons 8 apart from x 16, so they end at 68.
+     The tabs start as far after them as the lights sit from the window's edge (owner, 2026-10-11:
+     the tabs sat too close to them at 8). */
+  :root[data-platform="darwin"] .studio-titlebar { padding-inline-start: 84px; } /* spec: 16 + 52 + 16 */
+  .studio-titlebar__tabs { flex: 0 1 auto; min-inline-size: 0; }
+  .studio-titlebar__end {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-4);
+    margin-inline-start: auto;
+  }
+  /* Search: wide enough for "Search components" and the ⌘K hint (Cursor's command centre
+     reads as a field, not a button). */
+  .studio-titlebar__search { inline-size: calc(var(--area-space-96) * 2 + var(--area-space-48)); /* pick: 240 */ margin-inline-end: var(--area-space-4); }
+
+  /* --- Workspace ----------------------------------------------------------- */
+
+  .studio-workspace {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    min-block-size: 0;
+  }
+  .studio-workspace:not([data-sidebar]) { grid-template-columns: minmax(0, 1fr) auto; }
+  .studio-workspace:not([data-inspector]) { grid-template-columns: auto minmax(0, 1fr); }
+  .studio-workspace:not([data-sidebar]):not([data-inspector]) { grid-template-columns: minmax(0, 1fr); }
+  .studio-sidebar,
+  .studio-inspector {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr);
+    min-block-size: 0;
+  }
+  /* The dividers: one hairline on each panel's inner edge. */
+  /* The dividers between the panels are the Panels' own seams (a flush, resizable Panel keeps the
+     edge it is resized from), so nothing here adds a second line beside them. */
+  /* The Sidebar has no bar: its first row starts 8 below the Titlebar, so a 24 row centres on
+     the Canvas and Inspector titles (studio.tsx, SidebarList). */
+  .studio-sidebar__list { padding-block-start: var(--area-space-8); }
+
+
+  .studio-inspector-note {
+    margin: 0;
+    color: var(--area-fg-muted);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
+  }
+  .studio-muted { color: var(--area-fg-muted); font-weight: var(--area-weight-regular); }
+  .studio-tabular { font-variant-numeric: tabular-nums; }
+  .studio-prop { display: block; }
+
+  /* --- Canvas -------------------------------------------------------------- */
+
+  /* The Canvas: a bar like the Inspector's (41, the title in Panel's bar type), over a body that
+     paints the gallery's ground (the page ground, a trial; see below). Tiles read by their
+     hairlines. The body carries the Canvas settings. */
+  .studio-canvas {
+    /* The Canvas's spacing (owner, 2026-10-11: margins larger than the gaps): 16 round the content
+       and between sections, 8 between tiles, the docs gallery's own tile gap. */
+    --_canvas-margin: var(--area-space-16);
+    --_canvas-gap: var(--area-space-8);
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    min-inline-size: 0;
+    min-block-size: 0;
+    background: var(--area-bg-page);
+  }
+  /* Panel's bar, rule for rule (panel.css, inset.css): 41 with its divider, 1 above the content
+     to balance that bottom-only divider, the title trimmed to its cap height and centred. */
+  .studio-canvas__bar {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-8);
+    box-sizing: border-box;
+    block-size: var(--_studio-bar); /* 41 at compact */
+    padding-block-start: var(--area-border-width);
+    /* The title shares the content's column, as a Panel's title shares its rows' (inset.css). */
+    padding-inline: var(--_canvas-margin);
+    border-block-end: var(--_studio-rule);
+  }
+  .studio-canvas__title {
+    margin: 0;
+    overflow: hidden;
+    font-size: var(--area-text-md-size); /* Panel's bar title */
+    line-height: var(--area-text-md-leading);
+    font-weight: var(--area-weight-strong);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-box: trim-both cap alphabetic;
+  }
+  .studio-canvas__body {
+    container-type: inline-size;
+    min-inline-size: 0;
+    min-block-size: 0;
+    overflow: auto;
+    padding: var(--_canvas-margin);
+    /* Trial (owner, 2026-10-12: "try making the canvas pages for all tabs white"): the page ground,
+       white in light and Area's near-black in dark, the panels' own ground, so the window is one
+       surface and tiles stand on their hairlines. Was neutral 25 (owner, 2026-10-03). */
+    background: var(--area-bg-page);
+    color: var(--area-fg-default);
+  }
+  /* Sections are a margin apart and a section's title one gap over its content, so a title reads
+     with what it names rather than floating between two sections. */
+  .studio-sections { display: grid; gap: var(--_canvas-margin); }
+  .studio-section { scroll-margin-block-start: var(--_canvas-margin); }
+  /* The bar's end: filters and the grid / list switch (src/view-controls.tsx). */
+  .studio-canvas__actions {
+    /* Fields' public width hook: a filter is as wide as "All statuses" needs, not a 256 form field. */
+    --area-input-inline-size: calc(var(--area-space-96) + var(--area-space-32)); /* pick: 128 */
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-8);
+    margin-inline-start: auto;
+  }
+  .studio-section__link { color: inherit; text-decoration: none; }
+  @media (hover: hover) { .studio-section__link:hover { text-decoration: underline; } }
+  /* Area's focus ring (Link's): keyboard focus is always visible (product UI rule 5). */
+  .studio-section__link:focus-visible { border-radius: var(--area-radius-small); outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  .studio-canvas__section-title {
+    margin: 0 0 var(--area-space-8);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
+    font-weight: var(--area-weight-strong);
+  }
+  .studio-canvas__lede {
+    max-inline-size: 64ch; /* pick: a readable measure */
+    margin: 0 0 var(--area-space-8);
+    color: var(--area-fg-muted);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
+  }
+
+  /* --- Tiles and the grid (src/tile.tsx) ------------------------------------ */
+
+  /*
+   * One grid for every tab. The unit is 136 at the least (two units and the gap are the docs
+   * gallery's 280 component tile); the column count is always even, so a wide tile (2 x 2) sits on
+   * exactly two units and wide and unit grids share their edges down the Canvas. Rows are four
+   * fifths of a unit: every tile is 5:4 (owner, 2026-10-04).
+   */
+  .studio-grid {
+    --_gap: var(--_canvas-gap);
+    --_unit-min: 136px; /* pick: 2 x 136 + 8 = the gallery's 280 */
+    --_pairs: max(1, round(down, calc((100cqw + var(--_gap)) / (var(--_unit-min) * 2 + var(--_gap) * 2)), 1));
+    --_unit: calc((100cqw - (var(--_pairs) * 2 - 1) * var(--_gap)) / (var(--_pairs) * 2));
+    --_unit-row: calc(var(--_unit) * 4 / 5);
+    display: grid;
+    grid-template-columns: repeat(calc(var(--_pairs) * 2), minmax(0, 1fr));
+    grid-auto-rows: var(--_unit-row);
+    gap: var(--_gap);
+  }
+  /* Zoom 2x (Components; src/gallery/fit.ts reads [data-zoom]): specimens show at up to 2x on a unit
+     half again as large (204, wide tiles 416 at the least), two across a 1440 window with both
+     panels; doubling it left one tile per row. */
+  [data-zoom="2"] .studio-grid { --_unit-min: 204px; /* pick: 1.5 x 136 */ }
+  .studio-grid--wide {
+    grid-template-columns: repeat(var(--_pairs), minmax(0, 1fr));
+    grid-auto-rows: calc(var(--_unit-row) * 2 + var(--_gap));
+  }
+  .studio-stack { display: grid; gap: var(--_canvas-gap); }
+  .studio-canvas__body {
+    --_tile-radius: 20px; /* pick: owner, 2026-10-12 "slightly too round", one even step below 24 (owner, 2026-10-11: rounder than 16) */
+    --_tile-edge: light-dark(var(--area-neutral-100), var(--area-neutral-750)); /* spec: Card's edge, surface.css */
+    --_tile-inset: var(--area-space-16);
+  }
+  /* A stage's own edge inside a tile (swatches, preset plates): Tailwind's 1px outline at 8%. */
+
+  /* The tile: a 1 hairline, a 24 corner (rounder again, owner 2026-10-11: the container corner at
+     radius 14; held whatever the Canvas's radius setting), the surface fill, 16 in from the outside
+     (inset.css: the border counted once; a rounder corner wants more room), a header row and the
+     stage. Nothing inside draws a second box: the visual is the tile (src/tile.tsx). */
+  .gallery-tile {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    row-gap: var(--area-space-8);
+    min-inline-size: 0;
+    min-block-size: 0;
+    margin: 0;
+    padding: calc(var(--_tile-inset) - var(--area-border-width));
+    overflow: clip;
+    /* Card's edge (surface.css --_card-edge: neutral 100, 750 in dark): a tile stands alone like a
+       Card, and DESIGN_SYSTEM.md keeps standalone surfaces off border-decorative, which is for
+       rules inside a surface. It also keeps tiles visible on the white Canvas. */
+    border: var(--area-border-width) solid var(--_tile-edge);
+    border-radius: var(--_tile-radius);
+    background: var(--area-bg-surface);
+    color: var(--area-fg-default);
+    font: inherit;
+    text-align: start;
+    scroll-margin-block: var(--_canvas-margin);
+  }
+  .gallery-tile[data-span="row"] { grid-template-rows: auto auto; }
+  .gallery-tile[data-stage="none"] { grid-template-rows: auto; align-content: start; }
+  /* Painted: the tile is the colour (Color), its header in the ink that reads on it. Its edge is
+     Color swatch picker's palette hairline (color.css: 1px, black 10% / white 10%, drawn inside;
+     owner, 2026-10-12), so a colour card is outlined as Area's own swatches are, the lightest and
+     darkest steps included. */
+  .gallery-tile[data-painted] {
+    border-color: transparent;
+    background: var(--_paint);
+    color: var(--_ink);
+    outline: var(--area-border-width) solid light-dark(rgb(0 0 0 / 0.1), rgb(255 255 255 / 0.1)); /* spec: color.css, swatch picker palette */
+    outline-offset: calc(var(--area-border-width) * -1);
+  }
+  .gallery-tile[data-painted] :is(.gallery-tile__label, .gallery-tile__value) { color: inherit; }
+  /* Scoped: the tile is a setting's own ground (Language), Primer's tinted plate. */
+  .gallery-tile[data-scoped] { background: var(--area-bg-subtle); color: var(--area-fg-default); }
+  /* Selected: the selection stroke drawn inside the edge, so the grid never moves. */
+  .gallery-tile:is([data-selected], [aria-pressed="true"]) { border-color: var(--area-stroke-selected); box-shadow: inset 0 0 0 var(--area-border-width) var(--area-stroke-selected); }
+  .gallery-tile:is(button, [role="button"]) { cursor: default; }
+  .gallery-tile:is(button, [role="button"]):focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+
+  /*
+   * Hover and press (docs/MOTION.md, "Hover plate", "Press"; a linked Card's edge, surface.css):
+   * only the edge moves, never the fill, the ink or the size, so a specimen reads the same under
+   * the pointer. Hover steps the hairline to the control edge's hover (#d4), a press one further
+   * to the hover border (#b4); both land at once and ease back on `fast` when the pointer leaves
+   * (--area-transition). Selection lands at once too, and outranks both.
+   */
+  .gallery-tile { transition: var(--area-transition); }
+  @media (hover: hover) {
+    .gallery-tile:not([data-painted]):hover { border-color: var(--area-edge-control-hover); transition-duration: 0s; }
+  }
+  .gallery-tile:not([data-painted]):active { border-color: var(--area-border-hover); transition-duration: 0s; }
+  .gallery-tile:is([data-selected], [aria-pressed="true"]) { transition-duration: 0s; }
+  .gallery-tile:not([data-painted]):is([data-selected], [aria-pressed="true"]):is(:hover, :active) { border-color: var(--area-stroke-selected); }
+  /*
+   * A painted tile's states step its one edge, as a component tile's border steps (owner,
+   * 2026-10-12: a ring inside the outline read as a double stroke). The swatch hairline (10%) takes
+   * the card's ink at 24% on hover and 48% pressed, and selected is a 2 line in the ink, the width
+   * a component tile's selection draws (its border and inset ring). Never a second ring. The ink,
+   * not the selection colour, so the line reads on every step from 25 to 975.
+   */
+  .gallery-tile[data-painted] { transition: outline-color var(--area-duration-fast) var(--area-ease-out); }
+  @media (hover: hover) {
+    .gallery-tile[data-painted]:hover { outline-color: color-mix(in srgb, var(--_ink) 24%, transparent); transition-duration: 0s; } /* pick */
+  }
+  .gallery-tile[data-painted]:active { outline-color: color-mix(in srgb, var(--_ink) 48%, transparent); transition-duration: 0s; } /* pick */
+  .gallery-tile[data-painted]:is([data-selected], [aria-pressed="true"]) {
+    border-color: transparent;
+    box-shadow: none;
+    outline: calc(var(--area-border-width) * 2) solid var(--_ink);
+    outline-offset: calc(var(--area-border-width) * -2);
+    transition-duration: 0s;
+  }
+  .gallery-tile__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--area-space-8);
+    min-inline-size: 0;
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+  }
+  .gallery-tile__label { min-inline-size: 0; overflow: hidden; color: var(--area-fg-muted); text-overflow: ellipsis; white-space: nowrap; }
+  .gallery-tile__value { flex: none; color: var(--area-fg-muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .gallery-tile__view { display: grid; min-inline-size: 0; min-block-size: 0; }
+
+  /* Stages (src/tile.tsx, TileStage). fit: a wide margin round the specimen, which fit.ts scales;
+     one track and unsafe centring, so a stage larger than the view overflows evenly and scales
+     about its centre into it. The margin replaces the header gap. */
+  .gallery-tile[data-stage="fit"] { row-gap: 0; }
+  [data-stage="fit"] > .gallery-tile__view {
+    grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+    place-items: unsafe center;
+    padding: var(--area-space-24) var(--area-space-32); /* spec: the docs gallery's stage margin (fit.ts reads it) */
+  }
+  .gallery-tile__stage {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 100%;
+    flex-shrink: 0;
+  }
+  [data-fit]:not([data-fitted]) .gallery-tile__stage { visibility: hidden; }
+
+  /*
+   * Compact density: the hairline contact sheet (Carbon's icon library and component index,
+   * component.gallery). Tiles touch, square, divided by single 1px lines: each tile draws a 1 ring
+   * into a 1 gap, and neighbouring rings land on the same pixels, so every line is drawn once.
+   * Spaced, rounded tiles stay the default density.
+   */
+  .studio-canvas__body[data-area-ui="compact"] {
+    --_tile-radius: 0px;
+    --_tile-inset: var(--area-space-12);
+  }
+  .studio-canvas__body[data-area-ui="compact"] :is(.studio-grid, .studio-stack) { --_gap: var(--area-border-width); gap: var(--area-border-width); padding: var(--area-border-width); }
+  .studio-canvas__body[data-area-ui="compact"] .gallery-tile {
+    padding: var(--_tile-inset);
+    border: 0;
+    box-shadow: 0 0 0 var(--area-border-width) var(--_tile-edge);
+  }
+  /* A painted tile keeps its own outline as its only edge here too. */
+  .studio-canvas__body[data-area-ui="compact"] .gallery-tile[data-painted] { box-shadow: none; }
+  /* Compact tiles draw their hairline as a ring into the 1 gap; hover and press step that ring. The
+     tile under the pointer, or with focus, sits above its neighbours, and stays there while its
+     ring fades (z-index steps at the end of the fade), so neither the ring nor the focus outline
+     slips under the next tile. */
+  .studio-canvas__body[data-area-ui="compact"] .gallery-tile { position: relative; transition: var(--area-transition), z-index 0s linear var(--area-duration-fast); }
+  .studio-canvas__body[data-area-ui="compact"] .gallery-tile:is(:hover, :focus-visible, :focus-within) { z-index: 1; }
+  .studio-canvas__body[data-area-ui="compact"] .gallery-tile:focus-visible { z-index: 2; }
+  @media (hover: hover) {
+    .studio-canvas__body[data-area-ui="compact"] .gallery-tile:not([data-painted], [data-selected], [aria-pressed="true"]):hover {
+      position: relative;
+      z-index: 1;
+      box-shadow: 0 0 0 var(--area-border-width) var(--area-edge-control-hover);
+    }
+  }
+  .studio-canvas__body[data-area-ui="compact"] button.gallery-tile:not([data-painted], [aria-pressed="true"]):active {
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 0 0 var(--area-border-width) var(--area-border-hover);
+  }
+  .studio-canvas__body[data-area-ui="compact"] .gallery-tile:not([data-painted]):is([data-selected], [aria-pressed="true"]) {
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 0 0 var(--area-border-width) var(--area-stroke-selected), inset 0 0 0 var(--area-border-width) var(--area-stroke-selected);
+  }
+  [data-stage="center"] > .gallery-tile__view { place-items: center; }
+  [data-stage="center"] > .gallery-tile__view svg { display: block; flex: none; }
+  [data-stage="flow"] > .gallery-tile__view { align-content: start; }
+  .studio-tile-error { margin: 0; color: var(--area-fg-danger); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); }
+
+  /* --- Typography ---------------------------------------------------------- */
+
+  /* A role's row tile: the sample, and its values in a column at the end (Carbon's type sets). */
+  /* The values' column is one width in every row (it holds "Compact 24 / 32 · -0.015em"), so it
+     lines up down the Canvas. */
+  .studio-type { display: grid; grid-template-columns: minmax(0, 1fr) calc(var(--area-space-96) * 2); align-items: start; gap: var(--area-space-16); }
+  .studio-type__sample { overflow-wrap: anywhere; }
+  /* The table's example cell: the role's name in the role itself (Geist). */
+  .studio-type__example { display: inline; }
+  .studio-type__token { display: inline-flex; align-items: center; gap: var(--area-space-4); white-space: nowrap; }
+  .studio-type__specs {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: var(--area-space-2) var(--area-space-12);
+    margin: 0;
+    color: var(--area-fg-muted);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+    font-variant-numeric: tabular-nums;
+  }
+  .studio-type__value { color: var(--area-fg-default); text-align: end; }
+
+  /*
+   * Type on the surface (owner, 2026-10-12): no tiles. One role's samples are ruled rows, a label
+   * line (name at the start, metrics at the end) one gap over the sample, rows a margin apart with
+   * the divider between them. The grid view is a sheet of cells with the icon cells' plates: "Aa"
+   * in the style over its name and metrics.
+   */
+  .studio-type-rows { display: grid; }
+  .studio-type-row { display: grid; gap: var(--area-space-8); padding-block: var(--_canvas-margin); border-block-start: var(--area-border-width) solid var(--area-border-divider); }
+  .studio-type-row:first-child { padding-block-start: 0; border-block-start: 0; }
+  .studio-type-row__head {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--area-space-8);
+    color: var(--area-fg-muted);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+  }
+  .studio-type-sheet {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(calc(var(--area-space-96) + var(--area-space-80)), 1fr)); /* pick: 176, the illustrations' card */
+    gap: var(--area-space-2);
+    margin-inline: calc(var(--area-space-12) * -1);
+  }
+  .studio-type-cell {
+    display: grid;
+    grid-template-rows: minmax(calc(var(--area-space-96) + var(--area-space-16)), 1fr) auto; /* pick: 112, room for Display 72 */
+    gap: var(--area-space-8);
+    margin: 0;
+    padding: var(--area-space-12);
+    border: 0;
+    border-radius: var(--area-radius-row);
+    background: transparent;
+    color: var(--area-fg-default);
+    font: inherit;
+    text-align: start;
+    cursor: default;
+    transition: var(--area-transition);
+  }
+  .studio-type-cell__sample { align-self: end; overflow: hidden; white-space: nowrap; }
+  /* The name over its metrics, both one line, so every cell's label is two lines and the samples
+     above them share one baseline row. */
+  .studio-type-cell__label { display: grid; min-inline-size: 0; font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); }
+  .studio-type-cell__label > * { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* The row plates' pair, as the icon cells (product UI rule 3). */
+  @media (hover: hover) { .studio-type-cell:hover { background: var(--area-bg-component-hover); transition-duration: 0s; } }
+  .studio-type-cell:is(:active, [aria-pressed="true"]) { background: var(--area-bg-component-active); transition-duration: 0s; }
+  .studio-type-cell:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(var(--area-focus-width) * -1); }
+
+  /* --- Icons --------------------------------------------------------------- */
+
+  /* A category's sheet: label-free cells (Lucide, Primer), the name in the hover window and the
+     Inspector. A cell is twice the icon, never less than the icon plus 32 (the icon browser's rule).
+     Icons sit straight on the Canvas's surface, no container (owner, 2026-10-12, after Cursor's icon
+     gallery): an icon is its own figure, so a frame round a sheet only adds a second edge. The
+     cells' plates hang into the margin by the cell's own inset, so the first icon's centre, not its
+     plate, sets the column (as a Nav row's text, not its plate, sets the Sidebar's). */
+  .studio-icons { --_cell: max(calc(var(--_size) * 2), calc(var(--_size) + var(--area-space-32))); }
+  /* Cells keep their own width and the spare room goes between the columns, so the first and last
+     icons sit exactly one hang from the edges at every Canvas width. */
+  .studio-icons__sheet {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, var(--_cell));
+    justify-content: space-between;
+    gap: var(--area-space-2);
+    margin-inline: calc((var(--_cell) - var(--_size)) / -2);
+  }
+  .studio-icons__glyph { display: grid; place-items: center; color: var(--area-fg-default); }
+  .studio-icons__glyph svg { display: block; }
+  .studio-icons__cell {
+    display: grid;
+    place-items: center;
+    min-block-size: var(--_cell);
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: var(--area-radius-row);
+    background: transparent;
+    color: var(--area-fg-default);
+    cursor: default;
+  }
+  .studio-icons__cell svg { display: block; flex: none; }
+  /* The row plates' pair (DESIGN_SYSTEM.md, "Shared state paint"): hover, then press and selected
+     a step firmer; in at once, out on `fast` (docs/MOTION.md). */
+  .studio-icons__cell { transition: var(--area-transition); }
+  @media (hover: hover) { .studio-icons__cell:hover { background: var(--area-bg-component-hover); transition-duration: 0s; } }
+  .studio-icons__cell:is(:active, [aria-pressed="true"]) { background: var(--area-bg-component-active); transition-duration: 0s; }
+  .studio-icons__cell:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(var(--area-focus-width) * -1); }
+  /*
+   * The hover window (src/pages/icons.tsx, IconCell): an Area Hover card 256 wide. Name and
+   * category on one line, the icon at 96 on the card's own surface, then the three actions:
+   * Copy SVG and Download SVG side by side, Copy name across. Gaps are the card's 12 step.
+   */
+  .studio-icon-card {
+    --area-popover-inline-size: calc(var(--area-space-96) * 2 + var(--area-space-64)); /* pick: 256, the Inspector's width */
+    display: grid;
+    gap: var(--area-space-12);
+  }
+  .studio-icon-card__head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--area-space-8); min-inline-size: 0; }
+  .studio-icon-card__name { min-inline-size: 0; overflow: hidden; font-family: var(--area-font-mono); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); text-overflow: ellipsis; white-space: nowrap; }
+  .studio-icon-card__meta { flex: none; color: var(--area-fg-muted); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); }
+  .studio-icon-card__preview { display: grid; place-items: center; block-size: calc(var(--area-space-96) + var(--area-space-48)); color: var(--area-fg-default); }
+  .studio-icon-card__preview svg { display: block; }
+  .studio-icon-card__actions { display: grid; grid-template-columns: 1fr 1fr; gap: var(--area-space-8); }
+  .studio-icon-card__actions > :last-child { grid-column: 1 / -1; }
+
+  .studio-icon-preview {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 1;
+    margin-block-end: var(--area-space-8);
+    border-radius: var(--area-radius-small);
+    background: var(--area-bg-subtle);
+    color: var(--area-fg-default);
+  }
+  .studio-icon-preview svg { max-inline-size: 100%; max-block-size: 100%; }
+
+  /* --- Color --------------------------------------------------------------- */
+
+  /*
+   * A step's card (src/pages/color.tsx, ColorCard): the painted tile, its level (14 regular) and a
+   * contrast badge in the header, hex, RGB and OKLCH at its foot in 12 tabular figures. Everything
+   * is the ink that reads on the colour; the field names and the badge's plate are that ink thinned
+   * (72% and 12%, picks), so the values lead.
+   */
+  .studio-swatch__level { font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); font-variant-numeric: tabular-nums; } /* regular weight: no bold on the cards (owner, 2026-10-12) */
+  .studio-swatch__badge {
+    display: inline-flex;
+    align-items: center;
+    padding-inline: var(--area-space-6);
+    border-radius: var(--area-radius-small);
+    background: color-mix(in srgb, var(--_ink) 12%, transparent); /* pick */
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+    font-variant-numeric: tabular-nums;
+  }
+  .studio-swatch__values {
+    display: grid;
+    align-self: end;
+    min-inline-size: 0;
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+    font-variant-numeric: tabular-nums;
+  }
+  .studio-swatch__values > * { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .studio-swatch__key { color: color-mix(in srgb, var(--_ink) 72%, transparent); /* pick */ }
+  /* The card's foot: the stage fills the tile under its header, the values at its bottom. */
+  .gallery-tile[data-painted][data-stage="flow"] > .gallery-tile__view { align-content: stretch; }
+
+  /* A list row's step: a colour chip beside its level. */
+  .studio-step { display: inline-flex; align-items: center; gap: var(--area-space-8); font-variant-numeric: tabular-nums; }
+  /* The Inspector's large preview: the colour edged as the cards are, with the swatch picker's 10%
+     hairline drawn inside. */
+  .studio-color-preview { aspect-ratio: 2; margin-block-end: var(--area-space-8); border-radius: var(--area-radius-small); outline: var(--area-border-width) solid light-dark(rgb(0 0 0 / 0.1), rgb(255 255 255 / 0.1)); /* spec: color.css, swatch picker palette */ outline-offset: calc(var(--area-border-width) * -1); }
+
+  /* --- Language ------------------------------------------------------------ */
+
+  /*
+   * Language illustrations (src/abstract.tsx): one family of abstract UI, after the Frames X kit's
+   * thumbnails. One set of sizes for every drawing (picks, on the 4 grid): a 176 card padded 12
+   * with 8 between its parts, 6 bars, 16 rows, an 18 pill, a 20 field, an 8 dot, a 12 check and a
+   * 24 x 14 toggle. Colours, corners, edges, lift, row height and timing are the live tokens, so
+   * each setting's tile draws its own effect.
+   */
+  /* Drawn as Card is: Card's edge (surface.css --_card-edge) and its card shadow. */
+  .abs-card {
+    display: grid;
+    gap: var(--area-space-8);
+    inline-size: calc(var(--area-space-96) + var(--area-space-80));
+    padding: calc(var(--area-space-12) - var(--area-border-width));
+    border: var(--area-border-width) solid light-dark(var(--area-neutral-100), var(--area-neutral-750)); /* spec: Card's edge */
+    border-radius: var(--area-radius-container);
+    background: var(--area-bg-surface);
+    box-shadow: var(--area-shadow-card);
+  }
+  /* Surface: a floating card over a resting one, offset down and to the end. */
+  .abs-stack { display: grid; }
+  .abs-stack > .abs-card { grid-area: 1 / 1; }
+  .abs-card[data-kind="back"] { translate: calc(var(--area-space-16) * -1) calc(var(--area-space-12) * -1); }
+  .abs-card[data-kind="float"] { translate: var(--area-space-16) var(--area-space-12); box-shadow: var(--area-shadow-float); }
+  /* A line of text: muted grey, or the default ink for a title. */
+  .abs-bar {
+    display: block;
+    inline-size: var(--_w);
+    block-size: var(--area-space-6);
+    border-radius: var(--area-radius-full);
+    background: var(--area-border-subtle);
+  }
+  .abs-bar[data-strong] { background: var(--area-fg-default); }
+  .abs-bar[data-tone="accent"] { background: var(--area-accent-solid); }
+  .abs-bar[data-tone="on-action"] { background: var(--area-fg-on-action); }
+  .abs-bar[data-tone="on-accent"] { background: var(--area-fg-on-accent); }
+  /* A row: its parts in a line, at half the scale's row height (16 default, 12 compact). */
+  .abs-row { display: flex; align-items: center; gap: var(--area-space-6); min-block-size: calc(var(--area-ui-row) / 2); }
+  .abs-row > .abs-bar { flex: none; }
+  .abs-row[data-end] { justify-content: flex-end; }
+  .abs-row[data-plate] {
+    margin-inline: calc(var(--area-space-6) * -1);
+    padding: var(--area-space-4) var(--area-space-6);
+    border-radius: var(--area-radius-row);
+    background: var(--area-bg-component-active);
+  }
+  .abs-pill {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    inline-size: var(--area-space-48);
+    block-size: calc(var(--area-space-16) + var(--area-space-2));
+    border-radius: var(--area-radius-control-sm);
+    background: var(--area-action-solid);
+  }
+  .abs-pill > .abs-bar { block-size: var(--area-space-4); opacity: 0.9; /* pick */ }
+  .abs-pill[data-kind="accent"] { background: var(--area-accent-solid); }
+  .abs-pill[data-kind="outline"] { background: var(--area-bg-surface); box-shadow: inset 0 0 0 var(--area-border-width) var(--area-border-subtle); }
+  .abs-dot { display: block; flex: none; inline-size: var(--area-space-8); block-size: var(--area-space-8); border-radius: var(--area-radius-full); background: var(--area-border-subtle); }
+  .abs-dot[data-kind="window"] { inline-size: var(--area-space-6); block-size: var(--area-space-6); }
+  /* The check and toggle wear the real controls' paint (DESIGN_SYSTEM.md, "Off states"): the
+     glyph-edge grey (edge-control-hover) round an empty check, the off-track grey (edge-control) under
+     the toggle, and the toggle's thumb on Switch's clock (docs/MOTION.md, "Switch thumb": base,
+     ease-in-out). */
+  .abs-check {
+    display: grid;
+    place-items: center;
+    flex: none;
+    inline-size: var(--area-space-12);
+    block-size: var(--area-space-12);
+    border-radius: var(--area-radius-small);
+    box-shadow: inset 0 0 0 var(--area-border-width) var(--area-edge-control-hover);
+    color: var(--area-fg-on-selection);
+  }
+  .abs-check[data-on] { background: var(--area-selection-solid); box-shadow: none; }
+  .abs-check > svg { display: block; }
+  .abs-toggle {
+    position: relative;
+    flex: none;
+    inline-size: var(--area-space-24);
+    block-size: calc(var(--area-space-12) + var(--area-space-2));
+    border-radius: var(--area-radius-full);
+    background: var(--area-edge-control);
+    transition: background-color var(--area-duration-base) var(--area-ease-in-out);
+  }
+  .abs-toggle::after {
+    content: "";
+    position: absolute;
+    inset-block-start: var(--area-space-2);
+    inset-inline-start: var(--area-space-2);
+    inline-size: var(--area-space-10);
+    block-size: var(--area-space-10);
+    border-radius: var(--area-radius-full);
+    background: var(--area-bg-surface);
+    transition: translate var(--area-duration-base) var(--area-ease-in-out);
+  }
+  .abs-toggle[data-on] { background: var(--area-selection-solid); }
+  .abs-toggle[data-on]::after { translate: var(--area-space-10) 0; background: var(--area-fg-on-selection); }
+  .abs-field {
+    display: flex;
+    align-items: center;
+    block-size: round(calc(var(--area-control-md) * 5 / 8), 1px); /* 20, compact 18 */
+    padding-inline: var(--area-space-8);
+    border-radius: var(--area-radius-control-sm);
+    background: var(--area-bg-surface);
+    box-shadow: inset 0 0 0 var(--area-border-width) var(--area-border-subtle);
+  }
+}

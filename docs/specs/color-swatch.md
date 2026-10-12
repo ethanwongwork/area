@@ -185,10 +185,13 @@ kept as the owner's choice.
 - 2026-10-03 · all even (owner) → the 20% corner rounds to 2px: 12 → 2; 16, 20 and 24 → 4 (`color.css`).
 - 2026-10-03 · one corner setting (owner: one radius setting, Sharp and Pill as ends; "every control is a pill") → 20% of the side at the default (unchanged), times setting ÷ 8 elsewhere, nearest even pixel (`color.css`). `docs/research/radius-audit-2026-10-03.md`, "One corner setting".
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → a swatch has no motion; its picker rings take Color swatch picker's (no change). See "Motion and interaction, 2026-10-07".
+- 2026-10-12 · owner: the swatches should be "the new swatches with transparent strokes" → the edge is the swatch picker palette's hairline, 1px black 10% (white 10% in dark) as an outline inside the shape, over the colour, replacing the solid neutral-50 ring of 2026-09-28 (reverses that call: the colour now shows through its rim); palette cells keep no outline of their own (the palette draws one round the grid) → color.css. One swatch outline across ColorSwatch, the palette picker and the desktop colour cards.
 - 2026-10-12 · owner (Token row review): "why does the stroke around the swatch only show lightly on the corners, not
   continuously around the whole swatch?" → the solid #f7 edge merged with light grounds on straight edges and showed only
   as antialiasing fringe on the curves; owner: "yes apply the swatch fix" → the edge is a translucent ring drawn over the
   colour, `--area-token-swatch-ring` = `light-dark(rgb(0 0 0 / 0.1), rgb(255 255 255 / 0.1))` (Figma's black 10%),
   shared by Code's swatch, ColorSwatch and Asset row's preview. Checked at 2× in light and dark: continuous on dark,
   white, translucent and saturated swatches; white still outlined on white.
+- 2026-10-12 · merge with main: main had drawn the same ring as an inset `outline` (1px black 10% / white 10%); the
+  merge keeps main's outline and drops this branch's duplicate `box-shadow`, so the ring is painted once.
 - 2026-10-12 · owner, review round 16: approved.

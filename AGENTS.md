@@ -7,13 +7,25 @@ specs matter more than speed.
 
 ## Start
 
+**New sessions work on the app itself: the gallery in `apps/desktop`** (Electron; later an
+IDE / VS Code fork). **The app is the source of truth** (owner, 2026-10-12): Area is a
+self-consuming product, built only from Area and judged only in the app, and its UI follows
+`docs/PRODUCT_UI.md`. No docs site is a source of truth. The app's regions are the **Titlebar** (tabs: Language, Components, Typography,
+Icons, Color; search; layout toggles; light / dark), the **Sidebar** (left list), the **Canvas**
+(centre) and the **Inspector** (right). Build it from Area components at the compact UI scale.
+The documentation site (`apps/docs`) is archived: don't extend it or check work there. Component
+content, status, specimens and demos live in `apps/desktop/src/content`; the icon pipeline still sits
+in the site's folder until it moves to `packages/icons`. Reviews of icons
+and components happen on artifacts, not in the docs site.
+
 Read `README.md` and, when resuming, `.Codex/HANDOFF.md`. For component work, read
 `docs/COMPONENT_ADAPTATION.md` (the process) and use the `area-component-build` and
 `area-visual-language` skills (`.agents/skills/`, linked from `.claude/skills/`). Each
 component's evidence and decisions are in `docs/specs/<slug>.md`; shared cross-product
 values are in `docs/research/BASELINE.md`. Read only the relevant section of
 `docs/DESIGN_SYSTEM.md`; use `docs/THEMING.md` for scope changes, `docs/CONTRAST.md` for
-color, focus or state painting, and `docs/MOTION.md` for transitions, animation and crispness. `docs/COMPONENTS.md` is the inventory and backlog.
+color, focus or state painting, `docs/MOTION.md` for transitions, animation and crispness, and
+`docs/PRODUCT_UI.md` for the rules app UI follows (states, tooltips, keyboard, arrangement). `docs/COMPONENTS.md` is the inventory and backlog.
 
 ## Work
 
@@ -47,7 +59,7 @@ color, focus or state painting, and `docs/MOTION.md` for transitions, animation 
   `table()`/`tokenSection()` in docs. Docs CSS cannot override `.area-*`; do not put
   backticks inside `DOCS_CSS`/`DOCS_SCRIPT`.
 - Regenerate icons with `apps/docs/scripts/gen-icons.mjs`; preserve vendored geometry.
-- Completion is owner-confirmed in `apps/docs/src/component-status.mjs`. Passing builds and
+- Completion is owner-confirmed in `apps/desktop/src/content/component-status.mjs`. Passing builds and
   complete specs do not confer it.
 
 ## Finish

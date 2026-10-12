@@ -14,9 +14,11 @@ a smaller folder count would not justify coupling CSS to React or docs to token 
   names a defined token or carries a fallback (`scripts/check-token-refs.mjs`).
 - `packages/react/src/`: markup, native behavior, composition and typed variant helpers.
   `scripts/build-modules.mjs` emits ESM and declarations without bundling away boundaries.
-- `apps/docs/src/`: page metadata, practices, real demos and hydrated browser fixtures.
-  `render.mjs` renders demos and extracts their own source; `build.mjs` makes static pages.
-  The docs audit checks shared-component usage and disallows undocumented raw styling.
+- `apps/desktop/`: the app and the source of truth. `src/content/` holds the component content
+  (`pages.mjs`), owner-confirmed status (`component-status.mjs`), specimens and their names, the demo
+  registry and every demo; `src/gallery/` the tile fit and the Canvas controls.
+- `apps/docs/`: the archived site, not a source of truth. Its build (`render.mjs`, `build.mjs`) still
+  reads the app's content and demos; the icon pipeline still lives here until it moves to `packages/icons`.
 
 The site has no application backend, database or required secrets. Geist fonts currently
 load from a pinned external URL; custom consumers may supply their own font tokens.
@@ -24,7 +26,9 @@ load from a pinned external URL; custom consumers may supply their own font toke
 ## Daily commands
 
 ```sh
-npm run dev            # live preview at http://localhost:4321
+npm run dev            # the desktop app (Electron), reloading on change
+npm run preview        # the same app in a browser at http://localhost:4400
+npm run dev:docs       # the archived docs site at http://localhost:4321
 npm run build          # tokens, styles/manifest, React JS + declarations
 npm run build:docs     # package build, static site, docs audit
 npm run typecheck      # packages, demos and browser lab
@@ -36,11 +40,14 @@ resolve the compiled React declarations. Do not run competing full builds agains
 watcher: it may replace declarations during typecheck. Stop the dev process first when
 running the full verification sequence, then restart it for preview.
 
-The development server watches source changes, builds into an ignored staging directory
+The desktop app (`apps/desktop`) bundles `src/main.tsx` with esbuild into `apps/desktop/dist` and
+copies `area.css` beside it; a change under `packages/<name>/src` rebuilds the packages first.
+
+The archived docs site's development server watches source changes, builds into an ignored staging directory
 and swaps in a successful immutable snapshot. A failed build retains the prior preview.
-Restart after editing server/watcher code. `PORT=4322 npm run dev` chooses another port.
+Restart after editing server/watcher code. `PORT=4322 npm run dev:docs` chooses another port.
 `npm run build:docs` writes `apps/docs/dist`; the static server must restart to read a new
-snapshot. Completion status is source data under `apps/docs/src`, so the watcher sees it.
+snapshot. Completion status is source data under `apps/desktop/src/content`.
 
 ## Checks by change
 

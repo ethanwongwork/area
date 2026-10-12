@@ -185,6 +185,7 @@ owner's pick, so it waits for a yes.
 - 2026-10-04 · quality pass after the one corner setting → the corner is the small role capped at a pill for its height; the radius rewrite had capped it at its own height's corner (12px code in a Table read 4, now 6 again); the swatch is nested, host − 4, floored at small − 2 (`code.css`, `token.css`). `docs/research/radius-audit-2026-10-03.md`, "Quality pass".
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → Token's height, swatch and inline inset rounded to whole pixels (`token.css`). See "Token: motion and crispness, 2026-10-07".
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → inline Code static; whole-pixel text rounding left as an open question (owner pick G-26).
+- 2026-10-12 · owner (desktop Props and Typography tables: names broke at hyphens) → inline Code in a Table's shrink-to-fit cell (`area-table__cell--fit`) keeps one line (`white-space: nowrap`), so those columns size to the longest name; other cells still wrap → code.css.
 - 2026-10-12 · owner (Token row review): "why does the stroke around the swatch only show lightly on the corners, not
   continuously around the whole swatch?" → the solid #f7 edge merged with light grounds on straight edges and showed only
   as antialiasing fringe on the curves; owner: "yes apply the swatch fix" → the edge is a translucent ring drawn over the

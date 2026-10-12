@@ -3,7 +3,7 @@
 <path data-filled="fill" d="M14 8A6 6 0 1 1 2 8A6 6 0 1 1 14 8Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path data-filled="line" d="M8 2A10 10 0 0 0 6.169 6.169M9.831 9.831A10 10 0 0 0 9.798 6" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path data-filled="line" d="M10 10H13.657" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="knockout" d="M8 2A10 10 0 0 1 9.798 6M6.169 6.169A10 10 0 0 0 8 14A10 10 0 0 0 9.831 9.831" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="knockout" d="M8 2A10 10 0 0 1 9.798 6M6.169 6.169A10 10 0 0 0 8 14M9.831 9.831A10 10 0 0 1 8 14" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path data-filled="knockout" d="M2.343 6H13.657M2.343 10L10 10" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path data-filled="gap" d="M0.909 -0.682L16.909 15.318" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M2 2L14 14" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>

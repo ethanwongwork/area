@@ -1028,6 +1028,10 @@ export interface TableProps extends HTMLAttributes<HTMLTableElement> {
   size?: VariantProps<typeof MANIFESTS.table>["size"];
   striped?: boolean;
   columnDividers?: boolean;
+  /** No frame: the table sits on its surface, its rows ruled and its cell inset hanging outside the content edge. */
+  flush?: boolean;
+  /** Cells in a row line up on their first baseline (rows mixing text sizes). */
+  baseline?: boolean;
   /** Props for the scrolling wrapper (audit F-23); `ref` and the rest land on the table. */
   wrapperProps?: HTMLAttributes<HTMLDivElement>;
 }
@@ -1041,7 +1045,7 @@ export const TableLink = /* @__PURE__ */ forwardRef<HTMLAnchorElement, AnchorHTM
 });
 
 export const Table = /* @__PURE__ */ forwardRef<HTMLTableElement, TableProps>(function Table(
-  { interactive, size, striped, columnDividers, wrapperProps, className, ...rest },
+  { interactive, size, striped, columnDividers, flush, baseline, wrapperProps, className, ...rest },
   ref,
 ) {
   // A wide table scrolls; a keyboard can only scroll what it can focus, so the wrapper becomes a
@@ -1066,7 +1070,7 @@ export const Table = /* @__PURE__ */ forwardRef<HTMLTableElement, TableProps>(fu
       {...(overflows ? { tabIndex: 0, role: "region", "aria-label": name, "aria-labelledby": name ? undefined : labelledBy } : {})}>
       <table
         ref={ref}
-        className={tableVariants({ interactive, size, striped, columnDividers }, className)}
+        className={tableVariants({ interactive, size, striped, columnDividers, flush, baseline }, className)}
         {...rest}
       />
     </div>
@@ -1094,17 +1098,22 @@ export interface TooltipProps extends Div {
   delay?: number;
   /** Delay before hiding after the pointer leaves, in milliseconds (Hover card's name; audit S17). */
   closeDelay?: number;
+  /**
+   * False when the tooltip repeats the trigger's accessible name (an icon-only button's label), so
+   * it is not announced twice; the tooltip then only shows. Defaults to true: it describes the trigger.
+   */
+  describes?: boolean;
 }
 
 export const Tooltip = /* @__PURE__ */ forwardRef<HTMLDivElement, TooltipProps>(function Tooltip(
-  { side, arrow, trigger, open, defaultOpen, onOpenChange, align, offset, delay, closeDelay, className, ...rest },
+  { side, arrow, trigger, open, defaultOpen, onOpenChange, align, offset, delay, closeDelay, describes, className, ...rest },
   ref,
 ) {
   const surface = (extra: Div & { ref?: Ref<HTMLDivElement> }) => (
     <div role="tooltip" className={tooltipVariants({ side, arrow }, className)} {...rest} {...extra} ref={node => { assignRef(ref, node); assignRef(extra.ref as never, node); }} />
   );
   if (trigger === undefined) return surface({});
-  return <AnchoredTooltip trigger={trigger} open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange} side={side} align={align} offset={offset} arrow={arrow} delay={delay} closeDelay={closeDelay} surface={surface} />;
+  return <AnchoredTooltip trigger={trigger} open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange} side={side} align={align} offset={offset} arrow={arrow} delay={delay} closeDelay={closeDelay} describes={describes} surface={surface} />;
 });
 
 export interface PopoverProps extends Div {
@@ -1193,12 +1202,18 @@ export interface MenuProps extends Div {
   side?: OverlaySide;
   align?: OverlayAlign;
   offset?: number;
+  /**
+   * With a trigger: an Area Tooltip that names it (below it, after the hover delay), for an
+   * icon-only trigger. A Tooltip cannot wrap a menu's trigger from outside, since both take the
+   * trigger over (product UI rule 4, docs/PRODUCT_UI.md).
+   */
+  tooltip?: ReactNode;
 }
 const menuItemsOf = (menu: HTMLElement) =>
   [...menu.querySelectorAll<HTMLElement>('[role^="menuitem"]:not([disabled]):not([aria-disabled="true"])')]
     .filter(item => item.closest('[role="menu"]') === menu);
 
-export const Menu = /* @__PURE__ */ forwardRef<HTMLDivElement, MenuProps>(function Menu({ trigger, open, defaultOpen, onOpenChange, side, align, offset, className, onKeyDown, ...rest }, ref) {
+export const Menu = /* @__PURE__ */ forwardRef<HTMLDivElement, MenuProps>(function Menu({ trigger, open, defaultOpen, onOpenChange, side, align, offset, tooltip, className, onKeyDown, ...rest }, ref) {
   const typeahead = useRef("");
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   if (trigger !== undefined) {
@@ -1214,7 +1229,9 @@ export const Menu = /* @__PURE__ */ forwardRef<HTMLDivElement, MenuProps>(functi
         onKeyDown={chain(onKeyDown, extra.onKeyDown)} onClick={chain(rest.onClick, extra.onClick)} onPointerMove={chain(rest.onPointerMove, extra.onPointerMove)}
         ref={node => { assignRef(ref, node); assignRef(extra.ref as never, node); }} />;
     };
-    return <AnchoredMenu trigger={trigger} open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange} side={side} align={align} offset={offset} id={rest.id} surface={surface} />;
+    // The tooltip takes the trigger after the menu has, so both sets of handlers and refs compose.
+    const wrapTrigger = tooltip == null ? undefined : (menuTrigger: ReactNode) => <Tooltip side="bottom" trigger={menuTrigger}>{tooltip}</Tooltip>;
+    return <AnchoredMenu trigger={trigger} open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange} side={side} align={align} offset={offset} id={rest.id} surface={surface} wrapTrigger={wrapTrigger} />;
   }
   /* A hosted menu: Up/Down move between items (wrapping), Home/End jump to the ends and a
      printable key moves to the next item starting with it, as in the WAI menu pattern. */
@@ -1374,10 +1391,16 @@ export interface MenuItemProps extends HTMLAttributes<HTMLButtonElement> {
   description?: ReactNode;
   /** A leading icon in the row's icon box, as NavItem, Tabs and CommandItem take (audit S17, D-18). */
   icon?: ReactNode;
+  /**
+   * Choosing the row leaves the menu open (`data-keep-open`), for a menu of view options whose
+   * effect shows behind it (sort, group, show); a menu of commands closes (docs/PRODUCT_UI.md).
+   * Checkbox rows always stay open.
+   */
+  keepOpen?: boolean;
 }
 
 export const MenuItem = /* @__PURE__ */ forwardRef<HTMLButtonElement, MenuItemProps>(function MenuItem(
-  { tone, shortcut, disabled, checked, radio, indicator = "check", description, icon, className, children, ...rest },
+  { tone, shortcut, disabled, checked, radio, indicator = "check", description, icon, keepOpen, className, children, ...rest },
   ref,
 ) {
   const checkable = checked !== undefined;
@@ -1390,6 +1413,7 @@ export const MenuItem = /* @__PURE__ */ forwardRef<HTMLButtonElement, MenuItemPr
       className={cx("area-menu__item", tone === "danger" && "area-menu__item--danger", className)}
       disabled={disabled}
       {...(disabled ? { "data-disabled": "" } : {})}
+      {...(keepOpen ? { "data-keep-open": "" } : {})}
       {...rest}
     >
       {icon ? <span className="area-menu__icon" aria-hidden="true">{icon}</span> : null}
@@ -1708,7 +1732,8 @@ export const Segmented = /* @__PURE__ */ forwardRef<HTMLDivElement, SegmentedPro
       className={segmentedVariants({ size, fullWidth, iconOnly }, className)}
       {...rest}
     >
-      {options.map((option) => (
+      {options.map((option) => {
+        const button = (
         <button
           key={option.value}
           type="button"
@@ -1739,7 +1764,11 @@ export const Segmented = /* @__PURE__ */ forwardRef<HTMLDivElement, SegmentedPro
           ) : null}
           <span className={iconOnly ? "area-sr-only" : "area-segmented__label"}>{option.label}</span>
         </button>
-      ))}
+        );
+        // An icon-only option names itself in an Area Tooltip, its label (product UI rule 4,
+        // docs/PRODUCT_UI.md); the label is already its name, so the tooltip only shows.
+        return iconOnly ? <Tooltip key={option.value} side="bottom" describes={false} trigger={button}>{option.label}</Tooltip> : button;
+      })}
       {name ? <input ref={hidden} type="hidden" name={name} form={form} disabled={disabled} value={value ?? ""} /> : null}
     </div>
   );

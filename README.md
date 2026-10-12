@@ -13,19 +13,25 @@ Use Node 22.18+, 24.x, or 26+ (see `package.json`) and npm workspaces.
 
 ```sh
 npm ci
-npm run dev
+npm run build   # the packages the app imports
+npm run dev     # the desktop app (Electron), reloading on change
 ```
 
-Open the [component gallery](http://localhost:4321/): every component and variant on one
-canvas, a component list on the left and a theme panel (mode, density) on the right that
-changes only the canvas. It is the source of truth for how components look; its chrome is
-built from Area's own Panel, Nav and Segmented (`apps/docs/src/gallery/`,
-`apps/docs/scripts/component-gallery.mjs`). Tiles are 4:3 and fill the canvas width; a
-specimen shows at 0.8 at most inside a wide margin, and larger ones scale down to fit the same tile (`apps/docs/src/gallery/fit.ts`). The [corner radius page](http://localhost:4321/roundness.html) shows each component
-at every radius setting, Sharp to Pill, and how inset corners follow their shell.
-Type ramp, iconography, icons, color, UI scale, radius, surface and motion each have a
-`gallery-*.html` page. The documentation site is hidden for now. The dev server rebuilds
-changed sources and keeps the last successful preview if a build fails.
+`npm run preview` serves the same app to a browser at http://localhost:4400.
+
+The app (`apps/desktop`) is Area's gallery: every component, icon, type style and colour. Its
+regions are the **Titlebar** (Language, Components, Typography, Icons and Color tabs, search,
+layout toggles, light / dark), the **Sidebar** (the tab's list), the **Canvas** (the selection at
+full size) and the **Inspector** (canvas settings and facts about the selection). It runs at the
+compact UI scale and is built from Area's own components; the Canvas carries its own density,
+radius and pills from the Inspector.
+
+**The app is the source of truth** (owner, 2026-10-12). Area consumes itself: the app is built only
+from Area, and it is the one place components, icons, type, colour and their states are shown and
+judged. The documentation site (`apps/docs`, `npm run dev:docs`) is archived and is not a source of
+truth. Component content and status, specimens and every demo now live in the app
+(`apps/desktop/src/content`); the icon pipeline still sits in the site's folder until it moves to
+`packages/icons`. Edit sources where they are and judge the result in the app. Reviews of icons and components are published as artifacts.
 
 ## Use the library
 
@@ -53,7 +59,9 @@ unpublished ESM workspaces; publishing them is separate work.
 - `packages/tokens/`: palette, scales, semantic roles, theme resolution and token tests.
 - `packages/styles/`: component CSS and the shared variant manifest.
 - `packages/react/`: components, native behavior, composition and typed helpers.
-- `apps/docs/`: component pages, real demos, gallery and browser verification fixtures.
+- `apps/desktop/`: the app (Electron): Titlebar, Sidebar, Canvas, Inspector.
+- `apps/docs/`: archived site, not a source of truth; its icon sources and generator move to
+  `packages/icons` next, then the site is deleted.
 - `tests/` and `scripts/`: consumer checks, retained fixtures and package build helpers.
 
 ## Essential documentation
@@ -67,7 +75,7 @@ unpublished ESM workspaces; publishing them is separate work.
 - [Contrast](docs/CONTRAST.md): color, focus and accessibility constraints.
 - [Development](docs/DEVELOPMENT.md): architecture, commands, testing and generated files.
 
-The gallery's [completion registry](apps/docs/src/component-status.mjs) is authoritative.
+The gallery's [completion registry](apps/desktop/src/content/component-status.mjs) is authoritative.
 New and refined families stay In review until the owner accepts them.
 
 Session notes live in [the handoff](.Codex/HANDOFF.md); history lives in the journal

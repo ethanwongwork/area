@@ -427,12 +427,19 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
     const ends = [];
     for (const sub of el.attrs.d.split(/(?=M)/).filter(s => s.trim())) {
       if (/z/i.test(sub)) continue; // a closed knockout (globe's meridian) has no free end to run out
-      const { segments: segs = [], points: pts = [] } = parsePath(name, sub);
-      const first = segs[0], last = segs.at(-1), start = pts[0], end = pts.at(-1);
-      const out = (s, p, back) => { const l = Math.hypot(s[2] - s[0], s[3] - s[1]), k = back ? -1 : 1; return [p[0] + k * (s[2] - s[0]) / l, p[1] + k * (s[3] - s[1]) / l].map(v => Number(v.toFixed(3))); };
+      // The run-out follows the path's tangent at the end, read from its samples, so an arc or a
+      // curve (banknote's corners, umbrella's ribs) runs out square too, not only a straight end
+      // (owner, 2026-10-11: curved knockouts kept a rounded end at the silhouette).
+      const ring = parsePath(name, sub).rings?.[0] ?? [];
+      const start = ring[0], end = ring.at(-1);
+      const away = (p, from) => { const q = from.find(s => Math.hypot(s[0] - p[0], s[1] - p[1]) >= 0.05); if (!q) return null;
+        const l = Math.hypot(p[0] - q[0], p[1] - q[1]); return [p[0] + (p[0] - q[0]) / l, p[1] + (p[1] - q[1]) / l].map(v => Number(v.toFixed(3))); };
       const onEdge = p => solidSamples.some(([x, y]) => Math.hypot(x - p[0], y - p[1]) < 0.15);
-      if (first && start && first[0] === start[0] && first[1] === start[1] && onEdge(start)) ends.push(`M${start[0]} ${start[1]}L${out(first, start, true).join(" ")}`);
-      if (last && end && last[2] === end[0] && last[3] === end[1] && onEdge(end)) ends.push(`M${end[0]} ${end[1]}L${out(last, end, false).join(" ")}`);
+      const r = p => p.map(v => Number(v.toFixed(3)));
+      // AUDIT_ENDS=1 lists knockout ends 0.15–1.2 from a solid's centre-line (near an edge without running out).
+      if (process.env.AUDIT_ENDS) for (const p of [start, end].filter(Boolean)) { const d = Math.min(...solidSamples.map(([x, y]) => Math.hypot(x - p[0], y - p[1]))); if (d >= 0.15 && d < 1.2) console.log(`ENDS ${name} ${r(p).join(",")} ${d.toFixed(2)}`); }
+      if (start && onEdge(start)) { const o = away(start, ring); if (o) ends.push(`M${r(start).join(" ")}L${o.join(" ")}`); }
+      if (end && onEdge(end)) { const o = away(end, [...ring].reverse()); if (o) ends.push(`M${r(end).join(" ")}L${o.join(" ")}`); }
     }
     if (ends.length) el.exitD = ends.join("");
   }
@@ -466,8 +473,11 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
   if (strict && name.endsWith("-off") && root["data-off"] !== "own" && !elements.some(el => /M2 2L14 14\b/.test(el.attrs.d ?? "")))
     fail(name, `an off icon draws the shared slash M2 2L14 14, or declares data-off="own"`);
   const lineGlyphIcon = !elements.some(el => SOLID_ROLES.includes(el.filled));
+  // data-ends="keep": a glyph stroke whose proportions matter (a 2's base against its bowl, a Z's bars against its
+  // corners, a 1's foot) keeps its free ends when it thickens, as a bolder weight of a typeface does; retracting them
+  // shortened the 2's base and offset the Z's bars in the filled variant (owner, 2026-10-11). Gaps are still linted.
   for (const el of drawn) if (el.stroked && el.tag === "path" && lineGlyphIcon) {
-    el.boldD = retractFreeEnds(el.attrs.d, drawn.filter(o => o !== el).flatMap(o => o.samples));
+    el.boldD = el.attrs["data-ends"] === "keep" ? el.attrs.d : retractFreeEnds(el.attrs.d, drawn.filter(o => o !== el).flatMap(o => o.samples));
     el.boldSamples = parsePath(name, el.boldD).samples;
   }
   // Gaps: separate shapes either join or sit on the gap scale (measured ink to ink).
@@ -614,7 +624,7 @@ const STROKE_HALO_EDGE = `style={{ strokeWidth: sw(weight, size, 2) }} strokeLin
 // Filled: every line, drawn as ink or as negative space (knockouts, cuts, gaps, halos), follows the
 // size curve, so the space in a filled icon is the outline's line at every size (owner, 2026-10-06).
 const jsx = (el, paint) => {
-  const { "data-shift": shift, "data-part": _part, "data-halo": _halo, ...attrs } = { ...el.attrs, ...paint?.attrs };
+  const { "data-shift": shift, "data-part": _part, "data-halo": _halo, "data-ends": _ends, ...attrs } = { ...el.attrs, ...paint?.attrs };
   const props = Object.entries(attrs).map(([k, v]) => `${camel(k)}="${v}"`);
   if (paint?.stroke ?? el.stroked) {
     let style = paint?.strokeStyle ?? STROKE;

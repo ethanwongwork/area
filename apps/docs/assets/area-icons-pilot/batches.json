@@ -13,9 +13,9 @@
         "chevron-down": "approved",
         "copy": "approved",
         "dismiss": "approved",
-        "document": "review",
+        "document": "approved",
         "eye": "approved",
-        "folder": "review",
+        "folder": "approved",
         "info": "approved",
         "link": "approved",
         "more-horizontal": "approved",
@@ -69,7 +69,7 @@
         "dots-four": "approved",
         "eye-off": "approved",
         "flip": "approved",
-        "flow": "review",
+        "flow": "approved",
         "flow-wrap": "approved",
         "flow-free": "approved",
         "gap": "approved",
@@ -88,9 +88,9 @@
         "lock": "approved",
         "star": "approved",
         "heart": "approved",
-        "calendar": "review",
+        "calendar": "approved",
         "clock": "approved",
-        "pencil": "review",
+        "pencil": "approved",
         "download": "approved",
         "upload": "approved",
         "filter": "approved",
@@ -106,12 +106,12 @@
       "icons": {
         "minus": "approved",
         "send": "approved",
-        "home": "review",
+        "home": "approved",
         "mail": "approved",
         "chat": "approved",
         "image": "approved",
         "mic": "approved",
-        "help": "review",
+        "help": "approved",
         "bookmark": "approved"
       }
     },
@@ -120,7 +120,7 @@
       "title": "Batch 7 · Controls & system",
       "note": "Toward a full set: navigation (menu, grid; more-vertical is more-horizontal turned 90°), media (play, pause), editing (undo; redo is its mirror), theme (sun, moon, desktop), development (code, terminal), status and sharing (error, unlock, share, globe). Rings at r 6. Globe A kept.",
       "icons": {
-        "menu": "review",
+        "menu": "approved",
         "grid": "approved",
         "play": "approved",
         "pause": "approved",
@@ -141,17 +141,17 @@
       "title": "Batch 8 · Objects",
       "note": "The deferred three (paperclip, tag, people) and zoom, flag, archive, cloud, phone, camera, cart. Round 2: people uses person's parts with the overlap cut; flag has sharp points; archive is landscape. Cloud and paperclip candidates on the Exploration sheet.",
       "icons": {
-        "attach": "review",
+        "attach": "approved",
         "tag": "approved",
-        "people": "review",
+        "people": "approved",
         "zoom-in": "approved",
         "zoom-out": "approved",
         "flag": "approved",
-        "archive": "review",
+        "archive": "approved",
         "cloud": "approved",
         "phone": "approved",
         "camera": "approved",
-        "cart": "review"
+        "cart": "approved"
       }
     },
     {
@@ -167,8 +167,8 @@
         "at": "approved",
         "key": "approved",
         "shield": "approved",
-        "gift": "review",
-        "map": "review",
+        "gift": "approved",
+        "map": "approved",
         "chart": "approved",
         "table": "review"
       }
@@ -181,7 +181,7 @@
         "strikethrough": "approved",
         "heading": "approved",
         "list-bullet": "approved",
-        "wifi": "review",
+        "wifi": "approved",
         "bluetooth": "approved",
         "battery": "approved",
         "plug": "approved",
@@ -200,11 +200,11 @@
         "thumbs-up": "approved",
         "smile": "review",
         "briefcase": "approved",
-        "building": "review",
+        "building": "approved",
         "compass": "approved",
         "crop": "approved",
         "trophy": "approved",
-        "coffee": "review"
+        "coffee": "approved"
       }
     },
     {
@@ -212,7 +212,7 @@
       "title": "Batch 12 · System & tools",
       "note": "Database, server, scissors, log in and log out (a bracket and reset's-size arrow), keyboard, pointer, move (four 2px heads on the lattice), hourglass and loader.",
       "icons": {
-        "database": "review",
+        "database": "approved",
         "server": "approved",
         "scissors": "approved",
         "log-in": "approved",
@@ -234,8 +234,8 @@
         "music": "approved",
         "film": "approved",
         "credit-card": "approved",
-        "wallet": "review",
-        "receipt": "review",
+        "wallet": "approved",
+        "receipt": "approved",
         "lightbulb": "approved",
         "megaphone": "approved"
       }
@@ -246,13 +246,13 @@
       "note": "Person add (people's figure and a plus), history (reset round clock hands), save, bug, eyedropper, paintbrush, puzzle piece and ruler.",
       "icons": {
         "person-add": "approved",
-        "history": "review",
+        "history": "approved",
         "save": "approved",
         "bug": "approved",
         "eyedropper": "approved",
         "paintbrush": "approved",
         "puzzle": "approved",
-        "ruler": "review"
+        "ruler": "approved"
       }
     },
     {
@@ -261,11 +261,11 @@
       "note": "Bell off, mic off and video off (each shape cut open round one slash), calculator, graduation cap, car and package.",
       "icons": {
         "bell-off": "approved",
-        "mic-off": "review",
-        "video-off": "review",
+        "mic-off": "approved",
+        "video-off": "approved",
         "calculator": "approved",
         "graduation-cap": "review",
-        "car": "review",
+        "car": "approved",
         "package": "approved"
       }
     },
@@ -274,7 +274,7 @@
       "title": "Batch 16 · Keys & connections",
       "note": "Wi-Fi off and link off (slashed line glyphs), cloud upload (the arrow leaves through the cloud's foot), command, return, backspace and rocket.",
       "icons": {
-        "wifi-off": "review",
+        "wifi-off": "approved",
         "link-off": "approved",
         "cloud-upload": "approved",
         "command": "approved",
@@ -292,10 +292,10 @@
         "stop": "approved",
         "repeat": "approved",
         "person-remove": "approved",
-        "clipboard": "review",
-        "sticky-note": "review",
+        "clipboard": "approved",
+        "sticky-note": "approved",
         "trending-up": "approved",
-        "shopping-bag": "review"
+        "shopping-bag": "approved"
       }
     },
     {
@@ -303,9 +303,9 @@
       "title": "Batch 18 · Add, sync & sensing",
       "note": "Calendar, folder and document add (a 4px plus replaces the lower-right corner, the container cut open round it), cloud download (the arrow leaves through an open foot), shuffle, fingerprint and gauge.",
       "icons": {
-        "calendar-add": "review",
-        "folder-add": "review",
-        "document-add": "review",
+        "calendar-add": "approved",
+        "folder-add": "approved",
+        "document-add": "approved",
         "cloud-download": "approved",
         "shuffle": "approved",
         "fingerprint": "review",
@@ -332,7 +332,7 @@
       "icons": {
         "tablet": "approved",
         "tv": "approved",
-        "watch": "review",
+        "watch": "approved",
         "mouse": "approved",
         "speaker": "approved",
         "hard-drive": "approved",
@@ -366,8 +366,8 @@
         "git-branch": "approved",
         "grip-vertical": "approved",
         "activity": "approved",
-        "layout": "review",
-        "percent": "review"
+        "layout": "approved",
+        "percent": "approved"
       }
     },
     {
@@ -384,7 +384,7 @@
         "indent": "approved",
         "outdent": "approved",
         "columns": "approved",
-        "calendar-remove": "review",
+        "calendar-remove": "approved",
         "folder-remove": "approved",
         "document-remove": "approved"
       }
@@ -396,7 +396,7 @@
       "icons": {
         "list-numbered": "review",
         "sort-ascending": "approved",
-        "filter-dismiss": "review",
+        "filter-dismiss": "approved",
         "bookmark-add": "approved",
         "reply-all": "approved",
         "text-cursor": "approved"
@@ -422,7 +422,7 @@
         "checkbox": "approved",
         "list-checklist": "approved",
         "bookmark-remove": "approved",
-        "filter-add": "review",
+        "filter-add": "approved",
         "pushpin": "approved",
         "palette": "approved"
       }
@@ -458,7 +458,7 @@
       "icons": {
         "truck": "approved",
         "store": "approved",
-        "ticket": "review",
+        "ticket": "approved",
         "kanban": "review"
       }
     },
@@ -467,11 +467,11 @@
       "title": "Batch 30 · Nature & tools",
       "note": "Highlighter (Fluent's marker: a cup, a collar and a chisel tip), flame (one outline: a tall centre flame between two smaller ones), leaf (a pointed top, a vein and stem), umbrella (Lucide's: a flat-bottomed canopy, a tip and a J handle), snowflake (three arms with branch ticks), thermometer (a tube and bulb with a ⌀2 reading), mountain (Mount Fuji with a snow line), anchor (a ring, stock, shank and arc) and magnet (a horseshoe with pole bands).",
       "icons": {
-        "highlighter": "review",
+        "highlighter": "approved",
         "flame": "approved",
         "leaf": "approved",
         "umbrella": "review",
-        "snowflake": "review",
+        "snowflake": "approved",
         "thermometer": "approved",
         "mountain": "approved",
         "anchor": "approved",
@@ -487,10 +487,10 @@
         "cloud-lightning": "approved",
         "wind": "approved",
         "star-off": "approved",
-        "qr-code": "review",
+        "qr-code": "approved",
         "rectangle": "approved",
         "ellipse": "approved",
-        "coins": "review"
+        "coins": "approved"
       }
     },
     {
@@ -525,7 +525,7 @@
       "title": "Batch 34 · Code & git",
       "note": "Git commit and git merge (git-branch's r 2 nodes), braces, variable (parentheses round a 4px ×), function (an ƒ with two hooks) and sigma.",
       "icons": {
-        "git-commit": "review",
+        "git-commit": "approved",
         "git-merge": "approved",
         "braces": "approved",
         "variable": "approved",
@@ -541,7 +541,7 @@
         "fast-forward": "approved",
         "screen-share": "approved",
         "picture-in-picture": "approved",
-        "images": "review",
+        "images": "approved",
         "captions": "approved",
         "camera-off": "approved"
       }
@@ -552,11 +552,11 @@
       "note": "Library (three books and a leaning one), code block (terminal's frame with two small chevrons), banknote (a note with a round seal), bank (a roof, three columns and a base), barcode (five bars, tight and standard gaps), award (a ring with a notched ribbon) and crown.",
       "icons": {
         "library": "approved",
-        "code-block": "review",
-        "banknote": "review",
+        "code-block": "approved",
+        "banknote": "approved",
         "bank": "approved",
         "barcode": "approved",
-        "award": "review",
+        "award": "approved",
         "crown": "approved"
       }
     },
@@ -565,7 +565,7 @@
       "title": "Batch 39 · People & talk",
       "note": "Frown (smile with its mouth turned over), person in a circle, chat multiple (a smaller bubble in front of copy's L) and end call (Fluent's hang-up handset).",
       "icons": {
-        "frown": "approved",
+        "frown": "review",
         "person-circle": "approved",
         "chat-multiple": "approved",
         "call-end": "approved"
@@ -608,7 +608,7 @@
       "icons": {
         "id-card": "approved",
         "newspaper": "approved",
-        "file-image": "review",
+        "file-image": "approved",
         "file-code": "review",
         "git-pull-request": "approved",
         "plane": "review",
@@ -656,11 +656,11 @@
       "title": "Batch 46 · Notification dot",
       "note": "A new shared part (delegated decision): a solid ⌀3 dot (Fluent's bell badge, Cursor's ratio) on the host's top-right corner, its edge flush with the host's ink; the host is cut round it by the overlap cut (1.125). In the filled variant a `gap` ring parts it from the solid host. On a ring it sits at the 45° point.",
       "icons": {
-        "bell-dot": "review",
-        "chat-dot": "review",
+        "bell-dot": "approved",
+        "chat-dot": "approved",
         "mail-dot": "review",
-        "square-badge": "review",
-        "compass-dot": "review"
+        "square-badge": "approved",
+        "compass-dot": "approved"
       }
     },
     {
@@ -668,12 +668,12 @@
       "title": "Batch 47 · Checks, plays and off states",
       "note": "Delegated decisions: no prohibited ring (flask-off takes the shared slash; search-off a short slash inside the lens, since the shared slash would lie along its handle) and no small bug; marks follow the placement rule (inside a screen, on a folder's corner).",
       "icons": {
-        "folder-check": "review",
+        "folder-check": "approved",
         "scan-check": "approved",
-        "desktop-check": "review",
+        "desktop-check": "approved",
         "desktop-play": "approved",
         "search-off": "approved",
-        "flask-off": "review"
+        "flask-off": "approved"
       }
     },
     {
@@ -681,7 +681,7 @@
       "title": "Batch 48 · Agents and sparkles",
       "note": "The agent mark (owner round: not the pointer, which read as Cursor’s cursor) is Fluent’s agents shape: a hexagon split by a steep slash into two halves. The sparkle sits on chat’s corner as Fluent’s chat sparkle.",
       "icons": {
-        "agent": "review",
+        "agent": "approved",
         "chat-sparkle": "approved",
         "grid-sparkle": "approved",
         "grid-plus": "approved",
@@ -696,7 +696,7 @@
         "arrow-left-right": "approved",
         "arrow-right-left": "approved",
         "arrow-right-to-line": "approved",
-        "caps-lock": "review",
+        "caps-lock": "approved",
         "chevrons-right": "approved",
         "chevrons-down-up": "approved"
       }
@@ -706,7 +706,7 @@
       "title": "Batch 50 · Files",
       "note": "Document and the copy stack.",
       "icons": {
-        "files": "review",
+        "files": "approved",
         "file-export": "review",
         "clipboard-list": "approved"
       }
@@ -719,7 +719,7 @@
         "hexagon": "approved",
         "cube": "approved",
         "asterisk": "approved",
-        "plus-minus": "review",
+        "plus-minus": "approved",
         "brackets": "approved",
         "split": "approved",
         "git-pull-request-closed": "approved",
@@ -732,7 +732,7 @@
       "note": "First part of the queue's batch 53.",
       "icons": {
         "dollar": "approved",
-        "chart-scatter": "review",
+        "chart-scatter": "approved",
         "layout-dashboard": "approved",
         "network": "approved"
       }
@@ -762,8 +762,8 @@
       "title": "Batch 56 · Objects 3",
       "note": "The rest of the queue's objects, first part.",
       "icons": {
-        "check-check": "review",
-        "presentation": "review",
+        "check-check": "approved",
+        "presentation": "approved",
         "blocks": "approved",
         "badge-check": "approved",
         "cookie": "approved",
@@ -779,18 +779,18 @@
       "icons": {
         "bug-off": "review",
         "file-lock": "approved",
-        "folders": "review",
+        "folders": "approved",
         "chat-warning": "approved",
         "call-incoming": "approved",
         "call-outgoing": "approved",
-        "app-window": "review",
+        "app-window": "approved",
         "gallery": "approved",
-        "markdown": "review",
+        "markdown": "approved",
         "case-upper": "approved",
         "case-sensitive": "approved",
         "wrench": "approved",
-        "bandage": "review",
-        "atom": "review"
+        "bandage": "approved",
+        "atom": "approved"
       }
     },
     {
@@ -813,9 +813,9 @@
       "icons": {
         "dumbbell": "approved",
         "piano": "approved",
-        "toy-brick": "review",
+        "toy-brick": "approved",
         "square-smile": "review",
-        "crystal-ball": "review",
+        "crystal-ball": "approved",
         "utensils": "approved",
         "basketball": "approved"
       }
@@ -843,12 +843,12 @@
         "bot-agent": "approved",
         "bot-builder": "approved",
         "bot-researcher": "approved",
-        "bot-scholar": "review",
-        "bot-guard": "review",
+        "bot-scholar": "approved",
+        "bot-guard": "approved",
         "bot-lead": "approved",
         "bot-designer": "approved",
         "bot-generator": "approved",
-        "bot-automator": "review"
+        "bot-automator": "approved"
       }
     },
     {
@@ -861,7 +861,7 @@
         "navigation": "approved",
         "mouse-pointer-click": "approved",
         "import": "approved",
-        "signature": "review",
+        "signature": "approved",
         "text-color": "approved",
         "bring-to-front": "approved",
         "group": "approved",
@@ -869,10 +869,10 @@
         "clipboard-check": "approved",
         "clipboard-paste": "approved",
         "list-plus": "approved",
-        "list-tree": "review",
+        "list-tree": "approved",
         "workflow": "approved",
         "cloud-check": "approved",
-        "archive-restore": "review",
+        "archive-restore": "approved",
         "headset": "approved",
         "person-settings": "approved",
         "bell-ring": "approved",
@@ -880,17 +880,17 @@
         "square-x": "approved",
         "more-circle": "approved",
         "radio-button": "approved",
-        "star-half": "review",
+        "star-half": "approved",
         "shield-alert": "approved",
-        "image-plus": "review",
+        "image-plus": "approved",
         "cart-add": "approved",
-        "calendar-clock": "review",
+        "calendar-clock": "approved",
         "octagon-alert": "approved",
         "toggle": "approved",
         "accessibility": "approved",
         "discount": "approved",
         "currency-euro": "approved",
-        "cards": "review"
+        "cards": "approved"
       }
     },
     {
@@ -903,34 +903,34 @@
         "lasso": "approved",
         "pilcrow": "approved",
         "insert-row": "approved",
-        "spell-check": "review",
+        "spell-check": "approved",
         "text-wrap": "approved",
         "file-search": "approved",
-        "file-spreadsheet": "review",
+        "file-spreadsheet": "approved",
         "rss": "approved",
-        "file-pen": "review",
+        "file-pen": "approved",
         "folder-lock": "approved",
         "chart-gantt": "approved",
         "webhook": "approved",
         "voicemail": "approved",
         "phone-missed": "approved",
         "broadcast": "approved",
-        "cast": "review",
+        "cast": "approved",
         "image-off": "approved",
         "radio": "approved",
         "battery-charging": "approved",
-        "battery-low": "approved",
+        "battery-low": "review",
         "brightness": "approved",
-        "devices": "review",
+        "devices": "approved",
         "gamepad": "approved",
         "signal": "approved",
         "usb": "approved",
-        "scan-face": "review",
+        "scan-face": "approved",
         "shield-off": "approved",
         "badge": "approved",
         "handshake": "approved",
         "meh": "review",
-        "basket": "review",
+        "basket": "approved",
         "piggy-bank": "approved",
         "scale": "approved",
         "cloud-snow": "approved",
@@ -956,12 +956,12 @@
       "note": "The build queue items that most icon systems share: binary, goal, radar, broom, chat-question, file-diff, plug-off.",
       "icons": {
         "file-diff": "approved",
-        "chat-question": "review",
+        "chat-question": "approved",
         "plug-off": "approved",
-        "binary": "approved",
+        "binary": "review",
         "goal": "approved",
         "radar": "approved",
-        "broom": "review"
+        "broom": "approved"
       }
     },
     {
@@ -969,11 +969,11 @@
       "title": "Batch 66 · Build next",
       "note": "The audit's build-next list (docs/research/icon-audit/relevance-2026-10-02.md): concepts 4 or 5 of Fluent, Lucide, Phosphor, Hugeicons and SF Symbols share.",
       "icons": {
-        "pencil-off": "review",
+        "pencil-off": "approved",
         "zap-off": "approved",
-        "location-off": "review",
+        "location-off": "approved",
         "chat-off": "approved",
-        "screen-share-off": "review",
+        "screen-share-off": "approved",
         "bookmark-off": "approved",
         "heart-off": "approved",
         "flag-off": "approved",
@@ -983,11 +983,11 @@
         "shield-user": "approved",
         "shield-x": "approved",
         "shield-plus": "approved",
-        "mail-plus": "review",
+        "mail-plus": "approved",
         "person-x": "approved",
         "person-key": "approved",
         "file-cog": "approved",
-        "file-download": "review",
+        "file-download": "approved",
         "password": "approved",
         "volume-low": "approved",
         "merge": "approved",
@@ -1008,7 +1008,7 @@
       "title": "Batch 67 · Pen",
       "note": "The pen, drawn as the pencil's twin (owner, 2026-10-05: pen and pencil the same size and shape; the pen has a round top and a clip).",
       "icons": {
-        "pen": "review"
+        "pen": "approved"
       }
     },
     {
@@ -1017,30 +1017,30 @@
       "note": "Concepts the whole-set consistency audit (2026-10-05) found missing: state variants of existing bases (copy, document, calendar, folder, timer, call, sparkle, person, shield, battery), editor and type pairs (justify, list-minus, lowercase, headings, regex, replace), arrange pairs (send to back, ungroup) and screen controls (minimize, loader-circle, arrow from line). Each is its family base plus the shared modifier.",
       "icons": {
         "copy-check": "approved",
-        "document-dismiss": "review",
-        "calendar-x": "review",
-        "folder-search": "review",
-        "timer-off": "review",
+        "document-dismiss": "approved",
+        "calendar-x": "approved",
+        "folder-search": "approved",
+        "timer-off": "approved",
         "call-off": "approved",
-        "sparkle-off": "review",
+        "sparkle-off": "approved",
         "person-lock": "approved",
-        "shield-lock": "review",
-        "battery-full": "review",
+        "shield-lock": "approved",
+        "battery-full": "approved",
         "battery-medium": "review",
-        "maximize": "review",
-        "minimize": "review",
-        "loader-circle": "review",
-        "text-align-justify": "review",
-        "list-minus": "review",
-        "case-lower": "review",
-        "regex": "review",
+        "maximize": "approved",
+        "minimize": "approved",
+        "loader-circle": "approved",
+        "text-align-justify": "approved",
+        "list-minus": "approved",
+        "case-lower": "approved",
+        "regex": "approved",
         "replace": "approved",
         "heading-1": "review",
         "heading-2": "review",
-        "heading-3": "review",
-        "send-to-back": "review",
-        "ungroup": "review",
-        "arrow-up-from-line": "review"
+        "heading-3": "approved",
+        "send-to-back": "approved",
+        "ungroup": "approved",
+        "arrow-up-from-line": "approved"
       }
     },
     {
@@ -1086,7 +1086,7 @@
         "monitor-cog": "approved",
         "stamp": "approved",
         "component": "approved",
-        "slice": "review",
+        "slice": "approved",
         "blend": "approved",
         "swatch-book": "approved",
         "line-style": "approved"
@@ -1097,45 +1097,45 @@
       "title": "Batch 70 · New icons",
       "note": "39 concepts Area lacked, each with a product use (a fresh library gap pass over Fluent, Lucide, Phosphor, Hugeicons and SF Symbols), drawn on the families they belong to. eye-closed and file-x are aliases of eye-off and document-dismiss.",
       "icons": {
-        "file-x": "review",
-        "file-clock": "review",
+        "file-x": "approved",
+        "file-clock": "approved",
         "file-question": "review",
-        "file-user": "review",
+        "file-user": "approved",
         "file-zip": "review",
-        "folder-cog": "review",
-        "folder-sync": "review",
+        "folder-cog": "approved",
+        "folder-sync": "approved",
         "form": "review",
         "table-cells-merge": "review",
         "table-cells-split": "review",
-        "person-search": "review",
-        "person-pen": "review",
-        "person-star": "review",
-        "shield-cog": "review",
-        "eye-closed": "review",
-        "mail-check": "review",
-        "mail-warning": "review",
+        "person-search": "approved",
+        "person-pen": "approved",
+        "person-star": "approved",
+        "shield-cog": "approved",
+        "eye-closed": "approved",
+        "mail-check": "approved",
+        "mail-warning": "approved",
         "hand-wave": "review",
-        "gif": "review",
+        "gif": "approved",
         "calendar-off": "review",
         "calendar-search": "review",
-        "calendar-sync": "review",
-        "alarm-off": "review",
-        "clock-check": "review",
-        "search-alert": "review",
-        "scan-qr": "review",
-        "webcam": "review",
-        "wifi-low": "review",
+        "calendar-sync": "approved",
+        "alarm-off": "approved",
+        "clock-check": "approved",
+        "search-alert": "approved",
+        "scan-qr": "approved",
+        "webcam": "approved",
+        "wifi-low": "approved",
         "globe-off": "review",
-        "book-add": "review",
-        "scroll": "review",
+        "book-add": "approved",
+        "scroll": "approved",
         "gavel": "review",
-        "tags": "review",
-        "vote": "review",
-        "text-quote": "review",
-        "copyright": "review",
+        "tags": "approved",
+        "vote": "approved",
+        "text-quote": "approved",
+        "copyright": "approved",
         "divide": "review",
-        "location-add": "review",
-        "arrow-up-right-circle": "review"
+        "location-add": "approved",
+        "arrow-up-right-circle": "approved"
       }
     },
     {
@@ -1143,29 +1143,29 @@
       "title": "Batch 71 · New icons",
       "note": "24 more concepts with a product use (media and calls, off states, reminders and labels, editor blocks, file types, charts, checkout), each on its family. monitor-off is an alias of screen-share-off.",
       "icons": {
-        "repeat-once": "review",
+        "repeat-once": "approved",
         "switch-camera": "review",
-        "eject": "review",
-        "headphones-off": "review",
-        "captions-off": "review",
-        "vibrate": "review",
-        "sim-card": "review",
-        "monitor-off": "review",
-        "megaphone-off": "review",
-        "lightbulb-off": "review",
-        "keyboard-off": "review",
-        "power-off": "review",
+        "eject": "approved",
+        "headphones-off": "approved",
+        "captions-off": "approved",
+        "vibrate": "approved",
+        "sim-card": "approved",
+        "monitor-off": "approved",
+        "megaphone-off": "approved",
+        "lightbulb-off": "approved",
+        "keyboard-off": "approved",
+        "power-off": "approved",
         "bell-plus": "review",
-        "calendar-range": "review",
-        "bookmark-check": "review",
-        "tag-plus": "review",
+        "calendar-range": "approved",
+        "bookmark-check": "approved",
+        "tag-plus": "approved",
         "paint-roller": "review",
-        "square-root": "review",
-        "list-collapse": "review",
+        "square-root": "approved",
+        "list-collapse": "approved",
         "file-video": "review",
         "file-audio": "review",
         "file-upload": "review",
-        "chart-area": "review",
+        "chart-area": "approved",
         "gift-card": "review"
       }
     },
@@ -1176,11 +1176,11 @@
       "icons": {
         "gem": "review",
         "file-pdf": "review",
-        "hand-coins": "review",
-        "package-check": "review",
+        "hand-coins": "approved",
+        "package-check": "approved",
         "sort-alpha": "review",
         "sort-numeric": "review",
-        "incognito": "review"
+        "incognito": "approved"
       }
     },
     {
@@ -1188,15 +1188,15 @@
       "title": "Batch 73 · New icons",
       "note": "Nine concepts from a product-surface pass (Cursor and VS Code, Figma, Notion, Linear, GitHub): resize and fold arrows, the Space key, resolve thread, clear list, priority levels, urgent. move-horizontal is an alias of arrow-left-right.",
       "icons": {
-        "move-horizontal": "review",
-        "fold-horizontal": "review",
-        "unfold-horizontal": "review",
-        "space": "review",
-        "chat-check": "review",
-        "list-x": "review",
-        "signal-low": "review",
-        "signal-medium": "review",
-        "square-alert": "review"
+        "move-horizontal": "approved",
+        "fold-horizontal": "approved",
+        "unfold-horizontal": "approved",
+        "space": "approved",
+        "chat-check": "approved",
+        "list-x": "approved",
+        "signal-low": "approved",
+        "signal-medium": "approved",
+        "square-alert": "approved"
       }
     },
     {
@@ -1206,6 +1206,27 @@
       "icons": {
         "panel-bottom-open": "review",
         "panel-bottom-close": "review"
+      }
+    },
+    {
+      "id": "batch-75",
+      "title": "Batch 75 · Coverage from product surfaces",
+      "note": "From a live survey of ChatGPT's icon sprite (854 symbols, 426 concepts), Notion's loaded icon set (206 concepts) and Figma's editor bundle (743 24px icons, read by eye). Each icon here is used in at least one of the three; most in two.",
+      "icons": {
+        "image-sparkle": "approved",
+        "pencil-sparkle": "approved",
+        "text-sparkle": "approved",
+        "code-sparkle": "approved",
+        "people-group": "approved",
+        "person-dashed": "approved",
+        "circle-dollar": "approved",
+        "chat-pen": "approved",
+        "sun-moon": "approved",
+        "heading-4": "approved",
+        "heading-5": "approved",
+        "heading-6": "approved",
+        "pilcrow-right": "approved",
+        "pilcrow-left": "approved"
       }
     }
   ]

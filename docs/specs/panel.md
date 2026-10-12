@@ -113,7 +113,7 @@ rgb(245, 245, 245) and white with a 1px rgb(230, 230, 230) edge.
 |---|---|---|---|
 | shell · width | **240**, public hook `--area-panel-inline-size` | Owner (2026-09-27: smaller by default); Figma's inspector 240 | Was 280, which made room for the action column; the Figma recipe sets 280 for its 28px rows |
 | rows | the tier's control, `--_row`: sm 28, md 32 (`panel.css:36, 351-357`) | Owner (prior; confirmed in the third pass) | Figma's rows are 32 (`figma--color-row`) with 24px fields inside; Area's controls fill the row |
-| field style | **soft for every field, Select included** (`apps/docs/src/demos/gallery.tsx:700-719`) | Third pass: one field style per surface | Was outline Selects beside soft NumberFields; Select gained `variant="soft"` ([select.md](select.md)) |
+| field style | **soft for every field, Select included** (`apps/desktop/src/content/demos/gallery.tsx:700-719`) | Third pass: one field style per surface | Was outline Selects beside soft NumberFields; Select gained `variant="soft"` ([select.md](select.md)) |
 | shell · radius / edge / fill | `radius-container` 12, `border-decorative` #f3f3f3, `bg-surface` #ffffff (`panel.css:36-38`) | Peers: Alert, Code block, Dialog; container seams stay decorative | Card's edge took `border-divider` in the third pass (it stands alone on the page), now neutral 100 (audit S7); a panel's lift carries its seam |
 | shell · shadow | `shadow-2`, 0 1px 2px −0.5px `shadow-color` 6% (`panel.css:40`) | Shared rule: the floating lift is for overlays | A panel sits in the page flow; Notion's 20px-blur geometry would read as an overlay |
 | flush | no border, radius or shadow; `bg-page` (`panel.css:49-54`) | Figma's docked inspector: no radius, edge or shadow on any row (`figma--section-title`, `figma--color-row`) | — |
@@ -121,7 +121,7 @@ rgb(245, 245, 245) and white with a 1px rgb(230, 230, 230) edge.
 | title | 500; md 16/24, sm 14/20 (`--_panel-title-*`, `panel.css:105-111`) | Surface title (audit S2, owner 2026-09-30); type by size (owner 2026-09-28) | Was UI 14/20 at both sizes |
 | heading | **500, `fg-default`; md 14/20, sm 12/16** (`--_panel-label-*`, `panel.css:162-177`; audit S2) | Second pass: the heading outranks muted labels by ink | Was 12/16, smaller than the 14px labels under it. Figma's title is 11/16 550 at the same ink as its field text; kept (third pass): one label weight, so ink sets headings apart |
 | field labels | **`fg-muted` #666666** (`panel.css:147`) | Second pass | Was the Field default ink |
-| numeric rows | **NumberField soft with letter prefixes** X / Y / W / H (`apps/docs/src/demos/gallery.tsx:680-690`) | Figma's letter-prefixed number fields (`figma--number-field`) | Prefix ink and box differ from Figma; see [number-field.md](number-field.md) |
+| numeric rows | **NumberField soft with letter prefixes** X / Y / W / H (`apps/desktop/src/content/demos/gallery.tsx:680-690`) | Figma's letter-prefixed number fields (`figma--number-field`) | Prefix ink and box differ from Figma; see [number-field.md](number-field.md) |
 | rules (bar, section, footer) | **`border-decorative`**, the panel's own edge (owner, 2026-09-27: a divider is never darker than its container); was `border-divider` #e2e2e2 | Second pass: new divider role for rules; Figma #e6 (`figma--size-select` edge), ChatGPT 10% black; Notion's menu rules are lighter, 7% (#f0, `menu/notion--page-menu--open`); #e2 is the nearest rung to #e5 | Was `border-decorative` #f3f3f3 |
 | section rule extent | full width; last section none (`panel.css:114-127`) | Area's own | — |
 | inset (sides, last field to a rule) | **sm 12, md 16** (`--_inset`) | Owner (2026-09-28: "the margins are too big for both") | Was 16 / 20 for one round, 12 / 16 before that |
@@ -188,7 +188,7 @@ Earlier note:
 
 The gallery shows Panel in Default (every control, with prefixed NumberField pairs),
 Content (sections, footer) and Layout (flush, bare bar) groups; every field is soft. The
-docs example (`PanelEverything`, `apps/docs/src/demos/display.tsx:316`) is the default 280px
+docs example (`PanelEverything`, `apps/desktop/src/content/demos/display.tsx:316`) is the default 280px
 panel with medium rows and soft fields. This spec's author did not inspect screenshots.
 Unverified: dark theme and a side-by-side with Figma's inspector at the same zoom.
 
@@ -225,7 +225,7 @@ Open questions:
 - 4 Area captures (re-taken after the second pass) and 5 Figma inspector captures compared
   above; Notion popover kept for contrast.
 - Build and test results: see [the audit](../research/cohesion-audit.md#verification).
-- The docs API table lists `bareBar` (`apps/docs/src/pages.mjs:834`).
+- The docs API table lists `bareBar` (`apps/desktop/src/content/pages.mjs:834`).
 
 ## Review note, 2026-10-09
 
@@ -288,4 +288,5 @@ Open questions:
   14 / 10 / 4, sm 10 / 6 / 4), the edge counted once (`--_side`); the resizable demo's Dimensions row carries Figma's
   constrain toggle in its reserved action column; the chevron is centred on the title row, not the heading box →
   panel.css, inset.css, gallery.tsx.
+- 2026-10-12 · owner (desktop Sidebar: "nav margins on the sides are way too large and not equally inset") → (1) a docked flush panel's seam is counted once: the seam side's inset is the inset less the border (`--_side-start` / `--_side-end`), so content sits 14 from the outside on both sides (was 14 / 15); (2) a vertical Nav or a Tree view in a panel body hangs its plates by the row inset (`--area-ui-row-inset`) and fills the panel, so text, labels and counts sit on the panel's 14 column and plates 6 from each edge (was plates 14, text 22) → panel.css. Measured in the app: plates 6 / 6, text 14, count digits end 14.
 - 2026-10-12 · owner, review round 16: approved.

@@ -143,6 +143,11 @@
     box-decoration-break: clone;
   }
 
+  /* In a shrink-to-fit table cell a name is a value, not prose: it keeps its line rather than breaking
+     at a hyphen (owner, 2026-10-12: "aria-" / "label"), so the column is as wide as its longest name,
+     as Vercel's and Primer's prop tables set them. Other cells still wrap, so a narrow table holds. */
+  .area-table__cell--fit .area-code { white-space: nowrap; }
+
   /*
    * Size sets the block's metrics; the base rules read them. md is the page block. sm is the
    * inspector's code well (Figma Dev Mode, box-model captures 2026-10-12): 18px lines, 8 insets

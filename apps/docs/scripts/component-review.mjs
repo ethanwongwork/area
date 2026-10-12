@@ -26,7 +26,7 @@ const dist = join(root, "dist");
 const beforeDist = arg("--before");
 const out = resolve(arg("--out") ?? join(root, ".cache/component-review"));
 
-const { COMPLETE_COMPONENTS, REVIEW_COMPONENTS } = await import(join(root, "src/component-status.mjs"));
+const { COMPLETE_COMPONENTS, REVIEW_COMPONENTS } = await import(join(root, "../desktop/src/content/component-status.mjs"));
 const RENAMED = { disclosure: "accordion" };
 
 /* Sections and tiles of a built gallery (index.html), by balanced tags. */

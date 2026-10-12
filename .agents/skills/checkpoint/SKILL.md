@@ -17,4 +17,4 @@ Use only for a requested checkpoint or handoff, not ordinary task completion.
 5. Report what is saved, what remains uncommitted, and any remaining work.
 
 Do not mark a component complete because a report or test passes. Owner-confirmed
-completion is recorded in `apps/docs/src/component-status.mjs`.
+completion is recorded in `apps/desktop/src/content/component-status.mjs`.
