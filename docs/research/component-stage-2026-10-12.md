@@ -58,8 +58,8 @@ bot check, so its docs were used.
   size (or 2×); the code attached under a decorative rule with Copy, collapsing past 8 lines; the
   right edge resizes it (288 to the full width, readout in the head).
 - **Code.** The configured instance's generated code (import plus JSX, non-default props), or the
-  demo's own source, extracted at build time by `scripts/demo-sources.mjs` as the archived site's
-  render step does (first-line indent fixed).
+  demo's own source, from main's build-time extractor (`scripts/snippets.mjs`,
+  `virtual:demo-snippets`), with its first-line indent fixed.
 - **Properties** (Button, Badge and Accordion so far). Generated from the manifest: two or three choices as
   Segmented, longer lists as Select, flags as Switches, the label as a field, Reset once changed. An
   edit that lands on a tile's configuration moves the Stage to that tile; otherwise the head reads

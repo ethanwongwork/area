@@ -251,16 +251,19 @@
   }
   .studio-stack { display: grid; gap: var(--_canvas-gap); }
   .studio-canvas__body {
-    --_tile-radius: 20px; /* pick: owner, 2026-10-12 "slightly too round", one even step below 24 (owner, 2026-10-11: rounder than 16) */
+    /* Sharper (owner, 2026-10-13: "make the corner radius sharper"; was 20, and 24 before that): 12,
+       Area's surface corner at the default radius (Card, Dialog), held whatever the Canvas's radius
+       setting, so a tile reads as an Area container. */
+    --_tile-radius: 12px; /* pick */
     --_tile-edge: var(--area-border-card); /* Card's edge */
-    --_tile-inset: var(--area-space-16);
+    /* Tighter (owner, 2026-10-13: "the margin/padding can be smaller"; was 16): 12, Compact's inset. */
+    --_tile-inset: var(--area-space-12);
   }
   /* A stage's own edge inside a tile (swatches, preset plates): Tailwind's 1px outline at 8%. */
 
-  /* The tile: a 1 hairline, a 24 corner (rounder again, owner 2026-10-11: the container corner at
-     radius 14; held whatever the Canvas's radius setting), the surface fill, 16 in from the outside
-     (inset.css: the border counted once; a rounder corner wants more room), a header row and the
-     stage. Nothing inside draws a second box: the visual is the tile (src/tile.tsx). */
+  /* The tile: a 1 hairline, a 12 corner (held whatever the Canvas's radius setting), the surface
+     fill, 12 in from the outside (inset.css: the border counted once), a header row and the stage.
+     Nothing inside draws a second box: the visual is the tile (src/tile.tsx). */
   .gallery-tile {
     display: grid;
     grid-template-rows: auto minmax(0, 1fr);
@@ -335,14 +338,16 @@
     outline-offset: calc(var(--area-border-width) * -2);
     transition-duration: 0s;
   }
+  /* The label is the app's UI text, 13 at its scale (owner, 2026-10-13: "the text label larger";
+     was text-xs, 11), the size a colour card's step already used, so every tab's tiles read alike. */
   .gallery-tile__head {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
     gap: var(--area-space-8);
     min-inline-size: 0;
-    font-size: var(--area-text-xs-size);
-    line-height: var(--area-text-xs-leading);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
   }
   .gallery-tile__label { min-inline-size: 0; overflow: hidden; color: var(--area-fg-muted); text-overflow: ellipsis; white-space: nowrap; }
   .gallery-tile__value { flex: none; color: var(--area-fg-muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
@@ -628,7 +633,7 @@
    * is the ink that reads on the colour; the field names and the badge's plate are that ink thinned
    * (72% and 12%, picks), so the values lead.
    */
-  .studio-swatch__level { font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); font-variant-numeric: tabular-nums; } /* regular weight: no bold on the cards (owner, 2026-10-12) */
+  .studio-swatch__level { font-variant-numeric: tabular-nums; } /* regular weight: no bold on the cards (owner, 2026-10-12) */
   .studio-swatch__badge {
     display: inline-flex;
     align-items: center;

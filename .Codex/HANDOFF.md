@@ -13,8 +13,11 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   groups below, then Props, Anatomy and States from the manifest. Properties in the Inspector for Button, Accordion and
   Badge (`src/content/playgrounds.tsx`, generated from `manifest.ts`). Double-click, ⌘↓ or Open to open; Escape,
   ⌘↑, ⌘[ or All to go back with the tile revealed. `#components/<family>/<tile>`.
-- Demo source for the code comes from `scripts/demo-sources.mjs` (virtual module `area:demo-sources`). The dev
-  server must restart after editing that script.
+- Demo source for the code is main's `scripts/snippets.mjs` (`virtual:demo-snippets`); this branch fixed its
+  first-line indent. Merged main on 2026-10-13 (the Stage's Inspector takes main's Copy code / Copy import and facts).
+- Tiles (owner, 2026-10-13: "corner radius sharper, the text label larger, the margin/padding can be smaller"):
+  corner 20 → 12, inset 16 → 12, label text-xs (11 at the app's 13) → text-sm (13), so component and colour
+  tiles share one label size.
 - Checks: desktop typecheck and build; browser preview at 1440 (light, dark, compact; Button, Badge, Menu, Confirm
   dialog; Properties, Escape / ⌘↓ / ⌘↑, reveal, width handle). Not verified: the Electron window, docs build.
 
