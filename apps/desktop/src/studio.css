@@ -419,6 +419,25 @@
   [data-stage="flow"] > .gallery-tile__view { align-content: start; }
   .studio-tile-error { margin: 0; color: var(--area-fg-danger); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); }
 
+  /*
+   * The Stage's strips: the family's tiles on the grid's own columns, each group a run of them under
+   * its heading. A group takes as many columns as it has tiles (up to the row), and the columns are
+   * the grid's (subgrid), so tiles line up down the Canvas across groups and small groups sit side by
+   * side. Groups a margin apart; a heading one gap over its tiles.
+   */
+  .studio-canvas__body .studio-grid.studio-strips { grid-auto-rows: auto; row-gap: var(--_canvas-margin); }
+  .studio-strip {
+    display: grid;
+    grid-column: span min(var(--_count), var(--_pairs));
+    grid-template-columns: subgrid;
+    grid-template-rows: auto;
+    grid-auto-rows: calc(var(--_unit-row) * 2 + var(--_gap));
+    row-gap: var(--_gap);
+    align-content: start;
+    min-inline-size: 0;
+  }
+  .studio-strip > .studio-canvas__section-title { grid-column: 1 / -1; margin: 0; }
+
   /* --- Stage (src/stage.tsx) ------------------------------------------------ */
 
   /* A family's isolated view: the tile made large. The tile's edge, corner, surface and head; the

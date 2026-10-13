@@ -19,7 +19,7 @@
  * The tiles come from the app's own content (src/content/: specimens.mjs over pages.mjs, the demos
  * in registry.tsx), labelled and ordered by specimen-names.mjs, and fitted by src/gallery/fit.ts.
  */
-import { Component, createElement, useEffect, useRef, useState, type ReactNode } from "react";
+import { Component, createElement, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import * as AreaReact from "@area/react";
 import { Badge, Button, Code, Count, EmptyState, Kbd, Link, Nav, NavGroup, NavItem, PanelSection, Segmented, Table, TableLink, Tooltip } from "@area/react";
 import { ArrowLeftIcon, ChevronLeftIcon, ChevronRightIcon, CopyIcon, OpenIcon, ResetIcon } from "@area/icons";
@@ -204,22 +204,24 @@ function FamilyStage({ family, tiles, tile, config, onSelectTile, onChange, zoom
         code={config && playground ? configCode(playground, config) : SNIPPETS[tile.demo]}>
         <TileBoundary>{config && playground ? renderConfig(playground, config, onChange) : <Demo name={tile.demo} />}</TileBoundary>
       </Stage>
-      <div ref={strips} className="studio-sections" data-fit="" data-zoom={zoom}>
-        {groups.map(([group, list]: readonly [string, Tile[]]) => (
-          <section key={group} className="studio-section" aria-labelledby={`group-${group}`}>
-            <h2 className="studio-canvas__section-title" id={`group-${group}`} {...APP_SCALE}>
-              {group} <span className="studio-muted studio-tabular">{list.length}</span>
-            </h2>
-            <TileGrid span="wide">
+      {/* The family's tiles: one grid, each group a run of it under its heading, so small groups share
+          a row instead of each starting its own (src/studio.css, .studio-strips). */}
+      <div ref={strips} data-fit="" data-zoom={zoom}>
+        <div className="studio-grid studio-grid--wide studio-strips">
+          {groups.map(([group, list]: readonly [string, Tile[]]) => (
+            <section key={group} className="studio-strip" style={{ "--_count": list.length } as CSSProperties} aria-labelledby={`group-${group}`}>
+              <h2 className="studio-canvas__section-title" id={`group-${group}`} {...APP_SCALE}>
+                {group} <span className="studio-muted studio-tabular">{list.length}</span>
+              </h2>
               {list.map(entry => (
                 <Tile key={entry.id} span="wide" stage="fit" label={group === "Default" ? entry.label : entry.value} aria-label={`${family.name}: ${entry.label}`}
                   selected={entry.id === onStage?.id} onSelect={() => onSelectTile(entry)}>
                   <TileBoundary><Demo name={entry.demo} /></TileBoundary>
                 </Tile>
               ))}
-            </TileGrid>
-          </section>
-        ))}
+            </section>
+          ))}
+        </div>
       </div>
       {/* The reference: documentation, not specimens, so it keeps the app's compact scale and default
           radius whatever the Canvas previews (owner, 2026-10-11: props at full width, under the tiles). */}
