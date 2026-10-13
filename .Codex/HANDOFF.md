@@ -10,8 +10,10 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
 - Owner: research how component pages and playgrounds show a component, then "go with your recommendations".
   Research and decisions: `docs/research/component-stage-2026-10-12.md`. The grid stays the overview; a family
   opens as a Stage (`src/stage.tsx`): the tile on it at real size, code attached, the family's tiles in their
-  groups below, then Props, Anatomy and States from the manifest. Properties in the Inspector for Button, Accordion and
-  Badge (`src/content/playgrounds.tsx`, generated from `manifest.ts`). Double-click, ⌘↓ or Open to open; Escape,
+  groups below (small groups share a row), then Props, Anatomy and States from the manifest. Properties in the
+  Inspector for Accordion, Badge, Button, Checkbox, Chip, Count, Input, Spinner, Switch and Tag
+  (`src/content/playgrounds.tsx`, generated from `manifest.ts`); `npm run check:playgrounds -w @area/desktop`
+  checks every mapped tile against its demo (0 mismatches). Double-click, ⌘↓ or Open to open; Escape,
   ⌘↑, ⌘[ or All to go back with the tile revealed. `#components/<family>/<tile>`.
 - Demo source for the code is main's `scripts/snippets.mjs` (`virtual:demo-snippets`); this branch fixed its
   first-line indent. Merged main on 2026-10-13 (the Stage's Inspector takes main's Copy code / Copy import and facts).

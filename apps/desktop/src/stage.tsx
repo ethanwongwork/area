@@ -134,7 +134,8 @@ function renderControl(control: PlaygroundControl, value: PropValue, change: (va
     return <Switch size="sm" aria-label={control.label} checked={value === true} onCheckedChange={checked => change(checked)} />;
   }
   if (control.kind === "text") {
-    return <Input size="sm" aria-label={control.label} value={String(value)} onChange={event => change(event.currentTarget.value)} />;
+    return <Input size="sm" aria-label={control.label} value={String(value)} onChange={event => change(event.currentTarget.value)}
+      {...(control.numeric ? { type: "number", inputMode: "numeric", min: 0 } : {})} />;
   }
   const options = control.options!;
   return options.length <= 3 ? (

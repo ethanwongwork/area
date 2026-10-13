@@ -60,22 +60,25 @@ bot check, so its docs were used.
 - **Code.** The configured instance's generated code (import plus JSX, non-default props), or the
   demo's own source, from main's build-time extractor (`scripts/snippets.mjs`,
   `virtual:demo-snippets`), with its first-line indent fixed.
-- **Properties** (Button, Badge and Accordion so far). Generated from the manifest: two or three choices as
+- **Properties** for Accordion, Badge, Button, Checkbox, Chip, Count, Input, Spinner, Switch and Tag. Generated from the manifest: two or three choices as
   Segmented, longer lists as Select, flags as Switches, the label as a field, Reset once changed. An
   edit that lands on a tile's configuration moves the Stage to that tile; otherwise the head reads
   "Custom". Composition tiles (icons, shortcuts, alignment context) show their demo as written.
+- **Tiles and configurations agree.** `npm run check:playgrounds -w @area/desktop` renders every tile a
+  playground maps to a configuration as code and compares it with the tile's own demo (props as a set,
+  defaults aside): 99 match, 43 have no source of their own (Badge's loop-made demos), 114 are compositions.
+- **Groups share rows.** The family's tiles sit on one grid; each group spans as many columns as it has tiles,
+  so one-tile groups sit side by side on the grid's columns.
 - **Reference under the tiles.** Props (as before), Anatomy (root and parts with their classes)
   and States (each runtime state and its attribute), both from the manifest.
 
 ## Open
 
-- Playgrounds for more families: each needs a `PLAYGROUNDS` entry naming its axes, switches and
-  label (`src/content/playgrounds.tsx`).
+- Playgrounds for the remaining families: each needs a `PLAYGROUNDS` entry naming its axes, switches,
+  text and any tiles whose configuration its name does not say; then run the check.
 - 92 generated demos have no literal source (Badge's and Indicator's gallery maps), so a composition
   tile from them shows no code.
 - A React / HTML switch on the code, "Open source" in an editor (needs an Electron bridge), a stage
   background choice, and a measure overlay were recommended but not built.
 - Frozen hover / press / focus tiles need a documented `data-*` hook per component; Button paints
   hover with `:hover` only.
-- Single-tile groups each take a row, which makes the lower half long for families with many
-  one-tile groups.
