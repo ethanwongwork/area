@@ -1,13 +1,15 @@
 /**
  * Icons: the categories in the Sidebar, every Area icon grouped by category on the Canvas
- * (filtered by the Titlebar search), and the selected icon in the Inspector with its style, size,
- * facts and Copy SVG. The icon data and the SVG export are the icon browser's
- * (apps/docs/src/gallery/icon-browser.tsx).
+ * (filtered by the Titlebar search), drawn in the style and at the size the Canvas bar sets. The
+ * Inspector shows the chosen icon (its drawing, Copy SVG, Download, Copy name and import, its
+ * facts from @area/icons/meta), else the Sidebar's category, else the set. The icon data and the
+ * SVG export are the icon browser's (apps/docs/src/gallery/icon-browser.tsx).
  */
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import { Badge, Button, Code, Count, EmptyState, Field, HoverCard, Nav, NavGroup, NavItem, PanelSection, PreviewFrame, Segmented, Slider, Table, TableLink } from "@area/react";
+import { Badge, Button, Code, Count, EmptyState, HoverCard, Nav, NavGroup, NavItem, PanelSection, Segmented, Select, Table, TableLink } from "@area/react";
+import { icons as ICON_META } from "@area/icons/meta";
 import { PILOT_BATCHES, PILOT_ICONS } from "../../../docs/src/pilot-icons.tsx";
-import { CopyIcon, DownloadIcon } from "@area/icons";
+import { CopyIcon, DownloadIcon, StarFilledIcon, StarIcon } from "@area/icons";
 import { ICON_CATEGORIES } from "../../../docs/src/icon-categories.ts";
 import { CopyButton, standaloneSvg } from "../../../docs/src/gallery/icon-browser.tsx";
 import { SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
@@ -15,6 +17,7 @@ import { CanvasSection } from "../tile.tsx";
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { Facts } from "../facts.tsx";
+import { Preview, Selection } from "../inspector.tsx";
 import { matches } from "../search.ts";
 import { readStored, writeStored } from "../storage.ts";
 import { ArrangeMenu, groupBy, PinButton, PinMenu, sortBy, useArrangement, usePins } from "../organize.tsx";
@@ -35,6 +38,16 @@ const StatusBadge = ({ name }: { name: string }) => statusOf(name) === "approved
   ? <Badge size="sm" tone="success" variant="soft">Approved</Badge>
   : <Badge size="sm" tone="caution" variant="soft">In review</Badge>;
 const titleCase = (name: string) => name.split("-").map(word => word[0]!.toUpperCase() + word.slice(1)).join(" ");
+/* The package's record of each icon: its export names, and the names that draw the same icon. */
+const META = new Map(ICON_META.map(entry => [entry.name, entry]));
+const ALIASES = new Map<string, string[]>();
+for (const entry of ICON_META) if (entry.aliasOf) ALIASES.set(entry.aliasOf, [...(ALIASES.get(entry.aliasOf) ?? []), entry.name]);
+/** The import line: approved icons are in the main entry, the rest in @area/icons/review. */
+const importLine = (name: string, style: "outline" | "filled") => {
+  const meta = META.get(name);
+  if (!meta) return undefined;
+  return `import { ${style === "filled" ? meta.filledComponent : meta.component} } from "@area/icons${meta.status === "approved" ? "" : "/review"}";`;
+};
 
 /* Sort and group (src/organize.tsx). The default is the curated order: by category, each in the
    order its category lists it. */
@@ -45,9 +58,11 @@ type Group = (typeof GROUPS)[number]["value"];
 const ORDER = new Map(ICON_CATEGORIES.flatMap(category => category.icons).map((name, index) => [name, index] as const));
 const STATUS_LABEL = (name: string) => statusOf(name) === "approved" ? "Approved" : statusOf(name) === "review" ? "In review" : "Not reviewed";
 
-/* Sizes: the grid from Area's 12 floor to 32; the preview at the icon browser's 128, the hover
-   window's at 96 (three quarters of it, so the card stays a third of the Canvas or less). */
+/* Sizes: the grid from Area's 12 floor to 32 in steps of 4, chosen in the Canvas bar; the preview
+   at the icon browser's 128, the hover window's at 96 (three quarters of it, so the card stays a
+   third of the Canvas or less). */
 const SIZE = { min: 12, max: 32, initial: 16 } as const;
+const SIZES = Array.from({ length: (SIZE.max - SIZE.min) / 4 + 1 }, (_, index) => SIZE.min + index * 4);
 const PREVIEW = 128;
 const CARD_PREVIEW = 96;
 
@@ -109,11 +124,13 @@ export function IconsPage() {
   });
   useEffect(() => { writeStored("iconMode", style); writeStored("iconSize", size); }, [style, size]);
 
-  // The Sidebar's choice (All, or one category) and the Inspector's (one icon, kept across launches).
+  // The Sidebar's choice (All, or one category) and the Inspector's (one icon, until the Sidebar's
+  // choice changes; with none, the category or the set).
   const view = ICON_CATEGORIES.find(category => category.slug === item);
-  const [selected, setSelected] = useState(() => readStored("icon", "component"));
-  const choose = (name: string) => { setSelected(name); writeStored("icon", name); };
-  const icon = BY_NAME.get(selected) ?? PILOT_ICONS[0]!;
+  const [selected, setSelected] = useState<string>();
+  useEffect(() => setSelected(undefined), [item]);
+  const choose = (name: string) => setSelected(name);
+  const icon = selected ? BY_NAME.get(selected) : undefined;
   const [mode, setMode] = useViewOption<ViewMode>("icons", "grid", ["grid", "list"]);
   const [status, setStatus] = useViewOption<"all" | "approved" | "review">("icons-status", "all", ["all", "approved", "review"]);
   const arrangement = useArrangement<Sort, Group>("icons", { sort: "category", descending: false, group: "category" }, SORTS, GROUPS);
@@ -143,17 +160,23 @@ export function IconsPage() {
   // Keep the selected icon in view when it changes from the Sidebar or a link.
   const canvas = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    canvas.current?.querySelector<HTMLElement>(`[data-icon="${CSS.escape(icon.name)}"]`)?.scrollIntoView({ block: "nearest" });
-  }, [icon.name]);
+    if (icon) canvas.current?.querySelector<HTMLElement>(`[data-icon="${CSS.escape(icon.name)}"]`)?.scrollIntoView({ block: "nearest" });
+  }, [icon?.name]);
 
   const preview = useRef<HTMLDivElement>(null);
   const svg = () => {
     const node = preview.current?.querySelector("svg");
-    return node ? standaloneSvg(node, icon.name) : "";
+    return node && icon ? standaloneSvg(node, icon.name) : "";
   };
-  const Draw = style === "filled" ? icon.Filled : icon.Icon;
-  const iconStatus = STATUS.get(icon.derivedFrom ?? icon.name);
-  const category = CATEGORY_OF.get(icon.name);
+  const Draw = icon ? (style === "filled" ? icon.Filled : icon.Icon) : undefined;
+  const iconStatus = icon ? STATUS.get(icon.derivedFrom ?? icon.name) : undefined;
+  const category = icon ? CATEGORY_OF.get(icon.name) : undefined;
+  const meta = icon ? META.get(icon.name) : undefined;
+  const aliases = icon ? [...(ALIASES.get(icon.name) ?? []), ...(meta?.aliasOf ? [meta.aliasOf] : [])] : [];
+  // The overview counts what the Sidebar's choice holds: the category, or every icon.
+  const scope = view ? view.icons : PILOT_ICONS.map(entry => entry.name);
+  const approved = scope.filter(name => statusOf(name) === "approved").length;
+  const inReview = scope.filter(name => statusOf(name) === "review").length;
 
   return (
     <Workspace
@@ -196,6 +219,14 @@ export function IconsPage() {
             options={[{ value: "all", label: "All statuses" }, { value: "approved", label: "Approved" }, { value: "review", label: "In review" }]} />
           <ArrangeMenu arrangement={arrangement} sorts={SORTS} groups={view ? undefined : GROUPS}
             directions={arrangement.sort === "name" ? ["A to Z", "Z to A"] : ["First to last", "Last to first"]} />
+          {/* How the icons are drawn, as Components' zoom: the style, then the size (product UI
+              rule 14: display settings in the Canvas bar, after the filters and the sort). */}
+          <Segmented size="sm" iconOnly aria-label="Style" value={style} onValueChange={value => setStyle(value as Mode)}
+            items={[{ value: "outline", label: "Outline", icon: <StarIcon /> }, { value: "filled", label: "Filled", icon: <StarFilledIcon /> }]} />
+          <Select size="sm" aria-label="Size" value={String(size)} onChange={event => setSize(Number(event.currentTarget.value))}
+            style={{ "--area-select-inline-size": "calc(var(--area-space-64) + var(--area-space-8))" } as CSSProperties /* pick: 72, "32 px" and the chevron */}>
+            {SIZES.map(value => <option key={value} value={value}>{value} px</option>)}
+          </Select>
           <ViewSwitch value={mode} onChange={setMode} />
         </ViewControls>
       }
@@ -215,7 +246,7 @@ export function IconsPage() {
                       if (!entry) return null;
                       const Glyph = style === "filled" ? entry.Filled : entry.Icon;
                       return (
-                        <tr key={name} data-selected={name === icon.name ? "" : undefined}>
+                        <tr key={name} data-selected={name === icon?.name ? "" : undefined}>
                           <td className="area-table__cell--fit"><span className="studio-icons__glyph" data-icon={name}><Glyph size={size} aria-hidden="true" /></span></td>
                           <td><TableLink href={`#icons`} onClick={event => { event.preventDefault(); choose(name); }}><Code>{name}</Code></TableLink></td>
                           <td><span className="studio-muted">{entry.keyline}</span></td>
@@ -231,7 +262,7 @@ export function IconsPage() {
                 <div className="studio-icons__sheet">
                   {section.shown.map(name => {
                     const entry = BY_NAME.get(name);
-                    return entry ? <IconCell key={name} entry={entry} style={style} size={size} selected={name === icon.name} onChoose={() => choose(name)} /> : null;
+                    return entry ? <IconCell key={name} entry={entry} style={style} size={size} selected={name === icon?.name} onChoose={() => choose(name)} /> : null;
                   })}
                 </div>
               )}
@@ -240,34 +271,46 @@ export function IconsPage() {
         </div>
         </PinMenu>
       ) : <EmptyState title="No icons" description={`Nothing matches “${query}”.`} />}
-      inspectorTitle={titleCase(icon.name)}
+      inspectorTitle={icon ? titleCase(icon.name) : view ? view.name : "All icons"}
       inspector={
         <>
           <CanvasSettings axes={["ui"]} />
-          <PanelSection>
-            <PreviewFrame className="studio-inspector-preview" ref={preview} label={titleCase(icon.name)}><Draw size={PREVIEW} aria-hidden="true" /></PreviewFrame>
-            <CopyButton label="Copy SVG" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(svg())} />
-          </PanelSection>
-          <PanelSection heading="Display">
-            <Field label="Style" orientation="horizontal">
-              <Segmented size="sm" fullWidth value={style} onValueChange={value => setStyle(value as Mode)}
-                items={[{ value: "outline", label: "Outline" }, { value: "filled", label: "Filled" }]} />
-            </Field>
-            <Field label="Size" orientation="horizontal">
-              <Slider size="sm" min={SIZE.min} max={SIZE.max} step={4} value={size} readout
-                onChange={event => setSize(Number(event.currentTarget.value))} />
-            </Field>
-          </PanelSection>
-          <PanelSection heading="Icon" actions={<PinButton name={titleCase(icon.name)} pinned={pins.has(icon.name)} onToggle={() => pins.toggle(icon.name)} />}>
-            <Facts label="Icon" items={[
-              ["Name", <Code>{icon.name}</Code>],
-              category ? ["Category", category.name] : null,
-              icon.derivedFrom ? ["From", icon.derivedFrom] : null,
-              ["Keyline", icon.keyline],
-              iconStatus ? ["Status", <StatusBadge name={icon.name} />] : null,
-              iconStatus ? ["Batch", iconStatus.batch] : null,
-            ]} />
-          </PanelSection>
+          {icon && Draw ? (
+            <>
+              <Selection preview={<Preview ref={preview} label={titleCase(icon.name)}><Draw size={PREVIEW} aria-hidden="true" /></Preview>}>
+                <CopyButton label="Copy SVG" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(svg())} />
+                <Button variant="outline" size="sm" fullWidth icon={<DownloadIcon />} onClick={() => download(svg(), icon.name)}>Download</Button>
+                <CopyButton label="Copy name" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(icon.name)} />
+                {importLine(icon.name, style) ? <CopyButton label="Copy import" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(importLine(icon.name, style)!)} /> : null}
+              </Selection>
+              <PanelSection heading="Icon" actions={<PinButton name={titleCase(icon.name)} pinned={pins.has(icon.name)} onToggle={() => pins.toggle(icon.name)} />}>
+                <Facts label="Icon" items={[
+                  ["Name", <Code>{icon.name}</Code>],
+                  meta ? ["Import", <Code>{style === "filled" ? meta.filledComponent : meta.component}</Code>] : null,
+                  aliases.length ? [meta?.aliasOf ? "Same as" : "Also", aliases.join(", ")] : null,
+                  category ? ["Category", category.name] : null,
+                  icon.derivedFrom ? ["From", icon.derivedFrom] : null,
+                  ["Keyline", icon.keyline],
+                  meta ? ["Filled", meta.fill === "solid" ? "Solid body" : "Heavier outline"] : null,
+                  iconStatus ? ["Status", <StatusBadge name={icon.name} />] : null,
+                  iconStatus ? ["Batch", iconStatus.batch] : null,
+                ]} />
+              </PanelSection>
+            </>
+          ) : (
+            <PanelSection heading={view ? "Category" : "Set"}>
+              <Facts label={view ? "Category" : "Set"} items={[
+                view ? null : ["Package", <Code>@area/icons</Code>],
+                ["Icons", scope.length],
+                ["Approved", approved],
+                ["In review", inReview],
+                scope.length - approved - inReview ? ["Not reviewed", scope.length - approved - inReview] : null,
+                view ? null : ["Categories", ICON_CATEGORIES.length],
+                ["Styles", "Outline, Filled"],
+                ["Sizes", `${SIZE.min} to ${SIZE.max}`],
+              ]} />
+            </PanelSection>
+          )}
         </>
       }
     />

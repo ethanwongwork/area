@@ -1,19 +1,23 @@
 /**
- * Color: the scales in the Sidebar; on the Canvas every scale as a ramp strip (All) or its steps as
- * painted tiles (one scale), or either as a list; the selected step in the Inspector (token, hex,
- * OKLCH, its contrast with the text it carries).
+ * Color: the scales in the Sidebar; on the Canvas every scale's steps as painted tiles, or as a
+ * list, filtered by the contrast their text needs; in the Inspector the chosen step (token, hex,
+ * OKLCH, its contrast with the text it carries, and the semantic tokens that use it), else the
+ * Sidebar's scale (its roles), else the palette.
  * Swatches paint the live custom property, so a neutral tint or theme change shows on the ramp.
  */
-import { useEffect, useState } from "react";
-import { Code, ColorSwatch, EmptyState, Nav, NavGroup, NavItem, PanelSection, PreviewFrame, Table, TableLink } from "@area/react";
+import { useEffect, useState, type ReactNode } from "react";
+import TOKENS from "@area/tokens/tokens.json";
+import { ROLE_SCALES } from "../../../../packages/tokens/src/color/presets.ts";
+import { Code, ColorSwatch, EmptyState, Nav, NavGroup, NavItem, PanelSection, Table, TableLink } from "@area/react";
 import { CopyIcon } from "@area/icons";
 import { CopyButton } from "../../../docs/src/gallery/icon-browser.tsx";
 import { SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
 import { CanvasSection, Tile, TileGrid } from "../tile.tsx";
-import { useViewOption, ViewControls, ViewSwitch, type ViewMode } from "../view-controls.tsx";
+import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { readStored, writeStored } from "../storage.ts";
 import { Facts } from "../facts.tsx";
+import { Preview, Selection } from "../inspector.tsx";
 import { matches } from "../search.ts";
 import { SCALES, type ScaleStep } from "../tokens.ts";
 import { ArrangeMenu, sortBy, useArrangement } from "../organize.tsx";
@@ -28,6 +32,40 @@ type Group = (typeof GROUPS)[number]["value"];
 const chroma = (scale: (typeof SCALES)[number]) => Number((scale.steps.find(step => step.level === 500) ?? scale.steps[0]!).oklch.match(/oklch\(\s*[\d.]+%?\s+([\d.]+)/)?.[1] ?? 0);
 
 const NEUTRALS = new Set(["neutral", "cool", "warm"]);
+
+/* Contrast filter: every step, or the steps that carry body text (AA, 4.5:1) on white or black. */
+type Contrast = "all" | "white" | "black";
+const CONTRASTS = [{ value: "all", label: "All steps" }, { value: "white", label: "Text on white" }, { value: "black", label: "Text on black" }] as const;
+
+/*
+ * The semantic tokens a step is (tokens.json semantics: a role, and the level it takes in light and
+ * dark). Only slots name their levels; tonal surfaces and strokes are derived from a role's scale
+ * (packages/tokens/src/emit) and are not listed. Roles reach a scale through ROLE_SCALES (danger
+ * is red, gray is warm) and the two settings: Neutral picks the neutral scale, Accent the accent's.
+ */
+type Semantic = { kind: string; role?: string; light?: number | string; dark?: number | string };
+const SEMANTICS = Object.entries(TOKENS.semantics as Record<string, Semantic>);
+const defaultPreset = (id: string) => (TOKENS.axes as Array<{ id: string; defaultPreset: string }>).find(axis => axis.id === id)!.defaultPreset;
+/** The roles that paint with a scale, each with the setting it needs, if any. */
+function rolesOf(scale: string): Array<{ role: string; when?: string }> {
+  const roles: Array<{ role: string; when?: string }> = [];
+  if (NEUTRALS.has(scale)) roles.push({ role: "neutral", when: scale === defaultPreset("neutral") ? undefined : `Neutral is ${title(scale)}` });
+  for (const [role, id] of Object.entries(ROLE_SCALES)) {
+    if (id !== scale) continue;
+    roles.push(role === "accent" ? { role, when: scale === defaultPreset("accent") ? undefined : `Accent is ${title(scale)}` } : { role });
+  }
+  return roles;
+}
+function usedBy(scale: string, level: number) {
+  const roles = rolesOf(scale);
+  return SEMANTICS.flatMap(([name, entry]) => {
+    const found = roles.find(item => item.role === entry.role);
+    if (!found) return [];
+    const modes = [entry.light === level ? "light" : null, entry.dark === level ? "dark" : null].filter(Boolean);
+    return modes.length ? [{ name, modes: modes.join(", "), when: found.when }] : [];
+  });
+}
+const roleLabel = (role: string) => role === "neutral" ? "Neutral" : role[0]!.toUpperCase() + role.slice(1);
 
 /* A step's values, as a colour card and the Inspector show them. */
 const rgbOf = (hex: string) => [1, 3, 5].map(at => parseInt(hex.slice(at, at + 2), 16)) as [number, number, number];
@@ -78,11 +116,15 @@ function parse(item?: string) {
 
 export function ColorPage() {
   const { query, item, select } = useStudio();
-  // The Sidebar's choice (All, or one scale) and the Inspector's (one step, kept across launches).
+  // The Sidebar's choice (All, or one scale) and the Inspector's (one step, until the Sidebar's
+  // choice changes; with none, the scale or the palette).
   const view = SCALES.find(entry => entry.id === item);
-  const [selected, setSelected] = useState(() => readStored("colorStep", "blue-500"));
-  const choose = (next: string) => { setSelected(next); writeStored("colorStep", next); };
-  const { scale, step } = parse(selected);
+  const [selected, setSelected] = useState<string>();
+  useEffect(() => setSelected(undefined), [item]);
+  const choose = (next: string) => setSelected(next);
+  const picked = selected ? parse(selected) : undefined;
+  const [contrast, setContrast] = useViewOption<Contrast>("color-contrast", "all", ["all", "white", "black"]);
+  const passes = (item: ScaleStep) => contrast === "all" || contrastWith(item.hex, contrast === "white" ? "#ffffff" : "#000000") >= 4.5;
   const arrangement = useArrangement<Sort, Group>("color", { sort: "palette", descending: false, group: "kind" }, SORTS, GROUPS);
   const filtered = SCALES.filter(entry => matches(query, entry.id, NEUTRALS.has(entry.id) ? "neutral grey gray" : entry.description));
   const sorted = arrangement.sort === "name" ? sortBy(filtered, entry => entry.id, arrangement.descending)
@@ -93,13 +135,13 @@ export function ColorPage() {
     : [["Scales", sorted]];
   // The Canvas runs in the Sidebar's order.
   const shown = groups.flatMap(([, list]) => list);
-  const onCanvas = view ? [view] : shown;
-  const token = `--area-${scale.id}-${step.level}`;
+  const onCanvas = (view ? [view] : shown).filter(entry => entry.steps.some(passes));
+  const token = picked ? `--area-${picked.scale.id}-${picked.step.level}` : "";
   const [mode, setMode] = useViewOption<ViewMode>("color", "grid", ["grid", "list"]);
 
   // The value the swatch paints now (the neutral axis tints neutral steps).
   const [live, setLive] = useState("");
-  useEffect(() => { setLive(getComputedStyle(document.documentElement).getPropertyValue(token).trim()); }, [token]);
+  useEffect(() => { setLive(token ? getComputedStyle(document.documentElement).getPropertyValue(token).trim() : ""); }, [token]);
 
   return (
     <Workspace
@@ -111,7 +153,7 @@ export function ColorPage() {
               {list.map(entry => (
                 <NavItem key={entry.id} href={`#color/${entry.id}`} current={entry.id === view?.id}
                   icon={<ColorSwatch size="sm" color={`var(--area-${entry.id}-500)`} aria-hidden="true" />}
-                  onClick={event => { event.preventDefault(); select(entry.id); choose(`${entry.id}-${step.level}`); }}>
+                  onClick={event => { event.preventDefault(); select(entry.id); }}>
                   {title(entry.id)}
                 </NavItem>
               ))}
@@ -120,9 +162,10 @@ export function ColorPage() {
         </Nav>
       }</SidebarList>}
       canvasTitle={view ? title(view.id) : "All scales"}
-      canvasMeta={<span className="studio-muted studio-tabular">{view ? view.steps.length : shown.length}</span>}
+      canvasMeta={<span className="studio-muted studio-tabular">{view ? view.steps.filter(passes).length : onCanvas.length}</span>}
       canvasActions={
         <ViewControls>
+          <ViewFilter label="Contrast" value={contrast} onChange={setContrast} options={CONTRASTS} />
           {view ? null : <ArrangeMenu arrangement={arrangement} sorts={SORTS} groups={GROUPS}
             directions={arrangement.sort === "name" ? ["A to Z", "Z to A"] : arrangement.sort === "chroma" ? ["Greyest first", "Most colourful first"] : ["First to last", "Last to first"]} />}
           <ViewSwitch value={mode} onChange={setMode} />
@@ -131,7 +174,8 @@ export function ColorPage() {
       canvas={onCanvas.length ? (
         <div className="studio-sections" onKeyDown={onGridKeys}>
           {onCanvas.map(entry => {
-            const isSelected = (level: number) => entry.id === scale.id && level === step.level;
+            const isSelected = (level: number) => entry.id === picked?.scale.id && level === picked?.step.level;
+            const steps = entry.steps.filter(passes);
             const pick = (level: number) => choose(`${entry.id}-${level}`);
             return (
               <CanvasSection key={entry.id} id={`scale-${entry.id}`} title={view ? undefined : title(entry.id)}>
@@ -140,7 +184,7 @@ export function ColorPage() {
                     <Table size="md" interactive flush aria-label={`${title(entry.id)} steps`}>
                       <thead><tr><th scope="col">Step</th><th scope="col">Token</th><th scope="col">Hex</th><th scope="col">OKLCH</th><th scope="col">Text</th></tr></thead>
                       <tbody>
-                        {entry.steps.map(item => (
+                        {steps.map(item => (
                           <tr key={item.level} data-selected={isSelected(item.level) ? "" : undefined}>
                             <td>
                               <TableLink href={`#color/${entry.id}`} className="studio-step" onClick={event => { event.preventDefault(); pick(item.level); }}>
@@ -161,7 +205,7 @@ export function ColorPage() {
                   // 2026-10-12: colours are their own containers; the joined ramp strip is gone).
                   // On the components' grid (owner, 2026-10-12): wide tiles, 280 at the least, 5:4.
                   <TileGrid span="wide">
-                    {entry.steps.map(item => (
+                    {steps.map(item => (
                       <ColorCard key={item.level} scale={entry.id} item={item} selected={isSelected(item.level)} onSelect={() => pick(item.level)} />
                     ))}
                   </TileGrid>
@@ -171,32 +215,65 @@ export function ColorPage() {
           })}
         </div>
       ) : <EmptyState title="No scales" description={`Nothing matches “${query}”.`} />}
-      inspectorTitle={`${title(scale.id)} ${step.level}`}
+      inspectorTitle={picked ? `${title(picked.scale.id)} ${picked.step.level}` : view ? title(view.id) : "All scales"}
       inspector={
         <>
           <CanvasSettings axes={["ui"]} />
-          <PanelSection>
-            <PreviewFrame className="studio-inspector-preview" aspect="wide" color={`var(${token})`} label={token} />
-            <CopyButton label="Copy token" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(`var(${token})`)} />
-          </PanelSection>
-          <PanelSection heading="Step">
-            <Facts label="Step" items={[
-              ["Token", <Code>{token}</Code>],
-              ["Hex", <Code>{live || step.hex}</Code>],
-              ["RGB", <Code>{rgbOf(step.hex).join(" ")}</Code>],
-              ["OKLCH", <Code>{step.oklch}</Code>],
-              ["Text", step.contrast.fg === "#ffffff" ? "White" : "Black"],
-              ["On white", <span className="studio-tabular">{contrastWith(step.hex, "#ffffff").toFixed(2)}:1 · {grade(contrastWith(step.hex, "#ffffff"))}</span>],
-              ["On black", <span className="studio-tabular">{contrastWith(step.hex, "#000000").toFixed(2)}:1 · {grade(contrastWith(step.hex, "#000000"))}</span>],
-            ]} />
-          </PanelSection>
-          {scale.description ? (
-            <PanelSection heading="Scale">
-              <p className="studio-inspector-note">{scale.description}</p>
-            </PanelSection>
-          ) : null}
+          {picked ? <StepInspector scale={picked.scale.id} step={picked.step} token={token} live={live} description={picked.scale.description} />
+            : view ? (
+              <PanelSection heading="Scale">
+                <Facts label="Scale" items={[
+                  ["Tokens", <Code>--area-{view.id}-*</Code>],
+                  ["Steps", `${view.steps.length}, ${view.steps[0]!.level} to ${view.steps.at(-1)!.level}`],
+                  ["Roles", rolesOf(view.id).length ? rolesOf(view.id).map(item => `${roleLabel(item.role)}${item.when ? ` (when ${item.when})` : ""}`).join(", ") : "None by default"],
+                  view.description ? ["About", view.description] : null,
+                ]} />
+              </PanelSection>
+            ) : (
+              <PanelSection heading="Palette">
+                <Facts label="Palette" items={[
+                  ["Tokens", <Code>--area-&lt;scale&gt;-&lt;step&gt;</Code>],
+                  ["Scales", SCALES.length],
+                  ["Neutrals", SCALES.filter(entry => NEUTRALS.has(entry.id)).map(entry => title(entry.id)).join(", ")],
+                  ["Hues", SCALES.filter(entry => !NEUTRALS.has(entry.id)).length],
+                  ["Steps", `${SCALES[0]!.steps.length} a scale`],
+                  ["Defaults", `Neutral: ${title(defaultPreset("neutral"))} · Accent: ${title(defaultPreset("accent"))}`],
+                ]} />
+              </PanelSection>
+            )}
         </>
       }
     />
+  );
+}
+
+/** The Inspector for one step: the colour, its token and hex to copy, then its facts. */
+function StepInspector({ scale, step, token, live, description }: { scale: string; step: ScaleStep; token: string; live: string; description?: string }) {
+  const uses = usedBy(scale, step.level);
+  const used: ReactNode = uses.length ? (
+    <span className="studio-used-by">
+      {uses.map(use => <span key={use.name}><Code>{use.name}</Code> <span className="studio-muted">{use.modes}{use.when ? ` · when ${use.when}` : ""}</span></span>)}
+    </span>
+  ) : <span className="studio-muted">No semantic token</span>;
+  return (
+    <>
+      <Selection preview={<Preview shape="wide" paint={`var(${token})`} label={token} />}>
+        <CopyButton label="Copy token" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(`var(${token})`)} />
+        <CopyButton label="Copy hex" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(live || step.hex)} />
+      </Selection>
+      <PanelSection heading="Step">
+        <Facts label="Step" items={[
+          ["Token", <Code>{token}</Code>],
+          ["Hex", <Code>{live || step.hex}</Code>],
+          ["RGB", <Code>{rgbOf(step.hex).join(" ")}</Code>],
+          ["OKLCH", <Code>{step.oklch}</Code>],
+          ["Text", step.contrast.fg === "#ffffff" ? "White" : "Black"],
+          ["On white", <span className="studio-tabular">{contrastWith(step.hex, "#ffffff").toFixed(2)}:1 · {grade(contrastWith(step.hex, "#ffffff"))}</span>],
+          ["On black", <span className="studio-tabular">{contrastWith(step.hex, "#000000").toFixed(2)}:1 · {grade(contrastWith(step.hex, "#000000"))}</span>],
+          ["Used by", used],
+          description ? ["Scale", description] : null,
+        ]} />
+      </PanelSection>
+    </>
   );
 }
