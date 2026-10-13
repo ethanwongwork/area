@@ -64,3 +64,23 @@ owner added form (shorter, aligned lines) and a hatched droplet as blur's refere
 - battery-full's three bars can't be exactly even on the grid; a cell construction would make the battery set exact.
 - smile-plus's plus badge shows a hairline at 48 (it predates this round).
 
+
+## Round 12: letters and numbers, filled icons side by side, divide
+
+Owner: the ÷ bar still read too long and the sign didn't read as division; "relaunch the icon review artifact, im still
+concerned about all numbers and letters in icons, as well as the filled icons and how the ones that fill the outline or
+1 shape look next to negative space stroke icons".
+
+- **divide** redrawn on Lucide's proportion: a 9 bar (3.5–12.5) at 7.5 with ⌀2.5 dots (`data-dot="free"`) at 3.75 and
+  11.25, a standard 1.94 from the bar. Sheet `divide.png`.
+- **Review page relaunched** (same link, same `reviews7` collection, version 50). `round12-data.mjs` rebuilds the data from
+  the published data.js with every drawing re-rendered from the sources; the 53 icons that draw letters, digits or signs
+  (`TYPE` in the script, in the type audit's tiers) and divide are reopened, so their earlier verdicts stop counting.
+  `review-page.html` is the template. New on the page:
+  - **One by one:** a strip under the stage shows the icon in a row, outline and filled at 16 and 24: a type icon beside
+    the rest of its tier, any other icon between ten common icons. Filters for letters and numbers, filled solids and
+    strokes-only icons.
+  - **Side by side:** every filled icon in rows as it would sit in a toolbar (by group, by measured ink, or solids then
+    strokes), each with its outline row, and the letters and numbers by tier. Ink is measured in the page: solid shapes
+    have a median of 39% of the square, strokes-only icons 20%. Click any icon to give it a verdict.
+  - **Set notes:** one note per view, saved to the `setnotes` collection (`round12-filled`, `round12-type`).

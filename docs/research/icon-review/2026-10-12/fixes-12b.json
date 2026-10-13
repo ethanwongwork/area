@@ -1,0 +1,6 @@
+{
+  "at": { "verdict": "replace", "library": "Fluent", "notes": "filled a negtive space too small, the a seems too big", "change": "Fluent's mention. The a is an r 2 bowl (was r 3), Fluent's share of the ring, and the tail is a wider hook, so every pocket is 2.9 in the outline and 2.5 filled (were 1.9 and 1.5)." },
+  "quote": { "verdict": "replace", "library": "Fluent", "notes": "the curve seems a bit too steep from the round part", "change": "Fluent text_quote's tail, kept as opening marks (your call in chat): the tail leaves the side of the round part straight up and bends gently over, instead of climbing steeply." },
+  "sort-alpha": { "verdict": "replace", "library": "Fluent", "notes": "A seems too short", "change": "Fluent text_sort_ascending's proportion: the A is 5 × 5 (was 4 × 4), larger than the Z as in Fluent. The arrow runs the full height." },
+  "strikethrough": { "verdict": "replace", "library": "Phosphor", "notes": "the S bottom part can be slightly wider than the top part, similar to B but very subtley wider", "change": "The lower bowl is 0.5 wider on each side (rx 4 against the top's 3.5); heights unchanged, so the difference stays subtle." }
+}

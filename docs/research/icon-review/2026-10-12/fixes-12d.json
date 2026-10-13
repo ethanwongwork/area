@@ -1,0 +1,260 @@
+{
+ "globe": {
+  "verdict": "fix",
+  "library": null,
+  "notes": "vertical arcs dont go all the way through the ends like fluent does",
+  "change": "Owner: the meridians should run through the ends like Fluent's. The lens is two open arcs ending at the poles, so the meridians cut through the ring at top and bottom; globe-off's lower lens is split at the pole the same way."
+ },
+ "table": {
+  "verdict": "approve",
+  "library": null,
+  "notes": "wider like phosphor",
+  "change": "Owner: wider like Phosphor. Landscape 12 × 9 frame, three equal rows, a narrow first column; merge and split (toward Fluent) share the frame: merge a header strip and a ↔ across the body, split a header divider and a floating bar."
+ },
+ "smile": {
+  "verdict": "approve",
+  "library": null,
+  "notes": "face is half a pixel too high",
+  "change": "Owner: the face sat half a pixel high. Eyes ⌀1.5 at 5.75, 6.5 / 10.25, 6.5 over the mouth's corners (smile M5.75 9.5A2.5 2.5 0 0 0 10.25 9.5; meh M5.75 10.5H10.25; frown M5.75 10.25A3.25 3.25 0 0 1 10.25 10.25; square-smile eyes at 6.5, mouth corners at 9.75); smile-plus at its 0.75 scale (eyes 4.75 / 8.25 at 5.25, mouth corners 7.75)."
+ },
+ "graduation-cap": {
+  "verdict": "fix",
+  "library": null,
+  "notes": "stroke on hat line pokes through top part of hat",
+  "change": "Owner: the tassel line poked through the board. It starts on the board's corner centre-line (13.5, 7.366)."
+ },
+ "fingerprint": {
+  "verdict": "replace",
+  "library": "Phosphor",
+  "notes": "",
+  "change": "Replace toward Phosphor: concentric tops (r 1.25 / 3.75 / 6.25 about 8, 8), lower ends on arcs about a point to the left, breaks as Phosphor's; three ridges at the approved 2.5 pitch (Phosphor's 2 fails the filled gap)."
+ },
+ "document-check": {
+  "verdict": "fix",
+  "library": null,
+  "notes": "check not centered?",
+  "change": "Owner: marks not centred. The page's free interior centres on 8, 10.25: document-check's 1.5 / 3 check exactly there; file-code's chevrons centred (off the lattice); file-export's arrow centred on x (6 to 10 at y 10); file-upload's arrow with download's 3.5 shaft, centred on y, 0.5 left on x (the recorded convention)."
+ },
+ "eraser": {
+  "verdict": "fix",
+  "library": null,
+  "notes": "make the eraser stroke align exactly with the bottom line",
+  "change": "Owner: align with the bottom line. The lower corner is a plain join at 6.5, 13.5 on the base line's start (the r 0.5 fillet lifted it 0.21)."
+ },
+ "bot": {
+  "verdict": "fix",
+  "library": null,
+  "notes": "other bots face is not filled completely",
+  "change": "Owner: the other bots' faces aren't filled. The face, eyes and mouth stay lines and the antenna (bot's accessory) fills, as the other bots fill their hats."
+ },
+ "kanban": {
+  "verdict": "replace",
+  "library": "Phosphor",
+  "notes": "",
+  "change": "Replace toward Phosphor: three columns from one top edge at different heights, cards in the outer columns; filled, separate solid cards."
+ },
+ "umbrella": {
+  "verdict": "fix",
+  "library": null,
+  "notes": "",
+  "change": "Owner: still wrong when filled. The ribs run from the apex to the bottom edge (one knockout path, no outline-only top), so both ends run out square; the canopy fills as three panels."
+ },
+ "frown": {
+  "verdict": "approve",
+  "library": null,
+  "notes": "",
+  "change": "Owner: the face sat half a pixel high. Eyes ⌀1.5 at 5.75, 6.5 / 10.25, 6.5 over the mouth's corners (smile M5.75 9.5A2.5 2.5 0 0 0 10.25 9.5; meh M5.75 10.5H10.25; frown M5.75 10.25A3.25 3.25 0 0 1 10.25 10.25; square-smile eyes at 6.5, mouth corners at 9.75); smile-plus at its 0.75 scale (eyes 4.75 / 8.25 at 5.25, mouth corners 7.75)."
+ },
+ "file-code": {
+  "verdict": "fix",
+  "library": null,
+  "notes": "arrows centered?",
+  "change": "Owner: marks not centred. The page's free interior centres on 8, 10.25: document-check's 1.5 / 3 check exactly there; file-code's chevrons centred (off the lattice); file-export's arrow centred on x (6 to 10 at y 10); file-upload's arrow with download's 3.5 shaft, centred on y, 0.5 left on x (the recorded convention)."
+ },
+ "plane": {
+  "verdict": "fix",
+  "library": null,
+  "notes": "can you make the window a bunch of dots,",
+  "change": "Owner: the window as a row of dots. Three ⌀1.5 windows at 6.25, 8.75, 11.25 on y 7.75 (holes when filled); the fuselage is 5.5–10 with an r 2.25 nose so they fit; the fin moved up 0.5."
+ },
+ "blur": {
+  "verdict": "fix",
+  "library": null,
+  "notes": "the lines can be horizontal not diagonal and evenly spaced",
+  "change": "Replace (toward Fluent) on the owner's reference, a droplet halved by a centre line with diagonal hatching on one side; drawn as the ring, as Fluent's blur is a circle: ring r 6, a centre line 2 to 14, and three 45° hatches on x + y = 14, 17, 20 from the centre line to the ring (3 apart: at 4 apart the top pocket was 0.68). Filled: the left half solid, the hatches lines. Owner: horizontal, evenly spaced lines. Lines at y 5, 8, 11 from the centre line to the ring, 3 apart and 3 from the ring's top and bottom (whole pixels; the crisp 4.5 / 7.5 / 10.5 set gives uneven end pockets)."
+ },
+ "mail-dot": {
+  "verdict": "fix",
+  "library": null,
+  "notes": "negative space line overlaps the dot",
+  "change": "Owner: the negative space hit the dot. The flap is an outline line; filled, a gap ends inside the dot's halo ring, so it merges with the halo and never touches the dot."
+ },
+ "file-export": {
+  "verdict": "fix",
+  "library": null,
+  "notes": "arrow not centered?",
+  "change": "Owner: marks not centred. The page's free interior centres on 8, 10.25: document-check's 1.5 / 3 check exactly there; file-code's chevrons centred (off the lattice); file-export's arrow centred on x (6 to 10 at y 10); file-upload's arrow with download's 3.5 shaft, centred on y, 0.5 left on x (the recorded convention)."
+ },
+ "bug-off": {
+  "verdict": "fix",
+  "library": null,
+  "notes": "why are the legs on the monoline but not the filled? should it be the consistent?",
+  "change": "Owner: legs in the outline but not the filled. All six legs show in both styles (bug's legs; the body fills, parted from the slash)."
+ },
+ "smile-plus": {
+  "verdict": "approve",
+  "library": null,
+  "notes": "",
+  "change": "Owner: the face sat half a pixel high. Eyes ⌀1.5 at 5.75, 6.5 / 10.25, 6.5 over the mouth's corners (smile M5.75 9.5A2.5 2.5 0 0 0 10.25 9.5; meh M5.75 10.5H10.25; frown M5.75 10.25A3.25 3.25 0 0 1 10.25 10.25; square-smile eyes at 6.5, mouth corners at 9.75); smile-plus at its 0.75 scale (eyes 4.75 / 8.25 at 5.25, mouth corners 7.75)."
+ },
+ "square-smile": {
+  "verdict": "approve",
+  "library": null,
+  "notes": "",
+  "change": "Owner: the face sat half a pixel high. Eyes ⌀1.5 at 5.75, 6.5 / 10.25, 6.5 over the mouth's corners (smile M5.75 9.5A2.5 2.5 0 0 0 10.25 9.5; meh M5.75 10.5H10.25; frown M5.75 10.25A3.25 3.25 0 0 1 10.25 10.25; square-smile eyes at 6.5, mouth corners at 9.75); smile-plus at its 0.75 scale (eyes 4.75 / 8.25 at 5.25, mouth corners 7.75)."
+ },
+ "battery-low": {
+  "verdict": "fix",
+  "library": null,
+  "notes": "No verdict yet: redrawn with battery-medium, which you flagged.",
+  "change": "Owner: bars equally spaced with equal margins. Bars at 4 / 6.5 (pitch 2.5; left, gap, top and bottom margins all 2.5 − line); battery-low's bar at 4. battery-full keeps 4.5 / 7 / 9.5 (three bars can't be exactly even on the grid; a cell construction is the alternative)."
+ },
+ "meh": {
+  "verdict": "approve",
+  "library": null,
+  "notes": "",
+  "change": "Owner: the face sat half a pixel high. Eyes ⌀1.5 at 5.75, 6.5 / 10.25, 6.5 over the mouth's corners (smile M5.75 9.5A2.5 2.5 0 0 0 10.25 9.5; meh M5.75 10.5H10.25; frown M5.75 10.25A3.25 3.25 0 0 1 10.25 10.25; square-smile eyes at 6.5, mouth corners at 9.75); smile-plus at its 0.75 scale (eyes 4.75 / 8.25 at 5.25, mouth corners 7.75)."
+ },
+ "folder-zip": {
+  "verdict": "fix",
+  "library": null,
+  "notes": "zipper overlaps the teeth",
+  "change": "Owner: the pull overlapped the teeth. The pull stands a detail gap below the teeth; file-zip keeps two teeth to make room; folder-zip's four teeth are unchanged and its pull hangs 1.5 below the folder."
+ },
+ "battery-medium": {
+  "verdict": "approve",
+  "library": null,
+  "notes": "battery indicators be equally spaced and margin inside the battery?",
+  "change": "Owner: bars equally spaced with equal margins. Bars at 4 / 6.5 (pitch 2.5; left, gap, top and bottom margins all 2.5 − line); battery-low's bar at 4. battery-full keeps 4.5 / 7 / 9.5 (three bars can't be exactly even on the grid; a cell construction is the alternative)."
+ },
+ "file-question": {
+  "verdict": "fix",
+  "library": null,
+  "notes": "? wrong",
+  "change": "Owner: the ? was wrong. chat-question's ? one size down with its stem restored, ⌀1.5 dot 2.25 below, at x 6.5 like file-warning's !."
+ },
+ "file-zip": {
+  "verdict": "fix",
+  "library": null,
+  "notes": "zipper ovrerlaps teeth",
+  "change": "Owner: the pull overlapped the teeth. The pull stands a detail gap below the teeth; file-zip keeps two teeth to make room; folder-zip's four teeth are unchanged and its pull hangs 1.5 below the folder."
+ },
+ "form": {
+  "verdict": "fix",
+  "library": null,
+  "notes": "the lines inside the form are not evenly spaced from the edges of the doc",
+  "change": "Owner: the lines should be shorter and aligned so the filled page isn't thin beside them. All three lines start at 5.5, 3 in from the page's left edge, and end at 8.5, 3 from its right (title 5.5 to 8.5 at 4.5, then 5.5 to 8.5 and 5.5 to 7); before, the title was centred and two lines started at 4.5, leaving 0.88 of fill at the edge. Owner: the lines weren't evenly spaced from the page edges. Margins of 3 on the top, left and right; lines 2 apart (M5.5 5.5H8.5M5.5 7.5H8.5M5.5 9.5H7), clear of the pen."
+ },
+ "table-cells-merge": {
+  "verdict": "replace",
+  "library": "Fluent",
+  "notes": "",
+  "change": "Owner: wider like Phosphor. Landscape 12 × 9 frame, three equal rows, a narrow first column; merge and split (toward Fluent) share the frame: merge a header strip and a ↔ across the body, split a header divider and a floating bar."
+ },
+ "table-cells-split": {
+  "verdict": "replace",
+  "library": "Fluent",
+  "notes": "",
+  "change": "Owner: wider like Phosphor. Landscape 12 × 9 frame, three equal rows, a narrow first column; merge and split (toward Fluent) share the frame: merge a header strip and a ↔ across the body, split a header divider and a floating bar."
+ },
+ "hand-wave": {
+  "verdict": "replace",
+  "library": "Phosphor",
+  "notes": "i like phosphors hand lines",
+  "change": "Replace toward Phosphor (the owner liked its hand lines): Phosphor's tilted hand, four digits on a round palm, finger lines ending in the palm, a thumb crease, two wave arcs."
+ },
+ "calendar-off": {
+  "verdict": "fix",
+  "library": null,
+  "notes": "small negative space above slash",
+  "change": "Owner: small pocket above the slash. The left peg stops on the top edge (M5.5 2V3.5), so the space beside the slash is an open wedge."
+ },
+ "calendar-search": {
+  "verdict": "fix",
+  "library": null,
+  "notes": "",
+  "change": "Fix filled. The body's cut round the lens leaves through the header line (as calendar-clock's), removing the hooked strip of fill."
+ },
+ "globe-off": {
+  "verdict": "fix",
+  "library": null,
+  "notes": "",
+  "change": "Owner: the meridians should run through the ends like Fluent's. The lens is two open arcs ending at the poles, so the meridians cut through the ring at top and bottom; globe-off's lower lens is split at the pole the same way."
+ },
+ "gavel": {
+  "verdict": "replace",
+  "library": "Phosphor",
+  "notes": "",
+  "change": "Replace toward Phosphor: a hollow block between two round-ended end bars, an outlined handle; filled, the parts are solid and the walls gaps."
+ },
+ "switch-camera": {
+  "verdict": "replace",
+  "library": "Lucide",
+  "notes": "",
+  "change": "Replace toward Lucide: the frame broken into two chasing halves with chevrons, a lens in the centre; filled, the lens fills."
+ },
+ "bell-plus": {
+  "verdict": "fix",
+  "library": null,
+  "notes": "plus can be more centered?",
+  "change": "Owner: centre the plus. The 4px + at 8, 7 (M8 5V9M6 7H10); body and clapper share data-part=\"bell\"."
+ },
+ "paint-roller": {
+  "verdict": "replace",
+  "library": "Lucide",
+  "notes": "",
+  "change": "Replace toward Lucide: a 9 × 3 roller, Lucide's handle path, a 3 × 4 grip under it."
+ },
+ "file-video": {
+  "verdict": "approve",
+  "library": null,
+  "notes": "play seems too big",
+  "change": "Owner: the play was too big. desktop-play's 4 × 5 play, centred at 10.25 below the fold."
+ },
+ "file-audio": {
+  "verdict": "fix",
+  "library": null,
+  "notes": "music note looks wrong",
+  "change": "Owner: the note looked wrong. A solid r 1.5 head, a stem on its right edge and a shallow flag (slope 0.25), as Fluent's and Phosphor's."
+ },
+ "file-upload": {
+  "verdict": "approve",
+  "library": null,
+  "notes": "arrow seems too low",
+  "change": "Owner: marks not centred. The page's free interior centres on 8, 10.25: document-check's 1.5 / 3 check exactly there; file-code's chevrons centred (off the lattice); file-export's arrow centred on x (6 to 10 at y 10); file-upload's arrow with download's 3.5 shaft, centred on y, 0.5 left on x (the recorded convention)."
+ },
+ "gift-card": {
+  "verdict": "replace",
+  "library": "Fluent",
+  "notes": "",
+  "change": "Replace toward Fluent: ribbons at x 6.5 and y 7.5, a bow of two r 1 loops above the crossing and two 45° tails below."
+ },
+ "gem": {
+  "verdict": "fix",
+  "library": null,
+  "notes": "",
+  "change": "Fix filled. The girdle and crown facets are gaps run out through the silhouette; the pavilion facets are outline-only, so no filled cut ends inside the fill."
+ },
+ "panel-bottom-open": {
+  "verdict": "fix",
+  "library": null,
+  "notes": "arrow not centered",
+  "change": "Owner: the arrow wasn't centred. The 2-leg chevron centred on x 8 (M6 7.5L8 5.5L10 7.5), legs on the half-lattice, data-angles=\"free\"; the top-panel flips follow."
+ },
+ "panel-bottom-close": {
+  "verdict": "fix",
+  "library": null,
+  "notes": "arrow not centered",
+  "change": "Owner: the arrow wasn't centred. The 2-leg chevron centred on x 8 (M6 7.5L8 5.5L10 7.5), legs on the half-lattice, data-angles=\"free\"; the top-panel flips follow."
+ }
+}
