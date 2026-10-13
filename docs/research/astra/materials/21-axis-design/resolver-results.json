@@ -1,0 +1,276 @@
+{
+  "checks": [
+    "root None",
+    "explicit preset resets parent controls",
+    "omission inherits",
+    "same preset explicit resets",
+    "nested None clears overrides",
+    "serialized scope remount retains resolved controls",
+    "NaN/range/deferred/color/role rejection",
+    "stale for-tag patch discarded on preset change",
+    "preset sentinel clears local/inherited control overrides"
+  ],
+  "scopeChain": [
+    {
+      "preset": "none",
+      "controls": {
+        "lightAngle": 315,
+        "lightHeight": 45,
+        "opticalDepth": 0,
+        "shadowSoftness": 0,
+        "shadowSpread": 0,
+        "shadowStrength": 0,
+        "glowStrength": 0,
+        "gradientAngle": 180,
+        "strokeOpacity": 0,
+        "fillOpacity": 1,
+        "grain": 0,
+        "gloss": 0,
+        "glass.lightIntensity": 0.35,
+        "glass.refraction": 0,
+        "glass.depth": 24,
+        "glass.dispersion": 0,
+        "glass.radius": 0
+      },
+      "roles": {
+        "page": 0,
+        "container": 0,
+        "floating-surface": 0,
+        "raised-control": 0,
+        "recessed-field-track": 0,
+        "thumb-knob": 0,
+        "indicator-fill": 0,
+        "divider": 0,
+        "edge": 0,
+        "glyph": 0,
+        "text": 0,
+        "scrim": 0,
+        "row-plate": 0
+      },
+      "colorSource": "neutral",
+      "glowColorSource": "accent",
+      "strokeMode": "none",
+      "gradientStops": [
+        {
+          "offset": 0,
+          "source": "neutral",
+          "alpha": 0
+        },
+        {
+          "offset": 1,
+          "source": "accent",
+          "alpha": 0
+        }
+      ]
+    },
+    {
+      "preset": "tactile",
+      "controls": {
+        "lightAngle": 315,
+        "lightHeight": 45,
+        "opticalDepth": 6,
+        "shadowSoftness": 12,
+        "shadowSpread": 0,
+        "shadowStrength": 1,
+        "glowStrength": 0,
+        "gradientAngle": 180,
+        "strokeOpacity": 0.25,
+        "fillOpacity": 1,
+        "grain": 0.04,
+        "gloss": 0.9,
+        "glass.lightIntensity": 0.35,
+        "glass.refraction": 0,
+        "glass.depth": 24,
+        "glass.dispersion": 0,
+        "glass.radius": 0
+      },
+      "roles": {
+        "page": 0.15,
+        "container": 1,
+        "floating-surface": 1,
+        "raised-control": 1,
+        "recessed-field-track": 1,
+        "thumb-knob": 1,
+        "indicator-fill": 0,
+        "divider": 0,
+        "edge": 0,
+        "glyph": 1,
+        "text": 1,
+        "scrim": 0,
+        "row-plate": 0.4
+      },
+      "colorSource": "neutral",
+      "glowColorSource": "accent",
+      "strokeMode": "solid",
+      "gradientStops": [
+        {
+          "offset": 0,
+          "source": "neutral",
+          "alpha": 0
+        },
+        {
+          "offset": 1,
+          "source": "accent",
+          "alpha": 0
+        }
+      ]
+    },
+    {
+      "preset": "glass",
+      "controls": {
+        "lightAngle": 315,
+        "lightHeight": 45,
+        "opticalDepth": 6,
+        "shadowSoftness": 12,
+        "shadowSpread": 0,
+        "shadowStrength": 1,
+        "glowStrength": 0,
+        "gradientAngle": 180,
+        "strokeOpacity": 0.25,
+        "fillOpacity": 0.72,
+        "grain": 0,
+        "gloss": 0.45,
+        "glass.lightIntensity": 0.35,
+        "glass.refraction": 0,
+        "glass.depth": 24,
+        "glass.dispersion": 0,
+        "glass.radius": 12
+      },
+      "roles": {
+        "page": 0.15,
+        "container": 1,
+        "floating-surface": 1,
+        "raised-control": 1,
+        "recessed-field-track": 1,
+        "thumb-knob": 1,
+        "indicator-fill": 0,
+        "divider": 0,
+        "edge": 0,
+        "glyph": 1,
+        "text": 1,
+        "scrim": 0,
+        "row-plate": 0.25
+      },
+      "colorSource": "neutral",
+      "glowColorSource": "accent",
+      "strokeMode": "solid",
+      "gradientStops": [
+        {
+          "offset": 0,
+          "source": "neutral",
+          "alpha": 0
+        },
+        {
+          "offset": 1,
+          "source": "accent",
+          "alpha": 0
+        }
+      ]
+    },
+    {
+      "preset": "glass",
+      "controls": {
+        "lightAngle": 315,
+        "lightHeight": 45,
+        "opticalDepth": 6,
+        "shadowSoftness": 12,
+        "shadowSpread": 0,
+        "shadowStrength": 1,
+        "glowStrength": 0,
+        "gradientAngle": 180,
+        "strokeOpacity": 0.25,
+        "fillOpacity": 0.72,
+        "grain": 0,
+        "gloss": 0.45,
+        "glass.lightIntensity": 0.35,
+        "glass.refraction": 0,
+        "glass.depth": 24,
+        "glass.dispersion": 0,
+        "glass.radius": 22
+      },
+      "roles": {
+        "page": 0.15,
+        "container": 1,
+        "floating-surface": 1,
+        "raised-control": 1,
+        "recessed-field-track": 1,
+        "thumb-knob": 1,
+        "indicator-fill": 0,
+        "divider": 0,
+        "edge": 0,
+        "glyph": 1,
+        "text": 1,
+        "scrim": 0,
+        "row-plate": 0.25
+      },
+      "colorSource": "neutral",
+      "glowColorSource": "accent",
+      "strokeMode": "solid",
+      "gradientStops": [
+        {
+          "offset": 0,
+          "source": "neutral",
+          "alpha": 0
+        },
+        {
+          "offset": 1,
+          "source": "accent",
+          "alpha": 0
+        }
+      ]
+    },
+    {
+      "preset": "glass",
+      "controls": {
+        "lightAngle": 315,
+        "lightHeight": 45,
+        "opticalDepth": 6,
+        "shadowSoftness": 12,
+        "shadowSpread": 0,
+        "shadowStrength": 1,
+        "glowStrength": 0,
+        "gradientAngle": 180,
+        "strokeOpacity": 0.25,
+        "fillOpacity": 0.72,
+        "grain": 0,
+        "gloss": 0.45,
+        "glass.lightIntensity": 0.35,
+        "glass.refraction": 0,
+        "glass.depth": 24,
+        "glass.dispersion": 0,
+        "glass.radius": 12
+      },
+      "roles": {
+        "page": 0.15,
+        "container": 1,
+        "floating-surface": 1,
+        "raised-control": 1,
+        "recessed-field-track": 1,
+        "thumb-knob": 1,
+        "indicator-fill": 0,
+        "divider": 0,
+        "edge": 0,
+        "glyph": 1,
+        "text": 1,
+        "scrim": 0,
+        "row-plate": 0.25
+      },
+      "colorSource": "neutral",
+      "glowColorSource": "accent",
+      "strokeMode": "solid",
+      "gradientStops": [
+        {
+          "offset": 0,
+          "source": "neutral",
+          "alpha": 0
+        },
+        {
+          "offset": 1,
+          "source": "accent",
+          "alpha": 0
+        }
+      ]
+    }
+  ],
+  "reactPortalExecuted": false
+}

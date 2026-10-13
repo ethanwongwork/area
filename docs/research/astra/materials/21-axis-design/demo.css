@@ -1,0 +1,32 @@
+/* Research fixture only. All dimensions/colors here are diagnostic inputs, not Area recipes. */
+:root {font:15px/1.5 system-ui;color-scheme:light;--paper:#f6f6f4;--ink:#20211e;--edge:#ccc;--accent:#5471b0;--shade:#18252f;--light:#fff}
+:root[data-mode=dark]{color-scheme:dark;--paper:#111416;--ink:#eff0eb;--edge:#40474c;--accent:#8eade9;--shade:#000;--light:#dce5f3}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink)}main{max-width:1100px;margin:auto;padding:40px}h1{font-size:36px;font-weight:550;letter-spacing:-.04em;margin:0}h2{font-size:20px;margin:36px 0 12px}p{max-width:78ch}header{display:flex;justify-content:space-between;align-items:start;gap:24px}button,select{font:inherit;padding:7px 12px;color:inherit;background:var(--paper);border:1px solid var(--edge);border-radius:7px}button{cursor:pointer}button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}small,.muted{color:var(--ink);opacity:.72}.scope{padding:18px;border:1px dashed var(--edge);border-radius:16px;margin-top:18px}.scope-label{font-size:12px;letter-spacing:.07em;text-transform:uppercase;margin-bottom:14px}.row{display:flex;flex-wrap:wrap;gap:24px}.receiver{position:relative;width:244px;height:90px;border-radius:12px;background:var(--paper);border:1px solid var(--edge);padding:18px;isolation:isolate}
+.receiver>span{position:relative;z-index:2}.receiver .optics{position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:0}
+:root,[data-area-material=none]{--area-material-gate-glass:0;--area-material-gate-tactile:0;--area-material-gate-soft:0;--area-material-input-glass-radius:0px}
+[data-area-material=glass]{--area-material-gate-glass:1;--area-material-gate-tactile:0;--area-material-gate-soft:0;--area-material-input-glass-radius:12px}
+[data-area-material=tactile]{--area-material-gate-glass:0;--area-material-gate-tactile:1;--area-material-gate-soft:0;--area-material-input-glass-radius:0px}
+[data-area-material=soft]{--area-material-gate-glass:0;--area-material-gate-tactile:0;--area-material-gate-soft:1;--area-material-input-glass-radius:0px}
+/* Re-derive at each actual receiver; no ancestor-preset descendant selector can leak. */
+.receiver{--area-material-paint-raised:calc(var(--area-material-gate-tactile) + var(--area-material-gate-soft));--area-material-paint-tint:calc(var(--area-material-gate-glass) + var(--area-material-gate-tactile) + var(--area-material-gate-soft));box-shadow:0 8px 16px color-mix(in srgb,var(--shade) calc(var(--area-material-paint-raised) * 22%),transparent),inset 0 2px 0 color-mix(in srgb,var(--light) calc(var(--area-material-gate-tactile) * 85%),transparent);background-image:linear-gradient(145deg,color-mix(in srgb,var(--accent) calc(var(--area-material-paint-tint) * 12%),transparent),color-mix(in srgb,var(--light) calc(var(--area-material-gate-tactile) * 45%),transparent))}
+.receiver .optics{opacity:var(--area-material-gate-glass);backdrop-filter:blur(var(--area-material-input-glass-radius));background:linear-gradient(145deg,color-mix(in srgb,var(--light) 45%,transparent),transparent);box-shadow:inset 0 1px 0 color-mix(in srgb,var(--light) 70%,transparent)}
+/* All effects live behind unchanged text; receiver isolation is fixture geometry in both baselines. */
+.test-stage{width:360px;height:210px;padding:58px;background:repeating-linear-gradient(35deg,var(--paper) 0 12px,var(--edge) 12px 14px);position:relative;border:1px solid var(--edge)}
+.test-stage .sample{width:244px;height:90px;position:relative;border-radius:12px;background:var(--paper);color:var(--ink);padding:20px;border:1px solid var(--edge)}
+.test-stage .sample::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;display:none}
+#probe-stage{--gate:0}.probe-shadow .sample{box-shadow:0 8px 16px color-mix(in srgb,var(--shade) calc(var(--gate) * 70%),transparent)}
+.probe-background .sample{background-image:linear-gradient(135deg,color-mix(in srgb,var(--accent) calc(var(--gate) * 70%),transparent),color-mix(in srgb,var(--light) calc(var(--gate) * 60%),transparent))}
+.probe-filter .sample::after{display:block;background:var(--accent);filter:blur(8px);opacity:var(--gate)}
+.probe-backdrop .sample{background:transparent}.probe-backdrop .sample::after{display:block;backdrop-filter:blur(12px);opacity:var(--gate)}
+/* Deliberately wrong: zero blur/spread/offset does not remove an inset shadow. */
+.bad-shadow .sample{box-shadow:inset 0 0 calc(12px * var(--gate)) 6px var(--shade)}
+.bad-background .sample{background-image:linear-gradient(calc(180deg * var(--gate)),var(--accent),var(--light))}
+.bad-filter .sample{filter:brightness(calc(var(--gate)))}
+.zero-blur .sample{filter:blur(calc(var(--gate) * 12px))}
+/* Baseline clears only the candidate fixture paint; matches the same box/ground. */
+#probe-stage.baseline .sample{box-shadow:none;background-image:none;filter:none}
+#probe-stage.baseline .sample::after{display:none}
+#probe-stage.literal-off .sample{box-shadow:none;background-image:none;filter:none}
+#probe-stage.literal-off .sample::after{display:none}
+pre{font:12px/1.5 ui-monospace,monospace;white-space:pre-wrap;overflow-wrap:anywhere;padding:16px;border:1px solid var(--edge);border-radius:8px;max-height:220px;overflow:auto}
+.test-stage .surface{box-shadow:var(--fixture-shadow);background:var(--paper)}
