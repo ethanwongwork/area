@@ -411,7 +411,8 @@ trash, eye, document, warning) clog. The *Sizes at 12px* sheet shows it at 1× a
 Scaling keeps the gaps proportional, and its line tracks the adjacent text stem at every
 size. **Recommendation: scale uniformly from 12 to 20px** (Cursor's model; the generated
 components already do this). Draw 12px cuts only for dense icons, and only if 1× must
-read at 12px: at 1× they blur in both modes. Owner to confirm.
+read at 12px: at 1× they blur in both modes. Owner to confirm. **Done 2026-10-13** for the icons components show at 12
+(section "12px cuts").
 
 Note: the Presence marks use a constant line (non-scaling stroke) by the earlier owner
 decision. They are simple marks inside a ring, so the constant line holds up there.
@@ -4958,3 +4959,56 @@ Migration step 2 (handoff, "Migration"): the drawings (`sources/`, with `batches
   the package test's oracle read it) and `pilot-explore.tsx`. The Fluent map (`apps/docs/scripts/gen-icons.mjs`,
   `assets/area-icons*`, the sprites) stays in the docs folder until it is retired.
 - Research scripts in `docs/research/` keep the old paths as records of their day.
+
+## 12px cuts, 2026-10-13
+
+Production gap 5 (owner, 2026-10-13: "continue the icon work"; the plan in "Sizes" and the skill: a dense icon that
+must read at 12px on 1× screens gets its own cut). Sheet: `docs/research/icon-review/2026-10-13/cuts12.png`
+(`cuts12.mjs`: the 16px drawing at 12 as components drew it, the cut and Fluent's 12px regular, at 1× magnified 8×,
+2× and actual size, light and dark).
+
+- **Which icons (by use, measured):** every icon the app's gallery shows in a 12px slot, measured in headless Edge
+  over all 925 tiles at type 13 compact (IntersectionObserver stubbed so every tile renders): Glyph's dismiss (Badge,
+  Tag, Tag picker; no cut, see below), chevron-down (Split button, Toolbar, Panel sm), open (Link) and info (Toggletip sm); the icons
+  demos pass into 12px slots: check, add, info, link, bell, arrow-right (Badge), globe (Tag), book (Citation).
+- **Drawn (9), in `packages/icons/sources/12/`:** chevron-down, check, add, info, open, link, bell, arrow-up and
+  globe; their turns and mirrors (chevron-left/right/up, arrow-down/left/right, alert-circle) turn the cut about
+  6, 6. On Fluent's 12px grid: square frames 8 of ink (2.5–9.5 centre-lines, open's r 1.5), arrows and chevrons on
+  the diagonal lattice through pixel centres, gaps of at least 1px.
+- **Crisp over centred (the 2026-10-02 rule, "crisp at 1× outweighs centring"):** a 1px line centred on 6 falls
+  between two pixels and shows as a grey 2px bar; Fluent's own 12px cuts do this (add, info's stem, arrow-up's
+  shaft, link's bar). Area's add, arrow-up, info and link put that line on 5.5, so the glyph sits 0.5 up or left of
+  the box's centre and every line is one dark pixel. info's ring is r 4 (ink 9) to stay concentric with its stem;
+  its dot is r 0.5, one pixel, 1px from the ring and the stem.
+- **Not cut:** dismiss and book (the 16px drawing at 12 already renders the same pixels: dismiss's diagonals pass
+  through pixel centres either way), help (a "?" with a readable hook
+  doesn't fit inside a 9px ring; the scaled drawing reads better), and every filled variant (filled at 12 scales the
+  16px drawing).
+- **globe** is Fluent's globe_12_regular ink exactly, as the 16px globe is Fluent's (owner's exception, 2026-10-12).
+- **Line:** the size curve's line at 12, `(12 / 16)^0.45` = 0.8786 of the 16px line (0.99px at 1.125), in the cut's
+  own units, so one unit is a pixel at 12.
+- **@area/icons:** an icon with a cut draws it when `size` is 12 (viewBox `0 0 12 12`, `sw12`); every other size, and
+  `size` left out, draws the 16px drawing. Metadata `cuts: [12]`; raw SVGs now also at `svg/12` (the cut, or the
+  16px drawing at 12). The app's Icons Inspector shows "At 12px: Own drawing" and the set's count of cuts (16).
+- **Glyph:** `size={12}` names the xs icon slot (`--area-icon-xs`: 12px below type 16, 16px at 16). A glyph with a cut
+  carries both drawings in one 16 viewBox (the cut scaled 4/3) and base.css shows one by opacity: the cut where
+  `--_glyph-cut` (a component's) or the type axis's new `--area-type-icon-xs-cut` (1 below type 16) is 1. The 16px
+  drawing's 12px line factor follows the same switch, so at type 16 a size-12 glyph now draws the 16px line in its
+  16px slot (it drew the heavier 12px line there before). Panel's md chevron is size 12 in a 16px slot, so
+  `panel.css` sets `--_glyph-cut: 0` there and the xs value for sm.
+- **Visible change in components:** Link's external mark, Split button and Toolbar
+  chevrons, Panel sm chevron and Toggletip sm's info draw the cuts below type 16. Panel md's chevron now draws the
+  16px line (was the 12px line).
+- **Checks:** `npm test -w @area/icons` (9; new: cuts at 12, turns, raw SVGs at 12, filled at 12 scales), React
+  `link.test.mjs` (the two drawings and the CSS switch), tokens 24,254, contracts, manifest parity, typecheck; the app
+  in the browser preview: Link's external mark shows the cut at type 13 (line 0.92px, type 13's icon weight) and the
+  16px drawing at type 16 (1.29px); the Icons grid at 12 draws the cuts.
+- **Owner, 2026-10-13: "go with your recommendations"** → the 9 cuts approved as drawn, and the demos use them.
+- **@area/icons in an xs slot:** with the token line (no `weight`), `size={12}` means the xs icon slot as Glyph's does:
+  an icon with a cut carries both drawings and `cutOpacity` shows the cut where the slot is 12 (inline opacity from
+  `--_glyph-cut` / `--area-type-icon-xs-cut`, the cut when Area's styles are absent), and `sw` gives every icon's
+  token line at 12 the same switch, so at type 16 a size-12 icon in its 16px slot draws the 16px line. A numeric
+  `weight` is an explicit 12px icon: the cut alone in its 12 viewBox (the raw `svg/12` files).
+- **Demos:** every Badge icon slot (check, info, add, link, arrow-right, dismiss) and Tag's globe pass `size={12}`;
+  checked in the app: at type 13 the 8 Badge icons with cuts draw them (0.99px), at type 16 the 16px drawing at the
+  16px line (1.29px). Citation's book stays as it was (no cut; the slot is a fixed 12 favicon box).

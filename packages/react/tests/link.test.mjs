@@ -2,6 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createElement as h } from "react";
 import { renderToString as render } from "react-dom/server";
+import { readFileSync } from "node:fs";
 import { Link, linkVariants } from "../dist/modules/index.js";
 
 test("defaults to an inline link in the surrounding ink, with native anchor props", () => {
@@ -30,4 +31,13 @@ test("an explicit target or rel wins over external's defaults; the label is rena
 test("ink blue: the link blue of product UI, with the variant's underline", () => {
   assert.match(render(h(Link, { href: "#", ink: "blue" }, "Learn more")), /class="area-link area-link--inline area-link--blue"/);
   assert.equal(linkVariants({ ink: "blue", variant: "standalone" }), "area-link area-link--standalone area-link--blue");
+});
+
+test("the 12px mark carries its 16px drawing and its 12px cut; base.css shows the cut where the xs slot is 12", () => {
+  const svg = render(h(Link, { href: "https://example.com", external: true }, "Help")).match(/<svg[\s\S]*<\/svg>/)[0];
+  assert.match(svg, /^<svg viewBox="0 0 16 16"/);
+  assert.match(svg, /<g data-area-glyph-drawing="16"><path d="M8 2.5H4.5/);
+  assert.match(svg, /<g data-area-glyph-drawing="12" transform="scale\(1.3333333333333333\)"><path d="M5.5 2.5H4/);
+  const css = readFileSync(new URL("../../styles/src/base.css", import.meta.url), "utf8");
+  assert.match(css, /\[data-area-glyph-drawing="12"\] \{ opacity: var\(--_glyph-cut, var\(--area-type-icon-xs-cut, 1\)\); \}/);
 });

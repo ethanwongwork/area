@@ -301,6 +301,7 @@ export function IconsPage() {
                   ["Keyline", icon.keyline],
                   meta ? ["Filled", meta.fill === "solid" ? "Solid body" : "Heavier outline"] : null,
                   meta?.rtl ? ["Right to left", "Mirrors"] : null,
+                  meta?.cuts?.includes(12) ? ["At 12px", "Own drawing"] : null,
                   iconStatus ? ["Status", <StatusBadge name={icon.name} />] : null,
                   iconStatus ? ["Batch", iconStatus.batch] : null,
                 ]} />
@@ -325,6 +326,7 @@ export function IconsPage() {
                 view ? null : ["Categories", ICON_CATEGORIES.length],
                 ["Styles", "Outline, Filled"],
                 ["Sizes", `${SIZE.min} to ${SIZE.max}`],
+                ["12px cuts", scope.filter(name => META.get(name)?.cuts?.includes(12)).length],
               ]} />
             </PanelSection>
           )}

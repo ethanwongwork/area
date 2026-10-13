@@ -23,6 +23,9 @@ export interface IconMeta {
   aliasOf?: string;
   /** "mirror": tied to reading direction, so the components mirror in right-to-left text (rtl.css). */
   rtl?: "mirror";
+  /** Sizes with a drawing of their own: [12] where the icon has a 12px cut, drawn when `size` is 12 (svg/12). Every
+   *  other size scales the 16px drawing (docs/specs/icons.md, "12px cuts"). */
+  cuts?: readonly 12[];
   /** Search words: the concept, synonyms and other libraries' words for it, never another icon's name. */
   keywords: readonly string[];
   /** The same icon's name in other libraries, as each publishes it (Fluent and Material in snake case). */

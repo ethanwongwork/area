@@ -692,7 +692,11 @@ Uniform scaling made large icons too thick (2.25px at 32) and small ones too lig
 whole (1.8px at 32, 2.7 at 48; Fluent's masters are 2 and 2.5), because the drawing's gaps stay
 fixed in its units and kept growing against a thinning line (`SIZE_CURVE_MAX` in the generator). Pass `size` to a pilot icon, or `size` to `Glyph` (base.css holds the factors), and
 the line follows the curve. At 12px the tight gap falls to about 0.9px, so a dense icon
-that must read at 12px on 1× screens gets its own 12px cut.
+that must read at 12px on 1× screens gets its own 12px cut. Cuts live in `packages/icons/sources/12/` (12 viewBox,
+stroke-width 1; spec "12px cuts"): Fluent's 12px grid (square frames 8 of ink, lines on half pixels, gaps ≥ 1px),
+and a line that would sit on the centre (6) moves to 5.5 so it stays one pixel (crisp over centred). Draw one only
+where a component or demo shows the icon at 12 and the cut beats the 16px drawing at 1× on
+`docs/research/icon-review/2026-10-13/cuts12.mjs`'s sheet; a turn or alias uses its base's cut.
 
 In the filled variant (owner, 2026-10-03: "the negative space looks way thicker than the
 monoline strokes"), lines drawn as negative space (knockouts, cuts) follow the curve, so they

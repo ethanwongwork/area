@@ -558,6 +558,33 @@ const EXPLORE_SRC = join(SRC, "explore");
 const explore = existsSync(EXPLORE_SRC) ? load(EXPLORE_SRC, { strict: true, soft: true }) : [];
 // Status marks sit inside the Presence ring at 10–20px: every rule but keylines applies.
 const statuses = load(STATUS_SRC, { strict: true, keylines: false });
+// 12px cuts (docs/specs/icons.md, "12px cuts"): a second drawing on the 12px grid for an icon that components show at
+// 12, with its lines on half pixels so they land on whole pixels at 1×. A turn, mirror or alias uses its base's cut,
+// turned. Lint: the 12px box, the source line, and stroked coordinates on the quarter-pixel grid inside 0.5–11.5;
+// gaps are judged on the cuts sheet (docs/research/icon-review/2026-10-13/cuts12.mjs).
+const CUT_SRC = join(SRC, "12");
+const CUT_LINE = Math.pow(12 / 16, SIZE_CURVE);  // the size curve's line at 12 against 16's (0.8786): 0.99px at 1.125
+const cuts = {};
+if (existsSync(CUT_SRC)) for (const file of readdirSync(CUT_SRC).filter(f => f.endsWith(".svg")).sort()) {
+  const name = file.replace(/\.svg$/, ""), label = `12/${name}`, text = readFileSync(join(CUT_SRC, file), "utf8");
+  if (ONLY && !ONLY.has(name)) continue;
+  if (attrs(text.match(/<svg[^>]*>/)[0]).viewBox !== "0 0 12 12") fail(label, `viewBox must be "0 0 12 12"`);
+  const base = icons.find(icon => icon.name === name);
+  if (!base || base.derivedFrom || base.aliasOf) fail(label, "a cut is drawn for a base icon; its turns and aliases follow it");
+  for (const [, tag] of text.matchAll(/<(ellipse|line|polyline|polygon|g|use)\b/g)) fail(label, `<${tag}>: draw it as a path`);
+  cuts[name] = [...text.matchAll(/<(path|circle)\b([^>]*)\/>/g)].map(([, tag, body]) => {
+    const { "stroke-width": width, "stroke-linecap": _c, "stroke-linejoin": _j, ...a } = attrs(body);
+    const stroked = a.stroke && a.stroke !== "none";
+    if (stroked) {
+      if (width !== "1") fail(label, "source stroke-width must be 1");
+      const values = tag === "path" ? a.d.replace(/A([^A-Za-z]+)/g, (_, arc) => " " + arc.trim().split(/[\s,]+/).filter((_, i) => i % 7 >= 5).join(" ")).match(/-?\d*\.?\d+/g).map(Number)
+        : [Number(a.cx) - Number(a.r), Number(a.cx) + Number(a.r), Number(a.cy) - Number(a.r), Number(a.cy) + Number(a.r)];
+      for (const v of values) if (!onGrid(v, 0.25) || v < 0.5 || v > 11.5) fail(label, `${v} is off the quarter-pixel grid or outside 0.5–11.5`);
+    }
+    return { tag, attrs: a, stroked };
+  });
+}
+const cutOf = icon => cuts[icon.name] ?? cuts[icon.derivedFrom] ?? cuts[icon.aliasOf];
 
 if (errors.length) { console.error(errors.map(e => "✗ " + e).join("\n")); process.exit(1); }
 console.log(`icon lint ok (${icons.length} icons, ${statuses.length} status marks)`);
@@ -652,6 +679,18 @@ const turn = (icon, lines) => {
   const transform = icon.rotate ? `rotate(${icon.rotate} 8 8)` : TRANSFORMS[icon.flip];
   return transform ? [`<g transform="${transform}">`, ...lines.map(l => "  " + l), `</g>`] : lines;
 };
+// A 12px cut's element: its line is sw12, the size curve's line at 12 in the cut's own units; dots and Fluent's
+// solid ink keep their drawn size.
+const jsx12 = el => {
+  const props = Object.entries(el.attrs).filter(([k]) => k !== "stroke").map(([k, v]) => `${camel(k)}="${v}"`);
+  if (el.stroked) props.push(`stroke="currentColor" style={{ strokeWidth: sw12(weight) }} strokeLinecap="round" strokeLinejoin="round"`);
+  return `<${el.tag} ${props.join(" ")} />`;
+};
+const TRANSFORMS12 = { flipx: "matrix(-1 0 0 1 12 0)", flipy: "matrix(1 0 0 -1 0 12)", transpose: "matrix(0 1 1 0 0 0)" };
+const turn12 = (icon, lines) => {
+  const transform = icon.rotate ? `rotate(${icon.rotate} 6 6)` : TRANSFORMS12[icon.flip];
+  return transform ? [`<g transform="${transform}">`, ...lines.map(l => "  " + l), `</g>`] : lines;
+};
 const hasFilled = () => true;  // every icon has a filled variant: solids, or a heavier line
 const boldDot = el => ({ ...el, attrs: { ...el.attrs, r: String(Number(el.attrs.r) + (BOLD - WEIGHT) / 2) } });
 // Solids keep their stroke, so the filled silhouette has the outline's exact outer edge.
@@ -733,8 +772,17 @@ export const sizeFactor = (size?: number) => size ? Math.pow(Math.min(size, ${SI
 export const sw = (weight: number | undefined, size: number | undefined, ratio = 1) => {
   const k = ratio * sizeFactor(size);
   if (weight !== undefined) return weight * k;
+  // The token line at 12 is the xs icon slot's (16px at type 16): the 12px factor applies where the slot is 12.
+  if (size === 12) return \`calc(var(--area-weight-icon) * \${ratio.toFixed(4)} * (1 + \${(sizeFactor12 - 1).toFixed(4)} * var(--_glyph-cut, var(--area-type-icon-xs-cut, 1))))\`;
   return k === 1 ? "var(--area-weight-icon)" : \`calc(var(--area-weight-icon) * \${k.toFixed(4)})\`;
 };
+const sizeFactor12 = sizeFactor(12);
+/** A 12px cut's line in its own units (one unit is a pixel at 12): the size curve's line at 12, ${CUT_LINE.toFixed(4)}× the
+ *  16px line (docs/specs/icons.md, "12px cuts"). */
+export const sw12 = (weight: number | undefined) => weight !== undefined ? weight * ${CUT_LINE.toFixed(4)} : "calc(var(--area-weight-icon) * ${CUT_LINE.toFixed(4)})";
+/** Which drawing an icon with a 12px cut shows at size 12 (token line): the cut where the xs icon slot is 12, from a
+ *  component's --_glyph-cut or the type axis's --area-type-icon-xs-cut; without Area's styles, the cut. */
+export const cutOpacity = (cut: boolean) => cut ? "var(--_glyph-cut, var(--area-type-icon-xs-cut, 1))" : "calc(1 - var(--_glyph-cut, var(--area-type-icon-xs-cut, 1)))";
 /** A halo's width: the line and one line of space on each side, so the cut round a part in front is
  *  the line's own weight at every size (owner, 2026-10-06: the overlap cut's fixed 2.25 grew to 1.5×
  *  the line above 24px). */
@@ -768,10 +816,10 @@ const base = { viewBox: "0 0 16 16", width: 16, height: 16, fill: "none" } as co
  *  data-area-rtl="mirror" for rtl.css's :dir(rtl) flip, which needs no context and renders the same on the
  *  server; mirrored flips it inline with the scale property, so a transform of the caller's still applies.
  *  Props passed through come last and win. */
-export const root = (size: number | undefined, { title, mirrored, style, ...props }: Omit<PilotIconProps, "weight" | "size">, rtl?: boolean) => {
+export const root = (size: number | undefined, { title, mirrored, style, ...props }: Omit<PilotIconProps, "weight" | "size">, rtl?: boolean, grid?: 12) => {
   const named = title !== undefined || props["aria-label"] !== undefined || props["aria-labelledby"] !== undefined;
   return {
-    ...base, ...(size ? { width: size, height: size } : {}),
+    ...base, ...(grid ? { viewBox: \`0 0 \${grid} \${grid}\` } : {}), ...(size ? { width: size, height: size } : {}),
     ...(named ? { role: "img", ...(title !== undefined ? { "aria-label": title } : {}) } : { "aria-hidden": true }),
     focusable: props.tabIndex !== undefined && props.tabIndex >= 0,
     ...(rtl && mirrored === undefined ? { "data-area-rtl": "mirror" } : {}),
@@ -786,7 +834,23 @@ const useMaskId = () => "area-icon-" + useId().replace(/[^A-Za-z0-9-]/g, "");
 const RTL = JSON.parse(readFileSync(join(SRC, "rtl.json"), "utf8")).mirror;
 for (const name of Object.keys(RTL)) if (!icons.some(icon => icon.name === name)) throw new Error(`rtl.json: ${name} is not an icon`);
 // One icon's outline and filled components, named by `name` (Pilot… for the docs, plain for @area/icons).
-const iconSource = (icon, name = component(icon)) => `export const ${name}Icon = ({ weight, size, ...props }: PilotIconProps) => (
+// An icon with a 12px cut draws it when size is 12; every other size scales the 16px drawing. With the token's line
+// (no weight), size 12 is the xs icon slot, 12px below type 16 and 16px at 16, so both drawings are carried and
+// cutOpacity shows the cut only where the slot is 12, as Glyph does (docs/specs/icons.md, "12px cuts").
+const iconSource = (icon, name = component(icon)) => `export const ${name}Icon = ({ weight, size, ...props }: PilotIconProps) => ${cutOf(icon) ? `size === 12 && weight !== undefined ? (
+  <svg {...root(size, props, ${RTL[icon.name] ? "true" : "undefined"}, 12)}>
+    ${turn12(icon, cutOf(icon).map(jsx12)).join("\n    ")}
+  </svg>
+) : size === 12 ? (
+  <svg {...root(size, props${RTL[icon.name] ? ", true" : ""})}>
+    <g style={{ opacity: cutOpacity(false) }}>
+      ${turn(icon, icon.elements.filter(el => !el.filledOnly).map(el => jsx(el))).join("\n      ")}
+    </g>
+    <g transform="scale(${(16 / 12).toFixed(6)})" style={{ opacity: cutOpacity(true) }}>
+      ${turn12(icon, cutOf(icon).map(jsx12)).join("\n      ")}
+    </g>
+  </svg>
+) : ` : ""}(
   <svg {...root(size, props${RTL[icon.name] ? ", true" : ""})}>
     ${turn(icon, icon.elements.filter(el => !el.filledOnly).map(el => jsx(el))).join("\n    ")}
   </svg>
@@ -849,7 +913,7 @@ const iconMeta = icons.map(icon => {
   return { name: icon.name, component: pkgName(icon) + "Icon", filledComponent: pkgName(icon) + "FilledIcon", category: categoryOf[icon.name] ?? null,
     keyline: icon.keyline, fill: icon.elements.some(el => SOLID_ROLES.includes(el.filled)) ? "solid" : "weight", status, batch,
     ...(icon.derivedFrom ? { derivedFrom: icon.derivedFrom, turn: icon.rotate ? `rotate(${icon.rotate})` : icon.flip } : {}), ...(icon.aliasOf ? { aliasOf: icon.aliasOf } : {}),
-    ...(RTL[icon.name] ? { rtl: "mirror" } : {}), keywords, ...(names ? { names } : {}) };
+    ...(RTL[icon.name] ? { rtl: "mirror" } : {}), ...(cutOf(icon) ? { cuts: [12] } : {}), keywords, ...(names ? { names } : {}) };
 });
 const GEN = "/** Generated by packages/icons/scripts/generate.mjs from packages/icons/sources. Do not edit by hand. */\n";
 rmSync(PKG, { recursive: true, force: true }); mkdirSync(join(PKG, "icons"), { recursive: true });
@@ -857,7 +921,7 @@ writeFileSync(join(PKG, "runtime.ts"), GEN + `import { useId, type SVGProps } fr
   .replace("const useMaskId = ", "export const useMaskId = "));
 for (const icon of icons) {
   const code = iconSource(icon, pkgName(icon)).replaceAll("PilotIconProps", "IconProps");
-  const used = ["sw", "haloWidth", "lineShift", "slashGap", "useMaskId"].filter(f => new RegExp(`\\b${f}\\(`).test(code));
+  const used = ["sw", "sw12", "cutOpacity", "haloWidth", "lineShift", "slashGap", "useMaskId"].filter(f => new RegExp(`\\b${f}\\(`).test(code));
   writeFileSync(join(PKG, "icons", icon.name + ".tsx"), GEN + `import { root, ${[...used, "type IconProps"].join(", ")} } from "../runtime.ts";\n\n` + (icon.label !== icon.name ? `/** ${icon.label}. */\n` + code.replace("\n\nexport const", `\n\n/** ${icon.label}, filled. */\nexport const`) : code) + "\n");
 }
 for (const [file, status] of [["approved.ts", "approved"], ["review.ts", "review"]])
@@ -942,6 +1006,15 @@ const glyphData = Object.fromEntries(Object.entries(PACKAGE_GLYPHS).map(([glyph,
   else if (elements.some(dot)) glyphFills[glyph] = elements.flatMap((el, i) => dot(el) ? [i] : []);
   return [glyph, elements.map(el => el.tag === "rect" ? rectD(el.attrs) : el.tag === "circle" ? circleD(el.attrs) : el.attrs.d)];
 }));
+// 12px cuts of whole-icon line glyphs: Glyph draws them when its size is 12, dots by index as glyphFills.
+const glyphCuts12 = {}, glyphCutFills12 = {};
+for (const [glyph, [source, index, paint]] of Object.entries(PACKAGE_GLYPHS)) {
+  const cut = cuts[source];
+  if (!cut || index !== undefined || paint) continue;
+  if (cut.some(el => !el.stroked && el.tag !== "circle")) throw new Error(`glyph ${glyph}: a 12px cut glyph is stroked paths and circles, with filled dots`);
+  glyphCuts12[glyph] = cut.map(el => el.tag === "circle" ? circleD(el.attrs) : el.attrs.d);
+  if (cut.some(el => !el.stroked)) glyphCutFills12[glyph] = cut.flatMap((el, i) => el.stroked ? [] : [i]);
+}
 writeFileSync(GLYPHS_OUT, `/** Area-drawn component glyphs, generated from packages/icons/sources by
  * packages/icons/scripts/generate.mjs. Do not edit by hand. Construction: docs/specs/icons.md.
  * Each glyph is a list of stroked centre-line paths on the 16px grid. */
@@ -955,5 +1028,9 @@ export const glyphPaint: Partial<Record<GlyphName, "solid" | "fill" | "knockout"
 export const glyphFills: Partial<Record<GlyphName, readonly number[]>> = ${JSON.stringify(glyphFills)};
 /** Knocked-out marks in a "knockout" glyph, by path index (dismiss-circle's ×), stroked at the line. */
 export const glyphKnockouts: Partial<Record<GlyphName, readonly number[]>> = ${JSON.stringify(glyphKnockouts)};
+/** 12px cuts (docs/specs/icons.md, "12px cuts"): the glyph redrawn on the 12px grid, its lines on half pixels so they
+ * are crisp at 1×. Glyph draws it when its size is 12; glyphCutFills12 lists its filled dots by path index. */
+export const glyphCuts12: Partial<Record<GlyphName, readonly string[]>> = ${JSON.stringify(glyphCuts12, null, 2)};
+export const glyphCutFills12: Partial<Record<GlyphName, readonly number[]>> = ${JSON.stringify(glyphCutFills12)};
 `);
 console.log("wrote packages/react/src/components/glyphs.ts");

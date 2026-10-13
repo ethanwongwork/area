@@ -21,5 +21,5 @@ export const GalleryTagRemovable = () => {
   const [shown, setShown] = useState(true);
   return shown ? <Tag tone="info" onRemove={() => setShown(false)}>personal</Tag> : <button type="button" onClick={() => setShown(true)}>Restore</button>;
 };
-export const GalleryTagIcon = () => <Tag tone="success" icon={<GlobeIcon />}>Public</Tag>;
+export const GalleryTagIcon = () => <Tag tone="success" icon={<GlobeIcon size={12} />}>Public</Tag>;
 export const GalleryTagDisabled = () => <Tag tone="info" disabled onRemove={() => {}}>personal</Tag>;

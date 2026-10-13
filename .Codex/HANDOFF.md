@@ -5,6 +5,20 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Icons: 12px cuts (2026-10-13, branch `claude/icon-work-2974ee`, uncommitted)
+
+- PR #79 (pipeline into `packages/icons`) had merged into the already-merged `claude/icon-work-status-38f2b6`, not
+  `main`; this branch merges it, so it reaches `main` with this branch.
+- Production gap 5: 9 cuts in `packages/icons/sources/12/` (chevron-down, check, add, info, open, link, bell, arrow-up,
+  globe = Fluent's), chosen by measuring every 12px icon slot in the gallery. Fluent's 12 grid, lines on half pixels;
+  add / arrow-up / info / link sit 0.5 off centre so their centre line stays one pixel. Generator: `size === 12` draws
+  the cut (`sw12`), turns follow, `cuts: [12]` in meta, `svg/12`. Glyph: both drawings, base.css shows the cut where
+  the xs slot is 12 (new token `--area-type-icon-xs-cut`, override `--_glyph-cut`; Panel md sets 0). Spec "12px cuts";
+  sheet in `docs/research/icon-review/2026-10-13/`. Owner approved the cuts ("go with your recommendations");
+  `@area/icons` at size 12 is slot-aware like Glyph (`cutOpacity`, `sw`), and Badge / Tag demos pass `size={12}`.
+- Checks: icons 9, React 274/275 (known docs-dist), tokens 24,254, contracts 14, manifest, typecheck; app preview
+  (Link mark at type 13 / 16, Icons grid at 12). Not checked: forced colours, a 1× external display.
+
 ## Preview frame (2026-10-13, branch `claude/component-work-1c5100`, PR)
 
 - Owner: "continue the component work" → Preview frame, the inspector plan's last part (PRODUCT_UI gap "an Inspector
