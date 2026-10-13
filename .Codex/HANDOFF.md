@@ -5,7 +5,7 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
-## Icons: 12px cuts (2026-10-13, branch `claude/icon-work-2974ee`, uncommitted)
+## Icons: 12px cuts (2026-10-13, branch `claude/icon-work-2974ee`, PR)
 
 - PR #79 (pipeline into `packages/icons`) had merged into the already-merged `claude/icon-work-status-38f2b6`, not
   `main`; this branch merges it, so it reaches `main` with this branch.
