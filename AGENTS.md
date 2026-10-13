@@ -14,8 +14,8 @@ self-consuming product, built only from Area and judged only in the app, and its
 Icons, Color; search; layout toggles; light / dark), the **Sidebar** (left list), the **Canvas**
 (centre) and the **Inspector** (right). Build it from Area components at the app's scale (type 13, Compact density).
 The documentation site (`apps/docs`) is archived: don't extend it or check work there. Component
-content, status, specimens and demos live in `apps/desktop/src/content`; the icon pipeline still sits
-in the site's folder until it moves to `packages/icons`. Reviews of icons
+content, status, specimens and demos live in `apps/desktop/src/content`; Area's icons (sources, generator
+and tools) live in `packages/icons`. Reviews of icons
 and components happen on artifacts, not in the docs site.
 
 Read `README.md` and, when resuming, `.Codex/HANDOFF.md`. For component work, read
@@ -58,7 +58,8 @@ color, focus or state painting, `docs/MOTION.md` for transitions, animation and 
   always David Tee (a list of several people uses teams for the others). Use
   `table()`/`tokenSection()` in docs. Docs CSS cannot override `.area-*`; do not put
   backticks inside `DOCS_CSS`/`DOCS_SCRIPT`.
-- Regenerate icons with `apps/docs/scripts/gen-icons.mjs`; preserve vendored geometry.
+- Regenerate Area's icons with `npm run icons:pilot` (`packages/icons/scripts/generate.mjs`); the old Fluent map
+  (`apps/docs/scripts/gen-icons.mjs`) still feeds the docs and the Iconography demo. Preserve vendored geometry.
 - Completion is owner-confirmed in `apps/desktop/src/content/component-status.mjs`. Passing builds and
   complete specs do not confer it.
 

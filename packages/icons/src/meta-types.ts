@@ -28,3 +28,9 @@ export interface IconMeta {
   /** The same icon's name in other libraries, as each publishes it (Fluent and Material in snake case). */
   names?: { lucide?: string; phosphor?: string; fluent?: string; material?: string };
 }
+
+/** A review batch: the drawings the owner reviewed together (sources/batches.json). */
+export interface IconBatch {
+  id: string;
+  title: string;
+}

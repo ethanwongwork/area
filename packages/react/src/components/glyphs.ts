@@ -1,5 +1,5 @@
-/** Area-drawn component glyphs, generated from apps/docs/assets/area-icons-pilot by
- * apps/docs/scripts/gen-pilot-icons.mjs. Do not edit by hand. Construction: docs/specs/icons.md.
+/** Area-drawn component glyphs, generated from packages/icons/sources by
+ * packages/icons/scripts/generate.mjs. Do not edit by hand. Construction: docs/specs/icons.md.
  * Each glyph is a list of stroked centre-line paths on the 16px grid. */
 export const glyphs = {
   "add": [

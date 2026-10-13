@@ -1,7 +1,7 @@
 /**
  * The gallery's icon browser (icons.html), modelled on Cursor's icon library (owner, 2026-10-05):
  * a toolbar (search, outline or filled, size), every Area icon in one grid grouped by category so
- * look-alikes sit together (src/icon-categories.ts), and a docked preview of the selected icon
+ * look-alikes sit together (packages/icons/src/categories.ts), and a docked preview of the selected icon
  * with its sizes, facts and Copy / Download SVG.
  *
  * Built from Area's own components and icons. The build renders it to HTML at the defaults
@@ -15,7 +15,7 @@ import {
   PILOT_BATCHES, PILOT_ICONS,
   PilotCheckIcon, PilotCopyIcon, PilotDismissIcon, PilotDownloadIcon, PilotOpenIcon, PilotSearchIcon,
 } from "../pilot-icons.tsx";
-import { ICON_CATEGORIES } from "../icon-categories.ts";
+import { ICON_CATEGORIES } from "../../../../packages/icons/src/categories.ts";
 
 type Entry = (typeof PILOT_ICONS)[number];
 type Mode = "outline" | "filled";

@@ -183,6 +183,17 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   is (approved family). Next inspector parts need Chrome in front: Preview frame + Description list "show more"
   (Figma's well rgb(245,245,245) radius 5), Link / Asset row, Token row; then the inspector rebuild.
 
+## Icons: pipeline moved to packages/icons (2026-10-12, branch `claude/icon-pipeline-package`, on top of PR #78)
+
+- Migration step 2 done (see "Migration" below; spec "Pipeline moved to packages/icons"). npm scripts keep their names;
+  new `icons:refs`, `icons:keywords`. The generator now checks categories (was in the docs build). The reference cache
+  is `packages/icons/.cache/refs` (gitignored); move or refetch it in other worktrees.
+- Generated drawings byte-identical (only header comments changed). Checks: full lint + generate, `npm test -w
+  @area/icons` (8), typecheck (all), consumer test, tools smoke-tested (find, geometry, generate --only, keywords);
+  app checked in the preview (Icons tab 808 icons, Empty state demo).
+- Pre-existing, not fixed: `npm run build -w @area/docs` fails on main since 00770d8 (the docs inspector still asks for
+  the removed `ui` axis in several places); the site is archived and due for deletion (step 4).
+
 ## Icons: accessible name, right-to-left, keywords (2026-10-12, branch `claude/icon-work-status-38f2b6`)
 
 - Owner: "continue working with your recs" → production gaps 3 and 4. Reviews were clear first (all 410 `reviews7`
@@ -356,8 +367,12 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   them on merge. Remaining:
   1. (done) `pages.mjs`, `component-status.mjs`, `gallery/specimens.mjs`, `scripts/specimen-names.mjs`, `registry.tsx`,
      `demos/` (37 files), `gallery/fit.ts`, `gallery/controls.ts` → `apps/desktop/src/content/` and `src/gallery/`.
-  2. Icon sources (`assets/area-icons-pilot`, vendored Fluent cuts), `gen-pilot-icons.mjs` / `gen-icons.mjs` and the
-     icon tools, `icon-categories.ts` → `packages/icons`; the app's Icons tab reads `@area/icons` + `/meta`.
+  2. (done 2026-10-12, branch `claude/icon-pipeline-package`) Area's drawings → `packages/icons/sources`, generator
+     and tools → `packages/icons/scripts` (`generate.mjs`, `find`, `geometry`, `batch`, `sheet`, `refs`, `keywords`),
+     categories → `packages/icons/src/categories.ts` (exported from `@area/icons/meta` with `batches`); the app's Icons
+     tab and the demos read `@area/icons`. Left in `apps/docs` until the Fluent map is retired: `gen-icons.mjs`,
+     `assets/area-icons*`, the sprites, `src/icons.tsx` (the Iconography demo's Fluent plates and AREA_SWAP names),
+     and the generated `pilot-icons.tsx` / `pilot-explore.tsx` (docs, Iconography demo, package test oracle).
   3. `CopyButton` → `@area/react`; `area-capture.js` → `tools/`.
   4. Repoint skills, AGENTS, README, DEVELOPMENT, root scripts, react tests that read `apps/docs/dist`; then delete
      the site (build, html, preview).

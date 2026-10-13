@@ -37,7 +37,7 @@
     "rtl.css"
   ],
   "scripts": {
-    "generate": "node ../../apps/docs/scripts/gen-pilot-icons.mjs --package",
+    "generate": "node scripts/generate.mjs --package",
     "build": "npm run generate && node ../../scripts/build-modules.mjs . && node scripts/build-assets.mjs",
     "test": "node --test tests/*.test.mjs",
     "typecheck": "node scripts/ensure-generated.mjs && tsc --noEmit"

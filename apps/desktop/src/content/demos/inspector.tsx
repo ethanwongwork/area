@@ -3,7 +3,7 @@
  * header rows are a muted icon and a standalone Link. */
 import type { CSSProperties, ReactNode } from "react";
 import { AssetRow, BoxModel, Button, CodeBlock, Link, Panel, PanelSection, TokenRow } from "@area/react";
-import { PilotClockIcon, PilotComponentIcon, PilotDownloadIcon, PilotHeartIcon, PilotMoreHorizontalIcon } from "../../../../docs/src/pilot-icons.tsx";
+import { ClockIcon, ComponentIcon, DownloadIcon, HeartIcon, MoreHorizontalIcon } from "@area/icons";
 // @ts-expect-error — the docs' own highlighter is authored in JavaScript.
 import { highlight } from "../highlight.mjs";
 
@@ -18,11 +18,11 @@ const stack = { display: "grid" } as CSSProperties;
 
 export const GalleryPanelDevMode = () => (
   <Panel size="sm" title="Button" aria-label="Inspect" style={{ "--area-panel-inline-size": "280px" } as CSSProperties}
-    action={<Button size="sm" variant="ghost" tone="neutral" iconOnly aria-label="More layer actions" icon={<PilotMoreHorizontalIcon />} />}>
+    action={<Button size="sm" variant="ghost" tone="neutral" iconOnly aria-label="More layer actions" icon={<MoreHorizontalIcon />} />}>
     <PanelSection heading="Component">
       <div style={metaRows}>
-        <Meta icon={<PilotComponentIcon />}><Link variant="standalone" ink="muted" href="#main-component">Button / Primary</Link></Meta>
-        <Meta icon={<PilotClockIcon />}>Edited 2 hours ago</Meta>
+        <Meta icon={<ComponentIcon />}><Link variant="standalone" ink="muted" href="#main-component">Button / Primary</Link></Meta>
+        <Meta icon={<ClockIcon />}>Edited 2 hours ago</Meta>
       </div>
     </PanelSection>
     <PanelSection heading="Layer properties">
@@ -38,8 +38,8 @@ export const GalleryPanelDevMode = () => (
       </div>
     </PanelSection>
     <PanelSection heading="Assets">
-      <AssetRow preview={<PilotHeartIcon />} name="icon/heart" meta="SVG · 16 × 16"
-        actions={<Button size="sm" variant="ghost" tone="neutral" iconOnly aria-label="Download icon/heart" icon={<PilotDownloadIcon />} />} />
+      <AssetRow preview={<HeartIcon />} name="icon/heart" meta="SVG · 16 × 16"
+        actions={<Button size="sm" variant="ghost" tone="neutral" iconOnly aria-label="Download icon/heart" icon={<DownloadIcon />} />} />
     </PanelSection>
   </Panel>
 );

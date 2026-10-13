@@ -514,11 +514,11 @@ export async function componentGalleryPage({ components, specimensOf, demos, dem
 /* --- Icons ----------------------------------------------------------------- */
 
 /**
- * Every Area icon, grouped by category (src/icon-categories.ts), with a preview of the selected one.
+ * Every Area icon, grouped by category (packages/icons/src/categories.ts), with a preview of the selected one.
  * Fails the build when an icon has no category or a category names something that is not an icon.
  */
 export async function iconsPage({ clients }) {
-  const { ICON_CATEGORIES } = await import(pathToFileURL(join(root, "src/icon-categories.ts")).href);
+  const { ICON_CATEGORIES } = await import(pathToFileURL(join(root, "../../packages/icons/src/categories.ts")).href);
   const browser = await renderIconBrowser();
   const icons = browser.names;
   const placed = ICON_CATEGORIES.flatMap(category => category.icons);
@@ -527,7 +527,7 @@ export async function iconsPage({ clients }) {
   const twice = placed.filter((name, index) => placed.indexOf(name) !== index);
   const missing = icons.filter(name => !placed.includes(name));
   if (unknown.length || twice.length || missing.length) {
-    throw new Error(`Icon categories (src/icon-categories.ts) are out of date.${missing.length ? ` No category: ${missing.join(", ")}.` : ""}${unknown.length ? ` Not icons: ${unknown.join(", ")}.` : ""}${twice.length ? ` Listed twice: ${twice.join(", ")}.` : ""}`);
+    throw new Error(`Icon categories (packages/icons/src/categories.ts) are out of date.${missing.length ? ` No category: ${missing.join(", ")}.` : ""}${unknown.length ? ` Not icons: ${unknown.join(", ")}.` : ""}${twice.length ? ` Listed twice: ${twice.join(", ")}.` : ""}`);
   }
   const chrome = await renderChrome(browser.sections, "icons");
   const canvas = `<div class="gallery-icons-root" id="${browser.id}">${browser.html}</div>`;

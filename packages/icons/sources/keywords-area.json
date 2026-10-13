@@ -1,5 +1,5 @@
 {
- "$comment": "Area's own search words, read by apps/docs/scripts/icon-keywords.mjs. $words: a word in an Area name and the word other libraries use for it, measured from the counterpart map (docs/research/icon-audit/area-map.json: person→user 6 times, add→plus 9, chat→message 5 …); an icon gets its name with each swap as a keyword, and a library icon of that name is its counterpart when the map has none. $drop: library tags that name another concept (Lucide's plus carries its crosshair words) or misspell one. The rest: keywords for one icon, for drawings no library has and words a library misses. Record: docs/specs/icons.md, \"Keywords and names\".",
+ "$comment": "Area's own search words, read by packages/icons/scripts/keywords.mjs. $words: a word in an Area name and the word other libraries use for it, measured from the counterpart map (docs/research/icon-audit/area-map.json: person→user 6 times, add→plus 9, chat→message 5 …); an icon gets its name with each swap as a keyword, and a library icon of that name is its counterpart when the map has none. $drop: library tags that name another concept (Lucide's plus carries its crosshair words) or misspell one. The rest: keywords for one icon, for drawings no library has and words a library misses. Record: docs/specs/icons.md, \"Keywords and names\".",
  "$words": {
   "add": [
    "plus"
