@@ -288,6 +288,59 @@ function gallerySpecimenTable() {
       { id: "content-image", title: "Content / image", demo: "GalleryPreviewFrameImage" },
       { id: "content-alpha", title: "Content / alpha", demo: "GalleryPreviewFrameAlpha" },
     ],
+    "password-field": [
+      { id: "default", title: "Default", demo: "GalleryPasswordField" },
+      { id: "state-filled", title: "State / with a password", demo: "GalleryPasswordFieldFilled" },
+      { id: "state-visible", title: "State / shown", demo: "GalleryPasswordFieldVisible" },
+      { id: "variant-soft", title: "Variant / soft", demo: "GalleryPasswordFieldSoft" },
+      { id: "size-sm", title: "Size / sm", demo: "GalleryPasswordFieldSm" },
+      { id: "size-md", title: "Size / md", demo: "GalleryPasswordFieldMd" },
+      { id: "size-lg", title: "Size / lg", demo: "GalleryPasswordFieldLg" },
+      { id: "state-invalid", title: "State / invalid", demo: "GalleryPasswordFieldInvalid" },
+      { id: "state-disabled", title: "State / disabled", demo: "GalleryPasswordFieldDisabled" },
+      { id: "content-new", title: "Content / new password", demo: "GalleryPasswordFieldNew" },
+      { id: "behavior-form", title: "Behavior / hides on submit", demo: "GalleryPasswordFieldForm" },
+    ],
+    "otp-field": [
+      { id: "default", title: "Default", demo: "GalleryOTPField" },
+      { id: "state-partial", title: "State / partly typed", demo: "GalleryOTPFieldPartial" },
+      { id: "state-filled", title: "State / filled", demo: "GalleryOTPFieldFilled" },
+      { id: "layout-groups", title: "Layout / groups", demo: "GalleryOTPFieldGroups" },
+      { id: "content-four", title: "Content / four digits", demo: "GalleryOTPFieldFour" },
+      { id: "content-mask", title: "Content / masked", demo: "GalleryOTPFieldMask" },
+      { id: "content-alphanumeric", title: "Content / letters and digits", demo: "GalleryOTPFieldAlphanumeric" },
+      { id: "variant-soft", title: "Variant / soft", demo: "GalleryOTPFieldSoft" },
+      { id: "size-sm", title: "Size / sm", demo: "GalleryOTPFieldSm" },
+      { id: "size-md", title: "Size / md", demo: "GalleryOTPFieldMd" },
+      { id: "size-lg", title: "Size / lg", demo: "GalleryOTPFieldLg" },
+      { id: "state-invalid", title: "State / invalid", demo: "GalleryOTPFieldInvalid" },
+      { id: "state-disabled", title: "State / disabled", demo: "GalleryOTPFieldDisabled" },
+      { id: "behavior-complete", title: "Behavior / checks when complete", demo: "GalleryOTPFieldComplete" },
+    ],
+    "time-field": [
+      { id: "default", title: "Default", demo: "GalleryTimeField" },
+      { id: "state-filled", title: "State / with a time", demo: "GalleryTimeFieldFilled" },
+      { id: "content-24", title: "Content / 24-hour", demo: "GalleryTimeField24" },
+      { id: "content-seconds", title: "Content / seconds", demo: "GalleryTimeFieldSeconds" },
+      { id: "content-icon", title: "Content / icon", demo: "GalleryTimeFieldIcon" },
+      { id: "content-list", title: "Content / list of times", demo: "GalleryTimeFieldList" },
+      { id: "variant-soft", title: "Variant / soft", demo: "GalleryTimeFieldSoft" },
+      { id: "size-sm", title: "Size / sm", demo: "GalleryTimeFieldSm" },
+      { id: "size-md", title: "Size / md", demo: "GalleryTimeFieldMd" },
+      { id: "size-lg", title: "Size / lg", demo: "GalleryTimeFieldLg" },
+      { id: "state-invalid", title: "State / invalid", demo: "GalleryTimeFieldInvalid" },
+      { id: "state-disabled", title: "State / disabled", demo: "GalleryTimeFieldDisabled" },
+      { id: "behavior-controlled", title: "Behavior / in a field", demo: "GalleryTimeFieldControlled" },
+    ],
+    stepper: [
+      { id: "default", title: "Default", demo: "GalleryStepper" },
+      { id: "state-start", title: "State / first step", demo: "GalleryStepperStart" },
+      { id: "state-done", title: "State / all done", demo: "GalleryStepperDone" },
+      { id: "state-invalid", title: "State / a problem", demo: "GalleryStepperInvalid" },
+      { id: "content-description", title: "Content / descriptions", demo: "GalleryStepperDescription" },
+      { id: "layout-vertical", title: "Layout / vertical", demo: "GalleryStepperVertical" },
+      { id: "behavior-interactive", title: "Behavior / going back", demo: "GalleryStepperInteractive" },
+    ],
     "editable-text": [
       { id: "default", title: "Default", demo: "GalleryEditableText" },
       { id: "state-editing", title: "State / editing", demo: "GalleryEditableTextEditing" },
@@ -770,6 +823,14 @@ function gallerySpecimenTable() {
       { id: "badge", title: "In badge", demo: "GallerySpinnerBadge" },
       { id: "input", title: "In input", demo: "GallerySpinnerInput" },
       { id: "empty", title: "Loading content", demo: "GallerySpinnerEmpty" },
+      { id: "state-value", title: "State / value", demo: "GallerySpinnerValue" },
+      { id: "state-value-sm", title: "State / value sm", demo: "GallerySpinnerValueSm" },
+      { id: "state-value-lg", title: "State / value lg", demo: "GallerySpinnerValueLg" },
+      { id: "state-value-empty", title: "State / value 0", demo: "GallerySpinnerValueEmpty" },
+      { id: "state-value-low", title: "State / value 4%", demo: "GallerySpinnerValueLow" },
+      { id: "state-value-full", title: "State / value 100%", demo: "GallerySpinnerValueFull" },
+      { id: "content-meter", title: "Content / meter", demo: "GallerySpinnerValueMeter" },
+      { id: "composition-value-button", title: "Composition / value in a button", demo: "GallerySpinnerValueButton" },
     ],
     chip: [
       { id: "default", title: "Default", demo: "GalleryChip" },
@@ -1047,6 +1108,7 @@ export function demoWrapper(name) {
   if (name.startsWith("GalleryFileUpload")) return { attribute: "data-switch-demo", style: `display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0` };
   if (name === "GalleryShortcutListDialog") return { attribute: "data-switch-demo", style: `display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0` };
   if (name.startsWith("GalleryEditableText")) return { attribute: "data-switch-demo", style: `display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0` };
+  if (/^Gallery(PasswordField|OTPField|TimeField|Stepper|SpinnerValueButton)/.test(name)) return { attribute: "data-switch-demo", style: `display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0` };
   if (name.startsWith("GallerySearchField")) return { attribute: "data-switch-demo", style: `display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0` };
   if (name.startsWith("GalleryToggleGroup")) return { attribute: "data-switch-demo", style: `display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0` };
   if (name.startsWith("GalleryToggletip")) return { attribute: "data-switch-demo", style: `display:flex;justify-content:center;max-inline-size:100%;min-inline-size:0` };

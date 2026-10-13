@@ -18,6 +18,30 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   `@area/icons` at size 12 is slot-aware like Glyph (`cutOpacity`, `sw`), and Badge / Tag demos pass `size={12}`.
 - Checks: icons 9, React 274/275 (known docs-dist), tokens 24,254, contracts 14, manifest, typecheck; app preview
   (Link mark at type 13 / 16, Icons grid at 12). Not checked: forced colours, a 1× external display.
+## Compass review → Password field, OTP field, Time field, Stepper, Spinner value (2026-10-13, branch `claude/design-compass-components-cfd9eb`, PR)
+
+- Owner reviewed compass.designcompass.org ("anything worth using/building?"). Gallery tile Copy/Reset and the app at
+  type 13 / Compact / radius 10 were handed to the **gallery** session: type 13 / Compact is on main (PR 75); Copy/Reset
+  (`apps/desktop/src/actions.tsx`) and radius 10 sit uncommitted in its worktree (`icon-hover-card-button-variant-c2d0bf`)
+  as of this merge. Research: `docs/research/compass-components-2026-10-13/`.
+- All Complete after review rounds 24-26 (`components24`-`26` on https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG);
+  nothing in review:
+  - **Password field**: Input + an eye / closed-eye InputAction ("Show / Hide password", in the Tab order, caret kept),
+    hidden again on submit. Input's "Password" tile now renders it.
+  - **OTP field**: Input-shell slots (8 apart, groups, mask, alphanumeric) over one transparent real input: autofill,
+    paste cleaned of spaces and dashes, a caret before a character selects its slot.
+  - **Time field**: spin-button segments in Input's shell (React Aria keys), the editing segment on `selection-surface`
+    with the field's ink, plates hanging 2 so digits sit at Input's inset and read "9:30 AM"; `step` adds ChatGPT's
+    list of times (Menu check rows, centred on the value); chevron `tabindex=-1`, Alt+Down opens (Combobox).
+  - **Stepper**: `ol`, `aria-current="step"`, Timeline's geometry (24 column, text 36 in, 400, its divider line 4 short
+    of markers); upcoming Checkbox ring, current the Selection fill, done a Selection ring + check.
+  - **Spinner `value`** (was the Progress circle family, owner: "is this not the same as spinner?"): the ring stopped at
+    a value, progressbar or meter (Cursor's context and review rings), linear value motion (MOTION.md progress).
+    Open: Progress's bar still eases out on value change.
+- Glyphs `eye`, `eye-off`, `clock` added to the component set (`gen-pilot-icons.mjs` PACKAGE_GLYPHS). Captures:
+  ChatGPT's schedule time list and Figma's sign-in (redacted), Mantine, Area 1:1 light and dark via headless Edge.
+- Checks: build, typecheck, npm test (24,251), React 291/291, contracts, build:docs, diff check. Not verified: the
+  Electron window, forced colours, screen readers, Time field on touch keyboards, SMS autofill.
 
 ## Preview frame (2026-10-13, branch `claude/component-work-1c5100`, PR)
 
