@@ -194,14 +194,15 @@
   /* --- Tiles and the grid (src/tile.tsx) ------------------------------------ */
 
   /*
-   * One grid for every tab. The unit is 136 at the least (two units and the gap are the docs
-   * gallery's 280 component tile); the column count is always even, so a wide tile (2 x 2) sits on
-   * exactly two units and wide and unit grids share their edges down the Canvas. Rows are four
-   * fifths of a unit: every tile is 5:4 (owner, 2026-10-04).
+   * One grid for every tab. The unit is 152 at the least, so a component tile (two units and the
+   * gap) is 312 at the least (owner, 2026-10-12: "a bit larger" than the docs gallery's 280); the
+   * column count is always even, so a wide tile (2 x 2) sits on exactly two units and wide and unit
+   * grids share their edges down the Canvas. Rows are four fifths of a unit: every tile is 5:4
+   * (owner, 2026-10-04).
    */
   .studio-grid {
     --_gap: var(--_canvas-gap);
-    --_unit-min: 136px; /* pick: 2 x 136 + 8 = the gallery's 280 */
+    --_unit-min: 152px; /* pick: 2 x 152 + 8 = 312 (was 136, the docs gallery's 280) */
     --_pairs: max(1, round(down, calc((100cqw + var(--_gap)) / (var(--_unit-min) * 2 + var(--_gap) * 2)), 1));
     --_unit: calc((100cqw - (var(--_pairs) * 2 - 1) * var(--_gap)) / (var(--_pairs) * 2));
     --_unit-row: calc(var(--_unit) * 4 / 5);
@@ -210,10 +211,10 @@
     grid-auto-rows: var(--_unit-row);
     gap: var(--_gap);
   }
-  /* Zoom 2x (Components; src/gallery/fit.ts reads [data-zoom]): specimens show at up to 2x on a unit
-     half again as large (204, wide tiles 416 at the least), two across a 1440 window with both
-     panels; doubling it left one tile per row. */
-  [data-zoom="2"] .studio-grid { --_unit-min: 204px; /* pick: 1.5 x 136 */ }
+  /* Zoom 2x (Components; src/gallery/fit.ts reads [data-zoom]): specimens show at up to 2x on a
+     larger unit (216, wide tiles 440 at the least), still two across a 1440 window with both
+     panels (its 912 Canvas holds two pairs up to a 222 unit); doubling it left one tile per row. */
+  [data-zoom="2"] .studio-grid { --_unit-min: 216px; /* pick: the largest 8-step under 222 */ }
   .studio-grid--wide {
     grid-template-columns: repeat(var(--_pairs), minmax(0, 1fr));
     grid-auto-rows: calc(var(--_unit-row) * 2 + var(--_gap));
