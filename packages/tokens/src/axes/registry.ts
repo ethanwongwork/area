@@ -16,7 +16,8 @@ import { ACTION_AXIS, SELECTION_AXIS } from "./emphasis.ts";
 import { MOTION_AXIS } from "./motion.ts";
 import { RADIUS_AXIS } from "./radius.ts";
 import { SURFACE_AXIS } from "./surface.ts";
-import { UI_SCALE_AXIS } from "./ui-scale.ts";
+import { DENSITY_AXIS } from "./density.ts";
+import { TYPE_AXIS } from "./type-size.ts";
 
 export const AXES: AxisDefinition[] = [
   THEME_AXIS,
@@ -24,7 +25,8 @@ export const AXES: AxisDefinition[] = [
   ACCENT_AXIS,
   ACTION_AXIS,
   SELECTION_AXIS,
-  UI_SCALE_AXIS,
+  TYPE_AXIS,
+  DENSITY_AXIS,
   RADIUS_AXIS,
   SURFACE_AXIS,
   MOTION_AXIS,

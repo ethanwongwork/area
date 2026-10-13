@@ -32,6 +32,7 @@ import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } fr
 import { SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
 import { matches } from "../search.ts";
 import { ArrangeMenu, groupBy, PinButton, PinMenu, sortBy, useArrangement, usePins } from "../organize.tsx";
+import { APP_SCALE } from "../app-scale.ts";
 
 interface Example { id: string; title: string; demo: string; note?: string; group?: string }
 interface Family { slug: string; name: string; manifest: string; docsOnly?: boolean; imports?: string; exportName?: string; api?: string[][]; examples: Example[] }
@@ -148,7 +149,7 @@ function FamilySection({ family, selected, onSelect, onOpen, zoom }: { family: F
   const rows = Math.ceil(TILES.get(family.slug)!.length / 3);
   return (
     <section ref={ref} className="studio-section" aria-labelledby={`family-${family.slug}`} data-fit="">
-      <h2 className="studio-canvas__section-title" id={`family-${family.slug}`} data-area-ui="compact">
+      <h2 className="studio-canvas__section-title" id={`family-${family.slug}`} {...APP_SCALE}>
         <a href={`#components/${family.slug}`} className="studio-section__link" data-key={family.slug} data-name={family.name} onClick={event => { event.preventDefault(); onOpen(); }}>{family.name}</a>
       </h2>
       {near ? <FamilyTiles family={family} selected={selected} onSelect={onSelect} /> : <div style={{ blockSize: `${rows * 256}px` }} />}
@@ -261,7 +262,7 @@ export function ComponentsPage() {
               Documentation, not a specimen: it keeps the app's compact scale and default radius whatever
               the Canvas previews. */}
           {family.api?.length ? (
-            <section className="studio-section" aria-labelledby="family-props" data-area-ui="compact">
+            <section className="studio-section" aria-labelledby="family-props" {...APP_SCALE}>
               <h2 className="studio-canvas__section-title" id="family-props">Props</h2>
               <PropsTable api={family.api} />
             </section>

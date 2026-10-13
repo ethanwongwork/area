@@ -218,7 +218,7 @@ export function ColorPage() {
       inspectorTitle={picked ? `${title(picked.scale.id)} ${picked.step.level}` : view ? title(view.id) : "All scales"}
       inspector={
         <>
-          <CanvasSettings axes={["ui"]} />
+          <CanvasSettings axes={["type", "density"]} />
           {picked ? <StepInspector scale={picked.scale.id} step={picked.step} token={token} live={live} description={picked.scale.description} />
             : view ? (
               <PanelSection heading="Scale">

@@ -274,7 +274,7 @@ export function IconsPage() {
       inspectorTitle={icon ? titleCase(icon.name) : view ? view.name : "All icons"}
       inspector={
         <>
-          <CanvasSettings axes={["ui"]} />
+          <CanvasSettings axes={["type", "density"]} />
           {icon && Draw ? (
             <>
               <Selection preview={<Preview ref={preview} label={titleCase(icon.name)}><Draw size={PREVIEW} aria-hidden="true" /></Preview>}>

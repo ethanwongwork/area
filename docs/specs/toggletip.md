@@ -205,4 +205,4 @@ compared side by side in Claude in Chrome with the live products (captures only)
    (#ada9a3). Recommendation: keep the chevron's role, so every quiet affordance in a form shares one ink.
 
 ## Feedback log
-
+- 2026-10-12 · spacing step extrapolated past Default → the icon size and stroke take only the compact step (`clamp(0, ui-dense, 1)`, `toggletip.css`). `docs/research/ui-size-scale-2026-10-12.md`.

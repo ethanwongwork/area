@@ -3,7 +3,7 @@
  * at the regular and the strong weight as separate ramps, each row's example its own name set in
  * its own style ("Heading 72", "Copy 14 Strong"), then its token, weight and what it is for; or as
  * a grid of "Aa" tiles. Choosing a role in the Sidebar shows it at each
- * weight and density, in a sample line the Inspector's Canvas section edits. The Inspector shows
+ * weight and at every type size, in a sample line the Inspector's Canvas section edits. The Inspector shows
  * the chosen role (its "Aa", its CSS and token to copy, its facts) or, with none, the type scale.
  *
  * The usage notes come from where Area uses each role (packages/styles) and the ramp's own notes
@@ -13,7 +13,7 @@ import { useState } from "react";
 import { Code, EmptyState, Field, Nav, NavGroup, NavItem, PanelSection, Table, TableLink, Textarea } from "@area/react";
 import { CheckIcon, CopyIcon } from "@area/icons";
 import { CanvasSettings } from "../canvas-settings.tsx";
-import { ChromeButton, SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
+import { APP_SCALE, ChromeButton, SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
 import { CanvasSection } from "../tile.tsx";
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
 import { Facts } from "../facts.tsx";
@@ -22,14 +22,14 @@ import { ArrangeMenu, sortBy, useArrangement } from "../organize.tsx";
 import { CopyButton } from "../../../docs/src/gallery/icon-browser.tsx";
 import { matches } from "../search.ts";
 import { onGridKeys } from "../grid-keys.ts";
-import { TYPE_ROLES, type TypeRole } from "../tokens.ts";
+import { DEFAULT_TYPE, TYPE_ROLES, TYPE_SIZES, type TypeRole } from "../tokens.ts";
 import { readStored, writeStored } from "../storage.ts";
 
 const SAMPLE = "Every component, icon and colour in one place.";
 
 const GROUPS = [
-  { id: "headings", label: "Headings", lede: "Introduce pages, sections and surfaces. Headings hold their size in compact density.", groups: ["display", "title"] },
-  { id: "copy", label: "Copy", lede: "Body text and interface text. Copy steps down a size in compact density.", groups: ["text"] },
+  { id: "headings", label: "Headings", lede: "Introduce pages, sections and surfaces. Surface titles follow the type size; larger headings hold theirs.", groups: ["display", "title"] },
+  { id: "copy", label: "Copy", lede: "Body text and interface text. Copy follows the type size: the base, two under it for small text, two over it for reading.", groups: ["text"] },
 ] as const;
 
 const USAGE: Record<string, string> = {
@@ -68,8 +68,8 @@ const roleStyle = (role: TypeRole, weight: "regular" | "strong") => ({
   fontWeight: `var(--area-weight-${weight})`,
 });
 
-const metrics = (role: TypeRole, density: "default" | "compact") => {
-  const { size, leading, tracking } = role.metrics[density];
+const metrics = (role: TypeRole, type: string) => {
+  const { size, leading, tracking } = role.metrics[type]!;
   return `${size} / ${leading}${tracking && tracking !== "0em" ? ` · ${tracking}` : ""}`;
 };
 
@@ -90,7 +90,8 @@ export function TypographyPage() {
   const view = TYPE_ROLES.find(entry => entry.id === item);
   const [selected, setSelected] = useState<string>();
   const role = view ?? TYPE_ROLES.find(entry => entry.id === selected);
-  const density = canvas.ui === "compact" ? "compact" : "default";
+  // The Canvas's type size (Inspector, Canvas section): roles are measured at it.
+  const density = canvas.type;
   const [mode, setMode] = useViewOption<ViewMode>("typography", "list", ["grid", "list"]);
   const [weights, setWeights] = useViewOption<"all" | "regular" | "strong">("typography-weight", "all", ["all", "regular", "strong"]);
   // One role's density rows take the header's weight (strong only when it shows strong alone).
@@ -99,7 +100,7 @@ export function TypographyPage() {
   const matching = TYPE_ROLES.filter(entry => matches(query, entry.name, entry.id, USAGE[entry.id]));
   // The Sidebar and the Canvas share one order (product UI rule 7).
   const shown = arrangement.sort === "name" ? sortBy(matching, entry => entry.name, arrangement.descending)
-    : sortBy(matching, entry => -entry.metrics.default.size, arrangement.descending);
+    : sortBy(matching, entry => -entry.metrics[DEFAULT_TYPE]!.size, arrangement.descending);
   const sections = arrangement.group === "kind" ? GROUPS : [ALL_ROLES];
   const changeSample = (value: string) => { setSample(value); writeStored("typeSample", value); };
 
@@ -135,22 +136,21 @@ export function TypographyPage() {
       canvasTitle={view ? view.name : "All roles"}
       canvasMeta={view ? undefined : <span className="studio-muted studio-tabular">{shown.length}</span>}
       canvas={view ? (
-        // One role: at the Canvas's density in each weight, then at each density, in the sample line,
-        // as ruled rows on the Canvas's surface (owner, 2026-10-12: type sits on the surface; a
+        // One role: at the Canvas's type size in each weight, then at every type size, in the sample
+        // line, as ruled rows on the Canvas's surface (owner, 2026-10-12: type sits on the surface; a
         // specimen is text, which needs no container).
         <div className="studio-type-rows">
           {([
             ["regular", undefined, "Regular"],
             ["strong", undefined, "Strong"],
-            [weight, "default", "Default density"],
-            [weight, "compact", "Compact density"],
-          ] as const).filter(([w, ui]) => ui || weights === "all" || weights === w).map(([w, ui, label]) => (
+            ...TYPE_SIZES.map(type => [weight, type, `Type ${type}`] as const),
+          ] as ReadonlyArray<readonly ["regular" | "strong", string | undefined, string]>).filter(([w, type]) => type || weights === "all" || weights === w).map(([w, type, label]) => (
             <section key={label} className="studio-type-row" aria-label={label}>
-              <div className="studio-type-row__head" data-area-ui="compact">
+              <div className="studio-type-row__head" {...APP_SCALE}>
                 <span>{label}</span>
-                <span className="studio-tabular">{metrics(view, ui ?? density)}</span>
+                <span className="studio-tabular">{metrics(view, type ?? density)}</span>
               </div>
-              <div {...(ui ? { "data-area-ui": ui } : {})}>
+              <div {...(type ? { "data-area-type": type } : {})}>
                 <span className="studio-type__sample" style={roleStyle(view, w)}>{sample || SAMPLE}</span>
               </div>
             </section>
@@ -176,7 +176,7 @@ export function TypographyPage() {
                       <button key={entry.id} type="button" className="studio-type-cell" aria-pressed={entry.id === role?.id}
                         aria-label={`${styleName(entry)}, ${metrics(entry, density)}`} onClick={() => setSelected(entry.id)}>
                         <span className="studio-type-cell__sample" style={roleStyle(entry, w.id)} aria-hidden="true">Aa</span>
-                        <span className="studio-type-cell__label" data-area-ui="compact" aria-hidden="true">
+                        <span className="studio-type-cell__label" {...APP_SCALE} aria-hidden="true">
                           <span>{styleName(entry)}</span>
                           <span className="studio-muted studio-tabular">{metrics(entry, density)}</span>
                         </span>
@@ -218,7 +218,7 @@ export function TypographyPage() {
       inspectorTitle={role ? role.name : "All roles"}
       inspector={
         <>
-          <CanvasSettings axes={["ui"]}>
+          <CanvasSettings axes={["type", "density"]}>
             {view ? (
               <Field label="Sample" orientation="vertical">
                 <Textarea size="sm" rows={3} value={sample} onChange={event => changeSample(event.currentTarget.value)} />
@@ -234,9 +234,9 @@ export function TypographyPage() {
               <PanelSection heading="Role">
                 <Facts label="Role" items={[
                   ["Token", <Code>--area-{role.id}</Code>],
-                  ["Default", metrics(role, "default")],
-                  ["Compact", metrics(role, "compact")],
-                  ["Ratio", (role.metrics[density].leading / role.metrics[density].size).toFixed(2)],
+                  ["At type " + density, metrics(role, density)],
+                  ["Type 12 to 16", `${role.metrics["12"]!.size} to ${role.metrics["16"]!.size}`],
+                  ["Ratio", (role.metrics[density]!.leading / role.metrics[density]!.size).toFixed(2)],
                   ["Weights", WEIGHTS.map(entry => entry.value).join(" · ")],
                   ["Group", role.group === "text" ? "Copy" : "Heading"],
                   ["Usage", USAGE[role.id]],
