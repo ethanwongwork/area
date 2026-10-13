@@ -27,7 +27,7 @@ load from a pinned external URL; custom consumers may supply their own font toke
 
 ```sh
 npm run dev            # the desktop app (Electron), reloading on change
-npm run preview        # the same app in a browser at http://localhost:4400
+npm run preview        # the same, plus the app in a browser at http://localhost:4400
 npm run dev:docs       # the archived docs site at http://localhost:4321
 npm run build          # tokens, styles/manifest, React JS + declarations
 npm run build:docs     # package build, static site, docs audit
@@ -41,7 +41,12 @@ watcher: it may replace declarations during typecheck. Stop the dev process firs
 running the full verification sequence, then restart it for preview.
 
 The desktop app (`apps/desktop`) bundles `src/main.tsx` with esbuild into `apps/desktop/dist` and
-copies `area.css` beside it; a change under `packages/<name>/src` rebuilds the packages first.
+copies `area.css` beside it. The Electron window always shows the checkout that started it:
+starting `dev` or `preview` closes any other Area dev window (another worktree's included), a
+renderer rebuild reloads the window and the browser page, a change under `apps/desktop/electron`
+restarts the window, and a change under `packages/<name>/src` rebuilds that package and the ones
+after it (tokens → styles → react). Icons are not watched; run `npm run build -w @area/icons`
+after regenerating them. `preview -- --no-electron` serves the browser alone.
 
 The archived docs site's development server watches source changes, builds into an ignored staging directory
 and swaps in a successful immutable snapshot. A failed build retains the prior preview.
