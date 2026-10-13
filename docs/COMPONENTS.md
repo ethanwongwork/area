@@ -35,16 +35,19 @@ actual specimens. Current families include:
   Radio/RadioGroup, Switch, Slider/SliderRange, Chip/ChipGroup, Segmented, ToggleGroup (in review, 2026-10-10: a set of toggle Buttons, any number or at most one pressed) and AlignmentPicker.
 - Forms: Field, Input/InputAction, InputGroup/InputGroupText, NumberField, BoxField, Textarea,
   Composer, native Select, Combobox, CustomSelect, TagPicker, DatePicker, ConfirmDialog, Drawer (in review, 2026-10-05), ColorField, ColorSwatch, ColorSwatchPicker, ColorPicker,
-  Calendar, PropertyList and FileUpload (in review, 2026-10-09: drop zone and upload rows).
+  Calendar, PropertyList, FileUpload (in review, 2026-10-09: drop zone and upload rows), PasswordField, OTPField
+  and TimeField (Complete, 2026-10-13: a reveal action; code slots over one input; time segments with a list).
 - Navigation and commands: Nav, Tabs, Menu, ContextMenu, CommandPalette, TreeView,
   Breadcrumb (linked ancestors, a current page and an optional collapsed marker) and
   Pagination (in review, 2026-10-08: numbered pages or a compact "Page 2 of 10", buttons or links)
-  and Link (in review, 2026-10-08: inline or standalone, inherited, muted or Action ink, external).
+  and Link (in review, 2026-10-08: inline or standalone, inherited, muted or Action ink, external),
+  and Stepper (Complete, 2026-10-13: Timeline's numbered steps, done steps checked).
 - Labels and identity: Badge/BadgeGroup, Count, Indicator/IndicatorAnchor, Presence (the
   status mark, audit H-25), Avatar, Kbd/KbdGroup and Code (Token is deprecated: use `<Code swatch>`).
 - Feedback: Alert (with the banner layout), Toast, Tooltip, Toggletip (in review, 2026-10-09: an info or help
   button beside a label whose note previews on hover and focus and pins on a press), EmptyState (in review, 2026-10-10: icon tile, title, muted line and
-  actions for a region with nothing in it; md after ChatGPT, sm after Notion), Progress, Spinner and Skeleton.
+  actions for a region with nothing in it; md after ChatGPT, sm after Notion), Progress, Spinner (its `value`,
+  2026-10-13, stops the ring at a value: the circular progress) and Skeleton.
 - Structure and content: Card, Panel (with `resizable`), Dialog, Popover, HoverCard, ScrollArea (in review, 2026-10-09),
   Separator, Table and CodeBlock.
 - Conversation: Message/MessageActions, PromptSuggestions, ModelPicker and ScrollToLatest.
@@ -123,16 +126,16 @@ built next; this list is an inventory, not an order of work.
 
 ### Broader coverage after the inspector foundation
 
-- **Entry and forms:** SearchField [built 2026-10-10], PasswordField, MultiSelect (Combobox is built),
-  TagPicker, editable text [built 2026-10-11], OTP input, Form validation and error
+- **Entry and forms:** SearchField [built 2026-10-10], PasswordField [built 2026-10-13], MultiSelect (Combobox is built),
+  TagPicker, editable text [built 2026-10-11], OTP input [built 2026-10-13 as OTPField], Form validation and error
   summary. Reuse Input/Field for search and password anatomy; promote a wrapper when
   behavior such as reveal, clear, filtering or async suggestions is included.
 - **Date and time:** Calendar is built (Complete, [spec](specs/calendar.md)): single,
   range and multiple selection, one or two months, bounds and unavailable dates, square /
   circle / tile days, event markers and a week strip. Next:
-  DateField (segmented entry), DatePicker [built 2026-10-05] and DateRangePicker [built 2026-10-10] (field + popover), TimeField and duration input. Keep segmented date editing distinct from a text
+  DateField (segmented entry), DatePicker [built 2026-10-05] and DateRangePicker [built 2026-10-10] (field + popover), TimeField [built 2026-10-13] and duration input. Keep segmented date editing distinct from a text
   field with a mask.
-- **Navigation and commands:** Stepper and MenuBar (Breadcrumb, TreeView,
+- **Navigation and commands:** Stepper [built 2026-10-13] and MenuBar (Breadcrumb, TreeView,
   ContextMenu, CommandPalette, Pagination and Link are built). Add keyboard behaviors to existing Menu
   before multiplying menu-shaped components.
 - **Selection and collections:** ListBox, selectable List, TreeSelect/Cascader,
@@ -151,7 +154,7 @@ built next; this list is an inventory, not an order of work.
   built). PageHeader, Sidebar,
   application shell and dockable inspector are compositions.
 - **Data and feedback:** DescriptionList [built 2026-10-10], Stat, Timeline [built 2026-10-11], EmptyState [built 2026-10-10], Result/ErrorState,
-  Meter [built 2026-10-10] (Banner is built as an Alert layout), circular Progress, live notification queue, DataGrid and TreeGrid.
+  Meter [built 2026-10-10] (Banner is built as an Alert layout), circular Progress [built 2026-10-13 as Spinner `value`], live notification queue, DataGrid and TreeGrid.
   DataGrid needs editing, resizing, selection and virtualization contracts beyond Table.
 - **Content and advanced tools:** image/media preview, Carousel, rich text and code-editor
   integrations, charts, gradient editor, easing/curve editor and shortcut recorder.
@@ -219,7 +222,7 @@ catalogue names. Each would be measured in its product like every other componen
   (Combobox with previews and weight axis), VariableChip (a bound token in a field, detach
   on hover).
 - **Shared and small:** SearchField (clear, shortcut hint; built 2026-10-10), EmptyState (built 2026-10-10), KeyboardShortcut
-  overlay (a sheet of Kbd groups; built 2026-10-10 as Shortcut list), Pagination, Stepper, Meter, circular Progress, ScrollArea (built 2026-10-09),
+  overlay (a sheet of Kbd groups; built 2026-10-10 as Shortcut list), Pagination, Stepper [built 2026-10-13], Meter, circular Progress [built 2026-10-13 as Spinner `value`], ScrollArea (built 2026-10-09),
   Splitter (two resizable regions), Sheet / Drawer, Banner, Stat, DescriptionList,
   DateField / Calendar / DatePicker.
 

@@ -1,0 +1,148 @@
+/* ---------------------------------------------------------------------------
+ * Stepper
+ *
+ * Where a person is in a flow of steps (docs/specs/stepper.md). It is Timeline's geometry with numbered steps
+ * (owner, review round 24: "should these be the same as timeline?"): a 24 marker column (compact 20), the title 12
+ * beyond it (36 from the column's start), 400 type, 16 between steps vertically, and Timeline's 1px divider line
+ * stopping 4 short of each marker. The line has one paint in every state, as Timeline's does; the markers carry the
+ * state in the choice controls' vocabulary: a step still to come is an unchecked ring (Checkbox's rest edge, the
+ * muted number), the current step is the checked fill (the Selection role and its ink, the one strong mark, as
+ * Timeline's current event), and a done step keeps the Selection ink as a ring with a check.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-stepper {
+    --_marker: var(--area-control-xs); /* spec: Timeline's marker, 24 (compact 20); MUI, Untitled UI, Chakra xs 24 */
+    --_gap: var(--area-space-12); /* spec: Timeline's content gap, the title 36 from the column's start */
+    --_line: var(--area-stroke-width); /* spec: Timeline's 1px line (Ant, MUI, GOV.UK 1px) */
+    --_line-gap: var(--area-space-4); /* spec: Timeline's gap around each marker */
+    --_spacing: var(--area-space-16); /* spec: Timeline's 16 between events */
+    --_leading: var(--area-text-sm-leading);
+    display: flex;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    min-inline-size: 0;
+    color: var(--area-fg-default);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--_leading);
+  }
+  .area-stepper--horizontal { flex-direction: row; align-items: flex-start; }
+  .area-stepper--vertical { flex-direction: column; }
+
+  .area-stepper-step {
+    --_ring: var(--area-edge-control-hover); /* spec: Checkbox and Radio's rest edge, the firmer edge for small marks */
+    --_disc: transparent;
+    --_number: var(--area-fg-muted);
+    --_title: var(--area-fg-muted);
+    position: relative;
+    display: flex;
+    min-inline-size: 0;
+  }
+  .area-stepper-step--upcoming {}
+  /* The checked fill: the Selection role and its ink (Checkbox, Radio, Switch on). */
+  .area-stepper-step--current { --_ring: var(--area-selection-solid); --_disc: var(--area-selection-solid); --_number: var(--area-fg-on-selection); --_title: var(--area-fg-default); }
+  /* Done keeps the Selection ink, as a ring with a check, so only the current step is solid. */
+  .area-stepper-step--complete { --_ring: var(--area-selection-solid); --_number: var(--area-selection-solid); --_title: var(--area-fg-default); }
+  .area-stepper-step--invalid { --_ring: var(--area-danger-solid); --_number: var(--area-danger-solid); --_title: var(--area-fg-default); }
+
+  .area-stepper-step__body,
+  .area-stepper-step__button {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--_gap);
+    min-inline-size: 0;
+  }
+  /* A step that can be revisited is a button whose row plate (PRODUCT_UI rules 2 and 3) lies 4 outside it, drawn
+     behind and taking no room, so the line beside it keeps its place. */
+  .area-stepper-step__button {
+    position: relative;
+    isolation: isolate;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: start;
+    cursor: pointer;
+  }
+  .area-stepper-step__button::before {
+    content: "";
+    position: absolute;
+    inset: calc(var(--area-space-4) * -1);
+    z-index: -1;
+    border-radius: var(--area-radius-control-sm);
+    transition: background-color var(--area-duration-fast) var(--area-ease-out);
+  }
+  @media (hover: hover) {
+    .area-stepper-step__button:hover::before { background-color: var(--area-bg-component-hover); transition-duration: 0s; }
+  }
+  .area-stepper-step__button:active::before { background-color: var(--area-bg-component-active); transition-duration: 0s; }
+  .area-stepper-step__button:focus-visible { outline: none; }
+  .area-stepper-step__button:focus-visible::before { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+
+  .area-stepper-step__marker {
+    display: grid;
+    place-items: center;
+    flex: none;
+    box-sizing: border-box;
+    inline-size: var(--_marker);
+    block-size: var(--_marker);
+    border: var(--area-stroke-width) solid var(--_ring);
+    border-radius: var(--area-radius-full);
+    background: var(--_disc);
+    color: var(--_number);
+    font-size: var(--area-text-xs-size); /* spec: 12 (MUI 12, Untitled UI 12-14, Ant 12 at 24) */
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  /* spec: a 12 check in the 24 marker (Untitled UI 12 in 24; Glyph's 12 cut). */
+  .area-stepper-step__marker svg { inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); }
+
+  /* The title's first line centres on the marker (inset.css: first-line alignment). */
+  .area-stepper-step__text {
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+    padding-block-start: calc((var(--_marker) - var(--_leading)) / 2);
+  }
+  .area-stepper-step__title { color: var(--_title); font-weight: var(--area-weight-regular); /* spec: Timeline's 400 */ }
+  .area-stepper-step__description { color: var(--area-fg-muted); }
+  .area-stepper-step[data-disabled] { opacity: var(--area-opacity-disabled); }
+
+  /* Horizontal: each step but the last takes the room left, and Timeline's line runs through it from 12 after the
+     text (the content gap) to 4 before the next marker (the line gap), level with the marker's centre. */
+  /* Steps share the room left over after their own content, and never shrink below it (their longest word and a 16
+     line), so the line can't run into a title; a stepper wider than its container overflows rather than overlaps. */
+  .area-stepper--horizontal > .area-stepper-step { min-inline-size: auto; }
+  .area-stepper--horizontal > .area-stepper-step:not(:last-child) { flex: 1 1 auto; }
+  .area-stepper--horizontal > .area-stepper-step > :first-child { flex: 0 1 auto; }
+  .area-stepper--horizontal > .area-stepper-step:not(:last-child)::after {
+    content: "";
+    flex: 1 1 var(--area-space-16);
+    align-self: flex-start;
+    min-inline-size: var(--area-space-16);
+    block-size: var(--_line);
+    margin-block-start: calc((var(--_marker) - var(--_line)) / 2);
+    margin-inline: var(--_gap) var(--_line-gap);
+    background: var(--area-border-divider); /* spec: Timeline's line */
+  }
+
+  /* Vertical: Timeline's column. The line runs from 4 below this marker to 4 above the next. */
+  .area-stepper--vertical > .area-stepper-step { padding-block-end: var(--_spacing); }
+  .area-stepper--vertical > .area-stepper-step:last-child { padding-block-end: 0; }
+  .area-stepper--vertical > .area-stepper-step:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    inset-block: calc(var(--_marker) + var(--_line-gap)) var(--_line-gap);
+    inset-inline-start: calc((var(--_marker) - var(--_line)) / 2);
+    inline-size: var(--_line);
+    background: var(--area-border-divider); /* spec: Timeline's line */
+  }
+
+  @media (forced-colors: active) {
+    .area-stepper-step__marker { border-color: CanvasText; }
+    .area-stepper-step--current .area-stepper-step__marker { background: Highlight; color: HighlightText; forced-color-adjust: none; }
+    .area-stepper-step::after { background: CanvasText; }
+  }
+}

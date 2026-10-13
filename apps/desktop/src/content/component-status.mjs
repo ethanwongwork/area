@@ -14,7 +14,7 @@ export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-09-28 (batch 5).
   'avatar', 'indicator', // badge was already approved
   // Approved 2026-09-28 (batch 6; progress was already approved).
-  'skeleton', 'spinner',
+  'skeleton',
   // Approved 2026-09-28 (batch 7; popover was already approved).
   'calendar',
   // Approved 2026-09-28 (batch 8; number-field and box-field were already approved).
@@ -74,7 +74,15 @@ export const COMPLETE_COMPONENTS = new Set([
   // owner's own pick, O1), Board's hover and corners, Description list's show more; open questions on the recommendations.
   'badge', 'board', 'chip', 'description-list', 'empty-state', 'select', 'tree-view',
   // Approved 2026-10-13 on the review page, round 23 (components23), after the round-22 approval and the tile surface.
-  'preview-frame', ]);
+  'preview-frame',
+  // Approved 2026-10-13 on the review page, round 24 (components24).
+  'password-field', 'otp-field',
+  // Approved 2026-10-13 on the review page, round 25 (components25).
+  'stepper',
+  // Approved 2026-10-13 on the review page, round 26 (components26): the value ring and its linear motion.
+  'spinner',
+  // Approved 2026-10-13 in chat after round 26 (owner: "okay agree": the colon stays tight, "9:30").
+  'time-field', ]);
 
 /** Built/refined and awaiting owner approval; not completion. */
 export const REVIEW_COMPONENTS = new Set([]);
@@ -138,6 +146,9 @@ export const APPROVAL_BATCHES = [
   { name: 'Shortcut sheets', families: ['shortcut-list'] },
   { name: 'Code and rules', families: ['code', 'code-block', 'separator'] },
   { name: 'Accordion', families: ['accordion'] },
+  { name: 'Secure entry', families: ['password-field', 'otp-field'] },
+  { name: 'Times', families: ['time-field'] },
+  { name: 'Steps', families: ['stepper'] },
 ];
 export const batchOf = slug => APPROVAL_BATCHES.findIndex(batch => batch.families.includes(slug));
 
@@ -151,4 +162,4 @@ export const batchOf = slug => APPROVAL_BATCHES.findIndex(batch => batch.familie
 export const REVIEW_BATCHES = [];
 
 // Most recently designed first. Move a family to the front when its design is worked on.
-export const RECENT_COMPONENTS = ['preview-frame', 'asset-row', 'token-row', 'code-block', 'box-model', 'editable-text', 'timeline', 'board', 'menu', 'zoom-control', 'citation', 'date-range-picker', 'shortcut-list', 'search-field', 'meter', 'description-list', 'toggle-group', 'empty-state', 'panel', 'link', 'file-upload', 'command-palette', 'toggletip', 'scroll-area', 'pagination', 'tag', 'drawer', 'confirm-dialog', 'date-picker', 'tag-picker', 'custom-select', 'accordion', 'badge-group', 'card', 'checkbox', 'radio', 'dialog', 'count', 'alert', 'toolbar', 'switch', 'chip', 'table', 'model-picker', 'scroll-to-latest', 'message', 'prompt-suggestions', 'hover-card', 'context-menu', 'combobox', 'composer', 'box-field', 'property-list', 'number-field', 'toast', 'popover', 'split-button', 'button-group', 'button', 'tree-view', 'breadcrumb', 'tooltip', 'badge', 'indicator', 'icon-pilot', 'color-picker', 'color-swatch-picker', 'color-field', 'color-swatch', 'alignment-picker', 'input-group', 'avatar', 'input', 'nav', 'progress', 'segmented', 'select', 'skeleton', 'spinner', 'calendar'];
+export const RECENT_COMPONENTS = ['time-field', 'stepper', 'spinner', 'password-field', 'otp-field', 'preview-frame', 'asset-row', 'token-row', 'code-block', 'box-model', 'editable-text', 'timeline', 'board', 'menu', 'zoom-control', 'citation', 'date-range-picker', 'shortcut-list', 'search-field', 'meter', 'description-list', 'toggle-group', 'empty-state', 'panel', 'link', 'file-upload', 'command-palette', 'toggletip', 'scroll-area', 'pagination', 'tag', 'drawer', 'confirm-dialog', 'date-picker', 'tag-picker', 'custom-select', 'accordion', 'badge-group', 'card', 'checkbox', 'radio', 'dialog', 'count', 'alert', 'toolbar', 'switch', 'chip', 'table', 'model-picker', 'scroll-to-latest', 'message', 'prompt-suggestions', 'hover-card', 'context-menu', 'combobox', 'composer', 'box-field', 'property-list', 'number-field', 'toast', 'popover', 'split-button', 'button-group', 'button', 'tree-view', 'breadcrumb', 'tooltip', 'badge', 'indicator', 'icon-pilot', 'color-picker', 'color-swatch-picker', 'color-field', 'color-swatch', 'alignment-picker', 'input-group', 'avatar', 'input', 'nav', 'progress', 'segmented', 'select', 'skeleton', 'calendar'];

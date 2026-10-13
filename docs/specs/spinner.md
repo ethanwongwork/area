@@ -1,6 +1,6 @@
 # Spinner spec
 
-**Status:** accepted · 2026-09-28 (owner, batch 6)
+**Status:** accepted · 2026-10-13 (owner, review round 26; first accepted 2026-09-28, batch 6)
 **Captures:** `docs/research/captures/spinner/`
 **Peers:** Progress (known or unknown duration on a rail), Skeleton (content placeholder),
 Button, Input, Badge and Switch (host a Spinner when loading)
@@ -17,9 +17,11 @@ item) changed nothing here.
 
 ## Job and boundaries
 
-Spinner says an action is in progress with no known duration, in a small space (a button,
-an input, a badge, a switch row, an empty region). A long task with a known end is Progress;
-a placeholder for arriving content is Skeleton.
+Spinner says an action is in progress, in a small space (a button, an input, a badge, a switch
+row, an empty region). With no known end its arc turns; with a `value` the same ring stops at how
+far along the task is, or how much of a quantity is used (see "Value"). A long task shown as a
+bar is Progress; a labelled reading with a description is Meter; a placeholder for arriving
+content is Skeleton.
 
 ## Variants
 
@@ -143,6 +145,40 @@ still arc can read as a frozen screen. Recommendation: keep the stop for now (on
 loop, and the spinner's live region names the state), and revisit only if a reduced-motion user
 reports a still spinner as a hang. `motion="none"` stops it either way.
 
+## Value, 2026-10-13
+
+Owner, review round 24, on a separate Progress circle family: "is this not the same as spinner?" It was: the same
+ring, sizes, line, ink and track with the arc stopped at a value. It is now Spinner's `value`, not a family of its
+own; the evidence below came from that family's research
+([design systems](../research/compass-components-2026-10-13/progress-circle.md),
+[Cursor's rings](../research/compass-components-2026-10-13/cursor-rings.md)).
+
+| property | Cursor context ring | Cursor review ring | Spectrum 2 S | Geist 20 | Area |
+|---|---|---|---|---|---|
+| size | 15 | 14 | 16 | 20 | Spinner's 12 / 16 / 24 |
+| line | 2 | 2 (track 1.5) | 2 | 3 | Spinner's, 1/8 of the size |
+| track | `stroke-tertiary` | ink 25% | gray-300 | separate arc | Spinner's: the ink at 25% |
+| arc ink | `icon-secondary` | currentColor | blue-900 | by value | Spinner's: Selection; a Button's ink inside one |
+| cap / start | round, 12 o'clock clockwise | same | same | same | same |
+| value change | — | 0.2s ease | none | 1s ease | `duration-slow`, linear (MOTION.md progress) |
+
+- `value` / `max` stop the arc (`[data-determinate]`); the arc is drawn as SVG (`__track`, `__arc`, `pathLength`
+  100) because its length changes, and the dash is shortened by the round cap so the drawn arc equals the value
+  (Ant's correction). 0 draws the track alone. A value change moves the arc linearly over `duration-slow` (MOTION.md's
+  progress easing; round 25), so updates that arrive one after another join into one motion.
+- `role` is progressbar (a task) or meter (a quantity used, ARIA 1.2), with `aria-valuenow` clamped, `label` as its
+  name and `valueText` for the announced value. Without a value Spinner is unchanged (hidden, or a status).
+- In a Button it sits in the `icon` slot and takes the label's ink, as the turning spinner does (Cursor's "Reviewing").
+- Not adopted: a label inside the ring (none of the references shows one at 12-24), gauge gaps, colour by value.
+
+## Review note, 2026-10-13 (round 26)
+
+- **What changed:** with a value, the ring now moves at an even pace from one value to the next instead of darting and
+  stopping, and the "in a button" example advances steadily like a real upload.
+- **Why:** you asked for smoother motion. Each update used to ease out sharply, so a stream of updates looked like a
+  row of jolts; MOTION.md gives progress a linear motion. The turning spinner was measured and is already drawn
+  entirely by the compositor (no repaints while it turns), so it is unchanged.
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → the spinner stops under the motion axis (it kept turning with
@@ -163,3 +199,13 @@ reports a still spinner as a hang. `motion="none"` stops it either way.
 - 2026-09-28 · owner: approved (batch 6). The md stroke stays 2px (1/8); the 2.5px option was not taken.
 - 2026-09-30 · audit S5 (owner) → no Spinner change; the Progress and Slider rail it is compared with is now `edge-control` #e2 (was ≈ #dd) → display.css:265.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → turn fixed at 1s with `--area-ease-linear` (was 4 × slow, 1.6s expressive); reduced motion stops it (was 1.8s); the motion-none stop now has its own rule (the `:is()` one dropped the pseudo-element) → display.css Spinner. See "Motion and interaction, 2026-10-07".
+- 2026-10-13 · owner, review round 24 on Progress circle: "is this not the same as spinner?" (rethink) → the ring
+  becomes Spinner's `value` (determinate state, `__track` / `__arc`, progressbar or meter); the Progress circle family,
+  its CSS, manifest entry and component are removed → display.css Spinner, primitives.tsx `Spinner`; tiles "State /
+  value …", "Content / meter", "Composition / value in a button".
+- 2026-10-13 · owner, review round 25 (rethink): "can you make the motion more smooth?" → a trace in headless Edge of 12
+  turning spinners for 2s: 0 paints, 1 commit (the turn runs on the compositor; unchanged). The value arc eased out over
+  250ms per update (cubic-bezier(0.16, 1, 0.3, 1)), so updates every 600ms read as darts and stops → linear
+  (`--area-ease-linear`, MOTION.md's progress easing); the in-button demo now advances 1% every 120ms and holds at 100
+  before restarting → display.css Spinner, spinner-value.tsx. Open: Progress's bar still eases out.
+- 2026-10-13 · owner, review round 26: approved (no notes).

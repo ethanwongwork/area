@@ -219,6 +219,73 @@ export const COMPONENT_PAGES = [
     ],
   },
   {
+    slug: "password-field", name: "Password field", exportName: "PasswordField", manifest: "passwordField",
+    imports: "PasswordField",
+    api: [
+      ["visible / defaultVisible / onVisibleChange", "boolean / boolean / (visible) => void (also when a form submit hides it)", "— / false / —"],
+      ["showLabel / hideLabel", "string: the reveal action's name in each state", "\"Show password\" / \"Hide password\""],
+      ["autoComplete", "\"current-password\" | \"new-password\" | …", "\"current-password\""],
+      ["variant / size / disabled / readOnly / invalid / fullWidth", "as Input", "outline / md"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "An Input whose reveal action shows the password as text. It names what it does (Show password, then Hide password), draws the eye for show and the closed eye for hide, stays in the Tab order and keeps the caret in the field.", demo: "GalleryPasswordFieldFilled" },
+      { id: "new", title: "New password", note: "autoComplete=\"new-password\" where a password is chosen, so the browser can suggest one.", demo: "GalleryPasswordFieldNew" },
+      { id: "form", title: "Hidden after submit", note: "Submitting the form hides a shown password again.", demo: "GalleryPasswordFieldForm" },
+    ],
+  },
+  {
+    slug: "otp-field", name: "OTP field", exportName: "OTPField", manifest: "otpField",
+    imports: "OTPField",
+    api: [
+      ["length", "number of characters", "6"],
+      ["value / defaultValue / onValueChange", "string / string / (value) => void", "— / \"\" / —"],
+      ["onComplete", "(value) => void, once every slot is filled", "—"],
+      ["groups", "number[]: slots per group, a dash between them ([3, 3])", "one group"],
+      ["characters", "\"digits\" | \"alphanumeric\"", "\"digits\""],
+      ["mask", "boolean: dots in place of the characters", "false"],
+      ["variant / size / invalid / disabled / readOnly", "as Input", "outline / md"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "One real input lies over the slots, so autofill from a text message or a password manager, paste, Backspace, arrows and undo all work, and the code is one control with one name and one Tab stop.", demo: "GalleryOTPFieldPartial" },
+      { id: "groups", title: "Groups", note: "groups splits the slots with a dash, as a code is read out.", demo: "GalleryOTPFieldGroups" },
+      { id: "complete", title: "Checking the code", note: "onComplete runs once every slot is filled; show the result in the Field's description or error.", demo: "GalleryOTPFieldComplete" },
+    ],
+  },
+  {
+    slug: "time-field", name: "Time field", exportName: "TimeField", manifest: "timeField",
+    imports: "TimeField",
+    api: [
+      ["value / defaultValue / onValueChange", "\"HH:MM\" or \"HH:MM:SS\", 24-hour; null while incomplete", "— / null / —"],
+      ["hourCycle", "12 | 24", "the locale's"],
+      ["granularity", "\"minute\" | \"second\"", "\"minute\""],
+      ["step", "minutes between the times in the list; no list without it", "—"],
+      ["icon", "ReactNode | true (the clock)", "—"],
+      ["name", "submits the 24-hour value", "—"],
+      ["variant / size / disabled / readOnly / invalid", "as Input", "outline / md"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "Each segment is a spin button: type the digits (it moves on by itself), or use Up and Down, Page Up and Down, Home and End; Left and Right move between segments; A or P sets the period.", demo: "GalleryTimeFieldFilled" },
+      { id: "list", title: "List of times", note: "step adds a chevron that opens the times step minutes apart, the current one checked and in view, as ChatGPT schedules a task.", demo: "GalleryTimeFieldList" },
+      { id: "field", title: "In a field", note: "Labelled by a Field; the value is 24-hour whatever the display.", demo: "GalleryTimeFieldControlled" },
+    ],
+  },
+  {
+    slug: "stepper", name: "Stepper", exportName: "Stepper", manifest: "stepper",
+    imports: "Stepper, StepperStep",
+    api: [
+      ["current", "index of the current step, from 0; steps before it are done", "—"],
+      ["orientation", "\"horizontal\" | \"vertical\"", "horizontal"],
+      ["onStepSelect / nonLinear", "(index) => void makes done steps buttons; nonLinear makes every other step one", "— / false"],
+      ["statusLabels", "the words read after each title, by status", "completed / current step / not started / has a problem"],
+      ["StepperStep title / description / status / disabled", "the step; status \"invalid\" marks a problem", "—"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "An ordered list with the current step marked aria-current=\"step\". Done steps show a check and fill the line after them.", demo: "GalleryStepper" },
+      { id: "vertical", title: "Vertical", note: "Timeline's column: the marker, the line through its centre and the title beside it.", demo: "GalleryStepperVertical" },
+      { id: "interactive", title: "Going back", note: "onStepSelect makes done steps buttons, so a person can go back but not skip ahead.", demo: "GalleryStepperInteractive" },
+    ],
+  },
+  {
     slug: "board", name: "Board", exportName: "Board", manifest: "boardColumn",
     imports: "Board, BoardColumn, BoardCard",
     api: [
@@ -1654,9 +1721,16 @@ export const COMPONENT_PAGES = [
     manifest: "spinner",
     api: [
       ["size", '"sm" | "md" | "lg"', '"md"'],
-      ["label", "string", "—"],
+      ["label", "string: announced while turning; names the ring with a value", "—"],
+      ["value / max", "number: stops the arc at the value; omit for no known end", "— / 100"],
+      ["valueText", "string: announced in place of the number", "—"],
+      ["role", '"progressbar" (a task) | "meter" (a quantity used), with a value', '"progressbar"'],
     ],
-    examples: [{ id: "default", title: "Default", demo: "SpinnerDefault" }],
+    examples: [
+      { id: "default", title: "Default", demo: "SpinnerDefault" },
+      { id: "value", title: "With a value", note: "value stops the arc at how far along a task is, so the same ring says how much once the amount is known (Cursor's review run).", demo: "GallerySpinnerValue" },
+      { id: "meter", title: "Usage", note: "role=\"meter\" for a level of something, such as Cursor's context ring.", demo: "GallerySpinnerValueMeter" },
+    ],
   },
   {
     slug: "progress",
