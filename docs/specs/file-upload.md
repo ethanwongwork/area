@@ -236,3 +236,4 @@ Resolved 2026-10-09 (owner: "go with your recommendations"):
   padding, margins, are all accurate" → actions 8 from the top and side (Untitled -mt-2 -mr-2,
   was 12 / 16); zone and row padding net of the border (16 / 24 from outside, was 17 / 25); size line 2 under the name
   (Untitled mt-0.5) → file-upload.css.
+- 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the zone, row and icon tile edges are at `stroke-width`, the field's (were `border-width`, so under Elevated the zone was a borderless white box) (file-upload.css). (docs/research/consistency-audit-2026-10-12.md)

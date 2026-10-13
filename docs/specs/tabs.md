@@ -111,7 +111,7 @@ Area (node trees): md 32px tall, 20px apart, selected ink rgb(40, 40, 40), rest 
 | indicator | 2px, `radius-full`, `fg-selection` (neutral: `fg-default`), whole tab | Owner (rounded underline spanning icon and count); Notion 2px in primary ink | Untitled 2px square-ended brand-600 |
 | hover | pending indicator `border-hover` #b4b4b4 / #585858; ink fixed | Foreground fixed on hover; Figma panel tab keeps 50% ink on hover | Figma paints a #f5 plate; Untitled hovers to the selected paint |
 | pressed | indicator `fg-muted` | Earlier Area value | — |
-| track | 1px **`border-divider`** #e2e2e2 / #333333 below the list | Second pass divider role; Untitled 1px baseline; Notion's hairline | Was `border-decorative`; Area's indicator sits above the divider |
+| track | 1px **`border-divider`** #e2e2e2 / #333333 below the list, at `stroke-width` (since the 2026-10-12 consistency pass) | Second pass divider role; Untitled 1px baseline; Notion's hairline | Was `border-decorative`; Area's indicator sits above the divider |
 | focus | 2px `focus-color` inset (offset −2), radius min(8, 0.4 × height) | Untitled 2px inset focus | — |
 | disabled | 50% | Audit disabled rule; Untitled 50% | — |
 | icon, gap | icon tier per size; icon-to-label gap 6 at sm, md and lg (`--_tab-item-gap`, navigation.css:16, :38, :79-81); compact sm 4 | Area icon and gap tiers; peer Button (audit S14) | Was 4 (sm) / 8 (md, lg) |
@@ -203,3 +203,4 @@ in [the audit](../research/cohesion-audit.md#verification).
 - 2026-09-30 · audit S17 (API vocabulary, slice 2, H-13) → manifest default `size: "md"` added (manifest.ts:590); the md modifier equals the base rule, no visual change.
 - 2026-10-02 · compact pass round 9 → sm tab gap 16 → 12 and the panel's top inset reads `inset-surface-md` (16 / 12) at compact. docs/research/compact-pass-2026-10-01.md (round 9).
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → hover, press and selection land at once and fade out on fast; sliding indicator left as an open question.
+- 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the track is at `stroke-width`, a standalone divider (was `border-width`) (navigation.css). (docs/research/consistency-audit-2026-10-12.md)

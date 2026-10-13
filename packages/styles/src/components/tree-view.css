@@ -118,8 +118,9 @@
   @media (hover: hover) { .area-tree-view [role="treeitem"]:hover .area-tree-view__actions > * { opacity: 1; transition-duration: 0s; } }
   /* Without hover (touch) the row actions always show, as Message and Card reveals do (audit H-17). */
   @media (hover: none) { .area-tree-view__actions > * { opacity: 1; } }
-  .area-tree-view__check { display: grid; place-items: center; flex: 0 0 var(--area-icon-md); inline-size: var(--area-icon-md); block-size: var(--area-icon-md); border: var(--area-stroke-width) solid var(--area-edge-control); transition: var(--area-transition); border-radius: min(max(var(--area-radius-min), round(down, calc(var(--area-icon-md) * var(--area-radius-factor)), 2px)), round(down, calc(var(--area-icon-md) * 7 / 16), 2px)); font-size: var(--area-control-sm-text); line-height: 1; }
-  /* Checked paints like Checkbox: the neutral solid face and its mark. It used a tint with a
+  .area-tree-view__check { display: grid; place-items: center; flex: 0 0 var(--area-icon-md); inline-size: var(--area-icon-md); block-size: var(--area-icon-md); border: var(--area-stroke-width) solid var(--area-edge-control-hover); transition: var(--area-transition); border-radius: min(max(var(--area-radius-min), round(down, calc(var(--area-icon-md) * var(--area-radius-factor)), 2px)), round(down, calc(var(--area-icon-md) * 7 / 16), 2px)); font-size: var(--area-control-sm-text); line-height: 1; }
+  /* The box's edge at rest is Checkbox's, the choice glyphs' `edge-control-hover` (audit S5; consistency pass
+     2026-10-12, it was the lighter field edge). Checked paints like Checkbox: the neutral solid face and its mark. It used a tint with a
      focus-colour edge, which read as focus rather than as a checked box. */
   .area-tree-view [aria-checked="true"] .area-tree-view__check { color: var(--_tree-check-mark, var(--area-fg-on-selection)); background: var(--_tree-check, var(--area-selection-solid)); border-color: var(--_tree-check, var(--area-selection-solid)); transition-duration: 0s; }
   /* The mark is the 16px drawing on the box's own 16px grid: it covers the border box (a negative

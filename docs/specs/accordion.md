@@ -388,3 +388,4 @@ None.
 - 2026-10-08 · owner: "go with your recommendations" → approved, recommendations accepted, no
   value changed: body motion kept, Divided tile stays sm (md is the FAQ tile), plain chevron stays
   muted outline, divided md padding stays 12. Decisions' motion row brought up to date.
+- 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → no change: the divided rule was already at `stroke-width`, which every standalone divider now uses. (docs/research/consistency-audit-2026-10-12.md)

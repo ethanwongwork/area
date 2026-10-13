@@ -267,7 +267,7 @@
   @media (hover: hover) {
     .area-checkbox__control:not(:checked):not(:indeterminate):not([data-indeterminate]):hover:not(:disabled),
   .area-radio__control:not(:checked):hover:not(:disabled) {
-    --_edge: color-mix(in srgb, var(--area-border-hover), var(--area-stroke-control-hover) calc(var(--area-contrast-more) * 100%));
+    --_edge: var(--area-edge-control-strong);
     }
   }
   @media (hover: hover) {

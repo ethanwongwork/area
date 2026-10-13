@@ -254,8 +254,10 @@
     margin-inline-start: 0;
   }
 
+  /* A standalone divider (`border-divider`): `stroke-width`, as Separator and Table's rules (consistency pass
+     2026-10-12; it vanished under the Elevated surface preset). */
   .area-nav__separator {
-    block-size: var(--area-border-width);
+    block-size: var(--area-stroke-width);
     margin-block: var(--area-space-8);
     background-color: var(--area-border-divider);
   }
@@ -291,7 +293,7 @@
   .area-nav__actions [aria-expanded="false"]:not([aria-haspopup]):dir(rtl) svg { rotate: 90deg; }
 
   .area-nav--horizontal .area-nav__separator {
-    inline-size: var(--area-border-width);
+    inline-size: var(--area-stroke-width);
     block-size: var(--area-space-20);
     margin-block: 0;
     margin-inline: var(--area-space-4);

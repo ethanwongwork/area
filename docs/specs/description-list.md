@@ -115,6 +115,8 @@ value started at 170 (4 after the column); Notion's text starts at 174 (cell 4 a
 
 ## Open questions
 
+Resolved 2026-10-12 (owner, review round 21: "go with your recs"): both recommendations taken, no change.
+
 1. Framed takes Table's corner (12) and white surface, where ChatGPT's card is 16 and off-white. Recommendation: keep
    Table's, so data frames match across the system.
 2. A stacked layout (term above value) has design-system precedent but no product use. Recommendation: leave it out
@@ -164,3 +166,5 @@ button below the frame (the `dl` carries the frame).
   and ChatGPT's account card; 9 captures, 6 gallery tiles, in review.
 - 2026-10-10 · owner, review round 5: approved → Complete in `component-status.mjs`.
 - 2026-10-12 · owner: build "show more" from design-system evidence → `visibleCount` and the Show more button (above). In review.
+- 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the divided rules and the framed edge are at `stroke-width`, Table's (were `border-width`) (description-list.css). (docs/research/consistency-audit-2026-10-12.md)
+- 2026-10-12 · owner, review round 21 (components21): approved with the open questions' recommendations ("go with your recs"), no change → Complete in `component-status.mjs`.

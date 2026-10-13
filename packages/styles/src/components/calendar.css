@@ -129,7 +129,7 @@
  /* A circle day already rests on the hover plate, so hover steps to the next opaque rung (the row
      pair #f3 → #ee); the translucent wash composited to the same #f3 and showed nothing (audit F-11). */
   @media (hover: hover) { .area-calendar--circle .area-calendar__day:hover:not(:disabled, [aria-disabled="true"], [data-outside], [data-selected]) { background: var(--area-bg-component-active); } }
-  .area-calendar--tile .area-calendar__day:not(:disabled, [aria-disabled="true"], [data-outside]) { --_day-edge: inset 0 0 0 var(--area-stroke-width) var(--area-border-subtle); }
+  .area-calendar--tile .area-calendar__day:not(:disabled, [aria-disabled="true"], [data-outside]) { --_day-edge: inset 0 0 0 var(--area-stroke-width) var(--area-edge-control-hover); } /* #d4, the choice glyphs' edge role (audit S5), stronger under increased contrast */
   .area-calendar--tile .area-calendar__day:is(:disabled, [aria-disabled="true"]):not([data-outside]) { --_day-fill: var(--area-bg-component); text-decoration: none; }
 
   /* Week strip: one row of days between the week arrows, each day with its weekday above and

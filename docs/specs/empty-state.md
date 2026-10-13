@@ -107,7 +107,7 @@ column `max-w-xl` 576. Notion's Favorites column 340 with a 12 gap under the ico
 | sm · tile | 40 (`control-lg`), corner `radius-control-lg` (10), same paint, 20 glyph | Peer File upload's 40 tile with a 20 glyph; shadcn 40 / 10 | Notion draws a bare 32 muted glyph; a tile keeps sm one family with md |
 | md · gaps | 16 under the tile, 8 title to line, 16 above actions | ChatGPT | — |
 | sm · gaps | 12 under the tile, 2 title to line, 8 above actions | Notion Favorites (12, 2), Skills (8) | — |
-| md · title | 18/24 500, `fg-default`; compact 16/24 | ChatGPT 18/24 500 default ink (shadcn 18 500) | No Area token is 18; literal `/* spec */`. Compact steps to the 16/24 title |
+| md · title | **`title-xs` 16/24** 500, `fg-default`, at both densities | Dialog and Drawer's surface title (consistency pass O3, owner 2026-10-12) | ChatGPT's 18/24 is off Area's six-step ramp; was a literal 18/24 (compact 16/24) |
 | sm · title | the UI type (14/20; 12/16 compact) 500, `fg-default` | Notion 14/20 500 | Notion's title is muted like its line; Area keeps the default ink in both sizes (ChatGPT, Untitled, shadcn, Primer), so the title reads first |
 | description | `text-sm` (14/20; 12/16 compact), `fg-muted` | ChatGPT and Notion 14/20 muted | — |
 | measure | md 576, sm 340 | ChatGPT `max-w-xl` 576 (Notion Skills 600); Notion Favorites 340 | — |
@@ -133,7 +133,7 @@ Buttons or Links, in reading order after the line.
 |---|---|---|---|---|
 | File upload | decorative icon tile | 40, `radius-control-lg`, white with the field edge, 20 glyph muted (Untitled) | md 48 / sm 40, soft fill, default ink (ChatGPT) | differs on purpose: the upload zone is a field and takes the field's edge (owner, 2026-10-10) |
 | Combobox / Command palette | "nothing here" | one muted row the height of a md row | a block for a region | kept separate on purpose (list rows stay rows) |
-| Dialog, Drawer, Card | surface title | `title-xs` 16/24 500 | md 18/24 500, sm the UI type, 500 | weight matches; md is one step larger, as ChatGPT's |
+| Dialog, Drawer, Card | surface title | `title-xs` 16/24 500 | md `title-xs` 16/24 500, sm the UI type, 500 | match at md (since 2026-10-12) |
 | Button | actions | Button sizes | default (md) / sm | match |
 
 ## Visual pass
@@ -173,9 +173,16 @@ Resolved 2026-10-10 (owner: "go with your recommendations"):
 - **Why:** It was the next missing piece on the gap list (seven design systems ship one). md copies ChatGPT's empty
   Trash and Sites pages; sm copies Notion's empty Library tabs.
 
+## Review note, 2026-10-12 (consistency pass, round 2)
+
+- **What changed:** the medium empty state's title is 16/24 (was 18/24); compact is unchanged.
+- **Why:** 18 isn't on Area's type ramp; 16/24 is the title size Dialog and Drawer use, and you went with that recommendation.
+
 ## Feedback log
 
 - 2026-10-10 · owner: "work on the next component" → Empty state from ChatGPT, Notion and Figma captures and Untitled
   UI, shadcn and Primer sources; 14 captures, 6 gallery tiles, in review.
 - 2026-10-10 · owner: "go with your recommendations" → open questions resolved as recommended; no code change.
 - 2026-10-10 · owner, review round 5: approved → Complete in `component-status.mjs`.
+- 2026-10-12 · owner, 2026-10-12: "go with your recommendations" (consistency pass) → the md title takes `title-xs` 16/24 (O3; was ChatGPT's 18/24, off the ramp) (empty-state.css). (docs/research/consistency-audit-2026-10-12.md)
+- 2026-10-12 · owner, review round 21 (components21): approved → Complete in `component-status.mjs`.

@@ -305,3 +305,4 @@ rules. The one deliberate difference is the palette cell, which uses the thumb's
   colour and half over the panel; now opaque `border-subtle`, the inner edge the swatch ring (10%); the palette's selected
   cell takes the same. States compared above (no change to selection or focus: they follow the system's roles). Round 17.
 - 2026-10-12 · owner, review round 17: approved.
+- 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the area, track, contrast-pair and preview hairlines are the swatch ring token at `stroke-width` (were a literal 1px and colour), and the thumb's outer edge reads Slider's `edge-control-hover` (same #d4 as `border-subtle`; stronger under increased contrast) (color.css). (docs/research/consistency-audit-2026-10-12.md)

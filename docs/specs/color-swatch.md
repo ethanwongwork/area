@@ -70,7 +70,7 @@ From the capture nodes (node 0):
 |---|---|---|---|
 | size | 16 / 20 / 24 (`space-16/20/24`) | Figma 14 and 16 | sm fills Input's 16px icon slot |
 | radius | **20% of the side at every size** (`--_radius: size / 5`; 3.2 / 4 / 4.8 at sm / md / lg); layers inside the edge are concentric, `radius - edge` (`--_inner-radius`) | Owner (2026-09-28: "make it more consistent"); Figma 20% (`figma--swatches`, the edge layer) | Was `min(radius-small, size / 4)`: 25% to 24px, then capped at 6 |
-| edge | **a 1px translucent ring over the colour**, `--area-token-swatch-ring` (black 10% light, white 10% dark); the layers fill the shape (`--_edge: 0`) | Owner (2026-10-12: "yes apply the swatch fix"); Figma's swatch edge, black 10% | Was (2026-09-28) a solid `bg-component` band around the colour: it merged with light grounds on straight edges and showed only as fringe at the corners. Before that, `fg-default` 22% (too dark) |
+| edge | **a 1px translucent ring over the colour** at `stroke-width` (a required edge, audit F-5), `--area-token-swatch-ring` (black 10% light, white 10% dark); the layers fill the shape (`--_edge: 0`) | Owner (2026-10-12: "yes apply the swatch fix"); Figma's swatch edge, black 10% | Was (2026-09-28) a solid `bg-component` band around the colour: it merged with light grounds on straight edges and showed only as fringe at the corners. Before that, `fg-default` 22% (too dark) |
 | checker | **a 2 × 2 pixel tile used as a mask, 5 cells across at every size** (ink cells in all four corners), `fg-default` 16% over `bg-surface` (color.css:3-15) | Owner (2026-09-28: a pixel image that meets the edges exactly and scales) | Figma 10.67px #fff/#e1e1e1; Area's follows the theme while the colour does not (owner). Was 8px conic-gradient tiles |
 | colour | consumer value, unchanged by theme | Owner (above) | — |
 
@@ -195,3 +195,4 @@ kept as the owner's choice.
 - 2026-10-12 · merge with main: main had drawn the same ring as an inset `outline` (1px black 10% / white 10%); the
   merge keeps main's outline and drops this branch's duplicate `box-shadow`, so the ring is painted once.
 - 2026-10-12 · owner, review round 16: approved.
+- 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the ring reads the `token-swatch-ring` token and `stroke-width` (the merge with main had brought back a literal colour at `border-width`, regressing audit F-5: a white swatch vanished under Elevated) (color.css). (docs/research/consistency-audit-2026-10-12.md)

@@ -198,8 +198,8 @@ Contract: [`docs/MOTION.md`](../MOTION.md).
 | reduced motion | tokens | tokens (no literal durations) |
 
 **Crispness.** The swatch's 1px ring was an inset `box-shadow` spread; it is now an inset
-`outline` (`outline-offset: -1px`), which snaps to device pixels (MOTION.md "Crispness" 3). Same
-colour (`bg-component`) and place. In forced colours the ring is now kept. The remove target is
+`outline` (`outline-offset: -1px`), which snaps to device pixels (MOTION.md "Crispness" 3). Since the 2026-10-12
+consistency pass its colour is the swatch ring (`token-swatch-ring`, black 10% / white 10%) at `stroke-width`, as ColorSwatch's. In forced colours the ring is now kept. The remove target is
 `height − 8` with a 16px glyph centred (4px each side at md): whole pixels.
 
 **Verified** (`/chip.html`, Chromium, DPR 2): chip transition is the four `--area-transition`
@@ -218,6 +218,11 @@ verified by eye (background tab), nor with a real pointer or keyboard.
   it underlines only on hover and focus, as designed.
 - **Why:** you saw the underline doubled; the chip is a link element and never cleared the browser's default underline.
   The gallery hid it because the docs site resets links.
+
+## Review note, 2026-10-12 (consistency pass)
+
+- **What changed:** A swatch chip's colour circle has the same thin see-through outline as every other colour swatch, instead of a light grey band around it. A remove button's focus ring now sits on the button itself instead of 2 outside it.
+- **Why:** You asked for one swatch outline everywhere (round 15); Chip still had the old band, which showed as a grey halo round the colour, most of all in dark mode. It also stays now when the Surface setting is Elevated. You went with the recommendation that a control inside another one rings at 0, as Tag's remove and a field's buttons do; at 2 outside, the ring met the chip's own edge.
 
 ## Feedback log
 
@@ -250,3 +255,6 @@ verified by eye (background tab), nor with a real pointer or keyboard.
   `.area-chip` never cleared the browser's underline, so it drew under the label's own; the gallery's docs CSS resets
   links, which hid it, and the review page (Area's CSS alone) showed it → `.area-chip { text-decoration: none }`
   (chip.css). Every other Area part that renders as a link already clears it.
+- 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the swatch's ring is the shared swatch ring (`token-swatch-ring`) at `stroke-width` (was ColorSwatch's retired solid `bg-component` edge at `border-width`, which vanished under Elevated) (chip.css). (docs/research/consistency-audit-2026-10-12.md)
+- 2026-10-12 · owner, 2026-10-12: "go with your recommendations" (consistency pass) → the remove and action focus rings sit at 0 (O1; were `focus-offset`); the input plate reads `bg-mark` / `bg-mark-hover` and the selected hover edge `edge-control-strong` (O5, same paint) (chip.css). (docs/research/consistency-audit-2026-10-12.md)
+- 2026-10-12 · owner, review round 21 (components21): approved → Complete in `component-status.mjs`.

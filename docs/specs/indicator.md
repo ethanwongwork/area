@@ -413,6 +413,7 @@ exactly, and as an attachment it takes the rounded placement above.
 - 2026-10-01 · audit C-19 (owner pick A) → Presence `xs` (10) removed; status sizes are sm 12, md 16, lg 20. Checkbox and Radio keep lg → manifest.ts:353, presence.css.
 - 2026-10-01 · audit C-25 (owner pick A) → `hidden` replaces `disabled` (kept as a deprecated alias) for an indicator that renders nothing; new `label` prop, a string or `(count) => string`, as Count's → Indicator.tsx:11-31.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → indicator placement rounded to whole pixels (translate and insets); show/hide is the small-mark recipe (scale from 0.6 + opacity, fast, was scale 0 over base); pulse easing on the linear token → indicator.css. See "Motion and interaction, 2026-10-07".
+- 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the anchored indicator's cutout is at `stroke-width` (was `border-width`) (indicator.css). (docs/research/consistency-audit-2026-10-12.md)
 
 ## Stroke findings (2026-09-25)
 

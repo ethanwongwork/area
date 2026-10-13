@@ -230,3 +230,4 @@ changes instant)? Recommendation: keep the 100ms fade; it is short enough not to
   cells ≈ 20.4 (224 / 11) → 2: 1 outside, 1 inside (was 1 + 2); hover 1px white 70% inside; the 15% line moves in to
   match. Round 20.
 - 2026-10-12 · owner, review round 20: approved.
+- 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the palette's outline is the swatch ring token at `stroke-width` (was a literal 1px and colour) (color.css). (docs/research/consistency-audit-2026-10-12.md)

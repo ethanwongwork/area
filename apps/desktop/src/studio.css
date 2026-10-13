@@ -221,7 +221,7 @@
   .studio-stack { display: grid; gap: var(--_canvas-gap); }
   .studio-canvas__body {
     --_tile-radius: 20px; /* pick: owner, 2026-10-12 "slightly too round", one even step below 24 (owner, 2026-10-11: rounder than 16) */
-    --_tile-edge: light-dark(var(--area-neutral-100), var(--area-neutral-750)); /* spec: Card's edge, surface.css */
+    --_tile-edge: var(--area-border-card); /* Card's edge */
     --_tile-inset: var(--area-space-16);
   }
   /* A stage's own edge inside a tile (swatches, preset plates): Tailwind's 1px outline at 8%. */
@@ -574,7 +574,7 @@
     gap: var(--area-space-8);
     inline-size: calc(var(--area-space-96) + var(--area-space-80));
     padding: calc(var(--area-space-12) - var(--area-border-width));
-    border: var(--area-border-width) solid light-dark(var(--area-neutral-100), var(--area-neutral-750)); /* spec: Card's edge */
+    border: var(--area-border-width) solid var(--area-border-card); /* Card's edge */
     border-radius: var(--area-radius-container);
     background: var(--area-bg-surface);
     box-shadow: var(--area-shadow-card);

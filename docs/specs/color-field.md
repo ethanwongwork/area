@@ -94,7 +94,7 @@ From the capture nodes (the component is node 0 in each):
 | swatch | ColorSwatch sm 16, radius 4, 8px inset | Input icon slot; Figma chit 14 at 5px | Area keeps its 16px icon slot |
 | type | 14/20 Geist, tabular numerals | Owner: not a monospace field | Figma 11/16 450 |
 | hex · display | `#RRGGBB`; with alpha, six digits without "#" and the alpha byte in the opacity field (`ColorField.tsx:36`) | Existing Area behaviour | Figma's values are redacted in the captures |
-| divider | 1px `border-decorative` (`color.css:112`) | Peer: InputGroup rule; Figma value row 1px gap | Figma's colour row draws none; kept (third pass): two fields in one group, the rule marks where each edits |
+| divider | 1px gap of `bg-surface` at `stroke-width` (audit F-7 A; `stroke-width` since the 2026-10-12 consistency pass, as every Input group seam) | Peer: InputGroup rule; Figma value row 1px gap | Figma's colour row draws a gap, not a rule; kept: two fields in one group, the gap marks where each edits |
 
 ## States
 
@@ -175,3 +175,4 @@ No change in the Color field rules of `color.css`.
 - 2026-10-04 · quality pass after the one corner setting → the swatch is its own corner but never rounder than concentric with the field, floored (`color.css`; was 6 inside a 16 field 12 in, at 14). `docs/research/radius-audit-2026-10-03.md`, "Quality pass".
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → the hex field and group take Input's and Input group's in-at-once, out-on-fast motion. See "Motion and interaction, 2026-10-07".
 - 2026-10-12 · owner, review round 16: approved.
+- 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the opacity seam is at `stroke-width`, as every Input group seam (was `border-width`, which Elevated sets to 0) (color.css). (docs/research/consistency-audit-2026-10-12.md)

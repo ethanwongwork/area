@@ -86,10 +86,10 @@
   .area-tabs__tab:is(:active, [data-selected]),
   .area-tabs__tab:is(:active, [data-selected])::after { transition-duration: 0s; }
   .area-tabs__label { display: inline-flex; align-items: center; white-space: nowrap; }
-  .area-tabs--track .area-tabs__list { border-block-end: var(--area-border-width) solid var(--area-border-divider); }
+  .area-tabs--track .area-tabs__list { border-block-end: var(--area-stroke-width) solid var(--area-border-divider); }
   /* The vertical track sits on the indicator's side, the start, as horizontal tabs put both at the
      bottom (audit D-21; was the end, opposite the rail). */
-  .area-tabs--track.area-tabs--vertical .area-tabs__list { border-block-end: 0; border-inline-start: var(--area-border-width) solid var(--area-border-divider); }
+  .area-tabs--track.area-tabs--vertical .area-tabs__list { border-block-end: 0; border-inline-start: var(--area-stroke-width) solid var(--area-border-divider); }
   .area-tabs__icon { display: inline-flex; flex-shrink: 0; inline-size: var(--_tab-icon); block-size: var(--_tab-icon); }
   .area-tabs__icon > svg { inline-size: 100%; block-size: 100%; }
   .area-tabs--sm { --_tab-height: var(--area-control-sm); --_tab-text: var(--area-control-sm-text); --_tab-leading: var(--area-control-sm-leading); --_tab-gap: calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-dense)); --_tab-icon: var(--area-icon-sm); --_tab-item-gap: var(--area-gap-sm); }
@@ -170,7 +170,8 @@
     padding: var(--_cell-inset) calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense));
     text-align: start;
     vertical-align: top;
-    border-block-end: var(--area-border-width) solid var(--area-border-divider);
+    /* Row rules are standalone dividers, `stroke-width` like the frame, so they stay under Elevated too. */
+    border-block-end: var(--area-stroke-width) solid var(--area-border-divider);
     overflow-wrap: break-word;
   }
 
@@ -237,7 +238,7 @@
   .area-table--md { --_cell-inset: calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense)); }
   .area-table--lg { --_cell-inset: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)); }
   .area-table--striped tbody tr:nth-child(even) { background: var(--area-bg-stripe); }
-  .area-table--column-dividers :is(th, td):not(:last-child) { border-inline-end: var(--area-border-width) solid var(--area-border-divider); }
+  .area-table--column-dividers :is(th, td):not(:last-child) { border-inline-end: var(--area-stroke-width) solid var(--area-border-divider); }
 
   /*
    * Flush: the table sits on its surface without a frame (Geist's type table, Cursor's icon sheet;
@@ -439,7 +440,9 @@
       max-block-size: min(324px, 100%); /* spec */
       overflow: auto;
       padding: var(--area-space-4);
-      border: var(--area-border-width) solid var(--area-border-decorative);
+      /* The floating frame, as Menu's and Popover's (consistency pass 2026-10-12; was `border-decorative`, which in
+         dark is the #282828 seam rather than the #4b4b4b frame every other floating surface draws). */
+      border: var(--area-border-width) solid var(--area-border-float);
       border-radius: var(--area-radius-list); /* concentric with its options */
       background: var(--area-bg-surface);
       color: var(--area-fg-default);

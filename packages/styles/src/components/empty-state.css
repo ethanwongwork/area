@@ -32,9 +32,10 @@
     --_media-gap: var(--area-space-16);
     --_title-gap: var(--area-space-8);
     --_actions-gap: var(--area-space-16);
-    /* spec: ChatGPT 18/24 500; compact the 16/24 title. */
-    --_title-size: calc(18px - 2px * var(--area-ui-dense)); /* spec */
-    --_title-leading: 24px; /* spec */
+    /* The surface title role, Dialog's and Drawer's: 16/24 at both densities (owner, 2026-10-12: consistency pass O3;
+       was ChatGPT's 18/24, off the type ramp). */
+    --_title-size: var(--area-title-xs-size);
+    --_title-leading: var(--area-title-xs-leading);
     /* spec: ChatGPT's column, max-w-xl 576 (Notion's Skills 600). */
     --_measure: 576px; /* spec */
   }

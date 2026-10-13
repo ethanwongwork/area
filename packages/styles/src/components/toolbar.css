@@ -64,8 +64,9 @@
   /* spec (owner references, 2026-09-27): the rule spans the commands, not the bar; Figma runs
      its divider the full 48. */
   /* Owner (2026-09-27): keep the command height, lighter stroke: the bar's seam role, as the rules
-     inside Panel and Code block (a rule is never heavier than the surface it divides). */
-  .area-toolbar__separator { display: block; flex: none; inline-size: var(--area-stroke-width); block-size: var(--_item); background: var(--area-border-decorative); }
-  .area-toolbar--vertical .area-toolbar__separator { inline-size: var(--_item); block-size: var(--area-stroke-width); }
+     inside Panel and Code block (a rule is never heavier than the surface it divides). A seam in a container:
+     `border-width`, as those rules (consistency pass 2026-10-12; was `stroke-width`). */
+  .area-toolbar__separator { display: block; flex: none; inline-size: var(--area-border-width); block-size: var(--_item); background: var(--area-border-decorative); }
+  .area-toolbar--vertical .area-toolbar__separator { inline-size: var(--_item); block-size: var(--area-border-width); }
   .area-toolbar:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
 }

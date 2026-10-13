@@ -96,3 +96,53 @@ test('selection markers never paint the accent or focus colour directly', () => 
     assert.doesNotMatch(body, /--area-(accent-solid|focus-color)\)\s*;?\s*$|background(-color)?:\s*var\(--area-(accent-solid|focus-color)\)/, `${selector} paints a marker in accent or focus colour`);
   }
 });
+
+// DESIGN_SYSTEM.md, "Strokes" (consistency pass 2026-10-12). A line's width follows its job: required lines (control,
+// field and state edges, swatch rings, cutouts, joined-control seams, standalone dividers and frames with no shadow)
+// use `stroke-width`, which no preset changes; frames of surfaces that carry a shadow, the seams inside them and the
+// edges of filled shapes use `border-width`, which the Elevated surface preset sets to 0. The swatch ring once
+// regressed to `border-width` (audit F-5), so a white swatch vanished under Elevated again.
+test('required lines never ride the Surface axis', () => {
+  const lineProp = /(?:^|[;\s])(border(?:-[a-z-]+)?|outline|box-shadow|--_[a-z-]*(?:ring|edge|line|border))\s*:\s*([^;]+)/g;
+  const required = /--area-(border-divider|token-swatch-ring|edge-control|edge-control-hover|edge-selected|edge-accent|input-edge|input-edge-hover|selection-edge|stroke-control|stroke-selected|focus-color|field-focus-color)\b/;
+  for (const { selector, body } of rules) {
+    for (const [, prop, value] of body.matchAll(lineProp)) {
+      if (!/var\(--area-border-width\)/.test(value)) continue;
+      assert.doesNotMatch(value, required, `${selector} draws a required line (${prop}) at border-width`);
+    }
+  }
+  const strokeWidth = /var\(--area-stroke-width\)/;
+  // Swatch rings, cutouts and standalone dividers, by name.
+  for (const [selector, prop] of [
+    ['.area-color-swatch', 'outline'],
+    ['.area-chip__swatch', 'outline'],
+    ['.area-code__swatch, .area-token__swatch', 'box-shadow'],
+    ['.area-color-swatch-picker--palette', 'outline'],
+    ['.area-avatar-group__item > .area-avatar, .area-avatar-group__overflow', '--_group-ring'],
+    ['.area-separator--horizontal', 'block-size'],
+    ['.area-nav__separator', 'block-size'],
+    ['.area-table-wrapper', 'border'],
+    ['.area-description-list--framed', 'border'],
+    ['.area-code-block', 'border'],
+    ['.area-file-upload', 'border'],
+  ]) {
+    const rule = rules.find(r => r.selector === selector && new RegExp(`(^|[;\\s])${prop.replace(/[-]/g, '\\-')}\\s*:`).test(r.body));
+    assert.ok(rule, `${selector} ${prop} missing`);
+    const value = rule.body.match(new RegExp(`(?:^|[;\\s])${prop.replace(/[-]/g, '\\-')}\\s*:\\s*([^;]+)`))[1];
+    assert.match(value, strokeWidth, `${selector} ${prop} is not at stroke-width: ${value.trim()}`);
+  }
+  // Seams inside a container go with its frame.
+  for (const selector of ['.area-menu__separator', '.area-toolbar__separator']) {
+    assert.match(ruleFor(selector)?.body ?? '', /var\(--area-border-width\)/, `${selector} is a container seam and should ride the Surface axis`);
+  }
+});
+
+test('every floating surface draws the floating frame', () => {
+  // border-float: the decorative rung in light, neutral 650 in dark, so a floating surface stays distinct over another
+  // surface where its shadow no longer reads (DESIGN_SYSTEM.md, "Size and shape").
+  for (const selector of ['.area-popover, .area-menu', '.area-dialog', '.area-toast', '.area-menu__search-surface', '.area-calendar, .area-calendar--surface', '.area-command-palette', '.area-select::picker(select)', '.area-board-card__actions']) {
+    const rule = rules.find(r => r.selector === selector && /var\(--area-border-float\)/.test(r.body));
+    assert.ok(rule, `${selector} does not draw border-float`);
+  }
+  assert.match(ruleFor('.area-color-picker, .area-color-picker--surface')?.body ?? '', /--_picker-edge:\s*var\(--area-border-float\)/);
+});

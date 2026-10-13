@@ -65,7 +65,7 @@
     /* spec: owner (2026-09-27), a lighter edge than the divider (#e2) with a faint lift under
        it. Light #ee (neutral 100) sits between Notion's 8% ring (#eb) and the decorative seam
        (#f3); dark keeps the divider rung, since 800 disappears against the dark surface. */
-    --_card-edge: light-dark(var(--area-neutral-100), var(--area-neutral-750));
+    --_card-edge: var(--area-border-card);
     /* spec: owner's reference is Figma's 0 0 8 0 at 2%. Area's recipe keeps that halo, drawn
        2px low so it pools under the card, and adds a 1px contact line that gives the lighter
        edge its bottom. Dark needs more ink to register on a dark page. */
@@ -100,6 +100,11 @@
     font-size: var(--_card-title-size);
     line-height: var(--_card-title-leading);
     box-shadow: var(--_card-shadow);
+    /* Elevated (border-width 0) leaves the halo to carry the card, but dark has no halo: the edge comes back as an inset
+       ring in dark only, as wide as the frame Elevated removed (0 under every other preset). Owner, 2026-10-12:
+       consistency pass O2. */
+    outline: calc(var(--area-stroke-width) - var(--_card-border)) solid light-dark(transparent, var(--_card-edge));
+    outline-offset: calc(var(--_card-border) - var(--area-stroke-width));
   }
 
   /* Size: corner and inset only. */
@@ -1252,7 +1257,7 @@
   }
 
   .area-menu__separator {
-    block-size: 1px;
+    block-size: var(--area-border-width); /* a seam inside the menu, as Panel's rules (consistency pass 2026-10-12) */
     /*
      * spec: 6px from the rows on each side, compact 5 (the row gap plus the rest; owner
      * 2026-10-02, cursor-desktop.md). Cursor's desktop menu 6 / 1 / 6; VS Code and Cursor web

@@ -379,3 +379,4 @@ Open questions:
   79.24 → 81.33). Browser 2026-10-08 (gallery, light): solid, soft, outline and ghost all compute
   500; 169 visible text Buttons across Button group, Split button, Toolbar, Prompt suggestions and
   Model picker are all 500 with no label overflow and unchanged heights.
+- 2026-10-12 · owner, 2026-10-12: "go with your recommendations" (consistency pass) → neutral outline and ghost ink reads `fg-quiet` (O5: one role for a literal written in several families; same paint). (docs/research/consistency-audit-2026-10-12.md)

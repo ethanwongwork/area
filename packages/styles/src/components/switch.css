@@ -138,7 +138,7 @@
 
   /* Disabled dims the whole control, like Checkbox, Radio and Button, so an on switch still
      reads as on. It used to repaint the track grey, which hid the checked state. */
-  .area-switch[data-disabled] { cursor: not-allowed; opacity: var(--_disabled-opacity, 0.5); }
+  .area-switch[data-disabled] { cursor: not-allowed; opacity: var(--area-opacity-disabled); }
   .area-switch[data-read-only] { cursor: default; }
   .area-switch[data-loading] { cursor: progress; }
 

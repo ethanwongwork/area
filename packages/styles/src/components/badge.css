@@ -25,7 +25,7 @@
     /* spec (audit S6a, owner 2026-09-30): Count's translucent soft plate (6% black, 10% white
        in dark), so a Badge stays visible on a hovered or selected row; hover and press lay the
        bg-hover / bg-active wash over it (1 - 0.94 x 0.95, about 10.7%). Was bg-component #f7. */
-    --_surface: light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.1)); --_surface-hover: light-dark(rgb(0 0 0 / 0.107), rgb(255 255 255 / 0.226)); /* spec */
+    --_surface: var(--area-bg-mark); --_surface-hover: var(--area-bg-mark-hover);
     /* The bare block is the neutral default React renders: muted ink (audit C-17). */
     --_tone-fg: var(--area-fg-muted); --_on-solid: var(--area-fg-on-neutral);
     --_line: var(--area-edge-control); --_line-hover: var(--area-edge-control-hover);
@@ -67,8 +67,8 @@
   .area-badge--neutral {
     --_solid: var(--area-neutral-solid);
     --_solid-hover: var(--area-neutral-solid-hover);
-    --_surface: light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.1)); /* spec (audit S6a) */
-    --_surface-hover: light-dark(rgb(0 0 0 / 0.107), rgb(255 255 255 / 0.226)); /* spec */
+    --_surface: var(--area-bg-mark); /* audit S6a */
+    --_surface-hover: var(--area-bg-mark-hover);
     /*
      * A step lighter than the control border, at rest and on hover alike.
      *
@@ -187,7 +187,7 @@
   /* spec: 24px, the previous md geometry. */
   .area-badge--lg { --_height: var(--area-mark-label-lg); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
   .area-badge--color { --_border: var(--_line); --_border-hover: var(--_line-hover); --_dot-color: var(--_solid); }
-  .area-badge--modern { --_bg: var(--area-bg-surface); --_bg-hover: var(--area-bg-component-hover); --_fg: var(--area-fg-default); --_border: var(--area-border-decorative); --_border-hover: var(--area-edge-control); --_dot-color: var(--_solid); box-shadow: var(--area-shadow-1); }
+  .area-badge--modern { --_bg: var(--area-bg-surface); --_bg-hover: var(--area-bg-component-hover); --_fg: var(--area-fg-default); --_border: var(--area-edge-selected); --_border-hover: var(--area-edge-control-hover); --_dot-color: var(--_solid); box-shadow: var(--area-shadow-1); } /* the raised plate's edge, as the Segmented thumb's (consistency pass 2026-10-12; was the #f3 seam; Untitled's modern ring is #d5) */
   .area-badge:is(.area-badge--color, .area-badge--modern) :is(.area-badge__leading-icon, .area-badge__trailing-icon) { color: var(--_solid); }
   .area-badge__avatar, .area-badge__flag { display: inline-flex; inline-size: var(--_media); block-size: var(--_media); flex: none; border-radius: var(--area-radius-full); overflow: hidden; }
   .area-badge__avatar > *, .area-badge__flag > * { inline-size: 100%; block-size: 100%; object-fit: cover; }
@@ -206,7 +206,9 @@
  /* The pill close recipe (audit S9): a concentric circle hovering to 12% of the ink. */
   /* The plate appears at once and fades out on duration-fast (MOTION.md, "Hover plate"; it snapped both ways). */
   @media (hover: hover) { .area-badge__dismiss:hover { background: color-mix(in srgb, currentColor 12%, transparent); transition-duration: 0s; } }
-  .area-badge__dismiss:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  /* A control nested in its host rings at 0, as Tag's remove and a field's actions (owner, 2026-10-12: O1 of the consistency
+     pass); at the focus offset the ring sat outside the badge. */
+  .area-badge__dismiss:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: 0; }
   /* spec: Notion's multi-select cell, 6 between lines and 8 between tags
      (notion--multi-select-wrap; was Primer's 4 both ways). */
   .area-badge-group { --_group-gap: calc(var(--area-space-6) - var(--area-space-2) * var(--area-ui-dense)) var(--area-ui-cluster); /* 6 × 8, compact 4 × 6 */ display: flex; align-items: center; flex-wrap: wrap; gap: var(--_group-gap); min-inline-size: 0; max-inline-size: 100%; }

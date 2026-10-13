@@ -48,7 +48,7 @@
     --_bg-active: var(--_surface-active);
   }
   .area-button-group > .area-button--solid.area-button--neutral:not([data-selected]) {
-    --_fg: color-mix(in oklab, var(--area-fg-default), var(--area-fg-muted) 75%); /* spec: button.css quiet ink */
+    --_fg: var(--area-fg-quiet);
   }
   .area-button-group > .area-button--solid[data-selected] {
     --_bg: var(--_surface-active);

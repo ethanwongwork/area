@@ -68,11 +68,12 @@
     background: var(--_swatch-color);
     box-shadow: inherit;
   }
-  /* The swatch picker palette's hairline: 1px black 10% (white 10% in dark), inside the shape, so a
-     swatch is outlined on any ground and the colour shows through its rim (spec: color.css palette). */
+  /* The swatch ring (`token-swatch-ring`, black 10% / white 10% in dark), inside the shape, so a swatch is
+     outlined on any ground and the colour shows through its rim. A required edge: `stroke-width`, so it stays
+     under the Elevated surface preset (audit F-5; consistency pass 2026-10-12, it had regressed to `border-width`). */
   .area-color-swatch {
-    outline: var(--area-border-width) solid light-dark(rgb(0 0 0 / 0.1), rgb(255 255 255 / 0.1)); /* spec */
-    outline-offset: calc(var(--area-border-width) * -1);
+    outline: var(--area-stroke-width) solid var(--area-token-swatch-ring);
+    outline-offset: calc(var(--area-stroke-width) * -1);
   }
   .area-color-swatch--sm { --_size: var(--area-mark-sm); }
   .area-color-swatch--md { --_size: var(--area-mark-md); }
@@ -148,8 +149,8 @@
     inline-size: 100%;
     border-radius: var(--area-radius-control-sm);
     overflow: clip;
-    outline: 1px solid light-dark(rgb(0 0 0 / 0.1), rgb(255 255 255 / 0.1)); /* spec */
-    outline-offset: -1px;
+    outline: var(--area-stroke-width) solid var(--area-token-swatch-ring); /* the swatch ring, round the whole grid */
+    outline-offset: calc(var(--area-stroke-width) * -1);
   }
   .area-color-swatch-picker--palette > .area-color-swatch-picker__cell { inline-size: auto; block-size: auto; aspect-ratio: 1; border-radius: 0; }
   .area-color-swatch-picker--palette > .area-color-swatch-picker__cell > .area-color-swatch {
@@ -206,8 +207,9 @@
     flex: 0 0 auto;
     inline-size: max-content;
     /* The surface gap ColorPicker's value row draws, Figma's colour row (audit F-7 A; was the
-       decorative rule, nearly invisible on the soft fill). */
-    border-inline-start: var(--area-border-width) solid var(--area-bg-surface);
+       decorative rule, nearly invisible on the soft fill). A joined control's seam, so `stroke-width`, as every
+       Input group seam (consistency pass 2026-10-12). */
+    border-inline-start: var(--area-stroke-width) solid var(--area-bg-surface);
   }
   .area-input-group.area-color-field > .area-color-field__opacity > .area-number-field__control {
     flex: 0 0 auto;
@@ -236,12 +238,12 @@
     --_rhythm: calc(12px - 4px * var(--area-ui-dense)); /* spec: 12, compact 8 */
     --_track: 16px; /* spec */
     --_thumb-ring: 4px; /* spec */
-    --_hairline: light-dark(rgb(0 0 0 / 0.1), rgb(255 255 255 / 0.1)); /* spec */
+    --_hairline: var(--area-token-swatch-ring); /* the swatch ring: the area, tracks and previews show colour too */
     /* spec (owner, review round 16: "the slider circle transparency on the outer stroke is kinda odd"): the thumb is as
        tall as its track, so a translucent outer edge (Figma's black 20%) sat half over the colour and half over the
        panel and changed colour around the circle. It is opaque now, one grey all round; the inner edge between the white
        ring and the fill is the swatch ring (black 10%), as every swatch. */
-    --_thumb-edge: var(--area-border-subtle);
+    --_thumb-edge: var(--area-edge-control-hover); /* Slider's thumb edge: #d4, stronger under increased contrast */
     --_thumb-inner: var(--area-token-swatch-ring);
     --_thumb-lift: 0 1px 3px -2px rgb(0 0 0 / 0.1), 0 5px 12px -2px rgb(0 0 0 / 0.13); /* spec */
     /* The alpha track is a range input (no layers inside it): the same checker as a gradient, three
@@ -279,7 +281,7 @@
     position: relative; aspect-ratio: 1; touch-action: none; cursor: crosshair;
     background: linear-gradient(to top, #000, transparent), linear-gradient(to right, #fff, transparent), hsl(var(--_hue) 100% 50%);
     border-radius: var(--area-radius-control-sm);
-    box-shadow: inset 0 0 0 1px var(--_hairline);
+    box-shadow: inset 0 0 0 var(--area-stroke-width) var(--_hairline);
   }
   /* One thumb for the area and both tracks. Vendor pseudo-elements take separate rules:
      an unsupported one invalidates every selector in its list. */
@@ -288,7 +290,7 @@
     inline-size: var(--_track); block-size: var(--_track);
     border: var(--_thumb-ring) solid #fff; border-radius: var(--area-radius-full);
     background: var(--_thumb-color, var(--_swatch-color));
-    box-shadow: 0 0 0 1px var(--_thumb-edge), inset 0 0 0 1px var(--_thumb-inner), var(--_thumb-lift);
+    box-shadow: 0 0 0 var(--area-stroke-width) var(--_thumb-edge), inset 0 0 0 var(--area-stroke-width) var(--_thumb-inner), var(--_thumb-lift);
   }
   .area-color-picker__slider::-webkit-slider-thumb {
     appearance: none;
@@ -296,7 +298,7 @@
     inline-size: var(--_track); block-size: var(--_track);
     border: var(--_thumb-ring) solid #fff; border-radius: var(--area-radius-full);
     background: var(--_thumb-color, var(--_swatch-color));
-    box-shadow: 0 0 0 1px var(--_thumb-edge), inset 0 0 0 1px var(--_thumb-inner), var(--_thumb-lift);
+    box-shadow: 0 0 0 var(--area-stroke-width) var(--_thumb-edge), inset 0 0 0 var(--area-stroke-width) var(--_thumb-inner), var(--_thumb-lift);
   }
   /* Whole pixels (docs/MOTION.md crispness, 2026-10-07): the value's percentage of the area is rounded,
      and the 16px thumb's half is 8, so the ring and its edge never land on a half pixel. It follows
@@ -315,12 +317,12 @@
   .area-color-picker__slider {
     appearance: none; display: block; inline-size: 100%; block-size: var(--_track); margin: 0;
     border-radius: var(--area-radius-full); cursor: pointer;
-    box-shadow: inset 0 0 0 1px var(--_hairline);
+    box-shadow: inset 0 0 0 var(--area-stroke-width) var(--_hairline);
   }
   .area-color-picker__slider::-moz-range-thumb {
     box-sizing: border-box; inline-size: var(--_track); block-size: var(--_track);
     border: var(--_thumb-ring) solid #fff; border-radius: var(--area-radius-full); background: var(--_thumb-color, var(--_swatch-color));
-    box-shadow: 0 0 0 1px var(--_thumb-edge), inset 0 0 0 1px var(--_thumb-inner), var(--_thumb-lift);
+    box-shadow: 0 0 0 var(--area-stroke-width) var(--_thumb-edge), inset 0 0 0 var(--area-stroke-width) var(--_thumb-inner), var(--_thumb-lift);
   }
   .area-color-picker__slider:focus-visible { outline: none; }
   .area-color-picker__slider:focus-visible::-moz-range-thumb { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
@@ -357,7 +359,7 @@
   .area-color-picker__contrast-pair {
     position: relative; flex: none; overflow: clip;
     inline-size: var(--area-icon-md); block-size: var(--area-icon-md); border-radius: var(--area-radius-full);
-    background: var(--_swatch-color); box-shadow: inset 0 0 0 1px var(--_hairline);
+    background: var(--_swatch-color); box-shadow: inset 0 0 0 var(--area-stroke-width) var(--_hairline);
   }
   .area-color-picker__contrast-pair > span { position: absolute; inset: 0 0 0 50%; background: var(--_swatch-color); }
   .area-color-picker__contrast-ratio { font-variant-numeric: tabular-nums; }
@@ -374,7 +376,7 @@
   .area-color-picker__preview {
     display: grid; grid-template-rows: 1fr 1fr; flex: none; align-self: stretch;
     inline-size: var(--area-control-sm); border-radius: var(--area-radius-control-sm); overflow: clip;
-    box-shadow: inset 0 0 0 1px var(--_hairline);
+    box-shadow: inset 0 0 0 var(--area-stroke-width) var(--_hairline);
   }
   .area-color-picker__preview-new,
   .area-color-picker__preview-original {
