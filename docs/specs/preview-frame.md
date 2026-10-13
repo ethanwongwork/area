@@ -107,7 +107,7 @@ edge from the well is 6 6 6 6).
 from the same session's direct read of `asset_panel_preview--previewThumbnailWrapper`: 58 × 58, padding 5, radius 5,
 rgb(245, 245, 245); its image 48 wide.)
 
-Area, from the same script (`area--<tile>--rest--<theme>.json`, 12 files, light and dark). The gallery fits each
+Area, from the same script (`area--<tile>--rest--<theme>.json`, 14 files, light and dark; re-captured after round 23). The gallery fits each
 256 column to its tile (0.72 here), so box sizes read scaled; computed values are exact:
 
 | slot · property | figma · asset-tile · rest · light | area · default · rest · light | area · content-image · rest · light | area · variant-wide · rest · dark |
@@ -115,7 +115,7 @@ Area, from the same script (`area--<tile>--rest--<theme>.json`, 12 files, light 
 | **shell** size | 96 × 116 (well 96 × 96) | 185.08 × 185.08 (256 × 256 at 1:1) | 185.08 × 185.08 | 252.92 × 126.45 |
 | **shell** padding | 0 (well 12 × 0.5 = 6) | 12 | 12 | 12 |
 | **shell** radius | 5px (well 10 × 0.5 = 5) | 12px | 12px | 12px |
-| **shell** background | (well rgb(245, 245, 245)) | rgb(247, 247, 247) | rgb(247, 247, 247) | rgb(29, 29, 29) under the paint |
+| **shell** background | (well rgb(245, 245, 245)) | rgb(255, 255, 255) (`subtle`: rgb(247, 247, 247)) | rgb(255, 255, 255) | rgb(29, 29, 29) under the paint |
 | **content** size | 84 × 84 | 92.53 × 92.53 (128 icon) | 167.73 × 167.73 (232 at 1:1) | — |
 | **content** edge from parent | 6 6 6 6 | centred | 8.67 all round (12 at 1:1) | — |
 | **content** radius | 0px | 0px (an icon) | 4px | — |
