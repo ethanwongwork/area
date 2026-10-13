@@ -168,6 +168,31 @@ export const searchField = {
   defaults: {},
 } as const satisfies ComponentManifest;
 
+export const passwordField = {
+  block: "area-password-field",
+  description: "A field for a password, with an action that shows it as text and hides it again.",
+  variants: {},
+  elements: ["reveal"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const otpField = {
+  block: "area-otp-field",
+  description: "A one-time code drawn as a row of character slots over one real input.",
+  variants: { variant: ["outline", "soft"], size: ["sm", "md", "lg"] },
+  states: ["invalid", "disabled", "read-only"],
+  elements: ["group", "slot", "caret", "separator", "control"],
+  defaults: { variant: "outline", size: "md" },
+} as const satisfies ComponentManifest;
+
+export const timeField = {
+  block: "area-time-field",
+  description: "A time of day typed in segments, with an optional list of times at a fixed step.",
+  variants: {},
+  elements: ["segments", "part", "literal", "segment", "period", "list", "trigger"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
 export const numberField = {
   block: "area-number-field",
   description: "Edits a number with optional units, stepping and scrubbing.",
@@ -530,9 +555,10 @@ export const skeleton = {
 
 export const spinner = {
   block: "area-spinner",
-  description: "Indicates an action in progress with no known duration.",
+  description: "Indicates an action in progress: turning with no known end, or stopped at a value.",
   variants: { size: ["sm", "md", "lg"] },
-  elements: [],
+  states: ["determinate"],
+  elements: ["track", "arc"],
   defaults: { size: "md" },
 } as const satisfies ComponentManifest;
 
@@ -939,6 +965,23 @@ export const editableText = {
   defaults: { activation: "dblclick" },
 } as const satisfies ComponentManifest;
 
+export const stepper = {
+  block: "area-stepper",
+  description: "Shows where a person is in a flow of steps: Timeline's numbered markers joined by its line, done steps checked.",
+  variants: { orientation: ["horizontal", "vertical"] },
+  elements: [],
+  defaults: { orientation: "horizontal" },
+} as const satisfies ComponentManifest;
+
+export const stepperStep = {
+  block: "area-stepper-step",
+  description: "One step of a stepper: its marker, title and an optional description.",
+  variants: { status: ["complete", "current", "upcoming", "invalid"] },
+  states: ["disabled"],
+  elements: ["button", "body", "marker", "text", "title", "description"],
+  defaults: { status: "upcoming" },
+} as const satisfies ComponentManifest;
+
 export const timeline = {
   block: "area-timeline",
   description: "Lists events in order along one line, each with a marker.",
@@ -1035,6 +1078,11 @@ export const MANIFESTS = {
   tokenRow,
   assetRow,
   previewFrame,
+  passwordField,
+  otpField,
+  timeField,
+  stepper,
+  stepperStep,
   scrollArea,
   link,
   toggletip,

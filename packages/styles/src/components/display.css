@@ -263,6 +263,33 @@
      tier's icon box (12/16/20 in compact sm/default/lg) rather than a fixed 16. */
   .area-button .area-spinner { --_indicator: currentColor; --_size: var(--_icon); }
 
+  /* Determinate (docs/specs/spinner.md, "Value"): the same ring with the arc stopped at the value, drawn as SVG
+     because its length changes. The mask ring and turning arc give way to it. 12 o'clock, clockwise, as Cursor's
+     rings and every system draw it. */
+  .area-spinner[data-determinate] {
+    background: none;
+    -webkit-mask: none;
+    mask: none;
+  }
+  .area-spinner[data-determinate]::before { content: none; }
+  .area-spinner > svg { display: block; inline-size: 100%; block-size: 100%; rotate: -90deg; overflow: visible; }
+  .area-spinner__track,
+  .area-spinner__arc { fill: none; stroke-width: 2px; /* spec: the spinning ring's line, 1/8 of the 16 grid */ }
+  .area-spinner__track { stroke: color-mix(in srgb, var(--_indicator) 25%, transparent); /* spec: the spinning ring's track */ }
+  .area-spinner__arc {
+    stroke: var(--_indicator);
+    stroke-linecap: round;
+    /* MOTION.md's progress easing, linear (owner, review round 25: "make the motion more smooth"): an ease-out
+       front-loads each step, so updates arriving one after another read as a row of jolts; linear joins them. */
+    transition: stroke-dasharray var(--area-duration-slow) var(--area-ease-linear);
+  }
+  /* At 0 the round cap alone would draw a dot. */
+  .area-spinner__arc[data-empty] { stroke: transparent; }
+  @media (forced-colors: active) {
+    .area-spinner__track { stroke: GrayText; }
+    .area-spinner__arc { stroke: CanvasText; }
+  }
+
   .area-spinner--sm { --_size: var(--area-space-12); }
   .area-spinner--md { --_size: var(--area-space-16); }
   .area-spinner--lg { --_size: var(--area-space-24); }
