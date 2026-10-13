@@ -1,20 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Badge, BadgeGroup, Button, Card, CardCarousel, CardContent, CardDescription, CardFooter, CardHeader, CardLink, CardList, CardMedia, CardOverlay, CardTitle, CardValue, Slider, Toolbar, ToolbarItem } from "@area/react";
-import {
-  ArrowIcon,
-  CheckIcon,
-  TrendingIcon,
-  ArrowUpRightIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  HeartIcon,
-  NextFilledIcon,
-  PauseFilledIcon,
-  PreviousFilledIcon,
-  SunIcon,
-  MoreIcon,
-  PlusIcon,
-} from "../../../../docs/src/icons.tsx";
+import { AddIcon, ArrowRightIcon, ArrowUpRightIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon, HeartIcon, MoreHorizontalIcon, PauseFilledIcon, SkipBackFilledIcon, SkipForwardFilledIcon, SunIcon, TrendingUpIcon } from "@area/icons";
 
 /*
  * Every card here is the default size (md) unless its tile shows a size, with inset media
@@ -143,7 +129,7 @@ export const CardMediaOverlay = () => (
 export const CardCornerAction = () => (
   <Card layout="immersive" style={{ inlineSize: 300, blockSize: 300 }}>
     <CardMedia aria-hidden="true" />
-    <CardOverlay placement="bottom-end"><Button iconOnly aria-label="Open" icon={<ArrowIcon />} /></CardOverlay>
+    <CardOverlay placement="bottom-end"><Button iconOnly aria-label="Open" icon={<ArrowRightIcon />} /></CardOverlay>
     <CardContent>
       <CardTitle>Title</CardTitle>
       <CardDescription>Description</CardDescription>
@@ -244,7 +230,7 @@ export const CardLinked = () => (
 export const CardLinkedActions = () => (
   <Card style={vertical}>
     <CardMedia aria-hidden="true">
-      <CardOverlay reveal><Button variant="soft" size="sm" iconOnly aria-label="More" icon={<MoreIcon />} /></CardOverlay>
+      <CardOverlay reveal><Button variant="soft" size="sm" iconOnly aria-label="More" icon={<MoreHorizontalIcon />} /></CardOverlay>
     </CardMedia>
     <CardContent>
       <CardTitle><CardLink href="#gallery-section-card">Title</CardLink></CardTitle>
@@ -266,7 +252,7 @@ export const CardTemplateVideo = () => (
       <CardOverlay placement="bottom-end"><Badge variant="solid" tone="inverse">12:04</Badge></CardOverlay>
     </CardMedia>
     <CardContent>
-      <CardHeader action={<Button variant="ghost" iconOnly aria-label="More" icon={<MoreIcon />} />}>
+      <CardHeader action={<Button variant="ghost" iconOnly aria-label="More" icon={<MoreHorizontalIcon />} />}>
         <CardTitle><CardLink href="#gallery-section-card">Title</CardLink></CardTitle>
         <CardDescription>Channel · 2 days ago</CardDescription>
       </CardHeader>
@@ -285,9 +271,9 @@ export const CardTemplateMusic = () => (
       <Slider size="sm" aria-label="Position" defaultValue={40} />
       <CardFooter>
         <Toolbar aria-label="Playback">
-          <ToolbarItem><Button variant="ghost" iconOnly aria-label="Previous" icon={<PreviousFilledIcon />} /></ToolbarItem>
+          <ToolbarItem><Button variant="ghost" iconOnly aria-label="Previous" icon={<SkipBackFilledIcon />} /></ToolbarItem>
           <ToolbarItem><Button pill iconOnly aria-label="Pause" icon={<PauseFilledIcon />} /></ToolbarItem>
-          <ToolbarItem><Button variant="ghost" iconOnly aria-label="Next" icon={<NextFilledIcon />} /></ToolbarItem>
+          <ToolbarItem><Button variant="ghost" iconOnly aria-label="Next" icon={<SkipForwardFilledIcon />} /></ToolbarItem>
         </Toolbar>
       </CardFooter>
     </CardContent>
@@ -309,7 +295,7 @@ export const CardTemplateWeather = () => (
 export const CardTemplateStat = () => (
   <Card style={widget}>
     <CardContent>
-      <CardHeader action={<TrendingIcon />}>
+      <CardHeader action={<TrendingUpIcon />}>
         <CardTitle>Label</CardTitle>
       </CardHeader>
       <CardValue>309.5</CardValue>
@@ -341,7 +327,7 @@ export const CardTemplateFeature = () => (
     <CardContent>
       <CardTitle>Title</CardTitle>
       <CardDescription>Description</CardDescription>
-      <CardFooter><Button variant="outline" icon={<PlusIcon />}>Action</Button></CardFooter>
+      <CardFooter><Button variant="outline" icon={<AddIcon />}>Action</Button></CardFooter>
     </CardContent>
   </Card>
 );

@@ -5012,3 +5012,24 @@ must read at 12px on 1× screens gets its own cut). Sheet: `docs/research/icon-r
 - **Demos:** every Badge icon slot (check, info, add, link, arrow-right, dismiss) and Tag's globe pass `size={12}`;
   checked in the app: at type 13 the 8 Badge icons with cuts draw them (0.99px), at type 16 the 16px drawing at the
   16px line (1.29px). Citation's book stays as it was (no cut; the slot is a fixed 12 favicon box).
+
+## Fluent map retired from the app, 2026-10-13
+
+Production gap 9, the app's half (owner, 2026-10-13: "go with your recommendations and continue working").
+
+- **Demos read `@area/icons`.** 13 demo modules imported 78 names from the archived `apps/docs/src/icons.tsx`; every
+  one was already a pass-through to an Area drawing (`PlusIcon` → `PilotAddIcon` …), so the demos now import the
+  package's own names (`AddIcon`, `ArrowRightIcon`, `MoreHorizontalIcon`, `PenToolIcon`, `VolumeIcon` …) and the
+  snippets the app shows name icons that exist. Nothing renders differently; `PersonIcon`'s default 20 is written
+  at its call sites (`size={20}`).
+- **Copy and SVG export** (`CopyButton`, `standaloneSvg`) moved from the docs' icon browser to
+  `apps/desktop/src/copy.tsx`; the export leaves out the drawing a size-12 icon hides (12px cuts).
+- **The Iconography demos** (`demos/icons.tsx`: Area beside Fluent's cuts and filled references, the review cards)
+  belong to the docs-only "Icon pilot" page, which the app never shows. They moved out of the app's registry into
+  `content/registry-docs.tsx`, which the archived docs render reads, so the app bundles neither them nor the Fluent
+  map: `apps/desktop/dist/app.js` 4.66 → 2.91 MB, no Fluent path data and no second copy of the icon set.
+- **Left for the docs site's deletion (owner's call):** `apps/docs/scripts/gen-icons.mjs`, `icons.generated.mjs`, the
+  Fluent cuts in `apps/docs/src/icons.tsx` and the Iconography demos. The research tools in `packages/icons/scripts`
+  keep reading `@fluentui/svg-icons` as a reference library (find, batch, sheet, keywords), as they do Lucide.
+- Found: the archived docs build fails on `main` since the type / density split (PR #75): `build.mjs` still reads the
+  removed `ui` axis in four places. Not fixed here (archived; fixing means rewriting its axis pages).

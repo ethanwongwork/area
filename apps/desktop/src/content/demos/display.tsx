@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Alert, Avatar, AvatarGroup, Badge, Indicator, IndicatorAnchor, Button, Checkbox, Chip, ChipGroup, Dialog, Field, Input, Kbd, KbdGroup, Label, Menu, MenuItem, Panel, PanelSection, PanelStack, Popover, PopoverDescription, PopoverHeader, PopoverTitle, Progress, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Tooltip } from "@area/react";
-import { AlertIcon, AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, ArrowIcon, CheckIcon, DismissIcon, DotsFourIcon, InfoIcon, PersonIcon, PlusIcon, SearchIcon, TokenIcon } from "../../../../docs/src/icons.tsx";
+import { AddIcon, AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, ArrowRightIcon, CheckIcon, DismissIcon, DotsFourIcon, InfoIcon, PersonIcon, SearchIcon, TokenIcon, WarningIcon } from "@area/icons";
 
 export const AvatarDefault = () => <Avatar fallback="D" alt="David Tee" />;
 
@@ -14,7 +14,7 @@ export const AvatarImageFallback = () => (
 
 export const AvatarInitials = () => <><Avatar fallback="D" alt="David Tee" /><Avatar fallback="DT" alt="David Tee" /></>;
 
-export const AvatarIcon = () => <Avatar icon={<PersonIcon />} alt="David Tee" />;
+export const AvatarIcon = () => <Avatar icon={<PersonIcon size={20} />} alt="David Tee" />;
 
 export const AvatarGrouped = () => (
   <AvatarGroup max={3} aria-label="David Tee and 4 teams"><Avatar src="images/david-tee.jpg" fallback="DT" alt="David Tee" /><Avatar shape="square" fallback="D" alt="Design team" /><Avatar shape="square" fallback="R" alt="Research team" /><Avatar shape="square" fallback="P" alt="Platform team" /><Avatar shape="square" fallback="S" alt="Support team" /></AvatarGroup>
@@ -59,8 +59,8 @@ export const AlertWithLink = () => (
 export const AlertTones = () => (
   <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-12)", inlineSize: 720 }}>
     <Alert tone="success" icon={<CheckIcon />} title="Title">Body text</Alert>
-    <Alert tone="warning" icon={<AlertIcon />} title="Title">Body text</Alert>
-    <Alert tone="danger" icon={<AlertIcon />} title="Title">Body text</Alert>
+    <Alert tone="warning" icon={<WarningIcon />} title="Title">Body text</Alert>
+    <Alert tone="danger" icon={<WarningIcon />} title="Title">Body text</Alert>
   </div>
 );
 
@@ -118,10 +118,10 @@ export const TooltipDefault = () => <Tooltip>Description</Tooltip>;
 export const MenuDefault = () => (
   <Menu>
     <MenuItem shortcut={<Kbd keys={["cmd", "K"]} variant="quiet" />} icon={<SearchIcon />}>Item one</MenuItem>
-    <MenuItem shortcut={<Kbd keys={["cmd", "N"]} variant="quiet" />} icon={<PlusIcon />}>Item two</MenuItem>
+    <MenuItem shortcut={<Kbd keys={["cmd", "N"]} variant="quiet" />} icon={<AddIcon />}>Item two</MenuItem>
     <div className="area-menu__separator" />
     <MenuItem icon={<TokenIcon />}>Item three</MenuItem>
-    <MenuItem shortcut={<ArrowIcon />} icon={<DotsFourIcon />}>Item four</MenuItem>
+    <MenuItem shortcut={<ArrowRightIcon />} icon={<DotsFourIcon />}>Item four</MenuItem>
     <MenuItem tone="danger" shortcut={<Kbd keys={["cmd", "backspace"]} variant="quiet" />} icon={<DismissIcon />}>Item five</MenuItem>
   </Menu>
 );
@@ -237,7 +237,7 @@ export const KbdKeyMap = () => (
 export const MenuWithShortcuts = () => (
   <Menu>
     <MenuItem shortcut={<Kbd keys={["cmd", "K"]} variant="quiet" />} icon={<SearchIcon />}>Item one</MenuItem>
-    <MenuItem shortcut={<Kbd keys={["cmd", "N"]} variant="quiet" />} icon={<PlusIcon />}>Item two</MenuItem>
+    <MenuItem shortcut={<Kbd keys={["cmd", "N"]} variant="quiet" />} icon={<AddIcon />}>Item two</MenuItem>
     <div className="area-menu__separator" />
     <MenuItem tone="danger" shortcut={<Kbd keys={["cmd", "backspace"]} variant="quiet" />} icon={<DismissIcon />}>Item three</MenuItem>
   </Menu>

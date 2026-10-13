@@ -10,7 +10,7 @@ import TOKENS from "@area/tokens/tokens.json";
 import { ROLE_SCALES } from "../../../../packages/tokens/src/color/presets.ts";
 import { Code, ColorSwatch, EmptyState, Nav, NavGroup, NavItem, PanelSection, Table, TableLink } from "@area/react";
 import { CopyIcon } from "@area/icons";
-import { CopyButton } from "../../../docs/src/gallery/icon-browser.tsx";
+import { CopyButton } from "../copy.tsx";
 import { SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
 import { CanvasSection, Tile, TileGrid } from "../tile.tsx";
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";

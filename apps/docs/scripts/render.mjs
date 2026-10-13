@@ -14,8 +14,9 @@ import { fileURLToPath } from "node:url";
 import { pathToFileURL } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-// The demos and their registry live in the app (the source of truth, 2026-10-12).
-const registry = resolve(root, "../desktop/src/content/registry.tsx");
+// The demos and their registry live in the app (the source of truth, 2026-10-12); registry-docs adds the
+// docs-only Iconography demos the app doesn't bundle.
+const registry = resolve(root, "../desktop/src/content/registry-docs.tsx");
 
 export async function renderDemos() {
   // Built inside the project, not a temp directory: the bundle leaves react external, so

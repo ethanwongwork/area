@@ -4,7 +4,7 @@
  * libraries), drawn in the style and at the size the Canvas bar sets. The Inspector shows the chosen
  * icon (its drawing, Copy SVG, Download, Copy name and import, its facts and search words from
  * @area/icons/meta), else the Sidebar's category, else the set. Icons, categories and batches come from
- * @area/icons; the SVG export and CopyButton are still the docs icon browser's (apps/docs/src/gallery/icon-browser.tsx).
+ * @area/icons; the SVG export and CopyButton are ../copy.tsx.
  */
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactElement } from "react";
 import { Badge, Button, Code, Count, EmptyState, HoverCard, Nav, NavGroup, NavItem, PanelSection, Segmented, Select, Table, TableLink } from "@area/react";
@@ -12,7 +12,7 @@ import { batches as ICON_BATCHES, categories as ICON_CATEGORIES, icons as ICON_M
 import * as APPROVED from "@area/icons";
 import * as IN_REVIEW from "@area/icons/review";
 import { CopyIcon, DownloadIcon, StarFilledIcon, StarIcon } from "@area/icons";
-import { CopyButton, standaloneSvg } from "../../../docs/src/gallery/icon-browser.tsx";
+import { CopyButton, standaloneSvg } from "../copy.tsx";
 import { SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
 import { CanvasSection } from "../tile.tsx";
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";

@@ -18,6 +18,10 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   `@area/icons` at size 12 is slot-aware like Glyph (`cutOpacity`, `sw`), and Badge / Tag demos pass `size={12}`.
 - Checks: icons 9, React 274/275 (known docs-dist), tokens 24,254, contracts 14, manifest, typecheck; app preview
   (Link mark at type 13 / 16, Icons grid at 12). Not checked: forced colours, a 1× external display.
+- Then production gap 9 for the app: demos import `@area/icons` names (78 pass-throughs, nothing renders differently),
+  Copy / SVG export in `apps/desktop/src/copy.tsx`, the docs-only Iconography demos in `content/registry-docs.tsx`
+  (the docs render reads it); the app bundle has no Fluent ink (4.66 → 2.91 MB). Spec "Fluent map retired from the app".
+- Found: `npm run build:docs` fails on `main` since PR #75 (`build.mjs` reads the removed `ui` axis); not fixed (archived).
 ## Compass review → Password field, OTP field, Time field, Stepper, Spinner value (2026-10-13, branch `claude/design-compass-components-cfd9eb`, PR)
 
 - Owner reviewed compass.designcompass.org ("anything worth using/building?"). Gallery tile Copy/Reset and the app at

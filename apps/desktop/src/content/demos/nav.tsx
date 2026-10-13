@@ -1,5 +1,5 @@
 import { Nav, NavGroup, NavItem, NavSeparator } from "@area/react";
-import { CheckIcon, InfoIcon, SearchIcon } from "../../../../docs/src/icons.tsx";
+import { CheckIcon, InfoIcon, SearchIcon } from "@area/icons";
 
 /* A vertical nav renders at its own sidebar width (240, nav.css); no demo framing. */
 

@@ -13,7 +13,7 @@ import { Badge, Code, Count, EmptyState, Link, Nav, NavGroup, NavItem, PanelSect
 import * as MANIFESTS from "@area/styles/manifest";
 import { CopyIcon } from "@area/icons";
 import SNIPPETS from "virtual:demo-snippets";
-import { CopyButton } from "../../../docs/src/gallery/icon-browser.tsx";
+import { CopyButton } from "../copy.tsx";
 // @ts-expect-error — the gallery's page content and status registry are authored in JavaScript.
 import { COMPONENT_PAGES } from "../content/pages.mjs";
 // @ts-expect-error — as above.

@@ -1,8 +1,8 @@
 /** Gallery specimens that complete each family's variant coverage: one per missing manifest value. */
 import { Alert, Badge, Button, Checkbox, CheckboxGroup, Chip, CodeBlock, Indicator, Input, InputGroup, InputGroupText, NumberField, Separator, Table, TableLink, Tabs, Toast } from "@area/react";
-import { InfoIcon, AlertIcon } from "../../../../docs/src/icons.tsx";
 // @ts-expect-error — the docs' own highlighter is authored in JavaScript.
 import { highlight } from "../highlight.mjs";
+import { InfoIcon, WarningIcon } from "@area/icons";
 
 const tableRows = ["Item one", "Item two", "Item three"];
 
@@ -11,7 +11,7 @@ export const GalleryTabsLarge = () => <Tabs size="lg" items={[{ id: "one", label
 export const GalleryToastNeutral = () => <Toast icon={<InfoIcon />}>Body text</Toast>;
 
 export const GalleryAlertInfo = () => <Alert tone="info" icon={<InfoIcon />} title="Title">Body text</Alert>;
-export const GalleryAlertWarning = () => <Alert tone="warning" icon={<AlertIcon />} title="Title">Body text</Alert>;
+export const GalleryAlertWarning = () => <Alert tone="warning" icon={<WarningIcon />} title="Title">Body text</Alert>;
 
 /* Figma's inspector fields: a letter in the leading slot that also drags the value. */
 export const GalleryNumberFieldPrefix = () => (

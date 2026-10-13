@@ -1,7 +1,7 @@
 import { useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import { Avatar, Badge, Indicator, IndicatorAnchor, BadgeGroup, Button, Table, Theme } from "@area/react";
-import { ArrowIcon, BellIcon, CheckIcon, DismissIcon, InfoIcon, LinkIcon, PlusIcon } from "../../../../docs/src/icons.tsx";
+import { AddIcon, ArrowRightIcon, BellIcon, CheckIcon, DismissIcon, InfoIcon, LinkIcon } from "@area/icons";
 
 export const BadgeDefault = () => <Badge>Badge</Badge>;
 /** Follows the radius setting instead of a pill (2026-10-03). */
@@ -51,7 +51,7 @@ export const BadgeDotMatrix = () => (
 );
 export const BadgeStateLabels = () => (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "start", gap: "var(--area-space-24)" }}>
-    <Badge pill variant="solid" tone="success" icon={<PlusIcon size={12} />}>Open</Badge>
+    <Badge pill variant="solid" tone="success" icon={<AddIcon size={12} />}>Open</Badge>
     <Badge pill variant="solid" tone="discovery" icon={<CheckIcon size={12} />}>Done</Badge>
     <Badge pill variant="solid" tone="danger" icon={<DismissIcon size={12} />}>Closed</Badge>
     <Badge pill variant="solid" icon={<InfoIcon size={12} />}>Draft</Badge>
@@ -114,7 +114,7 @@ export const BadgeBothThemes = () => (
 export const BadgeStress = () => (
   <div dir="rtl" style={{ width: "calc(var(--area-space-80) * 3)", maxWidth: "100%", display: "flex", flexDirection: "column", alignItems: "start", gap: "var(--area-space-24)" }}>
     <Badge truncate icon={<InfoIcon size={12} />}>Produktionsbereitstellungsbestätigung ausstehend</Badge>
-    <Badge as="a" href="#api" trailingIcon={<ArrowIcon size={12} />}>تفاصيل الإصدار</Badge>
+    <Badge as="a" href="#api" trailingIcon={<ArrowRightIcon size={12} />}>تفاصيل الإصدار</Badge>
     <div style={{ zoom: 2, maxWidth: "100%" }}><Badge truncate>Awaiting deployment approval</Badge></div>
   </div>
 );
@@ -135,7 +135,7 @@ export const BadgeAuditControls = () => {
     <label>Audit contrast <select className="area-select area-select--sm" value={contrast} onChange={event => setContrast(event.target.value)}><option>standard</option><option>more</option></select></label>
     <label>Audit direction <select className="area-select area-select--sm" value={direction} onChange={event => setDirection(event.target.value as "ltr" | "rtl")}><option>ltr</option><option>rtl</option></select></label>
     <div data-badge-audit="" data-area-theme={theme} data-area-ui={density} data-area-radius={radius} data-area-contrast={contrast} data-area-motion={motion} dir={direction} style={{ ...(type === "system" ? { "--area-font-sans": "system-ui" } : {}), background: "var(--area-bg-surface)", color: "var(--area-fg-default)", padding: "var(--area-space-24)", display: "grid", gap: "var(--area-space-24)" } as CSSProperties}>
-      {(["sm", "md", "lg"] as const).map(size => <div key={size}><Badge size={size} icon={<InfoIcon size={12} />} trailingIcon={<ArrowIcon size={12} />}>Badge</Badge></div>)}
+      {(["sm", "md", "lg"] as const).map(size => <div key={size}><Badge size={size} icon={<InfoIcon size={12} />} trailingIcon={<ArrowRightIcon size={12} />}>Badge</Badge></div>)}
       <BadgeToneMatrix />
       <BadgeAnchorPlacements />
       <BadgeGroupAuto />
@@ -165,7 +165,7 @@ export const BADGE_GALLERY_DEMOS: Record<string, () => ReactNode> = Object.fromE
   ...galleryVariants.flatMap(variant => galleryTones.map(tone => [`GalleryBadge${galleryName(variant)}${galleryName(tone)}`, galleryBadge(variant, tone)])),
   ...(["soft", "outline"] as const).flatMap(variant => galleryTones.map(tone => [`GalleryBadgeDot${galleryName(variant)}${galleryName(tone)}`, galleryDotBadge(variant, tone)])),
   ...(["top-end", "top-start", "bottom-end", "bottom-start"] as const).map(placement => [`GalleryBadgeAnchor${galleryName(placement).replace("-", "")}`, galleryPlacement(placement)]),
-  ["GalleryBadgeStateOpen", () => <Badge variant="solid" tone="success" icon={<PlusIcon size={12} />}>Open</Badge>],
+  ["GalleryBadgeStateOpen", () => <Badge variant="solid" tone="success" icon={<AddIcon size={12} />}>Open</Badge>],
   ["GalleryBadgeStateDone", () => <Badge variant="solid" tone="discovery" icon={<CheckIcon size={12} />}>Done</Badge>],
   ["GalleryBadgeStateClosed", () => <Badge variant="solid" tone="danger" icon={<DismissIcon size={12} />}>Closed</Badge>],
   ["GalleryBadgeStateDraft", () => <Badge variant="solid" icon={<InfoIcon size={12} />}>Draft</Badge>],
@@ -173,7 +173,7 @@ export const BADGE_GALLERY_DEMOS: Record<string, () => ReactNode> = Object.fromE
   ["GalleryBadgeThemeLight", () => <Theme value={{ theme: "light" }}><div style={{ background: "var(--area-bg-surface)", padding: "var(--area-space-16)" }}><Badge tone="success" dot>Badge</Badge></div></Theme>],
   ["GalleryBadgeThemeDark", () => <Theme value={{ theme: "dark" }}><div style={{ background: "var(--area-bg-surface)", padding: "var(--area-space-16)" }}><Badge tone="success" dot>Badge</Badge></div></Theme>],
   ["GalleryBadgeStressLong", () => <div style={{ width: "calc(var(--area-space-80) * 3)", maxWidth: "100%" }}><Badge truncate icon={<InfoIcon size={12} />}>Produktionsbereitstellungsbestätigung ausstehend</Badge></div>],
-  ["GalleryBadgeStressRtl", () => <div dir="rtl"><Badge as="a" href="#api" trailingIcon={<ArrowIcon size={12} />}>تفاصيل الإصدار</Badge></div>],
+  ["GalleryBadgeStressRtl", () => <div dir="rtl"><Badge as="a" href="#api" trailingIcon={<ArrowRightIcon size={12} />}>تفاصيل الإصدار</Badge></div>],
   ["GalleryBadgeStressZoom", () => <div style={{ zoom: 2, maxWidth: "100%" }}><Badge truncate>Awaiting deployment approval</Badge></div>],
   ["GalleryBadgeTableDeployed", () => <Table><thead><tr><th>Name</th><th>Status</th></tr></thead><tbody><tr><td>Item one</td><td><Badge dot tone="success">Status</Badge></td></tr></tbody></Table>],
   ["GalleryBadgeTableBuilding", () => <Table><thead><tr><th>Name</th><th>Status</th></tr></thead><tbody><tr><td>Item two</td><td><Badge dot tone="warning">Status</Badge></td></tr></tbody></Table>],
