@@ -290,9 +290,9 @@ order:
    16 / 20 / 24, a sprite, and metadata (name, components, category, keyline, fill, status, batch, turn, alias).
    Keywords, other libraries' names and the RTL flag come with items 3 and 4. The docs still render
    `pilot-icons.tsx`; switching them to the package is part of item 9.
-3. **Icon component API:** an accessible label (`title` / `aria-label`, which switches the icon to `role="img"`), and
+3. **Icon component API:** done 2026-10-12 (spec "Accessible name and right-to-left": `title` / `aria-label` / `aria-labelledby` → `role="img"`, 23 icons mirror under `:dir(rtl)`, `mirrored` overrides). an accessible label (`title` / `aria-label`, which switches the icon to `role="img"`), and
    right-to-left mirroring for directional icons.
-4. **Keywords and an alias map** for search, including Lucide, Material and Fluent names (user→person, file→document,
+4. **Keywords and an alias map:** done 2026-10-12 (spec "Keywords and names": `keywords` and `names` in the metadata, read by the app's Icons search). for search, including Lucide, Material and Fluent names (user→person, file→document,
    plus→add, x→dismiss, circle-x→error).
 5. **12px cuts** for the dense icons components use at 12 (the spec planned these and they were never drawn).
 6. **Licence** for Area's drawings, semver, changelog and a deprecation policy.

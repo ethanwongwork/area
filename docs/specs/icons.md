@@ -4875,3 +4875,65 @@ owner's explicit instruction ("the fluent globe ink should be exactly traced and
 curve and keep Fluent's 12 ink. `abs-path.py` (2026-10-12 review folder) converts a path to absolute commands. globe-off's
 filled cut `M7.5 6H10.5V9Z` lies inside the slash gap at every size and removes the middle cell's island.
 
+
+## Accessible name and right-to-left, 2026-10-12
+
+Owner: "continue working with your recs" (production gap 3 in `docs/research/icon-review/2026-10-10/README.md`).
+Evidence, read at pinned sources: `@fluentui/react-icons@2.0.344` (microsoft/fluentui-system-icons@f126001,
+`src/core/useBaseIconState.ts` 54–64, `scripts/convert.utils.js` 149), `lucide-react@1.55.0` (`Icon.ts` 67,
+`hasA11yProp.ts` 9), `@phosphor-icons/react@2.1.10` (`IconBase.tsx` 39–43), `@heroicons/react@2.2.0`,
+`@primer/octicons-react@19.40.0` (`renderOcticon.tsx` 47–58), Google's Material icons guide
+(google/material-design-icons@6eed39a `index.html` 423–525), Material's m2 Bidirectionality page and Apple's HIG
+"Right to left".
+
+- **Decorative by default.** Every library hides an icon from assistive technology unless it is named. Area's
+  components render `aria-hidden="true"` and `focusable="false"` as before.
+- **Named: `title`, `aria-label` or `aria-labelledby`.** Any of them drops `aria-hidden` and adds `role="img"`
+  (Fluent and Octicons; Lucide drops `aria-hidden` without a role). `title` becomes `aria-label` as in Fluent: no
+  `<title>` element, which would show the browser's own tooltip (PRODUCT_UI: Area Tooltips, never native titles).
+  Heroicons keeps `aria-hidden` on a titled icon, which hides the name; not copied. `focusable` is `true` only with
+  a `tabIndex` of 0 or more (Octicons). Props passed through come last and win.
+- **Right-to-left: the library knows which icons mirror.** Fluent marks each icon (`directionType: mirror`) and
+  flips those; Phosphor only has a caller's `mirrored`; Lucide, Heroicons and Octicons have neither. Area marks its
+  icons in `assets/area-icons-pilot/rtl.json` and gives the root `data-area-rtl="mirror"`; `[data-area-rtl="mirror"]:dir(rtl) { scale: -1 1; }`
+  flips them (in `@area/styles` base, and `@area/icons/rtl.css` for use without it). `:dir()` reads the inherited
+  direction, so there is no context to provide and the server renders the same markup (Fluent and Phosphor read a
+  React context, wrong on the server unless it is provided there too). `scale`, not `transform`, so a caller's
+  transform still applies. `mirrored` overrides: `true` flips inline (`scale: -1 1`), `false` never flips.
+- **Which icons mirror (23):** a concept tied to reading direction whose counterpart Fluent or Material mirrors,
+  and its family: reply, reply-all, forward, send, undo, redo, indent, outdent, list-bullet, list-plus, list-minus,
+  list-x, list-collapse, list-tree, table-of-contents, text-wrap, star-half, backspace, chevron-first,
+  chevron-last, debug-step-over, trending-up, trending-down. Each reason is in `rtl.json`.
+- **Never mirrored:** names of a literal direction (arrow-left, chevron-right, panel-left, text-align-left: Fluent's
+  React icons don't flip them and Apple keeps controls that "refer to an actual direction"; the caller picks the
+  icon by meaning), circular arrows and clocks (rotate, sync, repeat, history: "clocks still turn clockwise", m2),
+  slashes, checkmarks, letters and digits (list-numbered, list-checklist: Fluent's `unique`; the question mark
+  mirrors in Arabic and Farsi but not Hebrew, so help stays), media transport (tape direction, m2) and objects.
+  Fluent also flips arrow_up, calendar and folder_open because of its own drawings' details; Area's don't have them.
+  Symmetric drawings (import, list, screen-share, sort's paired arrows) would not change.
+- **Checks:** `npm test -w @area/icons`: decorative and named output, every component's `data-area-rtl` against
+  the metadata, `mirrored` both ways, and the CSS rule.
+
+## Keywords and names, 2026-10-12
+
+Production gap 4. `@area/icons/meta` and `icons.json` gain `keywords` and `names` (`lucide`, `phosphor`, `fluent`,
+`material`), and `rtl`. Built by `apps/docs/scripts/icon-keywords.mjs` into `assets/area-icons-pilot/keywords.json`
+(committed, so the generator needs no network); sources pinned in the file: `lucide-static@1.55.0` (tags for 1,877
+icons), `@phosphor-icons/core@2.1.1` (1,512), `@fluentui/svg-icons` (names) and `@material-symbols/metadata@0.48.0`
+(names only; no tags published).
+
+- **Names:** the counterpart each drawing was compared with (`docs/research/icon-audit/area-map.json`, 597 icons),
+  else the library's icon of the same name, or of the name with a word swapped for the library's word. The swaps
+  are measured from the map (person→user 6 times, add→plus 9, chat→message 5, remove→minus 7, off→slash 7 …) and
+  listed in `keywords-area.json` `$words`. Material has no map: its name is the first of the Area, Fluent or Lucide
+  names it publishes. Coverage: Lucide 711, Fluent 559, Phosphor 530, Material 249 of 808.
+- **Keywords:** the counterparts' Lucide and Phosphor tags and their names' words, the concept the component demos
+  label it with ("find people" for person-search), the name with its words swapped ("user search"), and Area's own
+  words for the 36 drawings no library has (the bot personas, sparkle composites, padding, sides, token …). A tag
+  that is another icon's name in Area or any library is dropped ("redo" on undo, "target" on add); `$drop` removes
+  the few tags that name a different concept (Lucide's plus carries its crosshair words; Phosphor's list tags reach
+  menu) or misspell one.
+- **The app's Icons search** reads keywords and names with the name (`apps/desktop/src/pages/icons.tsx`); the
+  Inspector lists them under Search.
+- Not done: Material Symbols' own tags (only on fonts.google.com, not in a package) and a ranking (the app's search
+  filters).
