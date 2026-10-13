@@ -2,12 +2,12 @@
 // A review sheet for Area icon sources: each icon at 16, 32 and 96px (line at 1.125), or a
 // balance strip of many icons at 16 and 32px with a blurred copy (the squint test). Renders
 // with headless Edge or Chrome, so a batch can be judged and sent without the dev server.
-//   node apps/docs/scripts/icon-sheet.mjs sheet out.png send.svg play.svg …
-//   node apps/docs/scripts/icon-sheet.mjs strip out.png folder info copy search …
-//   node apps/docs/scripts/icon-sheet.mjs filled out.png [icon…]   # outline beside filled
-//   node apps/docs/scripts/icon-sheet.mjs filled-large out.png icon…  # the same with a 64px row, to inspect cut-outs
-//   node apps/docs/scripts/icon-sheet.mjs compare out.png icon…   # Area outline and filled beside Fluent's regular and filled
-// Icons are names or paths under assets/area-icons-pilot, comma-separated lists, or a batch
+//   node packages/icons/scripts/sheet.mjs sheet out.png send.svg play.svg …
+//   node packages/icons/scripts/sheet.mjs strip out.png folder info copy search …
+//   node packages/icons/scripts/sheet.mjs filled out.png [icon…]   # outline beside filled
+//   node packages/icons/scripts/sheet.mjs filled-large out.png icon…  # the same with a 64px row, to inspect cut-outs
+//   node packages/icons/scripts/sheet.mjs compare out.png icon…   # Area outline and filled beside Fluent's regular and filled
+// Icons are names or paths under packages/icons/sources, comma-separated lists, or a batch
 // id from batches.json (batch-43 expands to its icons). Output lands where you ask.
 // filled and compare render the generated components (src/pilot-icons.tsx) in one React tree,
 // so each mask gets its own useId; separate renders reuse ids and every knockout shows the
@@ -20,12 +20,12 @@ import { basename, dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const SRC = join(HERE, "../assets/area-icons-pilot");
+const SRC = join(HERE, "../sources");
 const [mode0, out, ...args] = process.argv.slice(2);
 const large = mode0 === "filled-large", mode = large ? "filled" : mode0;
 const MODES = ["sheet", "strip", "filled", "compare"];
 if (!MODES.includes(mode) || !out || (mode !== "filled" && !args.length)) {
-  console.log("usage: icon-sheet.mjs sheet|strip|compare out.png icon… | filled|filled-large out.png [icon…]\n  icon: a name, a path, a comma-separated list, or a batch id (batch-43)"); process.exit(1);
+  console.log("usage: sheet.mjs sheet|strip|compare out.png icon… | filled|filled-large out.png [icon…]\n  icon: a name, a path, a comma-separated list, or a batch id (batch-43)"); process.exit(1);
 }
 // Batch ids expand to their icons; commas split lists (shells that don't split words pass one argument).
 const batches = JSON.parse(readFileSync(join(SRC, "batches.json"), "utf8")).batches;
@@ -48,7 +48,7 @@ const label = (n, s) => (s.match(/data-label="([^"]*)"/) ?? [, basename(n, ".svg
 // Fluent references, as gen-icons.mjs maps them (FluentRef<Name>Icon and …FilledIcon).
 const fluentFor = name => {
   const camel = name.replace(/(^|-)([a-z0-9])/g, (_, __, c) => c.toUpperCase());
-  const map = readFileSync(join(HERE, "gen-icons.mjs"), "utf8");
+  const map = readFileSync(join(HERE, "../../../apps/docs/scripts/gen-icons.mjs"), "utf8");
   const dir = join(dirname(createRequire(import.meta.url).resolve("@fluentui/svg-icons/package.json")), "icons");
   const load = key => { const id = map.match(new RegExp(`\\b${key}: "([a-z0-9_]+)"`))?.[1]; return id && existsSync(join(dir, id + ".svg")) ? readFileSync(join(dir, id + ".svg"), "utf8").replace("<svg ", `<svg fill="currentColor" `) : ""; };
   return { regular: load(`FluentRef${camel}Icon`), filled: load(`FluentRef${camel}FilledIcon`) };
@@ -70,7 +70,7 @@ const components = async body => {
   mkdirSync(cache, { recursive: true });
   writeFileSync(entry, `import { createElement as h, Fragment } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { PILOT_ICONS } from "../src/pilot-icons.tsx";
+import { PILOT_ICONS } from "../../../apps/docs/src/pilot-icons.tsx";
 export const html = (only, extra) => renderToStaticMarkup(h(Fragment, null, ...(${body})));`);
   await build({ entryPoints: [entry], bundle: true, format: "esm", platform: "node", outfile: bundle, external: ["react", "react-dom", "react-dom/server"], jsx: "automatic", logLevel: "error" });
   const mod = await import(`${bundle}?${Date.now()}`);

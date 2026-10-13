@@ -4,8 +4,8 @@
 // tracing: the rules in the area-icon-construction skill still apply. Cursor (proprietary) stays
 // rules-only. SF Symbols render locally from the installed app (sf-render.swift) into the ignored
 // cache, for viewing only (Apple's licence): never commit them or a sheet that shows them.
-//   node apps/docs/scripts/icon-refs.mjs fetch                 # Lucide, Phosphor, Hugeicons, Material Symbols names into .cache/refs
-//   node apps/docs/scripts/icon-refs.mjs sheet out.png [group…] # concepts from docs/research/icon-references.json
+//   node packages/icons/scripts/refs.mjs fetch                 # Lucide, Phosphor, Hugeicons, Material Symbols names into .cache/refs
+//   node packages/icons/scripts/refs.mjs sheet out.png [group…] # concepts from docs/research/icon-references.json
 // A group is a key of icon-references.json (bots, everyday) or a batch id (batch-12), whose icons
 // take their counterparts from docs/research/icon-audit/area-map.json; with none, every
 // icon-references group renders. SF Symbols appear only with --sf (local review sheets).
@@ -35,13 +35,13 @@ if (mode === "fetch") {
   }
   process.exit(0);
 }
-if (mode !== "sheet" || !out) { console.log("usage: icon-refs.mjs fetch | sheet out.png [group…]"); process.exit(1); }
-for (const pkg of Object.values(PACKAGES)) if (!existsSync(dir(pkg))) { console.error(`missing ${pkg}: run icon-refs.mjs fetch`); process.exit(1); }
+if (mode !== "sheet" || !out) { console.log("usage: refs.mjs fetch | sheet out.png [group…]"); process.exit(1); }
+for (const pkg of Object.values(PACKAGES)) if (!existsSync(dir(pkg))) { console.error(`missing ${pkg}: run refs.mjs fetch`); process.exit(1); }
 
 const SF = groups.includes("--sf"); groups.splice(0, groups.length, ...groups.filter(g => g !== "--sf"));
 const table = JSON.parse(readFileSync(join(ROOT, "docs/research/icon-references.json"), "utf8"));
 const MAP = join(ROOT, "docs/research/icon-audit/area-map.json"), map = existsSync(MAP) ? JSON.parse(readFileSync(MAP, "utf8")) : {};
-const batches = JSON.parse(readFileSync(join(HERE, "../assets/area-icons-pilot/batches.json"), "utf8")).batches;
+const batches = JSON.parse(readFileSync(join(HERE, "../sources/batches.json"), "utf8")).batches;
 for (const g of groups) {
   const b = batches.find(x => x.id === g.replace(/^batch-?/, "batch-"));
   if (!b) continue;
@@ -77,7 +77,7 @@ const huge = async name => {
 const { build } = await import("esbuild");
 writeFileSync(join(CACHE, "refs-entry.tsx"), `import { createElement as h } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
-import { PILOT_ICONS } from "../src/pilot-icons.tsx";
+import { PILOT_ICONS } from "../../../apps/docs/src/pilot-icons.tsx";
 let n = 0;  // separate renders reuse useId, so each gets its own mask id or every knockout shows the first mask
 export const area = (name, filled, size) => { const i = PILOT_ICONS.find(p => p.name === name); n++; return i ? renderToStaticMarkup(h(filled ? i.Filled : i.Icon, { size })).replace(/area-icon-[A-Za-z0-9-]+/g, m => m + "-" + n) : ""; };`);
 await build({ entryPoints: [join(CACHE, "refs-entry.tsx")], bundle: true, format: "esm", platform: "node", outfile: join(CACHE, "refs-entry.mjs"), external: ["react", "react-dom", "react-dom/server"], jsx: "automatic", logLevel: "error" });

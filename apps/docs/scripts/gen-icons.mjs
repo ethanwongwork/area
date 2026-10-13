@@ -1494,5 +1494,5 @@ console.log(
   `catalogued (${Object.keys(AREA).length} Area + ${REGULAR.length} Fluent)`,
 );
 
-// Presence status glyphs are Area-drawn since 2026-09-25: see apps/docs/assets/area-icons-pilot/status
-// and scripts/gen-pilot-icons.mjs.
+// Presence status glyphs are Area-drawn since 2026-09-25: see packages/icons/sources/status
+// and packages/icons/scripts/generate.mjs.

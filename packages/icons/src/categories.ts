@@ -1,7 +1,7 @@
 /**
- * The icon browser's categories (icons.html, owner 2026-10-05: "group the icons close to their
- * similar icons"). Every Area icon appears in exactly one category; the build fails on an icon
- * missing here or a name that is not an icon (scripts/icon-browser.mjs). Within a category the
+ * The icons' categories (owner 2026-10-05: "group the icons close to their similar icons"), in
+ * @area/icons/meta and the app's Icons Sidebar. Every Area icon appears in exactly one category;
+ * scripts/generate.mjs fails on an icon missing here or a name that is not an icon. Within a category the
  * order is deliberate: a base drawing, then its states (add, remove, check, off), then its
  * rotations and mirrors, then the next family, so look-alikes sit side by side.
  */

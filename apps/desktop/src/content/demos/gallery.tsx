@@ -3,7 +3,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import type { CSSProperties, ReactNode, MouseEvent } from "react";
 import { AREA_COLOR_GRID, SliderRange, Alert, AlignmentPicker, Avatar, Calendar, AvatarGroup, Badge, Indicator, IndicatorAnchor, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, ButtonGroup, Card, CardContent, CardMedia, Checkbox, CheckboxGroup, Chip, Count, ChipGroup, ChipLink, Code, CodeBlock, ColorField, ColorPicker, ColorSwatch, ColorSwatchPicker, Composer, Dialog, Field, Input, InputAction, InputGroup, InputGroupText, Kbd, KbdGroup, Menu, MenuItem, MenuLabel, MenuSeparator, MenuSub, Nav, NavGroup, NavItem, NumberField, Panel, PanelSection, Popover, PopoverBody, PopoverClose, PopoverDescription, PopoverFooter, PopoverHeader, PopoverMedia, PopoverTitle, Progress, Radio, RadioGroup, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Toaster, useToaster, Toolbar, ToolbarGroup, ToolbarItem, ToolbarOverflow, ToolbarSeparator, Tooltip, TreeView, type AlignmentPosition, BoxField, Combobox, CommandPalette, ContextMenu, HoverCard, Message, MessageActions, ModelPicker, PromptSuggestions, ScrollToLatest, SplitButton, PanelRow, PropertyList, PropertyListItem, type BoxValue, type ComboboxOption, type CommandItem, type TreeViewNode } from "@area/react";
 import { PanelLeftIcon, PointerIcon, FrameIcon, RectangleIcon, PenIcon, TextIcon, CommentIcon, PaintbrushIcon, DesignIcon, PlayIcon, CodeIcon, BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon, TextAlignLeftIcon, TextAlignCenterIcon, TextAlignRightIcon, AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, CheckIcon, ChevronIcon, DismissIcon, DocumentIcon, DotsFourIcon, EyeIcon, EyeSlashIcon, FolderIcon, InfoIcon, OpacityIcon, RotateIcon, OpenIcon, PersonSmallIcon, PersonIcon, PlusIcon, SearchIcon, TokenIcon, TrashIcon, EditIcon, ThumbLikeIcon, ThumbDislikeIcon, SpeakerIcon, RegenerateIcon, CopyIcon, AlertIcon, AlignCenterHorizontalIcon, AlignLeftIcon, AlignRightIcon, AngleIcon, AspectRatioIcon, AutoLayoutIcon, BarsThreeIcon, CornerRadiusIcon, CornersIcon, FlipHorizontalIcon, FlipVerticalIcon, FlowFreeIcon, FlowHorizontalIcon, FlowVerticalIcon, FlowWrapIcon, LinkIcon, MoreIcon, SettingsIcon, SlidersIcon, SubtractIcon, CalendarIcon } from "../../../../docs/src/icons.tsx";
-import { PilotArrowDownIcon, PilotArrowUpIcon, PilotDocumentIcon, PilotFolderFilledIcon, PilotMoreHorizontalIcon, PilotPaletteIcon, PilotCornerIcon, PilotTextIcon, PilotGridIcon, PilotLayersIcon, PilotSunIcon, PilotListIcon, PilotKanbanIcon } from "../../../../docs/src/pilot-icons.tsx";
+import { ArrowDownIcon, ArrowUpIcon, DocumentIcon as AreaDocumentIcon, FolderFilledIcon, MoreHorizontalIcon, PaletteIcon, CornerIcon, TextIcon as AreaTextIcon, GridIcon, LayersIcon, SunIcon, ListIcon, KanbanIcon } from "@area/icons";
 // @ts-expect-error — the docs' own highlighter is authored in JavaScript.
 import { highlight } from "../highlight.mjs";
 
@@ -500,12 +500,12 @@ export const GalleryCheckboxCard = () => (
 );
 export const GalleryCheckboxCardTile = () => (
   <CheckboxGroup label="Customize" style={{ inlineSize: "520px" }}>
-    <Checkbox variant="card" layout="tile" label="Colors" leadingVisual={<PilotPaletteIcon size={20} />} defaultChecked />
-    <Checkbox variant="card" layout="tile" label="Corners" leadingVisual={<PilotCornerIcon size={20} />} />
-    <Checkbox variant="card" layout="tile" label="Typography" leadingVisual={<PilotTextIcon size={20} />} />
-    <Checkbox variant="card" layout="tile" label="Spacing" leadingVisual={<PilotGridIcon size={20} />} />
-    <Checkbox variant="card" layout="tile" label="Layers" leadingVisual={<PilotLayersIcon size={20} />} defaultChecked />
-    <Checkbox variant="card" layout="tile" label="Theming" leadingVisual={<PilotSunIcon size={20} />} />
+    <Checkbox variant="card" layout="tile" label="Colors" leadingVisual={<PaletteIcon size={20} />} defaultChecked />
+    <Checkbox variant="card" layout="tile" label="Corners" leadingVisual={<CornerIcon size={20} />} />
+    <Checkbox variant="card" layout="tile" label="Typography" leadingVisual={<AreaTextIcon size={20} />} />
+    <Checkbox variant="card" layout="tile" label="Spacing" leadingVisual={<GridIcon size={20} />} />
+    <Checkbox variant="card" layout="tile" label="Layers" leadingVisual={<LayersIcon size={20} />} defaultChecked />
+    <Checkbox variant="card" layout="tile" label="Theming" leadingVisual={<SunIcon size={20} />} />
   </CheckboxGroup>
 );
 export const GalleryCheckboxCardAccent = () => (
@@ -1593,9 +1593,9 @@ export const GalleryRadioCard = () => (
 );
 export const GalleryRadioCardTile = () => (
   <RadioGroup label="Layout" name="gallery-radio-card-tile" defaultValue="grid" style={{ inlineSize: "520px" }}>
-    <Radio variant="card" layout="tile" value="list" label="List" leadingVisual={<PilotListIcon size={20} />} />
-    <Radio variant="card" layout="tile" value="grid" label="Grid" leadingVisual={<PilotGridIcon size={20} />} />
-    <Radio variant="card" layout="tile" value="board" label="Board" leadingVisual={<PilotKanbanIcon size={20} />} />
+    <Radio variant="card" layout="tile" value="list" label="List" leadingVisual={<ListIcon size={20} />} />
+    <Radio variant="card" layout="tile" value="grid" label="Grid" leadingVisual={<GridIcon size={20} />} />
+    <Radio variant="card" layout="tile" value="board" label="Board" leadingVisual={<KanbanIcon size={20} />} />
   </RadioGroup>
 );
 export const GalleryRadio = () => (
@@ -1771,7 +1771,7 @@ export const GalleryTableSelectable = () => {
 export const GalleryTableSorting = () => {
   const [descending, setDescending] = useState(false);
   const rows = [{ name: "Item one", value: 1 }, { name: "Item two", value: 12 }, { name: "Item three", value: 128 }].sort((a, b) => descending ? b.value - a.value : a.value - b.value);
-  return <Table aria-label="Table"><thead><tr><th scope="col">Name</th><th scope="col" aria-sort={descending ? "descending" : "ascending"} className="area-table__cell--numeric"><Button size="sm" variant="ghost" align="end" trailingIcon={descending ? <PilotArrowDownIcon /> : <PilotArrowUpIcon />} onClick={() => setDescending(!descending)}>Value</Button></th></tr></thead><tbody>{rows.map(row => <tr key={row.name}><td>{row.name}</td><td className="area-table__cell--numeric">{row.value}</td></tr>)}</tbody></Table>;
+  return <Table aria-label="Table"><thead><tr><th scope="col">Name</th><th scope="col" aria-sort={descending ? "descending" : "ascending"} className="area-table__cell--numeric"><Button size="sm" variant="ghost" align="end" trailingIcon={descending ? <ArrowDownIcon /> : <ArrowUpIcon />} onClick={() => setDescending(!descending)}>Value</Button></th></tr></thead><tbody>{rows.map(row => <tr key={row.name}><td>{row.name}</td><td className="area-table__cell--numeric">{row.value}</td></tr>)}</tbody></Table>;
 };
 export const GalleryTableCompact = () => <Table size="sm" aria-label="Table"><thead><tr><th scope="col">Name</th><th scope="col" className="area-table__cell--numeric">Value</th></tr></thead><tbody>{["Item one", "Item two", "Item three"].map((name, i) => <tr key={name}><td>{name}</td><td className="area-table__cell--numeric">{[1, 12, 128][i]} MB</td></tr>)}</tbody></Table>;
 export const GalleryTableStriped = () => <Table striped aria-label="Table"><thead><tr><th scope="col">Name</th><th scope="col" className="area-table__cell--numeric">Value</th></tr></thead><tbody>{["Item one", "Item two", "Item three", "Item four"].map((name, i) => <tr key={name}><td>{name}</td><td className="area-table__cell--numeric">{[1, 12, 128, 1024][i]} MB</td></tr>)}</tbody></Table>;
@@ -1893,17 +1893,17 @@ export const GalleryTreeViewFiles = () => {
   return <TreeView aria-label="Project files" items={fileTree} defaultExpandedIds={["src", "components"]} currentId={current} selectedIds={[current]} onActivate={setCurrent} />;
 };
 /* Folders as filled glyphs in one hue (owner, pass 2). */
-const blueFolder = <PilotFolderFilledIcon style={{ color: "var(--area-fg-info)" }} />;
+const blueFolder = <FolderFilledIcon style={{ color: "var(--area-fg-info)" }} />;
 const filledTree = [
   { id: "src", label: "src", icon: blueFolder, children: [
     { id: "components", label: "components", icon: blueFolder, children: [
-      { id: "avatar", label: "Avatar.tsx", icon: <PilotDocumentIcon />, trailing: "A" },
-      { id: "button", label: "Button.tsx", icon: <PilotDocumentIcon />, trailing: "M" },
+      { id: "avatar", label: "Avatar.tsx", icon: <AreaDocumentIcon />, trailing: "A" },
+      { id: "button", label: "Button.tsx", icon: <AreaDocumentIcon />, trailing: "M" },
     ] },
-    { id: "index", label: "index.ts", icon: <PilotDocumentIcon /> },
+    { id: "index", label: "index.ts", icon: <AreaDocumentIcon /> },
   ] },
-  { id: "public", label: "public", icon: blueFolder, children: [{ id: "favicon", label: "favicon.svg", icon: <PilotDocumentIcon /> }] },
-  { id: "package", label: "package.json", icon: <PilotDocumentIcon /> },
+  { id: "public", label: "public", icon: blueFolder, children: [{ id: "favicon", label: "favicon.svg", icon: <AreaDocumentIcon /> }] },
+  { id: "package", label: "package.json", icon: <AreaDocumentIcon /> },
 ];
 export const GalleryTreeViewFilledFolders = () => {
   const [current, setCurrent] = useState("button");
@@ -1914,7 +1914,7 @@ export const GalleryTreeViewFilledFolders = () => {
  * Layer-type glyphs (frame, rectangle, component) are not drawn yet; these are stand-ins.
  */
 const LayerControls = ({ name, hidden, onToggle }: { name: string; hidden: boolean; onToggle: () => void }) => <>
-  <Button variant="ghost" size="sm" iconOnly tabIndex={-1} icon={<PilotMoreHorizontalIcon />} aria-label={`More options for ${name}`} />
+  <Button variant="ghost" size="sm" iconOnly tabIndex={-1} icon={<MoreHorizontalIcon />} aria-label={`More options for ${name}`} />
   <Button variant="ghost" size="sm" iconOnly tabIndex={-1} data-pinned={hidden ? "" : undefined} icon={hidden ? <EyeSlashIcon /> : <EyeIcon />} aria-label={hidden ? `Show ${name}` : `Hide ${name}`} aria-pressed={hidden} onClick={onToggle} />
 </>;
 export const GalleryTreeViewLayers = () => {

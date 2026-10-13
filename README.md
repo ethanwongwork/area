@@ -30,8 +30,8 @@ size, density, radius and pills from the Inspector.
 from Area, and it is the one place components, icons, type, colour and their states are shown and
 judged. The documentation site (`apps/docs`, `npm run dev:docs`) is archived and is not a source of
 truth. Component content and status, specimens and every demo now live in the app
-(`apps/desktop/src/content`); the icon pipeline still sits in the site's folder until it moves to
-`packages/icons`. Edit sources where they are and judge the result in the app. Reviews of icons and components are published as artifacts.
+(`apps/desktop/src/content`); Area's icons, their sources, generator and tools are in `packages/icons`.
+Edit sources where they are and judge the result in the app. Reviews of icons and components are published as artifacts.
 
 ## Use the library
 
@@ -60,8 +60,9 @@ unpublished ESM workspaces; publishing them is separate work.
 - `packages/styles/`: component CSS and the shared variant manifest.
 - `packages/react/`: components, native behavior, composition and typed helpers.
 - `apps/desktop/`: the app (Electron): Titlebar, Sidebar, Canvas, Inspector.
-- `apps/docs/`: archived site, not a source of truth; its icon sources and generator move to
-  `packages/icons` next, then the site is deleted.
+- `packages/icons/`: Area's icons: the drawings (`sources/`), the generator and icon tools (`scripts/`), and the
+  `@area/icons` package built from them.
+- `apps/docs/`: archived site, not a source of truth; deleted once the app no longer imports from it.
 - `tests/` and `scripts/`: consumer checks, retained fixtures and package build helpers.
 
 ## Essential documentation

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Lint the Area icon pilot sources and generate src/pilot-icons.tsx.
-//   node apps/docs/scripts/gen-pilot-icons.mjs          # lint + generate
-//   node apps/docs/scripts/gen-pilot-icons.mjs --check  # lint only
+//   node packages/icons/scripts/generate.mjs          # lint + generate
+//   node packages/icons/scripts/generate.mjs --check  # lint only
 //   add --report to list each icon's keyline, ink box and centre
 //   --only name,name  lint and report just these icons (and their turns), writing nothing:
 //                     the quick loop while drawing; the full run still gates every icon
@@ -14,12 +14,13 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
-const SRC = join(ROOT, "assets/area-icons-pilot");
-const OUT = join(ROOT, "src/pilot-icons.tsx");
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), ".."), REPO = join(ROOT, "../..");
+const SRC = join(ROOT, "sources");
+// The archived docs site's copy (Pilot… names), which its pages, the Iconography demo and the package test read.
+const OUT = join(REPO, "apps/docs/src/pilot-icons.tsx");
 const STATUS_SRC = join(SRC, "status");
-const STATUS_OUT = join(ROOT, "../../packages/react/src/components/status-marks.ts");
-const GLYPHS_OUT = join(ROOT, "../../packages/react/src/components/glyphs.ts");
+const STATUS_OUT = join(REPO, "packages/react/src/components/status-marks.ts");
+const GLYPHS_OUT = join(REPO, "packages/react/src/components/glyphs.ts");
 // Pilot icons that components draw themselves, replacing Fluent family by family
 // (docs/specs/icons.md, "Components"). A glyph is a whole icon, or one element of one
 // (check-inset is the check inside the Available ring, for boxed checks).
@@ -781,7 +782,7 @@ export const root = (size: number | undefined, { title, mirrored, style, ...prop
 const useMaskId = () => "area-icon-" + useId().replace(/[^A-Za-z0-9-]/g, "");
 
 `;
-// Icons tied to reading direction (assets/area-icons-pilot/rtl.json): they mirror in right-to-left text.
+// Icons tied to reading direction (sources/rtl.json): they mirror in right-to-left text.
 const RTL = JSON.parse(readFileSync(join(SRC, "rtl.json"), "utf8")).mirror;
 for (const name of Object.keys(RTL)) if (!icons.some(icon => icon.name === name)) throw new Error(`rtl.json: ${name} is not an icon`);
 // One icon's outline and filled components, named by `name` (Pilot… for the docs, plain for @area/icons).
@@ -799,8 +800,8 @@ export const ${name}FilledIcon = ({ weight, size, ...props }: PilotIconProps) =>
   );
 };` : "");
 const tsx = `/**
- * Area icon pilot, generated from apps/docs/assets/area-icons-pilot by
- * scripts/gen-pilot-icons.mjs. Do not edit by hand. Construction: docs/specs/icons.md.
+ * Area icon pilot, generated from packages/icons/sources by
+ * packages/icons/scripts/generate.mjs. Do not edit by hand. Construction: docs/specs/icons.md.
  * Each icon is a stroked 16px drawing. The line weight follows --area-weight-icon (1.125px for
  * Geist); pass \`weight\` in CSS pixels to override it, as the gallery comparison does.
  * Filled variants are derived from each shape's data-filled role; cut-outs use a mask.
@@ -809,7 +810,7 @@ import { useId, type SVGProps } from "react";
 
 ${RUNTIME}${icons.map(icon => iconSource(icon)).join("\n\n")}
 
-/** Review batches and owner status, from assets/area-icons-pilot/batches.json. */
+/** Review batches and owner status, from packages/icons/sources/batches.json. */
 export const PILOT_BATCHES = ${JSON.stringify(JSON.parse(readFileSync(join(SRC, "batches.json"), "utf8")).batches.map(({ id, title, icons }) => ({ id, title, icons })))} as const;
 
 export const PILOT_ICONS = [
@@ -821,16 +822,26 @@ if (EMIT) { writeFileSync(EMIT, tsx); process.exit(0); }
 // @area/icons (docs/specs/icons.md, "Package"): one module per icon under packages/icons/src/generated, without the
 // Pilot prefix, an index of the approved icons and one of those still in review, and the metadata. The output is
 // gitignored and rebuilt by the package's build; --package writes only it (after the lint).
-const PKG = join(ROOT, "../../packages/icons/src/generated");
+const PKG = join(ROOT, "src/generated");
 const BATCHES = JSON.parse(readFileSync(join(SRC, "batches.json"), "utf8")).batches;
 const statusIn = Object.fromEntries(BATCHES.flatMap(b => Object.entries(b.icons).map(([name, status]) => [name, { status, batch: b.id }])));
 const byName = new Map(icons.map(i => [i.name, i]));
 // A turn or mirror follows its base drawing, an alias the icon it copies (batches.json's note).
 const reviewOf = icon => statusIn[icon.name] ?? (icon.derivedFrom ? reviewOf(byName.get(icon.derivedFrom)) : icon.aliasOf && byName.has(icon.aliasOf) ? reviewOf(byName.get(icon.aliasOf)) : { status: "review", batch: null });
-const categoryOf = Object.fromEntries([...readFileSync(join(ROOT, "src/icon-categories.ts"), "utf8").matchAll(/\{ slug: "([^"]+)", name: "[^"]+", icons: \[([^\]]*)\]/g)]
-  .flatMap(([, slug, list]) => [...list.matchAll(/"([^"]+)"/g)].map(m => [m[1], slug])));
+// Every icon in exactly one category (src/categories.ts), and no category naming something that is not an icon.
+const placed = [...readFileSync(join(ROOT, "src/categories.ts"), "utf8").matchAll(/\{ slug: "([^"]+)", name: "[^"]+", icons: \[([^\]]*)\]/g)]
+  .flatMap(([, slug, list]) => [...list.matchAll(/"([^"]+)"/g)].map(m => [m[1], slug]));
+const categoryOf = Object.fromEntries(placed);
+{
+  const names = placed.map(([name]) => name), missing = icons.filter(icon => !(icon.name in categoryOf)).map(icon => icon.name);
+  const unknown = names.filter(name => !byName.has(name)), twice = names.filter((name, index) => names.indexOf(name) !== index);
+  if (missing.length || unknown.length || twice.length) {
+    console.error(`src/categories.ts is out of date.${missing.length ? ` No category: ${missing.join(", ")}.` : ""}${unknown.length ? ` Not icons: ${unknown.join(", ")}.` : ""}${twice.length ? ` Listed twice: ${twice.join(", ")}.` : ""}`);
+    process.exit(1);
+  }
+}
 const pkgName = icon => camel("-" + icon.name);
-// Search keywords and other libraries' names (scripts/icon-keywords.mjs; docs/specs/icons.md, "Keywords and names").
+// Search keywords and other libraries' names (scripts/keywords.mjs; docs/specs/icons.md, "Keywords and names").
 const KEYWORDS = JSON.parse(readFileSync(join(SRC, "keywords.json"), "utf8")).icons;
 const iconMeta = icons.map(icon => {
   const { status, batch } = reviewOf(icon);
@@ -840,7 +851,7 @@ const iconMeta = icons.map(icon => {
     ...(icon.derivedFrom ? { derivedFrom: icon.derivedFrom, turn: icon.rotate ? `rotate(${icon.rotate})` : icon.flip } : {}), ...(icon.aliasOf ? { aliasOf: icon.aliasOf } : {}),
     ...(RTL[icon.name] ? { rtl: "mirror" } : {}), keywords, ...(names ? { names } : {}) };
 });
-const GEN = "/** Generated by apps/docs/scripts/gen-pilot-icons.mjs from apps/docs/assets/area-icons-pilot. Do not edit by hand. */\n";
+const GEN = "/** Generated by packages/icons/scripts/generate.mjs from packages/icons/sources. Do not edit by hand. */\n";
 rmSync(PKG, { recursive: true, force: true }); mkdirSync(join(PKG, "icons"), { recursive: true });
 writeFileSync(join(PKG, "runtime.ts"), GEN + `import { useId, type SVGProps } from "react";\n\n` + RUNTIME.replaceAll("PilotIconProps", "IconProps")
   .replace("const useMaskId = ", "export const useMaskId = "));
@@ -852,26 +863,27 @@ for (const icon of icons) {
 for (const [file, status] of [["approved.ts", "approved"], ["review.ts", "review"]])
   writeFileSync(join(PKG, file), GEN + iconMeta.filter(m => (m.status === "approved") === (status === "approved"))
     .map(m => `export { ${m.component}, ${m.filledComponent} } from "./icons/${m.name}.tsx";`).join("\n") + "\n");
-writeFileSync(join(PKG, "meta.ts"), GEN + `import type { IconMeta } from "../meta-types.ts";\n\nexport const icons: readonly IconMeta[] = ${JSON.stringify(iconMeta, null, 1)};\n`);
+writeFileSync(join(PKG, "meta.ts"), GEN + `import type { IconBatch, IconMeta } from "../meta-types.ts";\n\nexport const icons: readonly IconMeta[] = ${JSON.stringify(iconMeta, null, 1)};\n\n`
+  + `export const batches: readonly IconBatch[] = ${JSON.stringify(BATCHES.map(({ id, title }) => ({ id, title })), null, 1)};\n`);
 console.log(`wrote packages/icons/src/generated (${icons.length} icons, ${iconMeta.filter(m => m.status === "approved").length} approved)`);
 if (process.argv.includes("--package")) process.exit(0);
 writeFileSync(OUT, tsx);
-console.log(`wrote ${OUT.replace(ROOT + "/", "")}`);
+console.log(`wrote ${OUT.replace(REPO + "/", "")}`);
 
 // Presence status marks: the inner glyph only. The ring is the Presence shell's CSS border,
 // and every stroke uses --area-weight-icon with non-scaling strokes, so all status sizes
 // share one line weight.
 const marks = Object.fromEntries(statuses.map(icon => [icon.name, icon.elements.map(el => ({ tag: el.tag, ...el.attrs, stroked: el.stroked }))]));
-writeFileSync(STATUS_OUT, `/** Area-drawn presence marks, generated from apps/docs/assets/area-icons-pilot/status by
- * apps/docs/scripts/gen-pilot-icons.mjs. Do not edit by hand. Construction: docs/specs/icons.md. */
+writeFileSync(STATUS_OUT, `/** Area-drawn presence marks, generated from packages/icons/sources/status by
+ * packages/icons/scripts/generate.mjs. Do not edit by hand. Construction: docs/specs/icons.md. */
 export const statusMarks = ${JSON.stringify(marks, null, 2)} as const;
 `);
 console.log("wrote packages/react/src/components/status-marks.ts");
 
 // Exploration candidates, grouped for side-by-side review with their measurements.
-const EXPLORE_OUT = join(ROOT, "src/pilot-explore.tsx");
-writeFileSync(EXPLORE_OUT, `/** Area icon candidates under review, generated from apps/docs/assets/area-icons-pilot/explore
- * by scripts/gen-pilot-icons.mjs. Do not edit by hand. Each carries its lint measurements. */
+const EXPLORE_OUT = join(REPO, "apps/docs/src/pilot-explore.tsx");
+writeFileSync(EXPLORE_OUT, `/** Area icon candidates under review, generated from packages/icons/sources/explore
+ * by packages/icons/scripts/generate.mjs. Do not edit by hand. Each carries its lint measurements. */
 import type { ReactElement } from "react";
 import { sw, type PilotIconProps } from "./pilot-icons.tsx";
 
@@ -892,7 +904,7 @@ export const EXPLORE: readonly ExploreCandidate[] = [
 ${explore.map(icon => `  { group: ${JSON.stringify(icon.group)}, label: ${JSON.stringify(icon.label)}, Icon: ${component(icon)}Icon, gaps: ${JSON.stringify(icon.gaps)}, counters: ${JSON.stringify(icon.counters)}, notes: ${JSON.stringify(icon.notes.map(n => n.replace(/^[^:]+: /, "")))} },`).join("\n")}
 ];
 `);
-console.log(`wrote src/pilot-explore.tsx (${explore.length} candidates)`);
+console.log(`wrote apps/docs/src/pilot-explore.tsx (${explore.length} candidates)`);
 
 // Component glyphs: stroked centre-lines (a rect becomes its path); components render them with
 // Glyph.tsx. A "solid" glyph also fills inside its centre-line, as the filled variant's solid role
@@ -930,8 +942,8 @@ const glyphData = Object.fromEntries(Object.entries(PACKAGE_GLYPHS).map(([glyph,
   else if (elements.some(dot)) glyphFills[glyph] = elements.flatMap((el, i) => dot(el) ? [i] : []);
   return [glyph, elements.map(el => el.tag === "rect" ? rectD(el.attrs) : el.tag === "circle" ? circleD(el.attrs) : el.attrs.d)];
 }));
-writeFileSync(GLYPHS_OUT, `/** Area-drawn component glyphs, generated from apps/docs/assets/area-icons-pilot by
- * apps/docs/scripts/gen-pilot-icons.mjs. Do not edit by hand. Construction: docs/specs/icons.md.
+writeFileSync(GLYPHS_OUT, `/** Area-drawn component glyphs, generated from packages/icons/sources by
+ * packages/icons/scripts/generate.mjs. Do not edit by hand. Construction: docs/specs/icons.md.
  * Each glyph is a list of stroked centre-line paths on the 16px grid. */
 export const glyphs = ${JSON.stringify(glyphData, null, 2)} as const;
 export type GlyphName = keyof typeof glyphs;

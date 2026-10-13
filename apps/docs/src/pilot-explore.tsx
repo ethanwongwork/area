@@ -1,5 +1,5 @@
-/** Area icon candidates under review, generated from apps/docs/assets/area-icons-pilot/explore
- * by scripts/gen-pilot-icons.mjs. Do not edit by hand. Each carries its lint measurements. */
+/** Area icon candidates under review, generated from packages/icons/sources/explore
+ * by packages/icons/scripts/generate.mjs. Do not edit by hand. Each carries its lint measurements. */
 import type { ReactElement } from "react";
 import { sw, type PilotIconProps } from "./pilot-icons.tsx";
 

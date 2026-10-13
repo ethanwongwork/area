@@ -1,5 +1,9 @@
 # Icon set spec
 
+**Where (2026-10-12):** the drawings are in `packages/icons/sources/` (moved from `apps/docs/assets/area-icons-pilot/`),
+the generator and tools in `packages/icons/scripts/` (`gen-pilot-icons.mjs` is `generate.mjs`, `icon-<tool>.mjs` is
+`<tool>.mjs`), the categories in `packages/icons/src/categories.ts`. Earlier sections keep the paths of their day.
+
 **Status (2026-09-28):** 43 review batches, 376 icons with their turns and mirrors, in
 `apps/docs/assets/area-icons-pilot/`, generated to `apps/docs/src/pilot-icons.tsx` by
 `npm run icons:pilot` and linted by `npm run lint:icons`. Owner status per icon is in
@@ -14,7 +18,7 @@ and it holds the rules and the owner's decisions. This file is the record: the
 construction system's evidence (below), then one section per batch or owner round in date
 order, each icon's construction line in its batch's table. The build queue (concepts still
 to draw, with references and uses) is `docs/research/icon-inventory.md`. Tools:
-`icons:find` (does it exist?), `icons:geometry`, `gen-pilot-icons.mjs --only`,
+`icons:find` (does it exist?), `icons:geometry`, `generate.mjs --only`,
 `icons:sheet`, `icons:batch` (docs/DEVELOPMENT.md lists the commands).
 
 ## Why draw our own
@@ -4937,3 +4941,20 @@ icons), `@phosphor-icons/core@2.1.1` (1,512), `@fluentui/svg-icons` (names) and 
   Inspector lists them under Search.
 - Not done: Material Symbols' own tags (only on fonts.google.com, not in a package) and a ranking (the app's search
   filters).
+
+## Pipeline moved to packages/icons, 2026-10-12
+
+Migration step 2 (handoff, "Migration"): the drawings (`sources/`, with `batches.json`, `keywords*.json`,
+`rtl.json`, `status/`, `explore/`), the generator (`scripts/generate.mjs`) and the tools (`find`, `geometry`,
+`batch`, `sheet`, `refs`, `keywords`, `sf-render.swift`) and the categories (`src/categories.ts`) are in
+`packages/icons`; the reference cache is `packages/icons/.cache/refs`. npm scripts keep their names (`icons:pilot`,
+`icons:find` …; new `icons:refs`, `icons:keywords`).
+
+- `@area/icons/meta` now also exports `categories` (curated order) and `batches` (id, title). The app's Icons tab and
+  the component demos read `@area/icons`; only the Iconography demo still reads `apps/docs/src` (its Fluent
+  comparison plates, production gap 9).
+- The generator checks that every icon is in exactly one category (that check was in the docs build).
+- Still written to `apps/docs/src` until the site is deleted: `pilot-icons.tsx` (the docs, the Iconography demo and
+  the package test's oracle read it) and `pilot-explore.tsx`. The Fluent map (`apps/docs/scripts/gen-icons.mjs`,
+  `assets/area-icons*`, the sprites) stays in the docs folder until it is retired.
+- Research scripts in `docs/research/` keep the old paths as records of their day.

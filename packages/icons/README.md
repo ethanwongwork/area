@@ -25,12 +25,23 @@ as in an icon-only button without its own label. Icons tied to reading direction
 | `@area/icons` | Approved icons: `<Name>Icon` and `<Name>FilledIcon`, `IconProps` |
 | `@area/icons/review` | Icons still in review (they move to the main entry when approved) |
 | `@area/icons/icons/<name>` | One icon's module |
-| `@area/icons/meta`, `@area/icons/icons.json` | Name, component names, category, keyline, fill, status, batch, turns, aliases, `rtl`, search `keywords` and the same icon's `names` in Lucide, Phosphor, Fluent and Material |
+| `@area/icons/meta` | `icons` (below), `categories` in their curated order, review `batches` |
+| `@area/icons/meta`, `@area/icons/icons.json` | Each icon's name, component names, category, keyline, fill, status, batch, turns, aliases, `rtl`, search `keywords` and the same icon's `names` in Lucide, Phosphor, Fluent and Material |
 | `@area/icons/svg/<16\|20\|24>/<name>[-filled].svg` | Raw SVGs at the size curve's masters, line 1.125px at 16 |
 | `@area/icons/sprite.svg` | 16px symbols `area-<name>` and `area-<name>-filled` |
 | `@area/icons/rtl.css` | The right-to-left mirroring rule, for use without `@area/styles` |
 
-Components take every SVG prop; props passed through win. The sources (`src/generated`) are generated from
-`apps/docs/assets/area-icons-pilot` by `apps/docs/scripts/gen-pilot-icons.mjs` and are not committed:
+Components take every SVG prop; props passed through win.
+
+## Working on the icons
+
+| Folder | What |
+| --- | --- |
+| `sources/` | The drawings (stroked 16px SVGs), `batches.json` (owner status), `keywords*.json`, `rtl.json`, `status/` (presence marks), `explore/` (candidates) |
+| `src/categories.ts` | The categories, in order; every icon in exactly one |
+| `scripts/` | `generate.mjs` (lint and generate), `find`, `geometry`, `batch`, `sheet`, `refs`, `keywords` (root `npm run icons:*`) |
+
+The process is the `area-icon-construction` skill. The sources (`src/generated`) are generated from `sources/` by
+`scripts/generate.mjs` and are not committed:
 `npm run build -w @area/icons` regenerates them, compiles, then renders the SVGs, sprite and `icons.json`.
 `npm test -w @area/icons` checks the split by status and that every component draws exactly what the docs draw.
