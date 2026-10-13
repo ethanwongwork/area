@@ -8,6 +8,7 @@
 import { copyFileSync, cpSync, existsSync, mkdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { demoSourcesPlugin } from "./demo-sources.mjs";
 
 export const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 export const repo = resolve(root, "..", "..");
@@ -39,5 +40,8 @@ export const options = ({ production }) => ({
   sourcemap: production ? false : "inline",
   define: { "process.env.NODE_ENV": JSON.stringify(production ? "production" : "development") },
   logLevel: "warning",
-  plugins: [{ name: "static", setup(build) { build.onEnd(result => { if (!result.errors.length) copyStatic(); }); } }],
+  plugins: [
+    demoSourcesPlugin(join(root, "src/content/demos")),
+    { name: "static", setup(build) { build.onEnd(result => { if (!result.errors.length) copyStatic(); }); } },
+  ],
 });

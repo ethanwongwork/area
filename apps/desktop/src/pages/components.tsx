@@ -1,12 +1,24 @@
 /**
- * Components: All and every family in the Sidebar; the Canvas shows every family's tiles (All) or
- * one family's; the Inspector holds the canvas settings and the selected tile, family or library.
+ * Components: two levels, one gallery (owner, 2026-10-12: "keep the gallery grid as a wayfinding
+ * experience … stage will be the isolated view … a seamless experience").
+ *
+ *   All    every family's tiles on one grid: the whole system at a glance (or a list of families)
+ *   Stage  one family: the tile on the Stage at its real size with its code attached, the family's
+ *          tiles under it in their groups, then its props, anatomy and states (src/stage.tsx)
+ *
+ * The two share tiles, labels, order, zoom and Canvas settings, so opening a family reads as
+ * zooming into its section. A tile opens with a double-click, the Inspector's Open or ⌘↓, and the
+ * Stage starts on that tile; a family's name opens it on its first tile. Escape, ⌘↑, ⌘[ or All go
+ * back, with the tile last on the Stage selected and scrolled into view on the grid.
  *
  * The tiles come from the app's own content (src/content/: specimens.mjs over pages.mjs, the demos
  * in registry.tsx), labelled and ordered by specimen-names.mjs, and fitted by src/gallery/fit.ts.
  */
 import { Component, createElement, useEffect, useRef, useState, type ReactNode } from "react";
-import { Badge, Code, Count, EmptyState, Nav, NavGroup, NavItem, PanelSection, Segmented, Table, TableLink } from "@area/react";
+import { Badge, Button, Code, Count, EmptyState, Kbd, Nav, NavGroup, NavItem, PanelSection, Segmented, Table, TableLink, Tooltip } from "@area/react";
+import { ArrowLeftIcon, ChevronLeftIcon, ChevronRightIcon, OpenIcon, ResetIcon } from "@area/icons";
+import { MANIFESTS } from "@area/styles/manifest";
+import DEMO_SOURCES from "area:demo-sources";
 // @ts-expect-error — the gallery's page content and status registry are authored in JavaScript.
 import { COMPONENT_PAGES } from "../content/pages.mjs";
 // @ts-expect-error — as above.
@@ -16,23 +28,28 @@ import { componentSpecimens, demoWrapper } from "../content/specimens.mjs";
 // @ts-expect-error — as above.
 import { SPECIMEN_GROUPS, specimenGroup, specimenLabel, specimenName } from "../content/specimen-names.mjs";
 import { DEMOS } from "../content/registry.tsx";
+import { PLAYGROUNDS, configCode, initialConfig, renderConfig, sameConfig, tileConfig, type Config, type Playground, type PropValue } from "../content/playgrounds.tsx";
 import { fitTiles } from "../gallery/fit.ts";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { Facts, PropsTable } from "../facts.tsx";
 import { Tile, TileGrid } from "../tile.tsx";
+import { Anatomy, Properties, Stage, States, useStageKeys } from "../stage.tsx";
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
-import { SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
+import { ChromeButton, SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
 import { matches } from "../search.ts";
 import { ArrangeMenu, groupBy, PinButton, PinMenu, sortBy, useArrangement, usePins } from "../organize.tsx";
 
 interface Example { id: string; title: string; demo: string; note?: string; group?: string }
-interface Family { slug: string; name: string; docsOnly?: boolean; imports?: string; exportName?: string; api?: string[][]; examples: Example[] }
-interface Tile { id: string; label: string; demo: string; note?: string }
+interface Family { slug: string; name: string; docsOnly?: boolean; imports?: string; exportName?: string; manifest?: string; api?: string[][]; examples: Example[] }
+/** A gallery tile: its specimen name (size-sm), group (Sizes) and value in that group (sm). */
+interface Tile { id: string; name: string; group: string; value: string; label: string; demo: string; note?: string }
+interface ManifestLike { block: string; elements?: readonly string[]; states?: readonly string[]; stateAttributes?: Record<string, string> }
 
 const FAMILIES = (COMPONENT_PAGES as Family[]).filter(family => !family.docsOnly).sort((a, b) => a.name.localeCompare(b.name));
 const STATUS_LABEL = { complete: "Complete", review: "In review", unrefined: "Unrefined" } as const;
 const STATUS_TONE = { complete: "success", review: "caution", unrefined: "neutral" } as const;
 type Status = keyof typeof STATUS_LABEL;
+const manifestOf = (family: Family) => family.manifest ? (MANIFESTS as unknown as Record<string, ManifestLike>)[family.manifest] : undefined;
 
 /* A family's tiles, labelled group / value and in group order, as component-gallery.mjs does. */
 function tilesOf(family: Family): Tile[] {
@@ -40,10 +57,10 @@ function tilesOf(family: Family): Tile[] {
   const hasDefault = specimens.some(example => specimenName(example, family.slug) === "default");
   const notes = new Map(family.examples.map(example => [example.demo, example.note]));
   return specimens.map((example, index) => {
-    const name = specimenName(example, family.slug);
-    const group = !hasDefault && index === 0 ? "Default" : (example.group ?? specimenGroup(name, family.slug));
-    const value = group === "Default" && !hasDefault ? name : specimenLabel(name, group);
-    return { order: SPECIMEN_GROUPS.indexOf(group), tile: { id: example.id, label: group === "Default" ? value : `${group} / ${value}`, demo: example.demo, note: example.note ?? notes.get(example.demo) } };
+    const name = specimenName(example, family.slug) as string;
+    const group: string = !hasDefault && index === 0 ? "Default" : (example.group ?? specimenGroup(name, family.slug));
+    const value: string = group === "Default" && !hasDefault ? name : specimenLabel(name, group);
+    return { order: SPECIMEN_GROUPS.indexOf(group), tile: { id: example.id, name, group, value, label: group === "Default" ? value : `${group} / ${value}`, demo: example.demo, note: example.note ?? notes.get(example.demo) } };
   }).sort((a, b) => a.order - b.order).map(entry => entry.tile);
 }
 
@@ -65,6 +82,8 @@ function Demo({ name }: { name: string }) {
 /** Tile counts, computed once: the Sidebar shows one per family. */
 const TILES = new Map(FAMILIES.map(family => [family.slug, tilesOf(family)]));
 const statusOf = (family: Family) => componentStatus(family.slug) as Status;
+/** A tile's element id, so the grid can bring it back into view after the Stage. */
+const tileDomId = (key: string) => `tile-${key.replace("/", "--")}`;
 
 /* Sort and group (src/organize.tsx). The default is the Sidebar as it was: A to Z, In review first. */
 const SORTS = [{ value: "name", label: "Name" }, { value: "status", label: "Status" }, { value: "tiles", label: "Tile count" }] as const;
@@ -78,16 +97,26 @@ const DIRECTIONS: Record<Sort, readonly [string, string]> = {
   tiles: ["Fewest first", "Most first"],
 };
 
-function FamilyTiles({ family, selected, onSelect }: { family: Family; selected?: string; onSelect: (id: string) => void }) {
+/** A family's tiles on the All grid. Double-clicking one opens the family's Stage on it. */
+function FamilyTiles({ family, selected, onSelect, onOpen, reveal, onRevealed }: {
+  family: Family; selected?: string; onSelect: (key: string) => void; onOpen: (key: string) => void; reveal?: string; onRevealed: () => void;
+}) {
   const tiles = TILES.get(family.slug)!;
+  // Back from the Stage: the tile it showed comes into view, and focus returns to the family's name.
+  useEffect(() => {
+    if (!reveal?.startsWith(`${family.slug}/`)) return;
+    document.getElementById(tileDomId(reveal))?.scrollIntoView({ block: "center" });
+    document.querySelector<HTMLElement>(`#family-${family.slug} a`)?.focus({ preventScroll: true });
+    onRevealed();
+  }, [reveal]);
   if (!tiles.length) return <EmptyState title="No tiles yet" description="This family has no gallery specimens." />;
   return (
     <TileGrid span="wide">
       {tiles.map(entry => {
         const key = `${family.slug}/${entry.id}`;
         return (
-          <Tile key={key} span="wide" stage="fit" label={entry.label} aria-label={`${family.name}: ${entry.label}`}
-            selected={key === selected} onSelect={() => onSelect(key)}>
+          <Tile key={key} id={tileDomId(key)} span="wide" stage="fit" label={entry.label} aria-label={`${family.name}: ${entry.label}`}
+            selected={key === selected} onSelect={() => onSelect(key)} onOpen={() => onOpen(key)}>
             <TileBoundary><Demo name={entry.demo} /></TileBoundary>
           </Tile>
         );
@@ -114,7 +143,9 @@ function useFit(ref: { current: HTMLElement | null }, key: unknown, enabled = tr
  * the view, and keeps them: 80 families and nearly 900 demos at once held the Canvas for 2s. Until
  * then a placeholder holds about its height (rows of the 5:4 tiles), so the scroll bar is honest.
  */
-function FamilySection({ family, selected, onSelect, onOpen, zoom }: { family: Family; selected?: string; onSelect: (key: string) => void; onOpen: () => void; zoom: string }) {
+function FamilySection({ family, selected, onSelect, onOpen, onOpenTile, zoom, reveal, onRevealed }: {
+  family: Family; selected?: string; onSelect: (key: string) => void; onOpen: () => void; onOpenTile: (key: string) => void; zoom: string; reveal?: string; onRevealed: () => void;
+}) {
   const ref = useRef<HTMLElement>(null);
   const [near, setNear] = useState(false);
   useEffect(() => {
@@ -131,27 +162,103 @@ function FamilySection({ family, selected, onSelect, onOpen, zoom }: { family: F
       <h2 className="studio-canvas__section-title" id={`family-${family.slug}`} data-area-ui="compact">
         <a href={`#components/${family.slug}`} className="studio-section__link" data-key={family.slug} data-name={family.name} onClick={event => { event.preventDefault(); onOpen(); }}>{family.name}</a>
       </h2>
-      {near ? <FamilyTiles family={family} selected={selected} onSelect={onSelect} /> : <div style={{ blockSize: `${rows * 256}px` }} />}
+      {near ? <FamilyTiles family={family} selected={selected} onSelect={onSelect} onOpen={onOpenTile} reveal={reveal} onRevealed={onRevealed} /> : <div style={{ blockSize: `${rows * 256}px` }} />}
     </section>
   );
 }
 
+/**
+ * The Stage's page for one family: the Stage, the family's tiles in their groups (the same tiles as
+ * on the grid, labelled by their value under the group's heading), then the reference.
+ */
+function FamilyStage({ family, tiles, tile, config, onSelectTile, onChange, zoom, replays }: {
+  family: Family; tiles: Tile[]; tile: Tile; config: Config | null; onSelectTile: (tile: Tile) => void; onChange: (prop: string, value: PropValue) => void; zoom: string; replays: number;
+}) {
+  const playground = PLAYGROUNDS[family.slug];
+  const strips = useRef<HTMLDivElement>(null);
+  useFit(strips, `${family.slug}:${zoom}`);
+  const onStage = config && playground ? matchingTile(playground, tiles, config) : tile;
+  const manifest = manifestOf(family);
+  const groups = SPECIMEN_GROUPS.map((group: string) => [group, tiles.filter(entry => entry.group === group)] as const).filter(([, list]: readonly [string, Tile[]]) => list.length);
+  return (
+    <div className="studio-sections">
+      <Stage zoom={zoom} replays={replays}
+        label={config && playground ? onStage?.label ?? "Custom" : tile.label}
+        code={config && playground ? configCode(playground, config) : DEMO_SOURCES[tile.demo]}>
+        <TileBoundary>{config && playground ? renderConfig(playground, config, onChange) : <Demo name={tile.demo} />}</TileBoundary>
+      </Stage>
+      <div ref={strips} className="studio-sections" data-fit="" data-zoom={zoom}>
+        {groups.map(([group, list]: readonly [string, Tile[]]) => (
+          <section key={group} className="studio-section" aria-labelledby={`group-${group}`}>
+            <h2 className="studio-canvas__section-title" id={`group-${group}`} data-area-ui="compact">
+              {group} <span className="studio-muted studio-tabular">{list.length}</span>
+            </h2>
+            <TileGrid span="wide">
+              {list.map(entry => (
+                <Tile key={entry.id} span="wide" stage="fit" label={group === "Default" ? entry.label : entry.value} aria-label={`${family.name}: ${entry.label}`}
+                  selected={entry.id === onStage?.id} onSelect={() => onSelectTile(entry)}>
+                  <TileBoundary><Demo name={entry.demo} /></TileBoundary>
+                </Tile>
+              ))}
+            </TileGrid>
+          </section>
+        ))}
+      </div>
+      {/* The reference: documentation, not specimens, so it keeps the app's compact scale and default
+          radius whatever the Canvas previews (owner, 2026-10-11: props at full width, under the tiles). */}
+      {family.api?.length ? (
+        <section className="studio-section" aria-labelledby="family-props" data-area-ui="compact">
+          <h2 className="studio-canvas__section-title" id="family-props">Props</h2>
+          <PropsTable api={family.api} />
+        </section>
+      ) : null}
+      {manifest ? (
+        <section className="studio-section" aria-labelledby="family-anatomy" data-area-ui="compact">
+          <h2 className="studio-canvas__section-title" id="family-anatomy">Anatomy</h2>
+          <Anatomy manifest={manifest} />
+        </section>
+      ) : null}
+      {manifest?.states?.length ? (
+        <section className="studio-section" aria-labelledby="family-states" data-area-ui="compact">
+          <h2 className="studio-canvas__section-title" id="family-states">States</h2>
+          <States manifest={manifest} />
+        </section>
+      ) : null}
+    </div>
+  );
+}
+
+/** The tile whose specimen is exactly this configuration, if any. */
+function matchingTile(playground: Playground, tiles: Tile[], config: Config) {
+  return tiles.find(entry => { const own = tileConfig(playground, entry.name); return own !== null && sameConfig(own, config); });
+}
+
 export function ComponentsPage() {
   const { query, item, select } = useStudio();
-  // The Sidebar's choice: every family (All, the default) or one.
-  const family = FAMILIES.find(entry => entry.slug === item);
+  // The Sidebar's choice: every family (All, the default) or one family's Stage, on one of its tiles.
+  const [slug = "", tileId] = (item ?? "").split("/");
+  const family = FAMILIES.find(entry => entry.slug === slug);
   const shown = FAMILIES.filter(entry => matches(query, entry.name, entry.slug));
   const [mode, setMode] = useViewOption<ViewMode>("components", "grid", ["grid", "list"]);
   // Zoom (owner, 2026-10-12): specimens at up to 2x on tiles twice the minimum, for close reading.
   const [zoom, setZoom] = useViewOption<"1" | "2">("components-zoom", "1", ["1", "2"]);
   const [status, setStatus] = useViewOption<"all" | Status>("components-status", "all", ["all", "complete", "review", "unrefined"]);
-  // The Inspector's: one tile, as "<family>/<tile id>".
+  // The grid's selection: one tile, as "<family>/<tile id>". The Inspector describes it.
   const [selected, setSelected] = useState<string>();
-  useEffect(() => setSelected(undefined), [item]);
+  const [reveal, setReveal] = useState<string>();
   const [selectedSlug, selectedId] = selected?.split("/") ?? [];
-  const selectedFamily = FAMILIES.find(entry => entry.slug === selectedSlug);
-  const tile = selectedFamily ? TILES.get(selectedFamily.slug)!.find(entry => entry.id === selectedId) : undefined;
-  const subject = selectedFamily ?? family;
+  const selectedFamily = family ? undefined : FAMILIES.find(entry => entry.slug === selectedSlug);
+  const selectedTile = selectedFamily ? TILES.get(selectedFamily.slug)!.find(entry => entry.id === selectedId) : undefined;
+
+  // The Stage: the tile in the location, or the family's first. A family with a playground shows a
+  // configured instance the Properties edit; `edit` holds the edit for the tile it started from.
+  const tiles = family ? TILES.get(family.slug)! : [];
+  const stageTile = tiles.find(entry => entry.id === tileId) ?? tiles[0];
+  const playground = family ? PLAYGROUNDS[family.slug] : undefined;
+  const stageKey = family && stageTile ? `${family.slug}/${stageTile.id}` : "";
+  const [edit, setEdit] = useState<{ key: string; config: Config } | null>(null);
+  const [replays, setReplays] = useState(0);
+  const config = playground && stageTile ? (edit?.key === stageKey ? edit.config : tileConfig(playground, stageTile.name)) : null;
 
   const arrangement = useArrangement<Sort, Group>("components", { sort: "name", descending: false, group: "review" }, SORTS, GROUPS);
   const pins = usePins("components");
@@ -165,8 +272,8 @@ export function ComponentsPage() {
     : [["Components", sorted]];
   // The Canvas runs in the Sidebar's order, so the two read the same way down.
   const ordered = groups.flatMap(([, list]) => list);
-  const onCanvas = family ? [family] : ordered.filter(entry => status === "all" || statusOf(entry) === status);
-  const pinned = pins.pins.map(slug => FAMILIES.find(entry => entry.slug === slug)).filter((entry): entry is Family => Boolean(entry && shown.includes(entry)));
+  const onCanvas = ordered.filter(entry => status === "all" || statusOf(entry) === status);
+  const pinned = pins.pins.map(key => FAMILIES.find(entry => entry.slug === key)).filter((entry): entry is Family => Boolean(entry && shown.includes(entry)));
   const navItem = (entry: Family) => (
     <NavItem key={entry.slug} href={`#components/${entry.slug}`} current={entry.slug === family?.slug} data-key={entry.slug} data-name={entry.name}
       onClick={event => { event.preventDefault(); select(entry.slug); }}
@@ -175,15 +282,71 @@ export function ComponentsPage() {
     </NavItem>
   );
 
-  // One family fits as a whole Canvas; All fits section by section (FamilySection).
+  // Opening and leaving the Stage. Opening keeps the tile; leaving, by any route (Escape, ⌘↑, ⌘[,
+  // All), selects the tile the Stage last showed and brings it into view on the grid.
+  const open = (key: string) => select(key);
+  const back = () => select("");
+  const lastStage = useRef<string | undefined>(undefined);
+  if (family && stageTile) lastStage.current = stageKey;
   const canvas = useRef<HTMLDivElement>(null);
-  const single = useRef<HTMLDivElement>(null);
-  useEffect(() => { canvas.current?.scrollTo({ top: 0 }); }, [item]);
-  useFit(single, `${family?.slug}:${zoom}`, Boolean(family));
+  useEffect(() => {
+    canvas.current?.scrollTo({ top: 0 });
+    setEdit(null);
+    if (family || !lastStage.current) return;
+    const key = lastStage.current;
+    lastStage.current = undefined;
+    setSelected(key);
+    setReveal(key);
+    document.getElementById(`family-${key.split("/")[0]}`)?.scrollIntoView({ block: "start" });
+  }, [family?.slug]);
+  useStageKeys({ onBack: back, enabled: Boolean(family) });
+  // ⌘↓ opens the selected tile (Finder's Open).
+  useEffect(() => {
+    if (family || !selected) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== "ArrowDown" || !(event.metaKey || event.ctrlKey) || event.altKey || event.shiftKey) return;
+      event.preventDefault();
+      open(selected);
+    };
+    addEventListener("keydown", onKey);
+    return () => removeEventListener("keydown", onKey);
+  }, [family, selected]);
 
+  // Properties: an edit that lands on a tile's own configuration moves the Stage to that tile.
+  const change = (prop: string, value: PropValue) => {
+    if (!playground || !family) return;
+    const next = { ...(config ?? initialConfig(playground)), [prop]: value };
+    const match = matchingTile(playground, tiles, next);
+    if (match && match.id !== stageTile?.id) select(`${family.slug}/${match.id}`, { replace: true });
+    setEdit({ key: match ? `${family.slug}/${match.id}` : stageKey, config: next });
+  };
+  const reset = () => {
+    if (!family || !playground) return;
+    const first = matchingTile(playground, tiles, initialConfig(playground)) ?? tiles[0]!;
+    setEdit(null);
+    select(`${family.slug}/${first.id}`, { replace: true });
+  };
+  const selectTile = (entry: Tile) => {
+    if (!family) return;
+    setEdit(null);
+    select(`${family.slug}/${entry.id}`, { replace: true });
+  };
+
+  // Previous and next family, in the Sidebar's order.
+  const sequence = ordered.some(entry => entry.slug === family?.slug) ? ordered : FAMILIES;
+  const at = family ? sequence.indexOf(family) : -1;
+  const previous = at > 0 ? sequence[at - 1] : undefined;
+  const following = at >= 0 ? sequence[at + 1] : undefined;
+
+  // All fits section by section (FamilySection); the Stage fits its own tiles (FamilyStage).
   const counts = { complete: 0, review: 0, unrefined: 0 };
   for (const entry of FAMILIES) counts[statusOf(entry)]++;
   const total = FAMILIES.reduce((sum, entry) => sum + TILES.get(entry.slug)!.length, 0);
+  const subject = family ?? selectedFamily;
+  const zoomControl = (
+    <Segmented size="sm" aria-label="Zoom" value={zoom} onValueChange={next => setZoom(next as "1" | "2")}
+      items={[{ value: "1", label: "1×" }, { value: "2", label: "2×" }]} />
+  );
 
   return (
     <Workspace
@@ -200,55 +363,36 @@ export function ComponentsPage() {
           </PinMenu>
         </SidebarList>
       }
+      canvasLead={family ? (
+        <Tooltip side="bottom" describes={false} trigger={
+          <Button variant="ghost" tone="neutral" size="sm" iconOnly icon={<ArrowLeftIcon />} aria-label="All components" aria-keyshortcuts="Escape" onClick={back} />
+        }>All components <Kbd keys={["Esc"]} size="sm" /></Tooltip>
+      ) : undefined}
       canvasTitle={family ? family.name : "All components"}
       canvasMeta={family
         ? <Badge size="sm" tone={STATUS_TONE[statusOf(family)]} variant="soft">{STATUS_LABEL[statusOf(family)]}</Badge>
         : <span className="studio-muted studio-tabular">{onCanvas.length}</span>}
-      canvasActions={
+      canvasActions={family ? (
         <ViewControls>
-          {family ? null : (
-            <ViewFilter label="Status" value={status} onChange={setStatus}
-              options={[{ value: "all", label: "All statuses" }, { value: "complete", label: "Complete" }, { value: "review", label: "In review" }, { value: "unrefined", label: "Unrefined" }]} />
-          )}
-          {family ? null : <ArrangeMenu arrangement={arrangement} sorts={SORTS} groups={GROUPS} directions={DIRECTIONS[arrangement.sort]} />}
-          {mode === "grid" ? (
-            <Segmented size="sm" aria-label="Zoom" value={zoom} onValueChange={next => setZoom(next as "1" | "2")}
-              items={[{ value: "1", label: "1×" }, { value: "2", label: "2×" }]} />
-          ) : null}
+          <ChromeButton label="Replay" icon={<ResetIcon />} onClick={() => setReplays(count => count + 1)} />
+          {zoomControl}
+          <ChromeButton label={previous ? `Previous: ${previous.name}` : "Previous"} icon={<ChevronLeftIcon />} onClick={() => previous && select(previous.slug)} />
+          <ChromeButton label={following ? `Next: ${following.name}` : "Next"} icon={<ChevronRightIcon />} onClick={() => following && select(following.slug)} />
+        </ViewControls>
+      ) : (
+        <ViewControls>
+          <ViewFilter label="Status" value={status} onChange={setStatus}
+            options={[{ value: "all", label: "All statuses" }, { value: "complete", label: "Complete" }, { value: "review", label: "In review" }, { value: "unrefined", label: "Unrefined" }]} />
+          <ArrangeMenu arrangement={arrangement} sorts={SORTS} groups={GROUPS} directions={DIRECTIONS[arrangement.sort]} />
+          {mode === "grid" ? zoomControl : null}
           <ViewSwitch value={mode} onChange={setMode} />
         </ViewControls>
-      }
+      )}
       canvasRef={canvas}
       canvas={family ? (
-        <div className="studio-sections">
-          {mode === "list" ? (
-            // List: one row per tile, its demo and note.
-              <Table size="md" interactive flush aria-label={`${family.name} tiles`}>
-                <thead><tr><th scope="col">Specimen</th><th scope="col">Demo</th><th scope="col">Note</th></tr></thead>
-                <tbody>
-                  {TILES.get(family.slug)!.map(entry => {
-                    const key = `${family.slug}/${entry.id}`;
-                    return (
-                      <tr key={key} data-selected={key === selected ? "" : undefined}>
-                        <td><TableLink href={`#components/${family.slug}`} onClick={event => { event.preventDefault(); setSelected(key); }}>{entry.label}</TableLink></td>
-                        <td><Code>{entry.demo}</Code></td>
-                        <td><span className="studio-muted">{entry.note ?? "—"}</span></td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </Table>
-          ) : <div ref={single} data-fit="" data-zoom={zoom}><FamilyTiles family={family} selected={selected} onSelect={setSelected} /></div>}
-          {/* Props under the tiles, at full width (owner, 2026-10-11; they were cramped in the Inspector).
-              Documentation, not a specimen: it keeps the app's compact scale and default radius whatever
-              the Canvas previews. */}
-          {family.api?.length ? (
-            <section className="studio-section" aria-labelledby="family-props" data-area-ui="compact">
-              <h2 className="studio-canvas__section-title" id="family-props">Props</h2>
-              <PropsTable api={family.api} />
-            </section>
-          ) : null}
-        </div>
+        stageTile
+          ? <FamilyStage family={family} tiles={tiles} tile={stageTile} config={config} onSelectTile={selectTile} onChange={change} zoom={zoom} replays={replays} />
+          : <EmptyState title="No tiles yet" description="This family has no gallery specimens." />
       ) : onCanvas.length ? mode === "list" ? (
         // List: one row per family, its status, tile count and import.
           <Table size="md" interactive flush aria-label="Components">
@@ -266,22 +410,25 @@ export function ComponentsPage() {
           </Table>
       ) : (
         <PinMenu pins={pins} label="Component"><div className="studio-sections" data-zoom={zoom}>
-          {onCanvas.map(entry => <FamilySection key={entry.slug} family={entry} selected={selected} onSelect={setSelected} onOpen={() => select(entry.slug)} zoom={zoom} />)}
+          {onCanvas.map(entry => (
+            <FamilySection key={entry.slug} family={entry} selected={selected} onSelect={setSelected} onOpen={() => select(entry.slug)} onOpenTile={open}
+              zoom={zoom} reveal={reveal} onRevealed={() => setReveal(undefined)} />
+          ))}
         </div></PinMenu>
       ) : <EmptyState title="No components" description={`Nothing matches “${query}”.`} />}
-      inspectorTitle={tile?.label ?? subject?.name ?? "All components"}
+      inspectorTitle={subject?.name ?? "All components"}
       inspector={
         <>
+          {/* On a composition tile the Properties show the defaults; an edit puts a configured instance
+              on the Stage in its place. */}
+          {family && playground ? (
+            <Properties playground={playground} config={config ?? initialConfig(playground)} changed={Boolean(config) && !sameConfig(config!, initialConfig(playground))} onChange={change} onReset={reset} />
+          ) : null}
           <CanvasSettings />
           {subject ? (
-            <PanelSection heading={tile ? "Tile" : "Family"}
+            <PanelSection heading="Component"
               actions={<PinButton name={subject.name} pinned={pins.has(subject.slug)} onToggle={() => pins.toggle(subject.slug)} />}>
-              <Facts label={tile ? "Tile" : "Family"} items={tile ? [
-                ["Family", subject.name],
-                ["Specimen", tile.label],
-                ["Demo", <Code>{tile.demo}</Code>],
-                tile.note ? ["Note", tile.note] : null,
-              ] : [
+              <Facts label="Component" items={[
                 ["Status", <Badge size="sm" tone={STATUS_TONE[statusOf(subject)]} variant="soft">{STATUS_LABEL[statusOf(subject)]}</Badge>],
                 ["Tiles", TILES.get(subject.slug)!.length],
                 subject.imports ?? subject.exportName ? ["Import", <Code>{subject.imports ?? subject.exportName}</Code>] : null,
@@ -298,6 +445,22 @@ export function ComponentsPage() {
               ]} />
             </PanelSection>
           )}
+          {(family ? (config ? undefined : stageTile) : selectedTile) ? (() => {
+            const shownTile = (family ? stageTile : selectedTile)!;
+            return (
+              <PanelSection heading="Tile" actions={family ? null : (
+                <Tooltip side="bottom" describes={false} trigger={
+                  <Button variant="ghost" tone="neutral" size="sm" icon={<OpenIcon />} aria-keyshortcuts="Meta+ArrowDown" onClick={() => open(selected!)}>Open</Button>
+                }>Open on the Stage <Kbd keys={["⌘", "↓"]} size="sm" /></Tooltip>
+              )}>
+                <Facts label="Tile" items={[
+                  ["Specimen", shownTile.label],
+                  ["Demo", <Code>{shownTile.demo}</Code>],
+                  shownTile.note ? ["Note", shownTile.note] : null,
+                ]} />
+              </PanelSection>
+            );
+          })() : null}
         </>
       }
     />

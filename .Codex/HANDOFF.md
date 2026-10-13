@@ -5,6 +5,19 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Component Stage (2026-10-12, branch `claude/component-display-ui-research-11dc77`, uncommitted)
+
+- Owner: research how component pages and playgrounds show a component, then "go with your recommendations".
+  Research and decisions: `docs/research/component-stage-2026-10-12.md`. The grid stays the overview; a family
+  opens as a Stage (`src/stage.tsx`): the tile on it at real size, code attached, the family's tiles in their
+  groups below, then Props, Anatomy and States from the manifest. Properties in the Inspector for Button, Accordion and
+  Badge (`src/content/playgrounds.tsx`, generated from `manifest.ts`). Double-click, ⌘↓ or Open to open; Escape,
+  ⌘↑, ⌘[ or All to go back with the tile revealed. `#components/<family>/<tile>`.
+- Demo source for the code comes from `scripts/demo-sources.mjs` (virtual module `area:demo-sources`). The dev
+  server must restart after editing that script.
+- Checks: desktop typecheck and build; browser preview at 1440 (light, dark, compact; Button, Badge, Menu, Confirm
+  dialog; Properties, Escape / ⌘↓ / ⌘↑, reveal, width handle). Not verified: the Electron window, docs build.
+
 ## Preview frame (2026-10-13, branch `claude/component-work-1c5100`, PR)
 
 - Owner: "continue the component work" → Preview frame, the inspector plan's last part (PRODUCT_UI gap "an Inspector

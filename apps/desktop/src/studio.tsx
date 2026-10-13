@@ -42,12 +42,13 @@ const CANVAS_DEFAULTS = Object.fromEntries(
 
 /*
  * Location: #<tab>/<item>, so a selection survives a reload and can be linked. The item is the
- * page's own key (a component's slug, an icon's name, a scale, a type role).
+ * page's own key (a component's slug, an icon's name, a scale, a type role) and may have parts of
+ * its own: Components opens a family's Stage on one tile as <slug>/<tile>.
  */
 function readLocation(): { tab: TabId; item?: string } {
-  const [tab, item] = decodeURIComponent(location.hash.slice(1)).split("/");
+  const [tab, ...item] = decodeURIComponent(location.hash.slice(1)).split("/");
   const known = TABS.find(entry => entry.id === tab);
-  return known ? { tab: known.id, item: item || undefined } : { tab: readStored("tab", "components") as TabId };
+  return known ? { tab: known.id, item: item.join("/") || undefined } : { tab: readStored("tab", "components") as TabId };
 }
 
 interface StudioState {
@@ -55,7 +56,8 @@ interface StudioState {
   canvas: CanvasAxes;
   setCanvas: (axis: keyof CanvasAxes, value: string) => void;
   item?: string;
-  select: (item: string) => void;
+  /** Go to an item. `replace` swaps the current history entry (a Stage's tile) instead of adding one. */
+  select: (item: string, options?: { replace?: boolean }) => void;
   sidebar: boolean;
   inspector: boolean;
 }
@@ -96,22 +98,25 @@ export function Studio() {
   }, [theme]);
 
   // Shortcuts, as the Tooltips name them: ⌘K focuses search; ⌘B and ⌥⌘B show and hide the Sidebar
-  // and the Inspector (Cursor's and VS Code's primary and secondary side bars).
+  // and the Inspector (Cursor's and VS Code's primary and secondary side bars); ⌘[ and ⌘] go back
+  // and forward through what the Canvas showed (Finder, Safari, Cursor).
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (!(event.metaKey || event.ctrlKey) || event.shiftKey) return;
-      const key = event.code === "KeyK" ? "k" : event.code === "KeyB" ? "b" : "";
+      const key = event.code === "KeyK" ? "k" : event.code === "KeyB" ? "b" : event.code === "BracketLeft" ? "[" : event.code === "BracketRight" ? "]" : "";
       if (key === "k" && !event.altKey) { event.preventDefault(); search.current?.focus(); search.current?.select(); }
       else if (key === "b") { event.preventDefault(); togglePanel(event.altKey ? "inspector" : "sidebar"); }
+      else if ((key === "[" || key === "]") && !event.altKey) { event.preventDefault(); if (key === "[") history.back(); else history.forward(); }
     };
     addEventListener("keydown", onKey);
     return () => removeEventListener("keydown", onKey);
   }, []);
 
-  const go = useCallback((next: TabId, nextItem?: string) => {
-    const hash = `#${next}${nextItem ? `/${encodeURIComponent(nextItem)}` : ""}`;
-    if (location.hash !== hash) history.pushState(null, "", hash);
-    setLocation({ tab: next, item: nextItem });
+  const go = useCallback((next: TabId, nextItem?: string, replace = false) => {
+    // Each part is encoded on its own, so a Stage reads #components/button/size-small.
+    const hash = `#${next}${nextItem ? `/${nextItem.split("/").map(encodeURIComponent).join("/")}` : ""}`;
+    if (location.hash !== hash) history[replace ? "replaceState" : "pushState"](null, "", hash);
+    setLocation({ tab: next, item: nextItem || undefined });
   }, []);
   const togglePanel = (panel: "sidebar" | "inspector") => setPanels(current => {
     const next = { ...current, [panel]: !current[panel] };
@@ -128,7 +133,7 @@ export function Studio() {
       return next;
     }),
     item,
-    select: next => go(tab, next),
+    select: (next, options) => go(tab, next, options?.replace),
     sidebar: panels.sidebar,
     inspector: panels.inspector,
   }), [query, canvas, item, tab, go, panels]);
@@ -215,6 +220,8 @@ function usePanelWidth(panel: keyof typeof WIDTHS) {
 export interface WorkspaceProps {
   /** The tab's list, in a <SidebarList>. The Sidebar has no title bar (owner, 2026-10-11). */
   sidebar: ReactNode;
+  /** Before the title in the Canvas bar: the way back from a nested view (a family's Stage). */
+  canvasLead?: ReactNode;
   /** The Canvas's bar: what it shows (a family, "All icons"); also names the region. */
   canvasTitle: string;
   /** Beside the title in the Canvas bar: a status, a count. */
@@ -235,7 +242,7 @@ export interface WorkspaceProps {
  * line (SidebarList), so the three columns start level. Every region insets its content by
  * Panel's 14 (src/studio.css).
  */
-export function Workspace({ sidebar, canvasTitle, canvasMeta, canvasActions, canvas, inspectorTitle, inspector, canvasRef }: WorkspaceProps) {
+export function Workspace({ sidebar, canvasLead, canvasTitle, canvasMeta, canvasActions, canvas, inspectorTitle, inspector, canvasRef }: WorkspaceProps) {
   const studio = useStudio();
   const sidebarWidth = usePanelWidth("sidebar");
   const inspectorWidth = usePanelWidth("inspector");
@@ -251,6 +258,7 @@ export function Workspace({ sidebar, canvasTitle, canvasMeta, canvasActions, can
       ) : null}
       <main className="studio-canvas" aria-label={canvasTitle}>
         <header className="studio-canvas__bar">
+          {canvasLead}
           <h1 className="studio-canvas__title">{canvasTitle}</h1>
           {canvasMeta}
           {canvasActions}

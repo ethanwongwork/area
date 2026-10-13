@@ -383,6 +383,75 @@
   [data-stage="flow"] > .gallery-tile__view { align-content: start; }
   .studio-tile-error { margin: 0; color: var(--area-fg-danger); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); }
 
+  /* --- Stage (src/stage.tsx) ------------------------------------------------ */
+
+  /* A family's isolated view: the tile made large. The tile's edge, corner, surface and head; the
+     specimen at its real size in the middle; its code attached under a rule inside the same frame
+     (Primer's demo and code, one container); a grip on the right edge that resizes it. */
+  .studio-stage {
+    position: relative;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    box-sizing: border-box;
+    inline-size: 100%;
+    max-inline-size: 100%;
+    border: var(--area-border-width) solid var(--_tile-edge);
+    border-radius: var(--_tile-radius);
+    background: var(--area-bg-surface);
+    color: var(--area-fg-default);
+    overflow: clip;
+  }
+  /* The head is a tile's head (the tile's inset, the border counted once). */
+  .studio-stage__head { padding: calc(var(--_tile-inset) - var(--area-border-width)) calc(var(--_tile-inset) - var(--area-border-width)) 0; }
+  /* The specimen at its real size, centred, as a tile's fit stage lays it out before scaling: the
+     stage stretches so a fluid specimen takes the room and a fixed one centres. A specimen larger
+     than the view scrolls from its start (safe centring). */
+  .studio-stage__view {
+    display: grid;
+    grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+    place-items: safe center;
+    min-block-size: calc(var(--area-space-80) * 4); /* pick: 320, room for a menu or a popover open under its trigger */
+    padding: var(--area-space-48) var(--area-space-32); /* pick: the tile's 24 / 32 margin, taller for the larger frame */
+    overflow: auto;
+  }
+  .studio-stage__content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 100%;
+    min-inline-size: 0;
+  }
+  .studio-stage__view[data-zoom="2"] .studio-stage__content { zoom: 2; }
+  /* The code under its rule: a rule inside a surface is the decorative border (DESIGN_SYSTEM.md). */
+  .studio-stage__code { border-block-start: var(--area-border-width) solid var(--area-border-decorative); }
+  /* The resize grip: the right edge, 8 wide; its mark shows on hover and focus. */
+  .studio-stage__handle {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: 0;
+    inline-size: var(--area-space-8);
+    cursor: ew-resize;
+    touch-action: none;
+  }
+  .studio-stage__handle::after {
+    content: "";
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-end: var(--area-space-2);
+    inline-size: var(--area-space-4);
+    block-size: var(--area-space-32);
+    border-radius: var(--area-radius-full);
+    background: var(--area-border-hover);
+    opacity: 0;
+    translate: 0 -50%;
+    transition: opacity var(--area-duration-fast) var(--area-ease-out);
+  }
+  @media (hover: hover) {
+    .studio-stage:hover > .studio-stage__handle::after { opacity: 1; transition-duration: 0s; }
+  }
+  .studio-stage__handle:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(var(--area-focus-width) * -1); }
+  .studio-stage__handle:is(:focus-visible, :active)::after { opacity: 1; transition-duration: 0s; }
+
   /* --- Typography ---------------------------------------------------------- */
 
   /* A role's row tile: the sample, and its values in a column at the end (Carbon's type sets). */
