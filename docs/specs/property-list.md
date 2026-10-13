@@ -108,3 +108,4 @@ reorders without a slide.
 - 2026-10-01 · compact pass round 6 → standalone gaps 8 → 6 at compact; inside a Panel it reads the Panel's gaps. docs/research/compact-pass-2026-10-01.md.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → handle appears at once and fades out on fast; lifted and inactive dims land at once and return on fast; drop line rounded to whole pixels.
 - 2026-10-12 · owner, review round 16: approved.
+- 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the drop line is `stroke-width` × 2 (was `border-width` × 2, so it vanished under Elevated) (property-list.css). (docs/research/consistency-audit-2026-10-12.md)

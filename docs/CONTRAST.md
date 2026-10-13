@@ -19,13 +19,17 @@ measurements are in Git history (`archive/docs/batches/V01/`, removed after comm
 
 ## Roles
 
-- `border-decorative`: container seams, section/table rules and dividers; never the only
-  control or state cue. Its design floor is not a required-indicator accessibility floor.
+- `border-decorative`: seams inside a container (Panel, Code block and Command palette rules, Menu
+  and Toolbar separators) and the edges of filled shapes; never the only control or state cue. Its
+  design floor is not a required-indicator accessibility floor. `border-float` frames floating surfaces.
+- `border-divider`: rules that stand on their own (Separator, Tabs track, Table rows and frame).
 - `border-faint`, `border-subtle`, `border`, `border-hover`: supplementary visual definition.
 - `stroke-control`, `stroke-control-hover`, `stroke-selected`: strong endpoints for
   control identification and selection.
-- `stroke-width`: required edges, independent of Surface. `border-width` is decorative;
-  removing a container frame must not erase a control or focus indicator.
+- `stroke-width`: required edges, independent of Surface: controls, fields, state, swatch rings,
+  cutouts, joined-control seams, standalone dividers and frames with no shadow. `border-width` is
+  decorative (frames of shadowed surfaces and their seams); removing a container frame must not erase
+  a control or focus indicator ([Strokes](DESIGN_SYSTEM.md#strokes)).
 - `edge-control`, `edge-control-hover`, `edge-selected`, `edge-accent`, `fill-toggle`:
   presentation roles selecting quiet or strong endpoints according to contrast preference.
 

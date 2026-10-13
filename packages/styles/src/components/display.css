@@ -97,7 +97,8 @@
 
   .area-avatar-group__item > .area-avatar,
   .area-avatar-group__overflow {
-    --_group-ring: 0 0 0 var(--area-border-width) var(--area-bg-surface);
+    /* A cutout between overlapping avatars: required geometry, so `stroke-width` (it vanished under Elevated). */
+    --_group-ring: 0 0 0 var(--area-stroke-width) var(--area-bg-surface);
   }
 
   /* --- Separator ---------------------------------------------------------- */
@@ -111,12 +112,12 @@
   .area-separator--horizontal {
     margin-block: var(--_separator-gap);
     inline-size: 100%;
-    block-size: 1px;
+    block-size: var(--area-stroke-width);
   }
 
   .area-separator--vertical {
     margin-inline: var(--_separator-gap);
-    inline-size: 1px;
+    inline-size: var(--area-stroke-width);
     block-size: auto;
     align-self: stretch;
     /* Outside a flex row there is nothing to stretch to: keep a line's height (audit G-28). */

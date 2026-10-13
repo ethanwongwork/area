@@ -19,8 +19,10 @@
     gap: var(--area-space-12);
     /* The edge is counted once: content 16 / 24 from the outside, as Untitled's inset ring (owner, review round 2,
        2026-10-09: "make sure gaps, padding, margins are all accurate"; it was 17 / 25). */
-    padding: calc(var(--area-space-16) - var(--area-border-width)) calc(var(--area-space-24) - var(--area-border-width));
-    border: var(--area-border-width) solid var(--_edge);
+    /* The field's edge at the field's width (`stroke-width`): the zone is a control with no shadow, so its edge must
+       stay under the Elevated surface preset (consistency pass 2026-10-12; was `border-width`). */
+    padding: calc(var(--area-space-16) - var(--area-stroke-width)) calc(var(--area-space-24) - var(--area-stroke-width));
+    border: var(--area-stroke-width) solid var(--_edge);
     border-radius: var(--area-radius-surface);
     background-color: var(--area-bg-surface);
     color: var(--area-fg-muted);
@@ -52,7 +54,7 @@
     inline-size: var(--area-control-lg);
     block-size: var(--area-control-lg);
     box-sizing: border-box;
-    border: var(--area-border-width) solid var(--area-input-edge);
+    border: var(--area-stroke-width) solid var(--area-input-edge); /* the field's edge, at the field's width */
     border-radius: var(--area-radius-control-lg);
     background-color: var(--area-bg-surface);
     color: var(--area-fg-muted);
@@ -92,8 +94,8 @@
     /* spec: Untitled UI, padding 16, a 12 gap, the zone's edge and corner. */
     gap: var(--area-space-12);
     /* 16 from the outside, the edge counted once (was 17). */
-    padding: calc(var(--area-space-16) - var(--area-border-width));
-    border: var(--area-border-width) solid var(--area-input-edge);
+    padding: calc(var(--area-space-16) - var(--area-stroke-width));
+    border: var(--area-stroke-width) solid var(--area-input-edge);
     border-radius: var(--area-radius-surface);
     background-color: var(--area-bg-surface);
     font-size: var(--area-ui-size);

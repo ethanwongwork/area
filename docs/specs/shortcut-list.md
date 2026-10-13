@@ -140,3 +140,4 @@ Resolved 2026-10-10 (owner: "go with your recommendations"); kept for the record
   dialog and Figma's Help › Keyboard shortcuts; 5 gallery tiles, in review.
 - 2026-10-10 · owner: "go with your recommendations" → open questions 1–2 resolved as recommended; no change.
 - 2026-10-11 · owner, review round 7: approved.
+- 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the row rules are at `stroke-width`, as Table's (were `border-width`) (shortcut-list.css). (docs/research/consistency-audit-2026-10-12.md)

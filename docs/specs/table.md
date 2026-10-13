@@ -104,7 +104,7 @@ selected or hovered row.
 | cell inset | 4 / 8 / 12 block, 12 inline | Owner (three insets) | Notion 7.5 / 8; Untitled 24 sides; kept (third pass) |
 | header | `bg-subtle` #f7f7f7 / #282828, `fg-muted`, 400, middle | Untitled neutral-50 header, neutral-500 ink; owner (middle); Notion muted 400 ink | Notion has no header fill; kept (third pass) |
 | body alignment | top (first line) | Inset contract (first-line alignment) | — |
-| divider | 1px **`border-divider`** #e2e2e2 / #333333 below each row but the last | Second pass divider role; Untitled 1px neutral-200 | Was `border-decorative` |
+| divider | 1px **`border-divider`** #e2e2e2 / #333333 below each row but the last, at `stroke-width` like the frame (since the 2026-10-12 consistency pass) | Second pass divider role; Untitled 1px neutral-200 | Was `border-decorative` |
 | hover (interactive) | `bg-component-hover` #f3f3f3 / #333333 on the cells | Row-plate rule; Untitled row hover | Notion paints no plate; kept (third pass): shared row plates |
 | selected (`data-selected`) | `bg-component-active` #eeeeee / #3f3f3f, kept under the pointer | Selection one step above hover | Untitled uses neutral-50 for both |
 | stripes | `bg-stripe` #fafafa / #282828 on even rows | Owner | Selection wins over a stripe (same specificity, later rule, `navigation.css:211, 213`) |
@@ -209,3 +209,4 @@ read from the CSS; no Area capture shows them.
 - 2026-10-12 · owner adopted the product UI rules (docs/PRODUCT_UI.md, rule 3: rest → hover → press → selected, each a step firmer) → a held row of an interactive table (not selected) takes `bg-component-active`, landing at once; replaces the hover-plate-only press → `navigation.css`; desktop gallery.
 - 2026-10-12 · owner: icons and type sit on the surface, no containers (Cursor's icon gallery) → `flush` (no frame, edge, corner or header ground; the cell side inset hangs outside the content edge) and `baseline` (cells align on their first baseline) booleans → navigation.css, manifest.ts, `Table` props; desktop gallery Typography and Icons lists.
 - 2026-10-12 · owner: flush tables' "divider lines going almost all the way across … should align with the content" → flush no longer hangs the cell inset into the margin: the outer cells drop their side inset, so text and rules share the content edges; a hover, pressed or selected row reaches that inset past each edge as a shadow of its fill → navigation.css.
+- 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → row rules and column dividers are at `stroke-width`, as the frame (were `border-width`, so under Elevated a framed table lost its rows) (navigation.css). (docs/research/consistency-audit-2026-10-12.md)

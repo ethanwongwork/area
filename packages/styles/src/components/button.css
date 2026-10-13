@@ -386,7 +386,7 @@
    */
   .area-button--neutral.area-button--outline,
   .area-button--neutral.area-button--ghost {
-    --_fg: color-mix(in oklab, var(--area-fg-default), var(--area-fg-muted) 75%); /* spec */
+    --_fg: var(--area-fg-quiet);
   }
 
   /*

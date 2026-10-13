@@ -115,6 +115,18 @@ export function derivedTokens(): Record<string, string> {
     [`${PREFIX}edge-accent`]: `color-mix(in srgb, var(${PREFIX}accent-border), var(${PREFIX}stroke-selected) calc(var(${PREFIX}contrast-more) * 100%))`,
     [`${PREFIX}fill-toggle`]: `color-mix(in srgb, var(${PREFIX}border-subtle), var(${PREFIX}stroke-control) calc(var(${PREFIX}contrast-more) * 100%))`,
     [`${PREFIX}fill-toggle-hover`]: `color-mix(in srgb, var(${PREFIX}border), var(${PREFIX}stroke-control-hover) calc(var(${PREFIX}contrast-more) * 100%))`,
+    // The strong hover edge, a step past edge-control-hover: an unchecked Checkbox or Radio and a selected Chip under
+    // the pointer (consistency pass 2026-10-12: both had written the mix themselves).
+    [`${PREFIX}edge-control-strong`]: `color-mix(in srgb, var(${PREFIX}border-hover), var(${PREFIX}stroke-control-hover) calc(var(${PREFIX}contrast-more) * 100%))`,
+    // The standalone surface's edge (audit S7): Card, Composer, Code block. Lighter than the divider because a halo or a
+    // field carries it; dark keeps the faint rung (consistency pass 2026-10-12: three copies of one literal).
+    [`${PREFIX}border-card`]: `light-dark(var(${PREFIX}neutral-100), var(${PREFIX}neutral-750))`,
+    // The neutral soft-mark plate (audit S6a): Badge soft, Chip input, soft Count. Translucent, so a mark stays visible
+    // on a hovered or selected row plate; hover lays bg-hover's 5% wash over it (6% + 5% of 94% = 10.7%).
+    [`${PREFIX}bg-mark`]: "light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.1))",
+    [`${PREFIX}bg-mark-hover`]: "light-dark(rgb(0 0 0 / 0.107), rgb(255 255 255 / 0.226))",
+    // The quiet ink of icon actions (audit S6b): neutral outline and ghost Buttons, their groups and Split button.
+    [`${PREFIX}fg-quiet`]: `color-mix(in oklab, var(${PREFIX}fg-default), var(${PREFIX}fg-muted) 75%)`,
     // Editable fields keep their 1px edge and colour it with the focus role, plus a halo of
     // the same colour at the tone halos' 14% (audit S1, ChatGPT's 1px focus edge). Increased
     // contrast adds the regular 2px outline and expands the halo by that same width.

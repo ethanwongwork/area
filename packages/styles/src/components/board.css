@@ -4,8 +4,8 @@
  * Notion's board view, made Area's (docs/specs/board.md; captures/board/notion--*): columns side by
  * side, each a header (the group's name in plain text, a count Badge, buttons at the end) over a
  * tinted body of cards and an "Add new" row. A column takes a custom colour (Tag's inks); its tint,
- * count, add row and its cards' edge follow it, mixed thin. Cards are white,
- * radius 10, with Notion's soft lift; the title is a link stretched over the card, and actions show
+ * count, add row and its cards' edge follow it, mixed thin. Cards are white, the container corner
+ * (12; the column is concentric with them, 20), with Notion's soft lift; the title is a link stretched over the card, and actions show
  * on hover or focus.
  * ------------------------------------------------------------------------- */
 @layer area.components {
@@ -30,7 +30,10 @@
     /* spec: Notion's column, 276 (a 260 card in 8 each side). */
     inline-size: 276px; /* spec */
     max-inline-size: 100%;
-    border-radius: var(--area-radius-container);
+    /* A shell around its cards, concentric with them: the card's corner plus the 8 between them (20 at the default),
+       scaled by radius-concentric, as Composer and Toolbar (owner, 2026-10-12: "is the corner radius ... correct?"; it was
+       the card's own 12, so the gap widened at the corners). */
+    border-radius: calc(var(--area-radius-container) + var(--area-space-8) * var(--area-radius-concentric));
     background-color: color-mix(in oklab, var(--_color) var(--_tint), transparent);
     color: var(--area-fg-default);
     font-size: var(--area-ui-size);
@@ -102,8 +105,9 @@
   }
   .area-board-column:not(.area-board-column--neutral) .area-board-column__add {
     --_add-ink: var(--_color);
-    --_add-plate: color-mix(in oklab, var(--_color) 8%, transparent);
-    --_add-plate-active: color-mix(in oklab, var(--_color) 12%, transparent);
+    /* The card's hover strength, 6% (pressed 9%, the same 1.5 step as bg-hover to bg-active). */
+    --_add-plate: color-mix(in oklab, var(--_color) 6%, transparent);
+    --_add-plate-active: color-mix(in oklab, var(--_color) 9%, transparent);
   }
   @media (hover: hover) { .area-board-column__add:hover { background-color: var(--_add-plate); transition-duration: 0s; } }
   .area-board-column__add:active { background-color: var(--_add-plate-active); transition-duration: 0s; }
@@ -129,9 +133,12 @@
   /* Hover darkens the card as a row plate would; the ink stays. */
   @media (hover: hover) { .area-board-card:hover { background-color: var(--area-bg-component-hover); transition-duration: 0s; } }
   /* In a coloured column the hover takes the colour too (owner, review round 8: "hover state of the board cards
-     should be colored too"): the card mixes the column's colour at the add row's hover strength, 8%. */
+     should be colored too"), at 6% (owner, 2026-10-12: 8% "seems too drastic/dark"). Notion's hovered card, measured:
+     the column's own tint laid over the column (purple L 0.960, chroma 0.015; blue and the default column alike). At 8%
+     Area's purple matched that lightness but carried 0.020 chroma, its Tag ink being more saturated; 6% gives every
+     colour at most Notion's chroma (purple 0.015) and the gray column exactly the neutral hover, #f3. */
   @media (hover: hover) {
-    .area-board-column:not(.area-board-column--neutral) .area-board-card:hover { background-color: color-mix(in oklab, var(--_color) 8%, var(--area-bg-surface)); /* spec */ }
+    .area-board-column:not(.area-board-column--neutral) .area-board-card:hover { background-color: color-mix(in oklab, var(--_color) 6%, var(--area-bg-surface)); /* spec */ }
   }
 
   .area-board-card__heading { display: flex; align-items: flex-start; gap: var(--area-gap-md); min-inline-size: 0; }
@@ -167,13 +174,22 @@
     inset-inline-end: var(--area-space-8);
     z-index: 1;
     display: flex;
-    border-radius: var(--area-radius-control-sm);
+    /* Concentric with the card it sits 8 inside: the card's corner less 8, floored (4 at the default, Notion's 4; was the
+       small control's 6). Its buttons sit flush, so they take the same corner. */
+    --_plate-radius: max(min(var(--area-radius-floor), var(--area-radius-control-sm)), calc(var(--area-radius-container) - var(--area-space-8)));
+    border-radius: var(--_plate-radius);
     background-color: var(--area-bg-surface);
     box-shadow: var(--area-shadow-float);
+    /* The floating frame every floating surface draws (`border-float`), as an inset outline so the 28 × 24 buttons keep
+       their place and their hover plates don't cover it: in dark the plate is the card's own #1d1d1d and the shadow
+       does not read without it (consistency pass 2026-10-12; Notion's plate has a ring too). */
+    outline: var(--area-border-width) solid var(--area-border-float);
+    outline-offset: calc(-1 * var(--area-border-width));
     opacity: 0;
     pointer-events: none;
     transition: opacity var(--area-duration-fast) var(--area-ease-out);
   }
+  .area-board-card__actions > .area-button { --_radius: var(--_plate-radius); }
   .area-board-card:focus-within > .area-board-card__actions { opacity: 1; pointer-events: auto; transition-duration: 0s; }
   @media (hover: hover) { .area-board-card:hover > .area-board-card__actions { opacity: 1; pointer-events: auto; transition-duration: 0s; } }
 }

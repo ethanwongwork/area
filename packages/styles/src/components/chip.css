@@ -90,8 +90,8 @@
 
   .area-chip--input {
     /* spec (audit S6a): the translucent soft plate of Count and Badge; was bg-component #f7. */
-    --_bg: light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.1)); /* spec */
-    --_bg-hover: light-dark(rgb(0 0 0 / 0.107), rgb(255 255 255 / 0.226)); /* spec */
+    --_bg: var(--area-bg-mark);
+    --_bg-hover: var(--area-bg-mark-hover);
     --_border: transparent;
     --_border-hover: var(--area-edge-control-hover);
   }
@@ -117,7 +117,7 @@
     --_selected-bg: var(--area-selection-surface);
     --_selected-bg-hover: var(--area-selection-surface-hover);
     --_selected-border: var(--area-selection-edge);
-    --_selected-border-hover: color-mix(in srgb, color-mix(in srgb, var(--area-border-hover), var(--area-stroke-control-hover) calc(var(--area-contrast-more) * 100%)), var(--area-edge-accent) calc(var(--area-selection-accent) * 100%));
+    --_selected-border-hover: color-mix(in srgb, var(--area-edge-control-strong), var(--area-edge-accent) calc(var(--area-selection-accent) * 100%));
     --_selected-fg: var(--area-fg-selection);
   }
   .area-chip[data-selected] {
@@ -143,12 +143,13 @@
     inline-size: var(--_visual);
     block-size: var(--_visual);
     border-radius: var(--_chip-inner-radius);
-    /* ColorSwatch's solid, very light edge, so the colour never bleeds into it; the chip keeps its
-       round shape (audit F-30 A; was a 20% ink ring). */
+    /* The swatch ring, as ColorSwatch's (owner 2026-10-12: one swatch outline everywhere; consistency pass
+       2026-10-12, it was still ColorSwatch's old solid `bg-component` edge, which merged with the chip's fill).
+       A required edge, `stroke-width`. The chip keeps its round shape (audit F-30 A). */
     /* An inset outline, which snaps to device pixels where a box-shadow spread does not
        (docs/MOTION.md, "Crispness" 3; was an inset 1px box-shadow). */
-    outline: var(--area-border-width) solid var(--area-bg-component);
-    outline-offset: calc(-1 * var(--area-border-width));
+    outline: var(--area-stroke-width) solid var(--area-token-swatch-ring);
+    outline-offset: calc(-1 * var(--area-stroke-width));
   }
 
   .area-chip__icon,
@@ -252,8 +253,9 @@
   @media (hover: hover) { .area-chip__remove:hover { background: var(--_remove-hover, color-mix(in srgb, currentColor 12%, transparent)); transition-duration: 0s; } }
   .area-chip__remove:focus-visible,
   .area-chip__action:focus-visible {
+    /* Nested in the chip: the ring at 0, as Tag's remove and a field's actions (owner, 2026-10-12: consistency pass O1). */
     outline: var(--area-focus-width) solid var(--area-focus-color);
-    outline-offset: var(--area-focus-offset);
+    outline-offset: 0;
   }
   .area-chip__remove > svg { inline-size: var(--_dot); block-size: var(--_dot); }
 

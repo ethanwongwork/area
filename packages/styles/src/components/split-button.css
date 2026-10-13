@@ -68,7 +68,7 @@
    * hover and press plates. Was two soft Buttons: body ink, a #f3 hairline and a translucent wash.
    */
   .area-split-button--soft > .area-button--neutral:not([data-selected]) {
-    --_fg: color-mix(in oklab, var(--area-fg-default), var(--area-fg-muted) 75%); /* spec: button.css quiet ink */
+    --_fg: var(--area-fg-quiet);
     --_bg: var(--area-bg-component);
     --_bg-hover: var(--area-bg-component-hover);
     --_bg-active: var(--area-bg-component-active);

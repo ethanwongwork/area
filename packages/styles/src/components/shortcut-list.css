@@ -50,7 +50,7 @@
     padding-inline: var(--_inset);
   }
   /* spec: ChatGPT's 1px rule under each row but the last, the row's full width (Table's divider role). */
-  .area-shortcut-list__item:not(:last-child) { border-block-end: var(--area-border-width) solid var(--area-border-divider); }
+  .area-shortcut-list__item:not(:last-child) { border-block-end: var(--area-stroke-width) solid var(--area-border-divider); }
 
   /* spec: ChatGPT's command name, 14/20 400 in the default ink. */
   .area-shortcut-list__label { min-inline-size: 0; margin: 0; overflow-wrap: anywhere; }

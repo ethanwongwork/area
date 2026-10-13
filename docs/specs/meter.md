@@ -70,7 +70,7 @@ Spacing: header, 6, bar, 6, description (Field's stack; 4 in compact). Area adds
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
 | layout | label and value on one row; the bar; the description; each Field's stack apart (`ui-stack`, 6; 4 in compact) | Peer Field (label, control, description); Figma's card (caption under the bar) | ChatGPT puts the description and value on a line above the bar, 4 and 5 apart; Area keeps its Field spacing (owner, review round 6) |
-| label | 14/20 500 default ink (the UI type, strong) | ChatGPT | — |
+| label | 14/20 500 default ink (the UI type, strong): the meter's title at body size, named in the weight rule (O4, 2026-10-12) | ChatGPT | Field's label, a control's name, stays 400 |
 | value | the UI type (14/20) in the muted ink, tabular numbers, at the end of the label's row | Peer File upload's percentage (UI type); Spectrum, React Aria (value beside the label) | ChatGPT's 12/16 value read too small (owner, review round 6) |
 | description | Field's description, 12/16 muted, under the bar | Peer Field; Figma's caption | — |
 | bar | Progress's: rail `edge-control`, sm 4 / md 6 / lg 8, pill, `selection-solid` fill | ChatGPT 6 pill; peer Progress | Progress's rail rather than ChatGPT's 10% ink, so a meter and a progress bar match |
@@ -142,3 +142,4 @@ the value now ends the label's row.
   Field's description type; gaps 4 / 5 → Field's stack (6, 4 compact); owner: "go with your recommendations" →
   meter.css, Meter.tsx, tests; recaptured.
 - 2026-10-11 · owner, review round 7: "go with your recs for the open questions" → approved; open questions resolved as recommended (shared rail; circular meter waits).
+- 2026-10-12 · owner, 2026-10-12: "go with your recommendations" (consistency pass) → the label keeps 500 as the meter's title at body size, now named in DESIGN_SYSTEM.md's weight rule (O4); no visual change. (docs/research/consistency-audit-2026-10-12.md)

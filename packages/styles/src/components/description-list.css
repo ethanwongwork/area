@@ -82,14 +82,14 @@
     content: "";
     position: absolute;
     inset-inline: var(--_inset);
-    inset-block-end: calc(-1 * var(--_row-gap) / 2 - var(--area-border-width) / 2);
-    block-size: var(--area-border-width);
+    inset-block-end: calc(-1 * var(--_row-gap) / 2 - var(--area-stroke-width) / 2);
+    block-size: var(--area-stroke-width);
     background-color: var(--_divider);
     pointer-events: none;
   }
-  /* The frame: Table's (divider edge, container corner, surface), as ChatGPT's settings card. */
+  /* The frame: Table's (divider edge at `stroke-width`, container corner, surface), as ChatGPT's settings card. */
   .area-description-list--framed {
-    border: var(--area-border-width) solid var(--area-border-divider);
+    border: var(--area-stroke-width) solid var(--area-border-divider);
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
   }

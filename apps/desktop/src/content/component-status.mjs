@@ -39,8 +39,8 @@ export const COMPLETE_COMPONENTS = new Set([
   'composer',
   // color-field, color-picker, color-swatch-picker, panel and property-list reopened 2026-10-12: their swatches take the ring.
   'dialog', 'field', 'input-group',
-  'popover', 'progress', 'select', 'separator', 'slider',
-  'table', 'tabs', 'tooltip', 'tree-view',
+  'popover', 'progress', 'separator', 'slider',
+  'table', 'tabs', 'tooltip',
   // Approved 2026-10-08 on the component review page (recommendations for open questions accepted).
   'accordion', 'alignment-picker', 'tag',
   // Approved 2026-10-08 after their requested changes.
@@ -49,10 +49,7 @@ export const COMPLETE_COMPONENTS = new Set([
   'pagination', 'scroll-area', 'toggletip', 'combobox', 'custom-select', 'tag-picker', 'drawer',
   // Approved 2026-10-09 on the review page, round 3 (components3), after the round-2 feedback.
   'link', 'file-upload', 'command-palette', 'alert', 'card', 'kbd', 'number-field',
-  // Approved 2026-10-09 on the review page, round 4 (components4): one underline on link chips.
-  'chip',
   // Approved 2026-10-10 on the review page, round 5 (components5).
-  'empty-state',
   // description-list: reopened 2026-10-12 for show more (visibleCount).
 
   // Approved 2026-10-10 on the review page, round 6 (components6), after the round-5 rethink.
@@ -61,8 +58,8 @@ export const COMPLETE_COMPONENTS = new Set([
   'meter', 'shortcut-list', 'date-range-picker', 'zoom-control', 'menu',
   // Approved 2026-10-11 on the review page, round 8 (components8).
   'citation', 'search-field',
-  // Approved 2026-10-12 on the review page, round 9 (components9).
-  'badge', 'board', 'editable-text', 'timeline',
+  // Approved 2026-10-12 on the review page, round 9 (components9); badge and board reopened by the consistency pass.
+  'editable-text', 'timeline',
   // Approved 2026-10-12 on the review page, round 13 (components13).
   'box-model',
   // Approved 2026-10-12 on the review page, round 15 (components15).
@@ -72,10 +69,13 @@ export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-10-12 on the review page, round 17 (components17).
   'color-picker',
   // Approved 2026-10-12 on the review page, round 20 (components20): the palette's iOS-style outline.
-  'color-swatch-picker', ]);
+  'color-swatch-picker',
+  // Approved 2026-10-12 on the review page, round 21 (components21): the consistency pass (badge's dismiss ring at 0 is the
+  // owner's own pick, O1), Board's hover and corners, Description list's show more; open questions on the recommendations.
+  'badge', 'board', 'chip', 'description-list', 'empty-state', 'select', 'tree-view', ]);
 
 /** Built/refined and awaiting owner approval; not completion. */
-export const REVIEW_COMPONENTS = new Set(['description-list']);
+export const REVIEW_COMPONENTS = new Set([]);
 export const componentStatus = slug => COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
 export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined' })[status];
 

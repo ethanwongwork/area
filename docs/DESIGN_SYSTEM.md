@@ -45,7 +45,7 @@ checked by the contrast tests, including each tone's strong ink on its active ti
 Foreground does not change on hover. Weight (owner, audit S2, 2026-09-30): 400 for running
 text, descriptions, field labels, rows and titles set larger than the body; 500 for surface
 titles set at body size (14/20, 16/24), where size cannot set them apart: Popover, Dialog,
-Toast, Alert, Card, Panel bar and headings, Calendar month, Nav group titles. Labels are 500
+Toast, Alert, Card, Panel bar and headings, Calendar month, Nav group titles, Meter's name (consistency pass O4). Labels are 500
 on solid fills, tracks and static marks: solid Buttons, Segmented options, every Badge, soft
 Count, Kbd, Indicator counts and Avatar initials; every other label is 400. Text uses two foreground levels, default and muted;
 disabled is for disabled text only. Placeholder text shares the muted rung (`fg-placeholder`,
@@ -107,7 +107,7 @@ role paints the same way in every family:
   selected row plate; hover lays the `bg-hover` wash over it. Avatar and a selected Chip keep
   `bg-component-active`.
 - *Quiet ink* (audit S6b): icon actions (ghost icon Buttons, Message actions included) use the
-  Button's quiet 75% ink; text-like rows (prompt suggestions, Code block tabs) use `fg-muted`.
+  Button's quiet 75% ink, `fg-quiet`; text-like rows (prompt suggestions, Code block tabs) use `fg-muted`.
 - *Unselected options* in a set (Segmented, Tabs) take the muted ink and the selected one the
   default ink, as ChatGPT and Figma do. The Segmented thumb is raised: the white surface
   in light (ChatGPT, Figma) and `bg-component-active` in dark, where the surface rung sits
@@ -183,6 +183,38 @@ Untitled's do. Required control/state edges use `stroke-width` independently of 
 color/width/offset; editable fields use their field-focus roles. Preserve standard and
 increased-contrast behavior. Never weaken thresholds or add a waiver just to pass a test.
 See [Contrast](CONTRAST.md) before changing color, focus or state painting.
+
+## Strokes
+
+Every line is 1px and focus rings 2px; what varies is which width token a line reads and which colour role it
+takes (consistency pass 2026-10-12, [audit](research/consistency-audit-2026-10-12.md); guarded by
+`packages/react/tests/cohesion.test.mjs`). Never write a literal `1px` for a line.
+
+- **Width follows the job.** `stroke-width` (no preset changes it) draws every line that carries meaning or stands
+  alone: control, field and state edges; swatch and image rings; cutouts between overlapping marks (Avatar group,
+  Indicator anchor); seams inside joined controls (Button group, Split button, Input group, Color field); standalone
+  dividers on `border-divider` (Separator, Nav separators, the Tabs track, Table rows and frame, Description list,
+  Accordion, Shortcut list); and frames with no shadow to carry them (Table, Description list, Code block, Composer,
+  File upload). `border-width`, the Surface axis (0 under Elevated), draws the frames of surfaces that carry a shadow
+  (every floating surface, Panel, Card), the seams inside them (`border-decorative`: Panel, Code block, Command
+  palette and Color picker rules, Menu and Toolbar separators) and the edges of filled shapes (Alert, inline Code,
+  the Segmented and Toggle group tracks).
+- **Colour, lightest to firmest.** `border-decorative` #f3 (seams inside a container, filled shapes) · `border-float`
+  #f3, dark #4b (every floating frame) · `border-card`, neutral 100 #ee (standalone surfaces: Card, Composer, Code
+  block) · `border-divider` and `edge-control` #e2 (standalone rules; control and field edges; off tracks) ·
+  `edge-control-hover` #d4 (control edges on hover; at rest, the choice glyphs and Tree view's check, the Slider and
+  Color picker thumbs and Calendar tiles) · `edge-control-strong` #b4 (a Checkbox, Radio or selected Chip under the
+  pointer) · `stroke-control` #83 (Calendar's today ring, Breadcrumb separators). The raised-plate edge (Segmented
+  thumb, soft Toggle group selection, Badge modern) is `edge-selected` with `shadow-1`. Control and state edges read
+  the `edge-*` roles, which strengthen under increased contrast, never the raw `border-*` rungs; supplementary lines
+  (Box model layers, a disabled field's `border-faint`) may.
+- **Translucent lines** are for content whose colour Area cannot know: the swatch ring (`token-swatch-ring`, black
+  10% / white 10%) over swatches, the palette, colour areas, tracks and image wells, and Code's on-colour edge
+  (`currentColor` 20%). On a ground Area knows, lines are opaque.
+- **Translucent fills** follow the same rule: `bg-hover` and `bg-active` (5% and 7% ink) for plates on unknown grounds
+  and controls nested on rows; `bg-mark` and `bg-mark-hover`, the soft-mark plate (6% black, 10% white in dark: Badge soft, Chip input, soft Count);
+  `currentColor` 12% for a dismiss plate on a pill or tinted ground and 14% for a keycap inside a Button. Everything
+  else is an opaque rung.
 
 ## CSS, manifest and React
 

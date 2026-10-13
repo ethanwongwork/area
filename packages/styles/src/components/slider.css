@@ -60,7 +60,7 @@
     position: absolute;
     inset-inline-start: round(nearest, calc(var(--_mark) - 0.5px), 1px);
     block-size: 100%;
-    inline-size: 1px;
+    inline-size: var(--area-stroke-width);
     background: var(--_track-fill);
   }
 

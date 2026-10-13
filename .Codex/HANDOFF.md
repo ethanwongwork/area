@@ -5,6 +5,26 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Consistency and cohesion pass (2026-10-12, branch `claude/component-consistency-pass-7bd512`, uncommitted)
+
+- Owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used". Report:
+  `docs/research/consistency-audit-2026-10-12.md` (every declaration of 69 stylesheets catalogued; 18 findings, 5 open
+  questions O1–O5 for the owner). New rule, DESIGN_SYSTEM.md "Strokes": `stroke-width` for required lines (controls,
+  state, swatch rings, cutouts, joined seams, `border-divider` rules, frames with no shadow), `border-width` for frames of
+  shadowed surfaces, their seams and filled shapes; guarded by two new tests in `cohesion.test.mjs`. 21 stylesheets.
+- Visible changes, reopened (REVIEW_COMPONENTS): Badge modern edge `edge-selected`, Board card actions `border-float`
+  frame, Chip swatch takes the swatch ring, Select picker `border-float` (dark), Tree view check `edge-control-hover`.
+  Everything else paints the same at default (Elevated / increased contrast differ). Review round 21 (`components21`)
+  published to https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG; Before = be98603's gallery.
+- Checks: build, build:docs, npm test (24,251), React 271, contracts 14, typecheck, contrast report.
+- Owner then: "go with your recommendations" (O1–O5 done: nested pill controls ring at 0; Card keeps a dark edge under
+  Elevated via an `stroke-width − border-width` outline; Empty state md title `title-xs`; Meter 500 named in the weight
+  rule; new roles `bg-mark(-hover)`, `border-card`, `fg-quiet`, `edge-control-strong`). Board: hover 6% (Notion measured
+  read-only: hovered card = its column's tint), add row 6 / 9%, column corner concentric (20), actions plate 4. Badge
+  approved in round 21 → Complete; Empty state reopened. Round 21 republished (same collection, Badge's verdict kept).
+- Round 21: owner approved all seven (Badge, Board, Chip, Description list, Empty state, Select, Tree view), open
+  questions on the recommendations (Board, Description list: keep as built). Nothing in review.
+
 ## Description list show more; PR (2026-10-12, same branch)
 
 - Owner: "use Design-system evidence: build it from Ant Design, Polaris, Primer and similar collapse patterns ... then open

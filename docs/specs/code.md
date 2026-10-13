@@ -193,3 +193,4 @@ owner's pick, so it waits for a yes.
   shared by Code's swatch, ColorSwatch and Asset row's preview. Checked at 2× in light and dark: continuous on dark,
   white, translucent and saturated swatches; white still outlined on white.
 - 2026-10-12 · owner, review round 16: approved.
+- 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the token swatch's ring is at `stroke-width` (was `border-width`) (token.css). (docs/research/consistency-audit-2026-10-12.md)

@@ -106,9 +106,9 @@ unverified).
 
 | Peer | Shared role | Area value in peer | Separator | Match / reason |
 |---|---|---|---|---|
-| Menu separator | list divider | 1px `border-decorative` #f3, 2px block and 8px inline margins (surface.css:1112-1121) | spacing normal: 8px block | lighter by design: a rule inside a floating surface takes the seam role (owner 09-27); Notion's menu uses 4 / 12 |
+| Menu separator | list divider | `border-width` `border-decorative` #f3, 2px block and 8px inline margins (surface.css:1112-1121) | spacing normal: 8px block | lighter by design: a rule inside a floating surface takes the seam role (owner 09-27); Notion's menu uses 4 / 12 |
 | Nav separator | list divider | 1px `border-divider`, 8px block (nav.css:222-226) | same | match |
-| Toolbar separator | vertical rule | 1px `border-decorative`, command height (toolbar.css:66) | vertical inset 8 | lighter by design (owner 2026-09-27: "a rule is never heavier than the surface it divides"); the length rule differs |
+| Toolbar separator | vertical rule | `border-width` `border-decorative`, command height (toolbar.css:69) | vertical inset 8 | lighter by design (owner 2026-09-27: "a rule is never heavier than the surface it divides"); the length rule differs |
 | Table rows and shell, Tabs track | content rules | `border-divider` (navigation.css:77-78, 129, 157, 210) | same | match |
 | Panel, Code block rules | content rules | `border-decorative` (panel.css:93, 153, 294; code.css:39, 161, 416) | #e2e2e2 | lighter by design: a rule is never heavier than the container it divides |
 | ButtonGroup | seam | `edge-control` (button-group.css:11) | #e2e2e2 | differs: a control seam, not a rule |
@@ -159,3 +159,4 @@ Separator is static: a 1px background block, no motion, no transform. Nothing ch
   (audit G-8).
 - 2026-10-01 · audit G-28 → `decorative` prop (`role="none"`); a vertical rule keeps a line's height outside a flex row; `--area-separator-inset` drives both orientations (horizontal was a fixed 16) → primitives.tsx:325-344, display.css:119-133.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → static, no change.
+- 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the line is `stroke-width` thick (was a literal 1px); Menu separators are `border-width` (were a literal 1px) and Toolbar separators `border-width` (were `stroke-width`): seams inside a container ride the Surface axis with the container's frame (display.css, surface.css, toolbar.css). (docs/research/consistency-audit-2026-10-12.md)
