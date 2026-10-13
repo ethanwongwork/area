@@ -65,7 +65,7 @@
     /* spec: owner (2026-09-27), a lighter edge than the divider (#e2) with a faint lift under
        it. Light #ee (neutral 100) sits between Notion's 8% ring (#eb) and the decorative seam
        (#f3); dark keeps the divider rung, since 800 disappears against the dark surface. */
-    --_card-edge: light-dark(var(--area-neutral-100), var(--area-neutral-750));
+    --_card-edge: var(--area-border-card);
     /* spec: owner's reference is Figma's 0 0 8 0 at 2%. Area's recipe keeps that halo, drawn
        2px low so it pools under the card, and adds a 1px contact line that gives the lighter
        edge its bottom. Dark needs more ink to register on a dark page. */
@@ -76,9 +76,13 @@
        (trimmed to its cap and baseline) sits as far from the top and bottom as from the side. */
     --_card-content-padding: var(--_card-step);
     --_card-text-inset: calc(var(--_card-inset) + var(--_card-content-padding));
+    /* The drawn corner: the card's radius, never deeper than 1.5 x its text inset, so text never sits
+       in a curve twice its inset (owner, 2026-10-12: radius 14 put 16px-inset text in a 28 corner;
+       docs/research/ui-size-scale-2026-10-12.md). Bites only at the roundest settings. */
+    --_card-corner: min(var(--_card-radius), max(var(--area-radius-floor), round(down, calc(var(--_card-text-inset) * 1.5), 2px)));
     --_card-padding: calc(var(--_card-inset) - var(--_card-border));
     --_card-gap: var(--_card-inset);
-    --_card-media-radius: max(var(--area-radius-floor), calc(var(--_card-radius) - var(--_card-inset)));
+    --_card-media-radius: max(var(--area-radius-floor), calc(var(--_card-corner) - var(--_card-inset)));
     --_card-columns: minmax(0, 1fr);
     display: grid;
     grid-template-columns: var(--_card-columns);
@@ -94,12 +98,17 @@
        divider role: Figma file cards #e6, ChatGPT settings cards 10% black, Notion board
        cards an 8% ring; the owner took it a rung lighter, with the shadow above. */
     border: var(--_card-border) solid var(--_card-edge);
-    border-radius: var(--_card-radius);
+    border-radius: var(--_card-corner);
     background: var(--area-bg-surface);
     color: var(--area-fg-default);
     font-size: var(--_card-title-size);
     line-height: var(--_card-title-leading);
     box-shadow: var(--_card-shadow);
+    /* Elevated (border-width 0) leaves the halo to carry the card, but dark has no halo: the edge comes back as an inset
+       ring in dark only, as wide as the frame Elevated removed (0 under every other preset). Owner, 2026-10-12:
+       consistency pass O2. */
+    outline: calc(var(--area-stroke-width) - var(--_card-border)) solid light-dark(transparent, var(--_card-edge));
+    outline-offset: calc(var(--_card-border) - var(--area-stroke-width));
   }
 
   /* Size: corner and inset only. */
@@ -182,7 +191,7 @@
    */
   .area-card__media--bleed {
     --_card-bleed: calc(-1 * var(--_card-padding));
-    --_card-bleed-radius: max(0px, calc(var(--_card-radius) - var(--_card-border)));
+    --_card-bleed-radius: max(0px, calc(var(--_card-corner) - var(--_card-border)));
   }
   :is(.area-card--vertical, .area-card:not(.area-card--horizontal, .area-card--thumbnail, .area-card--immersive)) > .area-card__media--bleed:first-child {
     margin: var(--_card-bleed) var(--_card-bleed) 0;
@@ -436,7 +445,7 @@
     position: absolute;
     inset: calc(-1 * var(--_card-border));
     z-index: 1;
-    border-radius: var(--_card-radius);
+    border-radius: var(--_card-corner);
   }
   /* Controls inside a linked card sit above the stretched link. */
   /* Every control in a linked card sits above the stretched link, wherever it is (a well's
@@ -1151,6 +1160,9 @@
    * once and fades out on `fast` (--area-transition) as the pointer leaves. Keyboard movement is
    * instant both ways: while a row has keyboard focus no row trails a fade behind the arrow keys.
    */
+  /* Pressed (product UI rule 3, docs/PRODUCT_UI.md; DESIGN_SYSTEM.md "Shared state paint"): the row
+     takes the active fill while held, one step above hover, landing at once like the hover. */
+  .area-menu__item:active:not([data-disabled], [data-selected]) { background-color: var(--area-bg-component-active); }
   @media (hover: hover) { .area-menu__item:hover { transition-duration: 0s; } }
   .area-menu__item:is([data-highlighted], [data-selected], :focus-visible, :active, [aria-expanded="true"]),
   .area-menu:has(.area-menu__item:focus-visible) .area-menu__item { transition-duration: 0s; }
@@ -1249,14 +1261,14 @@
   }
 
   .area-menu__separator {
-    block-size: 1px;
+    block-size: var(--area-border-width); /* a seam inside the menu, as Panel's rules (consistency pass 2026-10-12) */
     /*
      * spec: 6px from the rows on each side, compact 5 (the row gap plus the rest; owner
      * 2026-10-02, cursor-desktop.md). Cursor's desktop menu 6 / 1 / 6; VS Code and Cursor web
      * 5 / 1 / 5, Figma 7 / 1 / 7; Notion 4, ChatGPT 8. Was 4 / 1 / 4 (Notion), and 10 before
      * that, a 21px band (docs/specs/menu.md).
      */
-    margin-block: calc(var(--area-space-6) - 1px * var(--area-ui-dense) - var(--area-ui-row-gap)); /* spec */
+    margin-block: round(nearest, calc(var(--area-space-6) - 1px * var(--area-ui-dense) - var(--area-ui-row-gap)), 1px); /* spec; rounded: half spacing steps would land on half pixels */
     margin-inline: var(--area-space-8);
     background-color: var(--area-border-decorative);
   }

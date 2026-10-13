@@ -3,7 +3,6 @@ import assert from 'node:assert/strict';
 import { createElement as h } from 'react';
 import { renderToString } from 'react-dom/server';
 import { Badge, BadgeGroup, Indicator, IndicatorAnchor, badgeVariants, MANIFESTS } from '../dist/modules/index.js';
-import { readFileSync } from 'node:fs';
 const render = element => renderToString(element);
 test('default and full variant/tone matrix preserve orthogonal classes', () => {
   assert.match(render(h(Badge,null,'Draft')), /area-badge--soft area-badge--neutral area-badge--md/);
@@ -45,16 +44,22 @@ test('group limits children without losing them and uses native popover relation
   assert.throws(()=>render(h(BadgeGroup,{visibleCount:NaN})),RangeError);
 });
 test('Badge gallery splits the complete matrix into one specimen per tile', async () => {
-  const {COMPONENT_PAGES}=await import('../../../apps/docs/src/pages.mjs');
-  const examples=COMPONENT_PAGES.find(page=>page.slug==='badge').examples;
-  const gallery=readFileSync(new URL('../../../apps/docs/dist/index.html',import.meta.url),'utf8');
+  // The app's gallery (apps/desktop, the source of truth) builds its tiles from specimens.mjs; the
+  // archived docs build this test once read is gone.
+  const {COMPONENT_PAGES}=await import('../../../apps/desktop/src/content/pages.mjs');
+  const {componentSpecimens}=await import('../../../apps/desktop/src/content/specimens.mjs');
+  const family=COMPONENT_PAGES.find(page=>page.slug==='badge');
+  const examples=family.examples;
   assert.equal(examples[0].demo,'BadgeDefault');assert.equal(examples[1].demo,'BadgeVariants');assert.equal(examples[2].demo,'BadgeSizes');
+  const tiles=componentSpecimens(family,()=>true);
+  const demos=new Set();
   for(const variant of MANIFESTS.badge.variants.variant) for(const tone of MANIFESTS.badge.variants.tone) {
-    const id=`gallery-badge-variant-${variant}-tone-${tone}`;
-    const tile=gallery.split(`id="${id}"`)[1].split('</article>')[0];
-    assert.equal((tile.match(/class="area-badge /g)||[]).length,1,`${variant}/${tone}`);
+    const tile=tiles.find(entry=>entry.id===`variant-${variant}-tone-${tone}`);
+    assert.ok(tile,`${variant}/${tone} has its own tile`);
+    assert.ok(!demos.has(tile.demo),`${variant}/${tone} has its own demo`);
+    demos.add(tile.demo);
   }
-  assert.ok(!gallery.includes('data-badge-demo="BadgeToneMatrix"'));
+  assert.ok(!tiles.some(entry=>entry.demo==='BadgeToneMatrix'));
 });
 
 test("badge media and dismiss actions preserve accessible native structure", () => {

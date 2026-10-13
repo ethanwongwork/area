@@ -66,8 +66,9 @@ area    div.area-board (flex, 12 gap, scrolls sideways)
 | title | UI type 500 (14/20) | Notion 15/22.5 500 | Area's ramp has no 15 |
 | icon | 16 glyph in a 20 square | Notion's 18 icon in a 24 button | Area's UI icon in a box one title line tall |
 | card link | the title is the link; its ::after covers the card | Notion's whole card is a link | Lets actions be separate controls (no button inside a link) |
-| actions | top 8 end 8, on a surface plate with the float lift, shown on hover or focus | Notion | — |
-| hover | the card darkens to `bg-component-hover`; ink fixed | Area's row plate rule | Notion's hover not captured (window hidden) |
+| actions | top 8 end 8, on a surface plate with the float lift and the floating frame (`border-float`, an inset outline), shown on hover or focus | Notion | The frame since the 2026-10-12 consistency pass: in dark the plate matched the card |
+| hover | neutral: the card darkens to `bg-component-hover`; in a colour, the colour at **6%** in the surface; ink fixed | Notion, measured 2026-10-12: the column's tint laid over the column (purple L 0.960, chroma 0.015) | 6% caps every colour at Notion's chroma (Area's Tag inks are more saturated: 8% gave purple 0.020) and puts the gray column on the neutral #f3 |
+| corners | column = card corner + 8 × `radius-concentric` (**20** at the default), card `radius-container` (12), actions plate = card − 8 floored (**4**, Notion's) and its buttons the same | Area's concentric rule (DESIGN_SYSTEM.md "Size and shape") | Notion draws 10 and 10, not concentric |
 
 ## Behavior and accessibility
 
@@ -88,8 +89,10 @@ end; a card with a Tag, a date and David Tee's avatar wraps its properties under
 
 ## Open questions
 
-1. Card radius: Area's container corner (12) or Notion's 10? Recommendation: Area's, so cards match Card and Panel.
-2. Count in the tone's ink, as Notion's? Recommendation: keep Count's muted ink; the Tag carries the colour.
+Resolved 2026-10-12 (owner, review round 21: "go with your recs"):
+
+1. Card radius: Area's container corner (12), so cards match Card and Panel; the column is now concentric with it (20).
+2. Count in the tone's ink: superseded in round 8, when the count became a soft Badge that takes the column's colour.
 
 ## Review note, 2026-10-10
 
@@ -108,7 +111,7 @@ Owner, round 7 (rethink), applied:
 | header buttons | `actions` at the header's end (the demos: add and more, ghost sm icon Buttons) | Notion shows them on hover | "add buttons to the right side" |
 | count | a soft Badge sm; in a coloured column its plate and ink take the colour (12% / the colour's ink) | Count, muted | "make the counter a badge instead" |
 | colours | `color`: neutral (default), gray, brown, orange, yellow, green, blue, purple, pink, red, each Tag's ink of that colour | `tone` with semantic names | "focus on the colors as just custom colors rather than semantic. the default should just be neutral" |
-| add row | `onAdd` shows "Add new" (`addLabel`): full width, start-aligned, a card's size (8 10 padding, 36 tall, container corner), the add glyph; muted in neutral, the colour's ink with an 8% / 12% hover / pressed plate in a colour | Notion's "+ New page" button | "the new page button should be add new ... full width but still left aligned, same size as the blocks above it ... colored like the custom color" |
+| add row | `onAdd` shows "Add new" (`addLabel`): full width, start-aligned, a card's size (8 10 padding, 36 tall, container corner), the add glyph; muted in neutral, the colour's ink with a 6% / 9% hover / pressed plate in a colour (8% / 12% until 2026-10-12) | Notion's "+ New page" button | "the new page button should be add new ... full width but still left aligned, same size as the blocks above it ... colored like the custom color" |
 
 ## Review note, 2026-10-11 (round 8)
 
@@ -124,6 +127,11 @@ Owner, round 7 (rethink), applied:
   shows on hover, so the page lists the tiles as unchanged: hover a card in the purple, blue or green tile.
 - **Why:** you asked for the hover to be coloured too. It uses the same strength as the coloured "Add new" row's hover.
 
+## Review note, 2026-10-12 (consistency pass)
+
+- **What changed:** The edit / more plate that appears on a card has the thin frame every floating surface has. A card in a coloured column hovers lighter (the colour at 6%, was 8%), and the add row with it (6% / 9%). The column's corners are rounder (20, was 12) so they follow the cards' corners evenly, and the edit / more plate's corners are tighter (4, was 6), following the card's.
+- **Why:** In dark mode the plate was the card's own colour and its shadow doesn't show on near-black, so it couldn't be seen; Menu, Popover and the other floating surfaces draw this frame for the same reason. Notion's plate has one too. You said the hover looked too dark. Measured on Notion: a hovered card takes its column's own tint, about as light as Area's 8% but far less saturated; at 6% every colour stays within Notion's saturation, and gray lands exactly on the neutral hover. You asked about the corners: the card (12) sat 8 inside a column with the same 12 corner, so the gap widened at each corner; Area's rule makes the outer shape the inner corner plus the gap (12 + 8 = 20), and the plate 8 inside the card the card's corner less 8 (4, as Notion's).
+
 ## Feedback log
 
 - 2026-10-10 · owner: "can you keep working, ill bring chrome to the front later" → Board from Notion's board view; 13
@@ -133,3 +141,6 @@ Owner, round 7 (rethink), applied:
   row (`onAdd`, card-sized, coloured) → Board.tsx, board.css, manifest (`color`), demos, tests.
 - 2026-10-11 · owner, review round 8 (needs changes): "hover state of the board cards should be colored too?" → in a coloured column the card's hover is the column's colour mixed into the surface at 8% (the add row's hover strength); neutral columns keep `bg-component-hover`.
 - 2026-10-12 · owner, review round 9: approved → Complete in `component-status.mjs`.
+- 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the card actions plate draws the floating frame, `border-float` as an inset outline (board.css). (docs/research/consistency-audit-2026-10-12.md)
+- 2026-10-12 · owner, 2026-10-12: "the hover state here seems too drastic/dark. is the corner radius for this component correct too?" → card hover 6% (was 8%) and add row 6% / 9% (was 8% / 12%), from Notion's hover measured read-only on the owner's "tasks" board (purple, blue and default columns: the hovered card's fill is the column's tint); the column's corner is concentric with its cards (`radius-container` + 8 × `radius-concentric`, 20), the actions plate concentric inside the card (4) with its buttons (board.css). (docs/research/consistency-audit-2026-10-12.md)
+- 2026-10-12 · owner, review round 21 (components21): approved with the open questions' recommendations ("go with your recs"), no change → Complete in `component-status.mjs`.

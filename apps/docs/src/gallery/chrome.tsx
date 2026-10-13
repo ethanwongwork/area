@@ -11,7 +11,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Button, Chip, ChipGroup, Field, Nav, NavGroup, NavItem, Panel, PanelSection, Segmented, Select } from "@area/react";
 import { PilotPanelRightIcon } from "../pilot-icons.tsx";
-import { GALLERY_CANVAS_ID, GALLERY_CONTROLS, GALLERY_STORAGE_KEY } from "./controls.ts";
+import { GALLERY_CANVAS_ID, GALLERY_CONTROLS, GALLERY_STORAGE_KEY } from "../../../desktop/src/gallery/controls.ts";
 
 /*
  * Rail widths (picks, not measured: Cursor's sidebar width is not in the captures). The nav is

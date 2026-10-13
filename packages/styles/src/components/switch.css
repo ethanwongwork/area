@@ -7,7 +7,9 @@
     /* spec: the thumb travels 12px at every size, as in ChatGPT (32 x 20) and Notion (30 x 18). */
     --_travel: var(--area-space-12);
     --_w: calc(var(--_h) + var(--_travel));
-    --_h: var(--area-mark-md);
+    /* The track follows the type size, 4 taller than a check box (18 at 12-13, 20 at 14, 22, 24 at
+       16; axes/type-size.ts): it was 20 at every size. */
+    --_h: var(--area-mark-toggle);
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
     --_inset: var(--area-space-2);
@@ -138,7 +140,7 @@
 
   /* Disabled dims the whole control, like Checkbox, Radio and Button, so an on switch still
      reads as on. It used to repaint the track grey, which hid the checked state. */
-  .area-switch[data-disabled] { cursor: not-allowed; opacity: var(--_disabled-opacity, 0.5); }
+  .area-switch[data-disabled] { cursor: not-allowed; opacity: var(--area-opacity-disabled); }
   .area-switch[data-read-only] { cursor: default; }
   .area-switch[data-loading] { cursor: progress; }
 

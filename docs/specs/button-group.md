@@ -92,3 +92,4 @@ and `color` over 100ms.
 - 2026-10-01 · audit A-23 (owner pick A) → a disabled button's seam is drawn by the enabled neighbour at full strength (was ~75% under the dimmed button) → button-group.css:83-94.
 - 2026-10-01 · audit H-26 → a group whose buttons are all disabled dims once as a whole (one disabled part still dims alone) → button-group.css:98-102.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → no group change; children inherit Button's instant-in, fast-out rule.
+- 2026-10-12 · owner, 2026-10-12: "go with your recommendations" (consistency pass) → the solid neutral group's quiet ink reads `fg-quiet` (O5: one role for a literal written in several families; same paint). (docs/research/consistency-audit-2026-10-12.md)

@@ -30,18 +30,18 @@
        the side (Figma's document swatches and edge layer, `figma--swatches`). Was min(radius-small,
        size / 4): 25% up to 24px, then capped at 6, so larger swatches read squarer. */
     --_shape: 0.2; /* at the default; scales with the setting, square at Sharp */
-    /* Required: it keeps a white swatch visible, so it ignores the Surface axis (audit F-5). */
-    --_edge: var(--area-stroke-width);
+    /* The edge is the palette's transparent hairline, drawn over the colour (below), not a solid ring
+       outside it (owner, 2026-10-12: one swatch outline everywhere, the palette's and the colour
+       cards'). Required: it keeps a white swatch visible, so it ignores the Surface axis (audit F-5). */
+    --_edge: 0px;
     /* Rounded to even pixels (radius audit D6; all even, owner 2026-10-03): 12 -> 2, 16, 20 and
        24 -> 4 at the default; times setting / 8 elsewhere (4 x factor). */
     --_radius: max(var(--area-radius-min), round(nearest, calc(var(--_size) * var(--_shape) * 4 * var(--area-radius-factor)), 2px));
     /* The layers inside the edge are concentric with it (outer - edge), so the edge is an even 1px all
        round. A 20% inner shape of its own (tried 2026-09-28) made the fill rounder than the edge. */
     --_inner-radius: max(0px, calc(var(--_radius) - var(--_edge)));
-    /* spec (owner, 2026-09-28): a solid, very light edge, so neither the colour nor the checker shows
-       through it; two steps off the surface in each theme (neutral 50 light, 800 dark), visible
-       against a white swatch and lost against colour. */
-    --_edge-color: var(--area-bg-component); /* the role it equalled exactly (audit F-36) */
+    /* The checker's light cells, under a translucent colour (was also the solid edge, 2026-09-28). */
+    --_edge-color: var(--area-bg-component);
     overflow: hidden;
     border-radius: var(--_radius);
     background: var(--_edge-color);
@@ -67,6 +67,13 @@
   :is(.area-color-picker__preview-new, .area-color-picker__preview-original)::after {
     background: var(--_swatch-color);
     box-shadow: inherit;
+  }
+  /* The swatch ring (`token-swatch-ring`, black 10% / white 10% in dark), inside the shape, so a swatch is
+     outlined on any ground and the colour shows through its rim. A required edge: `stroke-width`, so it stays
+     under the Elevated surface preset (audit F-5; consistency pass 2026-10-12, it had regressed to `border-width`). */
+  .area-color-swatch {
+    outline: var(--area-stroke-width) solid var(--area-token-swatch-ring);
+    outline-offset: calc(var(--area-stroke-width) * -1);
   }
   .area-color-swatch--sm { --_size: var(--area-mark-sm); }
   .area-color-swatch--md { --_size: var(--area-mark-md); }
@@ -134,7 +141,7 @@
   }
 
   /* Palette: contiguous cells filling the width, like the iOS color grid. The outer edge is
-     rounded like a color area; selection is the color picker's thumb ring, drawn inside. */
+     rounded like a color area; selection is the swatch rows' ring, drawn inside the cell. */
   .area-color-swatch-picker--palette {
     display: grid;
     grid-template-columns: repeat(var(--_columns), minmax(0, 1fr));
@@ -142,26 +149,34 @@
     inline-size: 100%;
     border-radius: var(--area-radius-control-sm);
     overflow: clip;
-    outline: 1px solid light-dark(rgb(0 0 0 / 0.1), rgb(255 255 255 / 0.1)); /* spec */
-    outline-offset: -1px;
+    outline: var(--area-stroke-width) solid var(--area-token-swatch-ring); /* the swatch ring, round the whole grid */
+    outline-offset: calc(var(--area-stroke-width) * -1);
   }
   .area-color-swatch-picker--palette > .area-color-swatch-picker__cell { inline-size: auto; block-size: auto; aspect-ratio: 1; border-radius: 0; }
   .area-color-swatch-picker--palette > .area-color-swatch-picker__cell > .area-color-swatch {
-    inline-size: 100%; block-size: 100%; --_radius: 0px; --_inner-radius: 0px; --_edge: 0px; box-shadow: none;
+    inline-size: 100%; block-size: 100%; --_radius: 0px; --_inner-radius: 0px; --_edge: 0px; box-shadow: none; outline: none;
     /* The rings are the swatch's (its colour layer inherits them): in at once, out on fast (motion, 2026-10-07). */
     transition: box-shadow var(--area-duration-fast) var(--area-ease-out);
   }
+  /* States (owner, review round 18, with the iOS colour grid: "maybe just an outline that goes around the swatch"):
+     selected is a white outline straddling the cell's edge, lightly rounded, the colour left
+     as it is, as iOS draws it; a black 15% line inside the white keeps it visible on white and pale cells in both themes
+     (the palette's colours don't change with the theme, so the line doesn't either; the thumb's pairing). Hover is the same outline, lighter and inside only. Round 17's survey:
+     docs/research/swatch-palette-survey.md. Thickness (owner, round 19: "is the stroke thickness correct?"): measured on
+     the owner's iOS screenshot, the ring is 3.5 of a 35 cell (10%), about 2.5 outside and 1 inside; at Area's ~20 cells
+     that is 2: 1 outside, 1 inside (was 3). */
   @media (hover: hover) {
     .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:hover:not(:has(input:checked, input:disabled)) > .area-color-swatch {
-      box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.6); /* spec */
+      box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.7), inset 0 0 0 2px rgb(0 0 0 / 0.15); /* spec */
       transition-duration: 0s;
     }
   }
   .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:has(input:checked) { z-index: 1; background: none; box-shadow: none; }
   .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:has(input:checked) > .area-color-swatch {
-    --_radius: var(--area-radius-control-xs);
+    --_radius: var(--area-radius-min); /* spec: iOS's lightly rounded outline; 2, so the colour's corners barely move */
     --_inner-radius: var(--_radius);
-    box-shadow: inset 0 0 0 2px #fff, 0 0 0 1px rgb(0 0 0 / 0.2), inset 0 0 0 3px rgb(0 0 0 / 0.2); /* spec */
+    overflow: visible;
+    box-shadow: 0 0 0 1px #fff, inset 0 0 0 1px #fff, inset 0 0 0 2px rgb(0 0 0 / 0.15); /* spec: iOS white, 10% of the cell */
     transition-duration: 0s;
   }
   .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:has(input:focus-visible) { outline-offset: calc(var(--area-focus-width) * -1); z-index: 2; }
@@ -192,8 +207,9 @@
     flex: 0 0 auto;
     inline-size: max-content;
     /* The surface gap ColorPicker's value row draws, Figma's colour row (audit F-7 A; was the
-       decorative rule, nearly invisible on the soft fill). */
-    border-inline-start: var(--area-border-width) solid var(--area-bg-surface);
+       decorative rule, nearly invisible on the soft fill). A joined control's seam, so `stroke-width`, as every
+       Input group seam (consistency pass 2026-10-12). */
+    border-inline-start: var(--area-stroke-width) solid var(--area-bg-surface);
   }
   .area-input-group.area-color-field > .area-color-field__opacity > .area-number-field__control {
     flex: 0 0 auto;
@@ -222,8 +238,13 @@
     --_rhythm: calc(12px - 4px * var(--area-ui-dense)); /* spec: 12, compact 8 */
     --_track: 16px; /* spec */
     --_thumb-ring: 4px; /* spec */
-    --_hairline: light-dark(rgb(0 0 0 / 0.1), rgb(255 255 255 / 0.1)); /* spec */
-    --_thumb-edge: rgb(0 0 0 / 0.2); /* spec */
+    --_hairline: var(--area-token-swatch-ring); /* the swatch ring: the area, tracks and previews show colour too */
+    /* spec (owner, review round 16: "the slider circle transparency on the outer stroke is kinda odd"): the thumb is as
+       tall as its track, so a translucent outer edge (Figma's black 20%) sat half over the colour and half over the
+       panel and changed colour around the circle. It is opaque now, one grey all round; the inner edge between the white
+       ring and the fill is the swatch ring (black 10%), as every swatch. */
+    --_thumb-edge: var(--area-edge-control-hover); /* Slider's thumb edge: #d4, stronger under increased contrast */
+    --_thumb-inner: var(--area-token-swatch-ring);
     --_thumb-lift: 0 1px 3px -2px rgb(0 0 0 / 0.1), 0 5px 12px -2px rgb(0 0 0 / 0.13); /* spec */
     /* The alpha track is a range input (no layers inside it): the same checker as a gradient, three
        rows meeting its top and bottom (Figma's track checker, ~5px cells; batch 10 side by side). */
@@ -260,7 +281,7 @@
     position: relative; aspect-ratio: 1; touch-action: none; cursor: crosshair;
     background: linear-gradient(to top, #000, transparent), linear-gradient(to right, #fff, transparent), hsl(var(--_hue) 100% 50%);
     border-radius: var(--area-radius-control-sm);
-    box-shadow: inset 0 0 0 1px var(--_hairline);
+    box-shadow: inset 0 0 0 var(--area-stroke-width) var(--_hairline);
   }
   /* One thumb for the area and both tracks. Vendor pseudo-elements take separate rules:
      an unsupported one invalidates every selector in its list. */
@@ -269,7 +290,7 @@
     inline-size: var(--_track); block-size: var(--_track);
     border: var(--_thumb-ring) solid #fff; border-radius: var(--area-radius-full);
     background: var(--_thumb-color, var(--_swatch-color));
-    box-shadow: 0 0 0 1px var(--_thumb-edge), inset 0 0 0 1px var(--_thumb-edge), var(--_thumb-lift);
+    box-shadow: 0 0 0 var(--area-stroke-width) var(--_thumb-edge), inset 0 0 0 var(--area-stroke-width) var(--_thumb-inner), var(--_thumb-lift);
   }
   .area-color-picker__slider::-webkit-slider-thumb {
     appearance: none;
@@ -277,7 +298,7 @@
     inline-size: var(--_track); block-size: var(--_track);
     border: var(--_thumb-ring) solid #fff; border-radius: var(--area-radius-full);
     background: var(--_thumb-color, var(--_swatch-color));
-    box-shadow: 0 0 0 1px var(--_thumb-edge), inset 0 0 0 1px var(--_thumb-edge), var(--_thumb-lift);
+    box-shadow: 0 0 0 var(--area-stroke-width) var(--_thumb-edge), inset 0 0 0 var(--area-stroke-width) var(--_thumb-inner), var(--_thumb-lift);
   }
   /* Whole pixels (docs/MOTION.md crispness, 2026-10-07): the value's percentage of the area is rounded,
      and the 16px thumb's half is 8, so the ring and its edge never land on a half pixel. It follows
@@ -296,12 +317,12 @@
   .area-color-picker__slider {
     appearance: none; display: block; inline-size: 100%; block-size: var(--_track); margin: 0;
     border-radius: var(--area-radius-full); cursor: pointer;
-    box-shadow: inset 0 0 0 1px var(--_hairline);
+    box-shadow: inset 0 0 0 var(--area-stroke-width) var(--_hairline);
   }
   .area-color-picker__slider::-moz-range-thumb {
     box-sizing: border-box; inline-size: var(--_track); block-size: var(--_track);
     border: var(--_thumb-ring) solid #fff; border-radius: var(--area-radius-full); background: var(--_thumb-color, var(--_swatch-color));
-    box-shadow: 0 0 0 1px var(--_thumb-edge), inset 0 0 0 1px var(--_thumb-edge), var(--_thumb-lift);
+    box-shadow: 0 0 0 var(--area-stroke-width) var(--_thumb-edge), inset 0 0 0 var(--area-stroke-width) var(--_thumb-inner), var(--_thumb-lift);
   }
   .area-color-picker__slider:focus-visible { outline: none; }
   .area-color-picker__slider:focus-visible::-moz-range-thumb { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
@@ -338,7 +359,7 @@
   .area-color-picker__contrast-pair {
     position: relative; flex: none; overflow: clip;
     inline-size: var(--area-icon-md); block-size: var(--area-icon-md); border-radius: var(--area-radius-full);
-    background: var(--_swatch-color); box-shadow: inset 0 0 0 1px var(--_hairline);
+    background: var(--_swatch-color); box-shadow: inset 0 0 0 var(--area-stroke-width) var(--_hairline);
   }
   .area-color-picker__contrast-pair > span { position: absolute; inset: 0 0 0 50%; background: var(--_swatch-color); }
   .area-color-picker__contrast-ratio { font-variant-numeric: tabular-nums; }
@@ -355,7 +376,7 @@
   .area-color-picker__preview {
     display: grid; grid-template-rows: 1fr 1fr; flex: none; align-self: stretch;
     inline-size: var(--area-control-sm); border-radius: var(--area-radius-control-sm); overflow: clip;
-    box-shadow: inset 0 0 0 1px var(--_hairline);
+    box-shadow: inset 0 0 0 var(--area-stroke-width) var(--_hairline);
   }
   .area-color-picker__preview-new,
   .area-color-picker__preview-original {

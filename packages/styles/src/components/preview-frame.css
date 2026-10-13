@@ -1,0 +1,95 @@
+/* ---------------------------------------------------------------------------
+ * Preview frame
+ *
+ * The frame at the head of an inspector that shows the one selected thing: an icon large, an image or vector
+ * contained whole, or a colour filling it. The column's width at a fixed aspect, the content centred and never
+ * enlarged. By default it is the gallery's component tile in small: the surface in Card's edge (owner, 2026-10-13),
+ * so a component previews on the surface it is drawn for (Polaris Thumbnail: white with a hairline). `subtle` is
+ * Figma's grey well (rgb(245)); content inset about its corner (Figma, Penpot). docs/specs/preview-frame.md.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-preview-frame {
+    --_aspect: 1; /* spec: Figma and Penpot asset tiles, square */
+    --_inset: var(--area-space-12); /* spec: Figma 6 at radius 5, Penpot 8 at 8: about the corner */
+    --_ground: var(--area-bg-surface); /* spec: the gallery tile's ground (owner, 2026-10-13) */
+    --_edge: var(--area-border-card); /* spec: the gallery tile's and Card's edge (neutral 100, dark 750) */
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+    place-items: center;
+    inline-size: 100%;
+    aspect-ratio: var(--_aspect);
+    padding: var(--_inset);
+    overflow: hidden;
+    border-radius: var(--area-radius-container); /* spec: 12, Box model's outer box */
+    background: var(--_ground);
+    color: var(--area-fg-default);
+  }
+  .area-preview-frame--square { --_aspect: 1; }
+  .area-preview-frame--landscape { --_aspect: 4 / 3; } /* spec: the gallery's tiles */
+  .area-preview-frame--wide { --_aspect: 2; } /* spec: the app's colour preview */
+  .area-preview-frame--surface { --_ground: var(--area-bg-surface); }
+  /* Figma's well, Box model's ground: a recess in the panel, outlined by the swatch ring as Asset row's well. */
+  .area-preview-frame--subtle { --_ground: var(--area-bg-subtle); --_edge: var(--area-token-swatch-ring); }
+
+  /* The content is contained and only ever scaled down (Figma scale-down, Penpot contain, Polaris max 100%). An svg
+     keeps its own size. */
+  .area-preview-frame > :is(img, video, canvas, svg, picture) {
+    display: block;
+    max-inline-size: 100%;
+    max-block-size: 100%;
+  }
+  .area-preview-frame > :is(img, video) { object-fit: contain; }
+  /* Media nests in the corner: max(radius-floor, corner - inset), 4 at the default (DESIGN_SYSTEM.md, nested
+     radius). Its box is the drawn picture (max sizes keep the aspect), so the corner lands on the picture. An icon has
+     no box to round. */
+  .area-preview-frame > :is(img, video, canvas, picture) { border-radius: max(var(--area-radius-floor), calc(var(--area-radius-container) - var(--_inset))); }
+
+  /* Transparency: Color swatch's checker (its ink through the 2 x 2 pixel mask) at a fixed cell, so a frame of any
+     width shows whole cells from its corner. A painted frame always has it, so a colour's alpha shows. */
+  .area-preview-frame--checker,
+  .area-preview-frame:has(> .area-preview-frame__paint) {
+    --_checker-tile: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2 2' shape-rendering='crispEdges'%3E%3Cpath d='M0 0h1v1H0zM1 1h1v1H1z'/%3E%3C/svg%3E");
+    --_checker-ink: color-mix(in srgb, var(--area-fg-default) 16%, var(--area-bg-surface)); /* spec: Color swatch */
+    --_checker-cell: var(--area-space-8); /* spec: Figma 10.67; Area's nearest step */
+    --_ground: var(--area-bg-surface);
+  }
+  /* A pattern or a colour takes the swatch ring: translucent, it shows evenly over any paint, as the gallery's painted
+     tiles and Color swatch (a solid line read as a mat around a colour). */
+  .area-preview-frame--checker,
+  .area-preview-frame:has(> .area-preview-frame__paint) { --_edge: var(--area-token-swatch-ring); }
+  .area-preview-frame--checker::before,
+  .area-preview-frame:has(> .area-preview-frame__paint)::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--_checker-ink);
+    mask: var(--_checker-tile) 0 0 / calc(var(--_checker-cell) * 2) auto repeat;
+    pointer-events: none;
+  }
+  /* A colour (`--_color`, set by the component) fills the frame over the checker. */
+  .area-preview-frame__paint {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--_color);
+  }
+
+  /* The edge, inside and over the content, so a white image or a pale colour is still outlined. A frame with no
+     shadow: `stroke-width` (DESIGN_SYSTEM.md, Strokes). */
+  .area-preview-frame::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 var(--area-stroke-width) var(--_edge);
+    pointer-events: none;
+  }
+
+  @media (forced-colors: active) {
+    .area-preview-frame { border: var(--area-border-width) solid CanvasText; }
+    .area-preview-frame__paint { forced-color-adjust: none; }
+  }
+}

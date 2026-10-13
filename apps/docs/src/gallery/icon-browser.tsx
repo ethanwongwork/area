@@ -80,7 +80,7 @@ function matches(icon: Entry, query: string) {
  * size-curve shifts are inline CSS on the page), React's ids renamed after the icon, nothing else
  * changed. It is read from the page, so it matches what the browser shows at that size.
  */
-function standaloneSvg(svg: SVGSVGElement, name: string) {
+export function standaloneSvg(svg: SVGSVGElement, name: string) {
   const copy = svg.cloneNode(true) as SVGSVGElement;
   const source = [svg, ...svg.querySelectorAll<SVGElement>("*")];
   const target = [copy, ...copy.querySelectorAll<SVGElement>("*")];
@@ -116,7 +116,7 @@ function standaloneSvg(svg: SVGSVGElement, name: string) {
 }
 
 /** A button whose label reads "Copied" for a moment after it succeeds. */
-function CopyButton({ label, copy, icon, fullWidth }: { label: string; copy: () => Promise<void> | void; icon: ReactNode; fullWidth?: boolean }) {
+export function CopyButton({ label, copy, icon, fullWidth }: { label: string; copy: () => Promise<void> | void; icon: ReactNode; fullWidth?: boolean }) {
   const [done, setDone] = useState(false);
   useEffect(() => {
     if (!done) return;

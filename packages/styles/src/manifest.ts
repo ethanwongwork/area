@@ -232,7 +232,7 @@ export const descriptionList = {
   description: "Lists labelled values: a term and its value per row.",
   variants: { layout: ["columns", "justified"] },
   booleans: ["divided", "framed"],
-  elements: ["item", "term", "icon", "value"],
+  elements: ["item", "term", "icon", "value", "more", "more-label"],
   defaults: { layout: "columns" },
 } as const satisfies ComponentManifest;
 
@@ -790,7 +790,7 @@ export const table = {
   block: "area-table",
   description: "Presents rows of structured data.",
   variants: { size: ["sm", "md", "lg"] },
-  booleans: ["interactive", "striped", "column-dividers"],
+  booleans: ["interactive", "striped", "column-dividers", "flush", "baseline"],
   elements: ["cell", "link"],
   elementModifiers: { cell: ["numeric", "fit"] },
   defaults: { size: "md" },
@@ -828,12 +828,13 @@ export const code = {
 export const codeBlock = {
   block: "area-code-block",
   description: "Shows a block of code with an optional file header, numbered lines and a copy action.",
-  variants: {},
+  // sm is the inspector's code well (Figma Dev Mode); md the page block.
+  variants: { size: ["sm", "md"] },
   booleans: ["flush", "wrap", "unnumbered"],
   states: ["collapsed"],
   elements: ["header", "title", "language", "languages", "select", "actions", "body", "pre", "code", "line", "gutter", "linenumber", "marker", "text", "toggle"],
   elementModifiers: { line: ["highlighted", "added", "removed"] },
-  defaults: {},
+  defaults: { size: "md" },
 } as const satisfies ComponentManifest;
 
 export const nav = {
@@ -901,6 +902,31 @@ export const boxModel = {
   elements: ["side", "value", "border", "padding", "content", "label", "corner", "caption"],
   elementModifiers: { side: ["top", "right", "bottom", "left"], corner: ["top-left", "top-right", "bottom-right", "bottom-left"] },
   defaults: { tone: "info" },
+} as const satisfies ComponentManifest;
+
+export const tokenRow = {
+  block: "area-token-row",
+  description: "Names a design token a layer uses: the token's plate (Code with its swatch) widened to the row, with its value; optionally copies it.",
+  variants: {},
+  booleans: ["outline", "copyable"],
+  elements: ["value"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const assetRow = {
+  block: "area-asset-row",
+  description: "Lists one exportable asset: its preview, name, details and an optional action.",
+  variants: {},
+  elements: ["preview", "text", "name", "meta", "actions"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const previewFrame = {
+  block: "area-preview-frame",
+  description: "Shows the selected item at the head of an inspector: an icon, an image or a colour, centred in a frame.",
+  variants: { aspect: ["square", "landscape", "wide"], ground: ["surface", "subtle", "checker"] },
+  elements: ["paint"],
+  defaults: { aspect: "square", ground: "surface" },
 } as const satisfies ComponentManifest;
 
 export const editableText = {
@@ -1006,6 +1032,9 @@ export const MANIFESTS = {
   timelineItem,
   editableText,
   boxModel,
+  tokenRow,
+  assetRow,
+  previewFrame,
   scrollArea,
   link,
   toggletip,

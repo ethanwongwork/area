@@ -1,7 +1,7 @@
 import { createElement } from "react";
 import { hydrateRoot } from "react-dom/client";
-import * as displayDemos from "./demos/display.tsx";
-import * as galleryDemos from "./demos/gallery.tsx";
+import * as displayDemos from "../../desktop/src/content/demos/display.tsx";
+import * as galleryDemos from "../../desktop/src/content/demos/gallery.tsx";
 
 const demos = { ...displayDemos, ...galleryDemos };
 

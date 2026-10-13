@@ -33,18 +33,18 @@
     display: flex;
     align-items: center;
     gap: var(--area-ui-cluster);
-    min-block-size: var(--area-control-md);
-    padding-block: var(--area-space-4);
-    padding-inline: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)); /* 12, compact 8: the code column (compact pass) */
+    min-block-size: var(--_code-bar);
+    padding-block: var(--_code-header-block);
+    padding-inline: var(--_code-start); /* 12, compact 8: the code column (compact pass) */
     border-block-end: var(--area-border-width) solid var(--area-border-decorative);
-    font-size: var(--area-ui-size);
-    line-height: var(--area-ui-leading);
+    font-size: var(--_code-ui-size);
+    line-height: var(--_code-ui-leading);
   }
   /* The trailing action ends as far from the edge as it sits from the top (4), as ChatGPT's header
      buttons sit 7 from the top and the end; the filename keeps the code column (owner 2026-10-01,
      equal insets; was 12 at the end). */
   .area-code-block__header > .area-code-block__actions:last-child {
-    margin-inline-end: calc(var(--area-space-4) - (var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)));
+    margin-inline-end: calc(var(--_code-header-block) - var(--_code-start));
   }
 
   /* The filename is a literal, so it is set in the same face as the code it names. */
@@ -61,8 +61,8 @@
   /* The language is a quiet annotation beside the filename, not a second title. */
   .area-code-block__language {
     color: var(--area-fg-muted);
-    font-size: var(--area-text-sm-size);
-    line-height: var(--area-text-sm-leading);
+    font-size: var(--_code-size);
+    line-height: var(--_code-leading);
   }
 
   .area-code-block__languages {
@@ -143,17 +143,73 @@
     box-decoration-break: clone;
   }
 
+  /* In a shrink-to-fit table cell a name is a value, not prose: it keeps its line rather than breaking
+     at a hyphen (owner, 2026-10-12: "aria-" / "label"), so the column is as wide as its longest name,
+     as Vercel's and Primer's prop tables set them. Other cells still wrap, so a narrow table holds. */
+  .area-table__cell--fit .area-code { white-space: nowrap; }
+
+  /*
+   * Size sets the block's metrics; the base rules read them. md is the page block. sm is the
+   * inspector's code well (Figma Dev Mode, box-model captures 2026-10-12): 18px lines, 8 insets
+   * and a narrow gutter, in Area's 12px floor over Dev Mode's 11.
+   */
+  .area-code-block,
+  .area-code-block--md {
+    --_code-size: var(--area-text-sm-size);
+    --_code-leading: var(--area-text-sm-leading);
+    --_code-block-inset: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)); /* 12, compact 8 */
+    --_code-inline-inset: calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-dense)); /* 16, compact 12 */
+    --_code-start: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)); /* 12, compact 8 */
+    --_code-gutter: calc(var(--area-space-24) + var(--area-space-8));
+    --_code-diff-gutter: var(--area-space-48);
+    --_code-number-start: var(--area-space-6);
+    --_code-number-end: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense));
+    --_code-ui-size: var(--area-ui-size);
+    --_code-ui-leading: var(--area-ui-leading);
+    --_code-header-block: var(--area-space-4);
+    --_code-bar: var(--area-control-md);
+    /* The floating copy: centred on the first line, as far from the end. */
+    --_code-copy-top: calc(var(--area-space-12) + (var(--area-text-sm-leading) - var(--area-control-sm)) / 2);
+    --_code-copy-end: var(--area-space-8);
+    --_code-copy-clear: var(--area-space-48);
+    --_code-radius: var(--area-radius-container);
+  }
+
+  .area-code-block--sm {
+    --_code-size: var(--area-text-xs-size); /* spec: Figma 11; Area's smallest UI text */
+    --_code-leading: calc(var(--area-leading-18) - var(--area-space-2) * var(--area-ui-dense)); /* spec: Figma 18; compact 16 */
+    --_code-block-inset: calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense)); /* spec: Figma 8 top and bottom; compact 6 */
+    --_code-inline-inset: calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense)); /* spec: Figma line padding 8 */
+    --_code-start: calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense)); /* spec */
+    /* spec: numbers 4 in, code 28 in (Figma 4 and 29, less its 1px column); compact 24. */
+    --_code-gutter: calc(var(--area-space-24) + var(--area-space-4) - var(--area-space-4) * var(--area-ui-dense));
+    --_code-diff-gutter: calc(var(--area-space-40) + var(--area-space-4) - var(--area-space-4) * var(--area-ui-dense)); /* spec: 4 + 8 marker + 4 + two digits + 12 */
+    --_code-number-start: var(--area-space-4); /* spec: Figma 4 */
+    --_code-ui-size: var(--area-text-xs-size);
+    --_code-ui-leading: var(--area-text-xs-leading);
+    --_code-bar: var(--area-control-sm);
+    --_code-copy-top: calc(var(--_code-block-inset) + (var(--_code-leading) - var(--area-control-sm)) / 2);
+    --_code-copy-end: var(--_code-copy-top);
+    --_code-copy-clear: calc(var(--_code-copy-top) + var(--area-control-sm) + var(--area-space-8));
+    /* spec (owner, round 11: "inset corner radius for the copy button is not correct"): the header's copy sits as far
+       in as the floating one (3, compact 2), and the corner is the copy's radius plus that inset and the border, so the
+       two corners are concentric: 6 + 3 + 1 = 10 (compact 9). */
+    --_code-header-block: var(--_code-copy-top);
+    --_code-radius: calc(var(--area-radius-control-sm) + var(--_code-copy-top) + var(--area-stroke-width));
+  }
+
   .area-code-block {
     text-align: start;
     position: relative;
     display: flex;
     flex-direction: column;
-    /* spec (audit S7a): Card's edge for a block standing alone; was border-decorative #f3. */
-    border: var(--area-border-width) solid light-dark(var(--area-neutral-100), var(--area-neutral-750)); /* spec */
+    /* spec (audit S7a): Card's edge for a block standing alone; was border-decorative #f3. It has no shadow to carry
+       it, so the frame is `stroke-width`, as Table's and Composer's (consistency pass 2026-10-12). */
+    border: var(--area-stroke-width) solid var(--area-border-card);
     /* spec: the container corner, 12 / compact 8, as Panel. Concentric with the header's copy
        action (radius 6, 5 in = 11); ChatGPT's 24 wraps a 48 header with 36 round buttons 7 in,
        which Area doesn't have (owner, 2026-10-02; reverses audit G-27 A). Code stays 14/20. */
-    border-radius: var(--area-radius-container);
+    border-radius: var(--_code-radius);
     background-color: var(--area-bg-code);
     overflow: hidden;
   }
@@ -179,31 +235,25 @@
    */
   .area-code-block > .area-code-block__actions {
     position: absolute;
-    inset-block-start: calc(
-      var(--area-space-12) + (var(--area-text-sm-leading) - var(--area-control-sm)) / 2
-    );
-    inset-inline-end: var(--area-space-8);
+    inset-block-start: var(--_code-copy-top);
+    inset-inline-end: var(--_code-copy-end);
     z-index: 1;
   }
 
   /* The first line keeps clear of the control that floats over it. */
   .area-code-block > .area-code-block__actions ~ .area-code-block__body
     .area-code-block__line:first-child .area-code-block__text {
-    padding-inline-end: var(--area-space-48);
+    padding-inline-end: var(--_code-copy-clear);
   }
 
   .area-code-block__pre {
-    --_code-gutter: calc(var(--area-space-24) + var(--area-space-8));
-    --_code-block-inset: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)); /* 12, compact 8 */
-    --_code-inline-inset: calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-dense)); /* 16, compact 12 */
-
     margin: 0;
     padding-block: var(--_code-block-inset);
     padding-inline: 0;
     overflow-x: auto;
     font-family: var(--area-font-mono);
-    font-size: var(--area-text-sm-size);
-    line-height: var(--area-text-sm-leading);
+    font-size: var(--_code-size);
+    line-height: var(--_code-leading);
     color: var(--area-fg-default);
     white-space: pre;
     tab-size: 2;
@@ -233,7 +283,7 @@
 
   /* spec: without the gutter, code starts where the header's filename and the numbers do (12). */
   .area-code-block--unnumbered .area-code-block__line:not(.area-code-block__line--added, .area-code-block__line--removed) .area-code-block__text {
-    padding-inline-start: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense));
+    padding-inline-start: var(--_code-start);
   }
 
   /* A diff marker keeps its own column even when the numbers are hidden. */
@@ -248,7 +298,7 @@
     justify-content: flex-end;
     gap: var(--area-space-4);
     /* The gap between number and code, and the row's leading inset when it is a link. */
-    padding-inline: var(--area-space-6) calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense));
+    padding-inline: var(--_code-number-start) var(--_code-number-end);
     color: var(--area-fg-muted);
     font-variant-numeric: tabular-nums;
     /* Numbers are chrome: they must not land in a copied selection. */
@@ -281,7 +331,7 @@
 
   /* A block with diff lines widens every gutter by the marker and its gap (8 + 4) plus room for
      a second digit, so marker and number fit and the code column stays aligned. */
-  .area-code-block__pre:has(.area-code-block__marker) { --_code-gutter: var(--area-space-48); }
+  .area-code-block__pre:has(.area-code-block__marker) { --_code-gutter: var(--_code-diff-gutter); }
 
   /* Diff markers sit inside the gutter, at its start; the number keeps the end. */
   .area-code-block__marker {
@@ -294,7 +344,7 @@
   .area-code-block__text {
     padding-inline-end: var(--_code-inline-inset);
     /* A blank line in the source still occupies a line in the block. */
-    min-block-size: var(--area-text-sm-leading);
+    min-block-size: var(--_code-leading);
   }
 
   /*
@@ -409,7 +459,7 @@
   }
 
   .area-code-block[data-collapsed] .area-code-block__pre {
-    max-block-size: calc(var(--area-text-sm-leading) * 8 + var(--_code-block-inset) * 2);
+    max-block-size: calc(var(--_code-leading) * 8 + var(--_code-block-inset) * 2);
     overflow: hidden;
   }
 
@@ -419,15 +469,15 @@
     justify-content: center;
     gap: var(--area-gap-md);
     inline-size: 100%;
-    block-size: var(--area-control-md);
+    block-size: var(--_code-bar);
     padding: 0;
     border: 0;
     border-block-start: var(--area-border-width) solid var(--area-border-decorative);
     background-color: var(--area-bg-code);
     color: var(--area-fg-muted);
     font-family: inherit;
-    font-size: var(--area-ui-size);
-    line-height: var(--area-ui-leading);
+    font-size: var(--_code-ui-size);
+    line-height: var(--_code-ui-leading);
     /* A label on a transparent control takes 400; 500 is for labels on fills. */
     font-weight: var(--area-weight-regular);
     cursor: pointer;
@@ -477,7 +527,7 @@
 
   .area-code-block__toggle:focus-visible {
     outline: var(--area-focus-width) solid var(--area-focus-color);
-    outline-offset: calc(var(--area-focus-offset) * -1);
+    outline-offset: calc(var(--area-focus-width) * -1); /* inset by its own width, as rows and tabs */
   }
 
   /*
@@ -491,7 +541,7 @@
     position: absolute;
     inset-inline: 0;
     inset-block-end: 0;
-    block-size: calc(var(--area-control-md) * 2);
+    block-size: calc(var(--_code-bar) * 2);
     align-items: flex-end;
     padding-block-end: var(--area-space-8);
     border-block-start: 0;

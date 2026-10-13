@@ -1,6 +1,6 @@
 # Description list spec
 
-**Status:** complete · 2026-10-10 (approved, review round 5)
+**Status:** in review · 2026-10-12 (show more); was: complete · 2026-10-10 (approved, review round 5)
 **Captures:** `docs/research/captures/description-list/`
 **Peers:** Table (frame, row rules), PropertyList (Figma's inspector rows; a different job), Card, Menu rows (icon to text), Badge, Avatar and Link (values)
 
@@ -115,6 +115,8 @@ value started at 170 (4 after the column); Notion's text starts at 174 (cell 4 a
 
 ## Open questions
 
+Resolved 2026-10-12 (owner, review round 21: "go with your recs"): both recommendations taken, no change.
+
 1. Framed takes Table's corner (12) and white surface, where ChatGPT's card is 16 and off-white. Recommendation: keep
    Table's, so data frames match across the system.
 2. A stacked layout (term above value) has design-system precedent but no product use. Recommendation: leave it out
@@ -128,8 +130,41 @@ value started at 170 (4 after the column); Notion's text starts at 174 (cell 4 a
 - **Why:** It was next on the gap list. Columns copies Notion's property rows (34 tall, a 160 term column); justified
   and framed copy ChatGPT's settings card, framed the way Area's tables are.
 
+## Show more, 2026-10-12
+
+Owner: "use Design-system evidence: build it from Ant Design, Polaris, Primer and similar collapse patterns" (the inspector
+plan's Description list "show more"; Figma Dev Mode's List view sits behind its upgrade dialog, and Notion's "N more
+properties" appears only on databases with hide-when-empty properties, which would change the owner's data). Survey:
+`docs/research/show-more-survey.md` (Ant Design, Polaris, Primer, Mantine, Carbon, Radix, React Aria, Chakra from source).
+
+| Slot · property | Area | Basis |
+|---|---|---|
+| API | `visibleCount`; `expanded` / `defaultExpanded` / `onExpandedChange`; `moreLabel` (text or a function of the hidden count) / `lessLabel` | Badge group's `visibleCount`; Mantine's expanded triplet |
+| label | "Show {n} more" / "Show less" | Primer LabelGroup ("Show +N more" / "Show less"), Polaris "Show more" / "Show less"; the count as Notion's "N more properties" |
+| element and ARIA | a native `button` after the `dl` (a `dl` holds only term groups), `aria-expanded`, `aria-controls` → the `dl` | Polaris, Mantine, Carbon, Radix, React Aria |
+| hidden rows | stay in the document with `hidden`, so order holds and a revealed row is the same node | Primer LabelGroup keeps them; Polaris unmounts |
+| focus | stays on the button both ways (the rows are text, nothing to move to) | Carbon; Primer moves focus only to a focusable revealed child |
+| row | a list row: 34 tall (compact 26), 4 below the last row (justified: the row's own 44, no gap) | the list's rhythm |
+| chevron | 16, in the term's icon slot, so the label starts where the term names do (28 in); points down, turns 180° when open on `duration-fast` | Carbon and Chakra rotate; Primer guidance: down closed, up open |
+| ink and type | `fg-muted`, the UI size, 400; an underline on hover, the ink fixed | Code block's toggle; Polaris plain button (underline on hover) |
+| motion | rows appear and go at once (no height animation) | Polaris and Carbon animate height; Area's Accordion recipe could be added later |
+
+Checked in the gallery with a hydrated demo: "Show 3 more" → "Show less", `aria-expanded` true, 0 rows hidden, the
+chevron at 180°, focus on the button; back again. Not checked: dark, compact, a screen reader. Framed lists put the
+button below the frame (the `dl` carries the frame).
+
+## Review note, 2026-10-12 (show more)
+
+- **What changed:** a description list can show only its first rows, with a "Show 3 more" button after them that reveals
+  the rest and turns into "Show less".
+- **Why:** you asked for the inspector's "show more", built from design systems: it follows Polaris and Primer's show
+  more / show less buttons and lines up with the term names like Notion's "N more properties".
+
 ## Feedback log
 
 - 2026-10-10 · owner: "go with your recommendations, keep building" → Description list from Notion's page properties
   and ChatGPT's account card; 9 captures, 6 gallery tiles, in review.
 - 2026-10-10 · owner, review round 5: approved → Complete in `component-status.mjs`.
+- 2026-10-12 · owner: build "show more" from design-system evidence → `visibleCount` and the Show more button (above). In review.
+- 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the divided rules and the framed edge are at `stroke-width`, Table's (were `border-width`) (description-list.css). (docs/research/consistency-audit-2026-10-12.md)
+- 2026-10-12 · owner, review round 21 (components21): approved with the open questions' recommendations ("go with your recs"), no change → Complete in `component-status.mjs`.

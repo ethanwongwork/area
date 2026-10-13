@@ -108,7 +108,7 @@ const ITEM = "[role^='menuitem']";
 // A menu's own rows: a nested MenuSub's rows belong to the submenu.
 const enabledItems = (menu: HTMLElement) => [...menu.querySelectorAll<HTMLElement>(ITEM)].filter(item => item.closest("[role='menu']") === menu && !item.matches(":disabled, [aria-disabled='true'], [data-disabled]"));
 
-export function AnchoredMenu({ trigger, open: openProp, defaultOpen, onOpenChange, side = "bottom", align = "start", offset = MENU_OFFSET, id: idProp, surface }: AnchoredProps & { /** The menu's id when the consumer sets one. */ id?: string; surface: (props: Div & { ref: Ref<HTMLDivElement> }) => ReactNode }) {
+export function AnchoredMenu({ trigger, open: openProp, defaultOpen, onOpenChange, side = "bottom", align = "start", offset = MENU_OFFSET, id: idProp, surface, wrapTrigger }: AnchoredProps & { /** The menu's id when the consumer sets one. */ id?: string; surface: (props: Div & { ref: Ref<HTMLDivElement> }) => ReactNode; /** Wraps the prepared trigger (Menu's `tooltip`). */ wrapTrigger?: (trigger: ReactNode) => ReactNode }) {
   const generatedId = useId();
   const id = idProp ?? generatedId;
   const triggerId = `${id}-trigger`;
@@ -167,8 +167,7 @@ export function AnchoredMenu({ trigger, open: openProp, defaultOpen, onOpenChang
   };
 
   const t = trigger as Trigger;
-  return <>
-    {isValidElement(trigger) ? cloneElement(t, {
+  const prepared = isValidElement(trigger) ? cloneElement(t, {
       ref: triggerRef,
       id: (t.props.id as string | undefined) ?? triggerId,
       "aria-haspopup": "menu",
@@ -182,7 +181,9 @@ export function AnchoredMenu({ trigger, open: openProp, defaultOpen, onOpenChang
         if (event.key === "ArrowUp") { entry.current = "last"; }
         if (event.key === "ArrowDown" || event.key === "ArrowUp") { event.preventDefault(); setOpen(true); }
       }),
-    }) : trigger}
+    }) : trigger;
+  return <>
+    {wrapTrigger ? wrapTrigger(prepared) : prepared}
     {surface({
       id,
       ref: surfaceNode,

@@ -10,7 +10,7 @@ Completion is owner-confirmed. Refining a family reopens it as **in review**; hi
 audits and passing builds do not confer approval.
 
 The single executable status source is
-[`component-status.mjs`](../apps/docs/src/component-status.mjs). Both the gallery and
+[`component-status.mjs`](../apps/desktop/src/content/component-status.mjs). Both the gallery and
 sidebar read it. Complete labels use green-500; unrefined labels use red-500/red-25 and
 specimen tiles use a red-500 edge while retaining the active themed surface. Explicit
 words accompany the colors in the gallery.
@@ -138,6 +138,14 @@ built next; this list is an inventory, not an order of work.
 - **Selection and collections:** ListBox, selectable List, TreeSelect/Cascader,
   TransferList, Rating, ToggleButtonGroup and drag/reorder handles. Choice cards can
   reuse Checkbox/Radio compositions; AvatarGroup and range Slider already exist.
+- **Action tile (candidate, owner 2026-10-12):** an action with its icon stacked over its
+  label, laid out in an equal-width grid. Seen in Cursor's icon gallery hover card (Copy SVG,
+  Download SVG, Copy Symbol); also resembles Figma's "New design file" tiles and share sheets.
+  Not a Button layout: its height follows its content, not the 28 / 32 / 40 size axis, and
+  Button's sources (ChatGPT, Notion, Figma, Untitled UI) only put the icon inline. Before
+  building it, capture it in at least two more products, then decide whether it is its own
+  component or a Card/ToggleGroup composition. The app's icon card uses standard `sm` outline
+  Buttons until then.
 - **Surfaces and layout:** Accordion/Disclosure, Drawer/Sheet, AlertDialog, a two-region
   Splitter and responsive layout primitives (HoverCard, Panel `resizable` and ScrollArea are
   built). PageHeader, Sidebar,

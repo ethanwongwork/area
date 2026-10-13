@@ -5,7 +5,7 @@
 sizes, weights and foreground colors as possible, and let a single variable carry each
 distinction.
 
-## Current Area ramp (`packages/tokens/src/axes/typography.ts`, `density.ts`)
+## Current Area ramp (`packages/tokens/src/axes/type-size.ts`; faces and weights in `typography.ts`)
 
 - Weights: regular 400 and strong 500 (never higher). Strong is used on control labels,
   field labels, nav and tab labels, badges, and every surface title (card, dialog,
@@ -117,3 +117,7 @@ Findings:
   distinct in the increased-contrast mode (CONTRAST.md).
 - Owner review; then update `typography.ts` and `density.ts`, and the components that set
   weight on titles and labels.
+
+## Type size (2026-10-12)
+
+- 2026-10-12 · owner: "the 12 to 16 proposal"; type size separate from density → the `type` axis (12–16, default 14) sets every role: UI text at the base, small text base − 2 (floor 10; was a 12 floor, 2026-10-01), reading text and surface titles base + 2 (titles were held at 16, 2026-09-30), small-text tracking (+0.01 / +0.0075 / +0.005 / +0.0025em for 10–13), the icon stroke (1.125 × base / 14). Display steps down a rung below 14. `packages/tokens/src/axes/type-size.ts`; `docs/research/ui-size-scale-2026-10-12.md`.

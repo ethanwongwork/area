@@ -14,6 +14,8 @@ import { fileURLToPath } from "node:url";
 import { pathToFileURL } from "node:url";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+// The demos and their registry live in the app (the source of truth, 2026-10-12).
+const registry = resolve(root, "../desktop/src/content/registry.tsx");
 
 export async function renderDemos() {
   // Built inside the project, not a temp directory: the bundle leaves react external, so
@@ -23,7 +25,7 @@ export async function renderDemos() {
   const outfile = join(outdir, `registry.${Date.now()}.mjs`);
 
   await build({
-    entryPoints: [join(root, "src", "registry.tsx")],
+    entryPoints: [registry],
     outfile,
     bundle: true,
     format: "esm",
@@ -68,7 +70,7 @@ function extractSources(files) {
   const out = {};
 
   for (const file of Object.values(files)) {
-    const text = readFileSync(join(root, file), "utf8");
+    const text = readFileSync(join(dirname(registry), file), "utf8");
     const pattern = /^export const (\w+) = \(\) => (\(\n[\s\S]*?\n\)|\{\n[\s\S]*?\n\}|.*?);$/gm;
 
     for (const match of text.matchAll(pattern)) {

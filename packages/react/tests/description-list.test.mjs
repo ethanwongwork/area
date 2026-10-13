@@ -17,3 +17,17 @@ test("layout, divided, framed and native props reach the list and its rows", () 
   assert.match(html, /^<dl class="area-description-list area-description-list--justified area-description-list--divided area-description-list--framed" aria-label="Account">/);
   assert.match(html, /<div class="area-description-list__item extra" id="plan">/);
 });
+
+test("visibleCount hides the rest behind a Show N more button after the list; expanded flips the label", async () => {
+  const { DescriptionList: DL, DescriptionListItem: Item } = await import("../dist/modules/index.js");
+  const rows = ["A", "B", "C", "D"].map(t => h(Item, { key: t, term: t }, t));
+  const html = render(h(DL, { visibleCount: 2, id: "props" }, rows));
+  assert.match(html, /^<dl id="props" class="area-description-list area-description-list--columns">/);
+  assert.equal((html.match(/<div class="area-description-list__item" hidden="">/g) || []).length, 2);
+  assert.match(html, /<\/dl><button type="button" class="area-description-list__more" aria-expanded="false" aria-controls="props">/);
+  assert.match(html, /<span class="area-description-list__more-label">Show 2 more<\/span><\/button>$/);
+  const open = render(h(DL, { visibleCount: 2, defaultExpanded: true, lessLabel: "Fewer" }, rows));
+  assert.doesNotMatch(open, /hidden=""/);
+  assert.match(open, /aria-expanded="true"[^>]*>.*Fewer<\/span><\/button>$/);
+  assert.doesNotMatch(render(h(DL, { visibleCount: 4 }, rows)), /__more/);
+});

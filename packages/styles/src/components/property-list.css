@@ -66,8 +66,9 @@
   .area-property-list__indicator {
     position: absolute;
     inset-inline: 0;
-    inset-block-start: calc(var(--_drop) - var(--area-border-width));
-    block-size: calc(var(--area-border-width) * 2);
+    /* A state mark, so `stroke-width`: it must not vanish under the Elevated surface preset. */
+    inset-block-start: calc(var(--_drop) - var(--area-stroke-width));
+    block-size: calc(var(--area-stroke-width) * 2);
     border-radius: var(--area-radius-full);
     /* Neutral ink: a drop line marks a position, not focus (cohesion audit, neutral markers). */
     background: var(--area-fg-default);

@@ -91,6 +91,12 @@ reorders without a slide.
 - **What changed:** The rows sit 2px closer to the panel's edge and to each other, because the Panel around them is tighter. Property list's own geometry is unchanged.
 - **Why:** Panel's spacing was tightened in this round, and every Property list tile sits in a Panel.
 
+## Review note, 2026-10-12 (swatch ring)
+
+- **What changed:** its fill swatches take the new translucent outline (from Color swatch); nothing else changed.
+- **Why:** you asked why the swatch's outline only showed at its corners, then said to apply the fix: the outline is now
+  a light translucent line drawn over the colour, so it shows evenly all the way round on every colour.
+
 ## Feedback log
 
 - 2026-09-28 · owner: truncation in this batch → inspector tiles at 280, Color field and Select fixes
@@ -98,6 +104,8 @@ reorders without a slide.
 - 2026-09-28 · owner: approved (batch 9).
 - 2026-09-28 · inside a panel, items are a row gap apart and values a field gap from their actions (`--_panel-*`).
 - 2026-09-30 · audit S17 (API vocabulary, slice 3/4) → a consumer's `aria-label` wins over `label` on the list (PropertyList.tsx:131; `label` used to override it).
-- 2026-10-01 · audit F-28 (owner pick B) → gallery panels are sm, matching their sm controls (were md panels around sm controls); Panel tier context deferred to compact density → apps/docs/src/demos/gallery.tsx:801-808.
+- 2026-10-01 · audit F-28 (owner pick B) → gallery panels are sm, matching their sm controls (were md panels around sm controls); Panel tier context deferred to compact density → apps/desktop/src/content/demos/gallery.tsx:801-808.
 - 2026-10-01 · compact pass round 6 → standalone gaps 8 → 6 at compact; inside a Panel it reads the Panel's gaps. docs/research/compact-pass-2026-10-01.md.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → handle appears at once and fades out on fast; lifted and inactive dims land at once and return on fast; drop line rounded to whole pixels.
+- 2026-10-12 · owner, review round 16: approved.
+- 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the drop line is `stroke-width` × 2 (was `border-width` × 2, so it vanished under Elevated) (property-list.css). (docs/research/consistency-audit-2026-10-12.md)

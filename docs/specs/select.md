@@ -73,7 +73,7 @@ Product triggers (node numbers from the captures):
 chatgpt  button  36px pill, padding 0 12, gap 4, fill rgb(243) (hover 5% black), 1px 10% ring
 notion   div[role=button]  28px, radius 6, no chrome; text span; 14px chevron svg, margin-start 4
 area     select.area-select  owns: height, border, radius, fill, focus (no resting shadow, audit B-2); chevron = ::picker-icon mask (base-select) or #888 background image (native picker)
-  picker ::picker(select)   4px below, padding 4, radius 12, bg-surface, decorative border, floating lift (--area-shadow-float)
+  picker ::picker(select)   4px below, padding 4, radius 12, bg-surface, floating border (--area-border-float), floating lift (--area-shadow-float)
   option option             32 at every trigger size, inline 11.03 start / 8 end, radius 8, 2px apart, gap-row 12, ::checkmark (Area check mask) at the end
   group  optgroup           label row 32, 12/16 muted; options inside reset to the row type
 ```
@@ -113,7 +113,7 @@ size-sm trigger radius was 8 at capture; since audit S4 it is 6.
 | trigger · text | 14/20 400 `fg-default`, 11.03 from the edge | Notion 14 400, ChatGPT 14/18 400 | Notion's permission select uses muted ink as an inline trigger; Figma 11/16 450 |
 | picker · offset | 4 from the field, below; `position-try-fallbacks: flip-block` with `position-try-order: normal`, so it flips only when below doesn't fit (`navigation.css:347-348`) | Audit B-5 B (owner 2026-09-30): Combobox list rules; UUI 4px offset | Was no flip (pre-2026-09-24 owner decision, superseded). Chrome's UA default (`most-block-size`) opened it on the roomier side |
 | picker · size | min width max(trigger, 224); max height min(324, 100%), then scrolls | Combobox list (Menu's 224; Figma's 324 font list) | Was the trigger's width and at most 288 |
-| picker · surface | padding 4, `radius-container` 12, `border-decorative`, `bg-surface` | Peer: Menu (4px inset) | UUI radius 8 |
+| picker · surface | padding 4, `radius-container` 12, `border-float` (was `border-decorative` until the 2026-10-12 consistency pass), `bg-surface` | Peer: Menu (4px inset) | UUI radius 8 |
 | picker · lift | `--area-shadow-float`: `0 20px 24px` + `0 5px 8px` at half strength, `shadow-color` (`navigation.css:334`); `none` under the Flat preset | Audit "Floating lift" (Notion popover; Menu, Popover) | Was `shadow-2`. A Surface axis role since audit S10 |
 | option · row | Menu's row (audit B-4): 32 at every trigger size; text start on the inset contract (32 − 1cap) / 2 ≈ 11 (11.03 measured live); check edge 8 from the end; gap `--area-gap-row` 12; corner min(max(0, `radius-container` − 4), 32 × cap) = 8 at Standard (measured); 2px apart (`navigation.css:356-378`) | Peer: Menu rows 32px | Figma 24px rows; UUI 36, radius 6. Was min 32, padding 6 8, radius `radius-row` |
 | optgroup · label | 32 row, 12/16 `fg-muted`, regular weight (`navigation.css:403-412`) | Peer: Menu group label | — |
@@ -212,6 +212,11 @@ Compared the Area captures (`select/area--*`) with ChatGPT's select, Notion's pe
 select and Figma's filter, size, zoom and format selects. Build and test results are in the
 [cohesion audit](../research/cohesion-audit.md#verification).
 
+## Review note, 2026-10-12 (consistency pass)
+
+- **What changed:** the open list's frame takes the floating-frame colour, as Menu's and Popover's. Only dark mode looks different (#4b, was #28).
+- **Why:** the Select list was the one floating surface still on the lighter container seam, so in dark mode its edge sank into the page.
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → disabled without double dimming; picker takes the floating
@@ -242,3 +247,6 @@ select and Figma's filter, size, zoom and format selects. Build and test results
 - 2026-10-04 · pill shapes and list rows (owner) → the picker and its options use `radius-list` / `radius-list-row`, as Menu; the trigger takes `--area-pill-field` (`navigation.css`). `docs/research/radius-audit-2026-10-03.md`, "Pill shapes and list rows".
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → hover, focus and tones land at once and fade out on fast; the customizable picker fades and scales in on base and out on fast; option plates as Menu rows.
 - 2026-10-08 · owner: Custom select approved, recommendations accepted (custom-select.md Q3–Q7) → checked option drops the `bg-component-active` plate (check only); the chevron's end inset is max(row inset, centred) (`inset.css`: 28 → 8 from the edge, was 6; 32 → 8; 40 → 12; compact 24 / 28 / 32 → 8, was 4 / 6 / 8); the `::picker-icon` takes `input-chevron` (rgb(131) light, rgb(147) dark; was #666 / rgb(197)); chevron stays still. Checked in the gallery (computed `::picker-icon` inset and colour, light/dark, default/compact); the open picker's plates were read from computed styles (no plate on `option:checked`), not seen open.
+- 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the native picker's frame is `border-float` (was `border-decorative`) (navigation.css). (docs/research/consistency-audit-2026-10-12.md)
+- 2026-10-12 · owner, review round 21 (components21): approved → Complete in `component-status.mjs`.
+- 2026-10-12 · radius at the extremes (owner) → shares Input's rule: the sides clear half the corner (`inset.css`). `docs/research/ui-size-scale-2026-10-12.md`.

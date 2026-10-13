@@ -25,16 +25,19 @@
     /* spec: ChatGPT's 48 tile with a 24 glyph (Untitled UI lg 48); the control-xl step, 40 / 20 in compact. */
     --_tile: var(--area-control-xl);
     --_tile-radius: var(--area-radius-control-xl);
-    --_glyph: calc(24px - 4px * var(--area-ui-dense)); /* spec */
+    /* Glyph sizes and strokes take only the compact step (clamped at 0): icons and their stroke follow
+       the type size on their own (axes/type-size.ts), so a roomier step must not grow or thin them. */
+    --_glyph: calc(24px - 4px * clamp(0, var(--area-ui-dense), 1)); /* spec */
     /* The glyph's line for a 24 slot (1.2 × the 16 line), 20 in compact (base.css size curve). */
-    --_glyph-line: calc(var(--area-weight-icon) * (0.8 + 0.0846 * var(--area-ui-dense)));
+    --_glyph-line: calc(var(--area-weight-icon) * (0.8 + 0.0846 * clamp(0, var(--area-ui-dense), 1)));
     /* spec: ChatGPT 16 under the tile, 8 between title and line, 16 above the actions. */
     --_media-gap: var(--area-space-16);
     --_title-gap: var(--area-space-8);
     --_actions-gap: var(--area-space-16);
-    /* spec: ChatGPT 18/24 500; compact the 16/24 title. */
-    --_title-size: calc(18px - 2px * var(--area-ui-dense)); /* spec */
-    --_title-leading: 24px; /* spec */
+    /* The surface title role, Dialog's and Drawer's: 16/24 at both densities (owner, 2026-10-12: consistency pass O3;
+       was ChatGPT's 18/24, off the type ramp). */
+    --_title-size: var(--area-title-xs-size);
+    --_title-leading: var(--area-title-xs-leading);
     /* spec: ChatGPT's column, max-w-xl 576 (Notion's Skills 600). */
     --_measure: 576px; /* spec */
   }
@@ -44,8 +47,8 @@
     /* spec: File upload's 40 tile with a 20 glyph (shadcn's 40 icon tile); 32 / 16 in compact. */
     --_tile: var(--area-control-lg);
     --_tile-radius: var(--area-radius-control-lg);
-    --_glyph: calc(20px - 4px * var(--area-ui-dense)); /* spec */
-    --_glyph-line: calc(var(--area-weight-icon) * (0.8846 + 0.1154 * var(--area-ui-dense)));
+    --_glyph: calc(20px - 4px * clamp(0, var(--area-ui-dense), 1)); /* spec */
+    --_glyph-line: calc(var(--area-weight-icon) * (0.8846 + 0.1154 * clamp(0, var(--area-ui-dense), 1)));
     /* spec: Notion 12 under the icon, 2 between title and line, 8 above the action. */
     --_media-gap: var(--area-space-12);
     --_title-gap: var(--area-space-2);

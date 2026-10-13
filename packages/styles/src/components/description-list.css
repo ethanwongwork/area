@@ -82,18 +82,54 @@
     content: "";
     position: absolute;
     inset-inline: var(--_inset);
-    inset-block-end: calc(-1 * var(--_row-gap) / 2 - var(--area-border-width) / 2);
-    block-size: var(--area-border-width);
+    inset-block-end: calc(-1 * var(--_row-gap) / 2 - var(--area-stroke-width) / 2);
+    block-size: var(--area-stroke-width);
     background-color: var(--_divider);
     pointer-events: none;
   }
-  /* The frame: Table's (divider edge, container corner, surface), as ChatGPT's settings card. */
+  /* The frame: Table's (divider edge at `stroke-width`, container corner, surface), as ChatGPT's settings card. */
   .area-description-list--framed {
-    border: var(--area-border-width) solid var(--area-border-divider);
+    border: var(--area-stroke-width) solid var(--area-border-divider);
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
   }
   /* Framed columns keep ChatGPT's card inset for the text: 12 from the top (5 + the row's 7 above a 20 line) and
      16 from the side (10 + the term's 6). */
   .area-description-list--framed.area-description-list--columns { padding: 5px 10px; /* spec */ }
+
+  /* --- show more ------------------------------------------------------------- */
+  /* The "Show N more" button after a list with visibleCount (docs/research/show-more-survey.md): a row of the list's
+     own rhythm, its chevron in the term's icon slot so the label starts where the term names do (Notion's "N more
+     properties"), muted ink and 400 as Code block's toggle, an underline on hover with the ink fixed (Polaris plain
+     button), the chevron turning to point up once every row shows (Carbon, Chakra; Primer: down collapsed, up open). */
+  .area-description-list__more {
+    --_term-inset: var(--area-space-6); /* spec: the columns layout's term inset */
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-6); /* spec: the term's icon gap */
+    min-block-size: calc(var(--area-ui-row) + 2px); /* spec: a list row (34, compact 26) */
+    margin-block-start: calc(var(--area-ui-row-gap) * 2); /* spec: the list's row gap, as if a row */
+    padding: 0 var(--_term-inset);
+    border: 0;
+    border-radius: var(--area-radius-small);
+    background: none;
+    color: var(--area-fg-muted);
+    font: inherit;
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+    font-weight: var(--area-weight-regular);
+    cursor: pointer;
+  }
+  .area-description-list--justified + .area-description-list__more { --_term-inset: var(--area-space-16); margin-block-start: 0; min-block-size: calc(var(--area-ui-leading) + var(--area-space-24)); }
+  .area-description-list__more > .area-description-list__icon > svg { transition: rotate var(--area-duration-fast) var(--area-ease-out); }
+  .area-description-list__more[aria-expanded="true"] > .area-description-list__icon > svg { rotate: 180deg; }
+  @media (hover: hover) {
+    .area-description-list__more:hover > .area-description-list__more-label {
+      text-decoration: underline;
+      text-decoration-thickness: var(--area-stroke-width);
+      text-underline-offset: var(--area-space-2);
+    }
+  }
+  .area-description-list__more:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  .area-description-list__item[hidden] { display: none; }
 }

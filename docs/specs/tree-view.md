@@ -172,6 +172,11 @@ Open questions:
   row actions. Layer-type glyphs (frame, rectangle, component, lock) are stand-ins until
   drawn under the icon construction rules.
 
+## Review note, 2026-10-12 (consistency pass)
+
+- **What changed:** in a checkbox tree, an unchecked box has Checkbox's slightly firmer edge (#d4, was #e2) in light mode; dark mode is unchanged.
+- **Why:** the tree's box is drawn to look like Checkbox (the checked box already did); unchecked it still had the lighter field edge.
+
 ## Feedback log
 
 - 2026-09-25 · owner approved Breadcrumb and asked to move on → Tree view first pass:
@@ -206,3 +211,6 @@ Open questions:
 - 2026-10-02 · compact evidence audit → rows stack flush at compact (`ui-row-gap` 2 / 0; VS Code tree rows abut; R7) docs/research/compact-evidence-2026-10-02/README.md.
 - 2026-10-03 · roundness → the check box follows Checkbox: a quarter of the box plus the shift (`tree-view.css`). `docs/research/radius-audit-2026-10-03.md`, "Roundness".
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → row, selection and chevron plates land at once and fade out on fast; chevron turns on fast (was a snapping transform); check mark enters from 0.6 and is drawn 1:1 at 16 (was 14/16).
+- 2026-10-12 · owner adopted the product UI rules (docs/PRODUCT_UI.md, rule 3: rest → hover → press → selected, each a step firmer) → a held row (not selected or current) takes `bg-component-active`, landing at once; replaces the hover-plate-only press → `tree-view.css`; desktop gallery.
+- 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the check box's resting edge is Checkbox's `edge-control-hover` (audit S5; was `edge-control`) (tree-view.css). (docs/research/consistency-audit-2026-10-12.md)
+- 2026-10-12 · owner, review round 21 (components21): approved → Complete in `component-status.mjs`.

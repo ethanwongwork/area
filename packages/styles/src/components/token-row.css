@@ -1,0 +1,52 @@
+/* ---------------------------------------------------------------------------
+ * Token row
+ *
+ * One design token a layer uses, for the inspector: the existing token (Code with its swatch, token.css)
+ * widened into one backplate for the row, the token's name at its start and the resolved value muted at
+ * its end (owner, review round 14: "1 cohesive backplate, just styled like the existing token component";
+ * round 13: "how does this fit in to the existing token component?"). The plate is the token's own ground,
+ * edge, corner, height and type; the row only stretches it and adds the value. `outline` keeps the edge
+ * and drops the fill (owner: "outline only as a style is acceptable"). Copyable rows are buttons that copy
+ * the value. Measured from Figma Dev Mode's Colors rows. docs/specs/token-row.md.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  /* Two classes, so the row's layout wins over Code's inline box (code.css loads after this file). */
+  .area-token-row.area-code {
+    --_token-height: round(nearest, calc(1em + var(--area-space-10)), 1px);
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-4);
+    inline-size: 100%;
+    min-inline-size: 0;
+    block-size: var(--_token-height);
+    margin: 0;
+    padding-block: 0;
+    padding-inline: round(nearest, calc((var(--_token-height) - 1cap) / 2 - var(--area-border-width)), 1px);
+    text-align: start;
+    white-space: nowrap;
+  }
+  .area-token-row > .area-code__label { flex: 1 1 auto; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; }
+  .area-token-row__value {
+    flex: none;
+    max-inline-size: 50%;
+    margin-inline-start: var(--area-space-8);
+    overflow: hidden;
+    color: var(--area-fg-muted);
+    font-variant-numeric: tabular-nums;
+    text-overflow: ellipsis;
+  }
+
+  /* Outline: the token's edge on no ground; the edge steps up to the divider so it holds on its own. */
+  .area-token-row--outline.area-code {
+    --_code-bg: transparent;
+    --_code-edge: var(--area-border-divider);
+  }
+
+  /* Copyable: the row is a button. The plate takes the hover ground; the ink stays (shared state paint). */
+  .area-token-row--copyable.area-code { cursor: pointer; transition: var(--area-transition); }
+  @media (hover: hover) {
+    .area-token-row--copyable.area-code:hover { --_code-bg: var(--area-bg-component-hover); }
+  }
+  .area-token-row--copyable.area-code:active { --_code-bg: var(--area-bg-component-active); }
+  .area-token-row--copyable:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+}

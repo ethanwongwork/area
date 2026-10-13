@@ -588,6 +588,11 @@ so nothing painted moves. Verified on `/badge.html` with a real pointer hover: d
 - **Why:** you said there was too much spacing at the sides and asked for smaller icons. Untitled UI uses 12 icons in all
   its badge sizes.
 
+## Review note, 2026-10-12 (consistency pass)
+
+- **What changed:** the modern badge's outline is one step firmer (#e2, was the faint #f3; dark #333, was #282828), and a linked one steps to #d4 on hover.
+- **Why:** a modern badge is a white raised plate, like the Segmented thumb and a selected soft Toggle group item, which draw #e2 with the same small shadow; on white the #f3 edge all but disappeared. Untitled UI's modern badge, its reference, draws #d5.
+
 ## Feedback log
 
 - 2026-10-11 · owner: "the icons seem too close to the horizontal side of the container. the avatar, flag look okay
@@ -628,3 +633,7 @@ so nothing painted moves. Verified on `/badge.html` with a real pointer hover: d
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → hover arrives at once and fades out on fast (links, overflow button); the dismiss plate gains the fade-out (it snapped) → badge.css. See "Motion and interaction, 2026-10-07".
 - 2026-10-11 · owner, review round 8 (rethink): "maybe too much spacing on the sides of the badges, can the icons be smaller?" → icon slot 12 at sm / md / lg (`icon-xs`; Untitled UI: 12 at every size), avatars, flags and dismiss keep 12 / 16 / 16; the round-8 "+4" icon side reverted, so the icon centres in the pill end: md icon 4 from the end (round 8: 6), label side 8, a 58-wide "Open" (measured). The 16 pilot drawings are scaled to 12 (no native 12 cuts yet; icon session gap).
 - 2026-10-12 · owner, review round 9: approved → Complete in `component-status.mjs`.
+- 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → modern's edge is the raised plate's `edge-selected` (was `border-decorative`), hover `edge-control-hover` (was `edge-control`) (badge.css). (docs/research/consistency-audit-2026-10-12.md)
+- 2026-10-12 · owner, 2026-10-12: "go with your recommendations" (consistency pass) → the dismiss's focus ring sits at 0, a control nested in its host (O1; was `focus-offset`, outside the badge); the soft plate reads `bg-mark` / `bg-mark-hover` (O5, same paint) (badge.css). (docs/research/consistency-audit-2026-10-12.md)
+- 2026-10-12 · owner, review round 21 → approved on the review page, round 21 (components21) → Complete in `component-status.mjs`. (docs/research/consistency-audit-2026-10-12.md)
+- 2026-10-12 · type size and density split (owner) → text-label marks follow the small-text line: `mark-label-sm` is its leading (14 at type 12 … 20 at 16), md and lg add the density's room (`emit/base.ts`); small text is base − 2, floor 10 (owner, 2026-10-12). `docs/research/ui-size-scale-2026-10-12.md`.
