@@ -9,7 +9,7 @@
  * stage only places its content: fit, centre or flow.
  *
  * Tiles come in three spans on one grid (src/studio.css, .studio-grid):
- *   unit  one base cell, 136 at the least, 5:4: a swatch, an icon
+ *   unit  one base cell, 152 at the least, 5:4: a swatch, an icon
  *   wide  2 x 2 units and the gap between them: a component, a setting's preset, a type specimen
  *   row   the full width, as tall as its content: an icon sheet, a type sample
  * A grid holds one span (TileGrid), so wide tiles always line up on pairs of units.
@@ -18,6 +18,7 @@
  * (src/gallery/fit.ts) still finds component specimens.
  */
 import type { CSSProperties, ReactNode } from "react";
+import { APP_SCALE } from "./app-scale.ts";
 
 export type TileSpan = "unit" | "wide" | "row";
 /**
@@ -65,7 +66,7 @@ export function Tile({ label, value, span, stage, selected, onSelect, pressable,
   // A pressable tile is a button, which holds phrasing content only: its parts are spans there.
   const Part = pressable ? "span" : "div";
   const head = (
-    <Part className="gallery-tile__head" data-area-ui="compact">
+    <Part className="gallery-tile__head" {...APP_SCALE}>
       <span className="gallery-tile__label">{label}</span>
       {value != null ? <span className="gallery-tile__value">{value}</span> : null}
     </Part>
@@ -116,8 +117,8 @@ export function CanvasSection({ id, title, lede, children }: { id: string; title
   // Untitled when the Canvas bar already names it (one scale, one setting).
   return (
     <section className="studio-section" id={id} aria-labelledby={title ? `${id}-title` : undefined}>
-      {title ? <h2 className="studio-canvas__section-title" id={`${id}-title`} data-area-ui="compact">{title}</h2> : null}
-      {lede ? <p className="studio-canvas__lede" data-area-ui="compact">{lede}</p> : null}
+      {title ? <h2 className="studio-canvas__section-title" id={`${id}-title`} {...APP_SCALE}>{title}</h2> : null}
+      {lede ? <p className="studio-canvas__lede" {...APP_SCALE}>{lede}</p> : null}
       {children}
     </section>
   );

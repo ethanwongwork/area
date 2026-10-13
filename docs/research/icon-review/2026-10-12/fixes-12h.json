@@ -1,0 +1,38 @@
+{
+ "bug-off": {
+  "verdict": "fix",
+  "notes": "still a small notch/gap between the negative space and the leg stroke, its not cohesive.",
+  "library": null,
+  "change": "Filled: the right middle leg is now part of the solid, so the slash's gap cuts it flush: no round end and no strip of fill between the gap and the leg."
+ },
+ "file-audio": {
+  "verdict": "fix",
+  "notes": "revert back to the other design with the larger note",
+  "library": null,
+  "change": "Back to the larger overhanging note: in the filled variant the head is solid, the note is ink, and the page is cut round it."
+ },
+ "globe": {
+  "verdict": "replace",
+  "notes": "almost but not quite, the middle lines are too round. the ends should be pointed sharp, can you literally trace the ink of the fluent version.",
+  "library": null,
+  "change": "Traced: the meridians follow the midline of Fluent's ink scaled to Area's ring. They run nearly straight, then merge into the ring 0.9 either side of each pole, so the cells beside them end in sharp points and the middle cell has Fluent's domed top. The latitudes stay at 5.5 and 10.5 (Fluent's scaled would be 5.27 and 10.73, soft at 1×)."
+ },
+ "globe-off": {
+  "verdict": "replace",
+  "notes": "(replace toward Fluent)",
+  "library": null,
+  "change": "Follows the traced meridians, split at the slash."
+ },
+ "hand-wave": {
+  "verdict": "fix",
+  "notes": "negative space still off",
+  "library": null,
+  "change": "Filled now follows Phosphor's: the whole hand is solid and each finger is parted by a line-weight slot that opens between the fingertips and ends where the outline's finger line ends; the thumb's slot runs into the crease."
+ },
+ "keyboard-off": {
+  "verdict": "fix",
+  "notes": "can you add all the dots? or most of them?",
+  "library": null,
+  "change": "The outline now has all seven of keyboard's keys and its full space bar, with the slash crossing them flat as it crosses other base icons (a recorded exception for keys beside the slash). Filled keeps the keys clear of the slash and its gap (three) and the bar up to the slash."
+ }
+}

@@ -34,6 +34,10 @@
   [data-area-glyph-size="12"] path { stroke-width: calc(var(--area-weight-icon) * 1.1715); }
   [data-area-glyph-size="20"] path { stroke-width: calc(var(--area-weight-icon) * 0.8846); }
   [data-area-glyph-size="24"] path { stroke-width: calc(var(--area-weight-icon) * 0.8000); }
+
+  /* @area/icons tied to reading direction (reply, undo, indent …) mirror in right-to-left text
+     (docs/specs/icons.md, "Accessible name and right-to-left"); the same rule as @area/icons/rtl.css. */
+  [data-area-rtl="mirror"]:dir(rtl) { scale: -1 1; }
 }
 
 @layer area.utilities {

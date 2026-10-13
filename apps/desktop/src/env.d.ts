@@ -6,3 +6,9 @@ interface AreaDesktop {
 }
 interface Window { areaDesktop?: AreaDesktop }
 
+
+/** Demo name -> its code, read from src/content/demos at build time (scripts/snippets.mjs). */
+declare module "virtual:demo-snippets" {
+  const snippets: Record<string, string>;
+  export default snippets;
+}

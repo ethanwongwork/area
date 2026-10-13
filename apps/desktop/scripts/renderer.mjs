@@ -8,6 +8,7 @@
 import { copyFileSync, cpSync, existsSync, mkdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { demoFiles, extractSnippets } from "./snippets.mjs";
 
 export const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 export const repo = resolve(root, "..", "..");
@@ -39,5 +40,16 @@ export const options = ({ production }) => ({
   sourcemap: production ? false : "inline",
   define: { "process.env.NODE_ENV": JSON.stringify(production ? "production" : "development") },
   logLevel: "warning",
-  plugins: [{ name: "static", setup(build) { build.onEnd(result => { if (!result.errors.length) copyStatic(); }); } }],
+  plugins: [
+    { name: "static", setup(build) { build.onEnd(result => { if (!result.errors.length) copyStatic(); }); } },
+    // `virtual:demo-snippets`: every demo's code from its source file (scripts/snippets.mjs), rebuilt
+    // when a demo file changes.
+    { name: "snippets", setup(build) {
+      build.onResolve({ filter: /^virtual:demo-snippets$/ }, () => ({ path: "demo-snippets", namespace: "snippets" }));
+      build.onLoad({ filter: /.*/, namespace: "snippets" }, () => {
+        const files = demoFiles(join(root, "src/content/demos"));
+        return { contents: JSON.stringify(extractSnippets(files)), loader: "json", watchFiles: files };
+      });
+    } },
+  ],
 });

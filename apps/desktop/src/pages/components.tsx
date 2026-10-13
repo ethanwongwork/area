@@ -1,12 +1,19 @@
 /**
  * Components: All and every family in the Sidebar; the Canvas shows every family's tiles (All) or
- * one family's; the Inspector holds the canvas settings and the selected tile, family or library.
+ * one family's; the Inspector holds the canvas settings and the selected tile, family or library
+ * (src/inspector.tsx): a tile's code and import to copy; a family's import, class, variants,
+ * defaults, status, purpose and spec, from the styles manifest and docs/specs.
  *
  * The tiles come from the app's own content (src/content/: specimens.mjs over pages.mjs, the demos
  * in registry.tsx), labelled and ordered by specimen-names.mjs, and fitted by src/gallery/fit.ts.
  */
 import { Component, createElement, useEffect, useRef, useState, type ReactNode } from "react";
-import { Badge, Code, Count, EmptyState, Nav, NavGroup, NavItem, PanelSection, Segmented, Table, TableLink } from "@area/react";
+import * as AreaReact from "@area/react";
+import { Badge, Code, Count, EmptyState, Link, Nav, NavGroup, NavItem, PanelSection, Segmented, Table, TableLink } from "@area/react";
+import * as MANIFESTS from "@area/styles/manifest";
+import { CopyIcon } from "@area/icons";
+import SNIPPETS from "virtual:demo-snippets";
+import { CopyButton } from "../../../docs/src/gallery/icon-browser.tsx";
 // @ts-expect-error — the gallery's page content and status registry are authored in JavaScript.
 import { COMPONENT_PAGES } from "../content/pages.mjs";
 // @ts-expect-error — as above.
@@ -19,14 +26,16 @@ import { DEMOS } from "../content/registry.tsx";
 import { fitTiles } from "../gallery/fit.ts";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { Facts, PropsTable } from "../facts.tsx";
+import { Selection } from "../inspector.tsx";
 import { Tile, TileGrid } from "../tile.tsx";
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
 import { SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
 import { matches } from "../search.ts";
 import { ArrangeMenu, groupBy, PinButton, PinMenu, sortBy, useArrangement, usePins } from "../organize.tsx";
+import { APP_SCALE } from "../app-scale.ts";
 
 interface Example { id: string; title: string; demo: string; note?: string; group?: string }
-interface Family { slug: string; name: string; docsOnly?: boolean; imports?: string; exportName?: string; api?: string[][]; examples: Example[] }
+interface Family { slug: string; name: string; manifest: string; docsOnly?: boolean; imports?: string; exportName?: string; api?: string[][]; examples: Example[] }
 interface Tile { id: string; label: string; demo: string; note?: string }
 
 const FAMILIES = (COMPONENT_PAGES as Family[]).filter(family => !family.docsOnly).sort((a, b) => a.name.localeCompare(b.name));
@@ -65,6 +74,18 @@ function Demo({ name }: { name: string }) {
 /** Tile counts, computed once: the Sidebar shows one per family. */
 const TILES = new Map(FAMILIES.map(family => [family.slug, tilesOf(family)]));
 const statusOf = (family: Family) => componentStatus(family.slug) as Status;
+
+/* What a family exports from @area/react: its recorded names, else its own name when the package
+   exports it ("date-picker" -> DatePicker). Every gallery family resolves (checked 2026-10-12). */
+const pascal = (slug: string) => slug.split("-").map(word => word[0]!.toUpperCase() + word.slice(1)).join("");
+const importsOf = (family: Family) => family.imports ?? family.exportName ?? (pascal(family.slug) in AreaReact ? pascal(family.slug) : undefined);
+const importLine = (names: string) => `import { ${names} } from "@area/react";`;
+/* The family's manifest (packages/styles/src/manifest.ts): its sentence, block, variants and
+   defaults. `switch` is exported as switchControl, a reserved word otherwise. */
+type Manifest = { block: string; description: string; variants: Record<string, readonly string[]>; defaults: Record<string, string> };
+const manifestOf = (family: Family) => ((MANIFESTS as Record<string, unknown>)[family.manifest] ?? (MANIFESTS as Record<string, unknown>)[`${family.manifest}Control`]) as Manifest | undefined;
+/* Every family has a spec (docs/specs/<slug>.md, checked 2026-10-12); origin on GitHub is canonical. */
+const specUrl = (family: Family) => `https://github.com/ethanwongwork/area/blob/main/docs/specs/${family.slug}.md`;
 
 /* Sort and group (src/organize.tsx). The default is the Sidebar as it was: A to Z, In review first. */
 const SORTS = [{ value: "name", label: "Name" }, { value: "status", label: "Status" }, { value: "tiles", label: "Tile count" }] as const;
@@ -128,7 +149,7 @@ function FamilySection({ family, selected, onSelect, onOpen, zoom }: { family: F
   const rows = Math.ceil(TILES.get(family.slug)!.length / 3);
   return (
     <section ref={ref} className="studio-section" aria-labelledby={`family-${family.slug}`} data-fit="">
-      <h2 className="studio-canvas__section-title" id={`family-${family.slug}`} data-area-ui="compact">
+      <h2 className="studio-canvas__section-title" id={`family-${family.slug}`} {...APP_SCALE}>
         <a href={`#components/${family.slug}`} className="studio-section__link" data-key={family.slug} data-name={family.name} onClick={event => { event.preventDefault(); onOpen(); }}>{family.name}</a>
       </h2>
       {near ? <FamilyTiles family={family} selected={selected} onSelect={onSelect} /> : <div style={{ blockSize: `${rows * 256}px` }} />}
@@ -201,9 +222,7 @@ export function ComponentsPage() {
         </SidebarList>
       }
       canvasTitle={family ? family.name : "All components"}
-      canvasMeta={family
-        ? <Badge size="sm" tone={STATUS_TONE[statusOf(family)]} variant="soft">{STATUS_LABEL[statusOf(family)]}</Badge>
-        : <span className="studio-muted studio-tabular">{onCanvas.length}</span>}
+      canvasMeta={<span className="studio-muted studio-tabular">{family ? TILES.get(family.slug)!.length : onCanvas.length}</span>}
       canvasActions={
         <ViewControls>
           {family ? null : (
@@ -243,7 +262,7 @@ export function ComponentsPage() {
               Documentation, not a specimen: it keeps the app's compact scale and default radius whatever
               the Canvas previews. */}
           {family.api?.length ? (
-            <section className="studio-section" aria-labelledby="family-props" data-area-ui="compact">
+            <section className="studio-section" aria-labelledby="family-props" {...APP_SCALE}>
               <h2 className="studio-canvas__section-title" id="family-props">Props</h2>
               <PropsTable api={family.api} />
             </section>
@@ -273,23 +292,10 @@ export function ComponentsPage() {
       inspector={
         <>
           <CanvasSettings />
-          {subject ? (
-            <PanelSection heading={tile ? "Tile" : "Family"}
-              actions={<PinButton name={subject.name} pinned={pins.has(subject.slug)} onToggle={() => pins.toggle(subject.slug)} />}>
-              <Facts label={tile ? "Tile" : "Family"} items={tile ? [
-                ["Family", subject.name],
-                ["Specimen", tile.label],
-                ["Demo", <Code>{tile.demo}</Code>],
-                tile.note ? ["Note", tile.note] : null,
-              ] : [
-                ["Status", <Badge size="sm" tone={STATUS_TONE[statusOf(subject)]} variant="soft">{STATUS_LABEL[statusOf(subject)]}</Badge>],
-                ["Tiles", TILES.get(subject.slug)!.length],
-                subject.imports ?? subject.exportName ? ["Import", <Code>{subject.imports ?? subject.exportName}</Code>] : null,
-              ]} />
-            </PanelSection>
-          ) : (
+          {subject ? <FamilyInspector family={subject} tile={tile} pinned={pins.has(subject.slug)} onPin={() => pins.toggle(subject.slug)} /> : (
             <PanelSection heading="Library">
               <Facts label="Library" items={[
+                ["Package", <Code>@area/react</Code>],
                 ["Families", FAMILIES.length],
                 ["Complete", counts.complete],
                 ["In review", counts.review],
@@ -301,5 +307,40 @@ export function ComponentsPage() {
         </>
       }
     />
+  );
+}
+
+/** The Inspector for a family, or one of its tiles: what to copy, then its facts in the shared order. */
+function FamilyInspector({ family, tile, pinned, onPin }: { family: Family; tile?: Tile; pinned: boolean; onPin: () => void }) {
+  const names = importsOf(family);
+  const manifest = manifestOf(family);
+  const code = tile ? SNIPPETS[tile.demo] : undefined;
+  const status = statusOf(family);
+  return (
+    <>
+      {names || code ? (
+        <Selection>
+          {code ? <CopyButton label="Copy code" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(code)} /> : null}
+          {names ? <CopyButton label="Copy import" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(importLine(names))} /> : null}
+        </Selection>
+      ) : null}
+      <PanelSection heading={tile ? "Tile" : "Family"} actions={<PinButton name={family.name} pinned={pinned} onToggle={onPin} />}>
+        <Facts label={tile ? "Tile" : "Family"} items={tile ? [
+          ["Specimen", tile.label],
+          ["Family", family.name],
+          ["Demo", <Code>{tile.demo}</Code>],
+          tile.note ? ["Note", tile.note] : null,
+        ] : [
+          names ? ["Import", <Code>{names}</Code>] : null,
+          manifest ? ["Class", <Code>.{manifest.block}</Code>] : null,
+          manifest && Object.keys(manifest.variants).length ? ["Variants", Object.entries(manifest.variants).map(([axis, values]) => `${axis} ${values.length}`).join(" · ")] : null,
+          manifest && Object.keys(manifest.defaults).length ? ["Defaults", Object.values(manifest.defaults).join(", ")] : null,
+          ["Status", <Badge size="sm" tone={STATUS_TONE[status]} variant="soft">{STATUS_LABEL[status]}</Badge>],
+          ["Tiles", TILES.get(family.slug)!.length],
+          manifest ? ["Purpose", manifest.description] : null,
+          ["Spec", <Link href={specUrl(family)} target="_blank" rel="noreferrer">{family.slug}.md</Link>],
+        ]} />
+      </PanelSection>
+    </>
   );
 }

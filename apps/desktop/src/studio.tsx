@@ -34,11 +34,19 @@ export const TABS = [
 export type TabId = (typeof TABS)[number]["id"];
 type Theme = "light" | "dark";
 
-/** The Canvas's own theme settings (the Inspector writes them): density, radius, pills. */
-export type CanvasAxes = Record<"ui" | "radius" | "pills", string>;
+/** The Canvas's own theme settings (the Inspector writes them): type size, density, radius, pills. */
+export type CanvasAxes = Record<"type" | "density" | "radius" | "pills", string>;
 const CANVAS_DEFAULTS = Object.fromEntries(
   GALLERY_CONTROLS.filter(control => control.axis !== "theme").map(control => [control.axis, control.defaultValue]),
 ) as CanvasAxes;
+/** A saved Canvas from before the split (`ui`: compact or default) as its type size and density. */
+function restoreCanvas(saved: Partial<CanvasAxes> & { ui?: string }): CanvasAxes {
+  const { ui, ...rest } = saved;
+  const legacy = ui === "compact" ? { type: "12", density: "compact" } : ui === "default" ? { type: "14", density: "default" } : {};
+  return { ...CANVAS_DEFAULTS, ...legacy, ...rest };
+}
+
+export { APP_SCALE } from "./app-scale.ts";
 
 /*
  * Location: #<tab>/<item>, so a selection survives a reload and can be linked. The item is the
@@ -73,7 +81,7 @@ export function Studio() {
   // src/theme.js has already set the theme before first paint; start from it.
   const [theme, setTheme] = useState<Theme>(() => (document.documentElement.getAttribute("data-area-theme") ?? (prefersDark() ? "dark" : "light")) === "dark" ? "dark" : "light");
   const [query, setQuery] = useState("");
-  const [canvas, setCanvasState] = useState<CanvasAxes>(() => ({ ...CANVAS_DEFAULTS, ...readStored<Partial<CanvasAxes>>("canvas", {}) }));
+  const [canvas, setCanvasState] = useState<CanvasAxes>(() => restoreCanvas(readStored<Partial<CanvasAxes>>("canvas", {})));
   const [panels, setPanels] = useState(() => readStored("panels", { sidebar: true, inspector: true }));
   const search = useRef<HTMLInputElement>(null);
 
@@ -179,7 +187,7 @@ export function ChromeButton({ label, icon, keys, shortcut, onClick, pressed }: 
   // aria-keyshortcuts ("Meta+B").
   return (
     <Tooltip side="bottom" describes={false} trigger={
-      <Button variant="ghost" tone="neutral" size="sm" iconOnly icon={icon} aria-label={label} aria-pressed={pressed} aria-keyshortcuts={shortcut} onClick={onClick} />
+      <Button variant="ghost" tone="neutral" size="sm" iconOnly className="studio-bar-icon" icon={icon} aria-label={label} aria-pressed={pressed} aria-keyshortcuts={shortcut} onClick={onClick} />
     }>
       {label}{keys ? <> <Kbd keys={keys} size="sm" /></> : null}
     </Tooltip>
@@ -241,7 +249,7 @@ export function Workspace({ sidebar, canvasTitle, canvasMeta, canvasActions, can
   const inspectorWidth = usePanelWidth("inspector");
   // The Canvas body carries the Inspector's settings on every tab: density (which also lays tiles out
   // as a hairline contact sheet in compact), radius and pills.
-  const axes = { "data-area-ui": studio.canvas.ui, "data-area-radius": studio.canvas.radius, "data-area-pills": studio.canvas.pills };
+  const axes = { "data-area-type": studio.canvas.type, "data-area-density": studio.canvas.density, "data-area-radius": studio.canvas.radius, "data-area-pills": studio.canvas.pills };
   return (
     <div className="studio-workspace" data-sidebar={studio.sidebar ? "" : undefined} data-inspector={studio.inspector ? "" : undefined}>
       {studio.sidebar ? (

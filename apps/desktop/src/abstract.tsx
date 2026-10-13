@@ -4,8 +4,8 @@
  * a toggle). Every piece is drawn from the same few parts at the same sizes (src/studio.css,
  * .abs-*), and every part reads Area's live tokens, so a setting's tile changes the drawing the
  * way that setting changes the product: the theme its ground and ink, the neutral its greys, the
- * accent, action and selection their fills, the UI scale its rows, the radius its corners, the
- * surface its edges and lift, the motion its timing.
+ * accent, action and selection their fills, the type size its lines, the density its rows, the
+ * radius its corners, the surface its edges and lift, the motion its timing.
  *
  * The parts:
  *   Card    a surface: the container corner, the card edge and shadow, one padding
@@ -27,6 +27,10 @@ const Dot = ({ kind }: { kind?: "window" }) => <span className="abs-dot" data-ki
 const Check = ({ on }: { on?: boolean }) => <span className="abs-check" data-on={on ? "" : undefined}>{on ? <CheckIcon size={12} aria-hidden="true" /> : null}</span>;
 const Toggle = ({ on }: { on?: boolean }) => <span className="abs-toggle" data-on={on ? "" : undefined} />;
 const Field = () => <span className="abs-field"><Bar w={40} /></span>;
+/* A line of text for the type size: its stroke and its line follow the live text tokens. */
+const Line = ({ w, title }: { w: number; title?: boolean }) => (
+  <span className="abs-line" data-title={title ? "" : undefined}><Bar w={w} strong={title} /></span>
+);
 const Card = ({ children, kind }: { children: ReactNode; kind?: "float" | "back" }) => <span className="abs-card" data-kind={kind}>{children}</span>;
 const Row = ({ children, end, plate }: { children: ReactNode; end?: boolean; plate?: boolean }) => (
   <span className="abs-row" data-end={end ? "" : undefined} data-plate={plate ? "" : undefined}>{children}</span>
@@ -95,8 +99,18 @@ export function Abstract({ axis }: { axis: string }) {
           <Row><Toggle on /><Bar w={36} /></Row>
         </Card>
       );
-    // Density: a field and rows at the scale's own row height.
-    case "ui":
+    // Type size: a title and lines of text, each at the size's own stroke and line.
+    case "type":
+      return (
+        <Card>
+          <Line w={52} title />
+          <Line w={88} />
+          <Line w={74} />
+          <Line w={64} />
+        </Card>
+      );
+    // Density: a field and rows at the setting's own row height.
+    case "density":
       return (
         <Card>
           <Field />

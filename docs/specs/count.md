@@ -164,3 +164,4 @@ Linear and GitHub swap the digits in place.
 - 2026-10-04 · pill shapes and list rows (owner) → the pill is the `count` entry of data-area-pills (default on); `pill` three-way (`count.css`). `docs/research/radius-audit-2026-10-03.md`, "Pill shapes and list rows".
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → static, no change.
 - 2026-10-12 · owner, 2026-10-12: "go with your recommendations" (consistency pass) → the soft plate reads `bg-mark` (O5: one role for a literal written in several families; same paint). (docs/research/consistency-audit-2026-10-12.md)
+- 2026-10-12 · type size and density split (owner) → `mark-label-*` follow the small-text line plus the density's room (`emit/base.ts`). `docs/research/ui-size-scale-2026-10-12.md`.

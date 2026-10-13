@@ -186,3 +186,4 @@ Resolved 2026-10-10 (owner: "go with your recommendations"):
 - 2026-10-10 · owner, review round 5: approved → Complete in `component-status.mjs`.
 - 2026-10-12 · owner, 2026-10-12: "go with your recommendations" (consistency pass) → the md title takes `title-xs` 16/24 (O3; was ChatGPT's 18/24, off the ramp) (empty-state.css). (docs/research/consistency-audit-2026-10-12.md)
 - 2026-10-12 · owner, review round 21 (components21): approved → Complete in `component-status.mjs`.
+- 2026-10-12 · spacing step extrapolated past Default (type size and density split) → glyph size and stroke take only the compact step (`clamp(0, ui-dense, 1)`): icons and strokes follow the type size on their own (`empty-state.css`). `docs/research/ui-size-scale-2026-10-12.md`.

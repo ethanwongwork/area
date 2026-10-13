@@ -1,0 +1,44 @@
+{
+ "bug-off": {
+  "verdict": "fix",
+  "notes": "still peaking a bit into the negative space",
+  "library": null,
+  "change": "Filled: the right middle leg now starts at 11.75, where its round end clears the slash's gap at every size (it reached 0.13 into it)."
+ },
+ "file-audio": {
+  "verdict": "fix",
+  "notes": "note visual negative space error outline",
+  "library": null,
+  "change": "Filled: the note is no longer ink with a cut round it (which read as an outline). It sits wholly on the page as a cutout, like the clouds' arrows: a solid head, the stem and the flag knocked out, the page whole. The outline keeps Lucide's overhanging note."
+ },
+ "globe": {
+  "verdict": "replace",
+  "notes": "closer but not quite",
+  "library": null,
+  "change": "Measured against Fluent's meridian scaled to Area's ring: it runs nearly straight through the middle and turns into the poles with fuller shoulders than an ellipse. Now that curve."
+ },
+ "globe-off": {
+  "verdict": "replace",
+  "notes": "(replace toward Fluent)",
+  "library": null,
+  "change": "Follows the globe's new meridian, split at the slash as before."
+ },
+ "hand-wave": {
+  "verdict": "fix",
+  "notes": "thumb negative space looks off",
+  "library": null,
+  "change": "Filled: the thumb crease now starts from the centre of the notch between the index finger and the thumb (it began half a unit off to one side, leaving a jog)."
+ },
+ "keyboard-off": {
+  "verdict": "fix",
+  "notes": "more dots?",
+  "library": null,
+  "change": "A fourth key, row 2 right (11.5, the closest spot clear of the slash and its filled gap). keyboard's own positions there sit too close to the slash."
+ },
+ "umbrella": {
+  "verdict": "replace",
+  "notes": "(replace toward Fluent)",
+  "library": null,
+  "change": "Fluent's umbrella: a slightly flattened dome with a three-scallop hem, no ribs, the handle hooking left. Filled: the canopy is solid."
+ }
+}

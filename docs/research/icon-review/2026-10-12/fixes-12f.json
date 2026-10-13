@@ -1,0 +1,62 @@
+{
+ "bug-off": {
+  "verdict": "fix",
+  "notes": "the stroke is still poking through on the leg side into the negative space",
+  "library": null,
+  "change": "Filled: the right middle leg now starts clear of the slash's gap (filled-only copy of the legs, as the other off icons do), and the cut under its root no longer leaves a hairline at 32. The outline is unchanged."
+ },
+ "file-zip": {
+  "verdict": "fix",
+  "notes": "the zipper part should be touching the teeth",
+  "library": null,
+  "change": "The pull's top now touches the last tooth (they meet edge to edge)."
+ },
+ "folder-zip": {
+  "verdict": "fix",
+  "notes": "the zipper part should be touching the teeth",
+  "library": null,
+  "change": "The pull's top now touches the last tooth (they meet edge to edge)."
+ },
+ "form": {
+  "verdict": "fix",
+  "notes": "the bottom stroke is too close to the bottom",
+  "library": null,
+  "change": "Margins of 3 on all four sides now: the lines are 2.5 apart (5.5, 8, 10.5), between the earlier 2 and 3."
+ },
+ "globe": {
+  "verdict": "replace",
+  "notes": "still wrong, copy fluent",
+  "library": null,
+  "change": "The difference was the meridian: Fluent's is an ellipse that meets the ring smoothly at the poles (rounded top when filled); mine was two pointed arcs. Now the ellipse, 2.5 from centre."
+ },
+ "globe-off": {
+  "verdict": "replace",
+  "notes": "(replace toward Fluent)",
+  "library": null,
+  "change": "Follows the globe's ellipse meridian."
+ },
+ "umbrella": {
+  "verdict": "fix",
+  "notes": "(fix filled: negative space and visual error)",
+  "library": null,
+  "change": "The ribs are the globe's new ellipse, so they meet the canopy's tip smoothly; the notch and slivers at the tip are gone."
+ },
+ "hand-wave": {
+  "verdict": "fix",
+  "notes": "copy phosphors filled, or find out what the current area hand icon looks like",
+  "library": null,
+  "change": "Filled now follows Area's hand: each finger and the thumb a strip with a round tip at the outline's height, parted by U notches that end where the outline's finger lines end, so the fingers stand apart like Phosphor's. The outline is unchanged."
+ },
+ "keyboard-off": {
+  "verdict": "fix",
+  "notes": "can you add more dots back in",
+  "library": null,
+  "change": "One more key, lower left in line with the top row's first key. keyboard's other keys sit too close to the slash (0.63, under the set's smallest gap) or would merge into its filled gap."
+ },
+ "file-audio": {
+  "verdict": "approve",
+  "notes": "should the filled music note also be filled on the bottom?",
+  "library": null,
+  "change": "Yes: filled means more ink, so the head is solid in the filled variant (Fluent and Phosphor fill it too). The outline keeps Lucide's open head."
+ }
+}

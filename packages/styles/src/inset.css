@@ -24,6 +24,15 @@
     padding-inline-start: var(--_inset-start);
     padding-inline-end: var(--_inset-end);
   }
+  /* A field's sides clear its own corner: at least half the corner in from the edge, so a pill
+     field's icon is not tucked into the round end (owner, 2026-10-12: a 24 pill field held its
+     icon 4 in; now 6). Fields at the default radius never move. */
+  .area-input, .area-number-field, .area-select, .area-custom-select__trigger, .area-date-picker__trigger {
+    --_field-corner: min(calc(var(--_box-height) / 2), calc(max(var(--area-radius-min), round(down, calc(var(--_box-height) * var(--area-radius-factor)), 2px)) + var(--area-pill-field) * 9999px));
+    --_corner-clear: round(nearest, calc(var(--_field-corner) / 2 - var(--_box-border)), 1px);
+    padding-inline-start: max(var(--_inset-start), var(--_corner-clear));
+    padding-inline-end: max(var(--_inset-end), var(--_corner-clear));
+  }
   .area-panel__bar {
     --_box-height: var(--_bar);
     /* The panel's edge, counted once (panel.css --_edge; 0 when flush), so the title shares the rows' column. */

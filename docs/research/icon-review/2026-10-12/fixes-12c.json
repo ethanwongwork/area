@@ -1,0 +1,3 @@
+{
+  "quote": { "verdict": "fix", "library": null, "notes": "the tails are maybe a bit too long", "change": "The tails are a sixth shorter (5.5 long, was 6.5). The whole curve is scaled, so it keeps the same gentle bend, and the pair moves down half a unit to stay centred." }
+}

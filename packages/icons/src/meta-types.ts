@@ -21,4 +21,10 @@ export interface IconMeta {
   turn?: string;
   /** A second name for another icon's drawing (kept identical to it). */
   aliasOf?: string;
+  /** "mirror": tied to reading direction, so the components mirror in right-to-left text (rtl.css). */
+  rtl?: "mirror";
+  /** Search words: the concept, synonyms and other libraries' words for it, never another icon's name. */
+  keywords: readonly string[];
+  /** The same icon's name in other libraries, as each publishes it (Fluent and Material in snake case). */
+  names?: { lucide?: string; phosphor?: string; fluent?: string; material?: string };
 }

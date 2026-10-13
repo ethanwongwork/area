@@ -1,0 +1,157 @@
+{
+ "bug-off": {
+  "verdict": "fix",
+  "notes": "the middle leg on the right is incorrect for filled",
+  "library": null,
+  "change": "Filled: the gap above the slash left a spur of fill under the right middle leg's root, so the leg looked bent. The spur is cut away flush with the leg's centre-line; the outline is unchanged."
+ },
+ "file-audio": {
+  "verdict": "fix",
+  "notes": "music note still looks incorrect, look at lucides music note",
+  "library": null,
+  "change": "Lucide's note: an open ring head at the page's lower-left, overhanging the edge like file-search's lens, a tall stem and Lucide's sloped flag. The page is cut round the head."
+ },
+ "file-question": {
+  "verdict": "fix",
+  "notes": "question mark top part seems too small",
+  "library": null,
+  "change": "The ? hook is 20% larger (r 0.9, was 0.75). It is as large as fits between the fold and the page's left edge with the dot still 2.25 below."
+ },
+ "file-zip": {
+  "verdict": "fix",
+  "notes": "put the other tooth back",
+  "library": null,
+  "change": "The third tooth is back (your round-10 drawing). The pull is 1 shorter so it clears the teeth by a detail gap instead of overlapping them."
+ },
+ "folder-zip": {
+  "verdict": "fix",
+  "notes": "i like the before, just the zipper itself overlapped the teeth just slightly",
+  "library": null,
+  "change": "Back to the earlier drawing you liked; only the pull is 1 shorter, so it clears the teeth by a detail gap."
+ },
+ "form": {
+  "verdict": "fix",
+  "notes": "are the lines too close together now?",
+  "library": null,
+  "change": "Yes, they were at the closest gap the set allows. The lines are 3 apart again (5.5, 8.5, 11.5), the standard spacing, with the 3 margins kept; the last line is a little shorter so it clears the pen."
+ },
+ "gavel": {
+  "verdict": "replace",
+  "notes": "the handle part is too small/short",
+  "library": "Phosphor",
+  "change": "Phosphor's proportions: the handle is 15% longer and the head's end bars shorter, so it still fits the keyline."
+ },
+ "gem": {
+  "verdict": "replace",
+  "notes": "copy fluent exactly",
+  "library": "Fluent",
+  "change": "Fluent's premium: a flat top, a wide girdle at 6.5, facets from the top to the girdle and down to the tip. Filled follows Fluent's filled cut: the same drawing at the heavier weight, with the facets open."
+ },
+ "globe": {
+  "verdict": "replace",
+  "notes": "copy fluent exactly for both filled and monoline",
+  "library": "Fluent",
+  "change": "Fluent's globe: latitudes at 5.5 and 10.5, and a wider lens through both poles (2.5 from centre at the equator). Filled: a solid disc with the lens and latitudes knocked out, as Fluent's."
+ },
+ "hand-wave": {
+  "verdict": "fix",
+  "notes": "(fix filled: visual and stroke error)",
+  "library": null,
+  "change": "Filled: each fingertip touched the next finger's edge, so the tips merged into a mitten. The separators now continue 1.6 up each shared edge, so the fingers part like Phosphor's. The outline is unchanged."
+ },
+ "kanban": {
+  "verdict": "fix",
+  "notes": "the column widths should be the same",
+  "library": null,
+  "change": "Three equal 4-wide columns. The icon sits 0.5 right of centre so every column edge stays sharp at 1×."
+ },
+ "umbrella": {
+  "verdict": "fix",
+  "notes": "base the design off of what the globe icon doesn for the lines",
+  "library": null,
+  "change": "The canopy is the globe's top half, so its ribs are now the globe's lens: from the tip down to 5.5 and 10.5."
+ },
+ "globe-off": {
+  "verdict": "approve",
+  "notes": "(approved; changed with globe)",
+  "library": null,
+  "change": "Follows the new globe (lens and latitudes), split at the slash as before."
+ },
+ "server": {
+  "verdict": "approve",
+  "notes": "(optical size pass)",
+  "library": null,
+  "change": "Optical size pass: it drew a pixel larger than the square frame (silhouette 169 against 140). The units are now 11 wide on square-plus's frame.",
+  "optical": true
+ },
+ "server-cog": {
+  "verdict": "approve",
+  "notes": "(optical size pass)",
+  "library": null,
+  "change": "Optical size pass: server's new units; the gear moves 0.5 left and down to stay centred.",
+  "optical": true
+ },
+ "piano": {
+  "verdict": "approve",
+  "notes": "(optical size pass)",
+  "library": null,
+  "change": "Optical size pass: the frame is square-plus's 2.5–13.5 (was 2–14); the black keys are unchanged.",
+  "optical": true
+ },
+ "film": {
+  "verdict": "approve",
+  "notes": "(optical size pass)",
+  "library": null,
+  "change": "Optical size pass: the frame is square-plus's 2.5–13.5 (was 2–14); the sprocket strips are 2.5 wide.",
+  "optical": true
+ },
+ "bandage": {
+  "verdict": "approve",
+  "notes": "(optical size pass)",
+  "library": null,
+  "change": "Optical size pass: both bands are 0.5 shorter at each end, so it matches the square frame's mass.",
+  "optical": true
+ },
+ "keyboard": {
+  "verdict": "approve",
+  "notes": "(optical size pass)",
+  "library": null,
+  "change": "Optical size pass: id-card's 12 × 10 frame (was 13 × 10) with the keys respaced.",
+  "optical": true
+ },
+ "keyboard-off": {
+  "verdict": "approve",
+  "notes": "(optical size pass)",
+  "library": null,
+  "change": "Optical size pass: follows keyboard.",
+  "optical": true
+ },
+ "markdown": {
+  "verdict": "approve",
+  "notes": "(optical size pass)",
+  "library": null,
+  "change": "Optical size pass: vault's 13 × 9 frame (was 13 × 10); the letters you approved are unchanged; the arrow ends 0.5 higher.",
+  "optical": true
+ },
+ "gif": {
+  "verdict": "approve",
+  "notes": "(optical size pass)",
+  "library": null,
+  "change": "Optical size pass: vault's 13 × 9 frame (was 13 × 10); the letters you approved are unchanged.",
+  "optical": true
+ },
+ "pipeline": {
+  "verdict": "approve",
+  "notes": "(optical size pass)",
+  "library": null,
+  "change": "Optical size pass: 12 wide (was 13), the folder's mass.",
+  "optical": true
+ },
+ "chess-rook": {
+  "verdict": "approve",
+  "notes": "(optical size pass)",
+  "library": null,
+  "change": "Optical size pass: 12 tall (was 13), the page's height.",
+  "optical": true
+ }
+}

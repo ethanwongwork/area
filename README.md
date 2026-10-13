@@ -4,7 +4,7 @@ A customizable component library built on shared design tokens. The goal is broa
 component coverage, useful variants, and consistent visual and interaction quality.
 
 The stack stays small: **tokens → framework-free CSS → React → live documentation**.
-Components share theme, color, UI scale, radius, surface and motion settings instead
+Components share theme, color, type size, density, radius, surface and motion settings instead
 of carrying separate light/dark implementations.
 
 ## Run locally
@@ -22,9 +22,9 @@ npm run dev     # the desktop app (Electron), reloading on change
 The app (`apps/desktop`) is Area's gallery: every component, icon, type style and colour. Its
 regions are the **Titlebar** (Language, Components, Typography, Icons and Color tabs, search,
 layout toggles, light / dark), the **Sidebar** (the tab's list), the **Canvas** (the selection at
-full size) and the **Inspector** (canvas settings and facts about the selection). It runs at the
-compact UI scale and is built from Area's own components; the Canvas carries its own density,
-radius and pills from the Inspector.
+full size) and the **Inspector** (canvas settings and facts about the selection). It runs at type
+13 and Compact density and is built from Area's own components; the Canvas carries its own type
+size, density, radius and pills from the Inspector.
 
 **The app is the source of truth** (owner, 2026-10-12). Area consumes itself: the app is built only
 from Area, and it is the one place components, icons, type, colour and their states are shown and
