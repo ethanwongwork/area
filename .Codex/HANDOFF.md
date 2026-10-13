@@ -8,8 +8,9 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
 ## Compass review → Password field, OTP field, Time field, Stepper, Spinner value (2026-10-13, branch `claude/design-compass-components-cfd9eb`, PR)
 
 - Owner reviewed compass.designcompass.org ("anything worth using/building?"). Gallery tile Copy/Reset and the app at
-  type 13 / Compact / radius 10 were handed to the running **gallery** session (`icon-hover-card-button-variant-c2d0bf`,
-  which holds the type-size axis and Inspector Copy code); not done here. Research: `docs/research/compass-components-2026-10-13/`.
+  type 13 / Compact / radius 10 were handed to the **gallery** session: type 13 / Compact is on main (PR 75); Copy/Reset
+  (`apps/desktop/src/actions.tsx`) and radius 10 sit uncommitted in its worktree (`icon-hover-card-button-variant-c2d0bf`)
+  as of this merge. Research: `docs/research/compass-components-2026-10-13/`.
 - All Complete after review rounds 24-26 (`components24`-`26` on https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG);
   nothing in review:
   - **Password field**: Input + an eye / closed-eye InputAction ("Show / Hide password", in the Tab order, caret kept),
