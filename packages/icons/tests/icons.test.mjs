@@ -127,3 +127,16 @@ test("a 12px cut draws on the 12px grid at size 12, turned with its base; other 
   assert.match(readFileSync(`${dist}svg/12/info.svg`, "utf8"), /viewBox="0 0 12 12"/);
   assert.match(readFileSync(`${dist}svg/12/info-filled.svg`, "utf8"), /viewBox="0 0 16 16"/, "filled at 12 scales the 16px drawing");
 });
+
+test("third-party ink is credited: source in the metadata, its library's licence in THIRD_PARTY_NOTICES.md", () => {
+  const notices = readFileSync(new URL("../THIRD_PARTY_NOTICES.md", import.meta.url), "utf8");
+  const credited = icons.filter(i => i.source);
+  assert.deepEqual(credited.map(i => i.name).sort(), ["globe", "globe-off"]);
+  for (const i of credited) {
+    assert.ok(notices.includes(`## ${i.source.library}`), i.name);
+    assert.match(notices, new RegExp(`\\| ${i.name} \\|`), `${i.name} listed`);
+  }
+  assert.deepEqual(icons.find(i => i.name === "globe").source, { library: "fluent", names: ["globe_16_regular", "globe_16_filled", "globe_12_regular"] });
+  const pkg = JSON.parse(readFileSync(new URL("../package.json", import.meta.url), "utf8"));
+  assert.ok(pkg.files.includes("THIRD_PARTY_NOTICES.md") && pkg.files.includes("CHANGELOG.md"));
+});

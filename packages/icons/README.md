@@ -27,11 +27,33 @@ as in an icon-only button without its own label. Icons tied to reading direction
 | `@area/icons/icons/<name>` | One icon's module |
 | `@area/icons/meta` | `icons` (below), `categories` in their curated order, review `batches` |
 | `@area/icons/meta`, `@area/icons/icons.json` | Each icon's name, component names, category, keyline, fill, status, batch, turns, aliases, `rtl`, search `keywords` and the same icon's `names` in Lucide, Phosphor, Fluent and Material |
-| `@area/icons/svg/<16\|20\|24>/<name>[-filled].svg` | Raw SVGs at the size curve's masters, line 1.125px at 16 |
+| `@area/icons/svg/<12\|16\|20\|24>/<name>[-filled].svg` | Raw SVGs at 12 (the 12px cut where an icon has one) and the size curve's masters, line 1.125px at 16 |
 | `@area/icons/sprite.svg` | 16px symbols `area-<name>` and `area-<name>-filled` |
 | `@area/icons/rtl.css` | The right-to-left mirroring rule, for use without `@area/styles` |
 
 Components take every SVG prop; props passed through win.
+
+`size={12}` with the token line is the xs icon slot (`--area-icon-xs`: 12px below type 16, 16px at 16). An icon with
+a 12px cut (`cuts: [12]` in the metadata) carries both drawings there and shows the cut only where the slot is 12;
+with a numeric `weight` it draws the cut alone.
+
+## Versions, deprecation and credits
+
+The package follows semantic versioning; `CHANGELOG.md` lists every release.
+
+- **Major:** an icon or export removed or renamed (after its deprecation), a prop or metadata field changed
+  incompatibly, an approved icon moved back to `@area/icons/review`.
+- **Minor:** icons added or approved into the main entry, new cuts, props, entries or metadata fields.
+- **Patch:** a drawing refined without changing its meaning, keyline or box (optical fixes, review redraws), metadata
+  corrections (keywords, names).
+- **Before 1.0** any minor may break, as semver allows for 0.x; reopened icons still move to `review`. 1.0 freezes the
+  main entry: from then an approved icon is redrawn in place and never leaves it.
+- **Deprecation:** a renamed icon keeps its old name for at least one minor release as an alias of the new drawing,
+  marked `@deprecated` in its JSDoc and `deprecated: { by, since }` in the metadata, and is removed in the next major.
+  (No icon has been renamed since versioning began; the alias machinery, `data-alias-of`, is in place.)
+- **Credits:** Area's drawings are its own, except where a drawing reproduces another library's ink: those carry
+  `source` in the metadata and their licence is in `THIRD_PARTY_NOTICES.md` (today Fluent's globe, in globe and
+  globe-off). The licence for Area's own drawings is the owner's to choose and not yet set.
 
 ## Working on the icons
 

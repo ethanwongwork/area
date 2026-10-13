@@ -302,6 +302,7 @@ export function IconsPage() {
                   meta ? ["Filled", meta.fill === "solid" ? "Solid body" : "Heavier outline"] : null,
                   meta?.rtl ? ["Right to left", "Mirrors"] : null,
                   meta?.cuts?.includes(12) ? ["At 12px", "Own drawing"] : null,
+                  meta?.source ? ["Ink from", `${LIBRARIES.find(([key]) => key === meta.source!.library)?.[1] ?? meta.source.library} ${meta.source.names[0]}`] : null,
                   iconStatus ? ["Status", <StatusBadge name={icon.name} />] : null,
                   iconStatus ? ["Batch", iconStatus.batch] : null,
                 ]} />

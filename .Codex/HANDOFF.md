@@ -21,6 +21,9 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
 - Then production gap 9 for the app: demos import `@area/icons` names (78 pass-throughs, nothing renders differently),
   Copy / SVG export in `apps/desktop/src/copy.tsx`, the docs-only Iconography demos in `content/registry-docs.tsx`
   (the docs render reads it); the app bundle has no Fluent ink (4.66 → 2.91 MB). Spec "Fluent map retired from the app".
+- Then gap 6 minus the licence: `@area/icons` 0.1.0, `CHANGELOG.md`, semver / deprecation policy (README), credits
+  (`data-source` → meta `source`, `packages/icons/THIRD_PARTY_NOTICES.md`: Fluent's globe in globe, globe-off). Open: the
+  licence for Area's own drawings (owner).
 - Found: `npm run build:docs` fails on `main` since PR #75 (`build.mjs` reads the removed `ui` axis); not fixed (archived).
 ## Compass review → Password field, OTP field, Time field, Stepper, Spinner value (2026-10-13, branch `claude/design-compass-components-cfd9eb`, PR)
 

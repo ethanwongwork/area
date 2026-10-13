@@ -5033,3 +5033,21 @@ Production gap 9, the app's half (owner, 2026-10-13: "go with your recommendatio
   keep reading `@fluentui/svg-icons` as a reference library (find, batch, sheet, keywords), as they do Lucide.
 - Found: the archived docs build fails on `main` since the type / density split (PR #75): `build.mjs` still reads the
   removed `ui` axis in four places. Not fixed here (archived; fixing means rewriting its axis pages).
+
+## Versions, deprecation and credits, 2026-10-13
+
+Production gap 6 without its licence (the owner's to choose). `@area/icons` is 0.1.0 with `CHANGELOG.md`; the policy is
+in the package README, "Versions, deprecation and credits".
+
+- **Semver:** major for removals, renames, incompatible props or metadata, and an approved icon moving back to review;
+  minor for new or newly approved icons, cuts, props and fields; patch for refinements that keep meaning, keyline and
+  box. Under 0.x reopened icons still move to `review`; 1.0 freezes the main entry (an approved icon is redrawn in place).
+- **Deprecation:** a renamed icon stays one minor as a `@deprecated` alias with `deprecated: { by, since }`, removed at
+  the next major; built with the first rename (the alias drawing check, `data-alias-of`, exists).
+- **Credits:** `data-source="<library> <icon> …"` on a drawing or its 12px cut marks reproduced third-party ink; the
+  generator puts `source: { library, names }` in the metadata and refuses a library with no section in
+  `packages/icons/THIRD_PARTY_NOTICES.md` (shipped in the package). Today: globe and globe-off (Fluent's globe, MIT,
+  `@fluentui/svg-icons` 1.1.341; copyright line read from microsoft/fluentui-system-icons' LICENSE). The app's
+  Inspector shows "Ink from". Drawings that follow another library's construction (the many "Lucide x:" rows) are
+  Area's own ink and carry no `source`.
+- Open (owner): the licence for Area's own drawings (none is set; the root package is private).
