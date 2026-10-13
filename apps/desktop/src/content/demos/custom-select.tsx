@@ -1,7 +1,7 @@
 /** Custom select gallery specimens: one variant per tile. docs/specs/custom-select.md. */
 import type { CSSProperties } from "react";
 import { CustomSelect, type CustomSelectOption } from "@area/react";
-import { PilotGlobeIcon, PilotGalleryIcon, PilotKanbanIcon, PilotListIcon, PilotLockIcon, PilotTableIcon, PilotCalendarIcon } from "../../../../docs/src/pilot-icons.tsx";
+import { GlobeIcon, GalleryIcon, KanbanIcon, ListIcon, LockIcon, TableIcon, CalendarIcon } from "@area/icons";
 
 /* Notion's Share popover access levels: a label and a line saying what it allows. */
 const access: CustomSelectOption[] = [
@@ -11,15 +11,15 @@ const access: CustomSelectOption[] = [
   { value: "view", label: "Can view" },
 ];
 const general: CustomSelectOption[] = [
-  { value: "invited", label: "Only people invited", icon: <PilotLockIcon /> },
-  { value: "web", label: "Anyone on the web with link", icon: <PilotGlobeIcon /> },
+  { value: "invited", label: "Only people invited", icon: <LockIcon /> },
+  { value: "web", label: "Anyone on the web with link", icon: <GlobeIcon /> },
 ];
 const layouts: CustomSelectOption[] = [
-  { value: "table", label: "Table", icon: <PilotTableIcon />, group: "Data" },
-  { value: "list", label: "List", icon: <PilotListIcon />, group: "Data" },
-  { value: "board", label: "Board", icon: <PilotKanbanIcon />, group: "Visual" },
-  { value: "gallery", label: "Gallery", icon: <PilotGalleryIcon />, group: "Visual" },
-  { value: "calendar", label: "Calendar", icon: <PilotCalendarIcon />, group: "Visual" },
+  { value: "table", label: "Table", icon: <TableIcon />, group: "Data" },
+  { value: "list", label: "List", icon: <ListIcon />, group: "Data" },
+  { value: "board", label: "Board", icon: <KanbanIcon />, group: "Visual" },
+  { value: "gallery", label: "Gallery", icon: <GalleryIcon />, group: "Visual" },
+  { value: "calendar", label: "Calendar", icon: <CalendarIcon />, group: "Visual" },
 ];
 const frame: CSSProperties = { inlineSize: 240 };
 

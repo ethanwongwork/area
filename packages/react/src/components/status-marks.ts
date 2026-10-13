@@ -1,5 +1,5 @@
-/** Area-drawn presence marks, generated from apps/docs/assets/area-icons-pilot/status by
- * apps/docs/scripts/gen-pilot-icons.mjs. Do not edit by hand. Construction: docs/specs/icons.md. */
+/** Area-drawn presence marks, generated from packages/icons/sources/status by
+ * packages/icons/scripts/generate.mjs. Do not edit by hand. Construction: docs/specs/icons.md. */
 export const statusMarks = {
   "available": [
     {

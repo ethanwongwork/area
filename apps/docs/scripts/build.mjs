@@ -305,10 +305,10 @@ function iconSheet(id, title, tileTitle, demoName, { open = true, note = "" } = 
       </article>
     </details>`;
 }
-/** Exploration: icon candidates under review (assets/area-icons-pilot/explore), shown only
+/** Exploration: icon candidates under review (packages/icons/sources/explore), shown only
  *  while candidates exist. */
 function iconExploreSection() {
-  const dir = join(root, "assets/area-icons-pilot/explore");
+  const dir = join(root, "../../packages/icons/sources/explore");
   if (!existsSync(dir) || !readdirSync(dir).some(file => file.endsWith(".svg"))) return "";
   return iconSheet("icon-explore", "Exploration", "candidates", "GalleryIconPilotExplore");
 }
@@ -322,7 +322,7 @@ const iconReviewSections = () => [
   iconSheet("icon-pixels", "Pixel check", "raster-1x-2x", "GalleryIconPilotPixels", { open: false }),
 ].join("");
 
-/** Icon review page (gallery-icons.html), from assets/area-icons-pilot/batches.json:
+/** Icon review page (gallery-icons.html), from packages/icons/sources/batches.json:
  *  - In review: a card per icon the owner hasn't approved yet, newest batch first;
  *  - All icons: the whole set, outline and filled, one group per batch, newest first;
  *  - Approved: the approved icons' cards, one closed section per batch, newest first.
@@ -331,7 +331,7 @@ const DERIVED_FROM = Object.fromEntries([...readFileSync(join(root, "src/pilot-i
   .matchAll(/name: "([a-z0-9-]+)", keyline: "[a-z]+", derivedFrom: "([a-z0-9-]+)"/g)]
   .map(([, name, base]) => [`GalleryIconReview${name.replace(/(^|-)([a-z0-9])/g, (_, __, c) => c.toUpperCase())}`, base]));
 function iconReviewPage() {
-  const { batches } = JSON.parse(readFileSync(join(root, "assets/area-icons-pilot/batches.json"), "utf8"));
+  const { batches } = JSON.parse(readFileSync(join(root, "../../packages/icons/sources/batches.json"), "utf8"));
   const newest = [...batches].reverse();
   const pascal = name => name.replace(/(^|-)([a-z0-9])/g, (_, __, c) => c.toUpperCase());
   const derived = Object.keys(demos).filter(name => name.startsWith("GalleryIconReview"));

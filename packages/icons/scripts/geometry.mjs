@@ -1,15 +1,15 @@
 #!/usr/bin/env node
 // Geometry helpers for drawing Area icons (docs/specs/icons.md). Solve shapes here instead
 // of nudging coordinates by eye, then paste the path into the source SVG.
-//   node apps/docs/scripts/icon-geometry.mjs fillet "3,1.5 14.5,8 3,14.5" "1.25,1,1.25"
-//   node apps/docs/scripts/icon-geometry.mjs open-fillet "2,5.5 8,8.5 14,5.5" "0,1.5,0"
-//   node apps/docs/scripts/icon-geometry.mjs mirror "M8 5.5C7.5 3.3 4 2.5 2 4V11.5Z"
-//   node apps/docs/scripts/icon-geometry.mjs slash "<d>" "2,2 14,14"          # off icons: one-sided
-//   node apps/docs/scripts/icon-geometry.mjs cut "<d>" "8,9 6,11 8,13 | 11,9 13,11" [clear]
-//   node apps/docs/scripts/icon-geometry.mjs behind "<back d>" "<front d>" [clear]
-//   node apps/docs/scripts/icon-geometry.mjs lobes 12.5 "4.5,10,2.5 7.5,7,3.5 11,9.5,3"
-//   node apps/docs/scripts/icon-geometry.mjs transform "<d>" 0.5 [8,8] [dx,dy]
-//   node apps/docs/scripts/icon-geometry.mjs gap "<d1>" "<d2>"
+//   node packages/icons/scripts/geometry.mjs fillet "3,1.5 14.5,8 3,14.5" "1.25,1,1.25"
+//   node packages/icons/scripts/geometry.mjs open-fillet "2,5.5 8,8.5 14,5.5" "0,1.5,0"
+//   node packages/icons/scripts/geometry.mjs mirror "M8 5.5C7.5 3.3 4 2.5 2 4V11.5Z"
+//   node packages/icons/scripts/geometry.mjs slash "<d>" "2,2 14,14"          # off icons: one-sided
+//   node packages/icons/scripts/geometry.mjs cut "<d>" "8,9 6,11 8,13 | 11,9 13,11" [clear]
+//   node packages/icons/scripts/geometry.mjs behind "<back d>" "<front d>" [clear]
+//   node packages/icons/scripts/geometry.mjs lobes 12.5 "4.5,10,2.5 7.5,7,3.5 11,9.5,3"
+//   node packages/icons/scripts/geometry.mjs transform "<d>" 0.5 [8,8] [dx,dy]
+//   node packages/icons/scripts/geometry.mjs gap "<d1>" "<d2>"
 // Every command prints absolute M/L/H/V/C/A/Z paths ready for a source SVG.
 import { fileURLToPath } from "node:url";
 
@@ -238,7 +238,7 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   else if (cmd === "lobes") console.log(lobes(Number(a), pts(b)));
   else if (cmd === "transform") console.log(transform(a, Number(b), c ? c.split(",").map(Number) : [8, 8], e ? e.split(",").map(Number) : [0, 0]));
   else if (cmd === "gap") { const r = inkGap(a, b); console.log(`${f(r.gap)}px ink (${f(r.centres)} between centre-lines): ${r.step}`); }
-  else console.log(`usage: icon-geometry.mjs <command>
+  else console.log(`usage: geometry.mjs <command>
   fillet "x,y …" "r,…"            closed polygon with arc corners (0 keeps a corner sharp)
   open-fillet "x,y …" "r,…"       the same, open (end radii ignored)
   mirror "<d>"                    mirror across x = 8

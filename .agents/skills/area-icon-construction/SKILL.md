@@ -1,6 +1,6 @@
 ---
 name: area-icon-construction
-description: Draw, redraw, review or plan Area's own stroked icons so the whole set has one optical system. Use whenever an icon in apps/docs/assets/area-icons-pilot (or a later Area icon family) is added or changed, when checking whether Area has an icon for a concept, when working through a reference set (Cursor, Lucide, Fluent) for gaps, when an icon reads larger, smaller, heavier, blurrier or denser than its neighbours, or when replacing a Fluent icon with an Area drawing.
+description: Draw, redraw, review or plan Area's own stroked icons so the whole set has one optical system. Use whenever an icon in packages/icons/sources (or a later Area icon family) is added or changed, when checking whether Area has an icon for a concept, when working through a reference set (Cursor, Lucide, Fluent) for gaps, when an icon reads larger, smaller, heavier, blurrier or denser than its neighbours, or when replacing a Fluent icon with an Area drawing.
 ---
 
 # Area icon construction
@@ -8,7 +8,7 @@ description: Draw, redraw, review or plan Area's own stroked icons so the whole 
 Area icons are stroked centre-line drawings on a 16px grid. The goal is a set in which
 every icon reads as the same size, weight and density, like Cursor's set, while staying
 crisp at 1× and 2×. The rules live in `docs/specs/icons.md` ("Construction system"); the
-lint in `apps/docs/scripts/gen-pilot-icons.mjs` enforces the measurable ones. The owner's
+lint in `packages/icons/scripts/generate.mjs` enforces the measurable ones. The owner's
 eye overrides any rule; when it does, record the exception in the spec.
 
 Sources: Cursor's published construction (minoradventures.co, "The making of Cursor's
@@ -25,7 +25,7 @@ A new icon or batch, start to finish. Each step's detail is further down.
 questions: take the recommended option, record it as delegated here (Owner preferences) and in
 `docs/research/icon-inventory.md` ("To settle"), and say so in the reply so the owner can
 overturn it. When the owner asks for decisions, send a simple decision sheet that shows each
-option rendered (explore candidates or `icon-sheet.mjs`), not a text list.
+option rendered (explore candidates or `sheet.mjs`), not a text list.
 
 0. **Set up** a fresh worktree with `npm ci`. Sheet scripts drive headless Edge; if they hang, stop stray
    `Microsoft Edge … --headless` processes (orphans hold the profile; `2026-10-07/edge.mjs` stops Edge as
@@ -37,28 +37,28 @@ option rendered (explore candidates or `icon-sheet.mjs`), not a text list.
    (`docs/research/icon-inventory.md`). Use what exists; if a family base exists, make a
    variant with the family's modifier (Families); if nothing does, check the queue's
    references and uses.
-2. **Reference, never trace.** Fluent's cuts are local: `node apps/docs/scripts/icon-batch.mjs
+2. **Reference, never trace.** Fluent's cuts are local: `node packages/icons/scripts/batch.mjs
    --fluent <stem>` finds the 16px pair (or the smallest that exists). Lucide's names and tags
    (search terms, ISC) can be fetched into the scratchpad from
    `https://unpkg.com/lucide-static@latest/tags.json` (follow the redirect). Cursor: rules and
-   numbers only. Render a reference beside Area with `icon-sheet.mjs sheet out.png <path.svg> <name>`.
-   For a concept across libraries (owner, 2026-10-01), `node apps/docs/scripts/icon-refs.mjs fetch`
+   numbers only. Render a reference beside Area with `sheet.mjs sheet out.png <path.svg> <name>`.
+   For a concept across libraries (owner, 2026-10-01), `node packages/icons/scripts/refs.mjs fetch`
    puts Lucide, Phosphor (six weights, a designed fill) and Hugeicons (free, stroke) in
-   `apps/docs/.cache/refs`; add the concept to `docs/research/icon-references.json` and run
-   `icon-refs.mjs sheet out.png <group>` (Area outline and filled beside Fluent, Lucide, Phosphor and
+   `packages/icons/.cache/refs`; add the concept to `docs/research/icon-references.json` and run
+   `refs.mjs sheet out.png <group>` (Area outline and filled beside Fluent, Lucide, Phosphor and
    Hugeicons). Look for the telling detail and the filled treatment, never the path.
 3. **Plan** the keyline, family and shared parts, the modifier, the filled roles and, for a
    dense idea, which simplification (Fitting a dense idea at 16px).
-4. **Draw** in `apps/docs/assets/area-icons-pilot/<name>.svg` with the geometry toolkit
+4. **Draw** in `packages/icons/sources/<name>.svg` with the geometry toolkit
    (`npm run icons:geometry` prints it): fillets, cuts round marks and overlaps, lobes,
    transforms and a gap check. Solve values; don't nudge by eye.
-5. **Lint loop:** `node apps/docs/scripts/gen-pilot-icons.mjs --only <name,name>` answers in
+5. **Lint loop:** `node packages/icons/scripts/generate.mjs --only <name,name>` answers in
    under a second; every near miss names the distance to the nearest step (Lint messages).
 6. **Look:** `node docs/research/icon-review/2026-10-07/look.mjs out.png name,… [ref.svg …]
    [--before] [--slivers]` renders straight from the sources, outline and filled at 16 / 24 / 32 /
    48 and 96 over the grid, with reference rows (Fluent, Lucide, Phosphor files) and the sliver check;
    it writes nothing shared, so parallel sessions can use it. After `npm run icons:pilot`,
-   `icon-sheet.mjs filled`, `filled-large` or `compare out.png batch-NN` still work.
+   `sheet.mjs filled`, `filled-large` or `compare out.png batch-NN` still work.
 7. **Record:** write a batch file (id, title, date, note, and per icon its name, label, Fluent
    stem and construction line, plus an optional `extra` paragraph for what was dropped and
    why) and run `npm run icons:batch -- batch.json`. It updates batches.json (new icons in
@@ -70,7 +70,7 @@ option rendered (explore candidates or `icon-sheet.mjs`), not a text list.
    icons); the sliver check at 16 and 48; the 1× pixel view
    (`docs/research/icon-review/2026-10-10/quality/tools/px.mjs out.png name=path.svg …`: the 2× sheets hide a
    whole-pixel stroke's grey double row) and the doubled-stroke scan (`quality/tools/dups.mjs
-   apps/docs/assets/area-icons-pilot <names>`); check the batch's cards on `gallery-icons.html`; send the
+   packages/icons/sources <names>`); check the batch's cards on `gallery-icons.html`; send the
    owner a sheet (Area alone at 16–48, or beside the libraries).
 9. **Hand off:** update the icon line in `.Codex/HANDOFF.md`. Only the owner marks approvals.
 
@@ -414,7 +414,7 @@ the lint prints every gap and counter with `--report`.
   keyline: video-off). **The filled variant still parts the slash from the solid**, since a slash
   on a solid would vanish: a solid shape is a whole `fill` parted by one `gap` above the bold
   slash, lines that stay lines when filled (legs, stands) are cut one-sided with
-  `icon-geometry.mjs slash` (2.5), and a line glyph's filled lines are `stroke` pieces cut 2.5.
+  `geometry.mjs slash` (2.5), and a line glyph's filled lines are `stroke` pieces cut 2.5.
   `docs/research/icon-review/2026-10-02/flat-slash.py` rebuilds the outlines from the bases. Two
   off states keep their own recorded form, declared `data-off="own"`: eye-off is a closed eye
   (owner) and volume-off a speaker with a 3.5px × (Fluent's mute). The lint fails any other
@@ -606,7 +606,7 @@ or the accessory fills instead (video_person, incognito; the bots' hats). Judge 
 - **Only closed parts that are the object fill.** A band, handle or stand that joins solid
   parts stays a line (headphones' band); if one closed path would fill the space between
   parts, split it. A shape in front of another (printer's sheet) needs a `gap` where it
-  overlaps. Review every filled variant with `icon-sheet.mjs filled` (`filled-large` adds
+  overlaps. Review every filled variant with `sheet.mjs filled` (`filled-large` adds
   a 64px row for cut-outs). An open solid fills with a straight chord between its ends:
   close the path unless that chord lies where an edge should be (printer's runs behind its
   sheet, a strap's along the body's edge); wallet's crossed its flap and left a wedge.
@@ -707,7 +707,7 @@ gap moves with the line (`slashGap`: the slash shifted one weight). A gap that m
 with a cut is drawn to the cut's centre-line (file-cog, file-pen), so a thinner cut opens no
 hairline. Line glyphs (no solid) keep the curve when filled. Review sheets show icons by themselves at 16 / 24 / 32 / 48
 through the real `size` prop (`docs/research/icon-review/2026-10-02/sizes.mjs`) or beside all
-five libraries (`icon-refs.mjs`), never at one large size beside Fluent alone.
+five libraries (`refs.mjs`), never at one large size beside Fluent alone.
 
 **In components.** A component that draws its own glyph uses `Glyph` from
 `packages/react/src/components/Glyph.tsx`. Add the icon (or one element of it) to
@@ -720,23 +720,23 @@ The quick path, in detail.
 
 1. **Plan.** Name the keyline, the family and shared parts it reuses, and the Fluent
    equivalent; search first (`npm run icons:find`).
-2. **Draw** in `apps/docs/assets/area-icons-pilot/<name>.svg`, using absolute commands and the
+2. **Draw** in `packages/icons/sources/<name>.svg`, using absolute commands and the
    attributes of the existing sources (`data-set`, `data-keyline`, stroke 1.25, round caps
    and joins, `fill="none"`; a solid is `fill="currentColor"` with no stroke). Generate
    parametric shapes, such as the gear, with a script and solve for grid-aligned values;
    don't nudge by eye. Use only path, circle and rect: the lint rejects anything it cannot
    measure (an ellipse was once skipped silently).
-3. **Lint** with `gen-pilot-icons.mjs --only <names>` while drawing, and the full
+3. **Lint** with `generate.mjs --only <names>` while drawing, and the full
    `--report` (or `npm run icons:pilot`) before recording. It checks the 0.5px grid (filled
    edges too), the diagonal lattice, the keyline, gaps, counters (filled solids count as
    ink), the live area (centre-lines within 1.5–14.5), angles and attributes, dot sizes, the
    shared slash on `-off` icons, and knockouts that leave their solid, and prints each icon's
    ink box and centre.
 4. **Review** each icon on `gallery-icons.html`. It is grouped by batch, from
-   `apps/docs/assets/area-icons-pilot/batches.json`, which also records the owner's status
+   `packages/icons/sources/batches.json`, which also records the owner's status
    for each icon (approved, revising, review), shown in the component gallery's status
    colours (Complete, In review, Unrefined). New icons go in as `review`, and an icon you
-   change goes back to `review` (`icon-batch.mjs --review name`); everything the owner has
+   change goes back to `review` (`batch.mjs --review name`); everything the owner has
    looked at is approved (owner, 2026-09-26). The page opens with **In review** (a card per
    open icon, newest batch first), then **All icons** (every icon, outline and filled at 16px,
    one group per batch, newest first; a dot marks an icon in review; a cell links to its
@@ -745,7 +745,7 @@ The quick path, in detail.
    icon in a Button, icon Button, Badge and the current Nav item (filled). Directional
    families are one drawing with `data-rotations` (quarter turns, `flipx` / `flipy` mirrors
    or `transpose`); never redraw a variant. Only the owner marks an icon approved. For a quick
-   look, or to send the owner a batch, render with `icon-sheet.mjs`: `sheet` (16, 32 and
+   look, or to send the owner a batch, render with `sheet.mjs`: `sheet` (16, 32 and
    96px), `strip` (16 and 32px with a blurred copy, the squint test), `filled` /
    `filled-large` (outline beside filled) or `compare` (beside Fluent's cuts). Then compare
    the set on `gallery-iconography.html`:
@@ -755,10 +755,10 @@ The quick path, in detail.
      that jumps out as larger, smaller, darker or denser;
    - *Filled*: outline, derived filled variant and Fluent's filled cut;
    - *Pixel check*: 1× and 2× rasters, beside Fluent's.
-5. **Audit parts drift** (Cursor's overview tables) with `gen-pilot-icons.mjs --check --parts`
+5. **Audit parts drift** (Cursor's overview tables) with `generate.mjs --check --parts`
    (members that left their base's drawing; triage, not a gate) and look at
    `node docs/research/icon-review/2026-10-02/sheets.mjs parts out.png` (each base in red under its members).
-6. **Audit optical size** with `node apps/docs/scripts/gen-pilot-icons.mjs --check --audit`
+6. **Audit optical size** with `node packages/icons/scripts/generate.mjs --check --audit`
    (the full set: medians need every icon). It rasterises each icon and reports:
    - apparent size (√ of the ink's convex-hull area) and density (ink per hull area),
      each against the set's median;
@@ -771,7 +771,7 @@ The quick path, in detail.
    heavier than its neighbours, remove a line or corner, or pull it inside its keyline,
    before thinning any stroke.
 8. **Explore** when there is more than one good answer. Put the candidates in
-   `apps/docs/assets/area-icons-pilot/explore/`, with `data-group` and `data-label` on each.
+   `packages/icons/sources/explore/`, with `data-group` and `data-label` on each.
    They are linted without failing the build, and the gallery's Exploration section shows
    each one at 16px and 4× with its gaps, counters and rule findings. Delete them once the
    owner chooses.
@@ -829,7 +829,7 @@ the fold's fixed diagonal, the pen axis, octagon, rocket, eyedropper, wrench).
 
 ## Geometry toolkit
 
-`apps/docs/scripts/icon-geometry.mjs` (`npm run icons:geometry` prints the usage). Every
+`packages/icons/scripts/geometry.mjs` (`npm run icons:geometry` prints the usage). Every
 command prints absolute paths ready for a source.
 
 - `fillet "x,y …" "r,…"` / `open-fillet`: a polygon or polyline with arc corners (0 keeps a

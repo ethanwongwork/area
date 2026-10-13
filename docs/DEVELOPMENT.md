@@ -18,7 +18,8 @@ a smaller folder count would not justify coupling CSS to React or docs to token 
   (`pages.mjs`), owner-confirmed status (`component-status.mjs`), specimens and their names, the demo
   registry and every demo; `src/gallery/` the tile fit and the Canvas controls.
 - `apps/docs/`: the archived site, not a source of truth. Its build (`render.mjs`, `build.mjs`) still
-  reads the app's content and demos; the icon pipeline still lives here until it moves to `packages/icons`.
+  reads the app's content and demos. Area's icon pipeline is in `packages/icons`; the old Fluent map
+  (`scripts/gen-icons.mjs` and its outputs) is still here.
 
 The site has no application backend, database or required secrets. Geist fonts currently
 load from a pinned external URL; custom consumers may supply their own font tokens.
@@ -97,16 +98,18 @@ checked-in generated sprites, `src/icons.tsx`, `scripts/icons.generated.mjs` and
 node apps/docs/scripts/gen-icons.mjs
 ```
 
-Area's own icons (`apps/docs/assets/area-icons-pilot/`) have their own tools; the process is
-the `area-icon-construction` skill's quick path.
+Area's own icons (`packages/icons/sources/`) have their own tools in `packages/icons/scripts/`; the
+process is the `area-icon-construction` skill's quick path.
 
 ```sh
 npm run icons:find -- brain "paper plane"          # does Area have it already?
 npm run icons:geometry                             # fillets, cuts, lobes, gaps (prints usage)
-node apps/docs/scripts/gen-pilot-icons.mjs --only a,b   # lint just these icons in a second
+node packages/icons/scripts/generate.mjs --only a,b   # lint just these icons in a second
 npm run icons:batch -- batch.json                  # record a batch everywhere it belongs
 npm run icons:sheet -- compare out.png batch-43    # Area beside Fluent, outline and filled
-npm run icons:pilot                                # full lint (about a minute) and generate
+npm run icons:pilot                                # full lint (about 3 minutes) and generate
+npm run icons:refs -- fetch                        # Lucide, Phosphor, Hugeicons, Material metadata into .cache
+npm run icons:keywords                             # rebuild sources/keywords.json (after a generate)
 ```
 
 Do not commit `dist/`, `.cache/`, `node_modules/`, test output or logs. Source checkouts
