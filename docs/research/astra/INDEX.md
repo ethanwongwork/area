@@ -10,6 +10,7 @@ broken research.
 
 | Date | Topic | Question | Status |
 | --- | --- | --- | --- |
+| 2026-10-12 | [materials/20-limits-and-none](materials/20-limits-and-none/README.md) | Which material hard limits have enforcement, which restraint belongs to None, and how can None prove pixel identity across the current app gallery? | unreviewed |
 | 2026-10-12 | [materials/19-corrections](materials/19-corrections/README.md) | Correct the reviewed materials series, refresh 101 contracts and 13 roles, and mark policies superseded by D1–D16. | unreviewed |
 | 2026-10-11 | [materials/18-contrast-harness](materials/18-contrast-harness/README.md) | Which preset text and required-edge paints fail after composition across a continuous backdrop range, including gradient interiors and opaque fallbacks? | reviewed 2026-10-11 ([review](materials/REVIEW.md)) |
 | 2026-10-10 | [materials/17-openglass](materials/17-openglass/README.md) | How do GlassLook controls reach all forty OpenGlass components, where do nesting, fallbacks and contrast break, and what does Area add? | reviewed 2026-10-11 ([review](materials/REVIEW.md)) |
