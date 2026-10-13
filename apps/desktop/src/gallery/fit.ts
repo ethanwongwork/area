@@ -111,9 +111,10 @@ export function fitTiles(canvas: HTMLElement): () => void {
   // The app's zoom (owner, 2026-10-12: a 2x view of the specimens): the largest scale, read once.
   const max = Number(canvas.closest("[data-zoom]")?.getAttribute("data-zoom")) || MAX;
 
-  // Fluid or fixed, and how wide a fluid specimen needs to be, at the default UI scale.
-  const density = canvas.getAttribute("data-area-ui");
-  canvas.setAttribute("data-area-ui", "default");
+  // Fluid or fixed, and how wide a fluid specimen needs to be, at the default type size and density.
+  const scale = ["data-area-type", "data-area-density"].map(name => [name, canvas.getAttribute(name)] as const);
+  canvas.setAttribute("data-area-type", "14");
+  canvas.setAttribute("data-area-density", "default");
   for (const entry of tiles) { entry.stage.style.zoom = ""; entry.stage.style.inlineSize = `${PROBE}px`; }
   for (const entry of tiles) {
     entry.natural = Math.ceil(extent(entry.stage).w);
@@ -127,7 +128,7 @@ export function fitTiles(canvas: HTMLElement): () => void {
     const room = roomOf(entry.view).w / MAX;
     entry.widen = WIDEN.find(factor => { entry.stage.style.inlineSize = `${Math.floor(room * factor)}px`; return !truncates(entry.stage); }) ?? WIDEN.at(-1)!;
   }
-  if (density) canvas.setAttribute("data-area-ui", density); else canvas.removeAttribute("data-area-ui");
+  for (const [name, value] of scale) if (value) canvas.setAttribute(name, value); else canvas.removeAttribute(name);
   // A fixed specimen keeps its own width, or the view's if wider (loose text inside it wraps to the stage).
   for (const entry of tiles) if (!entry.fluid) entry.stage.style.inlineSize = `max(100%, ${entry.natural}px)`;
 

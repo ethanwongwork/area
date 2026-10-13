@@ -12,7 +12,7 @@ IDE / VS Code fork). **The app is the source of truth** (owner, 2026-10-12): Are
 self-consuming product, built only from Area and judged only in the app, and its UI follows
 `docs/PRODUCT_UI.md`. No docs site is a source of truth. The app's regions are the **Titlebar** (tabs: Language, Components, Typography,
 Icons, Color; search; layout toggles; light / dark), the **Sidebar** (left list), the **Canvas**
-(centre) and the **Inspector** (right). Build it from Area components at the compact UI scale.
+(centre) and the **Inspector** (right). Build it from Area components at the app's scale (type 13, Compact density).
 The documentation site (`apps/docs`) is archived: don't extend it or check work there. Component
 content, status, specimens and demos live in `apps/desktop/src/content`; the icon pipeline still sits
 in the site's folder until it moves to `packages/icons`. Reviews of icons

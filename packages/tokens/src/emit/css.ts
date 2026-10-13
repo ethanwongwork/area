@@ -15,6 +15,7 @@ import { AXES, assertAxisIntegrity, attributeFor, defaultPresetOf, assertEmitted
 import { baseTokens, derivedTokens } from "./base.ts";
 import { REGISTERED_PROPERTIES } from "./base.ts";
 import { THEME_AXIS } from "../axes/color.ts";
+import { UI_SHORTHAND } from "../axes/ui-scale.ts";
 
 import { colorPairs } from "./colors.ts";
 
@@ -124,13 +125,22 @@ export function emitAxes(): string {
       "Area — axes",
       "Generated. Do not edit.\n\n" +
         "One block per preset. Selecting an axis is a data attribute on any element:\n" +
-        '  <html data-area-theme="dark" data-area-ui="compact" data-area-radius="0">\n\n' +
+        '  <html data-area-theme="dark" data-area-type="13" data-area-density="compact" data-area-radius="0">\n\n' +
         "Custom properties inherit, so a subtree can carry its own axis values:\n" +
-        '  <aside data-area-ui="compact"> ... </aside>',
+        '  <aside data-area-density="compact"> ... </aside>',
     ),
     "",
     "@layer area.axes {",
   ];
+
+  // The UI scale shorthand (axes/ui-scale.ts) first, so an explicit type or density on the same
+  // element, emitted below at the same specificity, wins.
+  out.push("");
+  out.push(`${INDENT}/* UI scale shorthand — data-area-ui="compact" is type 12, Compact; "default" is type 14, Default. */`);
+  for (const [id, pair] of Object.entries(UI_SHORTHAND)) {
+    const pick = (axisId: string, presetId: string) => AXES.find(a => a.id === axisId)!.presets.find(p => p.id === presetId)!.tokens;
+    out.push(rule(`[data-area-ui="${id}"]`, { ...pick("type", pair.type), ...pick("density", pair.density) }));
+  }
 
   for (const axis of AXES) {
     out.push("");
@@ -168,7 +178,7 @@ export function emitAxes(): string {
   // would get a 28px control with a 6px radius derived from 32. Repeating the derivations on
   // any element that carries an axis attribute makes them resolve against that element's own
   // values, which is exactly where they need to change and nowhere else.
-  const axisBearing = [...AXES.map((a) => `[${attributeFor(a)}]`), "[data-area-contrast]"].join(",\n" + INDENT);
+  const axisBearing = [...AXES.map((a) => `[${attributeFor(a)}]`), "[data-area-ui]", "[data-area-contrast]"].join(",\n" + INDENT);
   out.push("");
   out.push(`${INDENT}/* Re-derive cross-axis values wherever an axis is redeclared. */`);
   out.push(rule(axisBearing, derivedTokens()));

@@ -4,9 +4,9 @@
  * On macOS the window has no title bar of its own: the app's Titlebar is the drag region and the
  * traffic lights sit inside it as Cursor places them (owner, 2026-10-12: "i like cursors top bar"):
  * centred in the bar and as far from the side as from the top, plus one. Cursor's main process
- * (out/main.js, 3.23): s = floor((height - 14) / 2), at { x: s + 1, y: s }; for the 41 bar (40 and
- * the rule) that is 14, 13, centred on the controls' line at 20. Was 16, 14 (a pixel low), then 20, 19
- * in a 52 bar.
+ * (out/main.js, 3.23): s = floor((height - 14) / 2), at { x: s + 1, y: s }; for the 39 bar the app's
+ * type 13 / Compact scale gives (src/studio.css --_studio-bar) that is 13, 12, centred on the
+ * controls' line at 19. Was 14, 13 for the 41 bar at type 12.
  * --dev reloads the window when the renderer rebuilds; --capture=<file.png> saves one frame and
  * quits, for checking the window without looking at it (--theme=dark, --hash=icons/arrows,
  * --store='{"canvas":{"ui":"compact"}}' for saved settings).
@@ -35,7 +35,7 @@ function createWindow() {
     show: false,
     backgroundColor: nativeTheme.shouldUseDarkColors ? GROUND.dark : GROUND.light,
     titleBarStyle: process.platform === "darwin" ? "hiddenInset" : "default",
-    trafficLightPosition: { x: 14, y: 13 },
+    trafficLightPosition: { x: 13, y: 12 },
     webPreferences: {
       preload: join(__dirname, "preload.cjs"),
       // A capture runs in its own in-memory session, so it never reads or changes the saved

@@ -7,6 +7,7 @@ import { useState, type ReactNode } from "react";
 import { Segmented, Select } from "@area/react";
 import { GridIcon, ListIcon } from "@area/icons";
 import { readStored, writeStored } from "./storage.ts";
+import { APP_SCALE } from "./app-scale.ts";
 
 export type ViewMode = "grid" | "list";
 
@@ -38,5 +39,5 @@ export function ViewFilter<T extends string>({ label, value, onChange, options }
 
 /** The bar's end: filters, then the view switch. */
 export function ViewControls({ children }: { children: ReactNode }) {
-  return <div className="studio-canvas__actions" data-area-ui="compact">{children}</div>;
+  return <div className="studio-canvas__actions" {...APP_SCALE}>{children}</div>;
 }

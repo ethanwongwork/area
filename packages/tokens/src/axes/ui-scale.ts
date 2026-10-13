@@ -1,42 +1,12 @@
 /**
- * UI scale is Area's one curated geometry choice. It keeps the type ramp, controls, icons,
- * padding and gaps in one package so a product cannot accidentally combine large copy with
- * compact targets, or the reverse.
+ * UI scale, kept as a shorthand. It was Area's one geometry choice (Compact, Default) until the
+ * owner split it into type size and density (2026-10-12, axes/type-size.ts, axes/density.ts).
+ * `data-area-ui` and `ui` in a theme selection still work and mean the pair below; an explicit
+ * `data-area-type` or `data-area-density` on the same element wins (emit/css.ts emits the
+ * shorthand first).
  */
-import { type AxisDefinition, tokens } from "./schema.ts";
-import { COMPACT_ROLES, COMPACT_TIERS, DEFAULT_ROLES, DEFAULT_TIERS, densityTokens } from "./density.ts";
-import { GEIST_TOKENS, typographyRamps } from "./typography.ts";
-
-export const UI_SCALE_AXIS: AxisDefinition = {
-  id: "ui",
-  label: "UI scale",
-  description: "A curated package of interface type, controls, icons, padding, and gaps.",
-  defaultPreset: "default",
-  namespaces: [
-    "--area-font-",
-    "--area-text-",
-    "--area-title-",
-    "--area-display-",
-    "--area-weight-",
-    "--area-control-",
-    "--area-icon-",
-    "--area-gap-",
-    "--area-ui-",
-    "--area-mark-",
-    "--area-inset-surface-",
-  ],
-  presets: [
-    {
-      id: "compact",
-      label: "Compact",
-      description: "14px reading text, 12px UI text, 28px medium controls and 24px rows for dense tools.",
-      tokens: tokens({ ...GEIST_TOKENS, ...typographyRamps(-1), ...densityTokens(COMPACT_TIERS, COMPACT_ROLES) }),
-    },
-    {
-      id: "default",
-      label: "Default",
-      description: "16px reading text, 14px UI text, and 32px medium controls for everyday products.",
-      tokens: tokens({ ...GEIST_TOKENS, ...typographyRamps(0), ...densityTokens(DEFAULT_TIERS, DEFAULT_ROLES) }),
-    },
-  ],
-};
+export const UI_SHORTHAND = {
+  compact: { type: "12", density: "compact" },
+  default: { type: "14", density: "default" },
+} as const;
+export type UiShorthand = keyof typeof UI_SHORTHAND;

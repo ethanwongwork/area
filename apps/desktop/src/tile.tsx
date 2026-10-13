@@ -18,6 +18,7 @@
  * (src/gallery/fit.ts) still finds component specimens.
  */
 import type { CSSProperties, ReactNode } from "react";
+import { APP_SCALE } from "./app-scale.ts";
 
 export type TileSpan = "unit" | "wide" | "row";
 /**
@@ -65,7 +66,7 @@ export function Tile({ label, value, span, stage, selected, onSelect, pressable,
   // A pressable tile is a button, which holds phrasing content only: its parts are spans there.
   const Part = pressable ? "span" : "div";
   const head = (
-    <Part className="gallery-tile__head" data-area-ui="compact">
+    <Part className="gallery-tile__head" {...APP_SCALE}>
       <span className="gallery-tile__label">{label}</span>
       {value != null ? <span className="gallery-tile__value">{value}</span> : null}
     </Part>
@@ -116,8 +117,8 @@ export function CanvasSection({ id, title, lede, children }: { id: string; title
   // Untitled when the Canvas bar already names it (one scale, one setting).
   return (
     <section className="studio-section" id={id} aria-labelledby={title ? `${id}-title` : undefined}>
-      {title ? <h2 className="studio-canvas__section-title" id={`${id}-title`} data-area-ui="compact">{title}</h2> : null}
-      {lede ? <p className="studio-canvas__lede" data-area-ui="compact">{lede}</p> : null}
+      {title ? <h2 className="studio-canvas__section-title" id={`${id}-title`} {...APP_SCALE}>{title}</h2> : null}
+      {lede ? <p className="studio-canvas__lede" {...APP_SCALE}>{lede}</p> : null}
       {children}
     </section>
   );

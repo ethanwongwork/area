@@ -8,7 +8,7 @@
  * Every divider is the same stroke: --area-border-width in --area-border-decorative, the colour
  * Panel draws its own bar and section rules in.
  * Only the app's own classes are styled here; Area components keep their own CSS. Values are
- * Area tokens at the compact UI scale the whole app runs at (data-area-ui="compact" on <html>);
+ * Area tokens at the app's scale, type 13 and Compact (data-area-type and data-area-density on <html>);
  * the Canvas carries its own density, radius and pills from the Inspector.
  */
 @layer studio {
@@ -65,11 +65,11 @@
     -webkit-app-region: drag;
   }
   .studio-titlebar :is(a, button, input, select, [role="separator"]) { -webkit-app-region: no-drag; }
-  /* macOS traffic lights (electron/main.cjs): 14px buttons on a 20 pitch from x 14, as Cursor
-     places them, so they end at 68. The Sidebar toggle's box starts 16 after them, its icon 20
+  /* macOS traffic lights (electron/main.cjs): 14px buttons on a 20 pitch from x 13, as Cursor
+     places them in this 39 bar, so they end at 67. The Sidebar toggle's box starts 16 after them, its icon 20
      (Cursor's agents window: about 21 to the icon), and the last button ends as far from the other
-     edge as the lights start from theirs, 14 (owner, 2026-10-12: lights flush, as Cursor's). */
-  :root[data-platform="darwin"] .studio-titlebar { padding-inline: 84px 14px; } /* spec: 14 + 54 + 16, and 14 */
+     edge as the lights start from theirs, 13 (owner, 2026-10-12: lights flush, as Cursor's). */
+  :root[data-platform="darwin"] .studio-titlebar { padding-inline: 83px 13px; } /* spec: 13 + 54 + 16, and 13 */
   .studio-titlebar__tabs { flex: 0 1 auto; min-inline-size: 0; }
   .studio-titlebar__end {
     display: flex;
@@ -373,38 +373,38 @@
    * into a 1 gap, and neighbouring rings land on the same pixels, so every line is drawn once.
    * Spaced, rounded tiles stay the default density.
    */
-  .studio-canvas__body[data-area-ui="compact"] {
+  .studio-canvas__body[data-area-density="compact"] {
     --_tile-radius: 0px;
     --_tile-inset: var(--area-space-12);
   }
-  .studio-canvas__body[data-area-ui="compact"] :is(.studio-grid, .studio-stack) { --_gap: var(--area-border-width); gap: var(--area-border-width); padding: var(--area-border-width); }
-  .studio-canvas__body[data-area-ui="compact"] .gallery-tile {
+  .studio-canvas__body[data-area-density="compact"] :is(.studio-grid, .studio-stack) { --_gap: var(--area-border-width); gap: var(--area-border-width); padding: var(--area-border-width); }
+  .studio-canvas__body[data-area-density="compact"] .gallery-tile {
     padding: var(--_tile-inset);
     border: 0;
     box-shadow: 0 0 0 var(--area-border-width) var(--_tile-edge);
   }
   /* A painted tile keeps its own outline as its only edge here too. */
-  .studio-canvas__body[data-area-ui="compact"] .gallery-tile[data-painted] { box-shadow: none; }
+  .studio-canvas__body[data-area-density="compact"] .gallery-tile[data-painted] { box-shadow: none; }
   /* Compact tiles draw their hairline as a ring into the 1 gap; hover and press step that ring. The
      tile under the pointer, or with focus, sits above its neighbours, and stays there while its
      ring fades (z-index steps at the end of the fade), so neither the ring nor the focus outline
      slips under the next tile. */
-  .studio-canvas__body[data-area-ui="compact"] .gallery-tile { position: relative; transition: var(--area-transition), z-index 0s linear var(--area-duration-fast); }
-  .studio-canvas__body[data-area-ui="compact"] .gallery-tile:is(:hover, :focus-visible, :focus-within) { z-index: 1; }
-  .studio-canvas__body[data-area-ui="compact"] .gallery-tile:focus-visible { z-index: 2; }
+  .studio-canvas__body[data-area-density="compact"] .gallery-tile { position: relative; transition: var(--area-transition), z-index 0s linear var(--area-duration-fast); }
+  .studio-canvas__body[data-area-density="compact"] .gallery-tile:is(:hover, :focus-visible, :focus-within) { z-index: 1; }
+  .studio-canvas__body[data-area-density="compact"] .gallery-tile:focus-visible { z-index: 2; }
   @media (hover: hover) {
-    .studio-canvas__body[data-area-ui="compact"] .gallery-tile:not([data-painted], [data-selected], [aria-pressed="true"]):hover {
+    .studio-canvas__body[data-area-density="compact"] .gallery-tile:not([data-painted], [data-selected], [aria-pressed="true"]):hover {
       position: relative;
       z-index: 1;
       box-shadow: 0 0 0 var(--area-border-width) var(--area-edge-control-hover);
     }
   }
-  .studio-canvas__body[data-area-ui="compact"] button.gallery-tile:not([data-painted], [aria-pressed="true"]):active {
+  .studio-canvas__body[data-area-density="compact"] button.gallery-tile:not([data-painted], [aria-pressed="true"]):active {
     position: relative;
     z-index: 1;
     box-shadow: 0 0 0 var(--area-border-width) var(--area-border-hover);
   }
-  .studio-canvas__body[data-area-ui="compact"] .gallery-tile:not([data-painted]):is([data-selected], [aria-pressed="true"]) {
+  .studio-canvas__body[data-area-density="compact"] .gallery-tile:not([data-painted]):is([data-selected], [aria-pressed="true"]) {
     position: relative;
     z-index: 1;
     box-shadow: 0 0 0 var(--area-border-width) var(--area-stroke-selected), inset 0 0 0 var(--area-border-width) var(--area-stroke-selected);
@@ -626,6 +626,12 @@
   /* A row: its parts in a line, at half the scale's row height (16 default, 12 compact). */
   .abs-row { display: flex; align-items: center; gap: var(--area-space-6); min-block-size: calc(var(--area-ui-row) / 2); }
   .abs-row > .abs-bar { flex: none; }
+  /* A line of text (the type size's drawing): the bar a little under half the text size, on the
+     text's own line, so each size draws its own stroke and spacing. */
+  .abs-line { display: flex; align-items: center; min-block-size: var(--area-text-sm-leading); }
+  .abs-line > .abs-bar { block-size: round(nearest, calc(var(--area-text-sm-size) * 0.43), 1px); }
+  .abs-line[data-title] { min-block-size: var(--area-title-xs-leading); }
+  .abs-line[data-title] > .abs-bar { block-size: round(nearest, calc(var(--area-title-xs-size) * 0.5), 1px); }
   .abs-row[data-end] { justify-content: flex-end; }
   .abs-row[data-plate] {
     margin-inline: calc(var(--area-space-6) * -1);
