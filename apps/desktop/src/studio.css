@@ -507,7 +507,14 @@
   .studio-icon-card__meta { flex: none; color: var(--area-fg-muted); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); }
   .studio-icon-card__preview { display: grid; place-items: center; block-size: calc(var(--area-space-96) + var(--area-space-48)); color: var(--area-fg-default); }
   .studio-icon-card__preview svg { display: block; }
-  .studio-icon-card__actions { display: grid; grid-template-columns: 1fr 1fr; gap: var(--area-space-8); }
+  /* The name's cap sits on the 12 inset like the sides, as Popover's header title does
+     (surface.css): the head gives back the leading above the cap. */
+  @supports (text-box: trim-both cap alphabetic) {
+    .studio-icon-card > .studio-icon-card__head:first-child { margin-block-start: round(nearest, calc((1cap - 1lh) / 2), 1px); }
+  }
+  /* minmax(0, 1fr): the halves stay equal and inside the inset; a label too long for 112 is a
+     content error to fix, not a reason to push the end inset to zero. */
+  .studio-icon-card__actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--area-space-8); }
   .studio-icon-card__actions > :last-child { grid-column: 1 / -1; }
 
   /* The Inspector's preview (PreviewFrame) sits 8 above the action under it. */
