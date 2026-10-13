@@ -4,7 +4,7 @@
 // tracing: the rules in the area-icon-construction skill still apply. Cursor (proprietary) stays
 // rules-only. SF Symbols render locally from the installed app (sf-render.swift) into the ignored
 // cache, for viewing only (Apple's licence): never commit them or a sheet that shows them.
-//   node apps/docs/scripts/icon-refs.mjs fetch                 # Lucide, Phosphor, Hugeicons into .cache/refs
+//   node apps/docs/scripts/icon-refs.mjs fetch                 # Lucide, Phosphor, Hugeicons, Material Symbols names into .cache/refs
 //   node apps/docs/scripts/icon-refs.mjs sheet out.png [group…] # concepts from docs/research/icon-references.json
 // A group is a key of icon-references.json (bots, everyday) or a batch id (batch-12), whose icons
 // take their counterparts from docs/research/icon-audit/area-map.json; with none, every
@@ -19,7 +19,7 @@ import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url)), ROOT = join(HERE, "../../..");
 const REFS = join(HERE, "../.cache/refs"), CACHE = join(HERE, "../.cache");
-const PACKAGES = { lucide: "lucide-static", phosphor: "@phosphor-icons/core", huge: "@hugeicons/core-free-icons" };
+const PACKAGES = { lucide: "lucide-static", phosphor: "@phosphor-icons/core", huge: "@hugeicons/core-free-icons", material: "@material-symbols/metadata" };
 const dir = pkg => join(REFS, pkg.replace("@", "").replace("/", "-"), "package");
 const [mode, out, ...groups] = process.argv.slice(2);
 

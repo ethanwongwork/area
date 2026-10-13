@@ -1,8 +1,9 @@
 /**
  * Icons: the categories in the Sidebar, every Area icon grouped by category on the Canvas
- * (filtered by the Titlebar search), drawn in the style and at the size the Canvas bar sets. The
- * Inspector shows the chosen icon (its drawing, Copy SVG, Download, Copy name and import, its
- * facts from @area/icons/meta), else the Sidebar's category, else the set. The icon data and the
+ * (filtered by the Titlebar search, which also reads each icon's keywords and its names in other
+ * libraries), drawn in the style and at the size the Canvas bar sets. The Inspector shows the chosen
+ * icon (its drawing, Copy SVG, Download, Copy name and import, its facts and search words from
+ * @area/icons/meta), else the Sidebar's category, else the set. The icon data and the
  * SVG export are the icon browser's (apps/docs/src/gallery/icon-browser.tsx).
  */
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
@@ -42,6 +43,12 @@ const titleCase = (name: string) => name.split("-").map(word => word[0]!.toUpper
 const META = new Map(ICON_META.map(entry => [entry.name, entry]));
 const ALIASES = new Map<string, string[]>();
 for (const entry of ICON_META) if (entry.aliasOf) ALIASES.set(entry.aliasOf, [...(ALIASES.get(entry.aliasOf) ?? []), entry.name]);
+/** What the search reads besides the name: the icon's keywords and its names in other libraries. */
+const searchWords = (name: string) => {
+  const meta = META.get(name);
+  return meta ? [...meta.keywords, ...Object.values(meta.names ?? {}).map(other => other.replaceAll("_", " "))] : [];
+};
+const LIBRARIES = [["lucide", "Lucide"], ["phosphor", "Phosphor"], ["fluent", "Fluent"], ["material", "Material"]] as const;
 /** The import line: approved icons are in the main entry, the rest in @area/icons/review. */
 const importLine = (name: string, style: "outline" | "filled") => {
   const meta = META.get(name);
@@ -137,7 +144,7 @@ export function IconsPage() {
   const pins = usePins("icons");
   const filtered = useMemo(() => ICON_CATEGORIES.map(category => ({
     ...category,
-    shown: category.icons.filter(name => matches(query, name, category.name, BY_NAME.get(name)?.derivedFrom)
+    shown: category.icons.filter(name => matches(query, name, category.name, BY_NAME.get(name)?.derivedFrom, ...searchWords(name))
       && (status === "all" || statusOf(name) === status)),
   })), [query, status]);
   const listed = filtered.filter(section => section.shown.length);
@@ -292,10 +299,19 @@ export function IconsPage() {
                   icon.derivedFrom ? ["From", icon.derivedFrom] : null,
                   ["Keyline", icon.keyline],
                   meta ? ["Filled", meta.fill === "solid" ? "Solid body" : "Heavier outline"] : null,
+                  meta?.rtl ? ["Right to left", "Mirrors"] : null,
                   iconStatus ? ["Status", <StatusBadge name={icon.name} />] : null,
                   iconStatus ? ["Batch", iconStatus.batch] : null,
                 ]} />
               </PanelSection>
+              {meta ? (
+                <PanelSection heading="Search">
+                  <Facts label="Search" items={[
+                    ...LIBRARIES.map(([key, library]) => meta.names?.[key] ? [library, <Code>{meta.names[key]}</Code>] as const : null),
+                    meta.keywords.length ? ["Keywords", meta.keywords.join(", ")] : null,
+                  ]} />
+                </PanelSection>
+              ) : null}
             </>
           ) : (
             <PanelSection heading={view ? "Category" : "Set"}>

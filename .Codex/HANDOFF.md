@@ -183,6 +183,25 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   is (approved family). Next inspector parts need Chrome in front: Preview frame + Description list "show more"
   (Figma's well rgb(245,245,245) radius 5), Link / Asset row, Token row; then the inspector rebuild.
 
+## Icons: accessible name, right-to-left, keywords (2026-10-12, branch `claude/icon-work-status-38f2b6`)
+
+- Owner: "continue working with your recs" → production gaps 3 and 4. Reviews were clear first (all 410 `reviews7`
+  rows decided; 805 of 808 approved, the 3 left — grip, padding-side, sides — aren't in batches.json).
+- **API** (spec "Accessible name and right-to-left"): decorative by default; `title`, `aria-label` or
+  `aria-labelledby` → `role="img"` (title becomes aria-label, no `<title>`). 23 reading-direction icons
+  (`assets/area-icons-pilot/rtl.json`, from Fluent's and Material's published lists and the guidance) carry
+  `data-area-rtl="mirror"`; `[data-area-rtl="mirror"]:dir(rtl) { scale: -1 1 }` in `@area/styles` base and
+  `@area/icons/rtl.css`; `mirrored` true/false overrides. One `root()` helper in the generator's RUNTIME.
+- **Keywords and names** (spec "Keywords and names"): `apps/docs/scripts/icon-keywords.mjs` →
+  `keywords.json` (committed; Lucide 1.55.0 and Phosphor 2.1.1 tags, area-map counterparts, measured word swaps,
+  demo labels, Area words in `keywords-area.json`). Metadata gains `keywords`, `names`, `rtl`; the app's Icons search
+  reads them and the Inspector shows a Search section and "Right to left". `icon-refs.mjs fetch` now also fetches
+  `@material-symbols/metadata`.
+- Checks: `npm test -w @area/icons` (8, 3 new), build, typecheck, manifest parity, consumer test; app checked in
+  the browser preview (search "user" / "close" / "redo", Inspector, `dir=rtl` computes `scale: -1 1`). Not checked:
+  a real RTL page in the Electron window, screen readers.
+- Next on the production list: 12px cuts, licence and semver, Figma library, moving the pipeline to `packages/icons`.
+
 ## Icons: review round 12 and the optical size pass (2026-10-12, branch `claude/icon-divider-symbol-2b41bc`)
 
 - Every letter and number icon re-reviewed (53, all approved after at / quote / sort-alpha / strikethrough redraws);
