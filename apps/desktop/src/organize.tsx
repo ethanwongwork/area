@@ -84,7 +84,7 @@ export function ArrangeMenu<S extends string, G extends string>({ arrangement, s
   const summary = `${sortLabel}, ${directions[arrangement.descending ? 1 : 0]}`;
   return (
     <Menu aria-label="Sort and group" align="end" tooltip={<>Sort and group · {summary}</>}
-      trigger={<Button variant="ghost" tone="neutral" size="sm" iconOnly icon={<SortIcon />} aria-label="Sort and group" />}>
+      trigger={<Button variant="ghost" tone="neutral" size="sm" iconOnly className="studio-bar-icon" icon={<SortIcon />} aria-label="Sort and group" />}>
       <MenuLabel>Sort by</MenuLabel>
       {sorts.map(choice => (
         <MenuItem key={choice.value} keepOpen radio checked={arrangement.sort === choice.value} onClick={() => arrangement.change({ sort: choice.value })}>{choice.label}</MenuItem>

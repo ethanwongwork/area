@@ -179,7 +179,7 @@ export function ChromeButton({ label, icon, keys, shortcut, onClick, pressed }: 
   // aria-keyshortcuts ("Meta+B").
   return (
     <Tooltip side="bottom" describes={false} trigger={
-      <Button variant="ghost" tone="neutral" size="sm" iconOnly icon={icon} aria-label={label} aria-pressed={pressed} aria-keyshortcuts={shortcut} onClick={onClick} />
+      <Button variant="ghost" tone="neutral" size="sm" iconOnly className="studio-bar-icon" icon={icon} aria-label={label} aria-pressed={pressed} aria-keyshortcuts={shortcut} onClick={onClick} />
     }>
       {label}{keys ? <> <Kbd keys={keys} size="sm" /></> : null}
     </Tooltip>
