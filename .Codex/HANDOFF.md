@@ -5,6 +5,20 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/docs/src/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Icons: review round 12 and the optical size pass (2026-10-12, branch `claude/icon-divider-symbol-2b41bc`)
+
+- Every letter and number icon re-reviewed (53, all approved after at / quote / sort-alpha / strikethrough redraws);
+  divide redrawn on Lucide's proportion; the 43 round-11 redraws reviewed and settled; optical size pass (11 frames that
+  filled the whole keyline brought to the shared frames; rule in the icon skill). 805 of 808 icons approved; the 3 left in
+  review are unchanged drawings awaiting a verdict.
+- Review page (https://claude.ai/artifact/4sGs7JYAfNQexTPW9TQR9w, `reviews7`) gained Side by side (filled together,
+  letters by tier, set notes in `setnotes`) and an in-a-row strip. Data: `docs/research/icon-review/2026-10-11/round12-data.mjs`
+  (refuses to build from stale components; `BEFORE_TSX` and fixes JSON for redraw rounds). Record: spec "Owner review
+  round 12" … "12h", "Optical size pass"; READMEs in `docs/research/icon-review/2026-10-11/` and `2026-10-12/`.
+- Recorded exceptions: globe and globe-off are Fluent's ink exactly (solid shapes, owner); keyboard-off keeps all keys
+  under the slash (`data-gap="slash"`, new in the generator). Open calls: qr-code, calculator and gamepad stay heavy
+  (constructions you set); kanban 0.5 right of centre; form's middle line on a whole pixel.
+
 ## Round 9 approvals; inspector components begin (2026-10-12, same branch)
 
 - Round 9 (`components9`): Badge, Board, Editable text, Timeline approved (Complete; page and chat agree).

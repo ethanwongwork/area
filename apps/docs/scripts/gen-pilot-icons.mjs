@@ -496,6 +496,9 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
     let d = Infinity;
     for (const [ax, ay] of sampleOf(drawn[p])) for (const [bx, by] of sampleOf(drawn[q])) d = Math.min(d, Math.hypot(ax - bx, ay - by));
     if (d <= JOIN) continue;
+    // data-gap="slash" (owner-approved, recorded in the spec): the base icon is drawn whole and the
+    // shared slash crosses it flat, so a part beside the slash keeps its base position (keyboard-off's keys).
+    if (root["data-gap"] === "slash" && [drawn[p], drawn[q]].some(el => el.attrs?.d === "M2 2L14 14")) continue;
     const g = d - pads[p] - pads[q];
     if (g <= 0) continue;  // the inks overlap: a join, not a gap
     // Outline-only lines are not drawn in the filled variant, so they have no filled gap.

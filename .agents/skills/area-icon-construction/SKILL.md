@@ -249,6 +249,14 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
 - **Owner, 2026-10-11:** blur is the ring halved by a centre line with 45° hatching on the right half (owner's reference, a hatched droplet; the ring matches Fluent). Text lines inside a page start and end 3 from its edges, left-aligned, so the filled page keeps an even margin (form).
 - **Owner, 2026-10-11 (round 10):** negative space never ends rounded at an edge: a knockout ending on the silhouette runs out square along its tangent, curves included (the generator does it; `AUDIT_ENDS=1` lists near misses). Type: one construction per glyph (every 0 the 3 × 4 stadium, every 1 the 45° flag without a foot, every 2 the family 2, heading bowls r 1.5, H crossbars on 7.5); a pair or word reuses the single letters exactly (Aa is case-upper's A and case-lower's a) with standard gaps. Objects inside a shield are knocked out of the filled shield; only figures keep the frame a line.
 - **Owner, 2026-10-11 (round 11):** the 1 is Lucide's (a flat flag, the stem, a foot centred under the stem; flag 1.5 and foot 3 at 4 tall) wherever a 1 appears; the 2 is Lucide-like (a round bowl, a neck curving from the bowl's right side to the base's left corner, a base about 10% wider than the bowl reaching further right). Glyph strokes whose proportions matter (1, 2, Z) carry `data-ends="keep"` so the filled weight thickens them evenly instead of pulling their free ends back. Structural lines in a filled body run edge to edge (umbrella's ribs from the apex, the globe's meridians through both poles, as Fluent's globe).
+- **Off icons keep the base's parts (owner, 2026-10-12):** where the owner wants a base icon's small parts kept in its
+  `-off` variant, the outline draws them all with the slash crossing flat (`data-gap="slash"` exempts parts beside the
+  slash from the gap scale; keyboard-off), and the filled variant keeps only the parts clear of the slash and its gap.
+- **Frames never fill the keyline (optical size pass, 2026-10-12; delegated, owner to confirm):** a closed rectangular
+  frame carries far more mass than a free silhouette of the same width, so it uses its keyline's shared frame: square
+  2.5–13.5 (square-plus, hull area 140), horizontal 13 × 9 or 12 × 10 (folder's area, 134), vertical the page or the phone.
+  Free silhouettes (cloud, tree, trophy) may reach 13 × 13. Check a new frame's hull area with `--audit` against those
+  references (spec "Optical size pass, 2026-10-12").
 - **Filled audit, 2026-10-06** (spec "Filled consistency audit and the size curve's hold"): a part is
   one colour (knockout inside, ink joined when attached; the halo for a part crossing the edge in front
   was overturned 2026-10-08, see "Filled is simple" below); the curve holds at the 24px master. Owner notes applied: desktop-check's check centred,

@@ -224,7 +224,7 @@
    "name": "divide",
    "label": "Divide",
    "fluent": "",
-   "spec": "square; minus's 11px bar (2.5–13.5) with two ⌀2 mark dots on whole-pixel centres at 8, 4 and 8, 11, each a standard 1.94 from the bar (Lucide divide, Phosphor divide). The bar sits at 7.5 rather than minus's 8: with ⌀2 dots on whole-pixel centres, a symmetric standard gap needs a bar on x.5, so the ÷ sits 0.5 high and is crisp at 1× (the three-line stack precedent). Ink 12.12 × 9. Line glyph: it fills by weight, and the dots follow the curve."
+   "spec": "square; Lucide divide's proportion (owner, 2026-10-11: the 11px bar read too long and the ÷ didn't read as a division sign): a 9px bar (3.5–12.5, ink 10.12) at 7.5 with two ⌀2.5 dots at 8, 3.75 and 8, 11.25, each a standard 1.94 from the bar, so the dots sit close and read as part of one sign. The dots are a recorded `data-dot=\"free\"` solid (quote's, rocket's precedent): the dots are the sign, and ⌀2 read as specks beside the bar (Lucide's are about 2× its line). The bar sits 0.5 high on x.5 so it is crisp at 1×; dot edges land on the 0.5 grid. Ink 10.12 × 10, a square ÷ like the typographic glyph. Line glyph: it fills by weight."
   },
   {
    "name": "location-add",

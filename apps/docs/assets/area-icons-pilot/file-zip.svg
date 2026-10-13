@@ -5,7 +5,7 @@
 <path data-part="fold" data-shift="0.7071 -0.7071" d="M8 4.6V5A1.5 1.5 0 0 0 9.5 6.5H9.9" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path data-part="fold" data-shift="0 -0.7071" d="M9.9 6.5H12.5V6.2" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path data-part="fold" d="M8 2L8.588 2A0.5 0.5 0 0 1 8.941 2.146L12.354 5.559A0.5 0.5 0 0 1 12.5 5.912" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="hole" d="M8 8V9H6.5A0.5 0.5 0 0 1 6.5 8ZM8 9H9.5A0.5 0.5 0 0 1 9.5 10H8Z" fill="currentColor"/>
-<path d="M6.5 14V13A1.5 1.5 0 0 1 9.5 13V14A0.5 0.5 0 0 1 9 14.5H7A0.5 0.5 0 0 1 6.5 14Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="gap" d="M6.5 14V13A1.5 1.5 0 0 1 9.5 13V14A0.5 0.5 0 0 1 9 14.5H7A0.5 0.5 0 0 1 6.5 14Z" fill="currentColor" stroke="none"/>
+<path data-filled="hole" d="M8 8V9H6.5A0.5 0.5 0 0 1 6.5 8ZM8 9H9.5A0.5 0.5 0 0 1 9.5 10H8ZM8 10V11H6.5A0.5 0.5 0 0 1 6.5 10Z" fill="currentColor"/>
+<path d="M6.5 14V13.05A1.5 1.5 0 0 1 9.5 13.05V14A0.5 0.5 0 0 1 9 14.5H7A0.5 0.5 0 0 1 6.5 14Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="gap" d="M6.5 14V13.05A1.5 1.5 0 0 1 9.5 13.05V14A0.5 0.5 0 0 1 9 14.5H7A0.5 0.5 0 0 1 6.5 14Z" fill="currentColor" stroke="none"/>
 </svg>
