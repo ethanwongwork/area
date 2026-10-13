@@ -9,7 +9,7 @@
  * stage only places its content: fit, centre or flow.
  *
  * Tiles come in three spans on one grid (src/studio.css, .studio-grid):
- *   unit  one base cell, 136 at the least, 5:4: a swatch, an icon
+ *   unit  one base cell, 152 at the least, 5:4: a swatch, an icon
  *   wide  2 x 2 units and the gap between them: a component, a setting's preset, a type specimen
  *   row   the full width, as tall as its content: an icon sheet, a type sample
  * A grid holds one span (TileGrid), so wide tiles always line up on pairs of units.
