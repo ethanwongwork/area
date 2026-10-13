@@ -5,7 +5,7 @@
  * Swatches paint the live custom property, so a neutral tint or theme change shows on the ramp.
  */
 import { useEffect, useState } from "react";
-import { Code, ColorSwatch, EmptyState, Nav, NavGroup, NavItem, PanelSection, Table, TableLink } from "@area/react";
+import { Code, ColorSwatch, EmptyState, Nav, NavGroup, NavItem, PanelSection, PreviewFrame, Table, TableLink } from "@area/react";
 import { CopyIcon } from "@area/icons";
 import { CopyButton } from "../../../docs/src/gallery/icon-browser.tsx";
 import { SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
@@ -176,7 +176,7 @@ export function ColorPage() {
         <>
           <CanvasSettings axes={["ui"]} />
           <PanelSection>
-            <div className="studio-color-preview" style={{ background: `var(${token})` }} />
+            <PreviewFrame className="studio-inspector-preview" aspect="wide" color={`var(${token})`} label={token} />
             <CopyButton label="Copy token" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(`var(${token})`)} />
           </PanelSection>
           <PanelSection heading="Step">

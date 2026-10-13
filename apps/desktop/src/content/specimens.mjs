@@ -279,6 +279,15 @@ function gallerySpecimenTable() {
       { id: "content-action", title: "Content / action", demo: "GalleryAssetRowAction" },
       { id: "layout-group", title: "Layout / group", demo: "GalleryAssetRowGroup" },
     ],
+    "preview-frame": [
+      { id: "default", title: "Default", demo: "GalleryPreviewFrame" },
+      { id: "variant-landscape", title: "Variant / landscape", demo: "GalleryPreviewFrameLandscape" },
+      { id: "variant-wide", title: "Variant / wide", demo: "GalleryPreviewFrameWide" },
+      { id: "variant-subtle", title: "Variant / subtle", demo: "GalleryPreviewFrameSubtle" },
+      { id: "variant-checker", title: "Variant / checker", demo: "GalleryPreviewFrameChecker" },
+      { id: "content-image", title: "Content / image", demo: "GalleryPreviewFrameImage" },
+      { id: "content-alpha", title: "Content / alpha", demo: "GalleryPreviewFrameAlpha" },
+    ],
     "editable-text": [
       { id: "default", title: "Default", demo: "GalleryEditableText" },
       { id: "state-editing", title: "State / editing", demo: "GalleryEditableTextEditing" },

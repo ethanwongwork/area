@@ -429,11 +429,11 @@ export const ChipCustomDelete = () => <Chip kind="input" onDismiss={() => {}} di
 export const ChipAvatars = () => (
   <ChipGroup aria-label="Suggestions">
     <Chip avatar={<Avatar fallback="DT" alt="" />}>David Tee</Chip>
-    <Chip avatar={<Avatar src="/images/david-tee.jpg" alt="" />}>David Tee</Chip>
+    <Chip avatar={<Avatar src="images/david-tee.jpg" alt="" />}>David Tee</Chip>
   </ChipGroup>
 );
 
-export const ChipImageFilter = () => <Chip image="/images/chip-pixels.png" imageAlt="">Image</Chip>;
+export const ChipImageFilter = () => <Chip image="images/chip-pixels.png" imageAlt="">Image</Chip>;
 
 export const ChipInvalidInput = () => <Chip kind="input" invalid onDismiss={() => {}}>Chip</Chip>;
 

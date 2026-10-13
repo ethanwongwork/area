@@ -65,14 +65,14 @@ export const GalleryAvatar = () => (
   <Avatar fallback="D" alt="David Tee" />
 );
 
-export const GalleryAvatarImage = () => <Avatar src="/images/david-tee.jpg" fallback="D" alt="David Tee" />;
-export const GalleryAvatarImageFallback = () => <Avatar src="/images/avatar-missing.png" fallback="D" alt="David Tee" />;
+export const GalleryAvatarImage = () => <Avatar src="images/david-tee.jpg" fallback="D" alt="David Tee" />;
+export const GalleryAvatarImageFallback = () => <Avatar src="images/avatar-missing.png" fallback="D" alt="David Tee" />;
 export const GalleryAvatarTwoInitials = () => <Avatar fallback="DT" alt="David Tee" />;
 export const GalleryAvatarIcon = () => <Avatar icon={<PersonIcon />} alt="David Tee" />;
-export const GalleryAvatarGroup = () => <AvatarGroup max={3} aria-label="David Tee and 4 teams"><Avatar src="/images/david-tee.jpg" fallback="DT" alt="David Tee" /><Avatar shape="square" fallback="D" alt="Design team" /><Avatar shape="square" fallback="R" alt="Research team" /><Avatar shape="square" fallback="P" alt="Platform team" /><Avatar shape="square" fallback="S" alt="Support team" /></AvatarGroup>;
+export const GalleryAvatarGroup = () => <AvatarGroup max={3} aria-label="David Tee and 4 teams"><Avatar src="images/david-tee.jpg" fallback="DT" alt="David Tee" /><Avatar shape="square" fallback="D" alt="Design team" /><Avatar shape="square" fallback="R" alt="Research team" /><Avatar shape="square" fallback="P" alt="Platform team" /><Avatar shape="square" fallback="S" alt="Support team" /></AvatarGroup>;
 export const GalleryAvatarActive = () => <Avatar active fallback="D" alt="David Tee" />;
 export const GalleryAvatarAvailability = () => <IndicatorAnchor inset placement="bottom-end" overlap="circular" indicator={<Indicator status="available" size="sm" />}><Avatar fallback="D" role="img" aria-label="David Tee, available" /></IndicatorAnchor>;
-export const GalleryAvatarNotification = () => <IndicatorAnchor inset placement="top-end" overlap="circular" indicator={<Indicator count={2} />}><Avatar src="/images/david-tee.jpg" fallback="D" alt="David Tee, 2 notifications" /></IndicatorAnchor>;
+export const GalleryAvatarNotification = () => <IndicatorAnchor inset placement="top-end" overlap="circular" indicator={<Indicator count={2} />}><Avatar src="images/david-tee.jpg" fallback="D" alt="David Tee, 2 notifications" /></IndicatorAnchor>;
 export const GalleryAvatarInverse = () => <Avatar tone="inverse" fallback="D" alt="David Tee" />;
 export const GalleryAvatarSquare = () => <Avatar shape="square" fallback="D" alt="Design team" />;
 export const GalleryAvatarSmall = () => <Avatar size="sm" fallback="D" alt="David Tee" />;
@@ -561,8 +561,8 @@ export const GalleryChipCustomDelete = () => <Chip kind="input" onDismiss={() =>
 export const GalleryChipLinkUnderline = () => <ChipLink href="#gallery-section-chip">Link</ChipLink>;
 export const GalleryChipLinkIcon = () => <ChipLink href="#gallery-section-chip" treatment="icon" trailingIcon={<OpenIcon />}>Link out</ChipLink>;
 export const GalleryChipAvatarInitials = () => <Chip avatar={<Avatar fallback="DT" alt="" />}>David Tee</Chip>;
-export const GalleryChipAvatarPhoto = () => <Chip avatar={<Avatar src="/images/david-tee.jpg" alt="" />}>David Tee</Chip>;
-export const GalleryChipImageFilter = () => <Chip image="/images/chip-pixels.png" imageAlt="">Image</Chip>;
+export const GalleryChipAvatarPhoto = () => <Chip avatar={<Avatar src="images/david-tee.jpg" alt="" />}>David Tee</Chip>;
+export const GalleryChipImageFilter = () => <Chip image="images/chip-pixels.png" imageAlt="">Image</Chip>;
 export const GalleryChipInvalid = () => <Chip kind="input" invalid onDismiss={() => {}}>Chip</Chip>;
 
 export const GalleryCode = () => <Code>Code</Code>;
@@ -1554,7 +1554,7 @@ export const GalleryPopoverField = () => (
 export const GalleryPopoverImage = () => (
   <Popover role="dialog">
     <PopoverHeader><PopoverTitle>Title</PopoverTitle><PopoverDescription>Description</PopoverDescription><PopoverClose /></PopoverHeader>
-    <PopoverBody><PopoverMedia><img src="/images/chip-pixels.png" alt="" /></PopoverMedia></PopoverBody>
+    <PopoverBody><PopoverMedia><img src="images/chip-pixels.png" alt="" /></PopoverMedia></PopoverBody>
   </Popover>
 );
 

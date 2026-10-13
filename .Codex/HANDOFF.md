@@ -5,6 +5,26 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Preview frame (2026-10-13, branch `claude/component-work-1c5100`, PR)
+
+- Owner: "continue the component work" → Preview frame, the inspector plan's last part (PRODUCT_UI gap "an Inspector
+  preview well"). Approved in round 22, then the owner: "share the same visual as the component container, with a
+  white background and light stroke?" → default ground `bg-surface` in `border-card` (the tile's); `ground="subtle"`
+  keeps the grey well; checker and colour keep the swatch ring. Round 23 (`components23`): approved → Complete;
+  nothing in review. `PreviewFrame` (`aspect` square | landscape | wide, `ground` subtle | checker, `color`
+  over the checker, `label` → role img): `bg-subtle`, `radius-container`, swatch ring inside, 12 inset, content
+  contained and only scaled down, media corners nested (4). 6 tiles, docs entry, tests (3). Spec
+  `docs/specs/preview-frame.md`; Figma Assets captured read-only (tile rest / hover, folder row: its well renders
+  radius 5, inset 6; drawn at 2× and scaled 0.5) plus Area light / dark in `docs/research/captures/preview-frame/`.
+- The app's icon and colour Inspectors now use it (`studio-icon-preview` / `studio-color-preview` removed).
+- Fixed in passing: the app never served `/images/` (Electron loads `file://`; the preview server fell back to the
+  page), so Avatar, Chip, Popover and Asset row photos were broken in the app. `renderer.mjs` copies
+  `apps/docs/public/images` into `dist/images`; demos use relative `images/…` paths.
+- Review round 22 (`components22`) published to https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG (6 new, 0 changed;
+  Before = main at 0b8dafc). Checks: build, typecheck, npm test (24,251), React 272/274 (the 2 known docs-dist
+  failures), contracts 14, build:docs + audit, diff check. Not verified: forced colours, Electron window (browser
+  preview and headless Edge only).
+
 ## Consistency and cohesion pass (2026-10-12, branch `claude/component-consistency-pass-7bd512`, uncommitted)
 
 - Owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used". Report:
