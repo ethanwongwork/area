@@ -72,7 +72,8 @@ function createWindow() {
   }
   if (dev && existsSync(dist)) {
     let timer;
-    watch(dist, () => { clearTimeout(timer); timer = setTimeout(() => window.webContents.reloadIgnoringCache(), 120); });
+    // Logged, so the dev terminal shows each reload (and a missing one is noticed).
+    watch(dist, () => { clearTimeout(timer); timer = setTimeout(() => { window.webContents.reloadIgnoringCache(); console.log(`[electron] reloaded ${new Date().toLocaleTimeString()}`); }, 120); });
   }
   return window;
 }
