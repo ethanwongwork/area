@@ -62,7 +62,9 @@ function download(svg: string, name: string) {
 /**
  * The icon hover window (owner, 2026-10-12, after Cursor's icon gallery): resting on a cell opens
  * an Area Hover card under it with the icon's name and category, the icon large, and Copy SVG,
- * Download SVG and Copy name. Its rows are built only while it is open, so a sheet of hundreds of
+ * Download and Copy name. Each half of the 256 card holds 112, so the download says "Download"
+ * (its neighbour names the format): "Download SVG" needs 134 at sm and pushed the row past the
+ * card's end inset. Its rows are built only while it is open, so a sheet of hundreds of
  * cells carries one empty surface each.
  */
 function IconCell({ entry, style, size, selected, onChoose }: { entry: Entry; style: Mode; size: number; selected: boolean; onChoose: () => void }) {
@@ -90,7 +92,7 @@ function IconCell({ entry, style, size, selected, onChoose }: { entry: Entry; st
         <div className="studio-icon-card__preview" ref={preview}><Glyph size={CARD_PREVIEW} aria-hidden="true" /></div>
         <div className="studio-icon-card__actions">
           <CopyButton label="Copy SVG" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(svg())} />
-          <Button variant="outline" size="sm" fullWidth icon={<DownloadIcon />} onClick={() => download(svg(), entry.name)}>Download SVG</Button>
+          <Button variant="outline" size="sm" fullWidth icon={<DownloadIcon />} onClick={() => download(svg(), entry.name)}>Download</Button>
           <CopyButton label="Copy name" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(entry.name)} />
         </div>
       </> : null}
