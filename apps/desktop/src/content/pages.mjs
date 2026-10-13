@@ -345,6 +345,22 @@ export const COMPONENT_PAGES = [
     ],
   },
   {
+    slug: "preview-frame", name: "Preview frame", exportName: "PreviewFrame", manifest: "previewFrame",
+    imports: "PreviewFrame",
+    api: [
+      ["aspect", "\"square\" | \"landscape\" (4:3) | \"wide\" (2:1)", "square"],
+      ["ground", "\"surface\" (the component tile's frame) | \"subtle\" (a grey well) | \"checker\" (transparency, for an asset with alpha)", "surface"],
+      ["color", "a CSS colour that fills the frame, over the checker", "—"],
+      ["label", "names the preview (role=\"img\") when its content isn't already named", "—"],
+      ["children", "an icon at its own size, or an img / video contained and only scaled down", "—"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "The selected icon at 128 in the Inspector's column, in the component tile's frame: the surface in Card's edge.", demo: "GalleryPreviewFrame" },
+      { id: "color", title: "Colour", note: "color fills a wide frame; the light outline keeps a pale colour visible.", demo: "GalleryPreviewFrameWide" },
+      { id: "checker", title: "Transparency", note: "ground=\"checker\" for an asset with transparency, such as an exported icon.", demo: "GalleryPreviewFrameChecker" },
+    ],
+  },
+  {
     slug: "editable-text", name: "Editable text", exportName: "EditableText", manifest: "editableText",
     imports: "EditableText",
     api: [

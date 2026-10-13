@@ -510,16 +510,8 @@
   .studio-icon-card__actions { display: grid; grid-template-columns: 1fr 1fr; gap: var(--area-space-8); }
   .studio-icon-card__actions > :last-child { grid-column: 1 / -1; }
 
-  .studio-icon-preview {
-    display: grid;
-    place-items: center;
-    aspect-ratio: 1;
-    margin-block-end: var(--area-space-8);
-    border-radius: var(--area-radius-small);
-    background: var(--area-bg-subtle);
-    color: var(--area-fg-default);
-  }
-  .studio-icon-preview svg { max-inline-size: 100%; max-block-size: 100%; }
+  /* The Inspector's preview (PreviewFrame) sits 8 above the action under it. */
+  .studio-inspector-preview { margin-block-end: var(--area-space-8); }
 
   /* --- Color --------------------------------------------------------------- */
 
@@ -555,9 +547,6 @@
 
   /* A list row's step: a colour chip beside its level. */
   .studio-step { display: inline-flex; align-items: center; gap: var(--area-space-8); font-variant-numeric: tabular-nums; }
-  /* The Inspector's large preview: the colour edged as the cards are, with the swatch picker's 10%
-     hairline drawn inside. */
-  .studio-color-preview { aspect-ratio: 2; margin-block-end: var(--area-space-8); border-radius: var(--area-radius-small); outline: var(--area-border-width) solid light-dark(rgb(0 0 0 / 0.1), rgb(255 255 255 / 0.1)); /* spec: color.css, swatch picker palette */ outline-offset: calc(var(--area-border-width) * -1); }
 
   /* --- Language ------------------------------------------------------------ */
 

@@ -5,7 +5,7 @@
  * (apps/docs/src/gallery/icon-browser.tsx).
  */
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import { Badge, Button, Code, Count, EmptyState, Field, HoverCard, Nav, NavGroup, NavItem, PanelSection, Segmented, Slider, Table, TableLink } from "@area/react";
+import { Badge, Button, Code, Count, EmptyState, Field, HoverCard, Nav, NavGroup, NavItem, PanelSection, PreviewFrame, Segmented, Slider, Table, TableLink } from "@area/react";
 import { PILOT_BATCHES, PILOT_ICONS } from "../../../docs/src/pilot-icons.tsx";
 import { CopyIcon, DownloadIcon } from "@area/icons";
 import { ICON_CATEGORIES } from "../../../docs/src/icon-categories.ts";
@@ -243,7 +243,7 @@ export function IconsPage() {
         <>
           <CanvasSettings axes={["ui"]} />
           <PanelSection>
-            <div className="studio-icon-preview" ref={preview}><Draw size={PREVIEW} aria-hidden="true" /></div>
+            <PreviewFrame className="studio-inspector-preview" ref={preview} label={titleCase(icon.name)}><Draw size={PREVIEW} aria-hidden="true" /></PreviewFrame>
             <CopyButton label="Copy SVG" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(svg())} />
           </PanelSection>
           <PanelSection heading="Display">

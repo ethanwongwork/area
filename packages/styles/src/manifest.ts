@@ -921,6 +921,14 @@ export const assetRow = {
   defaults: {},
 } as const satisfies ComponentManifest;
 
+export const previewFrame = {
+  block: "area-preview-frame",
+  description: "Shows the selected item at the head of an inspector: an icon, an image or a colour, centred in a frame.",
+  variants: { aspect: ["square", "landscape", "wide"], ground: ["surface", "subtle", "checker"] },
+  elements: ["paint"],
+  defaults: { aspect: "square", ground: "surface" },
+} as const satisfies ComponentManifest;
+
 export const editableText = {
   block: "area-editable-text",
   description: "Shows text that turns into a field in place to rename it.",
@@ -1026,6 +1034,7 @@ export const MANIFESTS = {
   boxModel,
   tokenRow,
   assetRow,
+  previewFrame,
   scrollArea,
   link,
   toggletip,

@@ -5,11 +5,11 @@ import { AlertIcon, AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, ArrowIcon, C
 export const AvatarDefault = () => <Avatar fallback="D" alt="David Tee" />;
 
 export const AvatarImage = () => (
-  <Avatar src="/images/david-tee.jpg" fallback="D" alt="David Tee" />
+  <Avatar src="images/david-tee.jpg" fallback="D" alt="David Tee" />
 );
 
 export const AvatarImageFallback = () => (
-  <Avatar src="/images/avatar-missing.png" fallback="D" alt="David Tee" />
+  <Avatar src="images/avatar-missing.png" fallback="D" alt="David Tee" />
 );
 
 export const AvatarInitials = () => <><Avatar fallback="D" alt="David Tee" /><Avatar fallback="DT" alt="David Tee" /></>;
@@ -17,14 +17,14 @@ export const AvatarInitials = () => <><Avatar fallback="D" alt="David Tee" /><Av
 export const AvatarIcon = () => <Avatar icon={<PersonIcon />} alt="David Tee" />;
 
 export const AvatarGrouped = () => (
-  <AvatarGroup max={3} aria-label="David Tee and 4 teams"><Avatar src="/images/david-tee.jpg" fallback="DT" alt="David Tee" /><Avatar shape="square" fallback="D" alt="Design team" /><Avatar shape="square" fallback="R" alt="Research team" /><Avatar shape="square" fallback="P" alt="Platform team" /><Avatar shape="square" fallback="S" alt="Support team" /></AvatarGroup>
+  <AvatarGroup max={3} aria-label="David Tee and 4 teams"><Avatar src="images/david-tee.jpg" fallback="DT" alt="David Tee" /><Avatar shape="square" fallback="D" alt="Design team" /><Avatar shape="square" fallback="R" alt="Research team" /><Avatar shape="square" fallback="P" alt="Platform team" /><Avatar shape="square" fallback="S" alt="Support team" /></AvatarGroup>
 );
 
 export const AvatarActive = () => <Avatar active fallback="D" alt="David Tee" />;
 
 export const AvatarAvailability = () => <IndicatorAnchor inset placement="bottom-end" overlap="circular" indicator={<Indicator status="available" size="sm" />}><Avatar fallback="D" role="img" aria-label="David Tee, available" /></IndicatorAnchor>;
 
-export const AvatarNotification = () => <IndicatorAnchor inset placement="top-end" overlap="circular" indicator={<Indicator count={2} />}><Avatar src="/images/david-tee.jpg" fallback="D" alt="David Tee, 2 notifications" /></IndicatorAnchor>;
+export const AvatarNotification = () => <IndicatorAnchor inset placement="top-end" overlap="circular" indicator={<Indicator count={2} />}><Avatar src="images/david-tee.jpg" fallback="D" alt="David Tee, 2 notifications" /></IndicatorAnchor>;
 
 export const AvatarTones = () => <><Avatar fallback="D" alt="David Tee" /><Avatar tone="inverse" fallback="D" alt="David Tee" /></>;
 

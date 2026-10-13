@@ -65,7 +65,6 @@ Recorded, not yet built (each needs its own component pass). From the app audit 
 - Roving focus for grids and lists (every icon cell is a Tab stop); one selection semantic
   (`aria-selected` in a grid) instead of `aria-pressed`, `data-selected` and `aria-current` mixed.
 - Hover card that opens on pointer only, not on every arrow-key focus in a sheet.
-- An Inspector preview well (icons and colours draw their own).
 - Table props for its fit and numeric cells (the app writes `area-table__cell--fit` by hand).
 
 - A selectable card or tile state on Card (the gallery's Tile carries rule 3 in app CSS).

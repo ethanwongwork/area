@@ -92,6 +92,7 @@
 @import "./components/box-model.css";
 @import "./components/token-row.css";
 @import "./components/asset-row.css";
+@import "./components/preview-frame.css";
 @import "./components/toggletip.css";
 @import "./components/segmented.css";
 @import "./components/code.css";

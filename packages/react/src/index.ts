@@ -51,6 +51,7 @@ export { ShortcutList, ShortcutListItem, type ShortcutListProps, type ShortcutLi
 export { BoxModel, type BoxModelProps, type BoxSides, type BoxCorners } from "./components/BoxModel.tsx";
 export { TokenRow, type TokenRowProps } from "./components/TokenRow.tsx";
 export { AssetRow, type AssetRowProps } from "./components/AssetRow.tsx";
+export { PreviewFrame, type PreviewFrameProps } from "./components/PreviewFrame.tsx";
 export { EditableText, type EditableTextProps } from "./components/EditableText.tsx";
 export { Timeline, TimelineItem, type TimelineProps, type TimelineItemProps } from "./components/Timeline.tsx";
 export { DescriptionList, DescriptionListItem, type DescriptionListProps, type DescriptionListItemProps } from "./components/DescriptionList.tsx";
