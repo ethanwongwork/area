@@ -40,18 +40,23 @@
   /*
    * One row: the Sidebar's toggle and the tabs at the start, search, the Inspector's toggle and
    * light / dark at the end; each panel's toggle sits at its own side (owner, 2026-10-12, after
-   * Cursor's icon tool). A 24 control (sm) with 8
-   * above and below and the divider under it: 41, the height of the Canvas and Inspector bars
-   * below it (6 + 28 + 6 + 1), the border counted once (inset.css). The sides take the shared
-   * 14, so the first tab's text (14 + its 8 plate inset) sits over the Sidebar rows' text. In
-   * Electron on macOS the window has no title bar of its own; the bar is the drag region, and its
-   * start clears the traffic lights.
+   * Cursor's icon tool). A 24 control (sm) with 8 above and below and the divider under it: 41,
+   * the height of the Canvas and Inspector bars below it and of Cursor's agents window bar, the
+   * border counted once (inset.css). Inside the bar everything
+   * drawn is 12 apart: an icon, a field's edge, a tab's plate (the tabs' own plates stay Nav's 4
+   * apart). The ends are measured to the buttons' boxes, which their hover plates fill, so no
+   * plate reaches into the margin (owner, 2026-10-12: placing the end icons on the inset left the
+   * plates 12 from the traffic lights and 10 from the window's edge). In Electron on macOS the
+   * window has no title bar of its own; the bar is the drag region, and its start clears the
+   * traffic lights.
    */
   .studio-titlebar {
     display: flex;
     align-items: center;
-    gap: var(--area-space-8);
+    gap: var(--area-space-12);
     box-sizing: border-box;
+    /* spec: 41, Cursor's agents window bar (measured 2026-10-12); the traffic lights centre on the
+       controls' line (electron/main.cjs). A 52 trial (owner, 2026-10-12) was put back for Cursor's. */
     block-size: var(--_studio-bar); /* 41 at compact */
     padding-inline: var(--_studio-inset);
     border-block-end: var(--_studio-rule);
@@ -60,20 +65,29 @@
     -webkit-app-region: drag;
   }
   .studio-titlebar :is(a, button, input, select, [role="separator"]) { -webkit-app-region: no-drag; }
-  /* macOS traffic lights (electron/main.cjs): 12px buttons 8 apart from x 16, so they end at 68.
-     The tabs start as far after them as the lights sit from the window's edge (owner, 2026-10-11:
-     the tabs sat too close to them at 8). */
-  :root[data-platform="darwin"] .studio-titlebar { padding-inline-start: 84px; } /* spec: 16 + 52 + 16 */
+  /* macOS traffic lights (electron/main.cjs): 14px buttons on a 20 pitch from x 14, as Cursor
+     places them, so they end at 68. The Sidebar toggle's box starts 16 after them, its icon 20
+     (Cursor's agents window: about 21 to the icon), and the last button ends as far from the other
+     edge as the lights start from theirs, 14 (owner, 2026-10-12: lights flush, as Cursor's). */
+  :root[data-platform="darwin"] .studio-titlebar { padding-inline: 84px 14px; } /* spec: 14 + 54 + 16, and 14 */
   .studio-titlebar__tabs { flex: 0 1 auto; min-inline-size: 0; }
   .studio-titlebar__end {
     display: flex;
     align-items: center;
-    gap: var(--area-space-4);
+    gap: var(--area-space-12);
     margin-inline-start: auto;
   }
   /* Search: wide enough for "Search components" and the ⌘K hint (Cursor's command centre
      reads as a field, not a button). */
-  .studio-titlebar__search { inline-size: calc(var(--area-space-96) * 2 + var(--area-space-48)); /* pick: 240 */ margin-inline-end: var(--area-space-4); }
+  .studio-titlebar__search { inline-size: calc(var(--area-space-96) * 2 + var(--area-space-48)); /* pick: 240 */ }
+  /* A bar's ghost icon button is placed by its icon, as Popover's header close is (surface.css):
+     it gives back its plate's padding on both sides, so the bars' insets and gaps measure what is
+     drawn. The 24 target and the hover plate stay; the plate reaches 4 past the icon. */
+  :is(.studio-titlebar, .studio-titlebar__end, .studio-canvas__actions) > .studio-bar-icon { margin-inline: calc((var(--area-icon-sm) - var(--area-control-sm)) / 2); }
+  /* At a bar's ends the box keeps its place, so its plate stays inside the margin (see above).
+     By type: a Tooltip's popup follows its button, so the last button is not the last child. */
+  .studio-titlebar > button.studio-bar-icon:first-of-type { margin-inline-start: 0; }
+  .studio-titlebar__end > button.studio-bar-icon:last-of-type { margin-inline-end: 0; }
 
   /* --- Workspace ----------------------------------------------------------- */
 
@@ -140,7 +154,10 @@
   }
   .studio-canvas__title {
     margin: 0;
-    overflow: hidden;
+    /* Clipped for the ellipsis, but its descenders (trimmed off the cap box) still paint: they
+       reach about 3.5 below the baseline at 14 (a length: the property takes no lh or cap). */
+    overflow: clip;
+    overflow-clip-margin: var(--area-space-6);
     font-size: var(--area-text-md-size); /* Panel's bar title */
     line-height: var(--area-text-md-leading);
     font-weight: var(--area-weight-strong);
@@ -164,13 +181,18 @@
      with what it names rather than floating between two sections. */
   .studio-sections { display: grid; gap: var(--_canvas-margin); }
   .studio-section { scroll-margin-block-start: var(--_canvas-margin); }
-  /* The bar's end: filters and the grid / list switch (src/view-controls.tsx). */
+  /* The bar's end: filters and the grid / list switch (src/view-controls.tsx). Everything drawn is
+     12 apart, as in the Titlebar: a field's edge, a track, an icon (studio-bar-icon). The bar's 1
+     above balances its divider for the title; the controls are a whole 24 and give that 1 back,
+     so they sit 8 under the bar's top and 8 over its divider, as the Titlebar's do (centred in
+     the 39 they fell on half pixels, 7.5 and 8.5). */
   .studio-canvas__actions {
     /* Fields' public width hook: a filter is as wide as "All statuses" needs, not a 256 form field. */
     --area-input-inline-size: calc(var(--area-space-96) + var(--area-space-32)); /* pick: 128 */
     display: flex;
     align-items: center;
-    gap: var(--area-space-8);
+    gap: var(--area-space-12);
+    margin-block-start: calc(var(--area-border-width) * -1);
     margin-inline-start: auto;
   }
   .studio-section__link { color: inherit; text-decoration: none; }
