@@ -34,13 +34,16 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
 6. **Icon-only toggles in chrome swap outline → filled** (a shown panel, a pin) and set
    `aria-pressed`; toggles with a text label use Button's `selected` plate.
 7. **Arrangement is a view option, kept per view.** Sort, direction and grouping live in one
-   menu at the end of the view's bar; its rows keep the menu open (`MenuItem keepOpen`), the
+   menu in the view's bar, after its filters (rule 14); its rows keep the menu open (`MenuItem keepOpen`), the
    choice persists across launches, and Reset appears only once something changed. The Sidebar
    and the Canvas use the same order. Menus of commands close on a choice.
 8. **Pinning is personal and additive.** Pinned items appear in a Pinned group first and stay
    in their own group too; pin from the Inspector heading (a toggle, rule 6) or a context menu.
+   Only long lists pin (Components 85, Icons 808); a Sidebar of a dozen rows (settings, roles,
+   scales) needs no shortcut (owner, 2026-10-12).
 9. **Counts:** a count beside a title is muted tabular text; a count at the end of a row is
-   `Count`.
+   `Count`. The Canvas bar's count is always how many things the Canvas shows (families, tiles,
+   icons, scales, steps); a Canvas showing one thing (a type role) has none.
 10. **Empty results:** the Sidebar keeps All and its groups; the Canvas shows one `EmptyState`
     naming the query. No inline notes in the Sidebar.
 11. **Containers and surfaces.** A thing that is a composition (a component specimen, a
@@ -54,6 +57,18 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
     window controls; the Inspector's at the end.
 13. **App CSS styles only app classes.** When a product needs a component to do something it
     cannot, fix the component (with a spec note) or record a gap; never override `.area-*`.
+14. **The Canvas bar says what is shown; the Inspector, what is chosen** (owner, 2026-10-12).
+    - The bar: the title and count, then in this order filters, Sort and group, how things are
+      drawn (zoom, style, size), and the grid / list switch. A control that does not apply to
+      the current view is left out; the order of the rest never changes.
+    - The Inspector: the Canvas settings (only those that change this tab's specimens, plus the
+      tab's own display settings, such as Typography's sample text), then the chosen thing at its
+      narrowest: a Canvas item, else the Sidebar's row, else the tab's overview, under the same
+      title. A chosen thing gets its preview, unless the Canvas already shows it at size, and its
+      copy actions two to a row (`src/inspector.tsx`), then one facts Table whose rows run:
+      name and how to reach it (name, token, import), values, status, purpose, source.
+    - Nothing is chosen until the person chooses it: a tab opens on its overview, and the
+      choice clears when the Sidebar's row changes.
 
 ## Open component gaps
 

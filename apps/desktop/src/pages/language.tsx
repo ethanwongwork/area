@@ -3,14 +3,18 @@
  * accent, action, selection, UI scale, radius, surface, motion), one per Sidebar row. The Canvas
  * shows each axis as a row of its presets, every preset a tile scoped to it (data-area-<axis>)
  * holding the same abstract illustration (src/abstract.tsx), so a setting is seen by what it does.
- * The Inspector names the selected axis: what it controls, its attribute, presets and default.
+ * The Inspector shows the preset chosen on the Canvas (its sample and attribute to copy), else the
+ * Sidebar's setting (what it controls, its attribute, presets and default), else every setting.
  */
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { CopyIcon } from "@area/icons";
+import { CopyButton } from "../../../docs/src/gallery/icon-browser.tsx";
 import { Code, Count, EmptyState, Nav, NavGroup, NavItem, PanelSection, Table, TableLink } from "@area/react";
 import { SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
 import { CanvasSection, Tile, TileGrid } from "../tile.tsx";
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
 import { Facts } from "../facts.tsx";
+import { Preview, Selection } from "../inspector.tsx";
 import { Abstract } from "../abstract.tsx";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { matches } from "../search.ts";
@@ -25,14 +29,14 @@ const ALSO: Record<string, Record<string, string>> = {
 export function LanguagePage() {
   const { query, item, select } = useStudio();
   const shown = AXES.filter(axis => matches(query, axis.label, axis.id, axis.description));
-  // The Sidebar's choice (All, or one setting) and the Inspector's (the setting clicked on the
-  // Canvas; with one setting on the Canvas, that setting).
+  // The Sidebar's choice (All, or one setting) and the Inspector's: one preset of one setting
+  // ("<axis>:<preset>"), chosen on the Canvas, until the Sidebar's choice changes.
   const view = AXES.find(entry => entry.id === item);
-  // The selection is one preset of one setting ("<axis>:<preset>"); the Inspector names both.
-  const [selected, setSelected] = useState(`${AXES[0]!.id}:${AXES[0]!.defaultPreset}`);
-  const [selectedAxis, selectedPreset] = selected.split(":");
-  const axis = view ?? AXES.find(entry => entry.id === selectedAxis) ?? AXES[0]!;
-  const preset = axis.presets.find(entry => entry.id === (axis.id === selectedAxis ? selectedPreset : axis.defaultPreset));
+  const [selected, setSelected] = useState<string>();
+  useEffect(() => setSelected(undefined), [item]);
+  const [selectedAxis, selectedPreset] = selected?.split(":") ?? [];
+  const axis = AXES.find(entry => entry.id === selectedAxis) ?? view;
+  const preset = axis?.presets.find(entry => entry.id === selectedPreset);
   const onCanvas = view ? [view] : shown;
   const [mode, setMode] = useViewOption<ViewMode>("language", "grid", ["grid", "list"]);
   const [presets, setPresets] = useViewOption<"all" | "default">("language-presets", "all", ["all", "default"]);
@@ -114,19 +118,39 @@ export function LanguagePage() {
           ))}
         </div>
       )}
-      inspectorTitle={axis.label}
+      inspectorTitle={preset && axis ? `${axis.label} · ${preset.label}` : axis ? axis.label : "All settings"}
       inspector={
         <>
         <CanvasSettings axes={["ui", "radius"]} />
-        <PanelSection heading="Setting">
-          <Facts label="Setting" items={[
-            ["Controls", axis.description],
-            ["Attribute", <Code>data-area-{axis.id}</Code>],
-            ["Presets", axis.presets.map(preset => preset.label).join(", ")],
-            ["Default", axis.presets.find(preset => preset.id === axis.defaultPreset)?.label ?? "—"],
-            preset ? ["Selected", preset.label] : null,
-          ]} />
-        </PanelSection>
+        {axis && preset ? (
+          <Selection preview={<Preview shape="landscape" label={`${axis.label}: ${preset.label}`} scope={{ [`data-area-${axis.id}`]: preset.id, ...ALSO[axis.id] }}><Abstract axis={axis.id} /></Preview>}>
+            <CopyButton label="Copy attribute" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(`data-area-${axis.id}="${preset.id}"`)} />
+          </Selection>
+        ) : null}
+        {axis ? (
+          <PanelSection heading={preset ? "Preset" : "Setting"}>
+            <Facts label={preset ? "Preset" : "Setting"} items={preset ? [
+              ["Attribute", <Code>data-area-{axis.id}="{preset.id}"</Code>],
+              ["Setting", axis.label],
+              ["Default", preset.id === axis.defaultPreset ? "Yes" : `No, ${axis.presets.find(entry => entry.id === axis.defaultPreset)?.label ?? "—"}`],
+              ["Controls", axis.description],
+            ] : [
+              ["Attribute", <Code>data-area-{axis.id}</Code>],
+              ["Presets", axis.presets.map(entry => entry.label).join(", ")],
+              ["Default", axis.presets.find(entry => entry.id === axis.defaultPreset)?.label ?? "—"],
+              ["Controls", axis.description],
+            ]} />
+          </PanelSection>
+        ) : (
+          <PanelSection heading="Settings">
+            <Facts label="Settings" items={[
+              ["Attribute", <Code>data-area-&lt;setting&gt;</Code>],
+              ["Settings", AXES.length],
+              ["Presets", AXES.reduce((sum, entry) => sum + entry.presets.length, 0)],
+              ["Scope", "Any element; what it holds takes the nearest setting."],
+            ]} />
+          </PanelSection>
+        )}
         </>
       }
     />
