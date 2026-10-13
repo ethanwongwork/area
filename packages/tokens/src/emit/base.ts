@@ -25,7 +25,7 @@ export const SPACE_RAMP = [0, 2, 4, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 64, 80
  * size on the ramp instead of landing on 12.25px.
  */
 export const SIZE_RAMP = [
-  10, 11, 12, 13, 14, 16, 18, 20, 24, 28, 32, 40, 48, 56, 64, 72, 96, 128,
+  10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 24, 28, 32, 40, 48, 56, 64, 72, 96, 128,
 ] as const;
 
 export const LEADING_RAMP = [
@@ -243,6 +243,9 @@ export function derivedTokens(): Record<string, string> {
     // edge, black 10%; owner 2026-10-12, reversing the solid #f7 edge of 2026-09-28, which merged with light
     // grounds on straight edges and showed only as fringe at the corners).
     [`${PREFIX}token-swatch-ring`]: "light-dark(rgb(0 0 0 / 0.1), rgb(255 255 255 / 0.1))",
+    // Heights, rows, gaps, insets and marks from the type size and the density (axes/type-size.ts,
+    // axes/density.ts): live calc, so a subtree that sets either re-derives them here.
+    ...sizeDerivations(),
     // (radius-nested was pruned in audit S21b: concentric corners use radius-concentric, S3.)
     // Corners follow painted height (compact pass, owner 2026-10-01): the radius setting gives a
     // corner per pixel and the UI scale the heights. A live calc, so a `data-area-ui` or
@@ -253,6 +256,67 @@ export function derivedTokens(): Record<string, string> {
     [`${PREFIX}transition`]:
       `background-color var(${PREFIX}duration-fast) var(${PREFIX}ease-out), border-color var(${PREFIX}duration-fast) var(${PREFIX}ease-out), color var(${PREFIX}duration-fast) var(${PREFIX}ease-out), box-shadow var(${PREFIX}duration-fast) var(${PREFIX}ease-out)`,
   };
+}
+
+/**
+ * The geometry two axes share (owner, 2026-10-12; docs/research/ui-size-scale-2026-10-12.md).
+ *
+ * level   the density level (−1, 0, 1) clamped by the type size's bounds: Compact stops at 14,
+ *         Comfortable starts at 13, so those pairings resolve to Default.
+ * height  the tier's text line plus 2 × its room, never under 24 (xs: 20). Rooms at Default are
+ *         xs 4, sm 4, md 6, lg 10, xl 12 and rows 6; each level moves them 2.
+ * step    spacing keeps each level's ratio of space to type (Compact 12 at 12, Default 16 at 14,
+ *         Comfortable 20 at 14), rounded to halves: round((16 − ratio × base) / 4, 0.5). It is
+ *         `ui-dense`, the factor component insets are written against (`x − y × ui-dense`, every
+ *         y 2, 4 or 8, so halves stay whole pixels): 1 at Compact 12, 0 at Default 14.
+ * marks   text labels (Badge, Count, Kbd) sit on the small-text line plus the level's room; the
+ *         check box and toggle come from the type (`type-box`); static marks hold.
+ */
+function sizeDerivations(): Record<string, string> {
+  const v = (name: string) => `var(${PREFIX}${name})`;
+  const level = v("ui-level");
+  const down = `min(${level}, 0)`;
+  const up = `max(${level}, 0)`;
+  const step = v("ui-dense");
+  const height = (line: string, room: number, floor: number) =>
+    `max(${floor}px, calc(${line} + (${room}px + 2px * ${level}) * 2))`;
+  const out: Record<string, string> = {
+    [`${PREFIX}ui-level`]: `clamp(${v("type-level-min")}, ${v("density-level")}, ${v("type-level-max")})`,
+    [`${PREFIX}ui-dense`]: `round(nearest, calc((16 - (8 / 7 + ${up} * 2 / 7 + ${down} / 7) * ${v("type-base")}) / 4), 0.5)`,
+    [`${PREFIX}ui-size`]: v("text-sm-size"),
+    [`${PREFIX}ui-leading`]: v("text-sm-leading"),
+    [`${PREFIX}ui-row`]: `calc(${v("type-leading")} + (6px + 2px * ${level}) * 2)`,
+    [`${PREFIX}ui-row-inset`]: "8px",
+    [`${PREFIX}ui-row-gap`]: `max(0px, calc(2px - 2px * ${step}))`,
+    [`${PREFIX}ui-stack`]: `calc(6px - 2px * ${step})`,
+    [`${PREFIX}ui-cluster`]: `calc(8px - 2px * ${step})`,
+    [`${PREFIX}gap-row`]: `calc(12px - 4px * ${step})`,
+    [`${PREFIX}inset-surface-sm`]: `calc(12px - 4px * ${step})`,
+    [`${PREFIX}inset-surface-md`]: `calc(16px - 4px * ${step})`,
+    [`${PREFIX}mark-sm`]: "16px",
+    [`${PREFIX}mark-md`]: "20px",
+    [`${PREFIX}mark-lg`]: "24px",
+    [`${PREFIX}mark-label-sm`]: v("type-small-leading"),
+    [`${PREFIX}mark-label-md`]: `calc(${v("type-small-leading")} + 4px + 4px * ${down})`,
+    [`${PREFIX}mark-label-lg`]: `calc(${v("type-small-leading")} + 8px + 4px * ${down})`,
+    [`${PREFIX}mark-box`]: v("type-box"),
+    [`${PREFIX}mark-toggle`]: `calc(${v("type-box")} + 4px)`,
+  };
+  const tiers: Record<string, { line: string; room: number; floor: number; text: string; icon: string; gap: string }> = {
+    xs: { line: v("type-small-leading"), room: 4, floor: 20, text: "text-xs", icon: v("type-icon-xs"), gap: "4px" },
+    sm: { line: v("type-leading"), room: 4, floor: 24, text: "text-sm", icon: v("type-icon"), gap: `calc(6px - 2px * ${step})` },
+    md: { line: v("type-leading"), room: 6, floor: 24, text: "text-sm", icon: v("type-icon"), gap: `calc(6px - 2px * ${step})` },
+    lg: { line: v("type-leading"), room: 10, floor: 24, text: "text-sm", icon: v("type-icon"), gap: "6px" },
+    xl: { line: v("type-reading-leading"), room: 12, floor: 24, text: "text-md", icon: `max(${v("type-icon")}, calc(24px + 8px * ${down}))`, gap: `calc(8px - 2px * ${step})` },
+  };
+  for (const [tier, spec] of Object.entries(tiers)) {
+    out[`${PREFIX}control-${tier}`] = height(spec.line, spec.room, spec.floor);
+    out[`${PREFIX}control-${tier}-text`] = v(`${spec.text}-size`);
+    out[`${PREFIX}control-${tier}-leading`] = v(`${spec.text}-leading`);
+    out[`${PREFIX}icon-${tier}`] = spec.icon;
+    out[`${PREFIX}gap-${tier}`] = spec.gap;
+  }
+  return out;
 }
 
 function radiusDerivations(): Record<string, string> {
@@ -266,8 +330,10 @@ function radiusDerivations(): Record<string, string> {
   const out: Record<string, string> = {};
   for (const tier of ["xs", "sm", "md", "lg", "xl"]) out[`${PREFIX}radius-control-${tier}`] = corner(`var(${PREFIX}control-${tier})`);
   out[`${PREFIX}radius-control`] = `var(${PREFIX}radius-control-md)`;
-  // Surfaces hold at both densities (radius audit D1) on their own 4px ladder.
-  out[`${PREFIX}radius-container`] = `var(${PREFIX}radius-surface)`;
+  // Surfaces take their own 4px ladder (radius audit D1), never deeper than 1.5 x the surface
+  // inset (owner, 2026-10-12): a compact popover's 12 inset stops its corner at 18 when the setting
+  // asks for 20 or 24. Default and Comfortable insets never reach the cap.
+  out[`${PREFIX}radius-container`] = `min(var(${PREFIX}radius-surface), round(down, calc(var(${PREFIX}inset-surface-md) * 1.5), 2px))`;
   // Small nested shapes (code, disclosure plates): the smallest control's corner, 6 (compact 4).
   out[`${PREFIX}radius-small`] = `var(${PREFIX}radius-control-xs)`;
   // A full-width row's plate: the row's own height, 8 (compact 6).
@@ -313,7 +379,6 @@ export const REGISTERED_PROPERTIES = [
   { name: `${PREFIX}focus-width`, syntax: "<length>", initial: "2px" },
   { name: `${PREFIX}focus-offset`, syntax: "<length>", initial: "2px" },
   { name: `${PREFIX}border-width`, syntax: "<length>", initial: "1px" },
-  { name: `${PREFIX}control-md`, syntax: "<length>", initial: "32px" },
   { name: `${PREFIX}duration-fast`, syntax: "<time>", initial: "100ms" },
   { name: `${PREFIX}duration-base`, syntax: "<time>", initial: "150ms" },
 ] as const;

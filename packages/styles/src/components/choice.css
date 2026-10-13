@@ -3,7 +3,9 @@
 @layer area.components {
   .area-checkbox,
   .area-radio {
-    --_size: var(--area-space-16);
+    /* The box follows the type size, 4 inside the UI line (14 at 12-13, 16 at 14, 18, 20 at 16;
+       axes/type-size.ts): it was 16 at every size. */
+    --_size: var(--area-mark-box);
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
     --_gap: var(--area-gap-md);

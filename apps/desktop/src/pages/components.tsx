@@ -11,14 +11,21 @@
  * Stage starts on that tile; a family's name opens it on its first tile. Escape, ⌘↑, ⌘[ or All go
  * back, with the tile last on the Stage selected and scrolled into view on the grid.
  *
+ * The Inspector holds the Canvas settings, then what is chosen (docs/PRODUCT_UI.md, rule 14): on the
+ * Stage its Properties (src/content/playgrounds.tsx), then the tile's or family's copy actions and facts
+ * (src/inspector.tsx): code and import to copy; import, class, variants, defaults, status, purpose
+ * and spec, from the styles manifest and docs/specs.
+ *
  * The tiles come from the app's own content (src/content/: specimens.mjs over pages.mjs, the demos
  * in registry.tsx), labelled and ordered by specimen-names.mjs, and fitted by src/gallery/fit.ts.
  */
 import { Component, createElement, useEffect, useRef, useState, type ReactNode } from "react";
-import { Badge, Button, Code, Count, EmptyState, Kbd, Nav, NavGroup, NavItem, PanelSection, Segmented, Table, TableLink, Tooltip } from "@area/react";
-import { ArrowLeftIcon, ChevronLeftIcon, ChevronRightIcon, OpenIcon, ResetIcon } from "@area/icons";
+import * as AreaReact from "@area/react";
+import { Badge, Button, Code, Count, EmptyState, Kbd, Link, Nav, NavGroup, NavItem, PanelSection, Segmented, Table, TableLink, Tooltip } from "@area/react";
+import { ArrowLeftIcon, ChevronLeftIcon, ChevronRightIcon, CopyIcon, OpenIcon, ResetIcon } from "@area/icons";
 import { MANIFESTS } from "@area/styles/manifest";
-import DEMO_SOURCES from "area:demo-sources";
+import SNIPPETS from "virtual:demo-snippets";
+import { CopyButton } from "../../../docs/src/gallery/icon-browser.tsx";
 // @ts-expect-error — the gallery's page content and status registry are authored in JavaScript.
 import { COMPONENT_PAGES } from "../content/pages.mjs";
 // @ts-expect-error — as above.
@@ -32,6 +39,8 @@ import { PLAYGROUNDS, configCode, initialConfig, renderConfig, sameConfig, tileC
 import { fitTiles } from "../gallery/fit.ts";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { Facts, PropsTable } from "../facts.tsx";
+import { Selection } from "../inspector.tsx";
+import { APP_SCALE } from "../app-scale.ts";
 import { Tile, TileGrid } from "../tile.tsx";
 import { Anatomy, Properties, Stage, States, useStageKeys } from "../stage.tsx";
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
@@ -43,13 +52,21 @@ interface Example { id: string; title: string; demo: string; note?: string; grou
 interface Family { slug: string; name: string; docsOnly?: boolean; imports?: string; exportName?: string; manifest?: string; api?: string[][]; examples: Example[] }
 /** A gallery tile: its specimen name (size-sm), group (Sizes) and value in that group (sm). */
 interface Tile { id: string; name: string; group: string; value: string; label: string; demo: string; note?: string }
-interface ManifestLike { block: string; elements?: readonly string[]; states?: readonly string[]; stateAttributes?: Record<string, string> }
+/* The family's manifest (packages/styles/src/manifest.ts): its sentence, block, axes, defaults, parts and states. */
+interface ManifestLike { block: string; description: string; variants: Record<string, readonly string[]>; defaults: Record<string, string>; elements?: readonly string[]; states?: readonly string[]; stateAttributes?: Record<string, string> }
 
 const FAMILIES = (COMPONENT_PAGES as Family[]).filter(family => !family.docsOnly).sort((a, b) => a.name.localeCompare(b.name));
 const STATUS_LABEL = { complete: "Complete", review: "In review", unrefined: "Unrefined" } as const;
 const STATUS_TONE = { complete: "success", review: "caution", unrefined: "neutral" } as const;
 type Status = keyof typeof STATUS_LABEL;
 const manifestOf = (family: Family) => family.manifest ? (MANIFESTS as unknown as Record<string, ManifestLike>)[family.manifest] : undefined;
+/* What a family exports from @area/react: its recorded names, else its own name when the package
+   exports it ("date-picker" -> DatePicker). Every gallery family resolves (checked 2026-10-12). */
+const pascal = (slug: string) => slug.split("-").map(word => word[0]!.toUpperCase() + word.slice(1)).join("");
+const importsOf = (family: Family) => family.imports ?? family.exportName ?? (pascal(family.slug) in AreaReact ? pascal(family.slug) : undefined);
+const importLine = (names: string) => `import { ${names} } from "@area/react";`;
+/* Every family has a spec (docs/specs/<slug>.md, checked 2026-10-12); origin on GitHub is canonical. */
+const specUrl = (family: Family) => `https://github.com/ethanwongwork/area/blob/main/docs/specs/${family.slug}.md`;
 
 /* A family's tiles, labelled group / value and in group order, as component-gallery.mjs does. */
 function tilesOf(family: Family): Tile[] {
@@ -159,7 +176,7 @@ function FamilySection({ family, selected, onSelect, onOpen, onOpenTile, zoom, r
   const rows = Math.ceil(TILES.get(family.slug)!.length / 3);
   return (
     <section ref={ref} className="studio-section" aria-labelledby={`family-${family.slug}`} data-fit="">
-      <h2 className="studio-canvas__section-title" id={`family-${family.slug}`} data-area-ui="compact">
+      <h2 className="studio-canvas__section-title" id={`family-${family.slug}`} {...APP_SCALE}>
         <a href={`#components/${family.slug}`} className="studio-section__link" data-key={family.slug} data-name={family.name} onClick={event => { event.preventDefault(); onOpen(); }}>{family.name}</a>
       </h2>
       {near ? <FamilyTiles family={family} selected={selected} onSelect={onSelect} onOpen={onOpenTile} reveal={reveal} onRevealed={onRevealed} /> : <div style={{ blockSize: `${rows * 256}px` }} />}
@@ -184,13 +201,13 @@ function FamilyStage({ family, tiles, tile, config, onSelectTile, onChange, zoom
     <div className="studio-sections">
       <Stage zoom={zoom} replays={replays}
         label={config && playground ? onStage?.label ?? "Custom" : tile.label}
-        code={config && playground ? configCode(playground, config) : DEMO_SOURCES[tile.demo]}>
+        code={config && playground ? configCode(playground, config) : SNIPPETS[tile.demo]}>
         <TileBoundary>{config && playground ? renderConfig(playground, config, onChange) : <Demo name={tile.demo} />}</TileBoundary>
       </Stage>
       <div ref={strips} className="studio-sections" data-fit="" data-zoom={zoom}>
         {groups.map(([group, list]: readonly [string, Tile[]]) => (
           <section key={group} className="studio-section" aria-labelledby={`group-${group}`}>
-            <h2 className="studio-canvas__section-title" id={`group-${group}`} data-area-ui="compact">
+            <h2 className="studio-canvas__section-title" id={`group-${group}`} {...APP_SCALE}>
               {group} <span className="studio-muted studio-tabular">{list.length}</span>
             </h2>
             <TileGrid span="wide">
@@ -207,19 +224,19 @@ function FamilyStage({ family, tiles, tile, config, onSelectTile, onChange, zoom
       {/* The reference: documentation, not specimens, so it keeps the app's compact scale and default
           radius whatever the Canvas previews (owner, 2026-10-11: props at full width, under the tiles). */}
       {family.api?.length ? (
-        <section className="studio-section" aria-labelledby="family-props" data-area-ui="compact">
+        <section className="studio-section" aria-labelledby="family-props" {...APP_SCALE}>
           <h2 className="studio-canvas__section-title" id="family-props">Props</h2>
           <PropsTable api={family.api} />
         </section>
       ) : null}
       {manifest ? (
-        <section className="studio-section" aria-labelledby="family-anatomy" data-area-ui="compact">
+        <section className="studio-section" aria-labelledby="family-anatomy" {...APP_SCALE}>
           <h2 className="studio-canvas__section-title" id="family-anatomy">Anatomy</h2>
           <Anatomy manifest={manifest} />
         </section>
       ) : null}
       {manifest?.states?.length ? (
-        <section className="studio-section" aria-labelledby="family-states" data-area-ui="compact">
+        <section className="studio-section" aria-labelledby="family-states" {...APP_SCALE}>
           <h2 className="studio-canvas__section-title" id="family-states">States</h2>
           <States manifest={manifest} />
         </section>
@@ -369,9 +386,7 @@ export function ComponentsPage() {
         }>All components <Kbd keys={["Esc"]} size="sm" /></Tooltip>
       ) : undefined}
       canvasTitle={family ? family.name : "All components"}
-      canvasMeta={family
-        ? <Badge size="sm" tone={STATUS_TONE[statusOf(family)]} variant="soft">{STATUS_LABEL[statusOf(family)]}</Badge>
-        : <span className="studio-muted studio-tabular">{onCanvas.length}</span>}
+      canvasMeta={<span className="studio-muted studio-tabular">{family ? tiles.length : onCanvas.length}</span>}
       canvasActions={family ? (
         <ViewControls>
           <ChromeButton label="Replay" icon={<ResetIcon />} onClick={() => setReplays(count => count + 1)} />
@@ -419,24 +434,23 @@ export function ComponentsPage() {
       inspectorTitle={subject?.name ?? "All components"}
       inspector={
         <>
+          <CanvasSettings />
           {/* On a composition tile the Properties show the defaults; an edit puts a configured instance
               on the Stage in its place. */}
           {family && playground ? (
             <Properties playground={playground} config={config ?? initialConfig(playground)} changed={Boolean(config) && !sameConfig(config!, initialConfig(playground))} onChange={change} onReset={reset} />
           ) : null}
-          <CanvasSettings />
-          {subject ? (
-            <PanelSection heading="Component"
-              actions={<PinButton name={subject.name} pinned={pins.has(subject.slug)} onToggle={() => pins.toggle(subject.slug)} />}>
-              <Facts label="Component" items={[
-                ["Status", <Badge size="sm" tone={STATUS_TONE[statusOf(subject)]} variant="soft">{STATUS_LABEL[statusOf(subject)]}</Badge>],
-                ["Tiles", TILES.get(subject.slug)!.length],
-                subject.imports ?? subject.exportName ? ["Import", <Code>{subject.imports ?? subject.exportName}</Code>] : null,
-              ]} />
-            </PanelSection>
+          {family ? (
+            <FamilyInspector family={family} pinned={pins.has(family.slug)} onPin={() => pins.toggle(family.slug)}
+              tile={config && playground ? matchingTile(playground, tiles, config) : stageTile}
+              code={config && playground ? configCode(playground, config) : stageTile ? SNIPPETS[stageTile.demo] : undefined} />
+          ) : selectedFamily ? (
+            <FamilyInspector family={selectedFamily} pinned={pins.has(selectedFamily.slug)} onPin={() => pins.toggle(selectedFamily.slug)}
+              tile={selectedTile} code={selectedTile ? SNIPPETS[selectedTile.demo] : undefined} onOpen={selected ? () => open(selected) : undefined} />
           ) : (
             <PanelSection heading="Library">
               <Facts label="Library" items={[
+                ["Package", <Code>@area/react</Code>],
                 ["Families", FAMILIES.length],
                 ["Complete", counts.complete],
                 ["In review", counts.review],
@@ -445,24 +459,56 @@ export function ComponentsPage() {
               ]} />
             </PanelSection>
           )}
-          {(family ? (config ? undefined : stageTile) : selectedTile) ? (() => {
-            const shownTile = (family ? stageTile : selectedTile)!;
-            return (
-              <PanelSection heading="Tile" actions={family ? null : (
-                <Tooltip side="bottom" describes={false} trigger={
-                  <Button variant="ghost" tone="neutral" size="sm" icon={<OpenIcon />} aria-keyshortcuts="Meta+ArrowDown" onClick={() => open(selected!)}>Open</Button>
-                }>Open on the Stage <Kbd keys={["⌘", "↓"]} size="sm" /></Tooltip>
-              )}>
-                <Facts label="Tile" items={[
-                  ["Specimen", shownTile.label],
-                  ["Demo", <Code>{shownTile.demo}</Code>],
-                  shownTile.note ? ["Note", shownTile.note] : null,
-                ]} />
-              </PanelSection>
-            );
-          })() : null}
         </>
       }
     />
+  );
+}
+
+/**
+ * The Inspector for a family, or one of its tiles: what to copy, then its facts in the shared order.
+ * On the grid a selected tile also opens on the Stage (⌘↓); on the Stage the code is what it shows.
+ */
+function FamilyInspector({ family, tile, code, pinned, onPin, onOpen }: {
+  family: Family; tile?: Tile; code?: string; pinned: boolean; onPin: () => void; onOpen?: () => void;
+}) {
+  const names = importsOf(family);
+  const manifest = manifestOf(family);
+  const status = statusOf(family);
+  return (
+    <>
+      {names || code ? (
+        <Selection>
+          {code ? <CopyButton label="Copy code" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(code)} /> : null}
+          {names ? <CopyButton label="Copy import" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(importLine(names))} /> : null}
+        </Selection>
+      ) : null}
+      <PanelSection heading={tile ? "Tile" : "Family"} actions={
+        <>
+          {onOpen ? (
+            <Tooltip side="bottom" describes={false} trigger={
+              <Button variant="ghost" tone="neutral" size="sm" icon={<OpenIcon />} aria-keyshortcuts="Meta+ArrowDown" onClick={onOpen}>Open</Button>
+            }>Open on the Stage <Kbd keys={["⌘", "↓"]} size="sm" /></Tooltip>
+          ) : null}
+          <PinButton name={family.name} pinned={pinned} onToggle={onPin} />
+        </>
+      }>
+        <Facts label={tile ? "Tile" : "Family"} items={tile ? [
+          ["Specimen", tile.label],
+          ["Family", family.name],
+          ["Demo", <Code>{tile.demo}</Code>],
+          tile.note ? ["Note", tile.note] : null,
+        ] : [
+          names ? ["Import", <Code>{names}</Code>] : null,
+          manifest ? ["Class", <Code>.{manifest.block}</Code>] : null,
+          manifest && Object.keys(manifest.variants).length ? ["Variants", Object.entries(manifest.variants).map(([axis, values]) => `${axis} ${values.length}`).join(" · ")] : null,
+          manifest && Object.keys(manifest.defaults).length ? ["Defaults", Object.values(manifest.defaults).join(", ")] : null,
+          ["Status", <Badge size="sm" tone={STATUS_TONE[status]} variant="soft">{STATUS_LABEL[status]}</Badge>],
+          ["Tiles", TILES.get(family.slug)!.length],
+          manifest ? ["Purpose", manifest.description] : null,
+          ["Spec", <Link href={specUrl(family)} target="_blank" rel="noreferrer">{family.slug}.md</Link>],
+        ]} />
+      </PanelSection>
+    </>
   );
 }

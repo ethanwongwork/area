@@ -496,6 +496,9 @@ for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
     let d = Infinity;
     for (const [ax, ay] of sampleOf(drawn[p])) for (const [bx, by] of sampleOf(drawn[q])) d = Math.min(d, Math.hypot(ax - bx, ay - by));
     if (d <= JOIN) continue;
+    // data-gap="slash" (owner-approved, recorded in the spec): the base icon is drawn whole and the
+    // shared slash crosses it flat, so a part beside the slash keeps its base position (keyboard-off's keys).
+    if (root["data-gap"] === "slash" && [drawn[p], drawn[q]].some(el => el.attrs?.d === "M2 2L14 14")) continue;
     const g = d - pads[p] - pads[q];
     if (g <= 0) continue;  // the inks overlap: a join, not a gap
     // Outline-only lines are not drawn in the filled variant, so they have no filled gap.
@@ -717,8 +720,11 @@ const filledUniform = (icon, lines) => lines.map(line => [[SLASH_GAP, ""], [SLAS
   : l, line));
 // The size curve, stroke helpers and mask ids every component shares (pilot-icons.tsx and @area/icons).
 const RUNTIME = `/** weight: line in CSS px at 16px (overrides --area-weight-icon). size: rendered size in px;
- *  the line then follows the size curve instead of scaling with the drawing. */
-export type PilotIconProps = Omit<SVGProps<SVGSVGElement>, "stroke"> & { weight?: number; size?: number };
+ *  the line then follows the size curve instead of scaling with the drawing. title: the icon's
+ *  accessible name, for an icon that means something on its own (an icon beside its own text stays
+ *  decorative). mirrored: true flips the drawing, false keeps it; left out, an icon tied to reading
+ *  direction mirrors in right-to-left text (rtl.css). docs/specs/icons.md, "Accessible name and right-to-left". */
+export type PilotIconProps = Omit<SVGProps<SVGSVGElement>, "stroke"> & { weight?: number; size?: number; title?: string; mirrored?: boolean };
 /** Size curve (docs/specs/icons.md, "Sizes"): the line grows with size^${SIZE_CURVE}, Cursor's
  *  16 → 24px step (1.25 → 1.5px), up to the ${SIZE_CURVE_MAX}px master; larger icons are that master scaled
  *  whole. In drawing units that is a factor of (min(size, ${SIZE_CURVE_MAX}) / 16)^${(SIZE_CURVE - 1).toFixed(2)}. */
@@ -755,20 +761,39 @@ export const slashGap = (weight: number | undefined, size: number | undefined, s
   const t = \`calc(\${w.startsWith("calc") ? w.slice(5, -1) : w} * \${(side * 0.7071).toFixed(4)})\`;
   return { style: { strokeWidth: w, transform: \`translate(\${t}, calc(-1 * \${t}))\` } };
 };
-const base = { viewBox: "0 0 16 16", width: 16, height: 16, fill: "none", "aria-hidden": true, focusable: false } as const;
+const base = { viewBox: "0 0 16 16", width: 16, height: 16, fill: "none" } as const;
+/** The root svg's props. Decorative (aria-hidden) unless named by title, aria-label or aria-labelledby,
+ *  then role="img" (Fluent's and Octicons' pattern). An icon tied to reading direction (rtl) carries
+ *  data-area-rtl="mirror" for rtl.css's :dir(rtl) flip, which needs no context and renders the same on the
+ *  server; mirrored flips it inline with the scale property, so a transform of the caller's still applies.
+ *  Props passed through come last and win. */
+export const root = (size: number | undefined, { title, mirrored, style, ...props }: Omit<PilotIconProps, "weight" | "size">, rtl?: boolean) => {
+  const named = title !== undefined || props["aria-label"] !== undefined || props["aria-labelledby"] !== undefined;
+  return {
+    ...base, ...(size ? { width: size, height: size } : {}),
+    ...(named ? { role: "img", ...(title !== undefined ? { "aria-label": title } : {}) } : { "aria-hidden": true }),
+    focusable: props.tabIndex !== undefined && props.tabIndex >= 0,
+    ...(rtl && mirrored === undefined ? { "data-area-rtl": "mirror" } : {}),
+    ...(mirrored ? { style: { scale: "-1 1", ...style } } : style ? { style } : {}),
+    ...props,
+  };
+};
 const useMaskId = () => "area-icon-" + useId().replace(/[^A-Za-z0-9-]/g, "");
 
 `;
+// Icons tied to reading direction (assets/area-icons-pilot/rtl.json): they mirror in right-to-left text.
+const RTL = JSON.parse(readFileSync(join(SRC, "rtl.json"), "utf8")).mirror;
+for (const name of Object.keys(RTL)) if (!icons.some(icon => icon.name === name)) throw new Error(`rtl.json: ${name} is not an icon`);
 // One icon's outline and filled components, named by `name` (Pilot… for the docs, plain for @area/icons).
 const iconSource = (icon, name = component(icon)) => `export const ${name}Icon = ({ weight, size, ...props }: PilotIconProps) => (
-  <svg {...base} {...(size ? { width: size, height: size } : {})} {...props}>
+  <svg {...root(size, props${RTL[icon.name] ? ", true" : ""})}>
     ${turn(icon, icon.elements.filter(el => !el.filledOnly).map(el => jsx(el))).join("\n    ")}
   </svg>
 );` + (hasFilled(icon) ? `
 
 export const ${name}FilledIcon = ({ weight, size, ...props }: PilotIconProps) => {
   ${filledBody(icon).some(line => line.includes("mask")) ? "const id = useMaskId();\n  " : ""}return (
-    <svg {...base} {...(size ? { width: size, height: size } : {})} {...props}>
+    <svg {...root(size, props${RTL[icon.name] ? ", true" : ""})}>
       ${turn(icon, filledUniform(icon, filledBody(icon))).join("\n      ")}
     </svg>
   );
@@ -805,20 +830,24 @@ const reviewOf = icon => statusIn[icon.name] ?? (icon.derivedFrom ? reviewOf(byN
 const categoryOf = Object.fromEntries([...readFileSync(join(ROOT, "src/icon-categories.ts"), "utf8").matchAll(/\{ slug: "([^"]+)", name: "[^"]+", icons: \[([^\]]*)\]/g)]
   .flatMap(([, slug, list]) => [...list.matchAll(/"([^"]+)"/g)].map(m => [m[1], slug])));
 const pkgName = icon => camel("-" + icon.name);
+// Search keywords and other libraries' names (scripts/icon-keywords.mjs; docs/specs/icons.md, "Keywords and names").
+const KEYWORDS = JSON.parse(readFileSync(join(SRC, "keywords.json"), "utf8")).icons;
 const iconMeta = icons.map(icon => {
   const { status, batch } = reviewOf(icon);
+  const { keywords = [], names } = KEYWORDS[icon.name] ?? {};
   return { name: icon.name, component: pkgName(icon) + "Icon", filledComponent: pkgName(icon) + "FilledIcon", category: categoryOf[icon.name] ?? null,
     keyline: icon.keyline, fill: icon.elements.some(el => SOLID_ROLES.includes(el.filled)) ? "solid" : "weight", status, batch,
-    ...(icon.derivedFrom ? { derivedFrom: icon.derivedFrom, turn: icon.rotate ? `rotate(${icon.rotate})` : icon.flip } : {}), ...(icon.aliasOf ? { aliasOf: icon.aliasOf } : {}) };
+    ...(icon.derivedFrom ? { derivedFrom: icon.derivedFrom, turn: icon.rotate ? `rotate(${icon.rotate})` : icon.flip } : {}), ...(icon.aliasOf ? { aliasOf: icon.aliasOf } : {}),
+    ...(RTL[icon.name] ? { rtl: "mirror" } : {}), keywords, ...(names ? { names } : {}) };
 });
 const GEN = "/** Generated by apps/docs/scripts/gen-pilot-icons.mjs from apps/docs/assets/area-icons-pilot. Do not edit by hand. */\n";
 rmSync(PKG, { recursive: true, force: true }); mkdirSync(join(PKG, "icons"), { recursive: true });
 writeFileSync(join(PKG, "runtime.ts"), GEN + `import { useId, type SVGProps } from "react";\n\n` + RUNTIME.replaceAll("PilotIconProps", "IconProps")
-  .replace("const base = {", "export const base = {").replace("const useMaskId = ", "export const useMaskId = "));
+  .replace("const useMaskId = ", "export const useMaskId = "));
 for (const icon of icons) {
   const code = iconSource(icon, pkgName(icon)).replaceAll("PilotIconProps", "IconProps");
   const used = ["sw", "haloWidth", "lineShift", "slashGap", "useMaskId"].filter(f => new RegExp(`\\b${f}\\(`).test(code));
-  writeFileSync(join(PKG, "icons", icon.name + ".tsx"), GEN + `import { base, ${[...used, "type IconProps"].join(", ")} } from "../runtime.ts";\n\n` + (icon.label !== icon.name ? `/** ${icon.label}. */\n` + code.replace("\n\nexport const", `\n\n/** ${icon.label}, filled. */\nexport const`) : code) + "\n");
+  writeFileSync(join(PKG, "icons", icon.name + ".tsx"), GEN + `import { root, ${[...used, "type IconProps"].join(", ")} } from "../runtime.ts";\n\n` + (icon.label !== icon.name ? `/** ${icon.label}. */\n` + code.replace("\n\nexport const", `\n\n/** ${icon.label}, filled. */\nexport const`) : code) + "\n");
 }
 for (const [file, status] of [["approved.ts", "approved"], ["review.ts", "review"]])
   writeFileSync(join(PKG, file), GEN + iconMeta.filter(m => (m.status === "approved") === (status === "approved"))

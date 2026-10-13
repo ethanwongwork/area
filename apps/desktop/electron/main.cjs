@@ -2,7 +2,11 @@
  * Area's desktop shell: one window that loads the built app (dist/index.html).
  *
  * On macOS the window has no title bar of its own: the app's Titlebar is the drag region and the
- * traffic lights sit inside it, centred on its 40px row (12px buttons, so 14 from the top).
+ * traffic lights sit inside it as Cursor places them (owner, 2026-10-12: "i like cursors top bar"):
+ * centred in the bar and as far from the side as from the top, plus one. Cursor's main process
+ * (out/main.js, 3.23): s = floor((height - 14) / 2), at { x: s + 1, y: s }; for the 39 bar the app's
+ * type 13 / Compact scale gives (src/studio.css --_studio-bar) that is 13, 12, centred on the
+ * controls' line at 19. Was 14, 13 for the 41 bar at type 12.
  * --dev reloads the window when the renderer rebuilds; --capture=<file.png> saves one frame and
  * quits, for checking the window without looking at it (--theme=dark, --hash=icons/arrows,
  * --store='{"canvas":{"ui":"compact"}}' for saved settings).
@@ -31,7 +35,7 @@ function createWindow() {
     show: false,
     backgroundColor: nativeTheme.shouldUseDarkColors ? GROUND.dark : GROUND.light,
     titleBarStyle: process.platform === "darwin" ? "hiddenInset" : "default",
-    trafficLightPosition: { x: 16, y: 14 },
+    trafficLightPosition: { x: 13, y: 12 },
     webPreferences: {
       preload: join(__dirname, "preload.cjs"),
       // A capture runs in its own in-memory session, so it never reads or changes the saved
@@ -72,7 +76,8 @@ function createWindow() {
   }
   if (dev && existsSync(dist)) {
     let timer;
-    watch(dist, () => { clearTimeout(timer); timer = setTimeout(() => window.webContents.reloadIgnoringCache(), 120); });
+    // Logged, so the dev terminal shows each reload (and a missing one is noticed).
+    watch(dist, () => { clearTimeout(timer); timer = setTimeout(() => { window.webContents.reloadIgnoringCache(); console.log(`[electron] reloaded ${new Date().toLocaleTimeString()}`); }, 120); });
   }
   return window;
 }

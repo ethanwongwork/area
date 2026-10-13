@@ -4379,7 +4379,7 @@ beyond) stays only for notebook's attached rings. The table above changes in its
 | vote | horizontal; Lucide vote / Huge Vote, a ballot card entering a box's slot line. The card is 9 × 9 (3.5–12.5 × 3.5–12.5) with r 1.5 top corners, and its sides end on a 12-long slot line (2–14 at 12.5) that runs 1.5 past each side. Inside is the container's 1.5 / 3 check M6 8L7.5 9.5L10.5 6.5, which sits 0.25 right of centre to keep the lattice, as calendar-check does (tight 1.38 left, detail 0.88 right, standard 1.88 above and below). The 2 / 4 check would leave 0.38 at the sides. Ink 13.1 × 10.1, centred 8, 8. Filled: the card fills, closed along the slot line, the check knocks out and the slot line stays a line. Fluent's tilted ballot over a box is too dense at 16. |
 | text-quote | square; Lucide text-quote / Huge TextQuote (Notion's quote block) on the three-line stack rows 3.5 / 7.5 / 11.5, 0.5 high as text-align. The first row is text-align-left's first line exactly (2.5–10.5). Below it, a vertical quote bar at x 2.5 spans rows 2–3 (7.5–11.5), and two lines 5.5–13.5 run beside it, a standard 1.88 from the bar. Fluent's 99 quote is the existing quote icon. Line glyph: it fills by weight. |
 | copyright | circle; the ring (r 6 at 8, 8) with a C as the ring's glyph: an arc of token's and target's r 3 inner ring, opened 90° on the right with its ends at ±45° (Lucide copyright's opening): M10.121 5.879A3 3 0 1 0 10.121 10.121. The gap to the ring is a standard 1.87. r 2.5 (closer to Lucide's 0.4 ratio) leaves 2.37, a near miss. Filled: the ring fills and the C knocks out (as add-circle). |
-| divide | square; minus's 11px bar (2.5–13.5) with two ⌀2 mark dots on whole-pixel centres at 8, 4 and 8, 11, each a standard 1.94 from the bar (Lucide divide, Phosphor divide). The bar sits at 7.5 rather than minus's 8: with ⌀2 dots on whole-pixel centres, a symmetric standard gap needs a bar on x.5, so the ÷ sits 0.5 high and is crisp at 1× (the three-line stack precedent). Ink 12.12 × 9. Line glyph: it fills by weight, and the dots follow the curve. |
+| divide | square; Lucide divide's proportion (owner, 2026-10-11: the 11px bar read too long and the ÷ didn't read as a division sign): a 9px bar (3.5–12.5, ink 10.12) at 7.5 with two ⌀2.5 dots at 8, 3.75 and 8, 11.25, each a standard 1.94 from the bar, so the dots sit close and read as part of one sign. The dots are a recorded `data-dot="free"` solid (quote's, rocket's precedent): the dots are the sign, and ⌀2 read as specks beside the bar (Lucide's are about 2× its line). The bar sits 0.5 high on x.5 so it is crisp at 1×; dot edges land on the 0.5 grid. Ink 10.12 × 10, a square ÷ like the typographic glyph. Line glyph: it fills by weight. |
 | location-add | vertical; location's pin copied exactly with its hole replaced by the 4px + (6–10 × 4.5–8.5), centred in the head at 8, 6.5. Inside placement, because the pin is a closed shape whose head holds the + with tight 1.63 at each arm (Fluent location_add, Phosphor map-pin-plus, Lucide map-pin-plus-inside), as bookmark-add. Lucide's corner + beside the pin would cut the pin's outline, which is its identity. Filled: the pin fills and the + knocks out. |
 | arrow-up-right-circle | circle; arrow-up-circle's ring copied exactly, with its contained arrow turned 45° onto the lattice: the shaft is 5.5, 10.5 → 10.5, 5.5 and the head M7 5.5H10.5V9 (3.5 legs, the turned 2.5 head's 3.54). It is the same arrow as square-arrow-up-right's, on x.5 so it stays crisp at 1×. The shaft is 7.07 long against the straight 6, the longer of the two lattice choices, as arrow-up-right's 12.7 against 12. Tight 1.34 to the ring at the tip and tail. The other diagonals come from data-rotations arrow-down-right-circle:90, arrow-down-left-circle:180 and arrow-up-left-circle:270 (arrow-up-circle's and arrow-up-right's naming). Filled: the ring fills and the arrow knocks out. |
 
@@ -4691,7 +4691,7 @@ every letter and number, and a justification for each reviewed icon's filled tre
 | file-audio | Owner: the note looked wrong. A solid r 1.5 head, a stem on its right edge and a shallow flag (slope 0.25), as Fluent's and Phosphor's. |
 | file-zip, folder-zip | Owner: the pull overlapped the teeth. The pull stands a detail gap below the teeth; file-zip keeps two teeth to make room; folder-zip's four teeth are unchanged and its pull hangs 1.5 below the folder. |
 | form | Owner: the lines weren't evenly spaced from the page edges. Margins of 3 on the top, left and right; lines 2 apart (M5.5 5.5H8.5M5.5 7.5H8.5M5.5 9.5H7), clear of the pen. |
-| divide | Replace toward Lucide: line M2.5 7.5H13.5, ⌀2 dots at 8, 3 and 8, 12. |
+| divide | Replace toward Lucide: line M2.5 7.5H13.5, ⌀2 dots at 8, 3 and 8, 12. Follow-up (owner, 2026-10-11: line still too long, didn't read as ÷): bar 3.5–12.5, ⌀2.5 dots at 3.75 / 11.25 (`data-dot="free"`). |
 | fingerprint | Replace toward Phosphor: concentric tops (r 1.25 / 3.75 / 6.25 about 8, 8), lower ends on arcs about a point to the left, breaks as Phosphor's; three ridges at the approved 2.5 pitch (Phosphor's 2 fails the filled gap). |
 | gavel | Replace toward Phosphor: a hollow block between two round-ended end bars, an outlined handle; filled, the parts are solid and the walls gaps. |
 | gift-card | Replace toward Fluent: ribbons at x 6.5 and y 7.5, a bow of two r 1 loops above the crossing and two 45° tails below. |
@@ -4700,3 +4700,240 @@ every letter and number, and a justification for each reviewed icon's filled tre
 | paint-roller | Replace toward Lucide: a 9 × 3 roller, Lucide's handle path, a 3 × 4 grip under it. |
 | switch-camera | Replace toward Lucide: the frame broken into two chasing halves with chevrons, a lens in the centre; filled, the lens fills. |
 | table, table-cells-merge, table-cells-split | Owner: wider like Phosphor. Landscape 12 × 9 frame, three equal rows, a narrow first column; merge and split (toward Fluent) share the frame: merge a header strip and a ↔ across the body, split a header divider and a floating bar. |
+
+
+## Owner review round 12, 2026-10-12
+
+The review page reopened every icon that draws a letter, digit or sign (53, in the type audit's tiers) and divide, and
+added a side-by-side view of the whole filled set. 57 decisions: 53 approvals (the type set, divide, chat, chat-add,
+dismiss) and four replacements. No notes on the set as a whole.
+
+| name | change |
+|---|---|
+| at | Fluent mention (owner: the a too big, the filled negative space too small). The a is an r 2 bowl at 8, 8 (was r 3; 0.39 of the ring's width, Fluent's ratio) with its stem on the bowl's right side from 6, and the tail an r 2 hook to 14, 9 before the ring (M10 6V9A2 2 0 0 0 14 9V8A6 6 0 1 0 11 13.196). Every pocket is 2.88 in the outline and 2.5 filled (were 1.88 and 1.5). Round 12b: the owner kept this a (the same r 2 a as case-lower, case-sensitive and whole-word) over an r 2.5 one. |
+| quote | Fluent text_quote's tail (owner: the curve rose too steeply from the round part; keep opening marks). Opening marks ("66"), Fluent's closing mark turned 180°: the ⌀4 disc (r 1.438 traced and filled, `data-dot="free"`) at 5, 10 and 11, 10, the tail leaving the disc's left side straight up and bending gently to its end 1.06 right of the disc's centre (C+0 −2.115, +0.423 −3.808, +2.115 −5.5: round 12b, owner "the tails are maybe a bit too long", the curve scaled to 5.5/6.5 so it keeps its shape). Ink 10 × 8.06, centred. |
+| sort-alpha | Fluent text_sort_ascending (owner: the A too short). The A is 5 tall and 5 wide (2–7, apex 4.5, 2 with the r 0.5 fillet; crossbar 2.75–6.25 at 5.5), Fluent's larger A over a 4 × 4 Z; the gap to the Z is tight (1.42). The arrow runs 2.5–13.5 with the 2.5 head. |
+| strikethrough | Phosphor text-strikethrough (owner: the lower half very slightly wider, like the B). The upper bowl keeps rx 3.5; the lower is rx 4 (4–12), both ry 2.75, meeting at 8, 8 with horizontal tangents; the tail ends at 30° on the wider bowl (4.536, 12.125). |
+
+## Optical size pass, 2026-10-12
+
+Owner: "work on refining the optical size and balance of all the icons, to make sure they all are appropriately and
+accurately sized". All 729 drawings (79 turns and mirrors excluded) were measured: ink box against the keyline, and the
+apparent size (the square root of the ink's convex-hull area, `--audit`) against the median of icons with the same
+keyline and fill type. The medians agree (square solids 11.47, circle solids 11.69: rings 2% larger, as designed). Every
+candidate more than 8% off its class was then judged at 16 / 24 / 32 beside the four keyline references (info, square-plus,
+document, folder).
+
+Most measured outliers are right by nature and stay: narrow or pointed objects (mic, the B, send, navigation, pencil),
+open line glyphs (minus, chevrons, git-commit), the "-off" icons (the slash reaches the corners) and sparse spreads (atom,
+scissors). Dense icons (bot hats, people) read in balance at their size.
+
+**The rule found:** a closed rectangular frame never exceeds the shared frame of its keyline, because a rectangle that
+fills its box carries far more mass than a free silhouette of the same width. Square frames are square-plus's 2.5–13.5
+(hull area 140); horizontal frames are at most 13 × 9 (vault, mail) or 12 × 10 (id-card), folder's area (134); vertical
+frames are the page (9 × 12) or the phone (9 × 13, 136). Free silhouettes (cloud, tree, trophy) may still reach the
+13 × 13 keyline.
+
+| name | change | hull area |
+|---|---|---|
+| server | Two units 11 × 4.5 (2.5–7 and 9–13.5, r 1.5) a detail 0.875 apart, lights at 4.75 / 11.25; was 12 × 4.5 on 2–14. | 169 → 144 |
+| server-cog | server's units; the gear at 11.5, 11.5 (0.5 left and down so it clears the top unit and stays centred), the lower unit's bite concentric with it. The filled hub's sliver report predates the change. | 164 → 144 |
+| piano | The frame 2.5–13.5 (r 2); the black keys unchanged, so the side pockets match the middle one (0.875). | 165 → 140 |
+| film | The frame 2.5–13.5; the sprocket strips 2.5 wide (were 3), the holes at 5 / 8 / 11. | 165 → 140 |
+| bandage | Both bands 0.5 shorter at each end (end centres 4.75 and 11.25, r 2.25 unchanged): ink 12.12 square. | 164 → 139 |
+| keyboard, keyboard-off | id-card's 12 × 10 frame (2–14); keys on a 2.5 pitch (4.25 … 11.75), the lower row at 5.25 / 8 / 10.75 so it clears the sides by a standard gap. | 150 → 139 |
+| gif, markdown | vault's 13 × 9 frame (3.5–12.5); the letters unchanged (approved in round 12), now a detail 0.875 from the frame. The G's arc carries its top point so the lint measures that gap exactly. markdown's arrow ends at 10 (a tip at 10.5 cannot sit on the 45° lattice). | 150 → 136 |
+| pipeline | 12 wide (caps at 2–5 and 11–14), the height unchanged. | 152 → 141 |
+| chess-rook | 12 tall (2–14): the crown 0.5 lower, the base 0.5 higher; the body tapers over 4 (was 5). | 148 → 137 |
+
+Kept, with reasons: **qr-code** (168) cannot lose a pixel: on an 11 frame the finders' cores fall off the grid or sit 0.44
+from their rings. **calculator** (150) at 12 tall cannot keep its larger display and six keys on the gap scale (every
+arrangement misses by 0.04–0.3). **gamepad** (148) cannot narrow without leaving the 45° lattice, and a shorter top leaves
+it 0.25 low. **diamond** reads smaller than the square frame, but its vertices are already the furthest lattice points in
+the drawing area. **breakpoint** (r 4.5) stays smaller than ellipse (r 6), which is the plain circle. **settings** sits a
+pixel inside its keyline, as dense shapes do.
+
+## Owner review round 12d, 2026-10-12
+
+The 43 icons redrawn in round 11 were reviewed: 30 approved, 13 changed. Every icon below is in review again on the
+review page (version 54) with the 11 from the optical size pass.
+
+| name | change |
+|---|---|
+| bug-off | Owner: the middle leg on the right is incorrect for filled. Filled: the gap above the slash left a spur of fill under the right middle leg's root, so the leg looked bent. The spur is cut away flush with the leg's centre-line; the outline is unchanged. |
+| file-audio | Owner: music note still looks incorrect, look at lucides music note. Lucide's note: an open ring head at the page's lower-left, overhanging the edge like file-search's lens, a tall stem and Lucide's sloped flag. The page is cut round the head. |
+| file-question | Owner: question mark top part seems too small. The ? hook is 20% larger (r 0.9, was 0.75). It is as large as fits between the fold and the page's left edge with the dot still 2.25 below. |
+| file-zip | Owner: put the other tooth back. The third tooth is back (your round-10 drawing). The pull is 1 shorter so it clears the teeth by a detail gap instead of overlapping them. |
+| folder-zip | Owner: i like the before, just the zipper itself overlapped the teeth just slightly. Back to the earlier drawing you liked; only the pull is 1 shorter, so it clears the teeth by a detail gap. |
+| form | Owner: are the lines too close together now?. Yes, they were at the closest gap the set allows. The lines are 3 apart again (5.5, 8.5, 11.5), the standard spacing, with the 3 margins kept; the last line is a little shorter so it clears the pen. |
+| gavel | Owner: the handle part is too small/short. Phosphor's proportions: the handle is 15% longer and the head's end bars shorter, so it still fits the keyline. |
+| gem | Owner: copy fluent exactly. Fluent's premium: a flat top, a wide girdle at 6.5, facets from the top to the girdle and down to the tip. Filled follows Fluent's filled cut: the same drawing at the heavier weight, with the facets open. |
+| globe | Owner: copy fluent exactly for both filled and monoline. Fluent's globe: latitudes at 5.5 and 10.5, and a wider lens through both poles (2.5 from centre at the equator). Filled: a solid disc with the lens and latitudes knocked out, as Fluent's. |
+| hand-wave | Owner: (fix filled: visual and stroke error). Filled: each fingertip touched the next finger's edge, so the tips merged into a mitten. The separators now continue 1.6 up each shared edge, so the fingers part like Phosphor's. The outline is unchanged. |
+| kanban | Owner: the column widths should be the same. Three equal 4-wide columns. The icon sits 0.5 right of centre so every column edge stays sharp at 1×. |
+| umbrella | Owner: base the design off of what the globe icon doesn for the lines. The canopy is the globe's top half, so its ribs are now the globe's lens: from the tip down to 5.5 and 10.5. |
+| globe-off | Follows the new globe (lens and latitudes), split at the slash as before. |
+
+Construction notes: bug-off's filled cut is `M10.5 8.5H12.5V10.5Z` (inside the slash gap, so the main body is untouched).
+hand-wave's cuts are filled-only `gap`s from each valley 1.6 along the shared edge (the fingertip semicircles are tangent
+to the next finger's edge, so their strokes merge for the whole tip). file-audio's page fill follows an r 3.75 overlap cut
+round the r 1.5 head with r 0.75 fillets at both convex points; the stem and flag are ink with a `halo`. gavel: head centre
+8.25, 7.25, end bars 4.24 long (b 1.5), the handle's end unchanged at 3, 12.5. gem: vertices 4–12 at 2.5, girdle 2–14 at
+6.5, tip 8, 13.885, r 0.5 fillets; no filled roles, so it fills by weight (Fluent's premium filled cut). globe: lens arcs
+r 8.45 through 8, 2 and 8, 14 (centres 13.95, 8 and 2.05, 8); globe-off's lens meets the slash at 5.793 and 10.207 and the
+5.5 latitude at 10.122. Kept: globe-off's filled lower lens cell reads as an island in the sliver check at 16 only (the same
+cell as globe's, closed here because the 10.5 latitude stops at the slash); the zips keep the teeth slivers of the drawing
+the owner preferred.
+
+## Owner review round 12e, 2026-10-12
+
+24 decisions: 15 approved (bandage, chess-rook, file-audio, file-question, film, gavel, gem, gif, kanban, keyboard, markdown,
+piano, pipeline, server, server-cog), 9 changed. The page had first gone out (version 54) showing 13 redraws as their old
+drawings, because its data was built before the components were regenerated; version 55 fixed it and the data script now
+refuses to build from a stale generation.
+
+| name | change |
+|---|---|
+| bug-off | Owner: "the stroke is still poking through on the leg side into the negative space". Filled: the right middle leg now starts clear of the slash's gap (filled-only copy of the legs, as the other off icons do), and the cut under its root no longer leaves a hairline at 32. The outline is unchanged. |
+| file-zip | Owner: "the zipper part should be touching the teeth". The pull's top now touches the last tooth (they meet edge to edge). |
+| folder-zip | Owner: "the zipper part should be touching the teeth". The pull's top now touches the last tooth (they meet edge to edge). |
+| form | Owner: "the bottom stroke is too close to the bottom". Margins of 3 on all four sides now: the lines are 2.5 apart (5.5, 8, 10.5), between the earlier 2 and 3. |
+| globe | Owner: "still wrong, copy fluent". The difference was the meridian: Fluent's is an ellipse that meets the ring smoothly at the poles (rounded top when filled); mine was two pointed arcs. Now the ellipse, 2.5 from centre. |
+| globe-off | Owner: "(replace toward Fluent)". Follows the globe's ellipse meridian. |
+| umbrella | Owner: "(fix filled: negative space and visual error)". The ribs are the globe's new ellipse, so they meet the canopy's tip smoothly; the notch and slivers at the tip are gone. |
+| hand-wave | Owner: "copy phosphors filled, or find out what the current area hand icon looks like". Filled now follows Area's hand: each finger and the thumb a strip with a round tip at the outline's height, parted by U notches that end where the outline's finger lines end, so the fingers stand apart like Phosphor's. The outline is unchanged. |
+| keyboard-off | Owner: "can you add more dots back in". One more key, lower left in line with the top row's first key. keyboard's other keys sit too close to the slash (0.63, under the set's smallest gap) or would merge into its filled gap. |
+| file-audio | Owner: "should the filled music note also be filled on the bottom?". Yes: filled means more ink, so the head is solid in the filled variant (Fluent and Phosphor fill it too). The outline keeps Lucide's open head. |
+
+Construction notes: globe's lens is the ellipse `A2.5 6` through the poles (Fluent's meridian, tangent to the ring at the
+poles); umbrella's ribs are its top half; globe-off's lens meets the slash at 5.692 and 10.308 and the 5.5 latitude at
+10.273. hand-wave's filled `fill` follows hand.svg: strips 0.5625 wide (the 8.25 span less three 2-wide U notches) with
+r 0.281 tips at the outline's tip heights, notch bottoms 0.5 below the finger lines' ends, the thumb's notch 0.5 below
+its valley; finger lines are outline-only, the crease stays a knockout. bug-off's legs are outline-only plus a filled-only
+`stroke` copy whose right middle leg starts at 11.5; its spur cut is `M9.5 8.5H12.5V11.5Z` (inside the slash gap at every
+size). The zips' pull tops sit 0.0125 into the last tooth at 16px (a join; the lint reads an exact touch as a 0 gap).
+form's middle line sits on a whole pixel (8), slightly soft at 1×, for equal margins.
+
+## Owner review round 12f, 2026-10-12
+
+10 decisions: file-zip, folder-zip and form approved; 7 changed.
+
+| name | change |
+|---|---|
+| bug-off | Owner: "still peaking a bit into the negative space". Filled: the right middle leg now starts at 11.75, where its round end clears the slash's gap at every size (it reached 0.13 into it). |
+| file-audio | Owner: "note visual negative space error outline". Filled: the note is no longer ink with a cut round it (which read as an outline). It sits wholly on the page as a cutout, like the clouds' arrows: a solid head, the stem and the flag knocked out, the page whole. The outline keeps Lucide's overhanging note. |
+| globe | Owner: "closer but not quite". Measured against Fluent's meridian scaled to Area's ring: it runs nearly straight through the middle and turns into the poles with fuller shoulders than an ellipse. Now that curve. |
+| globe-off | Owner: "(replace toward Fluent)". Follows the globe's new meridian, split at the slash as before. |
+| hand-wave | Owner: "thumb negative space looks off". Filled: the thumb crease now starts from the centre of the notch between the index finger and the thumb (it began half a unit off to one side, leaving a jog). |
+| keyboard-off | Owner: "more dots?". A fourth key, row 2 right (11.5, the closest spot clear of the slash and its filled gap). keyboard's own positions there sit too close to the slash. |
+| umbrella | Owner: "(replace toward Fluent)". Fluent's umbrella: a slightly flattened dome with a three-scallop hem, no ribs, the handle hooking left. Filled: the canopy is solid. |
+
+Construction notes: globe's meridian halves are cubics `M8 2C5.35 2 5.5 7.4 5.5 8C5.5 8.6 5.35 14 8 14` and the mirror,
+fitted to Fluent's globe_16 meridian scaled by 6 / 5.5 (offsets 2.29 at y 4.73, 2.05 at 4.03, 2.5 at the equator; the
+extreme kept on 5.5 for a crisp vertical). globe-off splits them by de Casteljau at the slash (5.618, 10.382) and the 5.5
+latitude (10.366). umbrella: dome `A6 5.5` from 2 to 14 at 7.5, three r 2.5 scallops (dips at 6 and 10, peaks 1 higher),
+the stem from the middle scallop's peak 8, 6.5 to 12.5 and an r 1.5 hook to 5, 12.5. file-audio's filled note is `inset`:
+a disc of ink radius 1 at 6.25, 11.25, the stem at 6.75 to 8.75 and the flag to 8.75, 9.75, at least a line weight from
+the page's edges and the fold.
+
+## Owner review round 12g, 2026-10-12
+
+umbrella approved (Fluent's); 6 changed.
+
+| name | change |
+|---|---|
+| bug-off | Owner: "still a small notch/gap between the negative space and the leg stroke, its not cohesive.". Filled: the right middle leg is now part of the solid, so the slash's gap cuts it flush: no round end and no strip of fill between the gap and the leg. |
+| file-audio | Owner: "revert back to the other design with the larger note". Back to the larger overhanging note: in the filled variant the head is solid, the note is ink, and the page is cut round it. |
+| globe | Owner: "almost but not quite, the middle lines are too round. the ends should be pointed sharp, can you literally trace the ink of the fluent version.". Traced: the meridians follow the midline of Fluent's ink scaled to Area's ring. They run nearly straight, then merge into the ring 0.9 either side of each pole, so the cells beside them end in sharp points and the middle cell has Fluent's domed top. The latitudes stay at 5.5 and 10.5 (Fluent's scaled would be 5.27 and 10.73, soft at 1×). |
+| globe-off | Owner: "(replace toward Fluent)". Follows the traced meridians, split at the slash. |
+| hand-wave | Owner: "negative space still off". Filled now follows Phosphor's: the whole hand is solid and each finger is parted by a line-weight slot that opens between the fingertips and ends where the outline's finger line ends; the thumb's slot runs into the crease. |
+| keyboard-off | Owner: "can you add all the dots? or most of them?". The outline now has all seven of keyboard's keys and its full space bar, with the slash crossing them flat as it crosses other base icons (a recorded exception for keys beside the slash). Filled keeps the keys clear of the slash and its gap (three) and the bar up to the slash. |
+
+Construction notes: globe's meridian halves are cubics from the ring point at 5° (7.477, 2.023), leaving along the ring's
+tangent, to the equator at 5.262: `M7.477 2.023C6.78 2.084 5.262 4.3 5.262 8` and its mirrors, fitted to the midline of
+Fluent globe_16's meridian ink scaled by 6 / 5.5 (largest error 0.03). keyboard-off: `data-gap="slash"` (new, generator)
+skips the gap check between the shared slash and the base icon's parts; outline keys are outline-only, filled keys are
+filled-only round cuts. hand-wave's filled slots are `inset`s along each shared finger edge from outside the tips to the
+finger lines' ends (and into the crease), so the cut is one line weight at every size. bug-off's right middle leg is a
+filled-only `fill` line inside the masked solid; the sliver check reads that leg as a thin strip of fill (a false
+positive).
+
+## Owner review round 12h, 2026-10-12
+
+bug-off approved; 5 changed.
+
+| name | change |
+|---|---|
+| globe | Owner: "still not right, sent images in chat (the filled meridians cut the bottom; trace Fluent's ink exactly)". Fluent's globe_16 ink, exactly: its regular path is the outline and its filled path the filled variant (converted to absolute commands, geometry unchanged). It keeps Fluent's size (ink 12, the r 5.5 ring), so it reads a little smaller than Area's r 6 rings, and as solid ink it scales whole rather than thinning on the size curve above 16. |
+| globe-off | Owner: "(replace toward Fluent)". The traced globe whole under the shared slash; filled, Fluent's filled ink parted from the slash, with the island of the middle cell beside the slash's gap cut away. |
+| hand-wave | Owner: "(replace toward Fluent)". Back to the Fluent construction: Area's hand moved under bell-ring's two motion arcs (the drawing before round 11), with hand's filled finger columns. |
+| keyboard-off | Owner: "add the dots to filled too?". All seven keys are in the filled variant now, under the slash as in the outline. |
+| file-audio | Owner: "sent picture in chat (the head cut into a crescent)". The head is a front part now, so the cut round the stem can no longer bite it: a round solid head. |
+
+Recorded exception: globe and globe-off are Fluent's ink as solid shapes (`fill="currentColor" stroke="none"`), the
+owner's explicit instruction ("the fluent globe ink should be exactly traced and replicated"). They don't follow the size
+curve and keep Fluent's 12 ink. `abs-path.py` (2026-10-12 review folder) converts a path to absolute commands. globe-off's
+filled cut `M7.5 6H10.5V9Z` lies inside the slash gap at every size and removes the middle cell's island.
+
+
+## Accessible name and right-to-left, 2026-10-12
+
+Owner: "continue working with your recs" (production gap 3 in `docs/research/icon-review/2026-10-10/README.md`).
+Evidence, read at pinned sources: `@fluentui/react-icons@2.0.344` (microsoft/fluentui-system-icons@f126001,
+`src/core/useBaseIconState.ts` 54–64, `scripts/convert.utils.js` 149), `lucide-react@1.55.0` (`Icon.ts` 67,
+`hasA11yProp.ts` 9), `@phosphor-icons/react@2.1.10` (`IconBase.tsx` 39–43), `@heroicons/react@2.2.0`,
+`@primer/octicons-react@19.40.0` (`renderOcticon.tsx` 47–58), Google's Material icons guide
+(google/material-design-icons@6eed39a `index.html` 423–525), Material's m2 Bidirectionality page and Apple's HIG
+"Right to left".
+
+- **Decorative by default.** Every library hides an icon from assistive technology unless it is named. Area's
+  components render `aria-hidden="true"` and `focusable="false"` as before.
+- **Named: `title`, `aria-label` or `aria-labelledby`.** Any of them drops `aria-hidden` and adds `role="img"`
+  (Fluent and Octicons; Lucide drops `aria-hidden` without a role). `title` becomes `aria-label` as in Fluent: no
+  `<title>` element, which would show the browser's own tooltip (PRODUCT_UI: Area Tooltips, never native titles).
+  Heroicons keeps `aria-hidden` on a titled icon, which hides the name; not copied. `focusable` is `true` only with
+  a `tabIndex` of 0 or more (Octicons). Props passed through come last and win.
+- **Right-to-left: the library knows which icons mirror.** Fluent marks each icon (`directionType: mirror`) and
+  flips those; Phosphor only has a caller's `mirrored`; Lucide, Heroicons and Octicons have neither. Area marks its
+  icons in `assets/area-icons-pilot/rtl.json` and gives the root `data-area-rtl="mirror"`; `[data-area-rtl="mirror"]:dir(rtl) { scale: -1 1; }`
+  flips them (in `@area/styles` base, and `@area/icons/rtl.css` for use without it). `:dir()` reads the inherited
+  direction, so there is no context to provide and the server renders the same markup (Fluent and Phosphor read a
+  React context, wrong on the server unless it is provided there too). `scale`, not `transform`, so a caller's
+  transform still applies. `mirrored` overrides: `true` flips inline (`scale: -1 1`), `false` never flips.
+- **Which icons mirror (23):** a concept tied to reading direction whose counterpart Fluent or Material mirrors,
+  and its family: reply, reply-all, forward, send, undo, redo, indent, outdent, list-bullet, list-plus, list-minus,
+  list-x, list-collapse, list-tree, table-of-contents, text-wrap, star-half, backspace, chevron-first,
+  chevron-last, debug-step-over, trending-up, trending-down. Each reason is in `rtl.json`.
+- **Never mirrored:** names of a literal direction (arrow-left, chevron-right, panel-left, text-align-left: Fluent's
+  React icons don't flip them and Apple keeps controls that "refer to an actual direction"; the caller picks the
+  icon by meaning), circular arrows and clocks (rotate, sync, repeat, history: "clocks still turn clockwise", m2),
+  slashes, checkmarks, letters and digits (list-numbered, list-checklist: Fluent's `unique`; the question mark
+  mirrors in Arabic and Farsi but not Hebrew, so help stays), media transport (tape direction, m2) and objects.
+  Fluent also flips arrow_up, calendar and folder_open because of its own drawings' details; Area's don't have them.
+  Symmetric drawings (import, list, screen-share, sort's paired arrows) would not change.
+- **Checks:** `npm test -w @area/icons`: decorative and named output, every component's `data-area-rtl` against
+  the metadata, `mirrored` both ways, and the CSS rule.
+
+## Keywords and names, 2026-10-12
+
+Production gap 4. `@area/icons/meta` and `icons.json` gain `keywords` and `names` (`lucide`, `phosphor`, `fluent`,
+`material`), and `rtl`. Built by `apps/docs/scripts/icon-keywords.mjs` into `assets/area-icons-pilot/keywords.json`
+(committed, so the generator needs no network); sources pinned in the file: `lucide-static@1.55.0` (tags for 1,877
+icons), `@phosphor-icons/core@2.1.1` (1,512), `@fluentui/svg-icons` (names) and `@material-symbols/metadata@0.48.0`
+(names only; no tags published).
+
+- **Names:** the counterpart each drawing was compared with (`docs/research/icon-audit/area-map.json`, 597 icons),
+  else the library's icon of the same name, or of the name with a word swapped for the library's word. The swaps
+  are measured from the map (person→user 6 times, add→plus 9, chat→message 5, remove→minus 7, off→slash 7 …) and
+  listed in `keywords-area.json` `$words`. Material has no map: its name is the first of the Area, Fluent or Lucide
+  names it publishes. Coverage: Lucide 711, Fluent 559, Phosphor 530, Material 249 of 808.
+- **Keywords:** the counterparts' Lucide and Phosphor tags and their names' words, the concept the component demos
+  label it with ("find people" for person-search), the name with its words swapped ("user search"), and Area's own
+  words for the 36 drawings no library has (the bot personas, sparkle composites, padding, sides, token …). A tag
+  that is another icon's name in Area or any library is dropped ("redo" on undo, "target" on add); `$drop` removes
+  the few tags that name a different concept (Lucide's plus carries its crosshair words; Phosphor's list tags reach
+  menu) or misspell one.
+- **The app's Icons search** reads keywords and names with the name (`apps/desktop/src/pages/icons.tsx`); the
+  Inspector lists them under Search.
+- Not done: Material Symbols' own tags (only on fonts.google.com, not in a package) and a ranking (the app's search
+  filters).

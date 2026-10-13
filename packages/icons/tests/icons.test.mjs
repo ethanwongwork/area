@@ -61,3 +61,47 @@ test("raw SVGs at 16, 20 and 24, and a sprite symbol for each icon", () => {
   }
   assert.ok(existsSync(dist + "icons.json"));
 });
+
+test("decorative by default; title, aria-label or aria-labelledby name it as an image", () => {
+  const { SearchIcon } = main;
+  const html = props => renderToStaticMarkup(createElement(SearchIcon, props)).match(/^<svg[^>]*>/)[0];
+  assert.match(html({}), /aria-hidden="true"/);
+  assert.doesNotMatch(html({}), /role=/);
+  assert.match(html({}), /focusable="false"/);
+  for (const [props, name] of [[{ title: "Search" }, 'aria-label="Search"'], [{ "aria-label": "Find" }, 'aria-label="Find"'], [{ "aria-labelledby": "l" }, 'aria-labelledby="l"']]) {
+    const tag = html(props);
+    assert.match(tag, /role="img"/);
+    assert.doesNotMatch(tag, /aria-hidden/);
+    assert.ok(tag.includes(name), tag);
+  }
+  assert.doesNotMatch(renderToStaticMarkup(createElement(SearchIcon, { title: "Search" })), /<title>/, "no native tooltip");
+  assert.match(html({ tabIndex: 0, title: "Search" }), /focusable="true"/);
+});
+
+test("icons tied to reading direction mirror in right-to-left text; mirrored overrides", () => {
+  const rtl = icons.filter(i => i.rtl === "mirror").map(i => i.name);
+  assert.ok(rtl.includes("reply") && rtl.includes("undo") && rtl.includes("indent"));
+  for (const literal of ["arrow-left", "chevron-right", "rotate", "check", "search"]) assert.ok(!rtl.includes(literal), literal);
+  const tag = (C, props = {}) => renderToStaticMarkup(createElement(C, props)).match(/^<svg[^>]*>/)[0];
+  for (const meta of icons) {
+    const mod = review[meta.component] ? review : main;
+    for (const C of [mod[meta.component], mod[meta.filledComponent]])
+      assert.equal(/data-area-rtl="mirror"/.test(tag(C)), meta.rtl === "mirror", meta.name);
+  }
+  const { ReplyIcon, SearchIcon } = main;
+  assert.doesNotMatch(tag(ReplyIcon, { mirrored: false }), /data-area-rtl|scale/);
+  assert.match(tag(ReplyIcon, { mirrored: true }), /style="scale:-1 1"/);
+  assert.match(tag(SearchIcon, { mirrored: true, style: { color: "red" } }), /style="scale:-1 1;color:red"/);
+  assert.match(readFileSync(new URL("../rtl.css", import.meta.url), "utf8"), /\[data-area-rtl="mirror"\]:dir\(rtl\) \{ scale: -1 1; \}/);
+});
+
+test("every icon has search keywords, never its own name or another icon's", () => {
+  for (const i of icons) {
+    assert.ok(i.keywords.length > 0, `${i.name}: keywords`);
+    assert.ok(!i.keywords.includes(i.name), `${i.name}: its own name`);
+  }
+  const by = Object.fromEntries(icons.map(i => [i.name, i]));
+  assert.ok(by["person-search"].names.lucide === "user-search");
+  assert.ok(by.dismiss.keywords.includes("close") && by.add.names.lucide === "plus");
+  assert.ok(!by.undo.keywords.includes("redo"), "a tag naming another icon is dropped");
+});

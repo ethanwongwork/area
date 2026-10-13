@@ -1,0 +1,5 @@
+/* @area/icons: icons tied to reading direction (reply, undo, indent …) carry data-area-rtl="mirror" and mirror in
+   right-to-left text. :dir() reads the direction the element inherits, so it needs no context and renders the same
+   on the server. scale, not transform, so a transform of the caller's still applies. @area/styles has this rule;
+   import this file when you use the icons without it. docs/specs/icons.md, "Accessible name and right-to-left". */
+[data-area-rtl="mirror"]:dir(rtl) { scale: -1 1; }

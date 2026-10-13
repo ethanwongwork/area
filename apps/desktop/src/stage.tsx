@@ -15,6 +15,7 @@ import { Button, CodeBlock, Field, Input, PanelSection, Segmented, Select, Switc
 // @ts-expect-error — the highlighter is authored in JavaScript.
 import { highlight } from "./content/highlight.mjs";
 import type { Config, Playground, PlaygroundControl, PropValue } from "./content/playgrounds.tsx";
+import { APP_SCALE } from "./app-scale.ts";
 
 /** The narrowest the Stage is dragged to: a phone's 320 less the Canvas's margins. */
 const MIN_WIDTH = 288; /* pick */
@@ -79,7 +80,7 @@ export function Stage({ label, code, zoom, replays, children }: StageProps) {
   const lines = code ? code.split("\n").length : 0;
   return (
     <div ref={frame} className="studio-stage" style={narrowed ? { inlineSize: `${width}px` } : undefined}>
-      <div className="studio-stage__head gallery-tile__head" data-area-ui="compact">
+      <div className="studio-stage__head gallery-tile__head" {...APP_SCALE}>
         <span className="gallery-tile__label">{label}</span>
         {narrowed ? <span className="gallery-tile__value">{shown} px</span> : null}
       </div>
@@ -89,7 +90,7 @@ export function Stage({ label, code, zoom, replays, children }: StageProps) {
       {code ? (
         // Keyed by the code, so a long snippet starts as its excerpt each time the Stage changes.
         <CodeBlock key={code} className="studio-stage__code" flush lineNumbers={false} language="tsx"
-          html={highlight(code)} collapsible={lines > EXCERPT} defaultCollapsed={lines > EXCERPT} data-area-ui="compact" />
+          html={highlight(code)} collapsible={lines > EXCERPT} defaultCollapsed={lines > EXCERPT} {...APP_SCALE} />
       ) : null}
       <div className="studio-stage__handle" role="separator" aria-orientation="vertical" aria-label="Stage width"
         aria-valuemin={MIN_WIDTH} aria-valuemax={room} aria-valuenow={shown} aria-valuetext={`${shown} pixels`} tabIndex={0}

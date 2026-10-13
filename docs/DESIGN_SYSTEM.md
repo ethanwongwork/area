@@ -17,8 +17,11 @@ Reuse a semantic role when the job is the same. Add a component token when the r
 stable meaning and needs independent customization. Give it a sensible existing-token
 fallback, a consumer and checks. Do not add aliases merely to hide unexplained literals.
 
-The registered axes are `theme`, `neutral`, `accent`, `action`, `selection`, `ui`,
-`radius`, `surface` and `motion`. UI scale combines type and density. `data-area-contrast` is a separate
+The registered axes are `theme`, `neutral`, `accent`, `action`, `selection`, `type`,
+`density`, `radius`, `surface` and `motion`. Type size (12 to 16) and density (Compact, Default,
+Comfortable) are separate; `emit/base.ts` derives heights, gaps, insets and marks from both, and
+`data-area-ui` remains a shorthand for the two (owner, 2026-10-12;
+[research](research/ui-size-scale-2026-10-12.md)). `data-area-contrast` is a separate
 accessibility preference. See [Theming](THEMING.md) for inheritance and custom values.
 
 Axis namespaces are disjoint. Interactions belong in `packages/tokens/src/emit/base.ts`;

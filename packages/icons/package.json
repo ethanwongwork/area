@@ -2,7 +2,9 @@
   "name": "@area/icons",
   "version": "0.0.0",
   "type": "module",
-  "sideEffects": false,
+  "sideEffects": [
+    "*.css"
+  ],
   "description": "Area icons: one React component per icon (outline and filled), raw SVGs, a sprite and metadata.",
   "exports": {
     ".": {
@@ -27,10 +29,12 @@
     },
     "./icons.json": "./dist/icons.json",
     "./sprite.svg": "./dist/sprite.svg",
+    "./rtl.css": "./rtl.css",
     "./svg/*": "./dist/svg/*"
   },
   "files": [
-    "dist"
+    "dist",
+    "rtl.css"
   ],
   "scripts": {
     "generate": "node ../../apps/docs/scripts/gen-pilot-icons.mjs --package",

@@ -1,0 +1,32 @@
+{
+ "globe": {
+  "verdict": "replace",
+  "notes": "still not right, sent images in chat (the filled meridians cut the bottom; trace Fluent's ink exactly)",
+  "library": null,
+  "change": "Fluent's globe_16 ink, exactly: its regular path is the outline and its filled path the filled variant (converted to absolute commands, geometry unchanged). It keeps Fluent's size (ink 12, the r 5.5 ring), so it reads a little smaller than Area's r 6 rings, and as solid ink it scales whole rather than thinning on the size curve above 16."
+ },
+ "globe-off": {
+  "verdict": "replace",
+  "notes": "(replace toward Fluent)",
+  "library": null,
+  "change": "The traced globe whole under the shared slash; filled, Fluent's filled ink parted from the slash, with the island of the middle cell beside the slash's gap cut away."
+ },
+ "hand-wave": {
+  "verdict": "replace",
+  "notes": "(replace toward Fluent)",
+  "library": null,
+  "change": "Back to the Fluent construction: Area's hand moved under bell-ring's two motion arcs (the drawing before round 11), with hand's filled finger columns."
+ },
+ "keyboard-off": {
+  "verdict": "fix",
+  "notes": "add the dots to filled too?",
+  "library": null,
+  "change": "All seven keys are in the filled variant now, under the slash as in the outline."
+ },
+ "file-audio": {
+  "verdict": "fix",
+  "notes": "sent picture in chat (the head cut into a crescent)",
+  "library": null,
+  "change": "The head is a front part now, so the cut round the stem can no longer bite it: a round solid head."
+ }
+}
