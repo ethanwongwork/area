@@ -5,6 +5,20 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Elevation setting (2026-10-14, branch `claude/component-display-ui-research-11dc77`, local commits)
+
+- Owner: "add elevation as an option ... flat, minimal, normal, and higher contrast ... applied consistently
+  across all components". New axis `elevation` (`packages/tokens/src/axes/elevation.ts`): Flat, Minimal
+  (default), Soft (Notion, the old default), Standard (Fluent 2), Strong (Fluent 2 darker). Five roles that
+  components name: `shadow-control`, `-resting`, `-tooltip`, `-float`, `-modal` (Dialog, Drawer and Command palette
+  moved off float); every role is two layers in every preset; "no lift" is a transparent shadow. Surface axis is now
+  stroke only: Outlined / Borderless (was Elevated); flat / raised presets removed. Research:
+  `docs/research/elevation-2026-10-14.md`; rule: DESIGN_SYSTEM.md "Elevation". App: Elevation select in the
+  Inspector's Canvas settings and on the Language tab. Review: https://claude.ai/artifact/43C4ijRqFNdwoXmmKTBVcb.
+- Checks: npm test (24,254 incl. registry), contracts 14, cohesion 8 (every role two layers, no `none`, each
+  component on its role), React suites (Indicator's known docs-dist failure only), desktop typecheck and build.
+  Not run: build:docs / audit.
+
 ## Minimal elevation (2026-10-13, branch `claude/component-display-ui-research-11dc77`, local commits)
 
 - Owner: "an extremely subtle, very minimal shadow system ... i barely want to see any shadows". Captures

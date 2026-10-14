@@ -16,6 +16,7 @@ import { ACTION_AXIS, SELECTION_AXIS } from "./emphasis.ts";
 import { MOTION_AXIS } from "./motion.ts";
 import { RADIUS_AXIS } from "./radius.ts";
 import { SURFACE_AXIS } from "./surface.ts";
+import { ELEVATION_AXIS } from "./elevation.ts";
 import { DENSITY_AXIS } from "./density.ts";
 import { TYPE_AXIS } from "./type-size.ts";
 
@@ -29,6 +30,7 @@ export const AXES: AxisDefinition[] = [
   DENSITY_AXIS,
   RADIUS_AXIS,
   SURFACE_AXIS,
+  ELEVATION_AXIS,
   MOTION_AXIS,
 ];
 

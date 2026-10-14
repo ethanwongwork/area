@@ -69,7 +69,7 @@
     /* spec: owner's reference is Figma's 0 0 8 0 at 2%. Area's recipe keeps that halo, drawn
        2px low so it pools under the card, and adds a 1px contact line that gives the lighter
        edge its bottom. Dark needs more ink to register on a dark page. */
-    --_card-shadow: var(--area-shadow-card); /* the Surface axis role (audit S10); none at Flat */
+    --_card-shadow: var(--area-shadow-resting); /* the Elevation axis role (axes/elevation.ts): a resting surface */
     /* spec: owner, neutral 25 for every media fill (#fa); dark takes the 800 rung. */
     --_card-media-fill: light-dark(var(--area-neutral-25), var(--area-neutral-800));
     /* Derived. The content pad is the step from the media's inset to the text column; text
@@ -888,8 +888,9 @@
     border: var(--area-border-width) solid var(--area-border-float);
     border-radius: var(--_dialog-radius);
     background-color: var(--area-bg-surface);
-    /* spec: the floating-surface lift; see Popover and Menu. */
-    --_elevation: var(--area-shadow-float);
+    /* The Elevation axis's modal role: the topmost surface, over the scrim (every system sets its dialog a level
+       above its menus: Material L3 over L2, Fluent shadow64 over 16, Notion 24/48 over 20/24). */
+    --_elevation: var(--area-shadow-modal);
     color: var(--area-fg-default);
     box-shadow: var(--_elevation);
     overflow: hidden;
@@ -1396,10 +1397,10 @@
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
     max-inline-size: calc(var(--area-space-96) * 3);
-    /* spec (minimal elevation, owner 2026-10-13): no lift. ChatGPT's tooltip draws none (2026-10-13 capture:
-       a 1px 12% white edge on its dark fill); the inverted fill separates it in light, the 5% white inset edge
-       in dark. Was Notion's 0 4px 12px -2px. */
-    box-shadow: inset 0 0 0 var(--area-stroke-width) light-dark(transparent, rgb(255 255 255 / 0.05)); /* spec */
+    /* The Elevation axis's tooltip role: no lift at Minimal (ChatGPT's tooltip draws none, 2026-10-13: the
+       inverted fill separates it in light), Notion's 0 4 12 -2 at Soft, Fluent's shadow8 at Standard. Dark keeps
+       its 5% white inset edge whatever the preset. */
+    box-shadow: var(--area-shadow-tooltip), inset 0 0 0 var(--area-stroke-width) light-dark(transparent, rgb(255 255 255 / 0.05)); /* spec */
   }
 
   /* The nested keycap keeps its own 6px corner (kbd.css). Its 20px box is vertically centred by

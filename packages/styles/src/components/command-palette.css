@@ -78,8 +78,8 @@
     border-radius: var(--_palette-radius);
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);
-    /* spec: Dialog's floating lift (Notion floats its palette on 24/48 and 4/12). */
-    box-shadow: var(--area-shadow-float); /* spec */
+    /* The Elevation axis's modal role, as Dialog (Notion's palette is its search dialog: 24/48 and 4/12). */
+    box-shadow: var(--area-shadow-modal);
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
   }

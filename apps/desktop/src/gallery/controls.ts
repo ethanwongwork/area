@@ -6,7 +6,7 @@
  */
 import { DEFAULT_PILLS, PILL_SHAPES } from "@area/tokens/config";
 export interface GalleryControl {
-  axis: "theme" | "type" | "density" | "radius" | "pills";
+  axis: "theme" | "type" | "density" | "radius" | "pills" | "elevation";
   /**
    * Two or three options are a Segmented (Apple and Primer cap segments at 5-7); a longer list of
    * exact settings is a Select, each option naming what it sets (shadcn's radius picker is a menu).
@@ -36,6 +36,12 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = [
     value,
     label: value === "0" ? "0 · Sharp" : value === "pill" ? "Pill" : value === "8" ? "8 · Default" : value,
   })) },
+  // How much surfaces lift (axes/elevation.ts, owner 2026-10-14): five presets, each one system's values. A Select,
+  // as Density: five names do not fit a Segmented beside a label in the 256 Inspector.
+  { axis: "elevation", kind: "select", label: "Elevation", hint: "How much surfaces lift; every component takes its depth from its role", defaultValue: "minimal", items: [
+    { value: "flat", label: "Flat" }, { value: "minimal", label: "Minimal · Default" }, { value: "soft", label: "Soft" },
+    { value: "standard", label: "Standard" }, { value: "strong", label: "Strong" },
+  ] },
   // Which components draw a pill instead of the radius corner (axes/pills.ts), as data-area-pills.
   { axis: "pills", kind: "chips", label: "Pills", hint: "On: a pill. Off: follows Radius.", defaultValue: DEFAULT_PILLS.join(" "), items: PILL_SHAPES.map(value => ({ value, label: value === "field" ? "Fields" : value[0]!.toUpperCase() + value.slice(1) })) },
 ];

@@ -20,7 +20,7 @@
     /* The edge is counted once: content 16 / 24 from the outside, as Untitled's inset ring (owner, review round 2,
        2026-10-09: "make sure gaps, padding, margins are all accurate"; it was 17 / 25). */
     /* The field's edge at the field's width (`stroke-width`): the zone is a control with no shadow, so its edge must
-       stay under the Elevated surface preset (consistency pass 2026-10-12; was `border-width`). */
+       stay under the Borderless surface preset (was Elevated) (consistency pass 2026-10-12; was `border-width`). */
     padding: calc(var(--area-space-16) - var(--area-stroke-width)) calc(var(--area-space-24) - var(--area-stroke-width));
     border: var(--area-stroke-width) solid var(--_edge);
     border-radius: var(--area-radius-surface);

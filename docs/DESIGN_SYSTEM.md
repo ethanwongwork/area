@@ -156,27 +156,31 @@ role paints the same way in every family:
   one feedback set in Badge's order (neutral, info, success, warning, danger) and paint the
   neutral icon muted.
 
-**Elevation.** Minimal (owner, 2026-10-13: "an extremely subtle, very minimal shadow system ... i
-barely want to see any shadows or none"; evidence in `docs/research/elevation-2026-10-13.md`). The edge
-separates; a shadow only hints. Three rules:
+**Elevation.** A setting, the Elevation axis (owner, 2026-10-14; `axes/elevation.ts`,
+`docs/research/elevation-2026-10-14.md`). A component never picks a shadow. It names the role it plays,
+and the preset sets the depth:
 
-- **Nothing at rest lifts.** Fields, controls, Card, Panel, Board card and Tooltip draw no drop shadow
-  by default: `shadow-card`, the resting role, is no lift (Notion's page draws none at rest; ChatGPT's
-  tooltip draws none). Card and Board card keep their edges; Tooltip keeps its 5% white inner edge in dark.
-- **Everything that floats shares one hint.** Menu, Popover, the Select picker, Dialog, Toast, the
-  Calendar and ColorPicker surfaces, Command palette, Drawer and the floating Toolbar take
-  `shadow-float`: Notion's lightest captured lift, `0 8px 12px` and `0 2px 6px` at 2.7% in light, one
-  8% layer in dark, over `border-float` (#eeeeee light, the nearest rung to Notion's 7% popover ring;
-  #4b4b4b dark). A Dialog's scrim does the rest.
-- **Raised thumbs keep contact.** `shadow-1`, a 0.5px contact shadow, stays on the Switch, Slider and
-  Segmented thumbs, the soft Toggle group selection and Badge modern.
+| Role | Components | Flat | Minimal (default) | Soft | Standard | Strong |
+|---|---|---|---|---|---|---|
+| `shadow-control` | Switch, Slider, Segmented thumbs; soft Toggle group selection; Badge modern | none | 0.5px contact | 0.5px contact | Fluent shadow2 | shadow2, darker |
+| `shadow-resting` | Card, Panel, Board card | none | none | Card's 3% halo | shadow4 | shadow4, darker |
+| `shadow-tooltip` | Tooltip | none | none | 0 4 12 −2 | shadow8 | shadow8, darker |
+| `shadow-float` | Menu, Popover, Hover card, Select picker, Toast, Calendar and ColorPicker surfaces, floating Toolbar, Board card actions | none | Notion's chip, 2.7% | Notion's popover | shadow16 | shadow16, darker |
+| `shadow-modal` | Dialog, Drawer, Command palette | none | Notion's popover | Notion's search dialog | shadow64 | shadow64, darker |
 
-"No lift" is a transparent shadow, `0 0 0 0 transparent`, never `none`: a role can sit in a list beside a
-component's own layers (Board card's tone ring, the floating Toolbar's edge), and `none` in a list invalidates
-the whole `box-shadow`, ring and all. Both roles belong to the Surface axis (audit S10): Flat sets them to no lift; Raised and Elevated keep
-the previous default for a product that wants visible depth (Card's 3% halo, owner 2026-09-27, and
-Notion's popover geometry, `0 20px 24px` and `0 5px 8px` in `shadow-color` at full and half strength).
-The Table frame is a required edge (`stroke-width`), so it stays under Elevated.
+Standard is Fluent 2's colours (12% ambient, 14% key; 24 / 28% dark). Strong uses Fluent's Darker colours
+(20 / 24%; 40 / 48% dark), for depth that reads at a glance; it pairs with `data-area-contrast="more"`. Minimal
+is the measured product default (2026-10-13). Nothing at rest lifts, and floating surfaces barely do: Notion
+draws nothing at rest and ChatGPT's tooltip draws none. In every preset the modal sits a level above the
+floating role, as in every system surveyed.
+
+Every role is two layers, ambient then key, in every preset, so a preset swap or a transition interpolates layer
+by layer. "No lift" is a transparent shadow, `0 0 0 0 transparent`, never `none`. A role can sit in a list beside
+a component's own layers (the Board card's tone ring, the floating Toolbar's edge), and `none` in a list
+invalidates the whole `box-shadow`, ring and all. The edge does the separating at every level. `border-float`
+is #eeeeee in light (the nearest rung to Notion's 7% popover ring) and #4b4b4b in dark. Forced colours drop
+`box-shadow` entirely, and the border is what the browser repaints. Stroke is its own setting: the Surface axis,
+Outlined or Borderless. The Table frame is a required edge (`stroke-width`), so it stays under Borderless.
 
 A rule inside a container is never darker than the container's edge (owner, 2026-09-27;
 one exception, audit S8: seams inside joined controls, soft Button group and Split button,

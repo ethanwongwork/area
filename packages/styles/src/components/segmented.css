@@ -106,7 +106,7 @@
     background-color: light-dark(var(--area-bg-surface), var(--area-bg-component-active)); /* spec */
     color: var(--area-fg-default);
     border-color: var(--area-edge-selected);
-    box-shadow: var(--area-shadow-1);
+    box-shadow: var(--area-shadow-control);
   }
 
   .area-segmented__item:focus-visible {

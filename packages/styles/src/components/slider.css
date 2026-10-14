@@ -229,7 +229,7 @@
     border: var(--area-stroke-width) solid var(--_thumb-border);
     border-radius: var(--area-radius-full);
     background: radial-gradient(circle, var(--_fill) 0 42%, var(--area-bg-surface) 46% 100%); /* spec: slider.md thumb dot stops */
-    box-shadow: var(--area-shadow-1);
+    box-shadow: var(--area-shadow-control);
     transition: var(--area-transition);
   }
 
@@ -240,7 +240,7 @@
     border: var(--area-stroke-width) solid var(--_thumb-border);
     border-radius: var(--area-radius-full);
     background: radial-gradient(circle, var(--_fill) 0 42%, var(--area-bg-surface) 46% 100%); /* spec: slider.md thumb dot stops */
-    box-shadow: var(--area-shadow-1);
+    box-shadow: var(--area-shadow-control);
     transition: var(--area-transition);
   }
   @media (hover: hover) {
@@ -284,12 +284,12 @@
 
   /* The ring alone, as every other control (audit C-13; the thumb edge no longer recolours). */
   .area-slider__control:focus-visible::-webkit-slider-thumb {
-    box-shadow: var(--area-shadow-1);
+    box-shadow: var(--area-shadow-control);
     outline: var(--area-focus-width) solid var(--area-focus-color);
     outline-offset: var(--area-focus-offset);
   }
   .area-slider__control:focus-visible::-moz-range-thumb {
-    box-shadow: var(--area-shadow-1);
+    box-shadow: var(--area-shadow-control);
     outline: var(--area-focus-width) solid var(--area-focus-color);
     outline-offset: var(--area-focus-offset);
   }

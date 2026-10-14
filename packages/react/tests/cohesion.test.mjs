@@ -44,35 +44,45 @@ test('rows share one hover plate and one selection plate, and selection outranks
   assert.match(ruleFor('.area-tree-view--navigation')?.body ?? '', /--_tree-selection:\s*var\(--area-bg-component-active\)/);
 });
 
-test('every floating surface shares the lift', () => {
-  // The lift is the Surface axis role (audit S10): minimal by default (owner, 2026-10-13: Notion's small floating
-  // chip, 2.7%), Notion's popover geometry at Raised and Elevated, none at Flat.
-  const lift = /var\(--area-shadow-float\)/;
-  const role = [...css.matchAll(/--area-shadow-float:\s*([^;]+);/g)].map(match => match[1].trim());
-  assert.ok(role.includes('0 8px 12px light-dark(rgb(25 25 25 / 0.027), rgb(25 25 25 / 0.08)), 0 2px 6px light-dark(rgb(25 25 25 / 0.027), transparent)'), 'shadow-float lost its minimal default');
-  assert.ok(role.includes('0 20px 24px var(--area-shadow-color), 0 5px 8px color-mix(in srgb, var(--area-shadow-color) 50%, transparent)'), 'shadow-float lost its Raised recipe');
-  assert.ok(role.includes('0 0 0 0 transparent'), 'the Flat preset should drop the lift');
-  // A role sits inside lists (Board card's ring, the floating Toolbar's edge): `none` there invalidates the whole
-  // box-shadow and drops the ring with it, so "no lift" must be a transparent shadow.
-  for (const name of ['shadow-card', 'shadow-float']) {
-    const values = [...css.matchAll(new RegExp(`--area-${name}:\\s*([^;]+);`, 'g'))].map(match => match[1].trim());
-    assert.ok(values.length && !values.includes('none'), `--area-${name} is none somewhere; use a transparent shadow`);
+test('every surface takes its depth from its elevation role', () => {
+  // The Elevation axis (axes/elevation.ts, owner 2026-10-14): components name a role, the preset sets its depth.
+  // Every role is two layers, ambient then key, in every preset, so presets swap and transition layer by layer;
+  // "no lift" is a transparent shadow, never `none`, because a role also sits inside lists (Board card's ring,
+  // the floating Toolbar's edge) where `none` invalidates the whole box-shadow and drops the ring with it.
+  const layers = value => { let depth = 0, count = 1; for (const ch of value) { if (ch === '(') depth++; else if (ch === ')') depth--; else if (ch === ',' && depth === 0) count++; } return count; };
+  const roles = ['control', 'resting', 'tooltip', 'float', 'modal'];
+  for (const role of roles) {
+    const values = [...css.matchAll(new RegExp(`--area-shadow-${role}:\\s*([^;]+);`, 'g'))].map(match => match[1].trim());
+    // The default on :root, then one scope per preset (flat, minimal, soft, standard, strong).
+    assert.equal(values.length, 6, `--area-shadow-${role} should have the default and one value per preset`);
+    for (const value of values) {
+      assert.notEqual(value, 'none', `--area-shadow-${role} is none; use a transparent shadow`);
+      assert.equal(layers(value), 2, `--area-shadow-${role} is not two layers: ${value}`);
+    }
   }
-  for (const block of ['.area-popover, .area-menu', '.area-dialog', '.area-toast', '.area-menu__search-surface', '.area-calendar, .area-calendar--surface', '.area-color-picker, .area-color-picker--surface', '.area-command-palette']) {
-    const rule = ruleFor(block);
-    assert.ok(rule, `${block} missing`);
-    assert.match(rule.body, lift, `${block} does not use the floating lift`);
-  }
-  // The shadow that paints is the last box-shadow on the block, in any rule: a later literal
-  // once overrode the shared lift with a full-strength second layer and this test still passed.
+  const float = [...css.matchAll(/--area-shadow-float:\s*([^;]+);/g)].map(match => match[1].trim());
+  assert.ok(float.includes('0 2px 6px light-dark(rgb(25 25 25 / 0.027), transparent), 0 8px 12px light-dark(rgb(25 25 25 / 0.027), rgb(25 25 25 / 0.08))'), 'shadow-float lost its Minimal recipe (Notion\'s small chip)');
+  assert.ok(float.includes('0 5px 8px color-mix(in srgb, var(--area-shadow-color) 50%, transparent), 0 20px 24px var(--area-shadow-color)'), 'shadow-float lost its Soft recipe (Notion\'s popover)');
+  assert.ok(float.includes('0 0 0 0 transparent, 0 0 0 0 transparent'), 'the Flat preset should drop the lift');
+
+  // The shadow that paints is the last box-shadow on the block, in any rule: a later literal once overrode the
+  // shared lift with a full-strength second layer and a looser test still passed.
   const elevation = rule => rule.body.match(/--_elevation\s*:\s*([^;]+)/)?.[1].trim();
-  for (const block of ['.area-popover', '.area-menu', '.area-dialog', '.area-toast', '.area-menu__search-surface', '.area-command-palette']) {
+  const paints = block => {
     const own = rules.filter(rule => rule.selector.split(/\s*,\s*/).includes(block) && /(^|[;\s])box-shadow\s*:/.test(rule.body));
     assert.ok(own.length, `${block} has no box-shadow`);
     const value = [...own.at(-1).body.matchAll(/(?:^|[;\s])box-shadow\s*:\s*([^;]+)/g)].at(-1)[1].trim();
-    const resolved = value === 'var(--_elevation)' ? rules.filter(rule => rule.selector.split(/\s*,\s*/).includes(block)).map(elevation).filter(Boolean).at(-1) : value;
-    assert.match(resolved ?? '', lift, `${block} paints ${value}, not the floating lift`);
+    return value === 'var(--_elevation)' ? rules.filter(rule => rule.selector.split(/\s*,\s*/).includes(block)).map(elevation).filter(Boolean).at(-1) ?? value : value;
+  };
+  const expect = { float: ['.area-popover', '.area-menu', '.area-toast', '.area-menu__search-surface'], modal: ['.area-dialog', '.area-command-palette'], resting: ['.area-panel'] };
+  for (const [role, blocks] of Object.entries(expect)) {
+    for (const block of blocks) assert.match(paints(block), new RegExp(`var\\(--area-shadow-${role}\\)`), `${block} does not take the ${role} role`);
   }
+  for (const block of ['.area-calendar, .area-calendar--surface', '.area-color-picker, .area-color-picker--surface']) {
+    assert.match(ruleFor(block)?.body ?? '', /var\(--area-shadow-float\)/, `${block} does not take the float role`);
+  }
+  assert.match(ruleFor('.area-tooltip')?.body ?? '', /var\(--area-shadow-tooltip\)/, 'Tooltip does not take the tooltip role');
+  assert.match(ruleFor('.area-card')?.body ?? '', /--_card-shadow:\s*var\(--area-shadow-resting\)/, 'Card does not take the resting role');
 });
 
 test('text fields show disabled with field paint, not opacity', () => {
@@ -108,7 +118,7 @@ test('selection markers never paint the accent or focus colour directly', () => 
 // DESIGN_SYSTEM.md, "Strokes" (consistency pass 2026-10-12). A line's width follows its job: required lines (control,
 // field and state edges, swatch rings, cutouts, joined-control seams, standalone dividers and frames with no shadow)
 // use `stroke-width`, which no preset changes; frames of surfaces that carry a shadow, the seams inside them and the
-// edges of filled shapes use `border-width`, which the Elevated surface preset sets to 0. The swatch ring once
+// edges of filled shapes use `border-width`, which the Borderless surface preset (was Elevated) sets to 0. The swatch ring once
 // regressed to `border-width` (audit F-5), so a white swatch vanished under Elevated again.
 test('required lines never ride the Surface axis', () => {
   const lineProp = /(?:^|[;\s])(border(?:-[a-z-]+)?|outline|box-shadow|--_[a-z-]*(?:ring|edge|line|border))\s*:\s*([^;]+)/g;

@@ -255,7 +255,7 @@
   }
 
   /* A standalone divider (`border-divider`): `stroke-width`, as Separator and Table's rules (consistency pass
-     2026-10-12; it vanished under the Elevated surface preset). */
+     2026-10-12; it vanished under the Borderless surface preset (was Elevated)). */
   .area-nav__separator {
     block-size: var(--area-stroke-width);
     margin-block: var(--area-space-8);

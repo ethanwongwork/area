@@ -688,7 +688,7 @@
    * 24 x 14 toggle. Colours, corners, edges, lift, row height and timing are the live tokens, so
    * each setting's tile draws its own effect.
    */
-  /* Drawn as Card is: Card's edge (surface.css --_card-edge) and its card shadow. */
+  /* Drawn as Card is: Card's edge (surface.css --_card-edge) and the resting elevation role. */
   .abs-card {
     display: grid;
     gap: var(--area-space-8);
@@ -697,7 +697,7 @@
     border: var(--area-border-width) solid var(--area-border-card); /* Card's edge */
     border-radius: var(--area-radius-container);
     background: var(--area-bg-surface);
-    box-shadow: var(--area-shadow-card);
+    box-shadow: var(--area-shadow-resting);
   }
   /* Surface: a floating card over a resting one, offset down and to the end. */
   .abs-stack { display: grid; }
@@ -780,6 +780,7 @@
     block-size: var(--area-space-10);
     border-radius: var(--area-radius-full);
     background: var(--area-bg-surface);
+    box-shadow: var(--area-shadow-control); /* Switch's thumb takes the control role */
     transition: translate var(--area-duration-base) var(--area-ease-in-out);
   }
   .abs-toggle[data-on] { background: var(--area-selection-solid); }
