@@ -237,3 +237,7 @@ Resolved 2026-10-09 (owner: "go with your recommendations"):
   was 12 / 16); zone and row padding net of the border (16 / 24 from outside, was 17 / 25); size line 2 under the name
   (Untitled mt-0.5) → file-upload.css.
 - 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the zone, row and icon tile edges are at `stroke-width`, the field's (were `border-width`, so under Elevated the zone was a borderless white box) (file-upload.css). (docs/research/consistency-audit-2026-10-12.md)
+- 2026-10-14 · owner: "do the integrations" (the icon session's component integrations) → the demos pass a file-type
+  icon from `@area/icons` through `icon` (file-pdf, file-image, file-video, file-audio, file-spreadsheet, file-zip,
+  file-code by extension or MIME type; anything else keeps the `document` glyph). The slot's 20 box and the size curve
+  are unchanged (measured line 0.924 at type 13, the same as the zone's upload glyph). No component change.

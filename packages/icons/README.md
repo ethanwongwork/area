@@ -53,7 +53,9 @@ The package follows semantic versioning; `CHANGELOG.md` lists every release.
   (No icon has been renamed since versioning began; the alias machinery, `data-alias-of`, is in place.)
 - **Credits:** Area's drawings are its own, except where a drawing reproduces another library's ink: those carry
   `source` in the metadata and their licence is in `THIRD_PARTY_NOTICES.md` (today Fluent's globe, in globe and
-  globe-off). The licence for Area's own drawings is the owner's to choose and not yet set.
+  globe-off).
+- **Licence:** Area's own drawings are MIT (`LICENSE`); the reproduced ink keeps its own licence in
+  `THIRD_PARTY_NOTICES.md` (Fluent's is MIT too).
 
 ## Working on the icons
 

@@ -1,6 +1,6 @@
 # Third-party notices
 
-Area's icons are Area's own drawings, except the ones below, which reproduce another library's ink. Each carries
+Area's icons are Area's own drawings (MIT, `LICENSE`), except the ones below, which reproduce another library's ink. Each carries
 `source` in `@area/icons/meta` and `icons.json` (the library and the icons it reproduces).
 
 | Area icon | Reproduces | Notes |

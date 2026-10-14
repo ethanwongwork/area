@@ -938,9 +938,10 @@ for (const icon of icons) {
   const used = ["sw", "sw12", "cutOpacity", "haloWidth", "lineShift", "slashGap", "useMaskId"].filter(f => new RegExp(`\\b${f}\\(`).test(code));
   writeFileSync(join(PKG, "icons", icon.name + ".tsx"), GEN + `import { root, ${[...used, "type IconProps"].join(", ")} } from "../runtime.ts";\n\n` + (icon.label !== icon.name ? `/** ${icon.label}. */\n` + code.replace("\n\nexport const", `\n\n/** ${icon.label}, filled. */\nexport const`) : code) + "\n");
 }
+// An entry with no icons (review, once every icon is approved) stays a module: `export {}`.
 for (const [file, status] of [["approved.ts", "approved"], ["review.ts", "review"]])
-  writeFileSync(join(PKG, file), GEN + iconMeta.filter(m => (m.status === "approved") === (status === "approved"))
-    .map(m => `export { ${m.component}, ${m.filledComponent} } from "./icons/${m.name}.tsx";`).join("\n") + "\n");
+  writeFileSync(join(PKG, file), GEN + (iconMeta.filter(m => (m.status === "approved") === (status === "approved"))
+    .map(m => `export { ${m.component}, ${m.filledComponent} } from "./icons/${m.name}.tsx";`).join("\n") || "export {};") + "\n");
 writeFileSync(join(PKG, "meta.ts"), GEN + `import type { IconBatch, IconMeta } from "../meta-types.ts";\n\nexport const icons: readonly IconMeta[] = ${JSON.stringify(iconMeta, null, 1)};\n\n`
   + `export const batches: readonly IconBatch[] = ${JSON.stringify(BATCHES.map(({ id, title }) => ({ id, title })), null, 1)};\n`);
 console.log(`wrote packages/icons/src/generated (${icons.length} icons, ${iconMeta.filter(m => m.status === "approved").length} approved)`);

@@ -5050,4 +5050,8 @@ in the package README, "Versions, deprecation and credits".
   `@fluentui/svg-icons` 1.1.341; copyright line read from microsoft/fluentui-system-icons' LICENSE). The app's
   Inspector shows "Ink from". Drawings that follow another library's construction (the many "Lucide x:" rows) are
   Area's own ink and carry no `source`.
-- Open (owner): the licence for Area's own drawings (none is set; the root package is private).
+- Licence (owner, 2026-10-14): MIT for Area's own drawings, `packages/icons/LICENSE`, `"license": "MIT"` and shipped
+  in `files`; the root package stays private. MIT matches Fluent's, the only reproduced ink, so the package carries one
+  licence kind.
+- Last review (owner, 2026-10-14): grip, padding-side and sides approved as drawn (batch 4, Inspector), so all 808 are
+  in the main entry and `@area/icons/review` is empty (the generator writes `export {}` for an empty entry).

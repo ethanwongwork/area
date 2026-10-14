@@ -6,6 +6,7 @@
     "*.css"
   ],
   "description": "Area icons: one React component per icon (outline and filled), raw SVGs, a sprite and metadata.",
+  "license": "MIT",
   "exports": {
     ".": {
       "types": "./dist/modules/index.d.ts",
@@ -36,6 +37,7 @@
     "dist",
     "rtl.css",
     "CHANGELOG.md",
+    "LICENSE",
     "THIRD_PARTY_NOTICES.md"
   ],
   "scripts": {

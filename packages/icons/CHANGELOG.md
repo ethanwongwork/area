@@ -7,7 +7,9 @@ versioning, review round by review round, is in `docs/specs/icons.md`.
 
 The first versioned state.
 
-- 808 icons, 805 approved in the main entry and 3 in `@area/icons/review`, each an outline and a filled component.
+- 808 icons, all approved and in the main entry (`@area/icons/review` is empty), each an outline and a filled
+  component.
+- MIT licence for Area's drawings (`LICENSE`).
 - Size curve: the line grows with size^0.45 up to 24, larger sizes scale the 24px master.
 - 12px cuts for chevron-down, check, add, info, open, link, bell, arrow-up and globe, with their turns; `size={12}` is
   slot-aware (`--area-type-icon-xs-cut`).
