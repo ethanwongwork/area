@@ -156,16 +156,25 @@ role paints the same way in every family:
   one feedback set in Badge's order (neutral, info, success, warning, danger) and paint the
   neutral icon muted.
 
-**Elevation.** In-flow fields and controls have no shadow; `shadow-1` is only for raised
-thumbs (Switch, Slider, the Segmented thumb). A docked region (Panel) uses `shadow-2`. Card has its own faint halo (owner, 2026-09-27): a 1px contact shadow and
-a 2px-low 8px blur, both 3% black, over a lighter edge (neutral 100). A linked Card keeps its lift on hover and steps its edge to
-`edge-control-hover`, as Fluent's outline and Radix's surface cards do. Everything that floats over the page (Menu, Popover, the Select picker,
-Dialog, Toast, the Calendar and ColorPicker surfaces, Toolbar overflow) shares one lift,
-Notion's popover geometry: `0 20px 24px` and `0 5px 8px` in `shadow-color` at full and half
-strength, over the 1px decorative border. Both are Surface axis roles (audit S10, owner
-2026-09-30): `shadow-card` and `shadow-float`, `none` under Flat. Tooltip keeps its own smaller
-lift, and the Toolbar's floating bar its own four-layer recipe. The Table frame is a required
-edge (`stroke-width`), so it stays under Elevated.
+**Elevation.** Minimal (owner, 2026-10-13: "an extremely subtle, very minimal shadow system ... i
+barely want to see any shadows or none"; evidence in `docs/research/elevation-2026-10-13.md`). The edge
+separates; a shadow only hints. Three rules:
+
+- **Nothing at rest lifts.** Fields, controls, Card, Panel, Board card and Tooltip draw no drop shadow
+  by default: `shadow-card`, the resting role, is `none` (Notion's page draws none at rest; ChatGPT's
+  tooltip draws none). Card and Board card keep their edges; Tooltip keeps its 5% white inner edge in dark.
+- **Everything that floats shares one hint.** Menu, Popover, the Select picker, Dialog, Toast, the
+  Calendar and ColorPicker surfaces, Command palette, Drawer and the floating Toolbar take
+  `shadow-float`: Notion's lightest captured lift, `0 8px 12px` and `0 2px 6px` at 2.7% in light, one
+  8% layer in dark, over `border-float` (#eeeeee light, the nearest rung to Notion's 7% popover ring;
+  #4b4b4b dark). A Dialog's scrim does the rest.
+- **Raised thumbs keep contact.** `shadow-1`, a 0.5px contact shadow, stays on the Switch, Slider and
+  Segmented thumbs, the soft Toggle group selection and Badge modern.
+
+Both roles belong to the Surface axis (audit S10): Flat sets them to `none`; Raised and Elevated keep
+the previous default for a product that wants visible depth (Card's 3% halo, owner 2026-09-27, and
+Notion's popover geometry, `0 20px 24px` and `0 5px 8px` in `shadow-color` at full and half strength).
+The Table frame is a required edge (`stroke-width`), so it stays under Elevated.
 
 A rule inside a container is never darker than the container's edge (owner, 2026-09-27;
 one exception, audit S8: seams inside joined controls, soft Button group and Split button,

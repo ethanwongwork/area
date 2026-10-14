@@ -45,10 +45,12 @@ test('rows share one hover plate and one selection plate, and selection outranks
 });
 
 test('every floating surface shares the lift', () => {
-  // The lift is the Surface axis role (audit S10): Notion's geometry by default, none at Flat.
+  // The lift is the Surface axis role (audit S10): minimal by default (owner, 2026-10-13: Notion's small floating
+  // chip, 2.7%), Notion's popover geometry at Raised and Elevated, none at Flat.
   const lift = /var\(--area-shadow-float\)/;
   const role = [...css.matchAll(/--area-shadow-float:\s*([^;]+);/g)].map(match => match[1].trim());
-  assert.ok(role.includes('0 20px 24px var(--area-shadow-color), 0 5px 8px color-mix(in srgb, var(--area-shadow-color) 50%, transparent)'), 'shadow-float lost its recipe');
+  assert.ok(role.includes('0 8px 12px light-dark(rgb(25 25 25 / 0.027), rgb(25 25 25 / 0.08)), 0 2px 6px light-dark(rgb(25 25 25 / 0.027), transparent)'), 'shadow-float lost its minimal default');
+  assert.ok(role.includes('0 20px 24px var(--area-shadow-color), 0 5px 8px color-mix(in srgb, var(--area-shadow-color) 50%, transparent)'), 'shadow-float lost its Raised recipe');
   assert.ok(role.includes('none'), 'the Flat preset should drop the lift');
   for (const block of ['.area-popover, .area-menu', '.area-dialog', '.area-toast', '.area-menu__search-surface', '.area-calendar, .area-calendar--surface', '.area-color-picker, .area-color-picker--surface', '.area-command-palette']) {
     const rule = ruleFor(block);
@@ -138,8 +140,8 @@ test('required lines never ride the Surface axis', () => {
 });
 
 test('every floating surface draws the floating frame', () => {
-  // border-float: the decorative rung in light, neutral 650 in dark, so a floating surface stays distinct over another
-  // surface where its shadow no longer reads (DESIGN_SYSTEM.md, "Size and shape").
+  // border-float: neutral 100 in light (Notion's popover ring; it carries the separation the minimal lift no longer
+  // does), neutral 650 in dark, so a floating surface stays distinct over another surface (DESIGN_SYSTEM.md, "Size and shape").
   for (const selector of ['.area-popover, .area-menu', '.area-dialog', '.area-toast', '.area-menu__search-surface', '.area-calendar, .area-calendar--surface', '.area-command-palette', '.area-select::picker(select)', '.area-board-card__actions']) {
     const rule = rules.find(r => r.selector === selector && /var\(--area-border-float\)/.test(r.body));
     assert.ok(rule, `${selector} does not draw border-float`);

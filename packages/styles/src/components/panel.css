@@ -74,7 +74,9 @@
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);
-    box-shadow: var(--area-shadow-2);
+    /* A docked surface rests on the page: the Surface axis's resting lift, none by default (minimal
+       elevation, owner 2026-10-13; was shadow-2). The edge carries it. */
+    box-shadow: var(--area-shadow-card);
   }
 
   /*

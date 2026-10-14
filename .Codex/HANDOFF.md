@@ -5,6 +5,17 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Minimal elevation (2026-10-13, branch `claude/component-display-ui-research-11dc77`, local commits)
+
+- Owner: "an extremely subtle, very minimal shadow system ... i barely want to see any shadows". Captures
+  (ChatGPT, Notion light and dark, Cursor's bundle) and the decision: `docs/research/elevation-2026-10-13.md`;
+  rule: DESIGN_SYSTEM.md "Elevation". Outlined (default): `shadow-card` none (Card, Panel, Board card),
+  `shadow-float` Notion's small chip (0 8 12 / 0 2 6 at 2.7%; dark one 8% layer), Tooltip no drop shadow,
+  floating Toolbar on the shared lift with a real edge, `border-float` light 75 → 100. Raised / Elevated keep the
+  old recipes. Review: https://claude.ai/artifact/7mmvZzP8CZCG8gpUxZR8fv (Before / After, light and dark).
+- Checks: npm test (24,254), contracts 14, cohesion 8 (now pins the minimal default), React suites (Indicator's
+  known docs-dist failure only). Not run: build:docs / audit.
+
 ## Component Stage (2026-10-12, branch `claude/component-display-ui-research-11dc77`, uncommitted)
 
 - Owner: research how component pages and playgrounds show a component, then "go with your recommendations".

@@ -31,8 +31,9 @@ The registry in `packages/tokens/src/axes/registry.ts` defines ten axes:
   component adds as `flag × radius-full`, so concentric parts follow. Instance props override it
   (`pill`, Avatar's `shape`).
 - `surface`: flat, outlined, raised or elevated. Besides `border-width` and `shadow-1`…`4` it
-  owns `shadow-card` (Card's halo) and `shadow-float` (the shared floating lift); Flat sets
-  both to `none`.
+  owns `shadow-card` (the resting lift: Card, Panel, Board card) and `shadow-float` (the shared
+  floating lift). Outlined, the default, is minimal: `shadow-card` none and a barely-there float
+  (DESIGN_SYSTEM.md, "Elevation"); Raised and Elevated keep the deeper recipes; Flat sets both to `none`.
 - `motion`: none, subtle or expressive.
 
 Keep the name `accent`: it is the system-selected chromatic role and may represent a
