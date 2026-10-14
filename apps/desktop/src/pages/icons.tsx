@@ -3,16 +3,16 @@
  * (filtered by the Titlebar search, which also reads each icon's keywords and its names in other
  * libraries), drawn in the style and at the size the Canvas bar sets. The Inspector shows the chosen
  * icon (its drawing, Copy SVG, Download, Copy name and import, its facts and search words from
- * @area/icons/meta), else the Sidebar's category, else the set. The icon data and the
- * SVG export are the icon browser's (apps/docs/src/gallery/icon-browser.tsx).
+ * @area/icons/meta), else the Sidebar's category, else the set. Icons, categories and batches come from
+ * @area/icons; the SVG export and CopyButton are ../copy.tsx.
  */
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactElement } from "react";
 import { Badge, Button, Code, Count, EmptyState, HoverCard, Nav, NavGroup, NavItem, PanelSection, Segmented, Select, Table, TableLink } from "@area/react";
-import { icons as ICON_META } from "@area/icons/meta";
-import { PILOT_BATCHES, PILOT_ICONS } from "../../../docs/src/pilot-icons.tsx";
+import { batches as ICON_BATCHES, categories as ICON_CATEGORIES, icons as ICON_META } from "@area/icons/meta";
+import * as APPROVED from "@area/icons";
+import * as IN_REVIEW from "@area/icons/review";
 import { CopyIcon, DownloadIcon, StarFilledIcon, StarIcon } from "@area/icons";
-import { ICON_CATEGORIES } from "../../../docs/src/icon-categories.ts";
-import { CopyButton, standaloneSvg } from "../../../docs/src/gallery/icon-browser.tsx";
+import { CopyButton, standaloneSvg } from "../copy.tsx";
 import { SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
 import { CanvasSection } from "../tile.tsx";
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
@@ -24,16 +24,17 @@ import { readStored, writeStored } from "../storage.ts";
 import { ArrangeMenu, groupBy, PinButton, PinMenu, sortBy, useArrangement, usePins } from "../organize.tsx";
 import { onGridKeys } from "../grid-keys.ts";
 
-type Entry = (typeof PILOT_ICONS)[number];
 type Mode = "outline" | "filled";
-
-const BY_NAME = new Map<string, Entry>(PILOT_ICONS.map(icon => [icon.name, icon]));
+type IconComponent = (props: APPROVED.IconProps) => ReactElement;
+/** One icon as the page draws it: its record in @area/icons/meta and its two components (approved icons from the
+ *  main entry, the rest from @area/icons/review). */
+type Entry = (typeof ICON_META)[number] & { Icon: IconComponent; Filled: IconComponent };
+const COMPONENTS: Record<string, IconComponent> = { ...IN_REVIEW, ...APPROVED } as unknown as Record<string, IconComponent>;
+const BY_NAME = new Map<string, Entry>(ICON_META.map(meta => [meta.name, { ...meta, Icon: COMPONENTS[meta.component]!, Filled: COMPONENTS[meta.filledComponent]! }]));
 const CATEGORY_OF = new Map(ICON_CATEGORIES.flatMap(category => category.icons.map(name => [name, category] as const)));
-const STATUS = new Map<string, { status: string; batch: string }>(
-  PILOT_BATCHES.flatMap(batch => Object.entries(batch.icons).map(([name, status]) => [name, { status, batch: batch.title }] as const)),
-);
-/** An icon's review status, from its batch (a variant shares its base icon's). */
-const statusOf = (name: string) => STATUS.get(BY_NAME.get(name)?.derivedFrom ?? name)?.status;
+const BATCH_TITLE = new Map(ICON_BATCHES.map(batch => [batch.id, batch.title]));
+/** An icon's review status, from its batch (a variant shares its base icon's); none when it was never put in one. */
+const statusOf = (name: string) => { const entry = BY_NAME.get(name); return entry?.batch ? entry.status : undefined; };
 /** An icon's review status as the components' status reads: a soft Badge, success when approved. */
 const StatusBadge = ({ name }: { name: string }) => statusOf(name) === "approved"
   ? <Badge size="sm" tone="success" variant="soft">Approved</Badge>
@@ -176,12 +177,12 @@ export function IconsPage() {
     return node && icon ? standaloneSvg(node, icon.name) : "";
   };
   const Draw = icon ? (style === "filled" ? icon.Filled : icon.Icon) : undefined;
-  const iconStatus = icon ? STATUS.get(icon.derivedFrom ?? icon.name) : undefined;
+  const iconStatus = icon?.batch ? { status: icon.status, batch: BATCH_TITLE.get(icon.batch) ?? icon.batch } : undefined;
   const category = icon ? CATEGORY_OF.get(icon.name) : undefined;
   const meta = icon ? META.get(icon.name) : undefined;
   const aliases = icon ? [...(ALIASES.get(icon.name) ?? []), ...(meta?.aliasOf ? [meta.aliasOf] : [])] : [];
   // The overview counts what the Sidebar's choice holds: the category, or every icon.
-  const scope = view ? view.icons : PILOT_ICONS.map(entry => entry.name);
+  const scope = view ? view.icons : ICON_META.map(entry => entry.name);
   const approved = scope.filter(name => statusOf(name) === "approved").length;
   const inReview = scope.filter(name => statusOf(name) === "review").length;
 
@@ -300,6 +301,8 @@ export function IconsPage() {
                   ["Keyline", icon.keyline],
                   meta ? ["Filled", meta.fill === "solid" ? "Solid body" : "Heavier outline"] : null,
                   meta?.rtl ? ["Right to left", "Mirrors"] : null,
+                  meta?.cuts?.includes(12) ? ["At 12px", "Own drawing"] : null,
+                  meta?.source ? ["Ink from", `${LIBRARIES.find(([key]) => key === meta.source!.library)?.[1] ?? meta.source.library} ${meta.source.names[0]}`] : null,
                   iconStatus ? ["Status", <StatusBadge name={icon.name} />] : null,
                   iconStatus ? ["Batch", iconStatus.batch] : null,
                 ]} />
@@ -324,6 +327,7 @@ export function IconsPage() {
                 view ? null : ["Categories", ICON_CATEGORIES.length],
                 ["Styles", "Outline, Filled"],
                 ["Sizes", `${SIZE.min} to ${SIZE.max}`],
+                ["12px cuts", scope.filter(name => META.get(name)?.cuts?.includes(12)).length],
               ]} />
             </PanelSection>
           )}

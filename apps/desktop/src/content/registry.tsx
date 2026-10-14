@@ -6,6 +6,9 @@
  * come from a single artefact and cannot drift -- which was the one thing the previous
  * system's documentation could not promise, since its snippets were hand-typed strings
  * with no relationship to what was rendered.
+ *
+ * The docs-only Iconography demos (Area beside Fluent) are in registry-docs.tsx, which the archived
+ * docs build reads, so the app never bundles the Fluent map.
  */
 import * as switches from "./demos/switch.tsx";
 import * as badge from "./demos/badge.tsx";
@@ -16,7 +19,6 @@ import * as theme from "./demos/theme.tsx";
 import * as nav from "./demos/nav.tsx";
 import * as gallery from "./demos/gallery.tsx";
 import * as cards from "./demos/card.tsx";
-import * as icons from "./demos/icons.tsx";
 import * as variants from "./demos/gallery-variants.tsx";
 import * as overlays from "./demos/overlays.tsx";
 import * as counts from "./demos/count.tsx";
@@ -47,11 +49,15 @@ import * as boxModels from "./demos/box-model.tsx";
 import * as tokenRows from "./demos/token-row.tsx";
 import * as assetRows from "./demos/asset-row.tsx";
 import * as previewFrames from "./demos/preview-frame.tsx";
+import * as passwordFields from "./demos/password-field.tsx";
+import * as otpFields from "./demos/otp-field.tsx";
+import * as timeFields from "./demos/time-field.tsx";
+import * as spinnerValues from "./demos/spinner-value.tsx";
+import * as steppers from "./demos/stepper.tsx";
 import * as inspectorRecipes from "./demos/inspector.tsx";
 
 const { BADGE_GALLERY_DEMOS, ...badgeDemos } = badge;
-const { ICON_REVIEW_DEMOS, ...iconDemos } = icons;
-const DEMO_MODULES: Record<string, object> = { BADGE_GALLERY_DEMOS, badge: badgeDemos, switches, button, form, display, nav, theme, gallery, cards, icons: iconDemos, ICON_REVIEW_DEMOS, variants, overlays, counts, accordions, customSelects, tags, tagPickers, datePickers, drawers, paginations, links, scrollAreas, fileUploads, toggletips, emptyStates, toggleGroups, descriptionLists, meters, searchFields, shortcutLists, dateRangePickers, citations, zoomControls, boards, timelines, editableTexts, boxModels, tokenRows, assetRows, previewFrames, inspectorRecipes };
+const DEMO_MODULES: Record<string, object> = { BADGE_GALLERY_DEMOS, badge: badgeDemos, switches, button, form, display, nav, theme, gallery, cards, variants, overlays, counts, accordions, customSelects, tags, tagPickers, datePickers, drawers, paginations, links, scrollAreas, fileUploads, toggletips, emptyStates, toggleGroups, descriptionLists, meters, searchFields, shortcutLists, dateRangePickers, citations, zoomControls, boards, timelines, editableTexts, boxModels, tokenRows, assetRows, previewFrames, passwordFields, otpFields, timeFields, spinnerValues, steppers, inspectorRecipes };
 // One name, one demo. The server renders from this merged map, while hydration clients import a
 // module directly, so a name exported twice renders one demo and hydrates the other (a mismatch).
 const demoOwner = new Map<string, string>();
@@ -72,7 +78,6 @@ export const SOURCES = {
   display: "demos/display.tsx",
   nav: "demos/nav.tsx",
   gallery: "demos/gallery.tsx",
-  icons: "demos/icons.tsx",
   variants: "demos/gallery-variants.tsx",
   overlays: "demos/overlays.tsx",
   counts: "demos/count.tsx",
@@ -102,6 +107,11 @@ export const SOURCES = {
   tokenRows: "demos/token-row.tsx",
   assetRows: "demos/asset-row.tsx",
   previewFrames: "demos/preview-frame.tsx",
+  passwordFields: "demos/password-field.tsx",
+  otpFields: "demos/otp-field.tsx",
+  timeFields: "demos/time-field.tsx",
+  spinnerValues: "demos/spinner-value.tsx",
+  steppers: "demos/stepper.tsx",
   inspectorRecipes: "demos/inspector.tsx",
   drawers: "demos/drawer.tsx",
 };

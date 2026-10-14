@@ -282,7 +282,7 @@ Decisions are in its `iconswap1` collection.
 The owner asked what Area's set still lacks, besides review, to be an industry-grade library. Summary, in suggested
 order:
 
-1. **Finish the reviews:** 103 icons are held on the review page, plus 84 changed after approval and 18 old fix
+1. **Finish the reviews:** **Done 2026-10-14** (808 of 808 approved; grip, padding-side and sides last). 103 icons are held on the review page, plus 84 changed after approval and 18 old fix
    verdicts (see "batches.json synced with the review page"). The approvals that stand are synced. Only approved icons
    should ship.
 2. **Ship an `@area/icons` package:** done (`packages/icons`, spec "Package: @area/icons, 2026-10-10"): one module
@@ -294,13 +294,18 @@ order:
    right-to-left mirroring for directional icons.
 4. **Keywords and an alias map:** done 2026-10-12 (spec "Keywords and names": `keywords` and `names` in the metadata, read by the app's Icons search). for search, including Lucide, Material and Fluent names (user→person, file→document,
    plus→add, x→dismiss, circle-x→error).
-5. **12px cuts** for the dense icons components use at 12 (the spec planned these and they were never drawn).
-6. **Licence** for Area's drawings, semver, changelog and a deprecation policy.
-7. **A public, searchable catalogue** (copy SVG / JSX) and a Figma library.
+5. **12px cuts** for the dense icons components use at 12 (the spec planned these and they were never drawn). **Done 2026-10-13** (9 cuts, spec "12px cuts"; `../2026-10-13/README.md`).
+6. **Licence** for Area's drawings, semver, changelog and a deprecation policy. **Done** (0.1.0, CHANGELOG, policy, credits 2026-10-13; MIT licence 2026-10-14; spec "Versions, deprecation and credits").
+7. **A public, searchable catalogue** (copy SVG / JSX) and a Figma library. **Dropped as separate products
+   (owner, 2026-10-14):** the system lives in the app; the Icons tab is the catalogue (search by keyword and other
+   libraries' names, Inspector, Copy SVG / JSX). No Figma library.
 8. **Coverage**, by use (2026-10-11: ChatGPT, Notion and Figma surveyed live, gaps drawn as batch 75): currencies (5 against Lucide's 27), file types, heading levels 4–6, digits and letters,
    transport basics, panel and layout states. Brands, flags and emoji stay out (separate libraries).
-9. **Retire the Fluent map**, including the docs toolbar (`icons.generated.mjs`).
+9. **Retire the Fluent map**, including the docs toolbar (`icons.generated.mjs`). **App done 2026-10-13** (spec "Fluent map retired from the app"); the docs' own copy goes with the site.
 
 Also open: the quality pass's proposals (spec "Quality and consistency pass, 2026-10-10"); replace-all; the component
-integrations (File upload file types, Tag picker tag-plus, Date picker calendar-range, the panel toggles, Search
-field's dismiss-circle).
+integrations, settled 2026-10-14: File upload's demos pass file-type icons (file-pdf, file-image …) through
+`icon`; Search field already clears with dismiss-circle. Not adopted, by the references: Date range picker keeps Date
+picker's calendar (owner-accepted "one field across the date family"), Tag picker's create row stays text + tag
+(Notion's row has no icon), and the app's panel toggles stay outline → filled (`docs/PRODUCT_UI.md` rule 6), not
+panel-*-open / -close chevrons. tag-plus, calendar-range and the chevron toggles stay in the set for other uses.

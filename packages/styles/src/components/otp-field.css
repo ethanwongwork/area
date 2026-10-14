@@ -1,0 +1,138 @@
+/* ---------------------------------------------------------------------------
+ * OTP field
+ *
+ * A one-time code as a row of character slots (docs/specs/otp-field.md). One real input lies over the row,
+ * transparent, and owns the value, the caret, the selection, autofill and paste (input-otp, shadcn, Untitled UI;
+ * GOV.UK's single code input); the slots only draw it. Each slot is Input's shell at the tier's height, square:
+ * its edge, fill, corner and type, so a code sits beside a field as one family. The slot the next character goes
+ * into takes Input's focus paint and draws the caret; the slots are 8 apart (Mantine, Ant Design, Untitled UI,
+ * Chakra; shadcn's groups), groups 8 either side of a dash.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-otp-field {
+    --_height: var(--area-control-md);
+    --_radius: var(--area-radius-control-md);
+    --_text: var(--area-control-md-text);
+    --_leading: var(--area-control-md-leading);
+    --_slot-gap: var(--area-space-8); /* spec: 8 between slots (Mantine, Ant, Untitled UI xxs+, shadcn gap-2) */
+    --_border: var(--area-input-edge);
+    --_border-hover: var(--area-input-edge-hover);
+    --_border-focus: var(--area-field-focus-color);
+    --_focus-outline: var(--area-field-focus-color);
+    --_focus-halo: var(--area-field-focus-halo-color);
+    --_bg: var(--area-input-bg);
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--_slot-gap);
+    max-inline-size: 100%;
+    color: var(--area-input-text);
+    font-size: var(--_text);
+    line-height: var(--_leading);
+    /* Digits keep one width, so a code doesn't shift as it fills. */
+    font-variant-numeric: tabular-nums;
+  }
+
+  .area-otp-field__group { display: inline-flex; gap: var(--_slot-gap); }
+
+  /* Input's shell, square at the tier's height; its corner is Input's for the same height. */
+  .area-otp-field__slot {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    box-sizing: border-box;
+    inline-size: var(--_height);
+    block-size: var(--_height);
+    border: var(--area-stroke-width) solid var(--_border);
+    border-radius: calc(min(var(--_radius), max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px))) + var(--area-pill-field) * var(--area-radius-full));
+    background-color: var(--_bg);
+    /* Input's motion: paint fades out on fast; focus lands at once. */
+    transition-property: background-color, border-color, box-shadow;
+    transition-duration: var(--area-duration-fast);
+    transition-timing-function: var(--area-ease-out);
+  }
+
+  .area-otp-field--outline { --_bg: var(--area-input-bg); }
+  .area-otp-field--soft { --_bg: var(--area-input-bg-soft); --_border: transparent; --_border-hover: var(--area-input-edge); }
+
+  @media (hover: hover) {
+    .area-otp-field:hover:not([data-disabled], [data-read-only]) .area-otp-field__slot:not([data-active]) { border-color: var(--_border-hover); transition-duration: 0s; }
+  }
+
+  /* The slot the code continues in (or the selected slots): Input's focus edge, halo and outline, raised so the halo
+     reads over its neighbours. */
+  .area-otp-field__slot[data-active] {
+    z-index: 1;
+    border-color: var(--_border-focus);
+    box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
+    outline: var(--area-field-focus-outline-width) solid var(--_focus-outline);
+    outline-offset: 0;
+    transition-duration: 0s;
+  }
+
+  /* spec: shadcn's drawn caret, 1 wide and the line's height, blinking once a second. */
+  .area-otp-field__caret {
+    inline-size: var(--area-stroke-width);
+    block-size: var(--_leading);
+    background: currentColor;
+    animation: area-otp-caret 1s steps(1, end) infinite; /* spec: shadcn animate-caret-blink, 1s */
+  }
+  @keyframes area-otp-caret { 50% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .area-otp-field__caret { animation: none; } }
+  [data-area-motion="none"] .area-otp-field__caret { animation: none; }
+
+  .area-otp-field__separator {
+    display: inline-grid;
+    place-items: center;
+    inline-size: var(--area-icon-sm);
+    block-size: var(--area-icon-sm);
+    color: var(--area-fg-muted);
+  }
+  .area-otp-field__separator svg { inline-size: 100%; block-size: 100%; }
+
+  /* The real input: over the whole row, transparent, so every press lands on it and the platform edits the code.
+     It stays fully opaque (iOS offers paste only on a visible field; input-otp). */
+  .area-otp-field__control {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    inline-size: 100%;
+    block-size: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: transparent;
+    caret-color: transparent;
+    font: inherit;
+    letter-spacing: -0.5em;
+    outline: none;
+    opacity: 1;
+    cursor: text;
+  }
+  .area-otp-field__control::selection { background: transparent; color: transparent; }
+  /* Autofill paints the field it fills; here that is the transparent input, so keep it clear. */
+  .area-otp-field__control:autofill { -webkit-text-fill-color: transparent; transition: background-color 9999s; }
+
+  .area-otp-field:is([data-invalid]) {
+    --_border: var(--area-input-invalid-color);
+    --_border-hover: var(--area-input-invalid-color);
+    --_border-focus: var(--area-input-invalid-color);
+    --_focus-outline: var(--area-input-invalid-color);
+    --_focus-halo: var(--area-input-invalid-halo-color);
+  }
+  .area-otp-field[data-disabled] { --_bg: var(--area-input-bg-disabled); --_border: var(--area-border-faint); color: var(--area-fg-disabled); }
+  .area-otp-field--soft[data-disabled] { --_border: transparent; }
+  .area-otp-field[data-disabled] .area-otp-field__control { cursor: not-allowed; }
+  .area-otp-field[data-read-only] .area-otp-field__control { cursor: default; }
+
+  .area-otp-field--sm { --_height: var(--area-control-sm); --_radius: var(--area-radius-control-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
+  .area-otp-field--md { --_height: var(--area-control-md); --_radius: var(--area-radius-control-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-otp-field--lg { --_height: var(--area-control-lg); --_radius: var(--area-radius-control-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
+
+  @media (forced-colors: active) {
+    .area-otp-field__slot { border-color: CanvasText; }
+    .area-otp-field__slot[data-active] { outline-color: Highlight; border-color: Highlight; }
+  }
+}

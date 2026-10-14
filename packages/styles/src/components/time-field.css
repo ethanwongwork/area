@@ -1,0 +1,63 @@
+/* ---------------------------------------------------------------------------
+ * Time field
+ *
+ * A time of day typed in segments (docs/specs/time-field.md): Input's shell (edge, fill, sizes, focus, the
+ * leading icon and trailing action slots) holding hour, minute, optional second and AM/PM, each its own spin
+ * button (React Aria, Spectrum 2, MUI X, Mantine). The field hugs its segments rather than taking Input's
+ * 16rem measure. The segment being edited takes Editable text's editing surface with the field's ink, 2 corner
+ * and 2 sides (Spectrum 2's 2 / 2); separators take no room of their own. With a step, a
+ * trailing chevron opens the times as a Menu of check rows (ChatGPT's task schedule).
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-time-field {
+    inline-size: auto;
+    cursor: text;
+  }
+  .area-time-field[data-disabled] { cursor: not-allowed; }
+  .area-time-field[data-read-only] { cursor: default; }
+
+  .area-time-field__segments {
+    display: inline-flex;
+    align-items: center;
+    flex: none;
+    white-space: nowrap;
+    /* Digits keep one width, so a time doesn't shift as it is typed. */
+    font-variant-numeric: tabular-nums;
+  }
+  .area-time-field__part { display: inline-flex; align-items: center; }
+  /* Separators draw above the plates that hang over them. */
+  .area-time-field__literal { position: relative; z-index: 1; white-space: pre; }
+
+  /* Each segment's 2px plate hangs over what is beside it, as row plates hang into the margin (PRODUCT_UI rule 11):
+     the time spaces as plain text ("9:00 AM") and the digits sit at Input's text inset at both ends (owner, review
+     round 25: "margins on the horizontal sides seem slightly too large"; the padding put the text 2 deeper than an
+     Input's at each end and 4 either side of the colon). */
+  .area-time-field__segment {
+    padding-inline: var(--area-space-2); /* spec: Spectrum 2 segment padding 2, React Aria starter 2 */
+    margin-inline: calc(var(--area-space-2) * -1);
+    border-radius: var(--area-radius-min); /* spec: Spectrum 2 and Mantine 2 */
+    caret-color: transparent;
+    outline: none;
+  }
+  /* The period is its own word; the class marks it for the manifest and the end of the segments. */
+  .area-time-field__period {}
+  .area-time-field__segment[data-placeholder] { color: var(--area-input-placeholder); }
+  /* The segment being edited takes Editable text's editing surface, the Selection role's light surface, with the
+     field's own ink (owner, review round 24: "more custom to the component … should it just be black?"); was the
+     Selection plate with its inverse ink (Spectrum 2), a heavier block than any text in a field. */
+  .area-time-field__segment:focus {
+    background-color: var(--area-selection-surface); /* spec: Editable text's editing surface (Figma rgb(242, 249, 255)) */
+    color: var(--area-input-text);
+  }
+  .area-time-field[data-disabled] .area-time-field__segment { color: var(--area-fg-disabled); }
+
+  /* The list's trigger is InputAction's box with the chevron. */
+  .area-time-field__trigger {}
+
+  /* The list's rows are Menu's; 12 rows show before it scrolls (Fluent's 12; ChatGPT's list holds about 10). */
+  .area-time-field__list { max-block-size: calc(12 * var(--area-control-sm) + var(--area-space-8)); }
+
+  @media (forced-colors: active) {
+    .area-time-field__segment:focus { background-color: Highlight; color: HighlightText; forced-color-adjust: none; }
+  }
+}

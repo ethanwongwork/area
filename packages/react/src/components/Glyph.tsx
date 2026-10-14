@@ -2,10 +2,13 @@
 // The drawing is on a 16px grid and scales with the slot. The line follows the size curve
 // (Cursor's 16 → 24px step): pass the slot's size, and base.css sets the line from
 // --area-weight-icon for that size, so a 12px slot draws about 1px and a 24px slot about 1.35px.
+// size 12 is the xs icon slot (--area-icon-xs), 12px below type 16 and 16px at 16. A glyph with a 12px cut
+// (glyphCuts12, docs/specs/icons.md "12px cuts") carries both drawings there, and base.css shows the cut only
+// where the slot is 12 (--area-type-icon-xs-cut, or a component's --_glyph-cut), so its lines are crisp at 1×.
 import { useId } from "react";
 // A "knockout" glyph (the filled dismiss-circle) is a solid with marks cut out of it, listed by path index in
 // glyphKnockouts.
-import { glyphFills, glyphKnockouts, glyphPaint, glyphs, type GlyphName } from "./glyphs.ts";
+import { glyphCutFills12, glyphCuts12, glyphFills, glyphKnockouts, glyphPaint, glyphs, type GlyphName } from "./glyphs.ts";
 
 export function Glyph({ name, rotate, size = 16 }: { name: GlyphName; rotate?: 90 | 180 | 270; size?: 12 | 16 | 20 | 24 }) {
   const maskId = useId();
@@ -28,9 +31,22 @@ export function Glyph({ name, rotate, size = 16 }: { name: GlyphName; rotate?: 9
       <g mask={`url(#${maskId})`}>{paths}</g>
     </>
   ) : paths;
-  return (
+  const drawing = rotate ? <g transform={`rotate(${rotate} 8 8)`}>{body}</g> : body;
+  const cut = size === 12 ? glyphCuts12[name] : undefined;
+  if (!cut) return (
     <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false" data-area-glyph={name} data-area-glyph-size={size === 16 ? undefined : size}>
-      {rotate ? <g transform={`rotate(${rotate} 8 8)`}>{body}</g> : body}
+      {drawing}
+    </svg>
+  );
+  // The cut is drawn in its own 12-unit grid, scaled into the 16 viewBox, so one unit is a pixel at 12.
+  const dots: readonly number[] = glyphCutFills12[name] ?? [];
+  const lines = cut.map((d, i) => dots.includes(i)
+    ? <path key={d} d={d} fill="currentColor" stroke="none" />
+    : <path key={d} d={d} fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />);
+  return (
+    <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false" data-area-glyph={name} data-area-glyph-size="12">
+      <g data-area-glyph-drawing="16">{drawing}</g>
+      <g data-area-glyph-drawing="12" transform={`scale(${16 / 12})${rotate ? ` rotate(${rotate} 6 6)` : ""}`}>{lines}</g>
     </svg>
   );
 }

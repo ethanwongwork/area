@@ -1,7 +1,7 @@
 /** Tag gallery specimens: one variant per tile. docs/specs/tag.md. */
 import { useState } from "react";
 import { Tag } from "@area/react";
-import { PilotGlobeIcon } from "../../../../docs/src/pilot-icons.tsx";
+import { GlobeIcon } from "@area/icons";
 
 export const GalleryTag = () => <Tag tone="info">personal</Tag>;
 export const GalleryTagNeutral = () => <Tag>Draft</Tag>;
@@ -21,5 +21,5 @@ export const GalleryTagRemovable = () => {
   const [shown, setShown] = useState(true);
   return shown ? <Tag tone="info" onRemove={() => setShown(false)}>personal</Tag> : <button type="button" onClick={() => setShown(true)}>Restore</button>;
 };
-export const GalleryTagIcon = () => <Tag tone="success" icon={<PilotGlobeIcon />}>Public</Tag>;
+export const GalleryTagIcon = () => <Tag tone="success" icon={<GlobeIcon size={12} />}>Public</Tag>;
 export const GalleryTagDisabled = () => <Tag tone="info" disabled onRemove={() => {}}>personal</Tag>;

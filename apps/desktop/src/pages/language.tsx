@@ -8,7 +8,7 @@
  */
 import { useEffect, useState } from "react";
 import { CopyIcon } from "@area/icons";
-import { CopyButton } from "../../../docs/src/gallery/icon-browser.tsx";
+import { CopyButton } from "../copy.tsx";
 import { Code, Count, EmptyState, Nav, NavGroup, NavItem, PanelSection, Table, TableLink } from "@area/react";
 import { SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
 import { CanvasSection, Tile, TileGrid } from "../tile.tsx";

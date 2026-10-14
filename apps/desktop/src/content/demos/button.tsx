@@ -1,5 +1,5 @@
 import { Button } from "@area/react";
-import { ArrowIcon, PlusIcon } from "../../../../docs/src/icons.tsx";
+import { AddIcon, ArrowRightIcon } from "@area/icons";
 
 export const ButtonDefault = () => <Button>Button</Button>;
 
@@ -80,17 +80,17 @@ export const ButtonSizes = () => (
 
 export const ButtonWithIcon = () => (
   <>
-    <Button variant="outline" tone="neutral" icon={<PlusIcon />}>
+    <Button variant="outline" tone="neutral" icon={<AddIcon />}>
       Button
     </Button>
-    <Button variant="outline" tone="neutral" trailingIcon={<ArrowIcon />}>
+    <Button variant="outline" tone="neutral" trailingIcon={<ArrowRightIcon />}>
       Button
     </Button>
   </>
 );
 
 export const ButtonIconOnly = () => (
-  <Button variant="outline" tone="neutral" iconOnly icon={<PlusIcon />} aria-label="Add item" />
+  <Button variant="outline" tone="neutral" iconOnly icon={<AddIcon />} aria-label="Add item" />
 );
 
 export const ButtonLoading = () => <Button loading>Button</Button>;

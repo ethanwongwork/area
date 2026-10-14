@@ -1,16 +1,16 @@
 /** Description list gallery specimens: one variant per tile. docs/specs/description-list.md. */
 import { Avatar, Badge, DescriptionList, DescriptionListItem, Link } from "@area/react";
-import { PilotCalendarIcon, PilotCircleDashedIcon, PilotClockIcon, PilotFolderIcon, PilotPersonIcon, PilotTagIcon } from "../../../../docs/src/pilot-icons.tsx";
+import { CalendarIcon, CircleDashedIcon, ClockIcon, FolderIcon, PersonIcon, TagIcon } from "@area/icons";
 
 /* A page's properties (Notion's columns) and an account's facts (ChatGPT's settings card). */
 const page = { inlineSize: "calc(var(--area-space-96) * 4)", maxInlineSize: "100%" };
 
 export const GalleryDescriptionList = () => (
   <DescriptionList style={page}>
-    <DescriptionListItem term="Status" icon={<PilotCircleDashedIcon />}>In progress</DescriptionListItem>
-    <DescriptionListItem term="Owner" icon={<PilotPersonIcon />}>David Tee</DescriptionListItem>
-    <DescriptionListItem term="Due" icon={<PilotCalendarIcon />}>October 14, 2026</DescriptionListItem>
-    <DescriptionListItem term="Project" icon={<PilotFolderIcon />}>Website launch</DescriptionListItem>
+    <DescriptionListItem term="Status" icon={<CircleDashedIcon />}>In progress</DescriptionListItem>
+    <DescriptionListItem term="Owner" icon={<PersonIcon />}>David Tee</DescriptionListItem>
+    <DescriptionListItem term="Due" icon={<CalendarIcon />}>October 14, 2026</DescriptionListItem>
+    <DescriptionListItem term="Project" icon={<FolderIcon />}>Website launch</DescriptionListItem>
   </DescriptionList>
 );
 export const GalleryDescriptionListNoIcons = () => (
@@ -23,9 +23,9 @@ export const GalleryDescriptionListNoIcons = () => (
 /* Values that are components: a Badge, a person and a Link. */
 export const GalleryDescriptionListRich = () => (
   <DescriptionList style={page}>
-    <DescriptionListItem term="Status" icon={<PilotCircleDashedIcon />}><Badge>In review</Badge></DescriptionListItem>
-    <DescriptionListItem term="Owner" icon={<PilotPersonIcon />}><span style={{ display: "inline-flex", alignItems: "center", gap: "var(--area-space-6)" }}><Avatar size="sm" fallback="D" alt="" />David Tee</span></DescriptionListItem>
-    <DescriptionListItem term="Brief" icon={<PilotFolderIcon />}><Link href="#gallery-description-list-content-rich">Launch brief</Link></DescriptionListItem>
+    <DescriptionListItem term="Status" icon={<CircleDashedIcon />}><Badge>In review</Badge></DescriptionListItem>
+    <DescriptionListItem term="Owner" icon={<PersonIcon />}><span style={{ display: "inline-flex", alignItems: "center", gap: "var(--area-space-6)" }}><Avatar size="sm" fallback="D" alt="" />David Tee</span></DescriptionListItem>
+    <DescriptionListItem term="Brief" icon={<FolderIcon />}><Link href="#gallery-description-list-content-rich">Launch brief</Link></DescriptionListItem>
   </DescriptionList>
 );
 export const GalleryDescriptionListJustified = () => (
@@ -53,11 +53,11 @@ export const GalleryDescriptionListFramed = () => (
 /* The first three properties, then "Show 3 more" (Notion's "N more properties"). */
 export const GalleryDescriptionListShowMore = () => (
   <DescriptionList style={page} visibleCount={3}>
-    <DescriptionListItem term="Status" icon={<PilotCircleDashedIcon />}>In progress</DescriptionListItem>
-    <DescriptionListItem term="Owner" icon={<PilotPersonIcon />}>David Tee</DescriptionListItem>
-    <DescriptionListItem term="Due" icon={<PilotCalendarIcon />}>October 14, 2026</DescriptionListItem>
-    <DescriptionListItem term="Project" icon={<PilotFolderIcon />}>Website launch</DescriptionListItem>
-    <DescriptionListItem term="Tags" icon={<PilotTagIcon />}>Design, Launch</DescriptionListItem>
-    <DescriptionListItem term="Edited" icon={<PilotClockIcon />}>2 hours ago</DescriptionListItem>
+    <DescriptionListItem term="Status" icon={<CircleDashedIcon />}>In progress</DescriptionListItem>
+    <DescriptionListItem term="Owner" icon={<PersonIcon />}>David Tee</DescriptionListItem>
+    <DescriptionListItem term="Due" icon={<CalendarIcon />}>October 14, 2026</DescriptionListItem>
+    <DescriptionListItem term="Project" icon={<FolderIcon />}>Website launch</DescriptionListItem>
+    <DescriptionListItem term="Tags" icon={<TagIcon />}>Design, Launch</DescriptionListItem>
+    <DescriptionListItem term="Edited" icon={<ClockIcon />}>2 hours ago</DescriptionListItem>
   </DescriptionList>
 );

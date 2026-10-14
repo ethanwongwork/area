@@ -5,7 +5,7 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
-## Elevation setting (2026-10-14, branch `claude/component-display-ui-research-11dc77`, local commits)
+## Elevation setting (2026-10-14, branch `claude/component-display-ui-research-11dc77`, PR)
 
 - Owner: "add elevation as an option", then "toned down ... a naming convention similar to the existing axis ...
   2px scale for corner radius, 1px scale for typeface ... look into each component". Axis `elevation`
@@ -21,7 +21,7 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   run raced the preview watcher's package rebuild, so stop the preview before the full sequence), desktop
   typecheck and build. Not run: build:docs / audit.
 
-## Minimal elevation (2026-10-13, branch `claude/component-display-ui-research-11dc77`, local commits)
+## Minimal elevation (2026-10-13, branch `claude/component-display-ui-research-11dc77`, PR)
 
 - Owner: "an extremely subtle, very minimal shadow system ... i barely want to see any shadows". Captures
   (ChatGPT, Notion light and dark, Cursor's bundle) and the decision: `docs/research/elevation-2026-10-13.md`;
@@ -32,7 +32,7 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
 - Checks: npm test (24,254), contracts 14, cohesion 8 (now pins the minimal default), React suites (Indicator's
   known docs-dist failure only). Not run: build:docs / audit.
 
-## Component Stage (2026-10-12, branch `claude/component-display-ui-research-11dc77`, uncommitted)
+## Component Stage (2026-10-12, branch `claude/component-display-ui-research-11dc77`, PR)
 
 - Owner: research how component pages and playgrounds show a component, then "go with your recommendations".
   Research and decisions: `docs/research/component-stage-2026-10-12.md`. The grid stays the overview; a family
@@ -49,6 +49,64 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   tiles share one label size.
 - Checks: desktop typecheck and build; browser preview at 1440 (light, dark, compact; Button, Badge, Menu, Confirm
   dialog; Properties, Escape / ⌘↓ / ⌘↑, reveal, width handle). Not verified: the Electron window, docs build.
+
+## Icons: last three approved, MIT licence, no Figma library (2026-10-14, branch `claude/icon-work-status-d12c1f`)
+
+- Owner approved grip, padding-side and sides as drawn (batch 4): 808 of 808 approved, `@area/icons/review` is empty
+  (generator writes `export {}`). Owner chose MIT for Area's drawings: `packages/icons/LICENSE` (copyright Ethan Wong),
+  `"license": "MIT"`, shipped in `files`. Owner dropped the Figma library and a separate catalogue: the app's Icons tab
+  is the catalogue. Spec "Versions, deprecation and credits"; production-gaps README items 1, 6, 7.
+- Checks: `npm run build`, icons tests 10/10, typecheck (all), consumer test; app Icons tab shows padding-side Approved.
+- Integrations: File upload demos pass file-type icons through `icon` (spec feedback log); Search field already used
+  dismiss-circle (spec table row fixed). Not adopted: calendar-range in Date range picker, tag-plus in Tag picker's
+  create row, chevron panel toggles (reasons in the production-gaps README).
+- Left: coverage by use, deleting the docs site's Fluent copy with the site, pixel nits
+  (kanban, form, heavy qr-code / calculator / gamepad).
+
+## Icons: 12px cuts (2026-10-13, branch `claude/icon-work-2974ee`, PR)
+
+- PR #79 (pipeline into `packages/icons`) had merged into the already-merged `claude/icon-work-status-38f2b6`, not
+  `main`; this branch merges it, so it reaches `main` with this branch.
+- Production gap 5: 9 cuts in `packages/icons/sources/12/` (chevron-down, check, add, info, open, link, bell, arrow-up,
+  globe = Fluent's), chosen by measuring every 12px icon slot in the gallery. Fluent's 12 grid, lines on half pixels;
+  add / arrow-up / info / link sit 0.5 off centre so their centre line stays one pixel. Generator: `size === 12` draws
+  the cut (`sw12`), turns follow, `cuts: [12]` in meta, `svg/12`. Glyph: both drawings, base.css shows the cut where
+  the xs slot is 12 (new token `--area-type-icon-xs-cut`, override `--_glyph-cut`; Panel md sets 0). Spec "12px cuts";
+  sheet in `docs/research/icon-review/2026-10-13/`. Owner approved the cuts ("go with your recommendations");
+  `@area/icons` at size 12 is slot-aware like Glyph (`cutOpacity`, `sw`), and Badge / Tag demos pass `size={12}`.
+- Checks: icons 9, React 274/275 (known docs-dist), tokens 24,254, contracts 14, manifest, typecheck; app preview
+  (Link mark at type 13 / 16, Icons grid at 12). Not checked: forced colours, a 1× external display.
+- Then production gap 9 for the app: demos import `@area/icons` names (78 pass-throughs, nothing renders differently),
+  Copy / SVG export in `apps/desktop/src/copy.tsx`, the docs-only Iconography demos in `content/registry-docs.tsx`
+  (the docs render reads it); the app bundle has no Fluent ink (4.66 → 2.91 MB). Spec "Fluent map retired from the app".
+- Then gap 6 minus the licence: `@area/icons` 0.1.0, `CHANGELOG.md`, semver / deprecation policy (README), credits
+  (`data-source` → meta `source`, `packages/icons/THIRD_PARTY_NOTICES.md`: Fluent's globe in globe, globe-off). Open: the
+  licence for Area's own drawings (owner).
+- Found: `npm run build:docs` fails on `main` since PR #75 (`build.mjs` reads the removed `ui` axis); not fixed (archived).
+## Compass review → Password field, OTP field, Time field, Stepper, Spinner value (2026-10-13, branch `claude/design-compass-components-cfd9eb`, PR)
+
+- Owner reviewed compass.designcompass.org ("anything worth using/building?"). Gallery tile Copy/Reset and the app at
+  type 13 / Compact / radius 10 were handed to the **gallery** session: type 13 / Compact is on main (PR 75); Copy/Reset
+  (`apps/desktop/src/actions.tsx`) and radius 10 sit uncommitted in its worktree (`icon-hover-card-button-variant-c2d0bf`)
+  as of this merge. Research: `docs/research/compass-components-2026-10-13/`.
+- All Complete after review rounds 24-26 (`components24`-`26` on https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG);
+  nothing in review:
+  - **Password field**: Input + an eye / closed-eye InputAction ("Show / Hide password", in the Tab order, caret kept),
+    hidden again on submit. Input's "Password" tile now renders it.
+  - **OTP field**: Input-shell slots (8 apart, groups, mask, alphanumeric) over one transparent real input: autofill,
+    paste cleaned of spaces and dashes, a caret before a character selects its slot.
+  - **Time field**: spin-button segments in Input's shell (React Aria keys), the editing segment on `selection-surface`
+    with the field's ink, plates hanging 2 so digits sit at Input's inset and read "9:30 AM"; `step` adds ChatGPT's
+    list of times (Menu check rows, centred on the value); chevron `tabindex=-1`, Alt+Down opens (Combobox).
+  - **Stepper**: `ol`, `aria-current="step"`, Timeline's geometry (24 column, text 36 in, 400, its divider line 4 short
+    of markers); upcoming Checkbox ring, current the Selection fill, done a Selection ring + check.
+  - **Spinner `value`** (was the Progress circle family, owner: "is this not the same as spinner?"): the ring stopped at
+    a value, progressbar or meter (Cursor's context and review rings), linear value motion (MOTION.md progress).
+    Open: Progress's bar still eases out on value change.
+- Glyphs `eye`, `eye-off`, `clock` added to the component set (`gen-pilot-icons.mjs` PACKAGE_GLYPHS). Captures:
+  ChatGPT's schedule time list and Figma's sign-in (redacted), Mantine, Area 1:1 light and dark via headless Edge.
+- Checks: build, typecheck, npm test (24,251), React 291/291, contracts, build:docs, diff check. Not verified: the
+  Electron window, forced colours, screen readers, Time field on touch keyboards, SMS autofill.
 
 ## Preview frame (2026-10-13, branch `claude/component-work-1c5100`, PR)
 
@@ -228,6 +286,17 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   is (approved family). Next inspector parts need Chrome in front: Preview frame + Description list "show more"
   (Figma's well rgb(245,245,245) radius 5), Link / Asset row, Token row; then the inspector rebuild.
 
+## Icons: pipeline moved to packages/icons (2026-10-12, branch `claude/icon-pipeline-package`, on top of PR #78)
+
+- Migration step 2 done (see "Migration" below; spec "Pipeline moved to packages/icons"). npm scripts keep their names;
+  new `icons:refs`, `icons:keywords`. The generator now checks categories (was in the docs build). The reference cache
+  is `packages/icons/.cache/refs` (gitignored); move or refetch it in other worktrees.
+- Generated drawings byte-identical (only header comments changed). Checks: full lint + generate, `npm test -w
+  @area/icons` (8), typecheck (all), consumer test, tools smoke-tested (find, geometry, generate --only, keywords);
+  app checked in the preview (Icons tab 808 icons, Empty state demo).
+- Pre-existing, not fixed: `npm run build -w @area/docs` fails on main since 00770d8 (the docs inspector still asks for
+  the removed `ui` axis in several places); the site is archived and due for deletion (step 4).
+
 ## Icons: accessible name, right-to-left, keywords (2026-10-12, branch `claude/icon-work-status-38f2b6`)
 
 - Owner: "continue working with your recs" → production gaps 3 and 4. Reviews were clear first (all 410 `reviews7`
@@ -401,8 +470,12 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   them on merge. Remaining:
   1. (done) `pages.mjs`, `component-status.mjs`, `gallery/specimens.mjs`, `scripts/specimen-names.mjs`, `registry.tsx`,
      `demos/` (37 files), `gallery/fit.ts`, `gallery/controls.ts` → `apps/desktop/src/content/` and `src/gallery/`.
-  2. Icon sources (`assets/area-icons-pilot`, vendored Fluent cuts), `gen-pilot-icons.mjs` / `gen-icons.mjs` and the
-     icon tools, `icon-categories.ts` → `packages/icons`; the app's Icons tab reads `@area/icons` + `/meta`.
+  2. (done 2026-10-12, branch `claude/icon-pipeline-package`) Area's drawings → `packages/icons/sources`, generator
+     and tools → `packages/icons/scripts` (`generate.mjs`, `find`, `geometry`, `batch`, `sheet`, `refs`, `keywords`),
+     categories → `packages/icons/src/categories.ts` (exported from `@area/icons/meta` with `batches`); the app's Icons
+     tab and the demos read `@area/icons`. Left in `apps/docs` until the Fluent map is retired: `gen-icons.mjs`,
+     `assets/area-icons*`, the sprites, `src/icons.tsx` (the Iconography demo's Fluent plates and AREA_SWAP names),
+     and the generated `pilot-icons.tsx` / `pilot-explore.tsx` (docs, Iconography demo, package test oracle).
   3. `CopyButton` → `@area/react`; `area-capture.js` → `tools/`.
   4. Repoint skills, AGENTS, README, DEVELOPMENT, root scripts, react tests that read `apps/docs/dist`; then delete
      the site (build, html, preview).

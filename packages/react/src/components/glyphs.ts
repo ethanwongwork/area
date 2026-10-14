@@ -1,5 +1,5 @@
-/** Area-drawn component glyphs, generated from apps/docs/assets/area-icons-pilot by
- * apps/docs/scripts/gen-pilot-icons.mjs. Do not edit by hand. Construction: docs/specs/icons.md.
+/** Area-drawn component glyphs, generated from packages/icons/sources by
+ * packages/icons/scripts/generate.mjs. Do not edit by hand. Construction: docs/specs/icons.md.
  * Each glyph is a list of stroked centre-line paths on the 16px grid. */
 export const glyphs = {
   "add": [
@@ -91,6 +91,18 @@ export const glyphs = {
   "dismiss-circle": [
     "M2 8A6 6 0 1 0 14 8A6 6 0 1 0 2 8Z",
     "M5.5 5.5L10.5 10.5M10.5 5.5L5.5 10.5"
+  ],
+  "eye": [
+    "M1.611 7.703A6.957 6.957 0 0 1 14.389 7.703A0.75 0.75 0 0 1 14.389 8.297A6.957 6.957 0 0 1 1.611 8.297A0.75 0.75 0 0 1 1.611 7.703Z",
+    "M6 8A2 2 0 1 0 10 8A2 2 0 1 0 6 8Z"
+  ],
+  "eye-off": [
+    "M1.5 5.5C3.5 9.5 12.5 9.5 14.5 5.5",
+    "M8 8.5V11M4.5 7.912L3 9.662M11.5 7.912L13 9.662"
+  ],
+  "clock": [
+    "M2 8A6 6 0 1 0 14 8A6 6 0 1 0 2 8Z",
+    "M8 4.5V8L10.5 10.5"
   ]
 } as const;
 export type GlyphName = keyof typeof glyphs;
@@ -102,3 +114,29 @@ export const glyphPaint: Partial<Record<GlyphName, "solid" | "fill" | "knockout"
 export const glyphFills: Partial<Record<GlyphName, readonly number[]>> = {"info":[2],"help":[2]};
 /** Knocked-out marks in a "knockout" glyph, by path index (dismiss-circle's ×), stroked at the line. */
 export const glyphKnockouts: Partial<Record<GlyphName, readonly number[]>> = {"dismiss-circle":[1]};
+/** 12px cuts (docs/specs/icons.md, "12px cuts"): the glyph redrawn on the 12px grid, its lines on half pixels so they
+ * are crisp at 1×. Glyph draws it when its size is 12; glyphCutFills12 lists its filled dots by path index. */
+export const glyphCuts12: Partial<Record<GlyphName, readonly string[]>> = {
+  "add": [
+    "M5.5 2V9M2 5.5H9"
+  ],
+  "arrow-up": [
+    "M5.5 10.5V1.5M2 5L5.5 1.5L9 5"
+  ],
+  "check": [
+    "M2.5 5.5L5 8L9.5 3.5"
+  ],
+  "chevron-down": [
+    "M2.5 4.5L6 8L9.5 4.5"
+  ],
+  "open": [
+    "M5.5 2.5H4A1.5 1.5 0 0 0 2.5 4V8A1.5 1.5 0 0 0 4 9.5H8A1.5 1.5 0 0 0 9.5 8V6.5",
+    "M7.5 2.5H9.5V4.5M9.5 2.5L6 6"
+  ],
+  "info": [
+    "M1.5 5.5A4 4 0 1 0 9.5 5.5A4 4 0 1 0 1.5 5.5Z",
+    "M5.5 5.5V7.5",
+    "M5 3.5A0.5 0.5 0 1 0 6 3.5A0.5 0.5 0 1 0 5 3.5Z"
+  ]
+};
+export const glyphCutFills12: Partial<Record<GlyphName, readonly number[]>> = {"info":[2]};

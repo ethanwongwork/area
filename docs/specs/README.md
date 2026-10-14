@@ -60,7 +60,7 @@ Completion is recorded only in `apps/desktop/src/content/component-status.mjs`; 
 | [Separator](separator.md) | accepted | Cohesion audit, 2026-09-26: Area, ChatGPT, Notion and Figma captures and Untitled UI source; confirmed |
 | [Skeleton](skeleton.md) | accepted | Cohesion audit, 2026-09-26: Area, ChatGPT, Notion and Figma captures and Untitled UI source; changed |
 | [Slider](slider.md) | accepted | Cohesion audit, 2026-09-26: Area, ChatGPT, Notion and Figma captures and Untitled UI source; confirmed |
-| [Spinner](spinner.md) | accepted | Cohesion audit, 2026-09-26: Area, ChatGPT, Notion and Figma captures and Untitled UI source; changed |
+| [Spinner](spinner.md) | accepted | Cohesion audit, 2026-09-26: Area, ChatGPT, Notion and Figma captures and Untitled UI source; changed. 2026-10-13: `value` stops the ring at a value (was Progress circle; Cursor's rings) |
 | [Switch](switch.md) | accepted | Cohesion audit, 2026-09-26: Area, ChatGPT, Notion and Figma captures and Untitled UI source; changed |
 | [Table](table.md) | accepted | Cohesion audit, 2026-09-26: Area, ChatGPT, Notion and Figma captures and Untitled UI source; changed |
 | [Tabs](tabs.md) | accepted | Cohesion audit, 2026-09-26: Area, ChatGPT, Notion and Figma captures and Untitled UI source; confirmed |
@@ -94,6 +94,10 @@ Completion is recorded only in `apps/desktop/src/content/component-status.mjs`; 
 | [Badge](badge.md) | accepted | Pass 2: 16 / 20 / 24 scale (md 20 default), neutral ink, 2px dismiss gap, uppercase removed. 22 reference captures, 80 Area captures, validator |
 | [Icon set](icons.md) | research | Stroke census across Fluent, ChatGPT, Notion, Figma and Cursor; construction proposal and 12-icon pilot |
 | [Type ramp](typography.md) | research | Product type census; proposal for six sizes, a lighter weight policy and two text colors |
+| [Password field](password-field.md) | accepted | New, 2026-10-13: Input with a reveal action (InputAction's box, the eye / closed eye, "Show / Hide password", in the Tab order); hidden again on submit. Carbon, Mantine, Ant, Chakra, Untitled UI, GOV.UK; Figma's sign-in has no reveal |
+| [OTP field](otp-field.md) | accepted | New, 2026-10-13: a one-time code as Input-shell slots (8 apart, optional groups) over one real input, so autofill, paste and undo work (input-otp, shadcn, Untitled UI, GOV.UK) |
+| [Time field](time-field.md) | accepted | New, 2026-10-13: hour / minute / AM-PM spin-button segments in Input's shell (React Aria, Spectrum 2); `step` adds ChatGPT's list of times (captured). Round 24: the editing segment takes Editable text's Selection surface with the field's ink; the chevron leaves the Tab order and Alt+Down opens the list, as Combobox. Round 25: segment plates hang 2 over their neighbours, so the time spaces as text and starts at Input's inset |
+| [Stepper](stepper.md) | accepted | New, 2026-10-13: an `ol` of numbered steps on Timeline's geometry (24 column, text 36 in, 400, its divider line 4 short of each marker); current is the Selection fill, done a Selection ring with a check |
 
 Every component now has a spec. The decisions recorded before the evidence process were
 moved into the specs; [prior decisions](PRIOR_DECISIONS.md) maps where each went. The

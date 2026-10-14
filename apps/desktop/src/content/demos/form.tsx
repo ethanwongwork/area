@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Avatar, SliderRange, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Field, Input, InputAction, NumberField, Panel, PanelSection, Radio, RadioGroup, Select, Slider, Textarea } from "@area/react";
-import { CheckIcon, CornerRadiusIcon, DismissIcon, OpacityIcon, OpenIcon, RotateIcon, SearchIcon, TrashIcon } from "../../../../docs/src/icons.tsx";
+import { CheckIcon, CornerIcon, DismissIcon, OpacityIcon, OpenIcon, RotateIcon, SearchIcon, TrashIcon } from "@area/icons";
 
 export const InputDefault = () => <Input aria-label="Label" placeholder="Placeholder" />;
 
@@ -95,7 +95,7 @@ export const NumberFieldInspector = () => {
     </div></PanelSection>
     <PanelSection heading="Appearance"><div style={pair}>
       <NumberField variant="soft" fullWidth aria-label="Opacity" defaultValue={100} min={0} max={100} unit="%" scrub={<OpacityIcon />} />
-      <NumberField variant="soft" fullWidth aria-label="Corner radius" defaultValue={8} min={0} scrub={<CornerRadiusIcon />} />
+      <NumberField variant="soft" fullWidth aria-label="Corner radius" defaultValue={8} min={0} scrub={<CornerIcon />} />
     </div></PanelSection>
   </Panel>;
 };

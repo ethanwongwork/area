@@ -1,0 +1,346 @@
+{
+ "$comment": "Area's own search words, read by packages/icons/scripts/keywords.mjs. $words: a word in an Area name and the word other libraries use for it, measured from the counterpart map (docs/research/icon-audit/area-map.json: person→user 6 times, add→plus 9, chat→message 5 …); an icon gets its name with each swap as a keyword, and a library icon of that name is its counterpart when the map has none. $drop: library tags that name another concept (Lucide's plus carries its crosshair words) or misspell one. The rest: keywords for one icon, for drawings no library has and words a library misses. Record: docs/specs/icons.md, \"Keywords and names\".",
+ "$words": {
+  "add": [
+   "plus"
+  ],
+  "alert": [
+   "warning"
+  ],
+  "attach": [
+   "paperclip"
+  ],
+  "call": [
+   "phone"
+  ],
+  "chat": [
+   "message",
+   "message-circle",
+   "message-square"
+  ],
+  "check": [
+   "checkmark"
+  ],
+  "chip": [
+   "cpu"
+  ],
+  "desktop": [
+   "monitor"
+  ],
+  "dismiss": [
+   "x",
+   "close"
+  ],
+  "document": [
+   "file"
+  ],
+  "file": [
+   "document"
+  ],
+  "filter": [
+   "funnel"
+  ],
+  "flask": [
+   "beaker"
+  ],
+  "home": [
+   "house"
+  ],
+  "location": [
+   "map-pin"
+  ],
+  "log": [
+   "sign"
+  ],
+  "mail": [
+   "envelope"
+  ],
+  "more": [
+   "ellipsis"
+  ],
+  "off": [
+   "slash"
+  ],
+  "people": [
+   "users"
+  ],
+  "person": [
+   "user"
+  ],
+  "plane": [
+   "airplane"
+  ],
+  "pointer": [
+   "cursor"
+  ],
+  "pushpin": [
+   "pin"
+  ],
+  "remove": [
+   "minus"
+  ],
+  "search": [
+   "magnifying-glass"
+  ],
+  "settings": [
+   "gear"
+  ],
+  "trash": [
+   "delete"
+  ]
+ },
+ "$drop": {
+  "add": [
+   "aim",
+   "scope",
+   "sight",
+   "reticule",
+   "maximum",
+   "toolbar",
+   "calculate",
+   "upgrade"
+  ],
+  "sparkle": [
+   "rate",
+   "ratings",
+   "favorites",
+   "favorited",
+   "night"
+  ],
+  "dismiss": [
+   "mulitplication"
+  ],
+  "menu": [
+   "ul",
+   "ol",
+   "unordered list",
+   "ordered list",
+   "checklist"
+  ],
+  "settings": [
+   "8"
+  ],
+  "more-horizontal": [
+   "3",
+   "circles",
+   "polygons"
+  ],
+  "sort": [
+   "mobile data",
+   "internet"
+  ]
+ },
+ "api": [
+  "endpoint",
+  "interface",
+  "integration",
+  "rest",
+  "developer"
+ ],
+ "arrow-up-right-circle": [
+  "diagonal",
+  "northeast",
+  "external",
+  "open",
+  "launch"
+ ],
+ "arrow-down-right-circle": [
+  "diagonal",
+  "southeast",
+  "direction"
+ ],
+ "arrow-down-left-circle": [
+  "diagonal",
+  "southwest",
+  "direction"
+ ],
+ "arrow-up-left-circle": [
+  "diagonal",
+  "northwest",
+  "direction"
+ ],
+ "auto-layout": [
+  "stack",
+  "flex",
+  "spacing",
+  "direction",
+  "layout"
+ ],
+ "blur": [
+  "gaussian",
+  "soften",
+  "defocus",
+  "effect"
+ ],
+ "bot-agent": [
+  "agent",
+  "ai",
+  "assistant",
+  "robot"
+ ],
+ "bot-automator": [
+  "ai",
+  "robot",
+  "automation",
+  "workflow"
+ ],
+ "bot-builder": [
+  "ai",
+  "robot",
+  "build",
+  "construct"
+ ],
+ "bot-designer": [
+  "ai",
+  "robot",
+  "design",
+  "creative"
+ ],
+ "bot-generator": [
+  "ai",
+  "robot",
+  "generate",
+  "create"
+ ],
+ "bot-guard": [
+  "ai",
+  "robot",
+  "safety",
+  "security",
+  "moderation"
+ ],
+ "bot-lead": [
+  "ai",
+  "robot",
+  "leader",
+  "orchestrator",
+  "manager"
+ ],
+ "bot-researcher": [
+  "ai",
+  "robot",
+  "research",
+  "investigate"
+ ],
+ "bot-scholar": [
+  "ai",
+  "robot",
+  "learning",
+  "education",
+  "tutor"
+ ],
+ "breakpoint": [
+  "debug",
+  "debugger",
+  "pause",
+  "code"
+ ],
+ "clipboard-paste": [
+  "insert",
+  "put"
+ ],
+ "duplicate": [
+  "copy",
+  "clone"
+ ],
+ "escape": [
+  "esc",
+  "key",
+  "exit",
+  "cancel"
+ ],
+ "flow-wrap": [
+  "flex wrap",
+  "auto layout",
+  "grid"
+ ],
+ "gift-card": [
+  "voucher",
+  "coupon",
+  "present",
+  "credit"
+ ],
+ "hand-wave": [
+  "hello",
+  "hi",
+  "greeting",
+  "goodbye"
+ ],
+ "insert-column": [
+  "add column",
+  "table",
+  "spreadsheet"
+ ],
+ "issue": [
+  "bug",
+  "ticket",
+  "task",
+  "problem",
+  "open"
+ ],
+ "mask": [
+  "clip",
+  "clipping mask",
+  "layer mask",
+  "crop"
+ ],
+ "padding": [
+  "spacing",
+  "inset",
+  "box"
+ ],
+ "padding-axis": [
+  "spacing",
+  "horizontal padding",
+  "vertical padding"
+ ],
+ "pipeline": [
+  "ci",
+  "build",
+  "deploy",
+  "workflow",
+  "stages"
+ ],
+ "repository": [
+  "repo",
+  "git",
+  "source",
+  "codebase"
+ ],
+ "share-nodes": [
+  "network",
+  "connect",
+  "social",
+  "graph"
+ ],
+ "sides": [
+  "individual strokes",
+  "edges",
+  "border",
+  "stroke"
+ ],
+ "stack-frame": [
+  "call stack",
+  "debugger",
+  "frames",
+  "trace"
+ ],
+ "timeline": [
+  "history",
+  "events",
+  "activity",
+  "steps"
+ ],
+ "token": [
+  "design token",
+  "variable",
+  "style",
+  "value"
+ ],
+ "volume-low": [
+  "quiet",
+  "sound",
+  "audio",
+  "speaker"
+ ]
+}

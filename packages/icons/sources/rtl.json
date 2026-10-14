@@ -1,0 +1,28 @@
+{
+ "$comment": "Icons that mirror in right-to-left text, read by scripts/generate.mjs: each component carries data-area-rtl=\"mirror\" and @area/icons/rtl.css flips it under :dir(rtl). Rule (docs/specs/icons.md, \"Accessible name and right-to-left\"): a concept tied to reading direction mirrors when Fluent's React icons (directionType mirror, microsoft/fluentui-system-icons@f126001) or Google's Material list (google/material-design-icons@6eed39a, index.html 496-525) mirror its counterpart, and the family shares it. Never: icons named for a literal direction (arrow-left, chevron-right: the caller picks by meaning), circular arrows and clocks (they turn clockwise in every script), slashes, checkmarks, digits and letters, real objects, and drawings that are symmetric already (import, list, screen-share).",
+ "mirror": {
+  "reply": "forward motion; Fluent and Material",
+  "reply-all": "reply's family; Fluent and Material",
+  "forward": "forward motion; Fluent and Material",
+  "send": "forward motion; Fluent and Material",
+  "undo": "back in reading order; Fluent and Material",
+  "redo": "forward in reading order; Fluent and Material",
+  "indent": "text; Fluent and Material",
+  "outdent": "text; Fluent and Material",
+  "list-bullet": "markers at the line start; Material format_list_bulleted",
+  "list-plus": "list-bullet's family (Material playlist_add)",
+  "list-minus": "list-bullet's family",
+  "list-x": "list-bullet's family",
+  "list-collapse": "markers at the line start, list-bullet's family",
+  "list-tree": "hierarchy indents from the line start",
+  "table-of-contents": "text with its markers at the line end; Material toc",
+  "text-wrap": "text; Material wrap_text",
+  "star-half": "fills from the start side; Material star_half",
+  "backspace": "deletes toward the start; Material backspace",
+  "chevron-first": "the start, not the left; Material first_page",
+  "chevron-last": "the end, not the right; Material last_page",
+  "debug-step-over": "forward motion; Fluent arrow_step_over",
+  "trending-up": "time runs in reading order; Fluent and Material",
+  "trending-down": "time runs in reading order; Fluent and Material"
+ }
+}

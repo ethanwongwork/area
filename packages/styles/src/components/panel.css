@@ -257,7 +257,9 @@
   /* A native cut, 16 at md and 12 at sm, centred in the side inset (13 / 9): its ink (9 / 7 wide) fits inside it
      though the cut's box is wider, as Figma's 3 x 5 chevron sits in its 16. */
   .area-panel__chevron svg { flex-shrink: 0; inline-size: var(--_chevron, var(--area-icon-sm)); block-size: var(--_chevron, var(--area-icon-sm)); max-inline-size: none; }
-  .area-panel--sm .area-panel__chevron svg { --_chevron: var(--area-icon-xs); }
+  /* The glyph is Glyph size 12; only the sm slot is the xs slot where its 12px cut shows (base.css). */
+  .area-panel__chevron svg { --_glyph-cut: 0; }
+  .area-panel--sm .area-panel__chevron svg { --_chevron: var(--area-icon-xs); --_glyph-cut: var(--area-type-icon-xs-cut); }
   /* Revealed at once on hover or focus, faded out on fast (MOTION.md, "Hover plate"). */
   .area-panel__toggle:focus-visible .area-panel__chevron { opacity: 1; transition-duration: 0s; }
   @media (hover: hover) { .area-panel__heading:hover .area-panel__chevron { opacity: 1; transition-duration: 0s; } }

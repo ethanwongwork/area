@@ -1,6 +1,6 @@
 /** Timeline gallery specimens: one variant per tile. docs/specs/timeline.md. */
 import { Avatar, Timeline, TimelineItem } from "@area/react";
-import { CheckIcon, DocumentIcon, EditIcon, PlusIcon } from "../../../../docs/src/icons.tsx";
+import { AddIcon, CheckIcon, DocumentIcon, PencilIcon } from "@area/icons";
 
 const frame = { inlineSize: 280 };
 
@@ -25,9 +25,9 @@ export const GalleryTimelineAccent = () => (
 /* Bare icons on the line, as Linear's issue activity. */
 export const GalleryTimelineIcons = () => (
   <Timeline aria-label="Activity" style={frame}>
-    <TimelineItem icon={<EditIcon />} title="David Tee edited Launch plan" time="1m ago" />
+    <TimelineItem icon={<PencilIcon />} title="David Tee edited Launch plan" time="1m ago" />
     <TimelineItem icon={<DocumentIcon />} title="Design team published it" time="1h ago" />
-    <TimelineItem icon={<PlusIcon />} title="David Tee created Launch plan" time="Oct 8" />
+    <TimelineItem icon={<AddIcon />} title="David Tee created Launch plan" time="Oct 8" />
   </Timeline>
 );
 
