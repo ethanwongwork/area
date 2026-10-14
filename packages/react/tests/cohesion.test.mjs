@@ -51,7 +51,13 @@ test('every floating surface shares the lift', () => {
   const role = [...css.matchAll(/--area-shadow-float:\s*([^;]+);/g)].map(match => match[1].trim());
   assert.ok(role.includes('0 8px 12px light-dark(rgb(25 25 25 / 0.027), rgb(25 25 25 / 0.08)), 0 2px 6px light-dark(rgb(25 25 25 / 0.027), transparent)'), 'shadow-float lost its minimal default');
   assert.ok(role.includes('0 20px 24px var(--area-shadow-color), 0 5px 8px color-mix(in srgb, var(--area-shadow-color) 50%, transparent)'), 'shadow-float lost its Raised recipe');
-  assert.ok(role.includes('none'), 'the Flat preset should drop the lift');
+  assert.ok(role.includes('0 0 0 0 transparent'), 'the Flat preset should drop the lift');
+  // A role sits inside lists (Board card's ring, the floating Toolbar's edge): `none` there invalidates the whole
+  // box-shadow and drops the ring with it, so "no lift" must be a transparent shadow.
+  for (const name of ['shadow-card', 'shadow-float']) {
+    const values = [...css.matchAll(new RegExp(`--area-${name}:\\s*([^;]+);`, 'g'))].map(match => match[1].trim());
+    assert.ok(values.length && !values.includes('none'), `--area-${name} is none somewhere; use a transparent shadow`);
+  }
   for (const block of ['.area-popover, .area-menu', '.area-dialog', '.area-toast', '.area-menu__search-surface', '.area-calendar, .area-calendar--surface', '.area-color-picker, .area-color-picker--surface', '.area-command-palette']) {
     const rule = ruleFor(block);
     assert.ok(rule, `${block} missing`);

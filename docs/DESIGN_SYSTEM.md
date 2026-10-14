@@ -161,7 +161,7 @@ barely want to see any shadows or none"; evidence in `docs/research/elevation-20
 separates; a shadow only hints. Three rules:
 
 - **Nothing at rest lifts.** Fields, controls, Card, Panel, Board card and Tooltip draw no drop shadow
-  by default: `shadow-card`, the resting role, is `none` (Notion's page draws none at rest; ChatGPT's
+  by default: `shadow-card`, the resting role, is no lift (Notion's page draws none at rest; ChatGPT's
   tooltip draws none). Card and Board card keep their edges; Tooltip keeps its 5% white inner edge in dark.
 - **Everything that floats shares one hint.** Menu, Popover, the Select picker, Dialog, Toast, the
   Calendar and ColorPicker surfaces, Command palette, Drawer and the floating Toolbar take
@@ -171,7 +171,9 @@ separates; a shadow only hints. Three rules:
 - **Raised thumbs keep contact.** `shadow-1`, a 0.5px contact shadow, stays on the Switch, Slider and
   Segmented thumbs, the soft Toggle group selection and Badge modern.
 
-Both roles belong to the Surface axis (audit S10): Flat sets them to `none`; Raised and Elevated keep
+"No lift" is a transparent shadow, `0 0 0 0 transparent`, never `none`: a role can sit in a list beside a
+component's own layers (Board card's tone ring, the floating Toolbar's edge), and `none` in a list invalidates
+the whole `box-shadow`, ring and all. Both roles belong to the Surface axis (audit S10): Flat sets them to no lift; Raised and Elevated keep
 the previous default for a product that wants visible depth (Card's 3% halo, owner 2026-09-27, and
 Notion's popover geometry, `0 20px 24px` and `0 5px 8px` in `shadow-color` at full and half strength).
 The Table frame is a required edge (`stroke-width`), so it stays under Elevated.

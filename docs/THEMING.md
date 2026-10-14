@@ -32,8 +32,9 @@ The registry in `packages/tokens/src/axes/registry.ts` defines ten axes:
   (`pill`, Avatar's `shape`).
 - `surface`: flat, outlined, raised or elevated. Besides `border-width` and `shadow-1`…`4` it
   owns `shadow-card` (the resting lift: Card, Panel, Board card) and `shadow-float` (the shared
-  floating lift). Outlined, the default, is minimal: `shadow-card` none and a barely-there float
-  (DESIGN_SYSTEM.md, "Elevation"); Raised and Elevated keep the deeper recipes; Flat sets both to `none`.
+  floating lift). Outlined, the default, is minimal: no resting lift and a barely-there float
+  (DESIGN_SYSTEM.md, "Elevation"); Raised and Elevated keep the deeper recipes; Flat drops both. "No lift" is `0 0 0 0 transparent`,
+  never `none`, so a role stays valid inside a component's shadow list.
 - `motion`: none, subtle or expressive.
 
 Keep the name `accent`: it is the system-selected chromatic role and may represent a

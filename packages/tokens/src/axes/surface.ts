@@ -14,7 +14,7 @@
  * barely want to see any shadows or none"; docs/research/elevation-2026-10-13.md). The edge carries
  * separation and the shadow only hints at it, as the references draw it:
  *   - nothing at rest lifts: Notion's page and ChatGPT's (bar its composer) draw no shadow, so
- *     Outlined's `shadow-card` is `none`;
+ *     Outlined's `shadow-card` is no lift (a transparent shadow, list-safe; see NO_LIFT);
  *   - a floating surface takes Notion's lightest captured lift, its small floating chip: 0 8px 12px
  *     and 0 2px 6px, both rgba(25,25,25,.027) (light). Dark keeps one layer, Notion's dark chip at
  *     8%, since on a near-black page the 1px edge does the work (ChatGPT's dark composer draws none);
@@ -27,6 +27,10 @@ const CARD = "0 1px 2px -1px light-dark(rgb(0 0 0 / 0.03), transparent), 0 2px 8
 const FLOAT = "0 20px 24px var(--area-shadow-color), 0 5px 8px color-mix(in srgb, var(--area-shadow-color) 50%, transparent)";
 // spec: Notion's small floating chip (notion.site search, 2026-10-13): light 0 8 12 / 0 2 6 at 2.7%;
 // dark one layer at 8% (its 0 4 12 -2 rgba(25,25,25,.08), here on the light geometry's first layer).
+// "No lift" for the two roles is a transparent shadow, never `none`: components put a role in a list beside their
+// own layers (Board card's tone ring, the floating Toolbar's edge), and `none` inside a list makes the whole
+// box-shadow invalid, so the browser drops the ring with it (owner, 2026-10-14: "why is the stroke gone?").
+const NO_LIFT = "0 0 0 0 transparent";
 const FLOAT_MINIMAL = "0 8px 12px light-dark(rgb(25 25 25 / 0.027), rgb(25 25 25 / 0.08)), 0 2px 6px light-dark(rgb(25 25 25 / 0.027), transparent)";
 import { type AxisDefinition, tokens } from "./schema.ts";
 
@@ -47,8 +51,8 @@ export const SURFACE_AXIS: AxisDefinition = {
         "shadow-2": "none",
         "shadow-3": "none",
         "shadow-4": "none",
-        "shadow-card": "none",
-        "shadow-float": "none",
+        "shadow-card": NO_LIFT,
+        "shadow-float": NO_LIFT,
       }),
     },
     {
@@ -61,7 +65,7 @@ export const SURFACE_AXIS: AxisDefinition = {
         "shadow-2": "0 1px 2px -0.5px var(--area-shadow-color)",
         "shadow-3": "0 2px 4px -1px var(--area-shadow-color)",
         "shadow-4": "0 3px 6px -2px var(--area-shadow-color)",
-        "shadow-card": "none",
+        "shadow-card": NO_LIFT,
         "shadow-float": FLOAT_MINIMAL,
       }),
     },
