@@ -304,5 +304,8 @@ order:
 9. **Retire the Fluent map**, including the docs toolbar (`icons.generated.mjs`). **App done 2026-10-13** (spec "Fluent map retired from the app"); the docs' own copy goes with the site.
 
 Also open: the quality pass's proposals (spec "Quality and consistency pass, 2026-10-10"); replace-all; the component
-integrations (File upload file types, Tag picker tag-plus, Date picker calendar-range, the panel toggles, Search
-field's dismiss-circle).
+integrations, settled 2026-10-14: File upload's demos pass file-type icons (file-pdf, file-image …) through
+`icon`; Search field already clears with dismiss-circle. Not adopted, by the references: Date range picker keeps Date
+picker's calendar (owner-accepted "one field across the date family"), Tag picker's create row stays text + tag
+(Notion's row has no icon), and the app's panel toggles stay outline → filled (`docs/PRODUCT_UI.md` rule 6), not
+panel-*-open / -close chevrons. tag-plus, calendar-range and the chevron toggles stay in the set for other uses.

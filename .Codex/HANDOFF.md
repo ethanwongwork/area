@@ -12,8 +12,10 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   `"license": "MIT"`, shipped in `files`. Owner dropped the Figma library and a separate catalogue: the app's Icons tab
   is the catalogue. Spec "Versions, deprecation and credits"; production-gaps README items 1, 6, 7.
 - Checks: `npm run build`, icons tests 10/10, typecheck (all), consumer test; app Icons tab shows padding-side Approved.
-- Left: component integrations (File upload file types, Tag picker tag-plus, Date picker calendar-range, panel
-  toggles, Search field dismiss-circle), coverage by use, deleting the docs site's Fluent copy with the site, pixel nits
+- Integrations: File upload demos pass file-type icons through `icon` (spec feedback log); Search field already used
+  dismiss-circle (spec table row fixed). Not adopted: calendar-range in Date range picker, tag-plus in Tag picker's
+  create row, chevron panel toggles (reasons in the production-gaps README).
+- Left: coverage by use, deleting the docs site's Fluent copy with the site, pixel nits
   (kanban, form, heavy qr-code / calculator / gamepad).
 
 ## Icons: 12px cuts (2026-10-13, branch `claude/icon-work-2974ee`, PR)
