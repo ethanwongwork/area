@@ -3,15 +3,15 @@
 // mirrors), demo labels (the concept each icon stands for), the Fluent cut it is compared
 // with, its construction line in docs/specs/icons.md, batch notes, and the planned and
 // dropped concepts in docs/research/icon-inventory.md.
-//   node apps/docs/scripts/icon-find.mjs brain            # one concept
-//   node apps/docs/scripts/icon-find.mjs "paper plane" agent send
-//   node apps/docs/scripts/icon-find.mjs --missing concepts.txt   # which of a list have no icon
+//   node packages/icons/scripts/find.mjs brain            # one concept
+//   node packages/icons/scripts/find.mjs "paper plane" agent send
+//   node packages/icons/scripts/find.mjs --missing concepts.txt   # which of a list have no icon
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url)), ROOT = join(HERE, "../../..");
-const PILOT = join(HERE, "../assets/area-icons-pilot");
+const PILOT = join(HERE, "../sources");
 const read = p => existsSync(p) ? readFileSync(p, "utf8") : "";
 
 // Every icon, its derived turns and mirrors, and what it is known by.
@@ -25,7 +25,7 @@ for (const file of readdirSync(PILOT).filter(f => f.endsWith(".svg"))) {
 const labels = read(join(ROOT, "apps/desktop/src/content/demos/icons.tsx")).split("const REF_NAMES")[0];
 for (const [, name, label] of labels.matchAll(/"([a-z0-9-]+)": "([^"]+)"/g)) if (icons.has(name)) icons.get(name).label = label;
 const camel = n => n.replace(/(^|-)([a-z0-9])/g, (_, __, c) => c.toUpperCase());
-const gen = read(join(HERE, "gen-icons.mjs"));
+const gen = read(join(ROOT, "apps/docs/scripts/gen-icons.mjs"));
 for (const icon of icons.values()) icon.fluent = gen.match(new RegExp(`FluentRef${camel(icon.name)}Icon: "([a-z0-9_]+)"`))?.[1]?.replace(/_\d+_regular$/, "") ?? "";
 const spec = read(join(ROOT, "docs/specs/icons.md"));
 for (const [, name, text] of spec.matchAll(/^\| ([a-z0-9-]+) \| (.+) \|$/gm)) if (icons.has(name)) icons.get(name).spec = text;  // the latest row wins
@@ -54,7 +54,7 @@ function find(query) {
 }
 
 const args = process.argv.slice(2);
-if (!args.length) { console.log("usage: icon-find.mjs <concept> [<concept> …] | --missing list.txt"); process.exit(1); }
+if (!args.length) { console.log("usage: find.mjs <concept> [<concept> …] | --missing list.txt"); process.exit(1); }
 if (args[0] === "--missing") {
   const list = read(args[1]).split("\n").map(s => s.trim()).filter(Boolean);
   for (const concept of list) { const { hits, plans } = find(concept); if (!hits.length || hits[0][1] < 60) console.log(`${concept}${plans.length ? `  (planned: ${plans.map(p => `${p.concept} — ${p.plan}`).join("; ")})` : ""}`); }

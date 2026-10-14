@@ -2,10 +2,10 @@
 // Record a batch of Area icons in every place the review needs, from one JSON file:
 // batches.json (the gallery's review groups and owner status), the batch's construction
 // section in docs/specs/icons.md, the demo label and Fluent comparison plate
-// (apps/desktop/src/content/demos/icons.tsx, scripts/gen-icons.mjs), then regenerate the icon modules.
-//   node apps/docs/scripts/icon-batch.mjs batch.json            # record (idempotent)
-//   node apps/docs/scripts/icon-batch.mjs batch.json --review a,b  # set changed icons back to review
-//   node apps/docs/scripts/icon-batch.mjs --fluent contact_card    # resolve a Fluent stem
+// (apps/desktop/src/content/demos/icons.tsx, apps/docs/scripts/gen-icons.mjs), then regenerate the icon modules.
+//   node packages/icons/scripts/batch.mjs batch.json            # record (idempotent)
+//   node packages/icons/scripts/batch.mjs batch.json --review a,b  # set changed icons back to review
+//   node packages/icons/scripts/batch.mjs --fluent contact_card    # resolve a Fluent stem
 // batch.json:
 //   { "id": "batch-44", "title": "Batch 44 · Topic", "date": "2026-09-28",
 //     "note": "One paragraph for the gallery.",
@@ -23,7 +23,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const HERE = dirname(fileURLToPath(import.meta.url)), ROOT = join(HERE, "../../..");
-const PILOT = join(HERE, "../assets/area-icons-pilot");
+const PILOT = join(HERE, "../sources");
 const FLUENT = join(dirname(createRequire(import.meta.url).resolve("@fluentui/svg-icons/package.json")), "icons");
 const SIZES = [16, 20, 24, 28, 32, 48];
 
@@ -42,14 +42,14 @@ if (args[0] === "--fluent") {
   console.log(r ? r.join("  ") : `no Fluent cut for "${args[1]}"; try: ls node_modules/@fluentui/svg-icons/icons | grep ${args[1]}`);
   process.exit(r ? 0 : 1);
 }
-if (!args[0] || !existsSync(args[0])) { console.log("usage: icon-batch.mjs batch.json [--review name,name] | --fluent stem"); process.exit(1); }
+if (!args[0] || !existsSync(args[0])) { console.log("usage: batch.mjs batch.json [--review name,name] | --fluent stem"); process.exit(1); }
 const batch = JSON.parse(readFileSync(args[0], "utf8"));
 const review = new Set((args[args.indexOf("--review") + 1] ?? "").split(",").filter(Boolean));
 const problems = [];
 if (!/^batch-\d+$/.test(batch.id ?? "")) problems.push(`id must look like batch-44, not ${batch.id}`);
 for (const key of ["title", "date", "note"]) if (!batch[key]) problems.push(`missing "${key}"`);
 for (const icon of batch.icons ?? []) {
-  if (!existsSync(join(PILOT, `${icon.name}.svg`))) problems.push(`${icon.name}: no source at assets/area-icons-pilot/${icon.name}.svg`);
+  if (!existsSync(join(PILOT, `${icon.name}.svg`))) problems.push(`${icon.name}: no source at packages/icons/sources/${icon.name}.svg`);
   if (!icon.label) problems.push(`${icon.name}: missing "label" (the demo's concept name)`);
   if (!icon.spec) problems.push(`${icon.name}: missing "spec" (its construction line)`);
   if (icon.fluent && !resolveFluent(icon.fluent)) problems.push(`${icon.name}: no Fluent cut for "${icon.fluent}"`);
@@ -85,7 +85,7 @@ const newRefs = batch.icons.filter(i => i.fluent && !known.has(i.name)).map(i =>
 if (newRefs.length) demos = demos.replace(refs[0], `const REF_NAMES = [${refs[1]}, ${newRefs.join(", ")}];`);
 writeFileSync(demosPath, demos);
 
-const genPath = join(HERE, "gen-icons.mjs"); let gen = readFileSync(genPath, "utf8");
+const genPath = join(ROOT, "apps/docs/scripts/gen-icons.mjs"); let gen = readFileSync(genPath, "utf8");
 const marker = "  // icon-batch.mjs adds Fluent references for new batches above this line.\n";
 if (!gen.includes(marker)) { console.error("✗ gen-icons.mjs lost its icon-batch marker line"); process.exit(1); }
 const camel = n => n.replace(/(^|-)([a-z0-9])/g, (_, __, c) => c.toUpperCase());
@@ -97,7 +97,7 @@ if (newMap.length) gen = gen.replace(marker, newMap.join("") + marker);
 writeFileSync(genPath, gen);
 
 console.log(`recorded ${batch.id}: ${batch.icons.length} icons (${Object.values(entry.icons).filter(s => s === "review").length} in review), ${newLabels.length} labels, ${newRefs.length} Fluent plates`);
-execFileSync("node", [join(HERE, "gen-icons.mjs")], { stdio: "inherit" });
-execFileSync("node", [join(HERE, "gen-pilot-icons.mjs"), "--only", batch.icons.map(i => i.name).join(",")], { stdio: "inherit" });
+execFileSync("node", [genPath], { stdio: "inherit" });
+execFileSync("node", [join(HERE, "generate.mjs"), "--only", batch.icons.map(i => i.name).join(",")], { stdio: "inherit" });
 console.log(`next: npm run icons:pilot (full lint + generate), then review on gallery-icons.html or
-  node apps/docs/scripts/icon-sheet.mjs compare out.png ${batch.id}`);
+  npm run icons:sheet -- compare out.png ${batch.id}`);

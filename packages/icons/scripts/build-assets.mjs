@@ -1,5 +1,6 @@
-// The static half of @area/icons, rendered from the compiled components (dist/modules): raw SVGs at the size
-// curve's masters (16, 20 and 24; larger sizes scale the 24 master, docs/specs/icons.md "Sizes"), a 16px sprite
+// The static half of @area/icons, rendered from the compiled components (dist/modules): raw SVGs at 12 (the 12px
+// cut where an icon has one, docs/specs/icons.md "12px cuts") and at the size curve's masters (16, 20 and 24; larger
+// sizes scale the 24 master, "Sizes"), a 16px sprite
 // and icons.json. The line is Geist's --area-weight-icon (1.125px at 16) as a number, since a file can't read the token.
 import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 import { createElement } from "react";
@@ -7,7 +8,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 
 const dist = new URL("../dist/", import.meta.url).pathname;
 const { icons } = await import(dist + "modules/meta.js");
-const WEIGHT = 1.125, SIZES = [16, 20, 24];
+const WEIGHT = 1.125, SIZES = [12, 16, 20, 24];
 // Mask and clip ids are per file (area-<name>[-filled]…), so two inlined files never share one.
 const svg = (C, size, id) => renderToStaticMarkup(createElement(C, { weight: WEIGHT, size }))
   .replace(/ aria-hidden="true"| focusable="false"/g, "").replace("<svg ", '<svg xmlns="http://www.w3.org/2000/svg" ')

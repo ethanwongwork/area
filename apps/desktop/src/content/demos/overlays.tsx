@@ -1,6 +1,6 @@
 /** Anchored overlays: Popover, Menu and Tooltip opened from a trigger. */
 import { Button, Field, Input, Kbd, Menu, MenuItem, MenuLabel, MenuSeparator, Popover, PopoverBody, PopoverDescription, PopoverHeader, PopoverTitle, Tooltip } from "@area/react";
-import { ChevronIcon, SearchIcon, SettingsIcon } from "../../../../docs/src/icons.tsx";
+import { ChevronDownIcon, SearchIcon, SettingsIcon } from "@area/icons";
 
 export const GalleryOverlayPopover = () => (
   <Popover trigger={<Button variant="outline">Open</Button>}>
@@ -20,7 +20,7 @@ export const GalleryOverlayPopoverArrow = () => (
 );
 
 export const GalleryOverlayMenu = () => (
-  <Menu trigger={<Button variant="outline" trailingIcon={<ChevronIcon />}>Options</Button>}>
+  <Menu trigger={<Button variant="outline" trailingIcon={<ChevronDownIcon />}>Options</Button>}>
     <MenuItem shortcut={<Kbd keys={["cmd", "D"]} variant="quiet" />}>Duplicate</MenuItem>
     <MenuItem>Rename</MenuItem>
     <MenuItem disabled>Move</MenuItem>

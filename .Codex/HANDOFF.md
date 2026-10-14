@@ -5,6 +5,26 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Icons: 12px cuts (2026-10-13, branch `claude/icon-work-2974ee`, PR)
+
+- PR #79 (pipeline into `packages/icons`) had merged into the already-merged `claude/icon-work-status-38f2b6`, not
+  `main`; this branch merges it, so it reaches `main` with this branch.
+- Production gap 5: 9 cuts in `packages/icons/sources/12/` (chevron-down, check, add, info, open, link, bell, arrow-up,
+  globe = Fluent's), chosen by measuring every 12px icon slot in the gallery. Fluent's 12 grid, lines on half pixels;
+  add / arrow-up / info / link sit 0.5 off centre so their centre line stays one pixel. Generator: `size === 12` draws
+  the cut (`sw12`), turns follow, `cuts: [12]` in meta, `svg/12`. Glyph: both drawings, base.css shows the cut where
+  the xs slot is 12 (new token `--area-type-icon-xs-cut`, override `--_glyph-cut`; Panel md sets 0). Spec "12px cuts";
+  sheet in `docs/research/icon-review/2026-10-13/`. Owner approved the cuts ("go with your recommendations");
+  `@area/icons` at size 12 is slot-aware like Glyph (`cutOpacity`, `sw`), and Badge / Tag demos pass `size={12}`.
+- Checks: icons 9, React 274/275 (known docs-dist), tokens 24,254, contracts 14, manifest, typecheck; app preview
+  (Link mark at type 13 / 16, Icons grid at 12). Not checked: forced colours, a 1× external display.
+- Then production gap 9 for the app: demos import `@area/icons` names (78 pass-throughs, nothing renders differently),
+  Copy / SVG export in `apps/desktop/src/copy.tsx`, the docs-only Iconography demos in `content/registry-docs.tsx`
+  (the docs render reads it); the app bundle has no Fluent ink (4.66 → 2.91 MB). Spec "Fluent map retired from the app".
+- Then gap 6 minus the licence: `@area/icons` 0.1.0, `CHANGELOG.md`, semver / deprecation policy (README), credits
+  (`data-source` → meta `source`, `packages/icons/THIRD_PARTY_NOTICES.md`: Fluent's globe in globe, globe-off). Open: the
+  licence for Area's own drawings (owner).
+- Found: `npm run build:docs` fails on `main` since PR #75 (`build.mjs` reads the removed `ui` axis); not fixed (archived).
 ## Compass review → Password field, OTP field, Time field, Stepper, Spinner value (2026-10-13, branch `claude/design-compass-components-cfd9eb`, PR)
 
 - Owner reviewed compass.designcompass.org ("anything worth using/building?"). Gallery tile Copy/Reset and the app at
@@ -208,6 +228,17 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   is (approved family). Next inspector parts need Chrome in front: Preview frame + Description list "show more"
   (Figma's well rgb(245,245,245) radius 5), Link / Asset row, Token row; then the inspector rebuild.
 
+## Icons: pipeline moved to packages/icons (2026-10-12, branch `claude/icon-pipeline-package`, on top of PR #78)
+
+- Migration step 2 done (see "Migration" below; spec "Pipeline moved to packages/icons"). npm scripts keep their names;
+  new `icons:refs`, `icons:keywords`. The generator now checks categories (was in the docs build). The reference cache
+  is `packages/icons/.cache/refs` (gitignored); move or refetch it in other worktrees.
+- Generated drawings byte-identical (only header comments changed). Checks: full lint + generate, `npm test -w
+  @area/icons` (8), typecheck (all), consumer test, tools smoke-tested (find, geometry, generate --only, keywords);
+  app checked in the preview (Icons tab 808 icons, Empty state demo).
+- Pre-existing, not fixed: `npm run build -w @area/docs` fails on main since 00770d8 (the docs inspector still asks for
+  the removed `ui` axis in several places); the site is archived and due for deletion (step 4).
+
 ## Icons: accessible name, right-to-left, keywords (2026-10-12, branch `claude/icon-work-status-38f2b6`)
 
 - Owner: "continue working with your recs" → production gaps 3 and 4. Reviews were clear first (all 410 `reviews7`
@@ -381,8 +412,12 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   them on merge. Remaining:
   1. (done) `pages.mjs`, `component-status.mjs`, `gallery/specimens.mjs`, `scripts/specimen-names.mjs`, `registry.tsx`,
      `demos/` (37 files), `gallery/fit.ts`, `gallery/controls.ts` → `apps/desktop/src/content/` and `src/gallery/`.
-  2. Icon sources (`assets/area-icons-pilot`, vendored Fluent cuts), `gen-pilot-icons.mjs` / `gen-icons.mjs` and the
-     icon tools, `icon-categories.ts` → `packages/icons`; the app's Icons tab reads `@area/icons` + `/meta`.
+  2. (done 2026-10-12, branch `claude/icon-pipeline-package`) Area's drawings → `packages/icons/sources`, generator
+     and tools → `packages/icons/scripts` (`generate.mjs`, `find`, `geometry`, `batch`, `sheet`, `refs`, `keywords`),
+     categories → `packages/icons/src/categories.ts` (exported from `@area/icons/meta` with `batches`); the app's Icons
+     tab and the demos read `@area/icons`. Left in `apps/docs` until the Fluent map is retired: `gen-icons.mjs`,
+     `assets/area-icons*`, the sprites, `src/icons.tsx` (the Iconography demo's Fluent plates and AREA_SWAP names),
+     and the generated `pilot-icons.tsx` / `pilot-explore.tsx` (docs, Iconography demo, package test oracle).
   3. `CopyButton` → `@area/react`; `area-capture.js` → `tools/`.
   4. Repoint skills, AGENTS, README, DEVELOPMENT, root scripts, react tests that read `apps/docs/dist`; then delete
      the site (build, html, preview).

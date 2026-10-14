@@ -63,6 +63,8 @@ export function typeSizeTokens(base: TypeSize): Record<string, string> {
     "type-reading-leading": `${LEADING[reading]}px`,
     "type-icon": `${base >= 16 ? 20 : 16}px`,
     "type-icon-xs": `${base >= 16 ? 16 : 12}px`,
+    // 1 where the xs icon slot is 12px, so component glyphs draw their 12px cuts there (docs/specs/icons.md, "12px cuts").
+    "type-icon-xs-cut": base >= 16 ? "0" : "1",
     "type-box": `${box}px`,
     "type-level-min": base >= 15 ? "0" : "-1",
     "type-level-max": base <= 12 ? "0" : "1",

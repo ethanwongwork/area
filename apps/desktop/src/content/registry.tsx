@@ -6,6 +6,9 @@
  * come from a single artefact and cannot drift -- which was the one thing the previous
  * system's documentation could not promise, since its snippets were hand-typed strings
  * with no relationship to what was rendered.
+ *
+ * The docs-only Iconography demos (Area beside Fluent) are in registry-docs.tsx, which the archived
+ * docs build reads, so the app never bundles the Fluent map.
  */
 import * as switches from "./demos/switch.tsx";
 import * as badge from "./demos/badge.tsx";
@@ -16,7 +19,6 @@ import * as theme from "./demos/theme.tsx";
 import * as nav from "./demos/nav.tsx";
 import * as gallery from "./demos/gallery.tsx";
 import * as cards from "./demos/card.tsx";
-import * as icons from "./demos/icons.tsx";
 import * as variants from "./demos/gallery-variants.tsx";
 import * as overlays from "./demos/overlays.tsx";
 import * as counts from "./demos/count.tsx";
@@ -55,8 +57,7 @@ import * as steppers from "./demos/stepper.tsx";
 import * as inspectorRecipes from "./demos/inspector.tsx";
 
 const { BADGE_GALLERY_DEMOS, ...badgeDemos } = badge;
-const { ICON_REVIEW_DEMOS, ...iconDemos } = icons;
-const DEMO_MODULES: Record<string, object> = { BADGE_GALLERY_DEMOS, badge: badgeDemos, switches, button, form, display, nav, theme, gallery, cards, icons: iconDemos, ICON_REVIEW_DEMOS, variants, overlays, counts, accordions, customSelects, tags, tagPickers, datePickers, drawers, paginations, links, scrollAreas, fileUploads, toggletips, emptyStates, toggleGroups, descriptionLists, meters, searchFields, shortcutLists, dateRangePickers, citations, zoomControls, boards, timelines, editableTexts, boxModels, tokenRows, assetRows, previewFrames, passwordFields, otpFields, timeFields, spinnerValues, steppers, inspectorRecipes };
+const DEMO_MODULES: Record<string, object> = { BADGE_GALLERY_DEMOS, badge: badgeDemos, switches, button, form, display, nav, theme, gallery, cards, variants, overlays, counts, accordions, customSelects, tags, tagPickers, datePickers, drawers, paginations, links, scrollAreas, fileUploads, toggletips, emptyStates, toggleGroups, descriptionLists, meters, searchFields, shortcutLists, dateRangePickers, citations, zoomControls, boards, timelines, editableTexts, boxModels, tokenRows, assetRows, previewFrames, passwordFields, otpFields, timeFields, spinnerValues, steppers, inspectorRecipes };
 // One name, one demo. The server renders from this merged map, while hydration clients import a
 // module directly, so a name exported twice renders one demo and hydrates the other (a mismatch).
 const demoOwner = new Map<string, string>();
@@ -77,7 +78,6 @@ export const SOURCES = {
   display: "demos/display.tsx",
   nav: "demos/nav.tsx",
   gallery: "demos/gallery.tsx",
-  icons: "demos/icons.tsx",
   variants: "demos/gallery-variants.tsx",
   overlays: "demos/overlays.tsx",
   counts: "demos/count.tsx",

@@ -19,7 +19,7 @@ import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } fr
 import { Facts } from "../facts.tsx";
 import { Preview, Selection } from "../inspector.tsx";
 import { ArrangeMenu, sortBy, useArrangement } from "../organize.tsx";
-import { CopyButton } from "../../../docs/src/gallery/icon-browser.tsx";
+import { CopyButton } from "../copy.tsx";
 import { matches } from "../search.ts";
 import { onGridKeys } from "../grid-keys.ts";
 import { DEFAULT_TYPE, TYPE_ROLES, TYPE_SIZES, type TypeRole } from "../tokens.ts";

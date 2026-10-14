@@ -2,8 +2,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import type { CSSProperties, ReactNode, MouseEvent } from "react";
 import { AREA_COLOR_GRID, SliderRange, Alert, AlignmentPicker, Avatar, Calendar, AvatarGroup, Badge, Indicator, IndicatorAnchor, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, ButtonGroup, Card, CardContent, CardMedia, Checkbox, CheckboxGroup, Chip, Count, ChipGroup, ChipLink, Code, CodeBlock, ColorField, ColorPicker, ColorSwatch, ColorSwatchPicker, Composer, Dialog, Field, Input, InputAction, InputGroup, InputGroupText, PasswordField, Kbd, KbdGroup, Menu, MenuItem, MenuLabel, MenuSeparator, MenuSub, Nav, NavGroup, NavItem, NumberField, Panel, PanelSection, Popover, PopoverBody, PopoverClose, PopoverDescription, PopoverFooter, PopoverHeader, PopoverMedia, PopoverTitle, Progress, Radio, RadioGroup, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Toaster, useToaster, Toolbar, ToolbarGroup, ToolbarItem, ToolbarOverflow, ToolbarSeparator, Tooltip, TreeView, type AlignmentPosition, BoxField, Combobox, CommandPalette, ContextMenu, HoverCard, Message, MessageActions, ModelPicker, PromptSuggestions, ScrollToLatest, SplitButton, PanelRow, PropertyList, PropertyListItem, type BoxValue, type ComboboxOption, type CommandItem, type TreeViewNode } from "@area/react";
-import { PanelLeftIcon, PointerIcon, FrameIcon, RectangleIcon, PenIcon, TextIcon, CommentIcon, PaintbrushIcon, DesignIcon, PlayIcon, CodeIcon, BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon, TextAlignLeftIcon, TextAlignCenterIcon, TextAlignRightIcon, AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, CheckIcon, ChevronIcon, DismissIcon, DocumentIcon, DotsFourIcon, EyeIcon, EyeSlashIcon, FolderIcon, InfoIcon, OpacityIcon, RotateIcon, OpenIcon, PersonSmallIcon, PersonIcon, PlusIcon, SearchIcon, TokenIcon, TrashIcon, EditIcon, ThumbLikeIcon, ThumbDislikeIcon, SpeakerIcon, RegenerateIcon, CopyIcon, AlertIcon, AlignCenterHorizontalIcon, AlignLeftIcon, AlignRightIcon, AngleIcon, AspectRatioIcon, AutoLayoutIcon, BarsThreeIcon, CornerRadiusIcon, CornersIcon, FlipHorizontalIcon, FlipVerticalIcon, FlowFreeIcon, FlowHorizontalIcon, FlowVerticalIcon, FlowWrapIcon, LinkIcon, MoreIcon, SettingsIcon, SlidersIcon, SubtractIcon, CalendarIcon } from "../../../../docs/src/icons.tsx";
-import { PilotArrowDownIcon, PilotArrowUpIcon, PilotDocumentIcon, PilotFolderFilledIcon, PilotMoreHorizontalIcon, PilotPaletteIcon, PilotCornerIcon, PilotTextIcon, PilotGridIcon, PilotLayersIcon, PilotSunIcon, PilotListIcon, PilotKanbanIcon } from "../../../../docs/src/pilot-icons.tsx";
+import { AddIcon, AlignBottomIcon, AlignCenterIcon, AlignLeftIcon, AlignMiddleIcon, AlignRightIcon, AlignTopIcon, AngleIcon, ArrowDownIcon, ArrowUpIcon, AspectRatioIcon, AutoLayoutIcon, BoldIcon, CalendarIcon, ChatIcon, CheckIcon, ChevronDownIcon, CodeIcon, CopyIcon, CornerIcon, CornersIcon, DismissIcon, DocumentIcon, DotsFourIcon, EyeIcon, EyeOffIcon, FlipIcon, FlipVerticalIcon, FlowFreeIcon, FlowIcon, FlowVerticalIcon, FlowWrapIcon, FolderFilledIcon, FolderIcon, FrameIcon, GridIcon, InfoIcon, ItalicIcon, KanbanIcon, LayersIcon, LinkIcon, ListIcon, MenuIcon, MoreHorizontalIcon, OpacityIcon, OpenIcon, PaintbrushIcon, PaletteIcon, PanelLeftIcon, PencilIcon, PenToolIcon, PersonIcon, PlayIcon, PointerIcon, RectangleIcon, RefreshIcon, RotateIcon, SearchIcon, SettingsIcon, SlidersIcon, StrikethroughIcon, SubtractIcon, SunIcon, TextAlignCenterIcon, TextAlignLeftIcon, TextAlignRightIcon, TextIcon, ThumbsDownIcon, ThumbsUpIcon, TokenIcon, TrashIcon, UnderlineIcon, VolumeIcon, WarningIcon } from "@area/icons";
 // @ts-expect-error — the docs' own highlighter is authored in JavaScript.
 import { highlight } from "../highlight.mjs";
 
@@ -42,7 +41,7 @@ export const GalleryAlert = () => (
   <Alert icon={<InfoIcon />} title="Title">Body text</Alert>
 );
 export const GalleryAlertSuccess = () => <Alert tone="success" icon={<CheckIcon />} title="Title">Body text</Alert>;
-export const GalleryAlertDanger = () => <Alert tone="danger" icon={<AlertIcon />} title="Title">Body text</Alert>;
+export const GalleryAlertDanger = () => <Alert tone="danger" icon={<WarningIcon />} title="Title">Body text</Alert>;
 export const GalleryAlertLink = () => <Alert icon={<InfoIcon />} title="Title" link={<a href="#gallery-alert-multiline">Link</a>}>Body text</Alert>;
 export const GalleryAlertAction = () => <Alert icon={<InfoIcon />} title="Title" action={<Button size="sm" variant="outline">Action</Button>}>Body text</Alert>;
 export const GalleryAlertBanner = () => <Alert layout="banner" title="Title" link={<a href="#gallery-alert-layout-banner">Learn more</a>}>Body text</Alert>;
@@ -68,7 +67,7 @@ export const GalleryAvatar = () => (
 export const GalleryAvatarImage = () => <Avatar src="images/david-tee.jpg" fallback="D" alt="David Tee" />;
 export const GalleryAvatarImageFallback = () => <Avatar src="images/avatar-missing.png" fallback="D" alt="David Tee" />;
 export const GalleryAvatarTwoInitials = () => <Avatar fallback="DT" alt="David Tee" />;
-export const GalleryAvatarIcon = () => <Avatar icon={<PersonIcon />} alt="David Tee" />;
+export const GalleryAvatarIcon = () => <Avatar icon={<PersonIcon size={20} />} alt="David Tee" />;
 export const GalleryAvatarGroup = () => <AvatarGroup max={3} aria-label="David Tee and 4 teams"><Avatar src="images/david-tee.jpg" fallback="DT" alt="David Tee" /><Avatar shape="square" fallback="D" alt="Design team" /><Avatar shape="square" fallback="R" alt="Research team" /><Avatar shape="square" fallback="P" alt="Platform team" /><Avatar shape="square" fallback="S" alt="Support team" /></AvatarGroup>;
 export const GalleryAvatarActive = () => <Avatar active fallback="D" alt="David Tee" />;
 export const GalleryAvatarAvailability = () => <IndicatorAnchor inset placement="bottom-end" overlap="circular" indicator={<Indicator status="available" size="sm" />}><Avatar fallback="D" role="img" aria-label="David Tee, available" /></IndicatorAnchor>;
@@ -91,11 +90,11 @@ export const GalleryButtonSmall = () => <Button size="sm">Button</Button>;
 export const GalleryButtonMedium = () => <Button size="md">Button</Button>;
 export const GalleryButtonLarge = () => <Button size="lg">Button</Button>;
 export const GalleryButtonActionAccent = () => <ActionAccent><Button>Button</Button></ActionAccent>;
-export const GalleryButtonWithIcon = () => <Button icon={<PlusIcon />}>Button</Button>;
-export const GalleryButtonTrailingIcon = () => <Button variant="ghost" tone="neutral" trailingIcon={<ChevronIcon />}>Button</Button>;
+export const GalleryButtonWithIcon = () => <Button icon={<AddIcon />}>Button</Button>;
+export const GalleryButtonTrailingIcon = () => <Button variant="ghost" tone="neutral" trailingIcon={<ChevronDownIcon />}>Button</Button>;
 export const GalleryButtonDisabled = () => <Button disabled>Button</Button>;
 export const GalleryButtonLoading = () => <Button loading>Button</Button>;
-export const GalleryButtonIconOnly = () => <Button iconOnly icon={<PlusIcon />} aria-label="Add item" />;
+export const GalleryButtonIconOnly = () => <Button iconOnly icon={<AddIcon />} aria-label="Add item" />;
 export const GalleryButtonPill = () => <Button pill>Button</Button>;
 /* Every real toggle is ghost (Toolbar, Button group), so the Selected tile is ghost; a solid
    "selected" equals its hover and is not a supported toggle (audit A-13). */
@@ -117,7 +116,7 @@ export const GallerySplitButton = () => <SplitDemo label="Action" items={saveIte
 export const GallerySplitButtonAccent = () => <ActionAccent><SplitDemo label="Action" items={["Option one", "Option two"]} menuLabel="More options" /></ActionAccent>;
 export const GallerySplitButtonSoft = () => <SplitDemo label="Action" variant="soft" tone="neutral" items={saveItems} menuLabel="More options" />;
 export const GallerySplitButtonOutline = () => <SplitDemo label="Action" variant="outline" tone="neutral" items={saveItems} menuLabel="More options" />;
-export const GallerySplitButtonIcon = () => <SplitDemo label="Add" variant="outline" tone="neutral" icon={<PlusIcon />} items={["Item one", "Item two"]} menuLabel="More to add" />;
+export const GallerySplitButtonIcon = () => <SplitDemo label="Add" variant="outline" tone="neutral" icon={<AddIcon />} items={["Item one", "Item two"]} menuLabel="More to add" />;
 export const GallerySplitButtonSmall = () => <SplitDemo label="Action" size="sm" items={saveItems} menuLabel="More options" />;
 export const GallerySplitButtonMedium = () => <SplitDemo label="Action" size="md" items={saveItems} menuLabel="More options" />;
 export const GallerySplitButtonLarge = () => <SplitDemo label="Action" size="lg" items={saveItems} menuLabel="More options" />;
@@ -172,13 +171,13 @@ const figmaTools = [
   { id: "move", label: "Move", icon: <PointerIcon />, menu: [["move", "Move", "V"], ["hand", "Hand tool", "H"], ["scale", "Scale", "K"]] },
   { id: "frame", label: "Frame", icon: <FrameIcon />, menu: [["frame", "Frame", "F"], ["section", "Section", "⇧S"], ["slice", "Slice", "S"]] },
   { id: "rectangle", label: "Rectangle", icon: <RectangleIcon />, menu: [["rectangle", "Rectangle", "R"], ["line", "Line", "L"], ["ellipse", "Ellipse", "O"]] },
-  { id: "pen", label: "Pen", icon: <PenIcon />, menu: [["pen", "Pen", "P"], ["pencil", "Pencil", "⇧P"]] },
+  { id: "pen", label: "Pen", icon: <PenToolIcon />, menu: [["pen", "Pen", "P"], ["pencil", "Pencil", "⇧P"]] },
   { id: "text", label: "Text", icon: <TextIcon /> },
-  { id: "comment", label: "Comment", icon: <CommentIcon /> },
+  { id: "comment", label: "Comment", icon: <ChatIcon /> },
 ] as const;
 const figmaModes = [
   { value: "draw", label: "Draw", icon: <PaintbrushIcon /> },
-  { value: "design", label: "Design", icon: <DesignIcon /> },
+  { value: "design", label: "Design", icon: <PenToolIcon /> },
   { value: "prototype", label: "Present", icon: <PlayIcon /> },
   { value: "dev", label: "Code", icon: <CodeIcon /> },
 ];
@@ -494,23 +493,23 @@ export const GalleryCheckboxLeadingVisual = () => <Checkbox label="Label" leadin
    chosen card outlined). One layout per tile. */
 export const GalleryCheckboxCard = () => (
   <CheckboxGroup label="Label" style={{ inlineSize: "320px" }}>
-    <Checkbox variant="card" label="Item one" caption="Description" leadingVisual={<PersonIcon />} defaultChecked />
+    <Checkbox variant="card" label="Item one" caption="Description" leadingVisual={<PersonIcon size={20} />} defaultChecked />
     <Checkbox variant="card" label="Item two" caption="Description" leadingVisual={<DocumentIcon />} />
   </CheckboxGroup>
 );
 export const GalleryCheckboxCardTile = () => (
   <CheckboxGroup label="Customize" style={{ inlineSize: "520px" }}>
-    <Checkbox variant="card" layout="tile" label="Colors" leadingVisual={<PilotPaletteIcon size={20} />} defaultChecked />
-    <Checkbox variant="card" layout="tile" label="Corners" leadingVisual={<PilotCornerIcon size={20} />} />
-    <Checkbox variant="card" layout="tile" label="Typography" leadingVisual={<PilotTextIcon size={20} />} />
-    <Checkbox variant="card" layout="tile" label="Spacing" leadingVisual={<PilotGridIcon size={20} />} />
-    <Checkbox variant="card" layout="tile" label="Layers" leadingVisual={<PilotLayersIcon size={20} />} defaultChecked />
-    <Checkbox variant="card" layout="tile" label="Theming" leadingVisual={<PilotSunIcon size={20} />} />
+    <Checkbox variant="card" layout="tile" label="Colors" leadingVisual={<PaletteIcon size={20} />} defaultChecked />
+    <Checkbox variant="card" layout="tile" label="Corners" leadingVisual={<CornerIcon size={20} />} />
+    <Checkbox variant="card" layout="tile" label="Typography" leadingVisual={<TextIcon size={20} />} />
+    <Checkbox variant="card" layout="tile" label="Spacing" leadingVisual={<GridIcon size={20} />} />
+    <Checkbox variant="card" layout="tile" label="Layers" leadingVisual={<LayersIcon size={20} />} defaultChecked />
+    <Checkbox variant="card" layout="tile" label="Theming" leadingVisual={<SunIcon size={20} />} />
   </CheckboxGroup>
 );
 export const GalleryCheckboxCardAccent = () => (
   <SelectionAccent><CheckboxGroup label="Label" style={{ inlineSize: "320px" }}>
-    <Checkbox variant="card" label="Item one" caption="Description" leadingVisual={<PersonIcon />} defaultChecked />
+    <Checkbox variant="card" label="Item one" caption="Description" leadingVisual={<PersonIcon size={20} />} defaultChecked />
     <Checkbox variant="card" label="Item two" caption="Description" leadingVisual={<DocumentIcon />} />
   </CheckboxGroup></SelectionAccent>
 );
@@ -780,7 +779,7 @@ export const GalleryPanelCollapsible = () => (
       <PanelRow><ColorField size="sm" variant="soft" fullWidth aria-label="Selection color 2" defaultValue="#0055FF" /></PanelRow>
       <PanelRow><ColorField size="sm" variant="soft" fullWidth aria-label="Selection color 3" defaultValue="#FFB800" /></PanelRow>
     </PanelSection>
-    <PanelSection collapsible heading="Export" defaultOpen={false} actions={inspectorButton("Add export setting", <PlusIcon />)} />
+    <PanelSection collapsible heading="Export" defaultOpen={false} actions={inspectorButton("Add export setting", <AddIcon />)} />
   </Panel>
 );
 
@@ -794,11 +793,11 @@ const FillsSection = ({ initial }: { initial: string[] }) => {
   const next = useRef(initial.length);
   const add = () => setFills(list => [{ id: next.current++, color: "#D9D9D9", visible: true }, ...list]);
   const reorder = (from: number, to: number) => setFills(list => { const copy = [...list]; const [item] = copy.splice(from, 1); if (item) copy.splice(to, 0, item); return copy; });
-  return <PanelSection collapsible heading="Fill" actions={<>{inspectorButton("Styles", <DotsFourIcon />)}{inspectorButton("Add fill", <PlusIcon />)}</>} onClick={event => { if ((event.target as HTMLElement).closest("[aria-label='Add fill']")) add(); }}>
+  return <PanelSection collapsible heading="Fill" actions={<>{inspectorButton("Styles", <DotsFourIcon />)}{inspectorButton("Add fill", <AddIcon />)}</>} onClick={event => { if ((event.target as HTMLElement).closest("[aria-label='Add fill']")) add(); }}>
     {fills.length ? <PropertyList label="Fills" onReorder={reorder}>
       {fills.map(fill => { const name = `${fill.color.slice(1, 7)} fill`; return <PropertyListItem key={fill.id} label={name} inactive={!fill.visible} actions={<>
         <Button size="sm" variant="ghost" tone="neutral" iconOnly aria-label={`Hide ${name}`} aria-pressed={!fill.visible}
-          icon={fill.visible ? <EyeIcon /> : <EyeSlashIcon />} onClick={() => setFills(list => list.map(item => item.id === fill.id ? { ...item, visible: !item.visible } : item))} />
+          icon={fill.visible ? <EyeIcon /> : <EyeOffIcon />} onClick={() => setFills(list => list.map(item => item.id === fill.id ? { ...item, visible: !item.visible } : item))} />
         <Button size="sm" variant="ghost" tone="neutral" iconOnly aria-label={`Remove ${name}`} icon={<SubtractIcon />}
           onClick={() => setFills(list => list.filter(item => item.id !== fill.id))} />
       </>}>
@@ -819,11 +818,11 @@ export const GalleryPropertyListEffects = () => {
   const [effects, setEffects] = useState([{ id: 0, kind: "drop", visible: true }, { id: 1, kind: "inner", visible: false }]);
   const reorder = (from: number, to: number) => setEffects(list => { const copy = [...list]; const [item] = copy.splice(from, 1); if (item) copy.splice(to, 0, item); return copy; });
   return <Panel size="sm" title="Card" aria-label="Effect properties" style={{ "--area-panel-inline-size": "280px" } as CSSProperties}>
-    <PanelSection heading="Effects" actions={inspectorButton("Add effect", <PlusIcon />)}>
+    <PanelSection heading="Effects" actions={inspectorButton("Add effect", <AddIcon />)}>
       <PropertyList label="Effects" onReorder={reorder}>
         {effects.map((effect, index) => <PropertyListItem key={effect.id} label={`${effect.kind === "drop" ? "Drop shadow" : "Inner shadow"} effect`} inactive={!effect.visible} actions={<>
           <Button size="sm" variant="ghost" tone="neutral" iconOnly aria-label={`Hide effect ${index + 1}`} aria-pressed={!effect.visible}
-            icon={effect.visible ? <EyeIcon /> : <EyeSlashIcon />} onClick={() => setEffects(list => list.map(item => item.id === effect.id ? { ...item, visible: !item.visible } : item))} />
+            icon={effect.visible ? <EyeIcon /> : <EyeOffIcon />} onClick={() => setEffects(list => list.map(item => item.id === effect.id ? { ...item, visible: !item.visible } : item))} />
           <Button size="sm" variant="ghost" tone="neutral" iconOnly aria-label={`Remove effect ${index + 1}`} icon={<SubtractIcon />} onClick={() => setEffects(list => list.filter(item => item.id !== effect.id))} />
         </>}>
           <InputGroup size="sm" variant="soft" fullWidth aria-label={`Effect ${index + 1}`}>
@@ -860,7 +859,7 @@ const LayoutSection = () => {
       <Segmented size="sm" iconOnly fullWidth aria-label="Flow" value={flow} onValueChange={setFlow} items={[
         { value: "free", label: "Freeform", icon: <FlowFreeIcon /> },
         { value: "vertical", label: "Vertical", icon: <FlowVerticalIcon /> },
-        { value: "horizontal", label: "Horizontal", icon: <FlowHorizontalIcon /> },
+        { value: "horizontal", label: "Horizontal", icon: <FlowIcon /> },
         { value: "wrap", label: "Wrap", icon: <FlowWrapIcon /> },
       ]} />
     </PanelRow>
@@ -883,7 +882,7 @@ const AppearanceSection = () => {
         <PopoverBody><BoxField kind="corners" size="sm" variant="soft" label="Corner radius" independent toggle={false} value={radius} onValueChange={setRadius} /></PopoverBody>
       </Popover>}>
       <NumberField size="sm" variant="soft" fullWidth aria-label="Opacity" defaultValue={100} min={0} max={100} unit="%" scrub={<OpacityIcon />} />
-      <NumberField size="sm" variant="soft" fullWidth aria-label="Corner radius" min={0} scrub={<CornerRadiusIcon />}
+      <NumberField size="sm" variant="soft" fullWidth aria-label="Corner radius" min={0} scrub={<CornerIcon />}
         value={mixed ? null : first ?? null} mixed={mixed} onValueChange={next => setRadius([next, next, next, next])} />
     </PanelRow>
   </PanelSection>;
@@ -957,9 +956,9 @@ export const GalleryComboboxCreate = () => {
 };
 export const GalleryComboboxRich = () => (
   <div style={comboFrame}><Combobox fullWidth aria-label="Assignee" placeholder="Assign to" items={[
-    { value: "david-tee", label: "David Tee", icon: <PersonSmallIcon />, description: "Owner" },
-    { value: "design", label: "Design team", icon: <PersonSmallIcon />, description: "Editors" },
-    { value: "engineering", label: "Engineering team", icon: <PersonSmallIcon />, description: "Viewers" },
+    { value: "david-tee", label: "David Tee", icon: <PersonIcon />, description: "Owner" },
+    { value: "design", label: "Design team", icon: <PersonIcon />, description: "Editors" },
+    { value: "engineering", label: "Engineering team", icon: <PersonIcon />, description: "Viewers" },
   ]} /></div>
 );
 export const GalleryComboboxDisabledOption = () => (
@@ -983,7 +982,7 @@ const paletteItems: CommandItem[] = [
   { id: "roadmap", label: "Item one", description: "Description", icon: <DocumentIcon />, group: "Recent" },
   { id: "tokens", label: "Item two", description: "Description", icon: <DocumentIcon />, group: "Recent" },
   { id: "research", label: "Item three", icon: <FolderIcon />, group: "Recent" },
-  { id: "new", label: "New page", icon: <PlusIcon />, shortcut: ["cmd", "n"], group: "Actions" },
+  { id: "new", label: "New page", icon: <AddIcon />, shortcut: ["cmd", "n"], group: "Actions" },
   { id: "link", label: "Copy link", icon: <LinkIcon />, shortcut: ["cmd", "shift", "c"], group: "Actions" },
   { id: "settings", label: "Settings", icon: <SettingsIcon />, shortcut: ["cmd", ","], group: "Actions" },
   { id: "trash", label: "Trash", icon: <TrashIcon />, group: "Actions", disabled: true },
@@ -1074,7 +1073,7 @@ export const GalleryPromptSuggestions = () => {
   const [draft, setDraft] = useState("");
   const [list, setList] = useState(starterPrompts);
   return <div style={{ display: "grid", gap: "calc(var(--area-space-24) - var(--area-space-8) * var(--area-ui-dense))", inlineSize: "calc(var(--area-space-96) * 5)", maxInlineSize: "100%" }}>
-    <Composer value={draft} onValueChange={setDraft} placeholder="Placeholder" leadingActions={<Button variant="ghost" iconOnly icon={<PlusIcon />} aria-label="Add files" />} />
+    <Composer value={draft} onValueChange={setDraft} placeholder="Placeholder" leadingActions={<Button variant="ghost" iconOnly icon={<AddIcon />} aria-label="Add files" />} />
     {draft ? null : <PromptSuggestions items={list} onSelect={item => setDraft(item.label)} onDismiss={item => setList(rows => rows.filter(row => row.id !== item.id))} />}
   </div>;
 };
@@ -1082,7 +1081,7 @@ export const GalleryPromptSuggestionsPlain = () => <PromptSuggestions items={sta
 export const GalleryPromptSuggestionsChips = () => {
   const [draft, setDraft] = useState("");
   return <div style={{ display: "grid", gap: "calc(var(--area-space-24) - var(--area-space-8) * var(--area-ui-dense))", inlineSize: "calc(var(--area-space-96) * 5)", maxInlineSize: "100%" }}>
-    <Composer value={draft} onValueChange={setDraft} placeholder="Placeholder" leadingActions={<Button variant="ghost" iconOnly icon={<PlusIcon />} aria-label="Add files" />} />
+    <Composer value={draft} onValueChange={setDraft} placeholder="Placeholder" leadingActions={<Button variant="ghost" iconOnly icon={<AddIcon />} aria-label="Add files" />} />
     {draft ? null : <PromptSuggestions layout="chips" items={[
       { id: "one", label: "Item one", icon: <DocumentIcon /> },
       { id: "two", label: "Item two", icon: <SearchIcon /> },
@@ -1097,10 +1096,10 @@ export const GalleryPromptSuggestionsChips = () => {
  */
 const actionButton = (label: string, icon: ReactNode) => <Button variant="ghost" tone="neutral" iconOnly aria-label={label} icon={icon} />;
 const assistantActions = <MessageActions>
-  {actionButton("Copy", <CopyIcon />)}{actionButton("Good response", <ThumbLikeIcon />)}{actionButton("Bad response", <ThumbDislikeIcon />)}
-  {actionButton("Read aloud", <SpeakerIcon />)}{actionButton("Regenerate", <RegenerateIcon />)}{actionButton("More actions", <MoreIcon />)}
+  {actionButton("Copy", <CopyIcon />)}{actionButton("Good response", <ThumbsUpIcon />)}{actionButton("Bad response", <ThumbsDownIcon />)}
+  {actionButton("Read aloud", <VolumeIcon />)}{actionButton("Regenerate", <RefreshIcon />)}{actionButton("More actions", <MoreHorizontalIcon />)}
 </MessageActions>;
-const userActions = <MessageActions>{actionButton("Copy message", <CopyIcon />)}{actionButton("Edit message", <EditIcon />)}</MessageActions>;
+const userActions = <MessageActions>{actionButton("Copy message", <CopyIcon />)}{actionButton("Edit message", <PencilIcon />)}</MessageActions>;
 const conversation: CSSProperties = { display: "grid", gap: "var(--area-space-24)", inlineSize: "calc(var(--area-space-96) * 5)", maxInlineSize: "100%" };
 export const GalleryMessage = () => (
   <div style={conversation}>
@@ -1150,7 +1149,7 @@ export const GalleryScrollToLatest = () => {
     </div>
     <div style={{ position: "relative" }}>
       <ScrollToLatest scrollRef={scrollRef} />
-      <Composer placeholder="Placeholder" leadingActions={<Button variant="ghost" iconOnly icon={<PlusIcon />} aria-label="Add files" />} />
+      <Composer placeholder="Placeholder" leadingActions={<Button variant="ghost" iconOnly icon={<AddIcon />} aria-label="Add files" />} />
     </div>
   </div>;
 };
@@ -1166,7 +1165,7 @@ const modelOptions = [
 ];
 export const GalleryModelPicker = () => (
   <div style={{ inlineSize: "calc(var(--area-space-96) * 5)", maxInlineSize: "100%" }}>
-    <Composer placeholder="Placeholder" leadingActions={<Button variant="ghost" iconOnly icon={<PlusIcon />} aria-label="Add files" />}
+    <Composer placeholder="Placeholder" leadingActions={<Button variant="ghost" iconOnly icon={<AddIcon />} aria-label="Add files" />}
       mode={<ModelPicker items={modelOptions} defaultValue="two" />} />
   </div>
 );
@@ -1179,10 +1178,10 @@ export const GalleryModelPickerHeading = () => (
 );
 
 export const GalleryPanelFigma = () => (
-  <Panel size="sm" actionColumn title="Frame" aria-label="Design properties" style={{ "--area-panel-inline-size": "280px" } as CSSProperties} action={inspectorButton("More frame actions", <MoreIcon />)}>
+  <Panel size="sm" actionColumn title="Frame" aria-label="Design properties" style={{ "--area-panel-inline-size": "280px" } as CSSProperties} action={inspectorButton("More frame actions", <MoreHorizontalIcon />)}>
     <PanelSection collapsible heading="Position">
-      <PanelRow label="Alignment" action={inspectorButton("Distribute", <BarsThreeIcon />)}>
-        {inspectorGroup("Horizontal alignment", [["Align left", <AlignLeftIcon />], ["Align horizontal centers", <AlignCenterHorizontalIcon />], ["Align right", <AlignRightIcon />]])}
+      <PanelRow label="Alignment" action={inspectorButton("Distribute", <MenuIcon />)}>
+        {inspectorGroup("Horizontal alignment", [["Align left", <AlignLeftIcon />], ["Align horizontal centers", <AlignCenterIcon />], ["Align right", <AlignRightIcon />]])}
         {inspectorGroup("Vertical alignment", [["Align top", <AlignTopIcon />], ["Align vertical centers", <AlignMiddleIcon />], ["Align bottom", <AlignBottomIcon />]])}
       </PanelRow>
       <PanelRow label="Position">
@@ -1191,7 +1190,7 @@ export const GalleryPanelFigma = () => (
       </PanelRow>
       <PanelRow label="Rotation">
         <NumberField size="sm" variant="soft" fullWidth aria-label="Rotation" defaultValue={0} unit="°" scrub={<AngleIcon />} />
-        {inspectorGroup("Transform", [["Rotate 90°", <RotateIcon />], ["Flip horizontal", <FlipHorizontalIcon />], ["Flip vertical", <FlipVerticalIcon />]])}
+        {inspectorGroup("Transform", [["Rotate 90°", <RotateIcon />], ["Flip horizontal", <FlipIcon />], ["Flip vertical", <FlipVerticalIcon />]])}
       </PanelRow>
     </PanelSection>
     <LayoutSection />
@@ -1201,8 +1200,8 @@ export const GalleryPanelFigma = () => (
       <PanelRow><ColorField size="sm" variant="soft" fullWidth aria-label="Selection color 1" defaultValue="#FFFFFF" /></PanelRow>
       <PanelRow><ColorField size="sm" variant="soft" fullWidth aria-label="Selection color 2" defaultValue="#0055FF" /></PanelRow>
     </PanelSection>
-    <PanelSection collapsible heading="Stroke" actions={inspectorButton("Add stroke", <PlusIcon />)} />
-    <PanelSection collapsible heading="Export" actions={inspectorButton("Add export setting", <PlusIcon />)} />
+    <PanelSection collapsible heading="Stroke" actions={inspectorButton("Add stroke", <AddIcon />)} />
+    <PanelSection collapsible heading="Export" actions={inspectorButton("Add export setting", <AddIcon />)} />
   </Panel>
 );
 
@@ -1258,12 +1257,12 @@ export const GalleryKbdInSearchField = () => <Input type="search" aria-label="Se
 export const GalleryKbdInNav = () => (
   <Nav aria-label="Workspace">
     <NavItem href="#gallery-kbd-template-in-nav" icon={<SearchIcon />} trailing={<Kbd keys={["cmd", "K"]} size="sm" />}>Search</NavItem>
-    <NavItem href="#gallery-kbd-template-in-nav" icon={<EditIcon />} trailing={<Kbd keys={["cmd", "N"]} size="sm" />}>New page</NavItem>
+    <NavItem href="#gallery-kbd-template-in-nav" icon={<PencilIcon />} trailing={<Kbd keys={["cmd", "N"]} size="sm" />}>New page</NavItem>
     <NavItem href="#gallery-kbd-template-in-nav" icon={<SettingsIcon />} trailing={<Kbd keys={["cmd", ","]} size="sm" />}>Settings</NavItem>
   </Nav>
 );
 export const GalleryKbdInOutlineButton = () => <Button variant="outline" tone="neutral" icon={<SearchIcon />} aria-keyshortcuts="Meta+K">Search <Kbd keys={["cmd", "K"]} /></Button>;
-export const GalleryKbdInGhostButton = () => <Button variant="ghost" tone="neutral" icon={<PlusIcon />} aria-keyshortcuts="Meta+N">New page <Kbd keys={["cmd", "N"]} /></Button>;
+export const GalleryKbdInGhostButton = () => <Button variant="ghost" tone="neutral" icon={<AddIcon />} aria-keyshortcuts="Meta+N">New page <Kbd keys={["cmd", "N"]} /></Button>;
 export const GalleryKbdInSoftButton = () => <Button variant="soft" tone="neutral" aria-keyshortcuts="Meta+Z">Undo <Kbd keys={["cmd", "Z"]} /></Button>;
 export const GalleryKbdInSmallButton = () => <Button size="sm" variant="outline" tone="neutral" aria-keyshortcuts="Meta+Z">Undo <Kbd keys={["cmd", "Z"]} size="sm" /></Button>;
 export const GalleryKbdInLargeButton = () => <Button size="lg" aria-keyshortcuts="Meta+Enter">Send <Kbd keys={["cmd", "enter"]} /></Button>;
@@ -1391,7 +1390,7 @@ export const GalleryNavSidebar = () => (
     <div style={{ flex: 1, minBlockSize: 0, overflowY: "auto", padding: "0 var(--area-space-8)" }}>
       <Nav aria-label="Chats">
         <NavGroup>
-          <NavItem href="#gallery-nav-sidebar" icon={<EditIcon />} current>New chat</NavItem>
+          <NavItem href="#gallery-nav-sidebar" icon={<PencilIcon />} current>New chat</NavItem>
           <NavItem href="#gallery-nav-sidebar" icon={<DocumentIcon />}>Library</NavItem>
           <NavItem href="#gallery-nav-sidebar" icon={<DotsFourIcon />}>Apps</NavItem>
         </NavGroup>
@@ -1400,7 +1399,7 @@ export const GalleryNavSidebar = () => (
           <NavItem href="#gallery-nav-sidebar" icon={<FolderIcon />}>Launch plan</NavItem>
         </NavGroup>
         <NavGroup label="Recents">
-          <NavItem href="#gallery-nav-sidebar" actions={<Button size="sm" variant="ghost" iconOnly icon={<MoreIcon />} aria-label="Chat options" />}>Inspector panel fields</NavItem>
+          <NavItem href="#gallery-nav-sidebar" actions={<Button size="sm" variant="ghost" iconOnly icon={<MoreHorizontalIcon />} aria-label="Chat options" />}>Inspector panel fields</NavItem>
           <NavItem href="#gallery-nav-sidebar">Toolbar split buttons</NavItem>
           <NavItem href="#gallery-nav-sidebar">Calendar spacing</NavItem>
           <NavItem href="#gallery-nav-sidebar">Toast colours</NavItem>
@@ -1423,7 +1422,7 @@ export const GalleryNavGrouped = () => (
     </NavGroup>
   </Nav>
 );
-export const GalleryNavIcons = () => <Nav aria-label="Label"><NavItem href="#gallery-nav-icons" icon={<DotsFourIcon />} current>Item one</NavItem><NavItem href="#gallery-nav-icons" icon={<PersonSmallIcon />}>Item two</NavItem><NavItem href="#gallery-nav-icons" icon={<TokenIcon />}>Item three</NavItem></Nav>;
+export const GalleryNavIcons = () => <Nav aria-label="Label"><NavItem href="#gallery-nav-icons" icon={<DotsFourIcon />} current>Item one</NavItem><NavItem href="#gallery-nav-icons" icon={<PersonIcon />}>Item two</NavItem><NavItem href="#gallery-nav-icons" icon={<TokenIcon />}>Item three</NavItem></Nav>;
 export const GalleryNavCounts = () => <Nav aria-label="Label"><NavItem href="#gallery-nav-counts" current trailing={<Count count={12} />}>Item one</NavItem><NavItem href="#gallery-nav-counts" trailing={<Count count={3} />}>Item two</NavItem><NavItem href="#gallery-nav-counts">Item three</NavItem></Nav>;
 
 export const GalleryNavMarker = () => (
@@ -1450,7 +1449,7 @@ export const GalleryNavActions = () => {
 export const GalleryNavExpandable = () => {
   const [open, setOpen] = useState(false);
   const id = useId();
-  return <Nav aria-label="Label"><NavItem href="#gallery-nav-expandable" actions={<Button size="sm" variant="ghost" iconOnly icon={<ChevronIcon />} aria-label="Toggle items" aria-expanded={open} aria-controls={id} onClick={() => setOpen(!open)} />}>Item one</NavItem><div id={id} hidden={!open}><NavGroup nested><NavItem href="#gallery-nav-expandable">Item two</NavItem><NavItem href="#gallery-nav-expandable">Item three</NavItem></NavGroup></div></Nav>;
+  return <Nav aria-label="Label"><NavItem href="#gallery-nav-expandable" actions={<Button size="sm" variant="ghost" iconOnly icon={<ChevronDownIcon />} aria-label="Toggle items" aria-expanded={open} aria-controls={id} onClick={() => setOpen(!open)} />}>Item one</NavItem><div id={id} hidden={!open}><NavGroup nested><NavItem href="#gallery-nav-expandable">Item two</NavItem><NavItem href="#gallery-nav-expandable">Item three</NavItem></NavGroup></div></Nav>;
 };
 
 /** Two-column inspector layout; every editable surface is an Area control. */
@@ -1483,7 +1482,7 @@ const PanelSampleRows = ({ tier = "md" }: { tier?: PanelTier }) => {
     </PanelSection>
   </>;
 };
-const panelMore = (size: PanelTier) => <Button size={size} variant="ghost" tone="neutral" iconOnly aria-label="More actions" icon={<MoreIcon />} />;
+const panelMore = (size: PanelTier) => <Button size={size} variant="ghost" tone="neutral" iconOnly aria-label="More actions" icon={<MoreHorizontalIcon />} />;
 export const GalleryPanel = () => (
   <Panel title="Frame" action={panelMore("md")}><PanelSampleRows /></Panel>
 );
@@ -1505,7 +1504,7 @@ export const GalleryPanelSections = () => (
 export const GalleryPanelFooter = () => {
   const [effects, setEffects] = useState(2);
   return <Panel title="Effects" style={{ blockSize: 360 }}
-    footer={<Button variant="soft" fullWidth icon={<PlusIcon />} onClick={() => setEffects(count => count + 1)}>Add effect</Button>}>
+    footer={<Button variant="soft" fullWidth icon={<AddIcon />} onClick={() => setEffects(count => count + 1)}>Add effect</Button>}>
     {Array.from({ length: effects }, (_, index) => <PanelSection key={index} heading={`Effect ${index + 1}`}>
       <PanelRow label={["Blur", "Spread"]}>
         <NumberField variant="soft" fullWidth aria-label={`Effect ${index + 1} blur`} min={0} defaultValue={4 * (index + 1)} />
@@ -1584,16 +1583,16 @@ export const GalleryProgressLarge = () => <Progress value={62} label="Large prog
 
 export const GalleryRadioCard = () => (
   <RadioGroup label="Label" name="gallery-radio-card" defaultValue="basic" style={{ inlineSize: "320px" }}>
-    <Radio variant="card" value="basic" label="Option one" caption="Description" leadingVisual={<PersonIcon />} />
+    <Radio variant="card" value="basic" label="Option one" caption="Description" leadingVisual={<PersonIcon size={20} />} />
     <Radio variant="card" value="business" label="Option two" caption="Description" leadingVisual={<FolderIcon />} />
     <Radio variant="card" value="enterprise" label="Option three" caption="Description" leadingVisual={<TokenIcon />} />
   </RadioGroup>
 );
 export const GalleryRadioCardTile = () => (
   <RadioGroup label="Layout" name="gallery-radio-card-tile" defaultValue="grid" style={{ inlineSize: "520px" }}>
-    <Radio variant="card" layout="tile" value="list" label="List" leadingVisual={<PilotListIcon size={20} />} />
-    <Radio variant="card" layout="tile" value="grid" label="Grid" leadingVisual={<PilotGridIcon size={20} />} />
-    <Radio variant="card" layout="tile" value="board" label="Board" leadingVisual={<PilotKanbanIcon size={20} />} />
+    <Radio variant="card" layout="tile" value="list" label="List" leadingVisual={<ListIcon size={20} />} />
+    <Radio variant="card" layout="tile" value="grid" label="Grid" leadingVisual={<GridIcon size={20} />} />
+    <Radio variant="card" layout="tile" value="board" label="Board" leadingVisual={<KanbanIcon size={20} />} />
   </RadioGroup>
 );
 export const GalleryRadio = () => (
@@ -1610,7 +1609,7 @@ export const GalleryRadioDisabled = () => <Radio name="gallery-radio-disabled" v
 export const GalleryRadioDisabledSelected = () => <Radio name="gallery-radio-disabled-selected" value="disabled" label="Label" disabled defaultChecked />;
 export const GalleryRadioCardAccent = () => (
   <SelectionAccent><RadioGroup label="Label" name="gallery-radio-card-accent" defaultValue="one" style={{ inlineSize: "320px" }}>
-    <Radio variant="card" value="one" label="Option one" caption="Description" leadingVisual={<PersonIcon />} />
+    <Radio variant="card" value="one" label="Option one" caption="Description" leadingVisual={<PersonIcon size={20} />} />
     <Radio variant="card" value="two" label="Option two" caption="Description" leadingVisual={<FolderIcon />} />
   </RadioGroup></SelectionAccent>
 );
@@ -1769,7 +1768,7 @@ export const GalleryTableSelectable = () => {
 export const GalleryTableSorting = () => {
   const [descending, setDescending] = useState(false);
   const rows = [{ name: "Item one", value: 1 }, { name: "Item two", value: 12 }, { name: "Item three", value: 128 }].sort((a, b) => descending ? b.value - a.value : a.value - b.value);
-  return <Table aria-label="Table"><thead><tr><th scope="col">Name</th><th scope="col" aria-sort={descending ? "descending" : "ascending"} className="area-table__cell--numeric"><Button size="sm" variant="ghost" align="end" trailingIcon={descending ? <PilotArrowDownIcon /> : <PilotArrowUpIcon />} onClick={() => setDescending(!descending)}>Value</Button></th></tr></thead><tbody>{rows.map(row => <tr key={row.name}><td>{row.name}</td><td className="area-table__cell--numeric">{row.value}</td></tr>)}</tbody></Table>;
+  return <Table aria-label="Table"><thead><tr><th scope="col">Name</th><th scope="col" aria-sort={descending ? "descending" : "ascending"} className="area-table__cell--numeric"><Button size="sm" variant="ghost" align="end" trailingIcon={descending ? <ArrowDownIcon /> : <ArrowUpIcon />} onClick={() => setDescending(!descending)}>Value</Button></th></tr></thead><tbody>{rows.map(row => <tr key={row.name}><td>{row.name}</td><td className="area-table__cell--numeric">{row.value}</td></tr>)}</tbody></Table>;
 };
 export const GalleryTableCompact = () => <Table size="sm" aria-label="Table"><thead><tr><th scope="col">Name</th><th scope="col" className="area-table__cell--numeric">Value</th></tr></thead><tbody>{["Item one", "Item two", "Item three"].map((name, i) => <tr key={name}><td>{name}</td><td className="area-table__cell--numeric">{[1, 12, 128][i]} MB</td></tr>)}</tbody></Table>;
 export const GalleryTableStriped = () => <Table striped aria-label="Table"><thead><tr><th scope="col">Name</th><th scope="col" className="area-table__cell--numeric">Value</th></tr></thead><tbody>{["Item one", "Item two", "Item three", "Item four"].map((name, i) => <tr key={name}><td>{name}</td><td className="area-table__cell--numeric">{[1, 12, 128, 1024][i]} MB</td></tr>)}</tbody></Table>;
@@ -1784,7 +1783,7 @@ export const GalleryTabsDisabled = () => <Tabs aria-label="Tabs, disabled" items
 export const GalleryTabsVertical = () => <Tabs aria-label="Tabs, vertical" orientation="vertical" items={[{ id: "one", label: "Item one", content: "Body text" }, { id: "two", label: "Item two", content: "Body text" }, { id: "three", label: "Item three", content: "Body text" }]} />;
 export const GalleryTabsSmall = () => <Tabs aria-label="Tabs, small" size="sm" items={[{ id: "one", label: "Item one", content: "Body text" }, { id: "two", label: "Item two", content: "Body text" }]} />;
 export const GalleryTabsTrack = () => <Tabs aria-label="Tabs, track" track items={[{ id: "one", label: "Item one", content: "Body text" }, { id: "two", label: "Item two", content: "Body text" }]} />;
-export const GalleryTabsIcons = () => <Tabs aria-label="Tabs, icons" items={[{ id: "one", label: "Item one", icon: <PersonSmallIcon />, content: "Body text" }, { id: "two", label: "Item two", icon: <InfoIcon />, content: "Body text" }]} />;
+export const GalleryTabsIcons = () => <Tabs aria-label="Tabs, icons" items={[{ id: "one", label: "Item one", icon: <PersonIcon />, content: "Body text" }, { id: "two", label: "Item two", icon: <InfoIcon />, content: "Body text" }]} />;
 export const GalleryTabsCounts = () => <Tabs aria-label="Tabs, counts" items={[{ id: "one", label: "Item one", trailing: <Count variant="soft" count={12} />, content: "Body text" }, { id: "two", label: "Item two", trailing: <Count variant="soft" count={3} />, content: "Body text" }]} />;
 
 export const GalleryTextarea = () => <Textarea aria-label="Label" placeholder="Placeholder" rows={3} />;
@@ -1798,8 +1797,8 @@ export const GalleryTextareaCount = () => {
 
 export const GalleryToast = () => <Toast tone="success" icon={<CheckIcon />}>Body text</Toast>;
 export const GalleryToastInfo = () => <Toast tone="info" icon={<InfoIcon />}>Body text</Toast>;
-export const GalleryToastWarning = () => <Toast tone="warning" icon={<AlertIcon />}>Body text</Toast>;
-export const GalleryToastDanger = () => <Toast tone="danger" icon={<AlertIcon />}>Body text</Toast>;
+export const GalleryToastWarning = () => <Toast tone="warning" icon={<WarningIcon />}>Body text</Toast>;
+export const GalleryToastDanger = () => <Toast tone="danger" icon={<WarningIcon />}>Body text</Toast>;
 export const GalleryToastTitle = () => <Toast tone="info" icon={<InfoIcon />} title="Title">Body text</Toast>;
 export const GalleryToastMultiline = () => <Toast tone="info" icon={<InfoIcon />} style={{ inlineSize: "calc(var(--area-space-96) * 2 + var(--area-space-48))" }}>Body text that wraps onto a second line</Toast>;
 export const GalleryToastAction = () => {
@@ -1891,17 +1890,17 @@ export const GalleryTreeViewFiles = () => {
   return <TreeView aria-label="Project files" items={fileTree} defaultExpandedIds={["src", "components"]} currentId={current} selectedIds={[current]} onActivate={setCurrent} />;
 };
 /* Folders as filled glyphs in one hue (owner, pass 2). */
-const blueFolder = <PilotFolderFilledIcon style={{ color: "var(--area-fg-info)" }} />;
+const blueFolder = <FolderFilledIcon style={{ color: "var(--area-fg-info)" }} />;
 const filledTree = [
   { id: "src", label: "src", icon: blueFolder, children: [
     { id: "components", label: "components", icon: blueFolder, children: [
-      { id: "avatar", label: "Avatar.tsx", icon: <PilotDocumentIcon />, trailing: "A" },
-      { id: "button", label: "Button.tsx", icon: <PilotDocumentIcon />, trailing: "M" },
+      { id: "avatar", label: "Avatar.tsx", icon: <DocumentIcon />, trailing: "A" },
+      { id: "button", label: "Button.tsx", icon: <DocumentIcon />, trailing: "M" },
     ] },
-    { id: "index", label: "index.ts", icon: <PilotDocumentIcon /> },
+    { id: "index", label: "index.ts", icon: <DocumentIcon /> },
   ] },
-  { id: "public", label: "public", icon: blueFolder, children: [{ id: "favicon", label: "favicon.svg", icon: <PilotDocumentIcon /> }] },
-  { id: "package", label: "package.json", icon: <PilotDocumentIcon /> },
+  { id: "public", label: "public", icon: blueFolder, children: [{ id: "favicon", label: "favicon.svg", icon: <DocumentIcon /> }] },
+  { id: "package", label: "package.json", icon: <DocumentIcon /> },
 ];
 export const GalleryTreeViewFilledFolders = () => {
   const [current, setCurrent] = useState("button");
@@ -1912,8 +1911,8 @@ export const GalleryTreeViewFilledFolders = () => {
  * Layer-type glyphs (frame, rectangle, component) are not drawn yet; these are stand-ins.
  */
 const LayerControls = ({ name, hidden, onToggle }: { name: string; hidden: boolean; onToggle: () => void }) => <>
-  <Button variant="ghost" size="sm" iconOnly tabIndex={-1} icon={<PilotMoreHorizontalIcon />} aria-label={`More options for ${name}`} />
-  <Button variant="ghost" size="sm" iconOnly tabIndex={-1} data-pinned={hidden ? "" : undefined} icon={hidden ? <EyeSlashIcon /> : <EyeIcon />} aria-label={hidden ? `Show ${name}` : `Hide ${name}`} aria-pressed={hidden} onClick={onToggle} />
+  <Button variant="ghost" size="sm" iconOnly tabIndex={-1} icon={<MoreHorizontalIcon />} aria-label={`More options for ${name}`} />
+  <Button variant="ghost" size="sm" iconOnly tabIndex={-1} data-pinned={hidden ? "" : undefined} icon={hidden ? <EyeOffIcon /> : <EyeIcon />} aria-label={hidden ? `Show ${name}` : `Hide ${name}`} aria-pressed={hidden} onClick={onToggle} />
 </>;
 export const GalleryTreeViewLayers = () => {
   const [hidden, setHidden] = useState<string[]>(["rect-6"]);
@@ -1935,12 +1934,12 @@ export const GalleryTreeViewFilters = () => <TreeView aria-label="Filters" selec
 
 export const GalleryComposerInline = () => {
   const [sent, setSent] = useState("");
-  return <div style={{ inlineSize: "100%" }}><Composer label="Label" placeholder="Placeholder" leadingActions={<Button variant="ghost" iconOnly icon={<PlusIcon />} aria-label="Add attachment" onClick={() => setSent("Attachment action")} />} trailingActions={<Button variant="ghost" iconOnly icon={<SearchIcon />} aria-label="Search tools" onClick={() => setSent("Search tools action")} />} onSubmit={setSent} /><span className="area-sr-only" role="status">{sent && `Sent: ${sent}`}</span></div>;
+  return <div style={{ inlineSize: "100%" }}><Composer label="Label" placeholder="Placeholder" leadingActions={<Button variant="ghost" iconOnly icon={<AddIcon />} aria-label="Add attachment" onClick={() => setSent("Attachment action")} />} trailingActions={<Button variant="ghost" iconOnly icon={<SearchIcon />} aria-label="Search tools" onClick={() => setSent("Search tools action")} />} onSubmit={setSent} /><span className="area-sr-only" role="status">{sent && `Sent: ${sent}`}</span></div>;
 };
 export const GalleryComposerStacked = () => {
   const [sent, setSent] = useState("");
   const [mode, setMode] = useState("Option one");
-  return <div style={{ inlineSize: "100%" }}><Composer layout="stacked" label="Label" placeholder="Placeholder" mode={<ModelPicker label="Label" value={mode} onValueChange={setMode} items={[{ value: "Option one", label: "Option one" }, { value: "Option two", label: "Option two" }]} />} leadingActions={<Button variant="ghost" iconOnly icon={<PlusIcon />} aria-label="Add attachment" onClick={() => setSent("Attachment action")} />} onSubmit={setSent} /><span className="area-sr-only" role="status">{sent && `Sent: ${sent}`}</span></div>;
+  return <div style={{ inlineSize: "100%" }}><Composer layout="stacked" label="Label" placeholder="Placeholder" mode={<ModelPicker label="Label" value={mode} onValueChange={setMode} items={[{ value: "Option one", label: "Option one" }, { value: "Option two", label: "Option two" }]} />} leadingActions={<Button variant="ghost" iconOnly icon={<AddIcon />} aria-label="Add attachment" onClick={() => setSent("Attachment action")} />} onSubmit={setSent} /><span className="area-sr-only" role="status">{sent && `Sent: ${sent}`}</span></div>;
 };
 const archivedTree = [
   { id: "src", label: "src", icon: <FolderIcon />, children: [
@@ -1956,8 +1955,8 @@ export const GalleryComposerPrefilled = () => {
   return <div style={{ inlineSize: "100%" }}><Composer layout="stacked" label="Label" value={value} onValueChange={setValue} onSubmit={message => { setSent(message); setValue(""); }} /><span className="area-sr-only" role="status">{sent && `Sent: ${sent}`}</span></div>;
 };
 export const GalleryComposerDisabled = () => <Composer label="Label" placeholder="Placeholder" disabled />;
-export const GalleryComposerLoading = () => <Composer label="Label" placeholder="Placeholder" defaultValue="Body text" loading onStop={() => {}} leadingActions={<Button variant="ghost" iconOnly icon={<PlusIcon />} aria-label="Add attachment" />} />;
-export const GalleryComposerPill = () => <Composer label="Label" placeholder="Placeholder" defaultValue="Body text" submitPill leadingActions={<Button variant="ghost" iconOnly icon={<PlusIcon />} aria-label="Add attachment" />} />;
+export const GalleryComposerLoading = () => <Composer label="Label" placeholder="Placeholder" defaultValue="Body text" loading onStop={() => {}} leadingActions={<Button variant="ghost" iconOnly icon={<AddIcon />} aria-label="Add attachment" />} />;
+export const GalleryComposerPill = () => <Composer label="Label" placeholder="Placeholder" defaultValue="Body text" submitPill leadingActions={<Button variant="ghost" iconOnly icon={<AddIcon />} aria-label="Add attachment" />} />;
 
 export const GalleryColorFieldSplit = () => (
 <div style={{display: "grid", gap: "var(--area-space-8)"}}>

@@ -294,12 +294,12 @@ order:
    right-to-left mirroring for directional icons.
 4. **Keywords and an alias map:** done 2026-10-12 (spec "Keywords and names": `keywords` and `names` in the metadata, read by the app's Icons search). for search, including Lucide, Material and Fluent names (user→person, file→document,
    plus→add, x→dismiss, circle-x→error).
-5. **12px cuts** for the dense icons components use at 12 (the spec planned these and they were never drawn).
-6. **Licence** for Area's drawings, semver, changelog and a deprecation policy.
+5. **12px cuts** for the dense icons components use at 12 (the spec planned these and they were never drawn). **Done 2026-10-13** (9 cuts, spec "12px cuts"; `../2026-10-13/README.md`).
+6. **Licence** for Area's drawings, semver, changelog and a deprecation policy. **Done 2026-10-13 except the licence** (0.1.0, CHANGELOG, policy, credits; spec "Versions, deprecation and credits"); the licence is the owner's call.
 7. **A public, searchable catalogue** (copy SVG / JSX) and a Figma library.
 8. **Coverage**, by use (2026-10-11: ChatGPT, Notion and Figma surveyed live, gaps drawn as batch 75): currencies (5 against Lucide's 27), file types, heading levels 4–6, digits and letters,
    transport basics, panel and layout states. Brands, flags and emoji stay out (separate libraries).
-9. **Retire the Fluent map**, including the docs toolbar (`icons.generated.mjs`).
+9. **Retire the Fluent map**, including the docs toolbar (`icons.generated.mjs`). **App done 2026-10-13** (spec "Fluent map retired from the app"); the docs' own copy goes with the site.
 
 Also open: the quality pass's proposals (spec "Quality and consistency pass, 2026-10-10"); replace-all; the component
 integrations (File upload file types, Tag picker tag-plus, Date picker calendar-range, the panel toggles, Search
