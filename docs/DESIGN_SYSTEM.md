@@ -164,7 +164,7 @@ shadow. It names the role it plays, and the number scales every role:
 | Role | Components | Geometry (Fluent 2 tier) | Key at step n |
 |---|---|---|---|
 | `shadow-control` | Switch, Slider, Segmented thumbs; soft Toggle group selection; Badge modern | 0 0 2 + 0 1 2 (shadow2) | n% |
-| `shadow-resting` | Card, Panel, Board card | 0 0 2 + 0 2 4 (shadow4) | n/2 % |
+| `shadow-resting` | Card, Panel, Board card, Composer | 0 0 2 + 0 2 4 (shadow4) | n/2 % |
 | `shadow-tooltip` | Tooltip, Toggletip | 0 0 2 + 0 4 8 (shadow8) | n/2 % |
 | `shadow-float` | Menu and all that open one, Popover and all built on it, Select picker, Toast, Calendar and ColorPicker surfaces, floating Toolbar, Board card actions, Scroll to latest | 0 0 2 + 0 8 16 (shadow16) | n% |
 | `shadow-modal` | Dialog, Confirm dialog, Drawer, Command palette | 0 0 8 + 0 14 28 (shadow28) | 2n % |

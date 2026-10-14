@@ -35,7 +35,7 @@ The registry in `packages/tokens/src/axes/registry.ts` defines eleven axes:
 - `elevation`: one number, `0` (Flat) to `8`, `3` by default: the Menu's shadow strength in percent,
   as `radius` is the medium Button's corner (`axes/elevation.ts`, owner 2026-10-14;
   [research](research/elevation-2026-10-14.md)). It scales five roles that components name:
-  `shadow-control` (raised thumbs and plates), `shadow-resting` (Card, Panel, Board card),
+  `shadow-control` (raised thumbs and plates), `shadow-resting` (Card, Panel, Board card, Composer),
   `shadow-tooltip`, `shadow-float` (everything over the page) and `shadow-modal` (Dialog, Drawer,
   Command palette). Geometry is fixed per role (Fluent 2's tiers); the step sets the alpha (key
   `n × weight` %, ambient half, dark doubled). The ladder `shadow-1`…`4` (control, resting, float,

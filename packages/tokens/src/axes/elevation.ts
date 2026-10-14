@@ -11,7 +11,7 @@
  *
  *   control  a raised part on a track or plate: Switch, Slider and Segmented thumbs, the soft Toggle
  *            group selection, Badge modern
- *   resting  a surface that rests on the page: Card, Panel, Board card
+ *   resting  a surface that rests on the page: Card, Panel, Board card, Composer
  *   tooltip  a small annotation: Tooltip, Toggletip
  *   float    a surface over the page: Menu (and everything that opens one: Context menu, Combobox, custom
  *            Select, Tag picker, Model picker, Split button, Zoom control), Popover (Hover card, Date

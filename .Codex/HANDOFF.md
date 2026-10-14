@@ -16,7 +16,7 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   Scroll to latest now floats. Surface axis is stroke only (Outlined / Borderless). Per-component audit and research:
   `docs/research/elevation-2026-10-14.md`; rule: DESIGN_SYSTEM.md "Elevation". App: Elevation select (0–8) in the
   Inspector and on the Language tab. Review page: https://claude.ai/artifact/43C4ijRqFNdwoXmmKTBVcb.
-- Open for the owner: Composer stays flat by its spec (ChatGPT lifts its composer); no drag role yet.
+- Composer takes the resting role (owner, "go with your recs"). Not built: a drag role; an automatic step under prefers-contrast.
 - Checks: npm test (24,254), contracts 14, cohesion 8, React suites (Indicator's known docs-dist failure only; a
   run raced the preview watcher's package rebuild, so stop the preview before the full sequence), desktop
   typecheck and build. Not run: build:docs / audit.
