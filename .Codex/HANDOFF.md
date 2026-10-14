@@ -5,6 +5,17 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Icons: last three approved, MIT licence, no Figma library (2026-10-14, branch `claude/icon-work-status-d12c1f`)
+
+- Owner approved grip, padding-side and sides as drawn (batch 4): 808 of 808 approved, `@area/icons/review` is empty
+  (generator writes `export {}`). Owner chose MIT for Area's drawings: `packages/icons/LICENSE` (copyright Ethan Wong),
+  `"license": "MIT"`, shipped in `files`. Owner dropped the Figma library and a separate catalogue: the app's Icons tab
+  is the catalogue. Spec "Versions, deprecation and credits"; production-gaps README items 1, 6, 7.
+- Checks: `npm run build`, icons tests 10/10, typecheck (all), consumer test; app Icons tab shows padding-side Approved.
+- Left: component integrations (File upload file types, Tag picker tag-plus, Date picker calendar-range, panel
+  toggles, Search field dismiss-circle), coverage by use, deleting the docs site's Fluent copy with the site, pixel nits
+  (kanban, form, heavy qr-code / calculator / gamepad).
+
 ## Icons: 12px cuts (2026-10-13, branch `claude/icon-work-2974ee`, PR)
 
 - PR #79 (pipeline into `packages/icons`) had merged into the already-merged `claude/icon-work-status-38f2b6`, not

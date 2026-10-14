@@ -59,7 +59,7 @@
     {
       "id": "batch-4",
       "title": "Batch 4 · Inspector",
-      "note": "Area's inspector marks redrawn on the system. Families derive: corner gives all four corners; flip, flow, gap and padding-sides transpose to their vertical forms; sliders is options transposed (listed with options). Rotate, flip, corner, flow and hide follow Figma's editor icons (round 1). Not yet redrawn: auto-position (its S-path cannot hold a standard arrowhead without near misses), bars-three (unused); eye and corner-radius duplicate existing icons. Rotate, round 4: reset's own arc mirrored round the square (owner's pick B).",
+      "note": "Area's inspector marks redrawn on the system. Families derive: corner gives all four corners; flip, flow, gap and padding-sides transpose to their vertical forms; sliders is options transposed (listed with options). Rotate, flip, corner, flow and hide follow Figma's editor icons (round 1). Not yet redrawn: auto-position (its S-path cannot hold a standard arrowhead without near misses), bars-three (unused); eye and corner-radius duplicate existing icons. Rotate, round 4: reset's own arc mirrored round the square (owner's pick B). Component glyphs grip (Property list's reorder handle), padding-side and sides (Box field) approved 2026-10-14.",
       "icons": {
         "angle": "approved",
         "aspect-ratio": "approved",
@@ -77,7 +77,10 @@
         "padding": "approved",
         "padding-sides": "approved",
         "token": "approved",
-        "rotate": "approved"
+        "rotate": "approved",
+        "grip": "approved",
+        "padding-side": "approved",
+        "sides": "approved"
       }
     },
     {
