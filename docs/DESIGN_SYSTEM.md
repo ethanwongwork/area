@@ -157,30 +157,30 @@ role paints the same way in every family:
   neutral icon muted.
 
 **Elevation.** A setting, the Elevation axis (owner, 2026-10-14; `axes/elevation.ts`,
-`docs/research/elevation-2026-10-14.md`). A component never picks a shadow. It names the role it plays,
-and the preset sets the depth:
+`docs/research/elevation-2026-10-14.md`). It is one number, the Menu's shadow strength in percent: `0` (Flat)
+to `8`, `3` by default. Radius works the same way (the medium Button's corner). A component never picks a
+shadow. It names the role it plays, and the number scales every role:
 
-| Role | Components | Flat | Minimal (default) | Soft | Standard | Strong |
-|---|---|---|---|---|---|---|
-| `shadow-control` | Switch, Slider, Segmented thumbs; soft Toggle group selection; Badge modern | none | 0.5px contact | 0.5px contact | Fluent shadow2 | shadow2, darker |
-| `shadow-resting` | Card, Panel, Board card | none | none | Card's 3% halo | shadow4 | shadow4, darker |
-| `shadow-tooltip` | Tooltip | none | none | 0 4 12 −2 | shadow8 | shadow8, darker |
-| `shadow-float` | Menu, Popover, Hover card, Select picker, Toast, Calendar and ColorPicker surfaces, floating Toolbar, Board card actions | none | Notion's chip, 2.7% | Notion's popover | shadow16 | shadow16, darker |
-| `shadow-modal` | Dialog, Drawer, Command palette | none | Notion's popover | Notion's search dialog | shadow64 | shadow64, darker |
+| Role | Components | Geometry (Fluent 2 tier) | Key at step n |
+|---|---|---|---|
+| `shadow-control` | Switch, Slider, Segmented thumbs; soft Toggle group selection; Badge modern | 0 0 2 + 0 1 2 (shadow2) | n% |
+| `shadow-resting` | Card, Panel, Board card | 0 0 2 + 0 2 4 (shadow4) | n/2 % |
+| `shadow-tooltip` | Tooltip, Toggletip | 0 0 2 + 0 4 8 (shadow8) | n/2 % |
+| `shadow-float` | Menu and all that open one, Popover and all built on it, Select picker, Toast, Calendar and ColorPicker surfaces, floating Toolbar, Board card actions, Scroll to latest | 0 0 2 + 0 8 16 (shadow16) | n% |
+| `shadow-modal` | Dialog, Confirm dialog, Drawer, Command palette | 0 0 8 + 0 14 28 (shadow28) | 2n % |
 
-Standard is Fluent 2's colours (12% ambient, 14% key; 24 / 28% dark). Strong uses Fluent's Darker colours
-(20 / 24%; 40 / 48% dark), for depth that reads at a glance; it pairs with `data-area-contrast="more"`. Minimal
-is the measured product default (2026-10-13). Nothing at rest lifts, and floating surfaces barely do: Notion
-draws nothing at rest and ChatGPT's tooltip draws none. In every preset the modal sits a level above the
-floating role, as in every system surveyed.
+The ambient layer is half the key, and dark doubles both. Anchors: 3 is Notion's lightest lift (2.7%), 5 its
+popover (5%) and 8 ChatGPT's menu (8%). In-flow controls (Button, fields, Chip, Tag) and content (Code block,
+Table, Alert, Accordion and the rest) take no role at any step; they rest on their edge and plate. The full
+per-component audit is in the research note.
 
-Every role is two layers, ambient then key, in every preset, so a preset swap or a transition interpolates layer
-by layer. "No lift" is a transparent shadow, `0 0 0 0 transparent`, never `none`. A role can sit in a list beside
-a component's own layers (the Board card's tone ring, the floating Toolbar's edge), and `none` in a list
-invalidates the whole `box-shadow`, ring and all. The edge does the separating at every level. `border-float`
-is #eeeeee in light (the nearest rung to Notion's 7% popover ring) and #4b4b4b in dark. Forced colours drop
-`box-shadow` entirely, and the border is what the browser repaints. Stroke is its own setting: the Surface axis,
-Outlined or Borderless. The Table frame is a required edge (`stroke-width`), so it stays under Borderless.
+Every role is two layers at every step, so a step change or a transition interpolates layer by layer. Step 0
+is a transparent shadow, `0 0 0 0 transparent`, never `none`. A role can sit in a list beside a component's
+own layers (the Board card's tone ring, the floating Toolbar's edge), and `none` in a list invalidates the whole
+`box-shadow`, ring and all. The edge does the separating at every step. `border-float` is #eeeeee in light (the
+nearest rung to Notion's 7% popover ring) and #4b4b4b in dark. Forced colours drop `box-shadow` entirely, and the
+border is what the browser repaints. Stroke is its own setting: the Surface axis, Outlined or Borderless. The
+Table frame is a required edge (`stroke-width`), so it stays under Borderless.
 
 A rule inside a container is never darker than the container's edge (owner, 2026-09-27;
 one exception, audit S8: seams inside joined controls, soft Button group and Split button,

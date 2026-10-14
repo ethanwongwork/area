@@ -7,17 +7,19 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
 
 ## Elevation setting (2026-10-14, branch `claude/component-display-ui-research-11dc77`, local commits)
 
-- Owner: "add elevation as an option ... flat, minimal, normal, and higher contrast ... applied consistently
-  across all components". New axis `elevation` (`packages/tokens/src/axes/elevation.ts`): Flat, Minimal
-  (default), Soft (Notion, the old default), Standard (Fluent 2), Strong (Fluent 2 darker). Five roles that
-  components name: `shadow-control`, `-resting`, `-tooltip`, `-float`, `-modal` (Dialog, Drawer and Command palette
-  moved off float); every role is two layers in every preset; "no lift" is a transparent shadow. Surface axis is now
-  stroke only: Outlined / Borderless (was Elevated); flat / raised presets removed. Research:
-  `docs/research/elevation-2026-10-14.md`; rule: DESIGN_SYSTEM.md "Elevation". App: Elevation select in the
-  Inspector's Canvas settings and on the Language tab. Review: https://claude.ai/artifact/43C4ijRqFNdwoXmmKTBVcb.
-- Checks: npm test (24,254 incl. registry), contracts 14, cohesion 8 (every role two layers, no `none`, each
-  component on its role), React suites (Indicator's known docs-dist failure only), desktop typecheck and build.
-  Not run: build:docs / audit.
+- Owner: "add elevation as an option", then "toned down ... a naming convention similar to the existing axis ...
+  2px scale for corner radius, 1px scale for typeface ... look into each component". Axis `elevation`
+  (`packages/tokens/src/axes/elevation.ts`): one number, 0 (Flat) to 8, default 3 = the Menu's shadow in %. Five
+  roles components name (`shadow-control`, `-resting`, `-tooltip`, `-float`, `-modal`); geometry fixed per role
+  (Fluent tiers 2/4/8/16/28), key = step × weight %, ambient half, dark doubled; anchors 3 Notion chip, 5 Notion
+  popover, 8 ChatGPT menu. Every role two layers; step 0 transparent. Dialog, Drawer, Command palette are modal;
+  Scroll to latest now floats. Surface axis is stroke only (Outlined / Borderless). Per-component audit and research:
+  `docs/research/elevation-2026-10-14.md`; rule: DESIGN_SYSTEM.md "Elevation". App: Elevation select (0–8) in the
+  Inspector and on the Language tab. Review page: https://claude.ai/artifact/43C4ijRqFNdwoXmmKTBVcb.
+- Open for the owner: Composer stays flat by its spec (ChatGPT lifts its composer); no drag role yet.
+- Checks: npm test (24,254), contracts 14, cohesion 8, React suites (Indicator's known docs-dist failure only; a
+  run raced the preview watcher's package rebuild, so stop the preview before the full sequence), desktop
+  typecheck and build. Not run: build:docs / audit.
 
 ## Minimal elevation (2026-10-13, branch `claude/component-display-ui-research-11dc77`, local commits)
 

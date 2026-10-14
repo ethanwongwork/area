@@ -32,14 +32,15 @@ The registry in `packages/tokens/src/axes/registry.ts` defines eleven axes:
   (`pill`, Avatar's `shape`).
 - `surface`: outlined (default) or borderless: the decorative stroke, `border-width` (1px / 0px).
   Required edges (`stroke-width`) and focus stay.
-- `elevation`: flat, minimal (default), soft, standard or strong: how much surfaces lift
-  (`axes/elevation.ts`, owner 2026-10-14; [research](research/elevation-2026-10-14.md)). It owns
-  five roles that components name: `shadow-control` (raised thumbs and plates), `shadow-resting`
-  (Card, Panel, Board card), `shadow-tooltip`, `shadow-float` (Menu, Popover, Select picker, Toast,
-  Calendar and ColorPicker surfaces, the floating Toolbar) and `shadow-modal` (Dialog, Drawer,
-  Command palette), plus the ladder `shadow-1`…`4` (control, resting, float, modal) for apps.
-  Every role is two layers (ambient, key) in every preset. "No lift" is `0 0 0 0 transparent`,
-  never `none`, so a role stays valid inside a component's own shadow list.
+- `elevation`: one number, `0` (Flat) to `8`, `3` by default: the Menu's shadow strength in percent,
+  as `radius` is the medium Button's corner (`axes/elevation.ts`, owner 2026-10-14;
+  [research](research/elevation-2026-10-14.md)). It scales five roles that components name:
+  `shadow-control` (raised thumbs and plates), `shadow-resting` (Card, Panel, Board card),
+  `shadow-tooltip`, `shadow-float` (everything over the page) and `shadow-modal` (Dialog, Drawer,
+  Command palette). Geometry is fixed per role (Fluent 2's tiers); the step sets the alpha (key
+  `n × weight` %, ambient half, dark doubled). The ladder `shadow-1`…`4` (control, resting, float,
+  modal) is for apps. Every role is two layers at every step; step 0 is `0 0 0 0 transparent`, never
+  `none`, so a role stays valid inside a component's own shadow list.
 - `motion`: none, subtle or expressive.
 
 Keep the name `accent`: it is the system-selected chromatic role and may represent a

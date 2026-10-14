@@ -36,12 +36,12 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = [
     value,
     label: value === "0" ? "0 · Sharp" : value === "pill" ? "Pill" : value === "8" ? "8 · Default" : value,
   })) },
-  // How much surfaces lift (axes/elevation.ts, owner 2026-10-14): five presets, each one system's values. A Select,
-  // as Density: five names do not fit a Segmented beside a label in the 256 Inspector.
-  { axis: "elevation", kind: "select", label: "Elevation", hint: "How much surfaces lift; every component takes its depth from its role", defaultValue: "minimal", items: [
-    { value: "flat", label: "Flat" }, { value: "minimal", label: "Minimal · Default" }, { value: "soft", label: "Soft" },
-    { value: "standard", label: "Standard" }, { value: "strong", label: "Strong" },
-  ] },
+  // How much surfaces lift (axes/elevation.ts, owner 2026-10-14): one number, the Menu's shadow strength in percent,
+  // 0 (Flat) to 8, as Radius is the medium Button's corner. A Select, as Radius: nine steps.
+  { axis: "elevation", kind: "select", label: "Elevation", hint: "The Menu's shadow in %; every component's lift scales from it", defaultValue: "3", items: ["0", "1", "2", "3", "4", "5", "6", "7", "8"].map(value => ({
+    value,
+    label: value === "0" ? "0 · Flat" : value === "3" ? "3 · Default" : value,
+  })) },
   // Which components draw a pill instead of the radius corner (axes/pills.ts), as data-area-pills.
   { axis: "pills", kind: "chips", label: "Pills", hint: "On: a pill. Off: follows Radius.", defaultValue: DEFAULT_PILLS.join(" "), items: PILL_SHAPES.map(value => ({ value, label: value === "field" ? "Fields" : value[0]!.toUpperCase() + value.slice(1) })) },
 ];

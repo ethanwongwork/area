@@ -74,3 +74,4 @@ Open question: ChatGPT's show and hide timing was not captured (only rest and ho
 
 - 2026-10-01 · audit G-23 (owner pick A) → demos use the placeholder vocabulary (Body text, Item one, Option one, Placeholder, Label) and `authorName` "Assistant", per DESIGN_SYSTEM's Example copy; no component change.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → appears over duration-base and leaves over duration-fast (was fast both ways), opacity only.
+- 2026-10-14 · owner: "look into each component specifically to see how, if any elevation at all, is applied" → the button floats over the conversation, so it takes the Elevation axis's float role, as Menu and Toast do: 3% at the default step (ChatGPT's draws none; this is close to it), deeper as the setting rises, none at 0 (scroll-to-latest.css; docs/research/elevation-2026-10-14.md).

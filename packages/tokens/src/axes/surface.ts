@@ -4,7 +4,7 @@
  *
  * Depth moved to its own axis (axes/elevation.ts, owner 2026-10-14), so stroke and lift combine
  * freely: Outlined draws the 1px frames of cards, panels and floating surfaces; Borderless removes
- * them, for a shadow-led look under Soft, Standard or Strong elevation (it was the Elevated preset).
+ * them, for a shadow-led look at a higher elevation step (it was the Elevated preset).
  */
 import { type AxisDefinition, tokens } from "./schema.ts";
 

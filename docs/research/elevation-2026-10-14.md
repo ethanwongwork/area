@@ -40,32 +40,66 @@ Every system puts the modal a level above its menus. Two layers (ambient + key) 
 Strength comes from opacity and tightness more than blur. Dark raises opacity 2× (Fluent) and leans on an
 edge, because shadows barely read on near-black.
 
-## Design
+## First design (superseded the same day)
 
-- **Roles, not levels.** Components name the role they play: `shadow-control`, `shadow-resting`,
-  `shadow-tooltip`, `shadow-float`, `shadow-modal`. The preset decides the depth of each. Dialog, Drawer and
-  Command palette move from the floating lift to `modal`.
-- **One shape everywhere.** Every role is two layers, ambient then key, in every preset. Unused layers are
-  transparent zeros, so presets swap and animate layer by layer, and a role stays valid inside a component's
-  own shadow list (the Board card's tone ring, the floating Toolbar's edge).
-- **Each preset is one source.**
-  - Flat: none. This is Carbon's model and Atlassian's increased-contrast model; edges and the scrim separate.
-  - Minimal (default): the 2026-10-13 product captures. Notion's small chip floats, ChatGPT shows nothing at
-    rest, and the modal takes Notion's popover.
-  - Soft: Notion's depth, the default until 2026-10-13. It covers Card's halo, the tooltip lift, the popover
-    and the search dialog.
-  - Standard: Fluent 2's shadow2 / 4 / 8 / 16 / 64 at its default colours.
-  - Strong: Fluent 2's Darker colours on the same geometry. This is "higher contrast" depth. It pairs with
-    `data-area-contrast="more"`, which already firms edges.
-- **Stroke separate from lift.** The Surface axis keeps only `border-width`: Outlined (default) or
-  Borderless (was Elevated), so any stroke combines with any elevation.
-- **Forced colours.** `box-shadow` computes to `none` there. Every floating surface keeps its 1px
-  `border-float`, which the browser repaints, so nothing relies on a shadow to be seen.
+Five named presets, each one system's values: Flat, Minimal (Notion's chip), Soft (Notion's popover),
+Standard (Fluent 2) and Strong (Fluent 2 darker). Owner, on the review: Standard and Strong were "a bit too
+strong for the segmented control specifically ... perhaps the standard and strong elevations can be toned
+down even more. also figure out a naming convention similar to the existing axis ... think about the 2px
+scale for corner radius and the 1px scale for typeface".
+
+## Design: one number
+
+The setting is the Menu's shadow strength in percent, `0` (Flat) to `8`, one step at a time, `3` by default.
+Radius works the same way (the medium Button's corner) and so does type size (the base text). Every role scales
+from that one number:
+
+- **Geometry is fixed per role.** It is Fluent 2's recipe: an ambient layer with no offset, then a key layer
+  whose offset is half its blur.
+
+  | Role | Fluent tier | Ambient | Key | Weight |
+  |---|---|---|---|---|
+  | control | shadow2 | 0 0 2 | 0 1 2 | 1 |
+  | resting | shadow4 | 0 0 2 | 0 2 4 | 0.5 |
+  | tooltip | shadow8 | 0 0 2 | 0 4 8 | 0.5 |
+  | float | shadow16 | 0 0 2 | 0 8 16 | 1 |
+  | modal | shadow28 | 0 0 8 | 0 14 28 | 2 |
+
+- **Strength scales the alpha only.**
+  - The key is `step × weight` %.
+  - The ambient layer is half the key, as in Notion's popover (2.7% under 5%) and Area's previous lift.
+  - Dark doubles both, since Fluent's dark shadow colours are its light ones doubled.
+  - The weights are picks. Resting surfaces and annotations sit under the floating role and a modal over it,
+    as in every system surveyed.
+- **Anchors on the scale.**
+  - 3 is Notion's lightest lift: its small floating chip at 2.7%, captured 2026-10-13.
+  - 5 is Notion's popover key (5%).
+  - 8 is ChatGPT's menu (8%).
+  - Fluent's 14% is past the top of the scale.
+- **Step 8 vs the first design's Strong.** The Segmented thumb at step 8 is `0 1 2` at 8% plus `0 0 2` at 4%;
+  Strong was Fluent shadow2 at 24% / 20%.
+- **Two layers at every step.** Every role keeps two layers, so changing step interpolates layer by layer.
+  Step 0 is a transparent shadow, never `none`.
+- **Stroke stays separate.** The Surface axis keeps `border-width`: Outlined or Borderless.
+
+## Component audit
+
+Every component, and the role (if any) its surface takes. A component that opens another (Combobox opens
+a Menu) inherits that surface's role; nothing chooses a shadow of its own.
+
+| Role | Components | Why |
+|---|---|---|
+| control | Switch thumb, Slider thumbs (single and range), Segmented thumb, soft Toggle group selection, Badge modern | A raised part on a track or plate: a contact shadow says "on top of", with `edge-selected` as its edge. The tracks are recessed and take none. |
+| resting | Card, Panel, Board card | Objects that stand alone on the page. Their edge carries them; the lift is a hint that grows with the step. |
+| tooltip | Tooltip, Toggletip | A small annotation. In light its inverted fill separates it; the role adds depth only as the step rises. |
+| float | Menu, and every component that opens one: Context menu, Combobox, custom Select, Tag picker, Model picker, Split button, Zoom control. Popover, and every component built on it: Hover card, Date picker. Also the Select picker, Toast, the Calendar and ColorPicker surfaces, the floating Toolbar, Board card actions, and Scroll to latest (new) | Surfaces over the page or over content. Scroll to latest floats over a conversation, so it now takes the role; it was flat because ChatGPT draws none, and at the default step it is close to that. |
+| modal | Dialog (and Confirm dialog), Drawer, Command palette | The topmost surface, over the scrim. Inline variants (Command palette `inline`, Calendar `plain`, ColorPicker `plain`) sit in the page and take none. |
+| none, in-flow controls | Button (every variant), Button group, Split button's trigger, Input, Textarea, Number field, Search field, Select, Input group, Box field, Color field, Checkbox, Radio, Chip, Tag, Kbd, Link, Pagination, Breadcrumb, Alignment picker, Editable text, Prompt suggestions, Composer | Controls rest in the page with their edge and plate (ChatGPT, Notion and Figma shadow no button or field; DESIGN_SYSTEM.md). Composer is the one product exception: ChatGPT lifts its composer (0 2 8 at 4%, 0 4 80 8 at 2.4%). The owner's 2026-09-26 spec keeps it flat, so it is left for the owner to decide. |
+| none, content in a surface | Code block, Table, Alert, Message, Empty state, Preview frame, Token row, Asset row, Property list, Description list, Accordion, Tree view, Nav, Timeline, Box model, Citation, Shortcut list, File upload, Scroll area, Meter, Progress, Skeleton, Spinner, Avatar, Count, Indicator, Presence | Content inside a page or a surface, not an object on it: rules and edges, never a lift. Indicator's ring is a cutout in the surface colour, not a shadow. |
+| functional, fixed | ColorPicker thumbs (0 1 3 −2 at 10%, 0 5 12 −2 at 13%) | They sit on a full-colour gradient, where the lift keeps the handle visible. The setting doesn't move them, and they keep it at step 0. |
 
 ## Not done
 
-- A drag role (Material L4, Fluent shadow28) waits for a dragged component; Board cards don't drag yet.
-- Dark Minimal's modal uses Notion's dark popover strengths on the light geometry, since `light-dark()`
-  switches colours, not offsets.
-- An automatic Strong under `prefers-contrast: more` was not wired: contrast stays a colour setting, and
-  the choice is left to the product.
+- A drag role (Material L4, Fluent shadow28) waits for a component that drags; Board cards don't yet.
+- An automatic higher step under `prefers-contrast: more` was not wired: contrast stays a colour setting.
+- Composer: flat by the owner's spec; ChatGPT's resting lift is the reference if the owner wants one.

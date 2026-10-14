@@ -53,17 +53,18 @@ test('every surface takes its depth from its elevation role', () => {
   const roles = ['control', 'resting', 'tooltip', 'float', 'modal'];
   for (const role of roles) {
     const values = [...css.matchAll(new RegExp(`--area-shadow-${role}:\\s*([^;]+);`, 'g'))].map(match => match[1].trim());
-    // The default on :root, then one scope per preset (flat, minimal, soft, standard, strong).
-    assert.equal(values.length, 6, `--area-shadow-${role} should have the default and one value per preset`);
+    // The default on :root, then one scope per step, 0 to 8.
+    assert.equal(values.length, 10, `--area-shadow-${role} should have the default and one value per step`);
     for (const value of values) {
       assert.notEqual(value, 'none', `--area-shadow-${role} is none; use a transparent shadow`);
       assert.equal(layers(value), 2, `--area-shadow-${role} is not two layers: ${value}`);
     }
   }
   const float = [...css.matchAll(/--area-shadow-float:\s*([^;]+);/g)].map(match => match[1].trim());
-  assert.ok(float.includes('0 2px 6px light-dark(rgb(25 25 25 / 0.027), transparent), 0 8px 12px light-dark(rgb(25 25 25 / 0.027), rgb(25 25 25 / 0.08))'), 'shadow-float lost its Minimal recipe (Notion\'s small chip)');
-  assert.ok(float.includes('0 5px 8px color-mix(in srgb, var(--area-shadow-color) 50%, transparent), 0 20px 24px var(--area-shadow-color)'), 'shadow-float lost its Soft recipe (Notion\'s popover)');
-  assert.ok(float.includes('0 0 0 0 transparent, 0 0 0 0 transparent'), 'the Flat preset should drop the lift');
+  // Step 3, the default: the Menu's shadow at 3% (Notion's lightest lift, 2.7%), ambient half, dark doubled.
+  assert.equal(float[0], '0 0 2px light-dark(rgb(0 0 0 / 0.015), rgb(0 0 0 / 0.03)), 0 8px 16px light-dark(rgb(0 0 0 / 0.03), rgb(0 0 0 / 0.06))', 'the default float lost its step-3 recipe');
+  assert.ok(float.includes('0 0 0 0 transparent, 0 0 0 0 transparent'), 'step 0 should drop the lift');
+  assert.ok(float.includes('0 0 2px light-dark(rgb(0 0 0 / 0.04), rgb(0 0 0 / 0.08)), 0 8px 16px light-dark(rgb(0 0 0 / 0.08), rgb(0 0 0 / 0.16))'), 'step 8 should be ChatGPT\'s menu strength, 8%');
 
   // The shadow that paints is the last box-shadow on the block, in any rule: a later literal once overrode the
   // shared lift with a full-strength second layer and a looser test still passed.
@@ -74,7 +75,7 @@ test('every surface takes its depth from its elevation role', () => {
     const value = [...own.at(-1).body.matchAll(/(?:^|[;\s])box-shadow\s*:\s*([^;]+)/g)].at(-1)[1].trim();
     return value === 'var(--_elevation)' ? rules.filter(rule => rule.selector.split(/\s*,\s*/).includes(block)).map(elevation).filter(Boolean).at(-1) ?? value : value;
   };
-  const expect = { float: ['.area-popover', '.area-menu', '.area-toast', '.area-menu__search-surface'], modal: ['.area-dialog', '.area-command-palette'], resting: ['.area-panel'] };
+  const expect = { float: ['.area-popover', '.area-menu', '.area-toast', '.area-menu__search-surface', '.area-scroll-to-latest > .area-button'], modal: ['.area-dialog', '.area-command-palette'], resting: ['.area-panel'] };
   for (const [role, blocks] of Object.entries(expect)) {
     for (const block of blocks) assert.match(paints(block), new RegExp(`var\\(--area-shadow-${role}\\)`), `${block} does not take the ${role} role`);
   }
