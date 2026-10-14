@@ -128,7 +128,15 @@ export function Abstract({ axis }: { axis: string }) {
           <Row end><Pill /></Row>
         </Card>
       );
-    // Edges and lift: a floating card over a resting one.
+    // Depth: a floating card, holding a toggle, over a resting one; each takes its elevation role.
+    case "elevation":
+      return (
+        <span className="abs-stack">
+          <Card kind="back"><Bar w={44} strong /><Bar w={80} /><Bar w={62} /></Card>
+          <Card kind="float"><Bar w={60} strong /><Row><Toggle on /><Bar w={48} /></Row><Row end><Pill /></Row></Card>
+        </span>
+      );
+    // Edges: a floating card over a resting one, framed or not.
     case "surface":
       return (
         <span className="abs-stack">

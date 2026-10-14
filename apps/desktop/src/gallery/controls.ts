@@ -6,7 +6,7 @@
  */
 import { DEFAULT_PILLS, PILL_SHAPES } from "@area/tokens/config";
 export interface GalleryControl {
-  axis: "theme" | "type" | "density" | "radius" | "pills";
+  axis: "theme" | "type" | "density" | "radius" | "pills" | "elevation";
   /**
    * Two or three options are a Segmented (Apple and Primer cap segments at 5-7); a longer list of
    * exact settings is a Select, each option naming what it sets (shadcn's radius picker is a menu).
@@ -35,6 +35,12 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = [
   { axis: "radius", kind: "select", label: "Radius", hint: "The medium Button's corner; everything scales from it", defaultValue: "8", items: ["0", "2", "4", "6", "8", "10", "12", "14", "pill"].map(value => ({
     value,
     label: value === "0" ? "0 · Sharp" : value === "pill" ? "Pill" : value === "8" ? "8 · Default" : value,
+  })) },
+  // How much surfaces lift (axes/elevation.ts, owner 2026-10-14): one number, the Menu's shadow strength in percent,
+  // 0 (Flat) to 8, as Radius is the medium Button's corner. A Select, as Radius: nine steps.
+  { axis: "elevation", kind: "select", label: "Elevation", hint: "The Menu's shadow in %; every component's lift scales from it", defaultValue: "3", items: ["0", "1", "2", "3", "4", "5", "6", "7", "8"].map(value => ({
+    value,
+    label: value === "0" ? "0 · Flat" : value === "3" ? "3 · Default" : value,
   })) },
   // Which components draw a pill instead of the radius corner (axes/pills.ts), as data-area-pills.
   { axis: "pills", kind: "chips", label: "Pills", hint: "On: a pill. Off: follows Radius.", defaultValue: DEFAULT_PILLS.join(" "), items: PILL_SHAPES.map(value => ({ value, label: value === "field" ? "Fields" : value[0]!.toUpperCase() + value.slice(1) })) },

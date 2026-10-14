@@ -5,6 +5,51 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Elevation setting (2026-10-14, branch `claude/component-display-ui-research-11dc77`, PR)
+
+- Owner: "add elevation as an option", then "toned down ... a naming convention similar to the existing axis ...
+  2px scale for corner radius, 1px scale for typeface ... look into each component". Axis `elevation`
+  (`packages/tokens/src/axes/elevation.ts`): one number, 0 (Flat) to 8, default 3 = the Menu's shadow in %. Five
+  roles components name (`shadow-control`, `-resting`, `-tooltip`, `-float`, `-modal`); geometry fixed per role
+  (Fluent tiers 2/4/8/16/28), key = step × weight %, ambient half, dark doubled; anchors 3 Notion chip, 5 Notion
+  popover, 8 ChatGPT menu. Every role two layers; step 0 transparent. Dialog, Drawer, Command palette are modal;
+  Scroll to latest now floats. Surface axis is stroke only (Outlined / Borderless). Per-component audit and research:
+  `docs/research/elevation-2026-10-14.md`; rule: DESIGN_SYSTEM.md "Elevation". App: Elevation select (0–8) in the
+  Inspector and on the Language tab. Review page: https://claude.ai/artifact/43C4ijRqFNdwoXmmKTBVcb.
+- Composer takes the resting role (owner, "go with your recs"). Not built: a drag role; an automatic step under prefers-contrast.
+- Checks: npm test (24,254), contracts 14, cohesion 8, React suites (Indicator's known docs-dist failure only; a
+  run raced the preview watcher's package rebuild, so stop the preview before the full sequence), desktop
+  typecheck and build. Not run: build:docs / audit.
+
+## Minimal elevation (2026-10-13, branch `claude/component-display-ui-research-11dc77`, PR)
+
+- Owner: "an extremely subtle, very minimal shadow system ... i barely want to see any shadows". Captures
+  (ChatGPT, Notion light and dark, Cursor's bundle) and the decision: `docs/research/elevation-2026-10-13.md`;
+  rule: DESIGN_SYSTEM.md "Elevation". Outlined (default): `shadow-card` none (Card, Panel, Board card),
+  `shadow-float` Notion's small chip (0 8 12 / 0 2 6 at 2.7%; dark one 8% layer), Tooltip no drop shadow,
+  floating Toolbar on the shared lift with a real edge, `border-float` light 75 → 100. Raised / Elevated keep the
+  old recipes. Review: https://claude.ai/artifact/7mmvZzP8CZCG8gpUxZR8fv (Before / After, light and dark).
+- Checks: npm test (24,254), contracts 14, cohesion 8 (now pins the minimal default), React suites (Indicator's
+  known docs-dist failure only). Not run: build:docs / audit.
+
+## Component Stage (2026-10-12, branch `claude/component-display-ui-research-11dc77`, PR)
+
+- Owner: research how component pages and playgrounds show a component, then "go with your recommendations".
+  Research and decisions: `docs/research/component-stage-2026-10-12.md`. The grid stays the overview; a family
+  opens as a Stage (`src/stage.tsx`): the tile on it at real size, code attached, the family's tiles in their
+  groups below (small groups share a row), then Props, Anatomy and States from the manifest. Properties in the
+  Inspector for Accordion, Badge, Button, Checkbox, Chip, Count, Input, Spinner, Switch and Tag
+  (`src/content/playgrounds.tsx`, generated from `manifest.ts`); `npm run check:playgrounds -w @area/desktop`
+  checks every mapped tile against its demo (0 mismatches). Double-click, ⌘↓ or Open to open; Escape,
+  ⌘↑, ⌘[ or All to go back with the tile revealed. `#components/<family>/<tile>`.
+- Demo source for the code is main's `scripts/snippets.mjs` (`virtual:demo-snippets`); this branch fixed its
+  first-line indent. Merged main on 2026-10-13 (the Stage's Inspector takes main's Copy code / Copy import and facts).
+- Tiles (owner, 2026-10-13: "corner radius sharper, the text label larger, the margin/padding can be smaller"):
+  corner 20 → 12, inset 16 → 12, label text-xs (11 at the app's 13) → text-sm (13), so component and colour
+  tiles share one label size.
+- Checks: desktop typecheck and build; browser preview at 1440 (light, dark, compact; Button, Badge, Menu, Confirm
+  dialog; Properties, Escape / ⌘↓ / ⌘↑, reveal, width handle). Not verified: the Electron window, docs build.
+
 ## Icons: last three approved, MIT licence, no Figma library (2026-10-14, branch `claude/icon-work-status-d12c1f`)
 
 - Owner approved grip, padding-side and sides as drawn (batch 4): 808 of 808 approved, `@area/icons/review` is empty

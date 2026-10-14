@@ -66,7 +66,7 @@
   .area-property-list__indicator {
     position: absolute;
     inset-inline: 0;
-    /* A state mark, so `stroke-width`: it must not vanish under the Elevated surface preset. */
+    /* A state mark, so `stroke-width`: it must not vanish under the Borderless surface preset (was Elevated). */
     inset-block-start: calc(var(--_drop) - var(--area-stroke-width));
     block-size: calc(var(--area-stroke-width) * 2);
     border-radius: var(--area-radius-full);

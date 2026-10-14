@@ -156,16 +156,31 @@ role paints the same way in every family:
   one feedback set in Badge's order (neutral, info, success, warning, danger) and paint the
   neutral icon muted.
 
-**Elevation.** In-flow fields and controls have no shadow; `shadow-1` is only for raised
-thumbs (Switch, Slider, the Segmented thumb). A docked region (Panel) uses `shadow-2`. Card has its own faint halo (owner, 2026-09-27): a 1px contact shadow and
-a 2px-low 8px blur, both 3% black, over a lighter edge (neutral 100). A linked Card keeps its lift on hover and steps its edge to
-`edge-control-hover`, as Fluent's outline and Radix's surface cards do. Everything that floats over the page (Menu, Popover, the Select picker,
-Dialog, Toast, the Calendar and ColorPicker surfaces, Toolbar overflow) shares one lift,
-Notion's popover geometry: `0 20px 24px` and `0 5px 8px` in `shadow-color` at full and half
-strength, over the 1px decorative border. Both are Surface axis roles (audit S10, owner
-2026-09-30): `shadow-card` and `shadow-float`, `none` under Flat. Tooltip keeps its own smaller
-lift, and the Toolbar's floating bar its own four-layer recipe. The Table frame is a required
-edge (`stroke-width`), so it stays under Elevated.
+**Elevation.** A setting, the Elevation axis (owner, 2026-10-14; `axes/elevation.ts`,
+`docs/research/elevation-2026-10-14.md`). It is one number, the Menu's shadow strength in percent: `0` (Flat)
+to `8`, `3` by default. Radius works the same way (the medium Button's corner). A component never picks a
+shadow. It names the role it plays, and the number scales every role:
+
+| Role | Components | Geometry (Fluent 2 tier) | Key at step n |
+|---|---|---|---|
+| `shadow-control` | Switch, Slider, Segmented thumbs; soft Toggle group selection; Badge modern | 0 0 2 + 0 1 2 (shadow2) | n% |
+| `shadow-resting` | Card, Panel, Board card, Composer | 0 0 2 + 0 2 4 (shadow4) | n/2 % |
+| `shadow-tooltip` | Tooltip, Toggletip | 0 0 2 + 0 4 8 (shadow8) | n/2 % |
+| `shadow-float` | Menu and all that open one, Popover and all built on it, Select picker, Toast, Calendar and ColorPicker surfaces, floating Toolbar, Board card actions, Scroll to latest | 0 0 2 + 0 8 16 (shadow16) | n% |
+| `shadow-modal` | Dialog, Confirm dialog, Drawer, Command palette | 0 0 8 + 0 14 28 (shadow28) | 2n % |
+
+The ambient layer is half the key, and dark doubles both. Anchors: 3 is Notion's lightest lift (2.7%), 5 its
+popover (5%) and 8 ChatGPT's menu (8%). In-flow controls (Button, fields, Chip, Tag) and content (Code block,
+Table, Alert, Accordion and the rest) take no role at any step; they rest on their edge and plate. The full
+per-component audit is in the research note.
+
+Every role is two layers at every step, so a step change or a transition interpolates layer by layer. Step 0
+is a transparent shadow, `0 0 0 0 transparent`, never `none`. A role can sit in a list beside a component's
+own layers (the Board card's tone ring, the floating Toolbar's edge), and `none` in a list invalidates the whole
+`box-shadow`, ring and all. The edge does the separating at every step. `border-float` is #eeeeee in light (the
+nearest rung to Notion's 7% popover ring) and #4b4b4b in dark. Forced colours drop `box-shadow` entirely, and the
+border is what the browser repaints. Stroke is its own setting: the Surface axis, Outlined or Borderless. The
+Table frame is a required edge (`stroke-width`), so it stays under Borderless.
 
 A rule inside a container is never darker than the container's edge (owner, 2026-09-27;
 one exception, audit S8: seams inside joined controls, soft Button group and Split button,

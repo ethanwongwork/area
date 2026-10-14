@@ -70,7 +70,7 @@
   }
   /* The swatch ring (`token-swatch-ring`, black 10% / white 10% in dark), inside the shape, so a swatch is
      outlined on any ground and the colour shows through its rim. A required edge: `stroke-width`, so it stays
-     under the Elevated surface preset (audit F-5; consistency pass 2026-10-12, it had regressed to `border-width`). */
+     under the Borderless surface preset (was Elevated) (audit F-5; consistency pass 2026-10-12, it had regressed to `border-width`). */
   .area-color-swatch {
     outline: var(--area-stroke-width) solid var(--area-token-swatch-ring);
     outline-offset: calc(var(--area-stroke-width) * -1);

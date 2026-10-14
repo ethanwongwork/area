@@ -9,7 +9,7 @@ import { Chip, ChipGroup, Field, PanelSection, Segmented, Select } from "@area/r
 import { GALLERY_CONTROLS } from "./gallery/controls.ts";
 import { useStudio, type CanvasAxes } from "./studio.tsx";
 
-export function CanvasSettings({ axes = ["type", "density", "radius", "pills"], children }: { axes?: ReadonlyArray<keyof CanvasAxes>; children?: ReactNode }) {
+export function CanvasSettings({ axes = ["type", "density", "radius", "elevation", "pills"], children }: { axes?: ReadonlyArray<keyof CanvasAxes>; children?: ReactNode }) {
   const { canvas, setCanvas } = useStudio();
   return (
     <PanelSection heading="Canvas">

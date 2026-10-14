@@ -27,8 +27,10 @@
     --_composer-concentric: max(var(--area-radius-concentric), var(--area-pill-button));
     border-radius: calc(var(--_composer-button-radius) + var(--_composer-inset) * var(--_composer-concentric));
     background: var(--area-input-bg);
-    /* spec (owner 2026-09-26): no shadow at rest, as every control; the border carries the edge. */
-    box-shadow: none;
+    /* The Elevation axis's resting role (owner, 2026-10-14, "go with your recs"; was none, owner 2026-09-26):
+       the composer is the one control that rests on the page as an object, and ChatGPT lifts its own (0 2 8 at
+       4%, 0 4 80 8 at 2.4%, captured 2026-10-13). 1.5% at the default step, none at 0; the border still carries it. */
+    box-shadow: var(--area-shadow-resting);
     color: var(--area-input-text);
     font-family: var(--area-font-sans); /* the one font reference; the field inherits it */
     /* Motion (docs/MOTION.md; docs/specs/composer.md, 2026-10-07): colours leave on duration-fast
@@ -43,7 +45,7 @@
 
  /* The Input hover step (audit S7a). */
   @media (hover: hover) { .area-composer:hover:not(:focus-within, [data-disabled]) { border-color: var(--area-input-edge-hover); transition-duration: 0s; } }
-  .area-composer:focus-within { border-color: var(--area-composer-focus-color); outline: var(--area-field-focus-outline-width) solid var(--area-composer-focus-color); box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-shadow-color); transition-duration: 0s; }
+  .area-composer:focus-within { border-color: var(--area-composer-focus-color); outline: var(--area-field-focus-outline-width) solid var(--area-composer-focus-color); box-shadow: var(--area-shadow-resting), 0 0 0 var(--area-field-focus-halo-width) var(--area-shadow-color); transition-duration: 0s; }
   /* A text field shows disabled with Textarea's field paint, not opacity (cohesion audit), so the
      actions keep Button's own 50% instead of compounding to about 30%. */
   .area-composer[data-disabled] { background: var(--area-textarea-bg-disabled); border-color: var(--area-border-faint); color: var(--area-fg-disabled); cursor: not-allowed; }

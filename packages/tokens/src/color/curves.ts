@@ -100,11 +100,14 @@ export const INVERSION = {
   borderDecorative: { light: 75, dark: 800 },
   /**
    * The frame of a floating surface (Popover, Menu, Dialog, Toast, Command palette, a surface
-   * Calendar or ColorPicker). Light keeps the decorative rung; dark needs a firmer one, because a
-   * floating surface often sits on another surface where the lift and shadow vanish. 650 is
-   * ChatGPT's dark menu hairline, white 20% over its #212121 menu (audit S21c, 2026-10-01).
+   * Calendar or ColorPicker). It carries the separation: the floating lift is barely there (minimal
+   * elevation, owner 2026-10-13). Light is 100, #eee, the nearest rung to Notion's popover ring,
+   * rgba(42,28,0,.07) over white (#efeeec, capture 2026-10-13; was 75, which leaned on the deeper
+   * shadow). Dark needs a firmer one, because a floating surface often sits on another surface where
+   * the lift vanishes: 650 is ChatGPT's dark menu hairline, white 20% over its #212121 menu (audit
+   * S21c, 2026-10-01).
    */
-  borderFloat: { light: 75, dark: 650 },
+  borderFloat: { light: 100, dark: 650 },
   border: { light: 250, dark: 650 },
   /**
    * Floating container frames, token badges and segmented tracks. Lighter than
