@@ -45,6 +45,10 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
 - Merged (PR #89). Verified against a static build (port 4410; 4400 was another session's server): Surface 0 sweep
   clean in light and dark, forced colours lose no frame, 1× / 2× sheets in `docs/research/captures/surface-2026-10-14/`.
   Open (owner): the dark soft edge is faint at 1× at Elevation 0.
+- Merged (PR #91). Language tab: the default preset tile said "Default" twice ("1 (Default)" plus a Default
+  value) for every number setting; the value now shows only where the label lacks it, and the defaults-only view
+  drops the suffix. Radius's registry labels now read "0 (Sharp)" / "8 (Default)", as the Inspector's and the other
+  number settings' do. Owner did not take the firmer dark edge; left as is.
 
 ## All-axis audit (2026-10-14, branch `claude/elevation-axis-gallery-e500be`)
 
