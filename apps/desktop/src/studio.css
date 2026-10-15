@@ -8,7 +8,7 @@
  * Every divider is the same stroke: --area-border-width in --area-border-decorative, the colour
  * Panel draws its own bar and section rules in.
  * Only the app's own classes are styled here; Area components keep their own CSS. Values are
- * Area tokens at the app's scale, type 13 and Compact (data-area-type and data-area-density on <html>);
+ * Area tokens at the app's scale, type 13 and density 28, Compact (data-area-type and data-area-density on <html>);
  * the Canvas carries its own density, radius and pills from the Inspector.
  */
 @layer studio {
@@ -373,43 +373,43 @@
   [data-fit]:not([data-fitted]) .gallery-tile__stage { visibility: hidden; }
 
   /*
-   * Compact density: the hairline contact sheet (Carbon's icon library and component index,
+   * Density 28 (Compact): the hairline contact sheet (Carbon's icon library and component index,
    * component.gallery). Tiles touch, square, divided by single 1px lines: each tile draws a 1 ring
    * into a 1 gap, and neighbouring rings land on the same pixels, so every line is drawn once.
    * Spaced, rounded tiles stay the default density.
    */
-  .studio-canvas__body[data-area-density="compact"] {
+  .studio-canvas__body[data-area-density="28"] {
     --_tile-radius: 0px;
     --_tile-inset: var(--area-space-12);
   }
-  .studio-canvas__body[data-area-density="compact"] :is(.studio-grid, .studio-stack) { --_gap: var(--area-border-width); gap: var(--area-border-width); padding: var(--area-border-width); }
-  .studio-canvas__body[data-area-density="compact"] .gallery-tile {
+  .studio-canvas__body[data-area-density="28"] :is(.studio-grid, .studio-stack) { --_gap: var(--area-border-width); gap: var(--area-border-width); padding: var(--area-border-width); }
+  .studio-canvas__body[data-area-density="28"] .gallery-tile {
     padding: var(--_tile-inset);
     border: 0;
     box-shadow: 0 0 0 var(--area-border-width) var(--_tile-edge);
   }
   /* A painted tile keeps its own outline as its only edge here too. */
-  .studio-canvas__body[data-area-density="compact"] .gallery-tile[data-painted] { box-shadow: none; }
+  .studio-canvas__body[data-area-density="28"] .gallery-tile[data-painted] { box-shadow: none; }
   /* Compact tiles draw their hairline as a ring into the 1 gap; hover and press step that ring. The
      tile under the pointer, or with focus, sits above its neighbours, and stays there while its
      ring fades (z-index steps at the end of the fade), so neither the ring nor the focus outline
      slips under the next tile. */
-  .studio-canvas__body[data-area-density="compact"] .gallery-tile { position: relative; transition: var(--area-transition), z-index 0s linear var(--area-duration-fast); }
-  .studio-canvas__body[data-area-density="compact"] .gallery-tile:is(:hover, :focus-visible, :focus-within) { z-index: 1; }
-  .studio-canvas__body[data-area-density="compact"] .gallery-tile:focus-visible { z-index: 2; }
+  .studio-canvas__body[data-area-density="28"] .gallery-tile { position: relative; transition: var(--area-transition), z-index 0s linear var(--area-duration-fast); }
+  .studio-canvas__body[data-area-density="28"] .gallery-tile:is(:hover, :focus-visible, :focus-within) { z-index: 1; }
+  .studio-canvas__body[data-area-density="28"] .gallery-tile:focus-visible { z-index: 2; }
   @media (hover: hover) {
-    .studio-canvas__body[data-area-density="compact"] .gallery-tile:not([data-painted], [data-selected], [aria-pressed="true"]):hover {
+    .studio-canvas__body[data-area-density="28"] .gallery-tile:not([data-painted], [data-selected], [aria-pressed="true"]):hover {
       position: relative;
       z-index: 1;
       box-shadow: 0 0 0 var(--area-border-width) var(--area-edge-control-hover);
     }
   }
-  .studio-canvas__body[data-area-density="compact"] button.gallery-tile:not([data-painted], [aria-pressed="true"]):active {
+  .studio-canvas__body[data-area-density="28"] button.gallery-tile:not([data-painted], [aria-pressed="true"]):active {
     position: relative;
     z-index: 1;
     box-shadow: 0 0 0 var(--area-border-width) var(--area-border-hover);
   }
-  .studio-canvas__body[data-area-density="compact"] .gallery-tile:not([data-painted]):is([data-selected], [aria-pressed="true"]) {
+  .studio-canvas__body[data-area-density="28"] .gallery-tile:not([data-painted]):is([data-selected], [aria-pressed="true"]) {
     position: relative;
     z-index: 1;
     box-shadow: 0 0 0 var(--area-border-width) var(--area-stroke-selected), inset 0 0 0 var(--area-border-width) var(--area-stroke-selected);

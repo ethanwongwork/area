@@ -5,6 +5,20 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Density: one number (2026-10-14, branch `claude/next-axis-density`)
+
+- Owner: "continue working on the next axis". Density was the last geometry setting named by words. It is now the
+  medium Button's height at type 14: `data-area-density="28"|"32"|"36"` (was compact / default / comfortable),
+  labels "28 (Compact)", "32 (Default)", "36 (Comfortable)". Same three levels, nothing renders differently; the
+  `ui` shorthand maps to 28 / 32; a Canvas saved with a name restores as its number. Three steps, not more: the
+  products with a density setting offer three, and a fourth either collapses sm onto md at the 24 floor (24) or
+  repeats type 16 at 36 (40). Research: `docs/research/density-2026-10-14.md`.
+- Checks: build, tokens 24,254, contracts 14, manifest, typecheck, React 292/293 (known Indicator); app preview:
+  root 26px md at type 13 / 28, Canvas Button 28 / 32 / 36 per step, contact sheet at 28, a saved `comfortable`
+  restores as 36, Language tab text, no console errors. Not checked: forced colours, a 1× display.
+- Fixed in passing: `git fetch` failed on three stray refs with a " 2" suffix (`origin/main 2` too); moved to
+  `~/Desktop/area/.git-stray-refs-backup-2026-10-14/` (every commit they named is on a branch), delete when happy.
+
 ## Icons: open list closed (2026-10-14, branch `claude/icon-work-followup-2fcf1e`)
 
 - Owner: "go with your recommendations". The 2026-10-10 quality-pass proposals are closed as kept-as-approved (spec
@@ -41,7 +55,7 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   Token and Token row's outline (no fill) draw a required edge via Code's `--_code-border`; the Scroll area and
   Separator demo frames are `stroke-width`. Research note "Sweep after the change".
 - Found: `git fetch` fails in the shared repo on two stray refs, `refs/heads/claude/elevation-axis-gallery-e500be 2`
-  and `icon-work-ea140f 2` (copies with a " 2" suffix, likely from a file sync); left for the owner to delete.
+  and `icon-work-ea140f 2` (copies with a " 2" suffix, likely from a file sync). Moved aside 2026-10-14 (Density entry).
 
 ## All-axis audit (2026-10-14, branch `claude/elevation-axis-gallery-e500be`)
 

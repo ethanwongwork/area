@@ -44,12 +44,15 @@ const CANVAS_DEFAULTS = Object.fromEntries(
  * The saved Canvas, each setting kept only while it is still one of its control's options: an
  * elevation saved before it became a number (`minimal`, `standard` …) or a hand-edited value would
  * otherwise leave its Select blank and match no preset. Keys no control reads are dropped. A Canvas
- * from before the type / density split (`ui`: compact or default) restores as its two settings.
+ * from before the type / density split (`ui`: compact or default) restores as its two settings, and
+ * a density saved by name (compact, default, comfortable) as its number.
  */
 function restoreCanvas(saved: Partial<CanvasAxes> & { ui?: string }): CanvasAxes {
   const { ui, ...rest } = saved;
-  const legacy: Partial<CanvasAxes> = ui === "compact" ? { type: "12", density: "compact" } : ui === "default" ? { type: "14", density: "default" } : {};
+  const legacy: Partial<CanvasAxes> = ui === "compact" ? { type: "12", density: "28" } : ui === "default" ? { type: "14", density: "32" } : {};
   const merged: Record<string, unknown> = { ...legacy, ...rest };
+  const named: Record<string, string> = { compact: "28", default: "32", comfortable: "36" };
+  if (typeof merged.density === "string" && merged.density in named) merged.density = named[merged.density];
   const canvas = { ...CANVAS_DEFAULTS };
   for (const control of GALLERY_CONTROLS) {
     if (control.axis === "theme") continue;

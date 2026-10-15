@@ -6,7 +6,7 @@
  * shorthand first).
  */
 export const UI_SHORTHAND = {
-  compact: { type: "12", density: "compact" },
-  default: { type: "14", density: "default" },
+  compact: { type: "12", density: "28" },
+  default: { type: "14", density: "32" },
 } as const;
 export type UiShorthand = keyof typeof UI_SHORTHAND;
