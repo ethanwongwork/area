@@ -5,6 +5,12 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Icons: open list closed (2026-10-14, branch `claude/icon-work-followup-2fcf1e`)
+
+- Owner: "go with your recommendations". The 2026-10-10 quality-pass proposals are closed as kept-as-approved (spec
+  "Proposals (owner calls; not applied)"; the pixel ones were already done by the 1× pass). Nothing in the icon set is
+  waiting on the owner. Left until a use needs it: replace-all; the docs site's Fluent copy goes with the site.
+
 ## Surface: one number, Borderless keeps an edge (2026-10-14, branch `claude/next-axis-9766b4`)
 
 - Owner: "continue working on the next axis" (the Elevation session had recommended Surface after Motion).

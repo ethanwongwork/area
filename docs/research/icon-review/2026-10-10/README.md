@@ -308,7 +308,8 @@ order:
    excluded classes. Product UI coverage is complete; a further round needs a use first (an icon picker would be one).
 9. **Retire the Fluent map**, including the docs toolbar (`icons.generated.mjs`). **App done 2026-10-13** (spec "Fluent map retired from the app"); the docs' own copy goes with the site.
 
-Also open: the quality pass's proposals (spec "Quality and consistency pass, 2026-10-10"); replace-all; the component
+Closed 2026-10-14: the quality pass's proposals (spec "Quality and consistency pass, 2026-10-10") are kept as approved.
+Left until a use needs it: replace-all. The component
 integrations, settled 2026-10-14: File upload's demos pass file-type icons (file-pdf, file-image …) through
 `icon`; Search field already clears with dismiss-circle. Not adopted, by the references: Date range picker keeps Date
 picker's calendar (owner-accepted "one field across the date family"), Tag picker's create row stays text + tag
