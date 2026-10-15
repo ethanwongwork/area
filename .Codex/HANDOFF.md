@@ -49,6 +49,10 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   value) for every number setting; the value now shows only where the label lacks it, and the defaults-only view
   drops the suffix. Radius's registry labels now read "0 (Sharp)" / "8 (Default)", as the Inspector's and the other
   number settings' do. Owner did not take the firmer dark edge; left as is.
+- Merged (PR #92). Inspector: Contrast (System / Standard / More, a Select: "Standard" clips in a segment), writing
+  `data-area-contrast` on the Canvas only (System writes none, so the OS decides). Checked: More strengthens the
+  Input edge to #838383. Note: in the hidden browser pane CSS transitions never advance (currentTime 0), so a value
+  read after a change can look unchanged; read with `transition: none` or in headless Edge.
 
 ## All-axis audit (2026-10-14, branch `claude/elevation-axis-gallery-e500be`)
 
