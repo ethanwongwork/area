@@ -33,7 +33,9 @@ measurements are in Git history (`archive/docs/batches/V01/`, removed after comm
 - `edge-control`, `edge-control-hover`, `edge-selected`, `edge-accent`, `fill-toggle`:
   presentation roles selecting quiet or strong endpoints according to contrast preference.
 
-`data-area-contrast="more"` selects strong endpoints; `standard` resets them locally.
+`data-area-contrast="more"` selects strong endpoints; `standard` resets them locally. It also brings
+Surface 0's frames back at 1px (`border-width` = the Surface's `frame-width`, or 1px under More; owner,
+2026-10-15), as macOS Increase Contrast adds borders and forced colours restore them; frame colours are unchanged.
 Without a root preference, CSS follows `prefers-contrast: more`. Derivations must be
 re-emitted at axis and preference boundaries. Text/invalid colors remain independent.
 

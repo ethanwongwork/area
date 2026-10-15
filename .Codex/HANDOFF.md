@@ -20,9 +20,12 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   which also set type 12); it now writes `data-area-density` 28 / 32 / 36. Motion's open check (left from the Motion
   entry): a real Menu popover in dark at steps 0 / 30 / 150 / 210 / 300 opens over 0 / 30 / 150 / 210 / 300 ms and
   closes over 0 / 20 / 100 / 140 / 200 (`fast`), `duration-loop` 0 only at step 0.
-- Proposal (owner): under More contrast, Surface 0's frames come back at 1px (macOS Increase Contrast adds borders;
-  forced colours already restores them). Needs `border-width` derived from a surface leaf and `contrast-more`, and
-  reverses the Elevation research's "contrast stays a colour setting". Not built.
+- Merged (PR #95). Then (owner: "go with your rec"): under More contrast, Surface 0's frames come back at 1px.
+  Surface writes `frame-width` (registered); `border-width` is derived, `max(frame-width, contrast-more × 1px)`,
+  re-emitted at axis and contrast boundaries; forced-colors.css sets `frame-width`. Cohesion test pins the
+  derivation. Checked in the app: Surface 0 + More draws 1px on Card and Menu (nested either way), Card keeps 120
+  wide, Standard stays 0; dark shows the frame clearly. Docs: CONTRAST.md, THEMING.md, DESIGN_SYSTEM.md (Strokes),
+  surface research "More contrast". Not checked: the OS `prefers-contrast` path by emulation (same derivation).
 - Fixed in passing: `git fetch` failed on three stray refs with a " 2" suffix (`origin/main 2` too); moved to
   `~/Desktop/area/.git-stray-refs-backup-2026-10-14/` (every commit they named is on a branch), delete when happy.
 

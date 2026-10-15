@@ -16,7 +16,10 @@
  * (where a lift barely reads). At 1 it is transparent. It is two layers at both steps, never `none`, so it
  * sits in a box-shadow list beside the Elevation roles. `shadow-edge-filter` is the same edge for a shape a
  * box-shadow cannot follow (the Popover arrow): a drop-shadow outside the shape, 62% black, or 20% white in dark.
- * Forced colours drop box-shadow; forced-colors.css puts the frame back there.
+ * Forced colours drop box-shadow; forced-colors.css puts the frame back there. The axis writes `frame-width`;
+ * components read `border-width`, derived in emit/base.ts as the frame or 1px under increased contrast (owner,
+ * 2026-10-15), so More contrast brings the frame back at 0 too, as macOS Increase Contrast adds borders. The soft
+ * edge stays beside it.
  */
 import { type AxisDefinition, tokens } from "./schema.ts";
 
@@ -31,9 +34,9 @@ export const SURFACE_AXIS: AxisDefinition = {
   label: "Surface",
   description: "The frame's width on cards, panels and floating surfaces, 1px or 0 (Borderless, a soft shadow edge).",
   defaultPreset: "1",
-  namespaces: ["--area-border-width", "--area-shadow-edge:", "--area-shadow-edge-filter:"],
+  namespaces: ["--area-frame-width:", "--area-shadow-edge:", "--area-shadow-edge-filter:"],
   presets: [
-    { id: "0", label: "0 (Borderless)", description: "No frames: a soft shadow edge, ChatGPT's frameless menu. Control and state edges remain.", tokens: tokens({ "border-width": "0px", "shadow-edge": SOFT_EDGE, "shadow-edge-filter": SOFT_EDGE_FILTER }) },
-    { id: "1", label: "1 (Default)", description: "1px frames on cards, panels and floating surfaces.", tokens: tokens({ "border-width": "1px", "shadow-edge": NO_EDGE, "shadow-edge-filter": "none" }) },
+    { id: "0", label: "0 (Borderless)", description: "No frames: a soft shadow edge, ChatGPT's frameless menu. Control and state edges remain.", tokens: tokens({ "frame-width": "0px", "shadow-edge": SOFT_EDGE, "shadow-edge-filter": SOFT_EDGE_FILTER }) },
+    { id: "1", label: "1 (Default)", description: "1px frames on cards, panels and floating surfaces.", tokens: tokens({ "frame-width": "1px", "shadow-edge": NO_EDGE, "shadow-edge-filter": "none" }) },
   ],
 };

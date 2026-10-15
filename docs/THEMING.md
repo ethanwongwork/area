@@ -31,7 +31,9 @@ The registry in `packages/tokens/src/axes/registry.ts` defines eleven axes:
   component adds as `flag × radius-full`, so concentric parts follow. Instance props override it
   (`pill`, Avatar's `shape`).
 - `surface`: one number, the decorative frame's width in px: `1` (Default) or `0` (Borderless)
-  (`axes/surface.ts`, 2026-10-14; was `outlined` / `borderless`). Sets `border-width` and `shadow-edge`:
+  (`axes/surface.ts`, 2026-10-14; was `outlined` / `borderless`). Sets `frame-width` and `shadow-edge`;
+  components read `border-width`, derived as the frame or 1px under increased contrast (owner, 2026-10-15), so More
+  contrast brings the frame back at 0. `shadow-edge` is
   transparent at 1, and at 0 ChatGPT's frameless-menu edge (a 1px-blur shadow at 62% black, plus a 1px-blur
   20% white line inside it in dark), which every framed surface lists first in its `box-shadow`, so no
   surface loses its edge at Elevation 0 or in dark; `shadow-edge-filter` is the same edge as a drop-shadow, for the
