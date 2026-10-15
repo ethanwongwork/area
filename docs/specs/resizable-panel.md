@@ -72,6 +72,7 @@ focus-visible            ::before 4 × 50% of the edge,      outline 0 (no indic
 | limits | min 240, max 500 by default; props | Figma 240/241 and 500 | — |
 | keyboard | ←/→ move the edge 8px (Shift 32px), Home/End to min/max, Escape cancels a drag | WAI; Area spacing grid | steps not measured (pressing arrows would resize the owner's panel) |
 | docked seam | a `flush` resizable panel keeps a rule on its resize edge | Figma, Notion: a rule on that edge | `flush` otherwise has no border |
+| seam counted once | content on the seam's side, the bar's title included, sits the inset (14) from the seam's outside: the side inset less the rule | inset.css (borders counted once) | 2026-10-14: the bar's title sat 15, its rows 14 (desktop Inspector); the bar now takes `--_side-start` / `--_side-end` |
 | width | written as `--area-panel-inline-size` (the existing public sizing hook) | Panel | — |
 
 ## States

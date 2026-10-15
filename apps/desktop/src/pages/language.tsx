@@ -62,7 +62,6 @@ export function LanguagePage() {
         </Nav>
       }</SidebarList>}
       canvasTitle={view ? view.label : "All settings"}
-      canvasMeta={<span className="studio-muted studio-tabular">{view ? view.presets.length : shown.length}</span>}
       canvasActions={
         <ViewControls>
           <ViewFilter label="Presets" value={presets} onChange={setPresets} options={[{ value: "all", label: "All presets" }, { value: "default", label: "Defaults only" }]} />
@@ -122,7 +121,6 @@ export function LanguagePage() {
           ))}
         </div>
       )}
-      inspectorTitle={preset && axis ? `${axis.label} · ${preset.label}` : axis ? axis.label : "All settings"}
       inspector={
         <>
         <CanvasSettings axes={["type", "density", "radius"]} />

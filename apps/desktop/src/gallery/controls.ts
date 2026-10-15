@@ -12,7 +12,8 @@ export interface GalleryControl {
    * Two or three options are a Segmented (Apple and Primer cap segments at 5-7); a longer list of
    * exact settings is a Select, each option naming what it sets (shadcn's radius picker is a menu).
    * The stepped Slider read as an approximate value and fit 13 marks in 60px (2026-10-03).
-   * A set (several on at once) is a group of toggle Chips; its value is a space-separated list.
+   * A set (several on at once) is a multi-select dropdown in the app (a group of toggle Chips in the
+   * archived docs); its value is a space-separated list.
    */
   kind: "segmented" | "select" | "chips";
   label: string;

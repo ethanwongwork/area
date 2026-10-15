@@ -5,6 +5,19 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Gallery UI: one inset, cards, zoom, Fit groups (2026-10-15, branch `claude/gallery-ui-spacing-audit-e5e0d4`)
+
+- Spacing: every region 14 in on all sides (Canvas margin 14, sections 28 apart, tile gap 12); text trimmed to cap /
+  baseline. Panel bar title counts a flush seam once (panel.css). No titles over the Canvas or Inspector; the Canvas
+  header holds only the view controls (PRODUCT_UI rule 14 rewritten).
+- Inspector: settings grouped Color / Size / Shape / Effects; fields `soft`; Pills is a multi-select Custom select
+  (new `multiple`). Dropdown windows hug their rows: `--area-menu-min-inline-size` (default 224; the app sets 128).
+- Components: All shows one square card per family (Compass-style, title + copy-code button in the foot); a click
+  opens the Stage. Zoom is Zoom control's new `stepper` (− Fit +; Fit or exact 50–200%). Fit scales by size group
+  (≤48 tall and ≤160 tall at 125%, taller 100%) and lays stretching specimens out at their content's width + 20%
+  (src/gallery/fit.ts). Colour cards are unit tiles hugging their text, short OKLCH.
+- Not done: gallery tiles for CustomSelect `multiple` and ZoomControl `stepper`; Language tiles are not cards.
+
 ## Icons: open list closed (2026-10-14, branch `claude/icon-work-followup-2fcf1e`)
 
 - Owner: "go with your recommendations". The 2026-10-10 quality-pass proposals are closed as kept-as-approved (spec

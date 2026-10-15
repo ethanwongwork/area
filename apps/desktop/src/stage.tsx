@@ -134,7 +134,7 @@ function renderControl(control: PlaygroundControl, value: PropValue, change: (va
     return <Switch size="sm" aria-label={control.label} checked={value === true} onCheckedChange={checked => change(checked)} />;
   }
   if (control.kind === "text") {
-    return <Input size="sm" aria-label={control.label} value={String(value)} onChange={event => change(event.currentTarget.value)}
+    return <Input size="sm" variant="soft" aria-label={control.label} value={String(value)} onChange={event => change(event.currentTarget.value)}
       {...(control.numeric ? { type: "number", inputMode: "numeric", min: 0 } : {})} />;
   }
   const options = control.options!;
@@ -142,7 +142,7 @@ function renderControl(control: PlaygroundControl, value: PropValue, change: (va
     <Segmented size="sm" fullWidth aria-label={control.label} value={String(value)} onValueChange={next => change(next)}
       items={options.map(option => ({ value: option, label: optionLabel(control.prop, option) }))} />
   ) : (
-    <Select size="sm" fullWidth aria-label={control.label} value={String(value)} onChange={event => change(event.currentTarget.value)}>
+    <Select size="sm" variant="soft" fullWidth aria-label={control.label} value={String(value)} onChange={event => change(event.currentTarget.value)}>
       {options.map(option => <option key={option} value={option}>{optionLabel(control.prop, option)}</option>)}
     </Select>
   );

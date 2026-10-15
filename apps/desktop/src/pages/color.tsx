@@ -79,27 +79,37 @@ function contrastWith(hex: string, against: "#ffffff" | "#000000") {
   return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
 }
 const grade = (ratio: number) => ratio >= 7 ? "AAA" : ratio >= 4.5 ? "AA" : ratio >= 3 ? "AA Large" : "Fails";
-/** "oklch(56.86% 0.2205 259.01)" -> "56.86% 0.2205 259.01": the values without the function. */
-const oklchValues = (value: string) => value.replace(/^oklch\(|\)$/g, "");
+/**
+ * "oklch(56.86% 0.2205 259.01)" -> "0.569 0.221 259.0": lightness as a 0 to 1 number and three
+ * places for it and chroma, one for hue (owner, 2026-10-14: "oklch 0.306 0.011 28.2"). The card's
+ * shorthand; the Inspector and the list keep the token's exact value.
+ */
+function oklchShort(value: string) {
+  const [l = "0", c = "0", h = "0"] = value.replace(/^oklch\(|\)$/g, "").trim().split(/\s+/);
+  const lightness = l.endsWith("%") ? parseFloat(l) / 100 : parseFloat(l);
+  const number = (part: string, places: number) => (Number.isFinite(parseFloat(part)) ? parseFloat(part) : 0).toFixed(places);
+  return `${lightness.toFixed(3)} ${number(c, 3)} ${number(h, 1)}`;
+}
 
 /**
  * One step as its own card (owner, 2026-10-12, after brand-guide colour sheets): the card is the
  * colour, edged with the swatch picker's 10% hairline. Its level and the contrast of the text it
- * carries head it; hex, RGB and OKLCH sit at its foot, in the ink that reads on it.
+ * carries head it; hex, RGB and OKLCH follow a line below, all in the one ink that reads on it.
+ * A unit tile that hugs its text (owner, 2026-10-14), so a long value wraps rather than clips.
  */
 function ColorCard({ scale, item, selected, onSelect }: { scale: string; item: ScaleStep; selected: boolean; onSelect: () => void }) {
   const ink = item.contrast.fg;
   const [r, g, b] = rgbOf(item.hex);
   return (
-    <Tile span="wide" stage="flow" pressable selected={selected} onSelect={onSelect}
+    <Tile span="unit" stage="flow" pressable selected={selected} onSelect={onSelect}
       aria-label={`${title(scale)} ${item.level}, ${item.hex.toUpperCase()}, ${ink === "#ffffff" ? "white" : "black"} text ${item.contrast.ratio.toFixed(2)} to 1, ${item.contrast.grade}`}
       paint={{ background: `var(--area-${scale}-${item.level})`, color: ink }}
       label={<span className="studio-swatch__level">{item.level}</span>}
       value={<span className="studio-swatch__badge">{item.contrast.grade} · {item.contrast.ratio.toFixed(2)}</span>}>
       <span className="studio-swatch__values">
         <span>{item.hex.toUpperCase()}</span>
-        <span><span className="studio-swatch__key">RGB</span> {r} {g} {b}</span>
-        <span><span className="studio-swatch__key">OKLCH</span> {oklchValues(item.oklch)}</span>
+        <span>RGB {r} {g} {b}</span>
+        <span>OKLCH {oklchShort(item.oklch)}</span>
       </span>
     </Tile>
   );
@@ -162,7 +172,6 @@ export function ColorPage() {
         </Nav>
       }</SidebarList>}
       canvasTitle={view ? title(view.id) : "All scales"}
-      canvasMeta={<span className="studio-muted studio-tabular">{view ? view.steps.filter(passes).length : onCanvas.length}</span>}
       canvasActions={
         <ViewControls>
           <ViewFilter label="Contrast" value={contrast} onChange={setContrast} options={CONTRASTS} />
@@ -204,7 +213,7 @@ export function ColorPage() {
                   // Grid: every step its own card, painted in its colour, in every view (owner,
                   // 2026-10-12: colours are their own containers; the joined ramp strip is gone).
                   // On the components' grid (owner, 2026-10-12): wide tiles, 280 at the least, 5:4.
-                  <TileGrid span="wide">
+                  <TileGrid span="unit" hug>
                     {steps.map(item => (
                       <ColorCard key={item.level} scale={entry.id} item={item} selected={isSelected(item.level)} onSelect={() => pick(item.level)} />
                     ))}
@@ -215,7 +224,6 @@ export function ColorPage() {
           })}
         </div>
       ) : <EmptyState title="No scales" description={`Nothing matches “${query}”.`} />}
-      inspectorTitle={picked ? `${title(picked.scale.id)} ${picked.step.level}` : view ? title(view.id) : "All scales"}
       inspector={
         <>
           <CanvasSettings axes={["type", "density"]} />

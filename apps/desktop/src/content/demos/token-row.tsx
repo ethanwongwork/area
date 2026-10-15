@@ -2,9 +2,10 @@
  * docs/specs/token-row.md. */
 import { TokenRow } from "@area/react";
 
-/* Figma Dev Mode's Colors: rows in a 288 inspector column. */
-const frame = { inlineSize: 288 };
-const stack = { display: "grid", gap: "var(--area-space-8)", inlineSize: 288 };
+/* Figma Dev Mode's Colors: rows in an inspector column up to 288, narrower when its container is (owner,
+   2026-10-14: "fix token row so it can narrow too"; the gallery lays a specimen out at its content's width). */
+const frame = { inlineSize: "100%", maxInlineSize: 288 };
+const stack = { display: "grid", gap: "var(--area-space-8)", inlineSize: "100%", maxInlineSize: 288 };
 
 export const GalleryTokenRow = () => (
   <div style={frame}><TokenRow swatch="var(--area-neutral-850)" name="neutral/850" value="#1D1D1D" /></div>

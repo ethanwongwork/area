@@ -131,7 +131,7 @@
     overflow-y: auto;
     overscroll-behavior: contain;
     max-block-size: min(324px, var(--area-overlay-available-height, 50vh)); /* spec: combobox.md */
-    min-inline-size: max(var(--area-overlay-anchor-width, 0px), calc(var(--area-space-96) * 2 + var(--area-space-32)));
+    min-inline-size: max(var(--area-overlay-anchor-width, 0px), var(--area-menu-min-inline-size, calc(var(--area-space-96) * 2 + var(--area-space-32))));
   }
   .area-tag-picker__listbox:focus-visible { outline: none; }
   /* spec: Notion heads the list with "Select an option or create one", 12px muted. Menu's label. */

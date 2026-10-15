@@ -1,6 +1,6 @@
 /**
  * Sorting, grouping and pinning: how a tab's things are ordered and gathered on the Sidebar and
- * the Canvas. One "Sort and group" menu in the Canvas bar (Notion's view options, Figma's asset
+ * the Canvas. One "Sort and group" menu in the Canvas's header (Notion's view options, Figma's asset
  * panel sort), radio rows under a label for each choice, so the whole arrangement is set in one
  * place and read back at a glance. Each tab keeps its own arrangement across launches.
  *
@@ -68,7 +68,7 @@ export function groupBy<T>(list: readonly T[], label: (item: T) => string, order
 }
 
 /**
- * The Canvas bar's "Sort and group" menu: a ghost icon Button (the bar's quiet controls) opening
+ * The Canvas header's "Sort and group" menu: a ghost icon Button (the header's quiet controls) opening
  * an Area Menu. Its radio rows keep it open (`keepOpen`), as Notion's view options do, so the
  * Canvas rearranges behind it and several choices take one visit; Reset appears once the arrangement
  * differs from the tab's default, and the button's Area Tooltip names the current order.
