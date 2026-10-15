@@ -24,6 +24,13 @@
  * Every step keeps the same token names, so a component never branches on motion; 0 sets every
  * duration to 0 rather than removing transitions, which is what lets it double as the target for
  * `prefers-reduced-motion` (emit/css.ts).
+ *
+ * Loops (Spinner, Skeleton shimmer, indeterminate Progress, Indicator pulse, Message cursor, OTP caret) run
+ * fixed, measured periods instead, and `duration-loop` is the factor on every one: 1, and 0 at step 0. A
+ * zero-length animation draws nothing, so a loop rests in its base drawing; the Skeleton band and the
+ * Progress stripe read the same factor. Being a token, it inherits: the nearest motion scope decides, so a
+ * non-zero scope inside a 0 scope runs its loops again (they stopped by `[data-area-motion="0"] .x` until
+ * 2026-10-14), and reduced motion stops them wherever it re-emits step 0.
  */
 import { type AxisDefinition, tokens } from "./schema.ts";
 
@@ -59,6 +66,7 @@ function stepTokens(step: number) {
     "duration-base": duration(step, 3),
     "duration-moderate": duration(step, 4),
     "duration-slow": duration(step, 5),
+    "duration-loop": step === 0 ? "0" : "1",
     ...EASINGS,
   });
 }

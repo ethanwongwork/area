@@ -129,3 +129,4 @@ arrows move by slot, typing over a selected slot replaces it, a paste of "12 34-
 ## Feedback log
 
 - 2026-10-13 · owner, review round 24: approved (no notes).
+- 2026-10-14 · owner: "merge it, then continue working" (the all-axis audit's open item) → the loop stops through the Motion axis's `duration-loop` token (1, or 0 at step 0 and under reduced motion): the caret blink is `calc(1s * duration-loop)`, resting shown. The nearest motion scope now decides, so a non-zero scope nested in a 0 scope runs it; it was a `[data-area-motion="0"]` descendant rule plus a reduced-motion media rule (cohesion test pins it).

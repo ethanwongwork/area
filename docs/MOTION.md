@@ -30,6 +30,8 @@ ChatGPT's (220), 240 Figma's dropdown (250), 300 Primer's medium, where `slow` r
 ceiling for UI motion. The number moves time only; easings are fixed. Loops do not follow it:
 Spinner (1s a turn), Skeleton shimmer (3s), indeterminate Progress (1.8s), the Indicator pulse and
 Message cursor (1s) and the OTP field's caret blink (1s) run their measured periods and stop at `0` and under reduced motion.
+They stop through one token, `duration-loop` (1, or 0 at step 0), which multiplies each period and fades the Skeleton
+band and Progress stripe, so the nearest motion scope decides: a non-zero scope inside a `0` scope runs its loops.
 
 Easings:
 
@@ -96,7 +98,7 @@ The gallery's old `scale` transform was the main "pixelated" cause and is gone (
 
 `prefers-reduced-motion: reduce` resolves every duration to 0 wherever motion is set, including
 subtrees with their own `data-area-motion` (it used to apply only where none was set). Loops
-(spinner, shimmer, pulse) stop. Open question for the owner: keep short opacity fades under reduced
+(spinner, shimmer, pulse) stop, through the same `duration-loop` token. Open question for the owner: keep short opacity fades under reduced
 motion, as Apple and Emil Kowalski recommend, instead of 0.
 
 ## Checking a component

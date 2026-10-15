@@ -76,11 +76,9 @@
     inline-size: var(--area-stroke-width);
     block-size: var(--_leading);
     background: currentColor;
-    animation: area-otp-caret 1s steps(1, end) infinite; /* spec: shadcn animate-caret-blink, 1s */
+    animation: area-otp-caret calc(1s * var(--area-duration-loop)) steps(1, end) infinite; /* spec: shadcn animate-caret-blink, 1s; the loop factor (axes/motion.ts) holds it shown at motion 0 and under reduced motion */
   }
   @keyframes area-otp-caret { 50% { opacity: 0; } }
-  @media (prefers-reduced-motion: reduce) { .area-otp-field__caret { animation: none; } }
-  [data-area-motion="0"] .area-otp-field__caret { animation: none; }
 
   .area-otp-field__separator {
     display: inline-grid;
