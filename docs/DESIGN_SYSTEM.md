@@ -180,8 +180,12 @@ own layers (the Board card's tone ring, the floating Toolbar's edge), and `none`
 `box-shadow`, ring and all. The edge does the separating at every step. `border-float` is #eeeeee in light (the
 nearest rung to Notion's 7% popover ring) and #4b4b4b in dark. Forced colours drop `box-shadow` entirely, and the
 border is what the browser repaints: `forced-colors.css` puts the frame back at 1px under Borderless and gives
-the floating Toolbar, whose edge is an inset shadow, an outline. Stroke is its own setting: the Surface axis, Outlined or Borderless. The
-Table frame is a required edge (`stroke-width`), so it stays under Borderless.
+the floating Toolbar, whose edge is an inset shadow, an outline. Stroke is its own setting: the Surface axis, the
+frame's width, `1` (Default) or `0` (Borderless). Borderless never leaves a surface without an edge: every surface
+whose frame it removes lists `shadow-edge` first in its `box-shadow`, ChatGPT's frameless-menu edge (a 1px-blur
+shadow at 62% black, and in dark a 1px-blur 20% white line inside), transparent at 1. So a Card or Menu stays
+distinct at Elevation 0 and in dark, where no lift reads (2026-10-14; it replaced Card's dark-only ring,
+consistency pass O2). The Table frame is a required edge (`stroke-width`), so it stays under Borderless.
 
 A rule inside a container is never darker than the container's edge (owner, 2026-09-27;
 one exception, audit S8: seams inside joined controls, soft Button group and Split button,
@@ -214,8 +218,8 @@ takes (consistency pass 2026-10-12, [audit](research/consistency-audit-2026-10-1
   Indicator anchor); seams inside joined controls (Button group, Split button, Input group, Color field); standalone
   dividers on `border-divider` (Separator, Nav separators, the Tabs track, Table rows and frame, Description list,
   Accordion, Shortcut list); and frames with no shadow to carry them (Table, Description list, Code block, File upload), plus
-  Composer's frame, a field edge that stays beside its resting lift. `border-width`, the Surface axis (0 under
-  Borderless), draws the frames of surfaces that carry a shadow
+  Composer's frame, a field edge that stays beside its resting lift. `border-width`, the Surface axis (0 at
+  Borderless, where `shadow-edge` takes over the outer edge), draws the frames of surfaces that carry a shadow
   (every floating surface, Panel, Card), the seams inside them (`border-decorative`: Panel, Code block, Command
   palette and Color picker rules, Menu and Toolbar separators) and the edges of filled shapes (Alert, inline Code,
   the Segmented and Toggle group tracks).

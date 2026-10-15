@@ -449,7 +449,7 @@
       background: var(--area-bg-surface);
       color: var(--area-fg-default);
       /* spec: the floating-surface lift shared with Popover and Menu (surface.css). */
-      box-shadow: var(--area-shadow-float);
+      box-shadow: var(--area-shadow-edge), var(--area-shadow-float);
       font-family: var(--area-font-sans);
       font-size: var(--area-ui-size);
       line-height: var(--area-ui-leading);

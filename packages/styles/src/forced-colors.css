@@ -2,8 +2,8 @@
 @layer area.utilities {
   @media (forced-colors: active) {
     /* Forced colours drop every box-shadow, so a floating surface's frame is its only edge. The
-       Surface axis's Borderless (border-width 0) would leave none: the frame comes back at its 1px
-       wherever a scope sets the axis (utilities outrank the axes layer). */
+       Surface axis's 0 (Borderless: border-width 0, the edge drawn as a shadow) would leave none: the
+       frame comes back at its 1px wherever a scope sets the axis (utilities outrank the axes layer). */
     :root, [data-area-surface] { --area-border-width: var(--area-stroke-width); }
     /* The floating Toolbar draws its edge inside its box-shadow, which forced colours drop. */
     .area-toolbar--surface { outline: var(--area-stroke-width) solid CanvasText; outline-offset: calc(-1 * var(--area-stroke-width)); }

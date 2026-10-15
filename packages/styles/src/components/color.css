@@ -266,7 +266,7 @@
     --_picker-bg: var(--area-bg-surface);
     --_picker-edge: var(--area-border-float);
     /* spec: the floating-surface lift shared with Popover and Menu (surface.css). */
-    --_picker-lift: var(--area-shadow-float);
+    --_picker-lift: var(--area-shadow-edge), var(--area-shadow-float);
   }
   .area-color-picker--plain { --_picker-bg: transparent; --_picker-edge: transparent; --_picker-lift: none; }
   .area-color-picker__header {
