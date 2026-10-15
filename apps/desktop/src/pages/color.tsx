@@ -3,7 +3,8 @@
  * list, filtered by the contrast their text needs; in the Inspector the chosen step (token, hex,
  * OKLCH, its contrast with the text it carries, and the semantic tokens that use it), else the
  * Sidebar's scale (its roles), else the palette.
- * Swatches paint the live custom property, so a neutral tint or theme change shows on the ramp.
+ * Swatches paint the live custom property, so a neutral tint or theme change shows on the ramp; with Neutral set
+ * to Cool or Warm, the neutral ramp's labels and Inspector describe that ramp's steps, the colours it paints.
  */
 import { useEffect, useState, type ReactNode } from "react";
 import TOKENS from "@area/tokens/tokens.json";
@@ -115,14 +116,19 @@ function parse(item?: string) {
 }
 
 export function ColorPage() {
-  const { query, item, select } = useStudio();
+  const { query, item, select, canvas } = useStudio();
   // The Sidebar's choice (All, or one scale) and the Inspector's (one step, until the Sidebar's
   // choice changes; with none, the scale or the palette).
   const view = SCALES.find(entry => entry.id === item);
   const [selected, setSelected] = useState<string>();
   useEffect(() => setSelected(undefined), [item]);
   const choose = (next: string) => setSelected(next);
-  const picked = selected ? parse(selected) : undefined;
+  // The Neutral setting maps the neutral ramp onto Cool or Warm step for step, so a neutral step paints, and is
+  // described as, that ramp's step at the same level: its hex, OKLCH and contrast all match the swatch.
+  const paints = (scale: string, step: ScaleStep) => scale !== "neutral" || canvas.neutral === "neutral" ? step
+    : SCALES.find(entry => entry.id === canvas.neutral)?.steps.find(entry => entry.level === step.level) ?? step;
+  const chosen = selected ? parse(selected) : undefined;
+  const picked = chosen ? { ...chosen, step: paints(chosen.scale.id, chosen.step) } : undefined;
   const [contrast, setContrast] = useViewOption<Contrast>("color-contrast", "all", ["all", "white", "black"]);
   const passes = (item: ScaleStep) => contrast === "all" || contrastWith(item.hex, contrast === "white" ? "#ffffff" : "#000000") >= 4.5;
   const arrangement = useArrangement<Sort, Group>("color", { sort: "palette", descending: false, group: "kind" }, SORTS, GROUPS);
@@ -135,13 +141,10 @@ export function ColorPage() {
     : [["Scales", sorted]];
   // The Canvas runs in the Sidebar's order.
   const shown = groups.flatMap(([, list]) => list);
-  const onCanvas = (view ? [view] : shown).filter(entry => entry.steps.some(passes));
+  const onCanvas = (view ? [view] : shown).filter(entry => entry.steps.some(step => passes(paints(entry.id, step))));
   const token = picked ? `--area-${picked.scale.id}-${picked.step.level}` : "";
   const [mode, setMode] = useViewOption<ViewMode>("color", "grid", ["grid", "list"]);
 
-  // The value the swatch paints now (the neutral axis tints neutral steps).
-  const [live, setLive] = useState("");
-  useEffect(() => { setLive(token ? getComputedStyle(document.documentElement).getPropertyValue(token).trim() : ""); }, [token]);
 
   return (
     <Workspace
@@ -162,7 +165,7 @@ export function ColorPage() {
         </Nav>
       }</SidebarList>}
       canvasTitle={view ? title(view.id) : "All scales"}
-      canvasMeta={<span className="studio-muted studio-tabular">{view ? view.steps.filter(passes).length : onCanvas.length}</span>}
+      canvasMeta={<span className="studio-muted studio-tabular">{view ? view.steps.filter(step => passes(paints(view.id, step))).length : onCanvas.length}</span>}
       canvasActions={
         <ViewControls>
           <ViewFilter label="Contrast" value={contrast} onChange={setContrast} options={CONTRASTS} />
@@ -175,7 +178,7 @@ export function ColorPage() {
         <div className="studio-sections" onKeyDown={onGridKeys}>
           {onCanvas.map(entry => {
             const isSelected = (level: number) => entry.id === picked?.scale.id && level === picked?.step.level;
-            const steps = entry.steps.filter(passes);
+            const steps = entry.steps.map(step => paints(entry.id, step)).filter(passes);
             const pick = (level: number) => choose(`${entry.id}-${level}`);
             return (
               <CanvasSection key={entry.id} id={`scale-${entry.id}`} title={view ? undefined : title(entry.id)}>
@@ -218,8 +221,10 @@ export function ColorPage() {
       inspectorTitle={picked ? `${title(picked.scale.id)} ${picked.step.level}` : view ? title(view.id) : "All scales"}
       inspector={
         <>
-          <CanvasSettings axes={["type", "density"]} />
-          {picked ? <StepInspector scale={picked.scale.id} step={picked.step} token={token} live={live} description={picked.scale.description} />
+          {/* Neutral tints the neutral ramp (PRODUCT_UI rule 14: the settings that change this tab's specimens). */}
+          <CanvasSettings axes={["neutral", "type", "density"]} />
+          {picked ? <StepInspector scale={picked.scale.id} step={picked.step} token={token} description={picked.scale.description}
+              paintedAs={picked.scale.id === "neutral" && canvas.neutral !== "neutral" ? `${title(canvas.neutral)} ${picked.step.level} (Neutral is ${title(canvas.neutral)})` : undefined} />
             : view ? (
               <PanelSection heading="Scale">
                 <Facts label="Scale" items={[
@@ -248,7 +253,7 @@ export function ColorPage() {
 }
 
 /** The Inspector for one step: the colour, its token and hex to copy, then its facts. */
-function StepInspector({ scale, step, token, live, description }: { scale: string; step: ScaleStep; token: string; live: string; description?: string }) {
+function StepInspector({ scale, step, token, description, paintedAs }: { scale: string; step: ScaleStep; token: string; description?: string; paintedAs?: string }) {
   const uses = usedBy(scale, step.level);
   const used: ReactNode = uses.length ? (
     <span className="studio-used-by">
@@ -259,12 +264,13 @@ function StepInspector({ scale, step, token, live, description }: { scale: strin
     <>
       <Selection preview={<Preview shape="wide" paint={`var(${token})`} label={token} />}>
         <CopyButton label="Copy token" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(`var(${token})`)} />
-        <CopyButton label="Copy hex" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(live || step.hex)} />
+        <CopyButton label="Copy hex" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(step.hex)} />
       </Selection>
       <PanelSection heading="Step">
         <Facts label="Step" items={[
           ["Token", <Code>{token}</Code>],
-          ["Hex", <Code>{live || step.hex}</Code>],
+          paintedAs ? ["Paints", paintedAs] : null,
+          ["Hex", <Code>{step.hex}</Code>],
           ["RGB", <Code>{rgbOf(step.hex).join(" ")}</Code>],
           ["OKLCH", <Code>{step.oklch}</Code>],
           ["Text", step.contrast.fg === "#ffffff" ? "White" : "Black"],
