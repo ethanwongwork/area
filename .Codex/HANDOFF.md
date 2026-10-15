@@ -16,6 +16,13 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
 - Checks: build, tokens 24,254, contracts 14, manifest, typecheck, React 292/293 (known Indicator); app preview:
   root 26px md at type 13 / 28, Canvas Button 28 / 32 / 36 per step, contact sheet at 28, a saved `comfortable`
   restores as 36, Language tab text, no console errors. Not checked: forced colours, a 1× display.
+- Merged (PR #90). Then: Badge's audit demo wrote `data-area-ui` from an "Audit density" select (default / compact,
+  which also set type 12); it now writes `data-area-density` 28 / 32 / 36. Motion's open check (left from the Motion
+  entry): a real Menu popover in dark at steps 0 / 30 / 150 / 210 / 300 opens over 0 / 30 / 150 / 210 / 300 ms and
+  closes over 0 / 20 / 100 / 140 / 200 (`fast`), `duration-loop` 0 only at step 0.
+- Proposal (owner): under More contrast, Surface 0's frames come back at 1px (macOS Increase Contrast adds borders;
+  forced colours already restores them). Needs `border-width` derived from a surface leaf and `contrast-more`, and
+  reverses the Elevation research's "contrast stays a colour setting". Not built.
 - Fixed in passing: `git fetch` failed on three stray refs with a " 2" suffix (`origin/main 2` too); moved to
   `~/Desktop/area/.git-stray-refs-backup-2026-10-14/` (every commit they named is on a branch), delete when happy.
 
