@@ -142,7 +142,7 @@ foreground/background popover (the background is a prop).
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
 | shell · width | `control-sm × 10` (240 / 280) | Figma 240 = 10 × its 24px rows | The inset contract gives 28px fields an 8.74px text inset; at a fixed 240 three RGB digits clipped. Tying width to the row keeps Figma's proportions at both scales |
-| shell · surface | border-decorative, radius container (12), the floating lift `--area-shadow-float` (0 20px 24px, 0 5px 8px at half strength; `none` under Flat) (color.css:208-224); `plain` sets all three to transparent / none (color.css:225) | Peer: Popover | Figma 13px radius, no border; Area popovers are one surface family, and since the 2026-09-26 cohesion audit that family uses Notion's deep lift, close to Figma's 0 10px 16px |
+| shell · surface | border-decorative, radius container (12), the Elevation axis's float role `--area-shadow-float` (0 0 2 + 0 8 16, 3% key at the default step; transparent at 0); `plain` sets all three to transparent / none (color.css:225) | Peer: Popover | Figma 13px radius, no border; Area popovers are one surface family, and since the 2026-09-26 cohesion audit that family uses Notion's deep lift, close to Figma's 0 10px 16px |
 | shell · inset | 16 (border counted) | Figma 16 | — |
 | vertical rhythm | 12 | Figma: area→tracks 12, track gap 12, tracks→values 12 | — |
 | header | min 40, 16 start / 8 end, border-faint rule | Figma 40, divider rgb(230) | Figma's tab text sits at 16 (8 + tab padding); a plain title uses the same column. border-faint (226) is the role nearest rgb(230) |

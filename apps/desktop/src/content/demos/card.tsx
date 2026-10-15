@@ -194,7 +194,13 @@ export const GalleryCardCarousel = () => {
     setEdges({ start: element.scrollLeft <= 1, end: element.scrollLeft >= max - 1 });
   };
   useEffect(update, []);
-  const page = (direction: 1 | -1) => row.current?.scrollBy({ left: direction * row.current.clientWidth * 0.75, behavior: "smooth" });
+  // Smooth unless motion is 0 or reduced, as ScrollToLatest.
+  const page = (direction: 1 | -1) => {
+    const element = row.current;
+    if (!element) return;
+    const still = matchMedia("(prefers-reduced-motion: reduce)").matches || element.closest("[data-area-motion]")?.getAttribute("data-area-motion") === "0";
+    element.scrollBy({ left: direction * element.clientWidth * 0.75, behavior: still ? "auto" : "smooth" });
+  };
   return <Card role="region" aria-label="Collection" aria-roledescription="carousel" style={horizontal}>
     <CardContent>
       <CardHeader action={<>

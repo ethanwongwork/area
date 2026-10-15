@@ -245,6 +245,8 @@
        ring and the fill is the swatch ring (black 10%), as every swatch. */
     --_thumb-edge: var(--area-edge-control-hover); /* Slider's thumb edge: #d4, stronger under increased contrast */
     --_thumb-inner: var(--area-token-swatch-ring);
+    /* A functional shadow, not an elevation role: it keeps the handle visible on a full-colour gradient, so the
+       Elevation setting doesn't move it, step 0 included (docs/research/elevation-2026-10-14.md). */
     --_thumb-lift: 0 1px 3px -2px rgb(0 0 0 / 0.1), 0 5px 12px -2px rgb(0 0 0 / 0.13); /* spec */
     /* The alpha track is a range input (no layers inside it): the same checker as a gradient, three
        rows meeting its top and bottom (Figma's track checker, ~5px cells; batch 10 side by side). */

@@ -4,12 +4,16 @@ import { Citation, HoverCard, Message, PopoverDescription, PopoverTitle } from "
 import { BookIcon, LinkIcon } from "@area/icons";
 
 const column: CSSProperties = { inlineSize: "calc(var(--area-space-96) * 4)", maxInlineSize: "100%" };
-/* An assistant answer; the citation follows the sentence it supports. */
-const Answer = ({ children }: { children: ReactNode }) => (
-  <div style={column}><Message author="assistant" authorName="Assistant">
-    <p>Laser projectors keep their brightness for years and need no warm-up.{children}</p>
-  </Message></div>
-);
+/* An assistant answer; the citation follows the sentence it supports. A hover card holds block
+   content, so its answer is flow content (a div), never a <p> (hover-card.md, "Server rendering"). */
+const Answer = ({ children, flow }: { children: ReactNode; flow?: boolean }) => {
+  const Text = flow ? "div" : "p";
+  return (
+    <div style={column}><Message author="assistant" authorName="Assistant">
+      <Text>Laser projectors keep their brightness for years and need no warm-up.{children}</Text>
+    </Message></div>
+  );
+};
 
 export const GalleryCitation = () => <Answer><Citation href="#citation" label="Projector guide" title="How laser projectors work" /></Answer>;
 /* ChatGPT's favicon at the start. */
@@ -20,7 +24,7 @@ export const GalleryCitationMore = () => <Answer><Citation href="#citation" icon
 export const GalleryCitationLong = () => <Answer><Citation href="#citation" icon={<BookIcon />} label="The projector buyer's handbook" title="Choosing a home projector" more={1} /></Answer>;
 /* Hover or focus previews the source in a Hover card. */
 export const GalleryCitationHoverCard = () => (
-  <Answer>
+  <Answer flow>
     <HoverCard trigger={<Citation href="#citation" icon={<BookIcon />} label="Projector guide" title="How laser projectors work" />}>
       <div><PopoverTitle level={false}>How laser projectors work</PopoverTitle><PopoverDescription>Laser light sources hold their brightness for about 20,000 hours and start instantly.</PopoverDescription></div>
       <div className="area-hover-card__meta"><span><LinkIcon />projector-guide.example</span></div>

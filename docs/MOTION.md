@@ -29,7 +29,7 @@ of 240. Anchors in the research: 150 Radix Themes and Tailwind, 210 Geist's popo
 ChatGPT's (220), 240 Figma's dropdown (250), 300 Primer's medium, where `slow` reaches 500, Primer's
 ceiling for UI motion. The number moves time only; easings are fixed. Loops do not follow it:
 Spinner (1s a turn), Skeleton shimmer (3s), indeterminate Progress (1.8s), the Indicator pulse and
-Message cursor (1s) run their measured periods and stop at `0` and under reduced motion.
+Message cursor (1s) and the OTP field's caret blink (1s) run their measured periods and stop at `0` and under reduced motion.
 
 Easings:
 
@@ -59,7 +59,7 @@ Easings:
 | Tabs / Segmented indicator | `base` ease-in-out | same | `translate` + `scale`/`inline-size` of one indicator | only if the component draws a moving indicator |
 | Popover, menu, select list, combobox list, hover card, date panel | `base` ease-out | `fast` ease-out | `opacity` + `scale` from 0.97 | `transform-origin` at the trigger (overlay.ts writes it); `@starting-style` for the enter; exit by `allow-discrete` on `display`/`overlay` |
 | Context menu | `fast` ease-out | `fast` | `opacity` + `scale` from 0.97 | origin at the pointer |
-| Tooltip | `fast` ease-out after the open delay | instant-to-`fast` | `opacity` + `scale` 0.97 | open delay 500–700ms; once one tooltip is open, neighbours open at once (skip window ~300ms) |
+| Tooltip | `fast` ease-out after the open delay | instant | `opacity` + `scale` 0.97 | open delay 500–700ms; once one tooltip is open, neighbours open at once (skip window ~300ms) |
 | Dialog, command palette, confirm dialog | `moderate` ease-out | `base` ease-out | `opacity` + `scale` 0.97 | scrim `opacity` on `moderate`; no translate |
 | Drawer / sheet | `slow` ease-drawer | `moderate` ease-drawer | `translate` 100% on the edge axis | scrim as Dialog |
 | Toast | `slow` ease-out | `base` ease-out | `opacity` + `translate` 8–16px from the toaster's edge | stack reflow on `base` ease-in-out |

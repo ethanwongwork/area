@@ -1,6 +1,6 @@
 /**
  * Language: the system-wide settings Area is built from (the axes in @area/tokens: theme, neutral,
- * accent, action, selection, UI scale, radius, surface, motion), one per Sidebar row. The Canvas
+ * accent, action, selection, type, density, radius, surface, elevation, motion), one per Sidebar row. The Canvas
  * shows each axis as a row of its presets, every preset a tile scoped to it (data-area-<axis>)
  * holding the same abstract illustration (src/abstract.tsx), so a setting is seen by what it does.
  * The Inspector shows the preset chosen on the Canvas (its sample and attribute to copy), else the

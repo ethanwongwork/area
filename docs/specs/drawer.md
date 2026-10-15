@@ -51,7 +51,7 @@ not modal), not Notion's side peek as such (a non-modal page view; see Open ques
 (shadcn header padding 16; Area border 1 + padding 15), title 16/24 500 both, description 14/20 both,
 section gap 16 both. Area's title sits 11 from the top (centred on the 32 close, Dialog's rule)
 where shadcn's is 16 under a 28 close at 12 / 12. Shadow: shadcn 0 10 15 −3 / 0 4 6 −4 at 10%;
-Area's float lift 0 20 24 at 6% / 0 5 8 at 3%.
+Area's lift is the Elevation axis's modal role, as Dialog (`--area-shadow-modal`: 0 0 8 + 0 14 28, 6% key at the default step).
 
 ## Decisions
 

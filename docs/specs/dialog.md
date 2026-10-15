@@ -93,7 +93,7 @@ footer action in the opposite corner by the same rule (12/12).
 | surface · compact | inset **16** (border included, held), corner **16** (concentric with the close, at the 2 × container cap), section gap 12 (`inset-surface-md`) | Figma Share dialog (`compact/figma--share-dialog--open--light`): header title 16 in, field row 16 in, corner 13; VS Code save dialog 13 / 9, corner 8 | Owner 2026-10-02 (cursor-desktop.md): Figma holds 16 in its dense UI; R8's compact 12 rested on VS Code alone |
 | surface · width | 480 preferred (unchanged) | Between shadcn 384 and ChatGPT 600 / Primer 640 | — |
 | surface · border | 1px decorative (unchanged) | All use a 1px ring | — |
-| surface · shadow | **`--area-shadow-float`**: `0 20px 24px` in `shadow-color`, `0 5px 8px` at half strength (surface.css:777); `none` under the Flat preset | The lift Popover and Menu use | Was `shadow-2` (1–2px). A Surface axis role since audit S10. References lift less (ChatGPT 4/8, Primer 6/18), but one lift for every floating surface |
+| surface · shadow | **`--area-shadow-modal`**, the Elevation axis's modal role: `0 0 8` + `0 14 28` at twice the Elevation step in % (6% key at the default 3), the ambient half, dark doubled; transparent at step 0 (axes/elevation.ts) | The topmost surface, over Popover and Menu's float (elevation-2026-10-14) | Was `shadow-2` (1–2px). A Surface axis role since audit S10. References lift less (ChatGPT 4/8, Primer 6/18), but one lift for every floating surface |
 | scrim | **`rgb(0 0 0 / 0.133)`** in light, no blur; dark keeps `bg-overlay` | ChatGPT 13.3%; shadcn 10% | Was 65% with a 2px blur. Dark value not measured |
 | close · control | **32px ghost neutral Button** (md), Area `dismiss` glyph (`primitives.tsx:1341`) | ChatGPT 32, Primer 32; shadcn 28 | Was a bespoke 28px button whose foreground changed on hover (against the fixed-foreground rule). The written exception to the rectangular-surface close (ghost sm, 28), which Popover, Toast and Alert use (audit S9, owner) |
 | close · position | **8 from the top and 8 from the side**; icon on the 16 inset both ways | shadcn 8/8, Primer 8/8 (half the inset); ChatGPT 12/12 | Was 16/16 (box on the inset, icon at 22) |
@@ -143,9 +143,9 @@ gallery with a real pointer: opens modal with the 13% scrim, focus on the close,
 closes and refocuses the trigger, a scrim click closes, a click inside does not.
 
 Enter and exit (audit E-19 A, owner 2026-09-30; clocks from the motion pass 2026-10-07, below):
-the modal fades and scales from 0.97, entering over `--area-duration-moderate` (200) and leaving
-over `--area-duration-base` (150), `--area-ease-out`, and the scrim fades alongside; the entry runs from `@starting-style`, the exit keeps the top layer with
-`overlay` and `display` transitions (`allow-discrete`). The motion axis's "none" preset sets
+the modal fades and scales from 0.97, entering over `--area-duration-moderate` (280 at the default motion 210) and leaving
+over `--area-duration-base` (210), `--area-ease-out`, and the scrim fades alongside; the entry runs from `@starting-style`, the exit keeps the top layer with
+`overlay` and `display` transitions (`allow-discrete`). Motion 0 sets
 the duration to 0, so it is instant, and `prefers-reduced-motion` drops the scale as well
 (`surface.css:767-797`). Was instant.
 
@@ -195,7 +195,7 @@ Contract: [MOTION.md](../MOTION.md), "Dialog, command palette, confirm dialog".
 | rest | `scale: 1` (identity transform) | `scale: none` |
 | close button, footer buttons | Button's | Button's (not this pass) |
 | focus | native `showModal()` focus, no animation delay | unchanged: focus never waits for the transition |
-| reduced motion / "none" | tokens 0, scale 1 | unchanged; no literal durations |
+| reduced motion / motion 0 | tokens 0, scale 1 | unchanged; no literal durations |
 
 Confirm dialog shares `.area-dialog__modal` and picks this up; Command palette has its own
 modal (command-palette.css, not this pass).

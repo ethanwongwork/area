@@ -39,11 +39,27 @@ export type CanvasAxes = Record<"type" | "density" | "radius" | "elevation" | "m
 const CANVAS_DEFAULTS = Object.fromEntries(
   GALLERY_CONTROLS.filter(control => control.axis !== "theme").map(control => [control.axis, control.defaultValue]),
 ) as CanvasAxes;
-/** A saved Canvas from before the split (`ui`: compact or default) as its type size and density. */
+/**
+ * The saved Canvas, each setting kept only while it is still one of its control's options: an
+ * elevation saved before it became a number (`minimal`, `standard` …) or a hand-edited value would
+ * otherwise leave its Select blank and match no preset. Keys no control reads are dropped. A Canvas
+ * from before the type / density split (`ui`: compact or default) restores as its two settings.
+ */
 function restoreCanvas(saved: Partial<CanvasAxes> & { ui?: string }): CanvasAxes {
   const { ui, ...rest } = saved;
-  const legacy = ui === "compact" ? { type: "12", density: "compact" } : ui === "default" ? { type: "14", density: "default" } : {};
-  return { ...CANVAS_DEFAULTS, ...legacy, ...rest };
+  const legacy: Partial<CanvasAxes> = ui === "compact" ? { type: "12", density: "compact" } : ui === "default" ? { type: "14", density: "default" } : {};
+  const merged: Record<string, unknown> = { ...legacy, ...rest };
+  const canvas = { ...CANVAS_DEFAULTS };
+  for (const control of GALLERY_CONTROLS) {
+    if (control.axis === "theme") continue;
+    const value = merged[control.axis];
+    if (typeof value !== "string") continue;
+    const known = control.items.map(item => item.value);
+    // A set keeps the shapes it still knows (an empty set is a choice: every shape follows Radius).
+    if (control.kind === "chips") canvas[control.axis] = value.split(" ").filter(name => known.includes(name)).join(" ");
+    else if (known.includes(value)) canvas[control.axis] = value;
+  }
+  return canvas;
 }
 
 export { APP_SCALE } from "./app-scale.ts";

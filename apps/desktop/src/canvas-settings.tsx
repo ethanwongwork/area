@@ -1,6 +1,6 @@
 /**
- * The Inspector's Canvas section: the system-wide settings the Canvas previews (density, radius,
- * pills), one row each, from the gallery's own control list (src/gallery/controls.ts).
+ * The Inspector's Canvas section: the system-wide settings the Canvas previews (type, density,
+ * radius, elevation, motion, pills), one row each, from the gallery's own control list (src/gallery/controls.ts).
  * They write data-area-* on the Canvas only, so the app's own chrome stays compact. A tab adds its
  * own Canvas-wide display settings after them as children (Typography's sample text).
  */

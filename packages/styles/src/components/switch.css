@@ -41,9 +41,12 @@
     cursor: pointer;
   }
 
-  .area-switch--sm { --_h: var(--area-mark-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); --_gap: var(--area-gap-sm); }
-  .area-switch--md { --_h: var(--area-mark-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
-  .area-switch--lg { --_h: var(--area-mark-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); --_gap: var(--area-gap-lg); }
+  /* The track follows the type size at every size (owner, 2026-10-12): md is the type's toggle, sm and lg
+     4 either side (16 / 20 / 24 at type 14, as before). The size classes set the fixed marks 16 / 20 / 24
+     until 2026-10-14, which overrode the type-following base rule above. */
+  .area-switch--sm { --_h: calc(var(--area-mark-toggle) - var(--area-space-4)); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); --_gap: var(--area-gap-sm); }
+  .area-switch--md { --_h: var(--area-mark-toggle); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-switch--lg { --_h: calc(var(--area-mark-toggle) + var(--area-space-4)); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); --_gap: var(--area-gap-lg); }
   /* Explicit for manifest parity: short is the base track (the declarations above). */
   .area-switch--short { --_track: short; }
   .area-switch--long { --_thumb-width: calc(var(--_thumb) + var(--area-space-8)); --_w: calc(var(--_h) * 2 + var(--area-space-4)); }

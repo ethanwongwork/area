@@ -139,7 +139,7 @@
     overflow-x: auto;
     /* spec: a table stands alone on the page like a Card, and its edge is never lighter than
        the row rules inside it, so both take the divider role. */
-    /* A required frame: it keeps its edge under the Elevated preset (audit S10). */
+    /* A required frame: it keeps its edge under Borderless (audit S10). */
     border: var(--area-stroke-width) solid var(--area-border-divider);
     /* The surface corner, never deeper than 1.5 x the cells' side inset (owner, 2026-10-12: a
        compact table put 8px-inset cells under an 18 corner). Bites only at the roundest settings. */
@@ -172,7 +172,7 @@
     padding: var(--_cell-inset) calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense));
     text-align: start;
     vertical-align: top;
-    /* Row rules are standalone dividers, `stroke-width` like the frame, so they stay under Elevated too. */
+    /* Row rules are standalone dividers, `stroke-width` like the frame, so they stay under Borderless too. */
     border-block-end: var(--area-stroke-width) solid var(--area-border-divider);
     overflow-wrap: break-word;
   }

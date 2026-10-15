@@ -2,7 +2,8 @@
  * The component gallery's theme controls: one entry per system-wide setting the right panel
  * offers. Each writes `data-area-<axis>` on the gallery canvas only, so the gallery's own
  * chrome keeps Area's defaults whatever the canvas shows. Add a setting by adding an entry;
- * the panel, the saved preference and the pre-paint restore all read this list.
+ * the Inspector's Canvas section and the saved Canvas (studio.tsx restoreCanvas, which keeps only
+ * values listed here) both read this list.
  */
 import { DEFAULT_PILLS, PILL_SHAPES } from "@area/tokens/config";
 export interface GalleryControl {
@@ -52,6 +53,7 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = [
   { axis: "pills", kind: "chips", label: "Pills", hint: "On: a pill. Off: follows Radius.", defaultValue: DEFAULT_PILLS.join(" "), items: PILL_SHAPES.map(value => ({ value, label: value === "field" ? "Fields" : value[0]!.toUpperCase() + value.slice(1) })) },
 ];
 
-/** localStorage key for the canvas selection: `{ theme, ui }`. */
+/** The archived docs gallery's storage key and canvas id (apps/docs reads them); the app saves its
+ * Canvas under `area-desktop`.canvas (src/storage.ts). */
 export const GALLERY_STORAGE_KEY = "area-gallery-theme";
 export const GALLERY_CANVAS_ID = "gallery-canvas";

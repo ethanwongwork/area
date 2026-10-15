@@ -74,7 +74,7 @@ decides, because several are public seams or come from `palette.json`. Not a pro
 - Type: `display-sm/lg-*`, `title-sm/md-*`, `text-xs-tracking`.
 - Tiers no component uses: `control-xl`, `gap-` `xs` / `xl`, `icon-xl`,
   `radius-control-xl`; `radius-nested` (components compute their concentric radius).
-- Motion: `duration-instant`, `ease-in`, `-in-out`, `-linear`. Elevation's ladder `shadow-1`…`4` is for apps; components name roles.
+- Motion: `ease-in` and the deprecated `ease-spring`. Elevation's ladder `shadow-1`…`4` is for apps; components name roles.
 - Seams: `badge-bg`, `badge-fg`, `badge-tracking-wide`.
 - The `z-*` layer scale (0–80). Component stacking is local (−2…2 inside a component) and
   every floating surface is in the top layer, so no component reads it; it stays for apps.

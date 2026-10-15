@@ -66,9 +66,8 @@
        it. Light #ee (neutral 100) sits between Notion's 8% ring (#eb) and the decorative seam
        (#f3); dark keeps the divider rung, since 800 disappears against the dark surface. */
     --_card-edge: var(--area-border-card);
-    /* spec: owner's reference is Figma's 0 0 8 0 at 2%. Area's recipe keeps that halo, drawn
-       2px low so it pools under the card, and adds a 1px contact line that gives the lighter
-       edge its bottom. Dark needs more ink to register on a dark page. */
+    /* The Elevation axis's resting role: 0 0 2 + 0 2 4 at half the step in % (1.5% at the default 3),
+       dark doubled, transparent at 0 (axes/elevation.ts; was Figma's 0 0 8 halo with a contact line). */
     --_card-shadow: var(--area-shadow-resting); /* the Elevation axis role (axes/elevation.ts): a resting surface */
     /* spec: owner, neutral 25 for every media fill (#fa); dark takes the 800 rung. */
     --_card-media-fill: light-dark(var(--area-neutral-25), var(--area-neutral-800));
@@ -104,9 +103,9 @@
     font-size: var(--_card-title-size);
     line-height: var(--_card-title-leading);
     box-shadow: var(--_card-shadow);
-    /* Elevated (border-width 0) leaves the halo to carry the card, but dark has no halo: the edge comes back as an inset
-       ring in dark only, as wide as the frame Elevated removed (0 under every other preset). Owner, 2026-10-12:
-       consistency pass O2. */
+    /* Borderless (border-width 0) leaves the lift to carry the card, but a lift barely reads in dark: the edge comes back as
+       an inset ring in dark only, as wide as the frame Borderless removed (0 under Outlined). Owner, 2026-10-12:
+       consistency pass O2 (then the Elevated preset). */
     outline: calc(var(--area-stroke-width) - var(--_card-border)) solid light-dark(transparent, var(--_card-edge));
     outline-offset: calc(var(--_card-border) - var(--area-stroke-width));
   }
@@ -831,7 +830,7 @@
    * "Dialog"): a fade and a 0.97 scale from the centre, entering on `moderate` and leaving one
    * step faster on `base`, both ease-out; the scrim fades on the same clocks. A transition takes
    * the duration of the state it goes to, so the closed rules carry the exit clock. The durations
-   * are motion-axis tokens, so the "none" preset and prefers-reduced-motion make it instant.
+   * are motion-axis tokens, so motion 0 and prefers-reduced-motion make it instant.
    */
   .area-dialog__modal {
     --_overlay-duration: var(--area-duration-moderate);
@@ -982,9 +981,9 @@
        12 at the default, 14 / 16 / 18 at 10 / 12 / 14, 20 at Pill (owner, 2026-10-04). Popover
        replaces it with the surface corner below. */
     border-radius: var(--area-radius-list);
-    /* spec: floating surfaces share one lift. Notion's popover geometry (0 20 24, 0 5 8), with the
-       theme-aware shadow colour at full and half strength; ChatGPT's menu (0 8 16 -4) and Figma's
-       picker (0 10 16) agree on a soft, deep blur rather than a 1px edge shadow. */
+    /* Floating surfaces share one lift, the Elevation axis's float role: 0 0 2 + 0 8 16 at the step in %
+       (3% at the default 3), dark doubled (axes/elevation.ts). ChatGPT's menu (0 8 16) and Figma's picker
+       (0 10 16) agree on a soft, deep blur rather than a 1px edge shadow. */
     --_elevation: var(--area-shadow-float);
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);
@@ -1017,7 +1016,7 @@
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
     overflow-wrap: anywhere;
-    /* spec: the same floating lift as Menu (Notion draws both surfaces with one shadow). */
+    /* The same floating lift as Menu, the float role (Notion draws both surfaces with one shadow). */
     box-shadow: var(--_elevation);
   }
   /* Author display/position must preserve the native popover closed state and top layer. */
@@ -1107,9 +1106,9 @@
     gap: var(--area-ui-row-gap);
     min-inline-size: calc(var(--area-space-96) * 2 + var(--area-space-32));
     /*
-     * spec: a floating lift, Notion's two layers (20/24 and 5/8 blur) in the theme's shadow
-     * colour. ChatGPT (8/16) and Figma (2/5 + 10/16) float menus the same way; Area's 1px
-     * shadow-2 read as a flat card. docs/specs/menu.md.
+     * The floating lift, the Elevation axis's float role (0 0 2 + 0 8 16). ChatGPT (8/16) and
+     * Figma (2/5 + 10/16) float menus the same way; Area's 1px shadow-2 read as a flat card.
+     * docs/specs/menu.md.
      */
     box-shadow: var(--_elevation);
   }
@@ -1371,7 +1370,7 @@
     --_tooltip-inset-inline-end: var(--_tooltip-inset-inline);
     /*
      * spec: rounder than a control (8) but not a pill (14 on 28px): the owner asked for
-     * "rounder, not quite pill" (2026-09-25). 10px at Standard; a nested Kbd lands on its
+     * "rounder, not quite pill" (2026-09-25). 10px at the default radius 8; a nested Kbd lands on its
      * own 6px. Follows the radius preset, capped at half a line so it never becomes a blob.
      */
     /* compact: the large control corner too, 8 on the 24 box, so the tooltip stays rounder than a
@@ -1397,9 +1396,9 @@
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
     max-inline-size: calc(var(--area-space-96) * 3);
-    /* The Elevation axis's tooltip role: no lift at Minimal (ChatGPT's tooltip draws none, 2026-10-13: the
-       inverted fill separates it in light), Notion's 0 4 12 -2 at Soft, Fluent's shadow8 at Standard. Dark keeps
-       its 5% white inset edge whatever the preset. */
+    /* The Elevation axis's tooltip role: 0 0 2 + 0 4 8 at half the step in % (1.5% at the default 3), transparent
+       at 0, where the inverted fill alone separates it in light (ChatGPT's tooltip draws no shadow). Dark keeps
+       its 5% white inset edge at every step. */
     box-shadow: var(--area-shadow-tooltip), inset 0 0 0 var(--area-stroke-width) light-dark(transparent, rgb(255 255 255 / 0.05)); /* spec */
   }
 

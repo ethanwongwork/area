@@ -115,7 +115,7 @@ Generated with `node scripts/capture-compare.mjs` (rows abbreviated).
 | values | Figma 11/16 450 | 12/16 tabular; spacing values in the tone's ink, border widths default, the size `weight-strong` | Area's smallest UI text | — |
 | corner radii | Figma: none drawn (the owner's reference: centred in 32 × 24 cells) | cap box (ring − 1cap) / 2 from both edges | owner ("sit inset equally in the corners"), inset.css cap reference | — |
 | labels | Figma 4 8 padding, Border and Padding | 4 8, Margin, Border and Padding | Figma | — |
-| tone | owner's reference blue | info: `info-solid` ink, `info-surface` fill; neutral: `fg-muted`, `bg-subtle` | Area's info role | Area's accent is neutral by default |
+| tone | owner's reference blue | info: `fg-info` ink (the text role; `info-solid` is a fill and read 4.35:1 in light, 3.16:1 in dark, found 2026-10-14), `info-surface` fill; neutral: `fg-muted`, `bg-subtle` | Area's info role | Area's accent is neutral by default |
 
 ## States
 
@@ -194,3 +194,4 @@ None open. (Round 10's two were accepted; square rings replaced the 32 margin ro
   stroke is solid (`border-subtle`); its corner is the container family's (`radius-container`, 12, as Panel and Code
   block); the inner boxes keep their rounded corners (12 / 8 / 6). Round 13.
 - 2026-10-12 · owner, review round 13: approved.
+- 2026-10-14 · all-axis audit → spacing values take `fg-info`, the info text role (were `info-solid`, a fill: 4.35:1 on `bg-subtle` in light, 3.16:1 in dark, under 4.5 for 11–12px text) → box-model.css.

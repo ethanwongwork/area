@@ -142,7 +142,7 @@ renders without a DOM, and bundles browser JS/CSS with tree-shaking. It does not
 or test an external registry installation. React peer-version and RSC framework coverage
 still need explicit verification; do not infer either from a passing Node render.
 
-Existing limitations include incomplete composite-widget behavior and motion-none
+Existing limitations include incomplete composite-widget behavior and motion-0
 coverage. Native Windows forced colors, assistive technology, touch behavior and
 cross-engine execution remain release validation work.
 The standard soft-border presentation has documented contrast shortfalls; see

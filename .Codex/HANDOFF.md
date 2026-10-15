@@ -5,6 +5,30 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## All-axis audit (2026-10-14, branch `claude/elevation-axis-gallery-e500be`)
+
+- Owner: "do an all axis check ... visual errors, inconsistencies, discrepancies, or bugs". Method: axis independence
+  in the app (every token one setting moves is its own or a documented derivation), painted colours (accent reaches
+  action / selection only when they are accent), a headless-Edge sweep of all 90 families × 9 combinations (default,
+  dark, 12 / compact / sharp / flat / motion 0, 16 / comfortable / pill / elevation 8, the app's 13 compact dark,
+  warm + purple accent dark, borderless flat, borderless dark, no pills) for clipped text, overflow, control heights,
+  text contrast (1px canvas sampling), motion left at 0 and surfaces with no edge; a static code audit; forced colours
+  emulated. Scripts were scratch only (not committed).
+- Fixed: Switch, Checkbox and Radio now follow the type size. Their size classes set fixed 16 / 20 / 24 marks and
+  overrode the 2026-10-12 type-following rule, so they never changed; check and dash drawings are now 1:1 and centred.
+  Box model values took `info-solid` (4.35:1 light, 3.16:1 dark) → `fg-info`. Forced colours: frames come back at 1px
+  under Borderless; the floating Toolbar gets an outline. `restoreCanvas` keeps only values its controls list (an old
+  `minimal` elevation left the Select blank). Citation hover-card demo was a `<div>` in a `<p>`; Breadcrumb ellipsis keys
+  collided on equal hrefs. Badge group `visibleCount="auto"` looped ("Maximum update depth") at type 12 / Compact: hidden
+  badges measured 1.5px narrower inside the popover; measuring now unsets the popover's styles. ScrollToLatest and the Card carousel read the nearest motion scope. `@property` duration
+  fallbacks follow the default step. Language illustrations draw control edges at `stroke-width`. Stale docs, specs and
+  comments (old presets, Notion's 0 20 24 lift, axis counts, border-float #f3).
+- Open (owner): Borderless + elevation 0 leaves Cards, Panels and every floating surface with no edge in light (77 in
+  the sweep); in dark, floating surfaces at Borderless keep no edge (Card has a dark-only ring, floats don't). At type 16
+  Comfortable the Toolbar's Segmented overflows its bar (112px) and a horizontal Stepper step overflows by 10. CSS loop
+  stops are `[data-area-motion="0"] .x` descendants, so a nested non-zero scope inside a 0 scope still stops loops.
+  No Surface control in the Inspector.
+
 ## Motion: one number (2026-10-14, branch `claude/elevation-axis-gallery-e500be`)
 
 - Owner: "go with motion, same one-number approach as elevation", and labels "(Default)" / "(Flat)", not "· Default".

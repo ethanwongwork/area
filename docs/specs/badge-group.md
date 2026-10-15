@@ -174,3 +174,4 @@ overflow (they are measured and re-rendered; a reflow animation would lag the re
   8 between tags. Area's group gap 4 / 4 (Primer) → 6 / 8, in the group and its overflow
   Popover. Back to In review.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → the overflow trigger takes Badge's hover recipe; popover motion is the shared overlay's; no change here.
+- 2026-10-14 · all-axis audit → `visibleCount="auto"` measured hidden badges inside the overflow popover, whose text styles made them 1.5px narrower than in the group at type 12 / Compact; the fitted count flipped between two answers until React stopped it ("Maximum update depth exceeded"). The measuring pass now unsets the popover's styles (`all: unset`), so every badge measures in the group's context → BadgeGroup.tsx.

@@ -18,7 +18,7 @@ stable meaning and needs independent customization. Give it a sensible existing-
 fallback, a consumer and checks. Do not add aliases merely to hide unexplained literals.
 
 The registered axes are `theme`, `neutral`, `accent`, `action`, `selection`, `type`,
-`density`, `radius`, `surface` and `motion`. Type size (12 to 16) and density (Compact, Default,
+`density`, `radius`, `surface`, `elevation` and `motion`. Type size (12 to 16) and density (Compact, Default,
 Comfortable) are separate; `emit/base.ts` derives heights, gaps, insets and marks from both, and
 `data-area-ui` remains a shorthand for the two (owner, 2026-10-12;
 [research](research/ui-size-scale-2026-10-12.md)). `data-area-contrast` is a separate
@@ -179,7 +179,8 @@ is a transparent shadow, `0 0 0 0 transparent`, never `none`. A role can sit in 
 own layers (the Board card's tone ring, the floating Toolbar's edge), and `none` in a list invalidates the whole
 `box-shadow`, ring and all. The edge does the separating at every step. `border-float` is #eeeeee in light (the
 nearest rung to Notion's 7% popover ring) and #4b4b4b in dark. Forced colours drop `box-shadow` entirely, and the
-border is what the browser repaints. Stroke is its own setting: the Surface axis, Outlined or Borderless. The
+border is what the browser repaints: `forced-colors.css` puts the frame back at 1px under Borderless and gives
+the floating Toolbar, whose edge is an inset shadow, an outline. Stroke is its own setting: the Surface axis, Outlined or Borderless. The
 Table frame is a required edge (`stroke-width`), so it stays under Borderless.
 
 A rule inside a container is never darker than the container's edge (owner, 2026-09-27;
@@ -212,18 +213,19 @@ takes (consistency pass 2026-10-12, [audit](research/consistency-audit-2026-10-1
   alone: control, field and state edges; swatch and image rings; cutouts between overlapping marks (Avatar group,
   Indicator anchor); seams inside joined controls (Button group, Split button, Input group, Color field); standalone
   dividers on `border-divider` (Separator, Nav separators, the Tabs track, Table rows and frame, Description list,
-  Accordion, Shortcut list); and frames with no shadow to carry them (Table, Description list, Code block, Composer,
-  File upload). `border-width`, the Surface axis (0 under Elevated), draws the frames of surfaces that carry a shadow
+  Accordion, Shortcut list); and frames with no shadow to carry them (Table, Description list, Code block, File upload), plus
+  Composer's frame, a field edge that stays beside its resting lift. `border-width`, the Surface axis (0 under
+  Borderless), draws the frames of surfaces that carry a shadow
   (every floating surface, Panel, Card), the seams inside them (`border-decorative`: Panel, Code block, Command
   palette and Color picker rules, Menu and Toolbar separators) and the edges of filled shapes (Alert, inline Code,
   the Segmented and Toggle group tracks).
 - **Colour, lightest to firmest.** `border-decorative` #f3 (seams inside a container, filled shapes) · `border-float`
-  #f3, dark #4b (every floating frame) · `border-card`, neutral 100 #ee (standalone surfaces: Card, Composer, Code
+  neutral 100 #ee, dark #4b (every floating frame) · `border-card`, neutral 100 #ee (standalone surfaces: Card, Composer, Code
   block) · `border-divider` and `edge-control` #e2 (standalone rules; control and field edges; off tracks) ·
   `edge-control-hover` #d4 (control edges on hover; at rest, the choice glyphs and Tree view's check, the Slider and
   Color picker thumbs and Calendar tiles) · `edge-control-strong` #b4 (a Checkbox, Radio or selected Chip under the
   pointer) · `stroke-control` #83 (Calendar's today ring, Breadcrumb separators). The raised-plate edge (Segmented
-  thumb, soft Toggle group selection, Badge modern) is `edge-selected` with `shadow-1`. Control and state edges read
+  thumb, soft Toggle group selection, Badge modern) is `edge-selected` with the Elevation axis's control role, `shadow-control`. Control and state edges read
   the `edge-*` roles, which strengthen under increased contrast, never the raw `border-*` rungs; supplementary lines
   (Box model layers, a disabled field's `border-faint`) may.
 - **Translucent lines** are for content whose colour Area cannot know: the swatch ring (`token-swatch-ring`, black
@@ -322,10 +324,11 @@ spacing until compact surface captures exist (audit F-26).
 Dark mode is near-black (owner, 2026-10-01): the page is neutral 975 (#020202), raised surfaces
 850 and controls 800, as ChatGPT builds its dark theme on #000. Floating frames (Popover, Menu,
 Dialog, Toast, Command palette, surface Calendar and ColorPicker, the floating Toolbar) use
-`border-float`, the decorative rung in light and neutral 650 in dark, so a floating surface stays
+`border-float`, neutral 100 (#ee) in light and neutral 650 in dark, so a floating surface stays
 distinct over another surface where its shadow no longer reads. Dividers keep `border-decorative`.
-In dark the Tooltip stays a dark annotation (#282828 with a 5% white inset edge), Cards drop
-their halo, and the floating shadow ink is 20% (dark captures 2026-09-30, `docs/research/dark-pass-2026-09-30.md`).
+In dark the Tooltip stays a dark annotation (#282828 with a 5% white inset edge), and every elevation
+role doubles its light alpha (`axes/elevation.ts`; dark captures 2026-09-30,
+`docs/research/dark-pass-2026-09-30.md`).
 
 Public component size families default to `md`. Expose `sm` when a component has a real
 compact-composition use case and `lg` when it needs a more prominent or touch-oriented
