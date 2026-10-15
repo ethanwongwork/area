@@ -104,15 +104,18 @@
     /* spec (audit G-3): dark `border-decorative` equals the stripe fill, so dark takes the faint edge. */
     --_code-edge: light-dark(var(--area-border-decorative), var(--area-border-faint));
     --_code-text: var(--area-fg-default);
+    /* The edge's width: the Surface axis's, since a filled chip carries itself without it; the subtle variant
+       (token.css), which has no fill, draws it at the required width. Every inset that counts it reads this. */
+    --_code-border: var(--area-border-width);
 
     display: inline;
     /* A direct preview child is blockified by a flex parent; retain the same one-line
      * reference box there without making inline prose a fixed-height, unwrappable box. */
     min-block-size: calc(1em + var(--area-space-10));
     white-space: normal;
-    padding: var(--area-space-2) calc(var(--area-space-6) - var(--area-border-width));
+    padding: var(--area-space-2) calc(var(--area-space-6) - var(--_code-border));
     margin-inline: var(--area-space-2);
-    border: var(--area-border-width) solid var(--_code-edge);
+    border: var(--_code-border) solid var(--_code-edge);
     /* The small role, at most a pill for its height (quality pass 2026-10-04: the radius rewrite had
        capped it at the corner of its own height, so 12px code in a Table read 4 instead of 6). */
     border-radius: min(var(--area-radius-small), round(up, calc((1em + var(--area-space-10)) / 2), 1px));

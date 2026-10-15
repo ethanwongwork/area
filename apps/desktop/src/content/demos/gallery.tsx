@@ -1636,7 +1636,7 @@ export const GallerySelectSuccess = () => <Select validationStatus="success" ari
 export const GallerySelectWarning = () => <Select validationStatus="warning" aria-label="Label" defaultValue="one"><option value="one">Option one</option></Select>;
 
 const SeparatorList = ({ inset = false }: { inset?: boolean }) => (
-  <div style={{ border: "var(--area-border-width) solid var(--area-border-decorative)", borderRadius: "var(--area-radius-container)", inlineSize: "100%", overflow: "hidden", textAlign: "start", fontSize: "var(--area-ui-size)", lineHeight: "var(--area-ui-leading)", paddingBlock: "var(--area-space-8)" }}>
+  <div style={{ border: "var(--area-stroke-width) solid var(--area-border-decorative)", borderRadius: "var(--area-radius-container)", inlineSize: "100%", overflow: "hidden", textAlign: "start", fontSize: "var(--area-ui-size)", lineHeight: "var(--area-ui-leading)", paddingBlock: "var(--area-space-8)" }}>
     <div style={{ paddingInline: "var(--area-space-16)" }}>Item one</div>
     <Separator inset={inset} spacing="normal" />
     <div style={{ paddingInline: "var(--area-space-16)" }}>Item two</div>
@@ -1647,7 +1647,7 @@ const SeparatorList = ({ inset = false }: { inset?: boolean }) => (
 export const GallerySeparatorFullWidth = () => <SeparatorList />;
 export const GallerySeparatorInset = () => <SeparatorList inset />;
 const SeparatorToolbar = ({ inset = false }: { inset?: boolean }) => (
-  <div style={{ alignItems: "stretch", border: "var(--area-border-width) solid var(--area-border-decorative)", borderRadius: "var(--area-radius-container)", display: "flex", gap: "var(--area-space-4)", padding: "var(--area-space-4)", textAlign: "start" }}>
+  <div style={{ alignItems: "stretch", border: "var(--area-stroke-width) solid var(--area-border-decorative)", borderRadius: "var(--area-radius-container)", display: "flex", gap: "var(--area-space-4)", padding: "var(--area-space-4)", textAlign: "start" }}>
     <Button aria-label="Align top" icon={<AlignTopIcon />} iconOnly variant="ghost" />
     <Button aria-label="Align middle" icon={<AlignMiddleIcon />} iconOnly variant="ghost" />
     <Button aria-label="Align bottom" icon={<AlignBottomIcon />} iconOnly variant="ghost" />

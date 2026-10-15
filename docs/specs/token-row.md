@@ -151,3 +151,4 @@ Not yet compared side by side with Dev Mode's real values (paywalled).
   proposed to the owner (a translucent ring over the colour, as Figma's); not applied, since it changes the approved
   Code swatch and ColorSwatch edge (owner decision 2026-09-28).
 - 2026-10-12 · owner, review round 15: approved.
+- 2026-10-14 · owner: "merge it, then continue working" → all-axis sweep of Surface 0 at Elevation 0 (90 families, light and dark): the outline style (no fill) draws its edge at `stroke-width` through Code's `--_code-border`, so it keeps it at Surface 0; the row's inset counts it.

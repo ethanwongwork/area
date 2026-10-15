@@ -21,7 +21,7 @@
     block-size: var(--_token-height);
     margin: 0;
     padding-block: 0;
-    padding-inline: round(nearest, calc((var(--_token-height) - 1cap) / 2 - var(--area-border-width)), 1px);
+    padding-inline: round(nearest, calc((var(--_token-height) - 1cap) / 2 - var(--_code-border, var(--area-border-width))), 1px);
     text-align: start;
     white-space: nowrap;
   }
@@ -40,6 +40,8 @@
   .area-token-row--outline.area-code {
     --_code-bg: transparent;
     --_code-edge: var(--area-border-divider);
+    /* No fill: the edge is all that draws the row, so it is a required edge (`stroke-width`), as subtle Code's. */
+    --_code-border: var(--area-stroke-width);
   }
 
   /* Copyable: the row is a button. The plate takes the hover ground; the ink stays (shared state paint). */

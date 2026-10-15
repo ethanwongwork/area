@@ -192,3 +192,4 @@ Resolved 2026-10-09 (owner: "go with your recommendations"):
   Notion and shadcn readouts → 8 captures, gallery tiles, in review.
 - 2026-10-09 · owner: "go with your recommendations" → open questions resolved as recommended; adoption in the
   scrolling families follows in separate commits.
+- 2026-10-14 · owner: "merge it, then continue working" → all-axis sweep of Surface 0 at Elevation 0 (90 families, light and dark): the demo's frame (standing alone, no shadow) is a required edge, `stroke-width`, so it stays at Surface 0.

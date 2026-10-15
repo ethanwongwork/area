@@ -97,6 +97,12 @@ test('every surface takes its depth from its elevation role', () => {
     assert.match(paints(block), /^var\(--area-shadow-edge\),/, `${block} does not lead with the Surface axis's edge`);
   }
   assert.match(ruleFor('.area-card')?.body ?? '', /box-shadow:\s*var\(--area-shadow-edge\), var\(--_card-shadow\)/, 'Card does not lead with the Surface axis\'s edge');
+  // A chip with no fill is drawn by its edge alone, so that edge is required (`stroke-width`), or Surface 0 leaves
+  // plain text (all-axis sweep, 2026-10-14): subtle Code and Token, and Token row's outline style.
+  for (const block of ['.area-code--subtle, .area-token--subtle', '.area-token-row--outline.area-code']) {
+    assert.match(ruleFor(block)?.body ?? '', /--_code-border:\s*var\(--area-stroke-width\)/, `${block} loses its only edge at Surface 0`);
+  }
+  assert.match(ruleFor('.area-code')?.body ?? '', /border:\s*var\(--_code-border\) solid/, 'Code does not draw its edge at --_code-border');
   // The Popover arrow is a shape a box-shadow cannot follow: it takes the same edge as a drop-shadow.
   assert.match(ruleFor('.area-popover__arrow')?.body ?? '', /filter:\s*var\(--area-shadow-edge-filter\)/, 'the Popover arrow has no edge at Borderless');
 });

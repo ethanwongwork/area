@@ -30,7 +30,7 @@
     max-inline-size: 100%;
     block-size: var(--_token-height);
     padding-block: 0;
-    padding-inline: round(nearest, calc((var(--_token-height) - 1cap) / 2 - var(--area-border-width)), 1px);
+    padding-inline: round(nearest, calc((var(--_token-height) - 1cap) / 2 - var(--_code-border, var(--area-border-width))), 1px);
     white-space: nowrap;
   }
 
@@ -52,6 +52,9 @@
   .area-token--subtle {
     --_code-bg: var(--area-token-bg-subtle);
     --_token-bg: var(--area-token-bg-subtle);
+    /* No fill, so the edge is all that draws it: a required edge (`stroke-width`) that stays at Surface 0, where the
+       Surface width would leave plain text (all-axis sweep, 2026-10-14). */
+    --_code-border: var(--area-stroke-width);
   }
 
   .area-code--on-color,

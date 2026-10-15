@@ -30,7 +30,12 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   and fades the Skeleton band and the Progress stripe's gaps. The nearest scope decides, so a nested non-zero
   scope runs its loops; the `[data-area-motion="0"] .x` and per-loop reduced-motion rules are gone. Cohesion test
   pins every infinite animation to the factor (a mutation fails it). Checked live: outer 0 stops, nested 210 runs.
-  Not captured: a screenshot of the stopped stripe (computed values only).
+  Not captured: a screenshot of the stopped stripe (computed values only). Merged (PR #87).
+- Then a Surface 0 sweep (headless Edge, 90 families, light and dark): left only inner seams. Fixed: subtle Code /
+  Token and Token row's outline (no fill) draw a required edge via Code's `--_code-border`; the Scroll area and
+  Separator demo frames are `stroke-width`. Research note "Sweep after the change".
+- Found: `git fetch` fails in the shared repo on two stray refs, `refs/heads/claude/elevation-axis-gallery-e500be 2`
+  and `icon-work-ea140f 2` (copies with a " 2" suffix, likely from a file sync); left for the owner to delete.
 
 ## All-axis audit (2026-10-14, branch `claude/elevation-axis-gallery-e500be`)
 
