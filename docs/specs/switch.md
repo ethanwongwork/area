@@ -130,7 +130,7 @@ Captures: `area--sizesm`, `area--sizemd`, `area--sizelg`, `area--long`, `area--d
 
 Native checkbox with `role="switch"` covering the label; controlled or uncontrolled with form
 reset (Switch.tsx:44-57); `onCheckedChange(checked, event)` passes the change event (Switch.tsx:12). Read-only and loading block changes in `onChange`/`onClick`;
-read-only sets `aria-readonly`. Thumb travel honours `data-area-motion="none"` and reduced
+read-only sets `aria-readonly`. Thumb travel honours `data-area-motion="0"` and reduced
 motion through the duration tokens (Motion, 2026-10-07). Forced colours: Highlight/Canvas paint; only disabled greys (switch.css:115-125).
 Coarse pointers get a 44px minimum target (switch.css:114). Notion also keeps a native
 input (opacity 0) over the drawn track.
@@ -180,7 +180,7 @@ Contract: [`docs/MOTION.md`](../MOTION.md) (Switch thumb recipe).
 | press stretch (owner's, kept) | `inline-size` +2px over `fast` ease-out; the on-side offset via `inset-inline-start` | `inline-size` +2px on the thumb's clock (`base` ease-in-out); when on, the translate shortens by 2px so it grows toward the start |
 | focus-visible | outline on the track | unchanged (rings never fade) |
 | disabled, read-only, loading | no hover, no stretch | unchanged |
-| reduced motion | `transition: none` on the thumb (own `@media` and `data-area-motion="none"` rules) | the rules are removed: the duration tokens are zero wherever motion is set (`emit/css.ts`), which now also stops the track and hover layer |
+| reduced motion | `transition: none` on the thumb (own `@media` and `data-area-motion="0"` rules) | the rules are removed: the duration tokens are zero wherever motion is set (`emit/css.ts`), which now also stops the track and hover layer |
 
 **Crispness.** The thumb rests on whole pixels: it is laid out once at the start inset and only
 `translate` moves it, by a rounded length. Mid-travel frames are fractional, as any motion is.

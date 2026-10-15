@@ -75,7 +75,7 @@ Read from the nodes of `area--size-small`, `area--default`, `area--size-large`,
 | in a Button · size | the Button tier's icon box (`--_icon`: 12 / 16 / 20), not the Spinner's own size | Audit S18 (owner 2026-09-30): the spinner stands in for the leading icon | Was a fixed 16 at every tier |
 | track | the arc's ink at 25% (≈ #c9 on white; display.css:226-229) | Primer; ChatGPT 30% (2026-09-27 audit) | Darker than the rail (`edge-control` #e2); audit E-22 left open. Was `bg-component-active` #eee |
 | speed | **1s** per turn, `--area-ease-linear`, fixed at every motion preset (display.css) | Untitled, Primer, shadcn, Spectrum 1s (owner 2026-09-27) | Was 2s, the slowest of 14 systems; ChatGPT 2s |
-| motion | stops under `data-area-motion="none"` and reduced motion (display.css, motion block) | docs/MOTION.md "Reduced motion" (2026-10-07) | Reduced motion slowed it to 1.8s from 2026-09-27 to 2026-10-07 (Fluent); open question below |
+| motion | stops under `data-area-motion="0"` and reduced motion (display.css, motion block) | docs/MOTION.md "Reduced motion" (2026-10-07) | Reduced motion slowed it to 1.8s from 2026-09-27 to 2026-10-07 (Fluent); open question below |
 
 ## States
 
@@ -96,7 +96,7 @@ and `aria-disabled` (Button.tsx), Input names it with `loadingText` (Input.tsx:1
 
 | Peer | Shared role | Area value in peer | Spinner | Match / reason |
 |---|---|---|---|---|
-| Progress, Skeleton | motion axis | stop under `motion="none"` | same | match (audit) |
+| Progress, Skeleton | motion axis | stop under `motion="0"` | same | match (audit) |
 | Progress, Slider | fill / arc | `neutral-solid` | same | match |
 | Progress, Slider | track | rail `edge-control` #e2 (audit S5) | ink at 25% ≈ #c9 | differs (E-22 open) |
 | Button (any fill) | ink on the fill | label ink | arc = label ink, 25% track | match (fixed in the audit's spec pass; `area--button`) |
@@ -131,7 +131,7 @@ Contract: `docs/MOTION.md`. Research: `docs/research/motion-2026-10-07/crispness
 |---|---|---|
 | Turn | `rotate`, `calc(slow × 4)` (1s subtle, 1.6s expressive), `linear` keyword | `rotate`, **1s fixed**, `--area-ease-linear` (MOTION.md: 0.6–1s a turn at every preset) |
 | Reduced motion | slowed to 1.8s a turn | **stops** (MOTION.md "Reduced motion": loops stop) |
-| `data-area-motion="none"` | stopped only because the zeroed token made the duration 0: the `:is(…, .area-spinner::before, …)` rule was dropped (a pseudo-element is invalid inside `:is()`) | stops by its own rule (`[data-area-motion="none"] .area-spinner::before`) |
+| `data-area-motion="0"` | stopped only because the zeroed token made the duration 0: the `:is(…, .area-spinner::before, …)` rule was dropped (a pseudo-element is invalid inside `:is()`) | stops by its own rule (`[data-area-motion="0"] .area-spinner::before`) |
 
 Stopped, the arc rests at its identity turn, 12 to 3 o'clock: the drawing itself, not a frame
 caught mid-loop. Crispness: no change needed (SVG masks; no resting transform, `rotate` only while
@@ -143,7 +143,7 @@ stylesheet rule only (the pane cannot emulate the preference).
 stop; this spec slowed it to 1.8s from 2026-09-27 (Fluent 1.8s; Carbon and Primer keep turning) because a
 still arc can read as a frozen screen. Recommendation: keep the stop for now (one rule for every
 loop, and the spinner's live region names the state), and revisit only if a reduced-motion user
-reports a still spinner as a hang. `motion="none"` stops it either way.
+reports a still spinner as a hang. `motion="0"` stops it either way.
 
 ## Value, 2026-10-13
 
@@ -182,7 +182,7 @@ own; the evidence below came from that family's research
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → the spinner stops under the motion axis (it kept turning with
-  `motion="none"`) → display.css:271.
+  `motion="0"`) → display.css:271.
 - 2026-09-26 · cohesion audit, spec pass → a spinner in a Button takes the label's ink and a
   25% track (it vanished on a neutral solid button) → display.css:211, `area--button`.
 - 2026-09-26 · second pass (Notion, Figma; owner: decide all open items) → evidence
@@ -190,7 +190,7 @@ own; the evidence below came from that family's research
 - 2026-09-27 · owner: audit against other design systems → [survey](../research/skeleton-spinner-code-slider-survey.md):
   1s a turn (was 2s, the slowest of 14 systems; Untitled, Primer, shadcn, Spectrum 1s); the
   track is the arc's ink at 25% everywhere (Primer; was a fixed `bg-component-active` outside
-  Buttons); reduced motion slows to 1.8s instead of stopping (Fluent; `motion="none"` still
+  Buttons); reduced motion slows to 1.8s instead of stopping (Fluent; `motion="0"` still
   stops). Open for the owner: a default "Loading" name (shadcn, Primer, Carbon), a show delay
   (Primer 300 / 1000ms), a 32px page-level size. Claude in Chrome: products show spinners only
   while loading; not captured.

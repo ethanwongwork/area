@@ -176,7 +176,7 @@ from its trigger; now 64 and 152.
 
 Verification: `/popover.html`, trigger opened: enter `opacity:150 scale:150` ease-out; close
 `display/opacity/overlay/scale: 100`; at rest opacity 1, `scale: none`, transform none, rect
-428 × 1162, 320 × 152 (whole). Under `data-area-motion="none"` the duration is 0s.
+428 × 1162, 320 × 152 (whole). Under `data-area-motion="0"` the duration is 0s.
 Verified on the dev server (background tab, so transitions were read from `getAnimations()` and computed styles, not watched; real-pointer hover could not be driven in a background tab, so hover rules were read from the stylesheet).
 
 Open questions: none new.

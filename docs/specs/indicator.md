@@ -395,7 +395,7 @@ exactly, and as an attachment it takes the rounded placement above.
   border and the mark a non-scaling stroke at `--area-weight-icon` → gallery: every status
   and size shows the same line weight as the pilot icons (Edge, 2×).
 - 2026-09-25 · owner accepted Indicator → Complete in `component-status.mjs`.
-- 2026-09-26 · cohesion audit → the processing pulse stops under `data-area-motion="none"`
+- 2026-09-26 · cohesion audit → the processing pulse stops under `data-area-motion="0"`
   as it already did for reduced motion (indicator.css:53) → [cohesion-audit.md](../research/cohesion-audit.md);
   status back to in review.
 - 2026-09-26 · second pass (Notion, Figma; owner: decide all open items) → evidence added,
@@ -538,3 +538,4 @@ Pinned commit: `d27922755bebae866d9ffe86b7da44c27ec801ee`.
   ring, its corner on the 20px icon box's corner). Both products keep the dot inside the icon box;
   Area keeps centring it on the corner (owner, 2026-09-25; owner took the recommendation to keep it).
 - 2026-10-01 · owner (audit H-13): IndicatorAnchor `overlap` values are `rectangular | circular` (classes `--rectangular` / `--circular`; were `overlap-*`), and the `compact` boolean is `inset` (class `--inset`).
+- 2026-10-14 · owner: Motion is one number, default 210 → the processing pulse runs a fixed 1s (was `slow × 4`, which would have become 1.4s at the new default); it still stops at motion 0 and under reduced motion → indicator.css. docs/MOTION.md.

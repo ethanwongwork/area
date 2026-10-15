@@ -22,7 +22,7 @@
    * 2026-10-07; it used to snap open and shut): the surface fades and scales from 0.97 about its
    * centre, the scrim fades with it. Opening runs on the moderate clock, closing one step faster
    * on base, both ease-out; the scrim leaves on the surface's clock so it is never cut off when
-   * the dialog leaves the top layer. Durations are motion tokens: the "none" preset and reduced
+   * the dialog leaves the top layer. Durations are motion tokens: motion 0 and reduced
    * motion make it instant, and reduced motion also drops the scale.
    */
   .area-command-palette__modal {

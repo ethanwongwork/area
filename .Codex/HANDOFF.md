@@ -5,6 +5,22 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Motion: one number (2026-10-14, branch `claude/elevation-axis-gallery-e500be`)
+
+- Owner: "go with motion, same one-number approach as elevation", and labels "(Default)" / "(Flat)", not "· Default".
+  `axes/motion.ts`: the Menu's open in ms (`duration-base`), 0 (None) to 300 in steps of 30; fast /
+  base / moderate / slow = 2/3, 1, 4/3, 5/3 of it (150 = old Subtle exactly, 240 = old Expressive within 10ms, 300
+  puts slow at Primer's 500 ceiling). Default 210 (owner, after review page
+  https://claude.ai/artifact/H1ygA6Xz18xQfJYp6BZ7RM: matches ChatGPT's popover 220, Figma's dropdown 250), so every
+  transition is 40% longer than before (140 / 210 / 280 / 350). Loops (Skeleton 3s, Progress 1.8s, Indicator and
+  Message 1s) now run fixed measured periods instead of token multiples, which would have drifted. `data-area-motion="none"` → `"0"` in CSS, ScrollToLatest, specs; reduced
+  motion resolves to step 0 (`MOTION_NONE`). Motion select in the Inspector's Canvas section. Radius, Elevation and
+  Motion labels now read "0 (Sharp)", "8 (Default)", "0 (Flat)", "3 (Default)", "0 (None)", "210 (Default)".
+  Docs: THEMING.md, MOTION.md token table.
+- Checks: build, npm test (24,254), contracts 14, React 291/292 (known Indicator docs-dist), typecheck (all);
+  preview: thumb and tokens at 0 / 150 / 240 / 300, Spinner stops at 0, Language tab lists 11 steps. Not checked:
+  the Electron window by eye, dark mode, a menu opening at each step by eye.
+
 ## Elevation setting (2026-10-14, branch `claude/component-display-ui-research-11dc77`, PR)
 
 - Owner: "add elevation as an option", then "toned down ... a naming convention similar to the existing axis ...

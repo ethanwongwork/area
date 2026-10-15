@@ -149,7 +149,7 @@ a second toast moved the first by its local 47px (39 + 8 under zoom) with `trans
 `cubic-bezier(0.65, 0, 0.35, 1)`; rest translate none, opacity 1; Undo marked `data-leaving`
 (`pointer-events: none`, `opacity/translate: 150` ease-out), the item was gone 300ms later and the
 remaining toast reflowed from `0px -47px`; the last one leaving hid the region. Under
-`data-area-motion="none"` the leaving toast computes `0s`. Verified on the dev server (background tab, so transitions were read from `getAnimations()` and computed styles, not watched; real-pointer hover could not be driven in a background tab, so hover rules were read from the stylesheet).
+`data-area-motion="0"` the leaving toast computes `0s`. Verified on the dev server (background tab, so transitions were read from `getAnimations()` and computed styles, not watched; real-pointer hover could not be driven in a background tab, so hover rules were read from the stylesheet).
 
 Open questions:
 - Exit direction: 8px towards the bottom edge, into the stack gap, so it never overlaps the toast

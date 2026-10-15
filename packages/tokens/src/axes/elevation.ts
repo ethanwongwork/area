@@ -93,7 +93,7 @@ export const ELEVATION_AXIS: AxisDefinition = {
   ],
   presets: ELEVATION_STEPS.map(step => ({
     id: String(step),
-    label: step === 0 ? "0 · Flat" : step === 3 ? "3 · Default" : String(step),
+    label: step === 0 ? "0 (Flat)" : step === 3 ? "3 (Default)" : String(step),
     description: describe(step),
     tokens: stepTokens(step),
   })),

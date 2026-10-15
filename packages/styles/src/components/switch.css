@@ -155,7 +155,7 @@
   .area-switch--full-width { display: flex; inline-size: 100%; }
   .area-switch--full-width .area-switch__text { order: -2; flex: 1; }
 
-  /* Reduced motion and data-area-motion="none" zero every duration token (emit/css.ts), so the
+  /* Reduced motion and data-area-motion="0" zero every duration token (emit/css.ts), so the
      thumb, track and hover layer all stop without a rule of their own. */
   @media (pointer: coarse) { .area-switch { min-block-size: calc(var(--area-space-40) + var(--area-space-4)); min-inline-size: calc(var(--area-space-40) + var(--area-space-4)); } }
   @media (forced-colors: active) {

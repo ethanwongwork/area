@@ -99,7 +99,7 @@ an 80 × 32 rounded block.
 | paragraph | text lines in a column (both half-leadings kept); last 65%, min 50px | Primer SkeletonText | — |
 | wrap | the wrapper takes no box (`display: contents`); the child is painted and its contents hidden, in the `area.utilities` layer | Radix and Spectrum keep the child's radius | Was a wrapper box with a `:has()` list of control radii |
 | controls in compositions | omitted | Primer, MUI, Carbon ("actions need no skeleton"); Spectrum disables the real one | The card tile drew a button plate on the card's 8px control inset, 10px outside the text's 18px inset |
-| motion | shimmer and band removed under `data-area-motion="none"` and reduced motion, wrap included | Audit rule "motion setting" | — |
+| motion | shimmer and band removed under `data-area-motion="0"` and reduced motion, wrap included | Audit rule "motion setting" | — |
 
 ## States
 
@@ -117,7 +117,7 @@ busy or labels it (`area--card`: `aria-label="Loading card"`).
 
 | Peer | Shared role | Area value in peer | Skeleton | Match / reason |
 |---|---|---|---|---|
-| Spinner, Progress | motion axis | stop under `motion="none"` | same | match (audit) |
+| Spinner, Progress | motion axis | stop under `motion="0"` | same | match (audit) |
 | Card | media radius | card radius 12 − padding 7 − border 1 = 4 (surface.css:17, 22, 98; arithmetic) | clipped by the media slot | match. Was 16 when Card was 24px |
 | Card | media block | Card's own corner | `block` at 4, clipped by the host | the `rounded` shape was removed (owner option A, 2026-09-28) |
 | Avatar | circle | `radius-full` | same | match |
@@ -189,3 +189,4 @@ Open questions: none.
 - 2026-10-03 · roundness → the 4px block corner moves with the roundness shift (2 to 6), within the small role (`display.css`). `docs/research/radius-audit-2026-10-03.md`, "Roundness".
 - 2026-10-03 · one corner setting (owner: one radius setting, Sharp and Pill as ends; "every control is a pill") → a 16px box's corner, 4 at the default, scaling with the setting (`display.css`). `docs/research/radius-audit-2026-10-03.md`, "One corner setting".
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → shimmer easing on `--area-ease-linear`; stop rules unchanged (verified 8 → 0 animations under motion none) → display.css Skeleton.
+- 2026-10-14 · owner: Motion is one number, default 210 → the shimmer runs a fixed 3s, ChatGPT's and Figma's (was `slow × 12`, which would have become 4.2s); stop rules unchanged → display.css Skeleton. docs/MOTION.md.

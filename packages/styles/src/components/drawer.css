@@ -12,7 +12,7 @@
    * from its edge on Vaul's edge curve, in on the slow clock and out one step faster on moderate
    * (was base 150 both ways, abrupt for a 384–480 panel). The scrim fades as Dialog's, ease-out on
    * moderate, and leaves on the surface's clock so it is never cut when the dialog leaves the top
-   * layer. Motion tokens: the "none" preset and reduced motion make it instant.
+   * layer. Motion tokens: motion 0 and reduced motion make it instant.
    */
   .area-drawer__modal, .area-drawer {
     --_drawer-in: var(--area-duration-slow);

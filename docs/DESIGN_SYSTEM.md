@@ -456,7 +456,7 @@ Use `table()` and `tokenSection()` in `layout.mjs`. A backtick inside its `DOCS_
 `DOCS_SCRIPT` template literal breaks parsing, even in a comment.
 
 Inspect default/compact, light/dark, relevant radius extremes, narrow widths and states
-for visible changes (durations, easings and recipes: `docs/MOTION.md`). `data-area-motion="none"` must stop every loop that
+for visible changes (durations, easings and recipes: `docs/MOTION.md`). `data-area-motion="0"` must stop every loop that
 `prefers-reduced-motion` stops; literal animation durations do not follow the motion
 tokens on their own. Long labels, RTL, enlargement, reduced motion and forced colors
 remain verification concerns even when they are not gallery tiles. Use the checks in

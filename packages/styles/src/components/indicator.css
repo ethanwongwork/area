@@ -14,9 +14,9 @@
   }
   .area-indicator[data-border] { box-shadow: 0 0 0 var(--area-space-2) var(--area-bg-surface); }
   /* Processing: a copy of the mark grows out from behind it and fades (docs/MOTION.md, "pulse":
-     linear, stops under reduced motion and motion none). Stopped, the copy rests exactly behind the
+     linear, stops under reduced motion and motion 0). Stopped, the copy rests exactly behind the
      mark at scale 1 and full opacity, so nothing of the loop shows: no ring caught mid-pulse. */
-  .area-indicator[data-processing]::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--_bg); z-index: -1; animation: area-indicator-pulse calc(var(--area-duration-slow) * 4) var(--area-ease-linear) infinite; /* spec: 1s, 4 x slow (audit H-20) */ }
+  .area-indicator[data-processing]::before { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--_bg); z-index: -1; animation: area-indicator-pulse 1s var(--area-ease-linear) infinite; /* spec: 1s (audit H-20), fixed as the Spinner's turn: it was 4 x slow, which drifted when the motion default moved (2026-10-14) */ }
   @keyframes area-indicator-pulse { from { opacity: .6; scale: 0; } to { opacity: 0; scale: 2.8; } }
   .area-indicator--neutral { --_bg: var(--area-neutral-solid); --_fg: var(--area-fg-on-neutral); }
   .area-indicator--info { --_bg: var(--area-info-solid); --_fg: var(--area-fg-on-info); }
@@ -77,6 +77,6 @@
   .area-indicator-anchor:has(> .area-tabs__tab) { --_shift: 0; --_inset: 0px; padding-inline-end: calc(16px + 2px); /* spec: count height + gap */ }
   .area-indicator-anchor[data-invisible] > .area-indicator-anchor__indicator { scale: 0.6; opacity: 0; }
   @media (prefers-reduced-motion: reduce) { .area-indicator[data-processing]::before { animation: none; } .area-indicator-anchor__indicator { transition: none; } }
-  [data-area-motion="none"] .area-indicator[data-processing]::before { animation: none; }
+  [data-area-motion="0"] .area-indicator[data-processing]::before { animation: none; }
   @media (forced-colors: active) { .area-indicator { background: Highlight; color: HighlightText; } .area-indicator-anchor__indicator { outline: var(--area-space-2) solid Canvas; } }
 }

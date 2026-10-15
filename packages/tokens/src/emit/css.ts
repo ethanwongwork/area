@@ -16,6 +16,7 @@ import { baseTokens, derivedTokens } from "./base.ts";
 import { REGISTERED_PROPERTIES } from "./base.ts";
 import { THEME_AXIS } from "../axes/color.ts";
 import { UI_SHORTHAND } from "../axes/ui-scale.ts";
+import { MOTION_NONE } from "../axes/motion.ts";
 
 import { colorPairs } from "./colors.ts";
 
@@ -186,9 +187,9 @@ export function emitAxes(): string {
   out.push("");
   // The system preference wins over a page's or subtree's own motion setting (motion pass,
   // 2026-10-07): it used to apply only where no data-area-motion was set.
-  out.push(`${INDENT}/* Reduced motion resolves to the same tokens as the "none" preset, wherever motion is set. */`);
+  out.push(`${INDENT}/* Reduced motion resolves to the same tokens as motion 0, wherever motion is set. */`);
   out.push(`${INDENT}@media (prefers-reduced-motion: reduce) {`);
-  const none = AXES.find((a) => a.id === "motion")!.presets.find((p) => p.id === "none")!;
+  const none = AXES.find((a) => a.id === "motion")!.presets.find((p) => p.id === MOTION_NONE)!;
   out.push(rule(":root, [data-area-motion]", none.tokens, INDENT + INDENT));
   out.push(`${INDENT}}`);
   out.push("}");

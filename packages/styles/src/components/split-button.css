@@ -99,7 +99,7 @@
 
   /* Chevron (docs/MOTION.md, "Chevron rotation": one rule for every chevron, Accordion's): the
      `rotate` property over duration-fast, ease-out, both ways; it rests at 0 or a half turn, both
-     whole-pixel, and the token goes to 0 under reduced motion and motion "none". Was `transform`
+     whole-pixel, and the token goes to 0 under reduced motion and motion 0. Was `transform`
      over duration-base, with its own reduced-motion rule. */
   .area-split-button__trigger > .area-button__icon > svg { transition: rotate var(--area-duration-fast) var(--area-ease-out); }
   .area-split-button__trigger[aria-expanded="true"] > .area-button__icon > svg { rotate: 180deg; }

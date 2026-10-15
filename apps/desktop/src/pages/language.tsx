@@ -26,6 +26,10 @@ const ALSO: Record<string, Record<string, string>> = {
   accent: { "data-area-action": "accent", "data-area-selection": "accent" },
 };
 
+/** The default preset's name, without the "(Default)" its label carries in a list. */
+const defaultLabel = (axis: (typeof AXES)[number]) =>
+  axis.presets.find(entry => entry.id === axis.defaultPreset)?.label.replace(" (Default)", "") ?? "—";
+
 export function LanguagePage() {
   const { query, item, select } = useStudio();
   const shown = AXES.filter(axis => matches(query, axis.label, axis.id, axis.description));
@@ -132,12 +136,12 @@ export function LanguagePage() {
             <Facts label={preset ? "Preset" : "Setting"} items={preset ? [
               ["Attribute", <Code>data-area-{axis.id}="{preset.id}"</Code>],
               ["Setting", axis.label],
-              ["Default", preset.id === axis.defaultPreset ? "Yes" : `No, ${axis.presets.find(entry => entry.id === axis.defaultPreset)?.label ?? "—"}`],
+              ["Default", preset.id === axis.defaultPreset ? "Yes" : `No, ${defaultLabel(axis)}`],
               ["Controls", axis.description],
             ] : [
               ["Attribute", <Code>data-area-{axis.id}</Code>],
               ["Presets", axis.presets.map(entry => entry.label).join(", ")],
-              ["Default", axis.presets.find(entry => entry.id === axis.defaultPreset)?.label ?? "—"],
+              ["Default", defaultLabel(axis)],
               ["Controls", axis.description],
             ]} />
           </PanelSection>
