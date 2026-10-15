@@ -5,7 +5,7 @@ for specific roles. Components do not need separate light/dark variants.
 
 ## Shared settings
 
-The registry in `packages/tokens/src/axes/registry.ts` defines ten axes:
+The registry in `packages/tokens/src/axes/registry.ts` defines eleven axes:
 
 - `theme`: light or dark color polarity.
 - `neutral`: neutral, cool or warm neutral colors.
@@ -30,9 +30,17 @@ The registry in `packages/tokens/src/axes/registry.ts` defines ten axes:
   pills (`""` makes every one follow the radius). Each sets `--area-pill-<id>` (0 / 1), which the
   component adds as `flag × radius-full`, so concentric parts follow. Instance props override it
   (`pill`, Avatar's `shape`).
-- `surface`: flat, outlined, raised or elevated. Besides `border-width` and `shadow-1`…`4` it
-  owns `shadow-card` (Card's halo) and `shadow-float` (the shared floating lift); Flat sets
-  both to `none`.
+- `surface`: outlined (default) or borderless: the decorative stroke, `border-width` (1px / 0px).
+  Required edges (`stroke-width`) and focus stay.
+- `elevation`: one number, `0` (Flat) to `8`, `3` by default: the Menu's shadow strength in percent,
+  as `radius` is the medium Button's corner (`axes/elevation.ts`, owner 2026-10-14;
+  [research](research/elevation-2026-10-14.md)). It scales five roles that components name:
+  `shadow-control` (raised thumbs and plates), `shadow-resting` (Card, Panel, Board card, Composer),
+  `shadow-tooltip`, `shadow-float` (everything over the page) and `shadow-modal` (Dialog, Drawer,
+  Command palette). Geometry is fixed per role (Fluent 2's tiers); the step sets the alpha (key
+  `n × weight` %, ambient half, dark doubled). The ladder `shadow-1`…`4` (control, resting, float,
+  modal) is for apps. Every role is two layers at every step; step 0 is `0 0 0 0 transparent`, never
+  `none`, so a role stays valid inside a component's own shadow list.
 - `motion`: none, subtle or expressive.
 
 Keep the name `accent`: it is the system-selected chromatic role and may represent a
@@ -60,7 +68,7 @@ decides, because several are public seams or come from `palette.json`. Not a pro
 - Type: `display-sm/lg-*`, `title-sm/md-*`, `text-xs-tracking`.
 - Tiers no component uses: `control-xl`, `gap-` `xs` / `xl`, `icon-xl`,
   `radius-control-xl`; `radius-nested` (components compute their concentric radius).
-- Motion and elevation: `duration-instant`, `ease-in`, `-in-out`, `-linear`; `shadow-3`, `shadow-4`.
+- Motion: `duration-instant`, `ease-in`, `-in-out`, `-linear`. Elevation's ladder `shadow-1`…`4` is for apps; components name roles.
 - Seams: `badge-bg`, `badge-fg`, `badge-tracking-wide`.
 - The `z-*` layer scale (0–80). Component stacking is local (−2…2 inside a component) and
   every floating surface is in the top layer, so no component reads it; it stays for apps.

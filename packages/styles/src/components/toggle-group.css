@@ -63,7 +63,7 @@
     --_border: var(--area-edge-selected);
     --_border-hover: var(--area-edge-selected);
     --_fg: var(--area-fg-default);
-    --_shadow: var(--area-shadow-1);
+    --_shadow: var(--area-shadow-control);
   }
   /* Every toggle disabled: the track dims once, as ButtonGroup's joined control. */
   .area-toggle-group--soft:has(> .area-button:disabled):not(:has(> .area-button:not(:disabled))) { opacity: var(--area-opacity-disabled); }

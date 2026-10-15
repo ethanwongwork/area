@@ -42,7 +42,14 @@ export interface TileProps {
    * interactive: a swatch, an icon); otherwise a pointer down or focus inside selects it.
    */
   onSelect?: () => void;
+  /**
+   * Opening the tile's own view (Components: its family's Stage) on a double-click, as Finder and
+   * Figma open what a click selects. A double-click in a text field stays the field's.
+   */
+  onOpen?: () => void;
   pressable?: boolean;
+  /** The element's id, so a view can bring the tile back into sight. */
+  id?: string;
   /** Names the tile when the label alone would not ("Button: Sizes / sm"). */
   "aria-label"?: string;
   /** What a pin menu pins (src/organize.tsx, PinMenu): the thing's key and its name. */
@@ -62,7 +69,7 @@ export interface TileProps {
   children?: ReactNode;
 }
 
-export function Tile({ label, value, span, stage, selected, onSelect, pressable, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, paint, scope, stageScope, inert, children }: TileProps) {
+export function Tile({ label, value, span, stage, selected, onSelect, onOpen, pressable, id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, paint, scope, stageScope, inert, children }: TileProps) {
   // A pressable tile is a button, which holds phrasing content only: its parts are spans there.
   const Part = pressable ? "span" : "div";
   const head = (
@@ -75,6 +82,7 @@ export function Tile({ label, value, span, stage, selected, onSelect, pressable,
     ? <Part className="gallery-tile__view"><Part className="gallery-tile__stage">{children}</Part></Part>
     : <Part className="gallery-tile__view" inert={inert || undefined} {...stageScope}>{children}</Part>;
   const shared = {
+    id,
     className: "gallery-tile",
     "data-span": span,
     "data-stage": stage,
@@ -101,7 +109,8 @@ export function Tile({ label, value, span, stage, selected, onSelect, pressable,
     );
   }
   return (
-    <article {...shared} data-selected={selected ? "" : undefined} onPointerDown={onSelect} onFocusCapture={onSelect}>
+    <article {...shared} data-selected={selected ? "" : undefined} onPointerDown={onSelect} onFocusCapture={onSelect}
+      onDoubleClick={onOpen ? event => { if (!(event.target as Element).closest("input, textarea, select, [contenteditable]")) onOpen(); } : undefined}>
       {head}{view}
     </article>
   );

@@ -108,7 +108,7 @@
     block-size: var(--_thumb);
     border-radius: var(--_thumb-radius);
     background: var(--area-bg-surface);
-    box-shadow: var(--area-shadow-1);
+    box-shadow: var(--area-shadow-control);
     /* The thumb slides by translate, rounded to whole pixels, on the track's clock (was
        inset-inline-start over slow while the track took fast). The press stretch stays a 2px
        inline-size change on the same clock: a scale would oval the pill ends and rest at a

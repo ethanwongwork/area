@@ -187,7 +187,7 @@
   /* spec: 24px, the previous md geometry. */
   .area-badge--lg { --_height: var(--area-mark-label-lg); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
   .area-badge--color { --_border: var(--_line); --_border-hover: var(--_line-hover); --_dot-color: var(--_solid); }
-  .area-badge--modern { --_bg: var(--area-bg-surface); --_bg-hover: var(--area-bg-component-hover); --_fg: var(--area-fg-default); --_border: var(--area-edge-selected); --_border-hover: var(--area-edge-control-hover); --_dot-color: var(--_solid); box-shadow: var(--area-shadow-1); } /* the raised plate's edge, as the Segmented thumb's (consistency pass 2026-10-12; was the #f3 seam; Untitled's modern ring is #d5) */
+  .area-badge--modern { --_bg: var(--area-bg-surface); --_bg-hover: var(--area-bg-component-hover); --_fg: var(--area-fg-default); --_border: var(--area-edge-selected); --_border-hover: var(--area-edge-control-hover); --_dot-color: var(--_solid); box-shadow: var(--area-shadow-control); } /* the raised plate's edge, as the Segmented thumb's (consistency pass 2026-10-12; was the #f3 seam; Untitled's modern ring is #d5) */
   .area-badge:is(.area-badge--color, .area-badge--modern) :is(.area-badge__leading-icon, .area-badge__trailing-icon) { color: var(--_solid); }
   .area-badge__avatar, .area-badge__flag { display: inline-flex; inline-size: var(--_media); block-size: var(--_media); flex: none; border-radius: var(--area-radius-full); overflow: hidden; }
   .area-badge__avatar > *, .area-badge__flag > * { inline-size: 100%; block-size: 100%; object-fit: cover; }

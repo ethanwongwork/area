@@ -23,10 +23,14 @@ export function extractSnippets(files) {
   return out;
 }
 
-/** Strip the wrapping parens and fragment, and dedent. */
+/**
+ * Strip the wrapping parens and fragment, and dedent. Only blank lines are trimmed from the ends, so
+ * the first line keeps its indent and dedents with the rest (trimming it left a multi-line snippet's
+ * first line at 0 and every other line indented).
+ */
 function unwrap(body) {
   let code = body.trim();
-  if (code.startsWith("(") && code.endsWith(")")) code = code.slice(1, -1).trim();
+  if (code.startsWith("(") && code.endsWith(")")) code = code.slice(1, -1).replace(/^\s*\n|\n\s*$/g, "");
   const lines = code.split("\n");
   // A fragment is a demo-file artefact for grouping examples, not part of the API.
   if (lines[0]?.trim() === "<>" && lines.at(-1)?.trim() === "</>") { lines.shift(); lines.pop(); }

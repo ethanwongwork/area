@@ -124,9 +124,10 @@
     padding: var(--area-space-8) 10px; /* spec */
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
-    /* spec: Notion's card lift, 0 4 12 rgba(25,25,25,.027) and 0 1 2 rgba(25,25,25,.02), and a 1px ring in the
-       column's tone at 8% (rgba(102,0,178,.08) in a purple column). */
-    box-shadow: 0 4px 12px rgb(25 25 25 / 0.027), 0 1px 2px rgb(25 25 25 / 0.02), /* spec */
+    /* spec: Notion's 1px ring in the column's tone at 8% (rgba(102,0,178,.08) in a purple column) carries the
+       card; its lift is the Elevation axis's resting role (no lift at Minimal, owner 2026-10-13; was Notion's
+       0 4 12 / 0 1 2 at 2.7% / 2%). */
+    box-shadow: var(--area-shadow-resting),
       0 0 0 var(--area-border-width) color-mix(in oklab, var(--_color, var(--area-fg-default)) 8%, transparent); /* spec */
     transition: background-color var(--area-duration-fast) var(--area-ease-out);
   }

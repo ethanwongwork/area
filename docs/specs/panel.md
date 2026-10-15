@@ -160,7 +160,7 @@ outside the scroll so its action never reads as the last row's.
 | Peer | Shared role | Peer value | Panel | Match |
 |---|---|---|---|---|
 | Menu, Popover, Dialog, Toast, pickers | elevation | floating lift, 0 20px 24px + 0 5px 8px | `shadow-2` | intentionally different: region, not overlay |
-| Card | in-flow elevation | `shadow-card` (1px contact + 2px-low 8px blur, 3% black) | `shadow-2` (0 1px 2px) | intentional: a docked region sits one step above content (DESIGN_SYSTEM.md, Elevation) |
+| Card | in-flow elevation | `shadow-resting` | `shadow-resting` | same since 2026-10-14: a docked region rests on the page like a Card (the Elevation axis's resting role; was `shadow-2`) |
 | Alert / Code block | radius | 12 / 12 | 12 | match; Card is 22 / 24 / 28, concentric with its Button (owner 2026-09-28, audit S3) |
 | Field | row height and label | 32, label gap 6 | 32 rows, stack gap 6, labels muted inside a panel | match; the muting is Panel's (`panel.css:147`) |
 | Code block header, Menu separator, Toolbar separator | rule | `border-decorative` | `border-decorative` | match (a rule is never darker than its container); Separator stands alone on `border-divider` |
@@ -291,3 +291,4 @@ Open questions:
 - 2026-10-12 · owner (desktop Sidebar: "nav margins on the sides are way too large and not equally inset") → (1) a docked flush panel's seam is counted once: the seam side's inset is the inset less the border (`--_side-start` / `--_side-end`), so content sits 14 from the outside on both sides (was 14 / 15); (2) a vertical Nav or a Tree view in a panel body hangs its plates by the row inset (`--area-ui-row-inset`) and fills the panel, so text, labels and counts sit on the panel's 14 column and plates 6 from each edge (was plates 14, text 22) → panel.css. Measured in the app: plates 6 / 6, text 14, count digits end 14.
 - 2026-10-12 · owner, review round 16: approved.
 - 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the collapsible toggle's focus ring sits at `focus-offset` (was `space-2`, the same 2px) (panel.css). (docs/research/consistency-audit-2026-10-12.md)
+- 2026-10-14 · owner: "add elevation as an option" → Panel takes the Elevation axis's resting role, `--area-shadow-resting` (no lift at Minimal; was `shadow-2`, then `shadow-card` on 2026-10-13) (docs/research/elevation-2026-10-14.md).
