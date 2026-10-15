@@ -56,6 +56,21 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   Separator demo frames are `stroke-width`. Research note "Sweep after the change".
 - Found: `git fetch` fails in the shared repo on two stray refs, `refs/heads/claude/elevation-axis-gallery-e500be 2`
   and `icon-work-ea140f 2` (copies with a " 2" suffix, likely from a file sync). Moved aside 2026-10-14 (Density entry).
+- Merged (PR #89). Verified against a static build (port 4410; 4400 was another session's server): Surface 0 sweep
+  clean in light and dark, forced colours lose no frame, 1× / 2× sheets in `docs/research/captures/surface-2026-10-14/`.
+  Open (owner): the dark soft edge is faint at 1× at Elevation 0.
+- Merged (PR #91). Language tab: the default preset tile said "Default" twice ("1 (Default)" plus a Default
+  value) for every number setting; the value now shows only where the label lacks it, and the defaults-only view
+  drops the suffix. Radius's registry labels now read "0 (Sharp)" / "8 (Default)", as the Inspector's and the other
+  number settings' do. Owner did not take the firmer dark edge; left as is.
+- Merged (PR #92). Inspector: Contrast (System / Standard / More, a Select: "Standard" clips in a segment), writing
+  `data-area-contrast` on the Canvas only (System writes none, so the OS decides). Checked: More strengthens the
+  Input edge to #838383. Note: in the hidden browser pane CSS transitions never advance (currentTime 0), so a value
+  read after a change can look unchanged; read with `transition: none` or in headless Edge.
+- Merged (PR #93). Color tab (PRODUCT_UI rule 14): its Inspector offers Neutral, which tints the neutral ramp.
+  The Neutral setting maps `--area-neutral-*` onto Cool / Warm step for step (checked equal), so with Neutral
+  set, the neutral ramp's tiles, list rows, contrast filter and Inspector describe that ramp's step (a "Paints"
+  row says so); the Inspector's Hex used to read the document root and disagree with the swatch.
 
 ## All-axis audit (2026-10-14, branch `claude/elevation-axis-gallery-e500be`)
 

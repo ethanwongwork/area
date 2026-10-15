@@ -89,7 +89,8 @@ every combination. See DESIGN_SYSTEM.md, "Emphasis roles", for what each role pa
 
 Use `data-area-<axis>` on any ancestor. Missing settings inherit; explicit settings form
 a local boundary. `data-area-contrast="more"` is a separate accessibility preference;
-`standard` resets it locally. Without a root override, contrast follows the OS preference.
+`standard` resets it locally. Without a root override, contrast follows the OS preference. The app's Inspector
+offers it on the Canvas as Contrast: System (no attribute), Standard, More.
 
 ```html
 <section data-area-theme="dark" data-area-accent="teal" data-area-type="13" data-area-density="28">
