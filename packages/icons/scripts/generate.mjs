@@ -834,7 +834,8 @@ const useMaskId = () => "area-icon-" + useId().replace(/[^A-Za-z0-9-]/g, "");
 `;
 // Icons tied to reading direction (sources/rtl.json): they mirror in right-to-left text.
 const RTL = JSON.parse(readFileSync(join(SRC, "rtl.json"), "utf8")).mirror;
-for (const name of Object.keys(RTL)) if (!icons.some(icon => icon.name === name)) throw new Error(`rtl.json: ${name} is not an icon`);
+// --only previews a few icons, so the check needs the whole set.
+if (!ONLY) for (const name of Object.keys(RTL)) if (!icons.some(icon => icon.name === name)) throw new Error(`rtl.json: ${name} is not an icon`);
 // One icon's outline and filled components, named by `name` (Pilot… for the docs, plain for @area/icons).
 // An icon with a 12px cut draws it when size is 12; every other size scales the 16px drawing. With the token's line
 // (no weight), size 12 is the xs icon slot, 12px below type 16 and 16px at 16, so both drawings are carried and

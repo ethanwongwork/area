@@ -292,7 +292,7 @@ order:
    `pilot-icons.tsx`; switching them to the package is part of item 9.
 3. **Icon component API:** done 2026-10-12 (spec "Accessible name and right-to-left": `title` / `aria-label` / `aria-labelledby` → `role="img"`, 23 icons mirror under `:dir(rtl)`, `mirrored` overrides). an accessible label (`title` / `aria-label`, which switches the icon to `role="img"`), and
    right-to-left mirroring for directional icons.
-4. **Keywords and an alias map:** done 2026-10-12 (spec "Keywords and names": `keywords` and `names` in the metadata, read by the app's Icons search). for search, including Lucide, Material and Fluent names (user→person, file→document,
+4. **Keywords and an alias map:** done 2026-10-12 (spec "Keywords and names": `keywords` and `names` in the metadata, read by the app's Icons search); 2026-10-14 the counterpart map covers every icon: the 211 drawn after the 2026-10-02 audit had none, so Lucide `toggle-left` or `user-x` found nothing). for search, including Lucide, Material and Fluent names (user→person, file→document,
    plus→add, x→dismiss, circle-x→error).
 5. **12px cuts** for the dense icons components use at 12 (the spec planned these and they were never drawn). **Done 2026-10-13** (9 cuts, spec "12px cuts"; `../2026-10-13/README.md`).
 6. **Licence** for Area's drawings, semver, changelog and a deprecation policy. **Done** (0.1.0, CHANGELOG, policy, credits 2026-10-13; MIT licence 2026-10-14; spec "Versions, deprecation and credits").
@@ -301,6 +301,11 @@ order:
    libraries' names, Inspector, Copy SVG / JSX). No Figma library.
 8. **Coverage**, by use (2026-10-11: ChatGPT, Notion and Figma surveyed live, gaps drawn as batch 75): currencies (5 against Lucide's 27), file types, heading levels 4–6, digits and letters,
    transport basics, panel and layout states. Brands, flags and emoji stay out (separate libraries).
+   **Re-measured 2026-10-14** after the map was completed: of Lucide 1.57's 2,154 icons, every concept that Phosphor,
+   Fluent and Hugeicons also draw is in Area except 15, none with a product surface: backpack, balloon, bed,
+   book-open (owner: covered by book), clover, engine, guitar, joystick, microscope, pi, pill, stethoscope, syringe,
+   tent, toilet. What remains in two or fewer libraries is vehicles, food, animals, medical and sport, the audit's
+   excluded classes. Product UI coverage is complete; a further round needs a use first (an icon picker would be one).
 9. **Retire the Fluent map**, including the docs toolbar (`icons.generated.mjs`). **App done 2026-10-13** (spec "Fluent map retired from the app"); the docs' own copy goes with the site.
 
 Also open: the quality pass's proposals (spec "Quality and consistency pass, 2026-10-10"); replace-all; the component

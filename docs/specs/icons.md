@@ -4532,8 +4532,8 @@ Not drawn: replace-all. No "all" mark fits on an exact copy of Area's replace (a
 | space | horizontal; the ⎵ key glyph (Lucide space, Huge Space) on the key family's width (2.5–13.5, as option and return): uprights 6.5–8.5 at x 2.5 / 13.5 into whole-word's bracket corners (r 1) and a floor at 9.5, 3 deep (Huge's proportion; Lucide's 2 read as a bare underline beside shift), every edge on x.5, ink centred 8, 8; ink 12.12 × 4.12 (1.88 under the keyline, as option); line glyph, fills by weight |
 | chat-check | square; Lucide message-square-check / Fluent chat_checkmark / Huge MessageSquareCheck: chat's bubble copied exactly (chat-add's), with the check inside where chat-add holds its + (inside placement: a closed shape, as bookmark-check / shield-check). The 2 / 4 check is the inside-a-shape check, the partner of the bubble's 4px +, and it fits: M5 7L7 9L11 5, centred on chat-add's + centre 8, 7 (x 5-11, y 5-9, the same 4-tall band as chat-add's + and chat-code's chevrons), on the lattice, tight 1.38 to the bubble's top, bottom and both sides. The 1.5 / 3 check (bookmark-check's fallback) was rendered and looked lost in the bubble. Ink 12.12 x 12.06, centre 8, 7.97 (chat's). Filled: bubble solid, check a knockout (chat-add's) |
 | list-x | horizontal; Lucide list-x / Fluent text_bullet_list_dismiss / Huge ListX: list-plus copied exactly (2-14 lines at 3.5 / 6.5, 2-7.5 lines at 9.5 / 12.5) with its 4px + replaced by the 3.5 x at the same centre 12, 11 (filter-dismiss's x moved up 1): M10.25 9.25L13.75 12.75M13.75 9.25L10.25 12.75, arms on the lattice; tight 1.63 from both short lines' ends. Ink 13.12 x 10.37, centre 8, 8.13. Line glyph: fills by weight |
-| signal-low | square; Lucide signal-low / Phosphor cell-signal-low / Fluent cellular_data_3: signal's first two bars exactly at their positions (M3.5 13.5V11.5M6.5 13.5V8.5), the upper two dropped, as wifi-low keeps wifi's inner arc. Area's signal has four bars and no baseline dot, so its first bar plays Lucide's / Phosphor's dot: low = 2 bars, medium = 3, signal (high) = 4, an even series. The dropped bars vanish rather than stay as baseline stubs: ⌀1.5 dots and 0.5 stubs were both rendered and read as an ellipsis after the bars at 16, and every reference (Lucide, Phosphor, Fluent) lets them vanish. It sits under its keyline (ink 4.12 x 6.12, centre 5, 11) so it lines up with signal in a set, as wifi-low does. Line glyph: fills by weight |
-| signal-medium | square; Lucide signal-medium / Phosphor cell-signal-medium / Fluent cellular_data_2: signal's first three bars exactly at their positions (M3.5 13.5V11.5M6.5 13.5V8.5M9.5 13.5V5.5), the tallest dropped, one bar more than signal-low; the dropped bar vanishes as signal-low's. Ink 7.12 x 9.12, centre 6.5, 9.5, under its keyline so it lines up with signal. Line glyph: fills by weight |
+| signal-low | square; Lucide signal-low / Phosphor cell-signal-low / Fluent cellular_data_4 (Fluent counts down: _1 is five bars; corrected 2026-10-14): signal's first two bars exactly at their positions (M3.5 13.5V11.5M6.5 13.5V8.5), the upper two dropped, as wifi-low keeps wifi's inner arc. Area's signal has four bars and no baseline dot, so its first bar plays Lucide's / Phosphor's dot: low = 2 bars, medium = 3, signal (high) = 4, an even series. The dropped bars vanish rather than stay as baseline stubs: ⌀1.5 dots and 0.5 stubs were both rendered and read as an ellipsis after the bars at 16, and every reference (Lucide, Phosphor, Fluent) lets them vanish. It sits under its keyline (ink 4.12 x 6.12, centre 5, 11) so it lines up with signal in a set, as wifi-low does. Line glyph: fills by weight |
+| signal-medium | square; Lucide signal-medium / Phosphor cell-signal-medium / Fluent cellular_data_3 (corrected 2026-10-14): signal's first three bars exactly at their positions (M3.5 13.5V11.5M6.5 13.5V8.5M9.5 13.5V5.5), the tallest dropped, one bar more than signal-low; the dropped bar vanishes as signal-low's. Ink 7.12 x 9.12, centre 6.5, 9.5, under its keyline so it lines up with signal. Line glyph: fills by weight |
 | square-alert | square; SF exclamationmark.square / Linear's urgent priority: stop's square (11 x 11, r 2, 2.5-13.5) as square-x / square-plus, holding the ring's ! exactly (alert-circle's, info turned: stem M8 5V8.75, ⌀1.5 dot at 8, 11, 2.25 below the stem's end), since square containers take the ring's marks; the stem's top is square-plus's + top (5), tight 1.38 to the frame top, dot tight 1.19 to the base, stem-to-dot 0.94 as the ring's. Ink 12.12 square, centre 8, 8. Filled: square solid, stem a knockout, dot a hole (square-dot's) |
 
 Delegated calls: docs/research/icon-review/2026-10-10/README.md (Batch 73).
@@ -4927,7 +4927,7 @@ Production gap 4. `@area/icons/meta` and `icons.json` gain `keywords` and `names
 icons), `@phosphor-icons/core@2.1.1` (1,512), `@fluentui/svg-icons` (names) and `@material-symbols/metadata@0.48.0`
 (names only; no tags published).
 
-- **Names:** the counterpart each drawing was compared with (`docs/research/icon-audit/area-map.json`, 597 icons),
+- **Names:** the counterpart each drawing was compared with (`docs/research/icon-audit/area-map.json`, 597 icons; every icon since 2026-10-14),
   else the library's icon of the same name, or of the name with a word swapped for the library's word. The swaps
   are measured from the map (person→user 6 times, add→plus 9, chat→message 5, remove→minus 7, off→slash 7 …) and
   listed in `keywords-area.json` `$words`. Material has no map: its name is the first of the Area, Fluent or Lucide
@@ -4942,6 +4942,18 @@ icons), `@phosphor-icons/core@2.1.1` (1,512), `@fluentui/svg-icons` (names) and 
   Inspector lists them under Search.
 - Not done: Material Symbols' own tags (only on fonts.google.com, not in a package) and a ranking (the app's search
   filters).
+- **Map completed, 2026-10-14:** the 211 icons drawn after the 2026-10-02 audit had no entry in `area-map.json`, so
+  their names came only from the same-name fallback (Lucide `toggle-left`, `user-x`, `message-square-off` found
+  nothing). Each now has its counterparts, matched by meaning under the audit's rules (a modifier counts only when the
+  library has it; a variant follows its base's mapping; Lucide's canonical name over its aliases; every name checked
+  to exist): 211 entries, 723 names. Coverage: Lucide 747, Fluent 644, Phosphor 585, Material 255 of 808. Three old
+  entries corrected: arrow-right-to-line's Fluent is `arrow_import` (`arrow_export_ltr` leaves the line, now
+  arrow-right-from-line's), sort-ascending / -descending take `arrow_sort_up_lines` / `arrow_sort_down_lines` (the
+  A–Z `text_sort_ascending` is sort-alpha's). A name may stand for two icons when both drawings are that concept
+  (`arrow_import`: import and arrow-right-to-line; `text-align-justify`: list and text-align-justify). Two keywords a
+  closer icon's new name took are kept as Area's own words: crown "premium" (gem is Fluent's premium), utensils
+  "knife" (slice is Phosphor's knife). The rebuild read `lucide-static@1.57.0` (pinned in keywords.json; was 1.55.0), so a few Lucide tags moved
+  with it.
 
 ## Pipeline moved to packages/icons, 2026-10-12
 
@@ -5055,3 +5067,79 @@ in the package README, "Versions, deprecation and credits".
   licence kind.
 - Last review (owner, 2026-10-14): grip, padding-side and sides approved as drawn (batch 4, Inspector), so all 808 are
   in the main entry and `@area/icons/review` is empty (the generator writes `export {}` for an empty entry).
+
+## Optical outliers and 1× frames, 2026-10-14
+
+Owner: "continue working, open an artifact if you want me to review or approve anything", then "i left my verdicts on
+the page, apply them". Review page https://claude.ai/artifact/MZqhevHfrGVHhDANQLaKcA; record and tools in
+`docs/research/icon-review/2026-10-14/`.
+
+**Optical outliers (owner-approved).** The optical audit (`generate.mjs --check --audit`; median size 11.27, density
+0.41) put three icons far from their peers:
+
+| Icon | Construction | Audit |
+|---|---|---|
+| qr-code | square; three 4 × 4 finders (r 1) on half pixels (2.5 and 9.5), 1 × 1 solid centres (r 0.25), four 2 × 2 data modules (r 0.5) on whole pixels at 9 and 12, 1.94 from the finders (standard), so the aligned-gap exception is gone. Filled equals the outline | +15% → +6% size, +36% → +8% density |
+| diamond | circle; half-diagonal 7 (edges one whole lattice step out), corners r 1.5 so the tips stay inside ⌀14 | −15% → −3% |
+| gamepad | horizontal; body 13 × 9 from 3.5 (the top on a half pixel), lobes' outer round 2.379 so the 45° sides stay on the lattice, bridge and controls unchanged | +8% → +2% |
+
+Kept: calculator (+9%, +16%), whose weight is the owner's larger display (2026-10-07).
+
+**1× frames (owner chose "fix the frames"; both batches owner-approved 2026-10-14, no flags).** A stroke of the icon weight on a whole-pixel line smears
+across two grey rows at 1× (2× hides it); a solid's edge is crisp on a whole pixel. `tools/frames.py` scores every
+axis-aligned run of 2 or more and moves the drawing so long strokes land on half pixels:
+
+- Batch 1 (68 icons): the whole icon moves half a pixel (dx, dy in 0 / ±0.5; an icon with a 45° line on the lattice
+  takes only dx = dy, so its diagonals stay on it). The drawing is unchanged; some icons now sit 0.5 off centre, as
+  Fluent's 16px add does (7.5). pentagon moved down, not up, so its apex stays in the drawing area.
+- Batch 2 (171 icons and 3 aliases): parts that touch (centre-lines within 1.5) and `data-part` groups move as one
+  piece; the largest piece (the frame) takes its best shift, every other piece its own best (keeping its 45° lines on
+  the lattice), and each filled-only element follows the piece whose geometry it lies on. A move is kept only if the
+  lint passes, rolled back piece by piece otherwise; an icon that ends no crisper is restored. Gaps between pieces
+  change by up to 0.5.
+- Checks: lint (808), slivers at 16 and 48 (only folder-cog, folder-zip, truck, as before), geometry audit (no new
+  findings), and `frames.rigidity` (attached pieces and filled cut-outs moved together) on every changed icon. Long
+  whole-pixel stroke length: 4,207 → about 1,750.
+- Not yet fixed: the 20 slash icons (their cuts are rebuilt from the base, `2026-10-02/flat-slash.py`), icons whose
+  joined parts sit on both parities (the person family, lock, trash, server, document pages with marks …), and 76
+  batch-2 icons with a shorter whole-pixel stroke left. These need redraws in a later round.
+- Rings (r 6 at 8, 8) are not scored: their top and bottom stay soft at 1× wherever they sit. Icons that moved carry
+  their ring with them.
+
+**Round 3 (owner-approved 2026-10-14).** 31 icons:
+
+- Slash icons (9: keyboard-off, power-off, unpin, video-off, screen-share-off, camera-off, bluetooth-off, cloud-off,
+  link-off): everything but the shared slash and its parallel cuts slides by (d, d) along the slash, which keeps every
+  one-sided cut on its line, so the filled variant stays exact. Five took the circle keyline (the slash plus the moved
+  base is 13.63 wide), as video-off already had. brain-off and timer-off fit neither direction.
+- Part slides (9: crown, file-user, filter-add, folder-tree, list-plus, milestone, notebook, replace, table): one element
+  moves half a unit across its whole-pixel run, keeping every contact, every line end that sat on another part, and
+  every shared edge. **A part centred on its container or on the drawing does not slide** (symmetry beats 1× for inner
+  parts): the first pass moved store's door, history's hands, scale's post and clipboard's clip off centre and was
+  reverted by eye.
+- Redraws: desktop's screen is 12 × 9 (4 : 3, was 8.5) with a stand 2 long, in desktop, desktop-check, desktop-play
+  (its play 0.4 lower, centred), monitor-cog, screen-share, screen-share-off / monitor-off, and tv's screen; file-upload
+  and file-image take document's page (up 0.5), file-upload's arrow up 1 so it stays on the lattice; the clipboards'
+  boards end at 13.5 and clipboard-check sits on clipboard's board and clip; trash's body ends at 13.5, its handle starts
+  at 2.5, slats 7–11.
+- Left: 55 icons with a whole-pixel stroke of 5 or more (listed on the page), including the bots (owner-settled), the
+  panel-left family (a 5.5 pane edge puts the chevron 2.38 off), presentation (the easel's 45° legs fix the board's
+  bottom on 10), file-diff (a plain lattice fold). Question on the page: a centred line inside a half-pixel frame
+  (columns, import, the T, scale's post, bank's pillar …) stays soft unless the frame changes width.
+
+**Round 4 (owner-approved 2026-10-14).** 18 one-off redraws by half a unit, each
+lint-checked, sliver-checked and looked at at 96px: archive-restore (body up 0.5 as archive, arrow 0.5 right),
+building (0.5 left, bottom 13.5), cart and cart-add (bar 10.5, wheels 0.5 lower so they still sit on it; cart-add's
+basket end 11.5), chess-rook (base ends 13.5, corners r 1), clapperboard (body bottom 13.5), devices (phone 3 wide, stand
+foot 12.5), folder-input (arrow 0.5 lower, the left side's stub to 10.75), gift-card (frame 11 wide), inbox (bottom
+13.5), keyboard-off (space bar 10.5), magnet (inner opening 3), music (left note 0.5 left), newspaper (page edge 12.5,
+flap 2), paintbrush (top 2.5, bristle 10.5), siren (base 2 tall), stamp (base 3 tall), toy-brick (base from 5.5, studs
+0.5 taller). Tried and kept as they were: car (a lower beltline crowds the headlights into a filled sliver), barcode
+(bars 2 apart leave a hairline when filled; 3 apart collide with the brackets), server and server-cog (4-tall units
+crowd the light), volume-off, wind, table-cells-merge (no move passes the lint). 37 icons with a whole-pixel run of 5 or
+more remain, each held by a construction the owner set, the lattice, or the gap scale (list on the page).
+
+**Centred lines (owner, 2026-10-14: "leave").** A line centred inside a frame on half pixels (columns, import's stem,
+the T in line-height and letter-spacing, scale's post, bank's middle pillar, brain's divide, mouse's wheel, split,
+piano's keys, arrow-up-from-line, cloud-download) stays symmetric and soft at 1×; neither the frame's width nor the
+line's centring changes for 1×.

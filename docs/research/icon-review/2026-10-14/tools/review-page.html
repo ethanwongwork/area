@@ -1,0 +1,170 @@
+<title>Icon Pixel Pass</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one review column; each icon is a card with Before / After rows, a 1x pixel pair and a verdict bar. */
+:root {
+  --bg: #fbfbfa; --surface: #ffffff; --ink: #161616; --muted: #6b6b68; --line: #e6e6e3; --grid: #efefec;
+  --accent: #2b59c3; --accent-ink: #ffffff; --good: #1f7a46; --hold: #8a5a00; --pix-bg: #ffffff;
+  --sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --area-weight-icon: 1.125px; --_icon-overlap: 4.5px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #050505; --surface: #0e0e0e; --ink: #ededeb; --muted: #9a9a96; --line: #232322; --grid: #1a1a19;
+  --accent: #7d9cf0; --accent-ink: #050505; --good: #5cc28a; --hold: #e0b04a; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #050505; --surface: #0e0e0e; --ink: #ededeb; --muted: #9a9a96; --line: #232322; --grid: #1a1a19;
+  --accent: #7d9cf0; --accent-ink: #050505; --good: #5cc28a; --hold: #e0b04a; color-scheme: dark }
+body { background: var(--bg); color: var(--ink); font: 14px/1.5 var(--sans); }
+.page { max-width: 880px; margin: 0 auto; padding-inline: 16px; padding-block: 32px 64px; display: grid; gap: 28px; }
+h1 { font-size: 22px; font-weight: 600; margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+h2 { font-size: 16px; font-weight: 600; margin: 0; text-wrap: balance; }
+h3 { font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 0; }
+p { margin: 0; max-width: 68ch; }
+.lede { color: var(--muted); }
+.mono { font-family: var(--mono); font-size: 12.5px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px; display: grid; gap: 16px; min-width: 0; }
+.head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 14px; }
+.head .tag { font: 500 12px var(--mono); color: var(--muted); }
+.why { display: grid; grid-template-columns: 110px 1fr; gap: 6px 16px; }
+.why dt { color: var(--muted); }
+.why dd { margin: 0; min-width: 0; }
+.rows { overflow-x: auto; }
+.row { display: grid; grid-template-columns: 70px repeat(2, max-content); gap: 28px; align-items: center; padding-block: 10px; border-top: 1px solid var(--line); min-width: max-content; }
+.row:first-child { border-top: 0; }
+.row .lbl { color: var(--muted); font-size: 13px; }
+.row.after .lbl { color: var(--ink); font-weight: 500; }
+.set { display: flex; align-items: center; gap: 16px; }
+.set svg { display: block; color: var(--ink); }
+.cols { display: grid; grid-template-columns: 70px repeat(2, max-content); gap: 28px; color: var(--muted); font-size: 12px; min-width: max-content; }
+.px { display: flex; flex-wrap: wrap; gap: 20px; }
+.px figure { margin: 0; display: grid; gap: 6px; justify-items: start; }
+.px figcaption { font-size: 12px; color: var(--muted); }
+.cell { width: 128px; height: 128px; background-color: var(--pix-bg); background-repeat: no-repeat; background-size: 160px auto; image-rendering: pixelated; outline: 1px solid var(--line); border-radius: 4px; }
+.nums { display: flex; flex-wrap: wrap; gap: 6px 18px; font-variant-numeric: tabular-nums; }
+.nums span b { font-weight: 500; }
+.verdict { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; border-top: 1px solid var(--line); padding-top: 14px; }
+.verdict button { font: 500 13px var(--sans); color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 7px; padding: 6px 12px; cursor: pointer; }
+.verdict button:hover { border-color: var(--muted); }
+.verdict button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.verdict button:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.verdict .status { font-size: 12px; color: var(--muted); margin-left: auto; }
+textarea { width: 100%; box-sizing: border-box; min-height: 56px; font: 13px/1.45 var(--sans); color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 7px; padding: 8px 10px; resize: vertical; }
+.opts { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.opts li { display: grid; gap: 2px; }
+.opts b { font-weight: 500; }
+.rec { color: var(--good); font-size: 12px; font-weight: 500; }
+.banner { font-size: 13px; color: var(--hold); }
+footer { color: var(--muted); font-size: 12.5px; display: grid; gap: 6px; }
+@media (max-width: 560px) { .why { grid-template-columns: 1fr; } .why dt { margin-top: 6px; } }
+@media (prefers-reduced-motion: no-preference) { .verdict button { transition: background-color .12s, border-color .12s; } }
+</style>
+
+<main class="page">
+  <header style="display:grid;gap:8px">
+    <h1>Icon pixel pass</h1>
+    <p class="lede">The optical audit measures every icon's apparent size and ink density against the set's median. Three approved icons sat well outside their peers; here are their redraws. Below them is one set-wide question about 1× screens. Your verdicts save on this page and I read them back.</p>
+    <p class="banner" id="dbstate" hidden>Saving is unavailable in this view. Leave a comment instead, or open the page signed in.</p>
+  </header>
+
+  <section style="display:grid;gap:14px">
+    <h3>Redraws to approve</h3>
+    <div id="items" style="display:grid;gap:18px"></div>
+  </section>
+
+  <section style="display:grid;gap:14px">
+    <h3>Question</h3>
+    <article class="card" id="q-wholepx">
+      <div class="head"><h2>Long strokes on whole pixels</h2><span class="tag">295 icons</span></div>
+      <p>295 icons draw a long straight stroke (3 units or more) on a whole-pixel line: folders, clipboards, laptop, printer, wallet, book and others. On 2× screens they are sharp. On 1× screens, such as many external monitors, the stroke smears across two grey rows, as qr-code did. The Oct 10 pass fixed this for a few icons (wifi, git-commit, blur, caps-lock) by moving the stroke half a pixel, even off centre.</p>
+      <p>A blanket half-pixel shift keeps every 45° line on the lattice, but it is not the fix. Parts already on half pixels go soft; see clipboard's clip below. Each icon needs its frame moved and its parts re-placed, then a look at 1× and 2×.</p>
+      <div class="px" id="px-q"></div>
+      <ul class="opts">
+        <li><b>Fix the frames.</b> <span>I redraw family by family (folders, clipboards, devices, books…), one sheet per batch; every changed icon goes back to review.</span> <span class="rec">Recommended: the set's own rule is crisp at 1× and 2×.</span></li>
+        <li><b>Only when redrawn.</b> <span>Apply the half-pixel rule whenever an icon is touched for another reason.</span></li>
+        <li><b>Leave them.</b> <span>2× is the target; record the whole-pixel frames as accepted.</span></li>
+      </ul>
+      <div class="verdict" data-id="question-wholepx" data-options="fix:Fix the frames|redrawn:Only when redrawn|leave:Leave them"></div>
+    </article>
+  </section>
+
+  <footer>
+    <p><b style="font-weight:500;color:var(--ink)">Not changed: calculator.</b> It is 9% large and 16% dense, but its weight comes from the larger display you asked for on Oct 7, and a narrower body leaves no room for three key columns at the detail gap.</p>
+    <p>Measured with the generator's optical audit (apparent size is the square root of the ink's convex-hull area; density is ink over hull). Median: size 11.27, density 0.41. Every candidate passes the lint and the sliver check at 16 and 48.</p>
+  </footer>
+</main>
+
+<script>
+const ICONS = __ICONS__;
+const STRIP = "__STRIP__";
+const STRIP_ORDER = ["qr-code","zz-qr-a","diamond","zz-diamond-a","gamepad","zz-gamepad-a","folder","folder-shift","clipboard","clipboard-shift","laptop","laptop-shift"];
+const ITEMS = [
+  { id: "qr-code", before: "qr-code", after: "zz-qr-a", tag: "square keyline",
+    changed: "Finders 5 × 5 → 4 × 4 with edges on half pixels; centres 2 × 2 → 1 × 1; data modules 2.5 → 2 × 2 on whole pixels, 1.94 from the finders (standard gap), so the aligned-gap exception is no longer needed. Filled keeps the same treatment: finder rings stay lines, centres and modules are solid.",
+    why: "It measured 15% larger and 36% denser than the median, the heaviest icon apart from deliberate solids. Its ink box was 13.1 where square frames stop at 12.1, and at 1× its finders smeared across two pixel rows.",
+    nums: [["Size", "+15%", "+6%"], ["Density", "+36%", "+8%"], ["Ink", "93.3", "63.3"]], peers: "grid +6%, app-window +5%" },
+  { id: "diamond", before: "diamond", after: "zz-diamond-a", tag: "circle keyline",
+    changed: "Half-diagonal 6 → 7, so each edge moves one whole step out and stays on the 45° lattice; corners r 1 → 1.5 so the tips stay inside the ⌀14 circle keyline.",
+    why: "At −15% it was the smallest closed shape in the set and read small beside square and circle. The earlier note said a larger diamond breaks the lattice; that holds for half a step, but a whole step keeps it.",
+    nums: [["Size", "−15%", "−3%"], ["Density", "−2%", "−14%"]], peers: "circle-keyline shapes sit near 0%" },
+  { id: "gamepad", before: "gamepad", after: "zz-gamepad-a", tag: "horizontal keyline",
+    changed: "Body one unit shorter (10 → 9): top edge 3 → 3.5 (a half pixel), bottom 13 → 12.5; the lobes' outer round 1.88 → 2.38 so their 45° sides stay on the lattice. Width, controls and the bridge between the lobes are unchanged.",
+    why: "It read 8% large, and its top edge sat on a whole pixel, so it blurred at 1×.",
+    nums: [["Size", "+8%", "+2%"], ["Density", "−6%", "0%"]], peers: "keyboard +5%, tablet 0%" },
+];
+let maskSeq = 0;
+const uniq = svg => { const n = "m" + (maskSeq++); return svg.replaceAll("area-icon-R0", "area-icon-" + n); };
+const sizes = ["16", "24", "32", "48"];
+const set = (name, k) => `<span class="set">${sizes.map(s => uniq(ICONS[name][s][k])).join("")}</span>`;
+const cell = (name, label) => { const i = STRIP_ORDER.indexOf(name);
+  return `<figure><div class="cell" role="img" aria-label="${label}, 1× pixels, enlarged" style="background-image:url(${STRIP});background-position:0 -${i * 160}px"></div><figcaption>${label}</figcaption></figure>`; };
+const verdictBar = (id, options) => `<div class="verdict" data-id="${id}" data-options="${options}"></div>`;
+
+document.getElementById("items").innerHTML = ITEMS.map(it => `
+  <article class="card" id="item-${it.id}">
+    <div class="head"><h2>${it.id}</h2><span class="tag">${it.tag}</span></div>
+    <dl class="why"><dt>What changed</dt><dd>${it.changed}</dd><dt>Why</dt><dd>${it.why}</dd></dl>
+    <div class="rows">
+      <div class="cols"><span></span><span>Outline 16 / 24 / 32 / 48</span><span>Filled 16 / 24 / 32 / 48</span></div>
+      <div class="row before"><span class="lbl">Before</span>${set(it.before, "o")}${set(it.before, "f")}</div>
+      <div class="row after"><span class="lbl">After</span>${set(it.after, "o")}${set(it.after, "f")}</div>
+    </div>
+    <div class="px">${cell(it.before, "Before at 1×")}${cell(it.after, "After at 1×")}</div>
+    <div class="nums">${it.nums.map(([k, a, b]) => `<span>${k} <b>${a} → ${b}</b></span>`).join("")}<span style="color:var(--muted)">Peers: ${it.peers}</span></div>
+    ${verdictBar("redraw-" + it.id, "approve:Approve|keep:Keep current")}
+  </article>`).join("");
+document.getElementById("px-q").innerHTML = [["folder","Folder now"],["folder-shift","Folder, shifted ½"],["clipboard","Clipboard now"],["clipboard-shift","Clipboard, shifted ½"],["laptop","Laptop now"],["laptop-shift","Laptop, shifted ½"]].map(([n, l]) => cell(n, l)).join("");
+
+// Verdict bars: one document per item in `verdicts`, { verdict, note, at }.
+const bars = [...document.querySelectorAll(".verdict")];
+const state = {};
+for (const bar of bars) {
+  const id = bar.dataset.id;
+  const opts = bar.dataset.options.split("|").map(o => o.split(":"));
+  bar.innerHTML = opts.map(([v, l]) => `<button type="button" data-v="${v}" aria-pressed="false">${l}</button>`).join("") +
+    `<span class="status" id="st-${id}" aria-live="polite"></span>
+     <textarea id="note-${id}" placeholder="Note (optional): what to change, or why" aria-label="Note for ${id}"></textarea>`;
+  state[id] = { verdict: null, note: "" };
+}
+const paint = id => { const bar = document.querySelector(`.verdict[data-id="${id}"]`);
+  bar.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.v === state[id].verdict)));
+  const t = document.getElementById("note-" + id); if (document.activeElement !== t) t.value = state[id].note || ""; };
+const say = (id, msg) => { document.getElementById("st-" + id).textContent = msg; };
+
+(async () => {
+  const db = await window.claude?.use?.("db");
+  if (!db) { document.getElementById("dbstate").hidden = false; bars.forEach(b => b.querySelectorAll("button,textarea").forEach(e => e.disabled = true)); return; }
+  const col = db.collection("verdicts");
+  col.onSnapshot(snap => { for (const d of snap.docs) if (state[d.id] && d.exists) { const v = d.data(); state[d.id] = { verdict: v.verdict ?? null, note: v.note ?? "" }; paint(d.id); } },
+    () => say(bars[0].dataset.id, "Couldn't load saved verdicts"));
+  const save = async id => { say(id, "Saving…");
+    try { await col.doc(id).set({ verdict: state[id].verdict, note: state[id].note, at: new Date().toISOString() }); say(id, "Saved"); }
+    catch (e) { say(id, e?.code === "not_granted" || e?.code === "permission_denied" ? "You can view this page but not save" : "Not saved; try again"); } };
+  for (const bar of bars) { const id = bar.dataset.id;
+    bar.addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return;
+      state[id].verdict = state[id].verdict === b.dataset.v ? null : b.dataset.v; paint(id); save(id); });
+    const t = document.getElementById("note-" + id);
+    t.addEventListener("change", () => { state[id].note = t.value.trim(); save(id); }); }
+})();
+</script>

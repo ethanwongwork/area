@@ -5,6 +5,28 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Icons: counterpart map completed, coverage re-measured (2026-10-14, branch `claude/icon-work-ea140f`, PR)
+
+- Owner: "continue the icon work". Coverage by use, re-measured against Lucide 1.57 / Phosphor / Fluent / Hugeicons:
+  product UI coverage is complete; the 15 concepts all four draw that Area lacks have no product surface (backpack,
+  pill, tent …), and the rest are the audit's excluded classes (vehicles, food, animals, medical, sport). No new
+  drawings; a further round needs a use (production-gaps README item 8).
+- Found instead: 211 icons (everything drawn after the 2026-10-02 audit) had no `area-map.json` entry, so migration
+  search missed them (Lucide `toggle-left`, `user-x`, `message-square-off`). All mapped (723 names, checked to exist;
+  spec "Keywords and names", "Map completed"): names Lucide 711 → 747, Fluent 559 → 644, Phosphor 530 → 585 of 808.
+  Fixed three old entries (arrow-right-to-line, sort-ascending / -descending's Fluent) and signal-low / -medium's
+  Fluent citations (`cellular_data_N` counts down). `keywords.json` rebuilt; crown "premium", utensils "knife" kept.
+- Checks: `npm run build`, typecheck, icons tests 10/10; app Icons tab: `toggle-left` finds Toggle Off.
+- Then the optical audit's outliers: qr-code (+15% size, +36% density), diamond (−15%), gamepad (+8%) redrawn as
+  candidates (`docs/research/icon-review/2026-10-14/`, not in `sources/`), plus a question on the 295 icons with long
+  whole-pixel strokes (soft at 1×). **Waiting on the owner:** review page https://claude.ai/artifact/MZqhevHfrGVHhDANQLaKcA,
+  verdicts in its `verdicts` collection (ArtifactData list). On approval: copy the candidate over the source, drop
+  qr-code's `data-gap="aligned"` rule note, regenerate, record (spec, batches.json stays approved only after the owner).
+- Owner's verdicts (round 1): qr-code, diamond, gamepad approved → in `sources/`; "fix the frames" → 242 icons moved
+  onto half pixels for 1× (spec "Optical outliers and 1× frames"), owner-approved (both batches, no flags). Rounds 3 (31 icons) and 4 (18 half-unit redraws) owner-approved;
+  centred lines stay symmetric (owner: "leave"). 37 icons stay soft at 1× by construction.
+- Fixed: `generate.mjs --only … --emit` stopped on the `rtl.json` check; `2026-10-07/look.mjs` still calls the removed
+  docs generator (README there has the workaround).
 ## Elevation setting (2026-10-14, branch `claude/component-display-ui-research-11dc77`, PR)
 
 - Owner: "add elevation as an option", then "toned down ... a naming convention similar to the existing axis ...

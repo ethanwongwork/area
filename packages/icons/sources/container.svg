@@ -1,7 +1,7 @@
 <svg data-set="area-pilot" data-keyline="square" data-angles="free" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path data-filled="solid" d="M11.671 2.335L13.447 3.224A1 1 0 0 1 14 4.118L14 8.882A1 1 0 0 1 13.447 9.776L5.671 13.665A1.5 1.5 0 0 1 4.329 13.665L2.553 12.776A1 1 0 0 1 2 11.882L2 7.118A1 1 0 0 1 2.553 6.224L10.329 2.335A1.5 1.5 0 0 1 11.671 2.335Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="line" d="M2.2 6.6L5 8L13.8 3.6M5 8V13.8" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="gap" d="M0 5.5L5 8L16 2.5M5 8V16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="line" d="M8 6.5V12.5M11 5V11" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="gap" d="M8 6.5V16M11 5V16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="solid" d="M11.171 2.335L12.947 3.224A1 1 0 0 1 13.5 4.118L13.5 8.882A1 1 0 0 1 12.947 9.776L5.171 13.665A1.5 1.5 0 0 1 3.829 13.665L2.053 12.776A1 1 0 0 1 1.5 11.882L1.5 7.118A1 1 0 0 1 2.053 6.224L9.829 2.335A1.5 1.5 0 0 1 11.171 2.335Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="line" d="M1.7 6.6L4.5 8L13.3 3.6M4.5 8V13.8" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="gap" d="M-0.5 5.5L4.5 8L15.5 2.5M4.5 8V16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="line" d="M7.5 6.5V12.5M10.5 5V11" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="gap" d="M7.5 6.5V16M10.5 5V16" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
