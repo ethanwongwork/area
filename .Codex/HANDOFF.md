@@ -11,6 +11,30 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   "Proposals (owner calls; not applied)"; the pixel ones were already done by the 1× pass). Nothing in the icon set is
   waiting on the owner. Left until a use needs it: replace-all; the docs site's Fluent copy goes with the site.
 
+## Surface: one number, Borderless keeps an edge (2026-10-14, branch `claude/next-axis-9766b4`)
+
+- Owner: "continue working on the next axis" (the Elevation session had recommended Surface after Motion).
+  `axes/surface.ts`: the frame's width, `1` (Default) or `0` (Borderless), `data-area-surface="1"|"0"` (was
+  outlined / borderless). New token `shadow-edge`: transparent at 1; at 0 ChatGPT's frameless-menu edge (`0 0 1px`
+  black 62%, dark adds inset `0 0 1px` white 20%), listed first in the box-shadow of every surface the setting
+  unframes (13 families), so the audit's open items (no edge at Borderless + Elevation 0; floats edgeless in dark)
+  are closed. Card's dark-only ring (O2) replaced by it. Surface Select in the Inspector. Research:
+  `docs/research/surface-2026-10-14.md`; spec log lines in 13 specs.
+- Owner approved ("go with your recs"): review https://claude.ai/artifact/L4TCF2W5zcjvBK7xZmaDBN. The dark edge is
+  ChatGPT's and fainter than Card's old ring.
+- Checks: build, tokens 24,254, contracts 14, manifest, React 291/292 (known Indicator), cohesion 8 (pins the edge),
+  typecheck, playgrounds 0. Not checked: the Electron window by eye, forced colours, a 1× display.
+- Then ("go with your recs, then continue working"): the Popover arrow takes the edge as a drop-shadow
+  (`shadow-edge-filter`). The Inspector's Canvas section adds the colour settings, Neutral and Accent (Selects,
+  "Blue (Default)"), Action and Selection (Segmented), options and defaults read from `AXIS_PRESETS` /
+  `DEFAULT_AXES`; Canvas Buttons paint the accent at Action: Accent.
+- Audit items closed as not bugs: the Toolbar's 112px spill at type 16 Comfortable only appears with the tile zoom
+  forced to 1 (the gallery's fit scales it to 0.70 and it fits); the Stepper's 10px is its documented behaviour
+  ("overflows rather than overlaps"), inside its tile.
+- Still open: CSS loops stop by `[data-area-motion="0"] .x`, so a nested non-zero scope inside a 0 scope still
+  stops them (ScrollToLatest already reads the nearest scope). A fix needs an inherited motion token (a space
+  toggle plus a 0/1 flag for the Progress stripe) or container style queries; no surface in the app nests one.
+
 ## All-axis audit (2026-10-14, branch `claude/elevation-axis-gallery-e500be`)
 
 - Owner: "do an all axis check ... visual errors, inconsistencies, discrepancies, or bugs". Method: axis independence

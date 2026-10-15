@@ -697,13 +697,13 @@
     border: var(--area-border-width) solid var(--area-border-card); /* Card's edge */
     border-radius: var(--area-radius-container);
     background: var(--area-bg-surface);
-    box-shadow: var(--area-shadow-resting);
+    box-shadow: var(--area-shadow-edge), var(--area-shadow-resting); /* Card's: the Surface axis's edge, then its lift */
   }
   /* Surface: a floating card over a resting one, offset down and to the end. */
   .abs-stack { display: grid; }
   .abs-stack > .abs-card { grid-area: 1 / 1; }
   .abs-card[data-kind="back"] { translate: calc(var(--area-space-16) * -1) calc(var(--area-space-12) * -1); }
-  .abs-card[data-kind="float"] { translate: var(--area-space-16) var(--area-space-12); box-shadow: var(--area-shadow-float); }
+  .abs-card[data-kind="float"] { translate: var(--area-space-16) var(--area-space-12); box-shadow: var(--area-shadow-edge), var(--area-shadow-float); }
   /* A line of text: muted grey, or the default ink for a title. */
   .abs-bar {
     display: block;

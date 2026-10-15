@@ -35,7 +35,7 @@
  * shadow, never `none`: a role also sits inside lists beside a component's own layers (Board card's tone
  * ring, the floating Toolbar's edge), and `none` there invalidates the whole box-shadow. Forced colours
  * compute box-shadow to none; every floating surface keeps its 1px border-float, which the browser repaints
- * (forced-colors.css restores the frame width under Borderless, and gives the floating Toolbar, whose edge is
+ * (forced-colors.css restores the frame width at Surface 0, where the edge is a shadow (axes/surface.ts), and gives the floating Toolbar, whose edge is
  * a box-shadow, an outline). The ColorPicker thumbs' shadow is functional and fixed, not a role.
  */
 import { type AxisDefinition, tokens } from "./schema.ts";

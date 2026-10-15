@@ -33,7 +33,7 @@
   .area-toolbar--surface {
     --_toolbar-inset: var(--area-ui-cluster); /* spec: 8, compact 6 (compact pass) */
     --_toolbar-bg: var(--area-bg-surface);
-    --_toolbar-shadow: inset 0 0 0 var(--area-border-width) var(--area-border-float), var(--area-shadow-float);
+    --_toolbar-shadow: var(--area-shadow-edge), inset 0 0 0 var(--area-border-width) var(--area-border-float), var(--area-shadow-float);
   }
   .area-toolbar--sm { --_height: var(--area-control-sm); --_toolbar-icon: var(--area-icon-sm); --_toolbar-text: var(--area-control-sm-text); --_toolbar-leading: var(--area-control-sm-leading); --_toolbar-radius: var(--area-radius-control-sm); }
   .area-toolbar--md { --_height: var(--area-control-md); --_toolbar-icon: var(--area-icon-md); --_toolbar-text: var(--area-control-md-text); --_toolbar-leading: var(--area-control-md-leading); --_toolbar-radius: var(--area-radius-control-md); }
