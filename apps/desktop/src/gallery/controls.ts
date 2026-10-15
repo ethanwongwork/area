@@ -2,11 +2,12 @@
  * The component gallery's theme controls: one entry per system-wide setting the right panel
  * offers. Each writes `data-area-<axis>` on the gallery canvas only, so the gallery's own
  * chrome keeps Area's defaults whatever the canvas shows. Add a setting by adding an entry;
- * the panel, the saved preference and the pre-paint restore all read this list.
+ * the Inspector's Canvas section and the saved Canvas (studio.tsx restoreCanvas, which keeps only
+ * values listed here) both read this list.
  */
 import { DEFAULT_PILLS, PILL_SHAPES } from "@area/tokens/config";
 export interface GalleryControl {
-  axis: "theme" | "type" | "density" | "radius" | "pills" | "elevation";
+  axis: "theme" | "type" | "density" | "radius" | "pills" | "elevation" | "motion";
   /**
    * Two or three options are a Segmented (Apple and Primer cap segments at 5-7); a longer list of
    * exact settings is a Select, each option naming what it sets (shadcn's radius picker is a menu).
@@ -34,18 +35,25 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = [
   // (Sharp) to Pill; everything else scales off it (owner, 2026-10-04).
   { axis: "radius", kind: "select", label: "Radius", hint: "The medium Button's corner; everything scales from it", defaultValue: "8", items: ["0", "2", "4", "6", "8", "10", "12", "14", "pill"].map(value => ({
     value,
-    label: value === "0" ? "0 · Sharp" : value === "pill" ? "Pill" : value === "8" ? "8 · Default" : value,
+    label: value === "0" ? "0 (Sharp)" : value === "pill" ? "Pill" : value === "8" ? "8 (Default)" : value,
   })) },
   // How much surfaces lift (axes/elevation.ts, owner 2026-10-14): one number, the Menu's shadow strength in percent,
   // 0 (Flat) to 8, as Radius is the medium Button's corner. A Select, as Radius: nine steps.
   { axis: "elevation", kind: "select", label: "Elevation", hint: "The Menu's shadow in %; every component's lift scales from it", defaultValue: "3", items: ["0", "1", "2", "3", "4", "5", "6", "7", "8"].map(value => ({
     value,
-    label: value === "0" ? "0 · Flat" : value === "3" ? "3 · Default" : value,
+    label: value === "0" ? "0 (Flat)" : value === "3" ? "3 (Default)" : value,
+  })) },
+  // How long transitions take (axes/motion.ts, owner 2026-10-14): one number, the Menu's open in ms, 0 (None)
+  // to 300 in steps of 30, 210 by default, as Elevation is the Menu's shadow. A Select, as Elevation: eleven steps.
+  { axis: "motion", kind: "select", label: "Motion", hint: "The Menu's open in ms; every duration scales from it", defaultValue: "210", items: ["0", "30", "60", "90", "120", "150", "180", "210", "240", "270", "300"].map(value => ({
+    value,
+    label: value === "0" ? "0 (None)" : value === "210" ? "210 (Default)" : value,
   })) },
   // Which components draw a pill instead of the radius corner (axes/pills.ts), as data-area-pills.
   { axis: "pills", kind: "chips", label: "Pills", hint: "On: a pill. Off: follows Radius.", defaultValue: DEFAULT_PILLS.join(" "), items: PILL_SHAPES.map(value => ({ value, label: value === "field" ? "Fields" : value[0]!.toUpperCase() + value.slice(1) })) },
 ];
 
-/** localStorage key for the canvas selection: `{ theme, ui }`. */
+/** The archived docs gallery's storage key and canvas id (apps/docs reads them); the app saves its
+ * Canvas under `area-desktop`.canvas (src/storage.ts). */
 export const GALLERY_STORAGE_KEY = "area-gallery-theme";
 export const GALLERY_CANVAS_ID = "gallery-canvas";

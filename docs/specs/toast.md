@@ -78,7 +78,7 @@ Notion's shadow is the 20/24 + 5/8 lift Area uses for Popover, Menu and Dialog, 
 | surface · inset | **12** (border included), icon **12** from the top and side | Popover (the compact floating surface) | Was 10 (icon 11 from both). Notion 16, shadcn 16: Area keeps its compact-surface inset |
 | surface · height | **40** for one line, with or without controls | Notion 43; Popover's numbers (20 line + 2 × 10) | Was 38. Controls no longer change the height |
 | surface · radius | 12 (unchanged) | Container radius; concentric with the controls (12 − 6 = 6) | Notion 8, shadcn 18 |
-| surface · shadow | **20/24 + 5/8 lift**, the Surface axis role `--area-shadow-float` (surface.css:1273); `none` under the Flat preset | Notion (same lift); Popover, Menu, Dialog | Was a 2/4 shadow. A role since audit S10 |
+| surface · shadow | **`--area-shadow-float`**, the Elevation axis's float role: `0 0 2` + `0 8 16` at the Elevation step in % (3% key at the default 3), the ambient half, dark doubled; transparent at step 0 (axes/elevation.ts) | Notion (same lift); Popover, Menu, Dialog | Was a 2/4 shadow. A role since audit S10 |
 | icon · gap | 8 | Notion 8 | — |
 | controls | 28px box, negative block margins; the last sits **6 from the top and side** (6 from the bottom on one line) | Popover close rule; concentric with the corner | Was 5 top / 11 side; the dismiss was a bespoke-toned ghost button, now neutral with the dismiss glyph |
 | title | 14/20 strong | Typography: compact surface title; shadcn 500 | Was regular |
@@ -136,7 +136,7 @@ its own (docs, inline) does not animate.
 | Interaction | Before | After |
 |---|---|---|
 | enter | none: toasts popped in | `opacity` 0 → 1 and `translate` 0 16 → none (from the toaster's edge: 16 is the toaster's own offset), `duration-slow` 250, `ease-out`, `@starting-style` |
-| exit | none: removed at once | `data-leaving` on the list item: `opacity` → 0 and `translate` 8 towards the edge, `duration-base` 150, `ease-out`; Toaster.tsx removes the item when its transition has run (the computed duration, 0 under "none" and reduced motion); `pointer-events: none` while it leaves |
+| exit | none: removed at once | `data-leaving` on the list item: `opacity` → 0 and `translate` 8 towards the edge, `duration-base` (210 at the default), `ease-out`; Toaster.tsx removes the item when its transition has run (the computed duration, 0 at motion 0 and under reduced motion); `pointer-events: none` while it leaves |
 | stack reflow | jump | FLIP: each moved item starts from its previous place as a whole-pixel `translate` and eases home over `duration-base`, `ease-in-out`; an interrupted reflow continues from where it is; works under CSS `zoom` |
 | action, dismiss | Button's | Button's (not this pass) |
 | pause on hover and focus, F8 | unchanged | unchanged; a leaving toast's timer is already cleared |
@@ -149,7 +149,7 @@ a second toast moved the first by its local 47px (39 + 8 under zoom) with `trans
 `cubic-bezier(0.65, 0, 0.35, 1)`; rest translate none, opacity 1; Undo marked `data-leaving`
 (`pointer-events: none`, `opacity/translate: 150` ease-out), the item was gone 300ms later and the
 remaining toast reflowed from `0px -47px`; the last one leaving hid the region. Under
-`data-area-motion="none"` the leaving toast computes `0s`. Verified on the dev server (background tab, so transitions were read from `getAnimations()` and computed styles, not watched; real-pointer hover could not be driven in a background tab, so hover rules were read from the stylesheet).
+`data-area-motion="0"` the leaving toast computes `0s`. Verified on the dev server (background tab, so transitions were read from `getAnimations()` and computed styles, not watched; real-pointer hover could not be driven in a background tab, so hover rules were read from the stylesheet).
 
 Open questions:
 - Exit direction: 8px towards the bottom edge, into the stack gap, so it never overlaps the toast

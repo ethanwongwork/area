@@ -130,7 +130,7 @@ Captures: `area--sizesm`, `area--sizemd`, `area--sizelg`, `area--long`, `area--d
 
 Native checkbox with `role="switch"` covering the label; controlled or uncontrolled with form
 reset (Switch.tsx:44-57); `onCheckedChange(checked, event)` passes the change event (Switch.tsx:12). Read-only and loading block changes in `onChange`/`onClick`;
-read-only sets `aria-readonly`. Thumb travel honours `data-area-motion="none"` and reduced
+read-only sets `aria-readonly`. Thumb travel honours `data-area-motion="0"` and reduced
 motion through the duration tokens (Motion, 2026-10-07). Forced colours: Highlight/Canvas paint; only disabled greys (switch.css:115-125).
 Coarse pointers get a 44px minimum target (switch.css:114). Notion also keeps a native
 input (opacity 0) over the drawn track.
@@ -180,7 +180,7 @@ Contract: [`docs/MOTION.md`](../MOTION.md) (Switch thumb recipe).
 | press stretch (owner's, kept) | `inline-size` +2px over `fast` ease-out; the on-side offset via `inset-inline-start` | `inline-size` +2px on the thumb's clock (`base` ease-in-out); when on, the translate shortens by 2px so it grows toward the start |
 | focus-visible | outline on the track | unchanged (rings never fade) |
 | disabled, read-only, loading | no hover, no stretch | unchanged |
-| reduced motion | `transition: none` on the thumb (own `@media` and `data-area-motion="none"` rules) | the rules are removed: the duration tokens are zero wherever motion is set (`emit/css.ts`), which now also stops the track and hover layer |
+| reduced motion | `transition: none` on the thumb (own `@media` and `data-area-motion="0"` rules) | the rules are removed: the duration tokens are zero wherever motion is set (`emit/css.ts`), which now also stops the track and hover layer |
 
 **Crispness.** The thumb rests on whole pixels: it is laid out once at the start inset and only
 `translate` moves it, by a rounded length. Mid-travel frames are fractional, as any motion is.
@@ -231,3 +231,4 @@ pointer press.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → thumb slides by a whole-pixel `translate` on `base` ease-in-out (was `inset-inline-start` over `slow`), track fill and edge on the same clock (the edge used to jump), hover through a layer that lands at once and fades over `fast`, press stretch kept on the same clock (`switch.css`; "Motion and interaction, 2026-10-07").
 - 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → disabled reads `opacity-disabled` (was an unset `--_disabled-opacity` hook with a literal 0.5 fallback) (switch.css). (docs/research/consistency-audit-2026-10-12.md)
 - 2026-10-12 · type size and density split (owner: "the switches/toggles look to be the same size for everything") → the track reads `--area-mark-toggle`, a check box plus 4: 18 at type 12–13, 20 at 14, 22 at 15, 24 at 16 (`switch.css`; was `mark-md`, 20 at every size). `docs/research/ui-size-scale-2026-10-12.md`.
+- 2026-10-14 · all-axis audit → the track now follows the type size at every size: the `--sm` / `--md` / `--lg` classes set the fixed marks 16 / 20 / 24 and overrode the 2026-10-12 base rule, so every Switch stayed 20 tall (and hung 2px above its line at type 12). md reads `--area-mark-toggle`, sm and lg 4 either side; type 14 is unchanged → switch.css.

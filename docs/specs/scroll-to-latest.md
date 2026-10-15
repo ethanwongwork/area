@@ -58,7 +58,7 @@ lightened every neutral ghost and outline Button to #56 (button.md), which now m
 | appear | opacity over `duration-fast` (100) `ease-out`; visibility at once | opacity over **`duration-base` (150)** `ease-out`; visibility at once |
 | disappear | opacity over `fast` `ease-out`; visibility after 100 | unchanged: `fast` `ease-out`, hidden after it (exits one step faster than entrances, MOTION) |
 | button hover, press, focus | Button's | Button's new rule (instant in, `fast` out) |
-| scroll | smooth; a jump under reduced motion or motion "none" | unchanged |
+| scroll | smooth; a jump under reduced motion or motion 0 | unchanged |
 
 No transform: the button rests on layout (flex centring), never on a translate or scale. Every
 duration is a token, so reduced motion makes the show and hide instant.

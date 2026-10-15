@@ -743,7 +743,7 @@
   }
   .abs-pill > .abs-bar { block-size: var(--area-space-4); opacity: 0.9; /* pick */ }
   .abs-pill[data-kind="accent"] { background: var(--area-accent-solid); }
-  .abs-pill[data-kind="outline"] { background: var(--area-bg-surface); box-shadow: inset 0 0 0 var(--area-border-width) var(--area-border-subtle); }
+  .abs-pill[data-kind="outline"] { background: var(--area-bg-surface); box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-border-subtle); }
   .abs-dot { display: block; flex: none; inline-size: var(--area-space-8); block-size: var(--area-space-8); border-radius: var(--area-radius-full); background: var(--area-border-subtle); }
   .abs-dot[data-kind="window"] { inline-size: var(--area-space-6); block-size: var(--area-space-6); }
   /* The check and toggle wear the real controls' paint (DESIGN_SYSTEM.md, "Off states"): the
@@ -757,7 +757,7 @@
     inline-size: var(--area-space-12);
     block-size: var(--area-space-12);
     border-radius: var(--area-radius-small);
-    box-shadow: inset 0 0 0 var(--area-border-width) var(--area-edge-control-hover);
+    box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-edge-control-hover);
     color: var(--area-fg-on-selection);
   }
   .abs-check[data-on] { background: var(--area-selection-solid); box-shadow: none; }
@@ -792,6 +792,6 @@
     padding-inline: var(--area-space-8);
     border-radius: var(--area-radius-control-sm);
     background: var(--area-bg-surface);
-    box-shadow: inset 0 0 0 var(--area-border-width) var(--area-border-subtle);
+    box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-border-subtle);
   }
 }

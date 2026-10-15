@@ -80,7 +80,7 @@
   }
   @keyframes area-otp-caret { 50% { opacity: 0; } }
   @media (prefers-reduced-motion: reduce) { .area-otp-field__caret { animation: none; } }
-  [data-area-motion="none"] .area-otp-field__caret { animation: none; }
+  [data-area-motion="0"] .area-otp-field__caret { animation: none; }
 
   .area-otp-field__separator {
     display: inline-grid;

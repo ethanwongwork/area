@@ -91,7 +91,7 @@ sides, then 8px-inset list rows (menu-like). shadcn's content is a grid with 16p
 
 | Slot · property | Area value | Basis | Reason when it differs |
 |---|---|---|---|
-| surface · shadow | **`--area-shadow-float`**: `0 20px 24px` in `shadow-color`, `0 5px 8px` at half strength, as Menu (surface.css:866); `none` under the Flat preset | Notion (same lift on popovers and menus); ChatGPT 8/16; shadcn 4/6 + 2/4 | Was `shadow-2` (1–2px). One lift for every floating surface, a Surface axis role since audit S10 |
+| surface · shadow | **`--area-shadow-float`**, the Elevation axis's float role: `0 0 2` + `0 8 16` at the Elevation step in % (3% key at the default 3), the ambient half, dark doubled; transparent at step 0 (axes/elevation.ts), as Menu | Notion (same lift on popovers and menus); ChatGPT 8/16; shadcn 4/6 + 2/4 | Was `shadow-2` (1–2px). One lift for every floating surface, a Surface axis role since audit S10 |
 | surface · preferred width | **320** | shadcn 320; ChatGPT 254; Notion 456 | Was 240. Still capped at the container |
 | sections · gap | **16** | Notion 16 (header to field); shadcn 16 | Was 12 |
 | surface · inset | 12 (border included, unchanged) | Between shadcn 10 and Notion 16 | — |
@@ -166,7 +166,7 @@ Tooltip and every anchored surface built on `.area-popover` (Hover card, date pa
 | close | same clock as the open: `duration-base`, `ease-out` | one step faster: `duration-fast` (100), `ease-out` (`--_overlay-exit`, carried by the closed rule, since a transition takes the duration of the state it goes to); `display`/`overlay` `allow-discrete` keep the top layer for it |
 | rest | `scale: 1` (an identity transform on the resting surface) | `scale: none`: no transform at rest, so layout snaps it; `none` interpolates as 1 |
 | close button, footer buttons | Button's | Button's (not this pass) |
-| reduced motion / "none" | tokens 0, scale 1 | unchanged; no literal durations remain |
+| reduced motion / motion 0 | tokens 0, scale 1 | unchanged; no literal durations remain |
 
 Crispness: the arrow's 50% centre is `round(down, 50%, 1px)` (after a plain 50% fallback), so
 an odd-width popover's arrow and its 1px edge sit on whole pixels (a 321 popover: arrow 144
@@ -176,7 +176,7 @@ from its trigger; now 64 and 152.
 
 Verification: `/popover.html`, trigger opened: enter `opacity:150 scale:150` ease-out; close
 `display/opacity/overlay/scale: 100`; at rest opacity 1, `scale: none`, transform none, rect
-428 × 1162, 320 × 152 (whole). Under `data-area-motion="none"` the duration is 0s.
+428 × 1162, 320 × 152 (whole). Under `data-area-motion="0"` the duration is 0s.
 Verified on the dev server (background tab, so transitions were read from `getAnimations()` and computed styles, not watched; real-pointer hover could not be driven in a background tab, so hover rules were read from the stylesheet).
 
 Open questions: none new.

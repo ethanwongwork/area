@@ -42,9 +42,10 @@ export const ScrollToLatest = forwardRef<HTMLDivElement, ScrollToLatestProps>(fu
   const scroll = (button: HTMLButtonElement) => {
     const element = scrollRef.current;
     if (!element) return;
-    // The system setting and Area's motion axis both turn the smooth scroll into a jump.
+    // The system setting and Area's motion axis both turn the smooth scroll into a jump. The nearest
+    // motion scope decides, as it does for the duration tokens.
     const reduce = (typeof matchMedia !== "undefined" && matchMedia("(prefers-reduced-motion: reduce)").matches)
-      || element.closest('[data-area-motion="none"]') !== null;
+      || element.closest("[data-area-motion]")?.getAttribute("data-area-motion") === "0";
     element.scrollTo({ top: element.scrollHeight, behavior: reduce ? "auto" : "smooth" });
     // The button hides once at the end, so keyboard focus moves on rather than falling to the
     // page (audit G-19): to `focusRef` (a composer, say) or the conversation itself.

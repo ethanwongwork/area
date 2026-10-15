@@ -1,7 +1,7 @@
 /**
  * The axis registry, and the invariant that makes the whole design hold together.
  *
- * Eight axes produce tens of thousands of combinations. The property that makes targeted
+ * Eleven axes produce millions of combinations. The property that makes targeted
  * verification tractable
  * is proving the axes are *orthogonal*, which reduces the problem to checking each axis
  * once. Orthogonality is not a hope here -- `assertAxisIntegrity` fails the build if any

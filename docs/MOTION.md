@@ -10,16 +10,26 @@ that research; component specs cite this file.
 
 ## Tokens
 
-Durations (the motion axis, `packages/tokens/src/axes/motion.ts`; `none` and
-`prefers-reduced-motion` make every one 0):
+Durations (the motion axis, `packages/tokens/src/axes/motion.ts`): one number, the Menu's open in
+milliseconds (`duration-base`), `0` (None) to `300` in steps of 30, `210` by default (owner,
+2026-10-14; it replaced the None, Subtle and Expressive presets, and the owner moved the default from
+150 to 210 to match ChatGPT's popover, 220, and Figma's dropdown, 250). Every duration is a third-multiple
+of it; `0` and `prefers-reduced-motion` make every one 0.
 
-| Token | Subtle (default) | Expressive | Use |
-|---|---|---|---|
-| `--area-duration-instant` | 0 | 0 | hover-in, press, focus, keyboard-driven changes |
-| `--area-duration-fast` | 100 | 150 | colour leaving a state; small marks (check, radio dot, chevron); anchored surface exits |
-| `--area-duration-base` | 150 | 250 | anchored surfaces entering; indicators that slide (switch thumb, tabs, segmented); dialog exit |
-| `--area-duration-moderate` | 200 | 320 | dialog enter; drawer and accordion exit; scrim |
-| `--area-duration-slow` | 250 | 400 | drawer and toast enter; accordion open |
+| Token | Of the number | 150 | 210 (default) | 240 | 300 | Use |
+|---|---|---|---|---|---|---|
+| `--area-duration-instant` | 0 | 0 | 0 | 0 | 0 | hover-in, press, focus, keyboard-driven changes |
+| `--area-duration-fast` | 2/3 | 100 | 140 | 160 | 200 | colour leaving a state; small marks (check, radio dot, chevron); anchored surface exits |
+| `--area-duration-base` | 1 | 150 | 210 | 240 | 300 | anchored surfaces entering; indicators that slide (switch thumb, tabs, segmented); dialog exit |
+| `--area-duration-moderate` | 4/3 | 200 | 280 | 320 | 400 | dialog enter; drawer and accordion exit; scrim |
+| `--area-duration-slow` | 5/3 | 250 | 350 | 400 | 500 | drawer and toast enter; accordion open |
+
+150 is the old Subtle default. The thirds are the old Subtle's ratios; the old Expressive (150 / 250 / 320 / 400) sat within 10ms
+of 240. Anchors in the research: 150 Radix Themes and Tailwind, 210 Geist's popover (200) and
+ChatGPT's (220), 240 Figma's dropdown (250), 300 Primer's medium, where `slow` reaches 500, Primer's
+ceiling for UI motion. The number moves time only; easings are fixed. Loops do not follow it:
+Spinner (1s a turn), Skeleton shimmer (3s), indeterminate Progress (1.8s), the Indicator pulse and
+Message cursor (1s) and the OTP field's caret blink (1s) run their measured periods and stop at `0` and under reduced motion.
 
 Easings:
 
@@ -49,7 +59,7 @@ Easings:
 | Tabs / Segmented indicator | `base` ease-in-out | same | `translate` + `scale`/`inline-size` of one indicator | only if the component draws a moving indicator |
 | Popover, menu, select list, combobox list, hover card, date panel | `base` ease-out | `fast` ease-out | `opacity` + `scale` from 0.97 | `transform-origin` at the trigger (overlay.ts writes it); `@starting-style` for the enter; exit by `allow-discrete` on `display`/`overlay` |
 | Context menu | `fast` ease-out | `fast` | `opacity` + `scale` from 0.97 | origin at the pointer |
-| Tooltip | `fast` ease-out after the open delay | instant-to-`fast` | `opacity` + `scale` 0.97 | open delay 500–700ms; once one tooltip is open, neighbours open at once (skip window ~300ms) |
+| Tooltip | `fast` ease-out after the open delay | instant | `opacity` + `scale` 0.97 | open delay 500–700ms; once one tooltip is open, neighbours open at once (skip window ~300ms) |
 | Dialog, command palette, confirm dialog | `moderate` ease-out | `base` ease-out | `opacity` + `scale` 0.97 | scrim `opacity` on `moderate`; no translate |
 | Drawer / sheet | `slow` ease-drawer | `moderate` ease-drawer | `translate` 100% on the edge axis | scrim as Dialog |
 | Toast | `slow` ease-out | `base` ease-out | `opacity` + `translate` 8–16px from the toaster's edge | stack reflow on `base` ease-in-out |

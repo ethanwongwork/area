@@ -11,6 +11,7 @@
  * that silently shifts every consumer.
  */
 import { PREFIX } from "../axes/schema.ts";
+import { MOTION_AXIS, duration } from "../axes/motion.ts";
 
 /** 4px base with 2px, 6px and 10px half-steps for tight control interiors. */
 export const SPACE_RAMP = [0, 2, 4, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96] as const;
@@ -108,7 +109,7 @@ function role(_id: string, switchName: string, map: Record<string, [string, stri
 export function derivedTokens(): Record<string, string> {
   return {
     // Presentation aliases choose existing palette endpoints. A preference is not a color
-    // axis: it changes emphasis while all eight creative axes keep their own namespaces.
+    // axis: it changes emphasis while every axis keeps its own namespaces.
     [`${PREFIX}edge-control`]: `color-mix(in srgb, var(${PREFIX}border-faint), var(${PREFIX}stroke-control) calc(var(${PREFIX}contrast-more) * 100%))`,
     [`${PREFIX}edge-control-hover`]: `color-mix(in srgb, var(${PREFIX}border-subtle), var(${PREFIX}stroke-control-hover) calc(var(${PREFIX}contrast-more) * 100%))`,
     [`${PREFIX}edge-selected`]: `color-mix(in srgb, var(${PREFIX}border-faint), var(${PREFIX}stroke-control) calc(var(${PREFIX}contrast-more) * 100%))`,
@@ -379,6 +380,7 @@ export const REGISTERED_PROPERTIES = [
   { name: `${PREFIX}focus-width`, syntax: "<length>", initial: "2px" },
   { name: `${PREFIX}focus-offset`, syntax: "<length>", initial: "2px" },
   { name: `${PREFIX}border-width`, syntax: "<length>", initial: "1px" },
-  { name: `${PREFIX}duration-fast`, syntax: "<time>", initial: "100ms" },
-  { name: `${PREFIX}duration-base`, syntax: "<time>", initial: "150ms" },
+  // The motion axis's default step, so a missing or invalid duration falls back to the default.
+  { name: `${PREFIX}duration-fast`, syntax: "<time>", initial: duration(Number(MOTION_AXIS.defaultPreset), 2) },
+  { name: `${PREFIX}duration-base`, syntax: "<time>", initial: duration(Number(MOTION_AXIS.defaultPreset), 3) },
 ] as const;

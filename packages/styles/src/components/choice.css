@@ -1,4 +1,5 @@
-/* Checkbox and Radio retain native inputs and share one glyph ladder (md 16 / lg 20px).
+/* Checkbox and Radio retain native inputs and share one glyph ladder (md 16 / lg 20px at type 14,
+ * following the type size).
  * Switch has its own track/thumb construction in switch.css. */
 @layer area.components {
   .area-checkbox,
@@ -169,8 +170,9 @@
    * The mark is drawn with a mask rather than a pseudo-element glyph, so it inherits the
    * checked foreground instead of depending on a font metric. Motion and crispness
    * (docs/MOTION.md, 2026-10-07): the mark covers the control's border box and its mask is
-   * drawn 1:1 on that box's own pixel grid (a 16 drawing at md, a 20 drawing at lg), so its
-   * geometry is whole pixels at rest; it was a 16 drawing at 75% of the 14px padding box
+   * drawn 1:1, never scaled (a 16 drawing at md, a 20 drawing at lg, `--_grid`), centred in the
+   * box. The box follows the type size in even steps (14 to 24), so the drawing sits a whole
+   * number of pixels off centre and its geometry stays on whole pixels at rest; it was a 16 drawing at 75% of the 14px padding box
    * (1.15px stroke at a 1.75px offset). It enters from scale 0.6 with opacity on fast
    * ease-out and leaves the same way (was scale 0 → 1 on the deprecated spring), and rests
    * at scale 1.
@@ -190,13 +192,13 @@
   }
 
   .area-checkbox__control::after {
-    -webkit-mask: var(--_check) center / 100% no-repeat;
-    mask: var(--_check) center / 100% no-repeat;
+    -webkit-mask: var(--_check) center / var(--_grid) no-repeat;
+    mask: var(--_check) center / var(--_grid) no-repeat;
   }
 
   .area-checkbox__control:is(:indeterminate, [data-indeterminate])::after {
-    -webkit-mask: var(--_dash) center / 100% no-repeat;
-    mask: var(--_dash) center / 100% no-repeat;
+    -webkit-mask: var(--_dash) center / var(--_grid) no-repeat;
+    mask: var(--_dash) center / var(--_grid) no-repeat;
     opacity: 1;
     scale: 1;
   }
@@ -446,23 +448,28 @@
      1.5px stroke (Figma's 16px check, figma--checkbox-checked: 1.5px), the dash a 2px bar
      centred on whole pixels, 6 wide at 16 and 8 at 20; the radio dot 6 / 8. */
   .area-checkbox, .area-checkbox--md {
+    --_grid: var(--area-space-16); /* spec: the drawing's own grid */
     --_check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M5 8.5l2 2 4-5'/%3E%3C/svg%3E"); /* spec */
     --_dash: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' d='M6 8h4'/%3E%3C/svg%3E"); /* spec */
   }
   .area-radio, .area-radio--md { --_dot: 6px; /* spec */ }
   .area-checkbox--lg {
+    --_grid: var(--area-space-20); /* spec: the drawing's own grid */
     --_check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M6.5 10.5l2.5 2.5 4.5-6'/%3E%3C/svg%3E"); /* spec */
     --_dash: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' d='M7 10h6'/%3E%3C/svg%3E"); /* spec */
   }
   .area-radio--lg { --_dot: 8px; /* spec */ }
+  /* The box follows the type size at both sizes (owner, 2026-10-12): md is the type's box (14 at
+     type 12-13, 16 at 14, 18, 20 at 16), lg four larger (20 at type 14, as before). The size classes
+     set fixed 16 and 20 until 2026-10-14, which overrode the type-following base rule above. */
   .area-checkbox--md, .area-radio--md {
-    --_size: var(--area-space-16);
+    --_size: var(--area-mark-box);
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
     --_gap: var(--area-gap-md);
   }
   .area-checkbox--lg, .area-radio--lg {
-    --_size: var(--area-space-20);
+    --_size: calc(var(--area-mark-box) + var(--area-space-4));
     --_text: var(--area-control-lg-text);
     --_leading: var(--area-control-lg-leading);
     --_gap: var(--area-gap-lg);

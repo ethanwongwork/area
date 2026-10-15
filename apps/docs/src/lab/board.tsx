@@ -30,7 +30,7 @@ export function Board() {
       </div>
     </header>
     <main>
-      <section id="comparison" className="lab-stage" aria-label={p.name} data-area-theme={p.theme} data-area-neutral={p.neutral} data-area-accent="indigo" data-area-ui={p.ui} data-area-radius={p.radius} data-area-surface={p.surface} data-area-motion="subtle">
+      <section id="comparison" className="lab-stage" aria-label={p.name} data-area-theme={p.theme} data-area-neutral={p.neutral} data-area-accent="indigo" data-area-ui={p.ui} data-area-radius={p.radius} data-area-surface={p.surface} data-area-motion="150">
         <div className="lab-row lab-between"><h2>{p.name}</h2><Badge tone="success" dot>Baseline E01</Badge></div>
         <div className="lab-row">
           <Button id="lab-button">Create project</Button><Button variant="outline">Invite people</Button><Button variant="ghost">View activity</Button><Button disabled>Unavailable</Button><Chip selected>Design</Chip><Chip>Engineering</Chip>
@@ -65,7 +65,7 @@ export function Board() {
             <div id="light-reset" data-area-theme="light">Light island</div>
           </div>
           <div id="explicit-light" data-area-theme="light">Explicit light</div>
-          <div data-area-motion="none"><Spinner id="motion-probe" label="Motion none probe"/></div>
+          <div data-area-motion="0"><Spinner id="motion-probe" label="Motion none probe"/></div>
           <Tabs id="tabs-first" items={tabs} value="account">Account details</Tabs><Tabs id="tabs-second" items={tabs} value="account">Second account details</Tabs>
         </details>
       </section>

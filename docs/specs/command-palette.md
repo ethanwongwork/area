@@ -56,7 +56,7 @@ highlight  5% warm black (rgba 33,27,23 / 0.05)
 |---|---|---|---|
 | width | 600 | Notion's list column | Notion's preview pane (406) is left out |
 | position | 77 from the top, centred; max 700 tall | Notion | results grow downward from a fixed field |
-| surface | Dialog's: border, opaque surface, floating lift `--area-shadow-float` (command-palette.css:42; `none` under Flat), scrim 13% | dialog.md | Notion's translucent blur is not in Area's surfaces |
+| surface | Dialog's: border, opaque surface, the Elevation axis's modal role `--area-shadow-modal`, as Dialog, scrim 13% | dialog.md | Notion's translucent blur is not in Area's surfaces |
 | corner | row radius + list inset = 8 + 4 = 12 (Menu's and the Combobox list's) | list pass: one list model; kept by owner (audit D-23 A, 2026-09-30) | Notion 20 with 12 rows in a 10 inset; ChatGPT and Notion draw their palettes larger than their menus (corner 16–20, rows 36–48, audit D-23); Area keeps the list model (12 / 32) |
 | search row | 48 tall, 16/24 text; the glyph on the rows' icon column (13 from the edge), the typed text on their text column (41), `--area-gap-row` after the glyph (command-palette.css:56), rule under it | list pass | Notion puts its field 12 in |
 | rows | Menu rows (32, 8 radius, 5% wash), icon 16, 12 gap (`--area-gap-row`, command-palette.css:28; labels at 36) | menu.md | Notion's 36 rows and 20 icons belong to its larger scale |

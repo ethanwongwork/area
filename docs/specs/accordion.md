@@ -209,7 +209,7 @@ wraps the trigger in `h2`–`h6` (Accordion defaults to 3, as WAI asks of an acc
 Uncontrolled (`defaultOpen`) or controlled (`open` + `onOpenChange`). Accordion is
 uncontrolled (`defaultValue`) or controlled (`value` + `onValueChange`), keyed by each
 AccordionItem's `value`; without `multiple`, opening one closes the others. Reduced motion
-(system or `data-area-motion="none"`) zeroes the duration tokens, so the chevron and the body snap. Forced colors keep the
+(system or `data-area-motion="0"`) zeroes the duration tokens, so the chevron and the body snap. Forced colors keep the
 chevron (`currentColor`) and the outline. RTL mirrors the closed plain chevron.
 
 ## Peers and consistency
@@ -314,7 +314,7 @@ Contract: `docs/MOTION.md`. Verified in the built-in browser (computed transitio
 | Focus ring | outline, instant | unchanged |
 | Body open | snapped (`hidden` / `until-found`) | `block-size` (auto via `interpolate-size: allow-keywords`), `padding-block-end` and `opacity` on `slow` (250), `ease-in-out` |
 | Body close | snapped | the same properties on `moderate` (200), `ease-in-out` (one step faster) |
-| Reduced motion | own `@media` rule for the chevron | removed: the duration tokens resolve to 0 under the system preference and `data-area-motion="none"` (checked: every content duration and delay 0s) |
+| Reduced motion | own `@media` rule for the chevron | removed: the duration tokens resolve to 0 under the system preference and `data-area-motion="0"` (checked: every content duration and delay 0s) |
 
 How the body animates with `hidden="until-found"`: after hydration closed content is
 `content-visibility: hidden` (not `display: none`), and React's first close writes `hidden=""`

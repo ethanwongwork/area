@@ -43,7 +43,7 @@ export interface ToasterProps {
 
 const text = (node: ReactNode): string => typeof node === "string" || typeof node === "number" ? String(node) : "";
 
-/** The longest transition on a node, in ms: 0 under the "none" motion preset and reduced motion. */
+/** The longest transition on a node, in ms: 0 at motion 0 and under reduced motion. */
 const transitionMs = (node: Element | null | undefined) => {
   if (!node) return 0;
   const style = getComputedStyle(node);

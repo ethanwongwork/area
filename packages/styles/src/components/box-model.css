@@ -38,7 +38,7 @@
     --_border-line: var(--area-edge-control);
   }
   .area-box-model--info {
-    --_space-ink: var(--area-info-solid);
+    --_space-ink: var(--area-fg-info); /* the info text role: info-solid is a fill (4.35:1 on bg-subtle in light, 3.16:1 in dark) */
     --_padding-bg: var(--area-info-surface);
     --_padding-line: var(--area-info-border-strong);
     --_content-line: var(--area-info-border);

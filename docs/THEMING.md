@@ -41,7 +41,13 @@ The registry in `packages/tokens/src/axes/registry.ts` defines eleven axes:
   `n × weight` %, ambient half, dark doubled). The ladder `shadow-1`…`4` (control, resting, float,
   modal) is for apps. Every role is two layers at every step; step 0 is `0 0 0 0 transparent`, never
   `none`, so a role stays valid inside a component's own shadow list.
-- `motion`: none, subtle or expressive.
+- `motion`: one number, `0` (None) to `300` in steps of 30, `210` by default: the Menu's open in
+  milliseconds (`duration-base`), as `elevation` is the Menu's shadow (`axes/motion.ts`, owner
+  2026-10-14). Every duration scales from it in thirds: `fast` 2/3, `base` 1, `moderate` 4/3,
+  `slow` 5/3, so 210 gives 140 / 210 / 280 / 350 (ChatGPT's popover opens in 220), 150 gives
+  100 / 150 / 200 / 250 (the old Subtle) and 240 gives 160 / 240 / 320 /
+  400 (the old Expressive within 10ms). `instant` stays 0 and the easings are fixed. `0` and
+  `prefers-reduced-motion` make every duration 0. Replaces the None, Subtle and Expressive presets.
 
 Keep the name `accent`: it is the system-selected chromatic role and may represent a
 product brand. Components never ask for it with a variant. They paint one of two emphasis
@@ -68,7 +74,7 @@ decides, because several are public seams or come from `palette.json`. Not a pro
 - Type: `display-sm/lg-*`, `title-sm/md-*`, `text-xs-tracking`.
 - Tiers no component uses: `control-xl`, `gap-` `xs` / `xl`, `icon-xl`,
   `radius-control-xl`; `radius-nested` (components compute their concentric radius).
-- Motion: `duration-instant`, `ease-in`, `-in-out`, `-linear`. Elevation's ladder `shadow-1`…`4` is for apps; components name roles.
+- Motion: `ease-in` and the deprecated `ease-spring`. Elevation's ladder `shadow-1`…`4` is for apps; components name roles.
 - Seams: `badge-bg`, `badge-fg`, `badge-tracking-wide`.
 - The `z-*` layer scale (0–80). Component stacking is local (−2…2 inside a component) and
   every floating surface is in the top layer, so no component reads it; it stays for apps.

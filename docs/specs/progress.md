@@ -88,7 +88,7 @@ Figma.
 | State | Changes | Evidence |
 |---|---|---|
 | determinate | the bar's offset (`translate`) transitions on `duration-slow` ease-out; width while React still writes `inline-size` | `area--default` |
-| indeterminate | travelling segment; stops under `data-area-motion="none"` and reduced motion (display.css:271, 274-281) | `area--indeterminate` |
+| indeterminate | travelling segment; stops under `data-area-motion="0"` and reduced motion (display.css:271, 274-281) | `area--indeterminate` |
 
 No hover, focus or disabled: Progress is not interactive.
 
@@ -107,7 +107,7 @@ No forced-colors rule in display.css (unverified).
 | Slider | rail thickness | 4 | sm 4 | match at sm |
 | Slider, Switch, Spinner | fill | `selection-solid` | same | match |
 | Spinner | track | ink at 25% ≈ #c9 | #e2 | differs (audit E-22 open) |
-| Skeleton, Spinner | motion axis | stop under `motion="none"` | same | match (audit) |
+| Skeleton, Spinner | motion axis | stop under `motion="0"` | same | match (audit) |
 
 ## Visual pass
 
@@ -174,3 +174,4 @@ progress", which describes the indeterminate loop; a value change is a state cha
 - 2026-09-30 · audit S5 (owner) → rail fallback `edge-control` #e2 (was ≈ #dd), the one off-track grey of Switch and Slider; the open Figma #e6 against #dd question is settled → display.css:265.
 - 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → Progress is named with `aria-label` (`label` deprecated alias).
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → value moves by `translate` (rounded) instead of `inline-size` once React writes `--_progress-value`; reduced motion shows the still stripe (was a slowed 5.4s segment); loop easing on the linear token → display.css Progress. See "Motion and interaction, 2026-10-07".
+- 2026-10-14 · owner: Motion is one number, default 210 → the indeterminate loop runs a fixed 1.8s (was `base × 12`, which would have become 2.52s); the still stripe at motion 0 is unchanged → display.css Progress. docs/MOTION.md.

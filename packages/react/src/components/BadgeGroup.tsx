@@ -47,8 +47,12 @@ export const BadgeGroup = forwardRef<HTMLDivElement, BadgeGroupProps>(function B
       const panel = popup.current!;
       // Measure the actual items while the closed popover is invisible. No cloned IDs,
       // duplicate links, or guessed character widths; styles are restored synchronously.
+      // `all: unset` first: the hidden badges then inherit the group's text (size, tracking) rather
+      // than the popover's, so a badge measures the same in either place. They differed by 1.5px at
+      // type 12 / Compact, and the count flipped between two answers until React stopped it
+      // ("Maximum update depth exceeded", all-axis audit 2026-10-14).
       const saved = panel.style.cssText;
-      panel.style.cssText = "display:flex;position:fixed;visibility:hidden;inline-size:max-content;max-inline-size:none";
+      panel.style.cssText = "all:unset;display:flex;position:fixed;visibility:hidden;inline-size:max-content;max-inline-size:none";
       const widths = Array.from(host.querySelectorAll<HTMLElement>(".area-badge-group__item")).map(el => el.getBoundingClientRect().width);
       panel.style.cssText = saved;
       const gap = parseFloat(getComputedStyle(host).columnGap) || 0;

@@ -1,6 +1,6 @@
 /**
  * Language: the system-wide settings Area is built from (the axes in @area/tokens: theme, neutral,
- * accent, action, selection, UI scale, radius, surface, motion), one per Sidebar row. The Canvas
+ * accent, action, selection, type, density, radius, surface, elevation, motion), one per Sidebar row. The Canvas
  * shows each axis as a row of its presets, every preset a tile scoped to it (data-area-<axis>)
  * holding the same abstract illustration (src/abstract.tsx), so a setting is seen by what it does.
  * The Inspector shows the preset chosen on the Canvas (its sample and attribute to copy), else the
@@ -25,6 +25,10 @@ import { AXES } from "../tokens.ts";
 const ALSO: Record<string, Record<string, string>> = {
   accent: { "data-area-action": "accent", "data-area-selection": "accent" },
 };
+
+/** The default preset's name, without the "(Default)" its label carries in a list. */
+const defaultLabel = (axis: (typeof AXES)[number]) =>
+  axis.presets.find(entry => entry.id === axis.defaultPreset)?.label.replace(" (Default)", "") ?? "—";
 
 export function LanguagePage() {
   const { query, item, select } = useStudio();
@@ -132,12 +136,12 @@ export function LanguagePage() {
             <Facts label={preset ? "Preset" : "Setting"} items={preset ? [
               ["Attribute", <Code>data-area-{axis.id}="{preset.id}"</Code>],
               ["Setting", axis.label],
-              ["Default", preset.id === axis.defaultPreset ? "Yes" : `No, ${axis.presets.find(entry => entry.id === axis.defaultPreset)?.label ?? "—"}`],
+              ["Default", preset.id === axis.defaultPreset ? "Yes" : `No, ${defaultLabel(axis)}`],
               ["Controls", axis.description],
             ] : [
               ["Attribute", <Code>data-area-{axis.id}</Code>],
               ["Presets", axis.presets.map(entry => entry.label).join(", ")],
-              ["Default", axis.presets.find(entry => entry.id === axis.defaultPreset)?.label ?? "—"],
+              ["Default", defaultLabel(axis)],
               ["Controls", axis.description],
             ]} />
           </PanelSection>

@@ -136,7 +136,7 @@ captures were lost with a frozen tab and are not in the folder. Other tiles:
 | icon | 16 at md (Button's tier) | Button, Menu peers | Figma draws 24px icons in its 32 tools (4 padding); Area keeps the control icon ladder. Open: a canvas "tools" size |
 | surface inset | **8** | Figma toolbelt (48 around 32); owner references | Was 4 (third pass) |
 | surface radius | concentric: 16 at md | Radius rule, command radius + inset (Figma 13 = 5 + 8) | — |
-| surface paint | `bg-surface`; Figma's shadow `0 0 0.5px 18%, 0 3px 8px 10%, 0 1px 3px 10%`; a 1px decorative inset ring in dark only | Figma toolbelt (light); the halo cannot draw on a dark page | Was a hairline and `shadow-1`. A raised bar is not the overlay lift (Menu, Popover), which stays deeper. Its four-layer recipe is its own (toolbar.css:33), a documented exception to `--area-shadow-float` (audit S10); a literal, so the Flat preset keeps it |
+| surface paint | `bg-surface`; the floating frame (`border-float` at `border-width`, drawn as an inset ring) and the Elevation axis's float role, `--area-shadow-float` (toolbar.css `--_toolbar-shadow`) | Every floating surface | Was Figma's four-layer toolbelt recipe, an exception to the float lift (audit S10), until minimal elevation (2026-10-13) |
 | spacing | **8** between commands, groups and separators | Figma tool row 8 and 8 either side of its divider | Was 2 in a group, 4 between groups |
 | separator | `border-width` × **command height**, **`border-decorative`** (toolbar.css:69; was `stroke-width` until the 2026-10-12 consistency pass) | Owner references (rule spans the controls); owner 2026-09-27: lighter stroke, the bar's seam role | Figma runs it the full 48. Was `border-divider` |
 | hover | `bg-component-hover`, ink fixed | Shared rule; Figma #f5 | #f3 vs #f5: the shared plate wins |
@@ -176,7 +176,7 @@ take it through `toolbar.css`. Forced colours paint the separator `ButtonText`
 
 | Peer | Shared role | Area value in peer | Toolbar | Match / reason |
 |---|---|---|---|---|
-| Menu, Popover, Select picker, Dialog, Toast, Calendar, ColorPicker, Command palette | floating lift | `--area-shadow-float` (0 20 24 / 0 5 8 `shadow-color`) over a 1px decorative border | the overflow is a Menu | match (audit rule); the surface bar keeps its own recipe |
+| Menu, Popover, Select picker, Dialog, Toast, Calendar, ColorPicker, Command palette | floating lift | `--area-shadow-float` over the 1px floating frame (Dialog and Command palette take the modal role) | the overflow is a Menu | match |
 | Menu / Popover | floating radius | `radius-container` 12 | 12 | match |
 | Panel | docked surface | `shadow-2`, decorative edge | surface toolbar floats on Figma's bar shadow | the bar floats over a canvas; Panel docks |
 | Button (neutral ghost) | transparent command hover | `bg-component-hover` | trigger same | match |

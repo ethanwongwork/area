@@ -165,10 +165,11 @@
     background-image: linear-gradient(90deg, transparent, var(--_skeleton-band), transparent);
     background-size: 200% 100%;
     background-repeat: no-repeat;
-    /* spec: 3s linear, ChatGPT's and Figma's shimmer: 12 x the slow duration (250ms), so the
-       loop stretches with the expressive preset as Indicator's pulse does (audit H-20).
-       MOTION.md: shimmer is linear and long, and stops under reduced motion (below). */
-    animation: area-shimmer calc(var(--area-duration-slow) * 12) var(--area-ease-linear) infinite; /* spec */
+    /* spec: 3s linear, ChatGPT's and Figma's shimmer. A fixed period, as the Spinner's turn: it
+       was 12 x slow, which drifted from the measured 3s when the motion default moved to 210
+       (2026-10-14). MOTION.md: shimmer is linear and long, and stops at motion 0 and under
+       reduced motion (below). */
+    animation: area-shimmer 3s var(--area-ease-linear) infinite; /* spec */
   }
 
   /* spec: a block fills the width and is 16 tall until the host sizes it (Primer 1rem, Fluent
@@ -252,7 +253,7 @@
     -webkit-mask: var(--_arc) center / 100% 100% no-repeat;
     mask: var(--_arc) center / 100% 100% no-repeat;
     /* spec: 1s a turn (Untitled, Primer, shadcn, Spectrum; owner 2026-09-27). A fixed second, not
-       4 x slow: MOTION.md bounds a spinner at 0.6-1s a turn, and the expressive preset made it
+       4 x slow: MOTION.md bounds a spinner at 0.6-1s a turn, and the old Expressive preset made it
        1.6s, a sluggish turn (motion pass 2026-10-07). The motion axis and reduced motion stop it
        below, by name, so it no longer needs the zeroed tokens to stop. */
     animation: area-spin 1s var(--area-ease-linear) infinite; /* spec */
@@ -339,7 +340,7 @@
    */
   .area-progress[data-indeterminate] .area-progress__bar {
     inline-size: 35%;
-    animation: area-progress-indeterminate calc(var(--area-duration-base) * 12) var(--area-ease-linear) infinite; /* spec: 1.8s, 12 x the base duration (audit H-20) */
+    animation: area-progress-indeterminate 1.8s var(--area-ease-linear) infinite; /* spec: 1.8s (audit H-20), fixed as the Spinner's turn: it was 12 x base, which drifted when the motion default moved (2026-10-14) */
   }
 
   @keyframes area-progress-indeterminate {
@@ -355,18 +356,18 @@
 
   /* The motion axis and the reduced-motion preference stop every loop by name (docs/MOTION.md,
      "Reduced motion": loops stop; motion pass 2026-10-07, which ended the slowed spinner and
-     indeterminate bar under reduced motion). The loops scale from the duration tokens, but a
-     zero-length infinite loop is not a stop the stylesheet should rely on. Each stops in a drawn
+     indeterminate bar under reduced motion). The loops run fixed, measured periods, so they stop
+     here by name rather than through the zeroed duration tokens. Each stops in a drawn
      rest, never a frame caught mid-loop: the skeleton flat (no band), the spinner's arc at its
      identity turn (12 to 3 o'clock, the drawing itself), the indeterminate bar a full still stripe. */
   /* A pseudo-element cannot sit inside :is(), whose forgiving list dropped it, so the spinner's
      arc has its own rule (it stopped only because its duration was a zeroed token). */
-  [data-area-motion="none"] :is(.area-skeleton, .area-progress[data-indeterminate] .area-progress__bar),
-  [data-area-motion="none"] .area-spinner::before { animation: none; }
-  [data-area-motion="none"] .area-skeleton { background-image: none; }
+  [data-area-motion="0"] :is(.area-skeleton, .area-progress[data-indeterminate] .area-progress__bar),
+  [data-area-motion="0"] .area-spinner::before { animation: none; }
+  [data-area-motion="0"] .area-skeleton { background-image: none; }
   /* A stopped 35% segment reads as 35% done (audit E-9). With motion off, the indeterminate
      bar fills the track with a still stripe, which no determinate value looks like. */
-  [data-area-motion="none"] .area-progress[data-indeterminate] .area-progress__bar {
+  [data-area-motion="0"] .area-progress[data-indeterminate] .area-progress__bar {
     inline-size: 100%;
     translate: none;
     background: repeating-linear-gradient(-45deg, var(--_progress-fill) 0 var(--area-space-4), transparent var(--area-space-4) var(--area-space-8)); /* spec */
@@ -379,7 +380,7 @@
     .area-progress[data-indeterminate] .area-progress__bar {
       inline-size: 100%;
       translate: none;
-      background: repeating-linear-gradient(-45deg, var(--_progress-fill) 0 var(--area-space-4), transparent var(--area-space-4) var(--area-space-8)); /* spec: as motion none */
+      background: repeating-linear-gradient(-45deg, var(--_progress-fill) 0 var(--area-space-4), transparent var(--area-space-4) var(--area-space-8)); /* spec: as motion 0 */
     }
   }
 }
@@ -402,14 +403,14 @@
     outline: none;
     color: transparent;
     pointer-events: none;
-    animation: area-shimmer calc(var(--area-duration-slow) * 12) var(--area-ease-linear) infinite; /* spec: as the base skeleton */
+    animation: area-shimmer 3s var(--area-ease-linear) infinite; /* spec: as the base skeleton */
   }
   /* What the element holds keeps its space but does not paint. */
   .area-skeleton--wrap > * > *,
   .area-skeleton--wrap > *::before,
   .area-skeleton--wrap > *::after { visibility: hidden; }
   .area-skeleton--wrap.area-skeleton--static > * { animation: none; background-image: none; }
-  [data-area-motion="none"] .area-skeleton--wrap > * { animation: none; background-image: none; }
+  [data-area-motion="0"] .area-skeleton--wrap > * { animation: none; background-image: none; }
   @media (prefers-reduced-motion: reduce) {
     .area-skeleton--wrap > * { animation: none; background-image: none; }
   }

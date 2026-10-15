@@ -267,7 +267,7 @@ then owner review. Small fixes reuse an existing spec and re-measure only what c
 
 ## Known gaps
 
-Prioritize form correctness, composite-widget keyboard/focus behavior, motion-none
+Prioritize form correctness, composite-widget keyboard/focus behavior, motion-0
 behavior and theme resilience as families are touched. Before a release, verify
 cross-browser, forced-colors, assistive-technology and consumer integration behavior;
 automated token checks alone do not establish those results. See

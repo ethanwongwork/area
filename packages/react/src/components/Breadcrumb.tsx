@@ -54,5 +54,5 @@ export const BreadcrumbEllipsis = forwardRef<HTMLElement, BreadcrumbEllipsisProp
   if (!items?.length) return <span ref={ref as Ref<HTMLSpanElement>} role="img" aria-label={ariaLabel} className={cx("area-breadcrumb__ellipsis", className)} {...rest}>…</span>;
   const trigger = <button ref={ref as Ref<HTMLButtonElement>} type="button" aria-label={ariaLabel} className={cx("area-breadcrumb__ellipsis", className)} {...rest}>…</button>;
   // Rows are links, so a page opens like any other crumb (middle-click, a new tab, the router's own anchor).
-  return <Menu trigger={trigger}>{items.map(item => <a key={item.href} role="menuitem" href={item.href} className="area-menu__item"><span className="area-menu__text">{item.label}</span></a>)}</Menu>;
+  return <Menu trigger={trigger}>{items.map((item, index) => <a key={`${index}:${item.href}`} role="menuitem" href={item.href} className="area-menu__item"><span className="area-menu__text">{item.label}</span></a>)}</Menu>;
 });

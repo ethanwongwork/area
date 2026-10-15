@@ -34,7 +34,9 @@
  * Every role is two layers at every step, so steps swap and transition layer by layer. 0 is a transparent
  * shadow, never `none`: a role also sits inside lists beside a component's own layers (Board card's tone
  * ring, the floating Toolbar's edge), and `none` there invalidates the whole box-shadow. Forced colours
- * compute box-shadow to none; every floating surface keeps its 1px border-float, which the browser repaints.
+ * compute box-shadow to none; every floating surface keeps its 1px border-float, which the browser repaints
+ * (forced-colors.css restores the frame width under Borderless, and gives the floating Toolbar, whose edge is
+ * a box-shadow, an outline). The ColorPicker thumbs' shadow is functional and fixed, not a role.
  */
 import { type AxisDefinition, tokens } from "./schema.ts";
 
@@ -93,7 +95,7 @@ export const ELEVATION_AXIS: AxisDefinition = {
   ],
   presets: ELEVATION_STEPS.map(step => ({
     id: String(step),
-    label: step === 0 ? "0 · Flat" : step === 3 ? "3 · Default" : String(step),
+    label: step === 0 ? "0 (Flat)" : step === 3 ? "3 (Default)" : String(step),
     description: describe(step),
     tokens: stepTokens(step),
   })),

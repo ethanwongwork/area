@@ -322,7 +322,7 @@ Verified 2026-10-07 on `/button.html` (Chrome, DPR 2, computed styles, backgroun
 `transition-duration` 0.1s at rest and 0s with `data-selected` and `aria-expanded="true"`;
 toggling `data-selected` on a ghost Button creates no transition on the way in and
 `background-color` + `color` transitions of 100ms `cubic-bezier(0.16, 1, 0.3, 1)` on the way out;
-`data-area-motion="none"` gives 0s. The `:hover` and `:active` rules were confirmed in the served
+`data-area-motion="0"` gives 0s. The `:hover` and `:active` rules were confirmed in the served
 CSSOM; a real pointer hover could not be driven in a background tab.
 
 Open questions:

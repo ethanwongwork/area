@@ -5,6 +5,46 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## All-axis audit (2026-10-14, branch `claude/elevation-axis-gallery-e500be`)
+
+- Owner: "do an all axis check ... visual errors, inconsistencies, discrepancies, or bugs". Method: axis independence
+  in the app (every token one setting moves is its own or a documented derivation), painted colours (accent reaches
+  action / selection only when they are accent), a headless-Edge sweep of all 90 families × 9 combinations (default,
+  dark, 12 / compact / sharp / flat / motion 0, 16 / comfortable / pill / elevation 8, the app's 13 compact dark,
+  warm + purple accent dark, borderless flat, borderless dark, no pills) for clipped text, overflow, control heights,
+  text contrast (1px canvas sampling), motion left at 0 and surfaces with no edge; a static code audit; forced colours
+  emulated. Scripts were scratch only (not committed).
+- Fixed: Switch, Checkbox and Radio now follow the type size. Their size classes set fixed 16 / 20 / 24 marks and
+  overrode the 2026-10-12 type-following rule, so they never changed; check and dash drawings are now 1:1 and centred.
+  Box model values took `info-solid` (4.35:1 light, 3.16:1 dark) → `fg-info`. Forced colours: frames come back at 1px
+  under Borderless; the floating Toolbar gets an outline. `restoreCanvas` keeps only values its controls list (an old
+  `minimal` elevation left the Select blank). Citation hover-card demo was a `<div>` in a `<p>`; Breadcrumb ellipsis keys
+  collided on equal hrefs. Badge group `visibleCount="auto"` looped ("Maximum update depth") at type 12 / Compact: hidden
+  badges measured 1.5px narrower inside the popover; measuring now unsets the popover's styles. ScrollToLatest and the Card carousel read the nearest motion scope. `@property` duration
+  fallbacks follow the default step. Language illustrations draw control edges at `stroke-width`. Stale docs, specs and
+  comments (old presets, Notion's 0 20 24 lift, axis counts, border-float #f3).
+- Open (owner): Borderless + elevation 0 leaves Cards, Panels and every floating surface with no edge in light (77 in
+  the sweep); in dark, floating surfaces at Borderless keep no edge (Card has a dark-only ring, floats don't). At type 16
+  Comfortable the Toolbar's Segmented overflows its bar (112px) and a horizontal Stepper step overflows by 10. CSS loop
+  stops are `[data-area-motion="0"] .x` descendants, so a nested non-zero scope inside a 0 scope still stops loops.
+  No Surface control in the Inspector.
+
+## Motion: one number (2026-10-14, branch `claude/elevation-axis-gallery-e500be`)
+
+- Owner: "go with motion, same one-number approach as elevation", and labels "(Default)" / "(Flat)", not "· Default".
+  `axes/motion.ts`: the Menu's open in ms (`duration-base`), 0 (None) to 300 in steps of 30; fast /
+  base / moderate / slow = 2/3, 1, 4/3, 5/3 of it (150 = old Subtle exactly, 240 = old Expressive within 10ms, 300
+  puts slow at Primer's 500 ceiling). Default 210 (owner, after review page
+  https://claude.ai/artifact/H1ygA6Xz18xQfJYp6BZ7RM: matches ChatGPT's popover 220, Figma's dropdown 250), so every
+  transition is 40% longer than before (140 / 210 / 280 / 350). Loops (Skeleton 3s, Progress 1.8s, Indicator and
+  Message 1s) now run fixed measured periods instead of token multiples, which would have drifted. `data-area-motion="none"` → `"0"` in CSS, ScrollToLatest, specs; reduced
+  motion resolves to step 0 (`MOTION_NONE`). Motion select in the Inspector's Canvas section. Radius, Elevation and
+  Motion labels now read "0 (Sharp)", "8 (Default)", "0 (Flat)", "3 (Default)", "0 (None)", "210 (Default)".
+  Docs: THEMING.md, MOTION.md token table.
+- Checks: build, npm test (24,254), contracts 14, React 291/292 (known Indicator docs-dist), typecheck (all);
+  preview: thumb and tokens at 0 / 150 / 240 / 300, Spinner stops at 0, Language tab lists 11 steps. Not checked:
+  the Electron window by eye, dark mode, a menu opening at each step by eye.
+
 ## Icons: counterpart map completed, coverage re-measured (2026-10-14, branch `claude/icon-work-ea140f`, PR)
 
 - Owner: "continue the icon work". Coverage by use, re-measured against Lucide 1.57 / Phosphor / Fluent / Hugeicons:
@@ -27,6 +67,7 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   centred lines stay symmetric (owner: "leave"). 37 icons stay soft at 1× by construction.
 - Fixed: `generate.mjs --only … --emit` stopped on the `rtl.json` check; `2026-10-07/look.mjs` still calls the removed
   docs generator (README there has the workaround).
+
 ## Elevation setting (2026-10-14, branch `claude/component-display-ui-research-11dc77`, PR)
 
 - Owner: "add elevation as an option", then "toned down ... a naming convention similar to the existing axis ...

@@ -100,7 +100,7 @@ centred by construction ((28 − 20) / 2 = 4).
 | text · size | 14/20 | ChatGPT and Figma set tooltips at their body size (14, 11); Area's body is 14 | Notion uses 12 under a 14 body |
 | text · weight | 400 | Type ramp (500 is reserved for labels on fills and selected states); Notion 400 | ChatGPT 600, Figma 450 |
 | shell · fill / ink | `bg-inverse` rgb(40) / `fg-on-inverse` | Products rgb(13), rgb(44), rgb(30) | Within the range; semantic role kept |
-| shell · shadow | **0 4px 12px −2px** `shadow-color` | Target-product agreement on a ~12px blur, 4–8px down; Notion's geometry | Was `shadow-2` (1px). Colour stays theme-aware (6% / 8%) rather than Notion's 8% literal. Tooltip keeps this smaller lift as a documented exception to `--area-shadow-float` (audit S10; surface.css:1225) |
+| shell · shadow | **`--area-shadow-tooltip`**, the Elevation axis's tooltip role: `0 0 2` + `0 4 8` at half the Elevation step in % (1.5% key at the default 3), dark doubled; transparent at step 0; in dark a 5% white inset edge beside it (axes/elevation.ts) | Target-product agreement on a small blur, 4–8px down | Was its own 0 4px 12px −2px lift, an exception to the float lift (audit S10), until the Elevation axis (2026-10-14) |
 | shell · ring | none | — | ChatGPT and Notion add a 1px white-5% ring so their dark tooltips separate from dark pages. Area's tooltip inverts in dark theme, so the ring has no job |
 | kbd · layout | inline, 20px, radius = tooltip shape − 4 = 6 (Kbd's own radius) | ChatGPT inline chip (18px, radius 8); inset rule | Notion stacks the shortcut on a second line |
 | max width | 288 | ChatGPT 320, Notion 300 | — |
@@ -122,7 +122,7 @@ Hover intent is shared with Hover card through `useHoverIntent` (overlay.ts:108-
 | Peer | Shared role | Peer value | Tooltip | Match |
 |---|---|---|---|---|
 | Kbd on-emphasis | nested chip | 20px, radius 6 (`radius-control-sm`, kbd.css) | 20px, 4 block inset at a trailing Kbd | inset rule; the keycap keeps its own 6px corner |
-| Popover | overlay lift | container radius, `--area-shadow-float` (20/24 + 5/8) | radius 10, 0 4px 12px −2px | a tooltip is smaller; its own lift (audit S10 exception) |
+| Popover | overlay lift | container radius, `--area-shadow-float` | radius 10, `--area-shadow-tooltip` | a tooltip is smaller; its own Elevation role |
 
 ## Visual pass
 

@@ -33,7 +33,7 @@ async function run() {
   const cases: ReactNode[] = [];
   for (const ui of ["default", "compact"] as const) for (const radius of radii) for (const size of sizes) for (const checked of [false, true]) {
     const key = [ui, radius, size, checked].join("/");
-    cases.push(h(Theme, { key, value: { ui, radius, motion: "none" }, ...{ "data-case": key } }, h(Switch, { size, checked, readOnly: true, label: "Setting" })));
+    cases.push(h(Theme, { key, value: { ui, radius, motion: "0" }, ...{ "data-case": key } }, h(Switch, { size, checked, readOnly: true, label: "Setting" })));
   }
   flushSync(() => root.render(cases));
   await document.fonts.ready;
