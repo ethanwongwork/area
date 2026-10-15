@@ -267,13 +267,13 @@
     /* The decorative swatch is a direct, named Token slot. The parent reserves its
      * box; it is not a nested action and therefore owns no independent backplate. */
     padding-inline-start: calc(
-      (var(--_token-height) - var(--_token-swatch-size)) / 2 - var(--area-border-width)
+      (var(--_token-height) - var(--_token-swatch-size)) / 2 - var(--_code-border, var(--area-border-width))
     );
   }
   .area-code--swatch:has(> .area-code__swatch:last-child),
   .area-token:has(> .area-token__swatch:last-child) {
     padding-inline-end: calc(
-      (var(--_token-height) - var(--_token-swatch-size)) / 2 - var(--area-border-width)
+      (var(--_token-height) - var(--_token-swatch-size)) / 2 - var(--_code-border, var(--area-border-width))
     );
   }
   .area-button--start { margin-inline-start: calc(-1 * (var(--_inset-start) + var(--_box-border))); }

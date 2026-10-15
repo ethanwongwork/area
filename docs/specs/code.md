@@ -194,3 +194,4 @@ owner's pick, so it waits for a yes.
   white, translucent and saturated swatches; white still outlined on white.
 - 2026-10-12 · owner, review round 16: approved.
 - 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the token swatch's ring is at `stroke-width` (was `border-width`) (token.css). (docs/research/consistency-audit-2026-10-12.md)
+- 2026-10-14 · owner: "merge it, then continue working" → all-axis sweep of Surface 0 at Elevation 0 (90 families, light and dark): the edge reads `--_code-border`: the Surface width on filled chips, `stroke-width` on the subtle variant (Code and Token), which has no fill, so at Surface 0 it no longer turns into plain text; every inset that counts the edge (Code, swatch Token, Token row) reads it too.

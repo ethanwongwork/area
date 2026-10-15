@@ -5,7 +5,7 @@ import { ScrollArea } from "@area/react";
 const frame = {
   blockSize: "calc(var(--area-space-96) * 2)",
   inlineSize: "calc(var(--area-space-96) * 2)",
-  border: "var(--area-border-width) solid var(--area-border-subtle)",
+  border: "var(--area-stroke-width) solid var(--area-border-subtle)", // a frame standing alone, no shadow: a required edge
   borderRadius: "var(--area-radius-container)",
 };
 const list = { margin: 0, padding: "var(--area-space-8) var(--area-space-12)", listStyle: "none", display: "grid", gap: "var(--area-space-8)" };
