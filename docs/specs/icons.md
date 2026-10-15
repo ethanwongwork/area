@@ -4236,6 +4236,8 @@ family: superscript's and subscript's T is 7 × 8 (not 6 × 6). The ? sits 2.25 
 
 ### Still open (proposals; candidates in the reports)
 
+Closed 2026-10-14: kept as approved (see "Proposals (owner calls; not applied)" in the quality pass, 2026-10-10).
+
 - waypoints wider (Lucide, ±5 with r 1.25 rings, smaller than the set's r 1.5 nodes); gap's brackets on x.5
   (costs the dot's tight gap); link and link-off 0.5 up (three strokes on whole pixels); diamond larger
   (±7, r 1.5); plane longer (1.88 under its keyline); lock and unlock larger (1.88 under; the composites use
@@ -4454,6 +4456,12 @@ bell-off, clipboard and clipboard-check are among them.
 - **Small marks share the person family's bite; large marks (key, lens, pen) take their own cut**, as person-key.
 
 ### Proposals (owner calls; not applied)
+
+**Closed 2026-10-14 (owner: "go with your recommendations"):** the owner approved all 808 icons as drawn, so every
+proposal below is kept as approved. The pixel ones were taken up by the 1× pass ("Optical outliers and 1× frames":
+arrow-right-to-line, chevron-last, log-in, zoom-fit, hand, keyboard, thumbs-up, link, link-off, diamond). The rest
+(timeline, bold, bug-off, fast-forward, webcam, shield-cog, plane, lock, unlock, scan-qr, shared edges) stay as drawn;
+reopen one only when it shows a defect in use. The list is kept as the record.
 
 Each has a candidate source and a sheet in `quality/sheets/group-<n>-proposals.png`.
 
