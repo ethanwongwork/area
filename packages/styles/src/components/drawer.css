@@ -66,7 +66,7 @@
     border-inline-start-width: var(--area-border-width);
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);
-    box-shadow: var(--area-shadow-modal); /* the Elevation axis's modal role, as Dialog */
+    box-shadow: var(--area-shadow-edge), var(--area-shadow-modal); /* the Surface axis's edge, then the Elevation axis's modal role, as Dialog */
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
     text-align: start;

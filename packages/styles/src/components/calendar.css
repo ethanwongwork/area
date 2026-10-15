@@ -38,7 +38,7 @@
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
     /* spec: the floating-surface lift shared with Popover and Menu (surface.css). */
-    box-shadow: var(--area-shadow-float);
+    box-shadow: var(--area-shadow-edge), var(--area-shadow-float);
   }
   /* The 8px top inset seats the month header; a week strip has none, so it takes 12 all round. */
   .area-calendar--week { padding-block-start: calc(var(--area-inset-surface-sm) - var(--area-border-width)); }

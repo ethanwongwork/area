@@ -5,6 +5,21 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Surface: one number, Borderless keeps an edge (2026-10-14, branch `claude/next-axis-9766b4`)
+
+- Owner: "continue working on the next axis" (the Elevation session had recommended Surface after Motion).
+  `axes/surface.ts`: the frame's width, `1` (Default) or `0` (Borderless), `data-area-surface="1"|"0"` (was
+  outlined / borderless). New token `shadow-edge`: transparent at 1; at 0 ChatGPT's frameless-menu edge (`0 0 1px`
+  black 62%, dark adds inset `0 0 1px` white 20%), listed first in the box-shadow of every surface the setting
+  unframes (13 families), so the audit's open items (no edge at Borderless + Elevation 0; floats edgeless in dark)
+  are closed. Card's dark-only ring (O2) replaced by it. Surface Select in the Inspector. Research:
+  `docs/research/surface-2026-10-14.md`; spec log lines in 13 specs.
+- Owner approved ("go with your recs"): review https://claude.ai/artifact/L4TCF2W5zcjvBK7xZmaDBN. The dark edge is
+  ChatGPT's and fainter than Card's old ring.
+- Checks: build, tokens 24,254, contracts 14, manifest, React 291/292 (known Indicator), cohesion 8 (pins the edge),
+  typecheck, playgrounds 0. Not checked: the Electron window by eye, forced colours, a 1× display.
+- Still open from the audit: Toolbar / Stepper overflow at type 16 Comfortable; nested motion-0 scopes stop loops.
+
 ## All-axis audit (2026-10-14, branch `claude/elevation-axis-gallery-e500be`)
 
 - Owner: "do an all axis check ... visual errors, inconsistencies, discrepancies, or bugs". Method: axis independence

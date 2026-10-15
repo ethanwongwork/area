@@ -7,7 +7,7 @@
  */
 import { DEFAULT_PILLS, PILL_SHAPES } from "@area/tokens/config";
 export interface GalleryControl {
-  axis: "theme" | "type" | "density" | "radius" | "pills" | "elevation" | "motion";
+  axis: "theme" | "type" | "density" | "radius" | "pills" | "surface" | "elevation" | "motion";
   /**
    * Two or three options are a Segmented (Apple and Primer cap segments at 5-7); a longer list of
    * exact settings is a Select, each option naming what it sets (shadcn's radius picker is a menu).
@@ -37,6 +37,13 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = [
     value,
     label: value === "0" ? "0 (Sharp)" : value === "pill" ? "Pill" : value === "8" ? "8 (Default)" : value,
   })) },
+  // The frame's width (axes/surface.ts, 2026-10-14): one number, 1 (Default) or 0 (Borderless, a soft shadow edge),
+  // as the settings beside it are. A Select, as Elevation, though it has two options: "0 (Borderless)" does not fit a
+  // segment beside a label in the 256 Inspector, and it reads as one of the column of numbers it sits in.
+  { axis: "surface", kind: "select", label: "Surface", hint: "The frame's width in px; 0 draws a soft shadow edge instead", defaultValue: "1", items: [
+    { value: "0", label: "0 (Borderless)" },
+    { value: "1", label: "1 (Default)" },
+  ] },
   // How much surfaces lift (axes/elevation.ts, owner 2026-10-14): one number, the Menu's shadow strength in percent,
   // 0 (Flat) to 8, as Radius is the medium Button's corner. A Select, as Radius: nine steps.
   { axis: "elevation", kind: "select", label: "Elevation", hint: "The Menu's shadow in %; every component's lift scales from it", defaultValue: "3", items: ["0", "1", "2", "3", "4", "5", "6", "7", "8"].map(value => ({

@@ -1,21 +1,37 @@
 /**
- * Surface: the decorative stroke weight. Required edges (`stroke-width`: controls, state, swatch
- * rings, joined seams, divider rules) and focus are independent of it.
+ * Surface: the decorative frame's width, as one number (owner, 2026-10-14: "continue working on the next
+ * axis", after Elevation and Motion took the one-number form). Required edges (`stroke-width`: controls,
+ * state, swatch rings, joined seams, divider rules) and focus are independent of it.
+ * Research: docs/research/surface-2026-10-14.md.
  *
- * Depth moved to its own axis (axes/elevation.ts, owner 2026-10-14), so stroke and lift combine
- * freely: Outlined draws the 1px frames of cards, panels and floating surfaces; Borderless removes
- * them, for a shadow-led look at a higher elevation step (it was the Elevated preset).
+ * 1 (the default) draws the 1px frames of cards, panels and floating surfaces. 0 (Borderless) removes them
+ * for a shadow-led look (it was the Elevated preset). No other width is offered: every product measured
+ * frames at 1px (Notion's ring, ChatGPT's composer, Cursor's widget border), and a fractional width would
+ * put the insets that count the frame off whole pixels at 1x.
+ *
+ * Borderless still keeps an edge, as ChatGPT's frameless menu does: `shadow-edge` is a 1px-blur shadow at
+ * 62% black outside the surface and, in dark, a 1px-blur 20% white line inside it (captured 2026-10-13,
+ * docs/research/elevation-2026-10-13.md). Every surface whose frame the setting removes lists it in its
+ * box-shadow, so a surface never loses its edge: not at Elevation 0 (no lift to carry it), and not in dark
+ * (where a lift barely reads). At 1 it is transparent. It is two layers at both steps, never `none`, so it
+ * sits in a box-shadow list beside the Elevation roles. Forced colours drop box-shadow; forced-colors.css
+ * puts the frame back there.
  */
 import { type AxisDefinition, tokens } from "./schema.ts";
+
+export const SURFACE_STEPS = ["0", "1"] as const;
+
+const NO_EDGE = "0 0 0 0 transparent, inset 0 0 0 0 transparent";
+const SOFT_EDGE = "0 0 1px rgb(0 0 0 / 0.62), inset 0 0 1px light-dark(transparent, rgb(255 255 255 / 0.2))";
 
 export const SURFACE_AXIS: AxisDefinition = {
   id: "surface",
   label: "Surface",
-  description: "Whether surfaces draw their 1px frame.",
-  defaultPreset: "outlined",
-  namespaces: ["--area-border-width"],
+  description: "The frame's width on cards, panels and floating surfaces, 1px or 0 (Borderless, a soft shadow edge).",
+  defaultPreset: "1",
+  namespaces: ["--area-border-width", "--area-shadow-edge:"],
   presets: [
-    { id: "outlined", label: "Outlined", description: "1px frames on cards, panels and floating surfaces.", tokens: tokens({ "border-width": "1px" }) },
-    { id: "borderless", label: "Borderless", description: "No decorative frames; pair with an elevation that lifts. Control and state edges remain.", tokens: tokens({ "border-width": "0px" }) },
+    { id: "0", label: "0 (Borderless)", description: "No frames: a soft shadow edge, ChatGPT's frameless menu. Control and state edges remain.", tokens: tokens({ "border-width": "0px", "shadow-edge": SOFT_EDGE }) },
+    { id: "1", label: "1 (Default)", description: "1px frames on cards, panels and floating surfaces.", tokens: tokens({ "border-width": "1px", "shadow-edge": NO_EDGE }) },
   ],
 };

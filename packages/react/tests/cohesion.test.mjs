@@ -73,7 +73,8 @@ test('every surface takes its depth from its elevation role', () => {
     const own = rules.filter(rule => rule.selector.split(/\s*,\s*/).includes(block) && /(^|[;\s])box-shadow\s*:/.test(rule.body));
     assert.ok(own.length, `${block} has no box-shadow`);
     const value = [...own.at(-1).body.matchAll(/(?:^|[;\s])box-shadow\s*:\s*([^;]+)/g)].at(-1)[1].trim();
-    return value === 'var(--_elevation)' ? rules.filter(rule => rule.selector.split(/\s*,\s*/).includes(block)).map(elevation).filter(Boolean).at(-1) ?? value : value;
+    const ownElevation = () => rules.filter(rule => rule.selector.split(/\s*,\s*/).includes(block)).map(elevation).filter(Boolean).at(-1);
+    return value.includes('var(--_elevation)') ? value.replace('var(--_elevation)', ownElevation() ?? 'var(--_elevation)') : value;
   };
   const expect = { float: ['.area-popover', '.area-menu', '.area-toast', '.area-menu__search-surface', '.area-scroll-to-latest > .area-button'], modal: ['.area-dialog', '.area-command-palette'], resting: ['.area-panel', '.area-composer'] };
   for (const [role, blocks] of Object.entries(expect)) {
@@ -84,6 +85,18 @@ test('every surface takes its depth from its elevation role', () => {
   }
   assert.match(ruleFor('.area-tooltip')?.body ?? '', /var\(--area-shadow-tooltip\)/, 'Tooltip does not take the tooltip role');
   assert.match(ruleFor('.area-card')?.body ?? '', /--_card-shadow:\s*var\(--area-shadow-resting\)/, 'Card does not take the resting role');
+
+  // The Surface axis (axes/surface.ts, 2026-10-14): at 0 (Borderless) a framed surface's edge is a shadow, so every
+  // surface whose frame the setting removes lists `shadow-edge` first, or Borderless leaves it with no edge at
+  // Elevation 0 and in dark. Two layers at both steps, never none, as the roles.
+  const edges = [...css.matchAll(/--area-shadow-edge:\s*([^;]+);/g)].map(match => match[1].trim());
+  assert.equal(edges.length, 3, '--area-shadow-edge should have the default and one value per step');
+  for (const value of edges) assert.equal(layers(value), 2, `--area-shadow-edge is not two layers: ${value}`);
+  assert.ok(edges.includes('0 0 1px rgb(0 0 0 / 0.62), inset 0 0 1px light-dark(transparent, rgb(255 255 255 / 0.2))'), 'Borderless lost ChatGPT\'s frameless edge');
+  for (const block of [...expect.float.slice(0, 4), ...expect.modal, '.area-panel', '.area-drawer', '.area-board-card']) {
+    assert.match(paints(block), /^var\(--area-shadow-edge\),/, `${block} does not lead with the Surface axis's edge`);
+  }
+  assert.match(ruleFor('.area-card')?.body ?? '', /box-shadow:\s*var\(--area-shadow-edge\), var\(--_card-shadow\)/, 'Card does not lead with the Surface axis\'s edge');
 });
 
 test('text fields show disabled with field paint, not opacity', () => {

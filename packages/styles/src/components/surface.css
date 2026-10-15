@@ -102,12 +102,9 @@
     color: var(--area-fg-default);
     font-size: var(--_card-title-size);
     line-height: var(--_card-title-leading);
-    box-shadow: var(--_card-shadow);
-    /* Borderless (border-width 0) leaves the lift to carry the card, but a lift barely reads in dark: the edge comes back as
-       an inset ring in dark only, as wide as the frame Borderless removed (0 under Outlined). Owner, 2026-10-12:
-       consistency pass O2 (then the Elevated preset). */
-    outline: calc(var(--area-stroke-width) - var(--_card-border)) solid light-dark(transparent, var(--_card-edge));
-    outline-offset: calc(var(--_card-border) - var(--area-stroke-width));
+    /* The Surface axis's edge first: transparent at 1, and at 0 (Borderless) the soft shadow edge that keeps the
+       card distinct at Elevation 0 and in dark (axes/surface.ts; was a dark-only inset ring, consistency pass O2). */
+    box-shadow: var(--area-shadow-edge), var(--_card-shadow);
   }
 
   /* Size: corner and inset only. */
@@ -891,7 +888,7 @@
        above its menus: Material L3 over L2, Fluent shadow64 over 16, Notion 24/48 over 20/24). */
     --_elevation: var(--area-shadow-modal);
     color: var(--area-fg-default);
-    box-shadow: var(--_elevation);
+    box-shadow: var(--area-shadow-edge), var(--_elevation); /* the Surface axis's edge: soft at Borderless */
     overflow: hidden;
   }
 
@@ -987,7 +984,7 @@
     --_elevation: var(--area-shadow-float);
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);
-    box-shadow: var(--_elevation);
+    box-shadow: var(--area-shadow-edge), var(--_elevation); /* the Surface axis's edge: soft at Borderless */
   }
 
   .area-popover {
@@ -1017,7 +1014,7 @@
     line-height: var(--area-ui-leading);
     overflow-wrap: anywhere;
     /* The same floating lift as Menu, the float role (Notion draws both surfaces with one shadow). */
-    box-shadow: var(--_elevation);
+    box-shadow: var(--area-shadow-edge), var(--_elevation); /* the Surface axis's edge: soft at Borderless */
   }
   /* Author display/position must preserve the native popover closed state and top layer. */
   .area-popover[popover] { position: fixed; }
@@ -1110,7 +1107,7 @@
      * Figma (2/5 + 10/16) float menus the same way; Area's 1px shadow-2 read as a flat card.
      * docs/specs/menu.md.
      */
-    box-shadow: var(--_elevation);
+    box-shadow: var(--area-shadow-edge), var(--_elevation); /* the Surface axis's edge: soft at Borderless */
   }
 
   /*
@@ -1347,7 +1344,7 @@
     --_elevation: var(--area-shadow-float);
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
-    box-shadow: var(--_elevation);
+    box-shadow: var(--area-shadow-edge), var(--_elevation); /* the Surface axis's edge: soft at Borderless */
   }
 
   .area-menu__search-surface > .area-menu {
@@ -1499,7 +1496,7 @@
     /* spec: the floating-surface lift; see Popover and Menu. */
     --_elevation: var(--area-shadow-float);
     color: var(--area-fg-default);
-    box-shadow: var(--_elevation);
+    box-shadow: var(--area-shadow-edge), var(--_elevation); /* the Surface axis's edge: soft at Borderless */
     inline-size: var(--area-toast-inline-size, 360px); /* not captured: toast.md records 360 as Area's width (shadcn measured 384) */
     min-inline-size: 0;
     max-inline-size: 100%;
