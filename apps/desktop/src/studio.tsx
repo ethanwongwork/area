@@ -34,8 +34,9 @@ export const TABS = [
 export type TabId = (typeof TABS)[number]["id"];
 type Theme = "light" | "dark";
 
-/** The Canvas's own theme settings (the Inspector writes them): type size, density, radius, surface, elevation, motion, pills. */
-export type CanvasAxes = Record<"type" | "density" | "radius" | "surface" | "elevation" | "motion" | "pills", string>;
+/** The Canvas's own theme settings (the Inspector writes them): the colour settings, type size, density, radius, surface, elevation,
+ * motion, pills. */
+export type CanvasAxes = Record<"neutral" | "accent" | "action" | "selection" | "type" | "density" | "radius" | "surface" | "elevation" | "motion" | "pills", string>;
 const CANVAS_DEFAULTS = Object.fromEntries(
   GALLERY_CONTROLS.filter(control => control.axis !== "theme").map(control => [control.axis, control.defaultValue]),
 ) as CanvasAxes;
@@ -270,9 +271,9 @@ export function Workspace({ sidebar, canvasLead, canvasTitle, canvasMeta, canvas
   const studio = useStudio();
   const sidebarWidth = usePanelWidth("sidebar");
   const inspectorWidth = usePanelWidth("inspector");
-  // The Canvas body carries the Inspector's settings on every tab: density (which also lays tiles out
+  // The Canvas body carries the Inspector's settings on every tab: the colour settings, density (which also lays tiles out
   // as a hairline contact sheet in compact), radius, surface, elevation, motion and pills.
-  const axes = { "data-area-type": studio.canvas.type, "data-area-density": studio.canvas.density, "data-area-radius": studio.canvas.radius, "data-area-surface": studio.canvas.surface, "data-area-elevation": studio.canvas.elevation, "data-area-motion": studio.canvas.motion, "data-area-pills": studio.canvas.pills };
+  const axes = { "data-area-neutral": studio.canvas.neutral, "data-area-accent": studio.canvas.accent, "data-area-action": studio.canvas.action, "data-area-selection": studio.canvas.selection, "data-area-type": studio.canvas.type, "data-area-density": studio.canvas.density, "data-area-radius": studio.canvas.radius, "data-area-surface": studio.canvas.surface, "data-area-elevation": studio.canvas.elevation, "data-area-motion": studio.canvas.motion, "data-area-pills": studio.canvas.pills };
   return (
     <div className="studio-workspace" data-sidebar={studio.sidebar ? "" : undefined} data-inspector={studio.inspector ? "" : undefined}>
       {studio.sidebar ? (

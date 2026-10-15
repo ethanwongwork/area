@@ -34,7 +34,8 @@ The registry in `packages/tokens/src/axes/registry.ts` defines eleven axes:
   (`axes/surface.ts`, 2026-10-14; was `outlined` / `borderless`). Sets `border-width` and `shadow-edge`:
   transparent at 1, and at 0 ChatGPT's frameless-menu edge (a 1px-blur shadow at 62% black, plus a 1px-blur
   20% white line inside it in dark), which every framed surface lists first in its `box-shadow`, so no
-  surface loses its edge at Elevation 0 or in dark. Required edges (`stroke-width`) and focus stay.
+  surface loses its edge at Elevation 0 or in dark; `shadow-edge-filter` is the same edge as a drop-shadow, for the
+  Popover arrow. Required edges (`stroke-width`) and focus stay.
 - `elevation`: one number, `0` (Flat) to `8`, `3` by default: the Menu's shadow strength in percent,
   as `radius` is the medium Button's corner (`axes/elevation.ts`, owner 2026-10-14;
   [research](research/elevation-2026-10-14.md)). It scales five roles that components name:

@@ -18,7 +18,16 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   ChatGPT's and fainter than Card's old ring.
 - Checks: build, tokens 24,254, contracts 14, manifest, React 291/292 (known Indicator), cohesion 8 (pins the edge),
   typecheck, playgrounds 0. Not checked: the Electron window by eye, forced colours, a 1× display.
-- Still open from the audit: Toolbar / Stepper overflow at type 16 Comfortable; nested motion-0 scopes stop loops.
+- Then ("go with your recs, then continue working"): the Popover arrow takes the edge as a drop-shadow
+  (`shadow-edge-filter`). The Inspector's Canvas section adds the colour settings, Neutral and Accent (Selects,
+  "Blue (Default)"), Action and Selection (Segmented), options and defaults read from `AXIS_PRESETS` /
+  `DEFAULT_AXES`; Canvas Buttons paint the accent at Action: Accent.
+- Audit items closed as not bugs: the Toolbar's 112px spill at type 16 Comfortable only appears with the tile zoom
+  forced to 1 (the gallery's fit scales it to 0.70 and it fits); the Stepper's 10px is its documented behaviour
+  ("overflows rather than overlaps"), inside its tile.
+- Still open: CSS loops stop by `[data-area-motion="0"] .x`, so a nested non-zero scope inside a 0 scope still
+  stops them (ScrollToLatest already reads the nearest scope). A fix needs an inherited motion token (a space
+  toggle plus a 0/1 flag for the Progress stripe) or container style queries; no surface in the app nests one.
 
 ## All-axis audit (2026-10-14, branch `claude/elevation-axis-gallery-e500be`)
 

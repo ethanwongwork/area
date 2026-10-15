@@ -5,9 +5,9 @@
  * the Inspector's Canvas section and the saved Canvas (studio.tsx restoreCanvas, which keeps only
  * values listed here) both read this list.
  */
-import { DEFAULT_PILLS, PILL_SHAPES } from "@area/tokens/config";
+import { AXIS_PRESETS, DEFAULT_AXES, DEFAULT_PILLS, PILL_SHAPES } from "@area/tokens/config";
 export interface GalleryControl {
-  axis: "theme" | "type" | "density" | "radius" | "pills" | "surface" | "elevation" | "motion";
+  axis: "theme" | "neutral" | "accent" | "action" | "selection" | "type" | "density" | "radius" | "pills" | "surface" | "elevation" | "motion";
   /**
    * Two or three options are a Segmented (Apple and Primer cap segments at 5-7); a longer list of
    * exact settings is a Select, each option naming what it sets (shadcn's radius picker is a menu).
@@ -22,8 +22,24 @@ export interface GalleryControl {
   defaultValue: string;
 }
 
+/** A named axis's presets as options, the default marked as the number settings mark theirs. */
+function named(axis: "neutral" | "accent"): GalleryControl["items"] {
+  return AXIS_PRESETS[axis].map(value => {
+    const name = value[0]!.toUpperCase() + value.slice(1);
+    return { value, label: value === DEFAULT_AXES[axis] ? `${name} (Default)` : name };
+  });
+}
+
 export const GALLERY_CONTROLS: readonly GalleryControl[] = [
   { axis: "theme", kind: "segmented", label: "Mode", defaultValue: "light", items: [{ value: "light", label: "Light" }, { value: "dark", label: "Dark" }] },
+  // The colour settings (axes/color.ts, axes/emphasis.ts), in the registry's order, their options and defaults read
+  // from it. Neutral and Accent name a scale, a Select each (eleven accents); the default carries "(Default)" as the
+  // number settings do. Action and Selection are two words each, a Segmented, as Mode. An accent shows on a component
+  // only where Action or Selection is Accent (and in focus rings and links), which Accent's hint says.
+  { axis: "neutral", kind: "select", label: "Neutral", hint: "The grey every surface, edge and text is drawn in", defaultValue: DEFAULT_AXES.neutral, items: named("neutral") },
+  { axis: "accent", kind: "select", label: "Accent", hint: "Shows where Action or Selection is Accent, and in focus rings and links", defaultValue: DEFAULT_AXES.accent, items: named("accent") },
+  { axis: "action", kind: "segmented", label: "Action", hint: "The colour of primary actions", defaultValue: DEFAULT_AXES.action, items: [{ value: "neutral", label: "Neutral" }, { value: "accent", label: "Accent" }] },
+  { axis: "selection", kind: "segmented", label: "Selection", hint: "The colour of checked, selected and current states", defaultValue: DEFAULT_AXES.selection, items: [{ value: "neutral", label: "Neutral" }, { value: "accent", label: "Accent" }] },
   // Type size and density, separate (owner, 2026-10-12; axes/type-size.ts, axes/density.ts). Five
   // two-digit sizes fit a Segmented; the three densities' names do not beside a label in the 256
   // Inspector (Comfortable is 76 of text in a 42 segment), so Density is a Select, as Radius is. The

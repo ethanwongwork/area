@@ -1,6 +1,6 @@
 /**
- * The Inspector's Canvas section: the system-wide settings the Canvas previews (type, density,
- * radius, surface, elevation, motion, pills), one row each, from the gallery's own control list (src/gallery/controls.ts).
+ * The Inspector's Canvas section: the system-wide settings the Canvas previews (neutral, accent,
+ * action, selection, type, density, radius, surface, elevation, motion, pills), one row each, from the gallery's own control list (src/gallery/controls.ts).
  * They write data-area-* on the Canvas only, so the app's own chrome stays compact. A tab adds its
  * own Canvas-wide display settings after them as children (Typography's sample text).
  */
@@ -9,7 +9,7 @@ import { Chip, ChipGroup, Field, PanelSection, Segmented, Select } from "@area/r
 import { GALLERY_CONTROLS } from "./gallery/controls.ts";
 import { useStudio, type CanvasAxes } from "./studio.tsx";
 
-export function CanvasSettings({ axes = ["type", "density", "radius", "surface", "elevation", "motion", "pills"], children }: { axes?: ReadonlyArray<keyof CanvasAxes>; children?: ReactNode }) {
+export function CanvasSettings({ axes = ["neutral", "accent", "action", "selection", "type", "density", "radius", "surface", "elevation", "motion", "pills"], children }: { axes?: ReadonlyArray<keyof CanvasAxes>; children?: ReactNode }) {
   const { canvas, setCanvas } = useStudio();
   return (
     <PanelSection heading="Canvas">

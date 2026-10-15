@@ -1037,6 +1037,12 @@
     overflow: visible;
     fill: var(--area-bg-surface);
     pointer-events: none;
+    /* At Surface 0 the frame's stroke is gone and the arrow takes the surface's soft edge as a drop-shadow
+       (axes/surface.ts). The clip keeps the shell overlap (the 1px above the base) and cuts what a shadow of
+       that overlap would draw inside the shell: above the base and, beside the shoulders, down to 1px below
+       it, where the shell's own edge runs. The sides and point keep 2px for the blur. */
+    filter: var(--area-shadow-edge-filter);
+    clip-path: polygon(0 -1px, 100% -1px, 100% 1px, calc(100% + 2px) 1px, calc(100% + 2px) calc(100% + 2px), -2px calc(100% + 2px), -2px 1px, 0 1px);
   }
   .area-popover__arrow-edge { fill: none; stroke: var(--area-border-float); stroke-width: var(--area-border-width); vector-effect: non-scaling-stroke; }
   :is(.area-popover--top:not([data-side]), .area-popover[data-side="top"]) > .area-popover__arrow { left: 50%; left: round(down, 50%, 1px); top: 100%; transform: translate(-50%, 0); }
