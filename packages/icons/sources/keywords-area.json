@@ -239,6 +239,9 @@
   "insert",
   "put"
  ],
+ "crown": [
+  "premium"
+ ],
  "duplicate": [
   "copy",
   "clone"
@@ -336,6 +339,9 @@
   "variable",
   "style",
   "value"
+ ],
+ "utensils": [
+  "knife"
  ],
  "volume-low": [
   "quiet",

@@ -1,8 +1,8 @@
 <svg data-set="area-pilot" data-keyline="square" data-angles="free" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path data-filled="solid" d="M3 2.5H5.5A1 1 0 0 1 6.5 3.5V12.5A1 1 0 0 1 5.5 13.5H3A1 1 0 0 1 2 12.5V3.5A1 1 0 0 1 3 2.5Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="line" d="M2 5H6.5M2 11H6.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="gap" d="M1 5H7.5M1 11H7.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="solid" d="M11.681 13.304L13.151 13.01A1 1 0 0 0 13.936 11.833L12.171 3.008A1 1 0 0 0 10.994 2.223L9.523 2.518A1 1 0 0 0 8.739 3.694L10.504 12.52A1 1 0 0 0 11.681 13.304Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="line" d="M10.21 11.049L13.642 10.362M9.033 5.165L12.465 4.479" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="gap" d="M9.229 11.245L14.623 10.166M8.052 5.361L13.446 4.283" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="solid" d="M3 2H5.5A1 1 0 0 1 6.5 3V12A1 1 0 0 1 5.5 13H3A1 1 0 0 1 2 12V3A1 1 0 0 1 3 2Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="line" d="M2 4.5H6.5M2 10.5H6.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="gap" d="M1 4.5H7.5M1 10.5H7.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="solid" d="M11.681 12.804L13.151 12.51A1 1 0 0 0 13.936 11.333L12.171 2.508A1 1 0 0 0 10.994 1.723L9.523 2.018A1 1 0 0 0 8.739 3.194L10.504 12.02A1 1 0 0 0 11.681 12.804Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="line" d="M10.21 10.549L13.642 9.862M9.033 4.665L12.465 3.979" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="gap" d="M9.229 10.745L14.623 9.666M8.052 4.861L13.446 3.783" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

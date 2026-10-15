@@ -2,7 +2,7 @@
 <path data-filled="fill" d="M4.5 12A2.5 2.5 0 0 1 3.156 7.392A4.25 4.25 0 1 1 11.446 5.575A3.25 3.25 0 0 1 10.75 12Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path data-filled="line" d="M3.273 11.678A2.5 2.5 0 0 1 3.156 7.392A4.25 4.25 0 1 1 11.446 5.575A3.25 3.25 0 0 1 12.663 11.379" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path data-filled="line" d="M5.5 7.5V9.5A2.795 2.795 0 0 1 10.5 9.499M5.5 9.5H7.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="line" d="M10.5 14V12A2.795 2.795 0 0 1 5.5 12.001M10.5 12H8.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="line" d="M10.5 13.5V11.5A2.795 2.795 0 0 1 5.5 11.501M10.5 11.5H8.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path data-filled="inset" d="M5.53125 4.59375V6.34375A2.44562 2.44562 0 0 1 9.90625 6.34375M5.53125 6.34375H7.28125" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path data-filled="inset" d="M9.90625 10.28125V8.53125A2.44562 2.44562 0 0 1 5.53125 8.53125M9.90625 8.53125H8.15625" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
