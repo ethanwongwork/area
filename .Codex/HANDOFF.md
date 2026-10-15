@@ -53,6 +53,10 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   `data-area-contrast` on the Canvas only (System writes none, so the OS decides). Checked: More strengthens the
   Input edge to #838383. Note: in the hidden browser pane CSS transitions never advance (currentTime 0), so a value
   read after a change can look unchanged; read with `transition: none` or in headless Edge.
+- Merged (PR #93). Color tab (PRODUCT_UI rule 14): its Inspector offers Neutral, which tints the neutral ramp.
+  The Neutral setting maps `--area-neutral-*` onto Cool / Warm step for step (checked equal), so with Neutral
+  set, the neutral ramp's tiles, list rows, contrast filter and Inspector describe that ramp's step (a "Paints"
+  row says so); the Inspector's Hex used to read the document root and disagree with the swatch.
 
 ## All-axis audit (2026-10-14, branch `claude/elevation-axis-gallery-e500be`)
 
