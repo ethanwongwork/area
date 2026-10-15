@@ -18,6 +18,30 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   (src/gallery/fit.ts). Colour cards are unit tiles hugging their text, short OKLCH.
 - Not done: gallery tiles for CustomSelect `multiple` and ZoomControl `stepper`; Language tiles are not cards.
 
+## Density: one number (2026-10-14, branch `claude/next-axis-density`)
+
+- Owner: "continue working on the next axis". Density was the last geometry setting named by words. It is now the
+  medium Button's height at type 14: `data-area-density="28"|"32"|"36"` (was compact / default / comfortable),
+  labels "28 (Compact)", "32 (Default)", "36 (Comfortable)". Same three levels, nothing renders differently; the
+  `ui` shorthand maps to 28 / 32; a Canvas saved with a name restores as its number. Three steps, not more: the
+  products with a density setting offer three, and a fourth either collapses sm onto md at the 24 floor (24) or
+  repeats type 16 at 36 (40). Research: `docs/research/density-2026-10-14.md`.
+- Checks: build, tokens 24,254, contracts 14, manifest, typecheck, React 292/293 (known Indicator); app preview:
+  root 26px md at type 13 / 28, Canvas Button 28 / 32 / 36 per step, contact sheet at 28, a saved `comfortable`
+  restores as 36, Language tab text, no console errors. Not checked: forced colours, a 1× display.
+- Merged (PR #90). Then: Badge's audit demo wrote `data-area-ui` from an "Audit density" select (default / compact,
+  which also set type 12); it now writes `data-area-density` 28 / 32 / 36. Motion's open check (left from the Motion
+  entry): a real Menu popover in dark at steps 0 / 30 / 150 / 210 / 300 opens over 0 / 30 / 150 / 210 / 300 ms and
+  closes over 0 / 20 / 100 / 140 / 200 (`fast`), `duration-loop` 0 only at step 0.
+- Merged (PR #95). Then (owner: "go with your rec"): under More contrast, Surface 0's frames come back at 1px.
+  Surface writes `frame-width` (registered); `border-width` is derived, `max(frame-width, contrast-more × 1px)`,
+  re-emitted at axis and contrast boundaries; forced-colors.css sets `frame-width`. Cohesion test pins the
+  derivation. Checked in the app: Surface 0 + More draws 1px on Card and Menu (nested either way), Card keeps 120
+  wide, Standard stays 0; dark shows the frame clearly. Docs: CONTRAST.md, THEMING.md, DESIGN_SYSTEM.md (Strokes),
+  surface research "More contrast". Not checked: the OS `prefers-contrast` path by emulation (same derivation).
+- Fixed in passing: `git fetch` failed on three stray refs with a " 2" suffix (`origin/main 2` too); moved to
+  `~/Desktop/area/.git-stray-refs-backup-2026-10-14/` (every commit they named is on a branch), delete when happy.
+
 ## Icons: open list closed (2026-10-14, branch `claude/icon-work-followup-2fcf1e`)
 
 - Owner: "go with your recommendations". The 2026-10-10 quality-pass proposals are closed as kept-as-approved (spec
@@ -54,7 +78,27 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   Token and Token row's outline (no fill) draw a required edge via Code's `--_code-border`; the Scroll area and
   Separator demo frames are `stroke-width`. Research note "Sweep after the change".
 - Found: `git fetch` fails in the shared repo on two stray refs, `refs/heads/claude/elevation-axis-gallery-e500be 2`
-  and `icon-work-ea140f 2` (copies with a " 2" suffix, likely from a file sync); left for the owner to delete.
+  and `icon-work-ea140f 2` (copies with a " 2" suffix, likely from a file sync). Moved aside 2026-10-14 (Density entry).
+- Merged (PR #89). Verified against a static build (port 4410; 4400 was another session's server): Surface 0 sweep
+  clean in light and dark, forced colours lose no frame, 1× / 2× sheets in `docs/research/captures/surface-2026-10-14/`.
+  Open (owner): the dark soft edge is faint at 1× at Elevation 0.
+- Merged (PR #91). Language tab: the default preset tile said "Default" twice ("1 (Default)" plus a Default
+  value) for every number setting; the value now shows only where the label lacks it, and the defaults-only view
+  drops the suffix. Radius's registry labels now read "0 (Sharp)" / "8 (Default)", as the Inspector's and the other
+  number settings' do. Owner did not take the firmer dark edge; left as is.
+- Merged (PR #92). Inspector: Contrast (System / Standard / More, a Select: "Standard" clips in a segment), writing
+  `data-area-contrast` on the Canvas only (System writes none, so the OS decides). Checked: More strengthens the
+  Input edge to #838383. Note: in the hidden browser pane CSS transitions never advance (currentTime 0), so a value
+  read after a change can look unchanged; read with `transition: none` or in headless Edge.
+- Merged (PR #93). Color tab (PRODUCT_UI rule 14): its Inspector offers Neutral, which tints the neutral ramp.
+  The Neutral setting maps `--area-neutral-*` onto Cool / Warm step for step (checked equal), so with Neutral
+  set, the neutral ramp's tiles, list rows, contrast filter and Inspector describe that ramp's step (a "Paints"
+  row says so); the Inspector's Hex used to read the document root and disagree with the swatch.
+- Merged (PR #94). Contrast sweep of the settings added since the audit (headless Edge, 90 families × 7: default,
+  Contrast More light, More dark + Surface 0 + Elevation 0, purple accent roles light and dark, Cool dark, Warm
+  12 Compact; WCAG 4.5 / 3 large, disabled skipped): the only failure was on-color Code on the accent solid
+  (4.06-4.37:1 on 8 of 11 accents); its plate is now 8% of the ink's opposite (5.30:1 and up). No console errors.
+  Headless Edge degrades after many reloads; run long sweeps in fresh processes per combination.
 
 ## All-axis audit (2026-10-14, branch `claude/elevation-axis-gallery-e500be`)
 

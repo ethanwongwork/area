@@ -18,8 +18,8 @@ stable meaning and needs independent customization. Give it a sensible existing-
 fallback, a consumer and checks. Do not add aliases merely to hide unexplained literals.
 
 The registered axes are `theme`, `neutral`, `accent`, `action`, `selection`, `type`,
-`density`, `radius`, `surface`, `elevation` and `motion`. Type size (12 to 16) and density (Compact, Default,
-Comfortable) are separate; `emit/base.ts` derives heights, gaps, insets and marks from both, and
+`density`, `radius`, `surface`, `elevation` and `motion`. Type size (12 to 16) and density (the medium Button's height at
+type 14: 28 Compact, 32, 36 Comfortable) are separate; `emit/base.ts` derives heights, gaps, insets and marks from both, and
 `data-area-ui` remains a shorthand for the two (owner, 2026-10-12;
 [research](research/ui-size-scale-2026-10-12.md)). `data-area-contrast` is a separate
 accessibility preference. See [Theming](THEMING.md) for inheritance and custom values.
@@ -219,7 +219,7 @@ takes (consistency pass 2026-10-12, [audit](research/consistency-audit-2026-10-1
   dividers on `border-divider` (Separator, Nav separators, the Tabs track, Table rows and frame, Description list,
   Accordion, Shortcut list); and frames with no shadow to carry them (Table, Description list, Code block, File upload), plus
   Composer's frame, a field edge that stays beside its resting lift. `border-width`, the Surface axis (0 at
-  Borderless, where `shadow-edge` takes over the outer edge), draws the frames of surfaces that carry a shadow
+  Borderless, where `shadow-edge` takes over the outer edge; 1px again under increased contrast, owner 2026-10-15), draws the frames of surfaces that carry a shadow
   (every floating surface, Panel, Card), the seams inside them (`border-decorative`: Panel, Code block, Command
   palette and Color picker rules, Menu and Toolbar separators) and the edges of filled shapes (Alert, inline Code,
   the Segmented and Toggle group tracks).

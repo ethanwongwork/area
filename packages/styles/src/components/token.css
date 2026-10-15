@@ -59,7 +59,11 @@
 
   .area-code--on-color,
   .area-token--on-color {
-    --_code-bg: color-mix(in oklab, currentcolor 8%, transparent);
+    /* The plate is 8% of the ink's opposite (black under white ink, white under black), so it deepens the ground
+       away from the ink: an 8% wash of the ink itself lifted white on the accent solids (4.61-4.75:1 bare) to
+       4.06-4.37:1, under AA (all-axis sweep, 2026-10-15). Where relative colour is unsupported the fill drops and
+       the edge alone carries the chip, which also passes. */
+    --_code-bg: oklch(from currentcolor calc(1 - l) 0 0 / 0.08);
     --_code-edge: color-mix(in oklab, currentcolor 20%, transparent);
     --_code-text: inherit;
   }

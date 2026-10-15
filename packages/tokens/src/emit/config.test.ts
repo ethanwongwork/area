@@ -16,13 +16,13 @@ it('derives all runtime presets and defaults from the registry',async()=>{
 it('inherits omitted choices, validates inputs, and does not mutate its parent',async()=>{
   const {mergeAxes,themeAttributes}=await runtime();
   const parent=mergeAxes(undefined,{theme:'dark',accent:'green',neutral:'warm'});
-  const child=mergeAxes(parent,{type:'13',density:'compact',theme:undefined});
-  expect(child).toMatchObject({theme:'dark',accent:'green',neutral:'warm',type:'13',density:'compact'});
+  const child=mergeAxes(parent,{type:'13',density:'28',theme:undefined});
+  expect(child).toMatchObject({theme:'dark',accent:'green',neutral:'warm',type:'13',density:'28'});
   expect(parent.type).toBe('14');
-  expect(parent.density).toBe('default');
+  expect(parent.density).toBe('32');
   // The former UI scale is a shorthand for a type size and a density; an explicit axis wins.
-  expect(mergeAxes(parent,{ui:'compact'})).toMatchObject({type:'12',density:'compact'});
-  expect(mergeAxes(parent,{ui:'compact',type:'13'})).toMatchObject({type:'13',density:'compact'});
+  expect(mergeAxes(parent,{ui:'compact'})).toMatchObject({type:'12',density:'28'});
+  expect(mergeAxes(parent,{ui:'compact',type:'13'})).toMatchObject({type:'13',density:'28'});
   expect(mergeAxes(parent,{ui:'compact'})).not.toHaveProperty('ui');
   expect(()=>mergeAxes(parent,{ui:'huge'})).toThrow();
   expect(themeAttributes(child)['data-area-theme']).toBe('dark');

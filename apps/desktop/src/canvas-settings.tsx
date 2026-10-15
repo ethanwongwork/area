@@ -1,10 +1,10 @@
 /**
  * The Inspector's Canvas settings: the system-wide settings the Canvas previews, from the gallery's
  * own control list (src/gallery/controls.ts), grouped by what they shape under their own headings
- * (owner, 2026-10-14: "separated by larger titles"): Color (neutral, accent, action, selection),
- * Size (type size, density), Shape (the radius, and which components draw a pill instead) and
- * Effects (surface, elevation, motion). A tab shows only the settings that change its specimens,
- * and its own display settings follow in a Display section (Typography's sample text).
+ * (owner, 2026-10-14: "separated by larger titles"): Color (neutral, accent, action, selection,
+ * contrast), Size (type size, density), Shape (the radius, and which components draw a pill
+ * instead) and Effects (surface, elevation, motion). A tab shows only the settings that change its
+ * specimens, and its own display settings follow in a Display section (Typography's sample text).
  * They write data-area-* on the Canvas only, so the app's own chrome stays compact.
  */
 import type { ReactNode } from "react";
@@ -15,13 +15,13 @@ import { useStudio, type CanvasAxes } from "./studio.tsx";
 type Axis = keyof CanvasAxes;
 // Headings never repeat a row's label (a Radius heading over a Radius row read twice).
 const GROUPS: ReadonlyArray<{ heading: string; axes: readonly Axis[] }> = [
-  { heading: "Color", axes: ["neutral", "accent", "action", "selection"] },
+  { heading: "Color", axes: ["neutral", "accent", "action", "selection", "contrast"] },
   { heading: "Size", axes: ["type", "density"] },
   { heading: "Shape", axes: ["radius", "pills"] },
   { heading: "Effects", axes: ["surface", "elevation", "motion"] },
 ];
 
-export function CanvasSettings({ axes = ["neutral", "accent", "action", "selection", "type", "density", "radius", "surface", "elevation", "motion", "pills"], children }: { axes?: readonly Axis[]; children?: ReactNode }) {
+export function CanvasSettings({ axes = ["neutral", "accent", "action", "selection", "contrast", "type", "density", "radius", "surface", "elevation", "motion", "pills"], children }: { axes?: readonly Axis[]; children?: ReactNode }) {
   return (
     <>
       {GROUPS.map(group => {

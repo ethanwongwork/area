@@ -13,8 +13,8 @@ The registry in `packages/tokens/src/axes/registry.ts` defines eleven axes:
 - `action`: neutral or accent, the colour of committing actions (solid Buttons). Neutral is the default.
 - `selection`: neutral or accent, the colour of state (checked, on, selected, current, filled). Neutral is the default.
 - `type`: the base interface text size, `12` to `16` (default `14`; [research](research/ui-size-scale-2026-10-12.md), owner 2026-10-12). One number sets every type role: UI text at the base, small text two under it (never under 10), reading text and surface titles two over it, small-text tracking, the icon stroke, the check box and toggle (4 inside the UI line; a toggle 4 taller) and icons (the 20 cut at 16). It also bounds density: Compact up to 14, Comfortable from 13.
-- `density`: `compact`, `default` or `comfortable`, the room around text. `emit/base.ts` derives every control height (`control-*`: the tier's text line plus 2 x its room, never under 24; Default at type 14 gives 24 / 28 / 32 / 40 / 48), rows (`ui-row`), icon gaps (`gap-*`, `gap-row`), layout steps (`ui-stack`, `ui-cluster`), surface insets (`inset-surface-sm/md`) and the text-label marks (`mark-label-*`) from the level and the type size. Spacing keeps each level's ratio of space to type as a step in halves, published as `ui-dense` (1 at Compact 12, 0 at Default 14, negative above), which component insets are written against. Static marks `mark-sm/md/lg` (16 / 20 / 24: Presence, ColorSwatch, the Indicator count) hold. Control side padding has no token: inset.css derives it from the height (owner 2026-10-02). Surface corners cap at 1.5 x the surface inset, so compact surfaces stay shallow at the roundest radius settings.
-- `ui` (shorthand, not an axis): `compact` is type 12 with Compact, `default` type 14 with Default; an explicit `type` or `density` wins. Corners stay a cross-axis derivation: the radius axis publishes a corner per pixel of height, the type and density the heights, and `emit/base.ts` derives `radius-control-*`, `radius-small` and `radius-row` from them ([compact pass](research/compact-pass-2026-10-01.md)).
+- `density`: `28` (Compact), `32` (default) or `36` (Comfortable), the room around text, named by the medium Button's height at type 14 (one number since 2026-10-14, [research](research/density-2026-10-14.md); was `compact` / `default` / `comfortable`). `emit/base.ts` derives every control height (`control-*`: the tier's text line plus 2 x its room, never under 24; Default at type 14 gives 24 / 28 / 32 / 40 / 48), rows (`ui-row`), icon gaps (`gap-*`, `gap-row`), layout steps (`ui-stack`, `ui-cluster`), surface insets (`inset-surface-sm/md`) and the text-label marks (`mark-label-*`) from the level and the type size. Spacing keeps each level's ratio of space to type as a step in halves, published as `ui-dense` (1 at Compact 12, 0 at Default 14, negative above), which component insets are written against. Static marks `mark-sm/md/lg` (16 / 20 / 24: Presence, ColorSwatch, the Indicator count) hold. Control side padding has no token: inset.css derives it from the height (owner 2026-10-02). Surface corners cap at 1.5 x the surface inset, so compact surfaces stay shallow at the roundest radius settings.
+- `ui` (shorthand, not an axis): `compact` is type 12 with density 28, `default` type 14 with 32; an explicit `type` or `density` wins. Corners stay a cross-axis derivation: the radius axis publishes a corner per pixel of height, the type and density the heights, and `emit/base.ts` derives `radius-control-*`, `radius-small` and `radius-row` from them ([compact pass](research/compact-pass-2026-10-01.md)).
 - `radius`: one corner setting, `0` (Sharp), `2`, `4`, `6`, `8` (default), `10`, `12`, `14` or
   `pill`: one number, the medium Button's corner, that everything scales off (owner, 2026-10-03; replaces the named families and
   the roundness offset). Owns `radius-factor` (corner per pixel of height: setting ÷ 32, 0.5 at
@@ -31,7 +31,9 @@ The registry in `packages/tokens/src/axes/registry.ts` defines eleven axes:
   component adds as `flag × radius-full`, so concentric parts follow. Instance props override it
   (`pill`, Avatar's `shape`).
 - `surface`: one number, the decorative frame's width in px: `1` (Default) or `0` (Borderless)
-  (`axes/surface.ts`, 2026-10-14; was `outlined` / `borderless`). Sets `border-width` and `shadow-edge`:
+  (`axes/surface.ts`, 2026-10-14; was `outlined` / `borderless`). Sets `frame-width` and `shadow-edge`;
+  components read `border-width`, derived as the frame or 1px under increased contrast (owner, 2026-10-15), so More
+  contrast brings the frame back at 0. `shadow-edge` is
   transparent at 1, and at 0 ChatGPT's frameless-menu edge (a 1px-blur shadow at 62% black, plus a 1px-blur
   20% white line inside it in dark), which every framed surface lists first in its `box-shadow`, so no
   surface loses its edge at Elevation 0 or in dark; `shadow-edge-filter` is the same edge as a drop-shadow, for the
@@ -89,10 +91,11 @@ every combination. See DESIGN_SYSTEM.md, "Emphasis roles", for what each role pa
 
 Use `data-area-<axis>` on any ancestor. Missing settings inherit; explicit settings form
 a local boundary. `data-area-contrast="more"` is a separate accessibility preference;
-`standard` resets it locally. Without a root override, contrast follows the OS preference.
+`standard` resets it locally. Without a root override, contrast follows the OS preference. The app's Inspector
+offers it on the Canvas as Contrast: System (no attribute), Standard, More.
 
 ```html
-<section data-area-theme="dark" data-area-accent="teal" data-area-type="13" data-area-density="compact">
+<section data-area-theme="dark" data-area-accent="teal" data-area-type="13" data-area-density="28">
   <!-- Components inherit this scope. -->
 </section>
 ```

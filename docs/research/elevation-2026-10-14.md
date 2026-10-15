@@ -101,4 +101,5 @@ a Menu) inherits that surface's role; nothing chooses a shadow of its own.
 ## Not done
 
 - A drag role (Material L4, Fluent shadow28) waits for a component that drags; Board cards don't yet.
-- An automatic higher step under `prefers-contrast: more` was not wired: contrast stays a colour setting.
+- An automatic higher step under `prefers-contrast: more` was not wired: contrast changes no shadow. (Since
+  2026-10-15 it does bring Surface 0's frames back: surface-2026-10-14.md, "More contrast".)

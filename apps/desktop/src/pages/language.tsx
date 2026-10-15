@@ -92,7 +92,7 @@ export function LanguagePage() {
           {onCanvas.map(entry => {
             const preset = entry.presets.find(item => item.id === entry.defaultPreset) ?? entry.presets[0]!;
             return (
-              <Tile key={entry.id} span="wide" stage="center" inert label={entry.label} value={preset.label}
+              <Tile key={entry.id} span="wide" stage="center" inert label={entry.label} value={defaultLabel(entry)}
                 selected={selected === `${entry.id}:${preset.id}`} onSelect={() => setSelected(`${entry.id}:${preset.id}`)}
                 scope={{ [`data-area-${entry.id}`]: preset.id, ...ALSO[entry.id] }}>
                 <Abstract axis={entry.id} />
@@ -110,7 +110,8 @@ export function LanguagePage() {
               <TileGrid span="wide">
                 {presetsOf(entry).map(preset => (
                   <Tile key={preset.id} span="wide" stage="center" inert label={preset.label}
-                    value={preset.id === entry.defaultPreset ? "Default" : undefined}
+                    // A number setting's label already says "(Default)" (owner, 2026-10-14); others get it here.
+                    value={preset.id === entry.defaultPreset && !preset.label.includes("(Default)") ? "Default" : undefined}
                     selected={selected === `${entry.id}:${preset.id}`} onSelect={() => setSelected(`${entry.id}:${preset.id}`)}
                     scope={{ [`data-area-${entry.id}`]: preset.id, ...ALSO[entry.id] }}>
                     <Abstract axis={entry.id} />

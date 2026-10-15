@@ -34,9 +34,9 @@ export const TABS = [
 export type TabId = (typeof TABS)[number]["id"];
 type Theme = "light" | "dark";
 
-/** The Canvas's own theme settings (the Inspector writes them): the colour settings, type size, density, radius, surface, elevation,
+/** The Canvas's own theme settings (the Inspector writes them): the colour settings, contrast, type size, density, radius, surface, elevation,
  * motion, pills. */
-export type CanvasAxes = Record<"neutral" | "accent" | "action" | "selection" | "type" | "density" | "radius" | "surface" | "elevation" | "motion" | "pills", string>;
+export type CanvasAxes = Record<"neutral" | "accent" | "action" | "selection" | "contrast" | "type" | "density" | "radius" | "surface" | "elevation" | "motion" | "pills", string>;
 const CANVAS_DEFAULTS = Object.fromEntries(
   GALLERY_CONTROLS.filter(control => control.axis !== "theme").map(control => [control.axis, control.defaultValue]),
 ) as CanvasAxes;
@@ -44,12 +44,15 @@ const CANVAS_DEFAULTS = Object.fromEntries(
  * The saved Canvas, each setting kept only while it is still one of its control's options: an
  * elevation saved before it became a number (`minimal`, `standard` …) or a hand-edited value would
  * otherwise leave its Select blank and match no preset. Keys no control reads are dropped. A Canvas
- * from before the type / density split (`ui`: compact or default) restores as its two settings.
+ * from before the type / density split (`ui`: compact or default) restores as its two settings, and
+ * a density saved by name (compact, default, comfortable) as its number.
  */
 function restoreCanvas(saved: Partial<CanvasAxes> & { ui?: string }): CanvasAxes {
   const { ui, ...rest } = saved;
-  const legacy: Partial<CanvasAxes> = ui === "compact" ? { type: "12", density: "compact" } : ui === "default" ? { type: "14", density: "default" } : {};
+  const legacy: Partial<CanvasAxes> = ui === "compact" ? { type: "12", density: "28" } : ui === "default" ? { type: "14", density: "32" } : {};
   const merged: Record<string, unknown> = { ...legacy, ...rest };
+  const named: Record<string, string> = { compact: "28", default: "32", comfortable: "36" };
+  if (typeof merged.density === "string" && merged.density in named) merged.density = named[merged.density];
   const canvas = { ...CANVAS_DEFAULTS };
   for (const control of GALLERY_CONTROLS) {
     if (control.axis === "theme") continue;
@@ -270,7 +273,7 @@ export function Workspace({ sidebar, canvasLead, canvasTitle, canvasActions, can
   const inspectorWidth = usePanelWidth("inspector");
   // The Canvas body carries the Inspector's settings on every tab: the colour settings, density (which also lays tiles out
   // as a hairline contact sheet in compact), radius, surface, elevation, motion and pills.
-  const axes = { "data-area-neutral": studio.canvas.neutral, "data-area-accent": studio.canvas.accent, "data-area-action": studio.canvas.action, "data-area-selection": studio.canvas.selection, "data-area-type": studio.canvas.type, "data-area-density": studio.canvas.density, "data-area-radius": studio.canvas.radius, "data-area-surface": studio.canvas.surface, "data-area-elevation": studio.canvas.elevation, "data-area-motion": studio.canvas.motion, "data-area-pills": studio.canvas.pills };
+  const axes = { "data-area-neutral": studio.canvas.neutral, "data-area-accent": studio.canvas.accent, "data-area-action": studio.canvas.action, "data-area-selection": studio.canvas.selection, "data-area-contrast": studio.canvas.contrast === "system" ? undefined : studio.canvas.contrast, "data-area-type": studio.canvas.type, "data-area-density": studio.canvas.density, "data-area-radius": studio.canvas.radius, "data-area-surface": studio.canvas.surface, "data-area-elevation": studio.canvas.elevation, "data-area-motion": studio.canvas.motion, "data-area-pills": studio.canvas.pills };
   return (
     <div className="studio-workspace" data-sidebar={studio.sidebar ? "" : undefined} data-inspector={studio.inspector ? "" : undefined}>
       {studio.sidebar ? (

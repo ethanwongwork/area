@@ -7,7 +7,7 @@
  */
 import { AXIS_PRESETS, DEFAULT_AXES, DEFAULT_PILLS, PILL_SHAPES } from "@area/tokens/config";
 export interface GalleryControl {
-  axis: "theme" | "neutral" | "accent" | "action" | "selection" | "type" | "density" | "radius" | "pills" | "surface" | "elevation" | "motion";
+  axis: "theme" | "neutral" | "accent" | "action" | "selection" | "contrast" | "type" | "density" | "radius" | "pills" | "surface" | "elevation" | "motion";
   /**
    * Two or three options are a Segmented (Apple and Primer cap segments at 5-7); a longer list of
    * exact settings is a Select, each option naming what it sets (shadcn's radius picker is a menu).
@@ -41,13 +41,21 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = [
   { axis: "accent", kind: "select", label: "Accent", hint: "Shows where Action or Selection is Accent, and in focus rings and links", defaultValue: DEFAULT_AXES.accent, items: named("accent") },
   { axis: "action", kind: "segmented", label: "Action", hint: "The colour of primary actions", defaultValue: DEFAULT_AXES.action, items: [{ value: "neutral", label: "Neutral" }, { value: "accent", label: "Accent" }] },
   { axis: "selection", kind: "segmented", label: "Selection", hint: "The colour of checked, selected and current states", defaultValue: DEFAULT_AXES.selection, items: [{ value: "neutral", label: "Neutral" }, { value: "accent", label: "Accent" }] },
+  // Increased contrast (docs/CONTRAST.md): not a registry axis but the same kind of scoped setting,
+  // data-area-contrast="more" or "standard". System writes no attribute, so the OS preference decides, as it does
+  // for the app. A Select, as Density: "Standard" needs 56 of text in a 32 segment beside the label.
+  { axis: "contrast", kind: "select", label: "Contrast", hint: "System follows the OS preference; More strengthens edges, focus and state", defaultValue: "system", items: [{ value: "system", label: "System" }, { value: "standard", label: "Standard" }, { value: "more", label: "More" }] },
   // Type size and density, separate (owner, 2026-10-12; axes/type-size.ts, axes/density.ts). Five
-  // two-digit sizes fit a Segmented; the three densities' names do not beside a label in the 256
-  // Inspector (Comfortable is 76 of text in a 42 segment), so Density is a Select, as Radius is. The
-  // type bounds the density (Compact up to 14, Comfortable from 13) and the tokens resolve it, so
-  // every option stays pickable and its hint says so.
+  // two-digit sizes fit a Segmented. Density is one number since 2026-10-14 (axes/density.ts), the medium
+  // Button's height at type 14, 28 / 32 / 36; a Select, as Radius is, since "36 (Comfortable)" does not fit a
+  // segment beside a label in the 256 Inspector. The type bounds the density (28 up to 14, 36 from 13) and
+  // the tokens resolve it, so every option stays pickable and its hint says so.
   { axis: "type", kind: "segmented", label: "Type", defaultValue: "14", items: ["12", "13", "14", "15", "16"].map(value => ({ value, label: value })) },
-  { axis: "density", kind: "select", label: "Density", hint: "Compact up to type 14; Comfortable from type 13", defaultValue: "default", items: [{ value: "compact", label: "Compact" }, { value: "default", label: "Default" }, { value: "comfortable", label: "Comfortable" }] },
+  { axis: "density", kind: "select", label: "Density", hint: "The medium Button's height at type 14; 28 up to type 14, 36 from type 13", defaultValue: "32", items: [
+    { value: "28", label: "28 (Compact)" },
+    { value: "32", label: "32 (Default)" },
+    { value: "36", label: "36 (Comfortable)" },
+  ] },
   // The one corner setting (axes/radius.ts): a single number, the medium Button's corner, from 0
   // (Sharp) to Pill; everything else scales off it (owner, 2026-10-04).
   { axis: "radius", kind: "select", label: "Radius", hint: "The medium Button's corner; everything scales from it", defaultValue: "8", items: ["0", "2", "4", "6", "8", "10", "12", "14", "pill"].map(value => ({

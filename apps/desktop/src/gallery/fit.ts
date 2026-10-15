@@ -186,7 +186,7 @@ export function fitTiles(canvas: HTMLElement): () => void {
   // Fluid or fixed, and how wide a fluid specimen needs to be, at the default type size and density.
   const scale = ["data-area-type", "data-area-density"].map(name => [name, canvas.getAttribute(name)] as const);
   canvas.setAttribute("data-area-type", "14");
-  canvas.setAttribute("data-area-density", "default");
+  canvas.setAttribute("data-area-density", "32");
   for (const entry of tiles) { entry.stage.style.zoom = ""; entry.stage.style.inlineSize = `${PROBE}px`; }
   for (const entry of tiles) {
     const own = extent(entry.stage);
