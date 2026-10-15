@@ -25,9 +25,12 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
 - Audit items closed as not bugs: the Toolbar's 112px spill at type 16 Comfortable only appears with the tile zoom
   forced to 1 (the gallery's fit scales it to 0.70 and it fits); the Stepper's 10px is its documented behaviour
   ("overflows rather than overlaps"), inside its tile.
-- Still open: CSS loops stop by `[data-area-motion="0"] .x`, so a nested non-zero scope inside a 0 scope still
-  stops them (ScrollToLatest already reads the nearest scope). A fix needs an inherited motion token (a space
-  toggle plus a 0/1 flag for the Progress stripe) or container style queries; no surface in the app nests one.
+- Merged (PR #86). Then the audit's last open item: loops stop through a Motion token, `duration-loop` (1, or 0 at
+  step 0 and under reduced motion), which multiplies each loop's period (a zero-length animation draws nothing)
+  and fades the Skeleton band and the Progress stripe's gaps. The nearest scope decides, so a nested non-zero
+  scope runs its loops; the `[data-area-motion="0"] .x` and per-loop reduced-motion rules are gone. Cohesion test
+  pins every infinite animation to the factor (a mutation fails it). Checked live: outer 0 stops, nested 210 runs.
+  Not captured: a screenshot of the stopped stripe (computed values only).
 
 ## All-axis audit (2026-10-14, branch `claude/elevation-axis-gallery-e500be`)
 

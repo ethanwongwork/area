@@ -162,14 +162,15 @@
     display: block;
     border-radius: var(--_skeleton-radius);
     background-color: var(--_skeleton-fill);
-    background-image: linear-gradient(90deg, transparent, var(--_skeleton-band), transparent);
+    /* The band fades out with the loop factor (axes/motion.ts), so a stopped skeleton is flat. */
+    background-image: linear-gradient(90deg, transparent, color-mix(in srgb, var(--_skeleton-band) calc(var(--area-duration-loop) * 100%), transparent), transparent);
     background-size: 200% 100%;
     background-repeat: no-repeat;
     /* spec: 3s linear, ChatGPT's and Figma's shimmer. A fixed period, as the Spinner's turn: it
        was 12 x slow, which drifted from the measured 3s when the motion default moved to 210
        (2026-10-14). MOTION.md: shimmer is linear and long, and stops at motion 0 and under
-       reduced motion (below). */
-    animation: area-shimmer 3s var(--area-ease-linear) infinite; /* spec */
+       reduced motion: the period takes the loop factor, 0 there. */
+    animation: area-shimmer calc(3s * var(--area-duration-loop)) var(--area-ease-linear) infinite; /* spec */
   }
 
   /* spec: a block fills the width and is 16 tall until the host sizes it (Primer 1rem, Fluent
@@ -254,9 +255,9 @@
     mask: var(--_arc) center / 100% 100% no-repeat;
     /* spec: 1s a turn (Untitled, Primer, shadcn, Spectrum; owner 2026-09-27). A fixed second, not
        4 x slow: MOTION.md bounds a spinner at 0.6-1s a turn, and the old Expressive preset made it
-       1.6s, a sluggish turn (motion pass 2026-10-07). The motion axis and reduced motion stop it
-       below, by name, so it no longer needs the zeroed tokens to stop. */
-    animation: area-spin 1s var(--area-ease-linear) infinite; /* spec */
+       1.6s, a sluggish turn (motion pass 2026-10-07). The loop factor stops it at motion 0 and under
+       reduced motion, resting on its drawing (12 to 3 o'clock). */
+    animation: area-spin calc(1s * var(--area-duration-loop)) var(--area-ease-linear) infinite; /* spec */
   }
 
   /* Inside a Button the spinner takes the label's ink, so it shows on any fill: a neutral
@@ -339,8 +340,14 @@
    * be mistaken for a determinate bar sitting at 100%.
    */
   .area-progress[data-indeterminate] .area-progress__bar {
-    inline-size: 35%;
-    animation: area-progress-indeterminate 1.8s var(--area-ease-linear) infinite; /* spec: 1.8s (audit H-20), fixed as the Spinner's turn: it was 12 x base, which drifted when the motion default moved (2026-10-14) */
+    /* A 35% segment, which the loop factor (axes/motion.ts) turns into a still stripe across the whole track when
+       motion stops: a stopped 35% segment would read as 35% done (audit E-9). The stripe's gaps are the fill
+       while the loop runs, so the running bar is solid. */
+    --_progress-gap: color-mix(in srgb, var(--_progress-fill) calc(var(--area-duration-loop) * 100%), transparent);
+    inline-size: calc(100% - 65% * var(--area-duration-loop));
+    background-color: var(--_progress-gap);
+    background-image: repeating-linear-gradient(-45deg, var(--_progress-fill) 0 var(--area-space-4), var(--_progress-gap) var(--area-space-4) var(--area-space-8)); /* spec */
+    animation: area-progress-indeterminate calc(1.8s * var(--area-duration-loop)) var(--area-ease-linear) infinite; /* spec: 1.8s (audit H-20), fixed as the Spinner's turn: it was 12 x base, which drifted when the motion default moved (2026-10-14) */
   }
 
   @keyframes area-progress-indeterminate {
@@ -354,35 +361,12 @@
     to { translate: -340% 0; }
   }
 
-  /* The motion axis and the reduced-motion preference stop every loop by name (docs/MOTION.md,
-     "Reduced motion": loops stop; motion pass 2026-10-07, which ended the slowed spinner and
-     indeterminate bar under reduced motion). The loops run fixed, measured periods, so they stop
-     here by name rather than through the zeroed duration tokens. Each stops in a drawn
-     rest, never a frame caught mid-loop: the skeleton flat (no band), the spinner's arc at its
-     identity turn (12 to 3 o'clock, the drawing itself), the indeterminate bar a full still stripe. */
-  /* A pseudo-element cannot sit inside :is(), whose forgiving list dropped it, so the spinner's
-     arc has its own rule (it stopped only because its duration was a zeroed token). */
-  [data-area-motion="0"] :is(.area-skeleton, .area-progress[data-indeterminate] .area-progress__bar),
-  [data-area-motion="0"] .area-spinner::before { animation: none; }
-  [data-area-motion="0"] .area-skeleton { background-image: none; }
-  /* A stopped 35% segment reads as 35% done (audit E-9). With motion off, the indeterminate
-     bar fills the track with a still stripe, which no determinate value looks like. */
-  [data-area-motion="0"] .area-progress[data-indeterminate] .area-progress__bar {
-    inline-size: 100%;
-    translate: none;
-    background: repeating-linear-gradient(-45deg, var(--_progress-fill) 0 var(--area-space-4), transparent var(--area-space-4) var(--area-space-8)); /* spec */
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    :is(.area-skeleton, .area-progress[data-indeterminate] .area-progress__bar),
-    .area-spinner::before { animation: none; }
-    .area-skeleton { background-image: none; }
-    .area-progress[data-indeterminate] .area-progress__bar {
-      inline-size: 100%;
-      translate: none;
-      background: repeating-linear-gradient(-45deg, var(--_progress-fill) 0 var(--area-space-4), transparent var(--area-space-4) var(--area-space-8)); /* spec: as motion 0 */
-    }
-  }
+  /* The motion axis and the reduced-motion preference stop every loop through the loop factor,
+     `--area-duration-loop` (axes/motion.ts; docs/MOTION.md, "Reduced motion": loops stop; motion pass
+     2026-10-07). Each stops in a drawn rest, never a frame caught mid-loop: the skeleton flat (no band), the
+     spinner's arc at its identity turn (12 to 3 o'clock, the drawing itself), the indeterminate bar a full
+     still stripe. It was a `[data-area-motion="0"]` descendant rule, which a nested non-zero scope could not
+     undo (2026-10-14). */
 }
 
 /*
@@ -395,7 +379,7 @@
   .area-skeleton--wrap { display: contents; }
   .area-skeleton--wrap > * {
     background-color: var(--_skeleton-fill);
-    background-image: linear-gradient(90deg, transparent, var(--_skeleton-band), transparent);
+    background-image: linear-gradient(90deg, transparent, color-mix(in srgb, var(--_skeleton-band) calc(var(--area-duration-loop) * 100%), transparent), transparent);
     background-size: 200% 100%;
     background-repeat: no-repeat;
     border-color: transparent;
@@ -403,15 +387,11 @@
     outline: none;
     color: transparent;
     pointer-events: none;
-    animation: area-shimmer 3s var(--area-ease-linear) infinite; /* spec: as the base skeleton */
+    animation: area-shimmer calc(3s * var(--area-duration-loop)) var(--area-ease-linear) infinite; /* spec: as the base skeleton */
   }
   /* What the element holds keeps its space but does not paint. */
   .area-skeleton--wrap > * > *,
   .area-skeleton--wrap > *::before,
   .area-skeleton--wrap > *::after { visibility: hidden; }
   .area-skeleton--wrap.area-skeleton--static > * { animation: none; background-image: none; }
-  [data-area-motion="0"] .area-skeleton--wrap > * { animation: none; background-image: none; }
-  @media (prefers-reduced-motion: reduce) {
-    .area-skeleton--wrap > * { animation: none; background-image: none; }
-  }
 }

@@ -180,3 +180,15 @@ test('every floating surface draws the floating frame', () => {
   }
   assert.match(ruleFor('.area-color-picker, .area-color-picker--surface')?.body ?? '', /--_picker-edge:\s*var\(--area-border-float\)/);
 });
+
+test('every loop stops through the motion axis\'s loop factor', () => {
+  // axes/motion.ts (2026-10-14): `duration-loop` is 1, and 0 at motion 0 and under reduced motion. Each infinite
+  // animation multiplies its measured period by it, so the nearest motion scope decides; a `[data-area-motion="0"]`
+  // descendant rule could not be undone by a non-zero scope nested inside it.
+  const loops = [...css.matchAll(/animation\s*:\s*([^;{}]*\binfinite\b[^;{}]*)/g)].map(match => match[1].trim());
+  assert.ok(loops.length >= 7, `expected the seven loops, found ${loops.length}`);
+  for (const loop of loops) assert.match(loop, /calc\([\d.]+s \* var\(--area-duration-loop\)\)/, `a loop runs without the loop factor: ${loop}`);
+  assert.doesNotMatch(css, /\[data-area-motion="0"\]\s+[.:#\[\w]/, 'a loop stops by a motion-0 descendant rule again');
+  const factors = [...css.matchAll(/--area-duration-loop:\s*([^;]+);/g)].map(match => match[1].trim());
+  assert.deepEqual([...new Set(factors)].sort(), ['0', '1'], 'the loop factor should be 1, or 0 at step 0');
+});

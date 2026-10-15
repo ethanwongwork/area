@@ -74,11 +74,9 @@
        motion default moved to 210 (2026-10-14). The curve is the ease-in-out token (was
        the keyword, the system's one literal easing): each half of the breath eases, so the dot
        dwells at full ink and at 30% and never kinks at the turn as a linear fade would. */
-    animation: area-message-pulse 1s var(--area-ease-in-out) infinite; /* spec */
+    animation: area-message-pulse calc(1s * var(--area-duration-loop)) var(--area-ease-in-out) infinite; /* spec; the loop factor (axes/motion.ts) stops it at motion 0 and under reduced motion */
   }
   /* Stopped, the dot rests at full ink (the keyframes only set the 30% midpoint), never mid-fade. */
-  @media (prefers-reduced-motion: reduce) { .area-message__cursor { animation: none; } }
-  [data-area-motion="0"] .area-message__cursor { animation: none; }
   /* Forced colours drop authored backgrounds; keep the dot in the text colour. */
   @media (forced-colors: active) { .area-message__cursor { forced-color-adjust: none; background-color: CanvasText; } }
   @keyframes area-message-pulse { 50% { opacity: 0.3; } }
