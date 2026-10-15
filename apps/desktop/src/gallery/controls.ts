@@ -7,7 +7,7 @@
  */
 import { AXIS_PRESETS, DEFAULT_AXES, DEFAULT_PILLS, PILL_SHAPES } from "@area/tokens/config";
 export interface GalleryControl {
-  axis: "theme" | "neutral" | "accent" | "action" | "selection" | "type" | "density" | "radius" | "pills" | "surface" | "elevation" | "motion";
+  axis: "theme" | "neutral" | "accent" | "action" | "selection" | "contrast" | "type" | "density" | "radius" | "pills" | "surface" | "elevation" | "motion";
   /**
    * Two or three options are a Segmented (Apple and Primer cap segments at 5-7); a longer list of
    * exact settings is a Select, each option naming what it sets (shadcn's radius picker is a menu).
@@ -40,6 +40,10 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = [
   { axis: "accent", kind: "select", label: "Accent", hint: "Shows where Action or Selection is Accent, and in focus rings and links", defaultValue: DEFAULT_AXES.accent, items: named("accent") },
   { axis: "action", kind: "segmented", label: "Action", hint: "The colour of primary actions", defaultValue: DEFAULT_AXES.action, items: [{ value: "neutral", label: "Neutral" }, { value: "accent", label: "Accent" }] },
   { axis: "selection", kind: "segmented", label: "Selection", hint: "The colour of checked, selected and current states", defaultValue: DEFAULT_AXES.selection, items: [{ value: "neutral", label: "Neutral" }, { value: "accent", label: "Accent" }] },
+  // Increased contrast (docs/CONTRAST.md): not a registry axis but the same kind of scoped setting,
+  // data-area-contrast="more" or "standard". System writes no attribute, so the OS preference decides, as it does
+  // for the app. A Select, as Density: "Standard" needs 56 of text in a 32 segment beside the label.
+  { axis: "contrast", kind: "select", label: "Contrast", hint: "System follows the OS preference; More strengthens edges, focus and state", defaultValue: "system", items: [{ value: "system", label: "System" }, { value: "standard", label: "Standard" }, { value: "more", label: "More" }] },
   // Type size and density, separate (owner, 2026-10-12; axes/type-size.ts, axes/density.ts). Five
   // two-digit sizes fit a Segmented; the three densities' names do not beside a label in the 256
   // Inspector (Comfortable is 76 of text in a 42 segment), so Density is a Select, as Radius is. The
