@@ -23,13 +23,13 @@ describe("type size (docs/research/ui-size-scale-2026-10-12.md)", () => {
     }
   });
 
-  it("bounds density: Compact up to 14, Comfortable from 13", () => {
+  it("bounds density: 28 (Compact) up to 14, 36 (Comfortable) from 13", () => {
     const allowed = (base: (typeof TYPE_SIZES)[number], level: number) => {
       const t = typeSizeTokens(base);
       return level >= Number(t["type-level-min"]) && level <= Number(t["type-level-max"]);
     };
-    expect(TYPE_SIZES.filter(base => allowed(base, DENSITY_LEVELS.compact))).toEqual([12, 13, 14]);
-    expect(TYPE_SIZES.filter(base => allowed(base, DENSITY_LEVELS.comfortable))).toEqual([13, 14, 15, 16]);
-    expect(TYPE_SIZES.every(base => allowed(base, DENSITY_LEVELS.default))).toBe(true);
+    expect(TYPE_SIZES.filter(base => allowed(base, DENSITY_LEVELS["28"]))).toEqual([12, 13, 14]);
+    expect(TYPE_SIZES.filter(base => allowed(base, DENSITY_LEVELS["36"]))).toEqual([13, 14, 15, 16]);
+    expect(TYPE_SIZES.every(base => allowed(base, DENSITY_LEVELS["32"]))).toBe(true);
   });
 });

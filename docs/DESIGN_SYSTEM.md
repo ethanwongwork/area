@@ -18,8 +18,8 @@ stable meaning and needs independent customization. Give it a sensible existing-
 fallback, a consumer and checks. Do not add aliases merely to hide unexplained literals.
 
 The registered axes are `theme`, `neutral`, `accent`, `action`, `selection`, `type`,
-`density`, `radius`, `surface`, `elevation` and `motion`. Type size (12 to 16) and density (Compact, Default,
-Comfortable) are separate; `emit/base.ts` derives heights, gaps, insets and marks from both, and
+`density`, `radius`, `surface`, `elevation` and `motion`. Type size (12 to 16) and density (the medium Button's height at
+type 14: 28 Compact, 32, 36 Comfortable) are separate; `emit/base.ts` derives heights, gaps, insets and marks from both, and
 `data-area-ui` remains a shorthand for the two (owner, 2026-10-12;
 [research](research/ui-size-scale-2026-10-12.md)). `data-area-contrast` is a separate
 accessibility preference. See [Theming](THEMING.md) for inheritance and custom values.
