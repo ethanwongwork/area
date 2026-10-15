@@ -92,7 +92,7 @@ In a 14px table cell: 12.25px/16.54px, 22px tall (`area--table`).
 | text · weight / face | 400 `font-mono` | Type ramp (400 for text) | Untitled 700 in the body face |
 | shadow | none (`code.css:159`) | Area's own | An inline reference is never elevated |
 | subtle ground | `token-bg-subtle` #f7f7f7 (`token.css:46-50`) | Area's own | Was a no-op until the audit fix (Verification) |
-| on-color | 8% / 20% of `currentcolor` fill / edge, ink inherited (`token.css:52-57`) | Area's own | — |
+| on-color | 8% of the ink's opposite fill (2026-10-15, for AA on the accent solids), 20% of `currentcolor` edge, ink inherited (`token.css`) | Area's own | — |
 
 Settled in the third pass ([cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open)):
 
@@ -195,3 +195,4 @@ owner's pick, so it waits for a yes.
 - 2026-10-12 · owner, review round 16: approved.
 - 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the token swatch's ring is at `stroke-width` (was `border-width`) (token.css). (docs/research/consistency-audit-2026-10-12.md)
 - 2026-10-14 · owner: "merge it, then continue working" → all-axis sweep of Surface 0 at Elevation 0 (90 families, light and dark): the edge reads `--_code-border`: the Surface width on filled chips, `stroke-width` on the subtle variant (Code and Token), which has no fill, so at Surface 0 it no longer turns into plain text; every inset that counts the edge (Code, swatch Token, Token row) reads it too.
+- 2026-10-15 · owner: "merge it, then continue working" → all-axis contrast sweep: on-color Code on the accent solid (its gallery tile) read 4.12:1 with white ink, under AA. White sits at 4.61–4.75:1 on the white-ink accent solids, and the 8% wash of the ink itself lifted the ground toward it (4.06–4.37:1 across 8 of 11 accents). The plate is now 8% of the ink's opposite, `oklch(from currentcolor calc(1 - l) 0 0 / 0.08)`, darker under white ink and lighter under black: 5.30–14.20:1 on every accent. The 20% edge is unchanged; where relative colour is unsupported the fill drops and the edge carries the chip.

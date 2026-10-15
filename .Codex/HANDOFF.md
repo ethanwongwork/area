@@ -81,6 +81,11 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   The Neutral setting maps `--area-neutral-*` onto Cool / Warm step for step (checked equal), so with Neutral
   set, the neutral ramp's tiles, list rows, contrast filter and Inspector describe that ramp's step (a "Paints"
   row says so); the Inspector's Hex used to read the document root and disagree with the swatch.
+- Merged (PR #94). Contrast sweep of the settings added since the audit (headless Edge, 90 families × 7: default,
+  Contrast More light, More dark + Surface 0 + Elevation 0, purple accent roles light and dark, Cool dark, Warm
+  12 Compact; WCAG 4.5 / 3 large, disabled skipped): the only failure was on-color Code on the accent solid
+  (4.06-4.37:1 on 8 of 11 accents); its plate is now 8% of the ink's opposite (5.30:1 and up). No console errors.
+  Headless Edge degrades after many reloads; run long sweeps in fresh processes per combination.
 
 ## All-axis audit (2026-10-14, branch `claude/elevation-axis-gallery-e500be`)
 
