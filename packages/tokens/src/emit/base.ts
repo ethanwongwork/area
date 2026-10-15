@@ -118,6 +118,10 @@ export function derivedTokens(): Record<string, string> {
     [`${PREFIX}fill-toggle-hover`]: `color-mix(in srgb, var(${PREFIX}border), var(${PREFIX}stroke-control-hover) calc(var(${PREFIX}contrast-more) * 100%))`,
     // The strong hover edge, a step past edge-control-hover: an unchecked Checkbox or Radio and a selected Chip under
     // the pointer (consistency pass 2026-10-12: both had written the mix themselves).
+    // The decorative frame's width: the Surface setting's (`frame-width`, 1px or 0), or 1px under increased contrast
+    // (owner, 2026-10-15: "go with your rec"), as macOS Increase Contrast adds borders and forced colours restore them.
+    // Insets that count the frame follow it, so a surface keeps its outer size. docs/research/surface-2026-10-14.md.
+    [`${PREFIX}border-width`]: `max(var(${PREFIX}frame-width), calc(var(${PREFIX}contrast-more) * 1px))`,
     [`${PREFIX}edge-control-strong`]: `color-mix(in srgb, var(${PREFIX}border-hover), var(${PREFIX}stroke-control-hover) calc(var(${PREFIX}contrast-more) * 100%))`,
     // The standalone surface's edge (audit S7): Card, Composer, Code block. Lighter than the divider because a halo or a
     // field carries it; dark keeps the faint rung (consistency pass 2026-10-12: three copies of one literal).
@@ -379,7 +383,8 @@ export const REGISTERED_PROPERTIES = [
   { name: `${PREFIX}radius-factor`, syntax: "<number>", initial: "0.25" },
   { name: `${PREFIX}focus-width`, syntax: "<length>", initial: "2px" },
   { name: `${PREFIX}focus-offset`, syntax: "<length>", initial: "2px" },
-  { name: `${PREFIX}border-width`, syntax: "<length>", initial: "1px" },
+  // The Surface leaf; `border-width` is derived from it and contrast, so it is not registered.
+  { name: `${PREFIX}frame-width`, syntax: "<length>", initial: "1px" },
   // The motion axis's default step, so a missing or invalid duration falls back to the default.
   { name: `${PREFIX}duration-fast`, syntax: "<time>", initial: duration(Number(MOTION_AXIS.defaultPreset), 2) },
   { name: `${PREFIX}duration-base`, syntax: "<time>", initial: duration(Number(MOTION_AXIS.defaultPreset), 3) },

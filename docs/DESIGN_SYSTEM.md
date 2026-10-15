@@ -219,7 +219,7 @@ takes (consistency pass 2026-10-12, [audit](research/consistency-audit-2026-10-1
   dividers on `border-divider` (Separator, Nav separators, the Tabs track, Table rows and frame, Description list,
   Accordion, Shortcut list); and frames with no shadow to carry them (Table, Description list, Code block, File upload), plus
   Composer's frame, a field edge that stays beside its resting lift. `border-width`, the Surface axis (0 at
-  Borderless, where `shadow-edge` takes over the outer edge), draws the frames of surfaces that carry a shadow
+  Borderless, where `shadow-edge` takes over the outer edge; 1px again under increased contrast, owner 2026-10-15), draws the frames of surfaces that carry a shadow
   (every floating surface, Panel, Card), the seams inside them (`border-decorative`: Panel, Code block, Command
   palette and Color picker rules, Menu and Toolbar separators) and the edges of filled shapes (Alert, inline Code,
   the Segmented and Toggle group tracks).
