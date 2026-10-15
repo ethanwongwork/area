@@ -119,8 +119,8 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
   line (T keeps its serifs; bold's outline is a stroked B and its filled variant the solid B; owner to confirm, 2026-10-03).
 - **Clouds (owner, 2026-09-28):** every cloud icon uses the one cloud shape (moved, never
   redrawn); rain and bolts touch or cross its foot rather than floating below it.
-- **Aligned gap:** qr-code keeps its rows even, so its dots meet the squares' rounded corners
-  2.14 apart (`data-gap="aligned"`, owner-requested); use it only where the owner asks.
+- **Aligned gap:** owner-requested even rows (`data-gap="aligned"`); use it only where the owner asks (calendar,
+  building). qr-code no longer needs it (2026-10-14).
 - **Close gap:** battery's terminal sits 2 from the body (`data-gap="close"`, owner-approved),
   one step under tight; use it only where the owner asks for it.
 - **Solid exceptions:** quote's marks and bold's B are solid shapes, because the thing they show is
@@ -159,8 +159,19 @@ round-by-round record is in `docs/specs/icons.md`; add each new decision here to
   end ticks, stem and a foot about 0.45 of the bar. Sizes: text 11 (ticks 2, foot 5), the
   medium 6 × 6 T (ticks 1, foot 3) in line-height and letter-spacing, and text-size's pair (8 × 10 with ticks 1.5 and foot 4; 4 × 5.5 with ticks 1 and foot 2). superscript and subscript are an X with list-numbered's 2 (owner, 2026-10-08), not a T.
 - **Rain** lines are different lengths (owner). qr-code is square like a real code (owner,
-  2026-09-28): finders 5 × 5 at r 1 (not the container radius), square 2 × 2 modules (r 0.25)
-  for the finders' centres and the four data modules, 3 apart.
+  2026-09-28; redrawn by the optical audit, owner-approved 2026-10-14): finders 4 × 4 at r 1 on half pixels, 1 × 1
+  centres, four 2 × 2 data modules (r 0.5) on whole pixels, 1.94 from the finders.
+- **Optical audit and 1× (owner, 2026-10-14):** run `generate.mjs --check --audit`; an icon far outside the median
+  (qr-code was +15% size, +36% density; diamond −15%) is redrawn toward its peers. Long axis strokes sit on half
+  pixels and solids' edges on whole pixels, even when that puts the icon 0.5 off centre (Fluent's 16px add sits on
+  7.5); `docs/research/icon-review/2026-10-14/tools/frames.py report` lists offenders. diamond's half-diagonal is 7
+  (r 1.5 corners), gamepad's body 9 tall from 3.5.
+- **1× frames (owner-approved 2026-10-14, 263 icons in four rounds):** move the drawing, never redraw it, where that is
+  enough (`frames.py`); a slash icon slides along its slash (dx = dy) and may take the circle keyline; a single part
+  slides only along edges it touches, keeping contacts, line ends and shared edges; **a part centred on its container
+  never moves off centre, and a line centred in a half-pixel frame stays symmetric and soft** (owner: "leave"). Half-unit
+  redraws are fine where no owner construction depends on the proportion (desktop's screen is 12 × 9). Run
+  `frames.py report` on every new drawing.
 - **Simplify before dropping (owner, 2026-09-28):** an idea too dense for 16px is simplified
   (Fitting a dense idea at 16px) before it is dropped; drop it only with the owner, and give
   an alternative (file-zip: archive, or a labelled file type).
