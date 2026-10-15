@@ -134,7 +134,11 @@ export function derivedTokens(): Record<string, string> {
     [`${PREFIX}field-focus-color`]: `var(${PREFIX}focus-color)`,
     [`${PREFIX}field-focus-halo-color`]:
       `color-mix(in srgb, var(${PREFIX}field-focus-color) 14%, transparent)`,
-    // Composer is a surface that holds a field; it keeps the quiet neutral focus edge.
+    // Composer is a surface that holds a field; it keeps the quiet neutral focus edge. Its resting frame is the card
+    // edge, and the strong control stroke under increased contrast, where a field's boundary targets 3:1 (CONTRAST.md;
+    // the card edge alone read 1.16:1 light, 1.33:1 dark, 2026-10-15).
+    [`${PREFIX}composer-edge`]:
+      `color-mix(in srgb, var(${PREFIX}border-card), var(${PREFIX}stroke-control) calc(var(${PREFIX}contrast-more) * 100%))`,
     [`${PREFIX}composer-focus-color`]:
       `color-mix(in srgb, var(${PREFIX}border-subtle), var(${PREFIX}focus-color) calc(var(${PREFIX}contrast-more) * 100%))`,
     [`${PREFIX}field-focus-outline-width`]:
@@ -171,6 +175,9 @@ export function derivedTokens(): Record<string, string> {
     [`${PREFIX}input-bg-disabled`]: `var(${PREFIX}bg-component)`,
     [`${PREFIX}input-edge`]: `var(${PREFIX}edge-control)`,
     [`${PREFIX}input-edge-hover`]: `var(${PREFIX}edge-control-hover)`,
+    // A soft field's resting edge: none (the fill carries it, as Figma's) at standard contrast, and the strong control
+    // edge under increased contrast, where a required boundary targets 3:1 (CONTRAST.md); the fill alone read 1.07:1.
+    [`${PREFIX}input-edge-soft`]: `color-mix(in srgb, transparent, var(${PREFIX}edge-control) calc(var(${PREFIX}contrast-more) * 100%))`,
     [`${PREFIX}input-text`]: `var(${PREFIX}fg-default)`,
     [`${PREFIX}input-placeholder`]: `var(${PREFIX}fg-placeholder)`,
     [`${PREFIX}input-icon`]: `var(${PREFIX}fg-muted)`,
@@ -197,6 +204,7 @@ export function derivedTokens(): Record<string, string> {
     [`${PREFIX}textarea-bg-disabled`]: `var(${PREFIX}input-bg-disabled)`,
     [`${PREFIX}textarea-edge`]: `var(${PREFIX}input-edge)`,
     [`${PREFIX}textarea-edge-hover`]: `var(${PREFIX}input-edge-hover)`,
+    [`${PREFIX}textarea-edge-soft`]: `var(${PREFIX}input-edge-soft)`,
     [`${PREFIX}textarea-text`]: `var(${PREFIX}input-text)`,
     [`${PREFIX}textarea-placeholder`]: `var(${PREFIX}input-placeholder)`,
     [`${PREFIX}textarea-invalid-color`]: `var(${PREFIX}input-invalid-color)`,

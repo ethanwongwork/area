@@ -198,3 +198,16 @@ test('every loop stops through the motion axis\'s loop factor', () => {
   const factors = [...css.matchAll(/--area-duration-loop:\s*([^;]+);/g)].map(match => match[1].trim());
   assert.deepEqual([...new Set(factors)].sort(), ['0', '1'], 'the loop factor should be 1, or 0 at step 0');
 });
+
+test('soft fields draw a boundary under increased contrast', () => {
+  // CONTRAST.md: under increased contrast a required boundary targets 3:1. A soft field's fill alone read 1.07:1,
+  // so its resting edge is `input-edge-soft`: none at standard contrast, the strong control edge at more (2026-10-15).
+  const soft = ['.area-input--soft', '.area-number-field--soft', '.area-otp-field--soft', '.area-select--soft', '.area-custom-select--soft',
+    '.area-date-picker--soft', '.area-tag-picker--soft'];
+  for (const block of soft) assert.match(ruleFor(block)?.body ?? '', /--_border:\s*var\(--area-input-edge-soft\)/, `${block} has no edge under increased contrast`);
+  assert.match(ruleFor('.area-textarea--soft')?.body ?? '', /--_border:\s*var\(--area-textarea-edge-soft\)/, 'Textarea soft has no edge under increased contrast');
+  assert.match(ruleFor('.area-input-group--soft')?.body ?? '', /border-color:\s*var\(--area-input-edge-soft\)/, 'Input group soft has no edge under increased contrast');
+  assert.match(css, /--area-input-edge-soft:\s*color-mix\(in srgb, transparent, var\(--area-edge-control\) calc\(var\(--area-contrast-more\) \* 100%\)\)/, 'input-edge-soft lost its contrast switch');
+  // Composer is a field too: its card-edge frame turns to the strong control stroke under increased contrast.
+  assert.match(ruleFor('.area-composer')?.body ?? '', /--_composer-edge:\s*var\(--area-composer-edge\)/, 'Composer has no strong edge under increased contrast');
+});

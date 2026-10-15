@@ -30,7 +30,7 @@
   .area-date-picker--outline { --_bg: var(--area-select-bg); }
   .area-date-picker--soft {
     --_bg: var(--area-input-bg-soft);
-    --_border: transparent;
+    --_border: var(--area-input-edge-soft); /* none, or the strong edge under increased contrast */
     --_border-hover: var(--area-input-edge);
   }
   /* Notion's property value: no chrome until hovered, as wide as its text (Custom select ghost). */
