@@ -120,7 +120,7 @@ export const BadgeStress = () => (
 );
 export const BadgeAuditControls = () => {
   const [theme, setTheme] = useState("light");
-  const [density, setDensity] = useState("default");
+  const [density, setDensity] = useState("32");
   const [radius, setRadius] = useState("8");
   const [type, setType] = useState("geist");
   const [motion, setMotion] = useState("210");
@@ -128,13 +128,13 @@ export const BadgeAuditControls = () => {
   const [direction, setDirection] = useState<"ltr" | "rtl">("ltr");
   return <div style={{ display: "grid", gap: "var(--area-space-24)", maxWidth: "100%" }}>
     <label>Audit theme <select className="area-select area-select--sm" value={theme} onChange={event => setTheme(event.target.value)}><option>light</option><option>dark</option></select></label>
-    <label>Audit density <select className="area-select area-select--sm" value={density} onChange={event => setDensity(event.target.value)}><option>default</option><option>compact</option></select></label>
+    <label>Audit density <select className="area-select area-select--sm" value={density} onChange={event => setDensity(event.target.value)}><option>28</option><option>32</option><option>36</option></select></label>
     <label>Audit radius <select className="area-select area-select--sm" value={radius} onChange={event => setRadius(event.target.value)}>{["0", "2", "4", "6", "8", "10", "12", "14", "pill"].map(value => <option key={value}>{value}</option>)}</select></label>
     <label>Audit font <select className="area-select area-select--sm" value={type} onChange={event => setType(event.target.value)}><option>geist</option><option>system</option></select></label>
     <label>Audit motion <select className="area-select area-select--sm" value={motion} onChange={event => setMotion(event.target.value)}><option>0</option><option>210</option></select></label>
     <label>Audit contrast <select className="area-select area-select--sm" value={contrast} onChange={event => setContrast(event.target.value)}><option>standard</option><option>more</option></select></label>
     <label>Audit direction <select className="area-select area-select--sm" value={direction} onChange={event => setDirection(event.target.value as "ltr" | "rtl")}><option>ltr</option><option>rtl</option></select></label>
-    <div data-badge-audit="" data-area-theme={theme} data-area-ui={density} data-area-radius={radius} data-area-contrast={contrast} data-area-motion={motion} dir={direction} style={{ ...(type === "system" ? { "--area-font-sans": "system-ui" } : {}), background: "var(--area-bg-surface)", color: "var(--area-fg-default)", padding: "var(--area-space-24)", display: "grid", gap: "var(--area-space-24)" } as CSSProperties}>
+    <div data-badge-audit="" data-area-theme={theme} data-area-density={density} data-area-radius={radius} data-area-contrast={contrast} data-area-motion={motion} dir={direction} style={{ ...(type === "system" ? { "--area-font-sans": "system-ui" } : {}), background: "var(--area-bg-surface)", color: "var(--area-fg-default)", padding: "var(--area-space-24)", display: "grid", gap: "var(--area-space-24)" } as CSSProperties}>
       {(["sm", "md", "lg"] as const).map(size => <div key={size}><Badge size={size} icon={<InfoIcon size={12} />} trailingIcon={<ArrowRightIcon size={12} />}>Badge</Badge></div>)}
       <BadgeToneMatrix />
       <BadgeAnchorPlacements />
