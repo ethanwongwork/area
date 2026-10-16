@@ -23,6 +23,8 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   cell alone lights; the Inspector previews its weight; list rows match), Color's cards are the app's Tile with
   `option` (a ListBoxItem). `grid-keys.ts` removed. App tile / cell rules read `aria-selected`; `.gallery-tile`
   takes `place-items: normal` (the option centres its content otherwise).
+- Merged (PR #107). Then Hover card `openOnFocus` (default true; E-18 stands): the Icons tab's cells set it false, so
+  the arrows no longer open a card on every icon (it opened at once on focus); the Inspector has the same actions.
 
 ## Copy button (2026-10-15, branch `claude/copy-button`)
 

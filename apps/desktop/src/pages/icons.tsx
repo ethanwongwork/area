@@ -111,7 +111,9 @@ function IconCell({ entry, style, size }: { entry: Entry; style: Mode; size: num
   };
   const category = CATEGORY_OF.get(entry.name);
   return (
-    <HoverCard side="bottom" align="center" delay={500} open={open} onOpenChange={setOpen} className="studio-icon-card" aria-label={titleCase(entry.name)}
+    // Pointer only: the arrows sweep the sheet, and the Inspector already shows the card's name and actions for the
+    // option the keys are on (the List box's selection follows focus).
+    <HoverCard side="bottom" align="center" delay={500} openOnFocus={false} open={open} onOpenChange={setOpen} className="studio-icon-card" aria-label={titleCase(entry.name)}
       trigger={
         // An option of the sheet's ListBox: selected by a press or, as the keys move, by focus.
         <ListBoxItem value={entry.name} textValue={titleCase(entry.name)} className="studio-icons__cell" data-icon={entry.name} data-key={entry.name}
