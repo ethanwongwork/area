@@ -215,3 +215,4 @@ None.
   taken: check on chosen rows kept, opacity-only fade kept. Stays in review.
 - 2026-10-08 · owner: approved on the component review page (re-review after the requested changes).
 - 2026-10-09 · owner went with Scroll area's recommendation to adopt it in the scrolling families (docs/specs/scroll-area.md, "Adoption") → the scroll container is a Scroll area: Figma's overlay bar instead of the platform's, its inset moved into the scroller so rows keep their place → back in review.
+- 2026-10-15 · owner: "merge it, then continue working" → boundary sweep under increased contrast (CONTRAST.md: required boundaries target 3:1): the soft variant's resting edge is `input-edge-soft`, as Input's (now 3.79:1 light, 5.49:1 dark).

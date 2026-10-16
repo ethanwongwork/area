@@ -32,6 +32,9 @@ measurements are in Git history (`archive/docs/batches/V01/`, removed after comm
   a control or focus indicator ([Strokes](DESIGN_SYSTEM.md#strokes)).
 - `edge-control`, `edge-control-hover`, `edge-selected`, `edge-accent`, `fill-toggle`:
   presentation roles selecting quiet or strong endpoints according to contrast preference.
+  `input-edge-soft` (a soft field's resting edge: none, or the strong edge) and `composer-edge` (Composer's
+  frame: the card edge, or the strong stroke) follow the same switch, so every field reaches 3:1 under increased
+  contrast (boundary sweep, 2026-10-15).
 
 `data-area-contrast="more"` selects strong endpoints; `standard` resets them locally. It also brings
 Surface 0's frames back at 1px (`border-width` = the Surface's `frame-width`, or 1px under More; owner,

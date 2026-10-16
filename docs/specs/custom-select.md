@@ -337,3 +337,4 @@ announcement, RTL, forced colours, Figma side by side.
   listbox, the trigger lists the chosen labels in the list's order (placeholder when none), one
   hidden input per value. Row paint is unchanged: a chosen row shows the check. Not yet on the
   review page; the gallery has no `multiple` tile.
+- 2026-10-15 · owner: "merge it, then continue working" → boundary sweep under increased contrast (CONTRAST.md: required boundaries target 3:1): the soft variant's resting edge is `input-edge-soft`, as Input's; ghost stays chromeless.

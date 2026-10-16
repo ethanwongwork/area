@@ -171,3 +171,4 @@ Crispness: shell, insets (already `round()`ed) and boxes measured on whole pixel
 - 2026-09-30 · audit S4 (owner) → radius follows the tier as Button: sm 6, md 8, lg 10 (`--_radius` per size, `textarea.css:36`, `:131-133`); was 8 at every size.
 - 2026-10-01 · audit B-9 (owner pick B) → read-only keeps its variant's rest paint (was the soft fill), no hover edge, default cursor; a soft field never gains an edge when disabled → textarea.css:76-80, :115-128.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → motion pass: hover and focus edge and the focus halo appear at once and fade out on `fast`; tones land at once (`textarea.css`). See "Motion and interaction, 2026-10-07".
+- 2026-10-15 · owner: "merge it, then continue working" → boundary sweep under increased contrast (CONTRAST.md: required boundaries target 3:1): the soft variant's resting edge is `textarea-edge-soft` (= `input-edge-soft`), as Input's.
