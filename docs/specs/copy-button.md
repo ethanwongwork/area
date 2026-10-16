@@ -40,6 +40,8 @@ No copied-state variant: the state is runtime (`data-copy-state`), not a design-
 | zag | design system source (Ark, Chakra) | `timeout: 3e3`; trigger `aria-label` switches "Copy to clipboard" → "Copied to clipboard" (`dist/index.mjs:110, 128`) | @zag-js/clipboard@1.15.0 | MIT | — |
 | chatgpt | target product, live DOM (read 2026-10-15, Claude in Chrome, read-only; nothing pressed) | "Copy message" and the code "Copy": `button`, 32 × 32, radius 8, padding 0, transparent ground, ink rgb(143,143,143), a 20 × 20 svg, no visible text, no `aria-live` ancestor; "Copy table": 36 × 36, radius 9999, 16 × 16 svg | chatgpt.com | n/a (evidence only) | — |
 | notion, figma | target products | "Copy link" is a menu row confirmed by a toast | — | n/a | not captured |
+| chatgpt-pressed | target product, live DOM (2026-10-16, Claude in Chrome; a canvas document's header "Copy" pressed, which only copied it) | 36 × 36 pill, 20 × 20 icon; pressed, the icon turned to a check and the name and tooltip to "Copied" at 225 ms, back to "Copy" at 2241 ms: **2016 ms** held (20 ms poll); no live region. Message "Copy": 32 × 32, radius 8, 20 × 20 icon, ink rgb(143,143,143) | chatgpt.com | n/a (evidence only) | `chatgpt--canvas-copy-icon--rest--light.json`, `--copied--light.json`, `chatgpt--message-copy-icon--rest--light.json` |
+| notion-code | target product, live DOM (2026-10-16, a public page's code block, `todesign2020.notion.site`, read-only) | the code block's hover toolbar: language, an icon-only copy (24 × 24, radius 4, a 13.25 × 16 "duplicate" glyph, ink rgb(142,139,134), named "Copy code to clipboard"); pressed, the button does not change: a toast and a live region say "Copied code to clipboard" (toast lifetime not measured: repeated presses extend it) | todesign2020.notion.site | n/a (evidence only) | `notion--code-copy-icon--hover-block--light.json`, `--copied--light.json`, `notion--code-toolbar--hover-block--light.json` |
 
 The copied state in ChatGPT was not observed: pressing it writes the owner's clipboard.
 
@@ -59,8 +61,8 @@ Inset equations are Button's (`docs/specs/button.md`).
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| feedback · duration | 2000 ms (`COPY_FEEDBACK_MS`) | uui `use-clipboard.ts:5`; shadcn 2000; Mantine's hook 2000 | was 1600 in Code block and Token row with no source; Mantine's component 1000 and Zag's 3000 are the outliers |
-| feedback · what changes | the icon only: copy → check; the label and the name stay | uui (label stays), shadcn (sr-only name stays); Area audit G-21 (Code block: one fixed name) | Zag renames the button; a changing name is read on focus, not as a result |
+| feedback · duration | 2000 ms (`COPY_FEEDBACK_MS`) | uui `use-clipboard.ts:5`; shadcn 2000; Mantine's hook 2000; ChatGPT's canvas copy measured 2016 ms (chatgpt-pressed) | was 1600 in Code block and Token row with no source; Mantine's component 1000 and Zag's 3000 are the outliers |
+| feedback · what changes | the icon only: copy → check; the label and the name stay | uui (label stays), shadcn (sr-only name stays); Area audit G-21 (Code block: one fixed name) | Zag renames the button, and so does ChatGPT (name and tooltip "Copied", chatgpt-pressed); Notion changes nothing on the button (a toast and a live region, notion-code); a changing name is read on focus, not as a result |
 | feedback · announcement | polite live region beside the button, "Copied to clipboard" / "Copy failed" | Code block's (audit G-21) | — |
 | feedback · motion | the check enters from scale 0.6 with opacity over `duration-fast`, ease-out; the copy glyph returns at once | Code block, MOTION.md (2026-10-07) | moved from code.css to copy-button.css |
 | default variant / tone / size | ghost / neutral / sm | Code block's copy (the approved instance); ChatGPT's ghost icon buttons | ChatGPT's 32 / 20 icon is Button md's role; sm is Code block's, and `size` is open |
@@ -107,3 +109,4 @@ two-second clock. `onClick` runs first; `preventDefault()` there skips the copy.
 ## Feedback log
 
 - 2026-10-15 · owner: "go with your rec" (new components from the backlog) → Copy button, from PRODUCT_UI.md's open gaps.
+- 2026-10-16 · owner (on a parallel build of the same gap): "add my evidence" → sources chatgpt-pressed (ChatGPT's copied state held 2016 ms; it renames to "Copied") and notion-code (Notion's code-block copy: icon-only 24 × 24, confirmed by a toast and a live region, the button unchanged), with their captures. Evidence only: no value changes.
