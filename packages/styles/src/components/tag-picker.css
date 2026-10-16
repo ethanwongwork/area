@@ -30,7 +30,7 @@
   .area-tag-picker--outline { --_bg: var(--area-input-bg); }
   .area-tag-picker--soft {
     --_bg: var(--area-input-bg-soft);
-    --_border: transparent;
+    --_border: var(--area-input-edge-soft); /* none, or the strong edge under increased contrast */
     --_border-hover: var(--area-input-edge);
   }
   .area-tag-picker--sm { --_height: var(--area-control-sm); --_radius: var(--area-radius-control-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }

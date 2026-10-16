@@ -87,6 +87,16 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   The Neutral setting maps `--area-neutral-*` onto Cool / Warm step for step (checked equal), so with Neutral
   set, the neutral ramp's tiles, list rows, contrast filter and Inspector describe that ramp's step (a "Paints"
   row says so); the Inspector's Hex used to read the document root and disagree with the swatch.
+- Merged (PR #94). Contrast sweep of the settings added since the audit (headless Edge, 90 families × 7: default,
+  Contrast More light, More dark + Surface 0 + Elevation 0, purple accent roles light and dark, Cool dark, Warm
+  12 Compact; WCAG 4.5 / 3 large, disabled skipped): the only failure was on-color Code on the accent solid
+  (4.06-4.37:1 on 8 of 11 accents); its plate is now 8% of the ink's opposite (5.30:1 and up). No console errors.
+  Headless Edge degrades after many reloads; run long sweeps in fresh processes per combination.
+- Merged (PR #97). Boundary sweep under Contrast More (90 families, light and dark; CONTRAST.md's 3:1 target):
+  soft fields (Input, Number, OTP, Select, Custom select, Date picker, Tag picker, Textarea, Input group) had no edge
+  (fill 1.07:1) → `input-edge-soft`; Composer's frame stayed the card edge (1.16 / 1.33:1) → `composer-edge`. Both
+  3.79:1 light, 5.49:1 dark at More, unchanged at standard. Left as by design: ghost fields, Segmented items (the track
+  carries it), Command palette's search input, gradient slider tracks.
 
 ## All-axis audit (2026-10-14, branch `claude/elevation-axis-gallery-e500be`)
 

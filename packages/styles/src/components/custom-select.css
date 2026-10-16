@@ -33,7 +33,7 @@
   /* Soft matches Select, Input and NumberField soft, so an inspector holds one field style. */
   .area-custom-select--soft {
     --_bg: var(--area-input-bg-soft);
-    --_border: transparent;
+    --_border: var(--area-input-edge-soft); /* none, or the strong edge under increased contrast */
     --_border-hover: var(--area-input-edge);
   }
   /*
