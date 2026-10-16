@@ -9,8 +9,8 @@
  * The usage notes come from where Area uses each role (packages/styles) and the ramp's own notes
  * (packages/tokens/src/axes/typography.ts).
  */
-import { useState } from "react";
-import { Code, CopyButton as AreaCopyButton, EmptyState, Field, Nav, NavGroup, NavItem, PanelSection, Table, TableLink, Textarea, Tooltip } from "@area/react";
+import { useState, type ReactNode } from "react";
+import { Code, CopyButton as AreaCopyButton, EmptyState, Field, ListBox, ListBoxItem, Nav, NavGroup, NavItem, PanelSection, Table, TableLink, Textarea, Tooltip } from "@area/react";
 import { CheckIcon, CopyIcon } from "@area/icons";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { APP_SCALE, SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
@@ -21,7 +21,6 @@ import { Preview, Selection } from "../inspector.tsx";
 import { ArrangeMenu, sortBy, useArrangement } from "../organize.tsx";
 import { CopyButton } from "../copy.tsx";
 import { matches } from "../search.ts";
-import { onGridKeys } from "../grid-keys.ts";
 import { DEFAULT_TYPE, TYPE_ROLES, TYPE_SIZES, type TypeRole } from "../tokens.ts";
 import { readStored, writeStored } from "../storage.ts";
 
@@ -87,14 +86,26 @@ function CopyToken({ token }: { token: string }) {
   );
 }
 
+/*
+ * The Canvas's roles. In the grid every cell is an option of one ListBox (docs/specs/list-box.md): one Tab stop, the
+ * arrows across the sheets, typing to a name, selection following focus so the Inspector shows the keys' style.
+ */
+function Sheet({ grid, value, onChoose, children }: { grid: boolean; value: string | null; onChoose: (value: string) => void; children: ReactNode }) {
+  return grid
+    ? <ListBox layout="grid" aria-label="Type styles" value={value} onValueChange={onChoose} selectionFollowsFocus className="studio-sections">{children}</ListBox>
+    : <div className="studio-sections">{children}</div>;
+}
+
 export function TypographyPage() {
   const { query, item, select, canvas } = useStudio();
   const [sample, setSample] = useState(() => readStored("typeSample", SAMPLE));
   // The Sidebar's choice (All, or one role) and the Inspector's (the row chosen on the Canvas;
   // with one role on the Canvas, that role; with none, the type scale).
   const view = TYPE_ROLES.find(entry => entry.id === item);
+  // The chosen style, "<weight>:<role>": one cell, since each role shows in both weights (2026-10-15, List box).
   const [selected, setSelected] = useState<string>();
-  const role = view ?? TYPE_ROLES.find(entry => entry.id === selected);
+  const [selectedWeight, selectedId] = (selected?.split(":") ?? []) as ["regular" | "strong" | undefined, string | undefined];
+  const role = view ?? TYPE_ROLES.find(entry => entry.id === selectedId);
   // The Canvas's type size (Inspector, Canvas section): roles are measured at it.
   const density = canvas.type;
   const [mode, setMode] = useViewOption<ViewMode>("typography", "list", ["grid", "list"]);
@@ -164,27 +175,27 @@ export function TypographyPage() {
         // No matches: the Sidebar keeps All, and the Canvas says so (product UI rule 10, docs/PRODUCT_UI.md).
         <EmptyState title="No type roles" description={`Nothing matches “${query}”.`} />
       ) : (
-        <div className="studio-sections" onKeyDown={onGridKeys}>
+        <Sheet grid={mode === "grid"} value={selected ?? null} onChoose={setSelected}>
           {sections.flatMap(group => WEIGHTS.filter(w => weights === "all" || weights === w.id).map(w => {
             const list = shown.filter(entry => (group.groups as readonly string[]).includes(entry.group));
             if (!list.length) return null;
             const styleName = (entry: TypeRole) => `${entry.name}${w.suffix}`;
             return (
-              <CanvasSection key={`${group.id}-${w.id}`} id={`type-${group.id}-${w.id}`} title={`${group.label}${w.suffix}`}
+              <CanvasSection key={`${group.id}-${w.id}`} role={mode === "grid" ? "group" : undefined} id={`type-${group.id}-${w.id}`} title={`${group.label}${w.suffix}`}
                 lede={w.id === "regular" ? group.lede : `The same ramp at the strong weight (${w.value}), for emphasis and titles that need it.`}>
                 {mode === "grid" ? (
                   // Grid: every style a cell on the surface, its "Aa" set in the style over its name and
                   // values, with the icon cells' plates (Cursor's sheet; no containers for type).
                   <div className="studio-type-sheet">
                     {list.map(entry => (
-                      <button key={entry.id} type="button" className="studio-type-cell" aria-pressed={entry.id === role?.id}
-                        aria-label={`${styleName(entry)}, ${metrics(entry, density)}`} onClick={() => setSelected(entry.id)}>
+                      <ListBoxItem key={entry.id} value={`${w.id}:${entry.id}`} textValue={styleName(entry)} className="studio-type-cell"
+                        aria-label={`${styleName(entry)}, ${metrics(entry, density)}`}>
                         <span className="studio-type-cell__sample" style={roleStyle(entry, w.id)} aria-hidden="true">Aa</span>
                         <span className="studio-type-cell__label" {...APP_SCALE} aria-hidden="true">
                           <span>{styleName(entry)}</span>
                           <span className="studio-muted studio-tabular">{metrics(entry, density)}</span>
                         </span>
-                      </button>
+                      </ListBoxItem>
                     ))}
                   </div>
                 ) : (
@@ -199,10 +210,10 @@ export function TypographyPage() {
                       </thead>
                       <tbody>
                         {list.map(entry => (
-                          <tr key={entry.id} data-selected={entry.id === role?.id ? "" : undefined}>
+                          <tr key={entry.id} data-selected={selected === `${w.id}:${entry.id}` ? "" : undefined}>
                             <td>
                               <TableLink href={`#typography/${entry.id}`} className="studio-type__example" style={roleStyle(entry, w.id)}
-                                onClick={event => { event.preventDefault(); setSelected(entry.id); }}>
+                                onClick={event => { event.preventDefault(); setSelected(`${w.id}:${entry.id}`); }}>
                                 {styleName(entry)}
                               </TableLink>
                             </td>
@@ -217,7 +228,7 @@ export function TypographyPage() {
               </CanvasSection>
             );
           }))}
-        </div>
+        </Sheet>
       )}
       inspector={
         <>
@@ -230,7 +241,7 @@ export function TypographyPage() {
           </CanvasSettings>
           {role ? (
             <>
-              <Selection preview={<Preview><span style={roleStyle(role, weight)} aria-hidden="true">Aa</span></Preview>}>
+              <Selection preview={<Preview><span style={roleStyle(role, view ? weight : selectedWeight ?? weight)} aria-hidden="true">Aa</span></Preview>}>
                 <CopyButton label="Copy CSS" icon={<CopyIcon />} fullWidth value={() => roleCss(role)} />
                 <CopyButton label="Copy token" icon={<CopyIcon />} fullWidth value={() => `var(--area-${role.id}-size)`} />
               </Selection>

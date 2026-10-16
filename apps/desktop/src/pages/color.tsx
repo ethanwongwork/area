@@ -9,7 +9,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import TOKENS from "@area/tokens/tokens.json";
 import { ROLE_SCALES } from "../../../../packages/tokens/src/color/presets.ts";
-import { Code, ColorSwatch, EmptyState, Nav, NavGroup, NavItem, PanelSection, Table, TableLink } from "@area/react";
+import { Code, ColorSwatch, EmptyState, ListBox, Nav, NavGroup, NavItem, PanelSection, Table, TableLink } from "@area/react";
 import { CopyIcon } from "@area/icons";
 import { CopyButton } from "../copy.tsx";
 import { SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
@@ -22,7 +22,6 @@ import { Preview, Selection } from "../inspector.tsx";
 import { matches } from "../search.ts";
 import { SCALES, type ScaleStep } from "../tokens.ts";
 import { ArrangeMenu, sortBy, useArrangement } from "../organize.tsx";
-import { onGridKeys } from "../grid-keys.ts";
 
 /* Sort and group (src/organize.tsx). The default is the palette's own order, neutrals then hues. */
 const SORTS = [{ value: "palette", label: "Palette order" }, { value: "name", label: "Name" }, { value: "chroma", label: "Colourfulness" }] as const;
@@ -98,11 +97,21 @@ function oklchShort(value: string) {
  * carries head it; hex, RGB and OKLCH follow a line below, all in the one ink that reads on it.
  * A unit tile that hugs its text (owner, 2026-10-14), so a long value wraps rather than clips.
  */
-function ColorCard({ scale, item, selected, onSelect }: { scale: string; item: ScaleStep; selected: boolean; onSelect: () => void }) {
+/*
+ * The Canvas's steps. In the grid every card is an option of one ListBox (docs/specs/list-box.md): one Tab stop, the
+ * arrows across the scales, selection following focus so the Inspector shows the keys' step. The list is Tables.
+ */
+function Sheet({ grid, value, onChoose, children }: { grid: boolean; value: string | null; onChoose: (value: string) => void; children: ReactNode }) {
+  return grid
+    ? <ListBox layout="grid" aria-label="Colour steps" value={value} onValueChange={onChoose} selectionFollowsFocus className="studio-sections">{children}</ListBox>
+    : <div className="studio-sections">{children}</div>;
+}
+
+function ColorCard({ scale, item }: { scale: string; item: ScaleStep }) {
   const ink = item.contrast.fg;
   const [r, g, b] = rgbOf(item.hex);
   return (
-    <Tile span="unit" stage="flow" pressable selected={selected} onSelect={onSelect}
+    <Tile span="unit" stage="flow" option={`${scale}-${item.level}`}
       aria-label={`${title(scale)} ${item.level}, ${item.hex.toUpperCase()}, ${ink === "#ffffff" ? "white" : "black"} text ${item.contrast.ratio.toFixed(2)} to 1, ${item.contrast.grade}`}
       paint={{ background: `var(--area-${scale}-${item.level})`, color: ink }}
       label={<span className="studio-swatch__level">{item.level}</span>}
@@ -184,13 +193,13 @@ export function ColorPage() {
         </ViewControls>
       }
       canvas={onCanvas.length ? (
-        <div className="studio-sections" onKeyDown={onGridKeys}>
+        <Sheet grid={mode !== "list"} value={picked ? `${picked.scale.id}-${picked.step.level}` : null} onChoose={choose}>
           {onCanvas.map(entry => {
             const isSelected = (level: number) => entry.id === picked?.scale.id && level === picked?.step.level;
             const steps = entry.steps.map(step => paints(entry.id, step)).filter(passes);
             const pick = (level: number) => choose(`${entry.id}-${level}`);
             return (
-              <CanvasSection key={entry.id} id={`scale-${entry.id}`} title={view ? undefined : title(entry.id)}>
+              <CanvasSection key={entry.id} role={mode === "list" ? undefined : "group"} id={`scale-${entry.id}`} title={view ? undefined : title(entry.id)}>
                 {mode === "list" ? (
                   // List: one row per step, its token and values.
                     <Table size="md" interactive flush aria-label={`${title(entry.id)} steps`}>
@@ -218,14 +227,14 @@ export function ColorPage() {
                   // On the components' grid (owner, 2026-10-12): wide tiles, 280 at the least, 5:4.
                   <TileGrid span="unit" hug>
                     {steps.map(item => (
-                      <ColorCard key={item.level} scale={entry.id} item={item} selected={isSelected(item.level)} onSelect={() => pick(item.level)} />
+                      <ColorCard key={item.level} scale={entry.id} item={item} />
                     ))}
                   </TileGrid>
                 )}
               </CanvasSection>
             );
           })}
-        </div>
+        </Sheet>
       ) : <EmptyState title="No scales" description={`Nothing matches “${query}”.`} />}
       inspector={
         <>

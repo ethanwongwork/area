@@ -19,6 +19,10 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   Icons tab: Tab in → first icon chosen; Right / Down move and choose; one Tab leaves; Shift+Tab returns. The hidden
   preview pane fires no focus events (`document.hasFocus()` false), so keyboard checks need headless Edge.
 - Review page (In review): https://claude.ai/artifact/VtEvHb4MPWN6Z7UiK7gxBF (built from the app's demos).
+- Merged (PR #106). Then Typography and Color adopt it: Typography's cells are options `<weight>:<role>` (the chosen
+  cell alone lights; the Inspector previews its weight; list rows match), Color's cards are the app's Tile with
+  `option` (a ListBoxItem). `grid-keys.ts` removed. App tile / cell rules read `aria-selected`; `.gallery-tile`
+  takes `place-items: normal` (the option centres its content otherwise).
 
 ## Copy button (2026-10-15, branch `claude/copy-button`)
 

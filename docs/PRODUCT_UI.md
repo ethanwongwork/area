@@ -91,8 +91,6 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
 Recorded, not yet built (each needs its own component pass). From the app audit of 2026-10-12:
 
 - An on-colour Badge (colour cards draw their contrast badge in app CSS; `Code onColor` exists).
-- Roving focus for grids and lists: ListBox (2026-10-15, `docs/specs/list-box.md`) does it, and the Icons tab uses
-  it; Typography and Color still use `grid-keys.ts` with `aria-pressed`.
 - Hover card that opens on pointer only, not on every arrow-key focus in a sheet.
 - Table props for its fit and numeric cells (the app writes `area-table__cell--fit` by hand).
 
