@@ -5,6 +5,21 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## List box (2026-10-15, branch `claude/list-box`)
+
+- Owner: "merge it, then continue working" (PR #102 merged) → the next PRODUCT_UI gap: roving focus and a 2-D
+  collection. `ListBox` / `ListBoxItem` / `ListBoxSection` (packages/react/src/components/ListBox.tsx): the WAI-ARIA
+  listbox (React Aria ListBox), one Tab stop by roving tabindex, `layout` list (Menu's rows, the value picker's check)
+  or grid (cells `--area-list-box-item`, control-xl, 2 apart, row plates, inset ring: the app's icon cell). Grid keys:
+  reading order Left / Right, nearest by centre Up / Down across sections (grid-keys.ts's model), Home / End, typeahead
+  (TYPEAHEAD_RESET), Enter / Space; `selectionFollowsFocus`. No new painted values. Spec `docs/specs/list-box.md`.
+- The Icons tab's grid is one ListBox (808 options, 33 groups; `CanvasSection role="group"`); was 808 Tab stops with
+  `aria-pressed`. Typography (each style in two weights under one id) and Color (Tile cards) still use grid-keys.ts.
+- Checks: build, manifest (111), typecheck, React suites, playgrounds 0. Headless Edge with focus emulation on the
+  Icons tab: Tab in → first icon chosen; Right / Down move and choose; one Tab leaves; Shift+Tab returns. The hidden
+  preview pane fires no focus events (`document.hasFocus()` false), so keyboard checks need headless Edge.
+- Review page (In review): https://claude.ai/artifact/VtEvHb4MPWN6Z7UiK7gxBF (built from the app's demos).
+
 ## Copy button (2026-10-15, branch `claude/copy-button`)
 
 - Owner: "go with your rec" (new components from the backlog) → Copy button, from PRODUCT_UI.md's open gaps: the app's

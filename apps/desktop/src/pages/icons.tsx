@@ -6,8 +6,8 @@
  * @area/icons/meta), else the Sidebar's category, else the set. Icons, categories and batches come from
  * @area/icons; the SVG export and CopyButton are ../copy.tsx.
  */
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactElement } from "react";
-import { Badge, Button, Code, Count, EmptyState, HoverCard, Nav, NavGroup, NavItem, PanelSection, Segmented, Select, Table, TableLink } from "@area/react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactElement, type ReactNode } from "react";
+import { Badge, Button, Code, Count, EmptyState, HoverCard, ListBox, ListBoxItem, Nav, NavGroup, NavItem, PanelSection, Segmented, Select, Table, TableLink } from "@area/react";
 import { batches as ICON_BATCHES, categories as ICON_CATEGORIES, icons as ICON_META } from "@area/icons/meta";
 import * as APPROVED from "@area/icons";
 import * as IN_REVIEW from "@area/icons/review";
@@ -22,7 +22,6 @@ import { Preview, Selection } from "../inspector.tsx";
 import { matches } from "../search.ts";
 import { readStored, writeStored } from "../storage.ts";
 import { ArrangeMenu, groupBy, PinButton, PinMenu, sortBy, useArrangement, usePins } from "../organize.tsx";
-import { onGridKeys } from "../grid-keys.ts";
 
 type Mode = "outline" | "filled";
 type IconComponent = (props: APPROVED.IconProps) => ReactElement;
@@ -90,7 +89,19 @@ function download(svg: string, name: string) {
  * card's end inset. Its rows are built only while it is open, so a sheet of hundreds of
  * cells carries one empty surface each.
  */
-function IconCell({ entry, style, size, selected, onChoose }: { entry: Entry; style: Mode; size: number; selected: boolean; onChoose: () => void }) {
+/*
+ * The Canvas's icons. In the grid they are one ListBox (docs/specs/list-box.md): a single Tab stop, the arrows move
+ * across the sheets in reading order and to the nearest icon above or below, typing jumps to a name, and selection
+ * follows focus so the Inspector shows what the keys are on. Sections are its groups. The list view is a Table.
+ */
+function Sheet({ grid, value, onChoose, size, children }: { grid: boolean; value: string | null; onChoose: (name: string) => void; size: number; children: ReactNode }) {
+  const style = { "--_size": `${size}px` } as CSSProperties;
+  return grid
+    ? <ListBox layout="grid" aria-label="Icons" value={value} onValueChange={onChoose} selectionFollowsFocus className="studio-icons studio-sections" style={style}>{children}</ListBox>
+    : <div className="studio-icons studio-sections" style={style}>{children}</div>;
+}
+
+function IconCell({ entry, style, size }: { entry: Entry; style: Mode; size: number }) {
   const [open, setOpen] = useState(false);
   const preview = useRef<HTMLDivElement>(null);
   const Glyph = style === "filled" ? entry.Filled : entry.Icon;
@@ -102,10 +113,11 @@ function IconCell({ entry, style, size, selected, onChoose }: { entry: Entry; st
   return (
     <HoverCard side="bottom" align="center" delay={500} open={open} onOpenChange={setOpen} className="studio-icon-card" aria-label={titleCase(entry.name)}
       trigger={
-        <button type="button" className="studio-icons__cell" data-icon={entry.name} data-key={entry.name} data-name={titleCase(entry.name)}
-          aria-pressed={selected} aria-label={titleCase(entry.name)} onClick={onChoose}>
+        // An option of the sheet's ListBox: selected by a press or, as the keys move, by focus.
+        <ListBoxItem value={entry.name} textValue={titleCase(entry.name)} className="studio-icons__cell" data-icon={entry.name} data-key={entry.name}
+          data-name={titleCase(entry.name)} aria-label={titleCase(entry.name)}>
           <Glyph size={size} aria-hidden="true" />
-        </button>
+        </ListBoxItem>
       }>
       {open ? <>
         <div className="studio-icon-card__head">
@@ -239,9 +251,9 @@ export function IconsPage() {
       }
       canvas={total ? (
         <PinMenu pins={pins} label="Icon">
-        <div className="studio-icons studio-sections" style={{ "--_size": `${size}px` } as CSSProperties} onKeyDown={onGridKeys}>
+        <Sheet grid={mode !== "list"} value={icon?.name ?? null} onChoose={choose} size={size}>
           {onCanvas.map(section => (
-            <CanvasSection key={section.slug} id={`icons-${section.slug}`} title={view || onCanvas.length === 1 ? undefined : <>{section.name} <span className="studio-muted">{section.shown.length}</span></>}>
+            <CanvasSection key={section.slug} role={mode === "list" ? undefined : "group"} id={`icons-${section.slug}`} title={view || onCanvas.length === 1 ? undefined : <>{section.name} <span className="studio-muted">{section.shown.length}</span></>}>
               {mode === "list" ? (
                 // List: one row per icon on the Canvas's surface (a flush Table), drawn at the
                 // chosen size, with its facts.
@@ -269,13 +281,13 @@ export function IconsPage() {
                 <div className="studio-icons__sheet">
                   {section.shown.map(name => {
                     const entry = BY_NAME.get(name);
-                    return entry ? <IconCell key={name} entry={entry} style={style} size={size} selected={name === icon?.name} onChoose={() => choose(name)} /> : null;
+                    return entry ? <IconCell key={name} entry={entry} style={style} size={size} /> : null;
                   })}
                 </div>
               )}
             </CanvasSection>
           ))}
-        </div>
+        </Sheet>
         </PinMenu>
       ) : <EmptyState title="No icons" description={`Nothing matches “${query}”.`} />}
       inspector={

@@ -399,6 +399,24 @@ export const COMPONENT_PAGES = [
     ],
   },
   {
+    slug: "list-box", name: "List box", exportName: "ListBox", manifest: "listBox",
+    imports: "ListBox, ListBoxItem, ListBoxSection",
+    api: [
+      ["layout", "list (Menu's rows, the chosen one checked) | grid (options in rows and columns)", "list"],
+      ["value / defaultValue / onValueChange", "the chosen option's value", "— / null / —"],
+      ["selectionFollowsFocus", "moving with the keys also chooses, so a preview follows them", "false"],
+      ["disabled", "the whole set", "false"],
+      ["ListBoxItem: value / textValue / disabled", "its key; the text typing matches when its content has none; skipped by the keys", "— / its text / false"],
+      ["ListBoxSection: title", "a named group (role group) of options", "—"],
+      ["--area-list-box-item", "a grid option's cell size", "control-xl (48)"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "Options to choose one from, with one Tab stop: Tab enters at the chosen option and leaves the set; Up and Down move, Home and End reach the ends, typing jumps to an option. A list uses Menu's rows, the chosen one on the active plate with its check.", demo: "GalleryListBox" },
+      { id: "grid", title: "Grid", note: "Options in rows and columns, as the app's Icons tab: Left and Right in reading order, Up and Down to the nearest option above or below, across sections. Each option takes the row plates and an inset focus ring; its content is any mark.", demo: "GalleryListBoxGrid" },
+      { id: "sections", title: "Sections", note: "ListBoxSection names a group; the arrows cross from one group to the next.", demo: "GalleryListBoxSections" },
+    ],
+  },
+  {
     slug: "copy-button", name: "Copy button", exportName: "CopyButton", manifest: "copyButton",
     imports: "CopyButton",
     api: [
