@@ -159,3 +159,20 @@ Second round, after the review (follow D1–D16):
 | 26 | `26-performance-v2` | Rules restated from the data and a re-measure plan on a 60Hz minimum device |
 
 Run 19 first, then 20 and 21, then 22 and 23. Tasks 24–26 can run once 21 is in.
+
+### Status (2026-10-15)
+
+- Astra finished 19, 20 and 21 (unreviewed). Tasks 22–26 were not started; Astra is no longer
+  available, so they pass to Claude sessions with the same questions.
+- `main` changed under the series on 2026-10-14:
+  - Shadows now belong to a separate **Elevation** axis: one number, 0–8, with roles control,
+    resting, tooltip, float and modal (`packages/tokens/src/axes/elevation.ts`). Tooltip is a
+    role there.
+  - **Surface** is only the frame width (`1` or `0`, Borderless with a soft edge).
+  - Density and type are numbers too.
+- So D2's "Surface shadows split into adjustable parts" is largely done another way. The
+  Material axis now sits beside Surface *and* Elevation. Report 21's Surface-split section, and
+  any report that says Surface owns shadows, should be read against `elevation.ts`.
+- The app moved: new UI work happens in `apps/desktop` (Titlebar, Sidebar, Canvas, Inspector);
+  `apps/docs` is archived. A Material setting would appear in the Inspector beside the other
+  axes.

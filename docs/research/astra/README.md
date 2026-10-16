@@ -1,15 +1,21 @@
 # Astra research
 
-Research, audits and reports written by Astra (Codex, GPT-6). Everything Astra produces lives
-in this folder on the long-lived branch `astra/research`. Claude reviews it later and carries
-accepted findings into specs, `docs/COMPONENTS.md` or code. Nothing here is a decision until
-then.
+Research, audits and reports written by Astra (Codex, GPT-6) from 2026-09-28 to 2026-10-12.
+Astra is no longer available (2026-10-15). The `astra/research` branch was merged into `main`
+on that date, so this folder is now an archive. New research goes in `docs/research/` like any
+other Claude work, and the materials series continues from
+[materials/README.md](materials/README.md).
+
+Nothing here is a decision unless a review records the owner's choice (see
+[materials/REVIEW.md](materials/REVIEW.md)). Most reports pin an older `main`; check a finding
+against current code before acting on it. In particular, the axes were renamed to numbers and
+Elevation was added on 2026-10-14.
 
 [INDEX.md](INDEX.md) lists every task, newest first.
 
-## Rules for Astra
+## Rules for Astra (historical)
 
-Read the repository's `AGENTS.md` first; it still applies. These rules add to it.
+Kept for reference; they describe how the folder was built. Read the repository's `AGENTS.md` first; it still applies. These rules add to it.
 
 ### Where to write
 

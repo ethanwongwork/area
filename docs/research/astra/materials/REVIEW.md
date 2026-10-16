@@ -55,7 +55,7 @@ by others.
 | 13 presets | Low-medium | About 2.5 of 10 sampled seeds trace to sources; Paper fades existing borders to 14%; no None identity; Prism colours invented and ignore accent; Glass container breaks the container cap |
 | 14 tooling | High (facts) | DTCG 2025.10 and Figma API claims confirmed |
 | 15 consistency | Medium-high | Accurate, but every winner defers to 11's unmeasured caps; missed the 13 errors above |
-| 16 specimen | Low as a decision tool | Presets indistinguishable; caption bug ("Gloss softness undefined"); example person not Irene Yamaguchi |
+| 16 specimen | Low as a decision tool | Presets indistinguishable; caption bug ("Gloss softness undefined"); (the review first flagged the example person; David Tee is correct per AGENTS.md since 2026-10-04) |
 | 17 OpenGlass | High | All three headline defects reproduce in source |
 | 18 contrast harness | High (maths) | Passes for opaque presets add nothing about material paint; the exterior 1:1 result holds by construction |
 
@@ -111,7 +111,7 @@ every shadow, and the missing guards (cutout rings, fixed-colour fades, transluc
 focus via plate, solid emphasis fills, disabled group opacity); 08 forced-colors alpha and
 backdrop-filter, and sRGB gradient interpolation must be stated; 09 re-emission cite; 11 claims
 restated to match the data; 12 duotone vs knockouts; 13 Paper stroke, no None, Prism colours,
-Glass container; 16 caption bug and example person.
+Glass container; 16 caption bug.
 
 ## Owner decisions (2026-10-11)
 
@@ -125,6 +125,9 @@ Binding for tasks 19 onward. Cite them as D1–D16.
   gate tokens (as action/selection do), so nested scopes stay correct. Surface shadows split
   into adjustable parts, starting with a pixel-identical refactor; the literal Tooltip and
   Toolbar shadows move under Surface.
+  *Note 2026-10-15:* `main` added an Elevation axis on 2026-10-14 that owns every shadow by
+  role (control, resting, tooltip, float, modal), and Surface became the frame width only. The
+  split asked for here is largely done; the Material axis sits beside Surface and Elevation.
 - **D3 Adjustability:** presets first, then typed continuous controls on Theme. Bounds are
   calibrated to cover the reference board and contrast-tested at the extremes. Caps become
   numeric per-role strength multipliers.

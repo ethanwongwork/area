@@ -1,7 +1,7 @@
 # Astra research index
 
 Newest first. Status is `unreviewed` until Claude reviews the topic; then `reviewed`, with
-where the findings went.
+where the findings went. Archive since 2026-10-15 (see [README.md](README.md)).
 
 Topics dated before 2026-10-07 began on separate `astra/*` and `codex/*` branches and were
 moved here on 2026-10-07. Their snapshot commits are older than current `main`; their
