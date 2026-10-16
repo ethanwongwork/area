@@ -194,11 +194,19 @@ target is an invisible `::after` centred with `translate: -50%`; it paints nothi
 Build, parity, typecheck pass; captures pass the checksum. Unverified: dark against Notion, screen reader.
 2026-10-07: dark compared with Primer's dark IssueLabelToken only (model, not values).
 
+## Review note, 2026-10-16 (round 30)
+
+- **What changed:** in dark, coloured tags' labels lighten as the dark page gets lighter, so they stay readable on
+  their tinted plate. Nothing changes at the default dark or in light.
+- **Why:** the plate is the colour at 16% over whatever is behind, so it lightened with the ground and the label
+  didn't: brown fell to 3.98:1 at dark ground 24 + layers 8. Look at **Lightest dark**.
+
 ## Feedback log
 
 - 2026-10-06 · owner: tags look wrong, chip or badge size?, make a Tag, fix the × backplate, Chrome review →
   Tag built from Notion's tag (captures above); Tag picker uses it; palette and × corrected after the review.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → motion pass: the ×'s plate appears at once and fades out on fast ease-out, plate only. "Motion and interaction, 2026-10-07".
+- 2026-10-16 · owner: "go with your recs, fix them in that order" (after the Layers sweep, docs/research/layers-2026-10-16/sweep/README.md) → a tinted tone's dark label mixes toward white by the Layers model's lift (tokens color/layers.ts TINT_LIFT), through a private `--_lift`: on a card, a menu or the page `layer-dark-tint-lift` (0 until the raised layer passes L 0.30, then 4× the excess, 0.24 at ground 24 + layers 8); in a field (Tag picker) `layer-dark-tint-lift-fill`, solved on the raised hover fill (0.73 at 24 + 8). The plate is the ink at 16% over whatever is behind, so it lightened with the ground while the label stayed fixed: brown fell to 3.98:1 on a card and caution to 4.14:1 in a soft Tag picker at 24 + 8. Now 4.5:1 or more on the page, the raised layer, a field and a hovered row (layers.test.ts guards every tone); one lift for every ground had left tags nearly white on cards. Defaults unchanged.
 
 ## Settled questions
 

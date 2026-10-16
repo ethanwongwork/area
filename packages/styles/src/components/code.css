@@ -302,7 +302,8 @@
     gap: var(--area-space-4);
     /* The gap between number and code, and the row's leading inset when it is a link. */
     padding-inline: var(--_code-number-start) var(--_code-number-end);
-    color: var(--area-fg-muted);
+    --_ink: var(--area-fg-muted);
+    color: light-dark(color-mix(in oklab, var(--_ink), black calc(var(--_ink-darken, 0) * 100%)), color-mix(in oklab, var(--_ink), white calc(var(--_ink-lift, 0) * 100%)));
     font-variant-numeric: tabular-nums;
     /* Numbers are chrome: they must not land in a copied selection. */
     user-select: none;
@@ -383,6 +384,19 @@
     background-color: var(--area-bg-active);
   }
 
+  /*
+   * Inks on a marked line. Syntax inks, line numbers and diff markers are solved for the code ground, so a marked
+   * line darkens them (light) or lightens them (dark) by just enough to hold 4.5:1 on its plate (Layers sweep
+   * 2026-10-16: 3.3-4.3:1 before, 3.97:1 at the defaults). Light: the 6.7% wash needs 0.063-0.073 more on every
+   * ground, the fixed diff tints 0.042. Dark: the 19% white wash needs nothing up to a raised layer of L 0.225, then
+   * 4.5x the excess (0.57 at 24 + 8); the diff tints are dark plates and need none.
+   */
+  .area-code-block__line:is(.area-code-block__line--highlighted, :target) {
+    --_ink-darken: 0.075; /* spec */
+    --_ink-lift: clamp(0, calc((var(--area-layer-dark-raised) - 0.225) * 4.5), 1); /* spec */
+  }
+  .area-code-block__line:is(.area-code-block__line--added, .area-code-block__line--removed) { --_ink-darken: 0.05; } /* spec */
+
   .area-code-block__line--added {
     background-color: var(--area-success-surface);
   }
@@ -392,11 +406,13 @@
   }
 
   .area-code-block__line--added .area-code-block__marker {
-    color: var(--area-fg-success-vivid);
+    --_ink: var(--area-fg-success-vivid);
+    color: light-dark(color-mix(in oklab, var(--_ink), black calc(var(--_ink-darken, 0) * 100%)), color-mix(in oklab, var(--_ink), white calc(var(--_ink-lift, 0) * 100%)));
   }
 
   .area-code-block__line--removed .area-code-block__marker {
-    color: var(--area-fg-danger-vivid);
+    --_ink: var(--area-fg-danger-vivid);
+    color: light-dark(color-mix(in oklab, var(--_ink), black calc(var(--_ink-darken, 0) * 100%)), color-mix(in oklab, var(--_ink), white calc(var(--_ink-lift, 0) * 100%)));
   }
 
   /* Following a line-number link marks the line it landed on. */
@@ -433,12 +449,15 @@
    * identifiers that would genuinely be confusable -- tag and attribute -- are 0.059 apart
    * in dark rather than 0.024. A fifth blue-violet family would not add information.
    */
-  .area-code-block__pre .area-syntax-keyword { color: var(--area-syntax-keyword); }
-  .area-code-block__pre .area-syntax-tag { color: var(--area-syntax-tag); }
-  .area-code-block__pre .area-syntax-attr { color: var(--area-syntax-attr); }
-  .area-code-block__pre .area-syntax-string { color: var(--area-syntax-string); }
-  .area-code-block__pre .area-syntax-comment { color: var(--area-fg-muted); }
-  .area-code-block__pre .area-syntax-punct { color: var(--area-fg-muted); }
+  .area-code-block__pre .area-syntax-keyword { --_ink: var(--area-syntax-keyword); }
+  .area-code-block__pre .area-syntax-tag { --_ink: var(--area-syntax-tag); }
+  .area-code-block__pre .area-syntax-attr { --_ink: var(--area-syntax-attr); }
+  .area-code-block__pre .area-syntax-string { --_ink: var(--area-syntax-string); }
+  .area-code-block__pre .area-syntax-comment { --_ink: var(--area-fg-muted); }
+  .area-code-block__pre .area-syntax-punct { --_ink: var(--area-fg-muted); }
+  .area-code-block__pre :is(.area-syntax-keyword, .area-syntax-tag, .area-syntax-attr, .area-syntax-string, .area-syntax-comment, .area-syntax-punct) {
+    color: light-dark(color-mix(in oklab, var(--_ink), black calc(var(--_ink-darken, 0) * 100%)), color-mix(in oklab, var(--_ink), white calc(var(--_ink-lift, 0) * 100%)));
+  }
 
   /* --- Collapsing ------------------------------------------------------------ */
 

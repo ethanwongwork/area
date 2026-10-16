@@ -23,7 +23,9 @@ function tokensForRole(theme: ResolvedTheme, role: string): Record<string, strin
   for (const [name, alias] of Object.entries(SEMANTIC_ALIASES) as Array<[string, Alias]>) {
     // A literal belongs to the axis whose role it names (the neutral scrim); others are skipped.
     if (alias.role !== role) continue;
-    out[name] = theme.tokens[name]!;
+    // A vivid or tonal ink is written as its rung; the Layers model derives `fg-<role>-vivid` and `fg-<role>` from it, so
+    // it follows the ground (color/layers.ts HUED_INKS).
+    out[alias.kind === "vivid" || alias.kind === "tonalForeground" ? `${name}-rung` : name] = theme.tokens[name]!;
   }
   return out;
 }

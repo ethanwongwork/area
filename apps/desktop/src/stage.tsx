@@ -79,7 +79,7 @@ export function Stage({ label, code, zoom, replays, children }: StageProps) {
 
   const lines = code ? code.split("\n").length : 0;
   return (
-    <div ref={frame} className="studio-stage" style={narrowed ? { inlineSize: `${width}px` } : undefined}>
+    <div ref={frame} className="studio-stage" data-area-ground="raised" style={narrowed ? { inlineSize: `${width}px` } : undefined}>
       <div className="studio-stage__head gallery-tile__head" {...APP_SCALE}>
         <span className="gallery-tile__label">{label}</span>
         {narrowed ? <span className="gallery-tile__value">{shown} px</span> : null}

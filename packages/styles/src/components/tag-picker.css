@@ -28,6 +28,8 @@
     min-inline-size: 0;
   }
   .area-tag-picker--outline { --_bg: var(--area-input-bg); }
+  /* Tags sit on the field's fill, so their dark labels take the fill lift (tag.css; Layers sweep 2026-10-16). */
+  .area-tag-picker .area-tag { --_lift: var(--area-layer-dark-tint-lift-fill); }
   .area-tag-picker--soft {
     --_bg: var(--area-input-bg-soft);
     --_border: var(--area-input-edge-soft); /* none, or the strong edge under increased contrast */

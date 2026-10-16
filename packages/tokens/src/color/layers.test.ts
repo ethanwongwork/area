@@ -5,17 +5,34 @@
  */
 import { describe, expect, it } from "vitest";
 import {
-  DARK_FILL_FLOOR, GROUND_DARK_STEPS, GROUND_LIGHT_STEPS, LAYER_STEPS, castOf, groundLightness, layerHex, layerLightness, layerLightnessCss, layerTokens,
+  DARK_FILL_FLOOR, GROUND_DARK_STEPS, GROUND_LIGHT_STEPS, HUED_INKS, LAYER_STEPS, VIVID_ROLES, castOf, groundLightness, layerHex, layerLightness, layerLightnessCss, layerTokens,
 } from "./layers.ts";
 import { wcagContrastHex } from "./contrast.ts";
-import { NEUTRAL_SCALES } from "./presets.ts";
-import { scaleFor } from "../semantic/resolve.ts";
+import { type Rgb, SRGB, clampRgb, oklabToRgb, parseHex, rgbToOklab, toHex } from "./oklab.ts";
+import { CHROMATIC_SCALES, NEUTRAL_SCALES } from "./presets.ts";
+import { resolveTheme, scaleFor } from "../semantic/resolve.ts";
 
 const THEMES = ["light", "dark"] as const;
 const groundsOf = (t: "light" | "dark") => t === "light" ? GROUND_LIGHT_STEPS : GROUND_DARK_STEPS;
 /** The smallest steps Area ships today that read: light 0.012 (a sidebar's 50 to its hover 75), dark 0.04. */
 const MIN = { light: { fill: 0.017, hover: 0.009, selected: 0.035, frame: 0.03 }, dark: { fill: 0.035, hover: 0.035, selected: 0.07, frame: 0.06 } };
 const casts = NEUTRAL_SCALES.map(spec => ({ id: spec.id, cast: castOf(scaleFor(spec.id, "light").steps.find(s => s.level === 50)!.hex, scaleFor(spec.id, "dark").steps.find(s => s.level === 900)!.hex) }));
+
+/** base.ts `bg-mark` composited over a ground: 6% black in light, 10% white in dark. */
+function markOver(theme: "light" | "dark", hex: string): string {
+  const over = (c: number) => theme === "light" ? c * 0.94 : c * 0.9 + 0.1;
+  return toHex(parseHex(hex).map(over) as Rgb);
+}
+/** Mix toward black (d > 0) or white in OKLab, as CSS color-mix(in oklab, …) does. */
+function mixOklab(hex: string, toward: "black" | "white", t: number): string {
+  const { L, a, b } = rgbToOklab(parseHex(hex), SRGB), end = toward === "black" ? 0 : 1;
+  return toHex(clampRgb(oklabToRgb({ L: L * (1 - t) + end * t, a: a * (1 - t), b: b * (1 - t) }, SRGB)));
+}
+/** A colour at alpha over an opaque ground, in sRGB, as the browser composites. */
+function alphaOver(hex: string, alpha: number, ground: string): string {
+  const f = parseHex(hex), g = parseHex(ground);
+  return toHex(f.map((c, i) => c * alpha + g[i]! * (1 - alpha)) as Rgb);
+}
 
 describe("layers: every combination is usable", () => {
   for (const theme of THEMES) for (const { id, cast } of casts) it(`${theme}, ${id}: text reads, controls and frames show`, () => {
@@ -25,8 +42,10 @@ describe("layers: every combination is usable", () => {
       const body = hx(m.ink.body), muted = hx(m.ink.muted), edge = hx(m.ink.edge), mm = MIN[theme];
       for (const [name, ground] of [["page", m.page], ["raised", m.raised], ["recessed", m.recessed]] as const) {
         const [rest, hover, selected] = m.fill[name];
-        for (const [what, bg] of [[name, ground], [`${name} field`, rest], [`${name} hover`, hover]] as const)
+        for (const [what, bg] of [[name, ground], [`${name} field`, rest], [`${name} hover`, hover], [`${name} selected`, selected]] as const)
           if (wcagContrastHex(muted, hx(bg)) < 4.5) problems.push(`${at}: muted on ${what}`);
+        // Soft Badge and Count: muted on the soft-mark plate (base.ts bg-mark) laid over the ground.
+        if (wcagContrastHex(muted, markOver(theme, hx(ground))) < 4.5) problems.push(`${at}: muted on a mark on ${name}`);
         if (wcagContrastHex(body, hx(selected)) < 4.5) problems.push(`${at}: body on ${name} selected`);
         for (const bg of [ground, rest]) if (wcagContrastHex(edge, hx(bg)) < 3) problems.push(`${at}: control edge on ${name}`);
         if (Math.abs(rest - ground) < mm.fill) problems.push(`${at}: ${name} field`);
@@ -65,9 +84,42 @@ describe("layers: the shipped CSS computes what the model does", () => {
         ["page-fill-0", m.fill.page[0]], ["page-fill-1", m.fill.page[1]], ["page-fill-2", m.fill.page[2]],
         ["raised-fill-0", m.fill.raised[0]], ["raised-fill-2", m.fill.raised[2]], ["recessed-fill-1", m.fill.recessed[1]],
         ["body", m.ink.body], ["muted", m.ink.muted], ["edge", m.ink.edge],
+        ...(theme === "light" ? [["vivid-darken", m.vividDarken], ["tonal-darken", m.tonalDarken]] as Array<[string, number]> : [["tint-lift", m.tintLift], ["tint-lift-fill", m.tintLiftFill]] as Array<[string, number]>),
       ];
       for (const [k, x] of pairs) expect(c[p + k], `${theme} ${g}/${n} ${k}`).toBeCloseTo(x, 6);
     }
+  });
+});
+
+describe("layers: inks with a hue follow the ground", () => {
+  // Every hued ink in every accent and neutral (accent's own inks change with it), darkened as the CSS does, on the page.
+  const inks = { vivid: new Set<string>(), tonal: new Set<string>() };
+  for (const neutral of NEUTRAL_SCALES) for (const accent of CHROMATIC_SCALES) {
+    const t = resolveTheme({ theme: "light", neutral: neutral.id, accent: accent.id }).tokens;
+    for (const { token, darken } of HUED_INKS) inks[darken].add(t[token]!);
+  }
+  it("light: vivid and tonal inks keep 4.5:1 on every page, and are unchanged on white", () => {
+    const problems: string[] = [];
+    for (const g of GROUND_LIGHT_STEPS) for (const n of LAYER_STEPS) {
+      const m = layerLightness("light", g, n), page = layerHex("light", m.page, { chroma: 0, hue: 0 });
+      if (g === 100 && (m.vividDarken !== 0 || m.tonalDarken !== 0)) problems.push(`${g}/${n}: darkens on white`);
+      for (const [kind, d] of [["vivid", m.vividDarken], ["tonal", m.tonalDarken]] as const)
+        for (const ink of inks[kind]) if (wcagContrastHex(mixOklab(ink, "black", d), page) < 4.5) problems.push(`${g}/${n}: ${kind} ${ink} on ${page}`);
+    }
+    expect(problems).toEqual([]);
+  });
+  // Tag's dark inks (tag.css: the vivid rungs, gray, and its green and yellow literals) over a 16% wash of themselves.
+  const tagInks = [...VIVID_ROLES.filter(r => r !== "accent" && r !== "caution" && r !== "success").map(r => resolveTheme({ theme: "dark", neutral: "neutral", accent: "blue" }).tokens[`fg-${r}-vivid`]!), resolveTheme({ theme: "dark", neutral: "neutral", accent: "blue" }).tokens["fg-gray"]!, "#85ce94", "#e2b968"];
+  it("dark: tinted labels keep 4.5:1 on their plate on every raised layer, field and hovered row", () => {
+    const problems: string[] = [];
+    for (const g of GROUND_DARK_STEPS) for (const n of LAYER_STEPS) {
+      const m = layerLightness("dark", g, n);
+      for (const [ground, lift] of [[m.page, m.tintLift], [m.raised, m.tintLift], [m.fill.raised[0], m.tintLiftFill], [m.fill.raised[1], m.tintLiftFill]] as const) {
+        const bg = layerHex("dark", ground, { chroma: 0, hue: 0 });
+        for (const ink of tagInks) if (wcagContrastHex(mixOklab(ink, "white", lift), alphaOver(ink, 0.16, bg)) < 4.5) problems.push(`${g}/${n}: ${ink} on ${bg}`);
+      }
+    }
+    expect(problems).toEqual([]);
   });
 });
 

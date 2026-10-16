@@ -8,7 +8,7 @@
 // chip, badge-group, box-field and tabs keep Complete (docs/research/compact-evidence-2026-10-02/).
 export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-09-27 after all phases (batches 1-3).
-  'toolbar', 'split-button', 'segmented', 'toast',
+  'toolbar', 'split-button', 'toast', // segmented: reopened 2026-10-16 (Layers sweep, round 30).
   // Approved 2026-09-28 (batch 4).
   'count',
   // Approved 2026-09-28 (batch 5).
@@ -31,8 +31,8 @@ export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-09-28 (batch 16 again after the 16 column; batch 20).
   'model-picker', 'scroll-to-latest',
   // Approved 2026-09-28 (batch 22: lighter ground, brighter syntax; code and separator were already approved).
-  // code-block: reopened 2026-10-12 for size sm; approved again on the review page, round 12 (components12).
-  'code-block',
+  // code-block: reopened 2026-10-12 for size sm; approved again on the review page, round 12 (components12); reopened
+  // 2026-10-16 (Layers sweep, round 30).
   'box-field', 'breadcrumb',
   'button', 'button-group',
   // code and color-swatch reopened 2026-10-12 for the translucent swatch ring (owner: "yes apply the swatch fix").
@@ -42,26 +42,25 @@ export const COMPLETE_COMPONENTS = new Set([
   'popover', 'progress', 'separator', 'slider',
   'table', 'tabs', 'tooltip',
   // Approved 2026-10-08 on the component review page (recommendations for open questions accepted).
-  'accordion', 'alignment-picker', 'tag',
+  'accordion', 'alignment-picker', // tag: reopened 2026-10-16 (Layers sweep, round 30).
   // Approved 2026-10-08 after their requested changes.
   'confirm-dialog', 'date-picker',
   // Approved 2026-10-09 on the review page, round 2 (components2).
-  'pagination', 'scroll-area', 'toggletip', 'combobox', 'custom-select', 'tag-picker', 'drawer',
+  'pagination', 'scroll-area', 'toggletip', 'combobox', 'custom-select', 'drawer', // tag-picker: reopened 2026-10-16 (round 30).
   // Approved 2026-10-09 on the review page, round 3 (components3), after the round-2 feedback.
   'link', 'file-upload', 'command-palette', 'alert', 'kbd', 'number-field',
   // Approved 2026-10-10 on the review page, round 5 (components5).
   // description-list: reopened 2026-10-12 for show more (visibleCount).
 
-  // Approved 2026-10-10 on the review page, round 6 (components6), after the round-5 rethink.
-  'toggle-group',
+  // Approved 2026-10-10 on the review page, round 6 (components6), after the round-5 rethink. toggle-group: reopened
+  // 2026-10-16 (Layers sweep, round 30).
   // Approved 2026-10-11 on the review page, round 7 (components7); Menu after its shortcut-column change.
   'meter', 'shortcut-list', 'date-range-picker', 'zoom-control', 'menu',
   // Approved 2026-10-11 on the review page, round 8 (components8).
   'citation', 'search-field',
   // Approved 2026-10-12 on the review page, round 9 (components9); badge and board reopened by the consistency pass.
   'editable-text', 'timeline',
-  // Approved 2026-10-12 on the review page, round 13 (components13).
-  'box-model',
+  // Approved 2026-10-12 on the review page, round 13 (components13). box-model: reopened 2026-10-16 (Layers sweep, round 30).
   // Approved 2026-10-12 on the review page, round 15 (components15).
   'token-row',
   // Approved 2026-10-12 on the review page, round 16 (components16): Asset row and the swatch ring's families.
@@ -72,7 +71,8 @@ export const COMPLETE_COMPONENTS = new Set([
   'color-swatch-picker',
   // Approved 2026-10-12 on the review page, round 21 (components21): the consistency pass (badge's dismiss ring at 0 is the
   // owner's own pick, O1), Board's hover and corners, Description list's show more; open questions on the recommendations.
-  'board', 'chip', 'description-list', 'empty-state', 'select', 'tree-view',
+  // board: reopened 2026-10-16 (Layers sweep, round 30).
+  'chip', 'description-list', 'empty-state', 'select', 'tree-view',
   // Approved 2026-10-13 on the review page, round 23 (components23), after the round-22 approval and the tile surface.
   'preview-frame',
   // Approved 2026-10-13 on the review page, round 24 (components24).
@@ -91,7 +91,8 @@ export const COMPLETE_COMPONENTS = new Set([
   'nav', 'titlebar', ]);
 
 /** Built/refined and awaiting owner approval; not completion. */
-export const REVIEW_COMPONENTS = new Set([]);
+// Reopened 2026-10-16 after the Layers sweep (docs/research/layers-2026-10-16/sweep/): round 30 (components30).
+export const REVIEW_COMPONENTS = new Set(['segmented', 'toggle-group', 'code-block', 'box-model', 'tag', 'tag-picker', 'board']);
 export const componentStatus = slug => COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
 export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined' })[status];
 

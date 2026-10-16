@@ -109,6 +109,9 @@ export function Tile({ label, value, span, stage, selected, onSelect, onOpen, ca
     "data-stage": stage,
     "data-painted": paint ? "" : undefined,
     "data-scoped": scope ? "" : undefined,
+    // The ground the tile paints (studio.css: bg-surface, or bg-subtle when scoped), so the specimen's control fills,
+    // hovers and selections step from the tile, not the Canvas (styles layers.css; Layers sweep 2026-10-16).
+    "data-area-ground": paint ? undefined : scope ? "recessed" : "raised",
     "data-layout": card ? "card" : undefined,
     "aria-label": ariaLabel,
     "data-key": dataKey,

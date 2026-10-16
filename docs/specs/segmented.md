@@ -104,7 +104,7 @@ tab keeps its 50% ink and gains an rgb(245) plate (`tabs/figma--panel-tab--hover
 | track · inset / gap | 2 / 2 (`segmented.css:31, 42`) | Figma toolbar mode switch 2 / 2 | ChatGPT's thumb fills the track; Figma's view toggle has no inset |
 | track · radius | per-tier control radius as Button: 6 sm, 8 md, 10 lg (`segmented.css:50`, `:142-144`) | Audit S4 (owner): the track is the control | Was item radius + inset (10 at md). ChatGPT is a pill; Area keeps the pill for Chip |
 | item · radius | concentric inside the track: track radius − 2 inset, 4 sm, 6 md, 8 lg (`segmented.css:66`) | Radius rule; Figma 5 / 3 is concentric too | Was `radius-control` 8 at md |
-| track · paint | `bg-subtle` #f7f7f7 + inset 1px `border-decorative` #f3 (`segmented.css:53-54`) | ChatGPT 3% ink (about rgb 248); Figma rgb(245) | The ring adds definition on white |
+| track · paint | `bg-component` #f7f7f7 (the control fill, stepping from its ground; was `bg-subtle` until 2026-10-16) + inset 1px `border-decorative` #f3 (`segmented.css`) | ChatGPT 3% ink (about rgb 248); Figma rgb(245) | The ring adds definition on white |
 | selected · paint | `light-dark(bg-surface, bg-component-active)` + 1px `edge-selected` (#e2 standard) + `shadow-1` (`segmented.css:94-100`): white in light; in dark a #3f thumb on the #28 groove (measured live) | Figma view toggle: white + 1px rgb(230) ring; ChatGPT and Figma mode switch: white + soft shadow | Area carries both the hairline and a light shadow. In dark the surface rung (#1d) sat below the groove and read sunken, so the thumb takes the active fill (audit S15a) |
 | icon → label gap | 6 at sm, md and lg, the density tokens (`segmented.css:36, :60, :142-144`); compact sm 4 | Peer: Button (audit S14) | Was 4 / 8 / 8 |
 | icon-only item | square, item height (`segmented.css:29, 126-129`) | Owner (prior decision); Figma square cells (24 and 28) | — |
@@ -197,6 +197,14 @@ in; the selected option's `transition-duration` is `0s`, an unselected one keeps
    underbar, in one pass: it is the most visible "polish" gap in this family. It needs a
    measured indicator in React (ResizeObserver) and a no-JS fallback (today's per-option plate).
 
+## Review note, 2026-10-16 (round 30)
+
+- **What changed:** the track takes the control fill, so it always sits a step off whatever it's on. On white it's
+  the same #f7f7f7. On a gray page at layer contrast 0 it no longer disappears. In dark it's lighter than the
+  near-black it had become, back near the #28 groove you approved.
+- **Why:** the Layers sweep. The track was the recessed layer, which equals the page at contrast 0, so the track and
+  the white thumb were both the page tone and only a faint ring showed. Look at **Gray page** and **Dark**.
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → one 500 weight for every option (was 400 / 500 selected) →
@@ -221,3 +229,4 @@ in; the selected option's `transition-duration` is `0s`, an unselected one keeps
 - 2026-10-04 · pill shapes and list rows (owner) → `--area-pill-segmented` makes the track a pill, items concentric (`segmented.css`). `docs/research/radius-audit-2026-10-03.md`, "Pill shapes and list rows".
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → hover and press land at once and fade over `fast`; the chosen option is raised at once while the old one fades; the track edge is an inset outline (was a box-shadow spread, which does not snap); a sliding thumb is an open question (`segmented.css`; "Motion and interaction, 2026-10-07").
 - 2026-10-12 · owner adopted the product UI rules (docs/PRODUCT_UI.md, rule 4: every icon-only control names itself in an Area Tooltip) → an `iconOnly` Segmented wraps each option in a Tooltip (below, `describes={false}`, since the label is already its name) → `primitives.tsx`; the gallery's grid / list switch.
+- 2026-10-16 · owner: "go with your recs, fix them in that order" (after the Layers sweep, docs/research/layers-2026-10-16/sweep/README.md) → the track paints `bg-component`, the control fill, which steps from the ground it sits on (layers.css), instead of `bg-subtle`, the recessed layer, which equals the page at layer contrast 0: at 95 + 0 the track and the white thumb were both the page and only the 1.3:1 ring showed (`captures/layers-sweep-2026-10-16/segmented-light-95-0.png`). Light 100 + 4 is the same #f7f7f7; dark is the rest fill (L 0.20 floor, about #2c on a #12 card), back near the #28 groove this spec measured, where Layers had left #0b.

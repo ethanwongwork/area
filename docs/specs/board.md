@@ -132,6 +132,14 @@ Owner, round 7 (rethink), applied:
 - **What changed:** The edit / more plate that appears on a card has the thin frame every floating surface has. A card in a coloured column hovers lighter (the colour at 6%, was 8%), and the add row with it (6% / 9%). The column's corners are rounder (20, was 12) so they follow the cards' corners evenly, and the edit / more plate's corners are tighter (4, was 6), following the card's.
 - **Why:** In dark mode the plate was the card's own colour and its shadow doesn't show on near-black, so it couldn't be seen; Menu, Popover and the other floating surfaces draw this frame for the same reason. Notion's plate has one too. You said the hover looked too dark. Measured on Notion: a hovered card takes its column's own tint, about as light as Area's 8% but far less saturated; at 6% every colour stays within Notion's saturation, and gray lands exactly on the neutral hover. You asked about the corners: the card (12) sat 8 inside a column with the same 12 corner, so the gap widened at each corner; Area's rule makes the outer shape the inner corner plus the gap (12 + 8 = 20), and the plate 8 inside the card the card's corner less 8 (4, as Notion's).
 
+## Review note, 2026-10-16 (round 30)
+
+- **What changed:** a coloured column's count and "Add new" text follow the ground: a touch darker on a gray light
+  page, lighter on the lightest dark grounds. The neutral column's count darkens on a gray page too. Defaults
+  unchanged.
+- **Why:** their plates are translucent over the column tint, so they deepened on a gray page (4.18:1 at 90) and
+  lightened at dark 24 + 8 (4.06:1). Look at **Gray page** and **Lightest dark**.
+
 ## Feedback log
 
 - 2026-10-10 · owner: "can you keep working, ill bring chrome to the front later" → Board from Notion's board view; 13
@@ -145,3 +153,4 @@ Owner, round 7 (rethink), applied:
 - 2026-10-12 · owner, 2026-10-12: "the hover state here seems too drastic/dark. is the corner radius for this component correct too?" → card hover 6% (was 8%) and add row 6% / 9% (was 8% / 12%), from Notion's hover measured read-only on the owner's "tasks" board (purple, blue and default columns: the hovered card's fill is the column's tint); the column's corner is concentric with its cards (`radius-container` + 8 × `radius-concentric`, 20), the actions plate concentric inside the card (4) with its buttons (board.css). (docs/research/consistency-audit-2026-10-12.md)
 - 2026-10-12 · owner, review round 21 (components21): approved with the open questions' recommendations ("go with your recs"), no change → Complete in `component-status.mjs`.
 - 2026-10-14 · owner: "continue working on the next axis" → Surface is one number, the frame's width: `1` (Default) or `0` (Borderless) (was `outlined` / `borderless`; axes/surface.ts). At 0 the board card, and its floating actions, lists the Surface axis's `shadow-edge` first in its box-shadow, ChatGPT's frameless-menu edge (`0 0 1px` black 62%, and in dark an inset `0 0 1px` white 20%; captured 2026-10-13), so it keeps an edge at Elevation 0 and in dark, where it had none. Owner approved ("go with your recs"), review https://claude.ai/artifact/L4TCF2W5zcjvBK7xZmaDBN (docs/research/surface-2026-10-14.md).
+- 2026-10-16 · owner: "go with your recs, fix them in that order" (after the Layers sweep, docs/research/layers-2026-10-16/sweep/README.md) → a coloured column's text (its count and its add row) reads one private `--_ink` that follows the ground: in light it darkens by the vivid inks' page darken (`layer-light-vivid-darken`), in dark it lifts as Tag's labels do (`layer-dark-tint-lift`). Their plates are translucent over the column tint, so they deepened on a gray page (green count 4.18:1 and yellow add row 4.45:1 at light 90) and lightened at dark 24 + 8 (brown 4.06:1). The neutral column's muted count takes the same light darken (4.36:1 at 95 + 0). Defaults unchanged.
