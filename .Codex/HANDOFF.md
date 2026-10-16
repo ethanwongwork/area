@@ -25,7 +25,13 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   re-emitted at axis and contrast boundaries; forced-colors.css sets `frame-width`. Cohesion test pins the
   derivation. Checked in the app: Surface 0 + More draws 1px on Card and Menu (nested either way), Card keeps 120
   wide, Standard stays 0; dark shows the frame clearly. Docs: CONTRAST.md, THEMING.md, DESIGN_SYSTEM.md (Strokes),
-  surface research "More contrast". Not checked: the OS `prefers-contrast` path by emulation (same derivation).
+  surface research "More contrast". Merged (PR #96).
+- Then: the OS path checked in headless Edge (`Emulation.setEmulatedMedia`, no `data-area-contrast` on the Canvas):
+  Surface 0 Card and Menu draw 0 with no preference, 1px under `prefers-contrast: more`, 1px under
+  `forced-colors: active`, 1px under both; Card stays 120 wide.
+- Fixed the React suite's one standing failure ("known Indicator"): `indicator.test.mjs` read the archived docs'
+  `apps/docs/dist/index.html`. It now bundles the app's demo registry (as `check-playgrounds.mjs` does) and renders
+  each of the app's 35 Indicator tiles, one indicator each. React suite 293/293; a mutation fails it.
 - Fixed in passing: `git fetch` failed on three stray refs with a " 2" suffix (`origin/main 2` too); moved to
   `~/Desktop/area/.git-stray-refs-backup-2026-10-14/` (every commit they named is on a branch), delete when happy.
 
