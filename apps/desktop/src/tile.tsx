@@ -18,7 +18,7 @@
  * (src/gallery/fit.ts) still finds component specimens.
  */
 import type { CSSProperties, ReactNode } from "react";
-import { ListBoxItem } from "@area/react";
+import { ListBoxItem, SectionHeading } from "@area/react";
 import { APP_SCALE } from "./app-scale.ts";
 
 export type TileSpan = "unit" | "wide" | "row";
@@ -160,8 +160,8 @@ export function CanvasSection({ id, title, lede, role, children }: { id: string;
   // Untitled when the Sidebar's selected row already names it (one scale, one setting).
   return (
     <section className="studio-section" id={id} role={role} aria-labelledby={title ? `${id}-title` : undefined}>
-      {title ? <h2 className="studio-canvas__section-title" id={`${id}-title`} {...APP_SCALE}>{title}</h2> : null}
-      {lede ? <p className="studio-canvas__lede" {...APP_SCALE}>{lede}</p> : null}
+      {/* Area's SectionHeading (app-shell.css): the strong title trimmed to its cap, the muted lede 8 under it. */}
+      {title ? <SectionHeading className="studio-section-heading" titleId={`${id}-title`} title={title} lede={lede} {...APP_SCALE} /> : null}
       {children}
     </section>
   );

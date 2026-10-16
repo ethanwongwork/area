@@ -52,6 +52,7 @@ import * as previewFrames from "./demos/preview-frame.tsx";
 import * as passwordFields from "./demos/password-field.tsx";
 import * as copyButtons from "./demos/copy-button.tsx";
 import * as listBoxes from "./demos/list-box.tsx";
+import * as appShell from "./demos/app-shell.tsx";
 import * as otpFields from "./demos/otp-field.tsx";
 import * as timeFields from "./demos/time-field.tsx";
 import * as spinnerValues from "./demos/spinner-value.tsx";
@@ -59,7 +60,7 @@ import * as steppers from "./demos/stepper.tsx";
 import * as inspectorRecipes from "./demos/inspector.tsx";
 
 const { BADGE_GALLERY_DEMOS, ...badgeDemos } = badge;
-const DEMO_MODULES: Record<string, object> = { BADGE_GALLERY_DEMOS, badge: badgeDemos, switches, button, form, display, nav, theme, gallery, cards, variants, overlays, counts, accordions, customSelects, tags, tagPickers, datePickers, drawers, paginations, links, scrollAreas, fileUploads, toggletips, emptyStates, toggleGroups, descriptionLists, meters, searchFields, shortcutLists, dateRangePickers, citations, zoomControls, boards, timelines, editableTexts, boxModels, tokenRows, assetRows, previewFrames, passwordFields, copyButtons, listBoxes, otpFields, timeFields, spinnerValues, steppers, inspectorRecipes };
+const DEMO_MODULES: Record<string, object> = { BADGE_GALLERY_DEMOS, badge: badgeDemos, switches, button, form, display, nav, theme, gallery, cards, variants, overlays, counts, accordions, customSelects, tags, tagPickers, datePickers, drawers, paginations, links, scrollAreas, fileUploads, toggletips, emptyStates, toggleGroups, descriptionLists, meters, searchFields, shortcutLists, dateRangePickers, citations, zoomControls, boards, timelines, editableTexts, boxModels, tokenRows, assetRows, previewFrames, passwordFields, copyButtons, listBoxes, appShell, otpFields, timeFields, spinnerValues, steppers, inspectorRecipes };
 // One name, one demo. The server renders from this merged map, while hydration clients import a
 // module directly, so a name exported twice renders one demo and hydrates the other (a mismatch).
 const demoOwner = new Map<string, string>();
@@ -112,6 +113,7 @@ export const SOURCES = {
   passwordFields: "demos/password-field.tsx",
   copyButtons: "demos/copy-button.tsx",
   listBoxes: "demos/list-box.tsx",
+  appShell: "demos/app-shell.tsx",
   otpFields: "demos/otp-field.tsx",
   timeFields: "demos/time-field.tsx",
   spinnerValues: "demos/spinner-value.tsx",

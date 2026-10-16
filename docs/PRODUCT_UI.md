@@ -90,5 +90,6 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
 
 Recorded, not yet built (each needs its own component pass). From the app audit of 2026-10-12:
 
+None open: all built 2026-10-15 (Copy button, List box, Hover card `openOnFocus`, Table cells, Badge `onColor`,
+Nav `revealActions`, Context menu `itemSelector`, Card selected, Titlebar and Section heading). Record new ones here.
 
-- App-shell parts: Titlebar (drag region, traffic-light inset) and a section heading.

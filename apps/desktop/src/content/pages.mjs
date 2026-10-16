@@ -399,6 +399,32 @@ export const COMPONENT_PAGES = [
     ],
   },
   {
+    slug: "titlebar", name: "Titlebar", exportName: "Titlebar", manifest: "titlebar",
+    imports: "Titlebar",
+    api: [
+      ["children", "the bar's start: a panel toggle, tabs", "—"],
+      ["end", "ReactNode pushed to the end: search, toggles, the theme", "—"],
+      ["windowControls", '"macos": room for the traffic lights (Electron hiddenInset, trafficLightPosition { x: 13, y: 12 })', "—"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "A window's top bar, the height of a Panel's bar with its rule, so the two line up at any type size and density. In a frameless window it is the drag region; its controls stay pressable.", demo: "GalleryTitlebar" },
+      { id: "macos", title: "macOS window", note: "windowControls=\"macos\" starts the bar 83 in, clear of the traffic lights where Cursor puts them, and ends it 13 from the edge.", demo: "GalleryTitlebarMacos" },
+    ],
+  },
+  {
+    slug: "section-heading", name: "Section heading", exportName: "SectionHeading", manifest: "sectionHeading",
+    imports: "SectionHeading",
+    api: [
+      ["title", "ReactNode at the strong weight; a count can follow it in the muted ink", "—"],
+      ["lede", "a muted line under the title", "—"],
+      ["level / titleId", "2–6 / the heading's id, for aria-labelledby", "2 / —"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "A titled group on a page: UI text at the strong weight, trimmed to its cap and baseline, so the space around it is the layout's.", demo: "GallerySectionHeading" },
+      { id: "lede", title: "With a lede", note: "A muted line 8 under the title, at a readable measure.", demo: "GallerySectionHeadingLede" },
+    ],
+  },
+  {
     slug: "list-box", name: "List box", exportName: "ListBox", manifest: "listBox",
     imports: "ListBox, ListBoxItem, ListBoxSection",
     api: [

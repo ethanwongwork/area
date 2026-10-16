@@ -1,0 +1,58 @@
+/* ---------------------------------------------------------------------------
+ * App shell: Titlebar and Section heading (docs/specs/app-shell.md)
+ *
+ * Moved from the desktop app's own CSS (apps/desktop/src/studio.css, owner-reviewed 2026-10-12), where they were
+ * PRODUCT_UI.md's last open gap ("App-shell parts: Titlebar ... and a section heading"). No value is new.
+ *
+ * Titlebar: a window's top bar. Panel's bar height (a md row, the panel gap above and below, the rule; panel.css
+ * --_bar), so it lines up with a Panel's bar at any type size and density; Panel's 14 side inset; 12 between
+ * what it holds. In a frameless window the bar is the drag region and its controls stay pressable.
+ * `--macos` clears macOS's traffic lights where Cursor puts them (its main.js: 14 buttons on a 20 pitch from x 13,
+ * `trafficLightPosition { x: 13, y: 12 }` in Electron): 13 + 54 + 16 = 83 at the start, 13 at the end.
+ *
+ * Section heading: a titled group on a page, the UI text at the strong weight, trimmed to its cap and baseline so
+ * the space above and below is the layout's; a muted lede under it, 8 apart, at a readable measure.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-titlebar {
+    --_titlebar-start: calc(var(--area-space-16) - var(--area-space-2)); /* spec: Panel's 14 */
+    --_titlebar-end: calc(var(--area-space-16) - var(--area-space-2));
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-12);
+    box-sizing: border-box;
+    block-size: calc(var(--area-control-md) + (var(--area-space-10) - var(--area-space-4) * var(--area-ui-dense)) * 2 + var(--area-border-width));
+    padding-inline: var(--_titlebar-start) var(--_titlebar-end);
+    border-block-end: var(--area-border-width) solid var(--area-border-decorative);
+    background: var(--area-bg-page);
+    user-select: none;
+    -webkit-app-region: drag;
+    app-region: drag;
+  }
+  .area-titlebar :is(a, button, input, select, textarea, [role="separator"], [tabindex]) { -webkit-app-region: no-drag; app-region: no-drag; }
+  .area-titlebar--macos { --_titlebar-start: 83px; --_titlebar-end: 13px; } /* spec: Cursor's traffic lights, 13 + 54 + 16, and 13 */
+  .area-titlebar__end {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-12);
+    margin-inline-start: auto;
+  }
+
+  .area-section-heading { display: grid; gap: var(--area-space-8); min-inline-size: 0; }
+  .area-section-heading__title {
+    margin: 0;
+    color: var(--area-fg-default);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
+    font-weight: var(--area-weight-strong);
+    text-box: trim-both cap alphabetic;
+  }
+  .area-section-heading__lede {
+    max-inline-size: 64ch; /* spec: the app's readable measure */
+    margin: 0;
+    color: var(--area-fg-muted);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
+    text-box: trim-both cap alphabetic;
+  }
+}

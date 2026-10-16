@@ -13,7 +13,7 @@
  * page (src/pages/) that fills the three panels through <Workspace>.
  */
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode, type Ref } from "react";
-import { Button, Count, Kbd, Nav, NavGroup, NavItem, Panel, SearchField, Tooltip } from "@area/react";
+import { Button, Count, Kbd, Nav, NavGroup, NavItem, Panel, SearchField, Titlebar, Tooltip } from "@area/react";
 import { MoonIcon, PanelLeftFilledIcon, PanelLeftIcon, PanelRightFilledIcon, PanelRightIcon, SunIcon } from "@area/icons";
 import { GALLERY_CONTROLS } from "./gallery/controls.ts";
 import { ComponentsPage } from "./pages/components.tsx";
@@ -67,6 +67,9 @@ function restoreCanvas(saved: Partial<CanvasAxes> & { ui?: string }): CanvasAxes
 }
 
 export { APP_SCALE } from "./app-scale.ts";
+
+/** The Electron shell on macOS (main.tsx sets data-platform, after the imports run, so this is read at render). */
+const isMac = () => typeof document !== "undefined" && document.documentElement.dataset.platform === "darwin";
 
 /*
  * Location: #<tab>/<item>, so a selection survives a reload and can be linked. The item is the
@@ -170,7 +173,17 @@ export function Studio() {
   return (
     <StudioContext.Provider value={state}>
       <div className="studio">
-        <header className="studio-titlebar">
+        {/* Area's Titlebar (app-shell.css): Panel's bar, the drag region, clear of macOS's traffic lights. */}
+        <Titlebar className="studio-titlebar" windowControls={isMac() ? "macos" : undefined} end={<>
+          <SearchField ref={search} size="sm" variant="soft" className="studio-titlebar__search" value={query} onValueChange={setQuery}
+            placeholder={`Search ${current.label.toLowerCase()}`} aria-label={`Search ${current.label.toLowerCase()}`} shortcut={["⌘", "K"]} />
+          {/* Shown panels draw their side filled, as Cursor's layout toggles do. Each names itself
+              in an Area Tooltip with its shortcut, not the browser's title. */}
+          <ChromeButton label={panels.inspector ? "Hide inspector" : "Show inspector"} keys={["⌥", "⌘", "B"]} shortcut="Alt+Meta+B"
+            icon={panels.inspector ? <PanelRightFilledIcon /> : <PanelRightIcon />} onClick={() => togglePanel("inspector")} />
+          <ChromeButton label={theme === "dark" ? "Light mode" : "Dark mode"}
+            icon={theme === "dark" ? <SunIcon /> : <MoonIcon />} onClick={() => setTheme(theme === "dark" ? "light" : "dark")} />
+        </>}>
           {/* The Sidebar's toggle sits at the Sidebar's edge, first in the bar after the traffic
               lights (Cursor's icon tool and IDE); the Inspector's stays at the end, over it. */}
           <ChromeButton label={panels.sidebar ? "Hide sidebar" : "Show sidebar"} keys={["⌘", "B"]} shortcut="Meta+B"
@@ -183,17 +196,7 @@ export function Studio() {
               </NavItem>
             ))}
           </Nav>
-          <div className="studio-titlebar__end">
-            <SearchField ref={search} size="sm" variant="soft" className="studio-titlebar__search" value={query} onValueChange={setQuery}
-              placeholder={`Search ${current.label.toLowerCase()}`} aria-label={`Search ${current.label.toLowerCase()}`} shortcut={["⌘", "K"]} />
-            {/* Shown panels draw their side filled, as Cursor's layout toggles do. Each names itself
-                in an Area Tooltip with its shortcut, not the browser's title. */}
-            <ChromeButton label={panels.inspector ? "Hide inspector" : "Show inspector"} keys={["⌥", "⌘", "B"]} shortcut="Alt+Meta+B"
-              icon={panels.inspector ? <PanelRightFilledIcon /> : <PanelRightIcon />} onClick={() => togglePanel("inspector")} />
-            <ChromeButton label={theme === "dark" ? "Light mode" : "Dark mode"}
-              icon={theme === "dark" ? <SunIcon /> : <MoonIcon />} onClick={() => setTheme(theme === "dark" ? "light" : "dark")} />
-          </div>
-        </header>
+        </Titlebar>
         {tab === "language" ? <LanguagePage /> :
           tab === "components" ? <ComponentsPage /> :
           tab === "typography" ? <TypographyPage /> :
