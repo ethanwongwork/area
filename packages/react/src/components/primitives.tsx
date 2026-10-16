@@ -18,6 +18,8 @@ import type { OverlayAlign, OverlaySide } from "./overlay.ts";
  */
 import { Children, cloneElement, createContext, forwardRef, useContext, useEffect, useId, useImperativeHandle, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type {
+  TdHTMLAttributes,
+  ThHTMLAttributes,
   AnchorHTMLAttributes,
   ButtonHTMLAttributes,
   HTMLAttributes,
@@ -1087,6 +1089,28 @@ export interface TableProps extends HTMLAttributes<HTMLTableElement> {
  */
 export const TableLink = /* @__PURE__ */ forwardRef<HTMLAnchorElement, AnchorHTMLAttributes<HTMLAnchorElement>>(function TableLink({ className, ...rest }, ref) {
   return <a ref={ref} className={cx("area-table__link", className)} {...rest} />;
+});
+
+export interface TableCellProps extends TdHTMLAttributes<HTMLTableCellElement> {
+  /** Numbers: aligned to the end in tabular figures, so a column lines up on its digits. */
+  numeric?: boolean;
+  /** As narrow as its content, never wrapping: a cell of controls, a glyph or a short term beside a long value. */
+  fit?: boolean;
+}
+
+/** A data cell with Table's two cell options (`area-table__cell--numeric`, `--fit`), so callers need not write the classes. */
+export const TableCell = /* @__PURE__ */ forwardRef<HTMLTableCellElement, TableCellProps>(function TableCell({ numeric, fit, className, ...rest }, ref) {
+  return <td ref={ref} className={cx(numeric && "area-table__cell--numeric", fit && "area-table__cell--fit", className) || undefined} {...rest} />;
+});
+
+export interface TableHeaderCellProps extends ThHTMLAttributes<HTMLTableCellElement> {
+  numeric?: boolean;
+  fit?: boolean;
+}
+
+/** A column heading (`scope="col"` by default), taking its column's `numeric` and `fit` so the heading aligns with its cells. */
+export const TableHeaderCell = /* @__PURE__ */ forwardRef<HTMLTableCellElement, TableHeaderCellProps>(function TableHeaderCell({ numeric, fit, scope = "col", className, ...rest }, ref) {
+  return <th ref={ref} scope={scope} className={cx(numeric && "area-table__cell--numeric", fit && "area-table__cell--fit", className) || undefined} {...rest} />;
 });
 
 export const Table = /* @__PURE__ */ forwardRef<HTMLTableElement, TableProps>(function Table(

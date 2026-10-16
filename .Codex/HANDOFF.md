@@ -34,6 +34,8 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   takes `place-items: normal` (the option centres its content otherwise).
 - Merged (PR #107). Then Hover card `openOnFocus` (default true; E-18 stands): the Icons tab's cells set it false, so
   the arrows no longer open a card on every icon (it opened at once on focus); the Inspector has the same actions.
+- Merged (PR #108). Then `TableCell` / `TableHeaderCell` with `numeric` and `fit` (the existing modifiers); the app and
+  the Table demos no longer write `area-table__cell--*` by hand. PRODUCT_UI gap closed.
 
 ## Copy button (2026-10-15, branch `claude/copy-button`)
 

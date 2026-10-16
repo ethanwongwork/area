@@ -1,5 +1,5 @@
 /** Gallery specimens that complete each family's variant coverage: one per missing manifest value. */
-import { Alert, Badge, Button, Checkbox, CheckboxGroup, Chip, CodeBlock, Indicator, Input, InputGroup, InputGroupText, NumberField, Separator, Table, TableLink, Tabs, Toast } from "@area/react";
+import { Alert, Badge, Button, Checkbox, CheckboxGroup, Chip, CodeBlock, Indicator, Input, InputGroup, InputGroupText, NumberField, Separator, Table, TableCell, TableHeaderCell, TableLink, Tabs, Toast } from "@area/react";
 // @ts-expect-error — the docs' own highlighter is authored in JavaScript.
 import { highlight } from "../highlight.mjs";
 import { InfoIcon, WarningIcon } from "@area/icons";
@@ -33,9 +33,9 @@ export const GalleryInputGroupSizeLg = () => (
 
 
 const tableBody = (interactive = false) => (
-  <tbody>{tableRows.map((name, index) => <tr key={name}><td>{interactive ? <TableLink href="#gallery-section-table">{name}</TableLink> : name}</td><td><Badge dot tone="success">Status</Badge></td><td className="area-table__cell--numeric">{index + 1}</td></tr>)}</tbody>
+  <tbody>{tableRows.map((name, index) => <tr key={name}><td>{interactive ? <TableLink href="#gallery-section-table">{name}</TableLink> : name}</td><td><Badge dot tone="success">Status</Badge></td><TableCell numeric>{index + 1}</TableCell></tr>)}</tbody>
 );
-const tableHead = <thead><tr><th scope="col">Name</th><th scope="col">Status</th><th scope="col" className="area-table__cell--numeric">Value</th></tr></thead>;
+const tableHead = <thead><tr><th scope="col">Name</th><th scope="col">Status</th><TableHeaderCell numeric>Value</TableHeaderCell></tr></thead>;
 export const GalleryTableLarge = () => <Table size="lg" aria-label="Table">{tableHead}{tableBody()}</Table>;
 export const GalleryTableInteractive = () => <Table interactive aria-label="Table">{tableHead}{tableBody(true)}</Table>;
 

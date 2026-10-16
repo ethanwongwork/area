@@ -11,7 +11,7 @@
  * (zoom, replay) is the Canvas bar's; what it renders is the Inspector's.
  */
 import { useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent, type PointerEvent, type ReactNode } from "react";
-import { Button, CodeBlock, Field, Input, PanelSection, Segmented, Select, Switch, Table, Code } from "@area/react";
+import { Button, Code, CodeBlock, Field, Input, PanelSection, Segmented, Select, Switch, Table, TableCell } from "@area/react";
 // @ts-expect-error — the highlighter is authored in JavaScript.
 import { highlight } from "./content/highlight.mjs";
 import type { Config, Playground, PlaygroundControl, PropValue } from "./content/playgrounds.tsx";
@@ -161,9 +161,9 @@ export function Anatomy({ manifest }: { manifest: ManifestLike }) {
     <Table size="md" flush aria-label="Anatomy">
       <thead><tr><th scope="col">Part</th><th scope="col">Class</th></tr></thead>
       <tbody>
-        <tr><td className="area-table__cell--fit">Root</td><td><Code>{manifest.block}</Code></td></tr>
+        <tr><TableCell fit>Root</TableCell><td><Code>{manifest.block}</Code></td></tr>
         {(manifest.elements ?? []).map(part => (
-          <tr key={part}><td className="area-table__cell--fit">{part[0]!.toUpperCase() + part.slice(1).replaceAll("-", " ")}</td><td><Code>{`${manifest.block}__${part}`}</Code></td></tr>
+          <tr key={part}><TableCell fit>{part[0]!.toUpperCase() + part.slice(1).replaceAll("-", " ")}</TableCell><td><Code>{`${manifest.block}__${part}`}</Code></td></tr>
         ))}
       </tbody>
     </Table>
@@ -180,7 +180,7 @@ export function States({ manifest }: { manifest: ManifestLike }) {
       <thead><tr><th scope="col">State</th><th scope="col">Attribute</th></tr></thead>
       <tbody>
         {(manifest.states ?? []).map(state => (
-          <tr key={state}><td className="area-table__cell--fit">{state[0]!.toUpperCase() + state.slice(1).replaceAll("-", " ")}</td><td><Code>{manifest.stateAttributes?.[state] ?? `data-${state}`}</Code></td></tr>
+          <tr key={state}><TableCell fit>{state[0]!.toUpperCase() + state.slice(1).replaceAll("-", " ")}</TableCell><td><Code>{manifest.stateAttributes?.[state] ?? `data-${state}`}</Code></td></tr>
         ))}
       </tbody>
     </Table>
