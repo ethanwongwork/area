@@ -41,6 +41,8 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   text (worst Warm 500, 3.68); now ≥ 5.25. Visible: pill corner, plate direction, the line. Badge reopened for review.
 - Merged (PR #110). Then NavItem `revealActions`: Board's hover / focus-within reveal on a Nav row (touch always shows;
   an open menu keeps them). Additive; the app's Sidebar keeps pinning in the Inspector and the context menu (rule 7).
+- Merged (PR #111). Then ContextMenu `itemSelector` (+ `menu` as a function of the item, `data-context-target` while
+  open); the app's PinMenu uses it. Not painted: the target attribute is a hook (Finder / Notion mark the row).
 
 ## Copy button (2026-10-15, branch `claude/copy-button`)
 

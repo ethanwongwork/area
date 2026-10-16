@@ -1424,7 +1424,8 @@ export const COMPONENT_PAGES = [
     name: "Context menu",
     manifest: "contextMenu",
     api: [
-      ["menu", "ReactNode (MenuItem, MenuLabel, MenuSeparator)", "—"],
+      ["menu", "ReactNode (MenuItem, MenuLabel, MenuSeparator), or with itemSelector (item: HTMLElement) => ReactNode", "—"],
+      ["itemSelector", "string: opens only on a matching element (a row, a tile), hands it to menu and marks it data-context-target while open; elsewhere the browser's menu shows", "—"],
       ["menuLabel", "string (names the menu; label is a deprecated alias)", '"Context menu"'],
       ["children", "the area that opens it", "—"],
       ["onOpenChange", "(open) => void", "—"],

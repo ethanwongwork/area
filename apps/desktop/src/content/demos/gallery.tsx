@@ -1020,6 +1020,18 @@ export const GalleryContextMenuTree = () => (
     <div style={{ inlineSize: 240 }}><TreeView aria-label="Layers" items={[{ id: "frame", label: "Frame 1", children: [{ id: "title", label: "Title" }, { id: "image", label: "Image" }] }]} defaultExpandedIds={["frame"]} /></div>
   </ContextMenu>
 );
+/* One menu for a list: itemSelector picks the right-clicked row and hands it to the menu, which names it. */
+export const GalleryContextMenuItems = () => (
+  <ContextMenu menuLabel="Page actions" itemSelector="[data-page]" menu={row => <>
+    <MenuItem icon={<LinkIcon />}>Copy link to {row.dataset.page}</MenuItem>
+    <MenuItem icon={<DocumentIcon />}>Duplicate {row.dataset.page}</MenuItem>
+    <MenuItem tone="danger" icon={<TrashIcon />}>Move {row.dataset.page} to Trash</MenuItem>
+  </>}>
+    <Nav aria-label="Pages" style={{ inlineSize: 240 }}>
+      {["Roadmap", "Meeting notes", "Design reviews"].map(page => <NavItem key={page} href="#gallery-context-menu-items" data-page={page}>{page}</NavItem>)}
+    </Nav>
+  </ContextMenu>
+);
 export const GalleryContextMenuDisabled = () => (
   <ContextMenu menuLabel="Page actions" menu={<>
     <MenuItem icon={<LinkIcon />}>Copy link</MenuItem>

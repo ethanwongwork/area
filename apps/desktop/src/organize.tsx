@@ -7,7 +7,7 @@
  * Pinned things (Notion's favourites, Cursor's pinned chats) gather in a Pinned group at the top
  * of the Sidebar; a row's context menu and the Inspector pin and unpin.
  */
-import { useState, type MouseEvent, type ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { Button, ContextMenu, Menu, MenuItem, MenuLabel, MenuSeparator } from "@area/react";
 import { PushpinFilledIcon, PushpinIcon, SortIcon } from "@area/icons";
 import { readStored, writeStored } from "./storage.ts";
@@ -133,23 +133,22 @@ export function PinButton({ pinned, onToggle, name }: { pinned: boolean; onToggl
 
 /**
  * A context menu to pin or unpin: right-click (or Shift+F10 on) a Sidebar row or a Canvas item.
- * Pinnable things name themselves with `data-key` and `data-name`; anywhere else the browser's
- * own menu stays closed and nothing opens.
+ * Pinnable things name themselves with `data-key` and `data-name`; anywhere else nothing of ours opens (Electron
+ * shows no menu of its own).
  */
 export function PinMenu({ pins, children, label = "Sidebar" }: { pins: ReturnType<typeof usePins>; children: ReactNode; label?: string }) {
-  const [target, setTarget] = useState<{ key: string; name: string } | null>(null);
-  const onContextMenu = (event: MouseEvent<HTMLDivElement>) => {
-    const row = (event.target as HTMLElement).closest<HTMLElement>("[data-key]");
-    if (!row) { event.preventDefault(); setTarget(null); return; }
-    setTarget({ key: row.dataset.key!, name: row.dataset.name ?? row.dataset.key! });
-  };
+  // ContextMenu's per-item target (2026-10-15): it opens only on a row that names its key, hands that row to the
+  // menu, and marks it data-context-target while open.
   return (
-    <ContextMenu menuLabel={`${label} actions`} onContextMenu={onContextMenu} 
-      menu={target ? (
-        <MenuItem icon={<PushpinIcon />} onClick={() => pins.toggle(target.key)}>
-          {pins.has(target.key) ? `Unpin ${target.name}` : `Pin ${target.name}`}
-        </MenuItem>
-      ) : null}>
+    <ContextMenu menuLabel={`${label} actions`} itemSelector="[data-key]"
+      menu={row => {
+        const key = row.dataset.key!, name = row.dataset.name ?? key;
+        return (
+          <MenuItem icon={<PushpinIcon />} onClick={() => pins.toggle(key)}>
+            {pins.has(key) ? `Unpin ${name}` : `Pin ${name}`}
+          </MenuItem>
+        );
+      }}>
       {children}
     </ContextMenu>
   );
