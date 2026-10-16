@@ -1,0 +1,47 @@
+# Local execution and reproducibility
+
+Checked 2026-10-10. This is an execution ledger, separate from the source-only findings. The screenshot is proof the public demo ran locally; no report value was estimated from it.
+
+## Snapshot and commands
+
+Source clone lives under this topic's ignored `.source-cache/`; dependencies, package outputs and raw logs remain there and are not committed. The latest default branch pin was established from a fresh shallow clone, then rechecked with `git ls-remote`. It is the same SHA task 02 recorded. Clone exactly the pinned version to reproduce, rather than trusting a moving `main` URL.
+
+From this topic folder:
+
+```sh
+git clone --depth 1 https://github.com/moekoelueker/open-glass-ui.git .source-cache
+git -C .source-cache fetch --depth 1 origin 4943bbfd5611fe211cccf4b50c384345468d635b
+git -C .source-cache checkout --detach 4943bbfd5611fe211cccf4b50c384345468d635b
+cd .source-cache
+pnpm install --frozen-lockfile --ignore-scripts
+pnpm run build:packages
+pnpm test:unit
+node scripts/generate-liquid-css.mjs --check
+pnpm --filter @open-glass-ui/showcase dev --port 8770
+```
+
+The upstream package commands and Vite aliases/server are source-pinned: [package.json:9–39](https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/package.json#L9-L39) [apps/showcase/package.json:1–26](https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/apps/showcase/package.json#L1-L26) [apps/showcase/vite.config.ts:109–147](https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/apps/showcase/vite.config.ts#L109-L147). Local package manager was pnpm 11.25.0; the upstream manifest asks for 11.9.0. Dependencies used the frozen lockfile with lifecycle scripts disabled. No upstream production source was modified.
+
+## Executed results
+
+- Package build: passed for core, renderers, react, recipes and umbrella package.
+- Upstream unit suite: **21 files, 137 tests passed**. This is execution evidence for the pinned code, not an accessibility certification.
+- Generated liquid stylesheet check: passed (`liquid.css is up to date`).
+- In-app Chromium browser: opened `http://127.0.0.1:8770/library/hybrid`; DOM contained forty distinct `.atlas-specimen[data-component]` names matching this report. Switched Dark then Light through the demo's own controls.
+- Opened “Open publish dialog”; focus moved to its close button. Escape dismissed it and returned focus to the trigger. Opened it again in light mode. The authored atlas fixture and interaction test source are [apps/showcase/src/component-atlas.tsx:1017–1048](https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/apps/showcase/src/component-atlas.tsx#L1017-L1048) [tests/e2e/component-atlas.spec.ts:92–106](https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/tests/e2e/component-atlas.spec.ts#L92-L106).
+- Inspected the close button's computed positioning: static; its `::after`: absolute, radius 50%, sized against the larger panel. F01's mechanism and all dimensions in the finding come from source declarations, not the screenshot.
+- Evaluated `createGlassTheme('dark', {accent:'#777777'})` from the built core: foreground `#f9f8f3`; ratio `4.211349069950931`. Reproduction command below; formula and inputs are source-pinned in F07.
+
+```sh
+node --input-type=module -e 'import {createGlassTheme} from "./packages/core/dist/index.js"; const t=createGlassTheme("dark",{accent:"#777777"}); console.log({ink:t.accentInk,contrast:t.accentContrast});'
+```
+
+![Public local OpenGlass dialog, dark appearance; demonstration, not numerical evidence](demo-dark-dialog.png)
+
+## Not executed / no claims made
+
+No full browser e2e suite, Safari/Firefox run, OS reduced-transparency or forced-color run, assistive-technology session, arbitrary-backdrop sampling or timing benchmark was run for task 17. Portal/deep-scope counterexamples are source inferences, not invented observed results. The existing atlas's displayed scores, contrast labels and illustrative metrics are demo content; they were not copied as research measurements. SVG/WebGL were traced in source but not certified across browsers. No publication action in the demo, account sign-in, product-data change, upstream issue or pull request occurred.
+
+## Report checks
+
+`write_report.py` renders the curated Markdown/JSON from its records and the accompanying `*.md.in` prose inputs. `check.py` checks unique forty-component coverage against the source atlas, validates every pinned range against its commit, verifies upstream source hashes, validates local Markdown links and keeps each JSON below 1 MB. It also confirms the source clone has no tracked changes. Without the ignored clone, the validator still checks Area pins and the source lock's recorded bounds and explicitly reports that upstream bytes were not reverified. No external checkout or build output is part of the deliverable.

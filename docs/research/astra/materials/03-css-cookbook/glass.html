@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Glass, edges & refraction · Area materials research</title><link rel="stylesheet" href="lab.css"><script src="lab.js" defer></script></head>
+<body><main><nav aria-label="Cookbook demos"><a href="index.html">01 Layers</a><a href="glass.html">02 Glass &amp; edges</a><a href="scopes.html">03 Scope &amp; fallbacks</a><a href="README.md">Research report</a></nav><div class="eyebrow">Astra / Materials 03 / Research only</div><h1>Glass, edges & refraction</h1>
+<p class="intro">Separate tint, blur, rim paint and backdrop mapping. A translucent fill does not by itself create refraction, and a gradient stroke is not a readable focus indicator.</p><p>All optical numbers are authored teaching examples, not measured Area presets or native platform replicas.</p>
+<div class="controls" aria-label="Local demonstration settings">
+<label for="theme">Mode<select id="theme"><option value="light">Light</option><option value="dark">Dark</option></select></label>
+<label for="radius">Radius <output for="radius">26px</output><input id="radius" data-css="--demo-radius" data-unit="px" type="range" min="0" max="56" value="26"></label>
+<label for="angle">Gradient / highlight angle <output for="angle">135deg</output><input id="angle" data-css="--demo-angle" data-unit="deg" type="range" min="0" max="360" value="135"></label>
+<label class="check" for="reduce"><input id="reduce" type="checkbox">Simplify effects</label></div><div class="controls"><label for="blur">Backdrop blur <output for="blur">14px</output><input id="blur" data-css="--demo-blur" data-unit="px" type="range" min="0" max="36" value="14"></label>
+<label for="alpha">Body opacity <output for="alpha">70%</output><input id="alpha" data-css="--demo-alpha" data-unit="%" type="range" min="10" max="100" value="70"></label>
+<label for="warp">SVG displacement <output for="warp">22</output><input id="warp" data-css="--demo-warp" type="range" min="0" max="60" value="22"></label></div><p class="status" id="support" role="status"></p><h2>Backdrop sampling</h2><div class="scene"><p class="scene-label">Scene / stripes / colour / detail</p>
+<div class="specimen glass gloss"><span>Frosted body<br>Text is not filtered</span></div></div>
+<h2>Three gradient edge mechanisms</h2><div class="grid scene scene-grid">
+<article><div class="specimen stroke-double"><span>Double background</span></div><p>Opaque body covers the centre of the lower gradient.</p></article>
+<article><div class="specimen stroke-mask"><span>Masked ring</span></div><p>Transparent interior survives. A solid edge is the fallback.</p></article>
+<article><div class="specimen stroke-border-image"><span>Border image limit</span></div><p>Image corners stay square even when the body rounds.</p></article></div>
+<h2>Displace an owned SVG scene</h2><p>The left scene is unchanged. The right scene uses a turbulence displacement map. This is a wavy image-space demonstration, not native Liquid Glass or refraction of arbitrary HTML behind the panel. Labels sit outside the filtered artwork.</p>
+<svg class="art" viewBox="0 0 840 240" role="img" aria-labelledby="art-title art-desc">
+<title id="art-title">Original and displaced grid artwork</title><desc id="art-desc">Two copies of a coloured grid: the right copy is distorted by the displacement slider.</desc>
+<defs><pattern id="grid" width="24" height="24" patternUnits="userSpaceOnUse"><rect width="24" height="24" fill="#bddeeb"/><path d="M0 0H24V24" fill="none" stroke="#335970" stroke-width="2"/></pattern>
+<g id="scene-art"><rect width="370" height="150" fill="url(#grid)"/><circle cx="90" cy="75" r="55" fill="#ef9e82"/><rect x="190" y="32" width="130" height="85" rx="18" fill="#637ec9"/></g>
+<filter id="refraction" x="-15%" y="-20%" width="130%" height="140%" color-interpolation-filters="sRGB">
+<feTurbulence type="fractalNoise" baseFrequency=".022 .035" numOctaves="2" seed="4" result="map"/>
+<feDisplacementMap in="SourceGraphic" in2="map" scale="22" xChannelSelector="R" yChannelSelector="G"/>
+</filter></defs><g transform="translate(25 25)"><use href="#scene-art"/></g>
+<g transform="translate(445 25)"><g id="warped-art" filter="url(#refraction)"><use href="#scene-art"/></g></g>
+<g fill="#1b2542" font-family="system-ui,sans-serif" font-size="18"><text x="25" y="216">Original artwork</text><text x="445" y="216">Displacement approximation</text></g></svg>
+<footer><p>Checked 2026-10-08. See <a href="compatibility.md">dated support evidence</a> and <a href="cookbook.md">techniques and pitfalls</a>. No external assets or requests.</p></footer>
+</main></body></html>

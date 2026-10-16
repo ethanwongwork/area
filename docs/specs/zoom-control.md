@@ -104,3 +104,9 @@ Resolved 2026-10-10 (owner: "go with your recommendations"); kept for the record
 - 2026-10-10 · owner: "go with your recommendations" → light Menu kept; the column reserve moved to Menu (zoom-control.css
   rule removed).
 - 2026-10-11 · owner, review round 7: approved.
+- 2026-10-14 · owner (desktop gallery: "find a way to add a +- percentage control … if not add it", after a "− 100% +"
+  zoom row) → `stepper`: Zoom out / Zoom in ghost icon Buttons (`subtract`, `add`, each named in an Area Tooltip)
+  either side of the percentage, which keeps the menu and drops its chevron; `stops` (the zooms − and + and the menu's
+  Zoom in / out move between, else × / ÷ `step`); `valueLabel` ("Fit" while the view fits). The reference is a
+  screenshot of a browser menu row, not a capture: sizes are Area's ghost sm Button, to be measured if the owner
+  wants Chrome's own. Not yet a gallery tile.

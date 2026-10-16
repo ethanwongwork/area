@@ -1,0 +1,41 @@
+{
+  "specimen": {
+    "shadow": {
+      "type": "boxShadow",
+      "value": [
+        {
+          "x": "0px",
+          "y": "2px",
+          "blur": "4px",
+          "spread": "0px",
+          "color": "rgba(0, 0, 0, 0.1)",
+          "type": "dropShadow"
+        },
+        {
+          "x": "-1px",
+          "y": "-1px",
+          "blur": "0px",
+          "spread": "0px",
+          "color": "rgba(255, 255, 255, 0.2)",
+          "type": "innerShadow"
+        }
+      ]
+    },
+    "ramp": {
+      "type": "color",
+      "value": "linear-gradient(135deg, rgba(51.0, 102.0, 204.0, 0.3) 0%, rgba(204.0, 76.5, 127.5, 0) 100%)"
+    },
+    "border": {
+      "type": "border",
+      "value": {
+        "color": "rgba(0, 0, 0, 0.15)",
+        "width": "1px",
+        "style": "solid"
+      }
+    },
+    "blur": {
+      "type": "dimension",
+      "value": "5px"
+    }
+  }
+}

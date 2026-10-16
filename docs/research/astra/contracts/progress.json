@@ -1,0 +1,365 @@
+{
+  "slug": "progress",
+  "manifest": "progress",
+  "parts": [
+    {
+      "id": "root",
+      "element": [
+        "div"
+      ],
+      "class": "area-progress",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_progress-size",
+          "selectors": [
+            ".area-progress"
+          ]
+        },
+        {
+          "name": "--_progress-track",
+          "selectors": [
+            ".area-progress"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-accent-solid",
+          "selectors": [
+            ".area-progress--accent"
+          ]
+        },
+        {
+          "name": "--area-bg-surface",
+          "selectors": [
+            ".area-progress"
+          ]
+        },
+        {
+          "name": "--area-fill-toggle",
+          "selectors": [
+            ".area-progress"
+          ]
+        },
+        {
+          "name": "--area-neutral-solid",
+          "selectors": [
+            ".area-progress",
+            ".area-progress--neutral"
+          ]
+        },
+        {
+          "name": "--area-radius-full",
+          "selectors": [
+            ".area-progress"
+          ]
+        },
+        {
+          "name": "--area-space-4",
+          "selectors": [
+            ".area-progress--sm"
+          ]
+        },
+        {
+          "name": "--area-space-6",
+          "selectors": [
+            ".area-progress",
+            ".area-progress--md"
+          ]
+        },
+        {
+          "name": "--area-space-8",
+          "selectors": [
+            ".area-progress--lg"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bar",
+      "element": [
+        "div"
+      ],
+      "class": "area-progress__bar",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_progress-fill",
+          "selectors": [
+            ".area-progress__bar"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-duration-slow",
+          "selectors": [
+            ".area-progress__bar"
+          ]
+        },
+        {
+          "name": "--area-ease-out",
+          "selectors": [
+            ".area-progress__bar"
+          ]
+        }
+      ]
+    }
+  ],
+  "slots": [],
+  "options": {
+    "size": {
+      "values": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "default": "md"
+    },
+    "tone": {
+      "values": [
+        "neutral",
+        "accent"
+      ],
+      "default": "neutral"
+    }
+  },
+  "booleans": [],
+  "elementModifiers": {},
+  "states": [
+    {
+      "name": "valuemin",
+      "part": "root",
+      "kind": "aria",
+      "hook": "aria-valuemin",
+      "value": "{0}"
+    },
+    {
+      "name": "valuemax",
+      "part": "root",
+      "kind": "aria",
+      "hook": "aria-valuemax",
+      "value": "{max}"
+    },
+    {
+      "name": "valuenow",
+      "part": "root",
+      "kind": "aria",
+      "hook": "aria-valuenow",
+      "value": "{indeterminate ? undefined : value}"
+    },
+    {
+      "name": "indeterminate",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-indeterminate",
+      "value": "\"\""
+    },
+    {
+      "name": "indeterminate",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-indeterminate",
+      "value": "present"
+    },
+    {
+      "name": "indeterminate",
+      "part": "bar",
+      "kind": "data",
+      "hook": "data-indeterminate",
+      "value": "present"
+    }
+  ],
+  "keyboard": [],
+  "accessibleName": [
+    {
+      "part": "root",
+      "rule": "Reference wiring: aria-label={label}."
+    }
+  ],
+  "composition": {
+    "allowedParents": "not found",
+    "allowedChildren": "not found",
+    "observedChildren": [],
+    "demoExamples": [
+      "apps/docs/src/demos/display.tsx:118",
+      "apps/docs/src/demos/display.tsx:124",
+      "apps/docs/src/demos/gallery.tsx:1752",
+      "apps/docs/src/demos/gallery.tsx:1757",
+      "apps/docs/src/demos/gallery.tsx:1760",
+      "apps/docs/src/demos/gallery.tsx:1761",
+      "apps/docs/src/demos/gallery.tsx:1762",
+      "apps/docs/src/demos/gallery.tsx:1763",
+      "apps/docs/src/demos/gallery.tsx:1764"
+    ]
+  },
+  "reference": {
+    "css": [
+      "packages/styles/src/components/display.css"
+    ],
+    "spec": [
+      "docs/specs/progress.md"
+    ],
+    "reactExport": [
+      "Progress"
+    ]
+  },
+  "evidence": {
+    "/slug": {"status":"found","sources":["packages/styles/src/manifest.ts:416"],"note":"Direct source declaration or implementation."},
+    "/manifest": {"status":"found","sources":["packages/styles/src/manifest.ts:415"],"note":"Direct source declaration or implementation."},
+    "/parts": {"status":"found","sources":["packages/styles/src/manifest.ts:415","packages/react/src/components/primitives.tsx:425","packages/react/src/components/primitives.tsx:436"],"note":"Manifest parts plus implementation-only structural elements; unclassed nodes retain explicit IDs."},
+    "/parts/0": {"status":"found","sources":["packages/react/src/components/primitives.tsx:425"],"note":"Direct source declaration or implementation."},
+    "/parts/0/id": {"status":"found","sources":["packages/react/src/components/primitives.tsx:425"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/0/class": {"status":"found","sources":["packages/react/src/components/primitives.tsx:425"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element": {"status":"found","sources":["packages/react/src/components/primitives.tsx:425"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/required": {"status":"found","sources":["packages/react/src/components/primitives.tsx:425"],"note":"Root of the rendered family surface."},
+    "/parts/0/allowedContent": {"status":"not found","sources":["packages/react/src/components/primitives.tsx:425"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/0/customProperties/0": {"status":"found","sources":["packages/styles/src/components/display.css:269"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1": {"status":"found","sources":["packages/styles/src/components/display.css:272"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties": {"status":"found","sources":["packages/styles/src/components/display.css:269","packages/styles/src/components/display.css:272"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/0/tokens/0": {"status":"found","sources":["packages/styles/src/components/display.css:286"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1": {"status":"found","sources":["packages/styles/src/components/display.css:272"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2": {"status":"found","sources":["packages/styles/src/components/display.css:272"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3": {"status":"found","sources":["packages/styles/src/components/display.css:267","packages/styles/src/components/display.css:287"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4": {"status":"found","sources":["packages/styles/src/components/display.css:270"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5": {"status":"found","sources":["packages/styles/src/components/display.css:283"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6": {"status":"found","sources":["packages/styles/src/components/display.css:266","packages/styles/src/components/display.css:284"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7": {"status":"found","sources":["packages/styles/src/components/display.css:285"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens": {"status":"found","sources":["packages/styles/src/components/display.css:266","packages/styles/src/components/display.css:284","packages/styles/src/components/display.css:267","packages/styles/src/components/display.css:287","packages/styles/src/components/display.css:270","packages/styles/src/components/display.css:272","packages/styles/src/components/display.css:283","packages/styles/src/components/display.css:285","packages/styles/src/components/display.css:286"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/1": {"status":"found","sources":["packages/react/src/components/primitives.tsx:436"],"note":"Direct source declaration or implementation."},
+    "/parts/1/id": {"status":"found","sources":["packages/react/src/components/primitives.tsx:436"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/1/class": {"status":"found","sources":["packages/react/src/components/primitives.tsx:436"],"note":"Direct source declaration or implementation."},
+    "/parts/1/element": {"status":"found","sources":["packages/react/src/components/primitives.tsx:436"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/1/required": {"status":"found","sources":["packages/react/src/components/primitives.tsx:436"],"note":"Unconditional native child on the primary component return path."},
+    "/parts/1/allowedContent": {"status":"not found","sources":["packages/react/src/components/primitives.tsx:436"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/1/customProperties/0": {"status":"found","sources":["packages/styles/src/components/display.css:279"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties": {"status":"found","sources":["packages/styles/src/components/display.css:279"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/1/tokens/0": {"status":"found","sources":["packages/styles/src/components/display.css:280"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1": {"status":"found","sources":["packages/styles/src/components/display.css:280"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens": {"status":"found","sources":["packages/styles/src/components/display.css:280"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/slots": {"status":"not found","sources":["packages/styles/src/manifest.ts:415","packages/react/src/components/primitives.tsx:417","docs/specs/progress.md:1"],"note":"not found: No locally declared ReactNode/ReactElement slot props; native inherited children and delegated interfaces require review."},
+    "/options": {"status":"found","sources":["packages/styles/src/manifest.ts:418"],"note":"Direct source declaration or implementation."},
+    "/options/size": {"status":"found","sources":["packages/styles/src/manifest.ts:418"],"note":"Direct source declaration or implementation."},
+    "/options/size/default": {"status":"found","sources":["packages/styles/src/manifest.ts:421"],"note":"Direct source declaration or implementation."},
+    "/options/tone": {"status":"found","sources":["packages/styles/src/manifest.ts:418"],"note":"Direct source declaration or implementation."},
+    "/options/tone/default": {"status":"found","sources":["packages/styles/src/manifest.ts:421"],"note":"Direct source declaration or implementation."},
+    "/booleans": {"status":"found","sources":["packages/styles/src/manifest.ts:415"],"note":"Exact manifest boolean modifier list; absence means no declared booleans."},
+    "/elementModifiers": {"status":"found","sources":["packages/styles/src/manifest.ts:415"],"note":"Direct source declaration or implementation."},
+    "/states/0": {"status":"found","sources":["packages/react/src/components/primitives.tsx:428"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1": {"status":"found","sources":["packages/react/src/components/primitives.tsx:429"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2": {"status":"found","sources":["packages/react/src/components/primitives.tsx:430"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3": {"status":"found","sources":["packages/react/src/components/primitives.tsx:433"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/4": {"status":"found","sources":["packages/styles/src/components/display.css:312"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/5": {"status":"found","sources":["packages/styles/src/components/display.css:312"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states": {"status":"found","sources":["packages/react/src/components/primitives.tsx:428","packages/react/src/components/primitives.tsx:429","packages/react/src/components/primitives.tsx:430","packages/react/src/components/primitives.tsx:433","packages/styles/src/components/display.css:312"],"note":"Direct source declaration or implementation."},
+    "/keyboard": {"status":"not found","sources":["packages/styles/src/manifest.ts:415","packages/react/src/components/primitives.tsx:417","docs/specs/progress.md:1"],"note":"not found: No reviewed key-to-action contract found. Native behavior is not invented from a tag name."},
+    "/accessibleName/0": {"status":"found","sources":["packages/react/src/components/primitives.tsx:431"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName": {"status":"found","sources":["packages/react/src/components/primitives.tsx:431"],"note":"Direct source declaration or implementation."},
+    "/composition": {"status":"found","sources":["packages/styles/src/manifest.ts:415","packages/react/src/components/primitives.tsx:417","docs/specs/progress.md:1"],"note":"Allowed composition is distinct from examples and built-in child calls."},
+    "/composition/allowedParents": {"status":"not found","sources":["packages/styles/src/manifest.ts:415","packages/react/src/components/primitives.tsx:417","docs/specs/progress.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/allowedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:415","packages/react/src/components/primitives.tsx:417","docs/specs/progress.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/observedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:415","packages/react/src/components/primitives.tsx:417","docs/specs/progress.md:1"],"note":"not found: No child component call located."},
+    "/composition/demoExamples/0": {"status":"found","sources":["apps/docs/src/demos/display.tsx:118"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/1": {"status":"found","sources":["apps/docs/src/demos/display.tsx:124"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/2": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1752"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/3": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1757"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/4": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1760"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/5": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1761"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/6": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1762"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/7": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1763"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/8": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1764"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples": {"status":"found","sources":["apps/docs/src/demos/display.tsx:118","apps/docs/src/demos/display.tsx:124","apps/docs/src/demos/gallery.tsx:1752","apps/docs/src/demos/gallery.tsx:1757","apps/docs/src/demos/gallery.tsx:1760","apps/docs/src/demos/gallery.tsx:1761","apps/docs/src/demos/gallery.tsx:1762","apps/docs/src/demos/gallery.tsx:1763","apps/docs/src/demos/gallery.tsx:1764"],"note":"Direct source declaration or implementation."},
+    "/reference/css": {"status":"found","sources":["packages/styles/src/components/display.css:265","packages/styles/src/components/display.css:276","packages/styles/src/components/display.css:283","packages/styles/src/components/display.css:284","packages/styles/src/components/display.css:285","packages/styles/src/components/display.css:286","packages/styles/src/components/display.css:287","packages/styles/src/components/display.css:293","packages/styles/src/components/display.css:303","packages/styles/src/components/display.css:312","packages/styles/src/components/display.css:316"],"note":"Direct source declaration or implementation."},
+    "/reference/css/0": {"status":"found","sources":["packages/styles/src/components/display.css:265"],"note":"Direct source declaration or implementation."},
+    "/reference/spec": {"status":"found","sources":["docs/specs/progress.md:1"],"note":"Dedicated family spec."},
+    "/reference/reactExport/0": {"status":"found","sources":["packages/react/src/components/primitives.tsx:417","packages/react/src/index.ts:46"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport": {"status":"found","sources":["packages/react/src/components/primitives.tsx:417","packages/react/src/index.ts:46"],"note":"Direct source declaration or implementation."},
+    "/reference": {"status":"found","sources":["packages/styles/src/manifest.ts:415","packages/styles/src/components/display.css:1","docs/specs/progress.md:1"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element/0": {"status":"found","sources":["packages/react/src/components/primitives.tsx:425"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/display.css:269"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/display.css:269"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/display.css:269"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/name": {"status":"found","sources":["packages/styles/src/components/display.css:272"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/selectors": {"status":"found","sources":["packages/styles/src/components/display.css:272"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/display.css:272"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/display.css:286"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/display.css:286"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/display.css:286"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/display.css:272"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/display.css:272"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/display.css:272"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/display.css:272"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/display.css:272"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/display.css:272"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/name": {"status":"found","sources":["packages/styles/src/components/display.css:267","packages/styles/src/components/display.css:287"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/selectors": {"status":"found","sources":["packages/styles/src/components/display.css:267","packages/styles/src/components/display.css:287"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/display.css:267","packages/styles/src/components/display.css:287"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/selectors/1": {"status":"found","sources":["packages/styles/src/components/display.css:267","packages/styles/src/components/display.css:287"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/name": {"status":"found","sources":["packages/styles/src/components/display.css:270"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/selectors": {"status":"found","sources":["packages/styles/src/components/display.css:270"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/selectors/0": {"status":"found","sources":["packages/styles/src/components/display.css:270"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5/name": {"status":"found","sources":["packages/styles/src/components/display.css:283"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5/selectors": {"status":"found","sources":["packages/styles/src/components/display.css:283"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5/selectors/0": {"status":"found","sources":["packages/styles/src/components/display.css:283"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/name": {"status":"found","sources":["packages/styles/src/components/display.css:266","packages/styles/src/components/display.css:284"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/selectors": {"status":"found","sources":["packages/styles/src/components/display.css:266","packages/styles/src/components/display.css:284"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/selectors/0": {"status":"found","sources":["packages/styles/src/components/display.css:266","packages/styles/src/components/display.css:284"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/selectors/1": {"status":"found","sources":["packages/styles/src/components/display.css:266","packages/styles/src/components/display.css:284"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/name": {"status":"found","sources":["packages/styles/src/components/display.css:285"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/selectors": {"status":"found","sources":["packages/styles/src/components/display.css:285"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/selectors/0": {"status":"found","sources":["packages/styles/src/components/display.css:285"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/element/0": {"status":"found","sources":["packages/react/src/components/primitives.tsx:436"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/1/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/display.css:279"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/display.css:279"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/display.css:279"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/display.css:280"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/display.css:280"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/display.css:280"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/display.css:280"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/display.css:280"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/display.css:280"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/options/size/values": {"status":"found","sources":["packages/styles/src/manifest.ts:418"],"note":"Direct source declaration or implementation."},
+    "/options/size/values/0": {"status":"found","sources":["packages/styles/src/manifest.ts:418"],"note":"Direct source declaration or implementation."},
+    "/options/size/values/1": {"status":"found","sources":["packages/styles/src/manifest.ts:418"],"note":"Direct source declaration or implementation."},
+    "/options/size/values/2": {"status":"found","sources":["packages/styles/src/manifest.ts:418"],"note":"Direct source declaration or implementation."},
+    "/options/tone/values": {"status":"found","sources":["packages/styles/src/manifest.ts:418"],"note":"Direct source declaration or implementation."},
+    "/options/tone/values/0": {"status":"found","sources":["packages/styles/src/manifest.ts:418"],"note":"Direct source declaration or implementation."},
+    "/options/tone/values/1": {"status":"found","sources":["packages/styles/src/manifest.ts:418"],"note":"Direct source declaration or implementation."},
+    "/states/0/name": {"status":"found","sources":["packages/react/src/components/primitives.tsx:428"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/part": {"status":"found","sources":["packages/react/src/components/primitives.tsx:428"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/kind": {"status":"found","sources":["packages/react/src/components/primitives.tsx:428"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/hook": {"status":"found","sources":["packages/react/src/components/primitives.tsx:428"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/value": {"status":"found","sources":["packages/react/src/components/primitives.tsx:428"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/name": {"status":"found","sources":["packages/react/src/components/primitives.tsx:429"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/part": {"status":"found","sources":["packages/react/src/components/primitives.tsx:429"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/kind": {"status":"found","sources":["packages/react/src/components/primitives.tsx:429"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/hook": {"status":"found","sources":["packages/react/src/components/primitives.tsx:429"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/value": {"status":"found","sources":["packages/react/src/components/primitives.tsx:429"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/name": {"status":"found","sources":["packages/react/src/components/primitives.tsx:430"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/part": {"status":"found","sources":["packages/react/src/components/primitives.tsx:430"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/kind": {"status":"found","sources":["packages/react/src/components/primitives.tsx:430"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/hook": {"status":"found","sources":["packages/react/src/components/primitives.tsx:430"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/value": {"status":"found","sources":["packages/react/src/components/primitives.tsx:430"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3/name": {"status":"found","sources":["packages/react/src/components/primitives.tsx:433"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/3/part": {"status":"found","sources":["packages/react/src/components/primitives.tsx:433"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/3/kind": {"status":"found","sources":["packages/react/src/components/primitives.tsx:433"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/3/hook": {"status":"found","sources":["packages/react/src/components/primitives.tsx:433"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/3/value": {"status":"found","sources":["packages/react/src/components/primitives.tsx:433"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/4/name": {"status":"found","sources":["packages/styles/src/components/display.css:312"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/4/part": {"status":"found","sources":["packages/styles/src/components/display.css:312"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/4/kind": {"status":"found","sources":["packages/styles/src/components/display.css:312"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/4/hook": {"status":"found","sources":["packages/styles/src/components/display.css:312"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/4/value": {"status":"found","sources":["packages/styles/src/components/display.css:312"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/5/name": {"status":"found","sources":["packages/styles/src/components/display.css:312"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/5/part": {"status":"found","sources":["packages/styles/src/components/display.css:312"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/5/kind": {"status":"found","sources":["packages/styles/src/components/display.css:312"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/5/hook": {"status":"found","sources":["packages/styles/src/components/display.css:312"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/5/value": {"status":"found","sources":["packages/styles/src/components/display.css:312"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/accessibleName/0/part": {"status":"found","sources":["packages/react/src/components/primitives.tsx:431"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/0/rule": {"status":"found","sources":["packages/react/src/components/primitives.tsx:431"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/reference/spec/0": {"status":"found","sources":["docs/specs/progress.md:1"],"note":"Dedicated family spec."}
+  }
+}

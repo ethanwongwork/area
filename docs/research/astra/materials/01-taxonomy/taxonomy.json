@@ -1,0 +1,766 @@
+{
+  "schema_version": 1,
+  "checked": "2026-10-07",
+  "area_commit": "4c1854202a8e109479d5b83ef24a8325231da056",
+  "status": "unreviewed research; not an implementation contract",
+  "matrix_basis": "Author synthesis of cited examples, not measured values or universal requirements. — means not intrinsic, not prohibited. Optional means composable, not vendor-required. Not specified/found is a bounded evidence gap.",
+  "columns": [
+    "fill",
+    "translucency",
+    "blur",
+    "stroke_model",
+    "highlight",
+    "inner_shadow",
+    "drop_shadow",
+    "glow",
+    "grain",
+    "text_treatment",
+    "depth",
+    "light_direction"
+  ],
+  "sources": {
+    "flat": {
+      "title": "Nielsen Norman Group — Flat Design: Its Origins, Its Problems, and Why Flat 2.0 Is Better",
+      "url": "https://www.nngroup.com/articles/flat-design/",
+      "scope": "Design research; flat and skeuomorphic examples, not a vendor rendering specification.",
+      "checked": "2026-10-07"
+    },
+    "paper": {
+      "title": "Google Design — Material Eras, Material 1",
+      "url": "https://design.google/library/material-design-eras",
+      "scope": "First-person account by Material designer Christian Robertson; paper, layers, shadows and motion.",
+      "checked": "2026-10-07"
+    },
+    "alpha": {
+      "title": "W3C — Compositing and Blending Level 1, simple alpha compositing",
+      "url": "https://www.w3.org/TR/compositing-1/#simplealphacompositing",
+      "scope": "Technical definition and source-over examples.",
+      "checked": "2026-10-07"
+    },
+    "glass": {
+      "title": "Michał Malewicz — Glassmorphism in 2021",
+      "url": "https://hype4.academy/articles/design/glassmorphism-in-2021",
+      "scope": "Naming author’s illustrated recipes; an aesthetic umbrella, not a standard.",
+      "checked": "2026-10-07"
+    },
+    "acrylic": {
+      "title": "Microsoft — Acrylic material",
+      "url": "https://learn.microsoft.com/en-us/windows/apps/design/style/acrylic",
+      "scope": "Vendor material recipe and control examples.",
+      "checked": "2026-10-07"
+    },
+    "mica": {
+      "title": "Microsoft — Mica material",
+      "url": "https://learn.microsoft.com/en-us/windows/apps/design/style/mica",
+      "scope": "Vendor definition, Mica/Alt and window examples.",
+      "checked": "2026-10-07"
+    },
+    "liquid": {
+      "title": "Apple — Meet Liquid Glass, WWDC25 session 219",
+      "url": "https://developer.apple.com/videos/play/wwdc2025/219/",
+      "scope": "2025 introduction: Dynamics 1:29, Adaptivity 6:00, Principles 10:31. Descriptive layers, not shader constants.",
+      "checked": "2026-10-07"
+    },
+    "neu": {
+      "title": "Michał Malewicz — Neumorphism in User Interfaces",
+      "url": "https://hype4.academy/articles/design/neumorphism-in-user-interfaces",
+      "scope": "Illustrated explanation, Alex Plyuto example and pressed-state discussion.",
+      "checked": "2026-10-07"
+    },
+    "clay": {
+      "title": "Michał Malewicz — Claymorphism in User Interfaces",
+      "url": "https://hype4.academy/articles/design/claymorphism-in-user-interfaces",
+      "scope": "Author’s inflated-object recipe and examples.",
+      "checked": "2026-10-07"
+    },
+    "aqua": {
+      "title": "Apple — Apple Unveils Mac OS X, January 5, 2000",
+      "url": "https://www.apple.com/newsroom/2000/01/05Apple-Unveils-Mac-OS-X/",
+      "scope": "Contemporaneous Aqua announcement: luminous, semi-transparent controls and new Finder/Dock.",
+      "checked": "2026-10-07"
+    },
+    "aero": {
+      "title": "Consumer Aesthetics Research Institute — Frutiger Aero",
+      "url": "https://cari.institute/aesthetics/frutiger-aero",
+      "scope": "Curator’s definition, visual archive and Asadal case-study link; not a period vendor style guide.",
+      "checked": "2026-10-07"
+    },
+    "windows": {
+      "title": "Microsoft — Icons (Windows 7 UX Guide)",
+      "url": "https://learn.microsoft.com/en-us/windows/win32/uxguide/vis-icons",
+      "scope": "Archived Windows Aero icon vocabulary and examples; not current Windows guidance.",
+      "checked": "2026-10-07"
+    },
+    "neon": {
+      "title": "Adobe — How to create a neon effect in Photoshop",
+      "url": "https://www.adobe.com/creativecloud/photography/discover/neon-effect.html",
+      "scope": "Erica Larson’s magenta triangle tutorial; inner/outer glow and masking.",
+      "checked": "2026-10-07"
+    },
+    "gradient3": {
+      "title": "W3C — CSS Images Level 3, Gradients",
+      "url": "https://www.w3.org/TR/css-images-3/#gradients",
+      "scope": "Linear and radial definitions and normative example figures.",
+      "checked": "2026-10-07"
+    },
+    "gradient4": {
+      "title": "W3C — CSS Images Level 4, Conic Gradients",
+      "url": "https://www.w3.org/TR/css-images-4/#conic-gradients",
+      "scope": "Angular gradients and color-wheel examples; draft specification.",
+      "checked": "2026-10-07"
+    },
+    "mesh": {
+      "title": "Adobe Illustrator — Mesh objects overview",
+      "url": "https://helpx.adobe.com/illustrator/desktop/paint-and-fill/create-and-edit-meshes/mesh-objects-overview.html",
+      "scope": "Mesh points, lines and patches; multicolored ellipse example.",
+      "checked": "2026-10-07"
+    },
+    "effects": {
+      "title": "Adobe Photoshop — Layer style effects and options overview",
+      "url": "https://helpx.adobe.com/ca/photoshop/desktop/create-manage-layers/apply-layer-effects/layer-style-effects-and-options-overview.html",
+      "scope": "Effect definitions, gradient strokes and global lighting controls.",
+      "checked": "2026-10-07"
+    },
+    "shadow": {
+      "title": "W3C — CSS Backgrounds and Borders Level 3, box-shadow",
+      "url": "https://www.w3.org/TR/css-backgrounds-3/#box-shadow",
+      "scope": "Inner/outer shadow geometry, clipping and examples.",
+      "checked": "2026-10-07"
+    },
+    "letterpress": {
+      "title": "José Olarte — Simulating the Letterpress: From Live Filters in Fireworks to CSS Code",
+      "url": "https://www.smashingmagazine.com/2012/07/letterpress-effect-fireworks-css/",
+      "scope": "First-person worked letterpress text examples and downloadable demo.",
+      "checked": "2026-10-07"
+    },
+    "grain": {
+      "title": "Adobe Photoshop — Enhance texture with Grain",
+      "url": "https://helpx.adobe.com/photoshop/desktop/create-manage-layers/color-adjustment-fill-layers/enhance-texture-with-grain.html",
+      "scope": "Grain adjustment layer; amount, size and roughness controls.",
+      "checked": "2026-10-07"
+    },
+    "noise": {
+      "title": "W3C — Filter Effects Level 1, feTurbulence",
+      "url": "https://www.w3.org/TR/filter-effects-1/#feTurbulenceElement",
+      "scope": "Procedural turbulence/noise generator and illustrations.",
+      "checked": "2026-10-07"
+    },
+    "backdrop": {
+      "title": "CSS Working Group — Filter Effects Level 2, backdrop-filter",
+      "url": "https://drafts.csswg.org/filter-effects-2/#BackdropFilterProperty",
+      "scope": "Work in progress, not an interoperable support guarantee; filtering and clipping model.",
+      "checked": "2026-10-07"
+    },
+    "acrylic-active-graph": {
+      "title": "WinUI Acrylic active luminosity/tint graph",
+      "url": "https://github.com/microsoft/microsoft-ui-xaml/blob/901ffc065a1f3a1122bbfe6d222eb80a471f28a6/controls/dev/Materials/Acrylic/AcrylicBrush.cpp#L389-L414",
+      "scope": "Active nonopaque graph; unused exclusion constants are not additional layers. Correction from task 06 R04.",
+      "checked": "2026-10-11"
+    }
+  },
+  "styles": [
+    {
+      "id": "flat",
+      "name": "Flat",
+      "kind": "visual language",
+      "definition": "A deliberately planar treatment that suppresses realistic surface modeling. Strict flat omits gloss and simulated relief; the related flat 2.0 vocabulary admits restrained depth cues. Neither names a substance.",
+      "canonical_example": "Windows 8 Metro and the flat examples in NN/g’s article; use the article’s flat 2.0 comparison to delimit the term.",
+      "sources": [
+        "flat"
+      ],
+      "ingredients": {
+        "fill": "Uniform color",
+        "translucency": "Optional",
+        "blur": "—",
+        "stroke_model": "Optional outline",
+        "highlight": "— (strict flat)",
+        "inner_shadow": "—",
+        "drop_shadow": "— (strict flat)",
+        "glow": "—",
+        "grain": "—",
+        "text_treatment": "Plain",
+        "depth": "Planar",
+        "light_direction": "None"
+      }
+    },
+    {
+      "id": "paper",
+      "name": "Material / paper",
+      "kind": "material recipe + design language",
+      "definition": "Google’s original Material uses paper as a model for layered surfaces, cast shadows and meaningful motion. Here “paper” means that opaque sheet-like recipe, not every generation or feature of Google Material Design.",
+      "canonical_example": "Material 1’s paper prototypes described by Christian Robertson; the documented layer/shadow experiments are the reference, rather than a guessed paper texture.",
+      "sources": [
+        "paper"
+      ],
+      "ingredients": {
+        "fill": "Opaque sheet",
+        "translucency": "None in this model",
+        "blur": "Shadow only",
+        "stroke_model": "Optional edge",
+        "highlight": "—",
+        "inner_shadow": "—",
+        "drop_shadow": "Layer separation",
+        "glow": "—",
+        "grain": "Optional literal-paper texture",
+        "text_treatment": "Printed/plain",
+        "depth": "Stacked planes",
+        "light_direction": "Coherent cast light; angle unspecified"
+      }
+    },
+    {
+      "id": "transparency",
+      "name": "Transparency",
+      "kind": "optical property",
+      "definition": "A compositing property: content behind a foreground contributes to the result according to alpha. It does not by itself imply blur, reflection, refraction or glass. Distinguish a partially transparent paint from opacity applied to an entire group.",
+      "canonical_example": "W3C’s source-over compositing diagrams, isolating foreground alpha from the backdrop.",
+      "sources": [
+        "alpha"
+      ],
+      "ingredients": {
+        "fill": "Any alpha paint",
+        "translucency": "Defining",
+        "blur": "—",
+        "stroke_model": "Independent",
+        "highlight": "—",
+        "inner_shadow": "—",
+        "drop_shadow": "—",
+        "glow": "—",
+        "grain": "—",
+        "text_treatment": "Independent; avoid assuming group alpha",
+        "depth": "No depth implied",
+        "light_direction": "None"
+      }
+    },
+    {
+      "id": "glassmorphism",
+      "name": "Glassmorphism",
+      "kind": "material recipe umbrella",
+      "definition": "A frosted-glass aesthetic combining a see-through surface with a softened backdrop. Malewicz’s examples vary tint/gradient alpha, blur, edges and optional noise; the name does not designate one physical or platform implementation.",
+      "canonical_example": "The author’s four frosted card recipes and their border variations, including dark treatments.",
+      "sources": [
+        "glass"
+      ],
+      "ingredients": {
+        "fill": "Tint or low-alpha gradient",
+        "translucency": "Defining",
+        "blur": "Backdrop",
+        "stroke_model": "Optional translucent/gradient rim",
+        "highlight": "Optional rim",
+        "inner_shadow": "Optional",
+        "drop_shadow": "Optional",
+        "glow": "Optional",
+        "grain": "Optional",
+        "text_treatment": "Legible overlay",
+        "depth": "Separate pane (inference)",
+        "light_direction": "No canonical direction"
+      }
+    },
+    {
+      "id": "acrylic",
+      "name": "Acrylic (Fluent)",
+      "kind": "vendor material recipe",
+      "definition": "Microsoft’s translucent brush combines a backdrop, blur, a luminosity blend, tint and noise. Background acrylic samples behind the app; in-app acrylic samples within it. Microsoft supplies opaque fallbacks under conditions such as transparency being disabled. The active WinUI nonopaque path is the scope of this definition; historical/unused exclusion constants are not additional active layers (task 19 correction; task 06 R04).",
+      "canonical_example": "WinUI MenuFlyout, open ComboBox and AutoSuggestBox surfaces in Microsoft’s Acrylic guide.",
+      "sources": [
+        "acrylic",
+        "acrylic-active-graph"
+      ],
+      "ingredients": {
+        "fill": "Luminosity blend + tint",
+        "translucency": "Defining; opaque fallback",
+        "blur": "Backdrop",
+        "stroke_model": "Control-dependent",
+        "highlight": "—",
+        "inner_shadow": "—",
+        "drop_shadow": "Control-dependent",
+        "glow": "—",
+        "grain": "Recipe layer",
+        "text_treatment": "Foreground overlay",
+        "depth": "Transient/overlapping surface",
+        "light_direction": "Not specified"
+      }
+    },
+    {
+      "id": "mica",
+      "name": "Mica",
+      "kind": "vendor material recipe",
+      "definition": "An opaque Windows foundation material influenced by the theme and desktop wallpaper, sampled once. It is not a live see-through pane. Mica Alt strengthens the wallpaper influence for uses such as tabbed title bars.",
+      "canonical_example": "Microsoft’s Mica window/title-bar and NavigationView examples; long-lived app foundations, including Settings.",
+      "sources": [
+        "mica"
+      ],
+      "ingredients": {
+        "fill": "Opaque wallpaper-informed tint",
+        "translucency": "None",
+        "blur": "No live backdrop blur",
+        "stroke_model": "Separate component edge",
+        "highlight": "—",
+        "inner_shadow": "—",
+        "drop_shadow": "Window-dependent",
+        "glow": "—",
+        "grain": "Not found as required layer",
+        "text_treatment": "Foreground overlay",
+        "depth": "Window foundation",
+        "light_direction": "Not specified"
+      }
+    },
+    {
+      "id": "liquid-glass",
+      "name": "Liquid Glass (Apple, 2025)",
+      "kind": "vendor material + behavior system",
+      "definition": "Apple’s material joins lensing/refraction, responsive motion, highlights and adaptive separation. Regular adapts to content; Clear is more transparent and needs dimming for legibility. A blurred translucent card alone does not reproduce these behaviors.",
+      "canonical_example": "WWDC25’s toolbar-to-menu transition, floating sidebars and glass controls. Treat these as the native reference, not evidence of a complete CSS reproduction.",
+      "sources": [
+        "liquid"
+      ],
+      "ingredients": {
+        "fill": "Adaptive tint",
+        "translucency": "Regular / Clear",
+        "blur": "Scattering; adaptive",
+        "stroke_model": "Optical silhouette; not plain stroke",
+        "highlight": "Environment-responsive",
+        "inner_shadow": "Not separately specified",
+        "drop_shadow": "Adaptive",
+        "glow": "Interaction illumination",
+        "grain": "Not specified",
+        "text_treatment": "Adaptive ink",
+        "depth": "Floating navigation",
+        "light_direction": "Environment/device/interaction"
+      }
+    },
+    {
+      "id": "neumorphism",
+      "name": "Neumorphism",
+      "kind": "material recipe",
+      "definition": "Objects appear extruded from, or pressed into, the same surface. Similar body/background colors plus opposed light and dark shading give soft relief; an independent floating card is a different cue.",
+      "canonical_example": "Alex Plyuto’s soft UI example reproduced in Malewicz’s article, and its illustrated inset pressed-state treatment. These are design demonstrations, not a platform component standard.",
+      "sources": [
+        "neu"
+      ],
+      "ingredients": {
+        "fill": "Matches surrounding body",
+        "translucency": "Usually opaque",
+        "blur": "Shading softness",
+        "stroke_model": "Shading-defined edge",
+        "highlight": "Light counterpart",
+        "inner_shadow": "Recessed variant",
+        "drop_shadow": "Dark/light relief pair",
+        "glow": "—",
+        "grain": "Optional",
+        "text_treatment": "Typically plain overlay",
+        "depth": "Low extrusion or recess",
+        "light_direction": "Opposed light/dark pair"
+      }
+    },
+    {
+      "id": "claymorphism",
+      "name": "Claymorphism",
+      "kind": "material recipe",
+      "definition": "Inflated, rounded objects modeled with light and dark inner shading plus an external shadow. Unlike the same-surface neumorphic recipe, their color can stand apart from the ground.",
+      "canonical_example": "Malewicz’s inflated cards/buttons and construction sequence. The rounded, domed volume is characteristic; it is not a requirement to simulate granular sculpting clay.",
+      "sources": [
+        "clay"
+      ],
+      "ingredients": {
+        "fill": "Independent colored body",
+        "translucency": "Usually opaque",
+        "blur": "Soft shading",
+        "stroke_model": "Soft modeled edge",
+        "highlight": "Inner light lobe",
+        "inner_shadow": "Inner dark lobe",
+        "drop_shadow": "Soft external",
+        "glow": "—",
+        "grain": "—",
+        "text_treatment": "Plain overlay",
+        "depth": "Bulging volume",
+        "light_direction": "Top-left in worked example"
+      }
+    },
+    {
+      "id": "skeuomorphism",
+      "name": "Skeuomorphism",
+      "kind": "metaphor / visual language",
+      "definition": "A design retains recognizable ornamental features of a real-world predecessor to communicate what it is or does. It can use many materials; realism or a shadow alone does not establish that metaphor.",
+      "canonical_example": "The Kindle Fire wooden bookshelf shown by NN/g: shelves describe a real object used to organize books.",
+      "sources": [
+        "flat"
+      ],
+      "ingredients": {
+        "fill": "Object-dependent",
+        "translucency": "Object-dependent",
+        "blur": "Object-dependent",
+        "stroke_model": "Object-dependent",
+        "highlight": "Object-dependent",
+        "inner_shadow": "Object-dependent",
+        "drop_shadow": "Object-dependent",
+        "glow": "Object-dependent",
+        "grain": "Object-dependent",
+        "text_treatment": "Metaphor-dependent",
+        "depth": "Object-dependent",
+        "light_direction": "Scene-dependent"
+      }
+    },
+    {
+      "id": "aqua",
+      "name": "Aqua",
+      "kind": "historical visual language",
+      "definition": "Apple’s original Mac OS X interface, announced in 2000, foregrounded luminous, semi-transparent controls and fluid interaction. Use the name for the historical language, not as a synonym for arbitrary glass.",
+      "canonical_example": "The launch announcement’s buttons, scrollbars, windows, Dock and Finder. Exact gloss geometry is not specified there.",
+      "sources": [
+        "aqua"
+      ],
+      "ingredients": {
+        "fill": "Luminous body",
+        "translucency": "Some controls/windows",
+        "blur": "Not specified",
+        "stroke_model": "Not specified",
+        "highlight": "Luminous finish; inferred gloss",
+        "inner_shadow": "Not specified",
+        "drop_shadow": "Not specified",
+        "glow": "Luminous appearance; not proven bloom",
+        "grain": "—",
+        "text_treatment": "System labels; decoration unspecified",
+        "depth": "Layered windows/control volume (inference)",
+        "light_direction": "Not specified"
+      }
+    },
+    {
+      "id": "frutiger-aero",
+      "name": "Frutiger Aero",
+      "kind": "retrospective visual language",
+      "definition": "CARI’s retrospective category joins glossy digital imagery, glass, natural imagery and humanist typography. It is an art-direction bundle rather than a single material or a synonym for Windows Aero.",
+      "canonical_example": "CARI’s curated archive and linked Asadal Design Mall case study; Microsoft’s archived Aero icon examples provide a vendor-authored example of the reflective icon vocabulary.",
+      "sources": [
+        "aero",
+        "windows"
+      ],
+      "ingredients": {
+        "fill": "Gloss + imagery",
+        "translucency": "Often glass motifs",
+        "blur": "Optional atmospheric softness",
+        "stroke_model": "Varies",
+        "highlight": "Reflective gloss",
+        "inner_shadow": "Optional modeling",
+        "drop_shadow": "Optional modeling",
+        "glow": "Optional aurora/light",
+        "grain": "Not defining",
+        "text_treatment": "Humanist type vocabulary",
+        "depth": "Mixed illustrative depth",
+        "light_direction": "Scene-dependent"
+      }
+    },
+    {
+      "id": "glow-neon",
+      "name": "Glow / neon",
+      "kind": "emissive style recipe",
+      "definition": "A luminous mark is given surrounding bloom so it reads as a light source. This is a style assembled from a core mark and glow effects; the surrounding surface need not itself be emissive.",
+      "canonical_example": "Erica Larson’s Adobe tutorial wraps a magenta neon triangle around a wrist using outer and inner glow plus masking.",
+      "sources": [
+        "neon"
+      ],
+      "ingredients": {
+        "fill": "Bright core mark",
+        "translucency": "Not required",
+        "blur": "Bloom",
+        "stroke_model": "Luminous path/core",
+        "highlight": "Core brightness; not reflection",
+        "inner_shadow": "—",
+        "drop_shadow": "Optional scene grounding",
+        "glow": "Defining",
+        "grain": "—",
+        "text_treatment": "May glow selectively",
+        "depth": "Emission; depth independent",
+        "light_direction": "From emitting geometry"
+      }
+    },
+    {
+      "id": "linear-gradient",
+      "name": "Gradient fill — linear",
+      "kind": "paint primitive",
+      "definition": "Color stops vary along a straight gradient axis. The result can shade a surface, but its colors and direction need not describe lighting.",
+      "canonical_example": "CSS Images 3’s linear-gradient figures and stop-placement examples.",
+      "sources": [
+        "gradient3"
+      ],
+      "ingredients": {
+        "fill": "Linear stop field",
+        "translucency": "Per-stop alpha optional",
+        "blur": "—",
+        "stroke_model": "Independent",
+        "highlight": "Only if used as shading",
+        "inner_shadow": "—",
+        "drop_shadow": "—",
+        "glow": "—",
+        "grain": "—",
+        "text_treatment": "Independent",
+        "depth": "None intrinsic",
+        "light_direction": "Gradient axis; not necessarily light"
+      }
+    },
+    {
+      "id": "radial-gradient",
+      "name": "Gradient fill — radial",
+      "kind": "paint primitive",
+      "definition": "Color varies outward through circles or ellipses from a center. A radial fill can suggest a highlight or halo without being either physically.",
+      "canonical_example": "CSS Images 3’s circular/elliptical radial-gradient figures.",
+      "sources": [
+        "gradient3"
+      ],
+      "ingredients": {
+        "fill": "Radial stop field",
+        "translucency": "Per-stop alpha optional",
+        "blur": "—",
+        "stroke_model": "Independent",
+        "highlight": "Possible use",
+        "inner_shadow": "—",
+        "drop_shadow": "—",
+        "glow": "Possible use",
+        "grain": "—",
+        "text_treatment": "Independent",
+        "depth": "None intrinsic",
+        "light_direction": "Center/radii; not necessarily light"
+      }
+    },
+    {
+      "id": "conic-gradient",
+      "name": "Gradient fill — conic",
+      "kind": "paint primitive",
+      "definition": "Color varies by angle around a center. This angular field differs from the outward progression of a radial gradient.",
+      "canonical_example": "CSS Images 4’s color-wheel and conic-gradient examples.",
+      "sources": [
+        "gradient4"
+      ],
+      "ingredients": {
+        "fill": "Angular stop field",
+        "translucency": "Per-stop alpha optional",
+        "blur": "—",
+        "stroke_model": "Independent",
+        "highlight": "Possible use",
+        "inner_shadow": "—",
+        "drop_shadow": "—",
+        "glow": "—",
+        "grain": "—",
+        "text_treatment": "Independent",
+        "depth": "None intrinsic",
+        "light_direction": "Angular origin; not necessarily light"
+      }
+    },
+    {
+      "id": "mesh-gradient",
+      "name": "Gradient fill — mesh",
+      "kind": "paint primitive",
+      "definition": "A network of mesh points and patches distributes color in multiple directions. A mesh is not just another stop list on one axis; similar-looking freeform gradients should identify their actual construction.",
+      "canonical_example": "Adobe Illustrator’s multicolored ellipse and its editable mesh diagram.",
+      "sources": [
+        "mesh"
+      ],
+      "ingredients": {
+        "fill": "Control-point/patch field",
+        "translucency": "Implementation-dependent",
+        "blur": "Smooth interpolation, not blur",
+        "stroke_model": "Independent",
+        "highlight": "Possible modeled use",
+        "inner_shadow": "—",
+        "drop_shadow": "—",
+        "glow": "—",
+        "grain": "—",
+        "text_treatment": "Independent",
+        "depth": "None intrinsic",
+        "light_direction": "Multiple local color regions"
+      }
+    },
+    {
+      "id": "gradient-stroke",
+      "name": "Gradient stroke",
+      "kind": "edge paint primitive",
+      "definition": "A gradient paints an outline instead of the interior. It can imply a lit edge, but that interpretation is optional.",
+      "canonical_example": "Photoshop’s documented Stroke effect with Gradient as its fill type.",
+      "sources": [
+        "effects"
+      ],
+      "ingredients": {
+        "fill": "Independent",
+        "translucency": "Stroke alpha optional",
+        "blur": "—",
+        "stroke_model": "Gradient outline",
+        "highlight": "Optional inference",
+        "inner_shadow": "—",
+        "drop_shadow": "—",
+        "glow": "—",
+        "grain": "—",
+        "text_treatment": "Independent",
+        "depth": "None intrinsic",
+        "light_direction": "Paint-defined"
+      }
+    },
+    {
+      "id": "inner-shadow",
+      "name": "Inner shadow",
+      "kind": "shading primitive",
+      "definition": "An inset shadow is clipped within the subject; a dark edge commonly suggests a cavity. The geometry and interpretation are separate.",
+      "canonical_example": "CSS Backgrounds’ inset box-shadow examples.",
+      "sources": [
+        "shadow"
+      ],
+      "ingredients": {
+        "fill": "Independent",
+        "translucency": "Effect alpha",
+        "blur": "Effect softness",
+        "stroke_model": "Independent",
+        "highlight": "Independent",
+        "inner_shadow": "Defining",
+        "drop_shadow": "—",
+        "glow": "—",
+        "grain": "—",
+        "text_treatment": "Independent",
+        "depth": "Often recessed",
+        "light_direction": "Offset-dependent"
+      }
+    },
+    {
+      "id": "inner-glow",
+      "name": "Inner glow",
+      "kind": "shading/emission primitive",
+      "definition": "Glow is drawn inside the subject boundary. Its name describes location, not proof that the object emits light.",
+      "canonical_example": "Photoshop’s Inner Glow layer effect.",
+      "sources": [
+        "effects"
+      ],
+      "ingredients": {
+        "fill": "Independent",
+        "translucency": "Effect alpha",
+        "blur": "Effect softness",
+        "stroke_model": "Independent",
+        "highlight": "Possible use",
+        "inner_shadow": "—",
+        "drop_shadow": "—",
+        "glow": "Inside",
+        "grain": "—",
+        "text_treatment": "Independent",
+        "depth": "None intrinsic",
+        "light_direction": "Boundary/center"
+      }
+    },
+    {
+      "id": "outer-glow",
+      "name": "Outer glow",
+      "kind": "emission/halo primitive",
+      "definition": "A softened luminous halo extends outside the subject. This can decorate a mark without establishing cast-shadow depth.",
+      "canonical_example": "The outer-glow stage of Adobe’s neon triangle tutorial.",
+      "sources": [
+        "neon"
+      ],
+      "ingredients": {
+        "fill": "Independent core",
+        "translucency": "Effect alpha",
+        "blur": "Effect softness",
+        "stroke_model": "Independent",
+        "highlight": "—",
+        "inner_shadow": "—",
+        "drop_shadow": "—",
+        "glow": "Outside",
+        "grain": "—",
+        "text_treatment": "Optional glowing glyph",
+        "depth": "None intrinsic",
+        "light_direction": "Around emitter"
+      }
+    },
+    {
+      "id": "drop-shadow",
+      "name": "Drop shadow",
+      "kind": "shading primitive",
+      "definition": "An external shadow projects the subject’s silhouette. Offset, spread and softness shape it; a zero-blur expanded silhouette can instead serve as a ring.",
+      "canonical_example": "CSS Backgrounds’ outer box-shadow diagrams.",
+      "sources": [
+        "shadow"
+      ],
+      "ingredients": {
+        "fill": "Independent",
+        "translucency": "Effect alpha",
+        "blur": "Effect softness",
+        "stroke_model": "Ring possible",
+        "highlight": "—",
+        "inner_shadow": "—",
+        "drop_shadow": "Defining",
+        "glow": "—",
+        "grain": "—",
+        "text_treatment": "Independent",
+        "depth": "Cast lift or edge",
+        "light_direction": "Offset-dependent"
+      }
+    },
+    {
+      "id": "bevel-emboss",
+      "name": "Bevel / emboss",
+      "kind": "relief primitive",
+      "definition": "Highlights and shadows model an edge or relief. Bevel describes the edge profile; emboss gives a raised impression, with inverted/debossed treatments suggesting a recess.",
+      "canonical_example": "Photoshop’s Bevel & Emboss effect and its style/light controls.",
+      "sources": [
+        "effects"
+      ],
+      "ingredients": {
+        "fill": "Independent",
+        "translucency": "Independent",
+        "blur": "Shading softness",
+        "stroke_model": "Modeled rim",
+        "highlight": "Light-facing edge",
+        "inner_shadow": "Dark counterpart possible",
+        "drop_shadow": "Independent",
+        "glow": "—",
+        "grain": "—",
+        "text_treatment": "Can shape glyph relief",
+        "depth": "Raised or recessed",
+        "light_direction": "Shared light angle/altitude"
+      }
+    },
+    {
+      "id": "letterpress",
+      "name": "Letterpress",
+      "kind": "text/glyph relief recipe",
+      "definition": "A screen simulation of an impression pressed into a surface. Dark interior shading with a displaced lighter edge can make text read as debossed; ordinary offset text shadow alone is not sufficient evidence of that intent.",
+      "canonical_example": "José Olarte’s Fireworks-to-CSS worked text demonstrations. This is simulated impression, not a claim about every physical letterpress printing process.",
+      "sources": [
+        "letterpress"
+      ],
+      "ingredients": {
+        "fill": "Surface plus ink",
+        "translucency": "Independent",
+        "blur": "Fine text shading",
+        "stroke_model": "Glyph contour",
+        "highlight": "Lower lit edge in demo",
+        "inner_shadow": "Impression shading",
+        "drop_shadow": "Not required",
+        "glow": "—",
+        "grain": "Optional paper texture",
+        "text_treatment": "Debossed glyph",
+        "depth": "Recessed inscription",
+        "light_direction": "Consistent opposed edges"
+      }
+    },
+    {
+      "id": "grain",
+      "name": "Grain",
+      "kind": "microtexture primitive",
+      "definition": "Fine spatial variation applied as texture. Photoshop’s Grain exposes amount, size and roughness; procedural noise is another construction, not evidence that all grain shares one distribution.",
+      "canonical_example": "Photoshop’s Grain adjustment workflow; W3C feTurbulence illustrations show a procedural alternative.",
+      "sources": [
+        "grain",
+        "noise"
+      ],
+      "ingredients": {
+        "fill": "Texture overlay or modulation",
+        "translucency": "Texture alpha optional",
+        "blur": "Not required",
+        "stroke_model": "Independent",
+        "highlight": "Independent",
+        "inner_shadow": "—",
+        "drop_shadow": "—",
+        "glow": "—",
+        "grain": "Defining",
+        "text_treatment": "Usually separate from glyphs (proposal)",
+        "depth": "No geometric depth implied",
+        "light_direction": "None unless lighting modulates it"
+      }
+    }
+  ]
+}

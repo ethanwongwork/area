@@ -1,0 +1,34 @@
+{
+  "status": "analytical research examples; not screenshots or conformance results",
+  "model": "normal source-over in encoded sRGB, opaque final backing; WCAG relative luminance applied after composition",
+  "sources": {
+    "composition": "https://www.w3.org/TR/compositing-1/#simplealphacompositing",
+    "area_formula": "https://github.com/ethanwongwork/area/blob/6f896789a5200bcbd34fe87de458e60ca82141d6/packages/tokens/src/color/contrast.ts#L25-L40",
+    "neumorphism_defaults": "https://github.com/adamgiebl/neumorphism/blob/8ab93a6bea6493cc464d45a334b5fb7a90d34308/src/Configuration.js#L11-L23",
+    "neumorphism_generation": "https://github.com/adamgiebl/neumorphism/blob/8ab93a6bea6493cc464d45a334b5fb7a90d34308/src/Configuration.js#L89-L104"
+  },
+  "endpoint_counterexample": {
+    "provenance": "authored synthetic inputs, not a proposed preset",
+    "foreground": "#767676",
+    "tint": "#ffffff",
+    "tint_alpha": 0.01,
+    "on_black_backdrop": 4.55280798126249,
+    "on_white_backdrop": 4.542224959605253,
+    "interior_backdrop_srgb": [
+      0.4573182808476926,
+      0.4573182808476926,
+      0.4573182808476926
+    ],
+    "on_interior_backdrop": 1.0
+  },
+  "neumorphism_source_palette": {
+    "provenance": "task 06 R08 source preset; analytical palette bounds only",
+    "body_backdrop": "#e0e0e0",
+    "dark_lobe": "#bebebe",
+    "light_lobe": "#ffffff",
+    "body_backdrop_ratio": 1.0,
+    "dark_lobe_body_ratio": 1.408000241964898,
+    "light_lobe_body_ratio": 1.320083534140116,
+    "whole_palette_extreme_ratio": 1.858677935483161
+  }
+}

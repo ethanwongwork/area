@@ -1,0 +1,66 @@
+# Preference policy and per-role fallbacks
+
+**Proposed Area behavior, not implemented settings.** Public preference documentation checked 2026-10-08. The fallback keeps the part's meaning, geometry and focus ownership while removing optional optical channels. None/Trace/Quiet/Full from task 05 are not opacity multipliers. [Research model and policy](evidence.md#research-inputs).
+
+## Four independent signals
+
+**T — `prefers-reduced-transparency: reduce`.** MDN lists the feature as experimental/limited availability; a false query result alone does not establish that the browser supports the feature or that the user wants translucency. [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@media/prefers-reduced-transparency).
+
+Propose an explicit app setting `transparency: auto | reduce` in addition to the OS query. Reduction selects a tested opaque body for reading/control surfaces, disables backdrop acquisition/lensing and preserves separate ink/edges. Turning off blur without replacing transparent fill can make text harder to read. Prefer opaque base CSS, with translucent enhancement only on a verified path; unknown support remains opaque unless the user explicitly chooses an available, verified presentation through the app. Such a choice must not override a positive OS reduction signal. Do not implement reduction by applying opacity to the entire element, which would dim its descendants.
+
+**C — `prefers-contrast`.** Values distinguish `more`, `less`, `custom` and `no-preference`; a custom palette is not necessarily simply “more.” [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@media/prefers-contrast). Proposed `more`: strong existing semantic edges/marks, plain opaque reading grounds and removal of distracting grain/gloss/halo. Proposed `less`: calm decoration and optional extremes without lowering Area's text/required-indicator floors. `custom`: defer to forced-colors handling where active and otherwise preserve usable semantic paint. `no-preference` never waives default contrast checks.
+
+Current Area permits explicit `data-area-contrast="standard"` to restore standard inside an OS-more scope. [Emitter L156–174](https://github.com/ethanwongwork/area/blob/6f896789a5200bcbd34fe87de458e60ca82141d6/packages/tokens/src/emit/css.ts#L156-L174). **Proposed stronger material policy:** an author's local recipe/standard choice cannot re-enable optics suppressed by a user's more/reduce request. Treat user preference provenance separately from theme styling; this would be an explicit implementation change, not a claim about today's cascade.
+
+**F — `forced-colors: active`.** Browsers force common paint to system colors, suppress box/text shadows and non-URL background images; URL images can remain. Native element semantics affect chosen system colors. [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@media/forced-colors). Proposed material fallback disables decorative image grain, SVG lens/filter effects, gradients, gloss and bloom explicitly, and uses system-color bodies, real borders/outlines and actual state marks. Do not assume the browser removes every texture/filter, and do not set `forced-color-adjust: none` on a whole glass subtree. Retain narrowly justified literal-color/media exceptions with labels/boundaries; Area already has targeted system-color implementations. [Current forced-color rules](https://github.com/ethanwongwork/area/blob/6f896789a5200bcbd34fe87de458e60ca82141d6/packages/styles/src/forced-colors.css#L1-L106).
+
+**Task 19 correction / D7:** forced-color replacement preserves background alpha; `backdrop-filter` is not automatically reset. A system-color token alone can therefore leave glass translucent. On each actual material paint receiver, set `background: Canvas` (opaque, including clearing images), `backdrop-filter: none` and `-webkit-backdrop-filter: none`; remove optical pseudo-layer paint too. Keep inherited content opaque and preserve system-color focus/required edges and native semantics. Use `CanvasText` where appropriate for the receiver, with native field/button system colors where semantics require them. Do not force group opacity to 1 indiscriminately: the existing disabled-group owner remains responsible. [CSS Color Adjustment forced properties](https://drafts.csswg.org/css-color-adjust-1/#forced-colors-properties), checked 2026-10-11.
+
+```css
+@media (forced-colors: active) {
+  .research-material-receiver {
+    background: Canvas;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .research-material-receiver::before,
+  .research-material-receiver::after {
+    /* Only optical layers: functional marks/focus pseudos need separate adapters. */
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}
+```
+
+**M — `prefers-reduced-motion: reduce`.** The query detects a preference to reduce motion; it is independent of transparency. [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@media/prefers-reduced-motion). Proposed material fallback stops light tracking, parallax, elastic lensing, moving gloss, gradient travel, pulsing bloom and time-varying noise. Preserve immediate state feedback and loading/progress meaning through an existing static indicator/text; do not freeze a loop at its invisible frame. Cancel JS/RAF and SVG animation paths too, including on a preference change during playback. The current motion token fallback alone is not evidence those future paths would stop. [Current emitter](https://github.com/ethanwongwork/area/blob/6f896789a5200bcbd34fe87de458e60ca82141d6/packages/tokens/src/emit/css.ts#L177-L182).
+
+Native precedent: Microsoft documents solid acrylic fallback when transparency is disabled and user-selected backgrounds in high contrast. Apple describes distinct transparency/contrast/motion adaptations for native Liquid Glass. These support deliberate fallbacks; a web approximation does not receive native adaptation automatically. [Microsoft](https://learn.microsoft.com/en-us/windows/apps/design/style/acrylic), [Apple](https://developer.apple.com/videos/play/wwdc2025/219/).
+
+## Resolution and scope
+
+Proposed order: retain semantics and required paint → resolve system-color mode → enforce opaque/readability fallback → simplify for contrast → stop optional motion → apply remaining role/recipe caps. Combine signals: forced colors plus reduced motion must produce visible static system marks; transparency reduction does not cancel focus or selected states. Safety fallback also applies when optical support/evidence is missing, even without a preference signal.
+
+Keep **requested controls** separate from **effective outputs**. Media/role guards operate on effective channels so inline blur/glow requests cannot restore suppressed paint. Do not let removing a decorative shadow remove a box-shadow used as a required marker: replace that marker with a real solid border/shape first. Re-derive at all relevant axis, preference, optical-control and painted-part boundaries, including portal destinations; never register derived/paired colors with `@property`. Keep Surface as the cast policy owner. [Area ownership](evidence.md#area-sources), [task 07 proposed integration](../07-controls/architecture.md).
+
+Preference changes should preserve focus, hit geometry, scroll position, values, expanded/selected state and accessible names; no layout-shifting border addition. Reserve required edge geometry in the ordinary layout or paint an appropriate outline. Preserve near-black semantic surfaces instead of making every dark fallback white. In forced colors, user system colors take priority over authored near-black aesthetics.
+
+## Role fallbacks
+
+Each row is a proposed mapping of task 04/05 roles. T/C/F/M may co-occur; the strictest channel restriction wins. Required text and indicator thresholds are in [the method](method.md), not lowered here.
+
+| Role | Opaque/reduced-transparency or unresolved optics | More contrast / low-boundary failure | Forced colors | Reduced motion / invariants |
+| --- | --- | --- | --- | --- |
+| page | Existing opaque `bg-page`; remove transmitted scene behind reading content. | Calm semantic page; no grain/gloss under reading. | Canvas ground, CanvasText content. | Stop animated scene; keep layout and scrolling semantics. |
+| container | Existing appropriate opaque surface on actual painted shells; layout-only wrappers still unpainted. | Plain reading plane; stronger edge only when it conveys required information. | System body/edge when necessary; preserve grouping semantics. | Static body; no wandering illumination; never turn wrappers into surfaces. |
+| floating surface | One opaque shell, arrow continues its body; do not blur each row. | Visible shell separation and independent required focus; no bright halo competition. | System panel with real border where shadow previously supplied separation. | Immediate/static optical layers; keep overlay focus/dismissal/placement behavior. |
+| raised control | Opaque semantic plate where it has one; ghost controls need not gain arbitrary fill. | Qualify identifying label/icon/state; add required solid edge when needed. No new elevation. | Native/system ButtonFace/ButtonText or appropriate state pair with actual marks. | Static gloss/relief; foreground unchanged on hover; preserve press feedback. |
+| recessed field/track | Opaque editing well or track; remove lensing through values. | Required field edge or distinct track/handle cue independent of inset shadow. | Canvas/CanvasText field or appropriate track system paint; focus/invalid distinct. | Keep text entry and exact scale; no animated cavity; do not erase focus halo meaning. |
+| thumb/knob | Opaque body, preserve travel and dimensions. | Required thumb cue against track and local background; do not rely on float shadow. | Real system-colored body/edge, visible focus. | Instant final position if motion reduced; no parallax/elasticity. |
+| indicator/fill | Preserve solid semantic/literal data core; drop optional transmitted coating. | Required core/shape/label survives; a supplementary halo is insufficient. | System selection/mark pair, text or shape redundancy; literal-color exception narrowly scoped. | Static truthful status/progress; no pulsing glow dependency or frozen invisible state. |
+| divider | Plain structural rule; remove decorative refraction. | Distinguish decorative seam from required graphic separator; preserve applicable cue. | Actual system-colored line, not a shadow-only groove. | No glint/travel; preserve continuity and hierarchy. |
+| edge | Solid optional rim if useful; required edges remain separate. | Replace fading required contour with qualified solid cue. | Real border/outline; no gradient-mask-only boundary. | Static; no chasing focus rim. Geometry preserved. |
+| glyph | Plain semantic ink; intrinsic image/video pixels remain content. | Required icon contrast or equivalent visible cue; no engraving/glow substitute. | Appropriate system ink; retain meaningful media/literal colors with independent labels where necessary. | No shimmer/tilt; do not remove status glyph with its effect. |
+| text | Existing readable opaque ink on qualified ground; no lens/texture across prose/code. | Preserve text floors; remove letterpress/glow, retain syntax meaning and other cues. | CanvasText/ButtonText/HighlightText as appropriate; avoid blanket opt-out. | Stable text; no blinking illumination; keep loading/state announcements distinct. |
+| scrim | Keep functional occlusion; it is not a material coating. Qualify foreground reading ground independently. | Preserve dialog/context separation; never infer readable text from scrim alpha alone. | Test modal separation and panel boundary using user colors; don't rely on dimming. | Static occlusion; focus stays in the intended active overlay; no decorative blur/noise added. |
+
+A modal scrim is intentionally an exception to “everything becomes opaque”: making the whole viewport a solid wall or removing it blindly could break context. Its functional policy and modal behavior stay separately reviewed. The panel must remain identifiable even if dimming is unavailable. Likewise literal color ramps/media must not be recolored merely to preserve a decorative material identity.

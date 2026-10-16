@@ -152,4 +152,7 @@ Not yet compared side by side with Dev Mode's real values (paywalled).
   Code swatch and ColorSwatch edge (owner decision 2026-09-28).
 - 2026-10-12 · owner, review round 15: approved.
 - 2026-10-14 · owner: "merge it, then continue working" → all-axis sweep of Surface 0 at Elevation 0 (90 families, light and dark): the outline style (no fill) draws its edge at `stroke-width` through Code's `--_code-border`, so it keeps it at Surface 0; the row's inset counts it.
+- 2026-10-14 · owner: "fix token row so it can narrow too" → the component already fills its container (`inline-size:
+  100%`); the gallery demos' column was a fixed 288, so the desktop gallery could not lay the row out at its content's
+  width. The demos' column is now up to 288 (`max-inline-size`), so the row narrows with its container.
 - 2026-10-15 · Copy button built → a copyable row uses its `useCopy` and `CopyStatus`: the copied state holds 2000 ms (was 1600). docs/specs/copy-button.md.

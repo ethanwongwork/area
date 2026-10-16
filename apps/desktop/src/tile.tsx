@@ -44,7 +44,8 @@ export interface TileProps {
   onSelect?: () => void;
   /**
    * Opening the tile's own view (Components: its family's Stage) on a double-click, as Finder and
-   * Figma open what a click selects. A double-click in a text field stays the field's.
+   * Figma open what a click selects, or on a click with `openOnClick`. A double-click in a text
+   * field stays the field's.
    */
   onOpen?: () => void;
   pressable?: boolean;
@@ -66,21 +67,35 @@ export interface TileProps {
   stageScope?: Record<string, string>;
   /** The stage is shown, not used: its content is inert. */
   inert?: boolean;
+  /**
+   * A card (owner, 2026-10-14, after Compass's gallery): a square tile, the stage first and its label
+   * as a strong title at the foot, `actions` (a "More" menu) at the end of that row.
+   */
+  card?: boolean;
+  actions?: ReactNode;
+  /** A click on the tile, outside the controls in its specimen and head, opens it (`onOpen`). */
+  openOnClick?: boolean;
   children?: ReactNode;
 }
 
-export function Tile({ label, value, span, stage, selected, onSelect, onOpen, pressable, id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, paint, scope, stageScope, inert, children }: TileProps) {
+export function Tile({ label, value, span, stage, selected, onSelect, onOpen, card, actions, openOnClick, pressable, id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, paint, scope, stageScope, inert, children }: TileProps) {
   // A pressable tile is a button, which holds phrasing content only: its parts are spans there.
   const Part = pressable ? "span" : "div";
-  const head = (
+  const head = card ? (
+    <Part className="gallery-tile__caption" {...APP_SCALE}>
+      <span className="gallery-tile__title">{label}</span>
+      {actions}
+    </Part>
+  ) : (
     <Part className="gallery-tile__head" {...APP_SCALE}>
       <span className="gallery-tile__label">{label}</span>
       {value != null ? <span className="gallery-tile__value">{value}</span> : null}
     </Part>
   );
+  const viewClass = "gallery-tile__view";
   const view = stage === "none" ? null : stage === "fit"
-    ? <Part className="gallery-tile__view"><Part className="gallery-tile__stage">{children}</Part></Part>
-    : <Part className="gallery-tile__view" inert={inert || undefined} {...stageScope}>{children}</Part>;
+    ? <Part className={viewClass}><Part className="gallery-tile__stage">{children}</Part></Part>
+    : <Part className={viewClass} inert={inert || undefined} {...stageScope}>{children}</Part>;
   const shared = {
     id,
     className: "gallery-tile",
@@ -88,14 +103,17 @@ export function Tile({ label, value, span, stage, selected, onSelect, onOpen, pr
     "data-stage": stage,
     "data-painted": paint ? "" : undefined,
     "data-scoped": scope ? "" : undefined,
+    "data-layout": card ? "card" : undefined,
     "aria-label": ariaLabel,
     "data-key": dataKey,
     "data-name": dataName,
     style: paint ? ({ "--_paint": paint.background, "--_ink": paint.color } as CSSProperties) : undefined,
     ...scope,
   };
+  // A card reads specimen first, title at its foot.
+  const parts = card ? <>{view}{head}</> : <>{head}{view}</>;
   if (pressable) {
-    return <button type="button" {...shared} aria-pressed={selected ?? false} onClick={onSelect}>{head}{view}</button>;
+    return <button type="button" {...shared} aria-pressed={selected ?? false} onClick={onSelect}>{parts}</button>;
   }
   // A tile whose stage is inert has nothing inside to focus, so the tile itself is the control: a
   // Tab stop that Enter or Space selects, its state as aria-pressed (product UI rule 5). Its content
@@ -104,26 +122,31 @@ export function Tile({ label, value, span, stage, selected, onSelect, onOpen, pr
     return (
       <article {...shared} role="button" tabIndex={0} aria-pressed={selected ?? false} onClick={onSelect}
         onKeyDown={event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onSelect(); } }}>
-        {head}{view}
+        {parts}
       </article>
     );
   }
   return (
     <article {...shared} data-selected={selected ? "" : undefined} onPointerDown={onSelect} onFocusCapture={onSelect}
-      onDoubleClick={onOpen ? event => { if (!(event.target as Element).closest("input, textarea, select, [contenteditable]")) onOpen(); } : undefined}>
-      {head}{view}
+      onClick={onOpen && openOnClick ? event => { if (!(event.target as Element).closest("a, button, input, textarea, select, label, [contenteditable], [role=button], [role=switch], [role=checkbox], [role=radio], [role=tab], [role=slider], [role=combobox]")) onOpen(); } : undefined}
+      onDoubleClick={onOpen && !openOnClick ? event => { if (!(event.target as Element).closest("input, textarea, select, [contenteditable]")) onOpen(); } : undefined}>
+      {parts}
     </article>
   );
 }
 
-/** A grid of one span: unit or wide tiles on the shared unit, or row tiles stacked. */
-export function TileGrid({ span, children }: { span: TileSpan; children: ReactNode }) {
-  return <div className={span === "row" ? "studio-stack" : `studio-grid studio-grid--${span}`}>{children}</div>;
+/**
+ * A grid of one span: unit or wide tiles on the shared unit, or row tiles stacked. `hug`: rows as
+ * tall as their tallest tile's content instead of 5:4 (colour cards). `cards`: square card tiles
+ * on their own columns (280 at the least, with the zoom).
+ */
+export function TileGrid({ span, hug, cards, children }: { span: TileSpan; hug?: boolean; cards?: boolean; children: ReactNode }) {
+  return <div className={span === "row" ? "studio-stack" : `studio-grid studio-grid--${span}${hug ? " studio-grid--hug" : ""}${cards ? " studio-grid--cards" : ""}`}>{children}</div>;
 }
 
 /** A titled group on the Canvas: a family, a scale, a category, a setting. */
 export function CanvasSection({ id, title, lede, children }: { id: string; title?: ReactNode; lede?: ReactNode; children: ReactNode }) {
-  // Untitled when the Canvas bar already names it (one scale, one setting).
+  // Untitled when the Sidebar's selected row already names it (one scale, one setting).
   return (
     <section className="studio-section" id={id} aria-labelledby={title ? `${id}-title` : undefined}>
       {title ? <h2 className="studio-canvas__section-title" id={`${id}-title`} {...APP_SCALE}>{title}</h2> : null}

@@ -18,4 +18,15 @@
   /* spec: Figma's typed zoom field is the menu's first row, above a rule. Here it is a soft Input sm on the rows'
      4 inset (the Menu's padding), so its text lines up with the rows' text. */
   .area-zoom-control__field { display: flex; }
+
+  /*
+   * Stepper (owner, 2026-10-14, after Chrome's and ChatGPT Atlas's "− 100% +" zoom row): Zoom out and
+   * Zoom in, ghost icon Buttons at the control's size, either side of the percentage, which keeps
+   * the menu and drops its chevron. The group is the controls side by side, as a Button group's
+   * ghost buttons (gap 0: each plate is its own target). The percentage holds "100%" (three tabular
+   * figures and the sign, under 5ch), so 50%, 200% or a label leave the buttons where they are.
+   */
+  .area-zoom-control__stepper { display: inline-flex; align-items: center; }
+  .area-zoom-control--stepper .area-zoom-control__value { display: inline-block; min-inline-size: 5ch; text-align: center; }
+  .area-zoom-control__step { flex: none; }
 }

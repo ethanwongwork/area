@@ -1,0 +1,21 @@
+{
+  "ink": "#767676",
+  "threshold": 4.5,
+  "body": "#ffffff",
+  "alpha": 0.01,
+  "backdrop": {
+    "low": [
+      0,
+      0,
+      0
+    ],
+    "high": [
+      1,
+      1,
+      1
+    ]
+  },
+  "stops": [],
+  "space": "srgb",
+  "blend": "source-over"
+}

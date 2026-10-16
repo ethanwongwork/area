@@ -1,0 +1,2315 @@
+{
+  "snapshot": "4c1854202a8e109479d5b83ef24a8325231da056",
+  "checked": "2026-10-07",
+  "families": [
+    {
+      "slug": "toolbar",
+      "batch": 1,
+      "batch_name": "Toolbar controls",
+      "spec": "docs/specs/toolbar.md",
+      "spec_status": "**Status:** accepted · 2026-09-27 (batches 1-3; was: in review · 2026-09-27 (redesign from Figma's toolbelt, validated side by side in Claude in Chrome; was Complete))",
+      "audited": true,
+      "visual": [
+        187,
+        210
+      ],
+      "products": [
+        "docs/research/captures/toolbar/figma--bottom-toolbar--rest--light.json",
+        "docs/research/captures/toolbar/figma--mode-switch--hover--light.json",
+        "docs/research/captures/toolbar/figma--mode-switch--rest--light.json",
+        "docs/research/captures/toolbar/figma--split-tool--hover-action--light.json",
+        "docs/research/captures/toolbar/figma--split-tool--hover-chevron--light.json",
+        "docs/research/captures/toolbar/figma--split-tool--rest--light.json",
+        "docs/research/captures/toolbar/figma--split-tool-selected--hover-chevron--light.json",
+        "docs/research/captures/toolbar/figma--split-tool-selected--rest--light.json",
+        "docs/research/captures/toolbar/figma--tool--rest--light.json",
+        "docs/research/captures/toolbar/figma--tool-group--chevron-hover--light.json",
+        "docs/research/captures/toolbar/figma--tool-group--hover--light.json",
+        "docs/research/captures/toolbar/figma--tool-group--selected--light.json",
+        "docs/research/captures/toolbar/figma--toolbelt-row--rest--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-27",
+        "against": "Figma toolbelt, re-checked after the Segmented and split-tool change (tools, chevrons, divider, mode switch)",
+        "line": 19
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 220,
+          "end": 222,
+          "text": "parity, token references and the React tests pass. Unverified: Figma's dark theme (switching it\nneeds the owner), keyboard focus ring in the new track, a screen reader on toggle and track\nsemantics (toggles are `aria-pressed`; a track is not a radio group)."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "split-button",
+      "batch": 1,
+      "batch_name": "Toolbar controls",
+      "spec": "docs/specs/split-button.md",
+      "spec_status": "**Status:** accepted · 2026-09-26 (was: in review · 2026-09-26 (first build under the capture workflow))",
+      "audited": true,
+      "visual": [
+        196,
+        210
+      ],
+      "products": [
+        "docs/research/captures/split-button/figma--split-tool--hover-action--light.json",
+        "docs/research/captures/split-button/figma--split-tool--hover-chevron--light.json",
+        "docs/research/captures/split-button/figma--split-tool--rest--light.json",
+        "docs/research/captures/split-button/figma--split-tool-selected--hover-chevron--light.json",
+        "docs/research/captures/split-button/figma--split-tool-selected--rest--light.json",
+        "docs/research/captures/split-button/notion--split-main--rest--light.json",
+        "docs/research/captures/split-button/notion--split-menu--rest--light.json",
+        "docs/research/captures/split-button/notion--split-menu-surface--open--light.json",
+        "docs/research/captures/split-button/notion--split-solid-accent--hover-main--light.json",
+        "docs/research/captures/split-button/notion--split-solid-accent--hover-menu--light.json",
+        "docs/research/captures/split-button/notion--split-solid-accent--rest--light.json"
+      ],
+      "other_references": [
+        "docs/research/captures/split-button/shadcn--group-dropdown-outline--rest--light.json",
+        "docs/research/captures/split-button/shadcn--group-md-outline--rest--light.json",
+        "docs/research/captures/split-button/shadcn--split-dropdown--rest--light.json",
+        "docs/research/captures/split-button/shadcn--split-separator--rest--light.json"
+      ],
+      "validated": {
+        "date": "2026-09-27",
+        "against": "Figma's toolbelt tool groups (tool and chevron plates, hover, selected)",
+        "line": 23
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 217,
+          "end": 217,
+          "text": "- Unverified: dark theme, screen reader announcement, forced colors, RTL divider position."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "segmented",
+      "batch": 1,
+      "batch_name": "Toolbar controls",
+      "spec": "docs/specs/segmented.md",
+      "spec_status": "**Status:** accepted · 2026-09-27 (batches 1-3; was: in review · 2026-09-26 (cohesion audit; second pass the same day))",
+      "audited": true,
+      "visual": [
+        142,
+        156
+      ],
+      "products": [
+        "docs/research/captures/segmented/figma--flow-row--rest--light.json",
+        "docs/research/captures/segmented/figma--panel-tabs--rest--light.json",
+        "docs/research/captures/segmented/figma--view-toggle--rest--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-27",
+        "against": "ChatGPT's Chat / Work switch and Figma's mode switch",
+        "line": 83
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 163,
+          "end": 164,
+          "text": "[the audit](../research/cohesion-audit.md#verification). Unverified: hover and focus\ncaptures, dark theme."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "nav",
+      "batch": 2,
+      "batch_name": "Navigation lists",
+      "spec": "docs/specs/nav.md",
+      "spec_status": "**Status:** accepted · 2026-09-27 (batches 1-3; was: in review · 2026-09-26 (cohesion audit, second pass))",
+      "audited": true,
+      "visual": [
+        181,
+        195
+      ],
+      "products": [
+        "docs/research/captures/nav/chatgpt--sidebar-projects-section--rest--light.json",
+        "docs/research/captures/nav/chatgpt--sidebar-recents-section--rest--light.json",
+        "docs/research/captures/nav/chatgpt--sidebar-section-label--rest--light.json",
+        "docs/research/captures/nav/chatgpt--sidebar-top-group--rest--light.json",
+        "docs/research/captures/nav/notion--sidebar-private-section--rest--light.json",
+        "docs/research/captures/nav/notion--sidebar-sections--rest--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-27",
+        "against": "ChatGPT's and Notion's sidebars (sections, labels, rows, current plate)",
+        "line": 27
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 194,
+          "end": 194,
+          "text": "- Unverified: dark products, an accent Selection theme beside a product."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "menu",
+      "batch": 2,
+      "batch_name": "Navigation lists",
+      "spec": "docs/specs/menu.md",
+      "spec_status": "**Status:** accepted · 2026-09-26 (was: in review · 2026-09-26 (first pass under the capture workflow; reopened from Complete))",
+      "audited": true,
+      "visual": [
+        135,
+        144
+      ],
+      "products": [
+        "docs/research/captures/menu/chatgpt--account-menu--open--light.json",
+        "docs/research/captures/menu/chatgpt--chat-actions-menu--open--light.json",
+        "docs/research/captures/menu/chatgpt--composer-plus-menu--open--dark.json",
+        "docs/research/captures/menu/chatgpt--menu-item-danger--hover--light.json",
+        "docs/research/captures/menu/chatgpt--menu-item-danger--rest--light.json",
+        "docs/research/captures/menu/chatgpt--menu-item-icon--hover--light.json",
+        "docs/research/captures/menu/chatgpt--menu-item-icon--rest--light.json",
+        "docs/research/captures/menu/chatgpt--menu-item-keyboard--highlighted--light.json",
+        "docs/research/captures/menu/chatgpt--menu-item-selected--rest--light.json",
+        "docs/research/captures/menu/chatgpt--menu-item-submenu--rest--light.json",
+        "docs/research/captures/menu/chatgpt--model-menu--open--light.json",
+        "docs/research/captures/menu/chatgpt--profile-menu--hover--dark.json",
+        "docs/research/captures/menu/chatgpt--profile-menu--open--dark.json",
+        "docs/research/captures/menu/figma--account-menu--hover--dark.json",
+        "docs/research/captures/menu/figma--account-menu--open--dark.json",
+        "docs/research/captures/menu/figma--item--hover--light.json",
+        "docs/research/captures/menu/figma--item--rest--light.json",
+        "docs/research/captures/menu/figma--main-menu--open--light.json",
+        "docs/research/captures/menu/figma--more-menu--open--light.json",
+        "docs/research/captures/menu/notion--home-menu--hover--dark.json",
+        "docs/research/captures/menu/notion--home-menu--open--dark.json",
+        "docs/research/captures/menu/notion--item--hover--light.json",
+        "docs/research/captures/menu/notion--item-shortcut--rest--light.json",
+        "docs/research/captures/menu/notion--menu-item-icon--hover--light.json",
+        "docs/research/captures/menu/notion--menu-item-icon--rest--light.json",
+        "docs/research/captures/menu/notion--menu-item-keyboard--highlighted--light.json",
+        "docs/research/captures/menu/notion--menu-item-shortcut--rest--light.json",
+        "docs/research/captures/menu/notion--menu-item-toggle--rest--light.json",
+        "docs/research/captures/menu/notion--menu-item-trash--rest--light.json",
+        "docs/research/captures/menu/notion--page-actions-menu--open--light.json",
+        "docs/research/captures/menu/notion--page-menu--open--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-27",
+        "against": "Notion's page menu (icons, shortcuts, rules, danger row, lift)",
+        "line": 31
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 153,
+          "end": 153,
+          "text": "- Unverified: dark theme, screen-reader announcement of menu items and submenus."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "tree-view",
+      "batch": 2,
+      "batch_name": "Navigation lists",
+      "spec": "docs/specs/tree-view.md",
+      "spec_status": "**Status:** accepted · 2026-09-26 (was: in review · 2026-09-25 (pass 3: even spacing on shared columns, marker removed, variant pass))",
+      "audited": true,
+      "visual": [
+        118,
+        129
+      ],
+      "products": [
+        "docs/research/captures/tree-view/figma--layer-row--rest--light.json",
+        "docs/research/captures/tree-view/figma--layer-row--selected--light.json",
+        "docs/research/captures/tree-view/notion--sidebar-row--rest--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-27",
+        "against": "Notion's sidebar tree (rows, hover, row actions)",
+        "line": 35
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 143,
+          "end": 146,
+          "text": "- Unverified: dark theme, Notion indent and hover, Figma layers geometry (row height, 11px\n  type, icon and control sizes: needs a capture in the editor), screen-reader behaviour of\n  row actions. Layer-type glyphs (frame, rectangle, component, lock) are stand-ins until\n  drawn under the icon construction rules."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "toast",
+      "batch": 3,
+      "batch_name": "Status messages",
+      "spec": "docs/specs/toast.md",
+      "spec_status": "**Status:** accepted · 2026-09-26 (was: in review · 2026-09-26 (pass 1: Popover's inset and corner, 40 tall, shared lift))",
+      "audited": true,
+      "visual": [
+        107,
+        116
+      ],
+      "products": [
+        "docs/research/captures/toast/notion--toast-link-copied--open--light.json"
+      ],
+      "other_references": [
+        "docs/research/captures/toast/shadcn--toast-error--open--light.json",
+        "docs/research/captures/toast/shadcn--toast-success--open--light.json",
+        "docs/research/captures/toast/shadcn--toast-title-description-action--open--light.json"
+      ],
+      "validated": {
+        "date": "2026-09-27",
+        "against": "Notion's Link copied toast (shape, icon, action; Notion's is inverse)",
+        "line": 79
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 114,
+          "end": 115,
+          "text": "owner's lighter-fill direction; an inverse toast remains an open option. Unverified: dark theme,\nthe action and dismiss hover on screen."
+        },
+        {
+          "line": 123,
+          "end": 123,
+          "text": "- Unverified: dark theme, screen reader announcement timing."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "count",
+      "batch": 4,
+      "batch_name": "Counts and banners",
+      "spec": "docs/specs/count.md",
+      "spec_status": "**Status:** accepted · 2026-09-28 (owner, batch 4)",
+      "audited": true,
+      "visual": [
+        122,
+        139
+      ],
+      "products": [
+        "docs/research/captures/count/notion--board-group-count-neutral--rest--light.json",
+        "docs/research/captures/count/notion--board-group-header-neutral--rest--light.json"
+      ],
+      "other_references": [
+        "docs/research/captures/count/primer--counter-label-secondary--rest--light.json",
+        "docs/research/captures/count/primer--underline-nav-counter--current--light.json",
+        "docs/research/captures/count/primer--underline-nav-counter--rest--light.json"
+      ],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "Notion's board group counts (neutral and tinted groups: size, gutter, ink, place after the label)",
+        "line": 75
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 144,
+          "end": 144,
+          "text": "- Unverified: dark theme, forced colours, screen-reader reading of `label`."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "alert",
+      "batch": 4,
+      "batch_name": "Counts and banners",
+      "spec": "docs/specs/alert.md",
+      "spec_status": "**Status:** accepted · 2026-09-28 (owner, batch 4; banner layout added)",
+      "audited": true,
+      "visual": [
+        168,
+        182
+      ],
+      "products": [
+        "docs/research/captures/alert/notion--callout--rest--light.json"
+      ],
+      "other_references": [
+        "docs/research/captures/alert/openai--business-banner--rest--light.json",
+        "docs/research/captures/alert/openai--daybreak-banner--rest--light.json",
+        "docs/research/captures/alert/primer--banner-hidden-title-actions-dismiss--rest--light.json"
+      ],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "Notion's callout block (fill, edge, icon on the first line); banner layout against OpenAI's Daybreak banner (height, corner, 16 inset, end link)",
+        "line": 39
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 179,
+          "end": 179,
+          "text": "- Unverified: dismiss hover and focus on screen, dark theme."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "avatar",
+      "batch": 5,
+      "batch_name": "Identity and status marks",
+      "spec": "docs/specs/avatar.md",
+      "spec_status": "**Status:** accepted · 2026-09-28 (owner, batch 5; initials scale and Irene photo approved the same day)",
+      "audited": true,
+      "visual": [
+        142,
+        186
+      ],
+      "products": [
+        "docs/research/captures/avatar/figma--account-avatar--rest--light.json",
+        "docs/research/captures/avatar/figma--avatar-initial--rest--light.json",
+        "docs/research/captures/avatar/figma--file-card-avatar--rest--light.json",
+        "docs/research/captures/avatar/figma--team-avatar--rest--light.json",
+        "docs/research/captures/avatar/notion--avatar-person-initial--rest--light.json",
+        "docs/research/captures/avatar/notion--avatar-workspace-square--rest--light.json",
+        "docs/research/captures/avatar/notion--share-person-avatar--rest--light.json",
+        "docs/research/captures/avatar/notion--share-workspace-avatar--rest--light.json",
+        "docs/research/captures/avatar/notion--workspace-avatar--rest--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "Figma's file-browser avatars and Notion's person and workspace avatars (size, shape, fill, initial)",
+        "line": 43
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 184,
+          "end": 185,
+          "text": "did not inspect screenshots. Unverified: dark theme, an active ring next to a focused\navatar-bearing control, a side-by-side with Figma's initials avatar."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "indicator",
+      "batch": 5,
+      "batch_name": "Identity and status marks",
+      "spec": "docs/specs/indicator.md",
+      "spec_status": "**Status:** accepted · 2026-09-28 (owner, batch 5)",
+      "audited": true,
+      "visual": [
+        256,
+        343
+      ],
+      "products": [
+        "docs/research/captures/indicator/chatgpt--badge-new--rest--light.json",
+        "docs/research/captures/indicator/figma--bell-unread-dot--rest--light.json",
+        "docs/research/captures/indicator/notion--board-group-count--rest--light.json",
+        "docs/research/captures/indicator/notion--board-group-tag--rest--light.json",
+        "docs/research/captures/indicator/notion--help-dot--rest--light.json"
+      ],
+      "other_references": [
+        "docs/research/captures/indicator/fluent--counter-medium--rest--light.json",
+        "docs/research/captures/indicator/fluent--counter-small--rest--light.json",
+        "docs/research/captures/indicator/fluent--presence-available-extra-large--rest--light.json",
+        "docs/research/captures/indicator/fluent--presence-available-extra-small--rest--light.json",
+        "docs/research/captures/indicator/fluent--presence-available-large--rest--light.json",
+        "docs/research/captures/indicator/fluent--presence-available-medium--rest--light.json",
+        "docs/research/captures/indicator/fluent--presence-available-small--rest--light.json",
+        "docs/research/captures/indicator/fluent--presence-available-tiny--rest--light.json",
+        "docs/research/captures/indicator/uui--avatar-offline-md--rest--light.json",
+        "docs/research/captures/indicator/uui--avatar-online-2xl--rest--light.json",
+        "docs/research/captures/indicator/uui--avatar-online-lg--rest--light.json",
+        "docs/research/captures/indicator/uui--avatar-online-md--rest--light.json",
+        "docs/research/captures/indicator/uui--avatar-online-sm--rest--light.json",
+        "docs/research/captures/indicator/uui--avatar-online-xl--rest--light.json",
+        "docs/research/captures/indicator/uui--avatar-online-xs--rest--light.json"
+      ],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "Figma's notification bell dot and Notion's help-button activity dot (size, cutout, placement)",
+        "line": 47
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 351,
+          "end": 353,
+          "text": "- Unverified: product dark themes; Notion's inbox count and presence (not present);\n  Figma multiplayer avatars; counts on rectangular owners in any product; cross-engine,\n  screen-reader and forced-colors execution."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "badge",
+      "batch": 5,
+      "batch_name": "Identity and status marks",
+      "spec": "docs/specs/badge.md",
+      "spec_status": "**Status:** accepted · 2026-09-28 (owner, batch 5)",
+      "audited": true,
+      "visual": [
+        521,
+        543
+      ],
+      "products": [
+        "docs/research/captures/badge/chatgpt--status-paid--rest--light.json",
+        "docs/research/captures/badge/figma--ai-badge--rest--light.json",
+        "docs/research/captures/badge/figma--label-ai--rest--light.json",
+        "docs/research/captures/badge/figma--plan-badge--rest--light.json",
+        "docs/research/captures/badge/figma--plan-free-menu--rest--dark.json",
+        "docs/research/captures/badge/notion--select-brown--rest--light.json",
+        "docs/research/captures/badge/notion--select-red--rest--light.json",
+        "docs/research/captures/badge/notion--status-dot--rest--light.json",
+        "docs/research/captures/badge/notion--status-dot-green--rest--light.json",
+        "docs/research/captures/badge/notion--status-dot-yellow--rest--light.json",
+        "docs/research/captures/badge/notion--tag-blue--rest--light.json",
+        "docs/research/captures/badge/notion--tag-green--rest--light.json",
+        "docs/research/captures/badge/notion--tag-purple--rest--light.json",
+        "docs/research/captures/badge/notion--tag-yellow--rest--light.json"
+      ],
+      "other_references": [
+        "docs/research/captures/badge/uui--avatar-md--rest--light.json",
+        "docs/research/captures/badge/uui--close-md--rest--light.json",
+        "docs/research/captures/badge/uui--color-md--rest--light.json",
+        "docs/research/captures/badge/uui--dot-md--rest--light.json",
+        "docs/research/captures/badge/uui--icon-leading-md--rest--light.json",
+        "docs/research/captures/badge/uui--icon-only-sm--rest--light.json",
+        "docs/research/captures/badge/uui--icon-trailing-md--rest--light.json",
+        "docs/research/captures/badge/uui--modern-md--rest--light.json",
+        "docs/research/captures/badge/uui--pill-lg--rest--light.json",
+        "docs/research/captures/badge/uui--pill-md--rest--light.json",
+        "docs/research/captures/badge/uui--pill-sm--rest--light.json",
+        "docs/research/captures/badge/vscode--badge-new--rest--dark.json"
+      ],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "Figma's AI label and Notion's select tags",
+        "line": 51
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 555,
+          "end": 558,
+          "text": "- Unverified: dark theme in every product (needs the owner's go-ahead to switch), Figma\n  editor badges, hover/focus captures (no product badge is interactive), sm with icons\n  (no composition uses it), browsers without `text-box` (they keep the previous centring\n  and its baseline behaviour)."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "spinner",
+      "batch": 6,
+      "batch_name": "Loading",
+      "spec": "docs/specs/spinner.md",
+      "spec_status": "**Status:** accepted · 2026-09-28 (owner, batch 6)",
+      "audited": true,
+      "visual": [
+        103,
+        117
+      ],
+      "products": [
+        "docs/research/captures/spinner/chatgpt--spinner-18x18--loading--light.json",
+        "docs/research/captures/spinner/chatgpt--spinner-24x24--loading--light.json",
+        "docs/research/captures/spinner/chatgpt--spinner-28x28--loading--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "ChatGPT's conversation spinner (ring, track, sizes, speed)",
+        "line": 59
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 116,
+          "end": 116,
+          "text": "Nothing in Notion or Figma to compare. Unverified: dark theme, forced colours."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "skeleton",
+      "batch": 6,
+      "batch_name": "Loading",
+      "spec": "docs/specs/skeleton.md",
+      "spec_status": "**Status:** accepted · 2026-09-28 (owner, batch 6)",
+      "audited": true,
+      "visual": [
+        125,
+        149
+      ],
+      "products": [
+        "docs/research/captures/skeleton/chatgpt--skeleton-168x16--loading--light.json",
+        "docs/research/captures/skeleton/chatgpt--skeleton-205x16--loading--light.json",
+        "docs/research/captures/skeleton/figma--skeleton-tab--loading--light.json",
+        "docs/research/captures/skeleton/notion--skeleton-group--loading--light.json",
+        "docs/research/captures/skeleton/notion--skeleton-icon--loading--light.json",
+        "docs/research/captures/skeleton/notion--skeleton-text--loading--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "ChatGPT's results shimmer, Figma's tab shimmer and Notion's startup placeholders (fill, band, speed, shape)",
+        "line": 55
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 148,
+          "end": 148,
+          "text": "Unverified: dark theme, the card tile's media corners at the new Card radius on screen."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "progress",
+      "batch": 6,
+      "batch_name": "Loading",
+      "spec": "docs/specs/progress.md",
+      "spec_status": "**Status:** accepted · 2026-09-28 (owner, batch 6)",
+      "audited": true,
+      "visual": [
+        112,
+        134
+      ],
+      "products": [
+        "docs/research/captures/progress/figma--usage-bar--rest--light.json",
+        "docs/research/captures/progress/figma--usage-meter-ai-credits--rest--light.json",
+        "docs/research/captures/progress/figma--usage-meter-card--rest--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "Figma's AI-credits usage meter (height, shape, track, neutral fill)",
+        "line": 63
+      },
+      "owner": true,
+      "unverified": [],
+      "official": true
+    },
+    {
+      "slug": "calendar",
+      "batch": 7,
+      "batch_name": "Date and floating surface",
+      "spec": "docs/specs/calendar.md",
+      "spec_status": "**Status:** accepted · 2026-09-28 (owner, batch 7)",
+      "audited": true,
+      "visual": [
+        180,
+        209
+      ],
+      "products": [
+        "docs/research/captures/calendar/notion--day--hover--light.json",
+        "docs/research/captures/calendar/notion--day-today--rest--light.json",
+        "docs/research/captures/calendar/notion--nav-button--hover--light.json",
+        "docs/research/captures/calendar/notion--range--selected--light.json",
+        "docs/research/captures/calendar/notion--range-start--selected--light.json",
+        "docs/research/captures/calendar/notion--search-date-filter--rest--light.json",
+        "docs/research/captures/calendar/notion--search-date-filter-popover--rest--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "Notion's search Date filter calendar (surface, month label, cells, weeks, today, outside days)",
+        "line": 67
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 216,
+          "end": 217,
+          "text": "- Unverified: screen readers, dark theme, RTL, Firefox/Safari, touch; hover preview was\n  exercised only with synthetic events."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "popover",
+      "batch": 7,
+      "batch_name": "Date and floating surface",
+      "spec": "docs/specs/popover.md",
+      "spec_status": "**Status:** accepted · 2026-09-26 (was: in review · 2026-09-26 (pass 3: close in an even corner, title centred on it, strong title))",
+      "audited": true,
+      "visual": [
+        127,
+        134
+      ],
+      "products": [
+        "docs/research/captures/popover/chatgpt--model-menu--open--light.json",
+        "docs/research/captures/popover/notion--share-popover--open--light.json"
+      ],
+      "other_references": [
+        "docs/research/captures/popover/primer--dialog-header--open--light.json",
+        "docs/research/captures/popover/shadcn--dialog-header--open--light.json",
+        "docs/research/captures/popover/shadcn--popover--open--light.json"
+      ],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "Notion's Share popover (surface, ring, lift, corner)",
+        "line": 71
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 139,
+          "end": 140,
+          "text": "- Unverified: dark theme, screen reader announcement of the dialog, arrow alignment when the\n  anchored popover shifts to stay in view."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "panel",
+      "batch": 8,
+      "batch_name": "Inspector fields",
+      "spec": "docs/specs/panel.md",
+      "spec_status": "**Status:** accepted · 2026-09-28 (owner, batch 8)",
+      "audited": true,
+      "visual": [
+        168,
+        194
+      ],
+      "products": [
+        "docs/research/captures/panel/figma--section-auto-layout--rest--light.json",
+        "docs/research/captures/panel/figma--section-header--rest--light.json",
+        "docs/research/captures/panel/figma--section-title--rest--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "Figma's Design panel (section header, label and field rows, rules, row action column)",
+        "line": 87
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 193,
+          "end": 193,
+          "text": "Unverified: dark theme and a side-by-side with Figma's inspector at the same zoom."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "number-field",
+      "batch": 8,
+      "batch_name": "Inspector fields",
+      "spec": "docs/specs/number-field.md",
+      "spec_status": "**Status:** accepted · 2026-09-26; batch 8 side by side 2026-09-28, no change",
+      "audited": true,
+      "visual": [
+        130,
+        145
+      ],
+      "products": [
+        "docs/research/captures/number-field/figma--appearance-row--rest--light.json",
+        "docs/research/captures/number-field/figma--gap-field--rest--light.json",
+        "docs/research/captures/number-field/figma--number-field--rest--light.json",
+        "docs/research/captures/number-field/figma--number-field-icon--rest--light.json",
+        "docs/research/captures/number-field/figma--number-field-letter--rest--light.json",
+        "docs/research/captures/number-field/figma--number-field-menu--rest--light.json",
+        "docs/research/captures/number-field/figma--opacity--rest--light.json",
+        "docs/research/captures/number-field/figma--rotation--rest--light.json",
+        "docs/research/captures/number-field/figma--width--hover--light.json",
+        "docs/research/captures/number-field/figma--width--rest--light.json",
+        "docs/research/captures/number-field/figma--x-position--rest--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "Figma's Design panel fields (X / Y letters, W / H with a menu, Rotation, Gap)",
+        "line": 91
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 152,
+          "end": 152,
+          "text": "- Unverified: dark theme; Safari and Firefox without `field-sizing`."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "box-field",
+      "batch": 8,
+      "batch_name": "Inspector fields",
+      "spec": "docs/specs/box-field.md",
+      "spec_status": "**Status:** accepted · 2026-09-26; batch 8 side by side 2026-09-28, no change",
+      "audited": true,
+      "visual": [
+        100,
+        114
+      ],
+      "products": [
+        "docs/research/captures/box-field/figma--corner-radius-row--rest--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "Figma's Padding and Corner radius rows (paired fields, per-side toggle on the action column)",
+        "line": 95
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 124,
+          "end": 125,
+          "text": "- Unverified: dark theme; screen reader output; RTL (left/right are physical here, as padding\n  values are); Figma's split layouts (needs opening the panels in the owner's file)."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "property-list",
+      "batch": 9,
+      "batch_name": "Fills",
+      "spec": "docs/specs/property-list.md",
+      "spec_status": "**Status:** accepted · 2026-09-26; batch 9 tiles refined 2026-09-28",
+      "audited": true,
+      "visual": [
+        42,
+        52
+      ],
+      "products": [
+        "docs/research/captures/property-list/figma--fill-row-image--rest--light.json",
+        "docs/research/captures/property-list/figma--fill-section--rest--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "Figma's Fill and Effects rows (hex and opacity, effect type, row actions); owner screenshots",
+        "line": 99
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 60,
+          "end": 60,
+          "text": "Unverified: touch drag on a device; screen reader output of the live region; dark theme."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "color-field",
+      "batch": 9,
+      "batch_name": "Fills",
+      "spec": "docs/specs/color-field.md",
+      "spec_status": "**Status:** accepted · 2026-09-28 (owner, batch 9)",
+      "audited": true,
+      "visual": [
+        123,
+        135
+      ],
+      "products": [
+        "docs/research/captures/color-field/chatgpt--color-field-row--rest--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "Figma's Page colour row (hex, opacity anchored with % at the end)",
+        "line": 103
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 134,
+          "end": 134,
+          "text": "Unverified: Figma side by side at the same zoom, dark theme."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "color-swatch",
+      "batch": 9,
+      "batch_name": "Fills",
+      "spec": "docs/specs/color-swatch.md",
+      "spec_status": "**Status:** accepted · 2026-09-28 (owner, batch 9)",
+      "audited": true,
+      "visual": [
+        96,
+        106
+      ],
+      "products": [
+        "docs/research/captures/color-swatch/figma--fill-swatch-image--rest--light.json",
+        "docs/research/captures/color-swatch/figma--library-swatch--rest--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "The swatch in Figma's Page colour row (leading slot, hairline edge)",
+        "line": 107
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 104,
+          "end": 105,
+          "text": "The gallery shows ColorSwatch's tiles in named groups. Unverified: Figma side by side, dark\ntheme, forced colours."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "color-swatch-picker",
+      "batch": 10,
+      "batch_name": "Pickers",
+      "spec": "docs/specs/color-swatch-picker.md",
+      "spec_status": "**Status:** accepted (owner; Complete in `component-status.mjs`; was: in review · 2026-09-26 (cohesion audit; second pass with Notion and Figma))",
+      "audited": true,
+      "visual": [
+        130,
+        143
+      ],
+      "products": [
+        "docs/research/captures/color-swatch-picker/figma--library-swatch-grid--rest--light.json",
+        "docs/research/captures/color-swatch-picker/figma--library-swatch-row--rest--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "Figma's On this page swatch grid (chit size, cell, corner, light-chit edge)",
+        "line": 115
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 141,
+          "end": 142,
+          "text": "the sizes each have a tile. Unverified: Figma side by side, dark theme, a selected\nFigma chit."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "color-picker",
+      "batch": 10,
+      "batch_name": "Pickers",
+      "spec": "docs/specs/color-picker.md",
+      "spec_status": "**Status:** accepted (owner; Complete in `component-status.mjs`; was: in review · 2026-09-26 (second pass: views, OKLCH, contrast, preview))",
+      "audited": true,
+      "visual": [
+        194,
+        224
+      ],
+      "products": [
+        "docs/research/captures/color-picker/figma--area--rest--light.json",
+        "docs/research/captures/color-picker/figma--eyedropper--hover--light.json",
+        "docs/research/captures/color-picker/figma--eyedropper-and-sliders--rest--light.json",
+        "docs/research/captures/color-picker/figma--fill-row--rest--light.json",
+        "docs/research/captures/color-picker/figma--format-menu--open--light.json",
+        "docs/research/captures/color-picker/figma--format-row--rest--light.json",
+        "docs/research/captures/color-picker/figma--hue-slider--focus-visible--light.json",
+        "docs/research/captures/color-picker/figma--paint-type-row--rest--light.json",
+        "docs/research/captures/color-picker/figma--solid-layer-fill--rest--light.json",
+        "docs/research/captures/color-picker/figma--solid-page-background--rest--light.json",
+        "docs/research/captures/color-picker/figma--swatches--rest--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "Figma's colour picker from the Page colour row (area, tracks, value row, swatches)",
+        "line": 111
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 230,
+          "end": 230,
+          "text": "- Unverified: dark theme, screen readers, Firefox and Safari (no EyeDropper there), touch."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "alignment-picker",
+      "batch": 10,
+      "batch_name": "Pickers",
+      "spec": "docs/specs/alignment-picker.md",
+      "spec_status": "**Status:** accepted (owner; Complete in `component-status.mjs`; was: in review · 2026-09-26 (cohesion audit; second pass the same day, no change))",
+      "audited": true,
+      "visual": [
+        142,
+        157
+      ],
+      "products": [
+        "docs/research/captures/alignment-picker/figma--alignment-row--rest--light.json",
+        "docs/research/captures/alignment-picker/figma--auto-layout-alignment--hover--light.json",
+        "docs/research/captures/alignment-picker/figma--auto-layout-alignment--rest--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "Figma's auto-layout Alignment grid (ground, dots, selected bars)",
+        "line": 119
+      },
+      "owner": false,
+      "unverified": [
+        {
+          "line": 170,
+          "end": 170,
+          "text": "Unverified: Figma's focus state (rest and hover captured 2026-10-04)."
+        },
+        {
+          "line": 194,
+          "end": 195,
+          "text": "  for review (`component-status.mjs`). Unverified: Figma's grid size, padding, hover ink and plate,\n  pending a live capture in Claude in Chrome."
+        }
+      ],
+      "official": false
+    },
+    {
+      "slug": "button",
+      "batch": 11,
+      "batch_name": "Buttons",
+      "spec": "docs/specs/button.md",
+      "spec_status": "**Status:** accepted · 2026-09-26 (was: in review · 2026-09-25 (first pass under the capture workflow))",
+      "audited": true,
+      "visual": [
+        269,
+        279
+      ],
+      "products": [
+        "docs/research/captures/button/chatgpt--icon-ghost-32--hover--light.json",
+        "docs/research/captures/button/chatgpt--icon-ghost-32--rest--light.json",
+        "docs/research/captures/button/chatgpt--icon-ghost-round--hover--light.json",
+        "docs/research/captures/button/chatgpt--icon-ghost-round--rest--light.json",
+        "docs/research/captures/button/chatgpt--icon-ghost-round-dictate--rest--light.json",
+        "docs/research/captures/button/chatgpt--icon-ghost-square--hover--light.json",
+        "docs/research/captures/button/chatgpt--icon-ghost-square--rest--light.json",
+        "docs/research/captures/button/chatgpt--icon-ghost-square-header--rest--light.json",
+        "docs/research/captures/button/chatgpt--icon-label-ghost--hover--light.json",
+        "docs/research/captures/button/chatgpt--icon-label-ghost--rest--light.json",
+        "docs/research/captures/button/chatgpt--icon-solid-round--hover--light.json",
+        "docs/research/captures/button/chatgpt--icon-solid-round--rest--light.json",
+        "docs/research/captures/button/chatgpt--picker-ghost--hover--light.json",
+        "docs/research/captures/button/chatgpt--picker-ghost--rest--light.json",
+        "docs/research/captures/button/chatgpt--soft-danger--hover--light.json",
+        "docs/research/captures/button/chatgpt--soft-danger--rest--light.json",
+        "docs/research/captures/button/chatgpt--soft-secondary--focus-visible--light.json",
+        "docs/research/captures/button/chatgpt--soft-secondary--hover--light.json",
+        "docs/research/captures/button/chatgpt--soft-secondary--rest--light.json",
+        "docs/research/captures/button/figma--icon-button--hover--light.json",
+        "docs/research/captures/button/figma--icon-button--rest--light.json",
+        "docs/research/captures/button/figma--icon-ghost-24--rest--light.json",
+        "docs/research/captures/button/figma--icon-ghost-32--rest--light.json",
+        "docs/research/captures/button/figma--pill-soft--rest--light.json",
+        "docs/research/captures/button/figma--primary-button--rest--light.json",
+        "docs/research/captures/button/figma--product-button--rest--light.json",
+        "docs/research/captures/button/figma--secondary-button--rest--light.json",
+        "docs/research/captures/button/figma--share-solid--rest--light.json",
+        "docs/research/captures/button/figma--tab--rest--light.json",
+        "docs/research/captures/button/figma--tab-selected--rest--light.json",
+        "docs/research/captures/button/notion--icon-button--hover--light.json",
+        "docs/research/captures/button/notion--icon-button--rest--light.json",
+        "docs/research/captures/button/notion--icon-ghost--hover--light.json",
+        "docs/research/captures/button/notion--icon-ghost--rest--light.json",
+        "docs/research/captures/button/notion--icon-ghost-sidebar--hover--light.json",
+        "docs/research/captures/button/notion--icon-ghost-sidebar--rest--light.json",
+        "docs/research/captures/button/notion--icon-label-ghost--hover--light.json",
+        "docs/research/captures/button/notion--icon-label-ghost--rest--light.json",
+        "docs/research/captures/button/notion--outline--hover--light.json",
+        "docs/research/captures/button/notion--outline--rest--light.json",
+        "docs/research/captures/button/notion--outline-button--rest--light.json",
+        "docs/research/captures/button/notion--primary-button--rest--light.json",
+        "docs/research/captures/button/notion--solid-accent--hover--light.json",
+        "docs/research/captures/button/notion--solid-accent--rest--light.json",
+        "docs/research/captures/button/notion--text-button--hover--light.json",
+        "docs/research/captures/button/notion--text-button--rest--light.json",
+        "docs/research/captures/button/notion--text-ghost--hover--light.json",
+        "docs/research/captures/button/notion--text-ghost--rest--light.json",
+        "docs/research/captures/button/notion--toolbar-icon--rest--light.json"
+      ],
+      "other_references": [
+        "docs/research/captures/button/chatgpt-loggedout--icon-ghost-round--hover--light.json",
+        "docs/research/captures/button/chatgpt-loggedout--icon-ghost-round--rest--light.json",
+        "docs/research/captures/button/chatgpt-loggedout--icon-ghost-square--hover--light.json",
+        "docs/research/captures/button/chatgpt-loggedout--icon-ghost-square--rest--light.json",
+        "docs/research/captures/button/chatgpt-loggedout--icon-solid-round--rest--light.json",
+        "docs/research/captures/button/chatgpt-loggedout--outline--focus-visible--light.json",
+        "docs/research/captures/button/chatgpt-loggedout--outline--hover--light.json",
+        "docs/research/captures/button/chatgpt-loggedout--outline--rest--light.json",
+        "docs/research/captures/button/chatgpt-loggedout--solid--focus-visible--light.json",
+        "docs/research/captures/button/chatgpt-loggedout--solid--hover--light.json",
+        "docs/research/captures/button/chatgpt-loggedout--solid--rest--light.json",
+        "docs/research/captures/button/chatgpt-loggedout--suggestion-outline--hover--light.json",
+        "docs/research/captures/button/chatgpt-loggedout--suggestion-outline--rest--light.json",
+        "docs/research/captures/button/uui--primary-icon-md--rest--light.json",
+        "docs/research/captures/button/uui--primary-md--rest--light.json",
+        "docs/research/captures/button/uui--primary-sm--rest--light.json",
+        "docs/research/captures/button/uui--secondary-icon-sm--rest--light.json",
+        "docs/research/captures/button/uui--secondary-md--focus-visible--light.json",
+        "docs/research/captures/button/uui--secondary-md--hover--light.json",
+        "docs/research/captures/button/uui--secondary-md--rest--light.json",
+        "docs/research/captures/button/uui--secondary-sm--rest--light.json",
+        "docs/research/captures/button/uui--tertiary-md--rest--light.json",
+        "docs/research/captures/button/vscode--button--rest--dark.json"
+      ],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "Figma's Share (32, corner 5, 12 inset), Notion's Share popover buttons and ChatGPT's solid and outline pills (height, inset, weight, no shadow)",
+        "line": 123
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 292,
+          "end": 293,
+          "text": "- Unverified: dark theme (products not switched), Figma hover, disabled/loading/selected against references, compact density\n  (the gap follows density since audit S14; compact sm is 4)."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "button-group",
+      "batch": 11,
+      "batch_name": "Buttons",
+      "spec": "docs/specs/button-group.md",
+      "spec_status": "**Status:** accepted · 2026-09-26 (was: in review · 2026-09-26 (first pass under the capture workflow))",
+      "audited": true,
+      "visual": [
+        56,
+        64
+      ],
+      "products": [
+        "docs/research/captures/button-group/figma--align-group--rest--light.json",
+        "docs/research/captures/button-group/figma--present-split-group--rest--light.json",
+        "docs/research/captures/button-group/notion--split-button--rest--light.json"
+      ],
+      "other_references": [
+        "docs/research/captures/button-group/shadcn--group-dropdown-outline--rest--light.json",
+        "docs/research/captures/button-group/shadcn--group-md-outline--rest--light.json"
+      ],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "Figma's Present / Prototype view pair (outer corners only, square inner edges) and Notion's split divider",
+        "line": 127
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 69,
+          "end": 69,
+          "text": "- Unverified: dark theme, focus ring over the divider in every size."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "kbd",
+      "batch": 11,
+      "batch_name": "Buttons",
+      "spec": "docs/specs/kbd.md",
+      "spec_status": "**Status:** Complete · owner approved batch 11, 2026-09-28 (6px corner everywhere, filled with no stroke, plain text in menus, ⎋ glyph for Escape; Escape written \"Esc\" since audit S12b, 2026-09-30)",
+      "audited": true,
+      "visual": [
+        141,
+        149
+      ],
+      "products": [
+        "docs/research/captures/kbd/chatgpt--shortcut-chip--rest--light.json",
+        "docs/research/captures/kbd/figma--shortcut-panel-binding--rest--dark.json",
+        "docs/research/captures/kbd/figma--shortcut-panel-key--rest--dark.json",
+        "docs/research/captures/kbd/notion--shortcut-hint--rest--light.json"
+      ],
+      "other_references": [
+        "docs/research/captures/kbd/vscode--keybinding--rest--dark.json"
+      ],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "Notion's search ⌘K hint, ChatGPT's tooltip chip and Figma's keyboard-shortcuts panel keys (fill, edge, corner, nesting)",
+        "line": 131
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 162,
+          "end": 162,
+          "text": "[the audit](../research/cohesion-audit.md#verification). Unverified: dark theme, screen readers."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "input",
+      "batch": 12,
+      "batch_name": "Text entry",
+      "spec": "docs/specs/input.md",
+      "spec_status": "**Status:** accepted · 2026-09-28 (batch 12; was: in review · 2026-09-26 (cohesion audit; second pass with Notion and Figma))",
+      "audited": true,
+      "visual": [
+        145,
+        158
+      ],
+      "products": [
+        "docs/research/captures/input/figma--search-field--rest--light.json",
+        "docs/research/captures/input/notion--field--focus--light.json",
+        "docs/research/captures/input/notion--invite-field--focus--light.json",
+        "docs/research/captures/input/notion--menu-search--focus--light.json",
+        "docs/research/captures/input/notion--search-field-kbd--rest--light.json"
+      ],
+      "other_references": [
+        "docs/research/captures/input/vscode--settings-input--rest--dark.json"
+      ],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "Notion's sidebar search field (with its ⌘K hint) and Share invite field, Figma's file-browser search (height, corner, edge, fill, text inset)",
+        "line": 135
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 156,
+          "end": 157,
+          "text": "resting shadow. Unverified: hover and focus in the products (Chrome was a background window),\ndark theme."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "input-group",
+      "batch": 12,
+      "batch_name": "Text entry",
+      "spec": "docs/specs/input-group.md",
+      "spec_status": "**Status:** accepted (owner; Complete in `component-status.mjs`; was: in review · 2026-09-26 (cohesion audit; second pass with Notion and Figma))",
+      "audited": true,
+      "visual": [
+        135,
+        153
+      ],
+      "products": [
+        "docs/research/captures/input-group/figma--color-row--rest--light.json",
+        "docs/research/captures/input-group/figma--icon-field--rest--light.json",
+        "docs/research/captures/input-group/notion--invite-row--focus--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "Notion's Share invite row (field and button) and Figma's design-panel icon and colour fields",
+        "line": 139
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 145,
+          "end": 146,
+          "text": "second pass. Unverified: Figma side by side at one zoom, dark theme, a\ndisabled group, a group with one of two children disabled (the whole group paints disabled)."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "textarea",
+      "batch": 12,
+      "batch_name": "Text entry",
+      "spec": "docs/specs/textarea.md",
+      "spec_status": "**Status:** accepted · 2026-09-26 (spec written in the cohesion audit; accepted earlier;",
+      "audited": true,
+      "visual": [
+        120,
+        132
+      ],
+      "products": [
+        "docs/research/captures/textarea/chatgpt--textarea--focus--light.json",
+        "docs/research/captures/textarea/chatgpt--textarea-short--rest--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "ChatGPT's settings multiline fields (insets, corner, edge, no shadow)",
+        "line": 143
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 131,
+          "end": 131,
+          "text": "82 at three rows). Unverified: dark theme."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "select",
+      "batch": 13,
+      "batch_name": "Choosing from a list",
+      "spec": "docs/specs/select.md",
+      "spec_status": "**Status:** accepted (owner; Complete in `component-status.mjs`; was: in review · 2026-09-26 (cohesion audit; second pass with Notion and Figma))",
+      "audited": true,
+      "visual": [
+        148,
+        168
+      ],
+      "products": [
+        "docs/research/captures/select/chatgpt--settings-select--hover--light.json",
+        "docs/research/captures/select/chatgpt--settings-select--rest--light.json",
+        "docs/research/captures/select/figma--filter-select--rest--light.json",
+        "docs/research/captures/select/figma--size-select--rest--light.json",
+        "docs/research/captures/select/figma--zoom-select--rest--light.json",
+        "docs/research/captures/select/notion--inline-select--rest--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "ChatGPT's settings dropdown (read live), Figma's zoom, size and filter selects, Notion's inline select (height, fill, edge, chevron place)",
+        "line": 147
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 159,
+          "end": 160,
+          "text": "and checked fill appear only with the picker open in a supporting browser. Unverified: the\nopen picker on screen, a Notion or Figma picker side by side, dark theme."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "combobox",
+      "batch": 13,
+      "batch_name": "Choosing from a list",
+      "spec": "docs/specs/combobox.md",
+      "spec_status": "**Status:** accepted · 2026-09-28 (batch 13; was: in review · 2026-09-26)",
+      "audited": true,
+      "visual": [
+        68,
+        80
+      ],
+      "products": [
+        "docs/research/captures/combobox/chatgpt--settings-select-menu--open--light.json",
+        "docs/research/captures/combobox/figma--font-family-trigger--rest--light.json",
+        "docs/research/captures/combobox/figma--font-picker--open--light.json",
+        "docs/research/captures/combobox/figma--font-size-combobox--rest--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "Figma's font-family trigger, font-size combobox and open font picker (row, text, chevron place)",
+        "line": 151
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 79,
+          "end": 79,
+          "text": "field), matched to Notion's menu when Menu was approved. No change. Unverified: dark theme."
+        },
+        {
+          "line": 89,
+          "end": 89,
+          "text": "- Unverified: dark theme, screen reader announcements, IME composition, RTL."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "custom-select",
+      "batch": 13,
+      "batch_name": "Choosing from a list",
+      "spec": "docs/specs/custom-select.md",
+      "spec_status": "**Status:** in review · 2026-10-04 (built; `REVIEW_COMPONENTS`, Review page batch \"New components, batch 1\")",
+      "audited": false,
+      "visual": [
+        188,
+        196
+      ],
+      "products": [
+        "docs/research/captures/custom-select/notion--general-access-trigger--rest--light.json",
+        "docs/research/captures/custom-select/notion--member-access-menu--hover--light.json",
+        "docs/research/captures/custom-select/notion--member-access-menu--open--light.json",
+        "docs/research/captures/custom-select/notion--member-access-trigger--rest--light.json",
+        "docs/research/captures/custom-select/notion--share-general-access--hover--light.json",
+        "docs/research/captures/custom-select/notion--share-general-access--open--light.json"
+      ],
+      "other_references": [],
+      "validated": null,
+      "owner": false,
+      "unverified": [
+        {
+          "line": 209,
+          "end": 210,
+          "text": "moves, Escape closes and keeps focus), groups, ghost open in dark. Unverified: screen reader\nannouncement, RTL, forced colours, Figma side by side."
+        }
+      ],
+      "official": false
+    },
+    {
+      "slug": "tag",
+      "batch": 13,
+      "batch_name": "Choosing from a list",
+      "spec": "docs/specs/tag.md",
+      "spec_status": "**Status:** in review · 2026-10-06 (built; Review page batch \"New components, batch 1\")",
+      "audited": false,
+      "visual": [
+        68,
+        75
+      ],
+      "products": [
+        "docs/research/captures/tag/notion--tag-removable--dismiss-hover--light.json",
+        "docs/research/captures/tag/notion--tag-removable--rest--light.json"
+      ],
+      "other_references": [],
+      "validated": null,
+      "owner": false,
+      "unverified": [
+        {
+          "line": 78,
+          "end": 78,
+          "text": "Build, parity, typecheck pass; captures pass the checksum. Unverified: dark against Notion, screen reader."
+        }
+      ],
+      "official": false
+    },
+    {
+      "slug": "tag-picker",
+      "batch": 13,
+      "batch_name": "Choosing from a list",
+      "spec": "docs/specs/tag-picker.md",
+      "spec_status": "**Status:** in review · 2026-10-05 (built; Review page batch \"New components, batch 1\")",
+      "audited": false,
+      "visual": null,
+      "products": [
+        "docs/research/captures/tag-picker/notion--select-property-editor--hover--light.json",
+        "docs/research/captures/tag-picker/notion--select-property-editor--open--light.json"
+      ],
+      "other_references": [],
+      "validated": null,
+      "owner": false,
+      "unverified": [
+        {
+          "line": 117,
+          "end": 117,
+          "text": "removed\"; chosen rows show the check. Dark and compact checked on the Review page 2026-10-06 (compact field 28). Unverified: screen reader, RTL."
+        }
+      ],
+      "official": false
+    },
+    {
+      "slug": "date-picker",
+      "batch": 13,
+      "batch_name": "Choosing from a list",
+      "spec": "docs/specs/date-picker.md",
+      "spec_status": "**Status:** in review · 2026-10-05 (built; Review page batch \"New components, batch 1\")",
+      "audited": false,
+      "visual": null,
+      "products": [
+        "docs/research/captures/date-picker/notion--date-property-editor--open--light.json"
+      ],
+      "other_references": [],
+      "validated": null,
+      "owner": false,
+      "unverified": [
+        {
+          "line": 107,
+          "end": 107,
+          "text": "invalid edge. Dark (panel and calendar) and compact (field 28) checked 2026-10-06. Unverified: screen reader, RTL, Figma comparison."
+        }
+      ],
+      "official": false
+    },
+    {
+      "slug": "field",
+      "batch": 13,
+      "batch_name": "Choosing from a list",
+      "spec": "docs/specs/field.md",
+      "spec_status": "**Status:** accepted · 2026-09-26 (spec written in the cohesion audit; accepted earlier;",
+      "audited": true,
+      "visual": [
+        132,
+        141
+      ],
+      "products": [
+        "docs/research/captures/field/chatgpt--field-stacked--rest--light.json",
+        "docs/research/captures/field/chatgpt--settings-row--rest--light.json",
+        "docs/research/captures/field/figma--dimensions-row--rest--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "ChatGPT's settings row (read live) and stacked field (label, description, gaps)",
+        "line": 155
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 135,
+          "end": 135,
+          "text": "Unverified: dark theme."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "checkbox",
+      "batch": 14,
+      "batch_name": "Choice controls",
+      "spec": "docs/specs/checkbox.md",
+      "spec_status": "**Status:** accepted · 2026-09-28 (batch 14: cards, sm removed; was: in review · 2026-09-26 (cohesion audit, second pass))",
+      "audited": true,
+      "visual": [
+        144,
+        154
+      ],
+      "products": [
+        "docs/research/captures/checkbox/figma--checkbox-checked--rest--light.json",
+        "docs/research/captures/checkbox/figma--clip-content--rest--light.json",
+        "docs/research/captures/checkbox/notion--checkbox--rest--light.json",
+        "docs/research/captures/checkbox/notion--checkbox-checked--rest--light.json"
+      ],
+      "other_references": [
+        "docs/research/captures/checkbox/shadcn--choice-card-radio-0--checked--light.json",
+        "docs/research/captures/checkbox/shadcn--choice-card-radio-1--rest--light.json",
+        "docs/research/captures/checkbox/vscode--settings-checkbox--rest--dark.json"
+      ],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "Notion's and Figma's 16px checkboxes (size, corner, edge, checked face, label alignment)",
+        "line": 159
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 153,
+          "end": 153,
+          "text": "Unverified: dark theme, hover and focus in a product."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "radio",
+      "batch": 14,
+      "batch_name": "Choice controls",
+      "spec": "docs/specs/radio.md",
+      "spec_status": "**Status:** accepted · 2026-09-28 (batch 14: cards, sm removed; was: in review · 2026-09-26 (cohesion audit, second pass))",
+      "audited": true,
+      "visual": [
+        118,
+        127
+      ],
+      "products": [
+        "docs/research/captures/radio/chatgpt--mode-radio-cards--rest--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "No product radio exists; ChatGPT's mode radio cards and Checkbox's product evidence (control, label alignment)",
+        "line": 163
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 126,
+          "end": 126,
+          "text": "Unverified: dark theme, hover and focus in a product."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "switch",
+      "batch": 14,
+      "batch_name": "Choice controls",
+      "spec": "docs/specs/switch.md",
+      "spec_status": "**Status:** accepted · 2026-09-28 (batch 14: lighter off track; was: in review · 2026-09-26 (cohesion audit, second pass))",
+      "audited": true,
+      "visual": [
+        150,
+        164
+      ],
+      "products": [
+        "docs/research/captures/switch/chatgpt--switch-off--hover--light.json",
+        "docs/research/captures/switch/chatgpt--switch-off--rest--light.json",
+        "docs/research/captures/switch/chatgpt--switch-on--hover--light.json",
+        "docs/research/captures/switch/chatgpt--switch-on--rest--light.json",
+        "docs/research/captures/switch/notion--menu-switch-off--rest--light.json",
+        "docs/research/captures/switch/notion--switch-off--rest--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "ChatGPT's settings switches off and on, rest and hover, and Notion's page-menu toggle (track, thumb, off fill)",
+        "line": 167
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 163,
+          "end": 163,
+          "text": "#c5), edge equal to the fill so none shows. Unverified: dark theme."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "slider",
+      "batch": 15,
+      "batch_name": "Values and tags",
+      "spec": "docs/specs/slider.md",
+      "spec_status": "**Status:** accepted (Complete in `component-status.mjs`) · 2026-09-26: the second pass changed",
+      "audited": true,
+      "visual": [
+        157,
+        170
+      ],
+      "products": [
+        "docs/research/captures/slider/figma--adjustment-slider--rest--light.json",
+        "docs/research/captures/slider/figma--adjustment-slider-row--rest--light.json",
+        "docs/research/captures/slider/figma--hue-slider--rest--light.json",
+        "docs/research/captures/slider/figma--opacity-slider--rest--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "Figma's colour-picker sliders (reopened) and adjustment slider (rail, thumb, hit row)",
+        "line": 171
+      },
+      "owner": true,
+      "unverified": [],
+      "official": true
+    },
+    {
+      "slug": "chip",
+      "batch": 15,
+      "batch_name": "Values and tags",
+      "spec": "docs/specs/chip.md",
+      "spec_status": "**Status:** accepted · 2026-09-28 (batch 15; was: in review · 2026-09-26)",
+      "audited": true,
+      "visual": [
+        161,
+        172
+      ],
+      "products": [
+        "docs/research/captures/chip/chatgpt--composer-tool-pill--hover--light.json",
+        "docs/research/captures/chip/chatgpt--composer-tool-pill--rest--light.json",
+        "docs/research/captures/chip/notion--board-tag--rest--light.json",
+        "docs/research/captures/chip/notion--select-tag--rest--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "ChatGPT's composer tool pill (rest, hover) and Notion's select tags (shape, height, paint)",
+        "line": 175
+      },
+      "owner": true,
+      "unverified": [],
+      "official": true
+    },
+    {
+      "slug": "badge-group",
+      "batch": 15,
+      "batch_name": "Values and tags",
+      "spec": "docs/specs/badge-group.md",
+      "spec_status": "**Status:** accepted · 2026-09-28 (batch 15, group gap 6 / 8; first accepted 2026-09-25)",
+      "audited": true,
+      "visual": [
+        123,
+        141
+      ],
+      "products": [
+        "docs/research/captures/badge-group/notion--multi-select-many--rest--light.json",
+        "docs/research/captures/badge-group/notion--multi-select-wrap--rest--light.json"
+      ],
+      "other_references": [
+        "docs/research/captures/badge-group/primer--group-truncated-5--expanded--light.json"
+      ],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "Notion's multi-select table cells on a public page (tag geometry, gap between tags and between wrapped lines)",
+        "line": 187
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 134,
+          "end": 135,
+          "text": "owner's workspace (Notion's tasks board has single tags per group header). Unverified: a Notion multi-select cell's tag gap\n(no multi-select was reachable in the owner's workspace), dark theme."
+        },
+        {
+          "line": 147,
+          "end": 148,
+          "text": "- Unverified: keyboard focus ring on the trigger (not reached with the real Tab key in\n  this pass), dark theme, Primer source at a pinned commit."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "card",
+      "batch": 16,
+      "batch_name": "Content surfaces",
+      "spec": "docs/specs/card.md",
+      "spec_status": "**Status:** accepted · 2026-09-28 (batch 16, 16 text column; was: in review · 2026-09-28 (16 text column, carousel and well; was: accepted · 2026-09-28, batch 16))",
+      "audited": true,
+      "visual": [
+        194,
+        204
+      ],
+      "products": [
+        "docs/research/captures/card/chatgpt--library-file-card--hover--light.json",
+        "docs/research/captures/card/chatgpt--library-file-card--rest--light.json",
+        "docs/research/captures/card/chatgpt--library-image-card--rest--light.json",
+        "docs/research/captures/card/figma--community-feature-card--rest--light.json",
+        "docs/research/captures/card/figma--community-tile--rest--light.json",
+        "docs/research/captures/card/figma--file-card--hover--dark.json",
+        "docs/research/captures/card/figma--file-card--rest--dark.json",
+        "docs/research/captures/card/figma--file-card--rest--light.json",
+        "docs/research/captures/card/notion--board-card--hover--light.json",
+        "docs/research/captures/card/notion--board-card--rest--light.json",
+        "docs/research/captures/card/notion--board-card-linked--rest--light.json",
+        "docs/research/captures/card/notion--board-column--rest--light.json",
+        "docs/research/captures/card/notion--home-panel--rest--dark.json",
+        "docs/research/captures/card/notion--recent-card--hover--dark.json",
+        "docs/research/captures/card/notion--recent-card--rest--dark.json",
+        "docs/research/captures/card/notion--sidebar-promo-card--rest--light.json"
+      ],
+      "other_references": [
+        "docs/research/captures/card/apple--web-glass-nav--rest--light.json"
+      ],
+      "validated": {
+        "date": "2026-09-27",
+        "against": "Notion board cards, ChatGPT library cards and Figma file and community cards, light and dark (consistency pass)",
+        "line": 179
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 202,
+          "end": 203,
+          "text": "background). Unverified: Firefox and Safari (`text-box`, `cap`, container queries, `:has()`),\nforced colours, screen readers."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "table",
+      "batch": 16,
+      "batch_name": "Content surfaces",
+      "spec": "docs/specs/table.md",
+      "spec_status": "**Status:** accepted (owner; Complete in `component-status.mjs`; was: in review · 2026-09-26 (cohesion audit, second pass))",
+      "audited": true,
+      "visual": [
+        159,
+        169
+      ],
+      "products": [
+        "docs/research/captures/table/notion--body-row--hover--light.json",
+        "docs/research/captures/table/notion--body-row--rest--light.json",
+        "docs/research/captures/table/notion--header-cell--rest--light.json",
+        "docs/research/captures/table/notion--header-row--rest--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "Notion's table view (row height, rules, header ink, cells)",
+        "line": 183
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 168,
+          "end": 168,
+          "text": "paint, not with a real pointer (the preview pane was hidden). Unverified: dark theme."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "dialog",
+      "batch": 17,
+      "batch_name": "Overlays",
+      "spec": "docs/specs/dialog.md",
+      "spec_status": "**Status:** accepted · 2026-09-26 (was: in review · 2026-09-26 (pass 2: 16/24 strong title, concentric 16px corner))",
+      "audited": true,
+      "visual": [
+        152,
+        170
+      ],
+      "products": [
+        "docs/research/captures/dialog/chatgpt--close-button--hover--light.json",
+        "docs/research/captures/dialog/chatgpt--dialog-overlay--open--dark.json",
+        "docs/research/captures/dialog/chatgpt--dialog-overlay--open--light.json",
+        "docs/research/captures/dialog/chatgpt--search-dialog--open--dark.json",
+        "docs/research/captures/dialog/chatgpt--shortcuts-dialog--open--light.json",
+        "docs/research/captures/dialog/notion--dialog-overlay--open--dark.json",
+        "docs/research/captures/dialog/notion--settings-dialog--open--dark.json"
+      ],
+      "other_references": [
+        "docs/research/captures/dialog/primer--dialog-header--open--light.json",
+        "docs/research/captures/dialog/shadcn--dialog-header--open--light.json"
+      ],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "ChatGPT's keyboard-shortcuts dialog, live (width, corner, lift, title, close rest and hover, footer button inset)",
+        "line": 243
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 179,
+          "end": 180,
+          "text": "- Unverified: dark theme and the dark scrim, screen reader announcement, the modal on a\n  phone-width viewport."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "confirm-dialog",
+      "batch": 17,
+      "batch_name": "Overlays",
+      "spec": "docs/specs/confirm-dialog.md",
+      "spec_status": "**Status:** in review · 2026-10-05 (built; Review page batch \"New components, batch 1\")",
+      "audited": false,
+      "visual": null,
+      "products": [],
+      "other_references": [],
+      "validated": null,
+      "owner": false,
+      "unverified": [
+        {
+          "line": 59,
+          "end": 59,
+          "text": "surface is 420 wide. Unverified: dark, compact, screen reader."
+        }
+      ],
+      "official": false
+    },
+    {
+      "slug": "drawer",
+      "batch": 17,
+      "batch_name": "Overlays",
+      "spec": "docs/specs/drawer.md",
+      "spec_status": "**Status:** in review · 2026-10-05 (built; Review page batch \"New components, batch 1\")",
+      "audited": false,
+      "visual": null,
+      "products": [],
+      "other_references": [
+        "docs/research/captures/drawer/shadcn--sheet-overlay--open--light.json",
+        "docs/research/captures/drawer/shadcn--sheet-right--open--light.json"
+      ],
+      "validated": null,
+      "owner": false,
+      "unverified": [
+        {
+          "line": 77,
+          "end": 78,
+          "text": "Unverified: dark, compact, RTL, screen reader, the exit slide on browsers without\n`transition-behavior`."
+        }
+      ],
+      "official": false
+    },
+    {
+      "slug": "tooltip",
+      "batch": 17,
+      "batch_name": "Overlays",
+      "spec": "docs/specs/tooltip.md",
+      "spec_status": "**Status:** accepted · 2026-09-25 (first pass under the capture workflow)",
+      "audited": true,
+      "visual": [
+        127,
+        139
+      ],
+      "products": [
+        "docs/research/captures/tooltip/chatgpt--plain--rest--light.json",
+        "docs/research/captures/tooltip/chatgpt--shortcut--rest--light.json",
+        "docs/research/captures/tooltip/chatgpt--tooltip-shortcut--open--dark.json",
+        "docs/research/captures/tooltip/figma--tooltip--open--dark.json",
+        "docs/research/captures/tooltip/notion--shortcut-stacked--rest--light.json",
+        "docs/research/captures/tooltip/notion--tooltip-shortcut--open--dark.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "ChatGPT's sidebar-toggle tooltip with its shortcut, live (height, corner, type, fill, inline keycap); unchanged since 2026-09-25",
+        "line": 247
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 145,
+          "end": 145,
+          "text": "- Unverified: Figma capture file, dark theme. Hover/focus behaviour is implemented (2026-09-27, [overlay.md](overlay.md)); its timing has not been owner-reviewed (the batch 17 pass compared static paint)."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "hover-card",
+      "batch": 17,
+      "batch_name": "Overlays",
+      "spec": "docs/specs/hover-card.md",
+      "spec_status": "**Status:** accepted · 2026-09-28 (batch 17; was: in review · 2026-09-26)",
+      "audited": true,
+      "visual": [
+        55,
+        69
+      ],
+      "products": [
+        "docs/research/captures/hover-card/notion--link-preview--open--light.json",
+        "docs/research/captures/hover-card/notion--page-preview--open--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "Notion's sub-page link preview, live (surface, corner, ring, lift, type), and the web link preview on file",
+        "line": 191
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 76,
+          "end": 76,
+          "text": "- Unverified: dark theme, screen readers (by design the card is not announced)."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "context-menu",
+      "batch": 18,
+      "batch_name": "Command surfaces",
+      "spec": "docs/specs/context-menu.md",
+      "spec_status": "**Status:** accepted · 2026-09-28 (batch 18; was: in review · 2026-09-26)",
+      "audited": true,
+      "visual": [
+        48,
+        57
+      ],
+      "products": [
+        "docs/research/captures/context-menu/notion--context-menu--open--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "Notion's sidebar page menu, right-click, live (position, lift, rows, icons, type, shortcuts)",
+        "line": 195
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 66,
+          "end": 66,
+          "text": "- Unverified: touch long-press (not handled), screen reader output, dark theme."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "command-palette",
+      "batch": 18,
+      "batch_name": "Command surfaces",
+      "spec": "docs/specs/command-palette.md",
+      "spec_status": "**Status:** accepted · 2026-09-28 (batch 18; was: in review · 2026-09-26)",
+      "audited": true,
+      "visual": [
+        69,
+        86
+      ],
+      "products": [
+        "docs/research/captures/command-palette/chatgpt--search-palette--open--light.json",
+        "docs/research/captures/command-palette/notion--search-palette--open--light.json"
+      ],
+      "other_references": [
+        "docs/research/captures/command-palette/vscode--quick-input--rest--dark.json"
+      ],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "Notion's search and ChatGPT's search-chats palettes, live via cmd+K (surface, field, headings, rows, highlight)",
+        "line": 199
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 104,
+          "end": 104,
+          "text": "- Unverified: dark theme, screen reader output, IME."
+        },
+        {
+          "line": 131,
+          "end": 131,
+          "text": "\"Move\" ink to the Open keycap 16. Unverified: hover paint by eye, dark theme."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "message",
+      "batch": 19,
+      "batch_name": "Conversation",
+      "spec": "docs/specs/message.md",
+      "spec_status": "**Status:** accepted · 2026-09-28 (batch 19; was: in review · 2026-09-26)",
+      "audited": true,
+      "visual": [
+        61,
+        72
+      ],
+      "products": [
+        "docs/research/captures/message/chatgpt--assistant-actions--rest--light.json",
+        "docs/research/captures/message/chatgpt--assistant-prose--rest--light.json",
+        "docs/research/captures/message/chatgpt--user-message--hover--light.json",
+        "docs/research/captures/message/chatgpt--user-message--rest--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "ChatGPT's conversation, live (user bubble rest and hover actions, prose, assistant actions)",
+        "line": 203
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 85,
+          "end": 85,
+          "text": "- Unverified: dark theme, screen readers, RTL (the bubble moves to the start)."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "composer",
+      "batch": 19,
+      "batch_name": "Conversation",
+      "spec": "docs/specs/composer.md",
+      "spec_status": "**Status:** accepted · 2026-09-26 (was: in review · 2026-09-25 (first pass under the capture workflow))",
+      "audited": true,
+      "visual": [
+        84,
+        94
+      ],
+      "products": [
+        "docs/research/captures/composer/chatgpt--inline-empty--rest--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "ChatGPT's home composer, live (size, corner, ring and lift, text)",
+        "line": 207
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 98,
+          "end": 99,
+          "text": "`npm test` (tokens and contrast), capture checksums: all pass. Unverified: dark theme, focus ring on screen, ChatGPT's\nmulti-line radius (would require typing), hover states."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "prompt-suggestions",
+      "batch": 19,
+      "batch_name": "Conversation",
+      "spec": "docs/specs/prompt-suggestions.md",
+      "spec_status": "**Status:** accepted · 2026-09-28 (batch 19; was: in review · 2026-09-26)",
+      "audited": true,
+      "visual": [
+        51,
+        59
+      ],
+      "products": [
+        "docs/research/captures/prompt-suggestions/chatgpt--prompt-suggestions--rest--light.json",
+        "docs/research/captures/prompt-suggestions/chatgpt--suggestion-row--hover--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "ChatGPT's home suggestions, live (rows, offset, hover wash, ink, dismiss)",
+        "line": 211
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 72,
+          "end": 72,
+          "text": "- Unverified: dark theme. ChatGPT's hover state was captured 2026-09-28."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "model-picker",
+      "batch": 20,
+      "batch_name": "Conversation controls",
+      "spec": "docs/specs/model-picker.md",
+      "spec_status": "**Status:** accepted · 2026-09-28 (batch 20; was: in review · 2026-09-26)",
+      "audited": true,
+      "visual": [
+        47,
+        57
+      ],
+      "products": [
+        "docs/research/captures/model-picker/chatgpt--model-submenu--open--light.json",
+        "docs/research/captures/model-picker/chatgpt--model-trigger--open--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "ChatGPT's composer model picker, live (trigger, menu surface, rows with notes, check)",
+        "line": 215
+      },
+      "owner": true,
+      "unverified": [],
+      "official": true
+    },
+    {
+      "slug": "scroll-to-latest",
+      "batch": 20,
+      "batch_name": "Conversation controls",
+      "spec": "docs/specs/scroll-to-latest.md",
+      "spec_status": "**Status:** accepted · 2026-09-28 (batch 20; was: in review · 2026-09-26)",
+      "audited": true,
+      "visual": [
+        38,
+        47
+      ],
+      "products": [
+        "docs/research/captures/scroll-to-latest/chatgpt--scroll-to-bottom--hidden--light.json",
+        "docs/research/captures/scroll-to-latest/chatgpt--scroll-to-bottom--hover--light.json",
+        "docs/research/captures/scroll-to-latest/chatgpt--scroll-to-bottom--visible--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "ChatGPT's scroll-to-bottom button, live (size, ring, fill, glyph, position, hover)",
+        "line": 219
+      },
+      "owner": true,
+      "unverified": [],
+      "official": true
+    },
+    {
+      "slug": "tabs",
+      "batch": 21,
+      "batch_name": "Page navigation",
+      "spec": "docs/specs/tabs.md",
+      "spec_status": "**Status:** accepted · 2026-09-26 (spec written in the cohesion audit; accepted earlier;",
+      "audited": true,
+      "visual": [
+        158,
+        168
+      ],
+      "products": [
+        "docs/research/captures/tabs/figma--panel-tab--hover--light.json",
+        "docs/research/captures/tabs/figma--panel-tab--rest--light.json",
+        "docs/research/captures/tabs/figma--tab--hover--light.json",
+        "docs/research/captures/tabs/figma--tab--rest--light.json",
+        "docs/research/captures/tabs/figma--tab-selected--rest--light.json",
+        "docs/research/captures/tabs/notion--tabs-underline--rest--light.json",
+        "docs/research/captures/tabs/notion--view-tab--hover--light.json",
+        "docs/research/captures/tabs/notion--view-tab--rest--light.json",
+        "docs/research/captures/tabs/notion--view-tab-selected--rest--light.json",
+        "docs/research/captures/tabs/notion--view-tab-selected2--rest--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "Notion's database view tabs, live (size, corner, type, selected and hover wash, ink)",
+        "line": 223
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 166,
+          "end": 167,
+          "text": "Type size matches (14); weight stays 400 by the type ramp (Notion 500). No change. Unverified:\ndark theme."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "breadcrumb",
+      "batch": 21,
+      "batch_name": "Page navigation",
+      "spec": "docs/specs/breadcrumb.md",
+      "spec_status": "**Status:** accepted · 2026-09-25 (first pass under the capture workflow)",
+      "audited": true,
+      "visual": [
+        104,
+        118
+      ],
+      "products": [
+        "docs/research/captures/breadcrumb/notion--path-2--hover--light.json",
+        "docs/research/captures/breadcrumb/notion--path-2--rest--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "Notion's topbar page path, live (items, type, separator, hover plate)",
+        "line": 227
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 124,
+          "end": 124,
+          "text": "- Unverified: hover plate on screen (the browser pane was hidden), dark theme, Figma."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "code",
+      "batch": 22,
+      "batch_name": "Code and rules",
+      "spec": "docs/specs/code.md",
+      "spec_status": "**Status:** accepted · 2026-09-26 (spec written in the cohesion audit; accepted earlier; subtle-ground fix since)",
+      "audited": true,
+      "visual": [
+        120,
+        132
+      ],
+      "products": [
+        "docs/research/captures/code/chatgpt--inline-code--rest--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "ChatGPT's inline code in a conversation, live (size, fill, corner, inset)",
+        "line": 231
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 131,
+          "end": 131,
+          "text": "Unverified: dark theme, forced colours."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "code-block",
+      "batch": 22,
+      "batch_name": "Code and rules",
+      "spec": "docs/specs/code-block.md",
+      "spec_status": "**Status:** accepted · 2026-09-28 (batch 22, lighter ground and brighter syntax; was: in review · 2026-09-26 (cohesion audit))",
+      "audited": true,
+      "visual": [
+        152,
+        167
+      ],
+      "products": [
+        "docs/research/captures/code-block/chatgpt--code-block--rest--light.json",
+        "docs/research/captures/code-block/chatgpt--code-block-full--rest--light.json"
+      ],
+      "other_references": [
+        "docs/research/captures/code-block/github-copilot--chat-code-block--rest--light.json"
+      ],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "ChatGPT's code block in a conversation, live (shell, header, buttons, code type)",
+        "line": 235
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 165,
+          "end": 166,
+          "text": "(Area tokens over ChatGPT's pill scale; 14 mono throughout). No change. Unverified: hover and\n`:target` paint on screen, dark theme, RTL."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "separator",
+      "batch": 22,
+      "batch_name": "Code and rules",
+      "spec": "docs/specs/separator.md",
+      "spec_status": "**Status:** accepted (Complete in `component-status.mjs`; re-reviewed in batch 22, 2026-09-28) ·",
+      "audited": true,
+      "visual": [
+        118,
+        130
+      ],
+      "products": [
+        "docs/research/captures/separator/chatgpt--settings-group-dividers--rest--light.json",
+        "docs/research/captures/separator/figma--panel-section-divider--rest--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-09-28",
+        "against": "Notion's page-menu rules, live, and ChatGPT's settings dividers on file (weight, ink, inset)",
+        "line": 239
+      },
+      "owner": true,
+      "unverified": [
+        {
+          "line": 129,
+          "end": 129,
+          "text": "Unverified: dark theme (#333 on the dark surface), forced colours."
+        }
+      ],
+      "official": true
+    },
+    {
+      "slug": "disclosure",
+      "batch": 23,
+      "batch_name": "Disclosure",
+      "spec": "docs/specs/disclosure.md",
+      "spec_status": "**Status:** in review · 2026-10-02",
+      "audited": true,
+      "visual": [
+        205,
+        222
+      ],
+      "products": [
+        "docs/research/captures/disclosure/chatgpt--sidebar-section--rest--light.json",
+        "docs/research/captures/disclosure/notion--toggle-block--rest--light.json"
+      ],
+      "other_references": [],
+      "validated": {
+        "date": "2026-10-02",
+        "against": "Notion's toggle block (row, chevron square, title column, hover plate); divided against shadcn's accordion source",
+        "line": 15
+      },
+      "owner": false,
+      "unverified": [
+        {
+          "line": 231,
+          "end": 232,
+          "text": "- Unverified: Notion collapsed and dark, ChatGPT dark, a rendered shadcn accordion, dark paint on\n  screen, find-in-page with the real browser find bar."
+        }
+      ],
+      "official": false
+    }
+  ],
+  "supplemental": [
+    {
+      "spec": "docs/specs/inspector.md",
+      "unverified": [
+        {
+          "line": 85,
+          "end": 85,
+          "text": "- Unverified: dark theme; keyboard order across the groups (each button is its own stop)."
+        }
+      ]
+    },
+    {
+      "spec": "docs/specs/overlay.md",
+      "unverified": [
+        {
+          "line": 110,
+          "end": 111,
+          "text": "driven by real pointer and key events over the DevTools protocol. Unverified: Firefox and\nSafari, touch, screen readers, RTL alignment on screen, nested popovers."
+        }
+      ]
+    },
+    {
+      "spec": "docs/specs/resizable-panel.md",
+      "unverified": [
+        {
+          "line": 102,
+          "end": 102,
+          "text": "- Unverified: dark theme, RTL drag, touch, screen reader output."
+        }
+      ]
+    }
+  ]
+}

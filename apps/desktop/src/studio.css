@@ -1,10 +1,14 @@
 /*
  * The app's layout: Titlebar over Sidebar | Canvas | Inspector, divided by single hairlines.
  *
- * One inset and one stroke throughout. The Titlebar, Sidebar and Inspector inset their content by
- * Panel's 14 (its spec: 14 at both densities), so the first tab and the Sidebar's rows start on one
- * line and the Titlebar's last button and the Inspector's controls end on one. The Canvas is a
- * gallery and spaces itself by its own smaller step (8), its bar title on its content's edge.
+ * One inset and one stroke throughout. Every region insets its content by Panel's 14 (its spec: 14
+ * at both densities), on every side, measured to what is drawn: a control's box, a text's cap or
+ * baseline (text-box trim), a row plate's edge. So the Titlebar's first tab, the Sidebar's rows, the
+ * Canvas's sections and the Inspector's headings start 14 from their region's edge, and the first
+ * text in each region sits on one line under the Titlebar (owner, 2026-10-14: "the inset padding on
+ * the left and right and top and bottom is equal for all headers, panels"). Only the Titlebar is a
+ * bar; the Canvas and Inspector carry no titles (owner, 2026-10-14, after Framer and Figma). Inside
+ * the Canvas the tiles keep their own 8 gap and 16 inset.
  * Every divider is the same stroke: --area-border-width in --area-border-decorative, the colour
  * Panel draws its own bar and section rules in.
  * Only the app's own classes are styled here; Area components keep their own CSS. Values are
@@ -20,13 +24,17 @@
     font-family: var(--area-font-sans);
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
+    /* Dropdown windows hug their rows (owner, 2026-10-14: "they seem too wide"): Menu's public
+       floor, 128 instead of 224, so a short list is as wide as its longest row and a list under a
+       field as wide as the field. Set here, as menus and pickers float in the top layer. */
+    --area-menu-min-inline-size: calc(var(--area-space-96) + var(--area-space-32)); /* pick: 128, the filters' width */
   }
 
   .studio {
     --_studio-inset: calc(var(--area-space-16) - var(--area-space-2)); /* spec: Panel's 14 */
     --_studio-rule: var(--area-border-width) solid var(--area-border-decorative);
-    /* Every bar's height is Panel's bar (panel.css --_bar: a md row, the panel gap above and below,
-       and the rule), so the Titlebar, Canvas and Inspector bars stay one height at either density. */
+    /* The Titlebar's height is Panel's bar (panel.css --_bar: a md row, the panel gap above and
+       below, and the rule), so it matches a Panel's bar at either density. */
     --_studio-bar: calc(var(--area-control-md) + (var(--area-space-10) - var(--area-space-4) * var(--area-ui-dense)) * 2 + var(--area-border-width));
     display: grid;
     grid-template-rows: auto minmax(0, 1fr);
@@ -41,7 +49,7 @@
    * One row: the Sidebar's toggle and the tabs at the start, search, the Inspector's toggle and
    * light / dark at the end; each panel's toggle sits at its own side (owner, 2026-10-12, after
    * Cursor's icon tool). A 24 control (sm) with 8 above and below and the divider under it: 41,
-   * the height of the Canvas and Inspector bars below it and of Cursor's agents window bar, the
+   * the height of Panel's bar and of Cursor's agents window bar, the
    * border counted once (inset.css). Inside the bar everything
    * drawn is 12 apart: an icon, a field's edge, a tab's plate (the tabs' own plates stay Nav's 4
    * apart). The ends are measured to the buttons' boxes, which their hover plates fill, so no
@@ -108,9 +116,14 @@
   /* The dividers: one hairline on each panel's inner edge. */
   /* The dividers between the panels are the Panels' own seams (a flush, resizable Panel keeps the
      edge it is resized from), so nothing here adds a second line beside them. */
-  /* The Sidebar has no bar: its first row starts 8 below the Titlebar, so a 24 row centres on
-     the Canvas and Inspector titles (studio.tsx, SidebarList). */
-  .studio-sidebar__list { padding-block-start: var(--area-space-8); }
+  /* The Sidebar has no bar. Its rows hang their plates into the inset by the row's own inset
+     (panel.css), 6 from the sides, so the list starts and ends 6 from the Titlebar and the window's
+     foot too: the plates are 6 in on all four sides, and the first row centres on the Canvas and
+     Inspector titles (studio.tsx, SidebarList). The Panel body's 14 at the foot gives back the 8. */
+  .studio-sidebar__list {
+    padding-block-start: calc(var(--_studio-inset) - var(--area-ui-row-inset));
+    margin-block-end: calc(var(--area-ui-row-inset) * -1);
+  }
 
 
   /* The Inspector's selection (src/inspector.tsx): Area's PreviewFrame, then the copy actions two
@@ -133,45 +146,25 @@
 
   /* --- Canvas -------------------------------------------------------------- */
 
-  /* The Canvas: a bar like the Inspector's (41, the title in Panel's bar type), over a body that
-     paints the gallery's ground (the page ground, a trial; see below). Tiles read by their
-     hairlines. The body carries the Canvas settings. */
+  /* The Canvas: a header holding the view's controls and no title (owner, 2026-10-14: no titles,
+     but a header, not a floating toolbar), over a body that paints the gallery's ground (the page
+     ground, a trial; see below). Tiles read by their hairlines. The body carries the Canvas
+     settings. */
   .studio-canvas {
-    /* The Canvas's spacing (owner, 2026-10-11: margins larger than the gaps): 16 round the content
-       and between sections, 8 between tiles, the docs gallery's own tile gap. */
-    --_canvas-margin: var(--area-space-16);
-    --_canvas-gap: var(--area-space-8);
+    /* The Canvas's spacing (owner, 2026-10-11: margins larger than the gaps). The margin is the
+       app's one inset, 14, so the Canvas's content starts where the Sidebar's and Inspector's do
+       (owner, 2026-10-14; was 16). Tiles are 12 apart (owner, 2026-10-14: larger gaps; Compass's 12,
+       measured; was 8, the docs gallery's tile gap). A section's
+       title is one margin over its content and sections are two margins apart (28), the rhythm of
+       the Inspector's sections: 14 from content to rule, 14 from rule to the next heading's cap. */
+    --_canvas-margin: var(--_studio-inset);
+    --_canvas-gap: var(--area-space-12);
+    --_canvas-section: calc(var(--_canvas-margin) * 2);
     display: grid;
     grid-template-rows: auto minmax(0, 1fr);
     min-inline-size: 0;
     min-block-size: 0;
     background: var(--area-bg-page);
-  }
-  /* Panel's bar, rule for rule (panel.css, inset.css): 41 with its divider, 1 above the content
-     to balance that bottom-only divider, the title trimmed to its cap height and centred. */
-  .studio-canvas__bar {
-    display: flex;
-    align-items: center;
-    gap: var(--area-space-8);
-    box-sizing: border-box;
-    block-size: var(--_studio-bar); /* 41 at compact */
-    padding-block-start: var(--area-border-width);
-    /* The title shares the content's column, as a Panel's title shares its rows' (inset.css). */
-    padding-inline: var(--_canvas-margin);
-    border-block-end: var(--_studio-rule);
-  }
-  .studio-canvas__title {
-    margin: 0;
-    /* Clipped for the ellipsis, but its descenders (trimmed off the cap box) still paint: they
-       reach about 3.5 below the baseline at 14 (a length: the property takes no lh or cap). */
-    overflow: clip;
-    overflow-clip-margin: var(--area-space-6);
-    font-size: var(--area-text-md-size); /* Panel's bar title */
-    line-height: var(--area-text-md-leading);
-    font-weight: var(--area-weight-strong);
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    text-box: trim-both cap alphabetic;
   }
   .studio-canvas__body {
     container-type: inline-size;
@@ -185,40 +178,57 @@
     background: var(--area-bg-page);
     color: var(--area-fg-default);
   }
-  /* Sections are a margin apart and a section's title one gap over its content, so a title reads
-     with what it names rather than floating between two sections. */
-  .studio-sections { display: grid; gap: var(--_canvas-margin); }
+  /* Sections are two margins apart and a section's title one margin over its content, so a title
+     reads with what it names rather than floating between two sections. */
+  .studio-sections { display: grid; gap: var(--_canvas-section); }
   .studio-section { scroll-margin-block-start: var(--_canvas-margin); }
-  /* The bar's end: filters and the grid / list switch (src/view-controls.tsx). Everything drawn is
-     12 apart, as in the Titlebar: a field's edge, a track, an icon (studio-bar-icon). The bar's 1
-     above balances its divider for the title; the controls are a whole 24 and give that 1 back,
-     so they sit 8 under the bar's top and 8 over its divider, as the Titlebar's do (centred in
-     the 39 they fell on half pixels, 7.5 and 8.5). */
+  /* The header: the Titlebar's height (39 with its rule) and inset, its controls a whole 24 with 7
+     above and below and the rule under them, so they centre on the line the Sidebar's first row
+     and the Inspector's first heading share. No title (owner, 2026-10-14): the Sidebar's selected
+     row names what is shown. The controls run from the end, as Notion and Figma put a view's
+     options, in rule 14's order. */
+  .studio-canvas__bar {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    block-size: var(--_studio-bar);
+    padding-inline: var(--_canvas-margin);
+    border-block-end: var(--_studio-rule);
+  }
+  /* Everything drawn is 12 apart, as in the Titlebar: a field's edge, a track, an icon
+     (studio-bar-icon). */
   .studio-canvas__actions {
     /* Fields' public width hook: a filter is as wide as "All statuses" needs, not a 256 form field. */
     --area-input-inline-size: calc(var(--area-space-96) + var(--area-space-32)); /* pick: 128 */
     display: flex;
     align-items: center;
     gap: var(--area-space-12);
-    margin-block-start: calc(var(--area-border-width) * -1);
+    min-inline-size: 0;
     margin-inline-start: auto;
+    white-space: nowrap;
   }
   .studio-section__link { color: inherit; text-decoration: none; }
   @media (hover: hover) { .studio-section__link:hover { text-decoration: underline; } }
   /* Area's focus ring (Link's): keyboard focus is always visible (product UI rule 5). */
   .studio-section__link:focus-visible { border-radius: var(--area-radius-small); outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  /* Titles and ledes are trimmed to cap and baseline, so the Canvas's margin measures from the
+     bar's rule to the first title's cap, as the Inspector's first heading sits, and from a title's
+     baseline to its tiles. A lede follows its title at one line's spacing (8), as prose does. */
   .studio-canvas__section-title {
-    margin: 0 0 var(--area-space-8);
+    margin: 0 0 var(--_canvas-margin);
     font-size: var(--area-text-sm-size);
     line-height: var(--area-text-sm-leading);
     font-weight: var(--area-weight-strong);
+    text-box: trim-both cap alphabetic;
   }
+  .studio-canvas__section-title:has(+ .studio-canvas__lede) { margin-block-end: var(--area-space-8); }
   .studio-canvas__lede {
     max-inline-size: 64ch; /* pick: a readable measure */
-    margin: 0 0 var(--area-space-8);
+    margin: 0 0 var(--_canvas-margin);
     color: var(--area-fg-muted);
     font-size: var(--area-text-sm-size);
     line-height: var(--area-text-sm-leading);
+    text-box: trim-both cap alphabetic;
   }
 
   /* --- Tiles and the grid (src/tile.tsx) ------------------------------------ */
@@ -232,7 +242,6 @@
    */
   .studio-grid {
     --_gap: var(--_canvas-gap);
-    --_unit-min: 152px; /* pick: 2 x 152 + 8 = 312 (was 136, the docs gallery's 280) */
     --_pairs: max(1, round(down, calc((100cqw + var(--_gap)) / (var(--_unit-min) * 2 + var(--_gap) * 2)), 1));
     --_unit: calc((100cqw - (var(--_pairs) * 2 - 1) * var(--_gap)) / (var(--_pairs) * 2));
     --_unit-row: calc(var(--_unit) * 4 / 5);
@@ -241,14 +250,16 @@
     grid-auto-rows: var(--_unit-row);
     gap: var(--_gap);
   }
-  /* Zoom 2x (Components; src/gallery/fit.ts reads [data-zoom]): specimens show at up to 2x on a
-     larger unit (216, wide tiles 440 at the least), still two across a 1440 window with both
-     panels (its 912 Canvas holds two pairs up to a 222 unit); doubling it left one tile per row. */
-  [data-zoom="2"] .studio-grid { --_unit-min: 216px; /* pick: the largest 8-step under 222 */ }
+  /* Zoom (Components; src/gallery/fit.ts): tiles grow and shrink with an exact zoom, 64 a unit per
+     100% (216 at 200%, the old 2x unit: two across a 1440 window with both panels; 120 at 50%).
+     --_zoom is set where the zoom is chosen; Fit is 1. */
+  .studio-grid { --_unit-min: calc(152px + 64px * (var(--_zoom, 1) - 1)); }
   .studio-grid--wide {
     grid-template-columns: repeat(var(--_pairs), minmax(0, 1fr));
     grid-auto-rows: calc(var(--_unit-row) * 2 + var(--_gap));
   }
+  /* Rows as tall as their content (colour cards): a row's tiles still share its height. */
+  .studio-grid--hug { grid-auto-rows: auto; }
   .studio-stack { display: grid; gap: var(--_canvas-gap); }
   .studio-canvas__body {
     /* Sharper (owner, 2026-10-13: "make the corner radius sharper"; was 20, and 24 before that): 12,
@@ -338,6 +349,52 @@
     outline-offset: calc(var(--area-border-width) * -2);
     transition-duration: 0s;
   }
+  /*
+   * Cards (src/tile.tsx, `card`; owner, 2026-10-14, after Compass's gallery, measured at 1440: 331 x 336
+   * cards 12 apart, the specimen 28 in, the title in the card's foot). A square tile: the stage, then
+   * the title row (the title and the More menu) at the foot. The specimen sits 28 in (the tile's 16
+   * and the stage's 12, Compass's 24 + 4); the title starts on the tile's 16 and its baseline sits 16
+   * over the foot, the More menu's icon ends 16 from the side, so what is drawn is 16 in on every
+   * side. Columns hold at least 280 (three across a 1440 window with both panels), growing and
+   * shrinking with the zoom.
+   */
+  .studio-grid--cards {
+    /* As many columns of at least 280 as fit (pick: Compass's 331 less a step, for the narrower
+       Canvas), counted, so the Stage's strips span them as they span pairs of units. */
+    --_pairs: max(1, round(down, calc((100cqw + var(--_gap)) / (280px * var(--_zoom, 1) + var(--_gap))), 1));
+    grid-template-columns: repeat(var(--_pairs), minmax(0, 1fr));
+    grid-auto-rows: auto;
+  }
+  .gallery-tile[data-layout="card"] { aspect-ratio: 1; grid-template-rows: minmax(0, 1fr) auto; }
+  .gallery-tile[data-layout="card"] > .gallery-tile__view { padding: var(--area-space-12); }
+  /* Fields take the card's width (Fields' public width hooks; their 256 is a form's measure), as
+     Compass's text field fills its card, so a field shows at its size group's scale like a Button
+     (src/gallery/fit.ts). */
+  .gallery-tile[data-layout="card"] .gallery-tile__stage { --area-input-inline-size: 100%; --area-select-inline-size: 100%; }
+  .gallery-tile__caption {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--area-space-8);
+    min-inline-size: 0;
+    min-block-size: var(--area-control-sm);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
+  }
+  /* The row is one control tall with the title centred on it, so the foot is the baseline's: the
+     row reaches past the inset by the half-row under the baseline. */
+  .gallery-tile[data-layout="card"] > .gallery-tile__caption { margin-block-end: round(nearest, calc((1cap - var(--area-control-sm)) / 2), 1px); }
+  /* Strong at the app's text size (owner, 2026-10-14: "the type size is too large but i like the
+     strong weight"; Compass's 16/500 sits in a larger card). */
+  .gallery-tile__title {
+    min-inline-size: 0;
+    overflow: clip;
+    overflow-clip-margin: var(--area-space-4);
+    font-weight: var(--area-weight-strong);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .gallery-tile__caption .studio-bar-icon { margin-inline-end: calc((var(--area-icon-sm) - var(--area-control-sm)) / 2); }
   /* The label is the app's UI text, 13 at its scale (owner, 2026-10-13: "the text label larger";
      was text-xs, 11), the size a colour card's step already used, so every tab's tiles read alike. */
   .gallery-tile__head {
@@ -349,7 +406,12 @@
     font-size: var(--area-text-sm-size);
     line-height: var(--area-text-sm-leading);
   }
-  .gallery-tile__label { min-inline-size: 0; overflow: hidden; color: var(--area-fg-muted); text-overflow: ellipsis; white-space: nowrap; }
+  /* The header's text is trimmed to its cap, so the label's cap sits the tile's inset below its
+     edge, as far as the label sits from the side (it fell 3 to 4 lower on its leading). */
+  .gallery-tile__label, .gallery-tile__value { text-box: trim-both cap alphabetic; }
+  /* Clipped for the ellipsis, but its descenders (trimmed off the cap box) still paint: they reach
+     about 3 below the baseline at 12 (a length: the property takes no lh or cap). */
+  .gallery-tile__label { min-inline-size: 0; overflow: clip; overflow-clip-margin: var(--area-space-4); color: var(--area-fg-muted); text-overflow: ellipsis; white-space: nowrap; }
   .gallery-tile__value { flex: none; color: var(--area-fg-muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
   .gallery-tile__view { display: grid; min-inline-size: 0; min-block-size: 0; }
 
@@ -357,6 +419,8 @@
      one track and unsafe centring, so a stage larger than the view overflows evenly and scales
      about its centre into it. The margin replaces the header gap. */
   .gallery-tile[data-stage="fit"] { row-gap: 0; }
+  /* A card's title row keeps 8 from the stage over it. */
+  .gallery-tile[data-layout="card"][data-stage] { row-gap: var(--area-space-8); }
   [data-stage="fit"] > .gallery-tile__view {
     grid-template: minmax(0, 1fr) / minmax(0, 1fr);
     place-items: unsafe center;
@@ -434,6 +498,9 @@
     grid-auto-rows: calc(var(--_unit-row) * 2 + var(--_gap));
     row-gap: var(--_gap);
     align-content: start;
+  }
+  /* Card tiles (square, their title in the foot) set their own height. */
+  .studio-strip:has(> .gallery-tile[data-layout="card"]) { grid-auto-rows: auto;
     min-inline-size: 0;
   }
   .studio-strip > .studio-canvas__section-title { grid-column: 1 / -1; margin: 0; }
@@ -476,7 +543,8 @@
     inline-size: 100%;
     min-inline-size: 0;
   }
-  .studio-stage__view[data-zoom="2"] .studio-stage__content { zoom: 2; }
+  /* The Stage takes the zoom as it is: Fit shows the specimen at its real size (the Stage is large). */
+  .studio-stage__content { zoom: var(--_zoom, 1); }
   /* The code under its rule: a rule inside a surface is the decorative border (DESIGN_SYSTEM.md). */
   .studio-stage__code { border-block-start: var(--area-border-width) solid var(--area-border-decorative); }
   /* The resize grip: the right edge, 8 wide; its mark shows on hover and focus. */
@@ -647,10 +715,10 @@
   /* --- Color --------------------------------------------------------------- */
 
   /*
-   * A step's card (src/pages/color.tsx, ColorCard): the painted tile, its level (14 regular) and a
-   * contrast badge in the header, hex, RGB and OKLCH at its foot in 12 tabular figures. Everything
-   * is the ink that reads on the colour; the field names and the badge's plate are that ink thinned
-   * (72% and 12%, picks), so the values lead.
+   * A step's card (src/pages/color.tsx, ColorCard): the painted tile, its level and a contrast
+   * badge in the header, then one blank line, then hex, RGB and OKLCH in tabular figures. All its
+   * text is the one ink that reads on the colour (owner, 2026-10-14: no thinned field names); only
+   * the badge's plate is that ink thinned (12%, a pick).
    */
   .studio-swatch__level { font-variant-numeric: tabular-nums; } /* regular weight: no bold on the cards (owner, 2026-10-12) */
   .studio-swatch__badge {
@@ -663,18 +731,22 @@
     line-height: var(--area-text-xs-leading);
     font-variant-numeric: tabular-nums;
   }
+  /* Block lines, so the last value's baseline is trimmed onto the tile's inset at the foot, as the
+     level's cap is at the head. One blank line of the values' leading under the level (owner,
+     2026-10-14): from the level's baseline to the hex's cap is a line's leading and the leading less
+     the cap, as in untrimmed text with an empty line between. A long value wraps onto the next line. */
+  .gallery-tile[data-painted][data-stage="flow"] { row-gap: 0; }
   .studio-swatch__values {
-    display: grid;
-    align-self: end;
+    display: block;
+    text-box: trim-both cap alphabetic;
+    align-self: start;
+    margin-block-start: calc(2lh - 1cap);
     min-inline-size: 0;
     font-size: var(--area-text-xs-size);
     line-height: var(--area-text-xs-leading);
     font-variant-numeric: tabular-nums;
   }
-  .studio-swatch__values > * { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .studio-swatch__key { color: color-mix(in srgb, var(--_ink) 72%, transparent); /* pick */ }
-  /* The card's foot: the stage fills the tile under its header, the values at its bottom. */
-  .gallery-tile[data-painted][data-stage="flow"] > .gallery-tile__view { align-content: stretch; }
+  .studio-swatch__values > * { display: block; overflow-wrap: anywhere; }
 
   /* A list row's step: a colour chip beside its level. */
   .studio-step { display: inline-flex; align-items: center; gap: var(--area-space-8); font-variant-numeric: tabular-nums; }

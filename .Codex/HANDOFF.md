@@ -24,6 +24,32 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   archived docs build that component-review.mjs needs fails on the removed `ui` axis in apps/docs/scripts/build.mjs:
   inspector sections, typographyPage, iconographyPage, densityRows / uiScalePage; not fixed, docs archived).
 
+## Astra research folded into main (2026-10-15, branch `claude/fold-astra-research`)
+
+- Owner: Astra (Codex) is no longer available; "fold it into this main repo". `astra/research` merged:
+  `docs/research/astra/` (archive; README and INDEX say how to read it). The materials series (01–21) and the
+  owner's decisions D1–D16 are in `docs/research/astra/materials/` (REVIEW.md); tasks 22–26 were never run and
+  now belong to Claude sessions. Note: Elevation (2026-10-14) already owns every shadow by role, so the Material
+  axis sits beside Surface and Elevation.
+- Astra's React server-render tests (`astra/react-tests`): 29 files folded into `packages/react/tests`, 19 stale
+  assertions updated to current intended markup. Three real bugs left as `todo` tests: Composer drops
+  `inputProps.className` (Composer.tsx:120); Popover and Tooltip with a trigger drop a caller `id`
+  (primitives.tsx:1188, 1157). React suite 451: 447 pass, 3 todo, 1 known Indicator failure.
+- Checks: tokens 24,254, typecheck, contracts 14, React suites as above.
+
+## Gallery UI: one inset, cards, zoom, Fit groups (2026-10-15, branch `claude/gallery-ui-spacing-audit-e5e0d4`)
+
+- Spacing: every region 14 in on all sides (Canvas margin 14, sections 28 apart, tile gap 12); text trimmed to cap /
+  baseline. Panel bar title counts a flush seam once (panel.css). No titles over the Canvas or Inspector; the Canvas
+  header holds only the view controls (PRODUCT_UI rule 14 rewritten).
+- Inspector: settings grouped Color / Size / Shape / Effects; fields `soft`; Pills is a multi-select Custom select
+  (new `multiple`). Dropdown windows hug their rows: `--area-menu-min-inline-size` (default 224; the app sets 128).
+- Components: All shows one square card per family (Compass-style, title + copy-code button in the foot); a click
+  opens the Stage. Zoom is Zoom control's new `stepper` (− Fit +; Fit or exact 50–200%). Fit scales by size group
+  (≤48 tall and ≤160 tall at 125%, taller 100%) and lays stretching specimens out at their content's width + 20%
+  (src/gallery/fit.ts). Colour cards are unit tiles hugging their text, short OKLCH.
+- Not done: gallery tiles for CustomSelect `multiple` and ZoomControl `stepper`; Language tiles are not cards.
+
 ## Density: one number (2026-10-14, branch `claude/next-axis-density`)
 
 - Owner: "continue working on the next axis". Density was the last geometry setting named by words. It is now the

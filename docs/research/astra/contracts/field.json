@@ -1,0 +1,765 @@
+{
+  "slug": "field",
+  "manifest": "field",
+  "parts": [
+    {
+      "id": "root",
+      "element": [
+        "div"
+      ],
+      "class": "area-field",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_columns",
+          "selectors": [
+            ".area-field--horizontal",
+            ".area-field--inline"
+          ]
+        },
+        {
+          "name": "--_row",
+          "selectors": [
+            ".area-panel .area-field--horizontal",
+            ".area-panel .area-field--inline"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-gap-md",
+          "selectors": [
+            ".area-field--horizontal",
+            ".area-field--inline"
+          ]
+        },
+        {
+          "name": "--area-input-inline-size",
+          "selectors": [
+            ".area-field--horizontal",
+            ".area-field--inline"
+          ]
+        },
+        {
+          "name": "--area-space-6",
+          "selectors": [
+            ".area-field"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "label",
+      "element": [
+        "label"
+      ],
+      "class": "area-field__label",
+      "required": false,
+      "allowedContent": [
+        "renderable content (text, elements, fragments, or empty content)"
+      ],
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-fg-default",
+          "selectors": [
+            ".area-field__label"
+          ]
+        },
+        {
+          "name": "--area-fg-muted",
+          "selectors": [
+            ".area-field[data-disabled] > .area-field__label",
+            ".area-field--horizontal > .area-field__label",
+            ".area-field--inline > .area-field__label",
+            ".area-panel .area-field__label"
+          ]
+        },
+        {
+          "name": "--area-space-4",
+          "selectors": [
+            ".area-field__label"
+          ]
+        },
+        {
+          "name": "--area-ui-leading",
+          "selectors": [
+            ".area-field__label"
+          ]
+        },
+        {
+          "name": "--area-ui-size",
+          "selectors": [
+            ".area-field__label"
+          ]
+        },
+        {
+          "name": "--area-weight-regular",
+          "selectors": [
+            ".area-field__label",
+            ".area-field--horizontal > .area-field__label",
+            ".area-field--inline > .area-field__label"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "required",
+      "element": [
+        "span"
+      ],
+      "class": "area-field__required",
+      "required": false,
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-field-error-color",
+          "selectors": [
+            ".area-field__required"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "description",
+      "element": [
+        "span"
+      ],
+      "class": "area-field__description",
+      "required": false,
+      "allowedContent": [
+        "renderable content (text, elements, fragments, or empty content)"
+      ],
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-fg-muted",
+          "selectors": [
+            ".area-field__description"
+          ]
+        },
+        {
+          "name": "--area-text-xs-leading",
+          "selectors": [
+            ".area-field__description"
+          ]
+        },
+        {
+          "name": "--area-text-xs-size",
+          "selectors": [
+            ".area-field__description"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "validation",
+      "element": [
+        "span"
+      ],
+      "class": "area-field__validation",
+      "required": false,
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-fg-success-vivid",
+          "selectors": [
+            ".area-field__validation[data-tone=\"success\"]"
+          ]
+        },
+        {
+          "name": "--area-fg-warning-vivid",
+          "selectors": [
+            ".area-field__validation[data-tone=\"warning\"]"
+          ]
+        },
+        {
+          "name": "--area-field-error-color",
+          "selectors": [
+            ".area-field__validation"
+          ]
+        },
+        {
+          "name": "--area-space-4",
+          "selectors": [
+            ".area-field__validation"
+          ]
+        },
+        {
+          "name": "--area-text-xs-leading",
+          "selectors": [
+            ".area-field__validation"
+          ]
+        },
+        {
+          "name": "--area-text-xs-size",
+          "selectors": [
+            ".area-field__validation"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "error",
+      "element": "not found",
+      "class": "area-field__error",
+      "required": "not found",
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-field-error-color",
+          "selectors": [
+            ".area-field__error"
+          ]
+        },
+        {
+          "name": "--area-space-4",
+          "selectors": [
+            ".area-field__error"
+          ]
+        },
+        {
+          "name": "--area-text-xs-leading",
+          "selectors": [
+            ".area-field__error"
+          ]
+        },
+        {
+          "name": "--area-text-xs-size",
+          "selectors": [
+            ".area-field__error"
+          ]
+        }
+      ]
+    }
+  ],
+  "slots": [
+    {
+      "name": "Field.label",
+      "part": "label",
+      "element": [
+        "label"
+      ],
+      "class": "area-field__label",
+      "required": false,
+      "allowedContent": [
+        "renderable content (text, elements, fragments, or empty content)"
+      ]
+    },
+    {
+      "name": "Field.description",
+      "part": "description",
+      "element": [
+        "span"
+      ],
+      "class": "area-field__description",
+      "required": false,
+      "allowedContent": [
+        "renderable content (text, elements, fragments, or empty content)"
+      ]
+    },
+    {
+      "name": "Field.validation",
+      "part": "not found",
+      "element": "not found",
+      "class": "not found",
+      "required": false,
+      "allowedContent": [
+        "renderable content (text, elements, fragments, or empty content)"
+      ]
+    },
+    {
+      "name": "Field.error",
+      "part": "not found",
+      "element": "not found",
+      "class": "not found",
+      "required": false,
+      "allowedContent": [
+        "renderable content (text, elements, fragments, or empty content)"
+      ]
+    },
+    {
+      "name": "Field.children",
+      "part": "not found",
+      "element": "not found",
+      "class": "not found",
+      "required": "not found",
+      "allowedContent": "not found"
+    }
+  ],
+  "options": {
+    "orientation": {
+      "values": [
+        "vertical",
+        "horizontal"
+      ],
+      "default": "vertical"
+    }
+  },
+  "booleans": [
+    "inline"
+  ],
+  "elementModifiers": {},
+  "states": [
+    {
+      "name": "disabled",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-disabled",
+      "value": "\"\""
+    },
+    {
+      "name": "hidden",
+      "part": "required",
+      "kind": "aria",
+      "hook": "aria-hidden",
+      "value": "\"true\""
+    },
+    {
+      "name": "tone",
+      "part": "validation",
+      "kind": "data",
+      "hook": "data-tone",
+      "value": "{resolvedValidationStatus ?? \"error\"}"
+    },
+    {
+      "name": "tone",
+      "part": "validation",
+      "kind": "data",
+      "hook": "data-tone",
+      "value": "\"success\""
+    },
+    {
+      "name": "tone",
+      "part": "validation",
+      "kind": "data",
+      "hook": "data-tone",
+      "value": "\"warning\""
+    }
+  ],
+  "keyboard": [],
+  "accessibleName": [
+    {
+      "part": "label",
+      "rule": "Associate the label with the direct control; the child must forward native id, ARIA, required and disabled props."
+    },
+    {
+      "part": "label",
+      "rule": "Reference wiring: htmlFor={controlId}."
+    }
+  ],
+  "composition": {
+    "allowedParents": "not found",
+    "allowedChildren": [
+      "One direct control that forwards native id, aria-*, required and disabled props."
+    ],
+    "observedChildren": [],
+    "demoExamples": [
+      "apps/docs/src/demos/display.tsx:325",
+      "apps/docs/src/demos/display.tsx:332",
+      "apps/docs/src/demos/display.tsx:344",
+      "apps/docs/src/demos/display.tsx:355",
+      "apps/docs/src/demos/display.tsx:361",
+      "apps/docs/src/demos/display.tsx:364",
+      "apps/docs/src/demos/display.tsx:382",
+      "apps/docs/src/demos/display.tsx:385",
+      "apps/docs/src/demos/form.tsx:59",
+      "apps/docs/src/demos/form.tsx:60",
+      "apps/docs/src/demos/form.tsx:62",
+      "apps/docs/src/demos/form.tsx:63",
+      "apps/docs/src/demos/form.tsx:66",
+      "apps/docs/src/demos/form.tsx:68",
+      "apps/docs/src/demos/form.tsx:69",
+      "apps/docs/src/demos/form.tsx:70",
+      "apps/docs/src/demos/form.tsx:102",
+      "apps/docs/src/demos/form.tsx:108",
+      "apps/docs/src/demos/form.tsx:119",
+      "apps/docs/src/demos/form.tsx:125",
+      "apps/docs/src/demos/form.tsx:131",
+      "apps/docs/src/demos/form.tsx:138",
+      "apps/docs/src/demos/form.tsx:139",
+      "apps/docs/src/demos/form.tsx:140",
+      "apps/docs/src/demos/form.tsx:144",
+      "apps/docs/src/demos/form.tsx:146",
+      "apps/docs/src/demos/form.tsx:148",
+      "apps/docs/src/demos/form.tsx:150",
+      "apps/docs/src/demos/form.tsx:152",
+      "apps/docs/src/demos/form.tsx:187",
+      "apps/docs/src/demos/form.tsx:219",
+      "apps/docs/src/demos/form.tsx:225",
+      "apps/docs/src/demos/gallery.tsx:281",
+      "apps/docs/src/demos/gallery.tsx:305",
+      "apps/docs/src/demos/gallery.tsx:329",
+      "apps/docs/src/demos/gallery.tsx:374",
+      "apps/docs/src/demos/gallery.tsx:375",
+      "apps/docs/src/demos/gallery.tsx:379",
+      "apps/docs/src/demos/gallery.tsx:385",
+      "apps/docs/src/demos/gallery.tsx:388",
+      "apps/docs/src/demos/gallery.tsx:395",
+      "apps/docs/src/demos/gallery.tsx:700",
+      "apps/docs/src/demos/gallery.tsx:751",
+      "apps/docs/src/demos/gallery.tsx:756",
+      "apps/docs/src/demos/gallery.tsx:757",
+      "apps/docs/src/demos/gallery.tsx:758",
+      "apps/docs/src/demos/gallery.tsx:767",
+      "apps/docs/src/demos/gallery.tsx:768",
+      "apps/docs/src/demos/gallery.tsx:792",
+      "apps/docs/src/demos/gallery.tsx:793",
+      "apps/docs/src/demos/gallery.tsx:796",
+      "apps/docs/src/demos/gallery.tsx:1250",
+      "apps/docs/src/demos/gallery.tsx:1251",
+      "apps/docs/src/demos/gallery.tsx:1254",
+      "apps/docs/src/demos/gallery.tsx:1255",
+      "apps/docs/src/demos/gallery.tsx:1301",
+      "apps/docs/src/demos/gallery.tsx:1978",
+      "apps/docs/src/demos/overlays.tsx:10"
+    ]
+  },
+  "reference": {
+    "css": [
+      "packages/styles/src/components/field.css",
+      "packages/styles/src/components/panel.css"
+    ],
+    "spec": [
+      "docs/specs/field.md"
+    ],
+    "reactExport": [
+      "Field"
+    ]
+  },
+  "evidence": {
+    "/slug": {"status":"found","sources":["packages/styles/src/manifest.ts:134"],"note":"Direct source declaration or implementation."},
+    "/manifest": {"status":"found","sources":["packages/styles/src/manifest.ts:133"],"note":"Direct source declaration or implementation."},
+    "/parts": {"status":"found","sources":["packages/styles/src/manifest.ts:133","packages/react/src/components/Field.tsx:117","packages/react/src/components/Field.tsx:124","packages/react/src/components/Field.tsx:131","packages/react/src/components/Field.tsx:139","packages/react/src/components/Field.tsx:144","packages/react/src/components/Field.tsx:158"],"note":"Manifest parts plus implementation-only structural elements; unclassed nodes retain explicit IDs."},
+    "/parts/0": {"status":"found","sources":["packages/react/src/components/Field.tsx:117"],"note":"Direct source declaration or implementation."},
+    "/parts/0/id": {"status":"found","sources":["packages/react/src/components/Field.tsx:117"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/0/class": {"status":"found","sources":["packages/react/src/components/Field.tsx:117"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element": {"status":"found","sources":["packages/react/src/components/Field.tsx:117"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/required": {"status":"found","sources":["packages/react/src/components/Field.tsx:117"],"note":"Root of the rendered family surface."},
+    "/parts/0/allowedContent": {"status":"not found","sources":["packages/react/src/components/Field.tsx:117"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/0/customProperties/0": {"status":"found","sources":["packages/styles/src/components/field.css:67"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1": {"status":"found","sources":["packages/styles/src/components/field.css:80"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties": {"status":"found","sources":["packages/styles/src/components/field.css:67","packages/styles/src/components/field.css:80"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/0/tokens/0": {"status":"found","sources":["packages/styles/src/components/field.css:69"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1": {"status":"found","sources":["packages/styles/src/components/field.css:64"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2": {"status":"found","sources":["packages/styles/src/components/field.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens": {"status":"found","sources":["packages/styles/src/components/field.css:12","packages/styles/src/components/field.css:64","packages/styles/src/components/field.css:69"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/1": {"status":"found","sources":["packages/react/src/components/Field.tsx:124","packages/react/src/components/Field.tsx:158"],"note":"Direct source declaration or implementation."},
+    "/parts/1/id": {"status":"found","sources":["packages/react/src/components/Field.tsx:124","packages/react/src/components/Field.tsx:158"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/1/class": {"status":"found","sources":["packages/react/src/components/Field.tsx:124","packages/react/src/components/Field.tsx:158"],"note":"Direct source declaration or implementation."},
+    "/parts/1/element": {"status":"found","sources":["packages/react/src/components/Field.tsx:124","packages/react/src/components/Field.tsx:158"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/1/required": {"status":"found","sources":["packages/react/src/components/Field.tsx:124","packages/react/src/components/Field.tsx:158"],"note":"This part can be omitted by a conditional rendering branch."},
+    "/parts/1/allowedContent": {"status":"found","sources":["packages/react/src/components/Field.tsx:29"],"note":"Content type of the public slot rendered directly in this part."},
+    "/parts/1/customProperties": {"status":"not found","sources":["packages/react/src/components/Field.tsx:124","packages/react/src/components/Field.tsx:158"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/1/tokens/0": {"status":"found","sources":["packages/styles/src/components/field.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1": {"status":"found","sources":["packages/styles/src/components/field.css:56","packages/styles/src/components/field.css:86","packages/styles/src/components/panel.css:278"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/2": {"status":"found","sources":["packages/styles/src/components/field.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/3": {"status":"found","sources":["packages/styles/src/components/field.css:25"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/4": {"status":"found","sources":["packages/styles/src/components/field.css:24"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/5": {"status":"found","sources":["packages/styles/src/components/field.css:26","packages/styles/src/components/field.css:85"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens": {"status":"found","sources":["packages/styles/src/components/field.css:23","packages/styles/src/components/field.css:24","packages/styles/src/components/field.css:25","packages/styles/src/components/field.css:26","packages/styles/src/components/field.css:85","packages/styles/src/components/field.css:27","packages/styles/src/components/field.css:56","packages/styles/src/components/field.css:86","packages/styles/src/components/panel.css:278"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/2": {"status":"found","sources":["packages/react/src/components/Field.tsx:131"],"note":"Direct source declaration or implementation."},
+    "/parts/2/id": {"status":"found","sources":["packages/react/src/components/Field.tsx:131"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/2/class": {"status":"found","sources":["packages/react/src/components/Field.tsx:131"],"note":"Direct source declaration or implementation."},
+    "/parts/2/element": {"status":"found","sources":["packages/react/src/components/Field.tsx:131"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/2/required": {"status":"found","sources":["packages/react/src/components/Field.tsx:131"],"note":"This part can be omitted by a conditional rendering branch."},
+    "/parts/2/allowedContent": {"status":"not found","sources":["packages/react/src/components/Field.tsx:131"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/2/customProperties": {"status":"not found","sources":["packages/react/src/components/Field.tsx:131"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/2/tokens/0": {"status":"found","sources":["packages/styles/src/components/field.css:32"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens": {"status":"found","sources":["packages/styles/src/components/field.css:32"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/3": {"status":"found","sources":["packages/react/src/components/Field.tsx:139"],"note":"Direct source declaration or implementation."},
+    "/parts/3/id": {"status":"found","sources":["packages/react/src/components/Field.tsx:139"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/3/class": {"status":"found","sources":["packages/react/src/components/Field.tsx:139"],"note":"Direct source declaration or implementation."},
+    "/parts/3/element": {"status":"found","sources":["packages/react/src/components/Field.tsx:139"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/3/required": {"status":"found","sources":["packages/react/src/components/Field.tsx:139"],"note":"This part can be omitted by a conditional rendering branch."},
+    "/parts/3/allowedContent": {"status":"found","sources":["packages/react/src/components/Field.tsx:30"],"note":"Content type of the public slot rendered directly in this part."},
+    "/parts/3/customProperties": {"status":"not found","sources":["packages/react/src/components/Field.tsx:139"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/3/tokens/0": {"status":"found","sources":["packages/styles/src/components/field.css:38"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/1": {"status":"found","sources":["packages/styles/src/components/field.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/2": {"status":"found","sources":["packages/styles/src/components/field.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens": {"status":"found","sources":["packages/styles/src/components/field.css:36","packages/styles/src/components/field.css:37","packages/styles/src/components/field.css:38"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/4": {"status":"found","sources":["packages/react/src/components/Field.tsx:144"],"note":"Direct source declaration or implementation."},
+    "/parts/4/id": {"status":"found","sources":["packages/react/src/components/Field.tsx:144"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/4/class": {"status":"found","sources":["packages/react/src/components/Field.tsx:144"],"note":"Direct source declaration or implementation."},
+    "/parts/4/element": {"status":"found","sources":["packages/react/src/components/Field.tsx:144"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/4/required": {"status":"found","sources":["packages/react/src/components/Field.tsx:144"],"note":"This part can be omitted by a conditional rendering branch."},
+    "/parts/4/allowedContent": {"status":"not found","sources":["packages/react/src/components/Field.tsx:144"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/4/customProperties": {"status":"not found","sources":["packages/react/src/components/Field.tsx:144"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/4/tokens/0": {"status":"found","sources":["packages/styles/src/components/field.css:51"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/1": {"status":"found","sources":["packages/styles/src/components/field.css:52"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/2": {"status":"found","sources":["packages/styles/src/components/field.css:48"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/3": {"status":"found","sources":["packages/styles/src/components/field.css:45"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/4": {"status":"found","sources":["packages/styles/src/components/field.css:47"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/5": {"status":"found","sources":["packages/styles/src/components/field.css:46"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens": {"status":"found","sources":["packages/styles/src/components/field.css:45","packages/styles/src/components/field.css:46","packages/styles/src/components/field.css:47","packages/styles/src/components/field.css:48","packages/styles/src/components/field.css:51","packages/styles/src/components/field.css:52"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/5": {"status":"found","sources":["packages/styles/src/manifest.ts:133"],"note":"Direct source declaration or implementation."},
+    "/parts/5/id": {"status":"found","sources":["packages/styles/src/manifest.ts:133"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/5/class": {"status":"found","sources":["packages/styles/src/manifest.ts:139"],"note":"Direct source declaration or implementation."},
+    "/parts/5/element": {"status":"not found","sources":["packages/styles/src/manifest.ts:133"],"note":"not found: No native element resolved for this manifest part; searched JSX classes and class helpers."},
+    "/parts/5/required": {"status":"not found","sources":["packages/styles/src/manifest.ts:133"],"note":"not found: Family-wide mandatory/optional anatomy is not specified; presence at one JSX call site does not establish a composition rule."},
+    "/parts/5/allowedContent": {"status":"not found","sources":["packages/styles/src/manifest.ts:133"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/5/customProperties": {"status":"not found","sources":["packages/styles/src/manifest.ts:133"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/5/tokens/0": {"status":"found","sources":["packages/styles/src/components/field.css:48"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/1": {"status":"found","sources":["packages/styles/src/components/field.css:45"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/2": {"status":"found","sources":["packages/styles/src/components/field.css:47"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/3": {"status":"found","sources":["packages/styles/src/components/field.css:46"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens": {"status":"found","sources":["packages/styles/src/components/field.css:45","packages/styles/src/components/field.css:46","packages/styles/src/components/field.css:47","packages/styles/src/components/field.css:48"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/slots/0": {"status":"found","sources":["packages/react/src/components/Field.tsx:29"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/element": {"status":"found","sources":["packages/react/src/components/Field.tsx:124","packages/react/src/components/Field.tsx:158"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/slots/0/class": {"status":"found","sources":["packages/react/src/components/Field.tsx:124","packages/react/src/components/Field.tsx:158"],"note":"Direct source declaration or implementation."},
+    "/slots/1": {"status":"found","sources":["packages/react/src/components/Field.tsx:30"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/1/element": {"status":"found","sources":["packages/react/src/components/Field.tsx:139"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/slots/1/class": {"status":"found","sources":["packages/react/src/components/Field.tsx:139"],"note":"Direct source declaration or implementation."},
+    "/slots/2": {"status":"found","sources":["packages/react/src/components/Field.tsx:32"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/2/part": {"status":"not found","sources":["packages/styles/src/manifest.ts:133","packages/react/src/components/Field.tsx:60","docs/specs/field.md:1"],"note":"not found: No single direct part resolved for Field.validation; conditional/delegated rendering requires review."},
+    "/slots/2/element": {"status":"not found","sources":["packages/styles/src/manifest.ts:133","packages/react/src/components/Field.tsx:60","docs/specs/field.md:1"],"note":"not found: No resolved part for Field.validation."},
+    "/slots/2/class": {"status":"not found","sources":["packages/styles/src/manifest.ts:133","packages/react/src/components/Field.tsx:60","docs/specs/field.md:1"],"note":"not found: No resolved part for Field.validation."},
+    "/slots/3": {"status":"found","sources":["packages/react/src/components/Field.tsx:34"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/3/part": {"status":"not found","sources":["packages/styles/src/manifest.ts:133","packages/react/src/components/Field.tsx:60","docs/specs/field.md:1"],"note":"not found: No single direct part resolved for Field.error; conditional/delegated rendering requires review."},
+    "/slots/3/element": {"status":"not found","sources":["packages/styles/src/manifest.ts:133","packages/react/src/components/Field.tsx:60","docs/specs/field.md:1"],"note":"not found: No resolved part for Field.error."},
+    "/slots/3/class": {"status":"not found","sources":["packages/styles/src/manifest.ts:133","packages/react/src/components/Field.tsx:60","docs/specs/field.md:1"],"note":"not found: No resolved part for Field.error."},
+    "/slots/4": {"status":"found","sources":["packages/react/src/components/Field.tsx:74"],"note":"Observed children slot inherited through native props; no local content grammar declared."},
+    "/slots/4/required": {"status":"not found","sources":["packages/react/src/components/Field.tsx:74"],"note":"not found: Inherited native children; local content grammar/cardinality not found."},
+    "/slots/4/allowedContent": {"status":"not found","sources":["packages/react/src/components/Field.tsx:74"],"note":"not found: Inherited native children; local content grammar/cardinality not found."},
+    "/slots/4/element": {"status":"not found","sources":["packages/styles/src/manifest.ts:133","packages/react/src/components/Field.tsx:60","docs/specs/field.md:1"],"note":"not found: No unique direct part for inherited children."},
+    "/slots/4/class": {"status":"not found","sources":["packages/styles/src/manifest.ts:133","packages/react/src/components/Field.tsx:60","docs/specs/field.md:1"],"note":"not found: No unique direct part for inherited children."},
+    "/slots": {"status":"found","sources":["packages/react/src/components/Field.tsx:29","packages/react/src/components/Field.tsx:30","packages/react/src/components/Field.tsx:32","packages/react/src/components/Field.tsx:34","packages/react/src/components/Field.tsx:74"],"note":"Direct source declaration or implementation."},
+    "/options": {"status":"found","sources":["packages/styles/src/manifest.ts:136"],"note":"Direct source declaration or implementation."},
+    "/options/orientation": {"status":"found","sources":["packages/styles/src/manifest.ts:136"],"note":"Direct source declaration or implementation."},
+    "/options/orientation/default": {"status":"found","sources":["packages/styles/src/manifest.ts:140"],"note":"Direct source declaration or implementation."},
+    "/booleans": {"status":"found","sources":["packages/styles/src/manifest.ts:137"],"note":"Exact manifest boolean modifier list; absence means no declared booleans."},
+    "/elementModifiers": {"status":"found","sources":["packages/styles/src/manifest.ts:133"],"note":"Direct source declaration or implementation."},
+    "/states/0": {"status":"found","sources":["packages/react/src/components/Field.tsx:120"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/1": {"status":"found","sources":["packages/react/src/components/Field.tsx:131"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2": {"status":"found","sources":["packages/react/src/components/Field.tsx:144"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3": {"status":"found","sources":["packages/styles/src/components/field.css:51"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/4": {"status":"found","sources":["packages/styles/src/components/field.css:52"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states": {"status":"found","sources":["packages/react/src/components/Field.tsx:120","packages/react/src/components/Field.tsx:131","packages/react/src/components/Field.tsx:144","packages/styles/src/components/field.css:51","packages/styles/src/components/field.css:52"],"note":"Direct source declaration or implementation."},
+    "/keyboard": {"status":"not found","sources":["packages/styles/src/manifest.ts:133","packages/react/src/components/Field.tsx:60","docs/specs/field.md:1"],"note":"not found: No reviewed key-to-action contract found. Native behavior is not invented from a tag name."},
+    "/accessibleName/0": {"status":"found","sources":["packages/react/src/components/Field.tsx:57"],"note":"Direct source declaration or implementation."},
+    "/accessibleName/1": {"status":"found","sources":["packages/react/src/components/Field.tsx:127"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName": {"status":"found","sources":["packages/react/src/components/Field.tsx:57","packages/react/src/components/Field.tsx:127"],"note":"Direct source declaration or implementation."},
+    "/composition": {"status":"found","sources":["packages/styles/src/manifest.ts:133","packages/react/src/components/Field.tsx:60","docs/specs/field.md:1"],"note":"Allowed composition is distinct from examples and built-in child calls."},
+    "/composition/allowedParents": {"status":"not found","sources":["packages/styles/src/manifest.ts:133","packages/react/src/components/Field.tsx:60","docs/specs/field.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/allowedChildren": {"status":"found","sources":["packages/react/src/components/Field.tsx:57"],"note":"Direct source declaration or implementation."},
+    "/composition/observedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:133","packages/react/src/components/Field.tsx:60","docs/specs/field.md:1"],"note":"not found: No child component call located."},
+    "/composition/demoExamples/0": {"status":"found","sources":["apps/docs/src/demos/display.tsx:325"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/1": {"status":"found","sources":["apps/docs/src/demos/display.tsx:332"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/2": {"status":"found","sources":["apps/docs/src/demos/display.tsx:344"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/3": {"status":"found","sources":["apps/docs/src/demos/display.tsx:355"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/4": {"status":"found","sources":["apps/docs/src/demos/display.tsx:361"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/5": {"status":"found","sources":["apps/docs/src/demos/display.tsx:364"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/6": {"status":"found","sources":["apps/docs/src/demos/display.tsx:382"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/7": {"status":"found","sources":["apps/docs/src/demos/display.tsx:385"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/8": {"status":"found","sources":["apps/docs/src/demos/form.tsx:59"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/9": {"status":"found","sources":["apps/docs/src/demos/form.tsx:60"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/10": {"status":"found","sources":["apps/docs/src/demos/form.tsx:62"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/11": {"status":"found","sources":["apps/docs/src/demos/form.tsx:63"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/12": {"status":"found","sources":["apps/docs/src/demos/form.tsx:66"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/13": {"status":"found","sources":["apps/docs/src/demos/form.tsx:68"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/14": {"status":"found","sources":["apps/docs/src/demos/form.tsx:69"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/15": {"status":"found","sources":["apps/docs/src/demos/form.tsx:70"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/16": {"status":"found","sources":["apps/docs/src/demos/form.tsx:102"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/17": {"status":"found","sources":["apps/docs/src/demos/form.tsx:108"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/18": {"status":"found","sources":["apps/docs/src/demos/form.tsx:119"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/19": {"status":"found","sources":["apps/docs/src/demos/form.tsx:125"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/20": {"status":"found","sources":["apps/docs/src/demos/form.tsx:131"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/21": {"status":"found","sources":["apps/docs/src/demos/form.tsx:138"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/22": {"status":"found","sources":["apps/docs/src/demos/form.tsx:139"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/23": {"status":"found","sources":["apps/docs/src/demos/form.tsx:140"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/24": {"status":"found","sources":["apps/docs/src/demos/form.tsx:144"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/25": {"status":"found","sources":["apps/docs/src/demos/form.tsx:146"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/26": {"status":"found","sources":["apps/docs/src/demos/form.tsx:148"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/27": {"status":"found","sources":["apps/docs/src/demos/form.tsx:150"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/28": {"status":"found","sources":["apps/docs/src/demos/form.tsx:152"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/29": {"status":"found","sources":["apps/docs/src/demos/form.tsx:187"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/30": {"status":"found","sources":["apps/docs/src/demos/form.tsx:219"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/31": {"status":"found","sources":["apps/docs/src/demos/form.tsx:225"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/32": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:281"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/33": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:305"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/34": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:329"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/35": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:374"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/36": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:375"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/37": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:379"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/38": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:385"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/39": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:388"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/40": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:395"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/41": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:700"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/42": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:751"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/43": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:756"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/44": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:757"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/45": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:758"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/46": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:767"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/47": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:768"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/48": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:792"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/49": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:793"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/50": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:796"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/51": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1250"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/52": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1251"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/53": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1254"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/54": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1255"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/55": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1301"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/56": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1978"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/57": {"status":"found","sources":["apps/docs/src/demos/overlays.tsx:10"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples": {"status":"found","sources":["apps/docs/src/demos/display.tsx:325","apps/docs/src/demos/display.tsx:332","apps/docs/src/demos/display.tsx:344","apps/docs/src/demos/display.tsx:355","apps/docs/src/demos/display.tsx:361","apps/docs/src/demos/display.tsx:364","apps/docs/src/demos/display.tsx:382","apps/docs/src/demos/display.tsx:385","apps/docs/src/demos/form.tsx:59","apps/docs/src/demos/form.tsx:60","apps/docs/src/demos/form.tsx:62","apps/docs/src/demos/form.tsx:63","apps/docs/src/demos/form.tsx:66","apps/docs/src/demos/form.tsx:68","apps/docs/src/demos/form.tsx:69","apps/docs/src/demos/form.tsx:70","apps/docs/src/demos/form.tsx:102","apps/docs/src/demos/form.tsx:108","apps/docs/src/demos/form.tsx:119","apps/docs/src/demos/form.tsx:125","apps/docs/src/demos/form.tsx:131","apps/docs/src/demos/form.tsx:138","apps/docs/src/demos/form.tsx:139","apps/docs/src/demos/form.tsx:140","apps/docs/src/demos/form.tsx:144","apps/docs/src/demos/form.tsx:146","apps/docs/src/demos/form.tsx:148","apps/docs/src/demos/form.tsx:150","apps/docs/src/demos/form.tsx:152","apps/docs/src/demos/form.tsx:187","apps/docs/src/demos/form.tsx:219","apps/docs/src/demos/form.tsx:225","apps/docs/src/demos/gallery.tsx:281","apps/docs/src/demos/gallery.tsx:305","apps/docs/src/demos/gallery.tsx:329","apps/docs/src/demos/gallery.tsx:374","apps/docs/src/demos/gallery.tsx:375","apps/docs/src/demos/gallery.tsx:379","apps/docs/src/demos/gallery.tsx:385","apps/docs/src/demos/gallery.tsx:388","apps/docs/src/demos/gallery.tsx:395","apps/docs/src/demos/gallery.tsx:700","apps/docs/src/demos/gallery.tsx:751","apps/docs/src/demos/gallery.tsx:756","apps/docs/src/demos/gallery.tsx:757","apps/docs/src/demos/gallery.tsx:758","apps/docs/src/demos/gallery.tsx:767","apps/docs/src/demos/gallery.tsx:768","apps/docs/src/demos/gallery.tsx:792","apps/docs/src/demos/gallery.tsx:793","apps/docs/src/demos/gallery.tsx:796","apps/docs/src/demos/gallery.tsx:1250","apps/docs/src/demos/gallery.tsx:1251","apps/docs/src/demos/gallery.tsx:1254","apps/docs/src/demos/gallery.tsx:1255","apps/docs/src/demos/gallery.tsx:1301","apps/docs/src/demos/gallery.tsx:1978","apps/docs/src/demos/overlays.tsx:10"],"note":"Direct source declaration or implementation."},
+    "/reference/css": {"status":"found","sources":["packages/styles/src/components/field.css:9","packages/styles/src/components/field.css:16","packages/styles/src/components/field.css:20","packages/styles/src/components/field.css:31","packages/styles/src/components/field.css:35","packages/styles/src/components/field.css:41","packages/styles/src/components/field.css:51","packages/styles/src/components/field.css:52","packages/styles/src/components/field.css:55","packages/styles/src/components/field.css:62","packages/styles/src/components/field.css:75","packages/styles/src/components/field.css:83","packages/styles/src/components/field.css:90","packages/styles/src/components/field.css:100","packages/styles/src/components/panel.css:278"],"note":"Direct source declaration or implementation."},
+    "/reference/css/0": {"status":"found","sources":["packages/styles/src/components/field.css:9"],"note":"Direct source declaration or implementation."},
+    "/reference/css/1": {"status":"found","sources":["packages/styles/src/components/panel.css:278"],"note":"Direct source declaration or implementation."},
+    "/reference/spec": {"status":"found","sources":["docs/specs/field.md:1"],"note":"Dedicated family spec."},
+    "/reference/reactExport/0": {"status":"found","sources":["packages/react/src/components/Field.tsx:60","packages/react/src/index.ts:36"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport": {"status":"found","sources":["packages/react/src/components/Field.tsx:60","packages/react/src/index.ts:36"],"note":"Direct source declaration or implementation."},
+    "/reference": {"status":"found","sources":["packages/styles/src/manifest.ts:133","packages/styles/src/components/field.css:1","packages/styles/src/components/panel.css:1","docs/specs/field.md:1"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element/0": {"status":"found","sources":["packages/react/src/components/Field.tsx:117"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/field.css:67"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/field.css:67"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/field.css:67"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors/1": {"status":"found","sources":["packages/styles/src/components/field.css:67"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/name": {"status":"found","sources":["packages/styles/src/components/field.css:80"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/selectors": {"status":"found","sources":["packages/styles/src/components/field.css:80"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/field.css:80"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/selectors/1": {"status":"found","sources":["packages/styles/src/components/field.css:80"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/field.css:69"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/field.css:69"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/field.css:69"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors/1": {"status":"found","sources":["packages/styles/src/components/field.css:69"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/field.css:64"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/field.css:64"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/field.css:64"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors/1": {"status":"found","sources":["packages/styles/src/components/field.css:64"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/field.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/field.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/field.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/element/0": {"status":"found","sources":["packages/react/src/components/Field.tsx:124","packages/react/src/components/Field.tsx:158"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/1/allowedContent/0": {"status":"found","sources":["packages/react/src/components/Field.tsx:29"],"note":"Content type of the public slot rendered directly in this part."},
+    "/parts/1/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/field.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/field.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/field.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/field.css:56","packages/styles/src/components/field.css:86","packages/styles/src/components/panel.css:278"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/field.css:56","packages/styles/src/components/field.css:86","packages/styles/src/components/panel.css:278"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/field.css:56","packages/styles/src/components/field.css:86","packages/styles/src/components/panel.css:278"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1/selectors/1": {"status":"found","sources":["packages/styles/src/components/field.css:56","packages/styles/src/components/field.css:86","packages/styles/src/components/panel.css:278"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1/selectors/2": {"status":"found","sources":["packages/styles/src/components/field.css:56","packages/styles/src/components/field.css:86","packages/styles/src/components/panel.css:278"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1/selectors/3": {"status":"found","sources":["packages/styles/src/components/field.css:56","packages/styles/src/components/field.css:86","packages/styles/src/components/panel.css:278"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/field.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/field.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/field.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/3/name": {"status":"found","sources":["packages/styles/src/components/field.css:25"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/3/selectors": {"status":"found","sources":["packages/styles/src/components/field.css:25"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/field.css:25"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/4/name": {"status":"found","sources":["packages/styles/src/components/field.css:24"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/4/selectors": {"status":"found","sources":["packages/styles/src/components/field.css:24"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/4/selectors/0": {"status":"found","sources":["packages/styles/src/components/field.css:24"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/5/name": {"status":"found","sources":["packages/styles/src/components/field.css:26","packages/styles/src/components/field.css:85"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/5/selectors": {"status":"found","sources":["packages/styles/src/components/field.css:26","packages/styles/src/components/field.css:85"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/5/selectors/0": {"status":"found","sources":["packages/styles/src/components/field.css:26","packages/styles/src/components/field.css:85"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/5/selectors/1": {"status":"found","sources":["packages/styles/src/components/field.css:26","packages/styles/src/components/field.css:85"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/5/selectors/2": {"status":"found","sources":["packages/styles/src/components/field.css:26","packages/styles/src/components/field.css:85"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/element/0": {"status":"found","sources":["packages/react/src/components/Field.tsx:131"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/2/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/field.css:32"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/field.css:32"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/field.css:32"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/element/0": {"status":"found","sources":["packages/react/src/components/Field.tsx:139"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/3/allowedContent/0": {"status":"found","sources":["packages/react/src/components/Field.tsx:30"],"note":"Content type of the public slot rendered directly in this part."},
+    "/parts/3/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/field.css:38"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/field.css:38"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/field.css:38"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/field.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/field.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/field.css:37"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/field.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/field.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/field.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/element/0": {"status":"found","sources":["packages/react/src/components/Field.tsx:144"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/4/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/field.css:51"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/field.css:51"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/field.css:51"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/field.css:52"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/field.css:52"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/field.css:52"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/field.css:48"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/field.css:48"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/field.css:48"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/3/name": {"status":"found","sources":["packages/styles/src/components/field.css:45"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/3/selectors": {"status":"found","sources":["packages/styles/src/components/field.css:45"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/field.css:45"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/4/name": {"status":"found","sources":["packages/styles/src/components/field.css:47"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/4/selectors": {"status":"found","sources":["packages/styles/src/components/field.css:47"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/4/selectors/0": {"status":"found","sources":["packages/styles/src/components/field.css:47"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/5/name": {"status":"found","sources":["packages/styles/src/components/field.css:46"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/5/selectors": {"status":"found","sources":["packages/styles/src/components/field.css:46"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/5/selectors/0": {"status":"found","sources":["packages/styles/src/components/field.css:46"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/field.css:48"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/field.css:48"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/field.css:48"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/field.css:45"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/field.css:45"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/field.css:45"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/field.css:47"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/field.css:47"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/field.css:47"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/3/name": {"status":"found","sources":["packages/styles/src/components/field.css:46"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/3/selectors": {"status":"found","sources":["packages/styles/src/components/field.css:46"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/field.css:46"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/slots/0/name": {"status":"found","sources":["packages/react/src/components/Field.tsx:29"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/part": {"status":"found","sources":["packages/react/src/components/Field.tsx:29"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/element/0": {"status":"found","sources":["packages/react/src/components/Field.tsx:124","packages/react/src/components/Field.tsx:158"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/slots/0/required": {"status":"found","sources":["packages/react/src/components/Field.tsx:29"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/allowedContent": {"status":"found","sources":["packages/react/src/components/Field.tsx:29"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/allowedContent/0": {"status":"found","sources":["packages/react/src/components/Field.tsx:29"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/1/name": {"status":"found","sources":["packages/react/src/components/Field.tsx:30"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/1/part": {"status":"found","sources":["packages/react/src/components/Field.tsx:30"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/1/element/0": {"status":"found","sources":["packages/react/src/components/Field.tsx:139"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/slots/1/required": {"status":"found","sources":["packages/react/src/components/Field.tsx:30"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/1/allowedContent": {"status":"found","sources":["packages/react/src/components/Field.tsx:30"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/1/allowedContent/0": {"status":"found","sources":["packages/react/src/components/Field.tsx:30"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/2/name": {"status":"found","sources":["packages/react/src/components/Field.tsx:32"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/2/required": {"status":"found","sources":["packages/react/src/components/Field.tsx:32"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/2/allowedContent": {"status":"found","sources":["packages/react/src/components/Field.tsx:32"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/2/allowedContent/0": {"status":"found","sources":["packages/react/src/components/Field.tsx:32"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/3/name": {"status":"found","sources":["packages/react/src/components/Field.tsx:34"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/3/required": {"status":"found","sources":["packages/react/src/components/Field.tsx:34"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/3/allowedContent": {"status":"found","sources":["packages/react/src/components/Field.tsx:34"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/3/allowedContent/0": {"status":"found","sources":["packages/react/src/components/Field.tsx:34"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/4/name": {"status":"found","sources":["packages/react/src/components/Field.tsx:74"],"note":"Observed children slot inherited through native props; no local content grammar declared."},
+    "/slots/4/part": {"status":"not found","sources":["packages/react/src/components/Field.tsx:74"],"note":"not found: No value resolved; see the cited declaration and family review."},
+    "/options/orientation/values": {"status":"found","sources":["packages/styles/src/manifest.ts:136"],"note":"Direct source declaration or implementation."},
+    "/options/orientation/values/0": {"status":"found","sources":["packages/styles/src/manifest.ts:136"],"note":"Direct source declaration or implementation."},
+    "/options/orientation/values/1": {"status":"found","sources":["packages/styles/src/manifest.ts:136"],"note":"Direct source declaration or implementation."},
+    "/booleans/0": {"status":"found","sources":["packages/styles/src/manifest.ts:137"],"note":"Exact manifest boolean modifier list; absence means no declared booleans."},
+    "/states/0/name": {"status":"found","sources":["packages/react/src/components/Field.tsx:120"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/0/part": {"status":"found","sources":["packages/react/src/components/Field.tsx:120"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/0/kind": {"status":"found","sources":["packages/react/src/components/Field.tsx:120"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/0/hook": {"status":"found","sources":["packages/react/src/components/Field.tsx:120"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/0/value": {"status":"found","sources":["packages/react/src/components/Field.tsx:120"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/1/name": {"status":"found","sources":["packages/react/src/components/Field.tsx:131"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/part": {"status":"found","sources":["packages/react/src/components/Field.tsx:131"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/kind": {"status":"found","sources":["packages/react/src/components/Field.tsx:131"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/hook": {"status":"found","sources":["packages/react/src/components/Field.tsx:131"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/value": {"status":"found","sources":["packages/react/src/components/Field.tsx:131"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/name": {"status":"found","sources":["packages/react/src/components/Field.tsx:144"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/part": {"status":"found","sources":["packages/react/src/components/Field.tsx:144"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/kind": {"status":"found","sources":["packages/react/src/components/Field.tsx:144"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/hook": {"status":"found","sources":["packages/react/src/components/Field.tsx:144"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/value": {"status":"found","sources":["packages/react/src/components/Field.tsx:144"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3/name": {"status":"found","sources":["packages/styles/src/components/field.css:51"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/3/part": {"status":"found","sources":["packages/styles/src/components/field.css:51"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/3/kind": {"status":"found","sources":["packages/styles/src/components/field.css:51"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/3/hook": {"status":"found","sources":["packages/styles/src/components/field.css:51"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/3/value": {"status":"found","sources":["packages/styles/src/components/field.css:51"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/4/name": {"status":"found","sources":["packages/styles/src/components/field.css:52"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/4/part": {"status":"found","sources":["packages/styles/src/components/field.css:52"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/4/kind": {"status":"found","sources":["packages/styles/src/components/field.css:52"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/4/hook": {"status":"found","sources":["packages/styles/src/components/field.css:52"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/4/value": {"status":"found","sources":["packages/styles/src/components/field.css:52"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/accessibleName/0/part": {"status":"found","sources":["packages/react/src/components/Field.tsx:57"],"note":"Direct source declaration or implementation."},
+    "/accessibleName/0/rule": {"status":"found","sources":["packages/react/src/components/Field.tsx:57"],"note":"Direct source declaration or implementation."},
+    "/accessibleName/1/part": {"status":"found","sources":["packages/react/src/components/Field.tsx:127"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/1/rule": {"status":"found","sources":["packages/react/src/components/Field.tsx:127"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/composition/allowedChildren/0": {"status":"found","sources":["packages/react/src/components/Field.tsx:57"],"note":"Direct source declaration or implementation."},
+    "/reference/spec/0": {"status":"found","sources":["docs/specs/field.md:1"],"note":"Dedicated family spec."}
+  }
+}

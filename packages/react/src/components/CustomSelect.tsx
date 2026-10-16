@@ -45,6 +45,16 @@ export interface CustomSelectProps extends Omit<ButtonHTMLAttributes<HTMLButtonE
   required?: boolean;
   /** Called when the list opens or closes. */
   onOpenChange?: (open: boolean) => void;
+  /**
+   * Picks any number of options (Notion's multi-select, Figma's toggled lists): choosing a row
+   * toggles it and the list stays open, the trigger lists the chosen labels in the list's order,
+   * and the value is `values` / `defaultValues` / `onValuesChange` (`value` and `onValueChange`
+   * are ignored).
+   */
+  multiple?: boolean;
+  values?: readonly string[];
+  defaultValues?: readonly string[];
+  onValuesChange?: (values: string[], event: SyntheticEvent) => void;
 }
 
 /**
@@ -55,14 +65,19 @@ export interface CustomSelectProps extends Omit<ButtonHTMLAttributes<HTMLButtonE
  */
 export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(function CustomSelect(
   { items, value, defaultValue = null, onValueChange, placeholder = "Select…", variant, size, fullWidth, invalid, name, required,
-    onOpenChange, disabled, className, style, onKeyDown, onBlur, onClick, form, ...rest }, ref,
+    onOpenChange, multiple = false, values, defaultValues, onValuesChange, disabled, className, style, onKeyDown, onBlur, onClick, form, ...rest }, ref,
 ) {
   const options = items ?? NO_ITEMS;
   const id = useId();
   const listId = `${id}-listbox`;
   const [ownValue, setOwnValue] = useState<string | null>(defaultValue);
-  const selected = value !== undefined ? value : ownValue;
-  const selectedOption = options.find(option => option.value === selected) ?? null;
+  const [ownValues, setOwnValues] = useState<readonly string[]>(defaultValues ?? NO_ITEMS);
+  const chosen = values !== undefined ? values : ownValues;
+  const selected = multiple ? (chosen[0] ?? null) : value !== undefined ? value : ownValue;
+  const isChosen = (option: CustomSelectOption) => multiple ? chosen.includes(option.value) : option.value === selected;
+  const selectedOption = multiple ? null : options.find(option => option.value === selected) ?? null;
+  // A set reads as its labels in the list's order ("Button, Chip, Badge").
+  const chosenLabel = multiple ? options.filter(isChosen).map(option => option.label).join(", ") : selectedOption?.label;
   const [open, setOpenState] = useState(false);
   const [active, setActive] = useState(-1);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
@@ -70,6 +85,7 @@ export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(fun
   const rootRef = useRef<HTMLDivElement | null>(null);
   const typed = useRef({ text: "", at: 0 });
   const initial = useRef(defaultValue);
+  const initialValues = useRef(defaultValues ?? NO_ITEMS);
 
   // Grouped options are listed group by group, in the order each group first appears; the
   // index of a row is its place in this order.
@@ -103,6 +119,14 @@ export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(fun
   const choose = (index: number, event: SyntheticEvent) => {
     const option = rows[index];
     if (!option || option.disabled) return;
+    if (multiple) {
+      // Toggled in place; the set keeps the list's order.
+      const on = !chosen.includes(option.value);
+      const next = options.filter(entry => entry.value === option.value ? on : chosen.includes(entry.value)).map(entry => entry.value);
+      if (values === undefined) setOwnValues(next);
+      onValuesChange?.(next, event);
+      return;
+    }
     if (value === undefined) setOwnValue(option.value);
     if (option.value !== selected) onValueChange?.(option.value, event);
   };
@@ -114,6 +138,7 @@ export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(fun
     const reset = (event: Event) => queueMicrotask(() => {
       if (event.defaultPrevented) return;
       if (value === undefined) setOwnValue(initial.current);
+      if (values === undefined) setOwnValues(initialValues.current);
       close();
     });
     owner.addEventListener("reset", reset);
@@ -172,20 +197,21 @@ export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(fun
       case "ArrowDown": event.preventDefault(); setActive(current => move(current < 0 ? -1 : current, 1)); break;
       case "ArrowUp":
         event.preventDefault();
-        if (altKey) { choose(active, event); close(); }
+        if (altKey) { if (!multiple) choose(active, event); close(); }
         else setActive(current => move(current < 0 ? rows.length : current, -1));
         break;
       case "Home": event.preventDefault(); setActive(firstEnabled()); break;
       case "End": event.preventDefault(); setActive(lastEnabled()); break;
       case "PageDown": event.preventDefault(); setActive(current => move(current, PAGE)); break;
       case "PageUp": event.preventDefault(); setActive(current => move(current, -PAGE)); break;
-      case "Enter": event.preventDefault(); choose(active, event); close(); break;
+      // A set stays open: Enter and Space toggle the row, Escape, Tab or Alt+Up close.
+      case "Enter": event.preventDefault(); choose(active, event); if (!multiple) close(); break;
       case " ":
         // A space inside a typeahead search is part of the label, not a choice.
         if (Date.now() - typed.current.at < TYPEAHEAD_MS) { const match = typeahead(key); if (match >= 0) setActive(match); event.preventDefault(); break; }
-        event.preventDefault(); choose(active, event); close(); break;
+        event.preventDefault(); choose(active, event); if (!multiple) close(); break;
       case "Escape": event.preventDefault(); close(); break;
-      case "Tab": choose(active, event); close(); break;
+      case "Tab": if (!multiple) choose(active, event); close(); break;
       default:
         if (key.length === 1 && !event.ctrlKey && !event.metaKey && !altKey) {
           const match = typeahead(key);
@@ -202,14 +228,14 @@ export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(fun
 
   const renderRow = (index: number) => {
     const option = rows[index]!;
-    const isSelected = option.value === selected;
+    const isSelected = isChosen(option);
     return <div key={option.value} id={`${id}-option-${index}`} data-index={index} role="option" aria-selected={isSelected}
       aria-disabled={option.disabled || undefined} data-disabled={option.disabled ? "" : undefined}
       className="area-menu__item area-custom-select__option" data-highlighted={index === active ? "" : undefined}
      
       onPointerDown={event => event.preventDefault()}
       onPointerMove={() => { if (!option.disabled && index !== active) setActive(index); }}
-      onClick={event => { if (option.disabled) return; choose(index, event); close(); triggerRef.current?.focus(); }}>
+      onClick={event => { if (option.disabled) return; choose(index, event); if (!multiple) close(); triggerRef.current?.focus(); }}>
       {option.icon ? <span className="area-menu__icon" aria-hidden="true">{option.icon}</span> : null}
       {option.description
         ? <span className="area-menu__lines"><span className="area-menu__text">{option.label}</span><span className="area-menu__description">{option.description}</span></span>
@@ -228,12 +254,14 @@ export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(fun
       onKeyDown={handleKeyDown}
       onBlur={event => { onBlur?.(event); close(); }}>
       {selectedOption?.icon ? <span className="area-custom-select__icon" aria-hidden="true">{selectedOption.icon}</span> : null}
-      <span className="area-custom-select__value" data-placeholder={selectedOption ? undefined : ""}>{selectedOption?.label ?? placeholder}</span>
+      <span className="area-custom-select__value" data-placeholder={chosenLabel ? undefined : ""}>{chosenLabel || placeholder}</span>
       <span className="area-custom-select__chevron" aria-hidden="true"><Glyph name="chevron-down" /></span>
     </button>
     {/* The form gets the option's value, never its label. */}
-    {name ? <input type="hidden" name={name} form={form} disabled={disabled} value={selected ?? ""} /> : null}
-    <ScrollArea ref={listRef} id={listId} role="listbox" aria-label={typeof label === "string" ? label : undefined}
+    {name ? multiple
+      ? chosen.map(entry => <input key={entry} type="hidden" name={name} form={form} disabled={disabled} value={entry} />)
+      : <input type="hidden" name={name} form={form} disabled={disabled} value={selected ?? ""} /> : null}
+    <ScrollArea ref={listRef} id={listId} role="listbox" aria-multiselectable={multiple || undefined} aria-label={typeof label === "string" ? label : undefined}
       aria-labelledby={typeof label === "string" ? undefined : labelledBy}
       popover="manual" className="area-menu area-custom-select__listbox" tabIndex={-1} viewportProps={{ tabIndex: undefined }}>
       {[...groups].map(([group, indexes], position) => group

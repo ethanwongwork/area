@@ -331,4 +331,10 @@ announcement, RTL, forced colours, Figma side by side.
   alignment and still chevrons kept. Verified on `#component-custom-select` (computed styles and
   rects, light/dark, default/compact); `npm test` passes.
 - 2026-10-09 · owner went with Scroll area's recommendation to adopt it in the scrolling families (docs/specs/scroll-area.md, "Adoption") → the scroll container is a Scroll area: Figma's overlay bar instead of the platform's, its inset moved into the scroller so rows keep their place → back in review.
+- 2026-10-14 · owner (desktop Inspector: "pill can be a dropdown too with multi select") → `multiple`:
+  `values` / `defaultValues` / `onValuesChange`, rows toggle and the list stays open (Enter and
+  Space toggle; Escape, Tab and Alt+Up close without choosing), `aria-multiselectable` on the
+  listbox, the trigger lists the chosen labels in the list's order (placeholder when none), one
+  hidden input per value. Row paint is unchanged: a chosen row shows the check. Not yet on the
+  review page; the gallery has no `multiple` tile.
 - 2026-10-15 · owner: "merge it, then continue working" → boundary sweep under increased contrast (CONTRAST.md: required boundaries target 3:1): the soft variant's resting edge is `input-edge-soft`, as Input's; ghost stays chromeless.

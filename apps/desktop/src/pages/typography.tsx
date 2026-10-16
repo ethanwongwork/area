@@ -139,7 +139,6 @@ export function TypographyPage() {
         </ViewControls>
       }
       canvasTitle={view ? view.name : "All roles"}
-      canvasMeta={view ? undefined : <span className="studio-muted studio-tabular">{shown.length}</span>}
       canvas={view ? (
         // One role: at the Canvas's type size in each weight, then at every type size, in the sample
         // line, as ruled rows on the Canvas's surface (owner, 2026-10-12: type sits on the surface; a
@@ -220,7 +219,6 @@ export function TypographyPage() {
           }))}
         </div>
       )}
-      inspectorTitle={role ? role.name : "All roles"}
       inspector={
         <>
           <CanvasSettings axes={["type", "density"]}>

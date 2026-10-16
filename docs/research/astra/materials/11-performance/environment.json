@@ -1,0 +1,33 @@
+{
+  "checked": "2026-10-09",
+  "area_main": "6f896789a5200bcbd34fe87de458e60ca82141d6",
+  "research_input": "c3d6664e56570e1fbf4ef530ccc172934806127c",
+  "hardware": {
+    "model": "Mac17,9",
+    "cpu": "Apple M5 Pro",
+    "physical_memory_bytes": 25769803776,
+    "source": "Read-only sysctl hw.model machdep.cpu.brand_string hw.memsize; checked 2026-10-09"
+  },
+  "os": {
+    "name": "macOS",
+    "version": "27.2",
+    "build": "26B5091g",
+    "source": "Read-only sw_vers; checked 2026-10-09"
+  },
+  "installed_browsers": {
+    "edge": {"version": "154.0.4258.62", "build": "154.0.4258.62"},
+    "safari": {"version": "27.2", "build": "22625.2.5.11.1"},
+    "source": "CFBundleShortVersionString/CFBundleVersion from installed application Info.plist, checked 2026-10-09; actual run UA and renderer are in each evidence file"
+  },
+  "conditions": {
+    "profile": "Existing local browser profiles; not isolated clean profiles",
+    "background_work": "Other applications and browser tabs remained open; no intentional competing graphics test",
+    "power_mode": "Not controlled or changed",
+    "thermal_state": "Not measured",
+    "devtools_trace": "Not recorded",
+    "cpu_throttling": "None deliberately applied",
+    "viewport_and_dpr": "Recorded by each run, not assumed equal",
+    "frame_refresh": "Empty-stage rAF cadence calibrated each repetition; no OS refresh setting changed",
+    "browser_operation": "Native browser UI opens a local test tab and starts its page-owned harness; no headless run"
+  }
+}

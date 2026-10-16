@@ -1,0 +1,1234 @@
+{
+  "slug": "slider",
+  "manifest": "slider",
+  "parts": [
+    {
+      "id": "root",
+      "element": [
+        "label"
+      ],
+      "class": "area-slider",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_gap",
+          "selectors": [
+            ".area-slider",
+            ".area-slider--top"
+          ]
+        },
+        {
+          "name": "--_height",
+          "selectors": [
+            ".area-slider",
+            ".area-slider--top",
+            ".area-slider--vertical"
+          ]
+        },
+        {
+          "name": "--_track-fill",
+          "selectors": [
+            ".area-slider"
+          ]
+        },
+        {
+          "name": "--_vertical-length",
+          "selectors": [
+            ".area-slider--vertical"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-accent-solid",
+          "selectors": [
+            ".area-slider--accent"
+          ]
+        },
+        {
+          "name": "--area-accent-solid-hover",
+          "selectors": [
+            ".area-slider--accent"
+          ]
+        },
+        {
+          "name": "--area-bg-surface",
+          "selectors": [
+            ".area-slider"
+          ]
+        },
+        {
+          "name": "--area-border-hover",
+          "selectors": [
+            ".area-slider"
+          ]
+        },
+        {
+          "name": "--area-control-lg",
+          "selectors": [
+            ".area-slider--lg"
+          ]
+        },
+        {
+          "name": "--area-control-lg-leading",
+          "selectors": [
+            ".area-slider--lg"
+          ]
+        },
+        {
+          "name": "--area-control-lg-text",
+          "selectors": [
+            ".area-slider--lg"
+          ]
+        },
+        {
+          "name": "--area-control-md",
+          "selectors": [
+            ".area-slider",
+            ".area-slider--md"
+          ]
+        },
+        {
+          "name": "--area-control-md-leading",
+          "selectors": [
+            ".area-slider",
+            ".area-slider--md"
+          ]
+        },
+        {
+          "name": "--area-control-md-text",
+          "selectors": [
+            ".area-slider",
+            ".area-slider--md"
+          ]
+        },
+        {
+          "name": "--area-control-sm",
+          "selectors": [
+            ".area-slider--sm"
+          ]
+        },
+        {
+          "name": "--area-control-sm-leading",
+          "selectors": [
+            ".area-slider--sm"
+          ]
+        },
+        {
+          "name": "--area-control-sm-text",
+          "selectors": [
+            ".area-slider--sm"
+          ]
+        },
+        {
+          "name": "--area-fill-toggle",
+          "selectors": [
+            ".area-slider"
+          ]
+        },
+        {
+          "name": "--area-gap-lg",
+          "selectors": [
+            ".area-slider--lg"
+          ]
+        },
+        {
+          "name": "--area-gap-md",
+          "selectors": [
+            ".area-slider",
+            ".area-slider--md"
+          ]
+        },
+        {
+          "name": "--area-gap-sm",
+          "selectors": [
+            ".area-slider--sm"
+          ]
+        },
+        {
+          "name": "--area-gutter-lg",
+          "selectors": [
+            ".area-slider--lg"
+          ]
+        },
+        {
+          "name": "--area-gutter-md",
+          "selectors": [
+            ".area-slider--md"
+          ]
+        },
+        {
+          "name": "--area-gutter-sm",
+          "selectors": [
+            ".area-slider--sm"
+          ]
+        },
+        {
+          "name": "--area-icon-md",
+          "selectors": [
+            ".area-slider",
+            ".area-slider--md"
+          ]
+        },
+        {
+          "name": "--area-icon-sm",
+          "selectors": [
+            ".area-slider--sm"
+          ]
+        },
+        {
+          "name": "--area-input-inline-size",
+          "selectors": [
+            ".area-slider",
+            ".area-slider--top"
+          ]
+        },
+        {
+          "name": "--area-neutral-solid",
+          "selectors": [
+            ".area-slider",
+            ".area-slider--neutral"
+          ]
+        },
+        {
+          "name": "--area-neutral-solid-hover",
+          "selectors": [
+            ".area-slider",
+            ".area-slider--neutral"
+          ]
+        },
+        {
+          "name": "--area-space-2",
+          "selectors": [
+            ".area-slider--top"
+          ]
+        },
+        {
+          "name": "--area-space-20",
+          "selectors": [
+            ".area-slider--lg"
+          ]
+        },
+        {
+          "name": "--area-space-4",
+          "selectors": [
+            ".area-slider",
+            ".area-slider--top"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "label",
+      "element": [
+        "span"
+      ],
+      "class": "area-slider__label",
+      "required": false,
+      "allowedContent": [
+        "renderable content (text, elements, fragments, or empty content)"
+      ],
+      "customProperties": [
+        {
+          "name": "--_leading",
+          "selectors": [
+            ".area-slider__label"
+          ]
+        },
+        {
+          "name": "--_text",
+          "selectors": [
+            ".area-slider__label"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-fg-default",
+          "selectors": [
+            ".area-slider__label"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "control",
+      "element": [
+        "input"
+      ],
+      "class": "area-slider__control",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_fill",
+          "selectors": [
+            ".area-slider--vertical .area-slider__control::-webkit-slider-runnable-track",
+            ".area-slider--vertical .area-slider__control::-moz-range-track",
+            ".area-slider__control::-webkit-slider-runnable-track",
+            ".area-slider__control::-moz-range-track",
+            ".area-slider__control::-webkit-slider-thumb",
+            ".area-slider__control::-moz-range-thumb"
+          ]
+        },
+        {
+          "name": "--_fill-hover",
+          "selectors": [
+            ".area-slider__control:hover:not(:disabled)::-webkit-slider-runnable-track",
+            ".area-slider__control:hover:not(:disabled)::-moz-range-track",
+            ".area-slider__control:hover:not(:disabled)::-webkit-slider-thumb",
+            ".area-slider__control:hover:not(:disabled)::-moz-range-thumb",
+            ".area-slider--vertical .area-slider__control:hover:not(:disabled)::-webkit-slider-runnable-track",
+            ".area-slider--vertical .area-slider__control:hover:not(:disabled)::-moz-range-track"
+          ]
+        },
+        {
+          "name": "--_height",
+          "selectors": [
+            ".area-slider--vertical .area-slider__control",
+            ".area-slider__control"
+          ]
+        },
+        {
+          "name": "--_pct",
+          "selectors": [
+            ".area-slider--vertical .area-slider__control::-webkit-slider-runnable-track",
+            ".area-slider--vertical .area-slider__control::-moz-range-track",
+            ".area-slider__control::-webkit-slider-runnable-track",
+            ".area-slider__control::-moz-range-track",
+            ".area-slider__control:hover:not(:disabled)::-webkit-slider-runnable-track",
+            ".area-slider__control:hover:not(:disabled)::-moz-range-track",
+            ".area-slider--vertical .area-slider__control:hover:not(:disabled)::-webkit-slider-runnable-track",
+            ".area-slider--vertical .area-slider__control:hover:not(:disabled)::-moz-range-track"
+          ]
+        },
+        {
+          "name": "--_thumb",
+          "selectors": [
+            ".area-slider__control::-webkit-slider-thumb",
+            ".area-slider__control::-moz-range-thumb"
+          ]
+        },
+        {
+          "name": "--_thumb-border",
+          "selectors": [
+            ".area-slider__control::-webkit-slider-thumb",
+            ".area-slider__control::-moz-range-thumb"
+          ]
+        },
+        {
+          "name": "--_track",
+          "selectors": [
+            ".area-slider__control::-webkit-slider-runnable-track",
+            ".area-slider__control::-moz-range-track",
+            ".area-slider__control::-webkit-slider-thumb"
+          ]
+        },
+        {
+          "name": "--_track-fill",
+          "selectors": [
+            ".area-slider--vertical .area-slider__control::-webkit-slider-runnable-track",
+            ".area-slider--vertical .area-slider__control::-moz-range-track",
+            ".area-slider__control::-webkit-slider-runnable-track",
+            ".area-slider__control::-moz-range-track"
+          ]
+        },
+        {
+          "name": "--_track-fill-hover",
+          "selectors": [
+            ".area-slider__control:hover:not(:disabled)::-webkit-slider-runnable-track",
+            ".area-slider__control:hover:not(:disabled)::-moz-range-track",
+            ".area-slider--vertical .area-slider__control:hover:not(:disabled)::-webkit-slider-runnable-track",
+            ".area-slider--vertical .area-slider__control:hover:not(:disabled)::-moz-range-track"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-bg-surface",
+          "selectors": [
+            ".area-slider__control::-webkit-slider-thumb",
+            ".area-slider__control::-moz-range-thumb",
+            ".area-slider__control:hover:not(:disabled)::-webkit-slider-thumb",
+            ".area-slider__control:hover:not(:disabled)::-moz-range-thumb"
+          ]
+        },
+        {
+          "name": "--area-focus-color",
+          "selectors": [
+            ".area-slider__control:focus-visible::-webkit-slider-thumb",
+            ".area-slider__control:focus-visible::-moz-range-thumb"
+          ]
+        },
+        {
+          "name": "--area-focus-offset",
+          "selectors": [
+            ".area-slider__control:focus-visible::-webkit-slider-thumb",
+            ".area-slider__control:focus-visible::-moz-range-thumb"
+          ]
+        },
+        {
+          "name": "--area-focus-width",
+          "selectors": [
+            ".area-slider__control:focus-visible::-webkit-slider-thumb",
+            ".area-slider__control:focus-visible::-moz-range-thumb"
+          ]
+        },
+        {
+          "name": "--area-radius-full",
+          "selectors": [
+            ".area-slider__control::-webkit-slider-runnable-track",
+            ".area-slider__control::-moz-range-track",
+            ".area-slider__control::-webkit-slider-thumb",
+            ".area-slider__control::-moz-range-thumb"
+          ]
+        },
+        {
+          "name": "--area-shadow-1",
+          "selectors": [
+            ".area-slider__control::-webkit-slider-thumb",
+            ".area-slider__control::-moz-range-thumb",
+            ".area-slider__control:focus-visible::-webkit-slider-thumb",
+            ".area-slider__control:focus-visible::-moz-range-thumb"
+          ]
+        },
+        {
+          "name": "--area-stroke-width",
+          "selectors": [
+            ".area-slider__control::-webkit-slider-thumb",
+            ".area-slider__control::-moz-range-thumb"
+          ]
+        },
+        {
+          "name": "--area-transition",
+          "selectors": [
+            ".area-slider__control::-webkit-slider-thumb",
+            ".area-slider__control::-moz-range-thumb"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "value",
+      "element": [
+        "span"
+      ],
+      "class": "area-slider__value",
+      "required": false,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_leading",
+          "selectors": [
+            ".area-slider__value"
+          ]
+        },
+        {
+          "name": "--_text",
+          "selectors": [
+            ".area-slider__value"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-fg-muted",
+          "selectors": [
+            ".area-slider__value"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "marks",
+      "element": [
+        "span"
+      ],
+      "class": "area-slider__marks",
+      "required": false,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_height",
+          "selectors": [
+            ".area-slider--top .area-slider__marks"
+          ]
+        },
+        {
+          "name": "--_thumb",
+          "selectors": [
+            ".area-slider__marks",
+            ".area-slider--top .area-slider__marks"
+          ]
+        },
+        {
+          "name": "--_track",
+          "selectors": [
+            ".area-slider__marks"
+          ]
+        }
+      ],
+      "tokens": []
+    }
+  ],
+  "slots": [
+    {
+      "name": "Slider.label",
+      "part": "label",
+      "element": [
+        "span"
+      ],
+      "class": "area-slider__label",
+      "required": false,
+      "allowedContent": [
+        "renderable content (text, elements, fragments, or empty content)"
+      ]
+    },
+    {
+      "name": "Slider.readout",
+      "part": "not found",
+      "element": "not found",
+      "class": "not found",
+      "required": false,
+      "allowedContent": [
+        "renderable content (text, elements, fragments, or empty content)"
+      ]
+    }
+  ],
+  "options": {
+    "tone": {
+      "values": [
+        "neutral",
+        "accent"
+      ],
+      "default": "neutral"
+    },
+    "size": {
+      "values": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "default": "md"
+    },
+    "labelPosition": {
+      "values": [
+        "top"
+      ],
+      "default": "not found"
+    },
+    "orientation": {
+      "values": [
+        "vertical"
+      ],
+      "default": "not found"
+    }
+  },
+  "booleans": [],
+  "elementModifiers": {},
+  "states": [
+    {
+      "name": "disabled",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-disabled",
+      "value": "\"\""
+    },
+    {
+      "name": "disabled",
+      "part": "control",
+      "kind": "native",
+      "hook": "disabled",
+      "value": "{disabled}"
+    },
+    {
+      "name": "hidden",
+      "part": "value",
+      "kind": "aria",
+      "hook": "aria-hidden",
+      "value": "\"true\""
+    },
+    {
+      "name": "hidden",
+      "part": "marks",
+      "kind": "aria",
+      "hook": "aria-hidden",
+      "value": "\"true\""
+    },
+    {
+      "name": "disabled",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-disabled",
+      "value": "present"
+    },
+    {
+      "name": "focus-visible",
+      "part": "control",
+      "kind": "pseudo",
+      "hook": ":focus-visible",
+      "value": ".area-slider-range[data-overlap] .area-slider-range__end .area-slider__control:focus-visible::-webkit-slider-thumb"
+    },
+    {
+      "name": "focus-visible",
+      "part": "control",
+      "kind": "pseudo",
+      "hook": ":focus-visible",
+      "value": ".area-slider-range[data-overlap] .area-slider-range__end .area-slider__control:focus-visible::-moz-range-thumb"
+    },
+    {
+      "name": "hover",
+      "part": "control",
+      "kind": "pseudo",
+      "hook": ":hover",
+      "value": ".area-slider__control:hover:not(:disabled)::-webkit-slider-runnable-track"
+    },
+    {
+      "name": "hover",
+      "part": "control",
+      "kind": "pseudo",
+      "hook": ":hover",
+      "value": ".area-slider__control:hover:not(:disabled)::-moz-range-track"
+    },
+    {
+      "name": "hover",
+      "part": "control",
+      "kind": "pseudo",
+      "hook": ":hover",
+      "value": ".area-slider__control:hover:not(:disabled)::-webkit-slider-thumb"
+    },
+    {
+      "name": "hover",
+      "part": "control",
+      "kind": "pseudo",
+      "hook": ":hover",
+      "value": ".area-slider__control:hover:not(:disabled)::-moz-range-thumb"
+    },
+    {
+      "name": "hover",
+      "part": "control",
+      "kind": "pseudo",
+      "hook": ":hover",
+      "value": ".area-slider-range .area-slider__control:hover:not(:disabled)::-webkit-slider-runnable-track"
+    },
+    {
+      "name": "hover",
+      "part": "control",
+      "kind": "pseudo",
+      "hook": ":hover",
+      "value": ".area-slider-range .area-slider__control:hover:not(:disabled)::-moz-range-track"
+    },
+    {
+      "name": "hover",
+      "part": "control",
+      "kind": "pseudo",
+      "hook": ":hover",
+      "value": ".area-slider--vertical .area-slider__control:hover:not(:disabled)::-webkit-slider-runnable-track"
+    },
+    {
+      "name": "hover",
+      "part": "control",
+      "kind": "pseudo",
+      "hook": ":hover",
+      "value": ".area-slider--vertical .area-slider__control:hover:not(:disabled)::-moz-range-track"
+    },
+    {
+      "name": "focus-visible",
+      "part": "control",
+      "kind": "pseudo",
+      "hook": ":focus-visible",
+      "value": ".area-slider__control:focus-visible::-webkit-slider-thumb"
+    },
+    {
+      "name": "focus-visible",
+      "part": "control",
+      "kind": "pseudo",
+      "hook": ":focus-visible",
+      "value": ".area-slider__control:focus-visible::-moz-range-thumb"
+    }
+  ],
+  "keyboard": [],
+  "accessibleName": [],
+  "composition": {
+    "allowedParents": "not found",
+    "allowedChildren": "not found",
+    "observedChildren": [],
+    "demoExamples": [
+      "apps/docs/src/demos/card.tsx:285",
+      "apps/docs/src/demos/display.tsx:362",
+      "apps/docs/src/demos/form.tsx:340",
+      "apps/docs/src/demos/form.tsx:344",
+      "apps/docs/src/demos/form.tsx:345",
+      "apps/docs/src/demos/form.tsx:346",
+      "apps/docs/src/demos/form.tsx:352",
+      "apps/docs/src/demos/form.tsx:353",
+      "apps/docs/src/demos/form.tsx:357",
+      "apps/docs/src/demos/form.tsx:359",
+      "apps/docs/src/demos/form.tsx:361",
+      "apps/docs/src/demos/form.tsx:363",
+      "apps/docs/src/demos/form.tsx:367",
+      "apps/docs/src/demos/form.tsx:369",
+      "apps/docs/src/demos/form.tsx:371",
+      "apps/docs/src/demos/gallery.tsx:1893",
+      "apps/docs/src/demos/gallery.tsx:1894",
+      "apps/docs/src/demos/gallery.tsx:1895",
+      "apps/docs/src/demos/gallery.tsx:1896",
+      "apps/docs/src/demos/gallery.tsx:1897",
+      "apps/docs/src/demos/gallery.tsx:1898",
+      "apps/docs/src/demos/gallery.tsx:1899",
+      "apps/docs/src/demos/gallery.tsx:1900",
+      "apps/docs/src/demos/gallery.tsx:1901",
+      "apps/docs/src/demos/gallery.tsx:1902",
+      "apps/docs/src/demos/gallery.tsx:1903",
+      "apps/docs/src/demos/gallery.tsx:1906",
+      "apps/docs/src/demos/gallery.tsx:1909",
+      "apps/docs/src/demos/gallery.tsx:1910",
+      "apps/docs/src/demos/reviews.tsx:93",
+      "apps/docs/src/demos/reviews.tsx:94",
+      "apps/docs/src/demos/slider-range.tsx:72",
+      "apps/docs/src/demos/slider-range.tsx:73"
+    ]
+  },
+  "reference": {
+    "css": [
+      "packages/styles/src/components/slider.css",
+      "packages/styles/src/forced-colors.css"
+    ],
+    "spec": [
+      "docs/specs/slider.md"
+    ],
+    "reactExport": [
+      "Slider"
+    ]
+  },
+  "evidence": {
+    "/slug": {"status":"found","sources":["packages/styles/src/manifest.ts:278"],"note":"Direct source declaration or implementation."},
+    "/manifest": {"status":"found","sources":["packages/styles/src/manifest.ts:277"],"note":"Direct source declaration or implementation."},
+    "/parts": {"status":"found","sources":["packages/styles/src/manifest.ts:277","packages/react/src/components/primitives.tsx:782","packages/react/src/components/primitives.tsx:792","packages/react/src/components/primitives.tsx:793","packages/react/src/components/primitives.tsx:794","packages/react/src/components/primitives.tsx:813"],"note":"Manifest parts plus implementation-only structural elements; unclassed nodes retain explicit IDs."},
+    "/parts/0": {"status":"found","sources":["packages/react/src/components/primitives.tsx:782"],"note":"Direct source declaration or implementation."},
+    "/parts/0/id": {"status":"found","sources":["packages/react/src/components/primitives.tsx:782"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/0/class": {"status":"found","sources":["packages/react/src/components/primitives.tsx:782"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element": {"status":"found","sources":["packages/react/src/components/primitives.tsx:782"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/required": {"status":"found","sources":["packages/react/src/components/primitives.tsx:782"],"note":"Root of the rendered family surface."},
+    "/parts/0/allowedContent": {"status":"not found","sources":["packages/react/src/components/primitives.tsx:782"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/0/customProperties/0": {"status":"found","sources":["packages/styles/src/components/slider.css:38","packages/styles/src/components/slider.css:65"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1": {"status":"found","sources":["packages/styles/src/components/slider.css:40","packages/styles/src/components/slider.css:62","packages/styles/src/components/slider.css:75"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/2": {"status":"found","sources":["packages/styles/src/components/slider.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/3": {"status":"found","sources":["packages/styles/src/components/slider.css:76"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties": {"status":"found","sources":["packages/styles/src/components/slider.css:30","packages/styles/src/components/slider.css:38","packages/styles/src/components/slider.css:65","packages/styles/src/components/slider.css:40","packages/styles/src/components/slider.css:62","packages/styles/src/components/slider.css:75","packages/styles/src/components/slider.css:76"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/0/tokens/0": {"status":"found","sources":["packages/styles/src/components/slider.css:156"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1": {"status":"found","sources":["packages/styles/src/components/slider.css:157"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2": {"status":"found","sources":["packages/styles/src/components/slider.css:27","packages/styles/src/components/slider.css:31"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3": {"status":"found","sources":["packages/styles/src/components/slider.css:31"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4": {"status":"found","sources":["packages/styles/src/components/slider.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5": {"status":"found","sources":["packages/styles/src/components/slider.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6": {"status":"found","sources":["packages/styles/src/components/slider.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7": {"status":"found","sources":["packages/styles/src/components/slider.css:19","packages/styles/src/components/slider.css:306"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8": {"status":"found","sources":["packages/styles/src/components/slider.css:24","packages/styles/src/components/slider.css:306"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9": {"status":"found","sources":["packages/styles/src/components/slider.css:23","packages/styles/src/components/slider.css:306"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/10": {"status":"found","sources":["packages/styles/src/components/slider.css:305"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/11": {"status":"found","sources":["packages/styles/src/components/slider.css:305"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/12": {"status":"found","sources":["packages/styles/src/components/slider.css:305"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/13": {"status":"found","sources":["packages/styles/src/components/slider.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/14": {"status":"found","sources":["packages/styles/src/components/slider.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/15": {"status":"found","sources":["packages/styles/src/components/slider.css:22","packages/styles/src/components/slider.css:306"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/16": {"status":"found","sources":["packages/styles/src/components/slider.css:305"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/17": {"status":"found","sources":["packages/styles/src/components/slider.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/18": {"status":"found","sources":["packages/styles/src/components/slider.css:306"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/19": {"status":"found","sources":["packages/styles/src/components/slider.css:305"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/20": {"status":"found","sources":["packages/styles/src/components/slider.css:20","packages/styles/src/components/slider.css:306"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/21": {"status":"found","sources":["packages/styles/src/components/slider.css:305"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/22": {"status":"found","sources":["packages/styles/src/components/slider.css:33","packages/styles/src/components/slider.css:65"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/23": {"status":"found","sources":["packages/styles/src/components/slider.css:25","packages/styles/src/components/slider.css:151"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/24": {"status":"found","sources":["packages/styles/src/components/slider.css:26","packages/styles/src/components/slider.css:152"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/25": {"status":"found","sources":["packages/styles/src/components/slider.css:64"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/26": {"status":"found","sources":["packages/styles/src/components/slider.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/27": {"status":"found","sources":["packages/styles/src/components/slider.css:21","packages/styles/src/components/slider.css:63"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens": {"status":"found","sources":["packages/styles/src/components/slider.css:19","packages/styles/src/components/slider.css:306","packages/styles/src/components/slider.css:20","packages/styles/src/components/slider.css:21","packages/styles/src/components/slider.css:63","packages/styles/src/components/slider.css:22","packages/styles/src/components/slider.css:23","packages/styles/src/components/slider.css:24","packages/styles/src/components/slider.css:25","packages/styles/src/components/slider.css:151","packages/styles/src/components/slider.css:26","packages/styles/src/components/slider.css:152","packages/styles/src/components/slider.css:27","packages/styles/src/components/slider.css:31","packages/styles/src/components/slider.css:33","packages/styles/src/components/slider.css:65","packages/styles/src/components/slider.css:64","packages/styles/src/components/slider.css:156","packages/styles/src/components/slider.css:157","packages/styles/src/components/slider.css:305","packages/styles/src/components/slider.css:307"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/1": {"status":"found","sources":["packages/react/src/components/primitives.tsx:792"],"note":"Direct source declaration or implementation."},
+    "/parts/1/id": {"status":"found","sources":["packages/react/src/components/primitives.tsx:792"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/1/class": {"status":"found","sources":["packages/react/src/components/primitives.tsx:792"],"note":"Direct source declaration or implementation."},
+    "/parts/1/element": {"status":"found","sources":["packages/react/src/components/primitives.tsx:792"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/1/required": {"status":"found","sources":["packages/react/src/components/primitives.tsx:792"],"note":"This part can be omitted by a conditional rendering branch."},
+    "/parts/1/allowedContent": {"status":"found","sources":["packages/react/src/components/primitives.tsx:673"],"note":"Content type of the public slot rendered directly in this part."},
+    "/parts/1/customProperties/0": {"status":"found","sources":["packages/styles/src/components/slider.css:299"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/1": {"status":"found","sources":["packages/styles/src/components/slider.css:298"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties": {"status":"found","sources":["packages/styles/src/components/slider.css:298","packages/styles/src/components/slider.css:299"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/1/tokens/0": {"status":"found","sources":["packages/styles/src/components/slider.css:297"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens": {"status":"found","sources":["packages/styles/src/components/slider.css:297"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/2": {"status":"found","sources":["packages/react/src/components/primitives.tsx:794"],"note":"Direct source declaration or implementation."},
+    "/parts/2/id": {"status":"found","sources":["packages/react/src/components/primitives.tsx:794"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/2/class": {"status":"found","sources":["packages/react/src/components/primitives.tsx:794"],"note":"Direct source declaration or implementation."},
+    "/parts/2/element": {"status":"found","sources":["packages/react/src/components/primitives.tsx:794"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/2/required": {"status":"found","sources":["packages/react/src/components/primitives.tsx:794"],"note":"Unconditional native child on the primary component return path."},
+    "/parts/2/allowedContent": {"status":"not found","sources":["packages/react/src/components/primitives.tsx:794"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/2/customProperties/0": {"status":"found","sources":["packages/styles/src/components/slider.css:86","packages/styles/src/components/slider.css:87","packages/styles/src/components/slider.css:186","packages/styles/src/components/slider.css:196","packages/styles/src/components/slider.css:222","packages/styles/src/components/slider.css:233"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/1": {"status":"found","sources":["packages/styles/src/components/slider.css:239","packages/styles/src/components/slider.css:242","packages/styles/src/components/slider.css:245","packages/styles/src/components/slider.css:248","packages/styles/src/components/slider.css:259","packages/styles/src/components/slider.css:262"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/2": {"status":"found","sources":["packages/styles/src/components/slider.css:81","packages/styles/src/components/slider.css:177"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/3": {"status":"found","sources":["packages/styles/src/components/slider.css:86","packages/styles/src/components/slider.css:87","packages/styles/src/components/slider.css:186","packages/styles/src/components/slider.css:196","packages/styles/src/components/slider.css:239","packages/styles/src/components/slider.css:242","packages/styles/src/components/slider.css:259","packages/styles/src/components/slider.css:262"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/4": {"status":"found","sources":["packages/styles/src/components/slider.css:217","packages/styles/src/components/slider.css:218","packages/styles/src/components/slider.css:219","packages/styles/src/components/slider.css:229","packages/styles/src/components/slider.css:230"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/5": {"status":"found","sources":["packages/styles/src/components/slider.css:220","packages/styles/src/components/slider.css:231"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/6": {"status":"found","sources":["packages/styles/src/components/slider.css:184","packages/styles/src/components/slider.css:194","packages/styles/src/components/slider.css:219"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/7": {"status":"found","sources":["packages/styles/src/components/slider.css:86","packages/styles/src/components/slider.css:87","packages/styles/src/components/slider.css:186","packages/styles/src/components/slider.css:196"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/8": {"status":"found","sources":["packages/styles/src/components/slider.css:239","packages/styles/src/components/slider.css:242","packages/styles/src/components/slider.css:259","packages/styles/src/components/slider.css:262"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties": {"status":"found","sources":["packages/styles/src/components/slider.css:81","packages/styles/src/components/slider.css:177","packages/styles/src/components/slider.css:86","packages/styles/src/components/slider.css:87","packages/styles/src/components/slider.css:186","packages/styles/src/components/slider.css:196","packages/styles/src/components/slider.css:222","packages/styles/src/components/slider.css:233","packages/styles/src/components/slider.css:239","packages/styles/src/components/slider.css:242","packages/styles/src/components/slider.css:259","packages/styles/src/components/slider.css:262","packages/styles/src/components/slider.css:184","packages/styles/src/components/slider.css:194","packages/styles/src/components/slider.css:219","packages/styles/src/components/slider.css:217","packages/styles/src/components/slider.css:218","packages/styles/src/components/slider.css:229","packages/styles/src/components/slider.css:230","packages/styles/src/components/slider.css:220","packages/styles/src/components/slider.css:231","packages/styles/src/components/slider.css:245","packages/styles/src/components/slider.css:248"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/2/tokens/0": {"status":"found","sources":["packages/styles/src/components/slider.css:222","packages/styles/src/components/slider.css:233","packages/styles/src/components/slider.css:245","packages/styles/src/components/slider.css:248"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1": {"status":"found","sources":["packages/styles/src/components/slider.css:266","packages/styles/src/components/slider.css:268","packages/styles/src/components/slider.css:272","packages/styles/src/components/slider.css:274"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/2": {"status":"found","sources":["packages/styles/src/components/slider.css:269","packages/styles/src/components/slider.css:275"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/3": {"status":"found","sources":["packages/styles/src/components/slider.css:268","packages/styles/src/components/slider.css:274"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/4": {"status":"found","sources":["packages/styles/src/components/slider.css:185","packages/styles/src/components/slider.css:195","packages/styles/src/components/slider.css:221","packages/styles/src/components/slider.css:232"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/5": {"status":"found","sources":["packages/styles/src/components/slider.css:223","packages/styles/src/components/slider.css:234","packages/styles/src/components/slider.css:267","packages/styles/src/components/slider.css:273"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/6": {"status":"found","sources":["packages/styles/src/components/slider.css:220","packages/styles/src/components/slider.css:231"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/7": {"status":"found","sources":["packages/styles/src/components/slider.css:224","packages/styles/src/components/slider.css:235"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens": {"status":"found","sources":["packages/styles/src/components/slider.css:185","packages/styles/src/components/slider.css:195","packages/styles/src/components/slider.css:221","packages/styles/src/components/slider.css:232","packages/styles/src/components/slider.css:220","packages/styles/src/components/slider.css:231","packages/styles/src/components/slider.css:222","packages/styles/src/components/slider.css:233","packages/styles/src/components/slider.css:245","packages/styles/src/components/slider.css:248","packages/styles/src/components/slider.css:223","packages/styles/src/components/slider.css:234","packages/styles/src/components/slider.css:267","packages/styles/src/components/slider.css:273","packages/styles/src/components/slider.css:224","packages/styles/src/components/slider.css:235","packages/styles/src/components/slider.css:266","packages/styles/src/components/slider.css:268","packages/styles/src/components/slider.css:272","packages/styles/src/components/slider.css:274","packages/styles/src/components/slider.css:269","packages/styles/src/components/slider.css:275"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/3": {"status":"found","sources":["packages/react/src/components/primitives.tsx:813"],"note":"Direct source declaration or implementation."},
+    "/parts/3/id": {"status":"found","sources":["packages/react/src/components/primitives.tsx:813"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/3/class": {"status":"found","sources":["packages/react/src/components/primitives.tsx:813"],"note":"Direct source declaration or implementation."},
+    "/parts/3/element": {"status":"found","sources":["packages/react/src/components/primitives.tsx:813"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/3/required": {"status":"found","sources":["packages/react/src/components/primitives.tsx:813"],"note":"This part can be omitted by a conditional rendering branch."},
+    "/parts/3/allowedContent": {"status":"not found","sources":["packages/react/src/components/primitives.tsx:813"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/3/customProperties/0": {"status":"found","sources":["packages/styles/src/components/slider.css:289"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/customProperties/1": {"status":"found","sources":["packages/styles/src/components/slider.css:288"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/customProperties": {"status":"found","sources":["packages/styles/src/components/slider.css:288","packages/styles/src/components/slider.css:289"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/3/tokens/0": {"status":"found","sources":["packages/styles/src/components/slider.css:291"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens": {"status":"found","sources":["packages/styles/src/components/slider.css:291"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/4": {"status":"found","sources":["packages/react/src/components/primitives.tsx:793"],"note":"Direct source declaration or implementation."},
+    "/parts/4/id": {"status":"found","sources":["packages/react/src/components/primitives.tsx:793"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/4/class": {"status":"found","sources":["packages/react/src/components/primitives.tsx:793"],"note":"Direct source declaration or implementation."},
+    "/parts/4/element": {"status":"found","sources":["packages/react/src/components/primitives.tsx:793"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/4/required": {"status":"found","sources":["packages/react/src/components/primitives.tsx:793"],"note":"This part can be omitted by a conditional rendering branch."},
+    "/parts/4/allowedContent": {"status":"not found","sources":["packages/react/src/components/primitives.tsx:793"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/4/customProperties/0": {"status":"found","sources":["packages/styles/src/components/slider.css:71"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/customProperties/1": {"status":"found","sources":["packages/styles/src/components/slider.css:46","packages/styles/src/components/slider.css:71"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/customProperties/2": {"status":"found","sources":["packages/styles/src/components/slider.css:47"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/customProperties": {"status":"found","sources":["packages/styles/src/components/slider.css:46","packages/styles/src/components/slider.css:71","packages/styles/src/components/slider.css:47"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/4/tokens": {"status":"not found","sources":["packages/react/src/components/primitives.tsx:793"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/slots/0": {"status":"found","sources":["packages/react/src/components/primitives.tsx:673"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/element": {"status":"found","sources":["packages/react/src/components/primitives.tsx:792"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/slots/0/class": {"status":"found","sources":["packages/react/src/components/primitives.tsx:792"],"note":"Direct source declaration or implementation."},
+    "/slots/1": {"status":"found","sources":["packages/react/src/components/primitives.tsx:684"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/1/part": {"status":"not found","sources":["packages/styles/src/manifest.ts:277","packages/react/src/components/primitives.tsx:720","docs/specs/slider.md:1"],"note":"not found: No single direct part resolved for Slider.readout; conditional/delegated rendering requires review."},
+    "/slots/1/element": {"status":"not found","sources":["packages/styles/src/manifest.ts:277","packages/react/src/components/primitives.tsx:720","docs/specs/slider.md:1"],"note":"not found: No resolved part for Slider.readout."},
+    "/slots/1/class": {"status":"not found","sources":["packages/styles/src/manifest.ts:277","packages/react/src/components/primitives.tsx:720","docs/specs/slider.md:1"],"note":"not found: No resolved part for Slider.readout."},
+    "/slots": {"status":"found","sources":["packages/react/src/components/primitives.tsx:673","packages/react/src/components/primitives.tsx:684"],"note":"Direct source declaration or implementation."},
+    "/options": {"status":"found","sources":["packages/styles/src/manifest.ts:280"],"note":"Direct source declaration or implementation."},
+    "/options/tone": {"status":"found","sources":["packages/styles/src/manifest.ts:281"],"note":"Direct source declaration or implementation."},
+    "/options/tone/default": {"status":"found","sources":["packages/styles/src/manifest.ts:288"],"note":"Direct source declaration or implementation."},
+    "/options/size": {"status":"found","sources":["packages/styles/src/manifest.ts:282"],"note":"Direct source declaration or implementation."},
+    "/options/size/default": {"status":"found","sources":["packages/styles/src/manifest.ts:288"],"note":"Direct source declaration or implementation."},
+    "/options/labelPosition": {"status":"found","sources":["packages/styles/src/manifest.ts:283"],"note":"Direct source declaration or implementation."},
+    "/options/labelPosition/default": {"status":"not found","sources":["packages/styles/src/manifest.ts:288"],"note":"not found: No manifest default for this axis; does not assert that the effective CSS or React default is absent."},
+    "/options/orientation": {"status":"found","sources":["packages/styles/src/manifest.ts:284"],"note":"Direct source declaration or implementation."},
+    "/options/orientation/default": {"status":"not found","sources":["packages/styles/src/manifest.ts:288"],"note":"not found: No manifest default for this axis; does not assert that the effective CSS or React default is absent."},
+    "/booleans": {"status":"found","sources":["packages/styles/src/manifest.ts:277"],"note":"Exact manifest boolean modifier list; absence means no declared booleans."},
+    "/elementModifiers": {"status":"found","sources":["packages/styles/src/manifest.ts:277"],"note":"Direct source declaration or implementation."},
+    "/states/0": {"status":"found","sources":["packages/react/src/components/primitives.tsx:790"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/1": {"status":"found","sources":["packages/react/src/components/primitives.tsx:804"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2": {"status":"found","sources":["packages/react/src/components/primitives.tsx:813"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3": {"status":"found","sources":["packages/react/src/components/primitives.tsx:793"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/4": {"status":"found","sources":["packages/styles/src/components/slider.css:160"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/5": {"status":"found","sources":["packages/styles/src/components/slider.css:147"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/6": {"status":"found","sources":["packages/styles/src/components/slider.css:148"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/7": {"status":"found","sources":["packages/styles/src/components/slider.css:238"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/8": {"status":"found","sources":["packages/styles/src/components/slider.css:241"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/9": {"status":"found","sources":["packages/styles/src/components/slider.css:244"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/10": {"status":"found","sources":["packages/styles/src/components/slider.css:247"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/11": {"status":"found","sources":["packages/styles/src/components/slider.css:253"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/12": {"status":"found","sources":["packages/styles/src/components/slider.css:254"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/13": {"status":"found","sources":["packages/styles/src/components/slider.css:258"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/14": {"status":"found","sources":["packages/styles/src/components/slider.css:261"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/15": {"status":"found","sources":["packages/styles/src/components/slider.css:265"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/16": {"status":"found","sources":["packages/styles/src/components/slider.css:271"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states": {"status":"found","sources":["packages/react/src/components/primitives.tsx:790","packages/react/src/components/primitives.tsx:804","packages/react/src/components/primitives.tsx:813","packages/react/src/components/primitives.tsx:793","packages/styles/src/components/slider.css:160","packages/styles/src/components/slider.css:147","packages/styles/src/components/slider.css:148","packages/styles/src/components/slider.css:238","packages/styles/src/components/slider.css:241","packages/styles/src/components/slider.css:244","packages/styles/src/components/slider.css:247","packages/styles/src/components/slider.css:253","packages/styles/src/components/slider.css:254","packages/styles/src/components/slider.css:258","packages/styles/src/components/slider.css:261","packages/styles/src/components/slider.css:265","packages/styles/src/components/slider.css:271"],"note":"Direct source declaration or implementation."},
+    "/keyboard": {"status":"not found","sources":["packages/styles/src/manifest.ts:277","packages/react/src/components/primitives.tsx:720","docs/specs/slider.md:1"],"note":"not found: No reviewed key-to-action contract found. Native behavior is not invented from a tag name."},
+    "/accessibleName": {"status":"not found","sources":["packages/styles/src/manifest.ts:277","packages/react/src/components/primitives.tsx:720","docs/specs/slider.md:1"],"note":"not found: No explicit accessible-name rule or naming attribute found in scoped implementation; inherited native props are not treated as naming requirements."},
+    "/composition": {"status":"found","sources":["packages/styles/src/manifest.ts:277","packages/react/src/components/primitives.tsx:720","docs/specs/slider.md:1"],"note":"Allowed composition is distinct from examples and built-in child calls."},
+    "/composition/allowedParents": {"status":"not found","sources":["packages/styles/src/manifest.ts:277","packages/react/src/components/primitives.tsx:720","docs/specs/slider.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/allowedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:277","packages/react/src/components/primitives.tsx:720","docs/specs/slider.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/observedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:277","packages/react/src/components/primitives.tsx:720","docs/specs/slider.md:1"],"note":"not found: No child component call located."},
+    "/composition/demoExamples/0": {"status":"found","sources":["apps/docs/src/demos/card.tsx:285"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/1": {"status":"found","sources":["apps/docs/src/demos/display.tsx:362"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/2": {"status":"found","sources":["apps/docs/src/demos/form.tsx:340"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/3": {"status":"found","sources":["apps/docs/src/demos/form.tsx:344"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/4": {"status":"found","sources":["apps/docs/src/demos/form.tsx:345"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/5": {"status":"found","sources":["apps/docs/src/demos/form.tsx:346"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/6": {"status":"found","sources":["apps/docs/src/demos/form.tsx:352"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/7": {"status":"found","sources":["apps/docs/src/demos/form.tsx:353"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/8": {"status":"found","sources":["apps/docs/src/demos/form.tsx:357"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/9": {"status":"found","sources":["apps/docs/src/demos/form.tsx:359"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/10": {"status":"found","sources":["apps/docs/src/demos/form.tsx:361"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/11": {"status":"found","sources":["apps/docs/src/demos/form.tsx:363"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/12": {"status":"found","sources":["apps/docs/src/demos/form.tsx:367"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/13": {"status":"found","sources":["apps/docs/src/demos/form.tsx:369"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/14": {"status":"found","sources":["apps/docs/src/demos/form.tsx:371"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/15": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1893"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/16": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1894"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/17": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1895"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/18": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1896"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/19": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1897"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/20": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1898"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/21": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1899"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/22": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1900"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/23": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1901"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/24": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1902"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/25": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1903"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/26": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1906"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/27": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1909"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/28": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1910"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/29": {"status":"found","sources":["apps/docs/src/demos/reviews.tsx:93"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/30": {"status":"found","sources":["apps/docs/src/demos/reviews.tsx:94"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/31": {"status":"found","sources":["apps/docs/src/demos/slider-range.tsx:72"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/32": {"status":"found","sources":["apps/docs/src/demos/slider-range.tsx:73"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples": {"status":"found","sources":["apps/docs/src/demos/card.tsx:285","apps/docs/src/demos/display.tsx:362","apps/docs/src/demos/form.tsx:340","apps/docs/src/demos/form.tsx:344","apps/docs/src/demos/form.tsx:345","apps/docs/src/demos/form.tsx:346","apps/docs/src/demos/form.tsx:352","apps/docs/src/demos/form.tsx:353","apps/docs/src/demos/form.tsx:357","apps/docs/src/demos/form.tsx:359","apps/docs/src/demos/form.tsx:361","apps/docs/src/demos/form.tsx:363","apps/docs/src/demos/form.tsx:367","apps/docs/src/demos/form.tsx:369","apps/docs/src/demos/form.tsx:371","apps/docs/src/demos/gallery.tsx:1893","apps/docs/src/demos/gallery.tsx:1894","apps/docs/src/demos/gallery.tsx:1895","apps/docs/src/demos/gallery.tsx:1896","apps/docs/src/demos/gallery.tsx:1897","apps/docs/src/demos/gallery.tsx:1898","apps/docs/src/demos/gallery.tsx:1899","apps/docs/src/demos/gallery.tsx:1900","apps/docs/src/demos/gallery.tsx:1901","apps/docs/src/demos/gallery.tsx:1902","apps/docs/src/demos/gallery.tsx:1903","apps/docs/src/demos/gallery.tsx:1906","apps/docs/src/demos/gallery.tsx:1909","apps/docs/src/demos/gallery.tsx:1910","apps/docs/src/demos/reviews.tsx:93","apps/docs/src/demos/reviews.tsx:94","apps/docs/src/demos/slider-range.tsx:72","apps/docs/src/demos/slider-range.tsx:73"],"note":"Direct source declaration or implementation."},
+    "/reference/css": {"status":"found","sources":["packages/styles/src/components/slider.css:18","packages/styles/src/components/slider.css:43","packages/styles/src/components/slider.css:51","packages/styles/src/components/slider.css:60","packages/styles/src/components/slider.css:68","packages/styles/src/components/slider.css:69","packages/styles/src/components/slider.css:70","packages/styles/src/components/slider.css:71","packages/styles/src/components/slider.css:73","packages/styles/src/components/slider.css:78","packages/styles/src/components/slider.css:85","packages/styles/src/components/slider.css:86","packages/styles/src/components/slider.css:87","packages/styles/src/components/slider.css:128","packages/styles/src/components/slider.css:129","packages/styles/src/components/slider.css:130","packages/styles/src/components/slider.css:131","packages/styles/src/components/slider.css:145","packages/styles/src/components/slider.css:146","packages/styles/src/components/slider.css:147","packages/styles/src/components/slider.css:148","packages/styles/src/components/slider.css:150","packages/styles/src/components/slider.css:155","packages/styles/src/components/slider.css:160","packages/styles/src/components/slider.css:170","packages/styles/src/components/slider.css:183","packages/styles/src/components/slider.css:193","packages/styles/src/components/slider.css:203","packages/styles/src/components/slider.css:204","packages/styles/src/components/slider.css:215","packages/styles/src/components/slider.css:227","packages/styles/src/components/slider.css:238","packages/styles/src/components/slider.css:241","packages/styles/src/components/slider.css:244","packages/styles/src/components/slider.css:247","packages/styles/src/components/slider.css:253","packages/styles/src/components/slider.css:254","packages/styles/src/components/slider.css:258","packages/styles/src/components/slider.css:261","packages/styles/src/components/slider.css:265","packages/styles/src/components/slider.css:271","packages/styles/src/components/slider.css:284","packages/styles/src/components/slider.css:295","packages/styles/src/components/slider.css:305","packages/styles/src/components/slider.css:306","packages/styles/src/components/slider.css:307","packages/styles/src/forced-colors.css:55","packages/styles/src/forced-colors.css:56","packages/styles/src/forced-colors.css:57","packages/styles/src/forced-colors.css:58","packages/styles/src/forced-colors.css:59","packages/styles/src/forced-colors.css:60","packages/styles/src/forced-colors.css:61"],"note":"Direct source declaration or implementation."},
+    "/reference/css/0": {"status":"found","sources":["packages/styles/src/components/slider.css:18"],"note":"Direct source declaration or implementation."},
+    "/reference/css/1": {"status":"found","sources":["packages/styles/src/forced-colors.css:55"],"note":"Direct source declaration or implementation."},
+    "/reference/spec": {"status":"found","sources":["docs/specs/slider.md:1"],"note":"Dedicated family spec."},
+    "/reference/reactExport/0": {"status":"found","sources":["packages/react/src/components/primitives.tsx:720","packages/react/src/index.ts:46"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport": {"status":"found","sources":["packages/react/src/components/primitives.tsx:720","packages/react/src/index.ts:46"],"note":"Direct source declaration or implementation."},
+    "/reference": {"status":"found","sources":["packages/styles/src/manifest.ts:277","packages/styles/src/components/slider.css:1","packages/styles/src/forced-colors.css:1","docs/specs/slider.md:1"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element/0": {"status":"found","sources":["packages/react/src/components/primitives.tsx:782"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/slider.css:38","packages/styles/src/components/slider.css:65"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:38","packages/styles/src/components/slider.css:65"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:38","packages/styles/src/components/slider.css:65"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors/1": {"status":"found","sources":["packages/styles/src/components/slider.css:38","packages/styles/src/components/slider.css:65"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/name": {"status":"found","sources":["packages/styles/src/components/slider.css:40","packages/styles/src/components/slider.css:62","packages/styles/src/components/slider.css:75"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:40","packages/styles/src/components/slider.css:62","packages/styles/src/components/slider.css:75"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:40","packages/styles/src/components/slider.css:62","packages/styles/src/components/slider.css:75"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/selectors/1": {"status":"found","sources":["packages/styles/src/components/slider.css:40","packages/styles/src/components/slider.css:62","packages/styles/src/components/slider.css:75"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/selectors/2": {"status":"found","sources":["packages/styles/src/components/slider.css:40","packages/styles/src/components/slider.css:62","packages/styles/src/components/slider.css:75"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/2/name": {"status":"found","sources":["packages/styles/src/components/slider.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/2/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/3/name": {"status":"found","sources":["packages/styles/src/components/slider.css:76"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/3/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:76"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:76"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/slider.css:156"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:156"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:156"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/slider.css:157"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:157"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:157"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/slider.css:27","packages/styles/src/components/slider.css:31"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:27","packages/styles/src/components/slider.css:31"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:27","packages/styles/src/components/slider.css:31"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/name": {"status":"found","sources":["packages/styles/src/components/slider.css:31"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:31"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:31"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/name": {"status":"found","sources":["packages/styles/src/components/slider.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5/name": {"status":"found","sources":["packages/styles/src/components/slider.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/name": {"status":"found","sources":["packages/styles/src/components/slider.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/name": {"status":"found","sources":["packages/styles/src/components/slider.css:19","packages/styles/src/components/slider.css:306"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:19","packages/styles/src/components/slider.css:306"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:19","packages/styles/src/components/slider.css:306"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/selectors/1": {"status":"found","sources":["packages/styles/src/components/slider.css:19","packages/styles/src/components/slider.css:306"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8/name": {"status":"found","sources":["packages/styles/src/components/slider.css:24","packages/styles/src/components/slider.css:306"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:24","packages/styles/src/components/slider.css:306"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:24","packages/styles/src/components/slider.css:306"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8/selectors/1": {"status":"found","sources":["packages/styles/src/components/slider.css:24","packages/styles/src/components/slider.css:306"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9/name": {"status":"found","sources":["packages/styles/src/components/slider.css:23","packages/styles/src/components/slider.css:306"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:23","packages/styles/src/components/slider.css:306"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:23","packages/styles/src/components/slider.css:306"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9/selectors/1": {"status":"found","sources":["packages/styles/src/components/slider.css:23","packages/styles/src/components/slider.css:306"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/10/name": {"status":"found","sources":["packages/styles/src/components/slider.css:305"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/10/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:305"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/10/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:305"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/11/name": {"status":"found","sources":["packages/styles/src/components/slider.css:305"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/11/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:305"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/11/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:305"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/12/name": {"status":"found","sources":["packages/styles/src/components/slider.css:305"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/12/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:305"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/12/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:305"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/13/name": {"status":"found","sources":["packages/styles/src/components/slider.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/13/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/13/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/14/name": {"status":"found","sources":["packages/styles/src/components/slider.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/14/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/14/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/15/name": {"status":"found","sources":["packages/styles/src/components/slider.css:22","packages/styles/src/components/slider.css:306"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/15/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:22","packages/styles/src/components/slider.css:306"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/15/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:22","packages/styles/src/components/slider.css:306"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/15/selectors/1": {"status":"found","sources":["packages/styles/src/components/slider.css:22","packages/styles/src/components/slider.css:306"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/16/name": {"status":"found","sources":["packages/styles/src/components/slider.css:305"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/16/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:305"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/16/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:305"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/17/name": {"status":"found","sources":["packages/styles/src/components/slider.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/17/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/17/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/18/name": {"status":"found","sources":["packages/styles/src/components/slider.css:306"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/18/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:306"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/18/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:306"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/19/name": {"status":"found","sources":["packages/styles/src/components/slider.css:305"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/19/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:305"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/19/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:305"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/20/name": {"status":"found","sources":["packages/styles/src/components/slider.css:20","packages/styles/src/components/slider.css:306"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/20/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:20","packages/styles/src/components/slider.css:306"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/20/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:20","packages/styles/src/components/slider.css:306"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/20/selectors/1": {"status":"found","sources":["packages/styles/src/components/slider.css:20","packages/styles/src/components/slider.css:306"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/21/name": {"status":"found","sources":["packages/styles/src/components/slider.css:305"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/21/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:305"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/21/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:305"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/22/name": {"status":"found","sources":["packages/styles/src/components/slider.css:33","packages/styles/src/components/slider.css:65"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/22/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:33","packages/styles/src/components/slider.css:65"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/22/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:33","packages/styles/src/components/slider.css:65"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/22/selectors/1": {"status":"found","sources":["packages/styles/src/components/slider.css:33","packages/styles/src/components/slider.css:65"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/23/name": {"status":"found","sources":["packages/styles/src/components/slider.css:25","packages/styles/src/components/slider.css:151"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/23/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:25","packages/styles/src/components/slider.css:151"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/23/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:25","packages/styles/src/components/slider.css:151"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/23/selectors/1": {"status":"found","sources":["packages/styles/src/components/slider.css:25","packages/styles/src/components/slider.css:151"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/24/name": {"status":"found","sources":["packages/styles/src/components/slider.css:26","packages/styles/src/components/slider.css:152"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/24/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:26","packages/styles/src/components/slider.css:152"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/24/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:26","packages/styles/src/components/slider.css:152"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/24/selectors/1": {"status":"found","sources":["packages/styles/src/components/slider.css:26","packages/styles/src/components/slider.css:152"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/25/name": {"status":"found","sources":["packages/styles/src/components/slider.css:64"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/25/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:64"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/25/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:64"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/26/name": {"status":"found","sources":["packages/styles/src/components/slider.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/26/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/26/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/27/name": {"status":"found","sources":["packages/styles/src/components/slider.css:21","packages/styles/src/components/slider.css:63"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/27/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:21","packages/styles/src/components/slider.css:63"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/27/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:21","packages/styles/src/components/slider.css:63"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/27/selectors/1": {"status":"found","sources":["packages/styles/src/components/slider.css:21","packages/styles/src/components/slider.css:63"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/element/0": {"status":"found","sources":["packages/react/src/components/primitives.tsx:792"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/1/allowedContent/0": {"status":"found","sources":["packages/react/src/components/primitives.tsx:673"],"note":"Content type of the public slot rendered directly in this part."},
+    "/parts/1/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/slider.css:299"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:299"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:299"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/1/name": {"status":"found","sources":["packages/styles/src/components/slider.css:298"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/1/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:298"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:298"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/slider.css:297"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:297"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:297"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/element/0": {"status":"found","sources":["packages/react/src/components/primitives.tsx:794"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/2/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/slider.css:86","packages/styles/src/components/slider.css:87","packages/styles/src/components/slider.css:186","packages/styles/src/components/slider.css:196","packages/styles/src/components/slider.css:222","packages/styles/src/components/slider.css:233"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:86","packages/styles/src/components/slider.css:87","packages/styles/src/components/slider.css:186","packages/styles/src/components/slider.css:196","packages/styles/src/components/slider.css:222","packages/styles/src/components/slider.css:233"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:86","packages/styles/src/components/slider.css:87","packages/styles/src/components/slider.css:186","packages/styles/src/components/slider.css:196","packages/styles/src/components/slider.css:222","packages/styles/src/components/slider.css:233"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/0/selectors/1": {"status":"found","sources":["packages/styles/src/components/slider.css:86","packages/styles/src/components/slider.css:87","packages/styles/src/components/slider.css:186","packages/styles/src/components/slider.css:196","packages/styles/src/components/slider.css:222","packages/styles/src/components/slider.css:233"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/0/selectors/2": {"status":"found","sources":["packages/styles/src/components/slider.css:86","packages/styles/src/components/slider.css:87","packages/styles/src/components/slider.css:186","packages/styles/src/components/slider.css:196","packages/styles/src/components/slider.css:222","packages/styles/src/components/slider.css:233"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/0/selectors/3": {"status":"found","sources":["packages/styles/src/components/slider.css:86","packages/styles/src/components/slider.css:87","packages/styles/src/components/slider.css:186","packages/styles/src/components/slider.css:196","packages/styles/src/components/slider.css:222","packages/styles/src/components/slider.css:233"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/0/selectors/4": {"status":"found","sources":["packages/styles/src/components/slider.css:86","packages/styles/src/components/slider.css:87","packages/styles/src/components/slider.css:186","packages/styles/src/components/slider.css:196","packages/styles/src/components/slider.css:222","packages/styles/src/components/slider.css:233"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/0/selectors/5": {"status":"found","sources":["packages/styles/src/components/slider.css:86","packages/styles/src/components/slider.css:87","packages/styles/src/components/slider.css:186","packages/styles/src/components/slider.css:196","packages/styles/src/components/slider.css:222","packages/styles/src/components/slider.css:233"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/1/name": {"status":"found","sources":["packages/styles/src/components/slider.css:239","packages/styles/src/components/slider.css:242","packages/styles/src/components/slider.css:245","packages/styles/src/components/slider.css:248","packages/styles/src/components/slider.css:259","packages/styles/src/components/slider.css:262"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/1/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:239","packages/styles/src/components/slider.css:242","packages/styles/src/components/slider.css:245","packages/styles/src/components/slider.css:248","packages/styles/src/components/slider.css:259","packages/styles/src/components/slider.css:262"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:239","packages/styles/src/components/slider.css:242","packages/styles/src/components/slider.css:245","packages/styles/src/components/slider.css:248","packages/styles/src/components/slider.css:259","packages/styles/src/components/slider.css:262"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/1/selectors/1": {"status":"found","sources":["packages/styles/src/components/slider.css:239","packages/styles/src/components/slider.css:242","packages/styles/src/components/slider.css:245","packages/styles/src/components/slider.css:248","packages/styles/src/components/slider.css:259","packages/styles/src/components/slider.css:262"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/1/selectors/2": {"status":"found","sources":["packages/styles/src/components/slider.css:239","packages/styles/src/components/slider.css:242","packages/styles/src/components/slider.css:245","packages/styles/src/components/slider.css:248","packages/styles/src/components/slider.css:259","packages/styles/src/components/slider.css:262"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/1/selectors/3": {"status":"found","sources":["packages/styles/src/components/slider.css:239","packages/styles/src/components/slider.css:242","packages/styles/src/components/slider.css:245","packages/styles/src/components/slider.css:248","packages/styles/src/components/slider.css:259","packages/styles/src/components/slider.css:262"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/1/selectors/4": {"status":"found","sources":["packages/styles/src/components/slider.css:239","packages/styles/src/components/slider.css:242","packages/styles/src/components/slider.css:245","packages/styles/src/components/slider.css:248","packages/styles/src/components/slider.css:259","packages/styles/src/components/slider.css:262"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/1/selectors/5": {"status":"found","sources":["packages/styles/src/components/slider.css:239","packages/styles/src/components/slider.css:242","packages/styles/src/components/slider.css:245","packages/styles/src/components/slider.css:248","packages/styles/src/components/slider.css:259","packages/styles/src/components/slider.css:262"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/2/name": {"status":"found","sources":["packages/styles/src/components/slider.css:81","packages/styles/src/components/slider.css:177"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/2/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:81","packages/styles/src/components/slider.css:177"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:81","packages/styles/src/components/slider.css:177"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/2/selectors/1": {"status":"found","sources":["packages/styles/src/components/slider.css:81","packages/styles/src/components/slider.css:177"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/3/name": {"status":"found","sources":["packages/styles/src/components/slider.css:86","packages/styles/src/components/slider.css:87","packages/styles/src/components/slider.css:186","packages/styles/src/components/slider.css:196","packages/styles/src/components/slider.css:239","packages/styles/src/components/slider.css:242","packages/styles/src/components/slider.css:259","packages/styles/src/components/slider.css:262"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/3/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:86","packages/styles/src/components/slider.css:87","packages/styles/src/components/slider.css:186","packages/styles/src/components/slider.css:196","packages/styles/src/components/slider.css:239","packages/styles/src/components/slider.css:242","packages/styles/src/components/slider.css:259","packages/styles/src/components/slider.css:262"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:86","packages/styles/src/components/slider.css:87","packages/styles/src/components/slider.css:186","packages/styles/src/components/slider.css:196","packages/styles/src/components/slider.css:239","packages/styles/src/components/slider.css:242","packages/styles/src/components/slider.css:259","packages/styles/src/components/slider.css:262"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/3/selectors/1": {"status":"found","sources":["packages/styles/src/components/slider.css:86","packages/styles/src/components/slider.css:87","packages/styles/src/components/slider.css:186","packages/styles/src/components/slider.css:196","packages/styles/src/components/slider.css:239","packages/styles/src/components/slider.css:242","packages/styles/src/components/slider.css:259","packages/styles/src/components/slider.css:262"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/3/selectors/2": {"status":"found","sources":["packages/styles/src/components/slider.css:86","packages/styles/src/components/slider.css:87","packages/styles/src/components/slider.css:186","packages/styles/src/components/slider.css:196","packages/styles/src/components/slider.css:239","packages/styles/src/components/slider.css:242","packages/styles/src/components/slider.css:259","packages/styles/src/components/slider.css:262"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/3/selectors/3": {"status":"found","sources":["packages/styles/src/components/slider.css:86","packages/styles/src/components/slider.css:87","packages/styles/src/components/slider.css:186","packages/styles/src/components/slider.css:196","packages/styles/src/components/slider.css:239","packages/styles/src/components/slider.css:242","packages/styles/src/components/slider.css:259","packages/styles/src/components/slider.css:262"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/3/selectors/4": {"status":"found","sources":["packages/styles/src/components/slider.css:86","packages/styles/src/components/slider.css:87","packages/styles/src/components/slider.css:186","packages/styles/src/components/slider.css:196","packages/styles/src/components/slider.css:239","packages/styles/src/components/slider.css:242","packages/styles/src/components/slider.css:259","packages/styles/src/components/slider.css:262"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/3/selectors/5": {"status":"found","sources":["packages/styles/src/components/slider.css:86","packages/styles/src/components/slider.css:87","packages/styles/src/components/slider.css:186","packages/styles/src/components/slider.css:196","packages/styles/src/components/slider.css:239","packages/styles/src/components/slider.css:242","packages/styles/src/components/slider.css:259","packages/styles/src/components/slider.css:262"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/3/selectors/6": {"status":"found","sources":["packages/styles/src/components/slider.css:86","packages/styles/src/components/slider.css:87","packages/styles/src/components/slider.css:186","packages/styles/src/components/slider.css:196","packages/styles/src/components/slider.css:239","packages/styles/src/components/slider.css:242","packages/styles/src/components/slider.css:259","packages/styles/src/components/slider.css:262"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/3/selectors/7": {"status":"found","sources":["packages/styles/src/components/slider.css:86","packages/styles/src/components/slider.css:87","packages/styles/src/components/slider.css:186","packages/styles/src/components/slider.css:196","packages/styles/src/components/slider.css:239","packages/styles/src/components/slider.css:242","packages/styles/src/components/slider.css:259","packages/styles/src/components/slider.css:262"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/4/name": {"status":"found","sources":["packages/styles/src/components/slider.css:217","packages/styles/src/components/slider.css:218","packages/styles/src/components/slider.css:219","packages/styles/src/components/slider.css:229","packages/styles/src/components/slider.css:230"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/4/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:217","packages/styles/src/components/slider.css:218","packages/styles/src/components/slider.css:219","packages/styles/src/components/slider.css:229","packages/styles/src/components/slider.css:230"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/4/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:217","packages/styles/src/components/slider.css:218","packages/styles/src/components/slider.css:219","packages/styles/src/components/slider.css:229","packages/styles/src/components/slider.css:230"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/4/selectors/1": {"status":"found","sources":["packages/styles/src/components/slider.css:217","packages/styles/src/components/slider.css:218","packages/styles/src/components/slider.css:219","packages/styles/src/components/slider.css:229","packages/styles/src/components/slider.css:230"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/5/name": {"status":"found","sources":["packages/styles/src/components/slider.css:220","packages/styles/src/components/slider.css:231"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/5/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:220","packages/styles/src/components/slider.css:231"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/5/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:220","packages/styles/src/components/slider.css:231"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/5/selectors/1": {"status":"found","sources":["packages/styles/src/components/slider.css:220","packages/styles/src/components/slider.css:231"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/6/name": {"status":"found","sources":["packages/styles/src/components/slider.css:184","packages/styles/src/components/slider.css:194","packages/styles/src/components/slider.css:219"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/6/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:184","packages/styles/src/components/slider.css:194","packages/styles/src/components/slider.css:219"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/6/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:184","packages/styles/src/components/slider.css:194","packages/styles/src/components/slider.css:219"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/6/selectors/1": {"status":"found","sources":["packages/styles/src/components/slider.css:184","packages/styles/src/components/slider.css:194","packages/styles/src/components/slider.css:219"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/6/selectors/2": {"status":"found","sources":["packages/styles/src/components/slider.css:184","packages/styles/src/components/slider.css:194","packages/styles/src/components/slider.css:219"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/7/name": {"status":"found","sources":["packages/styles/src/components/slider.css:86","packages/styles/src/components/slider.css:87","packages/styles/src/components/slider.css:186","packages/styles/src/components/slider.css:196"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/7/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:86","packages/styles/src/components/slider.css:87","packages/styles/src/components/slider.css:186","packages/styles/src/components/slider.css:196"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/7/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:86","packages/styles/src/components/slider.css:87","packages/styles/src/components/slider.css:186","packages/styles/src/components/slider.css:196"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/7/selectors/1": {"status":"found","sources":["packages/styles/src/components/slider.css:86","packages/styles/src/components/slider.css:87","packages/styles/src/components/slider.css:186","packages/styles/src/components/slider.css:196"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/7/selectors/2": {"status":"found","sources":["packages/styles/src/components/slider.css:86","packages/styles/src/components/slider.css:87","packages/styles/src/components/slider.css:186","packages/styles/src/components/slider.css:196"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/7/selectors/3": {"status":"found","sources":["packages/styles/src/components/slider.css:86","packages/styles/src/components/slider.css:87","packages/styles/src/components/slider.css:186","packages/styles/src/components/slider.css:196"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/8/name": {"status":"found","sources":["packages/styles/src/components/slider.css:239","packages/styles/src/components/slider.css:242","packages/styles/src/components/slider.css:259","packages/styles/src/components/slider.css:262"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/8/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:239","packages/styles/src/components/slider.css:242","packages/styles/src/components/slider.css:259","packages/styles/src/components/slider.css:262"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/8/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:239","packages/styles/src/components/slider.css:242","packages/styles/src/components/slider.css:259","packages/styles/src/components/slider.css:262"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/8/selectors/1": {"status":"found","sources":["packages/styles/src/components/slider.css:239","packages/styles/src/components/slider.css:242","packages/styles/src/components/slider.css:259","packages/styles/src/components/slider.css:262"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/8/selectors/2": {"status":"found","sources":["packages/styles/src/components/slider.css:239","packages/styles/src/components/slider.css:242","packages/styles/src/components/slider.css:259","packages/styles/src/components/slider.css:262"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/8/selectors/3": {"status":"found","sources":["packages/styles/src/components/slider.css:239","packages/styles/src/components/slider.css:242","packages/styles/src/components/slider.css:259","packages/styles/src/components/slider.css:262"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/slider.css:222","packages/styles/src/components/slider.css:233","packages/styles/src/components/slider.css:245","packages/styles/src/components/slider.css:248"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:222","packages/styles/src/components/slider.css:233","packages/styles/src/components/slider.css:245","packages/styles/src/components/slider.css:248"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:222","packages/styles/src/components/slider.css:233","packages/styles/src/components/slider.css:245","packages/styles/src/components/slider.css:248"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/selectors/1": {"status":"found","sources":["packages/styles/src/components/slider.css:222","packages/styles/src/components/slider.css:233","packages/styles/src/components/slider.css:245","packages/styles/src/components/slider.css:248"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/selectors/2": {"status":"found","sources":["packages/styles/src/components/slider.css:222","packages/styles/src/components/slider.css:233","packages/styles/src/components/slider.css:245","packages/styles/src/components/slider.css:248"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/selectors/3": {"status":"found","sources":["packages/styles/src/components/slider.css:222","packages/styles/src/components/slider.css:233","packages/styles/src/components/slider.css:245","packages/styles/src/components/slider.css:248"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/slider.css:266","packages/styles/src/components/slider.css:268","packages/styles/src/components/slider.css:272","packages/styles/src/components/slider.css:274"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:266","packages/styles/src/components/slider.css:268","packages/styles/src/components/slider.css:272","packages/styles/src/components/slider.css:274"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:266","packages/styles/src/components/slider.css:268","packages/styles/src/components/slider.css:272","packages/styles/src/components/slider.css:274"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/1/selectors/1": {"status":"found","sources":["packages/styles/src/components/slider.css:266","packages/styles/src/components/slider.css:268","packages/styles/src/components/slider.css:272","packages/styles/src/components/slider.css:274"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/slider.css:269","packages/styles/src/components/slider.css:275"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:269","packages/styles/src/components/slider.css:275"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:269","packages/styles/src/components/slider.css:275"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/2/selectors/1": {"status":"found","sources":["packages/styles/src/components/slider.css:269","packages/styles/src/components/slider.css:275"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/3/name": {"status":"found","sources":["packages/styles/src/components/slider.css:268","packages/styles/src/components/slider.css:274"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/3/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:268","packages/styles/src/components/slider.css:274"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:268","packages/styles/src/components/slider.css:274"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/3/selectors/1": {"status":"found","sources":["packages/styles/src/components/slider.css:268","packages/styles/src/components/slider.css:274"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/4/name": {"status":"found","sources":["packages/styles/src/components/slider.css:185","packages/styles/src/components/slider.css:195","packages/styles/src/components/slider.css:221","packages/styles/src/components/slider.css:232"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/4/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:185","packages/styles/src/components/slider.css:195","packages/styles/src/components/slider.css:221","packages/styles/src/components/slider.css:232"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/4/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:185","packages/styles/src/components/slider.css:195","packages/styles/src/components/slider.css:221","packages/styles/src/components/slider.css:232"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/4/selectors/1": {"status":"found","sources":["packages/styles/src/components/slider.css:185","packages/styles/src/components/slider.css:195","packages/styles/src/components/slider.css:221","packages/styles/src/components/slider.css:232"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/4/selectors/2": {"status":"found","sources":["packages/styles/src/components/slider.css:185","packages/styles/src/components/slider.css:195","packages/styles/src/components/slider.css:221","packages/styles/src/components/slider.css:232"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/4/selectors/3": {"status":"found","sources":["packages/styles/src/components/slider.css:185","packages/styles/src/components/slider.css:195","packages/styles/src/components/slider.css:221","packages/styles/src/components/slider.css:232"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/5/name": {"status":"found","sources":["packages/styles/src/components/slider.css:223","packages/styles/src/components/slider.css:234","packages/styles/src/components/slider.css:267","packages/styles/src/components/slider.css:273"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/5/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:223","packages/styles/src/components/slider.css:234","packages/styles/src/components/slider.css:267","packages/styles/src/components/slider.css:273"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/5/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:223","packages/styles/src/components/slider.css:234","packages/styles/src/components/slider.css:267","packages/styles/src/components/slider.css:273"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/5/selectors/1": {"status":"found","sources":["packages/styles/src/components/slider.css:223","packages/styles/src/components/slider.css:234","packages/styles/src/components/slider.css:267","packages/styles/src/components/slider.css:273"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/5/selectors/2": {"status":"found","sources":["packages/styles/src/components/slider.css:223","packages/styles/src/components/slider.css:234","packages/styles/src/components/slider.css:267","packages/styles/src/components/slider.css:273"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/5/selectors/3": {"status":"found","sources":["packages/styles/src/components/slider.css:223","packages/styles/src/components/slider.css:234","packages/styles/src/components/slider.css:267","packages/styles/src/components/slider.css:273"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/6/name": {"status":"found","sources":["packages/styles/src/components/slider.css:220","packages/styles/src/components/slider.css:231"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/6/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:220","packages/styles/src/components/slider.css:231"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/6/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:220","packages/styles/src/components/slider.css:231"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/6/selectors/1": {"status":"found","sources":["packages/styles/src/components/slider.css:220","packages/styles/src/components/slider.css:231"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/7/name": {"status":"found","sources":["packages/styles/src/components/slider.css:224","packages/styles/src/components/slider.css:235"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/7/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:224","packages/styles/src/components/slider.css:235"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/7/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:224","packages/styles/src/components/slider.css:235"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/7/selectors/1": {"status":"found","sources":["packages/styles/src/components/slider.css:224","packages/styles/src/components/slider.css:235"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/element/0": {"status":"found","sources":["packages/react/src/components/primitives.tsx:813"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/3/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/slider.css:289"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:289"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:289"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/customProperties/1/name": {"status":"found","sources":["packages/styles/src/components/slider.css:288"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/customProperties/1/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:288"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/customProperties/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:288"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/slider.css:291"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:291"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:291"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/element/0": {"status":"found","sources":["packages/react/src/components/primitives.tsx:793"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/4/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/slider.css:71"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:71"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:71"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/customProperties/1/name": {"status":"found","sources":["packages/styles/src/components/slider.css:46","packages/styles/src/components/slider.css:71"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/customProperties/1/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:46","packages/styles/src/components/slider.css:71"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/customProperties/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:46","packages/styles/src/components/slider.css:71"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/customProperties/1/selectors/1": {"status":"found","sources":["packages/styles/src/components/slider.css:46","packages/styles/src/components/slider.css:71"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/customProperties/2/name": {"status":"found","sources":["packages/styles/src/components/slider.css:47"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/customProperties/2/selectors": {"status":"found","sources":["packages/styles/src/components/slider.css:47"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/customProperties/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/slider.css:47"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/slots/0/name": {"status":"found","sources":["packages/react/src/components/primitives.tsx:673"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/part": {"status":"found","sources":["packages/react/src/components/primitives.tsx:673"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/element/0": {"status":"found","sources":["packages/react/src/components/primitives.tsx:792"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/slots/0/required": {"status":"found","sources":["packages/react/src/components/primitives.tsx:673"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/allowedContent": {"status":"found","sources":["packages/react/src/components/primitives.tsx:673"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/allowedContent/0": {"status":"found","sources":["packages/react/src/components/primitives.tsx:673"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/1/name": {"status":"found","sources":["packages/react/src/components/primitives.tsx:684"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/1/required": {"status":"found","sources":["packages/react/src/components/primitives.tsx:684"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/1/allowedContent": {"status":"found","sources":["packages/react/src/components/primitives.tsx:684"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/1/allowedContent/0": {"status":"found","sources":["packages/react/src/components/primitives.tsx:684"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/options/tone/values": {"status":"found","sources":["packages/styles/src/manifest.ts:281"],"note":"Direct source declaration or implementation."},
+    "/options/tone/values/0": {"status":"found","sources":["packages/styles/src/manifest.ts:281"],"note":"Direct source declaration or implementation."},
+    "/options/tone/values/1": {"status":"found","sources":["packages/styles/src/manifest.ts:281"],"note":"Direct source declaration or implementation."},
+    "/options/size/values": {"status":"found","sources":["packages/styles/src/manifest.ts:282"],"note":"Direct source declaration or implementation."},
+    "/options/size/values/0": {"status":"found","sources":["packages/styles/src/manifest.ts:282"],"note":"Direct source declaration or implementation."},
+    "/options/size/values/1": {"status":"found","sources":["packages/styles/src/manifest.ts:282"],"note":"Direct source declaration or implementation."},
+    "/options/size/values/2": {"status":"found","sources":["packages/styles/src/manifest.ts:282"],"note":"Direct source declaration or implementation."},
+    "/options/labelPosition/values": {"status":"found","sources":["packages/styles/src/manifest.ts:283"],"note":"Direct source declaration or implementation."},
+    "/options/labelPosition/values/0": {"status":"found","sources":["packages/styles/src/manifest.ts:283"],"note":"Direct source declaration or implementation."},
+    "/options/orientation/values": {"status":"found","sources":["packages/styles/src/manifest.ts:284"],"note":"Direct source declaration or implementation."},
+    "/options/orientation/values/0": {"status":"found","sources":["packages/styles/src/manifest.ts:284"],"note":"Direct source declaration or implementation."},
+    "/states/0/name": {"status":"found","sources":["packages/react/src/components/primitives.tsx:790"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/0/part": {"status":"found","sources":["packages/react/src/components/primitives.tsx:790"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/0/kind": {"status":"found","sources":["packages/react/src/components/primitives.tsx:790"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/0/hook": {"status":"found","sources":["packages/react/src/components/primitives.tsx:790"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/0/value": {"status":"found","sources":["packages/react/src/components/primitives.tsx:790"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/1/name": {"status":"found","sources":["packages/react/src/components/primitives.tsx:804"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/part": {"status":"found","sources":["packages/react/src/components/primitives.tsx:804"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/kind": {"status":"found","sources":["packages/react/src/components/primitives.tsx:804"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/hook": {"status":"found","sources":["packages/react/src/components/primitives.tsx:804"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/value": {"status":"found","sources":["packages/react/src/components/primitives.tsx:804"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/name": {"status":"found","sources":["packages/react/src/components/primitives.tsx:813"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/part": {"status":"found","sources":["packages/react/src/components/primitives.tsx:813"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/kind": {"status":"found","sources":["packages/react/src/components/primitives.tsx:813"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/hook": {"status":"found","sources":["packages/react/src/components/primitives.tsx:813"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/value": {"status":"found","sources":["packages/react/src/components/primitives.tsx:813"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3/name": {"status":"found","sources":["packages/react/src/components/primitives.tsx:793"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3/part": {"status":"found","sources":["packages/react/src/components/primitives.tsx:793"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3/kind": {"status":"found","sources":["packages/react/src/components/primitives.tsx:793"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3/hook": {"status":"found","sources":["packages/react/src/components/primitives.tsx:793"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3/value": {"status":"found","sources":["packages/react/src/components/primitives.tsx:793"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/4/name": {"status":"found","sources":["packages/styles/src/components/slider.css:160"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/4/part": {"status":"found","sources":["packages/styles/src/components/slider.css:160"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/4/kind": {"status":"found","sources":["packages/styles/src/components/slider.css:160"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/4/hook": {"status":"found","sources":["packages/styles/src/components/slider.css:160"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/4/value": {"status":"found","sources":["packages/styles/src/components/slider.css:160"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/5/name": {"status":"found","sources":["packages/styles/src/components/slider.css:147"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/5/part": {"status":"found","sources":["packages/styles/src/components/slider.css:147"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/5/kind": {"status":"found","sources":["packages/styles/src/components/slider.css:147"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/5/hook": {"status":"found","sources":["packages/styles/src/components/slider.css:147"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/5/value": {"status":"found","sources":["packages/styles/src/components/slider.css:147"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/6/name": {"status":"found","sources":["packages/styles/src/components/slider.css:148"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/6/part": {"status":"found","sources":["packages/styles/src/components/slider.css:148"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/6/kind": {"status":"found","sources":["packages/styles/src/components/slider.css:148"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/6/hook": {"status":"found","sources":["packages/styles/src/components/slider.css:148"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/6/value": {"status":"found","sources":["packages/styles/src/components/slider.css:148"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/7/name": {"status":"found","sources":["packages/styles/src/components/slider.css:238"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/7/part": {"status":"found","sources":["packages/styles/src/components/slider.css:238"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/7/kind": {"status":"found","sources":["packages/styles/src/components/slider.css:238"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/7/hook": {"status":"found","sources":["packages/styles/src/components/slider.css:238"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/7/value": {"status":"found","sources":["packages/styles/src/components/slider.css:238"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/8/name": {"status":"found","sources":["packages/styles/src/components/slider.css:241"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/8/part": {"status":"found","sources":["packages/styles/src/components/slider.css:241"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/8/kind": {"status":"found","sources":["packages/styles/src/components/slider.css:241"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/8/hook": {"status":"found","sources":["packages/styles/src/components/slider.css:241"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/8/value": {"status":"found","sources":["packages/styles/src/components/slider.css:241"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/9/name": {"status":"found","sources":["packages/styles/src/components/slider.css:244"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/9/part": {"status":"found","sources":["packages/styles/src/components/slider.css:244"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/9/kind": {"status":"found","sources":["packages/styles/src/components/slider.css:244"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/9/hook": {"status":"found","sources":["packages/styles/src/components/slider.css:244"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/9/value": {"status":"found","sources":["packages/styles/src/components/slider.css:244"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/10/name": {"status":"found","sources":["packages/styles/src/components/slider.css:247"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/10/part": {"status":"found","sources":["packages/styles/src/components/slider.css:247"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/10/kind": {"status":"found","sources":["packages/styles/src/components/slider.css:247"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/10/hook": {"status":"found","sources":["packages/styles/src/components/slider.css:247"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/10/value": {"status":"found","sources":["packages/styles/src/components/slider.css:247"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/11/name": {"status":"found","sources":["packages/styles/src/components/slider.css:253"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/11/part": {"status":"found","sources":["packages/styles/src/components/slider.css:253"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/11/kind": {"status":"found","sources":["packages/styles/src/components/slider.css:253"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/11/hook": {"status":"found","sources":["packages/styles/src/components/slider.css:253"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/11/value": {"status":"found","sources":["packages/styles/src/components/slider.css:253"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/12/name": {"status":"found","sources":["packages/styles/src/components/slider.css:254"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/12/part": {"status":"found","sources":["packages/styles/src/components/slider.css:254"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/12/kind": {"status":"found","sources":["packages/styles/src/components/slider.css:254"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/12/hook": {"status":"found","sources":["packages/styles/src/components/slider.css:254"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/12/value": {"status":"found","sources":["packages/styles/src/components/slider.css:254"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/13/name": {"status":"found","sources":["packages/styles/src/components/slider.css:258"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/13/part": {"status":"found","sources":["packages/styles/src/components/slider.css:258"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/13/kind": {"status":"found","sources":["packages/styles/src/components/slider.css:258"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/13/hook": {"status":"found","sources":["packages/styles/src/components/slider.css:258"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/13/value": {"status":"found","sources":["packages/styles/src/components/slider.css:258"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/14/name": {"status":"found","sources":["packages/styles/src/components/slider.css:261"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/14/part": {"status":"found","sources":["packages/styles/src/components/slider.css:261"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/14/kind": {"status":"found","sources":["packages/styles/src/components/slider.css:261"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/14/hook": {"status":"found","sources":["packages/styles/src/components/slider.css:261"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/14/value": {"status":"found","sources":["packages/styles/src/components/slider.css:261"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/15/name": {"status":"found","sources":["packages/styles/src/components/slider.css:265"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/15/part": {"status":"found","sources":["packages/styles/src/components/slider.css:265"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/15/kind": {"status":"found","sources":["packages/styles/src/components/slider.css:265"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/15/hook": {"status":"found","sources":["packages/styles/src/components/slider.css:265"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/15/value": {"status":"found","sources":["packages/styles/src/components/slider.css:265"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/16/name": {"status":"found","sources":["packages/styles/src/components/slider.css:271"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/16/part": {"status":"found","sources":["packages/styles/src/components/slider.css:271"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/16/kind": {"status":"found","sources":["packages/styles/src/components/slider.css:271"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/16/hook": {"status":"found","sources":["packages/styles/src/components/slider.css:271"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/16/value": {"status":"found","sources":["packages/styles/src/components/slider.css:271"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/reference/spec/0": {"status":"found","sources":["docs/specs/slider.md:1"],"note":"Dedicated family spec."}
+  }
+}

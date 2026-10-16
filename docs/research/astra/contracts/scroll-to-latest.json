@@ -1,0 +1,140 @@
+{
+  "slug": "scroll-to-latest",
+  "manifest": "scrollToLatest",
+  "parts": [
+    {
+      "id": "root",
+      "element": [
+        "div"
+      ],
+      "class": "area-scroll-to-latest",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-duration-fast",
+          "selectors": [
+            ".area-scroll-to-latest"
+          ]
+        },
+        {
+          "name": "--area-ease-out",
+          "selectors": [
+            ".area-scroll-to-latest"
+          ]
+        },
+        {
+          "name": "--area-space-24",
+          "selectors": [
+            ".area-scroll-to-latest"
+          ]
+        }
+      ]
+    }
+  ],
+  "slots": [],
+  "options": {},
+  "booleans": [],
+  "elementModifiers": {},
+  "states": [
+    {
+      "name": "visible",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-visible",
+      "value": "{visible ? \"\" : undefined}"
+    },
+    {
+      "name": "visible",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-visible",
+      "value": "present"
+    }
+  ],
+  "keyboard": [],
+  "accessibleName": [],
+  "composition": {
+    "allowedParents": "not found",
+    "allowedChildren": "not found",
+    "observedChildren": [
+      "Button",
+      "Glyph"
+    ],
+    "demoExamples": [
+      "apps/docs/src/demos/gallery.tsx:1180"
+    ]
+  },
+  "reference": {
+    "css": [
+      "packages/styles/src/components/scroll-to-latest.css"
+    ],
+    "spec": [
+      "docs/specs/scroll-to-latest.md"
+    ],
+    "reactExport": [
+      "ScrollToLatest"
+    ]
+  },
+  "evidence": {
+    "/slug": {"status":"found","sources":["packages/styles/src/manifest.ts:452"],"note":"Direct source declaration or implementation."},
+    "/manifest": {"status":"found","sources":["packages/styles/src/manifest.ts:451"],"note":"Direct source declaration or implementation."},
+    "/parts": {"status":"found","sources":["packages/styles/src/manifest.ts:451","packages/react/src/components/ScrollToLatest.tsx:38"],"note":"Manifest parts plus implementation-only structural elements; unclassed nodes retain explicit IDs."},
+    "/parts/0": {"status":"found","sources":["packages/react/src/components/ScrollToLatest.tsx:38"],"note":"Direct source declaration or implementation."},
+    "/parts/0/id": {"status":"found","sources":["packages/react/src/components/ScrollToLatest.tsx:38"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/0/class": {"status":"found","sources":["packages/react/src/components/ScrollToLatest.tsx:38"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element": {"status":"found","sources":["packages/react/src/components/ScrollToLatest.tsx:38"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/required": {"status":"found","sources":["packages/react/src/components/ScrollToLatest.tsx:38"],"note":"Root of the rendered family surface."},
+    "/parts/0/allowedContent": {"status":"not found","sources":["packages/react/src/components/ScrollToLatest.tsx:38"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/0/customProperties": {"status":"not found","sources":["packages/react/src/components/ScrollToLatest.tsx:38"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/0/tokens/0": {"status":"found","sources":["packages/styles/src/components/scroll-to-latest.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1": {"status":"found","sources":["packages/styles/src/components/scroll-to-latest.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2": {"status":"found","sources":["packages/styles/src/components/scroll-to-latest.css:14"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens": {"status":"found","sources":["packages/styles/src/components/scroll-to-latest.css:14","packages/styles/src/components/scroll-to-latest.css:22"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/slots": {"status":"not found","sources":["packages/styles/src/manifest.ts:451","packages/react/src/components/ScrollToLatest.tsx:16","docs/specs/scroll-to-latest.md:1"],"note":"not found: No locally declared ReactNode/ReactElement slot props; native inherited children and delegated interfaces require review."},
+    "/options": {"status":"found","sources":["packages/styles/src/manifest.ts:454"],"note":"Direct source declaration or implementation."},
+    "/booleans": {"status":"found","sources":["packages/styles/src/manifest.ts:451"],"note":"Exact manifest boolean modifier list; absence means no declared booleans."},
+    "/elementModifiers": {"status":"found","sources":["packages/styles/src/manifest.ts:451"],"note":"Direct source declaration or implementation."},
+    "/states/0": {"status":"found","sources":["packages/react/src/components/ScrollToLatest.tsx:38"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1": {"status":"found","sources":["packages/styles/src/components/scroll-to-latest.css:24"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states": {"status":"found","sources":["packages/react/src/components/ScrollToLatest.tsx:38","packages/styles/src/components/scroll-to-latest.css:24"],"note":"Direct source declaration or implementation."},
+    "/keyboard": {"status":"not found","sources":["packages/styles/src/manifest.ts:451","packages/react/src/components/ScrollToLatest.tsx:16","docs/specs/scroll-to-latest.md:1"],"note":"not found: No reviewed key-to-action contract found. Native behavior is not invented from a tag name."},
+    "/accessibleName": {"status":"not found","sources":["packages/styles/src/manifest.ts:451","packages/react/src/components/ScrollToLatest.tsx:16","docs/specs/scroll-to-latest.md:1"],"note":"not found: No explicit accessible-name rule or naming attribute found in scoped implementation; inherited native props are not treated as naming requirements."},
+    "/composition": {"status":"found","sources":["packages/styles/src/manifest.ts:451","packages/react/src/components/ScrollToLatest.tsx:16","docs/specs/scroll-to-latest.md:1"],"note":"Allowed composition is distinct from examples and built-in child calls."},
+    "/composition/allowedParents": {"status":"not found","sources":["packages/styles/src/manifest.ts:451","packages/react/src/components/ScrollToLatest.tsx:16","docs/specs/scroll-to-latest.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/allowedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:451","packages/react/src/components/ScrollToLatest.tsx:16","docs/specs/scroll-to-latest.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/observedChildren/0": {"status":"found","sources":["packages/react/src/components/ScrollToLatest.tsx:39"],"note":"Observed child component call; not an allowed-child restriction."},
+    "/composition/observedChildren/1": {"status":"found","sources":["packages/react/src/components/ScrollToLatest.tsx:40"],"note":"Observed child component call; not an allowed-child restriction."},
+    "/composition/observedChildren": {"status":"found","sources":["packages/styles/src/manifest.ts:451","packages/react/src/components/ScrollToLatest.tsx:16","docs/specs/scroll-to-latest.md:1"],"note":"Direct source declaration or implementation."},
+    "/composition/demoExamples/0": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1180"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1180"],"note":"Direct source declaration or implementation."},
+    "/reference/css": {"status":"found","sources":["packages/styles/src/components/scroll-to-latest.css:10","packages/styles/src/components/scroll-to-latest.css:24","packages/styles/src/components/scroll-to-latest.css:25"],"note":"Direct source declaration or implementation."},
+    "/reference/css/0": {"status":"found","sources":["packages/styles/src/components/scroll-to-latest.css:10"],"note":"Direct source declaration or implementation."},
+    "/reference/spec": {"status":"found","sources":["docs/specs/scroll-to-latest.md:1"],"note":"Dedicated family spec."},
+    "/reference/reactExport/0": {"status":"found","sources":["packages/react/src/components/ScrollToLatest.tsx:16","packages/react/src/index.ts:25"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport": {"status":"found","sources":["packages/react/src/components/ScrollToLatest.tsx:16","packages/react/src/index.ts:25"],"note":"Direct source declaration or implementation."},
+    "/reference": {"status":"found","sources":["packages/styles/src/manifest.ts:451","packages/styles/src/components/scroll-to-latest.css:1","docs/specs/scroll-to-latest.md:1"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element/0": {"status":"found","sources":["packages/react/src/components/ScrollToLatest.tsx:38"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/scroll-to-latest.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/scroll-to-latest.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/scroll-to-latest.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/scroll-to-latest.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/scroll-to-latest.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/scroll-to-latest.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/scroll-to-latest.css:14"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/scroll-to-latest.css:14"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/scroll-to-latest.css:14"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/states/0/name": {"status":"found","sources":["packages/react/src/components/ScrollToLatest.tsx:38"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/part": {"status":"found","sources":["packages/react/src/components/ScrollToLatest.tsx:38"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/kind": {"status":"found","sources":["packages/react/src/components/ScrollToLatest.tsx:38"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/hook": {"status":"found","sources":["packages/react/src/components/ScrollToLatest.tsx:38"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/value": {"status":"found","sources":["packages/react/src/components/ScrollToLatest.tsx:38"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/name": {"status":"found","sources":["packages/styles/src/components/scroll-to-latest.css:24"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/1/part": {"status":"found","sources":["packages/styles/src/components/scroll-to-latest.css:24"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/1/kind": {"status":"found","sources":["packages/styles/src/components/scroll-to-latest.css:24"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/1/hook": {"status":"found","sources":["packages/styles/src/components/scroll-to-latest.css:24"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/1/value": {"status":"found","sources":["packages/styles/src/components/scroll-to-latest.css:24"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/reference/spec/0": {"status":"found","sources":["docs/specs/scroll-to-latest.md:1"],"note":"Dedicated family spec."}
+  }
+}

@@ -1,0 +1,293 @@
+# Public references and exact layer values
+
+Checked **2026-10-08**. Research only; all role/style assignments are Astra interpretations. See [method and limits](README.md).
+
+Values are source-specified unless explicitly marked calculated. A layer not listed is **not established by this extract**, not automatically zero or absent. Preserve the stated variant, units, paint order, blend mode and dependency. Each record is a selected recipe or documented partial recipe, not an assertion about an entire library.
+
+## Style coverage
+
+| Taxonomy style | References | Coverage boundary |
+| --- | --- | --- |
+| Flat | [R01](catalogue.md#r01) | R01 is a specific flat button, not a universal ban on every stylesheet shadow. |
+| Material / paper | [R02](catalogue.md#r02) | R02 is legacy Google MDC Web; no paper fiber is implied. |
+| Transparency | [R03](catalogue.md#r03), [R19](catalogue.md#r19) | R03 separates child body alpha from blur; R19 is owner-only evidence. |
+| Glassmorphism | [R03](catalogue.md#r03) | R03 is an inspectable CSS frost recipe. |
+| Acrylic (Fluent) | [R04](catalogue.md#r04) | R04 is native WinUI code, with host geometry and noise asset separate. |
+| Mica | [R05](catalogue.md#r05) | Partial: exact fallback/overlay values; active optical constants not found. |
+| Liquid Glass (Apple, 2025) | [R06](catalogue.md#r06), [R07](catalogue.md#r07) | Partial native API evidence (R06), numeric third-party approximation (R07); no complete Apple optical recipe. |
+| Neumorphism | [R08](catalogue.md#r08) | R08 has source-resolved colors and paired raised/pressed lobes. |
+| Claymorphism | [R09](catalogue.md#r09) | R09 preserves the library’s near-transparent default rather than inventing a pastel. |
+| Skeuomorphism | [R10](catalogue.md#r10) | R10 provides mechanical relief, not all real-object metaphors. |
+| Aqua | [R11](catalogue.md#r11) | R11 is an author’s CSS interpretation, not Apple source. |
+| Frutiger Aero | [R12](catalogue.md#r12) | R12 covers Aero chrome; broader cultural imagery is not a numeric material. |
+| Glow / neon | [R13](catalogue.md#r13) | R13 separates inner emission, outer emission and text bloom. |
+| Gradient fill — linear | [R11](catalogue.md#r11), [R12](catalogue.md#r12), [R20](catalogue.md#r20) | R11/R12 public values; R20 owner-only annotation has unspecified angle/stops. |
+| Gradient fill — radial | [R14](catalogue.md#r14), [R15](catalogue.md#r15) | R14 supplies a radial overpaint; R15 supplies decorative color blobs. |
+| Gradient fill — conic | [R14](catalogue.md#r14) | R14 static percentage indicator, not a complete accessible widget. |
+| Gradient fill — mesh | [R15](catalogue.md#r15), [R16](catalogue.md#r16) | R15 is a radial approximation; R16 is true mesh geometry with symbolic native colors. |
+| Gradient stroke | [R07](catalogue.md#r07), [R17](catalogue.md#r17), [R19](catalogue.md#r19) | R17 publishes both opaque-center and transparent-center alternatives. |
+| Inner shadow | [R08](catalogue.md#r08), [R10](catalogue.md#r10) | R08 pressed relief and R10 crisp bevel model different edge profiles. |
+| Inner glow | [R13](catalogue.md#r13) | R13 inset emission, distinct from black occlusion. |
+| Outer glow | [R12](catalogue.md#r12), [R13](catalogue.md#r13) | R13 emission and R12 selected hover glow. |
+| Drop shadow | [R02](catalogue.md#r02), [R19](catalogue.md#r19), [R20](catalogue.md#r20) | R02 supplies independent umbra/penumbra/ambient lobes; R19/R20 preserve board annotations. |
+| Bevel / emboss | [R10](catalogue.md#r10) | R10 crisp opposed edge pairs. |
+| Letterpress | [R18](catalogue.md#r18) | R18 is display typography, not small-text guidance. |
+| Grain | [R04](catalogue.md#r04), [R15](catalogue.md#r15) | R15 procedural SVG values; R04 bitmap-noise opacity without bitmap reproduction. |
+
+<a id="r01"></a>
+## R01 — Designmodo Flat UI: primary button
+
+**Evidence class:** exact source recipe. **Checked:** 2026-10-08.
+
+**Roles shown / possible role use:** raised control, text. **Scope:** Resting .btn.btn-primary; no .btn-embossed modifier.
+
+- **body.paints[]:** #1ABC9C opaque solid; alias brand-secondary → turquoise. [flat-variant](https://github.com/designmodo/Flat-UI/blob/cead40a83b12b678e278fd63dcbb06eb0a6520f4/app/styles/modules/buttons.scss#L65-L70); [flat-paint](https://github.com/designmodo/Flat-UI/blob/cead40a83b12b678e278fd63dcbb06eb0a6520f4/app/styles/mixins/buttons.scss#L1-L16); [flat-palette](https://github.com/designmodo/Flat-UI/blob/cead40a83b12b678e278fd63dcbb06eb0a6520f4/app/styles/_variables.scss#L10-L48).
+- **edges[] / geometry:** border:none; radius 4px; padding 10px 15px. [flat-base](https://github.com/designmodo/Flat-UI/blob/cead40a83b12b678e278fd63dcbb06eb0a6520f4/app/styles/modules/buttons.scss#L8-L29); [flat-radius](https://github.com/designmodo/Flat-UI/blob/cead40a83b12b678e278fd63dcbb06eb0a6520f4/app/styles/_variables.scss#L140-L143).
+- **content.ink:** white: btn-default-color → inverse → white. [flat-ink](https://github.com/designmodo/Flat-UI/blob/cead40a83b12b678e278fd63dcbb06eb0a6520f4/app/styles/_variables.scss#L215-L220); [flat-palette](https://github.com/designmodo/Flat-UI/blob/cead40a83b12b678e278fd63dcbb06eb0a6520f4/app/styles/_variables.scss#L10-L48).
+- **adaptation:** Active base explicitly removes box-shadow; plain base/variant has no gloss or texture declaration. [flat-base](https://github.com/designmodo/Flat-UI/blob/cead40a83b12b678e278fd63dcbb06eb0a6520f4/app/styles/modules/buttons.scss#L8-L29); [flat-paint](https://github.com/designmodo/Flat-UI/blob/cead40a83b12b678e278fd63dcbb06eb0a6520f4/app/styles/mixins/buttons.scss#L1-L16).
+
+**Limits:** Flat visual role classification is inferred from the shown recipe. This is historical Flat UI, not a claim that its entire stylesheet is flat or that focus removal is acceptable for Area. Geometry and ink are reference values, not Area defaults.
+
+<a id="r02"></a>
+## R02 — Google MDC Web: paper card at elevation 1
+
+**Evidence class:** exact source recipe. **Checked:** 2026-10-08.
+
+**Roles shown / possible role use:** container. **Scope:** Legacy MDC card, default Sass theme; not M3 Expressive.
+
+- **body.paints[] / geometry:** surface = #FFF; medium shape radius = 4px. [card-base](https://github.com/material-components/material-components-web/blob/6ceadb81df508ac08ab007c52c4d3dc1d811cc15/packages/mdc-card/_mixins.scss#L310-L320); [card-color](https://github.com/material-components/material-components-web/blob/6ceadb81df508ac08ab007c52c4d3dc1d811cc15/packages/mdc-theme/_theme-color.scss#L145-L148); [card-shape-ref](https://github.com/material-components/material-components-web/blob/6ceadb81df508ac08ab007c52c4d3dc1d811cc15/packages/mdc-card/_variables.scss#L31-L37); [card-shape](https://github.com/material-components/material-components-web/blob/6ceadb81df508ac08ab007c52c4d3dc1d811cc15/packages/mdc-shape/_shape.scss#L34-L44).
+- **shading.cast[]:** Black lobes in umbra/penumbra/ambient order: (x,y,blur,spread) = (0,2,1,-1)px at .20; (0,1,1,0)px at .14; (0,1,3,0)px at .12. Expanded from elevation 1 maps. [card-base](https://github.com/material-components/material-components-web/blob/6ceadb81df508ac08ab007c52c4d3dc1d811cc15/packages/mdc-card/_mixins.scss#L310-L320); [elevation-alpha](https://github.com/material-components/material-components-web/blob/6ceadb81df508ac08ab007c52c4d3dc1d811cc15/packages/mdc-elevation/_elevation-theme.scss#L39-L47); [elevation-penumbra](https://github.com/material-components/material-components-web/blob/6ceadb81df508ac08ab007c52c4d3dc1d811cc15/packages/mdc-elevation/_elevation-theme.scss#L72-L76); [elevation-ambient](https://github.com/material-components/material-components-web/blob/6ceadb81df508ac08ab007c52c4d3dc1d811cc15/packages/mdc-elevation/_elevation-theme.scss#L100-L104); [elevation-compose](https://github.com/material-components/material-components-web/blob/6ceadb81df508ac08ab007c52c4d3dc1d811cc15/packages/mdc-elevation/_elevation-theme.scss#L182-L196).
+
+**Limits:** No paper grain or specular layer is declared in this selected card recipe. Shadow-map expansion is arithmetic/source resolution, not a browser measurement. Card content styles remain separate.
+
+<a id="r03"></a>
+## R03 — Qrolic: frosted card plus transparent child
+
+**Evidence class:** exact source recipe. **Checked:** 2026-10-08.
+
+**Roles shown / possible role use:** container. **Scope:** Public CodePen CSS, resting card and nested .about strip.
+
+- **backdrop.source / filters[]:** Photo on .main-content (cover, center); .box-inner backdrop blur 5px. [glass](https://codepen.io/qrolic/pen/wvMxJXG).
+- **body.paints[] / geometry:** Card white alpha .5, radius 15px, width 400px, padding 30px. Child .about white alpha .3, radius 10px, padding 10px; no additional blur in its own rule. [glass](https://codepen.io/qrolic/pen/wvMxJXG).
+- **emission[] / adaptation:** Hover adds 0 0 20px white alpha .5 box-shadow. [glass](https://codepen.io/qrolic/pen/wvMxJXG).
+
+**Limits:** Exact CSS values, not proof of contrast or browser rendering. No border is declared in the selected card rule. The nested strip demonstrates transmission without a second backdrop filter. Its hover halo is not part of the resting stack.
+
+<a id="r04"></a>
+## R04 — Microsoft WinUI: in-app Acrylic default brush
+
+**Evidence class:** native recipe, host geometry separate. **Checked:** 2026-10-08.
+
+**Roles shown / possible role use:** floating surface. **Scope:** AcrylicInAppFillColorDefaultBrush, Light and Default/dark dictionaries; normal nonopaque path.
+
+- **body.paints[] / fallbacks:** Light: tint #FCFCFC, TintOpacity 0.0, TintLuminosityOpacity .85, fallback #F9F9F9. Dark: tint #2C2C2C, TintOpacity .15, TintLuminosityOpacity .96, fallback #2C2C2C. [acrylic-light](https://github.com/microsoft/microsoft-ui-xaml/blob/901ffc065a1f3a1122bbfe6d222eb80a471f28a6/controls/dev/Materials/Acrylic/AcrylicBrush_themeresources.xaml#L94-L100); [acrylic-dark](https://github.com/microsoft/microsoft-ui-xaml/blob/901ffc065a1f3a1122bbfe6d222eb80a471f28a6/controls/dev/Materials/Acrylic/AcrylicBrush_themeresources.xaml#L42-L48).
+- **backdrop.source / filters[]:** Backdrop composited over opaque fallback; native GaussianBlur BlurAmount = 30.0 with Hard border mode, then luminosity and tint blend. Native units/algorithm are retained; not asserted equal to CSS blur(30px). [acrylic-constants](https://github.com/microsoft/microsoft-ui-xaml/blob/901ffc065a1f3a1122bbfe6d222eb80a471f28a6/controls/dev/Materials/Acrylic/AcrylicBrush.h#L64-L67); [acrylic-graph](https://github.com/microsoft/microsoft-ui-xaml/blob/901ffc065a1f3a1122bbfe6d222eb80a471f28a6/controls/dev/Materials/Acrylic/AcrylicBrush.cpp#L493-L548); [acrylic-blend](https://github.com/microsoft/microsoft-ui-xaml/blob/901ffc065a1f3a1122bbfe6d222eb80a471f28a6/controls/dev/Materials/Acrylic/AcrylicBrush.cpp#L389-L414).
+- **texture[]:** Wrapped noise brush, opacity .02, source-over after tint. [acrylic-constants](https://github.com/microsoft/microsoft-ui-xaml/blob/901ffc065a1f3a1122bbfe6d222eb80a471f28a6/controls/dev/Materials/Acrylic/AcrylicBrush.h#L64-L67); [acrylic-graph](https://github.com/microsoft/microsoft-ui-xaml/blob/901ffc065a1f3a1122bbfe6d222eb80a471f28a6/controls/dev/Materials/Acrylic/AcrylicBrush.cpp#L493-L548).
+
+**Limits:** The inspected nonopaque path uses luminosity blending; do not append the unused saturation/exclusion constants from the header as if they were active layers. Noise bitmap pixels, host shape, stroke, shadow and content typography are not specified by this brush extract. Acrylic is a platform recipe, not just white-alpha CSS.
+
+<a id="r05"></a>
+## R05 — Microsoft Mica: foundation and content-layer resources
+
+**Evidence class:** partial native recipe. **Checked:** 2026-10-08.
+
+**Roles shown / possible role use:** page, container. **Scope:** Mica base, light/dark fallback and recommended content overlay; active optics only partially published here.
+
+- **backdrop.source / body.transmission:** Opaque system foundation informed by wallpaper/theme; XAML delegates to MicaController. [mica-doc](https://learn.microsoft.com/en-us/windows/apps/design/style/mica); [mica-controller](https://github.com/microsoft/microsoft-ui-xaml/blob/901ffc065a1f3a1122bbfe6d222eb80a471f28a6/controls/dev/Materials/MicaBackdrop/MicaBackdrop.cpp#L8-L20).
+- **fallbacks:** SolidBackgroundFillColorBase: light #F3F3F3, dark #202020. BaseAlt: light #DADADA, dark #0A0A0A. These are fallback resources, not measured active Mica colors. [mica-light](https://github.com/microsoft/microsoft-ui-xaml/blob/901ffc065a1f3a1122bbfe6d222eb80a471f28a6/controls/dev/CommonStyles/Common_themeresources_any.xaml#L263-L279); [mica-dark](https://github.com/microsoft/microsoft-ui-xaml/blob/901ffc065a1f3a1122bbfe6d222eb80a471f28a6/controls/dev/CommonStyles/Common_themeresources_any.xaml#L59-L75); [mica-doc](https://learn.microsoft.com/en-us/windows/apps/design/style/mica).
+- **body.paints[]:** Separate content layer LayerFillColorDefault: light XAML #80FFFFFF; dark XAML #4C3A3A3A. XAML is #AARRGGBB, so alpha is exactly 128/255 and 76/255 respectively. [mica-light](https://github.com/microsoft/microsoft-ui-xaml/blob/901ffc065a1f3a1122bbfe6d222eb80a471f28a6/controls/dev/CommonStyles/Common_themeresources_any.xaml#L263-L279); [mica-dark](https://github.com/microsoft/microsoft-ui-xaml/blob/901ffc065a1f3a1122bbfe6d222eb80a471f28a6/controls/dev/CommonStyles/Common_themeresources_any.xaml#L59-L75); [mica-doc](https://learn.microsoft.com/en-us/windows/apps/design/style/mica).
+
+**Limits:** Not found: a complete active Mica blur/tint/noise stack in the official Mica guide, inspected XAML adapter or public WindowsAppSDK tree at the locked SHA. Do not relabel Acrylic numbers as Mica. Source resources cover fallback/overlay only.
+
+<a id="r06"></a>
+## R06 — Apple Liquid Glass: official custom-view API recipe
+
+**Evidence class:** partial native API recipe. **Checked:** 2026-10-08.
+
+**Roles shown / possible role use:** raised control, floating surface. **Scope:** Official API examples, not reconstructed native renderer constants.
+
+- **body.paints[] / backdrop.mapping:** glassEffect() uses regular Glass within a Capsule. Example alternatives: rect(cornerRadius:16.0) and regular.tint(.orange).interactive(). Orange is the SwiftUI Color constant; no RGB was published in this sample. [apple-glass](https://developer.apple.com/documentation/swiftui/applying-liquid-glass-to-custom-views).
+- **adaptation / geometry:** GlassEffectContainer(spacing:40.0) with HStack(spacing:40.0) is one published combination example; a separate union example uses 20.0. These are example layout values, not universal material constants. [apple-glass](https://developer.apple.com/documentation/swiftui/applying-liquid-glass-to-custom-views).
+- **fallbacks / evidence:** HIG names regular and clear variants. Official design-resource kits are linked in the access ledger. [apple-hig](https://developer.apple.com/design/human-interface-guidelines/materials); [apple-resources](https://developer.apple.com/design/resources/).
+
+**Limits:** Not found: native blur kernel, index of refraction, tint alpha, rim gradient stops or cast-shadow numbers in the inspected HIG/API/design-resource pages. Values above are exact API inputs only. No third-party CSS recipe below is presented as Apple’s implementation.
+
+<a id="r07"></a>
+## R07 — rdev/liquid-glass-react: inspectable refraction approximation
+
+**Evidence class:** third-party approximation. **Checked:** 2026-10-08.
+
+**Roles shown / possible role use:** raised control, edge, text. **Scope:** Default exported props, standard mode, overLight=false, mouseOffset=(0,0), resting state.
+
+- **filters[] / backdrop.mapping:** blurAmount .0625; CSS backdrop blur = 4 + .0625×32 = 6px; saturation 140%. displacementScale 70, aberrationIntensity 2: R/G/B scales -70/-77/-84, channels R/B; post-channel Gaussian stdDeviation max(.1,.5−2×.1)=.3. Calculated from source. [liquid-default](https://github.com/rdev/liquid-glass-react/blob/ac48eab18d1f7f444ae30002d240cae29c863a21/src/index.tsx#L268-L284); [liquid-backdrop](https://github.com/rdev/liquid-glass-react/blob/ac48eab18d1f7f444ae30002d240cae29c863a21/src/index.tsx#L190-L210); [liquid-disp](https://github.com/rdev/liquid-glass-react/blob/ac48eab18d1f7f444ae30002d240cae29c863a21/src/index.tsx#L69-L115).
+- **shading.cast[] / geometry:** Host shadow 0 12px 40px black alpha .25; corner radius 999px; padding 24px 32px. [liquid-default](https://github.com/rdev/liquid-glass-react/blob/ac48eab18d1f7f444ae30002d240cae29c863a21/src/index.tsx#L268-L284); [liquid-backdrop](https://github.com/rdev/liquid-glass-react/blob/ac48eab18d1f7f444ae30002d240cae29c863a21/src/index.tsx#L190-L210).
+- **edges[] / reflection[]:** Two excluded-content masks, each padding 1.5px. At zero mouse offset both gradients are 135deg, white alpha 0/.12/.4/0 at 0/33/66/100% for the screen layer (opacity .2), and 0/.32/.6/0 for the overlay layer. Each has inset 0 0 0 .5px white .5; inset 0 1px 3px white .25; outer 0 1px 4px black .35. [liquid-edge](https://github.com/rdev/liquid-glass-react/blob/ac48eab18d1f7f444ae30002d240cae29c863a21/src/index.tsx#L511-L558).
+- **content.decoration[]:** Content wrapper font 500 20px/1 system-ui; text shadow 0 2px 12px black .4. [liquid-content](https://github.com/rdev/liquid-glass-react/blob/ac48eab18d1f7f444ae30002d240cae29c863a21/src/index.tsx#L217-L237).
+
+**Limits:** This is a third-party approximation, not Apple source. Native fidelity and runtime/browser portability were not tested. The excerpt bypasses URL filtering on Firefox. Displacement map assets/generation remain dependencies; numeric parameters alone do not reproduce their pixels. Radial hover layers elsewhere in the file are outside this resting stack.
+
+<a id="r08"></a>
+## R08 — Neumorphism.io: raised and pressed source presets
+
+**Evidence class:** exact source recipe. **Checked:** 2026-10-08.
+
+**Roles shown / possible role use:** raised control, recessed field/track. **Scope:** Unmodified #e0e0e0 default, light-source 1; compare shape 0 and shape 1.
+
+- **body.paints[] / geometry:** Solid #E0E0E0; radius 50px; distance 20px; blur 60px; color difference .15; gradient disabled in shape 0. [neu-default](https://github.com/adamgiebl/neumorphism/blob/8ab93a6bea6493cc464d45a334b5fb7a90d34308/src/Configuration.js#L11-L23); [neu-output](https://github.com/adamgiebl/neumorphism/blob/8ab93a6bea6493cc464d45a334b5fb7a90d34308/src/Configuration.js#L160-L176).
+- **shading.cast[]:** Raised: 20px 20px 60px #BEBEBE, −20px −20px 60px #FFF. Colors calculated by channel rounding/clamping: 224×.85→190 and 224×1.15→255. Omitted spread is zero by CSS syntax. [neu-colors](https://github.com/adamgiebl/neumorphism/blob/8ab93a6bea6493cc464d45a334b5fb7a90d34308/src/Configuration.js#L89-L104); [neu-math](https://github.com/adamgiebl/neumorphism/blob/8ab93a6bea6493cc464d45a334b5fb7a90d34308/src/utils.js#L1-L19); [neu-output](https://github.com/adamgiebl/neumorphism/blob/8ab93a6bea6493cc464d45a334b5fb7a90d34308/src/Configuration.js#L160-L176).
+- **shading.inset[]:** Pressed shape 1 prefixes those same two lobes with inset; body remains solid. [neu-output](https://github.com/adamgiebl/neumorphism/blob/8ab93a6bea6493cc464d45a334b5fb7a90d34308/src/Configuration.js#L160-L176).
+
+**Limits:** A generator specimen, not a complete control/state system. Source-size initialization can change with viewport; no fixed specimen width is inferred. Input blur 60 is distinct from the distance handler’s later blur=distance×2. Top-left lighting is an interpretation of the paired offsets.
+
+<a id="r09"></a>
+## R09 — Adrian Bece clay.css: default utility
+
+**Evidence class:** exact source recipe. **Checked:** 2026-10-08.
+
+**Roles shown / possible role use:** container, raised control. **Scope:** Published defaults before application-specific overrides.
+
+- **body.paints[] / geometry:** rgba(0,0,0,.005), radius 32px. The near-transparent default is literal; do not replace it with an invented pastel. [clay-default](https://github.com/codeAdrian/clay.css/blob/30dfeb9d75a6f5d081d5199fa47a74015f78e8e0/src/clay.scss#L1-L29).
+- **shading.cast[]:** 8px 8px 16px 0 black alpha .25. [clay-default](https://github.com/codeAdrian/clay.css/blob/30dfeb9d75a6f5d081d5199fa47a74015f78e8e0/src/clay.scss#L1-L29).
+- **shading.inset[] / reflection[]:** Inset dark lobe −8px −8px 16px 0 black .25; inset light lobe 8px 8px 16px 0 white .2, after the cast lobe. [clay-default](https://github.com/codeAdrian/clay.css/blob/30dfeb9d75a6f5d081d5199fa47a74015f78e8e0/src/clay.scss#L1-L29).
+
+**Limits:** Class defaults demonstrate inflated modeling but leave the host fill/ink/context to the application. Roles are possible hosts, not claims of supplied family coverage. Not an accessibility endorsement.
+
+<a id="r10"></a>
+## R10 — 98.css: crisp mechanical bevel and pressed well
+
+**Evidence class:** exact source recipe. **Checked:** 2026-10-08.
+
+**Roles shown / possible role use:** raised control, recessed field/track, thumb/knob, edge. **Scope:** Resting/pressed button plus scrollbar thumb.
+
+- **body.paints[] / geometry:** #C0C0C0 button, radius 0; scrollbar thumb #DFDFDF. [98-palette](https://github.com/jdan/98.css/blob/b1d7a907371bbe523d6f64e3af97f714fdbd6d6a/style.css#L8-L14); [98-button](https://github.com/jdan/98.css/blob/b1d7a907371bbe523d6f64e3af97f714fdbd6d6a/style.css#L146-L158); [98-thumb](https://github.com/jdan/98.css/blob/b1d7a907371bbe523d6f64e3af97f714fdbd6d6a/style.css#L829-L832).
+- **edges[] / reflection[]:** Raised edge uses inset offsets (−1,−1) #0A0A0A; (1,1) #FFF; (−2,−2) #808080; (2,2) #DFDFDF, all CSS px, omitted blur/spread zero. [98-palette](https://github.com/jdan/98.css/blob/b1d7a907371bbe523d6f64e3af97f714fdbd6d6a/style.css#L8-L14); [98-bevel](https://github.com/jdan/98.css/blob/b1d7a907371bbe523d6f64e3af97f714fdbd6d6a/style.css#L50-L59); [98-button](https://github.com/jdan/98.css/blob/b1d7a907371bbe523d6f64e3af97f714fdbd6d6a/style.css#L146-L158).
+- **shading.inset[] / adaptation:** Pressed swaps to (−1,−1) #FFF; (1,1) #0A0A0A; (−2,−2) #DFDFDF; (2,2) #808080. [98-bevel](https://github.com/jdan/98.css/blob/b1d7a907371bbe523d6f64e3af97f714fdbd6d6a/style.css#L50-L59); [98-press](https://github.com/jdan/98.css/blob/b1d7a907371bbe523d6f64e3af97f714fdbd6d6a/style.css#L174-L179).
+
+**Limits:** The offset shadows paint a bevel/edge, not a soft floating cast shadow. Historical Windows controls are a technical analogue for physical relief, not the owner’s car-console or terminal icon.
+
+<a id="r11"></a>
+## R11 — theldoria: CSS Aqua-style gloss band
+
+**Evidence class:** historical-style analogue. **Checked:** 2026-10-08.
+
+**Roles shown / possible role use:** raised control, edge, text. **Scope:** Blue .button.color3; author’s Sass/Compass recipe.
+
+- **body.paints[] / reflection[]:** Blue base #2963BD; over it white-alpha .2 through 50%, white-alpha 0 from 50.01%. Source uses Compass linear-gradient without an explicit angle. [aqua](https://codepen.io/theldoria/pen/XWmExZ).
+- **edges[] / geometry:** Inset zero-offset/zero-blur 2px white .2 ring; radius 3px; padding 15px 30px. [aqua](https://codepen.io/theldoria/pen/XWmExZ).
+- **content.ink / content.decoration[]:** White ink; text-shadow 0 1px 0 black .5. [aqua](https://codepen.io/theldoria/pen/XWmExZ).
+
+**Limits:** A published Aqua-inspired interpretation, not Apple’s historical values. Hover changes whole-element opacity to .9; that behavior is not recommended for Area. Gloss-stop values are exact, but a flat-edged sample is not a match for board pill geometry.
+
+<a id="r12"></a>
+## R12 — 7.css: Aero window and glowing window control
+
+**Evidence class:** historical-style analogue. **Checked:** 2026-10-08.
+
+**Roles shown / possible role use:** floating surface, raised control, edge. **Scope:** Regular .window (not .window.glass); separate close-button hover layer.
+
+- **body.paints[] / reflection[]:** Window base #4580C4; lateral gradient white #FFFFFF66 → black #0000001A → white #FFFFFF33. Additional vertical shine: transparent 20%, #FFFFFFB3 40%, transparent 41%. [aero-window-vars](https://github.com/khang-nd/7.css/blob/76d29abe7e76598fc521e707933f9ffa1b320259/gui/_window.scss#L1-L6); [aero-control-vars](https://github.com/khang-nd/7.css/blob/76d29abe7e76598fc521e707933f9ffa1b320259/gui/_window.scss#L37-L45); [aero-window](https://github.com/khang-nd/7.css/blob/76d29abe7e76598fc521e707933f9ffa1b320259/gui/_window.scss#L48-L68).
+- **edges[] / shading.cast[] / geometry:** Window border 1px #000000B3, radius 6px; outer 2px 2px 10px 1px same black; inset ring 0 0 0 1px #FFFA; pseudo-element inset ring #FFFD. [aero-window-vars](https://github.com/khang-nd/7.css/blob/76d29abe7e76598fc521e707933f9ffa1b320259/gui/_window.scss#L1-L6); [aero-window](https://github.com/khang-nd/7.css/blob/76d29abe7e76598fc521e707933f9ffa1b320259/gui/_window.scss#L48-L68).
+- **reflection[] / emission[]:** Control gloss #FFFFFF80 → #FFFFFF4D 45% → #0000001A 50% → #0000001A 75% → #FFFFFF80; close hover adds glow 0 0 7px 3px #E68E75. [aero-control-vars](https://github.com/khang-nd/7.css/blob/76d29abe7e76598fc521e707933f9ffa1b320259/gui/_window.scss#L37-L45); [aero-close](https://github.com/khang-nd/7.css/blob/76d29abe7e76598fc521e707933f9ffa1b320259/gui/_window.scss#L441-L450).
+
+**Limits:** Windows Aero CSS is a useful facet of the broader Frutiger Aero language; it does not establish the imagery/typography of that whole aesthetic. The hover close control also has bitmap glyph and radial paints; the glow is a selected layer, not a full close-button recipe. Eight-digit CSS hex is #RRGGBBAA, unlike XAML.
+
+<a id="r13"></a>
+## R13 — Codeible: neon button, inner bloom and outer halo
+
+**Evidence class:** exact source recipe. **Checked:** 2026-10-08.
+
+**Roles shown / possible role use:** raised control, edge, text. **Scope:** Resting .neon-btn, with separate floor-reflection pseudo-element.
+
+- **body.paints[] / edges[]:** Fill rgb(100,61,136); border .25em rgb(217,176,255); radius 1em; padding 1em 3em. [neon](https://codepen.io/Codeible/pen/abwvMdz).
+- **emission[]:** Outer lobes 0 0 1em .25em rgb(217,176,255), 0 0 4em 1em rgba(191,123,255,.781); inner lobe inset 0 0 .75em .25em rgb(217,176,255). [neon](https://codepen.io/Codeible/pen/abwvMdz).
+- **content.ink / content.decoration[]:** Ink rgb(217,176,255), size 1.5rem; glyph bloom 0 0 .5em same color. [neon](https://codepen.io/Codeible/pen/abwvMdz).
+- **reflection[]:** ::after uses spread color, blur 2em, opacity .7; top 120%, full host width/height; perspective(1.5em) rotateX(35deg) scale(1,.6). [neon](https://codepen.io/Codeible/pen/abwvMdz).
+
+**Limits:** All lengths retain em/rem units, not guessed px. Hover/focus changes ink and fill and expands a lobe; this report selects rest only. Area would retain fixed hover ink and separate required focus. A luminous border is not an elevation shadow.
+
+<a id="r14"></a>
+## R14 — Nikita Hlopov: conic progress ring with radial cutout paint
+
+**Evidence class:** exact source recipe. **Checked:** 2026-10-08.
+
+**Roles shown / possible role use:** indicator/fill. **Scope:** Static 75% example, before the animation section.
+
+- **body.paints[]:** Top radial paint: closest-side, white 79%, transparent 80%–100%; under it conic hotpink 75%, pink 0 (hard boundary after stop fixup). [ring](https://nikitahl.com/circle-progress-bar-css).
+- **geometry:** 100px × 100px; radius 50%. [ring](https://nikitahl.com/circle-progress-bar-css).
+
+**Limits:** This is a white center overpaint, not a transparent hole. Does not reproduce board 7’s round cap or glossy spherical knob. The article’s older browser-support statements and visibility:hidden accessibility suggestion are not adopted; only the static paint recipe is evidence.
+
+<a id="r15"></a>
+## R15 — Adi Purdila: multi-radial mesh approximation and grain
+
+**Evidence class:** mesh approximation / exact primitive values. **Checked:** 2026-10-08.
+
+**Roles shown / possible role use:** page. **Scope:** Noisy Gradients Mesh — Method 2; radial stacking, not a geometric mesh.
+
+- **body.paints[]:** Front-to-back radial layers, each color at 0 fading to transparent 50%: at (40%,20%) hsla(28,100%,74%,1); (80%,0%) hsla(189,100%,56%,1); (0%,50%) hsla(355,85%,93%,1); (80%,50%) hsla(340,100%,76%,1); (0%,100%) hsla(22,100%,77%,1); (80%,100%) hsla(242,100%,70%,1); (0%,0%) hsla(343,100%,76%,1). [mesh-noise](https://codepen.io/adipurdila/pen/rNGLYrd).
+- **texture[]:** body::before black input with SVG fractalNoise, baseFrequency 6.29, numOctaves 6, stitchTiles=stitch. Both full-size pseudo-elements use z-index −1 and mix-blend-mode:color. [mesh-noise](https://codepen.io/adipurdila/pen/rNGLYrd).
+
+**Limits:** Author labels it mesh, but it is overlapping radial gradients. Source background-image:#ffe699 is invalid CSS and is not counted as a solid base. Seed/texture opacity are not explicitly declared. Composition depends on the surrounding page; fine-noise suitability at Area density is unverified.
+
+<a id="r16"></a>
+## R16 — Apple SwiftUI: actual mesh geometry sample
+
+**Evidence class:** native sample with symbolic colors. **Checked:** 2026-10-08.
+
+**Roles shown / possible role use:** page, container. **Scope:** Published 3×3 MeshGradient sample.
+
+- **body.paints[]:** width=3,height=3; row-major points (0,0),(.5,0),(1,0); (0,.5),(.5,.5),(1,.5); (0,1),(.5,1),(1,1). Colors in the same order: .red,.purple,.indigo; .orange,.white,.blue; .yellow,.green,.mint. [mesh-native](https://developer.apple.com/documentation/swiftui/meshgradient).
+- **body.paints[] / evidence:** Mesh patches interpolate vertex colors; this is actual mesh geometry, unlike R15. Color constants are retained literally; their resolved RGB values were not published in the example. [mesh-native](https://developer.apple.com/documentation/swiftui/meshgradient).
+
+**Limits:** Exact point geometry and symbolic Color inputs, not a CSS export or a fully resolved RGB recipe. The example does not explicitly supply Bezier handles, color space, clipping geometry, strokes or shadows.
+
+<a id="r17"></a>
+## R17 — Temani Afif: rounded gradient edge
+
+**Evidence class:** exact source recipe. **Checked:** 2026-10-08.
+
+**Roles shown / possible role use:** edge. **Scope:** Two-background alternative, plus transparent-interior mask alternative.
+
+- **edges[] / body.paints[]:** Border 10px transparent, radius 25px; white conic fill clipped to padding-box, linear #FF4E50→#40C0CB clipped to border-box. Source does not explicitly write an angle. [gradient-edge](https://css-tip.com/border-gradient/).
+- **edges[] / body.transmission:** Transparent-interior alternative: absolute ::before inset 0, padding 10px, same linear gradient, inherited radius; exclude content-box via two conic mask layers. [gradient-edge](https://css-tip.com/border-gradient/).
+
+**Limits:** These are distinct alternatives, not stacked techniques. The white-center recipe is opaque. The page now also shows background-clip:border-area; this report selects the established fallback recipes and does not inherit its live browser-support claim.
+
+<a id="r18"></a>
+## R18 — Christy Wang: letterpress display text
+
+**Evidence class:** exact source recipe. **Checked:** 2026-10-08.
+
+**Roles shown / possible role use:** text. **Scope:** Public h2 specimen.
+
+- **body.paints[]:** Page #474747. [letterpress](https://codepen.io/ChristyWang/pen/Jobaba?anon=true&view=pen).
+- **content.ink / content.decoration[]:** Ink #222; text-shadow 0px 2px 3px #555; 70px Tahoma, Helvetica, Arial, Sans-Serif. [letterpress](https://codepen.io/ChristyWang/pen/Jobaba?anon=true&view=pen).
+
+**Limits:** Single lighter offset lobe is a published recessed-type cue. This large display specimen does not justify the same shadow on small control labels. No glyph geometry is inferred from the screenshot.
+
+<a id="r19"></a>
+## R19 — Owner board 5: annotated Reject button
+
+**Evidence class:** owner-supplied annotation. **Checked:** 2026-10-08.
+
+**Roles shown / possible role use:** raised control, edge. **Scope:** Owner’s transcribed annotation; original public URL and attached image unavailable.
+
+- **body.paints[]:** #E3E3E3 alpha .80. [board5](https://github.com/ethanwongwork/area/blob/a5c56e600f5124b8c618950747fd17bfeab60665/docs/research/astra/materials/README.md#L82-L86).
+- **edges[]:** Linear stroke #FDFDFD alpha 1 at 0% → #F1F1F1 alpha 0 at 100%; separate outer ring black .16, x0 y0 blur0 spread1. [board5](https://github.com/ethanwongwork/area/blob/a5c56e600f5124b8c618950747fd17bfeab60665/docs/research/astra/materials/README.md#L82-L86).
+- **shading.cast[]:** Black .10, x0 y2 blur4 spread0. [board5](https://github.com/ethanwongwork/area/blob/a5c56e600f5124b8c618950747fd17bfeab60665/docs/research/astra/materials/README.md#L82-L86).
+
+**Limits:** No gradient angle, stroke width, corner, dimensions or text styling is specified. Board lengths are recorded as printed annotation units, not independently measured CSS px. Ring and soft cast remain separate. This is owner evidence, not an independently located public reference.
+
+<a id="r20"></a>
+## R20 — Owner board 6: annotated dark Button Label
+
+**Evidence class:** owner-supplied annotation. **Checked:** 2026-10-08.
+
+**Roles shown / possible role use:** raised control, edge, text. **Scope:** Owner’s transcribed annotation; original public URL and attached image unavailable.
+
+- **body.paints[]:** Opaque #1D1F23 below a white-alpha gradient 0→.15. [board6](https://github.com/ethanwongwork/area/blob/a5c56e600f5124b8c618950747fd17bfeab60665/docs/research/astra/materials/README.md#L87-L92).
+- **edges[]:** Top-only white .15 stroke, 1.5px; separate black alpha1 ring, x0 y0 blur0 spread1.5. [board6](https://github.com/ethanwongwork/area/blob/a5c56e600f5124b8c618950747fd17bfeab60665/docs/research/astra/materials/README.md#L87-L92).
+- **shading.cast[]:** Black .20, x0 y4 blur7 spread0. [board6](https://github.com/ethanwongwork/area/blob/a5c56e600f5124b8c618950747fd17bfeab60665/docs/research/astra/materials/README.md#L87-L92).
+- **content.ink / content.decoration[]:** White alpha1; text shadow black .40, x0 y4 blur4, annotated spread0. CSS text-shadow has no spread parameter. [board6](https://github.com/ethanwongwork/area/blob/a5c56e600f5124b8c618950747fd17bfeab60665/docs/research/astra/materials/README.md#L87-L92).
+
+**Limits:** Angle, gradient stop positions, corner and dimensions are unspecified. No backdrop translucency follows from the top paint: the base is opaque. Non-stroke lengths remain printed annotation units. This text shadow is not evidence of letterpress.

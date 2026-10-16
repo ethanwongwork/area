@@ -1,0 +1,47 @@
+{
+  "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+  "checked": "2026-10-12",
+  "searches": [
+    {
+      "id": "automatic-text-effects",
+      "pattern": "text-shadow\\s*:",
+      "roots": [
+        "packages/styles/src",
+        "packages/tokens/src",
+        "packages/react/src"
+      ],
+      "matches": []
+    },
+    {
+      "id": "backdrop-acquisition",
+      "pattern": "backdrop-filter\\s*:",
+      "roots": [
+        "packages/styles/src",
+        "packages/tokens/src",
+        "packages/react/src"
+      ],
+      "matches": []
+    },
+    {
+      "id": "transparency-query",
+      "pattern": "prefers-reduced-transparency",
+      "roots": [
+        "packages/styles/src",
+        "packages/tokens/src",
+        "packages/react/src"
+      ],
+      "matches": []
+    },
+    {
+      "id": "material-api",
+      "pattern": "data-area-material|--area-material-|MATERIAL_AXIS",
+      "roots": [
+        "packages/styles/src",
+        "packages/tokens/src",
+        "packages/react/src"
+      ],
+      "matches": []
+    }
+  ],
+  "meaning": "No match is a bounded source observation, not a computed-style guarantee or future API implementation."
+}

@@ -1,0 +1,1700 @@
+{
+  "areaCommit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+  "reviewCommit": "dbd57a9067e3d927b2bfb7a061db074eeaf48db9",
+  "pins": [
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "AGENTS.md",
+      "line": 40,
+      "end": 49
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "AGENTS.md",
+      "line": 40,
+      "end": 54
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "AGENTS.md",
+      "line": 48,
+      "end": 54
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "AGENTS.md",
+      "line": 61,
+      "end": 63
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "docs/CONTRAST.md",
+      "line": 7,
+      "end": 17
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "docs/CONTRAST.md",
+      "line": 9,
+      "end": 11
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "docs/CONTRAST.md",
+      "line": 13,
+      "end": 32
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "docs/CONTRAST.md",
+      "line": 33,
+      "end": 38
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "docs/CONTRAST.md",
+      "line": 39,
+      "end": 42
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "docs/CONTRAST.md",
+      "line": 40,
+      "end": 44
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "docs/CONTRAST.md",
+      "line": 48,
+      "end": 57
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "docs/CONTRAST.md",
+      "line": 61,
+      "end": 68
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "docs/CONTRAST.md",
+      "line": 65,
+      "end": 68
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "docs/CONTRAST.md",
+      "line": 68,
+      "end": 68
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "docs/CONTRAST.md",
+      "line": 73,
+      "end": 79
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "docs/CONTRAST.md",
+      "line": 76,
+      "end": 79
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "docs/DEVELOPMENT.md",
+      "line": 10,
+      "end": 16
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "docs/DEVELOPMENT.md",
+      "line": 142,
+      "end": 147
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "docs/MOTION.md",
+      "line": 61,
+      "end": 64
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "docs/MOTION.md",
+      "line": 85,
+      "end": 97
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/Theme.tsx",
+      "line": 19,
+      "end": 32
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/tests/audit-rules.test.mjs",
+      "line": 30,
+      "end": 48
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/tests/audit-rules.test.mjs",
+      "line": 37,
+      "end": 59
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/tests/audit-rules.test.mjs",
+      "line": 121,
+      "end": 125
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/tests/cohesion.test.mjs",
+      "line": 11,
+      "end": 23
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/tests/cohesion.test.mjs",
+      "line": 25,
+      "end": 44
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/tests/cohesion.test.mjs",
+      "line": 70,
+      "end": 80
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/tests/cohesion.test.mjs",
+      "line": 101,
+      "end": 132
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/tests/overlay.test.mjs",
+      "line": 11,
+      "end": 43
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/tests/overlay.test.mjs",
+      "line": 46,
+      "end": 63
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/tests/tone.test.mjs",
+      "line": 41,
+      "end": 48
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/base.css",
+      "line": 5,
+      "end": 14
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/field.css",
+      "line": 20,
+      "end": 28
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/surface.css",
+      "line": 79,
+      "end": 85
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/surface.css",
+      "line": 93,
+      "end": 110
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/forced-colors.css",
+      "line": 1,
+      "end": 14
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/forced-colors.css",
+      "line": 10,
+      "end": 14
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/forced-colors.css",
+      "line": 23,
+      "end": 45
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/forced-colors.css",
+      "line": 50,
+      "end": 78
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/forced-colors.css",
+      "line": 92,
+      "end": 106
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/axes/registry.test.ts",
+      "line": 42,
+      "end": 75
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/color/contrast.ts",
+      "line": 68,
+      "end": 94
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/contrast/assertions.ts",
+      "line": 69,
+      "end": 79
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/contrast/assertions.ts",
+      "line": 74,
+      "end": 78
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/contrast/assertions.ts",
+      "line": 102,
+      "end": 127
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/contrast/assertions.ts",
+      "line": 152,
+      "end": 176
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/contrast/assertions.ts",
+      "line": 170,
+      "end": 176
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/contrast/assertions.ts",
+      "line": 190,
+      "end": 192
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/contrast/assertions.ts",
+      "line": 206,
+      "end": 228
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/contrast/contrast.test.ts",
+      "line": 21,
+      "end": 63
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/contrast/contrast.test.ts",
+      "line": 21,
+      "end": 29
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/contrast/contrast.test.ts",
+      "line": 66,
+      "end": 89
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/contrast/contrast.test.ts",
+      "line": 94,
+      "end": 127
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/contrast/exceptions.ts",
+      "line": 21,
+      "end": 22
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/contrast/report.ts",
+      "line": 90,
+      "end": 92
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/emit/colors.test.ts",
+      "line": 15,
+      "end": 33
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/emit/colors.test.ts",
+      "line": 39,
+      "end": 55
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/emit/colors.test.ts",
+      "line": 39,
+      "end": 46
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/emit/css.ts",
+      "line": 166,
+      "end": 184
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/emit/css.ts",
+      "line": 186,
+      "end": 193
+    },
+    {
+      "commit": "dbd57a9067e3d927b2bfb7a061db074eeaf48db9",
+      "file": "docs/research/astra/materials/REVIEW.md",
+      "line": 124,
+      "end": 127
+    },
+    {
+      "commit": "dbd57a9067e3d927b2bfb7a061db074eeaf48db9",
+      "file": "docs/research/astra/materials/REVIEW.md",
+      "line": 133,
+      "end": 133
+    },
+    {
+      "commit": "dbd57a9067e3d927b2bfb7a061db074eeaf48db9",
+      "file": "docs/research/astra/materials/REVIEW.md",
+      "line": 136,
+      "end": 140
+    },
+    {
+      "commit": "dbd57a9067e3d927b2bfb7a061db074eeaf48db9",
+      "file": "docs/research/astra/materials/REVIEW.md",
+      "line": 136,
+      "end": 142
+    },
+    {
+      "commit": "dbd57a9067e3d927b2bfb7a061db074eeaf48db9",
+      "file": "docs/research/astra/materials/REVIEW.md",
+      "line": 144,
+      "end": 144
+    },
+    {
+      "commit": "dbd57a9067e3d927b2bfb7a061db074eeaf48db9",
+      "file": "docs/research/astra/materials/REVIEW.md",
+      "line": 145,
+      "end": 145
+    },
+    {
+      "commit": "dbd57a9067e3d927b2bfb7a061db074eeaf48db9",
+      "file": "docs/research/astra/materials/REVIEW.md",
+      "line": 146,
+      "end": 146
+    },
+    {
+      "commit": "dbd57a9067e3d927b2bfb7a061db074eeaf48db9",
+      "file": "docs/research/astra/materials/REVIEW.md",
+      "line": 147,
+      "end": 148
+    },
+    {
+      "commit": "dbd57a9067e3d927b2bfb7a061db074eeaf48db9",
+      "file": "docs/research/astra/materials/REVIEW.md",
+      "line": 149,
+      "end": 150
+    },
+    {
+      "commit": "dbd57a9067e3d927b2bfb7a061db074eeaf48db9",
+      "file": "docs/research/astra/materials/REVIEW.md",
+      "line": 153,
+      "end": 154
+    }
+  ],
+  "files": [
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "AGENTS.md",
+      "lines": 73,
+      "sha256": "a9e9ed8b8eafd588073e175bdebcfbf144e394d858c7ce41993fb8fafbffd37e"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "docs/CONTRAST.md",
+      "lines": 80,
+      "sha256": "e23813842b74f3c8f69152f7d42ae6638ae5859012b391852802bc5d25d3068f"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "docs/DEVELOPMENT.md",
+      "lines": 156,
+      "sha256": "8768892064752511583b489c922fcd30a66ba7067264a3da583ddde6fae9b4aa"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "docs/MOTION.md",
+      "lines": 97,
+      "sha256": "5ae02a977fe9013490c5ee108fbaf843919fb8fc7e7ac4ef171ca98596fb512a"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/Accordion.tsx",
+      "lines": 121,
+      "sha256": "b02e534a4b9d178507c7debebe94cb0a51bd7ba6cbbfd66ac2e7474f98318083"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/AlignmentPicker.tsx",
+      "lines": 88,
+      "sha256": "d895c3bdb9dc9dc183c0e90b089224b7593f4ad8d4b400c0a20c5d178b38e14b"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/AssetRow.tsx",
+      "lines": 35,
+      "sha256": "a5715a5ed76aae1a7ffc6b0a545834a98e3c065b25c2663d0e4674700d5fe818"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/Badge.tsx",
+      "lines": 52,
+      "sha256": "847d8fd5a039c028448fa360522af4ab1227c07a559e7442e1c5d81533044922"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/BadgeGroup.tsx",
+      "lines": 88,
+      "sha256": "1e5ab2132e730e9ce0790f934978de14fa62133a1e09ea178bd037e093aa0432"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/Board.tsx",
+      "lines": 85,
+      "sha256": "243f3f1e771df47afb8fdc3e4337c59aff874c41b98b2d85e6b8da62fc16f298"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/BoxField.tsx",
+      "lines": 125,
+      "sha256": "926775d958a9ced7e6995514175dadde6d62c8e8b5063c119f360065623d5863"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/BoxModel.tsx",
+      "lines": 84,
+      "sha256": "7d108871e858e22733d02a666a3176b57518804d521a94e82c9fe0d1657cddd7"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/Breadcrumb.tsx",
+      "lines": 58,
+      "sha256": "f9e1c4b5404222d433ef4f88dc35f11e479f155698ee278a624d028bdfb4383b"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/Button.tsx",
+      "lines": 130,
+      "sha256": "87bd5939633f1a6a7354b611e54f7de5f3241acdd08e6090a3cdeb5e2c1e44aa"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/ButtonGroup.tsx",
+      "lines": 17,
+      "sha256": "4a3d95320e60400626c383f2e34a900623c0bd30ee67183674801f62d69755fc"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/Calendar.tsx",
+      "lines": 286,
+      "sha256": "c5b318758670d603cbdb55a5b211fe28efdad4dabc9be13bb816e6a53c820c13"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/Citation.tsx",
+      "lines": 34,
+      "sha256": "fb442c060bfb91d8ed91bbb2b41b2dbcaee504835f81323602e5e28601331886"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/ColorField.tsx",
+      "lines": 96,
+      "sha256": "692f0866d82025f46fd19c2dd07e100c63e984da6e365f5db89e414209ac7ad6"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/ColorPicker.tsx",
+      "lines": 382,
+      "sha256": "1d89b9b120ca38d8629ba1148f5a2af6e53846b53d6540c5098a1b76653c7d93"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/ColorSwatch.tsx",
+      "lines": 17,
+      "sha256": "7896a3deee979847b37cc84999cea90b1a141745b0dbf7418616e1cecb5abf3e"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/ColorSwatchPicker.tsx",
+      "lines": 122,
+      "sha256": "f1084c06d690a5b35306bbadf393cc844bdcf872730b7c52ae9714b508482472"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/Combobox.tsx",
+      "lines": 281,
+      "sha256": "46e2f2b93977015b27cd6abd7f1e3b8e6acadeea66aad2bb3f364873bb5352d0"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/CommandPalette.tsx",
+      "lines": 226,
+      "sha256": "d071d56d9a7581d3ad05d14cfcee494d3bb07d936c7aa9ae47cefbd454ca860a"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/Composer.tsx",
+      "lines": 134,
+      "sha256": "ab7d509a239ab1f7b2e4a251d3028e27ef54f1b5ccd4adf2e149f61b9d3604ee"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/ConfirmDialog.tsx",
+      "lines": 76,
+      "sha256": "a2faf2d44b2193749eedf0d7819554fde04aa90f4882abe6183f4919c03cf56f"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/ContextMenu.tsx",
+      "lines": 126,
+      "sha256": "e3b8d2f06ef7f5dc923a2f1b5ced584398431e790c73f454941d2e23e766e63a"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/Count.tsx",
+      "lines": 37,
+      "sha256": "01e11fdc883704763adec280939df738a99a592b9d6321a2bec98e4a3e7229a5"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/CustomSelect.tsx",
+      "lines": 248,
+      "sha256": "3c5f0bbac38ebe68871955aa04abad1cbdc352525fa976c265cbecc338648511"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/DatePicker.tsx",
+      "lines": 144,
+      "sha256": "4d5498d452651f585c48b8c6cb9f75aa030ee41b5d981e8f872a2dabd3bbd8f0"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/DateRangePicker.tsx",
+      "lines": 136,
+      "sha256": "0f596f18afd6dafb0681ffa82c0a0ab8e85cbb545aeffea3b5292fc9e6bf55e0"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/DescriptionList.tsx",
+      "lines": 94,
+      "sha256": "422c7e27a7b28c7bad5e20a764b997c8c26a83871ba491ee7e7e74917f390077"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/Drawer.tsx",
+      "lines": 109,
+      "sha256": "fe32a44995279ca9ed7ecf9e55632969bcb1af628c9fa1e886f72cba861742d5"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/EditableText.tsx",
+      "lines": 115,
+      "sha256": "143a62bde57d118ef5bb4d1eadf3928e181c296b9102838be7f1893877cb1557"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/EmptyState.tsx",
+      "lines": 42,
+      "sha256": "007596a826b5e480800c708992ed35d0a7c3f027106bb4fb83f26cf861cba2aa"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/Field.tsx",
+      "lines": 163,
+      "sha256": "a8e9ea6cd1687e9fd04c8c276e8ac9d23cbe951e1363dfbf4decc7d33fd8c03f"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/FileUpload.tsx",
+      "lines": 157,
+      "sha256": "15cf0cb77aa16ad50fb894aa9561044b2576a51af71bc22b45d3fb3bdfa7cd96"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/Glyph.tsx",
+      "lines": 36,
+      "sha256": "bbcc32d5d1864599a3f6d803b4f92f823c48f0aaa486d3ef8832f071c0df0747"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/HoverCard.tsx",
+      "lines": 83,
+      "sha256": "494a56460d4a20614bd0856987b18c65b10527ae9fdc5385c48c421eaea42efd"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/Indicator.tsx",
+      "lines": 57,
+      "sha256": "f8ff13f2d1405e9773fbbc6a082b6d0a388c14faf339c92a2d9f2625733562b0"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/Input.tsx",
+      "lines": 171,
+      "sha256": "d7c985a8b8cb5acb8256b1e882f3355e2c9c1bf6ccc5516327ae0b5e8549ea04"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/InputGroup.tsx",
+      "lines": 41,
+      "sha256": "aacc7a5c5bb92942b979bf61232af96e33fe12b9c9580a57007752c1805af660"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/Link.tsx",
+      "lines": 45,
+      "sha256": "d3094213d5cb2fd10e5da59ce683ab1183551ebae0acafb5d50cc2b6577db827"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/Message.tsx",
+      "lines": 42,
+      "sha256": "7713f22cb56b1283b61710e3033d5a1cbec43169706d6490c9d3bad09837a22f"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/Meter.tsx",
+      "lines": 54,
+      "sha256": "f20fa77bffcc468da963f236d172ae2bd3830cb9a0bb48a4ea894a7db2bf276b"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/ModelPicker.tsx",
+      "lines": 64,
+      "sha256": "d680f1a91a718e1c7d8162dfe4bf5b59c0a7255285bfae2f3795a7a08f641cd9"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/Nav.tsx",
+      "lines": 104,
+      "sha256": "23eef5168c9203f8dc6fd7d42503d0ed8f152ddb7ea7431322448426cd50c9d4"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/NumberField.tsx",
+      "lines": 232,
+      "sha256": "432d1ffa5e1368b45a4ef16d5c160ce6c28e51413d52fb7d523a016b7253d32e"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/Overlays.tsx",
+      "lines": 307,
+      "sha256": "8b9c5d45994505af8a191427a9d6b92ebafdd972ce4fb869152419740af4400f"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/Pagination.tsx",
+      "lines": 146,
+      "sha256": "ed3c50e7a1282e818fe67490184c1b273a348ef0395ae9cc0da1182879a465d9"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/Presence.tsx",
+      "lines": 31,
+      "sha256": "221cb947915ddba827193715683dea85e68dc55f11e3087821bdbdd56c17acf0"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/PreviewFrame.tsx",
+      "lines": 31,
+      "sha256": "cd3df2f92240f523c66885ef577b4cb88aa9b37522e57a70abcaf76fde7c7a3a"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/PromptSuggestions.tsx",
+      "lines": 55,
+      "sha256": "56f0ffbb0b4380617c946415f5ebd96e0486ca5f8a72e8fe60b62f8928b42c52"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/PropertyList.tsx",
+      "lines": 163,
+      "sha256": "4b34dfb59dade206f0b1345d02c1f8e32847d05e34f90d9602cda056db60b6e6"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/ScrollArea.tsx",
+      "lines": 137,
+      "sha256": "8ff9a5c76f3a0937024918680155cadee40f75ce0907000aa3215847804297cc"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/ScrollToLatest.tsx",
+      "lines": 61,
+      "sha256": "be8818002c506451b8fc72371476e98dd09ca4e86c1151c38bb663b01b4ef555"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/SearchField.tsx",
+      "lines": 114,
+      "sha256": "5393775bc7e12b44179f67ea1f0c5123c49cc137da81d0062e65ccc430ca01fe"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/ShortcutList.tsx",
+      "lines": 65,
+      "sha256": "d08b33a3eb5d5158c05df3c24528a66405b3d839d0cb8b5f052b1646ae2d5454"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/SliderRange.tsx",
+      "lines": 110,
+      "sha256": "5bc08724e2b04e9942f281e72d286149b36a0841e1dd2683eba73190a6f577ab"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/SplitButton.tsx",
+      "lines": 124,
+      "sha256": "f671f69f3013cdb78718e76543fe842ce1e9e01eb1f2c370253479a1f6d57f90"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/Switch.tsx",
+      "lines": 118,
+      "sha256": "0295bced0cc9a28e725cad154cbc4276538d5c89c78d1e05eeb03e839063c146"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/Tag.tsx",
+      "lines": 35,
+      "sha256": "4e99ae0aa3884c4e748b312e80fc2bd4304a4bda2def36c41060489df1bb1156"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/TagPicker.tsx",
+      "lines": 238,
+      "sha256": "bdc7135c2a22c0119d3129784f86b8f7ffab387e290ca931035bfe8f3ec4c959"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/Theme.tsx",
+      "lines": 34,
+      "sha256": "7be6c761e212b61d3e85f249e6a5eccdea84a9f8f28d054eaf13d7f93e5a8761"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/Timeline.tsx",
+      "lines": 63,
+      "sha256": "ebc4bd704c77ddbcf5df96a54c178429655189411a97e01e492754f21cf7abe8"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/Toaster.tsx",
+      "lines": 183,
+      "sha256": "1e0c5e4ceca250841a5df5c00cab1c5fe63f366a86db9cde3b02ad47b4a4121c"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/ToggleGroup.tsx",
+      "lines": 147,
+      "sha256": "ee6a1c85967cf975e40f492c53485b8c6ff769762cea7eee95c3345362aa9e17"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/Toggletip.tsx",
+      "lines": 54,
+      "sha256": "4b8d8273d9c502502ee35b2d0c49d63ff0c94883e2d3cf46a43ce50f23630e9f"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/TokenRow.tsx",
+      "lines": 67,
+      "sha256": "6335eb20a602efe5c2c035d9e541bc09c8102d0b70bed54aabdd987d9b28eaa8"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/Toolbar.tsx",
+      "lines": 113,
+      "sha256": "10fb6b47a3e4d9e9a6f40d2071ede3a373bd16026cd4b871111d114a3fa36df0"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/TreeView.tsx",
+      "lines": 151,
+      "sha256": "9b690f63c3af9cf8a9dd430d3c1509e2d33fc49c9faedf6cf9d6724fbe8d41d3"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/ZoomControl.tsx",
+      "lines": 93,
+      "sha256": "c08730f484982ca861d3fa04e5a912c13a2a79151e5fbbf56e1938d3070a5bff"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/color-grid.ts",
+      "lines": 117,
+      "sha256": "b84ebac0b85edd385951af8a018e6104665e9e4da679151cced2febb1026f736"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/color-math.ts",
+      "lines": 96,
+      "sha256": "0335bd3628c056c338cc6648fe895a4ab2fdfa0188fe2d2ec5ed57ca8e466fcc"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/count-format.ts",
+      "lines": 14,
+      "sha256": "f62fe5d04f74159e1629554e2d3fa31091350bffeb8e4061f316743a4836e797"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/forms.tsx",
+      "lines": 354,
+      "sha256": "c7f4c4d58c3db16c61a2c962984f838e34e10be313d819bebfcda92cb3cc3f9b"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/glyphs.ts",
+      "lines": 104,
+      "sha256": "80426e45282fbf7239f9b1b90ac5af7b30d639473999126ade509f4ebe5f969e"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/input-group-context.ts",
+      "lines": 12,
+      "sha256": "a8b064a35dee8836b42300806fc32e434c075ff4809afd7dc208ed608d692c46"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/number-math.ts",
+      "lines": 65,
+      "sha256": "6946ed710ec52c74f9899a5912a9ff2d0e8a35e3ee4c47ea334f631bc2f29250"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/overlay.ts",
+      "lines": 257,
+      "sha256": "6111f333726ccc23da4e227620040f657e48d27c33f0e13d79f30b0bcb8038d1"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/primitives.tsx",
+      "lines": 2254,
+      "sha256": "06355f8ec8a0ddddec9e9691d51111f7b38a7970d5ceb6d5095f482f6edfa1e5"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/status-marks.ts",
+      "lines": 67,
+      "sha256": "f44dc386fa2c9216c2e63823d1e40cbfbaaf0eaa9f519095e5d8abf0e2ad60b8"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/components/toolbar-context.ts",
+      "lines": 15,
+      "sha256": "8253e77a9d0763541332382ee1e0b7f5ccc31e6548849ad057f71ad59964572e"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/index.ts",
+      "lines": 93,
+      "sha256": "a8b330ae2ab1f9c03a5b20019e8543838051344e55f8b0e5601c1c8d846c50b3"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/src/variants.ts",
+      "lines": 145,
+      "sha256": "68e7f3daef64674c01c5666388268df0125bf67ff9a844a4d3e6946fbed7ac73"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/tests/audit-rules.test.mjs",
+      "lines": 202,
+      "sha256": "561049caf981364d8b971ffbbe6371b6a112d072cff724624f265ee164f83a68"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/tests/cohesion.test.mjs",
+      "lines": 148,
+      "sha256": "7d6d2d62974dc490b7b771b1b55b5da4c252fd6a6d2dfabcce6648a1bfceb0b5"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/tests/overlay.test.mjs",
+      "lines": 72,
+      "sha256": "cbc74c4013dedb0c5058c46260532a6a2e98d1a02e338c1b76b6d4d77bfac103"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/react/tests/tone.test.mjs",
+      "lines": 48,
+      "sha256": "3e9fb389a285bc3724db29f0761db647e14fb39a8e310433686b218099c12ae7"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/base.css",
+      "lines": 56,
+      "sha256": "22a20aa1d5e01ba229e9a13afaba5ec491c6c995cda17bc9ff0a8e976f59f3c8"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/accordion.css",
+      "lines": 160,
+      "sha256": "506e12b9821efc5108a76a3297724c151b6c82925eb85fb2c3ac1ccd7d682cba"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/alignment-picker.css",
+      "lines": 149,
+      "sha256": "f542779532f1d648cfaedac03f6b0d4297cc8935167ea3735a5637bdb96f6189"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/asset-row.css",
+      "lines": 63,
+      "sha256": "693ad9555db150036a3a3cd1c11c9468e16f916787d198dfe9177c393b40b39a"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/badge.css",
+      "lines": 244,
+      "sha256": "d1d3ae818d1f7c9e0e59573d7e21cd35c581600f87a33e7d820cfb844e9237e3"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/board.css",
+      "lines": 195,
+      "sha256": "dd4d85ce96b892eaf18f02846c90405bd20d95aba8ef29c540a85748e296baaf"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/box-field.css",
+      "lines": 59,
+      "sha256": "fe7ab95ba3be02efff8bc1f8ddfa7ffb54e7629380e9cf9019c9f3d883301173"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/box-model.css",
+      "lines": 130,
+      "sha256": "cfb19f726afee3ac99878c18ec742fd3f7e74da564af74febc8a5ec9d69d2b30"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/breadcrumb.css",
+      "lines": 52,
+      "sha256": "10dc1f54df017cf9a0e81e54ee3e08b9af7aafcf13e25cecabce394ac7c9dffc"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/button-group.css",
+      "lines": 103,
+      "sha256": "f8381cbdd3af171d2463d44f35890e4fe986a86814112b603d3450e87719dc45"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/button.css",
+      "lines": 471,
+      "sha256": "49801ade82a909476d5596713000c97ada2373160416c373bbcc31fb04b53c26"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/calendar.css",
+      "lines": 165,
+      "sha256": "a106d1288e780a2a16566162dfa1ff99aa28b5480c6b71a01aa2ab761fc4b850"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/chip.css",
+      "lines": 289,
+      "sha256": "3aca4f9e790a1a921377011f1e71e9f2943ccf9b199fc34cee9b83dbbf7eac3f"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/choice.css",
+      "lines": 472,
+      "sha256": "c709f2dbf09e8aff87264324e7bc4acc54cd2af592706650d301178abadf7b35"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/citation.css",
+      "lines": 68,
+      "sha256": "ee21795c57874fb8db6b127fbcb2b42ea57c9c5d9f72cc16d5b0cd4aa0754c23"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/code.css",
+      "lines": 556,
+      "sha256": "3d16310cc0f4f3a8c2296e45112aab33929fa425fdf0c11dcff022def2babbe0"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/color.css",
+      "lines": 438,
+      "sha256": "8755591220a5a6f505865f841b7f8b4ea93ba1e99bafe9d2e2f2d211ea16c1c9"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/combobox.css",
+      "lines": 50,
+      "sha256": "fdcb70d77526e6f1f3a2055d79b1c8e04ac76f5dc66e5d05ec444c44d0637b73"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/command-palette.css",
+      "lines": 204,
+      "sha256": "2603d94b86e7cf78d8b69d5f7b2bcc636d29bb53bcca25d4f99ab812ec09e85e"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/composer.css",
+      "lines": 76,
+      "sha256": "00deec57a3e88d03a76ef1a0dc9de1dd172d042cdee4d014b66ba4b1770cb7b5"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/confirm-dialog.css",
+      "lines": 15,
+      "sha256": "8cc0d750bb2599c58ea6386900e531a12d53aad44ea733cec684544d972489b9"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/context-menu.css",
+      "lines": 39,
+      "sha256": "310c27b52af07308a605124d3643d4d4d55ee8933f68fc79b539e4cb07ec9787"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/count.css",
+      "lines": 93,
+      "sha256": "7f128c584cf0fbaf0273bec135b973b5e28726ff3cbb3864ff2f6f0ea9fc94ee"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/custom-select.css",
+      "lines": 176,
+      "sha256": "290a633553a04c65236bc1a57a7c62090706a7c6422e317752bbf56536d045a4"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/date-picker.css",
+      "lines": 153,
+      "sha256": "14c5505523b285cb6886158c5d4c5b0e80af2824688ba72123b33ada0086c232"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/date-range-picker.css",
+      "lines": 25,
+      "sha256": "f42d841d77506999aa58547d8f69ee6560519311e2a9c84e56dce1d554225970"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/description-list.css",
+      "lines": 135,
+      "sha256": "4be11c835344e9acdc8c0c9bfc4c5f0dbaa75a2019afd69550283f18be747946"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/display.css",
+      "lines": 389,
+      "sha256": "f9354387142dc977948c3a50e60e253a3460d7ff8c6cb24fdc672041b0b1ea6f"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/drawer.css",
+      "lines": 166,
+      "sha256": "18d074be13d8d4f2285286802bd688a3e368982ba27d0f9e19b66498f9d420fa"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/editable-text.css",
+      "lines": 73,
+      "sha256": "9bc6374cf24fa9efb95918d45fc56c7e90be3903c8e73aa6c0572716a6f186e4"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/empty-state.css",
+      "lines": 109,
+      "sha256": "412a1ac794e395cc40080ae50739557f549ff90ce57ea7d44929708cec583cbf"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/field.css",
+      "lines": 109,
+      "sha256": "7e2d8682efca428c1ef28b60a6bf8476a452abc8a8ba799ac5ba54fd31784926"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/file-upload.css",
+      "lines": 151,
+      "sha256": "5b3035188b6f38927cb8331315a0aea28f2d923066f46eb46e8da9e424a23280"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/hover-card.css",
+      "lines": 32,
+      "sha256": "67095f92584fddb0f5608b9f372d62ad2d3bf6fce62224edc0357763d1906bbf"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/indicator.css",
+      "lines": 82,
+      "sha256": "5082926568885da470458c02017a6277e8a8877998b5c6ea5406ef8396b3da0d"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/input-group.css",
+      "lines": 126,
+      "sha256": "1bddaca5c161b4153d2904f4edfc17184c5183aa7cc57649ed723de8d079fa65"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/input.css",
+      "lines": 262,
+      "sha256": "4e9e9f7c1b97719a917f59f142b9161e96b4e0e2aff34ddd86c62e37d05b9843"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/kbd.css",
+      "lines": 153,
+      "sha256": "8bd50d844313701748a846c73247f619c0ec31ae395432e47e0be08a2f94a59d"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/link.css",
+      "lines": 71,
+      "sha256": "6378501de55f3beba673ba9f344c70e6d24a0c01097c372ffec0ee941b5e00b0"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/message.css",
+      "lines": 84,
+      "sha256": "5b766681d55bb863f7c5163264215e29d1b55082fbfc242b9ce99f4c3a291207"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/meter.css",
+      "lines": 37,
+      "sha256": "d9a56163d3c8d355028787c3e813c8cdd9a8b7cb41312f5e6fec61f1b523668c"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/model-picker.css",
+      "lines": 15,
+      "sha256": "2e5a78d22791169ffefc825e72459d2cdc0db89cd9a6faf876ce6a4b05e28986"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/nav.css",
+      "lines": 301,
+      "sha256": "6834b1ef17e5c4ddd638e7d769609d32cca0a055e79b240269a39a15b59a21c8"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/navigation.css",
+      "lines": 536,
+      "sha256": "80b890eb90c31732d806a4a46a3aaf460f6bfb064e6fc37e9504cfd050c9ee5c"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/number-field.css",
+      "lines": 152,
+      "sha256": "71c28e24e23bb99f468d8a5ad7473a303316f24e35f144425cd4a2d1c4ff4835"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/pagination.css",
+      "lines": 138,
+      "sha256": "27bb6fe3ad4bccff23049cda6f913e9b6b3a1befae76cf56dc48cb631b96cca6"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/panel.css",
+      "lines": 414,
+      "sha256": "88865ba3189690b28517235b6c955f8f2168189dc319ca935a7d2adb93cfa67c"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/presence.css",
+      "lines": 29,
+      "sha256": "e37538d11c6bb228aebc05e90eb5d740456ca3fe82cc2df8c10bbcb279f6a4c3"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/preview-frame.css",
+      "lines": 95,
+      "sha256": "d3a0b177ce71df44f6b64c6ec10d6efba66a885bb9fc081608cce01f345f1954"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/prompt-suggestions.css",
+      "lines": 102,
+      "sha256": "09a712288b2035a377ab7d007db39458aedfaf025d818d447d2b263d1d2d278d"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/property-list.css",
+      "lines": 84,
+      "sha256": "83ac27d64d5ca1a2f33c433a3b6266fd409c5eadd3009533224a6c34131e2cc8"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/scroll-area.css",
+      "lines": 110,
+      "sha256": "a4cb234e1f56d53420f4f790a1049ccd45a5f9103af6e1853280856382448a9c"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/scroll-to-latest.css",
+      "lines": 36,
+      "sha256": "c33c3444cae1094731641a6972c2cdc44b13a0380f8703574cdc9f5c36413561"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/search-field.css",
+      "lines": 15,
+      "sha256": "bb806478a21333bc0be8fdd071f2295bf77f20976310c11f30de1f457fefc53a"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/segmented.css",
+      "lines": 155,
+      "sha256": "626b25ed84a479f727747203fc8915b40201f4a5d53300c7131574e4c3b299d9"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/shortcut-list.css",
+      "lines": 72,
+      "sha256": "1b68821e8aa020eb94956398600ec267252ad90af8a82230374bb7cd87c9b983"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/slider.css",
+      "lines": 327,
+      "sha256": "934051edfeb026881f5dd25b15c7aa4f33711922bcf32b97e648951a068a6c93"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/split-button.css",
+      "lines": 124,
+      "sha256": "9b1a69dcf8d697f32e7d815de353ea8bfcfd2c19eeb2a21dccd87b05d5aaadbe"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/surface.css",
+      "lines": 1610,
+      "sha256": "b7ea1af6f006783415f5cc0a267907dad42b9419b86964bab92ba513bcaf47ed"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/switch.css",
+      "lines": 175,
+      "sha256": "bad33be34ed08f5550d293f3fc7c6a28e755a823d65999fcf2c7a8ea3274cf99"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/tag-picker.css",
+      "lines": 153,
+      "sha256": "d074a30dc3be789bb371f873f8cf2aea2fd85c8f6d4d557e3ff8ce1057fad451"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/tag.css",
+      "lines": 117,
+      "sha256": "acf61239ae36598b06d4629df1739505c9da49b0064df626bcfeaa71c044a081"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/textarea.css",
+      "lines": 145,
+      "sha256": "7a36a249c4d2acb9ca40f596891706cae8df9e4c6d5f55ed9ceea52fd0b891b8"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/timeline.css",
+      "lines": 105,
+      "sha256": "3af6850779ab2bcaf5b52c8771402e447118c4f4f3bdcbcc95469fca5c71097e"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/toggle-group.css",
+      "lines": 88,
+      "sha256": "4ab5fb7ff86e2c6e9ef9daf94b0ebb212188e6c10b1a5d7a2e462f6a69fa59ee"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/toggletip.css",
+      "lines": 75,
+      "sha256": "3359df63cc0569d4f09372c97805ac1e9395200fab08c29f086798bb223ac4f3"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/token-row.css",
+      "lines": 52,
+      "sha256": "16365c86222631e60850de4f05d011d9d2b69ba7c81e00cfc44ea008a8f73d51"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/token.css",
+      "lines": 63,
+      "sha256": "663e013348002c1d436333ad8b8a2e74c59c5f236ce2f16326c80957108f7895"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/toolbar.css",
+      "lines": 72,
+      "sha256": "942bc6f024c25afa1541ded97a0c1b0e66574bb18647890738cb745deb04dd8d"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/tree-view.css",
+      "lines": 142,
+      "sha256": "061d87595ed4592280d8fd65460ebdef4b0a1010644cfd5282051a9ac3e3bbf5"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/components/zoom-control.css",
+      "lines": 21,
+      "sha256": "ccfb3559fddce213c97ba5e548f659c7d9e7a270916c2b205fc14d435e72eb75"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/fonts.css",
+      "lines": 40,
+      "sha256": "fed345f522e0e6bd741cb8e0fbd171945e7dbcd1dd89ccda407efe44ef6a1464"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/forced-colors.css",
+      "lines": 108,
+      "sha256": "a2cb472664b21fbe925e3530097d5a8389b913c072a720ef127ac4b49775c944"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/index.css",
+      "lines": 108,
+      "sha256": "9139f3514a76e480015a8111f2da650f04e2f81b0db075fd88a59addd1f3aa95"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/inset.css",
+      "lines": 297,
+      "sha256": "903a34ad4b938b598f0fedad40ec5492b54fbe1c36872de750b6100b6b827ae7"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/manifest.ts",
+      "lines": 1105,
+      "sha256": "3a40d89b91adc1f4005074272ce6c51cfb31d6e297aa6cf63a04209d29652527"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/styles/src/reset.css",
+      "lines": 49,
+      "sha256": "1760352f29eae5bbd9b0ec364a43723c1a8474a3af950fb748f176aff8df2533"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/axes/color.ts",
+      "lines": 196,
+      "sha256": "22d84c33a4492def0c77abd95dcbde6ddaa4c1067b136b23629ebcb44078d6f2"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/axes/density.ts",
+      "lines": 38,
+      "sha256": "2a629bcd350f3eaac2708f0cef243e2ec26ff39fae58748256ae772649f3fa5c"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/axes/emphasis.ts",
+      "lines": 48,
+      "sha256": "bad8c1588f336390fd8099157ae1b569eb81b91a6b95891c4d92903dad1054d2"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/axes/motion.ts",
+      "lines": 74,
+      "sha256": "94290ac6274e2e322840f1032768c2c621475d85bfff7ad87306c8511b0a864f"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/axes/pills.ts",
+      "lines": 38,
+      "sha256": "0a2a8955e8b94773275f595ec63bcad93d378d66ad054dec8086b8ea583b9124"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/axes/radius.ts",
+      "lines": 69,
+      "sha256": "0785f69d57b3335a89c05d1ae10d51053fc36f5ae170650ee0247f574270d8e7"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/axes/registry.test.ts",
+      "lines": 123,
+      "sha256": "1122c8113f2727dade57c5d5fbcd6299ba46813dfb4f302f77e0b00b0fda0182"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/axes/registry.ts",
+      "lines": 163,
+      "sha256": "5f4cede04c242c6866b53558c8ca75e4c25f0012fc0581e75c9ddd6b969a4a5c"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/axes/schema.ts",
+      "lines": 65,
+      "sha256": "d73249c0804bb0998c00846fc6e95d3393d2df26359388fdb4d84b4e42e78f69"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/axes/surface.ts",
+      "lines": 85,
+      "sha256": "b288ada79de903ba1474d842cbf6802660230a2044a521563b6189bdfd4a518e"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/axes/type-size.test.ts",
+      "lines": 35,
+      "sha256": "dd5b697571bc361fe4d4c3592320dcc39eea2b1a4e5a96e545ebfac4616a3cb4"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/axes/type-size.ts",
+      "lines": 84,
+      "sha256": "376e1ce843d8e9bc62ff395545543e5597e36f2dcec3667073ff12499024b90d"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/axes/typography.ts",
+      "lines": 51,
+      "sha256": "537ec9716d7450da16f65c74d8b6adcd0499a5917e5bb6fcaca1aa32dfb1305d"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/axes/ui-scale.ts",
+      "lines": 12,
+      "sha256": "f9e40898aff74e03749bdfbc7481f13063e5fd379359ba634134aa2fc9b358e1"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/build.ts",
+      "lines": 45,
+      "sha256": "66ae9cb01889b21cc3ba109794b401eec604af53ceb694d4e668cfc8850441a6"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/color/alpha.ts",
+      "lines": 66,
+      "sha256": "f23c10cdfb9e7c64027e4223f2dcbfcb002922f8d64f7fb078c9cbf79b131477"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/color/apca.test.ts",
+      "lines": 39,
+      "sha256": "3edf3bf297386f688e1ea46c4f7b306849cd2229cef1352002ca375edae97b8a"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/color/contrast.ts",
+      "lines": 97,
+      "sha256": "fd223054fa7e861439516c9089c58161c623830c1cf482d61f34027656b4198a"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/color/curves.ts",
+      "lines": 255,
+      "sha256": "d955d6fa99bd0e59925d70ab82decb6fef0655de3f001d118088069ff2352cb2"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/color/gamut.test.ts",
+      "lines": 128,
+      "sha256": "91f14675e39f4323d88bd7818bf20fa81acfd660ed58203008e6fe0e84a77351"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/color/gamut.ts",
+      "lines": 197,
+      "sha256": "b8bd88f77e72d50d217487ca332612e7669d49a2a7d815875169805512d82980"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/color/matrix.ts",
+      "lines": 106,
+      "sha256": "0f848ea2e69be2b54bad2c9a2947a588c40a0207ebeadd49267f9d82960a6faa"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/color/oklab.oracle.test.ts",
+      "lines": 133,
+      "sha256": "08d2f986d8f8ff8ccc79fd9051d6a304cf1e0415743cc59b5a05f1bc96430133"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/color/oklab.ts",
+      "lines": 261,
+      "sha256": "553e74d6d38e1cfd682fb90785e7a4e2f363b33c0eae425375ffa25ea83bfbb6"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/color/presets.ts",
+      "lines": 119,
+      "sha256": "46fa52297111719e416115876a5594651051536acbbbc2e1ce9fbd89187961b2"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/color/preview.ts",
+      "lines": 40,
+      "sha256": "b1684e3320532934f655f723375746480c928547548ab726abb26bbe7079ab8e"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/color/scale.test.ts",
+      "lines": 328,
+      "sha256": "2550f6144e211d2b33540866d613be3437f722fca6cdeb036907a61630a8c868"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/color/scale.ts",
+      "lines": 511,
+      "sha256": "f4e832d21c964cc2952274a3cb654a6ca4c6ac363e2532ff8f3cf29ea96bb5c9"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/contrast/assertions.ts",
+      "lines": 230,
+      "sha256": "41558df645888b69f1436956ddffc740ef0f89273e2af9fcc77e5dad3d11e382"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/contrast/contrast.test.ts",
+      "lines": 129,
+      "sha256": "f3ae960b2837cf98974bfa2ee4e6bdc293036deb8e9222bc7d4c07084d931575"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/contrast/exceptions.ts",
+      "lines": 37,
+      "sha256": "e243da38502c536a9ceadedab1504aa62fd9637e9eca120e161c208beb9ad133"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/contrast/report.ts",
+      "lines": 92,
+      "sha256": "02d3ac352781cb951fbe68eb7c6f2264025b1fe646dfcc083bfa06c285b1d4ce"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/contrast/suggest.ts",
+      "lines": 142,
+      "sha256": "4b3277c00059eb9af00ec42444dced68c4fafb117b4b4738c49ea21aa9831d94"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/emit/base.ts",
+      "lines": 384,
+      "sha256": "6085183838256194ae99c6ca4f261fbc7457f2765d3a255de88f95e251d7999f"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/emit/colors.test.ts",
+      "lines": 55,
+      "sha256": "5b290475b008a3fa21ebdc16fc975345d11be6d6324d535dfc129278e1afe1ba"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/emit/colors.ts",
+      "lines": 14,
+      "sha256": "41ecab0f5eed9736df15c1c879395d39b85b1dbdc77b5544c9ccfe103f00f353"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/emit/config.test.ts",
+      "lines": 33,
+      "sha256": "a9397553e1d5a8dcedfb15b333f508a6e73f77a6790aae8d7c56fd46169591bd"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/emit/config.ts",
+      "lines": 76,
+      "sha256": "82f7915b5e9fd347943d1a18b454070cc7962d5779166d9aa8a5e09543d5a953"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/emit/css.ts",
+      "lines": 198,
+      "sha256": "badb89e0af994286f46f233a4d1f3c893c07bfa189fa7b2bf027509a54c5cbbc"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/emit/dts.ts",
+      "lines": 50,
+      "sha256": "14acf36ac2080611208ad96e2a01964ac4cfb45590c38d2653605b15ccb0cf40"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/emit/fixture.ts",
+      "lines": 127,
+      "sha256": "38b8e809d0f906fbcb79253977314a9a99b96a9f0f681ae6859276e6f832e31e"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/emit/json.ts",
+      "lines": 175,
+      "sha256": "a512380e7617742fd85c1bad1b9dce5dc76e2ef0a526fc0270deb07a1f8929fe"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/semantic/aliases.ts",
+      "lines": 360,
+      "sha256": "1e9fc478ef272aa75f93f45ab9e53eccd8674e0b9428db098e2d0dca5f34ac8e"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/semantic/resolve.ts",
+      "lines": 107,
+      "sha256": "4aac13cc5e921ab08f4d81ed2bb73c1315f82d80ad9f574f0edab15b0a95c260"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/semantic/stroke.test.ts",
+      "lines": 27,
+      "sha256": "637fe13dd1bcd48e8c02098be8d28e12efc752edad52d3245a88b33c1db73475"
+    },
+    {
+      "commit": "d455567e5b264a768f42dc853476f1622ed6dd9f",
+      "file": "packages/tokens/src/semantic/stroke.ts",
+      "lines": 53,
+      "sha256": "e5bbffc33dd1ac3267ed01bfff24e242a04dd2d4e9b70167562e47a99e0ea0af"
+    },
+    {
+      "commit": "dbd57a9067e3d927b2bfb7a061db074eeaf48db9",
+      "file": "docs/research/astra/materials/REVIEW.md",
+      "lines": 154,
+      "sha256": "d118bf839fed5f7ef0b8ba13df147fd2347fe356322cbdb0551eb1fc9e567671"
+    }
+  ]
+}

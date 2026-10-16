@@ -1,0 +1,2063 @@
+{
+  "checked": "2026-10-11",
+  "areaCommit": "6a4307756ce06ddd008c0bc9d866f297fda9e8fd",
+  "researchCommit": "cf058e2b09670682a5e33a177b930af48bcdb511",
+  "selection": {
+    "neutral": "neutral",
+    "accent": "blue"
+  },
+  "presets": {
+    "path": "docs/research/astra/materials/13-presets/presets.json",
+    "sha256": "55a6dc3710787c9a0d30655e84c1922884a8ac4426de562da84f382bd1c6f541"
+  },
+  "dependencyVersions": {
+    "apca-w3": "0.1.9"
+  },
+  "lockSha256": "c0c6f2341c164b67cee8f91df884be1c7a9fdc34e25ef2908384cd4188c3ef2a",
+  "sourceHashes": {
+    "packages/tokens/src/axes/color.ts": "22d84c33a4492def0c77abd95dcbde6ddaa4c1067b136b23629ebcb44078d6f2",
+    "packages/tokens/src/axes/density.ts": "64f5f5533cdbf39538b99f31b0596723e11f29d4b99ecd389dc1816c02890ad6",
+    "packages/tokens/src/axes/emphasis.ts": "bad8c1588f336390fd8099157ae1b569eb81b91a6b95891c4d92903dad1054d2",
+    "packages/tokens/src/axes/motion.ts": "94290ac6274e2e322840f1032768c2c621475d85bfff7ad87306c8511b0a864f",
+    "packages/tokens/src/axes/pills.ts": "0a2a8955e8b94773275f595ec63bcad93d378d66ad054dec8086b8ea583b9124",
+    "packages/tokens/src/axes/radius.ts": "0785f69d57b3335a89c05d1ae10d51053fc36f5ae170650ee0247f574270d8e7",
+    "packages/tokens/src/axes/registry.test.ts": "d80a73b367e88dcedaea805783be1c01a5593a4ffbe49f21c7753108ab972ad8",
+    "packages/tokens/src/axes/registry.ts": "7c7f58cbb91198be1dc5d49cddb918141bb76a10cc6559e8d7a0d041860aa7ba",
+    "packages/tokens/src/axes/schema.ts": "d73249c0804bb0998c00846fc6e95d3393d2df26359388fdb4d84b4e42e78f69",
+    "packages/tokens/src/axes/surface.ts": "b288ada79de903ba1474d842cbf6802660230a2044a521563b6189bdfd4a518e",
+    "packages/tokens/src/axes/typography.ts": "7d239bb1ef6813063234ab387c4f0ecf58c3b81c76f97d5ba57dd8d7be8bb144",
+    "packages/tokens/src/axes/ui-scale.ts": "d9bce9e71fefe350deefcfbdf23ac5d990be2f22bd2162a4aa229cb884997458",
+    "packages/tokens/src/build.ts": "66ae9cb01889b21cc3ba109794b401eec604af53ceb694d4e668cfc8850441a6",
+    "packages/tokens/src/color/alpha.ts": "f23c10cdfb9e7c64027e4223f2dcbfcb002922f8d64f7fb078c9cbf79b131477",
+    "packages/tokens/src/color/apca.test.ts": "3edf3bf297386f688e1ea46c4f7b306849cd2229cef1352002ca375edae97b8a",
+    "packages/tokens/src/color/contrast.ts": "fd223054fa7e861439516c9089c58161c623830c1cf482d61f34027656b4198a",
+    "packages/tokens/src/color/curves.ts": "d955d6fa99bd0e59925d70ab82decb6fef0655de3f001d118088069ff2352cb2",
+    "packages/tokens/src/color/gamut.test.ts": "91f14675e39f4323d88bd7818bf20fa81acfd660ed58203008e6fe0e84a77351",
+    "packages/tokens/src/color/gamut.ts": "b8bd88f77e72d50d217487ca332612e7669d49a2a7d815875169805512d82980",
+    "packages/tokens/src/color/matrix.ts": "0f848ea2e69be2b54bad2c9a2947a588c40a0207ebeadd49267f9d82960a6faa",
+    "packages/tokens/src/color/oklab.oracle.test.ts": "08d2f986d8f8ff8ccc79fd9051d6a304cf1e0415743cc59b5a05f1bc96430133",
+    "packages/tokens/src/color/oklab.ts": "553e74d6d38e1cfd682fb90785e7a4e2f363b33c0eae425375ffa25ea83bfbb6",
+    "packages/tokens/src/color/palette.json": "b83c2a40e3a30ba894ea3cce2e9bfb0cde71c101a70110b14b14ed557a0fb120",
+    "packages/tokens/src/color/presets.ts": "46fa52297111719e416115876a5594651051536acbbbc2e1ce9fbd89187961b2",
+    "packages/tokens/src/color/preview.ts": "b1684e3320532934f655f723375746480c928547548ab726abb26bbe7079ab8e",
+    "packages/tokens/src/color/scale.test.ts": "2550f6144e211d2b33540866d613be3437f722fca6cdeb036907a61630a8c868",
+    "packages/tokens/src/color/scale.ts": "f4e832d21c964cc2952274a3cb654a6ca4c6ac363e2532ff8f3cf29ea96bb5c9",
+    "packages/tokens/src/contrast/assertions.ts": "41558df645888b69f1436956ddffc740ef0f89273e2af9fcc77e5dad3d11e382",
+    "packages/tokens/src/contrast/contrast.test.ts": "f3ae960b2837cf98974bfa2ee4e6bdc293036deb8e9222bc7d4c07084d931575",
+    "packages/tokens/src/contrast/exceptions.ts": "e243da38502c536a9ceadedab1504aa62fd9637e9eca120e161c208beb9ad133",
+    "packages/tokens/src/contrast/report.ts": "02d3ac352781cb951fbe68eb7c6f2264025b1fe646dfcc083bfa06c285b1d4ce",
+    "packages/tokens/src/contrast/suggest.ts": "4b3277c00059eb9af00ec42444dced68c4fafb117b4b4738c49ea21aa9831d94",
+    "packages/tokens/src/emit/base.ts": "550fbe338248597ef99ec2a8519db44f30ef61472bef33f336ff866975b83e7c",
+    "packages/tokens/src/emit/colors.test.ts": "5b290475b008a3fa21ebdc16fc975345d11be6d6324d535dfc129278e1afe1ba",
+    "packages/tokens/src/emit/colors.ts": "41ecab0f5eed9736df15c1c879395d39b85b1dbdc77b5544c9ccfe103f00f353",
+    "packages/tokens/src/emit/config.test.ts": "118d9e866f743c6d014899a8493616b4b535e57d4c137465837e3747162903e0",
+    "packages/tokens/src/emit/config.ts": "2be7f0fc5143bf16b5aff5a4ea7b6cad00ec8c7c3a46001acfa06e2404aec431",
+    "packages/tokens/src/emit/css.ts": "83b25060bc950a1a3ff9a553692461b537ec041643cb24934132d67d25e6d2c7",
+    "packages/tokens/src/emit/dts.ts": "14acf36ac2080611208ad96e2a01964ac4cfb45590c38d2653605b15ccb0cf40",
+    "packages/tokens/src/emit/fixture.ts": "38b8e809d0f906fbcb79253977314a9a99b96a9f0f681ae6859276e6f832e31e",
+    "packages/tokens/src/emit/json.ts": "a512380e7617742fd85c1bad1b9dce5dc76e2ef0a526fc0270deb07a1f8929fe",
+    "packages/tokens/src/semantic/aliases.ts": "1e9fc478ef272aa75f93f45ab9e53eccd8674e0b9428db098e2d0dca5f34ac8e",
+    "packages/tokens/src/semantic/resolve.ts": "4aac13cc5e921ab08f4d81ed2bb73c1315f82d80ad9f574f0edab15b0a95c260",
+    "packages/tokens/src/semantic/stroke.test.ts": "637fe13dd1bcd48e8c02098be8d28e12efc752edad52d3245a88b33c1db73475",
+    "packages/tokens/src/semantic/stroke.ts": "e5bbffc33dd1ac3267ed01bfff24e242a04dd2d4e9b70167562e47a99e0ea0af"
+  },
+  "themes": {
+    "light": {
+      "bg-page": "#ffffff",
+      "bg-surface": "#ffffff",
+      "bg-subtle": "#f7f7f7",
+      "bg-stripe": "#fafafa",
+      "bg-code": "#ffffff",
+      "bg-component": "#f7f7f7",
+      "bg-component-hover": "#f3f3f3",
+      "bg-component-active": "#eeeeee",
+      "bg-inverse": "#282828",
+      "fg-on-inverse": "#fafafa",
+      "neutral-solid": "#282828",
+      "neutral-solid-hover": "#1d1d1d",
+      "fg-on-neutral": "#fafafa",
+      "bg-hover": "#1414140d",
+      "bg-active": "#00000011",
+      "bg-overlay": "#000000a6",
+      "scrim": "#00000022",
+      "fg-default": "#282828",
+      "fg-muted": "#666666",
+      "fg-placeholder": "#666666",
+      "fg-disabled": "#a4a4a4",
+      "border-subtle": "#d4d4d4",
+      "border-decorative": "#f3f3f3",
+      "border-faint": "#e2e2e2",
+      "border-float": "#f3f3f3",
+      "border-divider": "#e2e2e2",
+      "border": "#c5c5c5",
+      "border-hover": "#b4b4b4",
+      "stroke-control": "#838383",
+      "stroke-control-hover": "#747474",
+      "stroke-selected": "#004cb0",
+      "focus-color": "#004cb0",
+      "accent-surface": "#f0f6ff",
+      "accent-surface-hover": "#e6f0ff",
+      "accent-surface-active": "#dbe9fe",
+      "accent-border-subtle": "#dbe9fe",
+      "accent-border": "#d6e2f2",
+      "accent-border-strong": "#a1bde2",
+      "accent-solid": "#006df5",
+      "accent-solid-hover": "#0160d9",
+      "fg-accent": "#0160d9",
+      "fg-accent-vivid": "#006df5",
+      "fg-accent-strong": "#003b8c",
+      "fg-on-accent": "#ffffff",
+      "danger-surface": "#fbf5f5",
+      "danger-surface-hover": "#fceded",
+      "danger-surface-active": "#ffe0e1",
+      "danger-border-subtle": "#ffe0e1",
+      "danger-border": "#f2dbe1",
+      "danger-border-strong": "#e2adbc",
+      "danger-solid": "#e80945",
+      "danger-solid-hover": "#cf033c",
+      "fg-danger": "#cf033c",
+      "fg-danger-vivid": "#e80945",
+      "fg-danger-strong": "#820022",
+      "fg-on-danger": "#ffffff",
+      "warning-surface": "#fff5ee",
+      "warning-surface-hover": "#ffeee2",
+      "warning-surface-active": "#ffebdd",
+      "warning-border-subtle": "#ffebdd",
+      "warning-border": "#eedecf",
+      "warning-border-strong": "#d9b594",
+      "warning-solid": "#fe9c51",
+      "warning-solid-hover": "#fdb47e",
+      "fg-warning": "#a44f00",
+      "fg-warning-vivid": "#a44f00",
+      "fg-warning-strong": "#7b3a00",
+      "fg-on-warning": "#000000",
+      "caution-surface": "#f9f6f0",
+      "caution-surface-hover": "#f6f1e5",
+      "caution-surface-active": "#fdecc6",
+      "caution-border-subtle": "#fdecc6",
+      "caution-border": "#e7e0cd",
+      "caution-border-strong": "#caba8f",
+      "caution-solid": "#f9ba1d",
+      "caution-solid-hover": "#f3b303",
+      "fg-caution": "#866100",
+      "fg-caution-vivid": "#976e00",
+      "fg-caution-strong": "#654800",
+      "fg-on-caution": "#000000",
+      "success-surface": "#edf5ed",
+      "success-surface-hover": "#d9f8dc",
+      "success-surface-active": "#b5fac0",
+      "success-border-subtle": "#b5fac0",
+      "success-border": "#d0e6da",
+      "success-border-strong": "#95c6ab",
+      "success-solid": "#00853c",
+      "success-solid-hover": "#007734",
+      "fg-success": "#007734",
+      "fg-success-vivid": "#00853c",
+      "fg-success-strong": "#005b27",
+      "fg-on-success": "#ffffff",
+      "info-surface": "#f0f6ff",
+      "info-surface-hover": "#e6f0ff",
+      "info-surface-active": "#dbe9fe",
+      "info-border-subtle": "#dbe9fe",
+      "info-border": "#d6e2f2",
+      "info-border-strong": "#a1bde2",
+      "info-solid": "#006df5",
+      "info-solid-hover": "#0160d9",
+      "fg-info": "#0160d9",
+      "fg-info-vivid": "#006df5",
+      "fg-info-strong": "#003b8c",
+      "fg-on-info": "#ffffff",
+      "discovery-surface": "#eae5ff",
+      "discovery-surface-hover": "#dbd2fe",
+      "discovery-surface-active": "#cabaff",
+      "discovery-border-subtle": "#cabaff",
+      "discovery-border": "#e8dbf6",
+      "discovery-border-strong": "#ccafec",
+      "discovery-solid": "#8d4df3",
+      "discovery-solid-hover": "#7d41da",
+      "fg-discovery": "#6a14c7",
+      "fg-discovery-vivid": "#8d4df3",
+      "fg-discovery-strong": "#4f248c",
+      "fg-on-discovery": "#ffffff",
+      "pink-surface": "#faf3f5",
+      "pink-surface-hover": "#ffeaf0",
+      "pink-surface-active": "#fee0e9",
+      "pink-border-subtle": "#fee0e9",
+      "pink-border": "#f1dae7",
+      "pink-border-strong": "#e0acc8",
+      "pink-solid": "#df127d",
+      "pink-solid-hover": "#c7026e",
+      "fg-pink": "#c7026e",
+      "fg-pink-vivid": "#df127d",
+      "fg-pink-strong": "#7e0044",
+      "fg-on-pink": "#ffffff",
+      "gray-surface": "#f7f5f3",
+      "gray-surface-hover": "#f3f1ef",
+      "gray-surface-active": "#f1eeeb",
+      "fg-gray": "#4e4a46",
+      "fg-gray-strong": "#38332d",
+      "brown-surface": "#f5eee9",
+      "brown-surface-hover": "#ece0d7",
+      "brown-surface-active": "#e4d2c4",
+      "brown-border-subtle": "#e4d2c4",
+      "brown-border": "#cbb9ae",
+      "brown-border-strong": "#8f6951",
+      "brown-solid": "#886047",
+      "brown-solid-hover": "#7a5339",
+      "fg-brown": "#7a5339",
+      "fg-brown-vivid": "#886047",
+      "fg-brown-strong": "#6a452c",
+      "fg-on-brown": "#ffffff"
+    },
+    "dark": {
+      "bg-page": "#020202",
+      "bg-surface": "#1d1d1d",
+      "bg-subtle": "#282828",
+      "bg-stripe": "#282828",
+      "bg-code": "#1d1d1d",
+      "bg-component": "#282828",
+      "bg-component-hover": "#333333",
+      "bg-component-active": "#3f3f3f",
+      "bg-inverse": "#f3f3f3",
+      "fg-on-inverse": "#121212",
+      "neutral-solid": "#f3f3f3",
+      "neutral-solid-hover": "#fafafa",
+      "fg-on-neutral": "#121212",
+      "bg-hover": "#fcfcfc24",
+      "bg-active": "#fcfcfc31",
+      "bg-overlay": "#000000a6",
+      "scrim": "#00000080",
+      "fg-default": "#eeeeee",
+      "fg-muted": "#c5c5c5",
+      "fg-placeholder": "#c5c5c5",
+      "fg-disabled": "#666666",
+      "border-subtle": "#333333",
+      "border-decorative": "#282828",
+      "border-faint": "#333333",
+      "border-float": "#4b4b4b",
+      "border-divider": "#333333",
+      "border": "#4b4b4b",
+      "border-hover": "#585858",
+      "stroke-control": "#939393",
+      "stroke-control-hover": "#a4a4a4",
+      "stroke-selected": "#c1d9fd",
+      "focus-color": "#c1d9fd",
+      "accent-surface": "#002966",
+      "accent-surface-hover": "#00337a",
+      "accent-surface-active": "#003b8c",
+      "accent-border-subtle": "#003b8c",
+      "accent-border": "#303236",
+      "accent-border-strong": "#505863",
+      "accent-solid": "#006df5",
+      "accent-solid-hover": "#0160d9",
+      "fg-accent": "#a0c5fd",
+      "fg-accent-vivid": "#a0c5fd",
+      "fg-accent-strong": "#dbe9fe",
+      "fg-on-accent": "#ffffff",
+      "danger-surface": "#820022",
+      "danger-surface-hover": "#950028",
+      "danger-surface-active": "#a6002e",
+      "danger-border-subtle": "#a6002e",
+      "danger-border": "#373131",
+      "danger-border-strong": "#645354",
+      "danger-solid": "#e80945",
+      "danger-solid-hover": "#cf033c",
+      "fg-danger": "#ffc9cb",
+      "fg-danger-vivid": "#feb0b3",
+      "fg-danger-strong": "#ffe0e1",
+      "fg-on-danger": "#ffffff",
+      "warning-surface": "#693000",
+      "warning-surface-hover": "#7b3a00",
+      "warning-surface-active": "#914500",
+      "warning-border-subtle": "#914500",
+      "warning-border": "#36322f",
+      "warning-border-strong": "#5f554e",
+      "warning-solid": "#fe9c51",
+      "warning-solid-hover": "#fdb47e",
+      "fg-warning": "#ffc9a2",
+      "fg-warning-vivid": "#fdb47e",
+      "fg-warning-strong": "#ffebdd",
+      "fg-on-warning": "#000000",
+      "caution-surface": "#453000",
+      "caution-surface-hover": "#553c00",
+      "caution-surface-active": "#654800",
+      "caution-border-subtle": "#654800",
+      "caution-border": "#35322b",
+      "caution-border-strong": "#5f5643",
+      "caution-solid": "#f9ba1d",
+      "caution-solid-hover": "#fbc243",
+      "fg-caution": "#fbc243",
+      "fg-caution-vivid": "#f3b303",
+      "fg-caution-strong": "#fdecc6",
+      "fg-on-caution": "#000000",
+      "success-surface": "#004019",
+      "success-surface-hover": "#004d1f",
+      "success-surface-active": "#005b27",
+      "success-border-subtle": "#005b27",
+      "success-border": "#2c342e",
+      "success-border-strong": "#495c4c",
+      "success-solid": "#00853c",
+      "success-solid-hover": "#007734",
+      "fg-success": "#30ea75",
+      "fg-success-vivid": "#02de68",
+      "fg-success-strong": "#d9f8dc",
+      "fg-on-success": "#ffffff",
+      "info-surface": "#002966",
+      "info-surface-hover": "#00337a",
+      "info-surface-active": "#003b8c",
+      "info-border-subtle": "#003b8c",
+      "info-border": "#303236",
+      "info-border-strong": "#505863",
+      "info-solid": "#006df5",
+      "info-solid-hover": "#0160d9",
+      "fg-info": "#a0c5fd",
+      "fg-info-vivid": "#a0c5fd",
+      "fg-info-strong": "#dbe9fe",
+      "fg-on-info": "#ffffff",
+      "discovery-surface": "#371a63",
+      "discovery-surface-hover": "#442178",
+      "discovery-surface-active": "#4f248c",
+      "discovery-border-subtle": "#4f248c",
+      "discovery-border": "#333237",
+      "discovery-border-strong": "#595664",
+      "discovery-solid": "#8d4df3",
+      "discovery-solid-hover": "#7d41da",
+      "fg-discovery": "#cabaff",
+      "fg-discovery-vivid": "#cabaff",
+      "fg-discovery-strong": "#eae5ff",
+      "fg-on-discovery": "#ffffff",
+      "pink-surface": "#7e0044",
+      "pink-surface-hover": "#8f004d",
+      "pink-surface-active": "#a10057",
+      "pink-border-subtle": "#a10057",
+      "pink-border": "#373133",
+      "pink-border-strong": "#645358",
+      "pink-solid": "#df127d",
+      "pink-solid-hover": "#c7026e",
+      "fg-pink": "#fec8d9",
+      "fg-pink-vivid": "#ffabc7",
+      "fg-pink-strong": "#fee0e9",
+      "fg-on-pink": "#ffffff",
+      "gray-surface": "#2b2722",
+      "gray-surface-hover": "#38332d",
+      "gray-surface-active": "#423e3a",
+      "fg-gray": "#e5e2df",
+      "fg-gray-strong": "#f1eeeb",
+      "brown-surface": "#4e2b12",
+      "brown-surface-hover": "#5d3821",
+      "brown-surface-active": "#6a452c",
+      "brown-border-subtle": "#6a452c",
+      "brown-border": "#333231",
+      "brown-border-strong": "#5b5754",
+      "brown-solid": "#886047",
+      "brown-solid-hover": "#7a5339",
+      "fg-brown": "#e4d2c4",
+      "fg-brown-vivid": "#d2b098",
+      "fg-brown-strong": "#f5eee9",
+      "fg-on-brown": "#ffffff"
+    }
+  },
+  "assertions": [
+    {
+      "fg": "fg-default",
+      "bg": "bg-page",
+      "wcag": 4.5,
+      "apca": 75,
+      "note": "body copy"
+    },
+    {
+      "fg": "fg-muted",
+      "bg": "bg-page",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "secondary copy"
+    },
+    {
+      "fg": "fg-placeholder",
+      "bg": "bg-page",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "placeholder"
+    },
+    {
+      "fg": "fg-default",
+      "bg": "bg-surface",
+      "wcag": 4.5,
+      "apca": 75,
+      "note": "body copy"
+    },
+    {
+      "fg": "fg-muted",
+      "bg": "bg-surface",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "secondary copy"
+    },
+    {
+      "fg": "fg-placeholder",
+      "bg": "bg-surface",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "placeholder"
+    },
+    {
+      "fg": "fg-default",
+      "bg": "bg-subtle",
+      "wcag": 4.5,
+      "apca": 75,
+      "note": "body copy"
+    },
+    {
+      "fg": "fg-muted",
+      "bg": "bg-subtle",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "secondary copy"
+    },
+    {
+      "fg": "fg-placeholder",
+      "bg": "bg-subtle",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "placeholder"
+    },
+    {
+      "fg": "fg-default",
+      "bg": "bg-component",
+      "wcag": 4.5,
+      "apca": 75,
+      "note": "body copy"
+    },
+    {
+      "fg": "fg-muted",
+      "bg": "bg-component",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "secondary copy"
+    },
+    {
+      "fg": "fg-placeholder",
+      "bg": "bg-component",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "placeholder"
+    },
+    {
+      "fg": "fg-default",
+      "bg": "bg-stripe",
+      "wcag": 4.5,
+      "apca": 75,
+      "note": "body copy"
+    },
+    {
+      "fg": "fg-muted",
+      "bg": "bg-stripe",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "secondary copy"
+    },
+    {
+      "fg": "fg-placeholder",
+      "bg": "bg-stripe",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "placeholder"
+    },
+    {
+      "fg": "bg-inverse",
+      "bg": "bg-page",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "inverse Badge transparent label and hover"
+    },
+    {
+      "fg": "bg-inverse",
+      "bg": "bg-surface",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "inverse Badge transparent label and hover"
+    },
+    {
+      "fg": "bg-inverse",
+      "bg": "bg-component-hover",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "inverse Badge transparent label and hover"
+    },
+    {
+      "fg": "fg-danger-strong",
+      "bg": "danger-surface-active",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "danger tag label"
+    },
+    {
+      "fg": "fg-warning-strong",
+      "bg": "warning-surface-active",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "warning tag label"
+    },
+    {
+      "fg": "fg-caution-strong",
+      "bg": "caution-surface-active",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "caution tag label"
+    },
+    {
+      "fg": "fg-success-strong",
+      "bg": "success-surface-active",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "success tag label"
+    },
+    {
+      "fg": "fg-info-strong",
+      "bg": "info-surface-active",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "info tag label"
+    },
+    {
+      "fg": "fg-discovery-strong",
+      "bg": "discovery-surface-active",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "discovery tag label"
+    },
+    {
+      "fg": "fg-pink-strong",
+      "bg": "pink-surface-active",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "pink tag label"
+    },
+    {
+      "fg": "fg-brown-strong",
+      "bg": "brown-surface-active",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "brown tag label"
+    },
+    {
+      "fg": "fg-gray-strong",
+      "bg": "gray-surface-active",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "gray tag label"
+    },
+    {
+      "fg": "fg-gray",
+      "bg": "bg-page",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "gray text"
+    },
+    {
+      "fg": "fg-gray-strong",
+      "bg": "bg-page",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "gray strong text (a tag label)"
+    },
+    {
+      "fg": "fg-gray",
+      "bg": "bg-surface",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "gray text"
+    },
+    {
+      "fg": "fg-gray-strong",
+      "bg": "bg-surface",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "gray strong text (a tag label)"
+    },
+    {
+      "fg": "fg-gray",
+      "bg": "bg-subtle",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "gray text"
+    },
+    {
+      "fg": "fg-gray-strong",
+      "bg": "bg-subtle",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "gray strong text (a tag label)"
+    },
+    {
+      "fg": "fg-gray",
+      "bg": "gray-surface",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "gray text"
+    },
+    {
+      "fg": "fg-gray-strong",
+      "bg": "gray-surface",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "gray strong text (a tag label)"
+    },
+    {
+      "fg": "fg-gray",
+      "bg": "gray-surface-hover",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "gray text"
+    },
+    {
+      "fg": "fg-gray-strong",
+      "bg": "gray-surface-hover",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "gray strong text (a tag label)"
+    },
+    {
+      "fg": "fg-gray",
+      "bg": "gray-surface-active",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "gray text"
+    },
+    {
+      "fg": "fg-gray-strong",
+      "bg": "gray-surface-active",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "gray strong text (a tag label)"
+    },
+    {
+      "fg": "fg-accent",
+      "bg": "bg-page",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "accent text"
+    },
+    {
+      "fg": "fg-accent",
+      "bg": "bg-surface",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "accent text"
+    },
+    {
+      "fg": "fg-accent",
+      "bg": "bg-subtle",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "accent text"
+    },
+    {
+      "fg": "fg-accent",
+      "bg": "accent-surface",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "accent text"
+    },
+    {
+      "fg": "fg-accent-vivid",
+      "bg": "bg-code",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "accent vivid text on a code block"
+    },
+    {
+      "fg": "fg-on-accent",
+      "bg": "accent-solid",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "accent solid button label"
+    },
+    {
+      "fg": "fg-on-accent",
+      "bg": "accent-solid-hover",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "accent solid button label, hover"
+    },
+    {
+      "fg": "accent-border",
+      "bg": "bg-surface",
+      "wcag": 1.3,
+      "apca": 0,
+      "note": "accent control border"
+    },
+    {
+      "fg": "accent-border-strong",
+      "bg": "bg-surface",
+      "wcag": 1.9,
+      "apca": 15,
+      "note": "accent control border, hover"
+    },
+    {
+      "fg": "fg-danger",
+      "bg": "bg-page",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "danger text"
+    },
+    {
+      "fg": "fg-danger",
+      "bg": "bg-surface",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "danger text"
+    },
+    {
+      "fg": "fg-danger",
+      "bg": "bg-subtle",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "danger text"
+    },
+    {
+      "fg": "fg-danger",
+      "bg": "danger-surface",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "danger text"
+    },
+    {
+      "fg": "fg-danger-vivid",
+      "bg": "bg-code",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "danger vivid text on a code block"
+    },
+    {
+      "fg": "fg-on-danger",
+      "bg": "danger-solid",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "danger solid button label"
+    },
+    {
+      "fg": "fg-on-danger",
+      "bg": "danger-solid-hover",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "danger solid button label, hover"
+    },
+    {
+      "fg": "danger-border",
+      "bg": "bg-surface",
+      "wcag": 1.3,
+      "apca": 0,
+      "note": "danger control border"
+    },
+    {
+      "fg": "danger-border-strong",
+      "bg": "bg-surface",
+      "wcag": 1.9,
+      "apca": 15,
+      "note": "danger control border, hover"
+    },
+    {
+      "fg": "fg-warning",
+      "bg": "bg-page",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "warning text"
+    },
+    {
+      "fg": "fg-warning",
+      "bg": "bg-surface",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "warning text"
+    },
+    {
+      "fg": "fg-warning",
+      "bg": "bg-subtle",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "warning text"
+    },
+    {
+      "fg": "fg-warning",
+      "bg": "warning-surface",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "warning text"
+    },
+    {
+      "fg": "fg-on-warning",
+      "bg": "warning-solid",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "warning solid button label"
+    },
+    {
+      "fg": "fg-on-warning",
+      "bg": "warning-solid-hover",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "warning solid button label, hover"
+    },
+    {
+      "fg": "warning-border",
+      "bg": "bg-surface",
+      "wcag": 1.3,
+      "apca": 0,
+      "note": "warning control border"
+    },
+    {
+      "fg": "warning-border-strong",
+      "bg": "bg-surface",
+      "wcag": 1.9,
+      "apca": 15,
+      "note": "warning control border, hover"
+    },
+    {
+      "fg": "fg-caution",
+      "bg": "bg-page",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "caution text"
+    },
+    {
+      "fg": "fg-caution",
+      "bg": "bg-surface",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "caution text"
+    },
+    {
+      "fg": "fg-caution",
+      "bg": "bg-subtle",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "caution text"
+    },
+    {
+      "fg": "fg-caution",
+      "bg": "caution-surface",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "caution text"
+    },
+    {
+      "fg": "fg-on-caution",
+      "bg": "caution-solid",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "caution solid button label"
+    },
+    {
+      "fg": "fg-on-caution",
+      "bg": "caution-solid-hover",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "caution solid button label, hover"
+    },
+    {
+      "fg": "caution-border",
+      "bg": "bg-surface",
+      "wcag": 1.3,
+      "apca": 0,
+      "note": "caution control border"
+    },
+    {
+      "fg": "caution-border-strong",
+      "bg": "bg-surface",
+      "wcag": 1.9,
+      "apca": 15,
+      "note": "caution control border, hover"
+    },
+    {
+      "fg": "fg-success",
+      "bg": "bg-page",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "success text"
+    },
+    {
+      "fg": "fg-success",
+      "bg": "bg-surface",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "success text"
+    },
+    {
+      "fg": "fg-success",
+      "bg": "bg-subtle",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "success text"
+    },
+    {
+      "fg": "fg-success",
+      "bg": "success-surface",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "success text"
+    },
+    {
+      "fg": "fg-on-success",
+      "bg": "success-solid",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "success solid button label"
+    },
+    {
+      "fg": "fg-on-success",
+      "bg": "success-solid-hover",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "success solid button label, hover"
+    },
+    {
+      "fg": "success-border",
+      "bg": "bg-surface",
+      "wcag": 1.3,
+      "apca": 0,
+      "note": "success control border"
+    },
+    {
+      "fg": "success-border-strong",
+      "bg": "bg-surface",
+      "wcag": 1.9,
+      "apca": 15,
+      "note": "success control border, hover"
+    },
+    {
+      "fg": "fg-info",
+      "bg": "bg-page",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "info text"
+    },
+    {
+      "fg": "fg-info",
+      "bg": "bg-surface",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "info text"
+    },
+    {
+      "fg": "fg-info",
+      "bg": "bg-subtle",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "info text"
+    },
+    {
+      "fg": "fg-info",
+      "bg": "info-surface",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "info text"
+    },
+    {
+      "fg": "fg-info-vivid",
+      "bg": "bg-code",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "info vivid text on a code block"
+    },
+    {
+      "fg": "fg-on-info",
+      "bg": "info-solid",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "info solid button label"
+    },
+    {
+      "fg": "fg-on-info",
+      "bg": "info-solid-hover",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "info solid button label, hover"
+    },
+    {
+      "fg": "info-border",
+      "bg": "bg-surface",
+      "wcag": 1.3,
+      "apca": 0,
+      "note": "info control border"
+    },
+    {
+      "fg": "info-border-strong",
+      "bg": "bg-surface",
+      "wcag": 1.9,
+      "apca": 15,
+      "note": "info control border, hover"
+    },
+    {
+      "fg": "fg-discovery",
+      "bg": "bg-page",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "discovery text"
+    },
+    {
+      "fg": "fg-discovery",
+      "bg": "bg-surface",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "discovery text"
+    },
+    {
+      "fg": "fg-discovery",
+      "bg": "bg-subtle",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "discovery text"
+    },
+    {
+      "fg": "fg-discovery",
+      "bg": "discovery-surface",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "discovery text"
+    },
+    {
+      "fg": "fg-discovery-vivid",
+      "bg": "bg-code",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "discovery vivid text on a code block"
+    },
+    {
+      "fg": "fg-on-discovery",
+      "bg": "discovery-solid",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "discovery solid button label"
+    },
+    {
+      "fg": "fg-on-discovery",
+      "bg": "discovery-solid-hover",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "discovery solid button label, hover"
+    },
+    {
+      "fg": "discovery-border",
+      "bg": "bg-surface",
+      "wcag": 1.3,
+      "apca": 0,
+      "note": "discovery control border"
+    },
+    {
+      "fg": "discovery-border-strong",
+      "bg": "bg-surface",
+      "wcag": 1.9,
+      "apca": 15,
+      "note": "discovery control border, hover"
+    },
+    {
+      "fg": "fg-pink",
+      "bg": "bg-page",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "pink text"
+    },
+    {
+      "fg": "fg-pink",
+      "bg": "bg-surface",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "pink text"
+    },
+    {
+      "fg": "fg-pink",
+      "bg": "bg-subtle",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "pink text"
+    },
+    {
+      "fg": "fg-pink",
+      "bg": "pink-surface",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "pink text"
+    },
+    {
+      "fg": "fg-on-pink",
+      "bg": "pink-solid",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "pink solid button label"
+    },
+    {
+      "fg": "fg-on-pink",
+      "bg": "pink-solid-hover",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "pink solid button label, hover"
+    },
+    {
+      "fg": "pink-border",
+      "bg": "bg-surface",
+      "wcag": 1.3,
+      "apca": 0,
+      "note": "pink control border"
+    },
+    {
+      "fg": "pink-border-strong",
+      "bg": "bg-surface",
+      "wcag": 1.9,
+      "apca": 15,
+      "note": "pink control border, hover"
+    },
+    {
+      "fg": "fg-brown",
+      "bg": "bg-page",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "brown text"
+    },
+    {
+      "fg": "fg-brown",
+      "bg": "bg-surface",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "brown text"
+    },
+    {
+      "fg": "fg-brown",
+      "bg": "bg-subtle",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "brown text"
+    },
+    {
+      "fg": "fg-brown",
+      "bg": "brown-surface",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "brown text"
+    },
+    {
+      "fg": "fg-on-brown",
+      "bg": "brown-solid",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "brown solid button label"
+    },
+    {
+      "fg": "fg-on-brown",
+      "bg": "brown-solid-hover",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "brown solid button label, hover"
+    },
+    {
+      "fg": "brown-border",
+      "bg": "bg-surface",
+      "wcag": 1.3,
+      "apca": 0,
+      "note": "brown control border"
+    },
+    {
+      "fg": "brown-border-strong",
+      "bg": "bg-surface",
+      "wcag": 1.9,
+      "apca": 15,
+      "note": "brown control border, hover"
+    },
+    {
+      "fg": "border-decorative",
+      "bg": "bg-page",
+      "wcag": 1.1,
+      "apca": 0,
+      "note": "decorative divider on page"
+    },
+    {
+      "fg": "border-decorative",
+      "bg": "bg-surface",
+      "wcag": 1.1,
+      "apca": 0,
+      "note": "decorative container edge"
+    },
+    {
+      "fg": "border-float",
+      "bg": "bg-surface",
+      "wcag": 1.1,
+      "apca": 0,
+      "note": "floating frame over another surface"
+    },
+    {
+      "fg": "border",
+      "bg": "bg-page",
+      "wcag": 1.5,
+      "apca": 10,
+      "note": "control border on page"
+    },
+    {
+      "fg": "border",
+      "bg": "bg-surface",
+      "wcag": 1.5,
+      "apca": 10,
+      "note": "control border on surface"
+    },
+    {
+      "fg": "border-subtle",
+      "bg": "bg-surface",
+      "wcag": 1.3,
+      "apca": 0,
+      "note": "quiet control outline"
+    },
+    {
+      "fg": "border-subtle",
+      "bg": "bg-page",
+      "wcag": 1.3,
+      "apca": 0,
+      "note": "quiet outline on page"
+    },
+    {
+      "fg": "border-faint",
+      "bg": "bg-page",
+      "wcag": 1.2,
+      "apca": 0,
+      "note": "token badge edge on page"
+    },
+    {
+      "fg": "border-faint",
+      "bg": "bg-surface",
+      "wcag": 1.2,
+      "apca": 0,
+      "note": "token badge edge on a panel"
+    },
+    {
+      "fg": "border-faint",
+      "bg": "bg-subtle",
+      "wcag": 1.1,
+      "apca": 0,
+      "note": "segmented track outline"
+    },
+    {
+      "fg": "border-hover",
+      "bg": "bg-surface",
+      "wcag": 1.9,
+      "apca": 15,
+      "note": "control border, hover"
+    },
+    {
+      "fg": "focus-color",
+      "bg": "bg-page",
+      "wcag": 3,
+      "apca": 45,
+      "note": "focus ring on page"
+    },
+    {
+      "fg": "focus-color",
+      "bg": "bg-surface",
+      "wcag": 3,
+      "apca": 45,
+      "note": "focus ring on surface"
+    },
+    {
+      "fg": "focus-color",
+      "bg": "bg-component",
+      "wcag": 3,
+      "apca": 45,
+      "note": "focus ring on control"
+    },
+    {
+      "fg": "focus-color",
+      "bg": "bg-subtle",
+      "wcag": 3,
+      "apca": 45,
+      "note": "focus ring on inset"
+    },
+    {
+      "fg": "fg-on-neutral",
+      "bg": "neutral-solid",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "neutral button label"
+    },
+    {
+      "fg": "fg-on-inverse",
+      "bg": "bg-inverse",
+      "wcag": 4.5,
+      "apca": 75,
+      "note": "tooltip and toast text"
+    },
+    {
+      "fg": "fg-disabled",
+      "bg": "bg-surface",
+      "wcag": 1.9,
+      "apca": 20,
+      "note": "disabled label"
+    },
+    {
+      "fg": "stroke-control",
+      "bg": "bg-page",
+      "wcag": 3,
+      "apca": 0,
+      "note": "required boundary, state or opaque focus"
+    },
+    {
+      "fg": "stroke-control-hover",
+      "bg": "bg-page",
+      "wcag": 3,
+      "apca": 0,
+      "note": "required boundary, state or opaque focus"
+    },
+    {
+      "fg": "stroke-selected",
+      "bg": "bg-page",
+      "wcag": 3,
+      "apca": 0,
+      "note": "required boundary, state or opaque focus"
+    },
+    {
+      "fg": "fg-danger",
+      "bg": "bg-page",
+      "wcag": 3,
+      "apca": 0,
+      "note": "required boundary, state or opaque focus"
+    },
+    {
+      "fg": "fg-default",
+      "bg": "bg-page",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "UI label in interactive state"
+    },
+    {
+      "fg": "fg-danger-vivid",
+      "bg": "bg-page",
+      "wcag": 3,
+      "apca": 0,
+      "note": "vivid danger input edge"
+    },
+    {
+      "fg": "fg-success-vivid",
+      "bg": "bg-page",
+      "wcag": 3,
+      "apca": 0,
+      "note": "vivid success input edge"
+    },
+    {
+      "fg": "fg-warning-vivid",
+      "bg": "bg-page",
+      "wcag": 3,
+      "apca": 0,
+      "note": "vivid warning input edge"
+    },
+    {
+      "fg": "stroke-control",
+      "bg": "bg-surface",
+      "wcag": 3,
+      "apca": 0,
+      "note": "required boundary, state or opaque focus"
+    },
+    {
+      "fg": "stroke-control-hover",
+      "bg": "bg-surface",
+      "wcag": 3,
+      "apca": 0,
+      "note": "required boundary, state or opaque focus"
+    },
+    {
+      "fg": "stroke-selected",
+      "bg": "bg-surface",
+      "wcag": 3,
+      "apca": 0,
+      "note": "required boundary, state or opaque focus"
+    },
+    {
+      "fg": "fg-danger",
+      "bg": "bg-surface",
+      "wcag": 3,
+      "apca": 0,
+      "note": "required boundary, state or opaque focus"
+    },
+    {
+      "fg": "fg-default",
+      "bg": "bg-surface",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "UI label in interactive state"
+    },
+    {
+      "fg": "fg-danger-vivid",
+      "bg": "bg-surface",
+      "wcag": 3,
+      "apca": 0,
+      "note": "vivid danger input edge"
+    },
+    {
+      "fg": "fg-success-vivid",
+      "bg": "bg-surface",
+      "wcag": 3,
+      "apca": 0,
+      "note": "vivid success input edge"
+    },
+    {
+      "fg": "fg-warning-vivid",
+      "bg": "bg-surface",
+      "wcag": 3,
+      "apca": 0,
+      "note": "vivid warning input edge"
+    },
+    {
+      "fg": "stroke-control",
+      "bg": "bg-subtle",
+      "wcag": 3,
+      "apca": 0,
+      "note": "required boundary, state or opaque focus"
+    },
+    {
+      "fg": "stroke-control-hover",
+      "bg": "bg-subtle",
+      "wcag": 3,
+      "apca": 0,
+      "note": "required boundary, state or opaque focus"
+    },
+    {
+      "fg": "stroke-selected",
+      "bg": "bg-subtle",
+      "wcag": 3,
+      "apca": 0,
+      "note": "required boundary, state or opaque focus"
+    },
+    {
+      "fg": "fg-danger",
+      "bg": "bg-subtle",
+      "wcag": 3,
+      "apca": 0,
+      "note": "required boundary, state or opaque focus"
+    },
+    {
+      "fg": "fg-default",
+      "bg": "bg-subtle",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "UI label in interactive state"
+    },
+    {
+      "fg": "fg-danger-vivid",
+      "bg": "bg-subtle",
+      "wcag": 3,
+      "apca": 0,
+      "note": "vivid danger input edge"
+    },
+    {
+      "fg": "fg-success-vivid",
+      "bg": "bg-subtle",
+      "wcag": 3,
+      "apca": 0,
+      "note": "vivid success input edge"
+    },
+    {
+      "fg": "fg-warning-vivid",
+      "bg": "bg-subtle",
+      "wcag": 3,
+      "apca": 0,
+      "note": "vivid warning input edge"
+    },
+    {
+      "fg": "stroke-control",
+      "bg": "bg-component",
+      "wcag": 3,
+      "apca": 0,
+      "note": "required boundary, state or opaque focus"
+    },
+    {
+      "fg": "stroke-control-hover",
+      "bg": "bg-component",
+      "wcag": 3,
+      "apca": 0,
+      "note": "required boundary, state or opaque focus"
+    },
+    {
+      "fg": "stroke-selected",
+      "bg": "bg-component",
+      "wcag": 3,
+      "apca": 0,
+      "note": "required boundary, state or opaque focus"
+    },
+    {
+      "fg": "fg-danger",
+      "bg": "bg-component",
+      "wcag": 3,
+      "apca": 0,
+      "note": "required boundary, state or opaque focus"
+    },
+    {
+      "fg": "fg-default",
+      "bg": "bg-component",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "UI label in interactive state"
+    },
+    {
+      "fg": "fg-danger-vivid",
+      "bg": "bg-component",
+      "wcag": 3,
+      "apca": 0,
+      "note": "vivid danger input edge"
+    },
+    {
+      "fg": "fg-success-vivid",
+      "bg": "bg-component",
+      "wcag": 3,
+      "apca": 0,
+      "note": "vivid success input edge"
+    },
+    {
+      "fg": "fg-warning-vivid",
+      "bg": "bg-component",
+      "wcag": 3,
+      "apca": 0,
+      "note": "vivid warning input edge"
+    },
+    {
+      "fg": "stroke-control",
+      "bg": "bg-stripe",
+      "wcag": 3,
+      "apca": 0,
+      "note": "required boundary, state or opaque focus"
+    },
+    {
+      "fg": "stroke-control-hover",
+      "bg": "bg-stripe",
+      "wcag": 3,
+      "apca": 0,
+      "note": "required boundary, state or opaque focus"
+    },
+    {
+      "fg": "stroke-selected",
+      "bg": "bg-stripe",
+      "wcag": 3,
+      "apca": 0,
+      "note": "required boundary, state or opaque focus"
+    },
+    {
+      "fg": "fg-danger",
+      "bg": "bg-stripe",
+      "wcag": 3,
+      "apca": 0,
+      "note": "required boundary, state or opaque focus"
+    },
+    {
+      "fg": "fg-default",
+      "bg": "bg-stripe",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "UI label in interactive state"
+    },
+    {
+      "fg": "fg-danger-vivid",
+      "bg": "bg-stripe",
+      "wcag": 3,
+      "apca": 0,
+      "note": "vivid danger input edge"
+    },
+    {
+      "fg": "fg-success-vivid",
+      "bg": "bg-stripe",
+      "wcag": 3,
+      "apca": 0,
+      "note": "vivid success input edge"
+    },
+    {
+      "fg": "fg-warning-vivid",
+      "bg": "bg-stripe",
+      "wcag": 3,
+      "apca": 0,
+      "note": "vivid warning input edge"
+    },
+    {
+      "fg": "stroke-control",
+      "bg": "bg-component-hover",
+      "wcag": 3,
+      "apca": 0,
+      "note": "required boundary, state or opaque focus"
+    },
+    {
+      "fg": "stroke-control-hover",
+      "bg": "bg-component-hover",
+      "wcag": 3,
+      "apca": 0,
+      "note": "required boundary, state or opaque focus"
+    },
+    {
+      "fg": "stroke-selected",
+      "bg": "bg-component-hover",
+      "wcag": 3,
+      "apca": 0,
+      "note": "required boundary, state or opaque focus"
+    },
+    {
+      "fg": "fg-danger",
+      "bg": "bg-component-hover",
+      "wcag": 3,
+      "apca": 0,
+      "note": "required boundary, state or opaque focus"
+    },
+    {
+      "fg": "focus-color",
+      "bg": "bg-component-hover",
+      "wcag": 3,
+      "apca": 0,
+      "note": "required boundary, state or opaque focus"
+    },
+    {
+      "fg": "fg-default",
+      "bg": "bg-component-hover",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "UI label in interactive state"
+    },
+    {
+      "fg": "fg-danger-vivid",
+      "bg": "bg-component-hover",
+      "wcag": 3,
+      "apca": 0,
+      "note": "vivid danger input edge"
+    },
+    {
+      "fg": "fg-success-vivid",
+      "bg": "bg-component-hover",
+      "wcag": 3,
+      "apca": 0,
+      "note": "vivid success input edge"
+    },
+    {
+      "fg": "fg-warning-vivid",
+      "bg": "bg-component-hover",
+      "wcag": 3,
+      "apca": 0,
+      "note": "vivid warning input edge"
+    },
+    {
+      "fg": "stroke-control",
+      "bg": "bg-component-active",
+      "wcag": 3,
+      "apca": 0,
+      "note": "required boundary, state or opaque focus"
+    },
+    {
+      "fg": "stroke-control-hover",
+      "bg": "bg-component-active",
+      "wcag": 3,
+      "apca": 0,
+      "note": "required boundary, state or opaque focus"
+    },
+    {
+      "fg": "stroke-selected",
+      "bg": "bg-component-active",
+      "wcag": 3,
+      "apca": 0,
+      "note": "required boundary, state or opaque focus"
+    },
+    {
+      "fg": "fg-danger",
+      "bg": "bg-component-active",
+      "wcag": 3,
+      "apca": 0,
+      "note": "required boundary, state or opaque focus"
+    },
+    {
+      "fg": "focus-color",
+      "bg": "bg-component-active",
+      "wcag": 3,
+      "apca": 0,
+      "note": "required boundary, state or opaque focus"
+    },
+    {
+      "fg": "fg-default",
+      "bg": "bg-component-active",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "UI label in interactive state"
+    },
+    {
+      "fg": "fg-danger-vivid",
+      "bg": "bg-component-active",
+      "wcag": 3,
+      "apca": 0,
+      "note": "vivid danger input edge"
+    },
+    {
+      "fg": "fg-success-vivid",
+      "bg": "bg-component-active",
+      "wcag": 3,
+      "apca": 0,
+      "note": "vivid success input edge"
+    },
+    {
+      "fg": "fg-warning-vivid",
+      "bg": "bg-component-active",
+      "wcag": 3,
+      "apca": 0,
+      "note": "vivid warning input edge"
+    },
+    {
+      "fg": "fg-on-accent",
+      "bg": "accent-solid",
+      "wcag": 3,
+      "apca": 0,
+      "note": "checked mark or switch thumb"
+    },
+    {
+      "fg": "fg-on-accent",
+      "bg": "accent-solid-hover",
+      "wcag": 3,
+      "apca": 0,
+      "note": "checked mark or switch thumb"
+    },
+    {
+      "fg": "bg-surface",
+      "bg": "stroke-control",
+      "wcag": 3,
+      "apca": 0,
+      "note": "increased-contrast unchecked switch thumb"
+    },
+    {
+      "fg": "fg-on-neutral",
+      "bg": "neutral-solid-hover",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "neutral button hover label"
+    },
+    {
+      "fg": "focus-color",
+      "bg": "accent-surface",
+      "wcag": 3,
+      "apca": 0,
+      "note": "opaque focus on a tinted surface"
+    },
+    {
+      "fg": "focus-color",
+      "bg": "accent-surface-hover",
+      "wcag": 3,
+      "apca": 0,
+      "note": "opaque focus on a tinted surface"
+    },
+    {
+      "fg": "fg-accent",
+      "bg": "accent-surface-hover",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "tonal UI label in interactive state"
+    },
+    {
+      "fg": "focus-color",
+      "bg": "accent-surface-active",
+      "wcag": 3,
+      "apca": 0,
+      "note": "opaque focus on a tinted surface"
+    },
+    {
+      "fg": "fg-accent",
+      "bg": "accent-surface-active",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "tonal UI label in interactive state"
+    },
+    {
+      "fg": "focus-color",
+      "bg": "danger-surface",
+      "wcag": 3,
+      "apca": 0,
+      "note": "opaque focus on a tinted surface"
+    },
+    {
+      "fg": "focus-color",
+      "bg": "danger-surface-hover",
+      "wcag": 3,
+      "apca": 0,
+      "note": "opaque focus on a tinted surface"
+    },
+    {
+      "fg": "fg-danger",
+      "bg": "danger-surface-hover",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "tonal UI label in interactive state"
+    },
+    {
+      "fg": "focus-color",
+      "bg": "danger-surface-active",
+      "wcag": 3,
+      "apca": 0,
+      "note": "opaque focus on a tinted surface"
+    },
+    {
+      "fg": "fg-danger",
+      "bg": "danger-surface-active",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "tonal UI label in interactive state"
+    },
+    {
+      "fg": "focus-color",
+      "bg": "warning-surface",
+      "wcag": 3,
+      "apca": 0,
+      "note": "opaque focus on a tinted surface"
+    },
+    {
+      "fg": "focus-color",
+      "bg": "warning-surface-hover",
+      "wcag": 3,
+      "apca": 0,
+      "note": "opaque focus on a tinted surface"
+    },
+    {
+      "fg": "fg-warning",
+      "bg": "warning-surface-hover",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "tonal UI label in interactive state"
+    },
+    {
+      "fg": "focus-color",
+      "bg": "warning-surface-active",
+      "wcag": 3,
+      "apca": 0,
+      "note": "opaque focus on a tinted surface"
+    },
+    {
+      "fg": "fg-warning",
+      "bg": "warning-surface-active",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "tonal UI label in interactive state"
+    },
+    {
+      "fg": "focus-color",
+      "bg": "caution-surface",
+      "wcag": 3,
+      "apca": 0,
+      "note": "opaque focus on a tinted surface"
+    },
+    {
+      "fg": "focus-color",
+      "bg": "caution-surface-hover",
+      "wcag": 3,
+      "apca": 0,
+      "note": "opaque focus on a tinted surface"
+    },
+    {
+      "fg": "fg-caution",
+      "bg": "caution-surface-hover",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "tonal UI label in interactive state"
+    },
+    {
+      "fg": "focus-color",
+      "bg": "caution-surface-active",
+      "wcag": 3,
+      "apca": 0,
+      "note": "opaque focus on a tinted surface"
+    },
+    {
+      "fg": "fg-caution",
+      "bg": "caution-surface-active",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "tonal UI label in interactive state"
+    },
+    {
+      "fg": "focus-color",
+      "bg": "success-surface",
+      "wcag": 3,
+      "apca": 0,
+      "note": "opaque focus on a tinted surface"
+    },
+    {
+      "fg": "focus-color",
+      "bg": "success-surface-hover",
+      "wcag": 3,
+      "apca": 0,
+      "note": "opaque focus on a tinted surface"
+    },
+    {
+      "fg": "fg-success",
+      "bg": "success-surface-hover",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "tonal UI label in interactive state"
+    },
+    {
+      "fg": "focus-color",
+      "bg": "success-surface-active",
+      "wcag": 3,
+      "apca": 0,
+      "note": "opaque focus on a tinted surface"
+    },
+    {
+      "fg": "fg-success",
+      "bg": "success-surface-active",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "tonal UI label in interactive state"
+    },
+    {
+      "fg": "focus-color",
+      "bg": "info-surface",
+      "wcag": 3,
+      "apca": 0,
+      "note": "opaque focus on a tinted surface"
+    },
+    {
+      "fg": "focus-color",
+      "bg": "info-surface-hover",
+      "wcag": 3,
+      "apca": 0,
+      "note": "opaque focus on a tinted surface"
+    },
+    {
+      "fg": "fg-info",
+      "bg": "info-surface-hover",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "tonal UI label in interactive state"
+    },
+    {
+      "fg": "focus-color",
+      "bg": "info-surface-active",
+      "wcag": 3,
+      "apca": 0,
+      "note": "opaque focus on a tinted surface"
+    },
+    {
+      "fg": "fg-info",
+      "bg": "info-surface-active",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "tonal UI label in interactive state"
+    },
+    {
+      "fg": "focus-color",
+      "bg": "discovery-surface",
+      "wcag": 3,
+      "apca": 0,
+      "note": "opaque focus on a tinted surface"
+    },
+    {
+      "fg": "focus-color",
+      "bg": "discovery-surface-hover",
+      "wcag": 3,
+      "apca": 0,
+      "note": "opaque focus on a tinted surface"
+    },
+    {
+      "fg": "fg-discovery",
+      "bg": "discovery-surface-hover",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "tonal UI label in interactive state"
+    },
+    {
+      "fg": "focus-color",
+      "bg": "discovery-surface-active",
+      "wcag": 3,
+      "apca": 0,
+      "note": "opaque focus on a tinted surface"
+    },
+    {
+      "fg": "fg-discovery",
+      "bg": "discovery-surface-active",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "tonal UI label in interactive state"
+    },
+    {
+      "fg": "focus-color",
+      "bg": "pink-surface",
+      "wcag": 3,
+      "apca": 0,
+      "note": "opaque focus on a tinted surface"
+    },
+    {
+      "fg": "focus-color",
+      "bg": "pink-surface-hover",
+      "wcag": 3,
+      "apca": 0,
+      "note": "opaque focus on a tinted surface"
+    },
+    {
+      "fg": "fg-pink",
+      "bg": "pink-surface-hover",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "tonal UI label in interactive state"
+    },
+    {
+      "fg": "focus-color",
+      "bg": "pink-surface-active",
+      "wcag": 3,
+      "apca": 0,
+      "note": "opaque focus on a tinted surface"
+    },
+    {
+      "fg": "fg-pink",
+      "bg": "pink-surface-active",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "tonal UI label in interactive state"
+    },
+    {
+      "fg": "focus-color",
+      "bg": "brown-surface",
+      "wcag": 3,
+      "apca": 0,
+      "note": "opaque focus on a tinted surface"
+    },
+    {
+      "fg": "focus-color",
+      "bg": "brown-surface-hover",
+      "wcag": 3,
+      "apca": 0,
+      "note": "opaque focus on a tinted surface"
+    },
+    {
+      "fg": "fg-brown",
+      "bg": "brown-surface-hover",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "tonal UI label in interactive state"
+    },
+    {
+      "fg": "focus-color",
+      "bg": "brown-surface-active",
+      "wcag": 3,
+      "apca": 0,
+      "note": "opaque focus on a tinted surface"
+    },
+    {
+      "fg": "fg-brown",
+      "bg": "brown-surface-active",
+      "wcag": 4.5,
+      "apca": 60,
+      "note": "tonal UI label in interactive state"
+    },
+    {
+      "fg": "stroke-selected",
+      "bg": "accent-surface",
+      "wcag": 3,
+      "apca": 0,
+      "note": "increased-contrast selected chip border on its tint"
+    },
+    {
+      "fg": "stroke-selected",
+      "bg": "accent-surface-hover",
+      "wcag": 3,
+      "apca": 0,
+      "note": "increased-contrast selected chip border on its tint"
+    },
+    {
+      "fg": "stroke-selected",
+      "bg": "accent-surface-active",
+      "wcag": 3,
+      "apca": 0,
+      "note": "increased-contrast selected chip border on its tint"
+    }
+  ]
+}

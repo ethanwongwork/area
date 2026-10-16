@@ -1,0 +1,590 @@
+{
+  "slug": "breadcrumb",
+  "manifest": "breadcrumb",
+  "parts": [
+    {
+      "id": "root",
+      "element": [
+        "nav"
+      ],
+      "class": "area-breadcrumb",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-fg-muted",
+          "selectors": [
+            ".area-breadcrumb"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "list",
+      "element": [
+        "ol"
+      ],
+      "class": "area-breadcrumb__list",
+      "required": "not found",
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-control-md-leading",
+          "selectors": [
+            ".area-breadcrumb__list"
+          ]
+        },
+        {
+          "name": "--area-control-md-text",
+          "selectors": [
+            ".area-breadcrumb__list"
+          ]
+        },
+        {
+          "name": "--area-space-4",
+          "selectors": [
+            ".area-breadcrumb__list"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "item",
+      "element": [
+        "li"
+      ],
+      "class": "area-breadcrumb__item",
+      "required": "not found",
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-gap-md",
+          "selectors": [
+            ".area-breadcrumb__item"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "link",
+      "element": [
+        "a"
+      ],
+      "class": "area-breadcrumb__link",
+      "required": "not found",
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-bg-component-hover",
+          "selectors": [
+            ".area-breadcrumb__link:hover::before"
+          ]
+        },
+        {
+          "name": "--area-focus-color",
+          "selectors": [
+            ".area-breadcrumb__link:focus-visible"
+          ]
+        },
+        {
+          "name": "--area-focus-offset",
+          "selectors": [
+            ".area-breadcrumb__link:focus-visible"
+          ]
+        },
+        {
+          "name": "--area-focus-width",
+          "selectors": [
+            ".area-breadcrumb__link:focus-visible"
+          ]
+        },
+        {
+          "name": "--area-gap-md",
+          "selectors": [
+            ".area-breadcrumb__link"
+          ]
+        },
+        {
+          "name": "--area-radius-small",
+          "selectors": [
+            ".area-breadcrumb__link",
+            ".area-breadcrumb__link::before"
+          ]
+        },
+        {
+          "name": "--area-space-2",
+          "selectors": [
+            ".area-breadcrumb__link::before"
+          ]
+        },
+        {
+          "name": "--area-space-6",
+          "selectors": [
+            ".area-breadcrumb__link::before"
+          ]
+        },
+        {
+          "name": "--area-transition",
+          "selectors": [
+            ".area-breadcrumb__link::before"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "page",
+      "element": [
+        "span"
+      ],
+      "class": "area-breadcrumb__page",
+      "required": "not found",
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-fg-default",
+          "selectors": [
+            ".area-breadcrumb__page"
+          ]
+        },
+        {
+          "name": "--area-gap-md",
+          "selectors": [
+            ".area-breadcrumb__page"
+          ]
+        },
+        {
+          "name": "--area-weight-regular",
+          "selectors": [
+            ".area-breadcrumb__page"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "separator",
+      "element": [
+        "li"
+      ],
+      "class": "area-breadcrumb__separator",
+      "required": "not found",
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-icon-md",
+          "selectors": [
+            ".area-breadcrumb__separator"
+          ]
+        },
+        {
+          "name": "--area-stroke-control",
+          "selectors": [
+            ".area-breadcrumb__separator"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "chevron",
+      "element": "not found",
+      "class": "area-breadcrumb__chevron",
+      "required": "not found",
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-space-8",
+          "selectors": [
+            ".area-breadcrumb__chevron"
+          ]
+        },
+        {
+          "name": "--area-stroke-width",
+          "selectors": [
+            ".area-breadcrumb__chevron"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ellipsis",
+      "element": [
+        "span"
+      ],
+      "class": "area-breadcrumb__ellipsis",
+      "required": "not found",
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-fg-muted",
+          "selectors": [
+            ".area-breadcrumb__ellipsis"
+          ]
+        },
+        {
+          "name": "--area-icon-md",
+          "selectors": [
+            ".area-breadcrumb__ellipsis"
+          ]
+        }
+      ]
+    }
+  ],
+  "slots": [
+    {
+      "name": "BreadcrumbSeparator.children",
+      "part": "not found",
+      "element": "not found",
+      "class": "not found",
+      "required": false,
+      "allowedContent": [
+        "renderable content (text, elements, fragments, or empty content)"
+      ]
+    }
+  ],
+  "options": {},
+  "booleans": [],
+  "elementModifiers": {},
+  "states": [
+    {
+      "name": "current",
+      "part": "page",
+      "kind": "aria",
+      "hook": "aria-current",
+      "value": "\"page\""
+    },
+    {
+      "name": "hidden",
+      "part": "separator",
+      "kind": "aria",
+      "hook": "aria-hidden",
+      "value": "\"true\""
+    },
+    {
+      "name": "hover",
+      "part": "link",
+      "kind": "pseudo",
+      "hook": ":hover",
+      "value": ".area-breadcrumb__link:hover::before"
+    },
+    {
+      "name": "focus-visible",
+      "part": "link",
+      "kind": "pseudo",
+      "hook": ":focus-visible",
+      "value": ".area-breadcrumb__link:focus-visible"
+    }
+  ],
+  "keyboard": [],
+  "accessibleName": [
+    {
+      "part": "root",
+      "rule": "Reference wiring: aria-label={ariaLabel}."
+    },
+    {
+      "part": "ellipsis",
+      "rule": "Reference wiring: aria-label={ariaLabel}."
+    }
+  ],
+  "composition": {
+    "allowedParents": "not found",
+    "allowedChildren": "not found",
+    "observedChildren": [
+      "Glyph"
+    ],
+    "demoExamples": [
+      "apps/docs/src/demos/gallery.tsx:13",
+      "apps/docs/src/demos/gallery.tsx:14",
+      "apps/docs/src/demos/gallery.tsx:15",
+      "apps/docs/src/demos/gallery.tsx:16",
+      "apps/docs/src/demos/gallery.tsx:17",
+      "apps/docs/src/demos/gallery.tsx:18",
+      "apps/docs/src/demos/gallery.tsx:22",
+      "apps/docs/src/demos/gallery.tsx:23",
+      "apps/docs/src/demos/gallery.tsx:24",
+      "apps/docs/src/demos/gallery.tsx:25",
+      "apps/docs/src/demos/gallery.tsx:26",
+      "apps/docs/src/demos/gallery.tsx:27",
+      "apps/docs/src/demos/gallery.tsx:28",
+      "apps/docs/src/demos/gallery.tsx:29",
+      "apps/docs/src/demos/gallery.tsx:33",
+      "apps/docs/src/demos/gallery.tsx:34",
+      "apps/docs/src/demos/gallery.tsx:35",
+      "apps/docs/src/demos/gallery.tsx:36"
+    ]
+  },
+  "reference": {
+    "css": [
+      "packages/styles/src/components/breadcrumb.css"
+    ],
+    "spec": [
+      "docs/specs/breadcrumb.md"
+    ],
+    "reactExport": [
+      "Breadcrumb",
+      "BreadcrumbList",
+      "BreadcrumbItem",
+      "BreadcrumbLink",
+      "BreadcrumbPage",
+      "BreadcrumbSeparator",
+      "BreadcrumbEllipsis"
+    ]
+  },
+  "evidence": {
+    "/slug": {"status":"found","sources":["packages/styles/src/manifest.ts:173"],"note":"Direct source declaration or implementation."},
+    "/manifest": {"status":"found","sources":["packages/styles/src/manifest.ts:172"],"note":"Direct source declaration or implementation."},
+    "/parts": {"status":"found","sources":["packages/styles/src/manifest.ts:172","packages/react/src/components/Breadcrumb.tsx:9","packages/react/src/components/Breadcrumb.tsx:15","packages/react/src/components/Breadcrumb.tsx:21","packages/react/src/components/Breadcrumb.tsx:27","packages/react/src/components/Breadcrumb.tsx:33","packages/react/src/components/Breadcrumb.tsx:40","packages/react/src/components/Breadcrumb.tsx:46"],"note":"Manifest parts plus implementation-only structural elements; unclassed nodes retain explicit IDs."},
+    "/parts/0": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:9"],"note":"Direct source declaration or implementation."},
+    "/parts/0/id": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:9"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/0/class": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:9"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:9"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/required": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:9"],"note":"Root of the rendered family surface."},
+    "/parts/0/allowedContent": {"status":"not found","sources":["packages/react/src/components/Breadcrumb.tsx:9"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/0/customProperties": {"status":"not found","sources":["packages/react/src/components/Breadcrumb.tsx:9"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/0/tokens/0": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:2"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:2"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/1": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:15"],"note":"Direct source declaration or implementation."},
+    "/parts/1/id": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:15"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/1/class": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:15"],"note":"Direct source declaration or implementation."},
+    "/parts/1/element": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:15"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/1/required": {"status":"not found","sources":["packages/react/src/components/Breadcrumb.tsx:15"],"note":"not found: Family-wide mandatory/optional anatomy is not specified; presence at one JSX call site does not establish a composition rule."},
+    "/parts/1/allowedContent": {"status":"not found","sources":["packages/react/src/components/Breadcrumb.tsx:15"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/1/customProperties": {"status":"not found","sources":["packages/react/src/components/Breadcrumb.tsx:15"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/1/tokens/0": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:13"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/2": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:8"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:8","packages/styles/src/components/breadcrumb.css:12","packages/styles/src/components/breadcrumb.css:13"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/2": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:21"],"note":"Direct source declaration or implementation."},
+    "/parts/2/id": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:21"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/2/class": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:21"],"note":"Direct source declaration or implementation."},
+    "/parts/2/element": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:21"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/2/required": {"status":"not found","sources":["packages/react/src/components/Breadcrumb.tsx:21"],"note":"not found: Family-wide mandatory/optional anatomy is not specified; presence at one JSX call site does not establish a composition rule."},
+    "/parts/2/allowedContent": {"status":"not found","sources":["packages/react/src/components/Breadcrumb.tsx:21"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/2/customProperties": {"status":"not found","sources":["packages/react/src/components/Breadcrumb.tsx:21"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/2/tokens/0": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:15"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:15"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/3": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:27"],"note":"Direct source declaration or implementation."},
+    "/parts/3/id": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:27"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/3/class": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:27"],"note":"Direct source declaration or implementation."},
+    "/parts/3/element": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:27"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/3/required": {"status":"not found","sources":["packages/react/src/components/Breadcrumb.tsx:27"],"note":"not found: Family-wide mandatory/optional anatomy is not specified; presence at one JSX call site does not establish a composition rule."},
+    "/parts/3/allowedContent": {"status":"not found","sources":["packages/react/src/components/Breadcrumb.tsx:27"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/3/customProperties": {"status":"not found","sources":["packages/react/src/components/Breadcrumb.tsx:27"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/3/tokens/0": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:24"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/1": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:25"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/2": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:25"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/3": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:25"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/4": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/5": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:22","packages/styles/src/components/breadcrumb.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/6": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/7": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/8": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:22","packages/styles/src/components/breadcrumb.css:23","packages/styles/src/components/breadcrumb.css:24","packages/styles/src/components/breadcrumb.css:25"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/4": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:33"],"note":"Direct source declaration or implementation."},
+    "/parts/4/id": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:33"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/4/class": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:33"],"note":"Direct source declaration or implementation."},
+    "/parts/4/element": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:33"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/4/required": {"status":"not found","sources":["packages/react/src/components/Breadcrumb.tsx:33"],"note":"not found: Family-wide mandatory/optional anatomy is not specified; presence at one JSX call site does not establish a composition rule."},
+    "/parts/4/allowedContent": {"status":"not found","sources":["packages/react/src/components/Breadcrumb.tsx:33"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/4/customProperties": {"status":"not found","sources":["packages/react/src/components/Breadcrumb.tsx:33"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/4/tokens/0": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/1": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/2": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:27"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/5": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:40"],"note":"Direct source declaration or implementation."},
+    "/parts/5/id": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:40"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/5/class": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:40"],"note":"Direct source declaration or implementation."},
+    "/parts/5/element": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:40"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/5/required": {"status":"not found","sources":["packages/react/src/components/Breadcrumb.tsx:40"],"note":"not found: Family-wide mandatory/optional anatomy is not specified; presence at one JSX call site does not establish a composition rule."},
+    "/parts/5/allowedContent": {"status":"not found","sources":["packages/react/src/components/Breadcrumb.tsx:40"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/5/customProperties": {"status":"not found","sources":["packages/react/src/components/Breadcrumb.tsx:40"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/5/tokens/0": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/1": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:28"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/6": {"status":"found","sources":["packages/styles/src/manifest.ts:172"],"note":"Direct source declaration or implementation."},
+    "/parts/6/id": {"status":"found","sources":["packages/styles/src/manifest.ts:172"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/6/class": {"status":"found","sources":["packages/styles/src/manifest.ts:176"],"note":"Direct source declaration or implementation."},
+    "/parts/6/element": {"status":"not found","sources":["packages/styles/src/manifest.ts:172"],"note":"not found: No native element resolved for this manifest part; searched JSX classes and class helpers."},
+    "/parts/6/required": {"status":"not found","sources":["packages/styles/src/manifest.ts:172"],"note":"not found: Family-wide mandatory/optional anatomy is not specified; presence at one JSX call site does not establish a composition rule."},
+    "/parts/6/allowedContent": {"status":"not found","sources":["packages/styles/src/manifest.ts:172"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/6/customProperties": {"status":"not found","sources":["packages/styles/src/manifest.ts:172"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/6/tokens/0": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/1": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:36"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/7": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:46"],"note":"Direct source declaration or implementation."},
+    "/parts/7/id": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:46"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/7/class": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:46"],"note":"Direct source declaration or implementation."},
+    "/parts/7/element": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:46"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/7/required": {"status":"not found","sources":["packages/react/src/components/Breadcrumb.tsx:46"],"note":"not found: Family-wide mandatory/optional anatomy is not specified; presence at one JSX call site does not establish a composition rule."},
+    "/parts/7/allowedContent": {"status":"not found","sources":["packages/react/src/components/Breadcrumb.tsx:46"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/7/customProperties": {"status":"not found","sources":["packages/react/src/components/Breadcrumb.tsx:46"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/7/tokens/0": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:38"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/7/tokens/1": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:38"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/7/tokens": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:38"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/slots/0": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:36"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/part": {"status":"not found","sources":["packages/styles/src/manifest.ts:172","packages/react/src/components/Breadcrumb.tsx:6","packages/react/src/components/Breadcrumb.tsx:12","packages/react/src/components/Breadcrumb.tsx:18","packages/react/src/components/Breadcrumb.tsx:24","packages/react/src/components/Breadcrumb.tsx:30","packages/react/src/components/Breadcrumb.tsx:37","packages/react/src/components/Breadcrumb.tsx:43","docs/specs/breadcrumb.md:1"],"note":"not found: No single direct part resolved for BreadcrumbSeparator.children; conditional/delegated rendering requires review."},
+    "/slots/0/element": {"status":"not found","sources":["packages/styles/src/manifest.ts:172","packages/react/src/components/Breadcrumb.tsx:6","packages/react/src/components/Breadcrumb.tsx:12","packages/react/src/components/Breadcrumb.tsx:18","packages/react/src/components/Breadcrumb.tsx:24","packages/react/src/components/Breadcrumb.tsx:30","packages/react/src/components/Breadcrumb.tsx:37","packages/react/src/components/Breadcrumb.tsx:43","docs/specs/breadcrumb.md:1"],"note":"not found: No resolved part for BreadcrumbSeparator.children."},
+    "/slots/0/class": {"status":"not found","sources":["packages/styles/src/manifest.ts:172","packages/react/src/components/Breadcrumb.tsx:6","packages/react/src/components/Breadcrumb.tsx:12","packages/react/src/components/Breadcrumb.tsx:18","packages/react/src/components/Breadcrumb.tsx:24","packages/react/src/components/Breadcrumb.tsx:30","packages/react/src/components/Breadcrumb.tsx:37","packages/react/src/components/Breadcrumb.tsx:43","docs/specs/breadcrumb.md:1"],"note":"not found: No resolved part for BreadcrumbSeparator.children."},
+    "/slots": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:36"],"note":"Direct source declaration or implementation."},
+    "/options": {"status":"found","sources":["packages/styles/src/manifest.ts:175"],"note":"Direct source declaration or implementation."},
+    "/booleans": {"status":"found","sources":["packages/styles/src/manifest.ts:172"],"note":"Exact manifest boolean modifier list; absence means no declared booleans."},
+    "/elementModifiers": {"status":"found","sources":["packages/styles/src/manifest.ts:172"],"note":"Direct source declaration or implementation."},
+    "/states/0": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:33"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:40"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:24"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/3": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:25"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:33","packages/react/src/components/Breadcrumb.tsx:40","packages/styles/src/components/breadcrumb.css:24","packages/styles/src/components/breadcrumb.css:25"],"note":"Direct source declaration or implementation."},
+    "/keyboard": {"status":"not found","sources":["packages/styles/src/manifest.ts:172","packages/react/src/components/Breadcrumb.tsx:6","packages/react/src/components/Breadcrumb.tsx:12","packages/react/src/components/Breadcrumb.tsx:18","packages/react/src/components/Breadcrumb.tsx:24","packages/react/src/components/Breadcrumb.tsx:30","packages/react/src/components/Breadcrumb.tsx:37","packages/react/src/components/Breadcrumb.tsx:43","docs/specs/breadcrumb.md:1"],"note":"not found: No reviewed key-to-action contract found. Native behavior is not invented from a tag name."},
+    "/accessibleName/0": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:9"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/1": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:46"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:9","packages/react/src/components/Breadcrumb.tsx:46"],"note":"Direct source declaration or implementation."},
+    "/composition": {"status":"found","sources":["packages/styles/src/manifest.ts:172","packages/react/src/components/Breadcrumb.tsx:6","packages/react/src/components/Breadcrumb.tsx:12","packages/react/src/components/Breadcrumb.tsx:18","packages/react/src/components/Breadcrumb.tsx:24","packages/react/src/components/Breadcrumb.tsx:30","packages/react/src/components/Breadcrumb.tsx:37","packages/react/src/components/Breadcrumb.tsx:43","docs/specs/breadcrumb.md:1"],"note":"Allowed composition is distinct from examples and built-in child calls."},
+    "/composition/allowedParents": {"status":"not found","sources":["packages/styles/src/manifest.ts:172","packages/react/src/components/Breadcrumb.tsx:6","packages/react/src/components/Breadcrumb.tsx:12","packages/react/src/components/Breadcrumb.tsx:18","packages/react/src/components/Breadcrumb.tsx:24","packages/react/src/components/Breadcrumb.tsx:30","packages/react/src/components/Breadcrumb.tsx:37","packages/react/src/components/Breadcrumb.tsx:43","docs/specs/breadcrumb.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/allowedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:172","packages/react/src/components/Breadcrumb.tsx:6","packages/react/src/components/Breadcrumb.tsx:12","packages/react/src/components/Breadcrumb.tsx:18","packages/react/src/components/Breadcrumb.tsx:24","packages/react/src/components/Breadcrumb.tsx:30","packages/react/src/components/Breadcrumb.tsx:37","packages/react/src/components/Breadcrumb.tsx:43","docs/specs/breadcrumb.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/observedChildren/0": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:40"],"note":"Observed child component call; not an allowed-child restriction."},
+    "/composition/observedChildren": {"status":"found","sources":["packages/styles/src/manifest.ts:172","packages/react/src/components/Breadcrumb.tsx:6","packages/react/src/components/Breadcrumb.tsx:12","packages/react/src/components/Breadcrumb.tsx:18","packages/react/src/components/Breadcrumb.tsx:24","packages/react/src/components/Breadcrumb.tsx:30","packages/react/src/components/Breadcrumb.tsx:37","packages/react/src/components/Breadcrumb.tsx:43","docs/specs/breadcrumb.md:1"],"note":"Direct source declaration or implementation."},
+    "/composition/demoExamples/0": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:13"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/1": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:14"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/2": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:15"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/3": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:16"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/4": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:17"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/5": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:18"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/6": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:22"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/7": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:23"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/8": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:24"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/9": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:25"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/10": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:26"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/11": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:27"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/12": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:28"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/13": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:29"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/14": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:33"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/15": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:34"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/16": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:35"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/17": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:36"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:13","apps/docs/src/demos/gallery.tsx:14","apps/docs/src/demos/gallery.tsx:15","apps/docs/src/demos/gallery.tsx:16","apps/docs/src/demos/gallery.tsx:17","apps/docs/src/demos/gallery.tsx:18","apps/docs/src/demos/gallery.tsx:22","apps/docs/src/demos/gallery.tsx:23","apps/docs/src/demos/gallery.tsx:24","apps/docs/src/demos/gallery.tsx:25","apps/docs/src/demos/gallery.tsx:26","apps/docs/src/demos/gallery.tsx:27","apps/docs/src/demos/gallery.tsx:28","apps/docs/src/demos/gallery.tsx:29","apps/docs/src/demos/gallery.tsx:33","apps/docs/src/demos/gallery.tsx:34","apps/docs/src/demos/gallery.tsx:35","apps/docs/src/demos/gallery.tsx:36"],"note":"Direct source declaration or implementation."},
+    "/reference/css": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:2","packages/styles/src/components/breadcrumb.css:3","packages/styles/src/components/breadcrumb.css:15","packages/styles/src/components/breadcrumb.css:16","packages/styles/src/components/breadcrumb.css:22","packages/styles/src/components/breadcrumb.css:23","packages/styles/src/components/breadcrumb.css:24","packages/styles/src/components/breadcrumb.css:25","packages/styles/src/components/breadcrumb.css:27","packages/styles/src/components/breadcrumb.css:28","packages/styles/src/components/breadcrumb.css:33","packages/styles/src/components/breadcrumb.css:34","packages/styles/src/components/breadcrumb.css:36","packages/styles/src/components/breadcrumb.css:37","packages/styles/src/components/breadcrumb.css:38"],"note":"Direct source declaration or implementation."},
+    "/reference/css/0": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:2"],"note":"Direct source declaration or implementation."},
+    "/reference/spec": {"status":"found","sources":["docs/specs/breadcrumb.md:1"],"note":"Dedicated family spec."},
+    "/reference/reactExport/0": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:6","packages/react/src/index.ts:18"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport/1": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:12","packages/react/src/index.ts:18"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport/2": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:18","packages/react/src/index.ts:18"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport/3": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:24","packages/react/src/index.ts:18"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport/4": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:30","packages/react/src/index.ts:18"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport/5": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:37","packages/react/src/index.ts:18"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport/6": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:43","packages/react/src/index.ts:18"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:6","packages/react/src/index.ts:18","packages/react/src/components/Breadcrumb.tsx:12","packages/react/src/components/Breadcrumb.tsx:18","packages/react/src/components/Breadcrumb.tsx:24","packages/react/src/components/Breadcrumb.tsx:30","packages/react/src/components/Breadcrumb.tsx:37","packages/react/src/components/Breadcrumb.tsx:43"],"note":"Direct source declaration or implementation."},
+    "/reference": {"status":"found","sources":["packages/styles/src/manifest.ts:172","packages/styles/src/components/breadcrumb.css:1","docs/specs/breadcrumb.md:1"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element/0": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:9"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:2"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:2"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:2"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/element/0": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:15"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/1/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:13"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:13"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:13"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:12"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:8"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:8"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:8"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/element/0": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:21"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/2/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:15"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:15"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:15"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/element/0": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:27"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/3/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:24"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:24"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:24"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:25"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:25"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:25"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:25"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:25"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:25"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/3/name": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:25"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/3/selectors": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:25"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:25"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/4/name": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/4/selectors": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/4/selectors/0": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/5/name": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:22","packages/styles/src/components/breadcrumb.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/5/selectors": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:22","packages/styles/src/components/breadcrumb.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/5/selectors/0": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:22","packages/styles/src/components/breadcrumb.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/5/selectors/1": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:22","packages/styles/src/components/breadcrumb.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/6/name": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/6/selectors": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/6/selectors/0": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/7/name": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/7/selectors": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/7/selectors/0": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/8/name": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/8/selectors": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/tokens/8/selectors/0": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:23"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/element/0": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:33"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/4/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/4/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/element/0": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:40"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/5/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/5/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/6/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/7/element/0": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:46"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/7/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:38"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/7/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:38"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/7/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:38"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/7/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:38"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/7/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:38"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/7/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:38"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/slots/0/name": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:36"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/required": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:36"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/allowedContent": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:36"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/allowedContent/0": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:36"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/states/0/name": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:33"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/part": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:33"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/kind": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:33"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/hook": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:33"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/value": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:33"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/name": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:40"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/part": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:40"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/kind": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:40"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/hook": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:40"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/value": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:40"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/name": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:24"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/2/part": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:24"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/2/kind": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:24"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/2/hook": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:24"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/2/value": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:24"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/3/name": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:25"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/3/part": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:25"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/3/kind": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:25"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/3/hook": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:25"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/3/value": {"status":"found","sources":["packages/styles/src/components/breadcrumb.css:25"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/accessibleName/0/part": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:9"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/0/rule": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:9"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/1/part": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:46"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/1/rule": {"status":"found","sources":["packages/react/src/components/Breadcrumb.tsx:46"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/reference/spec/0": {"status":"found","sources":["docs/specs/breadcrumb.md:1"],"note":"Dedicated family spec."}
+  }
+}

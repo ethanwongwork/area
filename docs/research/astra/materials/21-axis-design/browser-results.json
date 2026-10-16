@@ -1,0 +1,1089 @@
+{
+  "checked": "2026-10-12",
+  "browser": "155.0.4283.45",
+  "platform": "darwin",
+  "release": "27.2.0",
+  "viewport": [
+    1200,
+    1100
+  ],
+  "dpr": 1,
+  "sourceHashes": {
+    "demo.css": "9c04c434032c95de00dc4f3b77d19008898209d735a95c15ab9342fc9218c149",
+    "demo.html": "971cc014b56bb20b8f4e43cd263632f231ecf7aae1174695c9f55c4086ff36cd",
+    "demo.mjs": "7865466adf6fc6790484f08f1776130cd2ce5d380714587db907e924af812521",
+    "surface-parts.json": "b445888453b4155dbac43c17b401eb819d524c26324df65f79511923eef9f92a"
+  },
+  "nested": [
+    {
+      "mode": "light",
+      "id": "none",
+      "gates": [
+        0,
+        0,
+        0
+      ],
+      "boxShadow": "color(srgb 0 0 0 / 0) 0px 8px 16px 0px, color(srgb 0 0 0 / 0) 0px 2px 0px 0px inset",
+      "background": "linear-gradient(145deg, color(srgb 0 0 0 / 0), color(srgb 0 0 0 / 0))",
+      "filter": "none",
+      "color": "rgb(32, 33, 30)",
+      "optics": {
+        "opacity": "0",
+        "filter": "none",
+        "backdropFilter": "blur(0px)"
+      },
+      "equalsIsolatedScope": true
+    },
+    {
+      "mode": "light",
+      "id": "tactile",
+      "gates": [
+        0,
+        1,
+        0
+      ],
+      "boxShadow": "color(srgb 0.0941176 0.145098 0.184314 / 0.22) 0px 8px 16px 0px, color(srgb 1 1 1 / 0.85) 0px 2px 0px 0px inset",
+      "background": "linear-gradient(145deg, color(srgb 0.329412 0.443137 0.690196 / 0.12), color(srgb 1 1 1 / 0.45))",
+      "filter": "none",
+      "color": "rgb(32, 33, 30)",
+      "optics": {
+        "opacity": "0",
+        "filter": "none",
+        "backdropFilter": "blur(0px)"
+      },
+      "equalsIsolatedScope": true
+    },
+    {
+      "mode": "light",
+      "id": "glass",
+      "gates": [
+        1,
+        0,
+        0
+      ],
+      "boxShadow": "color(srgb 0 0 0 / 0) 0px 8px 16px 0px, color(srgb 0 0 0 / 0) 0px 2px 0px 0px inset",
+      "background": "linear-gradient(145deg, color(srgb 0.329412 0.443137 0.690196 / 0.12), color(srgb 0 0 0 / 0))",
+      "filter": "none",
+      "color": "rgb(32, 33, 30)",
+      "optics": {
+        "opacity": "1",
+        "filter": "none",
+        "backdropFilter": "blur(12px)"
+      },
+      "equalsIsolatedScope": true
+    },
+    {
+      "mode": "light",
+      "id": "reset",
+      "gates": [
+        0,
+        0,
+        0
+      ],
+      "boxShadow": "color(srgb 0 0 0 / 0) 0px 8px 16px 0px, color(srgb 0 0 0 / 0) 0px 2px 0px 0px inset",
+      "background": "linear-gradient(145deg, color(srgb 0 0 0 / 0), color(srgb 0 0 0 / 0))",
+      "filter": "none",
+      "color": "rgb(32, 33, 30)",
+      "optics": {
+        "opacity": "0",
+        "filter": "none",
+        "backdropFilter": "blur(0px)"
+      },
+      "equalsIsolatedScope": true
+    },
+    {
+      "mode": "dark",
+      "id": "none",
+      "gates": [
+        0,
+        0,
+        0
+      ],
+      "boxShadow": "color(srgb 0 0 0 / 0) 0px 8px 16px 0px, color(srgb 0 0 0 / 0) 0px 2px 0px 0px inset",
+      "background": "linear-gradient(145deg, color(srgb 0 0 0 / 0), color(srgb 0 0 0 / 0))",
+      "filter": "none",
+      "color": "rgb(239, 240, 235)",
+      "optics": {
+        "opacity": "0",
+        "filter": "none",
+        "backdropFilter": "blur(0px)"
+      },
+      "equalsIsolatedScope": true
+    },
+    {
+      "mode": "dark",
+      "id": "tactile",
+      "gates": [
+        0,
+        1,
+        0
+      ],
+      "boxShadow": "color(srgb 0 0 0 / 0.22) 0px 8px 16px 0px, color(srgb 0.862745 0.898039 0.952941 / 0.85) 0px 2px 0px 0px inset",
+      "background": "linear-gradient(145deg, color(srgb 0.556863 0.678431 0.913725 / 0.12), color(srgb 0.862745 0.898039 0.952941 / 0.45))",
+      "filter": "none",
+      "color": "rgb(239, 240, 235)",
+      "optics": {
+        "opacity": "0",
+        "filter": "none",
+        "backdropFilter": "blur(0px)"
+      },
+      "equalsIsolatedScope": true
+    },
+    {
+      "mode": "dark",
+      "id": "glass",
+      "gates": [
+        1,
+        0,
+        0
+      ],
+      "boxShadow": "color(srgb 0 0 0 / 0) 0px 8px 16px 0px, color(srgb 0 0 0 / 0) 0px 2px 0px 0px inset",
+      "background": "linear-gradient(145deg, color(srgb 0.556863 0.678431 0.913725 / 0.12), color(srgb 0 0 0 / 0))",
+      "filter": "none",
+      "color": "rgb(239, 240, 235)",
+      "optics": {
+        "opacity": "1",
+        "filter": "none",
+        "backdropFilter": "blur(12px)"
+      },
+      "equalsIsolatedScope": true
+    },
+    {
+      "mode": "dark",
+      "id": "reset",
+      "gates": [
+        0,
+        0,
+        0
+      ],
+      "boxShadow": "color(srgb 0 0 0 / 0) 0px 8px 16px 0px, color(srgb 0 0 0 / 0) 0px 2px 0px 0px inset",
+      "background": "linear-gradient(145deg, color(srgb 0 0 0 / 0), color(srgb 0 0 0 / 0))",
+      "filter": "none",
+      "color": "rgb(239, 240, 235)",
+      "optics": {
+        "opacity": "0",
+        "filter": "none",
+        "backdropFilter": "blur(0px)"
+      },
+      "equalsIsolatedScope": true
+    }
+  ],
+  "gates": [
+    {
+      "mode": "light",
+      "kind": "shadow",
+      "offDiff": {
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "onDiff": {
+        "changedPixels": 15518,
+        "maxChannelDelta": 126
+      },
+      "offStyle": {
+        "boxShadow": "color(srgb 0 0 0 / 0) 0px 8px 16px 0px",
+        "background": "none",
+        "filter": "none",
+        "layerOpacity": "1",
+        "layerFilter": "none",
+        "backdropFilter": "none"
+      },
+      "expectedFailure": false
+    },
+    {
+      "mode": "light",
+      "kind": "background",
+      "offDiff": {
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "onDiff": {
+        "changedPixels": 21071,
+        "maxChannelDelta": 111
+      },
+      "offStyle": {
+        "boxShadow": "none",
+        "background": "linear-gradient(135deg, color(srgb 0 0 0 / 0), color(srgb 0 0 0 / 0))",
+        "filter": "none",
+        "layerOpacity": "1",
+        "layerFilter": "none",
+        "backdropFilter": "none"
+      },
+      "expectedFailure": false
+    },
+    {
+      "mode": "light",
+      "kind": "filter",
+      "offDiff": {
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "onDiff": {
+        "changedPixels": 36865,
+        "maxChannelDelta": 162
+      },
+      "offStyle": {
+        "boxShadow": "none",
+        "background": "none",
+        "filter": "none",
+        "layerOpacity": "0",
+        "layerFilter": "blur(8px)",
+        "backdropFilter": "none"
+      },
+      "expectedFailure": false
+    },
+    {
+      "mode": "light",
+      "kind": "backdrop",
+      "offDiff": {
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "onDiff": {
+        "changedPixels": 21202,
+        "maxChannelDelta": 195
+      },
+      "offStyle": {
+        "boxShadow": "none",
+        "background": "none",
+        "filter": "none",
+        "layerOpacity": "0",
+        "layerFilter": "none",
+        "backdropFilter": "blur(12px)"
+      },
+      "expectedFailure": false
+    },
+    {
+      "mode": "light",
+      "kind": "bad-shadow",
+      "offDiff": {
+        "changedPixels": 3780,
+        "maxChannelDelta": 222
+      },
+      "onDiff": {
+        "changedPixels": 12937,
+        "maxChannelDelta": 195
+      },
+      "offStyle": {
+        "boxShadow": "rgb(24, 37, 47) 0px 0px 0px 6px inset",
+        "background": "none",
+        "filter": "none",
+        "layerOpacity": "1",
+        "layerFilter": "none",
+        "backdropFilter": "none"
+      },
+      "expectedFailure": true
+    },
+    {
+      "mode": "light",
+      "kind": "bad-background",
+      "offDiff": {
+        "changedPixels": 21071,
+        "maxChannelDelta": 161
+      },
+      "onDiff": {
+        "changedPixels": 21072,
+        "maxChannelDelta": 162
+      },
+      "offStyle": {
+        "boxShadow": "none",
+        "background": "linear-gradient(0deg, rgb(84, 113, 176), rgb(255, 255, 255))",
+        "filter": "none",
+        "layerOpacity": "1",
+        "layerFilter": "none",
+        "backdropFilter": "none"
+      },
+      "expectedFailure": true
+    },
+    {
+      "mode": "light",
+      "kind": "bad-filter",
+      "offDiff": {
+        "changedPixels": 21868,
+        "maxChannelDelta": 246
+      },
+      "onDiff": {
+        "changedPixels": 50,
+        "maxChannelDelta": 1
+      },
+      "offStyle": {
+        "boxShadow": "none",
+        "background": "none",
+        "filter": "brightness(0)",
+        "layerOpacity": "1",
+        "layerFilter": "none",
+        "backdropFilter": "none"
+      },
+      "expectedFailure": true
+    },
+    {
+      "mode": "light",
+      "kind": "zero-blur",
+      "offDiff": {
+        "changedPixels": 50,
+        "maxChannelDelta": 1
+      },
+      "onDiff": {
+        "changedPixels": 29471,
+        "maxChannelDelta": 200
+      },
+      "offStyle": {
+        "boxShadow": "none",
+        "background": "none",
+        "filter": "blur(0px)",
+        "layerOpacity": "1",
+        "layerFilter": "none",
+        "backdropFilter": "none"
+      },
+      "expectedFailure": true
+    },
+    {
+      "mode": "dark",
+      "kind": "shadow",
+      "offDiff": {
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "onDiff": {
+        "changedPixels": 9959,
+        "maxChannelDelta": 43
+      },
+      "offStyle": {
+        "boxShadow": "color(srgb 0 0 0 / 0) 0px 8px 16px 0px",
+        "background": "none",
+        "filter": "none",
+        "layerOpacity": "1",
+        "layerFilter": "none",
+        "backdropFilter": "none"
+      },
+      "expectedFailure": false
+    },
+    {
+      "mode": "dark",
+      "kind": "background",
+      "offDiff": {
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "onDiff": {
+        "changedPixels": 21074,
+        "maxChannelDelta": 148
+      },
+      "offStyle": {
+        "boxShadow": "none",
+        "background": "linear-gradient(135deg, color(srgb 0 0 0 / 0), color(srgb 0 0 0 / 0))",
+        "filter": "none",
+        "layerOpacity": "1",
+        "layerFilter": "none",
+        "backdropFilter": "none"
+      },
+      "expectedFailure": false
+    },
+    {
+      "mode": "dark",
+      "kind": "filter",
+      "offDiff": {
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "onDiff": {
+        "changedPixels": 36803,
+        "maxChannelDelta": 211
+      },
+      "offStyle": {
+        "boxShadow": "none",
+        "background": "none",
+        "filter": "none",
+        "layerOpacity": "0",
+        "layerFilter": "blur(8px)",
+        "backdropFilter": "none"
+      },
+      "expectedFailure": false
+    },
+    {
+      "mode": "dark",
+      "kind": "backdrop",
+      "offDiff": {
+        "changedPixels": 0,
+        "maxChannelDelta": 0
+      },
+      "onDiff": {
+        "changedPixels": 21203,
+        "maxChannelDelta": 198
+      },
+      "offStyle": {
+        "boxShadow": "none",
+        "background": "none",
+        "filter": "none",
+        "layerOpacity": "0",
+        "layerFilter": "none",
+        "backdropFilter": "blur(12px)"
+      },
+      "expectedFailure": false
+    },
+    {
+      "mode": "dark",
+      "kind": "bad-shadow",
+      "offDiff": {
+        "changedPixels": 3772,
+        "maxChannelDelta": 22
+      },
+      "onDiff": {
+        "changedPixels": 10930,
+        "maxChannelDelta": 19
+      },
+      "offStyle": {
+        "boxShadow": "rgb(0, 0, 0) 0px 0px 0px 6px inset",
+        "background": "none",
+        "filter": "none",
+        "layerOpacity": "1",
+        "layerFilter": "none",
+        "backdropFilter": "none"
+      },
+      "expectedFailure": true
+    },
+    {
+      "mode": "dark",
+      "kind": "bad-background",
+      "offDiff": {
+        "changedPixels": 21074,
+        "maxChannelDelta": 221
+      },
+      "onDiff": {
+        "changedPixels": 21074,
+        "maxChannelDelta": 221
+      },
+      "offStyle": {
+        "boxShadow": "none",
+        "background": "linear-gradient(0deg, rgb(142, 173, 233), rgb(220, 229, 243))",
+        "filter": "none",
+        "layerOpacity": "1",
+        "layerFilter": "none",
+        "backdropFilter": "none"
+      },
+      "expectedFailure": true
+    },
+    {
+      "mode": "dark",
+      "kind": "bad-filter",
+      "offDiff": {
+        "changedPixels": 21868,
+        "maxChannelDelta": 240
+      },
+      "onDiff": {
+        "changedPixels": 57,
+        "maxChannelDelta": 1
+      },
+      "offStyle": {
+        "boxShadow": "none",
+        "background": "none",
+        "filter": "brightness(0)",
+        "layerOpacity": "1",
+        "layerFilter": "none",
+        "backdropFilter": "none"
+      },
+      "expectedFailure": true
+    },
+    {
+      "mode": "dark",
+      "kind": "zero-blur",
+      "offDiff": {
+        "changedPixels": 57,
+        "maxChannelDelta": 1
+      },
+      "onDiff": {
+        "changedPixels": 30458,
+        "maxChannelDelta": 205
+      },
+      "offStyle": {
+        "boxShadow": "none",
+        "background": "none",
+        "filter": "blur(0px)",
+        "layerOpacity": "1",
+        "layerFilter": "none",
+        "backdropFilter": "none"
+      },
+      "expectedFailure": true
+    }
+  ],
+  "surface": [
+    {
+      "mode": "light",
+      "surface": "flat",
+      "id": "1",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "none"
+    },
+    {
+      "mode": "light",
+      "surface": "flat",
+      "id": "2",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "none"
+    },
+    {
+      "mode": "light",
+      "surface": "flat",
+      "id": "3",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "none"
+    },
+    {
+      "mode": "light",
+      "surface": "flat",
+      "id": "4",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "none"
+    },
+    {
+      "mode": "light",
+      "surface": "flat",
+      "id": "card",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "none"
+    },
+    {
+      "mode": "light",
+      "surface": "flat",
+      "id": "float",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "none"
+    },
+    {
+      "mode": "light",
+      "surface": "flat",
+      "id": "tooltip",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.06) 0px 4px 12px -2px, rgba(0, 0, 0, 0) 0px 0px 0px 1px inset"
+    },
+    {
+      "mode": "light",
+      "surface": "flat",
+      "id": "toolbar",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.18) 0px 0px 0.5px 0px, rgba(0, 0, 0, 0.1) 0px 3px 8px 0px, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px"
+    },
+    {
+      "mode": "light",
+      "surface": "outlined",
+      "id": "1",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.06) 0px 0.5px 1px -0.5px"
+    },
+    {
+      "mode": "light",
+      "surface": "outlined",
+      "id": "2",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.06) 0px 1px 2px -0.5px"
+    },
+    {
+      "mode": "light",
+      "surface": "outlined",
+      "id": "3",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.06) 0px 2px 4px -1px"
+    },
+    {
+      "mode": "light",
+      "surface": "outlined",
+      "id": "4",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.06) 0px 3px 6px -2px"
+    },
+    {
+      "mode": "light",
+      "surface": "outlined",
+      "id": "card",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.03) 0px 1px 2px -1px, rgba(0, 0, 0, 0.03) 0px 2px 8px 0px"
+    },
+    {
+      "mode": "light",
+      "surface": "outlined",
+      "id": "float",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.06) 0px 20px 24px 0px, color(srgb 0 0 0 / 0.03) 0px 5px 8px 0px"
+    },
+    {
+      "mode": "light",
+      "surface": "outlined",
+      "id": "tooltip",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.06) 0px 4px 12px -2px, rgba(0, 0, 0, 0) 0px 0px 0px 1px inset"
+    },
+    {
+      "mode": "light",
+      "surface": "outlined",
+      "id": "toolbar",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.18) 0px 0px 0.5px 0px, rgba(0, 0, 0, 0.1) 0px 3px 8px 0px, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px"
+    },
+    {
+      "mode": "light",
+      "surface": "raised",
+      "id": "1",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.06) 0px 0.5px 1px -0.5px"
+    },
+    {
+      "mode": "light",
+      "surface": "raised",
+      "id": "2",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.06) 0px 1px 3px -1px"
+    },
+    {
+      "mode": "light",
+      "surface": "raised",
+      "id": "3",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.06) 0px 2px 6px -2px"
+    },
+    {
+      "mode": "light",
+      "surface": "raised",
+      "id": "4",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.06) 0px 4px 10px -3px"
+    },
+    {
+      "mode": "light",
+      "surface": "raised",
+      "id": "card",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.03) 0px 1px 2px -1px, rgba(0, 0, 0, 0.03) 0px 2px 8px 0px"
+    },
+    {
+      "mode": "light",
+      "surface": "raised",
+      "id": "float",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.06) 0px 20px 24px 0px, color(srgb 0 0 0 / 0.03) 0px 5px 8px 0px"
+    },
+    {
+      "mode": "light",
+      "surface": "raised",
+      "id": "tooltip",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.06) 0px 4px 12px -2px, rgba(0, 0, 0, 0) 0px 0px 0px 1px inset"
+    },
+    {
+      "mode": "light",
+      "surface": "raised",
+      "id": "toolbar",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.18) 0px 0px 0.5px 0px, rgba(0, 0, 0, 0.1) 0px 3px 8px 0px, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px"
+    },
+    {
+      "mode": "light",
+      "surface": "elevated",
+      "id": "1",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.06) 0px 0.5px 2px -0.5px"
+    },
+    {
+      "mode": "light",
+      "surface": "elevated",
+      "id": "2",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.06) 0px 1px 4px -1px"
+    },
+    {
+      "mode": "light",
+      "surface": "elevated",
+      "id": "3",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.06) 0px 3px 8px -2px"
+    },
+    {
+      "mode": "light",
+      "surface": "elevated",
+      "id": "4",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.06) 0px 5px 12px -3px"
+    },
+    {
+      "mode": "light",
+      "surface": "elevated",
+      "id": "card",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.03) 0px 1px 2px -1px, rgba(0, 0, 0, 0.03) 0px 2px 8px 0px"
+    },
+    {
+      "mode": "light",
+      "surface": "elevated",
+      "id": "float",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.06) 0px 20px 24px 0px, color(srgb 0 0 0 / 0.03) 0px 5px 8px 0px"
+    },
+    {
+      "mode": "light",
+      "surface": "elevated",
+      "id": "tooltip",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.06) 0px 4px 12px -2px, rgba(0, 0, 0, 0) 0px 0px 0px 1px inset"
+    },
+    {
+      "mode": "light",
+      "surface": "elevated",
+      "id": "toolbar",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0) 0px 0px 0px 0px inset, rgba(0, 0, 0, 0.18) 0px 0px 0.5px 0px, rgba(0, 0, 0, 0.1) 0px 3px 8px 0px, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px"
+    },
+    {
+      "mode": "dark",
+      "surface": "flat",
+      "id": "1",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "none"
+    },
+    {
+      "mode": "dark",
+      "surface": "flat",
+      "id": "2",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "none"
+    },
+    {
+      "mode": "dark",
+      "surface": "flat",
+      "id": "3",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "none"
+    },
+    {
+      "mode": "dark",
+      "surface": "flat",
+      "id": "4",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "none"
+    },
+    {
+      "mode": "dark",
+      "surface": "flat",
+      "id": "card",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "none"
+    },
+    {
+      "mode": "dark",
+      "surface": "flat",
+      "id": "float",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "none"
+    },
+    {
+      "mode": "dark",
+      "surface": "flat",
+      "id": "tooltip",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.2) 0px 4px 12px -2px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset"
+    },
+    {
+      "mode": "dark",
+      "surface": "flat",
+      "id": "toolbar",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgb(50, 50, 50) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.18) 0px 0px 0.5px 0px, rgba(0, 0, 0, 0.1) 0px 3px 8px 0px, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px"
+    },
+    {
+      "mode": "dark",
+      "surface": "outlined",
+      "id": "1",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.2) 0px 0.5px 1px -0.5px"
+    },
+    {
+      "mode": "dark",
+      "surface": "outlined",
+      "id": "2",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.2) 0px 1px 2px -0.5px"
+    },
+    {
+      "mode": "dark",
+      "surface": "outlined",
+      "id": "3",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.2) 0px 2px 4px -1px"
+    },
+    {
+      "mode": "dark",
+      "surface": "outlined",
+      "id": "4",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.2) 0px 3px 6px -2px"
+    },
+    {
+      "mode": "dark",
+      "surface": "outlined",
+      "id": "card",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0) 0px 1px 2px -1px, rgba(0, 0, 0, 0) 0px 2px 8px 0px"
+    },
+    {
+      "mode": "dark",
+      "surface": "outlined",
+      "id": "float",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.2) 0px 20px 24px 0px, color(srgb 0 0 0 / 0.1) 0px 5px 8px 0px"
+    },
+    {
+      "mode": "dark",
+      "surface": "outlined",
+      "id": "tooltip",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.2) 0px 4px 12px -2px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset"
+    },
+    {
+      "mode": "dark",
+      "surface": "outlined",
+      "id": "toolbar",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgb(50, 50, 50) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.18) 0px 0px 0.5px 0px, rgba(0, 0, 0, 0.1) 0px 3px 8px 0px, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px"
+    },
+    {
+      "mode": "dark",
+      "surface": "raised",
+      "id": "1",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.2) 0px 0.5px 1px -0.5px"
+    },
+    {
+      "mode": "dark",
+      "surface": "raised",
+      "id": "2",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.2) 0px 1px 3px -1px"
+    },
+    {
+      "mode": "dark",
+      "surface": "raised",
+      "id": "3",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.2) 0px 2px 6px -2px"
+    },
+    {
+      "mode": "dark",
+      "surface": "raised",
+      "id": "4",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.2) 0px 4px 10px -3px"
+    },
+    {
+      "mode": "dark",
+      "surface": "raised",
+      "id": "card",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0) 0px 1px 2px -1px, rgba(0, 0, 0, 0) 0px 2px 8px 0px"
+    },
+    {
+      "mode": "dark",
+      "surface": "raised",
+      "id": "float",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.2) 0px 20px 24px 0px, color(srgb 0 0 0 / 0.1) 0px 5px 8px 0px"
+    },
+    {
+      "mode": "dark",
+      "surface": "raised",
+      "id": "tooltip",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.2) 0px 4px 12px -2px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset"
+    },
+    {
+      "mode": "dark",
+      "surface": "raised",
+      "id": "toolbar",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgb(50, 50, 50) 0px 0px 0px 1px inset, rgba(0, 0, 0, 0.18) 0px 0px 0.5px 0px, rgba(0, 0, 0, 0.1) 0px 3px 8px 0px, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px"
+    },
+    {
+      "mode": "dark",
+      "surface": "elevated",
+      "id": "1",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.2) 0px 0.5px 2px -0.5px"
+    },
+    {
+      "mode": "dark",
+      "surface": "elevated",
+      "id": "2",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.2) 0px 1px 4px -1px"
+    },
+    {
+      "mode": "dark",
+      "surface": "elevated",
+      "id": "3",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.2) 0px 3px 8px -2px"
+    },
+    {
+      "mode": "dark",
+      "surface": "elevated",
+      "id": "4",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.2) 0px 5px 12px -3px"
+    },
+    {
+      "mode": "dark",
+      "surface": "elevated",
+      "id": "card",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0) 0px 1px 2px -1px, rgba(0, 0, 0, 0) 0px 2px 8px 0px"
+    },
+    {
+      "mode": "dark",
+      "surface": "elevated",
+      "id": "float",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.2) 0px 20px 24px 0px, color(srgb 0 0 0 / 0.1) 0px 5px 8px 0px"
+    },
+    {
+      "mode": "dark",
+      "surface": "elevated",
+      "id": "tooltip",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgba(0, 0, 0, 0.2) 0px 4px 12px -2px, rgba(255, 255, 255, 0.05) 0px 0px 0px 1px inset"
+    },
+    {
+      "mode": "dark",
+      "surface": "elevated",
+      "id": "toolbar",
+      "changedPixels": 0,
+      "maxChannelDelta": 0,
+      "computedEqual": true,
+      "computed": "rgb(50, 50, 50) 0px 0px 0px 0px inset, rgba(0, 0, 0, 0.18) 0px 0px 0.5px 0px, rgba(0, 0, 0, 0.1) 0px 3px 8px 0px, rgba(0, 0, 0, 0.1) 0px 1px 3px 0px"
+    }
+  ],
+  "limits": "Local diagnostic fixture only; no whole-gallery identity, native AT, performance or cross-engine claim.",
+  "pass": true
+}

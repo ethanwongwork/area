@@ -1,7 +1,7 @@
 /**
  * Icons: the categories in the Sidebar, every Area icon grouped by category on the Canvas
  * (filtered by the Titlebar search, which also reads each icon's keywords and its names in other
- * libraries), drawn in the style and at the size the Canvas bar sets. The Inspector shows the chosen
+ * libraries), drawn in the style and at the size the Canvas's header sets. The Inspector shows the chosen
  * icon (its drawing, Copy SVG, Download, Copy name and import, its facts and search words from
  * @area/icons/meta), else the Sidebar's category, else the set. Icons, categories and batches come from
  * @area/icons; the SVG export and CopyButton are ../copy.tsx.
@@ -66,7 +66,7 @@ type Group = (typeof GROUPS)[number]["value"];
 const ORDER = new Map(ICON_CATEGORIES.flatMap(category => category.icons).map((name, index) => [name, index] as const));
 const STATUS_LABEL = (name: string) => statusOf(name) === "approved" ? "Approved" : statusOf(name) === "review" ? "In review" : "Not reviewed";
 
-/* Sizes: the grid from Area's 12 floor to 32 in steps of 4, chosen in the Canvas bar; the preview
+/* Sizes: the grid from Area's 12 floor to 32 in steps of 4, chosen in the Canvas's header; the preview
    at the icon browser's 128, the hover window's at 96 (three quarters of it, so the card stays a
    third of the Canvas or less). */
 const SIZE = { min: 12, max: 32, initial: 16 } as const;
@@ -219,7 +219,6 @@ export function IconsPage() {
         </Nav>
       }</PinMenu></SidebarList>}
       canvasTitle={view ? view.name : "All icons"}
-      canvasMeta={<span className="studio-muted studio-tabular">{total}</span>}
       canvasRef={canvas}
       canvasActions={
         <ViewControls>
@@ -228,10 +227,10 @@ export function IconsPage() {
           <ArrangeMenu arrangement={arrangement} sorts={SORTS} groups={view ? undefined : GROUPS}
             directions={arrangement.sort === "name" ? ["A to Z", "Z to A"] : ["First to last", "Last to first"]} />
           {/* How the icons are drawn, as Components' zoom: the style, then the size (product UI
-              rule 14: display settings in the Canvas bar, after the filters and the sort). */}
+              rule 14: display settings in the Canvas's header, after the filters and the sort). */}
           <Segmented size="sm" iconOnly aria-label="Style" value={style} onValueChange={value => setStyle(value as Mode)}
             items={[{ value: "outline", label: "Outline", icon: <StarIcon /> }, { value: "filled", label: "Filled", icon: <StarFilledIcon /> }]} />
-          <Select size="sm" aria-label="Size" value={String(size)} onChange={event => setSize(Number(event.currentTarget.value))}
+          <Select size="sm" variant="soft" aria-label="Size" value={String(size)} onChange={event => setSize(Number(event.currentTarget.value))}
             style={{ "--area-select-inline-size": "calc(var(--area-space-64) + var(--area-space-8))" } as CSSProperties /* pick: 72, "32 px" and the chevron */}>
             {SIZES.map(value => <option key={value} value={value}>{value} px</option>)}
           </Select>
@@ -279,7 +278,6 @@ export function IconsPage() {
         </div>
         </PinMenu>
       ) : <EmptyState title="No icons" description={`Nothing matches “${query}”.`} />}
-      inspectorTitle={icon ? titleCase(icon.name) : view ? view.name : "All icons"}
       inspector={
         <>
           <CanvasSettings axes={["type", "density"]} />

@@ -1,0 +1,7 @@
+# Refraction support correction — task 19 / D8
+
+Checked 2026-10-11. Chromium supports `backdrop-filter:url(#filter)` with SVG displacement of the actual backdrop. Safari and Firefox require the frost/rim fallback for this path. Ordinary `filter:url()` over owned SVG/image content is a separate capability; recreating or capturing a scene is not native arbitrary-backdrop refraction.
+
+[WebKit issue 245510](https://bugs.webkit.org/show_bug.cgi?id=245510) records the Chromium/Safari difference, a three-browser testcase in June 2026, and an unlanded implementation proposal; its status is NEW at this check. [Liquid Glass Web's pinned browser paths](https://github.com/Meapri/liquid-glass-web/blob/1613f8311dbc31bc2331afcfe51a143c56dd6308/README.md#L449-L499) distinguish native Chromium from frost and copied-background fallbacks. The [MDN property page](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/backdrop-filter) documents URL syntax; its broad property compatibility is **not** evidence of SVG displacement support in every engine. Mozilla 1787623 is a resolved missing-element bug, not proof that SVG displacement shipped; do not cite its FIXED status as refraction support.
+
+D8: keep frosted blur plus rim as the default. Add a tested Chromium enhancement later; syntax-only `CSS.supports` cannot prove filter pixels. The cookbook's previous local-fixture observations are preserved. Task 19 adds source verification, not a new cross-browser render measurement.

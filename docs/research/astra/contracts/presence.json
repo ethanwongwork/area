@@ -1,0 +1,363 @@
+{
+  "slug": "presence",
+  "manifest": "presence",
+  "parts": [
+    {
+      "id": "root",
+      "element": [
+        "span"
+      ],
+      "class": "area-presence",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_ink",
+          "selectors": [
+            ".area-presence",
+            ".area-presence[data-solid]"
+          ]
+        },
+        {
+          "name": "--_size",
+          "selectors": [
+            ".area-presence"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-bg-surface",
+          "selectors": [
+            ".area-indicator-anchor__indicator > :is(.area-indicator, .area-presence)",
+            ".area-presence",
+            ".area-presence[data-out-of-office]"
+          ]
+        },
+        {
+          "name": "--area-border-width",
+          "selectors": [
+            ".area-indicator-anchor__indicator > :is(.area-indicator, .area-presence)"
+          ]
+        },
+        {
+          "name": "--area-danger-solid",
+          "selectors": [
+            ".area-presence--busy",
+            ".area-presence--do-not-disturb",
+            ".area-presence--blocked"
+          ]
+        },
+        {
+          "name": "--area-discovery-solid",
+          "selectors": [
+            ".area-presence--out-of-office"
+          ]
+        },
+        {
+          "name": "--area-neutral-solid",
+          "selectors": [
+            ".area-presence--offline",
+            ".area-presence--unknown"
+          ]
+        },
+        {
+          "name": "--area-radius-full",
+          "selectors": [
+            ".area-presence"
+          ]
+        },
+        {
+          "name": "--area-space-12",
+          "selectors": [
+            ".area-presence--sm"
+          ]
+        },
+        {
+          "name": "--area-space-16",
+          "selectors": [
+            ".area-presence",
+            ".area-presence--md"
+          ]
+        },
+        {
+          "name": "--area-space-2",
+          "selectors": [
+            ".area-presence--xs"
+          ]
+        },
+        {
+          "name": "--area-space-20",
+          "selectors": [
+            ".area-presence--lg"
+          ]
+        },
+        {
+          "name": "--area-space-8",
+          "selectors": [
+            ".area-presence--xs"
+          ]
+        },
+        {
+          "name": "--area-success-solid",
+          "selectors": [
+            ".area-presence",
+            ".area-presence--available"
+          ]
+        },
+        {
+          "name": "--area-warning-solid",
+          "selectors": [
+            ".area-presence--away"
+          ]
+        },
+        {
+          "name": "--area-weight-icon",
+          "selectors": [
+            ".area-presence"
+          ]
+        }
+      ]
+    }
+  ],
+  "slots": [],
+  "options": {
+    "status": {
+      "values": [
+        "available",
+        "away",
+        "busy",
+        "do-not-disturb",
+        "blocked",
+        "offline",
+        "out-of-office",
+        "unknown"
+      ],
+      "default": "available"
+    },
+    "size": {
+      "values": [
+        "xs",
+        "sm",
+        "md",
+        "lg"
+      ],
+      "default": "md"
+    }
+  },
+  "booleans": [],
+  "elementModifiers": {},
+  "states": [
+    {
+      "name": "out-of-office",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-out-of-office",
+      "value": "{outOfOffice || undefined}"
+    },
+    {
+      "name": "solid",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-solid",
+      "value": "{mark === \"solid\" || undefined}"
+    },
+    {
+      "name": "solid",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-solid",
+      "value": "present"
+    },
+    {
+      "name": "out-of-office",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-out-of-office",
+      "value": "present"
+    }
+  ],
+  "keyboard": [],
+  "accessibleName": [
+    {
+      "part": "root",
+      "rule": "Reference wiring: aria-label={label}."
+    }
+  ],
+  "composition": {
+    "allowedParents": "not found",
+    "allowedChildren": "not found",
+    "observedChildren": [],
+    "demoExamples": [
+      "apps/docs/src/demos/badge.tsx:189",
+      "apps/docs/src/demos/badge.tsx:192",
+      "apps/docs/src/demos/badge.tsx:193"
+    ]
+  },
+  "reference": {
+    "css": [
+      "packages/styles/src/components/indicator.css",
+      "packages/styles/src/components/presence.css"
+    ],
+    "spec": [
+      "docs/specs/indicator.md"
+    ],
+    "reactExport": [
+      "Presence"
+    ]
+  },
+  "evidence": {
+    "/slug": {"status":"found","sources":["packages/styles/src/manifest.ts:344"],"note":"Direct source declaration or implementation."},
+    "/manifest": {"status":"found","sources":["packages/styles/src/manifest.ts:343"],"note":"Direct source declaration or implementation."},
+    "/parts": {"status":"found","sources":["packages/styles/src/manifest.ts:343","packages/react/src/components/Presence.tsx:23"],"note":"Manifest parts plus implementation-only structural elements; unclassed nodes retain explicit IDs."},
+    "/parts/0": {"status":"found","sources":["packages/react/src/components/Presence.tsx:23"],"note":"Direct source declaration or implementation."},
+    "/parts/0/id": {"status":"found","sources":["packages/react/src/components/Presence.tsx:23"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/0/class": {"status":"found","sources":["packages/react/src/components/Presence.tsx:23"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element": {"status":"found","sources":["packages/react/src/components/Presence.tsx:23"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/required": {"status":"found","sources":["packages/react/src/components/Presence.tsx:23"],"note":"Root of the rendered family surface."},
+    "/parts/0/allowedContent": {"status":"not found","sources":["packages/react/src/components/Presence.tsx:23"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/0/customProperties/0": {"status":"found","sources":["packages/styles/src/components/presence.css:9","packages/styles/src/components/presence.css:10","packages/styles/src/components/presence.css:14"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1": {"status":"found","sources":["packages/styles/src/components/presence.css:8"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties": {"status":"found","sources":["packages/styles/src/components/presence.css:8","packages/styles/src/components/presence.css:9","packages/styles/src/components/presence.css:10","packages/styles/src/components/presence.css:14"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/0/tokens/0": {"status":"found","sources":["packages/styles/src/components/indicator.css:43","packages/styles/src/components/presence.css:10","packages/styles/src/components/presence.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1": {"status":"found","sources":["packages/styles/src/components/indicator.css:43"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2": {"status":"found","sources":["packages/styles/src/components/presence.css:23","packages/styles/src/components/presence.css:24","packages/styles/src/components/presence.css:25"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3": {"status":"found","sources":["packages/styles/src/components/presence.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4": {"status":"found","sources":["packages/styles/src/components/presence.css:26","packages/styles/src/components/presence.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5": {"status":"found","sources":["packages/styles/src/components/presence.css:9"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6": {"status":"found","sources":["packages/styles/src/components/presence.css:18"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7": {"status":"found","sources":["packages/styles/src/components/presence.css:6","packages/styles/src/components/presence.css:19"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8": {"status":"found","sources":["packages/styles/src/components/presence.css:17"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9": {"status":"found","sources":["packages/styles/src/components/presence.css:20"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/10": {"status":"found","sources":["packages/styles/src/components/presence.css:17"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/11": {"status":"found","sources":["packages/styles/src/components/presence.css:6","packages/styles/src/components/presence.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/12": {"status":"found","sources":["packages/styles/src/components/presence.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/13": {"status":"found","sources":["packages/styles/src/components/presence.css:9"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens": {"status":"found","sources":["packages/styles/src/components/indicator.css:43","packages/styles/src/components/presence.css:10","packages/styles/src/components/presence.css:16","packages/styles/src/components/presence.css:6","packages/styles/src/components/presence.css:19","packages/styles/src/components/presence.css:21","packages/styles/src/components/presence.css:9","packages/styles/src/components/presence.css:17","packages/styles/src/components/presence.css:18","packages/styles/src/components/presence.css:20","packages/styles/src/components/presence.css:22","packages/styles/src/components/presence.css:23","packages/styles/src/components/presence.css:24","packages/styles/src/components/presence.css:25","packages/styles/src/components/presence.css:26","packages/styles/src/components/presence.css:27","packages/styles/src/components/presence.css:28"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/slots": {"status":"not found","sources":["packages/styles/src/manifest.ts:343","packages/react/src/components/Presence.tsx:18","docs/specs/indicator.md:1"],"note":"not found: No locally declared ReactNode/ReactElement slot props; native inherited children and delegated interfaces require review."},
+    "/options": {"status":"found","sources":["packages/styles/src/manifest.ts:345"],"note":"Direct source declaration or implementation."},
+    "/options/status": {"status":"found","sources":["packages/styles/src/manifest.ts:345"],"note":"Direct source declaration or implementation."},
+    "/options/status/default": {"status":"found","sources":["packages/styles/src/manifest.ts:347"],"note":"Direct source declaration or implementation."},
+    "/options/size": {"status":"found","sources":["packages/styles/src/manifest.ts:345"],"note":"Direct source declaration or implementation."},
+    "/options/size/default": {"status":"found","sources":["packages/styles/src/manifest.ts:347"],"note":"Direct source declaration or implementation."},
+    "/booleans": {"status":"found","sources":["packages/styles/src/manifest.ts:343"],"note":"Exact manifest boolean modifier list; absence means no declared booleans."},
+    "/elementModifiers": {"status":"found","sources":["packages/styles/src/manifest.ts:343"],"note":"Direct source declaration or implementation."},
+    "/states/0": {"status":"found","sources":["packages/react/src/components/Presence.tsx:24"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1": {"status":"found","sources":["packages/react/src/components/Presence.tsx:24"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2": {"status":"found","sources":["packages/styles/src/components/presence.css:14"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/3": {"status":"found","sources":["packages/styles/src/components/presence.css:16"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states": {"status":"found","sources":["packages/react/src/components/Presence.tsx:24","packages/styles/src/components/presence.css:14","packages/styles/src/components/presence.css:16"],"note":"Direct source declaration or implementation."},
+    "/keyboard": {"status":"not found","sources":["packages/styles/src/manifest.ts:343","packages/react/src/components/Presence.tsx:18","docs/specs/indicator.md:1"],"note":"not found: No reviewed key-to-action contract found. Native behavior is not invented from a tag name."},
+    "/accessibleName/0": {"status":"found","sources":["packages/react/src/components/Presence.tsx:23"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName": {"status":"found","sources":["packages/react/src/components/Presence.tsx:23"],"note":"Direct source declaration or implementation."},
+    "/composition": {"status":"found","sources":["packages/styles/src/manifest.ts:343","packages/react/src/components/Presence.tsx:18","docs/specs/indicator.md:1"],"note":"Allowed composition is distinct from examples and built-in child calls."},
+    "/composition/allowedParents": {"status":"not found","sources":["packages/styles/src/manifest.ts:343","packages/react/src/components/Presence.tsx:18","docs/specs/indicator.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/allowedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:343","packages/react/src/components/Presence.tsx:18","docs/specs/indicator.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/observedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:343","packages/react/src/components/Presence.tsx:18","docs/specs/indicator.md:1"],"note":"not found: No child component call located."},
+    "/composition/demoExamples/0": {"status":"found","sources":["apps/docs/src/demos/badge.tsx:189"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/1": {"status":"found","sources":["apps/docs/src/demos/badge.tsx:192"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/2": {"status":"found","sources":["apps/docs/src/demos/badge.tsx:193"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples": {"status":"found","sources":["apps/docs/src/demos/badge.tsx:189","apps/docs/src/demos/badge.tsx:192","apps/docs/src/demos/badge.tsx:193"],"note":"Direct source declaration or implementation."},
+    "/reference/css": {"status":"found","sources":["packages/styles/src/components/indicator.css:43","packages/styles/src/components/presence.css:5","packages/styles/src/components/presence.css:12","packages/styles/src/components/presence.css:13","packages/styles/src/components/presence.css:14","packages/styles/src/components/presence.css:16","packages/styles/src/components/presence.css:17","packages/styles/src/components/presence.css:18","packages/styles/src/components/presence.css:19","packages/styles/src/components/presence.css:20","packages/styles/src/components/presence.css:21","packages/styles/src/components/presence.css:22","packages/styles/src/components/presence.css:23","packages/styles/src/components/presence.css:24","packages/styles/src/components/presence.css:25","packages/styles/src/components/presence.css:26","packages/styles/src/components/presence.css:27","packages/styles/src/components/presence.css:28","packages/styles/src/components/presence.css:29"],"note":"Direct source declaration or implementation."},
+    "/reference/css/0": {"status":"found","sources":["packages/styles/src/components/indicator.css:43"],"note":"Direct source declaration or implementation."},
+    "/reference/css/1": {"status":"found","sources":["packages/styles/src/components/presence.css:5"],"note":"Direct source declaration or implementation."},
+    "/reference/spec": {"status":"found","sources":["docs/specs/indicator.md:1"],"note":"Shared family spec; dedicated slug spec not found."},
+    "/reference/reactExport/0": {"status":"found","sources":["packages/react/src/components/Presence.tsx:18","packages/react/src/index.ts:63"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport": {"status":"found","sources":["packages/react/src/components/Presence.tsx:18","packages/react/src/index.ts:63"],"note":"Direct source declaration or implementation."},
+    "/reference": {"status":"found","sources":["packages/styles/src/manifest.ts:343","packages/styles/src/components/indicator.css:1","packages/styles/src/components/presence.css:1","docs/specs/indicator.md:1"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element/0": {"status":"found","sources":["packages/react/src/components/Presence.tsx:23"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/presence.css:9","packages/styles/src/components/presence.css:10","packages/styles/src/components/presence.css:14"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/presence.css:9","packages/styles/src/components/presence.css:10","packages/styles/src/components/presence.css:14"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/presence.css:9","packages/styles/src/components/presence.css:10","packages/styles/src/components/presence.css:14"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors/1": {"status":"found","sources":["packages/styles/src/components/presence.css:9","packages/styles/src/components/presence.css:10","packages/styles/src/components/presence.css:14"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/name": {"status":"found","sources":["packages/styles/src/components/presence.css:8"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/selectors": {"status":"found","sources":["packages/styles/src/components/presence.css:8"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/presence.css:8"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/indicator.css:43","packages/styles/src/components/presence.css:10","packages/styles/src/components/presence.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/indicator.css:43","packages/styles/src/components/presence.css:10","packages/styles/src/components/presence.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/indicator.css:43","packages/styles/src/components/presence.css:10","packages/styles/src/components/presence.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors/1": {"status":"found","sources":["packages/styles/src/components/indicator.css:43","packages/styles/src/components/presence.css:10","packages/styles/src/components/presence.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors/2": {"status":"found","sources":["packages/styles/src/components/indicator.css:43","packages/styles/src/components/presence.css:10","packages/styles/src/components/presence.css:16"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/indicator.css:43"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/indicator.css:43"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/indicator.css:43"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/presence.css:23","packages/styles/src/components/presence.css:24","packages/styles/src/components/presence.css:25"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/presence.css:23","packages/styles/src/components/presence.css:24","packages/styles/src/components/presence.css:25"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/presence.css:23","packages/styles/src/components/presence.css:24","packages/styles/src/components/presence.css:25"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors/1": {"status":"found","sources":["packages/styles/src/components/presence.css:23","packages/styles/src/components/presence.css:24","packages/styles/src/components/presence.css:25"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors/2": {"status":"found","sources":["packages/styles/src/components/presence.css:23","packages/styles/src/components/presence.css:24","packages/styles/src/components/presence.css:25"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/name": {"status":"found","sources":["packages/styles/src/components/presence.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/selectors": {"status":"found","sources":["packages/styles/src/components/presence.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/presence.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/name": {"status":"found","sources":["packages/styles/src/components/presence.css:26","packages/styles/src/components/presence.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/selectors": {"status":"found","sources":["packages/styles/src/components/presence.css:26","packages/styles/src/components/presence.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/selectors/0": {"status":"found","sources":["packages/styles/src/components/presence.css:26","packages/styles/src/components/presence.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/selectors/1": {"status":"found","sources":["packages/styles/src/components/presence.css:26","packages/styles/src/components/presence.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5/name": {"status":"found","sources":["packages/styles/src/components/presence.css:9"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5/selectors": {"status":"found","sources":["packages/styles/src/components/presence.css:9"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5/selectors/0": {"status":"found","sources":["packages/styles/src/components/presence.css:9"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/name": {"status":"found","sources":["packages/styles/src/components/presence.css:18"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/selectors": {"status":"found","sources":["packages/styles/src/components/presence.css:18"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/selectors/0": {"status":"found","sources":["packages/styles/src/components/presence.css:18"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/name": {"status":"found","sources":["packages/styles/src/components/presence.css:6","packages/styles/src/components/presence.css:19"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/selectors": {"status":"found","sources":["packages/styles/src/components/presence.css:6","packages/styles/src/components/presence.css:19"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/selectors/0": {"status":"found","sources":["packages/styles/src/components/presence.css:6","packages/styles/src/components/presence.css:19"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/selectors/1": {"status":"found","sources":["packages/styles/src/components/presence.css:6","packages/styles/src/components/presence.css:19"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8/name": {"status":"found","sources":["packages/styles/src/components/presence.css:17"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8/selectors": {"status":"found","sources":["packages/styles/src/components/presence.css:17"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8/selectors/0": {"status":"found","sources":["packages/styles/src/components/presence.css:17"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9/name": {"status":"found","sources":["packages/styles/src/components/presence.css:20"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9/selectors": {"status":"found","sources":["packages/styles/src/components/presence.css:20"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9/selectors/0": {"status":"found","sources":["packages/styles/src/components/presence.css:20"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/10/name": {"status":"found","sources":["packages/styles/src/components/presence.css:17"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/10/selectors": {"status":"found","sources":["packages/styles/src/components/presence.css:17"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/10/selectors/0": {"status":"found","sources":["packages/styles/src/components/presence.css:17"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/11/name": {"status":"found","sources":["packages/styles/src/components/presence.css:6","packages/styles/src/components/presence.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/11/selectors": {"status":"found","sources":["packages/styles/src/components/presence.css:6","packages/styles/src/components/presence.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/11/selectors/0": {"status":"found","sources":["packages/styles/src/components/presence.css:6","packages/styles/src/components/presence.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/11/selectors/1": {"status":"found","sources":["packages/styles/src/components/presence.css:6","packages/styles/src/components/presence.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/12/name": {"status":"found","sources":["packages/styles/src/components/presence.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/12/selectors": {"status":"found","sources":["packages/styles/src/components/presence.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/12/selectors/0": {"status":"found","sources":["packages/styles/src/components/presence.css:22"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/13/name": {"status":"found","sources":["packages/styles/src/components/presence.css:9"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/13/selectors": {"status":"found","sources":["packages/styles/src/components/presence.css:9"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/13/selectors/0": {"status":"found","sources":["packages/styles/src/components/presence.css:9"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/options/status/values": {"status":"found","sources":["packages/styles/src/manifest.ts:345"],"note":"Direct source declaration or implementation."},
+    "/options/status/values/0": {"status":"found","sources":["packages/styles/src/manifest.ts:345"],"note":"Direct source declaration or implementation."},
+    "/options/status/values/1": {"status":"found","sources":["packages/styles/src/manifest.ts:345"],"note":"Direct source declaration or implementation."},
+    "/options/status/values/2": {"status":"found","sources":["packages/styles/src/manifest.ts:345"],"note":"Direct source declaration or implementation."},
+    "/options/status/values/3": {"status":"found","sources":["packages/styles/src/manifest.ts:345"],"note":"Direct source declaration or implementation."},
+    "/options/status/values/4": {"status":"found","sources":["packages/styles/src/manifest.ts:345"],"note":"Direct source declaration or implementation."},
+    "/options/status/values/5": {"status":"found","sources":["packages/styles/src/manifest.ts:345"],"note":"Direct source declaration or implementation."},
+    "/options/status/values/6": {"status":"found","sources":["packages/styles/src/manifest.ts:345"],"note":"Direct source declaration or implementation."},
+    "/options/status/values/7": {"status":"found","sources":["packages/styles/src/manifest.ts:345"],"note":"Direct source declaration or implementation."},
+    "/options/size/values": {"status":"found","sources":["packages/styles/src/manifest.ts:345"],"note":"Direct source declaration or implementation."},
+    "/options/size/values/0": {"status":"found","sources":["packages/styles/src/manifest.ts:345"],"note":"Direct source declaration or implementation."},
+    "/options/size/values/1": {"status":"found","sources":["packages/styles/src/manifest.ts:345"],"note":"Direct source declaration or implementation."},
+    "/options/size/values/2": {"status":"found","sources":["packages/styles/src/manifest.ts:345"],"note":"Direct source declaration or implementation."},
+    "/options/size/values/3": {"status":"found","sources":["packages/styles/src/manifest.ts:345"],"note":"Direct source declaration or implementation."},
+    "/states/0/name": {"status":"found","sources":["packages/react/src/components/Presence.tsx:24"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/part": {"status":"found","sources":["packages/react/src/components/Presence.tsx:24"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/kind": {"status":"found","sources":["packages/react/src/components/Presence.tsx:24"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/hook": {"status":"found","sources":["packages/react/src/components/Presence.tsx:24"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/value": {"status":"found","sources":["packages/react/src/components/Presence.tsx:24"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/name": {"status":"found","sources":["packages/react/src/components/Presence.tsx:24"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/part": {"status":"found","sources":["packages/react/src/components/Presence.tsx:24"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/kind": {"status":"found","sources":["packages/react/src/components/Presence.tsx:24"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/hook": {"status":"found","sources":["packages/react/src/components/Presence.tsx:24"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/value": {"status":"found","sources":["packages/react/src/components/Presence.tsx:24"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/2/name": {"status":"found","sources":["packages/styles/src/components/presence.css:14"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/2/part": {"status":"found","sources":["packages/styles/src/components/presence.css:14"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/2/kind": {"status":"found","sources":["packages/styles/src/components/presence.css:14"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/2/hook": {"status":"found","sources":["packages/styles/src/components/presence.css:14"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/2/value": {"status":"found","sources":["packages/styles/src/components/presence.css:14"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/3/name": {"status":"found","sources":["packages/styles/src/components/presence.css:16"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/3/part": {"status":"found","sources":["packages/styles/src/components/presence.css:16"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/3/kind": {"status":"found","sources":["packages/styles/src/components/presence.css:16"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/3/hook": {"status":"found","sources":["packages/styles/src/components/presence.css:16"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/3/value": {"status":"found","sources":["packages/styles/src/components/presence.css:16"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/accessibleName/0/part": {"status":"found","sources":["packages/react/src/components/Presence.tsx:23"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/0/rule": {"status":"found","sources":["packages/react/src/components/Presence.tsx:23"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/reference/spec/0": {"status":"found","sources":["docs/specs/indicator.md:1"],"note":"Shared family spec; dedicated slug spec not found."}
+  }
+}

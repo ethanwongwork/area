@@ -1011,7 +1011,8 @@ export const zoomControl = {
   block: "area-zoom-control",
   description: "Shows a canvas's zoom and opens a menu to type, step, fit or pick a zoom.",
   variants: {},
-  elements: ["value", "menu", "field"],
+  booleans: ["stepper"],
+  elements: ["value", "menu", "field", "stepper", "step"],
   defaults: {},
 } as const satisfies ComponentManifest;
 
