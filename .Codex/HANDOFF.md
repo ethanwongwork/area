@@ -46,6 +46,10 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
 - Merged (PR #112). Then Card pressed + `selected` (rule 3, the app tiles' values: press `border-hover`, selected
   `stroke-selected` 2 inside, Surface-0 safe, forced colours outline). The app's Tile keeps its own copy for now
   (adopting Card's class on Tile would pull Card's layout).
+- Merged (PR #113). Review page for the six families: https://claude.ai/artifact/HwkKUmDzVH4B8eUGpjRwcD (approve in chat).
+- Then `Titlebar` (Panel's bar height and rule, drag region, `windowControls="macos"` 83 / 13) and `SectionHeading`
+  (strong text-sm, cap-trimmed, muted lede 8 under) from the app's own bar and section titles (app-shell.css, spec
+  `docs/specs/app-shell.md`); the app uses both, unchanged on screen. PRODUCT_UI's open gaps: none left.
 
 ## Copy button (2026-10-15, branch `claude/copy-button`)
 

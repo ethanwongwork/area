@@ -957,6 +957,23 @@ export const listBox = {
   defaults: { layout: "list" },
 } as const satisfies ComponentManifest;
 
+export const titlebar = {
+  block: "area-titlebar",
+  description: "A window's top bar: Panel's bar height and rule, the drag region of a frameless window.",
+  variants: {},
+  booleans: ["macos"],
+  elements: ["end"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const sectionHeading = {
+  block: "area-section-heading",
+  description: "A titled group on a page: a strong title trimmed to its cap and baseline, and a muted lede.",
+  variants: {},
+  elements: ["title", "lede"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
 export const assetRow = {
   block: "area-asset-row",
   description: "Lists one exportable asset: its preview, name, details and an optional action.",
@@ -1097,6 +1114,8 @@ export const MANIFESTS = {
   tokenRow,
   copyButton,
   listBox,
+  titlebar,
+  sectionHeading,
   assetRow,
   previewFrame,
   passwordField,

@@ -32,6 +32,7 @@ The manifest and React exports are authoritative for supported API; the gallery 
 actual specimens. Current families include:
 
 - Actions and choices: Button, ButtonGroup, SplitButton, Toolbar, Checkbox/CheckboxGroup,
+  Titlebar and SectionHeading (in review, 2026-10-15: the desktop app's bar and section titles, as components),
   ListBox (in review, 2026-10-15: options to choose one from, a list or a grid, one Tab stop; the Icons tab uses it),
   CopyButton (in review, 2026-10-15: copies and shows a check for two seconds; Code block, Token row and the app use it),
   Radio/RadioGroup, Switch, Slider/SliderRange, Chip/ChipGroup, Segmented, ToggleGroup (in review, 2026-10-10: a set of toggle Buttons, any number or at most one pressed) and AlignmentPicker.

@@ -22,7 +22,7 @@
  */
 import { Component, createElement, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import * as AreaReact from "@area/react";
-import { Badge, Button, Code, Count, EmptyState, Kbd, Link, Nav, NavGroup, NavItem, PanelSection, Table, TableCell, TableLink, Tooltip, ZoomControl } from "@area/react";
+import { Badge, Button, Code, Count, EmptyState, Kbd, Link, Nav, NavGroup, NavItem, PanelSection, SectionHeading, Table, TableCell, TableLink, Tooltip, ZoomControl } from "@area/react";
 import { ArrowLeftIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon, CopyIcon, OpenIcon, ResetIcon } from "@area/icons";
 import { MANIFESTS } from "@area/styles/manifest";
 import SNIPPETS from "virtual:demo-snippets";
@@ -214,9 +214,8 @@ function FamilyStage({ family, tiles, tile, config, onSelectTile, onChange, zoom
         <div className="studio-grid studio-grid--wide studio-grid--cards studio-strips">
           {groups.map(([group, list]: readonly [string, Tile[]]) => (
             <section key={group} className="studio-strip" style={{ "--_count": list.length } as CSSProperties} aria-labelledby={`group-${group}`}>
-              <h2 className="studio-canvas__section-title" id={`group-${group}`} {...APP_SCALE}>
-                {group} <span className="studio-muted studio-tabular">{list.length}</span>
-              </h2>
+              <SectionHeading className="studio-section-heading" titleId={`group-${group}`} {...APP_SCALE}
+                title={<>{group} <span className="studio-muted studio-tabular">{list.length}</span></>} />
               {list.map(entry => (
                 <Tile key={entry.id} span="wide" stage="fit" card label={group === "Default" ? entry.label : entry.value} aria-label={`${family.name}: ${entry.label}`}
                   selected={entry.id === onStage?.id} onSelect={() => onSelectTile(entry)}
@@ -232,19 +231,19 @@ function FamilyStage({ family, tiles, tile, config, onSelectTile, onChange, zoom
           radius whatever the Canvas previews (owner, 2026-10-11: props at full width, under the tiles). */}
       {family.api?.length ? (
         <section className="studio-section" aria-labelledby="family-props" {...APP_SCALE}>
-          <h2 className="studio-canvas__section-title" id="family-props">Props</h2>
+          <SectionHeading className="studio-section-heading" titleId="family-props" title="Props" />
           <PropsTable api={family.api} />
         </section>
       ) : null}
       {manifest ? (
         <section className="studio-section" aria-labelledby="family-anatomy" {...APP_SCALE}>
-          <h2 className="studio-canvas__section-title" id="family-anatomy">Anatomy</h2>
+          <SectionHeading className="studio-section-heading" titleId="family-anatomy" title="Anatomy" />
           <Anatomy manifest={manifest} />
         </section>
       ) : null}
       {manifest?.states?.length ? (
         <section className="studio-section" aria-labelledby="family-states" {...APP_SCALE}>
-          <h2 className="studio-canvas__section-title" id="family-states">States</h2>
+          <SectionHeading className="studio-section-heading" titleId="family-states" title="States" />
           <States manifest={manifest} />
         </section>
       ) : null}
