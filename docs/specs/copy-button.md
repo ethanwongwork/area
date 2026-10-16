@@ -105,8 +105,13 @@ two-second clock. `onClick` runs first; `preventDefault()` there skips the copy.
   screen reader hears "Copied to clipboard" once; the button keeps its name and width.
 - **Based on:** Code block's approved copy, with Untitled UI's and shadcn's two seconds (it was 1.6 with no source)
   and Untitled UI's labelled copy. Code block, Token row and the app now all use it.
+- **Why its own component:** it is a Button: it renders `Button`, and every variant, size, tone and focus ring is
+  Button's. What it adds is behaviour: the clipboard write, the two-second check and the one-time announcement,
+  which three places had written separately. A Button with `useCopy` does the same where a wrapper doesn't fit.
+  shadcn, Mantine and Untitled UI each ship a copy button too.
 
 ## Feedback log
 
 - 2026-10-15 · owner: "go with your rec" (new components from the backlog) → Copy button, from PRODUCT_UI.md's open gaps.
 - 2026-10-16 · owner (on a parallel build of the same gap): "add my evidence" → sources chatgpt-pressed (ChatGPT's copied state held 2016 ms; it renames to "Copied") and notion-code (Notion's code-block copy: icon-only 24 × 24, confirmed by a toast and a live region, the button unchanged), with their captures. Evidence only: no value changes.
+- 2026-10-16 · owner, review round 27 (components27) → approved → Complete in `component-status.mjs`.

@@ -1,11 +1,44 @@
-# Handoff — 2026-10-15
+# Handoff — 2026-10-16
 
 Each session starts from `main` in its own worktree (`claude/*` branch) and merges through a
 pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
-## Start here (2026-10-15, end of session `icon-work-followup-2fcf1e`; everything merged, PRs #88–#114)
+## Start here (2026-10-16, session `project-evaluation-97084a`, branch `claude/project-evaluation-97084a`)
+
+**Done:**
+- *Component reviews:* every family is Complete; `REVIEW_COMPONENTS` is empty.
+  - Rounds 27–29 ran on the old-format review page, https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG (1×/2×,
+    Before/After, verdicts in collections `components27`–`29`).
+  - The archived docs build runs again, so `apps/docs/scripts/component-review.mjs` works. Build the Before with
+    `node apps/docs/scripts/build.mjs` in a worktree of the old commit.
+- *Layers, built in:* three axes.
+  - `ground-light`: 100 (white) to 90 in 1% steps.
+  - `ground-dark`: 0 (black), 8 (Default, #020202), 12 to 24.
+  - `layers`: layer contrast, 0 (Flat) to 8, 4 the default.
+  - Page, layers, control fills, edges and inks are derived live from those numbers and the Neutral cast
+    (`packages/tokens/src/color/layers.ts`).
+  - Surfaces point control fills at their own ground (`packages/styles/src/layers.css`; `data-area-ground` for app
+    regions). The Inspector shows them under Color.
+  - Light 100 + 4 = the old light theme exactly. Dark 8 + 4 brings cards and sidebars closer (#121212 / #0b0b0b; were
+    #1d1d1d / #282828).
+  - `layers.test.ts` checks every combination in every neutral. Research:
+    `docs/research/layers-2026-10-16/README.md`.
+
+**Open:**
+- The owner's picks on the Layers page (https://claude.ai/artifact/5crS7DCaWEBbAjvTXYpJhn, db `layers` / `tuning`).
+  It still shows the 4-step contrast; the shipped scale is 0–8.
+- Whether every inset control takes Nav's rule (the row less 8, ink-only hover): Tree view, Chip, Tag, Badge dismiss,
+  field actions (`docs/research/inset-actions-2026-10-16.md`).
+- Found, not fixed:
+  - Badge dismiss and Tag remove are a 10px box with a 12px glyph at Compact 13.
+  - Chip, Tag and others press with the hover paint.
+  - Code's on-colour chip still has the plate Badge dropped.
+- Not run locally: the consumer check's install step (stalled; CI runs it). Not swept: every family at every Layers
+  combination in the app.
+
+## Earlier start (2026-10-15, end of session `icon-work-followup-2fcf1e`; everything merged, PRs #88–#114)
 
 **Waiting on the owner:** eight families In review, all on one page with live specimens, what changed and why:
 https://claude.ai/artifact/HwkKUmDzVH4B8eUGpjRwcD (approve in chat; record approvals in

@@ -5,11 +5,29 @@ for specific roles. Components do not need separate light/dark variants.
 
 ## Shared settings
 
-The registry in `packages/tokens/src/axes/registry.ts` defines eleven axes:
+The registry in `packages/tokens/src/axes/registry.ts` defines fourteen axes:
 
 - `theme`: light or dark color polarity.
 - `neutral`: neutral, cool or warm neutral colors.
 - `accent`: configurable chromatic accent; blue is the default (owner, 2026-09-29; was indigo). The focus ring follows it.
+- `ground-light`, `ground-dark` and `layers` (the Layers, `axes/layers.ts` and `color/layers.ts`, owner 2026-10-16;
+  [research](research/layers-2026-10-16/README.md)):
+  - `ground-light` is the light page's OKLCH lightness: `100` (White, default) to `90`, in 1% steps.
+  - `ground-dark` is the dark page's: `0` (Black), `8` (Default, #020202), then `12` to `24` in 2% steps.
+  - `layers` is layer contrast, `0` (Flat) to `8`, `4` by default. It sets how far raised layers (cards, menus,
+    dialogs) and recessed ones (sidebars, wells) sit from the page, and how far a control's fill sits from its ground.
+
+  `emit/base.ts` derives, live and tinted by the Neutral setting's own hue and chroma:
+  - `bg-page`, `bg-surface`, `bg-subtle`, `bg-stripe` and `bg-code`;
+  - the control fills on each ground: `bg-component*`, `-raised*` and `-recessed*`, and the Selection role on the
+    raised and recessed grounds;
+  - the edges: `border-*`, `border-card`;
+  - the inks: `fg-default`, `fg-muted`, `fg-placeholder`, `stroke-control*`.
+
+  Muted text and control edges keep today's colour wherever it passes, and darken (or lighten) just enough to hold
+  4.5:1 and 3:1. Surfaces that paint a raised layer point the control tokens at their own ground (styles
+  `layers.css`); a product marks its own regions with `data-area-ground="raised" | "recessed"`. Light 100 + 4 is the
+  light theme as it was; dark 8 + 4 keeps the near-black page with closer layers (cards #121212, sidebars #0b0b0b).
 - `action`: neutral or accent, the colour of committing actions (solid Buttons). Neutral is the default.
 - `selection`: neutral or accent, the colour of state (checked, on, selected, current, filled). Neutral is the default.
 - `type`: the base interface text size, `12` to `16` (default `14`; [research](research/ui-size-scale-2026-10-12.md), owner 2026-10-12). One number sets every type role: UI text at the base, small text two under it (never under 10), reading text and surface titles two over it, small-text tracking, the icon stroke, the check box and toggle (4 inside the UI line; a toggle 4 taller) and icons (the 20 cut at 16). It also bounds density: Compact up to 14, Comfortable from 13.

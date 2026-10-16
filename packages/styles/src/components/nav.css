@@ -264,11 +264,18 @@
 
   /* The link and independent actions share one plate without nesting buttons in links. */
   .area-nav__row {
+    /* An action on the row is a nested square, 4 in from the plate on every side: the row less 8, as Chip's remove
+       and a field's InputAction are (inset.css, "nested square action"). 24 at type 14 Default, 18 at the app's 13
+       Compact (it was Button sm, 28 / 24, 2 / 1 from the plate's edge). Notion's sidebar: 20 in 30, 5 in; ChatGPT's:
+       20 in 36, 8 in; shadcn's Sidebar: 20 in 32 (owner, review round 27: "should the actions backplate be smaller?
+       so the margins are a bit larger"; docs/research/inset-actions-2026-10-16.md). */
+    --_nav-action-inset: var(--area-space-4); /* spec */
+    --_nav-action: calc(var(--area-ui-row) - var(--_nav-action-inset) * 2); /* spec */
     display: flex;
     align-items: center;
     min-inline-size: 0;
     gap: var(--area-space-2);
-    padding-inline-end: calc((var(--area-ui-row) - var(--area-control-sm)) / 2);
+    padding-inline-end: var(--_nav-action-inset);
     border-radius: var(--area-radius-row);
     transition: var(--area-transition);
   }
@@ -281,10 +288,18 @@
 
   .area-nav__row > .area-nav__item { flex: 1; }
   .area-nav__actions { display: flex; align-items: center; gap: var(--area-space-2); flex-shrink: 0; }
-  /* Concentric with the row plate: its radius less the actions' inset ((row - action) / 2). */
-  .area-nav__actions > .area-button { --_radius: max(var(--area-radius-floor), calc(var(--area-radius-row) - (var(--area-ui-row) - var(--area-control-sm)) / 2)); }
-  /* Nested row controls hover with the translucent wash (audit S11c). */
-  .area-nav__actions .area-button.area-button--ghost { --_bg-hover: var(--area-bg-hover); --_bg-active: var(--area-bg-active); }
+  /* Concentric with the row plate: its radius less the actions' inset. */
+  .area-nav__actions > .area-button { --_height: var(--_nav-action); --_radius: max(var(--area-radius-floor), calc(var(--area-radius-row) - var(--_nav-action-inset))); }
+  /*
+   * A ghost action on the row changes its ink, not a plate: muted at rest, the default ink under the pointer and
+   * while pressed (owner, review round 27: "some other design systems for small controls like this just do a color
+   * change for hover"). ChatGPT's sidebar row actions and Cursor's Agents sidebar do the same; the row's own plate
+   * already says where the pointer is, so a second plate on it is not needed (it was the translucent wash, audit
+   * S11c). Focus keeps Button's ring.
+   */
+  .area-nav__actions .area-button.area-button--ghost { --_fg: var(--area-fg-muted); --_bg-hover: transparent; --_bg-active: transparent; }
+  @media (hover: hover) { .area-nav__actions .area-button.area-button--ghost:hover { --_fg: var(--area-fg-default); } }
+  .area-nav__actions .area-button.area-button--ghost:is(:active, [aria-expanded="true"][aria-haspopup]) { --_fg: var(--area-fg-default); }
   /* An expandable item's chevron: collapsed points along the reading direction, so it mirrors in
      right-to-left text (audit D-13). It turns on fast ease-out, the one chevron rule (MOTION.md).
      A popup trigger (a menu's ⋯) also carries aria-expanded, so it is left unrotated. */

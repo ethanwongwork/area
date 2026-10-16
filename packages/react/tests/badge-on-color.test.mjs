@@ -10,10 +10,11 @@ test('onColor adds the on-color modifier beside the variant', () => {
   assert.match(render(h(Badge, { onColor: true, size: 'sm' }, 'AA · 4.61')), /class="area-badge area-badge--soft area-badge--neutral area-badge--sm area-badge--on-color"/);
   assert.doesNotMatch(render(h(Badge, null, 'Draft')), /on-color/);
 });
-test('the on-color paint is the ink, a plate of its opposite and a line of it', () => {
+test('the on-color paint is one colour: the ink, and a line of it with no plate', () => {
   const css = readFileSync(new URL('../../styles/dist/area.css', import.meta.url), 'utf8');
   const rule = css.match(/\.area-badge--on-color \{([^}]*)\}/)?.[1] ?? '';
   assert.match(rule, /--_fg: currentcolor/);
-  assert.match(rule, /--_bg: oklch\(from currentcolor calc\(1 - l\) 0 0 \/ 0\.08\)/);
+  assert.match(rule, /--_bg: transparent/);
+  assert.match(rule, /--_bg-hover: transparent/);
   assert.match(rule, /--_border: color-mix\(in oklab, currentcolor 20%, transparent\)/);
 });

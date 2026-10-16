@@ -343,7 +343,7 @@ export const CardSelected = () => (
   <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "var(--area-space-12)", inlineSize: "calc(var(--area-space-96) * 5)", maxInlineSize: "100%" }}>
     {[["Free", "For trying Area out"], ["Team", "For a design team"], ["Enterprise", "For an organisation"]].map(([plan, note]) => (
       <Card key={plan} selected={plan === "Team"}>
-        <CardHeader><CardTitle>{plan}</CardTitle><CardDescription>{note}</CardDescription></CardHeader>
+        <CardContent><CardHeader><CardTitle>{plan}</CardTitle><CardDescription>{note}</CardDescription></CardHeader></CardContent>
       </Card>
     ))}
   </div>

@@ -14,6 +14,8 @@ import { CHROMATIC_SCALES, MUTED_SCALES, NEUTRAL_SCALES, SCALE_DESCRIPTIONS } fr
 import { type Theme } from "../color/scale.ts";
 import { type ResolvedTheme, DEFAULT_SELECTION, resolveTheme } from "../semantic/resolve.ts";
 import { SEMANTIC_ALIASES, type Alias } from "../semantic/aliases.ts";
+import { LAYER_COLOR_TOKENS, castOf } from "../color/layers.ts";
+import { scaleFor } from "../semantic/resolve.ts";
 
 /** Semantic tokens whose alias points at a given role. */
 function tokensForRole(theme: ResolvedTheme, role: string): Record<string, string> {
@@ -141,11 +143,29 @@ export const THEME_AXIS: AxisDefinition = {
 // Neutral axis
 // ---------------------------------------------------------------------------
 
+/** The neutral role's tokens the Layers model derives instead (color/layers.ts): page, layers, fills, edges, inks. */
+const LAYER_OWNED = new Set<string>(LAYER_COLOR_TOKENS);
+function neutralRoleTokens(resolved: ResolvedTheme): Record<string, string> {
+  return Object.fromEntries(Object.entries(tokensForRole(resolved, "neutral")).filter(([name]) => !LAYER_OWNED.has(name)));
+}
+
+/** The cast the Layers model tints with: the hue and chroma of this neutral's own 50 (light) and 900 (dark). Numbers,
+ * so both polarities carry the same four values and the emitter writes them once. */
+function castTokens(neutral: string): Record<string, string> {
+  const step = (theme: Theme, level: number) => scaleFor(neutral, theme).steps.find(s => s.level === level)!.hex;
+  const cast = castOf(step("light", 50), step("dark", 900));
+  return {
+    "neutral-chroma-light": String(cast.light.chroma), "neutral-hue-light": String(cast.light.hue),
+    "neutral-chroma-dark": String(cast.dark.chroma), "neutral-hue-dark": String(cast.dark.hue),
+  };
+}
+
 function neutralTokens(t: Theme, neutral: string): TokenMap {
   const resolved = themeFor(t, DEFAULT_SELECTION.accent, neutral);
   return tokens({
     ...primitiveRamp(resolved, neutral, "neutral"),
-    ...tokensForRole(resolved, "neutral"),
+    ...neutralRoleTokens(resolved),
+    ...castTokens(neutral),
   });
 }
 
@@ -156,7 +176,7 @@ export const NEUTRAL_AXIS: AxisDefinition = {
   defaultPreset: DEFAULT_SELECTION.neutral,
   namespaces: [
     "--area-neutral-",
-    ...Object.keys(tokensForRole(themeFor("light", DEFAULT_SELECTION.accent, DEFAULT_SELECTION.neutral), "neutral"))
+    ...Object.keys(neutralRoleTokens(themeFor("light", DEFAULT_SELECTION.accent, DEFAULT_SELECTION.neutral)))
       .map(name => `--area-${name}:`),
   ],
   presets: NEUTRAL_SCALES.map((spec) => ({

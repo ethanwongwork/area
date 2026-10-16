@@ -8,9 +8,12 @@
 import { type BuiltScale, type Theme, WHITE, buildScale } from "../color/scale.ts";
 import { ALL_SCALES, CHROMATIC_SCALES, NEUTRAL_SCALES, ROLE_SCALES } from "../color/presets.ts";
 import { type Role, type ScaleLookup, resolveAliases } from "./aliases.ts";
+import { DEFAULT_LAYER_SELECTION, type LayerSelection, castOf, layerTokens } from "../color/layers.ts";
 
 export interface ThemeSelection {
   theme: Theme;
+  /** The Layers settings (ground and layer contrast); Area's defaults when omitted. */
+  layers?: LayerSelection;
   /** Which neutral scale the interface is built from. */
   neutral: string;
   /** Which chromatic scale fills the accent role. */
@@ -28,7 +31,7 @@ export interface ResolvedTheme extends ThemeSelection {
 
 const scaleCache = new Map<string, BuiltScale>();
 
-function scaleFor(id: string, theme: Theme): BuiltScale {
+export function scaleFor(id: string, theme: Theme): BuiltScale {
   const key = `${id}:${theme}`;
   const cached = scaleCache.get(key);
   if (cached) return cached;
@@ -87,7 +90,12 @@ export function resolveTheme(selection: ThemeSelection): ResolvedTheme {
     ]),
   ) as unknown as ScaleLookup;
 
-  return { theme, neutral, accent, scales, roles, tokens: resolveAliases(lookup, theme) };
+  // The page, layers, control fills, edges and inks come from the Layers model (color/layers.ts), tinted by this
+  // neutral's own cast, so the gate checks what ships.
+  const hexAt = (t: Theme, level: number) => scaleFor(neutral, t).steps.find(s => s.level === level)!.hex;
+  const cast = castOf(hexAt("light", 50), hexAt("dark", 900))[theme];
+  const resolvedTokens = { ...resolveAliases(lookup, theme), ...layerTokens(theme, selection.layers ?? DEFAULT_LAYER_SELECTION, cast) };
+  return { theme, neutral, accent, scales, roles, tokens: resolvedTokens };
 }
 
 /** The selection Area ships as its default. */

@@ -19,6 +19,34 @@ export const GalleryTitlebar = () => (
     </Nav>
   </Titlebar>
 );
+/* plain: no rule under the bar (ChatGPT's and Notion's top bars); the bar loses the rule's 1, so the controls stay centred. */
+export const GalleryTitlebarPlain = () => (
+  <Titlebar variant="plain" style={bar} end={<>
+    <SearchField size="sm" variant="soft" aria-label="Search" placeholder="Search" />
+    {icon("Dark mode", MoonIcon)}
+  </>}>
+    {icon("Show sidebar", PanelLeftIcon)}
+    <Nav orientation="horizontal" aria-label="Sections">
+      <NavItem href="#gallery-titlebar-plain" current>Components</NavItem>
+      <NavItem href="#gallery-titlebar-plain">Icons</NavItem>
+    </Nav>
+  </Titlebar>
+);
+/* floating: a raised plate held one cluster space off the window's top and sides (the window's ground behind it). */
+export const GalleryTitlebarFloating = () => (
+  <div style={{ ...bar, background: "var(--area-bg-subtle)", paddingBlockEnd: "var(--area-space-24)" }}>
+    <Titlebar variant="floating" end={<>
+      <SearchField size="sm" variant="soft" aria-label="Search" placeholder="Search" />
+      {icon("Dark mode", MoonIcon)}
+    </>}>
+      {icon("Show sidebar", PanelLeftIcon)}
+      <Nav orientation="horizontal" aria-label="Sections">
+        <NavItem href="#gallery-titlebar-floating" current>Components</NavItem>
+        <NavItem href="#gallery-titlebar-floating">Icons</NavItem>
+      </Nav>
+    </Titlebar>
+  </div>
+);
 /* In a frameless macOS window: the start clears the traffic lights (drawn by the system; here the room is empty). */
 export const GalleryTitlebarMacos = () => (
   <Titlebar windowControls="macos" style={bar} end={icon("Dark mode", MoonIcon)}>

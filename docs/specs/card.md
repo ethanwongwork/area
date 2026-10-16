@@ -231,6 +231,19 @@ Open questions:
 - **What changed:** The underline under a card's action link is now the link's own colour at rest (it was 40%), matching Link. No gallery tile shows a card action yet, so every tile reads unchanged.
 - **Why:** Link's line changed in this round, and Card's action draws Link's line.
 
+## Review note, 2026-10-15
+
+- **What changed:** a card now has the last two steps of the product rules' state ladder: pressed (its edge one step
+  firmer) and selected (a 2px selected stroke inside the card, so nothing moves). Rest and hover are unchanged.
+- **Why:** the app's gallery tiles drew these states in app CSS; now any Card can.
+- **Not a new component:** it is a state on Card.
+
+## Review note, 2026-10-16
+
+- **What changed:** the selected cards' text now sits 16 in from the edge (12 compact), as on every other card.
+- **Why:** the example skipped the card's content wrapper, so the text sat on the 8 media inset; Card itself didn't
+  change.
+
 ## Feedback log
 
 - 2026-09-28 · owner: text and buttons offset, less offset from images, corner from the button,
@@ -302,3 +315,6 @@ Open questions:
 - 2026-10-14 · owner: "the standard and strong elevations can be toned down ... a naming convention similar to the existing axis" → Elevation is one number, 0 to 8 (default 3); the resting role is Fluent's shadow4 geometry at half the step in %: 1.5% at 3, 4% at 8, none at 0 (axes/elevation.ts).
 - 2026-10-14 · owner: "continue working on the next axis" → Surface is one number, the frame's width: `1` (Default) or `0` (Borderless) (was `outlined` / `borderless`; axes/surface.ts). At 0 the card lists the Surface axis's `shadow-edge` first in its box-shadow, ChatGPT's frameless-menu edge (`0 0 1px` black 62%, and in dark an inset `0 0 1px` white 20%; captured 2026-10-13), so it keeps an edge at Elevation 0 and in dark, where it had none. It replaces the dark-only inset ring (consistency pass O2), so a Card and a floating surface draw one edge. Owner approved ("go with your recs"), review https://claude.ai/artifact/L4TCF2W5zcjvBK7xZmaDBN (docs/research/surface-2026-10-14.md).
 - 2026-10-15 · PRODUCT_UI.md open gap ("A selectable card or tile state on Card: the gallery's Tile carries rule 3 in app CSS"), owner: "merge it, then continue working" → pressed and selected, rule 3's last two steps, from the app's gallery tiles (owner-adopted 2026-10-12): a linked card's edge steps to `border-hover` while pressed; selected (`selected` → `data-selected`, or `aria-selected` / `aria-pressed` on the card) draws `stroke-selected` 2 wide inside the card, its edge plus an inset ring of the rest (`2 × stroke-width − card border`), so the grid never moves and Surface 0 keeps the full 2; it lands at once and outranks hover and press; forced colours draw it as a 2 Highlight outline inside. The selected stroke is a state, so `stroke-width`, not the Surface's `border-width`. Gallery: State / selected.
+- 2026-10-16 · owner, review round 27 (components27) → needs changes: "padding is wrong" → open.
+- 2026-10-16 · from the owner's "padding is wrong" → the State / selected demo put `CardHeader` straight in the card, without `CardContent`, which holds the text column's inset; its text sat on the card's 8 (6 compact) media inset instead of 16 (12). The demo now wraps it as every other Card demo does; measured in the app: title and description 14 from the top, start and bottom at type 13. Card's CSS is unchanged.
+- 2026-10-16 · owner, review round 28 (components28) → approved (pressed, selected) → Complete again in `component-status.mjs`.

@@ -28,6 +28,8 @@ const out = resolve(arg("--out") ?? join(root, ".cache/component-review"));
 
 const { COMPLETE_COMPONENTS, REVIEW_COMPONENTS } = await import(join(root, "../desktop/src/content/component-status.mjs"));
 const RENAMED = { disclosure: "accordion" };
+// Families that share another family's spec.
+const SPEC_OF = { titlebar: "app-shell", "section-heading": "app-shell" };
 
 /* Sections and tiles of a built gallery (index.html), by balanced tags. */
 function block(html, start, tag) {
@@ -111,7 +113,7 @@ function sections(md) {
 // Spec sections and log lines dated in the open review rounds (from 2026-10-06).
 const RECENT = /2026-10-(0[6-9]|[12][0-9]|3[01])/;
 function notesOf(slug) {
-  const file = join(repo, "docs/specs", `${slug}.md`);
+  const file = join(repo, "docs/specs", `${SPEC_OF[slug] ?? slug}.md`);
   if (!existsSync(file)) return { changes: "", questions: "", refs: "", log: "", changed: false };
   const md = readFileSync(file, "utf8"), all = sections(md);
   // Dated sections, outermost only (a dated section keeps its own subsections).

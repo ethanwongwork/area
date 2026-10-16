@@ -959,11 +959,11 @@ export const listBox = {
 
 export const titlebar = {
   block: "area-titlebar",
-  description: "A window's top bar: Panel's bar height and rule, the drag region of a frameless window.",
-  variants: {},
+  description: "A window's top bar: Panel's bar height and rule, the drag region of a frameless window; plain drops the rule, floating is a raised plate.",
+  variants: { variant: ["ruled", "plain", "floating"] },
   booleans: ["macos"],
   elements: ["end"],
-  defaults: {},
+  defaults: { variant: "ruled" },
 } as const satisfies ComponentManifest;
 
 export const sectionHeading = {

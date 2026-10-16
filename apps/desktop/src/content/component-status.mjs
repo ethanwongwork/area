@@ -8,7 +8,6 @@
 // chip, badge-group, box-field and tabs keep Complete (docs/research/compact-evidence-2026-10-02/).
 export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-09-27 after all phases (batches 1-3).
-  // nav reopened 2026-10-15 for revealActions.
   'toolbar', 'split-button', 'segmented', 'toast',
   // Approved 2026-09-28 (batch 4).
   'count',
@@ -28,7 +27,6 @@ export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-09-28 (batch 15: group gap 6 / 8; slider was already approved).
   'badge-group',
   // Approved 2026-09-28 (batches 17-19; dialog, tooltip and composer were already approved).
-  // context-menu reopened 2026-10-15 for itemSelector.
   'hover-card', 'message', 'prompt-suggestions',
   // Approved 2026-09-28 (batch 16 again after the 16 column; batch 20).
   'model-picker', 'scroll-to-latest',
@@ -50,7 +48,6 @@ export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-10-09 on the review page, round 2 (components2).
   'pagination', 'scroll-area', 'toggletip', 'combobox', 'custom-select', 'tag-picker', 'drawer',
   // Approved 2026-10-09 on the review page, round 3 (components3), after the round-2 feedback.
-  // card reopened 2026-10-15 for pressed and selected.
   'link', 'file-upload', 'command-palette', 'alert', 'kbd', 'number-field',
   // Approved 2026-10-10 on the review page, round 5 (components5).
   // description-list: reopened 2026-10-12 for show more (visibleCount).
@@ -75,7 +72,6 @@ export const COMPLETE_COMPONENTS = new Set([
   'color-swatch-picker',
   // Approved 2026-10-12 on the review page, round 21 (components21): the consistency pass (badge's dismiss ring at 0 is the
   // owner's own pick, O1), Board's hover and corners, Description list's show more; open questions on the recommendations.
-  // badge reopened 2026-10-15 for onColor (the Color tab's contrast badge).
   'board', 'chip', 'description-list', 'empty-state', 'select', 'tree-view',
   // Approved 2026-10-13 on the review page, round 23 (components23), after the round-22 approval and the tile surface.
   'preview-frame',
@@ -86,11 +82,16 @@ export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-10-13 on the review page, round 26 (components26): the value ring and its linear motion.
   'spinner',
   // Approved 2026-10-13 in chat after round 26 (owner: "okay agree": the colon stays tight, "9:30").
-  'time-field', ]);
+  'time-field',
+  // Approved 2026-10-16 on the review page, round 27 (components27).
+  'copy-button', 'list-box', 'context-menu', 'section-heading',
+  // Approved 2026-10-16 on the review page, round 28 (components28).
+  'badge', 'card',
+  // Approved 2026-10-16 on the review page, round 29 (components29).
+  'nav', 'titlebar', ]);
 
 /** Built/refined and awaiting owner approval; not completion. */
-// Built 2026-10-15 (docs/specs/copy-button.md, docs/specs/list-box.md), awaiting the owner.
-export const REVIEW_COMPONENTS = new Set(['copy-button', 'list-box', 'badge', 'nav', 'context-menu', 'card', 'titlebar', 'section-heading']);
+export const REVIEW_COMPONENTS = new Set([]);
 export const componentStatus = slug => COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
 export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined' })[status];
 
