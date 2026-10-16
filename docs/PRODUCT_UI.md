@@ -92,6 +92,5 @@ Recorded, not yet built (each needs its own component pass). From the app audit 
 
 
 - A selectable card or tile state on Card (the gallery's Tile carries rule 3 in app CSS).
-- Nav row actions revealed on hover and focus-within, as Board card actions are.
 - A per-item context-menu target (the gallery's `PinMenu` reads `data-key` from the event).
 - App-shell parts: Titlebar (drag region, traffic-light inset) and a section heading.

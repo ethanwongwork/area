@@ -61,12 +61,15 @@ export interface NavItemProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElemen
   trailing?: ReactNode;
   /** Independent controls beside the link, within its shared row backplate; never nested inside the anchor. */
   actions?: ReactNode;
+  /** The actions show only while the row is hovered or holds focus (or a menu they opened is open), as Board's card
+   * actions; a touch screen always shows them. */
+  revealActions?: boolean;
   disabled?: boolean;
   children?: ReactNode;
 }
 
 export const NavItem = /* @__PURE__ */ forwardRef<HTMLAnchorElement, NavItemProps>(function NavItem(
-  { current, icon, trailing, actions, disabled, className, children, href, onClick, tabIndex, ...rest },
+  { current, icon, trailing, actions, revealActions, disabled, className, children, href, onClick, tabIndex, ...rest },
   ref,
 ) {
   const link = (
@@ -94,7 +97,7 @@ export const NavItem = /* @__PURE__ */ forwardRef<HTMLAnchorElement, NavItemProp
       {trailing ? <span className="area-nav__trailing">{trailing}</span> : null}
     </a>
   );
-  return actions ? <div className="area-nav__row">{link}<div className="area-nav__actions">{actions}</div></div> : link;
+  return actions ? <div className={cx("area-nav__row", revealActions && "area-nav__row--reveal")}>{link}<div className="area-nav__actions">{actions}</div></div> : link;
 });
 
 /** A rule between runs of items. Horizontal navs get a vertical hairline instead. */

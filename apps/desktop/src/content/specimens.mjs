@@ -141,6 +141,7 @@ function gallerySpecimenTable() {
       { id: "marker", title: "Selection marker", demo: "GalleryNavMarker" },
       { id: "horizontal", title: "Horizontal", demo: "GalleryNavHorizontal" },
       { id: "actions", title: "Actions", demo: "GalleryNavActions" },
+      { id: "behavior-reveal-actions", title: "Behavior / actions on hover", demo: "GalleryNavRevealActions" },
       { id: "expandable", title: "Expandable", demo: "GalleryNavExpandable" },
       { id: "selection-accent", title: "Marker / selection accent", demo: "NavAccent" },
       { id: "state-disabled", title: "State / disabled", demo: "NavDisabled" },

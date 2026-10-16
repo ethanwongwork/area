@@ -1446,6 +1446,15 @@ export const GalleryNavActions = () => {
       <NavItem href="#gallery-nav-actions">Item two</NavItem>
   </Nav>;
 };
+/* Revealed actions: each row's options appear while it is hovered or holds focus, as Notion's sidebar pages. */
+export const GalleryNavRevealActions = () => (
+  <Nav aria-label="Pages">
+    {["Roadmap", "Meeting notes", "Design reviews"].map((page, index) => (
+      <NavItem key={page} href="#gallery-nav-reveal-actions" current={index === 0} revealActions
+        actions={<Button size="sm" variant="ghost" iconOnly icon={<MoreHorizontalIcon />} aria-label={`${page} options`} />}>{page}</NavItem>
+    ))}
+  </Nav>
+);
 export const GalleryNavExpandable = () => {
   const [open, setOpen] = useState(false);
   const id = useId();
