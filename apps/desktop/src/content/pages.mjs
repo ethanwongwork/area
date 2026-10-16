@@ -1684,6 +1684,7 @@ export const COMPONENT_PAGES = [
     api: [
       ["size", '"sm" | "md" | "lg" (corner and inset; type is the same at every size)', '"md"'],
       ["layout", '"vertical" | "horizontal" | "thumbnail" | "immersive"', '"vertical"'],
+      ["selected", "boolean: the chosen card of a set, the selection stroke 2 wide inside its edge (also aria-selected / aria-pressed on the card)", "false"],
       ["CardLink", "Anchor attributes. Inside CardTitle it makes the whole card one link", "—"],
       ["CardHeader action", "ReactNode: a Badge or icon Button on the title's first line", "—"],
       ["CardMedia bleed / well", "boolean: flush with the card's edge / a recessed surface for a composition", "false"],

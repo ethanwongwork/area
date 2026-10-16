@@ -431,6 +431,24 @@
   /* Motion (docs/MOTION.md, "Hover plate"; motion pass 2026-10-07): the edge steps at once and
      eases back on `fast` (--area-transition) when the pointer leaves. */
   @media (hover: hover) { .area-card:has(.area-card__link):hover { border-color: var(--area-edge-control-hover); transition-duration: 0s; } }
+  /*
+   * Pressed and selected (product UI rule 3, docs/PRODUCT_UI.md: rest, hover, press, selected, each a step firmer; the
+   * app's gallery tiles, studio.css, owner 2026-10-12; docs/specs/card.md 2026-10-15). Only the edge moves: a press
+   * steps a linked card's edge one past hover (border-hover), and selected draws the selection stroke 2 wide inside the
+   * card (its edge, plus an inset ring that makes up the rest), so the grid never moves and Surface 0 still shows it.
+   * Selection lands at once and outranks hover and press. Selected is `data-selected` (Card `selected`), or the
+   * card as a pressed toggle or a chosen option.
+   */
+  .area-card:has(.area-card__link):active { border-color: var(--area-border-hover); transition-duration: 0s; }
+  .area-card:is([data-selected], [aria-pressed="true"], [aria-selected="true"]) {
+    border-color: var(--area-stroke-selected);
+    box-shadow: inset 0 0 0 calc(var(--area-stroke-width) * 2 - var(--_card-border)) var(--area-stroke-selected), var(--area-shadow-edge), var(--_card-shadow);
+    transition-duration: 0s;
+  }
+  @media (hover: hover) { .area-card:is([data-selected], [aria-pressed="true"], [aria-selected="true"]):hover { border-color: var(--area-stroke-selected); } }
+  @media (forced-colors: active) {
+    .area-card:is([data-selected], [aria-pressed="true"], [aria-selected="true"]) { outline: calc(var(--area-stroke-width) * 2) solid Highlight; outline-offset: calc(var(--area-stroke-width) * -2); }
+  }
   .area-card__link {
     color: inherit;
     text-decoration: none;

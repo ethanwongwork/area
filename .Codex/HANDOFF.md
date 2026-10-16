@@ -43,6 +43,9 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   an open menu keeps them). Additive; the app's Sidebar keeps pinning in the Inspector and the context menu (rule 7).
 - Merged (PR #111). Then ContextMenu `itemSelector` (+ `menu` as a function of the item, `data-context-target` while
   open); the app's PinMenu uses it. Not painted: the target attribute is a hook (Finder / Notion mark the row).
+- Merged (PR #112). Then Card pressed + `selected` (rule 3, the app tiles' values: press `border-hover`, selected
+  `stroke-selected` 2 inside, Surface-0 safe, forced colours outline). The app's Tile keeps its own copy for now
+  (adopting Card's class on Tile would pull Card's layout).
 
 ## Copy button (2026-10-15, branch `claude/copy-button`)
 

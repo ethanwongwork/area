@@ -219,11 +219,14 @@ export interface CardProps extends Div {
   layout?: VariantProps<typeof MANIFESTS.card>["layout"];
   /** Shape: the corner and inset (type is the same three roles at every size). */
   size?: VariantProps<typeof MANIFESTS.card>["size"];
+  /** The chosen card in a set: the selection stroke, 2 wide, inside its edge (product UI rule 3). Sets `data-selected`;
+   * the semantics (aria-selected in a List box, aria-pressed on a toggle) belong to the element that owns the choice. */
+  selected?: boolean;
 }
 
 const cardVariants = createVariants(MANIFESTS.card);
-export const Card = /* @__PURE__ */ forwardRef<HTMLDivElement, CardProps>(function Card({ layout, size, className, ...rest }, ref) {
-  return <div ref={ref} className={cardVariants({ layout, size }, className)} {...rest} />;
+export const Card = /* @__PURE__ */ forwardRef<HTMLDivElement, CardProps>(function Card({ layout, size, selected, className, ...rest }, ref) {
+  return <div ref={ref} className={cardVariants({ layout, size }, className)} data-selected={selected ? "" : undefined} {...rest} />;
 });
 
 export const CardContent = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function CardContent({ className, ...rest }, ref) {

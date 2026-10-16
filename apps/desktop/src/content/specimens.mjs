@@ -924,6 +924,7 @@ function gallerySpecimenTable() {
     ],
     card: [
       { id: "default", title: "Default", demo: "CardVertical" },
+      { id: "state-selected", title: "State / selected", demo: "CardSelected" },
       { id: "size-sm", title: "Size / sm", demo: "CardSmall" },
       { id: "size-lg", title: "Size / lg", demo: "CardLarge" },
       { id: "layout-horizontal", title: "Layout / horizontal", demo: "CardHorizontal" },
