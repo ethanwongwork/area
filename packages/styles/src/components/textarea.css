@@ -65,7 +65,7 @@
   .area-textarea--soft {
     box-shadow: none;
     --_bg: var(--area-textarea-bg-soft);
-    --_border: transparent;
+    --_border: var(--area-textarea-edge-soft); /* none, or the strong edge under increased contrast */
     --_border-hover: var(--area-textarea-edge);
   }
 

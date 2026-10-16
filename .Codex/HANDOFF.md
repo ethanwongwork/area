@@ -86,6 +86,11 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   12 Compact; WCAG 4.5 / 3 large, disabled skipped): the only failure was on-color Code on the accent solid
   (4.06-4.37:1 on 8 of 11 accents); its plate is now 8% of the ink's opposite (5.30:1 and up). No console errors.
   Headless Edge degrades after many reloads; run long sweeps in fresh processes per combination.
+- Merged (PR #97). Boundary sweep under Contrast More (90 families, light and dark; CONTRAST.md's 3:1 target):
+  soft fields (Input, Number, OTP, Select, Custom select, Date picker, Tag picker, Textarea, Input group) had no edge
+  (fill 1.07:1) → `input-edge-soft`; Composer's frame stayed the card edge (1.16 / 1.33:1) → `composer-edge`. Both
+  3.79:1 light, 5.49:1 dark at More, unchanged at standard. Left as by design: ghost fields, Segmented items (the track
+  carries it), Command palette's search input, gradient slider tracks.
 
 ## All-axis audit (2026-10-14, branch `claude/elevation-axis-gallery-e500be`)
 

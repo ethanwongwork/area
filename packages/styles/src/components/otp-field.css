@@ -54,7 +54,7 @@
   }
 
   .area-otp-field--outline { --_bg: var(--area-input-bg); }
-  .area-otp-field--soft { --_bg: var(--area-input-bg-soft); --_border: transparent; --_border-hover: var(--area-input-edge); }
+  .area-otp-field--soft { --_bg: var(--area-input-bg-soft); --_border: var(--area-input-edge-soft); --_border-hover: var(--area-input-edge); }
 
   @media (hover: hover) {
     .area-otp-field:hover:not([data-disabled], [data-read-only]) .area-otp-field__slot:not([data-active]) { border-color: var(--_border-hover); transition-duration: 0s; }

@@ -15,7 +15,7 @@
     padding: calc(var(--_composer-inset) - var(--area-stroke-width));
     /* spec (audit S7a, owner 2026-09-30): a surface standing alone on the page takes Card's
        edge (#ee, dark 750); was border-decorative #f3, the faintest edge in the system. */
-    --_composer-edge: var(--area-border-card);
+    --_composer-edge: var(--area-composer-edge); /* the card edge, strong under increased contrast */
     border: var(--area-stroke-width) solid var(--_composer-edge);
     /*
      * spec (composer.md, owner 2026-09-26: option B): concentric with the send Button -- its own
