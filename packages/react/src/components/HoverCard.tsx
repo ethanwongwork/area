@@ -21,6 +21,12 @@ export interface HoverCardProps extends HTMLAttributes<HTMLDivElement> {
   openDelay?: number;
   /** ms after the pointer leaves the trigger and card before it closes, time to cross the gap. */
   closeDelay?: number;
+  /**
+   * Keyboard focus opens the card (at once, as Tooltip). Turn it off only where the card's content and actions are
+   * also reached another way: an option in a sheet the arrows sweep across, whose details a panel beside it shows
+   * (the app's Icons tab and its Inspector). The pointer still opens it. docs/specs/hover-card.md.
+   */
+  openOnFocus?: boolean;
   open?: boolean;
   defaultOpen?: boolean;
   onOpenChange?: (open: boolean) => void;
@@ -32,7 +38,7 @@ export interface HoverCardProps extends HTMLAttributes<HTMLDivElement> {
  * link is followed instead).
  */
 export const HoverCard = forwardRef<HTMLDivElement, HoverCardProps>(function HoverCard(
-  { trigger, side = "bottom", align = "start", offset = POPOVER_OFFSET, delay, openDelay, closeDelay = 300, open: openProp, defaultOpen, onOpenChange, className, children, ...rest }, ref,
+  { trigger, side = "bottom", align = "start", offset = POPOVER_OFFSET, delay, openDelay, closeDelay = 300, openOnFocus = true, open: openProp, defaultOpen, onOpenChange, className, children, ...rest }, ref,
 ) {
   const id = useId();
   const cardId = `${id}-hover-card`;
@@ -71,7 +77,7 @@ export const HoverCard = forwardRef<HTMLDivElement, HoverCardProps>(function Hov
       ref: (element: HTMLElement | null) => { anchor.current = element; assignRef(theirRef as never, element); },
       onPointerEnter: (event: { pointerType: string }) => { triggerProps.onPointerEnter?.(event); if (hovers(event)) show(); },
       onPointerLeave: (event: { pointerType: string }) => { triggerProps.onPointerLeave?.(event); if (hovers(event)) hide(); },
-      onFocus: (event: { currentTarget: Element }) => { triggerProps.onFocus?.(event); focused(event); },
+      onFocus: (event: { currentTarget: Element }) => { triggerProps.onFocus?.(event); if (openOnFocus) focused(event); },
       onBlur: (event: unknown) => { triggerProps.onBlur?.(event); hide(0); },
     })}
     <div ref={setRef} id={cardId} popover="manual" {...rest}

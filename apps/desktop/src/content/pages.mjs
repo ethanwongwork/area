@@ -1409,6 +1409,7 @@ export const COMPONENT_PAGES = [
       ["children", "Popover slots: PopoverHeader, PopoverTitle, PopoverDescription, .area-hover-card__meta", "—"],
       ["side", '"top" | "right" | "bottom" | "left"', '"bottom"'],
       ["delay / closeDelay", "ms (openDelay is a deprecated alias)", "700 / 300"],
+      ["openOnFocus", "keyboard focus opens it at once; off only where its content is reached another way (a sheet the arrows sweep, a panel showing the same)", "true"],
       ["open / defaultOpen / onOpenChange", "boolean / boolean / (open) => void", "— / false / —"],
       ["align / offset", '"start" | "center" | "end" / px', '"start" / 8'],
     ],
