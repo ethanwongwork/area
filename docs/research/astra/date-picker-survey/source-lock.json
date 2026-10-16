@@ -1,0 +1,54 @@
+{
+  "shadcn": {
+    "repo": "shadcn-ui/ui",
+    "commit": "db2db460a26fa84fb65c8d903b213925fbdee9ed"
+  },
+  "radix": {
+    "repo": "radix-ui/primitives",
+    "commit": "4e8b0dbc76d3e0189ab1a0ef0ff2245758506840"
+  },
+  "radix-themes": {
+    "repo": "radix-ui/themes",
+    "commit": "1faff10ac26ae17f09944d418c6949b93fc6b566"
+  },
+  "adobe": {
+    "repo": "adobe/react-spectrum",
+    "commit": "b90cbea6a1ab6ee12b66ac03d37a97fd661c8783"
+  },
+  "base-ui": {
+    "repo": "mui/base-ui",
+    "commit": "62b54e8c944784c4de992eb424286b77cea4415a"
+  },
+  "primer": {
+    "repo": "primer/react",
+    "commit": "a89299ae77e8f444599f94d7e9ca368c17be3f9a"
+  },
+  "fluent": {
+    "repo": "microsoft/fluentui",
+    "commit": "8add8c8750c34c85acd811e32ab324abf8f1562e"
+  },
+  "carbon": {
+    "repo": "carbon-design-system/carbon",
+    "commit": "650fcf4a8c5f86c5fdaa255d59229fe70fdb9757"
+  },
+  "ant": {
+    "repo": "ant-design/ant-design",
+    "commit": "7ad64087106acd078dcc7d91a4adfdf38f5ce172"
+  },
+  "mui-x": {
+    "repo": "mui/mui-x",
+    "commit": "a49b31e8454f046898e55f6a3adec652480de9b6"
+  },
+  "day-picker": {
+    "repo": "gpbl/react-day-picker",
+    "commit": "5c0ccef22a46f5dcfb7e284db4bc49501c29da56"
+  },
+  "flatpickr": {
+    "repo": "flatpickr/flatpickr",
+    "commit": "82df19a8a595bb9c008da93b30f241c4155fa058"
+  },
+  "rc-picker": {
+    "repo": "react-component/picker",
+    "commit": "a975a11f9a959a811b1ecd901e8ff8ae8f0e515b"
+  }
+}

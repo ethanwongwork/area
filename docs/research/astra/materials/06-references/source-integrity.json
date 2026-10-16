@@ -1,0 +1,162 @@
+[
+  {
+    "repo": "designmodo/Flat-UI",
+    "commit": "cead40a83b12b678e278fd63dcbb06eb0a6520f4",
+    "path": "app/styles/modules/buttons.scss",
+    "sha256_utf8_text": "e92cbae173af45d50aefc879801b8956c74b2e681882c03d7fc3556a975f1673",
+    "line_count": 188,
+    "checked": "2026-10-08"
+  },
+  {
+    "repo": "designmodo/Flat-UI",
+    "commit": "cead40a83b12b678e278fd63dcbb06eb0a6520f4",
+    "path": "app/styles/mixins/buttons.scss",
+    "sha256_utf8_text": "7bd48d274850999aad7b0d8180361662081f90eb6e18971cff022d74cb200f13",
+    "line_count": 65,
+    "checked": "2026-10-08"
+  },
+  {
+    "repo": "designmodo/Flat-UI",
+    "commit": "cead40a83b12b678e278fd63dcbb06eb0a6520f4",
+    "path": "app/styles/_variables.scss",
+    "sha256_utf8_text": "05abf1bff1a386d28610764aa6e50686eebce7b2ec345c0ec5480d08bc0d391d",
+    "line_count": 1102,
+    "checked": "2026-10-08"
+  },
+  {
+    "repo": "material-components/material-components-web",
+    "commit": "6ceadb81df508ac08ab007c52c4d3dc1d811cc15",
+    "path": "packages/mdc-card/_mixins.scss",
+    "sha256_utf8_text": "0bdebca01e72b2326131fe23986925f02dd0a614d85f3145e1ba0a4d377e21d0",
+    "line_count": 434,
+    "checked": "2026-10-08"
+  },
+  {
+    "repo": "material-components/material-components-web",
+    "commit": "6ceadb81df508ac08ab007c52c4d3dc1d811cc15",
+    "path": "packages/mdc-theme/_theme-color.scss",
+    "sha256_utf8_text": "b86b11a3dea0dc00a28701197b083073b091a8734d92f0d9470ad80b61897f36",
+    "line_count": 365,
+    "checked": "2026-10-08"
+  },
+  {
+    "repo": "material-components/material-components-web",
+    "commit": "6ceadb81df508ac08ab007c52c4d3dc1d811cc15",
+    "path": "packages/mdc-card/_variables.scss",
+    "sha256_utf8_text": "cc6d36e0096125f20a51ff1b499a99b4dc555d0941ca6a72a5f26ddffae76cf3",
+    "line_count": 37,
+    "checked": "2026-10-08"
+  },
+  {
+    "repo": "material-components/material-components-web",
+    "commit": "6ceadb81df508ac08ab007c52c4d3dc1d811cc15",
+    "path": "packages/mdc-shape/_shape.scss",
+    "sha256_utf8_text": "55ea558f8f731b5ab359d10921e3644e7d06aee13d11231b56e84b48b30e4894",
+    "line_count": 436,
+    "checked": "2026-10-08"
+  },
+  {
+    "repo": "material-components/material-components-web",
+    "commit": "6ceadb81df508ac08ab007c52c4d3dc1d811cc15",
+    "path": "packages/mdc-elevation/_elevation-theme.scss",
+    "sha256_utf8_text": "e50ad0e52382834369d76a09ceac80644e2d9405b87050282fd19a5dea8954cf",
+    "line_count": 444,
+    "checked": "2026-10-08"
+  },
+  {
+    "repo": "microsoft/microsoft-ui-xaml",
+    "commit": "901ffc065a1f3a1122bbfe6d222eb80a471f28a6",
+    "path": "controls/dev/Materials/Acrylic/AcrylicBrush_themeresources.xaml",
+    "sha256_utf8_text": "b3dcc134c4228da61054e04a89f1fcee3802135370cd60d9a86e9a3b63c36a1f",
+    "line_count": 161,
+    "checked": "2026-10-08"
+  },
+  {
+    "repo": "microsoft/microsoft-ui-xaml",
+    "commit": "901ffc065a1f3a1122bbfe6d222eb80a471f28a6",
+    "path": "controls/dev/Materials/Acrylic/AcrylicBrush.h",
+    "sha256_utf8_text": "bc242bc4c2d40912f06a7f6accb562ce449b8da146c01a222d204f07b9b984c1",
+    "line_count": 140,
+    "checked": "2026-10-08"
+  },
+  {
+    "repo": "microsoft/microsoft-ui-xaml",
+    "commit": "901ffc065a1f3a1122bbfe6d222eb80a471f28a6",
+    "path": "controls/dev/Materials/Acrylic/AcrylicBrush.cpp",
+    "sha256_utf8_text": "ee30c9c216bb8011159d1771c8659a95c0f2cf9a367bcf04e09117c1173103f1",
+    "line_count": 779,
+    "checked": "2026-10-08"
+  },
+  {
+    "repo": "microsoft/microsoft-ui-xaml",
+    "commit": "901ffc065a1f3a1122bbfe6d222eb80a471f28a6",
+    "path": "controls/dev/CommonStyles/Common_themeresources_any.xaml",
+    "sha256_utf8_text": "8b1189968a551161fd46a4e876d1e0e6b694f6626dc278d881b8cb5446f97bd3",
+    "line_count": 607,
+    "checked": "2026-10-08"
+  },
+  {
+    "repo": "microsoft/microsoft-ui-xaml",
+    "commit": "901ffc065a1f3a1122bbfe6d222eb80a471f28a6",
+    "path": "controls/dev/Materials/MicaBackdrop/MicaBackdrop.cpp",
+    "sha256_utf8_text": "dea18f216f6cba6e3229b9f35924786dbea8032ac18aa29d73b4ba7ac3f25578",
+    "line_count": 58,
+    "checked": "2026-10-08"
+  },
+  {
+    "repo": "rdev/liquid-glass-react",
+    "commit": "ac48eab18d1f7f444ae30002d240cae29c863a21",
+    "path": "src/index.tsx",
+    "sha256_utf8_text": "aaea920c8de2af15d4df322f99124d65b57a9088b2479c056bce428f3ddeadba",
+    "line_count": 612,
+    "checked": "2026-10-08"
+  },
+  {
+    "repo": "adamgiebl/neumorphism",
+    "commit": "8ab93a6bea6493cc464d45a334b5fb7a90d34308",
+    "path": "src/Configuration.js",
+    "sha256_utf8_text": "d528475610faa3ec64b6a1e1c0090f518d4e4ee7eebfb64d6e2b17c396319f2e",
+    "line_count": 300,
+    "checked": "2026-10-08"
+  },
+  {
+    "repo": "adamgiebl/neumorphism",
+    "commit": "8ab93a6bea6493cc464d45a334b5fb7a90d34308",
+    "path": "src/utils.js",
+    "sha256_utf8_text": "d6173e1f855032b73ad1b9c0a6330d4a551ee0314130f20ed50298b65af801b2",
+    "line_count": 64,
+    "checked": "2026-10-08"
+  },
+  {
+    "repo": "codeAdrian/clay.css",
+    "commit": "30dfeb9d75a6f5d081d5199fa47a74015f78e8e0",
+    "path": "src/clay.scss",
+    "sha256_utf8_text": "5574c26ba8070d1318faeff60de9d90aca5a964b41aa61eabe95b7411dffcc49",
+    "line_count": 30,
+    "checked": "2026-10-08"
+  },
+  {
+    "repo": "jdan/98.css",
+    "commit": "b1d7a907371bbe523d6f64e3af97f714fdbd6d6a",
+    "path": "style.css",
+    "sha256_utf8_text": "22f66e3d607eb6406b2832ae096716d8c1124d2a8124723adb287402dfdf82fa",
+    "line_count": 994,
+    "checked": "2026-10-08"
+  },
+  {
+    "repo": "khang-nd/7.css",
+    "commit": "76d29abe7e76598fc521e707933f9ffa1b320259",
+    "path": "gui/_window.scss",
+    "sha256_utf8_text": "9ff4af3de68bcd461935b3428d3b8f946bfabf2b9f8937c5431d8740b8a6a7f3",
+    "line_count": 530,
+    "checked": "2026-10-08"
+  },
+  {
+    "repo": "ethanwongwork/area",
+    "commit": "a5c56e600f5124b8c618950747fd17bfeab60665",
+    "path": "docs/research/astra/materials/README.md",
+    "sha256_utf8_text": "977a7bac83ceafad68f4cf435d119fd418690aa4e758b9d16e55fe589a433d04",
+    "line_count": 139,
+    "checked": "2026-10-08"
+  }
+]

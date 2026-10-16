@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Area materials 12 — glyphs and text</title>
+<link rel="stylesheet" href="lab.css">
+<header>
+  <p class="eyebrow">AREA · MATERIALS RESEARCH · 12</p>
+  <h1>Keep the ink. Compare the decoration.</h1>
+  <p>Search and Calendar use pinned Area outlines. Text uses the system font. Literal effects are authored experiments, not approved presets.</p>
+  <p><a href="README.md">Report</a> · <a href="legibility.md">Acceptance checks</a></p>
+  <label>Theme <select id="theme"><option value="light">Light</option><option value="dark">Near-black</option></select></label>
+  <button id="plain" type="button" aria-pressed="false">Plain fallback</button>
+  <p id="status" role="status">Loading fixtures…</p>
+</header>
+<main id="grid"></main>
+<footer>Each row shows 12 / 14 / 16 CSS px. The 14px glyph uses the pilot size curve, not a package Glyph slot. No scale transforms, motion, external fonts or network dependencies.</footer>
+<script type="module" src="lab.js"></script>
+</html>

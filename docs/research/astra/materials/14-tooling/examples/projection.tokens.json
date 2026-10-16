@@ -1,0 +1,121 @@
+{
+  "specimen": {
+    "$description": "Authored projection fixture; geometry and behavior losses recorded in projection.loss.json.",
+    "shadow": {
+      "$type": "shadow",
+      "$value": [
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0,
+              0,
+              0
+            ],
+            "alpha": 0.1
+          },
+          "offsetX": {
+            "value": 0,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": 2,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 4,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          },
+          "inset": false
+        },
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              1,
+              1,
+              1
+            ],
+            "alpha": 0.2
+          },
+          "offsetX": {
+            "value": -1,
+            "unit": "px"
+          },
+          "offsetY": {
+            "value": -1,
+            "unit": "px"
+          },
+          "blur": {
+            "value": 0,
+            "unit": "px"
+          },
+          "spread": {
+            "value": 0,
+            "unit": "px"
+          },
+          "inset": true
+        }
+      ]
+    },
+    "ramp": {
+      "$type": "gradient",
+      "$value": [
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0.2,
+              0.4,
+              0.8
+            ],
+            "alpha": 0.3
+          },
+          "position": 0.0
+        },
+        {
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0.8,
+              0.3,
+              0.5
+            ],
+            "alpha": 0
+          },
+          "position": 1.0
+        }
+      ]
+    },
+    "border": {
+      "$type": "border",
+      "$value": {
+        "color": {
+          "colorSpace": "srgb",
+          "components": [
+            0,
+            0,
+            0
+          ],
+          "alpha": 0.15
+        },
+        "width": {
+          "value": 1,
+          "unit": "px"
+        },
+        "style": "solid"
+      }
+    },
+    "blur": {
+      "$type": "dimension",
+      "$value": {
+        "value": 5,
+        "unit": "px"
+      }
+    }
+  }
+}

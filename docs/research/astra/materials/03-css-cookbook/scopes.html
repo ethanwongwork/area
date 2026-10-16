@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en" data-theme="light"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Scopes & fallbacks · Area materials research</title><link rel="stylesheet" href="lab.css"><script src="lab.js" defer></script></head>
+<body><main><nav aria-label="Cookbook demos"><a href="index.html">01 Layers</a><a href="glass.html">02 Glass &amp; edges</a><a href="scopes.html">03 Scope &amp; fallbacks</a><a href="README.md">Research report</a></nav><div class="eyebrow">Astra / Materials 03 / Research only</div><h1>Scopes & fallbacks</h1>
+<p class="intro">Private unregistered custom properties consume Area semantic colours. Derive at the point of use so a child’s colour inputs do not inherit a colour already resolved in its parent.</p><p>All optical numbers are authored teaching examples, not measured Area presets or native platform replicas.</p>
+<div class="controls" aria-label="Local demonstration settings">
+<label for="theme">Mode<select id="theme"><option value="light">Light</option><option value="dark">Dark</option></select></label>
+<label for="radius">Radius <output for="radius">26px</output><input id="radius" data-css="--demo-radius" data-unit="px" type="range" min="0" max="56" value="26"></label>
+<label for="angle">Gradient / highlight angle <output for="angle">135deg</output><input id="angle" data-css="--demo-angle" data-unit="deg" type="range" min="0" max="360" value="135"></label>
+<label class="check" for="reduce"><input id="reduce" type="checkbox">Simplify effects</label></div><p class="status" id="support" role="status"></p><h2>Derive again at the consuming scope</h2><section class="demo-scope" id="outer-scope"><h3>Parent scope</h3><p>Body, accent tint and a relative-lightness sample read this scope’s inputs.</p>
+<div class="swatches" aria-label="Parent body, mixed tint, relative colour"><div class="swatch body" title="Body"></div><div class="swatch tint" title="Mixed tint"></div><div class="swatch relative" title="Relative colour"></div></div>
+<button class="action">Hover or focus me</button> <button class="action" disabled>Disabled</button>
+<section class="demo-scope nested" id="nested-scope"><h3>Nested scope</h3><p>Different local fallback inputs; the derivations are declared again here. Loading real Area tokens would take precedence over these fallback inputs.</p>
+<div class="swatches" aria-label="Nested body, mixed tint, relative colour"><div class="swatch body" title="Body"></div><div class="swatch tint" title="Mixed tint"></div><div class="swatch relative" title="Relative colour"></div></div><button class="action">Same ink on hover</button></section></section>
+<h2>Surface still owns cast elevation</h2><div class="grid"><article class="tile"><div class="cast-shell"><div class="specimen"><span>Cast shell + inset body</span></div></div><p>The wrapper consumes Area’s shadow-card when available. Its fallback is illustrative. The child draws only a local inset highlight.</p></article>
+<article class="tile"><div class="specimen shape"><span>Rounded fallback</span></div><p>Move Radius to zero: corner-shape needs a nonzero radius to have a visible effect.</p></article></div>
+<h2>Manual checks</h2><ol><li>Tab through links, sliders and buttons. Focus must remain visible outside decoration.</li><li>Switch Light / Dark; parent samples follow it while the nested scope remains distinct.</li><li>Hover the two enabled buttons: their foreground must remain fixed.</li><li>Enable Simplify effects, then revisit the glass page and enable it there too; settings are page-local.</li><li>Enable forced-colour emulation: text, outlines and real borders should remain when decoration is removed.</li></ol>
+<footer><p>Checked 2026-10-08. See <a href="compatibility.md">dated support evidence</a> and <a href="cookbook.md">techniques and pitfalls</a>. No external assets or requests.</p></footer>
+</main></body></html>

@@ -1,0 +1,2792 @@
+{
+  "checked": "2026-10-10",
+  "open_glass_ui": {
+    "repository": "https://github.com/moekoelueker/open-glass-ui",
+    "branch": "main",
+    "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+    "commit_date": "2026-09-29T13:57:49-07:00"
+  },
+  "area_main": "eaa9222ebf98f7c260f9e0dd448940523003d4d3",
+  "research_inputs": "ce84e32725f4e9321c77b4a75eb142a1c565674c",
+  "citations": [
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "tests/e2e/component-atlas.spec.ts",
+      "start": 26,
+      "end": 40,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/tests/e2e/component-atlas.spec.ts#L26-L40"
+    },
+    {
+      "owner": "research",
+      "commit": "ce84e32725f4e9321c77b4a75eb142a1c565674c",
+      "path": "docs/research/astra/materials/02-prior-art/README.md",
+      "start": 1,
+      "end": 28,
+      "url": "https://github.com/ethanwongwork/area/blob/ce84e32725f4e9321c77b4a75eb142a1c565674c/docs/research/astra/materials/02-prior-art/README.md#L1-L28"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/react/src/theme.tsx",
+      "start": 67,
+      "end": 106,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/react/src/theme.tsx#L67-L106"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/materials.ts",
+      "start": 4,
+      "end": 44,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/materials.ts#L4-L44"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/look.ts",
+      "start": 41,
+      "end": 101,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/look.ts#L41-L101"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/theme.ts",
+      "start": 189,
+      "end": 241,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/theme.ts#L189-L241"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/react/src/theme.tsx",
+      "start": 108,
+      "end": 148,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/react/src/theme.tsx#L108-L148"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/look.ts",
+      "start": 104,
+      "end": 155,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/look.ts#L104-L155"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 18,
+      "end": 22,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L18-L22"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 41,
+      "end": 165,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L41-L165"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/react/src/glass.tsx",
+      "start": 73,
+      "end": 121,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/react/src/glass.tsx#L73-L121"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/react/src/glass.tsx",
+      "start": 150,
+      "end": 162,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/react/src/glass.tsx#L150-L162"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/renderers/src/css.ts",
+      "start": 300,
+      "end": 309,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/renderers/src/css.ts#L300-L309"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/index.tsx",
+      "start": 429,
+      "end": 481,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L429-L481"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/index.tsx",
+      "start": 793,
+      "end": 817,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L793-L817"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/index.tsx",
+      "start": 24,
+      "end": 25,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L24-L25"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "scripts/generate-liquid-css.mjs",
+      "start": 21,
+      "end": 86,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/scripts/generate-liquid-css.mjs#L21-L86"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/look.ts",
+      "start": 85,
+      "end": 94,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/look.ts#L85-L94"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 76,
+      "end": 84,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L76-L84"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 139,
+      "end": 147,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L139-L147"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/renderers/src/css.ts",
+      "start": 34,
+      "end": 60,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/renderers/src/css.ts#L34-L60"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/renderers/src/css.ts",
+      "start": 142,
+      "end": 157,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/renderers/src/css.ts#L142-L157"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/renderers/src/css.ts",
+      "start": 169,
+      "end": 209,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/renderers/src/css.ts#L169-L209"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 43,
+      "end": 51,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L43-L51"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 85,
+      "end": 102,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L85-L102"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 110,
+      "end": 118,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L110-L118"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 148,
+      "end": 164,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L148-L164"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/look.ts",
+      "start": 13,
+      "end": 18,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/look.ts#L13-L18"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/look.ts",
+      "start": 139,
+      "end": 155,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/look.ts#L139-L155"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 85,
+      "end": 96,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L85-L96"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 148,
+      "end": 159,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L148-L159"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/renderers/src/css.ts",
+      "start": 169,
+      "end": 187,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/renderers/src/css.ts#L169-L187"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/renderers/src/css.ts",
+      "start": 201,
+      "end": 208,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/renderers/src/css.ts#L201-L208"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/look.ts",
+      "start": 23,
+      "end": 24,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/look.ts#L23-L24"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 48,
+      "end": 69,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L48-L69"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 97,
+      "end": 100,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L97-L100"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/look.ts",
+      "start": 25,
+      "end": 26,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/look.ts#L25-L26"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 54,
+      "end": 69,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L54-L69"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 303,
+      "end": 328,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L303-L328"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 810,
+      "end": 821,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L810-L821"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/look.ts",
+      "start": 27,
+      "end": 28,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/look.ts#L27-L28"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/look.ts",
+      "start": 62,
+      "end": 63,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/look.ts#L62-L63"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/look.ts",
+      "start": 119,
+      "end": 127,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/look.ts#L119-L127"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 67,
+      "end": 75,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L67-L75"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 207,
+      "end": 217,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L207-L217"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/look.ts",
+      "start": 29,
+      "end": 32,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/look.ts#L29-L32"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/look.ts",
+      "start": 128,
+      "end": 137,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/look.ts#L128-L137"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/look.ts",
+      "start": 33,
+      "end": 34,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/look.ts#L33-L34"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 64,
+      "end": 65,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L64-L65"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 128,
+      "end": 129,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L128-L129"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/renderers/src/css.ts",
+      "start": 188,
+      "end": 200,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/renderers/src/css.ts#L188-L200"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/look.ts",
+      "start": 35,
+      "end": 36,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/look.ts#L35-L36"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 70,
+      "end": 75,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L70-L75"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 133,
+      "end": 138,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L133-L138"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 381,
+      "end": 385,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L381-L385"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 99,
+      "end": 100,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L99-L100"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1121,
+      "end": 1132,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1121-L1132"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/look.ts",
+      "start": 8,
+      "end": 59,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/look.ts#L8-L59"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 205,
+      "end": 206,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L205-L206"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/renderers/src/css.ts",
+      "start": 142,
+      "end": 209,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/renderers/src/css.ts#L142-L209"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/renderers/src/css.ts",
+      "start": 212,
+      "end": 297,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/renderers/src/css.ts#L212-L297"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 179,
+      "end": 227,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L179-L227"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 303,
+      "end": 425,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L303-L425"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 452,
+      "end": 519,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L452-L519"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 522,
+      "end": 563,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L522-L563"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1044,
+      "end": 1062,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1044-L1062"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 569,
+      "end": 725,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L569-L725"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 810,
+      "end": 880,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L810-L880"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 654,
+      "end": 720,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L654-L720"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 791,
+      "end": 803,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L791-L803"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 922,
+      "end": 973,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L922-L973"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1069,
+      "end": 1148,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1069-L1148"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 979,
+      "end": 1041,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L979-L1041"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 559,
+      "end": 652,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L559-L652"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 722,
+      "end": 860,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L722-L860"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 947,
+      "end": 975,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L947-L975"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 1523,
+      "end": 1606,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1523-L1606"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 771,
+      "end": 780,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L771-L780"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 897,
+      "end": 917,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L897-L917"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1014,
+      "end": 1041,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1014-L1041"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 922,
+      "end": 935,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L922-L935"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 249,
+      "end": 297,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L249-L297"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/renderers/src/css.ts",
+      "start": 162,
+      "end": 167,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/renderers/src/css.ts#L162-L167"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/index.tsx",
+      "start": 1029,
+      "end": 1053,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L1029-L1053"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/react/src/glass.tsx",
+      "start": 110,
+      "end": 162,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/react/src/glass.tsx#L110-L162"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/index.tsx",
+      "start": 162,
+      "end": 223,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L162-L223"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/react/src/theme.tsx",
+      "start": 67,
+      "end": 148,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/react/src/theme.tsx#L67-L148"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 685,
+      "end": 743,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L685-L743"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 951,
+      "end": 958,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L951-L958"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 303,
+      "end": 319,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L303-L319"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 766,
+      "end": 780,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L766-L780"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/renderers/src/capabilities.ts",
+      "start": 108,
+      "end": 139,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/renderers/src/capabilities.ts#L108-L139"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/react/src/glass.tsx",
+      "start": 83,
+      "end": 120,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/react/src/glass.tsx#L83-L120"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/react/src/filters.tsx",
+      "start": 26,
+      "end": 33,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/react/src/filters.tsx#L26-L33"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/react/src/filters.tsx",
+      "start": 56,
+      "end": 136,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/react/src/filters.tsx#L56-L136"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/react/src/filters.tsx",
+      "start": 179,
+      "end": 195,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/react/src/filters.tsx#L179-L195"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/react/src/webgl-surface.tsx",
+      "start": 14,
+      "end": 32,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/react/src/webgl-surface.tsx#L14-L32"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/react/src/webgl-surface.tsx",
+      "start": 142,
+      "end": 155,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/react/src/webgl-surface.tsx#L142-L155"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1155,
+      "end": 1351,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1155-L1351"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 1701,
+      "end": 1803,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1701-L1803"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/renderers/src/css.ts",
+      "start": 212,
+      "end": 255,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/renderers/src/css.ts#L212-L255"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/index.tsx",
+      "start": 178,
+      "end": 223,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L178-L223"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 30,
+      "end": 143,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L30-L143"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/index.tsx",
+      "start": 229,
+      "end": 247,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L229-L247"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 145,
+      "end": 158,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L145-L158"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/index.tsx",
+      "start": 264,
+      "end": 300,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L264-L300"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 160,
+      "end": 195,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L160-L195"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/index.tsx",
+      "start": 308,
+      "end": 366,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L308-L366"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 569,
+      "end": 626,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L569-L626"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 197,
+      "end": 274,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L197-L274"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/index.tsx",
+      "start": 373,
+      "end": 421,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L373-L421"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 633,
+      "end": 721,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L633-L721"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 276,
+      "end": 303,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L276-L303"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/index.tsx",
+      "start": 429,
+      "end": 453,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L429-L453"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 731,
+      "end": 749,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L731-L749"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 305,
+      "end": 319,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L305-L319"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/index.tsx",
+      "start": 460,
+      "end": 481,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L460-L481"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 731,
+      "end": 756,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L731-L756"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 305,
+      "end": 324,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L305-L324"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/index.tsx",
+      "start": 498,
+      "end": 600,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L498-L600"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 452,
+      "end": 483,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L452-L483"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 326,
+      "end": 364,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L326-L364"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/index.tsx",
+      "start": 912,
+      "end": 925,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L912-L925"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 760,
+      "end": 780,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L760-L780"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 366,
+      "end": 404,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L366-L404"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/index.tsx",
+      "start": 617,
+      "end": 821,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L617-L821"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/index.tsx",
+      "start": 930,
+      "end": 958,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L930-L958"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 406,
+      "end": 421,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L406-L421"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/index.tsx",
+      "start": 963,
+      "end": 977,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L963-L977"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 760,
+      "end": 764,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L760-L764"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 366,
+      "end": 399,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L366-L399"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 423,
+      "end": 427,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L423-L427"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/index.tsx",
+      "start": 984,
+      "end": 1010,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L984-L1010"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 429,
+      "end": 474,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L429-L474"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/index.tsx",
+      "start": 1055,
+      "end": 1117,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L1055-L1117"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 633,
+      "end": 725,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L633-L725"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 476,
+      "end": 498,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L476-L498"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 37,
+      "end": 40,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L37-L40"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 979,
+      "end": 996,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L979-L996"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 559,
+      "end": 596,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L559-L596"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 47,
+      "end": 72,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L47-L72"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 999,
+      "end": 1002,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L999-L1002"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 598,
+      "end": 632,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L598-L632"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 73,
+      "end": 76,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L73-L76"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1005,
+      "end": 1011,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1005-L1011"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 634,
+      "end": 652,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L634-L652"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 85,
+      "end": 130,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L85-L130"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 810,
+      "end": 855,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L810-L855"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 138,
+      "end": 147,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L138-L147"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 916,
+      "end": 917,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L916-L917"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 722,
+      "end": 745,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L722-L745"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 154,
+      "end": 168,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L154-L168"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1014,
+      "end": 1031,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1014-L1031"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 747,
+      "end": 799,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L747-L799"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 179,
+      "end": 207,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L179-L207"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1014,
+      "end": 1017,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1014-L1017"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 768,
+      "end": 778,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L768-L778"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 801,
+      "end": 814,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L801-L814"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 208,
+      "end": 220,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L208-L220"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1038,
+      "end": 1041,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1038-L1041"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 816,
+      "end": 834,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L816-L834"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 221,
+      "end": 235,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L221-L235"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1033,
+      "end": 1034,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1033-L1034"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 836,
+      "end": 860,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L836-L860"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 242,
+      "end": 270,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L242-L270"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 897,
+      "end": 913,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L897-L913"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 862,
+      "end": 908,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L862-L908"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 278,
+      "end": 322,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L278-L322"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 910,
+      "end": 945,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L910-L945"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 328,
+      "end": 352,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L328-L352"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 381,
+      "end": 425,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L381-L425"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 452,
+      "end": 462,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L452-L462"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1044,
+      "end": 1057,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1044-L1057"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 977,
+      "end": 1011,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L977-L1011"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 432,
+      "end": 496,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L432-L496"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 858,
+      "end": 870,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L858-L870"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 1013,
+      "end": 1065,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1013-L1065"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 748,
+      "end": 751,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L748-L751"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 960,
+      "end": 973,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L960-L973"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 1067,
+      "end": 1179,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1067-L1179"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 575,
+      "end": 746,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L575-L746"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 752,
+      "end": 755,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L752-L755"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 767,
+      "end": 891,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L767-L891"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 873,
+      "end": 894,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L873-L894"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 1181,
+      "end": 1250,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1181-L1250"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 918,
+      "end": 986,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L918-L986"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 1003,
+      "end": 1032,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L1003-L1032"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1104,
+      "end": 1128,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1104-L1128"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 1252,
+      "end": 1326,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1252-L1326"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 1051,
+      "end": 1106,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L1051-L1106"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1104,
+      "end": 1114,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1104-L1114"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1130,
+      "end": 1137,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1130-L1137"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 1277,
+      "end": 1353,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1277-L1353"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 1118,
+      "end": 1146,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L1118-L1146"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1069,
+      "end": 1094,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1069-L1094"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 1355,
+      "end": 1378,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1355-L1378"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 1413,
+      "end": 1442,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1413-L1442"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 1153,
+      "end": 1185,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L1153-L1185"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1069,
+      "end": 1100,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1069-L1100"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 1355,
+      "end": 1411,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1355-L1411"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 1192,
+      "end": 1224,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L1192-L1224"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 1233,
+      "end": 1275,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L1233-L1275"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 1444,
+      "end": 1478,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1444-L1478"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 1286,
+      "end": 1369,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L1286-L1369"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 1480,
+      "end": 1521,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1480-L1521"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 1376,
+      "end": 1413,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L1376-L1413"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 1421,
+      "end": 1453,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L1421-L1453"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 303,
+      "end": 344,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L303-L344"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1060,
+      "end": 1062,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1060-L1062"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 1608,
+      "end": 1628,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1608-L1628"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 1465,
+      "end": 1612,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L1465-L1612"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1140,
+      "end": 1148,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1140-L1148"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 1630,
+      "end": 1693,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1630-L1693"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/look.ts",
+      "start": 8,
+      "end": 83,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/look.ts#L8-L83"
+    },
+    {
+      "owner": "research",
+      "commit": "ce84e32725f4e9321c77b4a75eb142a1c565674c",
+      "path": "docs/research/astra/materials/01-taxonomy/README.md",
+      "start": 1,
+      "end": 19,
+      "url": "https://github.com/ethanwongwork/area/blob/ce84e32725f4e9321c77b4a75eb142a1c565674c/docs/research/astra/materials/01-taxonomy/README.md#L1-L19"
+    },
+    {
+      "owner": "research",
+      "commit": "ce84e32725f4e9321c77b4a75eb142a1c565674c",
+      "path": "docs/research/astra/materials/04-role-map/README.md",
+      "start": 22,
+      "end": 59,
+      "url": "https://github.com/ethanwongwork/area/blob/ce84e32725f4e9321c77b4a75eb142a1c565674c/docs/research/astra/materials/04-role-map/README.md#L22-L59"
+    },
+    {
+      "owner": "research",
+      "commit": "ce84e32725f4e9321c77b4a75eb142a1c565674c",
+      "path": "docs/research/astra/materials/07-controls/controls.md",
+      "start": 7,
+      "end": 16,
+      "url": "https://github.com/ethanwongwork/area/blob/ce84e32725f4e9321c77b4a75eb142a1c565674c/docs/research/astra/materials/07-controls/controls.md#L7-L16"
+    },
+    {
+      "owner": "research",
+      "commit": "ce84e32725f4e9321c77b4a75eb142a1c565674c",
+      "path": "docs/research/astra/materials/05-absorption/policy.md",
+      "start": 92,
+      "end": 104,
+      "url": "https://github.com/ethanwongwork/area/blob/ce84e32725f4e9321c77b4a75eb142a1c565674c/docs/research/astra/materials/05-absorption/policy.md#L92-L104"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 64,
+      "end": 75,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L64-L75"
+    },
+    {
+      "owner": "area",
+      "commit": "eaa9222ebf98f7c260f9e0dd448940523003d4d3",
+      "path": "packages/tokens/src/axes/surface.ts",
+      "start": 15,
+      "end": 53,
+      "url": "https://github.com/ethanwongwork/area/blob/eaa9222ebf98f7c260f9e0dd448940523003d4d3/packages/tokens/src/axes/surface.ts#L15-L53"
+    },
+    {
+      "owner": "area",
+      "commit": "eaa9222ebf98f7c260f9e0dd448940523003d4d3",
+      "path": "docs/DESIGN_SYSTEM.md",
+      "start": 156,
+      "end": 165,
+      "url": "https://github.com/ethanwongwork/area/blob/eaa9222ebf98f7c260f9e0dd448940523003d4d3/docs/DESIGN_SYSTEM.md#L156-L165"
+    },
+    {
+      "owner": "research",
+      "commit": "ce84e32725f4e9321c77b4a75eb142a1c565674c",
+      "path": "docs/research/astra/materials/07-controls/architecture.md",
+      "start": 5,
+      "end": 27,
+      "url": "https://github.com/ethanwongwork/area/blob/ce84e32725f4e9321c77b4a75eb142a1c565674c/docs/research/astra/materials/07-controls/architecture.md#L5-L27"
+    },
+    {
+      "owner": "research",
+      "commit": "ce84e32725f4e9321c77b4a75eb142a1c565674c",
+      "path": "docs/research/astra/materials/07-controls/controls.md",
+      "start": 24,
+      "end": 45,
+      "url": "https://github.com/ethanwongwork/area/blob/ce84e32725f4e9321c77b4a75eb142a1c565674c/docs/research/astra/materials/07-controls/controls.md#L24-L45"
+    },
+    {
+      "owner": "research",
+      "commit": "ce84e32725f4e9321c77b4a75eb142a1c565674c",
+      "path": "docs/research/astra/materials/07-controls/architecture.md",
+      "start": 95,
+      "end": 113,
+      "url": "https://github.com/ethanwongwork/area/blob/ce84e32725f4e9321c77b4a75eb142a1c565674c/docs/research/astra/materials/07-controls/architecture.md#L95-L113"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/look.ts",
+      "start": 9,
+      "end": 10,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/look.ts#L9-L10"
+    },
+    {
+      "owner": "research",
+      "commit": "ce84e32725f4e9321c77b4a75eb142a1c565674c",
+      "path": "docs/research/astra/materials/07-controls/controls.md",
+      "start": 30,
+      "end": 31,
+      "url": "https://github.com/ethanwongwork/area/blob/ce84e32725f4e9321c77b4a75eb142a1c565674c/docs/research/astra/materials/07-controls/controls.md#L30-L31"
+    },
+    {
+      "owner": "research",
+      "commit": "ce84e32725f4e9321c77b4a75eb142a1c565674c",
+      "path": "docs/research/astra/materials/07-controls/controls.md",
+      "start": 42,
+      "end": 43,
+      "url": "https://github.com/ethanwongwork/area/blob/ce84e32725f4e9321c77b4a75eb142a1c565674c/docs/research/astra/materials/07-controls/controls.md#L42-L43"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/look.ts",
+      "start": 11,
+      "end": 18,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/look.ts#L11-L18"
+    },
+    {
+      "owner": "research",
+      "commit": "ce84e32725f4e9321c77b4a75eb142a1c565674c",
+      "path": "docs/research/astra/materials/07-controls/controls.md",
+      "start": 34,
+      "end": 41,
+      "url": "https://github.com/ethanwongwork/area/blob/ce84e32725f4e9321c77b4a75eb142a1c565674c/docs/research/astra/materials/07-controls/controls.md#L34-L41"
+    },
+    {
+      "owner": "research",
+      "commit": "ce84e32725f4e9321c77b4a75eb142a1c565674c",
+      "path": "docs/research/astra/materials/07-controls/controls.md",
+      "start": 50,
+      "end": 56,
+      "url": "https://github.com/ethanwongwork/area/blob/ce84e32725f4e9321c77b4a75eb142a1c565674c/docs/research/astra/materials/07-controls/controls.md#L50-L56"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/look.ts",
+      "start": 19,
+      "end": 22,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/look.ts#L19-L22"
+    },
+    {
+      "owner": "research",
+      "commit": "ce84e32725f4e9321c77b4a75eb142a1c565674c",
+      "path": "docs/research/astra/materials/07-controls/controls.md",
+      "start": 22,
+      "end": 46,
+      "url": "https://github.com/ethanwongwork/area/blob/ce84e32725f4e9321c77b4a75eb142a1c565674c/docs/research/astra/materials/07-controls/controls.md#L22-L46"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/look.ts",
+      "start": 23,
+      "end": 26,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/look.ts#L23-L26"
+    },
+    {
+      "owner": "research",
+      "commit": "ce84e32725f4e9321c77b4a75eb142a1c565674c",
+      "path": "docs/research/astra/materials/07-controls/controls.md",
+      "start": 39,
+      "end": 45,
+      "url": "https://github.com/ethanwongwork/area/blob/ce84e32725f4e9321c77b4a75eb142a1c565674c/docs/research/astra/materials/07-controls/controls.md#L39-L45"
+    },
+    {
+      "owner": "research",
+      "commit": "ce84e32725f4e9321c77b4a75eb142a1c565674c",
+      "path": "docs/research/astra/materials/07-controls/controls.md",
+      "start": 24,
+      "end": 26,
+      "url": "https://github.com/ethanwongwork/area/blob/ce84e32725f4e9321c77b4a75eb142a1c565674c/docs/research/astra/materials/07-controls/controls.md#L24-L26"
+    },
+    {
+      "owner": "research",
+      "commit": "ce84e32725f4e9321c77b4a75eb142a1c565674c",
+      "path": "docs/research/astra/materials/07-controls/controls.md",
+      "start": 36,
+      "end": 45,
+      "url": "https://github.com/ethanwongwork/area/blob/ce84e32725f4e9321c77b4a75eb142a1c565674c/docs/research/astra/materials/07-controls/controls.md#L36-L45"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 64,
+      "end": 69,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L64-L69"
+    },
+    {
+      "owner": "research",
+      "commit": "ce84e32725f4e9321c77b4a75eb142a1c565674c",
+      "path": "docs/research/astra/materials/07-controls/controls.md",
+      "start": 27,
+      "end": 35,
+      "url": "https://github.com/ethanwongwork/area/blob/ce84e32725f4e9321c77b4a75eb142a1c565674c/docs/research/astra/materials/07-controls/controls.md#L27-L35"
+    },
+    {
+      "owner": "research",
+      "commit": "ce84e32725f4e9321c77b4a75eb142a1c565674c",
+      "path": "docs/research/astra/materials/07-controls/controls.md",
+      "start": 43,
+      "end": 45,
+      "url": "https://github.com/ethanwongwork/area/blob/ce84e32725f4e9321c77b4a75eb142a1c565674c/docs/research/astra/materials/07-controls/controls.md#L43-L45"
+    },
+    {
+      "owner": "research",
+      "commit": "ce84e32725f4e9321c77b4a75eb142a1c565674c",
+      "path": "docs/research/astra/materials/07-controls/controls.md",
+      "start": 28,
+      "end": 35,
+      "url": "https://github.com/ethanwongwork/area/blob/ce84e32725f4e9321c77b4a75eb142a1c565674c/docs/research/astra/materials/07-controls/controls.md#L28-L35"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 367,
+      "end": 385,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L367-L385"
+    },
+    {
+      "owner": "research",
+      "commit": "ce84e32725f4e9321c77b4a75eb142a1c565674c",
+      "path": "docs/research/astra/materials/07-controls/controls.md",
+      "start": 33,
+      "end": 60,
+      "url": "https://github.com/ethanwongwork/area/blob/ce84e32725f4e9321c77b4a75eb142a1c565674c/docs/research/astra/materials/07-controls/controls.md#L33-L60"
+    },
+    {
+      "owner": "research",
+      "commit": "ce84e32725f4e9321c77b4a75eb142a1c565674c",
+      "path": "docs/research/astra/materials/05-absorption/policy.md",
+      "start": 3,
+      "end": 18,
+      "url": "https://github.com/ethanwongwork/area/blob/ce84e32725f4e9321c77b4a75eb142a1c565674c/docs/research/astra/materials/05-absorption/policy.md#L3-L18"
+    },
+    {
+      "owner": "research",
+      "commit": "ce84e32725f4e9321c77b4a75eb142a1c565674c",
+      "path": "docs/research/astra/materials/05-absorption/policy.md",
+      "start": 41,
+      "end": 71,
+      "url": "https://github.com/ethanwongwork/area/blob/ce84e32725f4e9321c77b4a75eb142a1c565674c/docs/research/astra/materials/05-absorption/policy.md#L41-L71"
+    },
+    {
+      "owner": "research",
+      "commit": "ce84e32725f4e9321c77b4a75eb142a1c565674c",
+      "path": "docs/research/astra/materials/11-performance/budgets.md",
+      "start": 3,
+      "end": 39,
+      "url": "https://github.com/ethanwongwork/area/blob/ce84e32725f4e9321c77b4a75eb142a1c565674c/docs/research/astra/materials/11-performance/budgets.md#L3-L39"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/react/src/glass.tsx",
+      "start": 110,
+      "end": 120,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/react/src/glass.tsx#L110-L120"
+    },
+    {
+      "owner": "area",
+      "commit": "eaa9222ebf98f7c260f9e0dd448940523003d4d3",
+      "path": "packages/react/src/components/Theme.tsx",
+      "start": 8,
+      "end": 33,
+      "url": "https://github.com/ethanwongwork/area/blob/eaa9222ebf98f7c260f9e0dd448940523003d4d3/packages/react/src/components/Theme.tsx#L8-L33"
+    },
+    {
+      "owner": "area",
+      "commit": "eaa9222ebf98f7c260f9e0dd448940523003d4d3",
+      "path": "docs/THEMING.md",
+      "start": 104,
+      "end": 129,
+      "url": "https://github.com/ethanwongwork/area/blob/eaa9222ebf98f7c260f9e0dd448940523003d4d3/docs/THEMING.md#L104-L129"
+    },
+    {
+      "owner": "research",
+      "commit": "ce84e32725f4e9321c77b4a75eb142a1c565674c",
+      "path": "docs/research/astra/materials/07-controls/architecture.md",
+      "start": 115,
+      "end": 124,
+      "url": "https://github.com/ethanwongwork/area/blob/ce84e32725f4e9321c77b4a75eb142a1c565674c/docs/research/astra/materials/07-controls/architecture.md#L115-L124"
+    },
+    {
+      "owner": "research",
+      "commit": "ce84e32725f4e9321c77b4a75eb142a1c565674c",
+      "path": "docs/research/astra/materials/07-controls/architecture.md",
+      "start": 176,
+      "end": 205,
+      "url": "https://github.com/ethanwongwork/area/blob/ce84e32725f4e9321c77b4a75eb142a1c565674c/docs/research/astra/materials/07-controls/architecture.md#L176-L205"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/theme.ts",
+      "start": 172,
+      "end": 241,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/theme.ts#L172-L241"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/react/src/provider.tsx",
+      "start": 90,
+      "end": 114,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/react/src/provider.tsx#L90-L114"
+    },
+    {
+      "owner": "area",
+      "commit": "eaa9222ebf98f7c260f9e0dd448940523003d4d3",
+      "path": "docs/CONTRAST.md",
+      "start": 7,
+      "end": 64,
+      "url": "https://github.com/ethanwongwork/area/blob/eaa9222ebf98f7c260f9e0dd448940523003d4d3/docs/CONTRAST.md#L7-L64"
+    },
+    {
+      "owner": "area",
+      "commit": "eaa9222ebf98f7c260f9e0dd448940523003d4d3",
+      "path": "docs/DESIGN_SYSTEM.md",
+      "start": 24,
+      "end": 45,
+      "url": "https://github.com/ethanwongwork/area/blob/eaa9222ebf98f7c260f9e0dd448940523003d4d3/docs/DESIGN_SYSTEM.md#L24-L45"
+    },
+    {
+      "owner": "research",
+      "commit": "ce84e32725f4e9321c77b4a75eb142a1c565674c",
+      "path": "docs/research/astra/materials/08-accessibility/method.md",
+      "start": 15,
+      "end": 45,
+      "url": "https://github.com/ethanwongwork/area/blob/ce84e32725f4e9321c77b4a75eb142a1c565674c/docs/research/astra/materials/08-accessibility/method.md#L15-L45"
+    },
+    {
+      "owner": "research",
+      "commit": "ce84e32725f4e9321c77b4a75eb142a1c565674c",
+      "path": "docs/research/astra/materials/08-accessibility/fallbacks.md",
+      "start": 5,
+      "end": 48,
+      "url": "https://github.com/ethanwongwork/area/blob/ce84e32725f4e9321c77b4a75eb142a1c565674c/docs/research/astra/materials/08-accessibility/fallbacks.md#L5-L48"
+    },
+    {
+      "owner": "research",
+      "commit": "ce84e32725f4e9321c77b4a75eb142a1c565674c",
+      "path": "docs/research/astra/materials/07-controls/controls.md",
+      "start": 50,
+      "end": 60,
+      "url": "https://github.com/ethanwongwork/area/blob/ce84e32725f4e9321c77b4a75eb142a1c565674c/docs/research/astra/materials/07-controls/controls.md#L50-L60"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/react/src/theme.tsx",
+      "start": 96,
+      "end": 105,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/react/src/theme.tsx#L96-L105"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 303,
+      "end": 359,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L303-L359"
+    },
+    {
+      "owner": "research",
+      "commit": "ce84e32725f4e9321c77b4a75eb142a1c565674c",
+      "path": "docs/research/astra/materials/07-controls/controls.md",
+      "start": 56,
+      "end": 60,
+      "url": "https://github.com/ethanwongwork/area/blob/ce84e32725f4e9321c77b4a75eb142a1c565674c/docs/research/astra/materials/07-controls/controls.md#L56-L60"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/index.tsx",
+      "start": 264,
+      "end": 421,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L264-L421"
+    },
+    {
+      "owner": "research",
+      "commit": "ce84e32725f4e9321c77b4a75eb142a1c565674c",
+      "path": "docs/research/astra/materials/16-specimen/README.md",
+      "start": 1,
+      "end": 20,
+      "url": "https://github.com/ethanwongwork/area/blob/ce84e32725f4e9321c77b4a75eb142a1c565674c/docs/research/astra/materials/16-specimen/README.md#L1-L20"
+    },
+    {
+      "owner": "research",
+      "commit": "ce84e32725f4e9321c77b4a75eb142a1c565674c",
+      "path": "docs/research/astra/materials/16-specimen/limitations.md",
+      "start": 20,
+      "end": 36,
+      "url": "https://github.com/ethanwongwork/area/blob/ce84e32725f4e9321c77b4a75eb142a1c565674c/docs/research/astra/materials/16-specimen/limitations.md#L20-L36"
+    },
+    {
+      "owner": "research",
+      "commit": "ce84e32725f4e9321c77b4a75eb142a1c565674c",
+      "path": "docs/research/astra/materials/15-consistency/findings.md",
+      "start": 5,
+      "end": 43,
+      "url": "https://github.com/ethanwongwork/area/blob/ce84e32725f4e9321c77b4a75eb142a1c565674c/docs/research/astra/materials/15-consistency/findings.md#L5-L43"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/look.ts",
+      "start": 8,
+      "end": 155,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/look.ts#L8-L155"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 392,
+      "end": 411,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L392-L411"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 428,
+      "end": 444,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L428-L444"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/index.tsx",
+      "start": 308,
+      "end": 421,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L308-L421"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 619,
+      "end": 682,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L619-L682"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/renderers/src/capabilities.ts",
+      "start": 124,
+      "end": 139,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/renderers/src/capabilities.ts#L124-L139"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1155,
+      "end": 1203,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1155-L1203"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/react/src/filters.tsx",
+      "start": 22,
+      "end": 24,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/react/src/filters.tsx#L22-L24"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/react/src/filters.tsx",
+      "start": 104,
+      "end": 126,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/react/src/filters.tsx#L104-L126"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "tests/e2e/component-atlas.spec.ts",
+      "start": 26,
+      "end": 59,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/tests/e2e/component-atlas.spec.ts#L26-L59"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "tests/e2e/component-atlas.spec.ts",
+      "start": 61,
+      "end": 129,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/tests/e2e/component-atlas.spec.ts#L61-L129"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/theme.test.ts",
+      "start": 9,
+      "end": 64,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/theme.test.ts#L9-L64"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 1099,
+      "end": 1118,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1099-L1118"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 1153,
+      "end": 1171,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1153-L1171"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 965,
+      "end": 973,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L965-L973"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 705,
+      "end": 722,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L705-L722"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 748,
+      "end": 755,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L748-L755"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/look.ts",
+      "start": 65,
+      "end": 83,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/look.ts#L65-L83"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/look.ts",
+      "start": 99,
+      "end": 118,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/look.ts#L99-L118"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/look.ts",
+      "start": 138,
+      "end": 155,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/look.ts#L138-L155"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 41,
+      "end": 84,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L41-L84"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/react/src/theme.tsx",
+      "start": 139,
+      "end": 148,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/react/src/theme.tsx#L139-L148"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/react/src/theme.tsx",
+      "start": 108,
+      "end": 130,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/react/src/theme.tsx#L108-L130"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/index.tsx",
+      "start": 642,
+      "end": 652,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L642-L652"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 588,
+      "end": 607,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L588-L607"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/atlas.tsx",
+      "start": 928,
+      "end": 958,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/atlas.tsx#L928-L958"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/react/src/theme.tsx",
+      "start": 119,
+      "end": 148,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/react/src/theme.tsx#L119-L148"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "scripts/generate-liquid-css.mjs",
+      "start": 21,
+      "end": 23,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/scripts/generate-liquid-css.mjs#L21-L23"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "scripts/generate-liquid-css.mjs",
+      "start": 43,
+      "end": 66,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/scripts/generate-liquid-css.mjs#L43-L66"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/look.ts",
+      "start": 23,
+      "end": 36,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/look.ts#L23-L36"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1173,
+      "end": 1203,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1173-L1203"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 609,
+      "end": 626,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L609-L626"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 668,
+      "end": 718,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L668-L718"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 922,
+      "end": 925,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L922-L925"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 592,
+      "end": 596,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L592-L596"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 910,
+      "end": 923,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L910-L923"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1146,
+      "end": 1148,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1146-L1148"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1155,
+      "end": 1170,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1155-L1170"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/theme.ts",
+      "start": 149,
+      "end": 181,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/theme.ts#L149-L181"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/theme.ts",
+      "start": 189,
+      "end": 205,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/theme.ts#L189-L205"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/theme.ts",
+      "start": 240,
+      "end": 241,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/theme.ts#L240-L241"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/theme.test.ts",
+      "start": 20,
+      "end": 27,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/theme.test.ts#L20-L27"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 367,
+      "end": 389,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L367-L389"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/theme.ts",
+      "start": 208,
+      "end": 214,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/theme.ts#L208-L214"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/core/src/theme.ts",
+      "start": 194,
+      "end": 228,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/core/src/theme.ts#L194-L228"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/renderers/src/capabilities.ts",
+      "start": 86,
+      "end": 107,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/renderers/src/capabilities.ts#L86-L107"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "tests/e2e/component-atlas.spec.ts",
+      "start": 44,
+      "end": 48,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/tests/e2e/component-atlas.spec.ts#L44-L48"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "tests/e2e/component-atlas.spec.ts",
+      "start": 131,
+      "end": 175,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/tests/e2e/component-atlas.spec.ts#L131-L175"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/renderers/src/css.ts",
+      "start": 218,
+      "end": 235,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/renderers/src/css.ts#L218-L235"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1268,
+      "end": 1351,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1268-L1351"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 1768,
+      "end": 1803,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1768-L1803"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 1380,
+      "end": 1397,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1380-L1397"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1300,
+      "end": 1332,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1300-L1332"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 205,
+      "end": 227,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L205-L227"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 652,
+      "end": 718,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L652-L718"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 1206,
+      "end": 1265,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L1206-L1265"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 1705,
+      "end": 1766,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L1705-L1766"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/index.tsx",
+      "start": 192,
+      "end": 209,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/index.tsx#L192-L209"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/react/src/glass.tsx",
+      "start": 73,
+      "end": 76,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/react/src/glass.tsx#L73-L76"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/react/src/webgl-surface.tsx",
+      "start": 103,
+      "end": 112,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/react/src/webgl-surface.tsx#L103-L112"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/react/src/webgl-surface.tsx",
+      "start": 165,
+      "end": 199,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/react/src/webgl-surface.tsx#L165-L199"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 388,
+      "end": 389,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L388-L389"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/liquid.source.css",
+      "start": 516,
+      "end": 542,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/liquid.source.css#L516-L542"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "packages/recipes/src/styles.css",
+      "start": 969,
+      "end": 975,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/packages/recipes/src/styles.css#L969-L975"
+    },
+    {
+      "owner": "area",
+      "commit": "eaa9222ebf98f7c260f9e0dd448940523003d4d3",
+      "path": "docs/CONTRAST.md",
+      "start": 36,
+      "end": 64,
+      "url": "https://github.com/ethanwongwork/area/blob/eaa9222ebf98f7c260f9e0dd448940523003d4d3/docs/CONTRAST.md#L36-L64"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "package.json",
+      "start": 9,
+      "end": 39,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/package.json#L9-L39"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "apps/showcase/package.json",
+      "start": 1,
+      "end": 26,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/apps/showcase/package.json#L1-L26"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "apps/showcase/vite.config.ts",
+      "start": 109,
+      "end": 147,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/apps/showcase/vite.config.ts#L109-L147"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "apps/showcase/src/component-atlas.tsx",
+      "start": 1017,
+      "end": 1048,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/apps/showcase/src/component-atlas.tsx#L1017-L1048"
+    },
+    {
+      "owner": "og",
+      "commit": "4943bbfd5611fe211cccf4b50c384345468d635b",
+      "path": "tests/e2e/component-atlas.spec.ts",
+      "start": 92,
+      "end": 106,
+      "url": "https://github.com/moekoelueker/open-glass-ui/blob/4943bbfd5611fe211cccf4b50c384345468d635b/tests/e2e/component-atlas.spec.ts#L92-L106"
+    }
+  ],
+  "source_files": [
+    {
+      "path": "apps/showcase/package.json",
+      "sha256": "192780450bc1ab282baa727a3fcfa0ef0014379183dd6f3514bbc13bde4aa5c2",
+      "lines": 27
+    },
+    {
+      "path": "apps/showcase/src/component-atlas.tsx",
+      "sha256": "93e7d7ba89fade1218fdd103506dcba34f37522e270173195a85b4521159b1fe",
+      "lines": 1158
+    },
+    {
+      "path": "apps/showcase/vite.config.ts",
+      "sha256": "e3ddfd9c8b348e9d0740a40e8eb35513f161ebd86061172f4b2e6159cc0122f0",
+      "lines": 147
+    },
+    {
+      "path": "package.json",
+      "sha256": "66534a5856934f841a75a9d21e2cc447319555703230c3855dfbe2d5f7a07e08",
+      "lines": 60
+    },
+    {
+      "path": "packages/core/src/look.ts",
+      "sha256": "0ed19c83d1c34c8d3300ec500302d8377cdeb66aae8829393b43f6b806aba306",
+      "lines": 156
+    },
+    {
+      "path": "packages/core/src/materials.ts",
+      "sha256": "55d50f03e5ddc7851c60c9fadb9c024762778c11e0ed28a0e2046311f1f8ea46",
+      "lines": 44
+    },
+    {
+      "path": "packages/core/src/theme.test.ts",
+      "sha256": "8061a3c12dfe31c17a22da7b1008abf2feba8ce4f9236a4612a7667cd5cdeea9",
+      "lines": 76
+    },
+    {
+      "path": "packages/core/src/theme.ts",
+      "sha256": "88b3e21e31ed3cfad054a26ff6ae89d360ab58d64c2c7f0813edbf9399fd3806",
+      "lines": 273
+    },
+    {
+      "path": "packages/react/src/filters.tsx",
+      "sha256": "e611737e110e17420216d8f12ffa37c91d17d088fbac32054694e23eb64df2b6",
+      "lines": 305
+    },
+    {
+      "path": "packages/react/src/glass.tsx",
+      "sha256": "d4a551b022e2aea37c57d9a8d90f8ae79661a47531a3414e35e5fdc2385d2631",
+      "lines": 166
+    },
+    {
+      "path": "packages/react/src/provider.tsx",
+      "sha256": "9d77d6905a0e9284a37cfa75d473db2f2b3d1ea1f90b2302917c3ffe1f83cd48",
+      "lines": 136
+    },
+    {
+      "path": "packages/react/src/theme.tsx",
+      "sha256": "a193b06d4737b0a239166649ad6ceb9b01230176b6ff31067f54b024414b2b1f",
+      "lines": 158
+    },
+    {
+      "path": "packages/react/src/webgl-surface.tsx",
+      "sha256": "544c4ed73da78f5d2a33236e7ff7cdbf61f9cb9e56c51442f786e8121ec61998",
+      "lines": 285
+    },
+    {
+      "path": "packages/recipes/src/atlas.tsx",
+      "sha256": "9a7672eb56ddea91fbd709c32d72e8d577ea43fc6d61911b2c38cc9a093e5154",
+      "lines": 1612
+    },
+    {
+      "path": "packages/recipes/src/index.tsx",
+      "sha256": "4feeb5754158a7327bb40d18fe1d4467e2b296ce137fa2a05e81fcd67179270b",
+      "lines": 1117
+    },
+    {
+      "path": "packages/recipes/src/liquid.source.css",
+      "sha256": "e5dc817105a6d881c922655a294457d373403f05f326afb7447a7ecd75555536",
+      "lines": 1351
+    },
+    {
+      "path": "packages/recipes/src/styles.css",
+      "sha256": "961f8e1a5af71fb231d4a203a3d44008e2fcdfdf225b4b679489b437efa7f98d",
+      "lines": 1803
+    },
+    {
+      "path": "packages/renderers/src/capabilities.ts",
+      "sha256": "c8b75d23d06ce86a48651309cceb5a685e8e967fcf9bd7dc793dfec79f0456c4",
+      "lines": 139
+    },
+    {
+      "path": "packages/renderers/src/css.ts",
+      "sha256": "367461e2350e8f924d084c03e968111ad666aa1f526ad7269b133225d42d545f",
+      "lines": 309
+    },
+    {
+      "path": "scripts/generate-liquid-css.mjs",
+      "sha256": "829cc110541a6cd4c8f6d0e2fc573ca5b2cad80fc8bce99daff08290956f1ebd",
+      "lines": 106
+    },
+    {
+      "path": "tests/e2e/component-atlas.spec.ts",
+      "sha256": "aca58e87695d45287e3faedd53a886faabe3a3fb0b4861ab3e7f99262be74b4c",
+      "lines": 191
+    }
+  ]
+}

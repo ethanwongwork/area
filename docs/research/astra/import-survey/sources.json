@@ -1,0 +1,182 @@
+[
+  {
+    "id": "primer",
+    "name": "Primer React",
+    "repository": "https://github.com/primer/react",
+    "sha": "67945828439898ace865bd5f7417c562033bcbc2",
+    "clonePath": ".cache/sources/primer@67945828439898ace865bd5f7417c562033bcbc2",
+    "kind": "design-system",
+    "checked": "2026-09-28"
+  },
+  {
+    "id": "polaris",
+    "name": "Polaris",
+    "repository": "https://github.com/Shopify/polaris",
+    "sha": "3f7954ae42fabf26d63cee68c23ceebfd7ef0972",
+    "clonePath": ".cache/sources/polaris@3f7954ae42fabf26d63cee68c23ceebfd7ef0972",
+    "kind": "design-system",
+    "checked": "2026-09-28"
+  },
+  {
+    "id": "carbon",
+    "name": "Carbon",
+    "repository": "https://github.com/carbon-design-system/carbon",
+    "sha": "c783b1bbd641cda2173cf577cc69a9a687e04d14",
+    "clonePath": ".cache/sources/carbon@c783b1bbd641cda2173cf577cc69a9a687e04d14",
+    "kind": "design-system",
+    "checked": "2026-09-28"
+  },
+  {
+    "id": "fluent",
+    "name": "Fluent UI React v9",
+    "repository": "https://github.com/microsoft/fluentui",
+    "sha": "8add8c8750c34c85acd811e32ab324abf8f1562e",
+    "clonePath": ".cache/sources/fluent@8add8c8750c34c85acd811e32ab324abf8f1562e",
+    "kind": "design-system",
+    "checked": "2026-09-28"
+  },
+  {
+    "id": "spectrum",
+    "name": "React Spectrum / React Aria",
+    "repository": "https://github.com/adobe/react-spectrum",
+    "sha": "16eead67e83cf42f3c0ee46ef6eb7a2032778378",
+    "clonePath": ".cache/sources/spectrum@16eead67e83cf42f3c0ee46ef6eb7a2032778378",
+    "kind": "design-system",
+    "checked": "2026-09-28"
+  },
+  {
+    "id": "atlassian",
+    "name": "Atlassian public packages",
+    "repository": "https://bitbucket.org/atlassian/atlassian-frontend-mirror",
+    "sha": "fcc914690c70d0df6fa39037b4cae6fc20e28e90",
+    "clonePath": ".cache/sources/atlassian@fcc914690c70d0df6fa39037b4cae6fc20e28e90",
+    "kind": "design-system",
+    "checked": "2026-09-28"
+  },
+  {
+    "id": "govuk",
+    "name": "GOV.UK Frontend",
+    "repository": "https://github.com/alphagov/govuk-frontend",
+    "sha": "86f233319cb06e48c979f1519896f255fbcbc9d0",
+    "clonePath": ".cache/sources/govuk@86f233319cb06e48c979f1519896f255fbcbc9d0",
+    "kind": "design-system",
+    "checked": "2026-09-28"
+  },
+  {
+    "id": "gestalt",
+    "name": "Gestalt",
+    "repository": "https://github.com/pinterest/gestalt",
+    "sha": "22874a7522d1803df992fae2bcb31ef42be29519",
+    "clonePath": ".cache/sources/gestalt@22874a7522d1803df992fae2bcb31ef42be29519",
+    "kind": "design-system",
+    "checked": "2026-09-28"
+  },
+  {
+    "id": "chakra",
+    "name": "Chakra UI",
+    "repository": "https://github.com/chakra-ui/chakra-ui",
+    "sha": "961161428b8c59157ad921dd23303b73c294d73f",
+    "clonePath": ".cache/sources/chakra@961161428b8c59157ad921dd23303b73c294d73f",
+    "kind": "design-system",
+    "checked": "2026-09-28"
+  },
+  {
+    "id": "mantine",
+    "name": "Mantine",
+    "repository": "https://github.com/mantinedev/mantine",
+    "sha": "f38933cb4f1c534600f4ff59ee3ddbb4685a4bc4",
+    "clonePath": ".cache/sources/mantine@f38933cb4f1c534600f4ff59ee3ddbb4685a4bc4",
+    "kind": "design-system",
+    "checked": "2026-09-28"
+  },
+  {
+    "id": "radix",
+    "name": "Radix Themes",
+    "repository": "https://github.com/radix-ui/themes",
+    "sha": "1faff10ac26ae17f09944d418c6949b93fc6b566",
+    "clonePath": ".cache/sources/radix@1faff10ac26ae17f09944d418c6949b93fc6b566",
+    "kind": "design-system",
+    "checked": "2026-09-28"
+  },
+  {
+    "id": "shadcn",
+    "name": "shadcn/ui registry",
+    "repository": "https://github.com/shadcn-ui/ui",
+    "sha": "98a1fe67b439324ddc857f47fbdce056600a4329",
+    "clonePath": ".cache/sources/shadcn@98a1fe67b439324ddc857f47fbdce056600a4329",
+    "kind": "design-system",
+    "checked": "2026-09-28"
+  },
+  {
+    "id": "material",
+    "name": "Material Web",
+    "repository": "https://github.com/material-components/material-web",
+    "sha": "cbd34a8921915af94d5ef65c2a69eece41d5b4f3",
+    "clonePath": ".cache/sources/material@cbd34a8921915af94d5ef65c2a69eece41d5b4f3",
+    "kind": "design-system",
+    "checked": "2026-09-28"
+  },
+  {
+    "id": "antd",
+    "name": "Ant Design",
+    "repository": "https://github.com/ant-design/ant-design",
+    "sha": "7ad64087106acd078dcc7d91a4adfdf38f5ce172",
+    "clonePath": ".cache/sources/antd@7ad64087106acd078dcc7d91a4adfdf38f5ce172",
+    "kind": "design-system",
+    "checked": "2026-09-28"
+  },
+  {
+    "id": "baseui",
+    "name": "Base UI",
+    "repository": "https://github.com/mui/base-ui",
+    "sha": "6d93516df883c4fd912daafa0aea57345ce800ce",
+    "clonePath": ".cache/sources/baseui@6d93516df883c4fd912daafa0aea57345ce800ce",
+    "kind": "design-system",
+    "checked": "2026-09-28"
+  },
+  {
+    "id": "eui",
+    "name": "Elastic EUI",
+    "repository": "https://github.com/elastic/eui",
+    "sha": "04d65520298b702f864470064c9a512e66d4de0f",
+    "clonePath": ".cache/sources/eui@04d65520298b702f864470064c9a512e66d4de0f",
+    "kind": "design-system",
+    "checked": "2026-09-28"
+  },
+  {
+    "id": "openstatus",
+    "name": "OpenStatus",
+    "repository": "https://github.com/openstatusHQ/openstatus",
+    "sha": "8b6d45ba5efc442e5d5b78d171667fc4139c5f1c",
+    "clonePath": ".cache/sources/openstatus@8b6d45ba5efc442e5d5b78d171667fc4139c5f1c",
+    "kind": "product",
+    "checked": "2026-09-28"
+  },
+  {
+    "id": "documenso",
+    "name": "Documenso",
+    "repository": "https://github.com/documenso/documenso",
+    "sha": "a1d4bec1430a937395db9a4aae28979cd71c2831",
+    "clonePath": ".cache/sources/documenso@a1d4bec1430a937395db9a4aae28979cd71c2831",
+    "kind": "product",
+    "checked": "2026-09-28"
+  },
+  {
+    "id": "midday",
+    "name": "Midday",
+    "repository": "https://github.com/midday-ai/midday",
+    "sha": "51587319f26a0ffaa9dfccab1920373cb65689b7",
+    "clonePath": ".cache/sources/midday@51587319f26a0ffaa9dfccab1920373cb65689b7",
+    "kind": "product",
+    "checked": "2026-09-28"
+  },
+  {
+    "id": "primer-primitives",
+    "name": "Primer Primitives (supporting token source)",
+    "repository": "https://github.com/primer/primitives",
+    "sha": "f48bc063f7bc0fb3e447386a8c259650ce46dea8",
+    "clonePath": ".cache/sources/primer-primitives@f48bc063f7bc0fb3e447386a8c259650ce46dea8",
+    "kind": "supporting-source",
+    "checked": "2026-09-28"
+  }
+]

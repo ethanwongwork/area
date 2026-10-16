@@ -1,0 +1,1773 @@
+{
+  "search-field": {
+    "a": [
+      "SearchField"
+    ],
+    "f": [
+      "searchbox"
+    ],
+    "c": [
+      "Search"
+    ],
+    "t": [
+      "+TextInput"
+    ],
+    "n": [
+      "input/Search"
+    ],
+    "o": [
+      "search-field"
+    ],
+    "h": [
+      "search-fields"
+    ]
+  },
+  "password-field": {
+    "u": [
+      "+inputs"
+    ],
+    "t": [
+      "PasswordInput"
+    ],
+    "n": [
+      "input/Password"
+    ],
+    "c": [
+      "PasswordInput"
+    ],
+    "k": [
+      "password-input"
+    ],
+    "g": [
+      "password-input"
+    ],
+    "h": [
+      "text-fields"
+    ]
+  },
+  "multi-select": {
+    "u": [
+      "multi-select"
+    ],
+    "a": [
+      "Select",
+      "TokenField"
+    ],
+    "b": [
+      "select",
+      "combobox"
+    ],
+    "f": [
+      "dropdown"
+    ],
+    "p": [
+      "select-panel"
+    ],
+    "c": [
+      "MultiSelect"
+    ],
+    "t": [
+      "MultiSelect"
+    ],
+    "n": [
+      "select"
+    ],
+    "k": [
+      "select",
+      "combobox"
+    ],
+    "l": [
+      "select"
+    ],
+    "o": [
+      "~choice-list"
+    ],
+    "h": [
+      "token-fields"
+    ]
+  },
+  "tag-picker": {
+    "u": [
+      "+inputs"
+    ],
+    "a": [
+      "TokenField"
+    ],
+    "f": [
+      "tagpicker"
+    ],
+    "p": [
+      "text-input-with-tokens"
+    ],
+    "t": [
+      "TagsInput"
+    ],
+    "n": [
+      "select"
+    ],
+    "k": [
+      "tags-input"
+    ],
+    "l": [
+      "select"
+    ],
+    "h": [
+      "token-fields"
+    ]
+  },
+  "editable-text": {
+    "t": [
+      "~TextInput"
+    ],
+    "n": [
+      "typography"
+    ],
+    "c": [
+      "EditInPlace"
+    ],
+    "k": [
+      "editable"
+    ],
+    "l": [
+      "inline-edit"
+    ],
+    "h": [
+      "text-fields"
+    ]
+  },
+  "otp-input": {
+    "u": [
+      "verification-code-inputs"
+    ],
+    "s": [
+      "input-otp"
+    ],
+    "b": [
+      "otp-field"
+    ],
+    "t": [
+      "PinInput"
+    ],
+    "n": [
+      "input/OTP"
+    ],
+    "k": [
+      "pin-input"
+    ],
+    "h": [
+      "~text-fields"
+    ]
+  },
+  "file-upload": {
+    "u": [
+      "file-uploaders"
+    ],
+    "a": [
+      "DropZone",
+      "FileTrigger"
+    ],
+    "c": [
+      "FileUploader"
+    ],
+    "t": [
+      "FileInput",
+      "@Dropzone"
+    ],
+    "n": [
+      "upload"
+    ],
+    "k": [
+      "file-upload"
+    ],
+    "o": [
+      "drop-zone"
+    ],
+    "g": [
+      "file-upload"
+    ],
+    "h": [
+      "drag-and-drop"
+    ],
+    "s": [
+      "~@FileUploadCard"
+    ],
+    "l": [
+      "@MediaPicker"
+    ]
+  },
+  "form-validation": {
+    "a": [
+      "Form",
+      "forms"
+    ],
+    "b": [
+      "form",
+      "field"
+    ],
+    "p": [
+      "form-control"
+    ],
+    "c": [
+      "Form"
+    ],
+    "t": [
+      "@Form"
+    ],
+    "n": [
+      "form"
+    ],
+    "k": [
+      "field",
+      "fieldset"
+    ],
+    "l": [
+      "form"
+    ],
+    "o": [
+      "~form"
+    ],
+    "g": [
+      "error-summary",
+      "error-message"
+    ],
+    "h": [
+      "~text-fields"
+    ]
+  },
+  "date-field": {
+    "u": [
+      "+inputs"
+    ],
+    "a": [
+      "DateField"
+    ],
+    "t": [
+      "@DateInput"
+    ],
+    "n": [
+      "~date-picker"
+    ],
+    "k": [
+      "date-input"
+    ],
+    "o": [
+      "date-field"
+    ],
+    "g": [
+      "date-input"
+    ],
+    "h": [
+      "pickers"
+    ]
+  },
+  "date-picker": {
+    "u": [
+      "date-pickers"
+    ],
+    "s": [
+      "date-picker"
+    ],
+    "a": [
+      "DatePicker"
+    ],
+    "f": [
+      "@DatePicker"
+    ],
+    "p": [
+      "!date-picker"
+    ],
+    "c": [
+      "DatePicker"
+    ],
+    "t": [
+      "@DatePickerInput"
+    ],
+    "n": [
+      "date-picker"
+    ],
+    "k": [
+      "date-picker"
+    ],
+    "l": [
+      "datetime-picker"
+    ],
+    "o": [
+      "date-field"
+    ],
+    "m": [
+      "datepicker"
+    ],
+    "h": [
+      "pickers"
+    ]
+  },
+  "date-range-picker": {
+    "u": [
+      "date-pickers"
+    ],
+    "s": [
+      "+date-picker"
+    ],
+    "a": [
+      "DateRangePicker"
+    ],
+    "p": [
+      "!date-picker"
+    ],
+    "c": [
+      "DatePicker"
+    ],
+    "t": [
+      "@DatePickerInput"
+    ],
+    "n": [
+      "date-picker"
+    ],
+    "k": [
+      "date-picker"
+    ],
+    "o": [
+      "+date-picker"
+    ],
+    "m": [
+      "datepicker"
+    ],
+    "h": [
+      "pickers"
+    ]
+  },
+  "time-field": {
+    "u": [
+      "+date-pickers"
+    ],
+    "a": [
+      "TimeField"
+    ],
+    "f": [
+      "@TimePicker"
+    ],
+    "c": [
+      "TimePicker"
+    ],
+    "t": [
+      "@TimeInput",
+      "@TimePicker"
+    ],
+    "n": [
+      "time-picker"
+    ],
+    "k": [
+      "+date-input"
+    ],
+    "l": [
+      "datetime-picker"
+    ],
+    "h": [
+      "pickers"
+    ]
+  },
+  "duration-input": {
+    "a": [
+      "~TimeField"
+    ],
+    "t": [
+      "@TimePicker"
+    ],
+    "n": [
+      "~time-picker"
+    ],
+    "k": [
+      "~date-input"
+    ],
+    "h": [
+      "~pickers"
+    ]
+  },
+  "link": {
+    "r": [
+      "link"
+    ],
+    "a": [
+      "Link"
+    ],
+    "f": [
+      "link"
+    ],
+    "p": [
+      "link"
+    ],
+    "c": [
+      "Link"
+    ],
+    "t": [
+      "Anchor"
+    ],
+    "n": [
+      "typography"
+    ],
+    "k": [
+      "link"
+    ],
+    "l": [
+      "link"
+    ],
+    "o": [
+      "link"
+    ],
+    "g": [
+      "+back-link",
+      "+skip-link"
+    ],
+    "h": [
+      "~menus"
+    ]
+  },
+  "pagination": {
+    "u": [
+      "pagination"
+    ],
+    "s": [
+      "pagination"
+    ],
+    "p": [
+      "pagination"
+    ],
+    "c": [
+      "Pagination",
+      "PaginationNav"
+    ],
+    "t": [
+      "Pagination"
+    ],
+    "n": [
+      "pagination"
+    ],
+    "k": [
+      "pagination"
+    ],
+    "l": [
+      "pagination"
+    ],
+    "g": [
+      "pagination"
+    ],
+    "h": [
+      "page-controls"
+    ]
+  },
+  "stepper": {
+    "u": [
+      "progress-steps"
+    ],
+    "c": [
+      "ProgressIndicator"
+    ],
+    "t": [
+      "Stepper"
+    ],
+    "n": [
+      "steps"
+    ],
+    "k": [
+      "steps"
+    ],
+    "l": [
+      "progress-tracker"
+    ],
+    "g": [
+      "~task-list"
+    ],
+    "h": [
+      "~steppers"
+    ]
+  },
+  "menubar": {
+    "s": [
+      "menubar"
+    ],
+    "b": [
+      "menubar"
+    ],
+    "t": [
+      "Menubar"
+    ],
+    "n": [
+      "+menu"
+    ],
+    "h": [
+      "menus"
+    ]
+  },
+  "listbox": {
+    "a": [
+      "ListBox"
+    ],
+    "b": [
+      "+select"
+    ],
+    "p": [
+      "+action-list"
+    ],
+    "c": [
+      "ListBox"
+    ],
+    "t": [
+      "Combobox"
+    ],
+    "n": [
+      "~select"
+    ],
+    "k": [
+      "listbox"
+    ],
+    "h": [
+      "lists-and-tables"
+    ],
+    "f": [
+      "@Listbox"
+    ]
+  },
+  "selectable-list": {
+    "a": [
+      "GridList"
+    ],
+    "f": [
+      "list"
+    ],
+    "p": [
+      "action-list"
+    ],
+    "c": [
+      "StructuredList",
+      "ContainedList"
+    ],
+    "t": [
+      "~List"
+    ],
+    "n": [
+      "~list"
+    ],
+    "k": [
+      "listbox"
+    ],
+    "o": [
+      "choice-list"
+    ],
+    "m": [
+      "listitem"
+    ],
+    "h": [
+      "lists-and-tables"
+    ]
+  },
+  "tree-select": {
+    "t": [
+      "TreeSelect",
+      "Cascader"
+    ],
+    "n": [
+      "tree-select",
+      "cascader"
+    ],
+    "k": [
+      "~tree-view"
+    ],
+    "a": [
+      "~Tree"
+    ],
+    "h": [
+      "~lists-and-tables"
+    ]
+  },
+  "transfer-list": {
+    "n": [
+      "transfer"
+    ],
+    "k": [
+      "+listbox"
+    ],
+    "a": [
+      "~ListBox"
+    ],
+    "h": [
+      "~lists-and-tables"
+    ],
+    "t": [
+      "+@TransferList"
+    ]
+  },
+  "rating": {
+    "u": [
+      "rating-badge-and-stars"
+    ],
+    "f": [
+      "rating"
+    ],
+    "t": [
+      "Rating"
+    ],
+    "n": [
+      "rate"
+    ],
+    "k": [
+      "rating"
+    ],
+    "h": [
+      "ratings-and-reviews"
+    ]
+  },
+  "toggle-button-group": {
+    "s": [
+      "toggle-group"
+    ],
+    "b": [
+      "toggle-group"
+    ],
+    "a": [
+      "ToggleButtonGroup"
+    ],
+    "r": [
+      "segmented-control"
+    ],
+    "f": [
+      "+toolbar"
+    ],
+    "c": [
+      "ContentSwitcher"
+    ],
+    "t": [
+      "SegmentedControl"
+    ],
+    "n": [
+      "segmented"
+    ],
+    "k": [
+      "segmented-control",
+      "@toggle-group"
+    ],
+    "m": [
+      "button"
+    ],
+    "h": [
+      "~toolbars"
+    ]
+  },
+  "drag-handle": {
+    "a": [
+      "dnd"
+    ],
+    "p": [
+      "!drag-and-drop"
+    ],
+    "c": [
+      "~DataTable"
+    ],
+    "n": [
+      "~table"
+    ],
+    "k": [
+      "+rich-text-editor"
+    ],
+    "l": [
+      "pragmatic-drag-and-drop"
+    ],
+    "h": [
+      "drag-and-drop"
+    ]
+  },
+  "accordion": {
+    "s": [
+      "accordion",
+      "collapsible"
+    ],
+    "b": [
+      "accordion",
+      "collapsible"
+    ],
+    "a": [
+      "Disclosure",
+      "DisclosureGroup"
+    ],
+    "f": [
+      "accordion"
+    ],
+    "p": [
+      "details"
+    ],
+    "c": [
+      "Accordion",
+      "Disclosure"
+    ],
+    "t": [
+      "Accordion",
+      "Collapse"
+    ],
+    "n": [
+      "collapse"
+    ],
+    "k": [
+      "accordion",
+      "collapsible"
+    ],
+    "l": [
+      "panel"
+    ],
+    "g": [
+      "accordion",
+      "details"
+    ],
+    "h": [
+      "disclosure-controls"
+    ],
+    "u": [
+      "+faq-sections"
+    ]
+  },
+  "drawer": {
+    "u": [
+      "drawers"
+    ],
+    "s": [
+      "drawer",
+      "sheet"
+    ],
+    "b": [
+      "drawer"
+    ],
+    "f": [
+      "drawer"
+    ],
+    "c": [
+      "SidePanel",
+      "Tearsheet"
+    ],
+    "t": [
+      "Drawer"
+    ],
+    "n": [
+      "drawer"
+    ],
+    "k": [
+      "drawer"
+    ],
+    "l": [
+      "drawer"
+    ],
+    "m": [
+      "bottomsheet",
+      "sidesheet"
+    ],
+    "h": [
+      "sheets"
+    ],
+    "a": [
+      "+@SheetExample"
+    ]
+  },
+  "alert-dialog": {
+    "s": [
+      "alert-dialog"
+    ],
+    "r": [
+      "alert-dialog"
+    ],
+    "b": [
+      "alert-dialog"
+    ],
+    "a": [
+      "@AlertDialog"
+    ],
+    "f": [
+      "+dialog"
+    ],
+    "p": [
+      "confirmation-dialog"
+    ],
+    "c": [
+      "+Modal"
+    ],
+    "t": [
+      "+Modal"
+    ],
+    "n": [
+      "modal",
+      "popconfirm"
+    ],
+    "k": [
+      "+dialog"
+    ],
+    "l": [
+      "modal-dialog"
+    ],
+    "o": [
+      "+modal"
+    ],
+    "m": [
+      "dialog"
+    ],
+    "h": [
+      "alerts"
+    ]
+  },
+  "splitter": {
+    "s": [
+      "resizable"
+    ],
+    "p": [
+      "split-page-layout"
+    ],
+    "c": [
+      "Resizer"
+    ],
+    "t": [
+      "Splitter"
+    ],
+    "n": [
+      "splitter"
+    ],
+    "k": [
+      "splitter"
+    ],
+    "h": [
+      "split-views"
+    ]
+  },
+  "scroll-area": {
+    "s": [
+      "scroll-area"
+    ],
+    "r": [
+      "scroll-area"
+    ],
+    "b": [
+      "scroll-area"
+    ],
+    "p": [
+      "@ScrollableRegion"
+    ],
+    "t": [
+      "ScrollArea"
+    ],
+    "k": [
+      "scroll-area"
+    ],
+    "h": [
+      "scroll-views"
+    ]
+  },
+  "responsive-layout": {
+    "r": [
+      "box",
+      "flex",
+      "grid",
+      "container"
+    ],
+    "c": [
+      "Grid",
+      "FlexGrid"
+    ],
+    "t": [
+      "Flex",
+      "Grid",
+      "SimpleGrid",
+      "Stack"
+    ],
+    "n": [
+      "flex",
+      "grid",
+      "space"
+    ],
+    "k": [
+      "flex",
+      "grid",
+      "stack"
+    ],
+    "l": [
+      "primitives/responsive",
+      "primitives/grid"
+    ],
+    "o": [
+      "stack",
+      "grid"
+    ],
+    "h": [
+      "split-views"
+    ]
+  },
+  "page-header": {
+    "u": [
+      "page-headers"
+    ],
+    "p": [
+      "page-header"
+    ],
+    "c": [
+      "PageHeader"
+    ],
+    "n": [
+      "~layout"
+    ],
+    "l": [
+      "page-header"
+    ],
+    "o": [
+      "page"
+    ],
+    "h": [
+      "~toolbars"
+    ]
+  },
+  "sidebar": {
+    "u": [
+      "sidebar-navigations"
+    ],
+    "s": [
+      "sidebar"
+    ],
+    "f": [
+      "nav"
+    ],
+    "p": [
+      "nav-list"
+    ],
+    "c": [
+      "UIShell"
+    ],
+    "t": [
+      "AppShell"
+    ],
+    "n": [
+      "layout",
+      "menu"
+    ],
+    "l": [
+      "navigation-system"
+    ],
+    "o": [
+      "~section"
+    ],
+    "m": [
+      "navigation",
+      "navigationrail"
+    ],
+    "h": [
+      "sidebars"
+    ]
+  },
+  "app-shell": {
+    "u": [
+      "+header-navigations"
+    ],
+    "s": [
+      "+sidebar"
+    ],
+    "p": [
+      "page-layout"
+    ],
+    "c": [
+      "UIShell"
+    ],
+    "t": [
+      "AppShell"
+    ],
+    "n": [
+      "layout"
+    ],
+    "l": [
+      "navigation-system",
+      "page-layout"
+    ],
+    "o": [
+      "page"
+    ],
+    "h": [
+      "split-views"
+    ]
+  },
+  "dockable-inspector": {
+    "k": [
+      "+floating-panel"
+    ],
+    "t": [
+      "+FloatingWindow"
+    ],
+    "p": [
+      "~split-page-layout"
+    ],
+    "h": [
+      "~sheets"
+    ]
+  },
+  "description-list": {
+    "r": [
+      "data-list"
+    ],
+    "p": [
+      "~page-header"
+    ],
+    "t": [
+      "DataList"
+    ],
+    "n": [
+      "descriptions"
+    ],
+    "k": [
+      "data-list"
+    ],
+    "g": [
+      "summary-list"
+    ],
+    "h": [
+      "~lists-and-tables"
+    ]
+  },
+  "stat": {
+    "u": [
+      "metrics"
+    ],
+    "c": [
+      "BigNumber"
+    ],
+    "t": [
+      "~RollingNumber"
+    ],
+    "n": [
+      "statistic"
+    ],
+    "k": [
+      "stat"
+    ],
+    "h": [
+      "~charts"
+    ]
+  },
+  "timeline": {
+    "u": [
+      "activity-feeds"
+    ],
+    "p": [
+      "timeline"
+    ],
+    "t": [
+      "Timeline"
+    ],
+    "n": [
+      "timeline"
+    ],
+    "k": [
+      "timeline"
+    ],
+    "h": [
+      "~lists-and-tables"
+    ]
+  },
+  "empty-state": {
+    "u": [
+      "empty-states"
+    ],
+    "s": [
+      "empty"
+    ],
+    "p": [
+      "blankslate"
+    ],
+    "t": [
+      "EmptyState"
+    ],
+    "n": [
+      "empty"
+    ],
+    "k": [
+      "empty-state"
+    ],
+    "l": [
+      "empty-state"
+    ],
+    "o": [
+      "empty-state"
+    ],
+    "h": [
+      "loading"
+    ]
+  },
+  "result": {
+    "u": [
+      "404-sections"
+    ],
+    "c": [
+      "FullPageError"
+    ],
+    "n": [
+      "result"
+    ],
+    "g": [
+      "+panel"
+    ],
+    "h": [
+      "~alerts"
+    ]
+  },
+  "banner": {
+    "u": [
+      "alerts"
+    ],
+    "r": [
+      "~callout"
+    ],
+    "f": [
+      "messagebar"
+    ],
+    "p": [
+      "banner"
+    ],
+    "c": [
+      "Notification",
+      "Guidebanner"
+    ],
+    "t": [
+      "~Alert"
+    ],
+    "n": [
+      "+alert"
+    ],
+    "k": [
+      "~alert"
+    ],
+    "l": [
+      "banner"
+    ],
+    "o": [
+      "banner"
+    ],
+    "g": [
+      "notification-banner",
+      "cookie-banner"
+    ],
+    "h": [
+      "~alerts"
+    ]
+  },
+  "meter": {
+    "b": [
+      "meter"
+    ],
+    "a": [
+      "Meter"
+    ],
+    "u": [
+      "activity-gauges"
+    ],
+    "t": [
+      "~Progress"
+    ],
+    "h": [
+      "~progress-indicators"
+    ]
+  },
+  "circular-progress": {
+    "u": [
+      "progress-indicators",
+      "activity-gauges"
+    ],
+    "a": [
+      "@ProgressCircle"
+    ],
+    "t": [
+      "RingProgress",
+      "SemiCircleProgress"
+    ],
+    "n": [
+      "progress"
+    ],
+    "k": [
+      "progress-circle"
+    ],
+    "m": [
+      "progressindicator"
+    ],
+    "h": [
+      "progress-indicators"
+    ]
+  },
+  "notification-queue": {
+    "u": [
+      "~notifications"
+    ],
+    "s": [
+      "toast"
+    ],
+    "b": [
+      "toast"
+    ],
+    "a": [
+      "Toast"
+    ],
+    "f": [
+      "toast"
+    ],
+    "c": [
+      "NotificationsPanel"
+    ],
+    "t": [
+      "~Notification"
+    ],
+    "n": [
+      "notification"
+    ],
+    "k": [
+      "toast"
+    ],
+    "l": [
+      "flag"
+    ],
+    "h": [
+      "~live-activities"
+    ]
+  },
+  "data-grid": {
+    "u": [
+      "tables"
+    ],
+    "s": [
+      "data-table"
+    ],
+    "a": [
+      "Table"
+    ],
+    "f": [
+      "@DataGrid"
+    ],
+    "p": [
+      "data-table"
+    ],
+    "c": [
+      "DataTable"
+    ],
+    "n": [
+      "table"
+    ],
+    "k": [
+      "~table"
+    ],
+    "l": [
+      "dynamic-table"
+    ],
+    "h": [
+      "lists-and-tables"
+    ]
+  },
+  "tree-grid": {
+    "a": [
+      "~Tree"
+    ],
+    "p": [
+      "!nested-list-view"
+    ],
+    "n": [
+      "+table"
+    ],
+    "l": [
+      "table-tree"
+    ],
+    "h": [
+      "lists-and-tables"
+    ],
+    "f": [
+      "+tree"
+    ]
+  },
+  "media-preview": {
+    "u": [
+      "video-players"
+    ],
+    "n": [
+      "image"
+    ],
+    "l": [
+      "@media-viewer"
+    ],
+    "h": [
+      "~sheets"
+    ]
+  },
+  "carousel": {
+    "u": [
+      "carousels"
+    ],
+    "s": [
+      "carousel"
+    ],
+    "f": [
+      "carousel"
+    ],
+    "n": [
+      "carousel"
+    ],
+    "k": [
+      "carousel"
+    ],
+    "m": [
+      "carousel"
+    ],
+    "h": [
+      "page-controls"
+    ],
+    "t": [
+      "@Carousel"
+    ]
+  },
+  "rich-text-editor": {
+    "u": [
+      "text-editors"
+    ],
+    "t": [
+      "@RichTextEditor"
+    ],
+    "k": [
+      "rich-text-editor"
+    ],
+    "p": [
+      "!markdown-editor"
+    ],
+    "l": [
+      "@editor-core"
+    ],
+    "h": [
+      "~text-fields"
+    ]
+  },
+  "code-editor": {
+    "t": [
+      "~JsonInput"
+    ],
+    "p": [
+      "!markdown-editor-view-switch"
+    ],
+    "h": [
+      "~text-fields"
+    ]
+  },
+  "charts": {
+    "u": [
+      "line-bar-charts",
+      "pie-charts",
+      "radar-charts"
+    ],
+    "s": [
+      "chart"
+    ],
+    "p": [
+      "!chart-card"
+    ],
+    "h": [
+      "charts"
+    ],
+    "t": [
+      "@Charts"
+    ],
+    "c": [
+      "@Charts"
+    ],
+    "k": [
+      "@Charts"
+    ],
+    "n": [
+      "@Charts"
+    ],
+    "f": [
+      "@Charts"
+    ],
+    "l": [
+      "@ForgeCharts"
+    ]
+  },
+  "gradient-editor": {
+    "u": [
+      "gradient-pickers"
+    ],
+    "n": [
+      "color-picker"
+    ],
+    "h": [
+      "~color-wells"
+    ]
+  },
+  "easing-curve-editor": {
+    "m": [
+      "~motion"
+    ],
+    "h": [
+      "~loading"
+    ]
+  },
+  "shortcut-recorder": {
+    "p": [
+      "~keybinding-hint"
+    ],
+    "h": [
+      "keyboards"
+    ]
+  },
+  "toggletip": {
+    "c": [
+      "Toggletip"
+    ],
+    "k": [
+      "toggle-tip"
+    ],
+    "f": [
+      "infolabel"
+    ],
+    "l": [
+      "inline-dialog"
+    ],
+    "r": [
+      "~popover"
+    ],
+    "h": [
+      "popovers"
+    ]
+  },
+  "message-actions": {
+    "u": [
+      "+messaging"
+    ],
+    "s": [
+      "+message"
+    ],
+    "h": [
+      "~menus"
+    ]
+  },
+  "thinking-disclosure": {
+    "s": [
+      "~message"
+    ],
+    "a": [
+      "~Disclosure"
+    ],
+    "k": [
+      "~collapsible"
+    ],
+    "h": [
+      "~disclosure-controls"
+    ]
+  },
+  "source-chip": {
+    "u": [
+      "~messaging"
+    ],
+    "s": [
+      "~badge"
+    ],
+    "r": [
+      "~hover-card"
+    ],
+    "h": [
+      "~popovers"
+    ]
+  },
+  "attachment-card": {
+    "u": [
+      "+messaging"
+    ],
+    "s": [
+      "attachment"
+    ],
+    "h": [
+      "~drag-and-drop"
+    ]
+  },
+  "voice-input": {
+    "u": [
+      "~messaging"
+    ],
+    "h": [
+      "~text-fields"
+    ]
+  },
+  "emoji-picker": {
+    "k": [
+      "+listbox",
+      "+rich-text-editor"
+    ],
+    "p": [
+      "!emoji-autocomplete"
+    ],
+    "l": [
+      "@emoji"
+    ],
+    "h": [
+      "~pickers"
+    ],
+    "a": [
+      "+@EmojiPickerExample"
+    ]
+  },
+  "callout": {
+    "r": [
+      "callout"
+    ],
+    "k": [
+      "~blockquote"
+    ],
+    "l": [
+      "section-message"
+    ],
+    "g": [
+      "inset-text"
+    ],
+    "h": [
+      "~alerts"
+    ],
+    "c": [
+      "@Callout"
+    ]
+  },
+  "toggle-block": {
+    "s": [
+      "+collapsible"
+    ],
+    "a": [
+      "+Disclosure"
+    ],
+    "k": [
+      "+collapsible"
+    ],
+    "p": [
+      "+details"
+    ],
+    "g": [
+      "+details"
+    ],
+    "h": [
+      "disclosure-controls"
+    ]
+  },
+  "people-picker": {
+    "a": [
+      "+TokenField"
+    ],
+    "f": [
+      "+tagpicker"
+    ],
+    "p": [
+      "+select-panel"
+    ],
+    "l": [
+      "@user-picker"
+    ],
+    "h": [
+      "~token-fields"
+    ]
+  },
+  "reactions": {
+    "u": [
+      "+messaging"
+    ],
+    "l": [
+      "@reactions"
+    ],
+    "h": [
+      "~ratings-and-reviews"
+    ]
+  },
+  "comment-thread": {
+    "u": [
+      "+messaging"
+    ],
+    "l": [
+      "comment"
+    ],
+    "h": [
+      "~lists-and-tables"
+    ]
+  },
+  "floating-format-bar": {
+    "u": [
+      "+text-editors"
+    ],
+    "t": [
+      "+@RichTextEditor"
+    ],
+    "k": [
+      "+rich-text-editor"
+    ],
+    "h": [
+      "toolbars"
+    ]
+  },
+  "database-card": {
+    "u": [
+      "~card-headers"
+    ],
+    "p": [
+      "~card"
+    ],
+    "r": [
+      "~card"
+    ],
+    "h": [
+      "~lists-and-tables"
+    ]
+  },
+  "property-value": {
+    "a": [
+      "~Table"
+    ],
+    "n": [
+      "~descriptions"
+    ],
+    "h": [
+      "~lists-and-tables"
+    ]
+  },
+  "color-area": {
+    "a": [
+      "ColorArea"
+    ],
+    "f": [
+      "@ColorArea"
+    ],
+    "t": [
+      "+ColorPicker"
+    ],
+    "k": [
+      "+color-picker"
+    ],
+    "h": [
+      "color-wells"
+    ]
+  },
+  "color-slider": {
+    "a": [
+      "ColorSlider"
+    ],
+    "f": [
+      "@ColorSlider"
+    ],
+    "t": [
+      "+ColorPicker"
+    ],
+    "k": [
+      "+color-picker"
+    ],
+    "h": [
+      "color-wells"
+    ]
+  },
+  "eyedropper-button": {
+    "a": [
+      "~ColorPicker"
+    ],
+    "t": [
+      "ColorInput"
+    ],
+    "k": [
+      "+color-picker"
+    ],
+    "h": [
+      "color-wells"
+    ]
+  },
+  "scrubbable-angle": {
+    "t": [
+      "AngleSlider"
+    ],
+    "k": [
+      "@angle-slider"
+    ],
+    "h": [
+      "~sliders"
+    ]
+  },
+  "zoom-control": {
+    "n": [
+      "~image"
+    ],
+    "h": [
+      "~scroll-views"
+    ]
+  },
+  "layer-row-badges": {
+    "p": [
+      "~tree-view"
+    ],
+    "f": [
+      "~tree"
+    ],
+    "h": [
+      "~lists-and-tables"
+    ]
+  },
+  "constraints-picker": {
+    "k": [
+      "~checkbox"
+    ],
+    "p": [
+      "~checkbox-group"
+    ],
+    "h": [
+      "~split-views"
+    ]
+  },
+  "unit-field": {
+    "u": [
+      "+inputs"
+    ],
+    "c": [
+      "~NumberInput"
+    ],
+    "t": [
+      "+NumberInput"
+    ],
+    "n": [
+      "+input-number"
+    ],
+    "o": [
+      "money-field"
+    ],
+    "h": [
+      "~text-fields"
+    ]
+  },
+  "font-picker": {
+    "u": [
+      "~text-editors"
+    ],
+    "t": [
+      "~@RichTextEditor"
+    ],
+    "k": [
+      "~rich-text-editor"
+    ],
+    "h": [
+      "~text-fields"
+    ]
+  },
+  "variable-chip": {
+    "r": [
+      "~code"
+    ],
+    "k": [
+      "~tags-input"
+    ],
+    "h": [
+      "~token-fields"
+    ]
+  },
+  "keyboard-shortcuts": {
+    "p": [
+      "~keybinding-hint"
+    ],
+    "s": [
+      "~kbd"
+    ],
+    "r": [
+      "~kbd"
+    ],
+    "h": [
+      "keyboards"
+    ]
+  }
+}

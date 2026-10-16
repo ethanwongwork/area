@@ -1,0 +1,679 @@
+[
+  {
+    "slug": "search-field",
+    "name": "SearchField",
+    "reuses": [
+      "Input",
+      "Field",
+      "Button",
+      "Kbd"
+    ]
+  },
+  {
+    "slug": "password-field",
+    "name": "PasswordField",
+    "reuses": [
+      "Input",
+      "Field",
+      "Button"
+    ]
+  },
+  {
+    "slug": "multi-select",
+    "name": "MultiSelect",
+    "reuses": [
+      "Combobox",
+      "Chip",
+      "Checkbox",
+      "Popover"
+    ]
+  },
+  {
+    "slug": "tag-picker",
+    "name": "TagPicker",
+    "reuses": [
+      "Combobox",
+      "Chip",
+      "Popover"
+    ]
+  },
+  {
+    "slug": "editable-text",
+    "name": "Editable text / InlineEditableTitle",
+    "reuses": [
+      "Input",
+      "Field",
+      "Button"
+    ]
+  },
+  {
+    "slug": "otp-input",
+    "name": "OTP input",
+    "reuses": [
+      "Input",
+      "Field"
+    ]
+  },
+  {
+    "slug": "file-upload",
+    "name": "FileUpload / DropZone",
+    "reuses": [
+      "Input",
+      "Button",
+      "Progress",
+      "Alert"
+    ]
+  },
+  {
+    "slug": "form-validation",
+    "name": "Form validation / Error summary",
+    "reuses": [
+      "Field",
+      "Input",
+      "Alert",
+      "Button"
+    ]
+  },
+  {
+    "slug": "date-field",
+    "name": "DateField",
+    "reuses": [
+      "Field",
+      "Input"
+    ]
+  },
+  {
+    "slug": "date-picker",
+    "name": "DatePicker",
+    "reuses": [
+      "Calendar",
+      "Popover",
+      "Input",
+      "Field"
+    ]
+  },
+  {
+    "slug": "date-range-picker",
+    "name": "DateRangePicker",
+    "reuses": [
+      "Calendar",
+      "Popover",
+      "Input",
+      "Field"
+    ]
+  },
+  {
+    "slug": "time-field",
+    "name": "TimeField",
+    "reuses": [
+      "Field",
+      "Input",
+      "NumberField"
+    ]
+  },
+  {
+    "slug": "duration-input",
+    "name": "Duration input",
+    "reuses": [
+      "NumberField",
+      "InputGroup",
+      "Field"
+    ]
+  },
+  {
+    "slug": "link",
+    "name": "Link",
+    "reuses": [
+      "Code",
+      "Button"
+    ]
+  },
+  {
+    "slug": "pagination",
+    "name": "Pagination",
+    "reuses": [
+      "Button",
+      "Select",
+      "Input"
+    ]
+  },
+  {
+    "slug": "stepper",
+    "name": "Stepper",
+    "reuses": [
+      "Button",
+      "Progress"
+    ]
+  },
+  {
+    "slug": "menubar",
+    "name": "MenuBar",
+    "reuses": [
+      "Menu",
+      "Toolbar"
+    ]
+  },
+  {
+    "slug": "listbox",
+    "name": "ListBox",
+    "reuses": [
+      "Checkbox",
+      "Chip"
+    ]
+  },
+  {
+    "slug": "selectable-list",
+    "name": "Selectable List",
+    "reuses": [
+      "Checkbox",
+      "Radio",
+      "Avatar"
+    ]
+  },
+  {
+    "slug": "tree-select",
+    "name": "TreeSelect / Cascader",
+    "reuses": [
+      "TreeView",
+      "Combobox",
+      "Popover",
+      "Chip"
+    ]
+  },
+  {
+    "slug": "transfer-list",
+    "name": "TransferList",
+    "reuses": [
+      "Checkbox",
+      "Input",
+      "Button"
+    ]
+  },
+  {
+    "slug": "rating",
+    "name": "Rating",
+    "reuses": [
+      "RadioGroup",
+      "Button"
+    ]
+  },
+  {
+    "slug": "toggle-button-group",
+    "name": "ToggleButtonGroup",
+    "reuses": [
+      "ButtonGroup",
+      "Segmented"
+    ]
+  },
+  {
+    "slug": "drag-handle",
+    "name": "Drag / reorder handles",
+    "reuses": [
+      "PropertyList",
+      "Button"
+    ]
+  },
+  {
+    "slug": "accordion",
+    "name": "Accordion / Disclosure",
+    "reuses": [
+      "Button",
+      "Panel"
+    ]
+  },
+  {
+    "slug": "drawer",
+    "name": "Drawer / Sheet",
+    "reuses": [
+      "Dialog",
+      "Panel",
+      "Button"
+    ]
+  },
+  {
+    "slug": "alert-dialog",
+    "name": "AlertDialog",
+    "reuses": [
+      "Dialog",
+      "Button"
+    ]
+  },
+  {
+    "slug": "splitter",
+    "name": "Resizable / Splitter",
+    "reuses": [
+      "Panel"
+    ]
+  },
+  {
+    "slug": "scroll-area",
+    "name": "ScrollArea",
+    "reuses": [
+      "Panel"
+    ]
+  },
+  {
+    "slug": "responsive-layout",
+    "name": "Responsive layout primitives",
+    "reuses": [
+      "Panel",
+      "Card",
+      "Separator"
+    ]
+  },
+  {
+    "slug": "page-header",
+    "name": "PageHeader",
+    "reuses": [
+      "Breadcrumb",
+      "Button",
+      "Input"
+    ]
+  },
+  {
+    "slug": "sidebar",
+    "name": "Sidebar",
+    "reuses": [
+      "Nav",
+      "Button",
+      "Menu"
+    ]
+  },
+  {
+    "slug": "app-shell",
+    "name": "Application shell",
+    "reuses": [
+      "Nav",
+      "Panel",
+      "Toolbar"
+    ]
+  },
+  {
+    "slug": "dockable-inspector",
+    "name": "Dockable inspector",
+    "reuses": [
+      "Panel",
+      "PropertyList",
+      "Toolbar"
+    ]
+  },
+  {
+    "slug": "description-list",
+    "name": "DescriptionList",
+    "reuses": [
+      "Code",
+      "Badge"
+    ]
+  },
+  {
+    "slug": "stat",
+    "name": "Stat",
+    "reuses": [
+      "Card",
+      "Progress"
+    ]
+  },
+  {
+    "slug": "timeline",
+    "name": "Timeline",
+    "reuses": [
+      "Avatar",
+      "Badge",
+      "Separator"
+    ]
+  },
+  {
+    "slug": "empty-state",
+    "name": "EmptyState",
+    "reuses": [
+      "Button",
+      "Card"
+    ]
+  },
+  {
+    "slug": "result",
+    "name": "Result / ErrorState",
+    "reuses": [
+      "Alert",
+      "Button"
+    ]
+  },
+  {
+    "slug": "banner",
+    "name": "Banner",
+    "reuses": [
+      "Alert",
+      "Button"
+    ]
+  },
+  {
+    "slug": "meter",
+    "name": "Meter",
+    "reuses": [
+      "Progress"
+    ]
+  },
+  {
+    "slug": "circular-progress",
+    "name": "Circular Progress",
+    "reuses": [
+      "Progress",
+      "Spinner"
+    ]
+  },
+  {
+    "slug": "notification-queue",
+    "name": "Live notification queue",
+    "reuses": [
+      "Toast"
+    ]
+  },
+  {
+    "slug": "data-grid",
+    "name": "DataGrid",
+    "reuses": [
+      "Table",
+      "Checkbox",
+      "Input",
+      "Menu"
+    ]
+  },
+  {
+    "slug": "tree-grid",
+    "name": "TreeGrid",
+    "reuses": [
+      "Table",
+      "TreeView"
+    ]
+  },
+  {
+    "slug": "media-preview",
+    "name": "Image / media preview",
+    "reuses": [
+      "Dialog",
+      "Button"
+    ]
+  },
+  {
+    "slug": "carousel",
+    "name": "Carousel",
+    "reuses": [
+      "Card",
+      "Button"
+    ]
+  },
+  {
+    "slug": "rich-text-editor",
+    "name": "Rich text editor integration",
+    "reuses": [
+      "Toolbar",
+      "Menu",
+      "Popover"
+    ]
+  },
+  {
+    "slug": "code-editor",
+    "name": "Code editor integration",
+    "reuses": [
+      "CodeBlock",
+      "Toolbar"
+    ]
+  },
+  {
+    "slug": "charts",
+    "name": "Chart integrations",
+    "reuses": [
+      "Tooltip",
+      "Card"
+    ]
+  },
+  {
+    "slug": "gradient-editor",
+    "name": "GradientEditor",
+    "reuses": [
+      "ColorPicker",
+      "ColorSwatch",
+      "Slider"
+    ]
+  },
+  {
+    "slug": "easing-curve-editor",
+    "name": "EasingCurveEditor",
+    "reuses": [
+      "NumberField",
+      "InputGroup"
+    ]
+  },
+  {
+    "slug": "shortcut-recorder",
+    "name": "ShortcutRecorder",
+    "reuses": [
+      "Kbd",
+      "Input",
+      "Button"
+    ]
+  },
+  {
+    "slug": "toggletip",
+    "name": "Toggletip",
+    "reuses": [
+      "Popover",
+      "Button"
+    ]
+  },
+  {
+    "slug": "message-actions",
+    "name": "MessageActions",
+    "reuses": [
+      "Message",
+      "Button",
+      "Toolbar"
+    ]
+  },
+  {
+    "slug": "thinking-disclosure",
+    "name": "ThinkingDisclosure",
+    "reuses": [
+      "Message",
+      "Panel",
+      "Spinner"
+    ]
+  },
+  {
+    "slug": "source-chip",
+    "name": "SourceChip / citation pill",
+    "reuses": [
+      "Chip",
+      "HoverCard"
+    ]
+  },
+  {
+    "slug": "attachment-card",
+    "name": "AttachmentCard",
+    "reuses": [
+      "Card",
+      "Progress",
+      "Button"
+    ]
+  },
+  {
+    "slug": "voice-input",
+    "name": "VoiceInput",
+    "reuses": [
+      "Button",
+      "Progress",
+      "Composer"
+    ]
+  },
+  {
+    "slug": "emoji-picker",
+    "name": "EmojiPicker / IconPicker",
+    "reuses": [
+      "Combobox",
+      "Popover",
+      "Tabs",
+      "Button"
+    ]
+  },
+  {
+    "slug": "callout",
+    "name": "Callout",
+    "reuses": [
+      "Alert",
+      "Code"
+    ]
+  },
+  {
+    "slug": "toggle-block",
+    "name": "ToggleBlock",
+    "reuses": [
+      "Panel",
+      "Button"
+    ]
+  },
+  {
+    "slug": "people-picker",
+    "name": "PeoplePicker",
+    "reuses": [
+      "Combobox",
+      "Avatar",
+      "Chip"
+    ]
+  },
+  {
+    "slug": "reactions",
+    "name": "Reactions",
+    "reuses": [
+      "Chip",
+      "Button"
+    ]
+  },
+  {
+    "slug": "comment-thread",
+    "name": "CommentThread",
+    "reuses": [
+      "Avatar",
+      "Composer",
+      "Message",
+      "Button"
+    ]
+  },
+  {
+    "slug": "floating-format-bar",
+    "name": "FloatingFormatBar",
+    "reuses": [
+      "Toolbar",
+      "Popover"
+    ]
+  },
+  {
+    "slug": "database-card",
+    "name": "DatabaseCard",
+    "reuses": [
+      "Card",
+      "Badge",
+      "Avatar"
+    ]
+  },
+  {
+    "slug": "property-value",
+    "name": "PropertyValue",
+    "reuses": [
+      "Field",
+      "Input",
+      "Badge",
+      "Avatar",
+      "Checkbox"
+    ]
+  },
+  {
+    "slug": "color-area",
+    "name": "ColorArea",
+    "reuses": [
+      "ColorPicker"
+    ]
+  },
+  {
+    "slug": "color-slider",
+    "name": "ColorSlider",
+    "reuses": [
+      "ColorPicker",
+      "Slider"
+    ]
+  },
+  {
+    "slug": "eyedropper-button",
+    "name": "EyedropperButton",
+    "reuses": [
+      "Button",
+      "ColorPicker"
+    ]
+  },
+  {
+    "slug": "scrubbable-angle",
+    "name": "ScrubbableAngle / dial",
+    "reuses": [
+      "NumberField",
+      "Slider"
+    ]
+  },
+  {
+    "slug": "zoom-control",
+    "name": "ZoomControl",
+    "reuses": [
+      "NumberField",
+      "Menu",
+      "Button"
+    ]
+  },
+  {
+    "slug": "layer-row-badges",
+    "name": "LayerRow badges",
+    "reuses": [
+      "TreeView",
+      "Badge"
+    ]
+  },
+  {
+    "slug": "constraints-picker",
+    "name": "ConstraintsPicker",
+    "reuses": [
+      "CheckboxGroup",
+      "AlignmentPicker"
+    ]
+  },
+  {
+    "slug": "unit-field",
+    "name": "UnitField",
+    "reuses": [
+      "NumberField",
+      "InputGroup",
+      "Select"
+    ]
+  },
+  {
+    "slug": "font-picker",
+    "name": "FontPicker",
+    "reuses": [
+      "Combobox",
+      "Select"
+    ]
+  },
+  {
+    "slug": "variable-chip",
+    "name": "VariableChip",
+    "reuses": [
+      "Chip",
+      "Code",
+      "Tooltip"
+    ]
+  },
+  {
+    "slug": "keyboard-shortcuts",
+    "name": "KeyboardShortcut overlay",
+    "reuses": [
+      "Dialog",
+      "Kbd"
+    ]
+  }
+]

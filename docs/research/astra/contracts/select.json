@@ -1,0 +1,1245 @@
+{
+  "slug": "select",
+  "manifest": "select",
+  "parts": [
+    {
+      "id": "root",
+      "element": [
+        "select"
+      ],
+      "class": "area-select",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_bg",
+          "selectors": [
+            ".area-select"
+          ]
+        },
+        {
+          "name": "--_border",
+          "selectors": [
+            ".area-select"
+          ]
+        },
+        {
+          "name": "--_border-focus",
+          "selectors": [
+            ".area-select:focus"
+          ]
+        },
+        {
+          "name": "--_border-hover",
+          "selectors": [
+            ".area-select:hover:not(:disabled):not(:focus)"
+          ]
+        },
+        {
+          "name": "--_box-border",
+          "selectors": [
+            ".area-select"
+          ]
+        },
+        {
+          "name": "--_box-end",
+          "selectors": [
+            ".area-select"
+          ]
+        },
+        {
+          "name": "--_box-height",
+          "selectors": [
+            ".area-select"
+          ]
+        },
+        {
+          "name": "--_box-start",
+          "selectors": [
+            ".area-select"
+          ]
+        },
+        {
+          "name": "--_box-text",
+          "selectors": [
+            ".area-select"
+          ]
+        },
+        {
+          "name": "--_chevron-inset",
+          "selectors": [
+            ".area-select",
+            ".area-select:dir(rtl)"
+          ]
+        },
+        {
+          "name": "--_focus-halo",
+          "selectors": [
+            ".area-select:focus"
+          ]
+        },
+        {
+          "name": "--_focus-outline",
+          "selectors": [
+            ".area-select:focus"
+          ]
+        },
+        {
+          "name": "--_gap",
+          "selectors": [
+            ".area-select"
+          ]
+        },
+        {
+          "name": "--_group-gap",
+          "selectors": [
+            ".area-input-group > :is(.area-input, .area-number-field, .area-select)"
+          ]
+        },
+        {
+          "name": "--_group-gutter",
+          "selectors": [
+            ".area-input-group > :is(.area-input, .area-number-field, .area-select)"
+          ]
+        },
+        {
+          "name": "--_group-height",
+          "selectors": [
+            ".area-input-group > :is(.area-input, .area-number-field, .area-select)",
+            ".area-input-group > .area-select:first-child"
+          ]
+        },
+        {
+          "name": "--_group-icon",
+          "selectors": [
+            ".area-input-group > :is(.area-input, .area-number-field, .area-select)"
+          ]
+        },
+        {
+          "name": "--_group-leading",
+          "selectors": [
+            ".area-input-group > :is(.area-input, .area-number-field, .area-select)"
+          ]
+        },
+        {
+          "name": "--_group-text",
+          "selectors": [
+            ".area-input-group > :is(.area-input, .area-number-field, .area-select)"
+          ]
+        },
+        {
+          "name": "--_gutter",
+          "selectors": [
+            ".area-input-group > .area-select",
+            ".area-select",
+            "[dir=\"rtl\"] .area-select"
+          ]
+        },
+        {
+          "name": "--_height",
+          "selectors": [
+            ".area-select"
+          ]
+        },
+        {
+          "name": "--_icon",
+          "selectors": [
+            ".area-input-group > .area-select",
+            ".area-select"
+          ]
+        },
+        {
+          "name": "--_leading",
+          "selectors": [
+            ".area-select"
+          ]
+        },
+        {
+          "name": "--_text",
+          "selectors": [
+            ".area-select"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-bg-surface",
+          "selectors": [
+            ".area-select::picker(select)"
+          ]
+        },
+        {
+          "name": "--area-border-decorative",
+          "selectors": [
+            ".area-input-group > :is(.area-input, .area-number-field, .area-select):focus",
+            ".area-input-group > :is(.area-input, .area-number-field, .area-select):focus-within",
+            ".area-select::picker(select)"
+          ]
+        },
+        {
+          "name": "--area-border-faint",
+          "selectors": [
+            ".area-input-group:has(> :is(.area-input, .area-number-field)[data-disabled], > .area-select:disabled)",
+            ".area-select:disabled"
+          ]
+        },
+        {
+          "name": "--area-border-width",
+          "selectors": [
+            ".area-select::picker(select)"
+          ]
+        },
+        {
+          "name": "--area-control-lg",
+          "selectors": [
+            ".area-select--lg"
+          ]
+        },
+        {
+          "name": "--area-control-lg-leading",
+          "selectors": [
+            ".area-select--lg"
+          ]
+        },
+        {
+          "name": "--area-control-lg-text",
+          "selectors": [
+            ".area-select--lg"
+          ]
+        },
+        {
+          "name": "--area-control-md",
+          "selectors": [
+            ".area-select",
+            ".area-select--md"
+          ]
+        },
+        {
+          "name": "--area-control-md-leading",
+          "selectors": [
+            ".area-select",
+            ".area-select--md"
+          ]
+        },
+        {
+          "name": "--area-control-md-text",
+          "selectors": [
+            ".area-select",
+            ".area-select--md"
+          ]
+        },
+        {
+          "name": "--area-control-sm",
+          "selectors": [
+            ".area-select--sm"
+          ]
+        },
+        {
+          "name": "--area-control-sm-leading",
+          "selectors": [
+            ".area-select--sm"
+          ]
+        },
+        {
+          "name": "--area-control-sm-text",
+          "selectors": [
+            ".area-select--sm"
+          ]
+        },
+        {
+          "name": "--area-fg-default",
+          "selectors": [
+            ".area-select::picker(select)"
+          ]
+        },
+        {
+          "name": "--area-fg-disabled",
+          "selectors": [
+            ".area-input-group:has(> :is(.area-input, .area-number-field)[data-disabled], > .area-select:disabled)",
+            ".area-select:disabled"
+          ]
+        },
+        {
+          "name": "--area-field-focus-color",
+          "selectors": [
+            ".area-select"
+          ]
+        },
+        {
+          "name": "--area-field-focus-halo-width",
+          "selectors": [
+            ".area-select:focus"
+          ]
+        },
+        {
+          "name": "--area-field-focus-outline-width",
+          "selectors": [
+            ".area-select:focus"
+          ]
+        },
+        {
+          "name": "--area-focus-offset",
+          "selectors": [
+            ".area-select:focus-visible"
+          ]
+        },
+        {
+          "name": "--area-focus-width",
+          "selectors": [
+            ".area-select:focus-visible"
+          ]
+        },
+        {
+          "name": "--area-font-sans",
+          "selectors": [
+            ".area-select::picker(select)"
+          ]
+        },
+        {
+          "name": "--area-gap-lg",
+          "selectors": [
+            ".area-select--lg"
+          ]
+        },
+        {
+          "name": "--area-gap-md",
+          "selectors": [
+            ".area-select",
+            ".area-select--md"
+          ]
+        },
+        {
+          "name": "--area-gap-sm",
+          "selectors": [
+            ".area-select--sm"
+          ]
+        },
+        {
+          "name": "--area-gutter-lg",
+          "selectors": [
+            ".area-select--lg"
+          ]
+        },
+        {
+          "name": "--area-gutter-md",
+          "selectors": [
+            ".area-select",
+            ".area-select--md"
+          ]
+        },
+        {
+          "name": "--area-gutter-sm",
+          "selectors": [
+            ".area-select--sm"
+          ]
+        },
+        {
+          "name": "--area-icon-lg",
+          "selectors": [
+            ".area-select--lg"
+          ]
+        },
+        {
+          "name": "--area-icon-md",
+          "selectors": [
+            ".area-select",
+            ".area-select--md"
+          ]
+        },
+        {
+          "name": "--area-icon-sm",
+          "selectors": [
+            ".area-select--sm"
+          ]
+        },
+        {
+          "name": "--area-input-bg-disabled",
+          "selectors": [
+            ".area-input-group:has(> :is(.area-input, .area-number-field)[data-disabled], > .area-select:disabled)"
+          ]
+        },
+        {
+          "name": "--area-input-bg-soft",
+          "selectors": [
+            ".area-select--soft"
+          ]
+        },
+        {
+          "name": "--area-input-edge",
+          "selectors": [
+            ".area-select--soft"
+          ]
+        },
+        {
+          "name": "--area-radius-cap",
+          "selectors": [
+            ".area-select"
+          ]
+        },
+        {
+          "name": "--area-radius-container",
+          "selectors": [
+            ".area-select::picker(select)"
+          ]
+        },
+        {
+          "name": "--area-radius-control",
+          "selectors": [
+            ".area-select"
+          ]
+        },
+        {
+          "name": "--area-select-bg",
+          "selectors": [
+            ".area-select",
+            ".area-select--outline"
+          ]
+        },
+        {
+          "name": "--area-select-bg-disabled",
+          "selectors": [
+            ".area-select:disabled"
+          ]
+        },
+        {
+          "name": "--area-select-edge",
+          "selectors": [
+            ".area-select"
+          ]
+        },
+        {
+          "name": "--area-select-edge-hover",
+          "selectors": [
+            ".area-select"
+          ]
+        },
+        {
+          "name": "--area-select-inline-size",
+          "selectors": [
+            ".area-select"
+          ]
+        },
+        {
+          "name": "--area-select-invalid-color",
+          "selectors": [
+            ".area-select[data-invalid]",
+            ".area-select[aria-invalid=\"true\"]"
+          ]
+        },
+        {
+          "name": "--area-select-invalid-halo-color",
+          "selectors": [
+            ".area-select[data-invalid]",
+            ".area-select[aria-invalid=\"true\"]"
+          ]
+        },
+        {
+          "name": "--area-select-success-color",
+          "selectors": [
+            ".area-select[data-success]"
+          ]
+        },
+        {
+          "name": "--area-select-success-halo-color",
+          "selectors": [
+            ".area-select[data-success]"
+          ]
+        },
+        {
+          "name": "--area-select-text",
+          "selectors": [
+            ".area-select"
+          ]
+        },
+        {
+          "name": "--area-select-warning-color",
+          "selectors": [
+            ".area-select[data-warning]"
+          ]
+        },
+        {
+          "name": "--area-select-warning-halo-color",
+          "selectors": [
+            ".area-select[data-warning]"
+          ]
+        },
+        {
+          "name": "--area-shadow-1",
+          "selectors": [
+            ".area-select"
+          ]
+        },
+        {
+          "name": "--area-shadow-color",
+          "selectors": [
+            ".area-select",
+            ".area-select::picker(select)"
+          ]
+        },
+        {
+          "name": "--area-space-4",
+          "selectors": [
+            ".area-select",
+            ".area-select::picker(select)"
+          ]
+        },
+        {
+          "name": "--area-space-96",
+          "selectors": [
+            ".area-select::picker(select)"
+          ]
+        },
+        {
+          "name": "--area-stroke-width",
+          "selectors": [
+            ".area-select"
+          ]
+        },
+        {
+          "name": "--area-transition",
+          "selectors": [
+            ".area-select"
+          ]
+        },
+        {
+          "name": "--area-ui-leading",
+          "selectors": [
+            ".area-select::picker(select)"
+          ]
+        },
+        {
+          "name": "--area-ui-size",
+          "selectors": [
+            ".area-select::picker(select)"
+          ]
+        }
+      ]
+    }
+  ],
+  "slots": [],
+  "options": {
+    "variant": {
+      "values": [
+        "outline",
+        "soft"
+      ],
+      "default": "outline"
+    },
+    "size": {
+      "values": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "default": "md"
+    }
+  },
+  "booleans": [
+    "full-width"
+  ],
+  "elementModifiers": {},
+  "states": [
+    {
+      "name": "invalid",
+      "part": "root",
+      "kind": "aria",
+      "hook": "aria-invalid",
+      "value": "{invalidState ? true : ariaInvalid}"
+    },
+    {
+      "name": "invalid",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-invalid",
+      "value": "\"\""
+    },
+    {
+      "name": "success",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-success",
+      "value": "\"\""
+    },
+    {
+      "name": "warning",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-warning",
+      "value": "\"\""
+    },
+    {
+      "name": "disabled",
+      "part": "root",
+      "kind": "pseudo",
+      "hook": ":disabled",
+      "value": ".area-input-group:has(> :is(.area-input, .area-number-field)[data-disabled], > .area-select:disabled)"
+    },
+    {
+      "name": "disabled",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-disabled",
+      "value": "present"
+    },
+    {
+      "name": "focus",
+      "part": "root",
+      "kind": "pseudo",
+      "hook": ":focus",
+      "value": ".area-input-group > :is(.area-input, .area-number-field, .area-select):focus"
+    },
+    {
+      "name": "focus-within",
+      "part": "root",
+      "kind": "pseudo",
+      "hook": ":focus-within",
+      "value": ".area-input-group > :is(.area-input, .area-number-field, .area-select):focus-within"
+    },
+    {
+      "name": "hover",
+      "part": "root",
+      "kind": "pseudo",
+      "hook": ":hover",
+      "value": ".area-select:hover:not(:disabled):not(:focus)"
+    },
+    {
+      "name": "focus",
+      "part": "root",
+      "kind": "pseudo",
+      "hook": ":focus",
+      "value": ".area-select:focus"
+    },
+    {
+      "name": "invalid",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-invalid",
+      "value": "present"
+    },
+    {
+      "name": "invalid",
+      "part": "root",
+      "kind": "aria",
+      "hook": "aria-invalid",
+      "value": "\"true\""
+    },
+    {
+      "name": "success",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-success",
+      "value": "present"
+    },
+    {
+      "name": "warning",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-warning",
+      "value": "present"
+    },
+    {
+      "name": "disabled",
+      "part": "root",
+      "kind": "pseudo",
+      "hook": ":disabled",
+      "value": ".area-select:disabled"
+    },
+    {
+      "name": "focus-visible",
+      "part": "root",
+      "kind": "pseudo",
+      "hook": ":focus-visible",
+      "value": ".area-select:focus-visible"
+    },
+    {
+      "name": "disabled",
+      "part": "not found",
+      "kind": "native",
+      "hook": "disabled",
+      "value": "present"
+    }
+  ],
+  "keyboard": [],
+  "accessibleName": [],
+  "composition": {
+    "allowedParents": "not found",
+    "allowedChildren": "not found",
+    "observedChildren": [],
+    "demoExamples": [
+      "apps/docs/src/demos/badge.tsx:128",
+      "apps/docs/src/demos/badge.tsx:129",
+      "apps/docs/src/demos/badge.tsx:130",
+      "apps/docs/src/demos/badge.tsx:131",
+      "apps/docs/src/demos/badge.tsx:132",
+      "apps/docs/src/demos/badge.tsx:133",
+      "apps/docs/src/demos/badge.tsx:134",
+      "apps/docs/src/demos/display.tsx:326",
+      "apps/docs/src/demos/display.tsx:386",
+      "apps/docs/src/demos/form.tsx:195",
+      "apps/docs/src/demos/form.tsx:203",
+      "apps/docs/src/demos/form.tsx:212",
+      "apps/docs/src/demos/form.tsx:213",
+      "apps/docs/src/demos/form.tsx:214",
+      "apps/docs/src/demos/form.tsx:220",
+      "apps/docs/src/demos/form.tsx:226",
+      "apps/docs/src/demos/form.tsx:232",
+      "apps/docs/src/demos/form.tsx:233",
+      "apps/docs/src/demos/form.tsx:237",
+      "apps/docs/src/demos/form.tsx:239",
+      "apps/docs/src/demos/form.tsx:242",
+      "apps/docs/src/demos/gallery.tsx:212",
+      "apps/docs/src/demos/gallery.tsx:213",
+      "apps/docs/src/demos/gallery.tsx:861",
+      "apps/docs/src/demos/gallery.tsx:1309",
+      "apps/docs/src/demos/gallery.tsx:1310",
+      "apps/docs/src/demos/gallery.tsx:1633",
+      "apps/docs/src/demos/gallery.tsx:1804",
+      "apps/docs/src/demos/gallery.tsx:1807",
+      "apps/docs/src/demos/gallery.tsx:1808",
+      "apps/docs/src/demos/gallery.tsx:1809",
+      "apps/docs/src/demos/gallery.tsx:1810",
+      "apps/docs/src/demos/gallery.tsx:1811"
+    ]
+  },
+  "reference": {
+    "css": [
+      "packages/styles/src/components/color.css",
+      "packages/styles/src/components/input-group.css",
+      "packages/styles/src/components/navigation.css",
+      "packages/styles/src/components/toolbar.css",
+      "packages/styles/src/forced-colors.css",
+      "packages/styles/src/inset.css"
+    ],
+    "spec": [
+      "docs/specs/select.md"
+    ],
+    "reactExport": [
+      "Select"
+    ]
+  },
+  "evidence": {
+    "/slug": {"status":"found","sources":["packages/styles/src/manifest.ts:214"],"note":"Direct source declaration or implementation."},
+    "/manifest": {"status":"found","sources":["packages/styles/src/manifest.ts:213"],"note":"Direct source declaration or implementation."},
+    "/parts": {"status":"found","sources":["packages/styles/src/manifest.ts:213","packages/react/src/components/forms.tsx:41"],"note":"Manifest parts plus implementation-only structural elements; unclassed nodes retain explicit IDs."},
+    "/parts/0": {"status":"found","sources":["packages/react/src/components/forms.tsx:41"],"note":"Direct source declaration or implementation."},
+    "/parts/0/id": {"status":"found","sources":["packages/react/src/components/forms.tsx:41"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/0/class": {"status":"found","sources":["packages/react/src/components/forms.tsx:41"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element": {"status":"found","sources":["packages/react/src/components/forms.tsx:41"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/required": {"status":"found","sources":["packages/react/src/components/forms.tsx:41"],"note":"Root of the rendered family surface."},
+    "/parts/0/allowedContent": {"status":"not found","sources":["packages/react/src/components/forms.tsx:41"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/0/customProperties/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:231"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1": {"status":"found","sources":["packages/styles/src/components/navigation.css:228"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/2": {"status":"found","sources":["packages/styles/src/components/navigation.css:268"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/3": {"status":"found","sources":["packages/styles/src/components/navigation.css:265"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/4": {"status":"found","sources":["packages/styles/src/inset.css:17","packages/styles/src/inset.css:18"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/5": {"status":"found","sources":["packages/styles/src/inset.css:18"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/6": {"status":"found","sources":["packages/styles/src/inset.css:17","packages/styles/src/inset.css:18"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/7": {"status":"found","sources":["packages/styles/src/inset.css:17"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/8": {"status":"found","sources":["packages/styles/src/inset.css:13","packages/styles/src/inset.css:14"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/9": {"status":"found","sources":["packages/styles/src/inset.css:129","packages/styles/src/inset.css:130","packages/styles/src/inset.css:132"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/10": {"status":"found","sources":["packages/styles/src/components/navigation.css:269"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/11": {"status":"found","sources":["packages/styles/src/components/navigation.css:270"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/12": {"status":"found","sources":["packages/styles/src/inset.css:129"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/13": {"status":"found","sources":["packages/styles/src/components/input-group.css:52"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/14": {"status":"found","sources":["packages/styles/src/components/input-group.css:53"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/15": {"status":"found","sources":["packages/styles/src/components/input-group.css:48","packages/styles/src/components/input-group.css:103"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/16": {"status":"found","sources":["packages/styles/src/components/input-group.css:51"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/17": {"status":"found","sources":["packages/styles/src/components/input-group.css:50"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/18": {"status":"found","sources":["packages/styles/src/components/input-group.css:49"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/19": {"status":"found","sources":["packages/styles/src/components/input-group.css:107","packages/styles/src/components/navigation.css:225","packages/styles/src/components/navigation.css:226","packages/styles/src/components/navigation.css:246","packages/styles/src/components/navigation.css:250"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/20": {"status":"found","sources":["packages/styles/src/components/navigation.css:224","packages/styles/src/components/navigation.css:230","packages/styles/src/inset.css:10","packages/styles/src/inset.css:128"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/21": {"status":"found","sources":["packages/styles/src/components/input-group.css:107","packages/styles/src/components/navigation.css:226","packages/styles/src/components/navigation.css:247","packages/styles/src/inset.css:15","packages/styles/src/inset.css:127","packages/styles/src/inset.css:128","packages/styles/src/inset.css:129"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/22": {"status":"found","sources":["packages/styles/src/components/navigation.css:234"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/23": {"status":"found","sources":["packages/styles/src/components/navigation.css:233"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties": {"status":"found","sources":["packages/styles/src/components/input-group.css:48","packages/styles/src/components/input-group.css:103","packages/styles/src/components/input-group.css:49","packages/styles/src/components/input-group.css:50","packages/styles/src/components/input-group.css:51","packages/styles/src/components/input-group.css:52","packages/styles/src/components/input-group.css:53","packages/styles/src/components/input-group.css:107","packages/styles/src/components/navigation.css:225","packages/styles/src/components/navigation.css:226","packages/styles/src/components/navigation.css:246","packages/styles/src/components/navigation.css:250","packages/styles/src/components/navigation.css:247","packages/styles/src/inset.css:15","packages/styles/src/inset.css:127","packages/styles/src/inset.css:128","packages/styles/src/inset.css:129","packages/styles/src/components/navigation.css:224","packages/styles/src/components/navigation.css:230","packages/styles/src/inset.css:10","packages/styles/src/components/navigation.css:228","packages/styles/src/components/navigation.css:231","packages/styles/src/components/navigation.css:233","packages/styles/src/components/navigation.css:234","packages/styles/src/components/navigation.css:265","packages/styles/src/components/navigation.css:268","packages/styles/src/components/navigation.css:269","packages/styles/src/components/navigation.css:270","packages/styles/src/inset.css:13","packages/styles/src/inset.css:14","packages/styles/src/inset.css:17","packages/styles/src/inset.css:18","packages/styles/src/inset.css:130","packages/styles/src/inset.css:132"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/0/tokens/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:327"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1": {"status":"found","sources":["packages/styles/src/components/input-group.css:66","packages/styles/src/components/navigation.css:325"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2": {"status":"found","sources":["packages/styles/src/components/input-group.css:34","packages/styles/src/components/navigation.css:300"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3": {"status":"found","sources":["packages/styles/src/components/navigation.css:325"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4": {"status":"found","sources":["packages/styles/src/components/navigation.css:309"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5": {"status":"found","sources":["packages/styles/src/components/navigation.css:309"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6": {"status":"found","sources":["packages/styles/src/components/navigation.css:309"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7": {"status":"found","sources":["packages/styles/src/components/navigation.css:212","packages/styles/src/components/navigation.css:308"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8": {"status":"found","sources":["packages/styles/src/components/navigation.css:217","packages/styles/src/components/navigation.css:308"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9": {"status":"found","sources":["packages/styles/src/components/navigation.css:216","packages/styles/src/components/navigation.css:308"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/10": {"status":"found","sources":["packages/styles/src/components/navigation.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/11": {"status":"found","sources":["packages/styles/src/components/navigation.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/12": {"status":"found","sources":["packages/styles/src/components/navigation.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/13": {"status":"found","sources":["packages/styles/src/components/navigation.css:328"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/14": {"status":"found","sources":["packages/styles/src/components/input-group.css:34","packages/styles/src/components/navigation.css:303"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/15": {"status":"found","sources":["packages/styles/src/components/navigation.css:209","packages/styles/src/components/navigation.css:210"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/16": {"status":"found","sources":["packages/styles/src/components/navigation.css:269"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/17": {"status":"found","sources":["packages/styles/src/components/navigation.css:270"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/18": {"status":"found","sources":["packages/styles/src/forced-colors.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/19": {"status":"found","sources":["packages/styles/src/forced-colors.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/20": {"status":"found","sources":["packages/styles/src/components/navigation.css:331"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/21": {"status":"found","sources":["packages/styles/src/components/navigation.css:309"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/22": {"status":"found","sources":["packages/styles/src/components/navigation.css:215","packages/styles/src/components/navigation.css:308"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/23": {"status":"found","sources":["packages/styles/src/components/navigation.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/24": {"status":"found","sources":["packages/styles/src/components/navigation.css:309"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/25": {"status":"found","sources":["packages/styles/src/components/navigation.css:213","packages/styles/src/components/navigation.css:308"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/26": {"status":"found","sources":["packages/styles/src/components/navigation.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/27": {"status":"found","sources":["packages/styles/src/components/navigation.css:309"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/28": {"status":"found","sources":["packages/styles/src/components/navigation.css:214","packages/styles/src/components/navigation.css:308"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/29": {"status":"found","sources":["packages/styles/src/components/navigation.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/30": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/31": {"status":"found","sources":["packages/styles/src/components/navigation.css:258"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/32": {"status":"found","sources":["packages/styles/src/components/navigation.css:260"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/33": {"status":"found","sources":["packages/styles/src/components/navigation.css:230"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/34": {"status":"found","sources":["packages/styles/src/components/navigation.css:326"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/35": {"status":"found","sources":["packages/styles/src/components/navigation.css:230"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/36": {"status":"found","sources":["packages/styles/src/components/navigation.css:206","packages/styles/src/components/navigation.css:253"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/37": {"status":"found","sources":["packages/styles/src/components/navigation.css:301"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/38": {"status":"found","sources":["packages/styles/src/components/navigation.css:207"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/39": {"status":"found","sources":["packages/styles/src/components/navigation.css:208"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/40": {"status":"found","sources":["packages/styles/src/components/navigation.css:222"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/41": {"status":"found","sources":["packages/styles/src/components/navigation.css:276","packages/styles/src/components/navigation.css:277","packages/styles/src/components/navigation.css:278","packages/styles/src/components/navigation.css:279"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/42": {"status":"found","sources":["packages/styles/src/components/navigation.css:280"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/43": {"status":"found","sources":["packages/styles/src/components/navigation.css:284","packages/styles/src/components/navigation.css:285","packages/styles/src/components/navigation.css:286","packages/styles/src/components/navigation.css:287"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/44": {"status":"found","sources":["packages/styles/src/components/navigation.css:288"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/45": {"status":"found","sources":["packages/styles/src/components/navigation.css:232"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/46": {"status":"found","sources":["packages/styles/src/components/navigation.css:292","packages/styles/src/components/navigation.css:293","packages/styles/src/components/navigation.css:294","packages/styles/src/components/navigation.css:295"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/47": {"status":"found","sources":["packages/styles/src/components/navigation.css:296"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/48": {"status":"found","sources":["packages/styles/src/components/navigation.css:239"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/49": {"status":"found","sources":["packages/styles/src/components/navigation.css:211","packages/styles/src/components/navigation.css:330"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/50": {"status":"found","sources":["packages/styles/src/components/navigation.css:226","packages/styles/src/components/navigation.css:317","packages/styles/src/components/navigation.css:324"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/51": {"status":"found","sources":["packages/styles/src/components/navigation.css:322"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/52": {"status":"found","sources":["packages/styles/src/components/navigation.css:228","packages/styles/src/inset.css:11","packages/styles/src/inset.css:128"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/53": {"status":"found","sources":["packages/styles/src/components/navigation.css:242"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/54": {"status":"found","sources":["packages/styles/src/components/navigation.css:333"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/55": {"status":"found","sources":["packages/styles/src/components/navigation.css:332"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens": {"status":"found","sources":["packages/styles/src/components/input-group.css:34","packages/styles/src/components/navigation.css:300","packages/styles/src/components/navigation.css:303","packages/styles/src/components/input-group.css:66","packages/styles/src/components/navigation.css:325","packages/styles/src/components/navigation.css:206","packages/styles/src/components/navigation.css:253","packages/styles/src/components/navigation.css:207","packages/styles/src/components/navigation.css:208","packages/styles/src/components/navigation.css:209","packages/styles/src/components/navigation.css:210","packages/styles/src/components/navigation.css:211","packages/styles/src/components/navigation.css:330","packages/styles/src/components/navigation.css:212","packages/styles/src/components/navigation.css:308","packages/styles/src/components/navigation.css:213","packages/styles/src/components/navigation.css:214","packages/styles/src/components/navigation.css:215","packages/styles/src/components/navigation.css:216","packages/styles/src/components/navigation.css:217","packages/styles/src/components/navigation.css:222","packages/styles/src/components/navigation.css:226","packages/styles/src/components/navigation.css:317","packages/styles/src/components/navigation.css:324","packages/styles/src/components/navigation.css:228","packages/styles/src/inset.css:11","packages/styles/src/inset.css:128","packages/styles/src/components/navigation.css:230","packages/styles/src/components/navigation.css:232","packages/styles/src/components/navigation.css:239","packages/styles/src/components/navigation.css:242","packages/styles/src/components/navigation.css:258","packages/styles/src/components/navigation.css:260","packages/styles/src/components/navigation.css:269","packages/styles/src/components/navigation.css:270","packages/styles/src/components/navigation.css:276","packages/styles/src/components/navigation.css:277","packages/styles/src/components/navigation.css:278","packages/styles/src/components/navigation.css:279","packages/styles/src/components/navigation.css:280","packages/styles/src/components/navigation.css:284","packages/styles/src/components/navigation.css:285","packages/styles/src/components/navigation.css:286","packages/styles/src/components/navigation.css:287","packages/styles/src/components/navigation.css:288","packages/styles/src/components/navigation.css:292","packages/styles/src/components/navigation.css:293","packages/styles/src/components/navigation.css:294","packages/styles/src/components/navigation.css:295","packages/styles/src/components/navigation.css:296","packages/styles/src/components/navigation.css:301","packages/styles/src/components/navigation.css:307","packages/styles/src/components/navigation.css:309","packages/styles/src/components/navigation.css:322","packages/styles/src/components/navigation.css:326","packages/styles/src/components/navigation.css:327","packages/styles/src/components/navigation.css:328","packages/styles/src/components/navigation.css:331","packages/styles/src/components/navigation.css:332","packages/styles/src/components/navigation.css:333","packages/styles/src/forced-colors.css:29","packages/styles/src/forced-colors.css:30"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/slots": {"status":"not found","sources":["packages/styles/src/manifest.ts:213","packages/react/src/components/forms.tsx:23","docs/specs/select.md:1"],"note":"not found: No locally declared ReactNode/ReactElement slot props; native inherited children and delegated interfaces require review."},
+    "/options": {"status":"found","sources":["packages/styles/src/manifest.ts:216"],"note":"Direct source declaration or implementation."},
+    "/options/variant": {"status":"found","sources":["packages/styles/src/manifest.ts:216"],"note":"Direct source declaration or implementation."},
+    "/options/variant/default": {"status":"found","sources":["packages/styles/src/manifest.ts:221"],"note":"Direct source declaration or implementation."},
+    "/options/size": {"status":"found","sources":["packages/styles/src/manifest.ts:216"],"note":"Direct source declaration or implementation."},
+    "/options/size/default": {"status":"found","sources":["packages/styles/src/manifest.ts:221"],"note":"Direct source declaration or implementation."},
+    "/booleans": {"status":"found","sources":["packages/styles/src/manifest.ts:217"],"note":"Exact manifest boolean modifier list; absence means no declared booleans."},
+    "/elementModifiers": {"status":"found","sources":["packages/styles/src/manifest.ts:213"],"note":"Direct source declaration or implementation."},
+    "/states/0": {"status":"found","sources":["packages/react/src/components/forms.tsx:44"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1": {"status":"found","sources":["packages/react/src/components/forms.tsx:45"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/2": {"status":"found","sources":["packages/react/src/components/forms.tsx:46"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/3": {"status":"found","sources":["packages/react/src/components/forms.tsx:47"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/4": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/5": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/6": {"status":"found","sources":["packages/styles/src/components/input-group.css:64"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/7": {"status":"found","sources":["packages/styles/src/components/input-group.css:64"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/8": {"status":"found","sources":["packages/styles/src/components/navigation.css:265"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/9": {"status":"found","sources":["packages/styles/src/components/navigation.css:267"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/10": {"status":"found","sources":["packages/styles/src/components/navigation.css:274"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/11": {"status":"found","sources":["packages/styles/src/components/navigation.css:274"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/12": {"status":"found","sources":["packages/styles/src/components/navigation.css:283"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/13": {"status":"found","sources":["packages/styles/src/components/navigation.css:291"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/14": {"status":"found","sources":["packages/styles/src/components/navigation.css:299"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/15": {"status":"found","sources":["packages/styles/src/forced-colors.css:25"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/16": {"status":"found","sources":["packages/styles/src/manifest.ts:219"],"note":"Manifest native/ARIA exception; state-bearing input control when present."},
+    "/states/16/part": {"status":"not found","sources":["packages/styles/src/manifest.ts:213","packages/react/src/components/forms.tsx:23","docs/specs/select.md:1"],"note":"not found: Carrier for disabled is not resolved."},
+    "/states": {"status":"found","sources":["packages/react/src/components/forms.tsx:44","packages/react/src/components/forms.tsx:45","packages/react/src/components/forms.tsx:46","packages/react/src/components/forms.tsx:47","packages/styles/src/components/input-group.css:34","packages/styles/src/components/input-group.css:64","packages/styles/src/components/navigation.css:265","packages/styles/src/components/navigation.css:267","packages/styles/src/components/navigation.css:274","packages/styles/src/components/navigation.css:283","packages/styles/src/components/navigation.css:291","packages/styles/src/components/navigation.css:299","packages/styles/src/forced-colors.css:25","packages/styles/src/manifest.ts:219"],"note":"Direct source declaration or implementation."},
+    "/keyboard": {"status":"not found","sources":["packages/styles/src/manifest.ts:213","packages/react/src/components/forms.tsx:23","docs/specs/select.md:1"],"note":"not found: No reviewed key-to-action contract found. Native behavior is not invented from a tag name."},
+    "/accessibleName": {"status":"not found","sources":["packages/styles/src/manifest.ts:213","packages/react/src/components/forms.tsx:23","docs/specs/select.md:1"],"note":"not found: No explicit accessible-name rule or naming attribute found in scoped implementation; inherited native props are not treated as naming requirements."},
+    "/composition": {"status":"found","sources":["packages/styles/src/manifest.ts:213","packages/react/src/components/forms.tsx:23","docs/specs/select.md:1"],"note":"Allowed composition is distinct from examples and built-in child calls."},
+    "/composition/allowedParents": {"status":"not found","sources":["packages/styles/src/manifest.ts:213","packages/react/src/components/forms.tsx:23","docs/specs/select.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/allowedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:213","packages/react/src/components/forms.tsx:23","docs/specs/select.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/observedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:213","packages/react/src/components/forms.tsx:23","docs/specs/select.md:1"],"note":"not found: No child component call located."},
+    "/composition/demoExamples/0": {"status":"found","sources":["apps/docs/src/demos/badge.tsx:128"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/1": {"status":"found","sources":["apps/docs/src/demos/badge.tsx:129"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/2": {"status":"found","sources":["apps/docs/src/demos/badge.tsx:130"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/3": {"status":"found","sources":["apps/docs/src/demos/badge.tsx:131"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/4": {"status":"found","sources":["apps/docs/src/demos/badge.tsx:132"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/5": {"status":"found","sources":["apps/docs/src/demos/badge.tsx:133"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/6": {"status":"found","sources":["apps/docs/src/demos/badge.tsx:134"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/7": {"status":"found","sources":["apps/docs/src/demos/display.tsx:326"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/8": {"status":"found","sources":["apps/docs/src/demos/display.tsx:386"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/9": {"status":"found","sources":["apps/docs/src/demos/form.tsx:195"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/10": {"status":"found","sources":["apps/docs/src/demos/form.tsx:203"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/11": {"status":"found","sources":["apps/docs/src/demos/form.tsx:212"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/12": {"status":"found","sources":["apps/docs/src/demos/form.tsx:213"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/13": {"status":"found","sources":["apps/docs/src/demos/form.tsx:214"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/14": {"status":"found","sources":["apps/docs/src/demos/form.tsx:220"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/15": {"status":"found","sources":["apps/docs/src/demos/form.tsx:226"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/16": {"status":"found","sources":["apps/docs/src/demos/form.tsx:232"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/17": {"status":"found","sources":["apps/docs/src/demos/form.tsx:233"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/18": {"status":"found","sources":["apps/docs/src/demos/form.tsx:237"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/19": {"status":"found","sources":["apps/docs/src/demos/form.tsx:239"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/20": {"status":"found","sources":["apps/docs/src/demos/form.tsx:242"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/21": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:212"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/22": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:213"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/23": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:861"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/24": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1309"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/25": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1310"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/26": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1633"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/27": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1804"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/28": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1807"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/29": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1808"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/30": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1809"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/31": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1810"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/32": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:1811"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples": {"status":"found","sources":["apps/docs/src/demos/badge.tsx:128","apps/docs/src/demos/badge.tsx:129","apps/docs/src/demos/badge.tsx:130","apps/docs/src/demos/badge.tsx:131","apps/docs/src/demos/badge.tsx:132","apps/docs/src/demos/badge.tsx:133","apps/docs/src/demos/badge.tsx:134","apps/docs/src/demos/display.tsx:326","apps/docs/src/demos/display.tsx:386","apps/docs/src/demos/form.tsx:195","apps/docs/src/demos/form.tsx:203","apps/docs/src/demos/form.tsx:212","apps/docs/src/demos/form.tsx:213","apps/docs/src/demos/form.tsx:214","apps/docs/src/demos/form.tsx:220","apps/docs/src/demos/form.tsx:226","apps/docs/src/demos/form.tsx:232","apps/docs/src/demos/form.tsx:233","apps/docs/src/demos/form.tsx:237","apps/docs/src/demos/form.tsx:239","apps/docs/src/demos/form.tsx:242","apps/docs/src/demos/gallery.tsx:212","apps/docs/src/demos/gallery.tsx:213","apps/docs/src/demos/gallery.tsx:861","apps/docs/src/demos/gallery.tsx:1309","apps/docs/src/demos/gallery.tsx:1310","apps/docs/src/demos/gallery.tsx:1633","apps/docs/src/demos/gallery.tsx:1804","apps/docs/src/demos/gallery.tsx:1807","apps/docs/src/demos/gallery.tsx:1808","apps/docs/src/demos/gallery.tsx:1809","apps/docs/src/demos/gallery.tsx:1810","apps/docs/src/demos/gallery.tsx:1811"],"note":"Direct source declaration or implementation."},
+    "/reference/css": {"status":"found","sources":["packages/styles/src/components/color.css:334","packages/styles/src/components/input-group.css:34","packages/styles/src/components/input-group.css:47","packages/styles/src/components/input-group.css:64","packages/styles/src/components/input-group.css:103","packages/styles/src/components/input-group.css:107","packages/styles/src/components/input-group.css:109","packages/styles/src/components/input-group.css:110","packages/styles/src/components/navigation.css:205","packages/styles/src/components/navigation.css:250","packages/styles/src/components/navigation.css:253","packages/styles/src/components/navigation.css:256","packages/styles/src/components/navigation.css:263","packages/styles/src/components/navigation.css:265","packages/styles/src/components/navigation.css:267","packages/styles/src/components/navigation.css:274","packages/styles/src/components/navigation.css:283","packages/styles/src/components/navigation.css:291","packages/styles/src/components/navigation.css:299","packages/styles/src/components/navigation.css:307","packages/styles/src/components/navigation.css:308","packages/styles/src/components/navigation.css:309","packages/styles/src/components/navigation.css:314","packages/styles/src/components/navigation.css:315","packages/styles/src/components/navigation.css:316","packages/styles/src/components/navigation.css:335","packages/styles/src/components/navigation.css:352","packages/styles/src/components/navigation.css:353","packages/styles/src/components/navigation.css:354","packages/styles/src/components/navigation.css:355","packages/styles/src/components/navigation.css:356","packages/styles/src/components/navigation.css:357","packages/styles/src/components/navigation.css:358","packages/styles/src/components/navigation.css:365","packages/styles/src/components/toolbar.css:45","packages/styles/src/forced-colors.css:4","packages/styles/src/forced-colors.css:18","packages/styles/src/forced-colors.css:22","packages/styles/src/forced-colors.css:25","packages/styles/src/inset.css:7","packages/styles/src/inset.css:21","packages/styles/src/inset.css:126","packages/styles/src/inset.css:132"],"note":"Direct source declaration or implementation."},
+    "/reference/css/0": {"status":"found","sources":["packages/styles/src/components/color.css:334"],"note":"Direct source declaration or implementation."},
+    "/reference/css/1": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"Direct source declaration or implementation."},
+    "/reference/css/2": {"status":"found","sources":["packages/styles/src/components/navigation.css:205"],"note":"Direct source declaration or implementation."},
+    "/reference/css/3": {"status":"found","sources":["packages/styles/src/components/toolbar.css:45"],"note":"Direct source declaration or implementation."},
+    "/reference/css/4": {"status":"found","sources":["packages/styles/src/forced-colors.css:4"],"note":"Direct source declaration or implementation."},
+    "/reference/css/5": {"status":"found","sources":["packages/styles/src/inset.css:7"],"note":"Direct source declaration or implementation."},
+    "/reference/spec": {"status":"found","sources":["docs/specs/select.md:1"],"note":"Dedicated family spec."},
+    "/reference/reactExport/0": {"status":"found","sources":["packages/react/src/components/forms.tsx:23","packages/react/src/index.ts:49"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport": {"status":"found","sources":["packages/react/src/components/forms.tsx:23","packages/react/src/index.ts:49"],"note":"Direct source declaration or implementation."},
+    "/reference": {"status":"found","sources":["packages/styles/src/manifest.ts:213","packages/styles/src/components/color.css:1","packages/styles/src/components/input-group.css:1","packages/styles/src/components/navigation.css:1","packages/styles/src/components/toolbar.css:1","packages/styles/src/forced-colors.css:1","packages/styles/src/inset.css:1","docs/specs/select.md:1"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element/0": {"status":"found","sources":["packages/react/src/components/forms.tsx:41"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:231"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:231"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:231"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:228"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:228"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:228"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/2/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:268"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/2/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:268"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:268"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/3/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:265"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/3/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:265"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:265"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/4/name": {"status":"found","sources":["packages/styles/src/inset.css:17","packages/styles/src/inset.css:18"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/4/selectors": {"status":"found","sources":["packages/styles/src/inset.css:17","packages/styles/src/inset.css:18"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/4/selectors/0": {"status":"found","sources":["packages/styles/src/inset.css:17","packages/styles/src/inset.css:18"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/5/name": {"status":"found","sources":["packages/styles/src/inset.css:18"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/5/selectors": {"status":"found","sources":["packages/styles/src/inset.css:18"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/5/selectors/0": {"status":"found","sources":["packages/styles/src/inset.css:18"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/6/name": {"status":"found","sources":["packages/styles/src/inset.css:17","packages/styles/src/inset.css:18"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/6/selectors": {"status":"found","sources":["packages/styles/src/inset.css:17","packages/styles/src/inset.css:18"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/6/selectors/0": {"status":"found","sources":["packages/styles/src/inset.css:17","packages/styles/src/inset.css:18"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/7/name": {"status":"found","sources":["packages/styles/src/inset.css:17"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/7/selectors": {"status":"found","sources":["packages/styles/src/inset.css:17"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/7/selectors/0": {"status":"found","sources":["packages/styles/src/inset.css:17"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/8/name": {"status":"found","sources":["packages/styles/src/inset.css:13","packages/styles/src/inset.css:14"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/8/selectors": {"status":"found","sources":["packages/styles/src/inset.css:13","packages/styles/src/inset.css:14"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/8/selectors/0": {"status":"found","sources":["packages/styles/src/inset.css:13","packages/styles/src/inset.css:14"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/9/name": {"status":"found","sources":["packages/styles/src/inset.css:129","packages/styles/src/inset.css:130","packages/styles/src/inset.css:132"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/9/selectors": {"status":"found","sources":["packages/styles/src/inset.css:129","packages/styles/src/inset.css:130","packages/styles/src/inset.css:132"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/9/selectors/0": {"status":"found","sources":["packages/styles/src/inset.css:129","packages/styles/src/inset.css:130","packages/styles/src/inset.css:132"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/9/selectors/1": {"status":"found","sources":["packages/styles/src/inset.css:129","packages/styles/src/inset.css:130","packages/styles/src/inset.css:132"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/10/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:269"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/10/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:269"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/10/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:269"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/11/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:270"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/11/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:270"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/11/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:270"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/12/name": {"status":"found","sources":["packages/styles/src/inset.css:129"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/12/selectors": {"status":"found","sources":["packages/styles/src/inset.css:129"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/12/selectors/0": {"status":"found","sources":["packages/styles/src/inset.css:129"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/13/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:52"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/13/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:52"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/13/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:52"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/14/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:53"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/14/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:53"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/14/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:53"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/15/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:48","packages/styles/src/components/input-group.css:103"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/15/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:48","packages/styles/src/components/input-group.css:103"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/15/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:48","packages/styles/src/components/input-group.css:103"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/15/selectors/1": {"status":"found","sources":["packages/styles/src/components/input-group.css:48","packages/styles/src/components/input-group.css:103"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/16/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:51"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/16/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:51"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/16/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:51"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/17/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:50"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/17/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:50"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/17/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:50"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/18/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:49"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/18/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:49"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/18/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:49"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/19/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:107","packages/styles/src/components/navigation.css:225","packages/styles/src/components/navigation.css:226","packages/styles/src/components/navigation.css:246","packages/styles/src/components/navigation.css:250"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/19/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:107","packages/styles/src/components/navigation.css:225","packages/styles/src/components/navigation.css:226","packages/styles/src/components/navigation.css:246","packages/styles/src/components/navigation.css:250"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/19/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:107","packages/styles/src/components/navigation.css:225","packages/styles/src/components/navigation.css:226","packages/styles/src/components/navigation.css:246","packages/styles/src/components/navigation.css:250"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/19/selectors/1": {"status":"found","sources":["packages/styles/src/components/input-group.css:107","packages/styles/src/components/navigation.css:225","packages/styles/src/components/navigation.css:226","packages/styles/src/components/navigation.css:246","packages/styles/src/components/navigation.css:250"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/19/selectors/2": {"status":"found","sources":["packages/styles/src/components/input-group.css:107","packages/styles/src/components/navigation.css:225","packages/styles/src/components/navigation.css:226","packages/styles/src/components/navigation.css:246","packages/styles/src/components/navigation.css:250"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/20/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:224","packages/styles/src/components/navigation.css:230","packages/styles/src/inset.css:10","packages/styles/src/inset.css:128"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/20/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:224","packages/styles/src/components/navigation.css:230","packages/styles/src/inset.css:10","packages/styles/src/inset.css:128"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/20/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:224","packages/styles/src/components/navigation.css:230","packages/styles/src/inset.css:10","packages/styles/src/inset.css:128"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/21/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:107","packages/styles/src/components/navigation.css:226","packages/styles/src/components/navigation.css:247","packages/styles/src/inset.css:15","packages/styles/src/inset.css:127","packages/styles/src/inset.css:128","packages/styles/src/inset.css:129"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/21/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:107","packages/styles/src/components/navigation.css:226","packages/styles/src/components/navigation.css:247","packages/styles/src/inset.css:15","packages/styles/src/inset.css:127","packages/styles/src/inset.css:128","packages/styles/src/inset.css:129"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/21/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:107","packages/styles/src/components/navigation.css:226","packages/styles/src/components/navigation.css:247","packages/styles/src/inset.css:15","packages/styles/src/inset.css:127","packages/styles/src/inset.css:128","packages/styles/src/inset.css:129"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/21/selectors/1": {"status":"found","sources":["packages/styles/src/components/input-group.css:107","packages/styles/src/components/navigation.css:226","packages/styles/src/components/navigation.css:247","packages/styles/src/inset.css:15","packages/styles/src/inset.css:127","packages/styles/src/inset.css:128","packages/styles/src/inset.css:129"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/22/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:234"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/22/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:234"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/22/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:234"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/23/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:233"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/23/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:233"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/23/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:233"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:327"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:327"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:327"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:66","packages/styles/src/components/navigation.css:325"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:66","packages/styles/src/components/navigation.css:325"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:66","packages/styles/src/components/navigation.css:325"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors/1": {"status":"found","sources":["packages/styles/src/components/input-group.css:66","packages/styles/src/components/navigation.css:325"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors/2": {"status":"found","sources":["packages/styles/src/components/input-group.css:66","packages/styles/src/components/navigation.css:325"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:34","packages/styles/src/components/navigation.css:300"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:34","packages/styles/src/components/navigation.css:300"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:34","packages/styles/src/components/navigation.css:300"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors/1": {"status":"found","sources":["packages/styles/src/components/input-group.css:34","packages/styles/src/components/navigation.css:300"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:325"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:325"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:325"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:309"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:309"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/4/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:309"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:309"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:309"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/5/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:309"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:309"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:309"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/6/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:309"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:212","packages/styles/src/components/navigation.css:308"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:212","packages/styles/src/components/navigation.css:308"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:212","packages/styles/src/components/navigation.css:308"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/7/selectors/1": {"status":"found","sources":["packages/styles/src/components/navigation.css:212","packages/styles/src/components/navigation.css:308"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:217","packages/styles/src/components/navigation.css:308"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:217","packages/styles/src/components/navigation.css:308"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:217","packages/styles/src/components/navigation.css:308"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/8/selectors/1": {"status":"found","sources":["packages/styles/src/components/navigation.css:217","packages/styles/src/components/navigation.css:308"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:216","packages/styles/src/components/navigation.css:308"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:216","packages/styles/src/components/navigation.css:308"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:216","packages/styles/src/components/navigation.css:308"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/9/selectors/1": {"status":"found","sources":["packages/styles/src/components/navigation.css:216","packages/styles/src/components/navigation.css:308"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/10/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/10/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/10/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/11/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/11/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/11/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/12/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/12/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/12/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/13/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:328"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/13/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:328"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/13/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:328"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/14/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:34","packages/styles/src/components/navigation.css:303"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/14/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:34","packages/styles/src/components/navigation.css:303"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/14/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:34","packages/styles/src/components/navigation.css:303"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/14/selectors/1": {"status":"found","sources":["packages/styles/src/components/input-group.css:34","packages/styles/src/components/navigation.css:303"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/15/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:209","packages/styles/src/components/navigation.css:210"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/15/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:209","packages/styles/src/components/navigation.css:210"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/15/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:209","packages/styles/src/components/navigation.css:210"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/16/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:269"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/16/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:269"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/16/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:269"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/17/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:270"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/17/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:270"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/17/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:270"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/18/name": {"status":"found","sources":["packages/styles/src/forced-colors.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/18/selectors": {"status":"found","sources":["packages/styles/src/forced-colors.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/18/selectors/0": {"status":"found","sources":["packages/styles/src/forced-colors.css:30"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/19/name": {"status":"found","sources":["packages/styles/src/forced-colors.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/19/selectors": {"status":"found","sources":["packages/styles/src/forced-colors.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/19/selectors/0": {"status":"found","sources":["packages/styles/src/forced-colors.css:29"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/20/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:331"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/20/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:331"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/20/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:331"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/21/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:309"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/21/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:309"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/21/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:309"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/22/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:215","packages/styles/src/components/navigation.css:308"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/22/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:215","packages/styles/src/components/navigation.css:308"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/22/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:215","packages/styles/src/components/navigation.css:308"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/22/selectors/1": {"status":"found","sources":["packages/styles/src/components/navigation.css:215","packages/styles/src/components/navigation.css:308"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/23/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/23/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/23/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/24/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:309"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/24/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:309"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/24/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:309"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/25/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:213","packages/styles/src/components/navigation.css:308"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/25/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:213","packages/styles/src/components/navigation.css:308"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/25/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:213","packages/styles/src/components/navigation.css:308"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/25/selectors/1": {"status":"found","sources":["packages/styles/src/components/navigation.css:213","packages/styles/src/components/navigation.css:308"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/26/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/26/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/26/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/27/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:309"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/27/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:309"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/27/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:309"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/28/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:214","packages/styles/src/components/navigation.css:308"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/28/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:214","packages/styles/src/components/navigation.css:308"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/28/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:214","packages/styles/src/components/navigation.css:308"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/28/selectors/1": {"status":"found","sources":["packages/styles/src/components/navigation.css:214","packages/styles/src/components/navigation.css:308"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/29/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/29/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/29/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:307"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/30/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/30/selectors": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/30/selectors/0": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/31/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:258"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/31/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:258"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/31/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:258"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/32/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:260"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/32/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:260"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/32/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:260"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/33/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:230"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/33/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:230"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/33/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:230"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/34/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:326"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/34/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:326"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/34/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:326"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/35/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:230"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/35/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:230"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/35/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:230"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/36/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:206","packages/styles/src/components/navigation.css:253"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/36/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:206","packages/styles/src/components/navigation.css:253"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/36/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:206","packages/styles/src/components/navigation.css:253"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/36/selectors/1": {"status":"found","sources":["packages/styles/src/components/navigation.css:206","packages/styles/src/components/navigation.css:253"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/37/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:301"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/37/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:301"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/37/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:301"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/38/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:207"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/38/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:207"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/38/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:207"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/39/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:208"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/39/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:208"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/39/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:208"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/40/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:222"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/40/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:222"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/40/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:222"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/41/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:276","packages/styles/src/components/navigation.css:277","packages/styles/src/components/navigation.css:278","packages/styles/src/components/navigation.css:279"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/41/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:276","packages/styles/src/components/navigation.css:277","packages/styles/src/components/navigation.css:278","packages/styles/src/components/navigation.css:279"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/41/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:276","packages/styles/src/components/navigation.css:277","packages/styles/src/components/navigation.css:278","packages/styles/src/components/navigation.css:279"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/41/selectors/1": {"status":"found","sources":["packages/styles/src/components/navigation.css:276","packages/styles/src/components/navigation.css:277","packages/styles/src/components/navigation.css:278","packages/styles/src/components/navigation.css:279"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/42/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:280"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/42/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:280"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/42/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:280"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/42/selectors/1": {"status":"found","sources":["packages/styles/src/components/navigation.css:280"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/43/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:284","packages/styles/src/components/navigation.css:285","packages/styles/src/components/navigation.css:286","packages/styles/src/components/navigation.css:287"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/43/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:284","packages/styles/src/components/navigation.css:285","packages/styles/src/components/navigation.css:286","packages/styles/src/components/navigation.css:287"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/43/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:284","packages/styles/src/components/navigation.css:285","packages/styles/src/components/navigation.css:286","packages/styles/src/components/navigation.css:287"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/44/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:288"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/44/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:288"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/44/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:288"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/45/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:232"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/45/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:232"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/45/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:232"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/46/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:292","packages/styles/src/components/navigation.css:293","packages/styles/src/components/navigation.css:294","packages/styles/src/components/navigation.css:295"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/46/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:292","packages/styles/src/components/navigation.css:293","packages/styles/src/components/navigation.css:294","packages/styles/src/components/navigation.css:295"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/46/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:292","packages/styles/src/components/navigation.css:293","packages/styles/src/components/navigation.css:294","packages/styles/src/components/navigation.css:295"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/47/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:296"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/47/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:296"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/47/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:296"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/48/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:239"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/48/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:239"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/48/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:239"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/49/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:211","packages/styles/src/components/navigation.css:330"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/49/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:211","packages/styles/src/components/navigation.css:330"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/49/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:211","packages/styles/src/components/navigation.css:330"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/49/selectors/1": {"status":"found","sources":["packages/styles/src/components/navigation.css:211","packages/styles/src/components/navigation.css:330"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/50/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:226","packages/styles/src/components/navigation.css:317","packages/styles/src/components/navigation.css:324"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/50/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:226","packages/styles/src/components/navigation.css:317","packages/styles/src/components/navigation.css:324"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/50/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:226","packages/styles/src/components/navigation.css:317","packages/styles/src/components/navigation.css:324"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/50/selectors/1": {"status":"found","sources":["packages/styles/src/components/navigation.css:226","packages/styles/src/components/navigation.css:317","packages/styles/src/components/navigation.css:324"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/51/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:322"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/51/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:322"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/51/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:322"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/52/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:228","packages/styles/src/inset.css:11","packages/styles/src/inset.css:128"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/52/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:228","packages/styles/src/inset.css:11","packages/styles/src/inset.css:128"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/52/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:228","packages/styles/src/inset.css:11","packages/styles/src/inset.css:128"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/53/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:242"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/53/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:242"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/53/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:242"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/54/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:333"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/54/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:333"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/54/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:333"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/55/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:332"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/55/selectors": {"status":"found","sources":["packages/styles/src/components/navigation.css:332"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/55/selectors/0": {"status":"found","sources":["packages/styles/src/components/navigation.css:332"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/options/variant/values": {"status":"found","sources":["packages/styles/src/manifest.ts:216"],"note":"Direct source declaration or implementation."},
+    "/options/variant/values/0": {"status":"found","sources":["packages/styles/src/manifest.ts:216"],"note":"Direct source declaration or implementation."},
+    "/options/variant/values/1": {"status":"found","sources":["packages/styles/src/manifest.ts:216"],"note":"Direct source declaration or implementation."},
+    "/options/size/values": {"status":"found","sources":["packages/styles/src/manifest.ts:216"],"note":"Direct source declaration or implementation."},
+    "/options/size/values/0": {"status":"found","sources":["packages/styles/src/manifest.ts:216"],"note":"Direct source declaration or implementation."},
+    "/options/size/values/1": {"status":"found","sources":["packages/styles/src/manifest.ts:216"],"note":"Direct source declaration or implementation."},
+    "/options/size/values/2": {"status":"found","sources":["packages/styles/src/manifest.ts:216"],"note":"Direct source declaration or implementation."},
+    "/booleans/0": {"status":"found","sources":["packages/styles/src/manifest.ts:217"],"note":"Exact manifest boolean modifier list; absence means no declared booleans."},
+    "/states/0/name": {"status":"found","sources":["packages/react/src/components/forms.tsx:44"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/part": {"status":"found","sources":["packages/react/src/components/forms.tsx:44"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/kind": {"status":"found","sources":["packages/react/src/components/forms.tsx:44"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/hook": {"status":"found","sources":["packages/react/src/components/forms.tsx:44"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/value": {"status":"found","sources":["packages/react/src/components/forms.tsx:44"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/name": {"status":"found","sources":["packages/react/src/components/forms.tsx:45"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/1/part": {"status":"found","sources":["packages/react/src/components/forms.tsx:45"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/1/kind": {"status":"found","sources":["packages/react/src/components/forms.tsx:45"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/1/hook": {"status":"found","sources":["packages/react/src/components/forms.tsx:45"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/1/value": {"status":"found","sources":["packages/react/src/components/forms.tsx:45"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/2/name": {"status":"found","sources":["packages/react/src/components/forms.tsx:46"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/2/part": {"status":"found","sources":["packages/react/src/components/forms.tsx:46"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/2/kind": {"status":"found","sources":["packages/react/src/components/forms.tsx:46"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/2/hook": {"status":"found","sources":["packages/react/src/components/forms.tsx:46"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/2/value": {"status":"found","sources":["packages/react/src/components/forms.tsx:46"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/3/name": {"status":"found","sources":["packages/react/src/components/forms.tsx:47"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/3/part": {"status":"found","sources":["packages/react/src/components/forms.tsx:47"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/3/kind": {"status":"found","sources":["packages/react/src/components/forms.tsx:47"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/3/hook": {"status":"found","sources":["packages/react/src/components/forms.tsx:47"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/3/value": {"status":"found","sources":["packages/react/src/components/forms.tsx:47"],"note":"Hook in conditional spread; evaluate the cited branch condition before emitting."},
+    "/states/4/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/4/part": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/4/kind": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/4/hook": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/4/value": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/5/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/5/part": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/5/kind": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/5/hook": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/5/value": {"status":"found","sources":["packages/styles/src/components/input-group.css:34"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/6/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:64"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/6/part": {"status":"found","sources":["packages/styles/src/components/input-group.css:64"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/6/kind": {"status":"found","sources":["packages/styles/src/components/input-group.css:64"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/6/hook": {"status":"found","sources":["packages/styles/src/components/input-group.css:64"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/6/value": {"status":"found","sources":["packages/styles/src/components/input-group.css:64"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/7/name": {"status":"found","sources":["packages/styles/src/components/input-group.css:64"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/7/part": {"status":"found","sources":["packages/styles/src/components/input-group.css:64"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/7/kind": {"status":"found","sources":["packages/styles/src/components/input-group.css:64"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/7/hook": {"status":"found","sources":["packages/styles/src/components/input-group.css:64"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/7/value": {"status":"found","sources":["packages/styles/src/components/input-group.css:64"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/8/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:265"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/8/part": {"status":"found","sources":["packages/styles/src/components/navigation.css:265"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/8/kind": {"status":"found","sources":["packages/styles/src/components/navigation.css:265"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/8/hook": {"status":"found","sources":["packages/styles/src/components/navigation.css:265"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/8/value": {"status":"found","sources":["packages/styles/src/components/navigation.css:265"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/9/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:267"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/9/part": {"status":"found","sources":["packages/styles/src/components/navigation.css:267"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/9/kind": {"status":"found","sources":["packages/styles/src/components/navigation.css:267"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/9/hook": {"status":"found","sources":["packages/styles/src/components/navigation.css:267"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/9/value": {"status":"found","sources":["packages/styles/src/components/navigation.css:267"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/10/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:274"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/10/part": {"status":"found","sources":["packages/styles/src/components/navigation.css:274"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/10/kind": {"status":"found","sources":["packages/styles/src/components/navigation.css:274"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/10/hook": {"status":"found","sources":["packages/styles/src/components/navigation.css:274"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/10/value": {"status":"found","sources":["packages/styles/src/components/navigation.css:274"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/11/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:274"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/11/part": {"status":"found","sources":["packages/styles/src/components/navigation.css:274"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/11/kind": {"status":"found","sources":["packages/styles/src/components/navigation.css:274"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/11/hook": {"status":"found","sources":["packages/styles/src/components/navigation.css:274"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/11/value": {"status":"found","sources":["packages/styles/src/components/navigation.css:274"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/12/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:283"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/12/part": {"status":"found","sources":["packages/styles/src/components/navigation.css:283"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/12/kind": {"status":"found","sources":["packages/styles/src/components/navigation.css:283"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/12/hook": {"status":"found","sources":["packages/styles/src/components/navigation.css:283"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/12/value": {"status":"found","sources":["packages/styles/src/components/navigation.css:283"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/13/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:291"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/13/part": {"status":"found","sources":["packages/styles/src/components/navigation.css:291"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/13/kind": {"status":"found","sources":["packages/styles/src/components/navigation.css:291"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/13/hook": {"status":"found","sources":["packages/styles/src/components/navigation.css:291"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/13/value": {"status":"found","sources":["packages/styles/src/components/navigation.css:291"],"note":"CSS-recognized hook, with the complete selector retained as evidence context."},
+    "/states/14/name": {"status":"found","sources":["packages/styles/src/components/navigation.css:299"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/14/part": {"status":"found","sources":["packages/styles/src/components/navigation.css:299"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/14/kind": {"status":"found","sources":["packages/styles/src/components/navigation.css:299"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/14/hook": {"status":"found","sources":["packages/styles/src/components/navigation.css:299"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/14/value": {"status":"found","sources":["packages/styles/src/components/navigation.css:299"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/15/name": {"status":"found","sources":["packages/styles/src/forced-colors.css:25"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/15/part": {"status":"found","sources":["packages/styles/src/forced-colors.css:25"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/15/kind": {"status":"found","sources":["packages/styles/src/forced-colors.css:25"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/15/hook": {"status":"found","sources":["packages/styles/src/forced-colors.css:25"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/15/value": {"status":"found","sources":["packages/styles/src/forced-colors.css:25"],"note":"CSS selector condition; a pseudo-class is not an attribute adapter."},
+    "/states/16/name": {"status":"found","sources":["packages/styles/src/manifest.ts:219"],"note":"Manifest native/ARIA exception; state-bearing input control when present."},
+    "/states/16/kind": {"status":"found","sources":["packages/styles/src/manifest.ts:219"],"note":"Manifest native/ARIA exception; state-bearing input control when present."},
+    "/states/16/hook": {"status":"found","sources":["packages/styles/src/manifest.ts:219"],"note":"Manifest native/ARIA exception; state-bearing input control when present."},
+    "/states/16/value": {"status":"found","sources":["packages/styles/src/manifest.ts:219"],"note":"Manifest native/ARIA exception; state-bearing input control when present."},
+    "/reference/spec/0": {"status":"found","sources":["docs/specs/select.md:1"],"note":"Dedicated family spec."}
+  }
+}
