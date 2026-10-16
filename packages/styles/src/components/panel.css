@@ -352,6 +352,11 @@
      the outside of their seam). */
   .area-panel--flush:has(> .area-panel__resize[data-edge="start"]) { --_side-start: calc(var(--_inset) - var(--area-border-width)); }
   .area-panel--flush:has(> .area-panel__resize[data-edge="end"]) { --_side-end: calc(var(--_inset) - var(--area-border-width)); }
+  /* The bar's title takes the same seam (inset.css counts the panel's --_edge, 0 when flush), so it
+     starts on the body's column, not 1 past it (owner, 2026-10-14: the app's Inspector title sat 15
+     from the seam's outside, its rows 14). */
+  .area-panel--flush:has(> .area-panel__resize[data-edge="start"]) > .area-panel__bar { padding-inline-start: var(--_side-start); }
+  .area-panel--flush:has(> .area-panel__resize[data-edge="end"]) > .area-panel__bar { padding-inline-end: var(--_side-end); }
   .area-panel[data-resizing] { user-select: none; }
   .area-panel__resize {
     --_resize-hit: 8px; /* spec: Figma 8 */

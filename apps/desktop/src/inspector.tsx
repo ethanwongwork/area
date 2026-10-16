@@ -1,8 +1,8 @@
 /**
  * The Inspector's shared parts (docs/PRODUCT_UI.md, rule 14). Every tab's Inspector runs in one
  * order: the Canvas settings (src/canvas-settings.tsx), then what is chosen, at its narrowest:
- * a Canvas item, else the Sidebar's row, else the tab's overview, under the same title the
- * Canvas bar or the item carries.
+ * a Canvas item, else the Sidebar's row, else the tab's overview. The Inspector has no title of its
+ * own (owner, 2026-10-14).
  *
  *   Selection  the chosen thing's preview, if the Canvas does not already show it at size, and its
  *              copy actions, two to a row

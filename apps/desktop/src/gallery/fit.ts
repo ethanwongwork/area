@@ -21,8 +21,33 @@
  * widths are decided once at the default UI scale; scale follows the specimen and the tile live.
  */
 
-/** The largest scale a specimen is shown at, at 1x; a canvas inside [data-zoom="2"] allows 2. */
+/*
+ * Two ways to show a specimen (owner, 2026-10-14), read from the nearest [data-zoom]:
+ *   fit   by size group (owner, 2026-10-14: "make all small controls scale to the same ratio …
+ *         grouping the components based on size groups and making that specific group set to the
+ *         same scale %"): a specimen's group is its height at the default type and density (a
+ *         control's height is what makes controls read alike; a field is as wide as its card), and
+ *         every specimen in a group shows at the group's scale (GROUPS), so a Button, a Switch and
+ *         an Input stay in proportion; one that stretches is laid out at its tile over that scale,
+ *         so it fills the tile at it; the tallest are 1:1, shrunk only to fit their tile
+ *   0.5…2 a true zoom: every specimen at exactly that scale, its tile growing above 100%; one larger
+ *         than its tile at that zoom is cut off by the tile, as a canvas at 100% shows what fits
+ */
+/** The scale of everything outside the groups, and of fluid specimens, under Fit. */
 const MAX = 1;
+/*
+ * Fit's size groups, shortest first, by the specimen's own height (Compass shows its Button at its
+ * 56-tall large size, about 1.75x a 32 Button; 200% read "insanely large"):
+ *   control  one row of controls, up to 48 (Button, Badge, Switch, Input, Segmented, Tabs)    125%
+ *            (owner, 2026-10-14: "use 125% for the controls group"; was 150%)
+ *   cluster  a few rows, up to 160 (a radio list, a small menu, an Accordion)                125%
+ *   panel    anything taller (a Dialog, a Table, a Calendar)                                 100%
+ * Controls and clusters now share 125% and stay two groups, so either can move on its own. A
+ * specimen its group's scale would not fit in its tile (a wide fixed one, a narrow Canvas) is
+ * shrunk to fit.
+ */
+const GROUPS = [{ name: "control", h: 48, scale: 1.25 }, { name: "cluster", h: 160, scale: 1.25 }] as const;
+const groupOf = (size: Box) => GROUPS.find(group => size.h <= group.h);
 /** A width no specimen fills unless it stretches to its container: tells fluid from fixed. */
 const PROBE = 1040;
 /** How much wider than its view a fluid specimen may be laid out to keep its text whole. */
@@ -35,6 +60,10 @@ interface Tile {
   stage: HTMLElement;
   fluid: boolean;
   natural: number;
+  /** Fit's scale for its size group (MAX outside the groups). */
+  group: number;
+  /** For a fluid specimen whose content reads narrower than its tile: the width it is laid out at. */
+  hug?: number;
   /** For a fluid specimen: its layout width over the view's room at MAX. */
   widen: number;
 }
@@ -73,6 +102,46 @@ function extent(stage: HTMLElement): Box {
 }
 
 /*
+ * How wide a stretching specimen's content reads (owner, 2026-10-14: a long row whose visible text
+ * takes a smaller width leaves "a bunch of negative space on the side"): from the specimen's start
+ * to the end of its last text or icon, and the start inset again on the other side, as the box
+ * would be drawn round that content, laid out wide so nothing wraps; or, when narrower, its own
+ * max-content width (a row that pushes its parts to its ends, a Token row's name and hex, keeps
+ * them side by side with its own gap). Specimens that are meant to fill (a field, a slider, a
+ * progress bar) have none.
+ */
+function contentWidth(stage: HTMLElement): number | undefined {
+  if (stage.querySelector("input, textarea, select, [role=slider], [role=progressbar], [role=meter], progress, meter")) return undefined;
+  let boxLeft = Infinity, inkLeft = Infinity, inkRight = -Infinity;
+  for (const node of stage.querySelectorAll<Element>('[class*="area-"]')) {
+    const rect = node.getBoundingClientRect();
+    if (rect.width > 1) boxLeft = Math.min(boxLeft, rect.left);
+  }
+  const ink = (rect: DOMRect) => { if (rect.width < 1 || rect.height < 1) return; inkLeft = Math.min(inkLeft, rect.left); inkRight = Math.max(inkRight, rect.right); };
+  const walker = document.createTreeWalker(stage, NodeFilter.SHOW_TEXT);
+  const range = document.createRange();
+  for (let text = walker.nextNode(); text; text = walker.nextNode()) {
+    if (!text.textContent?.trim() || text.parentElement?.closest(".area-sr-only, svg")) continue;
+    range.selectNodeContents(text);
+    for (const rect of range.getClientRects()) ink(rect);
+  }
+  for (const node of stage.querySelectorAll<Element>("svg, img")) if (!node.parentElement?.closest("svg")) ink(node.getBoundingClientRect());
+  if (!Number.isFinite(boxLeft) || !Number.isFinite(inkRight)) return undefined;
+  const scale = Number(stage.style.zoom) || 1;
+  const inked = (inkRight - boxLeft + Math.max(0, inkLeft - boxLeft)) / scale;
+  const laid = stage.style.inlineSize;
+  stage.style.inlineSize = "max-content";
+  // Text that truncates reports almost no max-content width (an Alert's title and body): trusted
+  // only when nothing is cut at it.
+  const own = truncates(stage) ? 0 : extent(stage).w;
+  stage.style.inlineSize = laid;
+  return own > 0 ? Math.min(inked, own) : inked;
+}
+/* The room a stretching specimen keeps past its content: a fifth more, so it reads as the component
+   at a natural width, not one shrink-wrapped (pick). */
+const BREATHE = 1.2;
+
+/*
  * A specimen that stretches to its tile can fit by truncating its text (a banner Alert in a
  * narrow tile). That shows the tile, not the component, so it counts as not fitting. Fields
  * scroll rather than truncate and are left out.
@@ -87,6 +156,7 @@ function truncates(stage: HTMLElement) {
 
 /* The scale that fits a specimen in its room, never above the canvas's zoom. */
 const fit = (room: Box, size: Box, max: number) => Math.min(max, room.w / Math.max(1, size.w), room.h / Math.max(1, size.h));
+
 
 /** The room a tile's view gives its specimen now. */
 function roomOf(view: HTMLElement): Box {
@@ -105,11 +175,13 @@ export function fitTiles(canvas: HTMLElement): () => void {
     stage: tile.querySelector<HTMLElement>(".gallery-tile__stage")!,
     fluid: false,
     natural: 0,
+    group: MAX,
     widen: 1,
   }));
   if (!tiles.length) return () => {};
-  // The app's zoom (owner, 2026-10-12: a 2x view of the specimens): the largest scale, read once.
-  const max = Number(canvas.closest("[data-zoom]")?.getAttribute("data-zoom")) || MAX;
+  // The app's zoom, read once: Fit, or an exact scale.
+  const zoomAttr = canvas.closest("[data-zoom]")?.getAttribute("data-zoom") ?? "fit";
+  const exact = zoomAttr === "fit" ? undefined : Number(zoomAttr) || MAX;
 
   // Fluid or fixed, and how wide a fluid specimen needs to be, at the default type size and density.
   const scale = ["data-area-type", "data-area-density"].map(name => [name, canvas.getAttribute(name)] as const);
@@ -117,20 +189,39 @@ export function fitTiles(canvas: HTMLElement): () => void {
   canvas.setAttribute("data-area-density", "32");
   for (const entry of tiles) { entry.stage.style.zoom = ""; entry.stage.style.inlineSize = `${PROBE}px`; }
   for (const entry of tiles) {
-    entry.natural = Math.ceil(extent(entry.stage).w);
+    const own = extent(entry.stage);
+    entry.natural = Math.ceil(own.w);
     entry.fluid = entry.natural >= PROBE - 40;
+    // The group is read here, at the default type and density, so a Type change scales a group
+    // together instead of moving specimens between groups.
+    const group = groupOf(own);
+    entry.group = group?.scale ?? MAX;
+    entry.tile.dataset.fitGroup = group?.name ?? "panel";
+    const content = contentWidth(entry.stage);
+    if (content) entry.hug = Math.ceil(content * BREATHE);
   }
+  // A fixed specimen narrower in content than in box (a Card, a Popover, a Toast at its default
+  // width) is offered its content's width; it keeps it only if it gives way (its width is capped at
+  // its container's, as Area's surfaces are), and 16 less is the least worth the change.
+  for (const entry of tiles) {
+    if (entry.fluid || !entry.hug || entry.hug > entry.natural - 16) { if (!entry.fluid) entry.hug = undefined; continue; }
+    entry.stage.style.inlineSize = `${entry.hug}px`;
+    const narrowed = Math.ceil(extent(entry.stage).w);
+    if (narrowed < entry.natural - 8 && narrowed <= entry.hug + 1) entry.natural = narrowed;
+    else entry.hug = undefined;
+  }
+  // The width a fluid specimen is laid out at: its tile over its scale, or its content's if narrower.
+  const layoutWidth = (entry: Tile, room: number, scale: number) => Math.min(room / scale, entry.hug ?? Infinity);
   // A fluid specimen takes the first width at which nothing truncates (a few specimens, a few tries).
   for (const entry of tiles.filter(tile => tile.fluid)) {
-    // Laid out for the tile at 1x whatever the zoom: zoom enlarges what has its own size (a Badge, a
-    // Button); a specimen that stretches to its tile just fills the larger tile (at 2x it was laid out at
-    // half the tile, then doubled: a Table wrapped and clipped).
-    const room = roomOf(entry.view).w / MAX;
+    // Laid out for the tile at its group's scale: zoomed by it, it fills the tile.
+    const room = layoutWidth(entry, roomOf(entry.view).w, exact ?? entry.group);
     entry.widen = WIDEN.find(factor => { entry.stage.style.inlineSize = `${Math.floor(room * factor)}px`; return !truncates(entry.stage); }) ?? WIDEN.at(-1)!;
   }
   for (const [name, value] of scale) if (value) canvas.setAttribute(name, value); else canvas.removeAttribute(name);
-  // A fixed specimen keeps its own width, or the view's if wider (loose text inside it wraps to the stage).
-  for (const entry of tiles) if (!entry.fluid) entry.stage.style.inlineSize = `max(100%, ${entry.natural}px)`;
+  // A fixed specimen keeps its own width, or the view's if wider (loose text inside it wraps to the
+  // stage); one that gave way keeps its content's width, centred.
+  for (const entry of tiles) if (!entry.fluid) entry.stage.style.inlineSize = entry.hug ? `${entry.hug}px` : `max(100%, ${entry.natural}px)`;
 
   // Scale follows the specimen and its tile: on first fit, and whenever either changes size
   // (window width, density, hydration, a disclosure opening inside the tile).
@@ -141,8 +232,9 @@ export function fitTiles(canvas: HTMLElement): () => void {
     // Read every room, write fluid widths, then read every extent and write every scale: two
     // layouts, however many tiles changed.
     const rooms = batch.map(entry => roomOf(entry.view));
-    batch.forEach((entry, index) => { if (entry.fluid) entry.stage.style.inlineSize = `${Math.floor(rooms[index]!.w / MAX * entry.widen)}px`; });
-    const scales = batch.map((entry, index) => fit(rooms[index]!, extent(entry.stage), entry.fluid ? MAX : max));
+    // A fluid specimen fills its tile at any zoom: laid out at the room over the zoom, then zoomed.
+    batch.forEach((entry, index) => { if (entry.fluid) entry.stage.style.inlineSize = `${Math.floor(layoutWidth(entry, rooms[index]!.w, exact ?? entry.group) * (exact ? 1 : entry.widen))}px`; });
+    const scales = batch.map((entry, index) => exact ?? fit(rooms[index]!, extent(entry.stage), entry.group));
     batch.forEach((entry, index) => { entry.stage.style.zoom = scales[index]!.toFixed(3); });
   };
   rescale(tiles);

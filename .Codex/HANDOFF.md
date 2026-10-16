@@ -18,6 +18,19 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   (primitives.tsx:1188, 1157). React suite 451: 447 pass, 3 todo, 1 known Indicator failure.
 - Checks: tokens 24,254, typecheck, contracts 14, React suites as above.
 
+## Gallery UI: one inset, cards, zoom, Fit groups (2026-10-15, branch `claude/gallery-ui-spacing-audit-e5e0d4`)
+
+- Spacing: every region 14 in on all sides (Canvas margin 14, sections 28 apart, tile gap 12); text trimmed to cap /
+  baseline. Panel bar title counts a flush seam once (panel.css). No titles over the Canvas or Inspector; the Canvas
+  header holds only the view controls (PRODUCT_UI rule 14 rewritten).
+- Inspector: settings grouped Color / Size / Shape / Effects; fields `soft`; Pills is a multi-select Custom select
+  (new `multiple`). Dropdown windows hug their rows: `--area-menu-min-inline-size` (default 224; the app sets 128).
+- Components: All shows one square card per family (Compass-style, title + copy-code button in the foot); a click
+  opens the Stage. Zoom is Zoom control's new `stepper` (− Fit +; Fit or exact 50–200%). Fit scales by size group
+  (≤48 tall and ≤160 tall at 125%, taller 100%) and lays stretching specimens out at their content's width + 20%
+  (src/gallery/fit.ts). Colour cards are unit tiles hugging their text, short OKLCH.
+- Not done: gallery tiles for CustomSelect `multiple` and ZoomControl `stepper`; Language tiles are not cards.
+
 ## Density: one number (2026-10-14, branch `claude/next-axis-density`)
 
 - Owner: "continue working on the next axis". Density was the last geometry setting named by words. It is now the
@@ -38,7 +51,13 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   re-emitted at axis and contrast boundaries; forced-colors.css sets `frame-width`. Cohesion test pins the
   derivation. Checked in the app: Surface 0 + More draws 1px on Card and Menu (nested either way), Card keeps 120
   wide, Standard stays 0; dark shows the frame clearly. Docs: CONTRAST.md, THEMING.md, DESIGN_SYSTEM.md (Strokes),
-  surface research "More contrast". Not checked: the OS `prefers-contrast` path by emulation (same derivation).
+  surface research "More contrast". Merged (PR #96).
+- Then: the OS path checked in headless Edge (`Emulation.setEmulatedMedia`, no `data-area-contrast` on the Canvas):
+  Surface 0 Card and Menu draw 0 with no preference, 1px under `prefers-contrast: more`, 1px under
+  `forced-colors: active`, 1px under both; Card stays 120 wide.
+- Fixed the React suite's one standing failure ("known Indicator"): `indicator.test.mjs` read the archived docs'
+  `apps/docs/dist/index.html`. It now bundles the app's demo registry (as `check-playgrounds.mjs` does) and renders
+  each of the app's 35 Indicator tiles, one indicator each. React suite 293/293; a mutation fails it.
 - Fixed in passing: `git fetch` failed on three stray refs with a " 2" suffix (`origin/main 2` too); moved to
   `~/Desktop/area/.git-stray-refs-backup-2026-10-14/` (every commit they named is on a branch), delete when happy.
 

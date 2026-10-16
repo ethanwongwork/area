@@ -6,7 +6,7 @@ import { cx } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
 import { Input } from "./Input.tsx";
 import { Button, type ButtonProps } from "./Button.tsx";
-import { Menu, MenuItem, MenuSeparator } from "./primitives.tsx";
+import { Menu, MenuItem, MenuSeparator, Tooltip } from "./primitives.tsx";
 
 export interface ZoomControlProps extends Omit<ButtonProps, "value" | "defaultValue" | "children" | "onChange"> {
   /** The zoom as a scale: 1 is 100% (controlled). */
@@ -26,6 +26,15 @@ export interface ZoomControlProps extends Omit<ButtonProps, "value" | "defaultVa
   shortcuts?: { zoomIn?: ReactNode; zoomOut?: ReactNode; zoomToFit?: ReactNode; presets?: Record<number, ReactNode> };
   /** More rows after the zoom rows, such as view toggles (MenuItem with `checked`). */
   children?: ReactNode;
+  /**
+   * Zoom out and Zoom in buttons either side of the percentage, which still opens the menu (Chrome's
+   * and ChatGPT Atlas's "− 100% +" zoom row). The percentage drops its chevron.
+   */
+  stepper?: boolean;
+  /** The zooms the stepper's buttons and the Zoom in / out rows move between, as scales; without them they multiply and divide by `step`. */
+  stops?: number[];
+  /** Shown instead of the percentage, as "Fit" while the view fits its content; the buttons step from `value`. */
+  valueLabel?: string;
   onOpenChange?: (open: boolean) => void;
 }
 
@@ -34,7 +43,7 @@ const percent = (zoom: number) => `${Math.round(zoom * 100)}%`;
 /** A percentage button that opens the zoom menu. */
 export const ZoomControl = /* @__PURE__ */ forwardRef<HTMLButtonElement, ZoomControlProps>(function ZoomControl(
   { value, defaultValue = 1, onValueChange, min = 0.02, max = 256, step = 2, presets = [0.5, 1, 2], onZoomToFit, shortcuts,
-    children, onOpenChange, size = "sm", variant = "ghost", tone = "neutral", className, "aria-label": ariaLabel, ...rest },
+    children, onOpenChange, stepper = false, stops, valueLabel, size = "sm", variant = "ghost", tone = "neutral", className, "aria-label": ariaLabel, ...rest },
   ref,
 ) {
   const [own, setOwn] = useState(defaultValue);
@@ -46,8 +55,15 @@ export const ZoomControl = /* @__PURE__ */ forwardRef<HTMLButtonElement, ZoomCon
   const set = (next: number) => {
     const clamped = Math.min(max, Math.max(min, next));
     if (value === undefined) setOwn(clamped);
-    if (clamped !== zoom) onValueChange?.(clamped);
+    // From a label ("Fit") the same zoom is still a choice: it leaves the label.
+    if (clamped !== zoom || valueLabel) onValueChange?.(clamped);
   };
+  // In and out: the next stop past the zoom, else a multiple of `step`.
+  const zoomIn = stops?.length ? stops.find(stop => stop > zoom + 1e-9) : zoom * step;
+  const zoomOut = stops?.length ? [...stops].reverse().find(stop => stop < zoom - 1e-9) : zoom / step;
+  const canIn = zoomIn !== undefined && zoom < max;
+  const canOut = zoomOut !== undefined && zoom > min;
+  const shown = valueLabel ?? percent(zoom);
   const openChange = (next: boolean) => {
     setOpen(next);
     onOpenChange?.(next);
@@ -68,11 +84,11 @@ export const ZoomControl = /* @__PURE__ */ forwardRef<HTMLButtonElement, ZoomCon
     if (event.key !== "ArrowDown" && event.key !== "Escape" && event.key !== "Tab") event.stopPropagation();
   };
 
-  return (
+  const menu = (
     <Menu className="area-zoom-control__menu" open={open} onOpenChange={openChange} align="end"
-      trigger={<Button ref={ref} variant={variant} tone={tone} size={size} className={cx("area-zoom-control", className)}
-        aria-label={ariaLabel ?? `Zoom ${percent(zoom)}`} trailingIcon={<Glyph name="chevron-down" />} {...rest}>
-        <span className="area-zoom-control__value">{percent(zoom)}</span>
+      trigger={<Button ref={ref} variant={variant} tone={tone} size={size} className={cx("area-zoom-control", stepper && "area-zoom-control--stepper", !stepper && className)}
+        aria-label={ariaLabel ?? `Zoom ${shown}`} trailingIcon={stepper ? undefined : <Glyph name="chevron-down" />} {...rest}>
+        <span className="area-zoom-control__value">{shown}</span>
       </Button>}>
       <div className="area-zoom-control__field">
         <Input size="sm" variant="soft" fullWidth aria-label="Zoom" value={text} invalid={invalid} inputMode="decimal"
@@ -80,14 +96,29 @@ export const ZoomControl = /* @__PURE__ */ forwardRef<HTMLButtonElement, ZoomCon
           onFocus={event => { const field = event.currentTarget; requestAnimationFrame(() => field.select()); }} />
       </div>
       <MenuSeparator />
-      <MenuItem shortcut={shortcuts?.zoomIn} disabled={zoom >= max} onClick={() => set(zoom * step)}>Zoom in</MenuItem>
-      <MenuItem shortcut={shortcuts?.zoomOut} disabled={zoom <= min} onClick={() => set(zoom / step)}>Zoom out</MenuItem>
+      <MenuItem shortcut={shortcuts?.zoomIn} disabled={!canIn} onClick={() => { if (zoomIn !== undefined) set(zoomIn); }}>Zoom in</MenuItem>
+      <MenuItem shortcut={shortcuts?.zoomOut} disabled={!canOut} onClick={() => { if (zoomOut !== undefined) set(zoomOut); }}>Zoom out</MenuItem>
       {onZoomToFit ? <MenuItem shortcut={shortcuts?.zoomToFit} onClick={onZoomToFit}>Zoom to fit</MenuItem> : null}
       {presets.map(preset => (
-        <MenuItem key={preset} radio checked={Math.abs(zoom - preset) < 1e-9} shortcut={shortcuts?.presets?.[preset]}
+        <MenuItem key={preset} radio checked={!valueLabel && Math.abs(zoom - preset) < 1e-9} shortcut={shortcuts?.presets?.[preset]}
           onClick={() => set(preset)}>{`Zoom to ${percent(preset)}`}</MenuItem>
       ))}
       {children ? <><MenuSeparator />{children}</> : null}
     </Menu>
+  );
+  if (!stepper) return menu;
+  // Icon-only, so each names itself in an Area Tooltip (docs/PRODUCT_UI.md, rule 4).
+  const stepButton = (label: string, glyph: "add" | "subtract", next: number | undefined, enabled: boolean) => (
+    <Tooltip side="bottom" describes={false} trigger={
+      <Button variant={variant} tone={tone} size={size} iconOnly className="area-zoom-control__step" icon={<Glyph name={glyph} />}
+        aria-label={label} disabled={!enabled} onClick={() => { if (next !== undefined) set(next); }} />
+    }>{label}</Tooltip>
+  );
+  return (
+    <div role="group" aria-label={typeof ariaLabel === "string" ? ariaLabel : "Zoom"} className={cx("area-zoom-control__stepper", className)}>
+      {stepButton("Zoom out", "subtract", zoomOut, canOut)}
+      {menu}
+      {stepButton("Zoom in", "add", zoomIn, canIn)}
+    </div>
   );
 });

@@ -50,9 +50,26 @@ test('Indicator exposes presence status, native size and out-of-office naming', 
 });
 
 test('gallery presents exactly one indicator variant per specimen', async () => {
-  const {readFileSync}=await import('node:fs');
-  const gallery=readFileSync(new URL('../../../apps/docs/dist/index.html',import.meta.url),'utf8');
-  const tiles=[...gallery.matchAll(/<article[^>]*id="gallery-indicator-[^"]+"[^>]*>([\s\S]*?)<\/article>/g)];
-  assert.ok(tiles.length > 20);
-  for(const [,tile] of tiles) assert.equal((tile.match(/class="area-(?:indicator|presence) /g)||[]).length,1);
+  // The app's gallery (apps/desktop, the source of truth) builds its tiles from specimens.mjs and renders each
+  // demo from the registry; the archived docs build this test once read is gone. Bundled as
+  // apps/desktop/scripts/check-playgrounds.mjs does: React external, inside the project so Node finds it.
+  const {build}=await import('esbuild');
+  const {mkdirSync,rmSync}=await import('node:fs');
+  const {pathToFileURL}=await import('node:url');
+  const app=new URL('../../../apps/desktop/',import.meta.url);
+  const scratch=new URL('.cache/',app);mkdirSync(scratch,{recursive:true});
+  const out=new URL(`indicator-registry.${process.pid}.mjs`,scratch);
+  await build({entryPoints:[new URL('src/content/registry.tsx',app).pathname],outfile:out.pathname,bundle:true,format:'esm',platform:'node',jsx:'automatic',external:['react','react-dom','react/jsx-runtime'],logLevel:'silent'});
+  try {
+    const {DEMOS}=await import(pathToFileURL(out.pathname).href);
+    const {COMPONENT_PAGES}=await import(new URL('src/content/pages.mjs',app).href);
+    const {componentSpecimens}=await import(new URL('src/content/specimens.mjs',app).href);
+    const tiles=componentSpecimens(COMPONENT_PAGES.find(page=>page.slug==='indicator'),()=>true);
+    assert.ok(tiles.length > 20);
+    for(const tile of tiles) {
+      assert.ok(DEMOS[tile.demo],`${tile.id} has no demo ${tile.demo}`);
+      const html=render(h(DEMOS[tile.demo]));
+      assert.equal((html.match(/class="area-(?:indicator|presence) /g)||[]).length,1,`${tile.id} (${tile.demo}) shows more or less than one indicator`);
+    }
+  } finally { rmSync(out,{force:true}); }
 });

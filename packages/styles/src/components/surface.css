@@ -1107,7 +1107,11 @@
     /* A small break lets adjacent hover plates remain distinct without turning the
      * panel into a loose stack; compact stacks rows flush, as VS Code and Figma (ui-row-gap). */
     gap: var(--area-ui-row-gap);
-    min-inline-size: calc(var(--area-space-96) * 2 + var(--area-space-32));
+    /* The floor every dropdown window shares (Menu, Select's picker, Custom select, Combobox, Tag
+       picker): 224, or the public --area-menu-min-inline-size, for a product whose lists hug their
+       rows (owner, 2026-10-14: the desktop app's dropdowns read too wide). A list anchored to a
+       field is never narrower than the field. */
+    min-inline-size: var(--area-menu-min-inline-size, calc(var(--area-space-96) * 2 + var(--area-space-32)));
     /*
      * The floating lift, the Elevation axis's float role (0 0 2 + 0 8 16). ChatGPT (8/16) and
      * Figma (2/5 + 10/16) float menus the same way; Area's 1px shadow-2 read as a flat card.
@@ -1343,7 +1347,7 @@
     flex-direction: column;
     gap: var(--area-space-4);
     /* Menu's own minimum, so a searchable menu is exactly as wide as a plain one. */
-    min-inline-size: calc(var(--area-space-96) * 2 + var(--area-space-32)); /* Menu's own minimum, 224 (audit D-17; was 256) */
+    min-inline-size: var(--area-menu-min-inline-size, calc(var(--area-space-96) * 2 + var(--area-space-32))); /* Menu's own minimum, 224 (audit D-17; was 256) */
     padding: var(--area-space-4);
     border: var(--area-border-width) solid var(--area-border-float);
     /* spec: the floating-surface lift; see Popover and Menu. */
