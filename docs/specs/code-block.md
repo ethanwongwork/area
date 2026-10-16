@@ -243,6 +243,15 @@ hidden by the growing edge.
   the copy button sits the same distance from the corner with or without a filename.
 - **Why:** you pointed out the copy button's corner didn't match the block's corner.
 
+## Review note, 2026-10-16 (round 30)
+
+- **What changed:** on highlighted and linked lines the syntax colours and line numbers are a little darker in light
+  (and lighter on the lightest dark grounds); on added and removed lines, slightly darker in light. This shows at the
+  default settings too.
+- **Why:** the syntax colours were solved for the plain code ground, so on the highlighted line's gray wash they fell
+  to 3.97:1 even at the defaults (3.31:1 on a gray page), and the diff tints left strings at 4.2:1. Now 4.5:1 or more
+  everywhere. Look at **Default**, **Gray page** and **Lightest dark**.
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → tabs, line numbers and the show / hide toggle keep their ink
@@ -285,3 +294,4 @@ hidden by the growing edge.
 - 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the shell's frame and the small size's corner use `stroke-width` (were `border-width`); the toggle's focus ring is inset by `focus-width` (was written as `focus-offset`, the same 2px) (code.css). (docs/research/consistency-audit-2026-10-12.md)
 - 2026-10-12 · owner, 2026-10-12: "go with your recommendations" (consistency pass) → the shell edge reads `border-card` (O5: one role for a literal written in several families; same paint). (docs/research/consistency-audit-2026-10-12.md)
 - 2026-10-15 · Copy button built (owner: "go with your rec") → the copy is `<CopyButton value={read} label={copyLabel} />`: same name, live region, glyphs and check motion (now in copy-button.css); the check holds 2000 ms (was 1600, unsourced; Untitled UI and shadcn 2000). docs/specs/copy-button.md.
+- 2026-10-16 · owner: "go with your recs, fix them in that order" (after the Layers sweep, docs/research/layers-2026-10-16/sweep/README.md) → inks on a marked line hold 4.5:1 on its plate. Syntax inks, line numbers and diff markers read a private `--_ink` through one rule that mixes it toward black by `--_ink-darken` (light) or white by `--_ink-lift` (dark). Highlighted and target lines: 0.075 darker (the 6.7% wash needs 0.063–0.073 on every light ground; syntax was 3.97:1 there at the defaults, 3.31:1 at 90), and in dark 4.5× however far the raised layer passes L 0.225 (the 19% white wash; 3.5:1 at 24 + 8 before, 0 at the defaults). Added and removed lines: 0.05 darker in light (their fixed tints left strings and markers at 4.19–4.32:1). The vivid inks themselves now follow the light page (tokens color/layers.ts VIVID_ROLES).

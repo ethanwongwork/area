@@ -73,6 +73,11 @@
      step firmer than the default tag. */
   .area-tag--brown { --_bg: light-dark(#faede5, color-mix(in oklab, var(--area-fg-brown-vivid) var(--_dark-tint), transparent)); --_fg: light-dark(var(--area-fg-brown), var(--area-fg-brown-vivid)); } /* spec */
   .area-tag--gray { --_bg: light-dark(#eeeae6, color-mix(in oklab, var(--area-fg-gray) var(--_dark-tint), transparent)); --_fg: var(--area-fg-gray); } /* spec */
+  /* A tinted tone's dark plate is its ink over whatever is behind, so it lightens with the dark layers; the label mixes
+     toward white by the Layers model's lift: on a card or the page by `layer-dark-tint-lift` (0 up to the defaults, 0.24
+     at ground 24 + layers 8, where brown fell to 3.98:1), and in a field by `-fill` (a soft Tag picker; caution fell to
+     4.14:1 there). Layers sweep 2026-10-16; tokens color/layers.ts TINT_LIFT. */
+  .area-tag:not(.area-tag--neutral) { --_lift: var(--area-layer-dark-tint-lift); color: light-dark(var(--_fg), color-mix(in oklab, var(--_fg), white calc(var(--_lift) * 100%))); }
 
   .area-tag__icon { display: inline-grid; place-items: center; flex: none; inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); }
   .area-tag__icon > svg { inline-size: 100%; block-size: 100%; }

@@ -34,7 +34,7 @@ export const GalleryTitlebarPlain = () => (
 );
 /* floating: a raised plate held one cluster space off the window's top and sides (the window's ground behind it). */
 export const GalleryTitlebarFloating = () => (
-  <div style={{ ...bar, background: "var(--area-bg-subtle)", paddingBlockEnd: "var(--area-space-24)" }}>
+  <div data-area-ground="recessed" style={{ ...bar, background: "var(--area-bg-subtle)", paddingBlockEnd: "var(--area-space-24)" }}>
     <Titlebar variant="floating" end={<>
       <SearchField size="sm" variant="soft" aria-label="Search" placeholder="Search" />
       {icon("Dark mode", MoonIcon)}

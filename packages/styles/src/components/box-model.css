@@ -49,6 +49,18 @@
     --_padding-line: var(--area-border-subtle);
     --_content-line: var(--area-edge-control);
   }
+  /*
+   * Inks on the grounds they sit on (Layers sweep 2026-10-16). Info's spacing values sit on the margin's recessed ground;
+   * fg-info (luminance 0.134, 5.3:1 on the default #f7f7f7) darkens just enough to hold 4.6:1 as that ground deepens
+   * (3.6:1 at 90 + 8 before; none at the defaults). The neutral padding is a 6.7% wash: in dark its inks take Code
+   * block's marked-line lift (code.css); in light the muted ink the Layers model solves on the soft mark holds there.
+   */
+  .area-box-model--info {
+    --_ink-darken: calc(1 - min(1, pow(max(0, (pow(var(--area-layer-light-recessed), 3) + 0.05) / 4.6 - 0.05) / 0.1338, 0.333333))); /* spec */
+  }
+  .area-box-model--neutral .area-box-model__padding {
+    --_ink-lift: clamp(0, calc((var(--area-layer-dark-raised) - 0.225) * 4.5), 1); /* spec: code.css */
+  }
 
   .area-box-model__border, .area-box-model__padding {
     position: relative;
@@ -77,7 +89,7 @@
   .area-box-model__side--right { grid-area: 2 / 3; }
   .area-box-model__side--bottom { grid-area: 3 / 2; }
   .area-box-model__side--left { grid-area: 2 / 1; }
-  .area-box-model > .area-box-model__side, .area-box-model__padding > .area-box-model__side { color: var(--_space-ink); }
+  .area-box-model > .area-box-model__side, .area-box-model__padding > .area-box-model__side { --_ink: var(--_space-ink); color: light-dark(color-mix(in oklab, var(--_ink), black calc(var(--_ink-darken, 0) * 100%)), color-mix(in oklab, var(--_ink), white calc(var(--_ink-lift, 0) * 100%))); }
   .area-box-model__value { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
   /* "Margin", "Border" and "Padding" at their ring's start, muted; "Border" clears its corner's radius. */
@@ -89,7 +101,8 @@
     /* Centred in its ring's row (8 at 32, Figma's 4 at 24). */
     padding: calc((var(--_ring) - var(--area-text-xs-leading)) / 2) var(--_label-x);
     overflow: hidden;
-    color: var(--area-fg-muted);
+    --_ink: var(--area-fg-muted);
+    color: light-dark(color-mix(in oklab, var(--_ink), black calc(var(--_ink-darken, 0) * 100%)), color-mix(in oklab, var(--_ink), white calc(var(--_ink-lift, 0) * 100%)));
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -102,7 +115,8 @@
     position: absolute;
     line-height: 1cap;
     text-box: trim-both cap alphabetic;
-    color: var(--area-fg-muted);
+    --_ink: var(--area-fg-muted);
+    color: light-dark(color-mix(in oklab, var(--_ink), black calc(var(--_ink-darken, 0) * 100%)), color-mix(in oklab, var(--_ink), white calc(var(--_ink-lift, 0) * 100%)));
   }
   .area-box-model__corner--top-left { inset-block-start: var(--_inset); inset-inline-start: var(--_inset); }
   .area-box-model__corner--top-right { inset-block-start: var(--_inset); inset-inline-end: var(--_inset); }

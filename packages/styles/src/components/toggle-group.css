@@ -37,7 +37,10 @@
     box-sizing: border-box;
     padding: var(--_track-inset);
     border-radius: var(--_track-radius);
-    background-color: var(--area-bg-subtle);
+    /* The track is a control, so it takes the control fill, which steps from the ground it sits on: the recessed
+       layer (bg-subtle, the old paint) equals the page at layer contrast 0 and left only the ring (Layers sweep
+       2026-10-16). Light 100 + 4 is the same #f7f7f7; dark is the rest fill, near the #28 groove the spec measured. */
+    background-color: var(--area-bg-component);
     outline: var(--area-border-width) solid var(--area-border-decorative);
     outline-offset: calc(-1 * var(--area-border-width));
   }

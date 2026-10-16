@@ -24,6 +24,10 @@
     --_color: var(--area-fg-default);
     /* spec: Notion's column tints run 3% (default, purple) to 6.3% (yellow); unmeasured colours 3.5%. */
     --_tint: 3%;
+    /* The colour as text (the count, the add row): its plates are translucent, so it follows the ground, darkening with
+       the light page as the vivid inks do and lightening with the dark layers as Tag's labels do (Layers sweep
+       2026-10-16: 4.18:1 at light 90, 4.06:1 at dark 24 + 8). */
+    --_ink: light-dark(color-mix(in oklab, var(--_color), black calc(var(--area-layer-light-vivid-darken) * 100%)), color-mix(in oklab, var(--_color), white calc(var(--area-layer-dark-tint-lift) * 100%)));
     display: flex;
     flex-direction: column;
     flex: none;
@@ -64,7 +68,12 @@
   /* The count is a soft Badge; in a coloured column it takes the colour, as the tint does. */
   .area-board-column:not(.area-board-column--neutral) .area-board-column__count {
     --_surface: color-mix(in oklab, var(--_color) 12%, transparent);
-    --_tone-fg: var(--_color);
+    --_tone-fg: var(--_ink);
+  }
+  /* The neutral column's count is muted text on the mark over the column's 3% tint, a step deeper than the mark the
+     Layers model solves muted for: it darkens with the light page as the vivid inks do (4.36:1 at 95 + 0 before). */
+  .area-board-column--neutral .area-board-column__count {
+    --_tone-fg: light-dark(color-mix(in oklab, var(--area-fg-muted), black calc(var(--area-layer-light-vivid-darken) * 100%)), var(--area-fg-muted));
   }
   .area-board-column__actions { display: flex; align-items: center; gap: var(--area-space-2); margin-inline-start: auto; }
 
@@ -104,7 +113,7 @@
     transition: background-color var(--area-duration-fast) var(--area-ease-out);
   }
   .area-board-column:not(.area-board-column--neutral) .area-board-column__add {
-    --_add-ink: var(--_color);
+    --_add-ink: var(--_ink);
     /* The card's hover strength, 6% (pressed 9%, the same 1.5 step as bg-hover to bg-active). */
     --_add-plate: color-mix(in oklab, var(--_color) 6%, transparent);
     --_add-plate-active: color-mix(in oklab, var(--_color) 9%, transparent);

@@ -1395,7 +1395,7 @@ export const GalleryNav = () => (
    default, which left 8 more on the right; review round 28). The name is the surface title size
    (16 at type 14) at the regular weight. */
 export const GalleryNavSidebar = () => (
-  <aside aria-label="Sidebar" style={{ display: "flex", flexDirection: "column", inlineSize: "calc(var(--area-space-96) * 2.75)", blockSize: "calc(var(--area-space-96) * 6)", background: "var(--area-bg-subtle)", borderInlineEnd: "var(--area-border-width) solid var(--area-border-decorative)" }}>
+  <aside aria-label="Sidebar" data-area-ground="recessed" style={{ display: "flex", flexDirection: "column", inlineSize: "calc(var(--area-space-96) * 2.75)", blockSize: "calc(var(--area-space-96) * 6)", background: "var(--area-bg-subtle)", borderInlineEnd: "var(--area-border-width) solid var(--area-border-decorative)" }}>
     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "var(--area-space-8) var(--area-space-8) var(--area-space-8) var(--area-space-16)" }}>
       <span style={{ fontSize: "var(--area-title-xs-size)", lineHeight: "var(--area-title-xs-leading)" }}>Area</span>
       <span style={{ display: "flex" }}>

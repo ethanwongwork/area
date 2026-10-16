@@ -70,6 +70,35 @@ export const INK_TARGET = { text: 4.6, edge: 3.1 } as const;
 /** The cast fades to none at white and at black, as the tinted ramps do: full chroma from 0.024 under white, and at or
  * above L 0.18 in dark. */
 export const CAST_FADE = { light: 0.024, dark: 0.18 } as const;
+/** The soft-mark plate (base.ts `bg-mark`, 6% black in light) over a gray, as a lightness factor: sRGB channels × 0.94
+ * scale a light gray's luminance by 0.872, whose cube root is 0.955 (0.954 to round safe). Soft Badge and Count set
+ * muted text on it, so muted is solved on it too (Layers sweep 2026-10-16: #666 on #e0e0e0, 4.35:1, at 95 + 0). */
+export const MARK_SHADE = 0.954;
+/** The roles with a vivid ink (`fg-<role>-vivid`: validation, danger rows, syntax). Each is chosen for 4.6:1 on white
+ * (scale.ts chooseVivid; the code ground is white in light), so its luminance is at most VIVID_Y. On a gray light page
+ * the inks mix toward black in OKLab, which scales luminance by (1 − d)³ exactly, by just enough to keep 4.6:1 on the
+ * page; on white d is 0, so the light theme as it was is unchanged (sweep: 3.83:1 at 90). Dark needs no change. */
+export const VIVID_ROLES = ["accent", "danger", "warning", "caution", "success", "info", "discovery", "pink", "brown"] as const;
+export const VIVID_Y = (1 + 0.05) / INK_TARGET.text - 0.05;
+/** The tonal inks (`fg-<role>`: outline Buttons and Badges, links, statuses) are darker; the brightest in any accent is
+ * teal's #00766a, luminance 0.140. They take the same mix, solved for that bound, so they hold on gray pages from about
+ * L 0.94 down (sweep: 4.18:1 at 90 + 0) and are unchanged on 100 to 95. */
+export const TONAL_ROLES = ["accent", "danger", "warning", "caution", "success", "info", "discovery", "pink", "gray", "brown"] as const;
+export const TONAL_Y = 0.141;
+/** Every hued ink the model derives: its token, the rung the axes write and the luminance bound it is solved for. */
+export const HUED_INKS = [
+  ...VIVID_ROLES.map(role => ({ token: `fg-${role}-vivid`, bound: VIVID_Y, darken: "vivid" as const })),
+  ...TONAL_ROLES.map(role => ({ token: `fg-${role}`, bound: TONAL_Y, darken: "tonal" as const })),
+];
+const darkenFor = (page: number, bound: number) => 1 - Math.min(1, Math.cbrt(Math.max(0, (page ** 3 + 0.05) / INK_TARGET.text - 0.05) / bound));
+/** Tinted labels on tinted plates (Tag, Board: the ink over a 16% wash of itself) lose contrast as the dark ground under
+ * the plate lightens, so they mix toward white. Two amounts, by the ground the label sits on:
+ *   layer  on a card, a menu or the page: past a raised layer of L 0.30, 4× the excess (0.24 at 24 + 8, every Tag ink
+ *          4.77:1 or more; sweep: brown 3.98:1 there before).
+ *   fill   in a field or on a hovered row (a soft Tag picker): past a raised hover fill of L 0.315, 4.9× the excess (0.73
+ *          at 24 + 8; sweep: caution 4.14:1 there before). Lifting every tag by this much left them nearly white on cards.
+ * Both are 0 up to the defaults. */
+export const TINT_LIFT = { layer: { from: 0.3, perL: 4 }, fill: { from: 0.315, perL: 4.9 } } as const;
 
 // ---------------------------------------------------------------------------
 // The model, as numbers
@@ -85,6 +114,8 @@ export interface LayerLightness {
   fill: { page: [number, number, number]; raised: [number, number, number]; recessed: [number, number, number] };
   edge: Record<keyof typeof EDGE_OFFSET.light, number>;
   ink: { body: number; muted: number; edge: number; edgeHover: number };
+  /** How far the vivid and tonal inks mix toward black (light) and tinted labels toward white (dark), 0 to 1. */
+  vividDarken: number; tonalDarken: number; tintLift: number; tintLiftFill: number;
 }
 
 const clamp01 = (L: number) => Math.min(1, Math.max(0, L));
@@ -106,24 +137,28 @@ export function layerLightness(theme: "light" | "dark", groundStep: number, n: n
     const edgeInk = Math.min(INK_TODAY.light.edge, inkOn("light", recessed - s, INK_TARGET.edge));
     const ink = {
       body: Math.min(INK_TODAY.light.body, inkOn("light", recessed - FILL_MULTIPLE.light[2] * s, INK_TARGET.text)),
-      muted: Math.min(INK_TODAY.light.muted, inkOn("light", recessed - FILL_MULTIPLE.light[1] * s, INK_TARGET.text)),
+      // Muted sits on hovered and selected rows (a count in a selected sidebar row) and on the soft-mark plate.
+      muted: Math.min(INK_TODAY.light.muted, inkOn("light", recessed - FILL_MULTIPLE.light[2] * s, INK_TARGET.text), inkOn("light", MARK_SHADE * recessed, INK_TARGET.text)),
       edge: edgeInk, edgeHover: edgeInk + INK_TODAY.light.edgeHover,
     };
-    return { page, raised, recessed, stripe: page - 0.6 * s, step: s, fill, edge, ink };
+    return { page, raised, recessed, stripe: page - 0.6 * s, step: s, fill, edge, ink, vividDarken: darkenFor(page, VIVID_Y), tonalDarken: darkenFor(page, TONAL_Y), tintLift: 0, tintLiftFill: 0 };
   }
   const lift = n > 0 && g < DARK_LAYER_FLOOR ? DARK_LAYER_FLOOR - g : 0;
   const page = g, raised = g + lift + LAYER_PER_STEP.dark.raised * n, recessed = g + lift + LAYER_PER_STEP.dark.recessed * n;
   const fills = (x: number) => { const rest = Math.max(x + s, DARK_FILL_FLOOR); return FILL_MULTIPLE.dark.map(m => rest + m * s) as [number, number, number]; };
   const fill = { page: fills(page), raised: fills(raised), recessed: fills(recessed) };
   const edge = Object.fromEntries(Object.entries(EDGE_OFFSET.dark).map(([k, d]) => [k, Math.max(EDGE_DARK_TODAY[k as keyof typeof EDGE_DARK_TODAY], raised + d)])) as LayerLightness["edge"];
-  // The lightest surface text sits on is the raised layer's hovered fill (raised is the lightest layer in dark).
+  // The lightest surface text sits on is the raised layer's selected fill (raised is the lightest layer in dark); muted
+  // text sits there too (a count in a selected row).
   const edgeInk = Math.max(INK_TODAY.dark.edge, inkOn("dark", fill.raised[0], INK_TARGET.edge));
   const ink = {
     body: Math.max(INK_TODAY.dark.body, inkOn("dark", fill.raised[2], INK_TARGET.text)),
-    muted: Math.max(INK_TODAY.dark.muted, inkOn("dark", fill.raised[1], INK_TARGET.text)),
+    muted: Math.max(INK_TODAY.dark.muted, inkOn("dark", fill.raised[2], INK_TARGET.text)),
     edge: edgeInk, edgeHover: Math.min(1, edgeInk + INK_TODAY.dark.edgeHover),
   };
-  return { page, raised, recessed, stripe: raised + 0.5 * s, step: s, fill, edge, ink };
+  const toWhite = (L: number, { from, perL }: { from: number; perL: number }) => Math.min(1, Math.max(0, (L - from) * perL));
+  const tintLift = toWhite(raised, TINT_LIFT.layer), tintLiftFill = toWhite(fill.raised[1], TINT_LIFT.fill);
+  return { page, raised, recessed, stripe: raised + 0.5 * s, step: s, fill, edge, ink, vividDarken: 0, tonalDarken: 0, tintLift, tintLiftFill };
 }
 
 /** The Neutral setting's tint: the hue and chroma of its own ramp, at 50 in light and 900 in dark. */
@@ -209,11 +244,15 @@ export function layerLightnessCss(): Record<string, string> {
   const inkDark = (bg: string, ratio: number, today: number) => `max(${num(today)}, ${root3(`min(1, ${num(ratio)} * (${cube(bg)} + 0.05) - 0.05)`)})`;
   Object.assign(out, {
     "layer-light-body": inkLight(v("layer-light-recessed-fill-2"), INK_TARGET.text, INK_TODAY.light.body),
-    "layer-light-muted": inkLight(v("layer-light-recessed-fill-1"), INK_TARGET.text, INK_TODAY.light.muted),
+    "layer-light-muted": `min(${inkLight(v("layer-light-recessed-fill-2"), INK_TARGET.text, INK_TODAY.light.muted)}, ${inkLight(`calc(${num(MARK_SHADE)} * ${v("layer-light-recessed")})`, INK_TARGET.text, INK_TODAY.light.muted)})`,
     "layer-light-edge": inkLight(v("layer-light-recessed-fill-0"), INK_TARGET.edge, INK_TODAY.light.edge),
     "layer-dark-body": inkDark(v("layer-dark-raised-fill-2"), INK_TARGET.text, INK_TODAY.dark.body),
-    "layer-dark-muted": inkDark(v("layer-dark-raised-fill-1"), INK_TARGET.text, INK_TODAY.dark.muted),
+    "layer-dark-muted": inkDark(v("layer-dark-raised-fill-2"), INK_TARGET.text, INK_TODAY.dark.muted),
     "layer-dark-edge": inkDark(v("layer-dark-raised-fill-0"), INK_TARGET.edge, INK_TODAY.dark.edge),
+    "layer-light-vivid-darken": `calc(1 - min(1, ${root3(`max(0, (${cube(gl)} + 0.05) / ${num(INK_TARGET.text)} - 0.05) / ${num(VIVID_Y)}`)}))`,
+    "layer-light-tonal-darken": `calc(1 - min(1, ${root3(`max(0, (${cube(gl)} + 0.05) / ${num(INK_TARGET.text)} - 0.05) / ${num(TONAL_Y)}`)}))`,
+    "layer-dark-tint-lift": `clamp(0, calc((${v("layer-dark-raised")} - ${num(TINT_LIFT.layer.from)}) * ${num(TINT_LIFT.layer.perL)}), 1)`,
+    "layer-dark-tint-lift-fill": `clamp(0, calc((${v("layer-dark-raised-fill-1")} - ${num(TINT_LIFT.fill.from)}) * ${num(TINT_LIFT.fill.perL)}), 1)`,
   });
   return out;
 }
@@ -253,13 +292,21 @@ export function layerCss(): Record<string, string> {
     [`${P}border`]: edge("border"),
     [`${P}border-hover`]: edge("hover"),
   };
+  // The hued inks: Theme and Accent write each one's rung (`<token>-rung`, axes/color.ts); in light it mixes toward
+  // black by the page's darken for its bound, exact in luminance (see VIVID_ROLES, TONAL_ROLES).
+  for (const { token, darken } of HUED_INKS) {
+    const rung = v(`${token}-rung`);
+    out[`${P}${token}`] = `light-dark(color-mix(in oklab, ${rung}, black calc(${v(`layer-light-${darken}-darken`)} * 100%)), ${rung})`;
+  }
   const suffix = ["", "-hover", "-active"];
-  for (const [ground, prefix] of [["page", "bg-component"], ["raised", "bg-component-raised"], ["recessed", "bg-component-recessed"]] as const)
+  // `bg-component` is the page's fill until a surface points it at its own ground; `-page` keeps the page's, so a region
+  // painted the page tone inside a raised one (a Titlebar or a flush Panel in a card or a gallery tile) can point back.
+  for (const [ground, prefix] of [["page", "bg-component"], ["page", "bg-component-page"], ["raised", "bg-component-raised"], ["recessed", "bg-component-recessed"]] as const)
     suffix.forEach((s, i) => { out[`${P}${prefix}${s}`] = both(`${ground}-fill-${i}`); });
   // The Selection role on a raised or recessed ground, as base.ts writes it on the page: the ground's pressed fill (or
   // hovered, for a band) mixed toward the accent when Selection is Accent. A surface points the role at these.
   const mix = (fill: string, accent: string) => `color-mix(in srgb, var(${P}${fill}), var(${P}${accent}) calc(var(${P}selection-accent) * 100%))`;
-  for (const ground of ["raised", "recessed"] as const) Object.assign(out, {
+  for (const ground of ["page", "raised", "recessed"] as const) Object.assign(out, {
     [`${P}selection-surface-${ground}`]: mix(`bg-component-${ground}-active`, "accent-surface"),
     [`${P}selection-surface-${ground}-hover`]: mix(`bg-component-${ground}-active`, "accent-surface-hover"),
     [`${P}selection-band-${ground}`]: mix(`bg-component-${ground}-hover`, "accent-surface"),

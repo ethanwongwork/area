@@ -151,6 +151,12 @@ Resolved 2026-10-10 (owner: "go with your recommendations"):
 - **What changed:** The default (soft) toggle group is now a track like Segmented: a faint outline around it, a darker wash under the pointer, and each pressed toggle raised as a white plate. Before, it was a joined Button group where hover was barely visible and pressed was only one shade darker. Outline and ghost are unchanged.
 - **Why:** You asked whether there should be strokes and whether hover was right. Hover was one shade off rest, hard to see and hard to tell from pressed; Figma's filled controls and Area's Segmented hover with a wash and raise the chosen option, with a hairline round the track.
 
+## Review note, 2026-10-16 (round 30)
+
+- **What changed:** the soft group's track takes Segmented's change: the control fill, a step off its ground. White
+  is unchanged; at contrast 0 and in dark the track shows again.
+- **Why:** the Layers sweep (same cause as Segmented). Look at **Gray page** and **Dark**.
+
 ## Feedback log
 
 - 2026-10-10 · owner: "keep building" → Toggle group from Untitled UI, shadcn, Radix and React Aria and Area's Button,
@@ -161,3 +167,4 @@ Resolved 2026-10-10 (owner: "go with your recommendations"):
   (hairline round it, hover wash, pressed raised), outline and ghost unchanged (owner: "go with your recommendations")
   → toggle-group.css, ToggleGroup.tsx (soft no longer carries ButtonGroup's classes); recaptured, round 5 in `before/`.
 - 2026-10-10 · owner, review round 6: approved → Complete in `component-status.mjs`.
+- 2026-10-16 · owner: "go with your recs, fix them in that order" (after the Layers sweep, docs/research/layers-2026-10-16/sweep/README.md) → the soft track takes Segmented's change: `bg-component` (the control fill, stepping from its ground) instead of `bg-subtle`, which vanished at layer contrast 0. Light defaults unchanged (#f7f7f7).

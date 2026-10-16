@@ -191,7 +191,9 @@ test('conversation and code: composer disables its actions, honours inputProps.i
   const code = renderToString(h(CodeBlock, { languages: ['tsx', 'css'], languageTabs: true, code: 'const a = 1;' }));
   assert.match(code, /<div class="area-tabs area-tabs--sm area-code-block__languages"><div class="area-tabs__list" role="tablist" aria-label="Language">/);
   assert.match(code, /class="area-tabs__tab" data-selected=""/);
-  assert.match(css, /\.area-code-block__pre \.area-syntax-keyword \{ color: var\(--area-syntax-keyword\); \}/);
+  // The keyword reads its syntax role through the marked-line ink rule (Layers sweep 2026-10-16).
+  assert.match(css, /\.area-code-block__pre \.area-syntax-keyword \{ --_ink: var\(--area-syntax-keyword\); \}/);
+  assert.match(css, /\.area-code-block__pre :is\(\.area-syntax-keyword, [^)]*\) \{\s*color: light-dark\(color-mix\(in oklab, var\(--_ink\)/);
 });
 
 test('a linked card lifts every control above its stretched link; RTL arrows mirror (audit F-29, F-34)', () => {

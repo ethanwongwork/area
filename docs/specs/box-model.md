@@ -178,6 +178,13 @@ None open. (Round 10's two were accepted; square rings replaced the 32 margin ro
 - **Why:** you asked for no dashed lines and for the outer box to take its component family's corner, with the inner
   corners still round.
 
+## Review note, 2026-10-16 (round 30)
+
+- **What changed:** the blue spacing values darken as the gray margin deepens on a gray page, and in dark the
+  neutral padding's labels lighten on the lightest grounds. Defaults unchanged.
+- **Why:** the Layers sweep: values fell to 3.6:1 on the margin at light 90, and the neutral labels to 4.0:1 at dark
+  24 + 8. Look at **Gray page** and **Lightest dark**.
+
 ## Feedback log
 
 - 2026-10-12 · owner: "keep working, start on the inspector components" → Box model from Figma Dev Mode's layer
@@ -195,3 +202,4 @@ None open. (Round 10's two were accepted; square rings replaced the 32 margin ro
   block); the inner boxes keep their rounded corners (12 / 8 / 6). Round 13.
 - 2026-10-12 · owner, review round 13: approved.
 - 2026-10-14 · all-axis audit → spacing values take `fg-info`, the info text role (were `info-solid`, a fill: 4.35:1 on `bg-subtle` in light, 3.16:1 in dark, under 4.5 for 11–12px text) → box-model.css.
+- 2026-10-16 · owner: "go with your recs, fix them in that order" (after the Layers sweep, docs/research/layers-2026-10-16/sweep/README.md) → inks follow the grounds they sit on. Info's spacing values on the margin's recessed ground darken just enough for 4.6:1 as it deepens (fg-info, luminance 0.134; 3.63:1 at 90 + 8 before, none at the defaults); in dark the neutral padding's labels and values take Code block's marked-line lift for its 6.7% wash (past a raised L 0.225; 4.04:1 at dark 24 + 8 before); in light the Layers model's muted ink, now solved on the soft mark, holds on it (4.27:1 at 95 + 0 before). Labels, corners and values read a private `--_ink`.

@@ -196,6 +196,13 @@ removed"; chosen rows show the check. Dark and compact checked on the Review pag
 
 None.
 
+## Review note, 2026-10-16 (round 30)
+
+- **What changed:** in dark, the coloured tags inside the field lighten their labels a little more than tags on a
+  card do, on the lightest dark grounds only. Nothing changes at the defaults or in light.
+- **Why:** the field's fill is lighter than a card, and a tag's plate is see-through, so caution fell to 4.14:1 in a
+  soft field at dark ground 24 + layers 8. Look at **Lightest dark**.
+
 ## Feedback log
 
 - 2026-10-05 · batch 1, second component → built from Notion's select property editor on Input's
@@ -216,3 +223,4 @@ None.
 - 2026-10-08 · owner: approved on the component review page (re-review after the requested changes).
 - 2026-10-09 · owner went with Scroll area's recommendation to adopt it in the scrolling families (docs/specs/scroll-area.md, "Adoption") → the scroll container is a Scroll area: Figma's overlay bar instead of the platform's, its inset moved into the scroller so rows keep their place → back in review.
 - 2026-10-15 · owner: "merge it, then continue working" → boundary sweep under increased contrast (CONTRAST.md: required boundaries target 3:1): the soft variant's resting edge is `input-edge-soft`, as Input's (now 3.79:1 light, 5.49:1 dark).
+- 2026-10-16 · owner: "go with your recs, fix them in that order" (after the Layers sweep, docs/research/layers-2026-10-16/sweep/README.md) → tags in the field take Tag's field lift (`--_lift: var(--area-layer-dark-tint-lift-fill)`, tag.css): in dark their labels sit on the field's fill, lighter than a card, so caution fell to 4.14:1 in a soft field at ground 24 + layers 8. Defaults unchanged.

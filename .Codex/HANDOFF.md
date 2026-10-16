@@ -5,7 +5,38 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
-## Start here (2026-10-16, session `project-evaluation-97084a`, branch `claude/project-evaluation-97084a`)
+## Start here (2026-10-16, later: session `project-status-components-16382f`, uncommitted in that worktree)
+
+**Waiting on the owner:**
+- Round 30 on the review page https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG (collection `components30`): Segmented,
+  Toggle group, Code block, Box model, Tag, Tag picker and Board are In review.
+- The page's new **Layers** switch (Default / Gray page / Lightest dark) shows each change where it applies.
+- Record approvals in `component-status.mjs`.
+
+**Done:**
+- A sweep of every family at 18 Layers settings (headless Edge against the static build), then fixes. The re-runnable
+  sweep and its results are in `docs/research/layers-2026-10-16/sweep/README.md`.
+- Text failures went from about 1,000 items in 32 families to 0. What changed:
+  - Hued inks (vivid and tonal) follow the light page.
+  - Muted is also solved on the selected fill and on the soft mark.
+  - Tinted labels lift on light dark grounds.
+  - The app marks its grounds: gallery tiles are raised, and there is a new `page` ground for Titlebar and flush Panel.
+  - Segmented and Toggle group take the control fill for their track.
+  - Code block's marked lines and Box model's insets adjust their inks.
+- Light 100 + 4 is unchanged except Code block's highlighted and diff lines, which already failed. Dark 8 + 4 is
+  unchanged except Segmented's and Toggle group's tracks (#2c, near the approved #28 groove).
+- The review diff now renders at the Layers extremes and compares colours by what paints.
+
+**Open:**
+- The owner's Layers picks (artifact 5crS7DCa…, still the 4-step page).
+- The inset-controls rule (Nav's row − 8, ink-only hover).
+- Badge dismiss and Tag remove: a 10px box holding a 12px glyph.
+- Chip and Tag press with the hover paint.
+- Code's on-colour plate.
+- Not swept: hover and pressed states; forced colours; the Electron window by eye.
+- `npm run build:docs` fails its dogfood audit on main too (one inline style in `index.html`); the pages still build.
+
+## Earlier start (2026-10-16, session `project-evaluation-97084a`, branch `claude/project-evaluation-97084a`)
 
 **Done:**
 - *Component reviews:* every family is Complete; `REVIEW_COMPONENTS` is empty.
