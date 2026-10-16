@@ -271,8 +271,8 @@ function StepInspector({ scale, step, token, description, paintedAs }: { scale: 
   return (
     <>
       <Selection preview={<Preview shape="wide" paint={`var(${token})`} label={token} />}>
-        <CopyButton label="Copy token" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(`var(${token})`)} />
-        <CopyButton label="Copy hex" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(step.hex)} />
+        <CopyButton label="Copy token" icon={<CopyIcon />} fullWidth value={() => `var(${token})`} />
+        <CopyButton label="Copy hex" icon={<CopyIcon />} fullWidth value={() => step.hex} />
       </Selection>
       <PanelSection heading="Step">
         <Facts label="Step" items={[

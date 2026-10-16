@@ -90,17 +90,13 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
 
 Recorded, not yet built (each needs its own component pass). From the app audit of 2026-10-12:
 
-- A Copy button with "Copied" feedback (the app borrows the docs site's `CopyButton`; Typography's
-  icon-only copy gives assistive tech no feedback).
 - An on-colour Badge (colour cards draw their contrast badge in app CSS; `Code onColor` exists).
-- Roving focus for grids and lists (every icon cell is a Tab stop); one selection semantic
-  (`aria-selected` in a grid) instead of `aria-pressed`, `data-selected` and `aria-current` mixed.
+- Roving focus for grids and lists: ListBox (2026-10-15, `docs/specs/list-box.md`) does it, and the Icons tab uses
+  it; Typography and Color still use `grid-keys.ts` with `aria-pressed`.
 - Hover card that opens on pointer only, not on every arrow-key focus in a sheet.
 - Table props for its fit and numeric cells (the app writes `area-table__cell--fit` by hand).
 
 - A selectable card or tile state on Card (the gallery's Tile carries rule 3 in app CSS).
-- A two-dimensional collection (grid list with roving focus and `aria-selected`); the gallery
-  uses `apps/desktop/src/grid-keys.ts`.
 - Nav row actions revealed on hover and focus-within, as Board card actions are.
 - A per-item context-menu target (the gallery's `PinMenu` reads `data-key` from the event).
 - App-shell parts: Titlebar (drag region, traffic-light inset) and a section heading.

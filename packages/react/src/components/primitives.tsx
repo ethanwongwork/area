@@ -2,6 +2,7 @@ import type { VariantProps } from "../variants.ts";
 import { InToolbar, ToolbarSize, toolbarItemProps } from "./toolbar-context.ts";
 import { MANIFESTS } from "../variants.ts";
 import { Button, type ButtonProps } from "./Button.tsx";
+import { CopyButton } from "./CopyButton.tsx";
 import { Glyph } from "./Glyph.tsx";
 import { Select } from "./forms.tsx";
 import { ScrollArea } from "./ScrollArea.tsx";
@@ -1840,22 +1841,6 @@ export const Code = /* @__PURE__ */ forwardRef<HTMLElement, CodeProps>(function 
 
 const codeBlockVariants = /* @__PURE__ */ createVariants(MANIFESTS.codeBlock);
 
-/**
- * The copy glyphs are the two Fluent cuts the documentation's own toolbar uses, so the
- * React control and the generated HTML chrome draw the same mark.
- */
-const CopyGlyph = () => (
-  <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor" focusable="false" aria-hidden="true">
-    <path d="M5 6H4a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1h1a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7c0-1.1.9-2 2-2h1zm7-4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V4c0-1.1.9-2 2-2zM8 3a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1z" />
-  </svg>
-);
-
-const CopiedGlyph = () => (
-  <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor" focusable="false" aria-hidden="true">
-    <path d="M13.86 3.66a.5.5 0 0 1-.02.7l-7.93 7.48a.6.6 0 0 1-.84-.02L2.4 9.1a.5.5 0 0 1 .72-.7l2.4 2.44 7.65-7.2a.5.5 0 0 1 .7.02" />
-  </svg>
-);
-
 export type CodeLineMark = "added" | "removed";
 
 /** `"3, 5-7"` or `[3, 5, 6, 7]` into the set of line numbers to emphasise. */
@@ -1962,12 +1947,8 @@ export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLDivElement, CodeBlockPro
   const id = useId().replace(/[^A-Za-z0-9_-]/g, "");
   const source = useRef<HTMLElement>(null);
   const tabButtons = useRef(new Map<string, HTMLButtonElement>());
-  const copyTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-  const [copyState, setCopyState] = useState<"idle" | "copied" | "failed">("idle");
   const [localLanguage, setLocalLanguage] = useState(() => value ?? languages?.[0]);
   const [collapsed, setCollapsed] = useState(Boolean(defaultCollapsed));
-
-  useEffect(() => () => { if (copyTimer.current) clearTimeout(copyTimer.current); }, []);
 
   const activeLanguage = value ?? localLanguage ?? languages?.[0];
   const highlighted = parseLineNumbers(highlightLines);
@@ -1983,21 +1964,12 @@ export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLDivElement, CodeBlockPro
    * Pre-highlighted HTML has no plain-text twin, so the copy reads it back off the rendered
    * text cells -- which is also what keeps the gutter out of the clipboard.
    */
-  const copy = () => {
-    const read = () => {
-      if (code !== undefined && html === undefined) return code;
-      const node = source.current;
-      if (!node) return code ?? "";
-      const cells = node.querySelectorAll<HTMLElement>(".area-code-block__text");
-      return cells.length ? Array.from(cells, cell => cell.textContent ?? "").join("\n") : node.textContent ?? "";
-    };
-    const settle = (state: "copied" | "failed") => {
-      setCopyState(state);
-      if (copyTimer.current) clearTimeout(copyTimer.current);
-      copyTimer.current = setTimeout(() => setCopyState("idle"), 1600);
-    };
-    if (!navigator.clipboard?.writeText) { settle("failed"); return; }
-    navigator.clipboard.writeText(read()).then(() => settle("copied"), () => settle("failed"));
+  const read = () => {
+    if (code !== undefined && html === undefined) return code;
+    const node = source.current;
+    if (!node) return code ?? "";
+    const cells = node.querySelectorAll<HTMLElement>(".area-code-block__text");
+    return cells.length ? Array.from(cells, cell => cell.textContent ?? "").join("\n") : node.textContent ?? "";
   };
 
   const picker = languages?.length ? (
@@ -2058,18 +2030,9 @@ export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLDivElement, CodeBlockPro
     <span className="area-code-block__actions">
       {actions}
       {copyable ? (
-        <Button
-          variant="ghost"
-          tone="neutral"
-          size="sm"
-          iconOnly
-          // One announcement: the name stays fixed and the live region says what happened
-          // (audit G-21); the glyph shows it, and a failure is a state the CSS can paint.
-          aria-label={copyLabel}
-          data-copy-state={copyState === "idle" ? undefined : copyState}
-          icon={copyState === "copied" ? <CopiedGlyph /> : <CopyGlyph />}
-          onClick={copy}
-        />
+        // CopyButton (docs/specs/copy-button.md): one fixed name, the result said once through its live region
+        // (audit G-21), the check shown by the glyph and `data-copy-state` as the paint hook.
+        <CopyButton value={read} label={copyLabel} />
       ) : null}
     </span>
   ) : null;
@@ -2137,9 +2100,6 @@ export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLDivElement, CodeBlockPro
           </button>
         ) : null}
       </div>
-      <span className="area-sr-only" aria-live="polite">
-        {copyState === "copied" ? "Copied to clipboard" : copyState === "failed" ? "Copy failed" : ""}
-      </span>
     </div>
   );
 });

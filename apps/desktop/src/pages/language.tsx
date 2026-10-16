@@ -127,7 +127,7 @@ export function LanguagePage() {
         <CanvasSettings axes={["type", "density", "radius"]} />
         {axis && preset ? (
           <Selection preview={<Preview shape="landscape" label={`${axis.label}: ${preset.label}`} scope={{ [`data-area-${axis.id}`]: preset.id, ...ALSO[axis.id] }}><Abstract axis={axis.id} /></Preview>}>
-            <CopyButton label="Copy attribute" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(`data-area-${axis.id}="${preset.id}"`)} />
+            <CopyButton label="Copy attribute" icon={<CopyIcon />} fullWidth value={() => `data-area-${axis.id}="${preset.id}"`} />
           </Selection>
         ) : null}
         {axis ? (

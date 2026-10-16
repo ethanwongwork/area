@@ -1,0 +1,55 @@
+/* ---------------------------------------------------------------------------
+ * List box
+ *
+ * Options to choose one from (docs/specs/list-box.md), one Tab stop for the set. Nothing here is a new value:
+ *
+ * - list: each option is Menu's row (area-menu__item, the value picker's selected plate and check, as Custom
+ *   select's options), and a section's heading is Menu's label.
+ * - grid: options flow in rows of square cells, `--area-list-box-item` on a side (48 by default: control-xl, the app's
+ *   icon cell at 16), 2 apart (the app's icon sheet). An option is the row plates' pair (DESIGN_SYSTEM.md, "Shared
+ *   state paint"): hover, then press and selected a step firmer, corner radius-row, focus an inset ring, in at once
+ *   and out on `fast` (MOTION.md). Its content sets what is drawn: an icon, a swatch, a word.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-list-box {
+    --area-list-box-item: var(--area-control-xl);
+    display: flex;
+    flex-direction: column;
+    gap: var(--area-ui-row-gap);
+    min-inline-size: 0;
+  }
+  /* list is the default: Menu's rows stacked. The hook is for a caller's layout. */
+  .area-list-box--list {}
+  /* A section's heading is Menu's label (area-menu__label): muted, small text, in the rows' inset. */
+  .area-list-box__heading {}
+  .area-list-box__section { display: flex; flex-direction: column; gap: var(--area-ui-row-gap); min-inline-size: 0; }
+  .area-list-box__options { display: flex; flex-direction: column; gap: var(--area-ui-row-gap); }
+  .area-list-box__item[aria-selected="false"] > .area-menu__check { visibility: hidden; }
+
+  /* Options straight inside the box flow in its grid; sections (Area's, or a caller's own) stack and grid their options. */
+  .area-list-box--grid:has(> .area-list-box__item) { display: grid; grid-template-columns: repeat(auto-fill, var(--area-list-box-item)); gap: var(--area-space-2); }
+  .area-list-box--grid .area-list-box__options { display: grid; grid-template-columns: repeat(auto-fill, var(--area-list-box-item)); gap: var(--area-space-2); }
+  .area-list-box--grid .area-list-box__item {
+    display: grid;
+    place-items: center;
+    min-block-size: var(--area-list-box-item);
+    min-inline-size: 0;
+    border-radius: var(--area-radius-row);
+    background: transparent;
+    color: var(--area-fg-default);
+    cursor: pointer;
+    transition: var(--area-transition);
+  }
+  @media (hover: hover) {
+    .area-list-box--grid .area-list-box__item:hover:not([data-disabled]) { background: var(--area-bg-component-hover); transition-duration: 0s; }
+  }
+  .area-list-box--grid .area-list-box__item[aria-selected="true"]:not([data-disabled]),
+  .area-list-box--grid .area-list-box__item:active:not([data-disabled]) { background: var(--area-bg-component-active); transition-duration: 0s; }
+  .area-list-box--grid .area-list-box__item:focus-visible {
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: calc(var(--area-focus-width) * -1);
+  }
+  .area-list-box__item[data-disabled] { cursor: not-allowed; opacity: var(--area-opacity-disabled); }
+  .area-list-box[aria-disabled="true"] { opacity: var(--area-opacity-disabled); }
+  .area-list-box[aria-disabled="true"] .area-list-box__item[data-disabled] { opacity: 1; }
+}

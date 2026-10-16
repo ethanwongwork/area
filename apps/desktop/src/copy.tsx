@@ -3,8 +3,8 @@
  * Moved from the archived docs' icon browser (apps/docs/src/gallery/icon-browser.tsx) so the app reads
  * only Area's packages (docs/specs/icons.md, "Fluent map retired from the app").
  */
-import { useEffect, useState, type ReactNode } from "react";
-import { Button } from "@area/react";
+import type { ReactNode } from "react";
+import { CopyButton as AreaCopyButton, type CopyValue } from "@area/react";
 import { CheckIcon } from "@area/icons";
 
 /*
@@ -52,18 +52,11 @@ export function standaloneSvg(svg: SVGSVGElement, name: string) {
   return copy.outerHTML;
 }
 
-/** A button whose label reads "Copied" for a moment after it succeeds. */
-export function CopyButton({ label, copy, icon, fullWidth }: { label: string; copy: () => Promise<void> | void; icon: ReactNode; fullWidth?: boolean }) {
-  const [done, setDone] = useState(false);
-  useEffect(() => {
-    if (!done) return;
-    const timer = setTimeout(() => setDone(false), 1600);
-    return () => clearTimeout(timer);
-  }, [done]);
-  return (
-    <Button variant="outline" size="sm" fullWidth={fullWidth} icon={done ? <CheckIcon /> : icon}
-      onClick={async () => { try { await copy(); setDone(true); } catch {} }}>
-      {done ? "Copied" : label}
-    </Button>
-  );
+/**
+ * The app's copy action: Area's CopyButton (docs/specs/copy-button.md) as an outline Button with a label and
+ * Area's own copy and check icons. The label stays; the icon turns to a check for two seconds and the result is
+ * said once to assistive tech.
+ */
+export function CopyButton({ label, value, icon, fullWidth }: { label: string; value: CopyValue; icon: ReactNode; fullWidth?: boolean }) {
+  return <AreaCopyButton variant="outline" size="sm" fullWidth={fullWidth} icon={icon} copiedIcon={<CheckIcon />} value={value}>{label}</AreaCopyButton>;
 }
