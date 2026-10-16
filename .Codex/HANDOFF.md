@@ -5,6 +5,15 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## CI (2026-10-15, branch `claude/ci-workflow`)
+
+- Owner: "set up the CI workflow". `.github/workflows/ci.yml` on pull requests and `main` (Ubuntu, Node 24):
+  install, build (icon lint included, so `lint:icons` isn't repeated), typecheck, tokens, contracts, icons, React,
+  desktop build + playgrounds, consumer install, and a clean-tree check after the build. DEVELOPMENT.md
+  "Continuous integration". `package-lock.json` synced (`@area/icons` 0.1.0, MIT) so `npm ci` matches.
+- Local timings (M-series): build 242s, typecheck 33s, tokens 16s, the rest under 10s each. Linux was not run
+  locally; the first run on the pull request is the first Linux check.
+
 ## Astra research folded into main (2026-10-15, branch `claude/fold-astra-research`)
 
 - Owner: Astra (Codex) is no longer available; "fold it into this main repo". `astra/research` merged:

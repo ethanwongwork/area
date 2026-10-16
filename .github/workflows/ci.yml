@@ -1,0 +1,70 @@
+# Area's checks on every pull request and on main: the package build (which also lints every icon),
+# typecheck, token and contrast tests, manifest contracts, icon and React tests, the desktop app's
+# build and playground mapping, and a consumer install of the built packages. See docs/DEVELOPMENT.md.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      # The checks never open the Electron window, so skip its binary.
+      ELECTRON_SKIP_BINARY_DOWNLOAD: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      - name: Build packages (tokens, styles, React, icons with icon lint)
+        run: npm run build
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Token, axis and contrast tests
+        run: npm test
+
+      - name: Manifest contracts
+        run: npm run test:contracts
+
+      - name: Icon tests
+        run: npm run test:icons
+
+      - name: React tests
+        run: node --test packages/react/tests/*.test.mjs
+
+      - name: Desktop app build and playground mapping
+        run: |
+          npm run build -w @area/desktop
+          npm run check:playgrounds -w @area/desktop
+
+      - name: Consumer install
+        run: npm run test:consumer
+
+      - name: Build leaves tracked files unchanged
+        run: |
+          if [ -n "$(git status --porcelain --untracked-files=no)" ]; then
+            git status --short --untracked-files=no
+            git diff --stat
+            echo "A build step changed tracked files: regenerate locally and commit the result."
+            exit 1
+          fi
