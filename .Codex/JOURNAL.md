@@ -271,3 +271,12 @@ replacing the generated Fluent presence paths.
 2026-09-25: split the gallery into eight pages with a nav and hid the documentation site
 (index and gallery.html redirect). Added a 1× / 2× pixel check for the icon pilot; fixed the
 More dots (whole-pixel centres), eye pupil and gear after it.
+
+2026-10-14/15 (session icon-work-followup-2fcf1e, PRs #88–#114): icon proposals closed as kept-as-approved; Density
+named by number (28 / 32 / 36, three steps: a fourth collapses sm onto md at the 24 floor or repeats type 16); More
+contrast restores Surface 0's frames (border-width derived from frame-width and contrast-more, as macOS Increase
+Contrast and forced colours do). Then every PRODUCT_UI.md component gap: Copy button (2000 ms, from Untitled UI and
+shadcn; the name never changes, the result is announced), List box (one Tab stop; grid keys by geometry), Hover card
+openOnFocus, Table cells, Badge onColor (decided by text contrast over all 345 colour steps), Nav revealActions,
+Context menu itemSelector, Card pressed / selected, Titlebar and Section heading (lifted from the app unchanged).
+Eight families left In review for the owner on one page.
