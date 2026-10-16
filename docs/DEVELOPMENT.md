@@ -55,6 +55,16 @@ Restart after editing server/watcher code. `PORT=4322 npm run dev:docs` chooses 
 `npm run build:docs` writes `apps/docs/dist`; the static server must restart to read a new
 snapshot. Completion status is source data under `apps/desktop/src/content`.
 
+## Continuous integration
+
+`.github/workflows/ci.yml` runs on every pull request and on `main` (Ubuntu, Node 24): `npm ci`,
+`build` (which lints every icon), `typecheck`, `npm test`, `test:contracts`, `test:icons`, the React
+suites, the desktop build with `check:playgrounds`, `test:consumer`, and a check that the build left
+tracked files unchanged. About ten minutes, most of it the icon build. It skips the Electron binary and
+checks nothing in a browser: preview, contrast in the rendered app, forced colours and a 1x display
+still need a session. If a lockfile change is needed, run `npm install` and commit `package-lock.json`;
+`npm ci` refuses a lockfile that disagrees with a workspace's `package.json`.
+
 ## Checks by change
 
 - **Docs/content/gallery:** docs build/audit, typecheck when TSX changes, inspect the pages.
