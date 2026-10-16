@@ -325,11 +325,18 @@ shrink their controls but not their marks (VS Code's badge 17, keycap 18 and che
 22–26px controls; Notion's and Figma's checkboxes 16; audit S21a). Surface insets stay fixed
 spacing until compact surface captures exist (audit F-26).
 
-Dark mode is near-black (owner, 2026-10-01): the page is neutral 975 (#020202), raised surfaces
-850 and controls 800, as ChatGPT builds its dark theme on #000. Floating frames (Popover, Menu,
-Dialog, Toast, Command palette, surface Calendar and ColorPicker, the floating Toolbar) use
-`border-float`, neutral 100 (#ee) in light and neutral 650 in dark, so a floating surface stays
-distinct over another surface where its shadow no longer reads. Dividers keep `border-decorative`.
+**Page and layer tones come from the Layers settings** (THEMING.md, `color/layers.ts`, 2026-10-16).
+- Each tone is an OKLCH lightness set by three numbers: the light ground, the dark ground and the layer contrast.
+  Every tone, control fill, edge and ink is derived from those, so a gray page, an all-white or all-gray look, a
+  blackout and a lighter dark all hold together.
+- Dark mode is near-black by default (owner, 2026-10-01). The page is #020202, as ChatGPT builds its dark theme on
+  #000. Since 2026-10-16, cards sit at #121212 and sidebars at #0b0b0b; they were 850 and 800.
+- Control fills step from the ground they sit on, and in dark never under L 0.20.
+- Floating frames use `border-float`, a step from the page in light (#eeeeee on white) and from the raised layer in
+  dark (at least neutral 650). That keeps a floating surface distinct over another surface where its shadow no longer
+  reads. The frames are Popover, Menu, Dialog, Toast, Command palette, the surface Calendar and ColorPicker, and the
+  floating Toolbar.
+- Dividers keep `border-decorative`.
 In dark the Tooltip stays a dark annotation (#282828 with a 5% white inset edge), and every elevation
 role doubles its light alpha (`axes/elevation.ts`; dark captures 2026-09-30,
 `docs/research/dark-pass-2026-09-30.md`).

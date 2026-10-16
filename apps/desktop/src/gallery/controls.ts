@@ -7,7 +7,7 @@
  */
 import { AXIS_PRESETS, DEFAULT_AXES, DEFAULT_PILLS, PILL_SHAPES } from "@area/tokens/config";
 export interface GalleryControl {
-  axis: "theme" | "neutral" | "accent" | "action" | "selection" | "contrast" | "type" | "density" | "radius" | "pills" | "surface" | "elevation" | "motion";
+  axis: "theme" | "neutral" | "accent" | "ground-light" | "ground-dark" | "layers" | "action" | "selection" | "contrast" | "type" | "density" | "radius" | "pills" | "surface" | "elevation" | "motion";
   /**
    * Two or three options are a Segmented (Apple and Primer cap segments at 5-7); a longer list of
    * exact settings is a Select, each option naming what it sets (shadcn's radius picker is a menu).
@@ -31,6 +31,12 @@ function named(axis: "neutral" | "accent"): GalleryControl["items"] {
   });
 }
 
+/** A number axis's presets as options, in the registry's order (light ground from white down), the default marked
+ * "(Default)" and the named ends as given. */
+function numbered(axis: "ground-light" | "ground-dark" | "layers", names: Record<string, string>): GalleryControl["items"] {
+  return AXIS_PRESETS[axis].map(value => ({ value, label: names[value] ?? (value === DEFAULT_AXES[axis] ? `${value} (Default)` : value) }));
+}
+
 export const GALLERY_CONTROLS: readonly GalleryControl[] = [
   { axis: "theme", kind: "segmented", label: "Mode", defaultValue: "light", items: [{ value: "light", label: "Light" }, { value: "dark", label: "Dark" }] },
   // The colour settings (axes/color.ts, axes/emphasis.ts), in the registry's order, their options and defaults read
@@ -39,6 +45,12 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = [
   // only where Action or Selection is Accent (and in focus rings and links), which Accent's hint says.
   { axis: "neutral", kind: "select", label: "Neutral", hint: "The grey every surface, edge and text is drawn in", defaultValue: DEFAULT_AXES.neutral, items: named("neutral") },
   { axis: "accent", kind: "select", label: "Accent", hint: "Shows where Action or Selection is Accent, and in focus rings and links", defaultValue: DEFAULT_AXES.accent, items: named("accent") },
+  // The Layers (axes/layers.ts, owner 2026-10-16; docs/research/layers-2026-10-16): the light and the dark page's
+  // lightness, and how far cards, menus, sidebars and control fills sit from it. Numbers, as Elevation; Selects, their
+  // options and defaults read from the registry. Each ground shows in its own mode.
+  { axis: "ground-light", kind: "select", label: "Light ground", hint: "The light page's lightness, 100 (white) to 90", defaultValue: DEFAULT_AXES["ground-light"], items: numbered("ground-light", { "100": "100 (White)" }) },
+  { axis: "ground-dark", kind: "select", label: "Dark ground", hint: "The dark page's lightness, 0 (black) to 24", defaultValue: DEFAULT_AXES["ground-dark"], items: numbered("ground-dark", { "0": "0 (Black)" }) },
+  { axis: "layers", kind: "select", label: "Layers", hint: "How far cards, menus, sidebars and control fills sit from the page, 0 (Flat) to 8", defaultValue: DEFAULT_AXES.layers, items: numbered("layers", { "0": "0 (Flat)" }) },
   { axis: "action", kind: "segmented", label: "Action", hint: "The colour of primary actions", defaultValue: DEFAULT_AXES.action, items: [{ value: "neutral", label: "Neutral" }, { value: "accent", label: "Accent" }] },
   { axis: "selection", kind: "segmented", label: "Selection", hint: "The colour of checked, selected and current states", defaultValue: DEFAULT_AXES.selection, items: [{ value: "neutral", label: "Neutral" }, { value: "accent", label: "Accent" }] },
   // Increased contrast (docs/CONTRAST.md): not a registry axis but the same kind of scoped setting,

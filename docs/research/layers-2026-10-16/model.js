@@ -18,22 +18,26 @@
     light: [100, 99, 98, 97, 96, 95, 94, 93, 92, 91, 90].map(p => ({ id: String(p), label: p === 100 ? "100 (White)" : String(p), L: p / 100 })),
     dark: [0, 8, 12, 14, 16, 18, 20, 22, 24].map(p => ({ id: String(p), label: p === 0 ? "0 (Black)" : p === 8 ? "8 (Default)" : String(p), L: p === 8 ? 0.085 : p / 100 })),
   };
-  const CONTRAST = ["Flat", "Low", "Default", "High"];
-  const DEFAULTS = { light: { ground: "100", contrast: 2 }, dark: { ground: "8", contrast: 2 } };
+  const CONTRAST = ["0 (Flat)", "1", "2", "3", "4 (Default)", "5", "6", "7", "8"];
+  const DEFAULTS = { light: { ground: "100", contrast: 4 }, dark: { ground: "8", contrast: 4 } };
 
   // Text and required edges stay on the ramp (Area today).
   const TEXT = { light: { body: "#282828", muted: "#666666", edge: "#838383" }, dark: { body: "#eeeeee", muted: "#c5c5c5", edge: "#939393" } };
 
   // How far each layer sits from the page, by contrast. Light: recessed darker; raised lifts toward white only on a gray
   // page (Carbon). Dark: both lighter, raised twice the recessed.
+  // Contrast is one number, 0 (Flat) to 8, 4 the default, in even steps. Light: recessed 0.006 darker per step; raised
+  // lifts 0.009 per step toward white, on a gray page only (Carbon). Dark: raised 0.015 lighter per step, recessed half.
+  // 4 is the earlier Default (light 0.024 / 0.036, dark 0.06 / 0.03); 8 the earlier dark High.
   const LAYER = {
-    light: { recessed: [0, 0.012, 0.024, 0.036], raised: [0, 0.018, 0.036, 0.036] },
-    dark: { recessed: [0, 0.015, 0.03, 0.06], raised: [0, 0.03, 0.06, 0.12] },
+    light: { recessed: n => 0.006 * n, raised: n => 0.009 * n },
+    dark: { recessed: n => 0.0075 * n, raised: n => 0.015 * n },
   };
-  // A control's fill steps from its own ground. Light: rest s, hover 1.5 s, pressed / selected 2.125 s (today on white:
-  // 50 / 75 / 100). Dark: rest at least s above the ground and never under L 0.20 (a smaller step near black doesn't show
-  // on a screen; ChatGPT's controls are #303030 on #000), hover + s, pressed / selected + 2 s (today: 800 / 750 / 700).
-  const STEP = { light: [0.018, 0.018, 0.024, 0.03], dark: [0.04, 0.04, 0.046, 0.06] };
+  // A control's fill steps from its own ground: s grows 0.0015 a step from Flat (light 0.018, dark 0.04; 4 is today's
+  // 0.024 / 0.046). Light: rest s, hover 1.5 s, pressed / selected 2.125 s darker (today on white: 50 / 75 / 100). Dark:
+  // rest at least s above the ground and never under L 0.20 (a smaller step near black doesn't show on a screen;
+  // ChatGPT's controls are #303030 on #000), hover + s, pressed / selected + 2 s (today: 800 / 750 / 700).
+  const STEP = { light: n => 0.018 + 0.0015 * n, dark: n => 0.04 + 0.0015 * n };
   const DARK_FILL_FLOOR = 0.2;
   // Near black a layer offset doesn't show either: on a darker ground, layers start at L 0.12 (Spectrum Darkest's first
   // layer is #0e0e0e, L 0.164).
@@ -48,11 +52,11 @@
 
   function layers(theme, groundL, k, step) {
     if (theme === "light") {
-      const page = groundL, raised = clamp(page + (page < 1 ? Math.min(1 - page, LAYER.light.raised[k]) : 0)), recessed = page - LAYER.light.recessed[k];
+      const page = groundL, raised = clamp(page + (page < 1 ? Math.min(1 - page, LAYER.light.raised(k)) : 0)), recessed = page - LAYER.light.recessed(k);
       return { page, raised, recessed };
     }
     const lift = k && groundL < DARK_LAYER_FLOOR ? DARK_LAYER_FLOOR - groundL : 0;
-    return { page: groundL, raised: groundL + lift + LAYER.dark.raised[k], recessed: groundL + lift + LAYER.dark.recessed[k] };
+    return { page: groundL, raised: groundL + lift + LAYER.dark.raised(k), recessed: groundL + lift + LAYER.dark.recessed(k) };
   }
   function fills(theme, g, s) {
     if (theme === "light") return [g - s, g - 1.5 * s, g - 2.125 * s].map(clamp);
@@ -90,8 +94,8 @@
 
   /** Everything a scene needs for one theme at one ground and contrast (or explicit numbers). */
   function resolve(theme, { groundL, contrast, custom }) {
-    const k = contrast ?? 2;
-    const step = custom?.step ?? STEP[theme][k];
+    const k = contrast ?? 4;
+    const step = custom?.step ?? STEP[theme](k);
     const L = custom ? { page: custom.page, raised: clamp(custom.page + custom.raised), recessed: clamp(custom.page + custom.recessed) } : layers(theme, groundL, k, step);
     const r = { theme, ...L, step, fill: { page: fills(theme, L.page, step), raised: fills(theme, L.raised, step), recessed: fills(theme, L.recessed, step) }, edge: edges(theme, L.page, L.raised) };
     r.ink = inks(theme, r);

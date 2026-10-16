@@ -1,0 +1,44 @@
+/* ---------------------------------------------------------------------------
+ * Layers: a control's fill steps from the ground it sits on.
+ *
+ * The Layers settings (ground-light, ground-dark, layers; @area/tokens color/layers.ts) derive a control fill for each
+ * ground: on the page (`bg-component`), on a raised layer (`bg-component-raised`) and on a recessed one
+ * (`bg-component-recessed`). A surface that paints a raised layer points the control tokens at its own ground, so a
+ * soft field, a row's hover and a selected row stay a visible step from the card, menu or panel they sit in, on a
+ * gray page and at layer contrast 0 too (owner, 2026-10-16: "for black flat, the backplates are not even visible for
+ * selected"). With the defaults the raised fills equal the page's in light, so nothing there changes.
+ *
+ * A product marks its own regions with `data-area-ground="raised" | "recessed"` (a sidebar it paints with
+ * `bg-subtle` is recessed). The tokens that read the control fills are restated here, because a custom property that
+ * reads another is resolved where it is declared (`input-bg-soft` declared on :root keeps :root's fill).
+ * docs/research/layers-2026-10-16/.
+ * ------------------------------------------------------------------------- */
+@layer area.base {
+  :where(
+    .area-card, .area-dialog, .area-drawer, .area-menu, .area-popover, .area-hover-card, .area-toggletip, .area-toast,
+    .area-command-palette, .area-panel, .area-table-wrapper, .area-board-card, .area-file-upload, .area-color-picker,
+    .area-calendar--surface, .area-toolbar--surface, .area-description-list--framed
+  ),
+  [data-area-ground="raised"] {
+    --area-bg-component: var(--area-bg-component-raised);
+    --area-bg-component-hover: var(--area-bg-component-raised-hover);
+    --area-bg-component-active: var(--area-bg-component-raised-active);
+    --area-input-bg-soft: var(--area-bg-component-raised);
+    --area-input-bg-disabled: var(--area-bg-component-raised);
+    --area-selection-surface: var(--area-selection-surface-raised);
+    --area-selection-surface-hover: var(--area-selection-surface-raised-hover);
+    --area-selection-band: var(--area-selection-band-raised);
+    --area-selection-band-hover: var(--area-selection-band-raised-hover);
+  }
+  [data-area-ground="recessed"] {
+    --area-bg-component: var(--area-bg-component-recessed);
+    --area-bg-component-hover: var(--area-bg-component-recessed-hover);
+    --area-bg-component-active: var(--area-bg-component-recessed-active);
+    --area-input-bg-soft: var(--area-bg-component-recessed);
+    --area-input-bg-disabled: var(--area-bg-component-recessed);
+    --area-selection-surface: var(--area-selection-surface-recessed);
+    --area-selection-surface-hover: var(--area-selection-surface-recessed-hover);
+    --area-selection-band: var(--area-selection-band-recessed);
+    --area-selection-band-hover: var(--area-selection-band-recessed-hover);
+  }
+}

@@ -1,8 +1,23 @@
 # Layers: page and layer tones, 2026-10-16
 
-A proposed setting for the tones of the page, the layers raised on it (cards, menus, dialogs) and the regions recessed
-into it (sidebars, wells, table headers), chosen separately for light and dark. Not built yet: the owner is choosing on
-the review page, https://claude.ai/artifact/5crS7DCaWEBbAjvTXYpJhn. Choices are saved in its database, collection
+A setting for the tones of the page, the layers raised on it (cards, menus, dialogs) and the regions recessed
+into it (sidebars, wells, table headers), chosen separately for light and dark.
+
+**Built 2026-10-16** (owner: "can you save everything and build it in? should there be more options for layer
+contrast?").
+- Code:
+  - `packages/tokens/src/axes/layers.ts`: the three axes, ground-light, ground-dark and layers.
+  - `packages/tokens/src/color/layers.ts`: the model, as numbers and as the CSS that ships.
+  - `packages/tokens/src/color/layers.test.ts`: every combination in every neutral; the CSS against the model; the
+    defaults against Area as it was.
+  - `packages/styles/src/layers.css`: surfaces point control fills at their own ground.
+  - The app's Inspector: Light ground, Dark ground and Layers, under Color.
+- Layer contrast became one number, 0 (Flat) to 8 with 4 the default, as Elevation is. Each step is light 0.006
+  recessed / 0.009 raised, dark 0.015 raised / 0.0075 recessed. The control step is 0.0015 more per step.
+- The review page explored four named steps; 4 is its Default and 8 its dark High.
+- This folder's model.js and check.mjs are the proposal's record; the shipped model is color/layers.ts.
+
+Review page: https://claude.ai/artifact/5crS7DCaWEBbAjvTXYpJhn. Choices are saved in its database, collection
 `layers`, doc `tuning`.
 
 ## How it came about
