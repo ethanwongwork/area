@@ -91,5 +91,4 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
 Recorded, not yet built (each needs its own component pass). From the app audit of 2026-10-12:
 
 
-- A selectable card or tile state on Card (the gallery's Tile carries rule 3 in app CSS).
 - App-shell parts: Titlebar (drag region, traffic-light inset) and a section heading.
