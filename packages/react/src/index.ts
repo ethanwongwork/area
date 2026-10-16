@@ -51,6 +51,7 @@ export { ShortcutList, ShortcutListItem, type ShortcutListProps, type ShortcutLi
 export { BoxModel, type BoxModelProps, type BoxSides, type BoxCorners } from "./components/BoxModel.tsx";
 export { TokenRow, type TokenRowProps } from "./components/TokenRow.tsx";
 export { CopyButton, CopyStatus, useCopy, COPY_FEEDBACK_MS, type CopyButtonProps, type CopyState, type CopyValue } from "./components/CopyButton.tsx";
+export { ListBox, ListBoxItem, ListBoxSection, type ListBoxProps, type ListBoxItemProps, type ListBoxSectionProps } from "./components/ListBox.tsx";
 export { AssetRow, type AssetRowProps } from "./components/AssetRow.tsx";
 export { PreviewFrame, type PreviewFrameProps } from "./components/PreviewFrame.tsx";
 export { PasswordField, type PasswordFieldProps } from "./components/PasswordField.tsx";

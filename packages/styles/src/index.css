@@ -95,6 +95,7 @@
 @import "./components/preview-frame.css";
 @import "./components/password-field.css";
 @import "./components/copy-button.css";
+@import "./components/list-box.css";
 @import "./components/otp-field.css";
 @import "./components/time-field.css";
 @import "./components/stepper.css";

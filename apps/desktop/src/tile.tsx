@@ -145,10 +145,11 @@ export function TileGrid({ span, hug, cards, children }: { span: TileSpan; hug?:
 }
 
 /** A titled group on the Canvas: a family, a scale, a category, a setting. */
-export function CanvasSection({ id, title, lede, children }: { id: string; title?: ReactNode; lede?: ReactNode; children: ReactNode }) {
+/** `role="group"` when the section is a ListBox's group of options (a region may not sit inside a listbox). */
+export function CanvasSection({ id, title, lede, role, children }: { id: string; title?: ReactNode; lede?: ReactNode; role?: "group"; children: ReactNode }) {
   // Untitled when the Sidebar's selected row already names it (one scale, one setting).
   return (
-    <section className="studio-section" id={id} aria-labelledby={title ? `${id}-title` : undefined}>
+    <section className="studio-section" id={id} role={role} aria-labelledby={title ? `${id}-title` : undefined}>
       {title ? <h2 className="studio-canvas__section-title" id={`${id}-title`} {...APP_SCALE}>{title}</h2> : null}
       {lede ? <p className="studio-canvas__lede" {...APP_SCALE}>{lede}</p> : null}
       {children}

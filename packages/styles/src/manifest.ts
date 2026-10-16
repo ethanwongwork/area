@@ -947,6 +947,15 @@ export const copyButton = {
   defaults: {},
 } as const satisfies ComponentManifest;
 
+export const listBox = {
+  block: "area-list-box",
+  description: "Options to choose one from, as a list or a grid, with one Tab stop and the arrows inside.",
+  variants: { layout: ["list", "grid"] },
+  states: ["disabled", "selected"],
+  elements: ["item", "section", "heading", "options"],
+  defaults: { layout: "list" },
+} as const satisfies ComponentManifest;
+
 export const assetRow = {
   block: "area-asset-row",
   description: "Lists one exportable asset: its preview, name, details and an optional action.",
@@ -1086,6 +1095,7 @@ export const MANIFESTS = {
   boxModel,
   tokenRow,
   copyButton,
+  listBox,
   assetRow,
   previewFrame,
   passwordField,
