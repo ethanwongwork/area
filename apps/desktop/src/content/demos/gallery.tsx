@@ -1389,18 +1389,22 @@ export const GalleryNav = () => (
 );
 /* Nav in full context (owner, 2026-09-27): ChatGPT's sidebar layout, every part an Area
    component: a header with the product name and two icon actions, icon rows, titled sections
-   (Projects, Recents) and the account row pinned to the bottom. */
+   (Projects, Recents) and the account row pinned to the bottom. One 8 inset on both sides: the
+   header's buttons and the rows' plates end 8 from the edge, and the name starts where the rows'
+   icons do (8 + the row's 8). The Nav fills its column (the sidebar sets the width, not Nav's 240
+   default, which left 8 more on the right; review round 28). The name is the surface title size
+   (16 at type 14) at the regular weight. */
 export const GalleryNavSidebar = () => (
   <aside aria-label="Sidebar" style={{ display: "flex", flexDirection: "column", inlineSize: "calc(var(--area-space-96) * 2.75)", blockSize: "calc(var(--area-space-96) * 6)", background: "var(--area-bg-subtle)", borderInlineEnd: "var(--area-border-width) solid var(--area-border-decorative)" }}>
     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "var(--area-space-8) var(--area-space-8) var(--area-space-8) var(--area-space-16)" }}>
-      <span>Area</span>
+      <span style={{ fontSize: "var(--area-title-xs-size)", lineHeight: "var(--area-title-xs-leading)" }}>Area</span>
       <span style={{ display: "flex" }}>
         <Button variant="ghost" iconOnly icon={<SearchIcon />} aria-label="Search chats" />
         <Button variant="ghost" iconOnly icon={<PanelLeftIcon />} aria-label="Close sidebar" />
       </span>
     </div>
     <div style={{ flex: 1, minBlockSize: 0, overflowY: "auto", padding: "0 var(--area-space-8)" }}>
-      <Nav aria-label="Chats">
+      <Nav aria-label="Chats" style={{ "--area-nav-inline-size": "100%" } as CSSProperties}>
         <NavGroup>
           <NavItem href="#gallery-nav-sidebar" icon={<PencilIcon />} current>New chat</NavItem>
           <NavItem href="#gallery-nav-sidebar" icon={<DocumentIcon />}>Library</NavItem>

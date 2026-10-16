@@ -593,6 +593,21 @@ so nothing painted moves. Verified on `/badge.html` with a real pointer hover: d
 - **What changed:** the modern badge's outline is one step firmer (#e2, was the faint #f3; dark #333, was #282828), and a linked one steps to #d4 on hover.
 - **Why:** a modern badge is a white raised plate, like the Segmented thumb and a selected soft Toggle group item, which draw #e2 with the same small shadow; on white the #f3 edge all but disappeared. Untitled UI's modern badge, its reference, draws #d5.
 
+## Review note, 2026-10-15
+
+- **What changed:** a new `onColor` option for a badge drawn on a colour (the Color tab's contrast badge): the colour's
+  own ink on a faint plate of the opposite ink, with a thin line. Every other badge is unchanged.
+- **Why:** the Color tab drew its own badge in app CSS, and 34 of the 345 colour steps fell under readable contrast
+  (worst 3.68:1). The new badge keeps every step at 5.25:1 or more.
+- **Not a new component:** it is an option on Badge.
+
+## Review note, 2026-10-16
+
+- **What changed:** the badge on a colour is one colour now: the colour's own text ink and a thin line of it, no
+  plate. Same size as every other badge (the Color tab uses the small one).
+- **Why:** you asked to simplify it. With nothing behind the text, it has exactly the contrast the badge prints
+  (4.61:1 or better on every step).
+
 ## Feedback log
 
 - 2026-10-11 · owner: "the icons seem too close to the horizontal side of the container. the avatar, flag look okay
@@ -638,3 +653,6 @@ so nothing painted moves. Verified on `/badge.html` with a real pointer hover: d
 - 2026-10-12 · owner, review round 21 → approved on the review page, round 21 (components21) → Complete in `component-status.mjs`. (docs/research/consistency-audit-2026-10-12.md)
 - 2026-10-12 · type size and density split (owner) → text-label marks follow the small-text line: `mark-label-sm` is its leading (14 at type 12 … 20 at 16), md and lg add the density's room (`emit/base.ts`); small text is base − 2, floor 10 (owner, 2026-10-12). `docs/research/ui-size-scale-2026-10-12.md`.
 - 2026-10-15 · PRODUCT_UI.md open gap ("An on-colour Badge: colour cards draw their contrast badge in app CSS"), owner: "merge it, then continue working" → `onColor` (`area-badge--on-color`): Code's on-colour chip (docs/specs/code.md, 2026-10-15), the ground's own ink, a plate of 8% of the ink's opposite and a 20% line of the ink; overrides variant and tone. Basis: the badge's text contrast over the 345 colour steps with their own ink. The Color tab's badge (a 12% wash of the ink, app CSS) left 34 steps under 4.5:1, worst Warm 500 at 3.68:1 (bare 4.64); the opposite plate keeps every step at 5.25:1 or more (worst Orange 600). The line marks the chip on the lightest steps, where the plate barely shows. The Color tab's cards use `<Badge size="sm" onColor>`: same 14 tall and 11/14 text; visible changes: Badge's pill corner (the pills setting) for the 4 corner, the plate's direction and the line. Gallery: Ground / on colour, Ground / on a light colour.
+- 2026-10-16 · owner, review round 27 (components27) → rethink `onColor`: "simplify it the colors, is it based on the badge dimensions?" → open.
+- 2026-10-16 · from the owner's "simplify it the colors" → `onColor` is one colour: the ground's own ink for the text and a 20% line of it (32% on hover), no plate (badge.css). With nothing under the text its contrast is the ground's own: 4.61:1 or more over the 345 colour steps (worst Red 500 with white, Orange 600 with black; computed from area.css), the very number the Color tab's badge prints. The plate (8% of the ink's opposite) had raised the floor to 5.25 but darkened some steps and lightened others. Dimensions: Badge's own sizes, unchanged (the Color tab uses `sm`, 14 tall; the gallery tiles show `md`). Code's on-colour chip keeps its plate for now (a separate family).
+- 2026-10-16 · owner, review round 28 (components28) → approved (`onColor`, one colour) → Complete again in `component-status.mjs`.

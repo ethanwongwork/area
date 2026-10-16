@@ -292,6 +292,8 @@ function gallerySpecimenTable() {
     ],
     titlebar: [
       { id: "default", title: "Default", demo: "GalleryTitlebar" },
+      { id: "variant-plain", title: "Variant / plain", demo: "GalleryTitlebarPlain" },
+      { id: "variant-floating", title: "Variant / floating", demo: "GalleryTitlebarFloating" },
       { id: "platform-macos", title: "Platform / macOS window", demo: "GalleryTitlebarMacos" },
     ],
     "section-heading": [
