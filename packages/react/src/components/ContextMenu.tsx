@@ -1,11 +1,19 @@
-import { forwardRef, useLayoutEffect, useRef, useState } from "react";
+import { forwardRef, useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { HTMLAttributes, KeyboardEvent, MouseEvent, ReactNode } from "react";
 import { contextMenuVariants } from "../variants.ts";
 import { Menu } from "./primitives.tsx";
 
 export interface ContextMenuProps extends Omit<HTMLAttributes<HTMLDivElement>, "content"> {
-  /** The menu's rows: MenuItem, MenuLabel, MenuSeparator. */
-  menu: ReactNode;
+  /**
+   * The menu's rows: MenuItem, MenuLabel, MenuSeparator. With `itemSelector`, a function of the item that was
+   * right-clicked (or focused, for Shift+F10), so one ContextMenu serves a whole list of rows.
+   */
+  menu: ReactNode | ((item: HTMLElement) => ReactNode);
+  /**
+   * Opens only on an element matching this selector inside the area (a row, a tile, `[data-key]`), and hands it to
+   * `menu`. Elsewhere the browser's own menu shows. The item carries `data-context-target` while the menu is open.
+   */
+  itemSelector?: string;
   /** Names the menu for assistive tech ("Page actions"); the menu is a sub-part, as SplitButton's `menuLabel` (audit D-18). */
   menuLabel?: string;
   /** @deprecated Use `menuLabel`. */
@@ -31,8 +39,16 @@ const itemsOf = (menu: HTMLElement) => [...menu.querySelectorAll<HTMLElement>('[
  * the Menu key). Choosing a row, Escape or a click elsewhere closes it and focus returns.
  */
 export const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(function ContextMenu(
-  { menu, menuLabel, label: labelProp, children, onOpenChange, disabled, className, onContextMenu, onKeyDown, ...rest }, ref,
+  { menu, menuLabel, label: labelProp, itemSelector, children, onOpenChange, disabled, className, onContextMenu, onKeyDown, ...rest }, ref,
 ) {
+  const area = useRef<HTMLDivElement | null>(null);
+  const [item, setItem] = useState<HTMLElement | null>(null);
+  // The item the menu acts on, from where it opened: none without a selector, and no menu outside an item.
+  const itemAt = (target: EventTarget | null) => {
+    if (!itemSelector) return undefined;
+    const found = (target as HTMLElement | null)?.closest?.<HTMLElement>(itemSelector) ?? null;
+    return found && area.current?.contains(found) ? found : null;
+  };
   const menuRef = useRef<HTMLDivElement | null>(null);
   const returnFocus = useRef<HTMLElement | null>(null);
   const [point, setPoint] = useState<{ x: number; y: number; keyboard: boolean; rtl?: boolean } | null>(null);
@@ -77,6 +93,13 @@ export const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(function
     Promise.all(element.getAnimations().map(animation => animation.finished)).then(done, done);
   }, [leaving, point]);
 
+  // The acted-on item says so while the menu is open (Finder and Notion keep the right-clicked row marked).
+  useEffect(() => {
+    if (!item || !point) return;
+    item.setAttribute("data-context-target", "");
+    return () => item.removeAttribute("data-context-target");
+  }, [item, point]);
+
   const close = (restore: boolean) => {
     setLeaving(true);
     setPoint(null);
@@ -86,6 +109,9 @@ export const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(function
   const open = (event: MouseEvent<HTMLDivElement>) => {
     onContextMenu?.(event);
     if (disabled || event.defaultPrevented) return;
+    const found = itemAt(event.target);
+    if (found === null) return;
+    if (found) setItem(found);
     event.preventDefault();
     returnFocus.current = document.activeElement as HTMLElement | null;
     // A keyboard-opened context menu reports no pointer: anchor it to the focused element.
@@ -102,13 +128,16 @@ export const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(function
     if (disabled || event.defaultPrevented || point) return;
     if (!((event.key === "F10" && event.shiftKey) || event.key === "ContextMenu")) return;
     if ((event.target as HTMLElement).closest(".area-context-menu__menu")) return;
+    const found = itemAt(event.target);
+    if (found === null) return;
+    if (found) setItem(found);
     event.preventDefault();
     returnFocus.current = document.activeElement as HTMLElement | null;
     setPoint(anchorAt(event.target as HTMLElement));
     onOpenChange?.(true);
   };
 
-  return <div ref={ref} className={contextMenuVariants({}, className)} onContextMenu={open} onKeyDown={openFromKeyboard} {...rest}>
+  return <div ref={node => { area.current = node; if (typeof ref === "function") ref(node); else if (ref) ref.current = node; }} className={contextMenuVariants({}, className)} onContextMenu={open} onKeyDown={openFromKeyboard} {...rest}>
     {children}
     <Menu ref={menuRef} popover="auto" aria-label={menuLabel ?? labelProp ?? "Context menu"} tabIndex={-1} className="area-context-menu__menu"
       onToggle={event => { if ((event.nativeEvent as ToggleEvent).newState === "closed" && point) close(false); }}
@@ -120,7 +149,7 @@ export const ContextMenu = forwardRef<HTMLDivElement, ContextMenuProps>(function
         menuRef.current?.hidePopover();
         close(true);
       }}>
-      {point || leaving ? menu : null}
+      {point || leaving ? (typeof menu === "function" ? (item ? menu(item) : null) : menu) : null}
     </Menu>
   </div>;
 });

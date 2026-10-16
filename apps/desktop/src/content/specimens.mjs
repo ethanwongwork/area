@@ -173,6 +173,7 @@ function gallerySpecimenTable() {
     "context-menu": [
       { id: "default", title: "Default", demo: "GalleryContextMenu" },
       { id: "tree", title: "On tree rows", demo: "GalleryContextMenuTree" },
+      { id: "behavior-per-item", title: "Behavior / one menu per row", demo: "GalleryContextMenuItems" },
       { id: "disabled", title: "Disabled rows", demo: "GalleryContextMenuDisabled" },
     ],
     "command-palette": [
