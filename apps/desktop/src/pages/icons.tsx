@@ -7,7 +7,7 @@
  * @area/icons; the SVG export and CopyButton are ../copy.tsx.
  */
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type ReactElement, type ReactNode } from "react";
-import { Badge, Button, Code, Count, EmptyState, HoverCard, ListBox, ListBoxItem, Nav, NavGroup, NavItem, PanelSection, Segmented, Select, Table, TableLink } from "@area/react";
+import { Badge, Button, Code, Count, EmptyState, HoverCard, ListBox, ListBoxItem, Nav, NavGroup, NavItem, PanelSection, Segmented, Select, Table, TableCell, TableLink } from "@area/react";
 import { batches as ICON_BATCHES, categories as ICON_CATEGORIES, icons as ICON_META } from "@area/icons/meta";
 import * as APPROVED from "@area/icons";
 import * as IN_REVIEW from "@area/icons/review";
@@ -268,7 +268,7 @@ export function IconsPage() {
                       const Glyph = style === "filled" ? entry.Filled : entry.Icon;
                       return (
                         <tr key={name} data-selected={name === icon?.name ? "" : undefined}>
-                          <td className="area-table__cell--fit"><span className="studio-icons__glyph" data-icon={name}><Glyph size={size} aria-hidden="true" /></span></td>
+                          <TableCell fit><span className="studio-icons__glyph" data-icon={name}><Glyph size={size} aria-hidden="true" /></span></TableCell>
                           <td><TableLink href={`#icons`} onClick={event => { event.preventDefault(); choose(name); }}><Code>{name}</Code></TableLink></td>
                           <td><span className="studio-muted">{entry.keyline}</span></td>
                           <td>{statusOf(name) ? <StatusBadge name={name} /> : <span className="studio-muted">—</span>}</td>

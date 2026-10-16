@@ -6,7 +6,7 @@
  * keeps the rule under the last row, both meant for a column header.
  */
 import type { ReactNode } from "react";
-import { Code, Table } from "@area/react";
+import { Code, Table, TableCell } from "@area/react";
 
 export type Fact = readonly [term: ReactNode, value: ReactNode];
 
@@ -19,7 +19,7 @@ export function Facts({ items, label }: { items: ReadonlyArray<Fact | null | fal
         {items.filter((item): item is Fact => Boolean(item)).map(([term, value], index) => (
           <tr key={index}>
             {/* Table's shrink-to-fit cell: the term column is as wide as its longest term. */}
-            <td className="area-table__cell--fit"><span className="studio-muted">{term}</span></td>
+            <TableCell fit><span className="studio-muted">{term}</span></TableCell>
             <td>{value}</td>
           </tr>
         ))}
@@ -42,11 +42,11 @@ export function PropsTable({ api }: { api: ReadonlyArray<ReadonlyArray<string>> 
       <tbody>
         {api.map(([prop = "", type, fallback]) => (
           <tr key={prop}>
-            <td className="area-table__cell--fit">
+            <TableCell fit>
               {prop.split(/ \/ |(?<=:) /).map((name, index) => <Code key={index} className="studio-prop">{name}</Code>)}
-            </td>
+            </TableCell>
             <td>{type}</td>
-            <td className="area-table__cell--fit">{fallback && fallback !== "—" ? <Code>{fallback}</Code> : <span className="studio-muted">—</span>}</td>
+            <TableCell fit>{fallback && fallback !== "—" ? <Code>{fallback}</Code> : <span className="studio-muted">—</span>}</TableCell>
           </tr>
         ))}
       </tbody>

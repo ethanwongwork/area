@@ -1967,7 +1967,7 @@ export const COMPONENT_PAGES = [
     slug: "table",
     name: "Table",
     manifest: "table",
-    api: [["interactive", "boolean (rows hover; give each row one TableLink)", "false"], ["size", '"sm" | "md" | "lg"', '"md"'], ["striped", "boolean", "false"], ["columnDividers", "boolean", "false"], ["TableLink", "a stretched link that makes its whole row clickable", "—"], ["wrapperProps", "props for the scroll wrapper; it becomes a focusable region named after the table while it overflows", "—"]],
+    api: [["interactive", "boolean (rows hover; give each row one TableLink)", "false"], ["size", '"sm" | "md" | "lg"', '"md"'], ["striped", "boolean", "false"], ["columnDividers", "boolean", "false"], ["TableLink", "a stretched link that makes its whole row clickable", "—"], ["TableCell / TableHeaderCell: numeric", "end-aligned tabular figures; give the heading the same", "false"], ["TableCell / TableHeaderCell: fit", "as narrow as the content, unwrapped (controls, a glyph, a short term)", "false"], ["wrapperProps", "props for the scroll wrapper; it becomes a focusable region named after the table while it overflows", "—"]],
     examples: [{ id: "default", title: "Default", demo: "TableDefault" }, { id: "clickable", title: "Clickable rows", note: "One TableLink per row stretches over the row, so the hover plate and the click agree; the row shows the link's focus.", demo: "GalleryTableInteractive" }],
   },
 ].sort((a, b) => a.name.localeCompare(b.name, "en"));

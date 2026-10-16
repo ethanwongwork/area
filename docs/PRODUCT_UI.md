@@ -91,7 +91,6 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
 Recorded, not yet built (each needs its own component pass). From the app audit of 2026-10-12:
 
 - An on-colour Badge (colour cards draw their contrast badge in app CSS; `Code onColor` exists).
-- Table props for its fit and numeric cells (the app writes `area-table__cell--fit` by hand).
 
 - A selectable card or tile state on Card (the gallery's Tile carries rule 3 in app CSS).
 - Nav row actions revealed on hover and focus-within, as Board card actions are.

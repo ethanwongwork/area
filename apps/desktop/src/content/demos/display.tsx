@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Alert, Avatar, AvatarGroup, Badge, Indicator, IndicatorAnchor, Button, Checkbox, Chip, ChipGroup, Dialog, Field, Input, Kbd, KbdGroup, Label, Menu, MenuItem, Panel, PanelSection, PanelStack, Popover, PopoverDescription, PopoverHeader, PopoverTitle, Progress, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, Tabs, Textarea, Toast, Tooltip } from "@area/react";
+import { Alert, Avatar, AvatarGroup, Badge, Button, Checkbox, Chip, ChipGroup, Dialog, Field, Indicator, IndicatorAnchor, Input, Kbd, KbdGroup, Label, Menu, MenuItem, Panel, PanelSection, PanelStack, Popover, PopoverDescription, PopoverHeader, PopoverTitle, Progress, Segmented, Select, Separator, Skeleton, Slider, Spinner, Switch, Table, TableCell, TableHeaderCell, Tabs, Textarea, Toast, Tooltip } from "@area/react";
 import { AddIcon, AlignBottomIcon, AlignMiddleIcon, AlignTopIcon, ArrowRightIcon, CheckIcon, DismissIcon, DotsFourIcon, InfoIcon, PersonIcon, SearchIcon, TokenIcon, WarningIcon } from "@area/icons";
 
 export const AvatarDefault = () => <Avatar fallback="D" alt="David Tee" />;
@@ -140,7 +140,7 @@ export const TableDefault = () => (
       <tr>
         <th>Name</th>
         <th>Status</th>
-        <th className="area-table__cell--numeric">Value</th>
+        <TableHeaderCell numeric>Value</TableHeaderCell>
       </tr>
     </thead>
     <tbody>
@@ -151,14 +151,14 @@ export const TableDefault = () => (
             Status
           </Badge>
         </td>
-        <td className="area-table__cell--numeric">1</td>
+        <TableCell numeric>1</TableCell>
       </tr>
       <tr>
         <td>Item two</td>
         <td>
           <Badge tone="warning">Status</Badge>
         </td>
-        <td className="area-table__cell--numeric">2</td>
+        <TableCell numeric>2</TableCell>
       </tr>
     </tbody>
   </Table>

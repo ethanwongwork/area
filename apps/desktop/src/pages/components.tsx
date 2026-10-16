@@ -22,7 +22,7 @@
  */
 import { Component, createElement, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import * as AreaReact from "@area/react";
-import { Badge, Button, Code, Count, EmptyState, Kbd, Link, Nav, NavGroup, NavItem, PanelSection, Table, TableLink, Tooltip, ZoomControl } from "@area/react";
+import { Badge, Button, Code, Count, EmptyState, Kbd, Link, Nav, NavGroup, NavItem, PanelSection, Table, TableCell, TableLink, Tooltip, ZoomControl } from "@area/react";
 import { ArrowLeftIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon, CopyIcon, OpenIcon, ResetIcon } from "@area/icons";
 import { MANIFESTS } from "@area/styles/manifest";
 import SNIPPETS from "virtual:demo-snippets";
@@ -424,7 +424,7 @@ export function ComponentsPage() {
                 <tr key={entry.slug}>
                   <td><TableLink href={`#components/${entry.slug}`} onClick={event => { event.preventDefault(); select(entry.slug); }}>{entry.name}</TableLink></td>
                   <td><Badge size="sm" tone={STATUS_TONE[statusOf(entry)]} variant="soft">{STATUS_LABEL[statusOf(entry)]}</Badge></td>
-                  <td className="area-table__cell--numeric">{TILES.get(entry.slug)!.length}</td>
+                  <TableCell numeric>{TILES.get(entry.slug)!.length}</TableCell>
                   <td>{entry.imports ?? entry.exportName ? <Code>{entry.imports ?? entry.exportName}</Code> : <span className="studio-muted">—</span>}</td>
                 </tr>
               ))}
