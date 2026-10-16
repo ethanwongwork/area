@@ -39,6 +39,8 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
 - Merged (PR #109). Then Badge `onColor` (Code's on-colour chip: ink inherited, 8% plate of the ink's opposite, 20%
   ink line). The Color tab's cards use it: their old 12% ink-wash badge left 34 of 345 steps under AA for its own
   text (worst Warm 500, 3.68); now ≥ 5.25. Visible: pill corner, plate direction, the line. Badge reopened for review.
+- Merged (PR #110). Then NavItem `revealActions`: Board's hover / focus-within reveal on a Nav row (touch always shows;
+  an open menu keeps them). Additive; the app's Sidebar keeps pinning in the Inspector and the context menu (rule 7).
 
 ## Copy button (2026-10-15, branch `claude/copy-button`)
 

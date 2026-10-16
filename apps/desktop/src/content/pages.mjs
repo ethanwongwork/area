@@ -1928,6 +1928,7 @@ export const COMPONENT_PAGES = [
       ["icon", "ReactNode", "\u2014"],
       ["trailing", "ReactNode", "\u2014"],
       ["actions", "ReactNode (independent buttons inside the shared row backplate)", "—"],
+      ["revealActions", "boolean: the actions show only while the row is hovered or holds focus (always on touch)", "false"],
       ["disabled", "boolean", "false"],
       ["NavGroup nested", "boolean (an expandable item's children, one Tree view level in)", "false"],
     ],

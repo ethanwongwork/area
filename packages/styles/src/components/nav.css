@@ -291,6 +291,17 @@
   .area-nav__actions [aria-expanded]:not([aria-haspopup]) svg { transition: rotate var(--area-duration-fast) var(--area-ease-out); }
   .area-nav__actions [aria-expanded="false"]:not([aria-haspopup]) svg { rotate: -90deg; }
   .area-nav__actions [aria-expanded="false"]:not([aria-haspopup]):dir(rtl) svg { rotate: 90deg; }
+  /*
+   * Revealed actions (NavItem revealActions, docs/specs/nav.md 2026-10-15): Board's card actions' rule (board.css,
+   * Notion's card buttons) on a row. Hidden until the row is hovered or holds focus, they land at once and leave on
+   * `fast`; a menu one of them opened keeps them while it is open. Hidden only where there is hover: a touch screen
+   * always shows them. They keep their place, so the row's text never reflows.
+   */
+  @media (hover: hover) {
+    .area-nav__row--reveal > .area-nav__actions { opacity: 0; transition: opacity var(--area-duration-fast) var(--area-ease-out); }
+    .area-nav__row--reveal:not(:hover, :focus-within, :has([aria-expanded="true"][aria-haspopup])) > .area-nav__actions { pointer-events: none; }
+    .area-nav__row--reveal:is(:hover, :focus-within, :has([aria-expanded="true"][aria-haspopup])) > .area-nav__actions { opacity: 1; transition-duration: 0s; }
+  }
 
   .area-nav--horizontal .area-nav__separator {
     inline-size: var(--area-stroke-width);

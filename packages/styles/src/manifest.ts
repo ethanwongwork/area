@@ -872,7 +872,7 @@ export const nav = {
   variants: { orientation: ["horizontal"], selection: ["marker"] },
   elements: ["group", "label", "item", "icon", "text", "trailing", "separator", "row", "actions"],
   // A nested group is an expandable item's children, stepped in like a Tree view level (audit D-20).
-  elementModifiers: { group: ["nested"] },
+  elementModifiers: { group: ["nested"], row: ["reveal"] },
   defaults: {},
 } as const satisfies ComponentManifest;
 
