@@ -41,6 +41,9 @@ const out = docsOutput(root);
 const AREA_COUNT = CATALOG.filter((i) => i.source === "area").length;
 
 const tokens = JSON.parse(readFileSync(join(repo, "packages/tokens/dist/tokens.json"), "utf8"));
+// The ui axis became Type and Density (2026-10-12). The archived pages that read its presets get empty ones, so the
+// build still runs (it feeds component review pages); those pages' tables are blank.
+const UI_AXIS = tokens.axes.find((a) => a.id === "ui") ?? { id: "ui", label: "UI", attribute: "data-area-ui", defaultPreset: "default", presets: [{ id: "default", label: "Default", description: "", tokens: {} }, { id: "compact", label: "Compact", description: "", tokens: {} }] };
 const { MANIFESTS } = await import(join(repo, "packages/styles/src/manifest.ts"));
 const demos = await renderDemos();
 
@@ -104,7 +107,7 @@ function axisSelect(axis) {
 
 const AXIS_SECTIONS = [
   { title: "Appearance", axes: ["theme", "neutral", "accent", "action", "selection"] },
-  { title: "Scale", axes: ["ui"] },
+  { title: "Scale", axes: ["type", "density"] },
   { title: "Layout", axes: ["radius", "surface"] },
   { title: "Accessibility", axes: ["contrast"] },
   { title: "Motion", axes: ["motion"] },
@@ -769,7 +772,7 @@ function iconographyPage() {
     "16px": "The default. Every inline icon beside a label.",
     "24px": "Standalone, where the icon is the whole affordance.",
   };
-  const density = tokens.axes.find((a) => a.id === "ui").presets.find((p) => p.id === "default");
+  const density = UI_AXIS.presets.find((p) => p.id === "default");
   const seen = new Map();
   for (const [token, value] of Object.entries(density.tokens)) {
     if (!/^--area-icon-/.test(token)) continue;
@@ -841,7 +844,7 @@ function extractIcon(source, name) {
 }
 
 function typographyPage() {
-  const preset = tokens.axes.find((a) => a.id === "ui").presets.find((p) => p.id === "default");
+  const preset = UI_AXIS.presets.find((p) => p.id === "default");
   const px = (token) => (preset.tokens[token] ?? "").replace(/var\(--area-(size|leading)-|\)/g, "");
 
   const groups = { text: [], title: [], display: [] };
@@ -984,7 +987,7 @@ ${tokenSection({
 }
 
 function axisPresetTable(axisId) {
-  const axis = tokens.axes.find((a) => a.id === axisId);
+  const axis = axisId === "ui" ? UI_AXIS : tokens.axes.find((a) => a.id === axisId);
   return table(
     ["Preset", "Attribute", "Description"],
     axis.presets.map((p) => [
@@ -1009,7 +1012,7 @@ function specimenGrid(items) {
 
 /** Tier values for the current density preset, read from the token data. */
 function densityRows(presetId) {
-  const axis = tokens.axes.find((a) => a.id === "ui");
+  const axis = UI_AXIS;
   const preset = axis.presets.find((p) => p.id === presetId);
   return ["xs", "sm", "md", "lg", "xl"].map((tier) => ({
     tier,
