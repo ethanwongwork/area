@@ -14,13 +14,15 @@ type Options = Omit<VariantProps<typeof MANIFESTS.badge>, "tone" | "rounded"> & 
   avatar?: ReactNode; flag?: ReactNode;
   onDismiss?: () => void;
   dismissLabel?: string;
+  /** On a coloured ground: the ground's own ink, a plate of the ink's opposite and a line of the ink (Code's `onColor`). */
+  onColor?: boolean;
 };
 type SpanProps = Options & HTMLAttributes<HTMLSpanElement> & { as?: "span" };
 type LinkProps = Options & AnchorHTMLAttributes<HTMLAnchorElement> & { as: "a"; href: string };
 export type BadgeProps = SpanProps | LinkProps;
 /** Static metadata or a native link. Icon/dot-only forms require an accessible name. */
 export const Badge = forwardRef<HTMLSpanElement | HTMLAnchorElement, BadgeProps>(function Badge(
-  { as = "span", tone, variant, size, pill, dot, dotOnly, iconOnly, truncate, icon, trailingIcon, avatar, flag, onDismiss, dismissLabel, className, children, title, ...rest }, ref,
+  { as = "span", tone, variant, size, pill, dot, dotOnly, iconOnly, truncate, onColor, icon, trailingIcon, avatar, flag, onDismiss, dismissLabel, className, children, title, ...rest }, ref,
 ) {
   if ((iconOnly || dotOnly) && !rest["aria-label"] && !rest["aria-labelledby"] && !rest["aria-hidden"]) {
     throw new Error("Badge: iconOnly and dotOnly require aria-label or aria-labelledby (or aria-hidden when decorative).");
@@ -32,7 +34,7 @@ export const Badge = forwardRef<HTMLSpanElement | HTMLAnchorElement, BadgeProps>
   if (onDismiss && !dismissLabel) throw new Error("Badge: dismissLabel is required for the dismiss button.");
   const props = {
     ...rest,
-    className: badgeVariants({ tone: tone === "inverted" ? "inverse" : tone, variant, size, dot, dotOnly, iconOnly, truncate, pill: pill === true, rounded: pill === false }, className),
+    className: badgeVariants({ tone: tone === "inverted" ? "inverse" : tone, variant, size, dot, dotOnly, iconOnly, truncate, onColor, pill: pill === true, rounded: pill === false }, className),
     title: title ?? (truncate && (typeof children === "string" || typeof children === "number") ? String(children) : undefined),
     role: rest.role ?? ((iconOnly || dotOnly) && as === "span" ? "img" : undefined),
     children: <>

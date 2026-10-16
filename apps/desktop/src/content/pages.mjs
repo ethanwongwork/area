@@ -1273,6 +1273,7 @@ export const COMPONENT_PAGES = [
     api: [
       ["variant", '"soft" | "solid" | "outline" | "color" | "modern"', '"soft"'],
       ["tone", '"neutral" | "info" | "success" | "warning" | "caution" | "danger" | "discovery" | "inverse"', '"neutral"'],
+      ["onColor", "on a coloured ground: its ink, a plate of the ink's opposite, a line of the ink (Code's onColor); overrides variant and tone", "false"],
       ["size", '"sm" | "md" | "lg"', '"md"'],
       ["pill", "boolean; unset follows the theme's pills list (a pill by default), true forces a pill, false the radius corner", "unset"],
       ["dot / dotOnly / iconOnly / truncate / uppercase", "boolean", "false"],

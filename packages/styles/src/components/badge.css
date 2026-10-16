@@ -188,6 +188,23 @@
   .area-badge--lg { --_height: var(--area-mark-label-lg); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
   .area-badge--color { --_border: var(--_line); --_border-hover: var(--_line-hover); --_dot-color: var(--_solid); }
   .area-badge--modern { --_bg: var(--area-bg-surface); --_bg-hover: var(--area-bg-component-hover); --_fg: var(--area-fg-default); --_border: var(--area-edge-selected); --_border-hover: var(--area-edge-control-hover); --_dot-color: var(--_solid); box-shadow: var(--area-shadow-control); } /* the raised plate's edge, as the Segmented thumb's (consistency pass 2026-10-12; was the #f3 seam; Untitled's modern ring is #d5) */
+  /*
+   * On a coloured ground (a colour card, a solid fill): Code's on-colour chip (token.css, docs/specs/code.md,
+   * 2026-10-15). The ink is the ground's own; the plate is 8% of the ink's opposite, so it deepens the ground away
+   * from the ink, and a 20% line of the ink marks the chip where the plate barely shows (the lightest steps). Over
+   * the 345 colour steps with their own ink, the badge's text stays at 5.25:1 or more; a 12% wash of the ink itself
+   * (the Color tab's badge before) left 34 under 4.5:1, worst Warm 500 at 3.68 (docs/specs/badge.md, 2026-10-15).
+   * Overrides any variant's paint; tone does not apply. Where relative colour is unsupported the plate drops and the line carries it.
+   */
+  .area-badge--on-color {
+    --_fg: currentcolor;
+    --_bg: oklch(from currentcolor calc(1 - l) 0 0 / 0.08);
+    --_bg-hover: oklch(from currentcolor calc(1 - l) 0 0 / 0.14);
+    --_border: color-mix(in oklab, currentcolor 20%, transparent);
+    --_border-hover: color-mix(in oklab, currentcolor 32%, transparent);
+    --_dot-color: currentcolor;
+    box-shadow: none;
+  }
   .area-badge:is(.area-badge--color, .area-badge--modern) :is(.area-badge__leading-icon, .area-badge__trailing-icon) { color: var(--_solid); }
   .area-badge__avatar, .area-badge__flag { display: inline-flex; inline-size: var(--_media); block-size: var(--_media); flex: none; border-radius: var(--area-radius-full); overflow: hidden; }
   .area-badge__avatar > *, .area-badge__flag > * { inline-size: 100%; block-size: 100%; object-fit: cover; }
