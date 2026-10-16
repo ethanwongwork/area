@@ -518,15 +518,7 @@
     }
   }
 
-  /*
-   * Copy feedback: the check enters as a small mark (MOTION.md: scale from 0.6 with opacity,
-   * duration-fast ease-out, ending at identity); the copy glyph returns at once. The button's plate
-   * follows Button's own hover and press.
-   */
-  .area-code-block__actions [data-copy-state="copied"] svg {
-    animation: area-code-copied var(--area-duration-fast) var(--area-ease-out);
-  }
-  @keyframes area-code-copied { from { opacity: 0; scale: 0.6; } }
+  /* Copy feedback is CopyButton's (copy-button.css): the check enters as a small mark. */
 
   .area-code-block__toggle:focus-visible {
     outline: var(--area-focus-width) solid var(--area-focus-color);

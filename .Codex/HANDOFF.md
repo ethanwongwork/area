@@ -5,6 +5,25 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Copy button (2026-10-15, branch `claude/copy-button`)
+
+- Owner: "go with your rec" (new components from the backlog) → Copy button, from PRODUCT_UI.md's open gaps: the app's
+  own CopyButton and Typography's silent icon-only copy; Code block, Token row and the app each wrote the copy logic.
+- `CopyButton` (packages/react/src/components/CopyButton.tsx): a Button (ghost / neutral / sm by default) that copies
+  `value` (string or a function read at the click); icon-only named by `label` ("Copy"), or with a label that stays;
+  the icon turns to a check for 2000 ms (Untitled UI, shadcn; was 1600 unsourced) and a sibling polite live region says
+  "Copied to clipboard" / "Copy failed" once; `data-copy-state` hook; `useCopy` and `CopyStatus` for Token row's row.
+  copy-button.css carries Code block's check entry (moved from code.css). Code block, Token row, the app's Inspector
+  copies (copy.tsx wraps it: outline, Area icons) and Typography's token copies use it. Spec `docs/specs/copy-button.md`.
+- Evidence: design-system sources pinned (uui 1d410cb8, shadcn c2477f31, Mantine 7.17.8, Zag 1.15.0); ChatGPT's copy
+  controls read live in Chrome (read-only, nothing pressed). Not captured: Notion / Figma (toast pattern, out of scope).
+- Checks: build, tokens 24,254, contracts 14, manifest (110), typecheck, React 297/297 (new copy-button.test.mjs),
+  playgrounds 0 mismatches. App preview: 8 tiles; a press writes the value, swaps to the check (0.14s entry), announces
+  once, keeps label and width; refused clipboard → "Copy failed"; Typography copies carry the tooltip and bar class.
+- Review page (In review): https://claude.ai/artifact/CWKJ1CCKJnEXFRBVPADfZp (built from the app's demos; the
+  archived docs build that component-review.mjs needs fails on the removed `ui` axis in apps/docs/scripts/build.mjs:
+  inspector sections, typographyPage, iconographyPage, densityRows / uiScalePage; not fixed, docs archived).
+
 ## Astra research folded into main (2026-10-15, branch `claude/fold-astra-research`)
 
 - Owner: Astra (Codex) is no longer available; "fold it into this main repo". `astra/research` merged:

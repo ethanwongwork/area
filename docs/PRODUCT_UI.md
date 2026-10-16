@@ -90,8 +90,6 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
 
 Recorded, not yet built (each needs its own component pass). From the app audit of 2026-10-12:
 
-- A Copy button with "Copied" feedback (the app borrows the docs site's `CopyButton`; Typography's
-  icon-only copy gives assistive tech no feedback).
 - An on-colour Badge (colour cards draw their contrast badge in app CSS; `Code onColor` exists).
 - Roving focus for grids and lists (every icon cell is a Tab stop); one selection semantic
   (`aria-selected` in a grid) instead of `aria-pressed`, `data-selected` and `aria-current` mixed.

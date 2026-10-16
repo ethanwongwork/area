@@ -1,0 +1,14 @@
+/* ---------------------------------------------------------------------------
+ * Copy button
+ *
+ * A Button that copies text (docs/specs/copy-button.md). The plate, sizes, variants, focus and icon box are
+ * Button's; this file draws only the feedback. Copied: the check enters as a small mark (MOTION.md: scale from
+ * 0.6 with opacity, duration-fast ease-out, ending at identity; Code block's copy since 2026-10-07); the copy
+ * glyph returns at once. `data-copy-state="copied" | "failed"` is the paint hook.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-copy-button[data-copy-state="copied"] .area-button__icon > * {
+    animation: area-copy-button-copied var(--area-duration-fast) var(--area-ease-out);
+  }
+  @keyframes area-copy-button-copied { from { opacity: 0; scale: 0.6; } }
+}

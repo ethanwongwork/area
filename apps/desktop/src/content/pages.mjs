@@ -399,6 +399,25 @@ export const COMPONENT_PAGES = [
     ],
   },
   {
+    slug: "copy-button", name: "Copy button", exportName: "CopyButton", manifest: "copyButton",
+    imports: "CopyButton",
+    api: [
+      ["value", "the text, or a function returning it (read when pressed)", "—"],
+      ["children / label", "a visible label, or the icon-only button's name", "— / \"Copy\""],
+      ["copiedLabel / failedLabel", "said once through a polite live region", "\"Copied to clipboard\" / \"Copy failed\""],
+      ["icon / copiedIcon", "the rest glyph and the check", "copy / check"],
+      ["timeout", "how long the check holds, ms", "2000"],
+      ["onCopied / onCopyError", "(text) => void / (error) => void", "—"],
+      ["variant / tone / size / …", "as Button", "ghost / neutral / sm"],
+      ["useCopy / CopyStatus", "the behaviour and the live region for a control that is not a Button (Token row)", "—"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "A Button that copies. Icon-only it is named Copy, as ChatGPT's message and code copies; the name stays fixed, the icon turns to a check for two seconds and a live region says Copied to clipboard once.", demo: "GalleryCopyButton" },
+      { id: "label", title: "With a label", note: "With children the label stays as written and only the icon changes, as Untitled UI's, so the button never changes width.", demo: "GalleryCopyButtonLabelled" },
+      { id: "field", title: "In a field", note: "At the end of a read-only Input, inside an InputGroup.", demo: "GalleryCopyButtonInField" },
+    ],
+  },
+  {
     slug: "asset-row", name: "Asset row", exportName: "AssetRow", manifest: "assetRow",
     imports: "AssetRow",
     api: [
