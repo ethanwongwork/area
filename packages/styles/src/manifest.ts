@@ -455,7 +455,7 @@ export const badge = {
     tone: ["neutral", "info", "success", "warning", "caution", "danger", "discovery", "inverse"],
     size: ["sm", "md", "lg"],
   },
-  booleans: ["dot", "dot-only", "icon-only", "truncate", "pill", "rounded"], // pill / rounded override data-area-pills (2026-10-04)
+  booleans: ["dot", "dot-only", "icon-only", "truncate", "pill", "rounded", "on-color"], // pill / rounded override data-area-pills (2026-10-04)
   elements: ["dot", "leading-icon", "label", "trailing-icon", "avatar", "flag", "dismiss"],
   defaults: { variant: "soft", tone: "neutral", size: "md" },
 } as const satisfies ComponentManifest;

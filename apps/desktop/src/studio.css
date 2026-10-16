@@ -723,16 +723,6 @@
    * the badge's plate is that ink thinned (12%, a pick).
    */
   .studio-swatch__level { font-variant-numeric: tabular-nums; } /* regular weight: no bold on the cards (owner, 2026-10-12) */
-  .studio-swatch__badge {
-    display: inline-flex;
-    align-items: center;
-    padding-inline: var(--area-space-6);
-    border-radius: var(--area-radius-small);
-    background: color-mix(in srgb, var(--_ink) 12%, transparent); /* pick */
-    font-size: var(--area-text-xs-size);
-    line-height: var(--area-text-xs-leading);
-    font-variant-numeric: tabular-nums;
-  }
   /* Block lines, so the last value's baseline is trimmed onto the tile's inset at the foot, as the
      level's cap is at the head. One blank line of the values' leading under the level (owner,
      2026-10-14): from the level's baseline to the hex's cap is a line's leading and the leading less

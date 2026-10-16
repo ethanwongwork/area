@@ -9,7 +9,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import TOKENS from "@area/tokens/tokens.json";
 import { ROLE_SCALES } from "../../../../packages/tokens/src/color/presets.ts";
-import { Code, ColorSwatch, EmptyState, ListBox, Nav, NavGroup, NavItem, PanelSection, Table, TableLink } from "@area/react";
+import { Badge, Code, ColorSwatch, EmptyState, ListBox, Nav, NavGroup, NavItem, PanelSection, Table, TableLink } from "@area/react";
 import { CopyIcon } from "@area/icons";
 import { CopyButton } from "../copy.tsx";
 import { SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
@@ -115,7 +115,9 @@ function ColorCard({ scale, item }: { scale: string; item: ScaleStep }) {
       aria-label={`${title(scale)} ${item.level}, ${item.hex.toUpperCase()}, ${ink === "#ffffff" ? "white" : "black"} text ${item.contrast.ratio.toFixed(2)} to 1, ${item.contrast.grade}`}
       paint={{ background: `var(--area-${scale}-${item.level})`, color: ink }}
       label={<span className="studio-swatch__level">{item.level}</span>}
-      value={<span className="studio-swatch__badge">{item.contrast.grade} · {item.contrast.ratio.toFixed(2)}</span>}>
+      // The contrast grade on the step's own colour: Badge onColor (docs/specs/badge.md, 2026-10-15), which keeps its text
+      // at AA on every step; the 12% ink wash it replaces left 34 steps under 4.5:1.
+      value={<Badge size="sm" onColor>{item.contrast.grade} · {item.contrast.ratio.toFixed(2)}</Badge>}>
       <span className="studio-swatch__values">
         <span>{item.hex.toUpperCase()}</span>
         <span>RGB {r} {g} {b}</span>

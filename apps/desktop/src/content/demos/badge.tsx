@@ -190,3 +190,9 @@ export const BadgeIndicatorZero = () => {
   const [show, setShow] = useState(true);
   return <div style={{display: "flex", gap: "var(--area-space-16)", alignItems: "center"}}><IndicatorAnchor indicator={<Indicator count={0} showZero={show} />}><Button aria-label={show ? "Inbox, 0 notifications" : "Inbox"}>Inbox</Button></IndicatorAnchor><Button size="sm" variant="soft" onClick={() => setShow(!show)}>{show ? "Hide zero" : "Show zero"}</Button></div>;
 };
+
+/* On a coloured ground: the ground's own ink, a plate of the ink's opposite and a line of the ink (Code's onColor). */
+const ground = (background: string, color: string): CSSProperties => ({ alignSelf: "stretch", blockSize: "100%", boxSizing: "border-box", display: "flex", alignItems: "center", justifyContent: "center", inlineSize: "100%", background, borderRadius: "var(--area-radius-container)", color, padding: "var(--area-space-24)" });
+export const BadgeOnColor = () => <div style={ground("var(--area-accent-solid)", "var(--area-fg-on-accent)")}><Badge onColor>AA · 4.61</Badge></div>;
+/* A light step with black ink, as the Color tab's cards: the line marks the chip where the plate barely shows. */
+export const BadgeOnColorLight = () => <div style={ground("var(--area-yellow-300)", "#000")}><Badge onColor>AAA · 12.90</Badge></div>;

@@ -620,6 +620,8 @@ function gallerySpecimenTable() {
       { id: "dismissible", title: "Dismissible", demo: "BadgeDismissible" },
       { id: "behavior-truncation", title: "Behavior / truncation", demo: "BadgeTruncation" },
       { id: "link", title: "Link", demo: "BadgeLink" },
+      { id: "ground-on-color", title: "Ground / on colour", demo: "BadgeOnColor" },
+      { id: "ground-on-color-light", title: "Ground / on a light colour", demo: "BadgeOnColorLight" },
     ],
     avatar: [
       { id: "default", title: "Default", demo: "GalleryAvatar" },

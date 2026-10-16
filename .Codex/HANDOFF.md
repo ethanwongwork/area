@@ -36,6 +36,9 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   the arrows no longer open a card on every icon (it opened at once on focus); the Inspector has the same actions.
 - Merged (PR #108). Then `TableCell` / `TableHeaderCell` with `numeric` and `fit` (the existing modifiers); the app and
   the Table demos no longer write `area-table__cell--*` by hand. PRODUCT_UI gap closed.
+- Merged (PR #109). Then Badge `onColor` (Code's on-colour chip: ink inherited, 8% plate of the ink's opposite, 20%
+  ink line). The Color tab's cards use it: their old 12% ink-wash badge left 34 of 345 steps under AA for its own
+  text (worst Warm 500, 3.68); now ≥ 5.25. Visible: pill corner, plate direction, the line. Badge reopened for review.
 
 ## Copy button (2026-10-15, branch `claude/copy-button`)
 
