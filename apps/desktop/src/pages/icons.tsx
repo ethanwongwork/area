@@ -114,9 +114,9 @@ function IconCell({ entry, style, size, selected, onChoose }: { entry: Entry; st
         </div>
         <div className="studio-icon-card__preview" ref={preview}><Glyph size={CARD_PREVIEW} aria-hidden="true" /></div>
         <div className="studio-icon-card__actions">
-          <CopyButton label="Copy SVG" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(svg())} />
+          <CopyButton label="Copy SVG" icon={<CopyIcon />} fullWidth value={() => svg()} />
           <Button variant="outline" size="sm" fullWidth icon={<DownloadIcon />} onClick={() => download(svg(), entry.name)}>Download</Button>
-          <CopyButton label="Copy name" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(entry.name)} />
+          <CopyButton label="Copy name" icon={<CopyIcon />} fullWidth value={() => entry.name} />
         </div>
       </> : null}
     </HoverCard>
@@ -286,10 +286,10 @@ export function IconsPage() {
           {icon && Draw ? (
             <>
               <Selection preview={<Preview ref={preview} label={titleCase(icon.name)}><Draw size={PREVIEW} aria-hidden="true" /></Preview>}>
-                <CopyButton label="Copy SVG" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(svg())} />
+                <CopyButton label="Copy SVG" icon={<CopyIcon />} fullWidth value={() => svg()} />
                 <Button variant="outline" size="sm" fullWidth icon={<DownloadIcon />} onClick={() => download(svg(), icon.name)}>Download</Button>
-                <CopyButton label="Copy name" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(icon.name)} />
-                {importLine(icon.name, style) ? <CopyButton label="Copy import" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(importLine(icon.name, style)!)} /> : null}
+                <CopyButton label="Copy name" icon={<CopyIcon />} fullWidth value={() => icon.name} />
+                {importLine(icon.name, style) ? <CopyButton label="Copy import" icon={<CopyIcon />} fullWidth value={() => importLine(icon.name, style)!} /> : null}
               </Selection>
               <PanelSection heading="Icon" actions={<PinButton name={titleCase(icon.name)} pinned={pins.has(icon.name)} onToggle={() => pins.toggle(icon.name)} />}>
                 <Facts label="Icon" items={[

@@ -288,6 +288,16 @@ function gallerySpecimenTable() {
       { id: "content-image", title: "Content / image", demo: "GalleryPreviewFrameImage" },
       { id: "content-alpha", title: "Content / alpha", demo: "GalleryPreviewFrameAlpha" },
     ],
+    "copy-button": [
+      { id: "default", title: "Default", demo: "GalleryCopyButton" },
+      { id: "content-label", title: "Content / with a label", demo: "GalleryCopyButtonLabelled" },
+      { id: "size-sm", title: "Size / sm", demo: "GalleryCopyButtonSm" },
+      { id: "size-md", title: "Size / md", demo: "GalleryCopyButtonMd" },
+      { id: "size-lg", title: "Size / lg", demo: "GalleryCopyButtonLg" },
+      { id: "behavior-read", title: "Behavior / read when pressed", demo: "GalleryCopyButtonRead" },
+      { id: "layout-field", title: "Layout / in a field", demo: "GalleryCopyButtonInField" },
+      { id: "state-disabled", title: "State / disabled", demo: "GalleryCopyButtonDisabled" },
+    ],
     "password-field": [
       { id: "default", title: "Default", demo: "GalleryPasswordField" },
       { id: "state-filled", title: "State / with a password", demo: "GalleryPasswordFieldFilled" },

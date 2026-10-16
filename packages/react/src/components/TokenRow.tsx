@@ -2,9 +2,10 @@
 // (Code with its swatch) widened to the row, the name at its start and the value at its end. Read-only, or a button
 // that copies the value.
 // Spec: docs/specs/token-row.md.
-import { forwardRef, useEffect, useRef, useState } from "react";
+import { forwardRef } from "react";
 import type { HTMLAttributes, MouseEvent, Ref } from "react";
 import { cx, tokenRowVariants } from "../variants.ts";
+import { CopyStatus, useCopy } from "./CopyButton.tsx";
 
 export interface TokenRowProps extends Omit<HTMLAttributes<HTMLElement>, "children"> {
   /** The token's name ("color/bg/surface"), shown as a Code token. */
@@ -26,9 +27,8 @@ export const TokenRow = /* @__PURE__ */ forwardRef<HTMLElement, TokenRowProps>(f
   { name, value, swatch, outline, copyable, copyText, copiedLabel = "Copied", className, onClick, "aria-label": ariaLabel, ...rest },
   ref,
 ) {
-  const [state, setState] = useState<"idle" | "copied" | "failed">("idle");
-  const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
-  useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
+  // CopyButton's behaviour (docs/specs/copy-button.md) on the whole row: the same clock, state hook and live region.
+  const { state, copy: write } = useCopy(copyText ?? value ?? name);
 
   const body = (
     <>
@@ -46,14 +46,7 @@ export const TokenRow = /* @__PURE__ */ forwardRef<HTMLElement, TokenRowProps>(f
 
   const copy = (event: MouseEvent<HTMLElement>) => {
     onClick?.(event);
-    if (event.defaultPrevented) return;
-    const settle = (next: "copied" | "failed") => {
-      setState(next);
-      if (timer.current) clearTimeout(timer.current);
-      timer.current = setTimeout(() => setState("idle"), 1600);
-    };
-    if (!navigator.clipboard?.writeText) { settle("failed"); return; }
-    navigator.clipboard.writeText(copyText ?? value ?? name).then(() => settle("copied"), () => settle("failed"));
+    if (!event.defaultPrevented) void write();
   };
 
   return (
@@ -61,7 +54,7 @@ export const TokenRow = /* @__PURE__ */ forwardRef<HTMLElement, TokenRowProps>(f
       aria-label={ariaLabel ?? `Copy ${name}${value !== undefined ? `, ${value}` : ""}`}
       data-copy-state={state === "idle" ? undefined : state} onClick={copy} {...rest}>
       {body}
-      <span className="area-sr-only" aria-live="polite">{state === "copied" ? copiedLabel : state === "failed" ? "Copy failed" : ""}</span>
+      <CopyStatus state={state} copiedLabel={copiedLabel} />
     </button>
   );
 });

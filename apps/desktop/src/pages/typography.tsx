@@ -10,10 +10,10 @@
  * (packages/tokens/src/axes/typography.ts).
  */
 import { useState } from "react";
-import { Code, EmptyState, Field, Nav, NavGroup, NavItem, PanelSection, Table, TableLink, Textarea } from "@area/react";
+import { Code, CopyButton as AreaCopyButton, EmptyState, Field, Nav, NavGroup, NavItem, PanelSection, Table, TableLink, Textarea, Tooltip } from "@area/react";
 import { CheckIcon, CopyIcon } from "@area/icons";
 import { CanvasSettings } from "../canvas-settings.tsx";
-import { APP_SCALE, ChromeButton, SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
+import { APP_SCALE, SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
 import { CanvasSection } from "../tile.tsx";
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
 import { Facts } from "../facts.tsx";
@@ -73,12 +73,17 @@ const metrics = (role: TypeRole, type: string) => {
   return `${size} / ${leading}${tracking && tracking !== "0em" ? ` · ${tracking}` : ""}`;
 };
 
-/** Copies a token, its check standing in for the copy glyph a moment after. */
+/**
+ * Copies a token: Area's icon-only CopyButton (docs/specs/copy-button.md), its check standing in for the copy glyph for
+ * two seconds and the result said once to assistive tech, with ChromeButton's tooltip and bar class.
+ */
 function CopyToken({ token }: { token: string }) {
-  const [done, setDone] = useState(false);
   return (
-    <ChromeButton label={`Copy ${token}`} icon={done ? <CheckIcon /> : <CopyIcon />}
-      onClick={async () => { try { await navigator.clipboard.writeText(`var(${token})`); setDone(true); setTimeout(() => setDone(false), 1600); } catch {} }} />
+    <Tooltip side="bottom" describes={false} trigger={
+      <AreaCopyButton className="studio-bar-icon" label={`Copy ${token}`} icon={<CopyIcon />} copiedIcon={<CheckIcon />} value={`var(${token})`} />
+    }>
+      Copy {token}
+    </Tooltip>
   );
 }
 
@@ -228,8 +233,8 @@ export function TypographyPage() {
           {role ? (
             <>
               <Selection preview={<Preview><span style={roleStyle(role, weight)} aria-hidden="true">Aa</span></Preview>}>
-                <CopyButton label="Copy CSS" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(roleCss(role))} />
-                <CopyButton label="Copy token" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(`var(--area-${role.id}-size)`)} />
+                <CopyButton label="Copy CSS" icon={<CopyIcon />} fullWidth value={() => roleCss(role)} />
+                <CopyButton label="Copy token" icon={<CopyIcon />} fullWidth value={() => `var(--area-${role.id}-size)`} />
               </Selection>
               <PanelSection heading="Role">
                 <Facts label="Role" items={[

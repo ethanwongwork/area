@@ -481,8 +481,8 @@ function FamilyInspector({ family, tile, code, pinned, onPin, onOpen }: {
     <>
       {names || code ? (
         <Selection>
-          {code ? <CopyButton label="Copy code" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(code)} /> : null}
-          {names ? <CopyButton label="Copy import" icon={<CopyIcon />} fullWidth copy={() => navigator.clipboard.writeText(importLine(names))} /> : null}
+          {code ? <CopyButton label="Copy code" icon={<CopyIcon />} fullWidth value={() => code} /> : null}
+          {names ? <CopyButton label="Copy import" icon={<CopyIcon />} fullWidth value={() => importLine(names)} /> : null}
         </Selection>
       ) : null}
       <PanelSection heading={tile ? "Tile" : "Family"} actions={

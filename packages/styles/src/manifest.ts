@@ -939,6 +939,14 @@ export const tokenRow = {
   defaults: {},
 } as const satisfies ComponentManifest;
 
+export const copyButton = {
+  block: "area-copy-button",
+  description: "A Button that copies text and shows a check for two seconds, with the result said once to assistive tech.",
+  variants: {},
+  states: ["copy-state"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
 export const assetRow = {
   block: "area-asset-row",
   description: "Lists one exportable asset: its preview, name, details and an optional action.",
@@ -1076,6 +1084,7 @@ export const MANIFESTS = {
   editableText,
   boxModel,
   tokenRow,
+  copyButton,
   assetRow,
   previewFrame,
   passwordField,

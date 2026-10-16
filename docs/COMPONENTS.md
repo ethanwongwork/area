@@ -32,6 +32,7 @@ The manifest and React exports are authoritative for supported API; the gallery 
 actual specimens. Current families include:
 
 - Actions and choices: Button, ButtonGroup, SplitButton, Toolbar, Checkbox/CheckboxGroup,
+  CopyButton (in review, 2026-10-15: copies and shows a check for two seconds; Code block, Token row and the app use it),
   Radio/RadioGroup, Switch, Slider/SliderRange, Chip/ChipGroup, Segmented, ToggleGroup (in review, 2026-10-10: a set of toggle Buttons, any number or at most one pressed) and AlignmentPicker.
 - Forms: Field, Input/InputAction, InputGroup/InputGroupText, NumberField, BoxField, Textarea,
   Composer, native Select, Combobox, CustomSelect, TagPicker, DatePicker, ConfirmDialog, Drawer (in review, 2026-10-05), ColorField, ColorSwatch, ColorSwatchPicker, ColorPicker,

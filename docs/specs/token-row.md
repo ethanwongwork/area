@@ -152,3 +152,4 @@ Not yet compared side by side with Dev Mode's real values (paywalled).
   Code swatch and ColorSwatch edge (owner decision 2026-09-28).
 - 2026-10-12 · owner, review round 15: approved.
 - 2026-10-14 · owner: "merge it, then continue working" → all-axis sweep of Surface 0 at Elevation 0 (90 families, light and dark): the outline style (no fill) draws its edge at `stroke-width` through Code's `--_code-border`, so it keeps it at Surface 0; the row's inset counts it.
+- 2026-10-15 · Copy button built → a copyable row uses its `useCopy` and `CopyStatus`: the copied state holds 2000 ms (was 1600). docs/specs/copy-button.md.
