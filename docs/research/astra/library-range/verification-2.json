@@ -1,0 +1,24 @@
+{
+  "checked_on": "2026-09-28",
+  "starting_commit": "7dae828e7af1daf9d26b663d34335121156606f7",
+  "families": 27,
+  "systems_per_family": 16,
+  "options": 1361,
+  "unique_source_observations": 2719,
+  "proposals": 112,
+  "external_option_source_urls": 300,
+  "result": "pass",
+  "checks": [
+    "exact family set",
+    "required section order",
+    "16-system dispositions",
+    "option evidence and dates",
+    "baseline paths and line bounds",
+    "deduplicated support counts",
+    "proposal option membership and counts",
+    "local links",
+    "branch and changed-file scope",
+    "git diff --check against baseline"
+  ],
+  "limitations": "Structural validation is not an independent semantic fact-check of source interpretation. Dated documentation may change."
+}

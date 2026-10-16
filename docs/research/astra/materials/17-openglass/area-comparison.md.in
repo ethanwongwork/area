@@ -1,0 +1,62 @@
+# Exactly what Area adds or does differently
+
+“Area current” below pins `origin/main` at the snapshot. “Area proposed” pins this research series at its input commit; none of its new material-axis/control names should be mistaken for shipping APIs. OpenGlass is an implemented library with real native React behavior; the Area material layer is still a design and specimen exercise.
+
+## 1. Layer breadth and explicit receivers
+
+**OpenGlass current:** a glass-focused sparse Look over classic/liquid design, with selectors that specialize controls/wells/sheets. No role map or per-role control field appears in GlassLook. {og:look:8-83} {og:l:303-328} {og:l:810-821} {og:l:1069-1100}
+
+**Area proposed addition:** twenty-five taxonomy entries include materials, primitives and visual languages; not twenty-five mutually exclusive shipping presets. The role map records twelve role names, 78 contracts and 626 parts at its own historical snapshot. Each part has role/depth/paint ownership; layout-only wrappers and intrinsic content must not acquire a shell merely because they inherit controls. Those counts describe research coverage, not parity with OpenGlass's forty API components or a recounted latest-main census. {research:01-taxonomy/README.md:1-19} {research:04-role-map/README.md:22-59} {research:07-controls/controls.md:7-16}
+
+**Consequence:** a Table row, CodeBlock reading plane and Calendar range segment need explicit semantics and context caps, not a blanket `.component` glass remap. OpenGlass's menu row specialization is already a good precedent for restraint; Area generalizes that distinction into an inspectable policy. {research:05-absorption/policy.md:92-104} {og:l:766-780}
+
+## 2. Independent Surface ownership
+
+**OpenGlass current:** ordinary liquid controls own their own multi-lobe lift; shadow scales selected alpha values, not a separate elevation policy. The angle aims bloom/rim while cast offsets remain fixed. {og:l:64-75} {og:l:303-319} {og:look:35-36}
+
+**Area current:** Surface owns decorative border width and named shadow tokens; Flat emits none. In-flow controls/fields have no cast, thumbs have their allowed lift, Card and floating shells use distinct roles. {area:packages/tokens/src/axes/surface.ts:15-53} {area:docs/DESIGN_SYSTEM.md:156-165}
+
+**Area proposed difference:** Material is a separate optical axis; Surface remains the single cast owner. Derived `--area-paint-*` outputs combine inputs at receivers, with independent cast gains/geometry and relief intent. A zero-blur shadow ring is an edge, not a cast lobe to be softened. This needs actual emitter/API changes; it is not present because the report names it. {research:07-controls/architecture.md:5-27} {research:07-controls/controls.md:24-45} {research:07-controls/architecture.md:95-113}
+
+## 3. Control-by-control translation
+
+- `blur` → proposed `backdrop.blurPx`, expressed in absolute units at an eligible owner, not multiplied onto every component tier. Layer blur/shadow softness are separate. {og:look:9-10} {og:l:76-84} {research:07-controls/controls.md:30-31} {research:07-controls/controls.md:42-43}
+- `opacity` → `body.transparency` plus named paint alpha, with opaque underpaint preserved. No root opacity and no promise to turn off every existing fill. `tint` becomes role/semantic body or decorative color sources with explicit light/dark handling. {og:look:11-18} {research:07-controls/controls.md:34-41} {research:07-controls/controls.md:50-56}
+- `saturation`/`brightness` → **no direct task 07 public-field equivalents**. Area's current proposal uses declared backend/filter metadata and guards; it must explicitly add these fields if it wants exposed parity. Do not invent an already-agreed translation. {og:look:19-22} {research:07-controls/controls.md:22-46}
+- `rim` → separate decorative `stroke.opacity` and coverage/paint/profile. `highlight` → reflection/gloss controls, leaving functional edges independent. Area has more expressiveness, but requires a compiled layer/mask definition rather than one multiplier. {og:look:23-26} {research:07-controls/controls.md:39-45}
+- `lightAngle` → `light.angleDeg` with a **different convention**. OpenGlass zero is top, Area proposal zero is right; preserving physical direction requires `AreaAngle = (OpenGlassAngle - 90 + 360) % 360` (derived conversion). Area also adds light height and ambient. {og:look:27-28} {research:07-controls/controls.md:24-26}
+- `lightSpread` → no scalar one-to-one match: angular conic-ring coverage must be encoded in a named edge/reflection mask/gradient; `gloss.extent` is not degrees. {og:look:29-32} {og:l:207-217} {research:07-controls/controls.md:36-45}
+- `lensing` → OpenGlass's inner luminous band maps to declared shading/reflection parameters, **not** Area backdrop displacement. A real lens needs a separate backend/mapping contract. {og:l:64-69} {research:07-controls/controls.md:27-35} {research:07-controls/controls.md:43-45}
+- `shadow` → `surfaceControls.strengthGain` only for eligible casts; distinct lift/softness/spread/direction controls, while relief/glow remain separate. {og:look:35-36} {og:l:70-75} {research:07-controls/controls.md:28-35}
+
+Additional Area proposal channels include editable named gradient stops/coordinates, grain source/scale/seed/strength, gloss extent/softness and explicit per-role patches. OpenGlass does not expose these in its Look interface, although its CSS hard-codes gradients and glow. Area must retain the difference between representational breadth and calibrated usable presets. {og:look:8-59} {og:l:367-385} {research:07-controls/controls.md:33-60}
+
+## 4. Absorption and nesting are explicit policy
+
+**OpenGlass current:** quiet menu rows and fixed wells are role-sensitive in practice, but nested Card/Button/Dialog paint does not consult an acquisition owner, dense-family cap or total-lobe budget. {og:l:303-319} {og:l:766-780} {og:l:810-821} {og:l:922-935}
+
+**Area proposed addition:** None/Trace/Quiet/Full are ordinal channel permissions, never a scalar multiplying opacity or blur. Context/semantics narrow the style-role cell. One enclosing owner acquires glass; recessed children use local paint; rows and labels remain calm; functional scrim is separately owned. Task 11 then adds stricter effective-role budgets such as no independent blur for ordinary raised controls, wells and thumbs. These are proposed review limits, not experimentally proven universal safe thresholds. {research:05-absorption/policy.md:3-18} {research:05-absorption/policy.md:41-71} {research:11-performance/budgets.md:3-39}
+
+## 5. Theme boundaries and portals
+
+**OpenGlass current:** Theme creates its own palette and sparse Look record; local Glass overrides are CSS-only. Portals copy recorded provider tokens. F02–F04 document where this diverges from inherited effective paint. {og:theme:67-148} {og:glass:110-120} {og:i:793-817}
+
+**Area current:** React Theme merges parent axis selections and emits a complete attribute boundary. Raw DOM scope attributes are not React context; portal content needs a Theme wrapper. This is existing axis support, not an implemented material control bridge. {area:packages/react/src/components/Theme.tsx:8-33} {area:docs/THEMING.md:104-129}
+
+**Area proposed addition:** carry recipe identity, raw inputs, role patches and reset provenance through context; re-derive at axis, control-only, painted role/tone and portal boundaries. An explicit `data-area-material-scope` marker handles scalar changes without preset changes. This addresses the class of failure in F03 if implemented and tested; it does not automatically repair arbitrary consumer CSS inheritance. {research:07-controls/architecture.md:115-124} {research:07-controls/architecture.md:176-205}
+
+## 6. Readability, fallback and state precedence
+
+**OpenGlass current:** palette contrast selection, fixed backdrop-brightness heuristics, separate focus on many controls, CSS/JS reduced-transparency and forced-color branches. F06–F09 show the uncovered states, a concrete failed accent pair, and absent prefers-contrast query. {og:palette:172-241} {og:provider:90-114} {og:l:1155-1351}
+
+**Area current:** text/icon/state contrast floors, composited halo checks and fixed foreground on hover are explicit requirements; namespace separation and unregistered paired/derived colors are existing architecture rules. {area:docs/CONTRAST.md:7-64} {area:docs/DESIGN_SYSTEM.md:24-45}
+
+**Area proposed addition:** qualify worst-case allowed backdrop/state domains, distinguish raw request from effective paint, enforce opaque/system-color/readability fallbacks after user inputs, and preserve required cue geometry regardless of decorative controls. Fallback is per role and must govern state overrides and renderer paths. No adaptive-ink or arbitrary backdrop guarantee is inferred from a passing solid accent pair. {research:08-accessibility/method.md:15-45} {research:08-accessibility/fallbacks.md:5-48} {research:07-controls/controls.md:50-60}
+
+Area would also keep radius, density, typography and motion independent of material. OpenGlass's classic/liquid design deliberately changes them; that is a product-scope difference, not a reason to call its implementation invalid. {og:theme:96-105} {og:l:303-359} {research:07-controls/controls.md:56-60}
+
+## 7. Where Area is not ahead yet
+
+OpenGlass implements forty interactive React recipes, CSS material fallback, optional SDF maps and media-backed WebGL. Area task 16 is a static compiled-CSS specimen for selected presets/families with documented omissions; it is not a shipped material runtime or a replacement for those interaction contracts. Task 15 already found contradictions between Area's inheritance proposal and complete preset records, and between presets and role lobe budgets. Those must be resolved before claiming stronger implementation consistency. {og:i:264-421} {og:a:575-746} {og:packages/react/src/filters.tsx:56-136} {og:packages/react/src/webgl-surface.tsx:14-32} {research:16-specimen/README.md:1-20} {research:16-specimen/limitations.md:20-36} {research:15-consistency/findings.md:5-43}
+
+**Recommendation:** retain OpenGlass's strongest ideas—shared input variables, specialized recipes, quiet nested rows, explicit fallback paths and native component semantics—then implement and test Area's receiver/cap/ownership contracts before adding broader presets. The novelty claim should be “broader, explicitly constrained material composition,” not “the first global adjustable material system.”

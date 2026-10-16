@@ -1,0 +1,905 @@
+{
+  "research": "b0768c8d809946b82d6b00139ecc33fe4e57f528",
+  "area": "3bcc6a93b93f73aa6bef410dbe88d93b0caddb7e",
+  "checked": "2026-10-10",
+  "brief": {
+    "file": "README.md",
+    "sha256": "977a7bac83ceafad68f4cf435d119fd418690aa4e758b9d16e55fe589a433d04"
+  },
+  "files": [
+    {
+      "file": "01-taxonomy/README.md",
+      "bytes": 9652,
+      "sha256": "8da9830505241f56b4a807000c41ce044f6653bf95e56878a71713b2eef1cb5b",
+      "lines": 62
+    },
+    {
+      "file": "01-taxonomy/catalogue.md",
+      "bytes": 14827,
+      "sha256": "92529dac431922c9462bfe2503f285a4dfd45ddf2927e430a282cacba128054f",
+      "lines": 282
+    },
+    {
+      "file": "01-taxonomy/ingredient-matrix.md",
+      "bytes": 9692,
+      "sha256": "c4856a6554630d365cb6f460ea4dc0b188467a6d5a7ee0bd05ac9362ffa4daf6",
+      "lines": 99
+    },
+    {
+      "file": "01-taxonomy/layer-model.md",
+      "bytes": 15726,
+      "sha256": "0201655feb2de0076b5dbd8cff5ef4667a48874586175f83cd15252c8787d470",
+      "lines": 104
+    },
+    {
+      "file": "01-taxonomy/render.py",
+      "bytes": 5258,
+      "sha256": "d7c28669c1d5689468f128b58fde7a19e035e8bdf30d0730363cd6e478fa51e3",
+      "lines": 85
+    },
+    {
+      "file": "01-taxonomy/sources.md",
+      "bytes": 4788,
+      "sha256": "584d29bdbbde64c045f62b1f302140c0a27b0e36c52bbb9b541344a3bc546199",
+      "lines": 135
+    },
+    {
+      "file": "01-taxonomy/taxonomy.json",
+      "bytes": 32004,
+      "sha256": "a3596c879e5b1d4908b65f1e0c15b4f9477843c571649f69dc0871a950295012",
+      "lines": 759
+    },
+    {
+      "file": "02-prior-art/.gitignore",
+      "bytes": 28,
+      "sha256": "1c11e77899866b87dd6e83e3df0443056c3ad3012041cbc6777070d585d35b3a",
+      "lines": 2
+    },
+    {
+      "file": "02-prior-art/README.md",
+      "bytes": 11884,
+      "sha256": "ba4639fb6c12f061c42f54cc048ab1b3b0d834c19ee6aa8fe5ac78e871014c17",
+      "lines": 83
+    },
+    {
+      "file": "02-prior-art/read-sources.py",
+      "bytes": 2778,
+      "sha256": "a84fcdd64416389304b61d3ca92b884554fd64d5f3067a44fb287d79b8a03b5f",
+      "lines": 39
+    },
+    {
+      "file": "02-prior-art/source-integrity.json",
+      "bytes": 7802,
+      "sha256": "5bcbe78b10efde7b3529a0799c9dcd4974c07b5d0375774b1e6564f889ef4bf8",
+      "lines": 254
+    },
+    {
+      "file": "02-prior-art/source-lock.json",
+      "bytes": 4231,
+      "sha256": "a7d1274a746b465fd0f3beff32de2cf2847d2215e1a80caad60f0f67dd4acc86",
+      "lines": 142
+    },
+    {
+      "file": "02-prior-art/survey.json",
+      "bytes": 29384,
+      "sha256": "eafb97610874466143b92ca2623d5749586934e21d008f5917c31ac40914a768",
+      "lines": 298
+    },
+    {
+      "file": "02-prior-art/survey.md",
+      "bytes": 29031,
+      "sha256": "7a67ebd6991be2e40362fcdfad82d3f66764c06d669d6d71bdaa928474acb271",
+      "lines": 344
+    },
+    {
+      "file": "02-prior-art/verify.py",
+      "bytes": 3045,
+      "sha256": "0bc19847d1273d95c5dec369bd45d7b84e5dd863cc8f8809da92643ec3af7d31",
+      "lines": 40
+    },
+    {
+      "file": "03-css-cookbook/.gitignore",
+      "bytes": 28,
+      "sha256": "aec0cfd3b55f9e65f9f7b1f8c53a4a94bbc53f4effe2f86670f58d262b24f174",
+      "lines": 2
+    },
+    {
+      "file": "03-css-cookbook/README.md",
+      "bytes": 5707,
+      "sha256": "0f972dbee57ba97428e23b6cc4ec2012abdd972c4108b8220c986978a9229581",
+      "lines": 50
+    },
+    {
+      "file": "03-css-cookbook/area-integration.md",
+      "bytes": 6226,
+      "sha256": "4e72a7d90f192523724733e845cd6ba745082aeee8052ff858cfdb91590c8c96",
+      "lines": 31
+    },
+    {
+      "file": "03-css-cookbook/caniuse-data.json",
+      "bytes": 110500,
+      "sha256": "a26f37c9efe184501a5646e68e85d89eceafe9486173dc77e604eea06e83cffa",
+      "lines": 4746
+    },
+    {
+      "file": "03-css-cookbook/compat-data.json",
+      "bytes": 27836,
+      "sha256": "41bf50203474fd1fdd404d5344a3bc664d6e5296d3838850aca98e4a8049df67",
+      "lines": 779
+    },
+    {
+      "file": "03-css-cookbook/compatibility.md",
+      "bytes": 12424,
+      "sha256": "1f5778c661e40f746301e6ac68a358b49491c3ad3f2e5c2bef3ff3dbba2bb7dd",
+      "lines": 48
+    },
+    {
+      "file": "03-css-cookbook/cookbook.md",
+      "bytes": 26653,
+      "sha256": "ff3d95cd8383549df9f4e79bff456fa6bc564e1329dce8871901567709b5248d",
+      "lines": 234
+    },
+    {
+      "file": "03-css-cookbook/glass.html",
+      "bytes": 4706,
+      "sha256": "2cfae31bfa8833bedce702f2c18408162af2be8721428f4f9bf7b25b5d4e7953",
+      "lines": 30
+    },
+    {
+      "file": "03-css-cookbook/grain.svg",
+      "bytes": 464,
+      "sha256": "2c059cc61f03ddb57d6932c09c77830d82cd4f26ebd54a5ee5a656f0d5b332bc",
+      "lines": 8
+    },
+    {
+      "file": "03-css-cookbook/index.html",
+      "bytes": 4347,
+      "sha256": "c42035dd2f61513e3e06c75bb1b9c035ca7555f038fbb519080747612c19c4fc",
+      "lines": 12
+    },
+    {
+      "file": "03-css-cookbook/lab.css",
+      "bytes": 10120,
+      "sha256": "3d4c3da702c7464a1ef8bb5d3fe1ebf52bd521e3d8feee7882a0fd4dabd3ac47",
+      "lines": 143
+    },
+    {
+      "file": "03-css-cookbook/lab.js",
+      "bytes": 1492,
+      "sha256": "30ddd360571b9116045f8ae627cfbbab126111eb1e6d316fa66a564699446616",
+      "lines": 22
+    },
+    {
+      "file": "03-css-cookbook/refresh-compat.py",
+      "bytes": 3981,
+      "sha256": "9a72d8b09bca2f6d5751e85a8c732147a7f9fa60d1624a07f35e4b79eaca6414",
+      "lines": 60
+    },
+    {
+      "file": "03-css-cookbook/scopes.html",
+      "bytes": 3934,
+      "sha256": "9af7294cfe7aef54ff497e8533abb405006232f2c67d8e8c0e806461129e8ab7",
+      "lines": 19
+    },
+    {
+      "file": "03-css-cookbook/verification.md",
+      "bytes": 6488,
+      "sha256": "a65d99e919b7c0967c4dc98ac8850067f1b6fdc42e767a5f6121b6b947798f27",
+      "lines": 47
+    },
+    {
+      "file": "03-css-cookbook/verify.py",
+      "bytes": 3353,
+      "sha256": "90ced3f44c37d536ceded96ac2977234d39b1195c1040c4fbc60e06d0fe349d0",
+      "lines": 64
+    },
+    {
+      "file": "04-role-map/.gitignore",
+      "bytes": 13,
+      "sha256": "32dae3052f331ee34d628ef535709b301259a45df7c7522c4d35dcf49873f00b",
+      "lines": 1
+    },
+    {
+      "file": "04-role-map/README.md",
+      "bytes": 14631,
+      "sha256": "4d24a854ceab53fc8aa192fa64d2d608a6ccda7960743c407a3c17f4946f0d65",
+      "lines": 79
+    },
+    {
+      "file": "04-role-map/assignments.py",
+      "bytes": 20815,
+      "sha256": "d761395ecc5fcec87d830bd9aa153a6276cecf9bdf3d0b89b0407b3c3f9ecd66",
+      "lines": 241
+    },
+    {
+      "file": "04-role-map/build.py",
+      "bytes": 18269,
+      "sha256": "c12e349cfef3899ec264f8547512fa105d2d89b704da506bb37281373e6d8059",
+      "lines": 200
+    },
+    {
+      "file": "04-role-map/compositions.py",
+      "bytes": 13453,
+      "sha256": "73a071eafc652775c2b48697c07021ff9f1688ebda0feabce689d4440470ae59",
+      "lines": 114
+    },
+    {
+      "file": "04-role-map/extras.py",
+      "bytes": 14599,
+      "sha256": "63765fcc7818bdb582ec5adeb7fc1c1a9acb9430fd102f2837da144155134de3",
+      "lines": 119
+    },
+    {
+      "file": "04-role-map/refinements.py",
+      "bytes": 3075,
+      "sha256": "92e24816bf1bf77f8aa8b99a93e51ce5120001589d56dae981f0442b7dd44ee1",
+      "lines": 38
+    },
+    {
+      "file": "04-role-map/role-map.json",
+      "bytes": 346737,
+      "sha256": "462e81de6fd133c378b08a03ded1d687502ce99eb924956768b5a5c26d699ea3",
+      "lines": 14559
+    },
+    {
+      "file": "04-role-map/role-map.md",
+      "bytes": 329109,
+      "sha256": "f458cda92fa1e513a9b27ac6c8c765bc5750ee3b76b3e77353c670cea9d987b3",
+      "lines": 1659
+    },
+    {
+      "file": "04-role-map/source.py",
+      "bytes": 2703,
+      "sha256": "708c820cbfc56961b84b844df996bb3807836667f3fdd3e857ef6484671a03b3",
+      "lines": 50
+    },
+    {
+      "file": "05-absorption/.gitignore",
+      "bytes": 13,
+      "sha256": "32dae3052f331ee34d628ef535709b301259a45df7c7522c4d35dcf49873f00b",
+      "lines": 1
+    },
+    {
+      "file": "05-absorption/README.md",
+      "bytes": 10128,
+      "sha256": "f42d0b16cdcda60e6fda70bbc7ad533a405f8091e53ae7c553d7d3d580a642d0",
+      "lines": 55
+    },
+    {
+      "file": "05-absorption/absorption.json",
+      "bytes": 242647,
+      "sha256": "3a2d72e2600af9f5883d829e2ae93d7bf7b3974321b340c298d600c7deda8ce6",
+      "lines": 7151
+    },
+    {
+      "file": "05-absorption/build.py",
+      "bytes": 12379,
+      "sha256": "52a2ce32a7667695bf1a49f5bb18509d0a639dd218f572d56fee7ef69fa7d993",
+      "lines": 107
+    },
+    {
+      "file": "05-absorption/family-exceptions.md",
+      "bytes": 77264,
+      "sha256": "8cd9351e1759d8fe86e19c3dff888822c765403b3c8e178586765675f6ab24d5",
+      "lines": 452
+    },
+    {
+      "file": "05-absorption/guards.py",
+      "bytes": 14908,
+      "sha256": "c81717ce440b8fff9cc01ad354cb88aed53d40f74edab6a0d0e5b1c9bc5ee1dc",
+      "lines": 117
+    },
+    {
+      "file": "05-absorption/policy.md",
+      "bytes": 19745,
+      "sha256": "d41a03b4d3a92ff355479dd890096ea06fd11ed898e6f0a966b0977174c1e7d5",
+      "lines": 110
+    },
+    {
+      "file": "05-absorption/recipes.md",
+      "bytes": 64706,
+      "sha256": "457bce9b0b2cfa655b383ab401e3f6b109b95e9c984637deebd55dff96c56d15",
+      "lines": 616
+    },
+    {
+      "file": "05-absorption/recipes.py",
+      "bytes": 28537,
+      "sha256": "1686a264f196e59c13f1e804090f6037309d6107af64a29749f71fcdcd2a444c",
+      "lines": 352
+    },
+    {
+      "file": "06-references/.gitignore",
+      "bytes": 28,
+      "sha256": "1c11e77899866b87dd6e83e3df0443056c3ad3012041cbc6777070d585d35b3a",
+      "lines": 2
+    },
+    {
+      "file": "06-references/README.md",
+      "bytes": 8360,
+      "sha256": "9fe84c2699339968850d605a7aa6a17139a630af0faf74b426d8f480b5fe08e8",
+      "lines": 60
+    },
+    {
+      "file": "06-references/access-ledger.md",
+      "bytes": 7629,
+      "sha256": "3ccbd3233a70490d5aba49dccb77ee9d815ca2cf7319de7c2fcb0c859a9d8cd5",
+      "lines": 38
+    },
+    {
+      "file": "06-references/board-coverage.md",
+      "bytes": 8014,
+      "sha256": "6daa1ad6c589a57566c23454980ea870a11a9e157e47d1fa5bd39b1e8981d194",
+      "lines": 25
+    },
+    {
+      "file": "06-references/build.py",
+      "bytes": 5496,
+      "sha256": "b8cb14fbc1cc53923dbbf6048125120c4c57f5c38ef30a297da4184e14295ac7",
+      "lines": 63
+    },
+    {
+      "file": "06-references/catalogue.md",
+      "bytes": 34614,
+      "sha256": "669f5508952946554f13d35ea885e6b5976d30255f23b9b6de06eebb48dec9a7",
+      "lines": 293
+    },
+    {
+      "file": "06-references/catalogue.py",
+      "bytes": 31685,
+      "sha256": "0243da52fbaa546fd390fa78ef25045248a24e0f07d79710da4c6ca926f2a467",
+      "lines": 218
+    },
+    {
+      "file": "06-references/read-sources.py",
+      "bytes": 2095,
+      "sha256": "cc59c465241b1c2b50c155461521d481940193e64cd131d2a48e2631140e6c80",
+      "lines": 38
+    },
+    {
+      "file": "06-references/references.json",
+      "bytes": 73017,
+      "sha256": "5dcf6b2bfc8180a1c24f0bf343d09ee93c571fa43c34cf62855f29d399ef36cb",
+      "lines": 1961
+    },
+    {
+      "file": "06-references/source-integrity.json",
+      "bytes": 6015,
+      "sha256": "22988c072176f48fd476577d4b4abe353cfd72209f2b91e05f67aa17926a384a",
+      "lines": 162
+    },
+    {
+      "file": "06-references/source-lock.json",
+      "bytes": 1791,
+      "sha256": "297a688c6f43adb43d8e074dda1719538a71d99338c98d143c2e8ecff1da8604",
+      "lines": 60
+    },
+    {
+      "file": "07-controls/README.md",
+      "bytes": 5781,
+      "sha256": "5b6f75e68a46798cf1dbf6ba9c813570d919255f0106b60b4d8271bd5bbf5764",
+      "lines": 43
+    },
+    {
+      "file": "07-controls/architecture.md",
+      "bytes": 27777,
+      "sha256": "f59beb016974d84508f27b92db3713988e439bdd7abefd0813a24567586daa4f",
+      "lines": 221
+    },
+    {
+      "file": "07-controls/check.py",
+      "bytes": 3779,
+      "sha256": "b415b4408455cf93e31a4a0a5f90a1d64bf1902df5d84abda6f5e142e52d7e4c",
+      "lines": 71
+    },
+    {
+      "file": "07-controls/controls.md",
+      "bytes": 19185,
+      "sha256": "32d5ecf899c2983ec326e3065f63daa2c84a38337af98df1185d6668c41fd681",
+      "lines": 124
+    },
+    {
+      "file": "07-controls/evidence.md",
+      "bytes": 11192,
+      "sha256": "2e72d3698991efb81937a50914aa057872c4ab9632a0e5dd81e2d25ddb30a035",
+      "lines": 57
+    },
+    {
+      "file": "08-accessibility/README.md",
+      "bytes": 5620,
+      "sha256": "23a281d717646f6fe43aeeef5c79ebaf494e36be510aa9b1f2f2429a6d88889a",
+      "lines": 46
+    },
+    {
+      "file": "08-accessibility/build.py",
+      "bytes": 3000,
+      "sha256": "31b121f4dfe51a94c21a1d983d5fa33c7f6ed197cbf994d730c9b74718426f3a",
+      "lines": 41
+    },
+    {
+      "file": "08-accessibility/check.py",
+      "bytes": 3560,
+      "sha256": "0935f99eb3539f70fa728c44c15df069acfa6b207f553d6ecf8aaa6b5a5d5721",
+      "lines": 58
+    },
+    {
+      "file": "08-accessibility/evidence.md",
+      "bytes": 9222,
+      "sha256": "84345605ff48e21e4d6a07a1a3803743faa7ccde5483e065c0ffc4f56bc24b34",
+      "lines": 33
+    },
+    {
+      "file": "08-accessibility/experiments.json",
+      "bytes": 1564,
+      "sha256": "ab55824588bad95e2ad4155cb3f19dbb99883d717d5eede602f9dfe98050223d",
+      "lines": 34
+    },
+    {
+      "file": "08-accessibility/experiments.py",
+      "bytes": 3069,
+      "sha256": "8ce2a2307fb50688b0a6879b41bfa34f2d74c988ffcd183721a8986d8e069901",
+      "lines": 66
+    },
+    {
+      "file": "08-accessibility/fallbacks.md",
+      "bytes": 11084,
+      "sha256": "5456413099b530f8cb25135f02bde497eb515d61e503b11cb00d81c449c47717",
+      "lines": 48
+    },
+    {
+      "file": "08-accessibility/method.md",
+      "bytes": 13222,
+      "sha256": "2962e807e415ce228845b853e469062acfed451b5632a8bb49654afbc7cf3e31",
+      "lines": 67
+    },
+    {
+      "file": "08-accessibility/style_data.py",
+      "bytes": 15419,
+      "sha256": "4974f194af6e68ffc757ba2df416d9b27cb369505228cc99d153106919f8c0bf",
+      "lines": 204
+    },
+    {
+      "file": "08-accessibility/styles.json",
+      "bytes": 25202,
+      "sha256": "27deacdf6822137f0f72630e7b6a41ff7471234b1855a5d4989e77238a43ee04",
+      "lines": 331
+    },
+    {
+      "file": "08-accessibility/styles.md",
+      "bytes": 27390,
+      "sha256": "e9db56b3380367604fc76f767e0a8397d0238e2b12ba1f41bc49bee120f54558",
+      "lines": 357
+    },
+    {
+      "file": "08-accessibility/tests.md",
+      "bytes": 13346,
+      "sha256": "ab78aeb1f34785a631656223386f3b4470e4745e50a8f849189a6336229573fc",
+      "lines": 96
+    },
+    {
+      "file": "09-dark-density/README.md",
+      "bytes": 7193,
+      "sha256": "bb3013b3ef38363dff54a85d40ca6ab6f6cbd93ed18e122a2e68bba6779f6975",
+      "lines": 52
+    },
+    {
+      "file": "09-dark-density/build.py",
+      "bytes": 4319,
+      "sha256": "8420fcff7e05a99d2c592462efc81b638a8d74542aae1c043e70ed8869a1ea87",
+      "lines": 39
+    },
+    {
+      "file": "09-dark-density/check.py",
+      "bytes": 3799,
+      "sha256": "72894416b2368ea49b4a064fd207779e30bc92b2a2de13934aeb213b90a43dfb",
+      "lines": 62
+    },
+    {
+      "file": "09-dark-density/evidence.md",
+      "bytes": 11887,
+      "sha256": "1876882774deb7f9b60bf6429314dc8830d4bb6c52bf94c3d359e2e3f4c3c29f",
+      "lines": 38
+    },
+    {
+      "file": "09-dark-density/geometry.json",
+      "bytes": 13706,
+      "sha256": "a6857ebbdea04ce92adf6e1efe16be3dd8c97397f798150862432f6506b08e84",
+      "lines": 711
+    },
+    {
+      "file": "09-dark-density/geometry.md",
+      "bytes": 3746,
+      "sha256": "f049aed74b3e46845ebd134d4dd6469269fa173d6359d0c557f7e807f429f939",
+      "lines": 59
+    },
+    {
+      "file": "09-dark-density/render_styles.py",
+      "bytes": 5100,
+      "sha256": "dc86384c70949f67763f8b1042b5c4e2887c15d94b27b1f863bae9e01c324b3c",
+      "lines": 35
+    },
+    {
+      "file": "09-dark-density/rules.md",
+      "bytes": 12092,
+      "sha256": "8cf020ba7bc00bbbe2f6893509093a789ffd8e064acecc6dc54fa8826d1d73e2",
+      "lines": 59
+    },
+    {
+      "file": "09-dark-density/style_data.py",
+      "bytes": 15603,
+      "sha256": "7f5b79d48646fb4607f4695ea6677524faa273a34d8a5eb36d2db49788098855",
+      "lines": 159
+    },
+    {
+      "file": "09-dark-density/styles.json",
+      "bytes": 27387,
+      "sha256": "521abf5b113a54357aec383b26dbabb4052752a315dac286561aee564fcbc82b",
+      "lines": 556
+    },
+    {
+      "file": "09-dark-density/styles.md",
+      "bytes": 31166,
+      "sha256": "23c145481f45d9b8f3617b81e678fabbf86666ac1f26cbf31793d3e7787f4894",
+      "lines": 464
+    },
+    {
+      "file": "10-states/README.md",
+      "bytes": 6792,
+      "sha256": "53a31743b223f0e3fd4ac61dbf8f350bc6c2e79780028bd6c460603c70cee085",
+      "lines": 51
+    },
+    {
+      "file": "10-states/build.py",
+      "bytes": 3734,
+      "sha256": "f100b8232226dddd2f3e937900ebe6ad3562d701a6ace51ee7e4e9792b6dd49c",
+      "lines": 30
+    },
+    {
+      "file": "10-states/check.py",
+      "bytes": 2962,
+      "sha256": "ac8acf5370308e7bc4cc939798b4f60b6d4e46d01659682218544a5bf6c5d9d5",
+      "lines": 44
+    },
+    {
+      "file": "10-states/evidence.md",
+      "bytes": 13407,
+      "sha256": "a5f960302e913745b2bbec1c0e73a5ee4a2236ae56ba0589c60b04ee41618001",
+      "lines": 52
+    },
+    {
+      "file": "10-states/policy.md",
+      "bytes": 16038,
+      "sha256": "f6ba0e19cff859f0b9dd914fdec1ade697e33d90d5c9c19995bbf42c430e42b8",
+      "lines": 84
+    },
+    {
+      "file": "10-states/recipes.py",
+      "bytes": 15321,
+      "sha256": "50a765027c674c3d74df4d223d5c15aa312d91f5fbd5591265db97433c5ebcd3",
+      "lines": 181
+    },
+    {
+      "file": "10-states/states.json",
+      "bytes": 44689,
+      "sha256": "7ce6745dbfb173749862138067c05f1aa51d924b7148ae554e44acf2edac31e1",
+      "lines": 332
+    },
+    {
+      "file": "10-states/states.md",
+      "bytes": 51626,
+      "sha256": "2a823d42f35110d6cbe12c80459c3ffe2e05e79e966ca870a88f6dace205d157",
+      "lines": 460
+    },
+    {
+      "file": "11-performance/README.md",
+      "bytes": 12130,
+      "sha256": "9ee60cb6125e389b78b74c5b60f9e62ca1fe5ffdfb7fff15d557d4a89fb3a4fb",
+      "lines": 83
+    },
+    {
+      "file": "11-performance/analyze.py",
+      "bytes": 5339,
+      "sha256": "2ec25adc79fc1e9a4939fb164b399383c2435591b4db8c22dcbc846e4e74fbfd",
+      "lines": 58
+    },
+    {
+      "file": "11-performance/bench.css",
+      "bytes": 2693,
+      "sha256": "8a838179c4845984c77f8e8064716ae0a22c1dcfdabac3b7d44591bdf75cc336",
+      "lines": 5
+    },
+    {
+      "file": "11-performance/bench.js",
+      "bytes": 11358,
+      "sha256": "0ae7669a1262fcfb630073b1d38b56ddbdc6a742df2efd337da2a13f952ae182",
+      "lines": 78
+    },
+    {
+      "file": "11-performance/budgets.md",
+      "bytes": 11533,
+      "sha256": "265f1a071a2d542de96b29710fd213ed8a166d051fe83e5d265065f20f0034e0",
+      "lines": 48
+    },
+    {
+      "file": "11-performance/environment.json",
+      "bytes": 1518,
+      "sha256": "691788911615ab6d5b1f602fea330714db79845404e10699423bda7b622faa94",
+      "lines": 33
+    },
+    {
+      "file": "11-performance/fixtures.html",
+      "bytes": 1767,
+      "sha256": "bae3c17084d4c9b881e7077ce51c918929488ab7cf9c3950e0488fd6eff91075",
+      "lines": 4
+    },
+    {
+      "file": "11-performance/index.html",
+      "bytes": 1481,
+      "sha256": "8ddac2c0445dabcd9557c964ad7871296efc4200d3722ba1ede657c68cdefeaa",
+      "lines": 4
+    },
+    {
+      "file": "11-performance/inspect.js",
+      "bytes": 667,
+      "sha256": "4bfee6e452378907e46e16497886c992a5629ac80f5f140df3b8bb6ac47da1c4",
+      "lines": 6
+    },
+    {
+      "file": "11-performance/method.md",
+      "bytes": 10341,
+      "sha256": "9a46839d968121453ae647df2a48938d9685b9635dba51f7e094c80a560838a5",
+      "lines": 61
+    },
+    {
+      "file": "11-performance/results.html",
+      "bytes": 3180,
+      "sha256": "34f0ed7f8cd4bc92f7ff4979c550f355de4d6bc307f2eb52617c0d27ee4257a4",
+      "lines": 8
+    },
+    {
+      "file": "11-performance/results.md",
+      "bytes": 31981,
+      "sha256": "b49062c5144a5d641291791a3a06bf1d7bd7c8b21e259318bd1d3be15e2f840d",
+      "lines": 269
+    },
+    {
+      "file": "11-performance/results/edge.json",
+      "bytes": 379203,
+      "sha256": "471cbe663497209a33e247d604e83d92790c1d22a0fe1e2e094937f798534c77",
+      "lines": 16169
+    },
+    {
+      "file": "11-performance/results/safari.json",
+      "bytes": 315333,
+      "sha256": "e9b31223827898eefef232057c54993de792881bae274c7b824b035c2bdaa378",
+      "lines": 15035
+    },
+    {
+      "file": "11-performance/serve.py",
+      "bytes": 1331,
+      "sha256": "2a54ca52aa59859106e3d89bc1fedeb20cd7831a0b19085615f3374110cd89f1",
+      "lines": 24
+    },
+    {
+      "file": "11-performance/summary.json",
+      "bytes": 162964,
+      "sha256": "5413ece46aeb271776d1bb2914c30bf2e1b6748451d89c38def05b64c058ae38",
+      "lines": 6260
+    },
+    {
+      "file": "11-performance/verification.md",
+      "bytes": 3514,
+      "sha256": "60b4c0d9c87edb45d890f5190fce0cf778acd5b3cc108b81b885d344a8833049",
+      "lines": 32
+    },
+    {
+      "file": "12-glyphs-text/README.md",
+      "bytes": 3942,
+      "sha256": "9ee09c502d7e64376b939cb4b91f9e4bf2290f4b8a838851fef57fc284cd9178",
+      "lines": 28
+    },
+    {
+      "file": "12-glyphs-text/build-fixtures.py",
+      "bytes": 1594,
+      "sha256": "726713846e201913230cd92c32a82784d2a812d38ff9003c7bdaa47b14439627",
+      "lines": 25
+    },
+    {
+      "file": "12-glyphs-text/fixtures.json",
+      "bytes": 2036,
+      "sha256": "172f1a95222cffc49713c08fa0158ebd010cce6e2bcbe0c474138aff7a52d795",
+      "lines": 13
+    },
+    {
+      "file": "12-glyphs-text/index.html",
+      "bytes": 1107,
+      "sha256": "35cdc43d911a5e0d2b628c6ec6362206531acb0c6f970ac42ea69452d9a7db6e",
+      "lines": 19
+    },
+    {
+      "file": "12-glyphs-text/lab.css",
+      "bytes": 3325,
+      "sha256": "d51e160c3f25608f52c7ff1729e7dfaea2a62643d22273a0bb0208be6d1c7cbc",
+      "lines": 45
+    },
+    {
+      "file": "12-glyphs-text/lab.js",
+      "bytes": 2852,
+      "sha256": "2b77b24cd13ff73a2d6193036fde45a50fea937549125eadbbffd5f0eed62242",
+      "lines": 37
+    },
+    {
+      "file": "12-glyphs-text/legibility.md",
+      "bytes": 10807,
+      "sha256": "30c25ada12d5557ade2cb200abf028406aca1792a02968f5d4b323120b2da04a",
+      "lines": 60
+    },
+    {
+      "file": "12-glyphs-text/serve.py",
+      "bytes": 449,
+      "sha256": "9072ce6efe648b32738ff870cc614a007947d35451f7c0feccf99b5ffdba44fa",
+      "lines": 9
+    },
+    {
+      "file": "12-glyphs-text/sources.md",
+      "bytes": 8765,
+      "sha256": "fe3a36e40b70152542c882f2fe35be2f29bdc9303e4ea98f27cc32edf8e19fb0",
+      "lines": 31
+    },
+    {
+      "file": "12-glyphs-text/treatments.md",
+      "bytes": 13509,
+      "sha256": "658b8eaf4d10080e965445e9ff79b35a93c678bd880cf9b5c265bbb0a9a9e970",
+      "lines": 65
+    },
+    {
+      "file": "12-glyphs-text/verification.md",
+      "bytes": 4330,
+      "sha256": "7854c40d80121d82c950111dab3f1f1b720ae4d24b510b49dec1dab4dcc5c443",
+      "lines": 32
+    },
+    {
+      "file": "13-presets/README.md",
+      "bytes": 8671,
+      "sha256": "b5fc1159f9f4836aa2e1134afc95380151003b27bcbd11ed286ba24fda232170",
+      "lines": 62
+    },
+    {
+      "file": "13-presets/build.py",
+      "bytes": 15741,
+      "sha256": "50c0000818fe62ee2f1a66846cc875d874db142c8ba8b462b56ff06e095d5f5a",
+      "lines": 142
+    },
+    {
+      "file": "13-presets/combinations.md",
+      "bytes": 24951,
+      "sha256": "a7fa00d9c6595929c6e09f55a0b206408e1beec70da7c51078ba0c046afdaa8d",
+      "lines": 440
+    },
+    {
+      "file": "13-presets/combinations.py",
+      "bytes": 7280,
+      "sha256": "f71b94d06d29a0ecdd34823a1ead90f168bc0718fb35a9395e822e012fbaa268",
+      "lines": 73
+    },
+    {
+      "file": "13-presets/compatibility.json",
+      "bytes": 113605,
+      "sha256": "619cd516e33431a0a5d3b1e517f40f0c5fe69b921677ffbdadee4d984b342d77",
+      "lines": 3849
+    },
+    {
+      "file": "13-presets/contract.md",
+      "bytes": 18030,
+      "sha256": "6441a20d05e54408182811922e36a84c38ab9d579d9025370be5e65a8a34d228",
+      "lines": 82
+    },
+    {
+      "file": "13-presets/evidence.md",
+      "bytes": 25686,
+      "sha256": "4e6f54f299d6e6337e38c2673f538508588bca42ee53780c659b255bc68c0e5d",
+      "lines": 194
+    },
+    {
+      "file": "13-presets/model.py",
+      "bytes": 14510,
+      "sha256": "0092ea6963e5c3fc6bbb368bfe78b995c35c6595b7df4c1386cca80c245c5908",
+      "lines": 99
+    },
+    {
+      "file": "13-presets/presets.json",
+      "bytes": 588712,
+      "sha256": "55a6dc3710787c9a0d30655e84c1922884a8ac4426de562da84f382bd1c6f541",
+      "lines": 16648
+    },
+    {
+      "file": "13-presets/presets.md",
+      "bytes": 49214,
+      "sha256": "13a21e344c0030e3131b256c65e9e6b408cd413f910d129f873893a5de1870db",
+      "lines": 277
+    },
+    {
+      "file": "13-presets/reference-inputs.json",
+      "bytes": 39330,
+      "sha256": "33c2a5649cf15ab56666a15cda0932e450274e9d203bc1718a3a150ff227c1be",
+      "lines": 1036
+    },
+    {
+      "file": "14-tooling/README.md",
+      "bytes": 7502,
+      "sha256": "e6f448a7302f389425b82e7007e5962a1e7fcb995294f7369df6121c6ceff309",
+      "lines": 56
+    },
+    {
+      "file": "14-tooling/acceptance.md",
+      "bytes": 5773,
+      "sha256": "814ec4cd8b1e4cfcb8620bb0c0a9533a8b125a11fe5633e1b9dbe614b63785c3",
+      "lines": 36
+    },
+    {
+      "file": "14-tooling/build.py",
+      "bytes": 11342,
+      "sha256": "f09a75db1705970ffdde08385a09159726f2c5be46e6d128ccba4e5ac78bc3ac",
+      "lines": 125
+    },
+    {
+      "file": "14-tooling/builder.md",
+      "bytes": 11607,
+      "sha256": "89c266ca7f1dc5d0aceab13a2fa65aad5198ff6b98d4356584e3798be666a51e",
+      "lines": 76
+    },
+    {
+      "file": "14-tooling/evidence.md",
+      "bytes": 8856,
+      "sha256": "5f451275c38c9a099eac7e1e2d260d8d5e634021eca81bd45f0fb87b4e61909a",
+      "lines": 59
+    },
+    {
+      "file": "14-tooling/examples/material.area.json",
+      "bytes": 78792,
+      "sha256": "4eb70c5c3758f0f31664e1da8fbb14dae5e928d29b79407ab30cf8d6d1a35113",
+      "lines": 2250
+    },
+    {
+      "file": "14-tooling/examples/projection-input.json",
+      "bytes": 2067,
+      "sha256": "c4e229e08776305ee5eda5afadf4c4561e9c45969bfe10ded3e2519ef4ba21ff",
+      "lines": 121
+    },
+    {
+      "file": "14-tooling/examples/projection.loss.json",
+      "bytes": 4424,
+      "sha256": "3b0de0f80b94bf03b5567d54e3915ada443ea9b88dc0de905bc154e3345bf5aa",
+      "lines": 185
+    },
+    {
+      "file": "14-tooling/examples/projection.tokens-studio-legacy.json",
+      "bytes": 867,
+      "sha256": "ff6adce1339a5c040292e23bfc719cb9076fc6e424bdf2447e423a7e42a578bf",
+      "lines": 41
+    },
+    {
+      "file": "14-tooling/examples/projection.tokens.json",
+      "bytes": 2356,
+      "sha256": "e3fc5d0dfaf927ad7db33c9354a1cac168af329446040741eab451fe1133cc41",
+      "lines": 121
+    },
+    {
+      "file": "14-tooling/exports.md",
+      "bytes": 18488,
+      "sha256": "9a391573eea0461a8e2e47f9a6cb5a3438575f397f97cb38e8b40668251d7d2a",
+      "lines": 104
+    },
+    {
+      "file": "14-tooling/sources.json",
+      "bytes": 7283,
+      "sha256": "f54c77fd0e74a4bc7a2c772da800003ea04deb8baf7c9f8f6b6f86217776d46a",
+      "lines": 209
+    },
+    {
+      "file": "14-tooling/sources.py",
+      "bytes": 5055,
+      "sha256": "33a3f2954de285060c40f19fb8ab40cfb61311fc97123012c1d29e8731dd759f",
+      "lines": 38
+    }
+  ]
+}

@@ -1,0 +1,3007 @@
+[
+  {
+    "family": "search-field",
+    "layer": 3,
+    "label": "Clear action inside the field",
+    "evidence": [
+      {
+        "unit": "a:SearchField",
+        "needle": "onClear",
+        "analogue": false
+      },
+      {
+        "unit": "c:Search",
+        "needle": "closeButtonLabel",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "search-field",
+    "layer": 3,
+    "label": "Dedicated submit action",
+    "evidence": [
+      {
+        "unit": "n:input/Search",
+        "needle": "enterButton",
+        "analogue": false
+      },
+      {
+        "unit": "a:SearchField",
+        "needle": "onSubmit",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "password-field",
+    "layer": 2,
+    "label": "Controlled reveal state",
+    "evidence": [
+      {
+        "unit": "t:PasswordInput",
+        "needle": "visible",
+        "analogue": false
+      },
+      {
+        "unit": "n:input/Password",
+        "needle": "visibilityToggle",
+        "analogue": false
+      },
+      {
+        "unit": "k:password-input",
+        "needle": "Controlled Visibility",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "password-field",
+    "layer": 3,
+    "label": "Strength and help content",
+    "evidence": [
+      {
+        "unit": "t:PasswordInput",
+        "needle": "Strength meter",
+        "analogue": false
+      },
+      {
+        "unit": "k:password-input",
+        "needle": "Strength",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "multi-select",
+    "layer": 3,
+    "label": "Selected-count summary",
+    "evidence": [
+      {
+        "unit": "u:multi-select",
+        "needle": "selected count",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "multi-select",
+    "layer": 3,
+    "label": "Removable selected tokens",
+    "evidence": [
+      {
+        "unit": "b:combobox",
+        "needle": "Chips",
+        "analogue": false
+      },
+      {
+        "unit": "a:Select",
+        "needle": "TagGroup",
+        "analogue": false
+      },
+      {
+        "unit": "t:MultiSelect",
+        "needle": "renderPill",
+        "analogue": false
+      },
+      {
+        "unit": "n:select",
+        "needle": "tagRender",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "multi-select",
+    "layer": 3,
+    "label": "Search inside the popup",
+    "evidence": [
+      {
+        "unit": "b:combobox",
+        "needle": "Input inside popup",
+        "analogue": false
+      },
+      {
+        "unit": "p:select-panel",
+        "needle": "filter",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "tag-picker",
+    "layer": 2,
+    "label": "Create and tokenize typed values",
+    "evidence": [
+      {
+        "unit": "a:TokenField",
+        "needle": "Tokenization",
+        "analogue": false
+      },
+      {
+        "unit": "t:TagsInput",
+        "needle": "Split chars",
+        "analogue": false
+      },
+      {
+        "unit": "k:tags-input",
+        "needle": "Custom Delimiter",
+        "analogue": false
+      },
+      {
+        "unit": "n:select",
+        "needle": "tokenSeparators",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "tag-picker",
+    "layer": 3,
+    "label": "Editable tokens",
+    "evidence": [
+      {
+        "unit": "k:tags-input",
+        "needle": "Editable Tags",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "tag-picker",
+    "layer": 3,
+    "label": "Wrapping or constrained token area",
+    "evidence": [
+      {
+        "unit": "p:text-input-with-tokens",
+        "needle": "Prevent wrapping",
+        "analogue": false
+      },
+      {
+        "unit": "f:tagpicker",
+        "needle": "Wrapping tags",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "editable-text",
+    "layer": 2,
+    "label": "Activation and submit policy",
+    "evidence": [
+      {
+        "unit": "k:editable",
+        "needle": "activationMode",
+        "analogue": false
+      },
+      {
+        "unit": "l:inline-edit",
+        "needle": "keepEditViewOpenOnBlur",
+        "analogue": false
+      },
+      {
+        "unit": "n:typography",
+        "needle": "triggerType",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "editable-text",
+    "layer": 3,
+    "label": "Explicit confirm/cancel controls",
+    "evidence": [
+      {
+        "unit": "k:editable",
+        "needle": "With Controls",
+        "analogue": false
+      },
+      {
+        "unit": "l:inline-edit",
+        "needle": "hideActionButtons",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "editable-text",
+    "layer": 3,
+    "label": "Multiline editor",
+    "evidence": [
+      {
+        "unit": "k:editable",
+        "needle": "Textarea",
+        "analogue": false
+      },
+      {
+        "unit": "n:typography",
+        "needle": "autoSize",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "otp-input",
+    "layer": 2,
+    "label": "Masked versus visible code",
+    "evidence": [
+      {
+        "unit": "b:otp-field",
+        "needle": "mask",
+        "analogue": false
+      },
+      {
+        "unit": "t:PinInput",
+        "needle": "mask",
+        "analogue": false
+      },
+      {
+        "unit": "k:pin-input",
+        "needle": "mask",
+        "analogue": false
+      },
+      {
+        "unit": "n:input/OTP",
+        "needle": "mask",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "otp-input",
+    "layer": 3,
+    "label": "Grouped slots and separators",
+    "evidence": [
+      {
+        "unit": "u:verification-code-inputs",
+        "needle": "With separator",
+        "analogue": false
+      },
+      {
+        "unit": "s:input-otp",
+        "needle": "Separator",
+        "analogue": false
+      },
+      {
+        "unit": "n:input/OTP",
+        "needle": "separator",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "file-upload",
+    "layer": 2,
+    "label": "Single/multiple accepted files",
+    "evidence": [
+      {
+        "unit": "a:FileTrigger",
+        "needle": "allowsMultiple",
+        "analogue": false
+      },
+      {
+        "unit": "t:FileInput",
+        "needle": "multiple",
+        "analogue": false
+      },
+      {
+        "unit": "k:file-upload",
+        "needle": "Multiple Files",
+        "analogue": false
+      },
+      {
+        "unit": "n:upload",
+        "needle": "multiple",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "file-upload",
+    "layer": 3,
+    "label": "Button versus drop target",
+    "evidence": [
+      {
+        "unit": "a:FileTrigger",
+        "needle": "FileTrigger",
+        "analogue": false
+      },
+      {
+        "unit": "a:DropZone",
+        "needle": "DropZone",
+        "analogue": false
+      },
+      {
+        "unit": "k:file-upload",
+        "needle": "Dropzone",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "file-upload",
+    "layer": 3,
+    "label": "Preview/progress file rows",
+    "evidence": [
+      {
+        "unit": "u:file-uploaders",
+        "needle": "Progress bar",
+        "analogue": false
+      },
+      {
+        "unit": "k:file-upload",
+        "needle": "Custom Preview",
+        "analogue": false
+      },
+      {
+        "unit": "n:upload",
+        "needle": "listType",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "form-validation",
+    "layer": 2,
+    "label": "Validation timing and strategy",
+    "evidence": [
+      {
+        "unit": "a:Form",
+        "needle": "validationBehavior",
+        "analogue": false
+      },
+      {
+        "unit": "b:field",
+        "needle": "validationMode",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "form-validation",
+    "layer": 3,
+    "label": "Linked error summary",
+    "evidence": [
+      {
+        "unit": "g:error-summary",
+        "needle": "links",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "form-validation",
+    "layer": 3,
+    "label": "Field-level and form-level errors",
+    "evidence": [
+      {
+        "unit": "a:Form",
+        "needle": "validationErrors",
+        "analogue": false
+      },
+      {
+        "unit": "b:form",
+        "needle": "errors",
+        "analogue": false
+      },
+      {
+        "unit": "g:error-message",
+        "needle": "Error message",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "date-field",
+    "layer": 2,
+    "label": "Locale/calendar and granularity",
+    "evidence": [
+      {
+        "unit": "a:DateField",
+        "needle": "Granularity",
+        "analogue": false
+      },
+      {
+        "unit": "k:date-input",
+        "needle": "granularity",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "date-field",
+    "layer": 3,
+    "label": "Segmented date input",
+    "evidence": [
+      {
+        "unit": "a:DateField",
+        "needle": "DateSegment",
+        "analogue": false
+      },
+      {
+        "unit": "k:date-input",
+        "needle": "Segments",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "date-field",
+    "layer": 3,
+    "label": "Separate day/month/year fields",
+    "evidence": [
+      {
+        "unit": "g:date-input",
+        "needle": "day",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "date-picker",
+    "layer": 2,
+    "label": "Bounded and unavailable dates",
+    "evidence": [
+      {
+        "unit": "a:DatePicker",
+        "needle": "isDateUnavailable",
+        "analogue": false
+      },
+      {
+        "unit": "k:date-picker",
+        "needle": "Unavailable Dates",
+        "analogue": false
+      },
+      {
+        "unit": "t:@DatePickerInput",
+        "needle": "Min and max dates",
+        "analogue": false
+      },
+      {
+        "unit": "n:date-picker",
+        "needle": "minDate",
+        "analogue": false
+      },
+      {
+        "unit": "f:@DatePicker",
+        "needle": "minDate",
+        "analogue": false
+      },
+      {
+        "unit": "c:DatePicker",
+        "needle": "minDate",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "date-picker",
+    "layer": 3,
+    "label": "Field or button trigger",
+    "evidence": [
+      {
+        "unit": "k:date-picker",
+        "needle": "Button Trigger",
+        "analogue": false
+      },
+      {
+        "unit": "s:date-picker",
+        "needle": "Button",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "date-picker",
+    "layer": 3,
+    "label": "Popover versus modal calendar",
+    "evidence": [
+      {
+        "unit": "t:@DatePickerInput",
+        "needle": "Open picker in modal",
+        "analogue": false
+      },
+      {
+        "unit": "m:datepicker",
+        "needle": "Modal date picker",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "date-range-picker",
+    "layer": 2,
+    "label": "Partial and constrained ranges",
+    "evidence": [
+      {
+        "unit": "n:date-picker",
+        "needle": "allowEmpty",
+        "analogue": false
+      },
+      {
+        "unit": "a:DateRangePicker",
+        "needle": "allowsNonContiguousRanges",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "date-range-picker",
+    "layer": 3,
+    "label": "Presets beside the calendar",
+    "evidence": [
+      {
+        "unit": "u:date-pickers",
+        "needle": "presets",
+        "analogue": false
+      },
+      {
+        "unit": "k:date-picker",
+        "needle": "Presets Sidebar",
+        "analogue": false
+      },
+      {
+        "unit": "t:@DatePickerInput",
+        "needle": "Presets",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "date-range-picker",
+    "layer": 3,
+    "label": "Multiple visible months",
+    "evidence": [
+      {
+        "unit": "k:date-picker",
+        "needle": "Multiple Months",
+        "analogue": false
+      },
+      {
+        "unit": "o:date-picker",
+        "needle": "visibleMonths",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "time-field",
+    "layer": 2,
+    "label": "Hour cycle and seconds precision",
+    "evidence": [
+      {
+        "unit": "a:TimeField",
+        "needle": "hourCycle",
+        "analogue": false
+      },
+      {
+        "unit": "t:@TimePicker",
+        "needle": "12-hour format",
+        "analogue": false
+      },
+      {
+        "unit": "k:date-input",
+        "needle": "hourCycle",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "time-field",
+    "layer": 3,
+    "label": "Segment entry versus time presets",
+    "evidence": [
+      {
+        "unit": "a:TimeField",
+        "needle": "DateSegment",
+        "analogue": false
+      },
+      {
+        "unit": "t:@TimePicker",
+        "needle": "Time presets",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "duration-input",
+    "layer": 2,
+    "label": "Duration rather than time-of-day mode",
+    "evidence": [
+      {
+        "unit": "t:@TimePicker",
+        "needle": "Duration type",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "duration-input",
+    "layer": 3,
+    "label": "Hours/minutes/seconds segments",
+    "evidence": [
+      {
+        "unit": "t:@TimePicker",
+        "needle": "Min hours digits",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "link",
+    "layer": 2,
+    "label": "Underline policy",
+    "evidence": [
+      {
+        "unit": "r:link",
+        "needle": "underline",
+        "analogue": false
+      },
+      {
+        "unit": "t:Anchor",
+        "needle": "underline",
+        "analogue": false
+      },
+      {
+        "unit": "k:link",
+        "needle": "variant",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "link",
+    "layer": 3,
+    "label": "Inline, standalone and icon-supported links",
+    "evidence": [
+      {
+        "unit": "f:link",
+        "needle": "Icons in links",
+        "analogue": false
+      },
+      {
+        "unit": "c:Link",
+        "needle": "Standalone link",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "link",
+    "layer": 3,
+    "label": "Back and skip navigation recipes",
+    "evidence": [
+      {
+        "unit": "g:back-link",
+        "needle": "Back link",
+        "analogue": false
+      },
+      {
+        "unit": "g:skip-link",
+        "needle": "Skip link",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "pagination",
+    "layer": 3,
+    "label": "Numbered pages or previous/next only",
+    "evidence": [
+      {
+        "unit": "p:pagination",
+        "needle": "showPages",
+        "analogue": false
+      },
+      {
+        "unit": "s:pagination",
+        "needle": "Simple",
+        "analogue": false
+      },
+      {
+        "unit": "g:pagination",
+        "needle": "content pages",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "pagination",
+    "layer": 3,
+    "label": "Page-size and page-jump controls",
+    "evidence": [
+      {
+        "unit": "c:Pagination",
+        "needle": "pageSize",
+        "analogue": false
+      },
+      {
+        "unit": "n:pagination",
+        "needle": "showQuickJumper",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "pagination",
+    "layer": 3,
+    "label": "Attached or aligned controls",
+    "evidence": [
+      {
+        "unit": "u:pagination",
+        "needle": "Button group center aligned",
+        "analogue": false
+      },
+      {
+        "unit": "k:pagination",
+        "needle": "Attached",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "stepper",
+    "layer": 2,
+    "label": "Stage states and gated navigation",
+    "evidence": [
+      {
+        "unit": "c:ProgressIndicator",
+        "needle": "invalid",
+        "analogue": false
+      },
+      {
+        "unit": "t:Stepper",
+        "needle": "allowNextStepsSelect",
+        "analogue": false
+      },
+      {
+        "unit": "k:steps",
+        "needle": "Validation",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "stepper",
+    "layer": 3,
+    "label": "Horizontal or vertical stages",
+    "evidence": [
+      {
+        "unit": "t:Stepper",
+        "needle": "orientation",
+        "analogue": false
+      },
+      {
+        "unit": "n:steps",
+        "needle": "orientation",
+        "analogue": false
+      },
+      {
+        "unit": "k:steps",
+        "needle": "orientation",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "stepper",
+    "layer": 3,
+    "label": "Numbers, icons or compact dots",
+    "evidence": [
+      {
+        "unit": "u:progress-steps",
+        "needle": "Icon centered with number",
+        "analogue": false
+      },
+      {
+        "unit": "n:steps",
+        "needle": "dot",
+        "analogue": false
+      },
+      {
+        "unit": "k:steps",
+        "needle": "Icon",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "menubar",
+    "layer": 3,
+    "label": "Persistent strip with nested menus",
+    "evidence": [
+      {
+        "unit": "s:menubar",
+        "needle": "MenubarMenu",
+        "analogue": false
+      },
+      {
+        "unit": "b:menubar",
+        "needle": "Menubar",
+        "analogue": false
+      },
+      {
+        "unit": "t:Menubar",
+        "needle": "Composition",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "menubar",
+    "layer": 2,
+    "label": "Keyboard focus looping",
+    "evidence": [
+      {
+        "unit": "b:menubar",
+        "needle": "loopFocus",
+        "analogue": false
+      },
+      {
+        "unit": "t:Menubar",
+        "needle": "loop",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "listbox",
+    "layer": 2,
+    "label": "Single/multiple and extended selection",
+    "evidence": [
+      {
+        "unit": "a:ListBox",
+        "needle": "selectionMode",
+        "analogue": false
+      },
+      {
+        "unit": "k:listbox",
+        "needle": "Extended Selection",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "listbox",
+    "layer": 3,
+    "label": "Grouped options with descriptions",
+    "evidence": [
+      {
+        "unit": "k:listbox",
+        "needle": "With Description",
+        "analogue": false
+      },
+      {
+        "unit": "p:action-list",
+        "needle": "Items with block descriptions",
+        "analogue": false
+      },
+      {
+        "unit": "b:select",
+        "needle": "Grouped",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "listbox",
+    "layer": 3,
+    "label": "Horizontal or grid option collection",
+    "evidence": [
+      {
+        "unit": "a:ListBox",
+        "needle": "Layouts",
+        "analogue": false
+      },
+      {
+        "unit": "k:listbox",
+        "needle": "Grid Layout",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "selectable-list",
+    "layer": 3,
+    "label": "Row selection versus nested row actions",
+    "evidence": [
+      {
+        "unit": "f:list",
+        "needle": "Selection as secondary action",
+        "analogue": false
+      },
+      {
+        "unit": "a:GridList",
+        "needle": "Selection and actions",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "selectable-list",
+    "layer": 3,
+    "label": "Inline actions and grouped rows",
+    "evidence": [
+      {
+        "unit": "c:ContainedList",
+        "needle": "Inline actions",
+        "analogue": false
+      },
+      {
+        "unit": "p:action-list",
+        "needle": "Items with trailing actions",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "tree-select",
+    "layer": 2,
+    "label": "Single/multiple and checkbox selection",
+    "evidence": [
+      {
+        "unit": "t:TreeSelect",
+        "needle": "TreeSelectMode",
+        "analogue": false
+      },
+      {
+        "unit": "n:tree-select",
+        "needle": "treeCheckable",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "tree-select",
+    "layer": 3,
+    "label": "Tree popup versus cascading columns",
+    "evidence": [
+      {
+        "unit": "t:Cascader",
+        "needle": "Cascader",
+        "analogue": false
+      },
+      {
+        "unit": "n:cascader",
+        "needle": "Cascader",
+        "analogue": false
+      },
+      {
+        "unit": "t:TreeSelect",
+        "needle": "TreeSelect",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "tree-select",
+    "layer": 2,
+    "label": "Lazy-loaded children",
+    "evidence": [
+      {
+        "unit": "n:cascader",
+        "needle": "loadData",
+        "analogue": false
+      },
+      {
+        "unit": "n:tree-select",
+        "needle": "loadData",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "transfer-list",
+    "layer": 3,
+    "label": "Two lists with explicit move actions",
+    "evidence": [
+      {
+        "unit": "n:transfer",
+        "needle": "targetKeys",
+        "analogue": false
+      },
+      {
+        "unit": "k:listbox",
+        "needle": "Transfer List",
+        "analogue": false
+      },
+      {
+        "unit": "t:@TransferList",
+        "needle": "onTransfer",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "transfer-list",
+    "layer": 2,
+    "label": "Search and paging within collections",
+    "evidence": [
+      {
+        "unit": "n:transfer",
+        "needle": "showSearch",
+        "analogue": false
+      },
+      {
+        "unit": "n:transfer",
+        "needle": "pagination",
+        "analogue": false
+      },
+      {
+        "unit": "t:@TransferList",
+        "needle": "search",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "rating",
+    "layer": 2,
+    "label": "Fractional and clearable ratings",
+    "evidence": [
+      {
+        "unit": "t:Rating",
+        "needle": "fractions",
+        "analogue": false
+      },
+      {
+        "unit": "n:rate",
+        "needle": "allowHalf",
+        "analogue": false
+      },
+      {
+        "unit": "n:rate",
+        "needle": "allowClear",
+        "analogue": false
+      },
+      {
+        "unit": "k:rating",
+        "needle": "allowHalf",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "rating",
+    "layer": 3,
+    "label": "Custom symbols and supporting label",
+    "evidence": [
+      {
+        "unit": "t:Rating",
+        "needle": "emptySymbol",
+        "analogue": false
+      },
+      {
+        "unit": "k:rating",
+        "needle": "Custom Icon",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "toggle-button-group",
+    "layer": 2,
+    "label": "Single or multiple pressed values",
+    "evidence": [
+      {
+        "unit": "b:toggle-group",
+        "needle": "multiple",
+        "analogue": false
+      },
+      {
+        "unit": "a:ToggleButtonGroup",
+        "needle": "selectionMode",
+        "analogue": false
+      },
+      {
+        "unit": "k:@toggle-group",
+        "needle": "Multiple",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "toggle-button-group",
+    "layer": 3,
+    "label": "Horizontal or vertical command group",
+    "evidence": [
+      {
+        "unit": "s:toggle-group",
+        "needle": "Vertical",
+        "analogue": false
+      },
+      {
+        "unit": "a:ToggleButtonGroup",
+        "needle": "orientation",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "drag-handle",
+    "layer": 3,
+    "label": "Drag affordance with insertion indicator",
+    "evidence": [
+      {
+        "unit": "a:dnd",
+        "needle": "Drop positions",
+        "analogue": false
+      },
+      {
+        "unit": "l:pragmatic-drag-and-drop",
+        "needle": "Drop indicator",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "drag-handle",
+    "layer": 3,
+    "label": "Move-menu alternative and live feedback",
+    "evidence": [
+      {
+        "unit": "l:pragmatic-drag-and-drop",
+        "needle": "Always provide alternatives",
+        "analogue": false
+      },
+      {
+        "unit": "a:dnd",
+        "needle": "keyboard",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "accordion",
+    "layer": 2,
+    "label": "Single or multiple expanded sections",
+    "evidence": [
+      {
+        "unit": "b:accordion",
+        "needle": "multiple",
+        "analogue": false
+      },
+      {
+        "unit": "t:Accordion",
+        "needle": "multiple",
+        "analogue": false
+      },
+      {
+        "unit": "n:collapse",
+        "needle": "accordion",
+        "analogue": false
+      },
+      {
+        "unit": "k:accordion",
+        "needle": "multiple",
+        "analogue": false
+      },
+      {
+        "unit": "a:DisclosureGroup",
+        "needle": "allowsMultipleExpanded",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "accordion",
+    "layer": 2,
+    "label": "Plain/bordered/filled/separated items",
+    "evidence": [
+      {
+        "unit": "t:Accordion",
+        "needle": "AccordionVariant",
+        "analogue": false
+      },
+      {
+        "unit": "k:accordion",
+        "needle": "variant",
+        "analogue": false
+      },
+      {
+        "unit": "n:collapse",
+        "needle": "bordered",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "accordion",
+    "layer": 3,
+    "label": "Indicator placement and secondary actions",
+    "evidence": [
+      {
+        "unit": "t:Accordion",
+        "needle": "chevronPosition",
+        "analogue": false
+      },
+      {
+        "unit": "n:collapse",
+        "needle": "expandIconPlacement",
+        "analogue": false
+      },
+      {
+        "unit": "k:accordion",
+        "needle": "With Actions",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "accordion",
+    "layer": 2,
+    "label": "Find-in-page reveal and mount policy",
+    "evidence": [
+      {
+        "unit": "b:accordion",
+        "needle": "hiddenUntilFound",
+        "analogue": false
+      },
+      {
+        "unit": "k:accordion",
+        "needle": "lazyMount",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "drawer",
+    "layer": 2,
+    "label": "Modal or nonmodal presentation",
+    "evidence": [
+      {
+        "unit": "f:drawer",
+        "needle": "Modality",
+        "analogue": false
+      },
+      {
+        "unit": "b:drawer",
+        "needle": "Non-modal",
+        "analogue": false
+      },
+      {
+        "unit": "k:drawer",
+        "needle": "Non-Modal Drawer",
+        "analogue": false
+      },
+      {
+        "unit": "m:bottomsheet",
+        "needle": "Standard",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "drawer",
+    "layer": 3,
+    "label": "Side/top/bottom placement",
+    "evidence": [
+      {
+        "unit": "n:drawer",
+        "needle": "placement",
+        "analogue": false
+      },
+      {
+        "unit": "k:drawer",
+        "needle": "placement",
+        "analogue": false
+      },
+      {
+        "unit": "s:drawer",
+        "needle": "Position",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "drawer",
+    "layer": 3,
+    "label": "Resizable or draggable sheet",
+    "evidence": [
+      {
+        "unit": "n:drawer",
+        "needle": "resizable",
+        "analogue": false
+      },
+      {
+        "unit": "b:drawer",
+        "needle": "snapPoints",
+        "analogue": false
+      },
+      {
+        "unit": "k:drawer",
+        "needle": "Non Draggable",
+        "analogue": false
+      },
+      {
+        "unit": "a:@SheetExample",
+        "needle": "drag=",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "alert-dialog",
+    "layer": 2,
+    "label": "Explicit confirm/cancel and destructive emphasis",
+    "evidence": [
+      {
+        "unit": "r:alert-dialog",
+        "needle": "Cancel",
+        "analogue": false
+      },
+      {
+        "unit": "b:alert-dialog",
+        "needle": "Close",
+        "analogue": false
+      },
+      {
+        "unit": "p:confirmation-dialog",
+        "needle": "confirmButtonType",
+        "analogue": false
+      },
+      {
+        "unit": "l:modal-dialog",
+        "needle": "Appearance",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "alert-dialog",
+    "layer": 3,
+    "label": "Inline confirmation popup",
+    "evidence": [
+      {
+        "unit": "n:popconfirm",
+        "needle": "Popconfirm",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "splitter",
+    "layer": 2,
+    "label": "Controlled sizes with collapse bounds",
+    "evidence": [
+      {
+        "unit": "k:splitter",
+        "needle": "Collapsible Panels",
+        "analogue": false
+      },
+      {
+        "unit": "t:Splitter",
+        "needle": "Collapsible panes",
+        "analogue": false
+      },
+      {
+        "unit": "n:splitter",
+        "needle": "collapsible",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "splitter",
+    "layer": 3,
+    "label": "Horizontal/vertical and multiple panes",
+    "evidence": [
+      {
+        "unit": "k:splitter",
+        "needle": "orientation",
+        "analogue": false
+      },
+      {
+        "unit": "t:Splitter",
+        "needle": "Multiple panes",
+        "analogue": false
+      },
+      {
+        "unit": "s:resizable",
+        "needle": "Vertical",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "splitter",
+    "layer": 3,
+    "label": "Keyboard resize trigger and indicator",
+    "evidence": [
+      {
+        "unit": "k:splitter",
+        "needle": "Keyboard Resize",
+        "analogue": false
+      },
+      {
+        "unit": "k:splitter",
+        "needle": "Resize Indicator",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "scroll-area",
+    "layer": 2,
+    "label": "Always/hover/automatic scrollbar presentation",
+    "evidence": [
+      {
+        "unit": "r:scroll-area",
+        "needle": "type",
+        "analogue": false
+      },
+      {
+        "unit": "t:ScrollArea",
+        "needle": "type",
+        "analogue": false
+      },
+      {
+        "unit": "k:scroll-area",
+        "needle": "variant",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "scroll-area",
+    "layer": 3,
+    "label": "Horizontal/vertical/both axes",
+    "evidence": [
+      {
+        "unit": "t:ScrollArea",
+        "needle": "scrollbars",
+        "analogue": false
+      },
+      {
+        "unit": "s:scroll-area",
+        "needle": "Horizontal",
+        "analogue": false
+      },
+      {
+        "unit": "k:scroll-area",
+        "needle": "Horizontal",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "responsive-layout",
+    "layer": 3,
+    "label": "Flex row/stack and grid layouts",
+    "evidence": [
+      {
+        "unit": "r:flex",
+        "needle": "direction",
+        "analogue": false
+      },
+      {
+        "unit": "t:Grid",
+        "needle": "Grid",
+        "analogue": false
+      },
+      {
+        "unit": "n:flex",
+        "needle": "orientation",
+        "analogue": false
+      },
+      {
+        "unit": "k:stack",
+        "needle": "Horizontal",
+        "analogue": false
+      },
+      {
+        "unit": "o:grid",
+        "needle": "column",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "responsive-layout",
+    "layer": 3,
+    "label": "Responsive spans and constrained containers",
+    "evidence": [
+      {
+        "unit": "r:container",
+        "needle": "sizes",
+        "analogue": false
+      },
+      {
+        "unit": "t:SimpleGrid",
+        "needle": "cols",
+        "analogue": false
+      },
+      {
+        "unit": "n:grid",
+        "needle": "span",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "page-header",
+    "layer": 3,
+    "label": "Title/description and actions",
+    "evidence": [
+      {
+        "unit": "p:page-header",
+        "needle": "TitleArea",
+        "analogue": false
+      },
+      {
+        "unit": "l:page-header",
+        "needle": "actions",
+        "analogue": false
+      },
+      {
+        "unit": "o:page",
+        "needle": "primary-action",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "page-header",
+    "layer": 3,
+    "label": "Breadcrumb/context and navigation regions",
+    "evidence": [
+      {
+        "unit": "p:page-header",
+        "needle": "Breadcrumbs",
+        "analogue": false
+      },
+      {
+        "unit": "p:page-header",
+        "needle": "Navigation",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "sidebar",
+    "layer": 3,
+    "label": "Standard/floating/inset navigation",
+    "evidence": [
+      {
+        "unit": "s:sidebar",
+        "needle": "variant",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "sidebar",
+    "layer": 3,
+    "label": "Expanded/icon-only/off-canvas modes",
+    "evidence": [
+      {
+        "unit": "s:sidebar",
+        "needle": "collapsible",
+        "analogue": false
+      },
+      {
+        "unit": "t:AppShell",
+        "needle": "Collapsed navbar",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "app-shell",
+    "layer": 3,
+    "label": "Header/content and optional side panes",
+    "evidence": [
+      {
+        "unit": "t:AppShell",
+        "needle": "layout",
+        "analogue": false
+      },
+      {
+        "unit": "p:page-layout",
+        "needle": "PageLayout.Pane",
+        "analogue": false
+      },
+      {
+        "unit": "n:layout",
+        "needle": "Sider",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "app-shell",
+    "layer": 2,
+    "label": "Static/fixed regions and responsive collapse",
+    "evidence": [
+      {
+        "unit": "t:AppShell",
+        "needle": "AppShellMode",
+        "analogue": false
+      },
+      {
+        "unit": "p:page-layout",
+        "needle": "Fullscreen responsive",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "dockable-inspector",
+    "layer": 3,
+    "label": "Floating resizable panel",
+    "evidence": [
+      {
+        "unit": "k:floating-panel",
+        "needle": "Resize Axes",
+        "analogue": false
+      },
+      {
+        "unit": "t:FloatingWindow",
+        "needle": "Resize handle",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "dockable-inspector",
+    "layer": 2,
+    "label": "Disable drag or resize independently",
+    "evidence": [
+      {
+        "unit": "k:floating-panel",
+        "needle": "Disable Drag",
+        "analogue": false
+      },
+      {
+        "unit": "k:floating-panel",
+        "needle": "Disable Resize",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "description-list",
+    "layer": 3,
+    "label": "Horizontal versus stacked term/value pairs",
+    "evidence": [
+      {
+        "unit": "r:data-list",
+        "needle": "orientationValues",
+        "analogue": false
+      },
+      {
+        "unit": "k:data-list",
+        "needle": "orientation",
+        "analogue": false
+      },
+      {
+        "unit": "n:descriptions",
+        "needle": "layout",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "description-list",
+    "layer": 3,
+    "label": "Row actions and summary cards",
+    "evidence": [
+      {
+        "unit": "g:summary-list",
+        "needle": "Adding actions",
+        "analogue": false
+      },
+      {
+        "unit": "g:summary-list",
+        "needle": "Summary cards",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "stat",
+    "layer": 3,
+    "label": "Label/value with prefix/suffix and trend",
+    "evidence": [
+      {
+        "unit": "n:statistic",
+        "needle": "prefix",
+        "analogue": false
+      },
+      {
+        "unit": "k:stat",
+        "needle": "ValueUnit",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "stat",
+    "layer": 3,
+    "label": "Metric with chart or contextual actions",
+    "evidence": [
+      {
+        "unit": "u:metrics",
+        "needle": "Chart actions",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "timeline",
+    "layer": 3,
+    "label": "Single-sided or alternating placement",
+    "evidence": [
+      {
+        "unit": "n:timeline",
+        "needle": "mode",
+        "analogue": false
+      },
+      {
+        "unit": "k:timeline",
+        "needle": "Alternating Content",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "timeline",
+    "layer": 3,
+    "label": "Avatar/marker/actions and breaks",
+    "evidence": [
+      {
+        "unit": "p:timeline",
+        "needle": "Timeline.Avatar",
+        "analogue": false
+      },
+      {
+        "unit": "p:timeline",
+        "needle": "Timeline.Break",
+        "analogue": false
+      },
+      {
+        "unit": "t:Timeline",
+        "needle": "bullet",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "empty-state",
+    "layer": 3,
+    "label": "Icon/illustration/avatar-led content",
+    "evidence": [
+      {
+        "unit": "u:empty-states",
+        "needle": "Illustration",
+        "analogue": false
+      },
+      {
+        "unit": "s:empty",
+        "needle": "Avatar Group",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "empty-state",
+    "layer": 3,
+    "label": "Primary/secondary recovery actions",
+    "evidence": [
+      {
+        "unit": "p:blankslate",
+        "needle": "secondary action",
+        "analogue": false
+      },
+      {
+        "unit": "o:empty-state",
+        "needle": "more than one way",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "result",
+    "layer": 2,
+    "label": "Success/warning/error categories",
+    "evidence": [
+      {
+        "unit": "n:result",
+        "needle": "status",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "result",
+    "layer": 3,
+    "label": "Confirmation panel versus full error page",
+    "evidence": [
+      {
+        "unit": "g:panel",
+        "needle": "Panel",
+        "analogue": false
+      },
+      {
+        "unit": "c:FullPageError",
+        "needle": "FullPageError",
+        "analogue": false
+      },
+      {
+        "unit": "u:404-sections",
+        "needle": "404",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "banner",
+    "layer": 2,
+    "label": "Semantic intent and optional dismissal",
+    "evidence": [
+      {
+        "unit": "p:banner",
+        "needle": "BannerVariant",
+        "analogue": false
+      },
+      {
+        "unit": "o:banner",
+        "needle": "dismissible",
+        "analogue": false
+      },
+      {
+        "unit": "f:messagebar",
+        "needle": "Dismissal",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "banner",
+    "layer": 3,
+    "label": "Actions/stacking/collapsed content",
+    "evidence": [
+      {
+        "unit": "f:messagebar",
+        "needle": "Stacking multiple",
+        "analogue": false
+      },
+      {
+        "unit": "p:banner",
+        "needle": "With actions",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "meter",
+    "layer": 2,
+    "label": "Value/bounds/value text",
+    "evidence": [
+      {
+        "unit": "a:Meter",
+        "needle": "minValue",
+        "analogue": false
+      },
+      {
+        "unit": "b:meter",
+        "needle": "Value",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "meter",
+    "layer": 3,
+    "label": "Label/track/formatted value",
+    "evidence": [
+      {
+        "unit": "b:meter",
+        "needle": "Label",
+        "analogue": false
+      },
+      {
+        "unit": "a:Meter",
+        "needle": "Meter",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "circular-progress",
+    "layer": 3,
+    "label": "Ring or semicircle",
+    "evidence": [
+      {
+        "unit": "t:RingProgress",
+        "needle": "RingProgress",
+        "analogue": false
+      },
+      {
+        "unit": "t:SemiCircleProgress",
+        "needle": "SemiCircleProgress",
+        "analogue": false
+      },
+      {
+        "unit": "n:progress",
+        "needle": "dashboard",
+        "analogue": false
+      },
+      {
+        "unit": "u:progress-indicators",
+        "needle": "Half circle",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "circular-progress",
+    "layer": 2,
+    "label": "Determinate or indeterminate ring",
+    "evidence": [
+      {
+        "unit": "m:progressindicator",
+        "needle": "indeterminate",
+        "analogue": false
+      },
+      {
+        "unit": "k:progress-circle",
+        "needle": "Indeterminate",
+        "analogue": false
+      },
+      {
+        "unit": "a:@ProgressCircle",
+        "needle": "isIndeterminate",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "circular-progress",
+    "layer": 3,
+    "label": "Segmented ring and central label",
+    "evidence": [
+      {
+        "unit": "t:RingProgress",
+        "needle": "sections",
+        "analogue": false
+      },
+      {
+        "unit": "t:RingProgress",
+        "needle": "Customize label",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "notification-queue",
+    "layer": 2,
+    "label": "Visible limit/timeout/pause policy",
+    "evidence": [
+      {
+        "unit": "k:toast",
+        "needle": "Max Visible",
+        "analogue": false
+      },
+      {
+        "unit": "b:toast",
+        "needle": "limit",
+        "analogue": false
+      },
+      {
+        "unit": "a:Toast",
+        "needle": "timeout",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "notification-queue",
+    "layer": 3,
+    "label": "Stacked or overlapping viewport",
+    "evidence": [
+      {
+        "unit": "b:toast",
+        "needle": "Stacking",
+        "analogue": false
+      },
+      {
+        "unit": "k:toast",
+        "needle": "Overlapping Toasts",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "notification-queue",
+    "layer": 2,
+    "label": "Promise/update and deduplication",
+    "evidence": [
+      {
+        "unit": "b:toast",
+        "needle": "Deduplicated toast",
+        "analogue": false
+      },
+      {
+        "unit": "k:toast",
+        "needle": "Promise",
+        "analogue": false
+      },
+      {
+        "unit": "s:toast",
+        "needle": "Promise",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "data-grid",
+    "layer": 2,
+    "label": "Row selection/sorting/loading",
+    "evidence": [
+      {
+        "unit": "a:Table",
+        "needle": "Sorting",
+        "analogue": false
+      },
+      {
+        "unit": "c:DataTable",
+        "needle": "Selectable",
+        "analogue": false
+      },
+      {
+        "unit": "s:data-table",
+        "needle": "Row Selection",
+        "analogue": false
+      },
+      {
+        "unit": "p:data-table",
+        "needle": "loading",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "data-grid",
+    "layer": 3,
+    "label": "Resizable columns and virtualized body",
+    "evidence": [
+      {
+        "unit": "a:Table",
+        "needle": "Column resizing",
+        "analogue": false
+      },
+      {
+        "unit": "n:table",
+        "needle": "virtual",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "data-grid",
+    "layer": 3,
+    "label": "Row actions/expansion/table toolbar",
+    "evidence": [
+      {
+        "unit": "s:data-table",
+        "needle": "Row Actions",
+        "analogue": false
+      },
+      {
+        "unit": "c:DataTable",
+        "needle": "Table toolbar",
+        "analogue": false
+      },
+      {
+        "unit": "a:Table",
+        "needle": "Expandable rows",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "tree-grid",
+    "layer": 3,
+    "label": "Nested table rows",
+    "evidence": [
+      {
+        "unit": "n:table",
+        "needle": "childrenColumnName",
+        "analogue": false
+      },
+      {
+        "unit": "l:table-tree",
+        "needle": "TableTree",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "tree-grid",
+    "layer": 2,
+    "label": "Composite treegrid focus model",
+    "evidence": [
+      {
+        "unit": "f:tree",
+        "needle": "TreeNavigationMode",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "media-preview",
+    "layer": 3,
+    "label": "Image preview with transform toolbar",
+    "evidence": [
+      {
+        "unit": "n:image",
+        "needle": "ToolbarRenderInfoType",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "media-preview",
+    "layer": 3,
+    "label": "Video playback surface",
+    "evidence": [
+      {
+        "unit": "u:video-players",
+        "needle": "Video player",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "carousel",
+    "layer": 2,
+    "label": "Autoplay/pause/explicit navigation",
+    "evidence": [
+      {
+        "unit": "k:carousel",
+        "needle": "Pause on Hover",
+        "analogue": false
+      },
+      {
+        "unit": "f:carousel",
+        "needle": "Auto-play",
+        "analogue": false
+      },
+      {
+        "unit": "n:carousel",
+        "needle": "autoplay",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "carousel",
+    "layer": 3,
+    "label": "Horizontal/vertical and variable widths",
+    "evidence": [
+      {
+        "unit": "s:carousel",
+        "needle": "Orientation",
+        "analogue": false
+      },
+      {
+        "unit": "k:carousel",
+        "needle": "Variable Sizes",
+        "analogue": false
+      },
+      {
+        "unit": "t:@Carousel",
+        "needle": "orientation",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "carousel",
+    "layer": 3,
+    "label": "Card/banner/gallery/hero layouts",
+    "evidence": [
+      {
+        "unit": "f:carousel",
+        "needle": "Card layout",
+        "analogue": false
+      },
+      {
+        "unit": "f:carousel",
+        "needle": "Web banner layout",
+        "analogue": false
+      },
+      {
+        "unit": "m:carousel",
+        "needle": "Hero",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "rich-text-editor",
+    "layer": 3,
+    "label": "Persistent or selection toolbar",
+    "evidence": [
+      {
+        "unit": "u:text-editors",
+        "needle": "Floating toolbar",
+        "analogue": false
+      },
+      {
+        "unit": "k:rich-text-editor",
+        "needle": "Bubble Menu",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "rich-text-editor",
+    "layer": 3,
+    "label": "Mentions/emoji/slash-command extensions",
+    "evidence": [
+      {
+        "unit": "k:rich-text-editor",
+        "needle": "Mentions",
+        "analogue": false
+      },
+      {
+        "unit": "k:rich-text-editor",
+        "needle": "Slash Commands",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "code-editor",
+    "layer": 3,
+    "label": "Narrow JSON editor adapter",
+    "evidence": [
+      {
+        "unit": "t:JsonInput",
+        "needle": "Custom serialization",
+        "analogue": true
+      }
+    ]
+  },
+  {
+    "family": "charts",
+    "layer": 3,
+    "label": "Line/bar/pie/radar adapters",
+    "evidence": [
+      {
+        "unit": "u:line-bar-charts",
+        "needle": "Line chart",
+        "analogue": false
+      },
+      {
+        "unit": "u:pie-charts",
+        "needle": "Pie chart",
+        "analogue": false
+      },
+      {
+        "unit": "u:radar-charts",
+        "needle": "Radar",
+        "analogue": false
+      },
+      {
+        "unit": "s:chart",
+        "needle": "Recharts",
+        "analogue": false
+      },
+      {
+        "unit": "t:@Charts",
+        "needle": "charts",
+        "analogue": false
+      },
+      {
+        "unit": "c:@Charts",
+        "needle": "charts",
+        "analogue": false
+      },
+      {
+        "unit": "f:@Charts",
+        "needle": "Line Chart",
+        "analogue": false
+      },
+      {
+        "unit": "l:@ForgeCharts",
+        "needle": "BarChartProps",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "charts",
+    "layer": 3,
+    "label": "Tooltip/legend/accessibility adapter layer",
+    "evidence": [
+      {
+        "unit": "s:chart",
+        "needle": "Accessibility",
+        "analogue": false
+      },
+      {
+        "unit": "t:@Charts",
+        "needle": "accessibility",
+        "analogue": false
+      },
+      {
+        "unit": "c:@Charts",
+        "needle": "options",
+        "analogue": false
+      },
+      {
+        "unit": "f:@Charts",
+        "needle": "accessibility",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "gradient-editor",
+    "layer": 2,
+    "label": "Solid versus gradient mode",
+    "evidence": [
+      {
+        "unit": "n:color-picker",
+        "needle": "mode",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "gradient-editor",
+    "layer": 3,
+    "label": "Stop track and angle controls",
+    "evidence": [
+      {
+        "unit": "u:gradient-pickers",
+        "needle": "gradient angle",
+        "analogue": false
+      },
+      {
+        "unit": "u:gradient-pickers",
+        "needle": "gradient stops",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "easing-curve-editor",
+    "layer": 3,
+    "label": "Engine-backed timing-function editor",
+    "evidence": [
+      {
+        "unit": "m:motion",
+        "needle": "Interpolator",
+        "analogue": true
+      }
+    ]
+  },
+  {
+    "family": "shortcut-recorder",
+    "layer": 3,
+    "label": "Recorder paired with chord display",
+    "evidence": [
+      {
+        "unit": "p:keybinding-hint",
+        "needle": "Sequences and chords",
+        "analogue": true
+      },
+      {
+        "unit": "h:keyboards",
+        "needle": "shortcuts",
+        "analogue": true
+      }
+    ]
+  },
+  {
+    "family": "toggletip",
+    "layer": 3,
+    "label": "Explicit trigger and interactive information",
+    "evidence": [
+      {
+        "unit": "c:Toggletip",
+        "needle": "Toggletips versus tooltips",
+        "analogue": false
+      },
+      {
+        "unit": "f:infolabel",
+        "needle": "Trapping focus",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "toggletip",
+    "layer": 2,
+    "label": "Escape and outside-interaction dismissal",
+    "evidence": [
+      {
+        "unit": "k:toggle-tip",
+        "needle": "Close on Escape",
+        "analogue": false
+      },
+      {
+        "unit": "k:toggle-tip",
+        "needle": "Close on Interact Outside",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "message-actions",
+    "layer": 3,
+    "label": "Message footer or action region",
+    "evidence": [
+      {
+        "unit": "s:message",
+        "needle": "Actions",
+        "analogue": false
+      },
+      {
+        "unit": "u:messaging",
+        "needle": "Message action minimal",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "thinking-disclosure",
+    "layer": 3,
+    "label": "Disclosure containing live message status",
+    "evidence": [
+      {
+        "unit": "a:Disclosure",
+        "needle": "Disclosure",
+        "analogue": true
+      },
+      {
+        "unit": "s:message",
+        "needle": "reasoning",
+        "analogue": true
+      }
+    ]
+  },
+  {
+    "family": "source-chip",
+    "layer": 3,
+    "label": "Linked citation with optional preview",
+    "evidence": [
+      {
+        "unit": "r:hover-card",
+        "needle": "Hover Card",
+        "analogue": true
+      },
+      {
+        "unit": "u:messaging",
+        "needle": "Message link preview",
+        "analogue": true
+      }
+    ]
+  },
+  {
+    "family": "attachment-card",
+    "layer": 2,
+    "label": "Upload lifecycle states",
+    "evidence": [
+      {
+        "unit": "s:attachment",
+        "needle": "state",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "attachment-card",
+    "layer": 3,
+    "label": "Horizontal file row or vertical image card",
+    "evidence": [
+      {
+        "unit": "s:attachment",
+        "needle": "orientation",
+        "analogue": false
+      },
+      {
+        "unit": "s:attachment",
+        "needle": "variant",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "attachment-card",
+    "layer": 3,
+    "label": "Scrollable attachment group",
+    "evidence": [
+      {
+        "unit": "s:attachment",
+        "needle": "AttachmentGroup",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "voice-input",
+    "layer": 3,
+    "label": "Recorder adapter with transport controls",
+    "evidence": [
+      {
+        "unit": "u:messaging",
+        "needle": "Message audio",
+        "analogue": true
+      }
+    ]
+  },
+  {
+    "family": "emoji-picker",
+    "layer": 3,
+    "label": "Searchable picker or emoji grid",
+    "evidence": [
+      {
+        "unit": "l:@emoji",
+        "needle": "EmojiPicker",
+        "analogue": false
+      },
+      {
+        "unit": "k:listbox",
+        "needle": "Emoji Grid",
+        "analogue": false
+      },
+      {
+        "unit": "a:@EmojiPickerExample",
+        "needle": "GridLayout",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "emoji-picker",
+    "layer": 2,
+    "label": "Picker sizing and emoji configuration",
+    "evidence": [
+      {
+        "unit": "l:@emoji",
+        "needle": "PickerSize",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "callout",
+    "layer": 2,
+    "label": "Soft/surface/outline treatment",
+    "evidence": [
+      {
+        "unit": "r:callout",
+        "needle": "variants",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "callout",
+    "layer": 3,
+    "label": "Icon/content block or inset text",
+    "evidence": [
+      {
+        "unit": "r:callout",
+        "needle": "Icon",
+        "analogue": false
+      },
+      {
+        "unit": "g:inset-text",
+        "needle": "Inset text",
+        "analogue": false
+      },
+      {
+        "unit": "c:@Callout",
+        "needle": "CalloutProps",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "toggle-block",
+    "layer": 3,
+    "label": "Standalone or nested disclosure",
+    "evidence": [
+      {
+        "unit": "k:collapsible",
+        "needle": "Nested Collapsibles",
+        "analogue": false
+      },
+      {
+        "unit": "g:details",
+        "needle": "Details",
+        "analogue": false
+      },
+      {
+        "unit": "a:Disclosure",
+        "needle": "Disclosure",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "people-picker",
+    "layer": 3,
+    "label": "People lookup with selected tokens",
+    "evidence": [
+      {
+        "unit": "l:@user-picker",
+        "needle": "UserPicker",
+        "analogue": false
+      },
+      {
+        "unit": "f:tagpicker",
+        "needle": "Tag picker",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "reactions",
+    "layer": 3,
+    "label": "Reaction counts and add-reaction control",
+    "evidence": [
+      {
+        "unit": "l:@reactions",
+        "needle": "Reaction",
+        "analogue": false
+      },
+      {
+        "unit": "u:messaging",
+        "needle": "Message reactions",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "comment-thread",
+    "layer": 3,
+    "label": "Identity/body/actions and nested replies",
+    "evidence": [
+      {
+        "unit": "l:comment",
+        "needle": "children",
+        "analogue": false
+      },
+      {
+        "unit": "u:messaging",
+        "needle": "Message reply",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "floating-format-bar",
+    "layer": 3,
+    "label": "Selection-anchored formatting toolbar",
+    "evidence": [
+      {
+        "unit": "u:text-editors",
+        "needle": "Floating toolbar",
+        "analogue": false
+      },
+      {
+        "unit": "k:rich-text-editor",
+        "needle": "Bubble Menu",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "database-card",
+    "layer": 3,
+    "label": "Record card with metadata and actions",
+    "evidence": [
+      {
+        "unit": "p:card",
+        "needle": "With metadata",
+        "analogue": true
+      },
+      {
+        "unit": "p:card",
+        "needle": "With action",
+        "analogue": true
+      }
+    ]
+  },
+  {
+    "family": "property-value",
+    "layer": 3,
+    "label": "Typed value renderer registry",
+    "evidence": [
+      {
+        "unit": "a:Table",
+        "needle": "Cell",
+        "analogue": true
+      },
+      {
+        "unit": "n:descriptions",
+        "needle": "DescriptionItem",
+        "analogue": true
+      }
+    ]
+  },
+  {
+    "family": "color-area",
+    "layer": 2,
+    "label": "Selectable channel axes",
+    "evidence": [
+      {
+        "unit": "a:ColorArea",
+        "needle": "xChannel",
+        "analogue": false
+      },
+      {
+        "unit": "a:ColorArea",
+        "needle": "yChannel",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "color-area",
+    "layer": 3,
+    "label": "Area with thumb and accessible value",
+    "evidence": [
+      {
+        "unit": "a:ColorArea",
+        "needle": "ColorThumb",
+        "analogue": false
+      },
+      {
+        "unit": "k:color-picker",
+        "needle": "ColorPicker.Area",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "color-slider",
+    "layer": 2,
+    "label": "Channel and orientation choices",
+    "evidence": [
+      {
+        "unit": "a:ColorSlider",
+        "needle": "channel",
+        "analogue": false
+      },
+      {
+        "unit": "a:ColorSlider",
+        "needle": "orientation",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "color-slider",
+    "layer": 3,
+    "label": "Channel track and numeric input",
+    "evidence": [
+      {
+        "unit": "k:color-picker",
+        "needle": "Channel Input",
+        "analogue": false
+      },
+      {
+        "unit": "a:ColorSlider",
+        "needle": "ColorThumb",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "eyedropper-button",
+    "layer": 3,
+    "label": "Optional eyedropper action",
+    "evidence": [
+      {
+        "unit": "t:ColorInput",
+        "needle": "Eye dropper",
+        "analogue": false
+      },
+      {
+        "unit": "k:color-picker",
+        "needle": "ColorPicker.EyeDropper",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "scrubbable-angle",
+    "layer": 2,
+    "label": "Discrete steps and labelled marks",
+    "evidence": [
+      {
+        "unit": "k:@angle-slider",
+        "needle": "Steps",
+        "analogue": false
+      },
+      {
+        "unit": "t:AngleSlider",
+        "needle": "Marks",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "scrubbable-angle",
+    "layer": 3,
+    "label": "Dial/value label/change-end event",
+    "evidence": [
+      {
+        "unit": "t:AngleSlider",
+        "needle": "formatLabel",
+        "analogue": false
+      },
+      {
+        "unit": "t:AngleSlider",
+        "needle": "onChangeEnd",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "zoom-control",
+    "layer": 3,
+    "label": "Percentage field and zoom commands",
+    "evidence": [
+      {
+        "unit": "n:image",
+        "needle": "TransformAction",
+        "analogue": true
+      }
+    ]
+  },
+  {
+    "family": "layer-row-badges",
+    "layer": 3,
+    "label": "Trailing layer-status markers",
+    "evidence": [
+      {
+        "unit": "f:tree",
+        "needle": "Badges",
+        "analogue": true
+      },
+      {
+        "unit": "p:tree-view",
+        "needle": "TrailingVisual",
+        "analogue": true
+      }
+    ]
+  },
+  {
+    "family": "constraints-picker",
+    "layer": 3,
+    "label": "Independent spatial edge toggles",
+    "evidence": [
+      {
+        "unit": "k:checkbox",
+        "needle": "Checkbox Group",
+        "analogue": true
+      },
+      {
+        "unit": "p:checkbox-group",
+        "needle": "CheckboxGroup",
+        "analogue": true
+      }
+    ]
+  },
+  {
+    "family": "unit-field",
+    "layer": 3,
+    "label": "Number with unit dropdown",
+    "evidence": [
+      {
+        "unit": "u:inputs",
+        "needle": "Trailing dropdown",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "unit-field",
+    "layer": 3,
+    "label": "Fixed unit/currency prefix or suffix",
+    "evidence": [
+      {
+        "unit": "t:NumberInput",
+        "needle": "Prefix and suffix",
+        "analogue": false
+      },
+      {
+        "unit": "o:money-field",
+        "needle": "currency",
+        "analogue": false
+      }
+    ]
+  },
+  {
+    "family": "font-picker",
+    "layer": 3,
+    "label": "Font-family lookup with preview adapter",
+    "evidence": [
+      {
+        "unit": "u:text-editors",
+        "needle": "Text editor",
+        "analogue": true
+      },
+      {
+        "unit": "k:rich-text-editor",
+        "needle": "Custom Controls",
+        "analogue": true
+      }
+    ]
+  },
+  {
+    "family": "variable-chip",
+    "layer": 3,
+    "label": "Bound-token display and detach action",
+    "evidence": [
+      {
+        "unit": "r:code",
+        "needle": "Code",
+        "analogue": true
+      },
+      {
+        "unit": "k:tags-input",
+        "needle": "Item",
+        "analogue": true
+      }
+    ]
+  },
+  {
+    "family": "keyboard-shortcuts",
+    "layer": 3,
+    "label": "Grouped shortcut reference in an overlay",
+    "evidence": [
+      {
+        "unit": "p:keybinding-hint",
+        "needle": "Sequences and chords",
+        "analogue": true
+      },
+      {
+        "unit": "s:kbd",
+        "needle": "KbdGroup",
+        "analogue": true
+      }
+    ]
+  },
+  {
+    "family": "callout",
+    "layer": 2,
+    "label": "Information and warning intents",
+    "evidence": [
+      {
+        "unit": "c:@Callout",
+        "needle": "NewKindProps",
+        "analogue": false
+      }
+    ]
+  }
+]

@@ -1,0 +1,163 @@
+{
+  "areaCommit": "4ea50618cf19e8737b607c9f983f64dd310d921d",
+  "existing": [
+    {
+      "id": "theme",
+      "namespaces": [
+        "--area-cool-",
+        "--area-warm-",
+        "--area-red-",
+        "--area-orange-",
+        "--area-yellow-",
+        "--area-lime-",
+        "--area-green-",
+        "--area-teal-",
+        "--area-cyan-",
+        "--area-blue-",
+        "--area-indigo-",
+        "--area-purple-",
+        "--area-pink-",
+        "--area-brown-",
+        "--area-danger-",
+        "--area-warning-",
+        "--area-caution-",
+        "--area-success-",
+        "--area-info-",
+        "--area-discovery-",
+        "--area-gray-",
+        "--area-fg-danger",
+        "--area-fg-warning",
+        "--area-fg-caution",
+        "--area-fg-success",
+        "--area-fg-info",
+        "--area-fg-discovery",
+        "--area-fg-pink",
+        "--area-fg-gray",
+        "--area-fg-brown",
+        "--area-fg-on-danger",
+        "--area-fg-on-warning",
+        "--area-fg-on-caution",
+        "--area-fg-on-success",
+        "--area-fg-on-info",
+        "--area-fg-on-discovery",
+        "--area-fg-on-pink",
+        "--area-fg-on-brown",
+        "--area-shadow-color"
+      ]
+    },
+    {
+      "id": "neutral",
+      "namespaces": [
+        "--area-neutral-",
+        "--area-bg-page:",
+        "--area-bg-surface:",
+        "--area-bg-subtle:",
+        "--area-bg-stripe:",
+        "--area-bg-code:",
+        "--area-bg-component:",
+        "--area-bg-component-hover:",
+        "--area-bg-component-active:",
+        "--area-bg-inverse:",
+        "--area-fg-on-inverse:",
+        "--area-neutral-solid:",
+        "--area-neutral-solid-hover:",
+        "--area-fg-on-neutral:",
+        "--area-bg-hover:",
+        "--area-bg-active:",
+        "--area-bg-overlay:",
+        "--area-scrim:",
+        "--area-fg-default:",
+        "--area-fg-muted:",
+        "--area-fg-placeholder:",
+        "--area-fg-disabled:",
+        "--area-border-subtle:",
+        "--area-border-decorative:",
+        "--area-border-faint:",
+        "--area-border-float:",
+        "--area-border-divider:",
+        "--area-border:",
+        "--area-border-hover:",
+        "--area-stroke-control:",
+        "--area-stroke-control-hover:"
+      ]
+    },
+    {
+      "id": "accent",
+      "namespaces": [
+        "--area-accent-",
+        "--area-fg-accent",
+        "--area-fg-on-accent",
+        "--area-focus-color:",
+        "--area-stroke-selected:"
+      ]
+    },
+    {
+      "id": "action",
+      "namespaces": [
+        "--area-action-accent:"
+      ]
+    },
+    {
+      "id": "selection",
+      "namespaces": [
+        "--area-selection-accent:"
+      ]
+    },
+    {
+      "id": "type",
+      "namespaces": [
+        "--area-font-",
+        "--area-text-",
+        "--area-title-",
+        "--area-display-",
+        "--area-weight-",
+        "--area-type-"
+      ]
+    },
+    {
+      "id": "density",
+      "namespaces": [
+        "--area-density-"
+      ]
+    },
+    {
+      "id": "radius",
+      "namespaces": [
+        "--area-radius-factor",
+        "--area-radius-min",
+        "--area-radius-surface",
+        "--area-radius-concentric"
+      ]
+    },
+    {
+      "id": "surface",
+      "namespaces": [
+        "--area-border-width",
+        "--area-shadow-1:",
+        "--area-shadow-2:",
+        "--area-shadow-3:",
+        "--area-shadow-4:",
+        "--area-shadow-card:",
+        "--area-shadow-float:"
+      ]
+    },
+    {
+      "id": "motion",
+      "namespaces": [
+        "--area-duration-",
+        "--area-ease-"
+      ]
+    }
+  ],
+  "proposed": [
+    "--area-material-gate-",
+    "--area-material-input-",
+    "--area-material-role-"
+  ],
+  "newSurfaceNamespace": "--area-surface-part-",
+  "derivedOnly": [
+    "--area-material-paint-"
+  ],
+  "problems": [],
+  "negativeControl": "broad --area-shadow- rejected"
+}

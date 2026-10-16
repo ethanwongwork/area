@@ -1,0 +1,1018 @@
+{
+  "areaCommit": "4ea50618cf19e8737b607c9f983f64dd310d921d",
+  "policy": "Tooltip and Toolbar retain their original recipes even under Flat in the identity migration.",
+  "shadows": [
+    {
+      "surface": "flat",
+      "id": "1",
+      "original": "none",
+      "borderWidth": "1px",
+      "parts": [],
+      "tokens": {},
+      "composed": "none"
+    },
+    {
+      "surface": "flat",
+      "id": "2",
+      "original": "none",
+      "borderWidth": "1px",
+      "parts": [],
+      "tokens": {},
+      "composed": "none"
+    },
+    {
+      "surface": "flat",
+      "id": "3",
+      "original": "none",
+      "borderWidth": "1px",
+      "parts": [],
+      "tokens": {},
+      "composed": "none"
+    },
+    {
+      "surface": "flat",
+      "id": "4",
+      "original": "none",
+      "borderWidth": "1px",
+      "parts": [],
+      "tokens": {},
+      "composed": "none"
+    },
+    {
+      "surface": "flat",
+      "id": "card",
+      "original": "none",
+      "borderWidth": "1px",
+      "parts": [],
+      "tokens": {},
+      "composed": "none"
+    },
+    {
+      "surface": "flat",
+      "id": "float",
+      "original": "none",
+      "borderWidth": "1px",
+      "parts": [],
+      "tokens": {},
+      "composed": "none"
+    },
+    {
+      "surface": "flat",
+      "id": "tooltip",
+      "original": "0 4px 12px -2px var(--area-shadow-color), inset 0 0 0 var(--area-stroke-width) light-dark(transparent, rgb(255 255 255 / 0.05))",
+      "borderWidth": "1px",
+      "parts": [
+        {
+          "inset": false,
+          "x": "0",
+          "y": "4px",
+          "blur": "12px",
+          "spread": "-2px",
+          "color": "var(--area-shadow-color)",
+          "css": "var(--area-surface-part-tooltip-1-x) var(--area-surface-part-tooltip-1-y) var(--area-surface-part-tooltip-1-blur) var(--area-surface-part-tooltip-1-spread) var(--area-surface-part-tooltip-1-color)"
+        },
+        {
+          "inset": true,
+          "x": "0",
+          "y": "0",
+          "blur": "0",
+          "spread": "var(--area-stroke-width)",
+          "color": "light-dark(transparent, rgb(255 255 255 / 0.05))",
+          "css": "inset var(--area-surface-part-tooltip-2-x) var(--area-surface-part-tooltip-2-y) var(--area-surface-part-tooltip-2-blur) var(--area-surface-part-tooltip-2-spread) var(--area-surface-part-tooltip-2-color)"
+        }
+      ],
+      "tokens": {
+        "--area-surface-part-tooltip-1-x": "0",
+        "--area-surface-part-tooltip-1-y": "4px",
+        "--area-surface-part-tooltip-1-blur": "12px",
+        "--area-surface-part-tooltip-1-spread": "-2px",
+        "--area-surface-part-tooltip-1-color": "var(--area-shadow-color)",
+        "--area-surface-part-tooltip-2-x": "0",
+        "--area-surface-part-tooltip-2-y": "0",
+        "--area-surface-part-tooltip-2-blur": "0",
+        "--area-surface-part-tooltip-2-spread": "var(--area-stroke-width)",
+        "--area-surface-part-tooltip-2-color": "light-dark(transparent, rgb(255 255 255 / 0.05))"
+      },
+      "composed": "var(--area-surface-part-tooltip-1-x) var(--area-surface-part-tooltip-1-y) var(--area-surface-part-tooltip-1-blur) var(--area-surface-part-tooltip-1-spread) var(--area-surface-part-tooltip-1-color), inset var(--area-surface-part-tooltip-2-x) var(--area-surface-part-tooltip-2-y) var(--area-surface-part-tooltip-2-blur) var(--area-surface-part-tooltip-2-spread) var(--area-surface-part-tooltip-2-color)"
+    },
+    {
+      "surface": "flat",
+      "id": "toolbar",
+      "original": "inset 0 0 0 var(--area-border-width) light-dark(transparent, var(--area-border-float)), 0 0 0.5px rgb(0 0 0 / 0.18), 0 3px 8px rgb(0 0 0 / 0.1), 0 1px 3px rgb(0 0 0 / 0.1)",
+      "borderWidth": "1px",
+      "parts": [
+        {
+          "inset": true,
+          "x": "0",
+          "y": "0",
+          "blur": "0",
+          "spread": "var(--area-border-width)",
+          "color": "light-dark(transparent, var(--area-border-float))",
+          "css": "inset var(--area-surface-part-toolbar-1-x) var(--area-surface-part-toolbar-1-y) var(--area-surface-part-toolbar-1-blur) var(--area-surface-part-toolbar-1-spread) var(--area-surface-part-toolbar-1-color)"
+        },
+        {
+          "inset": false,
+          "x": "0",
+          "y": "0",
+          "blur": "0.5px",
+          "spread": "0px",
+          "color": "rgb(0 0 0 / 0.18)",
+          "css": "var(--area-surface-part-toolbar-2-x) var(--area-surface-part-toolbar-2-y) var(--area-surface-part-toolbar-2-blur) var(--area-surface-part-toolbar-2-spread) var(--area-surface-part-toolbar-2-color)"
+        },
+        {
+          "inset": false,
+          "x": "0",
+          "y": "3px",
+          "blur": "8px",
+          "spread": "0px",
+          "color": "rgb(0 0 0 / 0.1)",
+          "css": "var(--area-surface-part-toolbar-3-x) var(--area-surface-part-toolbar-3-y) var(--area-surface-part-toolbar-3-blur) var(--area-surface-part-toolbar-3-spread) var(--area-surface-part-toolbar-3-color)"
+        },
+        {
+          "inset": false,
+          "x": "0",
+          "y": "1px",
+          "blur": "3px",
+          "spread": "0px",
+          "color": "rgb(0 0 0 / 0.1)",
+          "css": "var(--area-surface-part-toolbar-4-x) var(--area-surface-part-toolbar-4-y) var(--area-surface-part-toolbar-4-blur) var(--area-surface-part-toolbar-4-spread) var(--area-surface-part-toolbar-4-color)"
+        }
+      ],
+      "tokens": {
+        "--area-surface-part-toolbar-1-x": "0",
+        "--area-surface-part-toolbar-1-y": "0",
+        "--area-surface-part-toolbar-1-blur": "0",
+        "--area-surface-part-toolbar-1-spread": "var(--area-border-width)",
+        "--area-surface-part-toolbar-1-color": "light-dark(transparent, var(--area-border-float))",
+        "--area-surface-part-toolbar-2-x": "0",
+        "--area-surface-part-toolbar-2-y": "0",
+        "--area-surface-part-toolbar-2-blur": "0.5px",
+        "--area-surface-part-toolbar-2-spread": "0px",
+        "--area-surface-part-toolbar-2-color": "rgb(0 0 0 / 0.18)",
+        "--area-surface-part-toolbar-3-x": "0",
+        "--area-surface-part-toolbar-3-y": "3px",
+        "--area-surface-part-toolbar-3-blur": "8px",
+        "--area-surface-part-toolbar-3-spread": "0px",
+        "--area-surface-part-toolbar-3-color": "rgb(0 0 0 / 0.1)",
+        "--area-surface-part-toolbar-4-x": "0",
+        "--area-surface-part-toolbar-4-y": "1px",
+        "--area-surface-part-toolbar-4-blur": "3px",
+        "--area-surface-part-toolbar-4-spread": "0px",
+        "--area-surface-part-toolbar-4-color": "rgb(0 0 0 / 0.1)"
+      },
+      "composed": "inset var(--area-surface-part-toolbar-1-x) var(--area-surface-part-toolbar-1-y) var(--area-surface-part-toolbar-1-blur) var(--area-surface-part-toolbar-1-spread) var(--area-surface-part-toolbar-1-color), var(--area-surface-part-toolbar-2-x) var(--area-surface-part-toolbar-2-y) var(--area-surface-part-toolbar-2-blur) var(--area-surface-part-toolbar-2-spread) var(--area-surface-part-toolbar-2-color), var(--area-surface-part-toolbar-3-x) var(--area-surface-part-toolbar-3-y) var(--area-surface-part-toolbar-3-blur) var(--area-surface-part-toolbar-3-spread) var(--area-surface-part-toolbar-3-color), var(--area-surface-part-toolbar-4-x) var(--area-surface-part-toolbar-4-y) var(--area-surface-part-toolbar-4-blur) var(--area-surface-part-toolbar-4-spread) var(--area-surface-part-toolbar-4-color)"
+    },
+    {
+      "surface": "outlined",
+      "id": "1",
+      "original": "0 0.5px 1px -0.5px var(--area-shadow-color)",
+      "borderWidth": "1px",
+      "parts": [
+        {
+          "inset": false,
+          "x": "0",
+          "y": "0.5px",
+          "blur": "1px",
+          "spread": "-0.5px",
+          "color": "var(--area-shadow-color)",
+          "css": "var(--area-surface-part-1-1-x) var(--area-surface-part-1-1-y) var(--area-surface-part-1-1-blur) var(--area-surface-part-1-1-spread) var(--area-surface-part-1-1-color)"
+        }
+      ],
+      "tokens": {
+        "--area-surface-part-1-1-x": "0",
+        "--area-surface-part-1-1-y": "0.5px",
+        "--area-surface-part-1-1-blur": "1px",
+        "--area-surface-part-1-1-spread": "-0.5px",
+        "--area-surface-part-1-1-color": "var(--area-shadow-color)"
+      },
+      "composed": "var(--area-surface-part-1-1-x) var(--area-surface-part-1-1-y) var(--area-surface-part-1-1-blur) var(--area-surface-part-1-1-spread) var(--area-surface-part-1-1-color)"
+    },
+    {
+      "surface": "outlined",
+      "id": "2",
+      "original": "0 1px 2px -0.5px var(--area-shadow-color)",
+      "borderWidth": "1px",
+      "parts": [
+        {
+          "inset": false,
+          "x": "0",
+          "y": "1px",
+          "blur": "2px",
+          "spread": "-0.5px",
+          "color": "var(--area-shadow-color)",
+          "css": "var(--area-surface-part-2-1-x) var(--area-surface-part-2-1-y) var(--area-surface-part-2-1-blur) var(--area-surface-part-2-1-spread) var(--area-surface-part-2-1-color)"
+        }
+      ],
+      "tokens": {
+        "--area-surface-part-2-1-x": "0",
+        "--area-surface-part-2-1-y": "1px",
+        "--area-surface-part-2-1-blur": "2px",
+        "--area-surface-part-2-1-spread": "-0.5px",
+        "--area-surface-part-2-1-color": "var(--area-shadow-color)"
+      },
+      "composed": "var(--area-surface-part-2-1-x) var(--area-surface-part-2-1-y) var(--area-surface-part-2-1-blur) var(--area-surface-part-2-1-spread) var(--area-surface-part-2-1-color)"
+    },
+    {
+      "surface": "outlined",
+      "id": "3",
+      "original": "0 2px 4px -1px var(--area-shadow-color)",
+      "borderWidth": "1px",
+      "parts": [
+        {
+          "inset": false,
+          "x": "0",
+          "y": "2px",
+          "blur": "4px",
+          "spread": "-1px",
+          "color": "var(--area-shadow-color)",
+          "css": "var(--area-surface-part-3-1-x) var(--area-surface-part-3-1-y) var(--area-surface-part-3-1-blur) var(--area-surface-part-3-1-spread) var(--area-surface-part-3-1-color)"
+        }
+      ],
+      "tokens": {
+        "--area-surface-part-3-1-x": "0",
+        "--area-surface-part-3-1-y": "2px",
+        "--area-surface-part-3-1-blur": "4px",
+        "--area-surface-part-3-1-spread": "-1px",
+        "--area-surface-part-3-1-color": "var(--area-shadow-color)"
+      },
+      "composed": "var(--area-surface-part-3-1-x) var(--area-surface-part-3-1-y) var(--area-surface-part-3-1-blur) var(--area-surface-part-3-1-spread) var(--area-surface-part-3-1-color)"
+    },
+    {
+      "surface": "outlined",
+      "id": "4",
+      "original": "0 3px 6px -2px var(--area-shadow-color)",
+      "borderWidth": "1px",
+      "parts": [
+        {
+          "inset": false,
+          "x": "0",
+          "y": "3px",
+          "blur": "6px",
+          "spread": "-2px",
+          "color": "var(--area-shadow-color)",
+          "css": "var(--area-surface-part-4-1-x) var(--area-surface-part-4-1-y) var(--area-surface-part-4-1-blur) var(--area-surface-part-4-1-spread) var(--area-surface-part-4-1-color)"
+        }
+      ],
+      "tokens": {
+        "--area-surface-part-4-1-x": "0",
+        "--area-surface-part-4-1-y": "3px",
+        "--area-surface-part-4-1-blur": "6px",
+        "--area-surface-part-4-1-spread": "-2px",
+        "--area-surface-part-4-1-color": "var(--area-shadow-color)"
+      },
+      "composed": "var(--area-surface-part-4-1-x) var(--area-surface-part-4-1-y) var(--area-surface-part-4-1-blur) var(--area-surface-part-4-1-spread) var(--area-surface-part-4-1-color)"
+    },
+    {
+      "surface": "outlined",
+      "id": "card",
+      "original": "0 1px 2px -1px light-dark(rgb(0 0 0 / 0.03), transparent), 0 2px 8px 0 light-dark(rgb(0 0 0 / 0.03), transparent)",
+      "borderWidth": "1px",
+      "parts": [
+        {
+          "inset": false,
+          "x": "0",
+          "y": "1px",
+          "blur": "2px",
+          "spread": "-1px",
+          "color": "light-dark(rgb(0 0 0 / 0.03), transparent)",
+          "css": "var(--area-surface-part-card-1-x) var(--area-surface-part-card-1-y) var(--area-surface-part-card-1-blur) var(--area-surface-part-card-1-spread) var(--area-surface-part-card-1-color)"
+        },
+        {
+          "inset": false,
+          "x": "0",
+          "y": "2px",
+          "blur": "8px",
+          "spread": "0",
+          "color": "light-dark(rgb(0 0 0 / 0.03), transparent)",
+          "css": "var(--area-surface-part-card-2-x) var(--area-surface-part-card-2-y) var(--area-surface-part-card-2-blur) var(--area-surface-part-card-2-spread) var(--area-surface-part-card-2-color)"
+        }
+      ],
+      "tokens": {
+        "--area-surface-part-card-1-x": "0",
+        "--area-surface-part-card-1-y": "1px",
+        "--area-surface-part-card-1-blur": "2px",
+        "--area-surface-part-card-1-spread": "-1px",
+        "--area-surface-part-card-1-color": "light-dark(rgb(0 0 0 / 0.03), transparent)",
+        "--area-surface-part-card-2-x": "0",
+        "--area-surface-part-card-2-y": "2px",
+        "--area-surface-part-card-2-blur": "8px",
+        "--area-surface-part-card-2-spread": "0",
+        "--area-surface-part-card-2-color": "light-dark(rgb(0 0 0 / 0.03), transparent)"
+      },
+      "composed": "var(--area-surface-part-card-1-x) var(--area-surface-part-card-1-y) var(--area-surface-part-card-1-blur) var(--area-surface-part-card-1-spread) var(--area-surface-part-card-1-color), var(--area-surface-part-card-2-x) var(--area-surface-part-card-2-y) var(--area-surface-part-card-2-blur) var(--area-surface-part-card-2-spread) var(--area-surface-part-card-2-color)"
+    },
+    {
+      "surface": "outlined",
+      "id": "float",
+      "original": "0 20px 24px var(--area-shadow-color), 0 5px 8px color-mix(in srgb, var(--area-shadow-color) 50%, transparent)",
+      "borderWidth": "1px",
+      "parts": [
+        {
+          "inset": false,
+          "x": "0",
+          "y": "20px",
+          "blur": "24px",
+          "spread": "0px",
+          "color": "var(--area-shadow-color)",
+          "css": "var(--area-surface-part-float-1-x) var(--area-surface-part-float-1-y) var(--area-surface-part-float-1-blur) var(--area-surface-part-float-1-spread) var(--area-surface-part-float-1-color)"
+        },
+        {
+          "inset": false,
+          "x": "0",
+          "y": "5px",
+          "blur": "8px",
+          "spread": "0px",
+          "color": "color-mix(in srgb, var(--area-shadow-color) 50%, transparent)",
+          "css": "var(--area-surface-part-float-2-x) var(--area-surface-part-float-2-y) var(--area-surface-part-float-2-blur) var(--area-surface-part-float-2-spread) var(--area-surface-part-float-2-color)"
+        }
+      ],
+      "tokens": {
+        "--area-surface-part-float-1-x": "0",
+        "--area-surface-part-float-1-y": "20px",
+        "--area-surface-part-float-1-blur": "24px",
+        "--area-surface-part-float-1-spread": "0px",
+        "--area-surface-part-float-1-color": "var(--area-shadow-color)",
+        "--area-surface-part-float-2-x": "0",
+        "--area-surface-part-float-2-y": "5px",
+        "--area-surface-part-float-2-blur": "8px",
+        "--area-surface-part-float-2-spread": "0px",
+        "--area-surface-part-float-2-color": "color-mix(in srgb, var(--area-shadow-color) 50%, transparent)"
+      },
+      "composed": "var(--area-surface-part-float-1-x) var(--area-surface-part-float-1-y) var(--area-surface-part-float-1-blur) var(--area-surface-part-float-1-spread) var(--area-surface-part-float-1-color), var(--area-surface-part-float-2-x) var(--area-surface-part-float-2-y) var(--area-surface-part-float-2-blur) var(--area-surface-part-float-2-spread) var(--area-surface-part-float-2-color)"
+    },
+    {
+      "surface": "outlined",
+      "id": "tooltip",
+      "original": "0 4px 12px -2px var(--area-shadow-color), inset 0 0 0 var(--area-stroke-width) light-dark(transparent, rgb(255 255 255 / 0.05))",
+      "borderWidth": "1px",
+      "parts": [
+        {
+          "inset": false,
+          "x": "0",
+          "y": "4px",
+          "blur": "12px",
+          "spread": "-2px",
+          "color": "var(--area-shadow-color)",
+          "css": "var(--area-surface-part-tooltip-1-x) var(--area-surface-part-tooltip-1-y) var(--area-surface-part-tooltip-1-blur) var(--area-surface-part-tooltip-1-spread) var(--area-surface-part-tooltip-1-color)"
+        },
+        {
+          "inset": true,
+          "x": "0",
+          "y": "0",
+          "blur": "0",
+          "spread": "var(--area-stroke-width)",
+          "color": "light-dark(transparent, rgb(255 255 255 / 0.05))",
+          "css": "inset var(--area-surface-part-tooltip-2-x) var(--area-surface-part-tooltip-2-y) var(--area-surface-part-tooltip-2-blur) var(--area-surface-part-tooltip-2-spread) var(--area-surface-part-tooltip-2-color)"
+        }
+      ],
+      "tokens": {
+        "--area-surface-part-tooltip-1-x": "0",
+        "--area-surface-part-tooltip-1-y": "4px",
+        "--area-surface-part-tooltip-1-blur": "12px",
+        "--area-surface-part-tooltip-1-spread": "-2px",
+        "--area-surface-part-tooltip-1-color": "var(--area-shadow-color)",
+        "--area-surface-part-tooltip-2-x": "0",
+        "--area-surface-part-tooltip-2-y": "0",
+        "--area-surface-part-tooltip-2-blur": "0",
+        "--area-surface-part-tooltip-2-spread": "var(--area-stroke-width)",
+        "--area-surface-part-tooltip-2-color": "light-dark(transparent, rgb(255 255 255 / 0.05))"
+      },
+      "composed": "var(--area-surface-part-tooltip-1-x) var(--area-surface-part-tooltip-1-y) var(--area-surface-part-tooltip-1-blur) var(--area-surface-part-tooltip-1-spread) var(--area-surface-part-tooltip-1-color), inset var(--area-surface-part-tooltip-2-x) var(--area-surface-part-tooltip-2-y) var(--area-surface-part-tooltip-2-blur) var(--area-surface-part-tooltip-2-spread) var(--area-surface-part-tooltip-2-color)"
+    },
+    {
+      "surface": "outlined",
+      "id": "toolbar",
+      "original": "inset 0 0 0 var(--area-border-width) light-dark(transparent, var(--area-border-float)), 0 0 0.5px rgb(0 0 0 / 0.18), 0 3px 8px rgb(0 0 0 / 0.1), 0 1px 3px rgb(0 0 0 / 0.1)",
+      "borderWidth": "1px",
+      "parts": [
+        {
+          "inset": true,
+          "x": "0",
+          "y": "0",
+          "blur": "0",
+          "spread": "var(--area-border-width)",
+          "color": "light-dark(transparent, var(--area-border-float))",
+          "css": "inset var(--area-surface-part-toolbar-1-x) var(--area-surface-part-toolbar-1-y) var(--area-surface-part-toolbar-1-blur) var(--area-surface-part-toolbar-1-spread) var(--area-surface-part-toolbar-1-color)"
+        },
+        {
+          "inset": false,
+          "x": "0",
+          "y": "0",
+          "blur": "0.5px",
+          "spread": "0px",
+          "color": "rgb(0 0 0 / 0.18)",
+          "css": "var(--area-surface-part-toolbar-2-x) var(--area-surface-part-toolbar-2-y) var(--area-surface-part-toolbar-2-blur) var(--area-surface-part-toolbar-2-spread) var(--area-surface-part-toolbar-2-color)"
+        },
+        {
+          "inset": false,
+          "x": "0",
+          "y": "3px",
+          "blur": "8px",
+          "spread": "0px",
+          "color": "rgb(0 0 0 / 0.1)",
+          "css": "var(--area-surface-part-toolbar-3-x) var(--area-surface-part-toolbar-3-y) var(--area-surface-part-toolbar-3-blur) var(--area-surface-part-toolbar-3-spread) var(--area-surface-part-toolbar-3-color)"
+        },
+        {
+          "inset": false,
+          "x": "0",
+          "y": "1px",
+          "blur": "3px",
+          "spread": "0px",
+          "color": "rgb(0 0 0 / 0.1)",
+          "css": "var(--area-surface-part-toolbar-4-x) var(--area-surface-part-toolbar-4-y) var(--area-surface-part-toolbar-4-blur) var(--area-surface-part-toolbar-4-spread) var(--area-surface-part-toolbar-4-color)"
+        }
+      ],
+      "tokens": {
+        "--area-surface-part-toolbar-1-x": "0",
+        "--area-surface-part-toolbar-1-y": "0",
+        "--area-surface-part-toolbar-1-blur": "0",
+        "--area-surface-part-toolbar-1-spread": "var(--area-border-width)",
+        "--area-surface-part-toolbar-1-color": "light-dark(transparent, var(--area-border-float))",
+        "--area-surface-part-toolbar-2-x": "0",
+        "--area-surface-part-toolbar-2-y": "0",
+        "--area-surface-part-toolbar-2-blur": "0.5px",
+        "--area-surface-part-toolbar-2-spread": "0px",
+        "--area-surface-part-toolbar-2-color": "rgb(0 0 0 / 0.18)",
+        "--area-surface-part-toolbar-3-x": "0",
+        "--area-surface-part-toolbar-3-y": "3px",
+        "--area-surface-part-toolbar-3-blur": "8px",
+        "--area-surface-part-toolbar-3-spread": "0px",
+        "--area-surface-part-toolbar-3-color": "rgb(0 0 0 / 0.1)",
+        "--area-surface-part-toolbar-4-x": "0",
+        "--area-surface-part-toolbar-4-y": "1px",
+        "--area-surface-part-toolbar-4-blur": "3px",
+        "--area-surface-part-toolbar-4-spread": "0px",
+        "--area-surface-part-toolbar-4-color": "rgb(0 0 0 / 0.1)"
+      },
+      "composed": "inset var(--area-surface-part-toolbar-1-x) var(--area-surface-part-toolbar-1-y) var(--area-surface-part-toolbar-1-blur) var(--area-surface-part-toolbar-1-spread) var(--area-surface-part-toolbar-1-color), var(--area-surface-part-toolbar-2-x) var(--area-surface-part-toolbar-2-y) var(--area-surface-part-toolbar-2-blur) var(--area-surface-part-toolbar-2-spread) var(--area-surface-part-toolbar-2-color), var(--area-surface-part-toolbar-3-x) var(--area-surface-part-toolbar-3-y) var(--area-surface-part-toolbar-3-blur) var(--area-surface-part-toolbar-3-spread) var(--area-surface-part-toolbar-3-color), var(--area-surface-part-toolbar-4-x) var(--area-surface-part-toolbar-4-y) var(--area-surface-part-toolbar-4-blur) var(--area-surface-part-toolbar-4-spread) var(--area-surface-part-toolbar-4-color)"
+    },
+    {
+      "surface": "raised",
+      "id": "1",
+      "original": "0 0.5px 1px -0.5px var(--area-shadow-color)",
+      "borderWidth": "1px",
+      "parts": [
+        {
+          "inset": false,
+          "x": "0",
+          "y": "0.5px",
+          "blur": "1px",
+          "spread": "-0.5px",
+          "color": "var(--area-shadow-color)",
+          "css": "var(--area-surface-part-1-1-x) var(--area-surface-part-1-1-y) var(--area-surface-part-1-1-blur) var(--area-surface-part-1-1-spread) var(--area-surface-part-1-1-color)"
+        }
+      ],
+      "tokens": {
+        "--area-surface-part-1-1-x": "0",
+        "--area-surface-part-1-1-y": "0.5px",
+        "--area-surface-part-1-1-blur": "1px",
+        "--area-surface-part-1-1-spread": "-0.5px",
+        "--area-surface-part-1-1-color": "var(--area-shadow-color)"
+      },
+      "composed": "var(--area-surface-part-1-1-x) var(--area-surface-part-1-1-y) var(--area-surface-part-1-1-blur) var(--area-surface-part-1-1-spread) var(--area-surface-part-1-1-color)"
+    },
+    {
+      "surface": "raised",
+      "id": "2",
+      "original": "0 1px 3px -1px var(--area-shadow-color)",
+      "borderWidth": "1px",
+      "parts": [
+        {
+          "inset": false,
+          "x": "0",
+          "y": "1px",
+          "blur": "3px",
+          "spread": "-1px",
+          "color": "var(--area-shadow-color)",
+          "css": "var(--area-surface-part-2-1-x) var(--area-surface-part-2-1-y) var(--area-surface-part-2-1-blur) var(--area-surface-part-2-1-spread) var(--area-surface-part-2-1-color)"
+        }
+      ],
+      "tokens": {
+        "--area-surface-part-2-1-x": "0",
+        "--area-surface-part-2-1-y": "1px",
+        "--area-surface-part-2-1-blur": "3px",
+        "--area-surface-part-2-1-spread": "-1px",
+        "--area-surface-part-2-1-color": "var(--area-shadow-color)"
+      },
+      "composed": "var(--area-surface-part-2-1-x) var(--area-surface-part-2-1-y) var(--area-surface-part-2-1-blur) var(--area-surface-part-2-1-spread) var(--area-surface-part-2-1-color)"
+    },
+    {
+      "surface": "raised",
+      "id": "3",
+      "original": "0 2px 6px -2px var(--area-shadow-color)",
+      "borderWidth": "1px",
+      "parts": [
+        {
+          "inset": false,
+          "x": "0",
+          "y": "2px",
+          "blur": "6px",
+          "spread": "-2px",
+          "color": "var(--area-shadow-color)",
+          "css": "var(--area-surface-part-3-1-x) var(--area-surface-part-3-1-y) var(--area-surface-part-3-1-blur) var(--area-surface-part-3-1-spread) var(--area-surface-part-3-1-color)"
+        }
+      ],
+      "tokens": {
+        "--area-surface-part-3-1-x": "0",
+        "--area-surface-part-3-1-y": "2px",
+        "--area-surface-part-3-1-blur": "6px",
+        "--area-surface-part-3-1-spread": "-2px",
+        "--area-surface-part-3-1-color": "var(--area-shadow-color)"
+      },
+      "composed": "var(--area-surface-part-3-1-x) var(--area-surface-part-3-1-y) var(--area-surface-part-3-1-blur) var(--area-surface-part-3-1-spread) var(--area-surface-part-3-1-color)"
+    },
+    {
+      "surface": "raised",
+      "id": "4",
+      "original": "0 4px 10px -3px var(--area-shadow-color)",
+      "borderWidth": "1px",
+      "parts": [
+        {
+          "inset": false,
+          "x": "0",
+          "y": "4px",
+          "blur": "10px",
+          "spread": "-3px",
+          "color": "var(--area-shadow-color)",
+          "css": "var(--area-surface-part-4-1-x) var(--area-surface-part-4-1-y) var(--area-surface-part-4-1-blur) var(--area-surface-part-4-1-spread) var(--area-surface-part-4-1-color)"
+        }
+      ],
+      "tokens": {
+        "--area-surface-part-4-1-x": "0",
+        "--area-surface-part-4-1-y": "4px",
+        "--area-surface-part-4-1-blur": "10px",
+        "--area-surface-part-4-1-spread": "-3px",
+        "--area-surface-part-4-1-color": "var(--area-shadow-color)"
+      },
+      "composed": "var(--area-surface-part-4-1-x) var(--area-surface-part-4-1-y) var(--area-surface-part-4-1-blur) var(--area-surface-part-4-1-spread) var(--area-surface-part-4-1-color)"
+    },
+    {
+      "surface": "raised",
+      "id": "card",
+      "original": "0 1px 2px -1px light-dark(rgb(0 0 0 / 0.03), transparent), 0 2px 8px 0 light-dark(rgb(0 0 0 / 0.03), transparent)",
+      "borderWidth": "1px",
+      "parts": [
+        {
+          "inset": false,
+          "x": "0",
+          "y": "1px",
+          "blur": "2px",
+          "spread": "-1px",
+          "color": "light-dark(rgb(0 0 0 / 0.03), transparent)",
+          "css": "var(--area-surface-part-card-1-x) var(--area-surface-part-card-1-y) var(--area-surface-part-card-1-blur) var(--area-surface-part-card-1-spread) var(--area-surface-part-card-1-color)"
+        },
+        {
+          "inset": false,
+          "x": "0",
+          "y": "2px",
+          "blur": "8px",
+          "spread": "0",
+          "color": "light-dark(rgb(0 0 0 / 0.03), transparent)",
+          "css": "var(--area-surface-part-card-2-x) var(--area-surface-part-card-2-y) var(--area-surface-part-card-2-blur) var(--area-surface-part-card-2-spread) var(--area-surface-part-card-2-color)"
+        }
+      ],
+      "tokens": {
+        "--area-surface-part-card-1-x": "0",
+        "--area-surface-part-card-1-y": "1px",
+        "--area-surface-part-card-1-blur": "2px",
+        "--area-surface-part-card-1-spread": "-1px",
+        "--area-surface-part-card-1-color": "light-dark(rgb(0 0 0 / 0.03), transparent)",
+        "--area-surface-part-card-2-x": "0",
+        "--area-surface-part-card-2-y": "2px",
+        "--area-surface-part-card-2-blur": "8px",
+        "--area-surface-part-card-2-spread": "0",
+        "--area-surface-part-card-2-color": "light-dark(rgb(0 0 0 / 0.03), transparent)"
+      },
+      "composed": "var(--area-surface-part-card-1-x) var(--area-surface-part-card-1-y) var(--area-surface-part-card-1-blur) var(--area-surface-part-card-1-spread) var(--area-surface-part-card-1-color), var(--area-surface-part-card-2-x) var(--area-surface-part-card-2-y) var(--area-surface-part-card-2-blur) var(--area-surface-part-card-2-spread) var(--area-surface-part-card-2-color)"
+    },
+    {
+      "surface": "raised",
+      "id": "float",
+      "original": "0 20px 24px var(--area-shadow-color), 0 5px 8px color-mix(in srgb, var(--area-shadow-color) 50%, transparent)",
+      "borderWidth": "1px",
+      "parts": [
+        {
+          "inset": false,
+          "x": "0",
+          "y": "20px",
+          "blur": "24px",
+          "spread": "0px",
+          "color": "var(--area-shadow-color)",
+          "css": "var(--area-surface-part-float-1-x) var(--area-surface-part-float-1-y) var(--area-surface-part-float-1-blur) var(--area-surface-part-float-1-spread) var(--area-surface-part-float-1-color)"
+        },
+        {
+          "inset": false,
+          "x": "0",
+          "y": "5px",
+          "blur": "8px",
+          "spread": "0px",
+          "color": "color-mix(in srgb, var(--area-shadow-color) 50%, transparent)",
+          "css": "var(--area-surface-part-float-2-x) var(--area-surface-part-float-2-y) var(--area-surface-part-float-2-blur) var(--area-surface-part-float-2-spread) var(--area-surface-part-float-2-color)"
+        }
+      ],
+      "tokens": {
+        "--area-surface-part-float-1-x": "0",
+        "--area-surface-part-float-1-y": "20px",
+        "--area-surface-part-float-1-blur": "24px",
+        "--area-surface-part-float-1-spread": "0px",
+        "--area-surface-part-float-1-color": "var(--area-shadow-color)",
+        "--area-surface-part-float-2-x": "0",
+        "--area-surface-part-float-2-y": "5px",
+        "--area-surface-part-float-2-blur": "8px",
+        "--area-surface-part-float-2-spread": "0px",
+        "--area-surface-part-float-2-color": "color-mix(in srgb, var(--area-shadow-color) 50%, transparent)"
+      },
+      "composed": "var(--area-surface-part-float-1-x) var(--area-surface-part-float-1-y) var(--area-surface-part-float-1-blur) var(--area-surface-part-float-1-spread) var(--area-surface-part-float-1-color), var(--area-surface-part-float-2-x) var(--area-surface-part-float-2-y) var(--area-surface-part-float-2-blur) var(--area-surface-part-float-2-spread) var(--area-surface-part-float-2-color)"
+    },
+    {
+      "surface": "raised",
+      "id": "tooltip",
+      "original": "0 4px 12px -2px var(--area-shadow-color), inset 0 0 0 var(--area-stroke-width) light-dark(transparent, rgb(255 255 255 / 0.05))",
+      "borderWidth": "1px",
+      "parts": [
+        {
+          "inset": false,
+          "x": "0",
+          "y": "4px",
+          "blur": "12px",
+          "spread": "-2px",
+          "color": "var(--area-shadow-color)",
+          "css": "var(--area-surface-part-tooltip-1-x) var(--area-surface-part-tooltip-1-y) var(--area-surface-part-tooltip-1-blur) var(--area-surface-part-tooltip-1-spread) var(--area-surface-part-tooltip-1-color)"
+        },
+        {
+          "inset": true,
+          "x": "0",
+          "y": "0",
+          "blur": "0",
+          "spread": "var(--area-stroke-width)",
+          "color": "light-dark(transparent, rgb(255 255 255 / 0.05))",
+          "css": "inset var(--area-surface-part-tooltip-2-x) var(--area-surface-part-tooltip-2-y) var(--area-surface-part-tooltip-2-blur) var(--area-surface-part-tooltip-2-spread) var(--area-surface-part-tooltip-2-color)"
+        }
+      ],
+      "tokens": {
+        "--area-surface-part-tooltip-1-x": "0",
+        "--area-surface-part-tooltip-1-y": "4px",
+        "--area-surface-part-tooltip-1-blur": "12px",
+        "--area-surface-part-tooltip-1-spread": "-2px",
+        "--area-surface-part-tooltip-1-color": "var(--area-shadow-color)",
+        "--area-surface-part-tooltip-2-x": "0",
+        "--area-surface-part-tooltip-2-y": "0",
+        "--area-surface-part-tooltip-2-blur": "0",
+        "--area-surface-part-tooltip-2-spread": "var(--area-stroke-width)",
+        "--area-surface-part-tooltip-2-color": "light-dark(transparent, rgb(255 255 255 / 0.05))"
+      },
+      "composed": "var(--area-surface-part-tooltip-1-x) var(--area-surface-part-tooltip-1-y) var(--area-surface-part-tooltip-1-blur) var(--area-surface-part-tooltip-1-spread) var(--area-surface-part-tooltip-1-color), inset var(--area-surface-part-tooltip-2-x) var(--area-surface-part-tooltip-2-y) var(--area-surface-part-tooltip-2-blur) var(--area-surface-part-tooltip-2-spread) var(--area-surface-part-tooltip-2-color)"
+    },
+    {
+      "surface": "raised",
+      "id": "toolbar",
+      "original": "inset 0 0 0 var(--area-border-width) light-dark(transparent, var(--area-border-float)), 0 0 0.5px rgb(0 0 0 / 0.18), 0 3px 8px rgb(0 0 0 / 0.1), 0 1px 3px rgb(0 0 0 / 0.1)",
+      "borderWidth": "1px",
+      "parts": [
+        {
+          "inset": true,
+          "x": "0",
+          "y": "0",
+          "blur": "0",
+          "spread": "var(--area-border-width)",
+          "color": "light-dark(transparent, var(--area-border-float))",
+          "css": "inset var(--area-surface-part-toolbar-1-x) var(--area-surface-part-toolbar-1-y) var(--area-surface-part-toolbar-1-blur) var(--area-surface-part-toolbar-1-spread) var(--area-surface-part-toolbar-1-color)"
+        },
+        {
+          "inset": false,
+          "x": "0",
+          "y": "0",
+          "blur": "0.5px",
+          "spread": "0px",
+          "color": "rgb(0 0 0 / 0.18)",
+          "css": "var(--area-surface-part-toolbar-2-x) var(--area-surface-part-toolbar-2-y) var(--area-surface-part-toolbar-2-blur) var(--area-surface-part-toolbar-2-spread) var(--area-surface-part-toolbar-2-color)"
+        },
+        {
+          "inset": false,
+          "x": "0",
+          "y": "3px",
+          "blur": "8px",
+          "spread": "0px",
+          "color": "rgb(0 0 0 / 0.1)",
+          "css": "var(--area-surface-part-toolbar-3-x) var(--area-surface-part-toolbar-3-y) var(--area-surface-part-toolbar-3-blur) var(--area-surface-part-toolbar-3-spread) var(--area-surface-part-toolbar-3-color)"
+        },
+        {
+          "inset": false,
+          "x": "0",
+          "y": "1px",
+          "blur": "3px",
+          "spread": "0px",
+          "color": "rgb(0 0 0 / 0.1)",
+          "css": "var(--area-surface-part-toolbar-4-x) var(--area-surface-part-toolbar-4-y) var(--area-surface-part-toolbar-4-blur) var(--area-surface-part-toolbar-4-spread) var(--area-surface-part-toolbar-4-color)"
+        }
+      ],
+      "tokens": {
+        "--area-surface-part-toolbar-1-x": "0",
+        "--area-surface-part-toolbar-1-y": "0",
+        "--area-surface-part-toolbar-1-blur": "0",
+        "--area-surface-part-toolbar-1-spread": "var(--area-border-width)",
+        "--area-surface-part-toolbar-1-color": "light-dark(transparent, var(--area-border-float))",
+        "--area-surface-part-toolbar-2-x": "0",
+        "--area-surface-part-toolbar-2-y": "0",
+        "--area-surface-part-toolbar-2-blur": "0.5px",
+        "--area-surface-part-toolbar-2-spread": "0px",
+        "--area-surface-part-toolbar-2-color": "rgb(0 0 0 / 0.18)",
+        "--area-surface-part-toolbar-3-x": "0",
+        "--area-surface-part-toolbar-3-y": "3px",
+        "--area-surface-part-toolbar-3-blur": "8px",
+        "--area-surface-part-toolbar-3-spread": "0px",
+        "--area-surface-part-toolbar-3-color": "rgb(0 0 0 / 0.1)",
+        "--area-surface-part-toolbar-4-x": "0",
+        "--area-surface-part-toolbar-4-y": "1px",
+        "--area-surface-part-toolbar-4-blur": "3px",
+        "--area-surface-part-toolbar-4-spread": "0px",
+        "--area-surface-part-toolbar-4-color": "rgb(0 0 0 / 0.1)"
+      },
+      "composed": "inset var(--area-surface-part-toolbar-1-x) var(--area-surface-part-toolbar-1-y) var(--area-surface-part-toolbar-1-blur) var(--area-surface-part-toolbar-1-spread) var(--area-surface-part-toolbar-1-color), var(--area-surface-part-toolbar-2-x) var(--area-surface-part-toolbar-2-y) var(--area-surface-part-toolbar-2-blur) var(--area-surface-part-toolbar-2-spread) var(--area-surface-part-toolbar-2-color), var(--area-surface-part-toolbar-3-x) var(--area-surface-part-toolbar-3-y) var(--area-surface-part-toolbar-3-blur) var(--area-surface-part-toolbar-3-spread) var(--area-surface-part-toolbar-3-color), var(--area-surface-part-toolbar-4-x) var(--area-surface-part-toolbar-4-y) var(--area-surface-part-toolbar-4-blur) var(--area-surface-part-toolbar-4-spread) var(--area-surface-part-toolbar-4-color)"
+    },
+    {
+      "surface": "elevated",
+      "id": "1",
+      "original": "0 0.5px 2px -0.5px var(--area-shadow-color)",
+      "borderWidth": "0px",
+      "parts": [
+        {
+          "inset": false,
+          "x": "0",
+          "y": "0.5px",
+          "blur": "2px",
+          "spread": "-0.5px",
+          "color": "var(--area-shadow-color)",
+          "css": "var(--area-surface-part-1-1-x) var(--area-surface-part-1-1-y) var(--area-surface-part-1-1-blur) var(--area-surface-part-1-1-spread) var(--area-surface-part-1-1-color)"
+        }
+      ],
+      "tokens": {
+        "--area-surface-part-1-1-x": "0",
+        "--area-surface-part-1-1-y": "0.5px",
+        "--area-surface-part-1-1-blur": "2px",
+        "--area-surface-part-1-1-spread": "-0.5px",
+        "--area-surface-part-1-1-color": "var(--area-shadow-color)"
+      },
+      "composed": "var(--area-surface-part-1-1-x) var(--area-surface-part-1-1-y) var(--area-surface-part-1-1-blur) var(--area-surface-part-1-1-spread) var(--area-surface-part-1-1-color)"
+    },
+    {
+      "surface": "elevated",
+      "id": "2",
+      "original": "0 1px 4px -1px var(--area-shadow-color)",
+      "borderWidth": "0px",
+      "parts": [
+        {
+          "inset": false,
+          "x": "0",
+          "y": "1px",
+          "blur": "4px",
+          "spread": "-1px",
+          "color": "var(--area-shadow-color)",
+          "css": "var(--area-surface-part-2-1-x) var(--area-surface-part-2-1-y) var(--area-surface-part-2-1-blur) var(--area-surface-part-2-1-spread) var(--area-surface-part-2-1-color)"
+        }
+      ],
+      "tokens": {
+        "--area-surface-part-2-1-x": "0",
+        "--area-surface-part-2-1-y": "1px",
+        "--area-surface-part-2-1-blur": "4px",
+        "--area-surface-part-2-1-spread": "-1px",
+        "--area-surface-part-2-1-color": "var(--area-shadow-color)"
+      },
+      "composed": "var(--area-surface-part-2-1-x) var(--area-surface-part-2-1-y) var(--area-surface-part-2-1-blur) var(--area-surface-part-2-1-spread) var(--area-surface-part-2-1-color)"
+    },
+    {
+      "surface": "elevated",
+      "id": "3",
+      "original": "0 3px 8px -2px var(--area-shadow-color)",
+      "borderWidth": "0px",
+      "parts": [
+        {
+          "inset": false,
+          "x": "0",
+          "y": "3px",
+          "blur": "8px",
+          "spread": "-2px",
+          "color": "var(--area-shadow-color)",
+          "css": "var(--area-surface-part-3-1-x) var(--area-surface-part-3-1-y) var(--area-surface-part-3-1-blur) var(--area-surface-part-3-1-spread) var(--area-surface-part-3-1-color)"
+        }
+      ],
+      "tokens": {
+        "--area-surface-part-3-1-x": "0",
+        "--area-surface-part-3-1-y": "3px",
+        "--area-surface-part-3-1-blur": "8px",
+        "--area-surface-part-3-1-spread": "-2px",
+        "--area-surface-part-3-1-color": "var(--area-shadow-color)"
+      },
+      "composed": "var(--area-surface-part-3-1-x) var(--area-surface-part-3-1-y) var(--area-surface-part-3-1-blur) var(--area-surface-part-3-1-spread) var(--area-surface-part-3-1-color)"
+    },
+    {
+      "surface": "elevated",
+      "id": "4",
+      "original": "0 5px 12px -3px var(--area-shadow-color)",
+      "borderWidth": "0px",
+      "parts": [
+        {
+          "inset": false,
+          "x": "0",
+          "y": "5px",
+          "blur": "12px",
+          "spread": "-3px",
+          "color": "var(--area-shadow-color)",
+          "css": "var(--area-surface-part-4-1-x) var(--area-surface-part-4-1-y) var(--area-surface-part-4-1-blur) var(--area-surface-part-4-1-spread) var(--area-surface-part-4-1-color)"
+        }
+      ],
+      "tokens": {
+        "--area-surface-part-4-1-x": "0",
+        "--area-surface-part-4-1-y": "5px",
+        "--area-surface-part-4-1-blur": "12px",
+        "--area-surface-part-4-1-spread": "-3px",
+        "--area-surface-part-4-1-color": "var(--area-shadow-color)"
+      },
+      "composed": "var(--area-surface-part-4-1-x) var(--area-surface-part-4-1-y) var(--area-surface-part-4-1-blur) var(--area-surface-part-4-1-spread) var(--area-surface-part-4-1-color)"
+    },
+    {
+      "surface": "elevated",
+      "id": "card",
+      "original": "0 1px 2px -1px light-dark(rgb(0 0 0 / 0.03), transparent), 0 2px 8px 0 light-dark(rgb(0 0 0 / 0.03), transparent)",
+      "borderWidth": "0px",
+      "parts": [
+        {
+          "inset": false,
+          "x": "0",
+          "y": "1px",
+          "blur": "2px",
+          "spread": "-1px",
+          "color": "light-dark(rgb(0 0 0 / 0.03), transparent)",
+          "css": "var(--area-surface-part-card-1-x) var(--area-surface-part-card-1-y) var(--area-surface-part-card-1-blur) var(--area-surface-part-card-1-spread) var(--area-surface-part-card-1-color)"
+        },
+        {
+          "inset": false,
+          "x": "0",
+          "y": "2px",
+          "blur": "8px",
+          "spread": "0",
+          "color": "light-dark(rgb(0 0 0 / 0.03), transparent)",
+          "css": "var(--area-surface-part-card-2-x) var(--area-surface-part-card-2-y) var(--area-surface-part-card-2-blur) var(--area-surface-part-card-2-spread) var(--area-surface-part-card-2-color)"
+        }
+      ],
+      "tokens": {
+        "--area-surface-part-card-1-x": "0",
+        "--area-surface-part-card-1-y": "1px",
+        "--area-surface-part-card-1-blur": "2px",
+        "--area-surface-part-card-1-spread": "-1px",
+        "--area-surface-part-card-1-color": "light-dark(rgb(0 0 0 / 0.03), transparent)",
+        "--area-surface-part-card-2-x": "0",
+        "--area-surface-part-card-2-y": "2px",
+        "--area-surface-part-card-2-blur": "8px",
+        "--area-surface-part-card-2-spread": "0",
+        "--area-surface-part-card-2-color": "light-dark(rgb(0 0 0 / 0.03), transparent)"
+      },
+      "composed": "var(--area-surface-part-card-1-x) var(--area-surface-part-card-1-y) var(--area-surface-part-card-1-blur) var(--area-surface-part-card-1-spread) var(--area-surface-part-card-1-color), var(--area-surface-part-card-2-x) var(--area-surface-part-card-2-y) var(--area-surface-part-card-2-blur) var(--area-surface-part-card-2-spread) var(--area-surface-part-card-2-color)"
+    },
+    {
+      "surface": "elevated",
+      "id": "float",
+      "original": "0 20px 24px var(--area-shadow-color), 0 5px 8px color-mix(in srgb, var(--area-shadow-color) 50%, transparent)",
+      "borderWidth": "0px",
+      "parts": [
+        {
+          "inset": false,
+          "x": "0",
+          "y": "20px",
+          "blur": "24px",
+          "spread": "0px",
+          "color": "var(--area-shadow-color)",
+          "css": "var(--area-surface-part-float-1-x) var(--area-surface-part-float-1-y) var(--area-surface-part-float-1-blur) var(--area-surface-part-float-1-spread) var(--area-surface-part-float-1-color)"
+        },
+        {
+          "inset": false,
+          "x": "0",
+          "y": "5px",
+          "blur": "8px",
+          "spread": "0px",
+          "color": "color-mix(in srgb, var(--area-shadow-color) 50%, transparent)",
+          "css": "var(--area-surface-part-float-2-x) var(--area-surface-part-float-2-y) var(--area-surface-part-float-2-blur) var(--area-surface-part-float-2-spread) var(--area-surface-part-float-2-color)"
+        }
+      ],
+      "tokens": {
+        "--area-surface-part-float-1-x": "0",
+        "--area-surface-part-float-1-y": "20px",
+        "--area-surface-part-float-1-blur": "24px",
+        "--area-surface-part-float-1-spread": "0px",
+        "--area-surface-part-float-1-color": "var(--area-shadow-color)",
+        "--area-surface-part-float-2-x": "0",
+        "--area-surface-part-float-2-y": "5px",
+        "--area-surface-part-float-2-blur": "8px",
+        "--area-surface-part-float-2-spread": "0px",
+        "--area-surface-part-float-2-color": "color-mix(in srgb, var(--area-shadow-color) 50%, transparent)"
+      },
+      "composed": "var(--area-surface-part-float-1-x) var(--area-surface-part-float-1-y) var(--area-surface-part-float-1-blur) var(--area-surface-part-float-1-spread) var(--area-surface-part-float-1-color), var(--area-surface-part-float-2-x) var(--area-surface-part-float-2-y) var(--area-surface-part-float-2-blur) var(--area-surface-part-float-2-spread) var(--area-surface-part-float-2-color)"
+    },
+    {
+      "surface": "elevated",
+      "id": "tooltip",
+      "original": "0 4px 12px -2px var(--area-shadow-color), inset 0 0 0 var(--area-stroke-width) light-dark(transparent, rgb(255 255 255 / 0.05))",
+      "borderWidth": "0px",
+      "parts": [
+        {
+          "inset": false,
+          "x": "0",
+          "y": "4px",
+          "blur": "12px",
+          "spread": "-2px",
+          "color": "var(--area-shadow-color)",
+          "css": "var(--area-surface-part-tooltip-1-x) var(--area-surface-part-tooltip-1-y) var(--area-surface-part-tooltip-1-blur) var(--area-surface-part-tooltip-1-spread) var(--area-surface-part-tooltip-1-color)"
+        },
+        {
+          "inset": true,
+          "x": "0",
+          "y": "0",
+          "blur": "0",
+          "spread": "var(--area-stroke-width)",
+          "color": "light-dark(transparent, rgb(255 255 255 / 0.05))",
+          "css": "inset var(--area-surface-part-tooltip-2-x) var(--area-surface-part-tooltip-2-y) var(--area-surface-part-tooltip-2-blur) var(--area-surface-part-tooltip-2-spread) var(--area-surface-part-tooltip-2-color)"
+        }
+      ],
+      "tokens": {
+        "--area-surface-part-tooltip-1-x": "0",
+        "--area-surface-part-tooltip-1-y": "4px",
+        "--area-surface-part-tooltip-1-blur": "12px",
+        "--area-surface-part-tooltip-1-spread": "-2px",
+        "--area-surface-part-tooltip-1-color": "var(--area-shadow-color)",
+        "--area-surface-part-tooltip-2-x": "0",
+        "--area-surface-part-tooltip-2-y": "0",
+        "--area-surface-part-tooltip-2-blur": "0",
+        "--area-surface-part-tooltip-2-spread": "var(--area-stroke-width)",
+        "--area-surface-part-tooltip-2-color": "light-dark(transparent, rgb(255 255 255 / 0.05))"
+      },
+      "composed": "var(--area-surface-part-tooltip-1-x) var(--area-surface-part-tooltip-1-y) var(--area-surface-part-tooltip-1-blur) var(--area-surface-part-tooltip-1-spread) var(--area-surface-part-tooltip-1-color), inset var(--area-surface-part-tooltip-2-x) var(--area-surface-part-tooltip-2-y) var(--area-surface-part-tooltip-2-blur) var(--area-surface-part-tooltip-2-spread) var(--area-surface-part-tooltip-2-color)"
+    },
+    {
+      "surface": "elevated",
+      "id": "toolbar",
+      "original": "inset 0 0 0 var(--area-border-width) light-dark(transparent, var(--area-border-float)), 0 0 0.5px rgb(0 0 0 / 0.18), 0 3px 8px rgb(0 0 0 / 0.1), 0 1px 3px rgb(0 0 0 / 0.1)",
+      "borderWidth": "0px",
+      "parts": [
+        {
+          "inset": true,
+          "x": "0",
+          "y": "0",
+          "blur": "0",
+          "spread": "var(--area-border-width)",
+          "color": "light-dark(transparent, var(--area-border-float))",
+          "css": "inset var(--area-surface-part-toolbar-1-x) var(--area-surface-part-toolbar-1-y) var(--area-surface-part-toolbar-1-blur) var(--area-surface-part-toolbar-1-spread) var(--area-surface-part-toolbar-1-color)"
+        },
+        {
+          "inset": false,
+          "x": "0",
+          "y": "0",
+          "blur": "0.5px",
+          "spread": "0px",
+          "color": "rgb(0 0 0 / 0.18)",
+          "css": "var(--area-surface-part-toolbar-2-x) var(--area-surface-part-toolbar-2-y) var(--area-surface-part-toolbar-2-blur) var(--area-surface-part-toolbar-2-spread) var(--area-surface-part-toolbar-2-color)"
+        },
+        {
+          "inset": false,
+          "x": "0",
+          "y": "3px",
+          "blur": "8px",
+          "spread": "0px",
+          "color": "rgb(0 0 0 / 0.1)",
+          "css": "var(--area-surface-part-toolbar-3-x) var(--area-surface-part-toolbar-3-y) var(--area-surface-part-toolbar-3-blur) var(--area-surface-part-toolbar-3-spread) var(--area-surface-part-toolbar-3-color)"
+        },
+        {
+          "inset": false,
+          "x": "0",
+          "y": "1px",
+          "blur": "3px",
+          "spread": "0px",
+          "color": "rgb(0 0 0 / 0.1)",
+          "css": "var(--area-surface-part-toolbar-4-x) var(--area-surface-part-toolbar-4-y) var(--area-surface-part-toolbar-4-blur) var(--area-surface-part-toolbar-4-spread) var(--area-surface-part-toolbar-4-color)"
+        }
+      ],
+      "tokens": {
+        "--area-surface-part-toolbar-1-x": "0",
+        "--area-surface-part-toolbar-1-y": "0",
+        "--area-surface-part-toolbar-1-blur": "0",
+        "--area-surface-part-toolbar-1-spread": "var(--area-border-width)",
+        "--area-surface-part-toolbar-1-color": "light-dark(transparent, var(--area-border-float))",
+        "--area-surface-part-toolbar-2-x": "0",
+        "--area-surface-part-toolbar-2-y": "0",
+        "--area-surface-part-toolbar-2-blur": "0.5px",
+        "--area-surface-part-toolbar-2-spread": "0px",
+        "--area-surface-part-toolbar-2-color": "rgb(0 0 0 / 0.18)",
+        "--area-surface-part-toolbar-3-x": "0",
+        "--area-surface-part-toolbar-3-y": "3px",
+        "--area-surface-part-toolbar-3-blur": "8px",
+        "--area-surface-part-toolbar-3-spread": "0px",
+        "--area-surface-part-toolbar-3-color": "rgb(0 0 0 / 0.1)",
+        "--area-surface-part-toolbar-4-x": "0",
+        "--area-surface-part-toolbar-4-y": "1px",
+        "--area-surface-part-toolbar-4-blur": "3px",
+        "--area-surface-part-toolbar-4-spread": "0px",
+        "--area-surface-part-toolbar-4-color": "rgb(0 0 0 / 0.1)"
+      },
+      "composed": "inset var(--area-surface-part-toolbar-1-x) var(--area-surface-part-toolbar-1-y) var(--area-surface-part-toolbar-1-blur) var(--area-surface-part-toolbar-1-spread) var(--area-surface-part-toolbar-1-color), var(--area-surface-part-toolbar-2-x) var(--area-surface-part-toolbar-2-y) var(--area-surface-part-toolbar-2-blur) var(--area-surface-part-toolbar-2-spread) var(--area-surface-part-toolbar-2-color), var(--area-surface-part-toolbar-3-x) var(--area-surface-part-toolbar-3-y) var(--area-surface-part-toolbar-3-blur) var(--area-surface-part-toolbar-3-spread) var(--area-surface-part-toolbar-3-color), var(--area-surface-part-toolbar-4-x) var(--area-surface-part-toolbar-4-y) var(--area-surface-part-toolbar-4-blur) var(--area-surface-part-toolbar-4-spread) var(--area-surface-part-toolbar-4-color)"
+    }
+  ]
+}

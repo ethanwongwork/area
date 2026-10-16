@@ -5,6 +5,19 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Astra research folded into main (2026-10-15, branch `claude/fold-astra-research`)
+
+- Owner: Astra (Codex) is no longer available; "fold it into this main repo". `astra/research` merged:
+  `docs/research/astra/` (archive; README and INDEX say how to read it). The materials series (01–21) and the
+  owner's decisions D1–D16 are in `docs/research/astra/materials/` (REVIEW.md); tasks 22–26 were never run and
+  now belong to Claude sessions. Note: Elevation (2026-10-14) already owns every shadow by role, so the Material
+  axis sits beside Surface and Elevation.
+- Astra's React server-render tests (`astra/react-tests`): 29 files folded into `packages/react/tests`, 19 stale
+  assertions updated to current intended markup. Three real bugs left as `todo` tests: Composer drops
+  `inputProps.className` (Composer.tsx:120); Popover and Tooltip with a trigger drop a caller `id`
+  (primitives.tsx:1188, 1157). React suite 451: 447 pass, 3 todo, 1 known Indicator failure.
+- Checks: tokens 24,254, typecheck, contracts 14, React suites as above.
+
 ## Gallery UI: one inset, cards, zoom, Fit groups (2026-10-15, branch `claude/gallery-ui-spacing-audit-e5e0d4`)
 
 - Spacing: every region 14 in on all sides (Canvas margin 14, sections 28 apart, tile gap 12); text trimmed to cap /

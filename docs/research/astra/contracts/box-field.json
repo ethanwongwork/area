@@ -1,0 +1,454 @@
+{
+  "slug": "box-field",
+  "manifest": "boxField",
+  "parts": [
+    {
+      "id": "root",
+      "element": [
+        "div"
+      ],
+      "class": "area-box-field",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_panel-label-gap",
+          "selectors": [
+            ".area-box-field"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-control-lg",
+          "selectors": [
+            ".area-box-field--lg"
+          ]
+        },
+        {
+          "name": "--area-control-md",
+          "selectors": [
+            ".area-box-field",
+            ".area-box-field--md"
+          ]
+        },
+        {
+          "name": "--area-control-sm",
+          "selectors": [
+            ".area-box-field--sm"
+          ]
+        },
+        {
+          "name": "--area-space-6",
+          "selectors": [
+            ".area-box-field"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "label",
+      "element": [
+        "span"
+      ],
+      "class": "area-box-field__label",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_panel-label-leading",
+          "selectors": [
+            ".area-box-field__label"
+          ]
+        },
+        {
+          "name": "--_panel-label-text",
+          "selectors": [
+            ".area-box-field__label"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-fg-muted",
+          "selectors": [
+            ".area-box-field__label"
+          ]
+        },
+        {
+          "name": "--area-text-xs-leading",
+          "selectors": [
+            ".area-box-field__label"
+          ]
+        },
+        {
+          "name": "--area-text-xs-size",
+          "selectors": [
+            ".area-box-field__label"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fields",
+      "element": [
+        "div"
+      ],
+      "class": "area-box-field__fields",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [
+        {
+          "name": "--_control",
+          "selectors": [
+            ".area-box-field__fields"
+          ]
+        },
+        {
+          "name": "--_panel-gap",
+          "selectors": [
+            ".area-box-field__fields"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-space-8",
+          "selectors": [
+            ".area-box-field__fields"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "field",
+      "element": [
+        "span"
+      ],
+      "class": "area-box-field__field",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": []
+    },
+    {
+      "id": "toggle",
+      "element": [
+        "button"
+      ],
+      "class": "area-box-field__toggle",
+      "required": false,
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": []
+    },
+    {
+      "id": "unclassed-input-118",
+      "element": [
+        "input"
+      ],
+      "class": "not found",
+      "required": false,
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": []
+    }
+  ],
+  "slots": [],
+  "options": {
+    "size": {
+      "values": [
+        "sm",
+        "md",
+        "lg"
+      ],
+      "default": "md"
+    }
+  },
+  "booleans": [],
+  "elementModifiers": {
+    "field": [
+      "wide"
+    ]
+  },
+  "states": [
+    {
+      "name": "independent",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-independent",
+      "value": "{split ? \"\" : undefined}"
+    },
+    {
+      "name": "disabled",
+      "part": "not found",
+      "kind": "not found",
+      "hook": "not found",
+      "value": "{disabled}"
+    },
+    {
+      "name": "selected",
+      "part": "not found",
+      "kind": "not found",
+      "hook": "not found",
+      "value": "{split}"
+    },
+    {
+      "name": "disabled",
+      "part": "unclassed-input-118",
+      "kind": "native",
+      "hook": "disabled",
+      "value": "{disabled}"
+    }
+  ],
+  "keyboard": [
+    {
+      "key": "Tab",
+      "part": "fields",
+      "action": "Navigate the first row of fields, the split/join toggle, then the second row.",
+      "condition": "The toggle and fields are rendered."
+    }
+  ],
+  "accessibleName": [
+    {
+      "part": "root",
+      "rule": "Reference wiring: aria-labelledby={labelId}."
+    },
+    {
+      "part": "field",
+      "rule": "Reference wiring: aria-label={part.label ? `${part.label} ${noun}` : label}."
+    },
+    {
+      "part": "toggle",
+      "rule": "Reference wiring: aria-label={toggleLabel}."
+    }
+  ],
+  "composition": {
+    "allowedParents": "not found",
+    "allowedChildren": "not found",
+    "observedChildren": [
+      "NumberField",
+      "Button",
+      "Glyph"
+    ],
+    "demoExamples": [
+      "apps/docs/src/demos/gallery.tsx:901",
+      "apps/docs/src/demos/gallery.tsx:913",
+      "apps/docs/src/demos/gallery.tsx:923",
+      "apps/docs/src/demos/gallery.tsx:924",
+      "apps/docs/src/demos/gallery.tsx:925",
+      "apps/docs/src/demos/gallery.tsx:926",
+      "apps/docs/src/demos/gallery.tsx:927",
+      "apps/docs/src/demos/gallery.tsx:928",
+      "apps/docs/src/demos/gallery.tsx:929",
+      "apps/docs/src/demos/gallery.tsx:930",
+      "apps/docs/src/demos/gallery.tsx:931",
+      "apps/docs/src/demos/gallery.tsx:932",
+      "apps/docs/src/demos/gallery.tsx:946"
+    ]
+  },
+  "reference": {
+    "css": [
+      "packages/styles/src/components/box-field.css"
+    ],
+    "spec": [
+      "docs/specs/box-field.md"
+    ],
+    "reactExport": [
+      "BoxField"
+    ]
+  },
+  "evidence": {
+    "/slug": {"status":"found","sources":["packages/styles/src/manifest.ts:512"],"note":"Direct source declaration or implementation."},
+    "/manifest": {"status":"found","sources":["packages/styles/src/manifest.ts:511"],"note":"Direct source declaration or implementation."},
+    "/parts": {"status":"found","sources":["packages/styles/src/manifest.ts:511","packages/react/src/components/BoxField.tsx:101","packages/react/src/components/BoxField.tsx:108","packages/react/src/components/BoxField.tsx:110","packages/react/src/components/BoxField.tsx:111","packages/react/src/components/BoxField.tsx:113"],"note":"Manifest parts plus implementation-only structural elements; unclassed nodes retain explicit IDs."},
+    "/parts/0": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:108"],"note":"Direct source declaration or implementation."},
+    "/parts/0/id": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:108"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/0/class": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:108"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:108"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/required": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:108"],"note":"Root of the rendered family surface."},
+    "/parts/0/allowedContent": {"status":"not found","sources":["packages/react/src/components/BoxField.tsx:108"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/0/customProperties/0": {"status":"found","sources":["packages/styles/src/components/box-field.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties": {"status":"found","sources":["packages/styles/src/components/box-field.css:21"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/0/tokens/0": {"status":"found","sources":["packages/styles/src/components/box-field.css:54"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1": {"status":"found","sources":["packages/styles/src/components/box-field.css:15","packages/styles/src/components/box-field.css:53"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2": {"status":"found","sources":["packages/styles/src/components/box-field.css:52"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3": {"status":"found","sources":["packages/styles/src/components/box-field.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens": {"status":"found","sources":["packages/styles/src/components/box-field.css:15","packages/styles/src/components/box-field.css:53","packages/styles/src/components/box-field.css:21","packages/styles/src/components/box-field.css:52","packages/styles/src/components/box-field.css:54"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/1": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:110"],"note":"Direct source declaration or implementation."},
+    "/parts/1/id": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:110"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/1/class": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:110"],"note":"Direct source declaration or implementation."},
+    "/parts/1/element": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:110"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/1/required": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:110"],"note":"Unconditional native child on the primary component return path."},
+    "/parts/1/allowedContent": {"status":"not found","sources":["packages/react/src/components/BoxField.tsx:110"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/1/customProperties/0": {"status":"found","sources":["packages/styles/src/components/box-field.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/1": {"status":"found","sources":["packages/styles/src/components/box-field.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties": {"status":"found","sources":["packages/styles/src/components/box-field.css:27","packages/styles/src/components/box-field.css:28"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/1/tokens/0": {"status":"found","sources":["packages/styles/src/components/box-field.css:26"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1": {"status":"found","sources":["packages/styles/src/components/box-field.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/2": {"status":"found","sources":["packages/styles/src/components/box-field.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens": {"status":"found","sources":["packages/styles/src/components/box-field.css:26","packages/styles/src/components/box-field.css:27","packages/styles/src/components/box-field.css:28"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/2": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:111"],"note":"Direct source declaration or implementation."},
+    "/parts/2/id": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:111"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/2/class": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:111"],"note":"Direct source declaration or implementation."},
+    "/parts/2/element": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:111"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/2/required": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:111"],"note":"Unconditional native child on the primary component return path."},
+    "/parts/2/allowedContent": {"status":"not found","sources":["packages/react/src/components/BoxField.tsx:111"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/2/customProperties/0": {"status":"found","sources":["packages/styles/src/components/box-field.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/1": {"status":"found","sources":["packages/styles/src/components/box-field.css:38"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties": {"status":"found","sources":["packages/styles/src/components/box-field.css:36","packages/styles/src/components/box-field.css:38"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/2/tokens/0": {"status":"found","sources":["packages/styles/src/components/box-field.css:38"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens": {"status":"found","sources":["packages/styles/src/components/box-field.css:38"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/3": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:101"],"note":"Direct source declaration or implementation."},
+    "/parts/3/id": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:101"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/3/class": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:101"],"note":"Direct source declaration or implementation."},
+    "/parts/3/element": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:101","packages/react/src/components/NumberField.tsx:165"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/3/required": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:101"],"note":"Unconditional native child on the primary component return path."},
+    "/parts/3/allowedContent": {"status":"not found","sources":["packages/react/src/components/BoxField.tsx:101"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/3/customProperties": {"status":"not found","sources":["packages/react/src/components/BoxField.tsx:101"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/3/tokens": {"status":"not found","sources":["packages/react/src/components/BoxField.tsx:101"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/4": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:113"],"note":"Direct source declaration or implementation."},
+    "/parts/4/id": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:113"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/4/class": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:113"],"note":"Direct source declaration or implementation."},
+    "/parts/4/element": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:113","packages/react/src/components/Button.tsx:72"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/4/required": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:113"],"note":"This part can be omitted by a conditional rendering branch."},
+    "/parts/4/allowedContent": {"status":"not found","sources":["packages/react/src/components/BoxField.tsx:113"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/4/customProperties": {"status":"not found","sources":["packages/react/src/components/BoxField.tsx:113"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/4/tokens": {"status":"not found","sources":["packages/react/src/components/BoxField.tsx:113"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/5": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:118"],"note":"Direct source declaration or implementation."},
+    "/parts/5/id": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:118"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/5/class": {"status":"not found","sources":["packages/react/src/components/BoxField.tsx:118"],"note":"not found: No class assigned at this native element; callers may supply one through forwarded props."},
+    "/parts/5/element": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:118"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/5/required": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:118"],"note":"This part can be omitted by a conditional rendering branch."},
+    "/parts/5/allowedContent": {"status":"not found","sources":["packages/react/src/components/BoxField.tsx:118"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/5/customProperties": {"status":"not found","sources":["packages/react/src/components/BoxField.tsx:118"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/5/tokens": {"status":"not found","sources":["packages/react/src/components/BoxField.tsx:118"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/slots": {"status":"not found","sources":["packages/styles/src/manifest.ts:511","packages/react/src/components/BoxField.tsx:74","docs/specs/box-field.md:1"],"note":"not found: No locally declared ReactNode/ReactElement slot props; native inherited children and delegated interfaces require review."},
+    "/options": {"status":"found","sources":["packages/styles/src/manifest.ts:514"],"note":"Direct source declaration or implementation."},
+    "/options/size": {"status":"found","sources":["packages/styles/src/manifest.ts:514"],"note":"Direct source declaration or implementation."},
+    "/options/size/default": {"status":"found","sources":["packages/styles/src/manifest.ts:517"],"note":"Direct source declaration or implementation."},
+    "/booleans": {"status":"found","sources":["packages/styles/src/manifest.ts:511"],"note":"Exact manifest boolean modifier list; absence means no declared booleans."},
+    "/elementModifiers": {"status":"found","sources":["packages/styles/src/manifest.ts:516"],"note":"Direct source declaration or implementation."},
+    "/states/0": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:109"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1": {"status":"not found","sources":["packages/react/src/components/BoxField.tsx:102"],"note":"not found: Forwarded disabled prop on NumberField; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/1/part": {"status":"not found","sources":["packages/styles/src/manifest.ts:511","packages/react/src/components/BoxField.tsx:74","docs/specs/box-field.md:1"],"note":"not found: Carrier for not found is not resolved."},
+    "/states/2": {"status":"not found","sources":["packages/react/src/components/BoxField.tsx:114"],"note":"not found: Forwarded selected prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/2/part": {"status":"not found","sources":["packages/styles/src/manifest.ts:511","packages/react/src/components/BoxField.tsx:74","docs/specs/box-field.md:1"],"note":"not found: Carrier for not found is not resolved."},
+    "/states/3": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:118"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:109","packages/react/src/components/BoxField.tsx:102","packages/react/src/components/BoxField.tsx:114","packages/react/src/components/BoxField.tsx:118"],"note":"Direct source declaration or implementation."},
+    "/keyboard/0": {"status":"found","sources":["docs/specs/box-field.md:89"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard": {"status":"found","sources":["docs/specs/box-field.md:89"],"note":"Direct source declaration or implementation."},
+    "/accessibleName/0": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:108"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/1": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:103"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/2": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:114"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:108","packages/react/src/components/BoxField.tsx:103","packages/react/src/components/BoxField.tsx:114"],"note":"Direct source declaration or implementation."},
+    "/composition": {"status":"found","sources":["packages/styles/src/manifest.ts:511","packages/react/src/components/BoxField.tsx:74","docs/specs/box-field.md:1"],"note":"Allowed composition is distinct from examples and built-in child calls."},
+    "/composition/allowedParents": {"status":"not found","sources":["packages/styles/src/manifest.ts:511","packages/react/src/components/BoxField.tsx:74","docs/specs/box-field.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/allowedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:511","packages/react/src/components/BoxField.tsx:74","docs/specs/box-field.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/observedChildren/0": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:101"],"note":"Observed child component call; not an allowed-child restriction."},
+    "/composition/observedChildren/1": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:113"],"note":"Observed child component call; not an allowed-child restriction."},
+    "/composition/observedChildren/2": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:115"],"note":"Observed child component call; not an allowed-child restriction."},
+    "/composition/observedChildren": {"status":"found","sources":["packages/styles/src/manifest.ts:511","packages/react/src/components/BoxField.tsx:74","docs/specs/box-field.md:1"],"note":"Direct source declaration or implementation."},
+    "/composition/demoExamples/0": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:901"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/1": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:913"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/2": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:923"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/3": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:924"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/4": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:925"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/5": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:926"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/6": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:927"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/7": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:928"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/8": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:929"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/9": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:930"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/10": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:931"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/11": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:932"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/12": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:946"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:901","apps/docs/src/demos/gallery.tsx:913","apps/docs/src/demos/gallery.tsx:923","apps/docs/src/demos/gallery.tsx:924","apps/docs/src/demos/gallery.tsx:925","apps/docs/src/demos/gallery.tsx:926","apps/docs/src/demos/gallery.tsx:927","apps/docs/src/demos/gallery.tsx:928","apps/docs/src/demos/gallery.tsx:929","apps/docs/src/demos/gallery.tsx:930","apps/docs/src/demos/gallery.tsx:931","apps/docs/src/demos/gallery.tsx:932","apps/docs/src/demos/gallery.tsx:946"],"note":"Direct source declaration or implementation."},
+    "/reference/css": {"status":"found","sources":["packages/styles/src/components/box-field.css:14","packages/styles/src/components/box-field.css:25","packages/styles/src/components/box-field.css:34","packages/styles/src/components/box-field.css:42","packages/styles/src/components/box-field.css:44","packages/styles/src/components/box-field.css:45","packages/styles/src/components/box-field.css:48","packages/styles/src/components/box-field.css:52","packages/styles/src/components/box-field.css:53","packages/styles/src/components/box-field.css:54"],"note":"Direct source declaration or implementation."},
+    "/reference/css/0": {"status":"found","sources":["packages/styles/src/components/box-field.css:14"],"note":"Direct source declaration or implementation."},
+    "/reference/spec": {"status":"found","sources":["docs/specs/box-field.md:1"],"note":"Dedicated family spec."},
+    "/reference/reactExport/0": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:74","packages/react/src/index.ts:32"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:74","packages/react/src/index.ts:32"],"note":"Direct source declaration or implementation."},
+    "/reference": {"status":"found","sources":["packages/styles/src/manifest.ts:511","packages/styles/src/components/box-field.css:1","docs/specs/box-field.md:1"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element/0": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:108"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/box-field.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/box-field.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/box-field.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/box-field.css:54"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/box-field.css:54"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/box-field.css:54"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/box-field.css:15","packages/styles/src/components/box-field.css:53"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/box-field.css:15","packages/styles/src/components/box-field.css:53"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/box-field.css:15","packages/styles/src/components/box-field.css:53"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors/1": {"status":"found","sources":["packages/styles/src/components/box-field.css:15","packages/styles/src/components/box-field.css:53"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/box-field.css:52"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/box-field.css:52"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/box-field.css:52"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/name": {"status":"found","sources":["packages/styles/src/components/box-field.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/selectors": {"status":"found","sources":["packages/styles/src/components/box-field.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/box-field.css:21"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/element/0": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:110"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/1/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/box-field.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/box-field.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/box-field.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/1/name": {"status":"found","sources":["packages/styles/src/components/box-field.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/1/selectors": {"status":"found","sources":["packages/styles/src/components/box-field.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/box-field.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/box-field.css:26"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/box-field.css:26"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/box-field.css:26"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/box-field.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/box-field.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/box-field.css:28"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/box-field.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/box-field.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/box-field.css:27"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/element/0": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:111"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/2/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/box-field.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/box-field.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/box-field.css:36"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/1/name": {"status":"found","sources":["packages/styles/src/components/box-field.css:38"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/1/selectors": {"status":"found","sources":["packages/styles/src/components/box-field.css:38"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/customProperties/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/box-field.css:38"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/box-field.css:38"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/box-field.css:38"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/2/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/box-field.css:38"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/3/element/0": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:101","packages/react/src/components/NumberField.tsx:165"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/4/element/0": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:113","packages/react/src/components/Button.tsx:72"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/5/element/0": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:118"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/options/size/values": {"status":"found","sources":["packages/styles/src/manifest.ts:514"],"note":"Direct source declaration or implementation."},
+    "/options/size/values/0": {"status":"found","sources":["packages/styles/src/manifest.ts:514"],"note":"Direct source declaration or implementation."},
+    "/options/size/values/1": {"status":"found","sources":["packages/styles/src/manifest.ts:514"],"note":"Direct source declaration or implementation."},
+    "/options/size/values/2": {"status":"found","sources":["packages/styles/src/manifest.ts:514"],"note":"Direct source declaration or implementation."},
+    "/elementModifiers/field": {"status":"found","sources":["packages/styles/src/manifest.ts:516"],"note":"Direct source declaration or implementation."},
+    "/elementModifiers/field/0": {"status":"found","sources":["packages/styles/src/manifest.ts:516"],"note":"Direct source declaration or implementation."},
+    "/states/0/name": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:109"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/part": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:109"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/kind": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:109"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/hook": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:109"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/value": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:109"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/name": {"status":"not found","sources":["packages/react/src/components/BoxField.tsx:102"],"note":"not found: Forwarded disabled prop on NumberField; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/1/kind": {"status":"not found","sources":["packages/react/src/components/BoxField.tsx:102"],"note":"not found: Forwarded disabled prop on NumberField; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/1/hook": {"status":"not found","sources":["packages/react/src/components/BoxField.tsx:102"],"note":"not found: Forwarded disabled prop on NumberField; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/1/value": {"status":"not found","sources":["packages/react/src/components/BoxField.tsx:102"],"note":"not found: Forwarded disabled prop on NumberField; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/2/name": {"status":"not found","sources":["packages/react/src/components/BoxField.tsx:114"],"note":"not found: Forwarded selected prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/2/kind": {"status":"not found","sources":["packages/react/src/components/BoxField.tsx:114"],"note":"not found: Forwarded selected prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/2/hook": {"status":"not found","sources":["packages/react/src/components/BoxField.tsx:114"],"note":"not found: Forwarded selected prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/2/value": {"status":"not found","sources":["packages/react/src/components/BoxField.tsx:114"],"note":"not found: Forwarded selected prop on Button; local native carrier/hook is not established by this call site. Consult the child-family definition."},
+    "/states/3/name": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:118"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3/part": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:118"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3/kind": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:118"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3/hook": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:118"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/3/value": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:118"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/keyboard/0/key": {"status":"found","sources":["docs/specs/box-field.md:89"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/0/part": {"status":"found","sources":["docs/specs/box-field.md:89"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/0/action": {"status":"found","sources":["docs/specs/box-field.md:89"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/keyboard/0/condition": {"status":"found","sources":["docs/specs/box-field.md:89"],"note":"Reviewed keyboard behavior in the reference implementation or spec."},
+    "/accessibleName/0/part": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:108"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/0/rule": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:108"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/1/part": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:103"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/1/rule": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:103"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/2/part": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:114"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/accessibleName/2/rule": {"status":"found","sources":["packages/react/src/components/BoxField.tsx:114"],"note":"Observed naming/label association; raw expression is not a framework-neutral requirement."},
+    "/reference/spec/0": {"status":"found","sources":["docs/specs/box-field.md:1"],"note":"Dedicated family spec."}
+  }
+}

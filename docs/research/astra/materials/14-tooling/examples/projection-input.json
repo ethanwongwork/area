@@ -1,0 +1,121 @@
+{
+  "status": "authored serialization fixture; not Area visual defaults",
+  "context": {
+    "mode": "light",
+    "receiver": "illustrative-surface"
+  },
+  "shadow": [
+    {
+      "color": {
+        "colorSpace": "srgb",
+        "components": [
+          0,
+          0,
+          0
+        ],
+        "alpha": 0.1
+      },
+      "offsetX": {
+        "value": 0,
+        "unit": "px"
+      },
+      "offsetY": {
+        "value": 2,
+        "unit": "px"
+      },
+      "blur": {
+        "value": 4,
+        "unit": "px"
+      },
+      "spread": {
+        "value": 0,
+        "unit": "px"
+      },
+      "inset": false
+    },
+    {
+      "color": {
+        "colorSpace": "srgb",
+        "components": [
+          1,
+          1,
+          1
+        ],
+        "alpha": 0.2
+      },
+      "offsetX": {
+        "value": -1,
+        "unit": "px"
+      },
+      "offsetY": {
+        "value": -1,
+        "unit": "px"
+      },
+      "blur": {
+        "value": 0,
+        "unit": "px"
+      },
+      "spread": {
+        "value": 0,
+        "unit": "px"
+      },
+      "inset": true
+    }
+  ],
+  "gradient": {
+    "kind": "linear",
+    "angleDeg": 135,
+    "interpolation": "srgb",
+    "target": "edge",
+    "stops": [
+      {
+        "id": "start",
+        "positionPercent": 0,
+        "color": {
+          "colorSpace": "srgb",
+          "components": [
+            0.2,
+            0.4,
+            0.8
+          ],
+          "alpha": 0.3
+        }
+      },
+      {
+        "id": "end",
+        "positionPercent": 100,
+        "color": {
+          "colorSpace": "srgb",
+          "components": [
+            0.8,
+            0.3,
+            0.5
+          ],
+          "alpha": 0
+        }
+      }
+    ]
+  },
+  "border": {
+    "color": {
+      "colorSpace": "srgb",
+      "components": [
+        0,
+        0,
+        0
+      ],
+      "alpha": 0.15
+    },
+    "width": {
+      "value": 1,
+      "unit": "px"
+    },
+    "style": "solid"
+  },
+  "backdrop": {
+    "source": "local",
+    "blurPx": 5,
+    "fallback": "opaque"
+  },
+  "policyRef": "area-role-guards-required"
+}

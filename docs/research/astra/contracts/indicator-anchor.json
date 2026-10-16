@@ -1,0 +1,380 @@
+{
+  "slug": "indicator-anchor",
+  "manifest": "indicatorAnchor",
+  "parts": [
+    {
+      "id": "root",
+      "element": [
+        "span"
+      ],
+      "class": "area-indicator-anchor",
+      "required": true,
+      "allowedContent": "not found",
+      "customProperties": [],
+      "tokens": [
+        {
+          "name": "--area-indicator-anchor-offset",
+          "selectors": [
+            ".area-indicator-anchor",
+            ".area-indicator-anchor--compact",
+            ".area-indicator-anchor--overlap-circular",
+            ".area-indicator-anchor--overlap-circular:has(> .area-indicator-anchor__indicator > .area-indicator--count)",
+            ".area-indicator-anchor--overlap-rectangular:has(> .area-indicator-anchor__indicator > .area-indicator--dot)"
+          ]
+        },
+        {
+          "name": "--area-space-0",
+          "selectors": [
+            ".area-indicator-anchor",
+            ".area-indicator-anchor--compact",
+            ".area-indicator-anchor--overlap-circular",
+            ".area-indicator-anchor--overlap-circular:has(> .area-indicator-anchor__indicator > .area-indicator--count)",
+            ".area-indicator-anchor--overlap-rectangular:has(> .area-indicator-anchor__indicator > .area-indicator--dot)"
+          ]
+        },
+        {
+          "name": "--area-space-4",
+          "selectors": [
+            ".area-indicator-anchor--compact"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "indicator",
+      "element": [
+        "span"
+      ],
+      "class": "area-indicator-anchor__indicator",
+      "required": true,
+      "allowedContent": [
+        "renderable content (text, elements, fragments, or empty content)"
+      ],
+      "customProperties": [
+        {
+          "name": "--_inset",
+          "selectors": [
+            ".area-indicator-anchor--top-end > .area-indicator-anchor__indicator",
+            ".area-indicator-anchor--top-start > .area-indicator-anchor__indicator",
+            ".area-indicator-anchor--bottom-end > .area-indicator-anchor__indicator",
+            ".area-indicator-anchor--bottom-start > .area-indicator-anchor__indicator"
+          ]
+        },
+        {
+          "name": "--_overlap",
+          "selectors": [
+            ".area-indicator-anchor--top-end > .area-indicator-anchor__indicator",
+            ".area-indicator-anchor--top-start > .area-indicator-anchor__indicator",
+            ".area-indicator-anchor--bottom-end > .area-indicator-anchor__indicator",
+            ".area-indicator-anchor--bottom-start > .area-indicator-anchor__indicator"
+          ]
+        },
+        {
+          "name": "--_shift",
+          "selectors": [
+            ".area-indicator-anchor__indicator",
+            ".area-indicator-anchor[data-invisible] > .area-indicator-anchor__indicator"
+          ]
+        },
+        {
+          "name": "--_x",
+          "selectors": [
+            ".area-indicator-anchor__indicator",
+            ".area-indicator-anchor[data-invisible] > .area-indicator-anchor__indicator"
+          ]
+        },
+        {
+          "name": "--_y",
+          "selectors": [
+            ".area-indicator-anchor__indicator",
+            ".area-indicator-anchor[data-invisible] > .area-indicator-anchor__indicator"
+          ]
+        }
+      ],
+      "tokens": [
+        {
+          "name": "--area-duration-base",
+          "selectors": [
+            ".area-indicator-anchor__indicator"
+          ]
+        },
+        {
+          "name": "--area-ease-out",
+          "selectors": [
+            ".area-indicator-anchor__indicator"
+          ]
+        },
+        {
+          "name": "--area-radius-full",
+          "selectors": [
+            ".area-indicator-anchor__indicator"
+          ]
+        },
+        {
+          "name": "--area-space-2",
+          "selectors": [
+            ".area-indicator-anchor__indicator"
+          ]
+        }
+      ]
+    }
+  ],
+  "slots": [
+    {
+      "name": "IndicatorAnchor.indicator",
+      "part": "indicator",
+      "element": [
+        "span"
+      ],
+      "class": "area-indicator-anchor__indicator",
+      "required": true,
+      "allowedContent": [
+        "renderable content (text, elements, fragments, or empty content)"
+      ]
+    },
+    {
+      "name": "IndicatorAnchor.children",
+      "part": "root",
+      "element": [
+        "span"
+      ],
+      "class": "area-indicator-anchor",
+      "required": "not found",
+      "allowedContent": "not found"
+    }
+  ],
+  "options": {
+    "placement": {
+      "values": [
+        "top-end",
+        "top-start",
+        "bottom-end",
+        "bottom-start"
+      ],
+      "default": "top-end"
+    },
+    "overlap": {
+      "values": [
+        "overlap-rectangular",
+        "overlap-circular"
+      ],
+      "default": "overlap-rectangular"
+    }
+  },
+  "booleans": [
+    "compact"
+  ],
+  "elementModifiers": {},
+  "states": [
+    {
+      "name": "invisible",
+      "part": "root",
+      "kind": "data",
+      "hook": "data-invisible",
+      "value": "{invisible ? \"\" : undefined}"
+    },
+    {
+      "name": "hidden",
+      "part": "indicator",
+      "kind": "aria",
+      "hook": "aria-hidden",
+      "value": "\"true\""
+    }
+  ],
+  "keyboard": [],
+  "accessibleName": [],
+  "composition": {
+    "allowedParents": "not found",
+    "allowedChildren": "not found",
+    "observedChildren": [],
+    "demoExamples": [
+      "apps/docs/src/demos/badge.tsx:62",
+      "apps/docs/src/demos/badge.tsx:67",
+      "apps/docs/src/demos/badge.tsx:72",
+      "apps/docs/src/demos/badge.tsx:78",
+      "apps/docs/src/demos/badge.tsx:83",
+      "apps/docs/src/demos/badge.tsx:88",
+      "apps/docs/src/demos/badge.tsx:151",
+      "apps/docs/src/demos/badge.tsx:200",
+      "apps/docs/src/demos/display.tsx:25",
+      "apps/docs/src/demos/display.tsx:27",
+      "apps/docs/src/demos/gallery.tsx:73",
+      "apps/docs/src/demos/gallery.tsx:74"
+    ]
+  },
+  "reference": {
+    "css": [
+      "packages/styles/src/components/indicator.css",
+      "packages/styles/src/components/navigation.css"
+    ],
+    "spec": [
+      "docs/specs/indicator.md"
+    ],
+    "reactExport": [
+      "IndicatorAnchor"
+    ]
+  },
+  "evidence": {
+    "/slug": {"status":"found","sources":["packages/styles/src/manifest.ts:351"],"note":"Direct source declaration or implementation."},
+    "/manifest": {"status":"found","sources":["packages/styles/src/manifest.ts:350"],"note":"Direct source declaration or implementation."},
+    "/parts": {"status":"found","sources":["packages/styles/src/manifest.ts:350","packages/react/src/components/Indicator.tsx:47","packages/react/src/components/Indicator.tsx:48"],"note":"Manifest parts plus implementation-only structural elements; unclassed nodes retain explicit IDs."},
+    "/parts/0": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:47"],"note":"Direct source declaration or implementation."},
+    "/parts/0/id": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:47"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/0/class": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:47"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:47"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/required": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:47"],"note":"Root of the rendered family surface."},
+    "/parts/0/allowedContent": {"status":"not found","sources":["packages/react/src/components/Indicator.tsx:47"],"note":"not found: No explicit content grammar for this part; see separately typed public slots."},
+    "/parts/0/customProperties": {"status":"not found","sources":["packages/react/src/components/Indicator.tsx:47"],"note":"not found: No directly targeted var() reads located in packages/styles/src; inheritance and child-family styling are not expanded."},
+    "/parts/0/tokens/0": {"status":"found","sources":["packages/styles/src/components/indicator.css:22","packages/styles/src/components/indicator.css:24","packages/styles/src/components/indicator.css:32","packages/styles/src/components/indicator.css:37","packages/styles/src/components/indicator.css:40"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1": {"status":"found","sources":["packages/styles/src/components/indicator.css:22","packages/styles/src/components/indicator.css:24","packages/styles/src/components/indicator.css:32","packages/styles/src/components/indicator.css:37","packages/styles/src/components/indicator.css:40"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2": {"status":"found","sources":["packages/styles/src/components/indicator.css:24"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens": {"status":"found","sources":["packages/styles/src/components/indicator.css:22","packages/styles/src/components/indicator.css:24","packages/styles/src/components/indicator.css:32","packages/styles/src/components/indicator.css:37","packages/styles/src/components/indicator.css:40"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/1": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:48"],"note":"Direct source declaration or implementation."},
+    "/parts/1/id": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:48"],"note":"Stable contract ID derived from the cited class or unclassed source node."},
+    "/parts/1/class": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:48"],"note":"Direct source declaration or implementation."},
+    "/parts/1/element": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:48"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/1/required": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:48"],"note":"Unconditional native child on the primary component return path."},
+    "/parts/1/allowedContent": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:33"],"note":"Content type of the public slot rendered directly in this part."},
+    "/parts/1/customProperties/0": {"status":"found","sources":["packages/styles/src/components/indicator.css:44","packages/styles/src/components/indicator.css:46","packages/styles/src/components/indicator.css:48","packages/styles/src/components/indicator.css:50"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/1": {"status":"found","sources":["packages/styles/src/components/indicator.css:44","packages/styles/src/components/indicator.css:46","packages/styles/src/components/indicator.css:48","packages/styles/src/components/indicator.css:50"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/2": {"status":"found","sources":["packages/styles/src/components/indicator.css:42","packages/styles/src/components/indicator.css:57"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/3": {"status":"found","sources":["packages/styles/src/components/indicator.css:42","packages/styles/src/components/indicator.css:57"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/4": {"status":"found","sources":["packages/styles/src/components/indicator.css:42","packages/styles/src/components/indicator.css:57"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties": {"status":"found","sources":["packages/styles/src/components/indicator.css:42","packages/styles/src/components/indicator.css:57","packages/styles/src/components/indicator.css:44","packages/styles/src/components/indicator.css:46","packages/styles/src/components/indicator.css:48","packages/styles/src/components/indicator.css:50"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/parts/1/tokens/0": {"status":"found","sources":["packages/styles/src/components/indicator.css:42"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1": {"status":"found","sources":["packages/styles/src/components/indicator.css:42"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/2": {"status":"found","sources":["packages/styles/src/components/indicator.css:42"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/3": {"status":"found","sources":["packages/styles/src/components/indicator.css:60"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens": {"status":"found","sources":["packages/styles/src/components/indicator.css:42","packages/styles/src/components/indicator.css:60"],"note":"Direct selector-scoped var() reads in all styles sources."},
+    "/slots/0": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:33"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/element": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:48"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/slots/0/class": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:48"],"note":"Direct source declaration or implementation."},
+    "/slots/1": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:45"],"note":"Observed children slot inherited through native props; no local content grammar declared."},
+    "/slots/1/required": {"status":"not found","sources":["packages/react/src/components/Indicator.tsx:45"],"note":"not found: Inherited native children; local content grammar/cardinality not found."},
+    "/slots/1/allowedContent": {"status":"not found","sources":["packages/react/src/components/Indicator.tsx:45"],"note":"not found: Inherited native children; local content grammar/cardinality not found."},
+    "/slots/1/element": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:47"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/slots/1/class": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:47"],"note":"Direct source declaration or implementation."},
+    "/slots": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:33","packages/react/src/components/Indicator.tsx:45"],"note":"Direct source declaration or implementation."},
+    "/options": {"status":"found","sources":["packages/styles/src/manifest.ts:353"],"note":"Direct source declaration or implementation."},
+    "/options/placement": {"status":"found","sources":["packages/styles/src/manifest.ts:353"],"note":"Direct source declaration or implementation."},
+    "/options/placement/default": {"status":"found","sources":["packages/styles/src/manifest.ts:357"],"note":"Direct source declaration or implementation."},
+    "/options/overlap": {"status":"found","sources":["packages/styles/src/manifest.ts:353"],"note":"Direct source declaration or implementation."},
+    "/options/overlap/default": {"status":"found","sources":["packages/styles/src/manifest.ts:357"],"note":"Direct source declaration or implementation."},
+    "/booleans": {"status":"found","sources":["packages/styles/src/manifest.ts:355"],"note":"Exact manifest boolean modifier list; absence means no declared booleans."},
+    "/elementModifiers": {"status":"found","sources":["packages/styles/src/manifest.ts:350"],"note":"Direct source declaration or implementation."},
+    "/states/0": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:47"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:48"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:47","packages/react/src/components/Indicator.tsx:48"],"note":"Direct source declaration or implementation."},
+    "/keyboard": {"status":"not found","sources":["packages/styles/src/manifest.ts:350","packages/react/src/components/Indicator.tsx:44","docs/specs/indicator.md:1"],"note":"not found: No reviewed key-to-action contract found. Native behavior is not invented from a tag name."},
+    "/accessibleName": {"status":"not found","sources":["packages/styles/src/manifest.ts:350","packages/react/src/components/Indicator.tsx:44","docs/specs/indicator.md:1"],"note":"not found: No explicit accessible-name rule or naming attribute found in scoped implementation; inherited native props are not treated as naming requirements."},
+    "/composition": {"status":"found","sources":["packages/styles/src/manifest.ts:350","packages/react/src/components/Indicator.tsx:44","docs/specs/indicator.md:1"],"note":"Allowed composition is distinct from examples and built-in child calls."},
+    "/composition/allowedParents": {"status":"not found","sources":["packages/styles/src/manifest.ts:350","packages/react/src/components/Indicator.tsx:44","docs/specs/indicator.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/allowedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:350","packages/react/src/components/Indicator.tsx:44","docs/specs/indicator.md:1"],"note":"not found: No exhaustive allowed-composition grammar found; examples do not prohibit other content."},
+    "/composition/observedChildren": {"status":"not found","sources":["packages/styles/src/manifest.ts:350","packages/react/src/components/Indicator.tsx:44","docs/specs/indicator.md:1"],"note":"not found: No child component call located."},
+    "/composition/demoExamples/0": {"status":"found","sources":["apps/docs/src/demos/badge.tsx:62"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/1": {"status":"found","sources":["apps/docs/src/demos/badge.tsx:67"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/2": {"status":"found","sources":["apps/docs/src/demos/badge.tsx:72"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/3": {"status":"found","sources":["apps/docs/src/demos/badge.tsx:78"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/4": {"status":"found","sources":["apps/docs/src/demos/badge.tsx:83"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/5": {"status":"found","sources":["apps/docs/src/demos/badge.tsx:88"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/6": {"status":"found","sources":["apps/docs/src/demos/badge.tsx:151"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/7": {"status":"found","sources":["apps/docs/src/demos/badge.tsx:200"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/8": {"status":"found","sources":["apps/docs/src/demos/display.tsx:25"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/9": {"status":"found","sources":["apps/docs/src/demos/display.tsx:27"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/10": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:73"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples/11": {"status":"found","sources":["apps/docs/src/demos/gallery.tsx:74"],"note":"Demo use, not a normative composition constraint."},
+    "/composition/demoExamples": {"status":"found","sources":["apps/docs/src/demos/badge.tsx:62","apps/docs/src/demos/badge.tsx:67","apps/docs/src/demos/badge.tsx:72","apps/docs/src/demos/badge.tsx:78","apps/docs/src/demos/badge.tsx:83","apps/docs/src/demos/badge.tsx:88","apps/docs/src/demos/badge.tsx:151","apps/docs/src/demos/badge.tsx:200","apps/docs/src/demos/display.tsx:25","apps/docs/src/demos/display.tsx:27","apps/docs/src/demos/gallery.tsx:73","apps/docs/src/demos/gallery.tsx:74"],"note":"Direct source declaration or implementation."},
+    "/reference/css": {"status":"found","sources":["packages/styles/src/components/indicator.css:22","packages/styles/src/components/indicator.css:23","packages/styles/src/components/indicator.css:24","packages/styles/src/components/indicator.css:32","packages/styles/src/components/indicator.css:36","packages/styles/src/components/indicator.css:39","packages/styles/src/components/indicator.css:42","packages/styles/src/components/indicator.css:43","packages/styles/src/components/indicator.css:44","packages/styles/src/components/indicator.css:45","packages/styles/src/components/indicator.css:46","packages/styles/src/components/indicator.css:47","packages/styles/src/components/indicator.css:48","packages/styles/src/components/indicator.css:49","packages/styles/src/components/indicator.css:50","packages/styles/src/components/indicator.css:51","packages/styles/src/components/indicator.css:52","packages/styles/src/components/indicator.css:56","packages/styles/src/components/indicator.css:57","packages/styles/src/components/indicator.css:58","packages/styles/src/components/indicator.css:60","packages/styles/src/components/navigation.css:32"],"note":"Direct source declaration or implementation."},
+    "/reference/css/0": {"status":"found","sources":["packages/styles/src/components/indicator.css:22"],"note":"Direct source declaration or implementation."},
+    "/reference/css/1": {"status":"found","sources":["packages/styles/src/components/navigation.css:32"],"note":"Direct source declaration or implementation."},
+    "/reference/spec": {"status":"found","sources":["docs/specs/indicator.md:1"],"note":"Shared family spec; dedicated slug spec not found."},
+    "/reference/reactExport/0": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:44","packages/react/src/index.ts:56"],"note":"Implementation declaration and public barrel export."},
+    "/reference/reactExport": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:44","packages/react/src/index.ts:56"],"note":"Direct source declaration or implementation."},
+    "/reference": {"status":"found","sources":["packages/styles/src/manifest.ts:350","packages/styles/src/components/indicator.css:1","packages/styles/src/components/navigation.css:1","docs/specs/indicator.md:1"],"note":"Direct source declaration or implementation."},
+    "/parts/0/element/0": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:47"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/0/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/indicator.css:22","packages/styles/src/components/indicator.css:24","packages/styles/src/components/indicator.css:32","packages/styles/src/components/indicator.css:37","packages/styles/src/components/indicator.css:40"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/indicator.css:22","packages/styles/src/components/indicator.css:24","packages/styles/src/components/indicator.css:32","packages/styles/src/components/indicator.css:37","packages/styles/src/components/indicator.css:40"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/indicator.css:22","packages/styles/src/components/indicator.css:24","packages/styles/src/components/indicator.css:32","packages/styles/src/components/indicator.css:37","packages/styles/src/components/indicator.css:40"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors/1": {"status":"found","sources":["packages/styles/src/components/indicator.css:22","packages/styles/src/components/indicator.css:24","packages/styles/src/components/indicator.css:32","packages/styles/src/components/indicator.css:37","packages/styles/src/components/indicator.css:40"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors/2": {"status":"found","sources":["packages/styles/src/components/indicator.css:22","packages/styles/src/components/indicator.css:24","packages/styles/src/components/indicator.css:32","packages/styles/src/components/indicator.css:37","packages/styles/src/components/indicator.css:40"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors/3": {"status":"found","sources":["packages/styles/src/components/indicator.css:22","packages/styles/src/components/indicator.css:24","packages/styles/src/components/indicator.css:32","packages/styles/src/components/indicator.css:37","packages/styles/src/components/indicator.css:40"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/0/selectors/4": {"status":"found","sources":["packages/styles/src/components/indicator.css:22","packages/styles/src/components/indicator.css:24","packages/styles/src/components/indicator.css:32","packages/styles/src/components/indicator.css:37","packages/styles/src/components/indicator.css:40"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/indicator.css:22","packages/styles/src/components/indicator.css:24","packages/styles/src/components/indicator.css:32","packages/styles/src/components/indicator.css:37","packages/styles/src/components/indicator.css:40"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/indicator.css:22","packages/styles/src/components/indicator.css:24","packages/styles/src/components/indicator.css:32","packages/styles/src/components/indicator.css:37","packages/styles/src/components/indicator.css:40"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/indicator.css:22","packages/styles/src/components/indicator.css:24","packages/styles/src/components/indicator.css:32","packages/styles/src/components/indicator.css:37","packages/styles/src/components/indicator.css:40"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors/1": {"status":"found","sources":["packages/styles/src/components/indicator.css:22","packages/styles/src/components/indicator.css:24","packages/styles/src/components/indicator.css:32","packages/styles/src/components/indicator.css:37","packages/styles/src/components/indicator.css:40"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors/2": {"status":"found","sources":["packages/styles/src/components/indicator.css:22","packages/styles/src/components/indicator.css:24","packages/styles/src/components/indicator.css:32","packages/styles/src/components/indicator.css:37","packages/styles/src/components/indicator.css:40"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors/3": {"status":"found","sources":["packages/styles/src/components/indicator.css:22","packages/styles/src/components/indicator.css:24","packages/styles/src/components/indicator.css:32","packages/styles/src/components/indicator.css:37","packages/styles/src/components/indicator.css:40"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/1/selectors/4": {"status":"found","sources":["packages/styles/src/components/indicator.css:22","packages/styles/src/components/indicator.css:24","packages/styles/src/components/indicator.css:32","packages/styles/src/components/indicator.css:37","packages/styles/src/components/indicator.css:40"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/indicator.css:24"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/indicator.css:24"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/0/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/indicator.css:24"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/element/0": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:48"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/parts/1/allowedContent/0": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:33"],"note":"Content type of the public slot rendered directly in this part."},
+    "/parts/1/customProperties/0/name": {"status":"found","sources":["packages/styles/src/components/indicator.css:44","packages/styles/src/components/indicator.css:46","packages/styles/src/components/indicator.css:48","packages/styles/src/components/indicator.css:50"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/0/selectors": {"status":"found","sources":["packages/styles/src/components/indicator.css:44","packages/styles/src/components/indicator.css:46","packages/styles/src/components/indicator.css:48","packages/styles/src/components/indicator.css:50"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/indicator.css:44","packages/styles/src/components/indicator.css:46","packages/styles/src/components/indicator.css:48","packages/styles/src/components/indicator.css:50"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/0/selectors/1": {"status":"found","sources":["packages/styles/src/components/indicator.css:44","packages/styles/src/components/indicator.css:46","packages/styles/src/components/indicator.css:48","packages/styles/src/components/indicator.css:50"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/0/selectors/2": {"status":"found","sources":["packages/styles/src/components/indicator.css:44","packages/styles/src/components/indicator.css:46","packages/styles/src/components/indicator.css:48","packages/styles/src/components/indicator.css:50"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/0/selectors/3": {"status":"found","sources":["packages/styles/src/components/indicator.css:44","packages/styles/src/components/indicator.css:46","packages/styles/src/components/indicator.css:48","packages/styles/src/components/indicator.css:50"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/1/name": {"status":"found","sources":["packages/styles/src/components/indicator.css:44","packages/styles/src/components/indicator.css:46","packages/styles/src/components/indicator.css:48","packages/styles/src/components/indicator.css:50"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/1/selectors": {"status":"found","sources":["packages/styles/src/components/indicator.css:44","packages/styles/src/components/indicator.css:46","packages/styles/src/components/indicator.css:48","packages/styles/src/components/indicator.css:50"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/indicator.css:44","packages/styles/src/components/indicator.css:46","packages/styles/src/components/indicator.css:48","packages/styles/src/components/indicator.css:50"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/1/selectors/1": {"status":"found","sources":["packages/styles/src/components/indicator.css:44","packages/styles/src/components/indicator.css:46","packages/styles/src/components/indicator.css:48","packages/styles/src/components/indicator.css:50"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/1/selectors/2": {"status":"found","sources":["packages/styles/src/components/indicator.css:44","packages/styles/src/components/indicator.css:46","packages/styles/src/components/indicator.css:48","packages/styles/src/components/indicator.css:50"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/1/selectors/3": {"status":"found","sources":["packages/styles/src/components/indicator.css:44","packages/styles/src/components/indicator.css:46","packages/styles/src/components/indicator.css:48","packages/styles/src/components/indicator.css:50"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/2/name": {"status":"found","sources":["packages/styles/src/components/indicator.css:42","packages/styles/src/components/indicator.css:57"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/2/selectors": {"status":"found","sources":["packages/styles/src/components/indicator.css:42","packages/styles/src/components/indicator.css:57"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/indicator.css:42","packages/styles/src/components/indicator.css:57"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/2/selectors/1": {"status":"found","sources":["packages/styles/src/components/indicator.css:42","packages/styles/src/components/indicator.css:57"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/3/name": {"status":"found","sources":["packages/styles/src/components/indicator.css:42","packages/styles/src/components/indicator.css:57"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/3/selectors": {"status":"found","sources":["packages/styles/src/components/indicator.css:42","packages/styles/src/components/indicator.css:57"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/indicator.css:42","packages/styles/src/components/indicator.css:57"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/3/selectors/1": {"status":"found","sources":["packages/styles/src/components/indicator.css:42","packages/styles/src/components/indicator.css:57"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/4/name": {"status":"found","sources":["packages/styles/src/components/indicator.css:42","packages/styles/src/components/indicator.css:57"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/4/selectors": {"status":"found","sources":["packages/styles/src/components/indicator.css:42","packages/styles/src/components/indicator.css:57"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/4/selectors/0": {"status":"found","sources":["packages/styles/src/components/indicator.css:42","packages/styles/src/components/indicator.css:57"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/customProperties/4/selectors/1": {"status":"found","sources":["packages/styles/src/components/indicator.css:42","packages/styles/src/components/indicator.css:57"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/0/name": {"status":"found","sources":["packages/styles/src/components/indicator.css:42"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/0/selectors": {"status":"found","sources":["packages/styles/src/components/indicator.css:42"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/0/selectors/0": {"status":"found","sources":["packages/styles/src/components/indicator.css:42"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1/name": {"status":"found","sources":["packages/styles/src/components/indicator.css:42"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1/selectors": {"status":"found","sources":["packages/styles/src/components/indicator.css:42"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/1/selectors/0": {"status":"found","sources":["packages/styles/src/components/indicator.css:42"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/2/name": {"status":"found","sources":["packages/styles/src/components/indicator.css:42"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/2/selectors": {"status":"found","sources":["packages/styles/src/components/indicator.css:42"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/2/selectors/0": {"status":"found","sources":["packages/styles/src/components/indicator.css:42"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/3/name": {"status":"found","sources":["packages/styles/src/components/indicator.css:60"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/3/selectors": {"status":"found","sources":["packages/styles/src/components/indicator.css:60"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/parts/1/tokens/3/selectors/0": {"status":"found","sources":["packages/styles/src/components/indicator.css:60"],"note":"Direct var() read on this selector target, including conditional rules and pseudo-elements. Not a computed/inherited token closure."},
+    "/slots/0/name": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:33"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/part": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:33"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/element/0": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:48"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/slots/0/required": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:33"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/allowedContent": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:33"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/0/allowedContent/0": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:33"],"note":"Public content prop type translated to a framework-neutral slot."},
+    "/slots/1/name": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:45"],"note":"Observed children slot inherited through native props; no local content grammar declared."},
+    "/slots/1/part": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:45"],"note":"Observed children slot inherited through native props; no local content grammar declared."},
+    "/slots/1/element/0": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:47"],"note":"Observed native element(s), resolving direct calls to public family roots; conditional element choices retained."},
+    "/options/placement/values": {"status":"found","sources":["packages/styles/src/manifest.ts:353"],"note":"Direct source declaration or implementation."},
+    "/options/placement/values/0": {"status":"found","sources":["packages/styles/src/manifest.ts:353"],"note":"Direct source declaration or implementation."},
+    "/options/placement/values/1": {"status":"found","sources":["packages/styles/src/manifest.ts:353"],"note":"Direct source declaration or implementation."},
+    "/options/placement/values/2": {"status":"found","sources":["packages/styles/src/manifest.ts:353"],"note":"Direct source declaration or implementation."},
+    "/options/placement/values/3": {"status":"found","sources":["packages/styles/src/manifest.ts:353"],"note":"Direct source declaration or implementation."},
+    "/options/overlap/values": {"status":"found","sources":["packages/styles/src/manifest.ts:353"],"note":"Direct source declaration or implementation."},
+    "/options/overlap/values/0": {"status":"found","sources":["packages/styles/src/manifest.ts:353"],"note":"Direct source declaration or implementation."},
+    "/options/overlap/values/1": {"status":"found","sources":["packages/styles/src/manifest.ts:353"],"note":"Direct source declaration or implementation."},
+    "/booleans/0": {"status":"found","sources":["packages/styles/src/manifest.ts:355"],"note":"Exact manifest boolean modifier list; absence means no declared booleans."},
+    "/states/0/name": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:47"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/part": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:47"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/kind": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:47"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/hook": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:47"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/0/value": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:47"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/name": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:48"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/part": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:48"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/kind": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:48"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/hook": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:48"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/states/1/value": {"status":"found","sources":["packages/react/src/components/Indicator.tsx:48"],"note":"Exact authored attribute value/expression; expressions describe current implementation, not a portable evaluator."},
+    "/reference/spec/0": {"status":"found","sources":["docs/specs/indicator.md:1"],"note":"Shared family spec; dedicated slug spec not found."}
+  }
+}

@@ -1,0 +1,779 @@
+{
+  "repo": "mdn/browser-compat-data",
+  "commit": "ef3eb098c3fea5291e31dc40ed9f8e47de2978bd",
+  "checked": "2026-10-08",
+  "files": [
+    {
+      "path": "css/properties/box-shadow.json",
+      "sha256": "75c490869d1e4a39c3cbc389905f87eb315865908a38ca80f5ff8b4a970a5860",
+      "features": [
+        {
+          "feature": "css.properties.box-shadow",
+          "line": 4,
+          "mdn": "https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/box-shadow",
+          "support": {
+            "chrome": [
+              {
+                "version_added": "10",
+                "notes": "Shadows affect layout in this browser. For example, if you cast an outer shadow to a box with a `width` of `100%`, then you'll see a scrollbar."
+              },
+              {
+                "prefix": "-webkit-",
+                "version_added": "1"
+              }
+            ],
+            "safari": [
+              {
+                "version_added": "5.1",
+                "notes": "Shadows affect layout in this browser. For example, if you cast an outer shadow to a box with a `width` of `100%`, then you'll see a scrollbar."
+              },
+              {
+                "prefix": "-webkit-",
+                "version_added": "3"
+              }
+            ],
+            "firefox": [
+              {
+                "version_added": "4",
+                "notes": "Shadows affect layout in this browser. For example, if you cast an outer shadow to a box with a `width` of `100%`, then you'll see a scrollbar."
+              },
+              {
+                "prefix": "-webkit-",
+                "version_added": "49"
+              },
+              {
+                "prefix": "-moz-",
+                "version_added": "3.5",
+                "version_removed": "13"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "path": "css/properties/text-shadow.json",
+      "sha256": "26f9c3c8c4b9523c0aa2414a9e04c3cbf812ac70718b04f5f58a7e3c119a6bf5",
+      "features": [
+        {
+          "feature": "css.properties.text-shadow",
+          "line": 4,
+          "mdn": "https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/text-shadow",
+          "support": {
+            "chrome": {
+              "version_added": "2"
+            },
+            "safari": {
+              "version_added": "1.1",
+              "notes": [
+                "In Safari, any shadows that do not explicitly specify a color are transparent.",
+                "Safari 1.1 to 3.2 only supports one text-shadow (displays the first shadow of a comma-separated list and ignores the rest). Safari 4.0 (WebKit 528) and later support multiple text-shadows."
+              ]
+            },
+            "firefox": {
+              "version_added": "3.5",
+              "notes": [
+                "Firefox versions before 57 have a bug whereby [`transition`](https://developer.mozilla.org/docs/Web/CSS/transition)s will not work when transitioning from a `text-shadow` with a color specified to a `text-shadow` without a color specified ([bug 726550](https://bugzil.la/726550)).",
+                "From Firefox 4, the blur radius is capped at 300 for performance reasons.",
+                "Firefox theoretically supports infinite text-shadows (don't try it).",
+                "If the `<color>` value is unspecified, then Firefox uses the value of the element's [`color`](https://developer.mozilla.org/docs/Web/CSS/color) property."
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "path": "css/properties/background-clip.json",
+      "sha256": "dee11f90d82b41e27d460f4bc6c3612a745fcafd1817d4a0c952daadc299e43f",
+      "features": [
+        {
+          "feature": "css.properties.background-clip",
+          "line": 4,
+          "mdn": "https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/background-clip",
+          "support": {
+            "chrome": [
+              {
+                "version_added": "1"
+              },
+              {
+                "prefix": "-webkit-",
+                "version_added": "1",
+                "notes": "Chrome accepts alternate synonyms to its values: `padding`, `border`, and `content`."
+              }
+            ],
+            "safari": [
+              {
+                "version_added": "5"
+              },
+              {
+                "prefix": "-webkit-",
+                "version_added": "3",
+                "notes": "Safari accepts alternate synonyms to its values: `padding`, `border`, and `content`."
+              }
+            ],
+            "firefox": [
+              {
+                "version_added": "4"
+              },
+              {
+                "prefix": "-webkit-",
+                "version_added": "49"
+              },
+              {
+                "prefix": "-moz-",
+                "version_added": "1",
+                "version_removed": "4",
+                "partial_implementation": true,
+                "notes": "Used the `-moz-background-clip: padding | border` syntax."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "path": "css/properties/border-image.json",
+      "sha256": "a3902ce9de78b11f1a8d3c89c0e0eaf8160b27936700600c94f58f2fa831a5ab",
+      "features": [
+        {
+          "feature": "css.properties.border-image",
+          "line": 4,
+          "mdn": "https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-image",
+          "support": {
+            "chrome": [
+              {
+                "version_added": "16",
+                "notes": "Before Chrome 112, a border image's absolute or percentage length width may not take precedence over a narrower `border-width` ([bug 40541033](https://crbug.com/40541033))."
+              },
+              {
+                "prefix": "-webkit-",
+                "version_added": "7"
+              }
+            ],
+            "safari": [
+              {
+                "version_added": "6"
+              },
+              {
+                "prefix": "-webkit-",
+                "version_added": "3"
+              }
+            ],
+            "firefox": [
+              {
+                "version_added": "15",
+                "notes": [
+                  "Small SVGs are incorrectly stretched, because percentages in [`border-image-slice`](https://developer.mozilla.org/docs/Web/CSS/border-image-slice) are computed to integers instead of floats ([bug 1284797](https://bugzil.la/1284797)).",
+                  "Until Firefox 47, SVGs without viewport were not sliced correctly ([bug 619500](https://bugzil.la/619500)).",
+                  "From Firefox 48 until Firefox 49, SVGs without viewport are displayed the same as SVGs with viewport, but if the slices are not exactly 50%, they are incorrectly stretched ([bug 1264809](https://bugzil.la/1264809)).",
+                  "Until Firefox 57, an issue persisted for SVGs without viewport when [e10s](https://wiki.mozilla.org/Electrolysis) was disabled ([bug 1290782](https://bugzil.la/1290782))."
+                ]
+              },
+              {
+                "prefix": "-moz-",
+                "version_added": "3.5",
+                "notes": "Before Firefox 15, an earlier version of the specification was implemented, prefixed."
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "path": "css/properties/border-radius.json",
+      "sha256": "7e9e84a72e6764c2ec0579d8f7958fb60b77f510a3a16e4b1a5742ee50762601",
+      "features": [
+        {
+          "feature": "css.properties.border-radius",
+          "line": 4,
+          "mdn": "https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/border-radius",
+          "support": {
+            "chrome": [
+              {
+                "version_added": "4",
+                "notes": "Chrome ignores `border-radius` on `<select>` elements unless `-webkit-appearance` is overridden to an appropriate value."
+              },
+              {
+                "prefix": "-webkit-",
+                "version_added": "1"
+              }
+            ],
+            "safari": [
+              {
+                "version_added": "5",
+                "notes": "Safari ignores `border-radius` on `<select>` elements unless `-webkit-appearance` is overridden to an appropriate value."
+              },
+              {
+                "prefix": "-webkit-",
+                "version_added": "3"
+              }
+            ],
+            "firefox": [
+              {
+                "version_added": "4",
+                "notes": [
+                  "Before Firefox 50, border styles of rounded corners (with `border-radius`) were always rendered as if `border-style` was `solid`. This has been fixed in Firefox 50.",
+                  "To conform to the CSS3 standard, Firefox 4 changes the handling of [`<percentage>`](https://developer.mozilla.org/docs/Web/CSS/percentage) values to match the specification. You can specify an ellipse as a border on an arbitrary sized element with `border-radius: 50%;`. Firefox 4 also makes rounded corners clip content and images if [`overflow`](https://developer.mozilla.org/docs/Web/CSS/overflow)`: visible` is not set."
+                ]
+              },
+              {
+                "prefix": "-moz-",
+                "version_added": "1",
+                "version_removed": "12"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "path": "css/properties/mask-composite.json",
+      "sha256": "97ddd2f29d0a28067f61aaf93df72ec9a12ba6cbf026a7aa7335fea00254089c",
+      "features": [
+        {
+          "feature": "css.properties.mask-composite",
+          "line": 4,
+          "mdn": "https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-composite",
+          "support": {
+            "chrome": {
+              "version_added": "120",
+              "notes": "See also [`-webkit-mask-composite`](https://developer.mozilla.org/docs/Web/CSS/-webkit-mask-composite) for a similar non-standard property that uses different keywords."
+            },
+            "safari": {
+              "version_added": "15.4",
+              "notes": "See also [`-webkit-mask-composite`](https://developer.mozilla.org/docs/Web/CSS/-webkit-mask-composite) for a similar non-standard property that uses different keywords."
+            },
+            "firefox": [
+              {
+                "version_added": "53"
+              },
+              {
+                "prefix": "-webkit-",
+                "version_added": "53"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "path": "css/properties/mask-image.json",
+      "sha256": "ae8ee064bbb332a409d7d8601f58b68227372645fbfa0b7fdeaaa14f3c57afd9",
+      "features": [
+        {
+          "feature": "css.properties.mask-image",
+          "line": 4,
+          "mdn": "https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mask-image",
+          "support": {
+            "chrome": [
+              {
+                "version_added": "120"
+              },
+              {
+                "prefix": "-webkit-",
+                "version_added": "1",
+                "notes": "From version 8, Chrome added support for gradient values. Initially, Chrome supported only `-webkit-` prefixed values for gradients (such as `-webkit-linear-gradient()`). Later, support for unprefixed values was added."
+              }
+            ],
+            "safari": [
+              {
+                "version_added": "15.4"
+              },
+              {
+                "prefix": "-webkit-",
+                "version_added": "4",
+                "notes": "Initially, Safari supported only `-webkit-` prefixed values for gradients (such as `-webkit-linear-gradient()`). Later, support for unprefixed values was added."
+              }
+            ],
+            "firefox": {
+              "version_added": "53"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "path": "css/properties/backdrop-filter.json",
+      "sha256": "ded99c632da2ec5c1a757a710e7348f802e27826124189cde691b206af70b7cf",
+      "features": [
+        {
+          "feature": "css.properties.backdrop-filter",
+          "line": 4,
+          "mdn": "https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/backdrop-filter",
+          "support": {
+            "chrome": {
+              "version_added": "76"
+            },
+            "safari": [
+              {
+                "version_added": "18"
+              },
+              {
+                "prefix": "-webkit-",
+                "version_added": "9"
+              }
+            ],
+            "firefox": {
+              "version_added": "103",
+              "notes": "Before Firefox 123, the property was not supported on systems with unknown GPU vendor (see bug [1868737](https://bugzil.la/1868737#c12))."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "path": "css/properties/filter.json",
+      "sha256": "e713b6fc2c77b68fab55fc90445a6dcc0694ea7d0279b67e5125b924c9a9616f",
+      "features": [
+        {
+          "feature": "css.properties.filter",
+          "line": 4,
+          "mdn": "https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/filter",
+          "support": {
+            "chrome": [
+              {
+                "version_added": "53"
+              },
+              {
+                "prefix": "-webkit-",
+                "version_added": "18"
+              }
+            ],
+            "safari": [
+              {
+                "version_added": "9.1"
+              },
+              {
+                "prefix": "-webkit-",
+                "version_added": "6"
+              }
+            ],
+            "firefox": [
+              {
+                "version_added": "35"
+              },
+              {
+                "prefix": "-webkit-",
+                "version_added": "49"
+              }
+            ]
+          }
+        },
+        {
+          "feature": "css.properties.filter.svg_elements",
+          "line": 522,
+          "mdn": null,
+          "support": {
+            "chrome": {
+              "version_added": "89"
+            },
+            "safari": {
+              "version_added": false,
+              "impl_url": "https://webkit.org/b/246106"
+            },
+            "firefox": {
+              "version_added": "35"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "path": "css/properties/corner-shape.json",
+      "sha256": "c5a0d1f62416df485a357ebb9ee9951b1b8fc151537cd20ee78d8b1d4f7c565a",
+      "features": [
+        {
+          "feature": "css.properties.corner-shape",
+          "line": 4,
+          "mdn": "https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/corner-shape",
+          "support": {
+            "chrome": {
+              "version_added": "139"
+            },
+            "safari": {
+              "version_added": "preview"
+            },
+            "firefox": {
+              "version_added": "preview"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "path": "css/properties/opacity.json",
+      "sha256": "0ca1af1e89e391db849f7a032cf248c91d608855cdc21c68c053648c461fad20",
+      "features": [
+        {
+          "feature": "css.properties.opacity",
+          "line": 4,
+          "mdn": "https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/opacity",
+          "support": {
+            "chrome": {
+              "version_added": "1"
+            },
+            "safari": [
+              {
+                "version_added": "2"
+              },
+              {
+                "prefix": "-khtml-",
+                "version_added": "1.1",
+                "version_removed": "2"
+              }
+            ],
+            "firefox": [
+              {
+                "version_added": "1"
+              },
+              {
+                "prefix": "-moz-",
+                "version_added": "1",
+                "version_removed": "3.5"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "path": "css/properties/mix-blend-mode.json",
+      "sha256": "65446d53c9ad8931cb29e2b6b982bec9c707f093b5277d38845273ecae9f5754",
+      "features": [
+        {
+          "feature": "css.properties.mix-blend-mode",
+          "line": 4,
+          "mdn": "https://developer.mozilla.org/docs/Web/CSS/Reference/Properties/mix-blend-mode",
+          "support": {
+            "chrome": {
+              "version_added": "41"
+            },
+            "safari": {
+              "version_added": "8"
+            },
+            "firefox": {
+              "version_added": "32"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "path": "css/types/color.json",
+      "sha256": "1a99b0950236b029a95e15175678e3c930c7a9b54bb174a4cde7906cc9ad8a50",
+      "features": [
+        {
+          "feature": "css.types.color.color-mix",
+          "line": 241,
+          "mdn": "https://developer.mozilla.org/docs/Web/CSS/Reference/Values/color_value/color-mix",
+          "support": {
+            "chrome": {
+              "version_added": "111"
+            },
+            "safari": {
+              "version_added": "16.2"
+            },
+            "firefox": {
+              "version_added": "113"
+            }
+          }
+        },
+        {
+          "feature": "css.types.color.rgb.relative_syntax",
+          "line": 1562,
+          "mdn": null,
+          "support": {
+            "chrome": [
+              {
+                "version_added": "122"
+              },
+              {
+                "version_added": "119",
+                "version_removed": "122",
+                "partial_implementation": true,
+                "notes": "Channel values incorrectly resolve to numbers between 0-1 rather than 0-255. As a result, channel value calculations require values to be specified as decimal percentage equivalents (e.g. 0.3 for 30%, which would be equivalent to a 76.5 `<number>` value). See [bug 41490327](https://crbug.com/41490327)."
+              }
+            ],
+            "safari": [
+              {
+                "version_added": "18"
+              },
+              {
+                "version_added": "16.4",
+                "version_removed": "18",
+                "partial_implementation": true,
+                "notes": "Implementation based on older spec version. As a result, channel value calculations do not work correctly, requiring values to be specified as percentages with units (e.g. 30%, which would be equivalent to a 76.5 `<number>` value). See [bug 267647](https://webkit.org/b/267647)."
+              }
+            ],
+            "firefox": {
+              "version_added": "128"
+            }
+          }
+        },
+        {
+          "feature": "css.types.color.oklch.relative_syntax",
+          "line": 1361,
+          "mdn": null,
+          "support": {
+            "chrome": [
+              {
+                "version_added": "122"
+              },
+              {
+                "version_added": "119",
+                "version_removed": "122",
+                "partial_implementation": true,
+                "notes": "`l` channel values incorrectly resolve to numbers between 0-100 rather than 0-1. As a result, channel value calculations require `l` values to be specified as percentage numbers without units (e.g. 20 for 0.2). See [bug 40940488](https://crbug.com/40940488)."
+              }
+            ],
+            "safari": [
+              {
+                "version_added": "18"
+              },
+              {
+                "version_added": "16.4",
+                "version_removed": "18",
+                "partial_implementation": true,
+                "notes": "Implementation based on older spec version. As a result, calculations with `h` channel values do not work correctly, requiring values to be specified with units (`deg`)."
+              }
+            ],
+            "firefox": {
+              "version_added": "128"
+            }
+          }
+        },
+        {
+          "feature": "css.types.color.light-dark",
+          "line": 971,
+          "mdn": "https://developer.mozilla.org/docs/Web/CSS/Reference/Values/color_value/light-dark",
+          "support": {
+            "chrome": {
+              "version_added": "123",
+              "impl_url": "https://crbug.com/40284803"
+            },
+            "safari": {
+              "version_added": "17.5",
+              "impl_url": "https://webkit.org/b/262914"
+            },
+            "firefox": {
+              "version_added": "120"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "path": "css/types/gradient.json",
+      "sha256": "dd5a2f5b8c4c88b8d3573972617a9f6f15d1ec94cd41cf214f46068805aa8b27",
+      "features": [
+        {
+          "feature": "css.types.gradient.linear-gradient",
+          "line": 259,
+          "mdn": "https://developer.mozilla.org/docs/Web/CSS/Reference/Values/gradient/linear-gradient",
+          "support": {
+            "chrome": [
+              {
+                "version_added": "26"
+              },
+              {
+                "prefix": "-webkit-",
+                "version_added": "10"
+              }
+            ],
+            "safari": [
+              {
+                "version_added": "7"
+              },
+              {
+                "prefix": "-webkit-",
+                "version_added": "5.1",
+                "notes": [
+                  "Safari 4 was supporting an experimental [`-webkit-gradient(linear,\u2026)`](https://developer.apple.com/library/archive/documentation/InternetWeb/Conceptual/SafariVisualEffectsProgGuide/Gradients/Gradient.html) function. It is more limited than the later standard version: you cannot specify both a position and an angle like in `linear-gradient()`. This old outdated syntax is still supported for compatibility purposes.",
+                  "Considers `<angle>` to start to the right, instead of the top. I.e. it considered an angle of `0deg` as a direction indicator pointing to the right."
+                ]
+              }
+            ],
+            "firefox": [
+              {
+                "version_added": "16"
+              },
+              {
+                "prefix": "-webkit-",
+                "version_added": "49"
+              },
+              {
+                "prefix": "-moz-",
+                "version_added": "3.6",
+                "notes": [
+                  "Since Firefox 42, the prefixed version of gradients can be disabled by setting `layout.css.prefixes.gradients` to `false`.",
+                  "Considers `<angle>` to start to the right, instead of the top. I.e. it considered an angle of `0deg` as a direction indicator pointing to the right."
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "feature": "css.types.gradient.radial-gradient",
+          "line": 660,
+          "mdn": "https://developer.mozilla.org/docs/Web/CSS/Reference/Values/gradient/radial-gradient",
+          "support": {
+            "chrome": [
+              {
+                "version_added": "26"
+              },
+              {
+                "prefix": "-webkit-",
+                "version_added": "13"
+              }
+            ],
+            "safari": [
+              {
+                "version_added": "7"
+              },
+              {
+                "prefix": "-webkit-",
+                "version_added": "5.1",
+                "notes": "Safari 4 was supporting an experimental [`-webkit-gradient(radial,\u2026)`](https://developer.apple.com/library/archive/documentation/InternetWeb/Conceptual/SafariVisualEffectsProgGuide/Gradients/Gradient.html) function. This old outdated syntax is still supported for compatibility purposes."
+              }
+            ],
+            "firefox": [
+              {
+                "version_added": "16"
+              },
+              {
+                "prefix": "-webkit-",
+                "version_added": "49"
+              },
+              {
+                "prefix": "-moz-",
+                "version_added": "3.6",
+                "notes": "Since Firefox 42, the prefixed version of gradients can be disabled by setting `layout.css.prefixes.gradients` to `false`."
+              }
+            ]
+          }
+        },
+        {
+          "feature": "css.types.gradient.conic-gradient",
+          "line": 83,
+          "mdn": "https://developer.mozilla.org/docs/Web/CSS/Reference/Values/gradient/conic-gradient",
+          "support": {
+            "chrome": {
+              "version_added": "69"
+            },
+            "safari": {
+              "version_added": "12.1"
+            },
+            "firefox": {
+              "version_added": "83"
+            }
+          }
+        },
+        {
+          "feature": "css.types.gradient.linear-gradient.interpolation_color_space",
+          "line": 430,
+          "mdn": null,
+          "support": {
+            "chrome": {
+              "version_added": "111"
+            },
+            "safari": {
+              "version_added": "16.2"
+            },
+            "firefox": {
+              "version_added": "127"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "path": "svg/elements/feDisplacementMap.json",
+      "sha256": "0db8541ef9f84455e7f5177d50356c3462b29d85d7694c1bda66e8270dd85012",
+      "features": [
+        {
+          "feature": "svg.elements.feDisplacementMap",
+          "line": 4,
+          "mdn": "https://developer.mozilla.org/docs/Web/SVG/Reference/Element/feDisplacementMap",
+          "support": {
+            "chrome": {
+              "version_added": "5"
+            },
+            "safari": {
+              "version_added": "6"
+            },
+            "firefox": {
+              "version_added": "3"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "path": "svg/elements/feTurbulence.json",
+      "sha256": "9f247192527050d09fa97efcafaa10d860bd09435045b93874ee7b6c8fa25af4",
+      "features": [
+        {
+          "feature": "svg.elements.feTurbulence",
+          "line": 4,
+          "mdn": "https://developer.mozilla.org/docs/Web/SVG/Reference/Element/feTurbulence",
+          "support": {
+            "chrome": {
+              "version_added": "5"
+            },
+            "safari": {
+              "version_added": "6"
+            },
+            "firefox": {
+              "version_added": "3"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "path": "css/selectors/before.json",
+      "sha256": "1cdee1afc7d99bc250861d9fe83d514e8e9b73a0139094084697d993a18425a4",
+      "features": [
+        {
+          "feature": "css.selectors.before",
+          "line": 4,
+          "mdn": "https://developer.mozilla.org/docs/Web/CSS/Reference/Selectors/::before",
+          "support": {
+            "chrome": [
+              {
+                "version_added": "1"
+              },
+              {
+                "alternative_name": ":before",
+                "version_added": "1"
+              }
+            ],
+            "safari": [
+              {
+                "version_added": "4"
+              },
+              {
+                "alternative_name": ":before",
+                "version_added": "4"
+              }
+            ],
+            "firefox": [
+              {
+                "version_added": "1.5",
+                "notes": [
+                  "Before Firefox 57, Firefox had a bug where `::before` pseudo-elements were still generated, even if the [`content`](https://developer.mozilla.org/docs/Web/CSS/content) property value were set to `normal` or `none`.",
+                  "Before Firefox 3.5, only the CSS level 2 behavior of `:before` was supported, which disallowed [`position`](https://developer.mozilla.org/docs/Web/CSS/position), [`float`](https://developer.mozilla.org/docs/Web/CSS/float), `list-style-*` and some `display` properties."
+                ]
+              },
+              {
+                "alternative_name": ":before",
+                "version_added": "1"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

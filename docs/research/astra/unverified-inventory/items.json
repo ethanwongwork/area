@@ -1,0 +1,1015 @@
+{
+  "snapshot": "4c1854202a8e109479d5b83ef24a8325231da056",
+  "counts": {
+    "Dark theme": 61,
+    "Other local/source/owner checks": 32,
+    "Product capture": 28,
+    "Firefox/Safari": 8,
+    "RTL": 12,
+    "Screen reader": 28,
+    "Touch": 6,
+    "Forced colours": 9
+  },
+  "items": [
+    {
+      "id": "U001",
+      "spec": "docs/specs/alert.md",
+      "slug": "alert",
+      "line": 179,
+      "end": 179,
+      "quote": "- Unverified: dismiss hover and focus on screen, dark theme.",
+      "item": "dismiss hover and focus on screen, dark theme.",
+      "kinds": [
+        "Dark theme",
+        "Other local/source/owner checks"
+      ],
+      "action": "Use single-line and multiline alerts with dismiss; hover and Tab to dismiss, then activate it."
+    },
+    {
+      "id": "U002",
+      "spec": "docs/specs/alignment-picker.md",
+      "slug": "alignment-picker",
+      "line": 170,
+      "end": 170,
+      "quote": "Unverified: Figma's focus state (rest and hover captured 2026-10-04).",
+      "item": "Figma's focus state (rest and hover captured 2026-10-04).",
+      "kinds": [
+        "Product capture",
+        "Other local/source/owner checks"
+      ],
+      "action": "Move through all nine physical positions with arrows, hover every cell, focus a cell and compare selected versus preview marks."
+    },
+    {
+      "id": "U003",
+      "spec": "docs/specs/alignment-picker.md",
+      "slug": "alignment-picker",
+      "line": 194,
+      "end": 195,
+      "quote": "  for review (`component-status.mjs`). Unverified: Figma's grid size, padding, hover ink and plate,\n  pending a live capture in Claude in Chrome.",
+      "item": "Figma's grid size, padding, hover ink and plate,   pending a live capture in Claude in Chrome.",
+      "kinds": [
+        "Product capture",
+        "Other local/source/owner checks"
+      ],
+      "action": "Move through all nine physical positions with arrows, hover every cell, focus a cell and compare selected versus preview marks."
+    },
+    {
+      "id": "U004",
+      "spec": "docs/specs/avatar.md",
+      "slug": "avatar",
+      "line": 184,
+      "end": 185,
+      "quote": "did not inspect screenshots. Unverified: dark theme, an active ring next to a focused\navatar-bearing control, a side-by-side with Figma's initials avatar.",
+      "item": "dark theme, an active ring next to a focused avatar-bearing control, a side-by-side with Figma's initials avatar.",
+      "kinds": [
+        "Dark theme",
+        "Product capture",
+        "Other local/source/owner checks"
+      ],
+      "action": "Use initials and image avatars, active and inactive, beside a focusable control carrying an avatar; focus that control."
+    },
+    {
+      "id": "U005",
+      "spec": "docs/specs/badge-group.md",
+      "slug": "badge-group",
+      "line": 134,
+      "end": 135,
+      "quote": "owner's workspace (Notion's tasks board has single tags per group header). Unverified: a Notion multi-select cell's tag gap\n(no multi-select was reachable in the owner's workspace), dark theme.",
+      "item": "a Notion multi-select cell's tag gap (no multi-select was reachable in the owner's workspace), dark theme.",
+      "kinds": [
+        "Dark theme",
+        "Product capture"
+      ],
+      "action": "Open the overflow trigger by keyboard, inspect its focus ring, then compare wrapping and overlay tag gaps."
+    },
+    {
+      "id": "U006",
+      "spec": "docs/specs/badge-group.md",
+      "slug": "badge-group",
+      "line": 147,
+      "end": 148,
+      "quote": "- Unverified: keyboard focus ring on the trigger (not reached with the real Tab key in\n  this pass), dark theme, Primer source at a pinned commit.",
+      "item": "keyboard focus ring on the trigger (not reached with the real Tab key in   this pass), dark theme, Primer source at a pinned commit.",
+      "kinds": [
+        "Dark theme",
+        "Other local/source/owner checks"
+      ],
+      "action": "Open the overflow trigger by keyboard, inspect its focus ring, then compare wrapping and overlay tag gaps."
+    },
+    {
+      "id": "U007",
+      "spec": "docs/specs/badge.md",
+      "slug": "badge",
+      "line": 555,
+      "end": 558,
+      "quote": "- Unverified: dark theme in every product (needs the owner's go-ahead to switch), Figma\n  editor badges, hover/focus captures (no product badge is interactive), sm with icons\n  (no composition uses it), browsers without `text-box` (they keep the previous centring\n  and its baseline behaviour).",
+      "item": "dark theme in every product (needs the owner's go-ahead to switch), Figma   editor badges, hover/focus captures (no product badge is interactive), sm with icons   (no composition uses it), browsers without `text-box` (they keep the previous centring   and its baseline behaviour).",
+      "kinds": [
+        "Dark theme",
+        "Firefox/Safari",
+        "Product capture",
+        "Other local/source/owner checks"
+      ],
+      "action": "Use labeled, icon-bearing and dismissible badges at every size; focus/hover dismiss and compare baseline alignment in surrounding text."
+    },
+    {
+      "id": "U008",
+      "spec": "docs/specs/box-field.md",
+      "slug": "box-field",
+      "line": 124,
+      "end": 125,
+      "quote": "- Unverified: dark theme; screen reader output; RTL (left/right are physical here, as padding\n  values are); Figma's split layouts (needs opening the panels in the owner's file).",
+      "item": "dark theme; screen reader output; RTL (left/right are physical here, as padding   values are); Figma's split layouts (needs opening the panels in the owner's file).",
+      "kinds": [
+        "Dark theme",
+        "RTL",
+        "Screen reader",
+        "Product capture"
+      ],
+      "action": "Toggle linked and per-side/per-corner editing, change each field locally and verify physical left/right labels remain attached to the intended side."
+    },
+    {
+      "id": "U009",
+      "spec": "docs/specs/breadcrumb.md",
+      "slug": "breadcrumb",
+      "line": 124,
+      "end": 124,
+      "quote": "- Unverified: hover plate on screen (the browser pane was hidden), dark theme, Figma.",
+      "item": "hover plate on screen (the browser pane was hidden), dark theme, Figma.",
+      "kinds": [
+        "Dark theme",
+        "Product capture",
+        "Other local/source/owner checks"
+      ],
+      "action": "Hover/focus each link and overflow control; inspect current-page treatment and separators."
+    },
+    {
+      "id": "U010",
+      "spec": "docs/specs/button-group.md",
+      "slug": "button-group",
+      "line": 69,
+      "end": 69,
+      "quote": "- Unverified: dark theme, focus ring over the divider in every size.",
+      "item": "dark theme, focus ring over the divider in every size.",
+      "kinds": [
+        "Dark theme",
+        "Other local/source/owner checks"
+      ],
+      "action": "Focus every joined button at each size; inspect the focused outline where it meets the divider, including a selected neighbor."
+    },
+    {
+      "id": "U011",
+      "spec": "docs/specs/button.md",
+      "slug": "button",
+      "line": 292,
+      "end": 293,
+      "quote": "- Unverified: dark theme (products not switched), Figma hover, disabled/loading/selected against references, compact density\n  (the gap follows density since audit S14; compact sm is 4).",
+      "item": "dark theme (products not switched), Figma hover, disabled/loading/selected against references, compact density   (the gap follows density since audit S14; compact sm is 4).",
+      "kinds": [
+        "Dark theme",
+        "Product capture",
+        "Other local/source/owner checks"
+      ],
+      "action": "Inspect solid/soft/outline/ghost at sm/md/lg, then disabled/loading/selected specimens with real pointer hover and keyboard focus."
+    },
+    {
+      "id": "U012",
+      "spec": "docs/specs/calendar.md",
+      "slug": "calendar",
+      "line": 216,
+      "end": 217,
+      "quote": "- Unverified: screen readers, dark theme, RTL, Firefox/Safari, touch; hover preview was\n  exercised only with synthetic events.",
+      "item": "screen readers, dark theme, RTL, Firefox/Safari, touch; hover preview was   exercised only with synthetic events.",
+      "kinds": [
+        "Dark theme",
+        "RTL",
+        "Screen reader",
+        "Firefox/Safari",
+        "Touch",
+        "Other local/source/owner checks"
+      ],
+      "action": "Use single, range and multiple modes; navigate days by arrows, week by Home/End, month by PageUp/PageDown, year by Shift+Page; select with Enter/Space and inspect disabled/outside/today states."
+    },
+    {
+      "id": "U013",
+      "spec": "docs/specs/card.md",
+      "slug": "card",
+      "line": 202,
+      "end": 203,
+      "quote": "background). Unverified: Firefox and Safari (`text-box`, `cap`, container queries, `:has()`),\nforced colours, screen readers.",
+      "item": "Firefox and Safari (`text-box`, `cap`, container queries, `:has()`), forced colours, screen readers.",
+      "kinds": [
+        "Forced colours",
+        "Screen reader",
+        "Firefox/Safari"
+      ],
+      "action": "Use linked, horizontal, immersive and carousel cards; Tab through links/actions and resize across container breakpoints."
+    },
+    {
+      "id": "U014",
+      "spec": "docs/specs/checkbox.md",
+      "slug": "checkbox",
+      "line": 153,
+      "end": 153,
+      "quote": "Unverified: dark theme, hover and focus in a product.",
+      "item": "dark theme, hover and focus in a product.",
+      "kinds": [
+        "Dark theme",
+        "Product capture",
+        "Other local/source/owner checks"
+      ],
+      "action": "Toggle checked/mixed/unchecked; focus normal and card/tile variants, including disabled and invalid."
+    },
+    {
+      "id": "U015",
+      "spec": "docs/specs/code-block.md",
+      "slug": "code-block",
+      "line": 165,
+      "end": 166,
+      "quote": "(Area tokens over ChatGPT's pill scale; 14 mono throughout). No change. Unverified: hover and\n`:target` paint on screen, dark theme, RTL.",
+      "item": "hover and `:target` paint on screen, dark theme, RTL.",
+      "kinds": [
+        "Dark theme",
+        "RTL",
+        "Other local/source/owner checks"
+      ],
+      "action": "Hover header actions and line links; navigate to a line fragment to activate :target and inspect the linked-line rail."
+    },
+    {
+      "id": "U016",
+      "spec": "docs/specs/code.md",
+      "slug": "code",
+      "line": 131,
+      "end": 131,
+      "quote": "Unverified: dark theme, forced colours.",
+      "item": "dark theme, forced colours.",
+      "kinds": [
+        "Dark theme",
+        "Forced colours"
+      ],
+      "action": "Render inline code in small and body text on ordinary and colored surfaces; inspect border/fill and text floor."
+    },
+    {
+      "id": "U017",
+      "spec": "docs/specs/color-field.md",
+      "slug": "color-field",
+      "line": 134,
+      "end": 134,
+      "quote": "Unverified: Figma side by side at the same zoom, dark theme.",
+      "item": "Figma side by side at the same zoom, dark theme.",
+      "kinds": [
+        "Dark theme",
+        "Product capture"
+      ],
+      "action": "Edit hex and opacity, reach the swatch and any nested action with Tab, and compare field/swatch corners at the same zoom."
+    },
+    {
+      "id": "U018",
+      "spec": "docs/specs/color-picker.md",
+      "slug": "color-picker",
+      "line": 230,
+      "end": 230,
+      "quote": "- Unverified: dark theme, screen readers, Firefox and Safari (no EyeDropper there), touch.",
+      "item": "dark theme, screen readers, Firefox and Safari (no EyeDropper there), touch.",
+      "kinds": [
+        "Dark theme",
+        "Screen reader",
+        "Firefox/Safari",
+        "Touch"
+      ],
+      "action": "Drag and keyboard-adjust the area, hue and opacity tracks; change value model; select/add a swatch and inspect the EyeDropper availability path."
+    },
+    {
+      "id": "U019",
+      "spec": "docs/specs/color-swatch-picker.md",
+      "slug": "color-swatch-picker",
+      "line": 141,
+      "end": 142,
+      "quote": "the sizes each have a tile. Unverified: Figma side by side, dark theme, a selected\nFigma chit.",
+      "item": "Figma side by side, dark theme, a selected Figma chit.",
+      "kinds": [
+        "Dark theme",
+        "Product capture"
+      ],
+      "action": "Choose swatches with arrows and Space, including a light swatch; inspect the selected ring and palette/grid/row layouts."
+    },
+    {
+      "id": "U020",
+      "spec": "docs/specs/color-swatch.md",
+      "slug": "color-swatch",
+      "line": 104,
+      "end": 105,
+      "quote": "The gallery shows ColorSwatch's tiles in named groups. Unverified: Figma side by side, dark\ntheme, forced colours.",
+      "item": "Figma side by side, dark theme, forced colours.",
+      "kinds": [
+        "Dark theme",
+        "Forced colours",
+        "Product capture"
+      ],
+      "action": "Render white, transparent, saturated and selected swatches; inspect edge visibility and checker/colour separation."
+    },
+    {
+      "id": "U021",
+      "spec": "docs/specs/combobox.md",
+      "slug": "combobox",
+      "line": 79,
+      "end": 79,
+      "quote": "field), matched to Notion's menu when Menu was approved. No change. Unverified: dark theme.",
+      "item": "dark theme.",
+      "kinds": [
+        "Dark theme"
+      ],
+      "action": "Type to filter, arrow through results, choose/create an item, clear, and Escape; use a real IME to confirm composition does not select early."
+    },
+    {
+      "id": "U022",
+      "spec": "docs/specs/combobox.md",
+      "slug": "combobox",
+      "line": 89,
+      "end": 89,
+      "quote": "- Unverified: dark theme, screen reader announcements, IME composition, RTL.",
+      "item": "dark theme, screen reader announcements, IME composition, RTL.",
+      "kinds": [
+        "Dark theme",
+        "RTL",
+        "Screen reader",
+        "Other local/source/owner checks"
+      ],
+      "action": "Type to filter, arrow through results, choose/create an item, clear, and Escape; use a real IME to confirm composition does not select early."
+    },
+    {
+      "id": "U023",
+      "spec": "docs/specs/command-palette.md",
+      "slug": "command-palette",
+      "line": 104,
+      "end": 104,
+      "quote": "- Unverified: dark theme, screen reader output, IME.",
+      "item": "dark theme, screen reader output, IME.",
+      "kinds": [
+        "Dark theme",
+        "Screen reader",
+        "Other local/source/owner checks"
+      ],
+      "action": "Open, type/filter, arrow through groups, activate a harmless action, and Escape; repeat with a real IME composition."
+    },
+    {
+      "id": "U024",
+      "spec": "docs/specs/command-palette.md",
+      "slug": "command-palette",
+      "line": 131,
+      "end": 131,
+      "quote": "\"Move\" ink to the Open keycap 16. Unverified: hover paint by eye, dark theme.",
+      "item": "hover paint by eye, dark theme.",
+      "kinds": [
+        "Dark theme",
+        "Other local/source/owner checks"
+      ],
+      "action": "Open, type/filter, arrow through groups, activate a harmless action, and Escape; repeat with a real IME composition."
+    },
+    {
+      "id": "U025",
+      "spec": "docs/specs/composer.md",
+      "slug": "composer",
+      "line": 98,
+      "end": 99,
+      "quote": "`npm test` (tokens and contrast), capture checksums: all pass. Unverified: dark theme, focus ring on screen, ChatGPT's\nmulti-line radius (would require typing), hover states.",
+      "item": "dark theme, focus ring on screen, ChatGPT's multi-line radius (would require typing), hover states.",
+      "kinds": [
+        "Dark theme",
+        "Product capture",
+        "Other local/source/owner checks"
+      ],
+      "action": "Type a multiline local draft, inspect auto-growth, hover/focus tool/send controls and verify the text remains readable."
+    },
+    {
+      "id": "U026",
+      "spec": "docs/specs/confirm-dialog.md",
+      "slug": "confirm-dialog",
+      "line": 59,
+      "end": 59,
+      "quote": "surface is 420 wide. Unverified: dark, compact, screen reader.",
+      "item": "dark, compact, screen reader.",
+      "kinds": [
+        "Dark theme",
+        "Screen reader",
+        "Other local/source/owner checks"
+      ],
+      "action": "Open the harmless local confirm demo, verify initial Cancel focus, test Cancel/Escape, and inspect its neutral/danger/compact specimens."
+    },
+    {
+      "id": "U027",
+      "spec": "docs/specs/context-menu.md",
+      "slug": "context-menu",
+      "line": 66,
+      "end": 66,
+      "quote": "- Unverified: touch long-press (not handled), screen reader output, dark theme.",
+      "item": "touch long-press (not handled), screen reader output, dark theme.",
+      "kinds": [
+        "Dark theme",
+        "Screen reader",
+        "Touch"
+      ],
+      "action": "Right-click and use Shift+F10/Menu key on the local target; navigate and dismiss; separately try a genuine touch long-press."
+    },
+    {
+      "id": "U028",
+      "spec": "docs/specs/count.md",
+      "slug": "count",
+      "line": 144,
+      "end": 144,
+      "quote": "- Unverified: dark theme, forced colours, screen-reader reading of `label`.",
+      "item": "dark theme, forced colours, screen-reader reading of `label`.",
+      "kinds": [
+        "Dark theme",
+        "Forced colours",
+        "Screen reader"
+      ],
+      "action": "Render zero, an ordinary count and a capped count; repeat with the label override and inspect the owner’s accessible name."
+    },
+    {
+      "id": "U029",
+      "spec": "docs/specs/custom-select.md",
+      "slug": "custom-select",
+      "line": 209,
+      "end": 210,
+      "quote": "moves, Escape closes and keeps focus), groups, ghost open in dark. Unverified: screen reader\nannouncement, RTL, forced colours, Figma side by side.",
+      "item": "screen reader announcement, RTL, forced colours, Figma side by side.",
+      "kinds": [
+        "Forced colours",
+        "RTL",
+        "Screen reader",
+        "Product capture"
+      ],
+      "action": "Open by Enter/Space/ArrowDown, use arrows/Home/End/typeahead, choose with Enter, and Escape; repeat descriptions, groups and ghost trigger."
+    },
+    {
+      "id": "U030",
+      "spec": "docs/specs/date-picker.md",
+      "slug": "date-picker",
+      "line": 107,
+      "end": 107,
+      "quote": "invalid edge. Dark (panel and calendar) and compact (field 28) checked 2026-10-06. Unverified: screen reader, RTL, Figma comparison.",
+      "item": "screen reader, RTL, Figma comparison.",
+      "kinds": [
+        "RTL",
+        "Screen reader",
+        "Product capture"
+      ],
+      "action": "Tab to the date trigger and open it with Enter/Space; type 2026-10-20 then Enter, reopen and type invalid text, Tab to Calendar, navigate with arrows, select a day, reopen, clear with the clear action and Escape; verify focus returns to the trigger and compare formatted date/week order in LTR and RTL."
+    },
+    {
+      "id": "U031",
+      "spec": "docs/specs/dialog.md",
+      "slug": "dialog",
+      "line": 179,
+      "end": 180,
+      "quote": "- Unverified: dark theme and the dark scrim, screen reader announcement, the modal on a\n  phone-width viewport.",
+      "item": "dark theme and the dark scrim, screen reader announcement, the modal on a   phone-width viewport.",
+      "kinds": [
+        "Dark theme",
+        "Screen reader",
+        "Other local/source/owner checks"
+      ],
+      "action": "Open by trigger, Tab and Shift+Tab through the modal, Escape and inspect return focus; repeat at a narrow phone-like viewport."
+    },
+    {
+      "id": "U032",
+      "spec": "docs/specs/disclosure.md",
+      "slug": "disclosure",
+      "line": 231,
+      "end": 232,
+      "quote": "- Unverified: Notion collapsed and dark, ChatGPT dark, a rendered shadcn accordion, dark paint on\n  screen, find-in-page with the real browser find bar.",
+      "item": "Notion collapsed and dark, ChatGPT dark, a rendered shadcn accordion, dark paint on   screen, find-in-page with the real browser find bar.",
+      "kinds": [
+        "Dark theme",
+        "Product capture",
+        "Other local/source/owner checks"
+      ],
+      "action": "Collapse a section containing a unique text string, use the browser’s real Find command for that string, then verify the section opens; also toggle plain/divided and grouped sections."
+    },
+    {
+      "id": "U033",
+      "spec": "docs/specs/drawer.md",
+      "slug": "drawer",
+      "line": 77,
+      "end": 78,
+      "quote": "Unverified: dark, compact, RTL, screen reader, the exit slide on browsers without\n`transition-behavior`.",
+      "item": "dark, compact, RTL, screen reader, the exit slide on browsers without `transition-behavior`.",
+      "kinds": [
+        "Dark theme",
+        "RTL",
+        "Screen reader",
+        "Firefox/Safari",
+        "Other local/source/owner checks"
+      ],
+      "action": "Open start/end/bottom, modal and non-modal drawers; Tab, Escape and inspect return focus; repeat stacked actions and close-transition fallback."
+    },
+    {
+      "id": "U034",
+      "spec": "docs/specs/field.md",
+      "slug": "field",
+      "line": 135,
+      "end": 135,
+      "quote": "Unverified: dark theme.",
+      "item": "dark theme.",
+      "kinds": [
+        "Dark theme"
+      ],
+      "action": "Use stacked and horizontal labeled controls with help/error text; focus the input and inspect label/description associations."
+    },
+    {
+      "id": "U035",
+      "spec": "docs/specs/hover-card.md",
+      "slug": "hover-card",
+      "line": 76,
+      "end": 76,
+      "quote": "- Unverified: dark theme, screen readers (by design the card is not announced).",
+      "item": "dark theme, screen readers (by design the card is not announced).",
+      "kinds": [
+        "Dark theme",
+        "Screen reader"
+      ],
+      "action": "Hover and keyboard-focus the trigger; move into/out of the card, dismiss and confirm expected non-announcement rather than inventing a live region."
+    },
+    {
+      "id": "U036",
+      "spec": "docs/specs/indicator.md",
+      "slug": "indicator",
+      "line": 351,
+      "end": 353,
+      "quote": "- Unverified: product dark themes; Notion's inbox count and presence (not present);\n  Figma multiplayer avatars; counts on rectangular owners in any product; cross-engine,\n  screen-reader and forced-colors execution.",
+      "item": "product dark themes; Notion's inbox count and presence (not present);   Figma multiplayer avatars; counts on rectangular owners in any product; cross-engine,   screen-reader and forced-colors execution.",
+      "kinds": [
+        "Dark theme",
+        "Forced colours",
+        "Screen reader",
+        "Firefox/Safari",
+        "Product capture"
+      ],
+      "action": "Use dot, count and presence specimens on round and rectangular owners; exercise processing and capped counts, then inspect owner labels."
+    },
+    {
+      "id": "U037",
+      "spec": "docs/specs/input-group.md",
+      "slug": "input-group",
+      "line": 145,
+      "end": 146,
+      "quote": "second pass. Unverified: Figma side by side at one zoom, dark theme, a\ndisabled group, a group with one of two children disabled (the whole group paints disabled).",
+      "item": "Figma side by side at one zoom, dark theme, a disabled group, a group with one of two children disabled (the whole group paints disabled).",
+      "kinds": [
+        "Dark theme",
+        "Product capture",
+        "Other local/source/owner checks"
+      ],
+      "action": "Compare all-enabled, all-disabled and mixed enabled/disabled child groups; focus each enabled child and inspect shared disabled paint."
+    },
+    {
+      "id": "U038",
+      "spec": "docs/specs/input.md",
+      "slug": "input",
+      "line": 156,
+      "end": 157,
+      "quote": "resting shadow. Unverified: hover and focus in the products (Chrome was a background window),\ndark theme.",
+      "item": "hover and focus in the products (Chrome was a background window), dark theme.",
+      "kinds": [
+        "Dark theme",
+        "Product capture",
+        "Other local/source/owner checks"
+      ],
+      "action": "Focus empty/filled/invalid/disabled fields, hover optional actions, type locally and inspect the label, affixes and focus edge."
+    },
+    {
+      "id": "U039",
+      "spec": "docs/specs/inspector.md",
+      "slug": "inspector",
+      "line": 85,
+      "end": 85,
+      "quote": "- Unverified: dark theme; keyboard order across the groups (each button is its own stop).",
+      "item": "dark theme; keyboard order across the groups (each button is its own stop).",
+      "kinds": [
+        "Dark theme"
+      ],
+      "action": "Open the Figma inspector recipe and Tab through each group and trailing action; record actual order against visual order."
+    },
+    {
+      "id": "U040",
+      "spec": "docs/specs/kbd.md",
+      "slug": "kbd",
+      "line": 162,
+      "end": 162,
+      "quote": "[the audit](../research/cohesion-audit.md#verification). Unverified: dark theme, screen readers.",
+      "item": "dark theme, screen readers.",
+      "kinds": [
+        "Dark theme",
+        "Screen reader"
+      ],
+      "action": "Inspect standalone keys, chords, sequences, menu shortcuts and on-color keys; listen to the enclosing control’s label."
+    },
+    {
+      "id": "U041",
+      "spec": "docs/specs/menu.md",
+      "slug": "menu",
+      "line": 153,
+      "end": 153,
+      "quote": "- Unverified: dark theme, screen-reader announcement of menu items and submenus.",
+      "item": "dark theme, screen-reader announcement of menu items and submenus.",
+      "kinds": [
+        "Dark theme",
+        "Screen reader"
+      ],
+      "action": "Open a menu and submenu fixture; use arrows, Home/End, typeahead, Enter and Escape; inspect the focused item and return focus."
+    },
+    {
+      "id": "U042",
+      "spec": "docs/specs/message.md",
+      "slug": "message",
+      "line": 85,
+      "end": 85,
+      "quote": "- Unverified: dark theme, screen readers, RTL (the bubble moves to the start).",
+      "item": "dark theme, screen readers, RTL (the bubble moves to the start).",
+      "kinds": [
+        "Dark theme",
+        "RTL",
+        "Screen reader"
+      ],
+      "action": "Show user/assistant turns and streaming; reach message actions and inspect bubble anchoring and reading order."
+    },
+    {
+      "id": "U043",
+      "spec": "docs/specs/nav.md",
+      "slug": "nav",
+      "line": 194,
+      "end": 194,
+      "quote": "- Unverified: dark products, an accent Selection theme beside a product.",
+      "item": "dark products, an accent Selection theme beside a product.",
+      "kinds": [
+        "Dark theme",
+        "Product capture"
+      ],
+      "action": "Open a navigation list with current, disabled, icon and trailing-action rows; hover each enabled row and Tab through its interactive parts."
+    },
+    {
+      "id": "U044",
+      "spec": "docs/specs/number-field.md",
+      "slug": "number-field",
+      "line": 152,
+      "end": 152,
+      "quote": "- Unverified: dark theme; Safari and Firefox without `field-sizing`.",
+      "item": "dark theme; Safari and Firefox without `field-sizing`.",
+      "kinds": [
+        "Dark theme",
+        "Firefox/Safari"
+      ],
+      "action": "Type and commit a value, clear it, show mixed state, scrub the handle and use steppers; repeat with a unit and a long number."
+    },
+    {
+      "id": "U045",
+      "spec": "docs/specs/overlay.md",
+      "slug": "overlay",
+      "line": 110,
+      "end": 111,
+      "quote": "driven by real pointer and key events over the DevTools protocol. Unverified: Firefox and\nSafari, touch, screen readers, RTL alignment on screen, nested popovers.",
+      "item": "Firefox and Safari, touch, screen readers, RTL alignment on screen, nested popovers.",
+      "kinds": [
+        "RTL",
+        "Screen reader",
+        "Firefox/Safari",
+        "Touch",
+        "Other local/source/owner checks"
+      ],
+      "action": "Open nested popovers in the interaction lab, resize near edges, Escape one level at a time and check return focus and dismissal boundaries."
+    },
+    {
+      "id": "U046",
+      "spec": "docs/specs/panel.md",
+      "slug": "panel",
+      "line": 193,
+      "end": 193,
+      "quote": "Unverified: dark theme and a side-by-side with Figma's inspector at the same zoom.",
+      "item": "dark theme and a side-by-side with Figma's inspector at the same zoom.",
+      "kinds": [
+        "Dark theme",
+        "Product capture"
+      ],
+      "action": "Open the Figma inspector recipe; expand/collapse sections, Tab through controls and inspect label columns and separators."
+    },
+    {
+      "id": "U047",
+      "spec": "docs/specs/popover.md",
+      "slug": "popover",
+      "line": 139,
+      "end": 140,
+      "quote": "- Unverified: dark theme, screen reader announcement of the dialog, arrow alignment when the\n  anchored popover shifts to stay in view.",
+      "item": "dark theme, screen reader announcement of the dialog, arrow alignment when the   anchored popover shifts to stay in view.",
+      "kinds": [
+        "Dark theme",
+        "Screen reader",
+        "Other local/source/owner checks"
+      ],
+      "action": "Open a triggered popover near every viewport edge, resize until it flips or shifts, inspect the arrow, Escape and verify return focus."
+    },
+    {
+      "id": "U048",
+      "spec": "docs/specs/prompt-suggestions.md",
+      "slug": "prompt-suggestions",
+      "line": 72,
+      "end": 72,
+      "quote": "- Unverified: dark theme. ChatGPT's hover state was captured 2026-09-28.",
+      "item": "dark theme. ChatGPT's hover state was captured 2026-09-28.",
+      "kinds": [
+        "Dark theme"
+      ],
+      "action": "Hover each row and dismiss action, Tab through suggestions and dismiss one in the local demo."
+    },
+    {
+      "id": "U049",
+      "spec": "docs/specs/property-list.md",
+      "slug": "property-list",
+      "line": 60,
+      "end": 60,
+      "quote": "Unverified: touch drag on a device; screen reader output of the live region; dark theme.",
+      "item": "touch drag on a device; screen reader output of the live region; dark theme.",
+      "kinds": [
+        "Dark theme",
+        "Screen reader",
+        "Touch"
+      ],
+      "action": "Reorder first/middle/last rows by pointer and by ArrowUp/Down/Home/End; verify focus follows the moved row and an announcement describes its position."
+    },
+    {
+      "id": "U050",
+      "spec": "docs/specs/radio.md",
+      "slug": "radio",
+      "line": 126,
+      "end": 126,
+      "quote": "Unverified: dark theme, hover and focus in a product.",
+      "item": "dark theme, hover and focus in a product.",
+      "kinds": [
+        "Dark theme",
+        "Product capture",
+        "Other local/source/owner checks"
+      ],
+      "action": "Arrow among radios and focus row/tile cards; verify one selected option and the group’s label."
+    },
+    {
+      "id": "U051",
+      "spec": "docs/specs/resizable-panel.md",
+      "slug": "resizable-panel",
+      "line": 102,
+      "end": 102,
+      "quote": "- Unverified: dark theme, RTL drag, touch, screen reader output.",
+      "item": "dark theme, RTL drag, touch, screen reader output.",
+      "kinds": [
+        "Dark theme",
+        "RTL",
+        "Screen reader",
+        "Touch"
+      ],
+      "action": "Drag each resizable edge, then focus the splitter and use arrows/Home/End to its limits; inspect focus and value announcements."
+    },
+    {
+      "id": "U052",
+      "spec": "docs/specs/segmented.md",
+      "slug": "segmented",
+      "line": 163,
+      "end": 164,
+      "quote": "[the audit](../research/cohesion-audit.md#verification). Unverified: hover and focus\ncaptures, dark theme.",
+      "item": "hover and focus captures, dark theme.",
+      "kinds": [
+        "Dark theme",
+        "Product capture",
+        "Other local/source/owner checks"
+      ],
+      "action": "Tab into the group, use each arrow direction and Home/End, select a different item, then Tab out."
+    },
+    {
+      "id": "U053",
+      "spec": "docs/specs/select.md",
+      "slug": "select",
+      "line": 159,
+      "end": 160,
+      "quote": "and checked fill appear only with the picker open in a supporting browser. Unverified: the\nopen picker on screen, a Notion or Figma picker side by side, dark theme.",
+      "item": "the open picker on screen, a Notion or Figma picker side by side, dark theme.",
+      "kinds": [
+        "Dark theme",
+        "Product capture"
+      ],
+      "action": "Open the real native/customized picker, navigate options and select one, then Escape; inspect checked/disabled/hover states on screen."
+    },
+    {
+      "id": "U054",
+      "spec": "docs/specs/separator.md",
+      "slug": "separator",
+      "line": 129,
+      "end": 129,
+      "quote": "Unverified: dark theme (#333 on the dark surface), forced colours.",
+      "item": "dark theme (#333 on the dark surface), forced colours.",
+      "kinds": [
+        "Dark theme",
+        "Forced colours"
+      ],
+      "action": "Inspect horizontal and vertical rules inside surfaces and on the page background."
+    },
+    {
+      "id": "U055",
+      "spec": "docs/specs/skeleton.md",
+      "slug": "skeleton",
+      "line": 148,
+      "end": 148,
+      "quote": "Unverified: dark theme, the card tile's media corners at the new Card radius on screen.",
+      "item": "dark theme, the card tile's media corners at the new Card radius on screen.",
+      "kinds": [
+        "Dark theme",
+        "Other local/source/owner checks"
+      ],
+      "action": "Show text, circle and Card media skeleton specimens; compare media corners against the card at radius 0, 8 and pill."
+    },
+    {
+      "id": "U056",
+      "spec": "docs/specs/spinner.md",
+      "slug": "spinner",
+      "line": 116,
+      "end": 116,
+      "quote": "Nothing in Notion or Figma to compare. Unverified: dark theme, forced colours.",
+      "item": "dark theme, forced colours.",
+      "kinds": [
+        "Dark theme",
+        "Forced colours"
+      ],
+      "action": "Show standalone spinners and loading Buttons at every size and on contrasting backgrounds; confirm motion-none stops animation."
+    },
+    {
+      "id": "U057",
+      "spec": "docs/specs/split-button.md",
+      "slug": "split-button",
+      "line": 217,
+      "end": 217,
+      "quote": "- Unverified: dark theme, screen reader announcement, forced colors, RTL divider position.",
+      "item": "dark theme, screen reader announcement, forced colors, RTL divider position.",
+      "kinds": [
+        "Dark theme",
+        "Forced colours",
+        "RTL",
+        "Screen reader"
+      ],
+      "action": "Tab to both halves, open the arrow menu with the keyboard, move through items, Escape, and verify focus returns to the opener."
+    },
+    {
+      "id": "U058",
+      "spec": "docs/specs/switch.md",
+      "slug": "switch",
+      "line": 163,
+      "end": 163,
+      "quote": "#c5), edge equal to the fill so none shows. Unverified: dark theme.",
+      "item": "dark theme.",
+      "kinds": [
+        "Dark theme"
+      ],
+      "action": "Toggle short/long tracks at every size, focus by keyboard and inspect off/on/disabled/read-only/loading states."
+    },
+    {
+      "id": "U059",
+      "spec": "docs/specs/table.md",
+      "slug": "table",
+      "line": 168,
+      "end": 168,
+      "quote": "paint, not with a real pointer (the preview pane was hidden). Unverified: dark theme.",
+      "item": "dark theme.",
+      "kinds": [
+        "Dark theme"
+      ],
+      "action": "Hover rows with a real pointer; select a row and hover it again; inspect header/rules and nested interactive cells."
+    },
+    {
+      "id": "U060",
+      "spec": "docs/specs/tabs.md",
+      "slug": "tabs",
+      "line": 166,
+      "end": 167,
+      "quote": "Type size matches (14); weight stays 400 by the type ramp (Notion 500). No change. Unverified:\ndark theme.",
+      "item": "dark theme.",
+      "kinds": [
+        "Dark theme"
+      ],
+      "action": "Arrow through tabs, activate and Tab into the panel; inspect selected/hover/focus contrast."
+    },
+    {
+      "id": "U061",
+      "spec": "docs/specs/tag-picker.md",
+      "slug": "tag-picker",
+      "line": 117,
+      "end": 117,
+      "quote": "removed\"; chosen rows show the check. Dark and compact checked on the Review page 2026-10-06 (compact field 28). Unverified: screen reader, RTL.",
+      "item": "screen reader, RTL.",
+      "kinds": [
+        "RTL",
+        "Screen reader"
+      ],
+      "action": "Filter and add a tag, create a new one in the local demo, remove by Backspace and by its remove button, then inspect the checked list row."
+    },
+    {
+      "id": "U062",
+      "spec": "docs/specs/tag.md",
+      "slug": "tag",
+      "line": 78,
+      "end": 78,
+      "quote": "Build, parity, typecheck pass; captures pass the checksum. Unverified: dark against Notion, screen reader.",
+      "item": "dark against Notion, screen reader.",
+      "kinds": [
+        "Dark theme",
+        "Screen reader",
+        "Product capture"
+      ],
+      "action": "Focus and activate the remove button on each tone; repeat disabled and both sizes, inspecting the concentric remove plate."
+    },
+    {
+      "id": "U063",
+      "spec": "docs/specs/textarea.md",
+      "slug": "textarea",
+      "line": 131,
+      "end": 131,
+      "quote": "82 at three rows). Unverified: dark theme.",
+      "item": "dark theme.",
+      "kinds": [
+        "Dark theme"
+      ],
+      "action": "Type enough lines to wrap and grow, focus/blur, resize where enabled and inspect placeholder/invalid/disabled variants."
+    },
+    {
+      "id": "U064",
+      "spec": "docs/specs/toast.md",
+      "slug": "toast",
+      "line": 114,
+      "end": 115,
+      "quote": "owner's lighter-fill direction; an inverse toast remains an open option. Unverified: dark theme,\nthe action and dismiss hover on screen.",
+      "item": "dark theme, the action and dismiss hover on screen.",
+      "kinds": [
+        "Dark theme",
+        "Other local/source/owner checks"
+      ],
+      "action": "Trigger a toast with an action and dismiss control; Tab to each and activate dismiss; repeat with a second live announcement."
+    },
+    {
+      "id": "U065",
+      "spec": "docs/specs/toast.md",
+      "slug": "toast",
+      "line": 123,
+      "end": 123,
+      "quote": "- Unverified: dark theme, screen reader announcement timing.",
+      "item": "dark theme, screen reader announcement timing.",
+      "kinds": [
+        "Dark theme",
+        "Screen reader",
+        "Other local/source/owner checks"
+      ],
+      "action": "Trigger a toast with an action and dismiss control; Tab to each and activate dismiss; repeat with a second live announcement."
+    },
+    {
+      "id": "U066",
+      "spec": "docs/specs/toolbar.md",
+      "slug": "toolbar",
+      "line": 220,
+      "end": 222,
+      "quote": "parity, token references and the React tests pass. Unverified: Figma's dark theme (switching it\nneeds the owner), keyboard focus ring in the new track, a screen reader on toggle and track\nsemantics (toggles are `aria-pressed`; a track is not a radio group).",
+      "item": "Figma's dark theme (switching it needs the owner), keyboard focus ring in the new track, a screen reader on toggle and track semantics (toggles are `aria-pressed`; a track is not a radio group).",
+      "kinds": [
+        "Dark theme",
+        "Screen reader",
+        "Product capture",
+        "Other local/source/owner checks"
+      ],
+      "action": "Tab into the toolbar, arrow across enabled controls, toggle a command, then move into its Segmented control and back out."
+    },
+    {
+      "id": "U067",
+      "spec": "docs/specs/tooltip.md",
+      "slug": "tooltip",
+      "line": 145,
+      "end": 145,
+      "quote": "- Unverified: Figma capture file, dark theme. Hover/focus behaviour is implemented (2026-09-27, [overlay.md](overlay.md)); its timing has not been owner-reviewed (the batch 17 pass compared static paint).",
+      "item": "Figma capture file, dark theme. Hover/focus behaviour is implemented (2026-09-27, [overlay.md](overlay.md)); its timing has not been owner-reviewed (the batch 17 pass compared static paint).",
+      "kinds": [
+        "Dark theme",
+        "Product capture",
+        "Other local/source/owner checks"
+      ],
+      "action": "Focus and hover the trigger, move between two tooltip triggers and Escape; measure opening/closing delays separately from owner timing approval."
+    },
+    {
+      "id": "U068",
+      "spec": "docs/specs/tree-view.md",
+      "slug": "tree-view",
+      "line": 143,
+      "end": 146,
+      "quote": "- Unverified: dark theme, Notion indent and hover, Figma layers geometry (row height, 11px\n  type, icon and control sizes: needs a capture in the editor), screen-reader behaviour of\n  row actions. Layer-type glyphs (frame, rectangle, component, lock) are stand-ins until\n  drawn under the icon construction rules.",
+      "item": "dark theme, Notion indent and hover, Figma layers geometry (row height, 11px   type, icon and control sizes: needs a capture in the editor), screen-reader behaviour of   row actions. Layer-type glyphs (frame, rectangle, component, lock) are stand-ins until   drawn under the icon construction rules.",
+      "kinds": [
+        "Dark theme",
+        "Screen reader",
+        "Product capture",
+        "Other local/source/owner checks"
+      ],
+      "action": "Expand and collapse a parent with arrow keys, navigate children, reach each row action, and compare child indents and labels."
+    }
+  ]
+}

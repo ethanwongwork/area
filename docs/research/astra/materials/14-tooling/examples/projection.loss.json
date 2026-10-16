@@ -1,0 +1,185 @@
+{
+  "schemaVersion": 1,
+  "source": "projection-input.json",
+  "sourceSha256": "d082a02abd3b357e8ae6a757dd46003ce736538a867d1d9be1a3048cd48cd1fa",
+  "target": "DTCG-2025.10",
+  "validation": "local structural assertions only; target-tool import unverified",
+  "records": [
+    {
+      "source": "/shadow",
+      "target": "/specimen/shadow",
+      "status": "represented",
+      "reason": "Lobes, dimensions, color alpha, inset and order retained; raster parity untested."
+    },
+    {
+      "source": "/border",
+      "target": "/specimen/border",
+      "status": "represented",
+      "reason": "Solid border fields retained; fixture does not include contour geometry."
+    },
+    {
+      "source": "/gradient/stops",
+      "target": "/specimen/ramp",
+      "status": "converted",
+      "reason": "Percent positions divide by 100; color/alpha retained. Stable IDs remain in sidecar."
+    },
+    {
+      "source": "/gradient",
+      "target": null,
+      "status": "sidecar-required",
+      "reason": "Kind, angle, interpolation, target and stop IDs are not encoded in the core ramp."
+    },
+    {
+      "source": "/backdrop/blurPx",
+      "target": "/specimen/blur",
+      "status": "represented",
+      "reason": "A dimension is retained, not a backdrop-filter behavior."
+    },
+    {
+      "source": "/backdrop",
+      "target": null,
+      "status": "sidecar-required",
+      "reason": "Acquisition and opaque fallback require Area renderer."
+    },
+    {
+      "source": "/policyRef",
+      "target": null,
+      "status": "sidecar-required",
+      "reason": "Role eligibility, nesting, state and accessibility rules remain external."
+    },
+    {
+      "source": "/context",
+      "target": null,
+      "status": "sidecar-required",
+      "reason": "The snapshot context is retained here, not silently applied by generic token tools."
+    },
+    {
+      "source": "/status",
+      "target": null,
+      "status": "metadata",
+      "reason": "Authored test status retained in source, no approval claim."
+    }
+  ],
+  "sidecar": {
+    "status": "authored serialization fixture; not Area visual defaults",
+    "context": {
+      "mode": "light",
+      "receiver": "illustrative-surface"
+    },
+    "shadow": [
+      {
+        "color": {
+          "colorSpace": "srgb",
+          "components": [
+            0,
+            0,
+            0
+          ],
+          "alpha": 0.1
+        },
+        "offsetX": {
+          "value": 0,
+          "unit": "px"
+        },
+        "offsetY": {
+          "value": 2,
+          "unit": "px"
+        },
+        "blur": {
+          "value": 4,
+          "unit": "px"
+        },
+        "spread": {
+          "value": 0,
+          "unit": "px"
+        },
+        "inset": false
+      },
+      {
+        "color": {
+          "colorSpace": "srgb",
+          "components": [
+            1,
+            1,
+            1
+          ],
+          "alpha": 0.2
+        },
+        "offsetX": {
+          "value": -1,
+          "unit": "px"
+        },
+        "offsetY": {
+          "value": -1,
+          "unit": "px"
+        },
+        "blur": {
+          "value": 0,
+          "unit": "px"
+        },
+        "spread": {
+          "value": 0,
+          "unit": "px"
+        },
+        "inset": true
+      }
+    ],
+    "gradient": {
+      "kind": "linear",
+      "angleDeg": 135,
+      "interpolation": "srgb",
+      "target": "edge",
+      "stops": [
+        {
+          "id": "start",
+          "positionPercent": 0,
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0.2,
+              0.4,
+              0.8
+            ],
+            "alpha": 0.3
+          }
+        },
+        {
+          "id": "end",
+          "positionPercent": 100,
+          "color": {
+            "colorSpace": "srgb",
+            "components": [
+              0.8,
+              0.3,
+              0.5
+            ],
+            "alpha": 0
+          }
+        }
+      ]
+    },
+    "border": {
+      "color": {
+        "colorSpace": "srgb",
+        "components": [
+          0,
+          0,
+          0
+        ],
+        "alpha": 0.15
+      },
+      "width": {
+        "value": 1,
+        "unit": "px"
+      },
+      "style": "solid"
+    },
+    "backdrop": {
+      "source": "local",
+      "blurPx": 5,
+      "fallback": "opaque"
+    },
+    "policyRef": "area-role-guards-required"
+  },
+  "tokensStudioImport": "illustrative legacy projection only; not plugin-tested"
+}

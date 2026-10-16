@@ -1,0 +1,275 @@
+{
+  "status": "proposal seeds; not calibrated limits or approved material recipes",
+  "bounds": {
+    "lightAngle": {
+      "unit": "deg",
+      "min": 0,
+      "max": 360,
+      "default": 315
+    },
+    "lightHeight": {
+      "unit": "deg",
+      "min": 0,
+      "max": 90,
+      "default": 45
+    },
+    "opticalDepth": {
+      "unit": "px",
+      "min": 0,
+      "max": 24,
+      "default": 6
+    },
+    "shadowSoftness": {
+      "unit": "px",
+      "min": 0,
+      "max": 96,
+      "default": 12
+    },
+    "shadowSpread": {
+      "unit": "px",
+      "min": -32,
+      "max": 32,
+      "default": 0
+    },
+    "shadowStrength": {
+      "unit": "ratio",
+      "min": 0,
+      "max": 2,
+      "default": 1
+    },
+    "glowStrength": {
+      "unit": "ratio",
+      "min": 0,
+      "max": 1,
+      "default": 0
+    },
+    "gradientAngle": {
+      "unit": "deg",
+      "min": 0,
+      "max": 360,
+      "default": 180
+    },
+    "strokeOpacity": {
+      "unit": "ratio",
+      "min": 0,
+      "max": 1,
+      "default": 0.25
+    },
+    "fillOpacity": {
+      "unit": "ratio",
+      "min": 0,
+      "max": 1,
+      "default": 1
+    },
+    "grain": {
+      "unit": "ratio",
+      "min": 0,
+      "max": 1,
+      "default": 0
+    },
+    "gloss": {
+      "unit": "ratio",
+      "min": 0,
+      "max": 1,
+      "default": 0
+    },
+    "glass.lightIntensity": {
+      "unit": "ratio",
+      "min": 0,
+      "max": 1,
+      "default": 0.35
+    },
+    "glass.refraction": {
+      "unit": "ratio",
+      "min": 0,
+      "max": 1,
+      "default": 0,
+      "deferred": true
+    },
+    "glass.depth": {
+      "unit": "Area px; Figma docs do not specify units",
+      "min": 1,
+      "max": 128,
+      "default": 24,
+      "deferred": true
+    },
+    "glass.dispersion": {
+      "unit": "ratio",
+      "min": 0,
+      "max": 1,
+      "default": 0,
+      "deferred": true
+    },
+    "glass.radius": {
+      "unit": "Area CSS px (Frost)",
+      "min": 0,
+      "max": 64,
+      "default": 12
+    }
+  },
+  "seeds": {
+    "none": {
+      "lightAngle": 315,
+      "lightHeight": 45,
+      "opticalDepth": 0,
+      "shadowSoftness": 0,
+      "shadowSpread": 0,
+      "shadowStrength": 0,
+      "glowStrength": 0,
+      "gradientAngle": 180,
+      "strokeOpacity": 0,
+      "fillOpacity": 1,
+      "grain": 0,
+      "gloss": 0,
+      "glass.lightIntensity": 0.35,
+      "glass.refraction": 0,
+      "glass.depth": 24,
+      "glass.dispersion": 0,
+      "glass.radius": 0
+    },
+    "glass": {
+      "lightAngle": 315,
+      "lightHeight": 45,
+      "opticalDepth": 6,
+      "shadowSoftness": 12,
+      "shadowSpread": 0,
+      "shadowStrength": 1,
+      "glowStrength": 0,
+      "gradientAngle": 180,
+      "strokeOpacity": 0.25,
+      "fillOpacity": 0.72,
+      "grain": 0,
+      "gloss": 0.45,
+      "glass.lightIntensity": 0.35,
+      "glass.refraction": 0,
+      "glass.depth": 24,
+      "glass.dispersion": 0,
+      "glass.radius": 12
+    },
+    "tactile": {
+      "lightAngle": 315,
+      "lightHeight": 45,
+      "opticalDepth": 6,
+      "shadowSoftness": 12,
+      "shadowSpread": 0,
+      "shadowStrength": 1,
+      "glowStrength": 0,
+      "gradientAngle": 180,
+      "strokeOpacity": 0.25,
+      "fillOpacity": 1,
+      "grain": 0.04,
+      "gloss": 0.65,
+      "glass.lightIntensity": 0.35,
+      "glass.refraction": 0,
+      "glass.depth": 24,
+      "glass.dispersion": 0,
+      "glass.radius": 0
+    },
+    "soft": {
+      "lightAngle": 315,
+      "lightHeight": 45,
+      "opticalDepth": 4,
+      "shadowSoftness": 18,
+      "shadowSpread": 0,
+      "shadowStrength": 0.7,
+      "glowStrength": 0,
+      "gradientAngle": 180,
+      "strokeOpacity": 0.25,
+      "fillOpacity": 1,
+      "grain": 0,
+      "gloss": 0,
+      "glass.lightIntensity": 0.35,
+      "glass.refraction": 0,
+      "glass.depth": 24,
+      "glass.dispersion": 0,
+      "glass.radius": 0
+    }
+  },
+  "roles": [
+    "page",
+    "container",
+    "floating-surface",
+    "raised-control",
+    "recessed-field-track",
+    "thumb-knob",
+    "indicator-fill",
+    "divider",
+    "edge",
+    "glyph",
+    "text",
+    "scrim",
+    "row-plate"
+  ],
+  "roleSeeds": {
+    "none": {
+      "page": 0,
+      "container": 0,
+      "floating-surface": 0,
+      "raised-control": 0,
+      "recessed-field-track": 0,
+      "thumb-knob": 0,
+      "indicator-fill": 0,
+      "divider": 0,
+      "edge": 0,
+      "glyph": 0,
+      "text": 0,
+      "scrim": 0,
+      "row-plate": 0
+    },
+    "glass": {
+      "page": 0.15,
+      "container": 1,
+      "floating-surface": 1,
+      "raised-control": 1,
+      "recessed-field-track": 1,
+      "thumb-knob": 1,
+      "indicator-fill": 0,
+      "divider": 0,
+      "edge": 0,
+      "glyph": 1,
+      "text": 1,
+      "scrim": 0,
+      "row-plate": 0.25
+    },
+    "tactile": {
+      "page": 0.15,
+      "container": 1,
+      "floating-surface": 1,
+      "raised-control": 1,
+      "recessed-field-track": 1,
+      "thumb-knob": 1,
+      "indicator-fill": 0,
+      "divider": 0,
+      "edge": 0,
+      "glyph": 1,
+      "text": 1,
+      "scrim": 0,
+      "row-plate": 0.4
+    },
+    "soft": {
+      "page": 0.15,
+      "container": 1,
+      "floating-surface": 1,
+      "raised-control": 1,
+      "recessed-field-track": 1,
+      "thumb-knob": 1,
+      "indicator-fill": 0,
+      "divider": 0,
+      "edge": 0,
+      "glyph": 1,
+      "text": 1,
+      "scrim": 0,
+      "row-plate": 0.55
+    }
+  },
+  "colorSources": [
+    "neutral",
+    "accent",
+    "info",
+    "success",
+    "warning",
+    "caution",
+    "danger",
+    "discovery"
+  ]
+}

@@ -1,0 +1,3897 @@
+{
+  "status": "authored compatibility policy, not browser support",
+  "styleOrder": [
+    "flat",
+    "paper",
+    "transparency",
+    "glassmorphism",
+    "acrylic",
+    "mica",
+    "liquid-glass",
+    "neumorphism",
+    "claymorphism",
+    "skeuomorphism",
+    "aqua",
+    "frutiger-aero",
+    "glow-neon",
+    "linear-gradient",
+    "radial-gradient",
+    "conic-gradient",
+    "mesh-gradient",
+    "gradient-stroke",
+    "inner-shadow",
+    "inner-glow",
+    "outer-glow",
+    "drop-shadow",
+    "bevel-emboss",
+    "letterpress",
+    "grain"
+  ],
+  "reasons": {
+    "same": [
+      "C",
+      "Use one instance of the same recipe; merge named layers rather than duplicate paint."
+    ],
+    "flat-depth": [
+      "X",
+      "Strict flat modeling excludes relief, cast, lensing, gloss or emission. Use another receiver or relax the flat intent explicitly."
+    ],
+    "body-model": [
+      "X",
+      "These complete body models demand incompatible opaque/transmitting or flat/volume assumptions on one receiver. Choose one body; the other can style a separate child."
+    ],
+    "acquire": [
+      "K",
+      "One acquisition/blur/tint graph only. Coalesce overlapping glass layers; do not stack two backdrop filters or claim native equivalence."
+    ],
+    "native": [
+      "K",
+      "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs."
+    ],
+    "body-field": [
+      "K",
+      "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills."
+    ],
+    "volume": [
+      "K",
+      "Pick one signed relief profile and one key light; a concavity and convexity can coexist only on separate local regions."
+    ],
+    "emission": [
+      "K",
+      "Resolve to one named inner/outer emission graph with a readable semantic core. Do not sum repeated halos or use bloom as focus."
+    ],
+    "content": [
+      "K",
+      "Letterpress is restricted to a separate reviewed display inscription. Functional glyph/text remains plain; never stack reflected and emitted type by default."
+    ],
+    "texture": [
+      "K",
+      "Use one static texture owner/seed and keep reading regions clear. Existing Acrylic noise is edited, not doubled."
+    ],
+    "edge": [
+      "K",
+      "Use one perimeter owner and contour, preserve required edges, and fit decorative gradient/bevel inside the available rim."
+    ],
+    "cast": [
+      "K",
+      "Only the receiver's existing Surface cast is allowed; merge source lobes once. Flat and inflow controls still have no cast."
+    ],
+    "referent": [
+      "K",
+      "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language."
+    ],
+    "separate": [
+      "C",
+      "Channels are distinct and can coexist on an eligible receiver under shared light, contrast and role caps; this is not a certification of arbitrary parameter values."
+    ]
+  },
+  "stylePairs": [
+    {
+      "a": "flat",
+      "b": "paper",
+      "status": "C",
+      "reasonId": "separate",
+      "reason": "Channels are distinct and can coexist on an eligible receiver under shared light, contrast and role caps; this is not a certification of arbitrary parameter values.",
+      "references": [
+        "R01",
+        "R02"
+      ]
+    },
+    {
+      "a": "flat",
+      "b": "transparency",
+      "status": "C",
+      "reasonId": "separate",
+      "reason": "Channels are distinct and can coexist on an eligible receiver under shared light, contrast and role caps; this is not a certification of arbitrary parameter values.",
+      "references": [
+        "R01",
+        "R03",
+        "R19"
+      ]
+    },
+    {
+      "a": "flat",
+      "b": "glassmorphism",
+      "status": "X",
+      "reasonId": "flat-depth",
+      "reason": "Strict flat modeling excludes relief, cast, lensing, gloss or emission. Use another receiver or relax the flat intent explicitly.",
+      "references": [
+        "R01",
+        "R03"
+      ]
+    },
+    {
+      "a": "flat",
+      "b": "acrylic",
+      "status": "X",
+      "reasonId": "flat-depth",
+      "reason": "Strict flat modeling excludes relief, cast, lensing, gloss or emission. Use another receiver or relax the flat intent explicitly.",
+      "references": [
+        "R01",
+        "R04"
+      ]
+    },
+    {
+      "a": "flat",
+      "b": "mica",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R01",
+        "R05"
+      ]
+    },
+    {
+      "a": "flat",
+      "b": "liquid-glass",
+      "status": "X",
+      "reasonId": "flat-depth",
+      "reason": "Strict flat modeling excludes relief, cast, lensing, gloss or emission. Use another receiver or relax the flat intent explicitly.",
+      "references": [
+        "R01",
+        "R06",
+        "R07"
+      ]
+    },
+    {
+      "a": "flat",
+      "b": "neumorphism",
+      "status": "X",
+      "reasonId": "flat-depth",
+      "reason": "Strict flat modeling excludes relief, cast, lensing, gloss or emission. Use another receiver or relax the flat intent explicitly.",
+      "references": [
+        "R01",
+        "R08"
+      ]
+    },
+    {
+      "a": "flat",
+      "b": "claymorphism",
+      "status": "X",
+      "reasonId": "flat-depth",
+      "reason": "Strict flat modeling excludes relief, cast, lensing, gloss or emission. Use another receiver or relax the flat intent explicitly.",
+      "references": [
+        "R01",
+        "R09"
+      ]
+    },
+    {
+      "a": "flat",
+      "b": "skeuomorphism",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R01",
+        "R10"
+      ]
+    },
+    {
+      "a": "flat",
+      "b": "aqua",
+      "status": "X",
+      "reasonId": "flat-depth",
+      "reason": "Strict flat modeling excludes relief, cast, lensing, gloss or emission. Use another receiver or relax the flat intent explicitly.",
+      "references": [
+        "R01",
+        "R11"
+      ]
+    },
+    {
+      "a": "flat",
+      "b": "frutiger-aero",
+      "status": "X",
+      "reasonId": "flat-depth",
+      "reason": "Strict flat modeling excludes relief, cast, lensing, gloss or emission. Use another receiver or relax the flat intent explicitly.",
+      "references": [
+        "R01",
+        "R12"
+      ]
+    },
+    {
+      "a": "flat",
+      "b": "glow-neon",
+      "status": "X",
+      "reasonId": "flat-depth",
+      "reason": "Strict flat modeling excludes relief, cast, lensing, gloss or emission. Use another receiver or relax the flat intent explicitly.",
+      "references": [
+        "R01",
+        "R13"
+      ]
+    },
+    {
+      "a": "flat",
+      "b": "linear-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R01",
+        "R11",
+        "R12",
+        "R20"
+      ]
+    },
+    {
+      "a": "flat",
+      "b": "radial-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R01",
+        "R14",
+        "R15"
+      ]
+    },
+    {
+      "a": "flat",
+      "b": "conic-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R01",
+        "R14"
+      ]
+    },
+    {
+      "a": "flat",
+      "b": "mesh-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R01",
+        "R15",
+        "R16"
+      ]
+    },
+    {
+      "a": "flat",
+      "b": "gradient-stroke",
+      "status": "K",
+      "reasonId": "edge",
+      "reason": "Use one perimeter owner and contour, preserve required edges, and fit decorative gradient/bevel inside the available rim.",
+      "references": [
+        "R01",
+        "R07",
+        "R17",
+        "R19"
+      ]
+    },
+    {
+      "a": "flat",
+      "b": "inner-shadow",
+      "status": "X",
+      "reasonId": "flat-depth",
+      "reason": "Strict flat modeling excludes relief, cast, lensing, gloss or emission. Use another receiver or relax the flat intent explicitly.",
+      "references": [
+        "R01",
+        "R08",
+        "R10"
+      ]
+    },
+    {
+      "a": "flat",
+      "b": "inner-glow",
+      "status": "X",
+      "reasonId": "flat-depth",
+      "reason": "Strict flat modeling excludes relief, cast, lensing, gloss or emission. Use another receiver or relax the flat intent explicitly.",
+      "references": [
+        "R01",
+        "R13"
+      ]
+    },
+    {
+      "a": "flat",
+      "b": "outer-glow",
+      "status": "X",
+      "reasonId": "flat-depth",
+      "reason": "Strict flat modeling excludes relief, cast, lensing, gloss or emission. Use another receiver or relax the flat intent explicitly.",
+      "references": [
+        "R01",
+        "R12",
+        "R13"
+      ]
+    },
+    {
+      "a": "flat",
+      "b": "drop-shadow",
+      "status": "X",
+      "reasonId": "flat-depth",
+      "reason": "Strict flat modeling excludes relief, cast, lensing, gloss or emission. Use another receiver or relax the flat intent explicitly.",
+      "references": [
+        "R01",
+        "R02",
+        "R19",
+        "R20"
+      ]
+    },
+    {
+      "a": "flat",
+      "b": "bevel-emboss",
+      "status": "X",
+      "reasonId": "flat-depth",
+      "reason": "Strict flat modeling excludes relief, cast, lensing, gloss or emission. Use another receiver or relax the flat intent explicitly.",
+      "references": [
+        "R01",
+        "R10"
+      ]
+    },
+    {
+      "a": "flat",
+      "b": "letterpress",
+      "status": "X",
+      "reasonId": "flat-depth",
+      "reason": "Strict flat modeling excludes relief, cast, lensing, gloss or emission. Use another receiver or relax the flat intent explicitly.",
+      "references": [
+        "R01",
+        "R18"
+      ]
+    },
+    {
+      "a": "flat",
+      "b": "grain",
+      "status": "K",
+      "reasonId": "texture",
+      "reason": "Use one static texture owner/seed and keep reading regions clear. Existing Acrylic noise is edited, not doubled.",
+      "references": [
+        "R01",
+        "R04",
+        "R15"
+      ]
+    },
+    {
+      "a": "paper",
+      "b": "transparency",
+      "status": "X",
+      "reasonId": "body-model",
+      "reason": "These complete body models demand incompatible opaque/transmitting or flat/volume assumptions on one receiver. Choose one body; the other can style a separate child.",
+      "references": [
+        "R02",
+        "R03",
+        "R19"
+      ]
+    },
+    {
+      "a": "paper",
+      "b": "glassmorphism",
+      "status": "X",
+      "reasonId": "body-model",
+      "reason": "These complete body models demand incompatible opaque/transmitting or flat/volume assumptions on one receiver. Choose one body; the other can style a separate child.",
+      "references": [
+        "R02",
+        "R03"
+      ]
+    },
+    {
+      "a": "paper",
+      "b": "acrylic",
+      "status": "X",
+      "reasonId": "body-model",
+      "reason": "These complete body models demand incompatible opaque/transmitting or flat/volume assumptions on one receiver. Choose one body; the other can style a separate child.",
+      "references": [
+        "R02",
+        "R04"
+      ]
+    },
+    {
+      "a": "paper",
+      "b": "mica",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R02",
+        "R05"
+      ]
+    },
+    {
+      "a": "paper",
+      "b": "liquid-glass",
+      "status": "X",
+      "reasonId": "body-model",
+      "reason": "These complete body models demand incompatible opaque/transmitting or flat/volume assumptions on one receiver. Choose one body; the other can style a separate child.",
+      "references": [
+        "R02",
+        "R06",
+        "R07"
+      ]
+    },
+    {
+      "a": "paper",
+      "b": "neumorphism",
+      "status": "K",
+      "reasonId": "volume",
+      "reason": "Pick one signed relief profile and one key light; a concavity and convexity can coexist only on separate local regions.",
+      "references": [
+        "R02",
+        "R08"
+      ]
+    },
+    {
+      "a": "paper",
+      "b": "claymorphism",
+      "status": "K",
+      "reasonId": "volume",
+      "reason": "Pick one signed relief profile and one key light; a concavity and convexity can coexist only on separate local regions.",
+      "references": [
+        "R02",
+        "R09"
+      ]
+    },
+    {
+      "a": "paper",
+      "b": "skeuomorphism",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R02",
+        "R10"
+      ]
+    },
+    {
+      "a": "paper",
+      "b": "aqua",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R02",
+        "R11"
+      ]
+    },
+    {
+      "a": "paper",
+      "b": "frutiger-aero",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R02",
+        "R12"
+      ]
+    },
+    {
+      "a": "paper",
+      "b": "glow-neon",
+      "status": "K",
+      "reasonId": "emission",
+      "reason": "Resolve to one named inner/outer emission graph with a readable semantic core. Do not sum repeated halos or use bloom as focus.",
+      "references": [
+        "R02",
+        "R13"
+      ]
+    },
+    {
+      "a": "paper",
+      "b": "linear-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R02",
+        "R11",
+        "R12",
+        "R20"
+      ]
+    },
+    {
+      "a": "paper",
+      "b": "radial-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R02",
+        "R14",
+        "R15"
+      ]
+    },
+    {
+      "a": "paper",
+      "b": "conic-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R02",
+        "R14"
+      ]
+    },
+    {
+      "a": "paper",
+      "b": "mesh-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R02",
+        "R15",
+        "R16"
+      ]
+    },
+    {
+      "a": "paper",
+      "b": "gradient-stroke",
+      "status": "K",
+      "reasonId": "edge",
+      "reason": "Use one perimeter owner and contour, preserve required edges, and fit decorative gradient/bevel inside the available rim.",
+      "references": [
+        "R02",
+        "R07",
+        "R17",
+        "R19"
+      ]
+    },
+    {
+      "a": "paper",
+      "b": "inner-shadow",
+      "status": "K",
+      "reasonId": "volume",
+      "reason": "Pick one signed relief profile and one key light; a concavity and convexity can coexist only on separate local regions.",
+      "references": [
+        "R02",
+        "R08",
+        "R10"
+      ]
+    },
+    {
+      "a": "paper",
+      "b": "inner-glow",
+      "status": "K",
+      "reasonId": "emission",
+      "reason": "Resolve to one named inner/outer emission graph with a readable semantic core. Do not sum repeated halos or use bloom as focus.",
+      "references": [
+        "R02",
+        "R13"
+      ]
+    },
+    {
+      "a": "paper",
+      "b": "outer-glow",
+      "status": "K",
+      "reasonId": "emission",
+      "reason": "Resolve to one named inner/outer emission graph with a readable semantic core. Do not sum repeated halos or use bloom as focus.",
+      "references": [
+        "R02",
+        "R12",
+        "R13"
+      ]
+    },
+    {
+      "a": "paper",
+      "b": "drop-shadow",
+      "status": "K",
+      "reasonId": "cast",
+      "reason": "Only the receiver's existing Surface cast is allowed; merge source lobes once. Flat and inflow controls still have no cast.",
+      "references": [
+        "R02",
+        "R19",
+        "R20"
+      ]
+    },
+    {
+      "a": "paper",
+      "b": "bevel-emboss",
+      "status": "K",
+      "reasonId": "volume",
+      "reason": "Pick one signed relief profile and one key light; a concavity and convexity can coexist only on separate local regions.",
+      "references": [
+        "R02",
+        "R10"
+      ]
+    },
+    {
+      "a": "paper",
+      "b": "letterpress",
+      "status": "K",
+      "reasonId": "content",
+      "reason": "Letterpress is restricted to a separate reviewed display inscription. Functional glyph/text remains plain; never stack reflected and emitted type by default.",
+      "references": [
+        "R02",
+        "R18"
+      ]
+    },
+    {
+      "a": "paper",
+      "b": "grain",
+      "status": "K",
+      "reasonId": "texture",
+      "reason": "Use one static texture owner/seed and keep reading regions clear. Existing Acrylic noise is edited, not doubled.",
+      "references": [
+        "R02",
+        "R04",
+        "R15"
+      ]
+    },
+    {
+      "a": "transparency",
+      "b": "glassmorphism",
+      "status": "K",
+      "reasonId": "acquire",
+      "reason": "One acquisition/blur/tint graph only. Coalesce overlapping glass layers; do not stack two backdrop filters or claim native equivalence.",
+      "references": [
+        "R03",
+        "R19"
+      ]
+    },
+    {
+      "a": "transparency",
+      "b": "acrylic",
+      "status": "K",
+      "reasonId": "acquire",
+      "reason": "One acquisition/blur/tint graph only. Coalesce overlapping glass layers; do not stack two backdrop filters or claim native equivalence.",
+      "references": [
+        "R03",
+        "R04",
+        "R19"
+      ]
+    },
+    {
+      "a": "transparency",
+      "b": "mica",
+      "status": "X",
+      "reasonId": "body-model",
+      "reason": "These complete body models demand incompatible opaque/transmitting or flat/volume assumptions on one receiver. Choose one body; the other can style a separate child.",
+      "references": [
+        "R03",
+        "R05",
+        "R19"
+      ]
+    },
+    {
+      "a": "transparency",
+      "b": "liquid-glass",
+      "status": "K",
+      "reasonId": "acquire",
+      "reason": "One acquisition/blur/tint graph only. Coalesce overlapping glass layers; do not stack two backdrop filters or claim native equivalence.",
+      "references": [
+        "R03",
+        "R06",
+        "R07",
+        "R19"
+      ]
+    },
+    {
+      "a": "transparency",
+      "b": "neumorphism",
+      "status": "X",
+      "reasonId": "body-model",
+      "reason": "These complete body models demand incompatible opaque/transmitting or flat/volume assumptions on one receiver. Choose one body; the other can style a separate child.",
+      "references": [
+        "R03",
+        "R08",
+        "R19"
+      ]
+    },
+    {
+      "a": "transparency",
+      "b": "claymorphism",
+      "status": "X",
+      "reasonId": "body-model",
+      "reason": "These complete body models demand incompatible opaque/transmitting or flat/volume assumptions on one receiver. Choose one body; the other can style a separate child.",
+      "references": [
+        "R03",
+        "R09",
+        "R19"
+      ]
+    },
+    {
+      "a": "transparency",
+      "b": "skeuomorphism",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R03",
+        "R10",
+        "R19"
+      ]
+    },
+    {
+      "a": "transparency",
+      "b": "aqua",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R03",
+        "R11",
+        "R19"
+      ]
+    },
+    {
+      "a": "transparency",
+      "b": "frutiger-aero",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R03",
+        "R12",
+        "R19"
+      ]
+    },
+    {
+      "a": "transparency",
+      "b": "glow-neon",
+      "status": "K",
+      "reasonId": "emission",
+      "reason": "Resolve to one named inner/outer emission graph with a readable semantic core. Do not sum repeated halos or use bloom as focus.",
+      "references": [
+        "R03",
+        "R13",
+        "R19"
+      ]
+    },
+    {
+      "a": "transparency",
+      "b": "linear-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R03",
+        "R11",
+        "R12",
+        "R19",
+        "R20"
+      ]
+    },
+    {
+      "a": "transparency",
+      "b": "radial-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R03",
+        "R14",
+        "R15",
+        "R19"
+      ]
+    },
+    {
+      "a": "transparency",
+      "b": "conic-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R03",
+        "R14",
+        "R19"
+      ]
+    },
+    {
+      "a": "transparency",
+      "b": "mesh-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R03",
+        "R15",
+        "R16",
+        "R19"
+      ]
+    },
+    {
+      "a": "transparency",
+      "b": "gradient-stroke",
+      "status": "K",
+      "reasonId": "edge",
+      "reason": "Use one perimeter owner and contour, preserve required edges, and fit decorative gradient/bevel inside the available rim.",
+      "references": [
+        "R03",
+        "R07",
+        "R17",
+        "R19"
+      ]
+    },
+    {
+      "a": "transparency",
+      "b": "inner-shadow",
+      "status": "K",
+      "reasonId": "volume",
+      "reason": "Pick one signed relief profile and one key light; a concavity and convexity can coexist only on separate local regions.",
+      "references": [
+        "R03",
+        "R08",
+        "R10",
+        "R19"
+      ]
+    },
+    {
+      "a": "transparency",
+      "b": "inner-glow",
+      "status": "K",
+      "reasonId": "emission",
+      "reason": "Resolve to one named inner/outer emission graph with a readable semantic core. Do not sum repeated halos or use bloom as focus.",
+      "references": [
+        "R03",
+        "R13",
+        "R19"
+      ]
+    },
+    {
+      "a": "transparency",
+      "b": "outer-glow",
+      "status": "K",
+      "reasonId": "emission",
+      "reason": "Resolve to one named inner/outer emission graph with a readable semantic core. Do not sum repeated halos or use bloom as focus.",
+      "references": [
+        "R03",
+        "R12",
+        "R13",
+        "R19"
+      ]
+    },
+    {
+      "a": "transparency",
+      "b": "drop-shadow",
+      "status": "K",
+      "reasonId": "cast",
+      "reason": "Only the receiver's existing Surface cast is allowed; merge source lobes once. Flat and inflow controls still have no cast.",
+      "references": [
+        "R02",
+        "R03",
+        "R19",
+        "R20"
+      ]
+    },
+    {
+      "a": "transparency",
+      "b": "bevel-emboss",
+      "status": "K",
+      "reasonId": "volume",
+      "reason": "Pick one signed relief profile and one key light; a concavity and convexity can coexist only on separate local regions.",
+      "references": [
+        "R03",
+        "R10",
+        "R19"
+      ]
+    },
+    {
+      "a": "transparency",
+      "b": "letterpress",
+      "status": "K",
+      "reasonId": "content",
+      "reason": "Letterpress is restricted to a separate reviewed display inscription. Functional glyph/text remains plain; never stack reflected and emitted type by default.",
+      "references": [
+        "R03",
+        "R18",
+        "R19"
+      ]
+    },
+    {
+      "a": "transparency",
+      "b": "grain",
+      "status": "K",
+      "reasonId": "texture",
+      "reason": "Use one static texture owner/seed and keep reading regions clear. Existing Acrylic noise is edited, not doubled.",
+      "references": [
+        "R03",
+        "R04",
+        "R15",
+        "R19"
+      ]
+    },
+    {
+      "a": "glassmorphism",
+      "b": "acrylic",
+      "status": "K",
+      "reasonId": "acquire",
+      "reason": "One acquisition/blur/tint graph only. Coalesce overlapping glass layers; do not stack two backdrop filters or claim native equivalence.",
+      "references": [
+        "R03",
+        "R04"
+      ]
+    },
+    {
+      "a": "glassmorphism",
+      "b": "mica",
+      "status": "X",
+      "reasonId": "body-model",
+      "reason": "These complete body models demand incompatible opaque/transmitting or flat/volume assumptions on one receiver. Choose one body; the other can style a separate child.",
+      "references": [
+        "R03",
+        "R05"
+      ]
+    },
+    {
+      "a": "glassmorphism",
+      "b": "liquid-glass",
+      "status": "K",
+      "reasonId": "acquire",
+      "reason": "One acquisition/blur/tint graph only. Coalesce overlapping glass layers; do not stack two backdrop filters or claim native equivalence.",
+      "references": [
+        "R03",
+        "R06",
+        "R07"
+      ]
+    },
+    {
+      "a": "glassmorphism",
+      "b": "neumorphism",
+      "status": "X",
+      "reasonId": "body-model",
+      "reason": "These complete body models demand incompatible opaque/transmitting or flat/volume assumptions on one receiver. Choose one body; the other can style a separate child.",
+      "references": [
+        "R03",
+        "R08"
+      ]
+    },
+    {
+      "a": "glassmorphism",
+      "b": "claymorphism",
+      "status": "X",
+      "reasonId": "body-model",
+      "reason": "These complete body models demand incompatible opaque/transmitting or flat/volume assumptions on one receiver. Choose one body; the other can style a separate child.",
+      "references": [
+        "R03",
+        "R09"
+      ]
+    },
+    {
+      "a": "glassmorphism",
+      "b": "skeuomorphism",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R03",
+        "R10"
+      ]
+    },
+    {
+      "a": "glassmorphism",
+      "b": "aqua",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R03",
+        "R11"
+      ]
+    },
+    {
+      "a": "glassmorphism",
+      "b": "frutiger-aero",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R03",
+        "R12"
+      ]
+    },
+    {
+      "a": "glassmorphism",
+      "b": "glow-neon",
+      "status": "K",
+      "reasonId": "emission",
+      "reason": "Resolve to one named inner/outer emission graph with a readable semantic core. Do not sum repeated halos or use bloom as focus.",
+      "references": [
+        "R03",
+        "R13"
+      ]
+    },
+    {
+      "a": "glassmorphism",
+      "b": "linear-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R03",
+        "R11",
+        "R12",
+        "R20"
+      ]
+    },
+    {
+      "a": "glassmorphism",
+      "b": "radial-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R03",
+        "R14",
+        "R15"
+      ]
+    },
+    {
+      "a": "glassmorphism",
+      "b": "conic-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R03",
+        "R14"
+      ]
+    },
+    {
+      "a": "glassmorphism",
+      "b": "mesh-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R03",
+        "R15",
+        "R16"
+      ]
+    },
+    {
+      "a": "glassmorphism",
+      "b": "gradient-stroke",
+      "status": "K",
+      "reasonId": "edge",
+      "reason": "Use one perimeter owner and contour, preserve required edges, and fit decorative gradient/bevel inside the available rim.",
+      "references": [
+        "R03",
+        "R07",
+        "R17",
+        "R19"
+      ]
+    },
+    {
+      "a": "glassmorphism",
+      "b": "inner-shadow",
+      "status": "K",
+      "reasonId": "volume",
+      "reason": "Pick one signed relief profile and one key light; a concavity and convexity can coexist only on separate local regions.",
+      "references": [
+        "R03",
+        "R08",
+        "R10"
+      ]
+    },
+    {
+      "a": "glassmorphism",
+      "b": "inner-glow",
+      "status": "K",
+      "reasonId": "emission",
+      "reason": "Resolve to one named inner/outer emission graph with a readable semantic core. Do not sum repeated halos or use bloom as focus.",
+      "references": [
+        "R03",
+        "R13"
+      ]
+    },
+    {
+      "a": "glassmorphism",
+      "b": "outer-glow",
+      "status": "K",
+      "reasonId": "emission",
+      "reason": "Resolve to one named inner/outer emission graph with a readable semantic core. Do not sum repeated halos or use bloom as focus.",
+      "references": [
+        "R03",
+        "R12",
+        "R13"
+      ]
+    },
+    {
+      "a": "glassmorphism",
+      "b": "drop-shadow",
+      "status": "K",
+      "reasonId": "cast",
+      "reason": "Only the receiver's existing Surface cast is allowed; merge source lobes once. Flat and inflow controls still have no cast.",
+      "references": [
+        "R02",
+        "R03",
+        "R19",
+        "R20"
+      ]
+    },
+    {
+      "a": "glassmorphism",
+      "b": "bevel-emboss",
+      "status": "K",
+      "reasonId": "volume",
+      "reason": "Pick one signed relief profile and one key light; a concavity and convexity can coexist only on separate local regions.",
+      "references": [
+        "R03",
+        "R10"
+      ]
+    },
+    {
+      "a": "glassmorphism",
+      "b": "letterpress",
+      "status": "K",
+      "reasonId": "content",
+      "reason": "Letterpress is restricted to a separate reviewed display inscription. Functional glyph/text remains plain; never stack reflected and emitted type by default.",
+      "references": [
+        "R03",
+        "R18"
+      ]
+    },
+    {
+      "a": "glassmorphism",
+      "b": "grain",
+      "status": "K",
+      "reasonId": "texture",
+      "reason": "Use one static texture owner/seed and keep reading regions clear. Existing Acrylic noise is edited, not doubled.",
+      "references": [
+        "R03",
+        "R04",
+        "R15"
+      ]
+    },
+    {
+      "a": "acrylic",
+      "b": "mica",
+      "status": "X",
+      "reasonId": "body-model",
+      "reason": "These complete body models demand incompatible opaque/transmitting or flat/volume assumptions on one receiver. Choose one body; the other can style a separate child.",
+      "references": [
+        "R04",
+        "R05"
+      ]
+    },
+    {
+      "a": "acrylic",
+      "b": "liquid-glass",
+      "status": "K",
+      "reasonId": "acquire",
+      "reason": "One acquisition/blur/tint graph only. Coalesce overlapping glass layers; do not stack two backdrop filters or claim native equivalence.",
+      "references": [
+        "R04",
+        "R06",
+        "R07"
+      ]
+    },
+    {
+      "a": "acrylic",
+      "b": "neumorphism",
+      "status": "X",
+      "reasonId": "body-model",
+      "reason": "These complete body models demand incompatible opaque/transmitting or flat/volume assumptions on one receiver. Choose one body; the other can style a separate child.",
+      "references": [
+        "R04",
+        "R08"
+      ]
+    },
+    {
+      "a": "acrylic",
+      "b": "claymorphism",
+      "status": "X",
+      "reasonId": "body-model",
+      "reason": "These complete body models demand incompatible opaque/transmitting or flat/volume assumptions on one receiver. Choose one body; the other can style a separate child.",
+      "references": [
+        "R04",
+        "R09"
+      ]
+    },
+    {
+      "a": "acrylic",
+      "b": "skeuomorphism",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R04",
+        "R10"
+      ]
+    },
+    {
+      "a": "acrylic",
+      "b": "aqua",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R04",
+        "R11"
+      ]
+    },
+    {
+      "a": "acrylic",
+      "b": "frutiger-aero",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R04",
+        "R12"
+      ]
+    },
+    {
+      "a": "acrylic",
+      "b": "glow-neon",
+      "status": "K",
+      "reasonId": "emission",
+      "reason": "Resolve to one named inner/outer emission graph with a readable semantic core. Do not sum repeated halos or use bloom as focus.",
+      "references": [
+        "R04",
+        "R13"
+      ]
+    },
+    {
+      "a": "acrylic",
+      "b": "linear-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R04",
+        "R11",
+        "R12",
+        "R20"
+      ]
+    },
+    {
+      "a": "acrylic",
+      "b": "radial-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R04",
+        "R14",
+        "R15"
+      ]
+    },
+    {
+      "a": "acrylic",
+      "b": "conic-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R04",
+        "R14"
+      ]
+    },
+    {
+      "a": "acrylic",
+      "b": "mesh-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R04",
+        "R15",
+        "R16"
+      ]
+    },
+    {
+      "a": "acrylic",
+      "b": "gradient-stroke",
+      "status": "K",
+      "reasonId": "edge",
+      "reason": "Use one perimeter owner and contour, preserve required edges, and fit decorative gradient/bevel inside the available rim.",
+      "references": [
+        "R04",
+        "R07",
+        "R17",
+        "R19"
+      ]
+    },
+    {
+      "a": "acrylic",
+      "b": "inner-shadow",
+      "status": "K",
+      "reasonId": "volume",
+      "reason": "Pick one signed relief profile and one key light; a concavity and convexity can coexist only on separate local regions.",
+      "references": [
+        "R04",
+        "R08",
+        "R10"
+      ]
+    },
+    {
+      "a": "acrylic",
+      "b": "inner-glow",
+      "status": "K",
+      "reasonId": "emission",
+      "reason": "Resolve to one named inner/outer emission graph with a readable semantic core. Do not sum repeated halos or use bloom as focus.",
+      "references": [
+        "R04",
+        "R13"
+      ]
+    },
+    {
+      "a": "acrylic",
+      "b": "outer-glow",
+      "status": "K",
+      "reasonId": "emission",
+      "reason": "Resolve to one named inner/outer emission graph with a readable semantic core. Do not sum repeated halos or use bloom as focus.",
+      "references": [
+        "R04",
+        "R12",
+        "R13"
+      ]
+    },
+    {
+      "a": "acrylic",
+      "b": "drop-shadow",
+      "status": "K",
+      "reasonId": "cast",
+      "reason": "Only the receiver's existing Surface cast is allowed; merge source lobes once. Flat and inflow controls still have no cast.",
+      "references": [
+        "R02",
+        "R04",
+        "R19",
+        "R20"
+      ]
+    },
+    {
+      "a": "acrylic",
+      "b": "bevel-emboss",
+      "status": "K",
+      "reasonId": "volume",
+      "reason": "Pick one signed relief profile and one key light; a concavity and convexity can coexist only on separate local regions.",
+      "references": [
+        "R04",
+        "R10"
+      ]
+    },
+    {
+      "a": "acrylic",
+      "b": "letterpress",
+      "status": "K",
+      "reasonId": "content",
+      "reason": "Letterpress is restricted to a separate reviewed display inscription. Functional glyph/text remains plain; never stack reflected and emitted type by default.",
+      "references": [
+        "R04",
+        "R18"
+      ]
+    },
+    {
+      "a": "acrylic",
+      "b": "grain",
+      "status": "K",
+      "reasonId": "texture",
+      "reason": "Use one static texture owner/seed and keep reading regions clear. Existing Acrylic noise is edited, not doubled.",
+      "references": [
+        "R04",
+        "R15"
+      ]
+    },
+    {
+      "a": "mica",
+      "b": "liquid-glass",
+      "status": "X",
+      "reasonId": "body-model",
+      "reason": "These complete body models demand incompatible opaque/transmitting or flat/volume assumptions on one receiver. Choose one body; the other can style a separate child.",
+      "references": [
+        "R05",
+        "R06",
+        "R07"
+      ]
+    },
+    {
+      "a": "mica",
+      "b": "neumorphism",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R05",
+        "R08"
+      ]
+    },
+    {
+      "a": "mica",
+      "b": "claymorphism",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R05",
+        "R09"
+      ]
+    },
+    {
+      "a": "mica",
+      "b": "skeuomorphism",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R05",
+        "R10"
+      ]
+    },
+    {
+      "a": "mica",
+      "b": "aqua",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R05",
+        "R11"
+      ]
+    },
+    {
+      "a": "mica",
+      "b": "frutiger-aero",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R05",
+        "R12"
+      ]
+    },
+    {
+      "a": "mica",
+      "b": "glow-neon",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R05",
+        "R13"
+      ]
+    },
+    {
+      "a": "mica",
+      "b": "linear-gradient",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R05",
+        "R11",
+        "R12",
+        "R20"
+      ]
+    },
+    {
+      "a": "mica",
+      "b": "radial-gradient",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R05",
+        "R14",
+        "R15"
+      ]
+    },
+    {
+      "a": "mica",
+      "b": "conic-gradient",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R05",
+        "R14"
+      ]
+    },
+    {
+      "a": "mica",
+      "b": "mesh-gradient",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R05",
+        "R15",
+        "R16"
+      ]
+    },
+    {
+      "a": "mica",
+      "b": "gradient-stroke",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R05",
+        "R07",
+        "R17",
+        "R19"
+      ]
+    },
+    {
+      "a": "mica",
+      "b": "inner-shadow",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R05",
+        "R08",
+        "R10"
+      ]
+    },
+    {
+      "a": "mica",
+      "b": "inner-glow",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R05",
+        "R13"
+      ]
+    },
+    {
+      "a": "mica",
+      "b": "outer-glow",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R05",
+        "R12",
+        "R13"
+      ]
+    },
+    {
+      "a": "mica",
+      "b": "drop-shadow",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R02",
+        "R05",
+        "R19",
+        "R20"
+      ]
+    },
+    {
+      "a": "mica",
+      "b": "bevel-emboss",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R05",
+        "R10"
+      ]
+    },
+    {
+      "a": "mica",
+      "b": "letterpress",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R05",
+        "R18"
+      ]
+    },
+    {
+      "a": "mica",
+      "b": "grain",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R04",
+        "R05",
+        "R15"
+      ]
+    },
+    {
+      "a": "liquid-glass",
+      "b": "neumorphism",
+      "status": "X",
+      "reasonId": "body-model",
+      "reason": "These complete body models demand incompatible opaque/transmitting or flat/volume assumptions on one receiver. Choose one body; the other can style a separate child.",
+      "references": [
+        "R06",
+        "R07",
+        "R08"
+      ]
+    },
+    {
+      "a": "liquid-glass",
+      "b": "claymorphism",
+      "status": "X",
+      "reasonId": "body-model",
+      "reason": "These complete body models demand incompatible opaque/transmitting or flat/volume assumptions on one receiver. Choose one body; the other can style a separate child.",
+      "references": [
+        "R06",
+        "R07",
+        "R09"
+      ]
+    },
+    {
+      "a": "liquid-glass",
+      "b": "skeuomorphism",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R06",
+        "R07",
+        "R10"
+      ]
+    },
+    {
+      "a": "liquid-glass",
+      "b": "aqua",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R06",
+        "R07",
+        "R11"
+      ]
+    },
+    {
+      "a": "liquid-glass",
+      "b": "frutiger-aero",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R06",
+        "R07",
+        "R12"
+      ]
+    },
+    {
+      "a": "liquid-glass",
+      "b": "glow-neon",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R06",
+        "R07",
+        "R13"
+      ]
+    },
+    {
+      "a": "liquid-glass",
+      "b": "linear-gradient",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R06",
+        "R07",
+        "R11",
+        "R12",
+        "R20"
+      ]
+    },
+    {
+      "a": "liquid-glass",
+      "b": "radial-gradient",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R06",
+        "R07",
+        "R14",
+        "R15"
+      ]
+    },
+    {
+      "a": "liquid-glass",
+      "b": "conic-gradient",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R06",
+        "R07",
+        "R14"
+      ]
+    },
+    {
+      "a": "liquid-glass",
+      "b": "mesh-gradient",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R06",
+        "R07",
+        "R15",
+        "R16"
+      ]
+    },
+    {
+      "a": "liquid-glass",
+      "b": "gradient-stroke",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R06",
+        "R07",
+        "R17",
+        "R19"
+      ]
+    },
+    {
+      "a": "liquid-glass",
+      "b": "inner-shadow",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R06",
+        "R07",
+        "R08",
+        "R10"
+      ]
+    },
+    {
+      "a": "liquid-glass",
+      "b": "inner-glow",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R06",
+        "R07",
+        "R13"
+      ]
+    },
+    {
+      "a": "liquid-glass",
+      "b": "outer-glow",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R06",
+        "R07",
+        "R12",
+        "R13"
+      ]
+    },
+    {
+      "a": "liquid-glass",
+      "b": "drop-shadow",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R02",
+        "R06",
+        "R07",
+        "R19",
+        "R20"
+      ]
+    },
+    {
+      "a": "liquid-glass",
+      "b": "bevel-emboss",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R06",
+        "R07",
+        "R10"
+      ]
+    },
+    {
+      "a": "liquid-glass",
+      "b": "letterpress",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R06",
+        "R07",
+        "R18"
+      ]
+    },
+    {
+      "a": "liquid-glass",
+      "b": "grain",
+      "status": "K",
+      "reasonId": "native",
+      "reason": "Native Mica/Liquid Glass behavior is only partially sourced and not a portable CSS preset. Keep a verified opaque/web fallback; independent receiver only where acquisition differs.",
+      "references": [
+        "R04",
+        "R06",
+        "R07",
+        "R15"
+      ]
+    },
+    {
+      "a": "neumorphism",
+      "b": "claymorphism",
+      "status": "K",
+      "reasonId": "volume",
+      "reason": "Pick one signed relief profile and one key light; a concavity and convexity can coexist only on separate local regions.",
+      "references": [
+        "R08",
+        "R09"
+      ]
+    },
+    {
+      "a": "neumorphism",
+      "b": "skeuomorphism",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R08",
+        "R10"
+      ]
+    },
+    {
+      "a": "neumorphism",
+      "b": "aqua",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R08",
+        "R11"
+      ]
+    },
+    {
+      "a": "neumorphism",
+      "b": "frutiger-aero",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R08",
+        "R12"
+      ]
+    },
+    {
+      "a": "neumorphism",
+      "b": "glow-neon",
+      "status": "K",
+      "reasonId": "emission",
+      "reason": "Resolve to one named inner/outer emission graph with a readable semantic core. Do not sum repeated halos or use bloom as focus.",
+      "references": [
+        "R08",
+        "R13"
+      ]
+    },
+    {
+      "a": "neumorphism",
+      "b": "linear-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R08",
+        "R11",
+        "R12",
+        "R20"
+      ]
+    },
+    {
+      "a": "neumorphism",
+      "b": "radial-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R08",
+        "R14",
+        "R15"
+      ]
+    },
+    {
+      "a": "neumorphism",
+      "b": "conic-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R08",
+        "R14"
+      ]
+    },
+    {
+      "a": "neumorphism",
+      "b": "mesh-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R08",
+        "R15",
+        "R16"
+      ]
+    },
+    {
+      "a": "neumorphism",
+      "b": "gradient-stroke",
+      "status": "K",
+      "reasonId": "edge",
+      "reason": "Use one perimeter owner and contour, preserve required edges, and fit decorative gradient/bevel inside the available rim.",
+      "references": [
+        "R07",
+        "R08",
+        "R17",
+        "R19"
+      ]
+    },
+    {
+      "a": "neumorphism",
+      "b": "inner-shadow",
+      "status": "K",
+      "reasonId": "volume",
+      "reason": "Pick one signed relief profile and one key light; a concavity and convexity can coexist only on separate local regions.",
+      "references": [
+        "R08",
+        "R10"
+      ]
+    },
+    {
+      "a": "neumorphism",
+      "b": "inner-glow",
+      "status": "K",
+      "reasonId": "emission",
+      "reason": "Resolve to one named inner/outer emission graph with a readable semantic core. Do not sum repeated halos or use bloom as focus.",
+      "references": [
+        "R08",
+        "R13"
+      ]
+    },
+    {
+      "a": "neumorphism",
+      "b": "outer-glow",
+      "status": "K",
+      "reasonId": "emission",
+      "reason": "Resolve to one named inner/outer emission graph with a readable semantic core. Do not sum repeated halos or use bloom as focus.",
+      "references": [
+        "R08",
+        "R12",
+        "R13"
+      ]
+    },
+    {
+      "a": "neumorphism",
+      "b": "drop-shadow",
+      "status": "K",
+      "reasonId": "cast",
+      "reason": "Only the receiver's existing Surface cast is allowed; merge source lobes once. Flat and inflow controls still have no cast.",
+      "references": [
+        "R02",
+        "R08",
+        "R19",
+        "R20"
+      ]
+    },
+    {
+      "a": "neumorphism",
+      "b": "bevel-emboss",
+      "status": "K",
+      "reasonId": "volume",
+      "reason": "Pick one signed relief profile and one key light; a concavity and convexity can coexist only on separate local regions.",
+      "references": [
+        "R08",
+        "R10"
+      ]
+    },
+    {
+      "a": "neumorphism",
+      "b": "letterpress",
+      "status": "K",
+      "reasonId": "content",
+      "reason": "Letterpress is restricted to a separate reviewed display inscription. Functional glyph/text remains plain; never stack reflected and emitted type by default.",
+      "references": [
+        "R08",
+        "R18"
+      ]
+    },
+    {
+      "a": "neumorphism",
+      "b": "grain",
+      "status": "K",
+      "reasonId": "texture",
+      "reason": "Use one static texture owner/seed and keep reading regions clear. Existing Acrylic noise is edited, not doubled.",
+      "references": [
+        "R04",
+        "R08",
+        "R15"
+      ]
+    },
+    {
+      "a": "claymorphism",
+      "b": "skeuomorphism",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R09",
+        "R10"
+      ]
+    },
+    {
+      "a": "claymorphism",
+      "b": "aqua",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R09",
+        "R11"
+      ]
+    },
+    {
+      "a": "claymorphism",
+      "b": "frutiger-aero",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R09",
+        "R12"
+      ]
+    },
+    {
+      "a": "claymorphism",
+      "b": "glow-neon",
+      "status": "K",
+      "reasonId": "emission",
+      "reason": "Resolve to one named inner/outer emission graph with a readable semantic core. Do not sum repeated halos or use bloom as focus.",
+      "references": [
+        "R09",
+        "R13"
+      ]
+    },
+    {
+      "a": "claymorphism",
+      "b": "linear-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R09",
+        "R11",
+        "R12",
+        "R20"
+      ]
+    },
+    {
+      "a": "claymorphism",
+      "b": "radial-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R09",
+        "R14",
+        "R15"
+      ]
+    },
+    {
+      "a": "claymorphism",
+      "b": "conic-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R09",
+        "R14"
+      ]
+    },
+    {
+      "a": "claymorphism",
+      "b": "mesh-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R09",
+        "R15",
+        "R16"
+      ]
+    },
+    {
+      "a": "claymorphism",
+      "b": "gradient-stroke",
+      "status": "K",
+      "reasonId": "edge",
+      "reason": "Use one perimeter owner and contour, preserve required edges, and fit decorative gradient/bevel inside the available rim.",
+      "references": [
+        "R07",
+        "R09",
+        "R17",
+        "R19"
+      ]
+    },
+    {
+      "a": "claymorphism",
+      "b": "inner-shadow",
+      "status": "K",
+      "reasonId": "volume",
+      "reason": "Pick one signed relief profile and one key light; a concavity and convexity can coexist only on separate local regions.",
+      "references": [
+        "R08",
+        "R09",
+        "R10"
+      ]
+    },
+    {
+      "a": "claymorphism",
+      "b": "inner-glow",
+      "status": "K",
+      "reasonId": "emission",
+      "reason": "Resolve to one named inner/outer emission graph with a readable semantic core. Do not sum repeated halos or use bloom as focus.",
+      "references": [
+        "R09",
+        "R13"
+      ]
+    },
+    {
+      "a": "claymorphism",
+      "b": "outer-glow",
+      "status": "K",
+      "reasonId": "emission",
+      "reason": "Resolve to one named inner/outer emission graph with a readable semantic core. Do not sum repeated halos or use bloom as focus.",
+      "references": [
+        "R09",
+        "R12",
+        "R13"
+      ]
+    },
+    {
+      "a": "claymorphism",
+      "b": "drop-shadow",
+      "status": "K",
+      "reasonId": "cast",
+      "reason": "Only the receiver's existing Surface cast is allowed; merge source lobes once. Flat and inflow controls still have no cast.",
+      "references": [
+        "R02",
+        "R09",
+        "R19",
+        "R20"
+      ]
+    },
+    {
+      "a": "claymorphism",
+      "b": "bevel-emboss",
+      "status": "K",
+      "reasonId": "volume",
+      "reason": "Pick one signed relief profile and one key light; a concavity and convexity can coexist only on separate local regions.",
+      "references": [
+        "R09",
+        "R10"
+      ]
+    },
+    {
+      "a": "claymorphism",
+      "b": "letterpress",
+      "status": "K",
+      "reasonId": "content",
+      "reason": "Letterpress is restricted to a separate reviewed display inscription. Functional glyph/text remains plain; never stack reflected and emitted type by default.",
+      "references": [
+        "R09",
+        "R18"
+      ]
+    },
+    {
+      "a": "claymorphism",
+      "b": "grain",
+      "status": "K",
+      "reasonId": "texture",
+      "reason": "Use one static texture owner/seed and keep reading regions clear. Existing Acrylic noise is edited, not doubled.",
+      "references": [
+        "R04",
+        "R09",
+        "R15"
+      ]
+    },
+    {
+      "a": "skeuomorphism",
+      "b": "aqua",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R10",
+        "R11"
+      ]
+    },
+    {
+      "a": "skeuomorphism",
+      "b": "frutiger-aero",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R10",
+        "R12"
+      ]
+    },
+    {
+      "a": "skeuomorphism",
+      "b": "glow-neon",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R10",
+        "R13"
+      ]
+    },
+    {
+      "a": "skeuomorphism",
+      "b": "linear-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R10",
+        "R11",
+        "R12",
+        "R20"
+      ]
+    },
+    {
+      "a": "skeuomorphism",
+      "b": "radial-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R10",
+        "R14",
+        "R15"
+      ]
+    },
+    {
+      "a": "skeuomorphism",
+      "b": "conic-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R10",
+        "R14"
+      ]
+    },
+    {
+      "a": "skeuomorphism",
+      "b": "mesh-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R10",
+        "R15",
+        "R16"
+      ]
+    },
+    {
+      "a": "skeuomorphism",
+      "b": "gradient-stroke",
+      "status": "K",
+      "reasonId": "edge",
+      "reason": "Use one perimeter owner and contour, preserve required edges, and fit decorative gradient/bevel inside the available rim.",
+      "references": [
+        "R07",
+        "R10",
+        "R17",
+        "R19"
+      ]
+    },
+    {
+      "a": "skeuomorphism",
+      "b": "inner-shadow",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R08",
+        "R10"
+      ]
+    },
+    {
+      "a": "skeuomorphism",
+      "b": "inner-glow",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R10",
+        "R13"
+      ]
+    },
+    {
+      "a": "skeuomorphism",
+      "b": "outer-glow",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R10",
+        "R12",
+        "R13"
+      ]
+    },
+    {
+      "a": "skeuomorphism",
+      "b": "drop-shadow",
+      "status": "K",
+      "reasonId": "cast",
+      "reason": "Only the receiver's existing Surface cast is allowed; merge source lobes once. Flat and inflow controls still have no cast.",
+      "references": [
+        "R02",
+        "R10",
+        "R19",
+        "R20"
+      ]
+    },
+    {
+      "a": "skeuomorphism",
+      "b": "bevel-emboss",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R10"
+      ]
+    },
+    {
+      "a": "skeuomorphism",
+      "b": "letterpress",
+      "status": "K",
+      "reasonId": "content",
+      "reason": "Letterpress is restricted to a separate reviewed display inscription. Functional glyph/text remains plain; never stack reflected and emitted type by default.",
+      "references": [
+        "R10",
+        "R18"
+      ]
+    },
+    {
+      "a": "skeuomorphism",
+      "b": "grain",
+      "status": "K",
+      "reasonId": "texture",
+      "reason": "Use one static texture owner/seed and keep reading regions clear. Existing Acrylic noise is edited, not doubled.",
+      "references": [
+        "R04",
+        "R10",
+        "R15"
+      ]
+    },
+    {
+      "a": "aqua",
+      "b": "frutiger-aero",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R11",
+        "R12"
+      ]
+    },
+    {
+      "a": "aqua",
+      "b": "glow-neon",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R11",
+        "R13"
+      ]
+    },
+    {
+      "a": "aqua",
+      "b": "linear-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R11",
+        "R12",
+        "R20"
+      ]
+    },
+    {
+      "a": "aqua",
+      "b": "radial-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R11",
+        "R14",
+        "R15"
+      ]
+    },
+    {
+      "a": "aqua",
+      "b": "conic-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R11",
+        "R14"
+      ]
+    },
+    {
+      "a": "aqua",
+      "b": "mesh-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R11",
+        "R15",
+        "R16"
+      ]
+    },
+    {
+      "a": "aqua",
+      "b": "gradient-stroke",
+      "status": "K",
+      "reasonId": "edge",
+      "reason": "Use one perimeter owner and contour, preserve required edges, and fit decorative gradient/bevel inside the available rim.",
+      "references": [
+        "R07",
+        "R11",
+        "R17",
+        "R19"
+      ]
+    },
+    {
+      "a": "aqua",
+      "b": "inner-shadow",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R08",
+        "R10",
+        "R11"
+      ]
+    },
+    {
+      "a": "aqua",
+      "b": "inner-glow",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R11",
+        "R13"
+      ]
+    },
+    {
+      "a": "aqua",
+      "b": "outer-glow",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R11",
+        "R12",
+        "R13"
+      ]
+    },
+    {
+      "a": "aqua",
+      "b": "drop-shadow",
+      "status": "K",
+      "reasonId": "cast",
+      "reason": "Only the receiver's existing Surface cast is allowed; merge source lobes once. Flat and inflow controls still have no cast.",
+      "references": [
+        "R02",
+        "R11",
+        "R19",
+        "R20"
+      ]
+    },
+    {
+      "a": "aqua",
+      "b": "bevel-emboss",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R10",
+        "R11"
+      ]
+    },
+    {
+      "a": "aqua",
+      "b": "letterpress",
+      "status": "K",
+      "reasonId": "content",
+      "reason": "Letterpress is restricted to a separate reviewed display inscription. Functional glyph/text remains plain; never stack reflected and emitted type by default.",
+      "references": [
+        "R11",
+        "R18"
+      ]
+    },
+    {
+      "a": "aqua",
+      "b": "grain",
+      "status": "K",
+      "reasonId": "texture",
+      "reason": "Use one static texture owner/seed and keep reading regions clear. Existing Acrylic noise is edited, not doubled.",
+      "references": [
+        "R04",
+        "R11",
+        "R15"
+      ]
+    },
+    {
+      "a": "frutiger-aero",
+      "b": "glow-neon",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R12",
+        "R13"
+      ]
+    },
+    {
+      "a": "frutiger-aero",
+      "b": "linear-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R11",
+        "R12",
+        "R20"
+      ]
+    },
+    {
+      "a": "frutiger-aero",
+      "b": "radial-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R12",
+        "R14",
+        "R15"
+      ]
+    },
+    {
+      "a": "frutiger-aero",
+      "b": "conic-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R12",
+        "R14"
+      ]
+    },
+    {
+      "a": "frutiger-aero",
+      "b": "mesh-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R12",
+        "R15",
+        "R16"
+      ]
+    },
+    {
+      "a": "frutiger-aero",
+      "b": "gradient-stroke",
+      "status": "K",
+      "reasonId": "edge",
+      "reason": "Use one perimeter owner and contour, preserve required edges, and fit decorative gradient/bevel inside the available rim.",
+      "references": [
+        "R07",
+        "R12",
+        "R17",
+        "R19"
+      ]
+    },
+    {
+      "a": "frutiger-aero",
+      "b": "inner-shadow",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R08",
+        "R10",
+        "R12"
+      ]
+    },
+    {
+      "a": "frutiger-aero",
+      "b": "inner-glow",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R12",
+        "R13"
+      ]
+    },
+    {
+      "a": "frutiger-aero",
+      "b": "outer-glow",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R12",
+        "R13"
+      ]
+    },
+    {
+      "a": "frutiger-aero",
+      "b": "drop-shadow",
+      "status": "K",
+      "reasonId": "cast",
+      "reason": "Only the receiver's existing Surface cast is allowed; merge source lobes once. Flat and inflow controls still have no cast.",
+      "references": [
+        "R02",
+        "R12",
+        "R19",
+        "R20"
+      ]
+    },
+    {
+      "a": "frutiger-aero",
+      "b": "bevel-emboss",
+      "status": "K",
+      "reasonId": "referent",
+      "reason": "The physical/historical language needs a coherent referent and role scope. A primitive alone does not reproduce the entire visual language.",
+      "references": [
+        "R10",
+        "R12"
+      ]
+    },
+    {
+      "a": "frutiger-aero",
+      "b": "letterpress",
+      "status": "K",
+      "reasonId": "content",
+      "reason": "Letterpress is restricted to a separate reviewed display inscription. Functional glyph/text remains plain; never stack reflected and emitted type by default.",
+      "references": [
+        "R12",
+        "R18"
+      ]
+    },
+    {
+      "a": "frutiger-aero",
+      "b": "grain",
+      "status": "K",
+      "reasonId": "texture",
+      "reason": "Use one static texture owner/seed and keep reading regions clear. Existing Acrylic noise is edited, not doubled.",
+      "references": [
+        "R04",
+        "R12",
+        "R15"
+      ]
+    },
+    {
+      "a": "glow-neon",
+      "b": "linear-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R11",
+        "R12",
+        "R13",
+        "R20"
+      ]
+    },
+    {
+      "a": "glow-neon",
+      "b": "radial-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R13",
+        "R14",
+        "R15"
+      ]
+    },
+    {
+      "a": "glow-neon",
+      "b": "conic-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R13",
+        "R14"
+      ]
+    },
+    {
+      "a": "glow-neon",
+      "b": "mesh-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R13",
+        "R15",
+        "R16"
+      ]
+    },
+    {
+      "a": "glow-neon",
+      "b": "gradient-stroke",
+      "status": "K",
+      "reasonId": "edge",
+      "reason": "Use one perimeter owner and contour, preserve required edges, and fit decorative gradient/bevel inside the available rim.",
+      "references": [
+        "R07",
+        "R13",
+        "R17",
+        "R19"
+      ]
+    },
+    {
+      "a": "glow-neon",
+      "b": "inner-shadow",
+      "status": "K",
+      "reasonId": "emission",
+      "reason": "Resolve to one named inner/outer emission graph with a readable semantic core. Do not sum repeated halos or use bloom as focus.",
+      "references": [
+        "R08",
+        "R10",
+        "R13"
+      ]
+    },
+    {
+      "a": "glow-neon",
+      "b": "inner-glow",
+      "status": "K",
+      "reasonId": "emission",
+      "reason": "Resolve to one named inner/outer emission graph with a readable semantic core. Do not sum repeated halos or use bloom as focus.",
+      "references": [
+        "R13"
+      ]
+    },
+    {
+      "a": "glow-neon",
+      "b": "outer-glow",
+      "status": "K",
+      "reasonId": "emission",
+      "reason": "Resolve to one named inner/outer emission graph with a readable semantic core. Do not sum repeated halos or use bloom as focus.",
+      "references": [
+        "R12",
+        "R13"
+      ]
+    },
+    {
+      "a": "glow-neon",
+      "b": "drop-shadow",
+      "status": "K",
+      "reasonId": "cast",
+      "reason": "Only the receiver's existing Surface cast is allowed; merge source lobes once. Flat and inflow controls still have no cast.",
+      "references": [
+        "R02",
+        "R13",
+        "R19",
+        "R20"
+      ]
+    },
+    {
+      "a": "glow-neon",
+      "b": "bevel-emboss",
+      "status": "K",
+      "reasonId": "emission",
+      "reason": "Resolve to one named inner/outer emission graph with a readable semantic core. Do not sum repeated halos or use bloom as focus.",
+      "references": [
+        "R10",
+        "R13"
+      ]
+    },
+    {
+      "a": "glow-neon",
+      "b": "letterpress",
+      "status": "K",
+      "reasonId": "content",
+      "reason": "Letterpress is restricted to a separate reviewed display inscription. Functional glyph/text remains plain; never stack reflected and emitted type by default.",
+      "references": [
+        "R13",
+        "R18"
+      ]
+    },
+    {
+      "a": "glow-neon",
+      "b": "grain",
+      "status": "K",
+      "reasonId": "texture",
+      "reason": "Use one static texture owner/seed and keep reading regions clear. Existing Acrylic noise is edited, not doubled.",
+      "references": [
+        "R04",
+        "R13",
+        "R15"
+      ]
+    },
+    {
+      "a": "linear-gradient",
+      "b": "radial-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R11",
+        "R12",
+        "R14",
+        "R15",
+        "R20"
+      ]
+    },
+    {
+      "a": "linear-gradient",
+      "b": "conic-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R11",
+        "R12",
+        "R14",
+        "R20"
+      ]
+    },
+    {
+      "a": "linear-gradient",
+      "b": "mesh-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R11",
+        "R12",
+        "R15",
+        "R16",
+        "R20"
+      ]
+    },
+    {
+      "a": "linear-gradient",
+      "b": "gradient-stroke",
+      "status": "K",
+      "reasonId": "edge",
+      "reason": "Use one perimeter owner and contour, preserve required edges, and fit decorative gradient/bevel inside the available rim.",
+      "references": [
+        "R07",
+        "R11",
+        "R12",
+        "R17",
+        "R19",
+        "R20"
+      ]
+    },
+    {
+      "a": "linear-gradient",
+      "b": "inner-shadow",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R08",
+        "R10",
+        "R11",
+        "R12",
+        "R20"
+      ]
+    },
+    {
+      "a": "linear-gradient",
+      "b": "inner-glow",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R11",
+        "R12",
+        "R13",
+        "R20"
+      ]
+    },
+    {
+      "a": "linear-gradient",
+      "b": "outer-glow",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R11",
+        "R12",
+        "R13",
+        "R20"
+      ]
+    },
+    {
+      "a": "linear-gradient",
+      "b": "drop-shadow",
+      "status": "K",
+      "reasonId": "cast",
+      "reason": "Only the receiver's existing Surface cast is allowed; merge source lobes once. Flat and inflow controls still have no cast.",
+      "references": [
+        "R02",
+        "R11",
+        "R12",
+        "R19",
+        "R20"
+      ]
+    },
+    {
+      "a": "linear-gradient",
+      "b": "bevel-emboss",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R10",
+        "R11",
+        "R12",
+        "R20"
+      ]
+    },
+    {
+      "a": "linear-gradient",
+      "b": "letterpress",
+      "status": "K",
+      "reasonId": "content",
+      "reason": "Letterpress is restricted to a separate reviewed display inscription. Functional glyph/text remains plain; never stack reflected and emitted type by default.",
+      "references": [
+        "R11",
+        "R12",
+        "R18",
+        "R20"
+      ]
+    },
+    {
+      "a": "linear-gradient",
+      "b": "grain",
+      "status": "K",
+      "reasonId": "texture",
+      "reason": "Use one static texture owner/seed and keep reading regions clear. Existing Acrylic noise is edited, not doubled.",
+      "references": [
+        "R04",
+        "R11",
+        "R12",
+        "R15",
+        "R20"
+      ]
+    },
+    {
+      "a": "radial-gradient",
+      "b": "conic-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R14",
+        "R15"
+      ]
+    },
+    {
+      "a": "radial-gradient",
+      "b": "mesh-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R14",
+        "R15",
+        "R16"
+      ]
+    },
+    {
+      "a": "radial-gradient",
+      "b": "gradient-stroke",
+      "status": "K",
+      "reasonId": "edge",
+      "reason": "Use one perimeter owner and contour, preserve required edges, and fit decorative gradient/bevel inside the available rim.",
+      "references": [
+        "R07",
+        "R14",
+        "R15",
+        "R17",
+        "R19"
+      ]
+    },
+    {
+      "a": "radial-gradient",
+      "b": "inner-shadow",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R08",
+        "R10",
+        "R14",
+        "R15"
+      ]
+    },
+    {
+      "a": "radial-gradient",
+      "b": "inner-glow",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R13",
+        "R14",
+        "R15"
+      ]
+    },
+    {
+      "a": "radial-gradient",
+      "b": "outer-glow",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R12",
+        "R13",
+        "R14",
+        "R15"
+      ]
+    },
+    {
+      "a": "radial-gradient",
+      "b": "drop-shadow",
+      "status": "K",
+      "reasonId": "cast",
+      "reason": "Only the receiver's existing Surface cast is allowed; merge source lobes once. Flat and inflow controls still have no cast.",
+      "references": [
+        "R02",
+        "R14",
+        "R15",
+        "R19",
+        "R20"
+      ]
+    },
+    {
+      "a": "radial-gradient",
+      "b": "bevel-emboss",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R10",
+        "R14",
+        "R15"
+      ]
+    },
+    {
+      "a": "radial-gradient",
+      "b": "letterpress",
+      "status": "K",
+      "reasonId": "content",
+      "reason": "Letterpress is restricted to a separate reviewed display inscription. Functional glyph/text remains plain; never stack reflected and emitted type by default.",
+      "references": [
+        "R14",
+        "R15",
+        "R18"
+      ]
+    },
+    {
+      "a": "radial-gradient",
+      "b": "grain",
+      "status": "K",
+      "reasonId": "texture",
+      "reason": "Use one static texture owner/seed and keep reading regions clear. Existing Acrylic noise is edited, not doubled.",
+      "references": [
+        "R04",
+        "R14",
+        "R15"
+      ]
+    },
+    {
+      "a": "conic-gradient",
+      "b": "mesh-gradient",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R14",
+        "R15",
+        "R16"
+      ]
+    },
+    {
+      "a": "conic-gradient",
+      "b": "gradient-stroke",
+      "status": "K",
+      "reasonId": "edge",
+      "reason": "Use one perimeter owner and contour, preserve required edges, and fit decorative gradient/bevel inside the available rim.",
+      "references": [
+        "R07",
+        "R14",
+        "R17",
+        "R19"
+      ]
+    },
+    {
+      "a": "conic-gradient",
+      "b": "inner-shadow",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R08",
+        "R10",
+        "R14"
+      ]
+    },
+    {
+      "a": "conic-gradient",
+      "b": "inner-glow",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R13",
+        "R14"
+      ]
+    },
+    {
+      "a": "conic-gradient",
+      "b": "outer-glow",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R12",
+        "R13",
+        "R14"
+      ]
+    },
+    {
+      "a": "conic-gradient",
+      "b": "drop-shadow",
+      "status": "K",
+      "reasonId": "cast",
+      "reason": "Only the receiver's existing Surface cast is allowed; merge source lobes once. Flat and inflow controls still have no cast.",
+      "references": [
+        "R02",
+        "R14",
+        "R19",
+        "R20"
+      ]
+    },
+    {
+      "a": "conic-gradient",
+      "b": "bevel-emboss",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R10",
+        "R14"
+      ]
+    },
+    {
+      "a": "conic-gradient",
+      "b": "letterpress",
+      "status": "K",
+      "reasonId": "content",
+      "reason": "Letterpress is restricted to a separate reviewed display inscription. Functional glyph/text remains plain; never stack reflected and emitted type by default.",
+      "references": [
+        "R14",
+        "R18"
+      ]
+    },
+    {
+      "a": "conic-gradient",
+      "b": "grain",
+      "status": "K",
+      "reasonId": "texture",
+      "reason": "Use one static texture owner/seed and keep reading regions clear. Existing Acrylic noise is edited, not doubled.",
+      "references": [
+        "R04",
+        "R14",
+        "R15"
+      ]
+    },
+    {
+      "a": "mesh-gradient",
+      "b": "gradient-stroke",
+      "status": "K",
+      "reasonId": "edge",
+      "reason": "Use one perimeter owner and contour, preserve required edges, and fit decorative gradient/bevel inside the available rim.",
+      "references": [
+        "R07",
+        "R15",
+        "R16",
+        "R17",
+        "R19"
+      ]
+    },
+    {
+      "a": "mesh-gradient",
+      "b": "inner-shadow",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R08",
+        "R10",
+        "R15",
+        "R16"
+      ]
+    },
+    {
+      "a": "mesh-gradient",
+      "b": "inner-glow",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R13",
+        "R15",
+        "R16"
+      ]
+    },
+    {
+      "a": "mesh-gradient",
+      "b": "outer-glow",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R12",
+        "R13",
+        "R15",
+        "R16"
+      ]
+    },
+    {
+      "a": "mesh-gradient",
+      "b": "drop-shadow",
+      "status": "K",
+      "reasonId": "cast",
+      "reason": "Only the receiver's existing Surface cast is allowed; merge source lobes once. Flat and inflow controls still have no cast.",
+      "references": [
+        "R02",
+        "R15",
+        "R16",
+        "R19",
+        "R20"
+      ]
+    },
+    {
+      "a": "mesh-gradient",
+      "b": "bevel-emboss",
+      "status": "K",
+      "reasonId": "body-field",
+      "reason": "Both affect the body color field. Declare one base and one masked overlay with explicit order/interpolation; do not blindly multiply complete fills.",
+      "references": [
+        "R10",
+        "R15",
+        "R16"
+      ]
+    },
+    {
+      "a": "mesh-gradient",
+      "b": "letterpress",
+      "status": "K",
+      "reasonId": "content",
+      "reason": "Letterpress is restricted to a separate reviewed display inscription. Functional glyph/text remains plain; never stack reflected and emitted type by default.",
+      "references": [
+        "R15",
+        "R16",
+        "R18"
+      ]
+    },
+    {
+      "a": "mesh-gradient",
+      "b": "grain",
+      "status": "K",
+      "reasonId": "texture",
+      "reason": "Use one static texture owner/seed and keep reading regions clear. Existing Acrylic noise is edited, not doubled.",
+      "references": [
+        "R04",
+        "R15",
+        "R16"
+      ]
+    },
+    {
+      "a": "gradient-stroke",
+      "b": "inner-shadow",
+      "status": "K",
+      "reasonId": "edge",
+      "reason": "Use one perimeter owner and contour, preserve required edges, and fit decorative gradient/bevel inside the available rim.",
+      "references": [
+        "R07",
+        "R08",
+        "R10",
+        "R17",
+        "R19"
+      ]
+    },
+    {
+      "a": "gradient-stroke",
+      "b": "inner-glow",
+      "status": "K",
+      "reasonId": "edge",
+      "reason": "Use one perimeter owner and contour, preserve required edges, and fit decorative gradient/bevel inside the available rim.",
+      "references": [
+        "R07",
+        "R13",
+        "R17",
+        "R19"
+      ]
+    },
+    {
+      "a": "gradient-stroke",
+      "b": "outer-glow",
+      "status": "K",
+      "reasonId": "edge",
+      "reason": "Use one perimeter owner and contour, preserve required edges, and fit decorative gradient/bevel inside the available rim.",
+      "references": [
+        "R07",
+        "R12",
+        "R13",
+        "R17",
+        "R19"
+      ]
+    },
+    {
+      "a": "gradient-stroke",
+      "b": "drop-shadow",
+      "status": "K",
+      "reasonId": "edge",
+      "reason": "Use one perimeter owner and contour, preserve required edges, and fit decorative gradient/bevel inside the available rim.",
+      "references": [
+        "R02",
+        "R07",
+        "R17",
+        "R19",
+        "R20"
+      ]
+    },
+    {
+      "a": "gradient-stroke",
+      "b": "bevel-emboss",
+      "status": "K",
+      "reasonId": "edge",
+      "reason": "Use one perimeter owner and contour, preserve required edges, and fit decorative gradient/bevel inside the available rim.",
+      "references": [
+        "R07",
+        "R10",
+        "R17",
+        "R19"
+      ]
+    },
+    {
+      "a": "gradient-stroke",
+      "b": "letterpress",
+      "status": "K",
+      "reasonId": "content",
+      "reason": "Letterpress is restricted to a separate reviewed display inscription. Functional glyph/text remains plain; never stack reflected and emitted type by default.",
+      "references": [
+        "R07",
+        "R17",
+        "R18",
+        "R19"
+      ]
+    },
+    {
+      "a": "gradient-stroke",
+      "b": "grain",
+      "status": "K",
+      "reasonId": "texture",
+      "reason": "Use one static texture owner/seed and keep reading regions clear. Existing Acrylic noise is edited, not doubled.",
+      "references": [
+        "R04",
+        "R07",
+        "R15",
+        "R17",
+        "R19"
+      ]
+    },
+    {
+      "a": "inner-shadow",
+      "b": "inner-glow",
+      "status": "K",
+      "reasonId": "emission",
+      "reason": "Resolve to one named inner/outer emission graph with a readable semantic core. Do not sum repeated halos or use bloom as focus.",
+      "references": [
+        "R08",
+        "R10",
+        "R13"
+      ]
+    },
+    {
+      "a": "inner-shadow",
+      "b": "outer-glow",
+      "status": "K",
+      "reasonId": "emission",
+      "reason": "Resolve to one named inner/outer emission graph with a readable semantic core. Do not sum repeated halos or use bloom as focus.",
+      "references": [
+        "R08",
+        "R10",
+        "R12",
+        "R13"
+      ]
+    },
+    {
+      "a": "inner-shadow",
+      "b": "drop-shadow",
+      "status": "K",
+      "reasonId": "cast",
+      "reason": "Only the receiver's existing Surface cast is allowed; merge source lobes once. Flat and inflow controls still have no cast.",
+      "references": [
+        "R02",
+        "R08",
+        "R10",
+        "R19",
+        "R20"
+      ]
+    },
+    {
+      "a": "inner-shadow",
+      "b": "bevel-emboss",
+      "status": "K",
+      "reasonId": "volume",
+      "reason": "Pick one signed relief profile and one key light; a concavity and convexity can coexist only on separate local regions.",
+      "references": [
+        "R08",
+        "R10"
+      ]
+    },
+    {
+      "a": "inner-shadow",
+      "b": "letterpress",
+      "status": "K",
+      "reasonId": "content",
+      "reason": "Letterpress is restricted to a separate reviewed display inscription. Functional glyph/text remains plain; never stack reflected and emitted type by default.",
+      "references": [
+        "R08",
+        "R10",
+        "R18"
+      ]
+    },
+    {
+      "a": "inner-shadow",
+      "b": "grain",
+      "status": "K",
+      "reasonId": "texture",
+      "reason": "Use one static texture owner/seed and keep reading regions clear. Existing Acrylic noise is edited, not doubled.",
+      "references": [
+        "R04",
+        "R08",
+        "R10",
+        "R15"
+      ]
+    },
+    {
+      "a": "inner-glow",
+      "b": "outer-glow",
+      "status": "K",
+      "reasonId": "emission",
+      "reason": "Resolve to one named inner/outer emission graph with a readable semantic core. Do not sum repeated halos or use bloom as focus.",
+      "references": [
+        "R12",
+        "R13"
+      ]
+    },
+    {
+      "a": "inner-glow",
+      "b": "drop-shadow",
+      "status": "K",
+      "reasonId": "cast",
+      "reason": "Only the receiver's existing Surface cast is allowed; merge source lobes once. Flat and inflow controls still have no cast.",
+      "references": [
+        "R02",
+        "R13",
+        "R19",
+        "R20"
+      ]
+    },
+    {
+      "a": "inner-glow",
+      "b": "bevel-emboss",
+      "status": "K",
+      "reasonId": "emission",
+      "reason": "Resolve to one named inner/outer emission graph with a readable semantic core. Do not sum repeated halos or use bloom as focus.",
+      "references": [
+        "R10",
+        "R13"
+      ]
+    },
+    {
+      "a": "inner-glow",
+      "b": "letterpress",
+      "status": "K",
+      "reasonId": "content",
+      "reason": "Letterpress is restricted to a separate reviewed display inscription. Functional glyph/text remains plain; never stack reflected and emitted type by default.",
+      "references": [
+        "R13",
+        "R18"
+      ]
+    },
+    {
+      "a": "inner-glow",
+      "b": "grain",
+      "status": "K",
+      "reasonId": "texture",
+      "reason": "Use one static texture owner/seed and keep reading regions clear. Existing Acrylic noise is edited, not doubled.",
+      "references": [
+        "R04",
+        "R13",
+        "R15"
+      ]
+    },
+    {
+      "a": "outer-glow",
+      "b": "drop-shadow",
+      "status": "K",
+      "reasonId": "cast",
+      "reason": "Only the receiver's existing Surface cast is allowed; merge source lobes once. Flat and inflow controls still have no cast.",
+      "references": [
+        "R02",
+        "R12",
+        "R13",
+        "R19",
+        "R20"
+      ]
+    },
+    {
+      "a": "outer-glow",
+      "b": "bevel-emboss",
+      "status": "K",
+      "reasonId": "emission",
+      "reason": "Resolve to one named inner/outer emission graph with a readable semantic core. Do not sum repeated halos or use bloom as focus.",
+      "references": [
+        "R10",
+        "R12",
+        "R13"
+      ]
+    },
+    {
+      "a": "outer-glow",
+      "b": "letterpress",
+      "status": "K",
+      "reasonId": "content",
+      "reason": "Letterpress is restricted to a separate reviewed display inscription. Functional glyph/text remains plain; never stack reflected and emitted type by default.",
+      "references": [
+        "R12",
+        "R13",
+        "R18"
+      ]
+    },
+    {
+      "a": "outer-glow",
+      "b": "grain",
+      "status": "K",
+      "reasonId": "texture",
+      "reason": "Use one static texture owner/seed and keep reading regions clear. Existing Acrylic noise is edited, not doubled.",
+      "references": [
+        "R04",
+        "R12",
+        "R13",
+        "R15"
+      ]
+    },
+    {
+      "a": "drop-shadow",
+      "b": "bevel-emboss",
+      "status": "K",
+      "reasonId": "cast",
+      "reason": "Only the receiver's existing Surface cast is allowed; merge source lobes once. Flat and inflow controls still have no cast.",
+      "references": [
+        "R02",
+        "R10",
+        "R19",
+        "R20"
+      ]
+    },
+    {
+      "a": "drop-shadow",
+      "b": "letterpress",
+      "status": "K",
+      "reasonId": "content",
+      "reason": "Letterpress is restricted to a separate reviewed display inscription. Functional glyph/text remains plain; never stack reflected and emitted type by default.",
+      "references": [
+        "R02",
+        "R18",
+        "R19",
+        "R20"
+      ]
+    },
+    {
+      "a": "drop-shadow",
+      "b": "grain",
+      "status": "K",
+      "reasonId": "texture",
+      "reason": "Use one static texture owner/seed and keep reading regions clear. Existing Acrylic noise is edited, not doubled.",
+      "references": [
+        "R02",
+        "R04",
+        "R15",
+        "R19",
+        "R20"
+      ]
+    },
+    {
+      "a": "bevel-emboss",
+      "b": "letterpress",
+      "status": "K",
+      "reasonId": "content",
+      "reason": "Letterpress is restricted to a separate reviewed display inscription. Functional glyph/text remains plain; never stack reflected and emitted type by default.",
+      "references": [
+        "R10",
+        "R18"
+      ]
+    },
+    {
+      "a": "bevel-emboss",
+      "b": "grain",
+      "status": "K",
+      "reasonId": "texture",
+      "reason": "Use one static texture owner/seed and keep reading regions clear. Existing Acrylic noise is edited, not doubled.",
+      "references": [
+        "R04",
+        "R10",
+        "R15"
+      ]
+    },
+    {
+      "a": "letterpress",
+      "b": "grain",
+      "status": "K",
+      "reasonId": "content",
+      "reason": "Letterpress is restricted to a separate reviewed display inscription. Functional glyph/text remains plain; never stack reflected and emitted type by default.",
+      "references": [
+        "R04",
+        "R15",
+        "R18"
+      ]
+    }
+  ],
+  "presetPairs": [
+    {
+      "a": "paper",
+      "b": "glass",
+      "status": "K",
+      "reason": "Glass outer shell, opaque Paper reading island; no transparency on the paper plane."
+    },
+    {
+      "a": "paper",
+      "b": "acrylic",
+      "status": "K",
+      "reason": "Acrylic popup perimeter and opaque Paper content; separate acquisition from the reading plane."
+    },
+    {
+      "a": "paper",
+      "b": "soft",
+      "status": "K",
+      "reason": "Paper content with Soft handle/perimeter; do not give every sheet a modeled convex face."
+    },
+    {
+      "a": "paper",
+      "b": "tactile",
+      "status": "C",
+      "reason": "Paper reading body with a Tactile action or handle; keep bevel away from copy."
+    },
+    {
+      "a": "paper",
+      "b": "aero",
+      "status": "K",
+      "reason": "Paper content within sparse Aero chrome; gloss cannot cross the reading plane."
+    },
+    {
+      "a": "paper",
+      "b": "glow",
+      "status": "K",
+      "reason": "Paper content with isolated Glow indicator/edge; no glowing prose or grid lines."
+    },
+    {
+      "a": "paper",
+      "b": "prism",
+      "status": "C",
+      "reason": "Paper body and one Prism perimeter share geometry; retain the structural edge."
+    },
+    {
+      "a": "glass",
+      "b": "acrylic",
+      "status": "X",
+      "reason": "Choose one shell acquisition recipe. Acrylic may replace Glass; stacking both doubles blur/tint/noise ownership."
+    },
+    {
+      "a": "glass",
+      "b": "soft",
+      "status": "X",
+      "reason": "Same-body transmitted glass and same-color opaque soft relief conflict. Use opaque Soft child handles inside a Glass shell instead."
+    },
+    {
+      "a": "glass",
+      "b": "tactile",
+      "status": "K",
+      "reason": "Glass shell with opaque Tactile controls; one light, no independently transparent bevel body."
+    },
+    {
+      "a": "glass",
+      "b": "aero",
+      "status": "K",
+      "reason": "Choose Glass acquisition and one Aero perimeter reflection; omit Aero body-reflection where it impairs transmission/reading."
+    },
+    {
+      "a": "glass",
+      "b": "glow",
+      "status": "K",
+      "reason": "One Glass shell plus bounded external Glow edge, after backdrop contrast checks; no glow at focus/error boundary."
+    },
+    {
+      "a": "glass",
+      "b": "prism",
+      "status": "C",
+      "reason": "Glass body plus transparent-center Prism mask; replace the Glass edge, do not add a second perimeter."
+    },
+    {
+      "a": "acrylic",
+      "b": "soft",
+      "status": "X",
+      "reason": "Same-body opaque soft volume conflicts with Acrylic transmission. Keep the Soft knob as an independent opaque receiver."
+    },
+    {
+      "a": "acrylic",
+      "b": "tactile",
+      "status": "K",
+      "reason": "Acrylic popup and opaque Tactile control/handle; remove grain from control inset/text regions."
+    },
+    {
+      "a": "acrylic",
+      "b": "aero",
+      "status": "X",
+      "reason": "Two complete shell recipes compete for body tint/reflection. Use separate chrome/content receivers or choose one shell."
+    },
+    {
+      "a": "acrylic",
+      "b": "glow",
+      "status": "K",
+      "reason": "One Acrylic shell with sparse semantic Glow core outside its reading region; retain only one noise plane."
+    },
+    {
+      "a": "acrylic",
+      "b": "prism",
+      "status": "K",
+      "reason": "Replace the Acrylic decorative edge with Prism; keep required boundary and confirm visibility through noise/tint."
+    },
+    {
+      "a": "soft",
+      "b": "tactile",
+      "status": "X",
+      "reason": "Broad soft relief and crisp molded bevel are competing edge profiles. Choose one at a part boundary."
+    },
+    {
+      "a": "soft",
+      "b": "aero",
+      "status": "X",
+      "reason": "Soft matte volume and strong gloss band compete on the same small body. Separate roles or choose a dominant finish."
+    },
+    {
+      "a": "soft",
+      "b": "glow",
+      "status": "K",
+      "reason": "Soft body with a separate semantic LED-like emitter; no external white relief shadow relabeled as glow."
+    },
+    {
+      "a": "soft",
+      "b": "prism",
+      "status": "K",
+      "reason": "Soft body with one restrained colored rim, replacing its bevel edge if space is insufficient."
+    },
+    {
+      "a": "tactile",
+      "b": "aero",
+      "status": "K",
+      "reason": "Tactile relief plus one Aero top reflection on a sparse control; share one bevel and keep it clear of labels."
+    },
+    {
+      "a": "tactile",
+      "b": "glow",
+      "status": "C",
+      "reason": "Tactile housing with a distinct Glow indicator, like the board console description; no luminous structural grooves."
+    },
+    {
+      "a": "tactile",
+      "b": "prism",
+      "status": "K",
+      "reason": "Choose a gradient paint for the existing Tactile rim, not an extra border layer."
+    },
+    {
+      "a": "aero",
+      "b": "glow",
+      "status": "K",
+      "reason": "Aero reflection and Glow emission are different channels; keep one subordinate, omit both near dense copy/focus."
+    },
+    {
+      "a": "aero",
+      "b": "prism",
+      "status": "K",
+      "reason": "One Aero body reflection and one Prism edge; remove duplicate Aero edge gradient."
+    },
+    {
+      "a": "glow",
+      "b": "prism",
+      "status": "K",
+      "reason": "Choose either a sharp Prism gradient edge or a context-colored Glow emitter as primary. Do not infer a multicolor halo from one semantic source."
+    },
+    {
+      "a": "none",
+      "b": "paper",
+      "status": "C",
+      "reason": "None emits no material declarations; the other recipe wins, not a concatenated second paint."
+    },
+    {
+      "a": "none",
+      "b": "glass",
+      "status": "C",
+      "reason": "None emits no material declarations; the other recipe wins, not a concatenated second paint."
+    },
+    {
+      "a": "none",
+      "b": "acrylic",
+      "status": "C",
+      "reason": "None emits no material declarations; the other recipe wins, not a concatenated second paint."
+    },
+    {
+      "a": "none",
+      "b": "soft",
+      "status": "C",
+      "reason": "None emits no material declarations; the other recipe wins, not a concatenated second paint."
+    },
+    {
+      "a": "none",
+      "b": "tactile",
+      "status": "C",
+      "reason": "None emits no material declarations; the other recipe wins, not a concatenated second paint."
+    },
+    {
+      "a": "none",
+      "b": "aero",
+      "status": "C",
+      "reason": "None emits no material declarations; the other recipe wins, not a concatenated second paint."
+    },
+    {
+      "a": "none",
+      "b": "glow",
+      "status": "C",
+      "reason": "None emits no material declarations; the other recipe wins, not a concatenated second paint."
+    },
+    {
+      "a": "none",
+      "b": "prism",
+      "status": "C",
+      "reason": "None emits no material declarations; the other recipe wins, not a concatenated second paint."
+    }
+  ]
+}
