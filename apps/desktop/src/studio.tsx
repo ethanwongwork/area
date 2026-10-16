@@ -184,7 +184,7 @@ export function Studio() {
             ))}
           </Nav>
           <div className="studio-titlebar__end">
-            <SearchField ref={search} size="sm" className="studio-titlebar__search" value={query} onValueChange={setQuery}
+            <SearchField ref={search} size="sm" variant="soft" className="studio-titlebar__search" value={query} onValueChange={setQuery}
               placeholder={`Search ${current.label.toLowerCase()}`} aria-label={`Search ${current.label.toLowerCase()}`} shortcut={["⌘", "K"]} />
             {/* Shown panels draw their side filled, as Cursor's layout toggles do. Each names itself
                 in an Area Tooltip with its shortcut, not the browser's title. */}
@@ -248,29 +248,26 @@ function usePanelWidth(panel: keyof typeof WIDTHS) {
 export interface WorkspaceProps {
   /** The tab's list, in a <SidebarList>. The Sidebar has no title bar (owner, 2026-10-11). */
   sidebar: ReactNode;
-  /** Before the title in the Canvas bar: the way back from a nested view (a family's Stage). */
+  /** At the start of the Canvas bar: the way back from a nested view (a family's Stage). */
   canvasLead?: ReactNode;
-  /** The Canvas's bar: what it shows (a family, "All icons"); also names the region. */
+  /** What the Canvas shows (a family, "All icons"): the region's accessible name, not drawn
+      (owner, 2026-10-14: no titles over the Canvas or the Inspector, as Framer and Figma). */
   canvasTitle: string;
-  /** Beside the title in the Canvas bar: a status, a count. */
-  canvasMeta?: ReactNode;
-  /** At the end of the Canvas bar: filters and the grid / list switch (src/view-controls.tsx). */
+  /** The Canvas's header: filters and the view's options (src/view-controls.tsx). */
   canvasActions?: ReactNode;
   canvas: ReactNode;
-  /** The Inspector's bar: what is selected. */
-  inspectorTitle: ReactNode;
   inspector: ReactNode;
   /** The Canvas's scrolling body (fitting tiles, scrolling a selection into view). */
   canvasRef?: Ref<HTMLDivElement>;
 }
 
 /*
- * Three columns under the Titlebar. The Canvas and Inspector are topped by a 41 bar (Panel's: a
- * row, 6 above and below it, and the rule), and the Sidebar's first row sits on the same centre
- * line (SidebarList), so the three columns start level. Every region insets its content by
- * Panel's 14 (src/studio.css).
+ * Three columns under the Titlebar, without titles (owner, 2026-10-14, after Framer and Figma):
+ * the Canvas has a header for its view options, and its controls, the Sidebar's first row and the
+ * Inspector's first heading sit on one line. Every region insets its content by Panel's 14
+ * (src/studio.css).
  */
-export function Workspace({ sidebar, canvasLead, canvasTitle, canvasMeta, canvasActions, canvas, inspectorTitle, inspector, canvasRef }: WorkspaceProps) {
+export function Workspace({ sidebar, canvasLead, canvasTitle, canvasActions, canvas, inspector, canvasRef }: WorkspaceProps) {
   const studio = useStudio();
   const sidebarWidth = usePanelWidth("sidebar");
   const inspectorWidth = usePanelWidth("inspector");
@@ -285,17 +282,12 @@ export function Workspace({ sidebar, canvasLead, canvasTitle, canvasMeta, canvas
         </div>
       ) : null}
       <main className="studio-canvas" aria-label={canvasTitle}>
-        <header className="studio-canvas__bar">
-          {canvasLead}
-          <h1 className="studio-canvas__title">{canvasTitle}</h1>
-          {canvasMeta}
-          {canvasActions}
-        </header>
+        <header className="studio-canvas__bar">{canvasLead}{canvasActions}</header>
         <div ref={canvasRef} className="studio-canvas__body" {...axes}>{canvas}</div>
       </main>
       {studio.inspector ? (
         <div className="studio-inspector">
-          <Panel flush resizable="start" title={inspectorTitle} titleLevel={2} {...inspectorWidth}>{inspector}</Panel>
+          <Panel flush resizable="start" aria-label="Inspector" {...inspectorWidth}>{inspector}</Panel>
         </div>
       ) : null}
     </div>
@@ -303,8 +295,8 @@ export function Workspace({ sidebar, canvasLead, canvasTitle, canvasMeta, canvas
 }
 
 /**
- * The Sidebar's list: its first row starts 8 below the Titlebar, the 8 the Titlebar's controls
- * sit in, which centres a 24 row on the Canvas and Inspector bars' title line (41 + 8 + 12 = 61).
+ * The Sidebar's list: its row plates sit 6 from the Titlebar, the sides and the foot, so its first
+ * row's text shares a line with the Canvas header's controls and the Inspector's first heading.
  */
 export function SidebarList({ children }: { children: ReactNode }) {
   return <div className="studio-sidebar__list">{children}</div>;

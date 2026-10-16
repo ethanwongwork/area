@@ -438,7 +438,7 @@
       position-try-fallbacks: flip-block;
       /* Below unless it doesn't fit: the UA's most-block-size order opened it on the roomier side. */
       position-try-order: normal;
-      min-inline-size: max(anchor-size(self-inline), calc(var(--area-space-96) * 2 + var(--area-space-32)));
+      min-inline-size: max(anchor-size(self-inline), var(--area-menu-min-inline-size, calc(var(--area-space-96) * 2 + var(--area-space-32))));
       max-block-size: min(324px, 100%); /* spec */
       overflow: auto;
       padding: var(--area-space-4);

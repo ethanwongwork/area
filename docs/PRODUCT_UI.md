@@ -42,8 +42,8 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
    Only long lists pin (Components 85, Icons 808); a Sidebar of a dozen rows (settings, roles,
    scales) needs no shortcut (owner, 2026-10-12).
 9. **Counts:** a count beside a title is muted tabular text; a count at the end of a row is
-   `Count`. The Canvas bar's count is always how many things the Canvas shows (families, tiles,
-   icons, scales, steps); a Canvas showing one thing (a type role) has none.
+   `Count`. The Sidebar's All row counts what the tab holds; the Canvas draws no count of its own
+   (owner, 2026-10-14: no titles over the Canvas or the Inspector).
 10. **Empty results:** the Sidebar keeps All and its groups; the Canvas shows one `EmptyState`
     naming the query. No inline notes in the Sidebar.
 11. **Containers and surfaces.** A thing that is a composition (a component specimen, a
@@ -57,16 +57,32 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
     window controls; the Inspector's at the end.
 13. **App CSS styles only app classes.** When a product needs a component to do something it
     cannot, fix the component (with a spec note) or record a gap; never override `.area-*`.
-14. **The Canvas bar says what is shown; the Inspector, what is chosen** (owner, 2026-10-12).
-    - The bar: the title and count, then in this order filters, Sort and group, how things are
-      drawn (zoom, style, size), and the grid / list switch. A control that does not apply to
-      the current view is left out; the order of the rest never changes.
-    - The Inspector: the Canvas settings (only those that change this tab's specimens, plus the
-      tab's own display settings, such as Typography's sample text), then the chosen thing at its
-      narrowest: a Canvas item, else the Sidebar's row, else the tab's overview, under the same
-      title. A chosen thing gets its preview, unless the Canvas already shows it at size, and its
-      copy actions two to a row (`src/inspector.tsx`), then one facts Table whose rows run:
-      name and how to reach it (name, token, import), values, status, purpose, source.
+14. **The Canvas's header sets how things are shown; the Inspector, what is chosen** (owner,
+    2026-10-12; 2026-10-14: no titles, as Framer and Figma, but a header, not a floating toolbar).
+    - No title over the Canvas or the Inspector: the Sidebar's selected row names what the Canvas
+      shows. The Canvas header's controls, the Sidebar's first row and the Inspector's first
+      heading share one line, every region 14 in on all sides.
+    - The header, at its end, in this order: filters, Sort and group, how things are drawn (zoom,
+      style, size), and the grid / list switch. Zoom is Zoom control's stepper (− Fit +): Fit shows
+      specimens by size group, each group at one scale (one row of controls and a few rows 125%,
+      taller ones 100% and shrunk only to fit; fields take their card's width), and a specimen
+      whose content reads narrower than its box is laid out at its content's width and a fifth
+      more, where the component gives way (src/gallery/fit.ts); 50% to 200% is an
+      exact zoom, tiles and the Stage growing with it (owner, 2026-10-14).
+    - Components' All shows one tile per family, its default specimen; a family's variants are its
+      own Canvas. Specimens sit in square cards, after Compass's gallery: the specimen 28 in, the
+      title (the app's text, strong) and a Copy code button in the card's foot, cards 12 apart. A
+      click on an All card opens its family's Stage (owner, 2026-10-14). A control that does not apply to the current view
+      is left out; the order of the rest never changes. Fields in the app's chrome and Inspector
+      are `soft` (filled), a set is a multi-select Custom select, and dropdown windows hug their
+      rows (`--area-menu-min-inline-size`).
+    - The Inspector, without a title: the Canvas settings under headings by what they shape (Size:
+      type, density; Shape: radius, pills; then Display, the tab's own settings, such as
+      Typography's sample text), only those that change this tab's specimens, then the chosen thing at its
+      narrowest: a Canvas item, else the Sidebar's row, else the tab's overview. A chosen thing
+      gets its preview, unless the Canvas already shows it at size, and its copy actions two to a
+      row (`src/inspector.tsx`), then one flush facts Table whose rows run: name and how to reach
+      it (name, token, import), values, status, purpose, source.
     - Nothing is chosen until the person chooses it: a tab opens on its overview, and the
       choice clears when the Sidebar's row changes.
 
@@ -87,5 +103,4 @@ Recorded, not yet built (each needs its own component pass). From the app audit 
   uses `apps/desktop/src/grid-keys.ts`.
 - Nav row actions revealed on hover and focus-within, as Board card actions are.
 - A per-item context-menu target (the gallery's `PinMenu` reads `data-key` from the event).
-- App-shell parts: Titlebar (drag region, traffic-light inset), a Panel-style bar for centre
-  regions, and a section heading.
+- App-shell parts: Titlebar (drag region, traffic-light inset) and a section heading.

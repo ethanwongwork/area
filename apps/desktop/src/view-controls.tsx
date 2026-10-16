@@ -1,7 +1,7 @@
 /**
- * The Canvas bar's view controls (owner, 2026-10-11: "different viewing modes for each tab, like
- * grid vs list views or even filters"): a grid / list switch and filters, at the end of the bar as
- * Notion and Figma put a view's options. Each tab keeps its own choices.
+ * The Canvas's view controls (owner, 2026-10-11: "different viewing modes for each tab, like
+ * grid vs list views or even filters"): filters, then a grid / list switch, at the end of the
+ * Canvas's header as Notion and Figma put a view's options. Each tab keeps its own choices.
  */
 import { useState, type ReactNode } from "react";
 import { Segmented, Select } from "@area/react";
@@ -31,13 +31,13 @@ export function ViewSwitch({ value, onChange }: { value: ViewMode; onChange: (mo
 /** One filter: a small Select whose options name what they show ("All statuses", "In review"). */
 export function ViewFilter<T extends string>({ label, value, onChange, options }: { label: string; value: T; onChange: (value: T) => void; options: ReadonlyArray<{ value: T; label: string }> }) {
   return (
-    <Select size="sm" aria-label={label} value={value} onChange={event => onChange(event.currentTarget.value as T)}>
+    <Select size="sm" variant="soft" aria-label={label} value={value} onChange={event => onChange(event.currentTarget.value as T)}>
       {options.map(option => <option key={option.value} value={option.value}>{option.label}</option>)}
     </Select>
   );
 }
 
-/** The bar's end: filters, then the view switch. */
+/** The header's end: filters, then the view switch. */
 export function ViewControls({ children }: { children: ReactNode }) {
-  return <div className="studio-canvas__actions" {...APP_SCALE}>{children}</div>;
+  return <div role="group" aria-label="View" className="studio-canvas__actions" {...APP_SCALE}>{children}</div>;
 }

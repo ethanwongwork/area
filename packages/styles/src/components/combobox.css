@@ -19,7 +19,7 @@
        taller than the room beside the field. On the [popover] rule so it outranks Menu's. */
     max-block-size: min(324px, var(--area-overlay-available-height, 50vh)); /* spec */
     /* At least the field's width, and never narrower than a menu (224). */
-    min-inline-size: max(var(--area-overlay-anchor-width, 0px), calc(var(--area-space-96) * 2 + var(--area-space-32)));
+    min-inline-size: max(var(--area-overlay-anchor-width, 0px), var(--area-menu-min-inline-size, calc(var(--area-space-96) * 2 + var(--area-space-32))));
   }
 
   /* Options are Menu rows. A value picker shows its value with the check alone, as Select and
