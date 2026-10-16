@@ -1,9 +1,45 @@
-# Handoff — 2026-10-12
+# Handoff — 2026-10-15
 
 Each session starts from `main` in its own worktree (`claude/*` branch) and merges through a
 pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
+
+## Start here (2026-10-15, end of session `icon-work-followup-2fcf1e`; everything merged, PRs #88–#114)
+
+**Waiting on the owner:** eight families In review, all on one page with live specimens, what changed and why:
+https://claude.ai/artifact/HwkKUmDzVH4B8eUGpjRwcD (approve in chat; record approvals in
+`apps/desktop/src/content/component-status.mjs`, moving each from `REVIEW_COMPONENTS` to `COMPLETE_COMPONENTS`).
+
+| Family | What | Spec |
+|---|---|---|
+| Copy button (new) | Button that copies; check for 2000 ms (uui, shadcn; ChatGPT 2016 ms), name fixed, said once; `useCopy` / `CopyStatus`. Code block, Token row, the app's copies use it | `copy-button.md` |
+| List box (new) | listbox, one Tab stop, list (Menu rows) or grid (the app's icon cells); Icons, Typography (options `<weight>:<role>`), Color (Tile `option`) use it; `grid-keys.ts` gone | `list-box.md` |
+| Badge (reopened) | `onColor`: Code's on-colour chip; the Color tab's badges (old 12% ink wash left 34/345 steps under AA) | `badge.md`, `docs/research/badge-on-color-2026-10-15/` |
+| Nav (reopened) | `revealActions`: Board's hover / focus reveal on a row | `nav.md` |
+| Context menu (reopened) | `itemSelector` + `menu(item)`, `data-context-target`; the app's PinMenu uses it | `context-menu.md` |
+| Card (reopened) | pressed (`border-hover`) and `selected` (stroke-selected 2 inside, Surface-0 safe) | `card.md` |
+| Titlebar, Section heading (new) | the app's bar and section titles (values unchanged); the app uses them | `app-shell.md` |
+
+Also merged this session, no review needed: Density as one number (`28 / 32 / 36`, research `density-2026-10-14.md`);
+More contrast restores Surface 0's frames (`border-width` derived from `frame-width` and `contrast-more`); Hover card
+`openOnFocus` (off for the icon cells); `TableCell` / `TableHeaderCell` (`numeric`, `fit`); the Indicator React test
+reads the app (suite fully green); the icon 2026-10-10 proposals closed as kept-as-approved.
+
+**State:** PRODUCT_UI.md's open component gaps: none left. React 466/466, tokens 24,254, contracts, typecheck, playgrounds
+0, CI on pull requests (#104). Not checked this session: a screen reader; forced colours by eye (List box selection
+paints a background); the Electron window by eye (Titlebar's macOS 83 / 13 computed only).
+
+**Next, in order:** (1) the owner's verdicts on the eight; (2) paint `[data-context-target]` (Finder / Notion keep the
+right-clicked row marked; a hook today); (3) the app's Tile could take Card's selected rule instead of its own copy.
+
+**Gotchas found:** the hidden preview pane fires no focus events (`document.hasFocus()` false): test keys in headless
+Edge with `Emulation.setFocusEmulationEnabled` (scratch scripts were in /private/tmp). The preview server is sometimes
+stopped by another session, and a stale server can hold its old port: restart `desktop` and check the port. `npm run
+build` can race the preview's watcher (`ENOTEMPTY` in a dist folder): rerun that workspace. A file sync makes
+" 2" copies (git refs were moved to `~/Desktop/area/.git-stray-refs-backup-2026-10-14/`; `packages/styles/dist/area
+2.css` and some committed ` 2.json` captures remain). `component-review.mjs` needs the archived docs build, which fails
+on the removed `ui` axis (`apps/docs/scripts/build.mjs`); review pages were built from the app's demos instead.
 
 ## CI (2026-10-15, branch `claude/ci-workflow`)
 
@@ -13,62 +49,6 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   "Continuous integration". `package-lock.json` synced (`@area/icons` 0.1.0, MIT) so `npm ci` matches.
 - Local timings (M-series): build 242s, typecheck 33s, tokens 16s, the rest under 10s each. Linux was not run
   locally; the first run on the pull request is the first Linux check.
-
-## List box (2026-10-15, branch `claude/list-box`)
-
-- Owner: "merge it, then continue working" (PR #102 merged) → the next PRODUCT_UI gap: roving focus and a 2-D
-  collection. `ListBox` / `ListBoxItem` / `ListBoxSection` (packages/react/src/components/ListBox.tsx): the WAI-ARIA
-  listbox (React Aria ListBox), one Tab stop by roving tabindex, `layout` list (Menu's rows, the value picker's check)
-  or grid (cells `--area-list-box-item`, control-xl, 2 apart, row plates, inset ring: the app's icon cell). Grid keys:
-  reading order Left / Right, nearest by centre Up / Down across sections (grid-keys.ts's model), Home / End, typeahead
-  (TYPEAHEAD_RESET), Enter / Space; `selectionFollowsFocus`. No new painted values. Spec `docs/specs/list-box.md`.
-- The Icons tab's grid is one ListBox (808 options, 33 groups; `CanvasSection role="group"`); was 808 Tab stops with
-  `aria-pressed`. Typography (each style in two weights under one id) and Color (Tile cards) still use grid-keys.ts.
-- Checks: build, manifest (111), typecheck, React suites, playgrounds 0. Headless Edge with focus emulation on the
-  Icons tab: Tab in → first icon chosen; Right / Down move and choose; one Tab leaves; Shift+Tab returns. The hidden
-  preview pane fires no focus events (`document.hasFocus()` false), so keyboard checks need headless Edge.
-- Review page (In review): https://claude.ai/artifact/VtEvHb4MPWN6Z7UiK7gxBF (built from the app's demos).
-- Merged (PR #106). Then Typography and Color adopt it: Typography's cells are options `<weight>:<role>` (the chosen
-  cell alone lights; the Inspector previews its weight; list rows match), Color's cards are the app's Tile with
-  `option` (a ListBoxItem). `grid-keys.ts` removed. App tile / cell rules read `aria-selected`; `.gallery-tile`
-  takes `place-items: normal` (the option centres its content otherwise).
-- Merged (PR #107). Then Hover card `openOnFocus` (default true; E-18 stands): the Icons tab's cells set it false, so
-  the arrows no longer open a card on every icon (it opened at once on focus); the Inspector has the same actions.
-- Merged (PR #108). Then `TableCell` / `TableHeaderCell` with `numeric` and `fit` (the existing modifiers); the app and
-  the Table demos no longer write `area-table__cell--*` by hand. PRODUCT_UI gap closed.
-- Merged (PR #109). Then Badge `onColor` (Code's on-colour chip: ink inherited, 8% plate of the ink's opposite, 20%
-  ink line). The Color tab's cards use it: their old 12% ink-wash badge left 34 of 345 steps under AA for its own
-  text (worst Warm 500, 3.68); now ≥ 5.25. Visible: pill corner, plate direction, the line. Badge reopened for review.
-- Merged (PR #110). Then NavItem `revealActions`: Board's hover / focus-within reveal on a Nav row (touch always shows;
-  an open menu keeps them). Additive; the app's Sidebar keeps pinning in the Inspector and the context menu (rule 7).
-- Merged (PR #111). Then ContextMenu `itemSelector` (+ `menu` as a function of the item, `data-context-target` while
-  open); the app's PinMenu uses it. Not painted: the target attribute is a hook (Finder / Notion mark the row).
-- Merged (PR #112). Then Card pressed + `selected` (rule 3, the app tiles' values: press `border-hover`, selected
-  `stroke-selected` 2 inside, Surface-0 safe, forced colours outline). The app's Tile keeps its own copy for now
-  (adopting Card's class on Tile would pull Card's layout).
-- Merged (PR #113). Review page for the six families: https://claude.ai/artifact/HwkKUmDzVH4B8eUGpjRwcD (approve in chat).
-- Then `Titlebar` (Panel's bar height and rule, drag region, `windowControls="macos"` 83 / 13) and `SectionHeading`
-  (strong text-sm, cap-trimmed, muted lede 8 under) from the app's own bar and section titles (app-shell.css, spec
-  `docs/specs/app-shell.md`); the app uses both, unchanged on screen. PRODUCT_UI's open gaps: none left.
-
-## Copy button (2026-10-15, branch `claude/copy-button`)
-
-- Owner: "go with your rec" (new components from the backlog) → Copy button, from PRODUCT_UI.md's open gaps: the app's
-  own CopyButton and Typography's silent icon-only copy; Code block, Token row and the app each wrote the copy logic.
-- `CopyButton` (packages/react/src/components/CopyButton.tsx): a Button (ghost / neutral / sm by default) that copies
-  `value` (string or a function read at the click); icon-only named by `label` ("Copy"), or with a label that stays;
-  the icon turns to a check for 2000 ms (Untitled UI, shadcn; was 1600 unsourced) and a sibling polite live region says
-  "Copied to clipboard" / "Copy failed" once; `data-copy-state` hook; `useCopy` and `CopyStatus` for Token row's row.
-  copy-button.css carries Code block's check entry (moved from code.css). Code block, Token row, the app's Inspector
-  copies (copy.tsx wraps it: outline, Area icons) and Typography's token copies use it. Spec `docs/specs/copy-button.md`.
-- Evidence: design-system sources pinned (uui 1d410cb8, shadcn c2477f31, Mantine 7.17.8, Zag 1.15.0); ChatGPT's copy
-  controls read live in Chrome (read-only, nothing pressed). Not captured: Notion / Figma (toast pattern, out of scope).
-- Checks: build, tokens 24,254, contracts 14, manifest (110), typecheck, React 297/297 (new copy-button.test.mjs),
-  playgrounds 0 mismatches. App preview: 8 tiles; a press writes the value, swaps to the check (0.14s entry), announces
-  once, keeps label and width; refused clipboard → "Copy failed"; Typography copies carry the tooltip and bar class.
-- Review page (In review): https://claude.ai/artifact/CWKJ1CCKJnEXFRBVPADfZp (built from the app's demos; the
-  archived docs build that component-review.mjs needs fails on the removed `ui` axis in apps/docs/scripts/build.mjs:
-  inspector sections, typographyPage, iconographyPage, densityRows / uiScalePage; not fixed, docs archived).
 
 ## Astra research folded into main (2026-10-15, branch `claude/fold-astra-research`)
 
@@ -95,42 +75,6 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   (≤48 tall and ≤160 tall at 125%, taller 100%) and lays stretching specimens out at their content's width + 20%
   (src/gallery/fit.ts). Colour cards are unit tiles hugging their text, short OKLCH.
 - Not done: gallery tiles for CustomSelect `multiple` and ZoomControl `stepper`; Language tiles are not cards.
-
-## Density: one number (2026-10-14, branch `claude/next-axis-density`)
-
-- Owner: "continue working on the next axis". Density was the last geometry setting named by words. It is now the
-  medium Button's height at type 14: `data-area-density="28"|"32"|"36"` (was compact / default / comfortable),
-  labels "28 (Compact)", "32 (Default)", "36 (Comfortable)". Same three levels, nothing renders differently; the
-  `ui` shorthand maps to 28 / 32; a Canvas saved with a name restores as its number. Three steps, not more: the
-  products with a density setting offer three, and a fourth either collapses sm onto md at the 24 floor (24) or
-  repeats type 16 at 36 (40). Research: `docs/research/density-2026-10-14.md`.
-- Checks: build, tokens 24,254, contracts 14, manifest, typecheck, React 292/293 (known Indicator); app preview:
-  root 26px md at type 13 / 28, Canvas Button 28 / 32 / 36 per step, contact sheet at 28, a saved `comfortable`
-  restores as 36, Language tab text, no console errors. Not checked: forced colours, a 1× display.
-- Merged (PR #90). Then: Badge's audit demo wrote `data-area-ui` from an "Audit density" select (default / compact,
-  which also set type 12); it now writes `data-area-density` 28 / 32 / 36. Motion's open check (left from the Motion
-  entry): a real Menu popover in dark at steps 0 / 30 / 150 / 210 / 300 opens over 0 / 30 / 150 / 210 / 300 ms and
-  closes over 0 / 20 / 100 / 140 / 200 (`fast`), `duration-loop` 0 only at step 0.
-- Merged (PR #95). Then (owner: "go with your rec"): under More contrast, Surface 0's frames come back at 1px.
-  Surface writes `frame-width` (registered); `border-width` is derived, `max(frame-width, contrast-more × 1px)`,
-  re-emitted at axis and contrast boundaries; forced-colors.css sets `frame-width`. Cohesion test pins the
-  derivation. Checked in the app: Surface 0 + More draws 1px on Card and Menu (nested either way), Card keeps 120
-  wide, Standard stays 0; dark shows the frame clearly. Docs: CONTRAST.md, THEMING.md, DESIGN_SYSTEM.md (Strokes),
-  surface research "More contrast". Merged (PR #96).
-- Then: the OS path checked in headless Edge (`Emulation.setEmulatedMedia`, no `data-area-contrast` on the Canvas):
-  Surface 0 Card and Menu draw 0 with no preference, 1px under `prefers-contrast: more`, 1px under
-  `forced-colors: active`, 1px under both; Card stays 120 wide.
-- Fixed the React suite's one standing failure ("known Indicator"): `indicator.test.mjs` read the archived docs'
-  `apps/docs/dist/index.html`. It now bundles the app's demo registry (as `check-playgrounds.mjs` does) and renders
-  each of the app's 35 Indicator tiles, one indicator each. React suite 293/293; a mutation fails it.
-- Fixed in passing: `git fetch` failed on three stray refs with a " 2" suffix (`origin/main 2` too); moved to
-  `~/Desktop/area/.git-stray-refs-backup-2026-10-14/` (every commit they named is on a branch), delete when happy.
-
-## Icons: open list closed (2026-10-14, branch `claude/icon-work-followup-2fcf1e`)
-
-- Owner: "go with your recommendations". The 2026-10-10 quality-pass proposals are closed as kept-as-approved (spec
-  "Proposals (owner calls; not applied)"; the pixel ones were already done by the 1× pass). Nothing in the icon set is
-  waiting on the owner. Left until a use needs it: replace-all; the docs site's Fluent copy goes with the site.
 
 ## Surface: one number, Borderless keeps an edge (2026-10-14, branch `claude/next-axis-9766b4`)
 
@@ -162,7 +106,7 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   Token and Token row's outline (no fill) draw a required edge via Code's `--_code-border`; the Scroll area and
   Separator demo frames are `stroke-width`. Research note "Sweep after the change".
 - Found: `git fetch` fails in the shared repo on two stray refs, `refs/heads/claude/elevation-axis-gallery-e500be 2`
-  and `icon-work-ea140f 2` (copies with a " 2" suffix, likely from a file sync). Moved aside 2026-10-14 (Density entry).
+  and `icon-work-ea140f 2` (copies with a " 2" suffix, likely from a file sync). Moved aside 2026-10-14 (see Start here, Gotchas).
 - Merged (PR #89). Verified against a static build (port 4410; 4400 was another session's server): Surface 0 sweep
   clean in light and dark, forced colours lose no frame, 1× / 2× sheets in `docs/research/captures/surface-2026-10-14/`.
   Open (owner): the dark soft edge is faint at 1× at Elevation 0.
