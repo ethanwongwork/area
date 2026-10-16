@@ -9,13 +9,13 @@
 > text slot, Panel/Menu ScrollArea roots, Progress `--_progress-value`, new Table
 > booleans). Those cases now test the current behavior. The four skips below became
 > `todo` cases: Menu's caller id and Composer's `inputProps.id` are fixed (now
-> ordinary tests). Three bugs remain open as `{ todo: "BUG: …" }`:
+> ordinary tests). Three were real bugs, fixed the same day (branch `claude/fix-caller-props`):
 >
-> - Composer drops `inputProps.className` (`Composer.tsx:120`).
-> - Popover with a trigger drops a caller `id` (`primitives.tsx:1188`, `Overlays.tsx:76`).
-> - Tooltip with a trigger drops a caller `id` (`primitives.tsx:1157`, `Overlays.tsx:212`).
+> - Composer dropped `inputProps.className`; the textarea now keeps its class and adds the caller's.
+> - Popover with a trigger dropped a caller `id`; `AnchoredPopover` now takes it, as `AnchoredMenu` does.
+> - Tooltip with a trigger dropped a caller `id`; `AnchoredTooltip` now takes it too.
 >
-> The 29 files now run 157 cases: 154 pass, 3 todo. The line numbers, counts and
+> The 29 files now run 157 cases, all passing. The line numbers, counts and
 > verification steps below are from the Sept 29 snapshot.
 
 Inventory snapshot of commit: `18b86465d542f620d532fee351c4f28d50c8ac3a` (`git rev-parse HEAD` before test changes).

@@ -44,8 +44,7 @@ test("Popover connects its trigger and serializes controlled/initial expanded st
   }
 });
 
-// packages/react/src/components/primitives.tsx:1188 and Overlays.tsx:76: native id in rest is overwritten by generated overlay props.
-test("Popover preserves a caller-provided surface id with a trigger", { todo: "BUG: AnchoredPopover's generated id (Overlays.tsx:76) overwrites the caller id via {...rest} {...extra} (primitives.tsx:1188)" }, () => {
+test("Popover preserves a caller-provided surface id with a trigger", () => {
   const html = renderToString(h(Popover, { id: "caller-surface", "aria-label": "Details", trigger: h("button", null, "Details") }, "Details"));
   const surface = html.match(/<div[^>]*role="dialog"[^>]*>/)[0];
   assert.match(surface, / id="caller-surface"/);

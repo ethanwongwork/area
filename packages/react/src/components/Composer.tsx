@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import type { ChangeEvent, HTMLAttributes, KeyboardEvent, ReactNode, TextareaHTMLAttributes } from "react";
-import { composerVariants, type VariantProps, MANIFESTS } from "../variants.ts";
+import { composerVariants, cx, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Button } from "./Button.tsx";
 import { Glyph } from "./Glyph.tsx";
 
@@ -117,7 +117,7 @@ export const Composer = forwardRef<HTMLTextAreaElement, ComposerProps>(function 
       {/* A fieldset disables every nested action natively when the composer is disabled (audit G-14). */}
       {layout === "inline" && leadingActions && <fieldset disabled={disabled} className="area-composer__actions area-composer__actions--leading">{leadingActions}</fieldset>}
       <label htmlFor={inputId} className="area-sr-only">{label}</label>
-      <textarea {...inputProps} id={inputId} ref={element => { inputRef.current = element; if (typeof ref === "function") ref(element); else if (ref) ref.current = element; }} className="area-composer__input" rows={layout === "inline" ? 1 : 2} value={text}
+      <textarea {...inputProps} id={inputId} ref={element => { inputRef.current = element; if (typeof ref === "function") ref(element); else if (ref) ref.current = element; }} className={cx("area-composer__input", inputProps?.className)} rows={layout === "inline" ? 1 : 2} value={text}
         onChange={change} onKeyDown={keyDown} placeholder={placeholder} disabled={disabled} maxLength={maxLength} />
       {layout === "inline" && <fieldset disabled={disabled} className="area-composer__actions area-composer__actions--trailing">
         {mode}<span className="area-composer__extras">{trailingActions}</span>

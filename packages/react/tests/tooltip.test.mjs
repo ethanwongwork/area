@@ -38,8 +38,7 @@ test("Tooltip describes its native trigger and keeps its own manual popover", ()
   assert.doesNotMatch(tooltip, /tabindex/);
 });
 
-// packages/react/src/components/primitives.tsx:1157 and Overlays.tsx:212: native id in rest is overwritten by generated overlay props.
-test("Tooltip preserves a caller-provided surface id with a trigger", { todo: "BUG: AnchoredTooltip's generated id (Overlays.tsx:212) overwrites the caller id via {...rest} {...extra} (primitives.tsx:1157)" }, () => {
+test("Tooltip preserves a caller-provided surface id with a trigger", () => {
   const html = renderToString(h(Tooltip, { id: "caller-surface", "aria-label": "Details", trigger: h("button", null, "Details") }, "Details"));
   const surface = html.match(/<div[^>]*role="tooltip"[^>]*>/)[0];
   assert.match(surface, / id="caller-surface"/);

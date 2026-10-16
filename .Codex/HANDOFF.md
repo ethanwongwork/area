@@ -13,9 +13,9 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   now belong to Claude sessions. Note: Elevation (2026-10-14) already owns every shadow by role, so the Material
   axis sits beside Surface and Elevation.
 - Astra's React server-render tests (`astra/react-tests`): 29 files folded into `packages/react/tests`, 19 stale
-  assertions updated to current intended markup. Three real bugs left as `todo` tests: Composer drops
-  `inputProps.className` (Composer.tsx:120); Popover and Tooltip with a trigger drop a caller `id`
-  (primitives.tsx:1188, 1157). React suite 451: 447 pass, 3 todo, 1 known Indicator failure.
+  assertions updated to current intended markup. They found three real bugs, fixed on `claude/fix-caller-props`:
+  Composer dropped `inputProps.className`; Popover and Tooltip with a trigger dropped a caller `id`
+  (`AnchoredPopover` / `AnchoredTooltip` now take `id`, as `AnchoredMenu` does). React suite 451, all pass.
 - Checks: tokens 24,254, typecheck, contracts 14, React suites as above.
 
 ## Gallery UI: one inset, cards, zoom, Fit groups (2026-10-15, branch `claude/gallery-ui-spacing-audit-e5e0d4`)

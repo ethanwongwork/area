@@ -60,7 +60,7 @@ test("Composer serializes empty, disabled and loading initial states", () => {
   assert.doesNotMatch(renderToString(h(Composer, { value: "Hello" })), /disabled=""/);
 });
 
-// packages/react/src/components/Composer.tsx:37 accepts native inputProps; :120 spreads them before its own id and className.
+// packages/react/src/components/Composer.tsx:37 accepts native inputProps; the textarea keeps its own class and adds the caller's.
 test("Composer preserves a native inputProps id and labels the textarea with it", () => {
   // Composer.tsx:52-53: a consumer's inputProps.id wins over the generated one (audit G-15).
   const html = renderToString(h(Composer, { inputProps: { id: "draft", className: "custom-input" } }));
@@ -69,7 +69,7 @@ test("Composer preserves a native inputProps id and labels the textarea with it"
   assert.match(html, /<label for="draft"/);
 });
 
-test("Composer merges a native inputProps className onto the textarea", { todo: "BUG: inputProps.className is overwritten by className=\"area-composer__input\" after the spread (Composer.tsx:120)" }, () => {
+test("Composer merges a native inputProps className onto the textarea", () => {
   const html = renderToString(h(Composer, { inputProps: { id: "draft", className: "custom-input" } }));
   const input = html.match(/<textarea[^>]*>/)[0];
   assert.ok(input.match(/class="([^"]+)"/)[1].split(" ").includes("custom-input"));
