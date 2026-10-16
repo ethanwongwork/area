@@ -72,8 +72,9 @@ const toggleOnClick = (setOpen: (open: boolean) => void, open: boolean) => (even
 
 /* --- Popover -------------------------------------------------------------- */
 
-export function AnchoredPopover({ trigger, open: openProp, defaultOpen, onOpenChange, side = "bottom", align = "center", offset, anchor, arrow, surface }: AnchoredProps & { arrow?: boolean; surface: (props: Div & { ref: Ref<HTMLDivElement> }) => ReactNode }) {
-  const id = useId();
+export function AnchoredPopover({ trigger, open: openProp, defaultOpen, onOpenChange, side = "bottom", align = "center", offset, anchor, arrow, id: idProp, surface }: AnchoredProps & { arrow?: boolean; /** The surface's id when the consumer sets one. */ id?: string; surface: (props: Div & { ref: Ref<HTMLDivElement> }) => ReactNode }) {
+  const generatedId = useId();
+  const id = idProp ?? generatedId;
   const [open, setOpen] = useOpenState(openProp, defaultOpen, onOpenChange);
   const [triggerNode, triggerRef] = useTriggerRef(trigger);
   const surfaceNode = useRef<HTMLDivElement | null>(null);
@@ -208,8 +209,9 @@ const within = (node: Element | null, target: EventTarget | null) => target inst
 let lastClosed = 0;
 const skipping = () => Date.now() - lastClosed < TOOLTIP_SKIP_DELAY;
 
-export function AnchoredTooltip({ trigger, open: openProp, defaultOpen, onOpenChange, side = "top", align = "center", offset, arrow, delay = TOOLTIP_DELAY, closeDelay = TOOLTIP_CLOSE_DELAY, describes = true, surface }: AnchoredProps & { arrow?: boolean; delay?: number; closeDelay?: number; /** False when the tooltip's text is already the trigger's name, so it isn't announced twice. */ describes?: boolean; surface: (props: Div & { ref: Ref<HTMLDivElement> }) => ReactNode }) {
-  const id = useId();
+export function AnchoredTooltip({ trigger, open: openProp, defaultOpen, onOpenChange, side = "top", align = "center", offset, arrow, delay = TOOLTIP_DELAY, closeDelay = TOOLTIP_CLOSE_DELAY, describes = true, id: idProp, surface }: AnchoredProps & { arrow?: boolean; /** The surface's id when the consumer sets one. */ id?: string; delay?: number; closeDelay?: number; /** False when the tooltip's text is already the trigger's name, so it isn't announced twice. */ describes?: boolean; surface: (props: Div & { ref: Ref<HTMLDivElement> }) => ReactNode }) {
+  const generatedId = useId();
+  const id = idProp ?? generatedId;
   const [open, setOpen] = useOpenState(openProp, defaultOpen, onOpenChange);
   const [triggerNode, triggerRef] = useTriggerRef(trigger);
   const surfaceNode = useRef<HTMLDivElement | null>(null);

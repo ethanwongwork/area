@@ -1157,7 +1157,7 @@ export const Tooltip = /* @__PURE__ */ forwardRef<HTMLDivElement, TooltipProps>(
     <div role="tooltip" className={tooltipVariants({ side, arrow }, className)} {...rest} {...extra} ref={node => { assignRef(ref, node); assignRef(extra.ref as never, node); }} />
   );
   if (trigger === undefined) return surface({});
-  return <AnchoredTooltip trigger={trigger} open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange} side={side} align={align} offset={offset} arrow={arrow} delay={delay} closeDelay={closeDelay} describes={describes} surface={surface} />;
+  return <AnchoredTooltip trigger={trigger} open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange} side={side} align={align} offset={offset} arrow={arrow} delay={delay} closeDelay={closeDelay} describes={describes} id={rest.id} surface={surface} />;
 });
 
 export interface PopoverProps extends Div {
@@ -1193,7 +1193,7 @@ export const Popover = /* @__PURE__ */ forwardRef<HTMLDivElement, PopoverProps>(
     </svg> : null}
   </div>;
   if (trigger === undefined) return surface({});
-  return <AnchoredPopover trigger={trigger} open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange} side={side} align={align} offset={offset} anchor={anchor} arrow={arrow} surface={surface} />;
+  return <AnchoredPopover trigger={trigger} open={open} defaultOpen={defaultOpen} onOpenChange={onOpenChange} side={side} align={align} offset={offset} anchor={anchor} arrow={arrow} id={rest.id} surface={surface} />;
 });
 export const PopoverHeader = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function PopoverHeader({ className, ...rest }, ref) { return <div ref={ref} className={cx("area-popover__header", className)} {...rest} />; });
 export interface PopoverTitleProps extends HTMLAttributes<HTMLHeadingElement> {
