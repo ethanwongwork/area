@@ -18,6 +18,7 @@
  * (src/gallery/fit.ts) still finds component specimens.
  */
 import type { CSSProperties, ReactNode } from "react";
+import { ListBoxItem } from "@area/react";
 import { APP_SCALE } from "./app-scale.ts";
 
 export type TileSpan = "unit" | "wide" | "row";
@@ -49,6 +50,11 @@ export interface TileProps {
    */
   onOpen?: () => void;
   pressable?: boolean;
+  /**
+   * The tile as an option of the ListBox around it (docs/specs/list-box.md): its value. The ListBox owns the Tab stop,
+   * the arrows and the selection; `selected` and `onSelect` are then unused.
+   */
+  option?: string;
   /** The element's id, so a view can bring the tile back into sight. */
   id?: string;
   /** Names the tile when the label alone would not ("Button: Sizes / sm"). */
@@ -78,9 +84,9 @@ export interface TileProps {
   children?: ReactNode;
 }
 
-export function Tile({ label, value, span, stage, selected, onSelect, onOpen, card, actions, openOnClick, pressable, id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, paint, scope, stageScope, inert, children }: TileProps) {
+export function Tile({ label, value, span, stage, selected, onSelect, onOpen, card, actions, openOnClick, pressable, option, id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, paint, scope, stageScope, inert, children }: TileProps) {
   // A pressable tile is a button, which holds phrasing content only: its parts are spans there.
-  const Part = pressable ? "span" : "div";
+  const Part = pressable || option !== undefined ? "span" : "div";
   const head = card ? (
     <Part className="gallery-tile__caption" {...APP_SCALE}>
       <span className="gallery-tile__title">{label}</span>
@@ -112,6 +118,10 @@ export function Tile({ label, value, span, stage, selected, onSelect, onOpen, ca
   };
   // A card reads specimen first, title at its foot.
   const parts = card ? <>{view}{head}</> : <>{head}{view}</>;
+  if (option !== undefined) {
+    const { className, ...attributes } = shared;
+    return <ListBoxItem value={option} className={className} {...attributes}>{parts}</ListBoxItem>;
+  }
   if (pressable) {
     return <button type="button" {...shared} aria-pressed={selected ?? false} onClick={onSelect}>{parts}</button>;
   }

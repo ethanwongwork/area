@@ -8,7 +8,10 @@
 
 - 2026-10-15: "merge it, then continue working" after the Copy button → the next gap in `docs/PRODUCT_UI.md`, "Open
   component gaps": roving focus for grids and lists (every icon cell was a Tab stop) and one selection semantic, and
-  a two-dimensional collection the gallery had built itself (`apps/desktop/src/grid-keys.ts`).
+  a two-dimensional collection the gallery had built itself (`apps/desktop/src/grid-keys.ts`, removed 2026-10-15).
+- 2026-10-15: "merge it, then continue working" (PR #106) → Typography and Color adopt it too. Typography showed each
+  role in both weights under one id, so both cells lit; each cell is now its own option ("<weight>:<role>"), the
+  chosen one alone lights, and the Inspector previews that weight.
 
 ## Job and boundaries
 
@@ -74,8 +77,10 @@ only (to check).
 
 - The app's Icons tab (grid view): one ListBox over the sheets (808 options, 33 groups); `CanvasSection` takes
   `role="group"` there. Before, every cell was a Tab stop with `aria-pressed`.
-- Not yet: Typography (each style shows in two weights under one id) and Color (cards from the app's Tile) still use
-  `grid-keys.ts`.
+- Typography's grid (each style an option, `<weight>:<role>`) and Color's grid (each step's card: the app's Tile takes
+  `option` and renders as a ListBoxItem). `grid-keys.ts` is gone. The app's tile and cell rules read `aria-selected`;
+  they sit in a later layer than Area's, so a tile keeps its own look, and `place-items: normal` undoes the option's
+  centring.
 
 ## Verification
 
@@ -94,3 +99,4 @@ only (to check).
 ## Feedback log
 
 - 2026-10-15 · owner: "merge it, then continue working" → List box, from PRODUCT_UI.md's open gaps.
+- 2026-10-15 · owner: "merge it, then continue working" (PR #106) → Typography and Color adopt it; the app's grid-keys.ts removed.

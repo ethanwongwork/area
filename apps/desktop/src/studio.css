@@ -293,6 +293,7 @@
     color: var(--area-fg-default);
     font: inherit;
     text-align: start;
+    place-items: normal; /* as a List box option (Color), not centred */
     scroll-margin-block: var(--_canvas-margin);
   }
   .gallery-tile[data-span="row"] { grid-template-rows: auto auto; }
@@ -312,9 +313,9 @@
   /* Scoped: the tile is a setting's own ground (Language), Primer's tinted plate. */
   .gallery-tile[data-scoped] { background: var(--area-bg-subtle); color: var(--area-fg-default); }
   /* Selected: the selection stroke drawn inside the edge, so the grid never moves. */
-  .gallery-tile:is([data-selected], [aria-pressed="true"]) { border-color: var(--area-stroke-selected); box-shadow: inset 0 0 0 var(--area-border-width) var(--area-stroke-selected); }
-  .gallery-tile:is(button, [role="button"]) { cursor: default; }
-  .gallery-tile:is(button, [role="button"]):focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  .gallery-tile:is([data-selected], [aria-pressed="true"], [aria-selected="true"]) { border-color: var(--area-stroke-selected); box-shadow: inset 0 0 0 var(--area-border-width) var(--area-stroke-selected); }
+  .gallery-tile:is(button, [role="button"], [role="option"]) { cursor: default; }
+  .gallery-tile:is(button, [role="button"], [role="option"]):focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
 
   /*
    * Hover and press (docs/MOTION.md, "Hover plate", "Press"; a linked Card's edge, surface.css):
@@ -328,8 +329,8 @@
     .gallery-tile:not([data-painted]):hover { border-color: var(--area-edge-control-hover); transition-duration: 0s; }
   }
   .gallery-tile:not([data-painted]):active { border-color: var(--area-border-hover); transition-duration: 0s; }
-  .gallery-tile:is([data-selected], [aria-pressed="true"]) { transition-duration: 0s; }
-  .gallery-tile:not([data-painted]):is([data-selected], [aria-pressed="true"]):is(:hover, :active) { border-color: var(--area-stroke-selected); }
+  .gallery-tile:is([data-selected], [aria-pressed="true"], [aria-selected="true"]) { transition-duration: 0s; }
+  .gallery-tile:not([data-painted]):is([data-selected], [aria-pressed="true"], [aria-selected="true"]):is(:hover, :active) { border-color: var(--area-stroke-selected); }
   /*
    * A painted tile's states step its one edge, as a component tile's border steps (owner,
    * 2026-10-12: a ring inside the outline read as a double stroke). The swatch hairline (10%) takes
@@ -342,7 +343,7 @@
     .gallery-tile[data-painted]:hover { outline-color: color-mix(in srgb, var(--_ink) 24%, transparent); transition-duration: 0s; } /* pick */
   }
   .gallery-tile[data-painted]:active { outline-color: color-mix(in srgb, var(--_ink) 48%, transparent); transition-duration: 0s; } /* pick */
-  .gallery-tile[data-painted]:is([data-selected], [aria-pressed="true"]) {
+  .gallery-tile[data-painted]:is([data-selected], [aria-pressed="true"], [aria-selected="true"]) {
     border-color: transparent;
     box-shadow: none;
     outline: calc(var(--area-border-width) * 2) solid var(--_ink);
@@ -462,18 +463,18 @@
   .studio-canvas__body[data-area-density="28"] .gallery-tile:is(:hover, :focus-visible, :focus-within) { z-index: 1; }
   .studio-canvas__body[data-area-density="28"] .gallery-tile:focus-visible { z-index: 2; }
   @media (hover: hover) {
-    .studio-canvas__body[data-area-density="28"] .gallery-tile:not([data-painted], [data-selected], [aria-pressed="true"]):hover {
+    .studio-canvas__body[data-area-density="28"] .gallery-tile:not([data-painted], [data-selected], [aria-pressed="true"], [aria-selected="true"]):hover {
       position: relative;
       z-index: 1;
       box-shadow: 0 0 0 var(--area-border-width) var(--area-edge-control-hover);
     }
   }
-  .studio-canvas__body[data-area-density="28"] button.gallery-tile:not([data-painted], [aria-pressed="true"]):active {
+  .studio-canvas__body[data-area-density="28"] .gallery-tile:is(button, [role="option"]):not([data-painted], [aria-pressed="true"], [aria-selected="true"]):active {
     position: relative;
     z-index: 1;
     box-shadow: 0 0 0 var(--area-border-width) var(--area-border-hover);
   }
-  .studio-canvas__body[data-area-density="28"] .gallery-tile:not([data-painted]):is([data-selected], [aria-pressed="true"]) {
+  .studio-canvas__body[data-area-density="28"] .gallery-tile:not([data-painted]):is([data-selected], [aria-pressed="true"], [aria-selected="true"]) {
     position: relative;
     z-index: 1;
     box-shadow: 0 0 0 var(--area-border-width) var(--area-stroke-selected), inset 0 0 0 var(--area-border-width) var(--area-stroke-selected);
@@ -622,6 +623,7 @@
   }
   .studio-type-cell {
     display: grid;
+    place-items: normal; /* a List box option centres its content; a type cell stacks the sample over its label */
     grid-template-rows: minmax(calc(var(--area-space-96) + var(--area-space-16)), 1fr) auto; /* pick: 112, room for Display 72 */
     gap: var(--area-space-8);
     margin: 0;
@@ -642,7 +644,7 @@
   .studio-type-cell__label > * { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   /* The row plates' pair, as the icon cells (product UI rule 3). */
   @media (hover: hover) { .studio-type-cell:hover { background: var(--area-bg-component-hover); transition-duration: 0s; } }
-  .studio-type-cell:is(:active, [aria-pressed="true"]) { background: var(--area-bg-component-active); transition-duration: 0s; }
+  .studio-type-cell:is(:active, [aria-selected="true"]) { background: var(--area-bg-component-active); transition-duration: 0s; }
   .studio-type-cell:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(var(--area-focus-width) * -1); }
 
   /* --- Icons --------------------------------------------------------------- */
