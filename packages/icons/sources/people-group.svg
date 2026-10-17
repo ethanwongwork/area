@@ -1,12 +1,12 @@
 <svg data-set="area-pilot" data-keyline="circle" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<circle data-filled="solid" data-halo="" cx="8" cy="6" r="2" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="solid" data-halo="" d="M5 13.5V13A2.5 2.5 0 0 1 7.5 10.5H8.5A2.5 2.5 0 0 1 11 13V13.5Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="line" d="M12.217 5.473A1.5 1.5 0 0 0 14 4A1.5 1.5 0 0 0 11.217 3.223" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="line" d="M10.849 8.871A2 2 0 0 1 14.5 10L14.5 11.5L13.007 11.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="line" d="M3.783 5.473A1.5 1.5 0 0 1 2 4A1.5 1.5 0 0 1 4.783 3.223" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="line" d="M5.151 8.871A2 2 0 0 0 1.5 10L1.5 11.5L2.993 11.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="fill" d="M11 4A1.5 1.5 0 1 0 14 4A1.5 1.5 0 1 0 11 4Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="fill" d="M10.5 11.5V10A2 2 0 0 1 14.5 10V11.5Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="fill" d="M5 4A1.5 1.5 0 1 1 2 4A1.5 1.5 0 1 1 5 4Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="fill" d="M5.5 11.5V10A2 2 0 0 0 1.5 10V11.5Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<circle data-filled="solid" data-halo="" cx="8" cy="6.5" r="2" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="solid" data-halo="" d="M5 14V13.5A2.5 2.5 0 0 1 7.5 11H8.5A2.5 2.5 0 0 1 11 13.5V14Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="line" d="M12.217 5.973A1.5 1.5 0 0 0 14 4.5A1.5 1.5 0 0 0 11.217 3.723" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="line" d="M10.849 9.371A2 2 0 0 1 14.5 10.5L14.5 12L13.007 12" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="line" d="M3.783 5.973A1.5 1.5 0 0 1 2 4.5A1.5 1.5 0 0 1 4.783 3.723" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="line" d="M5.151 9.371A2 2 0 0 0 1.5 10.5L1.5 12L2.993 12" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="fill" d="M11 4.5A1.5 1.5 0 1 0 14 4.5A1.5 1.5 0 1 0 11 4.5Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="fill" d="M10.5 12V10.5A2 2 0 0 1 14.5 10.5V12Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="fill" d="M5 4.5A1.5 1.5 0 1 1 2 4.5A1.5 1.5 0 1 1 5 4.5Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="fill" d="M5.5 12V10.5A2 2 0 0 0 1.5 10.5V12Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

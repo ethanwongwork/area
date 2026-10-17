@@ -319,7 +319,7 @@ vendored as references through `gen-icons.mjs`:
 | Icon | Keyline | Construction | Ink | Negative space |
 |---|---|---|---|---|
 | copy | square | front 8 × 8 r 1 at 5.5; back sheet as an L (2.5, 8 → 8.5, 2.5) ending 3 from the front | 12.1 × 12.1 | gap 1.88 |
-| document | vertical | 9 × 13 page, 45° clipped corner (9.5, 1.5 → 12.5, 4.5), lines 6.5–9.5 at y 8.5 / 11 (2026-10-16; was 11.5) | 10.1 × 14.1 | lines 1.88 from every edge. No dog-ear: its triangle counter would be about 0.6px |
+| document | vertical | 9 × 13 page, 45° clipped corner (9.5, 1.5 → 12.5, 4.5), lines 6.5–9.5 at y 9 / 11.5 (2026-10-16, evenly spaced; was 8.5 / 11.5) | 10.1 × 14.1 | lines 1.88 from every edge. No dog-ear: its triangle counter would be about 0.6px |
 | folder | horizontal | closed tab silhouette, 45° tab step (6.5, 3.5 → 8, 5) | 14.1 × 10.1 | no flap line: it would leave a 0.38px band beside the tab |
 | trash | vertical | lid 3–13 at y 4.5; handle 6.5–9.5, 3 tall; body 3.5–12.5; lines at x 6.5 / 9.5 | 11.1 × 14.1 | handle counter 1.93; lines 1.88 to lid, sides and base. The handle sits on the line positions |
 | warning | circle, `data-angles="free"` | triangle (8, 1) (14.5, 13.5) (1.5, 13.5), r 1.25 corners; ! stem 6.25–8, ⌀1.75 dot at 10.75 | 12.5 × 12.2 | stem and dot 1.3 tight to the sides and base; the triangle is lifted 0.5px so its ink box centres |
@@ -5161,3 +5161,112 @@ They move to **8.5 / 11**: 2.5 / 2.5 / 2.5, every gap 1.38 tight, x 6.5–9.5 un
 second line is now on a whole pixel, a grey double row at 1× (the trade the owner accepted for form's even lines,
 5.5 / 8 / 10.5, 2026-10-11); at 2× both lines draw alike. Lint, sliver check at 16 and 48: clean. Status kept approved
 (the package's main entry is approved-only); before / after sent to the owner.
+
+On the restored page ("Balance over 1× crispness" below: the page back on 2–14, the fold's base at 6.5) the same
+even spacing puts the lines at **9 / 11.5**: 2.5 / 2.5 / 2.5 between the fold's base, the lines and the page's
+bottom (14), x 6.5–9.5 unchanged.
+
+## Balance over 1× crispness: the frames moves restored, 2026-10-16
+
+Owner, on the document family after the 1× frames pass (the page moved up 0.5 but its lines stayed, so they sat low
+on the page; file-image's mountain cut stayed too and pushed through the page's bottom corners): "id prefer more
+even/equal spacing of the marks inside the document over the slight blur it causes. i also care more about the
+overall optical balance and size of the icons as a whole entire set/system than any blurring."
+
+**Rule.** An icon's optical centre, its size and the even spacing of its parts come before landing strokes on whole
+pixels. 1× crispness is a tie-breaker only between drawings that are equally balanced. A move or redraw made for
+crispness alone is not made.
+
+**Restored.** Measured against the drawings before the pass (each approved one by one on the review page), the pass
+had moved 208 of 276 changed icons' centre-line boxes further from 8, 8, shifted parts against each other in 79
+icons, and resized 31. Every source the frames pass changed (batches 1–2, rounds 3–4: 273 files) is back to its
+2026-10-13 drawing. Kept: the three optical outliers (qr-code, diamond, gamepad), which were redrawn for size and
+balance, and the pass's tooling and keyword changes. "Optical outliers and 1× frames" above records the pass;
+its frames sections no longer describe the sources. Sheets: `docs/research/icon-review/2026-10-16/`.
+
+**Balance pass, round 1 (2026-10-16).** Measured against Lucide and Phosphor drawing the same concepts (record and
+tools: `docs/research/icon-review/2026-10-16/`), so a small reading that every library shares (narrow, diagonal or
+pointed objects) is kept and only Area's own outliers change. Relative apparent size (1.00 = Area's median), before → after:
+
+| name | change | size |
+|---|---|---|
+| wand | the sparkle r 4.5 at 9.5, 6.5 (was r 3 at 11, 5), the stick 2, 14 → 5.5, 10.5, open 2.56: the full keyline | 0.70 → 0.83 |
+| eye-off | (round 2) the lid keeps eye's width and its corners at 5.5, its lowest point 9.5 (was 7.5), so it lies inside the open eye's outline, near its lower lid; lashes 2.75 (centre 9.5–12.5). Ink centre 9: Lucide's closed eye sits 0.67 low and Phosphor's 1.25, both so the lid stays where the open eye's lids are. Toggle sheet `7-toggle-pairs.png` | 0.77 → 0.89 |
+| lock, unlock | body 10 × 6.5 from 3, 7 (was 9 × 6), the shackle 0.5 higher; square keyline | 0.91 → 0.97 |
+| broadcast | both arc pairs ±50° (were ±45°); ±55° brought the inner pair 2.32 apart | 0.96 → 0.98 |
+| quote | the drawing ×1.25 about 8, 8, then 0.5 higher (its drops are the heavy part) | 0.76 → 0.93 |
+| scissors | rings r 2 at 4.5, 4.5 and 4.5, 11.5, blades to 13.5: 12.12 square (was 13.12); square keyline | 1.18 → 1.08 |
+| atom | orbits rx 7.176 (was 7.937): box 12.12, the ring's reading | 1.18 → 1.08 |
+
+Kept, measured: plane and pen-tool (a side view and an upright nib where the references draw diagonals), terminal
+(Area's framed console), the type letters and standalone arrows (larger than the references draw them, but at Area's
+median and set by the type family and arrow rules), list-bullet, volume-low, waypoints, gauge, mountain, unfold-horizontal
+and plug-off (within about 10%, each in a family). Open for the owner: the person family, crown and coffee are centred by
+their outline while their ink sits about 1 unit low at 16.
+
+**Balance pass, round 2 (2026-10-16): the writing tool and toggles.** Owner: "do the pencil family next … when i
+switch between eye and eye off it should be somewhat smooth". The shared writing tool (Pens and pencils, 2026-10-05:
+Lucide's pen) was 2.83 wide where Lucide's is about 3.8 at 16, so it read slim. Every pen and pencil widens ×1.25 with
+the 60° tip, the r 0.5 shoulders and its ends unchanged (`docs/research/icon-review/2026-10-16/body.py` draws the body
+from tip, half-width and end, and reproduces the old drawings exactly):
+
+| name | change |
+|---|---|
+| pencil, pencil-off | 3.54 wide (sides x + y = 13.5 / 18.5), the square end at x − y = 9 (was 10) so it stays in the keyline, band 3 from the end (x − y = 6) |
+| pen | the same body, the round end r 1.768 with its apex at x − y = 9; the clip 2.12 off the side as before |
+| compose, signature, chat-pen, person-pen, file-pen | the slim pen 2.65 wide (was 2.12), tip and end in place; the frames' overlap cuts re-solved to 2.25 (chat-pen's bubble from 5.54 and to 6.443, file-pen's page to 7.443 and from 7.057, person-pen's body to 6.438 and its shoulder ending on the line at 7.943, 10); file-pen's pen 0.35 shorter so its halo leaves no sliver against the fold |
+| pencil-sparkle | the slim pencil 2.65 wide, the sparkle 0.25 up and left (a detail 1.08 from it) |
+
+Sizes (Area median 1.00): pencil 0.68 → 0.72, pen 0.77 → 0.79, the composites unchanged within 0.02 (their frames
+set their size). The sides leave the 45° lattice (the recorded pen-axis exception), which balance outranks.
+Toggle pairs are checked overlaid (`toggle.mjs`, `7-toggle-pairs.png`): eye / eye-off, lock / unlock, pencil / pen,
+pencil / pencil-off, pencil / compose.
+
+**Balance pass, round 3 (2026-10-16): the diagonal tools.** Owner: "do the four tools next". Relative size (Area median
+1.00) before → after, with Lucide and Phosphor's mean reading of the same concept:
+
+| name | change | size | refs |
+|---|---|---|---|
+| slice | the knife 3.54 wide like the pencil (spine x + y = 15, edge x + y = 20, handle r 1.768 at 12, 5.5), the bolster at 9, 11 with its divider from 6.5, 8.5; on the grid and lattice | 0.66 → 0.70 | 0.76 |
+| broom | the head ×1.18 about the handle's join, the handle from 8.5, 7.5 (tight 1.51 to the head), the whole slid 0.25 along the handle so its ink centres (7.94, 8.07) | 0.73 → 0.80 | 0.91 |
+| wrench | ×1.07 about the centre: 12.9 square | 0.82 → 0.87 | 0.90 |
+| eyedropper | kept: it already reads as the references do | 0.81 | 0.82 |
+
+slice stays under its references because a 45° knife with a flat blade can't grow taller without leaving the
+lattice; it is the pencil's width now. Sheet: `8-tools.png`.
+
+**Balance pass, round 4 (2026-10-16): the rest of the set.** Owner: "finish the rest of the icons". The whole set
+re-measured (`measure.json`); every icon still more than 10% from the references' reading of its concept was looked at
+beside the keyline references (`bal.mjs`). Changed: **mountain** 0.5 higher (its heavy base had its ink centre 1.0 low;
+now the box sits 0.5 high, the heavy-base rule). Kept, with the reason:
+
+- **Limited by the keyline, not drawn small:** voicemail (r 2.5 loops either leave the 0.5 grid or pass the 14-wide
+  keyline), slice, the person family, crown and coffee (the person's head already sits at the top of the vertical keyline,
+  so it can't rise; its closed dome body, the owner's, carries more weight low than Lucide's open arc).
+- **Shape-driven** (the references read the same or near it): expand, collapse, maximize, minimize, list-bullet,
+  volume-low, unfold-horizontal, waypoints, gauge, plug-off, eyedropper, code-sparkle (code's outline).
+- **Concept differs from the references:** plane, pen-tool, terminal, wand (no satellite sparkles, owner), the signal
+  bars, eye-off (the closed eye, matched to eye for the toggle).
+- **Set by owner rules, at Area's median:** the type letters (cap height 2.5–13.5), standalone arrows (5 head on 12),
+  frames (ruler, password, kanban, library, diff).
+- **Small by role:** grip (the components' drag handle), corner, space, minus, breakpoint, case-lower (x-height).
+- **dismiss (owner-approved, 2026-10-16):** the standalone × is 9 (`M3.5 3.5L12.5 12.5M12.5 3.5L3.5 12.5`, was 10):
+  an X's hull is a square and a +'s a diamond, so at 10 it read about 20% larger than add; 9 is 0.82 of the +, as
+  Phosphor (Lucide 0.86). It is the close glyph every component draws (`PACKAGE_GLYPHS`): Alert, Popover, Toast, Badge,
+  Tag, Drawer, ColorPicker, FileUpload, PromptSuggestions keep their slots and only the mark is smaller
+  (`10-dismiss-components.png`, `dismiss-components.mjs`). The 3.5 × beside a shape and the 5 × in a ring are unchanged.
+
+Whole set, before the balance work → now (511 concepts all three libraries draw): within ±8% of the median 64.0% →
+64.6% (sd 0.127 → 0.124); within ±8% of the references' reading 83.2% → 84.3%, ±12% 92.6% → 93.9%. The figures move
+little because the set was already close; the changes are the visible outliers. `grid.mjs` renders the whole set
+shuffled (`9-whole-set-16.png`, `9-whole-set-24.png`), the "two random icons side by side" test.
+
+**Final visual pass (2026-10-16).** Owner: "do a final visual pass to make sure there are no stroke, negative space,
+or visual errors". Every redraw of the day at 96 (outline and filled) and 16 / 24 (`look96.mjs`, `11-final-pass.png`),
+and the whole set's checks run on today's set and on a baseline (the 13 Oct drawings with the three kept outliers):
+slivers at 16 and 48, doubled strokes (`dups.mjs`), knockout escapes, `AUDIT_ENDS`, `geometry-audit.mjs`. Today adds no
+sliver, doubled stroke, escape or end finding; the geometry audit's only new lines are 45° sides off the lattice in the
+widened pens and broom (balance outranks the lattice). Fixed in the pass: eye-off's side lashes 2.46 from the centre
+lash (a near miss of open), now from x 4.41 / 11.59. The slivers the tool lists on main and here alike (brain-off,
+bug-off, calendar-range, file-cog, file-zip, folder-cog, folder-zip, image-sparkle, person-settings, server-cog, unpin,
+smile-plus, truck) are the narrow tips of the family bites and cut-outs reviewed in earlier rounds, unchanged.

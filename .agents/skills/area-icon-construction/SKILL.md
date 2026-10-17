@@ -377,7 +377,7 @@ the lint prints every gap and counter with `--report`.
     cards behind as two shorter lines above (cards, Phosphor's cards-three);
 - marks (owner, 2026-09-26: every +, −, × and arrowhead is one of a few intentional sizes):
   - +, − standalone 11px (add, minus); beside or inside a shape 4px (person-add, zoom-in);
-  - × standalone 10px (dismiss); beside or inside a shape 3.5px (volume-off, backspace), a
+  - × standalone 9px (dismiss; 0.82 of the +, as Phosphor; 10 read 20% larger than add, 2026-10-16); beside or inside a shape 3.5px (volume-off, backspace), a
     diagonal reading larger than a 4px +; in a status ring 5px (error, the ring's glyph);
   - ✓ standalone 3.5 / 7 (check); inside a ring or shape 2 / 4 (status-available,
     shield-check); beside or on a shape 1.5 / 3, a 4.5 × 3 check, the 4px plus's partner

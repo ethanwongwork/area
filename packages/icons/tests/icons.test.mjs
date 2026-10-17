@@ -119,7 +119,7 @@ test("a 12px cut draws on the 12px grid at size 12, turned with its base; other 
   // The token line is the xs slot: both drawings, the cut shown where the slot is 12.
   const slot = html(InfoIcon, { size: 12 });
   assert.match(slot, /^<svg[^>]*viewBox="0 0 16 16" width="12" height="12"/);
-  assert.match(slot, /<g style="opacity:calc\(1 - var\(--_glyph-cut, var\(--area-type-icon-xs-cut, 1\)\)\)"><circle cx="7\.5"/);  // info's 16px drawing sits on 7.5 for 1x (2026-10-14)
+  assert.match(slot, /<g style="opacity:calc\(1 - var\(--_glyph-cut, var\(--area-type-icon-xs-cut, 1\)\)\)"><circle cx="8"/);
   assert.match(slot, /<g transform="scale\(1.333333\)" style="opacity:var\(--_glyph-cut, var\(--area-type-icon-xs-cut, 1\)\)"><circle cx="5.5"[^>]*stroke-width:calc\(var\(--area-weight-icon\) \* 0\.8786\)/);
   assert.match(html(InfoIcon, { size: 16 }), /viewBox="0 0 16 16"/);
   assert.doesNotMatch(html(InfoIcon, {}), /opacity/);
