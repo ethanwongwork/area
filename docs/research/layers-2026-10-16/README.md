@@ -108,5 +108,19 @@ The checker runs every ground × contrast, in gray and cool. Each combination mu
 
 Result: 80 of 80 pass.
 
-Run with `node docs/research/layers-2026-10-16/check.mjs`. Build the page with `node page/tuner.mjs`; it needs
-`area.css` from packages/styles/dist beside the template, plus `model.js`.
+Run with `node docs/research/layers-2026-10-16/check.mjs`.
+
+## The review page (rebuilt 2026-10-17 on the shipped scale)
+
+`node docs/research/layers-2026-10-16/page/tuner.mjs <out-dir>` after building tokens and styles. The previews are
+Area's built CSS driven by the real settings (`data-area-ground-light`, `-ground-dark`, `-layers-light`, `-layers-dark`,
+`-neutral`); the
+swatches and the matrix come from `packages/tokens/src/color/layers.ts`, checked with layers.test.ts's rules (180 of
+180 pass in each neutral). A headless check found the previews equal to the model (one value off by a rounding unit).
+Picks are saved to collection `layers`, doc `picks` (`light`, `dark`, `layers` (light), `layersDark`, `neutral`,
+`notes`).
+
+**2026-10-17, owner: "save all the layer picks for the most possible customization".** Every option stays (11 light
+grounds, 9 dark grounds, contrast 0–8), and layer contrast is now one setting per theme: `layers-light` and
+`layers-dark` (they were one `layers`). Each theme's formulas read only its own; layers.test.ts evaluates the CSS with
+the other theme's contrast set differently. The app restores a saved `layers` as both. Defaults unchanged.

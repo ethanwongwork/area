@@ -1,0 +1,166 @@
+<title>Material Scope</title>
+<link rel="stylesheet" href="area.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: the answer and the rules first, then one app screen painted two ways (scoped by the evidence, and every part
+   at full strength), then where all 94 families land, then the evidence. Chrome has its own palette; screens are Area. */
+:root {
+  --bg: #f4f4f2; --panel: #ffffff; --fg: #18181a; --muted: #66666c; --line: #e2e2df; --soft: #ececea; --accent: #2f5bd3;
+  --t-carries: #1f6feb; --t-echoes: #8250df; --t-overlay: #1a7f37; --t-chrome: #9a6700; --t-none: #6e7781;
+  --sans: "Geist", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #050505; --panel: #0e0e0f; --fg: #ececee; --muted: #8e8e94; --line: #232326; --soft: #161618; --accent: #7d9cf5;
+  --t-carries: #6ea8fe; --t-echoes: #b592f5; --t-overlay: #56d364; --t-chrome: #e3b341; --t-none: #9198a1; color-scheme: dark } }
+:root[data-theme="dark"] { --bg: #050505; --panel: #0e0e0f; --fg: #ececee; --muted: #8e8e94; --line: #232326; --soft: #161618; --accent: #7d9cf5;
+  --t-carries: #6ea8fe; --t-echoes: #b592f5; --t-overlay: #56d364; --t-chrome: #e3b341; --t-none: #9198a1; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 14px; line-height: 1.5 }
+.wrap { max-width: 1440px; margin: 0 auto; padding-inline: 16px; padding-block: 28px 64px; display: grid; gap: 20px }
+h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; margin: 0; text-wrap: balance }
+h2 { font-size: 17px; font-weight: 600; margin: 0; letter-spacing: -0.01em; text-wrap: balance }
+p { margin: 0; max-width: 84ch }
+.lede { color: var(--muted); font-size: 15px }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; display: grid; gap: 12px; min-width: 0 }
+ol.rules { margin: 0; padding-left: 20px; display: grid; gap: 8px; max-width: 96ch }
+.counts { display: flex; flex-wrap: wrap; gap: 8px }
+.count { border: 1px solid var(--line); border-radius: 999px; padding: 2px 10px; font-size: 13px }
+.count b { font-variant-numeric: tabular-nums }
+.count--carries b { color: var(--t-carries) } .count--echoes b { color: var(--t-echoes) } .count--overlay b { color: var(--t-overlay) } .count--chrome b { color: var(--t-chrome) } .count--none b { color: var(--t-none) }
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--line); border-radius: 999px; padding: 2px; gap: 2px; background: var(--panel); max-width: 100% }
+.seg button { border: 0; background: transparent; color: var(--muted); border-radius: 999px; padding: 3px 11px; font: inherit; font-size: 13px; cursor: pointer }
+.seg button:hover { color: var(--fg) }
+.seg button[aria-pressed="true"] { background: var(--fg); color: var(--bg) }
+.toolbar { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center }
+.lbl { font-size: 12px; color: var(--muted) }
+:is(.wrap button, summary):not(.app *):focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+.pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 620px), 1fr)); gap: 14px }
+.pair figure { margin: 0; display: grid; gap: 6px; min-width: 0 }
+.pair figcaption { font-size: 13px } .pair figcaption span { color: var(--muted) }
+.screen { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; min-width: 0 }
+.tier { border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px }
+.tier summary { cursor: pointer; display: flex; gap: 10px; align-items: baseline }
+.tier summary span { color: var(--muted); font-size: 12px }
+.tier--carries summary b { color: var(--t-carries) } .tier--echoes summary b { color: var(--t-echoes) } .tier--overlay summary b { color: var(--t-overlay) } .tier--chrome summary b { color: var(--t-chrome) } .tier--none summary b { color: var(--t-none) }
+.tbl { overflow-x: auto; margin-top: 8px }
+table.data { border-collapse: collapse; font-size: 13px; min-width: 720px; width: 100% }
+table.data th, table.data td { text-align: left; padding: 5px 12px 5px 0; border-bottom: 1px solid var(--line); vertical-align: top }
+table.data th { color: var(--muted); font-weight: 500; font-size: 12px }
+table.data td.n { font-family: var(--mono); font-size: 12px; white-space: nowrap }
+table.data td.ev { color: var(--muted); font-size: 12px }
+
+/* The app screen (Area components). */
+/* The window: chrome (sidebar and top bar, data-lv-chrome) sits over what is behind the window; content is opaque. */
+.app { display: grid; grid-template-columns: 170px minmax(0, 1fr); grid-template-rows: auto minmax(0, 1fr); min-width: 640px; min-height: 600px; position: relative; background: var(--area-bg-page); color: var(--area-fg-default); font-family: var(--area-font-sans); font-size: var(--area-text-md-size); line-height: var(--area-text-md-leading) }
+.screen[data-wall] .app { background:
+  radial-gradient(60% 50% at 10% 20%, color-mix(in oklab, var(--area-accent-solid) 70%, transparent), transparent 70%),
+  radial-gradient(55% 55% at 90% 10%, color-mix(in oklab, var(--area-discovery-solid) 65%, transparent), transparent 70%),
+  radial-gradient(60% 60% at 40% 100%, color-mix(in oklab, var(--area-success-solid) 50%, transparent), transparent 70%),
+  linear-gradient(160deg, color-mix(in oklab, var(--area-info-solid) 30%, var(--area-bg-page)), var(--area-bg-page)) }
+.app__side { grid-row: 1 / 3; --lv-chrome-fill: var(--area-bg-subtle); background: var(--area-bg-subtle); border-inline-end: var(--area-border-width) solid var(--area-border-decorative); padding: 12px 8px; display: grid; align-content: start; gap: 8px }
+.app__top { --lv-chrome-fill: var(--area-bg-page); background: var(--area-bg-page); border-block-end: var(--area-border-width) solid var(--area-border-decorative); padding: 10px 14px }
+.app__main { background: var(--area-bg-page) }
+.app__brand { padding: 2px 8px 6px; font-weight: 500 }
+.app__main { position: relative; padding: 14px; display: grid; gap: 12px; align-content: start; min-width: 0; grid-column: 2 }
+.app__bar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap } .app__bar .area-input { inline-size: 210px } .app__grow { flex: 1 }
+.app__grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px }
+.app__grid .area-card { inline-size: 100% }
+.app__row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; justify-content: space-between }
+.app__float { position: absolute; right: 18px; bottom: 16px; inline-size: 180px; z-index: 3 }
+.app__float .area-menu { inline-size: 100% }
+.app__toast { position: absolute; left: 14px; bottom: 14px; z-index: 3 } .app__toast .area-toast { position: static }
+.screen .area-table-wrapper { inline-size: 100% }
+
+/*LEVERS_CSS*/
+</style>
+
+<div class="wrap">
+  <header style="display:grid;gap:8px">
+    <h1>Material scope</h1>
+    <p class="lede">Which components a material reaches, and how strongly. From four platforms (Apple Liquid Glass, Fluent, Material 3), nine libraries that apply a style across all their components (daisyUI, Untitled UI, shadcn, neumorphism and glass kits) and three historic system styles (Aero, Aqua, iOS 6).</p>
+  </header>
+
+  <section class="card" aria-labelledby="rules-title">
+    <h2 id="rules-title">The rules every source agrees on</h2>
+    <ol class="rules">
+      <li><b>One hero carries it.</b> The solid, primary control takes the material at full strength. Aqua made every push button "clear except the default button"; Apple tints glass only for "primary actions"; daisyUI and Untitled UI paint solid buttons and strip ghost, link and soft ones.</li>
+      <li><b>Thumbs and ticked boxes carry too.</b> Switch and slider thumbs, the selected segment and a ticked checkbox are small raised parts. daisyUI glosses them; Apple turns them to glass while dragged.</li>
+      <li><b>Fields are recessed, never glossy.</b> Inputs, tracks and unticked boxes get an inset well (dark toward the light, a catch-light away), at about half strength. No system raises a field.</li>
+      <li><b>Selection may take a gradient; rows never do.</b> Aero's list gradient sat only on hot and selected items. Menus, nav, lists and calendars echo the material on the selected row alone.</li>
+      <li><b>Pressed flips to recessed; disabled drops it.</b> daisyUI removes the lift and moves the button down; neumorphism turns pressed buttons inset.</li>
+      <li><b>Overlays lift, and turn to glass only in glass materials.</b> Menus, popovers, dialogs, sheets and toasts take Elevation's shadow. Frost and transparency reach them only when the material is glass. Tooltips never go glass.</li>
+      <li><b>Chrome is where glass belongs.</b> Title bars, toolbars and sidebars are Apple's "functional layer" and Windows' Mica and Aero frame. Their buttons stay ghost, showing their affordance on hover.</li>
+      <li><b>Content stays plain.</b> "Don't use Liquid Glass in the content layer." Cards, tables, lists, text, code, avatars and keycaps take nothing, or only Elevation's lift.</li>
+      <li><b>Never material on material.</b> Apple, Acrylic and Mica all forbid stacking. A menu opened from glass chrome is the only glass at that spot.</li>
+      <li><b>Keep a residual bezel.</b> When styles went flat (Lion, iOS 7, Windows 8), NN/g measured about 22% more task time with weak signifiers. At its lowest, a material should still let a button read as a button.</li>
+    </ol>
+    <div class="counts" aria-label="Area's 94 families by tier"><!--COUNTS--></div>
+    <p class="status lede" style="font-size:13px">Most "echo" families echo on one part only: a field's well, or the selected row. In a typical screen the material is visible on a handful of parts.</p>
+  </section>
+
+  <section class="card" aria-labelledby="app-title">
+    <h2 id="app-title">One screen, two ways</h2>
+    <div class="toolbar">
+      <span class="lbl" id="b-label">Material</span><div class="seg" id="bundle" role="group" aria-labelledby="b-label"></div>
+      <span class="lbl" id="w-label">Behind the window</span><div class="seg" id="wall" role="group" aria-labelledby="w-label"><button type="button" data-w="page" aria-pressed="true">Page</button><button type="button" data-w="picture" aria-pressed="false">Wallpaper</button></div>
+      <span class="lbl" id="t-label">Theme</span><div class="seg" id="theme" role="group" aria-labelledby="t-label"><button type="button" data-t="light" aria-pressed="true">Light</button><button type="button" data-t="dark" aria-pressed="false">Dark</button></div>
+    </div>
+    <div class="pair">
+      <figure><figcaption><b>Scoped by the rules</b> <span>· primary full; secondary, badges, fields and selected rows at half; sidebar and top bar are chrome; content none</span></figcaption><div class="screen area-scope" data-area-theme="light" data-lv data-mode="scoped"><!--APP_SCOPED--></div></figure>
+      <figure><figcaption><b>Everywhere</b> <span>· every lever on every part group at full strength</span></figcaption><div class="screen area-scope" data-area-theme="light" data-lv data-mode="every"><!--APP_EVERY--></div></figure>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="tiers-title">
+    <h2 id="tiers-title">Where Area's 94 families land</h2>
+    <p class="lede" style="font-size:13px"><b>Carries</b>: full strength. <b>Echoes</b>: half strength, on the named part only. <b>Overlay</b>: Elevation's lift; glass only in glass materials. <b>Chrome</b>: where glass belongs; no relief on its body. <b>None</b>: nothing beyond Elevation.</p>
+    <!--TIERS-->
+  </section>
+
+  <section class="card" aria-labelledby="ev-title">
+    <h2 id="ev-title">Evidence</h2>
+    <p class="lede" style="font-size:13px">Sources, pinned commits and quotes are in the repository: <code>docs/research/astra/materials/29-scope/</code>, in <code>platforms.md</code> (Apple, Microsoft, Material 3), <code>libraries.md</code> (daisyUI, Untitled UI, shadcn, neumorphism and glass kits) and <code>history.md</code> (Aero, Aqua, iOS 6).</p>
+  </section>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const GROUPS = ["primary", "secondary", "marks", "wells", "selection", "surfaces", "overlays", "chrome"];
+const SCOPE = { primary: 1, secondary: 0.5, marks: 0.5, wells: 0.5, selection: 0.5, surfaces: 1, overlays: 1, chrome: 1 };
+const LEVERS = ["gradient", "sheen", "transparency", "frost", "stroke", "inner", "catch", "emboss", "contact"];
+const TARGETS = { gradient: ["primary"], sheen: ["primary"], transparency: ["surfaces", "overlays", "chrome"], frost: ["surfaces", "overlays", "chrome"], stroke: ["primary", "secondary", "marks"], inner: ["primary", "wells"], catch: ["primary", "wells"], emboss: ["primary"], contact: ["primary", "secondary"] };
+// The same combinations as the levers page.
+const B = {
+  Tactile: { v: { stroke: 4, inner: 4, contact: 4, grain: 3 }, g: ["stroke-solid", "stroke-lit", "stroke-neutral"] },
+  Glass: { v: { transparency: 6, frost: 6, stroke: 4, sheen: 3 }, g: ["stroke-lit"], t: { stroke: ["primary", "secondary", "surfaces", "overlays", "chrome"], sheen: ["primary", "overlays"] } },
+  Aero: { v: { gradient: 5, sheen: 6, stroke: 5, catch: 6, contact: 2 }, g: ["sheen-band", "gradient-accent", "stroke-double"], t: { catch: ["primary"] } },
+  Jelly: { v: { gradient: 4, sheen: 2, stroke: 5, catch: 6, inner: 5, contact: 2 }, g: ["stroke-solid"], t: { inner: ["wells"], catch: ["primary"] } },
+  Soft: { v: { angle: 315, emboss: 4, inner: 4, softness: 8 }, t: { inner: ["wells"] }, soft: true },
+  Glow: { v: { glow: 6, "page-glow": 5, gradient: 3, stroke: 3 }, g: ["gradient-radial", "gradient-accent", "stroke-gradient"] },
+};
+const GATES = ["gradient-radial", "gradient-accent", "gradient-centre", "gradient-away", "sheen-band", "stroke-solid", "stroke-lit", "stroke-gradient", "stroke-double", "stroke-neutral", "holds-icons", "holds-none"];
+let bundle = "Tactile", theme = "light", wall = "page";
+function apply() {
+  const b = B[bundle];
+  document.querySelectorAll(".screen").forEach(el => {
+    const every = el.dataset.mode === "every";
+    el.setAttribute("data-area-theme", theme);
+    el.toggleAttribute("data-wall", wall === "picture");
+    for (const k of [...LEVERS, "angle", "softness", "glow", "grain", "page-glow"]) el.style.setProperty("--lv-" + k, k === "angle" ? (b.v.angle || 0) + "deg" : String(b.v[k] || 0));
+    for (const g of GATES) el.style.setProperty("--lv-" + g, (b.g || []).includes(g) ? "1" : "0");
+    for (const l of LEVERS) for (const r of GROUPS) el.style.setProperty(`--lv-${l}-${r}`, every || ((b.t && b.t[l]) || TARGETS[l]).includes(r) ? "1" : "0");
+    for (const r of GROUPS) el.style.setProperty("--lv-scope-" + r, every ? "1" : String(SCOPE[r]));
+    for (const [a, v] of [["data-area-ground-light", "95"], ["data-area-layers-light", "0"], ["data-area-ground-dark", "24"], ["data-area-layers-dark", "0"]]) b.soft ? el.setAttribute(a, v) : el.removeAttribute(a);
+  });
+  document.querySelectorAll("#bundle button").forEach(x => x.setAttribute("aria-pressed", String(x.dataset.b === bundle)));
+  document.querySelectorAll("#theme button").forEach(x => x.setAttribute("aria-pressed", String(x.dataset.t === theme)));
+  document.querySelectorAll("#wall button").forEach(x => x.setAttribute("aria-pressed", String(x.dataset.w === wall)));
+}
+$("bundle").innerHTML = Object.keys(B).map(n => `<button type="button" data-b="${n}">${n}</button>`).join("");
+$("bundle").querySelectorAll("button").forEach(x => x.addEventListener("click", () => { bundle = x.dataset.b; apply(); }));
+$("theme").querySelectorAll("button").forEach(x => x.addEventListener("click", () => { theme = x.dataset.t; apply(); }));
+$("wall").querySelectorAll("button").forEach(x => x.addEventListener("click", () => { wall = x.dataset.w; apply(); }));
+apply();
+</script>

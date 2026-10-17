@@ -10,12 +10,14 @@ The registry in `packages/tokens/src/axes/registry.ts` defines fourteen axes:
 - `theme`: light or dark color polarity.
 - `neutral`: neutral, cool or warm neutral colors.
 - `accent`: configurable chromatic accent; blue is the default (owner, 2026-09-29; was indigo). The focus ring follows it.
-- `ground-light`, `ground-dark` and `layers` (the Layers, `axes/layers.ts` and `color/layers.ts`, owner 2026-10-16;
+- `ground-light`, `ground-dark`, `layers-light` and `layers-dark` (the Layers, `axes/layers.ts` and `color/layers.ts`, owner 2026-10-16;
   [research](research/layers-2026-10-16/README.md)):
   - `ground-light` is the light page's OKLCH lightness: `100` (White, default) to `90`, in 1% steps.
   - `ground-dark` is the dark page's: `0` (Black), `8` (Default, #020202), then `12` to `24` in 2% steps.
-  - `layers` is layer contrast, `0` (Flat) to `8`, `4` by default. It sets how far raised layers (cards, menus,
-    dialogs) and recessed ones (sidebars, wells) sit from the page, and how far a control's fill sits from its ground.
+  - `layers-light` and `layers-dark` are layer contrast in each theme, `0` (Flat) to `8`, `4` by default. They set how
+    far raised layers (cards, menus, dialogs) and recessed ones (sidebars, wells) sit from the page, and how far a
+    control's fill sits from its ground. One `layers` setting covered both until 2026-10-17 (owner: "the most possible
+    customization"); the app restores a saved one as both.
 
   `emit/base.ts` derives, live and tinted by the Neutral setting's own hue and chroma:
   - `bg-page`, `bg-surface`, `bg-subtle`, `bg-stripe` and `bg-code`;
