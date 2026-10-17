@@ -335,6 +335,97 @@ export const COMPONENT_PAGES = [
     ],
   },
   {
+    slug: "reference-list", name: "Reference list", exportName: "ReferenceList", manifest: "referenceList",
+    imports: "ReferenceList, ReferenceListItem, Citation",
+    api: [
+      ["ink", "Link's inks", "blue"],
+      ["columns", "boolean (27em columns)", "false"],
+      ["ReferenceListItem id / backlinks / highlighted", "string / string[] (the footnotes' ids) / boolean", "— / [] / false"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "Wikipedia's notes: numbered, each led by ↑ (or ↑ a b c) back to where it is cited.", demo: "GalleryReferenceList" },
+      { id: "footnotes", title: "With footnotes", note: "A footnote links to its note's id; the note's backlinks list the footnotes' ids.", demo: "GalleryReferenceListWithFootnotes" },
+    ],
+  },
+  {
+    slug: "table-of-contents", name: "Table of contents", exportName: "TableOfContents", manifest: "tableOfContents",
+    imports: "TableOfContents",
+    api: [
+      ["items", "{ id, label, children? }[] (the headings' ids)", "—"],
+      ["title / top", "ReactNode | false / { label, id }", "\"Contents\" / —"],
+      ["collapse", "boolean (subsections only for the section being read)", "false"],
+      ["offset", "number (a sticky header's height)", "0"],
+      ["current / onCurrentChange", "string (controlled) / (id) => void", "follows the scroll"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "Nav's marker rows: the section being read in the body ink with the rail.", demo: "GalleryTableOfContents" },
+      { id: "scroll", title: "Follows the scroll", note: "Scroll the article and the section being read is marked.", demo: "GalleryTableOfContentsScroll" },
+    ],
+  },
+  {
+    slug: "figure", name: "Figure", exportName: "Figure", manifest: "figure",
+    imports: "Figure",
+    api: [
+      ["frame", "plain | framed", "plain"],
+      ["align", "none | start | end (floated beside the text)", "none"],
+      ["caption", "ReactNode (wraps to the media's width)", "—"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "The image and a muted caption under it.", demo: "GalleryFigure" },
+      { id: "framed", title: "Framed", note: "Wikipedia's thumbnail, in Card's paint.", demo: "GalleryFigureFramed" },
+    ],
+  },
+  {
+    slug: "infobox", name: "Infobox", exportName: "Infobox", manifest: "infobox",
+    imports: "Infobox, InfoboxSection, InfoboxRow, InfoboxRows",
+    api: [
+      ["title / subtitle", "ReactNode", "—"],
+      ["media / caption", "ReactNode", "—"],
+      ["align", "none | start | end", "none"],
+      ["InfoboxSection title; InfoboxRow label", "ReactNode", "—"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "Wikipedia's infobox in Card's paint, labels in the muted term ink.", demo: "GalleryInfobox" },
+    ],
+  },
+  {
+    slug: "inline-list", name: "Inline list", exportName: "InlineList", manifest: "inlineList",
+    imports: "InlineList",
+    api: [["separator", "dot | bar | comma", "dot"]],
+    examples: [
+      { id: "default", title: "Default", note: "Wikipedia's hlist: a bold middle dot after every item but the last.", demo: "GalleryInlineList" },
+    ],
+  },
+  {
+    slug: "abbreviation", name: "Abbreviation", exportName: "Abbreviation", manifest: "abbreviation",
+    imports: "Abbreviation",
+    api: [["title", "string (what it stands for, shown in a Tooltip)", "—"]],
+    examples: [
+      { id: "default", title: "Default", note: "A dotted underline; the expansion shows on hover and on focus.", demo: "GalleryAbbreviation" },
+    ],
+  },
+  {
+    slug: "hatnote", name: "Hatnote", exportName: "Hatnote", manifest: "hatnote",
+    imports: "Hatnote, Link",
+    api: [["div props", "a note (role=note)", "—"]],
+    examples: [
+      { id: "default", title: "Default", note: "Italic, muted, 1.6em in, at the top of an article.", demo: "GalleryHatnote" },
+    ],
+  },
+  {
+    slug: "navbox", name: "Navbox", exportName: "Navbox", manifest: "navbox",
+    imports: "Navbox, NavboxGroup, InlineList, Link",
+    api: [
+      ["title", "ReactNode", "—"],
+      ["expanded / defaultExpanded / onExpandedChange", "boolean", "— / true / —"],
+      ["hideLabel / showLabel", "string", "\"Hide\" / \"Show\""],
+      ["NavboxGroup label", "ReactNode (omit for a full-width row)", "—"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "Wikipedia's navbox: groups of related links, every other row striped.", demo: "GalleryNavbox" },
+    ],
+  },
+  {
     slug: "date-range-picker", name: "Date range picker", exportName: "DateRangePicker", manifest: "dateRangePicker",
     imports: "DateRangePicker",
     api: [

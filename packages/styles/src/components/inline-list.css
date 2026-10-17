@@ -1,0 +1,29 @@
+/* ---------------------------------------------------------------------------
+ * Inline list
+ *
+ * Short items run along a line with a separator between them (docs/specs/inline-list.md): Wikipedia's
+ * hlist (navboxes, categories, infobox values), " · " in bold after every item but the last (measured
+ * 2026-10-17). The separator stays with the item before it, so a line never starts with one.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-inline-list {
+    --_separator: "\a0·\20";
+    display: inline;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .area-inline-list__item { display: inline; }
+  .area-inline-list__item:not(:last-child)::after {
+    content: var(--_separator);
+    /* spec: Wikipedia's bold middle dot; Area's muted ink, so the items lead. */
+    color: var(--area-fg-muted);
+    font-weight: var(--area-weight-strong);
+    white-space: pre;
+  }
+  .area-inline-list--dot {}
+  .area-inline-list--bar { --_separator: "\a0|\20"; }
+  .area-inline-list--bar > .area-inline-list__item:not(:last-child)::after { font-weight: var(--area-weight-regular); }
+  .area-inline-list--comma { --_separator: ",\20"; }
+  .area-inline-list--comma > .area-inline-list__item:not(:last-child)::after { color: inherit; font-weight: inherit; }
+}

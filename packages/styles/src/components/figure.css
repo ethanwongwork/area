@@ -1,0 +1,59 @@
+/* ---------------------------------------------------------------------------
+ * Figure
+ *
+ * Media with its caption (docs/specs/figure.md). Wikipedia's thumbnail (measured 2026-10-17): a table
+ * whose caption wraps to the image's width (Area: a column as wide as its media), the image 3 inside a #f8f9fa frame with a #c8ccd1 hairline,
+ * the caption at 0.884em, 6 in at its sides and foot; floated to the end 1.4em from the text. `plain` is
+ * the image alone with a muted caption under it (content-first, as Notion's image blocks); `framed` is
+ * Wikipedia's thumbnail in Area's card paint.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-figure {
+    --_frame-pad: 0px;
+    /* As wide as its media: the caption adds no width of its own (contain), so it wraps to the media's width, as
+       Wikipedia's (a table there). */
+    display: flex;
+    flex-direction: column;
+    inline-size: fit-content;
+    max-inline-size: 100%;
+    margin: 0;
+    box-sizing: border-box;
+  }
+  .area-figure__media { display: block; }
+  .area-figure__media > :is(img, video, svg, picture, canvas) {
+    display: block;
+    max-inline-size: 100%;
+    block-size: auto;
+    border-radius: var(--_media-radius, var(--area-radius-small));
+  }
+  .area-figure__caption {
+    contain: inline-size;
+    /* spec: Area's small text, a step under body (Wikipedia 0.884em). */
+    padding-block-start: var(--area-space-8);
+    color: var(--area-fg-muted);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
+    text-align: start;
+  }
+
+  .area-figure--plain {}
+  /* Framed: Wikipedia's thumbnail frame in Card's paint (the surface, its edge, the container corner, the resting
+     shadow), the caption inside it. */
+  .area-figure--framed {
+    --_frame-pad: var(--area-space-4); /* spec: Wikipedia's image 3 in, plus its 1 hairline */
+    --_media-radius: max(0px, calc(var(--area-radius-container) - var(--_frame-pad)));
+    padding: var(--_frame-pad);
+    background-color: var(--area-bg-surface);
+    border: var(--area-border-width) solid var(--area-border-card);
+    border-radius: var(--area-radius-container);
+    box-shadow: var(--area-shadow-resting);
+  }
+  /* spec: Wikipedia 6 at the caption's sides and foot, the frame's own ink. */
+  .area-figure--framed > .area-figure__caption { padding: var(--area-space-6) var(--area-space-4) var(--area-space-2); color: var(--area-fg-default); }
+
+  /* Align: beside the text. spec: Wikipedia floats a thumbnail to the end, 1.4em from the text and 1.3em
+     above what follows; Area's 24 and 16. */
+  .area-figure--none {}
+  .area-figure--end { float: inline-end; clear: inline-end; margin: var(--area-space-4) 0 var(--area-space-16) var(--area-space-24); }
+  .area-figure--start { float: inline-start; clear: inline-start; margin: var(--area-space-4) var(--area-space-24) var(--area-space-16) 0; }
+}

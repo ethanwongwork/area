@@ -5,6 +5,17 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Wikipedia: links, footnotes and article families (2026-10-17, branch `claude/wikipedia-links`, uncommitted)
+
+Owner: Wikipedia's "Systems[13]" ("i like the way the links and small numbers are styled", no hover-only underline,
+links in blue, text, gray or other colours); then "build whatever you recommend".
+- Link inks: purple, pink, green, red, orange, brown (each hue's readable text ink); Citation `variant="footnote"` ([13]).
+- New families, all In review (`REVIEW_COMPONENTS`, batch "Articles"): Reference list, Table of contents, Figure,
+  Infobox, Inline list, Abbreviation, Hatnote, Navbox. Specs in `docs/specs/`; tests `packages/react/tests/articles.test.mjs`.
+- Area's type has no italic (Geist upright, `font-synthesis: none`): Hatnote is muted instead of italic.
+- Checked: sweep text contrast at four Layers settings (0 findings), React 477/477, contracts, typecheck, styles build.
+- Open: owner review; Notion's TOC and image caption not measured; no manual TOC section toggle.
+
 ## Interaction polish (2026-10-16, branch `claude/component-polish-feel-7ac52a`, uncommitted)
 
 Owner: components don't feel polished when clicking and hovering; then "fix the underline on the link component".
