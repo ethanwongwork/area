@@ -197,6 +197,14 @@ Open questions:
 - **Why:** You agreed to fix it in Menu itself (Zoom control, question 2): a plain row's shortcut sat at the row's end,
   a check's width right of the check rows' shortcuts, and Figma keeps every shortcut in one column.
 
+## Review note, 2026-10-17 (round 31)
+
+- **What changed:** the red of a danger item ("Delete") is a little deeper in light, and a little lighter on the
+  lightest dark grounds, so it stays readable when the row is hovered or pressed. It holds the same red in every state.
+- **Why:** the red was solved for the plain menu, not its row fills. On the pressed row it fell to 3.97:1 even at the
+  default settings, and to 3.2:1 at dark 24 + 8 (the hover and pressed sweep). Look at a danger item while pressing it,
+  at **Default** and **Lightest dark**.
+
 ## Feedback log
 
 - 2026-09-26 · owner: "build the next component" → Menu evidence pass: label column 36,
@@ -243,3 +251,4 @@ Open questions:
   appropriately they seem too wide") → the 224 floor is now `var(--area-menu-min-inline-size, 224)`
   on Menu, Select's picker, Custom select, Combobox and Tag picker; the default is unchanged, and a
   list anchored to a field stays at least the field's width. The desktop app sets 128.
+- 2026-10-17 · owner: "go with your recs" (after round 30), the hover and pressed sweep (docs/research/layers-2026-10-16/sweep/states.mjs) → a danger item's red is solved for the row's pressed fill, the deepest it sits on: in light it darkens beyond the page's own darken by what the raised pressed fill needs (`--_danger-darken`, from `layer-light-raised-fill-2` and the vivid bound, 0.063 at the defaults), in dark it lifts past a raised pressed fill of L 0.396, 6.1× the excess (`--_danger-lift`, fitted over every accent and neutral; 0 up to the defaults). The same red at rest, so the ink stays fixed across states. Was 4.15:1 hovered and 3.97:1 pressed at the defaults, 3.2:1 pressed at dark 24 + 8.

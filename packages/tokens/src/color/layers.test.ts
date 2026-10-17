@@ -19,8 +19,8 @@ const MIN = { light: { fill: 0.017, hover: 0.009, selected: 0.035, frame: 0.03 }
 const casts = NEUTRAL_SCALES.map(spec => ({ id: spec.id, cast: castOf(scaleFor(spec.id, "light").steps.find(s => s.level === 50)!.hex, scaleFor(spec.id, "dark").steps.find(s => s.level === 900)!.hex) }));
 
 /** base.ts `bg-mark` composited over a ground: 6% black in light, 10% white in dark. */
-function markOver(theme: "light" | "dark", hex: string): string {
-  const over = (c: number) => theme === "light" ? c * 0.94 : c * 0.9 + 0.1;
+function markOver(theme: "light" | "dark", hex: string, keep = theme === "light" ? 0.94 : 0.9): string {
+  const over = (c: number) => theme === "light" ? c * keep : c * keep + (1 - keep);
   return toHex(parseHex(hex).map(over) as Rgb);
 }
 /** Mix toward black (d > 0) or white in OKLab, as CSS color-mix(in oklab, …) does. */
@@ -46,6 +46,8 @@ describe("layers: every combination is usable", () => {
           if (wcagContrastHex(muted, hx(bg)) < 4.5) problems.push(`${at}: muted on ${what}`);
         // Soft Badge and Count: muted on the soft-mark plate (base.ts bg-mark) laid over the ground.
         if (wcagContrastHex(muted, markOver(theme, hx(ground))) < 4.5) problems.push(`${at}: muted on a mark on ${name}`);
+        // An interactive soft Badge under the pointer (bg-mark-hover, 10.7% black) on the page and on layers.
+        if (theme === "light" && name !== "recessed" && wcagContrastHex(muted, markOver(theme, hx(ground), 0.893)) < 4.5) problems.push(`${at}: muted on a hovered mark on ${name}`);
         if (wcagContrastHex(body, hx(selected)) < 4.5) problems.push(`${at}: body on ${name} selected`);
         for (const bg of [ground, rest]) if (wcagContrastHex(edge, hx(bg)) < 3) problems.push(`${at}: control edge on ${name}`);
         if (Math.abs(rest - ground) < mm.fill) problems.push(`${at}: ${name} field`);

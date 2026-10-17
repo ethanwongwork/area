@@ -27,7 +27,7 @@ export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-09-28 (batch 15: group gap 6 / 8; slider was already approved).
   'badge-group',
   // Approved 2026-09-28 (batches 17-19; dialog, tooltip and composer were already approved).
-  'hover-card', 'message', 'prompt-suggestions',
+  'message', 'prompt-suggestions', // hover-card: reopened 2026-10-17 (round 31).
   // Approved 2026-09-28 (batch 16 again after the 16 column; batch 20).
   'model-picker', 'scroll-to-latest',
   // Approved 2026-09-28 (batch 22: lighter ground, brighter syntax; code and separator were already approved).
@@ -55,7 +55,7 @@ export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-10-10 on the review page, round 6 (components6), after the round-5 rethink. toggle-group: reopened
   // 2026-10-16 (Layers sweep, round 30).
   // Approved 2026-10-11 on the review page, round 7 (components7); Menu after its shortcut-column change.
-  'meter', 'shortcut-list', 'date-range-picker', 'zoom-control', 'menu',
+  'meter', 'shortcut-list', 'date-range-picker', 'zoom-control', // menu: reopened 2026-10-17 (round 31).
   // Approved 2026-10-11 on the review page, round 8 (components8).
   'citation', 'search-field',
   // Approved 2026-10-12 on the review page, round 9 (components9); badge and board reopened by the consistency pass.
@@ -88,11 +88,14 @@ export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-10-16 on the review page, round 28 (components28).
   'badge', 'card',
   // Approved 2026-10-16 on the review page, round 29 (components29).
-  'nav', 'titlebar', ]);
+  'nav', 'titlebar',
+  // Approved 2026-10-17 on the review page, round 30 (components30), after the Layers sweep; board needs changes.
+  'segmented', 'toggle-group', 'code-block', 'box-model', 'tag', 'tag-picker', ]);
 
 /** Built/refined and awaiting owner approval; not completion. */
-// Reopened 2026-10-16 after the Layers sweep (docs/research/layers-2026-10-16/sweep/): round 30 (components30).
-export const REVIEW_COMPONENTS = new Set(['segmented', 'toggle-group', 'code-block', 'box-model', 'tag', 'tag-picker', 'board']);
+// Round 31 (components31): Board's card actions reworked after round 30 ("cardactions need to be fixed"); Menu's danger
+// ink and Hover card's example links from the hover and pressed sweep.
+export const REVIEW_COMPONENTS = new Set(['board', 'menu', 'hover-card']);
 export const componentStatus = slug => COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
 export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined' })[status];
 

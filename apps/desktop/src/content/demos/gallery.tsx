@@ -1,7 +1,7 @@
 /** Real, compact specimens for the component gallery. Framing never rescales controls. */
 import { useEffect, useId, useRef, useState } from "react";
 import type { CSSProperties, ReactNode, MouseEvent } from "react";
-import { Alert, AlignmentPicker, AREA_COLOR_GRID, Avatar, AvatarGroup, Badge, BoxField, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, ButtonGroup, Calendar, Card, CardContent, CardMedia, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Code, CodeBlock, ColorField, ColorPicker, ColorSwatch, ColorSwatchPicker, Combobox, CommandPalette, Composer, ContextMenu, Count, Dialog, Field, HoverCard, Indicator, IndicatorAnchor, Input, InputAction, InputGroup, InputGroupText, Kbd, KbdGroup, Menu, MenuItem, MenuLabel, MenuSeparator, MenuSub, Message, MessageActions, ModelPicker, Nav, NavGroup, NavItem, NumberField, Panel, PanelRow, PanelSection, PasswordField, Popover, PopoverBody, PopoverClose, PopoverDescription, PopoverFooter, PopoverHeader, PopoverMedia, PopoverTitle, Progress, PromptSuggestions, PropertyList, PropertyListItem, Radio, RadioGroup, ScrollToLatest, Segmented, Select, Separator, Skeleton, Slider, SliderRange, Spinner, SplitButton, Switch, Table, TableCell, TableHeaderCell, Tabs, Textarea, Toast, Toaster, Toolbar, ToolbarGroup, ToolbarItem, ToolbarOverflow, ToolbarSeparator, Tooltip, TreeView, type AlignmentPosition, type BoxValue, type ComboboxOption, type CommandItem, type TreeViewNode, useToaster } from "@area/react";
+import { Alert, AlignmentPicker, AREA_COLOR_GRID, Avatar, AvatarGroup, Badge, BoxField, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, ButtonGroup, Calendar, Card, CardContent, CardMedia, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Code, CodeBlock, ColorField, ColorPicker, ColorSwatch, ColorSwatchPicker, Combobox, CommandPalette, Composer, ContextMenu, Count, Dialog, Field, HoverCard, Indicator, IndicatorAnchor, Input, InputAction, InputGroup, InputGroupText, Kbd, KbdGroup, Link, Menu, MenuItem, MenuLabel, MenuSeparator, MenuSub, Message, MessageActions, ModelPicker, Nav, NavGroup, NavItem, NumberField, Panel, PanelRow, PanelSection, PasswordField, Popover, PopoverBody, PopoverClose, PopoverDescription, PopoverFooter, PopoverHeader, PopoverMedia, PopoverTitle, Progress, PromptSuggestions, PropertyList, PropertyListItem, Radio, RadioGroup, ScrollToLatest, Segmented, Select, Separator, Skeleton, Slider, SliderRange, Spinner, SplitButton, Switch, Table, TableCell, TableHeaderCell, Tabs, Textarea, Toast, Toaster, Toolbar, ToolbarGroup, ToolbarItem, ToolbarOverflow, ToolbarSeparator, Tooltip, TreeView, type AlignmentPosition, type BoxValue, type ComboboxOption, type CommandItem, type TreeViewNode, useToaster } from "@area/react";
 import { AddIcon, AlignBottomIcon, AlignCenterIcon, AlignLeftIcon, AlignMiddleIcon, AlignRightIcon, AlignTopIcon, AngleIcon, ArrowDownIcon, ArrowUpIcon, AspectRatioIcon, AutoLayoutIcon, BoldIcon, CalendarIcon, ChatIcon, CheckIcon, ChevronDownIcon, CodeIcon, CopyIcon, CornerIcon, CornersIcon, DismissIcon, DocumentIcon, DotsFourIcon, EyeIcon, EyeOffIcon, FlipIcon, FlipVerticalIcon, FlowFreeIcon, FlowIcon, FlowVerticalIcon, FlowWrapIcon, FolderFilledIcon, FolderIcon, FrameIcon, GridIcon, InfoIcon, ItalicIcon, KanbanIcon, LayersIcon, LinkIcon, ListIcon, MenuIcon, MoreHorizontalIcon, OpacityIcon, OpenIcon, PaintbrushIcon, PaletteIcon, PanelLeftIcon, PencilIcon, PenToolIcon, PersonIcon, PlayIcon, PointerIcon, RectangleIcon, RefreshIcon, RotateIcon, SearchIcon, SettingsIcon, SlidersIcon, StrikethroughIcon, SubtractIcon, SunIcon, TextAlignCenterIcon, TextAlignLeftIcon, TextAlignRightIcon, TextIcon, ThumbsDownIcon, ThumbsUpIcon, TokenIcon, TrashIcon, UnderlineIcon, VolumeIcon, WarningIcon } from "@area/icons";
 // @ts-expect-error — the docs' own highlighter is authored in JavaScript.
 import { highlight } from "../highlight.mjs";
@@ -1054,22 +1054,22 @@ const personCard = <>
 /* A div, not a p: the card holds blocks, and an HTML parser closes a <p> at the first block,
    so server HTML inside a paragraph would not match the React tree it hydrates. */
 export const GalleryHoverCard = () => (
-  <div>Reviewed by <HoverCard trigger={<a href="#david">@david</a>}>{personCard}</HoverCard> yesterday.</div>
+  <div>Reviewed by <HoverCard trigger={<Link href="#david">@david</Link>}>{personCard}</HoverCard> yesterday.</div>
 );
 export const GalleryHoverCardPage = () => (
-  <div>Body text <HoverCard trigger={<a href="#title">Title</a>}>
+  <div>Body text <HoverCard trigger={<Link href="#title">Title</Link>}>
     <div><PopoverTitle level={false}>Title</PopoverTitle><PopoverDescription>Description</PopoverDescription></div>
     <div className="area-hover-card__meta"><span><DocumentIcon />Label</span><span>Value</span></div>
   </HoverCard> body text.</div>
 );
 export const GalleryHoverCardSource = () => (
-  <div>Area measures every value<HoverCard trigger={<a href="#source" aria-label="Source: component adaptation">¹</a>}>
+  <div>Area measures every value<HoverCard trigger={<Link href="#source" aria-label="Source: component adaptation">¹</Link>}>
     <div><PopoverTitle level={false}>Component adaptation</PopoverTitle><PopoverDescription>Every visible value traces to a capture or a pinned source line recorded in the spec.</PopoverDescription></div>
     <div className="area-hover-card__meta"><span><LinkIcon />docs/COMPONENT_ADAPTATION.md</span></div>
   </HoverCard>.</div>
 );
 export const GalleryHoverCardTop = () => (
-  <div>Owned by <HoverCard side="top" trigger={<a href="#david-top">@david</a>}>{personCard}</HoverCard></div>
+  <div>Owned by <HoverCard side="top" trigger={<Link href="#david-top">@david</Link>}>{personCard}</HoverCard></div>
 );
 
 /*

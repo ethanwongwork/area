@@ -94,8 +94,16 @@ Crispness: resting card on whole pixels (570, 689, 320 × 132; `overlay.ts` roun
 Open questions: a warm-up window as Tooltip's (a second hover card within ~300 ms opens at
 once) for lists of mentions. Recommendation: not yet; no reference product does it for cards.
 
+## Review note, 2026-10-17 (round 31)
+
+- **What changed:** the examples' trigger links are Area's Link: the body ink with an underline, instead of the
+  browser's blue, and no longer red while pressed.
+- **Why:** the hover and pressed sweep found the raw links turning the browser's default red when pressed (4:1 on
+  white, 2.97:1 on a gray page). The examples should be built from Area anyway.
+
 ## Feedback log
 
 - 2026-10-01 · audit E-18 (owner pick A) → hover intent shared with Tooltip (`useHoverIntent`): keyboard focus opens at once (was after 700ms), blur closes at once, one consuming capture-phase Escape; mouse and pen open after the delay, touch never → overlay.ts:108-145, HoverCard.tsx:46-74.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → HoverCard is shown before it is placed (layout effect, Popover's order), so the enter scales from the link at its final place; delays 700 / 300 kept; exit now fast via the shared rule. HoverCard.tsx, hover-card.css comment.
 - 2026-10-15 · PRODUCT_UI.md open gap ("Hover card that opens on pointer only, not on every arrow-key focus in a sheet"), owner: "merge it, then continue working" → `openOnFocus` (default `true`, so the E-18 rule stands): off, keyboard focus no longer opens the card and the pointer still does. The app's icon cells turn it off: the List box's arrows sweep 808 icons, each focus opened a card at once, and the Inspector shows the same name and actions for the focused icon. Radix opens on focus after its 700 ms (`@radix-ui/react-hover-card@1.1.14` index.mjs:44-47, 91); Area keeps at once.
+- 2026-10-17 · owner: "go with your recs" (after round 30), the hover and pressed sweep → the gallery examples' triggers are `Link` (the body ink, underlined) instead of raw `<a>`, which showed the browser's blue and, while pressed, its red (4:1 on white, 2.97:1 at light 90). The component is unchanged.

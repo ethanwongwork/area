@@ -16,13 +16,20 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
 - dismiss × is 9 (owner-approved; every component's close mark ~10% smaller). Final pass: no new sliver, doubled
   stroke or escape (spec "Final visual pass"). React 466/466, typecheck, build. Not checked: the Electron app by eye.
 
-## Start here (2026-10-16, later: session `project-status-components-16382f`, uncommitted in that worktree)
+## Start here (2026-10-17, session `project-status-components-16382f`)
 
 **Waiting on the owner:**
-- Round 30 on the review page https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG (collection `components30`): Segmented,
-  Toggle group, Code block, Box model, Tag, Tag picker and Board are In review.
-- The page's new **Layers** switch (Default / Gray page / Lightest dark) shows each change where it applies.
-- Record approvals in `component-status.mjs`.
+- Round 31 on the review page https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG (collection `components31`):
+  - **Board:** card actions take Nav's row-action rule, with no white box.
+  - **Menu:** the danger red holds on hovered and pressed rows.
+  - **Hover card:** the examples use Link.
+- Round 30 approved six. The first sweep merged as PR #117.
+
+**Since PR #117 (uncommitted):**
+- The hover and pressed sweep (`sweep/states.mjs`; README "Hover and pressed").
+- Muted text is also solved on the hovered soft mark, so it is slightly darker on gray pages only.
+- In dark, `edge-control-hover` steps to `border`: outline fields showed no hover there.
+- Review diff: a "light focused" mode, so actions shown on hover or focus count as changes.
 
 **Done:**
 - A sweep of every family at 18 Layers settings (headless Edge against the static build), then fixes. The re-runnable
