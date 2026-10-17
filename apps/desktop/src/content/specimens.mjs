@@ -167,7 +167,7 @@ function gallerySpecimenTable() {
     "hover-card": [
       { id: "person", title: "Person", demo: "GalleryHoverCard" },
       { id: "page", title: "Page", demo: "GalleryHoverCardPage" },
-      { id: "source", title: "Source", demo: "GalleryHoverCardSource" },
+      { id: "source", title: "Web link", demo: "GalleryHoverCardSource" },
       { id: "side-top", title: "Side / top", demo: "GalleryHoverCardTop" },
     ],
     "context-menu": [

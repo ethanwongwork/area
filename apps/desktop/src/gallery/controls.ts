@@ -7,7 +7,7 @@
  */
 import { AXIS_PRESETS, DEFAULT_AXES, DEFAULT_PILLS, PILL_SHAPES } from "@area/tokens/config";
 export interface GalleryControl {
-  axis: "theme" | "neutral" | "accent" | "ground-light" | "ground-dark" | "layers" | "action" | "selection" | "contrast" | "type" | "density" | "radius" | "pills" | "surface" | "elevation" | "motion";
+  axis: "theme" | "neutral" | "accent" | "ground-light" | "ground-dark" | "layers-light" | "layers-dark" | "action" | "selection" | "contrast" | "type" | "density" | "radius" | "pills" | "surface" | "elevation" | "motion";
   /**
    * Two or three options are a Segmented (Apple and Primer cap segments at 5-7); a longer list of
    * exact settings is a Select, each option naming what it sets (shadcn's radius picker is a menu).
@@ -33,7 +33,7 @@ function named(axis: "neutral" | "accent"): GalleryControl["items"] {
 
 /** A number axis's presets as options, in the registry's order (light ground from white down), the default marked
  * "(Default)" and the named ends as given. */
-function numbered(axis: "ground-light" | "ground-dark" | "layers", names: Record<string, string>): GalleryControl["items"] {
+function numbered(axis: "ground-light" | "ground-dark" | "layers-light" | "layers-dark", names: Record<string, string>): GalleryControl["items"] {
   return AXIS_PRESETS[axis].map(value => ({ value, label: names[value] ?? (value === DEFAULT_AXES[axis] ? `${value} (Default)` : value) }));
 }
 
@@ -50,7 +50,8 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = [
   // options and defaults read from the registry. Each ground shows in its own mode.
   { axis: "ground-light", kind: "select", label: "Light ground", hint: "The light page's lightness, 100 (white) to 90", defaultValue: DEFAULT_AXES["ground-light"], items: numbered("ground-light", { "100": "100 (White)" }) },
   { axis: "ground-dark", kind: "select", label: "Dark ground", hint: "The dark page's lightness, 0 (black) to 24", defaultValue: DEFAULT_AXES["ground-dark"], items: numbered("ground-dark", { "0": "0 (Black)" }) },
-  { axis: "layers", kind: "select", label: "Layers", hint: "How far cards, menus, sidebars and control fills sit from the page, 0 (Flat) to 8", defaultValue: DEFAULT_AXES.layers, items: numbered("layers", { "0": "0 (Flat)" }) },
+  { axis: "layers-light", kind: "select", label: "Light layers", hint: "In light: how far cards, menus, sidebars and control fills sit from the page, 0 (Flat) to 8", defaultValue: DEFAULT_AXES["layers-light"], items: numbered("layers-light", { "0": "0 (Flat)" }) },
+  { axis: "layers-dark", kind: "select", label: "Dark layers", hint: "In dark: how far cards, menus, sidebars and control fills sit from the page, 0 (Flat) to 8", defaultValue: DEFAULT_AXES["layers-dark"], items: numbered("layers-dark", { "0": "0 (Flat)" }) },
   { axis: "action", kind: "segmented", label: "Action", hint: "The colour of primary actions", defaultValue: DEFAULT_AXES.action, items: [{ value: "neutral", label: "Neutral" }, { value: "accent", label: "Accent" }] },
   { axis: "selection", kind: "segmented", label: "Selection", hint: "The colour of checked, selected and current states", defaultValue: DEFAULT_AXES.selection, items: [{ value: "neutral", label: "Neutral" }, { value: "accent", label: "Accent" }] },
   // Increased contrast (docs/CONTRAST.md): not a registry axis but the same kind of scoped setting,

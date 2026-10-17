@@ -190,7 +190,7 @@ const FAMILIES = window.FAMILIES || [];
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 // One collection per review round, so a family reopened after approval starts undecided (round 6: 2026-10-10).
-const ROUND = "components31", KEY = "area-component-review-31";
+const ROUND = "components32", KEY = "area-component-review-32";
 const pref = (k, d) => { try { return localStorage.getItem("area-cr-" + k) || d; } catch { return d; } };
 const setPref = (k, v) => { try { localStorage.setItem("area-cr-" + k, v); } catch {} };
 // Side by side by default (owner 2026-10-09: "be more explicit about the before and after"); only changed
@@ -198,7 +198,7 @@ const setPref = (k, v) => { try { localStorage.setItem("area-cr-" + k, v); } cat
 let view = pref("view2", "split"), theme = pref("theme", "light"), ui = pref("layers", "default");
 // The Layers settings a specimen shows at (the density switch this replaced is gone with its axis): the defaults, or
 // each theme's extreme, where the 2026-10-16 sweep found failures; choosing one sets its theme.
-const LAYERS = { default: {}, gray: { groundLight: "90", layers: "0" }, lightdark: { groundDark: "24", layers: "8" } };
+const LAYERS = { default: {}, gray: { groundLight: "90", layers: "0", layersLight: "0" }, lightdark: { groundDark: "24", layers: "8", layersDark: "8" } }; /* layers: Before builds from before the light/dark split */
 const LAYER_THEME = { gray: "light", lightdark: "dark" };
 const layerAttrs = () => Object.entries(LAYERS[ui] ?? {}).map(([k, v]) => ` data-area-${k.replace(/[A-Z]/g, c => "-" + c.toLowerCase())}="${v}"`).join("");
 // 2× makes a subtle change (an underline's ink, a 2px inset) visible without a screenshot.
@@ -265,7 +265,7 @@ function paintView() {
   document.querySelectorAll("#zoomseg button").forEach(b => b.setAttribute("aria-pressed", b.dataset.z === zoom));
   document.querySelectorAll(".canvas.area-scope").forEach(c => {
     c.dataset.areaTheme = theme; c.dataset.zoom = zoom;
-    for (const k of ["areaGroundLight", "areaGroundDark", "areaLayers"]) delete c.dataset[k];
+    for (const k of ["areaGroundLight", "areaGroundDark", "areaLayers", "areaLayersLight", "areaLayersDark"]) delete c.dataset[k];
     for (const [k, v] of Object.entries(LAYERS[ui] ?? {})) c.dataset["area" + k[0].toUpperCase() + k.slice(1)] = v;
   });
   const section = document.querySelector(`.fam[data-slug="${fam().slug}"]`);

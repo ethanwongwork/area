@@ -5,8 +5,10 @@
  *                 (white), 99% 98% 97% 96% 95%, etc").
  *   ground-dark   the dark page's lightness: 0 (black), 8 (Area's near-black #020202, the default), 12 to 24 in 2%
  *                 steps (below 12 a 1% step doesn't show on a screen).
- *   layers        layer contrast, 0 (Flat) to 8: how far cards, menus and sidebars sit from the page, and controls
- *                 from their ground. 4 is the default; light 100 + 4 is Area's light theme as it was.
+ *   layers-light  layer contrast in light, 0 (Flat) to 8: how far cards, menus and sidebars sit from the page, and
+ *   layers-dark   controls from their ground; the same in dark. 4 is the default for both; light 100 + 4 is Area's
+ *                 light theme as it was. One setting per theme since 2026-10-17 (owner: "the most possible
+ *                 customization"); it was one `layers` setting for both.
  *
  * Each writes one number; emit/base.ts derives every page, layer, control-fill, edge and ink colour from them with the
  * Neutral setting's cast, live, so a subtree that sets its own ground re-derives. Research and every combination
@@ -45,16 +47,18 @@ export const GROUND_DARK_AXIS: AxisDefinition = {
   })),
 };
 
-export const LAYERS_AXIS: AxisDefinition = {
-  id: "layers",
-  label: "Layer contrast",
-  description: "How far cards, menus and sidebars sit from the page, and controls from their ground, 0 (Flat) to 8.",
+const layersAxis = (theme: "light" | "dark"): AxisDefinition => ({
+  id: `layers-${theme}`,
+  label: theme === "light" ? "Light layers" : "Dark layers",
+  description: `In ${theme}: how far cards, menus and sidebars sit from the page, and controls from their ground, 0 (Flat) to 8.`,
   defaultPreset: String(DEFAULT_LAYERS),
-  namespaces: ["--area-layers:"],
+  namespaces: [`--area-layers-${theme}:`],
   presets: LAYER_STEPS.map(step => ({
     id: String(step),
     label: step === 0 ? "0 (Flat)" : step === DEFAULT_LAYERS ? `${step} (Default)` : String(step),
     description: step === 0 ? "One tone: frames alone set layers apart; controls still step from their ground." : step === DEFAULT_LAYERS ? "Area's layer contrast." : `Layer contrast ${step} of 8.`,
-    tokens: tokens({ layers: String(step) }),
+    tokens: tokens({ [`layers-${theme}`]: String(step) }),
   })),
-};
+});
+export const LAYERS_LIGHT_AXIS = layersAxis("light");
+export const LAYERS_DARK_AXIS = layersAxis("dark");

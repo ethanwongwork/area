@@ -1,0 +1,252 @@
+[
+  {
+    "id": 1,
+    "name": "Onboarding cards",
+    "summary": "Calm and light: a white card with a big soft shadow, and an accent button with a darker accent edge.",
+    "stack": {
+      "Fill": [
+        "Card: flat white (the Layers card tone)",
+        "Button: accent, a touch lighter at the top (#4a9cf0 → #3b99f5)"
+      ],
+      "Stroke": [
+        "Card: a near-invisible 1px edge (#f8 on white)",
+        "Button: a ring in a darker accent (#5598d9 top, #3f81c4 bottom), lit slightly at the top"
+      ],
+      "Effects": [
+        "Card: a large soft drop shadow, deepest just under it (#dedede on a #f7f7f7 page)",
+        "Button: no shadow of its own"
+      ],
+      "Not a lever": [
+        "The calendar and notes illustrations are content"
+      ]
+    },
+    "levers": {
+      "Gradient (linear)": "1",
+      "Stroke: tone ring": "4",
+      "Stroke: lit edge": "1",
+      "Drop shadow (Elevation)": "6"
+    },
+    "notLever": []
+  },
+  {
+    "id": 2,
+    "name": "Aero buttons",
+    "summary": "Windows 7 gloss: an accent-tinted gradient with a lighter top band and a cyan glow rising from the bottom, inside a double rim.",
+    "stack": {
+      "Fill": [
+        "Linear accent gradient: light top (#cfddff), deeper middle band (#a3c1ff), lighter cyan bottom (#c4efff)",
+        "Sheen band: the top half lighter, ending at the middle",
+        "Radial glow from the bottom, shifted toward cyan"
+      ],
+      "Stroke": [
+        "Double rim: an outer ring in a darker accent (#8dace4) and an inner white rim"
+      ],
+      "Effects": [
+        "A soft accent-tinted shadow under it (#e1eaf2 on #f1f1f1)"
+      ],
+      "Not a lever": []
+    },
+    "levers": {
+      "Gradient (linear)": "5 accent",
+      "Gradient (radial)": "4 from below",
+      "Sheen": "6 band",
+      "Stroke: double": "5",
+      "Contact shadow": "2 tinted"
+    },
+    "notLever": []
+  },
+  {
+    "id": 3,
+    "name": "Liquid glass toolbar",
+    "summary": "Apple's 2025 glass: a barely-there frosted panel with a white rim, and more opaque pill buttons floating on it.",
+    "stack": {
+      "Fill": [
+        "Panel: white at low opacity over a blurred backdrop (only #d7 over a #c3 background)",
+        "Pills: white at higher opacity (#eaeef1), slight top-to-bottom sheen"
+      ],
+      "Stroke": [
+        "Panel and pills: a bright white rim (#dde1e4 on the panel edge)"
+      ],
+      "Effects": [
+        "Pills: a soft drop shadow (#d3d7da under them)",
+        "Panel: a faint dark line just outside (#afb2b7)",
+        "Frost on both"
+      ],
+      "Not a lever": [
+        "The icons are accent glyphs with no effect"
+      ]
+    },
+    "levers": {
+      "Transparency": "8 panel, 4 pills",
+      "Frost": "5",
+      "Sheen": "2",
+      "Stroke: lit edge": "6 white rim",
+      "Drop shadow (Elevation)": "4"
+    },
+    "notLever": []
+  },
+  {
+    "id": 4,
+    "name": "Green jelly toggle",
+    "summary": "A glossy green pill sunk into a black track: tone-on-tone gradient, a darker green ring, and a bright catch-light along the bottom.",
+    "stack": {
+      "Fill": [
+        "Pill: green gradient, light top (#acf4c3) to deeper bottom (#8aedaa)",
+        "Track: near black (#080808)"
+      ],
+      "Stroke": [
+        "Pill: a ring in a darker green (#7fd29f)",
+        "Track: a lighter grey rim around the outside (#393939), then the black body: a double rim"
+      ],
+      "Effects": [
+        "Pill: a bright catch-light along the bottom inside edge (#c6fddb) and a soft highlight at the top",
+        "Track: an inner shadow (a well)",
+        "The whole control: a dark drop shadow on the #1f1f1f page"
+      ],
+      "Not a lever": [
+        "The glyph takes the darker green (#5eb476): ink, not material"
+      ]
+    },
+    "levers": {
+      "Gradient (linear)": "4 tone",
+      "Sheen": "2",
+      "Stroke: tone ring": "5",
+      "Stroke: double": "4 track",
+      "Inner shadow": "5 track",
+      "Catch-light": "6 pill",
+      "Drop shadow (Elevation)": "6"
+    },
+    "notLever": [
+      "glyph colour"
+    ]
+  },
+  {
+    "id": 5,
+    "name": "Terminal tile",
+    "summary": "A dark tile lit from the top right, with a bright rim and a recessed well holding an engraved prompt.",
+    "stack": {
+      "Fill": [
+        "Tile: a diagonal gradient, lighter top right (#3f4044) to darker bottom (#1e1d23)",
+        "Well: darker than the tile (#1a191f)"
+      ],
+      "Stroke": [
+        "Tile: a gradient rim, brightest at the top (#858489), dimmer at the sides (#646466) and bottom (#58585c)"
+      ],
+      "Effects": [
+        "Well: an inner shadow at the top and a faint catch-light at the bottom"
+      ],
+      "Not a lever": [
+        "Engraved glyph (a text effect: D13 keeps these opt-in)",
+        "Squircle corners (corner-shape, experimental)"
+      ]
+    },
+    "levers": {
+      "Gradient (radial)": "4 top right",
+      "Stroke: gradient": "6",
+      "Inner shadow": "5 well",
+      "Catch-light": "2 well"
+    },
+    "notLever": [
+      "engraved glyph",
+      "squircle"
+    ]
+  },
+  {
+    "id": 6,
+    "name": "Light tile with a bowl button",
+    "summary": "A light tile with a strong top-to-bottom gradient, and a dark round button pressed into it like a bowl.",
+    "stack": {
+      "Fill": [
+        "Tile: a strong gradient, #f2f2f2 top to #b5b9b9 bottom",
+        "Bowl: the reverse, black at the top (#161616) to grey at the bottom (#7b7b7b): a concave surface"
+      ],
+      "Stroke": [
+        "Bowl: a bright rim along the bottom edge (#d2d2d2 → #e7e8e9)"
+      ],
+      "Effects": [
+        "Bowl: a deep inner shadow at the top"
+      ],
+      "Not a lever": [
+        "Squircle corners",
+        "The plus glyph's soft shadow (a glyph effect)"
+      ]
+    },
+    "levers": {
+      "Gradient (linear)": "8 tile; reversed in the well",
+      "Inner shadow": "8 bowl",
+      "Catch-light": "8 bowl"
+    },
+    "notLever": [
+      "squircle",
+      "glyph shadow"
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Car console",
+    "summary": "Matte black plastic: a grainy housing, raised keys with a lit top edge and a shadow under them, a curved rocker, and a glowing LED.",
+    "stack": {
+      "Fill": [
+        "Housing: flat #353537 with grain",
+        "Keys: a slight gradient, darker toward the bottom (#353537 → #2c2c2e)",
+        "Rocker: a fold near the top: a highlight band (#636364) above a dark crease, then flat (#303032)"
+      ],
+      "Stroke": [
+        "Keys and rocker: a lit top edge",
+        "Keys: a dark socket around each (the housing, darker): a tone ring"
+      ],
+      "Effects": [
+        "Keys: a dark contact shadow under each (#1d1d1f at the bottom edge)",
+        "LEDs: off is a grey pill with its own gradient; on is green with a small glow (#07d057)",
+        "Housing: a soft drop shadow on the light page"
+      ],
+      "Not a lever": [
+        "The line icons are ink"
+      ]
+    },
+    "levers": {
+      "Gradient (linear)": "2",
+      "Sheen": "5 band (rocker)",
+      "Stroke: lit edge": "3",
+      "Contact shadow": "6",
+      "Glow": "4 indicator",
+      "Grain": "4",
+      "Drop shadow (Elevation)": "4",
+      "Stroke: tone ring": "6 socket"
+    },
+    "notLever": []
+  },
+  {
+    "id": 8,
+    "name": "Frosted folder",
+    "summary": "A grey glass folder front: what is behind it shows through blurred, with a lit top edge and a soft shadow.",
+    "stack": {
+      "Fill": [
+        "Front: grey at partial opacity over the content behind, a little lighter at the bottom (#c8c8c8 → #d9d9d9)",
+        "Back flap: flat grey (#c7c7c7)"
+      ],
+      "Stroke": [
+        "Front: a darker outline",
+        "Front: a lit top edge along the tab"
+      ],
+      "Effects": [
+        "Front: frost (the logo behind it blurs)",
+        "Front: a darker lip along the bottom inside edge (an inner shadow: the glass has thickness)",
+        "A soft drop shadow under the folder (#ededed on white)"
+      ],
+      "Not a lever": [
+        "The folder shape is content"
+      ]
+    },
+    "levers": {
+      "Gradient (linear)": "1",
+      "Transparency": "5",
+      "Frost": "3",
+      "Stroke: lit edge": "3",
+      "Drop shadow (Elevation)": "3",
+      "Inner shadow": "2 bottom lip",
+      "Stroke: tone ring": "2"
+    },
+    "notLever": []
+  }
+]

@@ -15,13 +15,13 @@ import { useStudio, type CanvasAxes } from "./studio.tsx";
 type Axis = keyof CanvasAxes;
 // Headings never repeat a row's label (a Radius heading over a Radius row read twice).
 const GROUPS: ReadonlyArray<{ heading: string; axes: readonly Axis[] }> = [
-  { heading: "Color", axes: ["neutral", "accent", "ground-light", "ground-dark", "layers", "action", "selection", "contrast"] },
+  { heading: "Color", axes: ["neutral", "accent", "ground-light", "ground-dark", "layers-light", "layers-dark", "action", "selection", "contrast"] },
   { heading: "Size", axes: ["type", "density"] },
   { heading: "Shape", axes: ["radius", "pills"] },
   { heading: "Effects", axes: ["surface", "elevation", "motion"] },
 ];
 
-export function CanvasSettings({ axes = ["neutral", "accent", "ground-light", "ground-dark", "layers", "action", "selection", "contrast", "type", "density", "radius", "surface", "elevation", "motion", "pills"], children }: { axes?: readonly Axis[]; children?: ReactNode }) {
+export function CanvasSettings({ axes = ["neutral", "accent", "ground-light", "ground-dark", "layers-light", "layers-dark", "action", "selection", "contrast", "type", "density", "radius", "surface", "elevation", "motion", "pills"], children }: { axes?: readonly Axis[]; children?: ReactNode }) {
   return (
     <>
       {GROUPS.map(group => {

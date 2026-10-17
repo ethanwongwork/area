@@ -37,7 +37,7 @@ type Theme = "light" | "dark";
 /** The Canvas's own theme settings (the Inspector writes them): the colour settings, the Layers (light and dark ground, layer
  * contrast), contrast, type size, density, radius, surface, elevation,
  * motion, pills. */
-export type CanvasAxes = Record<"neutral" | "accent" | "ground-light" | "ground-dark" | "layers" | "action" | "selection" | "contrast" | "type" | "density" | "radius" | "surface" | "elevation" | "motion" | "pills", string>;
+export type CanvasAxes = Record<"neutral" | "accent" | "ground-light" | "ground-dark" | "layers-light" | "layers-dark" | "action" | "selection" | "contrast" | "type" | "density" | "radius" | "surface" | "elevation" | "motion" | "pills", string>;
 const CANVAS_DEFAULTS = Object.fromEntries(
   GALLERY_CONTROLS.filter(control => control.axis !== "theme").map(control => [control.axis, control.defaultValue]),
 ) as CanvasAxes;
@@ -46,11 +46,15 @@ const CANVAS_DEFAULTS = Object.fromEntries(
  * elevation saved before it became a number (`minimal`, `standard` …) or a hand-edited value would
  * otherwise leave its Select blank and match no preset. Keys no control reads are dropped. A Canvas
  * from before the type / density split (`ui`: compact or default) restores as its two settings, and
- * a density saved by name (compact, default, comfortable) as its number.
+ * a density saved by name (compact, default, comfortable) as its number. One Layers contrast saved before it
+ * split by theme (2026-10-17) restores as both.
  */
-function restoreCanvas(saved: Partial<CanvasAxes> & { ui?: string }): CanvasAxes {
-  const { ui, ...rest } = saved;
-  const legacy: Partial<CanvasAxes> = ui === "compact" ? { type: "12", density: "28" } : ui === "default" ? { type: "14", density: "32" } : {};
+function restoreCanvas(saved: Partial<CanvasAxes> & { ui?: string; layers?: string }): CanvasAxes {
+  const { ui, layers, ...rest } = saved;
+  const legacy: Partial<CanvasAxes> = {
+    ...(ui === "compact" ? { type: "12", density: "28" } : ui === "default" ? { type: "14", density: "32" } : {}),
+    ...(typeof layers === "string" ? { "layers-light": layers, "layers-dark": layers } : {}),
+  };
   const merged: Record<string, unknown> = { ...legacy, ...rest };
   const named: Record<string, string> = { compact: "28", default: "32", comfortable: "36" };
   if (typeof merged.density === "string" && merged.density in named) merged.density = named[merged.density];
@@ -277,7 +281,7 @@ export function Workspace({ sidebar, canvasLead, canvasTitle, canvasActions, can
   const inspectorWidth = usePanelWidth("inspector");
   // The Canvas body carries the Inspector's settings on every tab: the colour settings, density (which also lays tiles out
   // as a hairline contact sheet in compact), radius, surface, elevation, motion and pills.
-  const axes = { "data-area-neutral": studio.canvas.neutral, "data-area-accent": studio.canvas.accent, "data-area-ground-light": studio.canvas["ground-light"], "data-area-ground-dark": studio.canvas["ground-dark"], "data-area-layers": studio.canvas.layers, "data-area-action": studio.canvas.action, "data-area-selection": studio.canvas.selection, "data-area-contrast": studio.canvas.contrast === "system" ? undefined : studio.canvas.contrast, "data-area-type": studio.canvas.type, "data-area-density": studio.canvas.density, "data-area-radius": studio.canvas.radius, "data-area-surface": studio.canvas.surface, "data-area-elevation": studio.canvas.elevation, "data-area-motion": studio.canvas.motion, "data-area-pills": studio.canvas.pills };
+  const axes = { "data-area-neutral": studio.canvas.neutral, "data-area-accent": studio.canvas.accent, "data-area-ground-light": studio.canvas["ground-light"], "data-area-ground-dark": studio.canvas["ground-dark"], "data-area-layers-light": studio.canvas["layers-light"], "data-area-layers-dark": studio.canvas["layers-dark"], "data-area-action": studio.canvas.action, "data-area-selection": studio.canvas.selection, "data-area-contrast": studio.canvas.contrast === "system" ? undefined : studio.canvas.contrast, "data-area-type": studio.canvas.type, "data-area-density": studio.canvas.density, "data-area-radius": studio.canvas.radius, "data-area-surface": studio.canvas.surface, "data-area-elevation": studio.canvas.elevation, "data-area-motion": studio.canvas.motion, "data-area-pills": studio.canvas.pills };
   return (
     <div className="studio-workspace" data-sidebar={studio.sidebar ? "" : undefined} data-inspector={studio.inspector ? "" : undefined}>
       {studio.sidebar ? (

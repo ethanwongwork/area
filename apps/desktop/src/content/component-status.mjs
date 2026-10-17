@@ -90,13 +90,14 @@ export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-10-16 on the review page, round 29 (components29).
   'nav', 'titlebar',
   // Approved 2026-10-17 on the review page, round 30 (components30), after the Layers sweep; board needs changes.
-  'segmented', 'toggle-group', 'code-block', 'box-model', 'tag', 'tag-picker', ]);
+  'segmented', 'toggle-group', 'code-block', 'box-model', 'tag', 'tag-picker',
+  // Approved 2026-10-17 on the review page, round 31 (components31); hover-card: "rethink the content/source".
+  'board', 'menu', ]);
 
 /** Built/refined and awaiting owner approval; not completion. */
-// Round 31 (components31): Board's card actions reworked after round 30 ("cardactions need to be fixed"); Menu's danger
-// ink and Hover card's example links from the hover and pressed sweep.
+// Hover card: round 31 (components31) asked to "rethink the content/source" of its examples.
 // Articles (2026-10-17, from Wikipedia's page): eight new families.
-export const REVIEW_COMPONENTS = new Set(['board', 'menu', 'hover-card', 'reference-list', 'table-of-contents', 'figure', 'infobox', 'inline-list', 'abbreviation', 'hatnote', 'navbox']);
+export const REVIEW_COMPONENTS = new Set(['hover-card', 'reference-list', 'table-of-contents', 'figure', 'infobox', 'inline-list', 'abbreviation', 'hatnote', 'navbox']);
 export const componentStatus = slug => COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
 export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined' })[status];
 
