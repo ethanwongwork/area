@@ -1,5 +1,5 @@
 <svg data-set="area-pilot" data-keyline="circle" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M13.6125 13.6125A7.937 3 45 1 1 2.3875 2.3875A7.937 3 45 1 1 13.6125 13.6125Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M13.6125 2.3875A7.937 3 135 1 1 2.3875 13.6125A7.937 3 135 1 1 13.6125 2.3875Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M13.0742 13.0742A7.176 3 45 1 1 2.9258 2.9258A7.176 3 45 1 1 13.0742 13.0742Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M13.0742 2.9258A7.176 3 135 1 1 2.9258 13.0742A7.176 3 135 1 1 13.0742 2.9258Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <circle cx="8" cy="8" r="1" fill="currentColor"/>
 </svg>

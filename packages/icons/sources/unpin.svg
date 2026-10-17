@@ -1,8 +1,8 @@
 <svg data-set="area-pilot" data-angles="free" data-keyline="circle" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path data-filled="line" d="M4.75 1.5H10.25A1.25 1.25 0 0 1 10.25 4L10 4A0.5 0.5 0 0 0 9.5 4.5L9.5 5.75" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="line" d="M5.5 5.5L5.5 6.729A1 1 0 0 1 5.073 7.549L3.427 8.701A1 1 0 0 0 3 9.521L3 10.5A0.5 0.5 0 0 0 3.5 11L11 11" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path data-filled="fill" d="M4.75 1.5H10.25A1.25 1.25 0 0 1 10.25 4L10 4A0.5 0.5 0 0 0 9.5 4.5L9.5 6.729A1 1 0 0 0 9.927 7.549L11.573 8.701A1 1 0 0 1 12 9.521L12 10.5A0.5 0.5 0 0 1 11.5 11L3.5 11A0.5 0.5 0 0 1 3 10.5L3 9.521A1 1 0 0 1 3.427 8.701L5.073 7.549A1 1 0 0 0 5.5 6.729L5.5 4.5A0.5 0.5 0 0 0 5 4L4.75 4A1.25 1.25 0 0 1 4.75 1.5Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
-<path d="M7.5 11V14" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="line" d="M5.25 2H10.75A1.25 1.25 0 0 1 10.75 4.5L10.5 4.5A0.5 0.5 0 0 0 10 5L10 6.25" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="line" d="M6 6L6 7.229A1 1 0 0 1 5.573 8.049L3.927 9.201A1 1 0 0 0 3.5 10.021L3.5 11A0.5 0.5 0 0 0 4 11.5L11.5 11.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path data-filled="fill" d="M5.25 2H10.75A1.25 1.25 0 0 1 10.75 4.5L10.5 4.5A0.5 0.5 0 0 0 10 5L10 7.229A1 1 0 0 0 10.427 8.049L12.073 9.201A1 1 0 0 1 12.5 10.021L12.5 11A0.5 0.5 0 0 1 12 11.5L4 11.5A0.5 0.5 0 0 1 3.5 11L3.5 10.021A1 1 0 0 1 3.927 9.201L5.573 8.049A1 1 0 0 0 6 7.229L6 5A0.5 0.5 0 0 0 5.5 4.5L5.25 4.5A1.25 1.25 0 0 1 5.25 2Z" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M8 11.5V14.5" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path data-filled="gap" d="M0.909 -0.682L16.909 15.318" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 <path d="M2 2L14 14" fill="none" stroke="currentColor" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>
