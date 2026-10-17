@@ -205,6 +205,10 @@ Open questions:
   default settings, and to 3.2:1 at dark 24 + 8 (the hover and pressed sweep). Look at a danger item while pressing it,
   at **Default** and **Lightest dark**.
 
+## Interaction polish, 2026-10-16
+
+Rows press at `bg-component-pressed`, one step past selected (Notion presses at 10%, ChatGPT 12%; it shared selected's fill, 1.5% below hover). Row text is not selectable. See [interaction polish](../research/interaction-polish-2026-10-16.md).
+
 ## Feedback log
 
 - 2026-09-26 · owner: "build the next component" → Menu evidence pass: label column 36,

@@ -51,7 +51,7 @@ test('a disabled tree row dims as a whole (audit D-5)', () => {
 });
 
 test('an input action has pressed and disabled paint, and a disabled one does not hover (audit B-8)', () => {
-  assert.match(body('.area-input__action-button:active:not(:disabled)'), /var\(--area-bg-component-active\)/);
+  assert.match(body('.area-input__action-button:active:not(:disabled)'), /var\(--area-bg-component-pressed\)/); // pressed, a step past selected (interaction polish 2026-10-16)
   assert.match(body('.area-input__action-button:disabled'), /var\(--area-fg-disabled\)/);
   assert.ok(css.includes('.area-input__action-button:hover:not(:disabled)'));
 });

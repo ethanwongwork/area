@@ -121,6 +121,10 @@ Resolved 2026-10-10 (owner: "go with your recommendations"); kept for the record
 - **Why:** You asked whether 12 would be better and for more real examples. Two open chat kits that ship this component,
   Vercel's AI Elements and prompt-kit, both set it at 12px on a 20 to 22 pill; ChatGPT's 9px is the outlier.
 
+## Interaction polish, 2026-10-16
+
+Presses at `bg-component-pressed`, one step past selected (Notion presses at 10%, ChatGPT 12%; it shared selected's fill, 1.5% below hover) (hover is `bg-component-active`). See [interaction polish](../research/interaction-polish-2026-10-16.md).
+
 ## Feedback log
 
 - 2026-10-10 · owner: "go with your recommendations then keep working" → Citation from ChatGPT's answer citations; 5

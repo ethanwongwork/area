@@ -84,13 +84,25 @@ setting, and is never a selection marker.
 **Shared state paint** ([cohesion audit](research/cohesion-audit.md), 2026-09-26). The same
 role paints the same way in every family:
 
-- *Row and item plates.* Hover is `bg-component-hover`; pressed, selected and current are
-  `bg-component-active`, one step above, in both themes and under the pointer. Menu, Nav,
-  Tree view, Table, Select options and neutral ghost Buttons share this pair; ChatGPT, Figma
-  and Notion all hover at about #f2–#f5 on white (and use that one fill for the current row;
-  Area keeps selection a step firmer so it survives hover). The translucent `bg-hover` is for
-  grounds a component cannot know (a segmented track, a swatch cell); its dark value is
+- *Row and item plates.* Hover is `bg-component-hover`; selected and current are
+  `bg-component-active`, one step above, in both themes and under the pointer; pressed is
+  `bg-component-pressed`, one step further (2026-10-16). Menu, Nav, Tree view, Table, Select
+  options and neutral ghost Buttons share this ladder; ChatGPT, Figma and Notion all hover at
+  about #f2–#f5 on white (and use that one fill for the current row; Area keeps selection a step
+  firmer so it survives hover). A press is a firm, momentary step: Notion's rows and buttons press
+  at 10% of its ink (hover 5%, its selected row 5%), ChatGPT's ghosts at 12% (hover 5%); Area's
+  press had shared selected's fill, 1.5% below hover, and read as no press at all. `bg-component-pressed`
+  is the selected fill 3% toward the ink in light (L 0.929 at the defaults, Notion's #e9) and 7% in
+  dark, so it follows every ground and Layers setting (`packages/styles/src/layers.css`). The
+  translucent `bg-hover` / `bg-active` / `bg-pressed` (5% / 6.7% / 10% black; 14% / 19% / 24% white)
+  are for grounds a component cannot know (a segmented track, a swatch cell); the dark hover is
   solved against the dark page rung, so it composites to the same step as the opaque fill.
+- *Solid fills* step rest → hover → pressed in one direction: hover is a step further from the page,
+  pressed one more (`--_solid-active` in button.css; ChatGPT's solid #0d → #30 → #41).
+- *Text in controls is not selectable* (`user-select: none` on every control's base rule): a double
+  click or quick repeat clicks on a tab, row, day or option never paints a text selection, as in
+  ChatGPT and Notion (every button, row and tab measured, 2026-10-16). Fields, links in prose and
+  editable text stay selectable.
 - *Selected rows* (audit S13, owner 2026-09-30) split by job. Menus of commands and choices
   show a trailing check only (MenuItem `checked`, or `radio` for one of several), and the
   plate is the highlight. Value pickers (Select, Combobox) show their value with the active

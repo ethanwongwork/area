@@ -229,6 +229,10 @@ Resolved 2026-10-08 (owner: "go with your recommendations"):
 2. Step labels on by default; a table footer turns them off with `stepLabels={false}`.
 3. No Figma search; the design-system basis stands.
 
+## Interaction polish, 2026-10-16
+
+Pages press at `bg-component-pressed`, one step past selected (Notion presses at 10%, ChatGPT 12%; it shared selected's fill, 1.5% below hover). See [interaction polish](../research/interaction-polish-2026-10-16.md).
+
 ## Feedback log
 
 - 2026-10-08 · owner picked Pagination as the next component → built from Untitled UI, shadcn and Primer

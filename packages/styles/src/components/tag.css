@@ -109,10 +109,13 @@
        fast ease-out; the × keeps the tag's ink, so only the plate moves. */
     transition: var(--area-transition);
     transition-property: background-color;
+    user-select: none;
   }
   .area-tag__remove > svg { inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); }
   @media (hover: hover) { .area-tag__remove:hover { background: color-mix(in srgb, currentColor 12%, transparent); transition-duration: 0s; } }
   .area-tag__remove:active { transition-duration: 0s; }
+  /* spec: pressed 20% of the ink, a step past the 12% hover, as Chip's remove. */
+  .area-tag__remove:active { background: color-mix(in srgb, currentColor 20%, transparent); transition-duration: 0s; }
   .area-tag__remove:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: 0; }
   /* An invisible 24px target (44 on coarse pointers) centred on the box (WCAG 2.5.8), as Badge's. */
   .area-tag__remove::after { content: ""; position: absolute; inset: 50% auto auto 50%; translate: -50% -50%; inline-size: var(--area-space-24); block-size: var(--area-space-24); }

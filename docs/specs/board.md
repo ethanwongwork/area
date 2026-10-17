@@ -149,6 +149,10 @@ Owner, round 7 (rethink), applied:
   filled half of it, and in dark the box was darker than the hovered card. Nav's rule, which you approved, says a row
   that already shows the pointer doesn't need a second plate; ChatGPT's sidebar fades the title the same way.
 
+## Interaction polish, 2026-10-16
+
+Cards press at `bg-component-active`, or 9% of a coloured column's colour (7% in dark, where 9% left a tinted badge at 4.41:1 at dark 24 + 8) (they pressed with the hover); the card's actions press on their own. The add button presses at 7.5% black in light (its muted label at 4.53:1 on a gray column) and `bg-pressed` in dark, or 12% of the colour (was 9%). Cards and the add button are not selectable. See [interaction polish](../research/interaction-polish-2026-10-16.md).
+
 ## Feedback log
 
 - 2026-10-10 · owner: "can you keep working, ill bring chrome to the front later" → Board from Notion's board view; 13

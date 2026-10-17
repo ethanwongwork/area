@@ -50,6 +50,7 @@
     opacity: 0;
     touch-action: none;
     overflow: visible;
+    user-select: none;
   }
   /* The glyph keeps its 16 slot, centred in the inset and allowed past the handle's box; its
    * ink is 5 wide, so it fits even a small panel's 8px inset without touching the value. */

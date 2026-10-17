@@ -184,6 +184,10 @@ after the second pass) and Untitled UI source values. Build and test results are
 [the audit](../research/cohesion-audit.md#verification). Hover and selection paints were
 read from the CSS; no Area capture shows them.
 
+## Interaction polish, 2026-10-16
+
+Interactive rows press at `bg-component-pressed`, one step past selected (Notion presses at 10%, ChatGPT 12%; it shared selected's fill, 1.5% below hover). See [interaction polish](../research/interaction-polish-2026-10-16.md).
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → hover `bg-hover` → `bg-component-hover`; selection

@@ -324,7 +324,7 @@
     .area-code-block__linenumber:hover {
       text-decoration: underline;
       text-decoration-thickness: var(--area-stroke-width);
-      text-underline-offset: var(--area-space-2);
+      text-underline-offset: 0.25em; /* spec: Link's offset, clear of descenders (link.md, 2026-10-16) */
     }
   }
 
@@ -504,6 +504,7 @@
     font-weight: var(--area-weight-regular);
     cursor: pointer;
     transition: var(--area-transition);
+    user-select: none;
   }
 
   /* The label keeps its ink under the pointer and takes an underline, as line links do. */
@@ -511,7 +512,7 @@
     .area-code-block__toggle:hover {
       text-decoration: underline;
       text-decoration-thickness: var(--area-stroke-width);
-      text-underline-offset: var(--area-space-2);
+      text-underline-offset: 0.25em; /* spec: Link's offset, clear of descenders (link.md, 2026-10-16) */
     }
   }
 

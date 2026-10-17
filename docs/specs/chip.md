@@ -224,6 +224,10 @@ verified by eye (background tab), nor with a real pointer or keyboard.
 - **What changed:** A swatch chip's colour circle has the same thin see-through outline as every other colour swatch, instead of a light grey band around it. A remove button's focus ring now sits on the button itself instead of 2 outside it.
 - **Why:** You asked for one swatch outline everywhere (round 15); Chip still had the old band, which showed as a grey halo round the colour, most of all in dark mode. It also stays now when the Surface setting is Elevated. You went with the recommendation that a control inside another one rings at 0, as Tag's remove and a field's buttons do; at 2 outside, the ring met the chip's own edge.
 
+## Interaction polish, 2026-10-16
+
+Chips press one step past hover: `bg-component-pressed` (filter, assist, suggestion), 15.4% (the input chip's mark: 6%, 10.7%, 15.4%; 24% white in dark, as far as its label holds 4.5:1 at dark 24 + 8), `danger-surface-active` (invalid). A selected chip keeps its plate. Remove presses at 20% of its ink (hover 12%) and does not press the chip. Link's underline offset (0.25em). See [interaction polish](../research/interaction-polish-2026-10-16.md).
+
 ## Feedback log
 
 - 2026-09-26 · earlier pass the same day → selected chips neutral tonal, `tone="accent"` added

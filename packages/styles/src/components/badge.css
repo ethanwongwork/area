@@ -178,6 +178,9 @@
      --area-transition is the leave, on duration-fast ease-out; hover arrives at once. The focus ring
      is an outline and never transitions. */
   @media (hover: hover) { :is(a, button).area-badge:hover { background: var(--_bg-hover); border-color: var(--_border-hover); transition-duration: 0s; } }
+  /* Pressed: the hover fill with the hover wash laid over it once more, a step past hover in every
+     variant and tone (it pressed with the hover paint). The dismiss button presses on its own. */
+  :is(a, button).area-badge:active:not(:has(.area-badge__dismiss:active)) { background: linear-gradient(var(--area-bg-hover), var(--area-bg-hover)) var(--_bg-hover); border-color: var(--_border-hover); transition-duration: 0s; }
   :is(a, button).area-badge:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   :is(a, button).area-badge::after { content: ""; position: absolute; inset: 50% auto auto 50%; translate: -50% -50%; min-inline-size: var(--area-space-24); min-block-size: var(--area-space-24); inline-size: 100%; block-size: 100%; }
   @media (pointer: coarse) { :is(a, button).area-badge::after { min-inline-size: calc(var(--area-space-40) + var(--area-space-4)); min-block-size: calc(var(--area-space-40) + var(--area-space-4)); } }
@@ -212,7 +215,7 @@
   .area-badge:has(> :is(.area-badge__dot, .area-badge__avatar, .area-badge__flag)) { gap: var(--_media-gap); }
   /* spec: the dismiss box already holds 2px of air around its glyph (Untitled gap-0.5). */
   .area-badge:has(> .area-badge__dismiss) { gap: var(--area-space-2); }
-  .area-badge__dismiss { display: inline-flex; align-items: center; justify-content: center; inline-size: var(--_media); block-size: var(--_media); flex: none; padding: 0; border: 0; border-radius: var(--_badge-radius); background: transparent; color: inherit; cursor: pointer; transition: background-color var(--area-duration-fast) var(--area-ease-out); }
+  .area-badge__dismiss { display: inline-flex; align-items: center; justify-content: center; inline-size: var(--_media); block-size: var(--_media); flex: none; padding: 0; border: 0; border-radius: var(--_badge-radius); background: transparent; color: inherit; cursor: pointer; transition: background-color var(--area-duration-fast) var(--area-ease-out); user-select: none; }
   .area-badge__dismiss > svg { inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); }
   /* The visible box stays the badge's media square; an invisible 24px target (44 on coarse
      pointers) centred on it meets WCAG 2.5.8, as Badge links already do (audit C-5). */
@@ -223,6 +226,8 @@
  /* The pill close recipe (audit S9): a concentric circle hovering to 12% of the ink. */
   /* The plate appears at once and fades out on duration-fast (MOTION.md, "Hover plate"; it snapped both ways). */
   @media (hover: hover) { .area-badge__dismiss:hover { background: color-mix(in srgb, currentColor 12%, transparent); transition-duration: 0s; } }
+  /* spec: pressed 20% of the ink, a step past the 12% hover, as Chip's remove. */
+  .area-badge__dismiss:active { background: color-mix(in srgb, currentColor 20%, transparent); transition-duration: 0s; }
   /* A control nested in its host rings at 0, as Tag's remove and a field's actions (owner, 2026-10-12: O1 of the consistency
      pass); at the focus offset the ring sat outside the badge. */
   .area-badge__dismiss:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: 0; }

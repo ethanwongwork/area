@@ -182,6 +182,10 @@ coordinates and read as 2px grey bars at 1x (research B4, an icon-drawing change
 - **What changed:** Only the inspector tile changed: the Panel around the fields is 2px tighter. Number field itself is unchanged.
 - **Why:** Panel's spacing was tightened in this round, and this tile sits in a Panel.
 
+## Interaction polish, 2026-10-16
+
+Steppers press at `bg-component-pressed`, one step past selected (Notion presses at 10%, ChatGPT 12%; it shared selected's fill, 1.5% below hover) (soft: `bg-pressed`). Not selectable. See [interaction polish](../research/interaction-polish-2026-10-16.md).
+
 ## Feedback log
 
 - 2026-09-26 · pass 1 ("do the next component, show me the images in chat"): Figma's handle

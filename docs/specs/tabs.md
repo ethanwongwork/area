@@ -190,6 +190,10 @@ Compared the Notion and Figma tab captures above with 8 Area captures (`tabs/are
 re-taken after the second pass) and Untitled UI source values. Build and test results are
 in [the audit](../research/cohesion-audit.md#verification).
 
+## Interaction polish, 2026-10-16
+
+Tab labels are not selectable. See [interaction polish](../research/interaction-polish-2026-10-16.md).
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → no change (neutral underline, fixed ink confirmed) → 7 Area captures.

@@ -81,12 +81,15 @@
        enter it at once (hover, press, keyboard below); was no transition, the one plate in the
        system that snapped out. The focus ring is an outline and never fades. */
     transition: var(--area-transition);
+    user-select: none;
   }
   @media (hover: hover) { .area-calendar__day:hover { transition-duration: 0s; } }
   .area-calendar__day:is(:active, :focus-visible) { transition-duration: 0s; }
   /* A neighbouring month's day is quieter but live: muted, not disabled ink (audit F-10). */
   .area-calendar__day[data-outside] { color: var(--area-fg-muted); }
   @media (hover: hover) { .area-calendar__day:hover:not(:disabled, [aria-disabled="true"], [data-selected]) { background: var(--area-bg-hover); } }
+  /* Pressed, a step past hover (layers.css, "Pressed"); a day pressed with the hover paint. */
+  .area-calendar__day:active:not(:disabled, [aria-disabled="true"], [data-selected]) { background: var(--area-bg-pressed); }
   .area-calendar__day:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); z-index: 1; }
   .area-calendar__day[data-today]:not([data-selected]) { box-shadow: inset 0 0 0 var(--area-stroke-width) var(--_today-edge); }
   .area-calendar__day[data-selected] { background: var(--_selected); color: var(--_on-selected); box-shadow: none; }
@@ -129,6 +132,7 @@
  /* A circle day already rests on the hover plate, so hover steps to the next opaque rung (the row
      pair #f3 → #ee); the translucent wash composited to the same #f3 and showed nothing (audit F-11). */
   @media (hover: hover) { .area-calendar--circle .area-calendar__day:hover:not(:disabled, [aria-disabled="true"], [data-outside], [data-selected]) { background: var(--area-bg-component-active); } }
+  .area-calendar--circle .area-calendar__day:active:not(:disabled, [aria-disabled="true"], [data-outside], [data-selected]) { background: var(--area-bg-component-pressed); }
   .area-calendar--tile .area-calendar__day:not(:disabled, [aria-disabled="true"], [data-outside]) { --_day-edge: inset 0 0 0 var(--area-stroke-width) var(--area-edge-control-hover); } /* #d4, the choice glyphs' edge role (audit S5), stronger under increased contrast */
   .area-calendar--tile .area-calendar__day:is(:disabled, [aria-disabled="true"]):not([data-outside]) { --_day-fill: var(--area-bg-component); text-decoration: none; }
 

@@ -237,6 +237,10 @@ moves a 4px dot by 2px, a whole pixel, so it stays. The today ring stays an inse
 - Unverified: screen readers, dark theme, RTL, Firefox/Safari, touch; hover preview was
   exercised only with synthetic events.
 
+## Interaction polish, 2026-10-16
+
+Days press at `bg-pressed` (10%; they pressed with the 5% hover); circle days at `bg-component-pressed`. Day numbers are not selectable. See [interaction polish](../research/interaction-polish-2026-10-16.md).
+
 ## Feedback log
 
 - 2026-09-26 · owner: numbers too large, plus Google / tile / strip / send-later references →

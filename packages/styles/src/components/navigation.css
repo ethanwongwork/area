@@ -48,6 +48,7 @@
     font-weight: var(--area-weight-regular);
     cursor: pointer;
     transition: var(--area-transition);
+    user-select: none;
   }
 
   /* The indicator identifies the whole tab, including its icon and count. */
@@ -204,9 +205,9 @@
   }
 
   /* Pressed (product UI rule 3, docs/PRODUCT_UI.md; DESIGN_SYSTEM.md "Shared state paint"): the row
-     takes the active fill while held, one step above hover, landing at once like the hover. */
+     takes the pressed fill while held, one step firmer than selected, landing at once like the hover. */
   .area-table--interactive tbody tr:not([data-selected], [aria-selected="true"]):active td {
-    background-color: var(--area-bg-component-active);
+    background-color: var(--area-bg-component-pressed);
     transition-duration: 0s;
   }
 
@@ -266,8 +267,8 @@
     .area-table--flush.area-table--interactive tbody tr:not([data-selected], [aria-selected="true"]):hover td:first-child { box-shadow: calc(var(--_flush-side) * -1) 0 0 0 var(--area-bg-component-hover); }
     .area-table--flush.area-table--interactive tbody tr:not([data-selected], [aria-selected="true"]):hover td:last-child { box-shadow: var(--_flush-side) 0 0 0 var(--area-bg-component-hover); }
   }
-  .area-table--flush.area-table--interactive tbody tr:not([data-selected], [aria-selected="true"]):active td:first-child { box-shadow: calc(var(--_flush-side) * -1) 0 0 0 var(--area-bg-component-active); }
-  .area-table--flush.area-table--interactive tbody tr:not([data-selected], [aria-selected="true"]):active td:last-child { box-shadow: var(--_flush-side) 0 0 0 var(--area-bg-component-active); }
+  .area-table--flush.area-table--interactive tbody tr:not([data-selected], [aria-selected="true"]):active td:first-child { box-shadow: calc(var(--_flush-side) * -1) 0 0 0 var(--area-bg-component-pressed); }
+  .area-table--flush.area-table--interactive tbody tr:not([data-selected], [aria-selected="true"]):active td:last-child { box-shadow: var(--_flush-side) 0 0 0 var(--area-bg-component-pressed); }
   .area-table--flush tbody tr:is([data-selected], [aria-selected="true"]) td:first-child { box-shadow: calc(var(--_flush-side) * -1) 0 0 0 var(--area-bg-component-active); }
   .area-table--flush tbody tr:is([data-selected], [aria-selected="true"]) td:last-child { box-shadow: var(--_flush-side) 0 0 0 var(--area-bg-component-active); }
   /* The overhang fades with the fill (docs/MOTION.md, "Hover plate"). */

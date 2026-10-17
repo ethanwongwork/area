@@ -118,6 +118,7 @@
     text-decoration: none;
     cursor: pointer;
     transition: var(--area-transition);
+    user-select: none;
   }
 
   /* Horizontal items hug their label instead of filling the axis. */
@@ -159,9 +160,9 @@
     .area-nav__row:hover { transition-duration: 0s; }
   }
   /* Pressed (product UI rule 3, docs/PRODUCT_UI.md; DESIGN_SYSTEM.md "Shared state paint"): the row
-     takes the active fill while held, one step above hover, landing at once like the hover. */
+     takes the pressed fill while held, one step firmer than selected, landing at once like the hover. */
   .area-nav__item:active:not([data-disabled]),
-  .area-nav__row:has(> .area-nav__item:active:not([data-disabled])) { background-color: var(--area-bg-component-active); }
+  .area-nav__row:has(> .area-nav__item:active:not([data-disabled])) { background-color: var(--area-bg-component-pressed); }
   .area-nav__item:is(:active, [aria-current]:not([aria-current="false"])),
   .area-nav__row:has(> .area-nav__item[aria-current]:not([aria-current="false"])) { transition-duration: 0s; }
 
@@ -285,6 +286,9 @@
   .area-nav--marker .area-nav__row:has(> .area-nav__item[aria-current]:not([aria-current="false"])) { background: transparent; }
   .area-nav .area-nav__row > .area-nav__item { background: transparent; }
   .area-nav__row:has(> .area-nav__item:active:not([data-disabled])) { transition-duration: 0s; }
+  /* Pressed, restated after the row's hover: that rule's :has() outranks the press above, so a held row showed only
+     its hover (interaction polish, 2026-10-16). */
+  .area-nav__row:has(> .area-nav__item:active:not([data-disabled])):active { background: var(--area-bg-component-pressed); }
 
   .area-nav__row > .area-nav__item { flex: 1; }
   .area-nav__actions { display: flex; align-items: center; gap: var(--area-space-2); flex-shrink: 0; }

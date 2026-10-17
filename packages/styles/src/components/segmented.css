@@ -83,6 +83,7 @@
     white-space: nowrap;
     cursor: pointer;
     transition: var(--area-transition);
+    user-select: none;
   }
   /* Motion (docs/MOTION.md, 2026-10-07): hover, press and selection land at once; leaving
      them fades over fast (ease-out), so the option given up fades while the chosen one is
@@ -95,6 +96,10 @@
       transition-duration: 0s;
     }
   }
+  /* Pressed, a step past hover (layers.css, "Pressed"); it pressed with the hover paint. spec: in light as firm as
+     the muted label allows on the track, 7.5% black (#666 on #e4, 4.53:1; the shared 10% left it at 4.26:1); in dark
+     16.5% white, past the 14% hover (19% left it at 4.29:1 at dark 24 + 8). */
+  .area-segmented__item:active:not([data-selected]):not(:disabled) { background-color: light-dark(#00000013, #fcfcfc2a); }
 
   /*
    * The selected item lifts off the track: a surface fill, a hairline of its own, and the

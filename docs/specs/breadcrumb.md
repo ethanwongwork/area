@@ -140,6 +140,10 @@ Open questions:
   `test:preview` (4), `npm test` (tokens and contrast), `git diff --check`: all pass.
 - Unverified: hover plate on screen (the browser pane was hidden), dark theme, Figma.
 
+## Interaction polish, 2026-10-16
+
+Links and the ellipsis press at `bg-component-pressed`, one step past selected (Notion presses at 10%, ChatGPT 12%; it shared selected's fill, 1.5% below hover) (they pressed with the hover). Link text is not selectable. See [interaction polish](../research/interaction-polish-2026-10-16.md).
+
 ## Feedback log
 
 - 2026-09-25 · owner approved Tooltip and asked to move on → Breadcrumb first pass: page
