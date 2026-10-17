@@ -184,11 +184,25 @@ test('required lines never ride the Surface axis', () => {
 test('every floating surface draws the floating frame', () => {
   // border-float: neutral 100 in light (Notion's popover ring; it carries the separation the minimal lift no longer
   // does), neutral 650 in dark, so a floating surface stays distinct over another surface (DESIGN_SYSTEM.md, "Size and shape").
-  for (const selector of ['.area-popover, .area-menu', '.area-dialog', '.area-toast', '.area-menu__search-surface', '.area-calendar, .area-calendar--surface', '.area-command-palette', '.area-select::picker(select)', '.area-board-card__actions']) {
+  for (const selector of ['.area-popover, .area-menu', '.area-dialog', '.area-toast', '.area-menu__search-surface', '.area-calendar, .area-calendar--surface', '.area-command-palette', '.area-select::picker(select)']) {
     const rule = rules.find(r => r.selector === selector && /var\(--area-border-float\)/.test(r.body));
     assert.ok(rule, `${selector} does not draw border-float`);
   }
   assert.match(ruleFor('.area-color-picker, .area-color-picker--surface')?.body ?? '', /--_picker-edge:\s*var\(--area-border-float\)/);
+});
+
+test('row actions change ink, not plate: Nav and Board cards', () => {
+  // Nav's rule (owner, review rounds 27 and 29), and Board's card actions since round 30 ("cardactions need to be
+  // fixed"): the row or card already shows the pointer, so its actions are ghost squares whose hover is ink only, and
+  // Board's sit on the card's own paint rather than a floating plate.
+  for (const scope of ['.area-nav__actions', '.area-board-card__actions']) {
+    const body = ruleFor(`${scope} .area-button.area-button--ghost`)?.body ?? '';
+    assert.match(body, /--_bg-hover:\s*transparent/, `${scope}: a hover plate`);
+    assert.match(body, /--_fg:\s*var\(--area-fg-muted\)/, `${scope}: not muted at rest`);
+  }
+  const plate = ruleFor('.area-board-card__actions')?.body ?? '';
+  assert.match(plate, /background-color:\s*var\(--_card-bg\)/);
+  assert.doesNotMatch(plate, /box-shadow|outline:/);
 });
 
 test('every loop stops through the motion axis\'s loop factor', () => {

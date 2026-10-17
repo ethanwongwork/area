@@ -74,6 +74,15 @@ export const CAST_FADE = { light: 0.024, dark: 0.18 } as const;
  * scale a light gray's luminance by 0.872, whose cube root is 0.955 (0.954 to round safe). Soft Badge and Count set
  * muted text on it, so muted is solved on it too (Layers sweep 2026-10-16: #666 on #e0e0e0, 4.35:1, at 95 + 0). */
 export const MARK_SHADE = 0.954;
+/** The soft mark under the pointer (`bg-mark-hover`, 10.7% black: an interactive soft Badge, "+N more"). Its plate is
+ * the ground's sRGB channels × 0.893, composited exactly (a constant lightness factor missed by a hair on some grays).
+ * Muted is solved on it over the page, aiming 4.5 on white, where #666666 already clears it (4.52:1 as hex), rising
+ * to the model's 4.6 from a 98 page down, the margin rounded hexes need (state sweep 2026-10-17: 4.19:1 at 90 + 0). */
+export const MARK_HOVER_KEEP = 0.893;
+export const markHoverTarget = (page: number) => 4.5 + Math.min(INK_TARGET.text - 4.5, (1 - page) * 5);
+/** A gray's OKLCH lightness after a black wash that keeps `keep` of each sRGB channel (gamma 2.4, no linear toe above
+ * L 0.2). */
+export const washedLightness = (L: number, keep: number) => Math.cbrt((((1.055 * (L ** 3) ** (1 / 2.4) - 0.055) * keep + 0.055) / 1.055) ** 2.4);
 /** The roles with a vivid ink (`fg-<role>-vivid`: validation, danger rows, syntax). Each is chosen for 4.6:1 on white
  * (scale.ts chooseVivid; the code ground is white in light), so its luminance is at most VIVID_Y. On a gray light page
  * the inks mix toward black in OKLab, which scales luminance by (1 − d)³ exactly, by just enough to keep 4.6:1 on the
@@ -138,7 +147,7 @@ export function layerLightness(theme: "light" | "dark", groundStep: number, n: n
     const ink = {
       body: Math.min(INK_TODAY.light.body, inkOn("light", recessed - FILL_MULTIPLE.light[2] * s, INK_TARGET.text)),
       // Muted sits on hovered and selected rows (a count in a selected sidebar row) and on the soft-mark plate.
-      muted: Math.min(INK_TODAY.light.muted, inkOn("light", recessed - FILL_MULTIPLE.light[2] * s, INK_TARGET.text), inkOn("light", MARK_SHADE * recessed, INK_TARGET.text)),
+      muted: Math.min(INK_TODAY.light.muted, inkOn("light", recessed - FILL_MULTIPLE.light[2] * s, INK_TARGET.text), inkOn("light", MARK_SHADE * recessed, INK_TARGET.text), inkOn("light", washedLightness(page, MARK_HOVER_KEEP), markHoverTarget(page))),
       edge: edgeInk, edgeHover: edgeInk + INK_TODAY.light.edgeHover,
     };
     return { page, raised, recessed, stripe: page - 0.6 * s, step: s, fill, edge, ink, vividDarken: darkenFor(page, VIVID_Y), tonalDarken: darkenFor(page, TONAL_Y), tintLift: 0, tintLiftFill: 0 };
@@ -240,11 +249,12 @@ export function layerLightnessCss(): Record<string, string> {
   });
   const cube = (x: string) => `pow(${x}, 3)`;
   const root3 = (x: string) => `pow(${x}, ${num(1 / 3)})`;
+  const inkLightCss = (bg: string, ratio: string, today: number) => `min(${num(today)}, ${root3(`max(0, (${cube(bg)} + 0.05) / ${ratio} - 0.05)`)})`;
   const inkLight = (bg: string, ratio: number, today: number) => `min(${num(today)}, ${root3(`max(0, (${cube(bg)} + 0.05) / ${num(ratio)} - 0.05)`)})`;
   const inkDark = (bg: string, ratio: number, today: number) => `max(${num(today)}, ${root3(`min(1, ${num(ratio)} * (${cube(bg)} + 0.05) - 0.05)`)})`;
   Object.assign(out, {
     "layer-light-body": inkLight(v("layer-light-recessed-fill-2"), INK_TARGET.text, INK_TODAY.light.body),
-    "layer-light-muted": `min(${inkLight(v("layer-light-recessed-fill-2"), INK_TARGET.text, INK_TODAY.light.muted)}, ${inkLight(`calc(${num(MARK_SHADE)} * ${v("layer-light-recessed")})`, INK_TARGET.text, INK_TODAY.light.muted)})`,
+    "layer-light-muted": `min(${inkLight(v("layer-light-recessed-fill-2"), INK_TARGET.text, INK_TODAY.light.muted)}, ${inkLight(`calc(${num(MARK_SHADE)} * ${v("layer-light-recessed")})`, INK_TARGET.text, INK_TODAY.light.muted)}, ${inkLightCss(`pow(pow(calc((calc(1.055 * pow(pow(${v("layer-light-page")}, 3), ${num(1 / 2.4)}) - 0.055) * ${num(MARK_HOVER_KEEP)} + 0.055) / 1.055), 2.4), ${num(1 / 3)})`, `calc(4.5 + min(${num(INK_TARGET.text - 4.5)}, calc((1 - ${v("layer-light-page")}) * 5)))`, INK_TODAY.light.muted)})`,
     "layer-light-edge": inkLight(v("layer-light-recessed-fill-0"), INK_TARGET.edge, INK_TODAY.light.edge),
     "layer-dark-body": inkDark(v("layer-dark-raised-fill-2"), INK_TARGET.text, INK_TODAY.dark.body),
     "layer-dark-muted": inkDark(v("layer-dark-raised-fill-2"), INK_TARGET.text, INK_TODAY.dark.muted),

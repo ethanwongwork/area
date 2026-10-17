@@ -190,7 +190,7 @@ const FAMILIES = window.FAMILIES || [];
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 // One collection per review round, so a family reopened after approval starts undecided (round 6: 2026-10-10).
-const ROUND = "components30", KEY = "area-component-review-30";
+const ROUND = "components31", KEY = "area-component-review-31";
 const pref = (k, d) => { try { return localStorage.getItem("area-cr-" + k) || d; } catch { return d; } };
 const setPref = (k, v) => { try { localStorage.setItem("area-cr-" + k, v); } catch {} };
 // Side by side by default (owner 2026-10-09: "be more explicit about the before and after"); only changed
@@ -211,7 +211,7 @@ const BEFORE = window.REVIEW?.before || "the earlier build";
 /* A specimen's change, measured by rendering it in both builds (scripts/review-diff.mjs): changed, new or unchanged,
    and for a change seen only in some modes, which. Changed variants come first; unchanged ones fold away. */
 const state = t => t.change?.state ?? (t.before == null ? "new" : "unknown");
-const where = t => t.change?.modes?.length && t.change.modes.length < 4 ? " in " + t.change.modes.join(", ") : "";
+const where = t => t.change?.modes?.length && t.change.modes.length < 5 ? " in " + t.change.modes.join(", ") : "";
 const badge = t => ({ changed: `<span class="badge changed">Changed${esc(where(t))}</span>`, new: '<span class="badge new">New</span>', unchanged: '<span class="badge same">Unchanged</span>' })[state(t)] ?? "";
 const RANK = { changed: 0, new: 1, unknown: 2, unchanged: 3 };
 const tileHtml = t => `
@@ -291,7 +291,7 @@ function render() {
   $("vlist").innerHTML = [
     by("changed").length ? `<div><span class="badge changed">Changed</span> ${by("changed").length}: ${names(by("changed"))}</div>` : "",
     by("new").length ? `<div><span class="badge new">New</span> ${by("new").length}: ${names(by("new"))}</div>` : "",
-    by("unchanged").length ? `<div><span class="badge same">Unchanged</span> ${by("unchanged").length} variant${by("unchanged").length === 1 ? "" : "s"} look the same as Before in light and dark, at the default Layers and at each theme's extreme</div>` : "",
+    by("unchanged").length ? `<div><span class="badge same">Unchanged</span> ${by("unchanged").length} variant${by("unchanged").length === 1 ? "" : "s"} look the same as Before in light and dark, at the default Layers, at each theme's extreme and with a control focused</div>` : "",
     !HAS_BEFORE ? '<div class="hint">No Before build was given, so every variant counts as new.</div>' : "",
   ].join("");
   $("changes").innerHTML = f.changes || f.log || '<p>No dated changes in this component\'s spec.</p>';

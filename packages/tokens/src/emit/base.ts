@@ -112,7 +112,10 @@ export function derivedTokens(): Record<string, string> {
     // Presentation aliases choose existing palette endpoints. A preference is not a color
     // axis: it changes emphasis while every axis keeps its own namespaces.
     [`${PREFIX}edge-control`]: `color-mix(in srgb, var(${PREFIX}border-faint), var(${PREFIX}stroke-control) calc(var(${PREFIX}contrast-more) * 100%))`,
-    [`${PREFIX}edge-control-hover`]: `color-mix(in srgb, var(${PREFIX}border-subtle), var(${PREFIX}stroke-control-hover) calc(var(${PREFIX}contrast-more) * 100%))`,
+    // The hover edge a step past rest: border-subtle in light (#d4 after #e2). In dark border-subtle is the rest edge's own
+    // value (both #333, today and in the Layers model), so a field's hover drew nothing; it takes `border` (#4b4b4b),
+    // the dark step the model's edges use (hover and pressed sweep 2026-10-17: Custom select, Input, Select, Textarea).
+    [`${PREFIX}edge-control-hover`]: `color-mix(in srgb, light-dark(var(${PREFIX}border-subtle), var(${PREFIX}border)), var(${PREFIX}stroke-control-hover) calc(var(${PREFIX}contrast-more) * 100%))`,
     [`${PREFIX}edge-selected`]: `color-mix(in srgb, var(${PREFIX}border-faint), var(${PREFIX}stroke-control) calc(var(${PREFIX}contrast-more) * 100%))`,
     [`${PREFIX}edge-accent`]: `color-mix(in srgb, var(${PREFIX}accent-border), var(${PREFIX}stroke-selected) calc(var(${PREFIX}contrast-more) * 100%))`,
     [`${PREFIX}fill-toggle`]: `color-mix(in srgb, var(${PREFIX}border-subtle), var(${PREFIX}stroke-control) calc(var(${PREFIX}contrast-more) * 100%))`,

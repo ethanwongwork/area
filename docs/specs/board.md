@@ -66,7 +66,7 @@ area    div.area-board (flex, 12 gap, scrolls sideways)
 | title | UI type 500 (14/20) | Notion 15/22.5 500 | Area's ramp has no 15 |
 | icon | 16 glyph in a 20 square | Notion's 18 icon in a 24 button | Area's UI icon in a box one title line tall |
 | card link | the title is the link; its ::after covers the card | Notion's whole card is a link | Lets actions be separate controls (no button inside a link) |
-| actions | top 8 end 8, on a surface plate with the float lift and the floating frame (`border-float`, an inset outline), shown on hover or focus | Notion | The frame since the 2026-10-12 consistency pass: in dark the plate matched the card |
+| actions | Nav's row actions: 24 squares (`ui-row` − 8) centred on the title's first line, ink-only hover, on the card's paint with a 24 fade, shown on hover, focus or an open menu | Nav (owner rounds 27, 29); ChatGPT's sidebar fade | Was Notion's white plate with a lift and the floating frame until round 30 |
 | hover | neutral: the card darkens to `bg-component-hover`; in a colour, the colour at **6%** in the surface; ink fixed | Notion, measured 2026-10-12: the column's tint laid over the column (purple L 0.960, chroma 0.015) | 6% caps every colour at Notion's chroma (Area's Tag inks are more saturated: 8% gave purple 0.020) and puts the gray column on the neutral #f3 |
 | corners | column = card corner + 8 × `radius-concentric` (**20** at the default), card `radius-container` (12), actions plate = card − 8 floored (**4**, Notion's) and its buttons the same | Area's concentric rule (DESIGN_SYSTEM.md "Size and shape") | Notion draws 10 and 10, not concentric |
 
@@ -140,6 +140,15 @@ Owner, round 7 (rethink), applied:
 - **Why:** their plates are translucent over the column tint, so they deepened on a gray page (4.18:1 at 90) and
   lightened at dark 24 + 8 (4.06:1). Look at **Gray page** and **Lightest dark**.
 
+## Review note, 2026-10-17 (round 31)
+
+- **What changed:** a card's edit and more buttons no longer sit on a white box. They appear on the card itself, as a
+  sidebar row's buttons do in Nav: 24 square, centred on the title's first line, grey at rest and darker under the
+  pointer, with no grey plate. A long title fades out under them.
+- **Why:** your note on round 30. The white box read as pasted onto the tinted hovered card, the edit button's hover
+  filled half of it, and in dark the box was darker than the hovered card. Nav's rule, which you approved, says a row
+  that already shows the pointer doesn't need a second plate; ChatGPT's sidebar fades the title the same way.
+
 ## Feedback log
 
 - 2026-10-10 · owner: "can you keep working, ill bring chrome to the front later" → Board from Notion's board view; 13
@@ -154,3 +163,4 @@ Owner, round 7 (rethink), applied:
 - 2026-10-12 · owner, review round 21 (components21): approved with the open questions' recommendations ("go with your recs"), no change → Complete in `component-status.mjs`.
 - 2026-10-14 · owner: "continue working on the next axis" → Surface is one number, the frame's width: `1` (Default) or `0` (Borderless) (was `outlined` / `borderless`; axes/surface.ts). At 0 the board card, and its floating actions, lists the Surface axis's `shadow-edge` first in its box-shadow, ChatGPT's frameless-menu edge (`0 0 1px` black 62%, and in dark an inset `0 0 1px` white 20%; captured 2026-10-13), so it keeps an edge at Elevation 0 and in dark, where it had none. Owner approved ("go with your recs"), review https://claude.ai/artifact/L4TCF2W5zcjvBK7xZmaDBN (docs/research/surface-2026-10-14.md).
 - 2026-10-16 · owner: "go with your recs, fix them in that order" (after the Layers sweep, docs/research/layers-2026-10-16/sweep/README.md) → a coloured column's text (its count and its add row) reads one private `--_ink` that follows the ground: in light it darkens by the vivid inks' page darken (`layer-light-vivid-darken`), in dark it lifts as Tag's labels do (`layer-dark-tint-lift`). Their plates are translucent over the column tint, so they deepened on a gray page (green count 4.18:1 and yellow add row 4.45:1 at light 90) and lightened at dark 24 + 8 (brown 4.06:1). The neutral column's muted count takes the same light darken (4.36:1 at 95 + 0). Defaults unchanged.
+- 2026-10-17 · owner, review round 30 ("needs changes": "cardactions"; "cardactions need to be fixed", with a screenshot of the hovered card) → card actions take Nav's row-action rule (nav.css; rounds 27 and 29): nested squares the row less 8 (`ui-row` − 8, 24 at type 14), centred on the title's first line and as far from the end as from the top, ghost with an ink-only hover (muted to default, no plate), on the card's own paint (`--_card-bg`, the hover and the column tint included) with a 24 fade before them, which covers a long title's end as ChatGPT's sidebar does. Was Notion's white plate with the float lift and `border-float` frame, its buttons' hovers filling it; in dark since the Layers the plate was the card's resting tone, darker than the hovered card. Also kept visible while the more menu is open. cohesion.test pins the rule for Nav and Board.

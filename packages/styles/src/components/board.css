@@ -132,7 +132,9 @@
     /* spec: Notion's card pads 8 10 around its title row. */
     padding: var(--area-space-8) 10px; /* spec */
     border-radius: var(--area-radius-container);
-    background-color: var(--area-bg-surface);
+    /* The card's paint, which its actions sit on too (they cover the title's end with it). */
+    --_card-bg: var(--area-bg-surface);
+    background-color: var(--_card-bg);
     /* spec: Notion's 1px ring in the column's tone at 8% (rgba(102,0,178,.08) in a purple column) carries the
        card; its lift is the Elevation axis's resting role (1.5% at the default step, none at 0; was Notion's
        0 4 12 / 0 1 2 at 2.7% / 2%). */
@@ -141,14 +143,14 @@
     transition: background-color var(--area-duration-fast) var(--area-ease-out);
   }
   /* Hover darkens the card as a row plate would; the ink stays. */
-  @media (hover: hover) { .area-board-card:hover { background-color: var(--area-bg-component-hover); transition-duration: 0s; } }
+  @media (hover: hover) { .area-board-card:hover { --_card-bg: var(--area-bg-component-hover); transition-duration: 0s; } }
   /* In a coloured column the hover takes the colour too (owner, review round 8: "hover state of the board cards
      should be colored too"), at 6% (owner, 2026-10-12: 8% "seems too drastic/dark"). Notion's hovered card, measured:
      the column's own tint laid over the column (purple L 0.960, chroma 0.015; blue and the default column alike). At 8%
      Area's purple matched that lightness but carried 0.020 chroma, its Tag ink being more saturated; 6% gives every
      colour at most Notion's chroma (purple 0.015) and the gray column exactly the neutral hover, #f3. */
   @media (hover: hover) {
-    .area-board-column:not(.area-board-column--neutral) .area-board-card:hover { background-color: color-mix(in oklab, var(--_color) 6%, var(--area-bg-surface)); /* spec */ }
+    .area-board-column:not(.area-board-column--neutral) .area-board-card:hover { --_card-bg: color-mix(in oklab, var(--_color) 6%, var(--area-bg-surface)); /* spec */ }
   }
 
   .area-board-card__heading { display: flex; align-items: flex-start; gap: var(--area-gap-md); min-inline-size: 0; }
@@ -177,29 +179,46 @@
 
   .area-board-card__properties { display: flex; flex-wrap: wrap; align-items: center; gap: var(--area-space-4); min-inline-size: 0; color: var(--area-fg-muted); }
 
-  /* spec: Notion's edit and more buttons, top 8 right 8, on a white plate with its own lift; shown on hover or focus. */
+  /*
+   * Edit and more, shown on hover or focus at the card's top end. Nav's row-action rule (nav.css; owner, review round
+   * 27, approved round 29): the card is the row, so the actions are nested squares the row less 8 (24 at type 14),
+   * centred on the title's first line and as far from the end as from the top, and they change ink, not plate: no
+   * second plate on the card's own. They sit on the card's paint (`--_card-bg`, the hover and the column's tint
+   * included) with a 24 fade before them, so a long title runs out under them as ChatGPT's sidebar rows do (owner,
+   * review round 30: "cardactions need to be fixed": the white plate read as a box pasted on the tinted card, the
+   * edit button's hover filled half of it, and in dark the plate was the card's resting tone, darker than the hovered
+   * card). Was Notion's white plate with a lift, the floating frame and plate-filling hovers.
+   */
   .area-board-card__actions {
+    --_card-action: calc(var(--area-ui-row) - var(--area-space-4) * 2); /* spec: nav.css */
+    --_card-action-inset: calc(var(--area-space-8) + (var(--area-ui-leading) - var(--_card-action)) / 2);
     position: absolute;
-    inset-block-start: var(--area-space-8);
-    inset-inline-end: var(--area-space-8);
+    inset-block-start: var(--_card-action-inset);
+    inset-inline-end: var(--_card-action-inset);
     z-index: 1;
     display: flex;
-    /* Concentric with the card it sits 8 inside: the card's corner less 8, floored (4 at the default, Notion's 4; was the
-       small control's 6). Its buttons sit flush, so they take the same corner. */
-    --_plate-radius: max(min(var(--area-radius-floor), var(--area-radius-control-sm)), calc(var(--area-radius-container) - var(--area-space-8)));
-    border-radius: var(--_plate-radius);
-    background-color: var(--area-bg-surface);
-    box-shadow: var(--area-shadow-edge), var(--area-shadow-float);
-    /* The floating frame every floating surface draws (`border-float`), as an inset outline so the 28 × 24 buttons keep
-       their place and their hover plates don't cover it: in dark the plate is the card's own #1d1d1d and the shadow
-       does not read without it (consistency pass 2026-10-12; Notion's plate has a ring too). */
-    outline: var(--area-border-width) solid var(--area-border-float);
-    outline-offset: calc(-1 * var(--area-border-width));
+    align-items: center;
+    gap: var(--area-space-2);
+    border-radius: var(--area-radius-floor);
+    background-color: var(--_card-bg);
     opacity: 0;
     pointer-events: none;
     transition: opacity var(--area-duration-fast) var(--area-ease-out);
   }
-  .area-board-card__actions > .area-button { --_radius: var(--_plate-radius); }
-  .area-board-card:focus-within > .area-board-card__actions { opacity: 1; pointer-events: auto; transition-duration: 0s; }
+  .area-board-card__actions::before {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: 100%;
+    inline-size: var(--area-space-24);
+    background: linear-gradient(to right, transparent, var(--_card-bg));
+    pointer-events: none;
+  }
+  .area-board-card__actions:dir(rtl)::before { background: linear-gradient(to left, transparent, var(--_card-bg)); }
+  .area-board-card__actions > .area-button { --_height: var(--_card-action); --_radius: max(var(--area-radius-floor), calc(var(--area-radius-container) - var(--_card-action-inset))); }
+  .area-board-card__actions .area-button.area-button--ghost { --_fg: var(--area-fg-muted); --_bg-hover: transparent; --_bg-active: transparent; }
+  @media (hover: hover) { .area-board-card__actions .area-button.area-button--ghost:hover { --_fg: var(--area-fg-default); } }
+  .area-board-card__actions .area-button.area-button--ghost:is(:active, [aria-expanded="true"][aria-haspopup]) { --_fg: var(--area-fg-default); }
+  .area-board-card:is(:focus-within, :has([aria-expanded="true"][aria-haspopup])) > .area-board-card__actions { opacity: 1; pointer-events: auto; transition-duration: 0s; }
   @media (hover: hover) { .area-board-card:hover > .area-board-card__actions { opacity: 1; pointer-events: auto; transition-duration: 0s; } }
 }

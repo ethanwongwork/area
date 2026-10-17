@@ -146,3 +146,40 @@ Reopened for review, round 30: Segmented, Toggle group, Code block, Box model, T
   equals the old `rgb()` no longer counts as a change. The page's Layers switch shows any specimen at those settings.
 - **Not checked:** hover and pressed states (the sweep reads rest states only), forced colours and the Electron window
   by eye.
+
+## Hover and pressed (2026-10-17, `states.mjs`)
+
+**Method.** Every interactive element in every family, up to 40 a family, at six settings:
+- light 100 + 4, 90 + 0 and 90 + 8;
+- dark 8 + 4, 0 + 0 and 24 + 8.
+
+`:hover`, then `:hover:active`, is forced up the element's ancestors to its gallery tile, as a real pointer would apply
+it. Each state is checked for text under 4.5:1 on its plate, and for whether hover shows at all (a plate, ink, edge or
+underline change on the element, its parent or its grandparent).
+
+Run it with `node states.mjs --all <out>`; it starts twelve browsers. Twelve at once overloaded the machine: some
+processes timed out, and others rendered without Area's stylesheet or theme. Those settings were rerun four browsers
+at a time.
+
+**Found and fixed:**
+- **Menu's danger red** failed on its own row fills: 4.15:1 hovered and 3.97:1 pressed at the defaults, 3.2:1 pressed at
+  dark 24 + 8. It is now solved for the row's pressed fill, and the same red holds at rest (surface.css).
+- **Hover card's example links** were raw `<a>`, so they showed the browser's red while pressed (4:1, 2.97:1 at 90 + 0).
+  They are now Area's `Link`.
+- **An interactive soft Badge's hover** (the "+N more" button, a linked badge) left muted text at 4.19:1 at 90 + 0.
+  The model also solves muted on the hovered soft mark, composited exactly. The target is 4.5 on white, where #666666
+  stays, and 4.6 from a 98 page down.
+- **Outline fields in dark showed no hover.** `border-faint` and `border-subtle` are the same value in dark, before
+  Layers too, so `edge-control-hover` now steps to `border` there (base.ts). This changes dark hover edges on Input,
+  Select, Custom select, Textarea, Number field and the rest; their CSS is unchanged.
+- **Board's card actions** (round 30) now follow Nav's row-action rule.
+
+**After:** no text under 4.5:1 in any hover or pressed state at the six settings, with two exceptions:
+- Toggle group's pressed day at dark 24 + 8 (4.29:1, a press-only moment at the lightest dark ground);
+- disabled text, which WCAG exempts.
+
+**Left by design, as "no hover":**
+- ink-fixed controls: Tabs, Accordion triggers, Breadcrumb links, inline Links (always underlined);
+- a Switch's input, whose visual is its track;
+- the current or selected item, validation fields (their tone edge holds), read-only fields and loading buttons.
+- One faint hover: Chip's accent selection at dark 24 + 8 (ΔE 0.015).
