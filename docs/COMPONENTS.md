@@ -270,6 +270,9 @@ then owner review. Small fixes reuse an existing spec and re-measure only what c
 
 ## Known gaps
 
+- **Chart** (2026-10-17): Area has no chart component. The Examples tab's analytics dashboard draws its line chart as
+  an SVG in Area's tokens (accent line and wash, edge gridlines, muted labels); a Chart family would replace it.
+
 Prioritize form correctness, composite-widget keyboard/focus behavior, motion-0
 behavior and theme resilience as families are touched. Before a release, verify
 cross-browser, forced-colors, assistive-technology and consumer integration behavior;
