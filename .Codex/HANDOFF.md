@@ -5,7 +5,31 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
-## Interaction polish (2026-10-16, branch `claude/component-polish-feel-7ac52a`, uncommitted)
+## Next session starts here (owner, 2026-10-17: "i want to see the artifact in the next session")
+
+Build the component review artifact and open it first, before any other work. It covers PRs #120 and #122:
+- **Interaction polish (#120):** firmer presses, unselectable controls, Link's underline offset. Show before / after
+  rest, hover and pressed (capture scripts in `docs/research/interaction-polish-2026-10-16.md`).
+- **Link inks and Citation `footnote` (#122).**
+- **The eight new Articles families (#122):** Reference list, Table of contents, Figure, Infobox, Inline list,
+  Abbreviation, Hatnote, Navbox.
+
+Follow the review-page format (plain What changed / Why per family, changed variants marked, Before / After side by
+side): `apps/docs/scripts/component-review.mjs`, and the review notes in each spec. Record the owner's approvals in
+`component-status.mjs`.
+
+## Wikipedia: links, footnotes and article families (2026-10-17, PR #122)
+
+Owner: Wikipedia's "Systems[13]" ("i like the way the links and small numbers are styled", no hover-only underline,
+links in blue, text, gray or other colours); then "build whatever you recommend".
+- Link inks: purple, pink, green, red, orange, brown (each hue's readable text ink); Citation `variant="footnote"` ([13]).
+- New families, all In review (`REVIEW_COMPONENTS`, batch "Articles"): Reference list, Table of contents, Figure,
+  Infobox, Inline list, Abbreviation, Hatnote, Navbox. Specs in `docs/specs/`; tests `packages/react/tests/articles.test.mjs`.
+- Area's type has no italic (Geist upright, `font-synthesis: none`): Hatnote is muted instead of italic.
+- Checked: sweep text contrast at four Layers settings (0 findings), React 477/477, contracts, typecheck, styles build.
+- Open: owner review; Notion's TOC and image caption not measured; no manual TOC section toggle.
+
+## Interaction polish (2026-10-16, PR #120, merged)
 
 Owner: components don't feel polished when clicking and hovering; then "fix the underline on the link component".
 Research and every value: `docs/research/interaction-polish-2026-10-16.md`.

@@ -1,0 +1,24 @@
+/* ---------------------------------------------------------------------------
+ * Table of contents
+ *
+ * A page's sections, with the one in view marked (docs/specs/table-of-contents.md). The rows are Nav's
+ * marker rows (nav.css): Wikipedia's contents (Vector 2022, measured 2026-10-17) are 28-tall rows at 14
+ * (Area's compact row), sections 12 in per level, the current one in the body ink while the rest are
+ * links; Area draws the current one in the body ink with the selection rail and the rest muted, as its
+ * other outlines. Only the title is the TOC's own.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-toc { min-inline-size: 0; }
+  /* spec: Wikipedia's "Contents", 14 bold; Area's UI text, strong, starting where the marker rows' text starts
+     (nav.css: 16 in). */
+  .area-toc__title {
+    margin: 0;
+    padding-inline: var(--area-space-16) var(--area-space-8);
+    padding-block-end: var(--area-space-4);
+    color: var(--area-fg-default);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+    font-weight: var(--area-weight-strong);
+  }
+  .area-toc .area-nav__item { scroll-margin-block: var(--area-space-8); }
+}

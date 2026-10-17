@@ -114,3 +114,11 @@
 @import "./components/indicator.css";
 @import "./components/count.css";
 @import "./components/presence.css";
+@import "./components/reference-list.css";
+@import "./components/table-of-contents.css";
+@import "./components/figure.css";
+@import "./components/infobox.css";
+@import "./components/inline-list.css";
+@import "./components/abbreviation.css";
+@import "./components/hatnote.css";
+@import "./components/navbox.css";

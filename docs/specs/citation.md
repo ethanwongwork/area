@@ -125,6 +125,24 @@ Resolved 2026-10-10 (owner: "go with your recommendations"); kept for the record
 
 Presses at `bg-component-pressed`, one step past selected (Notion presses at 10%, ChatGPT 12%; it shared selected's fill, 1.5% below hover) (hover is `bg-component-active`). See [interaction polish](../research/interaction-polish-2026-10-16.md).
 
+## Footnote variant, 2026-10-17
+
+Owner, on Wikipedia's "Systems[13]": "i like the way the links and small numbers are styled". `variant="footnote"`
+draws a number in brackets raised after the word, measured on en.wikipedia.org/wiki/Lisa_Su (computed styles):
+
+| Property | Wikipedia | Area |
+|---|---|---|
+| size | 11.264 on 16 text (0.704em) | 0.704em |
+| line height | 1 | 1, so the raised number never opens the line |
+| position | `vertical-align: super`, no gap before it | the same; 1px each side for the focus ring |
+| brackets | inside the link, in its ink | inside, `aria-hidden`; the name is "Note 13: title" |
+| ink | link blue #36c | `ink`, blue (`fg-info`) by default; Link's inks |
+| underline | none, then on hover | none at all (the owner doesn't want hover-only underlines) |
+| hover plate | none | none, as Link in a sentence; a plate behind a hued number was 3.97:1 at dark 24 + 8 |
+| target | in-page `#cite_note-13` | no `target`; the pill still opens a new tab |
+
+A Hover card previews the source, as Wikipedia's reference previews do. `variant` is `pill` (default) or `footnote`.
+
 ## Feedback log
 
 - 2026-10-10 · owner: "go with your recommendations then keep working" → Citation from ChatGPT's answer citations; 5

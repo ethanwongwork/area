@@ -281,7 +281,7 @@ export const scrollArea = {
 export const link = {
   block: "area-link",
   description: "Goes to another page or place, inline in text or on its own.",
-  variants: { variant: ["inline", "standalone"], ink: ["inherit", "muted", "action", "blue"] },
+  variants: { variant: ["inline", "standalone"], ink: ["inherit", "muted", "action", "blue", "purple", "pink", "green", "red", "orange", "brown"] },
   elements: ["icon"],
   defaults: { variant: "inline", ink: "inherit" },
 } as const satisfies ComponentManifest;
@@ -1045,10 +1045,10 @@ export const zoomControl = {
 
 export const citation = {
   block: "area-citation",
-  description: "Links a source from the text it supports, as a small pill.",
-  variants: {},
-  elements: ["icon", "label", "count"],
-  defaults: {},
+  description: "Links a source from the text it supports: a small pill, or a footnote number.",
+  variants: { variant: ["pill", "footnote"], ink: ["inherit", "muted", "action", "blue", "purple", "pink", "green", "red", "orange", "brown"] },
+  elements: ["icon", "label", "count", "bracket"],
+  defaults: { variant: "pill" },
 } as const satisfies ComponentManifest;
 
 export const dateRangePicker = {
@@ -1073,6 +1073,69 @@ export const kbdGroup = {
   description: "Groups chord hints into a keyboard shortcut sequence.",
   variants: {},
   elements: [],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const referenceList = {
+  block: "area-reference-list",
+  description: "Lists numbered notes, each with links back to where it is cited.",
+  variants: { ink: ["inherit", "muted", "action", "blue", "purple", "pink", "green", "red", "orange", "brown"] },
+  booleans: ["columns"],
+  elements: ["item", "backlinks", "backlink", "text"],
+  defaults: { ink: "blue" },
+} as const satisfies ComponentManifest;
+
+export const tableOfContents = {
+  block: "area-toc",
+  description: "Lists a page's sections and marks the one being read.",
+  variants: {},
+  elements: ["title"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const figure = {
+  block: "area-figure",
+  description: "Shows an image or other media with its caption.",
+  variants: { frame: ["plain", "framed"], align: ["none", "start", "end"] },
+  elements: ["media", "caption"],
+  defaults: { frame: "plain", align: "none" },
+} as const satisfies ComponentManifest;
+
+export const infobox = {
+  block: "area-infobox",
+  description: "Summarises a subject beside an article: a title, an image and labelled facts.",
+  variants: { align: ["none", "start", "end"] },
+  elements: ["title", "subtitle", "media", "caption", "section", "heading", "rows", "row", "label", "value"],
+  defaults: { align: "none" },
+} as const satisfies ComponentManifest;
+
+export const inlineList = {
+  block: "area-inline-list",
+  description: "Runs short items along a line, with a separator between them.",
+  variants: { separator: ["dot", "bar", "comma"] },
+  elements: ["item"],
+  defaults: { separator: "dot" },
+} as const satisfies ComponentManifest;
+
+export const abbreviation = {
+  block: "area-abbr",
+  description: "Marks an abbreviation and shows what it stands for.",
+  variants: {},
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const hatnote = {
+  block: "area-hatnote",
+  description: "Points readers who wanted a different page, at the top of an article or section.",
+  variants: {},
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const navbox = {
+  block: "area-navbox",
+  description: "Groups related links under one title, collapsible, at the foot of a page.",
+  variants: {},
+  elements: ["header", "title", "toggle", "body", "group", "label", "list"],
   defaults: {},
 } as const satisfies ComponentManifest;
 
@@ -1190,4 +1253,12 @@ export const MANIFESTS = {
   token,
   kbd,
   kbdGroup,
+  referenceList,
+  tableOfContents,
+  figure,
+  infobox,
+  inlineList,
+  abbreviation,
+  hatnote,
+  navbox,
 } as const satisfies Record<string, ComponentManifest>;
