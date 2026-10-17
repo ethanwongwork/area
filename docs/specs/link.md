@@ -158,6 +158,17 @@ Rendered in headless Edge at 1x and 2x, 12 to 16px, on "usage guide, typography"
 Peers that draw Link's line take the same offset: Chip `link` and `link-icon`, Card action, Alert link, Code block line
 numbers and toggle, and Description list's "Show more".
 
+## Hued inks, 2026-10-17
+
+Owner: "i also want the option to have the link be colored blue or standard text, or potentially another color like
+even gray, or purple, etc." and "i dont want the underline to just show up on hover". Inline links were already always
+underlined, and the underline stays in the link's ink at 0.25em. New inks: `purple`, `pink`, `green`, `red`,
+`orange`, `brown`. Each is the readable text ink of its hue, the one Tag and Badge use (`fg-discovery`, `fg-pink`,
+`fg-success`, `fg-danger`, `fg-warning`, `fg-brown`), so it holds 4.5:1 and follows the Layers ground. Gray stays
+`muted`; standard text is `inherit`. Wikipedia, measured: links #36c with no underline until hover, visited #6a60b0,
+missing pages #bf3c2c. A hue names a colour, not a status. Contrast sweep at light 100 + 4, light 90 + 8, dark 8 + 4
+and dark 24 + 8: no text under 4.5:1.
+
 ## Peers aligned, 2026-10-08
 
 Owner: "go with your recommendations" (open question 1). The underlines that show at rest now draw Link's

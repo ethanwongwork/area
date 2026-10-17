@@ -1,0 +1,81 @@
+/* ---------------------------------------------------------------------------
+ * Reference list
+ *
+ * The notes a footnote (Citation variant="footnote") points at, numbered, each led by links back to
+ * where it is cited (docs/specs/reference-list.md). Measured on Wikipedia (en.wikipedia.org/wiki/Lisa_Su,
+ * 2026-10-17, computed): an ol at 0.9 of the body (14.4 on 16, leading 23.4), markers 3.2em in, items 0.1em
+ * apart, "↑" (one citation) or "↑ a b c" (several) before the text in the link blue, the note highlighted
+ * #e8eeff when it is the page's target, in columns 27em wide when the list is long.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-reference-list {
+    --_ink: inherit;
+    margin: 0;
+    /* spec: Wikipedia's markers sit 3.2em in (46.08 at 14.4); room for three digits. */
+    padding-inline-start: 3.2em;
+    color: var(--area-fg-default);
+    /* spec: a step below body, as Wikipedia's 0.9; Area's small text. */
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
+  }
+  /* spec: Wikipedia's reflist columns (27em in Vector 2022); a note never splits across two. */
+  .area-reference-list--columns { column-width: 27em; column-gap: var(--area-space-32); }
+  .area-reference-list--columns > .area-reference-list__item { break-inside: avoid-column; }
+
+  .area-reference-list__item {
+    /* spec: Wikipedia 0.1em between notes. */
+    margin-block-end: var(--area-space-2);
+    scroll-margin-block: var(--area-space-24);
+  }
+  /* The numbers are quieter than the notes and line up. */
+  .area-reference-list__item::marker { color: var(--area-fg-muted); font-variant-numeric: tabular-nums; }
+  /* The note a footnote jumped to: Wikipedia tints it (#e8eeff). Area marks it as it marks the current place in an
+     outline (Nav marker, Table of contents): the selection rail beside it, at the list's start edge, so the note's
+     text and links stay on the page (a filled plate left the blue backlinks at 3.16:1 at dark 24 + 8).
+     data-highlighted lets an app mark it without a hash change. */
+  .area-reference-list__item { position: relative; }
+  .area-reference-list__item:is(:target, [data-highlighted])::before {
+    content: "";
+    position: absolute;
+    inset-block: var(--area-space-2);
+    inset-inline-start: -3.2em;
+    inline-size: calc(var(--area-space-2) + var(--area-stroke-width)); /* spec: Nav marker's rail */
+    border-radius: var(--area-radius-full);
+    background-color: var(--area-fg-selection);
+  }
+
+  .area-reference-list__backlinks {
+    margin-inline-end: 0.25em;
+    color: var(--area-fg-muted);
+    user-select: none; /* spec: Wikipedia's .mw-cite-backlink */
+  }
+  .area-reference-list__backlink {
+    color: var(--_ink);
+    text-decoration: none;
+    border-radius: var(--area-radius-min);
+    cursor: pointer;
+  }
+  /* spec: Wikipedia sets the a b c of several citations raised, bold and italic; Area's type has no italic
+     (base.css: no synthesis), so raised and strong. */
+  .area-reference-list__backlink:not(:first-child) {
+    margin-inline-start: 0.2em;
+    font-size: 0.75em;
+    font-weight: var(--area-weight-strong);
+    vertical-align: super;
+    line-height: 1;
+  }
+  .area-reference-list__backlink:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  .area-reference-list__text {}
+
+  /* Ink of the links back, as Link's (link.css): blue by default (manifest), Wikipedia's. */
+  .area-reference-list--inherit {}
+  .area-reference-list--muted { --_ink: var(--area-fg-muted); }
+  .area-reference-list--action { --_ink: var(--area-fg-action); }
+  .area-reference-list--blue { --_ink: var(--area-fg-info); }
+  .area-reference-list--purple { --_ink: var(--area-fg-discovery); }
+  .area-reference-list--pink { --_ink: var(--area-fg-pink); }
+  .area-reference-list--green { --_ink: var(--area-fg-success); }
+  .area-reference-list--red { --_ink: var(--area-fg-danger); }
+  .area-reference-list--orange { --_ink: var(--area-fg-warning); }
+  .area-reference-list--brown { --_ink: var(--area-fg-brown); }
+}

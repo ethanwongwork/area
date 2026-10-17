@@ -1,0 +1,20 @@
+/* ---------------------------------------------------------------------------
+ * Abbreviation
+ *
+ * A short form whose expansion shows in a Tooltip (docs/specs/abbreviation.md). Wikipedia (measured
+ * 2026-10-17): abbr[title] underlined dotted, cursor help, the expansion in the browser's title. Area
+ * keeps the dotted line, on Link's offset, and shows the expansion in an Area Tooltip, which the keyboard
+ * reaches too (docs/PRODUCT_UI.md rule 4: never the browser's title).
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-abbr {
+    text-decoration-line: underline;
+    text-decoration-style: dotted;
+    text-decoration-thickness: var(--area-stroke-width);
+    text-underline-offset: 0.25em; /* spec: Link's offset, clear of descenders (link.md) */
+    text-decoration-skip-ink: auto;
+    cursor: help;
+    border-radius: var(--area-radius-min);
+  }
+  .area-abbr:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+}

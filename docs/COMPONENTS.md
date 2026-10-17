@@ -241,6 +241,12 @@ Keep behavioral boundaries clear: Select differs from Combobox; Badge from selec
 Chip; Tooltip from interactive Popover; Table from DataGrid. Count independent jobs and
 working behaviors rather than styling aliases when evaluating library coverage.
 
+- **From Wikipedia (en.wikipedia.org/wiki/Lisa_Su, 2026-10-17), built the same day, in review:** Reference list,
+  Table of contents (Nav marker rows that follow the scroll), Figure, Infobox, Inline list, Abbreviation, Hatnote,
+  Navbox (specs in `specs/`). Not built: a Section heading "edit" action (its actions may cover it), and a manual
+  toggle for the Table of contents' sections (it collapses automatically). Already covered: Link (now with hued
+  inks), Citation `footnote`, Tabs, Menu, Combobox and Search field, Table, Hover card.
+
 ## Useful variants
 
 Each family exposes the dimensions it actually needs:

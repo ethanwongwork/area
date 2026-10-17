@@ -1,0 +1,66 @@
+/* ---------------------------------------------------------------------------
+ * Infobox
+ *
+ * A subject at a glance, beside the article (docs/specs/infobox.md). Wikipedia's (measured 2026-10-17):
+ * 22em wide at 0.88 of the body (14.08 / 21.12), floated to the end 1em from the text, a #f8f9fa panel
+ * with a #a2a9b1 hairline; the title 1.25em bold centred; the image centred with its caption under it;
+ * sections under a centred bold band; rows of a bold label (about 40%) and its value, both top-aligned.
+ * Area keeps the structure in its own paint: Card's surface and edge, the band in the control fill, and
+ * labels in Description list's muted term ink (the labelled-values role).
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-infobox {
+    /* spec: Wikipedia 22em (309.76 at 14.08). */
+    inline-size: 22em;
+    max-inline-size: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: var(--area-space-8);
+    padding: var(--area-space-12);
+    background-color: var(--area-bg-surface);
+    border: var(--area-border-width) solid var(--area-border-card);
+    border-radius: var(--area-radius-container);
+    /* A resting surface, as Card: its frame rides the Surface axis and the resting shadow keeps it under Borderless. */
+    box-shadow: var(--area-shadow-resting);
+    color: var(--area-fg-default);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
+  }
+  /* spec: Wikipedia floats it to the end, 1em from the text; Area's 24 and 16, as Figure. */
+  .area-infobox--none {}
+  .area-infobox--end { float: inline-end; clear: inline-end; margin: var(--area-space-4) 0 var(--area-space-16) var(--area-space-24); }
+  .area-infobox--start { float: inline-start; clear: inline-start; margin: var(--area-space-4) var(--area-space-24) var(--area-space-16) 0; }
+
+  /* spec: Wikipedia's title 1.25em bold, centred; Area's body text, strong. */
+  .area-infobox__title {
+    margin: 0;
+    font-size: var(--area-text-md-size);
+    line-height: var(--area-text-md-leading);
+    font-weight: var(--area-weight-strong);
+    text-align: center;
+    overflow-wrap: anywhere;
+  }
+  .area-infobox__subtitle { margin: calc(var(--area-space-8) * -1) 0 0; color: var(--area-fg-muted); text-align: center; }
+  .area-infobox__media { margin: 0; display: flex; flex-direction: column; align-items: center; gap: var(--area-space-6); }
+  .area-infobox__media > :is(img, video, svg, picture) { display: block; max-inline-size: 100%; block-size: auto; border-radius: var(--area-radius-small); }
+  .area-infobox__caption { color: var(--area-fg-muted); text-align: center; }
+
+  .area-infobox__section { display: flex; flex-direction: column; gap: var(--area-space-4); margin: 0; }
+  /* spec: Wikipedia's section band, bold and centred on a tint; Area's control fill, the band's own corner. */
+  .area-infobox__heading {
+    margin: 0;
+    padding: var(--area-space-2) var(--area-space-8);
+    background-color: var(--area-bg-component);
+    border-radius: var(--area-radius-small);
+    font-size: inherit;
+    line-height: inherit;
+    font-weight: var(--area-weight-strong);
+    text-align: center;
+  }
+  .area-infobox__rows { display: flex; flex-direction: column; gap: var(--area-space-4); margin: 0; }
+  /* spec: Wikipedia's label column about 40% (120.8 of 296), label and value top-aligned. */
+  .area-infobox__row { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); column-gap: var(--area-space-12); align-items: start; }
+  .area-infobox__label { margin: 0; color: var(--area-fg-muted); overflow-wrap: anywhere; }
+  .area-infobox__value { margin: 0; min-inline-size: 0; overflow-wrap: anywhere; }
+}

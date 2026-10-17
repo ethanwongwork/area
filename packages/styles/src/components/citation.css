@@ -8,6 +8,10 @@
  * AI Elements' InlineCitation (shadcn Badge, text-xs) and prompt-kit's Source (h-5, text-xs) set it.
  * It sits on the sentence's baseline 4 after the last word. A link: it opens the source, and a Hover
  * card can preview it.
+ *
+ * Footnote (owner, 2026-10-17, on Wikipedia's "Systems[13]": "i like the way the links and small numbers are
+ * styled"): a number in brackets raised after the word, in Wikipedia's measured shape. It goes to its note on the
+ * page; a Hover card can preview the source, as Wikipedia's reference previews do.
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-citation {
@@ -65,4 +69,42 @@
   /* spec: ChatGPT cuts the name at 15ch with an ellipsis. */
   .area-citation__label { min-inline-size: 0; max-inline-size: 15ch; overflow: hidden; text-overflow: ellipsis; }
   .area-citation__count { flex: none; font-variant-numeric: tabular-nums; }
+
+  /* Footnote. spec (en.wikipedia.org/wiki/Lisa_Su, 2026-10-17, computed): sup.reference 11.264 on 16 text (0.704em),
+     line-height 1, vertical-align super, nowrap, no gap before it, the brackets inside the link in its ink
+     (#36c), regular weight. No underline at rest, as Wikipedia, and none on hover either (the owner does not want an
+     underline that only appears on hover), and no plate either, as Link in a sentence: the number stays clean in the
+     line. */
+  .area-citation--footnote {
+    display: inline;
+    block-size: auto;
+    margin-inline-start: 0;
+    padding: 0 1px; /* spec: a hair of room for the focus ring around the brackets; Wikipedia sets none, and 2 opened a gap after the word */
+    border-radius: var(--area-radius-min);
+    background-color: transparent;
+    color: var(--_ink, inherit);
+    font-family: inherit;
+    font-size: 0.704em; /* spec: Wikipedia */
+    line-height: 1; /* spec: Wikipedia; the raised number never opens the line */
+    font-weight: inherit;
+    font-variant-numeric: tabular-nums;
+    vertical-align: super;
+  }
+  /* Ink, as Link's (link.css): blue by default (Citation.tsx), Wikipedia's link blue. */
+  .area-citation--inherit {}
+  .area-citation--muted { --_ink: var(--area-fg-muted); }
+  .area-citation--action { --_ink: var(--area-fg-action); }
+  .area-citation--blue { --_ink: var(--area-fg-info); }
+  .area-citation--purple { --_ink: var(--area-fg-discovery); }
+  .area-citation--pink { --_ink: var(--area-fg-pink); }
+  .area-citation--green { --_ink: var(--area-fg-success); }
+  .area-citation--red { --_ink: var(--area-fg-danger); }
+  .area-citation--orange { --_ink: var(--area-fg-warning); }
+  .area-citation--brown { --_ink: var(--area-fg-brown); }
+  .area-citation__bracket {}
+  /* A footnote is a link in the line, as Link: no plate on hover or press, the pointer and its ink say it is one. A plate
+     behind a hued number failed in dark (the blue on the hover plate 3.97:1 at dark 24 + 8). */
+  @media (hover: hover) { .area-citation--footnote:hover { background-color: transparent; } }
+  .area-citation--footnote:active { background-color: transparent; }
+  .area-citation--pill {}
 }

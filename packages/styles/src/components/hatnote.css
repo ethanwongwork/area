@@ -1,0 +1,17 @@
+/* ---------------------------------------------------------------------------
+ * Hatnote
+ *
+ * "For other uses, see …" at the top of an article or section (docs/specs/hatnote.md). Wikipedia
+ * (measured 2026-10-17): body size, italic, 1.6em in, 0.5em before what follows; titles inside it set
+ * upright. Area's type has no italic (Geist ships upright only and base.css turns off synthesis), so the
+ * note takes the muted ink instead (Wikipedia's mobile skin sets its subtle ink too) and keeps the indent:
+ * it reads as a note about the page rather than its first line.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-hatnote {
+    margin: 0 0 var(--area-space-8);
+    padding-inline-start: 1.6em; /* spec: Wikipedia */
+    color: var(--area-fg-muted);
+  }
+  .area-hatnote + .area-hatnote { margin-block-start: calc(var(--area-space-8) * -1 + var(--area-space-2)); }
+}
