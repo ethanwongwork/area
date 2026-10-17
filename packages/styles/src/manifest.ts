@@ -1078,11 +1078,10 @@ export const kbdGroup = {
 
 export const referenceList = {
   block: "area-reference-list",
-  description: "Lists numbered notes, each with links back to where it is cited.",
-  variants: { ink: ["inherit", "muted", "action", "blue", "purple", "pink", "green", "red", "orange", "brown"] },
-  booleans: ["columns"],
-  elements: ["item", "backlinks", "backlink", "text"],
-  defaults: { ink: "blue" },
+  description: "Lists a text's sources: publisher, linked title and what each covers.",
+  variants: { marker: ["number", "bullet"] },
+  elements: ["title", "list", "item", "text", "dash", "backlinks", "backlink", "count"],
+  defaults: { marker: "number" },
 } as const satisfies ComponentManifest;
 
 export const tableOfContents = {
@@ -1096,23 +1095,24 @@ export const tableOfContents = {
 export const figure = {
   block: "area-figure",
   description: "Shows an image or other media with its caption.",
-  variants: { frame: ["plain", "framed"], align: ["none", "start", "end"] },
+  variants: {},
   elements: ["media", "caption"],
-  defaults: { frame: "plain", align: "none" },
+  defaults: {},
 } as const satisfies ComponentManifest;
 
 export const infobox = {
   block: "area-infobox",
-  description: "Summarises a subject beside an article: a title, an image and labelled facts.",
-  variants: { align: ["none", "start", "end"] },
-  elements: ["title", "subtitle", "media", "caption", "section", "heading", "rows", "row", "label", "value"],
-  defaults: { align: "none" },
+  description: "Summarises a subject: a title, optional media, and labelled facts in sections.",
+  variants: { layout: ["columns", "stacked"] },
+  booleans: ["framed"],
+  elements: ["header", "media", "title-row", "heading-group", "title", "subtitle", "action", "section", "heading", "rows", "row", "label", "value"],
+  defaults: { layout: "columns" },
 } as const satisfies ComponentManifest;
 
 export const inlineList = {
   block: "area-inline-list",
   description: "Runs short items along a line, with a separator between them.",
-  variants: { separator: ["dot", "bar", "comma"] },
+  variants: { separator: ["dot", "rule", "none"] },
   elements: ["item"],
   defaults: { separator: "dot" },
 } as const satisfies ComponentManifest;
@@ -1133,9 +1133,10 @@ export const hatnote = {
 
 export const navbox = {
   block: "area-navbox",
-  description: "Groups related links under one title, collapsible, at the foot of a page.",
+  description: "Groups related links under small headings, in columns, at the foot of a page.",
   variants: {},
-  elements: ["header", "title", "toggle", "body", "group", "label", "list"],
+  booleans: ["divided"],
+  elements: ["title", "groups", "group", "label", "list"],
   defaults: {},
 } as const satisfies ComponentManifest;
 

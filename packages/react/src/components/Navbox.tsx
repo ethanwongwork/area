@@ -1,49 +1,38 @@
-// Navbox: related pages grouped under one title, collapsible, at the foot of an article (Wikipedia's navbox).
-// docs/specs/navbox.md.
-import { forwardRef, useId, useState } from "react";
+// Navbox: related links in named groups at the foot of a page, as site footers and docs "related" blocks lay them
+// out: a heading above each group, its links one per line, in columns. docs/specs/navbox.md.
+import { Children, forwardRef, isValidElement, useId } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { cx, navboxVariants } from "../variants.ts";
-import { Button } from "./Button.tsx";
 
 export interface NavboxProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
-  /** The topic the links share. */
-  title: ReactNode;
-  /** Open (controlled). */
-  expanded?: boolean;
-  defaultExpanded?: boolean;
-  onExpandedChange?: (expanded: boolean) => void;
-  /** The toggle's labels, "Hide" and "Show" by default. */
-  hideLabel?: string;
-  showLabel?: string;
+  /** The topic the links share, in the surface title role. Without it, give the nav an `aria-label`. */
+  title?: ReactNode;
+  /** The title's heading level, 2 by default. */
+  level?: 2 | 3 | 4 | 5 | 6;
+  /** A rule above, where the block closes an article. */
+  divided?: boolean;
   /** `NavboxGroup`s. */
   children?: ReactNode;
 }
 
 export const Navbox = /* @__PURE__ */ forwardRef<HTMLElement, NavboxProps>(function Navbox(
-  { title, expanded: expandedProp, defaultExpanded = true, onExpandedChange, hideLabel = "Hide", showLabel = "Show", className, children, ...rest },
+  { title, level, divided, className, children, ...rest },
   ref,
 ) {
   const id = useId();
-  const [local, setLocal] = useState(defaultExpanded);
-  const expanded = expandedProp ?? local;
-  const toggle = () => { if (expandedProp === undefined) setLocal(!expanded); onExpandedChange?.(!expanded); };
+  const Heading = `h${level ?? 2}` as "h2";
   return (
-    <nav ref={ref} className={navboxVariants(undefined, className)} aria-labelledby={`${id}-title`} {...rest}>
-      <div className={navboxVariants.element("header")}>
-        <div className={navboxVariants.element("title")} id={`${id}-title`}>{title}</div>
-        <Button className={navboxVariants.element("toggle")} variant="ghost" size="sm" aria-expanded={expanded} aria-controls={`${id}-body`} onClick={toggle}>
-          {expanded ? hideLabel : showLabel}
-        </Button>
-      </div>
-      <div className={navboxVariants.element("body")} id={`${id}-body`} hidden={!expanded}>{children}</div>
+    <nav ref={ref} className={navboxVariants({ divided }, className)} aria-labelledby={title ? `${id}-title` : undefined} {...rest}>
+      {title ? <Heading className={navboxVariants.element("title")} id={`${id}-title`}>{title}</Heading> : null}
+      <div className={navboxVariants.element("groups")}>{children}</div>
     </nav>
   );
 });
 
 export interface NavboxGroupProps extends HTMLAttributes<HTMLDivElement> {
-  /** The group's name, at the start of its row. Omit it and the links take the whole row. */
+  /** The group's heading, above its links. */
   label?: ReactNode;
-  /** The links, usually an `InlineList`. */
+  /** The links: each child becomes one row. */
   children?: ReactNode;
 }
 
@@ -51,10 +40,13 @@ export const NavboxGroup = /* @__PURE__ */ forwardRef<HTMLDivElement, NavboxGrou
   { label, className, children, ...rest },
   ref,
 ) {
+  const id = useId();
   return (
     <div ref={ref} className={cx(navboxVariants.element("group"), className)} {...rest}>
-      {label ? <div className={navboxVariants.element("label")}>{label}</div> : null}
-      <div className={navboxVariants.element("list")}>{children}</div>
+      {label ? <div className={navboxVariants.element("label")} id={`${id}-label`}>{label}</div> : null}
+      <ul className={navboxVariants.element("list")} role="list" aria-labelledby={label ? `${id}-label` : undefined}>
+        {Children.toArray(children).map((child, index) => <li key={isValidElement(child) && child.key != null ? child.key : index}>{child}</li>)}
+      </ul>
     </div>
   );
 });

@@ -1,27 +1,21 @@
-// Figure: media with its caption (Wikipedia's thumbnail; Notion's image block). docs/specs/figure.md.
+// Figure: media with its caption, unframed (Notion's image block; Carbon, Tailwind Typography). docs/specs/figure.md.
 import { forwardRef } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
-import { figureVariants, type VariantProps, MANIFESTS } from "../variants.ts";
-
-type FigureVariants = VariantProps<typeof MANIFESTS.figure>;
+import { figureVariants } from "../variants.ts";
 
 export interface FigureProps extends HTMLAttributes<HTMLElement> {
-  /** `plain`: the media alone with a muted caption under it. `framed`: Wikipedia's thumbnail frame. */
-  frame?: FigureVariants["frame"];
-  /** Beside the text: floated to the `end` or `start` of the line, as Wikipedia's thumbnails. */
-  align?: FigureVariants["align"];
-  /** The caption, wrapped to the media's width. */
+  /** The caption, wrapped to the media's width. Optional. */
   caption?: ReactNode;
-  /** The media: an img, a video, an svg. Give an img its alt text. */
+  /** The media: an img, an svg, an embed. Give an img its alt text. */
   children?: ReactNode;
 }
 
 export const Figure = /* @__PURE__ */ forwardRef<HTMLElement, FigureProps>(function Figure(
-  { frame, align, caption, className, children, ...rest },
+  { caption, className, children, ...rest },
   ref,
 ) {
   return (
-    <figure ref={ref} className={figureVariants({ frame, align }, className)} {...rest}>
+    <figure ref={ref} className={figureVariants(undefined, className)} {...rest}>
       <div className={figureVariants.element("media")}>{children}</div>
       {caption ? <figcaption className={figureVariants.element("caption")}>{caption}</figcaption> : null}
     </figure>

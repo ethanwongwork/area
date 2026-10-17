@@ -11,7 +11,7 @@
     text-decoration-line: underline;
     text-decoration-style: dotted;
     text-decoration-thickness: var(--area-stroke-width);
-    text-underline-offset: 0.25em; /* spec: Link's offset, clear of descenders (link.md) */
+    text-underline-offset: 0.08em; /* spec: Link's offset, close under the text (link.md, 2026-10-17) */
     text-decoration-skip-ink: auto;
     cursor: help;
     border-radius: var(--area-radius-min);
