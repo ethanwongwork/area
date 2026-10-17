@@ -177,6 +177,10 @@ Open questions:
 - **What changed:** in a checkbox tree, an unchecked box has Checkbox's slightly firmer edge (#d4, was #e2) in light mode; dark mode is unchanged.
 - **Why:** the tree's box is drawn to look like Checkbox (the checked box already did); unchecked it still had the lighter field edge.
 
+## Interaction polish, 2026-10-16
+
+Rows press at `bg-component-pressed`, one step past selected (Notion presses at 10%, ChatGPT 12%; it shared selected's fill, 1.5% below hover). Row text is not selectable. The arrow cursor stays (Figma's layers). See [interaction polish](../research/interaction-polish-2026-10-16.md).
+
 ## Feedback log
 
 - 2026-09-25 · owner approved Breadcrumb and asked to move on → Tree view first pass:

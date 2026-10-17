@@ -44,14 +44,16 @@
     text-align: start;
     cursor: pointer;
     transition: var(--area-transition);
+    user-select: none;
   }
   .area-prompt-suggestions__row:not(:has(.area-prompt-suggestions__dismiss)) > .area-prompt-suggestions__item { padding-inline-end: var(--area-space-8); }
   /* spec: hover and focus lay Menu's row plate under the prompt; the ink stays fixed, as on
      every hovered control. */
   @media (hover: hover) { .area-prompt-suggestions__row:hover > .area-prompt-suggestions__item { background-color: var(--area-bg-component-hover); } }
   .area-prompt-suggestions__item:focus-visible { background-color: var(--area-bg-component-hover); }
-  /* Pressed takes the shared pressed plate, one step firmer (audit G-18). */
-  .area-prompt-suggestions__item:active { background-color: var(--area-bg-component-active); }
+  /* Pressed takes the shared pressed plate, one step firmer (audit G-18). Read through the row, as
+     the hover is, or the row's hover outranks it and the press never shows. */
+  .area-prompt-suggestions__row > .area-prompt-suggestions__item:active { background-color: var(--area-bg-component-pressed); }
   /* Motion (docs/MOTION.md, "Hover plate", "Press", "Focus ring"; Button's rule): the plate arrives
      at once and fades out over the base rule's duration-fast. Hover is read from the row, so the
      dismiss keeps the row's plate on while the pointer is over it. */

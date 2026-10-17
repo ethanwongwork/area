@@ -210,6 +210,10 @@ grey while the halo fades (the hover rule is 0s for paint); recommendation: keep
 the exit. (2) A tone cleared while the field is not focused fades on `fast`; a tone cleared while
 typing is instant. CSS cannot tell the direction; recommendation: keep.
 
+## Interaction polish, 2026-10-16
+
+Action buttons press at `bg-component-pressed`, one step past selected (Notion presses at 10%, ChatGPT 12%; it shared selected's fill, 1.5% below hover) (soft fields: `bg-pressed`). Not selectable. See [interaction polish](../research/interaction-polish-2026-10-16.md).
+
 ## Feedback log
 
 - 2026-09-28 · batch 12 Chrome side by side → Input `suffix` centres a Kbd (found by the Kbd

@@ -201,6 +201,10 @@ Build, parity, typecheck pass; captures pass the checksum. Unverified: dark agai
 - **Why:** the plate is the colour at 16% over whatever is behind, so it lightened with the ground and the label
   didn't: brown fell to 3.98:1 at dark ground 24 + layers 8. Look at **Lightest dark**.
 
+## Interaction polish, 2026-10-16
+
+Remove presses at 20% of its ink (hover 12%). Not selectable. See [interaction polish](../research/interaction-polish-2026-10-16.md).
+
 ## Feedback log
 
 - 2026-10-06 · owner: tags look wrong, chip or badge size?, make a Tag, fix the × backplate, Chrome review →

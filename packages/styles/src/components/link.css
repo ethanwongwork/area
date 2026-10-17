@@ -22,8 +22,11 @@
     /* spec: one stroke, as Area's other underlines (Alert, Card, Chip, Code block); ChatGPT's
        auto line is 1px at 12px, Notion's 0.05em (0.8 at 16). */
     text-decoration-thickness: var(--area-stroke-width);
-    /* spec: ChatGPT 0.125rem (2px); Notion 10% (1.6 at 16); Area's other underlines 2. */
-    text-underline-offset: var(--area-space-2);
+    /* spec: a quarter of the type, so the line clears descenders with a 1px gap at every size (12–16:
+       3, 3.25, 3.5, 3.75, 4; one solid pixel row at 1x). A fixed 2 (ChatGPT's 0.125rem, set for 16 text)
+       met g, y and p at 13 and 14: their tails fused with the line or skip-ink chopped it (owner,
+       2026-10-16: "it doesnt look clean"; link.md, "Underline clears descenders"). */
+    text-underline-offset: 0.25em;
     text-decoration-skip-ink: auto;
     border-radius: var(--area-radius-min);
     cursor: pointer;

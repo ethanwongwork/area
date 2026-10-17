@@ -5,6 +5,24 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Interaction polish (2026-10-16, branch `claude/component-polish-feel-7ac52a`, uncommitted)
+
+Owner: components don't feel polished when clicking and hovering; then "fix the underline on the link component".
+Research and every value: `docs/research/interaction-polish-2026-10-16.md`.
+- **Presses show.** New `bg-component-pressed` (layers.css: selected fill 3% / 7% toward the ink, bounded by muted
+  ink at 4.6:1) and `bg-pressed` (10% / 19%), one step past selected (Notion 5% → 10%, ChatGPT 5% → 12%). About 30
+  families repointed or given the press they lacked (solid Button `--_solid-active`, Segmented, Chip, Calendar, Badge,
+  Tag, Board, Breadcrumb…). Two presses never showed (specificity): Prompt suggestions, Nav rows with actions.
+  PRODUCT_UI rule 3 and DESIGN_SYSTEM "Shared state paint" updated.
+- **`user-select: none`** on every control (ChatGPT and Notion: 100%).
+- **Link underline** at 0.25em, clear of descenders (link.md); peers and the app's section links too.
+- **Components tab** blocked about 350ms; `fit.ts` batches reads and writes: about 175ms. Fits are identical.
+- **Checked:** hover and press sweep (the states.mjs copy also reads descendants and pseudo-elements). No text under
+  4.5:1 at light 100 + 4, light 90 + 8, dark 8 + 4 or dark 24 + 8 for the changed families. React 468/468, contracts,
+  typecheck, styles build.
+- **Not done:** owner review of the changed (Complete) families; Color tab's 260ms first layout.
+- Another session (`remaining-work-axis`) is changing the Layers axes; this pass avoided `packages/tokens`.
+
 ## Icons: balance over 1× crispness (2026-10-16, branch `claude/icon-review-5957f0`, merged)
 
 - Owner: optical balance, size and even spacing outrank 1× pixel crispness (spec "Balance over 1× crispness").

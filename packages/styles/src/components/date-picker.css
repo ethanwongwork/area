@@ -73,6 +73,7 @@
        on fast ease-out; the focus halo is not in the list, so the ring never fades. */
     transition: var(--area-transition);
     transition-property: background-color, border-color, color;
+    user-select: none;
   }
   @media (hover: hover) {
     .area-date-picker__trigger:hover:not(:disabled, [aria-expanded="true"]) {

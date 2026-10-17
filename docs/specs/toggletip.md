@@ -204,5 +204,9 @@ compared side by side in Claude in Chrome with the live products (captures only)
 3. **Ink.** `stroke-control` (#838383) is between ChatGPT's #8f8f8f and the muted text (#666). Notion is lighter
    (#ada9a3). Recommendation: keep the chevron's role, so every quiet affordance in a form shares one ink.
 
+## Interaction polish, 2026-10-16
+
+The trigger presses at `bg-component-pressed`, one step past selected (Notion presses at 10%, ChatGPT 12%; it shared selected's fill, 1.5% below hover); open keeps `bg-component-active`. Not selectable. See [interaction polish](../research/interaction-polish-2026-10-16.md).
+
 ## Feedback log
 - 2026-10-12 · spacing step extrapolated past Default → the icon size and stroke take only the compact step (`clamp(0, ui-dense, 1)`, `toggletip.css`). `docs/research/ui-size-scale-2026-10-12.md`.

@@ -196,6 +196,10 @@ the trigger.
    typed date shows focus (shadcn, React Aria)? Recommendation: hold the rest edge; one focus
    indicator on screen.
 
+## Interaction polish, 2026-10-16
+
+The trigger's label is not selectable. See [interaction polish](../research/interaction-polish-2026-10-16.md).
+
 ## Feedback log
 
 - 2026-10-05 · batch 1, third component → built from Notion's date property editor on Select's

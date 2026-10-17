@@ -14,10 +14,12 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
 2. **Hover and press change one thing: the plate or the edge.** Ink, size and position never
    move. Rows change their plate; cards and tiles change their edge; painted things (swatches,
    ramp steps) change a ring in their own ink.
-3. **Each state is one step firmer than the last**: rest → hover → press → selected, and
-   selected survives hover and press.
-   - Rows (Nav, Menu, Tree view, interactive Table): `bg-component-hover` → `bg-component-active`
-     held → `bg-component-active` selected / current.
+3. **Each state is one step firmer than the last**: rest → hover → selected → press, and
+   selected survives hover. A press is the firmest, momentary step, so every click shows (owner,
+   2026-10-16: "make sure the build quality is real"; Notion presses at twice its hover, ChatGPT
+   more than twice).
+   - Rows (Nav, Menu, Tree view, interactive Table, List box, Pagination): `bg-component-hover` →
+     `bg-component-active` selected / current → `bg-component-pressed` held.
    - Tiles and cards: Card's edge (`neutral-100`, 750 in dark) → `edge-control-hover` →
      `border-hover` held → `stroke-selected` (2px). A tile stands alone like a Card, so it is never
      on `border-decorative`, which is for rules inside a surface.

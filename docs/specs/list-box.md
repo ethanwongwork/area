@@ -100,6 +100,10 @@ only (to check).
   value chosen, and a screen reader hears "option, selected". It is the WAI-ARIA listbox pattern, which React Aria,
   Fluent and Spectrum each ship as its own component.
 
+## Interaction polish, 2026-10-16
+
+Grid options press at `bg-component-pressed`, one step past selected (Notion presses at 10%, ChatGPT 12%; it shared selected's fill, 1.5% below hover); selected keeps `bg-component-active`. Option text is not selectable. See [interaction polish](../research/interaction-polish-2026-10-16.md).
+
 ## Feedback log
 
 - 2026-10-15 · owner: "merge it, then continue working" → List box, from PRODUCT_UI.md's open gaps.

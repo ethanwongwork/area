@@ -53,6 +53,7 @@
        the focus ring is an outline, never faded. */
     transition: var(--area-transition);
     transition-property: background-color;
+    user-select: none;
   }
   @media (hover: hover) { .area-alignment-picker__cell:hover { transition-duration: 0s; } }
   .area-alignment-picker__cell:is(:active, :has(input:checked)) { transition-duration: 0s; }

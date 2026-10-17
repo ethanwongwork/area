@@ -205,6 +205,10 @@ in; the selected option's `transition-duration` is `0s`, an unselected one keeps
 - **Why:** the Layers sweep. The track was the recessed layer, which equals the page at contrast 0, so the track and
   the white thumb were both the page tone and only a faint ring showed. Look at **Gray page** and **Dark**.
 
+## Interaction polish, 2026-10-16
+
+Unselected items press at 7.5% black in light (as firm as the muted label allows on the track: 4.53:1; the shared 10% gave 4.26:1) and 16.5% white in dark, past the 14% hover and as far as the label holds 4.5:1 at dark 24 + 8 (they pressed with the 5% hover). Labels are not selectable. See [interaction polish](../research/interaction-polish-2026-10-16.md).
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → one 500 weight for every option (was 400 / 500 selected) →

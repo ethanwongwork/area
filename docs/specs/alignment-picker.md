@@ -251,6 +251,10 @@ Compared the seven `alignment-picker/area--*` captures with `button-group/figma-
 Build and test results are in [the audit](../research/cohesion-audit.md#verification).
 Unverified: Figma's focus state (rest and hover captured 2026-10-04).
 
+## Interaction polish, 2026-10-16
+
+Cells are not selectable. See [interaction polish](../research/interaction-polish-2026-10-16.md).
+
 ## Feedback log
 
 - 2026-09-26 · earlier pass the same day → selected bars `fg-accent` → `fg-default`, `tone`

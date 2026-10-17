@@ -38,6 +38,11 @@
      */
     --_solid: var(--area-action-solid);
     --_solid-hover: var(--area-action-solid-hover);
+    /* spec: pressed, one step past hover in the same direction (hover is one step further from the page:
+       #28 → #1d in light, #f3 → #fa in dark). ChatGPT's solid steps rest → hover → pressed (#0d → #30 →
+       #41); Area's had no pressed step, so a click showed nothing past the hover. Light 18% toward black
+       (#1d → about #15), dark the white end; the accent 10% toward black, as the tones. */
+    --_solid-active: color-mix(in srgb, light-dark(color-mix(in oklab, var(--area-action-solid-hover), #000 18%), #fff), color-mix(in oklab, var(--area-action-solid-hover), #000 10%) calc(var(--area-action-accent) * 100%));
     --_surface: var(--area-bg-component);
     --_surface-hover: var(--area-bg-component-hover);
     --_surface-active: var(--area-bg-component-active);
@@ -219,6 +224,7 @@
   .area-button--neutral {
     --_solid: var(--area-action-solid);
     --_solid-hover: var(--area-action-solid-hover);
+    --_solid-active: color-mix(in srgb, light-dark(color-mix(in oklab, var(--area-action-solid-hover), #000 18%), #fff), color-mix(in oklab, var(--area-action-solid-hover), #000 10%) calc(var(--area-action-accent) * 100%));
     --_surface: var(--area-bg-component);
     --_surface-hover: var(--area-bg-component-hover);
     --_surface-active: var(--area-bg-component-active);
@@ -240,6 +246,7 @@
   .area-button--info {
     --_solid: var(--area-info-solid);
     --_solid-hover: var(--area-info-solid-hover);
+    --_solid-active: color-mix(in oklab, var(--_solid-hover), #000 10%); /* spec: pressed, a step past hover */
     --_surface: var(--area-info-surface);
     --_surface-hover: var(--area-info-surface-hover);
     --_surface-active: var(--area-info-surface-active);
@@ -252,6 +259,7 @@
   .area-button--success {
     --_solid: var(--area-success-solid);
     --_solid-hover: var(--area-success-solid-hover);
+    --_solid-active: color-mix(in oklab, var(--_solid-hover), #000 10%); /* spec: pressed, a step past hover */
     --_surface: var(--area-success-surface);
     --_surface-hover: var(--area-success-surface-hover);
     --_surface-active: var(--area-success-surface-active);
@@ -264,6 +272,7 @@
   .area-button--warning {
     --_solid: var(--area-warning-solid);
     --_solid-hover: var(--area-warning-solid-hover);
+    --_solid-active: color-mix(in oklab, var(--_solid-hover), #000 10%); /* spec: pressed, a step past hover */
     --_surface: var(--area-warning-surface);
     --_surface-hover: var(--area-warning-surface-hover);
     --_surface-active: var(--area-warning-surface-active);
@@ -276,6 +285,7 @@
   .area-button--caution {
     --_solid: var(--area-caution-solid);
     --_solid-hover: var(--area-caution-solid-hover);
+    --_solid-active: color-mix(in oklab, var(--_solid-hover), #000 10%); /* spec: pressed, a step past hover */
     --_surface: var(--area-caution-surface);
     --_surface-hover: var(--area-caution-surface-hover);
     --_surface-active: var(--area-caution-surface-active);
@@ -288,6 +298,7 @@
   .area-button--danger {
     --_solid: var(--area-danger-solid);
     --_solid-hover: var(--area-danger-solid-hover);
+    --_solid-active: color-mix(in oklab, var(--_solid-hover), #000 10%); /* spec: pressed, a step past hover */
     --_surface: var(--area-danger-surface);
     --_surface-hover: var(--area-danger-surface-hover);
     --_surface-active: var(--area-danger-surface-active);
@@ -301,6 +312,7 @@
   .area-button--discovery {
     --_solid: var(--area-discovery-solid);
     --_solid-hover: var(--area-discovery-solid-hover);
+    --_solid-active: color-mix(in oklab, var(--_solid-hover), #000 10%); /* spec: pressed, a step past hover */
     --_surface: var(--area-discovery-surface);
     --_surface-hover: var(--area-discovery-surface-hover);
     --_surface-active: var(--area-discovery-surface-active);
@@ -320,7 +332,7 @@
   .area-button--solid {
     --_bg: var(--_solid);
     --_bg-hover: var(--_solid-hover);
-    --_bg-active: var(--_solid-hover);
+    --_bg-active: var(--_solid-active);
     --_fg: var(--_on-solid);
   }
 
@@ -356,7 +368,8 @@
     --_bg-hover: var(--_surface);
     --_bg-active: var(--_surface);
     --_wash-hover: linear-gradient(var(--area-bg-hover), var(--area-bg-hover));
-    --_wash-active: linear-gradient(var(--area-bg-active), var(--area-bg-active));
+    /* spec: pressed takes the pressed wash (10%, Notion's press; was bg-active, 6.7%: 247 → about 231). */
+    --_wash-active: linear-gradient(var(--area-bg-pressed), var(--area-bg-pressed));
     --_border-hover: var(--area-bg-hover);
   }
 
@@ -397,8 +410,10 @@
    */
   .area-button--neutral.area-button--ghost {
     --_bg-hover: var(--area-bg-component-hover);
-    --_bg-active: var(--area-bg-component-active);
+    --_bg-active: var(--area-bg-component-pressed);
   }
+  /* Pressed is one step firmer than selected (layers.css, "Pressed"; Notion 5% → 10%, ChatGPT 5% → 12%). */
+  .area-button--neutral.area-button--outline { --_bg-active: var(--area-bg-component-pressed); }
 
   /* --- Shape and alignment ---------------------------------------------------- */
 

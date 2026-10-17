@@ -332,6 +332,10 @@ Open questions:
    spinner over a hidden label (Primer, Radix) for text-only Buttons. Needs owner approval; it is
    a layout change, not motion.
 
+## Interaction polish, 2026-10-16
+
+Solid presses one step past hover in the same direction (`--_solid-active`: neutral #1d → about #15 in light, #fa → #fff in dark; tones and accent 10% toward black; ChatGPT #0d → #30 → #41). Neutral ghost and outline press at `bg-component-pressed`, one step past selected (Notion presses at 10%, ChatGPT 12%; it shared selected's fill, 1.5% below hover); neutral soft's press wash is `bg-pressed` (10%). Selected toggles are unchanged. See [interaction polish](../research/interaction-polish-2026-10-16.md).
+
 ## Feedback log
 
 - 2026-09-28 · batch 11 Chrome side by side: Figma's Share (32 tall, corner 5, 0 12, 11/16 450,

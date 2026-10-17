@@ -51,6 +51,7 @@
     align-items: flex-start;
     gap: var(--_gap);
     min-inline-size: 0;
+    user-select: none;
   }
   /* A step that can be revisited is a button whose row plate (PRODUCT_UI rules 2 and 3) lies 4 outside it, drawn
      behind and taking no room, so the line beside it keeps its place. */
@@ -77,7 +78,7 @@
   @media (hover: hover) {
     .area-stepper-step__button:hover::before { background-color: var(--area-bg-component-hover); transition-duration: 0s; }
   }
-  .area-stepper-step__button:active::before { background-color: var(--area-bg-component-active); transition-duration: 0s; }
+  .area-stepper-step__button:active::before { background-color: var(--area-bg-component-pressed); transition-duration: 0s; }
   .area-stepper-step__button:focus-visible { outline: none; }
   .area-stepper-step__button:focus-visible::before { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
 

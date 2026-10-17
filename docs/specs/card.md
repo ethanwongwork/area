@@ -244,6 +244,10 @@ Open questions:
 - **Why:** the example skipped the card's content wrapper, so the text sat on the 8 media inset; Card itself didn't
   change.
 
+## Interaction polish, 2026-10-16
+
+The action's underline takes Link's offset, 0.25em, clear of descenders (link.md). See [interaction polish](../research/interaction-polish-2026-10-16.md).
+
 ## Feedback log
 
 - 2026-09-28 · owner: text and buttons offset, less offset from images, corner from the button,

@@ -608,6 +608,10 @@ so nothing painted moves. Verified on `/badge.html` with a real pointer hover: d
 - **Why:** you asked to simplify it. With nothing behind the text, it has exactly the contrast the badge prints
   (4.61:1 or better on every step).
 
+## Interaction polish, 2026-10-16
+
+An interactive Badge presses with the hover wash laid once more over its hover fill; dismiss presses at 20% of its ink (hover 12%) and does not press the badge. See [interaction polish](../research/interaction-polish-2026-10-16.md).
+
 ## Feedback log
 
 - 2026-10-11 · owner: "the icons seem too close to the horizontal side of the container. the avatar, flag look okay

@@ -39,12 +39,14 @@
     color: var(--area-fg-default);
     cursor: pointer;
     transition: var(--area-transition);
+    user-select: none;
   }
   @media (hover: hover) {
     .area-list-box--grid .area-list-box__item:hover:not([data-disabled]) { background: var(--area-bg-component-hover); transition-duration: 0s; }
   }
-  .area-list-box--grid .area-list-box__item[aria-selected="true"]:not([data-disabled]),
-  .area-list-box--grid .area-list-box__item:active:not([data-disabled]) { background: var(--area-bg-component-active); transition-duration: 0s; }
+  .area-list-box--grid .area-list-box__item[aria-selected="true"]:not([data-disabled]) { background: var(--area-bg-component-active); transition-duration: 0s; }
+  /* Pressed is one step firmer than selected (layers.css, "Pressed"). */
+  .area-list-box--grid .area-list-box__item:active:not([data-disabled]) { background: var(--area-bg-component-pressed); transition-duration: 0s; }
   .area-list-box--grid .area-list-box__item:focus-visible {
     outline: var(--area-focus-width) solid var(--area-focus-color);
     outline-offset: calc(var(--area-focus-width) * -1);
