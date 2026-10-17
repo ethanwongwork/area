@@ -69,14 +69,10 @@
   /* Search: wide enough for "Search components" and the ⌘K hint (Cursor's command centre
      reads as a field, not a button). */
   .studio-titlebar__search { inline-size: calc(var(--area-space-96) * 2 + var(--area-space-48)); /* pick: 240 */ }
-  /* A bar's ghost icon button is placed by its icon, as Popover's header close is (surface.css):
-     it gives back its plate's padding on both sides, so the bars' insets and gaps measure what is
-     drawn. The 24 target and the hover plate stay; the plate reaches 4 past the icon. */
-  :is(.studio-titlebar, .studio-titlebar > *, .studio-canvas__actions) > .studio-bar-icon { margin-inline: calc((var(--area-icon-sm) - var(--area-control-sm)) / 2); }
-  /* At a bar's ends the box keeps its place, so its plate stays inside the margin (see above).
-     By type: a Tooltip's popup follows its button, so the last button is not the last child. */
-  .studio-titlebar > button.studio-bar-icon:first-of-type { margin-inline-start: 0; }
-  .studio-titlebar > * > button.studio-bar-icon:last-of-type { margin-inline-end: 0; }
+  /* The Canvas header's ghost icon buttons are placed by their icon, as Popover's header close is (surface.css): each
+     gives back its plate's padding on both sides, so the header's gaps measure what is drawn. The Titlebar spaces its
+     controls itself, box to box (app-shell.css, review round 27). */
+  .studio-canvas__actions > .studio-bar-icon { margin-inline: calc((var(--area-icon-sm) - var(--area-control-sm)) / 2); }
 
   /* --- Workspace ----------------------------------------------------------- */
 

@@ -54,7 +54,7 @@ export function themeAttributes(selection = DEFAULT_AXES) {
 export function emitConfigTypes(): string {
   return `// Generated from the Area registry. Do not edit.
 export interface AxisSelection {
-${AXES.map(axis=>`  ${axis.id}: ${axis.presets.map(p=>JSON.stringify(p.id)).join(' | ')};`).join('\n')}
+${AXES.map(axis=>`  ${/^[a-z]+$/.test(axis.id) ? axis.id : JSON.stringify(axis.id)}: ${axis.presets.map(p=>JSON.stringify(p.id)).join(' | ')};`).join('\n')}
   /** Shorthand for a type size and a density (the former UI scale): "compact" is type 12, Compact;
    *  "default" is type 14, Default. An explicit \`type\` or \`density\` wins. Never in a merged result. */
   ui?: ${Object.keys(UI_SHORTHAND).map(k=>JSON.stringify(k)).join(' | ')};

@@ -95,8 +95,13 @@ only (to check).
   out, the arrows move inside, typing jumps to a name.
 - **Based on:** React Aria's ListBox and the app's own icon sheet, whose look it keeps. The Icons tab now uses it, so
   its 808 icons are one Tab stop instead of 808.
+- **Why its own component:** its rows are Menu's rows (`area-menu__item`, the same plate and check), so it looks
+  like Menu. It behaves differently: Menu runs commands and closes, Nav moves to another page, List box keeps one
+  value chosen, and a screen reader hears "option, selected". It is the WAI-ARIA listbox pattern, which React Aria,
+  Fluent and Spectrum each ship as its own component.
 
 ## Feedback log
 
 - 2026-10-15 · owner: "merge it, then continue working" → List box, from PRODUCT_UI.md's open gaps.
 - 2026-10-15 · owner: "merge it, then continue working" (PR #106) → Typography and Color adopt it; the app's grid-keys.ts removed.
+- 2026-10-16 · owner, review round 27 (components27) → approved → Complete in `component-status.mjs`.

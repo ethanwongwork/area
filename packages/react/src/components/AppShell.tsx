@@ -5,6 +5,8 @@ import type { HTMLAttributes, ReactNode } from "react";
 import { cx } from "../variants.ts";
 
 export interface TitlebarProps extends HTMLAttributes<HTMLElement> {
+  /** ruled (default): a rule under the bar. plain: no rule. floating: a raised plate held off the window's edges. */
+  variant?: "ruled" | "plain" | "floating";
   /** Clears the platform's own window controls: "macos" leaves room for the traffic lights where Cursor puts them
    * (Electron `titleBarStyle: "hiddenInset"`, `trafficLightPosition: { x: 13, y: 12 }`). */
   windowControls?: "macos";
@@ -14,10 +16,10 @@ export interface TitlebarProps extends HTMLAttributes<HTMLElement> {
 
 /** A window's top bar: Panel's bar height and rule, the drag region of a frameless window, its controls pressable. */
 export const Titlebar = /* @__PURE__ */ forwardRef<HTMLElement, TitlebarProps>(function Titlebar(
-  { windowControls, end, className, children, ...rest }, ref,
+  { variant = "ruled", windowControls, end, className, children, ...rest }, ref,
 ) {
   return (
-    <header ref={ref} className={cx("area-titlebar", windowControls === "macos" && "area-titlebar--macos", className)} {...rest}>
+    <header ref={ref} className={cx("area-titlebar", `area-titlebar--${variant}`, windowControls === "macos" && "area-titlebar--macos", className)} {...rest}>
       {children}
       {end ? <div className="area-titlebar__end">{end}</div> : null}
     </header>

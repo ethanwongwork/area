@@ -404,10 +404,13 @@ export const COMPONENT_PAGES = [
     api: [
       ["children", "the bar's start: a panel toggle, tabs", "—"],
       ["end", "ReactNode pushed to the end: search, toggles, the theme", "—"],
+      ["variant", '"ruled": a rule under the bar; "plain": no rule; "floating": a raised plate held off the window\'s edges', '"ruled"'],
       ["windowControls", '"macos": room for the traffic lights (Electron hiddenInset, trafficLightPosition { x: 13, y: 12 })', "—"],
     ],
     examples: [
       { id: "default", title: "Default", note: "A window's top bar, the height of a Panel's bar with its rule, so the two line up at any type size and density. In a frameless window it is the drag region; its controls stay pressable.", demo: "GalleryTitlebar" },
+      { id: "plain", title: "Plain", note: "No rule under the bar, as ChatGPT's and Notion's top bars; the bar drops the rule's 1 so its controls stay centred.", demo: "GalleryTitlebarPlain" },
+      { id: "floating", title: "Floating", note: "A raised plate held one cluster space off the window's top and sides, painted as every floating surface (Toolbar surface); its controls sit the same space in, and its corner is concentric with theirs.", demo: "GalleryTitlebarFloating" },
       { id: "macos", title: "macOS window", note: "windowControls=\"macos\" starts the bar 83 in, clear of the traffic lights where Cursor puts them, and ends it 13 from the edge.", demo: "GalleryTitlebarMacos" },
     ],
   },
@@ -1299,7 +1302,7 @@ export const COMPONENT_PAGES = [
     api: [
       ["variant", '"soft" | "solid" | "outline" | "color" | "modern"', '"soft"'],
       ["tone", '"neutral" | "info" | "success" | "warning" | "caution" | "danger" | "discovery" | "inverse"', '"neutral"'],
-      ["onColor", "on a coloured ground: its ink, a plate of the ink's opposite, a line of the ink (Code's onColor); overrides variant and tone", "false"],
+      ["onColor", "on a coloured ground: the ground's own ink for the text and a 20% line of it, no plate; overrides variant and tone", "false"],
       ["size", '"sm" | "md" | "lg"', '"md"'],
       ["pill", "boolean; unset follows the theme's pills list (a pill by default), true forces a pill, false the radius corner", "unset"],
       ["dot / dotOnly / iconOnly / truncate / uppercase", "boolean", "false"],

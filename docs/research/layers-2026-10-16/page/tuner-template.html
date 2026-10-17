@@ -1,0 +1,237 @@
+<title>Layers Setting</title>
+<link rel="stylesheet" href="area.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: findings up top, then a tuner per theme (controls beside a live scene drawn with Area's own CSS), then the
+   pick strip. Page chrome has its own small palette; the scenes are Area. */
+:root {
+  --bg: #f6f6f4; --panel: #ffffff; --fg: #18181a; --muted: #67676d; --line: #e3e3e0; --soft: #efefec;
+  --accent: #2f5bd3; --ok: #1f8a4c; --ok-bg: #e7f4ec; --bad: #b3261e;
+  --sans: "Geist", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #050505; --panel: #0e0e0f; --fg: #ececee; --muted: #8e8e94; --line: #232326; --soft: #161618;
+  --accent: #7d9cf5; --ok: #5cc98a; --ok-bg: #0f2418; --bad: #f2867d; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #050505; --panel: #0e0e0f; --fg: #ececee; --muted: #8e8e94; --line: #232326; --soft: #161618;
+  --accent: #7d9cf5; --ok: #5cc98a; --ok-bg: #0f2418; --bad: #f2867d; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 14px; line-height: 1.5 }
+.wrap { max-width: 1280px; margin: 0 auto; padding-inline: 16px; padding-block: 28px 64px; display: grid; gap: 24px }
+h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; margin: 0; text-wrap: balance }
+h2 { font-size: 18px; font-weight: 600; margin: 0; letter-spacing: -0.01em }
+p { margin: 0; max-width: 80ch }
+.lede { color: var(--muted); font-size: 15px }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; display: grid; gap: 10px; min-width: 0 }
+.mono { font-family: var(--mono); font-size: 12px; font-variant-numeric: tabular-nums }
+.tbl { overflow-x: auto }
+table.data { border-collapse: collapse; font-size: 13px; min-width: 620px; width: 100% }
+table.data th, table.data td { text-align: left; padding: 5px 8px; border-bottom: 1px solid var(--line) }
+table.data th { color: var(--muted); font-weight: 500; font-size: 12px }
+table.data td.n { font-family: var(--mono); font-size: 12px; font-variant-numeric: tabular-nums }
+
+.tuner { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 16px; align-items: start }
+@media (max-width: 1000px) { .tuner { grid-template-columns: minmax(0, 1fr) } }
+.controls { display: grid; gap: 14px }
+.presets { display: flex; flex-wrap: wrap; gap: 6px }
+.chipbtn { border: 1px solid var(--line); background: var(--bg); color: var(--fg); border-radius: 999px; padding: 3px 10px; font: inherit; font-size: 12px; cursor: pointer }
+.chipbtn[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg) }
+.field { display: grid; gap: 4px }
+.field .top { display: flex; justify-content: space-between; gap: 8px; font-size: 13px }
+.field .top span { font-family: var(--mono); font-size: 12px; color: var(--muted) }
+.field input[type=range] { inline-size: 100%; accent-color: var(--accent) }
+.field small { color: var(--muted); font-size: 12px }
+.seg { display: inline-flex; flex-wrap: wrap; justify-self: start; border: 1px solid var(--line); border-radius: 999px; padding: 2px; gap: 2px }
+.seg button { border: 0; background: transparent; color: var(--muted); border-radius: 999px; padding: 3px 10px; font: inherit; font-size: 12px; cursor: pointer }
+.seg button[aria-pressed="true"] { background: var(--fg); color: var(--bg) }
+.readout { display: grid; gap: 4px; font-size: 12px }
+.readout .row { display: grid; grid-template-columns: 14px minmax(0, 1fr) auto auto auto; gap: 4px 10px; align-items: center }
+.readout i { width: 14px; height: 14px; border-radius: 4px; border: 1px solid var(--line) }
+.readout .pass, .readout small.pass { color: var(--ok) } .readout .fail, .readout small.fail { color: var(--bad) }
+.custom summary { cursor: pointer; font-size: 13px; color: var(--muted) }
+.frame { overflow-x: auto; border-radius: 10px; border: 1px solid var(--line) }
+:is(button, input, textarea):focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+.pick { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; display: grid; gap: 10px }
+.pick textarea { width: 100%; min-height: 64px; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; background: var(--bg); color: var(--fg); font: inherit; resize: vertical }
+.btn { border: 1px solid var(--fg); background: var(--fg); color: var(--bg); border-radius: 8px; padding: 6px 14px; font: inherit; font-weight: 500; cursor: pointer; justify-self: start }
+.status { font-size: 12px; color: var(--muted) }
+
+/* The scene: one app window drawn with Area's own classes; its tones come from the tuner. */
+.scene { display: grid; grid-template-columns: 170px minmax(0, 1fr); min-width: 720px; background: var(--area-bg-page); color: var(--area-fg-default); font-family: var(--area-font-sans); font-size: var(--area-text-md-size); line-height: var(--area-text-md-leading) }
+.scene__side { background: var(--area-bg-subtle); border-inline-end: var(--area-border-width) solid var(--area-border-decorative); padding: 12px 8px; display: grid; align-content: start; gap: 8px }
+.scene__brand { padding: 2px 8px 6px; font-weight: 500 }
+.scene__main { padding: 16px; display: grid; gap: 14px; align-content: start; min-width: 0 }
+.scene__bar .area-input { inline-size: 240px }
+.scene__row { display: grid; grid-template-columns: 290px 190px; gap: 14px; align-items: start }
+.scene__menu .area-menu { inline-size: 100% }
+.scene .scene__hover { background: var(--area-bg-component-hover) } /* the hovered row, drawn at rest */
+.swatches { display: flex; flex-wrap: wrap; gap: 4px }
+.sw { display: grid; justify-items: center; gap: 2px; border: 0; background: transparent; color: var(--muted); padding: 2px; border-radius: 8px; cursor: pointer; font: 11px var(--mono) }
+.sw i { display: block; width: 26px; height: 26px; border-radius: 6px; border: 1px solid var(--line) }
+.sw[aria-pressed="true"] { color: var(--fg) } .sw[aria-pressed="true"] i { outline: 2px solid var(--accent); outline-offset: 1px }
+.matrix { display: grid; gap: 6px; overflow-x: auto }
+.matrix table { border-collapse: separate; border-spacing: 6px; font-size: 12px }
+.matrix th { color: var(--muted); font-weight: 500; text-align: left; white-space: nowrap }
+.mini { width: 132px; height: 74px; border-radius: 6px; display: grid; grid-template-columns: 34px 1fr; overflow: hidden; border: 1px solid var(--line); font: 10px/1.2 var(--sans) }
+.mini__side { padding: 6px 4px; display: grid; gap: 3px; align-content: start }
+.mini__row { height: 9px; border-radius: 3px }
+.mini__main { padding: 6px; display: grid; gap: 4px; align-content: start }
+.mini__card { border-radius: 5px; padding: 4px; display: grid; gap: 3px; border: 1px solid }
+.mini__field { height: 9px; border-radius: 3px; border: 1px solid transparent }
+.mini__ok { font: 11px var(--mono) } .mini__ok.pass { color: var(--ok) } .mini__ok.fail { color: var(--bad) }
+</style>
+
+<div class="wrap">
+  <header style="display:grid;gap:8px">
+    <h1>Layers: the page and what sits on it</h1>
+    <p class="lede">Two choices per theme: the ground (the page's lightness, in 1% steps from white) and the layer contrast. Every combination is checked below for readable text, visible controls and visible edges. Each scene is Area's own CSS.</p>
+  </header>
+
+  <section class="card">
+    <h2>How it works</h2>
+    <ul style="margin:0;padding-left:20px;display:grid;gap:6px;max-width:88ch">
+      <li><b>Ground</b> is the page's OKLCH lightness: light 100 (white) down to 90 in 1% steps; dark 0 (black), 8 (Area's near-black today), then 12 to 24 in 2% steps (below 12 a 1% step doesn't show on a screen).</li>
+      <li><b>Layer contrast</b> (Flat, Low, Default, High) sets how far cards, menus and sidebars sit from the page. Direction follows the ground: on white, cards stay white and sidebars go darker; on a gray page, cards lift toward white; in dark, layers lift lighter, starting from the first visible dark when the page is darker than that.</li>
+      <li><b>Controls always show.</b> A field, a row's hover and a selected row step from the ground they sit on, never less than a visible step, at Flat too. In dark they never sit under L 0.20, so on Black a selected row is a clear #282828-ish plate (it was black on black).</li>
+      <li><b>Text and edges hold their contrast.</b> Muted text and control edges keep today's colour wherever it passes, and darken (light) or lighten (dark) just enough to keep 4.5:1 and 3:1 on the deepest surface they sit on. Card, menu and sidebar frames follow the ground too, so a frame never disappears into a gray page.</li>
+      <li><b>Defaults.</b> Light 100 + Default is today's page, cards, sidebar, fields, edges and text exactly; sidebar row plates now step from the sidebar's own tone, one step firmer than today (#efefef / #e6e6e6 for #f3f3f3 / #eeeeee). Dark 8 + Default keeps today's #020202 page and brings cards and sidebars closer (#121212, #0b0b0b; today #1d1d1d, #282828).</li>
+      <li><b>The ramp stays</b> for text, borders, fills and hues; only the layer tones are computed. Exact numbers stay available under Custom, as tokens a product team could set.</li>
+    </ul>
+  </section>
+
+  <section class="card" aria-labelledby="light-title">
+    <h2 id="light-title">Light</h2>
+    <div class="tuner">
+      <div class="controls" data-theme-controls="light"></div>
+      <div class="frame"><!--SCENE_LIGHT--></div>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="dark-title">
+    <h2 id="dark-title">Dark</h2>
+    <div class="tuner">
+      <div class="controls" data-theme-controls="dark"></div>
+      <div class="frame"><!--SCENE_DARK--></div>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>Neutral cast</h2>
+    <div class="seg" id="cast" role="group" aria-label="Neutral cast"><button data-cast="gray" aria-pressed="true">Gray</button><button data-cast="cool">Cool</button><button data-cast="warm">Warm</button></div>
+    <p class="status">The Neutral setting's hue and chroma, measured from Area's cool and warm ramps (light 0.0034 at 247° / 67°, dark about 0.0115 at 254° / 73°).</p>
+  </section>
+
+  <section class="card" aria-labelledby="matrix-title">
+    <h2 id="matrix-title">Every combination</h2>
+    <p class="status">Each tile: the sidebar with a hovered and a selected row, the page with a field, and a card with a field and muted text, in that combination's tones. Below it, the checks: body, muted and placeholder text at 4.5:1, control edges at 3:1, and fields, hover, selection, frames and the sidebar rule each a visible step from their ground. Click a tile to load it above.</p>
+    <div class="matrix" id="matrix-light"></div>
+    <div class="matrix" id="matrix-dark"></div>
+  </section>
+
+  <section class="pick" aria-labelledby="pick-title">
+    <h2 id="pick-title">Save what you like</h2>
+    <p class="status">Saves both themes' choices (or custom numbers) and your notes. Claude reads them to set the defaults and the range.</p>
+    <label class="status" for="notes">Notes</label>
+    <textarea id="notes" placeholder="e.g. light 98 + Low as the default; dark 12 + Default; drop High"></textarea>
+    <button class="btn" id="save" type="button">Save</button>
+    <span class="status" id="status" role="status"></span>
+  </section>
+</div>
+
+<script src="model.js"></script>
+<script>
+const { GROUNDS, CONTRAST, DEFAULTS, resolve, check, hexOf } = window.Layers;
+const CAST = { gray: { light: [0, 0], dark: [0, 0] }, cool: { light: [0.0034, 247], dark: [0.0115, 254] }, warm: { light: [0.0034, 67], dark: [0.0115, 73] } };
+const RANGE = {
+  light: { page: [0.88, 1, 0.001], raised: [-0.06, 0.06, 0.001], recessed: [-0.06, 0.06, 0.001], step: [0.01, 0.06, 0.001] },
+  dark: { page: [0, 0.32, 0.001], raised: [-0.2, 0.2, 0.001], recessed: [-0.2, 0.2, 0.001], step: [0.02, 0.08, 0.001] },
+};
+const LABEL = { page: "Page", raised: "Raised (offset)", recessed: "Recessed (offset)", step: "Control step" };
+const state = { cast: "gray", light: { ...DEFAULTS.light, custom: null }, dark: { ...DEFAULTS.dark, custom: null } };
+const groundL = theme => GROUNDS[theme].find(g => g.id === state[theme].ground)?.L ?? 1;
+const resolved = theme => state[theme].custom ? resolve(theme, { custom: state[theme].custom }) : resolve(theme, { groundL: groundL(theme), contrast: state[theme].contrast });
+
+function cssVars(theme, r) {
+  const [c, h] = CAST[state.cast][theme], col = L => `oklch(${L.toFixed(4)} ${c} ${h})`, ink = L => `oklch(${L.toFixed(4)} 0 0)`;
+  const fills = f => ({ "--area-bg-component": col(f[0]), "--area-bg-component-hover": col(f[1]), "--area-bg-component-active": col(f[2]), "--area-input-bg-soft": col(f[0]), "--area-input-bg-disabled": col(f[0]), "--area-selection-surface": col(f[2]), "--area-selection-surface-hover": col(f[2]), "--area-selection-band": col(f[1]), "--area-selection-band-hover": col(f[2]) });
+  const e = r.edge;
+  return {
+    scene: { "--area-bg-page": col(r.page), "--area-bg-surface": col(r.raised), "--area-input-bg": col(r.raised), "--area-bg-subtle": col(r.recessed), "--area-bg-stripe": col(r.recessed), "--area-token-bg": col(r.recessed),
+      "--area-border-decorative": col(e.decorative), "--area-border-card": col(e.card), "--area-border-float": col(e.float), "--area-border-faint": col(e.faint), "--area-border-divider": col(e.faint), "--area-border-subtle": col(e.subtle), "--area-border": col(e.border), "--area-border-hover": col(e.hover),
+      "--area-edge-control": col(e.faint), "--area-edge-selected": col(e.faint), "--area-edge-control-hover": col(e.subtle), "--area-edge-control-strong": col(e.hover),
+      "--area-fg-default": ink(r.ink.body), "--area-fg-muted": ink(r.ink.muted), "--area-fg-placeholder": ink(r.ink.muted), "--area-stroke-control": ink(r.ink.edge), "--area-stroke-control-hover": ink(theme === "light" ? r.ink.edge - 0.03 : r.ink.edge + 0.03), ...fills(r.fill.page) },
+    raised: fills(r.fill.raised),
+    side: { "--area-bg-component-hover": col(r.fill.recessed[0]), "--area-bg-component-active": col(r.fill.recessed[2]) },
+  };
+}
+function paint(theme) {
+  const r = resolved(theme), v = cssVars(theme, r), scene = document.getElementById("scene-" + theme);
+  const set = (el, map) => { for (const [k, x] of Object.entries(map)) el.style.setProperty(k, x); };
+  set(scene, v.scene); scene.querySelectorAll(".scene__raised").forEach(el => set(el, v.raised)); set(scene.querySelector(".scene__side"), v.side);
+  const [c, h] = CAST[state.cast][theme], hx = L => hexOf(L, c, h);
+  const issues = check(r, CAST[state.cast][theme]);
+  const rows = [["Page", r.page], ["Raised", r.raised], ["Recessed", r.recessed], ["Field on page", r.fill.page[0]], ["Selected in sidebar", r.fill.recessed[2]]];
+  document.querySelector(`[data-readout="${theme}"]`).innerHTML = rows.map(([n, L]) => `<div class="row"><i style="background:${hx(L)}"></i><span>${n}</span><span class="mono">${hx(L)}</span><span class="mono">L ${L.toFixed(3)}</span><span></span></div>`).join("") +
+    `<div class="row"><i style="background:${hexOf(r.ink.muted)}"></i><span>Muted text</span><span class="mono">${hexOf(r.ink.muted)}</span><span class="mono">L ${r.ink.muted.toFixed(3)}</span><span></span></div>` +
+    `<small class="${issues.length ? "fail" : "pass"}">${issues.length ? "✕ " + issues.join("; ") : "✓ every check passes"}</small>`;
+}
+function build(theme) {
+  const root = document.querySelector(`[data-theme-controls="${theme}"]`);
+  root.innerHTML =
+    `<div class="field"><div class="top"><span>Ground</span><span id="${theme}-ground-v"></span></div><div class="swatches" role="group" aria-label="${theme} ground">${GROUNDS[theme].map(g => `<button class="sw" data-ground="${g.id}" title="${g.label}"><i style="background:${hexOf(g.L)}"></i>${g.id}</button>`).join("")}</div></div>` +
+    `<div class="field"><div class="top"><span>Layer contrast</span><span>cards, sidebars, fields</span></div><div class="seg" role="group" aria-label="${theme} layer contrast">${CONTRAST.map((n, i) => `<button data-contrast="${i}">${n}</button>`).join("")}</div></div>` +
+    `<div class="readout" data-readout="${theme}"></div>` +
+    `<details class="custom"><summary>Custom numbers</summary><div class="controls" style="margin-top:10px">` +
+    Object.keys(RANGE[theme]).map(k => { const [min, max, step] = RANGE[theme][k]; return `<div class="field"><div class="top"><label for="${theme}-${k}">${LABEL[k]}</label><span id="${theme}-${k}-v"></span></div><input type="range" id="${theme}-${k}" min="${min}" max="${max}" step="${step}"></div>`; }).join("") +
+    `</div></details>`;
+  const sync = () => {
+    const s = state[theme], r = resolved(theme);
+    root.querySelectorAll("[data-ground]").forEach(b => b.setAttribute("aria-pressed", String(!s.custom && b.dataset.ground === s.ground)));
+    root.querySelectorAll("[data-contrast]").forEach(b => b.setAttribute("aria-pressed", String(!s.custom && Number(b.dataset.contrast) === s.contrast)));
+    document.getElementById(`${theme}-ground-v`).textContent = s.custom ? "custom" : GROUNDS[theme].find(g => g.id === s.ground).label;
+    const nums = { page: r.page, raised: r.raised - r.page, recessed: r.recessed - r.page, step: r.step };
+    for (const k of Object.keys(RANGE[theme])) { document.getElementById(`${theme}-${k}`).value = nums[k]; document.getElementById(`${theme}-${k}-v`).textContent = (k === "page" ? "" : nums[k] > 0 ? "+" : "") + nums[k].toFixed(3); }
+    paint(theme);
+  };
+  root.querySelectorAll("[data-ground]").forEach(b => b.addEventListener("click", () => { state[theme].ground = b.dataset.ground; state[theme].custom = null; sync(); }));
+  root.querySelectorAll("[data-contrast]").forEach(b => b.addEventListener("click", () => { state[theme].contrast = Number(b.dataset.contrast); state[theme].custom = null; sync(); }));
+  for (const k of Object.keys(RANGE[theme])) document.getElementById(`${theme}-${k}`).addEventListener("input", e => {
+    const r = resolved(theme), cur = state[theme].custom ?? { page: r.page, raised: r.raised - r.page, recessed: r.recessed - r.page, step: r.step };
+    state[theme].custom = { ...cur, [k]: Number(e.target.value) }; sync();
+  });
+  root.sync = sync; sync();
+}
+function matrix(theme) {
+  const [c, h] = CAST[state.cast][theme], hx = L => hexOf(L, c, h);
+  const head = `<tr><th>${theme === "light" ? "Light" : "Dark"} ground</th>${CONTRAST.map(n => `<th>${n}</th>`).join("")}</tr>`;
+  const body = GROUNDS[theme].map(g => `<tr><th>${g.label}</th>${CONTRAST.map((n, k) => {
+    const r = resolve(theme, { groundL: g.L, contrast: k }), issues = check(r, CAST[state.cast][theme]), e = r.edge;
+    const mini = `<div class="mini" style="background:${hx(r.page)};color:${hexOf(r.ink.body)}"><div class="mini__side" style="background:${hx(r.recessed)};border-right:1px solid ${hx(e.decorative)}"><div class="mini__row" style="background:${hx(r.fill.recessed[2])}"></div><div class="mini__row" style="background:${hx(r.fill.recessed[0])}"></div><div class="mini__row"></div></div><div class="mini__main"><div class="mini__field" style="background:${hx(r.fill.page[0])}"></div><div class="mini__card" style="background:${hx(r.raised)};border-color:${hx(e.card)}"><span>Plan <span style="color:${hexOf(r.ink.muted)}">· draft</span></span><div class="mini__field" style="background:${hx(r.fill.raised[0])};border-color:${hexOf(r.ink.edge)}"></div></div></div></div>`;
+    return `<td><button class="sw" style="padding:0" data-load="${theme}:${g.id}:${k}" title="${issues.length ? issues.join("; ") : "Every check passes"}">${mini}</button><div class="mini__ok ${issues.length ? "fail" : "pass"}">${issues.length ? "✕ " + issues.length + " issue" + (issues.length > 1 ? "s" : "") : "✓ passes"}</div></td>`;
+  }).join("")}</tr>`).join("");
+  const el = document.getElementById("matrix-" + theme);
+  el.innerHTML = `<table>${head}${body}</table>`;
+  el.querySelectorAll("[data-load]").forEach(b => b.addEventListener("click", () => { const [t, g, k] = b.dataset.load.split(":"); Object.assign(state[t], { ground: g, contrast: Number(k), custom: null }); document.querySelector(`[data-theme-controls="${t}"]`).sync(); document.getElementById(t + "-title").scrollIntoView({ behavior: "smooth" }); }));
+}
+build("light"); build("dark"); matrix("light"); matrix("dark");
+document.querySelectorAll("#cast button").forEach(b => b.addEventListener("click", () => { state.cast = b.dataset.cast; document.querySelectorAll("#cast button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); paint("light"); paint("dark"); matrix("light"); matrix("dark"); }));
+
+(async () => {
+  const $ = id => document.getElementById(id);
+  let db = null;
+  try { db = window.claude ? await window.claude.use("db") : null; } catch { db = null; }
+  const doc = db ? db.collection("layers").doc("tuning") : null;
+  const pick = t => ({ ground: state[t].ground, contrast: state[t].contrast, custom: state[t].custom });
+  if (doc) { try { const snap = await doc.get(); if (snap.exists) { const d = snap.data(); for (const t of ["light", "dark"]) if (d[t] && "ground" in d[t]) { Object.assign(state[t], d[t]); document.querySelector(`[data-theme-controls="${t}"]`).sync(); } if (d.cast) document.querySelector(`#cast [data-cast="${d.cast}"]`)?.click(); $("notes").value = d.notes || ""; $("status").textContent = "Loaded your saved choices."; } } catch {} }
+  else $("status").textContent = "Saving needs the page open on claude.ai, signed in; you can also tell Claude your choices in chat.";
+  $("save").onclick = async () => {
+    const d = { light: pick("light"), dark: pick("dark"), cast: state.cast, notes: $("notes").value.trim(), at: new Date().toISOString() };
+    if (!doc) { $("status").textContent = "Couldn't save from this view: tell Claude your choices in chat."; return; }
+    $("status").textContent = "Saving…";
+    try { await doc.set(d); $("status").textContent = "Saved. Claude can read your choices."; }
+    catch (e) { $("status").textContent = "Couldn't save (" + (e && e.code || "error") + "): tell Claude your choices in chat."; }
+  };
+})();
+</script>

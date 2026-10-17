@@ -14,7 +14,7 @@ type Options = Omit<VariantProps<typeof MANIFESTS.badge>, "tone" | "rounded"> & 
   avatar?: ReactNode; flag?: ReactNode;
   onDismiss?: () => void;
   dismissLabel?: string;
-  /** On a coloured ground: the ground's own ink, a plate of the ink's opposite and a line of the ink (Code's `onColor`). */
+  /** On a coloured ground: the ground's own ink for the text and a 20% line of it, no plate (the text keeps the ground's own contrast). */
   onColor?: boolean;
 };
 type SpanProps = Options & HTMLAttributes<HTMLSpanElement> & { as?: "span" };

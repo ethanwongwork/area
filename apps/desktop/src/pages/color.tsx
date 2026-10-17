@@ -115,8 +115,8 @@ function ColorCard({ scale, item }: { scale: string; item: ScaleStep }) {
       aria-label={`${title(scale)} ${item.level}, ${item.hex.toUpperCase()}, ${ink === "#ffffff" ? "white" : "black"} text ${item.contrast.ratio.toFixed(2)} to 1, ${item.contrast.grade}`}
       paint={{ background: `var(--area-${scale}-${item.level})`, color: ink }}
       label={<span className="studio-swatch__level">{item.level}</span>}
-      // The contrast grade on the step's own colour: Badge onColor (docs/specs/badge.md, 2026-10-15), which keeps its text
-      // at AA on every step; the 12% ink wash it replaces left 34 steps under 4.5:1.
+      // The contrast grade on the step's own colour: Badge onColor (docs/specs/badge.md, 2026-10-16), its ink and a line of
+      // it with no plate, so the text has the contrast it prints (4.61:1 or more); a 12% ink wash left 34 steps under 4.5:1.
       value={<Badge size="sm" onColor>{item.contrast.grade} · {item.contrast.ratio.toFixed(2)}</Badge>}>
       <span className="studio-swatch__values">
         <span>{item.hex.toUpperCase()}</span>

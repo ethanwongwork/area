@@ -1,11 +1,11 @@
-# Handoff — 2026-10-15
+# Handoff — 2026-10-16
 
 Each session starts from `main` in its own worktree (`claude/*` branch) and merges through a
 pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
-## Icons: balance over 1× crispness (2026-10-16, branch `claude/icon-review-5957f0`, not yet committed)
+## Icons: balance over 1× crispness (2026-10-16, branch `claude/icon-review-5957f0`, merged)
 
 - Owner: optical balance, size and even spacing outrank 1× pixel crispness (spec "Balance over 1× crispness").
   The 2026-10-14 frames moves (273 sources) are restored to their 13 Oct drawings; qr-code, diamond, gamepad kept.
@@ -16,7 +16,71 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
 - dismiss × is 9 (owner-approved; every component's close mark ~10% smaller). Final pass: no new sliver, doubled
   stroke or escape (spec "Final visual pass"). React 466/466, typecheck, build. Not checked: the Electron app by eye.
 
-## Start here (2026-10-15, end of session `icon-work-followup-2fcf1e`; everything merged, PRs #88–#114)
+## Start here (2026-10-16, later: session `project-status-components-16382f`, uncommitted in that worktree)
+
+**Waiting on the owner:**
+- Round 30 on the review page https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG (collection `components30`): Segmented,
+  Toggle group, Code block, Box model, Tag, Tag picker and Board are In review.
+- The page's new **Layers** switch (Default / Gray page / Lightest dark) shows each change where it applies.
+- Record approvals in `component-status.mjs`.
+
+**Done:**
+- A sweep of every family at 18 Layers settings (headless Edge against the static build), then fixes. The re-runnable
+  sweep and its results are in `docs/research/layers-2026-10-16/sweep/README.md`.
+- Text failures went from about 1,000 items in 32 families to 0. What changed:
+  - Hued inks (vivid and tonal) follow the light page.
+  - Muted is also solved on the selected fill and on the soft mark.
+  - Tinted labels lift on light dark grounds.
+  - The app marks its grounds: gallery tiles are raised, and there is a new `page` ground for Titlebar and flush Panel.
+  - Segmented and Toggle group take the control fill for their track.
+  - Code block's marked lines and Box model's insets adjust their inks.
+- Light 100 + 4 is unchanged except Code block's highlighted and diff lines, which already failed. Dark 8 + 4 is
+  unchanged except Segmented's and Toggle group's tracks (#2c, near the approved #28 groove).
+- The review diff now renders at the Layers extremes and compares colours by what paints.
+
+**Open:**
+- The owner's Layers picks (artifact 5crS7DCa…, still the 4-step page).
+- The inset-controls rule (Nav's row − 8, ink-only hover).
+- Badge dismiss and Tag remove: a 10px box holding a 12px glyph.
+- Chip and Tag press with the hover paint.
+- Code's on-colour plate.
+- Not swept: hover and pressed states; forced colours; the Electron window by eye.
+- `npm run build:docs` fails its dogfood audit on main too (one inline style in `index.html`); the pages still build.
+
+## Earlier start (2026-10-16, session `project-evaluation-97084a`, branch `claude/project-evaluation-97084a`)
+
+**Done:**
+- *Component reviews:* every family is Complete; `REVIEW_COMPONENTS` is empty.
+  - Rounds 27–29 ran on the old-format review page, https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG (1×/2×,
+    Before/After, verdicts in collections `components27`–`29`).
+  - The archived docs build runs again, so `apps/docs/scripts/component-review.mjs` works. Build the Before with
+    `node apps/docs/scripts/build.mjs` in a worktree of the old commit.
+- *Layers, built in:* three axes.
+  - `ground-light`: 100 (white) to 90 in 1% steps.
+  - `ground-dark`: 0 (black), 8 (Default, #020202), 12 to 24.
+  - `layers`: layer contrast, 0 (Flat) to 8, 4 the default.
+  - Page, layers, control fills, edges and inks are derived live from those numbers and the Neutral cast
+    (`packages/tokens/src/color/layers.ts`).
+  - Surfaces point control fills at their own ground (`packages/styles/src/layers.css`; `data-area-ground` for app
+    regions). The Inspector shows them under Color.
+  - Light 100 + 4 = the old light theme exactly. Dark 8 + 4 brings cards and sidebars closer (#121212 / #0b0b0b; were
+    #1d1d1d / #282828).
+  - `layers.test.ts` checks every combination in every neutral. Research:
+    `docs/research/layers-2026-10-16/README.md`.
+
+**Open:**
+- The owner's picks on the Layers page (https://claude.ai/artifact/5crS7DCaWEBbAjvTXYpJhn, db `layers` / `tuning`).
+  It still shows the 4-step contrast; the shipped scale is 0–8.
+- Whether every inset control takes Nav's rule (the row less 8, ink-only hover): Tree view, Chip, Tag, Badge dismiss,
+  field actions (`docs/research/inset-actions-2026-10-16.md`).
+- Found, not fixed:
+  - Badge dismiss and Tag remove are a 10px box with a 12px glyph at Compact 13.
+  - Chip, Tag and others press with the hover paint.
+  - Code's on-colour chip still has the plate Badge dropped.
+- Not run locally: the consumer check's install step (stalled; CI runs it). Not swept: every family at every Layers
+  combination in the app.
+
+## Earlier start (2026-10-15, end of session `icon-work-followup-2fcf1e`; everything merged, PRs #88–#114)
 
 **Waiting on the owner:** eight families In review, all on one page with live specimens, what changed and why:
 https://claude.ai/artifact/HwkKUmDzVH4B8eUGpjRwcD (approve in chat; record approvals in

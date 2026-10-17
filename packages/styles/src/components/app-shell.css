@@ -5,8 +5,17 @@
  * PRODUCT_UI.md's last open gap ("App-shell parts: Titlebar ... and a section heading"). No value is new.
  *
  * Titlebar: a window's top bar. Panel's bar height (a md row, the panel gap above and below, the rule; panel.css
- * --_bar), so it lines up with a Panel's bar at any type size and density; Panel's 14 side inset; 12 between
- * what it holds. In a frameless window the bar is the drag region and its controls stay pressable.
+ * --_bar), so it lines up with a Panel's bar at any type size and density; Panel's 14 side inset. In a frameless
+ * window the bar is the drag region and its controls stay pressable.
+ * Inside it (owner, review round 27: "the nav items look bigger than the buttons and inputs ... the gaps, inset
+ * padding, margins, etc should all be intentional"; docs/research/inset-actions-2026-10-16.md):
+ *   - every control is the small control's height, Nav's items included (they were a row, 26 beside 24 at the app's
+ *     scale), so each sits centred with equal room above and below: (bar - rule - control-sm) / 2, 7 at the app's
+ *     scale. Cursor's bar holds every control at one height (22 in 35), as ChatGPT's (36 in 52) and Notion's
+ *     buttons (28 in 44) do;
+ *   - one gap between everything it holds, the cluster space (8, compact 6), box to box: Cursor's 8 between
+ *     groups, ChatGPT's 8. A Nav keeps its own 4 between its items.
+ *   - the ends are measured to the controls' boxes, so no hover plate reaches into the margin.
  * `--macos` clears macOS's traffic lights where Cursor puts them (its main.js: 14 buttons on a 20 pitch from x 13,
  * `trafficLightPosition { x: 13, y: 12 }` in Electron): 13 + 54 + 16 = 83 at the start, 13 at the end.
  *
@@ -19,11 +28,13 @@
     --_titlebar-end: calc(var(--area-space-16) - var(--area-space-2));
     display: flex;
     align-items: center;
-    gap: var(--area-space-12);
+    gap: var(--area-ui-cluster); /* spec: 8, compact 6 */
     box-sizing: border-box;
-    block-size: calc(var(--area-control-md) + (var(--area-space-10) - var(--area-space-4) * var(--area-ui-dense)) * 2 + var(--area-border-width));
+    /* The rule under the bar: the Surface width (none at Borderless, 1 again under More contrast). */
+    --_titlebar-rule: var(--area-border-width);
+    block-size: calc(var(--area-control-md) + (var(--area-space-10) - var(--area-space-4) * var(--area-ui-dense)) * 2 + var(--_titlebar-rule));
     padding-inline: var(--_titlebar-start) var(--_titlebar-end);
-    border-block-end: var(--area-border-width) solid var(--area-border-decorative);
+    border-block-end: var(--_titlebar-rule) solid var(--area-border-decorative);
     background: var(--area-bg-page);
     user-select: none;
     -webkit-app-region: drag;
@@ -31,11 +42,42 @@
   }
   .area-titlebar :is(a, button, input, select, textarea, [role="separator"], [tabindex]) { -webkit-app-region: no-drag; app-region: no-drag; }
   .area-titlebar--macos { --_titlebar-start: 83px; --_titlebar-end: 13px; } /* spec: Cursor's traffic lights, 13 + 54 + 16, and 13 */
+  /*
+   * Variants (owner, review round 28: "is there always just an underline? is there a floating title bar variant with
+   * a backplate?"; picked both, 2026-10-16).
+   *   ruled, the default: the rule under the bar (Cursor's, VS Code's).
+   *   plain: no rule, and the bar loses its 1 so the controls stay centred (ChatGPT's and Notion's top bars; Panel's
+   *     bare bar).
+   *   floating: a plate held off the window's edges, painted as every floating surface (Toolbar surface: the surface
+   *     fill, the floating edge and the float shadow). Its controls sit one cluster space in from the plate on every
+   *     side, Toolbar surface's inset, and its corner is concentric with theirs (the small control's corner plus that
+   *     inset); the plate stands one cluster space off the window's top and sides. On macOS its start clears the
+   *     traffic lights (they end at 67) by the same space; the window places the lights on the plate's centre line.
+   */
+  .area-titlebar--ruled { --_titlebar-rule: var(--area-border-width); }
+  .area-titlebar--plain { --_titlebar-rule: 0px; }
+  .area-titlebar--floating {
+    --_titlebar-rule: 0px;
+    --_titlebar-inset: var(--area-ui-cluster); /* spec: Toolbar surface's 8, compact 6 */
+    --_titlebar-start: var(--_titlebar-inset);
+    --_titlebar-end: var(--_titlebar-inset);
+    block-size: calc(var(--area-control-sm) + var(--_titlebar-inset) * 2);
+    margin: var(--_titlebar-inset) var(--_titlebar-inset) 0;
+    border-radius: min(calc(var(--area-radius-control-sm) + var(--_titlebar-inset) * var(--area-radius-concentric)), calc(var(--area-control-sm) / 2 + var(--_titlebar-inset)));
+    background: var(--area-bg-surface);
+    box-shadow: var(--area-shadow-edge), inset 0 0 0 var(--area-border-width) var(--area-border-float), var(--area-shadow-float);
+  }
+  .area-titlebar--floating.area-titlebar--macos { --_titlebar-start: var(--_titlebar-inset); --_titlebar-end: var(--_titlebar-inset); margin-inline-start: calc(67px + var(--_titlebar-inset)); } /* spec: the lights end at 67 */
   .area-titlebar__end {
     display: flex;
     align-items: center;
-    gap: var(--area-space-12);
+    gap: var(--area-ui-cluster); /* spec: 8, compact 6 */
     margin-inline-start: auto;
+  }
+  /* A Nav in the bar is a row of controls: the small control's height and corner, as the Buttons beside it. */
+  .area-titlebar .area-nav--horizontal .area-nav__item {
+    block-size: var(--area-control-sm);
+    border-radius: min(var(--area-radius-control-sm), max(var(--area-radius-min), round(down, calc(var(--area-control-sm) * var(--area-radius-factor)), 2px)));
   }
 
   .area-section-heading { display: grid; gap: var(--area-space-8); min-inline-size: 0; }

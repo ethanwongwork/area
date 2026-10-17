@@ -227,6 +227,29 @@ Compared the ChatGPT, Notion and Figma row captures above with 10 Area captures
 current row keeps its plate under the pointer as a plain item (`nav.css:131, 139`, equal
 specificity, later wins) and as a row with actions (`nav.css:242` excludes it).
 
+## Review note, 2026-10-15
+
+- **What changed:** a row can hide its actions until the row is hovered or focused, as Board's cards
+  already do. The actions keep their place, so the text never moves; on a touch screen they always show.
+- **Why:** the app's Sidebar rows needed it; it was the last Nav gap in the product rules.
+- **Not a new component:** it is an option on a Nav row (`revealActions`).
+
+## Review note, 2026-10-16
+
+- **What changed:** a row's actions are smaller, with 4 of room on every side inside the row (they nearly filled it,
+  1–2 in), and under the pointer only their ink darkens, with no second plate on the row's plate.
+- **Why:** your questions. Notion leaves 5, ChatGPT 8; ChatGPT and Cursor change only the ink on a row that
+  already shows the pointer. The size rule is the one Chip's remove and field actions use: the row less 8.
+
+## Review note, 2026-10-16 (round 29)
+
+- **What changed:** in the sidebar example the rows now end where the header's buttons do, 8 from each edge (they
+  stopped 16 from the right: the Nav kept its own 240 width inside a wider sidebar), and the product name is back at
+  its old size, now set as the surface title rather than whatever it inherited. The Library icon's two lines are
+  evenly spaced.
+- **Why:** your notes. The rows fill the sidebar's column, so one 8 inset runs down both sides; Nav itself didn't
+  change.
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → hover `bg-component` → `bg-component-hover`, current
@@ -263,3 +286,8 @@ specificity, later wins) and as a row with actions (`nav.css:242` excludes it).
 - 2026-10-12 · owner (desktop Sidebar) → in a Panel, Nav hangs its plates by its row inset and takes the panel's width instead of its 240 default; text on the panel's 14 column, plates 6 from the edges (Figma and Notion 8). Rule lives in panel.css; Nav alone is unchanged.
 - 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → separators are at `stroke-width`, as Separator (were `border-width`) (nav.css). (docs/research/consistency-audit-2026-10-12.md)
 - 2026-10-15 · PRODUCT_UI.md open gap ("Nav row actions revealed on hover and focus-within, as Board card actions are"), owner: "merge it, then continue working" → NavItem `revealActions` (`area-nav__row--reveal`): Board's card-actions rule on a row, hidden (opacity 0, no pointer) until the row is hovered or holds focus, landing at once and leaving on `fast`; kept while a menu one of them opened is open (`aria-expanded` with `aria-haspopup`); only under `(hover: hover)`, so a touch screen always shows them. The actions keep their place, so the text never reflows. Gallery: Behavior / actions on hover.
+- 2026-10-16 · owner, review round 27 (components27) → rethink `revealActions`: "should the actions backplate be smaller? so the margins are a bit larger and more visible? what is the sizing logic for inset hover actions in a row that already has a backplate? like maybe something like the dismiss button on a chip filter. i know some other design systems for small controls like this just do a color change for hover, wondering if that might be simpler/easier to implement across all components when it comes to small inset controls/actions" → open.
+- 2026-10-16 · from the owner's round-27 questions → row actions are a nested square 4 in from the plate on every side, the row less 8 (24 at type 14 Default, 18 at the app's 13 Compact; were Button sm, 28 / 24, 2 / 1 in), with the row's corner less 4 (floor), and the row's end padding 4; their hover changes only the ink, `fg-muted` to `fg-default` (also while pressed or while its menu is open), with no plate (was the translucent `bg-hover`, audit S11c). Basis: Notion 20 in 30 (5 in), ChatGPT 20 in 36 (8 in, ink-only hover), shadcn 20 in 32, Fluent 24 in 32, Cursor's Agents sidebar ink-only; Area's own nested-square rule (Chip remove, InputAction). Measured in the app at type 13 Default: 22 in 30, 4 in, corner 4. docs/research/inset-actions-2026-10-16.md. Open: whether every inset control (Tree view, Chip, Tag, Badge, field actions) takes the same rule; Tree view still has the old one.
+- 2026-10-16 · owner, review round 28 (components28) → rethink: "can you make sure the margins and padding are all intentional, it looks like there is extra margins on the right side. and so the backplate of the nav item doesnt look aligned with the button on top. also the wordmark can be the old size before." In chat: "how is the wordmark size for Area decided? is the library icon an area component? the lines inside the document look off and too close to the bottom of the document, not evenly spaced" → open.
+- 2026-10-16 · from the owner's round-28 note → the sidebar demo (`GalleryNavSidebar`): the Nav kept its 240 default inside the 264 sidebar's 248 column, so its plates stopped 16 from the right edge and 8 from the left, out of line with the header's buttons. It now fills its column (`--area-nav-inline-size: 100%`, the sidebar sets the width), so the plates and the header's buttons both end 8 from each edge; the name starts on the rows' icon column (8 + the row's 8). The name had no type role and showed whatever it inherited (16 in the review page's Before frame, 14 in its After); it is now the surface title size (`title-xs`, 16 / 24 at type 14), at the regular weight, the old size. Nav's CSS unchanged. The Library row's `document` icon was redrawn with evenly spaced lines (docs/specs/icons.md, 2026-10-16).
+- 2026-10-16 · owner, review round 29 (components29) → approved (row actions, the sidebar demo) → Complete again in `component-status.mjs`.

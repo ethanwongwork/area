@@ -12,6 +12,7 @@
  */
 import { PREFIX } from "../axes/schema.ts";
 import { MOTION_AXIS, duration } from "../axes/motion.ts";
+import { layerCss } from "../color/layers.ts";
 
 /** 4px base with 2px, 6px and 10px half-steps for tight control interiors. */
 export const SPACE_RAMP = [0, 2, 4, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96] as const;
@@ -123,9 +124,10 @@ export function derivedTokens(): Record<string, string> {
     // Insets that count the frame follow it, so a surface keeps its outer size. docs/research/surface-2026-10-14.md.
     [`${PREFIX}border-width`]: `max(var(${PREFIX}frame-width), calc(var(${PREFIX}contrast-more) * 1px))`,
     [`${PREFIX}edge-control-strong`]: `color-mix(in srgb, var(${PREFIX}border-hover), var(${PREFIX}stroke-control-hover) calc(var(${PREFIX}contrast-more) * 100%))`,
-    // The standalone surface's edge (audit S7): Card, Composer, Code block. Lighter than the divider because a halo or a
-    // field carries it; dark keeps the faint rung (consistency pass 2026-10-12: three copies of one literal).
-    [`${PREFIX}border-card`]: `light-dark(var(${PREFIX}neutral-100), var(${PREFIX}neutral-750))`,
+    // The page, its layers, control fills on each ground, edges and inks: the Layers model (color/layers.ts), live over
+    // the ground and layer-contrast settings and the Neutral cast. border-card (Card, Composer, Code block) is among
+    // them: today's neutral-100 / 750, now a step from the page.
+    ...layerCss(),
     // The neutral soft-mark plate (audit S6a): Badge soft, Chip input, soft Count. Translucent, so a mark stays visible
     // on a hovered or selected row plate; hover lays bg-hover's 5% wash over it (6% + 5% of 94% = 10.7%).
     [`${PREFIX}bg-mark`]: "light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.1))",

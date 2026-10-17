@@ -19,6 +19,7 @@ import { SURFACE_AXIS } from "./surface.ts";
 import { ELEVATION_AXIS } from "./elevation.ts";
 import { DENSITY_AXIS } from "./density.ts";
 import { TYPE_AXIS } from "./type-size.ts";
+import { GROUND_DARK_AXIS, GROUND_LIGHT_AXIS, LAYERS_AXIS } from "./layers.ts";
 
 export const AXES: AxisDefinition[] = [
   THEME_AXIS,
@@ -26,6 +27,9 @@ export const AXES: AxisDefinition[] = [
   ACCENT_AXIS,
   ACTION_AXIS,
   SELECTION_AXIS,
+  GROUND_LIGHT_AXIS,
+  GROUND_DARK_AXIS,
+  LAYERS_AXIS,
   TYPE_AXIS,
   DENSITY_AXIS,
   RADIUS_AXIS,

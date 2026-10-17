@@ -319,7 +319,7 @@ vendored as references through `gen-icons.mjs`:
 | Icon | Keyline | Construction | Ink | Negative space |
 |---|---|---|---|---|
 | copy | square | front 8 × 8 r 1 at 5.5; back sheet as an L (2.5, 8 → 8.5, 2.5) ending 3 from the front | 12.1 × 12.1 | gap 1.88 |
-| document | vertical | 9 × 13 page, 45° clipped corner (9.5, 1.5 → 12.5, 4.5), lines 6.5–9.5 at y 8.5 / 11.5 | 10.1 × 14.1 | lines 1.88 from every edge. No dog-ear: its triangle counter would be about 0.6px |
+| document | vertical | 9 × 13 page, 45° clipped corner (9.5, 1.5 → 12.5, 4.5), lines 6.5–9.5 at y 9 / 11.5 (2026-10-16, evenly spaced; was 8.5 / 11.5) | 10.1 × 14.1 | lines 1.88 from every edge. No dog-ear: its triangle counter would be about 0.6px |
 | folder | horizontal | closed tab silhouette, 45° tab step (6.5, 3.5 → 8, 5) | 14.1 × 10.1 | no flap line: it would leave a 0.38px band beside the tab |
 | trash | vertical | lid 3–13 at y 4.5; handle 6.5–9.5, 3 tall; body 3.5–12.5; lines at x 6.5 / 9.5 | 11.1 × 14.1 | handle counter 1.93; lines 1.88 to lid, sides and base. The handle sits on the line positions |
 | warning | circle, `data-angles="free"` | triangle (8, 1) (14.5, 13.5) (1.5, 13.5), r 1.25 corners; ! stem 6.25–8, ⌀1.75 dot at 10.75 | 12.5 × 12.2 | stem and dot 1.3 tight to the sides and base; the triangle is lifted 0.5px so its ink box centres |
@@ -5151,6 +5151,20 @@ more remain, each held by a construction the owner set, the lattice, or the gap 
 the T in line-height and letter-spacing, scale's post, bank's middle pillar, brain's divide, mouse's wheel, split,
 piano's keys, arrow-up-from-line, cloud-download) stays symmetric and soft at 1×; neither the frame's width nor the
 line's centring changes for 1×.
+
+## document's text lines evened, 2026-10-16
+
+Owner (component review, round 28, on the Nav sidebar demo's Library row): "the lines inside the document look off and
+too close to the bottom of the document, not evenly spaced". Below the fold (its base at y 6) and above the page's
+bottom (13.5) the lines at 8.5 / 11.5 left 2.5 / 3 / 2 between centre-lines, 0.75 of clear space under the second.
+They move to **8.5 / 11**: 2.5 / 2.5 / 2.5, every gap 1.38 tight, x 6.5–9.5 unchanged (3 from the page's sides). The
+second line is now on a whole pixel, a grey double row at 1× (the trade the owner accepted for form's even lines,
+5.5 / 8 / 10.5, 2026-10-11); at 2× both lines draw alike. Lint, sliver check at 16 and 48: clean. Status kept approved
+(the package's main entry is approved-only); before / after sent to the owner.
+
+On the restored page ("Balance over 1× crispness" below: the page back on 2–14, the fold's base at 6.5) the same
+even spacing puts the lines at **9 / 11.5**: 2.5 / 2.5 / 2.5 between the fold's base, the lines and the page's
+bottom (14), x 6.5–9.5 unchanged.
 
 ## Balance over 1× crispness: the frames moves restored, 2026-10-16
 
