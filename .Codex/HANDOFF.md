@@ -5,6 +5,17 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Icons: balance over 1× crispness (2026-10-16, branch `claude/icon-review-5957f0`, merged)
+
+- Owner: optical balance, size and even spacing outrank 1× pixel crispness (spec "Balance over 1× crispness").
+  The 2026-10-14 frames moves (273 sources) are restored to their 13 Oct drawings; qr-code, diamond, gamepad kept.
+- Balance pass, rounds 1–4 (spec): wand, eye-off (matched to eye for the toggle), lock / unlock, broadcast, quote,
+  scissors, atom; the writing tool ×1.25 wider in pencil, pen, pencil-off and every composite pen; slice, broom, wrench;
+  mountain. Measured against Lucide and Phosphor (`docs/research/icon-review/2026-10-16/`: measure.mjs, compare.py,
+  bal.mjs, toggle.mjs, grid.mjs). Lint 808, icons tests 10/10.
+- dismiss × is 9 (owner-approved; every component's close mark ~10% smaller). Final pass: no new sliver, doubled
+  stroke or escape (spec "Final visual pass"). React 466/466, typecheck, build. Not checked: the Electron app by eye.
+
 ## Start here (2026-10-17, session `project-status-components-16382f`)
 
 **Waiting on the owner:**
