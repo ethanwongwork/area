@@ -1,0 +1,271 @@
+<title>Material Levers</title>
+<link rel="stylesheet" href="area.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: the idea, then a live editor (lever panel beside light and dark scenes, bundles above), then every lever on
+   its own at 0, 4 and 8, the questions, and the save strip. Page chrome has its own palette; scenes are Area. */
+:root {
+  --bg: #f4f4f2; --panel: #ffffff; --fg: #18181a; --muted: #66666c; --line: #e2e2df; --soft: #ececea; --accent: #2f5bd3;
+  --sans: "Geist", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #050505; --panel: #0e0e0f; --fg: #ececee; --muted: #8e8e94; --line: #232326; --soft: #161618; --accent: #7d9cf5; color-scheme: dark } }
+:root[data-theme="dark"] { --bg: #050505; --panel: #0e0e0f; --fg: #ececee; --muted: #8e8e94; --line: #232326; --soft: #161618; --accent: #7d9cf5; color-scheme: dark }
+* { box-sizing: border-box }
+[hidden] { display: none !important }
+body { background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 14px; line-height: 1.5 }
+.wrap { max-width: 1440px; margin: 0 auto; padding-inline: 16px; padding-block: 28px 64px; display: grid; gap: 20px }
+h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; margin: 0; text-wrap: balance }
+h2 { font-size: 17px; font-weight: 600; margin: 0; letter-spacing: -0.01em; text-wrap: balance }
+h3.grp { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 6px 0 0 }
+p { margin: 0; max-width: 82ch }
+.lede { color: var(--muted); font-size: 15px }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; display: grid; gap: 12px; min-width: 0 }
+.status { font-size: 12px; color: var(--muted) }
+ul.points { margin: 0; padding-left: 20px; display: grid; gap: 6px; max-width: 92ch }
+.tbl { overflow-x: auto }
+table.data { border-collapse: collapse; font-size: 13px; min-width: 760px; width: 100% }
+table.data th, table.data td { text-align: left; padding: 5px 12px 5px 0; border-bottom: 1px solid var(--line); vertical-align: top }
+table.data th { color: var(--muted); font-weight: 500; font-size: 12px }
+table.data td.n { font-family: var(--mono); font-size: 12px; white-space: nowrap }
+
+.seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--line); border-radius: 999px; padding: 2px; gap: 2px; background: var(--panel); max-width: 100% }
+.seg button, .chips button { border: 0; background: transparent; color: var(--muted); border-radius: 999px; padding: 2px 10px; font: inherit; font-size: 12px; cursor: pointer }
+.seg button:hover, .chips button:hover { color: var(--fg) }
+.seg button[aria-pressed="true"] { background: var(--fg); color: var(--bg) }
+.chips { display: flex; flex-wrap: wrap; gap: 4px }
+.chips button { border: 1px solid var(--line); padding: 1px 8px; font-size: 11px }
+.chips button[aria-pressed="true"] { border-color: var(--fg); color: var(--fg); background: var(--soft) }
+.lbl { font-size: 12px; color: var(--muted) }
+:is(.wrap button, input, textarea):not(.scene *):focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+.btn { border: 1px solid var(--line); background: var(--panel); color: var(--fg); border-radius: 8px; padding: 6px 12px; font: inherit; font-weight: 500; cursor: pointer; justify-self: start }
+.btn.primary { background: var(--fg); color: var(--bg); border-color: var(--fg) }
+
+/* Editor. */
+.editor { display: grid; grid-template-columns: minmax(280px, 340px) minmax(0, 1fr); gap: 16px; align-items: start }
+@media (max-width: 980px) { .editor { grid-template-columns: minmax(0, 1fr) } }
+.panel { display: grid; gap: 10px; align-content: start; max-height: none }
+.lev { display: grid; gap: 4px; padding-block: 4px; border-bottom: 1px solid var(--line) }
+.lev .top { display: flex; justify-content: space-between; gap: 8px; font-size: 13px }
+.lev .top span:last-child { font-family: var(--mono); font-size: 12px; color: var(--muted) }
+.lev input[type=range] { inline-size: 100%; accent-color: var(--accent) }
+.lev small { font-size: 11px; color: var(--muted) }
+.scenes { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 12px; min-width: 0 ; position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px) }
+@media (max-width: 980px) { .scenes { position: static } }
+.bundles { display: flex; flex-wrap: wrap; gap: 8px; align-items: center }
+
+.scene { position: relative; isolation: isolate; border-radius: 12px; border: 1px solid var(--line); padding: 16px; background: var(--area-bg-page); color: var(--area-fg-default); font-family: var(--area-font-sans); font-size: var(--area-text-md-size); line-height: var(--area-text-md-leading); overflow: hidden; min-width: 0 }
+/* Page levers: grain (a fractal-noise tile) and page glow (an accent wash toward the light). */
+.scene::before { content: ""; position: absolute; inset: 0; z-index: -2; pointer-events: none; background: radial-gradient(70% 60% at var(--lv-px, 50%) var(--lv-py, 5%), color-mix(in oklab, var(--area-accent-solid) calc(var(--lv-page-glow, 0) * 4%), transparent), transparent 70%) }
+.scene::after { content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: calc(var(--lv-grain, 0) * 0.015); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); mix-blend-mode: overlay }
+.scene--photo, .bd-photo .scene[data-live] { background:
+  radial-gradient(60% 50% at 15% 20%, color-mix(in oklab, var(--area-accent-solid) 75%, transparent), transparent 70%),
+  radial-gradient(55% 55% at 85% 30%, color-mix(in oklab, var(--area-discovery-solid) 70%, transparent), transparent 70%),
+  radial-gradient(60% 60% at 50% 95%, color-mix(in oklab, var(--area-success-solid) 55%, transparent), transparent 70%),
+  linear-gradient(160deg, color-mix(in oklab, var(--area-info-solid) 35%, var(--area-bg-page)), var(--area-bg-page)) }
+.scene__grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 14px }
+.stack { display: grid; gap: 12px; align-content: start; min-width: 0 }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center }
+.row--fill > * { flex: 1 1 100% }
+.row .area-input { inline-size: 100% }
+.scene .area-card, .scene .area-menu { inline-size: 100% }
+.scene .area-toast { position: static; inline-size: 100% }
+
+/* Lever by lever. */
+.levers { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 620px), 1fr)); gap: 16px }
+.lever { margin: 0; display: grid; gap: 8px; min-width: 0 }
+.lever figcaption { display: grid; gap: 2px } .lever figcaption b { font-size: 14px; font-weight: 600 } .lever figcaption span { font-size: 12px; color: var(--muted) }
+.steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px }
+@media (max-width: 560px) { .steps { grid-template-columns: minmax(0, 1fr) } }
+.step { position: relative; min-width: 0 }
+.step .tag { position: absolute; top: 6px; right: 8px; z-index: 2; font: 11px var(--mono); color: var(--muted) }
+.scene--mini { padding: 12px; display: grid; gap: 8px; align-content: start; min-height: 132px }
+.mini-card .area-card { inline-size: 100% }
+textarea { width: 100%; min-height: 72px; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; background: var(--bg); color: var(--fg); font: inherit; resize: vertical }
+
+/*LEVERS_CSS*/
+</style>
+
+<div class="wrap">
+  <header style="display:grid;gap:8px">
+    <h1>Material levers</h1>
+    <p class="lede">Materials taken apart into separate settings, the way Layers splits tone into ground and contrast. Each lever is one number from 0 (off) to 8, with the parts it applies to. Glass, Tactile and Soft become saved combinations of lever values, and you can make any other.</p>
+  </header>
+
+  <section class="card" aria-labelledby="idea-title">
+    <h2 id="idea-title">How the levers work</h2>
+    <ul class="points">
+      <li><b>Grouped as Figma groups them.</b> <i>Fill</i> (gradient, sheen, transparency, frost), <i>Stroke</i> (style and strength) and <i>Effects</i> (inner shadow, emboss, contact shadow, glow), plus <i>Page</i> (grain, page glow). Figma stacks fills, strokes and effects on a layer the same way.</li>
+      <li><b>One light for everything.</b> The light angle (0 = top, clockwise) sets the gradient's direction, the radial highlight's position, the sheen, the lit edge of a stroke, which side an inner shadow falls on and where the contact shadow lands.</li>
+      <li><b>Each lever says where it applies, and each part group has a strength.</b> Groups: <i>Primary</i> (solid buttons, the selected segment, thumbs, ticked boxes), <i>Secondary</i> (outline and soft buttons), <i>Badges</i> (solid badges), <i>Fields</i> (fields, tracks, unticked boxes), <i>Selected rows</i> (menus, nav), <i>Cards</i> and <i>Overlays</i> (menus, popovers, toasts). Ghost buttons, text, tables, lists and code take nothing. By default Primary takes the material at full strength and the rest echo it at half, as platforms, libraries and the old system styles do (29-scope).</li>
+      <li><b>Every lever works on the Layers tone.</b> A gradient lightens and darkens the part's own tone, transparency lowers its alpha, strokes and shadows use white and black at an alpha. Colour comes only from the accent, by choice (D5).</li>
+      <li><b>Nothing else splits this far.</b> Figma has the same parts but per layer. daisyUI 5 has system-wide <code>--depth</code> and <code>--noise</code>, but each is on or off and bundles several paints. Radix and shadcn make panels or menus translucent as one switch. None gives each paint its own scale, targets and a shared light.</li>
+      <li><b>Updated from your eight references.</b> A ring takes the part's own colour, darker (<i>Tone</i>; <i>Neutral</i> is black, as on the board's dark button). The bright inner edge away from the light is its own lever, <i>Catch-light</i>. Wells flip their gradient. A radial gradient can centre toward the light, in the middle, or away from it. How see-through a part can go depends on what it holds.</li>
+      <li><b>Safe by construction.</b> Transparency stops at the floor for what a part holds; reduced transparency and forced colours turn transparency and frost off; levers never change size, type or ink (D16).</li>
+    </ul>
+  </section>
+
+  <section class="card" aria-labelledby="editor-title">
+    <h2 id="editor-title">Try the levers</h2>
+    <div class="bundles" role="group" aria-label="Load a combination"><span class="lbl">Load</span><span id="bundles"></span>
+      <span class="lbl" style="margin-left:12px" id="bd-label">Backdrop</span>
+      <div class="seg" id="backdrop" role="group" aria-labelledby="bd-label"><button type="button" data-b="page" aria-pressed="true">Page</button><button type="button" data-b="photo" aria-pressed="false">Picture</button></div>
+    </div>
+    <div class="editor">
+      <div class="panel" id="panel"></div>
+      <div class="scenes">
+        <!--SCENE_LIGHT-->
+        <!--SCENE_DARK-->
+      </div>
+    </div>
+    <p class="status" id="readout"></p>
+  </section>
+
+  <section class="card" aria-labelledby="alone-title">
+    <h2 id="alone-title">Each lever on its own</h2>
+    <p class="status">0, 4 and 8, light, on the parts the lever applies to by default. Every other lever is off.</p>
+    <div class="levers"><!--ALONE--></div>
+  </section>
+
+  <section class="card" aria-labelledby="bundles-title">
+    <h2 id="bundles-title">The materials as lever values</h2>
+    <div class="tbl"><table class="data" id="bundle-table"></table></div>
+    <p class="status">Soft also sets Layers to a gray ground (95 light, 24 dark, contrast 0): emboss needs a tone lighter and darker than the ground.</p>
+  </section>
+
+  <section class="card" aria-labelledby="q-title">
+    <h2 id="q-title">Questions for you</h2>
+    <ul class="points">
+      <li><b>One value or one per theme?</b> Layers has separate light and dark settings. The levers here are one number each, tuned per theme inside (dark strokes and shadows are stronger). Separate light and dark values would double the panel.</li>
+      <li><b>Where do targets live?</b> Per lever (as here), or one target set for the whole material (simpler, less control)?</li>
+      <li><b>Contact shadow: material or Elevation?</b> It could be an Elevation role for controls instead of a material lever.</li>
+      <li><b>Elevation for cards.</b> Reference 1's card shadow is far softer and wider than Elevation's resting role can draw. Widen that role, or add a softness setting to Elevation?</li>
+      <li><b>Gradient fill colour.</b> Tone-on-tone and accent-tinted are here. More colour (a second hue, mesh) would need a colour source beyond accent and tones.</li>
+      <li><b>Text on gradients.</b> A strong gradient on a card darkens one end. At 8 in light, muted text at the dark end of a card falls under 4.5:1 unless the gradient is capped there or Layers solves inks for it.</li>
+    </ul>
+  </section>
+
+  <section class="card" aria-labelledby="save-title">
+    <h2 id="save-title">Save</h2>
+    <p class="status">Saves the lever values and targets now in the editor, and your notes. Claude reads them to shape the Material settings.</p>
+    <label class="status" for="notes">Notes and answers</label>
+    <textarea id="notes" placeholder="For example: one value per lever is fine; drop emboss; I want a second gradient colour"></textarea>
+    <button type="button" class="btn primary" id="save">Save</button>
+    <span class="status" id="status" role="status"></span>
+  </section>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const ROLES = [["primary", "Primary"], ["secondary", "Secondary"], ["marks", "Badges"], ["wells", "Fields"], ["selection", "Selected rows"], ["surfaces", "Cards"], ["overlays", "Overlays"], ["chrome", "Chrome"]];
+// Default strength per part group (29-scope): primary carries the material, the rest echo it at half.
+const SCOPE_DEFAULTS = { primary: 1, secondary: 0.5, marks: 0.5, wells: 0.5, selection: 0.5, surfaces: 1, overlays: 1, chrome: 1 };
+// [key, label, group, targeted?, switches: [[gate, label]...] as a one-of (radio) or many (toggle) set]
+const LEVERS = [
+  ["angle", "Light angle", "Light", false],
+  ["gradient", "Gradient", "Fill", true, { kind: "one", label: "Shape", opts: [["", "Linear"], ["gradient-radial", "Radial"]] }, { kind: "one", label: "Centre", opts: [["", "Toward light"], ["gradient-centre", "Middle"], ["gradient-away", "Away"]] }, { kind: "many", label: "Colour", opts: [["gradient-accent", "Accent"]] }],
+  ["sheen", "Sheen", "Fill", true, { kind: "one", label: "Shape", opts: [["", "Soft"], ["sheen-band", "Band"]] }],
+  ["transparency", "Transparency", "Fill", true, { kind: "one", label: "Holds", opts: [["", "Text"], ["holds-icons", "Icons"], ["holds-none", "Nothing"]] }],
+  ["frost", "Frost", "Fill", true],
+  ["stroke", "Stroke", "Stroke", true, { kind: "many", label: "Style", opts: [["stroke-solid", "Ring"], ["stroke-lit", "Lit edge"], ["stroke-gradient", "Gradient"], ["stroke-double", "Double"]] }, { kind: "one", label: "Ring", opts: [["", "Tone"], ["stroke-neutral", "Neutral"]] }],
+  ["inner", "Inner shadow", "Effects", true],
+  ["softness", "Inner shadow softness", "Effects", false],
+  ["catch", "Catch-light", "Effects", true],
+  ["emboss", "Emboss", "Effects", true],
+  ["contact", "Contact shadow", "Effects", true],
+  ["glow", "Glow", "Effects", false],
+  ["grain", "Grain", "Page", false],
+  ["page-glow", "Page glow", "Page", false],
+];
+const TARGET_DEFAULTS = { gradient: ["primary"], sheen: ["primary"], transparency: ["surfaces", "overlays", "chrome"], frost: ["surfaces", "overlays", "chrome"], stroke: ["primary", "secondary", "marks"], inner: ["primary", "wells"], catch: ["primary", "wells"], emboss: ["primary"], contact: ["primary", "secondary"] };
+const blank = () => ({ values: Object.fromEntries(LEVERS.map(l => [l[0], 0])), gates: {}, targets: JSON.parse(JSON.stringify(TARGET_DEFAULTS)), scope: { ...SCOPE_DEFAULTS }, soft: false });
+// The materials as lever values (27-levers/README.md, "Bundles").
+const BUNDLES = {
+  None: blank(),
+  Glass: { ...blank(), values: { ...blank().values, transparency: 6, frost: 6, stroke: 4, sheen: 3 }, gates: { "stroke-lit": 1 }, targets: { ...TARGET_DEFAULTS, stroke: ["primary", "secondary", "surfaces", "overlays", "chrome"], sheen: ["primary", "overlays"] } },
+  Tactile: { ...blank(), values: { ...blank().values, stroke: 4, inner: 4, contact: 4, grain: 3 }, gates: { "stroke-solid": 1, "stroke-lit": 1, "stroke-neutral": 1 } },
+  Jelly: { ...blank(), values: { ...blank().values, gradient: 4, sheen: 2, stroke: 5, catch: 6, inner: 5, contact: 2 }, gates: { "stroke-solid": 1 }, targets: { ...TARGET_DEFAULTS, inner: ["wells"], catch: ["primary"] } },
+  Soft: { ...blank(), values: { ...blank().values, angle: 315, emboss: 4, inner: 4, softness: 8 }, targets: { ...TARGET_DEFAULTS, inner: ["wells"] }, soft: true },
+  Aero: { ...blank(), values: { ...blank().values, gradient: 5, sheen: 6, stroke: 5, catch: 6, contact: 2 }, gates: { "sheen-band": 1, "gradient-accent": 1, "stroke-double": 1 }, targets: { ...TARGET_DEFAULTS, catch: ["primary"] } },
+  Glow: { ...blank(), values: { ...blank().values, glow: 6, "page-glow": 5, gradient: 3, stroke: 3 }, gates: { "gradient-radial": 1, "gradient-accent": 1, "stroke-gradient": 1 } },
+};
+const clone = o => JSON.parse(JSON.stringify(o));
+let st = clone(BUNDLES.Tactile), current = "Tactile";
+
+function apply() {
+  document.querySelectorAll("[data-live]").forEach(el => {
+    for (const [k, v] of Object.entries(st.values)) el.style.setProperty("--lv-" + k, k === "angle" ? v + "deg" : String(v));
+    for (const l of LEVERS) for (const sw of l.slice(4)) for (const [g] of sw.opts) if (g) el.style.setProperty("--lv-" + g, String(st.gates[g] ? 1 : 0));
+    for (const [lever, roles] of Object.entries(st.targets)) for (const [r] of ROLES) el.style.setProperty(`--lv-${lever}-${r}`, roles.includes(r) ? "1" : "0");
+    for (const [r] of ROLES) el.style.setProperty(`--lv-scope-${r}`, String((st.scope || SCOPE_DEFAULTS)[r]));
+    for (const [a, v] of [["data-area-ground-light", "95"], ["data-area-layers-light", "0"], ["data-area-ground-dark", "24"], ["data-area-layers-dark", "0"]]) st.soft ? el.setAttribute(a, v) : el.removeAttribute(a);
+  });
+  readout();
+}
+function panel() {
+  let html = "", group = "";
+  for (const [key, label, g, targeted, ...sws] of LEVERS) {
+    if (g !== group) { html += `<h3 class="grp">${g}</h3>`; group = g; }
+    const max = key === "angle" ? 345 : 8, step = key === "angle" ? 15 : 1, val = st.values[key];
+    html += `<div class="lev"><div class="top"><label for="l-${key}">${label}</label><span id="v-${key}">${val}${key === "angle" ? "°" : ""}</span></div><input type="range" id="l-${key}" min="0" max="${max}" step="${step}" value="${val}">`;
+    for (const sw of sws) html += `<div class="chips" role="group" aria-label="${label} ${sw.label}"><span class="lbl">${sw.label}</span>${sw.opts.map(([gk, gl]) => `<button type="button" data-sw="${key}" data-kind="${sw.kind}" data-g="${gk}" aria-pressed="${gk ? !!st.gates[gk] : !sw.opts.some(([o]) => o && st.gates[o])}">${gl}</button>`).join("")}</div>`;
+    if (targeted) html += `<div class="chips" role="group" aria-label="${label} applies to"><span class="lbl">On</span>${ROLES.map(([r, rl]) => `<button type="button" data-t="${key}" data-r="${r}" aria-pressed="${st.targets[key].includes(r)}">${rl}</button>`).join("")}</div>`;
+    html += `</div>`;
+  }
+  st.scope ||= { ...SCOPE_DEFAULTS };
+  html += `<h3 class="grp">Scope</h3><p class="lbl" style="margin:0">How strongly each part group takes the material (29-scope: primary carries it; the rest echo it).</p>` + ROLES.map(([r, rl]) => `<div class="lev"><div class="top"><label for="s-${r}">${rl}</label><span id="vs-${r}">${Math.round(st.scope[r] * 100)}%</span></div><input type="range" id="s-${r}" min="0" max="1" step="0.05" value="${st.scope[r]}"></div>`).join("");
+  $("panel").innerHTML = html;
+  for (const [r] of ROLES) $("s-" + r).addEventListener("input", e => { st.scope[r] = Number(e.target.value); $("vs-" + r).textContent = Math.round(st.scope[r] * 100) + "%"; current = ""; bundles(); apply(); });
+  for (const [key] of LEVERS) $("l-" + key).addEventListener("input", e => { st.values[key] = Number(e.target.value); $("v-" + key).textContent = e.target.value + (key === "angle" ? "°" : ""); current = ""; bundles(); apply(); });
+  $("panel").querySelectorAll("[data-sw]").forEach(b => b.addEventListener("click", () => {
+    const sws = LEVERS.find(l => l[0] === b.dataset.sw).slice(4).find(s => s.opts.some(([g]) => g === b.dataset.g));
+    if (b.dataset.kind === "one") { for (const [g] of sws.opts) if (g) st.gates[g] = 0; if (b.dataset.g) st.gates[b.dataset.g] = 1; }
+    else st.gates[b.dataset.g] = st.gates[b.dataset.g] ? 0 : 1;
+    current = ""; bundles(); panel(); apply();
+  }));
+  $("panel").querySelectorAll("[data-t]").forEach(b => b.addEventListener("click", () => {
+    const list = st.targets[b.dataset.t], r = b.dataset.r;
+    st.targets[b.dataset.t] = list.includes(r) ? list.filter(x => x !== r) : [...list, r];
+    current = ""; bundles(); panel(); apply();
+  }));
+}
+function bundles() {
+  $("bundles").innerHTML = `<span class="seg">${Object.keys(BUNDLES).map(n => `<button type="button" data-n="${n}" aria-pressed="${n === current}">${n}</button>`).join("")}</span>`;
+  $("bundles").querySelectorAll("button").forEach(b => b.addEventListener("click", () => { st = clone(BUNDLES[b.dataset.n]); current = b.dataset.n; bundles(); panel(); apply(); }));
+}
+function readout() {
+  const t = st.values.transparency;
+  const holds = st.gates["holds-none"] ? "none" : st.gates["holds-icons"] ? "icons" : "text";
+  const fl = { text: [0.56, 0.62], icons: [0, 0.71], none: [0, 0] }[holds];
+  $("readout").textContent = t ? `Transparency ${t}, holding ${holds}: see-through parts paint at ${(1 - t / 8 * (1 - fl[0])).toFixed(2)} in light and ${(1 - t / 8 * (1 - fl[1])).toFixed(2)} in dark. At 8 they reach the floor for what they hold (text 0.56 / 0.62, icons 0 / 0.71, nothing 0).` : "";
+}
+function table() {
+  const keys = LEVERS.map(l => l[0]);
+  const gateNames = b => Object.entries(b.gates).filter(([, v]) => v).map(([g]) => g.replace(/^[a-z]+-/, "")).join(", ");
+  $("bundle-table").innerHTML = `<thead><tr><th>Material</th>${keys.map(k => `<th>${LEVERS.find(l => l[0] === k)[1]}</th>`).join("")}<th>Switches</th></tr></thead><tbody>` +
+    Object.entries(BUNDLES).map(([n, b]) => `<tr><td>${n}</td>${keys.map(k => `<td class="n">${b.values[k] || "·"}</td>`).join("")}<td class="n">${gateNames(b) || "·"}</td></tr>`).join("") + "</tbody>";
+}
+$("backdrop").querySelectorAll("button").forEach(b => b.addEventListener("click", () => {
+  document.body.classList.toggle("bd-photo", b.dataset.b === "photo");
+  $("backdrop").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+}));
+bundles(); panel(); apply(); table();
+
+(async () => {
+  let db = null;
+  try { db = window.claude ? await window.claude.use("db") : null; } catch { db = null; }
+  const doc = db ? db.collection("levers").doc("picks") : null;
+  if (!doc) $("status").textContent = "Saving works when the page is open on claude.ai and you're signed in. You can also tell Claude in chat.";
+  else {
+    try { const snap = await doc.get(); if (snap.exists) { const d = snap.data(); if (d.state) { st = { ...blank(), ...d.state }; current = ""; } $("notes").value = d.notes || ""; bundles(); panel(); apply(); $("status").textContent = "Loaded what you saved."; } } catch { /* defaults */ }
+  }
+  $("save").addEventListener("click", async () => {
+    if (!doc) { $("status").textContent = "Couldn't save from this view. Tell Claude in chat."; return; }
+    $("status").textContent = "Saving…";
+    try { await doc.set({ state: st, loadedFrom: current, notes: $("notes").value.trim(), at: new Date().toISOString() }); $("status").textContent = "Saved. Claude can read it."; }
+    catch (e) { $("status").textContent = "Couldn't save (" + ((e && e.code) || "error") + "). Tell Claude in chat."; }
+  });
+})();
+</script>

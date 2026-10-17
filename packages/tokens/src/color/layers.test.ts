@@ -71,7 +71,7 @@ function evaluate(expr: string, vars: Record<string, number>): number {
   return Function(`"use strict"; return (${js});`)() as number;
 }
 function cssLightness(theme: "light" | "dark", g: number, n: number) {
-  const css = layerLightnessCss(), vars: Record<string, number> = { "ground-light": theme === "light" ? groundLightness("light", g) : 1, "ground-dark": theme === "dark" ? groundLightness("dark", g) : 0, layers: n };
+  const css = layerLightnessCss(), vars: Record<string, number> = { "ground-light": theme === "light" ? groundLightness("light", g) : 1, "ground-dark": theme === "dark" ? groundLightness("dark", g) : 0, "layers-light": theme === "light" ? n : 8 - n, "layers-dark": theme === "dark" ? n : 8 - n };
   // Resolve in dependency order: keep going until every helper is known.
   for (let pass = 0; pass < 6; pass++) for (const [k, e] of Object.entries(css)) if (!(k in vars)) { try { vars[k] = evaluate(e, vars); } catch { /* a later pass */ } }
   return vars;
@@ -127,7 +127,7 @@ describe("layers: inks with a hue follow the ground", () => {
 
 describe("layers: the defaults are Area as it was", () => {
   it("light 100 + 4 reproduces the light theme", () => {
-    const t = layerTokens("light", { groundLight: 100, groundDark: 8, layers: 4 }, { chroma: 0, hue: 0 });
+    const t = layerTokens("light", { groundLight: 100, groundDark: 8, layersLight: 4, layersDark: 4 }, { chroma: 0, hue: 0 });
     expect(t).toMatchObject({
       "bg-page": "#ffffff", "bg-surface": "#ffffff", "bg-subtle": "#f7f7f7", "bg-stripe": "#fafafa", "bg-code": "#ffffff",
       "bg-component": "#f7f7f7", "bg-component-hover": "#f3f3f3", "bg-component-active": "#eeeeee",
@@ -137,7 +137,7 @@ describe("layers: the defaults are Area as it was", () => {
     });
   });
   it("dark 8 + 4 keeps the near-black page and today's inks", () => {
-    const t = layerTokens("dark", { groundLight: 100, groundDark: 8, layers: 4 }, { chroma: 0, hue: 0 });
+    const t = layerTokens("dark", { groundLight: 100, groundDark: 8, layersLight: 4, layersDark: 4 }, { chroma: 0, hue: 0 });
     expect(t).toMatchObject({ "bg-page": "#020202", "fg-default": "#eeeeee", "fg-muted": "#c5c5c5", "stroke-control": "#939393", "stroke-control-hover": "#a4a4a4", "border-decorative": "#282828", "border-card": "#333333", "border-float": "#4b4b4b" });
   });
 });

@@ -155,3 +155,45 @@ Binding for tasks 19 onward. Cite them as D1–D16.
   no public claim until it ships.
 - **D16 Separation:** a material never changes geometry, type or ink. A preset that sets several
   axes is a bundle.
+
+## Reports 19–21: Claude review (2026-10-17)
+
+Reviewed against `main` at `530ef22` plus this session's uncommitted Layers split, by three reviewers in parallel. No
+report was edited; this section is the reading guide.
+
+| Report | Trust | Main issue |
+| --- | --- | --- |
+| 19 corrections | Medium: high as a fix ledger at `9036ed9`, low as a picture of today | Every correction in "Corrections for Astra" is fixed in the data. The 13-presets README Answer and 10-states README:32 still carry superseded policy without a callout. It changed the 16 specimen's example person away from David Tee, which AGENTS.md requires (still to fix). All Area pins predate Elevation, Surface-as-frame and Layers; 12 newer manifest exports are missing from the inventory |
+| 20 limits and None | Medium-high on principles, low on currency | The hard limits are real and correctly cited (4.5:1 text, dark APCA floors, required edges, focus, semantic state, disabled vs read-only, reduced motion). Nine of its "hard limits" are owner decisions (D5, D8, D10–D13, D16, architecture, process), which D1 keeps adjustable. D7's safety paths (backdrop-filter fallbacks, `prefers-reduced-transparency`, an app transparency setting, forced-colours Canvas) don't exist yet. The None baseline (`d455567`) is stale |
+| 21 axis design | Medium | Material namespaces and one-hot gates are sound and pass today's registry check. The Surface split (a third of the report) is obsolete: Elevation owns every shadow, and the proposed Surface gives 12 registry conflicts. Its outer-shadow controls duplicate Elevation. Area's overlays use the native top layer, not portals, so the portal bridge is only for consumers. No answer to translucent fills over the Layers ink solve |
+
+**Findings that change the plan:**
+- **A material adds no outer lift to cards, menus or dialogs.** Elevation owns those shadows. The one outer cast a material keeps is the contact shadow under raised controls, which Elevation leaves flat by design (DESIGN_SYSTEM's shadowless in-flow controls). Board items 5 and 6 print exactly such a shadow.
+- **Decorative strokes are lobes in the shadow list**, beside Surface's `shadow-edge`. They never change `border-width`, the frame or required edges.
+- **The None proof must be re-pinned** to today's axes, covering Elevation 0–8, Surface 0/1 and the Layers extremes. `layers.test.ts` "the defaults are Area as it was" is the model.
+- **D10 needs restating under Layers**: the dark page is now a setting (0 to 24), so "within a fixed distance of #020202" should read "of the chosen dark ground".
+- **H05 has a known exception**: Nav and Board row actions change ink on hover (`nav.css:300-302`, `board.css:219-221`), tested in cohesion but recorded in no rule doc.
+- **Open for the owner:** engraved glyphs (board items 1 and 9) need a ruling beyond D13, which covers only display text and button labels.
+
+## Layers × Material (2026-10-17)
+
+Layers (2026-10-16) now computes the page, card, sidebar and control-fill tones, their edges and the inks, solved
+for contrast against those tones. A material must fit beside it.
+
+**Recommendation, used by tasks 22 and 23:** the material paints over Layers and never replaces a Layers tone.
+- **Glass** takes the surface's own Layers tone and lowers its alpha (`color-mix(in srgb, var(--area-bg-surface) a, transparent)` at the receiver), over a backdrop blur.
+- **Tactile and Soft** light and shade the Layers tone with lobes and a sheen image.
+- The material's colours derive from accent, neutral and tones (D5), never from literal greys.
+- **A bundle may set Layers.** Soft needs a same-tone gray ground to model relief, so Soft sets light ground 95, dark ground 24 and contrast 0 (D16: a preset that sets several axes is a bundle).
+
+**Glass and the ink solve.** Inks are solved for opaque grounds. Over the worst backdrop (black or white), body text
+keeps 4.5:1 only if the glass is at least 56% opaque in light and 62% in dark. Muted text needs 90% and 73%, and
+placeholder in a field 93% and 75% (computed from the Layers tokens at the defaults; `22-calibration`). Three ways to
+hold contrast, for the owner:
+1. **A floor (recommended for now):** opacity never drops below the floor for the text it carries. Body text gives a
+   usable glass; muted text makes light glass nearly opaque. The specimen shows both floors.
+2. **Glass inks:** muted text darkens (light) or lightens (dark) on glass, as Layers already does per ground. This
+   gives a 56% floor everywhere but changes ink, which D16 forbids for a material; it would belong to Layers.
+3. **A bounded backdrop:** where the app owns what is behind (its own page or wallpaper), the floor is computed for
+   that backdrop's lightness range instead of black and white. D7 says floating shells assume any backdrop, so this
+   would apply to in-flow glass only.

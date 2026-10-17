@@ -18,8 +18,9 @@ const BROWSERS = ["/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edg
 export const MODES = [
   ["light", { theme: "light" }],
   ["dark", { theme: "dark" }],
-  ["light 90 + 0", { theme: "light", groundLight: "90", layers: "0" }],
-  ["dark 24 + 8", { theme: "dark", groundDark: "24", layers: "8" }],
+  // `layers` for builds before 2026-10-17, when layer contrast split into `layers-light` and `layers-dark`.
+  ["light 90 + 0", { theme: "light", groundLight: "90", layers: "0", layersLight: "0" }],
+  ["dark 24 + 8", { theme: "dark", groundDark: "24", layers: "8", layersDark: "8" }],
   // Controls shown only on hover or focus (Board's card actions, Nav's revealed actions): each of the specimen's
   // controls focused in turn, so a change to what appears is seen (round 31: the card actions read as unchanged at rest).
   ["light focused", { theme: "light", focus: true }],
@@ -92,7 +93,7 @@ function print(root) {
   const out = {};
   for (const [name, attrs] of ${JSON.stringify(MODES)}) {
     for (const c of document.querySelectorAll(".c")) {
-      for (const k of ["areaGroundLight", "areaGroundDark", "areaLayers"]) delete c.dataset[k];
+      for (const k of ["areaGroundLight", "areaGroundDark", "areaLayers", "areaLayersLight", "areaLayersDark"]) delete c.dataset[k];
       for (const [k, v] of Object.entries(attrs)) if (k !== "focus") c.dataset["area" + k[0].toUpperCase() + k.slice(1)] = v;
     }
     await new Promise(r => setTimeout(r, 50));

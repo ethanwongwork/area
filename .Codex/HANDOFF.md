@@ -16,14 +16,42 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
 - dismiss × is 9 (owner-approved; every component's close mark ~10% smaller). Final pass: no new sliver, doubled
   stroke or escape (spec "Final visual pass"). React 466/466, typecheck, build. Not checked: the Electron app by eye.
 
-## Start here (2026-10-17, session `project-status-components-16382f`)
+
+## Start here (2026-10-17, session `remaining-work-axis-d71922`, uncommitted)
 
 **Waiting on the owner:**
-- Round 31 on the review page https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG (collection `components31`):
-  - **Board:** card actions take Nav's row-action rule, with no white box.
-  - **Menu:** the danger red holds on hovered and pressed rows.
-  - **Hover card:** the examples use Link.
-- Round 30 approved six. The first sweep merged as PR #117.
+- Round 32 on the review page (collection `components32`): Hover card's examples rethought (spec "Content").
+  Round 31 approved Board and Menu; they are Complete.
+- Materials restarted (owner: "yes, start there"): https://claude.ai/artifact/6yuLW5kY176hsCeJf2Abzo shows None,
+  Glass, Tactile and Soft on real components with controls and the board; picks in collection `materials`, doc
+  `picks`. Reports 19–21 reviewed and Layers × Material recommended in `docs/research/astra/materials/REVIEW.md`;
+  values in `22-calibration`, page source in `23-specimen-v2`. Open for the owner: the Glass reading floor (body text
+  56/62%, muted 90/73%), engraved glyphs, D10 under Layers. Next: tasks 24–26, then the Material axis (start with
+  None + Glass on floating surfaces, per the 21 review).
+- Owner then asked for materials as separate levers: https://claude.ai/artifact/BpDuXHDq1vo2Rv5vKdhUB3 (13 levers,
+  0–8 each, targets per lever, one light; bundles for None/Glass/Tactile/Soft/Aero/Glow; picks in collection `levers`,
+  doc `picks`). Source `docs/research/astra/materials/27-levers/`.
+- Then the owner narrowed to eight references: https://claude.ai/artifact/NXTVuD3ajRMbHaJZmaPCXR rebuilds each in CSS
+  with its recipe and a lever matrix (`materials/28-recipes/`). Lever changes it found: tone ring, catch-light, wells
+  reverse gradients, radial position, content-based transparency floors, a softer Elevation resting shadow.
+- Then scope: https://claude.ai/artifact/4GwjuWZeFx9Tj8S31iVEQ7 (`materials/29-scope/`): 16 sources agree; Area's 94
+  families placed (10 carry, 32 echo on one part, 11 overlay, 5 chrome, 36 none). The levers now target part groups
+  with strengths (primary 1; secondary, badges, fields, selected rows 0.5). Levers page updated with the five recipe
+  changes; recipes page's console and folder reworked.
+
+**Done:**
+- Layers: contrast is one setting per theme, `layers-light` and `layers-dark` (was `layers`); every ground and step
+  kept (owner: "save all the layer picks for the most possible customization"; saved to the Layers page, doc
+  `picks`). The app restores a saved `layers` as both. The Layers page (rebuilt from the shipped CSS and model):
+  https://claude.ai/artifact/5crS7DCaWEBbAjvTXYpJhn.
+- Surface 0 (Borderless): the dark edge is a crisp 1px 20% white line, not a 1px blur (owner: "make it firmer").
+- Review diff: renders the Layers extremes with both the old and new attributes and clears them between modes.
+- Checks: tokens 24,266, React tests, typecheck. `build:docs` still fails only the known dogfood audit.
+
+## Earlier (2026-10-17, session `project-status-components-16382f`)
+
+**Waiting on the owner:**
+- Round 30 approved six; round 31 Board and Menu. The first sweep merged as PR #117.
 
 **Since PR #117 (uncommitted):**
 - The hover and pressed sweep (`sweep/states.mjs`; README "Hover and pressed").
@@ -46,7 +74,7 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
 - The review diff now renders at the Layers extremes and compares colours by what paints.
 
 **Open:**
-- The owner's Layers picks (artifact 5crS7DCa…, still the 4-step page).
+- The Layers picks: every option kept, defaults unchanged (doc `picks`).
 - The inset-controls rule (Nav's row − 8, ink-only hover).
 - Badge dismiss and Tag remove: a 10px box holding a 12px glyph.
 - Chip and Tag press with the hover paint.

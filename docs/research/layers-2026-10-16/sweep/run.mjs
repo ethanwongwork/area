@@ -36,7 +36,7 @@ try {
   await send("Emulation.setDeviceMetricsOverride", { width: 1600, height: 1200, deviceScaleFactor: 1, mobile: false });
   await send("Page.navigate", { url: BASE + `?theme=${theme}` }); await sleep(1500);
   const axis = theme === "dark" ? "ground-dark" : "ground-light";
-  await evaluate(`(() => { const all = JSON.parse(localStorage.getItem("area-desktop") || "{}"); all.theme = ${JSON.stringify(theme)}; all.canvas = { ...(all.canvas || {}), ${JSON.stringify(axis)}: ${JSON.stringify(ground)}, layers: ${JSON.stringify(layers)} }; localStorage.setItem("area-desktop", JSON.stringify(all)); })()`);
+  await evaluate(`(() => { const all = JSON.parse(localStorage.getItem("area-desktop") || "{}"); all.theme = ${JSON.stringify(theme)}; all.canvas = { ...(all.canvas || {}), ${JSON.stringify(axis)}: ${JSON.stringify(ground)}, "layers-light": ${JSON.stringify(layers)}, "layers-dark": ${JSON.stringify(layers)} }; localStorage.setItem("area-desktop", JSON.stringify(all)); })()`);
   await evaluate(`location.hash = "components"`); await send("Page.reload", { ignoreCache: true }); await sleep(2500);
   await evaluate(`(() => { const s = document.createElement("style"); s.textContent = "*,*::before,*::after{transition:none!important;animation-play-state:paused!important}"; document.head.append(s); })()`);
   const attrs = await evaluate(`(() => { const b = document.querySelector(".studio-canvas__body"); return b && Object.fromEntries([...b.attributes].filter(a => a.name.startsWith("data-area")).map(a => [a.name, a.value])); })()`);

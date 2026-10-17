@@ -92,7 +92,7 @@ test('every surface takes its depth from its elevation role', () => {
   const edges = [...css.matchAll(/--area-shadow-edge:\s*([^;]+);/g)].map(match => match[1].trim());
   assert.equal(edges.length, 3, '--area-shadow-edge should have the default and one value per step');
   for (const value of edges) assert.equal(layers(value), 2, `--area-shadow-edge is not two layers: ${value}`);
-  assert.ok(edges.includes('0 0 1px rgb(0 0 0 / 0.62), inset 0 0 1px light-dark(transparent, rgb(255 255 255 / 0.2))'), 'Borderless lost ChatGPT\'s frameless edge');
+  assert.ok(edges.includes('0 0 1px rgb(0 0 0 / 0.62), inset 0 0 0 1px light-dark(transparent, rgb(255 255 255 / 0.2))'), 'Borderless lost ChatGPT\'s frameless edge');
   for (const block of [...expect.float.slice(0, 4), ...expect.modal, '.area-panel', '.area-drawer', '.area-board-card']) {
     assert.match(paints(block), /^var\(--area-shadow-edge\),/, `${block} does not lead with the Surface axis's edge`);
   }

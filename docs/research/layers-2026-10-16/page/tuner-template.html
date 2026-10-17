@@ -3,235 +3,277 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: findings up top, then a tuner per theme (controls beside a live scene drawn with Area's own CSS), then the
-   pick strip. Page chrome has its own small palette; the scenes are Area. */
+/* Layout: what changed, then the settings, then the two live scenes side by side (Area's built CSS), then every
+   combination as a grid of ground × contrast, then the save strip. The page chrome has its own small palette; the
+   scenes are Area. */
 :root {
   --bg: #f6f6f4; --panel: #ffffff; --fg: #18181a; --muted: #67676d; --line: #e3e3e0; --soft: #efefec;
-  --accent: #2f5bd3; --ok: #1f8a4c; --ok-bg: #e7f4ec; --bad: #b3261e;
+  --accent: #2f5bd3; --ok: #1f8a4c; --bad: #b3261e;
   --sans: "Geist", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
   --bg: #050505; --panel: #0e0e0f; --fg: #ececee; --muted: #8e8e94; --line: #232326; --soft: #161618;
-  --accent: #7d9cf5; --ok: #5cc98a; --ok-bg: #0f2418; --bad: #f2867d; color-scheme: dark } }
+  --accent: #7d9cf5; --ok: #5cc98a; --bad: #f2867d; color-scheme: dark } }
 :root[data-theme="dark"] {
   --bg: #050505; --panel: #0e0e0f; --fg: #ececee; --muted: #8e8e94; --line: #232326; --soft: #161618;
-  --accent: #7d9cf5; --ok: #5cc98a; --ok-bg: #0f2418; --bad: #f2867d; color-scheme: dark }
+  --accent: #7d9cf5; --ok: #5cc98a; --bad: #f2867d; color-scheme: dark }
 * { box-sizing: border-box }
+[hidden] { display: none !important }
 body { background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 14px; line-height: 1.5 }
-.wrap { max-width: 1280px; margin: 0 auto; padding-inline: 16px; padding-block: 28px 64px; display: grid; gap: 24px }
+.wrap { max-width: 1320px; margin: 0 auto; padding-inline: 16px; padding-block: 28px 64px; display: grid; gap: 20px }
 h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.02em; margin: 0; text-wrap: balance }
-h2 { font-size: 18px; font-weight: 600; margin: 0; letter-spacing: -0.01em }
+h2 { font-size: 17px; font-weight: 600; margin: 0; letter-spacing: -0.01em; text-wrap: balance }
+h3.sub { font-size: 14px; font-weight: 600; margin: 0 }
 p { margin: 0; max-width: 80ch }
 .lede { color: var(--muted); font-size: 15px }
-.card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; display: grid; gap: 10px; min-width: 0 }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; display: grid; gap: 12px; min-width: 0 }
 .mono { font-family: var(--mono); font-size: 12px; font-variant-numeric: tabular-nums }
-.tbl { overflow-x: auto }
-table.data { border-collapse: collapse; font-size: 13px; min-width: 620px; width: 100% }
-table.data th, table.data td { text-align: left; padding: 5px 8px; border-bottom: 1px solid var(--line) }
-table.data th { color: var(--muted); font-weight: 500; font-size: 12px }
-table.data td.n { font-family: var(--mono); font-size: 12px; font-variant-numeric: tabular-nums }
-
-.tuner { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 16px; align-items: start }
-@media (max-width: 1000px) { .tuner { grid-template-columns: minmax(0, 1fr) } }
-.controls { display: grid; gap: 14px }
-.presets { display: flex; flex-wrap: wrap; gap: 6px }
-.chipbtn { border: 1px solid var(--line); background: var(--bg); color: var(--fg); border-radius: 999px; padding: 3px 10px; font: inherit; font-size: 12px; cursor: pointer }
-.chipbtn[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg) }
-.field { display: grid; gap: 4px }
-.field .top { display: flex; justify-content: space-between; gap: 8px; font-size: 13px }
-.field .top span { font-family: var(--mono); font-size: 12px; color: var(--muted) }
-.field input[type=range] { inline-size: 100%; accent-color: var(--accent) }
-.field small { color: var(--muted); font-size: 12px }
-.seg { display: inline-flex; flex-wrap: wrap; justify-self: start; border: 1px solid var(--line); border-radius: 999px; padding: 2px; gap: 2px }
-.seg button { border: 0; background: transparent; color: var(--muted); border-radius: 999px; padding: 3px 10px; font: inherit; font-size: 12px; cursor: pointer }
-.seg button[aria-pressed="true"] { background: var(--fg); color: var(--bg) }
-.readout { display: grid; gap: 4px; font-size: 12px }
-.readout .row { display: grid; grid-template-columns: 14px minmax(0, 1fr) auto auto auto; gap: 4px 10px; align-items: center }
-.readout i { width: 14px; height: 14px; border-radius: 4px; border: 1px solid var(--line) }
-.readout .pass, .readout small.pass { color: var(--ok) } .readout .fail, .readout small.fail { color: var(--bad) }
-.custom summary { cursor: pointer; font-size: 13px; color: var(--muted) }
-.frame { overflow-x: auto; border-radius: 10px; border: 1px solid var(--line) }
-:is(button, input, textarea):focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
-.pick { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 16px 18px; display: grid; gap: 10px }
-.pick textarea { width: 100%; min-height: 64px; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; background: var(--bg); color: var(--fg); font: inherit; resize: vertical }
-.btn { border: 1px solid var(--fg); background: var(--fg); color: var(--bg); border-radius: 8px; padding: 6px 14px; font: inherit; font-weight: 500; cursor: pointer; justify-self: start }
 .status { font-size: 12px; color: var(--muted) }
+ul.points { margin: 0; padding-left: 20px; display: grid; gap: 6px; max-width: 90ch }
+.map { border-collapse: collapse; font-size: 13px }
+.map th, .map td { text-align: left; padding: 4px 14px 4px 0; border-bottom: 1px solid var(--line) }
+.map th { color: var(--muted); font-weight: 500; font-size: 12px }
+.map td { font-family: var(--mono); font-size: 12px; font-variant-numeric: tabular-nums }
 
-/* The scene: one app window drawn with Area's own classes; its tones come from the tuner. */
-.scene { display: grid; grid-template-columns: 170px minmax(0, 1fr); min-width: 720px; background: var(--area-bg-page); color: var(--area-fg-default); font-family: var(--area-font-sans); font-size: var(--area-text-md-size); line-height: var(--area-text-md-leading) }
+/* Settings */
+.settings { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr)); gap: 18px 28px; align-items: start }
+.field { display: grid; gap: 6px; min-width: 0 }
+.field .top { display: flex; justify-content: space-between; gap: 8px; font-size: 13px; font-weight: 500 }
+.field .top span { font-family: var(--mono); font-size: 12px; color: var(--muted); font-weight: 400 }
+.swatches { display: flex; flex-wrap: wrap; gap: 4px }
+.sw { display: grid; justify-items: center; gap: 2px; border: 0; background: transparent; color: var(--muted); padding: 2px; border-radius: 8px; cursor: pointer; font: 11px var(--mono) }
+.sw i { display: block; width: 24px; height: 24px; border-radius: 6px; border: 1px solid var(--line) }
+.sw[aria-pressed="true"] { color: var(--fg) } .sw[aria-pressed="true"] i { outline: 2px solid var(--accent); outline-offset: 1px }
+.seg { display: inline-flex; flex-wrap: wrap; justify-self: start; border: 1px solid var(--line); border-radius: 999px; padding: 2px; gap: 2px; max-width: 100% }
+.seg button { border: 0; background: transparent; color: var(--muted); border-radius: 999px; min-width: 30px; padding: 3px 9px; font: inherit; font-size: 12px; font-variant-numeric: tabular-nums; cursor: pointer }
+.seg button:hover { color: var(--fg) }
+.seg button[aria-pressed="true"] { background: var(--fg); color: var(--bg) }
+.check { display: flex; gap: 8px; align-items: center; font-size: 13px }
+.check input { accent-color: var(--accent) }
+:is(button, input, textarea, a):focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+
+/* Live scenes */
+.previews { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 600px), 1fr)); gap: 16px }
+.preview { display: grid; gap: 10px; min-width: 0; align-content: start }
+.preview header { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; flex-wrap: wrap }
+.frame { overflow-x: auto; border-radius: 10px; border: 1px solid var(--line) }
+.readout { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px 14px; font-size: 12px }
+.readout .row { display: grid; grid-template-columns: 14px minmax(0, 1fr) auto; gap: 8px; align-items: center }
+.readout i { width: 14px; height: 14px; border-radius: 4px; border: 1px solid var(--line) }
+.verdict { font-size: 12px } .verdict.pass, .pass { color: var(--ok) } .verdict.fail, .fail { color: var(--bad) }
+
+.scene { display: grid; grid-template-columns: 150px minmax(0, 1fr); min-width: 580px; background: var(--area-bg-page); color: var(--area-fg-default); font-family: var(--area-font-sans); font-size: var(--area-text-md-size); line-height: var(--area-text-md-leading) }
 .scene__side { background: var(--area-bg-subtle); border-inline-end: var(--area-border-width) solid var(--area-border-decorative); padding: 12px 8px; display: grid; align-content: start; gap: 8px }
 .scene__brand { padding: 2px 8px 6px; font-weight: 500 }
 .scene__main { padding: 16px; display: grid; gap: 14px; align-content: start; min-width: 0 }
-.scene__bar .area-input { inline-size: 240px }
-.scene__row { display: grid; grid-template-columns: 290px 190px; gap: 14px; align-items: start }
+.scene__bar .area-input { inline-size: 220px }
+.scene__row { display: grid; grid-template-columns: minmax(0, 1fr) 170px; gap: 14px; align-items: start }
 .scene__menu .area-menu { inline-size: 100% }
 .scene .scene__hover { background: var(--area-bg-component-hover) } /* the hovered row, drawn at rest */
-.swatches { display: flex; flex-wrap: wrap; gap: 4px }
-.sw { display: grid; justify-items: center; gap: 2px; border: 0; background: transparent; color: var(--muted); padding: 2px; border-radius: 8px; cursor: pointer; font: 11px var(--mono) }
-.sw i { display: block; width: 26px; height: 26px; border-radius: 6px; border: 1px solid var(--line) }
-.sw[aria-pressed="true"] { color: var(--fg) } .sw[aria-pressed="true"] i { outline: 2px solid var(--accent); outline-offset: 1px }
-.matrix { display: grid; gap: 6px; overflow-x: auto }
-.matrix table { border-collapse: separate; border-spacing: 6px; font-size: 12px }
-.matrix th { color: var(--muted); font-weight: 500; text-align: left; white-space: nowrap }
-.mini { width: 132px; height: 74px; border-radius: 6px; display: grid; grid-template-columns: 34px 1fr; overflow: hidden; border: 1px solid var(--line); font: 10px/1.2 var(--sans) }
-.mini__side { padding: 6px 4px; display: grid; gap: 3px; align-content: start }
-.mini__row { height: 9px; border-radius: 3px }
-.mini__main { padding: 6px; display: grid; gap: 4px; align-content: start }
-.mini__card { border-radius: 5px; padding: 4px; display: grid; gap: 3px; border: 1px solid }
-.mini__field { height: 9px; border-radius: 3px; border: 1px solid transparent }
-.mini__ok { font: 11px var(--mono) } .mini__ok.pass { color: var(--ok) } .mini__ok.fail { color: var(--bad) }
+
+/* Every combination */
+.matrix { overflow-x: auto }
+.matrix table { border-collapse: separate; border-spacing: 5px; font-size: 12px }
+.matrix th { color: var(--muted); font-weight: 500; text-align: left; white-space: nowrap; font-variant-numeric: tabular-nums }
+.matrix thead th { text-align: center }
+.tile { display: grid; gap: 2px; border: 0; background: transparent; padding: 2px; border-radius: 8px; cursor: pointer; color: inherit }
+.tile[aria-pressed="true"] { outline: 2px solid var(--accent); outline-offset: 0 }
+.mini { width: 92px; height: 56px; border-radius: 5px; display: grid; grid-template-columns: 26px 1fr; overflow: hidden; border: 1px solid var(--line) }
+.mini__side { padding: 5px 3px; display: grid; gap: 3px; align-content: start }
+.mini__row { height: 7px; border-radius: 2px }
+.mini__main { padding: 5px; display: grid; gap: 4px; align-content: start }
+.mini__card { border-radius: 4px; padding: 3px; display: grid; gap: 3px; border: 1px solid }
+.mini__line { height: 3px; border-radius: 2px; width: 70% }
+.mini__line.m { width: 45% }
+.mini__field { height: 7px; border-radius: 2px; border: 1px solid transparent }
+.mini__ok { font: 10px var(--mono); text-align: left }
+
+.pick textarea { width: 100%; min-height: 64px; border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; background: var(--bg); color: var(--fg); font: inherit; resize: vertical }
+.btn { border: 1px solid var(--fg); background: var(--fg); color: var(--bg); border-radius: 8px; padding: 6px 14px; font: inherit; font-weight: 500; cursor: pointer; justify-self: start }
+.summary { font-family: var(--mono); font-size: 12px; background: var(--soft); border-radius: 8px; padding: 8px 10px; overflow-wrap: anywhere }
 </style>
 
 <div class="wrap">
   <header style="display:grid;gap:8px">
-    <h1>Layers: the page and what sits on it</h1>
-    <p class="lede">Two choices per theme: the ground (the page's lightness, in 1% steps from white) and the layer contrast. Every combination is checked below for readable text, visible controls and visible edges. Each scene is Area's own CSS.</p>
+    <h1>Layers</h1>
+    <p class="lede">Pick the page tone for light and dark, and how far cards, menus and sidebars sit from it. The two previews use Area's built CSS with the real settings, so what you see here is what ships. <span class="pass"><!--PASSING--> of <!--TOTAL--> combinations</span> pass the contrast and visibility checks, in each of the three neutrals.</p>
   </header>
 
-  <section class="card">
-    <h2>How it works</h2>
-    <ul style="margin:0;padding-left:20px;display:grid;gap:6px;max-width:88ch">
-      <li><b>Ground</b> is the page's OKLCH lightness: light 100 (white) down to 90 in 1% steps; dark 0 (black), 8 (Area's near-black today), then 12 to 24 in 2% steps (below 12 a 1% step doesn't show on a screen).</li>
-      <li><b>Layer contrast</b> (Flat, Low, Default, High) sets how far cards, menus and sidebars sit from the page. Direction follows the ground: on white, cards stay white and sidebars go darker; on a gray page, cards lift toward white; in dark, layers lift lighter, starting from the first visible dark when the page is darker than that.</li>
-      <li><b>Controls always show.</b> A field, a row's hover and a selected row step from the ground they sit on, never less than a visible step, at Flat too. In dark they never sit under L 0.20, so on Black a selected row is a clear #282828-ish plate (it was black on black).</li>
-      <li><b>Text and edges hold their contrast.</b> Muted text and control edges keep today's colour wherever it passes, and darken (light) or lighten (dark) just enough to keep 4.5:1 and 3:1 on the deepest surface they sit on. Card, menu and sidebar frames follow the ground too, so a frame never disappears into a gray page.</li>
-      <li><b>Defaults.</b> Light 100 + Default is today's page, cards, sidebar, fields, edges and text exactly; sidebar row plates now step from the sidebar's own tone, one step firmer than today (#efefef / #e6e6e6 for #f3f3f3 / #eeeeee). Dark 8 + Default keeps today's #020202 page and brings cards and sidebars closer (#121212, #0b0b0b; today #1d1d1d, #282828).</li>
-      <li><b>The ramp stays</b> for text, borders, fills and hues; only the layer tones are computed. Exact numbers stay available under Custom, as tokens a product team could set.</li>
+  <section class="card" aria-labelledby="changed-title">
+    <h2 id="changed-title">What changed since the last version of this page</h2>
+    <ul class="points">
+      <li><b>Layer contrast is one number from 0 (Flat) to 8</b>, with 4 the default. It used to be four named steps. Each step moves light sidebars 0.006 darker (cards lift 0.009 on a gray page) and dark cards 0.015 lighter (sidebars half that).</li>
+      <li><b>Each theme has its own contrast.</b> Light layers and Dark layers are separate settings (since 17 Oct), so you can, for example, keep light flat and give dark more separation. Every ground and every step is kept.</li>
+      <li><b>It's in the app.</b> The Inspector has Light ground, Dark ground, Light layers and Dark layers under Color. The defaults, 100 + 4 in light and 8 + 4 in dark, are what the app uses now.</li>
     </ul>
+    <div style="overflow-x:auto">
+      <table class="map" aria-label="The old named steps on the new scale">
+        <thead><tr><th>Old name</th><th>Light</th><th>Dark</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Flat</th><td>0</td><td>0</td></tr>
+          <tr><th scope="row">Low</th><td>2</td><td>2</td></tr>
+          <tr><th scope="row">Default</th><td>4</td><td>4</td></tr>
+          <tr><th scope="row">High</th><td>6</td><td>8</td></tr>
+        </tbody>
+      </table>
+    </div>
   </section>
 
-  <section class="card" aria-labelledby="light-title">
-    <h2 id="light-title">Light</h2>
-    <div class="tuner">
-      <div class="controls" data-theme-controls="light"></div>
+  <section class="card" aria-labelledby="settings-title">
+    <h2 id="settings-title">Settings</h2>
+    <div class="settings">
+      <div class="field"><div class="top"><span style="font:inherit;color:inherit">Light ground</span><span id="v-light"></span></div><div class="swatches" id="ground-light" role="group" aria-label="Light ground"></div></div>
+      <div class="field"><div class="top"><span style="font:inherit;color:inherit">Dark ground</span><span id="v-dark"></span></div><div class="swatches" id="ground-dark" role="group" aria-label="Dark ground"></div></div>
+      <div class="field">
+        <div class="top"><span style="font:inherit;color:inherit" id="layers-label">Light layers</span><span id="v-layers"></span></div>
+        <div class="seg" id="layers" role="group" aria-labelledby="layers-label"></div>
+        <div class="top"><span style="font:inherit;color:inherit" id="layers-dark-label">Dark layers</span><span id="v-layers-dark"></span></div>
+        <div class="seg" id="layers-dark" role="group" aria-labelledby="layers-dark-label"></div>
+      </div>
+      <div class="field"><div class="top"><span style="font:inherit;color:inherit" id="neutral-label">Neutral</span><span>the gray's tint</span></div><div class="seg" id="neutral" role="group" aria-labelledby="neutral-label"></div></div>
+    </div>
+  </section>
+
+  <section class="previews" aria-label="Previews">
+    <div class="card preview">
+      <header><h2>Light</h2><span class="mono" id="sel-light"></span></header>
       <div class="frame"><!--SCENE_LIGHT--></div>
+      <div class="readout" id="readout-light"></div>
+      <div class="verdict" id="verdict-light"></div>
     </div>
-  </section>
-
-  <section class="card" aria-labelledby="dark-title">
-    <h2 id="dark-title">Dark</h2>
-    <div class="tuner">
-      <div class="controls" data-theme-controls="dark"></div>
+    <div class="card preview">
+      <header><h2>Dark</h2><span class="mono" id="sel-dark"></span></header>
       <div class="frame"><!--SCENE_DARK--></div>
+      <div class="readout" id="readout-dark"></div>
+      <div class="verdict" id="verdict-dark"></div>
     </div>
-  </section>
-
-  <section class="card">
-    <h2>Neutral cast</h2>
-    <div class="seg" id="cast" role="group" aria-label="Neutral cast"><button data-cast="gray" aria-pressed="true">Gray</button><button data-cast="cool">Cool</button><button data-cast="warm">Warm</button></div>
-    <p class="status">The Neutral setting's hue and chroma, measured from Area's cool and warm ramps (light 0.0034 at 247° / 67°, dark about 0.0115 at 254° / 73°).</p>
   </section>
 
   <section class="card" aria-labelledby="matrix-title">
     <h2 id="matrix-title">Every combination</h2>
-    <p class="status">Each tile: the sidebar with a hovered and a selected row, the page with a field, and a card with a field and muted text, in that combination's tones. Below it, the checks: body, muted and placeholder text at 4.5:1, control edges at 3:1, and fields, hover, selection, frames and the sidebar rule each a visible step from their ground. Click a tile to load it above.</p>
+    <p class="status">Rows are grounds and columns are that theme's layer contrast. Each tile shows a sidebar with a selected row, a field on the page, and a card with text, muted text and a field. Underneath is the lowest muted-text contrast in that combination. Click a tile to load it into the previews.</p>
+    <h3 class="sub">Light</h3>
     <div class="matrix" id="matrix-light"></div>
+    <h3 class="sub">Dark</h3>
     <div class="matrix" id="matrix-dark"></div>
   </section>
 
-  <section class="pick" aria-labelledby="pick-title">
-    <h2 id="pick-title">Save what you like</h2>
-    <p class="status">Saves both themes' choices (or custom numbers) and your notes. Claude reads them to set the defaults and the range.</p>
+  <section class="card pick" aria-labelledby="pick-title">
+    <h2 id="pick-title">Save your picks</h2>
+    <p class="status">Saves the settings above and your notes. Claude reads them to set the defaults and decide whether to trim the range.</p>
+    <div class="summary" id="summary"></div>
     <label class="status" for="notes">Notes</label>
-    <textarea id="notes" placeholder="e.g. light 98 + Low as the default; dark 12 + Default; drop High"></textarea>
-    <button class="btn" id="save" type="button">Save</button>
+    <textarea id="notes" placeholder="For example: light 98 + 3 as the default, drop dark 22 and 24, keep 8 as the default dark"></textarea>
+    <button class="btn" id="save" type="button">Save picks</button>
     <span class="status" id="status" role="status"></span>
   </section>
 </div>
 
-<script src="model.js"></script>
 <script>
-const { GROUNDS, CONTRAST, DEFAULTS, resolve, check, hexOf } = window.Layers;
-const CAST = { gray: { light: [0, 0], dark: [0, 0] }, cool: { light: [0.0034, 247], dark: [0.0115, 254] }, warm: { light: [0.0034, 67], dark: [0.0115, 73] } };
-const RANGE = {
-  light: { page: [0.88, 1, 0.001], raised: [-0.06, 0.06, 0.001], recessed: [-0.06, 0.06, 0.001], step: [0.01, 0.06, 0.001] },
-  dark: { page: [0, 0.32, 0.001], raised: [-0.2, 0.2, 0.001], recessed: [-0.2, 0.2, 0.001], step: [0.02, 0.08, 0.001] },
-};
-const LABEL = { page: "Page", raised: "Raised (offset)", recessed: "Recessed (offset)", step: "Control step" };
-const state = { cast: "gray", light: { ...DEFAULTS.light, custom: null }, dark: { ...DEFAULTS.dark, custom: null } };
-const groundL = theme => GROUNDS[theme].find(g => g.id === state[theme].ground)?.L ?? 1;
-const resolved = theme => state[theme].custom ? resolve(theme, { custom: state[theme].custom }) : resolve(theme, { groundL: groundL(theme), contrast: state[theme].contrast });
+/*DATA*/
+const $ = id => document.getElementById(id);
+const state = { light: DEFAULTS.light, dark: DEFAULTS.dark, layers: DEFAULTS.layers, layersDark: DEFAULTS.layers, neutral: "neutral" };
+const layersOf = theme => theme === "dark" ? state.layersDark : state.layers;
+const entry = (theme, g = state[theme], n = layersOf(theme)) => DATA[state.neutral][theme][`${g}/${n}`];
+const groundName = (theme, g) => theme === "light" ? (g === 100 ? "100 (White)" : String(g)) : g === 0 ? "0 (Black)" : g === DEFAULTS.dark ? `${g} (Default)` : String(g);
+const layerName = n => n === 0 ? "0 (Flat)" : n === DEFAULTS.layers ? `${n} (Default)` : String(n);
 
-function cssVars(theme, r) {
-  const [c, h] = CAST[state.cast][theme], col = L => `oklch(${L.toFixed(4)} ${c} ${h})`, ink = L => `oklch(${L.toFixed(4)} 0 0)`;
-  const fills = f => ({ "--area-bg-component": col(f[0]), "--area-bg-component-hover": col(f[1]), "--area-bg-component-active": col(f[2]), "--area-input-bg-soft": col(f[0]), "--area-input-bg-disabled": col(f[0]), "--area-selection-surface": col(f[2]), "--area-selection-surface-hover": col(f[2]), "--area-selection-band": col(f[1]), "--area-selection-band-hover": col(f[2]) });
-  const e = r.edge;
-  return {
-    scene: { "--area-bg-page": col(r.page), "--area-bg-surface": col(r.raised), "--area-input-bg": col(r.raised), "--area-bg-subtle": col(r.recessed), "--area-bg-stripe": col(r.recessed), "--area-token-bg": col(r.recessed),
-      "--area-border-decorative": col(e.decorative), "--area-border-card": col(e.card), "--area-border-float": col(e.float), "--area-border-faint": col(e.faint), "--area-border-divider": col(e.faint), "--area-border-subtle": col(e.subtle), "--area-border": col(e.border), "--area-border-hover": col(e.hover),
-      "--area-edge-control": col(e.faint), "--area-edge-selected": col(e.faint), "--area-edge-control-hover": col(e.subtle), "--area-edge-control-strong": col(e.hover),
-      "--area-fg-default": ink(r.ink.body), "--area-fg-muted": ink(r.ink.muted), "--area-fg-placeholder": ink(r.ink.muted), "--area-stroke-control": ink(r.ink.edge), "--area-stroke-control-hover": ink(theme === "light" ? r.ink.edge - 0.03 : r.ink.edge + 0.03), ...fills(r.fill.page) },
-    raised: fills(r.fill.raised),
-    side: { "--area-bg-component-hover": col(r.fill.recessed[0]), "--area-bg-component-active": col(r.fill.recessed[2]) },
-  };
+function buildControls() {
+  for (const theme of ["light", "dark"]) {
+    $("ground-" + theme).innerHTML = GROUNDS[theme].map(g => `<button type="button" class="sw" data-g="${g}" aria-label="${groundName(theme, g)}"><i style="background:${DATA.neutral[theme][`${g}/0`].page}"></i>${g}</button>`).join("");
+    $("ground-" + theme).querySelectorAll("button").forEach(b => b.addEventListener("click", () => { state[theme] = Number(b.dataset.g); render(); }));
+  }
+  for (const [id, key] of [["layers", "layers"], ["layers-dark", "layersDark"]]) {
+    $(id).innerHTML = LAYERS.map(n => `<button type="button" data-n="${n}" aria-label="${layerName(n)}">${n}</button>`).join("");
+    $(id).querySelectorAll("button").forEach(b => b.addEventListener("click", () => { state[key] = Number(b.dataset.n); render(); }));
+  }
+  $("neutral").innerHTML = NEUTRALS.map(c => `<button type="button" data-c="${c.id}">${c.label}</button>`).join("");
+  $("neutral").querySelectorAll("button").forEach(b => b.addEventListener("click", () => { state.neutral = b.dataset.c; render(); matrices(); }));
 }
-function paint(theme) {
-  const r = resolved(theme), v = cssVars(theme, r), scene = document.getElementById("scene-" + theme);
-  const set = (el, map) => { for (const [k, x] of Object.entries(map)) el.style.setProperty(k, x); };
-  set(scene, v.scene); scene.querySelectorAll(".scene__raised").forEach(el => set(el, v.raised)); set(scene.querySelector(".scene__side"), v.side);
-  const [c, h] = CAST[state.cast][theme], hx = L => hexOf(L, c, h);
-  const issues = check(r, CAST[state.cast][theme]);
-  const rows = [["Page", r.page], ["Raised", r.raised], ["Recessed", r.recessed], ["Field on page", r.fill.page[0]], ["Selected in sidebar", r.fill.recessed[2]]];
-  document.querySelector(`[data-readout="${theme}"]`).innerHTML = rows.map(([n, L]) => `<div class="row"><i style="background:${hx(L)}"></i><span>${n}</span><span class="mono">${hx(L)}</span><span class="mono">L ${L.toFixed(3)}</span><span></span></div>`).join("") +
-    `<div class="row"><i style="background:${hexOf(r.ink.muted)}"></i><span>Muted text</span><span class="mono">${hexOf(r.ink.muted)}</span><span class="mono">L ${r.ink.muted.toFixed(3)}</span><span></span></div>` +
-    `<small class="${issues.length ? "fail" : "pass"}">${issues.length ? "✕ " + issues.join("; ") : "✓ every check passes"}</small>`;
+
+function readout(theme) {
+  const e = entry(theme);
+  const rows = [["Page", e.page], ["Card", e.card], ["Sidebar", e.side], ["Field on the page", e.field], ["Field in a card", e.cField], ["Selected in the sidebar", e.sSel], ["Text", e.text], ["Muted text", e.muted], ["Control edge", e.edge]];
+  $("readout-" + theme).innerHTML = rows.map(([n, hex]) => `<div class="row"><i style="background:${hex}"></i><span>${n}</span><span class="mono">${hex}</span></div>`).join("");
+  const v = $("verdict-" + theme);
+  v.className = "verdict " + (e.issues.length ? "fail" : "pass");
+  v.textContent = e.issues.length ? "✕ " + e.issues.join("; ") : `✓ Every check passes. Lowest muted text ${e.muted}:1 (needs 4.5), lowest control edge ${e.edge}:1 (needs 3).`;
 }
-function build(theme) {
-  const root = document.querySelector(`[data-theme-controls="${theme}"]`);
-  root.innerHTML =
-    `<div class="field"><div class="top"><span>Ground</span><span id="${theme}-ground-v"></span></div><div class="swatches" role="group" aria-label="${theme} ground">${GROUNDS[theme].map(g => `<button class="sw" data-ground="${g.id}" title="${g.label}"><i style="background:${hexOf(g.L)}"></i>${g.id}</button>`).join("")}</div></div>` +
-    `<div class="field"><div class="top"><span>Layer contrast</span><span>cards, sidebars, fields</span></div><div class="seg" role="group" aria-label="${theme} layer contrast">${CONTRAST.map((n, i) => `<button data-contrast="${i}">${n}</button>`).join("")}</div></div>` +
-    `<div class="readout" data-readout="${theme}"></div>` +
-    `<details class="custom"><summary>Custom numbers</summary><div class="controls" style="margin-top:10px">` +
-    Object.keys(RANGE[theme]).map(k => { const [min, max, step] = RANGE[theme][k]; return `<div class="field"><div class="top"><label for="${theme}-${k}">${LABEL[k]}</label><span id="${theme}-${k}-v"></span></div><input type="range" id="${theme}-${k}" min="${min}" max="${max}" step="${step}"></div>`; }).join("") +
-    `</div></details>`;
-  const sync = () => {
-    const s = state[theme], r = resolved(theme);
-    root.querySelectorAll("[data-ground]").forEach(b => b.setAttribute("aria-pressed", String(!s.custom && b.dataset.ground === s.ground)));
-    root.querySelectorAll("[data-contrast]").forEach(b => b.setAttribute("aria-pressed", String(!s.custom && Number(b.dataset.contrast) === s.contrast)));
-    document.getElementById(`${theme}-ground-v`).textContent = s.custom ? "custom" : GROUNDS[theme].find(g => g.id === s.ground).label;
-    const nums = { page: r.page, raised: r.raised - r.page, recessed: r.recessed - r.page, step: r.step };
-    for (const k of Object.keys(RANGE[theme])) { document.getElementById(`${theme}-${k}`).value = nums[k]; document.getElementById(`${theme}-${k}-v`).textContent = (k === "page" ? "" : nums[k] > 0 ? "+" : "") + nums[k].toFixed(3); }
-    paint(theme);
-  };
-  root.querySelectorAll("[data-ground]").forEach(b => b.addEventListener("click", () => { state[theme].ground = b.dataset.ground; state[theme].custom = null; sync(); }));
-  root.querySelectorAll("[data-contrast]").forEach(b => b.addEventListener("click", () => { state[theme].contrast = Number(b.dataset.contrast); state[theme].custom = null; sync(); }));
-  for (const k of Object.keys(RANGE[theme])) document.getElementById(`${theme}-${k}`).addEventListener("input", e => {
-    const r = resolved(theme), cur = state[theme].custom ?? { page: r.page, raised: r.raised - r.page, recessed: r.recessed - r.page, step: r.step };
-    state[theme].custom = { ...cur, [k]: Number(e.target.value) }; sync();
-  });
-  root.sync = sync; sync();
+
+function render() {
+  for (const theme of ["light", "dark"]) {
+    const s = $("scene-" + theme);
+    s.setAttribute("data-area-ground-light", String(state.light));
+    s.setAttribute("data-area-ground-dark", String(state.dark));
+    s.setAttribute("data-area-layers-light", String(state.layers));
+    s.setAttribute("data-area-layers-dark", String(state.layersDark));
+    s.setAttribute("data-area-neutral", state.neutral);
+    $("ground-" + theme).querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(Number(b.dataset.g) === state[theme])));
+    $("v-" + theme).textContent = groundName(theme, state[theme]);
+    $("sel-" + theme).textContent = `ground ${state[theme]} · contrast ${layersOf(theme)}`;
+    readout(theme);
+    $("matrix-" + theme).querySelectorAll("[data-load]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.load === `${state[theme]}/${layersOf(theme)}`)));
+  }
+  $("layers").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(Number(b.dataset.n) === state.layers)));
+  $("layers-dark").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(Number(b.dataset.n) === state.layersDark)));
+  $("neutral").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.c === state.neutral)));
+  $("v-layers").textContent = layerName(state.layers);
+  $("v-layers-dark").textContent = layerName(state.layersDark);
+  $("summary").textContent = `Light ground ${state.light} · Dark ground ${state.dark} · Light layers ${state.layers} · Dark layers ${state.layersDark} · Neutral ${NEUTRALS.find(c => c.id === state.neutral).label}`;
 }
-function matrix(theme) {
-  const [c, h] = CAST[state.cast][theme], hx = L => hexOf(L, c, h);
-  const head = `<tr><th>${theme === "light" ? "Light" : "Dark"} ground</th>${CONTRAST.map(n => `<th>${n}</th>`).join("")}</tr>`;
-  const body = GROUNDS[theme].map(g => `<tr><th>${g.label}</th>${CONTRAST.map((n, k) => {
-    const r = resolve(theme, { groundL: g.L, contrast: k }), issues = check(r, CAST[state.cast][theme]), e = r.edge;
-    const mini = `<div class="mini" style="background:${hx(r.page)};color:${hexOf(r.ink.body)}"><div class="mini__side" style="background:${hx(r.recessed)};border-right:1px solid ${hx(e.decorative)}"><div class="mini__row" style="background:${hx(r.fill.recessed[2])}"></div><div class="mini__row" style="background:${hx(r.fill.recessed[0])}"></div><div class="mini__row"></div></div><div class="mini__main"><div class="mini__field" style="background:${hx(r.fill.page[0])}"></div><div class="mini__card" style="background:${hx(r.raised)};border-color:${hx(e.card)}"><span>Plan <span style="color:${hexOf(r.ink.muted)}">· draft</span></span><div class="mini__field" style="background:${hx(r.fill.raised[0])};border-color:${hexOf(r.ink.edge)}"></div></div></div></div>`;
-    return `<td><button class="sw" style="padding:0" data-load="${theme}:${g.id}:${k}" title="${issues.length ? issues.join("; ") : "Every check passes"}">${mini}</button><div class="mini__ok ${issues.length ? "fail" : "pass"}">${issues.length ? "✕ " + issues.length + " issue" + (issues.length > 1 ? "s" : "") : "✓ passes"}</div></td>`;
-  }).join("")}</tr>`).join("");
-  const el = document.getElementById("matrix-" + theme);
-  el.innerHTML = `<table>${head}${body}</table>`;
-  el.querySelectorAll("[data-load]").forEach(b => b.addEventListener("click", () => { const [t, g, k] = b.dataset.load.split(":"); Object.assign(state[t], { ground: g, contrast: Number(k), custom: null }); document.querySelector(`[data-theme-controls="${t}"]`).sync(); document.getElementById(t + "-title").scrollIntoView({ behavior: "smooth" }); }));
+
+function mini(e) {
+  return `<span class="mini" style="background:${e.page}" aria-hidden="true">
+    <span class="mini__side" style="background:${e.side};border-right:1px solid ${e.rule}"><span class="mini__row" style="background:${e.sSel}"></span><span class="mini__row" style="background:${e.sHover}"></span></span>
+    <span class="mini__main"><span class="mini__field" style="background:${e.field}"></span>
+      <span class="mini__card" style="background:${e.card};border-color:${e.cardEdge}"><span class="mini__line" style="background:${e.text}"></span><span class="mini__line m" style="background:${e.muted}"></span><span class="mini__field" style="background:${e.cField};border-color:${e.edge}"></span></span></span></span>`;
 }
-build("light"); build("dark"); matrix("light"); matrix("dark");
-document.querySelectorAll("#cast button").forEach(b => b.addEventListener("click", () => { state.cast = b.dataset.cast; document.querySelectorAll("#cast button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); paint("light"); paint("dark"); matrix("light"); matrix("dark"); }));
+function matrices() {
+  for (const theme of ["light", "dark"]) {
+    const head = `<thead><tr><th scope="col"><span class="status">ground \\ contrast</span></th>${LAYERS.map(n => `<th scope="col">${n === 0 ? "0 Flat" : n === DEFAULTS.layers ? "4 Default" : n}</th>`).join("")}</tr></thead>`;
+    const body = GROUNDS[theme].map(g => `<tr><th scope="row">${groundName(theme, g)}</th>${LAYERS.map(n => {
+      const e = DATA[state.neutral][theme][`${g}/${n}`];
+      return `<td><button type="button" class="tile" data-load="${g}/${n}" aria-label="${theme} ground ${g}, contrast ${n}: ${e.issues.length ? e.issues.length + " issues" : "passes"}">${mini(e)}<span class="mini__ok ${e.issues.length ? "fail" : "pass"}">${e.issues.length ? "✕ " + e.issues.length : "✓ " + e.muted.toFixed(1) + ":1"}</span></button></td>`;
+    }).join("")}</tr>`).join("");
+    const el = $("matrix-" + theme);
+    el.innerHTML = `<table aria-label="${theme} combinations">${head}<tbody>${body}</tbody></table>`;
+    el.querySelectorAll("[data-load]").forEach(b => b.addEventListener("click", () => {
+      const [g, n] = b.dataset.load.split("/").map(Number);
+      state[theme] = g;
+      if (theme === "dark") state.layersDark = n; else state.layers = n;
+      render();
+      $("scene-" + theme).scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "center" });
+    }));
+  }
+  render();
+}
+
+buildControls(); matrices();
 
 (async () => {
-  const $ = id => document.getElementById(id);
   let db = null;
   try { db = window.claude ? await window.claude.use("db") : null; } catch { db = null; }
-  const doc = db ? db.collection("layers").doc("tuning") : null;
-  const pick = t => ({ ground: state[t].ground, contrast: state[t].contrast, custom: state[t].custom });
-  if (doc) { try { const snap = await doc.get(); if (snap.exists) { const d = snap.data(); for (const t of ["light", "dark"]) if (d[t] && "ground" in d[t]) { Object.assign(state[t], d[t]); document.querySelector(`[data-theme-controls="${t}"]`).sync(); } if (d.cast) document.querySelector(`#cast [data-cast="${d.cast}"]`)?.click(); $("notes").value = d.notes || ""; $("status").textContent = "Loaded your saved choices."; } } catch {} }
-  else $("status").textContent = "Saving needs the page open on claude.ai, signed in; you can also tell Claude your choices in chat.";
-  $("save").onclick = async () => {
-    const d = { light: pick("light"), dark: pick("dark"), cast: state.cast, notes: $("notes").value.trim(), at: new Date().toISOString() };
-    if (!doc) { $("status").textContent = "Couldn't save from this view: tell Claude your choices in chat."; return; }
+  const doc = db ? db.collection("layers").doc("picks") : null;
+  if (!doc) $("status").textContent = "Saving works when the page is open on claude.ai and you're signed in. You can also tell Claude your picks in chat.";
+  else {
+    try {
+      const snap = await doc.get();
+      if (snap.exists) {
+        const d = snap.data();
+        for (const k of ["light", "dark", "layers", "layersDark", "neutral"]) if (k in d) state[k] = d[k];
+        $("notes").value = d.notes || "";
+        matrices();
+        $("status").textContent = "Loaded your saved picks.";
+      }
+    } catch { /* show the defaults */ }
+  }
+  $("save").addEventListener("click", async () => {
+    if (!doc) { $("status").textContent = "Couldn't save from this view. Tell Claude your picks in chat."; return; }
+    const d = { light: state.light, dark: state.dark, layers: state.layers, layersDark: state.layersDark, neutral: state.neutral, notes: $("notes").value.trim(), at: new Date().toISOString() };
     $("status").textContent = "Saving…";
-    try { await doc.set(d); $("status").textContent = "Saved. Claude can read your choices."; }
-    catch (e) { $("status").textContent = "Couldn't save (" + (e && e.code || "error") + "): tell Claude your choices in chat."; }
-  };
+    try { await doc.set(d); $("status").textContent = "Saved. Claude can read your picks."; }
+    catch (e) { $("status").textContent = "Couldn't save (" + ((e && e.code) || "error") + "). Tell Claude your picks in chat."; }
+  });
 })();
 </script>

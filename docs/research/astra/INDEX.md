@@ -10,9 +10,14 @@ broken research.
 
 | Date | Topic | Question | Status |
 | --- | --- | --- | --- |
-| 2026-10-12 | [materials/21-axis-design](materials/21-axis-design/README.md) | How should Material gates, scoped controls, Surface shadow parts and portal propagation work, and which mechanisms preserve paint identity? | unreviewed |
-| 2026-10-12 | [materials/20-limits-and-none](materials/20-limits-and-none/README.md) | Which material hard limits have enforcement, which restraint belongs to None, and how can None prove pixel identity across the current app gallery? | unreviewed |
-| 2026-10-12 | [materials/19-corrections](materials/19-corrections/README.md) | Correct the reviewed materials series, refresh 101 contracts and 13 roles, and mark policies superseded by D1–D16. | unreviewed |
+| 2026-10-17 | [materials/29-scope](materials/29-scope/README.md) | Which components does a material reach, and how strongly? (Claude; platforms, libraries, historic styles) | for owner review |
+| 2026-10-17 | [materials/28-recipes](materials/28-recipes/README.md) | What combination of gradients, strokes, shadows and transparency does each of the owner's eight references take? (Claude) | for owner review |
+| 2026-10-17 | [materials/27-levers](materials/27-levers/README.md) | Can materials be separate levers (gradient, sheen, transparency, frost, stroke, inner shadow, emboss, contact, glow, grain) like the Layers settings? (Claude) | for owner review |
+| 2026-10-17 | [materials/23-specimen-v2](materials/23-specimen-v2/README.md) | Can the owner tell None, Glass, Tactile and Soft apart on real components, and does Tactile reach the board's printed buttons? (Claude) | for owner review |
+| 2026-10-17 | [materials/22-calibration](materials/22-calibration/README.md) | What numbers make the four presets reach the board, and where do contrast and today's axes bound them? (Claude) | for owner review |
+| 2026-10-12 | [materials/21-axis-design](materials/21-axis-design/README.md) | How should Material gates, scoped controls, Surface shadow parts and portal propagation work, and which mechanisms preserve paint identity? | reviewed 2026-10-17 (materials/REVIEW.md, "Reports 19–21") |
+| 2026-10-12 | [materials/20-limits-and-none](materials/20-limits-and-none/README.md) | Which material hard limits have enforcement, which restraint belongs to None, and how can None prove pixel identity across the current app gallery? | reviewed 2026-10-17 (materials/REVIEW.md, "Reports 19–21") |
+| 2026-10-12 | [materials/19-corrections](materials/19-corrections/README.md) | Correct the reviewed materials series, refresh 101 contracts and 13 roles, and mark policies superseded by D1–D16. | reviewed 2026-10-17 (materials/REVIEW.md, "Reports 19–21") |
 | 2026-10-11 | [materials/18-contrast-harness](materials/18-contrast-harness/README.md) | Which preset text and required-edge paints fail after composition across a continuous backdrop range, including gradient interiors and opaque fallbacks? | reviewed 2026-10-11 ([review](materials/REVIEW.md)) |
 | 2026-10-10 | [materials/17-openglass](materials/17-openglass/README.md) | How do GlassLook controls reach all forty OpenGlass components, where do nesting, fallbacks and contrast break, and what does Area add? | reviewed 2026-10-11 ([review](materials/REVIEW.md)) |
 | 2026-10-10 | [materials/16-specimen](materials/16-specimen/README.md) | How do Paper, Glass and Tactile render on compiled Area across mode, density and backdrop, with live controls and explicit recipe limits? | reviewed 2026-10-11 ([review](materials/REVIEW.md)) |

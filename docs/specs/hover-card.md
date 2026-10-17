@@ -21,7 +21,7 @@ Popover (opened by a click, may hold a form).
 | Axis | Value | Justification |
 |---|---|---|
 | side | bottom (default), top, left, right | Popover's sides |
-| content | person (identity row, description, facts), page, source | Notion, ChatGPT, GitHub |
+| content | person (identity row, description, facts), page (path, title, opening lines, last edit), web link (title, snippet, site) | GitHub, Notion, ChatGPT (see Content) |
 
 ## Sources
 
@@ -51,6 +51,22 @@ title and description). Inside a `<p>`, an HTML parser closes the paragraph at t
 block, so server-rendered HTML no longer matches the React tree and hydration fails (React
 #418). Server-rendered pages place a hover card in flow content (a `div`), as the gallery
 demos now do (2026-09-27); client-only rendering is unaffected.
+
+## Content, 2026-10-17
+
+Owner, round 31: "rethink the content/source". The examples held filler ("Description", "Label / Value", "Body text
+Title body text"), and the Source tile cited one of Area's own repository files. Each now shows what its reference
+product puts in that preview, with real-world text:
+
+| Example | What the card holds | Basis |
+|---|---|---|
+| Person (a mention in a comment) | avatar, name over handle; one line on what they do; team and local time | GitHub's user hovercard (name, handle, bio, then facts such as location and local time); Notion's people preview |
+| Page (an internal page link) | the page's path above its title, its opening lines, who edited it last and when | Notion's page peek (`notion--page-preview--open`: a 12px muted path, the 13/600 title, then the page itself) |
+| Web link (an external link in prose) | the page's title, a snippet, the site with a globe | Notion's link preview (`notion--link-preview--open`: title 14/600, a ~150-character description, then the site in 12/500 muted); ChatGPT's source previews |
+
+The Citation family keeps the answer-with-sources case; this tile is a plain link in prose, so the two no longer
+repeat each other. Its subject (projectors, a `.example` site) matches Citation's. The component, its slots and its
+CSS are unchanged: the path line is the existing meta slot, placed above the title.
 
 ## Visual pass
 
@@ -101,9 +117,18 @@ once) for lists of mentions. Recommendation: not yet; no reference product does 
 - **Why:** the hover and pressed sweep found the raw links turning the browser's default red when pressed (4:1 on
   white, 2.97:1 on a gray page). The examples should be built from Area anyway.
 
+## Review note, 2026-10-17 (round 32)
+
+- **What changed:** the examples now show real previews instead of placeholder text: a person card (what they do,
+  their team and local time), a page card (where the page lives, its opening lines, its last edit) and a web-link card
+  (title, snippet, site). The third tile was a citation of an Area file; it is now a plain web link.
+- **Why:** you asked to rethink the content and the source. Each card now holds what GitHub, Notion and ChatGPT show
+  in the same preview.
+
 ## Feedback log
 
 - 2026-10-01 · audit E-18 (owner pick A) → hover intent shared with Tooltip (`useHoverIntent`): keyboard focus opens at once (was after 700ms), blur closes at once, one consuming capture-phase Escape; mouse and pen open after the delay, touch never → overlay.ts:108-145, HoverCard.tsx:46-74.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → HoverCard is shown before it is placed (layout effect, Popover's order), so the enter scales from the link at its final place; delays 700 / 300 kept; exit now fast via the shared rule. HoverCard.tsx, hover-card.css comment.
 - 2026-10-15 · PRODUCT_UI.md open gap ("Hover card that opens on pointer only, not on every arrow-key focus in a sheet"), owner: "merge it, then continue working" → `openOnFocus` (default `true`, so the E-18 rule stands): off, keyboard focus no longer opens the card and the pointer still does. The app's icon cells turn it off: the List box's arrows sweep 808 icons, each focus opened a card at once, and the Inspector shows the same name and actions for the focused icon. Radix opens on focus after its 700 ms (`@radix-ui/react-hover-card@1.1.14` index.mjs:44-47, 91); Area keeps at once.
 - 2026-10-17 · owner: "go with your recs" (after round 30), the hover and pressed sweep → the gallery examples' triggers are `Link` (the body ink, underlined) instead of raw `<a>`, which showed the browser's blue and, while pressed, its red (4:1 on white, 2.97:1 at light 90). The component is unchanged.
+- 2026-10-17 · owner, round 31: "rethink the content/source" → the examples' content follows each reference's preview (section Content); the Source tile is a web link (title, snippet, site), not a citation of an Area file. gallery.tsx personCard, GalleryHoverCardPage, GalleryHoverCardSource; specimens.mjs title.

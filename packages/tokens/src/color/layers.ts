@@ -7,8 +7,10 @@
  *
  *   ground-light  the light page's OKLCH lightness, 1 (white) to 0.90 in 0.01 steps.
  *   ground-dark   the dark page's lightness: 0 (black), 0.085 (Area's near-black, the default), 0.12 to 0.24.
- *   layers        layer contrast, 0 (Flat) to 8, 4 the default: how far raised layers (cards, menus, dialogs) and
- *                 recessed ones (sidebars, wells) sit from the page, and how far a control's fill sits from its ground.
+ *   layers-light  layer contrast in light, 0 (Flat) to 8, 4 the default: how far raised layers (cards, menus,
+ *                 dialogs) and recessed ones (sidebars, wells) sit from the page, and a control's fill from its ground.
+ *   layers-dark   the same in dark. One setting per theme since 2026-10-17 (owner: "save all the layer picks for the
+ *                 most possible customization"); each theme's formulas read only its own.
  *
  * Every tone is an OKLCH lightness derived from those numbers, tinted by the Neutral setting's hue and chroma. The
  * neutral ramp is unchanged: text, borders, fills and the hues keep their named steps; only these roles are computed.
@@ -114,8 +116,8 @@ export const TINT_LIFT = { layer: { from: 0.3, perL: 4 }, fill: { from: 0.315, p
 // ---------------------------------------------------------------------------
 
 export interface Cast { chroma: number; hue: number }
-export interface LayerSelection { groundLight: number; groundDark: number; layers: number }
-export const DEFAULT_LAYER_SELECTION: LayerSelection = { groundLight: DEFAULT_GROUND_LIGHT, groundDark: DEFAULT_GROUND_DARK, layers: DEFAULT_LAYERS };
+export interface LayerSelection { groundLight: number; groundDark: number; layersLight: number; layersDark: number }
+export const DEFAULT_LAYER_SELECTION: LayerSelection = { groundLight: DEFAULT_GROUND_LIGHT, groundDark: DEFAULT_GROUND_DARK, layersLight: DEFAULT_LAYERS, layersDark: DEFAULT_LAYERS };
 
 export interface LayerLightness {
   page: number; raised: number; recessed: number; stripe: number; step: number;
@@ -204,7 +206,7 @@ export const LAYER_COLOR_TOKENS = [
 
 /** Hex for every layer token, for one theme. What the contrast gate checks. */
 export function layerTokens(theme: "light" | "dark", sel: LayerSelection, cast: Cast): Record<string, string> {
-  const m = layerLightness(theme, theme === "light" ? sel.groundLight : sel.groundDark, sel.layers);
+  const m = layerLightness(theme, theme === "light" ? sel.groundLight : sel.groundDark, theme === "light" ? sel.layersLight : sel.layersDark);
   const hx = (L: number) => layerHex(theme, L, cast);
   return {
     "bg-page": hx(m.page), "bg-surface": hx(m.raised), "bg-subtle": hx(m.recessed), "bg-stripe": hx(m.stripe), "bg-code": hx(m.raised),
@@ -228,20 +230,20 @@ const num = (x: number) => String(Number(x.toFixed(6)));
 
 /** The light and dark lightness of every role, as CSS math over the three settings. */
 export function layerLightnessCss(): Record<string, string> {
-  const gl = v("ground-light"), gd = v("ground-dark"), n = v("layers");
+  const gl = v("ground-light"), gd = v("ground-dark"), nl = v("layers-light"), nd = v("layers-dark");
   const sl = v("layer-light-step"), sd = v("layer-dark-step");
   const lf = (x: string, m: number) => `calc(${x} - ${num(m)} * ${sl})`;
   const df = (x: string, m: number) => `calc(max(${x} + ${sd}, ${num(DARK_FILL_FLOOR)}) + ${num(m)} * ${sd})`;
   const out: Record<string, string> = {
-    "layer-light-step": `calc(${num(CONTROL_STEP.light.base)} + ${num(CONTROL_STEP.light.perStep)} * ${n})`,
-    "layer-dark-step": `calc(${num(CONTROL_STEP.dark.base)} + ${num(CONTROL_STEP.dark.perStep)} * ${n})`,
+    "layer-light-step": `calc(${num(CONTROL_STEP.light.base)} + ${num(CONTROL_STEP.light.perStep)} * ${nl})`,
+    "layer-dark-step": `calc(${num(CONTROL_STEP.dark.base)} + ${num(CONTROL_STEP.dark.perStep)} * ${nd})`,
     "layer-light-page": gl,
-    "layer-light-raised": `min(1, calc(${gl} + min(1 - ${gl}, ${num(LAYER_PER_STEP.light.raised)} * ${n})))`,
-    "layer-light-recessed": `calc(${gl} - ${num(LAYER_PER_STEP.light.recessed)} * ${n})`,
-    "layer-dark-lift": `calc(max(0, ${num(DARK_LAYER_FLOOR)} - ${gd}) * min(1, ${n}))`,
+    "layer-light-raised": `min(1, calc(${gl} + min(1 - ${gl}, ${num(LAYER_PER_STEP.light.raised)} * ${nl})))`,
+    "layer-light-recessed": `calc(${gl} - ${num(LAYER_PER_STEP.light.recessed)} * ${nl})`,
+    "layer-dark-lift": `calc(max(0, ${num(DARK_LAYER_FLOOR)} - ${gd}) * min(1, ${nd}))`,
     "layer-dark-page": gd,
-    "layer-dark-raised": `calc(${gd} + ${v("layer-dark-lift")} + ${num(LAYER_PER_STEP.dark.raised)} * ${n})`,
-    "layer-dark-recessed": `calc(${gd} + ${v("layer-dark-lift")} + ${num(LAYER_PER_STEP.dark.recessed)} * ${n})`,
+    "layer-dark-raised": `calc(${gd} + ${v("layer-dark-lift")} + ${num(LAYER_PER_STEP.dark.raised)} * ${nd})`,
+    "layer-dark-recessed": `calc(${gd} + ${v("layer-dark-lift")} + ${num(LAYER_PER_STEP.dark.recessed)} * ${nd})`,
   };
   for (const ground of ["page", "raised", "recessed"]) FILL_MULTIPLE.light.forEach((m, i) => {
     out[`layer-light-${ground}-fill-${i}`] = lf(v(`layer-light-${ground}`), m);

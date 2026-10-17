@@ -173,6 +173,9 @@ Run 19 first, then 20 and 21, then 22 and 23. Tasks 24–26 can run once 21 is i
 - So D2's "Surface shadows split into adjustable parts" is largely done another way. The
   Material axis now sits beside Surface *and* Elevation. Report 21's Surface-split section, and
   any report that says Surface owns shadows, should be read against `elevation.ts`.
+- **2026-10-17 (Claude):** 19–21 reviewed (REVIEW.md, "Reports 19–21"), Layers × Material settled as a recommendation
+  (REVIEW.md, "Layers × Material"), 22 calibrated and 23 built: https://claude.ai/artifact/6yuLW5kY176hsCeJf2Abzo.
+  24–26 remain.
 - The app moved: new UI work happens in `apps/desktop` (Titlebar, Sidebar, Canvas, Inspector);
   `apps/docs` is archived. A Material setting would appear in the Inspector beside the other
   axes.

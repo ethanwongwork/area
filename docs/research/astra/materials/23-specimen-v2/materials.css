@@ -1,0 +1,170 @@
+/* ---------------------------------------------------------------------------
+ * Materials prototype (task 23, 2026-10-17). Research only: a material layer painted over Area's built CSS so the
+ * owner can judge None, Glass, Tactile and Soft on real components. Not a package file. Values: 22-calibration.
+ *
+ * Shape of the layer (report 21, revised for today's axes):
+ *   - A material never replaces a Layers tone, an Elevation shadow, a Surface frame, a size or an ink (D16). It adds
+ *     paint on top: lobes appended to the component's own box-shadow, a gloss image under its state wash, a frost
+ *     (alpha + backdrop blur) on the Layers tone it already has.
+ *   - Inputs are numbers on the scope (`[data-area-material]`); every lobe is always present and is transparent
+ *     when its input is 0, so None paints exactly what Area paints. Light direction: --m-angle, 0 = top, clockwise
+ *     (D9); a lobe's offset is (-sin, cos) x distance, so the lit edge and the cast shadow follow one light.
+ *   - Stroke mode is a one-hot set of gates (report 21): solid, top, gradient, double; none = all 0.
+ *   - Roles paint by component part (report 04/19 role map): raised control, thumb, well, container, floating,
+ *     row plate, page.
+ * ------------------------------------------------------------------------- */
+
+[data-area-material] {
+  /* Inputs (controls). None: everything off. */
+  --m-angle: 0deg;          /* light angle, 0 = top, clockwise */
+  --m-relief: 0;            /* convex/concave modelling strength, 0–2 (1 = calibrated) */
+  --m-cast: 0;              /* material cast-shadow strength, 0–2 (1 = calibrated); Elevation keeps its own */
+  --m-stroke: 0;            /* decorative stroke opacity multiplier, 0–2 (1 = calibrated) */
+  --m-stroke-solid: 0; --m-stroke-top: 0; --m-stroke-gradient: 0; --m-stroke-double: 0;
+  --m-gloss: 0;             /* top sheen on raised parts, 0–1 */
+  --m-fill: 1;              /* fill opacity of frosted surfaces, floor-clamped below */
+  --m-frost: 0px;           /* backdrop blur radius (Figma Glass "Frost") */
+  --m-glow: 0;              /* accent emission on solid actions and on-states, 0–1 */
+  --m-grain: 0;             /* page grain opacity, 0–0.12 */
+  --m-plate: 0;             /* row-plate strength (D6), 0–2 */
+  --m-label: 0;             /* label relief on button labels, opt-in only (D13), 0/1 */
+
+  /* Numbers that differ by theme. light-dark() takes colours only, and Area has no numeric theme token, so the
+     prototype keeps its own (--m-dark, set below with the theme attribute). A build would add one to the theme axis. */
+  --m-dark: 0;
+  --m-ring-w: calc(1px + 0.5px * var(--m-dark));                           /* board 5 1px / board 6 1.5px */
+  --m-cast-y: calc(2px + 2px * var(--m-dark)); --m-cast-b: calc(4px + 3px * var(--m-dark));  /* board 5 (0 2 4) / board 6 (0 4 7) */
+  --m-floor: calc(0.56 + 0.06 * var(--m-dark));
+
+  /* Light direction, as unit offsets. */
+  --m-lx: calc(-1 * sin(var(--m-angle)));
+  --m-ly: cos(var(--m-angle));
+
+  /* Calibrated lobes per theme (22-calibration). light-dark() picks by the scope's colour scheme. */
+  --m-hi: light-dark(rgb(255 255 255 / 0.9), rgb(255 255 255 / 0.15));   /* lit edge: board 5 #FDFDFD / board 6 15% white */
+  --m-shade: light-dark(rgb(0 0 0 / 0.1), rgb(0 0 0 / 0.2));             /* cast: board 5 10% / board 6 20% */
+  --m-ring: light-dark(rgb(0 0 0 / 0.16), rgb(0 0 0 / 1));               /* outer hairline: board 5 16% / board 6 100% */
+  --m-well-shade: light-dark(rgb(0 0 0 / 0.1), rgb(0 0 0 / 0.55));
+  --m-well-hi: light-dark(rgb(255 255 255 / 0.75), rgb(255 255 255 / 0.06));
+  --m-rim: light-dark(rgb(255 255 255 / 0.55), rgb(255 255 255 / 0.14));  /* glass rim (rdev: 0.5px white 50%) */
+  --m-sheen: light-dark(rgb(255 255 255 / 0.5), rgb(255 255 255 / 0.15));
+  --m-soft-hi: light-dark(rgb(255 255 255 / 0.95), rgb(255 255 255 / 0.05));
+  --m-soft-lo: light-dark(rgb(0 0 0 / 0.13), rgb(0 0 0 / 0.65));
+  --m-glow-color: color-mix(in oklab, var(--area-accent-solid) 70%, transparent);  /* D5: derived from accent */
+
+  /* Frost: the Layers tone, made translucent no further than the reading floor (22-calibration: body text 4.5:1 over
+     any backdrop needs light 0.56 / dark 0.62; muted light 0.90 / dark 0.73). --m-floor is the floor in force. */
+  --m-alpha: max(var(--m-fill), var(--m-floor));
+
+  /* Lobes. Each is one shadow, transparent at 0. Offsets follow the light. */
+  --m-l-ring: 0 0 0 calc(var(--m-ring-w) * min(1, var(--m-stroke-solid) + var(--m-stroke-double))) color-mix(in srgb, var(--m-ring) calc(var(--m-stroke) * 100%), transparent);
+  --m-l-top: inset calc(var(--m-lx) * 1px) calc(var(--m-ly) * var(--m-ring-w)) 0 0 color-mix(in srgb, var(--m-hi) calc(var(--m-stroke) * min(1, var(--m-stroke-top) + var(--m-stroke-gradient)) * 100%), transparent);
+  --m-l-grad: inset 0 0 0 1px color-mix(in srgb, var(--m-hi) calc(var(--m-stroke) * var(--m-stroke-gradient) * 35%), transparent);
+  --m-l-inner: inset 0 0 0 1px color-mix(in srgb, var(--m-hi) calc(var(--m-stroke) * var(--m-stroke-double) * 100%), transparent);
+  --m-l-cast: calc(var(--m-lx) * var(--m-cast-y) * -1) calc(var(--m-ly) * var(--m-cast-y)) var(--m-cast-b) 0 color-mix(in srgb, var(--m-shade) calc(min(2, var(--m-cast)) * 100%), transparent);
+  --m-l-glow: 0 0 calc(var(--m-glow) * 18px) calc(var(--m-glow) * 2px) color-mix(in srgb, var(--m-glow-color) calc(var(--m-glow) * 100%), transparent);
+  /* Soft (neumorphic) pair: lit side light, far side dark (R08 proportions: distance 1 : blur 3, scaled to a 32 control). */
+  --m-l-soft-hi: calc(var(--m-lx) * -3px * var(--m-relief) * var(--m-soft)) calc(var(--m-ly) * -3px * var(--m-relief) * var(--m-soft)) calc(9px * var(--m-soft)) 0 color-mix(in srgb, var(--m-soft-hi) calc(min(1, var(--m-relief)) * var(--m-soft) * 100%), transparent);
+  --m-l-soft-lo: calc(var(--m-lx) * 3px * var(--m-relief) * var(--m-soft)) calc(var(--m-ly) * 3px * var(--m-relief) * var(--m-soft)) calc(9px * var(--m-soft)) 0 color-mix(in srgb, var(--m-soft-lo) calc(min(1, var(--m-relief)) * var(--m-soft) * 100%), transparent);
+  /* Convex modelling for crisp (Tactile) parts: a lit inner edge and a shaded far edge, 1px, no blur (R10, softened). */
+  --m-l-cvx-hi: inset calc(var(--m-lx) * -1px) calc(var(--m-ly) * 1px) 0 0 color-mix(in srgb, var(--m-hi) calc(var(--m-relief) * var(--m-crisp) * 60%), transparent);
+  --m-l-cvx-lo: inset calc(var(--m-lx) * 1px) calc(var(--m-ly) * -1px) 0 0 color-mix(in srgb, var(--m-shade) calc(var(--m-relief) * var(--m-crisp) * 60%), transparent);
+  /* Concave (wells): shade on the lit side, catch-light on the far edge. */
+  --m-l-well-lo: inset calc(var(--m-lx) * -1px * var(--m-relief)) calc(var(--m-ly) * 1px * var(--m-relief)) calc(2px * var(--m-relief)) 0 color-mix(in srgb, var(--m-well-shade) calc(min(1, var(--m-relief)) * var(--m-crisp) * 100%), transparent);
+  --m-l-well-hi: inset calc(var(--m-lx) * 1px) calc(var(--m-ly) * -1px) 0 0 color-mix(in srgb, var(--m-well-hi) calc(min(1, var(--m-relief)) * var(--m-crisp) * 100%), transparent);
+  --m-l-swell-lo: inset calc(var(--m-lx) * -2px) calc(var(--m-ly) * 2px) calc(5px * var(--m-soft)) 0 color-mix(in srgb, var(--m-soft-lo) calc(min(1, var(--m-relief)) * var(--m-soft) * 100%), transparent);
+  --m-l-swell-hi: inset calc(var(--m-lx) * 2px) calc(var(--m-ly) * -2px) calc(5px * var(--m-soft)) 0 color-mix(in srgb, var(--m-soft-hi) calc(min(1, var(--m-relief)) * var(--m-soft) * 100%), transparent);
+  --m-l-rim: inset 0 0 0 0.5px color-mix(in srgb, var(--m-rim) calc(var(--m-glass) * 100%), transparent), inset calc(var(--m-lx) * -1px) calc(var(--m-ly) * 1px) 3px 0 color-mix(in srgb, var(--m-sheen) calc(var(--m-glass) * 50%), transparent);
+  --m-crisp: 0; --m-soft: 0; --m-glass: 0;   /* recipe gates (report 21), one per preset family */
+
+  /* Role lists. A receiver appends its own shadow after these. */
+  --m-raised: var(--m-l-ring), var(--m-l-top), var(--m-l-grad), var(--m-l-inner), var(--m-l-cvx-hi), var(--m-l-cvx-lo), var(--m-l-soft-hi), var(--m-l-soft-lo), var(--m-l-rim), var(--m-l-cast);
+  --m-well: var(--m-l-well-lo), var(--m-l-well-hi), var(--m-l-swell-lo), var(--m-l-swell-hi), var(--m-l-rim);
+  --m-gloss-image: linear-gradient(calc(180deg + var(--m-angle)), color-mix(in srgb, var(--m-hi) calc(var(--m-gloss) * 100%), transparent), transparent 70%);
+}
+
+[data-area-theme="dark"][data-area-material], [data-area-theme="dark"] [data-area-material] { --m-dark: 1; }
+[data-area-theme="light"] [data-area-material] { --m-dark: 0; }
+
+/* Presets: the calibrated inputs (22-calibration). Controls on the page override these inline. */
+[data-area-material="glass"] {
+  --m-glass: 1; --m-fill: 0.72; --m-frost: 24px; --m-stroke: 1; --m-stroke-top: 1; --m-gloss: 0.35; --m-plate: 0.25; --m-cast: 0;
+}
+[data-area-material="tactile"] {
+  --m-crisp: 1; --m-relief: 1; --m-cast: 1; --m-stroke: 1; --m-stroke-solid: 1; --m-stroke-top: 1;
+  --m-gloss: calc(0.15 * var(--m-dark)); --m-grain: 0.04; --m-plate: 0.4;   /* board 5 flat fill / board 6 15% sheen */
+}
+[data-area-material="soft"] {
+  --m-soft: 1; --m-relief: 1; --m-angle: 315deg; --m-plate: 0.55; --m-cast: 0;
+}
+
+/* ---- Raised controls: Buttons (and Toggle group / Split button parts), Segmented thumb, Switch and Slider thumbs. */
+[data-area-material] .area-button:not(.area-button--ghost) {
+  box-shadow: var(--m-raised); /* Button's own --_shadow is `none`, which a shadow list can't hold; it sets no other value */
+  background-image: var(--m-gloss-image);
+}
+/* Emission only on solid actions (custom properties resolve where declared, so the glow is listed here, not toggled). */
+[data-area-material] .area-button.area-button--solid:not(.area-button--ghost) { box-shadow: var(--m-raised), var(--m-l-glow); }
+@media (hover: hover) {
+  [data-area-material] .area-button:not(.area-button--ghost):hover:not(:disabled, [data-disabled], [aria-disabled="true"]) { background-image: var(--m-gloss-image), var(--_wash-hover, none); }
+}
+[data-area-material] .area-button:not(.area-button--ghost):active { background-image: var(--m-gloss-image), var(--_wash-active, none); }
+[data-area-material] .area-segmented__item[data-selected],
+[data-area-material] .area-switch__thumb {
+  box-shadow: var(--m-raised), var(--area-shadow-control);
+  background-image: var(--m-gloss-image);
+}
+[data-area-material] .area-slider__control::-webkit-slider-thumb { box-shadow: var(--m-raised), var(--area-shadow-control); }
+[data-area-material] .area-switch__track[data-checked] { box-shadow: var(--m-l-glow); }
+[data-area-material] .area-button__label { text-shadow: 0 calc(var(--m-ly) * 1px) calc(2px * var(--m-dark)) light-dark(rgb(255 255 255 / calc(var(--m-label) * 0.8)), rgb(0 0 0 / calc(var(--m-label) * 0.4))); }
+[data-area-material] .area-button--solid .area-button__label { text-shadow: 0 calc(var(--m-ly) * 1px) 2px rgb(0 0 0 / calc(var(--m-label) * 0.4)); }
+
+/* ---- Wells: fields and tracks. */
+[data-area-material] .area-input:not(:focus-within),
+[data-area-material] .area-switch__track,
+[data-area-material] .area-segmented,
+[data-area-material] .area-progress { box-shadow: var(--m-well); }
+[data-area-material] .area-input:focus-within { box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo), var(--m-well); }
+[data-area-material] .area-slider__control::-webkit-slider-runnable-track { box-shadow: var(--m-well); }
+
+/* ---- Containers and floating surfaces: the Surface edge and Elevation stay first; the material follows. */
+[data-area-material] .area-card { box-shadow: var(--area-shadow-edge), var(--m-container), var(--_card-shadow); }
+[data-area-material] :is(.area-menu, .area-popover, .area-dialog, .area-toast) { box-shadow: var(--area-shadow-edge), var(--m-container), var(--_elevation); }
+[data-area-material] {
+  --m-container: var(--m-l-top), var(--m-l-ring), var(--m-l-rim),
+    calc(var(--m-lx) * -6px * var(--m-soft)) calc(var(--m-ly) * -6px * var(--m-soft)) calc(18px * var(--m-soft)) 0 color-mix(in srgb, var(--m-soft-hi) calc(var(--m-soft) * 100%), transparent),
+    calc(var(--m-lx) * 6px * var(--m-soft)) calc(var(--m-ly) * 6px * var(--m-soft)) calc(18px * var(--m-soft)) 0 color-mix(in srgb, var(--m-soft-lo) calc(var(--m-soft) * 100%), transparent);
+}
+
+/* Frost (Glass only): the surface's own Layers tone at --m-alpha, over a blurred backdrop. Opaque under reduced
+   transparency (D7, the OS query; the page's own switch sets data-m-opaque) and in forced colours. */
+[data-area-material="glass"] :is(.area-card, .area-menu, .area-popover, .area-dialog, .area-toast) {
+  background-color: color-mix(in srgb, var(--area-bg-surface) calc(var(--m-alpha) * 100%), transparent);
+  backdrop-filter: blur(var(--m-frost)) saturate(1.5);
+}
+[data-area-material="glass"] .area-button:is(.area-button--soft, .area-button--outline) {
+  background-color: color-mix(in srgb, var(--_bg) calc(var(--m-alpha) * 100%), transparent);
+  backdrop-filter: blur(calc(var(--m-frost) / 2));
+}
+@media (hover: hover) {
+  [data-area-material="glass"] .area-button:is(.area-button--soft, .area-button--outline):hover:not(:disabled) { background-color: color-mix(in srgb, var(--_bg-hover) calc(var(--m-alpha) * 100%), transparent); }
+}
+[data-area-material="glass"] .area-button:is(.area-button--soft, .area-button--outline):active { background-color: color-mix(in srgb, var(--_bg-active) calc(var(--m-alpha) * 100%), transparent); }
+[data-area-material="glass"] .area-input { background-color: color-mix(in srgb, var(--_bg) calc(var(--m-alpha) * 100%), transparent); }
+@media (prefers-reduced-transparency: reduce) {
+  [data-area-material="glass"] { --m-fill: 1; --m-frost: 0px; }
+}
+[data-area-material="glass"][data-m-opaque] { --m-fill: 1; --m-frost: 0px; }
+@media (forced-colors: active) {
+  [data-area-material] :is(.area-card, .area-menu, .area-popover, .area-dialog, .area-toast, .area-button, .area-input) { backdrop-filter: none; background-color: Canvas; }
+}
+
+/* ---- Row plates (D6): hovered and selected rows in Menu and Nav. */
+[data-area-material] :is(.area-menu__item[data-selected], .area-nav__item[aria-current]:not([aria-current="false"])) {
+  box-shadow:
+    inset calc(var(--m-lx) * -1px) calc(var(--m-ly) * 1px) calc(2px * var(--m-soft) + 1px * var(--m-crisp)) 0 color-mix(in srgb, var(--m-well-shade) calc(var(--m-plate) * (var(--m-crisp) + var(--m-soft)) * 100%), transparent),
+    inset 0 0 0 0.5px color-mix(in srgb, var(--m-rim) calc(var(--m-plate) * var(--m-glass) * 200%), transparent);
+}
+[data-area-material="glass"] .area-nav__item[aria-current]:not([aria-current="false"]) {
+  background-color: color-mix(in srgb, var(--area-bg-component-active) calc(var(--m-alpha) * 100%), transparent);
+}
