@@ -3,7 +3,7 @@
  *
  * Four named regions, so updates can point at one (owner, 2026-10-10):
  *
- *   Titlebar   the header across the top: the five tabs, search, layout toggles, light / dark
+ *   Titlebar   the header across the top: the six tabs, search, layout toggles, light / dark
  *   Sidebar    the left panel: what the current tab holds, as a list
  *   Canvas     the centre: the selected thing at full size
  *   Inspector  the right panel: canvas settings and facts about the selection
@@ -21,6 +21,7 @@ import { TypographyPage } from "./pages/typography.tsx";
 import { IconsPage } from "./pages/icons.tsx";
 import { ColorPage } from "./pages/color.tsx";
 import { LanguagePage } from "./pages/language.tsx";
+import { ExamplesPage } from "./pages/examples.tsx";
 import { readStored, writeStored } from "./storage.ts";
 
 /* Text-only tabs (owner, 2026-10-11: no icons in the Titlebar's tabs). */
@@ -30,6 +31,8 @@ export const TABS = [
   { id: "typography", label: "Typography" },
   { id: "icons", label: "Icons" },
   { id: "color", label: "Color" },
+  /* Whole screens built from Area, to test the defaults and every setting (owner, 2026-10-17). */
+  { id: "examples", label: "Examples" },
 ] as const;
 export type TabId = (typeof TABS)[number]["id"];
 type Theme = "light" | "dark";
@@ -205,7 +208,8 @@ export function Studio() {
         {tab === "language" ? <LanguagePage /> :
           tab === "components" ? <ComponentsPage /> :
           tab === "typography" ? <TypographyPage /> :
-          tab === "icons" ? <IconsPage /> : <ColorPage />}
+          tab === "icons" ? <IconsPage /> :
+          tab === "examples" ? <ExamplesPage /> : <ColorPage />}
       </div>
     </StudioContext.Provider>
   );

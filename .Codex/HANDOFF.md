@@ -59,7 +59,19 @@ Research and every value: `docs/research/interaction-polish-2026-10-16.md`.
   stroke or escape (spec "Final visual pass"). React 466/466, typecheck, build. Not checked: the Electron app by eye.
 
 
-## Start here (2026-10-17, session `remaining-work-axis-d71922`, uncommitted)
+## Start here (2026-10-17, branch `claude/sample-dashboard`, uncommitted)
+
+- **Examples tab** (owner: "test this with a sample ui dashboard built entirely from this design system, i will start
+  with the defaults then move on to materials and other axis of customization"):
+  - A sixth Titlebar tab, Examples (`pages/examples.tsx`). Its first example is a product analytics dashboard
+    (`content/examples/analytics.tsx`), built from 26 Area families.
+  - It renders on the Canvas inside the Canvas settings, so every Inspector setting reaches it.
+  - The chart is an SVG in tokens: Area has no Chart (docs/COMPONENTS.md, "Known gaps").
+  - Checked in the browser pane (light, dark, no overflow); typecheck, desktop build, playgrounds 0 mismatches.
+  - Next: the owner tests the defaults, then the settings, then materials, which need the Material setting built into
+    the Inspector (levers from `materials/27-levers`).
+
+## Earlier (2026-10-17, session `remaining-work-axis-d71922`, merged as PR #121)
 
 **Waiting on the owner:**
 - Round 32 on the review page (collection `components32`): Hover card's examples rethought (spec "Content").
