@@ -97,6 +97,10 @@ reorders without a slide.
 - **Why:** you asked why the swatch's outline only showed at its corners, then said to apply the fix: the outline is now
   a light translucent line drawn over the colour, so it shows evenly all the way round on every colour.
 
+## Interaction polish, 2026-10-16
+
+The handle is not selectable. See [interaction polish](../research/interaction-polish-2026-10-16.md).
+
 ## Feedback log
 
 - 2026-09-28 · owner: truncation in this batch → inspector tiles at 280, Color field and Select fixes

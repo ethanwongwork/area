@@ -119,6 +119,7 @@
     line-height: var(--area-ui-leading);
     font-weight: var(--area-weight-regular);
     cursor: pointer;
+    user-select: none;
   }
   .area-description-list--justified + .area-description-list__more { --_term-inset: var(--area-space-16); margin-block-start: 0; min-block-size: calc(var(--area-ui-leading) + var(--area-space-24)); }
   .area-description-list__more > .area-description-list__icon > svg { transition: rotate var(--area-duration-fast) var(--area-ease-out); }
@@ -127,7 +128,7 @@
     .area-description-list__more:hover > .area-description-list__more-label {
       text-decoration: underline;
       text-decoration-thickness: var(--area-stroke-width);
-      text-underline-offset: var(--area-space-2);
+      text-underline-offset: 0.25em; /* spec: Link's offset, clear of descenders (link.md, 2026-10-16) */
     }
   }
   .area-description-list__more:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }

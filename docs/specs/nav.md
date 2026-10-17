@@ -250,6 +250,10 @@ specificity, later wins) and as a row with actions (`nav.css:242` excludes it).
 - **Why:** your notes. The rows fill the sidebar's column, so one 8 inset runs down both sides; Nav itself didn't
   change.
 
+## Interaction polish, 2026-10-16
+
+Rows press at `bg-component-pressed`, one step past selected (Notion presses at 10%, ChatGPT 12%; it shared selected's fill, 1.5% below hover). A row with actions showed no press at all: the row's hover rule outranked its press rule; the press is restated after it. Item text is not selectable. See [interaction polish](../research/interaction-polish-2026-10-16.md).
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → hover `bg-component` → `bg-component-hover`, current

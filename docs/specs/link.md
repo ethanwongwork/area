@@ -100,11 +100,11 @@ Area's underline (computed): 1px, offset 2px, `oklab(0.277 0 0 / 0.4)` on rgb(40
 | link · type | inherited | ChatGPT, Notion | — |
 | link · ink | inherited (`inherit`), or `fg-muted`, or `fg-action` | ChatGPT and Notion inherit; Primer muted; Emphasis roles | — |
 | link · underline (inline) | always | ChatGPT, Notion agree | — |
-| underline · colour | `currentColor` at **40%** | Notion (primary product for content), alpha 0.4 | ChatGPT uses the text colour. Applied to the link's own ink so it follows muted and dark text |
+| underline · colour | `currentColor` (the link's own ink) | ChatGPT; owner, review round 2 (2026-10-09) | Notion 40% (Area's value until round 2) |
 | underline · thickness | 1 stroke (`stroke-width`) | Area's other underlines; ChatGPT auto ≈ 1px | Notion 0.05em (0.8 at 16) |
-| underline · offset | 2 (`space-2`) | ChatGPT 0.125rem; Area's other underlines | Notion 10% (1.6 at 16), Primer 0.05rem |
+| underline · offset | **0.25em** (3 at 12, 3.25 at 13, 3.5 at 14, 4 at 16) | Clears descenders by 1px at every type size, measured at 1x and 2x ("Underline clears descenders") | ChatGPT 0.125rem (2) is set for 16 text; Notion 10%, Primer 0.05rem. Was 2 until 2026-10-16 |
 | text opacity | none | Area keeps ink fixed and its contrast measurable | Notion sets the link text at 70% |
-| hover / focus | underline at full ink, lands at once, fades on fast; ink fixed | Shared rule (hover changes only plate, edge or underline); Untitled darkens the underline | Untitled and Primer muted also change the ink |
+| hover / focus | inline: unchanged (the line is already full ink, as ChatGPT's); standalone: the line lands at once, fades on fast; ink fixed | Shared rule (hover changes only plate, edge or underline); Untitled darkens the underline | Untitled and Primer muted also change the ink |
 | standalone | no underline at rest; full underline on hover and focus | Primer default; Untitled link buttons | — |
 | focus ring | 2px `focus-color` at `focus-offset` (2), `radius-min` corners | Alert link, Button | — |
 | external mark | `open` glyph (Area's approved external icon, Fluent's shape) at 12, 4 after the text, cap-centred, mirrored in RTL | xs icon gap (DESIGN_SYSTEM.md, 4 at xs); inset.css cap reference | — |
@@ -113,7 +113,7 @@ Area's underline (computed): 1px, offset 2px, `oklab(0.277 0 0 / 0.4)` on rgb(40
 
 | State | Changes | Evidence |
 |---|---|---|
-| hover | underline `currentColor` (from 40%), ink fixed | `area--default--hover--light`; harness readout rgb(40) / rgb(40) |
+| hover | inline unchanged; standalone underline from transparent to `currentColor`; ink fixed | `area--default--hover--light`; harness readout rgb(40) / rgb(40) |
 | focus-visible | underline full, 2px focus ring offset 2 | harness with Tab |
 | standalone rest | underline transparent | `area--variant-standalone--rest--light` |
 
@@ -139,6 +139,24 @@ Breadcrumb: the 40% line reads as a link without weighing on the text, in both t
 caption's 12px and muted ink with nothing set; the external mark sits on the cap height; a wrapped link underlines
 every line. Fixed during the pass: focus drew the underline over the 100ms fade (alpha 0.81 when read); focus now
 lands at once, as hover does.
+
+## Underline clears descenders, 2026-10-16
+
+Owner: "can you clean up and fix the underline on the link component, it doesnt look clean".
+
+Rendered in headless Edge at 1x and 2x, 12 to 16px, on "usage guide, typography":
+- **At 2 (the old offset):** at 13 the tails of g, y and p ended on the row above the line and fused with it. At 14 they
+  crossed it, and skip-ink cut the line into pieces around each one. ChatGPT's 0.125rem is set for its 16px prose,
+  where the descender is deeper relative to the offset and the cuts read as intended.
+- **Compared:** 3, 0.2em, 0.25em; and 3 at 50% and 35% ink, and Notion's 2 at 40%.
+- **Chosen: 0.25em.** At 1x the line is one solid pixel row with one clear row between it and the lowest descender at
+  12, 13, 14, 15 and 16 (pixel rows read from the captures). The gap scales with the type, so a link in a caption and
+  one in body text look alike.
+- **Ink:** the line stays the link's own ink (owner, round 2). Softer lines (35 to 50%) also read clean, but they
+  would undo that decision.
+
+Peers that draw Link's line take the same offset: Chip `link` and `link-icon`, Card action, Alert link, Code block line
+numbers and toggle, and Description list's "Show more".
 
 ## Peers aligned, 2026-10-08
 

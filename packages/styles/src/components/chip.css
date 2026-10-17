@@ -34,6 +34,8 @@
 
     --_bg: var(--area-bg-surface);
     --_bg-hover: var(--area-bg-component-hover);
+    /* Pressed, one step past hover (layers.css, "Pressed"); the chip pressed with its hover paint. */
+    --_bg-active: var(--area-bg-component-pressed);
     --_border: var(--area-edge-control);
     --_fg: var(--area-fg-default);
 
@@ -74,6 +76,11 @@
       transition-duration: 0s;
     }
   }
+  /* Pressing the remove button is the remove button's press, not the chip's. */
+  .area-chip:active:not([data-disabled], :has(> .area-chip__remove:active)) {
+    background-color: var(--_bg-active);
+    border-color: var(--_border-hover, var(--area-edge-control-hover));
+  }
 
   /* Focus is the ring alone, as Button, Segmented, Checkbox and Switch (audit C-13). */
   .area-chip:focus-visible {
@@ -92,6 +99,9 @@
     /* spec (audit S6a): the translucent soft plate of Count and Badge; was bg-component #f7. */
     --_bg: var(--area-bg-mark);
     --_bg-hover: var(--area-bg-mark-hover);
+    /* spec: the mark's equal steps on: 6%, 10.7%, 15.4% black. Dark 10%, 22.6%, then 24% white, as far as the label
+       holds 4.5:1 at dark 24 + 8 (the equal step, 35%, left it at 3.37:1). */
+    --_bg-active: light-dark(rgb(0 0 0 / 0.154), rgb(255 255 255 / 0.24));
     --_border: transparent;
     --_border-hover: var(--area-edge-control-hover);
   }
@@ -99,6 +109,7 @@
   .area-chip[data-invalid] {
     --_bg: var(--area-danger-surface);
     --_bg-hover: var(--area-danger-surface-hover);
+    --_bg-active: var(--area-danger-surface-active);
     --_border: var(--area-danger-border);
     --_border-hover: var(--area-danger-border-strong);
     --_fg: var(--area-fg-danger);
@@ -123,6 +134,8 @@
   .area-chip[data-selected] {
     --_bg: var(--_selected-bg);
     --_bg-hover: var(--_selected-bg-hover);
+    /* Selected survives the press (docs/PRODUCT_UI.md rule 3). */
+    --_bg-active: var(--_selected-bg-hover);
     --_border: var(--_selected-border);
     --_border-hover: var(--_selected-border-hover);
     --_fg: var(--_selected-fg);
@@ -199,16 +212,16 @@
     text-decoration: underline;
     text-decoration-color: currentColor; /* spec: Link's line, the link's own ink (link.md, review round 2) */
     text-decoration-thickness: var(--area-stroke-width);
-    text-underline-offset: var(--area-space-2);
+    text-underline-offset: 0.25em; /* spec: Link's offset, clear of descenders (link.md, 2026-10-16) */
   }
   @media (hover: hover) { .area-chip--link:hover .area-chip__label { text-decoration-color: currentColor; } }
   .area-chip--link:focus-visible .area-chip__label { text-decoration-color: currentColor; }
 
-  @media (hover: hover) { .area-chip--link-icon:hover .area-chip__label { text-decoration: underline; text-decoration-thickness: var(--area-stroke-width); text-underline-offset: var(--area-space-2); } }
+  @media (hover: hover) { .area-chip--link-icon:hover .area-chip__label { text-decoration: underline; text-decoration-thickness: var(--area-stroke-width); text-underline-offset: 0.25em; /* spec: Link's offset, clear of descenders (link.md, 2026-10-16) */ } }
   .area-chip--link-icon:focus-visible .area-chip__label {
     text-decoration: underline;
     text-decoration-thickness: var(--area-stroke-width);
-    text-underline-offset: var(--area-space-2);
+    text-underline-offset: 0.25em; /* spec: Link's offset, clear of descenders (link.md, 2026-10-16) */
   }
 
   /* A removable chip is a composition: its primary action and removal action stay peers. */
@@ -251,6 +264,8 @@
      Alert dismiss does on its tinted ground. */
   .area-chip__remove[data-hover] { background: var(--_remove-hover, color-mix(in srgb, currentColor 12%, transparent)); }
   @media (hover: hover) { .area-chip__remove:hover { background: var(--_remove-hover, color-mix(in srgb, currentColor 12%, transparent)); transition-duration: 0s; } }
+  /* spec: pressed 20% of the ink, a step past the 12% hover (Notion's 5% → 10% press doubles it). */
+  .area-chip__remove:active { background: var(--_remove-active, color-mix(in srgb, currentColor 20%, transparent)); }
   .area-chip__remove:focus-visible,
   .area-chip__action:focus-visible {
     /* Nested in the chip: the ring at 0, as Tag's remove and a field's actions (owner, 2026-10-12: consistency pass O1). */

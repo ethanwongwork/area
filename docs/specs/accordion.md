@@ -368,6 +368,10 @@ None.
 - Unverified: Notion collapsed and dark, ChatGPT dark, dark paint on screen, find-in-page with the
   real browser find bar, real-pointer hover on reference accordions (2026-10-07 tab in background).
 
+## Interaction polish, 2026-10-16
+
+The chevron plate presses at `bg-pressed`, Notion's 10%, as the spec comment said (it was `bg-active`, 6.7%). The trigger's text is not selectable. See [interaction polish](../research/interaction-polish-2026-10-16.md).
+
 ## Feedback log
 
 - 2026-10-02 · owner: build Disclosure → spec written from Notion, ChatGPT, Figma (panel) captures

@@ -47,7 +47,7 @@
   .area-citation:not(:has(> .area-citation__icon)) { --_pad-start: var(--_pad-end); }
   /* The plate darkens on hover and press; the ink stays (DESIGN_SYSTEM.md, fixed foreground). */
   @media (hover: hover) { .area-citation:hover { background-color: var(--area-bg-component-active); transition-duration: 0s; } }
-  .area-citation:active { background-color: var(--area-bg-component-active); transition-duration: 0s; }
+  .area-citation:active { background-color: var(--area-bg-component-pressed); transition-duration: 0s; }
   .area-citation:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
 
   /* spec: ChatGPT's favicon, 12 round. */

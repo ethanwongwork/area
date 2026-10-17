@@ -252,6 +252,10 @@ hidden by the growing edge.
   to 3.97:1 even at the defaults (3.31:1 on a gray page), and the diff tints left strings at 4.2:1. Now 4.5:1 or more
   everywhere. Look at **Default**, **Gray page** and **Lightest dark**.
 
+## Interaction polish, 2026-10-16
+
+The collapse toggle is not selectable; line-number and toggle underlines take Link's offset (0.25em). See [interaction polish](../research/interaction-polish-2026-10-16.md).
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → tabs, line numbers and the show / hide toggle keep their ink

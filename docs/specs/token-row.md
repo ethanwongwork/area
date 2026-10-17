@@ -136,6 +136,10 @@ Not yet compared side by side with Dev Mode's real values (paywalled).
   value sits at the end of the row. The long outlined box and the separate icon are gone.
 - **Why:** you said the row looked long and asked how it fits with the existing token component.
 
+## Interaction polish, 2026-10-16
+
+The copyable row presses at `bg-component-pressed`, one step past selected (Notion presses at 10%, ChatGPT 12%; it shared selected's fill, 1.5% below hover). See [interaction polish](../research/interaction-polish-2026-10-16.md).
+
 ## Feedback log
 
 - 2026-10-12 · owner: "brought the figma window forward, keep working" → Token row from Dev Mode's Colors rows

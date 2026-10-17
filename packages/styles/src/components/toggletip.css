@@ -34,6 +34,7 @@
     /* Motion (docs/MOTION.md, "Hover plate"): the plate lands at once and fades on fast ease-out. */
     transition: var(--area-transition);
     transition-property: background-color;
+    user-select: none;
   }
 
   .area-toggletip--md {
@@ -57,8 +58,8 @@
   @media (hover: hover) {
     .area-toggletip:hover { background-color: var(--area-bg-component-hover); transition-duration: 0s; }
   }
-  .area-toggletip:active,
   .area-toggletip[aria-expanded="true"] { background-color: var(--area-bg-component-active); transition-duration: 0s; }
+  .area-toggletip:active { background-color: var(--area-bg-component-pressed); transition-duration: 0s; }
   .area-toggletip:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: 0; }
 
   /* An invisible 24px target (44 on coarse pointers) centred on the box (WCAG 2.5.8), as Tag's remove. */

@@ -40,7 +40,7 @@
     --_rotate-closed-rtl: 90deg; /* closed points along the reading direction, as Tree view */
     --_rotate-open: 0deg;
     --_plate-hover: var(--area-bg-hover); /* spec: Notion 5% hover, 10% pressed */
-    --_plate-active: var(--area-bg-active);
+    --_plate-active: var(--area-bg-pressed); /* spec: Notion 10% pressed (was bg-active, 6.7%) */
     --_content-start: calc(var(--_leading) + var(--_gap));
     --_content-end: 0px;
     --_rule-width: 0px;
@@ -63,7 +63,7 @@
     --_rotate-closed-rtl: 0deg;
     --_rotate-open: 180deg; /* spec: shadcn rotate-180 */
     --_plate-hover: var(--area-bg-hover);
-    --_plate-active: var(--area-bg-active);
+    --_plate-active: var(--area-bg-pressed); /* spec: Notion 10% pressed (was bg-active, 6.7%) */
     --_content-start: 0px;
     --_content-end: calc(var(--_leading) / 2); /* spec: as the trigger; shadcn's rendered content pb 10 at sm */
     --_rule-width: var(--area-stroke-width); /* spec: shadcn border-b, last none */
@@ -86,6 +86,7 @@
     font-weight: var(--_weight);
     text-align: start;
     cursor: pointer;
+    user-select: none;
   }
   .area-accordion-item__trigger:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   .area-accordion-item__trigger:disabled { cursor: not-allowed; opacity: var(--area-opacity-disabled); }

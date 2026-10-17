@@ -184,8 +184,9 @@
     margin-inline-start: auto;
     white-space: nowrap;
   }
-  .studio-section__link { color: inherit; text-decoration: none; }
-  @media (hover: hover) { .studio-section__link:hover { text-decoration: underline; } }
+  /* A heading that opens its family: not selectable, as the app's other controls; Link's underline on hover. */
+  .studio-section__link { color: inherit; text-decoration: none; user-select: none; }
+  @media (hover: hover) { .studio-section__link:hover { text-decoration: underline; text-decoration-thickness: var(--area-stroke-width); text-underline-offset: 0.25em; } }
   /* Area's focus ring (Link's): keyboard focus is always visible (product UI rule 5). */
   .studio-section__link:focus-visible { border-radius: var(--area-radius-small); outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   /* Titles and ledes are trimmed to cap and baseline, so the Canvas's margin measures from the

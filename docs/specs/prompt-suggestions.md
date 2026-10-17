@@ -108,3 +108,7 @@ by layout (`inset-block: 0` with flex centring).
 Verified on `/prompt-suggestions.html` (computed styles): focusing a row shows the dismiss at once
 (`transition-duration: 0s`, no animation), blurring fades it over 100ms; the hover and press rules
 were confirmed in the served CSSOM (a pointer hover cannot be driven in a background tab).
+
+## Interaction polish, 2026-10-16
+
+The press never showed: the row's hover rule outranked `item:active`. It is now read through the row and paints `bg-component-pressed`, one step past selected (Notion presses at 10%, ChatGPT 12%; it shared selected's fill, 1.5% below hover). Not selectable. See [interaction polish](../research/interaction-polish-2026-10-16.md).

@@ -160,6 +160,10 @@ button below the frame (the `dl` carries the frame).
 - **Why:** you asked for the inspector's "show more", built from design systems: it follows Polaris and Primer's show
   more / show less buttons and lines up with the term names like Notion's "N more properties".
 
+## Interaction polish, 2026-10-16
+
+"Show more" is not selectable; its hover underline takes Link's offset (0.25em). See [interaction polish](../research/interaction-polish-2026-10-16.md).
+
 ## Feedback log
 
 - 2026-10-10 · owner: "go with your recommendations, keep building" → Description list from Notion's page properties

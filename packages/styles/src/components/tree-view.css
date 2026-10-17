@@ -42,6 +42,7 @@
     cursor: default;
     outline: none;
     transition: var(--area-transition);
+    user-select: none;
   }
 
  /* A selected or current row keeps its plate under the pointer (DESIGN_SYSTEM.md, row plates). */
@@ -54,8 +55,8 @@
    * press, selected and current land at once. The ring is an outline and never transitions.
    */
   /* Pressed (product UI rule 3, docs/PRODUCT_UI.md; DESIGN_SYSTEM.md "Shared state paint"): the row
-     takes the active fill while held, one step above hover, landing at once like the hover. */
-  .area-tree-view [role="treeitem"]:active:not([data-disabled], [aria-current="page"], [aria-selected="true"]) { background: var(--area-bg-component-active); }
+     takes the pressed fill while held, one step firmer than selected, landing at once like the hover. */
+  .area-tree-view [role="treeitem"]:active:not([data-disabled], [aria-current="page"], [aria-selected="true"]) { background: var(--area-bg-component-pressed); }
   @media (hover: hover) { .area-tree-view [role="treeitem"]:hover { transition-duration: 0s; } }
   .area-tree-view [role="treeitem"]:is(:active, [aria-selected="true"], [aria-current="page"]) { transition-duration: 0s; }
   /* The current row is marked by fill and ink alone; the edge marker was removed (owner, pass 3). */

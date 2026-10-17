@@ -86,6 +86,7 @@
        (hover, press, focus, open below). The focus halo is not in the list: rings never fade. */
     transition: var(--area-transition);
     transition-property: background-color, border-color, color;
+    user-select: none;
   }
   @media (hover: hover) {
     .area-custom-select:not([data-open]) > .area-custom-select__trigger:hover:not(:disabled) {

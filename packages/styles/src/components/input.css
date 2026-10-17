@@ -233,17 +233,18 @@
     /* The plate appears at once on hover and press and fades on fast (docs/MOTION.md, 2026-10-07;
        was instant both ways). The glyph's ink never moves. */
     transition: background-color var(--area-duration-fast) var(--area-ease-out);
+    user-select: none;
   }
   @media (hover: hover) { .area-input__action-button:hover { transition-duration: 0s; } }
   .area-input__action-button:active { transition-duration: 0s; }
 
   /* The row pair: hover #f3, pressed #ee, as the NumberField steppers beside it (audit B-8). */
   @media (hover: hover) { .area-input__action-button:hover:not(:disabled) { background-color: var(--area-bg-component-hover); } }
-  .area-input__action-button:active:not(:disabled) { background-color: var(--area-bg-component-active); }
+  .area-input__action-button:active:not(:disabled) { background-color: var(--area-bg-component-pressed); }
   /* On a soft field (#f7) the opaque #f3 all but vanishes, so the plate is the translucent pair
      that shows on any ground (audit B-7 C). */
   @media (hover: hover) { .area-input--soft .area-input__action-button:hover:not(:disabled) { background-color: var(--area-bg-hover); } }
-  .area-input--soft .area-input__action-button:active:not(:disabled) { background-color: var(--area-bg-active); }
+  .area-input--soft .area-input__action-button:active:not(:disabled) { background-color: var(--area-bg-pressed); }
   .area-input__action-button:disabled { color: var(--area-fg-disabled); cursor: not-allowed; }
   .area-input__action-button:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: 0; }
 

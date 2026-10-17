@@ -171,6 +171,10 @@ recipe for every modal.
 - **What changed:** The up and down arrows in the footer now sit centred in their hover plates. Before, each arrow sat 4px from the plate's left edge and 11.5px from its right. Also visible in Kbd's command-palette tile.
 - **Why:** You said the arrow buttons' backplate was wrong; the plate was a 24px square with its narrow arrow packed to one side.
 
+## Interaction polish, 2026-10-16
+
+Hint buttons press at `bg-component-pressed`, one step past selected (Notion presses at 10%, ChatGPT 12%; it shared selected's fill, 1.5% below hover) (they pressed with the hover). Not selectable. See [interaction polish](../research/interaction-polish-2026-10-16.md).
+
 ## Feedback log
 
 - 2026-09-30 · audit S10–S12 (owner) → the lift is the Surface axis role `--area-shadow-float` (command-palette.css:42); rows and the search row take the density token `--area-gap-row` (12, labels at 36; command-palette.css:28, :56); quiet keys render in the UI font 12/16 400, and Escape is written "Esc" (kbd.css:89-102).

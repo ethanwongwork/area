@@ -315,6 +315,10 @@ inline styles. In the browser: keyboard (typeahead "c c" → Can comment, Enter 
 moves, Escape closes and keeps focus), groups, ghost open in dark. Unverified: screen reader
 announcement, RTL, forced colours, Figma side by side.
 
+## Interaction polish, 2026-10-16
+
+The trigger's label is not selectable. See [interaction polish](../research/interaction-polish-2026-10-16.md).
+
 ## Feedback log
 
 - 2026-10-04 · owner: batch 1, Custom Select first → built from Notion's Share popover menus

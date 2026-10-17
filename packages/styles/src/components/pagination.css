@@ -90,7 +90,7 @@
   @media (hover: hover) {
     .area-pagination__page:hover { background-color: var(--area-bg-component-hover); transition-duration: 0s; }
   }
-  .area-pagination__page:active { background-color: var(--area-bg-component-active); transition-duration: 0s; }
+  .area-pagination__page:active { background-color: var(--area-bg-component-pressed); transition-duration: 0s; }
   /* The current page is the selected option: the active plate and the default ink, and the plate
      stays under the pointer (shared state paint). Untitled UI paints its current page with a
      plate too; shadcn outlines it, Primer fills it with the accent. */

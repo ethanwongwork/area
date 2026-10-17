@@ -94,7 +94,9 @@
   .area-board-column__add {
     --_add-ink: var(--area-fg-muted);
     --_add-plate: var(--area-bg-hover);
-    --_add-plate-active: var(--area-bg-active);
+    /* spec: pressed (layers.css), as firm as the muted label allows on a gray column: 7.5% black in light (#666 at
+       4.53:1; the shared 10% left 4.3:1), the shared 24% in dark. */
+    --_add-plate-active: light-dark(#00000013, var(--area-bg-pressed));
     appearance: none;
     display: flex;
     align-items: center;
@@ -111,12 +113,13 @@
     text-align: start;
     cursor: pointer;
     transition: background-color var(--area-duration-fast) var(--area-ease-out);
+    user-select: none;
   }
   .area-board-column:not(.area-board-column--neutral) .area-board-column__add {
     --_add-ink: var(--_ink);
     /* The card's hover strength, 6% (pressed 9%, the same 1.5 step as bg-hover to bg-active). */
     --_add-plate: color-mix(in oklab, var(--_color) 6%, transparent);
-    --_add-plate-active: color-mix(in oklab, var(--_color) 9%, transparent);
+    --_add-plate-active: color-mix(in oklab, var(--_color) 12%, transparent); /* spec: twice the hover, as Notion 5% → 10% */
   }
   @media (hover: hover) { .area-board-column__add:hover { background-color: var(--_add-plate); transition-duration: 0s; } }
   .area-board-column__add:active { background-color: var(--_add-plate-active); transition-duration: 0s; }
@@ -141,6 +144,7 @@
     box-shadow: var(--area-shadow-edge), var(--area-shadow-resting),
       0 0 0 var(--area-border-width) color-mix(in oklab, var(--_color, var(--area-fg-default)) 8%, transparent); /* spec */
     transition: background-color var(--area-duration-fast) var(--area-ease-out);
+    user-select: none;
   }
   /* Hover darkens the card as a row plate would; the ink stays. */
   @media (hover: hover) { .area-board-card:hover { --_card-bg: var(--area-bg-component-hover); transition-duration: 0s; } }
@@ -152,6 +156,10 @@
   @media (hover: hover) {
     .area-board-column:not(.area-board-column--neutral) .area-board-card:hover { --_card-bg: color-mix(in oklab, var(--_color) 6%, var(--area-bg-surface)); /* spec */ }
   }
+  /* Pressed, a step past hover (layers.css, "Pressed"): the card's next row rung, or 9% of the column's colour
+     (the hover's 6% and as much again by half); the card's own actions press on their own. */
+  .area-board-card:active:not(:has(.area-board-card__actions :active)) { --_card-bg: var(--area-bg-component-active); transition-duration: 0s; }
+  .area-board-column:not(.area-board-column--neutral) .area-board-card:active:not(:has(.area-board-card__actions :active)) { --_card-bg: light-dark(color-mix(in oklab, var(--_color) 9%, var(--area-bg-surface)), color-mix(in oklab, var(--_color) 7%, var(--area-bg-surface))); /* spec: 7% in dark, where 9% left a tinted badge at 4.41:1 at dark 24 + 8 */ }
 
   .area-board-card__heading { display: flex; align-items: flex-start; gap: var(--area-gap-md); min-inline-size: 0; }
   /* The page icon in a square one title line tall, its glyph the UI icon. */

@@ -57,4 +57,40 @@
     --area-selection-band: var(--area-selection-band-recessed);
     --area-selection-band-hover: var(--area-selection-band-recessed-hover);
   }
+
+  /*
+   * Pressed: the plate under a pointer or key that is held, one step firmer than selected. Hover,
+   * selected and pressed were two steps (selected and pressed shared `bg-component-active`, 1.5% below
+   * hover in light), so a click barely showed. Notion's rows and buttons hover 5% and press 10% of its
+   * warm black, with the selected row at the hover's 5%; ChatGPT's ghosts hover 5% and press 12%
+   * (measured 2026-10-16, docs/PRODUCT_UI.md rule 3).
+   *
+   * spec: the selected fill moved toward the ink, 3% in light (L 0.949 → 0.929 at the defaults, Notion's
+   * pressed #e9) and 7% in dark (one more of the dark model's equal fill steps), so it follows every
+   * ground, layer contrast and neutral cast; but never past the lightness at which the muted ink keeps
+   * 4.6:1 (the model's text target), the bound the model already solves its inks to on the selected fill.
+   * At the defaults the bound is far away; at dark 24 + 8 the press stops there (body ink on the uncapped
+   * press came out 4.27:1). Restated on every ground that restates the fills above, since a property that
+   * reads another resolves where it is declared.
+   */
+  :root,
+  :where(
+    .area-card, .area-dialog, .area-drawer, .area-menu, .area-popover, .area-hover-card, .area-toggletip, .area-toast,
+    .area-command-palette, .area-panel, .area-table-wrapper, .area-board-card, .area-file-upload, .area-color-picker,
+    .area-calendar--surface, .area-toolbar--surface, .area-description-list--framed, .area-titlebar--floating,
+    .area-file-upload-item, .area-titlebar:not(.area-titlebar--floating), .area-panel--flush
+  ),
+  [data-area-ground] {
+    --area-bg-component-pressed: light-dark(
+      oklch(from color-mix(in oklab, var(--area-bg-component-active), var(--area-fg-default) 3%)
+        max(l, pow(calc(4.6 * (pow(var(--area-layer-light-muted), 3) + 0.05) - 0.05), 0.333333)) c h),
+      oklch(from color-mix(in oklab, var(--area-bg-component-active), var(--area-fg-default) 7%)
+        min(l, pow(max(0, calc((pow(var(--area-layer-dark-muted), 3) + 0.05) / 4.6 - 0.05)), 0.333333)) c h)); /* spec */
+  }
+  :root {
+    /* spec: the translucent twin, for a plate over an unknown fill: hover 5%, selected 6.7%, pressed 10% black
+       (Notion's 10%). In dark 19% white, the selected wash, a step past the 14% hover: a translucent plate cannot be
+       bounded by its ink like the opaque one, and 24% left muted day numbers at 4.43:1 at dark 24 + 8. */
+    --area-bg-pressed: light-dark(#0000001a, #fcfcfc31);
+  }
 }

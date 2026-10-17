@@ -110,8 +110,9 @@ function extent(stage: HTMLElement): Box {
  * them side by side with its own gap). Specimens that are meant to fill (a field, a slider, a
  * progress bar) have none.
  */
-function contentWidth(stage: HTMLElement): number | undefined {
-  if (stage.querySelector("input, textarea, select, [role=slider], [role=progressbar], [role=meter], progress, meter")) return undefined;
+const fills = (stage: HTMLElement) => !!stage.querySelector("input, textarea, select, [role=slider], [role=progressbar], [role=meter], progress, meter");
+/* The inked part of contentWidth: reads only, so every tile's can be read in one layout. */
+function inkedWidth(stage: HTMLElement): number | undefined {
   let boxLeft = Infinity, inkLeft = Infinity, inkRight = -Infinity;
   for (const node of stage.querySelectorAll<Element>('[class*="area-"]')) {
     const rect = node.getBoundingClientRect();
@@ -128,15 +129,11 @@ function contentWidth(stage: HTMLElement): number | undefined {
   for (const node of stage.querySelectorAll<Element>("svg, img")) if (!node.parentElement?.closest("svg")) ink(node.getBoundingClientRect());
   if (!Number.isFinite(boxLeft) || !Number.isFinite(inkRight)) return undefined;
   const scale = Number(stage.style.zoom) || 1;
-  const inked = (inkRight - boxLeft + Math.max(0, inkLeft - boxLeft)) / scale;
-  const laid = stage.style.inlineSize;
-  stage.style.inlineSize = "max-content";
-  // Text that truncates reports almost no max-content width (an Alert's title and body): trusted
-  // only when nothing is cut at it.
-  const own = truncates(stage) ? 0 : extent(stage).w;
-  stage.style.inlineSize = laid;
-  return own > 0 ? Math.min(inked, own) : inked;
+  return (inkRight - boxLeft + Math.max(0, inkLeft - boxLeft)) / scale;
 }
+/* Text that truncates reports almost no max-content width (an Alert's title and body): the
+   max-content extent is trusted only when nothing is cut at it. */
+const contentWidth = (inked: number, own: number) => own > 0 ? Math.min(inked, own) : inked;
 /* The room a stretching specimen keeps past its content: a fifth more, so it reads as the component
    at a natural width, not one shrink-wrapped (pick). */
 const BREATHE = 1.2;
@@ -187,7 +184,13 @@ export function fitTiles(canvas: HTMLElement): () => void {
   const scale = ["data-area-type", "data-area-density"].map(name => [name, canvas.getAttribute(name)] as const);
   canvas.setAttribute("data-area-type", "14");
   canvas.setAttribute("data-area-density", "32");
+  /*
+   * Every step below writes all the tiles' widths, then reads all of them: one layout a step, not
+   * one a tile. Interleaved, the first fit forced a layout of the whole canvas for each of ~90
+   * tiles, several times over, and opening the Components tab froze for over half a second.
+   */
   for (const entry of tiles) { entry.stage.style.zoom = ""; entry.stage.style.inlineSize = `${PROBE}px`; }
+  const inked = new Map<Tile, number | undefined>();
   for (const entry of tiles) {
     const own = extent(entry.stage);
     entry.natural = Math.ceil(own.w);
@@ -197,26 +200,43 @@ export function fitTiles(canvas: HTMLElement): () => void {
     const group = groupOf(own);
     entry.group = group?.scale ?? MAX;
     entry.tile.dataset.fitGroup = group?.name ?? "panel";
-    const content = contentWidth(entry.stage);
-    if (content) entry.hug = Math.ceil(content * BREATHE);
+    if (!fills(entry.stage)) inked.set(entry, inkedWidth(entry.stage));
   }
+  const measured = [...inked].filter(([, width]) => width !== undefined) as [Tile, number][];
+  for (const [entry] of measured) entry.stage.style.inlineSize = "max-content";
+  const maxContent = measured.map(([entry]) => truncates(entry.stage) ? 0 : extent(entry.stage).w);
+  measured.forEach(([entry, width], index) => {
+    entry.stage.style.inlineSize = `${PROBE}px`;
+    const content = contentWidth(width, maxContent[index]!);
+    if (content) entry.hug = Math.ceil(content * BREATHE);
+  });
   // A fixed specimen narrower in content than in box (a Card, a Popover, a Toast at its default
   // width) is offered its content's width; it keeps it only if it gives way (its width is capped at
   // its container's, as Area's surfaces are), and 16 less is the least worth the change.
-  for (const entry of tiles) {
-    if (entry.fluid || !entry.hug || entry.hug > entry.natural - 16) { if (!entry.fluid) entry.hug = undefined; continue; }
-    entry.stage.style.inlineSize = `${entry.hug}px`;
-    const narrowed = Math.ceil(extent(entry.stage).w);
-    if (narrowed < entry.natural - 8 && narrowed <= entry.hug + 1) entry.natural = narrowed;
+  const offered = tiles.filter(entry => {
+    if (entry.fluid) return false;
+    if (!entry.hug || entry.hug > entry.natural - 16) { entry.hug = undefined; return false; }
+    return true;
+  });
+  for (const entry of offered) entry.stage.style.inlineSize = `${entry.hug}px`;
+  const narrowed = offered.map(entry => Math.ceil(extent(entry.stage).w));
+  offered.forEach((entry, index) => {
+    if (narrowed[index]! < entry.natural - 8 && narrowed[index]! <= entry.hug! + 1) entry.natural = narrowed[index]!;
     else entry.hug = undefined;
-  }
+  });
   // The width a fluid specimen is laid out at: its tile over its scale, or its content's if narrower.
   const layoutWidth = (entry: Tile, room: number, scale: number) => Math.min(room / scale, entry.hug ?? Infinity);
-  // A fluid specimen takes the first width at which nothing truncates (a few specimens, a few tries).
-  for (const entry of tiles.filter(tile => tile.fluid)) {
-    // Laid out for the tile at its group's scale: zoomed by it, it fills the tile.
-    const room = layoutWidth(entry, roomOf(entry.view).w, exact ?? entry.group);
-    entry.widen = WIDEN.find(factor => { entry.stage.style.inlineSize = `${Math.floor(room * factor)}px`; return !truncates(entry.stage); }) ?? WIDEN.at(-1)!;
+  // A fluid specimen takes the first width at which nothing truncates (a few specimens, a few tries),
+  // laid out for the tile at its group's scale: zoomed by it, it fills the tile.
+  const fluid = tiles.filter(tile => tile.fluid);
+  const fluidRooms = new Map(fluid.map(entry => [entry, layoutWidth(entry, roomOf(entry.view).w, exact ?? entry.group)]));
+  let open = fluid;
+  for (const factor of WIDEN) {
+    if (!open.length) break;
+    for (const entry of open) entry.stage.style.inlineSize = `${Math.floor(fluidRooms.get(entry)! * factor)}px`;
+    const cut = open.map(entry => truncates(entry.stage));
+    for (const entry of open) entry.widen = factor;
+    open = open.filter((_, index) => cut[index]);
   }
   for (const [name, value] of scale) if (value) canvas.setAttribute(name, value); else canvas.removeAttribute(name);
   // A fixed specimen keeps its own width, or the view's if wider (loose text inside it wraps to the

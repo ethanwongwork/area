@@ -130,6 +130,10 @@ titles.
 1. Done steps: a Selection ring with a check (now) or a muted check with no ring, as Timeline's marks stand without a
    plate? Recommendation: the ring, so every step keeps one 24 circle and the line's gaps stay even.
 
+## Interaction polish, 2026-10-16
+
+Step buttons press at `bg-component-pressed`, one step past selected (Notion presses at 10%, ChatGPT 12%; it shared selected's fill, 1.5% below hover). Not selectable. See [interaction polish](../research/interaction-polish-2026-10-16.md).
+
 ## Feedback log
 
 - 2026-10-13 · owner, review round 24 (rethink): "should these be the same as timeline? there seems to be some line

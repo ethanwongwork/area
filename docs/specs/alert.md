@@ -254,6 +254,10 @@ Open questions:
 - **What changed:** The underline under the alert's link is now the link's own colour at rest (it was 40%), matching Link.
 - **Why:** Link's line changed in this round, and Alert's link draws Link's line.
 
+## Interaction polish, 2026-10-16
+
+The link's underline takes Link's offset, 0.25em, clear of descenders (link.md). See [interaction polish](../research/interaction-polish-2026-10-16.md).
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → dismiss at full ink (was 0.72, 1 on hover), radius
