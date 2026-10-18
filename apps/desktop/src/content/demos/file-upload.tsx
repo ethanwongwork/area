@@ -24,11 +24,11 @@ const typeIcon = (name: string, type = "") => {
 export const GalleryFileUpload = () => <FileUpload style={width} accept=".pdf,.png,.jpg,image/png,image/jpeg,application/pdf" maxSize={10_000_000} multiple hint={hint} />;
 /* Files held over the zone. */
 export const GalleryFileUploadDragging = () => <FileUpload style={width} hint={hint} data-dragging="" />;
-export const GalleryFileUploadInvalid = () => <FileUpload style={width} invalid hint="That file is over 10 MB. Choose a smaller one." />;
+export const GalleryFileUploadInvalid = () => <FileUpload style={width} invalid hint="Error message" />;
 export const GalleryFileUploadDisabled = () => <FileUpload style={width} disabled hint={hint} />;
-export const GalleryFileUploadItemUploading = () => <FileUploadList style={width}><FileUploadItem name="Brand guidelines.pdf" icon={typeIcon("Brand guidelines.pdf")} size={2_400_000} status="uploading" progress={40} onRemove={() => {}} /></FileUploadList>;
-export const GalleryFileUploadItemComplete = () => <FileUploadList style={width}><FileUploadItem name="Hero image.png" icon={typeIcon("Hero image.png")} size={720_000} status="complete" onRemove={() => {}} /></FileUploadList>;
-export const GalleryFileUploadItemError = () => <FileUploadList style={width}><FileUploadItem name="Quarterly report.pdf" icon={typeIcon("Quarterly report.pdf")} size={14_200_000} status="error" error="Over 10 MB" onRetry={() => {}} onRemove={() => {}} /></FileUploadList>;
+export const GalleryFileUploadItemUploading = () => <FileUploadList style={width}><FileUploadItem name="Document.pdf" icon={typeIcon("Document.pdf")} size={2_400_000} status="uploading" progress={40} onRemove={() => {}} /></FileUploadList>;
+export const GalleryFileUploadItemComplete = () => <FileUploadList style={width}><FileUploadItem name="Image.png" icon={typeIcon("Image.png")} size={720_000} status="complete" onRemove={() => {}} /></FileUploadList>;
+export const GalleryFileUploadItemError = () => <FileUploadList style={width}><FileUploadItem name="File.pdf" icon={typeIcon("File.pdf")} size={14_200_000} status="error" error="Error message" onRetry={() => {}} onRemove={() => {}} /></FileUploadList>;
 
 /* The whole flow: choose or drop files, and each one uploads (simulated) into the list below. */
 type Upload = { id: number; file: File; progress: number; status: "uploading" | "complete" | "error"; error?: string };

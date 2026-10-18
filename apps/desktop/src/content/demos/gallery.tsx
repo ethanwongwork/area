@@ -32,9 +32,9 @@ export const GalleryBreadcrumbCollapsed = () => (
 );
 export const GalleryBreadcrumbIcons = () => (
   <Breadcrumb><BreadcrumbList>
-    <BreadcrumbItem><BreadcrumbLink href="#gallery-breadcrumb-icons"><FolderIcon /> Projects</BreadcrumbLink></BreadcrumbItem>
+    <BreadcrumbItem><BreadcrumbLink href="#gallery-breadcrumb-icons"><FolderIcon /> Item one</BreadcrumbLink></BreadcrumbItem>
     <BreadcrumbSeparator />
-    <BreadcrumbItem><BreadcrumbPage><DocumentIcon /> Files</BreadcrumbPage></BreadcrumbItem>
+    <BreadcrumbItem><BreadcrumbPage><DocumentIcon /> Item two</BreadcrumbPage></BreadcrumbItem>
   </BreadcrumbList></Breadcrumb>
 );
 export const GalleryAlert = () => (
@@ -44,10 +44,10 @@ export const GalleryAlertSuccess = () => <Alert tone="success" icon={<CheckIcon 
 export const GalleryAlertDanger = () => <Alert tone="danger" icon={<WarningIcon />} title="Title">Body text</Alert>;
 export const GalleryAlertLink = () => <Alert icon={<InfoIcon />} title="Title" link={<a href="#gallery-alert-multiline">Link</a>}>Body text</Alert>;
 export const GalleryAlertAction = () => <Alert icon={<InfoIcon />} title="Title" action={<Button size="sm" variant="outline">Action</Button>}>Body text</Alert>;
-export const GalleryAlertBanner = () => <Alert layout="banner" title="Title" link={<a href="#gallery-alert-layout-banner">Learn more</a>}>Body text</Alert>;
-export const GalleryAlertBannerIcon = () => <Alert layout="banner" tone="info" icon={<InfoIcon />} title="Title" link={<a href="#gallery-alert-banner-icon">Learn more</a>}>Body text</Alert>;
+export const GalleryAlertBanner = () => <Alert layout="banner" title="Title" link={<a href="#gallery-alert-layout-banner">Link</a>}>Body text</Alert>;
+export const GalleryAlertBannerIcon = () => <Alert layout="banner" tone="info" icon={<InfoIcon />} title="Title" link={<a href="#gallery-alert-banner-icon">Link</a>}>Body text</Alert>;
 export const GalleryAlertBannerStatus = () => <Alert layout="banner" title="Title" action={<Badge variant="solid">Status</Badge>}>Body text</Alert>;
-export const GalleryAlertBannerFlush = () => <Alert layout="banner" flush title="Title" link={<a href="#gallery-alert-layout-banner-flush">Learn more</a>}>Body text</Alert>;
+export const GalleryAlertBannerFlush = () => <Alert layout="banner" flush title="Title" link={<a href="#gallery-alert-layout-banner-flush">Link</a>}>Body text</Alert>;
 export const GalleryAlertBannerDismissible = () => {
   const [open, setOpen] = useState(true);
   return open
@@ -498,7 +498,7 @@ export const GalleryCheckboxCard = () => (
   </CheckboxGroup>
 );
 export const GalleryCheckboxCardTile = () => (
-  <CheckboxGroup label="Customize" style={{ inlineSize: "520px" }}>
+  <CheckboxGroup label="Label" style={{ inlineSize: "520px" }}>
     <Checkbox variant="card" layout="tile" label="Colors" leadingVisual={<PaletteIcon size={20} />} defaultChecked />
     <Checkbox variant="card" layout="tile" label="Corners" leadingVisual={<CornerIcon size={20} />} />
     <Checkbox variant="card" layout="tile" label="Typography" leadingVisual={<TextIcon size={20} />} />
@@ -558,7 +558,7 @@ export const GalleryChipDelete = () => <Chip kind="input" onDismiss={() => {}}>C
 export const GalleryChipClickableDelete = () => <Chip kind="input" clickable onClick={() => {}} onDismiss={() => {}}>Chip</Chip>;
 export const GalleryChipCustomDelete = () => <Chip kind="input" onDismiss={() => {}} dismissIcon={<TrashIcon />} dismissLabel="Delete">Chip</Chip>;
 export const GalleryChipLinkUnderline = () => <ChipLink href="#gallery-section-chip">Link</ChipLink>;
-export const GalleryChipLinkIcon = () => <ChipLink href="#gallery-section-chip" treatment="icon" trailingIcon={<OpenIcon />}>Link out</ChipLink>;
+export const GalleryChipLinkIcon = () => <ChipLink href="#gallery-section-chip" treatment="icon" trailingIcon={<OpenIcon />}>Link</ChipLink>;
 export const GalleryChipAvatarInitials = () => <Chip avatar={<Avatar fallback="DT" alt="" />}>David Tee</Chip>;
 export const GalleryChipAvatarPhoto = () => <Chip avatar={<Avatar src="images/david-tee.jpg" alt="" />}>David Tee</Chip>;
 export const GalleryChipImageFilter = () => <Chip image="images/chip-pixels.png" imageAlt="">Image</Chip>;
@@ -928,7 +928,7 @@ export const GalleryPanelResizable = () => (
 export const GalleryPanelResizableSidebar = () => (
   <div style={resizeStage}>
     <Panel size="sm" flush resizable="end" defaultWidth={240} maxWidth={360} title="Layers" aria-label="Layers">
-      <PanelSection heading="Pages"><TreeView aria-label="Pages" items={[{ id: "cover", label: "Cover" }, { id: "components", label: "Components" }]} defaultSelectedIds={["cover"]} /></PanelSection>
+      <PanelSection heading="Pages"><TreeView aria-label="Pages" items={[{ id: "cover", label: "Item one" }, { id: "components", label: "Item two" }]} defaultSelectedIds={["cover"]} /></PanelSection>
     </Panel>
     <div style={resizeCanvas} aria-hidden="true" />
   </div>
@@ -950,22 +950,22 @@ export const GalleryComboboxGroups = () => (
   ]} /></div>
 );
 export const GalleryComboboxCreate = () => {
-  const [tags, setTags] = useState<ComboboxOption[]>(["Design", "Engineering", "Research"].map(label => ({ value: label.toLowerCase(), label })));
-  return <div style={comboFrame}><Combobox fullWidth aria-label="Tag" placeholder="Search or create a tag" items={tags}
+  const [tags, setTags] = useState<ComboboxOption[]>(["Option one", "Option two", "Option three"].map(label => ({ value: label.toLowerCase().replace(/\s+/g, "-"), label })));
+  return <div style={comboFrame}><Combobox fullWidth aria-label="Label" placeholder="Placeholder" items={tags}
     onCreate={text => setTags(list => [...list, { value: text.toLowerCase(), label: text }])} /></div>;
 };
 export const GalleryComboboxRich = () => (
-  <div style={comboFrame}><Combobox fullWidth aria-label="Assignee" placeholder="Assign to" items={[
-    { value: "david-tee", label: "David Tee", icon: <PersonIcon />, description: "Owner" },
-    { value: "design", label: "Design team", icon: <PersonIcon />, description: "Editors" },
-    { value: "engineering", label: "Engineering team", icon: <PersonIcon />, description: "Viewers" },
+  <div style={comboFrame}><Combobox fullWidth aria-label="Label" placeholder="Placeholder" items={[
+    { value: "david-tee", label: "David Tee", icon: <PersonIcon />, description: "Description" },
+    { value: "design", label: "Design team", icon: <PersonIcon />, description: "Description" },
+    { value: "engineering", label: "Engineering team", icon: <PersonIcon />, description: "Description" },
   ]} /></div>
 );
 export const GalleryComboboxDisabledOption = () => (
-  <div style={comboFrame}><Combobox fullWidth aria-label="Assignee" placeholder="Assign to" items={[
+  <div style={comboFrame}><Combobox fullWidth aria-label="Label" placeholder="Placeholder" items={[
     { value: "david-tee", label: "David Tee" },
     { value: "design", label: "Design team" },
-    { value: "guest", label: "Guest", description: "Invited", disabled: true },
+    { value: "research", label: "Research team", description: "Description", disabled: true },
   ]} /></div>
 );
 export const GalleryComboboxSoft = () => <div style={comboFrame}><Combobox fullWidth variant="soft" aria-label="Font" items={fontOptions} defaultValue="geist" /></div>;
@@ -982,21 +982,21 @@ const paletteItems: CommandItem[] = [
   { id: "roadmap", label: "Item one", description: "Description", icon: <DocumentIcon />, group: "Recent" },
   { id: "tokens", label: "Item two", description: "Description", icon: <DocumentIcon />, group: "Recent" },
   { id: "research", label: "Item three", icon: <FolderIcon />, group: "Recent" },
-  { id: "new", label: "New page", icon: <AddIcon />, shortcut: ["cmd", "n"], group: "Actions" },
+  { id: "new", label: "New item", icon: <AddIcon />, shortcut: ["cmd", "n"], group: "Actions" },
   { id: "link", label: "Copy link", icon: <LinkIcon />, shortcut: ["cmd", "shift", "c"], group: "Actions" },
   { id: "settings", label: "Settings", icon: <SettingsIcon />, shortcut: ["cmd", ","], group: "Actions" },
-  { id: "trash", label: "Trash", icon: <TrashIcon />, group: "Actions", disabled: true },
+  { id: "trash", label: "Delete", icon: <TrashIcon />, group: "Actions", disabled: true },
 ];
-export const GalleryCommandPalette = () => <CommandPalette inline items={paletteItems} placeholder="Search or ask…" />;
+export const GalleryCommandPalette = () => <CommandPalette inline items={paletteItems} placeholder="Search" />;
 export const GalleryCommandPaletteModal = () => {
   const [open, setOpen] = useState(false);
   return <>
     <Button variant="outline" icon={<SearchIcon />} onClick={() => setOpen(true)}>Search<Kbd keys={["cmd", "k"]} size="sm" variant="quiet" /></Button>
-    <CommandPalette open={open} onOpenChange={setOpen} hotkey="mod+k" items={paletteItems} placeholder="Search or ask…" />
+    <CommandPalette open={open} onOpenChange={setOpen} hotkey="mod+k" items={paletteItems} placeholder="Search" />
   </>;
 };
-export const GalleryCommandPaletteEmpty = () => <CommandPalette inline items={paletteItems} defaultQuery="Placeholder" emptyText="No results for “Quarterly plan”" />;
-export const GalleryCommandPaletteNoFooter = () => <CommandPalette inline footer={false} items={paletteItems.filter(item => item.group === "Actions")} placeholder="Run a command…" />;
+export const GalleryCommandPaletteEmpty = () => <CommandPalette inline items={paletteItems} defaultQuery="Search query" emptyText="No results" />;
+export const GalleryCommandPaletteNoFooter = () => <CommandPalette inline footer={false} items={paletteItems.filter(item => item.group === "Actions")} placeholder="Search" />;
 
 /*
  * Context menu (docs/specs/context-menu.md): Menu, opened at the pointer. Right-click the
@@ -1008,10 +1008,10 @@ const pageActions = <>
   <MenuItem icon={<DocumentIcon />}>Duplicate</MenuItem>
   <MenuItem icon={<OpenIcon />}>Open in new tab</MenuItem>
   <MenuSeparator />
-  <MenuItem tone="danger" icon={<TrashIcon />}>Move to Trash</MenuItem>
+  <MenuItem tone="danger" icon={<TrashIcon />}>Delete</MenuItem>
 </>;
 export const GalleryContextMenu = () => (
-  <ContextMenu menuLabel="Page actions" menu={pageActions}>
+  <ContextMenu menuLabel="Label" menu={pageActions}>
     <div style={contextArea} tabIndex={0}>Right-click here</div>
   </ContextMenu>
 );
@@ -1022,23 +1022,23 @@ export const GalleryContextMenuTree = () => (
 );
 /* One menu for a list: itemSelector picks the right-clicked row and hands it to the menu, which names it. */
 export const GalleryContextMenuItems = () => (
-  <ContextMenu menuLabel="Page actions" itemSelector="[data-page]" menu={row => <>
+  <ContextMenu menuLabel="Label" itemSelector="[data-page]" menu={row => <>
     <MenuItem icon={<LinkIcon />}>Copy link to {row.dataset.page}</MenuItem>
     <MenuItem icon={<DocumentIcon />}>Duplicate {row.dataset.page}</MenuItem>
-    <MenuItem tone="danger" icon={<TrashIcon />}>Move {row.dataset.page} to Trash</MenuItem>
+    <MenuItem tone="danger" icon={<TrashIcon />}>Delete {row.dataset.page}</MenuItem>
   </>}>
-    <Nav aria-label="Pages" style={{ inlineSize: 240 }}>
-      {["Roadmap", "Meeting notes", "Design reviews"].map(page => <NavItem key={page} href="#gallery-context-menu-items" data-page={page}>{page}</NavItem>)}
+    <Nav aria-label="Label" style={{ inlineSize: 240 }}>
+      {["Item one", "Item two", "Item three"].map(page => <NavItem key={page} href="#gallery-context-menu-items" data-page={page}>{page}</NavItem>)}
     </Nav>
   </ContextMenu>
 );
 export const GalleryContextMenuDisabled = () => (
-  <ContextMenu menuLabel="Page actions" menu={<>
+  <ContextMenu menuLabel="Label" menu={<>
     <MenuItem icon={<LinkIcon />}>Copy link</MenuItem>
     <MenuItem disabled icon={<DocumentIcon />}>Duplicate</MenuItem>
-    <MenuItem disabled tone="danger" icon={<TrashIcon />}>Move to Trash</MenuItem>
+    <MenuItem disabled tone="danger" icon={<TrashIcon />}>Delete</MenuItem>
   </>}>
-    <div style={contextArea} tabIndex={0}>Read-only page</div>
+    <div style={contextArea} tabIndex={0}>Right-click here</div>
   </ContextMenu>
 );
 
@@ -1051,29 +1051,29 @@ export const GalleryContextMenuDisabled = () => (
    (Notion's page peek); a web link is its title, a snippet and the site (Notion's link preview, ChatGPT's sources). */
 const personCard = <>
   <div className="area-hover-card__identity"><Avatar size="lg" fallback="DT" /><div><PopoverTitle level={false}>David Tee</PopoverTitle><span className="area-hover-card__meta">@david</span></div></div>
-  <PopoverDescription>Designs the component library and its tokens.</PopoverDescription>
-  <div className="area-hover-card__meta"><span><PeopleIcon />Design team</span><span><ClockIcon />4:12 PM local time</span></div>
+  <PopoverDescription>Description</PopoverDescription>
+  <div className="area-hover-card__meta"><span><PeopleIcon />Label</span><span><ClockIcon />4:12 PM local time</span></div>
 </>;
 /* A div, not a p: the card holds blocks, and an HTML parser closes a <p> at the first block,
    so server HTML inside a paragraph would not match the React tree it hydrates. */
 export const GalleryHoverCard = () => (
-  <div>Reviewed by <HoverCard trigger={<Link href="#david">@david</Link>}>{personCard}</HoverCard> yesterday.</div>
+  <div>Body text <HoverCard trigger={<Link href="#david">@david</Link>}>{personCard}</HoverCard></div>
 );
 export const GalleryHoverCardPage = () => (
-  <div>Dates and owners are in <HoverCard trigger={<Link href="#launch-plan">Launch plan</Link>}>
-    <div className="area-hover-card__meta"><span><DocumentIcon />Design team / Projects</span></div>
-    <div><PopoverTitle level={false}>Launch plan</PopoverTitle><PopoverDescription>Ship the component library to the first two product teams before the end of the quarter.</PopoverDescription></div>
-    <div className="area-hover-card__meta"><span><HistoryIcon />Edited 2 hours ago by David Tee</span></div>
+  <div>Body text <HoverCard trigger={<Link href="#launch-plan">Link</Link>}>
+    <div className="area-hover-card__meta"><span><DocumentIcon />Label</span></div>
+    <div><PopoverTitle level={false}>Title</PopoverTitle><PopoverDescription>Description</PopoverDescription></div>
+    <div className="area-hover-card__meta"><span><HistoryIcon />Caption</span></div>
   </HoverCard>.</div>
 );
 export const GalleryHoverCardSource = () => (
-  <div>Projector brightness is given in <HoverCard trigger={<Link href="#ansi-lumens">ANSI lumens</Link>}>
-    <div><PopoverTitle level={false}>What ANSI lumens measure</PopoverTitle><PopoverDescription>The average of nine readings across the screen, so two projectors can be compared fairly.</PopoverDescription></div>
-    <div className="area-hover-card__meta"><span><GlobeIcon />projector-guide.example</span></div>
+  <div>Body text <HoverCard trigger={<Link href="#ansi-lumens">Link</Link>}>
+    <div><PopoverTitle level={false}>Title</PopoverTitle><PopoverDescription>Description</PopoverDescription></div>
+    <div className="area-hover-card__meta"><span><GlobeIcon />example.com</span></div>
   </HoverCard>.</div>
 );
 export const GalleryHoverCardTop = () => (
-  <div>Owned by <HoverCard side="top" trigger={<Link href="#david-top">@david</Link>}>{personCard}</HoverCard></div>
+  <div>Body text <HoverCard side="top" trigger={<Link href="#david-top">@david</Link>}>{personCard}</HoverCard></div>
 );
 
 /*
@@ -1260,7 +1260,7 @@ export const GalleryKbdOnEmphasis = () => (
 /* Kbd in context (owner, 2026-09-28: "show as many examples to show it in context"). One host per
    tile; the host decides the keycap's appearance, the corner is 6 everywhere. */
 export const GalleryKbdInMenu = () => (
-  <Menu aria-label="Page actions">
+  <Menu aria-label="Label">
     <MenuItem shortcut={<Kbd keys={["cmd", "L"]} />} icon={<LinkIcon />}>Copy link</MenuItem>
     <MenuItem shortcut={<Kbd keys={["cmd", "D"]} />} icon={<DocumentIcon />}>Duplicate</MenuItem>
     <MenuItem shortcut={<Kbd keys={["cmd", "shift", "P"]} />} icon={<OpenIcon />}>Move to</MenuItem>
@@ -1268,24 +1268,24 @@ export const GalleryKbdInMenu = () => (
     <MenuItem tone="danger" shortcut={<Kbd keys={["cmd", "backspace"]} />} icon={<TrashIcon />}>Delete</MenuItem>
   </Menu>
 );
-export const GalleryKbdInCommandPalette = () => <CommandPalette inline items={paletteItems.filter(item => item.group === "Actions" && !item.disabled)} placeholder="Run a command…" />;
-export const GalleryKbdInSearchField = () => <Input type="search" aria-label="Search" placeholder="Search or ask" aria-keyshortcuts="Meta+K" leadingIcon={<SearchIcon />} suffix={<Kbd keys={["cmd", "K"]} size="sm" />} />;
+export const GalleryKbdInCommandPalette = () => <CommandPalette inline items={paletteItems.filter(item => item.group === "Actions" && !item.disabled)} placeholder="Search" />;
+export const GalleryKbdInSearchField = () => <Input type="search" aria-label="Search" placeholder="Search" aria-keyshortcuts="Meta+K" leadingIcon={<SearchIcon />} suffix={<Kbd keys={["cmd", "K"]} size="sm" />} />;
 export const GalleryKbdInNav = () => (
-  <Nav aria-label="Workspace">
+  <Nav aria-label="Label">
     <NavItem href="#gallery-kbd-template-in-nav" icon={<SearchIcon />} trailing={<Kbd keys={["cmd", "K"]} size="sm" />}>Search</NavItem>
-    <NavItem href="#gallery-kbd-template-in-nav" icon={<PencilIcon />} trailing={<Kbd keys={["cmd", "N"]} size="sm" />}>New page</NavItem>
+    <NavItem href="#gallery-kbd-template-in-nav" icon={<PencilIcon />} trailing={<Kbd keys={["cmd", "N"]} size="sm" />}>New item</NavItem>
     <NavItem href="#gallery-kbd-template-in-nav" icon={<SettingsIcon />} trailing={<Kbd keys={["cmd", ","]} size="sm" />}>Settings</NavItem>
   </Nav>
 );
 export const GalleryKbdInOutlineButton = () => <Button variant="outline" tone="neutral" icon={<SearchIcon />} aria-keyshortcuts="Meta+K">Search <Kbd keys={["cmd", "K"]} /></Button>;
-export const GalleryKbdInGhostButton = () => <Button variant="ghost" tone="neutral" icon={<AddIcon />} aria-keyshortcuts="Meta+N">New page <Kbd keys={["cmd", "N"]} /></Button>;
+export const GalleryKbdInGhostButton = () => <Button variant="ghost" tone="neutral" icon={<AddIcon />} aria-keyshortcuts="Meta+N">New item <Kbd keys={["cmd", "N"]} /></Button>;
 export const GalleryKbdInSoftButton = () => <Button variant="soft" tone="neutral" aria-keyshortcuts="Meta+Z">Undo <Kbd keys={["cmd", "Z"]} /></Button>;
 export const GalleryKbdInSmallButton = () => <Button size="sm" variant="outline" tone="neutral" aria-keyshortcuts="Meta+Z">Undo <Kbd keys={["cmd", "Z"]} size="sm" /></Button>;
-export const GalleryKbdInLargeButton = () => <Button size="lg" aria-keyshortcuts="Meta+Enter">Send <Kbd keys={["cmd", "enter"]} /></Button>;
+export const GalleryKbdInLargeButton = () => <Button size="lg" aria-keyshortcuts="Meta+Enter">Action <Kbd keys={["cmd", "enter"]} /></Button>;
 export const GalleryKbdInFooter = () => (
   <div style={{ display: "flex", gap: "var(--area-space-8)" }}>
     <Button variant="outline" tone="neutral" aria-keyshortcuts="Escape">Cancel <Kbd keys={["escape"]} /></Button>
-    <Button aria-keyshortcuts="Meta+Enter">Save <Kbd keys={["cmd", "enter"]} /></Button>
+    <Button aria-keyshortcuts="Meta+Enter">Action <Kbd keys={["cmd", "enter"]} /></Button>
   </div>
 );
 export const GalleryKbdInText = () => (
@@ -1296,7 +1296,7 @@ export const GalleryKbdInTable = () => (
     <thead><tr><th scope="col">Action</th><th scope="col">Shortcut</th></tr></thead>
     <tbody>
       <tr><td>Search</td><td><Kbd keys={["cmd", "K"]} /></td></tr>
-      <tr><td>New page</td><td><Kbd keys={["cmd", "N"]} /></td></tr>
+      <tr><td>New item</td><td><Kbd keys={["cmd", "N"]} /></td></tr>
       <tr><td>Go to settings</td><td><KbdGroup><Kbd keys={["G"]} /><Kbd keys={["S"]} /></KbdGroup></td></tr>
     </tbody>
   </Table>
@@ -1332,7 +1332,7 @@ export const GalleryMenuSelected = () => (
 
 /* A real submenu (audit D-10): Right or Enter opens it, Left or Escape returns to its row. */
 export const GalleryMenuSubmenu = () => (
-  <Menu aria-label="Page actions" trigger={<Button variant="outline">Page</Button>}>
+  <Menu aria-label="Label" trigger={<Button variant="outline">Button</Button>}>
     <MenuItem icon={<LinkIcon />}>Copy link</MenuItem>
     <MenuItem icon={<DocumentIcon />}>Duplicate</MenuItem>
     <MenuSub label="Move to" icon={<OpenIcon />}>
@@ -1341,7 +1341,7 @@ export const GalleryMenuSubmenu = () => (
       <MenuItem>Item three</MenuItem>
     </MenuSub>
     <MenuSeparator />
-    <MenuItem tone="danger" icon={<TrashIcon />}>Move to Trash</MenuItem>
+    <MenuItem tone="danger" icon={<TrashIcon />}>Delete</MenuItem>
   </Menu>
 );
 
@@ -1356,7 +1356,7 @@ export const GalleryMenuDanger = () => <Menu aria-label="Label"><MenuItem><span 
 
 /* Icon rows, a separator and a danger action, as ChatGPT's chat actions (docs/specs/menu.md). */
 const MenuIconRows = ({ style, dangerStyle, highlightDanger, separatorStyle }: { style?: CSSProperties; dangerStyle?: CSSProperties; highlightDanger?: boolean; separatorStyle?: CSSProperties }) => (
-  <Menu aria-label="Page actions" style={style}>
+  <Menu aria-label="Label" style={style}>
     <MenuItem shortcut="⌘L" icon={<LinkIcon />}>Copy link</MenuItem>
     <MenuItem icon={<OpenIcon />}>Open in new tab</MenuItem>
     <MenuItem icon={<SettingsIcon />}>Settings</MenuItem>
@@ -1374,14 +1374,14 @@ export const GalleryMenuControls = () => {
   const [on, setOn] = useState<Record<string, boolean>>({ small: false, full: true, comments: true, backlinks: false });
   const toggle = (key: string) => () => setOn((state) => ({ ...state, [key]: !state[key] }));
   return (
-    <Menu aria-label="Page options">
-      <MenuLabel>Page</MenuLabel>
-      <MenuItem indicator="switch" checked={on.small} onClick={toggle("small")}><span className="area-menu__text">Small text</span></MenuItem>
-      <MenuItem indicator="switch" checked={on.full} onClick={toggle("full")}><span className="area-menu__text">Full width</span></MenuItem>
+    <Menu aria-label="Label">
+      <MenuLabel>Label</MenuLabel>
+      <MenuItem indicator="switch" checked={on.small} onClick={toggle("small")}><span className="area-menu__text">Option one</span></MenuItem>
+      <MenuItem indicator="switch" checked={on.full} onClick={toggle("full")}><span className="area-menu__text">Option two</span></MenuItem>
       <MenuSeparator />
-      <MenuLabel>Show</MenuLabel>
-      <MenuItem checked={on.comments} onClick={toggle("comments")}><span className="area-menu__text">Comments</span></MenuItem>
-      <MenuItem checked={on.backlinks} onClick={toggle("backlinks")}><span className="area-menu__text">Backlinks</span></MenuItem>
+      <MenuLabel>Label</MenuLabel>
+      <MenuItem checked={on.comments} onClick={toggle("comments")}><span className="area-menu__text">Option three</span></MenuItem>
+      <MenuItem checked={on.backlinks} onClick={toggle("backlinks")}><span className="area-menu__text">Option four</span></MenuItem>
     </Menu>
   );
 };
@@ -1393,7 +1393,7 @@ export const GalleryNav = () => (
 );
 /* Nav in full context (owner, 2026-09-27): ChatGPT's sidebar layout, every part an Area
    component: a header with the product name and two icon actions, icon rows, titled sections
-   (Projects, Recents) and the account row pinned to the bottom. One 8 inset on both sides: the
+   (two labelled groups) and the account row pinned to the bottom. One 8 inset on both sides: the
    header's buttons and the rows' plates end 8 from the edge, and the name starts where the rows'
    icons do (8 + the row's 8). The Nav fills its column (the sidebar sets the width, not Nav's 240
    default, which left 8 more on the right; review round 28). The name is the surface title size
@@ -1401,34 +1401,34 @@ export const GalleryNav = () => (
 export const GalleryNavSidebar = () => (
   <aside aria-label="Sidebar" data-area-ground="recessed" style={{ display: "flex", flexDirection: "column", inlineSize: "calc(var(--area-space-96) * 2.75)", blockSize: "calc(var(--area-space-96) * 6)", background: "var(--area-bg-subtle)", borderInlineEnd: "var(--area-border-width) solid var(--area-border-decorative)" }}>
     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "var(--area-space-8) var(--area-space-8) var(--area-space-8) var(--area-space-16)" }}>
-      <span style={{ fontSize: "var(--area-title-xs-size)", lineHeight: "var(--area-title-xs-leading)" }}>Area</span>
+      <span style={{ fontSize: "var(--area-title-xs-size)", lineHeight: "var(--area-title-xs-leading)" }}>Title</span>
       <span style={{ display: "flex" }}>
-        <Button variant="ghost" iconOnly icon={<SearchIcon />} aria-label="Search chats" />
+        <Button variant="ghost" iconOnly icon={<SearchIcon />} aria-label="Search" />
         <Button variant="ghost" iconOnly icon={<PanelLeftIcon />} aria-label="Close sidebar" />
       </span>
     </div>
     <div style={{ flex: 1, minBlockSize: 0, overflowY: "auto", padding: "0 var(--area-space-8)" }}>
-      <Nav aria-label="Chats" style={{ "--area-nav-inline-size": "100%" } as CSSProperties}>
+      <Nav aria-label="Label" style={{ "--area-nav-inline-size": "100%" } as CSSProperties}>
         <NavGroup>
-          <NavItem href="#gallery-nav-sidebar" icon={<PencilIcon />} current>New chat</NavItem>
-          <NavItem href="#gallery-nav-sidebar" icon={<DocumentIcon />}>Library</NavItem>
-          <NavItem href="#gallery-nav-sidebar" icon={<DotsFourIcon />}>Apps</NavItem>
+          <NavItem href="#gallery-nav-sidebar" icon={<PencilIcon />} current>Item one</NavItem>
+          <NavItem href="#gallery-nav-sidebar" icon={<DocumentIcon />}>Item two</NavItem>
+          <NavItem href="#gallery-nav-sidebar" icon={<DotsFourIcon />}>Item three</NavItem>
         </NavGroup>
-        <NavGroup label="Projects">
-          <NavItem href="#gallery-nav-sidebar" icon={<FolderIcon />}>Design system</NavItem>
-          <NavItem href="#gallery-nav-sidebar" icon={<FolderIcon />}>Launch plan</NavItem>
+        <NavGroup label="Label">
+          <NavItem href="#gallery-nav-sidebar" icon={<FolderIcon />}>Item four</NavItem>
+          <NavItem href="#gallery-nav-sidebar" icon={<FolderIcon />}>Item five</NavItem>
         </NavGroup>
-        <NavGroup label="Recents">
-          <NavItem href="#gallery-nav-sidebar" actions={<Button size="sm" variant="ghost" iconOnly icon={<MoreHorizontalIcon />} aria-label="Chat options" />}>Inspector panel fields</NavItem>
-          <NavItem href="#gallery-nav-sidebar">Toolbar split buttons</NavItem>
-          <NavItem href="#gallery-nav-sidebar">Calendar spacing</NavItem>
-          <NavItem href="#gallery-nav-sidebar">Toast colours</NavItem>
+        <NavGroup label="Label">
+          <NavItem href="#gallery-nav-sidebar" actions={<Button size="sm" variant="ghost" iconOnly icon={<MoreHorizontalIcon />} aria-label="More options" />}>Item six</NavItem>
+          <NavItem href="#gallery-nav-sidebar">Item seven</NavItem>
+          <NavItem href="#gallery-nav-sidebar">Item eight</NavItem>
+          <NavItem href="#gallery-nav-sidebar">Item nine</NavItem>
         </NavGroup>
       </Nav>
     </div>
     <div style={{ display: "flex", alignItems: "center", gap: "var(--area-space-8)", padding: "var(--area-space-12) var(--area-space-16)" }}>
       <Avatar size="sm" fallback="DT" role="img" aria-label="David Tee" />
-      <span style={{ display: "grid" }}><span>David Tee</span><span style={{ color: "var(--area-fg-muted)", fontSize: "var(--area-text-xs-size)", lineHeight: "var(--area-text-xs-leading)" }}>Plus</span></span>
+      <span style={{ display: "grid" }}><span>David Tee</span><span style={{ color: "var(--area-fg-muted)", fontSize: "var(--area-text-xs-size)", lineHeight: "var(--area-text-xs-leading)" }}>Caption</span></span>
     </div>
   </aside>
 );
@@ -1468,8 +1468,8 @@ export const GalleryNavActions = () => {
 };
 /* Revealed actions: each row's options appear while it is hovered or holds focus, as Notion's sidebar pages. */
 export const GalleryNavRevealActions = () => (
-  <Nav aria-label="Pages">
-    {["Roadmap", "Meeting notes", "Design reviews"].map((page, index) => (
+  <Nav aria-label="Label">
+    {["Item one", "Item two", "Item three"].map((page, index) => (
       <NavItem key={page} href="#gallery-nav-reveal-actions" current={index === 0} revealActions
         actions={<Button size="sm" variant="ghost" iconOnly icon={<MoreHorizontalIcon />} aria-label={`${page} options`} />}>{page}</NavItem>
     ))}
@@ -1878,7 +1878,7 @@ export const GalleryTooltipBottom = () => <div style={{ display: "flex", flexDir
 export const GalleryTooltipLeft = () => <div style={{ display: "flex", alignItems: "center", gap: "var(--area-space-4)" }}><Tooltip side="left" id="tooltip-left">Description</Tooltip><Button variant="outline" aria-describedby="tooltip-left">Button</Button></div>;
 
 export const CodeInProse = () => (
-  <p>Install the package with <Code>npm install @area/react</Code>.</p>
+  <p>Body text <Code>npm install @area/react</Code></p>
 );
 
 export const SegmentedSizes = () => (
@@ -1894,14 +1894,14 @@ export const SegmentedFullWidth = () => (
 );
 
 const fileTree = [
-  { id: "src", label: "src", icon: <FolderIcon />, children: [
-    { id: "components", label: "components", icon: <FolderIcon />, children: [
-      { id: "avatar", label: "Avatar.tsx", icon: <DocumentIcon />, trailing: "A" },
-      { id: "button", label: "Button.tsx", icon: <DocumentIcon />, trailing: "M" },
+  { id: "src", label: "Folder one", icon: <FolderIcon />, children: [
+    { id: "components", label: "Folder two", icon: <FolderIcon />, children: [
+      { id: "avatar", label: "File one", icon: <DocumentIcon />, trailing: "A" },
+      { id: "button", label: "File two", icon: <DocumentIcon />, trailing: "M" },
     ] },
-    { id: "index", label: "index.ts", icon: <DocumentIcon /> },
+    { id: "index", label: "File three", icon: <DocumentIcon /> },
   ] },
-  { id: "package", label: "package.json", icon: <DocumentIcon /> },
+  { id: "package", label: "File four", icon: <DocumentIcon /> },
 ];
 const filterTree = [
   { id: "markets", label: "Item one", trailing: "85", children: [
@@ -1916,24 +1916,24 @@ const filterTree = [
 ];
 export const GalleryTreeViewFiles = () => {
   const [current, setCurrent] = useState("button");
-  return <TreeView aria-label="Project files" items={fileTree} defaultExpandedIds={["src", "components"]} currentId={current} selectedIds={[current]} onActivate={setCurrent} />;
+  return <TreeView aria-label="Label" items={fileTree} defaultExpandedIds={["src", "components"]} currentId={current} selectedIds={[current]} onActivate={setCurrent} />;
 };
 /* Folders as filled glyphs in one hue (owner, pass 2). */
 const blueFolder = <FolderFilledIcon style={{ color: "var(--area-fg-info)" }} />;
 const filledTree = [
-  { id: "src", label: "src", icon: blueFolder, children: [
-    { id: "components", label: "components", icon: blueFolder, children: [
-      { id: "avatar", label: "Avatar.tsx", icon: <DocumentIcon />, trailing: "A" },
-      { id: "button", label: "Button.tsx", icon: <DocumentIcon />, trailing: "M" },
+  { id: "src", label: "Folder one", icon: blueFolder, children: [
+    { id: "components", label: "Folder two", icon: blueFolder, children: [
+      { id: "avatar", label: "File one", icon: <DocumentIcon />, trailing: "A" },
+      { id: "button", label: "File two", icon: <DocumentIcon />, trailing: "M" },
     ] },
-    { id: "index", label: "index.ts", icon: <DocumentIcon /> },
+    { id: "index", label: "File three", icon: <DocumentIcon /> },
   ] },
-  { id: "public", label: "public", icon: blueFolder, children: [{ id: "favicon", label: "favicon.svg", icon: <DocumentIcon /> }] },
-  { id: "package", label: "package.json", icon: <DocumentIcon /> },
+  { id: "public", label: "Folder three", icon: blueFolder, children: [{ id: "favicon", label: "File four", icon: <DocumentIcon /> }] },
+  { id: "package", label: "File five", icon: <DocumentIcon /> },
 ];
 export const GalleryTreeViewFilledFolders = () => {
   const [current, setCurrent] = useState("button");
-  return <TreeView aria-label="Project files with filled folders" items={filledTree} defaultExpandedIds={["src", "components"]} currentId={current} selectedIds={[current]} onActivate={setCurrent} />;
+  return <TreeView aria-label="Label" items={filledTree} defaultExpandedIds={["src", "components"]} currentId={current} selectedIds={[current]} onActivate={setCurrent} />;
 };
 /*
  * Figma-style layers: row controls at the end. Visibility is pinned while a layer is hidden.
@@ -1971,13 +1971,13 @@ export const GalleryComposerStacked = () => {
   return <div style={{ inlineSize: "100%" }}><Composer layout="stacked" label="Label" placeholder="Placeholder" mode={<ModelPicker label="Label" value={mode} onValueChange={setMode} items={[{ value: "Option one", label: "Option one" }, { value: "Option two", label: "Option two" }]} />} leadingActions={<Button variant="ghost" iconOnly icon={<AddIcon />} aria-label="Add attachment" onClick={() => setSent("Attachment action")} />} onSubmit={setSent} /><span className="area-sr-only" role="status">{sent && `Sent: ${sent}`}</span></div>;
 };
 const archivedTree = [
-  { id: "src", label: "src", icon: <FolderIcon />, children: [
-    { id: "button", label: "Button.tsx", icon: <DocumentIcon /> },
-    { id: "legacy", label: "Legacy.tsx", icon: <DocumentIcon />, trailing: "Locked", disabled: true },
+  { id: "src", label: "Folder one", icon: <FolderIcon />, children: [
+    { id: "button", label: "File one", icon: <DocumentIcon /> },
+    { id: "legacy", label: "File two", icon: <DocumentIcon />, trailing: "Locked", disabled: true },
   ] },
 ];
-export const GalleryTreeViewDisabled = () => <TreeView aria-label="Project with a locked file" items={archivedTree} defaultExpandedIds={["src"]} defaultSelectedIds={["button"]} />;
-export const GalleryTreeViewCollapsed = () => <TreeView aria-label="Collapsed project" items={fileTree} defaultSelectedIds={["src"]} />;
+export const GalleryTreeViewDisabled = () => <TreeView aria-label="Label" items={archivedTree} defaultExpandedIds={["src"]} defaultSelectedIds={["button"]} />;
+export const GalleryTreeViewCollapsed = () => <TreeView aria-label="Label" items={fileTree} defaultSelectedIds={["src"]} />;
 export const GalleryComposerPrefilled = () => {
   const [value, setValue] = useState("Body text");
   const [sent, setSent] = useState("");
@@ -2027,20 +2027,20 @@ export const GalleryColorPickerDisabled = () => <ColorPicker label="Locked fill"
 
 /* Calendar. A fixed "today" keeps the gallery deterministic. */
 const calendarToday = "2026-09-26";
-export const GalleryCalendar = () => <Calendar aria-label="Due date" today={calendarToday} defaultValue="2026-09-15" />;
-export const GalleryCalendarRange = () => <Calendar aria-label="Trip dates" selectionMode="range" today={calendarToday} defaultValue={{ start: "2026-09-15", end: "2026-09-19" }} />;
-export const GalleryCalendarTwoMonths = () => <Calendar aria-label="Report period" selectionMode="range" visibleMonths={2} today={calendarToday} defaultValue={{ start: "2026-09-24", end: "2026-10-06" }} />;
-export const GalleryCalendarMultiple = () => <Calendar aria-label="Office days" selectionMode="multiple" today={calendarToday} defaultValue={["2026-09-08", "2026-09-10", "2026-09-15", "2026-09-17"]} />;
-export const GalleryCalendarUnavailable = () => <Calendar aria-label="Booking date" today={calendarToday} defaultMonth="2026-09" min="2026-09-03" max="2026-10-10" isDateUnavailable={date => ["2026-09-12", "2026-09-13", "2026-09-22"].includes(date)} />;
-export const GalleryCalendarMonday = () => <Calendar aria-label="Sprint start" firstDayOfWeek={1} locale="en-GB" today={calendarToday} defaultValue="2026-09-28" />;
-export const GalleryCalendarPlain = () => <Calendar variant="plain" aria-label="Publish date" today={calendarToday} defaultValue="2026-09-30" />;
-export const GalleryCalendarAccent = () => <SelectionAccent><Calendar aria-label="Launch window" selectionMode="range" today={calendarToday} defaultValue={{ start: "2026-09-15", end: "2026-09-19" }} /></SelectionAccent>;
+export const GalleryCalendar = () => <Calendar aria-label="Label" today={calendarToday} defaultValue="2026-09-15" />;
+export const GalleryCalendarRange = () => <Calendar aria-label="Label" selectionMode="range" today={calendarToday} defaultValue={{ start: "2026-09-15", end: "2026-09-19" }} />;
+export const GalleryCalendarTwoMonths = () => <Calendar aria-label="Label" selectionMode="range" visibleMonths={2} today={calendarToday} defaultValue={{ start: "2026-09-24", end: "2026-10-06" }} />;
+export const GalleryCalendarMultiple = () => <Calendar aria-label="Label" selectionMode="multiple" today={calendarToday} defaultValue={["2026-09-08", "2026-09-10", "2026-09-15", "2026-09-17"]} />;
+export const GalleryCalendarUnavailable = () => <Calendar aria-label="Label" today={calendarToday} defaultMonth="2026-09" min="2026-09-03" max="2026-10-10" isDateUnavailable={date => ["2026-09-12", "2026-09-13", "2026-09-22"].includes(date)} />;
+export const GalleryCalendarMonday = () => <Calendar aria-label="Label" firstDayOfWeek={1} locale="en-GB" today={calendarToday} defaultValue="2026-09-28" />;
+export const GalleryCalendarPlain = () => <Calendar variant="plain" aria-label="Label" today={calendarToday} defaultValue="2026-09-30" />;
+export const GalleryCalendarAccent = () => <SelectionAccent><Calendar aria-label="Label" selectionMode="range" today={calendarToday} defaultValue={{ start: "2026-09-15", end: "2026-09-19" }} /></SelectionAccent>;
 /* Calendar day treatments (docs/specs/calendar.md). */
 const weekend = (date: string) => [0, 6].includes(new Date(`${date}T12:00`).getDay());
-export const GalleryCalendarCircle = () => <Calendar days="circle" weekdayStyle="narrow" aria-label="Appointment date" today={calendarToday} defaultValue="2026-09-08" min="2026-09-08" max="2026-10-10" isDateUnavailable={weekend} />;
-export const GalleryCalendarTile = () => <Calendar days="tile" weekdayStyle="abbreviated" firstDayOfWeek={1} locale="en-GB" aria-label="Delivery date" today={calendarToday} defaultValue="2026-09-16" showOutsideDays={false} min="2026-09-16" isDateUnavailable={date => ["2026-09-18", "2026-09-19", "2026-09-20", "2026-09-26", "2026-09-27"].includes(date)} />;
-export const GalleryCalendarMarkers = () => <Calendar firstDayOfWeek={1} aria-label="Send date" today={calendarToday} defaultValue="2026-09-21" markers={{ "2026-09-04": "info", "2026-09-14": "info", "2026-09-29": "neutral", "2026-10-08": "neutral" }} />;
-export const GalleryCalendarWeek = () => <Calendar layout="week" firstDayOfWeek={1} aria-label="Visit day" today={calendarToday} defaultValue="2026-09-30" markers={{ "2026-10-01": "info" }} />;
+export const GalleryCalendarCircle = () => <Calendar days="circle" weekdayStyle="narrow" aria-label="Label" today={calendarToday} defaultValue="2026-09-08" min="2026-09-08" max="2026-10-10" isDateUnavailable={weekend} />;
+export const GalleryCalendarTile = () => <Calendar days="tile" weekdayStyle="abbreviated" firstDayOfWeek={1} locale="en-GB" aria-label="Label" today={calendarToday} defaultValue="2026-09-16" showOutsideDays={false} min="2026-09-16" isDateUnavailable={date => ["2026-09-18", "2026-09-19", "2026-09-20", "2026-09-26", "2026-09-27"].includes(date)} />;
+export const GalleryCalendarMarkers = () => <Calendar firstDayOfWeek={1} aria-label="Label" today={calendarToday} defaultValue="2026-09-21" markers={{ "2026-09-04": "info", "2026-09-14": "info", "2026-09-29": "neutral", "2026-10-08": "neutral" }} />;
+export const GalleryCalendarWeek = () => <Calendar layout="week" firstDayOfWeek={1} aria-label="Label" today={calendarToday} defaultValue="2026-09-30" markers={{ "2026-10-01": "info" }} />;
 const scheduleTimes = ["8:00 AM", "8:30 AM", "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "12:00 PM", "1:00 PM"];
 /* Schedule: the calendar surface (Calendar variant="surface": 8 top, 12 sides, the floating lift)
    split by a rule; the time list is a column of the grid's 36px cells holding 32px plates, 14 from
@@ -2054,10 +2054,10 @@ export const GalleryCalendarSchedule = () => {
   return <div className="area-calendar area-calendar--surface" style={{ display: "grid", padding: 0 }}>
     <div style={{ display: "flex" }}>
       <div style={{ padding: "calc(var(--area-space-8) - var(--area-border-width)) calc(var(--area-space-12) - var(--area-border-width)) var(--area-space-12)" }}>
-        <Calendar variant="plain" aria-label="Send date" firstDayOfWeek={1} today={calendarToday} value={date} onValueChange={setDate} min={calendarToday} markers={{ "2026-10-04": "info", "2026-10-14": "info" }} />
+        <Calendar variant="plain" aria-label="Date" firstDayOfWeek={1} today={calendarToday} value={date} onValueChange={setDate} min={calendarToday} markers={{ "2026-10-04": "info", "2026-10-14": "info" }} />
       </div>
       <div style={{ position: "relative", inlineSize: "calc(var(--area-space-96) + var(--area-space-24))", borderInlineStart: rule }}>
-        <div role="group" aria-label="Send time" style={{ position: "absolute", inset: 0, display: "grid", alignContent: "start", gap: "var(--area-space-4)", padding: "var(--area-space-8) calc(var(--area-space-12) - var(--area-border-width) + var(--area-space-2))", overflowY: "auto", scrollPaddingBlock: "var(--area-space-8)" }}>
+        <div role="group" aria-label="Time" style={{ position: "absolute", inset: 0, display: "grid", alignContent: "start", gap: "var(--area-space-4)", padding: "var(--area-space-8) calc(var(--area-space-12) - var(--area-border-width) + var(--area-space-2))", overflowY: "auto", scrollPaddingBlock: "var(--area-space-8)" }}>
           {scheduleTimes.map(item => <Button key={item} variant="ghost" size="md" fullWidth selected={item === time} onClick={() => setTime(item)}>{item}</Button>)}
         </div>
       </div>
@@ -2065,12 +2065,12 @@ export const GalleryCalendarSchedule = () => {
     <div style={{ display: "flex", alignItems: "center", gap: "var(--area-space-8)", padding: "var(--area-space-8) calc(var(--area-space-12) - var(--area-border-width))", borderBlockStart: rule }}>
       <Button variant="ghost" size="sm" onClick={() => setScheduled("")}>Cancel</Button>
       <span style={{ marginInlineStart: "auto", color: "var(--area-fg-muted)", fontSize: "var(--area-control-sm-text)", lineHeight: "var(--area-control-sm-leading)", fontVariantNumeric: "tabular-nums" }}>{label} · {time}</span>
-      <Button variant="outline" size="sm" disabled={!date} onClick={() => setScheduled(`${label} ${time}`)}>Schedule</Button>
+      <Button variant="outline" size="sm" disabled={!date} onClick={() => setScheduled(`${label} ${time}`)}>Action</Button>
     </div>
-    <span className="area-sr-only" role="status">{scheduled && `Scheduled for ${scheduled}`}</span>
+    <span className="area-sr-only" role="status">{scheduled && `Selected ${scheduled}`}</span>
   </div>;
 };
-export const GalleryCalendarDisabled = () => <Calendar aria-label="Locked date" today={calendarToday} defaultValue="2026-09-15" disabled />;
+export const GalleryCalendarDisabled = () => <Calendar aria-label="Label" today={calendarToday} defaultValue="2026-09-15" disabled />;
 
 /* The Selection role in the accent (DESIGN_SYSTEM.md, "Emphasis roles"): scoped with
    data-area-selection="accent", as a theme would set it. */

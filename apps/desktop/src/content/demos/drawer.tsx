@@ -7,57 +7,57 @@ import { Button, ConfirmDialog, Drawer, Field, Input } from "@area/react";
 const stage: CSSProperties = { inlineSize: 440, blockSize: 300 };
 
 const ProfileFields = () => <div style={{ display: "grid", gap: "var(--area-space-16)" }}>
-  <Field label="Name"><Input fullWidth defaultValue="David Tee" /></Field>
-  <Field label="Username"><Input fullWidth defaultValue="@davidtee" /></Field>
+  <Field label="Label"><Input fullWidth defaultValue="Value" /></Field>
+  <Field label="Label"><Input fullWidth defaultValue="Value" /></Field>
 </div>;
-const footer = <><Button variant="soft" tone="neutral">Cancel</Button><Button>Save changes</Button></>;
+const footer = <><Button variant="soft" tone="neutral">Cancel</Button><Button>Action</Button></>;
 
 export const GalleryDrawer = () => (
-  <div className="docs-edge-stage" style={stage}><Drawer inline title="Edit profile" description="Make changes to your profile here." footer={footer}><ProfileFields /></Drawer></div>
+  <div className="docs-edge-stage" style={stage}><Drawer inline title="Title" description="Description" footer={footer}><ProfileFields /></Drawer></div>
 );
 export const GalleryDrawerStart = () => (
-  <div className="docs-edge-stage" style={stage}><Drawer inline side="start" title="Edit profile" description="Make changes to your profile here." footer={footer}><ProfileFields /></Drawer></div>
+  <div className="docs-edge-stage" style={stage}><Drawer inline side="start" title="Title" description="Description" footer={footer}><ProfileFields /></Drawer></div>
 );
 export const GalleryDrawerBottom = () => (
-  <div className="docs-edge-stage" style={stage}><Drawer inline side="bottom" title="Edit profile" description="Make changes to your profile here." footer={footer} /></div>
+  <div className="docs-edge-stage" style={stage}><Drawer inline side="bottom" title="Title" description="Description" footer={footer} /></div>
 );
 export const GalleryDrawerNoClose = () => (
-  <div className="docs-edge-stage" style={stage}><Drawer inline showCloseButton={false} title="Edit profile" footer={footer}><ProfileFields /></Drawer></div>
+  <div className="docs-edge-stage" style={stage}><Drawer inline showCloseButton={false} title="Title" footer={footer}><ProfileFields /></Drawer></div>
 );
 /* shadcn's Sheet: the primary action first, both full width. */
 export const GalleryDrawerStacked = () => (
-  <div className="docs-edge-stage" style={stage}><Drawer inline actions="stacked" title="Edit profile" description="Make changes to your profile here."
-    footer={<><Button>Save changes</Button><Button variant="soft" tone="neutral">Cancel</Button></>}><ProfileFields /></Drawer></div>
+  <div className="docs-edge-stage" style={stage}><Drawer inline actions="stacked" title="Title" description="Description"
+    footer={<><Button>Action</Button><Button variant="soft" tone="neutral">Cancel</Button></>}><ProfileFields /></Drawer></div>
 );
 /* Notion's side peek: no scrim, the page behind stays usable; Escape or the close control closes it. */
 export const GalleryDrawerNonModal = () => {
   const [open, setOpen] = useState(false);
   return <Drawer modal={false} open={open} onOpenChange={setOpen} trigger={<Button variant="outline">Open side panel</Button>}
-    title="Project notes" description="Opened beside the page."><ProfileFields /></Drawer>;
+    title="Title" description="Description"><ProfileFields /></Drawer>;
 };
 export const GalleryDrawerModal = () => {
   const [open, setOpen] = useState(false);
   return <Drawer open={open} onOpenChange={setOpen} trigger={<Button variant="outline">Open drawer</Button>}
-    title="Edit profile" description="Make changes to your profile here."
-    footer={<><Button variant="soft" tone="neutral" onClick={() => setOpen(false)}>Cancel</Button><Button onClick={() => setOpen(false)}>Save changes</Button></>}>
+    title="Title" description="Description"
+    footer={<><Button variant="soft" tone="neutral" onClick={() => setOpen(false)}>Cancel</Button><Button onClick={() => setOpen(false)}>Action</Button></>}>
     <ProfileFields />
   </Drawer>;
 };
 export const GalleryDrawerMd = () => {
   const [open, setOpen] = useState(false);
   return <Drawer size="md" open={open} onOpenChange={setOpen} trigger={<Button variant="outline">Open md drawer</Button>}
-    title="Edit profile" description="Make changes to your profile here."><ProfileFields /></Drawer>;
+    title="Title" description="Description"><ProfileFields /></Drawer>;
 };
 
 /* ChatGPT's "Delete chat?" (captured 2026-10-05, then cancelled). */
 export const GalleryConfirmDialog = () => (
-  <ConfirmDialog inline tone="danger" title="Delete chat?" description="This will permanently delete Project notes. This can't be undone." confirmLabel="Delete chat" />
+  <ConfirmDialog inline tone="danger" title="Title" description="Description" confirmLabel="Delete" />
 );
 export const GalleryConfirmDialogNeutral = () => (
-  <ConfirmDialog inline title="Leave without saving?" description="Your changes to this page will be lost." confirmLabel="Leave" cancelLabel="Keep editing" />
+  <ConfirmDialog inline title="Title" description="Description" confirmLabel="Action" cancelLabel="Cancel" />
 );
 export const GalleryConfirmDialogModal = () => (
-  <ConfirmDialog tone="danger" trigger={<Button variant="soft" tone="danger">Delete chat</Button>}
-    title="Delete chat?" description="This will permanently delete Project notes. This can't be undone." confirmLabel="Delete chat"
+  <ConfirmDialog tone="danger" trigger={<Button variant="soft" tone="danger">Delete</Button>}
+    title="Title" description="Description" confirmLabel="Delete"
     onConfirm={() => new Promise(resolve => setTimeout(resolve, 800))} />
 );

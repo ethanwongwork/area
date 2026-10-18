@@ -7,57 +7,57 @@ const page = { inlineSize: "calc(var(--area-space-96) * 4)", maxInlineSize: "100
 
 export const GalleryDescriptionList = () => (
   <DescriptionList style={page}>
-    <DescriptionListItem term="Status" icon={<CircleDashedIcon />}>In progress</DescriptionListItem>
-    <DescriptionListItem term="Owner" icon={<PersonIcon />}>David Tee</DescriptionListItem>
-    <DescriptionListItem term="Due" icon={<CalendarIcon />}>October 14, 2026</DescriptionListItem>
-    <DescriptionListItem term="Project" icon={<FolderIcon />}>Website launch</DescriptionListItem>
+    <DescriptionListItem term="Label" icon={<CircleDashedIcon />}>Value</DescriptionListItem>
+    <DescriptionListItem term="Label" icon={<PersonIcon />}>David Tee</DescriptionListItem>
+    <DescriptionListItem term="Label" icon={<CalendarIcon />}>October 14, 2026</DescriptionListItem>
+    <DescriptionListItem term="Label" icon={<FolderIcon />}>Value</DescriptionListItem>
   </DescriptionList>
 );
 export const GalleryDescriptionListNoIcons = () => (
   <DescriptionList style={page}>
-    <DescriptionListItem term="Format">PNG</DescriptionListItem>
-    <DescriptionListItem term="Dimensions">1440 × 900</DescriptionListItem>
-    <DescriptionListItem term="Size">2.4 MB</DescriptionListItem>
+    <DescriptionListItem term="Label">Value</DescriptionListItem>
+    <DescriptionListItem term="Label">Value</DescriptionListItem>
+    <DescriptionListItem term="Label">Value</DescriptionListItem>
   </DescriptionList>
 );
 /* Values that are components: a Badge, a person and a Link. */
 export const GalleryDescriptionListRich = () => (
   <DescriptionList style={page}>
-    <DescriptionListItem term="Status" icon={<CircleDashedIcon />}><Badge>In review</Badge></DescriptionListItem>
-    <DescriptionListItem term="Owner" icon={<PersonIcon />}><span style={{ display: "inline-flex", alignItems: "center", gap: "var(--area-space-6)" }}><Avatar size="sm" fallback="D" alt="" />David Tee</span></DescriptionListItem>
-    <DescriptionListItem term="Brief" icon={<FolderIcon />}><Link href="#gallery-description-list-content-rich">Launch brief</Link></DescriptionListItem>
+    <DescriptionListItem term="Label" icon={<CircleDashedIcon />}><Badge>Badge</Badge></DescriptionListItem>
+    <DescriptionListItem term="Label" icon={<PersonIcon />}><span style={{ display: "inline-flex", alignItems: "center", gap: "var(--area-space-6)" }}><Avatar size="sm" fallback="D" alt="" />David Tee</span></DescriptionListItem>
+    <DescriptionListItem term="Label" icon={<FolderIcon />}><Link href="#gallery-description-list-content-rich">Link</Link></DescriptionListItem>
   </DescriptionList>
 );
 export const GalleryDescriptionListJustified = () => (
   <DescriptionList style={page} layout="justified">
-    <DescriptionListItem term="Plan">Plus</DescriptionListItem>
-    <DescriptionListItem term="Username">@davidtee</DescriptionListItem>
-    <DescriptionListItem term="Member since">March 2024</DescriptionListItem>
+    <DescriptionListItem term="Label">Value</DescriptionListItem>
+    <DescriptionListItem term="Label">Value</DescriptionListItem>
+    <DescriptionListItem term="Label">March 2024</DescriptionListItem>
   </DescriptionList>
 );
 export const GalleryDescriptionListDivided = () => (
   <DescriptionList style={page} divided>
-    <DescriptionListItem term="Format">PNG</DescriptionListItem>
-    <DescriptionListItem term="Dimensions">1440 × 900</DescriptionListItem>
-    <DescriptionListItem term="Size">2.4 MB</DescriptionListItem>
+    <DescriptionListItem term="Label">Value</DescriptionListItem>
+    <DescriptionListItem term="Label">Value</DescriptionListItem>
+    <DescriptionListItem term="Label">Value</DescriptionListItem>
   </DescriptionList>
 );
 /* ChatGPT's account card: justified rows, divided, in a frame. */
 export const GalleryDescriptionListFramed = () => (
   <DescriptionList style={page} layout="justified" divided framed>
-    <DescriptionListItem term="Plan">Plus</DescriptionListItem>
-    <DescriptionListItem term="Username">@davidtee</DescriptionListItem>
-    <DescriptionListItem term="Member since">March 2024</DescriptionListItem>
+    <DescriptionListItem term="Label">Value</DescriptionListItem>
+    <DescriptionListItem term="Label">Value</DescriptionListItem>
+    <DescriptionListItem term="Label">March 2024</DescriptionListItem>
   </DescriptionList>
 );
 /* The first three properties, then "Show 3 more" (Notion's "N more properties"). */
 export const GalleryDescriptionListShowMore = () => (
   <DescriptionList style={page} visibleCount={3}>
-    <DescriptionListItem term="Status" icon={<CircleDashedIcon />}>In progress</DescriptionListItem>
-    <DescriptionListItem term="Owner" icon={<PersonIcon />}>David Tee</DescriptionListItem>
-    <DescriptionListItem term="Due" icon={<CalendarIcon />}>October 14, 2026</DescriptionListItem>
-    <DescriptionListItem term="Project" icon={<FolderIcon />}>Website launch</DescriptionListItem>
-    <DescriptionListItem term="Tags" icon={<TagIcon />}>Design, Launch</DescriptionListItem>
-    <DescriptionListItem term="Edited" icon={<ClockIcon />}>2 hours ago</DescriptionListItem>
+    <DescriptionListItem term="Label" icon={<CircleDashedIcon />}>Value</DescriptionListItem>
+    <DescriptionListItem term="Label" icon={<PersonIcon />}>David Tee</DescriptionListItem>
+    <DescriptionListItem term="Label" icon={<CalendarIcon />}>October 14, 2026</DescriptionListItem>
+    <DescriptionListItem term="Label" icon={<FolderIcon />}>Value</DescriptionListItem>
+    <DescriptionListItem term="Label" icon={<TagIcon />}>Value</DescriptionListItem>
+    <DescriptionListItem term="Label" icon={<ClockIcon />}>2 hours ago</DescriptionListItem>
   </DescriptionList>
 );
