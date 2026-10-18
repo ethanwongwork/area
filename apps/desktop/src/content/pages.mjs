@@ -338,13 +338,14 @@ export const COMPONENT_PAGES = [
     slug: "reference-list", name: "Reference list", exportName: "ReferenceList", manifest: "referenceList",
     imports: "ReferenceList, ReferenceListItem, Citation",
     api: [
-      ["ink", "Link's inks", "blue"],
-      ["columns", "boolean (27em columns)", "false"],
+      ["title", "ReactNode (\"Sources\")", "—"],
+      ["marker", "number | bullet", "number"],
+      ["ReferenceListItem source / title / href / description", "ReactNode / ReactNode / string / ReactNode", "—"],
       ["ReferenceListItem id / backlinks / highlighted", "string / string[] (the footnotes' ids) / boolean", "— / [] / false"],
     ],
     examples: [
-      { id: "default", title: "Default", note: "Wikipedia's notes: numbered, each led by ↑ (or ↑ a b c) back to where it is cited.", demo: "GalleryReferenceList" },
-      { id: "footnotes", title: "With footnotes", note: "A footnote links to its note's id; the note's backlinks list the footnotes' ids.", demo: "GalleryReferenceListWithFootnotes" },
+      { id: "default", title: "Default", note: "ChatGPT's sources: publisher, linked title and what it covers.", demo: "GalleryReferenceList" },
+      { id: "footnotes", title: "With footnotes", note: "Numbered: a footnote links to its note's id; the note's links back list the footnotes' ids.", demo: "GalleryReferenceListWithFootnotes" },
     ],
   },
   {
@@ -352,8 +353,8 @@ export const COMPONENT_PAGES = [
     imports: "TableOfContents",
     api: [
       ["items", "{ id, label, children? }[] (the headings' ids)", "—"],
-      ["title / top", "ReactNode | false / { label, id }", "\"Contents\" / —"],
-      ["collapse", "boolean (subsections only for the section being read)", "false"],
+      ["title / top", "ReactNode | false / { label, id }", "\"On this page\" / —"],
+      ["levels", "1 | 2", "2"],
       ["offset", "number (a sticky header's height)", "0"],
       ["current / onCurrentChange", "string (controlled) / (id) => void", "follows the scroll"],
     ],
@@ -366,13 +367,10 @@ export const COMPONENT_PAGES = [
     slug: "figure", name: "Figure", exportName: "Figure", manifest: "figure",
     imports: "Figure",
     api: [
-      ["frame", "plain | framed", "plain"],
-      ["align", "none | start | end (floated beside the text)", "none"],
-      ["caption", "ReactNode (wraps to the media's width)", "—"],
+      ["caption", "ReactNode (optional; wraps to the media's width)", "—"],
     ],
     examples: [
       { id: "default", title: "Default", note: "The image and a muted caption under it.", demo: "GalleryFigure" },
-      { id: "framed", title: "Framed", note: "Wikipedia's thumbnail, in Card's paint.", demo: "GalleryFigureFramed" },
     ],
   },
   {
@@ -380,20 +378,22 @@ export const COMPONENT_PAGES = [
     imports: "Infobox, InfoboxSection, InfoboxRow, InfoboxRows",
     api: [
       ["title / subtitle", "ReactNode", "—"],
-      ["media / caption", "ReactNode", "—"],
-      ["align", "none | start | end", "none"],
+      ["media", "ReactNode (an image or an Avatar)", "—"],
+      ["action", "ReactNode (one icon Button at the end of the title row)", "—"],
+      ["layout", "columns | stacked", "columns"],
+      ["framed", "boolean (Card's frame)", "false"],
       ["InfoboxSection title; InfoboxRow label", "ReactNode", "—"],
     ],
     examples: [
-      { id: "default", title: "Default", note: "Wikipedia's infobox in Card's paint, labels in the muted term ink.", demo: "GalleryInfobox" },
+      { id: "default", title: "Default", note: "A start-aligned header in the surface title role, then sections of dense label and value rows.", demo: "GalleryInfobox" },
     ],
   },
   {
     slug: "inline-list", name: "Inline list", exportName: "InlineList", manifest: "inlineList",
     imports: "InlineList",
-    api: [["separator", "dot | bar | comma", "dot"]],
+    api: [["separator", "dot | rule | none", "dot"]],
     examples: [
-      { id: "default", title: "Default", note: "Wikipedia's hlist: a bold middle dot after every item but the last.", demo: "GalleryInlineList" },
+      { id: "default", title: "Default", note: "A byline: a muted middle dot between items.", demo: "GalleryInlineList" },
     ],
   },
   {
@@ -414,15 +414,14 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "navbox", name: "Navbox", exportName: "Navbox", manifest: "navbox",
-    imports: "Navbox, NavboxGroup, InlineList, Link",
+    imports: "Navbox, NavboxGroup, Link",
     api: [
-      ["title", "ReactNode", "—"],
-      ["expanded / defaultExpanded / onExpandedChange", "boolean", "— / true / —"],
-      ["hideLabel / showLabel", "string", "\"Hide\" / \"Show\""],
-      ["NavboxGroup label", "ReactNode (omit for a full-width row)", "—"],
+      ["title / level", "ReactNode (the surface title role) / 2–6", "— / 2"],
+      ["divided", "boolean (a rule above)", "false"],
+      ["NavboxGroup label", "ReactNode (the group's heading); children are the links, one per row: Link ink=\"muted\" variant=\"standalone\"", "—"],
     ],
     examples: [
-      { id: "default", title: "Default", note: "Wikipedia's navbox: groups of related links, every other row striped.", demo: "GalleryNavbox" },
+      { id: "default", title: "Default", note: "Groups of related links in columns: a strong heading over muted links.", demo: "GalleryNavbox" },
     ],
   },
   {

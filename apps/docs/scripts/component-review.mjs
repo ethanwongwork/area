@@ -5,7 +5,7 @@
  *
  *   npm run build:docs                      # the current gallery (apps/docs/dist)
  *   node apps/docs/scripts/component-review.mjs [--before <dist of an earlier build>] [--before-label <text>]
- *     [--unapproved] [--out <dir>]
+ *     [--unapproved] [--round <slug,slug>] [--out <dir>]
  *
  * --before points at the dist of an earlier build (a worktree of the commit to compare against,
  * built with npm run build && npm run build:docs); its tiles and stylesheet become the Before view, and every
@@ -154,6 +154,10 @@ const families = [...now.values()].filter(f => !onlyOpen || status(f.slug) !== "
 // specimen counts as new.
 const changes = beforeDist ? visualChanges({ dist, beforeDist, tiles: families.flatMap(f => f.tiles.map(t => ({ key: `${f.slug}/${t.id}`, now: t.html, before: t.before }))) }) : {};
 for (const f of families) for (const t of f.tiles) t.change = changes[`${f.slug}/${t.id}`] ?? { state: "new", modes: [] };
+// This round (the page's default filter): families in review, and any whose specimens render differently from Before.
+// --round <slug,slug> names them instead, when Before also differs in work already approved.
+const roundSlugs = arg("--round")?.split(",");
+for (const f of families) f.round = roundSlugs ? roundSlugs.includes(f.slug) : f.status === "review" || (Boolean(beforeDist) && f.tiles.some(t => t.change.state !== "unchanged"));
 
 rmSync(out, { recursive: true, force: true });
 mkdirSync(out, { recursive: true });

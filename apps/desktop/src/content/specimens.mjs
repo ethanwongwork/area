@@ -424,30 +424,34 @@ function gallerySpecimenTable() {
     ],
     "reference-list": [
       { id: "default", title: "Default", demo: "GalleryReferenceList" },
-      { id: "layout-columns", title: "Layout / columns", demo: "GalleryReferenceListColumns" },
-      { id: "state-highlighted", title: "State / highlighted", demo: "GalleryReferenceListHighlighted" },
+      { id: "marker-bullet", title: "Marker / bullet", demo: "GalleryReferenceListBullet" },
+      { id: "content-long", title: "Content / ten or more", demo: "GalleryReferenceListLong" },
       { id: "composition-footnotes", title: "Composition / with footnotes", demo: "GalleryReferenceListWithFootnotes" },
+      { id: "state-highlighted", title: "State / highlighted", demo: "GalleryReferenceListHighlighted" },
     ],
     "table-of-contents": [
       { id: "default", title: "Default", demo: "GalleryTableOfContents" },
-      { id: "behavior-collapse", title: "Behavior / collapse", demo: "GalleryTableOfContentsCollapse" },
+      { id: "levels-one", title: "Levels / one", demo: "GalleryTableOfContentsLevels" },
       { id: "content-top", title: "Content / top row", demo: "GalleryTableOfContentsTop" },
       { id: "behavior-scroll", title: "Behavior / follows the scroll", demo: "GalleryTableOfContentsScroll" },
     ],
     figure: [
       { id: "default", title: "Default", demo: "GalleryFigure" },
-      { id: "frame-framed", title: "Frame / framed", demo: "GalleryFigureFramed" },
+      { id: "content-no-caption", title: "Content / no caption", demo: "GalleryFigureNoCaption" },
       { id: "content-long-caption", title: "Content / long caption", demo: "GalleryFigureLongCaption" },
-      { id: "align-end", title: "Align / end", demo: "GalleryFigureAlignEnd" },
     ],
     infobox: [
       { id: "default", title: "Default", demo: "GalleryInfobox" },
       { id: "content-rows", title: "Content / rows only", demo: "GalleryInfoboxRows" },
+      { id: "layout-stacked", title: "Layout / stacked", demo: "GalleryInfoboxStacked" },
+      { id: "content-action", title: "Content / action", demo: "GalleryInfoboxAction" },
+      { id: "framed", title: "Framed", demo: "GalleryInfoboxFramed" },
     ],
     "inline-list": [
       { id: "default", title: "Default", demo: "GalleryInlineList" },
-      { id: "separator-bar", title: "Separator / bar", demo: "GalleryInlineListBar" },
-      { id: "separator-comma", title: "Separator / comma", demo: "GalleryInlineListComma" },
+      { id: "content-blue-links", title: "Content / blue links", demo: "GalleryInlineListBlue" },
+      { id: "separator-rule", title: "Separator / rule", demo: "GalleryInlineListRule" },
+      { id: "separator-none", title: "Separator / none", demo: "GalleryInlineListNone" },
       { id: "content-wrap", title: "Content / wrapping", demo: "GalleryInlineListWrap" },
     ],
     abbreviation: [
@@ -458,7 +462,7 @@ function gallerySpecimenTable() {
     ],
     navbox: [
       { id: "default", title: "Default", demo: "GalleryNavbox" },
-      { id: "state-collapsed", title: "State / collapsed", demo: "GalleryNavboxCollapsed" },
+      { id: "divided", title: "Divided", demo: "GalleryNavboxDivided" },
     ],
     "date-range-picker": [
       { id: "default", title: "Default", demo: "GalleryDateRangePicker" },

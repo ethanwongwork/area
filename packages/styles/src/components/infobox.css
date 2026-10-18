@@ -1,66 +1,76 @@
 /* ---------------------------------------------------------------------------
  * Infobox
  *
- * A subject at a glance, beside the article (docs/specs/infobox.md). Wikipedia's (measured 2026-10-17):
- * 22em wide at 0.88 of the body (14.08 / 21.12), floated to the end 1em from the text, a #f8f9fa panel
- * with a #a2a9b1 hairline; the title 1.25em bold centred; the image centred with its caption under it;
- * sections under a centred bold band; rows of a bold label (about 40%) and its value, both top-aligned.
- * Area keeps the structure in its own paint: Card's surface and edge, the band in the control fill, and
- * labels in Description list's muted term ink (the labelled-values role).
+ * A subject's key facts, beside or above the content (docs/specs/infobox.md). Start-aligned and unframed, as
+ * GitHub's About sidebar, the App Store's Information and Figma's inspector (round 34 survey,
+ * docs/research/articles-rethink-2026-10-17/figure-infobox.md); at Wikipedia's density (owner, round 34: "i like the
+ * left aligned but also like the density and spacing and gaps of the wikipedia one"). Its type is Area's own ramp,
+ * one role per level (owner: "are the titles consistent with other components?"):
+ *   title     the surface title (title-xs, strong): Card's and Dialog's title
+ *   subtitle  UI text, muted: Card's and Section heading's lede
+ *   heading   UI text, strong, default ink: Section heading's title (GitHub's About headings, Figma's section titles)
+ *   label     UI text, muted, regular: Description list's term (Notion's property names, Radix, Chakra)
+ *   value     UI text, default ink
+ * `layout="stacked"` puts each label above its value for a narrow column; `action` ends the title row with one control.
+ * `framed` puts it in Card's frame (ChatGPT's settings card, Google's panel). It fills its column.
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-infobox {
-    /* spec: Wikipedia 22em (309.76 at 14.08). */
-    inline-size: 22em;
-    max-inline-size: 100%;
-    box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    gap: var(--area-space-8);
+    /* spec: 12 between the header and each section (GitHub's About: sections 16 apart at 14 with a rule; Area's
+       card-content gap at the app's density). */
+    gap: var(--area-space-12);
+    min-inline-size: 0;
+    box-sizing: border-box;
+    color: var(--area-fg-default);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+  }
+  /* Card's frame: its surface, edge, corner and resting shadow (card.css), 12 in. */
+  .area-infobox--framed {
     padding: var(--area-space-12);
     background-color: var(--area-bg-surface);
     border: var(--area-border-width) solid var(--area-border-card);
     border-radius: var(--area-radius-container);
-    /* A resting surface, as Card: its frame rides the Surface axis and the resting shadow keeps it under Borderless. */
     box-shadow: var(--area-shadow-resting);
-    color: var(--area-fg-default);
-    font-size: var(--area-text-sm-size);
-    line-height: var(--area-text-sm-leading);
   }
-  /* spec: Wikipedia floats it to the end, 1em from the text; Area's 24 and 16, as Figure. */
-  .area-infobox--none {}
-  .area-infobox--end { float: inline-end; clear: inline-end; margin: var(--area-space-4) 0 var(--area-space-16) var(--area-space-24); }
-  .area-infobox--start { float: inline-start; clear: inline-start; margin: var(--area-space-4) var(--area-space-24) var(--area-space-16) 0; }
 
-  /* spec: Wikipedia's title 1.25em bold, centred; Area's body text, strong. */
+  /* Proximity: the title pairs with its subtitle (2 apart) and sits further from the media (8); sections sit further
+     still (12), so the groups read before the type does. */
+  .area-infobox__header { display: flex; flex-direction: column; gap: var(--area-space-8); min-inline-size: 0; }
+  .area-infobox__media { display: block; }
+  .area-infobox__media > :is(img, video, svg, picture) { display: block; max-inline-size: 100%; block-size: auto; border-radius: var(--area-radius-small); }
+  /* The title row: the title and subtitle, then one action ending on the content edge (Ant Descriptions' extra,
+     GitHub's About gear), its top on the title's first line. */
+  .area-infobox__title-row { display: flex; align-items: start; gap: var(--area-space-8); min-inline-size: 0; }
+  .area-infobox__heading-group { flex: 1; display: flex; flex-direction: column; gap: var(--area-space-2); min-inline-size: 0; }
+  .area-infobox__action { flex: none; display: flex; margin-block-start: calc((var(--area-title-xs-leading) - var(--area-control-sm)) / 2); }
   .area-infobox__title {
     margin: 0;
-    font-size: var(--area-text-md-size);
-    line-height: var(--area-text-md-leading);
+    font-size: var(--area-title-xs-size);
+    line-height: var(--area-title-xs-leading);
     font-weight: var(--area-weight-strong);
-    text-align: center;
     overflow-wrap: anywhere;
   }
-  .area-infobox__subtitle { margin: calc(var(--area-space-8) * -1) 0 0; color: var(--area-fg-muted); text-align: center; }
-  .area-infobox__media { margin: 0; display: flex; flex-direction: column; align-items: center; gap: var(--area-space-6); }
-  .area-infobox__media > :is(img, video, svg, picture) { display: block; max-inline-size: 100%; block-size: auto; border-radius: var(--area-radius-small); }
-  .area-infobox__caption { color: var(--area-fg-muted); text-align: center; }
+  .area-infobox__subtitle { margin: 0; color: var(--area-fg-muted); }
 
-  .area-infobox__section { display: flex; flex-direction: column; gap: var(--area-space-4); margin: 0; }
-  /* spec: Wikipedia's section band, bold and centred on a tint; Area's control fill, the band's own corner. */
-  .area-infobox__heading {
-    margin: 0;
-    padding: var(--area-space-2) var(--area-space-8);
-    background-color: var(--area-bg-component);
-    border-radius: var(--area-radius-small);
-    font-size: inherit;
-    line-height: inherit;
-    font-weight: var(--area-weight-strong);
-    text-align: center;
+  /* A section: its heading, then its rows; a divider between sections (GitHub, Figma: a 1px muted rule). */
+  .area-infobox__section { display: flex; flex-direction: column; gap: var(--area-space-6); margin: 0; min-inline-size: 0; }
+  .area-infobox__section + .area-infobox__section {
+    padding-block-start: var(--area-space-12);
+    border-block-start: var(--area-stroke-width) solid var(--area-border-divider); /* a divider: a required line (DESIGN_SYSTEM.md, "Strokes") */
   }
+  .area-infobox__heading { margin: 0; font-size: inherit; line-height: inherit; font-weight: var(--area-weight-strong); }
+  /* spec: Wikipedia's rows: the label column 123 of 296 (Area 120, Radix and Chakra's label minimum), the value 4 after
+     it (3 spacing + 1 padding), rows 4 apart (3 + 2 × 1), both top-aligned. */
   .area-infobox__rows { display: flex; flex-direction: column; gap: var(--area-space-4); margin: 0; }
-  /* spec: Wikipedia's label column about 40% (120.8 of 296), label and value top-aligned. */
-  .area-infobox__row { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 3fr); column-gap: var(--area-space-12); align-items: start; }
+  .area-infobox__row { display: grid; grid-template-columns: 120px minmax(0, 1fr); column-gap: var(--area-space-8); align-items: start; }
   .area-infobox__label { margin: 0; color: var(--area-fg-muted); overflow-wrap: anywhere; }
+  .area-infobox--columns {}
+  /* Stacked: the label above its value, for a narrow column (the App Store's Information: label muted, 4 above the
+     value; Radix and Chakra `vertical`); pairs 8 apart so each reads as one. */
+  .area-infobox--stacked .area-infobox__rows { gap: var(--area-space-8); }
+  .area-infobox--stacked .area-infobox__row { grid-template-columns: minmax(0, 1fr); row-gap: var(--area-space-4); }
   .area-infobox__value { margin: 0; min-inline-size: 0; overflow-wrap: anywhere; }
 }

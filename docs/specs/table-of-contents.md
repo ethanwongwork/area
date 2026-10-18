@@ -57,3 +57,37 @@ Wikipedia, computed:
 
 - **What it is:** A page's sections as an outline, with the section being read marked as you scroll.
 - **Based on:** Wikipedia's contents panel drawn with Nav's marker rows, so it matches Area's other outlines.
+
+## Rethink, 2026-10-17 (round 34)
+
+Owner, round 33: "rethink" (not only Wikipedia). Survey: `docs/research/articles-rethink-2026-10-17/reference-list-toc.md`.
+- `title` defaults to "On this page", in Nav's group label (muted, strong, a row tall), its text 16 in with the rows.
+- `levels`: 2 (default) or 1. Dropped `collapse`. Rows, rail and the scroll rule (VitePress `outline.ts`) unchanged.
+- Open: a faint marker track on every row (VitePress, MDN) would change Nav marker everywhere; not done.
+
+## Review note, 2026-10-17 (round 34)
+
+- **What changed:** The label is a quiet "On this page" (Nav's muted group label) instead of a bold "Contents". It
+  shows two levels, or one with `levels={1}`, and the Wikipedia-style collapse is gone. The rows are unchanged:
+  muted, the section being read in the full ink with its rail.
+- **Why:** You asked for it not to look only like Wikipedia. Docs outlines (VitePress, Starlight, Primer, Nextra,
+  Docusaurus, MDN) head it "On this page" in a quiet label, show two levels and never fold subsections.
+
+## Round 35, 2026-10-17
+
+Owner, round 34: "reevaluate type styles and make sure they are correct for style and fg color." → the label moves to
+the default ink.
+
+| Part | Type | Ink | Space | Basis |
+|---|---|---|---|---|
+| label ("On this page") | UI text, strong | default | a row tall, text 16 in | VitePress: title 600 in text-1 over text-2 links |
+| row | UI text, regular | `fg-muted` | Nav marker rows (28 at the app's 13, 16 in) | Notion's outline: rows in its secondary ink; VitePress text-2 |
+| current row | UI text, regular | default, with the rail in `fg-selection` | — | Nav marker; Notion marks the current row by ink (its blue), VitePress by its brand ink: Area's Selection role, neutral unless a theme makes it the accent |
+| nested | — | — | Nav's nested indent | Notion 12 per level |
+
+## Review note, 2026-10-17 (round 35)
+
+- **What changed:** "On this page" is now in the full text colour, so it reads as the outline's heading above the grey
+  section names. The section you're reading stays in the full colour with its marker.
+- **Why:** You asked to re-check the type and colours. The label was grey like the rows, so only its weight told it
+  apart; docs outlines (VitePress) and Notion keep the heading strong and the rows grey.

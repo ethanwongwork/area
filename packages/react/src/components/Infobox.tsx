@@ -1,4 +1,5 @@
-// Infobox: a subject at a glance beside an article (Wikipedia's infobox). docs/specs/infobox.md.
+// Infobox: a subject's key facts beside or above the content: a start-aligned header, then sections of label and value
+// rows at Wikipedia's density (GitHub's About sidebar, the App Store's Information). docs/specs/infobox.md.
 import { forwardRef } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { cx, infoboxVariants, type VariantProps, MANIFESTS } from "../variants.ts";
@@ -6,46 +7,51 @@ import { cx, infoboxVariants, type VariantProps, MANIFESTS } from "../variants.t
 type InfoboxVariants = VariantProps<typeof MANIFESTS.infobox>;
 
 export interface InfoboxProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
-  /** The subject's name, centred at the top. */
+  /** The subject's name, at the start of the header. */
   title: ReactNode;
   /** A line under the title: a role, a short description. */
   subtitle?: ReactNode;
-  /** An image (or other media), centred under the title. */
+  /** An image (or an Avatar) above the title. Give an img its alt text; a caption belongs to a Figure. */
   media?: ReactNode;
-  /** The media's caption. */
-  caption?: ReactNode;
-  /** Beside the text: floated to the `end` or `start`, as Wikipedia's. */
-  align?: InfoboxVariants["align"];
-  /** Rows (`InfoboxRow`) and sections (`InfoboxSection`). */
+  /** One control at the end of the title row: an icon Button (`size="sm"`, ghost). */
+  action?: ReactNode;
+  /** `columns` (default): a 120 label column. `stacked`: each label above its value, for a narrow column. */
+  layout?: InfoboxVariants["layout"];
+  /** In Card's frame. Unframed by default, as GitHub's and Notion's. */
+  framed?: boolean;
+  /** Sections (`InfoboxSection`), or rows (`InfoboxRows`). */
   children?: ReactNode;
 }
 
 export const Infobox = /* @__PURE__ */ forwardRef<HTMLElement, InfoboxProps>(function Infobox(
-  { title, subtitle, media, caption, align, className, children, "aria-label": ariaLabel, ...rest },
+  { title, subtitle, media, action, layout, framed, className, children, "aria-label": ariaLabel, ...rest },
   ref,
 ) {
   return (
-    <aside ref={ref} className={infoboxVariants({ align }, className)} aria-label={ariaLabel ?? (typeof title === "string" ? title : undefined)} {...rest}>
-      <div className={infoboxVariants.element("title")}>{title}</div>
-      {subtitle ? <div className={infoboxVariants.element("subtitle")}>{subtitle}</div> : null}
-      {media ? (
-        <figure className={infoboxVariants.element("media")}>
-          {media}
-          {caption ? <figcaption className={infoboxVariants.element("caption")}>{caption}</figcaption> : null}
-        </figure>
-      ) : null}
+    <aside ref={ref} className={infoboxVariants({ layout, framed }, className)} aria-label={ariaLabel ?? (typeof title === "string" ? title : undefined)} {...rest}>
+      <div className={infoboxVariants.element("header")}>
+        {media ? <div className={infoboxVariants.element("media")}>{media}</div> : null}
+        <div className={infoboxVariants.element("title-row")}>
+          <div className={infoboxVariants.element("heading-group")}>
+            <div className={infoboxVariants.element("title")}>{title}</div>
+            {subtitle ? <div className={infoboxVariants.element("subtitle")}>{subtitle}</div> : null}
+          </div>
+          {action ? <div className={infoboxVariants.element("action")}>{action}</div> : null}
+        </div>
+      </div>
       {children}
     </aside>
   );
 });
 
 export interface InfoboxSectionProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
-  /** The band over the section's rows ("Personal details"). */
+  /** The heading over the section's rows ("Personal details"). */
   title?: ReactNode;
+  /** `InfoboxRow`s. */
   children?: ReactNode;
 }
 
-/** A titled run of rows. Rows outside a section need no wrapper of their own: Infobox lists them as they come. */
+/** A titled run of rows; a divider separates it from the section before it. */
 export const InfoboxSection = /* @__PURE__ */ forwardRef<HTMLElement, InfoboxSectionProps>(function InfoboxSection(
   { title, className, children, ...rest },
   ref,
@@ -64,7 +70,7 @@ export interface InfoboxRowProps extends HTMLAttributes<HTMLDivElement> {
   children?: ReactNode;
 }
 
-/** A label and its value. Put rows in an `InfoboxSection` (or an `InfoboxRows`), which makes the `dl`. */
+/** A label and its value. Put rows in an `InfoboxSection` or `InfoboxRows`, which make the `dl`. */
 export const InfoboxRow = /* @__PURE__ */ forwardRef<HTMLDivElement, InfoboxRowProps>(function InfoboxRow(
   { label, className, children, ...rest },
   ref,
@@ -77,12 +83,12 @@ export const InfoboxRow = /* @__PURE__ */ forwardRef<HTMLDivElement, InfoboxRowP
   );
 });
 
-/** Rows without a section title. */
-export const InfoboxRows = /* @__PURE__ */ forwardRef<HTMLDListElement, HTMLAttributes<HTMLDListElement>>(function InfoboxRows(
-  { className, ...rest },
+/** Rows without a heading. */
+export const InfoboxRows = /* @__PURE__ */ forwardRef<HTMLElement, HTMLAttributes<HTMLElement>>(function InfoboxRows(
+  { className, children, ...rest },
   ref,
 ) {
-  return <dl ref={ref} className={cx(infoboxVariants.element("rows"), className)} {...rest} />;
+  return <section ref={ref} className={cx(infoboxVariants.element("section"), className)} {...rest}><dl className={infoboxVariants.element("rows")}>{children}</dl></section>;
 });
 
 export { infoboxVariants };

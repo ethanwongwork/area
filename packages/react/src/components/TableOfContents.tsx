@@ -1,5 +1,5 @@
 // Table of contents: a page's sections as Nav's marker rows, with the section being read marked as the page
-// scrolls (Wikipedia's contents). docs/specs/table-of-contents.md.
+// scrolls (a docs "On this page" outline: VitePress, MDN, Primer). docs/specs/table-of-contents.md.
 import { Fragment, forwardRef, useEffect, useMemo, useRef, useState } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { cx, tableOfContentsVariants } from "../variants.ts";
@@ -15,12 +15,12 @@ export interface TableOfContentsItem {
 
 export interface TableOfContentsProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
   items: TableOfContentsItem[];
-  /** The visible title, "Contents" by default; `false` for none (the nav keeps an accessible name). */
+  /** The visible label, "On this page" by default; `false` for none (the nav keeps an accessible name). */
   title?: ReactNode | false;
-  /** A first row that goes back to the top: its label ("(Top)") and the id it links to. */
+  /** A first row that goes back to the top: its label ("Overview") and the id it links to. */
   top?: { label: ReactNode; id: string };
-  /** Shows a section's subsections only while it is the one being read, as Wikipedia. */
-  collapse?: boolean;
+  /** How many levels to show: 2 (sections and their subsections, the default) or 1. */
+  levels?: 1 | 2;
   /** Space a sticky header covers at the top of the scroller, in px: a heading counts as reached below it. */
   offset?: number;
   /** The id of the section being read (controlled). Otherwise it follows the scroll. */
@@ -28,7 +28,8 @@ export interface TableOfContentsProps extends Omit<HTMLAttributes<HTMLElement>, 
   onCurrentChange?: (id: string | undefined) => void;
 }
 
-const flatten = (items: TableOfContentsItem[]): TableOfContentsItem[] => items.flatMap(item => [item, ...flatten(item.children ?? [])]);
+const flatten = (items: TableOfContentsItem[], depth: number): TableOfContentsItem[] =>
+  items.flatMap(item => [item, ...(depth > 1 ? flatten(item.children ?? [], depth - 1) : [])]);
 const scrollerOf = (node: Element) => {
   for (let parent = node.parentElement; parent; parent = parent.parentElement) {
     const style = getComputedStyle(parent);
@@ -38,14 +39,14 @@ const scrollerOf = (node: Element) => {
 };
 
 export const TableOfContents = /* @__PURE__ */ forwardRef<HTMLElement, TableOfContentsProps>(function TableOfContents(
-  { items, title = "Contents", top, collapse, offset = 0, current: currentProp, onCurrentChange, className, "aria-label": ariaLabel, ...rest },
+  { items, title = "On this page", top, levels = 2, offset = 0, current: currentProp, onCurrentChange, className, "aria-label": ariaLabel, ...rest },
   ref,
 ) {
   const [local, setLocal] = useState<string | undefined>(top?.id);
   const current = currentProp ?? local;
   const changed = useRef(onCurrentChange);
   changed.current = onCurrentChange;
-  const all = useMemo(() => flatten(items), [items]);
+  const all = useMemo(() => flatten(items, levels), [items, levels]);
   const key = all.map(item => item.id).join(" ");
 
   // The section being read: the last heading at or above the top of its scroller (below `offset`), or the last
@@ -71,19 +72,18 @@ export const TableOfContents = /* @__PURE__ */ forwardRef<HTMLElement, TableOfCo
     return () => { document.removeEventListener("scroll", request, true); window.removeEventListener("resize", request); cancelAnimationFrame(frame); };
   }, [key, offset, top?.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const contains = (item: TableOfContentsItem): boolean => item.id === current || (item.children ?? []).some(contains);
-  const rows = (list: TableOfContentsItem[]): ReactNode => list.map(item => (
+  const rows = (list: TableOfContentsItem[], depth = 1): ReactNode => list.map(item => (
     <Fragment key={item.id}>
       <NavItem href={`#${item.id}`} aria-current={item.id === current ? "location" : undefined} onClick={() => { if (currentProp === undefined) setLocal(item.id); onCurrentChange?.(item.id); }}>
         {item.label}
       </NavItem>
-      {item.children?.length && (!collapse || contains(item)) ? <NavGroup nested>{rows(item.children)}</NavGroup> : null}
+      {item.children?.length && depth < levels ? <NavGroup nested>{rows(item.children, depth + 1)}</NavGroup> : null}
     </Fragment>
   ));
 
   return (
     <Nav ref={node => assignRef(ref, node)} selection="marker" className={cx(tableOfContentsVariants(), className)}
-      aria-label={ariaLabel ?? (typeof title === "string" ? title : "Contents")} {...rest}>
+      aria-label={ariaLabel ?? (typeof title === "string" ? title : "On this page")} {...rest}>
       {title !== false ? <div className={tableOfContentsVariants.element("title")} aria-hidden="true">{title}</div> : null}
       {top ? <NavItem href={`#${top.id}`} aria-current={current === top.id ? "location" : undefined} onClick={() => { if (currentProp === undefined) setLocal(top.id); onCurrentChange?.(top.id); }}>{top.label}</NavItem> : null}
       {rows(items)}

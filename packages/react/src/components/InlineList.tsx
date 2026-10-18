@@ -1,4 +1,4 @@
-// Inline list: short items along a line with a separator between them (Wikipedia's hlist). docs/specs/inline-list.md.
+// Inline list: short items along a line with a separator between them (a byline, a metadata row). docs/specs/inline-list.md.
 import { Children, forwardRef, isValidElement } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { inlineListVariants, type VariantProps, MANIFESTS } from "../variants.ts";
@@ -6,7 +6,7 @@ import { inlineListVariants, type VariantProps, MANIFESTS } from "../variants.ts
 type InlineListVariants = VariantProps<typeof MANIFESTS.inlineList>;
 
 export interface InlineListProps extends HTMLAttributes<HTMLUListElement> {
-  /** Between items: a bold middle dot (Wikipedia), a bar, or a comma. */
+  /** Between items: a muted middle dot (default), a 1px rule, or space alone (`none`, for icon-led items). */
   separator?: InlineListVariants["separator"];
   /** The items: each child becomes one list item. */
   children?: ReactNode;

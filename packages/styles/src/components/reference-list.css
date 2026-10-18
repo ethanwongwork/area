@@ -1,81 +1,86 @@
 /* ---------------------------------------------------------------------------
  * Reference list
  *
- * The notes a footnote (Citation variant="footnote") points at, numbered, each led by links back to
- * where it is cited (docs/specs/reference-list.md). Measured on Wikipedia (en.wikipedia.org/wiki/Lisa_Su,
- * 2026-10-17, computed): an ol at 0.9 of the body (14.4 on 16, leading 23.4), markers 3.2em in, items 0.1em
- * apart, "↑" (one citation) or "↑ a b c" (several) before the text in the link blue, the note highlighted
- * #e8eeff when it is the page's target, in columns 27em wide when the list is long.
+ * Where a text's facts come from (docs/specs/reference-list.md). Built on ChatGPT's own "Sources" (owner, round 34:
+ * "look at chatgpts reference/source design"; measured in a temporary chat, 2026-10-17): an h3 at the answer's size,
+ * 600, default ink, 24 above and 8 over a list; the list 32 in (2em at 16) with discs in the default ink; items at the
+ * answer's size and ink, one after another with no gap; each source's publisher, title (a link with its external mark 4
+ * after it) and what it covers, set apart by spaced em dashes (owner, round 37). Area keeps that in its UI text, with its own Link (underlined in a sentence)
+ * in place of ChatGPT's dotted grey line. Numbered by default (owner, round 35: "i actually prefer numbers"), the
+ * numbers flush with the text above; a note can end with a link back (Area's return glyph; GitHub's ↩), and the note
+ * a footnote jumped to carries the selection rail.
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-reference-list {
-    --_ink: inherit;
-    margin: 0;
-    /* spec: Wikipedia's markers sit 3.2em in (46.08 at 14.4); room for three digits. */
-    padding-inline-start: 3.2em;
+    display: flex;
+    flex-direction: column;
+    /* spec: ChatGPT's heading 8 over its list. */
+    gap: var(--area-space-8);
+    min-inline-size: 0;
     color: var(--area-fg-default);
-    /* spec: a step below body, as Wikipedia's 0.9; Area's small text. */
-    font-size: var(--area-text-sm-size);
-    line-height: var(--area-text-sm-leading);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
   }
-  /* spec: Wikipedia's reflist columns (27em in Vector 2022); a note never splits across two. */
-  .area-reference-list--columns { column-width: 27em; column-gap: var(--area-space-32); }
-  .area-reference-list--columns > .area-reference-list__item { break-inside: avoid-column; }
-
+  /* spec: ChatGPT's h3, the answer's size at 600 in the default ink: Area's UI text, strong (Section heading's title). */
+  .area-reference-list__title { margin: 0; font-size: inherit; line-height: inherit; font-weight: var(--area-weight-strong); }
+  /* The marker starts on the edge of the text above, no hanging indent (owner, round 35: "the numbers themselves aligning
+     with the text on top, i dont like huge indents"; Substack, Notion and Perplexity, round-36-variants.md). Round 36
+     (owner: "the space between the dots/numbers and the start of the text is too big, can you make it so theyre
+     interchangeable/aligned"): one marker box for bullets and numbers alike, as Notion's lists keep one box for both,
+     at least the width of "1." (0.8em: 10.4 of Geist at 13) and growing to the widest number, shared by every row so
+     the text keeps one edge; the text 6 after it (Notion's and Substack's 6). Numbers start on the edge; the bullet sits
+     in the middle of the box, as Notion centres its markers, so swapping one for the other leaves the text in place.
+     Wrapped lines hang under the text. */
+  .area-reference-list__list {
+    display: grid;
+    grid-template-columns: minmax(0.8em, max-content) minmax(0, 1fr);
+    column-gap: var(--area-space-6);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: area-reference var(--_start, 0);
+  }
   .area-reference-list__item {
-    /* spec: Wikipedia 0.1em between notes. */
-    margin-block-end: var(--area-space-2);
+    position: relative;
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
     scroll-margin-block: var(--area-space-24);
+    counter-increment: area-reference;
   }
-  /* The numbers are quieter than the notes and line up. */
-  .area-reference-list__item::marker { color: var(--area-fg-muted); font-variant-numeric: tabular-nums; }
-  /* The note a footnote jumped to: Wikipedia tints it (#e8eeff). Area marks it as it marks the current place in an
-     outline (Nav marker, Table of contents): the selection rail beside it, at the list's start edge, so the note's
-     text and links stay on the page (a filled plate left the blue backlinks at 3.16:1 at dark 24 + 8).
-     data-highlighted lets an app mark it without a hash change. */
-  .area-reference-list__item { position: relative; }
-  .area-reference-list__item:is(:target, [data-highlighted])::before {
+  .area-reference-list__item::before { grid-column: 1; color: var(--area-fg-muted); font-variant-numeric: tabular-nums; }
+  .area-reference-list--number .area-reference-list__item::before { content: counter(area-reference) "."; }
+  .area-reference-list--bullet .area-reference-list__item::before { content: "•"; justify-self: center; }
+  .area-reference-list__text { grid-column: 2; min-inline-size: 0; }
+  /* The parts of a source (publisher, title, what it covers) are set apart by a spaced em dash in the item's ink, as
+     ChatGPT's (owner, round 37: "i actually prefer m dashes over dots if thats an intentional use and proper use"). */
+  .area-reference-list__dash { white-space: pre; }
+
+  /* The note a footnote jumped to: Nav marker's selection rail, 6 outside the marker column's start edge (the rail sits
+     6 inside a marker row's 16 inset there). data-target lets an app mark it without a hash change. */
+  .area-reference-list__item:is(:target, [data-target])::after {
     content: "";
     position: absolute;
     inset-block: var(--area-space-2);
-    inset-inline-start: -3.2em;
+    inset-inline-start: calc(-1 * (var(--area-space-6) + var(--area-space-2) + var(--area-stroke-width)));
     inline-size: calc(var(--area-space-2) + var(--area-stroke-width)); /* spec: Nav marker's rail */
     border-radius: var(--area-radius-full);
     background-color: var(--area-fg-selection);
   }
 
-  .area-reference-list__backlinks {
-    margin-inline-end: 0.25em;
-    color: var(--area-fg-muted);
-    user-select: none; /* spec: Wikipedia's .mw-cite-backlink */
-  }
+  /* A link back at the end of a note: Area's return glyph at the xs icon size, 4 after the text (as Link's external
+     mark); a repeat citation adds its count (remark's ↩²). */
+  .area-reference-list__backlinks { display: inline-flex; gap: var(--area-space-4); margin-inline-start: var(--area-space-4); vertical-align: calc((1cap - var(--area-icon-xs)) / 2); white-space: nowrap; }
   .area-reference-list__backlink {
-    color: var(--_ink);
+    display: inline-flex;
+    align-items: start;
+    color: var(--area-fg-muted);
     text-decoration: none;
     border-radius: var(--area-radius-min);
     cursor: pointer;
+    user-select: none;
   }
-  /* spec: Wikipedia sets the a b c of several citations raised, bold and italic; Area's type has no italic
-     (base.css: no synthesis), so raised and strong. */
-  .area-reference-list__backlink:not(:first-child) {
-    margin-inline-start: 0.2em;
-    font-size: 0.75em;
-    font-weight: var(--area-weight-strong);
-    vertical-align: super;
-    line-height: 1;
-  }
+  .area-reference-list__backlink > svg { inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); }
   .area-reference-list__backlink:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
-  .area-reference-list__text {}
-
-  /* Ink of the links back, as Link's (link.css): blue by default (manifest), Wikipedia's. */
-  .area-reference-list--inherit {}
-  .area-reference-list--muted { --_ink: var(--area-fg-muted); }
-  .area-reference-list--action { --_ink: var(--area-fg-action); }
-  .area-reference-list--blue { --_ink: var(--area-fg-info); }
-  .area-reference-list--purple { --_ink: var(--area-fg-discovery); }
-  .area-reference-list--pink { --_ink: var(--area-fg-pink); }
-  .area-reference-list--green { --_ink: var(--area-fg-success); }
-  .area-reference-list--red { --_ink: var(--area-fg-danger); }
-  .area-reference-list--orange { --_ink: var(--area-fg-warning); }
-  .area-reference-list--brown { --_ink: var(--area-fg-brown); }
+  .area-reference-list__count { font-size: var(--area-text-xs-size); line-height: 1; font-variant-numeric: tabular-nums; }
 }

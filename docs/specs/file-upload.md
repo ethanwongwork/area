@@ -227,6 +227,13 @@ Resolved 2026-10-09 (owner: "go with your recommendations"):
 - **What changed:** The remove and retry buttons now sit 8px from the row's top and 8px from its side, evenly. Before, they sat 12px from the top and 16px from the side. Everything inside the zone and the rows now starts 16px from the outside (it was 17, because the 1px border was counted on top of the padding). The size line sits 2px under the file name, as in Untitled UI.
 - **Why:** You said the inset around the buttons looked unequal and asked for every gap to be accurate; Untitled UI pulls its button 8 up and 8 in, and counts its edge once.
 
+## Review note, 2026-10-17 (round 33)
+
+- **What changed:** Only the underline on the upload link: it now sits close under the words, about 1px below the letters,
+  instead of 0.25em down. Tails of g, y and p cross it and the line breaks around them. Nothing else changed.
+- **Why:** It follows Link, which you asked to underline "very natural and close to the text" (link.md, "Close
+  underline").
+
 ## Feedback log
 
 - 2026-10-09 · owner: "move on to the next component" → File upload built from Untitled UI and Area's parts; owner declined a

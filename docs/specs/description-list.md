@@ -164,6 +164,13 @@ button below the frame (the `dl` carries the frame).
 
 "Show more" is not selectable; its hover underline takes Link's offset (0.25em). See [interaction polish](../research/interaction-polish-2026-10-16.md).
 
+## Review note, 2026-10-17 (round 33)
+
+- **What changed:** Only the underline on the "Show more" link: it now sits close under the words, about 1px below the letters,
+  instead of 0.25em down. Tails of g, y and p cross it and the line breaks around them. Nothing else changed.
+- **Why:** It follows Link, which you asked to underline "very natural and close to the text" (link.md, "Close
+  underline").
+
 ## Feedback log
 
 - 2026-10-10 · owner: "go with your recommendations, keep building" → Description list from Notion's page properties
@@ -172,3 +179,5 @@ button below the frame (the `dl` carries the frame).
 - 2026-10-12 · owner: build "show more" from design-system evidence → `visibleCount` and the Show more button (above). In review.
 - 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the divided rules and the framed edge are at `stroke-width`, Table's (were `border-width`) (description-list.css). (docs/research/consistency-audit-2026-10-12.md)
 - 2026-10-12 · owner, review round 21 (components21): approved with the open questions' recommendations ("go with your recs"), no change → Complete in `component-status.mjs`.
+
+Since 2026-10-17 the underline offset is Link's 0.08em, close under the text (link.md, "Close underline").

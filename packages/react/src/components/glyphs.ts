@@ -103,6 +103,10 @@ export const glyphs = {
   "clock": [
     "M2 8A6 6 0 1 0 14 8A6 6 0 1 0 2 8Z",
     "M8 4.5V8L10.5 10.5"
+  ],
+  "return": [
+    "M13.5 2.5V8A2.5 2.5 0 0 1 11 10.5H2.5",
+    "M5.5 7.5L2.5 10.5L5.5 13.5"
   ]
 } as const;
 export type GlyphName = keyof typeof glyphs;

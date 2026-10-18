@@ -228,6 +228,13 @@ verified by eye (background tab), nor with a real pointer or keyboard.
 
 Chips press one step past hover: `bg-component-pressed` (filter, assist, suggestion), 15.4% (the input chip's mark: 6%, 10.7%, 15.4%; 24% white in dark, as far as its label holds 4.5:1 at dark 24 + 8), `danger-surface-active` (invalid). A selected chip keeps its plate. Remove presses at 20% of its ink (hover 12%) and does not press the chip. Link's underline offset (0.25em). See [interaction polish](../research/interaction-polish-2026-10-16.md).
 
+## Review note, 2026-10-17 (round 33)
+
+- **What changed:** Only the underline on link chips: it now sits close under the words, about 1px below the letters,
+  instead of 0.25em down. Tails of g, y and p cross it and the line breaks around them. Nothing else changed.
+- **Why:** It follows Link, which you asked to underline "very natural and close to the text" (link.md, "Close
+  underline").
+
 ## Feedback log
 
 - 2026-09-26 · earlier pass the same day → selected chips neutral tonal, `tone="accent"` added
@@ -262,3 +269,5 @@ Chips press one step past hover: `bg-component-pressed` (filter, assist, suggest
 - 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the swatch's ring is the shared swatch ring (`token-swatch-ring`) at `stroke-width` (was ColorSwatch's retired solid `bg-component` edge at `border-width`, which vanished under Elevated) (chip.css). (docs/research/consistency-audit-2026-10-12.md)
 - 2026-10-12 · owner, 2026-10-12: "go with your recommendations" (consistency pass) → the remove and action focus rings sit at 0 (O1; were `focus-offset`); the input plate reads `bg-mark` / `bg-mark-hover` and the selected hover edge `edge-control-strong` (O5, same paint) (chip.css). (docs/research/consistency-audit-2026-10-12.md)
 - 2026-10-12 · owner, review round 21 (components21): approved → Complete in `component-status.mjs`.
+
+Since 2026-10-17 the underline offset is Link's 0.08em, close under the text (link.md, "Close underline").
