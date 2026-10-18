@@ -1144,7 +1144,7 @@ export const videoPlayer = {
   block: "area-video-player",
   description: "Plays a video with Area's own controls over it.",
   variants: { layout: ["floating", "bar", "minimal"], controls: ["auto", "always"] },
-  elements: ["media", "start", "scrim", "controls", "row", "transport", "group", "timeline", "clock", "button", "range", "time", "duration", "volume", "skip", "optional", "surface"],
+  elements: ["media", "start", "scrim", "controls", "transport", "group", "timeline", "clock", "range", "duration", "volume", "skip", "optional", "surface"],
   elementModifiers: { group: ["start", "center", "end"], clock: ["start"] },
   defaults: { layout: "floating", controls: "auto" },
 } as const satisfies ComponentManifest;

@@ -7,7 +7,7 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
 
 ## Video player in Area's paint (2026-10-18, branch `claude/video-player-area-paint`)
 
-**Waiting on the owner:** round 46 (collection `components46`: glass-tint plates, Cursor-style solid track and thumb; the review diff cannot see pseudo-element or hover changes). Before that, round 45 (collection `components45`: dark glass in every theme via color-scheme: dark, white 12% stroke, filled icons; generator "body" paint). Before that, round 44 (collection `components44`): the floating controller built from Area's parts (surface
+**Waiting on the owner:** round 47 (collection `components47`: one set of parts in every layout, CC track in demos, captions icon 13 × 10, row gap 8, narrow corners). Open: captions-off redraw with captions. Before that, round 46 (collection `components46`: glass-tint plates, Cursor-style solid track and thumb; the review diff cannot see pseudo-element or hover changes). Before that, round 45 (collection `components45`: dark glass in every theme via color-scheme: dark, white 12% stroke, filled icons; generator "body" paint). Before that, round 44 (collection `components44`): the floating controller built from Area's parts (surface
 Toolbar paint and corner, Material overlays group, ghost Buttons, outline icons, Slider's track and thumb, muted time);
 still sample image. PR #126 (Link groups, Video player rounds 39–43) merged.
 

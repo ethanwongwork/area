@@ -171,15 +171,12 @@ export const VideoPlayer = /* @__PURE__ */ forwardRef<HTMLVideoElement, VideoPla
   const part = videoPlayerVariants.element;
   // Each button names its action in an Area Tooltip with its key (Loom, YouTube); the label is its accessible name, so
   // the tooltip does not describe it again.
-  // On the floating surface the buttons are Area's own ghost icon-only Buttons (their hover, press, selected and focus
-  // paint); the bar over the video keeps its white on-media buttons. `role` names the part (skip, optional) for the
-  // narrow layout; `pressed` makes a toggle.
+  // The buttons are Area's own ghost icon-only Buttons (their hover, press, selected and focus paint) in every layout,
+  // in Area's dark scheme over the video. `role` names the part (skip, optional) for the narrow layout; `pressed` makes a
+  // toggle.
   type Extra = { role?: "skip" | "optional"; pressed?: boolean; disabled?: boolean; control?: string };
   const button = (name: string, label: string, onClick: () => void, glyph: ReactNode, extra: Extra = {}, key?: string) => {
-    const trigger = shape === "bar" ? (
-      <button type="button" className={[part("button"), extra.role && part(extra.role)].filter(Boolean).join(" ")} aria-label={label} onClick={onClick}
-        aria-pressed={extra.pressed} disabled={extra.disabled} data-control={extra.control}>{glyph}</button>
-    ) : (
+    const trigger = (
       <Button variant="ghost" tone="neutral" size="md" iconOnly icon={glyph} aria-label={label} onClick={onClick}
         className={extra.role ? part(extra.role) : undefined} selected={extra.pressed} disabled={extra.disabled} data-control={extra.control} />
     );
@@ -190,9 +187,9 @@ export const VideoPlayer = /* @__PURE__ */ forwardRef<HTMLVideoElement, VideoPla
     );
   };
 
-  // Filled icons on the floating surface (Apple's and YouTube's transport; the filled variant's body: the speaker's body,
-  // not its waves); the bar keeps the line icons.
-  const filled = shape !== "bar";
+  // Filled icons in every layout (Apple's and YouTube's transport; the filled variant's body: the speaker's body, not
+  // its waves).
+  const filled = true;
   const play = () => button("play", playing ? "Pause" : "Play", toggle, <Glyph name={playing ? (filled ? "pause-filled" : "pause") : (filled ? "play-filled" : "play")} />, {}, "K");
   const seekRange = (
     <input key="seek" type="range" className={part("range")} aria-label="Seek"
@@ -239,7 +236,7 @@ export const VideoPlayer = /* @__PURE__ */ forwardRef<HTMLVideoElement, VideoPla
     <div className={part("controls")}>
       {play()}
       {seekRange}
-      <span className={part("time")}>{clock(time)}<span className={part("duration")}> / {clock(duration)}</span></span>
+      <span className={part("clock")}>{clock(time)}<span className={part("duration")}> / {clock(duration)}</span></span>
       {volumeGroup}
       {captionsButton}{pipButton}{fullscreenButton}
     </div>
@@ -256,8 +253,8 @@ export const VideoPlayer = /* @__PURE__ */ forwardRef<HTMLVideoElement, VideoPla
       </video>
       {/* The round play: before the first play in every layout; in minimal it stays as the only control. */}
       {!started || shape === "minimal" ? (
-        <button type="button" className={shape === "bar" ? part("start") : `${part("start")} ${part("surface")}`} aria-label={playing ? "Pause" : "Play"} onClick={toggle}>
-          <Glyph name={playing ? (shape === "bar" ? "pause" : "pause-filled") : (shape === "bar" ? "play" : "play-filled")} size={shape === "bar" ? 20 : 16} />
+        <button type="button" className={`${part("start")} ${part("surface")}`} aria-label={playing ? "Pause" : "Play"} onClick={toggle}>
+          <Glyph name={playing ? "pause-filled" : "play-filled"} />
         </button>
       ) : null}
       {shape === "bar" ? <div className={part("scrim")} aria-hidden="true" /> : null}

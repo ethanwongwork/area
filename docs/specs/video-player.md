@@ -252,3 +252,36 @@ icon library where its just a solid shape, but in this case i would want the tra
   tiles, and the progress and volume bars are a simple solid shape: a thin track filled up to a plain round dot.
 - **Why:** You wanted the play button's backplate to match the panel and preferred Cursor's solid slider, with the
   played part filled.
+
+## Round 47, 2026-10-18
+
+Owner, round 46: "for layout bar, the icons should still be filled? or the play button should be filled at least. why is
+the cc button grayed out. make sure all the type styles and all the gaps, padding and margins are correct for all variants,
+the floating panel looks like it might need more gaps between the top row and bottom row but look into it. also the cc
+icon looks pretty small compared to the other icons. also for the layout/narrow, should the backplate be pill shaped? if so
+then the play button should be pill shaped but i think it should be rounded corner values that match the other components
+in the ds."
+- **One set of parts in every layout.** The bar now uses the same Area ghost Buttons, filled icons, glass plates, dark
+  scheme, solid track, muted time and glass round play as the floating layouts; the stylesheet was rewritten around the
+  shared parts (video-player.css header).
+- **CC was grey** because the sample had no captions track, so the button was disabled (round 42's rule). The demos now
+  carry an English track (`images/sample-captions.vtt`, two generic cues); CC is on offer in the app. (The review page
+  runs no player script, so it still shows the disabled state.)
+- **CC icon.** Its box was 12 × 9, under the 14 × 11 keyline of wide icons, and the filled form cut small Cs from it.
+  Captions grows to 13 × 10 (rx 2.5) with the Cs centred. Captions-off keeps the old box: the larger frame left a 2.38 gap
+  to its letters, between the gap scale's steps; an icon session should redraw that pair together. The 12 × 9 box is
+  shared with mail, the cards and the panels, which keep it.
+- **Rows.** Safari's rows stand about 1.8 × its edge apart (22 vs 12). The floating panel's row gap goes from 2 to 8:
+  about 25 between the transport's icons and the time against 17–18 at the edges (1.4 ×).
+- **Narrow corners.** The narrow panel keeps the surface Toolbar's corner (the control corner + inset, 16 at type 14), as
+  the wide panel and every Area surface, not a pill; play keeps Button's corner.
+- **Measured (glyphs, type 14):** floating 18 / 18 / 16.4–17.9 / 17.8 (L / R / T / B); narrow 18.4–19 on every side;
+  bar 18.4–19 from the video's edges.
+
+## Review note, 2026-10-18 (round 47)
+
+- **What changed:** The bar layout now uses the same filled icons, buttons, slider and glass as the others; CC works
+  (the sample has captions now); the CC icon is bigger; the floating panel has more room between its two rows; the narrow
+  panel has the same rounded corners as the rest of Area instead of a pill.
+- **Why:** You asked for filled icons in the bar, why CC was grey (no captions track), for a CC icon that matches its
+  neighbours, more space between the rows (Safari leaves about twice its edge), and Area's corners for the narrow panel.
