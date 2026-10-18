@@ -8,17 +8,20 @@
 import { useId } from "react";
 // A "knockout" glyph (the filled dismiss-circle) is a solid with marks cut out of it, listed by path index in
 // glyphKnockouts.
-import { glyphCutFills10, glyphCutFills12, glyphCuts10, glyphCuts12, glyphFills, glyphKnockouts, glyphPaint, glyphs, type GlyphName } from "./glyphs.ts";
+import { glyphBodies, glyphCutFills10, glyphCutFills12, glyphCuts10, glyphCuts12, glyphFills, glyphKnockouts, glyphPaint, glyphs, type GlyphName } from "./glyphs.ts";
 
 export function Glyph({ name, rotate, size = 16 }: { name: GlyphName; rotate?: 90 | 180 | 270; size?: 12 | 16 | 20 | 24 }) {
   const maskId = useId();
   const paint = glyphPaint[name];
   const fills: readonly number[] = glyphFills[name] ?? [];
+  // A "body" glyph fills only its body paths and strokes everything (docs/specs/icons.md, "Filled = body only").
+  const bodies: readonly number[] = paint === "body" ? glyphBodies[name] ?? [] : [];
   const cuts: readonly number[] = paint === "knockout" ? glyphKnockouts[name] ?? [] : [];
   const drawn = glyphs[name].flatMap((d, i) => cuts.includes(i) ? [] : [[d, i] as const]);
   const paths = drawn.map(([d, i]) => {
     const dot = paint === "fill" || fills.includes(i);
-    return <path key={d} d={d} fill={paint || dot ? "currentColor" : "none"} stroke={dot ? "none" : "currentColor"} strokeLinecap="round" strokeLinejoin="round" />;
+    const filled = (paint && paint !== "body") || dot || bodies.includes(i);
+    return <path key={d} d={d} fill={filled ? "currentColor" : "none"} stroke={dot ? "none" : "currentColor"} strokeLinecap="round" strokeLinejoin="round" />;
   });
   // The cut is a mask, not a stroke in the surface colour, so the glyph reads on any ground (a soft field, a
   // selected row). The cut paths are glyph paths too, so base.css strokes them at the glyph's line for its size.

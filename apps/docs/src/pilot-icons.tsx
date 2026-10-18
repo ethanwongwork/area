@@ -3290,8 +3290,8 @@ export const PilotCapsLockFilledIcon = ({ weight, size, ...props }: PilotIconPro
 
 export const PilotCaptionsIcon = ({ weight, size, ...props }: PilotIconProps) => (
   <svg {...root(size, props)}>
-    <rect x="2" y="3.5" width="12" height="9" rx="2" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M7 6.586A1.5 1.5 0 1 0 7 9.414M11 6.586A1.5 1.5 0 1 0 11 9.414" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <rect x="1.5" y="3" width="13" height="10" rx="2.5" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M7.5 6.586A1.5 1.5 0 1 0 7.5 9.414M11.5 6.586A1.5 1.5 0 1 0 11.5 9.414" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
@@ -3301,10 +3301,10 @@ export const PilotCaptionsFilledIcon = ({ weight, size, ...props }: PilotIconPro
     <svg {...root(size, props)}>
       <mask id={id} maskUnits="userSpaceOnUse" x="0" y="0" width="16" height="16">
         <rect width="16" height="16" fill="white" />
-        <path d="M7 6.586A1.5 1.5 0 1 0 7 9.414M11 6.586A1.5 1.5 0 1 0 11 9.414" fill="none" stroke="black" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M7.5 6.586A1.5 1.5 0 1 0 7.5 9.414M11.5 6.586A1.5 1.5 0 1 0 11.5 9.414" fill="none" stroke="black" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
       </mask>
       <g mask={`url(#${id})`}>
-        <rect x="2" y="3.5" width="12" height="9" rx="2" fill="currentColor" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+        <rect x="1.5" y="3" width="13" height="10" rx="2.5" fill="currentColor" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
       </g>
     </svg>
   );

@@ -68,10 +68,12 @@ test("link groups are a nav named by its title, with labelled lists of links", (
 test("a video player is a named group: the video, and only the round play before the first play", () => {
   const html = render(h(VideoPlayer, { label: "Sample", src: "x.mp4" }));
   assert.match(html, /^<div role="group" aria-label="Sample" tabindex="0" class="area-video-player area-video-player--floating area-video-player--auto"><video src="x.mp4" class="area-video-player__media" playsinline=""><\/video>/i);
-  assert.match(html, /<button type="button" class="area-video-player__start" aria-label="Play"><svg[^>]*data-area-glyph="play"/);
+  assert.match(html, /<button type="button" class="area-video-player__start area-video-player__surface" aria-label="Play"><svg[^>]*data-area-glyph="play-filled"/);
   assert.doesNotMatch(html, /area-video-player__controls/);
   const floating = render(h(VideoPlayer, { label: "S", src: "x.mp4", autoPlay: true, controls: "always" }));
   assert.match(floating, /area-video-player--always" data-started="">.*area-video-player__transport.*aria-label="Volume".*aria-label="Back 15 seconds".*aria-label="Play".*aria-label="Forward 15 seconds".*area-video-player__timeline.*aria-label="Seek"/);
+  assert.match(floating, /class="area-video-player__controls area-video-player__surface"/);
+  assert.match(floating, /class="area-button[^"]*area-button--ghost[^"]*"[^>]*aria-label="Play"/, "the floating controller's buttons are Area's ghost Buttons");
   assert.match(render(h(VideoPlayer, { label: "S", src: "x.mp4", autoPlay: true, layout: "bar" })), /area-video-player__scrim.*aria-label="Seek".*aria-label="Volume"/);
   const minimal = render(h(VideoPlayer, { label: "S", src: "x.mp4", autoPlay: true, layout: "minimal" }));
   assert.match(minimal, /area-video-player__start/);

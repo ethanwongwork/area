@@ -124,8 +124,8 @@ export const glyphs = {
     "M10.25 6.25L13.75 9.75M13.75 6.25L10.25 9.75"
   ],
   "captions": [
-    "M4 3.5H12A2 2 0 0 1 14 5.5V10.5A2 2 0 0 1 12 12.5H4A2 2 0 0 1 2 10.5V5.5A2 2 0 0 1 4 3.5Z",
-    "M7 6.586A1.5 1.5 0 1 0 7 9.414M11 6.586A1.5 1.5 0 1 0 11 9.414"
+    "M4 3H12A2.5 2.5 0 0 1 14.5 5.5V10.5A2.5 2.5 0 0 1 12 13H4A2.5 2.5 0 0 1 1.5 10.5V5.5A2.5 2.5 0 0 1 4 3Z",
+    "M7.5 6.586A1.5 1.5 0 1 0 7.5 9.414M11.5 6.586A1.5 1.5 0 1 0 11.5 9.414"
   ],
   "picture-in-picture": [
     "M14 6V4.5A2 2 0 0 0 12 2.5H4A2 2 0 0 0 2 4.5V9.5A2 2 0 0 0 4 11.5H5",
@@ -142,17 +142,46 @@ export const glyphs = {
   "fast-forward": [
     "M4.207 4.207L7.47 7.47A0.75 0.75 0 0 1 7.47 8.53L4.207 11.793A1 1 0 0 1 2.5 11.086L2.5 4.914A1 1 0 0 1 4.207 4.207Z",
     "M9.707 4.207L12.97 7.47A0.75 0.75 0 0 1 12.97 8.53L9.707 11.793A1 1 0 0 1 8 11.086L8 4.914A1 1 0 0 1 9.707 4.207Z"
+  ],
+  "play-filled": [
+    "M4.865 2.554L12.96 7.129A1 1 0 0 1 12.96 8.871L4.865 13.446A1.25 1.25 0 0 1 3 12.358L3 3.642A1.25 1.25 0 0 1 4.865 2.554Z"
+  ],
+  "pause-filled": [
+    "M4.5 2H5.5A1 1 0 0 1 6.5 3V13A1 1 0 0 1 5.5 14H4.5A1 1 0 0 1 3.5 13V3A1 1 0 0 1 4.5 2Z",
+    "M10.5 2H11.5A1 1 0 0 1 12.5 3V13A1 1 0 0 1 11.5 14H10.5A1 1 0 0 1 9.5 13V3A1 1 0 0 1 10.5 2Z"
+  ],
+  "fast-forward-filled": [
+    "M4.207 4.207L7.47 7.47A0.75 0.75 0 0 1 7.47 8.53L4.207 11.793A1 1 0 0 1 2.5 11.086L2.5 4.914A1 1 0 0 1 4.207 4.207Z",
+    "M9.707 4.207L12.97 7.47A0.75 0.75 0 0 1 12.97 8.53L9.707 11.793A1 1 0 0 1 8 11.086L8 4.914A1 1 0 0 1 9.707 4.207Z"
+  ],
+  "volume-filled": [
+    "M3 6L4.315 6A0.5 0.5 0 0 0 4.64 5.88L6.762 4.061A0.75 0.75 0 0 1 8 4.631L8 11.369A0.75 0.75 0 0 1 6.762 11.939L4.64 10.12A0.5 0.5 0 0 0 4.315 10L3 10A1 1 0 0 1 2 9L2 7A1 1 0 0 1 3 6Z",
+    "M10.5 5.5A3.5 3.5 0 0 1 10.5 10.5M12 3.5A6.364 6.364 0 0 1 12 12.5"
+  ],
+  "volume-off-filled": [
+    "M3 6L4.315 6A0.5 0.5 0 0 0 4.64 5.88L6.762 4.061A0.75 0.75 0 0 1 8 4.631L8 11.369A0.75 0.75 0 0 1 6.762 11.939L4.64 10.12A0.5 0.5 0 0 0 4.315 10L3 10A1 1 0 0 1 2 9L2 7A1 1 0 0 1 3 6Z",
+    "M10.25 6.25L13.75 9.75M13.75 6.25L10.25 9.75"
+  ],
+  "captions-filled": [
+    "M4 3H12A2.5 2.5 0 0 1 14.5 5.5V10.5A2.5 2.5 0 0 1 12 13H4A2.5 2.5 0 0 1 1.5 10.5V5.5A2.5 2.5 0 0 1 4 3Z",
+    "M7.5 6.586A1.5 1.5 0 1 0 7.5 9.414M11.5 6.586A1.5 1.5 0 1 0 11.5 9.414"
+  ],
+  "picture-in-picture-filled": [
+    "M14 6V4.5A2 2 0 0 0 12 2.5H4A2 2 0 0 0 2 4.5V9.5A2 2 0 0 0 4 11.5H5",
+    "M9 8.5H12.5A1.5 1.5 0 0 1 14 10V12A1.5 1.5 0 0 1 12.5 13.5H9A1.5 1.5 0 0 1 7.5 12V10A1.5 1.5 0 0 1 9 8.5Z"
   ]
 } as const;
 export type GlyphName = keyof typeof glyphs;
 /** Glyphs that are not line drawings: "solid" also fills inside the centre-line (the filled
  * variant's solid role); "fill" is filled shapes with no stroke (dots); "knockout" is a solid
  * whose glyphKnockouts paths are cut out of it (a mask), not painted. */
-export const glyphPaint: Partial<Record<GlyphName, "solid" | "fill" | "knockout">> = {"stop":"solid","more":"fill","dismiss-circle":"knockout","play":"solid","pause":"solid","fast-forward":"solid"};
+export const glyphPaint: Partial<Record<GlyphName, "solid" | "fill" | "knockout" | "body">> = {"stop":"solid","more":"fill","dismiss-circle":"knockout","play-filled":"solid","pause-filled":"solid","fast-forward-filled":"solid","volume-filled":"body","volume-off-filled":"body","captions-filled":"knockout","picture-in-picture-filled":"body"};
+/** A "body" glyph's filled paths, by path index (the speaker's body; its waves stay lines). */
+export const glyphBodies: Partial<Record<GlyphName, readonly number[]>> = {"volume-filled":[0],"volume-off-filled":[0],"picture-in-picture-filled":[1]};
 /** Filled dots inside a line drawing, by path index (the i's dot, the ?'s point). */
 export const glyphFills: Partial<Record<GlyphName, readonly number[]>> = {"info":[2],"help":[2]};
 /** Knocked-out marks in a "knockout" glyph, by path index (dismiss-circle's ×), stroked at the line. */
-export const glyphKnockouts: Partial<Record<GlyphName, readonly number[]>> = {"dismiss-circle":[1]};
+export const glyphKnockouts: Partial<Record<GlyphName, readonly number[]>> = {"dismiss-circle":[1],"captions-filled":[1]};
 /** 12px cuts (docs/specs/icons.md, "12px cuts"): the glyph redrawn on the 12px grid, its lines on half pixels so they
  * are crisp at 1×. Glyph draws it when its size is 12; glyphCutFills12 lists its filled dots by path index. */
 export const glyphCuts12: Partial<Record<GlyphName, readonly string[]>> = {

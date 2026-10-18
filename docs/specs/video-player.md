@@ -1,6 +1,6 @@
 # Video player spec
 
-**Status:** in review · 2026-10-17
+**Status:** Complete · approved 2026-10-18 (round 47)
 **Research:** `docs/research/video-player-2026-10-17.md` (Plyr, Video.js v10, Vidstack, Media Chrome and Kibo pinned to
 commits; YouTube, Vimeo and apple.com computed; Notion, Loom, Slack not measured)
 **Peers:** Figure (holds it, with a caption), Button (ghost icon-only, here on media), Slider (the range), Tooltip, Spinner
@@ -178,3 +178,110 @@ already even. The slider stays the player's own part (owner: "keep it as is").
   with the icons above it, and the space between the two rows matches the space around them.
 - **Why:** You found the padding uneven, especially around the progress bar. Measured, the icons sat 22 from the sides
   while the time sat 12, and the bottom had only 12; now every side is 16.
+
+## Round 44, 2026-10-18
+
+Owner, round 43: "the corner radius and icons, and material/fill/stroke/, etc should be applied from the area design system
+principles, i like the layout, but want everything to feel like its part of the other area components. also remove the
+zooming image just keep it static." The layout stays; the paint is Area's own parts:
+
+| Part | Was (round 43) | Now | Basis |
+|---|---|---|---|
+| panel fill / stroke / shadow | black 55%, blur 16, a white top line, black 10% ring | `bg-surface`, `shadow-edge`, `border-float` ring, `shadow-float` | the surface Toolbar (toolbar.css `--surface`) |
+| corner | 16 | the control corner + the inset, concentric (`radius-control-md` + `ui-cluster` × `radius-concentric`) | the surface Toolbar's rule |
+| material | none | the overlays group (Glass: 67% see-through, blur 24, saturate 137.5%, as Menu and Popover) | material.css; checked with Glass in the app |
+| theme | always dark | follows light and dark | Area surfaces |
+| buttons | the player's own white buttons | Button ghost, neutral, md, icon-only (hover, press, selected, focus); play the same size | Button; Toolbar's buttons |
+| icons | solid play, pause, skip | Area's outline icons | the icon set's line style |
+| time | white 90% | `fg-muted`, UI text, tabular | Area's secondary text |
+| track / thumb | white rail, 12 white thumb | Slider's: `edge-control` rail, `selection-solid` fill, the 16 thumb (surface, `edge-control-hover` ring, the fill's dot, `shadow-control`); loaded `edge-control-hover` | slider.css |
+| round play | black 50% | the same surface, `control-lg` | the panel |
+| inset | 16 | 18 at type 14 on every side and between the rows (16 at the app's 13), remeasured on the glyphs | round 43's method |
+
+The bar keeps its white on-media buttons over the scrim (it has no surface). The sample clip is now the avatar photo still,
+8 s, no zoom.
+
+## Review note, 2026-10-18 (round 44)
+
+- **What changed:** The controller is now built from Area's own parts: the floating Toolbar's surface and corners, Area's
+  ghost buttons and outline icons, Slider's track and thumb, and muted time text. It follows light and dark and the
+  Inspector's Material (Glass makes it see-through like a Menu). The sample image no longer zooms.
+- **Why:** You liked the layout but wanted it to feel like the rest of Area. Every colour, corner, stroke and icon now
+  comes from a component Area already has, and the spacing is even again on every side.
+
+## Round 45, 2026-10-18
+
+Owner, round 44: "you can use filled icons, and also use a darker transparent fill? what do you recommend? i think in design
+systems, its common to use a dark fill even with some blur? and maybe a transparent stroke? even if the rest of the design
+system is neutral white, gray." Recommended and done:
+- **Dark in every theme.** Controls over video stay dark whatever the app's theme (Apple #2a2a2d at 72% with blur 7,
+  QuickTime black 55% with blur 17.5, Media Chrome black 75%, Video.js; round-42 captures): video can be bright or dark, and
+  white glyphs on dark glass read on both. The surface sets `color-scheme: dark`, so every Area token inside it (surface,
+  ink, ghost Buttons, Slider) takes its dark value: still Area's paint, one scheme.
+- **Transparent fill with blur.** Area's dark surface at 72% (Apple's) under blur(16px) saturate(150%) (Video.js 16;
+  between Apple's 180% and Glass's 137.5%). Material still layers over it (the overlays group).
+- **Transparent stroke.** A white 12% hairline in place of the float edge, and the float shadow.
+- **Filled icons.** Play, pause and skip solid; the speaker's body filled with its waves as lines and picture in picture's
+  inner window filled ("Filled = body only"); captions a knockout; full screen stays a line (no filled form). The component
+  glyph generator gains a "body" paint for this. The bar keeps its line icons.
+
+## Review note, 2026-10-18 (round 45)
+
+- **What changed:** The controller is a dark see-through glass in both light and dark mode, with a faint white edge, and
+  its icons are filled.
+- **Why:** You suggested it, and it's what video players do: Apple, QuickTime, Media Chrome and Video.js keep controls
+  dark over video in any theme so they read on bright and dark frames. Everything inside still uses Area's own colours,
+  just its dark set.
+
+## Round 46, 2026-10-18
+
+Owner, on the narrow pill: "the backplates for the whole thing and the play button should match"; then "i also dont like
+the slider design here, does it have to use this slider or can it be a new design? i kind of like this slider from cursors
+icon library where its just a solid shape, but in this case i would want the track to be filled on the left side".
+- **Plates match the glass.** The dark scheme's ghost hover is an opaque grey, which showed as a dark tile on the
+  see-through panel. On the surface a ghost Button's hover is white 12% (the panel's stroke), press white 20% (Vidstack's
+  hover), selected white 16%: lighter patches of the same glass.
+- **A solid-shape track.** The player's track is its own part (not Slider), so it takes Cursor's shape: a thin rail and a
+  plain solid round thumb, no ring, dot or shadow, with the played part filled in the thumb's ink. Played and thumb in the
+  surface's text ink (white in its dark scheme), loaded 35%, rail 20%; thumb 12, always shown; track 4. Material no
+  longer paints the thumb (it was Slider's primary-group hook).
+
+## Review note, 2026-10-18 (round 46)
+
+- **What changed:** Button highlights on the controller are now light see-through tints of the glass instead of dark
+  tiles, and the progress and volume bars are a simple solid shape: a thin track filled up to a plain round dot.
+- **Why:** You wanted the play button's backplate to match the panel and preferred Cursor's solid slider, with the
+  played part filled.
+
+## Round 47, 2026-10-18
+
+Owner, round 46: "for layout bar, the icons should still be filled? or the play button should be filled at least. why is
+the cc button grayed out. make sure all the type styles and all the gaps, padding and margins are correct for all variants,
+the floating panel looks like it might need more gaps between the top row and bottom row but look into it. also the cc
+icon looks pretty small compared to the other icons. also for the layout/narrow, should the backplate be pill shaped? if so
+then the play button should be pill shaped but i think it should be rounded corner values that match the other components
+in the ds."
+- **One set of parts in every layout.** The bar now uses the same Area ghost Buttons, filled icons, glass plates, dark
+  scheme, solid track, muted time and glass round play as the floating layouts; the stylesheet was rewritten around the
+  shared parts (video-player.css header).
+- **CC was grey** because the sample had no captions track, so the button was disabled (round 42's rule). The demos now
+  carry an English track (`images/sample-captions.vtt`, two generic cues); CC is on offer in the app. (The review page
+  runs no player script, so it still shows the disabled state.)
+- **CC icon.** Its box was 12 × 9, under the 14 × 11 keyline of wide icons, and the filled form cut small Cs from it.
+  Captions grows to 13 × 10 (rx 2.5) with the Cs centred. Captions-off keeps the old box: the larger frame left a 2.38 gap
+  to its letters, between the gap scale's steps; an icon session should redraw that pair together. The 12 × 9 box is
+  shared with mail, the cards and the panels, which keep it.
+- **Rows.** Safari's rows stand about 1.8 × its edge apart (22 vs 12). The floating panel's row gap goes from 2 to 8:
+  about 25 between the transport's icons and the time against 17–18 at the edges (1.4 ×).
+- **Narrow corners.** The narrow panel keeps the surface Toolbar's corner (the control corner + inset, 16 at type 14), as
+  the wide panel and every Area surface, not a pill; play keeps Button's corner.
+- **Measured (glyphs, type 14):** floating 18 / 18 / 16.4–17.9 / 17.8 (L / R / T / B); narrow 18.4–19 on every side;
+  bar 18.4–19 from the video's edges.
+
+## Review note, 2026-10-18 (round 47)
+
+- **What changed:** The bar layout now uses the same filled icons, buttons, slider and glass as the others; CC works
+  (the sample has captions now); the CC icon is bigger; the floating panel has more room between its two rows; the narrow
+  panel has the same rounded corners as the rest of Area instead of a pill.
+- **Why:** You asked for filled icons in the bar, why CC was grey (no captions track), for a CC icon that matches its
+  neighbours, more space between the rows (Safari leaves about twice its edge), and Area's corners for the narrow panel.

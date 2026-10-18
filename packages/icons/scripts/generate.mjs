@@ -24,7 +24,7 @@ const GLYPHS_OUT = join(REPO, "packages/react/src/components/glyphs.ts");
 // Pilot icons that components draw themselves, replacing Fluent family by family
 // (docs/specs/icons.md, "Components"). A glyph is a whole icon, or one element of one
 // (check-inset is the check inside the Available ring, for boxed checks).
-const PACKAGE_GLYPHS = { "add": ["add"], "arrow-up": ["arrow-up"], "check": ["check"], "check-inset": ["status-available", 1], "chevron-down": ["chevron-down"], "dismiss": ["dismiss"], "grip": ["grip"], "subtract": ["subtract"], "corner": ["corner"], "corners": ["corners"], "padding-side": ["padding-side"], "padding-axis": ["padding-axis"], "sides": ["sides"], "search": ["search"], "stop": ["stop", undefined, "solid"], "more": ["more-horizontal"], "open": ["open"], "upload": ["upload"], "document": ["document"], "reset": ["reset"], "info": ["info"], "help": ["help"], "dismiss-circle": ["error", undefined, "knockout"], "eye": ["eye"], "eye-off": ["eye-off"], "clock": ["clock"], "return": ["return"], "play": ["play", undefined, "solid"], "pause": ["pause", undefined, "solid"], "volume": ["volume"], "volume-off": ["volume-off"], "captions": ["captions"], "picture-in-picture": ["picture-in-picture"], "maximize": ["maximize"], "minimize": ["minimize"], "fast-forward": ["fast-forward", undefined, "solid"] };
+const PACKAGE_GLYPHS = { "add": ["add"], "arrow-up": ["arrow-up"], "check": ["check"], "check-inset": ["status-available", 1], "chevron-down": ["chevron-down"], "dismiss": ["dismiss"], "grip": ["grip"], "subtract": ["subtract"], "corner": ["corner"], "corners": ["corners"], "padding-side": ["padding-side"], "padding-axis": ["padding-axis"], "sides": ["sides"], "search": ["search"], "stop": ["stop", undefined, "solid"], "more": ["more-horizontal"], "open": ["open"], "upload": ["upload"], "document": ["document"], "reset": ["reset"], "info": ["info"], "help": ["help"], "dismiss-circle": ["error", undefined, "knockout"], "eye": ["eye"], "eye-off": ["eye-off"], "clock": ["clock"], "return": ["return"], "play": ["play"], "pause": ["pause"], "volume": ["volume"], "volume-off": ["volume-off"], "captions": ["captions"], "picture-in-picture": ["picture-in-picture"], "maximize": ["maximize"], "minimize": ["minimize"], "fast-forward": ["fast-forward"], "play-filled": ["play", undefined, "solid"], "pause-filled": ["pause", undefined, "solid"], "fast-forward-filled": ["fast-forward", undefined, "solid"], "volume-filled": ["volume", undefined, "body"], "volume-off-filled": ["volume-off", undefined, "body"], "captions-filled": ["captions", undefined, "knockout"], "picture-in-picture-filled": ["picture-in-picture", undefined, "body"] };
 const LIVE = [1.5, 14.5];      // stroke centrelines stay inside this box (ink 0.94–15.06 at 1.125px)
 const LIVE_FILL = [1, 15];     // filled shapes (dots) stay inside this box
 const WEIGHT = 1.125;          // --area-weight-icon; keylines and gaps are judged at this weight
@@ -1049,6 +1049,8 @@ console.log(`wrote apps/docs/src/pilot-explore.tsx (${explore.length} candidates
 // A "knockout" glyph is a solid with marks cut through it (the filled error ring as dismiss-circle):
 // its solid paths fill as "solid" does and glyphKnockouts lists the knockout paths, which Glyph.tsx
 // cuts out with a mask so the cut shows the background on any surface.
+// A "body" glyph fills only its body (the paths the filled variant marks solid) and keeps its parts as lines: the
+// speaker's body, not its waves ("Filled = body only", docs/specs/icons.md).
 const rectD = ({ x, y, width, height, rx = 0 }) => {
   const [l, t, w, h, r] = [x, y, width, height, rx].map(Number);
   const [R, B] = [l + w, t + h];
@@ -1065,6 +1067,8 @@ const glyphPaint = {};
 const glyphFills = {};
 // A solid glyph's knocked-out marks, by path index (dismiss-circle's ×).
 const glyphKnockouts = {};
+// A body glyph's filled paths, by path index (the speaker's body).
+const glyphBodies = {};
 const glyphData = Object.fromEntries(Object.entries(PACKAGE_GLYPHS).map(([glyph, [source, index, paint]]) => {
   const icon = icons.find(i => i.name === source);
   if (!icon) throw new Error(`glyph ${glyph}: no pilot icon ${source}`);
@@ -1074,6 +1078,7 @@ const glyphData = Object.fromEntries(Object.entries(PACKAGE_GLYPHS).map(([glyph,
   if (!dots && elements.some(el => !dot(el) && (!el.stroked || !["path", "rect", "circle"].includes(el.tag)))) throw new Error(`glyph ${glyph}: only stroked paths, rects and circles, with filled dots, are supported`);
   if (dots) glyphPaint[glyph] = "fill";
   else if (paint === "solid") glyphPaint[glyph] = "solid";
+  else if (paint === "body") { glyphPaint[glyph] = "body"; glyphBodies[glyph] = elements.flatMap((el, i) => el.filled === "solid" ? [i] : []); }
   else if (paint === "knockout") { glyphPaint[glyph] = "knockout"; glyphKnockouts[glyph] = elements.flatMap((el, i) => el.filled === "knockout" ? [i] : []); }
   else if (elements.some(dot)) glyphFills[glyph] = elements.flatMap((el, i) => dot(el) ? [i] : []);
   return [glyph, elements.map(el => el.tag === "rect" ? rectD(el.attrs) : el.tag === "circle" ? circleD(el.attrs) : el.attrs.d)];
@@ -1104,7 +1109,9 @@ export type GlyphName = keyof typeof glyphs;
 /** Glyphs that are not line drawings: "solid" also fills inside the centre-line (the filled
  * variant's solid role); "fill" is filled shapes with no stroke (dots); "knockout" is a solid
  * whose glyphKnockouts paths are cut out of it (a mask), not painted. */
-export const glyphPaint: Partial<Record<GlyphName, "solid" | "fill" | "knockout">> = ${JSON.stringify(glyphPaint)};
+export const glyphPaint: Partial<Record<GlyphName, "solid" | "fill" | "knockout" | "body">> = ${JSON.stringify(glyphPaint)};
+/** A "body" glyph's filled paths, by path index (the speaker's body; its waves stay lines). */
+export const glyphBodies: Partial<Record<GlyphName, readonly number[]>> = ${JSON.stringify(glyphBodies)};
 /** Filled dots inside a line drawing, by path index (the i's dot, the ?'s point). */
 export const glyphFills: Partial<Record<GlyphName, readonly number[]>> = ${JSON.stringify(glyphFills)};
 /** Knocked-out marks in a "knockout" glyph, by path index (dismiss-circle's ×), stroked at the line. */

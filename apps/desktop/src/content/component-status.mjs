@@ -100,13 +100,15 @@ export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-10-17 on the review page, round 36 (components36).
   'infobox',
   // Approved 2026-10-17 on the review page, round 38 (components38): every Articles family is Complete.
-  'figure', 'reference-list', ]);
+  'figure', 'reference-list',
+  // Approved 2026-10-18 on the review page, round 47 (components47).
+  'video-player', ]);
 
 /** Built/refined and awaiting owner approval; not completion. */
 // Articles (2026-10-17, from Wikipedia's page): round 33 asked to rethink six (three approved in round 35) so they don't read as only
 // Wikipedia (Figure: "look at other design systems/products ... keep it simple and consistent and cohesive").
 // Video player (2026-10-17): owner, round 36: "should there be a real video component with its own design player controls?".
-export const REVIEW_COMPONENTS = new Set(['video-player']);
+export const REVIEW_COMPONENTS = new Set([]);
 export const componentStatus = slug => COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
 export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined' })[status];
 
