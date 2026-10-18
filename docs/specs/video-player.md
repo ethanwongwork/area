@@ -151,3 +151,30 @@ heaviest and dimmest time, the faintest rail and the only tall rectangle. Applie
   and a tooltip with its shortcut on every button.
 - **Why:** You asked what other products do. Compared with 15 players (YouTube, Vimeo-style, Loom, Mux, Video.js,
   Vidstack, Plyr, Apple), Area's controller had the smallest buttons, the heaviest time and the faintest track.
+
+## Round 43, 2026-10-18
+
+Owner, round 42: "the padding seems to be too small around the bottom slider"; then "the inset in general is not very
+even, make sure the margins, padding, gaps, etc are all correct". Measured on the drawn glyphs (svg paths; text from its
+font metrics) in headless Edge:
+
+| Edge to ink | Round 42 | Round 43 |
+|---|---|---|
+| left (mute icon / time) | 22 / 12 | 16 / 16 |
+| right (full screen icon / time) | 22.5 / 12 | 16 / 16 |
+| top (16 icons; play 20) | 15.9; 13 | 15.9; 13 |
+| bottom (time digits) | 11.8 | 15.8 |
+| row one's icons to the time | 21 | ≈ 16 |
+
+How: the panel pads 6 at the sides, 4 on top and 12 under; the time row adds the buttons' inset back
+(`(button − icon) / 2 + 2`); no gap between the rows, since the 32 transport row already leaves 8 under its icons. 64 tall.
+Back 15 and forward 15 sit 36 either side of play. Play is the larger glyph (20), centred on the row, so its ink comes 3
+nearer the top, as Apple's does. The bar (14.4–15 from the video's edges) and the narrow pill (14.4–15 on every side) were
+already even. The slider stays the player's own part (owner: "keep it as is").
+
+## Review note, 2026-10-18 (round 43)
+
+- **What changed:** Every edge of the controller now has the same space to its icons and text (16), the time lines up
+  with the icons above it, and the space between the two rows matches the space around them.
+- **Why:** You found the padding uneven, especially around the progress bar. Measured, the icons sat 22 from the sides
+  while the time sat 12, and the bottom had only 12; now every side is 16.

@@ -237,9 +237,14 @@
     box-sizing: border-box;
     flex-direction: column;
     align-items: stretch;
-    /* spec: round 42, tightened toward the references' pills: 4 in, rows 2 apart (58 tall: 4 + 32 + 2 + 16 + 4), corner 16. */
-    gap: var(--area-space-2);
-    padding: var(--area-space-4) var(--area-space-12);
+    /* The ink sits 16 from every edge (round 43, owner: "the inset in general is not very even", measured on the drawn
+       glyphs). The transport's 16 icons sit 5 inside their buttons and a few pixels inside their own boxes, so the panel
+       pads 6 at the sides and the time row adds the buttons' inset back (Area's inset rule: border + shell padding + slot
+       inset); 4 above the transport (its icons' ink lands at 16), no gap between the rows (the transport's 32 already
+       leaves 8 under its icons: 16 to the digits) and 12 under the time row (16 to the digits). 64 tall
+       (4 + 32 + 16 + 12). Safari's controller is as even: 10 at the sides and under its time row. */
+    gap: 0;
+    padding: var(--area-space-4) var(--area-space-6) var(--area-space-12);
     border-radius: var(--area-space-16);
     background-color: rgb(0 0 0 / 0.55); /* spec: Apple's black 55% */
     backdrop-filter: blur(16px) saturate(180%); /* spec: Apple saturate 180, blur 17.5; Video.js blur 16 */
@@ -263,7 +268,7 @@
   /* Muted keeps the level in view, greyed: the slider says where the volume returns to (QuickTime, macOS). */
   .area-video-player__volume[data-muted] > .area-video-player__range { --_fill: rgb(255 255 255 / 0.4); /* spec */ }
   /* Row two: the time, the track, the time, 8 apart (WebKit time-control). */
-  .area-video-player__timeline { display: flex; align-items: center; gap: var(--area-space-8); block-size: var(--area-space-16); }
+  .area-video-player__timeline { display: flex; align-items: center; gap: var(--area-space-8); block-size: var(--area-space-16); padding-inline: calc((var(--_button) - var(--area-icon-md)) / 2 + var(--area-space-2)); }
   .area-video-player__timeline > .area-video-player__range { block-size: var(--area-space-16); }
   /* spec: Apple's time is 12, monospaced digits, white 55% beside 75% transport; Area's small text, 500, tabular, white 70%. */
   .area-video-player__clock {
