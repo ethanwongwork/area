@@ -2,16 +2,16 @@
 import { useEffect, useState } from "react";
 import { Button, Spinner } from "@area/react";
 
-export const GallerySpinnerValue = () => <Spinner value={62} label="Uploading" />;
-export const GallerySpinnerValueSm = () => <Spinner size="sm" value={62} label="Uploading" />;
-export const GallerySpinnerValueLg = () => <Spinner size="lg" value={62} label="Uploading" />;
-export const GallerySpinnerValueEmpty = () => <Spinner value={0} label="Uploading" />;
-export const GallerySpinnerValueLow = () => <Spinner value={4} label="Uploading" />;
-export const GallerySpinnerValueFull = () => <Spinner value={100} label="Uploaded" />;
+export const GallerySpinnerValue = () => <Spinner value={62} label="Label" />;
+export const GallerySpinnerValueSm = () => <Spinner size="sm" value={62} label="Label" />;
+export const GallerySpinnerValueLg = () => <Spinner size="lg" value={62} label="Label" />;
+export const GallerySpinnerValueEmpty = () => <Spinner value={0} label="Label" />;
+export const GallerySpinnerValueLow = () => <Spinner value={4} label="Label" />;
+export const GallerySpinnerValueFull = () => <Spinner value={100} label="Label" />;
 /* Cursor's context ring: how much of a quantity is used, so a meter. */
 export const GallerySpinnerValueMeter = () => (
   <span style={{ display: "inline-flex", alignItems: "center", gap: "var(--area-space-4)", color: "var(--area-fg-muted)", fontSize: "var(--area-text-xs-size)" }}>
-    <Spinner role="meter" value={48} valueText="48% of context used" label="Context used" />
+    <Spinner role="meter" value={48} valueText="48%" label="Label" />
     48%
   </span>
 );
@@ -30,5 +30,5 @@ export const GallerySpinnerValueButton = () => {
     }), 120);
     return () => clearInterval(timer);
   }, []);
-  return <Button variant="outline" icon={<Spinner value={value} label="Review progress" />}>Reviewing</Button>;
+  return <Button variant="outline" icon={<Spinner value={value} label="Label" />}>Action</Button>;
 };

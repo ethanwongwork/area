@@ -7,26 +7,26 @@ const page = { inlineSize: "calc(var(--area-space-96) * 5)", maxInlineSize: "100
 const panel = { inlineSize: "calc(var(--area-space-96) * 3)", maxInlineSize: "100%" };
 
 export const GalleryEmptyState = () => (
-  <EmptyState style={page} icon={<TrashIcon size={24} />} title="Trash is empty"
-    description="Pages you delete stay here for 30 days before they are removed for good." />
+  <EmptyState style={page} icon={<TrashIcon size={24} />} title="Title"
+    description="Description" />
 );
 export const GalleryEmptyStateSm = () => (
-  <EmptyState style={panel} size="sm" icon={<SearchIcon size={20} />} title="No results"
-    description="Try another word, or clear the filters to see every page." />
+  <EmptyState style={panel} size="sm" icon={<SearchIcon size={20} />} title="Title"
+    description="Description" />
 );
 export const GalleryEmptyStateActions = () => (
-  <EmptyState style={page} icon={<DocumentIcon size={24} />} title="No pages yet"
-    description="Start a page from scratch, or pick a template to share with David Tee's studio."
-    actions={<><Button variant="solid">New page</Button><Button variant="outline">Browse templates</Button></>} />
+  <EmptyState style={page} icon={<DocumentIcon size={24} />} title="Title"
+    description="Description"
+    actions={<><Button variant="solid">Action</Button><Button variant="outline">Secondary</Button></>} />
 );
 export const GalleryEmptyStateNoIcon = () => (
-  <EmptyState style={page} title="Nothing scheduled" description="Tasks you schedule for later show up here." />
+  <EmptyState style={page} title="Title" description="Description" />
 );
 export const GalleryEmptyStateTitleOnly = () => (
-  <EmptyState style={page} title="No favorites yet" />
+  <EmptyState style={page} title="Title" />
 );
 /* sm with its one action: Notion's Library › Skills shape inside a panel. */
 export const GalleryEmptyStateSmAction = () => (
-  <EmptyState style={panel} size="sm" icon={<InboxIcon size={20} />} title="You're all caught up"
-    description="New mentions and replies land here." actions={<Button variant="ghost" size="sm">View archive</Button>} />
+  <EmptyState style={panel} size="sm" icon={<InboxIcon size={20} />} title="Title"
+    description="Description" actions={<Button variant="ghost" size="sm">Action</Button>} />
 );

@@ -3,13 +3,13 @@ import type { CSSProperties } from "react";
 import { ScrollArea, TableOfContents } from "@area/react";
 
 const sections = [
-  { id: "gallery-toc-early", label: "Early life and education" },
-  { id: "gallery-toc-career", label: "Career", children: [
-    { id: "gallery-toc-studio", label: "Studio" },
-    { id: "gallery-toc-teaching", label: "Teaching" },
+  { id: "gallery-toc-early", label: "Section one" },
+  { id: "gallery-toc-career", label: "Section two", children: [
+    { id: "gallery-toc-studio", label: "Subsection one" },
+    { id: "gallery-toc-teaching", label: "Subsection two" },
   ] },
-  { id: "gallery-toc-work", label: "Selected work" },
-  { id: "gallery-toc-references", label: "References" },
+  { id: "gallery-toc-work", label: "Section three" },
+  { id: "gallery-toc-references", label: "Section four" },
 ];
 const side: CSSProperties = { inlineSize: "calc(var(--area-space-96) * 2.5)" };
 
@@ -23,11 +23,11 @@ export const GalleryTableOfContentsTop = () => <TableOfContents style={side} ite
 const page = (id: string, title: string) => (
   <section key={id}>
     <h3 id={id} style={{ margin: "0 0 var(--area-space-8)", fontSize: "var(--area-text-md-size)", lineHeight: "var(--area-text-md-leading)", fontWeight: "var(--area-weight-strong)" }}>{title}</h3>
-    <p style={{ margin: "0 0 var(--area-space-24)", color: "var(--area-fg-muted)" }}>David Tee studied industrial design before moving to interface work. The studio's projects ran from type to hardware, and each one began with a measured study of what people already used.</p>
+    <p style={{ margin: "0 0 var(--area-space-24)", color: "var(--area-fg-muted)" }}>Body text that wraps onto a second line. Body text that continues the paragraph. Body text that continues the paragraph. Body text that continues the paragraph.</p>
   </section>
 );
 export const GalleryTableOfContentsScroll = () => {
-  const ids = [["gallery-tocs-a", "Early life"], ["gallery-tocs-b", "Studio"], ["gallery-tocs-c", "Teaching"], ["gallery-tocs-d", "Selected work"]] as const;
+  const ids = [["gallery-tocs-a", "Section one"], ["gallery-tocs-b", "Section two"], ["gallery-tocs-c", "Section three"], ["gallery-tocs-d", "Section four"]] as const;
   return (
     <div style={{ display: "flex", gap: "var(--area-space-24)", inlineSize: "calc(var(--area-space-96) * 6)", maxInlineSize: "100%" }}>
       <TableOfContents style={side} items={ids.map(([id, label]) => ({ id, label }))} />

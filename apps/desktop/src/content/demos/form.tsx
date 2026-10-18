@@ -55,8 +55,8 @@ export const InputRtl = () => (
   </div>
 );
 
-export const NumberFieldDefault = () => <Field label="Width"><NumberField defaultValue={240} unit="px" /></Field>;
-export const NumberFieldSteppers = () => <Field label="Opacity"><NumberField defaultValue={80} min={0} max={100} step={1} unit="%" steppers /></Field>;
+export const NumberFieldDefault = () => <Field label="Label"><NumberField defaultValue={240} unit="px" /></Field>;
+export const NumberFieldSteppers = () => <Field label="Label"><NumberField defaultValue={80} min={0} max={100} step={1} unit="%" steppers /></Field>;
 export const NumberFieldScrub = () => <NumberField aria-label="Rotation" defaultValue={15} min={-360} max={360} unit="°" scrub={<RotateIcon />} />;
 export const NumberFieldDecimal = () => <Field label="Label"><NumberField defaultValue={1.25} min={0} step={0.05} fractionDigits={2} /></Field>;
 export const NumberFieldExpression = () => <Field label="Label"><NumberField defaultValue={24} unit="px" scrub steppers /></Field>;
@@ -64,7 +64,7 @@ export const NumberFieldMixed = () => {
   const [mixed, setMixed] = useState(true);
   return <Field label="Label"><NumberField mixed={mixed} defaultValue={8} onValueChange={() => setMixed(false)} unit="px" steppers /></Field>;
 };
-export const NumberFieldSoft = () => <Field label="Height"><NumberField variant="soft" defaultValue={120} unit="px" /></Field>;
+export const NumberFieldSoft = () => <Field label="Label"><NumberField variant="soft" defaultValue={120} unit="px" /></Field>;
 export const NumberFieldReadOnly = () => <Field label="Read-only"><NumberField defaultValue={48} unit="px" readOnly /></Field>;
 export const NumberFieldInvalid = () => <Field label="Label" error="Error message"><NumberField defaultValue={48} unit="px" /></Field>;
 export const NumberFieldSuccess = () => <Field label="Label" validation="Success message" validationStatus="success"><NumberField defaultValue={48} unit="px" /></Field>;
@@ -72,13 +72,13 @@ export const NumberFieldWarning = () => <Field label="Label" validation="Warning
 export const NumberFieldDisabled = () => <Field label="Disabled"><NumberField defaultValue={48} unit="px" disabled /></Field>;
 export const NumberFieldSizes = () => <div style={{ display: "grid", gap: "var(--area-space-16)", inlineSize: "var(--area-input-inline-size)" }}><NumberField size="sm" aria-label="Small" defaultValue={8} unit="px" /><NumberField size="md" aria-label="Medium" defaultValue={16} unit="px" /><NumberField size="lg" aria-label="Large" defaultValue={24} unit="px" /></div>;
 export const NumberFieldSizeSm = () => (
-  <NumberField size="sm" aria-label="Width" defaultValue={16} unit="px" />
+  <NumberField size="sm" aria-label="Label" defaultValue={16} unit="px" />
 );
 export const NumberFieldSizeMd = () => (
-  <NumberField size="md" aria-label="Width" defaultValue={16} unit="px" />
+  <NumberField size="md" aria-label="Label" defaultValue={16} unit="px" />
 );
 export const NumberFieldSizeLg = () => (
-  <NumberField size="lg" aria-label="Width" defaultValue={16} unit="px" />
+  <NumberField size="lg" aria-label="Label" defaultValue={16} unit="px" />
 );
 /* Figma's inspector: soft fields whose letter or icon is the scrub handle, no px, no label row. */
 export const NumberFieldInspector = () => {
@@ -372,7 +372,7 @@ export const SliderDisabled = () => <Slider aria-label="Label" defaultValue={60}
 export const SliderBare = () => <Slider aria-label="Label" min={0} max={100} defaultValue={40} />;
 
 export const ChipDefault = () => (
-  <ChipGroup aria-label="Filters">
+  <ChipGroup aria-label="Label">
     <Chip defaultSelected>Item one</Chip>
     <Chip>Item two</Chip>
     <Chip>Item three</Chip>
@@ -427,7 +427,7 @@ export const ChipLinkIcon = () => <ChipLink href="#chip-api" treatment="icon" tr
 export const ChipCustomDelete = () => <Chip kind="input" onDismiss={() => {}} dismissIcon={<TrashIcon />} dismissLabel="Delete">Chip</Chip>;
 
 export const ChipAvatars = () => (
-  <ChipGroup aria-label="Suggestions">
+  <ChipGroup aria-label="Label">
     <Chip avatar={<Avatar fallback="DT" alt="" />}>David Tee</Chip>
     <Chip avatar={<Avatar src="images/david-tee.jpg" alt="" />}>David Tee</Chip>
   </ChipGroup>

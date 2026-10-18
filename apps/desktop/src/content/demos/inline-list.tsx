@@ -2,7 +2,7 @@
 import { ClockIcon, StarIcon } from "@area/icons";
 import { InlineList, Link } from "@area/react";
 
-const items = ["Type", "Design systems", "Hardware", "Teaching"];
+const items = ["Item one", "Item two", "Item three", "Item four"];
 /* A byline: a muted row with a dot between items. */
 export const GalleryInlineList = () => (
   <div style={{ color: "var(--area-fg-muted)" }}>
@@ -18,13 +18,13 @@ export const GalleryInlineListNone = () => (
     <InlineList separator="none">
       <span style={{ display: "inline-flex", alignItems: "center", gap: "var(--area-space-4)" }}><StarIcon width={16} height={16} aria-hidden />128</span>
       <span style={{ display: "inline-flex", alignItems: "center", gap: "var(--area-space-4)" }}><ClockIcon width={16} height={16} aria-hidden />Updated 2 days ago</span>
-      <span>MIT licence</span>
+      <span>Label</span>
     </InlineList>
   </div>
 );
 /* Wrapping: a mark stays with the item before it, so no line starts with one. */
 export const GalleryInlineListWrap = () => (
   <div style={{ inlineSize: "calc(var(--area-space-96) * 2.5)" }}>
-    <InlineList>{["Designers from New Zealand", "Interface designers", "Type designers", "Victoria University alumni"].map(item => <Link key={item} variant="standalone" href="#gallery-inline-list-wrap">{item}</Link>)}</InlineList>
+    <InlineList>{["Item one", "Item two", "Item three", "Item four", "Item five", "Item six"].map(item => <Link key={item} variant="standalone" href="#gallery-inline-list-wrap">{item}</Link>)}</InlineList>
   </div>
 );
