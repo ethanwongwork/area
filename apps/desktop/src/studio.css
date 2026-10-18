@@ -652,17 +652,19 @@
   .studio-icons__cell:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(var(--area-focus-width) * -1); }
   /*
    * The hover window (src/pages/icons.tsx, IconCell): an Area Hover card 256 wide. Name and
-   * category on one line, the icon at 96 on the card's own surface, then the three actions:
-   * Copy SVG and Download SVG side by side, Copy name across. Gaps are the card's 12 step.
+   * category on one line, the icon at 96 on the card's own surface, then Copy SVG over Download.
+   * Insets and gaps are Popover's own (surface.css): 12 in from the edge, the md surface inset
+   * between its parts (16, 12 in compact) and the cluster gap between the actions, as Popover's
+   * body. It sits in the Canvas body, so it draws at the Canvas's type and density.
    */
   .studio-icon-card {
     --area-popover-inline-size: calc(var(--area-space-96) * 2 + var(--area-space-64)); /* pick: 256, the Inspector's width */
-    display: grid;
-    gap: var(--area-space-12);
   }
   .studio-icon-card__head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--area-space-8); min-inline-size: 0; }
-  .studio-icon-card__name { min-inline-size: 0; overflow: hidden; font-family: var(--area-font-mono); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); text-overflow: ellipsis; white-space: nowrap; }
-  .studio-icon-card__meta { flex: none; color: var(--area-fg-muted); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); }
+  .studio-icon-card__name { min-inline-size: 0; overflow: hidden; font-family: var(--area-font-mono); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); text-overflow: ellipsis; white-space: nowrap; }
+  /* The category is the card's secondary line at the UI size, as Popover's description (owner,
+     2026-10-17: the xs step read too small beside the name). */
+  .studio-icon-card__meta { flex: none; color: var(--area-fg-muted); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); }
   .studio-icon-card__preview { display: grid; place-items: center; block-size: calc(var(--area-space-96) + var(--area-space-48)); color: var(--area-fg-default); }
   .studio-icon-card__preview svg { display: block; }
   /* The name's cap sits on the 12 inset like the sides, as Popover's header title does
@@ -670,10 +672,7 @@
   @supports (text-box: trim-both cap alphabetic) {
     .studio-icon-card > .studio-icon-card__head:first-child { margin-block-start: round(nearest, calc((1cap - 1lh) / 2), 1px); }
   }
-  /* minmax(0, 1fr): the halves stay equal and inside the inset; a label too long for 112 is a
-     content error to fix, not a reason to push the end inset to zero. */
-  .studio-icon-card__actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--area-space-8); }
-  .studio-icon-card__actions > :last-child { grid-column: 1 / -1; }
+  .studio-icon-card__actions { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-ui-cluster); }
 
   /* The Inspector's preview (PreviewFrame) sits 8 above the action under it. */
   .studio-inspector-preview { margin-block-end: var(--area-space-8); }
