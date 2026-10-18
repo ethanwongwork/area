@@ -7,7 +7,9 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
 
 ## Video player and Link groups (2026-10-17, branch `claude/link-groups-video-player`, PR #126)
 
-**Waiting on the owner:** round 39 (collection `components39`): the new Video player (`docs/specs/video-player.md`,
+**Waiting on the owner:** round 40 (collection `components40`): Video player rebuilt on QuickTime's floating controller
+(`layout`: floating default, bar, minimal; `video-player-quicktime-2026-10-17.md`); placeholder is the avatar photo.
+Earlier, round 39 (collection `components39`): the new Video player (`docs/specs/video-player.md`,
 `docs/research/video-player-2026-10-17.md`); merge of PR #126 (the session's `gh pr merge` was blocked by permissions).
 - Navbox renamed Link groups (owner). Abbreviation's tooltip is a span (no hydration error).
 - Video player not built yet: settings menu (speed, caption track), Tooltips on its buttons and the scrubber's hover time,

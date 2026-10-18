@@ -1,7 +1,10 @@
 /* ---------------------------------------------------------------------------
  * Video player
  *
- * A video with Area's own controls (docs/specs/video-player.md; survey docs/research/video-player-2026-10-17.md).
+ * A video with Area's own controls (docs/specs/video-player.md; surveys docs/research/video-player-2026-10-17.md and
+ * video-player-quicktime-2026-10-17.md). Three layouts, as AVKit's control styles: `floating` (default; QuickTime
+ * Player's controller, owner 2026-10-17: "based on the quicktime player preview, but in the style of area
+ * components"), `bar` (one row along the foot) and `minimal` (one round play / pause).
  * Owner, round 36: "should there be a real video component with its own design player controls?". The controls lie
  * over the media in one row at the bottom (Plyr, Vimeo, Video.js, Media Chrome): play, the scrubber, the time, mute
  * with its volume, then captions, picture in picture and full screen when the video and the browser offer them. A dark
@@ -50,6 +53,7 @@
     align-items: center;
     gap: var(--area-space-2);
   }
+  .area-video-player__row { display: flex; align-items: center; gap: var(--area-space-2); min-inline-size: 0; }
   /* Shown: fade in on fast, out on moderate, opacity only (MOTION.md; Media Chrome in faster than out). */
   .area-video-player__scrim,
   .area-video-player__controls { opacity: 1; transition: opacity var(--area-duration-fast) var(--area-ease-out); }
@@ -213,4 +217,72 @@
     .area-video-player__range::-webkit-slider-runnable-track { transition: none; }
     .area-video-player__range::-webkit-slider-thumb { transition: none; }
   }
+
+  /* --- floating: QuickTime Player's controller ---------------------------------------------------------------------
+     spec (Safari's macOS full-screen controls, WebKit modern-media-controls; AVKit `floating` "matches the look of
+     QuickTime Player's playback controls"): a 468 × 75 panel, corner 8, 25 above the foot, black 55% under
+     saturate(180%) blur(17.5px); row one the transport (volume left, rewind · play · forward centred, the rest right), row
+     two the time, a thin track, the time. Scaled by Area's rows (≈ 0.85): 64 tall (6 + 32 + 4 + 16 + 6), at most 400
+     wide, 12 above the foot, centred; the corner is the floating Toolbar's (12: the control corner 6 + the 6 inset). */
+  .area-video-player--floating .area-video-player__scrim { display: none; }
+  .area-video-player--floating .area-video-player__controls {
+    inset: auto 0 var(--area-space-12);
+    margin-inline: auto;
+    inline-size: min(400px, 100% - var(--area-space-24)); /* spec */
+    box-sizing: border-box;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--area-space-4);
+    padding: var(--area-space-6) var(--area-space-12);
+    border-radius: var(--area-space-12);
+    background-color: rgb(0 0 0 / 0.55); /* spec: Apple's black 55% */
+    backdrop-filter: blur(16px) saturate(180%); /* spec: Apple saturate 180, blur 17.5; Video.js blur 16 */
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.1); /* spec: Video.js's top highlight, for Apple's lighten tint */
+  }
+  /* Row one: volume at the start, the transport in the middle, the rest at the end (WebKit's three groups). */
+  .area-video-player__transport { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; block-size: var(--area-space-32); }
+  .area-video-player__group { display: flex; align-items: center; gap: var(--area-space-2); min-inline-size: 0; }
+  .area-video-player__group--center { gap: var(--area-space-16); /* spec: Apple's skips 27 from play at 0.85 */ }
+  .area-video-player__group--end { justify-content: end; }
+  /* spec: Apple draws play at twice the other glyphs: 32 with a 20 icon. */
+  .area-video-player__button--play { inline-size: var(--area-space-32); block-size: var(--area-space-32); border-radius: var(--area-radius-full); }
+  .area-video-player__button--play > svg { inline-size: var(--area-space-20); block-size: var(--area-space-20); }
+  .area-video-player--floating .area-video-player__volume > .area-video-player__range { inline-size: 56px; /* spec: Apple's 60 */ margin-inline: var(--area-space-4); opacity: 1; }
+  /* Row two: the time, the track, the time, 8 apart (WebKit time-control). */
+  .area-video-player__timeline { display: flex; align-items: center; gap: var(--area-space-8); block-size: var(--area-space-16); }
+  .area-video-player__timeline > .area-video-player__range { block-size: var(--area-space-16); }
+  /* spec: Apple's time is 12, monospaced digits, white 55% beside 75% transport; Area's small text, 500, tabular, white 70%. */
+  .area-video-player__clock {
+    flex: none;
+    color: rgb(255 255 255 / 0.7); /* spec */
+    font-weight: var(--area-weight-strong);
+    font-variant-numeric: tabular-nums;
+  }
+  .area-video-player--floating .area-video-player__button { color: rgb(255 255 255 / 0.85); /* spec: Apple's transport 75%, lifted for contrast */ }
+  .area-video-player--floating .area-video-player__button--play { color: #fff; }
+  /* The start button takes the panel's paint (Apple's centre button sits on the same tint). */
+  .area-video-player--floating .area-video-player__start {
+    background-color: rgb(0 0 0 / 0.55); /* spec */
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+  }
+  /* Narrow (under 400): one row, as a pill: play, the track, the time, full screen (visionOS's pill; Vidstack small). */
+  @container (max-inline-size: 400px) {
+    .area-video-player--floating .area-video-player__controls { flex-direction: row; align-items: center; gap: var(--area-space-8); padding: var(--area-space-4); border-radius: var(--area-radius-full); }
+    .area-video-player--floating .area-video-player__transport { display: contents; }
+    .area-video-player--floating :is(.area-video-player__group--start, .area-video-player__skip, .area-video-player__optional) { display: none; }
+    .area-video-player--floating .area-video-player__group--center { order: 0; }
+    .area-video-player--floating .area-video-player__timeline { order: 1; flex: 1; }
+    .area-video-player--floating .area-video-player__group--end { order: 2; }
+    .area-video-player--floating .area-video-player__button--play { inline-size: var(--_button); block-size: var(--_button); }
+    .area-video-player--floating .area-video-player__button--play > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
+    .area-video-player--floating .area-video-player__clock--start { display: none; }
+  }
+
+  /* --- minimal: one round play / pause, no scrubber (AVKit `minimal`; Video.js's background preset; apple.com) ---- */
+  .area-video-player--minimal .area-video-player__scrim { display: none; }
+  .area-video-player--minimal .area-video-player__start { display: grid; transition: opacity var(--area-duration-fast) var(--area-ease-out), background-color var(--area-duration-fast) var(--area-ease-out); }
+  .area-video-player--minimal[data-idle] .area-video-player__start { opacity: 0; transition-duration: var(--area-duration-moderate); }
+  .area-video-player--bar {}
 }

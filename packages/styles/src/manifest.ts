@@ -1143,9 +1143,10 @@ export const linkGroups = {
 export const videoPlayer = {
   block: "area-video-player",
   description: "Plays a video with Area's own controls over it.",
-  variants: { controls: ["auto", "always"] },
-  elements: ["media", "start", "scrim", "controls", "button", "range", "time", "duration", "volume"],
-  defaults: { controls: "auto" },
+  variants: { layout: ["floating", "bar", "minimal"], controls: ["auto", "always"] },
+  elements: ["media", "start", "scrim", "controls", "row", "transport", "group", "timeline", "clock", "button", "range", "time", "duration", "volume", "skip", "optional"],
+  elementModifiers: { group: ["start", "center", "end"], button: ["play"], clock: ["start"] },
+  defaults: { layout: "floating", controls: "auto" },
 } as const satisfies ComponentManifest;
 
 export const MANIFESTS = {

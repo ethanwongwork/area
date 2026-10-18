@@ -13,6 +13,9 @@ type VideoPlayerVariants = VariantProps<typeof MANIFESTS.videoPlayer>;
 export interface VideoPlayerProps extends Omit<VideoHTMLAttributes<HTMLVideoElement>, "controls"> {
   /** Names the player for assistive tech: the video's title. */
   label: string;
+  /** `floating` (default): QuickTime Player's controller, a frosted panel over the video. `bar`: one row along the foot.
+   * `minimal`: one round play / pause, for ambient loops. (AVKit's control styles.) */
+  layout?: VideoPlayerVariants["layout"];
   /** `auto` (default): the controls hide while the video plays and nothing moves. `always`: they stay. */
   controls?: VideoPlayerVariants["controls"];
   /** Caption and subtitle tracks (`<track>` elements). */
@@ -35,7 +38,7 @@ const spoken = (seconds: number) => {
 };
 
 export const VideoPlayer = /* @__PURE__ */ forwardRef<HTMLVideoElement, VideoPlayerProps>(function VideoPlayer(
-  { label, controls, className, children, rootProps, style, ...video },
+  { label, layout, controls, className, children, rootProps, style, ...video },
   ref,
 ) {
   const root = useRef<HTMLDivElement | null>(null);
@@ -163,57 +166,79 @@ export const VideoPlayer = /* @__PURE__ */ forwardRef<HTMLVideoElement, VideoPla
   const played = duration ? (time / duration) * 100 : 0;
   const rangeStyle = (fill: number, buffer = 0) => ({ "--_played": `${fill}%`, "--_loaded": `${buffer * 100}%` }) as CSSProperties;
   const level = muted ? 0 : volume;
+  const shape = layout ?? "floating";
+  const part = videoPlayerVariants.element;
+  const button = (name: string, label: string, onClick: () => void, glyph: ReactNode, extra: Record<string, unknown> = {}) => (
+    <button key={name} type="button" className={part("button")} aria-label={label} onClick={onClick} {...extra}>{glyph}</button>
+  );
+
+  const play = (big = false) => button("play", playing ? "Pause" : "Play", toggle, <Glyph name={playing ? "pause" : "play"} size={big ? 20 : 16} />,
+    big ? { className: `${part("button")} ${part("button")}--play` } : {});
+  const seekRange = (
+    <input key="seek" type="range" className={part("range")} aria-label="Seek"
+      min={0} max={duration || 0} step="any" value={time} style={rangeStyle(played, loaded)}
+      aria-valuetext={`${spoken(time)} of ${spoken(duration)}`}
+      onChange={event => seek(Number(event.currentTarget.value))} />
+  );
+  const volumeGroup = (
+    <div key="volume" className={part("volume")} data-open={volumeOpen ? "" : undefined}
+      onPointerEnter={event => { if (event.pointerType === "mouse") setVolumeOpen(true); }} onPointerLeave={() => setVolumeOpen(false)}>
+      {button("mute", muted || volume === 0 ? "Unmute" : "Mute", toggleMute, <Glyph name={muted || volume === 0 ? "volume-off" : "volume"} />)}
+      <input type="range" className={part("range")} aria-label="Volume"
+        min={0} max={1} step={0.05} value={level} style={rangeStyle(level * 100)}
+        aria-valuetext={`${Math.round(level * 100)}% volume`}
+        onChange={event => setLevel(Number(event.currentTarget.value))} />
+    </div>
+  );
+  const captionsButton = hasTracks ? button("captions", "Captions", toggleCaptions, <Glyph name="captions" />, { "aria-pressed": captions, className: `${part("button")} ${part("optional")}` }) : null;
+  const pipButton = pipSupported ? button("pip", pip ? "Exit picture in picture" : "Picture in picture", togglePip, <Glyph name="picture-in-picture" />, { "data-control": "pip", className: `${part("button")} ${part("optional")}` }) : null;
+  const fullscreenButton = button("fullscreen", fullscreen ? "Exit full screen" : "Full screen", toggleFullscreen, <Glyph name={fullscreen ? "minimize" : "maximize"} />);
+
+  // floating: QuickTime's two rows (transport; time, track, time). bar: one row along the foot. minimal: no row.
+  const controlsRow = shape === "minimal" ? null : shape === "floating" ? (
+    <div className={part("controls")}>
+      <div className={part("transport")}>
+        <div className={`${part("group")} ${part("group")}--start`}>{volumeGroup}</div>
+        <div className={`${part("group")} ${part("group")}--center`}>
+          {button("back", "Back 15 seconds", () => { const v = el(); if (v) seek(v.currentTime - 15); }, <Glyph name="fast-forward" rotate={180} />, { className: `${part("button")} ${part("skip")}` })}
+          {play(true)}
+          {button("forward", "Forward 15 seconds", () => { const v = el(); if (v) seek(v.currentTime + 15); }, <Glyph name="fast-forward" />, { className: `${part("button")} ${part("skip")}` })}
+        </div>
+        <div className={`${part("group")} ${part("group")}--end`}>{captionsButton}{pipButton}{fullscreenButton}</div>
+      </div>
+      <div className={part("timeline")}>
+        <span className={`${part("clock")} ${part("clock")}--start`}>{clock(time)}</span>
+        {seekRange}
+        <span className={part("clock")}>{clock(duration)}</span>
+      </div>
+    </div>
+  ) : (
+    <div className={part("controls")}>
+      {play()}
+      {seekRange}
+      <span className={part("time")}>{clock(time)}<span className={part("duration")}> / {clock(duration)}</span></span>
+      {volumeGroup}
+      {captionsButton}{pipButton}{fullscreenButton}
+    </div>
+  );
 
   return (
     <div {...rootProps} ref={root} role="group" aria-label={label} tabIndex={0}
-      className={videoPlayerVariants({ controls }, rootProps?.className)}
+      className={videoPlayerVariants({ layout, controls }, rootProps?.className)}
       data-started={started ? "" : undefined} data-idle={idle && playing ? "" : undefined}
       onPointerMove={wake} onPointerDown={wake} onFocus={wake} onKeyDown={onKeyDown}>
-      <video {...video} ref={node => { media.current = node; assignRef(ref, node); }} className={[videoPlayerVariants.element("media"), className].filter(Boolean).join(" ")}
-        style={style} playsInline onClick={toggle} onDoubleClick={toggleFullscreen}>
+      <video {...video} ref={node => { media.current = node; assignRef(ref, node); }} className={[part("media"), className].filter(Boolean).join(" ")}
+        style={style} playsInline onClick={toggle} onDoubleClick={shape === "minimal" ? undefined : toggleFullscreen}>
         {children}
       </video>
-      {started ? null : (
-        <button type="button" className={videoPlayerVariants.element("start")} aria-label="Play" onClick={toggle}>
-          <Glyph name="play" size={20} />
+      {/* The round play: before the first play in every layout; in minimal it stays as the only control. */}
+      {!started || shape === "minimal" ? (
+        <button type="button" className={part("start")} aria-label={playing ? "Pause" : "Play"} onClick={toggle}>
+          <Glyph name={playing ? "pause" : "play"} size={20} />
         </button>
-      )}
-      <div className={videoPlayerVariants.element("scrim")} aria-hidden="true" />
-      {started ? <div className={videoPlayerVariants.element("controls")}>
-        <button type="button" className={videoPlayerVariants.element("button")} aria-label={playing ? "Pause" : "Play"} onClick={toggle}>
-          <Glyph name={playing ? "pause" : "play"} />
-        </button>
-        <input type="range" className={videoPlayerVariants.element("range")} aria-label="Seek"
-          min={0} max={duration || 0} step="any" value={time} style={rangeStyle(played, loaded)}
-          aria-valuetext={`${spoken(time)} of ${spoken(duration)}`}
-          onChange={event => seek(Number(event.currentTarget.value))} />
-        <span className={videoPlayerVariants.element("time")}>
-          {clock(time)}<span className={videoPlayerVariants.element("duration")}> / {clock(duration)}</span>
-        </span>
-        <div className={videoPlayerVariants.element("volume")} data-open={volumeOpen ? "" : undefined}
-          onPointerEnter={event => { if (event.pointerType === "mouse") setVolumeOpen(true); }} onPointerLeave={() => setVolumeOpen(false)}>
-          <button type="button" className={videoPlayerVariants.element("button")} aria-label={muted || volume === 0 ? "Unmute" : "Mute"} onClick={toggleMute}>
-            <Glyph name={muted || volume === 0 ? "volume-off" : "volume"} />
-          </button>
-          <input type="range" className={videoPlayerVariants.element("range")} aria-label="Volume"
-            min={0} max={1} step={0.05} value={level} style={rangeStyle(level * 100)}
-            aria-valuetext={`${Math.round(level * 100)}% volume`}
-            onChange={event => setLevel(Number(event.currentTarget.value))} />
-        </div>
-        {hasTracks ? (
-          <button type="button" className={videoPlayerVariants.element("button")} aria-label="Captions" aria-pressed={captions} onClick={toggleCaptions}>
-            <Glyph name="captions" />
-          </button>
-        ) : null}
-        {pipSupported ? (
-          <button type="button" className={videoPlayerVariants.element("button")} data-control="pip" aria-label={pip ? "Exit picture in picture" : "Picture in picture"} onClick={togglePip}>
-            <Glyph name="picture-in-picture" />
-          </button>
-        ) : null}
-        <button type="button" className={videoPlayerVariants.element("button")} aria-label={fullscreen ? "Exit full screen" : "Full screen"} onClick={toggleFullscreen}>
-          <Glyph name={fullscreen ? "minimize" : "maximize"} />
-        </button>
-      </div> : null}
+      ) : null}
+      {shape === "bar" ? <div className={part("scrim")} aria-hidden="true" /> : null}
+      {started ? controlsRow : null}
     </div>
   );
 });

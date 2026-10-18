@@ -72,3 +72,42 @@ Spinner; ended / replay state; captures of Notion's video block and Loom.
   play them in the app (Components → Video player).
 - **Based on:** What YouTube, Vimeo, Plyr, Video.js, Vidstack and Media Chrome agree on: 24 buttons in a 32 row, a 4px
   progress bar that grows to 6 under the pointer, white on a dark fade, hiding after 2 seconds.
+
+## Round 40, 2026-10-17
+
+Owner, with screenshots of QuickTime Player's controller, Apple TV's and the macOS/iOS 26 pill: "use the same image from
+avatar as the placeholder, i want the player ui to be based on the quicktime player preview, but in the style of area
+components. look into legit video player components to see what variants are necessary, is a picture in picture
+variant necessary?" Survey: `docs/research/video-player-quicktime-2026-10-17.md` (WebKit modern-media-controls @54a3335,
+AVKit's ControlsStyle, Vidstack, Video.js, player.style, Mux).
+
+- **Variants**, as AVKit's control styles: `floating` (default; AVKit: "matches the look of QuickTime Player's playback
+  controls"; Safari's macOS full screen; Video.js's pill; visionOS), `bar` (the round-39 row; AVKit inline, Safari inline,
+  Plyr, Vimeo) and `minimal` (one round play / pause; AVKit minimal, Video.js background, apple.com). `controls: auto |
+  always` stays. Narrow sizes are container queries, not variants.
+- **Picture in picture is not a variant**: the browser or OS draws the PiP window with its own controls and a page cannot
+  put its controls in it (MDN); Document Picture-in-Picture (Chrome 116+, not Safari) moves the same player into a window,
+  a placement, not a variant. It stays a button.
+- **Floating**, Safari's 468 × 75 controller scaled by Area's rows (≈ 0.85): 64 tall (6 + 32 + 4 + 16 + 6), at most 400
+  wide, 12 above the foot, centred, corner 12 (the floating Toolbar's: control corner 6 + inset 6); black 55% under
+  blur(16px) saturate(180%) (Apple 55%, 180%, 17.5), a 1px white 10% top highlight in place of Apple's lighten tint; no
+  scrim. Row one: mute and a 56 volume at the start; back 15 · play (32, icon 20, Apple's 2×) · forward 15 in the middle,
+  16 apart; captions, picture in picture, full screen at the end. Row two: time · track · duration, 8 apart, time 12/500
+  tabular in white 70% (Apple 55%, lifted for contrast). Under 400 it folds into one pill: play, track, duration, full
+  screen.
+- **Placeholder**: the avatar photo (David Tee) as the poster, and the clip is that photo with a slow zoom.
+- Open: Apple's 4 × 17 bar knob in place of the round thumb; skips of 10 rather than 15; hiding after 4 s (Apple) rather
+  than 2 s (Plyr, Video.js, Vidstack, Media Chrome); numbered skip icons (Area has none yet).
+
+## Review note, 2026-10-17 (round 40)
+
+- **What changed:** The controls are now QuickTime Player's floating controller in Area's style: a frosted panel over the
+  video with sound on the left, back 15 · play · forward 15 in the middle, the rest on the right, and the time and
+  progress bar under them. Two more layouts: the round-39 bar, and a minimal round play button. The examples use the
+  avatar photo.
+- **Why:** You asked for QuickTime's player in Area's style and for the variants real players need. Apple's own player
+  offers exactly these three (floating, inline, minimal). Picture in picture isn't a variant: the browser draws its own
+  window, so it stays a button.
+
+In a Figure, give the Figure a width (`style={{ inlineSize: "100%" }}`): Figure is as wide as its media, and the player is
+as wide as its container, so neither can size the other.
