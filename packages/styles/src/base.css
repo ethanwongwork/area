@@ -43,6 +43,14 @@
   [data-area-glyph-drawing="12"] { opacity: var(--_glyph-cut, var(--area-type-icon-xs-cut, 1)); }
   [data-area-glyph-drawing="16"] { opacity: calc(1 - var(--_glyph-cut, var(--area-type-icon-xs-cut, 1))); }
   [data-area-glyph-drawing="12"] path { stroke-width: calc(var(--area-weight-icon) * 0.8786); }
+  /* 10px cuts (glyphCuts10, "10px cuts"): a mark's Compact slot, the plate less 4. A glyph that has one shows it where
+     --_glyph-cut10 is 1 (Badge, Tag and Citation set it when their icon box is under 12); its line is the curve's at
+     10, (10 / 16)^0.45 = 0.8094 of the 16px line, about 0.91px. The other drawings give way to it. */
+  [data-area-glyph-cuts~="10"] [data-area-glyph-drawing="16"] { opacity: calc((1 - var(--_glyph-cut, var(--area-type-icon-xs-cut, 1))) * (1 - var(--_glyph-cut10, 0))); }
+  [data-area-glyph-cuts="10"] [data-area-glyph-drawing="16"] { opacity: calc(1 - var(--_glyph-cut10, 0)); }
+  [data-area-glyph-cuts~="10"] [data-area-glyph-drawing="12"] { opacity: calc(var(--_glyph-cut, var(--area-type-icon-xs-cut, 1)) * (1 - var(--_glyph-cut10, 0))); }
+  [data-area-glyph-drawing="10"] { opacity: var(--_glyph-cut10, 0); }
+  [data-area-glyph-drawing="10"] path { stroke-width: calc(var(--area-weight-icon) * 0.8094); }
 
   /* @area/icons tied to reading direction (reply, undo, indent …) mirror in right-to-left text
      (docs/specs/icons.md, "Accessible name and right-to-left"); the same rule as @area/icons/rtl.css. */

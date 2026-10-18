@@ -108,24 +108,39 @@ test("every icon has search keywords, never its own name or another icon's", () 
 
 test("a 12px cut draws on the 12px grid at size 12, turned with its base; other sizes scale the 16px drawing", () => {
   const by = Object.fromEntries(icons.map(i => [i.name, i]));
-  for (const name of ["chevron-down", "chevron-right", "open", "info", "add", "check", "link", "bell", "arrow-up", "arrow-left", "globe"])
-    assert.deepEqual(by[name].cuts, [12], name);
-  for (const name of ["search", "dismiss", "help", "book"]) assert.equal(by[name].cuts, undefined, name);
+  for (const name of ["chevron-down", "chevron-right", "open", "bell"]) assert.deepEqual(by[name].cuts, [12], name);
+  for (const name of ["info", "add", "check", "link", "arrow-up", "arrow-left", "globe"]) assert.deepEqual(by[name].cuts, [10, 12], name);
+  for (const name of ["search", "help"]) assert.equal(by[name].cuts, undefined, name);
   const { ChevronRightIcon, InfoIcon, SearchIcon } = main;
   const html = (C, props) => renderToStaticMarkup(createElement(C, props));
   // A numeric weight is an explicit 12px icon: the cut alone, in its own grid.
   assert.match(html(InfoIcon, { size: 12, weight: 1.125 }), /^<svg[^>]*viewBox="0 0 12 12" width="12" height="12"/);
   assert.match(html(ChevronRightIcon, { size: 12, weight: 1 }), /rotate\(270 6 6\)/);
-  // The token line is the xs slot: both drawings, the cut shown where the slot is 12.
-  const slot = html(InfoIcon, { size: 12 });
+  // The token line is the xs slot: both drawings, the cut shown where the slot is 12 (bell has no 10px cut).
+  const slot = html(main.BellIcon, { size: 12 });
   assert.match(slot, /^<svg[^>]*viewBox="0 0 16 16" width="12" height="12"/);
-  assert.match(slot, /<g style="opacity:calc\(1 - var\(--_glyph-cut, var\(--area-type-icon-xs-cut, 1\)\)\)"><circle cx="8"/);
-  assert.match(slot, /<g transform="scale\(1.333333\)" style="opacity:var\(--_glyph-cut, var\(--area-type-icon-xs-cut, 1\)\)"><circle cx="5.5"[^>]*stroke-width:calc\(var\(--area-weight-icon\) \* 0\.8786\)/);
+  assert.match(slot, /<g style="opacity:calc\(1 - var\(--_glyph-cut, var\(--area-type-icon-xs-cut, 1\)\)\)"><path d="M/);
+  assert.match(slot, /<g transform="scale\(1.333333\)" style="opacity:var\(--_glyph-cut, var\(--area-type-icon-xs-cut, 1\)\)"><path d="M2.5 5A3.5[^>]*stroke-width:calc\(var\(--area-weight-icon\) \* 0\.8786\)/);
   assert.match(html(InfoIcon, { size: 16 }), /viewBox="0 0 16 16"/);
   assert.doesNotMatch(html(InfoIcon, {}), /opacity/);
   assert.doesNotMatch(html(SearchIcon, { size: 12 }), /opacity|0 0 12 12/);
   assert.match(readFileSync(`${dist}svg/12/info.svg`, "utf8"), /viewBox="0 0 12 12"/);
   assert.match(readFileSync(`${dist}svg/12/info-filled.svg`, "utf8"), /viewBox="0 0 16 16"/, "filled at 12 scales the 16px drawing");
+});
+
+test("a 10px cut draws at size 10 and, at the xs slot, where a mark's --_glyph-cut10 is 1 (docs/specs/icons.md, \"10px cuts\")", () => {
+  const by = Object.fromEntries(icons.map(i => [i.name, i]));
+  for (const name of ["dismiss", "book"]) assert.deepEqual(by[name].cuts, [10], name);
+  const { InfoIcon, DismissIcon, ArrowRightIcon } = main;
+  const html = (C, props) => renderToStaticMarkup(createElement(C, props));
+  assert.match(html(InfoIcon, { size: 10 }), /^<svg[^>]*viewBox="0 0 10 10" width="10" height="10"/);
+  assert.match(html(ArrowRightIcon, { size: 10 }), /rotate\(90 5 5\)/);
+  // At the xs slot: the 16px drawing and the 12px cut give way to the 10px cut where --_glyph-cut10 is 1.
+  const slot = html(InfoIcon, { size: 12 });
+  assert.match(slot, /opacity:calc\(\(1 - var\(--_glyph-cut, var\(--area-type-icon-xs-cut, 1\)\)\) \* \(1 - var\(--_glyph-cut10, 0\)\)\)/);
+  assert.match(slot, /<g transform="scale\(1.600000\)" style="opacity:var\(--_glyph-cut10, 0\)"><circle cx="4.5"[^>]*stroke-width:calc\(var\(--area-weight-icon\) \* 0\.8094\)/);
+  // An icon with only a 10px cut: the 16px drawing and the cut.
+  assert.match(html(DismissIcon, { size: 12 }), /opacity:calc\(1 - var\(--_glyph-cut10, 0\)\)/);
 });
 
 test("third-party ink is credited: source in the metadata, its library's licence in THIRD_PARTY_NOTICES.md", () => {

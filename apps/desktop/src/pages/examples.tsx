@@ -1,5 +1,5 @@
 /**
- * Examples: whole screens built only from Area, to test the system the way a product would use it (owner,
+ * Testing (the Examples tab until 2026-10-17): whole screens built only from Area, to test the system the way a product would use it (owner,
  * 2026-10-17). The Sidebar lists the examples; the Canvas shows the chosen one at full size, inside the Canvas's
  * settings, so every Inspector setting (colour, Layers, type, density, radius, surface, elevation, motion) reaches it;
  * All shows each example as a tile. The Inspector holds every Canvas setting, then the example's facts.
@@ -30,11 +30,11 @@ export function ExamplesPage() {
   return (
     <Workspace
       sidebar={<SidebarList>{
-        <Nav aria-label="Examples">
-          <SidebarAll tab="examples" count={shown.length} current={!example} />
-          <NavGroup label="Examples">
+        <Nav aria-label="Testing">
+          <SidebarAll tab="testing" count={shown.length} current={!example} />
+          <NavGroup label="Screens">
             {shown.map(entry => (
-              <NavItem key={entry.id} href={`#examples/${entry.id}`} current={entry.id === example?.id}
+              <NavItem key={entry.id} href={`#testing/${entry.id}`} current={entry.id === example?.id}
                 onClick={event => { event.preventDefault(); select(entry.id); }}
                 trailing={<Count count={entry.families.length} />}>
                 {entry.label}
@@ -43,11 +43,11 @@ export function ExamplesPage() {
           </NavGroup>
         </Nav>
       }</SidebarList>}
-      canvasTitle={example ? example.label : "All examples"}
+      canvasTitle={example ? example.label : "All tests"}
       canvas={example ? (
         <div className="ex-canvas"><example.Screen /></div>
       ) : !shown.length ? (
-        <EmptyState title="No examples" description={`Nothing matches “${query}”.`} />
+        <EmptyState title="Nothing to test" description={`Nothing matches “${query}”.`} />
       ) : (
         <TileGrid span="wide">
           {shown.map(entry => (
@@ -60,15 +60,15 @@ export function ExamplesPage() {
       inspector={
         <>
           <CanvasSettings />
-          <PanelSection heading={example ? "Example" : "Examples"}>
-            <Facts label={example ? "Example" : "Examples"} items={example ? [
-              ["Example", example.label],
+          <PanelSection heading={example ? "Screen" : "Testing"}>
+            <Facts label={example ? "Screen" : "Testing"} items={example ? [
+              ["Screen", example.label],
               ["Shows", example.description],
               ["Families", `${example.families.length}: ${example.families.join(", ")}`],
               ["Not from Area", example.gaps.join(" ")],
               ["Source", <Code>apps/desktop/src/content/examples/{example.id}.tsx</Code>],
             ] : [
-              ["Examples", EXAMPLES.length],
+              ["Screens", EXAMPLES.length],
               ["Purpose", "Whole screens built only from Area, to test the defaults and every setting the way a product would."],
             ]} />
           </PanelSection>

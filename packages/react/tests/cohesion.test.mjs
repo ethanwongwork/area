@@ -70,7 +70,9 @@ test('every surface takes its depth from its elevation role', () => {
   // shared lift with a full-strength second layer and a looser test still passed.
   const elevation = rule => rule.body.match(/--_elevation\s*:\s*([^;]+)/)?.[1].trim();
   const paints = block => {
-    const own = rules.filter(rule => rule.selector.split(/\s*,\s*/).includes(block) && /(^|[;\s])box-shadow\s*:/.test(rule.body));
+    // Rules under a material (styles material.css) paint only inside data-area-material, and keep the role last in
+    // --_m-own (checked below).
+    const own = rules.filter(rule => !rule.selector.includes('[data-area-material]') && rule.selector.split(/\s*,\s*/).includes(block) && /(^|[;\s])box-shadow\s*:/.test(rule.body));
     assert.ok(own.length, `${block} has no box-shadow`);
     const value = [...own.at(-1).body.matchAll(/(?:^|[;\s])box-shadow\s*:\s*([^;]+)/g)].at(-1)[1].trim();
     const ownElevation = () => rules.filter(rule => rule.selector.split(/\s*,\s*/).includes(block)).map(elevation).filter(Boolean).at(-1);
@@ -80,6 +82,11 @@ test('every surface takes its depth from its elevation role', () => {
   for (const [role, blocks] of Object.entries(expect)) {
     for (const block of blocks) assert.match(paints(block), new RegExp(`var\\(--area-shadow-${role}\\)`), `${block} does not take the ${role} role`);
   }
+  // A material keeps each surface's own lift after its paints: overlays the float role (or their own --_elevation),
+  // cards their resting shadow.
+  const material = rules.filter(rule => rule.selector.includes('[data-area-material]') && /--_m-own\s*:/.test(rule.body));
+  assert.ok(material.some(rule => rule.selector.includes('.area-popover') && /--_m-own:\s*var\(--area-shadow-edge\), var\(--_elevation, var\(--area-shadow-float\)\)/.test(rule.body)), 'a material drops the overlays\' lift');
+  assert.ok(material.some(rule => rule.selector.includes('.area-card') && /--_m-own:\s*var\(--area-shadow-edge\), var\(--_card-shadow\)/.test(rule.body)), 'a material drops the card\'s lift');
   for (const block of ['.area-calendar, .area-calendar--surface', '.area-color-picker, .area-color-picker--surface']) {
     assert.match(ruleFor(block)?.body ?? '', /var\(--area-shadow-float\)/, `${block} does not take the float role`);
   }

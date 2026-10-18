@@ -1,0 +1,231 @@
+/* ---------------------------------------------------------------------------
+ * Material: the levers' paints on the parts that carry them (@area/tokens axes/material.ts has the levers, bundles
+ * and the per-group derivations; research docs/research/astra/materials/27-levers and 29-scope).
+ *
+ * Everything here sits under an element with `data-area-material`, so with no material nothing changes. Each part
+ * group reads its group's tokens into local properties, and one painter per kind of part consumes them:
+ *
+ *   primary    solid Buttons, the selected Segmented item, Switch and Slider thumbs, ticked boxes   full strength
+ *   secondary  outline and soft Buttons                                                           half
+ *   marks      solid Badges                                                                       half
+ *   wells      fields, selects, text areas, tracks, unticked boxes (concave)                      half
+ *   selection  the selected Menu row, the current Nav row (concave)                               half
+ *   surfaces   Cards                                                                              glass
+ *   overlays   Menus, Popovers, Hover cards, Toggletips, Toasts, Dialogs, Drawers, Command palette  glass
+ *   chrome     Titlebar, the surface Toolbar, and a product's own regions marked data-area-chrome  glass
+ *
+ * Ghost Buttons, text, tables, lists, code, avatars and keycaps take none (29-scope rule 8). A material paints over the
+ * part's own fill and frame, after its own shadow; pressed parts flip to recessed and disabled parts drop it. A focused
+ * field shows its focus halo alone. The gradient stroke and frost need Chromium's style queries; elsewhere the stroke
+ * stays the part's frame and nothing blurs.
+ * ------------------------------------------------------------------------- */
+@layer area.base {
+  /* A product's own chrome (a sidebar or a top bar it draws itself) marks itself data-area-chrome, names its fill in
+     --area-chrome-fill and paints --area-chrome-bg, which a material makes see-through. */
+  [data-area-chrome] { --area-chrome-bg: var(--area-chrome-fill, var(--area-bg-page)); }
+  /* The page levers (grain, page glow) on the element that sets the material; a product that paints its own page
+     lays --area-material-page over its ground. */
+  [data-area-material] { background-image: var(--area-material-page); }
+}
+
+@layer area.components {
+  /* ---- Part groups: each reads its group's paints. ---- */
+  :where([data-area-material]) :is(
+    .area-button--solid, .area-segmented__item[data-selected], .area-switch__thumb,
+    .area-checkbox__control:checked, .area-radio__control:checked, .area-checkbox__control:indeterminate
+  ) {
+    --_m-image: var(--area-material-primary-image);
+    --_m-shadow: var(--area-material-primary-shadow);
+    --_m-stroke: var(--area-material-primary-stroke);
+    --_m-stroke-image: var(--area-material-primary-stroke-image);
+    --_m-pressed: var(--area-material-primary-pressed);
+  }
+  :where([data-area-material]) .area-button:is(.area-button--outline, .area-button--soft) {
+    --_m-image: var(--area-material-secondary-image);
+    --_m-shadow: var(--area-material-secondary-shadow);
+    --_m-stroke: var(--area-material-secondary-stroke);
+    --_m-stroke-image: var(--area-material-secondary-stroke-image);
+    --_m-pressed: var(--area-material-secondary-pressed);
+  }
+  :where([data-area-material]) .area-badge--solid {
+    --_m-image: var(--area-material-marks-image);
+    --_m-shadow: var(--area-material-marks-shadow);
+    --_m-stroke: var(--area-material-marks-stroke);
+  }
+  :where([data-area-material]) :is(
+    .area-input, .area-select, .area-custom-select__trigger, .area-textarea, .area-switch__track, .area-segmented,
+    .area-progress, .area-meter__track, .area-checkbox__control:not(:checked, :indeterminate), .area-radio__control:not(:checked)
+  ) {
+    --_m-image: var(--area-material-wells-image);
+    --_m-shadow: var(--area-material-wells-shadow);
+    --_m-stroke: var(--area-material-wells-stroke);
+  }
+  :where([data-area-material]) :is(.area-menu__item[data-selected], .area-nav__item[aria-current]:not([aria-current="false"])) {
+    --_m-image: var(--area-material-selection-image);
+    --_m-shadow: var(--area-material-selection-shadow);
+    --_m-stroke: var(--area-material-selection-stroke);
+  }
+  :where([data-area-material]) .area-card {
+    --_m-image: var(--area-material-surfaces-image);
+    --_m-shadow: var(--area-material-surfaces-shadow);
+    --_m-stroke: var(--area-material-surfaces-stroke);
+    --_m-stroke-image: var(--area-material-surfaces-stroke-image);
+    --_m-alpha-light: var(--area-material-surfaces-alpha-light);
+    --_m-alpha-dark: var(--area-material-surfaces-alpha-dark);
+    --_m-frost: var(--area-material-surfaces-frost);
+    --_m-fill: var(--area-bg-surface);
+    --_m-frame: var(--_card-edge);
+    --_m-own: var(--area-shadow-edge), var(--_card-shadow);
+  }
+  :where([data-area-material]) :is(.area-menu, .area-popover, .area-hover-card, .area-toggletip, .area-toast, .area-dialog, .area-drawer, .area-command-palette) {
+    --_m-image: var(--area-material-overlays-image);
+    --_m-shadow: var(--area-material-overlays-shadow);
+    --_m-stroke: var(--area-material-overlays-stroke);
+    --_m-stroke-image: var(--area-material-overlays-stroke-image);
+    --_m-alpha-light: var(--area-material-overlays-alpha-light);
+    --_m-alpha-dark: var(--area-material-overlays-alpha-dark);
+    --_m-frost: var(--area-material-overlays-frost);
+    --_m-fill: var(--area-bg-surface);
+    --_m-frame: var(--area-border-float);
+    --_m-own: var(--area-shadow-edge), var(--_elevation, var(--area-shadow-float));
+  }
+  :where([data-area-material]) :is(.area-titlebar:not(.area-titlebar--floating), .area-toolbar--surface, [data-area-chrome]) {
+    --_m-image: var(--area-material-chrome-image);
+    --_m-shadow: var(--area-material-chrome-shadow);
+    --_m-stroke: var(--area-material-chrome-stroke);
+    --_m-alpha-light: var(--area-material-chrome-alpha-light);
+    --_m-alpha-dark: var(--area-material-chrome-alpha-dark);
+    --_m-frost: var(--area-material-chrome-frost);
+    --_m-fill: var(--area-chrome-fill, var(--area-bg-page));
+    --_m-own: 0 0 0 0 transparent;
+  }
+
+  /* Each part's own fill, which the tone ring darkens, and its own shadow, kept after the material's. */
+  :where([data-area-material]) .area-button { --_m-fill: var(--_bg); --_m-own: 0 0 0 0 transparent; }
+  :where([data-area-material]) .area-button--solid { --_m-own: var(--area-material-glow-shadow); }
+  :where([data-area-material]) .area-segmented__item[data-selected] { --_m-fill: light-dark(var(--area-bg-surface), var(--area-bg-component-active)); --_m-own: var(--area-shadow-control); }
+  :where([data-area-material]) .area-switch__thumb { --_m-fill: var(--area-bg-surface); --_m-own: var(--area-shadow-control); }
+  :where([data-area-material]) :is(.area-checkbox__control, .area-radio__control) { --_m-fill: var(--_fill); --_m-own: 0 0 0 0 transparent; }
+  :where([data-area-material]) .area-badge--solid { --_m-fill: var(--_bg); --_m-own: 0 0 0 0 transparent; }
+  :where([data-area-material]) :is(.area-input, .area-select, .area-custom-select__trigger, .area-textarea) { --_m-fill: var(--_bg); --_m-own: 0 0 0 0 transparent; }
+  :where([data-area-material]) .area-switch__track { --_m-fill: var(--_off); --_m-own: 0 0 0 0 transparent; }
+  :where([data-area-material]) .area-switch__control:checked ~ .area-switch__track,
+  :where([data-area-material]) .area-switch__track[data-checked] { --_m-fill: var(--_on); --_m-own: var(--area-material-glow-shadow); }
+  :where([data-area-material]) :is(.area-segmented, .area-progress, .area-meter__track) { --_m-fill: var(--area-bg-component); --_m-own: 0 0 0 0 transparent; }
+  :where([data-area-material]) :is(.area-menu__item[data-selected], .area-nav__item[aria-current]:not([aria-current="false"])) { --_m-fill: var(--area-bg-component-active); --_m-own: 0 0 0 0 transparent; }
+
+  /* ---- Painters. ---- */
+  /* The tone ring: the part's own fill 30% darker (28-recipes), where the stroke draws a ring or a double rim. */
+  :where([data-area-material]) :is(
+    .area-button:is(.area-button--solid, .area-button--outline, .area-button--soft), .area-segmented__item[data-selected], .area-switch__thumb,
+    .area-checkbox__control, .area-radio__control, .area-badge--solid, .area-input, .area-select, .area-custom-select__trigger,
+    .area-textarea, .area-switch__track, .area-segmented, .area-progress, .area-meter__track, .area-menu__item[data-selected],
+    .area-nav__item[aria-current]:not([aria-current="false"]), .area-card, .area-menu, .area-popover, .area-hover-card,
+    .area-toggletip, .area-toast, .area-dialog, .area-drawer, .area-command-palette,
+    .area-titlebar:not(.area-titlebar--floating), .area-toolbar--surface, [data-area-chrome]
+  ) {
+    --_m-ring: 0 0 0 1px color-mix(in srgb, color-mix(in oklab, var(--_m-fill), black 30%) calc(min(1, var(--_m-stroke) * 2 * min(1, var(--area-material-stroke-solid) + var(--area-material-stroke-double)) * (1 - var(--area-material-stroke-neutral))) * 100%), transparent);
+  }
+
+  /* Buttons, by state. Hover keeps its wash over the material; pressed flips raised to recessed. */
+  [data-area-material] .area-button:is(.area-button--solid, .area-button--outline, .area-button--soft) {
+    background-image: var(--_m-image);
+    box-shadow: var(--_m-ring), var(--_m-shadow), var(--_m-own);
+  }
+  @media (hover: hover) {
+    [data-area-material] .area-button:is(.area-button--solid, .area-button--outline, .area-button--soft):hover:not(:disabled, [data-disabled], [data-loading]) {
+      --_m-fill: var(--_bg-hover);
+      background-image: var(--_m-image), var(--_wash-hover);
+    }
+  }
+  [data-area-material] .area-button:is(.area-button--solid, .area-button--outline, .area-button--soft):is(:active, [aria-haspopup="menu"][aria-expanded="true"]):not(:disabled, [data-disabled], [data-loading]) {
+    --_m-fill: var(--_bg-active);
+    background-image: var(--_wash-active);
+    box-shadow: var(--_m-ring), var(--_m-pressed);
+  }
+
+  /* Plain parts: thumbs, ticked and unticked boxes, badges, tracks, selected rows. */
+  [data-area-material] :is(
+    .area-segmented__item[data-selected], .area-switch__thumb, .area-checkbox__control, .area-radio__control, .area-badge--solid,
+    .area-switch__track, .area-segmented, .area-progress, .area-meter__track, .area-menu__item[data-selected],
+    .area-nav__item[aria-current]:not([aria-current="false"])
+  ) {
+    background-image: var(--_m-image);
+    box-shadow: var(--_m-ring), var(--_m-shadow), var(--_m-own);
+  }
+  /* Fields: the well at rest and on hover; focused, the focus halo alone. */
+  [data-area-material] :is(.area-input, .area-select, .area-custom-select__trigger, .area-textarea):not(:focus-within, :focus-visible) {
+    background-image: var(--_m-image);
+    box-shadow: var(--_m-ring), var(--_m-shadow);
+  }
+  /* The Slider's parts are pseudo-elements, which read their own group's tokens directly. */
+  [data-area-material] .area-slider__control::-webkit-slider-thumb { background-image: var(--area-material-primary-image); box-shadow: var(--area-material-primary-shadow), var(--area-shadow-control); }
+  [data-area-material] .area-slider__control::-moz-range-thumb { background-image: var(--area-material-primary-image); box-shadow: var(--area-material-primary-shadow), var(--area-shadow-control); }
+  [data-area-material] .area-slider__control::-webkit-slider-runnable-track { background-image: var(--area-material-wells-image); box-shadow: var(--area-material-wells-shadow); }
+  [data-area-material] .area-slider__control::-moz-range-track { background-image: var(--area-material-wells-image); box-shadow: var(--area-material-wells-shadow); }
+
+  /* Surfaces, overlays and chrome: see-through down to the reading floor, the material over the fill. */
+  [data-area-material] :is(
+    .area-card, .area-menu, .area-popover, .area-hover-card, .area-toggletip, .area-toast, .area-dialog, .area-drawer,
+    .area-command-palette, .area-titlebar:not(.area-titlebar--floating), .area-toolbar--surface
+  ) {
+    background-color: light-dark(color-mix(in srgb, var(--_m-fill) calc(var(--_m-alpha-light) * 100%), transparent), color-mix(in srgb, var(--_m-fill) calc(var(--_m-alpha-dark) * 100%), transparent));
+    background-image: var(--_m-image);
+    box-shadow: var(--_m-ring), var(--_m-shadow), var(--_m-own);
+  }
+  [data-area-material] [data-area-chrome] {
+    --area-chrome-bg: light-dark(color-mix(in srgb, var(--_m-fill) calc(var(--_m-alpha-light) * 100%), transparent), color-mix(in srgb, var(--_m-fill) calc(var(--_m-alpha-dark) * 100%), transparent));
+    background-image: var(--_m-image);
+    box-shadow: var(--_m-ring), var(--_m-shadow);
+  }
+
+  /* Frost only where it draws: a zero blur still makes a containing block and a backdrop root. */
+  @container not style(--area-material-frost: 0) {
+    [data-area-material] :is(
+      .area-card, .area-menu, .area-popover, .area-hover-card, .area-toggletip, .area-toast, .area-dialog, .area-drawer,
+      .area-command-palette, .area-titlebar:not(.area-titlebar--floating), .area-toolbar--surface, [data-area-chrome]
+    ) {
+      -webkit-backdrop-filter: var(--_m-frost);
+      backdrop-filter: var(--_m-frost);
+    }
+  }
+
+  /* The gradient stroke: the frame turns clear and two layers in the border area paint it, the frame's colour under the
+     light-to-shade gradient, so a see-through part stays clear inside (border-area; border-box elsewhere). */
+  @container style(--area-material-stroke-gradient: 1) {
+    [data-area-material] :is(.area-button:is(.area-button--solid, .area-button--outline, .area-button--soft), .area-card, .area-menu, .area-popover, .area-hover-card, .area-toast, .area-dialog) {
+      --_m-frame: var(--_border, var(--area-border-float));
+      --_m-under: light-dark(color-mix(in srgb, var(--_m-fill) calc(var(--_m-alpha-light, 1) * 100%), transparent), color-mix(in srgb, var(--_m-fill) calc(var(--_m-alpha-dark, 1) * 100%), transparent));
+      border-color: transparent;
+      background-color: transparent;
+      background-image: var(--_m-image), linear-gradient(var(--_m-under), var(--_m-under)), var(--_m-stroke-image), linear-gradient(var(--_m-frame), var(--_m-frame));
+      background-origin: border-box;
+      background-clip: padding-box, padding-box, border-box, border-box;
+    }
+    [data-area-material] .area-card { --_m-frame: var(--_card-edge); }
+    @supports (background-clip: border-area) {
+      [data-area-material] :is(.area-button:is(.area-button--solid, .area-button--outline, .area-button--soft), .area-card, .area-menu, .area-popover, .area-hover-card, .area-toast, .area-dialog) {
+        background-clip: padding-box, padding-box, border-area, border-area;
+      }
+    }
+  }
+
+  /* Disabled parts drop the material. */
+  [data-area-material] :is(.area-button, .area-input, .area-select, .area-custom-select__trigger, .area-textarea, .area-segmented__item, .area-checkbox__control, .area-radio__control):is(:disabled, [data-disabled], [aria-disabled="true"]) {
+    background-image: none;
+    box-shadow: none;
+  }
+  [data-area-material] .area-switch__control:disabled ~ .area-switch__track,
+  [data-area-material] .area-switch__control:disabled ~ .area-switch__track .area-switch__thumb { background-image: none; box-shadow: none; }
+
+  /* Forced colours: no material images or blur; the system paints fills and frames (D7). */
+  @media (forced-colors: active) {
+    [data-area-material], [data-area-material] * { background-image: none; -webkit-backdrop-filter: none; backdrop-filter: none; }
+    [data-area-chrome] { --area-chrome-bg: Canvas; }
+  }
+
+  /* Reduced transparency: opaque, no blur (D7). */
+  @media (prefers-reduced-transparency: reduce) {
+    [data-area-material], [data-area-material-transparency], [data-area-material-frost] { --area-material-transparency: 0; --area-material-frost: 0; }
+  }
+}

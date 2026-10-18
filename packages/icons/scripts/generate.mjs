@@ -562,31 +562,39 @@ const statuses = load(STATUS_SRC, { strict: true, keylines: false });
 // 12, with its lines on half pixels so they land on whole pixels at 1×. A turn, mirror or alias uses its base's cut,
 // turned. Lint: the 12px box, the source line, and stroked coordinates on the quarter-pixel grid inside 0.5–11.5;
 // gaps are judged on the cuts sheet (docs/research/icon-review/2026-10-13/cuts12.mjs).
-const CUT_SRC = join(SRC, "12");
 const CUT_LINE = Math.pow(12 / 16, SIZE_CURVE);  // the size curve's line at 12 against 16's (0.8786): 0.99px at 1.125
-const cuts = {}, cutSources = {};
-if (existsSync(CUT_SRC)) for (const file of readdirSync(CUT_SRC).filter(f => f.endsWith(".svg")).sort()) {
-  const name = file.replace(/\.svg$/, ""), label = `12/${name}`, text = readFileSync(join(CUT_SRC, file), "utf8");
-  if (ONLY && !ONLY.has(name)) continue;
-  if (attrs(text.match(/<svg[^>]*>/)[0]).viewBox !== "0 0 12 12") fail(label, `viewBox must be "0 0 12 12"`);
-  const base = icons.find(icon => icon.name === name);
-  if (!base || base.derivedFrom || base.aliasOf) fail(label, "a cut is drawn for a base icon; its turns and aliases follow it");
-  for (const [, tag] of text.matchAll(/<(ellipse|line|polyline|polygon|g|use)\b/g)) fail(label, `<${tag}>: draw it as a path`);
-  const cutSource = attrs(text.match(/<svg[^>]*>/)[0])["data-source"];
-  if (cutSource) cutSources[name] = cutSource;
-  cuts[name] = [...text.matchAll(/<(path|circle)\b([^>]*)\/>/g)].map(([, tag, body]) => {
-    const { "stroke-width": width, "stroke-linecap": _c, "stroke-linejoin": _j, ...a } = attrs(body);
-    const stroked = a.stroke && a.stroke !== "none";
-    if (stroked) {
-      if (width !== "1") fail(label, "source stroke-width must be 1");
-      const values = tag === "path" ? a.d.replace(/A([^A-Za-z]+)/g, (_, arc) => " " + arc.trim().split(/[\s,]+/).filter((_, i) => i % 7 >= 5).join(" ")).match(/-?\d*\.?\d+/g).map(Number)
-        : [Number(a.cx) - Number(a.r), Number(a.cx) + Number(a.r), Number(a.cy) - Number(a.r), Number(a.cy) + Number(a.r)];
-      for (const v of values) if (!onGrid(v, 0.25) || v < 0.5 || v > 11.5) fail(label, `${v} is off the quarter-pixel grid or outside 0.5–11.5`);
-    }
-    return { tag, attrs: a, stroked };
-  });
-}
+// 10px cuts (docs/specs/icons.md, "10px cuts", owner 2026-10-17: "go with 10px icons, draw the cuts"): a mark's icon
+// slot at Compact (Badge, Tag, Citation: the plate less 4, 10 in a 14 plate). Same construction and lint, on a 10 grid.
+const CUT_LINE10 = Math.pow(10 / 16, SIZE_CURVE);  // 0.8094: 0.91px at 1.125
+const cutSources = {};
+const loadCuts = grid => {
+  const out = {}, dir = join(SRC, String(grid));
+  if (existsSync(dir)) for (const file of readdirSync(dir).filter(f => f.endsWith(".svg")).sort()) {
+    const name = file.replace(/\.svg$/, ""), label = `${grid}/${name}`, text = readFileSync(join(dir, file), "utf8");
+    if (ONLY && !ONLY.has(name)) continue;
+    if (attrs(text.match(/<svg[^>]*>/)[0]).viewBox !== `0 0 ${grid} ${grid}`) fail(label, `viewBox must be "0 0 ${grid} ${grid}"`);
+    const base = icons.find(icon => icon.name === name);
+    if (!base || base.derivedFrom || base.aliasOf) fail(label, "a cut is drawn for a base icon; its turns and aliases follow it");
+    for (const [, tag] of text.matchAll(/<(ellipse|line|polyline|polygon|g|use)\b/g)) fail(label, `<${tag}>: draw it as a path`);
+    const cutSource = attrs(text.match(/<svg[^>]*>/)[0])["data-source"];
+    if (cutSource) cutSources[name] = cutSource;
+    out[name] = [...text.matchAll(/<(path|circle)\b([^>]*)\/>/g)].map(([, tag, body]) => {
+      const { "stroke-width": width, "stroke-linecap": _c, "stroke-linejoin": _j, ...a } = attrs(body);
+      const stroked = a.stroke && a.stroke !== "none";
+      if (stroked) {
+        if (width !== "1") fail(label, "source stroke-width must be 1");
+        const values = tag === "path" ? a.d.replace(/A([^A-Za-z]+)/g, (_, arc) => " " + arc.trim().split(/[\s,]+/).filter((_, i) => i % 7 >= 5).join(" ")).match(/-?\d*\.?\d+/g).map(Number)
+          : [Number(a.cx) - Number(a.r), Number(a.cx) + Number(a.r), Number(a.cy) - Number(a.r), Number(a.cy) + Number(a.r)];
+        for (const v of values) if (!onGrid(v, 0.25) || v < 0.5 || v > grid - 0.5) fail(label, `${v} is off the quarter-pixel grid or outside 0.5–${grid - 0.5}`);
+      }
+      return { tag, attrs: a, stroked };
+    });
+  }
+  return out;
+};
+const cuts = loadCuts(12), cuts10 = loadCuts(10);
 const cutOf = icon => cuts[icon.name] ?? cuts[icon.derivedFrom] ?? cuts[icon.aliasOf];
+const cut10Of = icon => cuts10[icon.name] ?? cuts10[icon.derivedFrom] ?? cuts10[icon.aliasOf];
 
 if (errors.length) { console.error(errors.map(e => "✗ " + e).join("\n")); process.exit(1); }
 console.log(`icon lint ok (${icons.length} icons, ${statuses.length} status marks)`);
@@ -689,6 +697,17 @@ const jsx12 = el => {
   return `<${el.tag} ${props.join(" ")} />`;
 };
 const TRANSFORMS12 = { flipx: "matrix(-1 0 0 1 12 0)", flipy: "matrix(1 0 0 -1 0 12)", transpose: "matrix(0 1 1 0 0 0)" };
+// A 10px cut's element and turn: its line is sw10 in its own units, turned about 5, 5.
+const jsx10 = el => {
+  const props = Object.entries(el.attrs).filter(([k]) => k !== "stroke").map(([k, v]) => `${camel(k)}="${v}"`);
+  if (el.stroked) props.push(`stroke="currentColor" style={{ strokeWidth: sw10(weight) }} strokeLinecap="round" strokeLinejoin="round"`);
+  return `<${el.tag} ${props.join(" ")} />`;
+};
+const TRANSFORMS10 = { flipx: "matrix(-1 0 0 1 10 0)", flipy: "matrix(1 0 0 -1 0 10)", transpose: "matrix(0 1 1 0 0 0)" };
+const turn10 = (icon, lines) => {
+  const transform = icon.rotate ? `rotate(${icon.rotate} 5 5)` : TRANSFORMS10[icon.flip];
+  return transform ? [`<g transform="${transform}">`, ...lines.map(l => "  " + l), `</g>`] : lines;
+};
 const turn12 = (icon, lines) => {
   const transform = icon.rotate ? `rotate(${icon.rotate} 6 6)` : TRANSFORMS12[icon.flip];
   return transform ? [`<g transform="${transform}">`, ...lines.map(l => "  " + l), `</g>`] : lines;
@@ -785,6 +804,16 @@ export const sw12 = (weight: number | undefined) => weight !== undefined ? weigh
 /** Which drawing an icon with a 12px cut shows at size 12 (token line): the cut where the xs icon slot is 12, from a
  *  component's --_glyph-cut or the type axis's --area-type-icon-xs-cut; without Area's styles, the cut. */
 export const cutOpacity = (cut: boolean) => cut ? "var(--_glyph-cut, var(--area-type-icon-xs-cut, 1))" : "calc(1 - var(--_glyph-cut, var(--area-type-icon-xs-cut, 1)))";
+/** A 10px cut's line in its own units (one unit is a pixel at 10): ${CUT_LINE10.toFixed(4)}× the 16px line ("10px cuts"). */
+export const sw10 = (weight: number | undefined) => weight !== undefined ? weight * ${CUT_LINE10.toFixed(4)} : "calc(var(--area-weight-icon) * ${CUT_LINE10.toFixed(4)})";
+/** An icon with a 10px cut, at size 12 (token line): the 10px cut shows where a mark's slot is 10 (a component's
+ *  --_glyph-cut10, 1 in Compact's 14px marks); the other drawings give way to it there. */
+export const cut10Opacity = (layer: 16 | 12 | 10, has12: boolean) => {
+  const c12 = "var(--_glyph-cut, var(--area-type-icon-xs-cut, 1))", c10 = "var(--_glyph-cut10, 0)";
+  if (layer === 10) return c10;
+  if (layer === 12) return \`calc(\${c12} * (1 - \${c10}))\`;
+  return has12 ? \`calc((1 - \${c12}) * (1 - \${c10}))\` : \`calc(1 - \${c10})\`;
+};
 /** A halo's width: the line and one line of space on each side, so the cut round a part in front is
  *  the line's own weight at every size (owner, 2026-10-06: the overlap cut's fixed 2.25 grew to 1.5×
  *  the line above 24px). */
@@ -818,7 +847,7 @@ const base = { viewBox: "0 0 16 16", width: 16, height: 16, fill: "none" } as co
  *  data-area-rtl="mirror" for rtl.css's :dir(rtl) flip, which needs no context and renders the same on the
  *  server; mirrored flips it inline with the scale property, so a transform of the caller's still applies.
  *  Props passed through come last and win. */
-export const root = (size: number | undefined, { title, mirrored, style, ...props }: Omit<PilotIconProps, "weight" | "size">, rtl?: boolean, grid?: 12) => {
+export const root = (size: number | undefined, { title, mirrored, style, ...props }: Omit<PilotIconProps, "weight" | "size">, rtl?: boolean, grid?: 12 | 10) => {
   const named = title !== undefined || props["aria-label"] !== undefined || props["aria-labelledby"] !== undefined;
   return {
     ...base, ...(grid ? { viewBox: \`0 0 \${grid} \${grid}\` } : {}), ...(size ? { width: size, height: size } : {}),
@@ -840,20 +869,46 @@ if (!ONLY) for (const name of Object.keys(RTL)) if (!icons.some(icon => icon.nam
 // An icon with a 12px cut draws it when size is 12; every other size scales the 16px drawing. With the token's line
 // (no weight), size 12 is the xs icon slot, 12px below type 16 and 16px at 16, so both drawings are carried and
 // cutOpacity shows the cut only where the slot is 12, as Glyph does (docs/specs/icons.md, "12px cuts").
-const iconSource = (icon, name = component(icon)) => `export const ${name}Icon = ({ weight, size, ...props }: PilotIconProps) => ${cutOf(icon) ? `size === 12 && weight !== undefined ? (
-  <svg {...root(size, props, ${RTL[icon.name] ? "true" : "undefined"}, 12)}>
-    ${turn12(icon, cutOf(icon).map(jsx12)).join("\n    ")}
+const iconSource = (icon, name = component(icon)) => {
+  const c12 = cutOf(icon), c10 = cut10Of(icon), rtl = RTL[icon.name] ? ", true" : "", rtlArg = RTL[icon.name] ? "true" : "undefined";
+  const outline = (indent) => turn(icon, icon.elements.filter(el => !el.filledOnly).map(el => jsx(el))).join("\n" + indent);
+  const layer12 = (indent) => turn12(icon, c12.map(jsx12)).join("\n" + indent);
+  const layer10 = (indent) => turn10(icon, c10.map(jsx10)).join("\n" + indent);
+  // An explicit 10 (size 10, or a numeric weight at 10): the 10 cut alone, in its own grid.
+  const explicit10 = c10 ? `size === 10 ? (
+  <svg {...root(size, props, ${rtlArg}, 10)}>
+    ${layer10("    ")}
   </svg>
-) : size === 12 ? (
-  <svg {...root(size, props${RTL[icon.name] ? ", true" : ""})}>
+) : ` : "";
+  const explicit12 = c12 ? `size === 12 && weight !== undefined ? (
+  <svg {...root(size, props, ${rtlArg}, 12)}>
+    ${layer12("    ")}
+  </svg>
+) : ` : "";
+  // The token line at 12 is the xs slot: every drawing the icon has, one shown by the slot's switches.
+  const slot = !c12 && !c10 ? "" : c10 ? `size === 12 ? (
+  <svg {...root(size, props${rtl})}>
+    <g style={{ opacity: cut10Opacity(16, ${Boolean(c12)}) }}>
+      ${outline("      ")}
+    </g>${c12 ? `
+    <g transform="scale(${(16 / 12).toFixed(6)})" style={{ opacity: cut10Opacity(12, true) }}>
+      ${layer12("      ")}
+    </g>` : ""}
+    <g transform="scale(${(16 / 10).toFixed(6)})" style={{ opacity: cut10Opacity(10, ${Boolean(c12)}) }}>
+      ${layer10("      ")}
+    </g>
+  </svg>
+) : ` : `size === 12 ? (
+  <svg {...root(size, props${rtl})}>
     <g style={{ opacity: cutOpacity(false) }}>
-      ${turn(icon, icon.elements.filter(el => !el.filledOnly).map(el => jsx(el))).join("\n      ")}
+      ${outline("      ")}
     </g>
     <g transform="scale(${(16 / 12).toFixed(6)})" style={{ opacity: cutOpacity(true) }}>
-      ${turn12(icon, cutOf(icon).map(jsx12)).join("\n      ")}
+      ${layer12("      ")}
     </g>
   </svg>
-) : ` : ""}(
+) : `;
+  return `export const ${name}Icon = ({ weight, size, ...props }: PilotIconProps) => ${explicit10}${explicit12}${slot}(
   <svg {...root(size, props${RTL[icon.name] ? ", true" : ""})}>
     ${turn(icon, icon.elements.filter(el => !el.filledOnly).map(el => jsx(el))).join("\n    ")}
   </svg>
@@ -866,6 +921,7 @@ export const ${name}FilledIcon = ({ weight, size, ...props }: PilotIconProps) =>
     </svg>
   );
 };` : "");
+};
 const tsx = `/**
  * Area icon pilot, generated from packages/icons/sources by
  * packages/icons/scripts/generate.mjs. Do not edit by hand. Construction: docs/specs/icons.md.
@@ -928,7 +984,7 @@ const iconMeta = icons.map(icon => {
   return { name: icon.name, component: pkgName(icon) + "Icon", filledComponent: pkgName(icon) + "FilledIcon", category: categoryOf[icon.name] ?? null,
     keyline: icon.keyline, fill: icon.elements.some(el => SOLID_ROLES.includes(el.filled)) ? "solid" : "weight", status, batch,
     ...(icon.derivedFrom ? { derivedFrom: icon.derivedFrom, turn: icon.rotate ? `rotate(${icon.rotate})` : icon.flip } : {}), ...(icon.aliasOf ? { aliasOf: icon.aliasOf } : {}),
-    ...(RTL[icon.name] ? { rtl: "mirror" } : {}), ...(cutOf(icon) ? { cuts: [12] } : {}), ...sourceOf(icon), keywords, ...(names ? { names } : {}) };
+    ...(RTL[icon.name] ? { rtl: "mirror" } : {}), ...(cutOf(icon) || cut10Of(icon) ? { cuts: [...(cut10Of(icon) ? [10] : []), ...(cutOf(icon) ? [12] : [])] } : {}), ...sourceOf(icon), keywords, ...(names ? { names } : {}) };
 });
 const GEN = "/** Generated by packages/icons/scripts/generate.mjs from packages/icons/sources. Do not edit by hand. */\n";
 rmSync(PKG, { recursive: true, force: true }); mkdirSync(join(PKG, "icons"), { recursive: true });
@@ -936,7 +992,7 @@ writeFileSync(join(PKG, "runtime.ts"), GEN + `import { useId, type SVGProps } fr
   .replace("const useMaskId = ", "export const useMaskId = "));
 for (const icon of icons) {
   const code = iconSource(icon, pkgName(icon)).replaceAll("PilotIconProps", "IconProps");
-  const used = ["sw", "sw12", "cutOpacity", "haloWidth", "lineShift", "slashGap", "useMaskId"].filter(f => new RegExp(`\\b${f}\\(`).test(code));
+  const used = ["sw", "sw12", "sw10", "cutOpacity", "cut10Opacity", "haloWidth", "lineShift", "slashGap", "useMaskId"].filter(f => new RegExp(`\\b${f}\\(`).test(code));
   writeFileSync(join(PKG, "icons", icon.name + ".tsx"), GEN + `import { root, ${[...used, "type IconProps"].join(", ")} } from "../runtime.ts";\n\n` + (icon.label !== icon.name ? `/** ${icon.label}. */\n` + code.replace("\n\nexport const", `\n\n/** ${icon.label}, filled. */\nexport const`) : code) + "\n");
 }
 // An entry with no icons (review, once every icon is approved) stays a module: `export {}`.
@@ -1031,6 +1087,15 @@ for (const [glyph, [source, index, paint]] of Object.entries(PACKAGE_GLYPHS)) {
   glyphCuts12[glyph] = cut.map(el => el.tag === "circle" ? circleD(el.attrs) : el.attrs.d);
   if (cut.some(el => !el.stroked)) glyphCutFills12[glyph] = cut.flatMap((el, i) => el.stroked ? [] : [i]);
 }
+// 10px cuts (the marks' Compact slot) the same way.
+const glyphCuts10 = {}, glyphCutFills10 = {};
+for (const [glyph, [source, index, paint]] of Object.entries(PACKAGE_GLYPHS)) {
+  const cut = cuts10[source];
+  if (!cut || index !== undefined || paint) continue;
+  if (cut.some(el => !el.stroked && el.tag !== "circle")) throw new Error(`glyph ${glyph}: a 10px cut glyph is stroked paths and circles, with filled dots`);
+  glyphCuts10[glyph] = cut.map(el => el.tag === "circle" ? circleD(el.attrs) : el.attrs.d);
+  if (cut.some(el => !el.stroked)) glyphCutFills10[glyph] = cut.flatMap((el, i) => el.stroked ? [] : [i]);
+}
 writeFileSync(GLYPHS_OUT, `/** Area-drawn component glyphs, generated from packages/icons/sources by
  * packages/icons/scripts/generate.mjs. Do not edit by hand. Construction: docs/specs/icons.md.
  * Each glyph is a list of stroked centre-line paths on the 16px grid. */
@@ -1048,5 +1113,9 @@ export const glyphKnockouts: Partial<Record<GlyphName, readonly number[]>> = ${J
  * are crisp at 1×. Glyph draws it when its size is 12; glyphCutFills12 lists its filled dots by path index. */
 export const glyphCuts12: Partial<Record<GlyphName, readonly string[]>> = ${JSON.stringify(glyphCuts12, null, 2)};
 export const glyphCutFills12: Partial<Record<GlyphName, readonly number[]>> = ${JSON.stringify(glyphCutFills12)};
+/** 10px cuts (docs/specs/icons.md, "10px cuts"): the glyph on the 10px grid, for a mark's Compact slot (the plate less
+ * 4). Glyph carries it at size 12 and base.css shows it where --_glyph-cut10 is 1. */
+export const glyphCuts10: Partial<Record<GlyphName, readonly string[]>> = ${JSON.stringify(glyphCuts10, null, 2)};
+export const glyphCutFills10: Partial<Record<GlyphName, readonly number[]>> = ${JSON.stringify(glyphCutFills10)};
 `);
 console.log("wrote packages/react/src/components/glyphs.ts");

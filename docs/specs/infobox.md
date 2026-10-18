@@ -57,3 +57,7 @@ Wikipedia, computed:
 
 - **What it is:** A side card that sums up a subject: title, image, and labelled facts in sections.
 - **Based on:** Wikipedia's infobox in Card's paint, with Description list's quiet labels.
+
+## Spacing audit (2026-10-17)
+
+Inset: 12 to the content with the border counted once, `calc(12 − border-width)`, as Popover's (11 + 1); it was 13. Measured in `docs/research/spacing-2026-10-17/` (Before / After: https://claude.ai/artifact/JtDZ9LNfutFyfdkGUvQzL2).

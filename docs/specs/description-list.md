@@ -172,3 +172,7 @@ button below the frame (the `dl` carries the frame).
 - 2026-10-12 · owner: build "show more" from design-system evidence → `visibleCount` and the Show more button (above). In review.
 - 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the divided rules and the framed edge are at `stroke-width`, Table's (were `border-width`) (description-list.css). (docs/research/consistency-audit-2026-10-12.md)
 - 2026-10-12 · owner, review round 21 (components21): approved with the open questions' recommendations ("go with your recs"), no change → Complete in `component-status.mjs`.
+
+## Spacing audit (2026-10-17)
+
+Framed insets: the frame's stroke is counted once, so text and rules sit 16 from the frame's outer edge, ChatGPT's measured 16 (capture-compare measures from the shell's border box); both layouts sat 17. Measured in `docs/research/spacing-2026-10-17/` (Before / After: https://claude.ai/artifact/JtDZ9LNfutFyfdkGUvQzL2).

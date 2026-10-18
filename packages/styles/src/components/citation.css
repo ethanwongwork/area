@@ -18,8 +18,15 @@
     /* spec: 20 (prompt-kit h-5; AI Elements about 22; ChatGPT 18 at 9px), the 20 mark tier (16 compact);
        ps-1 / pe-2 (4 / 8, ChatGPT and prompt-kit), gap 4. */
     --_height: var(--area-mark-label-md);
-    --_pad-start: var(--area-space-4);
-    --_pad-end: var(--area-space-8);
+    /* Both from the height, as Badge's (inset.css): an icon side (h - icon) / 2 and a text side (h - 4) / 2, so ChatGPT's
+       4 / 8 at 20 and 1 / 5 in Compact's 14 (spacing audit 2026-10-17: the literal 8 stayed at every height, 8 beside 3
+       of room above the text, where Badge at 14 sets 5). */
+    /* The favicon box: ChatGPT's 12, at most the plate less 4 (10 in Compact's 14, where an Area icon draws its 10px cut;
+       owner, 2026-10-17: "go with 10px icons"). */
+    --_icon: min(var(--area-icon-xs), calc(var(--_height) - var(--area-space-4)));
+    --_glyph-cut10: max(0, sign(var(--area-icon-xs) - var(--_icon)));
+    --_pad-start: calc((var(--_height) - var(--_icon)) / 2);
+    --_pad-end: calc((var(--_height) - var(--area-space-4)) / 2);
     display: inline-flex;
     align-items: center;
     gap: var(--area-space-4);
@@ -59,8 +66,8 @@
     display: inline-grid;
     place-items: center;
     flex: none;
-    inline-size: 12px; /* spec */
-    block-size: 12px; /* spec */
+    inline-size: var(--_icon); /* spec: 12 */
+    block-size: var(--_icon);
     border-radius: var(--area-radius-full);
     overflow: hidden;
   }

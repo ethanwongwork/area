@@ -322,3 +322,7 @@ The action's underline takes Link's offset, 0.25em, clear of descenders (link.md
 - 2026-10-16 · owner, review round 27 (components27) → needs changes: "padding is wrong" → open.
 - 2026-10-16 · from the owner's "padding is wrong" → the State / selected demo put `CardHeader` straight in the card, without `CardContent`, which holds the text column's inset; its text sat on the card's 8 (6 compact) media inset instead of 16 (12). The demo now wraps it as every other Card demo does; measured in the app: title and description 14 from the top, start and bottom at type 13. Card's CSS is unchanged.
 - 2026-10-16 · owner, review round 28 (components28) → approved (pressed, selected) → Complete again in `component-status.mjs`.
+
+## Spacing audit (2026-10-17)
+
+Header marks: a Badge or marker icon in `CardHeader`'s action slot centres on the title's cap line (the slot is one cap tall and the mark overflows it evenly, as a ghost control's). It sat 6.3–6.8 below the cap centre because the title is cap-trimmed and the slot was one title line tall; header buttons were already centred (0.5). Measured in `docs/research/spacing-2026-10-17/` (Before / After: https://claude.ai/artifact/JtDZ9LNfutFyfdkGUvQzL2).
