@@ -1,6 +1,6 @@
 # Video player spec
 
-**Status:** in review · 2026-10-17
+**Status:** Complete · approved 2026-10-18 (round 47)
 **Research:** `docs/research/video-player-2026-10-17.md` (Plyr, Video.js v10, Vidstack, Media Chrome and Kibo pinned to
 commits; YouTube, Vimeo and apple.com computed; Notion, Loom, Slack not measured)
 **Peers:** Figure (holds it, with a caption), Button (ghost icon-only, here on media), Slider (the range), Tooltip, Spinner
