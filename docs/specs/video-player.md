@@ -232,3 +232,23 @@ system is neutral white, gray." Recommended and done:
 - **Why:** You suggested it, and it's what video players do: Apple, QuickTime, Media Chrome and Video.js keep controls
   dark over video in any theme so they read on bright and dark frames. Everything inside still uses Area's own colours,
   just its dark set.
+
+## Round 46, 2026-10-18
+
+Owner, on the narrow pill: "the backplates for the whole thing and the play button should match"; then "i also dont like
+the slider design here, does it have to use this slider or can it be a new design? i kind of like this slider from cursors
+icon library where its just a solid shape, but in this case i would want the track to be filled on the left side".
+- **Plates match the glass.** The dark scheme's ghost hover is an opaque grey, which showed as a dark tile on the
+  see-through panel. On the surface a ghost Button's hover is white 12% (the panel's stroke), press white 20% (Vidstack's
+  hover), selected white 16%: lighter patches of the same glass.
+- **A solid-shape track.** The player's track is its own part (not Slider), so it takes Cursor's shape: a thin rail and a
+  plain solid round thumb, no ring, dot or shadow, with the played part filled in the thumb's ink. Played and thumb in the
+  surface's text ink (white in its dark scheme), loaded 35%, rail 20%; thumb 12, always shown; track 4. Material no
+  longer paints the thumb (it was Slider's primary-group hook).
+
+## Review note, 2026-10-18 (round 46)
+
+- **What changed:** Button highlights on the controller are now light see-through tints of the glass instead of dark
+  tiles, and the progress and volume bars are a simple solid shape: a thin track filled up to a plain round dot.
+- **Why:** You wanted the play button's backplate to match the panel and preferred Cursor's solid slider, with the
+  played part filled.

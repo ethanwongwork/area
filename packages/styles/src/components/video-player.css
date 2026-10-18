@@ -247,6 +247,19 @@
     box-shadow: inset 0 0 0 var(--area-border-width) rgb(255 255 255 / 0.12), var(--area-shadow-float); /* spec: the transparent stroke */
     color: var(--area-fg-default);
   }
+  /* Plates on the glass are glass too (round 46, owner: "the backplates for the whole thing and the play button should
+     match"): the dark scheme's ghost hover is an opaque grey, which sat on the see-through panel as a dark tile. On the
+     surface a ghost Button's hover, press and selected plates are white tints over the same glass (Vidstack's white 20%
+     hover; the panel's own white 12% stroke), so a plate reads as a lighter patch of the panel, not a second material. */
+  .area-video-player__surface .area-button.area-button--ghost {
+    --_bg-hover: rgb(255 255 255 / 0.12); /* spec: the panel's stroke */
+    --_bg-active: rgb(255 255 255 / 0.2); /* spec: Vidstack's hover */
+  }
+  .area-video-player__surface .area-button.area-button--ghost[data-selected] {
+    --_bg: rgb(255 255 255 / 0.16); /* spec: between hover and press, as Button's selected step */
+    --_bg-hover: rgb(255 255 255 / 0.16);
+    --_bg-active: rgb(255 255 255 / 0.16);
+  }
   .area-video-player--floating .area-video-player__scrim { display: none; }
   .area-video-player--floating .area-video-player__controls {
     inset: auto 0 var(--area-space-12);
@@ -289,41 +302,44 @@
     font-weight: var(--area-weight-regular);
     font-variant-numeric: tabular-nums;
   }
-  /* Ranges on the surface are Slider's (slider.css): the selection fill, the control edge for the rail, and its thumb (the
-     surface with the control-hover edge, the fill's dot, the control shadow), shown always so the track says where the
-     video is (QuickTime's knob). What has loaded sits a step darker than the rail. */
+  /* Ranges on the surface: a solid shape (round 46, owner: "i kind of like this slider from cursors icon library where its
+     just a solid shape, but in this case i would want the track to be filled on the left side"). Cursor's slider is a
+     thin rail and a plain solid round thumb, no ring, dot or shadow; here the part before the thumb is filled in the
+     thumb's ink. All three are the surface's text ink (white in its dark scheme): played and thumb at full, what has
+     loaded at 35%, the rail at 20% (the round-42 references' 20–50%). The thumb is 12 (YouTube, Video.js), shown always
+     so the track says where the video is (QuickTime's knob). The track is the player's own part, not Slider (owner:
+     "keep it as is"). */
   .area-video-player__surface .area-video-player__range {
-    --_fill: var(--area-selection-solid);
-    --_rail: var(--area-edge-control);
-    --_loaded: 0%;
+    --_fill: var(--area-fg-default);
+    --_rail: color-mix(in srgb, var(--area-fg-default) 20%, transparent); /* spec */
   }
   .area-video-player__surface .area-video-player__range::-webkit-slider-runnable-track {
     background: linear-gradient(to right,
       var(--_fill) 0 var(--_played),
-      var(--area-edge-control-hover) var(--_played) max(var(--_played), var(--_loaded)),
-      var(--_rail) max(var(--_played), var(--_loaded)) 100%);
+      color-mix(in srgb, var(--area-fg-default) 35%, transparent) var(--_played) max(var(--_played), var(--_loaded)),
+      var(--_rail) max(var(--_played), var(--_loaded)) 100%); /* spec */
   }
   .area-video-player__surface .area-video-player__range::-moz-range-track {
     background: linear-gradient(to right,
       var(--_fill) 0 var(--_played),
-      var(--area-edge-control-hover) var(--_played) max(var(--_played), var(--_loaded)),
-      var(--_rail) max(var(--_played), var(--_loaded)) 100%);
+      color-mix(in srgb, var(--area-fg-default) 35%, transparent) var(--_played) max(var(--_played), var(--_loaded)),
+      var(--_rail) max(var(--_played), var(--_loaded)) 100%); /* spec */
   }
   .area-video-player__surface .area-video-player__range::-webkit-slider-thumb {
-    inline-size: var(--area-space-16);
-    block-size: var(--area-space-16);
-    margin-block-start: calc((var(--_track) - var(--area-space-16)) / 2);
-    border: var(--area-stroke-width) solid var(--area-edge-control-hover);
-    background: radial-gradient(circle, var(--_fill) 0 42%, var(--area-bg-surface) 46% 100%); /* spec: slider.md thumb dot stops */
-    box-shadow: var(--area-shadow-control);
+    inline-size: var(--area-space-12);
+    block-size: var(--area-space-12);
+    margin-block-start: calc((var(--_track) - var(--area-space-12)) / 2);
+    border: 0;
+    background: var(--_fill);
+    box-shadow: none;
     scale: 1;
   }
   .area-video-player__surface .area-video-player__range::-moz-range-thumb {
-    inline-size: var(--area-space-16);
-    block-size: var(--area-space-16);
-    border: var(--area-stroke-width) solid var(--area-edge-control-hover);
-    background: radial-gradient(circle, var(--_fill) 0 42%, var(--area-bg-surface) 46% 100%); /* spec */
-    box-shadow: var(--area-shadow-control);
+    inline-size: var(--area-space-12);
+    block-size: var(--area-space-12);
+    border: 0;
+    background: var(--_fill);
+    box-shadow: none;
     scale: 1;
   }
   /* The track keeps Slider's 4 on the surface (no growth: Slider does not grow). */

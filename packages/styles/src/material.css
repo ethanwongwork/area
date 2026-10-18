@@ -164,9 +164,6 @@
   [data-area-material] .area-slider__control::-moz-range-thumb { background-image: var(--area-material-primary-image); box-shadow: var(--area-material-primary-shadow), var(--area-shadow-control); }
   [data-area-material] .area-slider__control::-webkit-slider-runnable-track { background-image: var(--area-material-wells-image); box-shadow: var(--area-material-wells-shadow); }
   [data-area-material] .area-slider__control::-moz-range-track { background-image: var(--area-material-wells-image); box-shadow: var(--area-material-wells-shadow); }
-  /* The Video player's ranges on its Area surface are Slider's parts. */
-  [data-area-material] .area-video-player__surface .area-video-player__range::-webkit-slider-thumb { background-image: var(--area-material-primary-image); box-shadow: var(--area-material-primary-shadow), var(--area-shadow-control); }
-  [data-area-material] .area-video-player__surface .area-video-player__range::-moz-range-thumb { background-image: var(--area-material-primary-image); box-shadow: var(--area-material-primary-shadow), var(--area-shadow-control); }
 
   /* Surfaces, overlays and chrome: see-through down to the reading floor, the material over the fill. */
   [data-area-material] :is(
