@@ -354,7 +354,9 @@
     --_bg-hover: var(--_surface-hover);
     --_bg-active: var(--_surface-active);
     --_fg: var(--_tone-fg);
-    --_border: var(--_surface-hover);
+    /* Its fill a step darker; Contrast takes it to the outline Button's line by the level, as every edge (owner,
+       2026-10-18: some components "dont visibly change at all"). */
+    --_border: color-mix(in oklab, var(--_surface-hover), var(--_line) calc(var(--area-contrast-more) * 100%));
     --_border-hover: var(--_surface-active);
   }
 

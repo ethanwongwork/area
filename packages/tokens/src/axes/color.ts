@@ -25,7 +25,8 @@ function tokensForRole(theme: ResolvedTheme, role: string): Record<string, strin
     if (alias.role !== role) continue;
     // A vivid or tonal ink is written as its rung; the Layers model derives `fg-<role>-vivid` and `fg-<role>` from it, so
     // it follows the ground (color/layers.ts HUED_INKS).
-    out[alias.kind === "vivid" || alias.kind === "tonalForeground" ? `${name}-rung` : name] = theme.tokens[name]!;
+    // A tonal stroke is written as its rung too; base.ts moves it with the Contrast level.
+    out[alias.kind === "vivid" || alias.kind === "tonalForeground" || alias.kind === "stroke" || alias.kind === "strokeHover" ? `${name}-rung` : name] = theme.tokens[name]!;
   }
   return out;
 }

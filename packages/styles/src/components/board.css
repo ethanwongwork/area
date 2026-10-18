@@ -34,10 +34,11 @@
     /* spec: Notion's column, 276 (a 260 card in 8 each side). */
     inline-size: 276px; /* spec */
     max-inline-size: 100%;
-    /* A shell around its cards, concentric with them: the card's corner plus the 8 between them (20 at the default),
-       scaled by radius-concentric, as Composer and Toolbar (owner, 2026-10-12: "is the corner radius ... correct?"; it was
-       the card's own 12, so the gap widened at the corners). */
-    border-radius: calc(var(--area-radius-container) + var(--area-space-8) * var(--area-radius-concentric));
+    /* A shell around its cards, concentric with them: the card's corner plus the 8 between them, scaled by
+       radius-concentric, as Composer and Toolbar (owner, 2026-10-12: "is the corner radius ... correct?"). 16 at the
+       default, Card's, Dialog's and Composer's outer corner (owner, 2026-10-18: "too round compared to the other
+       components"; it was 20, the card's container 12 plus 8, the roundest surface in the system). */
+    border-radius: calc(var(--area-radius-row) + var(--area-space-8) * var(--area-radius-concentric));
     background-color: color-mix(in oklab, var(--_color) var(--_tint), transparent);
     color: var(--area-fg-default);
     font-size: var(--area-ui-size);
@@ -106,7 +107,7 @@
     margin: 0;
     padding: var(--area-space-8) 10px; /* spec: the card's 8 10 */
     border: 0;
-    border-radius: var(--area-radius-container);
+    border-radius: var(--area-radius-row);
     background: transparent;
     color: var(--_add-ink);
     font: inherit;
@@ -115,6 +116,7 @@
     transition: background-color var(--area-duration-fast) var(--area-ease-out);
     user-select: none;
   }
+  .area-board-column:not(.area-board-column--neutral) { --_ring-strong: var(--_ink); }
   .area-board-column:not(.area-board-column--neutral) .area-board-column__add {
     --_add-ink: var(--_ink);
     /* The card's hover strength, 6% (pressed 9%, the same 1.5 step as bg-hover to bg-active). */
@@ -134,7 +136,9 @@
     gap: var(--area-space-4);
     /* spec: Notion's card pads 8 10 around its title row. */
     padding: var(--area-space-8) 10px; /* spec */
-    border-radius: var(--area-radius-container);
+    /* A row in its column, as a Menu's rows in their list: the row plate's corner (8 at the default, 6 compact; Notion 10),
+       so the column around it stays at a surface's 16 (2026-10-18; it was the container's 12). */
+    border-radius: var(--area-radius-row);
     /* The card's paint, which its actions sit on too (they cover the title's end with it). */
     --_card-bg: var(--area-bg-surface);
     background-color: var(--_card-bg);
@@ -142,7 +146,7 @@
        card; its lift is the Elevation axis's resting role (1.5% at the default step, none at 0; was Notion's
        0 4 12 / 0 1 2 at 2.7% / 2%). */
     box-shadow: var(--area-shadow-edge), var(--area-shadow-resting),
-      0 0 0 var(--area-border-width) color-mix(in oklab, var(--_color, var(--area-fg-default)) 8%, transparent); /* spec */
+      0 0 0 var(--area-border-width) color-mix(in oklab, color-mix(in oklab, var(--_color, var(--area-fg-default)) 8%, transparent), var(--_ring-strong, var(--area-border-card)) calc(var(--area-contrast-more) * 100%)); /* spec; Contrast takes it to the card frame (the strong stroke at More), or the colour's ink in a colour (2026-10-18) */
     transition: background-color var(--area-duration-fast) var(--area-ease-out);
     user-select: none;
   }
@@ -223,7 +227,7 @@
     pointer-events: none;
   }
   .area-board-card__actions:dir(rtl)::before { background: linear-gradient(to left, transparent, var(--_card-bg)); }
-  .area-board-card__actions > .area-button { --_height: var(--_card-action); --_radius: max(var(--area-radius-floor), calc(var(--area-radius-container) - var(--_card-action-inset))); }
+  .area-board-card__actions > .area-button { --_height: var(--_card-action); --_radius: max(var(--area-radius-floor), calc(var(--area-radius-row) - var(--_card-action-inset))); }
   .area-board-card__actions .area-button.area-button--ghost { --_fg: var(--area-fg-muted); --_bg-hover: transparent; --_bg-active: transparent; }
   @media (hover: hover) { .area-board-card__actions .area-button.area-button--ghost:hover { --_fg: var(--area-fg-default); } }
   .area-board-card__actions .area-button.area-button--ghost:is(:active, [aria-expanded="true"][aria-haspopup]) { --_fg: var(--area-fg-default); }

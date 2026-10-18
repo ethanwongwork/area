@@ -61,10 +61,13 @@ export const EDGE_OFFSET = {
   dark: { decorative: 0.05, card: 0.09, float: 0.182, faint: 0.09, subtle: 0.09, border: 0.182, hover: 0.2296 },
 } as const;
 export const EDGE_DARK_TODAY = { decorative: 0.2768, card: 0.3211, float: 0.4128, faint: 0.3211, subtle: 0.3211, border: 0.4128, hover: 0.4604 } as const;
-/** How far toward the strong stroke (`stroke-control`) every edge moves under Contrast More, as a share of the way: a third,
- * so a seam on white steps #f3 → #c9 and a card frame #ee → #c5 while a control edge goes all the way to its 3:1 stroke
- * (#e2 → #83). Medium is half of it. A third keeps seams quieter than frames and frames quieter than controls. */
-export const CONTRAST_EDGE_SHARE = 1 / 3;
+/** How far toward the strong stroke every edge moves under Contrast More, as a share of the way. One share for every
+ * stroke (owner, 2026-10-18: "some components get an obviously darker stroke whereas some components dont visibly change
+ * at all"): a third for seams and frames while control edges went the whole way read as two settings. So every rest edge
+ * reaches `stroke-control` (3:1) and every hover edge `stroke-control-hover` at More, half way at Medium. */
+export const CONTRAST_EDGE_SHARE = 1;
+/** The edges a pointer steps to: they reach the strong hover stroke, so a hover still reads under More. */
+const HOVER_EDGES: ReadonlySet<string> = new Set(["border", "hover"]);
 /** Inks: today's text and edge where they pass (light #282828 / #666666 / #838383, hover #747474; dark #eeeeee /
  * #c5c5c5 / #939393, hover #a4a4a4), else darkened (light) or lightened (dark) just enough to hold the target. */
 export const INK_TODAY = {
@@ -281,18 +284,27 @@ function color(light: string, dark: string): string {
   return `light-dark(oklch(${light} ${cl} ${v("neutral-hue-light")}), oklch(${dark} ${cd} ${v("neutral-hue-dark")}))`;
 }
 
+/** An edge at standard contrast: its distance below the light page, above the dark raised layer. base.ts mixes the
+ * controls' roles from these, so no role moves twice. */
+export function rawEdge(k: keyof typeof EDGE_OFFSET.light): string {
+  const edgeLight = (d: number) => `calc(${v("layer-light-page")} - ${num(d)})`;
+  const edgeDark = (today: number, d: number) => `max(${num(today)}, calc(${v("layer-dark-raised")} + ${num(d)}))`;
+  return color(edgeLight(EDGE_OFFSET.light[k]), edgeDark(EDGE_DARK_TODAY[k], EDGE_OFFSET.dark[k]));
+}
+
+/** A colour at standard contrast taken `share` of the way to `strong` at the Contrast level (0, 0.5 Medium, 1 More). */
+export const contrastMix = (standard: string, strong: string, share = 1) =>
+  `color-mix(in oklab, ${standard}, ${strong} calc(${v("contrast-more")} * ${num(share * 100)}%))`;
+
 /** Every layer colour token as CSS, plus the lightness helpers it reads. */
 export function layerCss(): Record<string, string> {
   const L = (theme: "light" | "dark", name: string) => v(`layer-${theme}-${name}`);
   const both = (name: string) => color(L("light", name), L("dark", name));
-  const edgeLight = (d: number) => `calc(${v("layer-light-page")} - ${num(d)})`;
-  const edgeDark = (today: number, d: number) => `max(${num(today)}, calc(${v("layer-dark-raised")} + ${num(d)}))`;
-  const raw = (k: keyof typeof EDGE_OFFSET.light) => color(edgeLight(EDGE_OFFSET.light[k]), edgeDark(EDGE_DARK_TODAY[k], EDGE_OFFSET.dark[k]));
-  // Contrast moves every stroke together (owner, 2026-10-18: More "doesn't seem to apply to all components evenly"):
-  // each edge goes the same share of the way to the strong stroke, so seams, frames and dividers step with the control
-  // edges, which base.ts takes the whole way, and the order between them holds. Standard is the edge as it was.
+  const raw = rawEdge;
+  // Contrast moves every stroke together (owner, 2026-10-18: More "doesn't seem to apply to all components evenly"): each
+  // edge goes the same share of the way to the strong stroke (CONTRAST_EDGE_SHARE). Standard is the edge as it was.
   const edge = (k: keyof typeof EDGE_OFFSET.light) =>
-    `color-mix(in oklab, ${raw(k)}, ${v("stroke-control")} calc(${v("contrast-more")} * ${num(CONTRAST_EDGE_SHARE * 100)}%))`;
+    contrastMix(raw(k), v(HOVER_EDGES.has(k) ? "stroke-control-hover" : "stroke-control"), CONTRAST_EDGE_SHARE);
   const out: Record<string, string> = {
     ...Object.fromEntries(Object.entries(layerLightnessCss()).map(([k, x]) => [`${P}${k}`, x])),
     [`${P}bg-page`]: both("page"),

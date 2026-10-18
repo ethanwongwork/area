@@ -40,8 +40,9 @@
     block-size: var(--_token-swatch-size, 1em);
     flex-shrink: 0;
     /* Nested in its host: the host's corner less the ~4 inset, floored at no more than its old
-       small − 2 (4, compact 2), so it never outgrows the host (quality pass 2026-10-04: 6 inside 8 at 12). */
-    border-radius: max(var(--area-radius-min), min(var(--area-radius-floor), calc(var(--area-radius-small) - var(--area-space-2))), calc(var(--area-radius-small) - var(--area-space-4)));
+       small − 2 (4, compact 2), so it never outgrows the host (quality pass 2026-10-04: 6 inside 8 at 12). It stops 2px
+       short of round until Pill, as Kbd and a Menu's rows (radius audit, 2026-10-18: 8 on a 12 swatch at 14 / 36). */
+    border-radius: max(var(--area-radius-min), min(max(min(var(--area-radius-floor), calc(var(--area-radius-small) - var(--area-space-2))), calc(var(--area-radius-small) - var(--area-space-4))), calc(var(--_token-swatch-size, 1em) / 2 - min(2px, (0.5 - var(--area-radius-factor)) * 1000px))));
     /* The swatch ring, as ColorSwatch's: a required edge (`stroke-width`), so it stays under Borderless. */
     box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-token-swatch-ring);
   }
