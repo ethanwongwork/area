@@ -1,62 +1,43 @@
 /* ---------------------------------------------------------------------------
  * Navbox
  *
- * Related pages grouped under one title, at the foot of an article, collapsible (docs/specs/navbox.md).
- * Wikipedia's (measured 2026-10-17): a #a2a9b1 hairline box at 0.88 of the body, a centred bold title
- * band with "hide" at its end, then rows of a bold, end-aligned group name on a tint beside its links
- * (an inline list), rows 2 apart and every other list striped. Area: Card's surface and edge, the title
- * band and group names on the control fill, rows divided by Area's rule, every other list on the stripe.
+ * Related links in named groups, at the foot of a page (docs/specs/navbox.md): unframed columns, a heading above each
+ * group, its links one per line (round 34 survey: Vercel, Linear, Apple, GitHub, Notion, MDN, Docusaurus, GOV.UK,
+ * Primer; docs/research/articles-rethink-2026-10-17/inline-list-navbox.md). Type follows the footers' hierarchy (owner,
+ * round 34: "reevaluate the text styles and make sure hierarchy and proper type alignment is correct"): Vercel, Linear,
+ * Apple, MDN and Docusaurus set the group heading in the strongest ink and the links dimmer.
+ *   title    the surface title (title-xs, strong): Card's, Dialog's and Infobox's title
+ *   heading  UI text, strong, default ink (Linear 13 / 510 primary; Vercel 14 / 500 gray-1000)
+ *   links    UI text, regular, muted, underlined on hover (Linear tertiary, Vercel gray-900): Link muted standalone
+ * Title, headings and links start on one edge; no element is inset.
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-navbox {
-    clear: both;
-    box-sizing: border-box;
-    overflow: hidden;
-    background-color: var(--area-bg-surface);
-    border: var(--area-border-width) solid var(--area-border-card);
-    border-radius: var(--area-radius-container);
-    /* A resting surface, as Card: its frame rides the Surface axis and the resting shadow keeps it under Borderless. */
-    box-shadow: var(--area-shadow-resting);
+    display: flex;
+    flex-direction: column;
+    /* spec: the title 12 above the groups, as Infobox's header above its sections. */
+    gap: var(--area-space-12);
+    min-inline-size: 0;
     color: var(--area-fg-default);
-    font-size: var(--area-text-sm-size);
-    line-height: var(--area-text-sm-leading);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
   }
-  .area-navbox__header {
-    display: grid;
-    /* The title centres on the box, with the toggle's width kept free on both sides. */
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    min-block-size: var(--area-ui-row);
-    padding-inline: var(--area-space-4);
-    background-color: var(--area-bg-component);
-  }
+  .area-navbox--divided { padding-block-start: var(--area-space-16); border-block-start: var(--area-stroke-width) solid var(--area-border-divider); }
   .area-navbox__title {
-    grid-column: 2;
     margin: 0;
-    padding-block: var(--area-space-4);
-    font-size: inherit;
-    line-height: inherit;
+    font-size: var(--area-title-xs-size);
+    line-height: var(--area-title-xs-leading);
     font-weight: var(--area-weight-strong);
-    text-align: center;
   }
-  .area-navbox__toggle { grid-column: 3; justify-self: end; }
-  .area-navbox__body { display: grid; grid-template-columns: max-content minmax(0, 1fr); }
-  .area-navbox__body[hidden] { display: none; }
-  .area-navbox__group { display: contents; }
-  .area-navbox__label,
-  .area-navbox__list {
-    padding: var(--area-space-6) var(--area-space-12);
-    border-block-start: var(--area-stroke-width) solid var(--area-border-divider); /* a divider: a required line (DESIGN_SYSTEM.md, "Strokes") */
+  /* spec: columns at least 10em wide, 24 apart both ways (Vercel gap-6). */
+  .area-navbox__groups {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 10em), 1fr));
+    gap: var(--area-space-24);
   }
-  /* spec: Wikipedia's group names, bold and end-aligned on a tint. */
-  .area-navbox__label {
-    max-inline-size: 12em;
-    background-color: var(--area-bg-component);
-    font-weight: var(--area-weight-strong);
-    text-align: end;
-  }
-  /* A group without a name spans both columns. */
-  .area-navbox__list:first-child { grid-column: 1 / -1; }
-  /* spec: Wikipedia stripes every other list. */
-  .area-navbox__group:nth-child(even) > .area-navbox__list { background-color: var(--area-bg-stripe); }
+  /* spec: the heading 8 above its links (Linear 16 at 13 for a whole-site footer; half for a page's block). */
+  .area-navbox__group { display: flex; flex-direction: column; gap: var(--area-space-8); min-inline-size: 0; }
+  .area-navbox__label { margin: 0; font-size: inherit; line-height: inherit; font-weight: var(--area-weight-strong); }
+  /* spec: one link per line, 4 apart (Vercel's 20 line + 2 + 2). */
+  .area-navbox__list { display: flex; flex-direction: column; align-items: start; gap: var(--area-space-4); margin: 0; padding: 0; list-style: none; }
 }

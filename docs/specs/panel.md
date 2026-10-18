@@ -242,6 +242,13 @@ Open questions:
 
 The section toggle is not selectable. See [interaction polish](../research/interaction-polish-2026-10-16.md).
 
+## Review note, 2026-10-17 (round 33)
+
+- **What changed:** Only the underline on the main-component link in dev mode (shown on hover and focus): it now sits close under the words, about 1px below the letters,
+  instead of 0.25em down. Tails of g, y and p cross it and the line breaks around them. Nothing else changed.
+- **Why:** It follows Link, which you asked to underline "very natural and close to the text" (link.md, "Close
+  underline").
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → no change; `shadow-2` confirmed as an in-flow region, outside
@@ -297,3 +304,18 @@ The section toggle is not selectable. See [interaction polish](../research/inter
 - 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the collapsible toggle's focus ring sits at `focus-offset` (was `space-2`, the same 2px) (panel.css). (docs/research/consistency-audit-2026-10-12.md)
 - 2026-10-14 · owner: "add elevation as an option" → Panel takes the Elevation axis's resting role, `--area-shadow-resting` (no lift at Minimal; was `shadow-2`, then `shadow-card` on 2026-10-13) (docs/research/elevation-2026-10-14.md).
 - 2026-10-14 · owner: "continue working on the next axis" → Surface is one number, the frame's width: `1` (Default) or `0` (Borderless) (was `outlined` / `borderless`; axes/surface.ts). At 0 the panel lists the Surface axis's `shadow-edge` first in its box-shadow, ChatGPT's frameless-menu edge (`0 0 1px` black 62%, and in dark an inset `0 0 1px` white 20%; captured 2026-10-13), so it keeps an edge at Elevation 0 and in dark, where it had none. Owner approved ("go with your recs"), review https://claude.ai/artifact/L4TCF2W5zcjvBK7xZmaDBN (docs/research/surface-2026-10-14.md).
+
+## Review note, 2026-10-17 (round 34)
+
+- **What changed:** Only the Component icon in the dev-mode row ("Button / Primary"): its four diamonds are larger and
+  closer, about 4.9 wide instead of 4, reaching as far as Area's diamond icon, so it reads as Figma's component mark
+  rather than a scatter of dots.
+- **Why:** You said "the component icon looks wrong". Lucide draws the same concept with larger diamonds; the old
+  drawing was the lightest of the circle-keyline icons (docs/specs/icons.md, "Component redrawn").
+
+## Review note, 2026-10-17 (round 35)
+
+- **What changed:** The colour tokens in the dev-mode inspector have 8 between them instead of touching.
+- **Why:** You said they should have a gap. Figma's Dev Mode lists its colours every 32; Area's token is about 23 tall,
+  which leaves 8, the gap Token row's own examples use.
+

@@ -212,16 +212,16 @@
     text-decoration: underline;
     text-decoration-color: currentColor; /* spec: Link's line, the link's own ink (link.md, review round 2) */
     text-decoration-thickness: var(--area-stroke-width);
-    text-underline-offset: 0.25em; /* spec: Link's offset, clear of descenders (link.md, 2026-10-16) */
+    text-underline-offset: 0.08em; /* spec: Link's offset, close under the text (link.md, 2026-10-17) */
   }
   @media (hover: hover) { .area-chip--link:hover .area-chip__label { text-decoration-color: currentColor; } }
   .area-chip--link:focus-visible .area-chip__label { text-decoration-color: currentColor; }
 
-  @media (hover: hover) { .area-chip--link-icon:hover .area-chip__label { text-decoration: underline; text-decoration-thickness: var(--area-stroke-width); text-underline-offset: 0.25em; /* spec: Link's offset, clear of descenders (link.md, 2026-10-16) */ } }
+  @media (hover: hover) { .area-chip--link-icon:hover .area-chip__label { text-decoration: underline; text-decoration-thickness: var(--area-stroke-width); text-underline-offset: 0.08em; /* spec: Link's offset, close under the text (link.md, 2026-10-17) */ } }
   .area-chip--link-icon:focus-visible .area-chip__label {
     text-decoration: underline;
     text-decoration-thickness: var(--area-stroke-width);
-    text-underline-offset: 0.25em; /* spec: Link's offset, clear of descenders (link.md, 2026-10-16) */
+    text-underline-offset: 0.08em; /* spec: Link's offset, close under the text (link.md, 2026-10-17) */
   }
 
   /* A removable chip is a composition: its primary action and removal action stay peers. */

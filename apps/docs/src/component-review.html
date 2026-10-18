@@ -118,6 +118,7 @@ details.panel > summary { cursor: pointer; font-size: 12px; font-weight: 500; co
     <h1>Area component review</h1>
     <div class="prog" aria-label="Progress"><div class="track" id="track"></div><div class="nums" id="nums">Loading components…</div></div>
     <select id="filter" aria-label="Show">
+      <option value="round">This round</option>
       <option value="review">Not approved yet</option>
       <option value="changed">Changed recently</option>
       <option value="todo">Not decided</option>
@@ -190,7 +191,7 @@ const FAMILIES = window.FAMILIES || [];
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 // One collection per review round, so a family reopened after approval starts undecided (round 6: 2026-10-10).
-const ROUND = "components32", KEY = "area-component-review-32";
+const ROUND = "components38", KEY = "area-component-review-38";
 const pref = (k, d) => { try { return localStorage.getItem("area-cr-" + k) || d; } catch { return d; } };
 const setPref = (k, v) => { try { localStorage.setItem("area-cr-" + k, v); } catch {} };
 // Side by side by default (owner 2026-10-09: "be more explicit about the before and after"); only changed
@@ -233,7 +234,7 @@ const fam = () => FAMILIES[order[at]];
 function applyFilter(keep) {
   const f = $("filter").value, was = order[at];
   order = FAMILIES.map((_, i) => i).filter(i => { const x = FAMILIES[i], v = store[x.slug]?.verdict;
-    return f === "all" || (f === "changed" && x.changed) || (f === "review" && x.status !== "complete") || (f === "todo" && !v) || (f === "flagged" && (v === "changes" || v === "rethink")); });
+    return f === "all" || (f === "round" && x.round) || (f === "changed" && x.changed) || (f === "review" && x.status !== "complete") || (f === "todo" && !v) || (f === "flagged" && (v === "changes" || v === "rethink")); });
   if (!order.length) order = FAMILIES.map((_, i) => i);
   at = keep && order.includes(was) ? order.indexOf(was) : Math.min(at, order.length - 1);
 }
@@ -351,7 +352,7 @@ $("copy").onclick = async () => {
   catch { $("notes").value = text; $("notes").select(); $("status").textContent = "Copy the decisions from the notes box"; }
 };
 $("save").onclick = () => save(true); $("next").onclick = () => go(at + 1); $("prev").onclick = () => go(at - 1); $("clear").onclick = clearOne;
-$("filter").onchange = () => { setPref("filter2", $("filter").value); applyFilter(); render(); };
+$("filter").onchange = () => { setPref("filter3", $("filter").value); applyFilter(); render(); };
 document.addEventListener("keydown", e => {
   if (e.target.closest(".canvas")) return;
   if (e.target.tagName === "TEXTAREA") { if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) { e.preventDefault(); save(true); } return; }
@@ -364,7 +365,7 @@ document.addEventListener("keydown", e => {
 
 if (!FAMILIES.length) $("nums").textContent = "The component data did not load.";
 else {
-  $("filter").value = pref("filter2", "review"); applyFilter(); buildJump();
+  $("filter").value = pref("filter3", "round"); applyFilter(); buildJump();
   const hash = location.hash.slice(1), i = FAMILIES.findIndex(f => f.slug === hash);
   if (i >= 0) { if (!order.includes(i)) { $("filter").value = "all"; applyFilter(); } at = order.indexOf(i); }
   render();
