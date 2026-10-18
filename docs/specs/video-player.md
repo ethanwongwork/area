@@ -68,6 +68,7 @@ Spinner; ended / replay state; captures of Notion's video block and Loom.
 
 - **What it is:** A video player with Area's own controls: a round play button to start, then one row over the video
   with play, the progress bar, the time, sound, captions, picture in picture and full screen. The row fades away while
-  the video plays and you're not moving, and comes back when you move or pause.
+  the video plays and you're not moving, and comes back when you move or pause. The page shows each player at rest;
+  play them in the app (Components → Video player).
 - **Based on:** What YouTube, Vimeo, Plyr, Video.js, Vidstack and Media Chrome agree on: 24 buttons in a 32 row, a 4px
   progress bar that grows to 6 under the pointer, white on a dark fade, hiding after 2 seconds.
