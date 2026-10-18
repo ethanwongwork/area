@@ -83,11 +83,11 @@ function download(svg: string, name: string) {
 
 /**
  * The icon hover window (owner, 2026-10-12, after Cursor's icon gallery): resting on a cell opens
- * an Area Hover card under it with the icon's name and category, the icon large, and Copy SVG,
- * Download and Copy name. Each half of the 256 card holds 112, so the download says "Download"
- * (its neighbour names the format): "Download SVG" needs 134 at sm and pushed the row past the
- * card's end inset. Its rows are built only while it is open, so a sheet of hundreds of
- * cells carries one empty surface each.
+ * an Area Hover card under it with the icon's name and category, the icon large, and Copy SVG over
+ * Download, stacked across the card at Button's default size (owner, 2026-10-17: stack them, drop one
+ * copy). Copy name went: the name is printed on the card, and the Inspector keeps Copy name and
+ * Copy import. The download says "Download" (its neighbour names the format). Its rows are built
+ * only while it is open, so a sheet of hundreds of cells carries one empty surface each.
  */
 /*
  * The Canvas's icons. In the grid they are one ListBox (docs/specs/list-box.md): a single Tab stop, the arrows move
@@ -128,9 +128,8 @@ function IconCell({ entry, style, size }: { entry: Entry; style: Mode; size: num
         </div>
         <div className="studio-icon-card__preview" ref={preview}><Glyph size={CARD_PREVIEW} aria-hidden="true" /></div>
         <div className="studio-icon-card__actions">
-          <CopyButton label="Copy SVG" icon={<CopyIcon />} fullWidth value={() => svg()} />
-          <Button variant="outline" size="sm" fullWidth icon={<DownloadIcon />} onClick={() => download(svg(), entry.name)}>Download</Button>
-          <CopyButton label="Copy name" icon={<CopyIcon />} fullWidth value={() => entry.name} />
+          <CopyButton label="Copy SVG" icon={<CopyIcon />} fullWidth size="md" value={() => svg()} />
+          <Button variant="outline" fullWidth icon={<DownloadIcon />} onClick={() => download(svg(), entry.name)}>Download</Button>
         </div>
       </> : null}
     </HoverCard>

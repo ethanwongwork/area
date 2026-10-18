@@ -55,8 +55,8 @@ export function standaloneSvg(svg: SVGSVGElement, name: string) {
 /**
  * The app's copy action: Area's CopyButton (docs/specs/copy-button.md) as an outline Button with a label and
  * Area's own copy and check icons. The label stays; the icon turns to a check for two seconds and the result is
- * said once to assistive tech.
+ * said once to assistive tech. sm in the Inspector's action stacks; the icon hover window passes Button's default md.
  */
-export function CopyButton({ label, value, icon, fullWidth }: { label: string; value: CopyValue; icon: ReactNode; fullWidth?: boolean }) {
-  return <AreaCopyButton variant="outline" size="sm" fullWidth={fullWidth} icon={icon} copiedIcon={<CheckIcon />} value={value}>{label}</AreaCopyButton>;
+export function CopyButton({ label, value, icon, fullWidth, size = "sm" }: { label: string; value: CopyValue; icon: ReactNode; fullWidth?: boolean; size?: "sm" | "md" }) {
+  return <AreaCopyButton variant="outline" size={size} fullWidth={fullWidth} icon={icon} copiedIcon={<CheckIcon />} value={value}>{label}</AreaCopyButton>;
 }
