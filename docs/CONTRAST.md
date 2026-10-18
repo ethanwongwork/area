@@ -36,9 +36,19 @@ measurements are in Git history (`archive/docs/batches/V01/`, removed after comm
   frame: the card edge, or the strong stroke) follow the same switch, so every field reaches 3:1 under increased
   contrast (boundary sweep, 2026-10-15).
 
-`data-area-contrast="more"` selects strong endpoints; `standard` resets them locally. It also brings
-Surface 0's frames back at 1px (`border-width` = the Surface's `frame-width`, or 1px under More; owner,
-2026-10-15), as macOS Increase Contrast adds borders and forced colours restore them; frame colours are unchanged.
+Contrast is a level, `--area-contrast-more` from 0 to 1: `data-area-contrast="standard"` (0), `"medium"` (0.5,
+owner 2026-10-18: More "seems very extreme"; Material 3's Standard / Medium / High) and `"more"` (1), which selects the
+strong endpoints. Every derivation mixes by the level, so Medium sits half way. It also brings Surface 0's frames back
+at 1px at any raised level (`border-width` = the Surface's `frame-width`, or 1px; owner, 2026-10-15), as macOS Increase
+Contrast adds borders and forced colours restore them.
+
+Every stroke moves with the level (owner, 2026-10-18: More "doesn't seem to apply to all components evenly"; it only
+moved control edges, #e2 → #83, while seams, frames and dividers stayed): each `border-*` role goes a third of the way
+to `stroke-control` at More (`CONTRAST_EDGE_SHARE`, color/layers.ts), so on white a seam steps #f3 → #df → #cc, a card
+frame #ee → #db → #c9, a divider #e2 → #d2 → #c1, and a control edge #e2 → #aa → #83, the order between them kept.
+Rails are fills, not strokes: `fill-track` / `fill-track-hover` (Progress, Meter, Slider, the off Switch) keep their value
+at every level, since the fill or thumb on them is what has to read (under More the 3:1 rail left an accent fill 1.2:1).
+Switch outlines instead, as macOS does: its edge and an off thumb's ring take the strong stroke.
 Without a root preference, CSS follows `prefers-contrast: more`. Derivations must be
 re-emitted at axis and preference boundaries. Text/invalid colors remain independent.
 

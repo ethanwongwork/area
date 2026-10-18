@@ -185,8 +185,10 @@
     white-space: nowrap;
   }
   /* A heading that opens its family: not selectable, as the app's other controls; Link's underline on hover. */
-  .studio-section__link { color: inherit; text-decoration: none; user-select: none; }
-  @media (hover: hover) { .studio-section__link:hover { text-decoration: underline; text-decoration-thickness: var(--area-stroke-width); text-underline-offset: 0.08em; } }
+  /* The underline is always drawn, transparent at rest, so it fades out on `fast` as Link's does (link.css) instead
+     of vanishing; it appears at once (MOTION.md, hover). */
+  .studio-section__link { color: inherit; text-decoration: underline transparent; text-decoration-thickness: var(--area-stroke-width); text-underline-offset: 0.08em; user-select: none; transition: text-decoration-color var(--area-duration-fast) var(--area-ease-out); }
+  @media (hover: hover) { .studio-section__link:hover { text-decoration-color: currentColor; transition-duration: 0s; } }
   /* Area's focus ring (Link's): keyboard focus is always visible (product UI rule 5). */
   .studio-section__link:focus-visible { border-radius: var(--area-radius-small); outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   /* Titles and ledes are trimmed to cap and baseline, so the Canvas's margin measures from the
@@ -276,17 +278,21 @@
   .gallery-tile[data-painted] :is(.gallery-tile__label, .gallery-tile__value) { color: inherit; }
   /* Scoped: the tile is a setting's own ground (Language), Primer's tinted plate. */
   .gallery-tile[data-scoped] { background: var(--area-bg-subtle); color: var(--area-fg-default); }
-  /* Selected: the selection stroke drawn inside the edge, so the grid never moves. */
-  .gallery-tile:is([data-selected], [aria-pressed="true"], [aria-selected="true"]) { border-color: var(--area-stroke-selected); box-shadow: inset 0 0 0 var(--area-border-width) var(--area-stroke-selected); }
+  /* Selected: the tile's own edge takes the selection colour, so the grid never moves. One line, as Figma and Framer
+     mark a selected frame (owner, 2026-10-18: the 2px stroke, the edge and a ring inside it, read thick as it stayed). */
+  .gallery-tile:is([data-selected], [aria-pressed="true"], [aria-selected="true"]) { border-color: var(--area-stroke-selected); }
   .gallery-tile:is(button, [role="button"], [role="option"]) { cursor: default; }
-  .gallery-tile:is(button, [role="button"], [role="option"]):focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  /* The ring lands at once (MOTION.md: a ring that fades lags the keyboard); the edge and lift keep their clocks. */
+  .gallery-tile:is(button, [role="button"], [role="option"]):focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); transition-duration: var(--area-duration-fast), var(--area-duration-base), 0s; }
 
   /*
    * Hover and press: a tile lifts as a linked Card does (surface.css; owner, 2026-10-18: no stroke change, "something
    * more subtle with the shadow" and "smooth, subtle, professional motion"; Notion's linked cards measured,
    * docs/research/card-hover-2026-10-18.md). The Canvas's float shadow fades in on `fast` ease-out and out on `base`
    * ease-in; a press drops it at once. The edge, fill, ink and size never move, so a specimen reads the same under the
-   * pointer. At Elevation 0 there is no shadow, so the edge steps instead. Selection lands at once and outranks both.
+   * pointer. At Elevation 0 there is no shadow, so the edge steps instead. Selection crossfades the edge on `fast`
+   * ease-out both ways (owner, 2026-10-18: "more smooth and seamless"; it landed at once), a press included, and a
+   * selected tile lifts as the rest do.
    */
   .gallery-tile {
     box-shadow: 0 0 0 0 transparent, 0 0 0 0 transparent;
@@ -296,26 +302,22 @@
     .gallery-tile:hover { box-shadow: var(--area-shadow-float); transition-duration: var(--area-duration-fast); transition-timing-function: var(--area-ease-out); }
     .studio-canvas__body[data-area-elevation="0"] .gallery-tile:not([data-painted]):hover { border-color: var(--area-edge-control-hover); }
   }
-  .gallery-tile:active { box-shadow: 0 0 0 0 transparent, 0 0 0 0 transparent; transition-duration: 0s; }
+  .gallery-tile:active { box-shadow: 0 0 0 0 transparent, 0 0 0 0 transparent; transition-duration: var(--area-duration-fast), 0s, var(--area-duration-fast); }
   .studio-canvas__body[data-area-elevation="0"] .gallery-tile:not([data-painted]):active { border-color: var(--area-border-hover); }
-  .gallery-tile:is([data-selected], [aria-pressed="true"], [aria-selected="true"]) { transition-duration: 0s; }
-  .gallery-tile:not([data-painted]):is([data-selected], [aria-pressed="true"], [aria-selected="true"]):is(:hover, :active) { border-color: var(--area-stroke-selected); box-shadow: inset 0 0 0 var(--area-border-width) var(--area-stroke-selected); }
+  .gallery-tile:not([data-painted]):is([data-selected], [aria-pressed="true"], [aria-selected="true"]):is(:hover, :active) { border-color: var(--area-stroke-selected); }
   /*
    * A painted tile's states step its one edge, as a component tile's border steps (owner,
    * 2026-10-12: a ring inside the outline read as a double stroke). The swatch hairline (10%) takes
-   * the card's ink at 24% on hover and 48% pressed, and selected is a 2 line in the ink, the width
-   * a component tile's selection draws (its border and inset ring). Never a second ring. The ink,
-   * not the selection colour, so the line reads on every step from 25 to 975.
+   * the card's ink at 24% on hover and 48% pressed, and selected is the outline in the ink, one line as a component
+   * tile's selection is, crossfading as it does. Never a second ring. The ink, not the selection colour, so the line
+   * reads on every step from 25 to 975.
    */
   /* A painted tile lifts like the rest (above); at Elevation 0 its one outline steps instead. */
   .studio-canvas__body[data-area-elevation="0"] .gallery-tile[data-painted]:hover { outline-color: color-mix(in srgb, var(--_ink) 24%, transparent); } /* pick */
   .studio-canvas__body[data-area-elevation="0"] .gallery-tile[data-painted]:active { outline-color: color-mix(in srgb, var(--_ink) 48%, transparent); } /* pick */
   .gallery-tile[data-painted]:is([data-selected], [aria-pressed="true"], [aria-selected="true"]) {
     border-color: transparent;
-    box-shadow: none;
-    outline: calc(var(--area-border-width) * 2) solid var(--_ink);
-    outline-offset: calc(var(--area-border-width) * -2);
-    transition-duration: 0s;
+    outline-color: var(--_ink);
   }
   /*
    * Cards (src/tile.tsx, `card`; owner, 2026-10-14, after Compass's gallery, measured at 1440: 331 x 336
@@ -327,9 +329,9 @@
    * shrinking with the zoom.
    */
   .studio-grid--cards {
-    /* As many columns of at least 380 as fit (owner, 2026-10-18: 400, then "update the minimum size for component
-       containers to 380"; was 280), counted, so the Stage's strips span them as they span pairs of units. */
-    --_pairs: max(1, round(down, calc((100cqw + var(--_gap)) / (380px * var(--_zoom, 1) + var(--_gap))), 1));
+    /* As many columns of at least 360 as fit (owner, 2026-10-18: 400, then 380, then "maybe make the minimum width of
+       the component containers 360"; was 280), counted, so the Stage's strips span them as they span pairs of units. */
+    --_pairs: max(1, round(down, calc((100cqw + var(--_gap)) / (360px * var(--_zoom, 1) + var(--_gap))), 1));
     grid-template-columns: repeat(var(--_pairs), minmax(0, 1fr));
     grid-auto-rows: auto;
   }
@@ -426,9 +428,9 @@
      tile under the pointer, or with focus, sits above its neighbours, and stays there while its
      ring fades (z-index steps at the end of the fade), so neither the ring nor the focus outline
      slips under the next tile. */
-  .studio-canvas__body[data-area-density="28"] .gallery-tile { position: relative; transition: border-color var(--area-duration-fast) var(--area-ease-out), box-shadow var(--area-duration-base) var(--area-ease-in), z-index 0s linear var(--area-duration-base); }
+  .studio-canvas__body[data-area-density="28"] .gallery-tile { position: relative; transition: border-color var(--area-duration-fast) var(--area-ease-out), box-shadow var(--area-duration-base) var(--area-ease-in), outline-color var(--area-duration-fast) var(--area-ease-out), z-index 0s linear var(--area-duration-base); }
   .studio-canvas__body[data-area-density="28"] .gallery-tile:is(:hover, :focus-visible, :focus-within) { z-index: 1; }
-  .studio-canvas__body[data-area-density="28"] .gallery-tile:focus-visible { z-index: 2; }
+  .studio-canvas__body[data-area-density="28"] .gallery-tile:focus-visible { z-index: 2; transition-duration: var(--area-duration-fast), var(--area-duration-base), 0s, 0s; }
   @media (hover: hover) {
     .studio-canvas__body[data-area-density="28"] .gallery-tile:not([data-painted], [data-selected], [aria-pressed="true"], [aria-selected="true"]):hover {
       position: relative;
@@ -447,10 +449,19 @@
   @media (hover: hover) {
     .studio-canvas__body[data-area-density="28"][data-area-elevation="0"] .gallery-tile:not([data-painted], [data-selected], [aria-pressed="true"], [aria-selected="true"]):hover { box-shadow: 0 0 0 var(--area-border-width) var(--area-edge-control-hover); }
   }
+  /* Selected: the ring itself takes the selection colour (one line, as the spaced tiles' edge), above its neighbours so
+     the shared line shows it on every side, and lifts on hover as the rest do. */
   .studio-canvas__body[data-area-density="28"] .gallery-tile:not([data-painted]):is([data-selected], [aria-pressed="true"], [aria-selected="true"]) {
     position: relative;
     z-index: 1;
-    box-shadow: 0 0 0 var(--area-border-width) var(--area-stroke-selected), inset 0 0 0 var(--area-border-width) var(--area-stroke-selected);
+    box-shadow: 0 0 0 var(--area-border-width) var(--area-stroke-selected);
+  }
+  @media (hover: hover) {
+    .studio-canvas__body[data-area-density="28"]:not([data-area-elevation="0"]) .gallery-tile:not([data-painted]):is([data-selected], [aria-pressed="true"], [aria-selected="true"]):hover {
+      box-shadow: 0 0 0 var(--area-border-width) var(--area-stroke-selected), var(--area-shadow-float);
+      transition-duration: var(--area-duration-fast);
+      transition-timing-function: var(--area-ease-out);
+    }
   }
   [data-stage="center"] > .gallery-tile__view { place-items: center; }
   [data-stage="center"] > .gallery-tile__view svg { display: block; flex: none; }

@@ -111,9 +111,10 @@ test('every surface takes its depth from its elevation role', () => {
   }
   assert.match(ruleFor('.area-code')?.body ?? '', /border:\s*var\(--_code-border\) solid/, 'Code does not draw its edge at --_code-border');
   // More contrast brings the frame back at Surface 0 (owner, 2026-10-15): the axis writes `frame-width` and every frame
-  // reads `border-width`, derived from both, so no axis or preference sets `border-width` itself.
+  // reads `border-width`, derived from both, so no axis or preference sets `border-width` itself. Medium (0.5) rounds up
+  // to the whole pixel (2026-10-18).
   const widths = [...css.matchAll(/--area-border-width:\s*([^;]+);/g)].map(match => match[1].trim());
-  assert.ok(widths.length > 0 && widths.every(value => value === 'max(var(--area-frame-width), calc(var(--area-contrast-more) * 1px))'), `--area-border-width is set outside its derivation: ${widths.join(' / ')}`);
+  assert.ok(widths.length > 0 && widths.every(value => value === 'max(var(--area-frame-width), round(up, calc(var(--area-contrast-more) * 1px), 1px))'), `--area-border-width is set outside its derivation: ${widths.join(' / ')}`);
   // The Popover arrow is a shape a box-shadow cannot follow: it takes the same edge as a drop-shadow.
   assert.match(ruleFor('.area-popover__arrow')?.body ?? '', /filter:\s*var\(--area-shadow-edge-filter\)/, 'the Popover arrow has no edge at Borderless');
 });

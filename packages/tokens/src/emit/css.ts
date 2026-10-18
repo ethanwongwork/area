@@ -172,7 +172,10 @@ export function emitAxes(): string {
   for (const shape of PILL_SHAPES) out.push(rule(`[data-area-pills~="${shape.id}"]`, { [`--area-pill-${shape.id}`]: "1" }));
 
   // OS preference by default; an explicit scoped value can opt in or restore standard.
+  // A level, not a switch (owner, 2026-10-18: More "seems very extreme"): Medium goes half way, as Material 3's
+  // Standard / Medium / High. Every derivation mixes by it, so any value between 0 and 1 reads.
   out.push(rule('[data-area-contrast="more"]', { "--area-contrast-more": "1" }));
+  out.push(rule('[data-area-contrast="medium"]', { "--area-contrast-more": "0.5" }));
   out.push(rule('[data-area-contrast="standard"]', { "--area-contrast-more": "0" }));
   out.push('@media (prefers-contrast: more) {');
   out.push(rule(':root:not([data-area-contrast])', { "--area-contrast-more": "1", ...derivedTokens() }));

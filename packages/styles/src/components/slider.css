@@ -27,8 +27,9 @@
     --_fill: var(--area-selection-solid);
     --_fill-hover: var(--area-selection-solid-hover);
     /* spec (audit S5, owner 2026-09-30): one off-track grey, the control edge #e2, shared with
-       Switch and Progress (Figma rails #e6, ChatGPT off track ≈ #e6); was fill-toggle at 80%, ≈ #dd. */
-    --_track-fill: var(--area-edge-control);
+       Switch and Progress (Figma rails #e6, ChatGPT off track ≈ #e6); was fill-toggle at 80%, ≈ #dd. A fill, so
+       Contrast leaves it (2026-10-18: under More the rail was the 3:1 stroke and an accent fill read 1.2:1 on it). */
+    --_track-fill: var(--area-fill-track);
     /* spec: hover darkens the fill and the thumb's dot, never the rail (Fluent: colour on the
        thumb and fill only; Radix and Base UI: no hover change). */
     --_track-fill-hover: var(--_track-fill);
@@ -97,7 +98,7 @@
      role, so a theme's accent reaches it; the rail's height follows the size tier. */
   .area-slider-range {
     --_range-fill: var(--area-selection-solid);
-    --_range-track-fill: var(--area-edge-control); /* spec (audit S5): as the single rail */
+    --_range-track-fill: var(--area-fill-track); /* spec (audit S5): as the single rail */
     --_range-height: var(--area-control-md);
     display: grid;
     grid-template-columns: max-content minmax(var(--area-space-80), 1fr) max-content;

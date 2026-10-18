@@ -61,6 +61,10 @@ export const EDGE_OFFSET = {
   dark: { decorative: 0.05, card: 0.09, float: 0.182, faint: 0.09, subtle: 0.09, border: 0.182, hover: 0.2296 },
 } as const;
 export const EDGE_DARK_TODAY = { decorative: 0.2768, card: 0.3211, float: 0.4128, faint: 0.3211, subtle: 0.3211, border: 0.4128, hover: 0.4604 } as const;
+/** How far toward the strong stroke (`stroke-control`) every edge moves under Contrast More, as a share of the way: a third,
+ * so a seam on white steps #f3 → #c9 and a card frame #ee → #c5 while a control edge goes all the way to its 3:1 stroke
+ * (#e2 → #83). Medium is half of it. A third keeps seams quieter than frames and frames quieter than controls. */
+export const CONTRAST_EDGE_SHARE = 1 / 3;
 /** Inks: today's text and edge where they pass (light #282828 / #666666 / #838383, hover #747474; dark #eeeeee /
  * #c5c5c5 / #939393, hover #a4a4a4), else darkened (light) or lightened (dark) just enough to hold the target. */
 export const INK_TODAY = {
@@ -201,7 +205,7 @@ export const LAYER_COLOR_TOKENS = [
   "bg-component-recessed", "bg-component-recessed-hover", "bg-component-recessed-active",
   "fg-default", "fg-muted", "fg-placeholder",
   "border-decorative", "border-card", "border-float", "border-faint", "border-divider", "border-subtle", "border", "border-hover",
-  "stroke-control", "stroke-control-hover",
+  "stroke-control", "stroke-control-hover", "fill-track", "fill-track-hover",
 ] as const;
 
 /** Hex for every layer token, for one theme. What the contrast gate checks. */
@@ -217,6 +221,7 @@ export function layerTokens(theme: "light" | "dark", sel: LayerSelection, cast: 
     "border-decorative": hx(m.edge.decorative), "border-card": hx(m.edge.card), "border-float": hx(m.edge.float), "border-faint": hx(m.edge.faint),
     "border-divider": hx(m.edge.faint), "border-subtle": hx(m.edge.subtle), "border": hx(m.edge.border), "border-hover": hx(m.edge.hover),
     "stroke-control": hx(m.ink.edge), "stroke-control-hover": hx(m.ink.edgeHover),
+    "fill-track": hx(m.edge.faint), "fill-track-hover": hx(m.edge.subtle),
   };
 }
 
@@ -282,7 +287,12 @@ export function layerCss(): Record<string, string> {
   const both = (name: string) => color(L("light", name), L("dark", name));
   const edgeLight = (d: number) => `calc(${v("layer-light-page")} - ${num(d)})`;
   const edgeDark = (today: number, d: number) => `max(${num(today)}, calc(${v("layer-dark-raised")} + ${num(d)}))`;
-  const edge = (k: keyof typeof EDGE_OFFSET.light) => color(edgeLight(EDGE_OFFSET.light[k]), edgeDark(EDGE_DARK_TODAY[k], EDGE_OFFSET.dark[k]));
+  const raw = (k: keyof typeof EDGE_OFFSET.light) => color(edgeLight(EDGE_OFFSET.light[k]), edgeDark(EDGE_DARK_TODAY[k], EDGE_OFFSET.dark[k]));
+  // Contrast moves every stroke together (owner, 2026-10-18: More "doesn't seem to apply to all components evenly"):
+  // each edge goes the same share of the way to the strong stroke, so seams, frames and dividers step with the control
+  // edges, which base.ts takes the whole way, and the order between them holds. Standard is the edge as it was.
+  const edge = (k: keyof typeof EDGE_OFFSET.light) =>
+    `color-mix(in oklab, ${raw(k)}, ${v("stroke-control")} calc(${v("contrast-more")} * ${num(CONTRAST_EDGE_SHARE * 100)}%))`;
   const out: Record<string, string> = {
     ...Object.fromEntries(Object.entries(layerLightnessCss()).map(([k, x]) => [`${P}${k}`, x])),
     [`${P}bg-page`]: both("page"),
@@ -303,6 +313,11 @@ export function layerCss(): Record<string, string> {
     [`${P}border-subtle`]: edge("subtle"),
     [`${P}border`]: edge("border"),
     [`${P}border-hover`]: edge("hover"),
+    // A rail's unfilled part (Progress, Meter, Slider, the off Switch): a fill, not a stroke, so Contrast leaves it. Its
+    // value is what has to read on it, and a darker rail only lowers that (under More the 3:1 stroke made an accent fill
+    // 1.2:1 on it, 2026-10-18).
+    [`${P}fill-track`]: raw("faint"),
+    [`${P}fill-track-hover`]: raw("subtle"),
   };
   // The hued inks: Theme and Accent write each one's rung (`<token>-rung`, axes/color.ts); in light it mixes toward
   // black by the page's darken for its bound, exact in luminance (see VIVID_ROLES, TONAL_ROLES).

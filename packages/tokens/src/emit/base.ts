@@ -127,7 +127,8 @@ export function derivedTokens(): Record<string, string> {
     // The decorative frame's width: the Surface setting's (`frame-width`, 1px or 0), or 1px under increased contrast
     // (owner, 2026-10-15: "go with your rec"), as macOS Increase Contrast adds borders and forced colours restore them.
     // Insets that count the frame follow it, so a surface keeps its outer size. docs/research/surface-2026-10-14.md.
-    [`${PREFIX}border-width`]: `max(var(${PREFIX}frame-width), calc(var(${PREFIX}contrast-more) * 1px))`,
+    // Any raised contrast (Medium's 0.5 too) brings the whole pixel back.
+    [`${PREFIX}border-width`]: `max(var(${PREFIX}frame-width), round(up, calc(var(${PREFIX}contrast-more) * 1px), 1px))`,
     [`${PREFIX}edge-control-strong`]: `color-mix(in srgb, var(${PREFIX}border-hover), var(${PREFIX}stroke-control-hover) calc(var(${PREFIX}contrast-more) * 100%))`,
     // The page, its layers, control fills on each ground, edges and inks: the Layers model (color/layers.ts), live over
     // the ground and layer-contrast settings and the Neutral cast. border-card (Card, Composer, Code block) is among
