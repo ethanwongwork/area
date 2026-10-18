@@ -5,7 +5,13 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
-## Video player and Link groups (2026-10-17, branch `claude/link-groups-video-player`, PR #126)
+## Video player in Area's paint (2026-10-18, branch `claude/video-player-area-paint`)
+
+**Waiting on the owner:** round 44 (collection `components44`): the floating controller built from Area's parts (surface
+Toolbar paint and corner, Material overlays group, ghost Buttons, outline icons, Slider's track and thumb, muted time);
+still sample image. PR #126 (Link groups, Video player rounds 39–43) merged.
+
+## Video player and Link groups (2026-10-17, branch `claude/link-groups-video-player`, PR #126, merged)
 
 **Waiting on the owner:** round 43 (collection `components43`: even 16 insets measured on the glyphs). Before that, round 42 (collection `components42`: refined from 15 captured players, `docs/research/video-player-references-2026-10-18/`). Before that, round 41 (collection `components41`: thumb always shown, rail 30% in the panel, muted volume keeps its level). Before that, round 40 (collection `components40`): Video player rebuilt on QuickTime's floating controller
 (`layout`: floating default, bar, minimal; `video-player-quicktime-2026-10-17.md`); placeholder is the avatar photo.

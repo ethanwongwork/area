@@ -148,7 +148,7 @@ export type GlyphName = keyof typeof glyphs;
 /** Glyphs that are not line drawings: "solid" also fills inside the centre-line (the filled
  * variant's solid role); "fill" is filled shapes with no stroke (dots); "knockout" is a solid
  * whose glyphKnockouts paths are cut out of it (a mask), not painted. */
-export const glyphPaint: Partial<Record<GlyphName, "solid" | "fill" | "knockout">> = {"stop":"solid","more":"fill","dismiss-circle":"knockout","play":"solid","pause":"solid","fast-forward":"solid"};
+export const glyphPaint: Partial<Record<GlyphName, "solid" | "fill" | "knockout">> = {"stop":"solid","more":"fill","dismiss-circle":"knockout"};
 /** Filled dots inside a line drawing, by path index (the i's dot, the ?'s point). */
 export const glyphFills: Partial<Record<GlyphName, readonly number[]>> = {"info":[2],"help":[2]};
 /** Knocked-out marks in a "knockout" glyph, by path index (dismiss-circle's ×), stroked at the line. */

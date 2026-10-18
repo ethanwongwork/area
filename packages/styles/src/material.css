@@ -11,7 +11,8 @@
  *   wells      fields, selects, text areas, tracks, unticked boxes (concave)                      half
  *   selection  the selected Menu row, the current Nav row (concave)                               half
  *   surfaces   Cards                                                                              glass
- *   overlays   Menus, Popovers, Hover cards, Toggletips, Toasts, Dialogs, Drawers, Command palette  glass
+ *   overlays   Menus, Popovers, Hover cards, Toggletips, Toasts, Dialogs, Drawers, Command palette,  glass
+ *              the Video player's floating controller and round play
  *   chrome     Titlebar, the surface Toolbar, and a product's own regions marked data-area-chrome  glass
  *
  * Ghost Buttons, text, tables, lists, code, avatars and keycaps take none (29-scope rule 8). A material paints over the
@@ -77,7 +78,7 @@
     --_m-frame: var(--_card-edge);
     --_m-own: var(--area-shadow-edge), var(--_card-shadow);
   }
-  :where([data-area-material]) :is(.area-menu, .area-popover, .area-hover-card, .area-toggletip, .area-toast, .area-dialog, .area-drawer, .area-command-palette) {
+  :where([data-area-material]) :is(.area-menu, .area-popover, .area-hover-card, .area-toggletip, .area-toast, .area-dialog, .area-drawer, .area-command-palette, .area-video-player__surface) {
     --_m-image: var(--area-material-overlays-image);
     --_m-shadow: var(--area-material-overlays-shadow);
     --_m-stroke: var(--area-material-overlays-stroke);
@@ -121,7 +122,7 @@
     .area-checkbox__control, .area-radio__control, .area-badge--solid, .area-input, .area-select, .area-custom-select__trigger,
     .area-textarea, .area-switch__track, .area-segmented, .area-progress, .area-meter__track, .area-menu__item[data-selected],
     .area-nav__item[aria-current]:not([aria-current="false"]), .area-card, .area-menu, .area-popover, .area-hover-card,
-    .area-toggletip, .area-toast, .area-dialog, .area-drawer, .area-command-palette,
+    .area-toggletip, .area-toast, .area-dialog, .area-drawer, .area-command-palette, .area-video-player__surface,
     .area-titlebar:not(.area-titlebar--floating), .area-toolbar--surface, [data-area-chrome]
   ) {
     --_m-ring: 0 0 0 1px color-mix(in srgb, color-mix(in oklab, var(--_m-fill), black 30%) calc(min(1, var(--_m-stroke) * 2 * min(1, var(--area-material-stroke-solid) + var(--area-material-stroke-double)) * (1 - var(--area-material-stroke-neutral))) * 100%), transparent);
@@ -163,11 +164,14 @@
   [data-area-material] .area-slider__control::-moz-range-thumb { background-image: var(--area-material-primary-image); box-shadow: var(--area-material-primary-shadow), var(--area-shadow-control); }
   [data-area-material] .area-slider__control::-webkit-slider-runnable-track { background-image: var(--area-material-wells-image); box-shadow: var(--area-material-wells-shadow); }
   [data-area-material] .area-slider__control::-moz-range-track { background-image: var(--area-material-wells-image); box-shadow: var(--area-material-wells-shadow); }
+  /* The Video player's ranges on its Area surface are Slider's parts. */
+  [data-area-material] .area-video-player__surface .area-video-player__range::-webkit-slider-thumb { background-image: var(--area-material-primary-image); box-shadow: var(--area-material-primary-shadow), var(--area-shadow-control); }
+  [data-area-material] .area-video-player__surface .area-video-player__range::-moz-range-thumb { background-image: var(--area-material-primary-image); box-shadow: var(--area-material-primary-shadow), var(--area-shadow-control); }
 
   /* Surfaces, overlays and chrome: see-through down to the reading floor, the material over the fill. */
   [data-area-material] :is(
     .area-card, .area-menu, .area-popover, .area-hover-card, .area-toggletip, .area-toast, .area-dialog, .area-drawer,
-    .area-command-palette, .area-titlebar:not(.area-titlebar--floating), .area-toolbar--surface
+    .area-command-palette, .area-video-player__surface, .area-titlebar:not(.area-titlebar--floating), .area-toolbar--surface
   ) {
     background-color: light-dark(color-mix(in srgb, var(--_m-fill) calc(var(--_m-alpha-light) * 100%), transparent), color-mix(in srgb, var(--_m-fill) calc(var(--_m-alpha-dark) * 100%), transparent));
     background-image: var(--_m-image);
@@ -183,7 +187,7 @@
   @container not style(--area-material-frost: 0) {
     [data-area-material] :is(
       .area-card, .area-menu, .area-popover, .area-hover-card, .area-toggletip, .area-toast, .area-dialog, .area-drawer,
-      .area-command-palette, .area-titlebar:not(.area-titlebar--floating), .area-toolbar--surface, [data-area-chrome]
+      .area-command-palette, .area-video-player__surface, .area-titlebar:not(.area-titlebar--floating), .area-toolbar--surface, [data-area-chrome]
     ) {
       -webkit-backdrop-filter: var(--_m-frost);
       backdrop-filter: var(--_m-frost);

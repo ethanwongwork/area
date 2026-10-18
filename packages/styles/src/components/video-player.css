@@ -223,78 +223,129 @@
     .area-video-player__range::-webkit-slider-thumb { transition: none; }
   }
 
-  /* --- floating: QuickTime Player's controller ---------------------------------------------------------------------
-     spec (Safari's macOS full-screen controls, WebKit modern-media-controls; AVKit `floating` "matches the look of
-     QuickTime Player's playback controls"): a 468 × 75 panel, corner 8, 25 above the foot, black 55% under
-     saturate(180%) blur(17.5px); row one the transport (volume left, rewind · play · forward centred, the rest right), row
-     two the time, a thin track, the time. Scaled by Area's rows (≈ 0.85): 64 tall (6 + 32 + 4 + 16 + 6), at most 400
-     wide, 12 above the foot, centred; the corner is the floating Toolbar's (12: the control corner 6 + the 6 inset). */
+  /* --- floating: QuickTime Player's controller in Area's paint -------------------------------------------------------
+     The layout is QuickTime's (Safari's macOS full-screen controls; AVKit `floating`): volume at the start, back · play ·
+     forward in the middle, the rest at the end, then the time, the track and the time remaining, in a panel inset over the
+     video. Round 44 (owner: "the corner radius and icons, and material/fill/stroke, etc should be applied from the area
+     design system principles ... feel like its part of the other area components"): the panel is the floating Toolbar's
+     surface (`bg-surface`, its edge shadow, `border-float` ring and `shadow-float`; its corner is the control's corner
+     plus the inset, concentric), it follows light and dark and the Inspector's Material (the overlays group, as Popover
+     and Menu), its buttons are Area's ghost icon-only Buttons with Area's outline icons, its ranges are Slider's, and its
+     time is Area's muted UI text. */
+  .area-video-player__surface {
+    --_inset: var(--area-ui-cluster); /* spec: the surface Toolbar's inset (8, compact 6) */
+    background-color: var(--area-bg-surface);
+    box-shadow: var(--area-shadow-edge), inset 0 0 0 var(--area-border-width) var(--area-border-float), var(--area-shadow-float);
+    color: var(--area-fg-default);
+  }
   .area-video-player--floating .area-video-player__scrim { display: none; }
   .area-video-player--floating .area-video-player__controls {
     inset: auto 0 var(--area-space-12);
     margin-inline: auto;
-    inline-size: min(400px, 100% - var(--area-space-24)); /* spec */
+    inline-size: min(400px, 100% - var(--area-space-24)); /* spec: Safari's 468 at Area's rows */
     box-sizing: border-box;
     flex-direction: column;
     align-items: stretch;
-    /* The ink sits 16 from every edge (round 43, owner: "the inset in general is not very even", measured on the drawn
-       glyphs). The transport's 16 icons sit 5 inside their buttons and a few pixels inside their own boxes, so the panel
-       pads 6 at the sides and the time row adds the buttons' inset back (Area's inset rule: border + shell padding + slot
-       inset); 4 above the transport (its icons' ink lands at 16), no gap between the rows (the transport's 32 already
-       leaves 8 under its icons: 16 to the digits) and 12 under the time row (16 to the digits). 64 tall
-       (4 + 32 + 16 + 12). Safari's controller is as even: 10 at the sides and under its time row. */
-    gap: 0;
-    padding: var(--area-space-4) var(--area-space-6) var(--area-space-12);
-    border-radius: var(--area-space-16);
-    background-color: rgb(0 0 0 / 0.55); /* spec: Apple's black 55% */
-    backdrop-filter: blur(16px) saturate(180%); /* spec: Apple saturate 180, blur 17.5; Video.js blur 16 */
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
-    /* spec: Video.js's top highlight (for Apple's lighten tint), its 1px black 10% ring and a soft shadow, so the panel
-       holds on a bright frame. */
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.1), 0 0 0 1px rgb(0 0 0 / 0.1), 0 4px 16px rgb(0 0 0 / 0.2); /* spec */
+    /* Even ink (round 43, measured on the glyphs): the buttons' icons sit (button − icon) / 2 inside them, so the panel's
+       inset plus that lands every icon the same distance from the sides and the top; the time row adds the same back at
+       its sides and sits as far from the foot. */
+    /* Measured (round 44): a 16 icon's drawing starts 2 inside its box at the side and 4 at the top; the time's digits sit
+       4 above the foot of their 16 row. So 2 less above and 6 more below the cluster inset, and the time row 2 further in,
+       put every glyph 18 from its edge at type 14 (16 at the app's 13). */
+    gap: var(--area-space-2);
+    padding: calc(var(--_inset) - var(--area-space-2)) var(--_inset) calc(var(--_inset) + var(--area-space-6));
+    border-radius: calc(var(--area-radius-control-md) + var(--_inset) * var(--area-radius-concentric));
   }
   /* Row one: volume at the start, the transport in the middle, the rest at the end (WebKit's three groups). */
-  .area-video-player__transport { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; block-size: var(--area-space-32); }
+  .area-video-player__transport { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; }
   .area-video-player__group { display: flex; align-items: center; gap: var(--area-space-2); min-inline-size: 0; }
-  .area-video-player__group--center { gap: var(--area-space-16); /* spec: Apple's skips 27 from play at 0.85 */ }
+  /* spec: Apple's skips stand off from play (27 at 75); Area's cluster gap between the transport's buttons. */
+  .area-video-player__group--center { gap: var(--area-gap-md); }
   .area-video-player__group--end { justify-content: end; }
-  /* spec: Apple draws play at twice the other glyphs: 32 with a 20 icon. */
-  .area-video-player__button--play { inline-size: var(--area-space-32); block-size: var(--area-space-32); border-radius: var(--area-radius-full); }
-  .area-video-player__button--play > svg { inline-size: var(--area-space-20); block-size: var(--area-space-20); }
-  /* Inside the dark panel the rail is 30% (the 20% of the bar read faint against black 55%), and the thumb always shows
-     where the video is, as QuickTime's knob and the iOS 26 pill's (round 41 visual pass). */
-  .area-video-player--floating .area-video-player__range::-webkit-slider-thumb { scale: 1; }
-  .area-video-player--floating .area-video-player__range::-moz-range-thumb { scale: 1; }
-  /* Muted keeps the level in view, greyed: the slider says where the volume returns to (QuickTime, macOS). */
-  .area-video-player__volume[data-muted] > .area-video-player__range { --_fill: rgb(255 255 255 / 0.4); /* spec */ }
-  /* Row two: the time, the track, the time, 8 apart (WebKit time-control). */
-  .area-video-player__timeline { display: flex; align-items: center; gap: var(--area-space-8); block-size: var(--area-space-16); padding-inline: calc((var(--_button) - var(--area-icon-md)) / 2 + var(--area-space-2)); }
+  /* Row two: the time, the track, the time remaining, 8 apart (WebKit time-control), the text where the icons above start. */
+  .area-video-player__timeline {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-8);
+    block-size: var(--area-space-16);
+    padding-inline: calc((var(--area-control-md) - var(--area-icon-md)) / 2 + var(--area-space-2));
+  }
   .area-video-player__timeline > .area-video-player__range { block-size: var(--area-space-16); }
-  /* spec: Apple's time is 12, monospaced digits, white 55% beside 75% transport; Area's small text, 500, tabular, white 70%. */
+  /* The time: Area's muted UI text, tabular (Apple's secondary time; the references' 400). */
   .area-video-player__clock {
     flex: none;
-    color: rgb(255 255 255 / 0.9); /* spec: references 81–100%, weight 400 */
+    color: var(--area-fg-muted);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
     font-weight: var(--area-weight-regular);
     font-variant-numeric: tabular-nums;
   }
-  .area-video-player--floating .area-video-player__button { color: rgb(255 255 255 / 0.85); /* spec: Apple's transport 75%, lifted for contrast */ }
-  .area-video-player--floating .area-video-player__button--play { color: #fff; }
-  /* The start button takes the panel's paint (Apple's centre button sits on the same tint). */
-  .area-video-player--floating .area-video-player__start {
-    background-color: rgb(0 0 0 / 0.55); /* spec */
-    backdrop-filter: blur(16px) saturate(180%);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
+  /* Ranges on the surface are Slider's (slider.css): the selection fill, the control edge for the rail, and its thumb (the
+     surface with the control-hover edge, the fill's dot, the control shadow), shown always so the track says where the
+     video is (QuickTime's knob). What has loaded sits a step darker than the rail. */
+  .area-video-player__surface .area-video-player__range {
+    --_fill: var(--area-selection-solid);
+    --_rail: var(--area-edge-control);
+    --_loaded: 0%;
   }
+  .area-video-player__surface .area-video-player__range::-webkit-slider-runnable-track {
+    background: linear-gradient(to right,
+      var(--_fill) 0 var(--_played),
+      var(--area-edge-control-hover) var(--_played) max(var(--_played), var(--_loaded)),
+      var(--_rail) max(var(--_played), var(--_loaded)) 100%);
+  }
+  .area-video-player__surface .area-video-player__range::-moz-range-track {
+    background: linear-gradient(to right,
+      var(--_fill) 0 var(--_played),
+      var(--area-edge-control-hover) var(--_played) max(var(--_played), var(--_loaded)),
+      var(--_rail) max(var(--_played), var(--_loaded)) 100%);
+  }
+  .area-video-player__surface .area-video-player__range::-webkit-slider-thumb {
+    inline-size: var(--area-space-16);
+    block-size: var(--area-space-16);
+    margin-block-start: calc((var(--_track) - var(--area-space-16)) / 2);
+    border: var(--area-stroke-width) solid var(--area-edge-control-hover);
+    background: radial-gradient(circle, var(--_fill) 0 42%, var(--area-bg-surface) 46% 100%); /* spec: slider.md thumb dot stops */
+    box-shadow: var(--area-shadow-control);
+    scale: 1;
+  }
+  .area-video-player__surface .area-video-player__range::-moz-range-thumb {
+    inline-size: var(--area-space-16);
+    block-size: var(--area-space-16);
+    border: var(--area-stroke-width) solid var(--area-edge-control-hover);
+    background: radial-gradient(circle, var(--_fill) 0 42%, var(--area-bg-surface) 46% 100%); /* spec */
+    box-shadow: var(--area-shadow-control);
+    scale: 1;
+  }
+  /* The track keeps Slider's 4 on the surface (no growth: Slider does not grow). */
+  .area-video-player__surface .area-video-player__range { --_track: var(--area-space-4); }
+  /* Muted keeps the level in view in the muted ink (QuickTime, macOS). */
+  .area-video-player__volume[data-muted] > .area-video-player__range { --_fill: var(--area-fg-muted); }
+  .area-video-player__surface .area-video-player__volume:is(:focus-within, [data-open]) > .area-video-player__range { inline-size: 64px; /* spec: Apple's 60 on the 4 grid */ }
+
+  /* The round play before the first play (and minimal's only control): the same surface, a large icon-only control. */
+  .area-video-player:is(.area-video-player--floating, .area-video-player--minimal) .area-video-player__start {
+    inline-size: var(--area-control-lg);
+    block-size: var(--area-control-lg);
+    color: var(--area-fg-default);
+    background-color: var(--area-bg-surface);
+    box-shadow: var(--area-shadow-edge), inset 0 0 0 var(--area-border-width) var(--area-border-float), var(--area-shadow-float);
+  }
+  .area-video-player:is(.area-video-player--floating, .area-video-player--minimal) .area-video-player__start > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
+  @media (hover: hover) {
+    .area-video-player:is(.area-video-player--floating, .area-video-player--minimal) .area-video-player__start:hover {
+      background-color: color-mix(in srgb, var(--area-bg-surface), var(--area-fg-default) 6%); /* spec: the surface's hover step */
+    }
+  }
+
   /* Narrow (under 400): one row, as a pill: play, the track, the time, full screen (visionOS's pill; Vidstack small). */
   @container (max-inline-size: 400px) {
-    .area-video-player--floating .area-video-player__controls { flex-direction: row; align-items: center; gap: var(--area-space-8); padding: var(--area-space-4); border-radius: var(--area-radius-full); }
+    .area-video-player--floating .area-video-player__controls { flex-direction: row; align-items: center; gap: var(--area-space-8); padding: var(--_inset); border-radius: var(--area-radius-full); }
     .area-video-player--floating .area-video-player__transport { display: contents; }
     .area-video-player--floating :is(.area-video-player__group--start, .area-video-player__skip, .area-video-player__optional) { display: none; }
     .area-video-player--floating .area-video-player__group--center { order: 0; }
-    .area-video-player--floating .area-video-player__timeline { order: 1; flex: 1; }
+    .area-video-player--floating .area-video-player__timeline { order: 1; flex: 1; padding-inline: 0; }
     .area-video-player--floating .area-video-player__group--end { order: 2; }
-    .area-video-player--floating .area-video-player__button--play { inline-size: var(--_button); block-size: var(--_button); }
-    .area-video-player--floating .area-video-player__button--play > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
     .area-video-player--floating .area-video-player__clock--start { display: none; }
   }
 

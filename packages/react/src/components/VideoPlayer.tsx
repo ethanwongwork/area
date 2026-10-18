@@ -7,6 +7,7 @@ import type { CSSProperties, KeyboardEvent, ReactNode, VideoHTMLAttributes } fro
 import { videoPlayerVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
 import { Kbd, Tooltip } from "./primitives.tsx";
+import { Button } from "./Button.tsx";
 import { assignRef } from "./overlay.ts";
 
 type VideoPlayerVariants = VariantProps<typeof MANIFESTS.videoPlayer>;
@@ -170,14 +171,26 @@ export const VideoPlayer = /* @__PURE__ */ forwardRef<HTMLVideoElement, VideoPla
   const part = videoPlayerVariants.element;
   // Each button names its action in an Area Tooltip with its key (Loom, YouTube); the label is its accessible name, so
   // the tooltip does not describe it again.
-  const button = (name: string, label: string, onClick: () => void, glyph: ReactNode, extra: Record<string, unknown> = {}, key?: string) => (
-    <Tooltip key={name} describes={false} trigger={<button type="button" className={part("button")} aria-label={label} onClick={onClick} {...extra}>{glyph}</button>}>
-      {label}{key ? <>{" "}<Kbd keys={[key]} size="sm" /></> : null}
-    </Tooltip>
-  );
+  // On the floating surface the buttons are Area's own ghost icon-only Buttons (their hover, press, selected and focus
+  // paint); the bar over the video keeps its white on-media buttons. `role` names the part (skip, optional) for the
+  // narrow layout; `pressed` makes a toggle.
+  type Extra = { role?: "skip" | "optional"; pressed?: boolean; disabled?: boolean; control?: string };
+  const button = (name: string, label: string, onClick: () => void, glyph: ReactNode, extra: Extra = {}, key?: string) => {
+    const trigger = shape === "bar" ? (
+      <button type="button" className={[part("button"), extra.role && part(extra.role)].filter(Boolean).join(" ")} aria-label={label} onClick={onClick}
+        aria-pressed={extra.pressed} disabled={extra.disabled} data-control={extra.control}>{glyph}</button>
+    ) : (
+      <Button variant="ghost" tone="neutral" size="md" iconOnly icon={glyph} aria-label={label} onClick={onClick}
+        className={extra.role ? part(extra.role) : undefined} selected={extra.pressed} disabled={extra.disabled} data-control={extra.control} />
+    );
+    return (
+      <Tooltip key={name} describes={false} trigger={trigger}>
+        {label}{key ? <>{" "}<Kbd keys={[key]} size="sm" /></> : null}
+      </Tooltip>
+    );
+  };
 
-  const play = (big = false) => button("play", playing ? "Pause" : "Play", toggle, <Glyph name={playing ? "pause" : "play"} size={big ? 20 : 16} />,
-    big ? { className: `${part("button")} ${part("button")}--play` } : {}, "K");
+  const play = () => button("play", playing ? "Pause" : "Play", toggle, <Glyph name={playing ? "pause" : "play"} />, {}, "K");
   const seekRange = (
     <input key="seek" type="range" className={part("range")} aria-label="Seek"
       min={0} max={duration || 0} step="any" value={time} style={rangeStyle(played, loaded)}
@@ -196,19 +209,19 @@ export const VideoPlayer = /* @__PURE__ */ forwardRef<HTMLVideoElement, VideoPla
   );
   // Captions shows disabled without a track rather than leaving a gap (round 42).
   const captionsButton = button("captions", hasTracks ? "Captions" : "No captions", toggleCaptions, <Glyph name="captions" />,
-    { "aria-pressed": hasTracks ? captions : undefined, disabled: !hasTracks, className: `${part("button")} ${part("optional")}` }, hasTracks ? "C" : undefined);
-  const pipButton = pipSupported ? button("pip", pip ? "Exit picture in picture" : "Picture in picture", togglePip, <Glyph name="picture-in-picture" />, { "data-control": "pip", className: `${part("button")} ${part("optional")}` }, "I") : null;
+    { pressed: hasTracks ? captions : undefined, disabled: !hasTracks, role: "optional" }, hasTracks ? "C" : undefined);
+  const pipButton = pipSupported ? button("pip", pip ? "Exit picture in picture" : "Picture in picture", togglePip, <Glyph name="picture-in-picture" />, { control: "pip", role: "optional" }, "I") : null;
   const fullscreenButton = button("fullscreen", fullscreen ? "Exit full screen" : "Full screen", toggleFullscreen, <Glyph name={fullscreen ? "minimize" : "maximize"} />, {}, "F");
 
   // floating: QuickTime's two rows (transport; time, track, time). bar: one row along the foot. minimal: no row.
   const controlsRow = shape === "minimal" ? null : shape === "floating" ? (
-    <div className={part("controls")}>
+    <div className={`${part("controls")} ${part("surface")}`}>
       <div className={part("transport")}>
         <div className={`${part("group")} ${part("group")}--start`}>{volumeGroup}</div>
         <div className={`${part("group")} ${part("group")}--center`}>
-          {button("back", "Back 15 seconds", () => { const v = el(); if (v) seek(v.currentTime - 15); }, <Glyph name="fast-forward" rotate={180} />, { className: `${part("button")} ${part("skip")}` }, "J")}
-          {play(true)}
-          {button("forward", "Forward 15 seconds", () => { const v = el(); if (v) seek(v.currentTime + 15); }, <Glyph name="fast-forward" />, { className: `${part("button")} ${part("skip")}` }, "L")}
+          {button("back", "Back 15 seconds", () => { const v = el(); if (v) seek(v.currentTime - 15); }, <Glyph name="fast-forward" rotate={180} />, { role: "skip" }, "J")}
+          {play()}
+          {button("forward", "Forward 15 seconds", () => { const v = el(); if (v) seek(v.currentTime + 15); }, <Glyph name="fast-forward" />, { role: "skip" }, "L")}
         </div>
         <div className={`${part("group")} ${part("group")}--end`}>{captionsButton}{pipButton}{fullscreenButton}</div>
       </div>
@@ -240,8 +253,8 @@ export const VideoPlayer = /* @__PURE__ */ forwardRef<HTMLVideoElement, VideoPla
       </video>
       {/* The round play: before the first play in every layout; in minimal it stays as the only control. */}
       {!started || shape === "minimal" ? (
-        <button type="button" className={part("start")} aria-label={playing ? "Pause" : "Play"} onClick={toggle}>
-          <Glyph name={playing ? "pause" : "play"} size={20} />
+        <button type="button" className={shape === "bar" ? part("start") : `${part("start")} ${part("surface")}`} aria-label={playing ? "Pause" : "Play"} onClick={toggle}>
+          <Glyph name={playing ? "pause" : "play"} size={shape === "bar" ? 20 : 16} />
         </button>
       ) : null}
       {shape === "bar" ? <div className={part("scrim")} aria-hidden="true" /> : null}

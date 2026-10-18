@@ -178,3 +178,33 @@ already even. The slider stays the player's own part (owner: "keep it as is").
   with the icons above it, and the space between the two rows matches the space around them.
 - **Why:** You found the padding uneven, especially around the progress bar. Measured, the icons sat 22 from the sides
   while the time sat 12, and the bottom had only 12; now every side is 16.
+
+## Round 44, 2026-10-18
+
+Owner, round 43: "the corner radius and icons, and material/fill/stroke/, etc should be applied from the area design system
+principles, i like the layout, but want everything to feel like its part of the other area components. also remove the
+zooming image just keep it static." The layout stays; the paint is Area's own parts:
+
+| Part | Was (round 43) | Now | Basis |
+|---|---|---|---|
+| panel fill / stroke / shadow | black 55%, blur 16, a white top line, black 10% ring | `bg-surface`, `shadow-edge`, `border-float` ring, `shadow-float` | the surface Toolbar (toolbar.css `--surface`) |
+| corner | 16 | the control corner + the inset, concentric (`radius-control-md` + `ui-cluster` × `radius-concentric`) | the surface Toolbar's rule |
+| material | none | the overlays group (Glass: 67% see-through, blur 24, saturate 137.5%, as Menu and Popover) | material.css; checked with Glass in the app |
+| theme | always dark | follows light and dark | Area surfaces |
+| buttons | the player's own white buttons | Button ghost, neutral, md, icon-only (hover, press, selected, focus); play the same size | Button; Toolbar's buttons |
+| icons | solid play, pause, skip | Area's outline icons | the icon set's line style |
+| time | white 90% | `fg-muted`, UI text, tabular | Area's secondary text |
+| track / thumb | white rail, 12 white thumb | Slider's: `edge-control` rail, `selection-solid` fill, the 16 thumb (surface, `edge-control-hover` ring, the fill's dot, `shadow-control`); loaded `edge-control-hover` | slider.css |
+| round play | black 50% | the same surface, `control-lg` | the panel |
+| inset | 16 | 18 at type 14 on every side and between the rows (16 at the app's 13), remeasured on the glyphs | round 43's method |
+
+The bar keeps its white on-media buttons over the scrim (it has no surface). The sample clip is now the avatar photo still,
+8 s, no zoom.
+
+## Review note, 2026-10-18 (round 44)
+
+- **What changed:** The controller is now built from Area's own parts: the floating Toolbar's surface and corners, Area's
+  ghost buttons and outline icons, Slider's track and thumb, and muted time text. It follows light and dark and the
+  Inspector's Material (Glass makes it see-through like a Menu). The sample image no longer zooms.
+- **Why:** You liked the layout but wanted it to feel like the rest of Area. Every colour, corner, stroke and icon now
+  comes from a component Area already has, and the spacing is even again on every side.
