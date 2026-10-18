@@ -6,6 +6,7 @@ import { forwardRef, useCallback, useEffect, useRef, useState } from "react";
 import type { CSSProperties, KeyboardEvent, ReactNode, VideoHTMLAttributes } from "react";
 import { videoPlayerVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
+import { Kbd, Tooltip } from "./primitives.tsx";
 import { assignRef } from "./overlay.ts";
 
 type VideoPlayerVariants = VariantProps<typeof MANIFESTS.videoPlayer>;
@@ -167,12 +168,16 @@ export const VideoPlayer = /* @__PURE__ */ forwardRef<HTMLVideoElement, VideoPla
   const rangeStyle = (fill: number, buffer = 0) => ({ "--_played": `${fill}%`, "--_loaded": `${buffer * 100}%` }) as CSSProperties;
   const shape = layout ?? "floating";
   const part = videoPlayerVariants.element;
-  const button = (name: string, label: string, onClick: () => void, glyph: ReactNode, extra: Record<string, unknown> = {}) => (
-    <button key={name} type="button" className={part("button")} aria-label={label} onClick={onClick} {...extra}>{glyph}</button>
+  // Each button names its action in an Area Tooltip with its key (Loom, YouTube); the label is its accessible name, so
+  // the tooltip does not describe it again.
+  const button = (name: string, label: string, onClick: () => void, glyph: ReactNode, extra: Record<string, unknown> = {}, key?: string) => (
+    <Tooltip key={name} describes={false} trigger={<button type="button" className={part("button")} aria-label={label} onClick={onClick} {...extra}>{glyph}</button>}>
+      {label}{key ? <>{" "}<Kbd keys={[key]} size="sm" /></> : null}
+    </Tooltip>
   );
 
   const play = (big = false) => button("play", playing ? "Pause" : "Play", toggle, <Glyph name={playing ? "pause" : "play"} size={big ? 20 : 16} />,
-    big ? { className: `${part("button")} ${part("button")}--play` } : {});
+    big ? { className: `${part("button")} ${part("button")}--play` } : {}, "K");
   const seekRange = (
     <input key="seek" type="range" className={part("range")} aria-label="Seek"
       min={0} max={duration || 0} step="any" value={time} style={rangeStyle(played, loaded)}
@@ -182,16 +187,18 @@ export const VideoPlayer = /* @__PURE__ */ forwardRef<HTMLVideoElement, VideoPla
   const volumeGroup = (
     <div key="volume" className={part("volume")} data-open={volumeOpen ? "" : undefined} data-muted={muted ? "" : undefined}
       onPointerEnter={event => { if (event.pointerType === "mouse") setVolumeOpen(true); }} onPointerLeave={() => setVolumeOpen(false)}>
-      {button("mute", muted || volume === 0 ? "Unmute" : "Mute", toggleMute, <Glyph name={muted || volume === 0 ? "volume-off" : "volume"} />)}
+      {button("mute", muted || volume === 0 ? "Unmute" : "Mute", toggleMute, <Glyph name={muted || volume === 0 ? "volume-off" : "volume"} />, {}, "M")}
       <input type="range" className={part("range")} aria-label="Volume"
         min={0} max={1} step={0.05} value={volume} style={rangeStyle(volume * 100)}
         aria-valuetext={muted ? `Muted, ${Math.round(volume * 100)}% volume` : `${Math.round(volume * 100)}% volume`}
         onChange={event => setLevel(Number(event.currentTarget.value))} />
     </div>
   );
-  const captionsButton = hasTracks ? button("captions", "Captions", toggleCaptions, <Glyph name="captions" />, { "aria-pressed": captions, className: `${part("button")} ${part("optional")}` }) : null;
-  const pipButton = pipSupported ? button("pip", pip ? "Exit picture in picture" : "Picture in picture", togglePip, <Glyph name="picture-in-picture" />, { "data-control": "pip", className: `${part("button")} ${part("optional")}` }) : null;
-  const fullscreenButton = button("fullscreen", fullscreen ? "Exit full screen" : "Full screen", toggleFullscreen, <Glyph name={fullscreen ? "minimize" : "maximize"} />);
+  // Captions shows disabled without a track rather than leaving a gap (round 42).
+  const captionsButton = button("captions", hasTracks ? "Captions" : "No captions", toggleCaptions, <Glyph name="captions" />,
+    { "aria-pressed": hasTracks ? captions : undefined, disabled: !hasTracks, className: `${part("button")} ${part("optional")}` }, hasTracks ? "C" : undefined);
+  const pipButton = pipSupported ? button("pip", pip ? "Exit picture in picture" : "Picture in picture", togglePip, <Glyph name="picture-in-picture" />, { "data-control": "pip", className: `${part("button")} ${part("optional")}` }, "I") : null;
+  const fullscreenButton = button("fullscreen", fullscreen ? "Exit full screen" : "Full screen", toggleFullscreen, <Glyph name={fullscreen ? "minimize" : "maximize"} />, {}, "F");
 
   // floating: QuickTime's two rows (transport; time, track, time). bar: one row along the foot. minimal: no row.
   const controlsRow = shape === "minimal" ? null : shape === "floating" ? (
@@ -199,16 +206,17 @@ export const VideoPlayer = /* @__PURE__ */ forwardRef<HTMLVideoElement, VideoPla
       <div className={part("transport")}>
         <div className={`${part("group")} ${part("group")}--start`}>{volumeGroup}</div>
         <div className={`${part("group")} ${part("group")}--center`}>
-          {button("back", "Back 15 seconds", () => { const v = el(); if (v) seek(v.currentTime - 15); }, <Glyph name="fast-forward" rotate={180} />, { className: `${part("button")} ${part("skip")}` })}
+          {button("back", "Back 15 seconds", () => { const v = el(); if (v) seek(v.currentTime - 15); }, <Glyph name="fast-forward" rotate={180} />, { className: `${part("button")} ${part("skip")}` }, "J")}
           {play(true)}
-          {button("forward", "Forward 15 seconds", () => { const v = el(); if (v) seek(v.currentTime + 15); }, <Glyph name="fast-forward" />, { className: `${part("button")} ${part("skip")}` })}
+          {button("forward", "Forward 15 seconds", () => { const v = el(); if (v) seek(v.currentTime + 15); }, <Glyph name="fast-forward" />, { className: `${part("button")} ${part("skip")}` }, "L")}
         </div>
         <div className={`${part("group")} ${part("group")}--end`}>{captionsButton}{pipButton}{fullscreenButton}</div>
       </div>
       <div className={part("timeline")}>
         <span className={`${part("clock")} ${part("clock")}--start`}>{clock(time)}</span>
         {seekRange}
-        <span className={part("clock")}>{clock(duration)}</span>
+        {/* Remaining time on the right (Video.js, Plyr; round 42). */}
+        <span className={part("clock")} aria-label={`${spoken(Math.max(0, duration - time))} remaining`}>−{clock(Math.max(0, duration - time))}</span>
       </div>
     </div>
   ) : (

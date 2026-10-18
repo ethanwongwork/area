@@ -7,7 +7,7 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
 
 ## Video player and Link groups (2026-10-17, branch `claude/link-groups-video-player`, PR #126)
 
-**Waiting on the owner:** round 41 (collection `components41`: thumb always shown, rail 30% in the panel, muted volume keeps its level). Before that, round 40 (collection `components40`): Video player rebuilt on QuickTime's floating controller
+**Waiting on the owner:** round 42 (collection `components42`: refined from 15 captured players, `docs/research/video-player-references-2026-10-18/`). Before that, round 41 (collection `components41`: thumb always shown, rail 30% in the panel, muted volume keeps its level). Before that, round 40 (collection `components40`): Video player rebuilt on QuickTime's floating controller
 (`layout`: floating default, bar, minimal; `video-player-quicktime-2026-10-17.md`); placeholder is the avatar photo.
 Earlier, round 39 (collection `components39`): the new Video player (`docs/specs/video-player.md`,
 `docs/research/video-player-2026-10-17.md`); merge of PR #126 (the session's `gh pr merge` was blocked by permissions).

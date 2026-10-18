@@ -130,3 +130,24 @@ on the floating controller:
   empty.
 - **Why:** You asked to refine it. Next to QuickTime and Apple's newer players, the bar had no marker at rest, the track
   was faint on the dark glass, and the muted volume looked like a stray line.
+
+## Round 42, 2026-10-18
+
+Reference set: `docs/research/video-player-references-2026-10-18/` (15 players captured at 2×: Video.js v10, apple.com,
+Media Chrome's Microvideo, Minimal, Sutro, Instaplay, Vimeonova and YT themes, YouTube's embed, Vidstack, Mux, Loom,
+Plyr, Kibo, Edge's native controls; contact sheet). Against them the floating controller had the smallest buttons, the
+heaviest and dimmest time, the faintest rail and the only tall rectangle. Applied:
+- Buttons 24 → `control-md` (26 at the app's 13; references 30–38, median 32), icons 16.
+- Panel tightened: 4 in, rows 2 apart (58), corner 16; Video.js's 1px black 10% ring and a soft 0 4 16 black 20% shadow.
+- Time regular (400) at white 90% (references 81–100%, 400); remaining time on the right (Video.js, Plyr).
+- Volume: only mute at rest, the slider slides out on hover or focus (every compact or floating reference; Vidstack 0 → 72).
+- Rail white 30%, loaded 50% (references 30–50%).
+- Captions shows disabled without a track; every button has an Area Tooltip with its key (Loom, YouTube).
+
+## Review note, 2026-10-18 (round 42)
+
+- **What changed:** Bigger buttons, a slimmer panel with softer corners and a faint edge so it holds on bright video,
+  lighter time text with time remaining on the right, the volume slider tucked behind the speaker until you hover it,
+  and a tooltip with its shortcut on every button.
+- **Why:** You asked what other products do. Compared with 15 players (YouTube, Vimeo-style, Loom, Mux, Video.js,
+  Vidstack, Plyr, Apple), Area's controller had the smallest buttons, the heaviest time and the faintest track.
