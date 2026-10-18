@@ -217,3 +217,4 @@ no transform or transition.
 ## Spacing audit (2026-10-17)
 
 Key gap: `--area-keyboard-gap` is `round(nearest, 0.25ch, 1px)` (2), so keys after the first sit on whole pixels; `0.25ch` computed 1.94 (md) and 1.78 (sm). Measured in `docs/research/spacing-2026-10-17/` (Before / After: https://claude.ai/artifact/JtDZ9LNfutFyfdkGUvQzL2).
+- 2026-10-18 · radius audit (owner: "any other components that need a corner radius audit … the axis can be applied with no issues?") → the corner stops 2px short of a pill until Pill, as a Menu's rows (`kbd.css`): at Radius 14 a 16 compact key took 10, a capsule. Default unchanged (6); 6 at 14 / Compact, 8 at 14 / Comfortable, a capsule at Pill.

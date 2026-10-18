@@ -49,6 +49,21 @@ temporary: remove it once the bundles are settled and written back to `packages/
 - Setup: this worktree needed its own `node_modules` (APFS clone `cp -cR ~/Desktop/area/node_modules .`, plus
   `node_modules/electron/dist` and `path.txt` from another worktree) so `@area/*` resolve here, not to the main checkout.
 
+## Board corners, Contrast equal for every stroke, radius audit (2026-10-18, same branch, PR open)
+
+- Board: column 16 (was 20, the roundest surface), cards and add row `radius-row` 8 (were 12). Spec updated.
+- Contrast (owner: "some components get an obviously darker stroke whereas some … dont visibly change at all"): one share
+  for every stroke. Neutral rest edges → `stroke-control`, hover edges → `stroke-control-hover`, tonal `<tone>-border`
+  (now written as `-rung`, derived in base.ts) → `fg-<tone>`, plus the swatch ring, soft Button edge and Board's ring.
+  Sweep: 202/202 light strokes move; dark all but Tooltip, Video player's on-media button, Color field's opacity seam.
+- Radius audit (owner: "any other components that need a corner radius audit"): measured every painted corner at
+  the default and swept Radius 0…Pill × density 28/32/36 × type 12–16 for poke-outs, over-half and concentric gaps.
+  Board was the only outer-corner outlier. Fixed: Kbd and Code's swatch stop 2px short of a pill until Pill (they
+  became a capsule / circle at 14). Accepted: Message bubble one-liners capsule from 14 (ChatGPT's); fields and buttons
+  in Panel / Dialog rounder than concentric at 14 and Pill (the 1.5× inset corner cap); Alert / Toast 10, Alignment
+  picker 6, Video player 6 are recorded decisions (radius audit D2, Figma, Figure's media corner).
+- Checks: tokens 24,270, React 480/480, contracts 14/14, contrast report, typecheck, playgrounds, parity.
+
 ## Contrast levels, tile selection, motion gaps (2026-10-18, branch `claude/design-system-motion-theme-fa5802`, PR open)
 
 Owner: dark strokes, meter track and switch under Contrast More; "refine the contrast axis … doesn't apply evenly";

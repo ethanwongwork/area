@@ -42,10 +42,18 @@ strong endpoints. Every derivation mixes by the level, so Medium sits half way. 
 at 1px at any raised level (`border-width` = the Surface's `frame-width`, or 1px; owner, 2026-10-15), as macOS Increase
 Contrast adds borders and forced colours restore them.
 
-Every stroke moves with the level (owner, 2026-10-18: More "doesn't seem to apply to all components evenly"; it only
-moved control edges, #e2 → #83, while seams, frames and dividers stayed): each `border-*` role goes a third of the way
-to `stroke-control` at More (`CONTRAST_EDGE_SHARE`, color/layers.ts), so on white a seam steps #f3 → #df → #cc, a card
-frame #ee → #db → #c9, a divider #e2 → #d2 → #c1, and a control edge #e2 → #aa → #83, the order between them kept.
+Every stroke moves with the level, by the same share (owner, 2026-10-18: "some components get an obviously darker
+stroke whereas some components dont visibly change at all"). Each mixes from its standard value by the level: every
+neutral rest edge (`border-decorative`, `-card`, `-float`, `-faint`, `-divider`, `-subtle`, the control edges, Composer's
+frame, the swatch ring, the soft Button's edge) toward `stroke-control`, every hover edge (`border`, `border-hover`, the
+control hover edges) toward `stroke-control-hover`, and every tonal stroke (`<tone>-border`, `-border-strong`, written
+by the axes as `<token>-rung`) toward its tone's ink (`fg-<tone>`). So at More every quiet stroke is the 3:1 stroke
+(#83, 3.8:1 on white) and at Medium about 2:1, whatever it started at; the gallery sweep (2026-10-18) found all 202
+light strokes under 2.8:1 moving, and in dark all but Tooltips (an inverse surface), the Video player's on-media button
+and Color field's inner opacity seam. Strokes already strong (checked marks, today's ring) and cutouts stay.
+(A first pass, the same day, moved seams and frames a third of the way while control edges went all of it; it read as
+two settings.) A soft Button's edge mixes toward its outline's line, itself already mixed, so at Medium it goes about a
+quarter of the way.
 Rails are fills, not strokes: `fill-track` / `fill-track-hover` (Progress, Meter, Slider, the off Switch) keep their value
 at every level, since the fill or thumb on them is what has to read (under More the 3:1 rail left an accent fill 1.2:1).
 Switch outlines instead, as macOS does: its edge and an off thumb's ring take the strong stroke.

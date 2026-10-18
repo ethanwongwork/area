@@ -19,8 +19,10 @@
        rule"; 4 read too sharp, a concentric 2 far too sharp). */
     /* 6 at the default as the corner of a 24px box, so it scales with the radius setting like every
        corner (2 ... 6 ... 10, a pill at Pill, where the browser's half-height clamp takes it); the
-       same at both densities (radius audit D4). */
-    --_radius: max(var(--area-radius-min), round(down, calc(24px * var(--area-radius-factor)), 2px));
+       same at both densities (radius audit D4). It stops 2px short of a pill until Pill, as a Menu's
+       rows do (base.ts radius-list-row): at 14 a 16 compact key took 10 and read as a capsule (radius
+       audit, 2026-10-18). */
+    --_radius: max(var(--area-radius-min), min(round(down, calc(24px * var(--area-radius-factor)), 2px), calc(var(--_height) / 2 - min(2px, (0.5 - var(--area-radius-factor)) * 1000px))));
 
     display: inline-flex;
     align-items: center;

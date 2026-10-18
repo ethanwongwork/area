@@ -12,7 +12,8 @@
  */
 import { PREFIX } from "../axes/schema.ts";
 import { MOTION_AXIS, duration } from "../axes/motion.ts";
-import { layerCss } from "../color/layers.ts";
+import { contrastMix, layerCss, rawEdge } from "../color/layers.ts";
+import { SEMANTIC_ALIASES } from "../semantic/aliases.ts";
 
 /** 4px base with 2px, 6px and 10px half-steps for tight control interiors. */
 export const SPACE_RAMP = [0, 2, 4, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96] as const;
@@ -113,15 +114,17 @@ export function derivedTokens(): Record<string, string> {
   return {
     // Presentation aliases choose existing palette endpoints. A preference is not a color
     // axis: it changes emphasis while every axis keeps its own namespaces.
-    [`${PREFIX}edge-control`]: `color-mix(in srgb, var(${PREFIX}border-faint), var(${PREFIX}stroke-control) calc(var(${PREFIX}contrast-more) * 100%))`,
+    // Each mixes from its edge at standard contrast (rawEdge), by the level, as every border-* does (color/layers.ts), so a
+    // control edge and a seam move the same share at Medium and More (owner, 2026-10-18).
+    [`${PREFIX}edge-control`]: contrastMix(rawEdge("faint"), `var(${PREFIX}stroke-control)`),
     // The hover edge a step past rest: border-subtle in light (#d4 after #e2). In dark border-subtle is the rest edge's own
     // value (both #333, today and in the Layers model), so a field's hover drew nothing; it takes `border` (#4b4b4b),
     // the dark step the model's edges use (hover and pressed sweep 2026-10-17: Custom select, Input, Select, Textarea).
-    [`${PREFIX}edge-control-hover`]: `color-mix(in srgb, light-dark(var(${PREFIX}border-subtle), var(${PREFIX}border)), var(${PREFIX}stroke-control-hover) calc(var(${PREFIX}contrast-more) * 100%))`,
-    [`${PREFIX}edge-selected`]: `color-mix(in srgb, var(${PREFIX}border-faint), var(${PREFIX}stroke-control) calc(var(${PREFIX}contrast-more) * 100%))`,
+    [`${PREFIX}edge-control-hover`]: contrastMix(`light-dark(${rawEdge("subtle")}, ${rawEdge("border")})`, `var(${PREFIX}stroke-control-hover)`),
+    [`${PREFIX}edge-selected`]: contrastMix(rawEdge("faint"), `var(${PREFIX}stroke-control)`),
     [`${PREFIX}edge-accent`]: `color-mix(in srgb, var(${PREFIX}accent-border), var(${PREFIX}stroke-selected) calc(var(${PREFIX}contrast-more) * 100%))`,
-    [`${PREFIX}fill-toggle`]: `color-mix(in srgb, var(${PREFIX}border-subtle), var(${PREFIX}stroke-control) calc(var(${PREFIX}contrast-more) * 100%))`,
-    [`${PREFIX}fill-toggle-hover`]: `color-mix(in srgb, var(${PREFIX}border), var(${PREFIX}stroke-control-hover) calc(var(${PREFIX}contrast-more) * 100%))`,
+    [`${PREFIX}fill-toggle`]: contrastMix(rawEdge("subtle"), `var(${PREFIX}stroke-control)`),
+    [`${PREFIX}fill-toggle-hover`]: contrastMix(rawEdge("border"), `var(${PREFIX}stroke-control-hover)`),
     // The strong hover edge, a step past edge-control-hover: an unchecked Checkbox or Radio and a selected Chip under
     // the pointer (consistency pass 2026-10-12: both had written the mix themselves).
     // The decorative frame's width: the Surface setting's (`frame-width`, 1px or 0), or 1px under increased contrast
@@ -129,11 +132,16 @@ export function derivedTokens(): Record<string, string> {
     // Insets that count the frame follow it, so a surface keeps its outer size. docs/research/surface-2026-10-14.md.
     // Any raised contrast (Medium's 0.5 too) brings the whole pixel back.
     [`${PREFIX}border-width`]: `max(var(${PREFIX}frame-width), round(up, calc(var(${PREFIX}contrast-more) * 1px), 1px))`,
-    [`${PREFIX}edge-control-strong`]: `color-mix(in srgb, var(${PREFIX}border-hover), var(${PREFIX}stroke-control-hover) calc(var(${PREFIX}contrast-more) * 100%))`,
+    [`${PREFIX}edge-control-strong`]: contrastMix(rawEdge("hover"), `var(${PREFIX}stroke-control-hover)`),
     // The page, its layers, control fills on each ground, edges and inks: the Layers model (color/layers.ts), live over
     // the ground and layer-contrast settings and the Neutral cast. border-card (Card, Composer, Code block) is among
     // them: today's neutral-100 / 750, now a step from the page.
     ...layerCss(),
+    // Tonal strokes (`<tone>-border`, `-border-strong`: outline Badges and Buttons, Box model, tone frames): the axes write
+    // each as its rung (axes/color.ts) and it goes the same share of the way to its tone's ink as the neutral edges go to
+    // theirs (owner, 2026-10-18: "the contrast control doesnt look like it equally applies to all component colors").
+    ...Object.fromEntries(Object.entries(SEMANTIC_ALIASES).filter(([, alias]) => alias.kind === "stroke" || alias.kind === "strokeHover")
+      .map(([name]) => [`${PREFIX}${name}`, contrastMix(`var(${PREFIX}${name}-rung)`, `var(${PREFIX}fg-${name.replace(/-border(-strong)?$/, "")})`)])),
     // The neutral soft-mark plate (audit S6a): Badge soft, Chip input, soft Count. Translucent, so a mark stays visible
     // on a hovered or selected row plate; hover lays bg-hover's 5% wash over it (6% + 5% of 94% = 10.7%).
     [`${PREFIX}bg-mark`]: "light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.1))",
@@ -150,9 +158,9 @@ export function derivedTokens(): Record<string, string> {
     // edge, and the strong control stroke under increased contrast, where a field's boundary targets 3:1 (CONTRAST.md;
     // the card edge alone read 1.16:1 light, 1.33:1 dark, 2026-10-15).
     [`${PREFIX}composer-edge`]:
-      `color-mix(in srgb, var(${PREFIX}border-card), var(${PREFIX}stroke-control) calc(var(${PREFIX}contrast-more) * 100%))`,
+      contrastMix(rawEdge("card"), `var(${PREFIX}stroke-control)`),
     [`${PREFIX}composer-focus-color`]:
-      `color-mix(in srgb, var(${PREFIX}border-subtle), var(${PREFIX}focus-color) calc(var(${PREFIX}contrast-more) * 100%))`,
+      contrastMix(rawEdge("subtle"), `var(${PREFIX}focus-color)`),
     [`${PREFIX}field-focus-outline-width`]:
       `calc(var(${PREFIX}focus-width) * var(${PREFIX}contrast-more))`,
     [`${PREFIX}field-focus-halo-width`]:
@@ -263,7 +271,8 @@ export function derivedTokens(): Record<string, string> {
     // the colour, so it shows evenly all round on any colour and still outlines white on white (Figma's swatch
     // edge, black 10%; owner 2026-10-12, reversing the solid #f7 edge of 2026-09-28, which merged with light
     // grounds on straight edges and showed only as fringe at the corners).
-    [`${PREFIX}token-swatch-ring`]: "light-dark(rgb(0 0 0 / 0.1), rgb(255 255 255 / 0.1))",
+    // The swatch ring steps with every other stroke (owner, 2026-10-18), to the strong stroke at More.
+    [`${PREFIX}token-swatch-ring`]: contrastMix("light-dark(rgb(0 0 0 / 0.1), rgb(255 255 255 / 0.1))", `var(${PREFIX}stroke-control)`),
     // Heights, rows, gaps, insets and marks from the type size and the density (axes/type-size.ts,
     // axes/density.ts): live calc, so a subtree that sets either re-derives them here.
     ...sizeDerivations(),
