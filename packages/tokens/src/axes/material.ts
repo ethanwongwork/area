@@ -82,7 +82,7 @@ export const MATERIAL_ROLES = [
 type Role = (typeof MATERIAL_ROLES)[number][0];
 
 /** Which part groups each targeted lever reaches by default (29-scope; owner 2026-10-17: glass reaches cards too). */
-const TARGETS: Partial<Record<MaterialLever, readonly Role[]>> = {
+export const MATERIAL_TARGETS: Partial<Record<MaterialLever, readonly Role[]>> = {
   gradient: ["primary"],
   sheen: ["primary"],
   transparency: ["surfaces", "overlays", "chrome"],
@@ -141,8 +141,9 @@ export const MATERIAL_BUNDLES: Readonly<Record<string, Bundle>> = {
 export const DEFAULT_MATERIAL = "none";
 
 /** The grain tile: mono fractal noise, about 0.4% darker a step on average (R04: Acrylic's noise is 2%; owner's board grain reads at 3). */
-const grainImage = (step: number) => step === 0 ? "linear-gradient(transparent, transparent)"
-  : `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1.6 1.1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='${(step * 0.012).toFixed(3)}'/%3E%3C/svg%3E")`;
+export const GRAIN_OPACITY_PER_STEP = 0.012;
+export const GRAIN_TILE = (opacity: string) => `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -1.6 1.1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='${opacity}'/%3E%3C/svg%3E")`;
+const grainImage = (step: number) => step === 0 ? "linear-gradient(transparent, transparent)" : GRAIN_TILE((step * GRAIN_OPACITY_PER_STEP).toFixed(3));
 
 /** Every input a bundle sets: lever values, gates, targets. With no bundle every input is 0 and targets are defaults. */
 function bundleInputs(bundle: Bundle): Record<string, string> {
@@ -159,7 +160,7 @@ function bundleInputs(bundle: Bundle): Record<string, string> {
   }
   for (const style of bundle.stroke ?? []) on.add(MATERIAL_STROKE_STYLES.find(s => s.id === style)!.gate);
   for (const gate of GATES) out[`${P}${gate}`] = on.has(gate) ? "1" : "0";
-  for (const [lever, fallback] of Object.entries(TARGETS)) {
+  for (const [lever, fallback] of Object.entries(MATERIAL_TARGETS)) {
     const reach = bundle.targets?.[lever as MaterialLever] ?? fallback!;
     for (const [role] of MATERIAL_ROLES) out[`${P}${lever}-on-${role}`] = reach.includes(role) ? "1" : "0";
   }
@@ -205,7 +206,7 @@ export function materialDerived(): Record<string, string> {
     [`${P}page`]: `radial-gradient(70% 60% at calc(50% - ${v("lx")} * 45%) calc(50% - ${v("ly")} * 45%), color-mix(in oklab, var(${PREFIX}accent-solid) calc(${v("page-glow")} * 4%), transparent), transparent 70%), ${v("grain-image")}`,
   };
   for (const [r, , concave] of MATERIAL_ROLES) {
-    const s = (lever: MaterialLever) => TARGETS[lever]
+    const s = (lever: MaterialLever) => MATERIAL_TARGETS[lever]
       ? `calc(${v(lever)} / 8 * ${v(`${lever}-on-${r}`)} * ${v(`scope-${r}`)})`
       : `calc(${v(lever)} / 8 * ${v(`scope-${r}`)})`;
     const k = (name: string) => v(`${r}-${name}`);

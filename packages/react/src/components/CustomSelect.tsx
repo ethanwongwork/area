@@ -46,6 +46,12 @@ export interface CustomSelectProps extends Omit<ButtonHTMLAttributes<HTMLButtonE
   /** Called when the list opens or closes. */
   onOpenChange?: (open: boolean) => void;
   /**
+   * The option the pointer or the arrow keys are on while the list is open, and `null` when the list closes, so a host
+   * can preview it before it is chosen (shadcn's builder previews a hovered option on its canvas; Base UI's
+   * `onItemHighlighted`). A choice still arrives through `onValueChange` / `onValuesChange`.
+   */
+  onHighlightChange?: (value: string | null) => void;
+  /**
    * Picks any number of options (Notion's multi-select, Figma's toggled lists): choosing a row
    * toggles it and the list stays open, the trigger lists the chosen labels in the list's order,
    * and the value is `values` / `defaultValues` / `onValuesChange` (`value` and `onValueChange`
@@ -65,7 +71,7 @@ export interface CustomSelectProps extends Omit<ButtonHTMLAttributes<HTMLButtonE
  */
 export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(function CustomSelect(
   { items, value, defaultValue = null, onValueChange, placeholder = "Select…", variant, size, fullWidth, invalid, name, required,
-    onOpenChange, multiple = false, values, defaultValues, onValuesChange, disabled, className, style, onKeyDown, onBlur, onClick, form, ...rest }, ref,
+    onOpenChange, onHighlightChange, multiple = false, values, defaultValues, onValuesChange, disabled, className, style, onKeyDown, onBlur, onClick, form, ...rest }, ref,
 ) {
   const options = items ?? NO_ITEMS;
   const id = useId();
@@ -154,6 +160,14 @@ export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(fun
   }, [open]);
   // Menu's engine (audit S16): the list starts at the trigger's start, 4 below it, flips and shifts.
   useAnchoredPosition(rootRef, listRef, open, { side: "bottom", align: "start", offset: MENU_OFFSET, padding: OVERLAY_PADDING });
+  // The highlighted option, told once per change; null once the list is closed.
+  const highlighted = open && active >= 0 ? rows[active]?.value ?? null : null;
+  const told = useRef<string | null>(null);
+  useEffect(() => {
+    if (highlighted === told.current) return;
+    told.current = highlighted;
+    onHighlightChange?.(highlighted);
+  }, [highlighted, onHighlightChange]);
   useEffect(() => {
     if (!open || active < 0) return;
     scrollOptionIntoList(listRef.current, listRef.current?.querySelector<HTMLElement>(`[data-index="${active}"]`));

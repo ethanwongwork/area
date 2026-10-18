@@ -22,32 +22,41 @@
  */
 
 /*
- * Two ways to show a specimen (owner, 2026-10-14), read from the nearest [data-zoom]:
- *   fit   by size group (owner, 2026-10-14: "make all small controls scale to the same ratio …
- *         grouping the components based on size groups and making that specific group set to the
- *         same scale %"): a specimen's group is its height at the default type and density (a
- *         control's height is what makes controls read alike; a field is as wide as its card), and
- *         every specimen in a group shows at the group's scale (GROUPS), so a Button, a Switch and
- *         an Input stay in proportion; one that stretches is laid out at its tile over that scale,
- *         so it fills the tile at it; the tallest are 1:1, shrunk only to fit their tile
+ * Three ways to show a specimen (owner, 2026-10-14; Auto and Fit 2026-10-18), read from the nearest [data-zoom]:
+ *   auto  by size group: every specimen in a group shows at most at the group's scale (GROUPS), so specimens of a
+ *         size stay in proportion, and one its group's scale would not fit in its tile is shrunk to fit; one that
+ *         stretches is laid out at its tile over that scale, so it fills the tile at it
+ *   fit   every specimen as large as its tile allows, up to FIT_MAX; one that stretches fills its tile at 100%
  *   0.5…2 a true zoom: every specimen at exactly that scale, its tile growing above 100%; one larger
  *         than its tile at that zoom is cut off by the tile, as a canvas at 100% shows what fits
  */
-/** The scale of everything outside the groups, and of fluid specimens, under Fit. */
+/** Fit's ceiling: the zoom list's largest step, so a Badge does not fill a card. */
+const FIT_MAX = 2;
+/** The scale of a true zoom's fallback. */
 const MAX = 1;
 /*
- * Fit's size groups, shortest first, by the specimen's own height (Compass shows its Button at its
- * 56-tall large size, about 1.75x a 32 Button; 200% read "insanely large"):
- *   control  one row of controls, up to 48 (Button, Badge, Switch, Input, Segmented, Tabs)    125%
- *            (owner, 2026-10-14: "use 125% for the controls group"; was 150%)
- *   cluster  a few rows, up to 160 (a radio list, a small menu, an Accordion)                125%
- *   panel    anything taller (a Dialog, a Table, a Calendar)                                 100%
- * Controls and clusters now share 125% and stay two groups, so either can move on its own. A
- * specimen its group's scale would not fit in its tile (a wide fixed one, a narrow Canvas) is
- * shrunk to fit.
+ * Fit's size groups, smallest first, by the specimen's painted area at the default type and density (owner,
+ * 2026-10-18: "some of the small ones look very large because theyre scaled up … i want larger components like code
+ * block, board, color picker, command palette, panel, etc to be the largest … much more granular, so for example if
+ * those large components are at most 75% of their actual size, i want the other component size groups for the next
+ * smallest groups to be 80%, 85%, 90% max"). Nothing is scaled up any more (controls were 125% until then). Area, not
+ * height, so a short wide specimen (Board 852 x 172, Code block 360 x 163) groups with the other large ones; the
+ * bounds sit in the gaps of the measured spread (2026-10-18, Components at type 14 / 32):
+ *   small     up to 6,000 px²: one control, a mark (Button, Badge, Switch, Segmented, Avatar)             90%
+ *   medium    up to 24,000: a field, a row of controls, a small list (Input, Tabs, Menu, Accordion)       85%
+ *   large     up to 56,000: a few rows, a dialog (Card, Table, Dialog, Tree view, Description list)        80%
+ *   largest   anything bigger (Code block, Board, Color picker, Command palette, Panel, Calendar)         75%
+ * A specimen that stretches is measured at its content's width (a Code block's longest line, a fifth more), or, if it
+ * fills (a field, a slider), at Area's contained field width (16rem, --area-input-inline-size), never the probe's.
  */
-const GROUPS = [{ name: "control", h: 48, scale: 1.25 }, { name: "cluster", h: 160, scale: 1.25 }] as const;
-const groupOf = (size: Box) => GROUPS.find(group => size.h <= group.h);
+const GROUPS = [
+  { name: "small", area: 6000, scale: 0.9 },
+  { name: "medium", area: 24000, scale: 0.85 },
+  { name: "large", area: 56000, scale: 0.8 },
+  { name: "largest", area: Infinity, scale: 0.75 },
+] as const;
+const FLUID_WIDTH = 256;
+const groupOf = (size: Box) => GROUPS.find(group => size.w * size.h <= group.area)!;
 /** A width no specimen fills unless it stretches to its container: tells fluid from fixed. */
 const PROBE = 1040;
 /** How much wider than its view a fluid specimen may be laid out to keep its text whole. */
@@ -60,7 +69,7 @@ interface Tile {
   stage: HTMLElement;
   fluid: boolean;
   natural: number;
-  /** Fit's scale for its size group (MAX outside the groups). */
+  /** Fit's most for its size group. */
   group: number;
   /** For a fluid specimen whose content reads narrower than its tile: the width it is laid out at. */
   hug?: number;
@@ -177,8 +186,9 @@ export function fitTiles(canvas: HTMLElement): () => void {
   }));
   if (!tiles.length) return () => {};
   // The app's zoom, read once: Fit, or an exact scale.
-  const zoomAttr = canvas.closest("[data-zoom]")?.getAttribute("data-zoom") ?? "fit";
-  const exact = zoomAttr === "fit" ? undefined : Number(zoomAttr) || MAX;
+  const zoomAttr = canvas.closest("[data-zoom]")?.getAttribute("data-zoom") ?? "auto";
+  const exact = zoomAttr === "auto" || zoomAttr === "fit" ? undefined : Number(zoomAttr) || MAX;
+  const filling = zoomAttr === "fit";
 
   // Fluid or fixed, and how wide a fluid specimen needs to be, at the default type size and density.
   const scale = ["data-area-type", "data-area-density"].map(name => [name, canvas.getAttribute(name)] as const);
@@ -191,15 +201,14 @@ export function fitTiles(canvas: HTMLElement): () => void {
    */
   for (const entry of tiles) { entry.stage.style.zoom = ""; entry.stage.style.inlineSize = `${PROBE}px`; }
   const inked = new Map<Tile, number | undefined>();
+  const heights = new Map<Tile, number>();
   for (const entry of tiles) {
     const own = extent(entry.stage);
     entry.natural = Math.ceil(own.w);
     entry.fluid = entry.natural >= PROBE - 40;
     // The group is read here, at the default type and density, so a Type change scales a group
     // together instead of moving specimens between groups.
-    const group = groupOf(own);
-    entry.group = group?.scale ?? MAX;
-    entry.tile.dataset.fitGroup = group?.name ?? "panel";
+    heights.set(entry, own.h);
     if (!fills(entry.stage)) inked.set(entry, inkedWidth(entry.stage));
   }
   const measured = [...inked].filter(([, width]) => width !== undefined) as [Tile, number][];
@@ -224,6 +233,16 @@ export function fitTiles(canvas: HTMLElement): () => void {
     if (narrowed[index]! < entry.natural - 8 && narrowed[index]! <= entry.hug! + 1) entry.natural = narrowed[index]!;
     else entry.hug = undefined;
   });
+  // Each specimen's size group, by its painted area: a stretching one at its content's width (a Code block's line)
+  // or, filling (a field, a slider), at the contained field width.
+  for (const entry of tiles) {
+    const measured = { w: entry.fluid ? entry.hug ?? FLUID_WIDTH : entry.natural, h: heights.get(entry)! };
+    const group = groupOf(measured);
+    entry.group = filling ? (entry.fluid ? MAX : FIT_MAX) : group.scale;
+    entry.tile.dataset.fitGroup = group.name;
+    // The measure behind the group, for retuning the bounds (px² at type 14 / 32).
+    entry.tile.dataset.fitArea = String(Math.round(measured.w * measured.h));
+  }
   // The width a fluid specimen is laid out at: its tile over its scale, or its content's if narrower.
   const layoutWidth = (entry: Tile, room: number, scale: number) => Math.min(room / scale, entry.hug ?? Infinity);
   // A fluid specimen takes the first width at which nothing truncates (a few specimens, a few tries),

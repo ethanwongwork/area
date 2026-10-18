@@ -1,0 +1,70 @@
+/**
+ * What each setting's option sets, drawn in its list row and, for the chosen one, in the trigger (owner, 2026-10-18:
+ * "see more visibly what each change means"; docs/research/settings-pickers-2026-10-18: shadcn Create draws the chosen
+ * value at the end of its setting row, tweakcn draws each preset's colours in its option).
+ *
+ * Colours are Area's Color swatch painted by the real token under the option's own scope, so a swatch is the colour the
+ * Canvas will paint with that option (`data-area-accent="teal"` → `--area-accent-solid`), against the rest of the
+ * Canvas's settings (an Action swatch takes the Canvas's accent; a ground, its neutral). Shapes and numbers are marks
+ * in the option's icon slot, drawn from the same tokens under the option's scope where one exists (Surface's frame,
+ * Elevation's shadow, Contrast's edge) and from the setting's own number where the value is a size (Density, Radius,
+ * Motion). They fill the slot (Menu's and Custom select's icon box), so they follow the app's scale.
+ */
+import type { CSSProperties, ReactNode } from "react";
+import { ColorSwatch } from "@area/react";
+import type { CanvasAxes } from "./studio.tsx";
+
+type Axis = keyof CanvasAxes;
+
+/** A swatch of one token, painted under `scope`. */
+const swatch = (color: string, scope: Record<string, string | undefined>) =>
+  <ColorSwatch size="sm" color={color} aria-hidden="true" className="studio-mark__swatch" {...scope} />;
+
+/**
+ * The mark for one option of one setting, or nothing where the label already is the value (Type's sizes) or the
+ * option names a part (Pills' components).
+ */
+export function optionMark(axis: Axis, value: string, canvas: CanvasAxes): ReactNode {
+  const neutral = { "data-area-neutral": canvas.neutral };
+  switch (axis) {
+    case "neutral": return swatch("var(--area-neutral-500)", { "data-area-neutral": value });
+    case "accent": return swatch("var(--area-accent-solid)", { "data-area-accent": value });
+    case "action": return swatch("var(--area-action-solid)", { ...neutral, "data-area-accent": canvas.accent, "data-area-action": value });
+    case "selection": return swatch("var(--area-selection-solid)", { ...neutral, "data-area-accent": canvas.accent, "data-area-selection": value });
+    case "ground-light": return swatch("var(--area-bg-page)", { ...neutral, "data-area-theme": "light", "data-area-ground-light": value });
+    case "ground-dark": return swatch("var(--area-bg-page)", { ...neutral, "data-area-theme": "dark", "data-area-ground-dark": value });
+    // The page with a recessed strip (a sidebar, bg-subtle) and a raised card (bg-surface) in the option's layer
+    // contrast: in light the strip steps (100 + 4: 1 → 0.976), in dark the card (8 + 4: 0.085 → 0.18); 0 is one tone.
+    case "layers-light":
+    case "layers-dark": {
+      const theme = axis === "layers-light" ? "light" : "dark";
+      return (
+        <span className="studio-mark studio-mark--layers" aria-hidden="true" data-area-theme={theme} {...neutral}
+          {...{ [`data-area-ground-${theme}`]: canvas[`ground-${theme}` as const], [`data-area-${axis}`]: value }}>
+          <span className="studio-mark__recessed" />
+          <span className="studio-mark__raised" />
+        </span>
+      );
+    }
+    // A field's edge: Contrast More strengthens it (edge-control → stroke-control). System writes nothing.
+    case "contrast": return <span className="studio-mark studio-mark--edge" aria-hidden="true" data-area-contrast={value === "system" ? undefined : value} />;
+    // The medium Button's height at type 14, to scale: 36 fills the box.
+    case "density": {
+      const height = (Number(value) / 36) * 14;
+      return <svg className="studio-mark" viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y={8 - height / 2} width="13" height={height} rx="2.5" /></svg>;
+    }
+    // The medium Button's corner on a button-shaped mark 10 tall (the 32 Button at 10/32), Pill a stadium.
+    case "radius": {
+      const r = value === "pill" ? 5 : (Number(value) * 10) / 32;
+      return <svg className="studio-mark" viewBox="0 0 16 16" aria-hidden="true"><rect x="0.75" y="3" width="14.5" height="10" rx={r} /></svg>;
+    }
+    // A card's frame: 1 its hairline, 0 Borderless's soft shadow edge.
+    case "surface": return <span className="studio-mark studio-mark--frame" aria-hidden="true" data-area-surface={value} />;
+    // A plate lifted in proportion to the option (the Menu's shadow strength, 0 to 8): the real float shadow is too faint
+    // to read on a 12 plate, so the mark's shadow grows with the number instead; 0 is flat.
+    case "elevation": return <span className="studio-mark studio-mark--lift" aria-hidden="true" style={{ "--_lift": value } as CSSProperties} />;
+    // The Menu's open as a share of the longest, 300 ms; 0 (None) is an empty ring.
+    case "motion": return <span className="studio-mark studio-mark--duration" aria-hidden="true" style={{ "--_share": `${(Number(value) / 300) * 100}%` } as CSSProperties} />;
+    default: return null;
+  }
+}

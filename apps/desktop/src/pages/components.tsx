@@ -100,12 +100,21 @@ function Demo({ name }: { name: string }) {
 /** Tile counts, computed once: the Sidebar shows one per family. */
 const TILES = new Map(FAMILIES.map(family => [family.slug, tilesOf(family)]));
 const statusOf = (family: Family) => componentStatus(family.slug) as Status;
-/* Zoom (src/gallery/fit.ts): Fit, or an exact scale from 50% to 200% in quarter steps. */
-const ZOOM_STOPS = [0.5, 0.75, 1, 1.25, 1.5, 2];
-const ZOOMS = ["fit", ...ZOOM_STOPS.map(String)] as const;
+/*
+ * Zoom (src/gallery/fit.ts; owner, 2026-10-18: "the default should be the automatic scaling approach based on the
+ * largest components, then there should just be Auto, Fit 50% 75% 80% 90% 100%, 110%, 125%, 150% 175% 200%"):
+ *   auto  each specimen at most at its size group's scale, the largest at 75% (the default)
+ *   fit   each specimen as large as its card allows, up to 200%
+ *   0.5…2 every specimen at exactly that scale
+ * − and + step through the percentages; from Auto or Fit, which have no one place on that scale, they step from 100%.
+ */
+const ZOOM_STOPS = [0.5, 0.75, 0.8, 0.9, 1, 1.1, 1.25, 1.5, 1.75, 2];
+const VIEWS = { auto: "Auto", fit: "Fit" } as const;
+const ZOOMS = [...Object.keys(VIEWS), ...ZOOM_STOPS.map(String)] as const;
 type Zoom = string;
-/** What a zoomed region carries: the zoom for fit.ts, and the scale tiles and the Stage size by (Fit is 1). */
-const zoomScope = (zoom: Zoom) => ({ "data-zoom": zoom, style: { "--_zoom": zoom === "fit" ? 1 : Number(zoom) } as CSSProperties });
+const named = (zoom: Zoom): zoom is keyof typeof VIEWS => zoom in VIEWS;
+/** What a zoomed region carries: the zoom for fit.ts, and the scale tiles and the Stage size by (Auto and Fit are 1). */
+const zoomScope = (zoom: Zoom) => ({ "data-zoom": zoom, style: { "--_zoom": named(zoom) ? 1 : Number(zoom) } as CSSProperties });
 
 /**
  * A card's copy action (owner, 2026-10-14: "make the 3 dot menu a copy button"): a ghost icon Button
@@ -266,7 +275,8 @@ export function ComponentsPage() {
   // Zoom (owner, 2026-10-12: a closer view; 2026-10-14: a − 100% + control, Fit at the gallery's own
   // ratios): Fit, the default, or an exact 50% to 200% (src/gallery/fit.ts). A new key: the old "1"
   // and "2" meant at most 100% and 200%.
-  const [zoom, setZoom] = useViewOption<Zoom>("components-scale", "fit", ZOOMS);
+  // A new key again (2026-10-18): the old "fit" was today's Auto.
+  const [zoom, setZoom] = useViewOption<Zoom>("components-zoom", "auto", ZOOMS);
   const [status, setStatus] = useViewOption<"all" | Status>("components-status", "all", ["all", "complete", "review", "unrefined"]);
   // The grid's selection: the family whose Stage was last open, as "<family>/<tile id>", marked on its
   // card when the Stage closes. The Inspector describes it.
@@ -367,9 +377,11 @@ export function ComponentsPage() {
   for (const entry of FAMILIES) counts[statusOf(entry)]++;
   const total = FAMILIES.reduce((sum, entry) => sum + TILES.get(entry.slug)!.length, 0);
   const zoomControl = (
-    <ZoomControl stepper size="sm" value={zoom === "fit" ? 1 : Number(zoom)} valueLabel={zoom === "fit" ? "Fit" : undefined}
-      min={ZOOM_STOPS[0]} max={ZOOM_STOPS.at(-1)} stops={ZOOM_STOPS} presets={[0.5, 1, 2]}
-      onZoomToFit={() => setZoom("fit")} onValueChange={next => setZoom(String(next))} />
+    <ZoomControl stepper size="sm" value={named(zoom) ? 1 : Number(zoom)} valueLabel={named(zoom) ? VIEWS[zoom] : undefined}
+      min={ZOOM_STOPS[0]} max={ZOOM_STOPS.at(-1)} stops={ZOOM_STOPS} presets={ZOOM_STOPS} stepRows={false} field={false}
+      presetLabel={stop => `${Math.round(stop * 100)}%`}
+      views={Object.entries(VIEWS).map(([id, label]) => ({ label, selected: zoom === id, onSelect: () => setZoom(id) }))}
+      onValueChange={next => setZoom(String(next))} />
   );
 
   return (

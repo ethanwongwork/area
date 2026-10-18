@@ -22,6 +22,7 @@ import { IconsPage } from "./pages/icons.tsx";
 import { ColorPage } from "./pages/color.tsx";
 import { LanguagePage } from "./pages/language.tsx";
 import { ExamplesPage } from "./pages/examples.tsx";
+import { MaterialsPage } from "./pages/materials.tsx";
 import { readStored, writeStored } from "./storage.ts";
 import { MATERIAL_BUNDLES } from "@area/tokens/config";
 import { bundleValue, materialAttributes, restoreMaterial, type MaterialState } from "./material.ts";
@@ -36,6 +37,8 @@ export const TABS = [
   /* Whole screens built from Area, to test the defaults and every setting (owner, 2026-10-17; "Examples" until the owner
      renamed it the same day). */
   { id: "testing", label: "Testing" },
+  /* A temporary lab for tuning the Material setting's bundles (owner, 2026-10-18); it goes when they are settled. */
+  { id: "materials", label: "Materials" },
 ] as const;
 export type TabId = (typeof TABS)[number]["id"];
 type Theme = "light" | "dark";
@@ -106,6 +109,15 @@ interface StudioState {
   setMaterialBundle: (bundle: string) => void;
   /** Move one lever, switch or the stroke styles; its bundle's own value clears the override. */
   setMaterialValue: (key: string, value: string) => void;
+  /**
+   * Hover preview (owner, 2026-10-18: "see more visibly what each change means"; docs/research/settings-pickers-2026-10-18):
+   * the option a setting's list is on paints the Canvas until the list closes, without being saved. `null` ends it.
+   */
+  previewCanvas: (axis: keyof CanvasAxes, value: string | null) => void;
+  /** The Material a list is on (a bundle, or one lever moved), or `null`. */
+  previewMaterial: (state: MaterialState | null) => void;
+  /** What the Canvas paints: the saved settings with any preview over them. */
+  shown: { canvas: CanvasAxes; material: MaterialState };
   item?: string;
   /** Go to an item. `replace` swaps the current history entry (a Stage's tile) instead of adding one. */
   select: (item: string, options?: { replace?: boolean }) => void;
@@ -129,6 +141,8 @@ export function Studio() {
   const [canvas, setCanvasState] = useState<CanvasAxes>(() => restoreCanvas(readStored<Partial<CanvasAxes>>("canvas", {})));
   const [material, setMaterialState] = useState<MaterialState>(() => restoreMaterial(readStored("material", null)));
   const [panels, setPanels] = useState(() => readStored("panels", { sidebar: true, inspector: true }));
+  const [previewAxes, setPreviewAxes] = useState<Partial<CanvasAxes>>({});
+  const [previewedMaterial, setPreviewedMaterial] = useState<MaterialState | null>(null);
   const search = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -202,11 +216,17 @@ export function Studio() {
       writeStored("material", next);
       return next;
     }),
+    previewCanvas: (axis, value) => setPreviewAxes(current => {
+      if (value === null) { if (!(axis in current)) return current; const { [axis]: _, ...rest } = current; return rest; }
+      return current[axis] === value ? current : { ...current, [axis]: value };
+    }),
+    previewMaterial: setPreviewedMaterial,
+    shown: { canvas: { ...canvas, ...previewAxes }, material: previewedMaterial ?? material },
     item,
     select: (next, options) => go(tab, next, options?.replace),
     sidebar: panels.sidebar,
     inspector: panels.inspector,
-  }), [query, canvas, material, item, tab, go, panels]);
+  }), [query, canvas, material, previewAxes, previewedMaterial, item, tab, go, panels]);
 
   const current = TABS.find(entry => entry.id === tab)!;
   return (
@@ -240,7 +260,8 @@ export function Studio() {
           tab === "components" ? <ComponentsPage /> :
           tab === "typography" ? <TypographyPage /> :
           tab === "icons" ? <IconsPage /> :
-          tab === "testing" ? <ExamplesPage /> : <ColorPage />}
+          tab === "testing" ? <ExamplesPage /> :
+          tab === "materials" ? <MaterialsPage /> : <ColorPage />}
       </div>
     </StudioContext.Provider>
   );
@@ -316,7 +337,8 @@ export function Workspace({ sidebar, canvasLead, canvasTitle, canvasActions, can
   const inspectorWidth = usePanelWidth("inspector");
   // The Canvas body carries the Inspector's settings on every tab (and the Material, src/material.ts): the colour settings, density (which also lays tiles out
   // as a hairline contact sheet in compact), radius, surface, elevation, motion and pills.
-  const axes = { "data-area-neutral": studio.canvas.neutral, "data-area-accent": studio.canvas.accent, "data-area-ground-light": studio.canvas["ground-light"], "data-area-ground-dark": studio.canvas["ground-dark"], "data-area-layers-light": studio.canvas["layers-light"], "data-area-layers-dark": studio.canvas["layers-dark"], "data-area-action": studio.canvas.action, "data-area-selection": studio.canvas.selection, "data-area-contrast": studio.canvas.contrast === "system" ? undefined : studio.canvas.contrast, "data-area-type": studio.canvas.type, "data-area-density": studio.canvas.density, "data-area-radius": studio.canvas.radius, "data-area-surface": studio.canvas.surface, "data-area-elevation": studio.canvas.elevation, "data-area-motion": studio.canvas.motion, "data-area-pills": studio.canvas.pills, ...materialAttributes(studio.material) };
+  const shown = studio.shown.canvas;
+  const axes = { "data-area-neutral": shown.neutral, "data-area-accent": shown.accent, "data-area-ground-light": shown["ground-light"], "data-area-ground-dark": shown["ground-dark"], "data-area-layers-light": shown["layers-light"], "data-area-layers-dark": shown["layers-dark"], "data-area-action": shown.action, "data-area-selection": shown.selection, "data-area-contrast": shown.contrast === "system" ? undefined : shown.contrast, "data-area-type": shown.type, "data-area-density": shown.density, "data-area-radius": shown.radius, "data-area-surface": shown.surface, "data-area-elevation": shown.elevation, "data-area-motion": shown.motion, "data-area-pills": shown.pills, ...materialAttributes(studio.shown.material) };
   return (
     <div className="studio-workspace" data-sidebar={studio.sidebar ? "" : undefined} data-inspector={studio.inspector ? "" : undefined}>
       {studio.sidebar ? (

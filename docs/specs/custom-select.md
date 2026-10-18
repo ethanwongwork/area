@@ -192,6 +192,9 @@ choose and close, Tab chooses and moves on, Alt+↑ chooses and closes, Escape c
 half a second searches as one string, a repeated letter cycles. Clicking a row chooses it and
 returns focus to the trigger; blur closes. `name` submits the value through a hidden input; an
 uncontrolled select restores `defaultValue` on form reset. Forced colours: Menu's rules.
+`onHighlightChange(value | null)` reports the row the pointer or the arrows are on while the list is open, once per
+change, and `null` when it closes, so a host can preview an option before it is chosen (shadcn's builder repaints its
+canvas on hover; Base UI's `onItemHighlighted`; `docs/research/settings-pickers-2026-10-18`). It never chooses.
 
 ## Visual pass
 
@@ -342,3 +345,6 @@ The trigger's label is not selectable. See [interaction polish](../research/inte
   hidden input per value. Row paint is unchanged: a chosen row shows the check. Not yet on the
   review page; the gallery has no `multiple` tile.
 - 2026-10-15 · owner: "merge it, then continue working" → boundary sweep under increased contrast (CONTRAST.md: required boundaries target 3:1): the soft variant's resting edge is `input-edge-soft`, as Input's; ghost stays chromeless.
+- 2026-10-18 · owner: "simplify the process of selecting the options … see more visibly what each change means" →
+  `onHighlightChange` for hover and arrow-key preview (desktop Inspector), measured against shadcn Create's live
+  preview (`docs/research/settings-pickers-2026-10-18`). No visual change; status unchanged.

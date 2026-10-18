@@ -5,6 +5,50 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Settings that show their effect, card lift, Fit groups (2026-10-18, same branch, uncommitted)
+
+- **Settings (owner: keep every option, make choosing visible):** every Inspector list is a Custom select whose options
+  draw what they set (`apps/desktop/src/option-marks.tsx`: colours as Color swatches under the option's own scope,
+  marks for Layers, Contrast, Density, Radius, Surface, Elevation, Motion) and whose highlighted option previews on the
+  Canvas until the list closes (Studio `previewCanvas` / `previewMaterial` / `shown`; Material bundles and levers too).
+  Custom select gained `onHighlightChange` (spec note, test). Research: `docs/research/settings-pickers-2026-10-18/`
+  (shadcn Create previews on hover; tweakcn draws swatches). Open: "Neutral (Default)" truncates by 17 in the 256
+  Inspector (Panel's 1 : 1.5 field split); Segmented settings (Action, Selection, Type) have no marks or preview.
+- **Card hover (owner: no stroke change, a subtle shadow, smooth motion):** a linked Card and the gallery tiles keep
+  their edge and lift to the float shadow, in on `fast` ease-out, out on `base` ease-in; a press drops it; Elevation 0
+  keeps the edge step. Measured from Notion's tatami card and Fluent's: `docs/research/card-hover-2026-10-18.md`;
+  PRODUCT_UI rules 2–3, MOTION.md "Lift", card spec log. Card stays Complete pending the owner's look.
+- **Zoom (owner: no upscaling, granular groups, clearer options):** component cards are at least 380 wide. The zoom is
+  Auto (default), Fit (each specimen as large as its card allows, to 200%), then 50–200% in ten steps; − and + step
+  through the percentages, from 100% on Auto or Fit; Zoom control gained `views`, `stepRows`, `field`, `presetLabel`
+  and a 2 gap between its plates (spec log). Auto groups by
+  painted area at type 14 / 32 (`data-fit-area` on each tile): small 90%, medium 85%, large 80%, largest 75% (Code
+  block, Board, Color picker, Command palette, Panel …), shrunk further only to fit (`src/gallery/fit.ts`).
+- Motion setting audit: every component transition reads the duration tokens; no hard-coded durations.
+- Checks: React 480/480, contracts 14/14, check:playgrounds, manifest parity, typecheck. Checked in the browser pane.
+
+## Materials lab (2026-10-18, branch `claude/ui-improvements-cleanup-19e92d`, uncommitted)
+
+Owner: "a new temporary tab in electron for materials where i can really experiment, research, fine tune, improve, and
+clean up the materials". Built the **Materials** tab (`apps/desktop/src/pages/materials.tsx`, `.lab-*` in studio.css),
+temporary: remove it once the bundles are settled and written back to `packages/tokens/src/axes/material.ts`.
+- Sidebar: the bundles (Edited when the draft differs). Canvas: Every part / one part group / Page / Screen (Analytics
+  dashboard) / Readings (contrast of body and muted ink on cards, overlays and chrome over each backdrop's extremes), light
+  and/or dark, over Page, Wallpaper, Photo, Text or Stripes, beside Shipped or a snapshot. Inspector: every lever as a
+  continuous slider, switches, stroke styles, per-lever targets, group strengths (`--area-material-scope-*`), notes;
+  Reset, Save snapshot, Copy bundle (source for MATERIAL_BUNDLES), Copy changes (a list to paste into a session).
+- The draft is written as the material's own inputs (`--area-material-*`) on a `data-area-material` scope, so it paints
+  through material.css exactly as shipped; an unedited draft matches Shipped. Drafts and snapshots live in the app's
+  localStorage (storage.ts, keys `lab:drafts` and `lab:snapshots`).
+- Tokens config now also exports `MATERIAL_ROLES`, `MATERIAL_TARGETS`, bundle `targets`, switch `gates`, stroke `gate` and
+  `materialGrainImage()`.
+- Fixed (found in the lab): under any material the Slider's track was blank and its thumb hollow (material.css replaced
+  the Slider's own gradients); the material now lies over them.
+- Checks: tokens 24,270, React 479/479, contracts 14/14, check:playgrounds, manifest parity, typecheck. Checked in the
+  browser pane (every view, both themes, backdrops, Soft's Layers, copy output); Electron relaunched from this worktree.
+- Setup: this worktree needed its own `node_modules` (APFS clone `cp -cR ~/Desktop/area/node_modules .`, plus
+  `node_modules/electron/dist` and `path.txt` from another worktree) so `@area/*` resolve here, not to the main checkout.
+
 ## Video player in Area's paint (2026-10-18, branch `claude/video-player-area-paint`)
 
 **Done:** round 47 approved; Video player is Complete. Nothing is in review. Round 47 (collection `components47`: one set of parts in every layout, CC track in demos, captions icon 13 × 10, row gap 8, narrow corners). Open: captions-off redraw with captions. Before that, round 46 (collection `components46`: glass-tint plates, Cursor-style solid track and thumb; the review diff cannot see pseudo-element or hover changes). Before that, round 45 (collection `components45`: dark glass in every theme via color-scheme: dark, white 12% stroke, filled icons; generator "body" paint). Before that, round 44 (collection `components44`): the floating controller built from Area's parts (surface

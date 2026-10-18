@@ -22,11 +22,14 @@
   /*
    * Stepper (owner, 2026-10-14, after Chrome's and ChatGPT Atlas's "− 100% +" zoom row): Zoom out and
    * Zoom in, ghost icon Buttons at the control's size, either side of the percentage, which keeps
-   * the menu and drops its chevron. The group is the controls side by side, as a Button group's
-   * ghost buttons (gap 0: each plate is its own target). The percentage holds "100%" (three tabular
-   * figures and the sign, under 5ch), so 50%, 200% or a label leave the buttons where they are.
+   * the menu and drops its chevron. The three plates stand 2 apart (owner, 2026-10-18: "is there not supposed to be
+   * a gap at all between the backplate"; edge to edge, two hovered or pressed plates met at their rounded corners):
+   * Figma's mode switch and Segmented keep plates of one control 2 apart; a control that joins its segments draws one
+   * plate round them instead, square inside (Excalidraw's zoom group, 0 apart on a shared #ececf4 plate, measured
+   * 2026-10-18). The percentage holds "100%" (three tabular figures and the sign, under 5ch), so 50%, 200% or a
+   * label leave the buttons where they are.
    */
-  .area-zoom-control__stepper { display: inline-flex; align-items: center; }
+  .area-zoom-control__stepper { display: inline-flex; align-items: center; gap: var(--area-space-2); }
   .area-zoom-control--stepper .area-zoom-control__value { display: inline-block; min-inline-size: 5ch; text-align: center; }
   .area-zoom-control__step { flex: none; }
 }
