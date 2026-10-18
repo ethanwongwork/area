@@ -61,7 +61,9 @@ export function baseTokens(): Record<string, string> {
   // Keep this separate from the creative typography axis: a custom text font may lack
   // keyboard glyphs, causing individual characters to fall back at different metrics.
   out["--area-font-keyboard"] = 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-  out["--area-keyboard-gap"] = "0.25ch";
+  // A quarter of a character, rounded to whole pixels, so the keys after the first sit on the pixel grid (spacing
+  // audit 2026-10-17: 0.25ch computed 1.94 / 1.78 and left every later glyph between pixels).
+  out["--area-keyboard-gap"] = "round(nearest, 0.25ch, 1px)";
 
   // Pure black and white. Named because they are real answers, not placeholders: every
   // `fg-on-*` token resolves to one of these two after the scale measures which is

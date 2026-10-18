@@ -5,6 +5,39 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Material in the Inspector (2026-10-17, branch `claude/materials-testing-inspector-00a2d4`, merged by PR)
+
+Owner: test the defaults on Examples → Analytics dashboard, then materials, built "into the Inspector as a real
+setting". Done: Inspector → **Material** (a bundle, then 14 levers with their switches) on Components and Examples.
+Tokens `axes/material.ts`, receivers `styles/src/material.css`, app `src/material.ts`; details and what changed from the
+prototype in `docs/research/astra/materials/27-levers/README.md` "Built into Area". The levers page and specimen held no
+saved picks (collections `levers` and `materials` empty), so values are the levers page's bundles.
+- Checks: tokens 24,270 (new `material.test.ts`), React 477/477 (cohesion test skips material-scoped rules and checks
+  they keep the lift), contracts 14/14, typecheck, styles build (parity, token refs).
+- Open: per-lever targets and group strengths are fixed per bundle (not in the Inspector); muted text on light gradients
+  past 3 (caps.mjs); contrast sweep with materials on; Glass needs a backdrop to read (no wallpaper option yet).
+- Then (owner): the Examples tab is **Testing** (`#testing/…`; old `#examples` links and saved tabs map to it). The
+  Language illustrations (`src/abstract.tsx`) are now real Area components with placeholder text ("Title", "Option",
+  "Button"), one card per setting (properties card, inspector card, menu over a card…), laid out at 320 × 248 and zoomed
+  to fit the tile; the `.abs-*` drawing CSS is replaced by a few `.lang-*` layout rules. Checked in the browser pane
+  (every setting; no tile overflows); not checked by eye in Electron.
+
+## Spacing pass (2026-10-17, same branch and PR)
+
+Owner: "fix the padding, gaps, etc. overall … research how design systems … ensure alignment, optical sizing, spacing …
+be thorough". Record: `docs/research/spacing-2026-10-17/README.md` (research in `external.md`, 16 systems; sweep scripts
+in `sweep/`). Review page (Before / After): https://claude.ai/artifact/JtDZ9LNfutFyfdkGUvQzL2.
+- Measured all 102 families at type 14 / 32 and 13 / Compact in headless Edge at 1:1 (defects + cross-family metrics,
+  1,116 title/action pairs, list label columns). The inset contract holds: no off-centre control at 14.
+- Fixed: Tag at Compact (owner's notes): text 13px → 11 in the 14 tag, side 6 → 4 (room above the cap + 1, max 6), label lifted a quarter of cap − x-height so lowercase reads centred; then (owner: "see if there are other small components") a marks sweep (`sweep/marks-check.js`): Citation's pill sides now from its height (5 at 14, was 8); Badge, Tag and Citation share one optical centre (inset.css); then (owner: "go with 10px icons, draw the cuts") 10px cuts for the 8 icons the app puts in marks (`packages/icons/sources/10/`, `--_glyph-cut10`, spec "10px cuts"), Card header badge/marker centring (6px low), Kbd key gap (fractional 0.25ch), Select gap (browser 0.5em), Tag
+  icon side/gap (to Badge's), Tag label and remove centring at 13, choice-group description/validation gaps (Field's
+  ui-stack), Infobox and framed Description list insets (border counted once). Specs updated. These are Complete families
+  (Infobox In review): owner review pending on the page; status not changed.
+- Open (on the page): Popover gap 16 > inset 12; Table and framed data views add their frame; Tag picker lg tag corner;
+  12-in-10 remove glyph at Compact 13.
+- Language illustrations simplified (owner, relayed by the placeholder-copy session: "fix and simplify the ui being used in the language, maybe make it more abstract or small/simple"): per setting two or three components that show it (an action pair, three rows, a field and a button…), the Example copy (Title, Description, Button, Item one, One / Two), shown 1:1 on a 224 reference and zoomed down only in small tiles.
+- Checks: React 477/477, contracts 14/14, tokens 24,270, typecheck, styles build. Raw sweep JSON is not in the repo.
+
 ## Round 35 / 34: Articles rethink and the Component icon (2026-10-17, branch `claude/wikipedia-link-underline-12add0`, uncommitted)
 
 **Done:** round 38 approved Figure and Reference list; all eight Articles families are Complete. Nothing is in review.

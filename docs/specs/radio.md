@@ -191,3 +191,7 @@ selection with a real keyboard.
 - 2026-10-12 · owner, 2026-10-12: "go with your recommendations" (consistency pass) → the unchecked hover edge reads `edge-control-strong` (O5: one role for a literal written in several families; same paint). (docs/research/consistency-audit-2026-10-12.md)
 - 2026-10-12 · type size and density split (owner) → the radio shares Checkbox's box, `--area-mark-box` (14 / 14 / 16 / 18 / 20 for type 12–16; `choice.css`). `docs/research/ui-size-scale-2026-10-12.md`.
 - 2026-10-14 · all-axis audit → the box now follows the type size (`.area-radio--md` set a fixed 16, overriding the 2026-10-12 base rule); lg is four larger; the dot stays 6 / 8, centred on whole pixels → choice.css.
+
+## Spacing audit (2026-10-17)
+
+Group rhythm: as Checkbox group, the description and validation sit `ui-stack` (6, compact 4) from what's above (validation was 12). Measured in `docs/research/spacing-2026-10-17/` (Before / After: https://claude.ai/artifact/JtDZ9LNfutFyfdkGUvQzL2).

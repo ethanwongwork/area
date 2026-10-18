@@ -8,7 +8,7 @@
 import { useId } from "react";
 // A "knockout" glyph (the filled dismiss-circle) is a solid with marks cut out of it, listed by path index in
 // glyphKnockouts.
-import { glyphCutFills12, glyphCuts12, glyphFills, glyphKnockouts, glyphPaint, glyphs, type GlyphName } from "./glyphs.ts";
+import { glyphCutFills10, glyphCutFills12, glyphCuts10, glyphCuts12, glyphFills, glyphKnockouts, glyphPaint, glyphs, type GlyphName } from "./glyphs.ts";
 
 export function Glyph({ name, rotate, size = 16 }: { name: GlyphName; rotate?: 90 | 180 | 270; size?: 12 | 16 | 20 | 24 }) {
   const maskId = useId();
@@ -33,20 +33,22 @@ export function Glyph({ name, rotate, size = 16 }: { name: GlyphName; rotate?: 9
   ) : paths;
   const drawing = rotate ? <g transform={`rotate(${rotate} 8 8)`}>{body}</g> : body;
   const cut = size === 12 ? glyphCuts12[name] : undefined;
-  if (!cut) return (
+  // A 10px cut (docs/specs/icons.md "10px cuts"): a mark's Compact slot. base.css shows it where --_glyph-cut10 is 1.
+  const cut10 = size === 12 ? glyphCuts10[name] : undefined;
+  if (!cut && !cut10) return (
     <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false" data-area-glyph={name} data-area-glyph-size={size === 16 ? undefined : size}>
       {drawing}
     </svg>
   );
-  // The cut is drawn in its own 12-unit grid, scaled into the 16 viewBox, so one unit is a pixel at 12.
-  const dots: readonly number[] = glyphCutFills12[name] ?? [];
-  const lines = cut.map((d, i) => dots.includes(i)
+  // Each cut is drawn in its own grid (12 or 10 units), scaled into the 16 viewBox, so one unit is a pixel at its size.
+  const lines = (paths: readonly string[], dots: readonly number[]) => paths.map((d, i) => dots.includes(i)
     ? <path key={d} d={d} fill="currentColor" stroke="none" />
     : <path key={d} d={d} fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" />);
   return (
-    <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false" data-area-glyph={name} data-area-glyph-size="12">
+    <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" focusable="false" data-area-glyph={name} data-area-glyph-size="12" data-area-glyph-cuts={cut10 ? (cut ? "10 12" : "10") : undefined}>
       <g data-area-glyph-drawing="16">{drawing}</g>
-      <g data-area-glyph-drawing="12" transform={`scale(${16 / 12})${rotate ? ` rotate(${rotate} 6 6)` : ""}`}>{lines}</g>
+      {cut ? <g data-area-glyph-drawing="12" transform={`scale(${16 / 12})${rotate ? ` rotate(${rotate} 6 6)` : ""}`}>{lines(cut, glyphCutFills12[name] ?? [])}</g> : null}
+      {cut10 ? <g data-area-glyph-drawing="10" transform={`scale(${16 / 10})${rotate ? ` rotate(${rotate} 5 5)` : ""}`}>{lines(cut10, glyphCutFills10[name] ?? [])}</g> : null}
     </svg>
   );
 }

@@ -321,7 +321,7 @@
   }
 
   .area-radio-group__description,
-  .area-checkbox-group__description { margin-block-start: var(--area-space-6); /* Field's label-to-description gap (audit B-22 B; was 4) */ }
+  .area-checkbox-group__description { margin-block-start: var(--area-ui-stack); /* Field's label-to-description gap, 6, compact 4 (audit B-22 B; was 4; spacing audit 2026-10-17: was a fixed 6) */ }
   .area-radio-group__description { color: var(--area-fg-muted); }
   .area-radio-group__validation { color: var(--area-fg-danger-vivid); }
 
@@ -417,7 +417,7 @@
     }
   }
   .area-checkbox-group__validation,
-  .area-radio-group__validation { margin-block-start: var(--area-space-12); }
+  .area-radio-group__validation { margin-block-start: var(--area-ui-stack); } /* Field's control-to-message gap, 6, compact 4 (spacing audit 2026-10-17: was 12, twice Field's) */
 
   /* --- Labels ------------------------------------------------------------- */
 

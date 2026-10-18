@@ -181,3 +181,7 @@ button below the frame (the `dl` carries the frame).
 - 2026-10-12 · owner, review round 21 (components21): approved with the open questions' recommendations ("go with your recs"), no change → Complete in `component-status.mjs`.
 
 Since 2026-10-17 the underline offset is Link's 0.08em, close under the text (link.md, "Close underline").
+
+## Spacing audit (2026-10-17)
+
+Framed insets: the frame's stroke is counted once, so text and rules sit 16 from the frame's outer edge, ChatGPT's measured 16 (capture-compare measures from the shell's border box); both layouts sat 17. Measured in `docs/research/spacing-2026-10-17/` (Before / After: https://claude.ai/artifact/JtDZ9LNfutFyfdkGUvQzL2).

@@ -17,6 +17,7 @@ import { REGISTERED_PROPERTIES } from "./base.ts";
 import { THEME_AXIS } from "../axes/color.ts";
 import { UI_SHORTHAND } from "../axes/ui-scale.ts";
 import { MOTION_NONE } from "../axes/motion.ts";
+import { MATERIAL_ATTRIBUTES, materialDefaults, materialDerived, materialRules } from "../axes/material.ts";
 
 import { colorPairs } from "./colors.ts";
 
@@ -104,7 +105,7 @@ export function emitTokens(): string {
     ),
     "",
     "@layer area.tokens {",
-    rule(":where(:root)", { "color-scheme": "light", ...baseTokens(), ...pillDefaults(), ...defaults, ...derivedTokens() }),
+    rule(":where(:root)", { "color-scheme": "light", ...baseTokens(), ...pillDefaults(), ...materialDefaults(), ...defaults, ...derivedTokens(), ...materialDerived() }),
     "}",
     "",
   ];
@@ -157,6 +158,12 @@ export function emitAxes(): string {
     }
   }
 
+  // Material (axes/material.ts): a bundle, then single levers, switches and stroke styles, which win over a bundle on
+  // the same element by coming later.
+  out.push("");
+  out.push(`${INDENT}/* Material — data-area-material="glass"; data-area-material-<lever>="0".."8" over it. */`);
+  for (const [selector, map] of materialRules()) out.push(rule(selector, map));
+
   // Pill shapes (axes/pills.ts): a listed component is a pill; a scope with the attribute
   // clears every flag first, so the list is exactly the pills in that subtree.
   out.push("");
@@ -183,6 +190,11 @@ export function emitAxes(): string {
   out.push("");
   out.push(`${INDENT}/* Re-derive cross-axis values wherever an axis is redeclared. */`);
   out.push(rule(axisBearing, derivedTokens()));
+
+  // Material's paints read only its own inputs and the accent, so they re-derive only where either is set.
+  out.push("");
+  out.push(`${INDENT}/* Re-derive material paints wherever a material or the accent is redeclared. */`);
+  out.push(rule([...MATERIAL_ATTRIBUTES.map(a => `[${a}]`), "[data-area-accent]"].join(",\n" + INDENT), materialDerived()));
 
   out.push("");
   // The system preference wins over a page's or subtree's own motion setting (motion pass,

@@ -11,8 +11,14 @@
   .area-tag {
     /* spec: 20, Notion's tag (notion--tag-removable--rest--light), the mark ladder's md. */
     --_height: var(--area-mark-label-md);
-    /* spec: 6 before the text (Notion padding 0 0 0 6); the end matches when there's no ×. */
-    --_side: var(--area-space-6); /* spec */
+    /* The icon box: at most the plate less 4, as Badge's (12 at 20 and 24, 10 in Compact's 14), where the icon and the
+       remove glyph draw their 10px cuts (owner, 2026-10-17: "go with 10px icons"; docs/specs/icons.md "10px cuts"). */
+    --_icon: min(var(--area-icon-xs), calc(var(--_height) - var(--area-space-4)));
+    --_glyph-cut10: max(0, sign(var(--area-icon-xs) - var(--_icon)));
+    /* spec: 6 before the text (Notion padding 0 0 0 6); the end matches when there's no ×. The side follows the plate:
+       the room above the cap plus 1, so it is Notion's 6 at 20 (and 24) and 4 in Compact's 14 (owner, 2026-10-17: "the
+       padding on the left side of the text looks way too big"; a fixed 6 there was twice the room above the text). */
+    --_side: min(var(--area-space-6), round(nearest, calc((var(--_height) - 1cap) / 2 + 1px), 1px)); /* spec */
     /* The remove box: a square 4 shorter than the tag, 2 in from its end and top (Notion's × box
        ends 1.99 from the tag's end); its glyph 12, whose ink (7.5) is Notion's (7.4). */
     --_remove: calc(var(--_height) - var(--area-space-4));
@@ -36,7 +42,11 @@
     background: var(--_bg);
     color: var(--_fg);
     font-family: var(--area-font-sans);
-    font-size: var(--area-ui-size);
+    /* The UI size while the tag holds its line (Notion's 14 in 20), the small size (Badge's) when the tag is shorter
+       than that line: Compact's 14 tag held 13px type, 0.93 of its height, where Badge, Count, Kbd and Citation set
+       11 in the same 14 (owner, 2026-10-17: "the type here looks way too big for this backplate"). */
+    --_small: max(0, sign(var(--area-ui-leading) - var(--_height)));
+    font-size: calc(var(--area-ui-size) - (var(--area-ui-size) - var(--area-text-xs-size)) * var(--_small));
     line-height: var(--_height);
     font-weight: var(--area-weight-regular);
     white-space: nowrap;
@@ -79,9 +89,14 @@
      4.14:1 there). Layers sweep 2026-10-16; tokens color/layers.ts TINT_LIFT. */
   .area-tag:not(.area-tag--neutral) { --_lift: var(--area-layer-dark-tint-lift); color: light-dark(var(--_fg), color-mix(in oklab, var(--_fg), white calc(var(--_lift) * 100%))); }
 
-  .area-tag__icon { display: inline-grid; place-items: center; flex: none; inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); }
+  /* An icon side centres the icon in the tag's end square, as Badge's does ((h - icon) / 2: 4 at 20, 6 at 24), and
+     the icon stands the xs icon gap (4) from the label, Badge's at the same height (spacing audit 2026-10-17: it was 6
+     in and 2 from the label, the text side's literal). */
+  .area-tag:has(> .area-tag__icon:first-child) { padding-inline-start: calc((var(--_height) - var(--_icon)) / 2); }
+  .area-tag__icon { display: inline-grid; place-items: center; flex: none; inline-size: var(--_icon); block-size: var(--_icon); margin-inline-end: calc(var(--area-gap-xs) - var(--area-space-2)); }
   .area-tag__icon > svg { inline-size: 100%; block-size: 100%; }
   .area-tag__label { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; }
+  /* The label's optical centre is the marks' shared rule (inset.css, "Marks: optical centre"). */
 
   /*
    * The remove control. At rest it is just the ×, in the tag's ink. Under the pointer it gets a
@@ -93,6 +108,9 @@
     position: relative;
     display: inline-grid;
     place-items: center;
+    /* The track centres too, so a glyph larger than the box (12 in Compact 13's 10) overflows evenly instead of hanging
+       from the top (spacing audit 2026-10-17: it sat 2 in a 14 tag, 1 low). */
+    place-content: center;
     flex: none;
     inline-size: var(--_remove);
     block-size: var(--_remove);
@@ -111,7 +129,7 @@
     transition-property: background-color;
     user-select: none;
   }
-  .area-tag__remove > svg { inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); }
+  .area-tag__remove > svg { inline-size: var(--_icon); block-size: var(--_icon); }
   @media (hover: hover) { .area-tag__remove:hover { background: color-mix(in srgb, currentColor 12%, transparent); transition-duration: 0s; } }
   .area-tag__remove:active { transition-duration: 0s; }
   /* spec: pressed 20% of the ink, a step past the 12% hover, as Chip's remove. */

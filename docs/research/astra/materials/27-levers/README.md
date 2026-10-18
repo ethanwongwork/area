@@ -95,6 +95,30 @@ daisyUI comes closest and is binary. That is the gap Area's levers fill.
   lever image and blur (D7).
 - **Glyphs and text** take no lever (D13); label relief stays an opt-in per component.
 
+## Built into Area (2026-10-17)
+
+Material is now a real setting, testable in the app: Examples → Analytics dashboard, Inspector → **Material**.
+- **Tokens** (`packages/tokens/src/axes/material.ts`): the 14 levers (0–8; light angle 0–345°), six one-of switches,
+  the stroke styles (a set, as Pills), seven bundles (None, Glass, Tactile, Jelly, Soft, Aero, Glow, from the levers
+  page) and the part-group targets of 29-scope. Not a registry axis (Pills isn't either): `data-area-material="glass"`,
+  then `data-area-material-<lever>="5"` or `-<switch>="radial"` or `-stroke-style="ring lit"` over it. The paints are
+  derived live and re-derived wherever a material or the accent is set. `@area/tokens/config` exports the levers,
+  switches and bundles for pickers. Test: `material.test.ts`.
+- **Receivers** (`packages/styles/src/material.css`): everything is scoped under `[data-area-material]`, so with no
+  attribute nothing changes. Part groups as 29-scope; pressed flips to recessed, disabled drops it, a focused field
+  shows its halo alone, forced colours and reduced transparency switch it off. Gradient stroke and frost use style
+  queries (Chromium). A product's own chrome marks `data-area-chrome`, names `--area-chrome-fill` and paints
+  `--area-chrome-bg`; its page lays `--area-material-page` over its ground.
+- **App** (`apps/desktop/src/material.ts`, `canvas-settings.tsx`): a Material select loads a bundle (Soft also sets its
+  Layers: ground 95 / 24, contrast 0); each lever after it shows the bundle's value by name; a lever's switches show
+  while it is on. Saved per viewer.
+- **Changed from the prototype:** dark uses the same geometry with the dark alphas (as Elevation; CSS has no numeric
+  theme flag), so the dark ring is 1px not 1.5px and the dark contact shadow keeps the light offsets. Grain is mono
+  noise (no blend mode on a background layer) at 1.2% opacity a step; a first port at 3% read too strong.
+- **Checked in the browser pane:** Tactile, Jelly, Aero, Glow, Soft in light; Glass in dark with a menu open (frost,
+  rim, see-through card at 0.715). Not checked: every family under every bundle, a contrast sweep with materials on,
+  hover and press by eye, Firefox and Safari.
+
 ## How it was built (prototype)
 
 `gen-levers.mjs` writes `levers.css`. For each target group it derives, on the scope:

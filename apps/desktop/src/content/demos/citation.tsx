@@ -17,15 +17,15 @@ const Answer = ({ children, flow }: { children: ReactNode; flow?: boolean }) => 
 
 export const GalleryCitation = () => <Answer><Citation href="#citation" label="Label" title="Title" /></Answer>;
 /* ChatGPT's favicon at the start. */
-export const GalleryCitationIcon = () => <Answer><Citation href="#citation" icon={<BookIcon />} label="Label" title="Title" /></Answer>;
+export const GalleryCitationIcon = () => <Answer><Citation href="#citation" icon={<BookIcon size={12} />} label="Label" title="Title" /></Answer>;
 /* More sources behind this one: "+2". */
-export const GalleryCitationMore = () => <Answer><Citation href="#citation" icon={<BookIcon />} label="Label" title="Title" more={2} /></Answer>;
+export const GalleryCitationMore = () => <Answer><Citation href="#citation" icon={<BookIcon size={12} />} label="Label" title="Title" more={2} /></Answer>;
 /* A long name is cut at 15 characters. */
-export const GalleryCitationLong = () => <Answer><Citation href="#citation" icon={<BookIcon />} label="Label that is too long to fit" title="Title" more={1} /></Answer>;
+export const GalleryCitationLong = () => <Answer><Citation href="#citation" icon={<BookIcon size={12} />} label="Label that is too long to fit" title="Title" more={1} /></Answer>;
 /* Hover or focus previews the source in a Hover card. */
 export const GalleryCitationHoverCard = () => (
   <Answer flow>
-    <HoverCard trigger={<Citation href="#citation" icon={<BookIcon />} label="Label" title="Title" />}>
+    <HoverCard trigger={<Citation href="#citation" icon={<BookIcon size={12} />} label="Label" title="Title" />}>
       <div><PopoverTitle level={false}>Title</PopoverTitle><PopoverDescription>Description that wraps onto a second line.</PopoverDescription></div>
       <div className="area-hover-card__meta"><span><LinkIcon />example.com</span></div>
     </HoverCard>

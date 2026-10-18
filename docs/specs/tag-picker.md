@@ -224,3 +224,7 @@ None.
 - 2026-10-09 · owner went with Scroll area's recommendation to adopt it in the scrolling families (docs/specs/scroll-area.md, "Adoption") → the scroll container is a Scroll area: Figma's overlay bar instead of the platform's, its inset moved into the scroller so rows keep their place → back in review.
 - 2026-10-15 · owner: "merge it, then continue working" → boundary sweep under increased contrast (CONTRAST.md: required boundaries target 3:1): the soft variant's resting edge is `input-edge-soft`, as Input's (now 3.79:1 light, 5.49:1 dark).
 - 2026-10-16 · owner: "go with your recs, fix them in that order" (after the Layers sweep, docs/research/layers-2026-10-16/sweep/README.md) → tags in the field take Tag's field lift (`--_lift: var(--area-layer-dark-tint-lift-fill)`, tag.css): in dark their labels sit on the field's fill, lighter than a card, so caution fell to 4.14:1 in a soft field at ground 24 + layers 8. Defaults unchanged.
+
+## Spacing audit (2026-10-17)
+
+Open: at lg the md Tags keep their own radius 6 inside the field's 10 at a 7 inset; the nested-corner rule gives 4. Fixing it needs the field's corner and inset as properties the Tag can read. Measured in `docs/research/spacing-2026-10-17/` (Before / After: https://claude.ai/artifact/JtDZ9LNfutFyfdkGUvQzL2).

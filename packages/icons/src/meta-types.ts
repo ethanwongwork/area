@@ -24,8 +24,9 @@ export interface IconMeta {
   /** "mirror": tied to reading direction, so the components mirror in right-to-left text (rtl.css). */
   rtl?: "mirror";
   /** Sizes with a drawing of their own: [12] where the icon has a 12px cut, drawn when `size` is 12 (svg/12). Every
-   *  other size scales the 16px drawing (docs/specs/icons.md, "12px cuts"). */
-  cuts?: readonly 12[];
+   *  other size scales the 16px drawing (docs/specs/icons.md, "12px cuts"). 10: a 10px cut for a mark's Compact slot,
+   *  drawn at size 10 or where a component sets --_glyph-cut10 ("10px cuts"). */
+  cuts?: readonly (10 | 12)[];
   /** Another library's ink this drawing reproduces (THIRD_PARTY_NOTICES.md carries its licence): the library and its icons. */
   source?: { library: string; names: readonly string[] };
   /** Search words: the concept, synonyms and other libraries' words for it, never another icon's name. */

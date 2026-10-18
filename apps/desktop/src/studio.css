@@ -709,118 +709,23 @@
   /* --- Language ------------------------------------------------------------ */
 
   /*
-   * Language illustrations (src/abstract.tsx): one family of abstract UI, after the Frames X kit's
-   * thumbnails. One set of sizes for every drawing (picks, on the 4 grid): a 176 card padded 12
-   * with 8 between its parts, 6 bars, 16 rows, an 18 pill, a 20 field, an 8 dot, a 12 check and a
-   * 24 x 14 toggle. Colours, corners, edges, lift, row height and timing are the live tokens, so
-   * each setting's tile draws its own effect.
+   * Language illustrations (src/abstract.tsx): per setting, the two or three Area components that show it, with the
+   * Example copy, laid out at one reference width (--_lang-width, 224) and shown 1:1 (zoomed down only in a smaller
+   * tile). App classes only lay them out: a column and a row at the cluster gap (8, compact 6), and a menu floating
+   * over a card.
    */
-  /* Drawn as Card is: Card's edge (surface.css --_card-edge) and the resting elevation role. */
-  .abs-card {
-    display: grid;
-    gap: var(--area-space-8);
-    inline-size: calc(var(--area-space-96) + var(--area-space-80));
-    padding: calc(var(--area-space-12) - var(--area-border-width));
-    border: var(--area-border-width) solid var(--area-border-card); /* Card's edge */
-    border-radius: var(--area-radius-container);
-    background: var(--area-bg-surface);
-    box-shadow: var(--area-shadow-edge), var(--area-shadow-resting); /* Card's: the Surface axis's edge, then its lift */
-  }
-  /* Surface: a floating card over a resting one, offset down and to the end. */
-  .abs-stack { display: grid; }
-  .abs-stack > .abs-card { grid-area: 1 / 1; }
-  .abs-card[data-kind="back"] { translate: calc(var(--area-space-16) * -1) calc(var(--area-space-12) * -1); }
-  .abs-card[data-kind="float"] { translate: var(--area-space-16) var(--area-space-12); box-shadow: var(--area-shadow-edge), var(--area-shadow-float); }
-  /* A line of text: muted grey, or the default ink for a title. */
-  .abs-bar {
-    display: block;
-    inline-size: var(--_w);
-    block-size: var(--area-space-6);
-    border-radius: var(--area-radius-full);
-    background: var(--area-border-subtle);
-  }
-  .abs-bar[data-strong] { background: var(--area-fg-default); }
-  .abs-bar[data-tone="accent"] { background: var(--area-accent-solid); }
-  .abs-bar[data-tone="on-action"] { background: var(--area-fg-on-action); }
-  .abs-bar[data-tone="on-accent"] { background: var(--area-fg-on-accent); }
-  /* A row: its parts in a line, at half the scale's row height (16 default, 12 compact). */
-  .abs-row { display: flex; align-items: center; gap: var(--area-space-6); min-block-size: calc(var(--area-ui-row) / 2); }
-  .abs-row > .abs-bar { flex: none; }
-  /* A line of text (the type size's drawing): the bar a little under half the text size, on the
-     text's own line, so each size draws its own stroke and spacing. */
-  .abs-line { display: flex; align-items: center; min-block-size: var(--area-text-sm-leading); }
-  .abs-line > .abs-bar { block-size: round(nearest, calc(var(--area-text-sm-size) * 0.43), 1px); }
-  .abs-line[data-title] { min-block-size: var(--area-title-xs-leading); }
-  .abs-line[data-title] > .abs-bar { block-size: round(nearest, calc(var(--area-title-xs-size) * 0.5), 1px); }
-  .abs-row[data-end] { justify-content: flex-end; }
-  .abs-row[data-plate] {
-    margin-inline: calc(var(--area-space-6) * -1);
-    padding: var(--area-space-4) var(--area-space-6);
-    border-radius: var(--area-radius-row);
-    background: var(--area-bg-component-active);
-  }
-  .abs-pill {
-    display: inline-grid;
-    place-items: center;
-    flex: none;
-    inline-size: var(--area-space-48);
-    block-size: calc(var(--area-space-16) + var(--area-space-2));
-    border-radius: var(--area-radius-control-sm);
-    background: var(--area-action-solid);
-  }
-  .abs-pill > .abs-bar { block-size: var(--area-space-4); opacity: 0.9; /* pick */ }
-  .abs-pill[data-kind="accent"] { background: var(--area-accent-solid); }
-  .abs-pill[data-kind="outline"] { background: var(--area-bg-surface); box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-border-subtle); }
-  .abs-dot { display: block; flex: none; inline-size: var(--area-space-8); block-size: var(--area-space-8); border-radius: var(--area-radius-full); background: var(--area-border-subtle); }
-  .abs-dot[data-kind="window"] { inline-size: var(--area-space-6); block-size: var(--area-space-6); }
-  /* The check and toggle wear the real controls' paint (DESIGN_SYSTEM.md, "Off states"): the
-     glyph-edge grey (edge-control-hover) round an empty check, the off-track grey (edge-control) under
-     the toggle, and the toggle's thumb on Switch's clock (docs/MOTION.md, "Switch thumb": base,
-     ease-in-out). */
-  .abs-check {
-    display: grid;
-    place-items: center;
-    flex: none;
-    inline-size: var(--area-space-12);
-    block-size: var(--area-space-12);
-    border-radius: var(--area-radius-small);
-    box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-edge-control-hover);
-    color: var(--area-fg-on-selection);
-  }
-  .abs-check[data-on] { background: var(--area-selection-solid); box-shadow: none; }
-  .abs-check > svg { display: block; }
-  .abs-toggle {
-    position: relative;
-    flex: none;
-    inline-size: var(--area-space-24);
-    block-size: calc(var(--area-space-12) + var(--area-space-2));
-    border-radius: var(--area-radius-full);
-    background: var(--area-edge-control);
-    transition: background-color var(--area-duration-base) var(--area-ease-in-out);
-  }
-  .abs-toggle::after {
-    content: "";
-    position: absolute;
-    inset-block-start: var(--area-space-2);
-    inset-inline-start: var(--area-space-2);
-    inline-size: var(--area-space-10);
-    block-size: var(--area-space-10);
-    border-radius: var(--area-radius-full);
-    background: var(--area-bg-surface);
-    box-shadow: var(--area-shadow-control); /* Switch's thumb takes the control role */
-    transition: translate var(--area-duration-base) var(--area-ease-in-out);
-  }
-  .abs-toggle[data-on] { background: var(--area-selection-solid); }
-  .abs-toggle[data-on]::after { translate: var(--area-space-10) 0; background: var(--area-fg-on-selection); }
-  .abs-field {
-    display: flex;
-    align-items: center;
-    block-size: round(calc(var(--area-control-md) * 5 / 8), 1px); /* 20, compact 18 */
-    padding-inline: var(--area-space-8);
-    border-radius: var(--area-radius-control-sm);
-    background: var(--area-bg-surface);
-    box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-border-subtle);
-  }
+  .lang-ui { inline-size: var(--_lang-width); flex: none; text-align: start; }
+  .lang-ui > .area-card { inline-size: 100%; }
+  .lang-col { display: grid; gap: var(--area-ui-cluster); justify-items: start; }
+  .lang-col > .area-segmented { justify-self: stretch; }
+  .lang-row { display: flex; align-items: center; justify-content: center; gap: var(--area-ui-cluster); }
+  .lang-row > .area-input { flex: 1 1 0; min-inline-size: 0; }
+  .lang-ui .area-card .lang-row { justify-content: flex-start; }
+  /* Depth: a menu floating down and to the end of a resting card, drawn as the Menu is, in place. */
+  .lang-stack { display: grid; }
+  .lang-stack > * { grid-area: 1 / 1; }
+  .lang-stack > .area-card { inline-size: 72%; align-self: start; }
+  .lang-float { position: relative; z-index: 1; inset: auto; justify-self: end; align-self: start; inline-size: 52%; margin-block-start: var(--area-space-64); }
 }
 
 /* ---------------------------------------------------------------------------
@@ -829,8 +734,9 @@
  * ------------------------------------------------------------------------- */
 .ex-canvas { min-inline-size: 960px; border: var(--area-border-width) solid var(--area-border-card); border-radius: var(--area-radius-container, 12px); overflow: hidden; background: var(--area-bg-page) }
 .ex-thumb { inline-size: 1200px; zoom: 0.42; pointer-events: none }
-.ex-app { display: grid; grid-template-columns: 220px minmax(0, 1fr); min-block-size: 900px; background: var(--area-bg-page); color: var(--area-fg-default); font-family: var(--area-font-sans); font-size: var(--area-text-md-size); line-height: var(--area-text-md-leading) }
-.ex-side { display: flex; flex-direction: column; gap: var(--area-space-12); padding: var(--area-space-12) var(--area-space-8); background: var(--area-bg-subtle); border-inline-end: var(--area-border-width) solid var(--area-border-decorative) }
+/* The page takes the Material's page levers (grain, page glow) over its ground; the sidebar is chrome (styles material.css). */
+.ex-app { display: grid; grid-template-columns: 220px minmax(0, 1fr); min-block-size: 900px; background: var(--area-material-page), var(--area-bg-page); color: var(--area-fg-default); font-family: var(--area-font-sans); font-size: var(--area-text-md-size); line-height: var(--area-text-md-leading) }
+.ex-side { display: flex; flex-direction: column; gap: var(--area-space-12); padding: var(--area-space-12) var(--area-space-8); --area-chrome-fill: var(--area-bg-subtle); background: var(--area-chrome-bg); border-inline-end: var(--area-border-width) solid var(--area-border-decorative) }
 .ex-brand { display: flex; align-items: center; gap: var(--area-space-8); padding: var(--area-space-4) var(--area-space-8); font-weight: var(--area-weight-strong, 600) }
 .ex-side__foot { margin-block-start: auto; display: grid; gap: var(--area-space-12); padding-inline: var(--area-space-8) }
 .ex-side__foot .area-nav { margin-inline: calc(-1 * var(--area-space-8)) }

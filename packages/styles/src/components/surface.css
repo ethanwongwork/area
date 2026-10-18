@@ -325,6 +325,10 @@
        2026-09-28: the carousel title sat 26 from the top beside 16 on every other card). The
        action box is one cap tall; the control overflows it evenly. */
     .area-card__header-action:has(> .area-button--ghost):not(:has(> :not(.area-button--ghost))) { block-size: 1cap; }
+    /* A Badge or marker icon centres on the title's cap too: the title is trimmed to its cap, so a title-line-tall slot
+       set them 6 below the cap centre (spacing audit 2026-10-17; buttons were 0.5). The slot is one cap tall and the mark
+       overflows it evenly, as the ghost control does. */
+    .area-card__header-action:not(:has(> :is(button, a, .area-button))) { block-size: 1cap; }
     .area-card__header:has(> .area-card__header-action > .area-button--ghost):not(:has(> .area-card__header-action > :not(.area-button--ghost))) > .area-card__heading { padding-block-start: 0; }
   }
   .area-card__media {

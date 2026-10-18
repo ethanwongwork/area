@@ -94,7 +94,7 @@ export function AnalyticsDashboard() {
   return (
     <Toaster>
       <div className="ex-app">
-        <aside className="ex-side" data-area-ground="recessed">
+        <aside className="ex-side" data-area-ground="recessed" data-area-chrome="">
           <div className="ex-brand"><Avatar size="sm" fallback="P" aria-hidden="true" /><span>Pulse</span></div>
           <Nav aria-label="Analytics" style={{ ["--area-nav-inline-size" as string]: "100%" }}>
             <NavGroup label="Analytics">
