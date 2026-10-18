@@ -35,6 +35,17 @@ export interface ZoomControlProps extends Omit<ButtonProps, "value" | "defaultVa
   stops?: number[];
   /** Shown instead of the percentage, as "Fit" while the view fits its content; the buttons step from `value`. */
   valueLabel?: string;
+  /**
+   * Named ways to show the content, listed before the presets as choices of one set ("Auto", "Fit"); the one shown is
+   * `selected` and the trigger then shows `valueLabel`. A desktop gallery's automatic scale is one.
+   */
+  views?: ReadonlyArray<{ label: string; selected: boolean; onSelect: () => void }>;
+  /** The Zoom in and Zoom out rows (the stepper's buttons do the same). */
+  stepRows?: boolean;
+  /** The typed zoom field at the top of the menu. */
+  field?: boolean;
+  /** A preset row's label; "Zoom to 50%" by default. */
+  presetLabel?: (zoom: number) => string;
   onOpenChange?: (open: boolean) => void;
 }
 
@@ -43,7 +54,7 @@ const percent = (zoom: number) => `${Math.round(zoom * 100)}%`;
 /** A percentage button that opens the zoom menu. */
 export const ZoomControl = /* @__PURE__ */ forwardRef<HTMLButtonElement, ZoomControlProps>(function ZoomControl(
   { value, defaultValue = 1, onValueChange, min = 0.02, max = 256, step = 2, presets = [0.5, 1, 2], onZoomToFit, shortcuts,
-    children, onOpenChange, stepper = false, stops, valueLabel, size = "sm", variant = "ghost", tone = "neutral", className, "aria-label": ariaLabel, ...rest },
+    children, onOpenChange, stepper = false, stops, valueLabel, views, stepRows = true, field = true, presetLabel = zoom => `Zoom to ${percent(zoom)}`, size = "sm", variant = "ghost", tone = "neutral", className, "aria-label": ariaLabel, ...rest },
   ref,
 ) {
   const [own, setOwn] = useState(defaultValue);
@@ -90,18 +101,24 @@ export const ZoomControl = /* @__PURE__ */ forwardRef<HTMLButtonElement, ZoomCon
         aria-label={ariaLabel ?? `Zoom ${shown}`} trailingIcon={stepper ? undefined : <Glyph name="chevron-down" />} {...rest}>
         <span className="area-zoom-control__value">{shown}</span>
       </Button>}>
-      <div className="area-zoom-control__field">
-        <Input size="sm" variant="soft" fullWidth aria-label="Zoom" value={text} invalid={invalid} inputMode="decimal"
-          onChange={event => { setText(event.target.value); setInvalid(false); }} onKeyDown={onFieldKey}
-          onFocus={event => { const field = event.currentTarget; requestAnimationFrame(() => field.select()); }} />
-      </div>
-      <MenuSeparator />
-      <MenuItem shortcut={shortcuts?.zoomIn} disabled={!canIn} onClick={() => { if (zoomIn !== undefined) set(zoomIn); }}>Zoom in</MenuItem>
-      <MenuItem shortcut={shortcuts?.zoomOut} disabled={!canOut} onClick={() => { if (zoomOut !== undefined) set(zoomOut); }}>Zoom out</MenuItem>
+      {field ? <>
+        <div className="area-zoom-control__field">
+          <Input size="sm" variant="soft" fullWidth aria-label="Zoom" value={text} invalid={invalid} inputMode="decimal"
+            onChange={event => { setText(event.target.value); setInvalid(false); }} onKeyDown={onFieldKey}
+            onFocus={event => { const input = event.currentTarget; requestAnimationFrame(() => input.select()); }} />
+        </div>
+        <MenuSeparator />
+      </> : null}
+      {stepRows ? <>
+        <MenuItem shortcut={shortcuts?.zoomIn} disabled={!canIn} onClick={() => { if (zoomIn !== undefined) set(zoomIn); }}>Zoom in</MenuItem>
+        <MenuItem shortcut={shortcuts?.zoomOut} disabled={!canOut} onClick={() => { if (zoomOut !== undefined) set(zoomOut); }}>Zoom out</MenuItem>
+      </> : null}
       {onZoomToFit ? <MenuItem shortcut={shortcuts?.zoomToFit} onClick={onZoomToFit}>Zoom to fit</MenuItem> : null}
+      {views?.map(view => <MenuItem key={view.label} radio checked={view.selected} onClick={view.onSelect}>{view.label}</MenuItem>)}
+      {views?.length && presets.length ? <MenuSeparator /> : null}
       {presets.map(preset => (
         <MenuItem key={preset} radio checked={!valueLabel && Math.abs(zoom - preset) < 1e-9} shortcut={shortcuts?.presets?.[preset]}
-          onClick={() => set(preset)}>{`Zoom to ${percent(preset)}`}</MenuItem>
+          onClick={() => set(preset)}>{presetLabel(preset)}</MenuItem>
       ))}
       {children ? <><MenuSeparator />{children}</> : null}
     </Menu>

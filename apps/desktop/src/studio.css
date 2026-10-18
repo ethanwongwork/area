@@ -327,9 +327,9 @@
    * shrinking with the zoom.
    */
   .studio-grid--cards {
-    /* As many columns of at least 400 as fit (owner, 2026-10-18: "each component container to have a minimum size of
-       400 width"; was 280), counted, so the Stage's strips span them as they span pairs of units. */
-    --_pairs: max(1, round(down, calc((100cqw + var(--_gap)) / (400px * var(--_zoom, 1) + var(--_gap))), 1));
+    /* As many columns of at least 380 as fit (owner, 2026-10-18: 400, then "update the minimum size for component
+       containers to 380"; was 280), counted, so the Stage's strips span them as they span pairs of units. */
+    --_pairs: max(1, round(down, calc((100cqw + var(--_gap)) / (380px * var(--_zoom, 1) + var(--_gap))), 1));
     grid-template-columns: repeat(var(--_pairs), minmax(0, 1fr));
     grid-auto-rows: auto;
   }

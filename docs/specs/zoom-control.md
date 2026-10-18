@@ -110,3 +110,9 @@ Resolved 2026-10-10 (owner: "go with your recommendations"); kept for the record
   Zoom in / out move between, else × / ÷ `step`); `valueLabel` ("Fit" while the view fits). The reference is a
   screenshot of a browser menu row, not a capture: sizes are Area's ghost sm Button, to be measured if the owner
   wants Chrome's own. Not yet a gallery tile.
+- 2026-10-18 · owner (desktop gallery: "make the zoom view options more clear … just be Auto, Fit 50% … 200% … remove
+  the zoom in and zoom out options … is there not supposed to be a gap at all between the backplate") → `views` (named
+  ways to show the content, radio rows before the presets), `stepRows` and `field` (to leave out the Zoom in / out rows
+  and the typed field), `presetLabel` ("50%" instead of "Zoom to 50%"); the stepper's plates stand 2 apart (edge to
+  edge, two shown plates met at their rounded corners; Figma's mode switch and Segmented keep a control's plates 2
+  apart, Excalidraw joins its zoom buttons on one shared plate instead, measured). Defaults unchanged otherwise.

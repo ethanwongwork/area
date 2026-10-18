@@ -67,15 +67,15 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
       shows. The Canvas header's controls, the Sidebar's first row and the Inspector's first
       heading share one line, every region 14 in on all sides.
     - The header, at its end, in this order: filters, Sort and group, how things are drawn (zoom,
-      style, size), and the grid / list switch. Zoom is Zoom control's stepper (− Fit +): Fit shows
+      style, size), and the grid / list switch. Zoom is Zoom control's stepper (− Auto +, plates 2 apart): Auto, the default, shows
       specimens by size group, each group at most at one scale and never above 100% (by painted area: a control 90%,
       a field or small list 85%, a few rows or a dialog 80%, the largest, Code block, Board, Color picker, Command
-      palette, Panel, 75%; owner, 2026-10-18), shrunk further only to fit; fields take their card's width, and a specimen
-      whose content reads narrower than its box is laid out at its content's width and a fifth
-      more, where the component gives way (src/gallery/fit.ts); 50% to 200% is an
-      exact zoom, tiles and the Stage growing with it (owner, 2026-10-14).
+      palette, Panel, 75%), shrunk further only to fit; Fit shows each specimen as large as its card allows, up to 200%;
+      then 50, 75, 80, 90, 100, 110, 125, 150, 175 and 200% exactly, tiles growing with the zoom. − and + step through
+      the percentages, from 100% when on Auto or Fit; the menu lists Auto, Fit and the percentages, nothing else
+      (owner, 2026-10-14; 2026-10-18).
     - Components' All shows one tile per family, its default specimen; a family's variants are its
-      own Canvas. Specimens sit in square cards at least 400 wide (owner, 2026-10-18), after Compass's gallery: the specimen 28 in, the
+      own Canvas. Specimens sit in square cards at least 380 wide (owner, 2026-10-18), after Compass's gallery: the specimen 28 in, the
       title (the app's text, strong) and a Copy code button in the card's foot, cards 12 apart. A
       click on an All card opens its family's Stage (owner, 2026-10-14). A control that does not apply to the current view
       is left out; the order of the rest never changes. Fields in the app's chrome and Inspector

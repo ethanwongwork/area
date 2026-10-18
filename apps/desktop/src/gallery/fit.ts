@@ -22,13 +22,16 @@
  */
 
 /*
- * Two ways to show a specimen (owner, 2026-10-14), read from the nearest [data-zoom]:
- *   fit   by size group: every specimen in a group shows at most at the group's scale (GROUPS), so specimens of a
+ * Three ways to show a specimen (owner, 2026-10-14; Auto and Fit 2026-10-18), read from the nearest [data-zoom]:
+ *   auto  by size group: every specimen in a group shows at most at the group's scale (GROUPS), so specimens of a
  *         size stay in proportion, and one its group's scale would not fit in its tile is shrunk to fit; one that
  *         stretches is laid out at its tile over that scale, so it fills the tile at it
+ *   fit   every specimen as large as its tile allows, up to FIT_MAX; one that stretches fills its tile at 100%
  *   0.5…2 a true zoom: every specimen at exactly that scale, its tile growing above 100%; one larger
  *         than its tile at that zoom is cut off by the tile, as a canvas at 100% shows what fits
  */
+/** Fit's ceiling: the zoom list's largest step, so a Badge does not fill a card. */
+const FIT_MAX = 2;
 /** The scale of a true zoom's fallback. */
 const MAX = 1;
 /*
@@ -183,8 +186,9 @@ export function fitTiles(canvas: HTMLElement): () => void {
   }));
   if (!tiles.length) return () => {};
   // The app's zoom, read once: Fit, or an exact scale.
-  const zoomAttr = canvas.closest("[data-zoom]")?.getAttribute("data-zoom") ?? "fit";
-  const exact = zoomAttr === "fit" ? undefined : Number(zoomAttr) || MAX;
+  const zoomAttr = canvas.closest("[data-zoom]")?.getAttribute("data-zoom") ?? "auto";
+  const exact = zoomAttr === "auto" || zoomAttr === "fit" ? undefined : Number(zoomAttr) || MAX;
+  const filling = zoomAttr === "fit";
 
   // Fluid or fixed, and how wide a fluid specimen needs to be, at the default type size and density.
   const scale = ["data-area-type", "data-area-density"].map(name => [name, canvas.getAttribute(name)] as const);
@@ -234,7 +238,7 @@ export function fitTiles(canvas: HTMLElement): () => void {
   for (const entry of tiles) {
     const measured = { w: entry.fluid ? entry.hug ?? FLUID_WIDTH : entry.natural, h: heights.get(entry)! };
     const group = groupOf(measured);
-    entry.group = group.scale;
+    entry.group = filling ? (entry.fluid ? MAX : FIT_MAX) : group.scale;
     entry.tile.dataset.fitGroup = group.name;
     // The measure behind the group, for retuning the bounds (px² at type 14 / 32).
     entry.tile.dataset.fitArea = String(Math.round(measured.w * measured.h));

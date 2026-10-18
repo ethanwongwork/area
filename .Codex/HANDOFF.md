@@ -18,7 +18,10 @@ session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps
   their edge and lift to the float shadow, in on `fast` ease-out, out on `base` ease-in; a press drops it; Elevation 0
   keeps the edge step. Measured from Notion's tatami card and Fluent's: `docs/research/card-hover-2026-10-18.md`;
   PRODUCT_UI rules 2–3, MOTION.md "Lift", card spec log. Card stays Complete pending the owner's look.
-- **Fit (owner: no upscaling, 400 minimum, granular groups):** component cards are at least 400 wide; Fit groups by
+- **Zoom (owner: no upscaling, granular groups, clearer options):** component cards are at least 380 wide. The zoom is
+  Auto (default), Fit (each specimen as large as its card allows, to 200%), then 50–200% in ten steps; − and + step
+  through the percentages, from 100% on Auto or Fit; Zoom control gained `views`, `stepRows`, `field`, `presetLabel`
+  and a 2 gap between its plates (spec log). Auto groups by
   painted area at type 14 / 32 (`data-fit-area` on each tile): small 90%, medium 85%, large 80%, largest 75% (Code
   block, Board, Color picker, Command palette, Panel …), shrunk further only to fit (`src/gallery/fit.ts`).
 - Motion setting audit: every component transition reads the duration tokens; no hard-coded durations.
