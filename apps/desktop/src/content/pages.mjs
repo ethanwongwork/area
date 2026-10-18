@@ -413,6 +413,19 @@ export const COMPONENT_PAGES = [
     ],
   },
   {
+    slug: "video-player", name: "Video player", exportName: "VideoPlayer", manifest: "videoPlayer",
+    imports: "VideoPlayer, Figure",
+    api: [
+      ["label", "string (the video's title, names the player)", "—"],
+      ["controls", "auto | always", "auto"],
+      ["video props", "src, poster, preload, autoPlay, muted, loop…; children are <track> elements", "—"],
+      ["keys", "Space / K play · ← → 5 s · J / L 10 s · ↑ ↓ volume · M mute · F full screen · C captions · I picture in picture · 0–9", "—"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "A round play before the first play; then one row over the video that hides while it plays.", demo: "GalleryVideoPlayer" },
+    ],
+  },
+  {
     slug: "link-groups", name: "Link groups", exportName: "LinkGroups", manifest: "linkGroups",
     imports: "LinkGroups, LinkGroup, Link",
     api: [

@@ -106,3 +106,4 @@ export { InlineList, inlineListVariants, type InlineListProps } from "./componen
 export { Abbreviation, abbreviationVariants, type AbbreviationProps } from "./components/Abbreviation.tsx";
 export { Hatnote, hatnoteVariants } from "./components/Hatnote.tsx";
 export { LinkGroups, LinkGroup, linkGroupsVariants, type LinkGroupsProps, type LinkGroupProps } from "./components/LinkGroups.tsx";
+export { VideoPlayer, videoPlayerVariants, type VideoPlayerProps } from "./components/VideoPlayer.tsx";

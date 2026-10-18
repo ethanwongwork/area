@@ -157,3 +157,4 @@ export const inlineListVariants = /* @__PURE__ */ createVariants(manifests.inlin
 export const abbreviationVariants = /* @__PURE__ */ createVariants(manifests.abbreviation);
 export const hatnoteVariants = /* @__PURE__ */ createVariants(manifests.hatnote);
 export const linkGroupsVariants = /* @__PURE__ */ createVariants(manifests.linkGroups);
+export const videoPlayerVariants = /* @__PURE__ */ createVariants(manifests.videoPlayer);

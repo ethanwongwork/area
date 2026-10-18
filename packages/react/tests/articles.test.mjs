@@ -4,7 +4,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createElement as h } from "react";
 import { renderToStaticMarkup as render } from "react-dom/server";
-import { Abbreviation, Figure, Hatnote, Infobox, InfoboxRow, InfoboxSection, InlineList, LinkGroups, LinkGroup, ReferenceList, ReferenceListItem, TableOfContents } from "../dist/modules/index.js";
+import { VideoPlayer, Abbreviation, Figure, Hatnote, Infobox, InfoboxRow, InfoboxSection, InlineList, LinkGroups, LinkGroup, ReferenceList, ReferenceListItem, TableOfContents } from "../dist/modules/index.js";
 
 test("a reference list is ChatGPT's sources: publisher, linked title and what it covers, set apart by em dashes; numbered notes link back", () => {
   const html = render(h(ReferenceList, { title: "Sources" }, h(ReferenceListItem, { source: "Epson", title: "Report", href: "https://x.test", description: "durability" })));
@@ -64,3 +64,12 @@ test("link groups are a nav named by its title, with labelled lists of links", (
   assert.match(html, /<div class="area-link-groups__label" id="([^"]+)-label">People<\/div><ul class="area-link-groups__list" role="list" aria-labelledby="\1-label"><li>x<\/li><li>y<\/li><\/ul>/);
   assert.doesNotMatch(html, /aria-expanded/);
 });
+
+test("a video player is a named group: the video, and only the round play before the first play", () => {
+  const html = render(h(VideoPlayer, { label: "Sample", src: "x.mp4" }));
+  assert.match(html, /^<div role="group" aria-label="Sample" tabindex="0" class="area-video-player area-video-player--auto"><video src="x.mp4" class="area-video-player__media" playsinline=""><\/video>/i);
+  assert.match(html, /<button type="button" class="area-video-player__start" aria-label="Play"><svg[^>]*data-area-glyph="play"/);
+  assert.doesNotMatch(html, /area-video-player__controls/);
+  assert.match(render(h(VideoPlayer, { label: "S", src: "x.mp4", autoPlay: true, controls: "always" })), /area-video-player--always" data-started="">.*aria-label="Seek".*aria-label="Volume"/);
+});
+

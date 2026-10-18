@@ -460,7 +460,13 @@ function gallerySpecimenTable() {
     hatnote: [
       { id: "default", title: "Default", demo: "GalleryHatnote" },
     ],
-    linkGroups: [
+    "video-player": [
+      { id: "default", title: "Default", demo: "GalleryVideoPlayer" },
+      { id: "controls-always", title: "Controls / always", demo: "GalleryVideoPlayerAlways" },
+      { id: "composition-figure", title: "Composition / in a Figure", demo: "GalleryVideoPlayerFigure" },
+      { id: "layout-narrow", title: "Layout / narrow", demo: "GalleryVideoPlayerNarrow" },
+    ],
+    "link-groups": [
       { id: "default", title: "Default", demo: "GalleryLinkGroups" },
       { id: "divided", title: "Divided", demo: "GalleryLinkGroupsDivided" },
     ],

@@ -1140,6 +1140,14 @@ export const linkGroups = {
   defaults: {},
 } as const satisfies ComponentManifest;
 
+export const videoPlayer = {
+  block: "area-video-player",
+  description: "Plays a video with Area's own controls over it.",
+  variants: { controls: ["auto", "always"] },
+  elements: ["media", "start", "scrim", "controls", "button", "range", "time", "duration", "volume"],
+  defaults: { controls: "auto" },
+} as const satisfies ComponentManifest;
+
 export const MANIFESTS = {
   button,
   buttonGroup,
@@ -1262,4 +1270,5 @@ export const MANIFESTS = {
   abbreviation,
   hatnote,
   linkGroups,
+  videoPlayer,
 } as const satisfies Record<string, ComponentManifest>;
