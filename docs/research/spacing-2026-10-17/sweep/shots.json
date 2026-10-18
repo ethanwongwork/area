@@ -1,0 +1,14 @@
+[
+  {"name": "card-header-badge", "hash": "components/card", "tile": "headerAction"},
+  {"name": "card-stat", "hash": "components/card", "tile": "stat"},
+  {"name": "tag-icon", "hash": "components/tag", "tile": "icon"},
+  {"name": "kbd-default", "hash": "components/kbd", "tile": "default"},
+  {"name": "infobox", "hash": "components/infobox", "tile": "default"},
+  {"name": "description-list-framed", "hash": "components/description-list", "tile": "framed"},
+  {"name": "checkbox-group-invalid", "hash": "components/checkbox", "tile": "group-invalid"},
+  {"name": "radio-invalid", "hash": "components/radio", "tile": "invalid"},
+  {"name": "select-default", "hash": "components/select", "tile": "default"},
+  {"name": "compact-tag-picker", "hash": "components/tag-picker", "tile": "default", "canvas": {"type": "13", "density": "28"}},
+  {"name": "compact-tag-removable", "hash": "components/tag", "tile": "removable", "canvas": {"type": "13", "density": "28"}},
+  {"name": "compact-select", "hash": "components/select", "tile": "default", "canvas": {"type": "13", "density": "28"}}
+]

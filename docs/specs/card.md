@@ -324,3 +324,7 @@ The action's underline takes Link's offset, 0.25em, clear of descenders (link.md
 - 2026-10-16 · owner, review round 28 (components28) → approved (pressed, selected) → Complete again in `component-status.mjs`.
 
 Since 2026-10-17 the underline offset is Link's 0.08em, close under the text (link.md, "Close underline").
+
+## Spacing audit (2026-10-17)
+
+Header marks: a Badge or marker icon in `CardHeader`'s action slot centres on the title's cap line (the slot is one cap tall and the mark overflows it evenly, as a ghost control's). It sat 6.3–6.8 below the cap centre because the title is cap-trimmed and the slot was one title line tall; header buttons were already centred (0.5). Measured in `docs/research/spacing-2026-10-17/` (Before / After: https://claude.ai/artifact/JtDZ9LNfutFyfdkGUvQzL2).

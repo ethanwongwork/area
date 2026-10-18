@@ -95,7 +95,10 @@
   }
   /* Framed columns keep ChatGPT's card inset for the text: 12 from the top (5 + the row's 7 above a 20 line) and
      16 from the side (10 + the term's 6). */
-  .area-description-list--framed.area-description-list--columns { padding: 5px 10px; /* spec */ }
+  /* The frame's stroke is counted once (inset.css; spacing audit 2026-10-17: the text and rules sat 17 in, not ChatGPT's 16
+     from the card's outer edge). */
+  .area-description-list--framed.area-description-list--justified { --_inset: calc(var(--area-space-16) - var(--area-stroke-width)); }
+  .area-description-list--framed.area-description-list--columns { padding: calc(5px - var(--area-stroke-width)) calc(10px - var(--area-stroke-width)); /* spec */ }
 
   /* --- show more ------------------------------------------------------------- */
   /* The "Show N more" button after a list with visibleCount (docs/research/show-more-survey.md): a row of the list's

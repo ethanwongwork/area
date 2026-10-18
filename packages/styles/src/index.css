@@ -109,6 +109,8 @@
 
 @import "./inset.css";
 
+/* After every component: a material paints over their own fills and shadows (axes/material.ts). */
+@import "./material.css";
 @import "./forced-colors.css";
 
 @import "./components/indicator.css";

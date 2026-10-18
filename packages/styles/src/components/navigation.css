@@ -297,6 +297,9 @@
     --_height: var(--area-control-md);
     --_icon: var(--area-icon-md);
     --_gap: var(--area-gap-md);
+    /* Its own gap tier between the value and anything after it, not the browser's base-select 0.5em (7 at type 14,
+       6.5 at 13: spacing audit 2026-10-17). */
+    gap: var(--_gap);
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
 

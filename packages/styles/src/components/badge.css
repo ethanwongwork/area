@@ -12,7 +12,10 @@
      * the UI scale shortens (compact md is 16) is drawn as the default mark of that height. */
     /* spec (owner, review round 8: "can the icons be smaller?"): 12 at every size, as Untitled UI's
        badges (12 at sm, md and lg); avatars and flags keep 12 / 16 / 16. */
-    --_icon: var(--area-icon-xs); /* spec */
+    --_icon: min(var(--area-icon-xs), calc(var(--_height) - var(--area-space-4))); /* spec */
+    /* At most the plate less 4, as the media (owner, 2026-10-17: "go with 10px icons"): 12 at every default size, 10 in
+       Compact's 14 plate, where icons and the dismiss glyph draw their 10px cuts (docs/specs/icons.md "10px cuts"). */
+    --_glyph-cut10: max(0, sign(var(--area-icon-xs) - var(--_icon)));
     --_media: min(var(--area-icon-md), calc(var(--_height) - var(--area-space-4))); /* spec */
     --_gap: min(var(--area-space-4), calc(var(--_height) / 2 - var(--area-space-6))); /* spec */
     --_media-gap: max(var(--area-space-4), calc(var(--_height) / 2 - var(--area-space-6))); /* spec */
@@ -54,7 +57,8 @@
   @supports (text-box: trim-both cap alphabetic) {
     .area-badge > .area-badge__label {
       align-self: baseline;
-      padding-block: calc((var(--_height) - 2 * var(--area-stroke-width) - 1cap) / 2);
+      /* Lifted by the marks' optical centre (inset.css): the cap sits that much above the middle. */
+      padding-block: calc((var(--_height) - 2 * var(--area-stroke-width) - 1cap) / 2 - var(--_optical-lift)) calc((var(--_height) - 2 * var(--area-stroke-width) - 1cap) / 2 + var(--_optical-lift));
     }
   }
   .area-badge__leading-icon, .area-badge__trailing-icon {
@@ -216,7 +220,7 @@
   /* spec: the dismiss box already holds 2px of air around its glyph (Untitled gap-0.5). */
   .area-badge:has(> .area-badge__dismiss) { gap: var(--area-space-2); }
   .area-badge__dismiss { display: inline-flex; align-items: center; justify-content: center; inline-size: var(--_media); block-size: var(--_media); flex: none; padding: 0; border: 0; border-radius: var(--_badge-radius); background: transparent; color: inherit; cursor: pointer; transition: background-color var(--area-duration-fast) var(--area-ease-out); user-select: none; }
-  .area-badge__dismiss > svg { inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); }
+  .area-badge__dismiss > svg { inline-size: var(--_icon); block-size: var(--_icon); }
   /* The visible box stays the badge's media square; an invisible 24px target (44 on coarse
      pointers) centred on it meets WCAG 2.5.8, as Badge links already do (audit C-5). */
   .area-badge__dismiss { position: relative; }

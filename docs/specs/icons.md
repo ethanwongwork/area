@@ -5033,6 +5033,39 @@ must read at 12px on 1× screens gets its own cut). Sheet: `docs/research/icon-r
   checked in the app: at type 13 the 8 Badge icons with cuts draw them (0.99px), at type 16 the 16px drawing at the
   16px line (1.29px). Citation's book stays as it was (no cut; the slot is a fixed 12 favicon box).
 
+## 10px cuts, 2026-10-17
+
+Owner, 2026-10-17: "go with 10px icons, draw the cuts", after the spacing pass showed Badge, Tag and Citation holding a
+12px icon in Compact's 14px plate, 1px from its edge (review: https://claude.ai/artifact/JtDZ9LNfutFyfdkGUvQzL2).
+
+- **The slot:** a mark's icon box is at most the plate less 4, the rule Badge's avatars and flags already followed: 12
+  at every default size (20, 24 and sm's 16), 10 in Compact's 14 (type 12–14 at density 28). Badge, Tag and Citation
+  set `--_icon: min(var(--area-icon-xs), h − 4)` and `--_glyph-cut10: max(0, sign(icon-xs − --_icon))`, 1 where the box
+  is under 12. The dismiss and remove glyphs take the same box.
+- **Drawn (8), in `packages/icons/sources/10/`:** every icon the app puts in a mark: add (a 6px + on 4.5), check (2 / 4
+  arms, M2 5L4 7L8 3), arrow-up (a 7px shaft, 3px head legs; its turns are arrow-right, -left, -down), info (an r 3.5
+  ring on 4.5, a 1.5 stem, the one-pixel dot 0.8 above it), link (two r 2 arcs and a bar on 4.5), dismiss (a 5px × on
+  pixel centres, the ink Compact's × already had), globe (ring, lens meridian and equator, Fluent's construction; Fluent
+  has no 10px globe) and book (two arched pages on a spine at 4.5, page edges on half pixels).
+- **Rules, as the 12px cuts':** one unit is a pixel at 10; lines on half pixels where the shape allows, so the glyph sits
+  0.5 up or left of centre (crisp at 1× over centred); 45° lines with x ± y whole; ink about two-thirds of the box for
+  square shapes (add, check: 6.9), about four-fifths for rings and long shapes (info, link, arrow: 7.9), as the 16px
+  keylines make rings and horizontal shapes larger. Line: the size curve's at 10, `(10 / 16)^0.45` = 0.8094 of the 16px
+  line (0.91px at 1.125). The lint checks the 10 box, the source line and the quarter-pixel grid inside 0.5–9.5.
+- **@area/icons:** `size={10}` draws the cut alone (viewBox `0 0 10 10`, `sw10`). At `size={12}` with the token line (the xs
+  slot), an icon with a 10px cut carries it as a third drawing beside the 16px drawing and any 12px cut; `cut10Opacity`
+  shows it where `--_glyph-cut10` is 1 and the others give way. Metadata `cuts: [10, 12]` (or `[10]`). Raw SVGs stay at
+  12, 16, 20 and 24: the 10 is a component slot, not a file size.
+- **Glyph:** `glyphCuts10`; at size 12 a glyph with one carries it (`data-area-glyph-cuts`), and base.css switches it in
+  with `--_glyph-cut10`, its line 0.8094.
+- **Checked:** icon lint (808), icons tests 11/11 (new: the 10px cut at size 10 and in the xs slot), React 477/477,
+  contracts, tokens, typecheck; at Compact 13 every Badge, Tag and Citation icon shows its 10px cut in a 10px box 2 from
+  the plate's edge (was 1), and at the default the 12px cut or the 16px drawing shows as before. 1× pixel sheet beside
+  the old drawing squeezed into 10: the cuts are crisp where it was grey (add, check, arrow, ×, link); globe is dense
+  but keeps its parts. Citation's demos now pass `size={12}` to the book, so it carries the cuts.
+- **Not cut:** icons a product passes into a mark without a 10px cut scale their 12px cut or 16px drawing into the
+  10px box, as icons without a 12px cut did at 12.
+
 ## Fluent map retired from the app, 2026-10-13
 
 Production gap 9, the app's half (owner, 2026-10-13: "go with your recommendations and continue working").

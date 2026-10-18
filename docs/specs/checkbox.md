@@ -254,3 +254,7 @@ Chromium snaps box edges and masks to device pixels, so the marks stay on the gr
 - 2026-10-12 · owner, 2026-10-12: "go with your recommendations" (consistency pass) → the unchecked hover edge reads `edge-control-strong` (O5: one role for a literal written in several families; same paint). (docs/research/consistency-audit-2026-10-12.md)
 - 2026-10-12 · owner: type size and density as separate settings; every component sized from the text → the box reads `--area-mark-box`, 4 inside the UI line: 14 at type 12–13, 16 at 14, 18 at 15, 20 at 16 (`choice.css`; was 16 at every size). `docs/research/ui-size-scale-2026-10-12.md`.
 - 2026-10-14 · all-axis audit → the box now follows the type size: `.area-checkbox--md` set a fixed 16 and overrode the 2026-10-12 base rule, so it stayed 16 at every type. md reads `--area-mark-box`, lg four larger (20 at type 14, as before); the check and dash drawings are no longer scaled with the box but drawn 1:1 and centred (`--_grid` 16 / 20), whole pixels in every even box → choice.css.
+
+## Spacing audit (2026-10-17)
+
+Group rhythm: a group's description and validation sit `ui-stack` (6, compact 4) from what's above, Field's label-control-message gap; validation was 12 and the description a fixed 6. Measured in `docs/research/spacing-2026-10-17/` (Before / After: https://claude.ai/artifact/JtDZ9LNfutFyfdkGUvQzL2).

@@ -23,6 +23,8 @@ import { ColorPage } from "./pages/color.tsx";
 import { LanguagePage } from "./pages/language.tsx";
 import { ExamplesPage } from "./pages/examples.tsx";
 import { readStored, writeStored } from "./storage.ts";
+import { MATERIAL_BUNDLES } from "@area/tokens/config";
+import { bundleValue, materialAttributes, restoreMaterial, type MaterialState } from "./material.ts";
 
 /* Text-only tabs (owner, 2026-10-11: no icons in the Titlebar's tabs). */
 export const TABS = [
@@ -31,8 +33,9 @@ export const TABS = [
   { id: "typography", label: "Typography" },
   { id: "icons", label: "Icons" },
   { id: "color", label: "Color" },
-  /* Whole screens built from Area, to test the defaults and every setting (owner, 2026-10-17). */
-  { id: "examples", label: "Examples" },
+  /* Whole screens built from Area, to test the defaults and every setting (owner, 2026-10-17; "Examples" until the owner
+     renamed it the same day). */
+  { id: "testing", label: "Testing" },
 ] as const;
 export type TabId = (typeof TABS)[number]["id"];
 type Theme = "light" | "dark";
@@ -85,15 +88,24 @@ const isMac = () => typeof document !== "undefined" && document.documentElement.
  * its own: Components opens a family's Stage on one tile as <slug>/<tile>.
  */
 function readLocation(): { tab: TabId; item?: string } {
-  const [tab, ...item] = decodeURIComponent(location.hash.slice(1)).split("/");
-  const known = TABS.find(entry => entry.id === tab);
-  return known ? { tab: known.id, item: item.join("/") || undefined } : { tab: readStored("tab", "components") as TabId };
+  const [hash, ...item] = decodeURIComponent(location.hash.slice(1)).split("/");
+  // Testing was the Examples tab until 2026-10-17: an old link or saved tab opens it.
+  const renamed = (id?: string) => id === "examples" ? "testing" : id;
+  const known = TABS.find(entry => entry.id === renamed(hash));
+  const stored = TABS.find(entry => entry.id === renamed(readStored<string>("tab", "components")));
+  return known ? { tab: known.id, item: item.join("/") || undefined } : { tab: stored?.id ?? "components" };
 }
 
 interface StudioState {
   query: string;
   canvas: CanvasAxes;
   setCanvas: (axis: keyof CanvasAxes, value: string) => void;
+  /** The Canvas's Material (src/material.ts): a bundle and the levers moved away from it. */
+  material: MaterialState;
+  /** Load a bundle: every lever returns to it, and the Layers settings it is drawn for (Soft's gray, flat page) apply. */
+  setMaterialBundle: (bundle: string) => void;
+  /** Move one lever, switch or the stroke styles; its bundle's own value clears the override. */
+  setMaterialValue: (key: string, value: string) => void;
   item?: string;
   /** Go to an item. `replace` swaps the current history entry (a Stage's tile) instead of adding one. */
   select: (item: string, options?: { replace?: boolean }) => void;
@@ -115,6 +127,7 @@ export function Studio() {
   const [theme, setTheme] = useState<Theme>(() => (document.documentElement.getAttribute("data-area-theme") ?? (prefersDark() ? "dark" : "light")) === "dark" ? "dark" : "light");
   const [query, setQuery] = useState("");
   const [canvas, setCanvasState] = useState<CanvasAxes>(() => restoreCanvas(readStored<Partial<CanvasAxes>>("canvas", {})));
+  const [material, setMaterialState] = useState<MaterialState>(() => restoreMaterial(readStored("material", null)));
   const [panels, setPanels] = useState(() => readStored("panels", { sidebar: true, inspector: true }));
   const search = useRef<HTMLInputElement>(null);
 
@@ -171,11 +184,29 @@ export function Studio() {
       writeStored("canvas", next);
       return next;
     }),
+    material,
+    setMaterialBundle: bundle => {
+      const next = { bundle, overrides: {} };
+      writeStored("material", next);
+      setMaterialState(next);
+      const layers = MATERIAL_BUNDLES[bundle]?.layers ?? {};
+      if (Object.keys(layers).length) setCanvasState(current => {
+        const merged = { ...current, ...layers };
+        writeStored("canvas", merged);
+        return merged;
+      });
+    },
+    setMaterialValue: (key, value) => setMaterialState(current => {
+      const { [key]: _, ...rest } = current.overrides;
+      const next = { ...current, overrides: value === bundleValue(current.bundle, key) ? rest : { ...rest, [key]: value } };
+      writeStored("material", next);
+      return next;
+    }),
     item,
     select: (next, options) => go(tab, next, options?.replace),
     sidebar: panels.sidebar,
     inspector: panels.inspector,
-  }), [query, canvas, item, tab, go, panels]);
+  }), [query, canvas, material, item, tab, go, panels]);
 
   const current = TABS.find(entry => entry.id === tab)!;
   return (
@@ -209,7 +240,7 @@ export function Studio() {
           tab === "components" ? <ComponentsPage /> :
           tab === "typography" ? <TypographyPage /> :
           tab === "icons" ? <IconsPage /> :
-          tab === "examples" ? <ExamplesPage /> : <ColorPage />}
+          tab === "testing" ? <ExamplesPage /> : <ColorPage />}
       </div>
     </StudioContext.Provider>
   );
@@ -283,9 +314,9 @@ export function Workspace({ sidebar, canvasLead, canvasTitle, canvasActions, can
   const studio = useStudio();
   const sidebarWidth = usePanelWidth("sidebar");
   const inspectorWidth = usePanelWidth("inspector");
-  // The Canvas body carries the Inspector's settings on every tab: the colour settings, density (which also lays tiles out
+  // The Canvas body carries the Inspector's settings on every tab (and the Material, src/material.ts): the colour settings, density (which also lays tiles out
   // as a hairline contact sheet in compact), radius, surface, elevation, motion and pills.
-  const axes = { "data-area-neutral": studio.canvas.neutral, "data-area-accent": studio.canvas.accent, "data-area-ground-light": studio.canvas["ground-light"], "data-area-ground-dark": studio.canvas["ground-dark"], "data-area-layers-light": studio.canvas["layers-light"], "data-area-layers-dark": studio.canvas["layers-dark"], "data-area-action": studio.canvas.action, "data-area-selection": studio.canvas.selection, "data-area-contrast": studio.canvas.contrast === "system" ? undefined : studio.canvas.contrast, "data-area-type": studio.canvas.type, "data-area-density": studio.canvas.density, "data-area-radius": studio.canvas.radius, "data-area-surface": studio.canvas.surface, "data-area-elevation": studio.canvas.elevation, "data-area-motion": studio.canvas.motion, "data-area-pills": studio.canvas.pills };
+  const axes = { "data-area-neutral": studio.canvas.neutral, "data-area-accent": studio.canvas.accent, "data-area-ground-light": studio.canvas["ground-light"], "data-area-ground-dark": studio.canvas["ground-dark"], "data-area-layers-light": studio.canvas["layers-light"], "data-area-layers-dark": studio.canvas["layers-dark"], "data-area-action": studio.canvas.action, "data-area-selection": studio.canvas.selection, "data-area-contrast": studio.canvas.contrast === "system" ? undefined : studio.canvas.contrast, "data-area-type": studio.canvas.type, "data-area-density": studio.canvas.density, "data-area-radius": studio.canvas.radius, "data-area-surface": studio.canvas.surface, "data-area-elevation": studio.canvas.elevation, "data-area-motion": studio.canvas.motion, "data-area-pills": studio.canvas.pills, ...materialAttributes(studio.material) };
   return (
     <div className="studio-workspace" data-sidebar={studio.sidebar ? "" : undefined} data-inspector={studio.inspector ? "" : undefined}>
       {studio.sidebar ? (

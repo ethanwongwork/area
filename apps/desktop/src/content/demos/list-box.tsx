@@ -7,11 +7,11 @@ const grid = { inlineSize: "calc(var(--area-space-80) * 4)", maxInlineSize: "100
 
 /* A list: Menu's rows, the chosen one on the active plate with its check. One Tab stop; Up and Down move. */
 export const GalleryListBox = () => (
-  <ListBox aria-label="Sort by" defaultValue="modified" style={list}>
-    <ListBoxItem value="name">Name</ListBoxItem>
-    <ListBoxItem value="modified">Date modified</ListBoxItem>
-    <ListBoxItem value="created">Date created</ListBoxItem>
-    <ListBoxItem value="size">Size</ListBoxItem>
+  <ListBox aria-label="Label" defaultValue="two" style={list}>
+    <ListBoxItem value="one">Option one</ListBoxItem>
+    <ListBoxItem value="two">Option two</ListBoxItem>
+    <ListBoxItem value="three">Option three</ListBoxItem>
+    <ListBoxItem value="four">Option four</ListBoxItem>
   </ListBox>
 );
 
@@ -29,10 +29,10 @@ export const GalleryListBoxGrid = () => (
 /* Sections: each a named group, the arrows crossing from one to the next. */
 export const GalleryListBoxSections = () => (
   <ListBox layout="grid" aria-label="Icon" defaultValue="clock" style={grid}>
-    <ListBoxSection title="Objects">
+    <ListBoxSection title="Group one">
       {ICONS.slice(0, 8).map(([id, Icon]) => <ListBoxItem key={id} value={id} textValue={name(id)} aria-label={name(id)}><Icon size={16} aria-hidden="true" /></ListBoxItem>)}
     </ListBoxSection>
-    <ListBoxSection title="Arrows">
+    <ListBoxSection title="Group two">
       {ICONS.slice(8).map(([id, Icon]) => <ListBoxItem key={id} value={id} textValue={name(id)} aria-label={name(id)}><Icon size={16} aria-hidden="true" /></ListBoxItem>)}
     </ListBoxSection>
   </ListBox>
@@ -52,10 +52,10 @@ export const GalleryListBoxSwatches = () => (
 
 /* Selection follows focus: a preview beside the set follows the arrows. */
 export const GalleryListBoxFollowsFocus = () => (
-  <ListBox aria-label="Theme" defaultValue="system" selectionFollowsFocus style={list}>
-    <ListBoxItem value="light">Light</ListBoxItem>
-    <ListBoxItem value="dark">Dark</ListBoxItem>
-    <ListBoxItem value="system">System</ListBoxItem>
+  <ListBox aria-label="Label" defaultValue="three" selectionFollowsFocus style={list}>
+    <ListBoxItem value="one">Option one</ListBoxItem>
+    <ListBoxItem value="two">Option two</ListBoxItem>
+    <ListBoxItem value="three">Option three</ListBoxItem>
   </ListBox>
 );
 

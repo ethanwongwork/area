@@ -213,3 +213,7 @@ no transform or transition.
 - 2026-10-03 · roundness → 6 plus the shift, never below square, its whole-pixel height cap moving with the shift: 16px Kbd square, 2, 4, 6, 8, pill in 2px steps (`kbd.css:22-27`). `docs/research/radius-audit-2026-10-03.md`, "Roundness".
 - 2026-10-03 · one corner setting (owner: one radius setting, Sharp and Pill as ends; "every control is a pill") → a 24px box's corner, 6 at the default at every size, scaling with the setting; a pill at Pill (`kbd.css`). `docs/research/radius-audit-2026-10-03.md`, "One corner setting".
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → no change; Kbd has no motion and rests on whole-pixel heights at both densities.
+
+## Spacing audit (2026-10-17)
+
+Key gap: `--area-keyboard-gap` is `round(nearest, 0.25ch, 1px)` (2), so keys after the first sit on whole pixels; `0.25ch` computed 1.94 (md) and 1.78 (sm). Measured in `docs/research/spacing-2026-10-17/` (Before / After: https://claude.ai/artifact/JtDZ9LNfutFyfdkGUvQzL2).

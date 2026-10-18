@@ -27,9 +27,10 @@
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
   }
-  /* Card's frame: its surface, edge, corner and resting shadow (card.css), 12 in. */
+  /* Card's frame: its surface, edge, corner and resting shadow (card.css), 12 in, the border counted once (inset.css;
+     spacing audit 2026-10-17: 12 of padding inside the border put the content 13 in, Popover's 12 is 11 + 1). */
   .area-infobox--framed {
-    padding: var(--area-space-12);
+    padding: calc(var(--area-space-12) - var(--area-border-width));
     background-color: var(--area-bg-surface);
     border: var(--area-border-width) solid var(--area-border-card);
     border-radius: var(--area-radius-container);

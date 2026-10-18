@@ -261,3 +261,13 @@ Remove presses at 20% of its ink (hover 12%). Not selectable. See [interaction p
   dark green/yellow calmed inside Tag (lead, tag.css); × on its hover plate verified ≥ 4.5 for every
   tone in light (4.54–10.25) and dark (4.78–7.64), so no further fix; corner radius confirmed 4
   (20 × 0.25 = 5 → even 4; Notion 4). tag.css header comment updated to the new contrast range.
+
+## Spacing audit (2026-10-17)
+
+10px icons at Compact (owner: "go with 10px icons, draw the cuts"): the icon and remove glyph boxes are at most the plate less 4 (`--_icon`): 12 at 20 and 24, 10 in Compact's 14, with their 10px cuts (`--_glyph-cut10`; docs/specs/icons.md "10px cuts"); the icon side follows the box ((14 − 10) / 2 = 2). Supersedes the open note below.
+
+Text side and optical centre (owner, 2026-10-17: "the padding on the left side of the text looks way too big and the type doesnt look as centered vertically as the Public text"): the side is the room above the cap plus 1, at most 6 (`min(6, round((h − 1cap) / 2 + 1))`): 6 at 20 and 24, 4 at Compact's 14 (matching the ×'s 4.2 on the other side), 5 at 18. The label centres a quarter of the cap–x-height gap above cap centre (`(1cap − 1ex) / 4`: 0.5 at 11px, 0.6 at 14), so lowercase labels read centred beside the ×; Spectrum lifts its labels above centre the same way. Since the follow-up the rule is shared with Badge and Citation (inset.css, "Marks: optical centre"). Open: the 12px icon fills Compact's 14 tag (1 each side), as in Badge; a smaller glyph needs a 10px cut.
+
+Text size: the UI size while the tag is at least its line tall (Notion's 14 in 20; md 13 in 18 at Compact), the small size when it is shorter (`sign(ui-leading − height)`): Compact 13's 14 tag sets 11, as Badge, Count, Kbd and Citation do at that height; it held 13, 0.93 of its height (owner, 2026-10-17: "the type here looks way too big for this backplate").
+
+Icon side and gap: an icon centres in the tag's end square, `(h − icon) / 2` (4 at 20, 6 at 24), and stands the xs icon gap (4) from the label, as Badge's at the same height; it was 6 in and 2 from the label (the text side's Notion literal). The label joins inset.css's cap-trimmed text slots (at type 13 its cap sat 1px low), and the remove control's track centres, so a 12 glyph in Compact 13's 10 box overflows evenly (it hung 1 low). The 12-in-10 size is still open. Measured in `docs/research/spacing-2026-10-17/` (Before / After: https://claude.ai/artifact/JtDZ9LNfutFyfdkGUvQzL2).

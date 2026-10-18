@@ -213,9 +213,10 @@
   .area-nav__group--nested .area-nav__item { padding-inline-start: calc(var(--_inset-start) + var(--_nav-indent)); }
   .area-nav--marker .area-nav__group--nested .area-nav__item { padding-inline-start: calc(var(--area-space-16) + var(--_nav-indent)); }
 
-  /* Trim only text slots, never SVGs or containers holding controls. Symmetric
+  /* Trim only text slots, never SVGs or containers holding controls (Tag's label joined 2026-10-17: centred by its
+   * line box, its cap sat 1px low at type 13; spacing audit). Symmetric
    * safety padding lets accents/descenders paint even in an ellipsized label. */
-  .area-button__label, .area-chip__label, .area-badge__label,
+  .area-button__label, .area-chip__label, .area-badge__label, .area-tag__label, .area-citation__label,
   .area-segmented__label, .area-tabs__label, .area-code__label, .area-token__label,
   .area-nav__text, .area-menu__text, .area-input__affix,
   .area-avatar > span:not(.area-avatar__icon),
@@ -223,6 +224,16 @@
     text-box: trim-both cap alphabetic;
     padding-block: 0.25em;
     min-inline-size: 0;
+  }
+  /* Marks: optical centre (owner, 2026-10-17, on Tag at Compact: "the type doesnt look as centered vertically as the
+   * Public text"). A mark's label is often lowercase (a tag, a tone name, a cited site), and a cap-centred lowercase
+   * body sits up to the half-gap between cap height and x-height below a centred dot, icon or x: about 1px in a 14
+   * plate. Badge, Tag and Citation centre their label midway, a quarter of that gap above the cap centre (0.5 at 11px,
+   * 0.6 at 14), as Spectrum sets labels above centre (docs/research/spacing-2026-10-17/external.md §5). The slot
+   * moves, never a glyph; Count keeps the cap centre, since digits are cap-height. */
+  .area-badge__label, .area-tag__label, .area-citation__label { --_optical-lift: calc((1cap - 1ex) / 4); }
+  .area-tag > .area-tag__label, .area-citation > .area-citation__label {
+    padding-block: calc(0.25em - var(--_optical-lift)) calc(0.25em + var(--_optical-lift));
   }
   .area-chip__label, .area-segmented__label, .area-tabs__label, .area-token__label, .area-code__label {
     overflow: hidden;

@@ -179,3 +179,25 @@ export const glyphCuts12: Partial<Record<GlyphName, readonly string[]>> = {
   ]
 };
 export const glyphCutFills12: Partial<Record<GlyphName, readonly number[]>> = {"info":[2]};
+/** 10px cuts (docs/specs/icons.md, "10px cuts"): the glyph on the 10px grid, for a mark's Compact slot (the plate less
+ * 4). Glyph carries it at size 12 and base.css shows it where --_glyph-cut10 is 1. */
+export const glyphCuts10: Partial<Record<GlyphName, readonly string[]>> = {
+  "add": [
+    "M4.5 1.5V7.5M1.5 4.5H7.5"
+  ],
+  "arrow-up": [
+    "M4.5 8.5V1.5M1.5 4.5L4.5 1.5L7.5 4.5"
+  ],
+  "check": [
+    "M2 5L4 7L8 3"
+  ],
+  "dismiss": [
+    "M2.5 2.5L7.5 7.5M7.5 2.5L2.5 7.5"
+  ],
+  "info": [
+    "M1 4.5A3.5 3.5 0 1 0 8 4.5A3.5 3.5 0 1 0 1 4.5Z",
+    "M4.5 4.75V6.25",
+    "M4 3A0.5 0.5 0 1 0 5 3A0.5 0.5 0 1 0 4 3Z"
+  ]
+};
+export const glyphCutFills10: Partial<Record<GlyphName, readonly number[]>> = {"info":[2]};
