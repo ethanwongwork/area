@@ -21,11 +21,13 @@
     --_on-hover: var(--area-switch-color-hover, var(--area-switch-color, var(--area-selection-solid-hover)));
     /* spec (owner 2026-09-28, "lighten is better"): the off track takes the control edge's rung,
        #e2 (ChatGPT ≈ #e6, Notion ≈ #db; was fill-toggle #d4), and hovers one rung up to #d4.
-       Both keep the increased-contrast mix. The edge equals the fill, so none shows, as in
-       both products. */
-    --_off: var(--area-edge-control);
-    --_off-hover: var(--area-edge-control-hover);
+       The edge equals the fill, so none shows, as in both products. Contrast outlines instead of
+       darkening (2026-10-18; macOS Increase Contrast): the fill stays the rail's, the edge and an
+       off thumb's ring take the strong stroke, so the thumb still reads on its track. */
+    --_off: var(--area-fill-track);
+    --_off-hover: var(--area-fill-track-hover);
     --_edge: var(--area-edge-control);
+    --_thumb-ring: color-mix(in srgb, transparent, var(--area-stroke-control) calc(var(--area-contrast-more) * 100%));
     display: inline-flex;
     align-items: flex-start;
     gap: var(--_gap);
@@ -111,7 +113,7 @@
     block-size: var(--_thumb);
     border-radius: var(--_thumb-radius);
     background: var(--area-bg-surface);
-    box-shadow: var(--area-shadow-control);
+    box-shadow: var(--area-shadow-control), inset 0 0 0 var(--area-stroke-width) var(--_thumb-ring);
     /* The thumb slides by translate, rounded to whole pixels, on the track's clock (was
        inset-inline-start over slow while the track took fast). The press stretch stays a 2px
        inline-size change on the same clock: a scale would oval the pill ends and rest at a
@@ -121,12 +123,13 @@
     translate: calc(var(--_x) * var(--_dir)) 0;
     transition:
       translate var(--area-duration-base) var(--area-ease-in-out),
-      inline-size var(--area-duration-base) var(--area-ease-in-out);
+      inline-size var(--area-duration-base) var(--area-ease-in-out),
+      box-shadow var(--area-duration-base) var(--area-ease-in-out);
   }
   .area-switch:dir(rtl) .area-switch__thumb { --_dir: -1; }
 
   .area-switch__control:checked ~ .area-switch__track,
-  .area-switch__track[data-checked] { background: var(--_on); border-color: var(--_on); }
+  .area-switch__track[data-checked] { background: var(--_on); border-color: var(--_on); --_thumb-ring: transparent; }
   .area-switch__control:checked ~ .area-switch__track::before,
   .area-switch__track[data-checked]::before { background-color: var(--_on-hover); }
   /* On: the thumb's start edge moves to the far side; whole pixels (track − 2 insets − thumb). */

@@ -22,6 +22,11 @@
     color: var(--area-fg-placeholder);
   }
 
+  /* A theme or setting switch is instant (MOTION.md, "Theme / density change"): an app sets data-area-switching on the
+     scope it repaints for one frame, and every colour transition built on the motion tokens jumps instead of fading
+     the whole UI over `fast`. */
+  [data-area-switching], [data-area-switching] *, [data-area-switching] ::before, [data-area-switching] ::after { transition: none !important; }
+
   /* Area-drawn component glyphs (packages/react Glyph, docs/specs/icons.md): stroked on a
      16px grid, the line set by the typeface's icon weight and scaling with the slot. */
   [data-area-glyph] path {

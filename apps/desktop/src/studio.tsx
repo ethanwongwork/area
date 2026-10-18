@@ -12,7 +12,7 @@
  * one divider between the Titlebar and the panels and one between each panel. Each tab is a
  * page (src/pages/) that fills the three panels through <Workspace>.
  */
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode, type Ref } from "react";
+import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type Ref } from "react";
 import { Button, Count, Kbd, Nav, NavGroup, NavItem, Panel, SearchField, Titlebar, Tooltip } from "@area/react";
 import { MoonIcon, PanelLeftFilledIcon, PanelLeftIcon, PanelRightFilledIcon, PanelRightIcon, SunIcon } from "@area/icons";
 import { GALLERY_CONTROLS } from "./gallery/controls.ts";
@@ -81,6 +81,16 @@ function restoreCanvas(saved: Partial<CanvasAxes> & { ui?: string; layers?: stri
 }
 
 export { APP_SCALE } from "./app-scale.ts";
+
+/**
+ * A theme or setting change lands at once (MOTION.md, "Theme / density change"): `data-area-switching` (base.css) stops
+ * every transition on `element` for the frame that repaints it, then lets hover and state motion run again.
+ */
+function switchInstantly(element: HTMLElement | null) {
+  if (!element) return;
+  element.setAttribute("data-area-switching", "");
+  requestAnimationFrame(() => requestAnimationFrame(() => element.removeAttribute("data-area-switching")));
+}
 
 /** The Electron shell on macOS (main.tsx sets data-platform, after the imports run, so this is read at render). */
 const isMac = () => typeof document !== "undefined" && document.documentElement.dataset.platform === "darwin";
@@ -155,8 +165,9 @@ export function Studio() {
   // The theme is the whole app's, Titlebar included. Area's colours are light-dark() pairs, and
   // Chromium can keep a cached colour when color-scheme flips (docs/THEMING.md): one synchronous
   // restyle re-resolves everything before the next paint.
-  useEffect(() => {
+  useLayoutEffect(() => {
     const root = document.documentElement;
+    switchInstantly(root);
     root.setAttribute("data-area-theme", theme);
     root.style.display = "none"; void root.offsetHeight; root.style.display = "";
     writeStored("theme", theme);
@@ -339,6 +350,15 @@ export function Workspace({ sidebar, canvasLead, canvasTitle, canvasActions, can
   // as a hairline contact sheet in compact), radius, surface, elevation, motion and pills.
   const shown = studio.shown.canvas;
   const axes = { "data-area-neutral": shown.neutral, "data-area-accent": shown.accent, "data-area-ground-light": shown["ground-light"], "data-area-ground-dark": shown["ground-dark"], "data-area-layers-light": shown["layers-light"], "data-area-layers-dark": shown["layers-dark"], "data-area-action": shown.action, "data-area-selection": shown.selection, "data-area-contrast": shown.contrast === "system" ? undefined : shown.contrast, "data-area-type": shown.type, "data-area-density": shown.density, "data-area-radius": shown.radius, "data-area-surface": shown.surface, "data-area-elevation": shown.elevation, "data-area-motion": shown.motion, "data-area-pills": shown.pills, ...materialAttributes(studio.shown.material) };
+  // A setting (or a hover preview of one) repaints the Canvas at once rather than fading every tile's colours.
+  const main = useRef<HTMLElement>(null);
+  const signature = JSON.stringify(axes);
+  const painted = useRef(signature);
+  useLayoutEffect(() => {
+    if (painted.current === signature) return;
+    painted.current = signature;
+    switchInstantly(main.current);
+  }, [signature]);
   return (
     <div className="studio-workspace" data-sidebar={studio.sidebar ? "" : undefined} data-inspector={studio.inspector ? "" : undefined}>
       {studio.sidebar ? (
@@ -346,7 +366,7 @@ export function Workspace({ sidebar, canvasLead, canvasTitle, canvasActions, can
           <Panel flush resizable="end" aria-label="Sidebar" {...sidebarWidth}>{sidebar}</Panel>
         </div>
       ) : null}
-      <main className="studio-canvas" aria-label={canvasTitle}>
+      <main ref={main} className="studio-canvas" aria-label={canvasTitle}>
         <header className="studio-canvas__bar">{canvasLead}{canvasActions}</header>
         <div ref={canvasRef} className="studio-canvas__body" {...axes}>{canvas}</div>
       </main>

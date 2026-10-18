@@ -49,6 +49,7 @@ it('honors explicit contrast preferences and only applies the OS fallback to an 
   const css=emitAxes();
   expect(css).toContain('[data-area-contrast="more"] {\n    --area-contrast-more: 1;');
   expect(css).toContain('[data-area-contrast="standard"] {\n    --area-contrast-more: 0;');
+  expect(css).toContain('[data-area-contrast="medium"] {\n    --area-contrast-more: 0.5;');
   expect(css).toContain('@media (prefers-contrast: more)');
   expect(css).toContain(':root:not([data-area-contrast])');
   expect(emitTokens()).toContain('--area-contrast-more: 0;');

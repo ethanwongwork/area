@@ -75,7 +75,7 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
       the percentages, from 100% when on Auto or Fit; the menu lists Auto, Fit and the percentages, nothing else
       (owner, 2026-10-14; 2026-10-18).
     - Components' All shows one tile per family, its default specimen; a family's variants are its
-      own Canvas. Specimens sit in square cards at least 380 wide (owner, 2026-10-18), after Compass's gallery: the specimen 28 in, the
+      own Canvas. Specimens sit in square cards at least 360 wide (owner, 2026-10-18), after Compass's gallery: the specimen 28 in, the
       title (the app's text, strong) and a Copy code button in the card's foot, cards 12 apart. A
       click on an All card opens its family's Stage (owner, 2026-10-14). A control that does not apply to the current view
       is left out; the order of the rest never changes. Fields in the app's chrome and Inspector

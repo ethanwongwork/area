@@ -52,7 +52,7 @@ Easings:
 | Interaction | Enter | Leave | Properties | Notes |
 |---|---|---|---|---|
 | Hover plate / colour | instant | `fast` ease-out | colours only | `:hover { transition-duration: 0s }` under `@media (hover: hover)`: feedback appears at once and fades away (ChatGPT 0s, Notion 20ms, Linear 0s in / 150 out) |
-| Lift (linked Card, gallery tiles) | `fast` ease-out | `base` ease-in | `box-shadow` to the float shadow | the edge stays; a press drops the lift at once; Elevation 0 steps the edge instead (owner, 2026-10-18; Notion's linked card fades its shadow in 150 / out 200, `docs/research/card-hover-2026-10-18.md`) |
+| Lift (linked Card, gallery tiles) | `fast` ease-out | `base` ease-in | `box-shadow` to the float shadow | the edge stays; a press drops the lift at once; Elevation 0 steps the edge instead (owner, 2026-10-18; Notion's linked card fades its shadow in 150 / out 200, `docs/research/card-hover-2026-10-18.md`). A selected gallery tile is one line, its own edge in the selection colour, crossfading on `fast` ease-out both ways and lifting like the rest (owner, 2026-10-18: the 2px stroke read thick and landed at once) |
 | Press | instant | `fast` | colours | `:active { transition-duration: 0s }`. No press scale by default (no target product shrinks controls) |
 | Focus ring | instant | instant | outline / box-shadow | rings never fade in; a ring that animates lags the keyboard |
 | Selected / checked colour | instant | `fast` | colours | same rule as hover |
@@ -69,7 +69,7 @@ Easings:
 | Accordion body | `slow` ease-in-out | `moderate` ease-in-out | `block-size` via `interpolate-size: allow-keywords` + `opacity` | progressive enhancement; without support it snaps |
 | Spinner | 0.6–1s per turn, linear | — | `rotate` | stops under reduced motion |
 | Skeleton shimmer, pulse | linear, long | — | `background-position` / `opacity` | stops under reduced motion |
-| Theme / density change | instant | instant | — | never animate a theme switch |
+| Theme / density change | instant | instant | — | never animate a theme switch: the app sets `data-area-switching` (base.css) on the scope it repaints for one frame, so token-built colour transitions jump (the desktop app does it for Light / Dark and every Canvas setting, hover previews included) |
 
 Exits are one step faster than entrances. Anything opened from the keyboard should feel no slower
 than pressing a key: keep keyboard-opened surfaces on the same short clock and never delay focus

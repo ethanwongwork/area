@@ -49,6 +49,20 @@ temporary: remove it once the bundles are settled and written back to `packages/
 - Setup: this worktree needed its own `node_modules` (APFS clone `cp -cR ~/Desktop/area/node_modules .`, plus
   `node_modules/electron/dist` and `path.txt` from another worktree) so `@area/*` resolve here, not to the main checkout.
 
+## Contrast levels, tile selection, motion gaps (2026-10-18, branch `claude/design-system-motion-theme-fa5802`, PR open)
+
+Owner: dark strokes, meter track and switch under Contrast More; "refine the contrast axis … doesn't apply evenly";
+selected tile's thick stroke; tiles at least 360; are all motion interactions in the system.
+- Contrast is a level: Standard / **Medium** (new, 0.5) / More, System (Default) follows the OS. Every `border-*` steps a
+  third of the way to `stroke-control` at More; rails (`fill-track`, `fill-track-hover`) never move; Switch outlines under
+  More (edge + off-thumb ring). CONTRAST.md has the numbers. Standard is unchanged.
+- Gallery tile selection: one line (the edge in the selection colour), crossfades on `fast`, lifts on hover. Cards ≥ 360.
+- Motion audit: components all follow MOTION.md. Fixed: theme / Canvas setting switches now land at once
+  (`data-area-switching`, base.css), tile focus ring instant, compact painted outline fades, section-link underline fades.
+  Open: Sidebar / Inspector show-hide snaps (no recipe; owner decision).
+- Checks: tokens 24,270, React 480/480 (cohesion literal for `border-width` updated), contracts 14/14, switch, slider,
+  manifest parity, typecheck, playgrounds, contrast report. Seen in the browser pane (desktop-dist); Electron relaunched.
+
 ## Video player in Area's paint (2026-10-18, branch `claude/video-player-area-paint`)
 
 **Done:** round 47 approved; Video player is Complete. Nothing is in review. Round 47 (collection `components47`: one set of parts in every layout, CC track in demos, captions icon 13 × 10, row gap 8, narrow corners). Open: captions-off redraw with captions. Before that, round 46 (collection `components46`: glass-tint plates, Cursor-style solid track and thumb; the review diff cannot see pseudo-element or hover changes). Before that, round 45 (collection `components45`: dark glass in every theme via color-scheme: dark, white 12% stroke, filled icons; generator "body" paint). Before that, round 44 (collection `components44`): the floating controller built from Area's parts (surface

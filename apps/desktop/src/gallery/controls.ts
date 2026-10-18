@@ -55,9 +55,11 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = [
   { axis: "action", kind: "segmented", label: "Action", hint: "The colour of primary actions", defaultValue: DEFAULT_AXES.action, items: [{ value: "neutral", label: "Neutral" }, { value: "accent", label: "Accent" }] },
   { axis: "selection", kind: "segmented", label: "Selection", hint: "The colour of checked, selected and current states", defaultValue: DEFAULT_AXES.selection, items: [{ value: "neutral", label: "Neutral" }, { value: "accent", label: "Accent" }] },
   // Increased contrast (docs/CONTRAST.md): not a registry axis but the same kind of scoped setting,
-  // data-area-contrast="more" or "standard". System writes no attribute, so the OS preference decides, as it does
-  // for the app. A Select, as Density: "Standard" needs 56 of text in a 32 segment beside the label.
-  { axis: "contrast", kind: "select", label: "Contrast", hint: "System follows the OS preference; More strengthens edges, focus and state", defaultValue: "system", items: [{ value: "system", label: "System" }, { value: "standard", label: "Standard" }, { value: "more", label: "More" }] },
+  // data-area-contrast="standard", "medium" or "more". System writes no attribute, so the OS preference decides (Standard,
+  // or More under Increase contrast), as it does for the app; it is the default and says so, as the number settings do.
+  // Medium goes half way (owner, 2026-10-18: More "seems very extreme"; Material 3's Standard / Medium / High).
+  // A Select, as Density: "Standard" needs 56 of text in a 32 segment beside the label.
+  { axis: "contrast", kind: "select", label: "Contrast", hint: "System follows the OS preference; Medium and More strengthen every edge, focus and state, More to 3:1", defaultValue: "system", items: [{ value: "system", label: "System (Default)" }, { value: "standard", label: "Standard" }, { value: "medium", label: "Medium" }, { value: "more", label: "More" }] },
   // Type size and density, separate (owner, 2026-10-12; axes/type-size.ts, axes/density.ts). Five
   // two-digit sizes fit a Segmented. Density is one number since 2026-10-14 (axes/density.ts), the medium
   // Button's height at type 14, 28 / 32 / 36; a Select, as Radius is, since "36 (Comfortable)" does not fit a
