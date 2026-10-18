@@ -137,7 +137,7 @@ function parse(item?: string) {
 }
 
 export function ColorPage() {
-  const { query, item, select, canvas } = useStudio();
+  const { query, item, select, shown: { canvas } } = useStudio();
   // The Sidebar's choice (All, or one scale) and the Inspector's (one step, until the Sidebar's
   // choice changes; with none, the scale or the palette).
   const view = SCALES.find(entry => entry.id === item);

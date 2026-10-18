@@ -328,3 +328,8 @@ Since 2026-10-17 the underline offset is Link's 0.08em, close under the text (li
 ## Spacing audit (2026-10-17)
 
 Header marks: a Badge or marker icon in `CardHeader`'s action slot centres on the title's cap line (the slot is one cap tall and the mark overflows it evenly, as a ghost control's). It sat 6.3–6.8 below the cap centre because the title is cap-trimmed and the slot was one title line tall; header buttons were already centred (0.5). Measured in `docs/research/spacing-2026-10-17/` (Before / After: https://claude.ai/artifact/JtDZ9LNfutFyfdkGUvQzL2).
+- 2026-10-18 · owner: "i dont like the card hover state with the stroke outline color change … more subtle with the
+  shadow … smooth, subtle, professional motion" → a linked card's hover keeps its edge and lifts to the float shadow,
+  fading in on `fast` ease-out and out on `base` ease-in; a press drops the lift; Elevation 0 keeps the edge step
+  (`surface.css`; measured from Notion's and Fluent's cards, `docs/research/card-hover-2026-10-18.md`). Status unchanged;
+  for the owner's review.

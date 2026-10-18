@@ -11,17 +11,19 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
 1. **States land at once and leave on `fast`.** Hover, press, selection and focus appear
    instantly; only the leave fades (`--area-transition`, 100ms ease-out). No scale on press, no
    movement on hover, no animated theme or density change.
-2. **Hover and press change one thing: the plate or the edge.** Ink, size and position never
-   move. Rows change their plate; cards and tiles change their edge; painted things (swatches,
-   ramp steps) change a ring in their own ink.
+2. **Hover and press change one thing: the plate, the edge or the lift.** Ink, size and position never
+   move. Rows change their plate; cards and tiles lift (owner, 2026-10-18: no edge change, a soft shadow that fades in,
+   `docs/research/card-hover-2026-10-18.md`), and step their edge only at Elevation 0, where there is no shadow;
+   painted things (swatches, ramp steps) change a ring in their own ink.
 3. **Each state is one step firmer than the last**: rest → hover → selected → press, and
    selected survives hover. A press is the firmest, momentary step, so every click shows (owner,
    2026-10-16: "make sure the build quality is real"; Notion presses at twice its hover, ChatGPT
    more than twice).
    - Rows (Nav, Menu, Tree view, interactive Table, List box, Pagination): `bg-component-hover` →
      `bg-component-active` selected / current → `bg-component-pressed` held.
-   - Tiles and cards: Card's edge (`neutral-100`, 750 in dark) → `edge-control-hover` →
-     `border-hover` held → `stroke-selected` (2px). A tile stands alone like a Card, so it is never
+   - Tiles and cards: resting shadow → the float shadow fading in on `fast` (hover) → dropped at once (held) →
+     `stroke-selected` (2px); the edge (`neutral-100`, 750 in dark) stays, and steps `edge-control-hover` → `border-hover`
+     only at Elevation 0 (owner, 2026-10-18). A tile stands alone like a Card, so it is never
      on `border-decorative`, which is for rules inside a surface.
    - Painted (colour cards): their one outline, the swatch picker's 10% hairline, steps to the
      card's ink at 24% → 48% held → 2px solid selected. Never a second ring.
@@ -66,13 +68,14 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
       heading share one line, every region 14 in on all sides.
     - The header, at its end, in this order: filters, Sort and group, how things are drawn (zoom,
       style, size), and the grid / list switch. Zoom is Zoom control's stepper (− Fit +): Fit shows
-      specimens by size group, each group at one scale (one row of controls and a few rows 125%,
-      taller ones 100% and shrunk only to fit; fields take their card's width), and a specimen
+      specimens by size group, each group at most at one scale and never above 100% (by painted area: a control 90%,
+      a field or small list 85%, a few rows or a dialog 80%, the largest, Code block, Board, Color picker, Command
+      palette, Panel, 75%; owner, 2026-10-18), shrunk further only to fit; fields take their card's width, and a specimen
       whose content reads narrower than its box is laid out at its content's width and a fifth
       more, where the component gives way (src/gallery/fit.ts); 50% to 200% is an
       exact zoom, tiles and the Stage growing with it (owner, 2026-10-14).
     - Components' All shows one tile per family, its default specimen; a family's variants are its
-      own Canvas. Specimens sit in square cards, after Compass's gallery: the specimen 28 in, the
+      own Canvas. Specimens sit in square cards at least 400 wide (owner, 2026-10-18), after Compass's gallery: the specimen 28 in, the
       title (the app's text, strong) and a Copy code button in the card's foot, cards 12 apart. A
       click on an All card opens its family's Stage (owner, 2026-10-14). A control that does not apply to the current view
       is left out; the order of the rest never changes. Fields in the app's chrome and Inspector

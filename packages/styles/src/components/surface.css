@@ -427,29 +427,52 @@
    * valid, focusable and clickable above it. Notion's board cards and ChatGPT's library cards
    * are links like this.
    */
-  .area-card:has(.area-card__link) { transition: var(--area-transition); }
-
- /* Hover steps the edge to the control edge's hover, as Fluent's outline card and Radix's
-     surface card do; the fill, lift and ink stay (ChatGPT's and Figma's cards keep their paint
-     too). At rest a linked card looks like any other. */
-  /* Motion (docs/MOTION.md, "Hover plate"; motion pass 2026-10-07): the edge steps at once and
-     eases back on `fast` (--area-transition) when the pointer leaves. */
-  @media (hover: hover) { .area-card:has(.area-card__link):hover { border-color: var(--area-edge-control-hover); transition-duration: 0s; } }
   /*
-   * Pressed and selected (product UI rule 3, docs/PRODUCT_UI.md: rest, hover, press, selected, each a step firmer; the
-   * app's gallery tiles, studio.css, owner 2026-10-12; docs/specs/card.md 2026-10-15). Only the edge moves: a press
-   * steps a linked card's edge one past hover (border-hover), and selected draws the selection stroke 2 wide inside the
+   * Hover lifts (owner, 2026-10-18: "i dont like the card hover state with the stroke outline color change … something
+   * more subtle with the shadow and … smooth, subtle, professional motion"). Notion's linked card (its tatami system,
+   * measured 2026-10-18, docs/research/card-hover-2026-10-18.md) keeps its edge and fades a soft shadow in over 150ms
+   * ease-out and out over 200ms ease-in; Fluent 2's interactive card steps its shadow up a level. Here the resting
+   * shadow steps to the Menu's float shadow, so the lift follows Elevation, fading in on `fast` with ease-out and out on
+   * `base` with ease-in (MOTION.md, "Lift"). The edge, fill and ink stay; at rest a linked card looks like any other.
+   */
+  .area-card:has(.area-card__link) {
+    transition: border-color var(--area-duration-fast) var(--area-ease-out), box-shadow var(--area-duration-base) var(--area-ease-in);
+  }
+  @media (hover: hover) {
+    .area-card:has(.area-card__link):hover {
+      box-shadow: var(--area-shadow-edge), var(--area-shadow-float);
+      transition-duration: var(--area-duration-fast);
+      transition-timing-function: var(--area-ease-out);
+    }
+    /* Elevation 0 draws no shadow, so a flat card keeps the edge step as its hover. */
+    [data-area-elevation="0"] .area-card:has(.area-card__link):hover { border-color: var(--area-edge-control-hover); }
+  }
+  /* A press settles the card: the lift drops at once (the press is the one instant step, product UI rule 3). */
+  .area-card:has(.area-card__link):active { box-shadow: var(--area-shadow-edge), var(--_card-shadow); transition-duration: 0s; }
+  [data-area-elevation="0"] .area-card:has(.area-card__link):active { border-color: var(--area-border-hover); }
+  /*
+   * Selected (product UI rule 3, docs/PRODUCT_UI.md; the app's gallery tiles, studio.css, owner 2026-10-12;
+   * docs/specs/card.md 2026-10-15): selected draws the selection stroke 2 wide inside the
    * card (its edge, plus an inset ring that makes up the rest), so the grid never moves and Surface 0 still shows it.
    * Selection lands at once and outranks hover and press. Selected is `data-selected` (Card `selected`), or the
    * card as a pressed toggle or a chosen option.
    */
-  .area-card:has(.area-card__link):active { border-color: var(--area-border-hover); transition-duration: 0s; }
   .area-card:is([data-selected], [aria-pressed="true"], [aria-selected="true"]) {
     border-color: var(--area-stroke-selected);
     box-shadow: inset 0 0 0 calc(var(--area-stroke-width) * 2 - var(--_card-border)) var(--area-stroke-selected), var(--area-shadow-edge), var(--_card-shadow);
     transition-duration: 0s;
   }
   @media (hover: hover) { .area-card:is([data-selected], [aria-pressed="true"], [aria-selected="true"]):hover { border-color: var(--area-stroke-selected); } }
+  /* A selected linked card still lifts and settles, its selection stroke kept in the list. */
+  @media (hover: hover) {
+    .area-card:has(.area-card__link):is([data-selected], [aria-pressed="true"], [aria-selected="true"]):hover {
+      box-shadow: inset 0 0 0 calc(var(--area-stroke-width) * 2 - var(--_card-border)) var(--area-stroke-selected), var(--area-shadow-edge), var(--area-shadow-float);
+    }
+  }
+  .area-card:has(.area-card__link):is([data-selected], [aria-pressed="true"], [aria-selected="true"]):active {
+    border-color: var(--area-stroke-selected);
+    box-shadow: inset 0 0 0 calc(var(--area-stroke-width) * 2 - var(--_card-border)) var(--area-stroke-selected), var(--area-shadow-edge), var(--_card-shadow);
+  }
   @media (forced-colors: active) {
     .area-card:is([data-selected], [aria-pressed="true"], [aria-selected="true"]) { outline: calc(var(--area-stroke-width) * 2) solid Highlight; outline-offset: calc(var(--area-stroke-width) * -2); }
   }

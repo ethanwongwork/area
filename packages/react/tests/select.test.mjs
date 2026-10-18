@@ -2,7 +2,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createElement as h } from "react";
 import { renderToString } from "react-dom/server";
-import { Select, MANIFESTS } from "../dist/modules/index.js";
+import { CustomSelect, Select, MANIFESTS } from "../dist/modules/index.js";
 
 for (const [axis, values] of Object.entries(MANIFESTS.select.variants)) {
   for (const value of values) {
@@ -39,4 +39,12 @@ test("Select maps validation to native ARIA and data hooks", () => {
     assert.doesNotMatch(html, /aria-invalid="true"|data-invalid/);
   }
   assert.match(renderToString(h(Select, { "aria-invalid": false })), /aria-invalid="false"/);
+});
+
+// packages/react/src/components/CustomSelect.tsx: onHighlightChange is a callback, never a DOM attribute, and a closed
+// list reports nothing (the effect runs only in a browser).
+test("CustomSelect keeps onHighlightChange off the trigger", () => {
+  const html = renderToString(h(CustomSelect, { "aria-label": "Radius", items: [{ value: "8", label: "8 (Default)" }], value: "8", onHighlightChange: () => {} }));
+  assert.doesNotMatch(html, /onhighlightchange/i);
+  assert.match(html, /role="combobox"/);
 });

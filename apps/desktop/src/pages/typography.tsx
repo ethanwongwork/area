@@ -97,7 +97,7 @@ function Sheet({ grid, value, onChoose, children }: { grid: boolean; value: stri
 }
 
 export function TypographyPage() {
-  const { query, item, select, canvas } = useStudio();
+  const { query, item, select, shown: { canvas } } = useStudio();
   const [sample, setSample] = useState(() => readStored("typeSample", SAMPLE));
   // The Sidebar's choice (All, or one role) and the Inspector's (the row chosen on the Canvas;
   // with one role on the Canvas, that role; with none, the type scale).

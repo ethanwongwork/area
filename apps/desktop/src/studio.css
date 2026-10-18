@@ -282,19 +282,24 @@
   .gallery-tile:is(button, [role="button"], [role="option"]):focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
 
   /*
-   * Hover and press (docs/MOTION.md, "Hover plate", "Press"; a linked Card's edge, surface.css):
-   * only the edge moves, never the fill, the ink or the size, so a specimen reads the same under
-   * the pointer. Hover steps the hairline to the control edge's hover (#d4), a press one further
-   * to the hover border (#b4); both land at once and ease back on `fast` when the pointer leaves
-   * (--area-transition). Selection lands at once too, and outranks both.
+   * Hover and press: a tile lifts as a linked Card does (surface.css; owner, 2026-10-18: no stroke change, "something
+   * more subtle with the shadow" and "smooth, subtle, professional motion"; Notion's linked cards measured,
+   * docs/research/card-hover-2026-10-18.md). The Canvas's float shadow fades in on `fast` ease-out and out on `base`
+   * ease-in; a press drops it at once. The edge, fill, ink and size never move, so a specimen reads the same under the
+   * pointer. At Elevation 0 there is no shadow, so the edge steps instead. Selection lands at once and outranks both.
    */
-  .gallery-tile { transition: var(--area-transition); }
-  @media (hover: hover) {
-    .gallery-tile:not([data-painted]):hover { border-color: var(--area-edge-control-hover); transition-duration: 0s; }
+  .gallery-tile {
+    box-shadow: 0 0 0 0 transparent, 0 0 0 0 transparent;
+    transition: border-color var(--area-duration-fast) var(--area-ease-out), box-shadow var(--area-duration-base) var(--area-ease-in), outline-color var(--area-duration-fast) var(--area-ease-out);
   }
-  .gallery-tile:not([data-painted]):active { border-color: var(--area-border-hover); transition-duration: 0s; }
+  @media (hover: hover) {
+    .gallery-tile:hover { box-shadow: var(--area-shadow-float); transition-duration: var(--area-duration-fast); transition-timing-function: var(--area-ease-out); }
+    .studio-canvas__body[data-area-elevation="0"] .gallery-tile:not([data-painted]):hover { border-color: var(--area-edge-control-hover); }
+  }
+  .gallery-tile:active { box-shadow: 0 0 0 0 transparent, 0 0 0 0 transparent; transition-duration: 0s; }
+  .studio-canvas__body[data-area-elevation="0"] .gallery-tile:not([data-painted]):active { border-color: var(--area-border-hover); }
   .gallery-tile:is([data-selected], [aria-pressed="true"], [aria-selected="true"]) { transition-duration: 0s; }
-  .gallery-tile:not([data-painted]):is([data-selected], [aria-pressed="true"], [aria-selected="true"]):is(:hover, :active) { border-color: var(--area-stroke-selected); }
+  .gallery-tile:not([data-painted]):is([data-selected], [aria-pressed="true"], [aria-selected="true"]):is(:hover, :active) { border-color: var(--area-stroke-selected); box-shadow: inset 0 0 0 var(--area-border-width) var(--area-stroke-selected); }
   /*
    * A painted tile's states step its one edge, as a component tile's border steps (owner,
    * 2026-10-12: a ring inside the outline read as a double stroke). The swatch hairline (10%) takes
@@ -302,11 +307,9 @@
    * a component tile's selection draws (its border and inset ring). Never a second ring. The ink,
    * not the selection colour, so the line reads on every step from 25 to 975.
    */
-  .gallery-tile[data-painted] { transition: outline-color var(--area-duration-fast) var(--area-ease-out); }
-  @media (hover: hover) {
-    .gallery-tile[data-painted]:hover { outline-color: color-mix(in srgb, var(--_ink) 24%, transparent); transition-duration: 0s; } /* pick */
-  }
-  .gallery-tile[data-painted]:active { outline-color: color-mix(in srgb, var(--_ink) 48%, transparent); transition-duration: 0s; } /* pick */
+  /* A painted tile lifts like the rest (above); at Elevation 0 its one outline steps instead. */
+  .studio-canvas__body[data-area-elevation="0"] .gallery-tile[data-painted]:hover { outline-color: color-mix(in srgb, var(--_ink) 24%, transparent); } /* pick */
+  .studio-canvas__body[data-area-elevation="0"] .gallery-tile[data-painted]:active { outline-color: color-mix(in srgb, var(--_ink) 48%, transparent); } /* pick */
   .gallery-tile[data-painted]:is([data-selected], [aria-pressed="true"], [aria-selected="true"]) {
     border-color: transparent;
     box-shadow: none;
@@ -324,9 +327,9 @@
    * shrinking with the zoom.
    */
   .studio-grid--cards {
-    /* As many columns of at least 280 as fit (pick: Compass's 331 less a step, for the narrower
-       Canvas), counted, so the Stage's strips span them as they span pairs of units. */
-    --_pairs: max(1, round(down, calc((100cqw + var(--_gap)) / (280px * var(--_zoom, 1) + var(--_gap))), 1));
+    /* As many columns of at least 400 as fit (owner, 2026-10-18: "each component container to have a minimum size of
+       400 width"; was 280), counted, so the Stage's strips span them as they span pairs of units. */
+    --_pairs: max(1, round(down, calc((100cqw + var(--_gap)) / (400px * var(--_zoom, 1) + var(--_gap))), 1));
     grid-template-columns: repeat(var(--_pairs), minmax(0, 1fr));
     grid-auto-rows: auto;
   }
@@ -423,20 +426,26 @@
      tile under the pointer, or with focus, sits above its neighbours, and stays there while its
      ring fades (z-index steps at the end of the fade), so neither the ring nor the focus outline
      slips under the next tile. */
-  .studio-canvas__body[data-area-density="28"] .gallery-tile { position: relative; transition: var(--area-transition), z-index 0s linear var(--area-duration-fast); }
+  .studio-canvas__body[data-area-density="28"] .gallery-tile { position: relative; transition: border-color var(--area-duration-fast) var(--area-ease-out), box-shadow var(--area-duration-base) var(--area-ease-in), z-index 0s linear var(--area-duration-base); }
   .studio-canvas__body[data-area-density="28"] .gallery-tile:is(:hover, :focus-visible, :focus-within) { z-index: 1; }
   .studio-canvas__body[data-area-density="28"] .gallery-tile:focus-visible { z-index: 2; }
   @media (hover: hover) {
     .studio-canvas__body[data-area-density="28"] .gallery-tile:not([data-painted], [data-selected], [aria-pressed="true"], [aria-selected="true"]):hover {
       position: relative;
       z-index: 1;
-      box-shadow: 0 0 0 var(--area-border-width) var(--area-edge-control-hover);
+      box-shadow: 0 0 0 var(--area-border-width) var(--_tile-edge), var(--area-shadow-float);
+      transition-duration: var(--area-duration-fast);
+      transition-timing-function: var(--area-ease-out);
     }
   }
   .studio-canvas__body[data-area-density="28"] .gallery-tile:is(button, [role="option"]):not([data-painted], [aria-pressed="true"], [aria-selected="true"]):active {
     position: relative;
     z-index: 1;
-    box-shadow: 0 0 0 var(--area-border-width) var(--area-border-hover);
+    box-shadow: 0 0 0 var(--area-border-width) var(--_tile-edge);
+    transition-duration: 0s;
+  }
+  @media (hover: hover) {
+    .studio-canvas__body[data-area-density="28"][data-area-elevation="0"] .gallery-tile:not([data-painted], [data-selected], [aria-pressed="true"], [aria-selected="true"]):hover { box-shadow: 0 0 0 var(--area-border-width) var(--area-edge-control-hover); }
   }
   .studio-canvas__body[data-area-density="28"] .gallery-tile:not([data-painted]):is([data-selected], [aria-pressed="true"], [aria-selected="true"]) {
     position: relative;
@@ -761,3 +770,75 @@
 .ex-legend > span { display: inline-flex; align-items: center; gap: var(--area-space-6, 6px) }
 .ex-legend > span::before { content: ""; inline-size: 14px; block-size: 2px; border-radius: 1px; background: var(--area-accent-solid) }
 .ex-legend__prior::before { background: var(--area-border) !important }
+
+/* ---------------------------------------------------------------------------
+ * Materials lab (pages/materials.tsx), a temporary tab: columns per theme and variant, each a material scope over a
+ * backdrop. App classes only lay the board out and draw the backdrops; every part is an Area component painted by
+ * packages/styles/src/material.css. The wallpaper's stops are the ones the Readings view measures against.
+ * ------------------------------------------------------------------------- */
+.lab-board { display: grid; gap: var(--area-space-32, 32px) }
+.lab-group { display: grid; gap: var(--area-space-12, 12px) }
+.lab-group__head { display: grid; gap: var(--area-space-4, 4px) }
+.lab-group__title { font: var(--area-text-md-strong, 600 13px/1.4 var(--area-font-sans)); color: var(--area-fg-default) }
+.lab-group__parts, .lab-muted { color: var(--area-fg-muted); font-size: var(--area-text-sm-size) }
+.lab-columns { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: var(--area-space-12, 12px) }
+.lab-column { display: grid; gap: var(--area-space-6, 6px); align-content: start; min-inline-size: 0 }
+.lab-column__label { color: var(--area-fg-muted); font-size: var(--area-text-sm-size) }
+.lab-scope {
+  position: relative; overflow: hidden; min-block-size: 160px; padding: var(--area-space-24, 24px);
+  border: var(--area-border-width) solid var(--area-border); border-radius: var(--area-radius-container, 12px);
+  background-color: var(--area-bg-page); color: var(--area-fg-default);
+}
+.lab-scope__content { position: relative; z-index: 1 }
+.lab-backdrop { position: absolute; inset: 0; z-index: 0; overflow: hidden }
+.lab-backdrop[data-kind="wallpaper"] {
+  background:
+    radial-gradient(at 15% 20%, light-dark(#f9c6a8, #5a2a1a), transparent 55%),
+    radial-gradient(at 85% 15%, light-dark(#b7d2ff, #16305e), transparent 55%),
+    radial-gradient(at 80% 85%, light-dark(#d9c4ff, #3b2366), transparent 55%),
+    radial-gradient(at 15% 85%, light-dark(#a9e6d0, #12483a), transparent 55%),
+    light-dark(#d9c4ff, #3b2366);
+}
+.lab-backdrop[data-kind="photo"] { background: url("images/david-tee.jpg") center / cover }
+.lab-backdrop[data-kind="text"] { padding: var(--area-space-8, 8px); font-size: 13px; line-height: 1.5; color: var(--area-fg-default) }
+.lab-backdrop[data-kind="stripes"] { background: repeating-linear-gradient(45deg, #000 0 14px, #fff 14px 28px) }
+.lab-specimens { display: flex; flex-wrap: wrap; align-items: center; gap: var(--area-space-12, 12px) }
+.lab-specimens--stack { display: grid; justify-items: start; max-inline-size: 320px }
+.lab-specimens--stack > :is(.area-input, .area-select, .area-textarea, .area-progress, .area-meter, .area-titlebar, .area-toolbar, .lab-chrome) { inline-size: 100% }
+.lab-page-sample { display: grid; gap: var(--area-space-16, 16px); min-block-size: 240px; align-content: start }
+.lab-nav { inline-size: 200px }
+.lab-chrome { padding: var(--area-space-10, 10px) var(--area-space-12, 12px); border-radius: var(--area-radius-container, 12px); background: var(--area-chrome-bg); font-size: var(--area-text-sm-size) }
+.lab-screen { inline-size: 1200px; zoom: 0.42 }
+.lab-table { inline-size: 100% }
+.lab-ratio[data-fails] { color: var(--area-fg-danger); font-weight: 600 }
+.lab-probes { position: absolute; visibility: hidden; pointer-events: none; inset-inline-start: 0; inset-block-start: 0 }
+.lab-ink { display: block }
+.lab-ink--muted { color: var(--area-fg-muted) }
+.lab-description { margin: 0; color: var(--area-fg-muted); font-size: var(--area-text-sm-size) }
+.lab-snapshot { display: flex; align-items: center; gap: var(--area-space-4, 4px) }
+.lab-snapshot__name { flex: 1; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.lab-span { display: grid; grid-column: 1 / -1 }
+
+/* ---------------------------------------------------------------------------
+ * Option marks (src/option-marks.tsx): what a setting's option sets, drawn in Menu's and Custom select's icon slot
+ * (Area's icon box, centred). Strokes use the icon line weight; frames, shadows and edges are the option's own tokens
+ * under its scope; a plate that could vanish on the list's ground carries the swatch ring, as Color swatch does.
+ * ------------------------------------------------------------------------- */
+.studio-mark { display: block; box-sizing: border-box; flex: none }
+svg.studio-mark { inline-size: 100%; block-size: 100%; fill: none; stroke: currentColor; stroke-width: var(--area-weight-icon, 1.125px); vector-effect: non-scaling-stroke; overflow: visible }
+svg.studio-mark * { vector-effect: non-scaling-stroke }
+.studio-mark--layers {
+  position: relative; inline-size: 100%; block-size: 100%; overflow: hidden; border-radius: 3px;
+  background: var(--area-bg-page); outline: var(--area-stroke-width) solid var(--area-token-swatch-ring); outline-offset: calc(-1 * var(--area-stroke-width));
+}
+.studio-mark__recessed { position: absolute; inset: 0 auto 0 0; inline-size: 37.5%; background: var(--area-bg-subtle) }
+.studio-mark__raised { position: absolute; inset: 25% 12.5% 25% 50%; border-radius: 1.5px; background: var(--area-bg-surface); box-shadow: 0 0 0 var(--area-stroke-width) var(--area-border-card) }
+.studio-mark--edge { inline-size: 100%; block-size: 62.5%; border: var(--area-stroke-width) solid var(--area-edge-control); border-radius: 3px; background: var(--area-bg-surface) }
+.studio-mark--frame, .studio-mark--lift { inline-size: 75%; block-size: 75%; border-radius: 3px; background: var(--area-bg-surface) }
+.studio-mark--frame { border: var(--area-border-width) solid var(--area-border-card); box-shadow: var(--area-shadow-edge) }
+.studio-mark--lift { outline: var(--area-stroke-width) solid var(--area-token-swatch-ring); outline-offset: calc(-1 * var(--area-stroke-width)); box-shadow: 0 calc(var(--_lift) * 0.25px) calc(var(--_lift) * 0.5px) light-dark(rgb(0 0 0 / calc(var(--_lift) * 5%)), rgb(0 0 0 / calc(var(--_lift) * 10%))) }
+.studio-mark--duration {
+  inline-size: 75%; block-size: 75%; border-radius: 50%;
+  background: conic-gradient(currentColor var(--_share), transparent 0);
+  box-shadow: inset 0 0 0 var(--area-weight-icon, 1.125px) currentColor;
+}
