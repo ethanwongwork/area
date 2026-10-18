@@ -4,7 +4,7 @@ import { Citation, ReferenceList, ReferenceListItem } from "@area/react";
 
 const column: CSSProperties = { inlineSize: "calc(var(--area-space-96) * 5)", maxInlineSize: "100%" };
 const source = (n: number, hash: string, extra = {}) => (
-  <ReferenceListItem key={n} source="Publisher" title={`Article title ${n}`} href={hash} description="what the source covers" {...extra} />
+  <ReferenceListItem key={n} source="Publisher" title={`Title ${n}`} href={hash} description="Description" {...extra} />
 );
 
 export const GalleryReferenceList = () => (
@@ -21,10 +21,10 @@ export const GalleryReferenceListLong = () => (
 /* With the footnotes that point at it: each number goes to its note, each return arrow comes back. */
 export const GalleryReferenceListWithFootnotes = () => (
   <div style={{ ...column, display: "flex", flexDirection: "column", gap: "var(--area-space-16)" }}>
-    <p style={{ margin: 0 }}>A sentence that cites a source<Citation variant="footnote" id="gallery-cite-f1" href="#gallery-ref-f1" label="1" /> and another.<Citation variant="footnote" id="gallery-cite-f2" href="#gallery-ref-f2" label="2" /></p>
+    <p style={{ margin: 0 }}>Body text<Citation variant="footnote" id="gallery-cite-f1" href="#gallery-ref-f1" label="1" /> that continues the paragraph.<Citation variant="footnote" id="gallery-cite-f2" href="#gallery-ref-f2" label="2" /></p>
     <ReferenceList title="Notes">
-      <ReferenceListItem id="gallery-ref-f1" source="Publisher" title="Article title 1" href="#gallery-ref-f1" backlinks={["gallery-cite-f1"]} />
-      <ReferenceListItem id="gallery-ref-f2" source="Publisher" title="Article title 2" href="#gallery-ref-f2" backlinks={["gallery-cite-f2", "gallery-cite-f2b"]} />
+      <ReferenceListItem id="gallery-ref-f1" source="Publisher" title="Title 1" href="#gallery-ref-f1" backlinks={["gallery-cite-f1"]} />
+      <ReferenceListItem id="gallery-ref-f2" source="Publisher" title="Title 2" href="#gallery-ref-f2" backlinks={["gallery-cite-f2", "gallery-cite-f2b"]} />
     </ReferenceList>
   </div>
 );

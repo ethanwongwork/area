@@ -306,7 +306,7 @@ export const PanelEverything = () => (
       </Field>
       <PanelStack>
         <Label>Label</Label>
-        <ChipGroup aria-label="Filters">
+        <ChipGroup aria-label="Label">
           <Chip swatch="var(--area-red-500)">Red</Chip>
           <Chip selected swatch="var(--area-indigo-500)">Indigo</Chip>
           <Chip swatch="var(--area-teal-600)">Teal</Chip>

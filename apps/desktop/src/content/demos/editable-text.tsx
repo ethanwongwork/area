@@ -7,25 +7,25 @@ const ui = { fontSize: "var(--area-text-sm-size)", lineHeight: "var(--area-text-
 const title = { margin: 0, fontSize: "var(--area-title-md-size)", lineHeight: "var(--area-title-md-leading)", fontWeight: "var(--area-weight-strong)" };
 
 /* Figma's layer name: double-click to rename. */
-export const GalleryEditableText = () => <EditableText style={ui} label="Layer name" defaultValue="Header" />;
+export const GalleryEditableText = () => <EditableText style={ui} label="Label" defaultValue="Title" />;
 
-export const GalleryEditableTextEditing = () => <EditableText style={ui} label="Layer name" defaultValue="Header" defaultEditing />;
+export const GalleryEditableTextEditing = () => <EditableText style={ui} label="Label" defaultValue="Title" defaultEditing />;
 
 /* Notion's title: a click places the caret. */
 export const GalleryEditableTextClick = () => (
-  <h2 style={title}><EditableText label="Page title" activation="click" defaultValue="Launch plan" /></h2>
+  <h2 style={title}><EditableText label="Label" activation="click" defaultValue="Title" /></h2>
 );
 
 export const GalleryEditableTextFill = () => (
-  <div style={frame}><EditableText style={ui} label="Layer name" fill defaultValue="Navigation bar" /></div>
+  <div style={frame}><EditableText style={ui} label="Label" fill defaultValue="Title" /></div>
 );
 
 export const GalleryEditableTextPlaceholder = () => (
-  <h2 style={title}><EditableText label="Page title" activation="click" placeholder="Untitled" /></h2>
+  <h2 style={title}><EditableText label="Label" activation="click" placeholder="Placeholder" /></h2>
 );
 
 export const GalleryEditableTextLong = () => (
-  <div style={frame}><EditableText style={ui} label="Layer name" fill defaultValue="Onboarding checklist, step three: invite your team" /></div>
+  <div style={frame}><EditableText style={ui} label="Label" fill defaultValue="Title that wraps onto a second line" /></div>
 );
 
-export const GalleryEditableTextDisabled = () => <EditableText style={ui} label="Layer name" defaultValue="Header" disabled />;
+export const GalleryEditableTextDisabled = () => <EditableText style={ui} label="Label" defaultValue="Title" disabled />;

@@ -5,59 +5,59 @@ import { Button, Stepper, StepperStep } from "@area/react";
 const wide = { inlineSize: "calc(var(--area-space-96) * 4)", maxInlineSize: "100%" };
 
 export const GalleryStepper = () => (
-  <Stepper current={1} aria-label="Workspace setup" style={wide}>
-    <StepperStep title="Details" />
-    <StepperStep title="Members" />
-    <StepperStep title="Review" />
+  <Stepper current={1} aria-label="Label" style={wide}>
+    <StepperStep title="Step one" />
+    <StepperStep title="Step two" />
+    <StepperStep title="Step three" />
   </Stepper>
 );
 export const GalleryStepperStart = () => (
-  <Stepper current={0} aria-label="Workspace setup" style={wide}>
-    <StepperStep title="Details" />
-    <StepperStep title="Members" />
-    <StepperStep title="Review" />
+  <Stepper current={0} aria-label="Label" style={wide}>
+    <StepperStep title="Step one" />
+    <StepperStep title="Step two" />
+    <StepperStep title="Step three" />
   </Stepper>
 );
 export const GalleryStepperDone = () => (
-  <Stepper current={3} aria-label="Workspace setup" style={wide}>
-    <StepperStep title="Details" />
-    <StepperStep title="Members" />
-    <StepperStep title="Review" />
+  <Stepper current={3} aria-label="Label" style={wide}>
+    <StepperStep title="Step one" />
+    <StepperStep title="Step two" />
+    <StepperStep title="Step three" />
   </Stepper>
 );
 export const GalleryStepperDescription = () => (
-  <Stepper current={1} aria-label="Workspace setup" style={{ ...wide, inlineSize: "calc(var(--area-space-96) * 6)" }}>
-    <StepperStep title="Details" description="Name and icon" />
-    <StepperStep title="Members" description="David Tee's teams" />
-    <StepperStep title="Review" description="Check and create" />
+  <Stepper current={1} aria-label="Label" style={{ ...wide, inlineSize: "calc(var(--area-space-96) * 6)" }}>
+    <StepperStep title="Step one" description="Description" />
+    <StepperStep title="Step two" description="Description" />
+    <StepperStep title="Step three" description="Description" />
   </Stepper>
 );
 export const GalleryStepperVertical = () => (
-  <Stepper current={1} orientation="vertical" aria-label="Publish a library">
-    <StepperStep title="Choose components" description="12 selected" />
-    <StepperStep title="Write release notes" description="What changed for David Tee's teams" />
-    <StepperStep title="Publish" />
+  <Stepper current={1} orientation="vertical" aria-label="Label">
+    <StepperStep title="Step one" description="Description" />
+    <StepperStep title="Step two" description="Description" />
+    <StepperStep title="Step three" />
   </Stepper>
 );
 export const GalleryStepperInvalid = () => (
-  <Stepper current={2} aria-label="Import" style={wide}>
-    <StepperStep title="Upload" />
-    <StepperStep title="Map fields" status="invalid" />
-    <StepperStep title="Import" />
+  <Stepper current={2} aria-label="Label" style={wide}>
+    <StepperStep title="Step one" />
+    <StepperStep title="Step two" status="invalid" />
+    <StepperStep title="Step three" />
   </Stepper>
 );
 /* Done steps are buttons back to them; steps ahead wait. */
 export const GalleryStepperInteractive = () => {
   const [step, setStep] = useState(2);
-  const titles = ["Details", "Members", "Billing", "Review"];
+  const titles = ["Step one", "Step two", "Step three", "Step four"];
   return (
     <div style={{ display: "grid", gap: "var(--area-space-16)", ...wide, inlineSize: "calc(var(--area-space-96) * 5)" }}>
-      <Stepper current={step} onStepSelect={setStep} aria-label="Workspace setup">
+      <Stepper current={step} onStepSelect={setStep} aria-label="Label">
         {titles.map(title => <StepperStep key={title} title={title} />)}
       </Stepper>
       <div style={{ display: "flex", gap: "var(--area-space-8)", justifyContent: "flex-end" }}>
-        <Button variant="outline" disabled={step === 0} onClick={() => setStep(step - 1)}>Back</Button>
-        <Button variant="solid" disabled={step === titles.length} onClick={() => setStep(step + 1)}>{step >= titles.length - 1 ? "Finish" : "Continue"}</Button>
+        <Button variant="outline" disabled={step === 0} onClick={() => setStep(step - 1)}>Secondary</Button>
+        <Button variant="solid" disabled={step === titles.length} onClick={() => setStep(step + 1)}>Action</Button>
       </div>
     </div>
   );

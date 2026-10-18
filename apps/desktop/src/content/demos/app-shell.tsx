@@ -13,9 +13,9 @@ export const GalleryTitlebar = () => (
     {icon("Dark mode", MoonIcon)}
   </>}>
     {icon("Show sidebar", PanelLeftIcon)}
-    <Nav orientation="horizontal" aria-label="Sections">
-      <NavItem href="#gallery-titlebar" current>Components</NavItem>
-      <NavItem href="#gallery-titlebar">Icons</NavItem>
+    <Nav orientation="horizontal" aria-label="Label">
+      <NavItem href="#gallery-titlebar" current>Item one</NavItem>
+      <NavItem href="#gallery-titlebar">Item two</NavItem>
     </Nav>
   </Titlebar>
 );
@@ -26,9 +26,9 @@ export const GalleryTitlebarPlain = () => (
     {icon("Dark mode", MoonIcon)}
   </>}>
     {icon("Show sidebar", PanelLeftIcon)}
-    <Nav orientation="horizontal" aria-label="Sections">
-      <NavItem href="#gallery-titlebar-plain" current>Components</NavItem>
-      <NavItem href="#gallery-titlebar-plain">Icons</NavItem>
+    <Nav orientation="horizontal" aria-label="Label">
+      <NavItem href="#gallery-titlebar-plain" current>Item one</NavItem>
+      <NavItem href="#gallery-titlebar-plain">Item two</NavItem>
     </Nav>
   </Titlebar>
 );
@@ -40,9 +40,9 @@ export const GalleryTitlebarFloating = () => (
       {icon("Dark mode", MoonIcon)}
     </>}>
       {icon("Show sidebar", PanelLeftIcon)}
-      <Nav orientation="horizontal" aria-label="Sections">
-        <NavItem href="#gallery-titlebar-floating" current>Components</NavItem>
-        <NavItem href="#gallery-titlebar-floating">Icons</NavItem>
+      <Nav orientation="horizontal" aria-label="Label">
+        <NavItem href="#gallery-titlebar-floating" current>Item one</NavItem>
+        <NavItem href="#gallery-titlebar-floating">Item two</NavItem>
       </Nav>
     </Titlebar>
   </div>
@@ -51,18 +51,18 @@ export const GalleryTitlebarFloating = () => (
 export const GalleryTitlebarMacos = () => (
   <Titlebar windowControls="macos" style={bar} end={icon("Dark mode", MoonIcon)}>
     {icon("Show sidebar", PanelLeftIcon)}
-    <Nav orientation="horizontal" aria-label="Sections">
-      <NavItem href="#gallery-titlebar-macos" current>Components</NavItem>
-      <NavItem href="#gallery-titlebar-macos">Icons</NavItem>
+    <Nav orientation="horizontal" aria-label="Label">
+      <NavItem href="#gallery-titlebar-macos" current>Item one</NavItem>
+      <NavItem href="#gallery-titlebar-macos">Item two</NavItem>
     </Nav>
   </Titlebar>
 );
 
 /* A titled group on a page. */
-export const GallerySectionHeading = () => <SectionHeading title="Arrows" />;
+export const GallerySectionHeading = () => <SectionHeading title="Title" />;
 /* With a count in the muted ink. */
-export const GallerySectionHeadingCount = () => <SectionHeading title={<>Arrows <span style={{ color: "var(--area-fg-muted)", fontWeight: "var(--area-weight-regular)" }}>48</span></>} />;
+export const GallerySectionHeadingCount = () => <SectionHeading title={<>Title <span style={{ color: "var(--area-fg-muted)", fontWeight: "var(--area-weight-regular)" }}>48</span></>} />;
 /* With a lede, 8 under the title. */
 export const GallerySectionHeadingLede = () => (
-  <SectionHeading title="Headings" lede="Introduce pages, sections and surfaces. Surface titles follow the type size; larger headings hold theirs." />
+  <SectionHeading title="Title" lede="Description that wraps onto a second line" />
 );

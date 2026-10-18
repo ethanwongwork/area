@@ -22,13 +22,13 @@ export const GalleryNumberFieldPrefix = () => (
 );
 
 export const GalleryInputGroupSizeSm = () => (
-  <InputGroup size="sm" aria-label="Price"><InputGroupText aria-hidden="true">$</InputGroupText><Input aria-label="Amount" defaultValue="24.00" inputMode="decimal" /></InputGroup>
+  <InputGroup size="sm" aria-label="Label"><InputGroupText aria-hidden="true">$</InputGroupText><Input aria-label="Value" defaultValue="24.00" inputMode="decimal" /></InputGroup>
 );
 export const GalleryInputGroupSizeMd = () => (
-  <InputGroup size="md" aria-label="Price"><InputGroupText aria-hidden="true">$</InputGroupText><Input aria-label="Amount" defaultValue="24.00" inputMode="decimal" /></InputGroup>
+  <InputGroup size="md" aria-label="Label"><InputGroupText aria-hidden="true">$</InputGroupText><Input aria-label="Value" defaultValue="24.00" inputMode="decimal" /></InputGroup>
 );
 export const GalleryInputGroupSizeLg = () => (
-  <InputGroup size="lg" aria-label="Price"><InputGroupText aria-hidden="true">$</InputGroupText><Input aria-label="Amount" defaultValue="24.00" inputMode="decimal" /></InputGroup>
+  <InputGroup size="lg" aria-label="Label"><InputGroupText aria-hidden="true">$</InputGroupText><Input aria-label="Value" defaultValue="24.00" inputMode="decimal" /></InputGroup>
 );
 
 
