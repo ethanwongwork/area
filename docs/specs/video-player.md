@@ -208,3 +208,27 @@ The bar keeps its white on-media buttons over the scrim (it has no surface). The
   Inspector's Material (Glass makes it see-through like a Menu). The sample image no longer zooms.
 - **Why:** You liked the layout but wanted it to feel like the rest of Area. Every colour, corner, stroke and icon now
   comes from a component Area already has, and the spacing is even again on every side.
+
+## Round 45, 2026-10-18
+
+Owner, round 44: "you can use filled icons, and also use a darker transparent fill? what do you recommend? i think in design
+systems, its common to use a dark fill even with some blur? and maybe a transparent stroke? even if the rest of the design
+system is neutral white, gray." Recommended and done:
+- **Dark in every theme.** Controls over video stay dark whatever the app's theme (Apple #2a2a2d at 72% with blur 7,
+  QuickTime black 55% with blur 17.5, Media Chrome black 75%, Video.js; round-42 captures): video can be bright or dark, and
+  white glyphs on dark glass read on both. The surface sets `color-scheme: dark`, so every Area token inside it (surface,
+  ink, ghost Buttons, Slider) takes its dark value: still Area's paint, one scheme.
+- **Transparent fill with blur.** Area's dark surface at 72% (Apple's) under blur(16px) saturate(150%) (Video.js 16;
+  between Apple's 180% and Glass's 137.5%). Material still layers over it (the overlays group).
+- **Transparent stroke.** A white 12% hairline in place of the float edge, and the float shadow.
+- **Filled icons.** Play, pause and skip solid; the speaker's body filled with its waves as lines and picture in picture's
+  inner window filled ("Filled = body only"); captions a knockout; full screen stays a line (no filled form). The component
+  glyph generator gains a "body" paint for this. The bar keeps its line icons.
+
+## Review note, 2026-10-18 (round 45)
+
+- **What changed:** The controller is a dark see-through glass in both light and dark mode, with a faint white edge, and
+  its icons are filled.
+- **Why:** You suggested it, and it's what video players do: Apple, QuickTime, Media Chrome and Video.js keep controls
+  dark over video in any theme so they read on bright and dark frames. Everything inside still uses Area's own colours,
+  just its dark set.

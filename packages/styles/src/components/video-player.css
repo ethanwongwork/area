@@ -229,13 +229,22 @@
      video. Round 44 (owner: "the corner radius and icons, and material/fill/stroke, etc should be applied from the area
      design system principles ... feel like its part of the other area components"): the panel is the floating Toolbar's
      surface (`bg-surface`, its edge shadow, `border-float` ring and `shadow-float`; its corner is the control's corner
-     plus the inset, concentric), it follows light and dark and the Inspector's Material (the overlays group, as Popover
-     and Menu), its buttons are Area's ghost icon-only Buttons with Area's outline icons, its ranges are Slider's, and its
-     time is Area's muted UI text. */
+     plus the inset, concentric), the Inspector's Material (the overlays group, as Popover and Menu), its buttons are
+     Area's ghost icon-only Buttons with Area's filled icons (Apple's and YouTube's transport; round 45), its ranges are
+     Slider's, and its time is Area's muted UI text. */
+  /* Round 45 (owner: "use a darker transparent fill ... common to use a dark fill even with some blur ... and maybe a
+     transparent stroke, even if the rest of the design system is neutral white, gray"): controls over video stay dark in
+     every theme (Apple #2a2a2d at 72% with blur, QuickTime black 55% with blur, Media Chrome black 75%, Video.js; the
+     round-42 captures), so white glyphs read on any frame. The surface takes Area's dark scheme (`color-scheme: dark`:
+     every Area token inside it, the surface, ink, Buttons and Slider, resolves to its dark value), its surface at 72% under
+     blur(16px) saturate(150%), and a transparent stroke: a white 12% hairline in place of the float edge. */
   .area-video-player__surface {
     --_inset: var(--area-ui-cluster); /* spec: the surface Toolbar's inset (8, compact 6) */
-    background-color: var(--area-bg-surface);
-    box-shadow: var(--area-shadow-edge), inset 0 0 0 var(--area-border-width) var(--area-border-float), var(--area-shadow-float);
+    color-scheme: dark;
+    background-color: color-mix(in srgb, var(--area-bg-surface) 72%, transparent); /* spec: Apple's 72% */
+    -webkit-backdrop-filter: blur(16px) saturate(150%); /* spec: Video.js blur 16; Apple saturate 180, Glass 137.5 */
+    backdrop-filter: blur(16px) saturate(150%);
+    box-shadow: inset 0 0 0 var(--area-border-width) rgb(255 255 255 / 0.12), var(--area-shadow-float); /* spec: the transparent stroke */
     color: var(--area-fg-default);
   }
   .area-video-player--floating .area-video-player__scrim { display: none; }
@@ -327,9 +336,6 @@
   .area-video-player:is(.area-video-player--floating, .area-video-player--minimal) .area-video-player__start {
     inline-size: var(--area-control-lg);
     block-size: var(--area-control-lg);
-    color: var(--area-fg-default);
-    background-color: var(--area-bg-surface);
-    box-shadow: var(--area-shadow-edge), inset 0 0 0 var(--area-border-width) var(--area-border-float), var(--area-shadow-float);
   }
   .area-video-player:is(.area-video-player--floating, .area-video-player--minimal) .area-video-player__start > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
   @media (hover: hover) {

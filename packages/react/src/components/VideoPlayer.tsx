@@ -190,7 +190,10 @@ export const VideoPlayer = /* @__PURE__ */ forwardRef<HTMLVideoElement, VideoPla
     );
   };
 
-  const play = () => button("play", playing ? "Pause" : "Play", toggle, <Glyph name={playing ? "pause" : "play"} />, {}, "K");
+  // Filled icons on the floating surface (Apple's and YouTube's transport; the filled variant's body: the speaker's body,
+  // not its waves); the bar keeps the line icons.
+  const filled = shape !== "bar";
+  const play = () => button("play", playing ? "Pause" : "Play", toggle, <Glyph name={playing ? (filled ? "pause-filled" : "pause") : (filled ? "play-filled" : "play")} />, {}, "K");
   const seekRange = (
     <input key="seek" type="range" className={part("range")} aria-label="Seek"
       min={0} max={duration || 0} step="any" value={time} style={rangeStyle(played, loaded)}
@@ -200,7 +203,7 @@ export const VideoPlayer = /* @__PURE__ */ forwardRef<HTMLVideoElement, VideoPla
   const volumeGroup = (
     <div key="volume" className={part("volume")} data-open={volumeOpen ? "" : undefined} data-muted={muted ? "" : undefined}
       onPointerEnter={event => { if (event.pointerType === "mouse") setVolumeOpen(true); }} onPointerLeave={() => setVolumeOpen(false)}>
-      {button("mute", muted || volume === 0 ? "Unmute" : "Mute", toggleMute, <Glyph name={muted || volume === 0 ? "volume-off" : "volume"} />, {}, "M")}
+      {button("mute", muted || volume === 0 ? "Unmute" : "Mute", toggleMute, <Glyph name={muted || volume === 0 ? (filled ? "volume-off-filled" : "volume-off") : (filled ? "volume-filled" : "volume")} />, {}, "M")}
       <input type="range" className={part("range")} aria-label="Volume"
         min={0} max={1} step={0.05} value={volume} style={rangeStyle(volume * 100)}
         aria-valuetext={muted ? `Muted, ${Math.round(volume * 100)}% volume` : `${Math.round(volume * 100)}% volume`}
@@ -208,9 +211,9 @@ export const VideoPlayer = /* @__PURE__ */ forwardRef<HTMLVideoElement, VideoPla
     </div>
   );
   // Captions shows disabled without a track rather than leaving a gap (round 42).
-  const captionsButton = button("captions", hasTracks ? "Captions" : "No captions", toggleCaptions, <Glyph name="captions" />,
+  const captionsButton = button("captions", hasTracks ? "Captions" : "No captions", toggleCaptions, <Glyph name={filled ? "captions-filled" : "captions"} />,
     { pressed: hasTracks ? captions : undefined, disabled: !hasTracks, role: "optional" }, hasTracks ? "C" : undefined);
-  const pipButton = pipSupported ? button("pip", pip ? "Exit picture in picture" : "Picture in picture", togglePip, <Glyph name="picture-in-picture" />, { control: "pip", role: "optional" }, "I") : null;
+  const pipButton = pipSupported ? button("pip", pip ? "Exit picture in picture" : "Picture in picture", togglePip, <Glyph name={filled ? "picture-in-picture-filled" : "picture-in-picture"} />, { control: "pip", role: "optional" }, "I") : null;
   const fullscreenButton = button("fullscreen", fullscreen ? "Exit full screen" : "Full screen", toggleFullscreen, <Glyph name={fullscreen ? "minimize" : "maximize"} />, {}, "F");
 
   // floating: QuickTime's two rows (transport; time, track, time). bar: one row along the foot. minimal: no row.
@@ -219,9 +222,9 @@ export const VideoPlayer = /* @__PURE__ */ forwardRef<HTMLVideoElement, VideoPla
       <div className={part("transport")}>
         <div className={`${part("group")} ${part("group")}--start`}>{volumeGroup}</div>
         <div className={`${part("group")} ${part("group")}--center`}>
-          {button("back", "Back 15 seconds", () => { const v = el(); if (v) seek(v.currentTime - 15); }, <Glyph name="fast-forward" rotate={180} />, { role: "skip" }, "J")}
+          {button("back", "Back 15 seconds", () => { const v = el(); if (v) seek(v.currentTime - 15); }, <Glyph name={filled ? "fast-forward-filled" : "fast-forward"} rotate={180} />, { role: "skip" }, "J")}
           {play()}
-          {button("forward", "Forward 15 seconds", () => { const v = el(); if (v) seek(v.currentTime + 15); }, <Glyph name="fast-forward" />, { role: "skip" }, "L")}
+          {button("forward", "Forward 15 seconds", () => { const v = el(); if (v) seek(v.currentTime + 15); }, <Glyph name={filled ? "fast-forward-filled" : "fast-forward"} />, { role: "skip" }, "L")}
         </div>
         <div className={`${part("group")} ${part("group")}--end`}>{captionsButton}{pipButton}{fullscreenButton}</div>
       </div>
@@ -254,7 +257,7 @@ export const VideoPlayer = /* @__PURE__ */ forwardRef<HTMLVideoElement, VideoPla
       {/* The round play: before the first play in every layout; in minimal it stays as the only control. */}
       {!started || shape === "minimal" ? (
         <button type="button" className={shape === "bar" ? part("start") : `${part("start")} ${part("surface")}`} aria-label={playing ? "Pause" : "Play"} onClick={toggle}>
-          <Glyph name={playing ? "pause" : "play"} size={shape === "bar" ? 20 : 16} />
+          <Glyph name={playing ? (shape === "bar" ? "pause" : "pause-filled") : (shape === "bar" ? "play" : "play-filled")} size={shape === "bar" ? 20 : 16} />
         </button>
       ) : null}
       {shape === "bar" ? <div className={part("scrim")} aria-hidden="true" /> : null}
