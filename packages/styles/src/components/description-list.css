@@ -131,7 +131,7 @@
     .area-description-list__more:hover > .area-description-list__more-label {
       text-decoration: underline;
       text-decoration-thickness: var(--area-stroke-width);
-      text-underline-offset: 0.25em; /* spec: Link's offset, clear of descenders (link.md, 2026-10-16) */
+      text-underline-offset: 0.08em; /* spec: Link's offset, close under the text (link.md, 2026-10-17) */
     }
   }
   .area-description-list__more:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }

@@ -14,7 +14,8 @@ const metaIcon = { display: "inline-flex", inlineSize: "var(--area-icon-md)", bl
 const Meta = ({ icon, children }: { icon: ReactNode; children: ReactNode }) => (
   <div style={metaRow}><span style={metaIcon} aria-hidden="true">{icon}</span>{children}</div>
 );
-const stack = { display: "grid" } as CSSProperties;
+// Token rows 8 apart: Figma Dev Mode lists its colour rows every 32 (token-row.md, "group spacing"); Area's token is about 23.
+const stack = { display: "grid", gap: "var(--area-space-8)" } as CSSProperties;
 
 export const GalleryPanelDevMode = () => (
   <Panel size="sm" title="Button" aria-label="Inspect" style={{ "--area-panel-inline-size": "280px" } as CSSProperties}

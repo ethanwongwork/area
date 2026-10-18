@@ -92,12 +92,20 @@ export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-10-17 on the review page, round 30 (components30), after the Layers sweep; board needs changes.
   'segmented', 'toggle-group', 'code-block', 'box-model', 'tag', 'tag-picker',
   // Approved 2026-10-17 on the review page, round 31 (components31); hover-card: "rethink the content/source".
-  'board', 'menu', ]);
+  'board', 'menu',
+  // Approved 2026-10-17 on the review page, round 33 (components33); the other Articles families: rethink.
+  'hover-card', 'abbreviation', 'hatnote',
+  // Approved 2026-10-17 on the review page, round 35 (components35); panel's token rows 8 apart (Panel stays Complete).
+  'inline-list', 'navbox', 'table-of-contents',
+  // Approved 2026-10-17 on the review page, round 36 (components36).
+  'infobox',
+  // Approved 2026-10-17 on the review page, round 38 (components38): every Articles family is Complete.
+  'figure', 'reference-list', ]);
 
 /** Built/refined and awaiting owner approval; not completion. */
-// Hover card: round 31 (components31) asked to "rethink the content/source" of its examples.
-// Articles (2026-10-17, from Wikipedia's page): eight new families.
-export const REVIEW_COMPONENTS = new Set(['hover-card', 'reference-list', 'table-of-contents', 'figure', 'infobox', 'inline-list', 'abbreviation', 'hatnote', 'navbox']);
+// Articles (2026-10-17, from Wikipedia's page): round 33 asked to rethink six (three approved in round 35) so they don't read as only
+// Wikipedia (Figure: "look at other design systems/products ... keep it simple and consistent and cohesive").
+export const REVIEW_COMPONENTS = new Set([]);
 export const componentStatus = slug => COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
 export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined' })[status];
 

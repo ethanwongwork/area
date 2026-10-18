@@ -5,7 +5,7 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
-## Material in the Inspector (2026-10-17, branch `claude/materials-testing-inspector-00a2d4`, uncommitted)
+## Material in the Inspector (2026-10-17, branch `claude/materials-testing-inspector-00a2d4`, merged by PR)
 
 Owner: test the defaults on Examples → Analytics dashboard, then materials, built "into the Inspector as a real
 setting". Done: Inspector → **Material** (a bundle, then 14 levers with their switches) on Components and Examples.
@@ -16,14 +16,13 @@ saved picks (collections `levers` and `materials` empty), so values are the leve
   they keep the lift), contracts 14/14, typecheck, styles build (parity, token refs).
 - Open: per-lever targets and group strengths are fixed per bundle (not in the Inspector); muted text on light gradients
   past 3 (caps.mjs); contrast sweep with materials on; Glass needs a backdrop to read (no wallpaper option yet).
-- Still waiting from before: the review artifact for PRs #120 and #122 (below).
 - Then (owner): the Examples tab is **Testing** (`#testing/…`; old `#examples` links and saved tabs map to it). The
   Language illustrations (`src/abstract.tsx`) are now real Area components with placeholder text ("Title", "Option",
   "Button"), one card per setting (properties card, inspector card, menu over a card…), laid out at 320 × 248 and zoomed
   to fit the tile; the `.abs-*` drawing CSS is replaced by a few `.lang-*` layout rules. Checked in the browser pane
   (every setting; no tile overflows); not checked by eye in Electron.
 
-## Spacing pass (2026-10-17, same branch, uncommitted)
+## Spacing pass (2026-10-17, same branch and PR)
 
 Owner: "fix the padding, gaps, etc. overall … research how design systems … ensure alignment, optical sizing, spacing …
 be thorough". Record: `docs/research/spacing-2026-10-17/README.md` (research in `external.md`, 16 systems; sweep scripts
@@ -39,18 +38,48 @@ in `sweep/`). Review page (Before / After): https://claude.ai/artifact/JtDZ9LNfu
 - Language illustrations simplified (owner, relayed by the placeholder-copy session: "fix and simplify the ui being used in the language, maybe make it more abstract or small/simple"): per setting two or three components that show it (an action pair, three rows, a field and a button…), the Example copy (Title, Description, Button, Item one, One / Two), shown 1:1 on a 224 reference and zoomed down only in small tiles.
 - Checks: React 477/477, contracts 14/14, tokens 24,270, typecheck, styles build. Raw sweep JSON is not in the repo.
 
-## Next session starts here (owner, 2026-10-17: "i want to see the artifact in the next session")
+## Round 35 / 34: Articles rethink and the Component icon (2026-10-17, branch `claude/wikipedia-link-underline-12add0`, uncommitted)
 
-Build the component review artifact and open it first, before any other work. It covers PRs #120 and #122:
-- **Interaction polish (#120):** firmer presses, unselectable controls, Link's underline offset. Show before / after
-  rest, hover and pressed (capture scripts in `docs/research/interaction-polish-2026-10-16.md`).
-- **Link inks and Citation `footnote` (#122).**
-- **The eight new Articles families (#122):** Reference list, Table of contents, Figure, Infobox, Inline list,
-  Abbreviation, Hatnote, Navbox.
+**Done:** round 38 approved Figure and Reference list; all eight Articles families are Complete. Nothing is in review.
+Proposed, not started: a Video player family. Port 4400 and the Electron window belong to another session
+(`materials-testing-inspector`); this session's earlier blanket pkills may have closed its app. Verify here with
+`desktop-dist` (4410). Round 38 (collection `components38`): Reference list's em dashes back (owner prefers them);
+Figure's `ratio` removed (a video will be its own player). Earlier, round 37 (collection `components37`): Reference list markers (one box for bullets and
+numbers, 6 to the text) and no em dashes (Inline list dots); Figure's 16:9 tile is an image. Round 36 approved Infobox.
+Open: a Video player as its own family (owner asked; proposed, not started).
 
-Follow the review-page format (plain What changed / Why per family, changed variants marked, Before / After side by
-side): `apps/docs/scripts/component-review.mjs`, and the review notes in each spec. Record the owner's approvals in
-`component-status.mjs`.
+Earlier, round 36 (collection `components36`, Before = round 35 rebuilt from the page): Figure
+(`ratio`, no-caption and video tiles), Infobox (`layout="stacked"`, `action`), Reference list (numbered by default, numbers
+flush with the text above; `round-36-variants.md`); generic placeholder copy. Round 35 approved Inline list, Navbox, Table
+of contents and Panel. Open: collapsible Infobox sections; rename Navbox.
+
+Earlier, round 35 (collection `components35`; Before = round 34 rebuilt from the page's own data.js and
+area.css). Round 34's verdicts are applied: Figure one form; Infobox Wikipedia density with Area's title roles; Inline list
+blue-link tile (links standalone in a list); Navbox footer hierarchy; Reference list rebuilt on ChatGPT's Sources
+(measured, `docs/research/articles-rethink-2026-10-17/round-35-measurements.md`); TOC label in the default ink; Panel
+token rows 8 apart. Each spec's "Round 35" table gives every text style, ink and gap its basis.
+
+Earlier: round 34 (collection `components34`) on https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG,
+Before = round 33 (main at df7cfc6): Figure, Infobox, Inline list, Navbox, Reference list, Table of contents, Panel.
+Built with `component-review.mjs --round <slugs>` (new flag). Read verdicts with ArtifactData.
+
+- **Round 33 verdicts** (18/18): 12 approved and recorded in `component-status.mjs` (Link with the close underline,
+  Citation footnote, Hover card, Abbreviation, Hatnote, and the link-underline peers). Six "rethink": not only
+  Wikipedia; Figure: "look at other design systems/products ... simple and consistent and cohesive".
+- **Rethink** (surveys in `docs/research/articles-rethink-2026-10-17/`; each spec's "Rethink, 2026-10-17 (round 34)"):
+  Figure unframed (`align` start | center, `bordered`); Infobox composed of a header + Description list sections,
+  `framed` optional; Inline list `dot` | `rule` | `none`, never bold; Navbox unframed columns of headed link groups,
+  no toggle, `divided`; Reference list muted notes with one return-arrow backlink (`return` added to the component
+  glyphs), `divided`, hook `data-target`; Table of contents "On this page", `levels`, no collapse.
+- **Open for the owner:** rename Navbox ("Link groups")? Description list `stacked` (App Store, Chakra) would reopen
+  an approved family; a faint marker track on every TOC row would change Nav marker everywhere; a "Sources" list
+  (ChatGPT, Perplexity) for Reference list.
+- **Link underline** 0.25em → 0.08em (link.md, "Close underline"), approved in round 33.
+- **Component icon** redrawn larger (icons.md, "Component redrawn"; `data-angles="free"`); sheet in
+  `docs/research/icon-review/2026-10-17/`.
+- Checked: React 477/477, typecheck, icons 10/10, styles build (`build:docs` fails only the known dogfood audit).
+  Not synced with main (#123, Examples tab, unrelated): the worktree has uncommitted work.
+- Seen, not fixed: Abbreviation's tooltip renders a `div` inside a `p` (React hydration warning in the gallery).
 
 ## Wikipedia: links, footnotes and article families (2026-10-17, PR #122)
 

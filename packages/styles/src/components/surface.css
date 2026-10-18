@@ -566,7 +566,7 @@
     text-decoration: underline;
     text-decoration-color: currentColor; /* spec: Link's line, the link's own ink (link.md, review round 2) */
     text-decoration-thickness: var(--area-stroke-width);
-    text-underline-offset: 0.25em; /* spec: Link's offset, clear of descenders (link.md, 2026-10-16) */
+    text-underline-offset: 0.08em; /* spec: Link's offset, close under the text (link.md, 2026-10-17) */
     transition: text-decoration-color var(--area-duration-fast) var(--area-ease-out);
   }
   @media (hover: hover) { .area-card__action:hover { text-decoration-color: currentColor; transition-duration: 0s; } }
@@ -646,7 +646,7 @@
     /* Link's underline (docs/specs/link.md, peers aligned 2026-10-08). */
     text-decoration-color: currentColor; /* spec: Link's line, the link's own ink (link.md, review round 2) */
     text-decoration-thickness: var(--area-stroke-width);
-    text-underline-offset: 0.25em; /* spec: Link's offset, clear of descenders (link.md, 2026-10-16) */
+    text-underline-offset: 0.08em; /* spec: Link's offset, close under the text (link.md, 2026-10-17) */
     transition: text-decoration-color var(--area-duration-fast) var(--area-ease-out);
   }
   @media (hover: hover) { .area-alert__link a:hover { text-decoration-color: currentColor; transition-duration: 0s; } }

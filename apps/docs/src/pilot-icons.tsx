@@ -5131,20 +5131,20 @@ export const PilotCompassDotFilledIcon = ({ weight, size, ...props }: PilotIconP
 
 export const PilotComponentIcon = ({ weight, size, ...props }: PilotIconProps) => (
   <svg {...root(size, props)}>
-    <path d="M8.354 2.354L9.646 3.646A0.5 0.5 0 0 1 9.646 4.354L8.354 5.646A0.5 0.5 0 0 1 7.646 5.646L6.354 4.354A0.5 0.5 0 0 1 6.354 3.646L7.646 2.354A0.5 0.5 0 0 1 8.354 2.354Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M8.354 10.354L9.646 11.646A0.5 0.5 0 0 1 9.646 12.354L8.354 13.646A0.5 0.5 0 0 1 7.646 13.646L6.354 12.354A0.5 0.5 0 0 1 6.354 11.646L7.646 10.354A0.5 0.5 0 0 1 8.354 10.354Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M4.354 6.354L5.646 7.646A0.5 0.5 0 0 1 5.646 8.354L4.354 9.646A0.5 0.5 0 0 1 3.646 9.646L2.354 8.354A0.5 0.5 0 0 1 2.354 7.646L3.646 6.354A0.5 0.5 0 0 1 4.354 6.354Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
-    <path d="M12.354 6.354L13.646 7.646A0.5 0.5 0 0 1 13.646 8.354L12.354 9.646A0.5 0.5 0 0 1 11.646 9.646L10.354 8.354A0.5 0.5 0 0 1 10.354 7.646L11.646 6.354A0.5 0.5 0 0 1 12.354 6.354Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M8.354 1.654L10.096 3.396A0.5 0.5 0 0 1 10.096 4.104L8.354 5.846A0.5 0.5 0 0 1 7.646 5.846L5.904 4.104A0.5 0.5 0 0 1 5.904 3.396L7.646 1.654A0.5 0.5 0 0 1 8.354 1.654Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M8.354 10.154L10.096 11.896A0.5 0.5 0 0 1 10.096 12.604L8.354 14.346A0.5 0.5 0 0 1 7.646 14.346L5.904 12.604A0.5 0.5 0 0 1 5.904 11.896L7.646 10.154A0.5 0.5 0 0 1 8.354 10.154Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M4.104 5.904L5.846 7.646A0.5 0.5 0 0 1 5.846 8.354L4.104 10.096A0.5 0.5 0 0 1 3.396 10.096L1.654 8.354A0.5 0.5 0 0 1 1.654 7.646L3.396 5.904A0.5 0.5 0 0 1 4.104 5.904Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M12.604 5.904L14.346 7.646A0.5 0.5 0 0 1 14.346 8.354L12.604 10.096A0.5 0.5 0 0 1 11.896 10.096L10.154 8.354A0.5 0.5 0 0 1 10.154 7.646L11.896 5.904A0.5 0.5 0 0 1 12.604 5.904Z" fill="none" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
 export const PilotComponentFilledIcon = ({ weight, size, ...props }: PilotIconProps) => {
   return (
     <svg {...root(size, props)}>
-      <path d="M8.354 2.354L9.646 3.646A0.5 0.5 0 0 1 9.646 4.354L8.354 5.646A0.5 0.5 0 0 1 7.646 5.646L6.354 4.354A0.5 0.5 0 0 1 6.354 3.646L7.646 2.354A0.5 0.5 0 0 1 8.354 2.354Z" fill="currentColor" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M8.354 10.354L9.646 11.646A0.5 0.5 0 0 1 9.646 12.354L8.354 13.646A0.5 0.5 0 0 1 7.646 13.646L6.354 12.354A0.5 0.5 0 0 1 6.354 11.646L7.646 10.354A0.5 0.5 0 0 1 8.354 10.354Z" fill="currentColor" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M4.354 6.354L5.646 7.646A0.5 0.5 0 0 1 5.646 8.354L4.354 9.646A0.5 0.5 0 0 1 3.646 9.646L2.354 8.354A0.5 0.5 0 0 1 2.354 7.646L3.646 6.354A0.5 0.5 0 0 1 4.354 6.354Z" fill="currentColor" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M12.354 6.354L13.646 7.646A0.5 0.5 0 0 1 13.646 8.354L12.354 9.646A0.5 0.5 0 0 1 11.646 9.646L10.354 8.354A0.5 0.5 0 0 1 10.354 7.646L11.646 6.354A0.5 0.5 0 0 1 12.354 6.354Z" fill="currentColor" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M8.354 1.654L10.096 3.396A0.5 0.5 0 0 1 10.096 4.104L8.354 5.846A0.5 0.5 0 0 1 7.646 5.846L5.904 4.104A0.5 0.5 0 0 1 5.904 3.396L7.646 1.654A0.5 0.5 0 0 1 8.354 1.654Z" fill="currentColor" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M8.354 10.154L10.096 11.896A0.5 0.5 0 0 1 10.096 12.604L8.354 14.346A0.5 0.5 0 0 1 7.646 14.346L5.904 12.604A0.5 0.5 0 0 1 5.904 11.896L7.646 10.154A0.5 0.5 0 0 1 8.354 10.154Z" fill="currentColor" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M4.104 5.904L5.846 7.646A0.5 0.5 0 0 1 5.846 8.354L4.104 10.096A0.5 0.5 0 0 1 3.396 10.096L1.654 8.354A0.5 0.5 0 0 1 1.654 7.646L3.396 5.904A0.5 0.5 0 0 1 4.104 5.904Z" fill="currentColor" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M12.604 5.904L14.346 7.646A0.5 0.5 0 0 1 14.346 8.354L12.604 10.096A0.5 0.5 0 0 1 11.896 10.096L10.154 8.354A0.5 0.5 0 0 1 10.154 7.646L11.896 5.904A0.5 0.5 0 0 1 12.604 5.904Z" fill="currentColor" stroke="currentColor" style={{ strokeWidth: sw(weight, size) }} strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 };

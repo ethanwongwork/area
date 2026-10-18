@@ -1,17 +1,18 @@
 /* ---------------------------------------------------------------------------
  * Figure
  *
- * Media with its caption (docs/specs/figure.md). Wikipedia's thumbnail (measured 2026-10-17): a table
- * whose caption wraps to the image's width (Area: a column as wide as its media), the image 3 inside a #f8f9fa frame with a #c8ccd1 hairline,
- * the caption at 0.884em, 6 in at its sides and foot; floated to the end 1.4em from the text. `plain` is
- * the image alone with a muted caption under it (content-first, as Notion's image blocks); `framed` is
- * Wikipedia's thumbnail in Area's card paint.
+ * Media with its caption (docs/specs/figure.md). Rethought 2026-10-17 (round 33: "look at other design
+ * systems/products examples for figure besides wikipedia ... simple and consistent and cohesive"): no frame and
+ * no float, as 6 of 7 pinned sources (Notion, Tailwind Typography, Carbon, Apple DocC, Ghost, MUI;
+ * docs/research/articles-rethink-2026-10-17/figure-infobox.md). The media at Area's media corner, then a small
+ * muted caption 8 under it, start-aligned as Notion's image blocks; the caption is optional, the media any element, in its
+ * own shape (an image, an embed, later Area's own video player). Round 37 removed `ratio` (owner: "is it really
+ * necessary to have? eventually i want this to be an actual video"). Round 34 (owner: "what is content bordered,
+ * also why is the text centered?") removed the hairline and the centred form: one form, nothing to choose.
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-figure {
-    --_frame-pad: 0px;
-    /* As wide as its media: the caption adds no width of its own (contain), so it wraps to the media's width, as
-       Wikipedia's (a table there). */
+    /* As wide as its media: the caption adds no width of its own (contain), so it wraps to the media's width. */
     display: flex;
     flex-direction: column;
     inline-size: fit-content;
@@ -24,36 +25,16 @@
     display: block;
     max-inline-size: 100%;
     block-size: auto;
-    border-radius: var(--_media-radius, var(--area-radius-small));
+    border-radius: var(--area-radius-small);
   }
   .area-figure__caption {
     contain: inline-size;
-    /* spec: Area's small text, a step under body (Wikipedia 0.884em). */
+    /* spec: Notion's caption is its UI text (14, as its controls) in the secondary ink, 8 under the media (Carbon 8):
+       Area's UI text, muted. */
     padding-block-start: var(--area-space-8);
     color: var(--area-fg-muted);
     font-size: var(--area-text-sm-size);
     line-height: var(--area-text-sm-leading);
     text-align: start;
   }
-
-  .area-figure--plain {}
-  /* Framed: Wikipedia's thumbnail frame in Card's paint (the surface, its edge, the container corner, the resting
-     shadow), the caption inside it. */
-  .area-figure--framed {
-    --_frame-pad: var(--area-space-4); /* spec: Wikipedia's image 3 in, plus its 1 hairline */
-    --_media-radius: max(0px, calc(var(--area-radius-container) - var(--_frame-pad)));
-    padding: var(--_frame-pad);
-    background-color: var(--area-bg-surface);
-    border: var(--area-border-width) solid var(--area-border-card);
-    border-radius: var(--area-radius-container);
-    box-shadow: var(--area-shadow-resting);
-  }
-  /* spec: Wikipedia 6 at the caption's sides and foot, the frame's own ink. */
-  .area-figure--framed > .area-figure__caption { padding: var(--area-space-6) var(--area-space-4) var(--area-space-2); color: var(--area-fg-default); }
-
-  /* Align: beside the text. spec: Wikipedia floats a thumbnail to the end, 1.4em from the text and 1.3em
-     above what follows; Area's 24 and 16. */
-  .area-figure--none {}
-  .area-figure--end { float: inline-end; clear: inline-end; margin: var(--area-space-4) 0 var(--area-space-16) var(--area-space-24); }
-  .area-figure--start { float: inline-start; clear: inline-start; margin: var(--area-space-4) var(--area-space-24) var(--area-space-16) 0; }
 }

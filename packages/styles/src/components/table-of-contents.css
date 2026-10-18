@@ -1,20 +1,24 @@
 /* ---------------------------------------------------------------------------
  * Table of contents
  *
- * A page's sections, with the one in view marked (docs/specs/table-of-contents.md). The rows are Nav's
- * marker rows (nav.css): Wikipedia's contents (Vector 2022, measured 2026-10-17) are 28-tall rows at 14
- * (Area's compact row), sections 12 in per level, the current one in the body ink while the rest are
- * links; Area draws the current one in the body ink with the selection rail and the rest muted, as its
- * other outlines. Only the title is the TOC's own.
+ * A page's sections, with the one being read marked (docs/specs/table-of-contents.md). The rows are Nav's
+ * marker rows (nav.css): muted, the current one in the default ink with its rail, which is VitePress's and MDN's
+ * outline. Rethought 2026-10-17 (round 33, away from Wikipedia's "Contents"): docs outlines head it "On this page"
+ * in a quiet label, show two levels and never fold subsections (VitePress, Starlight, Primer, Nextra, Docusaurus;
+ * docs/research/articles-rethink-2026-10-17/reference-list-toc.md). Only the label is the TOC's own.
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-toc { min-inline-size: 0; }
-  /* spec: Wikipedia's "Contents", 14 bold; Area's UI text, strong, starting where the marker rows' text starts
-     (nav.css: 16 in). */
+  /* spec: the label leads the outline: the row's size, strong, in the default ink over the muted rows (VitePress:
+     title 600 in text-1, links text-2; Notion's outline rows its secondary ink). A row tall, its text where the marker
+     rows' text starts (nav.css: 16 in). Round 34 (owner: "make sure they are correct for style and fg color"): it was
+     muted, the rows' own ink, so only its weight told it apart. */
   .area-toc__title {
+    display: flex;
+    align-items: center;
+    block-size: var(--area-ui-row);
     margin: 0;
     padding-inline: var(--area-space-16) var(--area-space-8);
-    padding-block-end: var(--area-space-4);
     color: var(--area-fg-default);
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);

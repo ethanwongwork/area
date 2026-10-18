@@ -51,3 +51,41 @@ Wikipedia, computed:
 
 - **What it is:** Short items in a line with a dot (or bar, or comma) between them.
 - **Based on:** Wikipedia's hlist, as used in its navboxes and categories bar.
+
+## Rethink, 2026-10-17 (round 34)
+
+Owner, round 33: "rethink" (not only Wikipedia). Survey: `docs/research/articles-rethink-2026-10-17/inline-list-navbox.md`.
+- `separator`: `dot` (default; regular, `fg-muted`, 8 either side), `rule` (1px `border-divider`, 1em tall, 8 either
+  side), `none` (16 gap, GitHub). Dropped `bar`, `comma` and the bold weight.
+- A flex row that wraps; the mark is the previous item's `::after`, so no line starts with one. `rule` and `none`
+  centre items on the line (an icon or a rule has no baseline).
+
+## Review note, 2026-10-17 (round 34)
+
+- **What changed:** The separator is no longer Wikipedia's bold dot. `dot` is a regular muted dot 8 from each item;
+  `bar` became `rule`, a 1px divider line; `comma` is gone (write commas in the text); new `none` leaves 16 of space
+  for metadata that starts each item with an icon.
+- **Why:** You asked for it not to look only like Wikipedia. No other source bolds the separator; most use space
+  alone (GitHub, MDN, GOV.UK) or a quiet dot or rule (Docusaurus; shadcn, Radix, MUI, Apple).
+
+## Round 35, 2026-10-17
+
+Owner, round 34: "should the underline still be there on rest like the links? is there a colored version?" → links in
+an Inline list are standalone: underlined on hover, not at rest. A link in a sentence is underlined so it stands out
+from the words around it; a row of links is all links, as a site footer's or GitHub's topics, so the underline would
+only add noise (Link spec: `inline` for prose, `standalone` outside a sentence). Colour is Link's: any of its inks; a
+new tile shows the link blue.
+
+| Part | Type | Ink | Space | Basis |
+|---|---|---|---|---|
+| item | the context's | the context's (a link: Link's ink) | — | GitHub's metadata, Docusaurus |
+| `dot` | the item's size, regular | `fg-muted` | 8 either side | Docusaurus 8 |
+| `rule` | 1px × 1em | `border-divider` | 8 either side | shadcn, Radix, MUI, Apple |
+| `none` | — | — | 16 between items | GitHub 16 |
+
+## Review note, 2026-10-17 (round 35)
+
+- **What changed:** A new example shows the list with blue links. Links in a list stay underlined only on hover.
+- **Why:** You asked about the underline and a coloured version. A link in a sentence is underlined to stand out from
+  the words around it; a row of links needs no underline, as GitHub's topics and site footers. Any of Link's colours
+  works here.

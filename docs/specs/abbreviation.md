@@ -35,7 +35,7 @@ Wikipedia, computed:
 
 | Slot · property | Area value | Basis | Reason when it differs |
 |---|---|---|---|
-| line | dotted, 1 stroke, Link's 0.25em offset | Wikipedia dotted | Link's offset |
+| line | dotted, 1 stroke, Link's 0.08em offset | Wikipedia dotted | Link's offset (0.25em until 2026-10-17) |
 | expansion | an Area Tooltip that describes the abbreviation; no `title` | PRODUCT_UI rule 4 (never the browser's title) | Wikipedia uses the browser's title |
 | focus | focusable (`tabIndex` 0) with the focus ring | keyboard access to the expansion | Wikipedia's isn't focusable |
 

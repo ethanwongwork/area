@@ -324,7 +324,7 @@
     .area-code-block__linenumber:hover {
       text-decoration: underline;
       text-decoration-thickness: var(--area-stroke-width);
-      text-underline-offset: 0.25em; /* spec: Link's offset, clear of descenders (link.md, 2026-10-16) */
+      text-underline-offset: 0.08em; /* spec: Link's offset, close under the text (link.md, 2026-10-17) */
     }
   }
 
@@ -512,7 +512,7 @@
     .area-code-block__toggle:hover {
       text-decoration: underline;
       text-decoration-thickness: var(--area-stroke-width);
-      text-underline-offset: 0.25em; /* spec: Link's offset, clear of descenders (link.md, 2026-10-16) */
+      text-underline-offset: 0.08em; /* spec: Link's offset, close under the text (link.md, 2026-10-17) */
     }
   }
 

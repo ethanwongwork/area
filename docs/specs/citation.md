@@ -143,6 +143,12 @@ draws a number in brackets raised after the word, measured on en.wikipedia.org/w
 
 A Hover card previews the source, as Wikipedia's reference previews do. `variant` is `pill` (default) or `footnote`.
 
+## Review note, 2026-10-17 (round 33)
+
+- **What changed:** A new `footnote` variant: the small raised number in brackets, [13], in link blue, as Wikipedia
+  marks its references. No underline, at rest or on hover.
+- **Why:** You liked how Wikipedia styles its links and small reference numbers ("Systems[13]").
+
 ## Feedback log
 
 - 2026-10-10 · owner: "go with your recommendations then keep working" → Citation from ChatGPT's answer citations; 5

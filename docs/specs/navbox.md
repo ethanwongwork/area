@@ -54,3 +54,43 @@ Wikipedia, computed:
 
 - **What it is:** A box of related links in named groups, with a Hide / Show toggle, for the foot of an article.
 - **Based on:** Wikipedia's navbox in Card's paint, with Inline lists for the links.
+
+## Rethink, 2026-10-17 (round 34)
+
+Owner, round 33: "rethink" (not only Wikipedia). Survey: `docs/research/articles-rethink-2026-10-17/inline-list-navbox.md`.
+- Title: Area's Section heading (`title`, `level`). Groups: an auto grid, columns at least 10em, 24 apart (Vercel 24,
+  Linear 16). Group heading: Nav's group label (muted, strong). Links: one per row, 4 apart (Vercel 20 + 4, Linear 28 +
+  2), standalone Links.
+- `divided`: a 1px divider and 16 above (MDN, GOV.UK). Dropped the frame, the centred title band, the label column,
+  the stripes and the Hide / Show toggle (`expanded`, `hideLabel`…); fold a long block with Accordion if ever needed.
+- Open: the name. "Navbox" is Wikipedia's word; "Link groups" or "Related links" would describe it.
+
+## Review note, 2026-10-17 (round 34)
+
+- **What changed:** No box, title band, tinted label column, stripes or Hide toggle. It is a Section heading (optional)
+  over columns of groups; each group is a muted heading above its links, one per line. `divided` adds a rule above
+  where it closes an article.
+- **Why:** You asked for it not to look only like Wikipedia. Every other source (Vercel, Linear, Apple, GitHub,
+  Notion, MDN, Docusaurus, GOV.UK, Primer) puts a small heading above stacked links in columns, unframed; none
+  collapses at full width.
+
+## Round 35, 2026-10-17
+
+Owner, round 34: "reeavalute the text styles and make sure hierarchy and proper type alignment is correct" → the
+footers' hierarchy (strong heading, dimmer links) and the surface title for the block.
+
+| Part | Type | Ink | Space | Basis |
+|---|---|---|---|---|
+| title | surface title (`title-xs`), strong | default | 12 above the groups | Card, Dialog, Infobox title |
+| group heading | UI text, strong | default | 8 above its links | Linear 13 / 510 primary, Vercel 14 / 500 gray-1000, Apple, MDN, Docusaurus: the heading is the strongest ink |
+| link | UI text, regular | `fg-muted` (Link muted standalone) | 4 apart | Linear tertiary, Vercel gray-900; Vercel's 20 line + 4 |
+| columns | — | — | at least 10em, 24 apart | Vercel gap-6 |
+| alignment | title, headings and links share one start edge | — | — | no element is inset |
+
+## Review note, 2026-10-17 (round 35)
+
+- **What changed:** Three clear levels: the block's title is the same title as a Card's, each group heading is bold in
+  the full text colour, and the links under it are grey. Everything starts on one edge.
+- **Why:** You asked to re-check the hierarchy. Before, the title and the group headings were the same size and the
+  headings were grey over full-colour links. Site footers (Vercel, Linear, Apple, MDN) do the reverse: strong headings,
+  dimmer links.

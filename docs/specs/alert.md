@@ -258,6 +258,13 @@ Open questions:
 
 The link's underline takes Link's offset, 0.25em, clear of descenders (link.md). See [interaction polish](../research/interaction-polish-2026-10-16.md).
 
+## Review note, 2026-10-17 (round 33)
+
+- **What changed:** Only the underline on the link in an alert: it now sits close under the words, about 1px below the letters,
+  instead of 0.25em down. Tails of g, y and p cross it and the line breaks around them. Nothing else changed.
+- **Why:** It follows Link, which you asked to underline "very natural and close to the text" (link.md, "Close
+  underline").
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → dismiss at full ink (was 0.72, 1 on hover), radius
@@ -284,3 +291,5 @@ The link's underline takes Link's offset, 0.25em, clear of descenders (link.md).
 - 2026-10-03 · radius audit D2 (owner) → a one-line Alert and the banner are bars on the control curve, `radius-control-lg` capped (default 40 / 44 → 10, compact 32 → 8); multiline keeps the container 12; flush 0. Was 12 in place, 6 banner (`surface.css`, `.area-alert`, `.area-alert--multiline`). Departs from OpenAI / Primer's 6 for one family across all alerts. `docs/research/radius-audit-2026-10-03.md`.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → inventory only: no motion of its own, offsets whole; no change.
 - 2026-10-08 · owner went with Link's recommendation to align Area's underlines (docs/specs/link.md, "Peers aligned") → the link's underline (inline and banner) is Link's line: 40% of the tone ink at rest, full on hover and focus; the banner's duplicate link rule removed (surface.css) → back in review.
+
+Since 2026-10-17 the underline offset is Link's 0.08em, close under the text (link.md, "Close underline").

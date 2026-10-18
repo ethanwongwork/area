@@ -1,7 +1,7 @@
 /** Navbox gallery specimens. docs/specs/navbox.md. */
-import { InlineList, Link, Navbox, NavboxGroup } from "@area/react";
+import { Link, Navbox, NavboxGroup } from "@area/react";
 
-const links = (names: string[], hash: string) => <InlineList>{names.map(name => <Link key={name} ink="blue" href={hash}>{name}</Link>)}</InlineList>;
+const links = (names: string[], hash: string) => names.map(name => <Link key={name} variant="standalone" ink="muted" href={hash}>{name}</Link>);
 const width = { inlineSize: "calc(var(--area-space-96) * 6)", maxInlineSize: "100%" };
 
 export const GalleryNavbox = () => (
@@ -11,9 +11,9 @@ export const GalleryNavbox = () => (
     <NavboxGroup label="Places">{links(["Wellington", "Remote"], "#gallery-navbox")}</NavboxGroup>
   </Navbox>
 );
-/* Collapsed, as Wikipedia folds a page's later navboxes. */
-export const GalleryNavboxCollapsed = () => (
-  <Navbox title="Design systems" defaultExpanded={false} style={width}>
-    <NavboxGroup label="Libraries">{links(["Area", "Area icons", "Area tokens"], "#gallery-navbox-collapsed")}</NavboxGroup>
+/* Closing an article: a rule above, one group under the title ("See also"). */
+export const GalleryNavboxDivided = () => (
+  <Navbox title="See also" divided style={width}>
+    <NavboxGroup>{links(["Area icons", "Area tokens", "Design systems"], "#gallery-navbox-divided")}</NavboxGroup>
   </Navbox>
 );

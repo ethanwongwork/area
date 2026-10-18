@@ -5303,3 +5303,14 @@ widened pens and broom (balance outranks the lattice). Fixed in the pass: eye-of
 lash (a near miss of open), now from x 4.41 / 11.59. The slivers the tool lists on main and here alike (brain-off,
 bug-off, calendar-range, file-cog, file-zip, folder-cog, folder-zip, image-sparkle, person-settings, server-cog, unpin,
 smile-plus, truck) are the narrow tips of the family bites and cut-outs reviewed in earlier rounds, unchanged.
+
+## Component redrawn, 2026-10-17
+
+Owner, with a crop of Panel's dev-mode row ("Component · Button / Primary"): "the component icon looks wrong". The four
+diamonds were 4 wide (vertices 2 from their centres, centres 4 from the middle) with 2.4 counters: at 16 they read as a
+scatter of dots, lighter than the set's other circle-keyline icons. Lucide's `component` draws the same concept with
+diamonds about 4.5 wide set 4.4 out. Redrawn with diamonds 4.9 wide (vertices 2.45 out) at 4.25 from the middle: the
+tips reach the circle keyline as `diamond` does, the gaps between diamonds are 1.42 at the icon weight (tight) and the
+counters open to about 3.3. No whole-pixel geometry fits a larger diamond inside the keyline with a readable gap
+(centre offset ± size must both be whole), so the source takes `data-angles="free"`, as balance outranks 1× crispness
+(owner, 2026-10-16). Sheet: `docs/research/icon-review/2026-10-17/component-1x.png`, `-2x.png`.

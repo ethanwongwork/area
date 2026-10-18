@@ -102,7 +102,7 @@ Area's underline (computed): 1px, offset 2px, `oklab(0.277 0 0 / 0.4)` on rgb(40
 | link · underline (inline) | always | ChatGPT, Notion agree | — |
 | underline · colour | `currentColor` (the link's own ink) | ChatGPT; owner, review round 2 (2026-10-09) | Notion 40% (Area's value until round 2) |
 | underline · thickness | 1 stroke (`stroke-width`) | Area's other underlines; ChatGPT auto ≈ 1px | Notion 0.05em (0.8 at 16) |
-| underline · offset | **0.25em** (3 at 12, 3.25 at 13, 3.5 at 14, 4 at 16) | Clears descenders by 1px at every type size, measured at 1x and 2x ("Underline clears descenders") | ChatGPT 0.125rem (2) is set for 16 text; Notion 10%, Primer 0.05rem. Was 2 until 2026-10-16 |
+| underline · offset | **0.08em** (about 1 at 12–16) | Owner's reference (GitHub link, 2026-10-17): 1 CSS px under the baseline; one clear pixel row at 1x, 12–16 ("Close underline") | ChatGPT 0.125rem, Notion 10%, Primer 0.05rem. Was 2 until 2026-10-16, then 0.25em until 2026-10-17 |
 | text opacity | none | Area keeps ink fixed and its contrast measurable | Notion sets the link text at 70% |
 | hover / focus | inline: unchanged (the line is already full ink, as ChatGPT's); standalone: the line lands at once, fades on fast; ink fixed | Shared rule (hover changes only plate, edge or underline); Untitled darkens the underline | Untitled and Primer muted also change the ink |
 | standalone | no underline at rest; full underline on hover and focus | Primer default; Untitled link buttons | — |
@@ -204,6 +204,16 @@ Resolved 2026-10-08 (owner: "go with your recommendations"):
 - **What changed:** The underline is now the link's own colour at rest (it was 40% of it), so a link in a sentence reads as a link at a glance. A new blue ink (`ink="blue"`) gives the link blue that ChatGPT and Figma use for links in their interface; in a sentence it stays underlined, and a standalone one underlines on hover. The default still takes the surrounding text's colour, as ChatGPT and Notion do in running text.
 - **Why:** You asked whether links should be more obviously links, whether there should be a blue version, and whether the underline should match the text. ChatGPT draws its underline in the text colour; ChatGPT's settings links are rgb(44, 103, 197) and Figma's rgb(0, 123, 229).
 
+## Review note, 2026-10-17 (round 33)
+
+- **What changed:** The underline now sits close under the word, about 1px below the letters, as on GitHub and
+  Wikipedia (it was 0.25em, about 3.5px at 14). Tails of g, y and p cross the line and the line breaks around them.
+  The same line is used by Abbreviation, Chip links, Card actions, Alert links, Code block line numbers and Description
+  list's "Show more". Links also have new inks: purple, pink, green, red, orange and brown, beside text, gray and blue.
+- **Why:** You asked for an underline that is "very natural and close to the text", with a GitHub link as the
+  reference. Measured from it: a 1px line, 1px under the baseline. 0.08em gives that at 12–16 (rendered at 1x and 2x).
+  The inks came from your Wikipedia request for links in blue, text, gray or another colour.
+
 ## Feedback log
 
 - 2026-10-08 · owner: "move on to the next component" → Link built from ChatGPT and Notion links, Primer and
@@ -215,3 +225,30 @@ Resolved 2026-10-08 (owner: "go with your recommendations"):
   rgb(44, 103, 197) and Figma's file browser rgb(0, 123, 229), neither underlined; ChatGPT's prose underline in the text
   colour; Notion's in-page line a light border. Underline now the link's own ink at rest; new `ink="blue"`
   (`fg-info`); default stays inherit → link.css, manifest, Link.tsx, tile `ink-blue`; Alert, Card and Chip follow.
+- 2026-10-17 · owner: "i want the underline for the link style to be very natural and close to the text in this
+  style" (a GitHub link) → offset 0.25em → 0.08em on Link and its peers ("Close underline").
+
+## Close underline, 2026-10-17
+
+Owner, with a screenshot of a GitHub profile link: "i want the underline for the link style to be very natural and
+close to the text in this style".
+- **The reference, measured** (pixel rows of the 2x screenshot, about 14px text): the line is 1 CSS px thick and
+  starts 1 CSS px under the glyphs' baseline; g's tail crosses it and skip-ink parts the line around it.
+- **Rendered** Geist at 12, 13, 14 and 16, 1x and 2x, in headless Edge, at 0.25em, 0.15em, 0.12em, 0.1em, 0.08em,
+  0.06em, `auto` and `from-font`. Gaps from the baseline to the line, in device pixels:
+
+| Offset | 1x (12 / 13 / 14 / 16) | 2x (12 / 13 / 14 / 16) |
+|---|---|---|
+| 0.25em (previous) | 3 / 3 / 4 / 4 | 6 / 7 / 7 / 8 |
+| 0.1em | 1 / 1 / 1 / 2 | 2 / 3 / 3 / 3 |
+| **0.08em** | **1 / 1 / 1 / 1** | **2 / 2 / 2 / 3** |
+| auto, from-font | 1 / 1 / 1 / 1 | 1 / 1 / 1 / 1 |
+
+- **Chosen: 0.08em.** It matches the reference at the app's 13 and at 14 (2 device px at 2x), one clear row at 1x
+  everywhere. `auto` (Geist's own position) leaves half a pixel at 2x and reads as touching the letters.
+- **Trade-off:** descenders cross the line again; skip-ink parts it, as on GitHub and Wikipedia. This reverses the
+  2026-10-16 choice to keep the line clear of them.
+
+Peers that draw Link's line take the same offset: Abbreviation, Chip `link` and `link-icon`, Card action, Alert link,
+Code block line numbers and toggle, Description list's "Show more", and the app's section links.
+
