@@ -413,15 +413,15 @@ export const COMPONENT_PAGES = [
     ],
   },
   {
-    slug: "navbox", name: "Navbox", exportName: "Navbox", manifest: "navbox",
-    imports: "Navbox, NavboxGroup, Link",
+    slug: "link-groups", name: "Link groups", exportName: "LinkGroups", manifest: "linkGroups",
+    imports: "LinkGroups, LinkGroup, Link",
     api: [
       ["title / level", "ReactNode (the surface title role) / 2–6", "— / 2"],
       ["divided", "boolean (a rule above)", "false"],
-      ["NavboxGroup label", "ReactNode (the group's heading); children are the links, one per row: Link ink=\"muted\" variant=\"standalone\"", "—"],
+      ["LinkGroup label", "ReactNode (the group's heading); children are the links, one per row: Link ink=\"muted\" variant=\"standalone\"", "—"],
     ],
     examples: [
-      { id: "default", title: "Default", note: "Groups of related links in columns: a strong heading over muted links.", demo: "GalleryNavbox" },
+      { id: "default", title: "Default", note: "Groups of related links in columns: a strong heading over muted links.", demo: "GalleryLinkGroups" },
     ],
   },
   {

@@ -1131,8 +1131,8 @@ export const hatnote = {
   defaults: {},
 } as const satisfies ComponentManifest;
 
-export const navbox = {
-  block: "area-navbox",
+export const linkGroups = {
+  block: "area-link-groups",
   description: "Groups related links under small headings, in columns, at the foot of a page.",
   variants: {},
   booleans: ["divided"],
@@ -1261,5 +1261,5 @@ export const MANIFESTS = {
   inlineList,
   abbreviation,
   hatnote,
-  navbox,
+  linkGroups,
 } as const satisfies Record<string, ComponentManifest>;

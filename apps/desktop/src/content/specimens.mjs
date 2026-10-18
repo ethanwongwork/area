@@ -460,9 +460,9 @@ function gallerySpecimenTable() {
     hatnote: [
       { id: "default", title: "Default", demo: "GalleryHatnote" },
     ],
-    navbox: [
-      { id: "default", title: "Default", demo: "GalleryNavbox" },
-      { id: "divided", title: "Divided", demo: "GalleryNavboxDivided" },
+    linkGroups: [
+      { id: "default", title: "Default", demo: "GalleryLinkGroups" },
+      { id: "divided", title: "Divided", demo: "GalleryLinkGroupsDivided" },
     ],
     "date-range-picker": [
       { id: "default", title: "Default", demo: "GalleryDateRangePicker" },
