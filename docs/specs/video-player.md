@@ -111,3 +111,22 @@ AVKit's ControlsStyle, Vidstack, Video.js, player.style, Mux).
 
 In a Figure, give the Figure a width (`style={{ inlineSize: "100%" }}`): Figure is as wide as its media, and the player is
 as wide as its container, so neither can size the other.
+
+## Round 41, 2026-10-18
+
+Owner, round 40: "refine the ui, what do other design systems and products do?"; then "go ahead and refine it". Visual pass
+on the floating controller:
+- The track had no marker at rest: QuickTime's knob and the iOS 26 pill's thumb always show where the video is → the
+  floating thumb always shows (the bar keeps YouTube's hover-only thumb).
+- The rail at white 20% read faint on the panel's black 55% → 30% inside the panel.
+- Muted, the volume slider read as an empty line → it keeps the level, greyed (fill white 40%), and says "Muted, 60%
+  volume"; unmuting returns to it, as macOS does.
+- Demos write every prop out (the gallery's code view showed `{...clip}`).
+
+## Review note, 2026-10-18 (round 41)
+
+- **What changed:** The progress bar always shows its round marker, as QuickTime's does; the bar's empty part is a little
+  brighter so it reads on the dark panel; and when muted, the volume slider keeps its level in grey instead of looking
+  empty.
+- **Why:** You asked to refine it. Next to QuickTime and Apple's newer players, the bar had no marker at rest, the track
+  was faint on the dark glass, and the muted volume looked like a stray line.

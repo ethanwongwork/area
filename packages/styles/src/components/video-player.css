@@ -123,6 +123,8 @@
      (Vimeo, Video.js, Media Chrome); a 12 white thumb shown on hover, drag and focus (YouTube, Video.js 12). */
   .area-video-player__range {
     --_track: var(--area-space-4);
+    --_rail: rgb(255 255 255 / 0.2); /* spec */
+    --_fill: #fff; /* spec */
     --_played: 0%;
     --_loaded: 0%;
     flex: 1 1 auto;
@@ -139,18 +141,18 @@
     block-size: var(--_track);
     border-radius: var(--area-radius-full);
     background: linear-gradient(to right,
-      #fff 0 var(--_played),
+      var(--_fill) 0 var(--_played),
       rgb(255 255 255 / 0.4) var(--_played) max(var(--_played), var(--_loaded)),
-      rgb(255 255 255 / 0.2) max(var(--_played), var(--_loaded)) 100%); /* spec */
+      var(--_rail) max(var(--_played), var(--_loaded)) 100%); /* spec */
     transition: block-size var(--area-duration-fast) var(--area-ease-out);
   }
   .area-video-player__range::-moz-range-track {
     block-size: var(--_track);
     border-radius: var(--area-radius-full);
     background: linear-gradient(to right,
-      #fff 0 var(--_played),
+      var(--_fill) 0 var(--_played),
       rgb(255 255 255 / 0.4) var(--_played) max(var(--_played), var(--_loaded)),
-      rgb(255 255 255 / 0.2) max(var(--_played), var(--_loaded)) 100%); /* spec */
+      var(--_rail) max(var(--_played), var(--_loaded)) 100%); /* spec */
   }
   .area-video-player__range::-webkit-slider-thumb {
     appearance: none;
@@ -249,6 +251,13 @@
   .area-video-player__button--play { inline-size: var(--area-space-32); block-size: var(--area-space-32); border-radius: var(--area-radius-full); }
   .area-video-player__button--play > svg { inline-size: var(--area-space-20); block-size: var(--area-space-20); }
   .area-video-player--floating .area-video-player__volume > .area-video-player__range { inline-size: 56px; /* spec: Apple's 60 */ margin-inline: var(--area-space-4); opacity: 1; }
+  /* Inside the dark panel the rail is 30% (the 20% of the bar read faint against black 55%), and the thumb always shows
+     where the video is, as QuickTime's knob and the iOS 26 pill's (round 41 visual pass). */
+  .area-video-player--floating .area-video-player__range { --_rail: rgb(255 255 255 / 0.3); /* spec */ }
+  .area-video-player--floating .area-video-player__range::-webkit-slider-thumb { scale: 1; }
+  .area-video-player--floating .area-video-player__range::-moz-range-thumb { scale: 1; }
+  /* Muted keeps the level in view, greyed: the slider says where the volume returns to (QuickTime, macOS). */
+  .area-video-player__volume[data-muted] > .area-video-player__range { --_fill: rgb(255 255 255 / 0.4); /* spec */ }
   /* Row two: the time, the track, the time, 8 apart (WebKit time-control). */
   .area-video-player__timeline { display: flex; align-items: center; gap: var(--area-space-8); block-size: var(--area-space-16); }
   .area-video-player__timeline > .area-video-player__range { block-size: var(--area-space-16); }

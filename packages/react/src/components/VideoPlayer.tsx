@@ -165,7 +165,6 @@ export const VideoPlayer = /* @__PURE__ */ forwardRef<HTMLVideoElement, VideoPla
 
   const played = duration ? (time / duration) * 100 : 0;
   const rangeStyle = (fill: number, buffer = 0) => ({ "--_played": `${fill}%`, "--_loaded": `${buffer * 100}%` }) as CSSProperties;
-  const level = muted ? 0 : volume;
   const shape = layout ?? "floating";
   const part = videoPlayerVariants.element;
   const button = (name: string, label: string, onClick: () => void, glyph: ReactNode, extra: Record<string, unknown> = {}) => (
@@ -181,12 +180,12 @@ export const VideoPlayer = /* @__PURE__ */ forwardRef<HTMLVideoElement, VideoPla
       onChange={event => seek(Number(event.currentTarget.value))} />
   );
   const volumeGroup = (
-    <div key="volume" className={part("volume")} data-open={volumeOpen ? "" : undefined}
+    <div key="volume" className={part("volume")} data-open={volumeOpen ? "" : undefined} data-muted={muted ? "" : undefined}
       onPointerEnter={event => { if (event.pointerType === "mouse") setVolumeOpen(true); }} onPointerLeave={() => setVolumeOpen(false)}>
       {button("mute", muted || volume === 0 ? "Unmute" : "Mute", toggleMute, <Glyph name={muted || volume === 0 ? "volume-off" : "volume"} />)}
       <input type="range" className={part("range")} aria-label="Volume"
-        min={0} max={1} step={0.05} value={level} style={rangeStyle(level * 100)}
-        aria-valuetext={`${Math.round(level * 100)}% volume`}
+        min={0} max={1} step={0.05} value={volume} style={rangeStyle(volume * 100)}
+        aria-valuetext={muted ? `Muted, ${Math.round(volume * 100)}% volume` : `${Math.round(volume * 100)}% volume`}
         onChange={event => setLevel(Number(event.currentTarget.value))} />
     </div>
   );
