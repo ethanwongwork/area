@@ -1,10 +1,10 @@
 // The article families first built from Wikipedia's page (2026-10-17; reworked after round 33): Reference list, Table of contents, Figure, Infobox,
-// Inline list, Abbreviation, Hatnote, Navbox.
+// Inline list, Abbreviation, Hatnote, LinkGroups.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createElement as h } from "react";
 import { renderToStaticMarkup as render } from "react-dom/server";
-import { Abbreviation, Figure, Hatnote, Infobox, InfoboxRow, InfoboxSection, InlineList, Navbox, NavboxGroup, ReferenceList, ReferenceListItem, TableOfContents } from "../dist/modules/index.js";
+import { VideoPlayer, Abbreviation, Figure, Hatnote, Infobox, InfoboxRow, InfoboxSection, InlineList, LinkGroups, LinkGroup, ReferenceList, ReferenceListItem, TableOfContents } from "../dist/modules/index.js";
 
 test("a reference list is ChatGPT's sources: publisher, linked title and what it covers, set apart by em dashes; numbered notes link back", () => {
   const html = render(h(ReferenceList, { title: "Sources" }, h(ReferenceListItem, { source: "Epson", title: "Report", href: "https://x.test", description: "durability" })));
@@ -48,13 +48,33 @@ test("an abbreviation is focusable and never uses the browser's title", () => {
   assert.doesNotMatch(html, /title=/);
 });
 
+test("an abbreviation's tooltip is phrasing content, valid inside a paragraph", () => {
+  const html = render(h("p", null, h(Abbreviation, { title: "Bachelor of Design" }, "BDes")));
+  assert.match(html, /<abbr class="area-abbr" tabindex="0" aria-describedby="([^"]+)">BDes<\/abbr><span role="tooltip" class="area-tooltip area-tooltip--top" id="\1" popover="manual">Bachelor of Design<\/span><\/p>$/);
+  assert.doesNotMatch(html, /<div/);
+});
+
 test("a hatnote is a note", () => {
   assert.equal(render(h(Hatnote, null, "See also")), '<div role="note" class="area-hatnote">See also</div>');
 });
 
-test("a navbox is a nav named by its title, with labelled lists of links", () => {
-  const html = render(h(Navbox, { title: "Studio", divided: true }, h(NavboxGroup, { label: "People" }, "x", "y")));
-  assert.match(html, /^<nav class="area-navbox area-navbox--divided" aria-labelledby="([^"]+)-title"><h2 class="area-navbox__title" id="\1-title">Studio<\/h2><div class="area-navbox__groups">/);
-  assert.match(html, /<div class="area-navbox__label" id="([^"]+)-label">People<\/div><ul class="area-navbox__list" role="list" aria-labelledby="\1-label"><li>x<\/li><li>y<\/li><\/ul>/);
+test("link groups are a nav named by its title, with labelled lists of links", () => {
+  const html = render(h(LinkGroups, { title: "Studio", divided: true }, h(LinkGroup, { label: "People" }, "x", "y")));
+  assert.match(html, /^<nav class="area-link-groups area-link-groups--divided" aria-labelledby="([^"]+)-title"><h2 class="area-link-groups__title" id="\1-title">Studio<\/h2><div class="area-link-groups__groups">/);
+  assert.match(html, /<div class="area-link-groups__label" id="([^"]+)-label">People<\/div><ul class="area-link-groups__list" role="list" aria-labelledby="\1-label"><li>x<\/li><li>y<\/li><\/ul>/);
   assert.doesNotMatch(html, /aria-expanded/);
 });
+
+test("a video player is a named group: the video, and only the round play before the first play", () => {
+  const html = render(h(VideoPlayer, { label: "Sample", src: "x.mp4" }));
+  assert.match(html, /^<div role="group" aria-label="Sample" tabindex="0" class="area-video-player area-video-player--floating area-video-player--auto"><video src="x.mp4" class="area-video-player__media" playsinline=""><\/video>/i);
+  assert.match(html, /<button type="button" class="area-video-player__start" aria-label="Play"><svg[^>]*data-area-glyph="play"/);
+  assert.doesNotMatch(html, /area-video-player__controls/);
+  const floating = render(h(VideoPlayer, { label: "S", src: "x.mp4", autoPlay: true, controls: "always" }));
+  assert.match(floating, /area-video-player--always" data-started="">.*area-video-player__transport.*aria-label="Volume".*aria-label="Back 15 seconds".*aria-label="Play".*aria-label="Forward 15 seconds".*area-video-player__timeline.*aria-label="Seek"/);
+  assert.match(render(h(VideoPlayer, { label: "S", src: "x.mp4", autoPlay: true, layout: "bar" })), /area-video-player__scrim.*aria-label="Seek".*aria-label="Volume"/);
+  const minimal = render(h(VideoPlayer, { label: "S", src: "x.mp4", autoPlay: true, layout: "minimal" }));
+  assert.match(minimal, /area-video-player__start/);
+  assert.doesNotMatch(minimal, /aria-label="Seek"/);
+});
+

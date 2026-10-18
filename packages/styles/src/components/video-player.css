@@ -1,0 +1,306 @@
+/* ---------------------------------------------------------------------------
+ * Video player
+ *
+ * A video with Area's own controls (docs/specs/video-player.md; surveys docs/research/video-player-2026-10-17.md and
+ * video-player-quicktime-2026-10-17.md). Three layouts, as AVKit's control styles: `floating` (default; QuickTime
+ * Player's controller, owner 2026-10-17: "based on the quicktime player preview, but in the style of area
+ * components"), `bar` (one row along the foot) and `minimal` (one round play / pause).
+ * Owner, round 36: "should there be a real video component with its own design player controls?". The controls lie
+ * over the media in one row at the bottom (Plyr, Vimeo, Video.js, Media Chrome): play, the scrubber, the time, mute
+ * with its volume, then captions, picture in picture and full screen when the video and the browser offer them. A dark
+ * scrim fades in behind them; they hide 2 s after the last movement while playing (Plyr, Video.js, Vidstack and Media
+ * Chrome agree) and never while paused or while focus is inside. Before the first play a round play button sits in the
+ * middle (Plyr, YouTube). The ink on the video is white in every state (Video.js, Plyr), so it holds on any frame.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-video-player {
+    /* spec: white on media in every theme (Video.js oklch(1 0 0), Plyr #fff), with Video.js's media shadow for legibility. */
+    --_ink: #fff; /* spec */
+    --_shadow: drop-shadow(0 1px 2px rgb(0 0 0 / 0.3)); /* spec */
+    /* spec: the row 32 (Vimeo 32, Plyr 32): 24 buttons (control-sm at the app's 13) 4 in, 2 apart; inset 4 from the media. */
+    /* spec: round 42, buttons one step up (references 30–38, median 32): Area's medium control (26 at the app's 13). */
+    --_button: var(--area-control-md);
+    --_row-pad: var(--area-space-4);
+    position: relative;
+    display: block;
+    overflow: hidden;
+    inline-size: 100%;
+    max-inline-size: 100%;
+    /* spec: Figure's media corner; black behind letterboxing (every source). */
+    border-radius: var(--area-radius-small);
+    background-color: #000; /* spec */
+    color: var(--_ink);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
+    user-select: none;
+  }
+  .area-video-player:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  .area-video-player__media { display: block; inline-size: 100%; block-size: auto; max-block-size: 100%; }
+  .area-video-player:fullscreen { border-radius: 0; display: flex; align-items: center; }
+  .area-video-player:fullscreen .area-video-player__media { block-size: 100%; object-fit: contain; }
+
+  /* spec: black 50% at the foot to clear, 64 tall (2 × the row; Video.js 50%, Vidstack 60%). It fades with the controls. */
+  .area-video-player__scrim {
+    position: absolute;
+    inset: auto 0 0;
+    block-size: var(--area-space-64);
+    background: linear-gradient(to top, rgb(0 0 0 / 0.5), transparent); /* spec */
+    pointer-events: none;
+  }
+  .area-video-player__controls {
+    position: absolute;
+    inset: auto var(--_row-pad) var(--_row-pad);
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-2);
+  }
+  .area-video-player__row { display: flex; align-items: center; gap: var(--area-space-2); min-inline-size: 0; }
+  /* Shown: fade in on fast, out on moderate, opacity only (MOTION.md; Media Chrome in faster than out). */
+  .area-video-player__scrim,
+  .area-video-player__controls { opacity: 1; transition: opacity var(--area-duration-fast) var(--area-ease-out); }
+  .area-video-player[data-idle] :is(.area-video-player__scrim, .area-video-player__controls) {
+    opacity: 0;
+    transition-duration: var(--area-duration-moderate);
+  }
+  .area-video-player[data-idle] { cursor: none; }
+  /* Before the first play the round play button stands alone (YouTube, Plyr); the row is not rendered yet. */
+  .area-video-player:not([data-started]) .area-video-player__scrim { opacity: 0; }
+
+  /* Buttons on the media: ghost, icon-only, 24 square with a 16 icon; a white plate on hover (20%) and press (30%),
+     ink fixed (Vidstack white 20%; shared state paint). */
+  .area-video-player__button {
+    display: inline-grid;
+    place-items: center;
+    flex: none;
+    inline-size: var(--_button);
+    block-size: var(--_button);
+    padding: 0;
+    border: 0;
+    border-radius: var(--area-radius-control-sm);
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    transition: background-color var(--area-duration-fast) var(--area-ease-out);
+  }
+  .area-video-player__button > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); filter: var(--_shadow); }
+  @media (hover: hover) { .area-video-player__button:hover { background-color: rgb(255 255 255 / 0.2); /* spec */ transition-duration: 0s; } }
+  .area-video-player__button:active { background-color: rgb(255 255 255 / 0.3); /* spec */ }
+  .area-video-player__button:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: 0; }
+  .area-video-player__button:disabled { opacity: 0.4; /* spec: a disabled control on media */ cursor: default; background: transparent; }
+  .area-video-player__button[aria-pressed="true"] { background-color: rgb(255 255 255 / 0.2); /* spec */ }
+
+  /* spec: the round play before the first play, 48 (Plyr 48) on black 50%, a 20 icon. */
+  .area-video-player__start {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    display: grid;
+    place-items: center;
+    inline-size: var(--area-space-48);
+    block-size: var(--area-space-48);
+    padding: 0;
+    border: 0;
+    border-radius: var(--area-radius-full);
+    background-color: rgb(0 0 0 / 0.5); /* spec */
+    color: inherit;
+    cursor: pointer;
+    transition: background-color var(--area-duration-fast) var(--area-ease-out);
+  }
+  .area-video-player__start > svg { inline-size: var(--area-space-20); block-size: var(--area-space-20); }
+  @media (hover: hover) { .area-video-player__start:hover { background-color: rgb(0 0 0 / 0.65); /* spec: one step darker */ transition-duration: 0s; } }
+  .area-video-player__start:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+
+  /* The time: small text, 500, tabular, "m:ss / m:ss" (YouTube 500; Vidstack). */
+  .area-video-player__time {
+    flex: none;
+    padding-inline: var(--area-space-4);
+    font-weight: var(--area-weight-regular); /* spec: round 42, references 400 */
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    text-shadow: 0 1px 2px rgb(0 0 0 / 0.3); /* spec: Video.js media text shadow */
+  }
+
+  /* Ranges (the scrubber and the volume): a native input. The track 4 at rest and 6 under the pointer or while dragged
+     (YouTube 4 → 6; Vimeo, Video.js, Media Chrome 4); the rail white 20%, what is loaded white 40%, what has played white
+     (Vimeo, Video.js, Media Chrome); a 12 white thumb shown on hover, drag and focus (YouTube, Video.js 12). */
+  .area-video-player__range {
+    --_track: var(--area-space-4);
+    --_rail: rgb(255 255 255 / 0.3); /* spec: references 30–50% */
+    --_fill: #fff; /* spec */
+    --_played: 0%;
+    --_loaded: 0%;
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    block-size: var(--_button);
+    margin: 0;
+    background: transparent;
+    cursor: pointer;
+    appearance: none;
+  }
+  .area-video-player__range:is(:active, :focus-visible) { --_track: var(--area-space-6); }
+  @media (hover: hover) { .area-video-player__range:hover { --_track: var(--area-space-6); } }
+  .area-video-player__range::-webkit-slider-runnable-track {
+    block-size: var(--_track);
+    border-radius: var(--area-radius-full);
+    background: linear-gradient(to right,
+      var(--_fill) 0 var(--_played),
+      rgb(255 255 255 / 0.5) var(--_played) max(var(--_played), var(--_loaded)),
+      var(--_rail) max(var(--_played), var(--_loaded)) 100%); /* spec */
+    transition: block-size var(--area-duration-fast) var(--area-ease-out);
+  }
+  .area-video-player__range::-moz-range-track {
+    block-size: var(--_track);
+    border-radius: var(--area-radius-full);
+    background: linear-gradient(to right,
+      var(--_fill) 0 var(--_played),
+      rgb(255 255 255 / 0.5) var(--_played) max(var(--_played), var(--_loaded)),
+      var(--_rail) max(var(--_played), var(--_loaded)) 100%); /* spec */
+  }
+  .area-video-player__range::-webkit-slider-thumb {
+    appearance: none;
+    inline-size: var(--area-space-12);
+    block-size: var(--area-space-12);
+    margin-block-start: calc((var(--_track) - var(--area-space-12)) / 2);
+    border-radius: var(--area-radius-full);
+    background-color: #fff; /* spec */
+    box-shadow: 0 0 0 1px rgb(0 0 0 / 0.1), 0 1px 3px rgb(0 0 0 / 0.35); /* spec: Video.js thumb */
+    scale: 0;
+    transition: scale var(--area-duration-fast) var(--area-ease-out);
+  }
+  .area-video-player__range::-moz-range-thumb {
+    inline-size: var(--area-space-12);
+    block-size: var(--area-space-12);
+    border: 0;
+    border-radius: var(--area-radius-full);
+    background-color: #fff; /* spec */
+    box-shadow: 0 0 0 1px rgb(0 0 0 / 0.1), 0 1px 3px rgb(0 0 0 / 0.35); /* spec */
+    scale: 0;
+  }
+  .area-video-player__range:is(:active, :focus-visible)::-webkit-slider-thumb { scale: 1; }
+  .area-video-player__range:is(:active, :focus-visible)::-moz-range-thumb { scale: 1; }
+  @media (hover: hover) {
+    .area-video-player__range:hover::-webkit-slider-thumb { scale: 1; }
+    .area-video-player__range:hover::-moz-range-thumb { scale: 1; }
+  }
+  .area-video-player__range:focus-visible { outline: none; }
+  .area-video-player__range:focus-visible::-webkit-slider-thumb { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-space-2); }
+  .area-video-player__range:focus-visible::-moz-range-thumb { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-space-2); }
+
+  /* Volume: mute, and a 56 slider that opens beside it on hover or focus (YouTube's reveal; Vidstack 0 → 72); every
+     compact or floating reference shows only mute at rest (round 42). */
+  .area-video-player__volume { display: flex; align-items: center; flex: none; }
+  .area-video-player__volume > .area-video-player__range {
+    flex: none;
+    inline-size: 0;
+    opacity: 0;
+    transition: inline-size var(--area-duration-fast) var(--area-ease-out), opacity var(--area-duration-fast) var(--area-ease-out);
+  }
+  .area-video-player__volume:focus-within > .area-video-player__range,
+  .area-video-player__volume[data-open] > .area-video-player__range {
+    inline-size: 56px; /* spec: YouTube's reveal, under Vidstack's 72 */
+    margin-inline: var(--area-space-4);
+    opacity: 1;
+  }
+
+  /* Controls: `auto` hides them when idle; `always` never does (Kibo's always-visible bar, short clips and docs). */
+  .area-video-player--auto {}
+  .area-video-player--always[data-idle] :is(.area-video-player__scrim, .area-video-player__controls) { opacity: 1; }
+  .area-video-player--always[data-idle] { cursor: auto; }
+
+  /* Narrow players drop what matters least (Video.js media-max-lg, Vidstack's small layout): the volume slider and
+     picture in picture under 400, the duration under 280. */
+  .area-video-player { container-type: inline-size; }
+  @container (max-inline-size: 400px) {
+    .area-video-player__volume > .area-video-player__range { display: none; }
+    .area-video-player__button[data-control="pip"] { display: none; }
+  }
+  @container (max-inline-size: 280px) {
+    .area-video-player__duration { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .area-video-player__range::-webkit-slider-runnable-track { transition: none; }
+    .area-video-player__range::-webkit-slider-thumb { transition: none; }
+  }
+
+  /* --- floating: QuickTime Player's controller ---------------------------------------------------------------------
+     spec (Safari's macOS full-screen controls, WebKit modern-media-controls; AVKit `floating` "matches the look of
+     QuickTime Player's playback controls"): a 468 × 75 panel, corner 8, 25 above the foot, black 55% under
+     saturate(180%) blur(17.5px); row one the transport (volume left, rewind · play · forward centred, the rest right), row
+     two the time, a thin track, the time. Scaled by Area's rows (≈ 0.85): 64 tall (6 + 32 + 4 + 16 + 6), at most 400
+     wide, 12 above the foot, centred; the corner is the floating Toolbar's (12: the control corner 6 + the 6 inset). */
+  .area-video-player--floating .area-video-player__scrim { display: none; }
+  .area-video-player--floating .area-video-player__controls {
+    inset: auto 0 var(--area-space-12);
+    margin-inline: auto;
+    inline-size: min(400px, 100% - var(--area-space-24)); /* spec */
+    box-sizing: border-box;
+    flex-direction: column;
+    align-items: stretch;
+    /* The ink sits 16 from every edge (round 43, owner: "the inset in general is not very even", measured on the drawn
+       glyphs). The transport's 16 icons sit 5 inside their buttons and a few pixels inside their own boxes, so the panel
+       pads 6 at the sides and the time row adds the buttons' inset back (Area's inset rule: border + shell padding + slot
+       inset); 4 above the transport (its icons' ink lands at 16), no gap between the rows (the transport's 32 already
+       leaves 8 under its icons: 16 to the digits) and 12 under the time row (16 to the digits). 64 tall
+       (4 + 32 + 16 + 12). Safari's controller is as even: 10 at the sides and under its time row. */
+    gap: 0;
+    padding: var(--area-space-4) var(--area-space-6) var(--area-space-12);
+    border-radius: var(--area-space-16);
+    background-color: rgb(0 0 0 / 0.55); /* spec: Apple's black 55% */
+    backdrop-filter: blur(16px) saturate(180%); /* spec: Apple saturate 180, blur 17.5; Video.js blur 16 */
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    /* spec: Video.js's top highlight (for Apple's lighten tint), its 1px black 10% ring and a soft shadow, so the panel
+       holds on a bright frame. */
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.1), 0 0 0 1px rgb(0 0 0 / 0.1), 0 4px 16px rgb(0 0 0 / 0.2); /* spec */
+  }
+  /* Row one: volume at the start, the transport in the middle, the rest at the end (WebKit's three groups). */
+  .area-video-player__transport { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; block-size: var(--area-space-32); }
+  .area-video-player__group { display: flex; align-items: center; gap: var(--area-space-2); min-inline-size: 0; }
+  .area-video-player__group--center { gap: var(--area-space-16); /* spec: Apple's skips 27 from play at 0.85 */ }
+  .area-video-player__group--end { justify-content: end; }
+  /* spec: Apple draws play at twice the other glyphs: 32 with a 20 icon. */
+  .area-video-player__button--play { inline-size: var(--area-space-32); block-size: var(--area-space-32); border-radius: var(--area-radius-full); }
+  .area-video-player__button--play > svg { inline-size: var(--area-space-20); block-size: var(--area-space-20); }
+  /* Inside the dark panel the rail is 30% (the 20% of the bar read faint against black 55%), and the thumb always shows
+     where the video is, as QuickTime's knob and the iOS 26 pill's (round 41 visual pass). */
+  .area-video-player--floating .area-video-player__range::-webkit-slider-thumb { scale: 1; }
+  .area-video-player--floating .area-video-player__range::-moz-range-thumb { scale: 1; }
+  /* Muted keeps the level in view, greyed: the slider says where the volume returns to (QuickTime, macOS). */
+  .area-video-player__volume[data-muted] > .area-video-player__range { --_fill: rgb(255 255 255 / 0.4); /* spec */ }
+  /* Row two: the time, the track, the time, 8 apart (WebKit time-control). */
+  .area-video-player__timeline { display: flex; align-items: center; gap: var(--area-space-8); block-size: var(--area-space-16); padding-inline: calc((var(--_button) - var(--area-icon-md)) / 2 + var(--area-space-2)); }
+  .area-video-player__timeline > .area-video-player__range { block-size: var(--area-space-16); }
+  /* spec: Apple's time is 12, monospaced digits, white 55% beside 75% transport; Area's small text, 500, tabular, white 70%. */
+  .area-video-player__clock {
+    flex: none;
+    color: rgb(255 255 255 / 0.9); /* spec: references 81–100%, weight 400 */
+    font-weight: var(--area-weight-regular);
+    font-variant-numeric: tabular-nums;
+  }
+  .area-video-player--floating .area-video-player__button { color: rgb(255 255 255 / 0.85); /* spec: Apple's transport 75%, lifted for contrast */ }
+  .area-video-player--floating .area-video-player__button--play { color: #fff; }
+  /* The start button takes the panel's paint (Apple's centre button sits on the same tint). */
+  .area-video-player--floating .area-video-player__start {
+    background-color: rgb(0 0 0 / 0.55); /* spec */
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+  }
+  /* Narrow (under 400): one row, as a pill: play, the track, the time, full screen (visionOS's pill; Vidstack small). */
+  @container (max-inline-size: 400px) {
+    .area-video-player--floating .area-video-player__controls { flex-direction: row; align-items: center; gap: var(--area-space-8); padding: var(--area-space-4); border-radius: var(--area-radius-full); }
+    .area-video-player--floating .area-video-player__transport { display: contents; }
+    .area-video-player--floating :is(.area-video-player__group--start, .area-video-player__skip, .area-video-player__optional) { display: none; }
+    .area-video-player--floating .area-video-player__group--center { order: 0; }
+    .area-video-player--floating .area-video-player__timeline { order: 1; flex: 1; }
+    .area-video-player--floating .area-video-player__group--end { order: 2; }
+    .area-video-player--floating .area-video-player__button--play { inline-size: var(--_button); block-size: var(--_button); }
+    .area-video-player--floating .area-video-player__button--play > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
+    .area-video-player--floating .area-video-player__clock--start { display: none; }
+  }
+
+  /* --- minimal: one round play / pause, no scrubber (AVKit `minimal`; Video.js's background preset; apple.com) ---- */
+  .area-video-player--minimal .area-video-player__scrim { display: none; }
+  .area-video-player--minimal .area-video-player__start { display: grid; transition: opacity var(--area-duration-fast) var(--area-ease-out), background-color var(--area-duration-fast) var(--area-ease-out); }
+  .area-video-player--minimal[data-idle] .area-video-player__start { opacity: 0; transition-duration: var(--area-duration-moderate); }
+  .area-video-player--bar {}
+}

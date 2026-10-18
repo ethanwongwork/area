@@ -5,6 +5,18 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Video player and Link groups (2026-10-17, branch `claude/link-groups-video-player`, PR #126)
+
+**Waiting on the owner:** round 43 (collection `components43`: even 16 insets measured on the glyphs). Before that, round 42 (collection `components42`: refined from 15 captured players, `docs/research/video-player-references-2026-10-18/`). Before that, round 41 (collection `components41`: thumb always shown, rail 30% in the panel, muted volume keeps its level). Before that, round 40 (collection `components40`): Video player rebuilt on QuickTime's floating controller
+(`layout`: floating default, bar, minimal; `video-player-quicktime-2026-10-17.md`); placeholder is the avatar photo.
+Earlier, round 39 (collection `components39`): the new Video player (`docs/specs/video-player.md`,
+`docs/research/video-player-2026-10-17.md`); merge of PR #126 (the session's `gh pr merge` was blocked by permissions).
+- Navbox renamed Link groups (owner). Abbreviation's tooltip is a span (no hydration error).
+- Video player not built yet: settings menu (speed, caption track), Tooltips on its buttons and the scrubber's hover time,
+  buffering Spinner, ended/replay, captures of Notion's and Loom's players. Open picks: played fill white vs accent;
+  full-screen icon; on-media Button as a Button option.
+- The sample clip `apps/docs/public/images/sample-video.webm` is a canvas recording (6 s, no personal content).
+
 ## Material in the Inspector (2026-10-17, branch `claude/materials-testing-inspector-00a2d4`, merged by PR)
 
 Owner: test the defaults on Examples → Analytics dashboard, then materials, built "into the Inspector as a real

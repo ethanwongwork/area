@@ -50,3 +50,11 @@ Wikipedia, computed:
 
 - **What it is:** An abbreviation with a dotted underline; its full form shows on hover or focus.
 - **Based on:** Wikipedia's abbr, with Area's Tooltip instead of the browser's.
+
+## Tooltip markup, 2026-10-17
+
+The gallery logged a React hydration error: Tooltip's surface is a `div`, which cannot sit inside the paragraph an
+abbreviation lives in. Abbreviation now draws the same surface (`.area-tooltip`, role, id, popover, description link)
+as a `span`; open, the popover is in the top layer and laid out as a block, so nothing visible changes. Tooltip itself
+is unchanged. Test: articles.test.mjs, "an abbreviation's tooltip is phrasing content".
+

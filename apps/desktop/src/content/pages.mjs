@@ -413,15 +413,29 @@ export const COMPONENT_PAGES = [
     ],
   },
   {
-    slug: "navbox", name: "Navbox", exportName: "Navbox", manifest: "navbox",
-    imports: "Navbox, NavboxGroup, Link",
+    slug: "video-player", name: "Video player", exportName: "VideoPlayer", manifest: "videoPlayer",
+    imports: "VideoPlayer, Figure",
+    api: [
+      ["label", "string (the video's title, names the player)", "—"],
+      ["layout", "floating | bar | minimal", "floating"],
+      ["controls", "auto | always", "auto"],
+      ["video props", "src, poster, preload, autoPlay, muted, loop…; children are <track> elements", "—"],
+      ["keys", "Space / K play · ← → 5 s · J / L 10 s · ↑ ↓ volume · M mute · F full screen · C captions · I picture in picture · 0–9", "—"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "QuickTime Player's floating controller: a frosted panel with the transport over the time and track.", demo: "GalleryVideoPlayer" },
+    ],
+  },
+  {
+    slug: "link-groups", name: "Link groups", exportName: "LinkGroups", manifest: "linkGroups",
+    imports: "LinkGroups, LinkGroup, Link",
     api: [
       ["title / level", "ReactNode (the surface title role) / 2–6", "— / 2"],
       ["divided", "boolean (a rule above)", "false"],
-      ["NavboxGroup label", "ReactNode (the group's heading); children are the links, one per row: Link ink=\"muted\" variant=\"standalone\"", "—"],
+      ["LinkGroup label", "ReactNode (the group's heading); children are the links, one per row: Link ink=\"muted\" variant=\"standalone\"", "—"],
     ],
     examples: [
-      { id: "default", title: "Default", note: "Groups of related links in columns: a strong heading over muted links.", demo: "GalleryNavbox" },
+      { id: "default", title: "Default", note: "Groups of related links in columns: a strong heading over muted links.", demo: "GalleryLinkGroups" },
     ],
   },
   {

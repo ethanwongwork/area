@@ -156,4 +156,5 @@ export const infoboxVariants = /* @__PURE__ */ createVariants(manifests.infobox)
 export const inlineListVariants = /* @__PURE__ */ createVariants(manifests.inlineList);
 export const abbreviationVariants = /* @__PURE__ */ createVariants(manifests.abbreviation);
 export const hatnoteVariants = /* @__PURE__ */ createVariants(manifests.hatnote);
-export const navboxVariants = /* @__PURE__ */ createVariants(manifests.navbox);
+export const linkGroupsVariants = /* @__PURE__ */ createVariants(manifests.linkGroups);
+export const videoPlayerVariants = /* @__PURE__ */ createVariants(manifests.videoPlayer);

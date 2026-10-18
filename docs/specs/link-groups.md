@@ -1,4 +1,4 @@
-# Navbox spec
+# Link groups spec (was Navbox)
 
 **Status:** built, in review · 2026-10-17
 **Captures:** computed-style readouts below (Wikipedia, en.wikipedia.org/wiki/Lisa_Su)
@@ -94,3 +94,9 @@ footers' hierarchy (strong heading, dimmer links) and the surface title for the 
 - **Why:** You asked to re-check the hierarchy. Before, the title and the group headings were the same size and the
   headings were grey over full-colour links. Site footers (Vercel, Linear, Apple, MDN) do the reverse: strong headings,
   dimmer links.
+
+## Renamed, 2026-10-17
+
+Owner: "Link groups" (recommended: no other system calls this a navbox; site footers and docs call it link groups or a
+sitemap). The family is `link-groups`: `LinkGroups` and `LinkGroup` in React, `.area-link-groups` in CSS, `linkGroups`
+in the manifest. The design approved in round 35 is unchanged.

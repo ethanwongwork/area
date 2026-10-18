@@ -105,4 +105,5 @@ export { Infobox, InfoboxSection, InfoboxRow, InfoboxRows, infoboxVariants, type
 export { InlineList, inlineListVariants, type InlineListProps } from "./components/InlineList.tsx";
 export { Abbreviation, abbreviationVariants, type AbbreviationProps } from "./components/Abbreviation.tsx";
 export { Hatnote, hatnoteVariants } from "./components/Hatnote.tsx";
-export { Navbox, NavboxGroup, navboxVariants, type NavboxProps, type NavboxGroupProps } from "./components/Navbox.tsx";
+export { LinkGroups, LinkGroup, linkGroupsVariants, type LinkGroupsProps, type LinkGroupProps } from "./components/LinkGroups.tsx";
+export { VideoPlayer, videoPlayerVariants, type VideoPlayerProps } from "./components/VideoPlayer.tsx";

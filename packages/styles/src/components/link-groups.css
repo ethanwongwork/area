@@ -1,7 +1,7 @@
 /* ---------------------------------------------------------------------------
- * Navbox
+ * Link groups
  *
- * Related links in named groups, at the foot of a page (docs/specs/navbox.md): unframed columns, a heading above each
+ * Related links in named groups, at the foot of a page (docs/specs/link-groups.md): unframed columns, a heading above each
  * group, its links one per line (round 34 survey: Vercel, Linear, Apple, GitHub, Notion, MDN, Docusaurus, GOV.UK,
  * Primer; docs/research/articles-rethink-2026-10-17/inline-list-navbox.md). Type follows the footers' hierarchy (owner,
  * round 34: "reevaluate the text styles and make sure hierarchy and proper type alignment is correct"): Vercel, Linear,
@@ -12,7 +12,7 @@
  * Title, headings and links start on one edge; no element is inset.
  * ------------------------------------------------------------------------- */
 @layer area.components {
-  .area-navbox {
+  .area-link-groups {
     display: flex;
     flex-direction: column;
     /* spec: the title 12 above the groups, as Infobox's header above its sections. */
@@ -22,22 +22,22 @@
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
   }
-  .area-navbox--divided { padding-block-start: var(--area-space-16); border-block-start: var(--area-stroke-width) solid var(--area-border-divider); }
-  .area-navbox__title {
+  .area-link-groups--divided { padding-block-start: var(--area-space-16); border-block-start: var(--area-stroke-width) solid var(--area-border-divider); }
+  .area-link-groups__title {
     margin: 0;
     font-size: var(--area-title-xs-size);
     line-height: var(--area-title-xs-leading);
     font-weight: var(--area-weight-strong);
   }
   /* spec: columns at least 10em wide, 24 apart both ways (Vercel gap-6). */
-  .area-navbox__groups {
+  .area-link-groups__groups {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 10em), 1fr));
     gap: var(--area-space-24);
   }
   /* spec: the heading 8 above its links (Linear 16 at 13 for a whole-site footer; half for a page's block). */
-  .area-navbox__group { display: flex; flex-direction: column; gap: var(--area-space-8); min-inline-size: 0; }
-  .area-navbox__label { margin: 0; font-size: inherit; line-height: inherit; font-weight: var(--area-weight-strong); }
+  .area-link-groups__group { display: flex; flex-direction: column; gap: var(--area-space-8); min-inline-size: 0; }
+  .area-link-groups__label { margin: 0; font-size: inherit; line-height: inherit; font-weight: var(--area-weight-strong); }
   /* spec: one link per line, 4 apart (Vercel's 20 line + 2 + 2). */
-  .area-navbox__list { display: flex; flex-direction: column; align-items: start; gap: var(--area-space-4); margin: 0; padding: 0; list-style: none; }
+  .area-link-groups__list { display: flex; flex-direction: column; align-items: start; gap: var(--area-space-4); margin: 0; padding: 0; list-style: none; }
 }
