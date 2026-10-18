@@ -11,16 +11,16 @@ const marks = [
   { value: "strikethrough", label: "Strikethrough", icon: <StrikethroughIcon /> },
 ];
 const Marks = ({ only = marks.length }: { only?: number }) => <>{marks.slice(0, only).map(mark => <ToggleGroupItem key={mark.value} value={mark.value} iconOnly icon={mark.icon}>{mark.label}</ToggleGroupItem>)}</>;
-const days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
+const days = ["One", "Two", "Three", "Four", "Five"];
 
 export const GalleryToggleGroup = () => <ToggleGroup aria-label="Text style" defaultValue={["bold"]}><Marks /></ToggleGroup>;
 export const GalleryToggleGroupOutline = () => <ToggleGroup aria-label="Text style" variant="outline" defaultValue={["bold"]}><Marks /></ToggleGroup>;
 export const GalleryToggleGroupGhost = () => <ToggleGroup aria-label="Text style" variant="ghost" defaultValue={["bold"]}><Marks /></ToggleGroup>;
 export const GalleryToggleGroupSm = () => <ToggleGroup aria-label="Text style" size="sm" defaultValue={["bold"]}><Marks /></ToggleGroup>;
 export const GalleryToggleGroupLg = () => <ToggleGroup aria-label="Text style" size="lg" defaultValue={["bold"]}><Marks /></ToggleGroup>;
-/* Text toggles: the weekdays a repeat runs on, any number of them. */
+/* Text toggles: any number of them. */
 export const GalleryToggleGroupText = () => (
-  <ToggleGroup aria-label="Repeat on" defaultValue={["Mon", "Wed", "Fri"]}>{days.map(day => <ToggleGroupItem key={day} value={day}>{day}</ToggleGroupItem>)}</ToggleGroup>
+  <ToggleGroup aria-label="Label" defaultValue={["One", "Three", "Five"]}>{days.map(day => <ToggleGroupItem key={day} value={day}>{day}</ToggleGroupItem>)}</ToggleGroup>
 );
 /* At most one: a line under or through the text, or neither (press the pressed one to release it). */
 export const GalleryToggleGroupSingle = () => {
@@ -35,7 +35,7 @@ export const GalleryToggleGroupSingle = () => {
 export const GalleryToggleGroupDisabled = () => <ToggleGroup aria-label="Text style" disabled defaultValue={["bold"]}><Marks /></ToggleGroup>;
 export const GalleryToggleGroupFullWidth = () => (
   <div style={{ inlineSize: "calc(var(--area-space-96) * 3)", maxInlineSize: "100%" }}>
-    <ToggleGroup aria-label="Repeat on" fullWidth defaultValue={["Mon", "Wed", "Fri"]}>{days.map(day => <ToggleGroupItem key={day} value={day}>{day}</ToggleGroupItem>)}</ToggleGroup>
+    <ToggleGroup aria-label="Label" fullWidth defaultValue={["One", "Three", "Five"]}>{days.map(day => <ToggleGroupItem key={day} value={day}>{day}</ToggleGroupItem>)}</ToggleGroup>
   </div>
 );
 /* In a Toolbar the set is a ghost group whose toggles join the toolbar's arrow keys (one Tab stop for the bar). */

@@ -17,7 +17,7 @@ export const GalleryOTPFieldSm = () => <OTPField size="sm" aria-label="Verificat
 export const GalleryOTPFieldMd = () => <OTPField size="md" aria-label="Verification code" defaultValue="482915" />;
 export const GalleryOTPFieldLg = () => <OTPField size="lg" aria-label="Verification code" defaultValue="482915" />;
 export const GalleryOTPFieldInvalid = () => (
-  <Field label="Verification code" error="That code has expired">
+  <Field label="Label" error="Error message">
     <OTPField defaultValue="482915" />
   </Field>
 );
@@ -27,8 +27,8 @@ export const GalleryOTPFieldComplete = () => {
   const [code, setCode] = useState("");
   const [state, setState] = useState<"idle" | "ok" | "wrong">("idle");
   return (
-    <Field label="Verification code" description={state === "ok" ? "Verified" : "Sent to David Tee's phone. Try 123456."}
-      error={state === "wrong" ? "That code isn't right" : undefined}>
+    <Field label="Label" description={state === "ok" ? "Success message" : "Helper text. Try 123456."}
+      error={state === "wrong" ? "Error message" : undefined}>
       <OTPField value={code} onValueChange={next => { setCode(next); setState("idle"); }}
         onComplete={next => setState(next === "123456" ? "ok" : "wrong")} />
     </Field>

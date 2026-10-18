@@ -11,7 +11,7 @@ export const GalleryAssetRow = () => (
 );
 
 export const GalleryAssetRowImage = () => (
-  <div style={frame}><AssetRow preview="images/chip-filter.png" name="filter" meta="PNG · 1254 × 1254" /></div>
+  <div style={frame}><AssetRow preview="images/chip-filter.png" name="image" meta="PNG · 1254 × 1254" /></div>
 );
 
 export const GalleryAssetRowNameOnly = () => (
@@ -29,6 +29,6 @@ export const GalleryAssetRowGroup = () => (
   <div style={stack}>
     <AssetRow preview={<HeartIcon />} name="icon/heart" meta="SVG · 24 × 24" />
     <AssetRow preview={<HomeIcon />} name="icon/home" meta="SVG · 24 × 24" />
-    <AssetRow preview="images/chip-filter.png" name="filter" meta="PNG · 1254 × 1254" />
+    <AssetRow preview="images/chip-filter.png" name="image" meta="PNG · 1254 × 1254" />
   </div>
 );

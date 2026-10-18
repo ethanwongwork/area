@@ -201,7 +201,7 @@ export const GalleryCardCarousel = () => {
     const still = matchMedia("(prefers-reduced-motion: reduce)").matches || element.closest("[data-area-motion]")?.getAttribute("data-area-motion") === "0";
     element.scrollBy({ left: direction * element.clientWidth * 0.75, behavior: still ? "auto" : "smooth" });
   };
-  return <Card role="region" aria-label="Collection" aria-roledescription="carousel" style={horizontal}>
+  return <Card role="region" aria-label="Title" aria-roledescription="carousel" style={horizontal}>
     <CardContent>
       <CardHeader action={<>
         <Button size="sm" variant="ghost" iconOnly aria-label="Previous items" icon={<ChevronLeftIcon />} disabled={edges.start} onClick={() => page(-1)} />
@@ -210,7 +210,7 @@ export const GalleryCardCarousel = () => {
         <CardTitle>Title</CardTitle>
       </CardHeader>
       <CardCarousel ref={row} aria-label="Items" onScroll={update}>
-        {[1, 2, 3, 4, 5, 6].map((item) => (
+        {["one", "two", "three", "four", "five", "six"].map((item) => (
           <li key={item}>
             <CardMedia aria-hidden="true" />
             <CardContent><CardTitle>Item {item}</CardTitle><CardDescription>Description</CardDescription></CardContent>
@@ -260,7 +260,7 @@ export const CardTemplateVideo = () => (
     <CardContent>
       <CardHeader action={<Button variant="ghost" iconOnly aria-label="More" icon={<MoreHorizontalIcon />} />}>
         <CardTitle><CardLink href="#gallery-section-card">Title</CardLink></CardTitle>
-        <CardDescription>Channel · 2 days ago</CardDescription>
+        <CardDescription>Description · 2 days ago</CardDescription>
       </CardHeader>
     </CardContent>
   </Card>
@@ -272,7 +272,7 @@ export const CardTemplateMusic = () => (
     <CardContent>
       <CardHeader action={<Button variant="ghost" iconOnly aria-label="Like" icon={<HeartIcon />} />}>
         <CardTitle>Title</CardTitle>
-        <CardDescription>Artist</CardDescription>
+        <CardDescription>Description</CardDescription>
       </CardHeader>
       <Slider size="sm" aria-label="Position" defaultValue={40} />
       <CardFooter>
@@ -290,10 +290,10 @@ export const CardTemplateWeather = () => (
   <Card style={widget}>
     <CardContent>
       <CardHeader action={<SunIcon />}>
-        <CardTitle>City</CardTitle>
+        <CardTitle>Title</CardTitle>
       </CardHeader>
       <CardValue>21°</CardValue>
-      <CardDescription>Sunny · H 24° L 16°</CardDescription>
+      <CardDescription>Description</CardDescription>
     </CardContent>
   </Card>
 );
@@ -305,7 +305,7 @@ export const CardTemplateStat = () => (
         <CardTitle>Label</CardTitle>
       </CardHeader>
       <CardValue>309.5</CardValue>
-      <CardDescription>+1.9% this week</CardDescription>
+      <CardDescription>+1.9% · Description</CardDescription>
     </CardContent>
   </Card>
 );
@@ -313,7 +313,7 @@ export const CardTemplateStat = () => (
 export const CardTemplatePlan = () => (
   <Card style={vertical}>
     <CardContent>
-      <CardHeader action={<Badge variant="outline" tone="info">Popular</Badge>}>
+      <CardHeader action={<Badge variant="outline" tone="info">Label</Badge>}>
         <CardTitle>Title</CardTitle>
       </CardHeader>
       <CardValue>$20</CardValue>
@@ -341,9 +341,9 @@ export const CardTemplateFeature = () => (
 /* Selected: the chosen card of a set takes the selection stroke, 2 wide, inside its edge; the others stay at rest. */
 export const CardSelected = () => (
   <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: "var(--area-space-12)", inlineSize: "calc(var(--area-space-96) * 5)", maxInlineSize: "100%" }}>
-    {[["Free", "For trying Area out"], ["Team", "For a design team"], ["Enterprise", "For an organisation"]].map(([plan, note]) => (
-      <Card key={plan} selected={plan === "Team"}>
-        <CardContent><CardHeader><CardTitle>{plan}</CardTitle><CardDescription>{note}</CardDescription></CardHeader></CardContent>
+    {["Option one", "Option two", "Option three"].map((option) => (
+      <Card key={option} selected={option === "Option two"}>
+        <CardContent><CardHeader><CardTitle>{option}</CardTitle><CardDescription>Description</CardDescription></CardHeader></CardContent>
       </Card>
     ))}
   </div>

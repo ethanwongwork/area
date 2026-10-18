@@ -196,17 +196,17 @@ export const PLAYGROUNDS: Record<string, Playground> = {
       "state-loading": { loading: true, checked: true },
     },
   },
-  // Tag: the default tile is an info tag; each tone's tile carries its own word.
+  // Tag: the default tile is an info tag; each tone's tile names its tone.
   tag: {
     name: "Tag",
     component: Tag as unknown as ComponentType<Record<string, unknown>>,
-    controls: controlsOf(MANIFESTS.tag, { choices: [{ axis: "tone", initial: "info" }, "size"], text: { children: "personal" }, switches: [] }),
+    controls: controlsOf(MANIFESTS.tag, { choices: [{ axis: "tone", initial: "info" }, "size"], text: { children: "Tag" }, switches: [] }),
     tiles: {
-      "tone-neutral": { tone: "neutral", children: "Draft" }, "tone-success": { tone: "success", children: "complete" },
-      "tone-warning": { tone: "warning", children: "blocked" }, "tone-caution": { tone: "caution", children: "later" },
-      "tone-danger": { tone: "danger", children: "urgent" }, "tone-discovery": { tone: "discovery", children: "work" },
-      "tone-gray": { tone: "gray", children: "archived" }, "tone-brown": { tone: "brown", children: "reading" },
-      "tone-pink": { tone: "pink", children: "ideas" },
+      "tone-neutral": { tone: "neutral", children: "Neutral" }, "tone-success": { tone: "success", children: "Success" },
+      "tone-warning": { tone: "warning", children: "Warning" }, "tone-caution": { tone: "caution", children: "Caution" },
+      "tone-danger": { tone: "danger", children: "Danger" }, "tone-discovery": { tone: "discovery", children: "Discovery" },
+      "tone-gray": { tone: "gray", children: "Gray" }, "tone-brown": { tone: "brown", children: "Brown" },
+      "tone-pink": { tone: "pink", children: "Pink" },
     },
   },
 };

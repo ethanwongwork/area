@@ -62,7 +62,7 @@ export const BadgeTruncation = () => <Badge truncate title="Badge text that over
 export const BadgeLink = () => <Badge as="a" href="#api" trailingIcon={<LinkIcon size={12} />}>Link</Badge>;
 export const BadgeAnchorButton = () => (
   <IndicatorAnchor indicator={<Indicator count={3} />}>
-    <Button aria-label="Label, 3">Button</Button>
+    <Button aria-label="Button, 3">Button</Button>
   </IndicatorAnchor>
 );
 export const BadgeAnchorIconButton = () => (
@@ -82,12 +82,12 @@ export const BadgeAnchorTab = () => (
 );
 export const BadgeAnchorPlacements = () => (
   <div style={{ display: "flex", flexDirection: "column", alignItems: "start", gap: "var(--area-space-32)" }}>
-    {(["top-end", "top-start", "bottom-end", "bottom-start"] as const).map(placement => <IndicatorAnchor key={placement} placement={placement} indicator={<Indicator count={3} />}><Button aria-label="Label, 3">Button</Button></IndicatorAnchor>)}
+    {(["top-end", "top-start", "bottom-end", "bottom-start"] as const).map(placement => <IndicatorAnchor key={placement} placement={placement} indicator={<Indicator count={3} />}><Button aria-label="Button, 3">Button</Button></IndicatorAnchor>)}
   </div>
 );
 export const BadgeAnchorVisibility = () => {
   const [invisible, setInvisible] = useState(false);
-  return <IndicatorAnchor invisible={invisible} indicator={<Indicator count={3} />}><Button onClick={() => setInvisible(value => !value)} aria-label={invisible ? "Label" : "Label, 3"}>Button</Button></IndicatorAnchor>;
+  return <IndicatorAnchor invisible={invisible} indicator={<Indicator count={3} />}><Button onClick={() => setInvisible(value => !value)} aria-label={invisible ? "Button" : "Button, 3"}>Button</Button></IndicatorAnchor>;
 };
 export const BadgeGroupWrap = () => (
   <BadgeGroup><Badge>Neutral</Badge><Badge tone="info">Info</Badge><Badge tone="discovery">Discovery</Badge><Badge tone="success">Success</Badge></BadgeGroup>
@@ -115,7 +115,7 @@ export const BadgeStress = () => (
   <div dir="rtl" style={{ width: "calc(var(--area-space-80) * 3)", maxWidth: "100%", display: "flex", flexDirection: "column", alignItems: "start", gap: "var(--area-space-24)" }}>
     <Badge truncate icon={<InfoIcon size={12} />}>Produktionsbereitstellungsbestätigung ausstehend</Badge>
     <Badge as="a" href="#api" trailingIcon={<ArrowRightIcon size={12} />}>تفاصيل الإصدار</Badge>
-    <div style={{ zoom: 2, maxWidth: "100%" }}><Badge truncate>Awaiting deployment approval</Badge></div>
+    <div style={{ zoom: 2, maxWidth: "100%" }}><Badge truncate>Badge text that overflows the available space</Badge></div>
   </div>
 );
 export const BadgeAuditControls = () => {
@@ -174,7 +174,7 @@ export const BADGE_GALLERY_DEMOS: Record<string, () => ReactNode> = Object.fromE
   ["GalleryBadgeThemeDark", () => <Theme value={{ theme: "dark" }}><div style={{ background: "var(--area-bg-surface)", padding: "var(--area-space-16)" }}><Badge tone="success" dot>Badge</Badge></div></Theme>],
   ["GalleryBadgeStressLong", () => <div style={{ width: "calc(var(--area-space-80) * 3)", maxWidth: "100%" }}><Badge truncate icon={<InfoIcon size={12} />}>Produktionsbereitstellungsbestätigung ausstehend</Badge></div>],
   ["GalleryBadgeStressRtl", () => <div dir="rtl"><Badge as="a" href="#api" trailingIcon={<ArrowRightIcon size={12} />}>تفاصيل الإصدار</Badge></div>],
-  ["GalleryBadgeStressZoom", () => <div style={{ zoom: 2, maxWidth: "100%" }}><Badge truncate>Awaiting deployment approval</Badge></div>],
+  ["GalleryBadgeStressZoom", () => <div style={{ zoom: 2, maxWidth: "100%" }}><Badge truncate>Badge text that overflows the available space</Badge></div>],
   ["GalleryBadgeTableDeployed", () => <Table><thead><tr><th>Name</th><th>Status</th></tr></thead><tbody><tr><td>Item one</td><td><Badge dot tone="success">Status</Badge></td></tr></tbody></Table>],
   ["GalleryBadgeTableBuilding", () => <Table><thead><tr><th>Name</th><th>Status</th></tr></thead><tbody><tr><td>Item two</td><td><Badge dot tone="warning">Status</Badge></td></tr></tbody></Table>],
 ]);
@@ -183,12 +183,12 @@ export const BadgeAvatar = () => <Badge variant="modern" avatar={<Avatar fallbac
 export const BadgeFlag = () => <Badge variant="color" flag={<svg viewBox="0 0 16 16"><rect width="16" height="16" fill="white" /><circle cx="8" cy="8" r="4" fill="#BC002D" /></svg>}>Japan</Badge>;
 export const BadgeDismissible = () => {
   const [visible, setVisible] = useState(true);
-  return visible ? <Badge variant="color" tone="discovery" dismissLabel="Remove design label" onDismiss={() => setVisible(false)}>Design</Badge> : <Button size="sm" variant="ghost" onClick={() => setVisible(true)}>Restore badge</Button>;
+  return visible ? <Badge variant="color" tone="discovery" dismissLabel="Remove badge" onDismiss={() => setVisible(false)}>Badge</Badge> : <Button size="sm" variant="ghost" onClick={() => setVisible(true)}>Restore badge</Button>;
 };
 
 export const BadgeIndicatorZero = () => {
   const [show, setShow] = useState(true);
-  return <div style={{display: "flex", gap: "var(--area-space-16)", alignItems: "center"}}><IndicatorAnchor indicator={<Indicator count={0} showZero={show} />}><Button aria-label={show ? "Inbox, 0 notifications" : "Inbox"}>Inbox</Button></IndicatorAnchor><Button size="sm" variant="soft" onClick={() => setShow(!show)}>{show ? "Hide zero" : "Show zero"}</Button></div>;
+  return <div style={{display: "flex", gap: "var(--area-space-16)", alignItems: "center"}}><IndicatorAnchor indicator={<Indicator count={0} showZero={show} />}><Button aria-label={show ? "Button, 0" : "Button"}>Button</Button></IndicatorAnchor><Button size="sm" variant="soft" onClick={() => setShow(!show)}>{show ? "Hide zero" : "Show zero"}</Button></div>;
 };
 
 /* On a coloured ground: the ground's own ink, a plate of the ink's opposite and a line of the ink (Code's onColor). */

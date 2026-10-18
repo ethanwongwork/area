@@ -19,7 +19,7 @@ export const GalleryTimeFieldDisabled = () => <TimeField aria-label="Time" hourC
 export const GalleryTimeFieldControlled = () => {
   const [time, setTime] = useState<string | null>("14:00");
   return (
-    <Field label="Start time" description={time ? `Value: ${time}` : "Value: none yet"}>
+    <Field label="Label" description={time ? `Value: ${time}` : "Value: none yet"}>
       <TimeField hourCycle={12} step={30} value={time} onValueChange={setTime} />
     </Field>
   );

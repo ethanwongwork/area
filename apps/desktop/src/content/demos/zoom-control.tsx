@@ -14,8 +14,8 @@ export const GalleryZoomControlView = () => {
   const [rulers, setRulers] = useState(false);
   return (
     <ZoomControl defaultValue={0.48} onZoomToFit={() => {}} shortcuts={shortcuts}>
-      <MenuItem checked={grid} onClick={() => setGrid(!grid)}>Pixel grid</MenuItem>
-      <MenuItem checked={rulers} shortcut="⇧R" onClick={() => setRulers(!rulers)}>Rulers</MenuItem>
+      <MenuItem checked={grid} onClick={() => setGrid(!grid)}>Item one</MenuItem>
+      <MenuItem checked={rulers} shortcut="⇧R" onClick={() => setRulers(!rulers)}>Item two</MenuItem>
     </ZoomControl>
   );
 };

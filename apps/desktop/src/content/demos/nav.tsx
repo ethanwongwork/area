@@ -34,7 +34,7 @@ export const NavVertical = () => (
 
 export const NavIcons = () => <Nav aria-label="Label"><NavItem href="#" current icon={<CheckIcon />}>Item one</NavItem><NavItem href="#" icon={<InfoIcon />}>Item two</NavItem><NavItem href="#" icon={<SearchIcon />}>Item three</NavItem></Nav>;
 export const NavCounts = () => <Nav aria-label="Label"><NavItem href="#" current trailing="1">Item one</NavItem><NavItem href="#" trailing="2">Item two</NavItem><NavItem href="#">Item three</NavItem></Nav>;
-export const NavTruncation = () => <Nav aria-label="Label"><NavItem href="#" current>Item one</NavItem><NavItem href="#">Item two with a name long enough to truncate</NavItem></Nav>;
+export const NavTruncation = () => <Nav aria-label="Label"><NavItem href="#" current>Item one</NavItem><NavItem href="#">Item two with a label long enough to truncate</NavItem></Nav>;
 
 export const NavHorizontal = () => (
   <Nav orientation="horizontal" aria-label="Label">

@@ -130,7 +130,7 @@ export const COMPONENT_PAGES = [
       { id: "days-tile", title: "Tile", note: "Days that can be chosen are outlined tiles; days that cannot are filled and quiet.", demo: "GalleryCalendarTile" },
       { id: "markers", title: "Markers", note: "Dots under days that carry events, in a tone per date. They are announced as a description.", demo: "GalleryCalendarMarkers" },
       { id: "layout-week", title: "Week", note: "One week between arrows, each day with its weekday and month. Arrows move by day; Up, Down, Page Up and Page Down by week.", demo: "GalleryCalendarWeek" },
-      { id: "composition-schedule", title: "Schedule", note: "A composition: a calendar, a time list and a footer summary with Cancel and Schedule.", demo: "GalleryCalendarSchedule" },
+      { id: "composition-schedule", title: "Schedule", note: "A composition: a calendar, a time list and a footer summary with Cancel and an action.", demo: "GalleryCalendarSchedule" },
       { id: "disabled", title: "Disabled", demo: "GalleryCalendarDisabled" },
     ],
   },
