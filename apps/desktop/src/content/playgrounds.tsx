@@ -202,7 +202,7 @@ export const PLAYGROUNDS: Record<string, Playground> = {
     component: Tag as unknown as ComponentType<Record<string, unknown>>,
     controls: controlsOf(MANIFESTS.tag, { choices: [{ axis: "tone", initial: "info" }, "size"], text: { children: "Tag" }, switches: [] }),
     tiles: {
-      "tone-neutral": { tone: "neutral", children: "Neutral" }, "tone-success": { tone: "success", children: "Success" },
+      "tone-neutral": { tone: "neutral", children: "Neutral" }, "tone-info": { children: "Info" }, "tone-success": { tone: "success", children: "Success" },
       "tone-warning": { tone: "warning", children: "Warning" }, "tone-caution": { tone: "caution", children: "Caution" },
       "tone-danger": { tone: "danger", children: "Danger" }, "tone-discovery": { tone: "discovery", children: "Discovery" },
       "tone-gray": { tone: "gray", children: "Gray" }, "tone-brown": { tone: "brown", children: "Brown" },
