@@ -40,7 +40,8 @@ Contrast is a level, `--area-contrast-more` from 0 to 1: `data-area-contrast="st
 owner 2026-10-18: More "seems very extreme"; Material 3's Standard / Medium / High) and `"more"` (1), which selects the
 strong endpoints. Every derivation mixes by the level, so Medium sits half way. It also brings Surface 0's frames back
 at 1px at any raised level (`border-width` = the Surface's `frame-width`, or 1px; owner, 2026-10-15), as macOS Increase
-Contrast adds borders and forced colours restore them.
+Contrast adds borders and forced colours restore them. The soft edge (`shadow-edge`) is drawn only while no frame is,
+so the returned frame replaces it rather than doubling it (audit 2026-10-18).
 
 Every stroke moves with the level, by the same share (owner, 2026-10-18: "some components get an obviously darker
 stroke whereas some components dont visibly change at all"). Each mixes from its standard value by the level: every

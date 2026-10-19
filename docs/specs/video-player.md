@@ -285,3 +285,10 @@ in the ds."
   panel has the same rounded corners as the rest of Area instead of a pill.
 - **Why:** You asked for filled icons in the bar, why CC was grey (no captions track), for a CC icon that matches its
   neighbours, more space between the rows (Safari leaves about twice its edge), and Area's corners for the narrow panel.
+
+## Settings collisions fixed (2026-10-18)
+
+Elevation and Stroke audit (docs/research/elevation-stroke-2026-10-18, "Audit: Area today"): under a Material the controller and the round play lost the 12% white inset ring (material.css replaced the
+whole `box-shadow`, and won over the round play's hover). Both now list the material's layers first
+(`var(--_m-layers, 0 0 0 0 transparent)`) beside their own ring and float lift, so a material adds to them rather
+than replacing them. Unchanged with no material. Checked in the app with None and Glass.

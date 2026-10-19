@@ -102,6 +102,17 @@ temporary: remove it once the bundles are settled and written back to `packages/
 - Setup: this worktree needed its own `node_modules` (APFS clone `cp -cR ~/Desktop/area/node_modules .`, plus
   `node_modules/electron/dist` and `path.txt` from another worktree) so `@area/*` resolve here, not to the main checkout.
 
+## Edge and Depth research (2026-10-18)
+
+Owner: shadows at rest packaged from offset, blur, spread, colour, opacity; stroke + shadow combinations; stroke width;
+relation to Contrast. Research and proposal only, nothing built: `docs/research/elevation-stroke-2026-10-18/`
+(README, `sources.md` with 20 pinned sources, `lab.html`). Review page with live levers and presets:
+https://claude.ai/artifact/5CoJiyCuttgfg4UDGV4twS. Waiting on the owner's picks (presets, levers, Field lift default,
+Stroke width 2). The audit gaps are fixed (same PR): surfaces, overlays and Scroll to latest list a Material's layers in
+`--_m-layers` beside their own shadow, so the modal lift, selected Card ring and Video ring survive; `--area-shadow-edge`
+follows `border-width`, so Surface 0 + Contrast draws one edge; framed Infobox has its edge. Material no longer paints the
+Toggletip button, and a searchable Menu is one overlay. Owner: the Toggletip note stays a Tooltip, no Material.
+
 ## Board corners, Contrast equal for every stroke, radius audit (2026-10-18, same branch, PR open)
 
 - Board: column 16 (was 20, the roundest surface), cards and add row `radius-row` 8 (were 12). Spec updated.

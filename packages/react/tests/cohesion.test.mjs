@@ -78,15 +78,46 @@ test('every surface takes its depth from its elevation role', () => {
     const ownElevation = () => rules.filter(rule => rule.selector.split(/\s*,\s*/).includes(block)).map(elevation).filter(Boolean).at(-1);
     return value.includes('var(--_elevation)') ? value.replace('var(--_elevation)', ownElevation() ?? 'var(--_elevation)') : value;
   };
-  const expect = { float: ['.area-popover', '.area-menu', '.area-toast', '.area-menu__search-surface', '.area-scroll-to-latest > .area-button'], modal: ['.area-dialog', '.area-command-palette'], resting: ['.area-panel', '.area-composer'] };
+  const expect = { float: ['.area-popover', '.area-menu', '.area-toast', '.area-menu__search-surface', '.area-scroll-to-latest > .area-button'], modal: ['.area-dialog', '.area-command-palette', '.area-drawer'], resting: ['.area-panel', '.area-composer'] };
   for (const [role, blocks] of Object.entries(expect)) {
     for (const block of blocks) assert.match(paints(block), new RegExp(`var\\(--area-shadow-${role}\\)`), `${block} does not take the ${role} role`);
   }
-  // A material keeps each surface's own lift after its paints: overlays the float role (or their own --_elevation),
-  // cards their resting shadow.
-  const material = rules.filter(rule => rule.selector.includes('[data-area-material]') && /--_m-own\s*:/.test(rule.body));
-  assert.ok(material.some(rule => rule.selector.includes('.area-popover') && /--_m-own:\s*var\(--area-shadow-edge\), var\(--_elevation, var\(--area-shadow-float\)\)/.test(rule.body)), 'a material drops the overlays\' lift');
-  assert.ok(material.some(rule => rule.selector.includes('.area-card') && /--_m-own:\s*var\(--area-shadow-edge\), var\(--_card-shadow\)/.test(rule.body)), 'a material drops the card\'s lift');
+  // A material never replaces a surface's box-shadow: it fills `--_m-layers`, which each surface lists first beside its
+  // own edge, ring and role, so a Drawer keeps its modal lift, a selected Card its ring and a linked Card its hover lift
+  // under a material (Elevation and Stroke audit, 2026-10-18: material.css re-added the float role and dropped them).
+  const slotted = ['.area-card', '.area-menu', '.area-menu__search-surface', '.area-popover', '.area-hover-card', '.area-toast', '.area-dialog', '.area-drawer', '.area-command-palette', '.area-video-player__surface'];
+  const material = rules.filter(rule => rule.selector.includes('[data-area-material]'));
+  const names = (rule, block) => new RegExp(`${block.replace(/[.]/g, '\\.')}(?![\\w-])`).test(rule.selector);
+  for (const block of slotted) {
+    assert.ok(material.some(rule => names(rule, block) && /--_m-layers:\s*var\(--_m-ring\), var\(--_m-shadow\)/.test(rule.body)), `a material does not fill ${block}'s layers`);
+    const replaces = material.find(rule => names(rule, block) && /(^|[;\s])box-shadow\s*:/.test(rule.body));
+    assert.equal(replaces, undefined, `a material replaces ${block}'s box-shadow: ${replaces?.selector}`);
+  }
+  assert.ok(!material.some(rule => /--_m-own\s*:[^;]*shadow-(float|modal|resting|edge)/.test(rule.body)), 'a material restates a surface\'s own lift');
+  // The same slot on a Button that floats: Scroll to latest lists the layers beside its float lift, and the button
+  // painter fills them without writing its box-shadow (it replaced the lift; audit 2026-10-18).
+  assert.match(paints('.area-scroll-to-latest > .area-button'), /^var\(--_m-layers, 0 0 0 0 transparent\), var\(--area-shadow-float\)$/, 'Scroll to latest does not list a material\'s layers beside its lift');
+  const buttonPainter = material.filter(rule => rule.selector.includes('.area-button:is(.area-button--solid, .area-button--outline, .area-button--soft)') && /(^|[;\s])box-shadow\s*:/.test(rule.body) && !/:disabled/.test(rule.selector));
+  assert.ok(buttonPainter.length, 'the button painter writes no box-shadow');
+  for (const rule of buttonPainter) {
+    assert.match(rule.selector, /:not\(:where\(\.area-scroll-to-latest > \*\)\)/, `the button painter replaces Scroll to latest's box-shadow: ${rule.selector}`);
+    assert.match(rule.body, /box-shadow:\s*var\(--_m-layers\)/, `the button painter does not paint the layers: ${rule.selector}`);
+  }
+  // The Toggletip's class is its button, a ghost mark; its note is a Tooltip, inverse: neither takes a material.
+  assert.ok(!material.some(rule => /\.area-toggletip(?![\w-])/.test(rule.selector)), 'a material paints the Toggletip button');
+  // A searchable Menu is one overlay: the Menu inside its surface takes no material and is clear.
+  for (const rule of material.filter(rule => /\.area-menu(?![\w-])/.test(rule.selector))) {
+    for (const match of rule.selector.matchAll(/\.area-menu(?![\w-])(:not\(:where\(\.area-menu__search-surface > \*\)\))?/g)) {
+      assert.ok(match[1], `a material paints the Menu inside a search surface: ${rule.selector}`);
+    }
+  }
+  assert.match(ruleFor('.area-menu__search-surface > .area-menu')?.body ?? '', /background-color:\s*transparent/, 'the Menu inside a search surface covers its fill');
+  // Disabled parts drop the material but keep their own shadow, and the rule outweighs every painter (it lost to the
+  // plain parts' painter, so a disabled selected Segmented item kept the material; audit 2026-10-18).
+  const disabled = material.find(rule => /:is\(:disabled, \[data-disabled\], \[aria-disabled="true"\]\)/.test(rule.selector));
+  assert.match(disabled?.body ?? '', /box-shadow:\s*var\(--_m-rest, none\)/, 'a disabled part under a material drops its own shadow');
+  assert.ok(disabled.selector.includes('.area-nav__item[aria-current]:not([aria-current="false"])'), 'the disabled rule no longer outweighs the plain parts\' painter');
+  assert.match(ruleFor('.area-video-player__surface')?.body ?? '', /box-shadow:\s*var\(--_m-layers, 0 0 0 0 transparent\), inset 0 0 0 var\(--area-border-width\) rgb\(255 255 255 \/ 0\.12\), var\(--area-shadow-float\)/, 'the Video player lost its ring or its material slot');
   for (const block of ['.area-calendar, .area-calendar--surface', '.area-color-picker, .area-color-picker--surface']) {
     assert.match(ruleFor(block)?.body ?? '', /var\(--area-shadow-float\)/, `${block} does not take the float role`);
   }
@@ -96,14 +127,28 @@ test('every surface takes its depth from its elevation role', () => {
   // The Surface axis (axes/surface.ts, 2026-10-14): at 0 (Borderless) a framed surface's edge is a shadow, so every
   // surface whose frame the setting removes lists `shadow-edge` first, or Borderless leaves it with no edge at
   // Elevation 0 and in dark. Two layers at both steps, never none, as the roles.
+  // The edge is derived from `border-width` (emit/base.ts), drawn only while no frame is, so Surface 0 under Medium or
+  // More contrast draws the returned frame alone, not the frame and the soft edge (audit 2026-10-18).
+  const on = '(1 - sign(var(--area-border-width)))';
   const edges = [...css.matchAll(/--area-shadow-edge:\s*([^;]+);/g)].map(match => match[1].trim());
-  assert.equal(edges.length, 3, '--area-shadow-edge should have the default and one value per step');
-  for (const value of edges) assert.equal(layers(value), 2, `--area-shadow-edge is not two layers: ${value}`);
-  assert.ok(edges.includes('0 0 1px rgb(0 0 0 / 0.62), inset 0 0 0 1px light-dark(transparent, rgb(255 255 255 / 0.2))'), 'Borderless lost ChatGPT\'s frameless edge');
-  for (const block of [...expect.float.slice(0, 4), ...expect.modal, '.area-panel', '.area-drawer', '.area-board-card']) {
+  assert.ok(edges.length > 0, '--area-shadow-edge is not emitted');
+  for (const value of edges) {
+    assert.equal(layers(value), 2, `--area-shadow-edge is not two layers: ${value}`);
+    assert.equal(value, `0 0 1px rgb(0 0 0 / calc(0.62 * ${on})), inset 0 0 0 1px light-dark(transparent, rgb(255 255 255 / calc(0.2 * ${on})))`, `--area-shadow-edge lost ChatGPT's frameless edge or its frame switch: ${value}`);
+  }
+  for (const value of [...css.matchAll(/--area-shadow-edge-filter:\s*([^;]+);/g)].map(match => match[1].trim())) {
+    assert.ok(value.includes(`calc(0.62 * ${on})`) && value.includes(`calc(0.2 * ${on})`), `--area-shadow-edge-filter does not follow the frame: ${value}`);
+  }
+  // Surfaces a material paints lead with its slot, then the edge; the rest lead with the edge.
+  for (const block of [...expect.float.slice(0, 4), ...expect.modal]) {
+    const leads = slotted.includes(block) ? /^var\(--_m-layers, 0 0 0 0 transparent\), var\(--area-shadow-edge\),/ : /^var\(--area-shadow-edge\),/;
+    assert.match(paints(block), leads, `${block} does not lead with the Surface axis's edge`);
+  }
+  for (const block of ['.area-panel', '.area-board-card', '.area-infobox--framed']) {
     assert.match(paints(block), /^var\(--area-shadow-edge\),/, `${block} does not lead with the Surface axis's edge`);
   }
-  assert.match(ruleFor('.area-card')?.body ?? '', /box-shadow:\s*var\(--area-shadow-edge\), var\(--_card-shadow\)/, 'Card does not lead with the Surface axis\'s edge');
+  assert.match(ruleFor('.area-card')?.body ?? '', /box-shadow:\s*var\(--_card-ring\), var\(--_m-layers, 0 0 0 0 transparent\), var\(--area-shadow-edge\), var\(--_card-lift\)/, 'Card does not lead with its ring, the material slot and the Surface axis\'s edge');
+  assert.match(ruleFor('.area-card')?.body ?? '', /--_card-lift:\s*var\(--_card-shadow\)/, 'Card does not rest on its resting shadow');
   // A chip with no fill is drawn by its edge alone, so that edge is required (`stroke-width`), or Surface 0 leaves
   // plain text (all-axis sweep, 2026-10-14): subtle Code and Token, and Token row's outline style.
   for (const block of ['.area-code--subtle, .area-token--subtle', '.area-token-row--outline.area-code']) {

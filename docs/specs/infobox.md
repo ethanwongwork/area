@@ -120,3 +120,8 @@ sections (Notion's property groups, unverified), a media-size switch, icon-led r
 ## Spacing audit (2026-10-17)
 
 Inset (framed, after the round-34 rethink): 12 to the content with the border counted once, `calc(12 − border-width)`, as Popover's (11 + 1); it was 13. Measured in `docs/research/spacing-2026-10-17/` (Before / After: https://claude.ai/artifact/JtDZ9LNfutFyfdkGUvQzL2).
+
+## Settings collisions fixed (2026-10-18)
+
+Elevation and Stroke audit (docs/research/elevation-stroke-2026-10-18, "Audit: Area today"): the framed Infobox had no edge at Surface 0 (Borderless). It now lists `--area-shadow-edge` before its resting
+lift, as Card does: the soft edge at 0, transparent while a frame is drawn. Checked in the app, light and dark.
