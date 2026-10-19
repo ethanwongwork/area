@@ -57,8 +57,13 @@
   @supports (text-box: trim-both cap alphabetic) {
     .area-badge > .area-badge__label {
       align-self: baseline;
-      /* Lifted by the marks' optical centre (inset.css): the cap sits that much above the middle. */
-      padding-block: calc((var(--_height) - 2 * var(--area-stroke-width) - 1cap) / 2 - var(--_optical-lift)) calc((var(--_height) - 2 * var(--area-stroke-width) - 1cap) / 2 + var(--_optical-lift));
+      /* Lifted by the marks' optical centre (inset.css): the cap sits that much above the middle. The baseline lands on
+         a whole pixel from the plate's top (owner, 2026-10-18: "the text vertical centering in the badge does not look
+         super consistent"): with a fractional offset (4.21 + a cap of 8.4 at 12px) the plate's edges and the glyphs
+         snap to device pixels apart, so the same badge drew its cap 10 or 11 device pixels down depending on where it
+         sat. Rounded, both snap together and every badge of a size draws alike. */
+      --_baseline: round(nearest, calc((var(--_height) - 2 * var(--area-stroke-width) + 1cap) / 2 - var(--_optical-lift)), 1px);
+      padding-block: calc(var(--_baseline) - 1cap) calc(var(--_height) - 2 * var(--area-stroke-width) - var(--_baseline));
     }
   }
   .area-badge__leading-icon, .area-badge__trailing-icon {

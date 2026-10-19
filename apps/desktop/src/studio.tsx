@@ -23,6 +23,7 @@ import { ColorPage } from "./pages/color.tsx";
 import { LanguagePage } from "./pages/language.tsx";
 import { ExamplesPage } from "./pages/examples.tsx";
 import { MaterialsPage } from "./pages/materials.tsx";
+import { BrandPage } from "./pages/brand.tsx";
 import { readStored, writeStored } from "./storage.ts";
 import { MATERIAL_BUNDLES } from "@area/tokens/config";
 import { bundleValue, materialAttributes, restoreMaterial, type MaterialState } from "./material.ts";
@@ -37,6 +38,8 @@ export const TABS = [
   /* Whole screens built from Area, to test the defaults and every setting (owner, 2026-10-17; "Examples" until the owner
      renamed it the same day). */
   { id: "testing", label: "Testing" },
+  /* The owner's brand inspiration in folders, browsed with Area's file explorer components (owner, 2026-10-18). */
+  { id: "brand", label: "Brand" },
   /* A temporary lab for tuning the Material setting's bundles (owner, 2026-10-18); it goes when they are settled. */
   { id: "materials", label: "Materials" },
 ] as const;
@@ -272,7 +275,8 @@ export function Studio() {
           tab === "typography" ? <TypographyPage /> :
           tab === "icons" ? <IconsPage /> :
           tab === "testing" ? <ExamplesPage /> :
-          tab === "materials" ? <MaterialsPage /> : <ColorPage />}
+          tab === "materials" ? <MaterialsPage /> :
+          tab === "brand" ? <BrandPage /> : <ColorPage />}
       </div>
     </StudioContext.Provider>
   );

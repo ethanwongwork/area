@@ -1,0 +1,103 @@
+/* ---------------------------------------------------------------------------
+ * File tile and file grid
+ *
+ * One item of a file browser's icon view (docs/specs/file-tile.md): its figure (a Folder, a file glyph or an image's
+ * preview) over its name and a detail line, centred, as Finder's icon view lays an item out (label on the bottom:
+ * `defaults read com.apple.finder StandardViewSettings`, labelOnBottom = 1). The file grid is a ListBox grid of tiles:
+ * one Tab stop, arrows in two dimensions, typeahead, the row plates' paint (list-box.css), plus open on Enter or a
+ * double click.
+ *
+ * - Figure: `--area-file-tile-figure`, 64 by default (Finder iconSize 64); sm 48 and lg 96 match Folder's sizes; a
+ *   caller may set any length (a zoom slider). An image preview is contained, never cropped, with the swatch ring.
+ * - Text: 12 (Finder textSize = 12; Figma's card 11, ChatGPT's 14) on the xs leading, the name at the strong weight
+ *   (Figma 550, ChatGPT and Notion 500), up to two lines; the detail line muted (Figma black at 50%, ChatGPT rgb(93),
+ *   Notion rgb(125)), one line.
+ * - Spacing: 8 around (Fluent Card small 8), 6 from figure to name (pick), the grid's cells 2 apart as ListBox's;
+ *   a column is the figure plus 24 each side so a two-line name has room (pick; Finder's gridSpacing 54 is a
+ *   different measure, unverified).
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-file-tile {
+    --_figure: var(--area-file-tile-figure, 64px); /* spec: Finder iconSize 64 */
+    --area-folder-size: var(--_figure); /* Folder and File page draw at the figure's size */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--area-space-6); /* spec: pick */
+    min-inline-size: 0;
+    padding: var(--area-space-8); /* spec: Fluent Card small 8 */
+    color: var(--area-fg-default);
+    font-size: var(--area-text-xs-size); /* spec: Finder textSize 12 */
+    line-height: var(--area-text-xs-leading);
+    text-align: center;
+  }
+  .area-file-tile--sm { --_figure: 48px; } /* spec: Folder sm */
+  .area-file-tile--md { --_figure: 64px; } /* spec: Finder iconSize 64 */
+  .area-file-tile--lg { --_figure: 96px; } /* spec: Folder lg */
+
+  .area-file-tile__figure {
+    position: relative;
+    display: grid;
+    /* One fixed cell, so an image's percentage limits resolve against the square, not against itself. */
+    grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+    place-items: center;
+    flex: none;
+    inline-size: var(--_figure);
+    block-size: var(--_figure);
+  }
+  /* A bare glyph (use File page for a file's figure): half the square, its line on the icon size curve (1.67px at 32;
+     docs/specs/icons.md, "Sizes"). */
+  .area-file-tile__figure > svg { inline-size: 50%; block-size: 50%; color: var(--area-fg-muted); --area-weight-icon: 0.84px; } /* spec: the size curve's 1.67px at 32 */
+  /* An image is contained in the square, its own shape kept, with the swatch ring (Asset row's preview). */
+  .area-file-tile__figure > img {
+    display: block;
+    max-inline-size: 100%;
+    max-block-size: 100%;
+    inline-size: auto;
+    block-size: auto;
+    border-radius: var(--area-radius-small);
+    box-shadow: 0 0 0 var(--area-stroke-width) var(--area-token-swatch-ring);
+    object-fit: contain;
+    background: var(--area-bg-subtle);
+  }
+  .area-file-tile__text { display: flex; flex-direction: column; align-items: center; min-inline-size: 0; max-inline-size: 100%; }
+  .area-file-tile__name {
+    display: -webkit-box;
+    max-inline-size: 100%;
+    overflow: hidden;
+    font-weight: var(--area-weight-strong); /* spec: Figma 550, ChatGPT and Notion 500 */
+    overflow-wrap: anywhere;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2; /* spec: ChatGPT Library card, up to 2 lines */
+  }
+  .area-file-tile__meta {
+    max-inline-size: 100%;
+    overflow: hidden;
+    color: var(--area-fg-muted);
+    font-variant-numeric: tabular-nums;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* The grid: a ListBox grid whose cells are tiles, as wide as a figure plus 24 each side, filling the row. */
+  .area-file-grid {
+    --area-file-tile-figure: 64px; /* spec: Finder iconSize 64 */
+  }
+  .area-file-grid--sm { --area-file-tile-figure: 48px; } /* spec: Folder sm */
+  .area-file-grid--md { --area-file-tile-figure: 64px; } /* spec: Finder iconSize 64 */
+  .area-file-grid--lg { --area-file-tile-figure: 96px; } /* spec: Folder lg */
+  .area-file-grid.area-list-box--grid:has(> .area-list-box__item),
+  .area-file-grid.area-list-box--grid .area-list-box__options {
+    grid-template-columns: repeat(auto-fill, minmax(calc(var(--area-file-tile-figure) + 2 * var(--area-space-24)), 1fr)); /* spec: pick */
+  }
+  /* Every tile starts at the top of its row, so figures line up whether a name takes one line or two (ListBox's
+     grid centres its cells; this rule is as specific and comes with the block's own class to win). */
+  .area-file-grid.area-list-box--grid .area-file-grid__item { place-items: start stretch; }
+  .area-file-grid__item > .area-file-tile { inline-size: 100%; }
+  /* A drag over a folder's tile opens its Folder (folder.css draws the open state); hovering lifts a solid folder's
+     sheet a little. */
+  .area-file-grid__item[data-drop-target] {}
+  @media (hover: hover) {
+    .area-file-grid__item:hover .area-folder--solid .area-folder__paper:not([data-tucked]) { transform: translateY(-6px); }
+  }
+}

@@ -14,9 +14,12 @@ import { useId, type SVGProps } from "react";
  *  direction mirrors in right-to-left text (rtl.css). docs/specs/icons.md, "Accessible name and right-to-left". */
 export type PilotIconProps = Omit<SVGProps<SVGSVGElement>, "stroke"> & { weight?: number; size?: number; title?: string; mirrored?: boolean };
 /** Size curve (docs/specs/icons.md, "Sizes"): the line grows with size^0.45, Cursor's
- *  16 → 24px step (1.25 → 1.5px), up to the 24px master; larger icons are that master scaled
- *  whole. In drawing units that is a factor of (min(size, 24) / 16)^-0.55. */
-export const sizeFactor = (size?: number) => size ? Math.pow(Math.min(size, 24) / 16, -0.55) : 1;
+ *  16 → 24px step (1.25 → 1.5px), up to the 24px master; above it with size^0.74, Fluent's slope
+ *  between its 24 and 48 masters. In drawing units that is a factor of (size / 16)^-0.55 to 24,
+ *  then (24 / 16)^-0.55 × (size / 24)^-0.26. */
+export const sizeFactor = (size?: number) => !size ? 1 : size <= 24
+  ? Math.pow(size / 16, -0.55)
+  : Math.pow(24 / 16, -0.55) * Math.pow(size / 24, -0.26);
 export const sw = (weight: number | undefined, size: number | undefined, ratio = 1) => {
   const k = ratio * sizeFactor(size);
   if (weight !== undefined) return weight * k;

@@ -569,6 +569,61 @@ export const COMPONENT_PAGES = [
     ],
   },
   {
+    slug: "folder", name: "Folder", exportName: "Folder", manifest: "folder",
+    imports: "Folder",
+    api: [
+      ["size", "sm (48) | md (64, Finder's icon view) | lg (96); unset follows --area-folder-size", "—"],
+      ["tone", "solid only: blue (Finder) | neutral | cyan | green | yellow | orange | red | pink | purple | brown", "blue"],
+      ["variant", "outline (back and pocket in grey with a thin light edge) | solid (Finder's lit folder)", "outline"],
+      ["contents", "solid only: anything inside draws one straight sheet over the pocket; image URLs put the first on it", "—"],
+      ["count", "a number at the pocket's foot, at the end", "—"],
+      ["badge", "small marks at the pocket's foot: who or what it is shared with", "—"],
+      ["open", "the pocket tips forward and a sheet rises out of it (a drag over it)", "false"],
+      ["label", "the figure's name; without one it is decorative", "—"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "The outline folder by default: the back with its tab and the pocket, flat in the subtle grey with one thin whole-pixel edge, in a square icon box at Finder's 64. variant=\"solid\" is Finder's lit blue folder.", demo: "GalleryFolder" },
+      { id: "contents", title: "What it holds", note: "The difference from Finder: anything inside draws one straight white sheet above the pocket; an image fills it.", demo: "GalleryFolderContents" },
+      { id: "tones", title: "Tones", note: "Finder's blue, neutral, and the palette's hues at Finder's lightness and chroma.", demo: "GalleryFolderTones" },
+      { id: "solid", title: "Solid", note: "The alternate: Finder's folder measured from the live icon, made rounder and brighter, holding one straight white sheet.", demo: "GalleryFolderSolid" },
+      { id: "open", title: "Open", note: "Under a drag the pocket tips toward you, its top dropping and flaring past the sides, and a sheet rises out of the folder, on base.", demo: "GalleryFolderOpen" },
+    ],
+  },
+  {
+    slug: "file-page", name: "File page", exportName: "FilePage", manifest: "filePage",
+    imports: "FilePage",
+    api: [
+      ["size", "sm (48) | md (64) | lg (96); unset follows --area-folder-size", "—"],
+      ["icon", "the type glyph, drawn thin in the middle: an @area/icons icon", "—"],
+      ["label", "the extension under the glyph: PDF, DOCX", "—"],
+      ["variant", "outline | solid, as Folder", "outline"],
+      ["preview", "an image of the file to fill the page instead", "—"],
+      ["name", "the figure's name; without one it is decorative", "—"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "Finder's document page made as round and soft as Area's Folder: a folded corner, the type glyph thin at about 1.25px, the extension under it.", demo: "GalleryFilePage" },
+      { id: "folder", title: "Beside a folder", note: "The same box, shadow and corner family as Folder, so files and folders line up in one grid.", demo: "GalleryFilePageWithFolder" },
+    ],
+  },
+  {
+    slug: "file-tile", name: "File tile", exportName: "FileTile", manifest: "fileTile",
+    imports: "FileTile, FileGrid, FileGridItem, Folder",
+    api: [
+      ["name", "the item's name: two lines, then an ellipsis", "—"],
+      ["meta", "a detail line: item count, type and size, edited time", "—"],
+      ["figure", "a Folder, a file glyph, or an image URL (contained)", "—"],
+      ["size", "sm (48) | md (64) | lg (96) figure; unset follows the grid", "—"],
+      ["FileGrid: value / onValueChange / onOpen", "the selected item; Enter or a double click opens", "— / — / —"],
+      ["FileGrid: size", "every tile's figure; or set --area-file-tile-figure", "md"],
+      ["FileGridItem: dropTarget", "a drag is over this item: its Folder tips open", "false"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "Finder's icon view: the figure over its name and item count, centred, 12 text with the name strong and the count muted.", demo: "GalleryFileTile" },
+      { id: "file", title: "A file", note: "A file's type glyph at 40 of the 64 square, as ChatGPT's Library card.", demo: "GalleryFileTileFile" },
+      { id: "grid", title: "Grid", note: "A ListBox grid of tiles: one Tab stop, arrows in two dimensions, typeahead, the row plates' paint; Enter or a double click opens.", demo: "GalleryFileGrid" },
+    ],
+  },
+  {
     slug: "asset-row", name: "Asset row", exportName: "AssetRow", manifest: "assetRow",
     imports: "AssetRow",
     api: [

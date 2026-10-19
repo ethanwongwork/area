@@ -853,3 +853,31 @@ svg.studio-mark * { vector-effect: non-scaling-stroke }
   background: conic-gradient(currentColor var(--_share), transparent 0);
   box-shadow: inset 0 0 0 var(--area-weight-icon, 1.125px) currentColor;
 }
+
+/* Brand (src/pages/brand.tsx): the owner's inspiration in folders, on Area's File grid and Folder. */
+.studio-brand { display: grid; align-content: start; min-block-size: 100%; }
+.studio-brand__trail { min-inline-size: 0; margin-inline-end: auto; }
+.studio-brand__loading { display: grid; place-items: center; min-block-size: 50vh; }
+.studio-brand__count { font-variant-numeric: tabular-nums; }
+/* The viewer: the image as large as the Canvas allows, never upscaled past its own pixels. */
+.studio-brand__viewer {
+  display: grid;
+  grid-template: minmax(0, 1fr) auto / minmax(0, 1fr);
+  place-items: center;
+  gap: var(--area-space-12);
+  min-block-size: calc(100vh - 160px);
+  margin: 0;
+}
+.studio-brand__viewer > img {
+  max-inline-size: 100%;
+  max-block-size: calc(100vh - 180px);
+  inline-size: auto;
+  block-size: auto;
+  object-fit: contain;
+  border-radius: var(--area-radius-small);
+  box-shadow: 0 0 0 var(--area-stroke-width) var(--area-token-swatch-ring);
+}
+.studio-brand__viewer > figcaption { font-size: var(--area-text-xs-size); font-variant-numeric: tabular-nums; }
+.studio-brand__preview { inline-size: 100%; block-size: 100%; object-fit: contain; }
+.studio-brand__row-thumb { display: block; inline-size: 32px; block-size: 32px; object-fit: cover; border-radius: var(--area-radius-small); }
+.studio-brand__colour { display: inline-flex; align-items: center; gap: var(--area-space-6); }

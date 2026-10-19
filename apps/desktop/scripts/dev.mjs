@@ -19,6 +19,7 @@ import { context } from "esbuild";
 import { execFileSync, spawn } from "node:child_process";
 import { createReadStream, existsSync, readFileSync, statSync, watch } from "node:fs";
 import { createServer } from "node:http";
+import { homedir } from "node:os";
 import { extname, join, normalize } from "node:path";
 import { copyStatic, dist, options, packagesBuilt, repo, root } from "./renderer.mjs";
 
@@ -65,7 +66,7 @@ for (const [index, name] of PACKAGES.entries()) {
 watch(join(root, "src"), (_, file) => { if (file && /\.(html|css)$|^theme\.js$/.test(file)) copyStatic(); });
 
 if (browser) {
-  const TYPES = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".json": "application/json", ".svg": "image/svg+xml", ".png": "image/png" };
+  const TYPES = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".json": "application/json", ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".gif": "image/gif", ".webp": "image/webp" };
   const port = Number(process.env.PORT ?? 4400);
   // Live reload: the page listens on /__reload and reloads when dist/ changes.
   const listeners = new Set();
@@ -85,6 +86,15 @@ if (browser) {
     if (path === "/__reload.js") {
       response.writeHead(200, { "content-type": "text/javascript", "cache-control": "no-store" });
       response.end(`new EventSource("/__reload").onmessage = () => location.reload();`);
+      return;
+    }
+    // The Brand library, for the browser preview (Electron serves it as area-brand://library/, electron/main.cjs).
+    if (path.startsWith("/__brand/")) {
+      const brand = join(homedir(), "Library", "Application Support", "Area", "Brand");
+      const asset = normalize(join(brand, path.slice("/__brand/".length)));
+      if (!asset.startsWith(brand) || !existsSync(asset)) { response.writeHead(404); response.end(); return; }
+      response.writeHead(200, { "content-type": TYPES[extname(asset)] ?? "application/octet-stream", "cache-control": "max-age=3600" });
+      createReadStream(asset).pipe(response);
       return;
     }
     let file = join(dist, path);
