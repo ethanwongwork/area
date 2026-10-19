@@ -624,6 +624,31 @@ export const COMPONENT_PAGES = [
     ],
   },
   {
+    slug: "asset-card", name: "Asset card", exportName: "AssetCard", manifest: "assetCard",
+    imports: "AssetCard, AssetGrid, AssetGridItem",
+    api: [
+      ["name / meta", "the asset's name, one line / a detail line under it", "—"],
+      ["media / mediaAlt", "an image URL (contained, 12 corner) or any element, centred / the image's text alternative", "— / \"\""],
+      ["group", "a group's assets (image URLs or elements): the first four as a 2 × 2 mosaic, cropped, 6 corner", "—"],
+      ["actions", "controls at the end of the caption, on the name's line", "—"],
+      ["selected", "the frame's edge in the selection colour (an AssetGrid sets it)", "false"],
+      ["interactive", "the card is a control outside an AssetGrid: hover lifts, focus rings, aria-pressed / aria-selected show as selected", "false"],
+      ["children / frameProps / captionProps", "the frame's own content in place of media / attributes for the frame / for the caption", "— / — / —"],
+      ["AssetGrid: value / onValueChange / onOpen", "the selected card; Enter or a double click opens", "— / — / —"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "An image asset: contained in the frame, the container corner, its name and detail line under it.", demo: "GalleryAssetCard" },
+      { id: "content-component", title: "A component", note: "Any element as the asset, centred in the frame.", demo: "GalleryAssetCardComponent" },
+      { id: "content-type", title: "A type style", note: "A type role's sample as the asset.", demo: "GalleryAssetCardType" },
+      { id: "content-actions", title: "With a control", note: "Controls under the frame, at the end of the name's line.", demo: "GalleryAssetCardActions" },
+      { id: "layout-group", title: "Group", note: "A group: its first four assets as a 2 × 2 mosaic, each cropped to its cell with the small corner.", demo: "GalleryAssetCardGroup" },
+      { id: "layout-group-few", title: "Group of two", note: "Fewer than four leave the other cells empty.", demo: "GalleryAssetCardGroupFew" },
+      { id: "state-selected", title: "Selected", note: "The frame's edge in the selection colour.", demo: "GalleryAssetCardSelected" },
+      { id: "behavior-interactive", title: "Interactive", note: "A card that is its own control outside a grid, as the app's gallery tiles: hover lifts the frame, Tab rings it.", demo: "GalleryAssetCardInteractive" },
+      { id: "behavior-grid", title: "Grid", note: "A ListBox grid of cards: one Tab stop, arrows in two dimensions; Enter or a double click opens. Hover lifts the frame.", demo: "GalleryAssetGrid" },
+    ],
+  },
+  {
     slug: "asset-row", name: "Asset row", exportName: "AssetRow", manifest: "assetRow",
     imports: "AssetRow",
     api: [

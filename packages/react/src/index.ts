@@ -57,6 +57,7 @@ export { AssetRow, type AssetRowProps } from "./components/AssetRow.tsx";
 export { Folder, type FolderProps } from "./components/Folder.tsx";
 export { FilePage, type FilePageProps } from "./components/FilePage.tsx";
 export { FileTile, FileGrid, FileGridItem, type FileTileProps, type FileGridProps, type FileGridItemProps } from "./components/FileTile.tsx";
+export { AssetCard, AssetGrid, AssetGridItem, type AssetCardProps, type AssetGridProps, type AssetGridItemProps } from "./components/AssetCard.tsx";
 export { PreviewFrame, type PreviewFrameProps } from "./components/PreviewFrame.tsx";
 export { PasswordField, type PasswordFieldProps } from "./components/PasswordField.tsx";
 export { OTPField, type OTPFieldProps } from "./components/OTPField.tsx";

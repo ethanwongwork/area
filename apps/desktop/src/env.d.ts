@@ -14,3 +14,15 @@ declare module "virtual:demo-snippets" {
   const snippets: Record<string, string>;
   export default snippets;
 }
+
+/** Every component's own files, read at build time (scripts/sources.mjs): file name -> text, and prop docs. */
+declare module "virtual:component-sources" {
+  const sources: {
+    specs: Record<string, string>;
+    css: Record<string, string>;
+    react: Record<string, string>;
+    /** Interface name (ButtonProps) -> prop -> its JSDoc. */
+    propDocs: Record<string, Record<string, string>>;
+  };
+  export default sources;
+}

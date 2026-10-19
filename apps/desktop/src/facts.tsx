@@ -6,7 +6,7 @@
  * keeps the rule under the last row, both meant for a column header.
  */
 import type { ReactNode } from "react";
-import { Code, Table, TableCell } from "@area/react";
+import { Table, TableCell } from "@area/react";
 
 export type Fact = readonly [term: ReactNode, value: ReactNode];
 
@@ -21,32 +21,6 @@ export function Facts({ items, label }: { items: ReadonlyArray<Fact | null | fal
             {/* Table's shrink-to-fit cell: the term column is as wide as its longest term. */}
             <TableCell fit><span className="studio-muted">{term}</span></TableCell>
             <td>{value}</td>
-          </tr>
-        ))}
-      </tbody>
-    </Table>
-  );
-}
-
-/**
- * A family's props on the Canvas, under its tiles: prop, type and default in their own columns. The
- * prop and default columns shrink to their longest entry, one name per line ("open / defaultOpen /
- * onOpenChange"), so the type gets the rest of the width.
- */
-export function PropsTable({ api }: { api: ReadonlyArray<ReadonlyArray<string>> }) {
-  return (
-    <Table size="md" flush aria-label="Props">
-      <thead>
-        <tr><th scope="col">Prop</th><th scope="col">Type</th><th scope="col">Default</th></tr>
-      </thead>
-      <tbody>
-        {api.map(([prop = "", type, fallback]) => (
-          <tr key={prop}>
-            <TableCell fit>
-              {prop.split(/ \/ |(?<=:) /).map((name, index) => <Code key={index} className="studio-prop">{name}</Code>)}
-            </TableCell>
-            <td>{type}</td>
-            <TableCell fit>{fallback && fallback !== "—" ? <Code>{fallback}</Code> : <span className="studio-muted">—</span>}</TableCell>
           </tr>
         ))}
       </tbody>

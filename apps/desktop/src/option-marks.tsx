@@ -58,8 +58,9 @@ export function optionMark(axis: Axis, value: string, canvas: CanvasAxes): React
       const r = value === "pill" ? 5 : (Number(value) * 10) / 32;
       return <svg className="studio-mark" viewBox="0 0 16 16" aria-hidden="true"><rect x="0.75" y="3" width="14.5" height="10" rx={r} /></svg>;
     }
-    // A card's frame: 1 its hairline, 0 Borderless's soft shadow edge.
+    // A card at the option's stroke width (0 flat) and at its rest shadow, each with the other at its default.
     case "surface": return <span className="studio-mark studio-mark--frame" aria-hidden="true" data-area-surface={value} />;
+    case "shadow-rest": return <span className="studio-mark studio-mark--frame" aria-hidden="true" data-area-surface="0" data-area-shadow-rest={value} />;
     // A plate lifted in proportion to the option (the Menu's shadow strength, 0 to 8): the real float shadow is too faint
     // to read on a 12 plate, so the mark's shadow grows with the number instead; 0 is flat.
     case "elevation": return <span className="studio-mark studio-mark--lift" aria-hidden="true" style={{ "--_lift": value } as CSSProperties} />;

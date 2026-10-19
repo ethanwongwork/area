@@ -49,7 +49,7 @@ type Theme = "light" | "dark";
 /** The Canvas's own theme settings (the Inspector writes them): the colour settings, the Layers (light and dark ground, layer
  * contrast), contrast, type size, density, radius, surface, elevation,
  * motion, pills. */
-export type CanvasAxes = Record<"neutral" | "accent" | "ground-light" | "ground-dark" | "layers-light" | "layers-dark" | "action" | "selection" | "contrast" | "type" | "density" | "radius" | "surface" | "elevation" | "motion" | "pills", string>;
+export type CanvasAxes = Record<"neutral" | "accent" | "ground-light" | "ground-dark" | "layers-light" | "layers-dark" | "action" | "selection" | "contrast" | "type" | "density" | "radius" | "surface" | "shadow-rest" | "elevation" | "motion" | "pills", string>;
 const CANVAS_DEFAULTS = Object.fromEntries(
   GALLERY_CONTROLS.filter(control => control.axis !== "theme").map(control => [control.axis, control.defaultValue]),
 ) as CanvasAxes;
@@ -338,6 +338,8 @@ export interface WorkspaceProps {
   inspector: ReactNode;
   /** The Canvas's scrolling body (fitting tiles, scrolling a selection into view). */
   canvasRef?: Ref<HTMLDivElement>;
+  /** Attributes the Canvas's body takes beyond the Inspector's settings: a tab's own preview (Language's theme). */
+  canvasScope?: Record<string, string>;
 }
 
 /*
@@ -346,14 +348,14 @@ export interface WorkspaceProps {
  * Inspector's first heading sit on one line. Every region insets its content by Panel's 14
  * (src/studio.css).
  */
-export function Workspace({ sidebar, canvasLead, canvasTitle, canvasActions, canvas, inspector, canvasRef }: WorkspaceProps) {
+export function Workspace({ sidebar, canvasLead, canvasTitle, canvasActions, canvas, inspector, canvasRef, canvasScope }: WorkspaceProps) {
   const studio = useStudio();
   const sidebarWidth = usePanelWidth("sidebar");
   const inspectorWidth = usePanelWidth("inspector");
   // The Canvas body carries the Inspector's settings on every tab (and the Material, src/material.ts): the colour settings, density (which also lays tiles out
   // as a hairline contact sheet in compact), radius, surface, elevation, motion and pills.
   const shown = studio.shown.canvas;
-  const axes = { "data-area-neutral": shown.neutral, "data-area-accent": shown.accent, "data-area-ground-light": shown["ground-light"], "data-area-ground-dark": shown["ground-dark"], "data-area-layers-light": shown["layers-light"], "data-area-layers-dark": shown["layers-dark"], "data-area-action": shown.action, "data-area-selection": shown.selection, "data-area-contrast": shown.contrast === "system" ? undefined : shown.contrast, "data-area-type": shown.type, "data-area-density": shown.density, "data-area-radius": shown.radius, "data-area-surface": shown.surface, "data-area-elevation": shown.elevation, "data-area-motion": shown.motion, "data-area-pills": shown.pills, ...materialAttributes(studio.shown.material) };
+  const axes = { ...canvasScope, "data-area-neutral": shown.neutral, "data-area-accent": shown.accent, "data-area-ground-light": shown["ground-light"], "data-area-ground-dark": shown["ground-dark"], "data-area-layers-light": shown["layers-light"], "data-area-layers-dark": shown["layers-dark"], "data-area-action": shown.action, "data-area-selection": shown.selection, "data-area-contrast": shown.contrast === "system" ? undefined : shown.contrast, "data-area-type": shown.type, "data-area-density": shown.density, "data-area-radius": shown.radius, "data-area-surface": shown.surface, "data-area-shadow-rest": shown["shadow-rest"], "data-area-elevation": shown.elevation, "data-area-motion": shown.motion, "data-area-pills": shown.pills, ...materialAttributes(studio.shown.material) };
   // A setting (or a hover preview of one) repaints the Canvas at once rather than fading every tile's colours.
   const main = useRef<HTMLElement>(null);
   const signature = JSON.stringify(axes);

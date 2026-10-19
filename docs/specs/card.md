@@ -333,6 +333,9 @@ Header marks: a Badge or marker icon in `CardHeader`'s action slot centres on th
   fading in on `fast` ease-out and out on `base` ease-in; a press drops the lift; Elevation 0 keeps the edge step
   (`surface.css`; measured from Notion's and Fluent's cards, `docs/research/card-hover-2026-10-18.md`). Status unchanged;
   for the owner's review.
+- 2026-10-18 · owner: the hover shadow "too drastic … very subtle elevation shadow" → the lift is Elevation's new `lift`
+  role (shadow8 geometry at half the float's weight: 0 0 2 + 0 4 8, 0.75% / 1.5% at Elevation 3), not the Menu's float
+  shadow; resting → lift is Fluent 2's interactive card step. Gallery tiles take the same role. Status unchanged.
 
 ## Settings collisions fixed (2026-10-18)
 

@@ -1,16 +1,21 @@
 /**
  * Brand: the owner's brand inspiration (owner, 2026-10-18: "an organized place in the electron browser called brand,
  * where i can explore things in organized folders"), from the Pinterest board oval / brand, downloaded to the app's own
- * data folder (~/Library/Application Support/Area/Brand), never into the repository. Built from Area's file explorer
- * components: the folders in the Sidebar; on the Canvas a FileGrid of Finder-style Folders,
- * a folder's images as tiles, or one image at full size; the chosen image in the Inspector.
+ * data folder (~/Library/Application Support/Area/Brand), never into the repository.
+ *
+ * Assets and groups (owner, 2026-10-18: "the gallery for brand to just be a bunch of containers ... they are
+ * essentially all assets, then you can group assets together in a group ... a 2x2 grid with each asset scaled down",
+ * after Figma's file browser): every image is an asset in an Asset card, its name and detail line under the container;
+ * a group (the library's folders) is an Asset card holding a 2 x 2 mosaic of its first four. The groups in the
+ * Sidebar; on the Canvas an AssetGrid of groups, a group's assets, or one asset at full size; the chosen one in the
+ * Inspector. Folder, File page and File tile stay in the library for file browsers.
  *
  * Electron serves the library as area-brand://library/ (electron/main.cjs); the browser preview as /__brand/
  * (scripts/dev.mjs). Location: #brand/<folder>, #brand/<folder>/<image> for the viewer.
  */
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, Code, ColorSwatch, EmptyState, FileGrid, FileGridItem, Folder, Nav, NavGroup, NavItem, PanelSection, Select, Spinner, Table, TableCell } from "@area/react";
-import { ArrowLeftIcon, ChevronLeftIcon, ChevronRightIcon, FolderIcon, OpenIcon } from "@area/icons";
+import { AssetGrid, AssetGridItem, Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, Code, ColorSwatch, EmptyState, Nav, NavGroup, NavItem, PanelSection, Select, Spinner, Table, TableCell } from "@area/react";
+import { ArrowLeftIcon, ChevronLeftIcon, ChevronRightIcon, GridIcon, OpenIcon } from "@area/icons";
 import { SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
 import { CanvasSection } from "../tile.tsx";
 import { useViewOption, ViewControls, ViewSwitch } from "../view-controls.tsx";
@@ -33,8 +38,8 @@ const url = (path: string) => BASE + path;
 const nameOf = (item: BrandItem) => item.title || (item.alt ? item.alt[0]!.toUpperCase() + item.alt.slice(1) : "") || item.source || "Untitled";
 const kindLabel = (item: BrandItem) => item.kind === "jpeg" ? "JPG" : item.kind.toUpperCase();
 
-/* Tile sizes: the figure's square (the File tile's --area-file-tile-figure). Medium is the default. */
-const SIZES = { small: 96, medium: 144, large: 208 } as const;
+/* Card sizes: a column's least width (the Asset grid's --area-asset-card-size). Medium is the default. */
+const SIZES = { small: 160, medium: 224, large: 320 } as const; /* pick */
 type Size = keyof typeof SIZES;
 
 function useLibrary() {
@@ -131,12 +136,12 @@ export function BrandPage() {
       </tbody>
     </Table>
   ) : (
-    <FileGrid aria-label={label} value={chosen} onValueChange={setChosen} onOpen={id => { const entry = entries.find(e => e.id === id); if (entry) openImage(entry); }}
-      style={{ "--area-file-tile-figure": `${SIZES[size]}px` } as CSSProperties}>
+    <AssetGrid aria-label={label} value={chosen} onValueChange={setChosen} onOpen={id => { const entry = entries.find(e => e.id === id); if (entry) openImage(entry); }}
+      style={{ "--area-asset-card-size": `${SIZES[size]}px` } as CSSProperties}>
       {entries.map(entry => (
-        <FileGridItem key={entry.id} value={entry.id} name={nameOf(entry)} meta={`${kindLabel(entry)} · ${entry.width} × ${entry.height}`} figure={url(entry.thumb)} textValue={nameOf(entry)} />
+        <AssetGridItem key={entry.id} value={entry.id} name={nameOf(entry)} meta={`${kindLabel(entry)} · ${entry.width} × ${entry.height}`} media={url(entry.thumb)} textValue={nameOf(entry)} />
       ))}
-    </FileGrid>
+    </AssetGrid>
   );
 
   let body;
@@ -152,16 +157,17 @@ export function BrandPage() {
     <CanvasSection id="brand-images" title={searching ? <>{folder ? `${folder.name}: ` : ""}{shown.length} results</> : undefined}>{imageGrid(shown, folder?.name ?? "Results")}</CanvasSection>
   ) : <EmptyState title="Nothing found" description={`Nothing matches “${query}”.`} />;
   else body = (
-    <CanvasSection id="brand-folders" title={<>Folders <span className="studio-muted">{folders.length}</span></>}>
-      <FileGrid aria-label="Folders" size="lg" value={chosen} onValueChange={setChosen} onOpen={openFolder}>
+    <CanvasSection id="brand-groups" title={<>Groups <span className="studio-muted">{folders.length}</span></>}>
+      <AssetGrid aria-label="Groups" value={chosen} onValueChange={setChosen} onOpen={openFolder}
+        style={{ "--area-asset-card-size": `${SIZES[size]}px` } as CSSProperties}>
         {folders.map(entry => {
           const inside = byFolder.get(entry.id) ?? [];
           return (
-            <FileGridItem key={entry.id} value={entry.id} name={entry.name} meta={`${inside.length} items`}
-              figure={<Folder />} />
+            <AssetGridItem key={entry.id} value={entry.id} name={entry.name} meta={`${inside.length} assets`}
+              group={inside.slice(0, 4).map(asset => url(asset.thumb))} />
           );
         })}
-      </FileGrid>
+      </AssetGrid>
     </CanvasSection>
   );
 
@@ -169,11 +175,11 @@ export function BrandPage() {
   return (
     <Workspace
       sidebar={<SidebarList>
-        <Nav aria-label="Brand folders">
+        <Nav aria-label="Brand groups">
           <SidebarAll tab="brand" count={total} current={!folder} />
-          <NavGroup label="Folders">
+          <NavGroup label="Groups">
             {folders.map(entry => (
-              <NavItem key={entry.id} href={`#brand/${entry.id}`} current={entry.id === folder?.id} icon={<FolderIcon />}
+              <NavItem key={entry.id} href={`#brand/${entry.id}`} current={entry.id === folder?.id} icon={<GridIcon />}
                 onClick={event => { event.preventDefault(); openFolder(entry.id); }}
                 trailing={<span className="studio-muted studio-brand__count">{byFolder.get(entry.id)?.length ?? 0}</span>}>
                 {entry.name}
@@ -193,14 +199,14 @@ export function BrandPage() {
           {opened ? <>
             <Button variant="ghost" tone="neutral" size="sm" iconOnly icon={<ChevronLeftIcon />} aria-label="Previous image" onClick={() => step(-1)} />
             <Button variant="ghost" tone="neutral" size="sm" iconOnly icon={<ChevronRightIcon />} aria-label="Next image" onClick={() => step(1)} />
-          </> : folder || searching ? <>
-            <Select size="sm" variant="soft" aria-label="Tile size" value={size} onChange={event => setSize(event.currentTarget.value as Size)}>
+          </> : <>
+            <Select size="sm" variant="soft" aria-label="Card size" value={size} onChange={event => setSize(event.currentTarget.value as Size)}>
               <option value="small">Small</option>
               <option value="medium">Medium</option>
               <option value="large">Large</option>
             </Select>
-            <ViewSwitch value={mode} onChange={setMode} />
-          </> : null}
+            {folder || searching ? <ViewSwitch value={mode} onChange={setMode} /> : null}
+          </>}
         </ViewControls>
       }
       canvas={<div className="studio-brand">{body}</div>}
@@ -215,10 +221,10 @@ export function BrandPage() {
                 {selected.link ? <Button variant="outline" size="sm" fullWidth icon={<OpenIcon />} onClick={() => window.open(selected.link, "_blank")}>Source</Button> : null}
                 {window.areaDesktop?.revealBrand ? <Button variant="outline" size="sm" fullWidth onClick={() => window.areaDesktop?.revealBrand?.(selected.file)}>Show in Finder</Button> : null}
               </Selection>
-              <PanelSection heading="Image">
-                <Facts label="Image" items={[
+              <PanelSection heading="Asset">
+                <Facts label="Asset" items={[
                   ["Name", nameOf(selected)],
-                  ["Folder", folders.find(entry => entry.id === selected.folder)?.name],
+                  ["Group", folders.find(entry => entry.id === selected.folder)?.name],
                   selected.source ? ["Source", selected.source] : null,
                   ["Size", `${selected.width} × ${selected.height}`],
                   ["Format", kindLabel(selected)],
@@ -228,14 +234,14 @@ export function BrandPage() {
               </PanelSection>
             </>
           ) : library ? (
-            <PanelSection heading={chosenFolder ?? folder ? "Folder" : "Library"}>
+            <PanelSection heading={chosenFolder ?? folder ? "Group" : "Library"}>
               <Facts label="Library" items={chosenFolder ?? folder ? [
                 ["Name", (chosenFolder ?? folder)!.name],
-                ["Images", byFolder.get((chosenFolder ?? folder)!.id)?.length ?? 0],
+                ["Assets", byFolder.get((chosenFolder ?? folder)!.id)?.length ?? 0],
                 ["Holds", (chosenFolder ?? folder)!.description],
               ] : [
-                ["Images", total],
-                ["Folders", folders.length],
+                ["Assets", total],
+                ["Groups", folders.length],
                 ["From", "Pinterest, oval / brand"],
                 ["Saved", new Date(library.fetched).toLocaleDateString()],
                 ["Stored in", <Code>Application Support/Area/Brand</Code>],

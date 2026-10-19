@@ -19,3 +19,12 @@ follows Elevation. It fades in on `duration-fast` (140 at Motion 210; Notion 150
 once. At Elevation 0 there is no shadow, so the edge steps as before. Motion 0 and reduced motion make it instant.
 Applied to the linked Card (`packages/styles/src/components/surface.css`) and the app's gallery tiles
 (`apps/desktop/src/studio.css`).
+
+## Lift role (2026-10-18, later)
+
+Owner: "the hover animation for the component container shadow is too drastic, i want it to be more subtle very subtle
+elevation shadow". The float shadow is the Menu's depth (shadow16: an 8px drop, 16px blur), for a surface over the page;
+a hovered card stays on the page. Elevation gains a sixth role, `lift`: Fluent's shadow8 geometry (`0 0 2` ambient,
+`0 4 8` key) at half the float's weight, so 1.5% key and 0.75% ambient at the default 3 (dark doubled), half the
+float's alpha and reach. A linked Card steps resting (shadow4) to lift (shadow8), Fluent 2's interactive card exactly;
+gallery tiles rest flat and lift to it. Timing is unchanged.

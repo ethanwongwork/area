@@ -123,21 +123,19 @@ test('every surface takes its depth from its elevation role', () => {
   }
   assert.match(ruleFor('.area-tooltip')?.body ?? '', /var\(--area-shadow-tooltip\)/, 'Tooltip does not take the tooltip role');
   assert.match(ruleFor('.area-card')?.body ?? '', /--_card-shadow:\s*var\(--area-shadow-resting\)/, 'Card does not take the resting role');
+  assert.match(css, /\.area-card:has\(\.area-card__link\):hover\s*\{[^}]*--_card-lift:\s*var\(--area-shadow-lift\)/, 'a linked Card\'s hover does not take the lift role');
 
-  // The Surface axis (axes/surface.ts, 2026-10-14): at 0 (Borderless) a framed surface's edge is a shadow, so every
-  // surface whose frame the setting removes lists `shadow-edge` first, or Borderless leaves it with no edge at
-  // Elevation 0 and in dark. Two layers at both steps, never none, as the roles.
-  // The edge is derived from `border-width` (emit/base.ts), drawn only while no frame is, so Surface 0 under Medium or
-  // More contrast draws the returned frame alone, not the frame and the soft edge (audit 2026-10-18).
-  const on = '(1 - sign(var(--area-border-width)))';
+  // The rest shadow (axes/surface.ts, 2026-10-19): every framed surface lists `shadow-edge` first, set by the Rest
+  // shadow setting alone (0 none, with the line or instead of it), two layers at every step, never none, as the roles.
+  const rest = 'var(--area-shadow-rest-step, 0)';
   const edges = [...css.matchAll(/--area-shadow-edge:\s*([^;]+);/g)].map(match => match[1].trim());
   assert.ok(edges.length > 0, '--area-shadow-edge is not emitted');
   for (const value of edges) {
     assert.equal(layers(value), 2, `--area-shadow-edge is not two layers: ${value}`);
-    assert.equal(value, `0 0 1px rgb(0 0 0 / calc(0.62 * ${on})), inset 0 0 0 1px light-dark(transparent, rgb(255 255 255 / calc(0.2 * ${on})))`, `--area-shadow-edge lost ChatGPT's frameless edge or its frame switch: ${value}`);
+    assert.equal(value, `0 0.5px 1.5px light-dark(rgb(0 0 0 / calc(0.05 * ${rest})), transparent), inset 0 0 0 1px light-dark(transparent, rgb(255 255 255 / calc(0.025 * ${rest})))`, `--area-shadow-edge is not the rest shadow: ${value}`);
   }
   for (const value of [...css.matchAll(/--area-shadow-edge-filter:\s*([^;]+);/g)].map(match => match[1].trim())) {
-    assert.ok(value.includes(`calc(0.62 * ${on})`) && value.includes(`calc(0.2 * ${on})`), `--area-shadow-edge-filter does not follow the frame: ${value}`);
+    assert.ok(value.includes(`calc(0.05 * ${rest})`) && value.includes(`calc(0.025 * ${rest})`), `--area-shadow-edge-filter does not follow the rest shadow: ${value}`);
   }
   // Surfaces a material paints lead with its slot, then the edge; the rest lead with the edge.
   for (const block of [...expect.float.slice(0, 4), ...expect.modal]) {

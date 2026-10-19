@@ -18,7 +18,7 @@ describe("axis registry", () => {
 
   it("ships the axes the system promises", () => {
     expect(AXES.map((a) => a.id).sort()).toEqual(
-      ["accent", "action", "density", "elevation", "ground-dark", "ground-light", "layers-dark", "layers-light", "motion", "neutral", "radius", "selection", "surface", "theme", "type"].sort(),
+      ["accent", "action", "density", "elevation", "ground-dark", "ground-light", "layers-dark", "layers-light", "motion", "neutral", "radius", "selection", "shadow-rest", "surface", "theme", "type"].sort(),
     );
   });
 });

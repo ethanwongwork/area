@@ -99,6 +99,7 @@
 @import "./components/folder.css";
 @import "./components/file-page.css";
 @import "./components/file-tile.css";
+@import "./components/asset-card.css";
 @import "./components/list-box.css";
 @import "./components/app-shell.css";
 @import "./components/otp-field.css";
