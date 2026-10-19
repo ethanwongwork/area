@@ -78,6 +78,12 @@ and menus.
 
 - Owner: whether the label shows at sm (it is about 5px there).
 
+## Coherence pass, 2026-10-19
+
+With Folder (docs/specs/folder.md, "Coherence pass"): the outline fill is `bg-component`, the glyph and label ink is muted
+mixed 45% toward it, the edge builds on `--area-stroke-width`. The solid page stays an illustration in fixed paint, as
+Finder's does in dark. Corners are part of the drawing (in proportion to the box), not the Radius setting, as icons.
+
 ## Review note, 2026-10-18 (round 48)
 
 - **What changed:** New. Files in an icon view get a page figure beside the Folder: a soft white page with a folded

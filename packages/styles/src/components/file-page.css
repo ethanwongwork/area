@@ -25,7 +25,7 @@
     --_page: #f4f5f7; /* spec: about 3.5 L under the top (owner: "the actual page part can have a slightly more obvious gradient") */
     --_fold: #f6f7f9; /* spec: the flap's back at its edge */
     --_fold-crease: #f0f1f4; /* spec: about 2 L darker toward the crease (owner: "even more subtle"); 5 L under the page's top */
-    --_edge: max(1px, round(down, calc(var(--_size) / 96), 1px)); /* spec: Folder's outline edge, a whole pixel */
+    --_edge: max(var(--area-stroke-width), round(down, calc(var(--_size) / 96), 1px)); /* spec: Folder's outline edge */
     --_ink: #b4b4b8; /* spec: Finder glyph #b6b6b6 */
     position: relative;
     display: inline-block;
@@ -66,9 +66,10 @@
   /* Outline: Folder's outline, the page flat in the subtle fill with a thin light edge. The flap is filled the same and
      only its two inner edges are drawn, so the diagonal is one line. */
   .area-file-page--solid {}
-  .area-file-page--outline { --_ink: light-dark(#b0b0b6, #6e6e74); } /* spec: the reference's grey, as Folder's count */
+  /* Folder's quiet ink: muted mixed 45% toward the page's fill (about 22 L under it), so it follows Contrast, Layers and dark. */
+  .area-file-page--outline { --_fill: var(--area-bg-component); --_ink: color-mix(in oklab, var(--area-fg-muted), var(--_fill) 45%); } /* spec: Folder's fill and quiet ink */
   .area-file-page--outline .area-file-page__figure > svg { filter: none; }
-  .area-file-page--outline :is(.area-file-page__sheet, .area-file-page__fold) { fill: var(--area-bg-subtle); }
+  .area-file-page--outline :is(.area-file-page__sheet, .area-file-page__fold) { fill: var(--_fill); }
   .area-file-page--outline :is(.area-file-page__edge, .area-file-page__crease, .area-file-page__diagonal) {
     fill: none;
     stroke: var(--area-border);

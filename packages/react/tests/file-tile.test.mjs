@@ -31,6 +31,8 @@ test('Folder outline draws its back, rim and pocket and its count, its sheet tuc
   assert.match(html, /area-folder__front/);
   assert.match(html, /area-folder__rim/);
   assert.match(html, /class="area-folder__paper" data-tucked=""/);
+  // The back's edge is drawn before the sheet, so the sheet stands in front of the back (owner, 2026-10-19).
+  assert.ok(html.indexOf('area-folder__rim') < html.indexOf('area-folder__paper'));
   assert.doesNotMatch(html, /fill="url\(#/);
   assert.match(render(h(Folder, { variant: 'solid', contents: 1, open: true })), /data-open=""/);
   assert.match(html, /area-folder__count">5</);
