@@ -5,6 +5,14 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## File explorer coherence pass (2026-10-19, branch `claude/brand-folder-ui-component-e54b70`, uncommitted)
+
+Owner: "a deep coherence pass with current area components". Folder / File page: outline fill `bg-component` (the
+recessed `bg-subtle` read as a hole in dark), quiet ink derived from muted, edge on `--area-stroke-width`, open motion
+`base` ease-in-out in / `fast` out (MOTION.md row), the outline sheet drawn over the back's edge. File tile: Asset card's
+caption type (UI text strong, xs muted detail) and 8 gap, no figure movement on hover (rule 2), bare glyph at the
+stroke width. Specs have a "Coherence pass" section each. Brand now uses Asset card (another session) and was left as is.
+
 ## App UI tweaks (2026-10-18 to 19, branch `claude/electron-ui-tweaks-ccf407`, merged to main in PR #137)
 
 Owner rule: design feedback applies to the real components and tokens, never as an app-only override. When the owner
