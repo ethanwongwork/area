@@ -974,6 +974,44 @@ export const sectionHeading = {
   defaults: {},
 } as const satisfies ComponentManifest;
 
+export const folder = {
+  block: "area-folder",
+  description: "Draws a folder as Finder does: a back panel with its tab, one sheet when it holds something, a front pocket and an optional badge.",
+  variants: {
+    size: ["sm", "md", "lg"],
+    tone: ["blue", "neutral", "cyan", "green", "yellow", "orange", "red", "pink", "purple", "brown"],
+    variant: ["outline", "solid"],
+  },
+  states: ["open"],
+  elements: ["figure", "back", "rim", "front", "paper", "badge", "count"],
+  defaults: { tone: "blue", variant: "outline" },
+} as const satisfies ComponentManifest;
+
+export const filePage = {
+  block: "area-file-page",
+  description: "Draws a file as Finder does: a page with its corner folded, its type glyph and its extension.",
+  variants: { size: ["sm", "md", "lg"], variant: ["outline", "solid"] },
+  elements: ["figure", "sheet", "edge", "fold", "crease", "diagonal", "content", "icon", "label"],
+  defaults: { variant: "outline" },
+} as const satisfies ComponentManifest;
+
+export const fileTile = {
+  block: "area-file-tile",
+  description: "One item of a file browser's icon view: its figure over its name and a detail line.",
+  variants: { size: ["sm", "md", "lg"] },
+  elements: ["figure", "text", "name", "meta"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const fileGrid = {
+  block: "area-file-grid",
+  description: "Lays file tiles out as a grid to browse, choose from and open, with one Tab stop.",
+  variants: { size: ["sm", "md", "lg"] },
+  states: ["drop-target"],
+  elements: ["item"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
 export const assetRow = {
   block: "area-asset-row",
   description: "Lists one exportable asset: its preview, name, details and an optional action.",
@@ -1186,6 +1224,10 @@ export const MANIFESTS = {
   boxModel,
   tokenRow,
   copyButton,
+  folder,
+  filePage,
+  fileTile,
+  fileGrid,
   listBox,
   titlebar,
   sectionHeading,

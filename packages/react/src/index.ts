@@ -54,6 +54,9 @@ export { CopyButton, CopyStatus, useCopy, COPY_FEEDBACK_MS, type CopyButtonProps
 export { ListBox, ListBoxItem, ListBoxSection, type ListBoxProps, type ListBoxItemProps, type ListBoxSectionProps } from "./components/ListBox.tsx";
 export { Titlebar, SectionHeading, type TitlebarProps, type SectionHeadingProps } from "./components/AppShell.tsx";
 export { AssetRow, type AssetRowProps } from "./components/AssetRow.tsx";
+export { Folder, type FolderProps } from "./components/Folder.tsx";
+export { FilePage, type FilePageProps } from "./components/FilePage.tsx";
+export { FileTile, FileGrid, FileGridItem, type FileTileProps, type FileGridProps, type FileGridItemProps } from "./components/FileTile.tsx";
 export { PreviewFrame, type PreviewFrameProps } from "./components/PreviewFrame.tsx";
 export { PasswordField, type PasswordFieldProps } from "./components/PasswordField.tsx";
 export { OTPField, type OTPFieldProps } from "./components/OTPField.tsx";

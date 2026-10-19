@@ -11,9 +11,10 @@
  * quits, for checking the window without looking at it (--theme=dark, --hash=icons/arrows,
  * --store='{"canvas":{"ui":"compact"}}' for saved settings).
  */
-const { app, BrowserWindow, ipcMain, nativeTheme } = require("electron");
+const { app, BrowserWindow, ipcMain, nativeTheme, net, protocol, session, shell } = require("electron");
 const { existsSync, watch, writeFileSync } = require("node:fs");
-const { join } = require("node:path");
+const { join, normalize, sep } = require("node:path");
+const { pathToFileURL } = require("node:url");
 
 const dist = join(__dirname, "..", "dist");
 const dev = process.argv.includes("--dev");
@@ -82,6 +83,28 @@ function createWindow() {
   return window;
 }
 
+/*
+ * The Brand library (the Brand tab): the owner's saved inspiration, downloaded to the app's own data folder
+ * (~/Library/Application Support/Area/Brand: library.json, originals/, thumbs/), never into the repository. The page reads
+ * it as area-brand://library/<path>; nothing outside that folder is served.
+ */
+protocol.registerSchemesAsPrivileged([{ scheme: "area-brand", privileges: { standard: true, secure: true, supportFetchAPI: true, corsEnabled: true, stream: true } }]);
+const brandFolder = () => join(app.getPath("userData"), "Brand");
+async function serveBrand(request) {
+  const root = brandFolder();
+  const file = normalize(join(root, decodeURIComponent(new URL(request.url).pathname)));
+  if (!file.startsWith(root + sep) || !existsSync(file)) return new Response("Not found", { status: 404 });
+  // The page is file://, so its fetch of library.json is cross-origin: allow it.
+  const response = await net.fetch(pathToFileURL(file).toString());
+  const headers = new Headers(response.headers);
+  headers.set("Access-Control-Allow-Origin", "*");
+  return new Response(response.body, { status: response.status, headers });
+}
+ipcMain.on("area:brand-reveal", (_event, path) => {
+  const file = normalize(join(brandFolder(), String(path)));
+  if (file.startsWith(brandFolder() + sep) && existsSync(file)) shell.showItemInFolder(file);
+});
+
 ipcMain.on("area:theme", (event, theme) => {
   nativeTheme.themeSource = theme === "dark" ? "dark" : "light";
   BrowserWindow.fromWebContents(event.sender)?.setBackgroundColor(GROUND[nativeTheme.themeSource]);
@@ -89,6 +112,8 @@ ipcMain.on("area:theme", (event, theme) => {
 
 app.setName("Area");
 app.whenReady().then(() => {
+  protocol.handle("area-brand", serveBrand);
+  session.fromPartition("capture").protocol.handle("area-brand", serveBrand);
   createWindow();
   app.on("activate", () => { if (BrowserWindow.getAllWindows().length === 0) createWindow(); });
 });

@@ -3,6 +3,8 @@ interface AreaDesktop {
   platform: string;
   /** Matches the window's native chrome (traffic lights, vibrancy) to the app's theme. */
   setTheme(theme: "light" | "dark"): void;
+  /** Shows a file of the Brand library (a path inside it, "originals/<id>.jpg") in Finder. */
+  revealBrand?(path: string): void;
 }
 interface Window { areaDesktop?: AreaDesktop }
 

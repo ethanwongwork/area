@@ -26,6 +26,19 @@
         "apps/desktop/dist"
       ],
       "port": 4410
+    },
+    {
+      "name": "desktop-browser",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "preview",
+        "-w",
+        "@area/desktop",
+        "--",
+        "--no-electron"
+      ],
+      "port": 4420
     }
   ]
 }

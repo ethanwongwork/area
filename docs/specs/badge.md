@@ -666,3 +666,13 @@ An interactive Badge presses with the hover wash laid once more over its hover f
 10px icons at Compact (owner: "go with 10px icons, draw the cuts"): the icon box is at most the plate less 4 (`--_icon`), as the media, so 12 at 16, 20 and 24 and 10 in Compact's 14, where icons and the dismiss glyph draw their 10px cuts (`--_glyph-cut10`; docs/specs/icons.md "10px cuts"). Supersedes the open note below.
 
 Optical centre: the label sits a quarter of the cap–x-height gap above the cap centre (`--_optical-lift`, inset.css "Marks: optical centre"; 0.5 at 11px, 0.54 at 12), shared with Tag and Citation, so lowercase labels read centred beside a dot, flag, icon or × (they sat about 1px low at Compact 14). Text sides already follow the height (8 at 20, 5 at 14). Open: icons stay 12 in Compact's 14 (1 from the edge) while avatars and flags take the height less 4; 10px cuts would be needed. Measured in `docs/research/spacing-2026-10-17/` (review: https://claude.ai/artifact/JtDZ9LNfutFyfdkGUvQzL2).
+
+
+## Review note, 2026-10-18 (round 48)
+
+- **What changed:** The label's baseline now sits a whole pixel from the plate's top. Before, the same badge drew its
+  text 10 or 11 device pixels down depending on where it landed on the page; now every badge of a size matches at
+  100%.
+- **Why:** You saw the text centring differ between two badges. The cause was a fractional offset (4.21 + a cap of
+  8.4 at 12px) that the plate and the glyphs rounded to pixels separately. In the gallery's 90% Auto zoom a few still
+  differ by half a pixel, since zoom makes any whole pixel fractional again.

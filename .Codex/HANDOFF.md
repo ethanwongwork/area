@@ -5,6 +5,59 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## File explorer components and the Brand tab (2026-10-18, branch `claude/brand-folder-ui-component-e54b70`, uncommitted)
+
+Owner: download the Pinterest board oval / brand into "an organized place in the electron browser called brand … in
+organized folders", and "work on the folder ui component first … add file explorer components".
+- **Library:** all 834 pins fetched through Pinterest's own page API in the owner's Chrome, downloaded (originals and
+  474 thumbnails, 242 MB) to `~/Library/Application Support/Area/Brand/`, never into the repo. Sorted by eye from
+  contact sheets into 12 folders (`folders.txt` there; `library.json` is the index the app reads).
+- **Components (in review):** Folder (`docs/specs/folder.md`: Finder's GenericFolderIcon geometry read at 256, sizes
+  48 / 64 / 96, palette tones, contents peeking, badge, open) and File tile + FileGrid / FileGridItem
+  (`docs/specs/file-tile.md`: Finder's icon-view item on ListBox's grid, Enter / double click opens). Gallery batch
+  "File explorer". Research and survey results: `docs/research/file-explorer-2026-10-18/README.md`.
+- **Brand tab** (`apps/desktop/src/pages/brand.tsx`): folders in the Sidebar, a FileGrid of Folders, a folder's images
+  as tiles (size Small / Medium / Large, grid / list), the chosen image in the Inspector (Pinterest, Source, Show in
+  Finder), a full-size viewer (Enter, ← →, Esc). Electron serves the library as `area-brand://library/`
+  (`electron/main.cjs`, CORS on for the file:// page); the browser preview as `/__brand/` (`scripts/dev.mjs`).
+  `.claude/launch.json` gained `desktop-browser` (port 4420, no Electron) for when another session holds 4400.
+- Folder redrawn the same day (owner: "very simple shapes … styled exactly like apples finder folders … just 1 paper"):
+  measured from the live Finder icon (NSWorkspace, macOS 27.2), Finder blue by default, one straight white sheet.
+- Badge: the label's baseline now rounds to a whole pixel from the plate (owner saw uneven centring); every badge of a
+  size matches at 100%; in the gallery's 90% Auto zoom ~6 of 73 still differ by half a pixel (zoom makes 1px fractional).
+- Owner, 2026-10-18: leave the gallery's Auto zoom at 90% for small specimens (the half-pixel drift there is accepted).
+- Then (owner: "more round … more large … more soft … brighter"; file glyphs "way too thick … not correctly positioned"):
+  Folder corners 56, fills 92 × 84% of its box, brighter softer stops and shadow; new **File page** (`FilePage`,
+  `docs/specs/file-page.md`: Finder's document page, glyph thinned to ~1.25px via `--area-weight-icon`, extension
+  label); File grid tiles now start at the top of their row (ListBox's grid centred them). Round 48 has all four.
+- Then: File page matched to Folder (corners 54 = Folder's on screen, top-lit, no edges, same shadow); Folder's sheet
+  corners concentric (34); `variant="outline"` on both (owner's simplified grey folder, AccessGrid reference) and
+  Folder `count`. Icon-line survey in the file-explorer research README §9. React 486/486.
+- Then: outline Folder draws back and pocket (two layers); outline edges clamp(0.75px, 0.85%, 2px); File page's flap
+  shares one diagonal with the page (no doubled stroke), solid flap shaded #fbfbfc → #d9dde3.
+- Then, after an illustration survey (research README §10): whole-pixel outline edges, Folder `__rim` (back edge only
+  where it shows, no doubled foot), solid pocket 1px lips, page near flat with a light flap, page corner 40 (folder
+  1.4×), count and label one type (cap ≈ 9%, regular, 7% up). **Icon line above 24px** now continues at size^0.74
+  (Fluent's slope; `SIZE_CURVE_LARGE` in packages/icons/scripts/generate.mjs; icons.md "Line above 24px"): 48 → 2.25px,
+  96 → 3.75 (were 2.7 / 5.4). Icons tests 11/11, React 486/486.
+- Then: outline page diagonal redrawn at 1.35× the edge; page #fff → #f4f5f7, flap #f0f1f4 → #f6f7f9; glyph and label in
+  one centred column; label and count share one type exactly (tracking removed).
+- Then: outline is the default `variant` for Folder and File page (solid is the alternate). Every stroke one weight
+  (owner): no heavier diagonal; File page's glyph draws at `--_edge` as a non-scaling stroke.
+  The diagonal looked thin because the flap's fill covered half its stroke; the outline's edge, crease and diagonal are
+  now drawn after the flap at one width (measured equal, scratch ink.py method in the spec).
+- 2026-10-19: round 48 approved all four (Folder, File page, File tile, Badge): the three new families are Complete.
+  After: figures snapped to even whole pixels, badge 12.5% of the box, a clear open state (pocket tips forward, a sheet
+  rises). Note: another session (design-system-motion-theme) relaunched its own dev server and Electron on 4400 and
+  closed this worktree's window; `desktop-browser` (4420, no Electron) is this worktree's preview.
+- Open for the owner: sm / lg folder sizes.
+  Not built: multi-select, rename, moving images between folders, FileRow, a file-type icon map.
+- Checks: React 484/484 (new file-tile.test.mjs), contracts 14/14, manifest parity, token refs, typecheck,
+  check:playgrounds. Seen in the browser pane (light and dark) and in an Electron capture.
+- Review: round 48 (`components48`) on https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG holds Folder and File tile
+  (review notes in both specs). `npm run build -w @area/docs` fails its dogfood audit on an inline style in
+  `gallery.tsx` / `badge.tsx` that predates this branch; the review page still generates.
+
 ## Settings that show their effect, card lift, Fit groups (2026-10-18, same branch, uncommitted)
 
 - **Settings (owner: keep every option, make choosing visible):** every Inspector list is a Custom select whose options

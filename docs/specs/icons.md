@@ -5314,3 +5314,30 @@ tips reach the circle keyline as `diamond` does, the gaps between diamonds are 1
 counters open to about 3.3. No whole-pixel geometry fits a larger diamond inside the keyline with a readable gap
 (centre offset ± size must both be whole), so the source takes `data-angles="free"`, as balance outranks 1× crispness
 (owner, 2026-10-16). Sheet: `docs/research/icon-review/2026-10-17/component-1x.png`, `-2x.png`.
+
+
+## Line above 24px, 2026-10-18
+
+Owner: "the icon stroke thickness scaling up looks very thick, is that what other icon systems do at larger sizes?",
+then "research how other icon system handle stroke width larger than 24px, and go with your rec".
+
+Survey (pinned sources: docs/research/file-explorer-2026-10-18/README.md §9): single-drawing sets scale the line with
+the drawing (Lucide, Tabler, Feather, Untitled UI, Phosphor, Radix: 2/24 is 4px at 48); Lucide's `absoluteStrokeWidth`
+holds it constant; systems with per-size drawings or optical sizes grow it more slowly (Fluent 1.5 → 2 → 2.5px at
+24 / 32 / 48, size^0.74; Material Symbols 2 → 3px at 24 → 48, size^0.58).
+
+Decision: the curve keeps size^0.45 to 24 and continues at Fluent's slope, size^0.74, above it
+(`SIZE_CURVE_LARGE` in packages/icons/scripts/generate.mjs). Was: the 24 drawing scaled whole above 24 (owner,
+2026-10-06). The line at the token weight:
+
+| Size | Was | Now |
+|---|---|---|
+| 24 | 1.35 | 1.35 |
+| 32 | 1.80 | 1.67 |
+| 48 | 2.70 | 2.25 |
+| 96 | 5.40 | 3.75 |
+| 128 | 7.20 | 4.86 |
+
+The 2026-10-06 concern (gaps growing while the line thins) is smaller at this slope: at 48 the line is 17% under a
+whole scale (the size^0.45 curve continued would have been 32%). Icons rendered by CSS size without `size` keep the
+token line scaled with the box; File page and File tile set their glyph line from this curve.

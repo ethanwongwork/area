@@ -75,10 +75,13 @@ const FILLED_ROLES = ["inset", "solid", "knockout", "hole", "cut", "gap", "line"
 const SOLID_ROLES = ["solid", "fill"];
 const FILLED_WEIGHT_RATIO = 4 / 3;
 const SIZE_CURVE = 0.45;             // line ∝ size^0.45: Cursor's 1.25px at 16 → 1.5px at 24   // 1.125 → 1.5px, Fluent's filled line weight
-// The curve runs to the 24px master and holds there: above 24 the drawing scales whole, so lines,
-// cuts and gaps keep the 24px proportions (owner, 2026-10-06: large previews thinned the line while
-// the gaps grew). Fluent's own masters: 1.5px at 24, 2 at 32, 2.5 at 48; held, Area is 1.8 and 2.7.
+// The curve runs to the 24px master; above it the line keeps growing, more slowly than the drawing (owner,
+// 2026-10-18: "the icon stroke thickness scaling up looks very thick … go with your rec"), at Fluent's slope between its
+// 24 and 48 masters (1.5 → 2.5px: size^0.74; Material's optical size 24 → 48 is size^0.58; Lucide, Tabler, Phosphor
+// scale whole, size^1). Was held at 24 and scaled whole (owner, 2026-10-06: large previews thinned the line while the
+// gaps grew); at size^0.74 the gaps open far less than the size^0.45 curve did: 48 → 2.25px (whole: 2.7), 96 → 3.75 (5.4).
 const SIZE_CURVE_MAX = 24;
+const SIZE_CURVE_LARGE = 0.74;
 const BOLD = WEIGHT * FILLED_WEIGHT_RATIO;
 const BOLD_GAP_MIN = 0.875;          // detail round (owner, 2026-09-28): the detail step survives the filled line (was 1.0, Cursor's floor)
 const RASTER = 8;              // samples per px for the counter check
@@ -787,9 +790,12 @@ const RUNTIME = `/** weight: line in CSS px at 16px (overrides --area-weight-ico
  *  direction mirrors in right-to-left text (rtl.css). docs/specs/icons.md, "Accessible name and right-to-left". */
 export type PilotIconProps = Omit<SVGProps<SVGSVGElement>, "stroke"> & { weight?: number; size?: number; title?: string; mirrored?: boolean };
 /** Size curve (docs/specs/icons.md, "Sizes"): the line grows with size^${SIZE_CURVE}, Cursor's
- *  16 → 24px step (1.25 → 1.5px), up to the ${SIZE_CURVE_MAX}px master; larger icons are that master scaled
- *  whole. In drawing units that is a factor of (min(size, ${SIZE_CURVE_MAX}) / 16)^${(SIZE_CURVE - 1).toFixed(2)}. */
-export const sizeFactor = (size?: number) => size ? Math.pow(Math.min(size, ${SIZE_CURVE_MAX}) / 16, ${(SIZE_CURVE - 1).toFixed(2)}) : 1;
+ *  16 → 24px step (1.25 → 1.5px), up to the ${SIZE_CURVE_MAX}px master; above it with size^${SIZE_CURVE_LARGE}, Fluent's slope
+ *  between its 24 and 48 masters. In drawing units that is a factor of (size / 16)^${(SIZE_CURVE - 1).toFixed(2)} to ${SIZE_CURVE_MAX},
+ *  then (${SIZE_CURVE_MAX} / 16)^${(SIZE_CURVE - 1).toFixed(2)} × (size / ${SIZE_CURVE_MAX})^${(SIZE_CURVE_LARGE - 1).toFixed(2)}. */
+export const sizeFactor = (size?: number) => !size ? 1 : size <= ${SIZE_CURVE_MAX}
+  ? Math.pow(size / 16, ${(SIZE_CURVE - 1).toFixed(2)})
+  : Math.pow(${SIZE_CURVE_MAX} / 16, ${(SIZE_CURVE - 1).toFixed(2)}) * Math.pow(size / ${SIZE_CURVE_MAX}, ${(SIZE_CURVE_LARGE - 1).toFixed(2)});
 export const sw = (weight: number | undefined, size: number | undefined, ratio = 1) => {
   const k = ratio * sizeFactor(size);
   if (weight !== undefined) return weight * k;

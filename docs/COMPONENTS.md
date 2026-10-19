@@ -53,6 +53,10 @@ actual specimens. Current families include:
   2026-10-13, stops the ring at a value: the circular progress) and Skeleton.
 - Structure and content: Card, Panel (with `resizable`), Dialog, Popover, HoverCard, ScrollArea (in review, 2026-10-09),
   Separator, Table and CodeBlock.
+- File explorer: Folder (Complete, 2026-10-19: Finder's folder figure in a square box, sheets or thumbnails peeking
+  out, palette tones, a badge, open under a drag) File page (Complete: Finder's document page, folded corner, glyph and extension) and File tile with FileGrid (Complete, 2026-10-19: Finder's icon-view
+  item on ListBox's grid, Enter or a double click opens). Next: multi-select, rename, FileRow on Table, a file-type icon
+  map. Research: `docs/research/file-explorer-2026-10-18/`.
 - Conversation: Message/MessageActions, PromptSuggestions, ModelPicker and ScrollToLatest.
 
 Presentation-only or partially implemented behaviors must be stated in the component's
