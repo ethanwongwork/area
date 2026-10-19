@@ -85,7 +85,7 @@ test('every surface takes its depth from its elevation role', () => {
   // A material never replaces a surface's box-shadow: it fills `--_m-layers`, which each surface lists first beside its
   // own edge, ring and role, so a Drawer keeps its modal lift, a selected Card its ring and a linked Card its hover lift
   // under a material (Elevation and Stroke audit, 2026-10-18: material.css re-added the float role and dropped them).
-  const slotted = ['.area-card', '.area-menu', '.area-popover', '.area-hover-card', '.area-toast', '.area-dialog', '.area-drawer', '.area-command-palette', '.area-video-player__surface'];
+  const slotted = ['.area-card', '.area-menu', '.area-menu__search-surface', '.area-popover', '.area-hover-card', '.area-toast', '.area-dialog', '.area-drawer', '.area-command-palette', '.area-video-player__surface'];
   const material = rules.filter(rule => rule.selector.includes('[data-area-material]'));
   const names = (rule, block) => new RegExp(`${block.replace(/[.]/g, '\\.')}(?![\\w-])`).test(rule.selector);
   for (const block of slotted) {
@@ -94,6 +94,24 @@ test('every surface takes its depth from its elevation role', () => {
     assert.equal(replaces, undefined, `a material replaces ${block}'s box-shadow: ${replaces?.selector}`);
   }
   assert.ok(!material.some(rule => /--_m-own\s*:[^;]*shadow-(float|modal|resting|edge)/.test(rule.body)), 'a material restates a surface\'s own lift');
+  // The same slot on a Button that floats: Scroll to latest lists the layers beside its float lift, and the button
+  // painter fills them without writing its box-shadow (it replaced the lift; audit 2026-10-18).
+  assert.match(paints('.area-scroll-to-latest > .area-button'), /^var\(--_m-layers, 0 0 0 0 transparent\), var\(--area-shadow-float\)$/, 'Scroll to latest does not list a material\'s layers beside its lift');
+  const buttonPainter = material.filter(rule => rule.selector.includes('.area-button:is(.area-button--solid, .area-button--outline, .area-button--soft)') && /(^|[;\s])box-shadow\s*:/.test(rule.body) && !/:disabled/.test(rule.selector));
+  assert.ok(buttonPainter.length, 'the button painter writes no box-shadow');
+  for (const rule of buttonPainter) {
+    assert.match(rule.selector, /:not\(:where\(\.area-scroll-to-latest > \*\)\)/, `the button painter replaces Scroll to latest's box-shadow: ${rule.selector}`);
+    assert.match(rule.body, /box-shadow:\s*var\(--_m-layers\)/, `the button painter does not paint the layers: ${rule.selector}`);
+  }
+  // The Toggletip's class is its button, a ghost mark; its note is a Tooltip, inverse: neither takes a material.
+  assert.ok(!material.some(rule => /\.area-toggletip(?![\w-])/.test(rule.selector)), 'a material paints the Toggletip button');
+  // A searchable Menu is one overlay: the Menu inside its surface takes no material and is clear.
+  for (const rule of material.filter(rule => /\.area-menu(?![\w-])/.test(rule.selector))) {
+    for (const match of rule.selector.matchAll(/\.area-menu(?![\w-])(:not\(:where\(\.area-menu__search-surface > \*\)\))?/g)) {
+      assert.ok(match[1], `a material paints the Menu inside a search surface: ${rule.selector}`);
+    }
+  }
+  assert.match(ruleFor('.area-menu__search-surface > .area-menu')?.body ?? '', /background-color:\s*transparent/, 'the Menu inside a search surface covers its fill');
   // Disabled parts drop the material but keep their own shadow, and the rule outweighs every painter (it lost to the
   // plain parts' painter, so a disabled selected Segmented item kept the material; audit 2026-10-18).
   const disabled = material.find(rule => /:is\(:disabled, \[data-disabled\], \[aria-disabled="true"\]\)/.test(rule.selector));

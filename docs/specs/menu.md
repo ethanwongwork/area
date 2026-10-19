@@ -256,3 +256,16 @@ Rows press at `bg-component-pressed`, one step past selected (Notion presses at 
   on Menu, Select's picker, Custom select, Combobox and Tag picker; the default is unchanged, and a
   list anchored to a field stays at least the field's width. The desktop app sets 128.
 - 2026-10-17 · owner: "go with your recs" (after round 30), the hover and pressed sweep (docs/research/layers-2026-10-16/sweep/states.mjs) → a danger item's red is solved for the row's pressed fill, the deepest it sits on: in light it darkens beyond the page's own darken by what the raised pressed fill needs (`--_danger-darken`, from `layer-light-raised-fill-2` and the vivid bound, 0.063 at the defaults), in dark it lifts past a raised pressed fill of L 0.396, 6.1× the excess (`--_danger-lift`, fitted over every accent and neutral; 0 up to the defaults). The same red at rest, so the ink stays fixed across states. Was 4.15:1 hovered and 3.97:1 pressed at the defaults, 3.2:1 pressed at dark 24 + 8.
+
+## Settings collisions fixed (2026-10-18)
+
+Elevation and Stroke audit (docs/research/elevation-stroke-2026-10-18): under a Material the Menu inside a search
+surface (`.area-menu__search-surface > .area-menu`, deprecated) took the overlay glass, frost and gradient stroke, while
+the search surface around it was in no Material group, so a searchable menu painted glass inside an opaque frame. A
+searchable menu is now one overlay: the search surface is listed with Menu in every overlay group (material.css; the
+inner Menu is excluded with `.area-menu:not(:where(.area-menu__search-surface > *))`, which keeps each list's weight),
+its box-shadow lists the Material slot first, `var(--_m-layers, 0 0 0 0 transparent), var(--area-shadow-edge),
+var(--_elevation)`, as Menu's, and the inner Menu is clear (`background-color: transparent`, surface.css), so the
+surface's fill or glass shows through it. With no Material the inner Menu's surface fill was the search surface's own,
+so the look is unchanged. Checked in the app (light and dark, None, Glass and Glow): under a Material the search surface
+computes the same fill, image, frost, stroke and box-shadow as a plain Menu.

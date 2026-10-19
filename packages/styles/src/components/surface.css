@@ -1411,14 +1411,17 @@
     --_elevation: var(--area-shadow-float);
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
-    box-shadow: var(--area-shadow-edge), var(--_elevation); /* the Surface axis's edge: soft at Borderless */
+    box-shadow: var(--_m-layers, 0 0 0 0 transparent), var(--area-shadow-edge), var(--_elevation); /* a material's layers (material.css), then the Surface axis's edge: soft at Borderless */
   }
 
+  /* The Menu inside is clear, so the search surface's fill (or a material's glass) shows through it; the same
+     surface fill without a material. */
   .area-menu__search-surface > .area-menu {
     min-inline-size: 0;
     padding: 0;
     border: 0;
     border-radius: 0;
+    background-color: transparent;
     box-shadow: none;
   }
 
