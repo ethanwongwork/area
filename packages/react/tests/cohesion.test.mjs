@@ -123,6 +123,7 @@ test('every surface takes its depth from its elevation role', () => {
   }
   assert.match(ruleFor('.area-tooltip')?.body ?? '', /var\(--area-shadow-tooltip\)/, 'Tooltip does not take the tooltip role');
   assert.match(ruleFor('.area-card')?.body ?? '', /--_card-shadow:\s*var\(--area-shadow-resting\)/, 'Card does not take the resting role');
+  assert.match(css, /\.area-card:has\(\.area-card__link\):hover\s*\{[^}]*--_card-lift:\s*var\(--area-shadow-lift\)/, 'a linked Card\'s hover does not take the lift role');
 
   // The Surface axis (axes/surface.ts, 2026-10-14): at 0 (Borderless) a framed surface's edge is a shadow, so every
   // surface whose frame the setting removes lists `shadow-edge` first, or Borderless leaves it with no edge at

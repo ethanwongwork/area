@@ -150,6 +150,10 @@ role paints the same way in every family:
   fill and no shadow, as Figma's inspector fields do. Outline fields have no shadow either
   (outline pass; Select followed on 2026-09-29, audit B-2), as no product field has one. One
   surface uses one field style: a Panel's rows are all soft.
+- *Image corners* follow the image's size role (owner, 2026-10-18: "round the corners of images to something by
+  default"): an image that stands alone (Figure, an Asset card's image, a viewer) takes the container corner,
+  `radius-container` (12 at the default Radius); a thumbnail (File tile, Asset row, a group's mosaic cell, a list
+  row) takes `radius-small` (6). An image inside a framed preview keeps Preview frame's concentric corner.
 - *Keycaps* are filled, not drawn: `bg-component-active`, no visible edge, radius 6 in every
   host (owner 2026-09-28), muted ink at 500 in the keyboard face (Notion's shortcut hints).
   Inside any Button the keycap is `currentColor` at 14% with the Button's ink, so it survives
@@ -178,6 +182,7 @@ shadow. It names the role it plays, and the number scales every role:
 | `shadow-control` | Switch, Slider, Segmented thumbs; soft Toggle group selection; Badge modern | 0 0 2 + 0 1 2 (shadow2) | n% |
 | `shadow-resting` | Card, Panel, Board card, Composer | 0 0 2 + 0 2 4 (shadow4) | n/2 % |
 | `shadow-tooltip` | Tooltip, Toggletip | 0 0 2 + 0 4 8 (shadow8) | n/2 % |
+| `shadow-lift` | linked Card hover, the app's gallery tiles on hover | 0 0 2 + 0 4 8 (shadow8) | n/2 % |
 | `shadow-float` | Menu and all that open one, Popover and all built on it, Select picker, Toast, Calendar and ColorPicker surfaces, floating Toolbar, Board card actions, Scroll to latest | 0 0 2 + 0 8 16 (shadow16) | n% |
 | `shadow-modal` | Dialog, Confirm dialog, Drawer, Command palette | 0 0 8 + 0 14 28 (shadow28) | 2n % |
 

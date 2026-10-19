@@ -9,7 +9,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import TOKENS from "@area/tokens/tokens.json";
 import { ROLE_SCALES } from "../../../../packages/tokens/src/color/presets.ts";
-import { Badge, Code, ColorSwatch, EmptyState, ListBox, Nav, NavGroup, NavItem, PanelSection, Table, TableLink } from "@area/react";
+import { AssetGrid, Code, ColorSwatch, EmptyState, Nav, NavGroup, NavItem, PanelSection, Table, TableLink } from "@area/react";
 import { CopyIcon } from "@area/icons";
 import { CopyButton } from "../copy.tsx";
 import { SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
@@ -98,12 +98,12 @@ function oklchShort(value: string) {
  * A unit tile that hugs its text (owner, 2026-10-14), so a long value wraps rather than clips.
  */
 /*
- * The Canvas's steps. In the grid every card is an option of one ListBox (docs/specs/list-box.md): one Tab stop, the
+ * The Canvas's steps. In the grid every card is an option of one Asset grid (docs/specs/asset-card.md, list-box.md): one Tab stop, the
  * arrows across the scales, selection following focus so the Inspector shows the keys' step. The list is Tables.
  */
 function Sheet({ grid, value, onChoose, children }: { grid: boolean; value: string | null; onChoose: (value: string) => void; children: ReactNode }) {
   return grid
-    ? <ListBox layout="grid" aria-label="Colour steps" value={value} onValueChange={onChoose} selectionFollowsFocus className="studio-sections">{children}</ListBox>
+    ? <AssetGrid aria-label="Colour steps" value={value} onValueChange={onChoose} selectionFollowsFocus className="studio-sections">{children}</AssetGrid>
     : <div className="studio-sections">{children}</div>;
 }
 
@@ -115,9 +115,9 @@ function ColorCard({ scale, item }: { scale: string; item: ScaleStep }) {
       aria-label={`${title(scale)} ${item.level}, ${item.hex.toUpperCase()}, ${ink === "#ffffff" ? "white" : "black"} text ${item.contrast.ratio.toFixed(2)} to 1, ${item.contrast.grade}`}
       paint={{ background: `var(--area-${scale}-${item.level})`, color: ink }}
       label={<span className="studio-swatch__level">{item.level}</span>}
-      // The contrast grade on the step's own colour: Badge onColor (docs/specs/badge.md, 2026-10-16), its ink and a line of
-      // it with no plate, so the text has the contrast it prints (4.61:1 or more); a 12% ink wash left 34 steps under 4.5:1.
-      value={<Badge size="sm" onColor>{item.contrast.grade} · {item.contrast.ratio.toFixed(2)}</Badge>}>
+      // The contrast grade under the colour, in the caption (owner, 2026-10-18: names and controls under the frame); it was
+      // a Badge onColor on the step's own colour.
+      value={<span className="studio-tabular">{item.contrast.grade} · {item.contrast.ratio.toFixed(2)}</span>}>
       <span className="studio-swatch__values">
         <span>{item.hex.toUpperCase()}</span>
         <span>RGB {r} {g} {b}</span>

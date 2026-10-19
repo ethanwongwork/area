@@ -126,3 +126,7 @@ and a cropped image is the app's to make. A video will be Area's own player insi
 - **What changed:** The ratio option is gone; Figure is the media in its own shape and an optional caption.
 - **Why:** You asked whether it was needed. Without video it only cropped images, which the image itself can do; a real
   video player will come as its own component and sit inside a Figure.
+
+## Feedback log
+
+- 2026-10-18 · owner: "can you round the corners of images to something by default" → by size: a standalone image takes the container corner (12 at the default Radius; was the small corner, 6), a thumbnail keeps 6 → `figure.css`. Same rule in Asset card and the Brand viewer (asset-card.md).

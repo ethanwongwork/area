@@ -1012,6 +1012,24 @@ export const fileGrid = {
   defaults: {},
 } as const satisfies ComponentManifest;
 
+export const assetCard = {
+  block: "area-asset-card",
+  description: "Shows one asset, or a group of them as a 2×2 mosaic, in a container with its name and controls under it.",
+  variants: { layout: ["asset", "group"] },
+  booleans: ["interactive"],
+  states: ["selected"],
+  elements: ["frame", "media", "mosaic", "cell", "caption", "text", "name", "meta", "actions"],
+  defaults: { layout: "asset" },
+} as const satisfies ComponentManifest;
+
+export const assetGrid = {
+  block: "area-asset-grid",
+  description: "Lays asset cards out as a grid to browse, choose from and open, with one Tab stop.",
+  variants: {},
+  elements: ["item"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
 export const assetRow = {
   block: "area-asset-row",
   description: "Lists one exportable asset: its preview, name, details and an optional action.",
@@ -1228,6 +1246,8 @@ export const MANIFESTS = {
   filePage,
   fileTile,
   fileGrid,
+  assetCard,
+  assetGrid,
   listBox,
   titlebar,
   sectionHeading,

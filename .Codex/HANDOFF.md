@@ -5,6 +5,21 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## App UI tweaks (2026-10-18, branch `claude/electron-ui-tweaks-ccf407`, uncommitted)
+
+Owner rule for the session: feedback applies to the real components, never as an app-only override.
+- **Elevation `lift` role** (`axes/elevation.ts`): shadow8 at half the float's weight; the linked Card's hover and the
+  gallery tiles' hover take it (was the Menu's float shadow, "too drastic").
+- **Component page tabs** (`src/family-tabs.tsx`, `scripts/sources.mjs`): Overview / Documentation / API / Code / Spec,
+  tables wherever data has rows; Button's Documentation rows in `src/content/documentation.mjs`. The Stage's code is
+  its own Code block under the frame. Research: `docs/research/component-page-2026-10-18.md`.
+- **Asset card** (new, in review; `docs/specs/asset-card.md`): an asset in a container, name / detail / controls under
+  it; a group as a 2×2 mosaic; `AssetGrid` on ListBox's grid. Brand now shows groups and assets with it (owner: "Asset
+  + Group"). Image corners by size (DESIGN_SYSTEM.md): standalone 12 (`radius-container`), thumbnails 6.
+- **Gallery tiles are Asset cards** (`src/tile.tsx`): every tab's names, values and controls sit under the frame; the
+  Compact hairline contact sheet is gone; colour cards show the grade under the colour (was a Badge on it). The Stage
+  keeps its label in its head.
+
 ## File explorer components and the Brand tab (2026-10-18, branch `claude/brand-folder-ui-component-e54b70`, uncommitted)
 
 Owner: download the Pinterest board oval / brand into "an organized place in the electron browser called brand … in
