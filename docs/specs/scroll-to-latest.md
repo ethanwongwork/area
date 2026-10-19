@@ -75,3 +75,13 @@ Open question: ChatGPT's show and hide timing was not captured (only rest and ho
 - 2026-10-01 · audit G-23 (owner pick A) → demos use the placeholder vocabulary (Body text, Item one, Option one, Placeholder, Label) and `authorName` "Assistant", per DESIGN_SYSTEM's Example copy; no component change.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → appears over duration-base and leaves over duration-fast (was fast both ways), opacity only.
 - 2026-10-14 · owner: "look into each component specifically to see how, if any elevation at all, is applied" → the button floats over the conversation, so it takes the Elevation axis's float role, as Menu and Toast do: 3% at the default step (ChatGPT's draws none; this is close to it), deeper as the setting rises, none at 0 (scroll-to-latest.css; docs/research/elevation-2026-10-14.md).
+
+## Settings collisions fixed (2026-10-18)
+
+Elevation and Stroke audit (docs/research/elevation-stroke-2026-10-18): under a Material the button lost its float lift,
+because material.css's button painter wrote the whole `box-shadow` at higher specificity. The button now lists the
+Material slot beside its lift, `var(--_m-layers, 0 0 0 0 transparent), var(--area-shadow-float)`
+(scroll-to-latest.css); the painter fills `--_m-layers` (rest: ring, material shadow, the part's own; pressed: ring,
+recessed) and writes the box-shadow of every other painted Button, not this one. Under a Material the lift stays at rest
+and pressed; with no Material the slot adds only a transparent layer, so the look is unchanged. Checked in the app
+(light and dark, None, Glass and Glow).

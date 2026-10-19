@@ -49,7 +49,7 @@
     background-color: color-mix(in srgb, var(--area-bg-surface) 72%, transparent); /* spec: Apple's 72% */
     -webkit-backdrop-filter: blur(16px) saturate(150%); /* spec: Video.js blur 16; Apple saturate 180, Glass 137.5 */
     backdrop-filter: blur(16px) saturate(150%);
-    box-shadow: inset 0 0 0 var(--area-border-width) rgb(255 255 255 / 0.12), var(--area-shadow-float); /* spec: the transparent stroke */
+    box-shadow: var(--_m-layers, 0 0 0 0 transparent), inset 0 0 0 var(--area-border-width) rgb(255 255 255 / 0.12), var(--area-shadow-float); /* spec: the transparent stroke; a material's layers first (material.css) */
   }
   /* Plates on the controls are tints of the glass (round 46): hover white 12% (the panel's stroke), press 20%
      (Vidstack's hover), selected 16%. */
@@ -81,7 +81,7 @@
   .area-video-player__start > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
   .area-video-player__start:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   /* The glass a step lighter under the pointer, as the buttons' plates. */
-  @media (hover: hover) { .area-video-player__start:hover { box-shadow: inset 0 0 0 999px rgb(255 255 255 / 0.12), inset 0 0 0 var(--area-border-width) rgb(255 255 255 / 0.12), var(--area-shadow-float); /* spec */ } }
+  @media (hover: hover) { .area-video-player__start:hover { box-shadow: var(--_m-layers, 0 0 0 0 transparent), inset 0 0 0 999px rgb(255 255 255 / 0.12), inset 0 0 0 var(--area-border-width) rgb(255 255 255 / 0.12), var(--area-shadow-float); /* spec */ } }
 
   /* The time: Area's muted UI text, tabular (Apple's secondary time; the references' 400). */
   .area-video-player__clock {

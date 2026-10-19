@@ -333,3 +333,12 @@ Header marks: a Badge or marker icon in `CardHeader`'s action slot centres on th
   fading in on `fast` ease-out and out on `base` ease-in; a press drops the lift; Elevation 0 keeps the edge step
   (`surface.css`; measured from Notion's and Fluent's cards, `docs/research/card-hover-2026-10-18.md`). Status unchanged;
   for the owner's review.
+
+## Settings collisions fixed (2026-10-18)
+
+Elevation and Stroke audit (docs/research/elevation-stroke-2026-10-18, "Audit: Area today"): under a Material a selected card lost its inset selection ring (material.css replaced the whole `box-shadow`
+and tied on specificity) and a linked card's hover lift dropped the material's layers. The box-shadow is now slots,
+`var(--_card-ring), var(--_m-layers, 0 0 0 0 transparent), var(--area-shadow-edge), var(--_card-lift)`: selection sets
+`--_card-ring`, hover and press set `--_card-lift` (float, then back to `--_card-shadow`), and a material fills only
+`--_m-layers`, so every state keeps the others. With no material the slots add only transparent layers: the look is
+unchanged. Checked in the app (light and dark, None, Glass and Tactile).

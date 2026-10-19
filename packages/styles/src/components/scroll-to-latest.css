@@ -33,8 +33,9 @@
   .area-scroll-to-latest[data-visible] > .area-button { pointer-events: auto; }
   /* It floats over the conversation, so it takes the Elevation axis's float role, as Menu and Toast do (owner,
      2026-10-14: elevation applied consistently by role). Near nothing at the default step, as ChatGPT draws
-     none; deeper as the setting rises. Button's own shadow is none, so this is its only layer. */
-  .area-scroll-to-latest > .area-button { box-shadow: var(--area-shadow-float); }
+     none; deeper as the setting rises. Button's own shadow is none, so this is its only layer, after a material's
+     layers (`--_m-layers`, material.css), which used to replace it (audit 2026-10-18). */
+  .area-scroll-to-latest > .area-button { box-shadow: var(--_m-layers, 0 0 0 0 transparent), var(--area-shadow-float); }
   /* The button is Button outline neutral, icon-only, pill: 32 round with the surface fill under its
    * ring, so it covers the prose it floats over (ChatGPT: 252 fill, 10% ring, no shadow). */
 }

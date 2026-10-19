@@ -1,0 +1,473 @@
+<title>Edge and Depth Lab</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="area.css">
+<style>
+/* Layout: a sticky lever rail beside two live canvases (light, dark) of Area's own components; findings below. */
+:root {
+  --lab-bg: #f6f6f5;
+  --lab-panel: #ffffff;
+  --lab-ink: #1d1d1c;
+  --lab-muted: #6b6b68;
+  --lab-rule: #e4e4e1;
+  --lab-accent: #2f5bd3;
+  --lab-chip: #efefec;
+  --lab-sans: "Geist", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --lab-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --lab-bg: #0b0b0b; --lab-panel: #141414; --lab-ink: #ececea; --lab-muted: #9a9a96; --lab-rule: #262625; --lab-accent: #7c9cf5; --lab-chip: #1f1f1e; color-scheme: dark;
+} }
+:root[data-theme="dark"] { --lab-bg: #0b0b0b; --lab-panel: #141414; --lab-ink: #ececea; --lab-muted: #9a9a96; --lab-rule: #262625; --lab-accent: #7c9cf5; --lab-chip: #1f1f1e; color-scheme: dark; }
+
+body { background: var(--lab-bg); color: var(--lab-ink); font-family: var(--lab-sans); font-size: 14px; line-height: 20px; }
+.lab { display: grid; gap: 32px; padding-block: 32px 64px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); max-width: 1480px; margin: 0 auto; }
+.lab-head { display: grid; gap: 8px; max-width: 72ch; }
+.lab-head h1 { margin: 0; font-size: 28px; line-height: 34px; font-weight: 600; letter-spacing: -0.015em; text-wrap: balance; }
+.lab-head p { margin: 0; color: var(--lab-muted); }
+.lab-eyebrow { font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--lab-muted); }
+
+.lab-work { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 24px; align-items: start; }
+@media (max-width: 900px) { .lab-work { grid-template-columns: minmax(0, 1fr); } }
+
+/* Levers */
+.levers { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 16px); display: grid; gap: 16px; padding: 16px; background: var(--lab-panel); border: 1px solid var(--lab-rule); border-radius: 12px; max-height: calc(100vh - 32px); overflow: auto; }
+@media (max-width: 900px) { .levers { position: static; max-height: none; } }
+.levers h2 { margin: 0; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--lab-muted); font-weight: 500; }
+.lever-group { display: grid; gap: 8px; }
+.lever { display: grid; grid-template-columns: 104px minmax(0, 1fr) 40px; align-items: center; gap: 8px; }
+.lever label { font-size: 13px; }
+.lever output { font-family: var(--lab-mono); font-size: 12px; color: var(--lab-muted); text-align: end; font-variant-numeric: tabular-nums; }
+.lever input[type="range"] { inline-size: 100%; accent-color: var(--lab-accent); }
+.lever select { grid-column: 2 / 4; font: inherit; font-size: 13px; padding: 4px 6px; border-radius: 6px; border: 1px solid var(--lab-rule); background: var(--lab-panel); color: var(--lab-ink); }
+.lever-note { font-size: 12px; line-height: 16px; color: var(--lab-muted); margin: 0; }
+.presets { display: flex; flex-wrap: wrap; gap: 6px; }
+.presets button { font: inherit; font-size: 12px; padding: 4px 8px; border-radius: 999px; border: 1px solid var(--lab-rule); background: var(--lab-panel); color: var(--lab-ink); cursor: pointer; }
+.presets button[aria-pressed="true"] { background: var(--lab-ink); color: var(--lab-panel); border-color: var(--lab-ink); }
+.presets button:focus-visible, .lever input:focus-visible, .lever select:focus-visible { outline: 2px solid var(--lab-accent); outline-offset: 2px; }
+
+/* Canvases: Area's own components at the default scale, one light, one dark. */
+.canvases { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 1200px) { .canvases { grid-template-columns: minmax(0, 1fr); } }
+.lab-canvas { display: grid; gap: 24px; padding: 32px; border-radius: 16px; background: var(--area-bg-page); color: var(--area-fg-default); font-family: var(--area-font-sans); min-width: 0; outline: 1px solid var(--lab-rule); }
+.lab-canvas__label { font-size: 12px; color: var(--area-fg-muted); margin: -8px 0 0; }
+.lab-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; align-items: start; }
+@media (max-width: 640px) { .lab-row { grid-template-columns: minmax(0, 1fr); } }
+.lab-canvas .area-card { inline-size: auto !important; }
+.lab-list { display: grid; gap: 10px; margin-top: 4px; }
+.lab-form { display: grid; gap: 14px; }
+.lab-actions { display: flex; gap: 8px; justify-content: flex-end; }
+.lab-float { display: grid; gap: 16px; align-content: start; }
+.lab-canvas .area-popover { position: static; display: block; inset: auto; margin: 0; translate: none; opacity: 1; transform: none; }
+.lab-canvas .area-dialog { position: static; }
+.lab-hint { font-size: 12px; color: var(--area-fg-muted); margin: 0; }
+/* The new field role (rest shadow on fields, outline and soft buttons, the select trigger). */
+.lab-canvas :is(.area-input, .area-custom-select__trigger, .area-button--soft, .area-button--outline):not(:focus-within, :focus-visible) { box-shadow: var(--lab-shadow-field); }
+/* Hover lift on the linked card, the same slots as at rest, so it crossfades. */
+.lab-canvas .lab-linked { cursor: pointer; transition: box-shadow var(--area-duration-fast) var(--area-ease-out); }
+.lab-canvas .lab-linked:is(:hover, [data-hover]) { box-shadow: var(--area-shadow-edge), var(--lab-shadow-hover); }
+
+/* Readout */
+.readout { display: grid; gap: 8px; }
+.readout h2 { margin: 0; font-size: 16px; font-weight: 600; }
+.readout-table { overflow-x: auto; border: 1px solid var(--lab-rule); border-radius: 12px; background: var(--lab-panel); }
+.readout table { border-collapse: collapse; inline-size: 100%; font-size: 12px; }
+.readout th, .readout td { text-align: start; padding: 8px 12px; border-bottom: 1px solid var(--lab-rule); vertical-align: top; }
+.readout tr:last-child td { border-bottom: 0; }
+.readout th { font-weight: 500; color: var(--lab-muted); white-space: nowrap; }
+.readout td code { font-family: var(--lab-mono); font-size: 11.5px; line-height: 17px; white-space: pre-wrap; word-break: break-word; }
+.copy { font: inherit; font-size: 12px; padding: 4px 10px; border-radius: 6px; border: 1px solid var(--lab-rule); background: var(--lab-panel); color: var(--lab-ink); cursor: pointer; justify-self: start; }
+
+/* Findings */
+.notes { display: grid; gap: 28px; max-width: 980px; }
+.notes section { display: grid; gap: 10px; }
+.notes h2 { margin: 0; font-size: 20px; line-height: 26px; font-weight: 600; letter-spacing: -0.01em; }
+.notes h3 { margin: 6px 0 0; font-size: 15px; font-weight: 600; }
+.notes p, .notes li { max-width: 75ch; }
+.notes p { margin: 0; }
+.notes ul { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
+.notes code { font-family: var(--lab-mono); font-size: 12.5px; background: var(--lab-chip); padding: 1px 4px; border-radius: 4px; }
+.table-wrap { overflow-x: auto; border: 1px solid var(--lab-rule); border-radius: 12px; background: var(--lab-panel); }
+.notes table { border-collapse: collapse; inline-size: 100%; font-size: 13px; }
+.notes th, .notes td { text-align: start; padding: 8px 12px; border-bottom: 1px solid var(--lab-rule); vertical-align: top; }
+.notes tr:last-child td { border-bottom: 0; }
+.notes th { font-weight: 500; color: var(--lab-muted); }
+.refs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 760px) { .refs { grid-template-columns: minmax(0, 1fr); } }
+.refs figure { margin: 0; display: grid; gap: 6px; background: var(--lab-panel); border: 1px solid var(--lab-rule); border-radius: 12px; padding: 12px; }
+.refs figcaption { font-size: 12px; line-height: 17px; color: var(--lab-muted); }
+.refs strong { color: var(--lab-ink); font-weight: 500; }
+.ask { background: var(--lab-panel); border: 1px solid var(--lab-rule); border-radius: 12px; padding: 16px 20px; }
+@media (prefers-reduced-motion: reduce) { .lab-canvas .lab-linked { transition: none; } }
+</style>
+
+<main class="lab">
+  <header class="lab-head">
+    <span class="lab-eyebrow">Area · Elevation and Stroke research · 2026-10-18</span>
+    <h1>Edge and Depth Lab</h1>
+    <p>Every proposed lever for strokes and shadows, live on Area's own components in light and dark. Pick a preset to see a system or one of your three references rebuilt from these levers, then move any lever. The readout shows the exact <code style="font-family:var(--lab-mono)">box-shadow</code> each role gets.</p>
+  </header>
+
+  <div class="lab-work">
+    <aside class="levers" aria-label="Levers">
+      <div class="lever-group">
+        <h2>Presets</h2>
+        <div class="presets" id="presets"></div>
+        <p class="lever-note" id="preset-note"></p>
+      </div>
+      <div class="lever-group" id="g-stroke"><h2>Stroke</h2></div>
+      <div class="lever-group" id="g-rest"><h2>Shadow at rest</h2></div>
+      <div class="lever-group" id="g-shape"><h2>Shadow shape</h2></div>
+      <div class="lever-group" id="g-light"><h2>Light and colour</h2></div>
+      <div class="lever-group" id="g-state"><h2>Hover and contrast</h2></div>
+    </aside>
+
+    <div class="canvases" id="canvases"></div>
+  </div>
+
+  <section class="readout" aria-labelledby="readout-title">
+    <h2 id="readout-title">What each role draws</h2>
+    <div class="readout-table"><table><thead><tr><th>Role</th><th>Who takes it</th><th>Light</th></tr></thead><tbody id="readout"></tbody></table></div>
+    <button class="copy" id="copy" type="button">Copy settings</button>
+  </section>
+
+  <div class="notes">
+    <section>
+      <h2>Your three references, read from the pixels</h2>
+      <p>Sampled across each edge at 2× (device pixels), with no source CSS. They share one recipe: a hairline stroke near 10% black, a short shadow that darkens the bottom edge more than the top, and on surfaces a 1px white line just inside the top.</p>
+      <div class="refs">
+        <figure><figcaption><strong>Bless, "Get Started".</strong> Card edge #e3–#ed at the sides, #e7 on top, #d3 at the bottom, then a fade over about 5 CSS px (#ee → #f9): stroke plus a <code>0 1px 3px</code> shadow. A white line just inside the top. Unchecked circles are recessed (a dark inner top, a white rim outside the top); the checked one is raised with a drop shadow.</figcaption></figure>
+        <figure><figcaption><strong>Simple Poll.</strong> Field edge #e4 on top, #c5 at the bottom with a fade (#e3 → #fb) over about 2 CSS px: stroke plus a lip. The selected segment has the same, stronger (#b8). The dialog has a #b9 stroke, a soft spread outside it and a white line inside.</figcaption></figure>
+        <figure><figcaption><strong>AccessGrid.</strong> Panel stroke #e0–#e8 at the sides, nearly none on top (#f5), a hard dark bottom (#a0) and then a long cool shadow (#c3 → #e9 over 15+ CSS px). A white card sits in a tinted tray (#f8f8fa) with its own stroke.</figcaption></figure>
+      </div>
+    </section>
+
+    <section>
+      <h2>What the research found</h2>
+      <p>Twenty sources, read from source or live CSS (Radix, Geist, Primer, Tailwind, shadcn, Polaris, Atlassian, Material 3, Fluent web and WinUI, Linear, Stripe, Raycast, Resend, Clerk, Ant, Apple, the CSS specs, and the shadow generators). The full record with every layer value is <code>docs/research/elevation-stroke-2026-10-18/sources.md</code>.</p>
+      <ul>
+        <li><strong>A shadow is a list of slots, not one value.</strong> Radix, Geist, Primer and Tailwind all compose a fixed order: inner highlight or shade, ring, lip, then one to five soft layers. Primer keeps its ring slot at 0% when off so a theme can switch it on without changing the layer count.</li>
+        <li><strong>Geometry, colour and alpha are separate.</strong> Tailwind rewrites every layer's colour through one variable and its alpha through another. Josh Comeau and Stripe tint the shadow toward the background's hue.</li>
+        <li><strong>Every generator shares one model.</strong> One final layer (distance, blur, alpha) is spread over N layers with an ease-in (smoothshadows: <code>t = ((i+1)/n)²</code>; Brumm: a bezier), spread grows negative with distance, and a light angle sets x from y. Material 3 and Fluent are two-layer cases of it.</li>
+        <li><strong>Resting shadows are small and common.</strong> shadcn puts <code>0 1px 2px 5%</code> on every field and outline button and <code>shadow-sm</code> on cards. Primer's buttons carry a <code>0 1px 0 4%</code> lip. Radix's segmented thumb and classic card share a five-layer resting stack.</li>
+        <li><strong>Hover grows the shadow, never the stroke width.</strong> Material steps one level, Fluent shadow4 → shadow8, Radix grows offsets and blurs at about the same alpha. No system surveyed moves the element on hover.</li>
+        <li><strong>Contrast never strengthens a shadow.</strong> Systems darken strokes (Primer, Polaris, Material's outline targets), turn translucent rings opaque, or replace the shadow with a 50% inset ring (Atlassian). Forced colours remove every shadow. Nobody thickens 1px to 2px for contrast; thicker lines are kept for focus and selection.</li>
+        <li><strong>Stroke widths.</strong> Apple's hairline is one device pixel; Polaris draws 0.66px; Radix adds a 0.5px ring. Scales stop at 1 / 2 (Primer, Fluent, Polaris, Clerk). Light strokes are translucent black (Apple 10%, Geist 8%) or opaque grey (shadcn, Polaris); dark strokes are nearly always translucent white, 7–17%.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Where Area is today</h2>
+      <ul>
+        <li><strong>Elevation</strong> is one number: the alpha of a fixed two-layer Fluent shadow per role (control, resting, tooltip, float, modal). Distance, blur, spread, layers, colour and light don't move.</li>
+        <li><strong>Surface</strong> is the frame width, 1 or 0. At 0 a soft <code>0 0 1px</code> 62% edge stands in.</li>
+        <li><strong>At rest</strong> only cards, panels, Composer, thumbs and floating chrome carry a shadow. Fields and buttons have none.</li>
+        <li><strong>Contrast</strong> moves every stroke to the 3:1 stroke (since today) and touches no shadow. At Surface 0 with More, a surface draws both its frame and the soft edge, a double edge.</li>
+        <li><strong>Material</strong> already draws a ring, lit edge and double rim (its Stroke lever), and contact and emboss shadows. Its rules replace the whole <code>box-shadow</code>, so under any material Drawer and Command palette lose their modal lift and a selected Card loses its ring.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Proposal</h2>
+      <p>Keep every current option. Turn Surface and Elevation into two groups of levers in the Inspector, each a number with named ends like the settings beside them, and give every role the same fixed list of slots so steps and hover crossfade layer by layer.</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Lever</th><th>Steps</th><th>What it moves</th><th>Basis</th></tr></thead>
+        <tbody>
+          <tr><td>Stroke width</td><td>0 (None) · 0.5 (Hairline) · 1 (Default) · 2</td><td>Decorative frames (today's Surface). Required edges stay 1</td><td>Apple hairline, Primer and Fluent 1 / 2</td></tr>
+          <tr><td>Stroke strength</td><td>0–8, 4 today</td><td>How far every stroke sits from its ground, as one multiplier on today's offsets; Contrast moves on from here</td><td>Geist 8%, Apple 10%, shadcn #eb</td></tr>
+          <tr><td>Stroke ink</td><td>Opaque · Translucent</td><td>A grey that ignores what's behind, or black / white at an alpha that takes the ground's tint</td><td>shadcn opaque; Geist, Apple translucent</td></tr>
+          <tr><td>Rest lift</td><td>0–8, 3 today</td><td>Cards, panels, Composer and thumbs at rest</td><td>Today's resting and control roles</td></tr>
+          <tr><td>Field lift (new)</td><td>0–8, 0 today</td><td>Fields, select triggers, outline and soft buttons at rest</td><td>shadcn shadow-xs 5%, Primer resting-small</td></tr>
+          <tr><td>Float lift</td><td>0–8, 3 today</td><td>Menus, popovers, toasts; modals take twice</td><td>Today's Elevation</td></tr>
+          <tr><td>Distance</td><td>0–8, 4 today</td><td>Every role's offset and blur together</td><td>Comeau, smoothshadows, Brumm</td></tr>
+          <tr><td>Layers</td><td>1 (Crisp) · 2 (Default) · 4 (Smooth) · 6</td><td>How the shadow is spread over layers</td><td>Ahlin, smoothshadows, Linear's stack</td></tr>
+          <tr><td>Tightness</td><td>0–8</td><td>Negative spread growing with distance</td><td>Geist, Primer, Tailwind</td></tr>
+          <tr><td>Lip</td><td>0–4</td><td>A hard <code>0 1px 0</code> under fields, buttons and surfaces</td><td>Primer 4%, Tailwind 2xs 5%, your references</td></tr>
+          <tr><td>Highlight</td><td>0–4</td><td>A 1px white line inside the top</td><td>Raycast, Radix, Polaris, your references</td></tr>
+          <tr><td>Light angle</td><td>0°, 15°, 30°, 45°</td><td>x from y for every layer; shared with Material's angle</td><td>Comeau, Material</td></tr>
+          <tr><td>Shadow tint</td><td>Black · Ink · Cool</td><td>The shadow's colour; alpha stays separate</td><td>Tailwind shadow colour, Stripe, Comeau</td></tr>
+          <tr><td>Dark strength</td><td>×2 · ×3 · ×4</td><td>How much darker shadows are in dark</td><td>Fluent ×2, Radix ×3–5, Geist ×4–8</td></tr>
+          <tr><td>Hover lift</td><td>0–8, 3 today</td><td>Linked cards and tiles under the pointer: the float shape at this strength</td><td>Material, Fluent, Notion</td></tr>
+        </tbody>
+      </table></div>
+      <h3>How it meets Contrast</h3>
+      <ul>
+        <li>Medium and More keep moving every stroke toward the 3:1 stroke from wherever Stroke strength puts it. Shadows stay as they are, as in every system surveyed.</li>
+        <li>Hairline becomes 1px at Medium and More; nothing goes thicker than 1.</li>
+        <li>The soft shadow edge switches off whenever a raised level brings the frame back, ending the double edge.</li>
+        <li>The lip and highlight are decoration and stay; under forced colours every shadow goes, so each floating surface keeps a real (transparent) border to fall back on, as today.</li>
+      </ul>
+      <h3>How it meets Material</h3>
+      <ul>
+        <li>One owner per effect. Edge and Depth would own every outer shadow (soft layers, lip, contact) and the frame. Material keeps fills and inner light (gradient, sheen, transparency, frost, inner shadow, catch-light, emboss, glow, grain).</li>
+        <li>Material's contact lever and its ring and lit-edge stroke styles would become the Lip, Highlight and Stroke levers; a bundle would set them, as bundles already set the Layers. No option is lost.</li>
+        <li>Components would list Material's layers beside the role instead of replacing the whole <code>box-shadow</code>, which also fixes the modal lift, selected Card ring and Video player ring that materials drop today.</li>
+      </ul>
+    </section>
+
+    <section class="ask">
+      <h2>Your call</h2>
+      <ul>
+        <li>Which presets read right, and which levers you'd keep, merge or drop from the Inspector.</li>
+        <li>Whether fields and buttons should carry a resting shadow by default (Field lift above 0), as in your Poll reference.</li>
+        <li>Whether Stroke width should reach 2 for decorative frames, or stop at Hairline and 1.</li>
+      </ul>
+    </section>
+  </div>
+</main>
+
+<template id="specimens">
+  <p class="lab-canvas__label"></p>
+  <div class="lab-row">
+    <div class="area-card area-card--vertical area-card--md lab-linked" tabindex="0" aria-label="Linked card, hover to lift">
+      <div class="area-card__content">
+        <h3 class="area-card__title">Get started</h3>
+        <div class="area-card__description">Hover to see the lift</div>
+        <div class="lab-list">
+          <label class="area-checkbox area-checkbox--md"><input class="area-checkbox__control" type="checkbox" checked><span class="area-choice-label"><span class="area-choice-label__title">Install the app</span></span></label>
+          <label class="area-checkbox area-checkbox--md"><input class="area-checkbox__control" type="checkbox"><span class="area-choice-label"><span class="area-choice-label__title">Invite a teammate</span></span></label>
+          <label class="area-switch area-switch--md area-switch--end area-switch--short"><input class="area-switch__control" role="switch" type="checkbox" checked aria-label="Notifications"><span class="area-switch__track" aria-hidden="true"><span class="area-switch__thumb"></span></span><span class="area-switch__text"><span class="area-switch__label">Notifications</span></span></label>
+        </div>
+      </div>
+    </div>
+    <div class="lab-form">
+      <div class="area-field area-field--vertical"><label class="area-field__label">Ask a question</label><div class="area-input area-input--outline area-input--md"><input class="area-input__control" placeholder="Type your question" aria-label="Ask a question"></div></div>
+      <div role="radiogroup" aria-label="Poll type" class="area-segmented area-segmented--md"><button type="button" role="radio" aria-checked="false" class="area-segmented__item"><span class="area-segmented__label">List</span></button><button type="button" role="radio" aria-checked="true" class="area-segmented__item" data-selected=""><span class="area-segmented__label">Emoji</span></button><button type="button" role="radio" aria-checked="false" class="area-segmented__item"><span class="area-segmented__label">Number</span></button></div>
+      <div class="area-field area-field--vertical"><label class="area-field__label">Duration</label><div class="area-input area-input--outline area-input--md"><input class="area-input__control" value="1 day" aria-label="Duration"></div></div>
+      <div class="lab-actions"><button type="button" class="area-button area-button--soft area-button--neutral area-button--md"><span class="area-button__label">Cancel</span></button><button type="button" class="area-button area-button--solid area-button--neutral area-button--md"><span class="area-button__label">Save</span></button></div>
+    </div>
+  </div>
+  <div class="lab-row">
+    <div class="lab-float">
+      <div role="menu" class="area-menu" aria-label="Menu"><button type="button" role="menuitem" class="area-menu__item"><span class="area-menu__text">Guides</span></button><button type="button" role="menuitem" class="area-menu__item"><span class="area-menu__text">Tools</span></button><button type="button" role="menuitem" class="area-menu__item"><span class="area-menu__text">API reference</span></button></div>
+      <p class="lab-hint">Menu: float</p>
+    </div>
+    <div class="area-dialog" role="group" aria-label="Dialog"><div class="area-dialog__header"><div class="area-dialog__heading"><h2 class="area-dialog__title">Delete poll</h2><p class="area-dialog__description">Votes are removed too.</p></div></div><div class="area-dialog__footer"><button type="button" class="area-button area-button--ghost area-button--neutral area-button--md"><span class="area-button__label">Cancel</span></button><button type="button" class="area-button area-button--solid area-button--neutral area-button--md"><span class="area-button__label">Delete</span></button></div></div>
+  </div>
+</template>
+
+<script>
+(() => {
+  // Reflect the viewer's theme into the page's Area tokens (the canvases set their own).
+  const root = document.documentElement;
+  const sync = () => { const t = root.getAttribute("data-theme") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"); root.setAttribute("data-area-theme", t); };
+  sync(); matchMedia("(prefers-color-scheme: dark)").addEventListener("change", sync);
+  new MutationObserver(sync).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+
+  // ---- Levers ---------------------------------------------------------------------------------------------
+  const LEVERS = [
+    { id: "width", group: "g-stroke", label: "Stroke width", kind: "select", options: [["0", "0 (None)"], ["0.5", "0.5 (Hairline)"], ["1", "1 (Default)"], ["2", "2"]] },
+    { id: "strength", group: "g-stroke", label: "Stroke strength", kind: "range", min: 0, max: 8, note: "4 is today's strokes" },
+    { id: "ink", group: "g-stroke", label: "Stroke ink", kind: "select", options: [["opaque", "Opaque (today)"], ["translucent", "Translucent"]] },
+    { id: "rest", group: "g-rest", label: "Rest lift", kind: "range", min: 0, max: 8 },
+    { id: "field", group: "g-rest", label: "Field lift", kind: "range", min: 0, max: 8 },
+    { id: "float", group: "g-rest", label: "Float lift", kind: "range", min: 0, max: 8 },
+    { id: "distance", group: "g-shape", label: "Distance", kind: "range", min: 0, max: 8 },
+    { id: "layers", group: "g-shape", label: "Layers", kind: "select", options: [["1", "1 (Crisp)"], ["2", "2 (Default)"], ["4", "4 (Smooth)"], ["6", "6"]] },
+    { id: "tight", group: "g-shape", label: "Tightness", kind: "range", min: 0, max: 8 },
+    { id: "lip", group: "g-shape", label: "Lip", kind: "range", min: 0, max: 4 },
+    { id: "highlight", group: "g-light", label: "Highlight", kind: "range", min: 0, max: 4 },
+    { id: "angle", group: "g-light", label: "Light angle", kind: "select", options: [["0", "0° (Top)"], ["15", "15°"], ["30", "30°"], ["45", "45°"]] },
+    { id: "tint", group: "g-light", label: "Shadow tint", kind: "select", options: [["black", "Black"], ["ink", "Ink"], ["cool", "Cool"]] },
+    { id: "dark", group: "g-light", label: "Dark strength", kind: "select", options: [["2", "×2 (today)"], ["3", "×3"], ["4", "×4"]] },
+    { id: "hover", group: "g-state", label: "Hover lift", kind: "range", min: 0, max: 8 },
+    { id: "contrast", group: "g-state", label: "Contrast", kind: "select", options: [["standard", "Standard"], ["medium", "Medium"], ["more", "More"]] },
+  ];
+
+  const TODAY = { width: "1", strength: 4, ink: "opaque", rest: 3, field: 0, float: 3, distance: 4, layers: "2", tight: 0, lip: 0, highlight: 0, angle: "0", tint: "black", dark: "2", hover: 3, contrast: "standard" };
+  const PRESETS = [
+    { id: "today", label: "Area today", note: "What ships: 1px frames, Fluent's two layers at 3%, fields flat.", v: { ...TODAY } },
+    { id: "borderless", label: "Borderless", note: "Surface 0: no frames, a soft edge, a smoother lift.", v: { ...TODAY, width: "0", rest: 4, float: 4, layers: "4" } },
+    { id: "notion", label: "Notion", note: "Translucent rings, nothing at rest, a soft float.", v: { ...TODAY, ink: "translucent", strength: 3, rest: 0, float: 3 } },
+    { id: "shadcn", label: "shadcn", note: "Border + shadow-xs on fields and buttons (0 1px 2px 5%), shadow-sm on cards, shadow-md on menus.", v: { ...TODAY, strength: 4, field: 5, rest: 6, layers: "2", float: 6, tight: 2, distance: 3 } },
+    { id: "primer", label: "Primer", note: "A 4% lip under buttons, a two-layer resting shadow, a four-layer float.", v: { ...TODAY, lip: 1, field: 2, rest: 5, layers: "4", float: 4, tight: 4, distance: 5 } },
+    { id: "geist", label: "Geist", note: "Translucent 8% ring, tiny layers with negative spread.", v: { ...TODAY, ink: "translucent", strength: 4, field: 2, rest: 2, layers: "4", tight: 6, float: 4, distance: 5, dark: "4" } },
+    { id: "radix", label: "Radix classic", note: "Five-layer resting stack and a top highlight on controls.", v: { ...TODAY, rest: 5, field: 2, layers: "4", tight: 3, highlight: 2, float: 6, distance: 6, dark: "3" } },
+    { id: "smooth", label: "Smooth (Linear)", note: "Six eased layers, a long tight float.", v: { ...TODAY, layers: "6", distance: 6, tight: 3, rest: 3, float: 6 } },
+    { id: "bless", label: "Ref: Bless", note: "Your first reference: stroke, a short drop at rest, a white line inside the top, ink-tinted shadow.", v: { ...TODAY, strength: 5, rest: 5, field: 3, lip: 1, highlight: 4, tint: "ink", layers: "4", distance: 3 } },
+    { id: "poll", label: "Ref: Poll", note: "Your second reference: fields and the selected segment with a lip and a darker bottom.", v: { ...TODAY, strength: 5, field: 4, lip: 2, rest: 4, float: 5, highlight: 3, distance: 3 } },
+    { id: "access", label: "Ref: AccessGrid", note: "Your third reference: a hard dark lip, then a long cool float.", v: { ...TODAY, strength: 5, lip: 3, float: 8, distance: 7, layers: "4", tint: "cool", highlight: 2, rest: 4, field: 2 } },
+  ];
+
+  let state = { ...TODAY };
+  let current = "today";
+
+  // ---- Recipes ----------------------------------------------------------------------------------------------
+  // Each role at Distance 4 is today's Fluent geometry: y, blur, ambient blur (elevation.ts ROLES).
+  const GEO = { control: [1, 2, 2], field: [1, 2, 2], resting: [2, 4, 2], float: [8, 16, 2], modal: [14, 28, 8] };
+  const WEIGHT = { control: 1, field: 1, resting: 0.5, float: 1, modal: 2 };
+  const n2 = x => Number(x.toFixed(2));
+  // `lightOnly` renders the light value alone, for the readout.
+  let lightOnly = false;
+  const pair = (light, dark) => lightOnly ? light : `light-dark(${light}, ${dark})`;
+  const tintColor = (alpha, dark) => {
+    const a = n2(alpha), ad = n2(Math.min(0.9, alpha * dark));
+    const light = state.tint === "black" ? `rgb(0 0 0 / ${a})` : state.tint === "ink" ? `oklch(0.25 0.02 60 / ${a})` : `oklch(0.3 0.08 255 / ${a})`;
+    return pair(light, `rgb(0 0 0 / ${ad})`);
+  };
+  const LIP = [0, 0.03, 0.05, 0.08, 0.14];
+  const HL = [[0, 0], [0.4, 0.03], [0.6, 0.05], [0.8, 0.08], [1, 0.12]];
+
+  // The slots every role keeps, in order: highlight, lip, then the soft layers (fixed count per Layers), so a role
+  // and its hover always have the same length and crossfade.
+  function role(name, step, { hl = true, lip = true } = {}) {
+    const dark = Number(state.dark);
+    const A = (step / 100) * WEIGHT[name];
+    const d = state.distance / 4;
+    const [gy, gb, ga] = GEO[name];
+    const Y = gy * d, B = Math.max(gb * d, 0.5);
+    const tan = Math.tan((Number(state.angle) * Math.PI) / 180);
+    const n = Number(state.layers);
+    const out = [];
+    const [hl1, hl2] = HL[state.highlight];
+    out.push(hl && hl1 ? `inset 0 1px 0 0 ${pair(`rgb(255 255 255 / ${hl1})`, `rgb(255 255 255 / ${hl2})`)}` : "inset 0 0 0 0 transparent");
+    const lipA = LIP[state.lip];
+    out.push(lip && lipA ? `0 1px 0 0 ${tintColor(lipA, 1.6)}` : "0 0 0 0 transparent");
+    if (n === 2) {
+      // Today's recipe: an ambient layer with no offset at half the key, and a key layer with y = blur / 2.
+      out.push(`0 0 ${n2(ga * Math.max(d, 0.5))}px ${tintColor(A / 2, dark)}`);
+      out.push(`${n2(Y * tan)}px ${n2(Y)}px ${n2(B)}px ${n2(-state.tight / 16 * Y)}px ${tintColor(A, dark)}`);
+    } else {
+      for (let i = 0; i < n; i++) {
+        const t = n === 1 ? 1 : ((i + 1) / n) ** 2;
+        const y = Y * t, b = Math.max(B * t, 0.5);
+        // Spread over layers so the darkest point matches a two-layer shadow of the same strength.
+        const a = n === 1 ? A : (A * 1.5) / Math.sqrt(n);
+        out.push(`${n2(y * tan)}px ${n2(y)}px ${n2(b)}px ${n2(-state.tight / 16 * y)}px ${tintColor(a, dark)}`);
+      }
+    }
+    return out.join(", ");
+  }
+
+  // Strokes: today's distance of each edge from its ground (color/layers.ts EDGE_OFFSET), times strength / 4.
+  const EDGE = { decorative: [0.036, 0.05], card: [0.051, 0.09], float: [0.051, 0.182], faint: [0.0872, 0.09], subtle: [0.1301, 0.09] };
+  function stroke(kind) {
+    const m = state.strength / 4;
+    const [l, dk] = EDGE[kind];
+    const base = state.ink === "opaque"
+      ? `light-dark(color-mix(in oklab, var(--area-bg-page), black ${n2(l * m * 100)}%), color-mix(in oklab, var(--area-bg-surface), white ${n2(dk * m * 110)}%))`
+      : `light-dark(rgb(0 0 0 / ${n2(l * m * 1.25)}), rgb(255 255 255 / ${n2(dk * m * 0.9)}))`;
+    return `color-mix(in oklab, ${base}, var(--area-stroke-control) calc(var(--area-contrast-more) * 100%))`;
+  }
+
+  function overrides() {
+    const raised = state.contrast !== "standard";
+    const width = state.width === "0.5" && raised ? "1" : state.width;
+    return {
+      "--area-frame-width": `${width}px`,
+      // The soft edge stands in only where there is no frame (proposal: never both).
+      "--area-shadow-edge": width === "0" && !raised ? "0 0 1px rgb(0 0 0 / 0.62), inset 0 0 0 1px light-dark(transparent, rgb(255 255 255 / 0.2))" : "0 0 0 0 transparent, inset 0 0 0 0 transparent",
+      "--area-border-decorative": stroke("decorative"),
+      "--area-border-card": stroke("card"),
+      "--area-border-float": stroke("float"),
+      "--area-border-faint": stroke("faint"),
+      "--area-border-divider": stroke("faint"),
+      "--area-edge-control": stroke("faint"),
+      "--area-input-edge": stroke("faint"),
+      "--area-composer-edge": stroke("card"),
+      "--area-shadow-control": role("control", state.rest),
+      "--area-shadow-resting": role("resting", state.rest),
+      "--area-shadow-float": role("float", state.float),
+      "--area-shadow-modal": role("modal", state.float),
+      "--lab-shadow-field": role("field", state.field),
+      "--lab-shadow-hover": role("float", state.hover),
+    };
+  }
+
+  // ---- UI ---------------------------------------------------------------------------------------------------
+  const canvases = document.getElementById("canvases");
+  const tpl = document.getElementById("specimens");
+  const made = ["light", "dark"].map(theme => {
+    const c = document.createElement("div");
+    c.className = "lab-canvas";
+    Object.entries({ "data-area-theme": theme, "data-area-type": "14", "data-area-density": "32", "data-area-radius": "8", "data-area-elevation": "3", "data-area-surface": "1", "data-area-selection": "neutral" }).forEach(([k, v]) => c.setAttribute(k, v));
+    c.appendChild(tpl.content.cloneNode(true));
+    c.querySelector(".lab-canvas__label").textContent = theme === "light" ? "Light" : "Dark";
+    canvases.appendChild(c);
+    return c;
+  });
+
+  const inputs = {};
+  for (const lever of LEVERS) {
+    const row = document.createElement("div");
+    row.className = "lever";
+    const id = `lever-${lever.id}`;
+    const label = document.createElement("label");
+    label.htmlFor = id; label.textContent = lever.label;
+    row.appendChild(label);
+    let el;
+    if (lever.kind === "range") {
+      el = document.createElement("input");
+      Object.assign(el, { type: "range", min: lever.min, max: lever.max, step: 1, id });
+      const out = document.createElement("output");
+      out.htmlFor = id; out.id = `${id}-out`;
+      row.append(el, out);
+    } else {
+      el = document.createElement("select");
+      el.id = id;
+      for (const [v, t] of lever.options) el.append(new Option(t, v));
+      row.appendChild(el);
+    }
+    el.addEventListener("input", () => { state[lever.id] = lever.kind === "range" ? Number(el.value) : el.value; current = null; render(); });
+    inputs[lever.id] = el;
+    document.getElementById(lever.group).appendChild(row);
+    if (lever.note) { const p = document.createElement("p"); p.className = "lever-note"; p.textContent = lever.note; document.getElementById(lever.group).appendChild(p); }
+  }
+
+  const presetBox = document.getElementById("presets");
+  for (const p of PRESETS) {
+    const b = document.createElement("button");
+    b.type = "button"; b.textContent = p.label; b.dataset.id = p.id;
+    b.addEventListener("click", () => { state = { ...p.v }; current = p.id; render(); });
+    presetBox.appendChild(b);
+  }
+
+  const WHO = {
+    "--lab-shadow-field": ["Field lift", "Fields, select triggers, outline and soft buttons (new)"],
+    "--area-shadow-control": ["Control", "Segmented, Switch and Slider thumbs"],
+    "--area-shadow-resting": ["Resting", "Card, Panel, Composer, Board card"],
+    "--lab-shadow-hover": ["Hover", "Linked Card, gallery tiles under the pointer"],
+    "--area-shadow-float": ["Float", "Menu, Popover, Select picker, Toast"],
+    "--area-shadow-modal": ["Modal", "Dialog, Drawer, Command palette"],
+    "--area-border-card": ["Card stroke", "Card, Composer, Code block frames"],
+    "--area-edge-control": ["Control stroke", "Fields and controls"],
+  };
+
+  function render() {
+    const o = overrides();
+    for (const c of made) {
+      for (const [k, v] of Object.entries(o)) c.style.setProperty(k, v);
+      c.setAttribute("data-area-contrast", state.contrast);
+    }
+    for (const lever of LEVERS) {
+      inputs[lever.id].value = String(state[lever.id]);
+      const out = document.getElementById(`lever-${lever.id}-out`);
+      if (out) out.textContent = String(state[lever.id]);
+    }
+    for (const b of presetBox.children) b.setAttribute("aria-pressed", String(b.dataset.id === current));
+    const p = PRESETS.find(x => x.id === current);
+    document.getElementById("preset-note").textContent = p ? p.note : "Custom: a preset with levers moved.";
+    lightOnly = true; const light = overrides(); lightOnly = false;
+    const body = document.getElementById("readout");
+    body.replaceChildren(...Object.entries(WHO).map(([k, [name, who]]) => {
+      const tr = document.createElement("tr");
+      const value = String(light[k]).split(", ").filter(layer => !/^(inset )?0 0 0 0 transparent$/.test(layer)).join(",\n") || "none";
+      tr.innerHTML = `<th scope="row"></th><td></td><td><code></code></td>`;
+      tr.children[0].textContent = name; tr.children[1].textContent = who; tr.querySelector("code").textContent = value;
+      return tr;
+    }));
+    try { localStorage.setItem("edge-depth-lab", JSON.stringify({ state, current })); } catch {}
+  }
+
+  document.getElementById("copy").addEventListener("click", async e => {
+    const text = JSON.stringify(state);
+    try { await navigator.clipboard.writeText(text); e.target.textContent = "Copied"; }
+    catch { e.target.textContent = text; }
+    setTimeout(() => { e.target.textContent = "Copy settings"; }, 1600);
+  });
+
+  try { const saved = JSON.parse(localStorage.getItem("edge-depth-lab") || "null"); if (saved?.state) { state = { ...TODAY, ...saved.state }; current = saved.current ?? null; } } catch {}
+  render();
+})();
+</script>

@@ -16,7 +16,8 @@
  *   float    a surface over the page: Menu (and everything that opens one: Context menu, Combobox, custom
  *            Select, Tag picker, Model picker, Split button, Zoom control), Popover (Hover card, Date
  *            picker), the Select picker, Toast, the Calendar and ColorPicker surfaces, the floating
- *            Toolbar, Board card actions, Scroll to latest
+ *            Toolbar, the Video player's controller, Scroll to latest (Board card actions sit on the card's
+ *            paint with no lift since review round 30, docs/specs/board.md)
  *   modal    the topmost surface, over a scrim: Dialog (Confirm dialog), Drawer, Command palette
  *
  * Geometry is Fluent 2's recipe, fixed per role (packages/tokens/src/utils/shadows.ts @93e324f72): an

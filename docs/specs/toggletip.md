@@ -8,6 +8,8 @@
 
 - 2026-10-09: "work on the next component" after File upload: Toggletip, the next item on the gap audit's
   recommended order (`docs/research/component-gap-audit.md` §5, item 12; Hover card, its pair, was built 2026-09-26).
+- 2026-10-18: "Keep the Toggletip note as a Tooltip: no Material." Neither the button nor the note takes a Material
+  (see Settings collisions fixed, below).
 
 ## Job and boundaries
 
@@ -210,3 +212,14 @@ The trigger presses at `bg-component-pressed`, one step past selected (Notion pr
 
 ## Feedback log
 - 2026-10-12 · spacing step extrapolated past Default → the icon size and stroke take only the compact step (`clamp(0, ui-dense, 1)`, `toggletip.css`). `docs/research/ui-size-scale-2026-10-12.md`.
+
+## Settings collisions fixed (2026-10-18)
+
+Elevation and Stroke audit (docs/research/elevation-stroke-2026-10-18): material.css listed `.area-toggletip` among
+its overlays, but that class is the info button, a ghost mark; the note is `.area-tooltip.area-toggletip__surface`. Under
+any Material the button took a see-through glass plate, the overlay ring and frost. The button is out of every Material
+list, so it keeps its own transparent box, hover plate and no shadow under every bundle; with no Material nothing
+changed. Checked in the app (light and dark, None, Glass and Glow).
+
+Owner decision (2026-10-18): "Keep the Toggletip note as a Tooltip: no Material." The note is a Tooltip, inverse, and
+takes no Material under any bundle, as Tooltip.
