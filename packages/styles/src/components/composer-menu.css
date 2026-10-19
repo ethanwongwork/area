@@ -1,0 +1,48 @@
+/* ---------------------------------------------------------------------------
+ * Composer menu
+ *
+ * The @ and / suggestions: a Menu (its floating surface, padding, rows, plate and section labels) placed above the
+ * Composer at the Composer's width, filtered by what follows the @ or /. Each row has an icon, a name and, for files,
+ * a muted path cut from its start so the folder nearest the file stays. Measured from Cursor's ComposerSlashMenuList,
+ * Claude Code's menu popups and Codex's suggestion menu (docs/specs/composer-menu.md; composer-additions.md, C).
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  /* Above the composer, as wide as it, 8 over it (Claude Code: bottom 100%, left and right 0, margin 8; all three open
+     upward). The list scrolls past 320 (Codex 320, Cursor 342, Claude Code's list 300). */
+  .area-composer-menu {
+    position: absolute;
+    inset-block-end: calc(100% + var(--area-space-8)); /* spec: Claude Code margin-bottom 8 */
+    inset-inline: 0;
+    z-index: 2;
+    max-block-size: 320px; /* spec: Codex --max-height-suggestion-menu 320 */
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+  /* A file's folder: Menu's trailing ink and size (its shortcut), at the row's end, cut from its start so the nearest
+     folder stays (Claude Code's right-aligned, RTL-ellipsis directory; Cursor's trailing text at most 180). */
+  /* The name takes the row, so the path ends it (a margin on the path would follow the path's own RTL direction). */
+  .area-composer-menu .area-menu__item > .area-menu__text { flex: 1 1 auto; min-inline-size: 0; }
+  .area-composer-menu__path {
+    flex: 0 1000 auto; /* the path gives way before the name does */
+    min-inline-size: 0;
+    max-inline-size: 60%;
+    overflow: hidden;
+    color: var(--area-fg-muted);
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    direction: rtl;
+    text-align: end;
+  }
+  .area-composer-menu__path > bdi { unicode-bidi: plaintext; }
+  /* Nothing matches: one muted row on the rows' text column. */
+  .area-composer-menu__empty {
+    display: flex;
+    align-items: center;
+    min-block-size: var(--area-ui-row);
+    margin: 0;
+    padding-inline: var(--area-ui-row-inset);
+    color: var(--area-fg-muted);
+  }
+}

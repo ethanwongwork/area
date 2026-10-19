@@ -180,20 +180,31 @@ shadow. It names the role it plays, and the number scales every role:
 | `shadow-tooltip` | Tooltip, Toggletip | 0 0 2 + 0 4 8 (shadow8) | n/2 % |
 | `shadow-float` | Menu and all that open one, Popover and all built on it, Select picker, Toast, Calendar and ColorPicker surfaces, floating Toolbar, Board card actions, Scroll to latest | 0 0 2 + 0 8 16 (shadow16) | n% |
 | `shadow-modal` | Dialog, Confirm dialog, Drawer, Command palette | 0 0 8 + 0 14 28 (shadow28) | 2n % |
+| `shadow-field` | Outline fields (Input, Textarea, Select, Custom select, Number field, Date picker, Tag picker, OTP slots, Input group), outline and soft Buttons | as control | Field shadow % (0 by default) |
+| `shadow-hover` | A linked Card, a gallery tile under the pointer | as float | n% |
 
 The ambient layer is half the key, and dark doubles both. Anchors: 3 is Notion's lightest lift (2.7%), 5 its
-popover (5%) and 8 ChatGPT's menu (8%). In-flow controls (Button, fields, Chip, Tag) and content (Code block,
-Table, Alert, Accordion and the rest) take no role at any step; they rest on their edge and plate. The full
-per-component audit is in the research note.
+popover (5%) and 8 ChatGPT's menu (8%). By default in-flow controls (Button, fields, Chip, Tag) and content (Code
+block, Table, Alert, Accordion and the rest) lift at no step; they rest on their edge and plate. The Field shadow
+control (below) can lift outline fields and buttons, as shadcn and Primer do; soft fields stay flat.
 
-Every role is two layers at every step, so a step change or a transition interpolates layer by layer. Step 0
-is a transparent shadow, `0 0 0 0 transparent`, never `none`. A role can sit in a list beside a component's
+**Edge and Depth** (owner, 2026-10-18; `axes/depth.ts`, [research](research/elevation-stroke-2026-10-18/README.md)).
+Nine controls, each set on its own (owner: no named looks; "too bloated" with fifteen levers): Stroke width (Surface),
+Stroke, Shadow (this axis: the floating roles and the hover lift), Rest shadow (control and resting roles, the `n` of
+their rows above, 3 by default), Field shadow, Shadow size, Softness, Light and Shadow colour. Every role is one list of
+eight slots at every setting (a lip, six soft layers, a highlight last), so settings and hovers crossfade; a list that
+changes length pads at its end, which is why the one inset slot comes last. Contrast never strengthens a shadow (no
+system surveyed does).
+
+Every role is the same eight slots at every step, so a step change or a transition interpolates layer by layer.
+Step 0 is transparent layers, never `none`. A role can sit in a list beside a component's
 own layers (the Board card's tone ring, the floating Toolbar's edge), and `none` in a list invalidates the whole
 `box-shadow`, ring and all. The edge does the separating at every step. `border-float` is #eeeeee in light (the
 nearest rung to Notion's 7% popover ring) and #4b4b4b in dark. Forced colours drop `box-shadow` entirely, and the
 border is what the browser repaints: `forced-colors.css` puts the frame back at 1px under Borderless and gives
 the floating Toolbar, whose edge is an inset shadow, an outline. Stroke is its own setting: the Surface axis, the
-frame's width, `1` (Default) or `0` (Borderless). Borderless never leaves a surface without an edge: every surface
+frame's width, `0` (Borderless), `0.5` (Hairline), `1` (Default) or `2` (Bold), with the Stroke control for how dark
+every stroke is. Borderless never leaves a surface without an edge: every surface
 whose frame it removes lists `shadow-edge` first in its `box-shadow`, ChatGPT's frameless-menu edge (a 1px-blur
 shadow at 62% black, and in dark a 1px-blur 20% white line inside), transparent at 1. So a Card or Menu stays
 distinct at Elevation 0 and in dark, where no lift reads (2026-10-14; it replaced Card's dark-only ring,

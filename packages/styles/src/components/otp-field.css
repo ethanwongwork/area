@@ -10,6 +10,7 @@
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-otp-field {
+    --_field-lift: var(--area-shadow-field); /* Field shadow (axes/depth.ts), transparent by default; each slot is a field */
     --_height: var(--area-control-md);
     --_radius: var(--area-radius-control-md);
     --_text: var(--area-control-md-text);
@@ -37,6 +38,7 @@
 
   /* Input's shell, square at the tier's height; its corner is Input's for the same height. */
   .area-otp-field__slot {
+    box-shadow: var(--_field-lift);
     position: relative;
     display: inline-grid;
     place-items: center;
@@ -54,7 +56,7 @@
   }
 
   .area-otp-field--outline { --_bg: var(--area-input-bg); }
-  .area-otp-field--soft { --_bg: var(--area-input-bg-soft); --_border: var(--area-input-edge-soft); --_border-hover: var(--area-input-edge); }
+  .area-otp-field--soft { --_field-lift: 0 0 0 0 transparent; --_bg: var(--area-input-bg-soft); --_border: var(--area-input-edge-soft); --_border-hover: var(--area-input-edge); }
 
   @media (hover: hover) {
     .area-otp-field:hover:not([data-disabled], [data-read-only]) .area-otp-field__slot:not([data-active]) { border-color: var(--_border-hover); transition-duration: 0s; }
@@ -65,7 +67,7 @@
   .area-otp-field__slot[data-active] {
     z-index: 1;
     border-color: var(--_border-focus);
-    box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
+    box-shadow: var(--_field-lift), 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
     outline: var(--area-field-focus-outline-width) solid var(--_focus-outline);
     outline-offset: 0;
     transition-duration: 0s;

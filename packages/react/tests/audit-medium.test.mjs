@@ -37,8 +37,8 @@ test('a Slider announces its visible readout (audit C-10)', () => {
   assert.match(html, /aria-valuetext="1.25×"/);
 });
 
-test('Select rests without a shadow, as every outline field (audit B-2)', () => {
-  assert.match(body('.area-select'), /box-shadow: none/);
+test('Select rests as every outline field, on Field shadow (transparent by default), never the old resting shadow (audit B-2)', () => {
+  assert.match(body('.area-select'), /box-shadow: var\(--_field-lift\)/);
   assert.doesNotMatch(body('.area-select'), /box-shadow: var\(--area-shadow-1\)/);
 });
 

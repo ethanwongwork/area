@@ -41,8 +41,11 @@
     font-family: inherit;
     font-size: var(--_text);
     line-height: var(--_leading);
-    /* spec (outline pass, docs/specs/number-field.md): controls at rest carry no shadow, as Button (ChatGPT, Notion, Figma fields). */
-    box-shadow: none;
+    /* spec (outline pass, docs/specs/number-field.md): controls at rest carry no shadow, as Button (ChatGPT, Notion, Figma
+       fields), by default: Field shadow (axes/depth.ts, 0 by default, a transparent role) lifts them when
+       chosen (shadcn's shadow-xs, Primer's). Soft fields stay flat. The focus halo lists after it, so the two crossfade. */
+    --_field-lift: var(--area-shadow-field);
+    box-shadow: var(--_field-lift);
     resize: vertical;
     outline: none;
     /* Motion (docs/MOTION.md, 2026-10-07), as Input: paint and the focus halo appear at once and
@@ -63,7 +66,8 @@
   .area-textarea--outline { --_bg: var(--area-textarea-bg); }
 
   .area-textarea--soft {
-    box-shadow: none;
+    --_field-lift: 0 0 0 0 transparent;
+    box-shadow: var(--_field-lift);
     --_bg: var(--area-textarea-bg-soft);
     --_border: var(--area-textarea-edge-soft); /* none, or the strong edge under increased contrast */
     --_border-hover: var(--area-textarea-edge);
@@ -90,7 +94,7 @@
     --_t-paint: 0s;
     --_t-halo: 0s;
     border-color: var(--_border-focus);
-    box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
+    box-shadow: var(--_field-lift), 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
     outline: var(--area-field-focus-outline-width) solid var(--_focus-outline);
     outline-offset: 0;
   }

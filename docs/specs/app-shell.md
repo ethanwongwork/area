@@ -80,3 +80,12 @@
 - 2026-10-16 · owner, review round 28 (components28) → Titlebar rethink: "how is the height of this bar calculated? is there always just an underline? is there a floating title bar variant with a backplate?" → open.
 - 2026-10-16 · Titlebar, from the owner's round-28 questions → answers: the height is Panel's bar formula (control-md + the header gap above and below + the rule: 26 + 6 + 6 + 1 = 39 at the app's 13 Compact, 32 + 10 + 10 + 1 = 53 at 14 Default), so its rule lines up with the panels beside it; the rule follows the Surface width (gone at Borderless, back under More contrast). Owner picked both offered options → `variant`: `ruled` (default), `plain` (no rule; the bar loses the rule's 1 so the controls stay centred; ChatGPT's and Notion's top bars, Panel's bare bar) and `floating` (Toolbar surface's paint: `bg-surface`, `shadow-edge`, the floating edge and `shadow-float`; the controls one cluster space in from the plate on every side and the plate the same space off the window's top and sides; the corner the small control's plus that inset, concentric; on macOS the start clears the lights, which end at 67, by the same space). Measured in the app at type 13 Default: ruled 47 (controls 10 / 10 above the rule), plain 46 (10 / 10), floating 40 tall, 7 in on every side, 7 off the window, corner 13. Gallery: Variant / plain, Variant / floating.
 - 2026-10-16 · owner, review round 29 (components29) → Titlebar approved (one control height, plain and floating) → Complete in `component-status.mjs`.
+
+
+## Even control insets (2026-10-18)
+
+Owner, of the app's bars: "these controls are not evenly inset, theres too much space horizontally". A docked Titlebar's
+end controls (and its start control, when the bar starts with one and has no traffic lights) now sit as far from the
+side as from the top and the rule: (height − rule − small control) / 2, 7 at the app's scale (was Panel's 14, and 13
+beside macOS's lights). A bar that starts with its title keeps the title on Panel's 14 column; the lights' 83 stays.
+Figma's panel tabs measure 8 and 8. (app-shell.css)

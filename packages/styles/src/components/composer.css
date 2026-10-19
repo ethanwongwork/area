@@ -41,6 +41,13 @@
     transition: background-color var(--area-duration-fast) var(--area-ease-out), border-color var(--area-duration-fast) var(--area-ease-out), color var(--area-duration-fast) var(--area-ease-out);
   }
   .area-composer--inline { min-block-size: var(--_composer-height); }
+  /* The context row: what the message is about, inside the shell above the field (Cursor's image grid and Codex's
+     attachments sit at the composer's top; Claude Code's row above its field). Chips (Chip input) and Attachments wrap
+     on the shell's inset, the composer's gap apart (Cursor's grid gap 8); its items take the composer's own corner less
+     the inset, so they are concentric with it (attachment.css). Placed with a gap under it in either layout. */
+  .area-composer { position: relative; } /* the Composer menu opens above it (composer-menu.css) */
+  .area-composer__context { display: flex; flex-wrap: wrap; align-items: center; gap: var(--_composer-gap); min-inline-size: 0; }
+  .area-composer--inline:has(> .area-composer__context) { gap: var(--_composer-gap); }
   .area-composer--stacked { gap: var(--area-ui-cluster); }
 
  /* The Input hover step (audit S7a). */

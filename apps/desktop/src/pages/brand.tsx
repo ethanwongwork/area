@@ -204,9 +204,10 @@ export function BrandPage() {
         </ViewControls>
       }
       canvas={<div className="studio-brand">{body}</div>}
-      inspector={
-        <>
-          <CanvasSettings axes={["type", "density"]} />
+      inspector={{
+        theme: <CanvasSettings axes={["type", "density"]} />,
+        // An image library: what is chosen, and no code.
+        design: <>
           {selected ? (
             <>
               <Selection preview={<Preview label={nameOf(selected)} paint={selected.color}><img className="studio-brand__preview" src={url(selected.thumb)} alt="" /></Preview>}>
@@ -242,8 +243,8 @@ export function BrandPage() {
               ]} />
             </PanelSection>
           ) : null}
-        </>
-      }
+        </>,
+      }}
     />
   );
 }

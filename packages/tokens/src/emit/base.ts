@@ -13,7 +13,8 @@
 import { PREFIX } from "../axes/schema.ts";
 import { MOTION_AXIS, duration } from "../axes/motion.ts";
 import { SOFT_EDGE, SOFT_EDGE_FILTER } from "../axes/surface.ts";
-import { contrastMix, layerCss, rawEdge } from "../color/layers.ts";
+import { contrastMix, layerCss, rawEdge, strokeEdge } from "../color/layers.ts";
+import { depthDerived } from "../axes/depth.ts";
 import { SEMANTIC_ALIASES } from "../semantic/aliases.ts";
 
 /** 4px base with 2px, 6px and 10px half-steps for tight control interiors. */
@@ -113,16 +114,19 @@ function role(_id: string, switchName: string, map: Record<string, [string, stri
  */
 export function derivedTokens(): Record<string, string> {
   return {
+    // The Elevation roles, from Depth and the Edge and Depth levers (axes/depth.ts): every input is an axis, so they
+    // re-derive wherever one is set.
+    ...depthDerived(),
     // Presentation aliases choose existing palette endpoints. A preference is not a color
     // axis: it changes emphasis while every axis keeps its own namespaces.
     // Each mixes from its edge at standard contrast (rawEdge), by the level, as every border-* does (color/layers.ts), so a
     // control edge and a seam move the same share at Medium and More (owner, 2026-10-18).
-    [`${PREFIX}edge-control`]: contrastMix(rawEdge("faint"), `var(${PREFIX}stroke-control)`),
+    [`${PREFIX}edge-control`]: contrastMix(strokeEdge("faint"), `var(${PREFIX}stroke-control)`),
     // The hover edge a step past rest: border-subtle in light (#d4 after #e2). In dark border-subtle is the rest edge's own
     // value (both #333, today and in the Layers model), so a field's hover drew nothing; it takes `border` (#4b4b4b),
     // the dark step the model's edges use (hover and pressed sweep 2026-10-17: Custom select, Input, Select, Textarea).
-    [`${PREFIX}edge-control-hover`]: contrastMix(`light-dark(${rawEdge("subtle")}, ${rawEdge("border")})`, `var(${PREFIX}stroke-control-hover)`),
-    [`${PREFIX}edge-selected`]: contrastMix(rawEdge("faint"), `var(${PREFIX}stroke-control)`),
+    [`${PREFIX}edge-control-hover`]: contrastMix(`light-dark(${strokeEdge("subtle")}, ${strokeEdge("border")})`, `var(${PREFIX}stroke-control-hover)`),
+    [`${PREFIX}edge-selected`]: contrastMix(strokeEdge("faint"), `var(${PREFIX}stroke-control)`),
     [`${PREFIX}edge-accent`]: `color-mix(in srgb, var(${PREFIX}accent-border), var(${PREFIX}stroke-selected) calc(var(${PREFIX}contrast-more) * 100%))`,
     [`${PREFIX}fill-toggle`]: contrastMix(rawEdge("subtle"), `var(${PREFIX}stroke-control)`),
     [`${PREFIX}fill-toggle-hover`]: contrastMix(rawEdge("border"), `var(${PREFIX}stroke-control-hover)`),
@@ -137,7 +141,7 @@ export function derivedTokens(): Record<string, string> {
     // contrast the frame returns and the soft edge turns transparent, so the two never draw together.
     [`${PREFIX}shadow-edge`]: SOFT_EDGE,
     [`${PREFIX}shadow-edge-filter`]: SOFT_EDGE_FILTER,
-    [`${PREFIX}edge-control-strong`]: contrastMix(rawEdge("hover"), `var(${PREFIX}stroke-control-hover)`),
+    [`${PREFIX}edge-control-strong`]: contrastMix(strokeEdge("hover"), `var(${PREFIX}stroke-control-hover)`),
     // The page, its layers, control fills on each ground, edges and inks: the Layers model (color/layers.ts), live over
     // the ground and layer-contrast settings and the Neutral cast. border-card (Card, Composer, Code block) is among
     // them: today's neutral-100 / 750, now a step from the page.
@@ -163,7 +167,7 @@ export function derivedTokens(): Record<string, string> {
     // edge, and the strong control stroke under increased contrast, where a field's boundary targets 3:1 (CONTRAST.md;
     // the card edge alone read 1.16:1 light, 1.33:1 dark, 2026-10-15).
     [`${PREFIX}composer-edge`]:
-      contrastMix(rawEdge("card"), `var(${PREFIX}stroke-control)`),
+      contrastMix(strokeEdge("card"), `var(${PREFIX}stroke-control)`),
     [`${PREFIX}composer-focus-color`]:
       contrastMix(rawEdge("subtle"), `var(${PREFIX}focus-color)`),
     [`${PREFIX}field-focus-outline-width`]:

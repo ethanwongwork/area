@@ -45,6 +45,9 @@
     padding-block-start: var(--area-border-width);
   }
   .area-panel--bare-bar > .area-panel__bar { padding-block-start: 0; }
+  /* A bar of controls alone (panel.css, 2026-10-18) centres them above its rule, 7 and 7 at the app's scale, as the
+     Titlebar's and the app's Canvas header do, so controls on one line share one centre; a title keeps the balance. */
+  .area-panel__bar:not(:has(> .area-panel__title)) { padding-block-start: 0; }
   /* spec (inspector.md, audit 2026-09-26): the bar's action ends on the body's action column,
    * as Figma's header buttons sit at 208 with every section and row action. */
   .area-panel__bar:has(> .area-button:last-child) { --_box-end: calc(var(--_box-height) - var(--_inset) * 2); }
@@ -137,10 +140,10 @@
 
   /* A shortcut is a nested backplate. Reserve its actual outer box so the space after it
    * equals the vertical space above and below it in the Button. */
-  .area-button:has(> .area-button__label > .area-kbd:last-child) {
+  .area-button:has(> .area-kbd:last-child) {
     --_box-end: var(--area-mark-label-md);
   }
-  .area-button:has(> .area-button__label > .area-kbd--sm:last-child) {
+  .area-button:has(> .area-kbd--sm:last-child) {
     --_box-end: var(--area-mark-label-sm);
   }
 

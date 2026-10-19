@@ -342,3 +342,10 @@ and tied on specificity) and a linked card's hover lift dropped the material's l
 `--_card-ring`, hover and press set `--_card-lift` (float, then back to `--_card-shadow`), and a material fills only
 `--_m-layers`, so every state keeps the others. With no material the slots add only transparent layers: the look is
 unchanged. Checked in the app (light and dark, None, Glass and Tactile).
+
+## Hover lift (2026-10-18)
+
+Edge and Depth (axes/depth.ts; owner: "go with your recommendations … finalize the material, surface, stroke, elevation axis
+theming"): a linked card's hover lift is `--area-shadow-hover`, the float shadow at Shadow (Elevation), so it is the lift it was.
+At Elevation 0 the edge steps instead. The gallery tiles take the same role (apps/desktop/src/studio.css). The resting
+lift is `shadow-resting` at Rest shadow, its own number since the nine controls (3 by default, as before).

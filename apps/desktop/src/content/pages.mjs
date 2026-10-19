@@ -28,6 +28,89 @@ export const COMPONENT_PAGES = [
     ],
   },
   {
+    slug: "step", name: "Step", manifest: "step", imports: "Step, StepGroup, Reasoning",
+    api: [["Step: verb", "what it did, as the line says it (the live form while running)", "—"], ["detail / meta / icon", "what it acted on; a duration or +N −N; a 16 glyph", "—"], ["status", "running (shimmer) | done | failed (danger ink)", "done"], ["children", "what went in and came out; the line opens to show it", "—"], ["open / defaultOpen / onOpenChange", "controlled or uncontrolled open state", "— / false / —"], ["StepGroup: verb, detail, children", "a run of Steps folded under one line", "—"], ["Reasoning: running, seconds, children", "\"Thinking\" while running, then \"Thought for Ns\", opening to the summary", "—"]],
+    examples: [
+      {id: "default", title: "Default", demo: "GalleryStep", note: "One line: the verb, then what it acted on, muted and cut short (Cursor's tool line, Codex's activity label)."},
+      {id: "running", title: "Running", demo: "GalleryStepRunning", note: "The verb shimmers while it runs; it stops at Motion 0 and under reduced motion."},
+      {id: "open", title: "Open", demo: "GalleryStepOpen", note: "A step with input or output opens to it; the chevron shows on hover, focus and while open."},
+      {id: "group", title: "Group", demo: "GalleryStepGroupOpen", note: "A run of steps folded under one line, on a rule 12 in (Claude Code's rail)."},
+      {id: "reasoning", title: "Reasoning", demo: "GalleryReasoningOpen", note: "Thinking as one closed line, opening to the summary."},
+    ],
+  },
+  {
+    slug: "edit-summary", name: "Edit summary", manifest: "editSummary", imports: "EditSummary, EditSummaryFile, Diff",
+    api: [["EditSummary: title, added, removed", "the count and the turn's +N −N", "\"Edited files\""], ["onKeepAll / onUndoAll", "Keep all and Undo all, while any file is pending", "—"], ["EditSummaryFile: name, added, removed", "one changed file", "—"], ["state", "pending | kept | undone", "pending"], ["onKeep / onUndo / diff / defaultOpen", "the file's actions and its Diff, shown when its name is pressed", "—"], ["Diff: hunks, label", "lines (added, removed, context, with old / new numbers) and folds between hunks", "—"]],
+    examples: [
+      {id: "default", title: "Default", demo: "GalleryEditSummary", note: "What changed in a turn: files with +N −N, Undo and Keep for each and for all (Cursor's review, Codex's patch summary)."},
+      {id: "open", title: "Open", demo: "GalleryEditSummaryOpen", note: "A file's name opens its diff: Code block sm's type and its added / removed paint, a 3px strip, folds between hunks."},
+      {id: "diff", title: "Diff", demo: "GalleryDiff"},
+    ],
+  },
+  {
+    slug: "approval", name: "Approval", manifest: "approval", imports: "Approval",
+    api: [["title / description", "what it wants to do, and why", "—"], ["options / onChoose", "numbered choices; 1–9 choose, arrows move", "—"], ["children", "the thing itself: a command, a Diff", "—"], ["onInstead / insteadPlaceholder", "a field to say what to do instead; Enter sends", "— / \"Tell it what to do instead\""], ["onDismiss", "Escape; the last option by default", "—"], ["autoFocus", "focus the first choice when it appears (where it takes the composer's place)", "false"]],
+    examples: [
+      {id: "default", title: "Default", demo: "GalleryApproval", note: "It takes the composer's place, in the Composer's shell; choices are Menu rows with a number (Claude Code's prompt, Codex's approvals)."},
+      {id: "detail", title: "Detail", demo: "GalleryApprovalDetail"},
+      {id: "instead", title: "Instead", demo: "GalleryApprovalInstead"},
+    ],
+  },
+  {
+    slug: "plan", name: "Plan", manifest: "plan", imports: "Plan",
+    api: [["items", "{ id, label, status: done | current | pending | cancelled }", "—"], ["title", "the head's name", "\"Plan\""], ["open / defaultOpen / onOpenChange", "folds to its head", "— / true / —"]],
+    examples: [
+      {id: "default", title: "Default", demo: "GalleryPlan", note: "Done, now, next and a count, above the composer (Cursor's todo tray, Codex's plan update)."},
+      {id: "folded", title: "Folded", demo: "GalleryPlanFolded"},
+      {id: "cancelled", title: "Cancelled item", demo: "GalleryPlanCancelled"},
+    ],
+  },
+  {
+    slug: "turn-notice", name: "Turn notice", manifest: "turnNotice", imports: "TurnNotice",
+    api: [["kind", "stopped | error | compacted", "stopped"], ["action", "a Button after the text (Retry)", "—"], ["children", "what happened", "—"]],
+    examples: [
+      {id: "stopped", title: "Stopped", demo: "GalleryTurnNotice", note: "How a turn ended, on one quiet line (Codex, Cursor, Claude Code)."},
+      {id: "error", title: "Error", demo: "GalleryTurnNoticeError"},
+      {id: "compacted", title: "Compacted", demo: "GalleryTurnNoticeCompacted"},
+    ],
+  },
+  {
+    slug: "attachment", name: "Attachment", manifest: "attachment", imports: "Attachment",
+    api: [["src / name", "the image, and the file's name (names the tile, its remove and its upload)", "—"], ["status", "ready | uploading | error", "ready"], ["progress", "0–100 while uploading; leave out while unknown", "—"], ["error", "why it failed", "\"<name> could not be uploaded\""], ["onRemove", "shows the remove control", "—"]],
+    examples: [
+      {id: "default", title: "Default", demo: "GalleryAttachment", note: "An image in the composer before it is sent (Cursor's 64 tile; Codex's upload ring)."},
+      {id: "uploading", title: "Uploading", demo: "GalleryAttachmentUploading"},
+      {id: "error", title: "Failed", demo: "GalleryAttachmentError"},
+      {id: "composer", title: "In the composer", demo: "GalleryComposerAttachments"},
+    ],
+  },
+  {
+    slug: "composer-menu", name: "Composer menu", manifest: "composerMenu", imports: "ComposerMenu",
+    api: [["label", "names the listbox", "—"], ["groups", "{ label?, items: { id, label, icon?, path? }[] }[]", "—"], ["activeId / onActiveChange", "the highlighted row; the field names it with aria-activedescendant (`${id}-${item.id}`)", "—"], ["onPick", "a row was chosen", "—"], ["emptyLabel", "shown when nothing matches", "\"No matches\""]],
+    examples: [
+      {id: "default", title: "Files", demo: "GalleryComposerMenu", note: "Opens above the composer at its width after @ or / (all three products); the field keeps focus."},
+      {id: "commands", title: "Commands", demo: "GalleryComposerMenuCommands"},
+      {id: "empty", title: "No matches", demo: "GalleryComposerMenuEmpty"},
+    ],
+  },
+  {
+    slug: "queue", name: "Queue", manifest: "queue", imports: "Queue",
+    api: [["items", "{ id, text, status?: queued | sending | failed }", "—"], ["onSendNow / onRemove / onRetry", "row actions", "—"], ["title", "the head", "\"<n> queued\""], ["open / defaultOpen / onOpenChange", "folds to its head", "— / true / —"]],
+    examples: [
+      {id: "default", title: "Default", demo: "GalleryQueue", note: "Messages sent while the agent works wait here (Cursor's queue tray, Codex's rail)."},
+      {id: "sending", title: "Sending", demo: "GalleryQueueSending"},
+      {id: "failed", title: "Failed", demo: "GalleryQueueFailed"},
+      {id: "folded", title: "Folded", demo: "GalleryQueueFolded"},
+    ],
+  },
+  {
+    slug: "timestamp", name: "Timestamp", manifest: "timestamp", imports: "Timestamp, formatTimestamp",
+    api: [["dateTime", "the moment (ISO string or Date)", "—"], ["children", "as read; formatTimestamp(date) words it as Codex does", "—"]],
+    examples: [
+      {id: "default", title: "Default", demo: "GalleryTimestamp", note: "Centred between turns after a pause, not on every message (Codex)."},
+    ],
+  },
+  {
     slug: "accordion", name: "Accordion", manifest: "accordionItem", imports: "Accordion, AccordionItem",
     api: [["AccordionItem: heading", "the title the reader clicks; names the trigger", "—"], ["open / defaultOpen / onOpenChange", "controlled or uncontrolled open state", "— / false / —"], ["variant", "plain (leading chevron, Notion) | divided (trailing chevron and a rule, shadcn)", "plain"], ["size", "sm (14/20) | md (16/24)", "md"], ["headingLevel", "2–6: wraps the trigger in a heading", "— (3 in a group)"], ["disabled", "boolean", "false"], ["value", "this item's key in its Accordion", "generated"], ["Accordion: multiple", "let any number stay open; otherwise opening one closes the others", "false"], ["Accordion: value / defaultValue / onValueChange", "open items by value", "— / [] / —"], ["Accordion: variant / size / headingLevel", "passed to every item", "— / — / 3"]],
     examples: [
@@ -812,8 +895,8 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "composer", name: "Composer", manifest: "composer",
-    api: [["layout", '"inline" | "stacked"', '"inline"'], ["value / defaultValue", "string", "—"], ["onValueChange", "(value: string) => void", "—"], ["onSubmit", "(value: string) => void", "—"], ["leadingActions / trailingActions / mode", "ReactNode", "—"], ["submitOnEnter", "boolean", "true"], ["label", "string (the field's accessible name)", '"Message"'], ["placeholder", "string", '"Write a message…"'], ["submitLabel", "string (names the send Button)", '"Send message"'], ["submitPill", "boolean (round send; the corner follows, making a pill composer)", "false"], ["disabled", "boolean (field paint; actions dim)", "false"], ["loading", "boolean (a reply is streaming: the field stays editable, Enter doesn't send, send becomes Stop; busy is a deprecated alias)", "false"], ["onStop / stopLabel", "() => void / string (the Stop button while loading)", '— / "Stop"'], ["maxLength", "number", "—"], ["inputProps / onInputKeyDown", "textarea props and key handler", "—"], ["ref", "HTMLTextAreaElement", "—"]],
-    examples: [{ id: "inline", title: "Inline", demo: "GalleryComposerInline" }, { id: "stacked", title: "Stacked", demo: "GalleryComposerStacked" }, { id: "prefilled", title: "Controlled draft", demo: "GalleryComposerPrefilled" }, { id: "disabled", title: "Disabled", demo: "GalleryComposerDisabled" }, { id: "loading", title: "Loading", note: "While a reply streams, the field stays editable and send turns into Stop.", demo: "GalleryComposerLoading" }, { id: "pill", title: "Pill send", note: "A round send makes the whole composer a pill, ChatGPT's shape.", demo: "GalleryComposerPill" }],
+    api: [["layout", '"inline" | "stacked"', '"inline"'], ["value / defaultValue", "string", "—"], ["onValueChange", "(value: string) => void", "—"], ["onSubmit", "(value: string) => void", "—"], ["leadingActions / trailingActions / mode", "ReactNode", "—"], ["submitOnEnter", "boolean", "true"], ["label", "string (the field's accessible name)", '"Message"'], ["placeholder", "string", '"Write a message…"'], ["submitLabel", "string (names the send Button)", '"Send message"'], ["submitPill", "boolean (round send; the corner follows, making a pill composer)", "false"], ["disabled", "boolean (field paint; actions dim)", "false"], ["loading", "boolean (a reply is streaming: the field stays editable, Enter doesn't send, send becomes Stop; busy is a deprecated alias)", "false"], ["onStop / stopLabel", "() => void / string (the Stop button while loading)", '— / "Stop"'], ["onQueue", "(value) => void: while loading, Enter queues the draft (the button stays Stop)", "—"], ["maxLength", "number", "—"], ["context", "ReactNode: chips and Attachments in a row inside the shell, above the field", "—"], ["menu", "ReactNode: a ComposerMenu, drawn above the composer at its width", "—"], ["inputProps / onInputKeyDown", "textarea props and key handler", "—"], ["ref", "HTMLTextAreaElement", "—"]],
+    examples: [{ id: "inline", title: "Inline", demo: "GalleryComposerInline" }, { id: "stacked", title: "Stacked", demo: "GalleryComposerStacked" }, { id: "prefilled", title: "Controlled draft", demo: "GalleryComposerPrefilled" }, { id: "disabled", title: "Disabled", demo: "GalleryComposerDisabled" }, { id: "loading", title: "Loading", note: "While a reply streams, the field stays editable and send turns into Stop.", demo: "GalleryComposerLoading" }, { id: "pill", title: "Pill send", note: "A round send makes the whole composer a pill, ChatGPT's shape.", demo: "GalleryComposerPill" }, { id: "context", title: "Context row", note: "What the message is about, inside the shell above the field (Cursor, Claude Code, Codex).", demo: "GalleryComposerContext" }],
   },
   {
     slug: "code", name: "Code", manifest: "code",

@@ -60,9 +60,14 @@ export function optionMark(axis: Axis, value: string, canvas: CanvasAxes): React
     }
     // A card's frame: 1 its hairline, 0 Borderless's soft shadow edge.
     case "surface": return <span className="studio-mark studio-mark--frame" aria-hidden="true" data-area-surface={value} />;
+    // The same frame under the option's Stroke (axes/depth.ts).
+    case "stroke": return <span className="studio-mark studio-mark--frame" aria-hidden="true" data-area-surface={canvas.surface} data-area-stroke={value} />;
     // A plate lifted in proportion to the option (the Menu's shadow strength, 0 to 8): the real float shadow is too faint
     // to read on a 12 plate, so the mark's shadow grows with the number instead; 0 is flat.
-    case "elevation": return <span className="studio-mark studio-mark--lift" aria-hidden="true" style={{ "--_lift": value } as CSSProperties} />;
+    // Rest and Field shadow are the same number in %, so they draw the same plate (axes/depth.ts).
+    case "elevation":
+    case "shadow-rest":
+    case "shadow-field": return <span className="studio-mark studio-mark--lift" aria-hidden="true" style={{ "--_lift": value } as CSSProperties} />;
     // The Menu's open as a share of the longest, 300 ms; 0 (None) is an empty ring.
     case "motion": return <span className="studio-mark studio-mark--duration" aria-hidden="true" style={{ "--_share": `${(Number(value) / 300) * 100}%` } as CSSProperties} />;
     default: return null;

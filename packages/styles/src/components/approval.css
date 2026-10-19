@@ -1,0 +1,96 @@
+/* ---------------------------------------------------------------------------
+ * Approval
+ *
+ * An agent asks before it acts. It takes the composer's place, so it wears the Composer's shell (edge, corner, field
+ * fill, inset); its choices are Menu rows with a number to press, and the last row is a field to say what to do
+ * instead (Claude Code's). Measured from Claude Code's permission prompt and Codex's approval modal
+ * (docs/specs/approval.md).
+ *
+ * Paint (cleanup pass 2026-10-19, owner round 49: "are the backplate colors correct, are the 1 2 3 and esc using kbd
+ * or badges?"): one backplate only, the row plate under the pointer or focus (Menu's). The numbers and Esc are quiet
+ * Kbd, Menu's shortcut paint (unboxed, muted); the field is part of its row, with no fill of its own.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-approval {
+    /* The Composer's shell (composer.css), which this replaces until it is answered. */
+    --_approval-inset: var(--area-ui-cluster); /* the Composer's inset: 8, compact 6 */
+    --_approval-radius: calc(min(var(--area-radius-control-md), max(var(--area-radius-min), round(down, calc(var(--area-control-md) * var(--area-radius-factor)), 2px))) + var(--_approval-inset) * var(--area-radius-concentric));
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--area-ui-cluster);
+    min-inline-size: 0;
+    padding: calc(var(--_approval-inset) - var(--area-stroke-width));
+    border: var(--area-stroke-width) solid var(--area-composer-edge);
+    border-radius: var(--_approval-radius);
+    background: var(--area-input-bg);
+    color: var(--area-fg-default);
+    /* The Composer's text: a question and its answers read at the field's size. */
+    font-size: var(--area-text-md-size);
+    line-height: var(--area-text-md-leading);
+  }
+  /* The question and why, one block on the rows' column (the row inset), so title, description, numbers and hint share
+     an edge. */
+  .area-approval__head,
+  .area-approval__hint { margin: 0; padding-inline: var(--area-ui-row-inset); }
+  /* The head's first line sits in a row, as every line after it does (inset.css, first-line alignment; round 54, owner:
+     "is the padding/margin at the top correct?"): half of what the row leaves around the title's line goes above it, so
+     the room above the title matches the room under the hint's row. */
+  .area-approval__head { display: grid; min-inline-size: 0; padding-block-start: max(0px, calc((var(--area-ui-row) - var(--area-text-md-leading)) / 2)); }
+  .area-approval__title { margin: 0; font-weight: var(--area-weight-strong); }
+  .area-approval__description,
+  .area-approval__hint { margin: 0; color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
+  /* The hint is the card's last row (round 53, owner: "esc to cancel looks way too close to the bottom"): a row tall,
+     centred, as the choices above it are, so the space under it is the shell's inset plus the row's own, like the space
+     the Composer's footer row leaves. Its keycap sits one ui-cluster from the words (Kbd's rule). */
+  .area-approval__hint { display: flex; align-items: center; gap: var(--area-ui-cluster); min-block-size: var(--area-ui-row); }
+  /* A key named in the hint's sentence is a keycap (Kbd's rule, round 52: a key named in prose is filled; a key that
+     labels a row or a button is quiet). */
+  .area-approval__detail { min-inline-size: 0; }
+  .area-approval__options { display: grid; grid-template-columns: minmax(0, 1fr); }
+  /* A choice is a Menu row: the row's height, inset, gap and corner; the row plate under the pointer and on focus. */
+  .area-approval__option {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-8); /* spec: Menu row gap 8 */
+    min-block-size: var(--area-ui-row);
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0 var(--area-ui-row-inset);
+    border: 0;
+    border-radius: var(--area-radius-row);
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: start;
+    cursor: pointer;
+    transition: background-color var(--area-duration-fast) var(--area-ease-out);
+  }
+  @media (hover: hover) { .area-approval__option:hover { background-color: var(--area-bg-component-hover); transition-duration: 0s; } }
+  .area-approval__option:is(:focus-visible, :has(> .area-approval__field:focus-visible)) {
+    background-color: var(--area-bg-component-hover);
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: calc(-1 * var(--area-focus-width));
+    transition-duration: 0s;
+  }
+  button.area-approval__option:active { background-color: var(--area-bg-component-active); }
+  /* The number sits in the row's icon slot, centred, so every label starts on one column; it reads at the label's size
+     in the muted ink, unboxed (round 51: Claude Code's shortcut number is the label's size at 60%; Codex writes "1." in
+     the label's type). A quiet Kbd keeps the key's semantics. */
+  .area-approval__key { display: inline-flex; flex: none; justify-content: center; inline-size: var(--area-icon-sm); color: var(--area-fg-muted); font-variant-numeric: tabular-nums; }
+  .area-approval__key > .area-kbd { font-size: inherit; line-height: inherit; }
+  .area-approval__label { min-inline-size: 0; overflow-wrap: anywhere; }
+  /* What to do instead: the field is the row's text, with no fill, edge or ring of its own. */
+  .area-approval__instead { cursor: text; }
+  .area-approval__field {
+    flex: 1;
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: none;
+    background: none;
+    color: inherit;
+    font: inherit;
+  }
+  .area-approval__field::placeholder { color: var(--area-fg-muted); opacity: 1; }
+}

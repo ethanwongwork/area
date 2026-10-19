@@ -121,9 +121,18 @@ function drawing(axis: string) {
     // Corners: a field and a button, each at its own radius.
     case "radius":
       return <Row><Input size="sm" aria-label="Label" placeholder="Placeholder" /><Button size="sm">Button</Button></Row>;
-    // Depth and edges: a menu floating over a resting card.
+    // Fields and outline buttons, which Field shadow lifts (axes/depth.ts).
+    case "shadow-field":
+      return <Row><Input size="sm" aria-label="Label" placeholder="Placeholder" /><Button size="sm" variant="outline" tone="neutral">Button</Button></Row>;
+    // Depth and edges: a menu floating over a resting card; every other Edge and Depth lever shapes one of them.
     case "elevation":
     case "surface":
+    case "stroke":
+    case "shadow-rest":
+    case "shadow-size":
+    case "shadow-softness":
+    case "shadow-light":
+    case "shadow-color":
       return (
         <div className="lang-stack">
           <Note />

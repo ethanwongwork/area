@@ -18,7 +18,7 @@ import { CanvasSection } from "../tile.tsx";
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { Facts } from "../facts.tsx";
-import { Preview, Selection } from "../inspector.tsx";
+import { CodeWell, Preview, Selection } from "../inspector.tsx";
 import { matches } from "../search.ts";
 import { readStored, writeStored } from "../storage.ts";
 import { ArrangeMenu, groupBy, PinButton, PinMenu, sortBy, useArrangement, usePins } from "../organize.tsx";
@@ -291,59 +291,69 @@ export function IconsPage() {
         </Sheet>
         </PinMenu>
       ) : <EmptyState title="No icons" description={`Nothing matches “${query}”.`} />}
-      inspector={
-        <>
-          <CanvasSettings axes={["type", "density"]} />
-          {icon && Draw ? (
-            <>
-              <Selection preview={<Preview ref={preview} label={titleCase(icon.name)}><Draw size={PREVIEW} aria-hidden="true" /></Preview>}>
-                <CopyButton label="Copy SVG" icon={<CopyIcon />} fullWidth value={() => svg()} />
-                <Button variant="outline" size="sm" fullWidth icon={<DownloadIcon />} onClick={() => download(svg(), icon.name)}>Download</Button>
-                <CopyButton label="Copy name" icon={<CopyIcon />} fullWidth value={() => icon.name} />
-                {importLine(icon.name, style) ? <CopyButton label="Copy import" icon={<CopyIcon />} fullWidth value={() => importLine(icon.name, style)!} /> : null}
-              </Selection>
-              <PanelSection heading="Icon" actions={<PinButton name={titleCase(icon.name)} pinned={pins.has(icon.name)} onToggle={() => pins.toggle(icon.name)} />}>
-                <Facts label="Icon" items={[
-                  ["Name", <Code>{icon.name}</Code>],
-                  meta ? ["Import", <Code>{style === "filled" ? meta.filledComponent : meta.component}</Code>] : null,
-                  aliases.length ? [meta?.aliasOf ? "Same as" : "Also", aliases.join(", ")] : null,
-                  category ? ["Category", category.name] : null,
-                  icon.derivedFrom ? ["From", icon.derivedFrom] : null,
-                  ["Keyline", icon.keyline],
-                  meta ? ["Filled", meta.fill === "solid" ? "Solid body" : "Heavier outline"] : null,
-                  meta?.rtl ? ["Right to left", "Mirrors"] : null,
-                  meta?.cuts?.includes(12) ? ["At 12px", "Own drawing"] : null,
-                  meta?.source ? ["Ink from", `${LIBRARIES.find(([key]) => key === meta.source!.library)?.[1] ?? meta.source.library} ${meta.source.names[0]}`] : null,
-                  iconStatus ? ["Status", <StatusBadge name={icon.name} />] : null,
-                  iconStatus ? ["Batch", iconStatus.batch] : null,
-                ]} />
-              </PanelSection>
-              {meta ? (
-                <PanelSection heading="Search">
-                  <Facts label="Search" items={[
-                    ...LIBRARIES.map(([key, library]) => meta.names?.[key] ? [library, <Code>{meta.names[key]}</Code>] as const : null),
-                    meta.keywords.length ? ["Keywords", meta.keywords.join(", ")] : null,
-                  ]} />
-                </PanelSection>
-              ) : null}
-            </>
-          ) : (
-            <PanelSection heading={view ? "Category" : "Set"}>
-              <Facts label={view ? "Category" : "Set"} items={[
-                view ? null : ["Package", <Code>@area/icons</Code>],
-                ["Icons", scope.length],
-                ["Approved", approved],
-                ["In review", inReview],
-                scope.length - approved - inReview ? ["Not reviewed", scope.length - approved - inReview] : null,
-                view ? null : ["Categories", ICON_CATEGORIES.length],
-                ["Styles", "Outline, Filled"],
-                ["Sizes", `${SIZE.min} to ${SIZE.max}`],
-                ["12px cuts", scope.filter(name => META.get(name)?.cuts?.includes(12)).length],
+      inspector={{
+        theme: <CanvasSettings axes={["type", "density"]} />,
+        design: icon && Draw ? (
+          <>
+            <Selection preview={<Preview ref={preview} label={titleCase(icon.name)}><Draw size={PREVIEW} aria-hidden="true" /></Preview>}>
+              <Button variant="outline" size="sm" fullWidth icon={<DownloadIcon />} onClick={() => download(svg(), icon.name)}>Download</Button>
+            </Selection>
+            <PanelSection heading="Icon" actions={<PinButton name={titleCase(icon.name)} pinned={pins.has(icon.name)} onToggle={() => pins.toggle(icon.name)} />}>
+              <Facts label="Icon" items={[
+                aliases.length ? [meta?.aliasOf ? "Same as" : "Also", aliases.join(", ")] : null,
+                category ? ["Category", category.name] : null,
+                icon.derivedFrom ? ["From", icon.derivedFrom] : null,
+                ["Keyline", icon.keyline],
+                meta ? ["Filled", meta.fill === "solid" ? "Solid body" : "Heavier outline"] : null,
+                meta?.rtl ? ["Right to left", "Mirrors"] : null,
+                meta?.cuts?.includes(12) ? ["At 12px", "Own drawing"] : null,
+                meta?.source ? ["Ink from", `${LIBRARIES.find(([key]) => key === meta.source!.library)?.[1] ?? meta.source.library} ${meta.source.names[0]}`] : null,
+                iconStatus ? ["Status", <StatusBadge name={icon.name} />] : null,
+                iconStatus ? ["Batch", iconStatus.batch] : null,
               ]} />
             </PanelSection>
-          )}
-        </>
-      }
+            {meta?.keywords.length ? (
+              <PanelSection heading="Search">
+                <Facts label="Search" items={[["Keywords", meta.keywords.join(", ")]]} />
+              </PanelSection>
+            ) : null}
+          </>
+        ) : (
+          <PanelSection heading={view ? "Category" : "Set"}>
+            <Facts label={view ? "Category" : "Set"} items={[
+              ["Icons", scope.length],
+              ["Approved", approved],
+              ["In review", inReview],
+              scope.length - approved - inReview ? ["Not reviewed", scope.length - approved - inReview] : null,
+              view ? null : ["Categories", ICON_CATEGORIES.length],
+              ["Styles", "Outline, Filled"],
+              ["Sizes", `${SIZE.min} to ${SIZE.max}`],
+              ["12px cuts", scope.filter(name => META.get(name)?.cuts?.includes(12)).length],
+            ]} />
+          </PanelSection>
+        ),
+        code: icon && Draw ? (
+          <>
+            <Selection>
+              <CopyButton label="Copy SVG" icon={<CopyIcon />} fullWidth value={() => svg()} />
+              <CopyButton label="Copy name" icon={<CopyIcon />} fullWidth value={() => icon.name} />
+              {importLine(icon.name, style) ? <CopyButton label="Copy import" icon={<CopyIcon />} fullWidth value={() => importLine(icon.name, style)!} /> : null}
+            </Selection>
+            {importLine(icon.name, style) ? <PanelSection heading="Import"><CodeWell code={importLine(icon.name, style)!} wrap /></PanelSection> : null}
+            <PanelSection heading="Name">
+              <Facts label="Name" items={[
+                ["Name", <Code>{icon.name}</Code>],
+                meta ? ["Component", <Code>{style === "filled" ? meta.filledComponent : meta.component}</Code>] : null,
+                ...(meta ? LIBRARIES.map(([key, library]) => meta.names?.[key] ? [library, <Code>{meta.names[key]}</Code>] as const : null) : []),
+              ]} />
+            </PanelSection>
+          </>
+        ) : (
+          <PanelSection heading="Package">
+            <Facts label="Package" items={[["Package", <Code>@area/icons</Code>]]} />
+          </PanelSection>
+        ),
+      }}
     />
   );
 }

@@ -16,7 +16,8 @@
     border-radius: calc(min(var(--_group-radius, var(--area-radius-control-md)), max(var(--area-radius-min), round(down, calc(var(--_group-height) * var(--area-radius-factor)), 2px))) + var(--area-pill-field) * var(--area-radius-full));
     background-color: var(--area-input-bg);
     /* spec (outline pass, docs/specs/number-field.md): controls at rest carry no shadow, as Button (ChatGPT, Notion, Figma fields). */
-    box-shadow: none;
+    --_field-lift: var(--area-shadow-field); /* Field shadow (axes/depth.ts), transparent by default */
+    box-shadow: var(--_field-lift);
     color: var(--area-input-text);
     font-size: var(--_group-text);
     line-height: var(--_group-leading);
@@ -30,7 +31,7 @@
     transition-timing-function: var(--area-ease-out);
   }
   .area-input-group--outline { background-color: var(--area-input-bg); }
-  .area-input-group--soft { background-color: var(--area-input-bg-soft); border-color: var(--area-input-edge-soft); box-shadow: none; }
+  .area-input-group--soft { background-color: var(--area-input-bg-soft); border-color: var(--area-input-edge-soft); --_field-lift: 0 0 0 0 transparent; box-shadow: var(--_field-lift); }
   .area-input-group--sm { --_group-height: var(--area-control-sm); --_group-radius: var(--area-radius-control-sm); --_group-text: var(--area-control-sm-text); --_group-leading: var(--area-control-sm-leading); --_group-icon: var(--area-icon-sm); --_group-gap: var(--area-gap-sm); }
   .area-input-group--md { --_group-height: var(--area-control-md); --_group-radius: var(--area-radius-control-md); --_group-text: var(--area-control-md-text); --_group-leading: var(--area-control-md-leading); --_group-icon: var(--area-icon-md); --_group-gap: var(--area-gap-md); }
   .area-input-group--lg { --_group-height: var(--area-control-lg); --_group-radius: var(--area-radius-control-lg); --_group-text: var(--area-control-lg-text); --_group-leading: var(--area-control-lg-leading); --_group-icon: var(--area-icon-lg); --_group-gap: var(--area-gap-lg); }
@@ -46,14 +47,14 @@
     --_t-paint: 0s;
     --_t-halo: 0s;
     border-color: var(--area-field-focus-color);
-    box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-field-focus-halo-color);
+    box-shadow: var(--_field-lift), 0 0 0 var(--area-field-focus-halo-width) var(--area-field-focus-halo-color);
     outline: var(--area-field-focus-outline-width) solid var(--area-field-focus-color);
   }
   /* A validation tone holds through focus, as it does on Input and Select. */
-  .area-input-group:has([data-success]):focus-within { border-color: var(--area-input-success-color); outline-color: var(--area-input-success-color); box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-input-success-halo-color); }
-  .area-input-group:has([data-warning]):focus-within { border-color: var(--area-input-warning-color); outline-color: var(--area-input-warning-color); box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-input-warning-halo-color); }
+  .area-input-group:has([data-success]):focus-within { border-color: var(--area-input-success-color); outline-color: var(--area-input-success-color); box-shadow: var(--_field-lift), 0 0 0 var(--area-field-focus-halo-width) var(--area-input-success-halo-color); }
+  .area-input-group:has([data-warning]):focus-within { border-color: var(--area-input-warning-color); outline-color: var(--area-input-warning-color); box-shadow: var(--_field-lift), 0 0 0 var(--area-field-focus-halo-width) var(--area-input-warning-halo-color); }
   .area-input-group:has([aria-invalid="true"], [data-invalid]) { border-color: var(--area-input-invalid-color); }
-  .area-input-group:has([aria-invalid="true"], [data-invalid]):focus-within { outline-color: var(--area-input-invalid-color); box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--area-input-invalid-halo-color); }
+  .area-input-group:has([aria-invalid="true"], [data-invalid]):focus-within { outline-color: var(--area-input-invalid-color); box-shadow: var(--_field-lift), 0 0 0 var(--area-field-focus-halo-width) var(--area-input-invalid-halo-color); }
   .area-input-group > :is(.area-input, .area-number-field, .area-select) {
     --_height: var(--_group-height);
     --_text: var(--_group-text);

@@ -14,7 +14,7 @@ import { SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
 import { CanvasSection, Tile, TileGrid } from "../tile.tsx";
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
 import { Facts } from "../facts.tsx";
-import { Preview, Selection } from "../inspector.tsx";
+import { CodeWell, Preview, Selection } from "../inspector.tsx";
 import { Abstract } from "../abstract.tsx";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { matches } from "../search.ts";
@@ -24,6 +24,9 @@ import { AXES } from "../tokens.ts";
    an accent only reaches a component through action and selection set to accent. */
 const ALSO: Record<string, Record<string, string>> = {
   accent: { "data-area-action": "accent", "data-area-selection": "accent" },
+  // Size, Softness and Shadow colour shape a lift that is faint at the default Shadow (3%): their tiles draw it at 6, the
+  // same for every preset, so a row still differs only by its own setting.
+  ...Object.fromEntries(["shadow-size", "shadow-softness", "shadow-color"].map(axis => [axis, { "data-area-elevation": "6", "data-area-shadow-rest": "6" }])),
 };
 
 /** The default preset's name, without the "(Default)" its label carries in a list. */
@@ -122,40 +125,55 @@ export function LanguagePage() {
           ))}
         </div>
       )}
-      inspector={
-        <>
-        <CanvasSettings axes={["type", "density", "radius"]} />
-        {axis && preset ? (
-          <Selection preview={<Preview shape="landscape" label={`${axis.label}: ${preset.label}`} scope={{ [`data-area-${axis.id}`]: preset.id, ...ALSO[axis.id] }}><Abstract axis={axis.id} /></Preview>}>
-            <CopyButton label="Copy attribute" icon={<CopyIcon />} fullWidth value={() => `data-area-${axis.id}="${preset.id}"`} />
-          </Selection>
-        ) : null}
-        {axis ? (
-          <PanelSection heading={preset ? "Preset" : "Setting"}>
-            <Facts label={preset ? "Preset" : "Setting"} items={preset ? [
-              ["Attribute", <Code>data-area-{axis.id}="{preset.id}"</Code>],
-              ["Setting", axis.label],
-              ["Default", preset.id === axis.defaultPreset ? "Yes" : `No, ${defaultLabel(axis)}`],
-              ["Controls", axis.description],
-            ] : [
-              ["Attribute", <Code>data-area-{axis.id}</Code>],
-              ["Presets", axis.presets.map(entry => entry.label).join(", ")],
-              ["Default", defaultLabel(axis)],
-              ["Controls", axis.description],
-            ]} />
-          </PanelSection>
+      inspector={{
+        theme: <CanvasSettings axes={["type", "density", "radius"]} />,
+        design: axis ? (
+          <>
+            {preset ? <Selection preview={<Preview shape="landscape" label={`${axis.label}: ${preset.label}`} scope={{ [`data-area-${axis.id}`]: preset.id, ...ALSO[axis.id] }}><Abstract axis={axis.id} /></Preview>} /> : null}
+            <PanelSection heading={preset ? "Preset" : "Setting"}>
+              <Facts label={preset ? "Preset" : "Setting"} items={preset ? [
+                ["Setting", axis.label],
+                ["Default", preset.id === axis.defaultPreset ? "Yes" : `No, ${defaultLabel(axis)}`],
+                ["Controls", axis.description],
+              ] : [
+                ["Presets", axis.presets.map(entry => entry.label).join(", ")],
+                ["Default", defaultLabel(axis)],
+                ["Controls", axis.description],
+              ]} />
+            </PanelSection>
+          </>
         ) : (
           <PanelSection heading="Settings">
             <Facts label="Settings" items={[
-              ["Attribute", <Code>data-area-&lt;setting&gt;</Code>],
               ["Settings", AXES.length],
               ["Presets", AXES.reduce((sum, entry) => sum + entry.presets.length, 0)],
               ["Scope", "Any element; what it holds takes the nearest setting."],
             ]} />
           </PanelSection>
-        )}
-        </>
-      }
+        ),
+        code: axis ? (
+          <>
+            {preset ? (
+              <Selection>
+                <CopyButton label="Copy attribute" icon={<CopyIcon />} fullWidth value={() => `data-area-${axis.id}="${preset.id}"`} />
+              </Selection>
+            ) : null}
+            <PanelSection heading="HTML">
+              <CodeWell language="html" code={`<div data-area-${axis.id}="${preset?.id ?? axis.defaultPreset}">\n  …\n</div>`} />
+            </PanelSection>
+            <PanelSection heading="Attribute">
+              <Facts label="Attribute" items={[
+                ["Attribute", <Code>data-area-{axis.id}</Code>],
+                ["Values", axis.presets.map(entry => entry.id).join(" · ")],
+              ]} />
+            </PanelSection>
+          </>
+        ) : (
+          <PanelSection heading="Attribute">
+            <Facts label="Attribute" items={[["Attribute", <Code>data-area-&lt;setting&gt;</Code>]]} />
+          </PanelSection>
+        ),
+      }}
     />
   );
 }

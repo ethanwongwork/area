@@ -9,8 +9,9 @@
  *   const changes = visualChanges({ dist, beforeDist, tiles: [{ key, now, before }] });
  *   // → { [key]: { state: "changed" | "unchanged" | "new", modes: ["light default", ...] } }
  */
-import { execFileSync } from "node:child_process";
-import { existsSync, rmSync, writeFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
+import { existsSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
 
 const BROWSERS = ["/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge", "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome", "google-chrome", "chromium"];
@@ -120,9 +121,17 @@ ${/* Each specimen in its own whole-pixel slot: in a stacked page a tile added o
 ${tiles.map((t, i) => `<div class="c area-scope" style="inset-block-start:${i * 3000}px" data-key="${t.key}" data-area-theme="light">${t.html}</div>`).join("\n")}
 <pre id="out"></pre><script>${MEASURE}</script></body></html>`);
   try {
-    const dom = execFileSync(browser, ["--headless=new", "--disable-gpu", "--hide-scrollbars", "--window-size=800,1000", "--virtual-time-budget=30000", "--dump-dom", `file://${page}`], { encoding: "utf8", maxBuffer: 1 << 28, timeout: 180000, stdio: ["ignore", "pipe", "ignore"] });
+    // A profile of its own: on the default one a headless Edge can hand the page to an Edge already running and print
+    // nothing (2026-10-19), so each run is a fresh browser.
+    const profile = mkdtempSync(join(tmpdir(), "area-review-diff-"));
+    let dom, log;
+    try {
+      const run = spawnSync(browser, ["--headless=new", "--disable-gpu", "--hide-scrollbars", "--window-size=800,1000", "--virtual-time-budget=30000", `--user-data-dir=${profile}`, "--dump-dom", `file://${page}`], { encoding: "utf8", maxBuffer: 1 << 28, timeout: 180000, stdio: ["ignore", "pipe", "pipe"] });
+      dom = run.stdout ?? "";
+      log = [run.error?.message, run.signal && `signal ${run.signal}`, ...(run.stderr ?? "").split("\n").filter(l => /fail|error/i.test(l) && !/gpu|CVDisplay|Crashpad|task_policy/.test(l)).slice(-3)].filter(Boolean).join("; ");
+    } finally { rmSync(profile, { recursive: true, force: true }); }
     const json = dom.match(/<pre id="out">([\s\S]*?)<\/pre>/)?.[1];
-    if (!json) throw new Error("the measuring page wrote nothing");
+    if (!json) throw new Error(`the measuring page wrote nothing (${dom.length} bytes${log ? `; ${log}` : ""})`);
     return JSON.parse(json.replaceAll("&quot;", '"').replaceAll("&amp;", "&").replaceAll("&lt;", "<").replaceAll("&gt;", ">"));
   } finally { rmSync(page, { force: true }); }
 }

@@ -104,7 +104,7 @@
     flex-shrink: 0;
 
     block-size: var(--_bar);
-    padding-inline: var(--_side-start) var(--_side-end);
+    padding-inline: var(--_bar-start, var(--_side-start)) var(--_bar-end, var(--_side-end));
     font-size: var(--_panel-title-text);
     line-height: var(--_panel-title-leading);
     border-block-end: var(--area-border-width) solid var(--area-border-decorative);
@@ -337,6 +337,12 @@
     padding: var(--_side) var(--_side-end) var(--_side) var(--_side-start);
     border-block-start: var(--area-border-width) solid var(--area-border-decorative);
   }
+  /*
+   * A footer that continues the body rather than closing it (a chat's composer; owner, 2026-10-18, the Inspector's
+   * Chat view): no rule above it, as Cursor's, Claude Code's and ChatGPT's composers draw none
+   * (docs/research/inspector-chat-2026-10-18).
+   */
+  .area-panel--bare-footer > .area-panel__footer { border-block-start: 0; }
 
   /*
    * spec (docs/specs/resizable-panel.md): a resizable panel has a separator on one edge. Figma's
@@ -356,8 +362,24 @@
   /* The bar's title takes the same seam (inset.css counts the panel's --_edge, 0 when flush), so it
      starts on the body's column, not 1 past it (owner, 2026-10-14: the app's Inspector title sat 15
      from the seam's outside, its rows 14). */
-  .area-panel--flush:has(> .area-panel__resize[data-edge="start"]) > .area-panel__bar { padding-inline-start: var(--_side-start); }
-  .area-panel--flush:has(> .area-panel__resize[data-edge="end"]) > .area-panel__bar { padding-inline-end: var(--_side-end); }
+  .area-panel--flush:has(> .area-panel__resize[data-edge="start"]) > .area-panel__bar { padding-inline-start: var(--_bar-start, var(--_side-start)); }
+  .area-panel--flush:has(> .area-panel__resize[data-edge="end"]) > .area-panel__bar { padding-inline-end: var(--_bar-end, var(--_side-end)); }
+  /*
+   * A bar of controls alone, no title (an inspector's view pills; owner, 2026-10-18: "these controls are not evenly
+   * inset, theres too much space horizontally"): its controls sit as far from the sides as from the top and the rule,
+   * (bar − rule − small control) / 2, as Figma's panel tabs do (8 and 8), instead of on the text column. Each side keeps
+   * its seam counted once: the inset is measured from the seam's outside, as the body's is.
+   */
+  .area-panel__bar:not(:has(> .area-panel__title)) {
+    --_bar-even: calc((var(--_bar) - var(--area-border-width) - var(--area-control-sm)) / 2);
+    --_bar-start: calc(var(--_bar-even) - var(--_inset) + var(--_side-start));
+    --_bar-end: calc(var(--_bar-even) - var(--_inset) + var(--_side-end));
+  }
+  /* A Nav in the bar is a row of controls: the small control's height and corner, as the Titlebar's tabs. */
+  .area-panel__bar .area-nav--horizontal .area-nav__item {
+    block-size: var(--area-control-sm);
+    border-radius: min(var(--area-radius-control-sm), max(var(--area-radius-min), round(down, calc(var(--area-control-sm) * var(--area-radius-factor)), 2px)));
+  }
   .area-panel[data-resizing] { user-select: none; }
   .area-panel__resize {
     --_resize-hit: 8px; /* spec: Figma 8 */

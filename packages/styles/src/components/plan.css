@@ -1,0 +1,104 @@
+/* ---------------------------------------------------------------------------
+ * Plan
+ *
+ * An agent's plan for the run, above the composer: done, now, next, and a count; it folds to its head. Measured from
+ * Cursor's todo tray, Codex's plan update and Claude Code's todos (docs/specs/plan.md).
+ *
+ * The agent card (edit-summary.css has the rules; cleanup pass 2026-10-19, owner round 49): Code block's frame, text-sm
+ * throughout (Cursor's tray 13 under a 14 reply), a head one row tall with its text 12 in, a rule under it when the
+ * list shows, and the items as Menu rows (not pressable, so no plate), their text after the mark's slot.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-plan {
+    --_card-list: var(--area-space-4); /* spec: Menu's list padding 4 */
+    --_card-column: calc(var(--_card-list) + var(--area-ui-row-inset)); /* 12 */
+    min-inline-size: 0;
+    overflow: hidden;
+    border: var(--area-stroke-width) solid var(--area-border-card); /* no shadow under it: a required frame */
+    border-radius: var(--area-radius-container);
+    background-color: var(--area-bg-surface);
+    color: var(--area-fg-default);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
+  }
+  .area-plan__head {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-8);
+    inline-size: 100%;
+    min-block-size: var(--area-ui-row); /* spec: Cursor header 28 (Compact's row) */
+    margin: 0;
+    padding: 0 var(--_card-column); /* spec: Cursor 0 12 */
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: start;
+    cursor: pointer;
+  }
+  /* Open, the head is a row plus its rule, so the rule never eats into the row (round 52: it centred the chevron's
+     plate half a pixel high). */
+  .area-plan[data-open] > .area-plan__head { min-block-size: calc(var(--area-ui-row) + var(--area-stroke-width)); border-block-end: var(--area-stroke-width) solid var(--area-border-divider); }
+  .area-plan__head:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(-1 * var(--area-focus-width)); border-radius: inherit; }
+  .area-plan__title { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .area-plan__count { flex: none; color: var(--area-fg-muted); font-variant-numeric: tabular-nums; }
+  .area-plan__chevron { display: inline-flex; flex: none; margin-inline-start: auto; color: var(--area-fg-muted); transform: rotate(-90deg); transition: transform var(--area-duration-fast) var(--area-ease-out); /* MOTION.md: every chevron turns on fast */ }
+  .area-plan[data-open] .area-plan__chevron { transform: none; }
+  .area-plan__chevron > svg { inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); }
+  /* The head answers the pointer as Accordion's does: a plate behind the chevron on hover and press (a square the
+     text's line tall, the small corner; Notion's 5% / 10%), never on the title (round 51: it had no hover at all). */
+  /* Equal insets (round 52, owner: "slightly more room on the right side than on top"): the plate sits as far from the
+     card's end as from its top, (row − plate) / 2, and its corner is the card's less that inset (concentric). */
+  .area-plan__chevron {
+    --_plate-in: calc((var(--area-ui-row) - var(--area-text-sm-leading)) / 2);
+    position: relative; isolation: isolate; place-items: center; justify-content: center; align-items: center;
+    inline-size: var(--area-text-sm-leading); block-size: var(--area-text-sm-leading);
+    margin-inline-end: calc(var(--_plate-in) - var(--_card-column));
+  }
+  .area-plan__chevron::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: max(var(--area-radius-min), calc(var(--area-radius-small) + (var(--area-radius-container) - var(--area-stroke-width) - var(--_plate-in) - var(--area-radius-small)) * var(--area-radius-concentric))); transition: var(--area-transition); }
+  @media (hover: hover) { .area-plan__head:hover .area-plan__chevron::before { background: var(--area-bg-hover); transition-duration: 0s; } }
+  .area-plan__head:active .area-plan__chevron::before { background: var(--area-bg-pressed); transition-duration: 0s; }
+  .area-plan__items {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    margin: 0;
+    padding: var(--_card-list);
+    list-style: none;
+  }
+  .area-plan__items[hidden] { display: none; }
+  /* An item is a Menu row that may wrap: at least a row tall, its first line centred in it (inset.css: first-line
+     alignment), the mark in the row's icon slot, 8 to the text (Menu's gap). */
+  .area-plan__item {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--area-space-8); /* spec: Menu row gap 8; Claude Code item gap 8 */
+    min-inline-size: 0;
+    padding-block: calc((var(--area-ui-row) - var(--area-text-sm-leading)) / 2);
+    padding-inline: var(--area-ui-row-inset);
+  }
+  .area-plan__mark {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--area-icon-sm);
+    block-size: var(--area-text-sm-leading);
+    color: var(--area-fg-muted);
+  }
+  .area-plan__mark > svg { inline-size: var(--area-icon-sm); block-size: var(--area-icon-sm); }
+  /* Not started: a ring drawn as Checkbox draws its box, on its rest edge (the control hover edge: a 16 glyph needs the
+     firmer edge). */
+  .area-plan__item--pending > .area-plan__mark::before {
+    content: "";
+    inline-size: calc(var(--area-icon-sm) - var(--area-space-4));
+    block-size: calc(var(--area-icon-sm) - var(--area-space-4));
+    border: var(--area-stroke-width) solid var(--area-edge-control-hover);
+    border-radius: var(--area-radius-full);
+  }
+  .area-plan__text { min-inline-size: 0; overflow-wrap: anywhere; }
+  /* Ink: what it is doing now in the default ink; the rest muted (Cursor: in progress primary, the rest quaternary); done
+     and cancelled struck. */
+  .area-plan__item:not(.area-plan__item--current) > .area-plan__text { color: var(--area-fg-muted); }
+  .area-plan__item:is(.area-plan__item--done, .area-plan__item--cancelled) > .area-plan__text { text-decoration: line-through; }
+  @media (forced-colors: active) { .area-plan__item--pending > .area-plan__mark::before { border-color: CanvasText; } }
+}

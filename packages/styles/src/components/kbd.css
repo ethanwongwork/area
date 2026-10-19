@@ -36,7 +36,10 @@
        muted ink). The 1px transparent border keeps the box a whole number. */
     border: var(--area-stroke-width) solid transparent;
     border-radius: var(--_radius);
-    background-color: var(--area-bg-component-active);
+    /* The mark fill, translucent as Badge's and Count's (round 51, 2026-10-19): an opaque grey matched the row plate
+       it sat on (a pressed row's is the same grey), so the keycap vanished on hover and press; a translucent fill
+       deepens with whatever is under it. At rest on the page it is the same 6% (Notion's 7%). */
+    background-color: var(--area-bg-mark);
     color: var(--area-fg-muted);
 
     font-family: var(--area-font-keyboard);
@@ -80,7 +83,7 @@
 
   /* Default is a quiet keycap rather than a second control. */
   .area-kbd--default {
-    background-color: var(--area-bg-component-active);
+    background-color: var(--area-bg-mark);
     border-color: transparent;
     color: var(--area-fg-muted);
   }

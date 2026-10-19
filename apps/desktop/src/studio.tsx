@@ -12,10 +12,10 @@
  * one divider between the Titlebar and the panels and one between each panel. Each tab is a
  * page (src/pages/) that fills the three panels through <Workspace>.
  */
-import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type Ref } from "react";
+import { createContext, Fragment, isValidElement, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode, type Ref } from "react";
 import { Button, Count, Kbd, Nav, NavGroup, NavItem, Panel, SearchField, Titlebar, Tooltip } from "@area/react";
 import { MoonIcon, PanelLeftFilledIcon, PanelLeftIcon, PanelRightFilledIcon, PanelRightIcon, SunIcon } from "@area/icons";
-import { GALLERY_CONTROLS } from "./gallery/controls.ts";
+import { DEPTH_LEVER_AXES, GALLERY_CONTROLS, type GalleryControl } from "./gallery/controls.ts";
 import { ComponentsPage } from "./pages/components.tsx";
 import { TypographyPage } from "./pages/typography.tsx";
 import { IconsPage } from "./pages/icons.tsx";
@@ -25,6 +25,7 @@ import { ExamplesPage } from "./pages/examples.tsx";
 import { MaterialsPage } from "./pages/materials.tsx";
 import { BrandPage } from "./pages/brand.tsx";
 import { readStored, writeStored } from "./storage.ts";
+import { ChatComposer, ChatProvider, ChatTranscript, selectionLabel, useChat } from "./chat/chat.tsx";
 import { MATERIAL_BUNDLES } from "@area/tokens/config";
 import { bundleValue, materialAttributes, restoreMaterial, type MaterialState } from "./material.ts";
 
@@ -49,7 +50,7 @@ type Theme = "light" | "dark";
 /** The Canvas's own theme settings (the Inspector writes them): the colour settings, the Layers (light and dark ground, layer
  * contrast), contrast, type size, density, radius, surface, elevation,
  * motion, pills. */
-export type CanvasAxes = Record<"neutral" | "accent" | "ground-light" | "ground-dark" | "layers-light" | "layers-dark" | "action" | "selection" | "contrast" | "type" | "density" | "radius" | "surface" | "elevation" | "motion" | "pills", string>;
+export type CanvasAxes = Record<Exclude<GalleryControl["axis"], "theme">, string>;
 const CANVAS_DEFAULTS = Object.fromEntries(
   GALLERY_CONTROLS.filter(control => control.axis !== "theme").map(control => [control.axis, control.defaultValue]),
 ) as CanvasAxes;
@@ -136,6 +137,11 @@ interface StudioState {
   select: (item: string, options?: { replace?: boolean }) => void;
   sidebar: boolean;
   inspector: boolean;
+  /** The Inspector's view (Theme, Design or Code), kept across tabs and launches. */
+  inspectorView: InspectorView;
+  setInspectorView: (view: InspectorView) => void;
+  /** Shows the Inspector if it is hidden (the Chat view's ⌘L). */
+  showInspector: () => void;
 }
 const StudioContext = createContext<StudioState | null>(null);
 export const useStudio = () => {
@@ -154,6 +160,10 @@ export function Studio() {
   const [canvas, setCanvasState] = useState<CanvasAxes>(() => restoreCanvas(readStored<Partial<CanvasAxes>>("canvas", {})));
   const [material, setMaterialState] = useState<MaterialState>(() => restoreMaterial(readStored("material", null)));
   const [panels, setPanels] = useState(() => readStored("panels", { sidebar: true, inspector: true }));
+  const [inspectorView, setInspectorViewState] = useState<InspectorView>(() => {
+    const saved = readStored<string>("inspectorView", "theme");
+    return INSPECTOR_VIEWS.some(entry => entry.id === saved) ? saved as InspectorView : "theme";
+  });
   const [previewAxes, setPreviewAxes] = useState<Partial<CanvasAxes>>({});
   const [previewedMaterial, setPreviewedMaterial] = useState<MaterialState | null>(null);
   const search = useRef<HTMLInputElement>(null);
@@ -240,11 +250,22 @@ export function Studio() {
     select: (next, options) => go(tab, next, options?.replace),
     sidebar: panels.sidebar,
     inspector: panels.inspector,
-  }), [query, canvas, material, previewAxes, previewedMaterial, item, tab, go, panels]);
+    inspectorView,
+    setInspectorView: view => { writeStored("inspectorView", view); setInspectorViewState(view); },
+    showInspector: () => setPanels(current => {
+      if (current.inspector) return current;
+      const next = { ...current, inspector: true };
+      writeStored("panels", next);
+      return next;
+    }),
+  }), [query, canvas, material, previewAxes, previewedMaterial, item, tab, go, panels, inspectorView]);
 
   const current = TABS.find(entry => entry.id === tab)!;
   return (
     <StudioContext.Provider value={state}>
+      {/* The conversation outlives tabs and views; the Canvas's selection rides along as its context chip. */}
+      <ChatProvider selection={selectionLabel(item)}>
+      <ChatShortcut />
       <div className="studio">
         {/* Area's Titlebar (app-shell.css): Panel's bar, the drag region, clear of macOS's traffic lights. */}
         <Titlebar className="studio-titlebar" windowControls={isMac() ? "macos" : undefined} end={<>
@@ -278,6 +299,7 @@ export function Studio() {
           tab === "materials" ? <MaterialsPage /> :
           tab === "brand" ? <BrandPage /> : <ColorPage />}
       </div>
+      </ChatProvider>
     </StudioContext.Provider>
   );
 }
@@ -335,7 +357,11 @@ export interface WorkspaceProps {
   /** The Canvas's header: filters and the view's options (src/view-controls.tsx). */
   canvasActions?: ReactNode;
   canvas: ReactNode;
-  inspector: ReactNode;
+  /**
+   * The Inspector: its three views (InspectorViews), or one body with no views (a lab tab). A page leaves out a view it
+   * has nothing for, and the shell leaves out its tab (rule 14: a control that does not apply is left out).
+   */
+  inspector: ReactNode | InspectorViews;
   /** The Canvas's scrolling body (fitting tiles, scrolling a selection into view). */
   canvasRef?: Ref<HTMLDivElement>;
 }
@@ -351,9 +377,9 @@ export function Workspace({ sidebar, canvasLead, canvasTitle, canvasActions, can
   const sidebarWidth = usePanelWidth("sidebar");
   const inspectorWidth = usePanelWidth("inspector");
   // The Canvas body carries the Inspector's settings on every tab (and the Material, src/material.ts): the colour settings, density (which also lays tiles out
-  // as a hairline contact sheet in compact), radius, surface, elevation, motion and pills.
+  // as a hairline contact sheet in compact), radius, surface, elevation and the Edge and Depth levers, motion and pills.
   const shown = studio.shown.canvas;
-  const axes = { "data-area-neutral": shown.neutral, "data-area-accent": shown.accent, "data-area-ground-light": shown["ground-light"], "data-area-ground-dark": shown["ground-dark"], "data-area-layers-light": shown["layers-light"], "data-area-layers-dark": shown["layers-dark"], "data-area-action": shown.action, "data-area-selection": shown.selection, "data-area-contrast": shown.contrast === "system" ? undefined : shown.contrast, "data-area-type": shown.type, "data-area-density": shown.density, "data-area-radius": shown.radius, "data-area-surface": shown.surface, "data-area-elevation": shown.elevation, "data-area-motion": shown.motion, "data-area-pills": shown.pills, ...materialAttributes(studio.shown.material) };
+  const axes = { "data-area-neutral": shown.neutral, "data-area-accent": shown.accent, "data-area-ground-light": shown["ground-light"], "data-area-ground-dark": shown["ground-dark"], "data-area-layers-light": shown["layers-light"], "data-area-layers-dark": shown["layers-dark"], "data-area-action": shown.action, "data-area-selection": shown.selection, "data-area-contrast": shown.contrast === "system" ? undefined : shown.contrast, "data-area-type": shown.type, "data-area-density": shown.density, "data-area-radius": shown.radius, "data-area-surface": shown.surface, "data-area-elevation": shown.elevation, ...Object.fromEntries(DEPTH_LEVER_AXES.map(axis => [`data-area-${axis}`, shown[axis]])), "data-area-motion": shown.motion, "data-area-pills": shown.pills, ...materialAttributes(studio.shown.material) };
   // A setting (or a hover preview of one) repaints the Canvas at once rather than fading every tile's colours.
   const main = useRef<HTMLElement>(null);
   const signature = JSON.stringify(axes);
@@ -376,11 +402,79 @@ export function Workspace({ sidebar, canvasLead, canvasTitle, canvasActions, can
       </main>
       {studio.inspector ? (
         <div className="studio-inspector">
-          <Panel flush resizable="start" aria-label="Inspector" {...inspectorWidth}>{inspector}</Panel>
+          {isViews(inspector) ? <InspectorPanel views={inspector} width={inspectorWidth} />
+            : <Panel flush resizable="start" aria-label="Inspector" {...inspectorWidth}>{inspector}</Panel>}
         </div>
       ) : null}
     </div>
   );
+}
+
+/**
+ * The Inspector's views (owner, 2026-10-18: "a figma style panel based on dev mode and the standard design panel … the
+ * tab controls at the top … separate the current inspector to themes, design, and code"), as Figma's Design | Prototype
+ * and Dev Mode: Theme holds the Canvas settings (src/canvas-settings.tsx); Design what is chosen, what it is (its
+ * preview, properties, values, status, purpose); Code how to use it (copy actions, import, class, tokens, code, the
+ * measured box). One view at a time, chosen by Nav pills in the Panel's bar (the Titlebar's tabs, Figma's filled pills;
+ * Tabs keeps the underline, docs/specs/tabs.md), the bar on the line the Canvas header and the Sidebar's first row share.
+ */
+export type InspectorView = "theme" | "design" | "code" | "chat";
+export type InspectorViews = Partial<Record<Exclude<InspectorView, "chat">, ReactNode>>;
+/** Chat is the app's, not a tab's: every tab offers it, last (src/chat/chat.tsx; owner, 2026-10-18). */
+const INSPECTOR_VIEWS: ReadonlyArray<{ id: InspectorView; label: string }> = [
+  { id: "theme", label: "Theme" },
+  { id: "design", label: "Design" },
+  { id: "code", label: "Code" },
+  { id: "chat", label: "Chat" },
+];
+const isViews = (value: ReactNode | InspectorViews): value is InspectorViews =>
+  value !== null && typeof value === "object" && !isValidElement(value) && !Array.isArray(value) && !(Symbol.iterator in value);
+
+function InspectorPanel({ views, width }: { views: InspectorViews; width: ReturnType<typeof usePanelWidth> }) {
+  const { inspectorView, setInspectorView } = useStudio();
+  const offered = INSPECTOR_VIEWS.filter(entry => entry.id === "chat" || (views[entry.id] != null && views[entry.id] !== false));
+  // A tab without the chosen view shows its first; the choice itself is kept for the tabs that have it.
+  const shown = offered.find(entry => entry.id === inspectorView) ?? offered[0];
+  const chat = shown?.id === "chat";
+  // The Chat view's transcript scrolls in the Panel's own body, which it follows to the newest line.
+  const scroller = useRef<HTMLDivElement | null>(null);
+  return (
+    <Panel flush resizable="start" aria-label="Inspector" {...width} viewportRef={scroller}
+      bareFooter={chat} footer={chat ? <ChatComposer scroller={scroller} /> : undefined} action={<>
+        <Nav orientation="horizontal" aria-label="Inspector views" className="studio-inspector__views">
+          {offered.map(entry => (
+            <NavItem key={entry.id} href={`#${entry.id}`} current={entry.id === shown?.id}
+              onClick={event => { event.preventDefault(); setInspectorView(entry.id); }}>
+              {entry.label}
+            </NavItem>
+          ))}
+        </Nav>
+      </>}>
+      {/* Keyed, so a view opens at its top and its own sections' state starts fresh. */}
+      <Fragment key={shown?.id}>{chat ? <ChatTranscript scroller={scroller} /> : shown ? views[shown.id as Exclude<InspectorView, "chat">] : null}</Fragment>
+    </Panel>
+  );
+}
+
+/**
+ * ⌘L opens the Chat view and puts the cursor in its composer (Cursor's chat key), showing the Inspector if it is hidden.
+ * Esc in the composer stops a running reply (src/chat/chat.tsx).
+ */
+function ChatShortcut() {
+  const { setInspectorView, showInspector } = useStudio();
+  const { composer } = useChat();
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (!(event.metaKey || event.ctrlKey) || event.shiftKey || event.altKey || event.code !== "KeyL") return;
+      event.preventDefault();
+      showInspector();
+      setInspectorView("chat");
+      requestAnimationFrame(() => requestAnimationFrame(() => composer.current?.focus()));
+    };
+    addEventListener("keydown", onKey);
+    return () => removeEventListener("keydown", onKey);
+  }, [setInspectorView, showInspector, composer]);
+  return null;
 }
 
 /**

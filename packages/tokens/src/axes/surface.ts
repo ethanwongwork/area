@@ -5,9 +5,11 @@
  * Research: docs/research/surface-2026-10-14.md.
  *
  * 1 (the default) draws the 1px frames of cards, panels and floating surfaces. 0 (Borderless) removes them
- * for a shadow-led look (it was the Elevated preset). No other width is offered: every product measured
- * frames at 1px (Notion's ring, ChatGPT's composer, Cursor's widget border), and a fractional width would
- * put the insets that count the frame off whole pixels at 1x.
+ * for a shadow-led look (it was the Elevated preset). Every product measured frames at 1px (Notion's ring, ChatGPT's
+ * composer, Cursor's widget border). Since 2026-10-18 (Edge and Depth, axes/depth.ts) two more widths: 0.5 (Hairline,
+ * Apple's one device pixel and Polaris' 0.66; on a 1x screen Chromium draws it as one pixel and the insets that count
+ * it sit half a pixel off) and 2 (Bold, the outer end of every surveyed width scale). Raised contrast makes a hairline
+ * 1px (`border-width` below).
  *
  * Borderless still keeps an edge, as ChatGPT's frameless menu does: `shadow-edge` is a 1px-blur shadow at
  * 62% black outside the surface and, in dark, a 1px-blur 20% white line inside it (captured 2026-10-13,
@@ -27,7 +29,7 @@
  */
 import { type AxisDefinition, tokens } from "./schema.ts";
 
-export const SURFACE_STEPS = ["0", "1"] as const;
+export const SURFACE_STEPS = ["0", "0.5", "1", "2"] as const;
 
 // 1 while no frame is drawn, 0 once one is (`border-width` is the frame or contrast's 1px).
 const EDGE_ON = "(1 - sign(var(--area-border-width)))";
@@ -41,11 +43,13 @@ export const SOFT_EDGE_FILTER = `drop-shadow(0 0 1px light-dark(rgb(0 0 0 / calc
 export const SURFACE_AXIS: AxisDefinition = {
   id: "surface",
   label: "Surface",
-  description: "The frame's width on cards, panels and floating surfaces, 1px or 0 (Borderless, a soft shadow edge).",
+  description: "The frame's width on cards, panels and floating surfaces: 0 (Borderless, a soft shadow edge), 0.5 (Hairline), 1 or 2 (Bold).",
   defaultPreset: "1",
   namespaces: ["--area-frame-width:"],
   presets: [
     { id: "0", label: "0 (Borderless)", description: "No frames: a soft shadow edge, ChatGPT's frameless menu. Control and state edges remain.", tokens: tokens({ "frame-width": "0px" }) },
+    { id: "0.5", label: "0.5 (Hairline)", description: "Half-pixel frames, one device pixel on a 2x screen (Apple's hairline); 1px under raised contrast.", tokens: tokens({ "frame-width": "0.5px" }) },
     { id: "1", label: "1 (Default)", description: "1px frames on cards, panels and floating surfaces.", tokens: tokens({ "frame-width": "1px" }) },
+    { id: "2", label: "2 (Bold)", description: "2px frames: a printed, outlined look. Insets count the frame, so content stays put.", tokens: tokens({ "frame-width": "2px" }) },
   ],
 };

@@ -57,7 +57,9 @@ actual specimens. Current families include:
   out, palette tones, a badge, open under a drag) File page (Complete: Finder's document page, folded corner, glyph and extension) and File tile with FileGrid (Complete, 2026-10-19: Finder's icon-view
   item on ListBox's grid, Enter or a double click opens). Next: multi-select, rename, FileRow on Table, a file-type icon
   map. Research: `docs/research/file-explorer-2026-10-18/`.
-- Conversation: Message/MessageActions, PromptSuggestions, ModelPicker and ScrollToLatest.
+- Conversation: Message/MessageActions, PromptSuggestions, ModelPicker and ScrollToLatest, and the agent chat set (in review, 2026-10-19:
+  Step / StepGroup / Reasoning, EditSummary with Diff, Approval, Plan and TurnNotice; the Inspector's Chat view; research
+  `docs/research/inspector-chat-2026-10-18/`).
 
 Presentation-only or partially implemented behaviors must be stated in the component's
 page. A menu-shaped surface does not by itself implement keyboard navigation; a visual

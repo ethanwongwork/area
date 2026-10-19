@@ -8,6 +8,7 @@
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-custom-select {
+    --_field-lift: var(--area-shadow-field); /* Field shadow (axes/depth.ts), transparent by default */
     /* Field chrome: the same roles as Select (navigation.css), so the two sit side by side. */
     --_bg: var(--area-select-bg);
     --_bg-hover: var(--_bg);
@@ -32,6 +33,7 @@
   .area-custom-select--outline { --_bg: var(--area-select-bg); }
   /* Soft matches Select, Input and NumberField soft, so an inspector holds one field style. */
   .area-custom-select--soft {
+    --_field-lift: 0 0 0 0 transparent;
     --_bg: var(--area-input-bg-soft);
     --_border: var(--area-input-edge-soft); /* none, or the strong edge under increased contrast */
     --_border-hover: var(--area-input-edge);
@@ -79,7 +81,7 @@
     font-size: var(--_text);
     line-height: var(--_leading);
     text-align: start;
-    box-shadow: none;
+    box-shadow: var(--_field-lift);
     cursor: pointer;
     outline: none;
     /* Motion (docs/MOTION.md): colour leaves a state on fast ease-out and enters it at once
@@ -99,7 +101,7 @@
   .area-custom-select[data-open] > .area-custom-select__trigger { transition-duration: 0s; }
   .area-custom-select__trigger:focus-visible {
     border-color: var(--_border-focus);
-    box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
+    box-shadow: var(--_field-lift), 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
     outline: var(--area-field-focus-outline-width) solid var(--_focus-outline);
     outline-offset: 0;
   }

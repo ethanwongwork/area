@@ -27,7 +27,8 @@
     font-size: var(--_text);
     line-height: var(--_leading);
     /* spec (outline pass, docs/specs/number-field.md): controls at rest carry no shadow, as Button (ChatGPT, Notion, Figma fields). */
-    box-shadow: none;
+    --_field-lift: var(--area-shadow-field); /* Field shadow (axes/depth.ts), transparent by default */
+    box-shadow: var(--_field-lift);
     /* Motion (docs/MOTION.md, 2026-10-07), as Input: paint and the focus halo appear at once and
        fade out on fast; the halo keeps its fade into hover. */
     --_t-paint: var(--area-duration-fast);
@@ -37,7 +38,7 @@
     transition-timing-function: var(--area-ease-out);
   }
   .area-number-field--outline { --_bg: var(--area-input-bg); }
-  .area-number-field--soft { box-shadow: none; --_bg: var(--area-input-bg-soft); --_border: var(--area-input-edge-soft); --_border-hover: var(--area-input-edge); }
+  .area-number-field--soft { --_field-lift: 0 0 0 0 transparent; box-shadow: var(--_field-lift); --_bg: var(--area-input-bg-soft); --_border: var(--area-input-edge-soft); --_border-hover: var(--area-input-edge); }
   .area-number-field--sm { --_height: var(--area-control-sm); --_radius: var(--area-radius-control-sm); --_icon: var(--area-icon-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
   .area-number-field--md { --_height: var(--area-control-md); --_radius: var(--area-radius-control-md); --_icon: var(--area-icon-md); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
   .area-number-field--lg { --_height: var(--area-control-lg); --_radius: var(--area-radius-control-lg); --_icon: var(--area-icon-lg); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
@@ -48,7 +49,7 @@
     --_t-paint: 0s;
     --_t-halo: 0s;
     border-color: var(--_border-focus);
-    box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo, var(--area-field-focus-halo-color));
+    box-shadow: var(--_field-lift), 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo, var(--area-field-focus-halo-color));
     outline: var(--area-field-focus-outline-width) solid var(--_focus-outline, var(--area-field-focus-color));
     outline-offset: 0;
   }

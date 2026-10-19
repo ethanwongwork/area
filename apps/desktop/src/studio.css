@@ -73,6 +73,9 @@
      gives back its plate's padding on both sides, so the header's gaps measure what is drawn. The Titlebar spaces its
      controls itself, box to box (app-shell.css, review round 27). */
   .studio-canvas__actions > .studio-bar-icon { margin-inline: calc((var(--area-icon-sm) - var(--area-control-sm)) / 2); }
+  /* At the header's end a control's plate, not its icon, takes the even inset (below), as the Titlebar's last does
+     (the last control, not the last child: a Tooltip's bubble may follow it). */
+  .studio-canvas__actions > .studio-bar-icon:not(:has(~ :is(.area-button, .area-segmented, .area-zoom-control, .area-select, .area-custom-select))) { margin-inline-end: 0; }
 
   /* --- Workspace ----------------------------------------------------------- */
 
@@ -105,6 +108,11 @@
 
   /* The Inspector's selection (src/inspector.tsx): Area's PreviewFrame, then the copy actions two
      to a row, 8 apart (the icon hover window's spacing). */
+  /* The Inspector's views (src/studio.tsx, InspectorPanel): Theme, Design and Code as the Titlebar's Nav pills, in the
+     Panel's bar, so they share the line the Canvas header and the Sidebar's first row sit on (rule 14). */
+  .studio-inspector__views { flex: 0 1 auto; min-inline-size: 0; }
+  /* A colour value in a facts row: its swatch, then its value (Code view, src/specimen-box.tsx). */
+  .studio-inspector-color { display: inline-flex; align-items: center; gap: var(--area-space-6); min-inline-size: 0; }
   .studio-inspector-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--area-space-8); }
   .studio-inspector-actions > :last-child:nth-child(odd) { grid-column: 1 / -1; }
 
@@ -159,8 +167,8 @@
      reads with what it names rather than floating between two sections. */
   .studio-sections { display: grid; gap: var(--_canvas-section); }
   .studio-section { scroll-margin-block-start: var(--_canvas-margin); }
-  /* The header: the Titlebar's height (39 with its rule) and inset, its controls a whole 24 with 7
-     above and below and the rule under them, so they centre on the line the Sidebar's first row
+  /* The header: the Titlebar's height (39 with its rule), its controls a whole 24 with 7 above, below and at
+     the sides, and the rule under them, so they centre on the line the Sidebar's first row
      and the Inspector's first heading share. No title (owner, 2026-10-14): the Sidebar's selected
      row names what is shown. The controls run from the end, as Notion and Figma put a view's
      options, in rule 14's order. */
@@ -169,7 +177,10 @@
     align-items: center;
     box-sizing: border-box;
     block-size: var(--_studio-bar);
-    padding-inline: var(--_canvas-margin);
+    /* Its controls sit as far from the sides as from the top and the rule, (bar − rule − small control) / 2, 7 at the
+       app's scale, as the Titlebar's and the Inspector's bar (owner, 2026-10-18: "these controls are not evenly inset,
+       theres too much space horizontally"; was the Canvas's 14 margin). */
+    padding-inline: calc((var(--_studio-bar) - var(--area-border-width) - var(--area-control-sm)) / 2);
     border-block-end: var(--_studio-rule);
   }
   /* Everything drawn is 12 apart, as in the Titlebar: a field's edge, a track, an icon
@@ -288,7 +299,7 @@
   /*
    * Hover and press: a tile lifts as a linked Card does (surface.css; owner, 2026-10-18: no stroke change, "something
    * more subtle with the shadow" and "smooth, subtle, professional motion"; Notion's linked cards measured,
-   * docs/research/card-hover-2026-10-18.md). The Canvas's float shadow fades in on `fast` ease-out and out on `base`
+   * docs/research/card-hover-2026-10-18.md). The Canvas's hover lift (the float shadow, set by Shadow; axes/depth.ts) fades in on `fast` ease-out and out on `base`
    * ease-in; a press drops it at once. The edge, fill, ink and size never move, so a specimen reads the same under the
    * pointer. At Elevation 0 there is no shadow, so the edge steps instead. Selection crossfades the edge on `fast`
    * ease-out both ways (owner, 2026-10-18: "more smooth and seamless"; it landed at once), a press included, and a
@@ -299,7 +310,7 @@
     transition: border-color var(--area-duration-fast) var(--area-ease-out), box-shadow var(--area-duration-base) var(--area-ease-in), outline-color var(--area-duration-fast) var(--area-ease-out);
   }
   @media (hover: hover) {
-    .gallery-tile:hover { box-shadow: var(--area-shadow-float); transition-duration: var(--area-duration-fast); transition-timing-function: var(--area-ease-out); }
+    .gallery-tile:hover { box-shadow: var(--area-shadow-hover); transition-duration: var(--area-duration-fast); transition-timing-function: var(--area-ease-out); }
     .studio-canvas__body[data-area-elevation="0"] .gallery-tile:not([data-painted]):hover { border-color: var(--area-edge-control-hover); }
   }
   .gallery-tile:active { box-shadow: 0 0 0 0 transparent, 0 0 0 0 transparent; transition-duration: var(--area-duration-fast), 0s, var(--area-duration-fast); }
@@ -435,7 +446,7 @@
     .studio-canvas__body[data-area-density="28"] .gallery-tile:not([data-painted], [data-selected], [aria-pressed="true"], [aria-selected="true"]):hover {
       position: relative;
       z-index: 1;
-      box-shadow: 0 0 0 var(--area-border-width) var(--_tile-edge), var(--area-shadow-float);
+      box-shadow: 0 0 0 var(--area-border-width) var(--_tile-edge), var(--area-shadow-hover);
       transition-duration: var(--area-duration-fast);
       transition-timing-function: var(--area-ease-out);
     }
@@ -458,7 +469,7 @@
   }
   @media (hover: hover) {
     .studio-canvas__body[data-area-density="28"]:not([data-area-elevation="0"]) .gallery-tile:not([data-painted]):is([data-selected], [aria-pressed="true"], [aria-selected="true"]):hover {
-      box-shadow: 0 0 0 var(--area-border-width) var(--area-stroke-selected), var(--area-shadow-float);
+      box-shadow: 0 0 0 var(--area-border-width) var(--area-stroke-selected), var(--area-shadow-hover);
       transition-duration: var(--area-duration-fast);
       transition-timing-function: var(--area-ease-out);
     }
@@ -881,3 +892,57 @@ svg.studio-mark * { vector-effect: non-scaling-stroke }
 .studio-brand__preview { inline-size: 100%; block-size: 100%; object-fit: contain; }
 .studio-brand__row-thumb { display: block; inline-size: 32px; block-size: 32px; object-fit: cover; border-radius: var(--area-radius-small); }
 .studio-brand__colour { display: inline-flex; align-items: center; gap: var(--area-space-6); }
+
+/* --- Chat (src/chat/chat.tsx; Phase 1 of docs/research/inspector-chat-2026-10-18) ------------------------------ */
+@layer studio {
+  /* Before the first prompt: what it is, then what to ask. Every chat grid is one column that may shrink below its
+     content's widest line (a long suggestion, a code line), so nothing pushes past the Inspector's 256. */
+  .studio-chat__empty { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-space-16); padding-block: var(--area-space-24); }
+  /* The conversation's head: its title (the first prompt, cut to a line, muted) and New chat, pinned to the top of the
+     scroller on the panel's ground; the button's plate sits on the column's end, as the bar's do. */
+  .studio-chat__head {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-8);
+    margin-block-end: var(--area-space-8);
+    padding-block: var(--area-space-4);
+    background-color: var(--area-bg-page);
+  }
+  .studio-chat__title { flex: 1; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--area-fg-muted); }
+  /* Turns 16 apart, as Codex's items (16) and Cursor's blocks (16). */
+  .studio-chat__transcript { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-space-16); padding-block-end: var(--area-space-8); }
+  /* A run of steps (Step, Step group, Reasoning) sits 4 apart, one group (Codex 4, Cursor 4); Message keeps its 16
+     around the group. */
+  .studio-chat__steps { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-space-4); min-inline-size: 0; }
+  /* The composer: the context chip over it; Scroll to latest rises above it (scroll-to-latest.css). */
+  .studio-chat__composer { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-space-8); }
+
+  /* Markdown in a reply (src/chat/markdown.tsx). Each block is a direct child of Message's content, which sets the 16
+     between blocks, so these reset only their inline sides. Headings take the message's size, strong, as a narrow panel wants;
+     lists indent 2em (Cursor's and Claude Code's 2em), items 4 apart; a quote is a 3px rule (Cursor's). */
+  .studio-md__heading { margin-inline: 0; font-size: inherit; line-height: inherit; font-weight: var(--area-weight-strong); }
+  .studio-md__list { margin-inline: 0; padding-inline-start: 2em; /* spec: Cursor, Claude Code 2em */ }
+  .studio-md__list > li + li, .studio-md__list .studio-md__list { margin-block-start: var(--area-space-4); }
+  .studio-md__quote { margin-inline: 0; padding-inline-start: var(--area-space-12); border-inline-start: 3px solid var(--area-border-subtle); /* spec: Cursor's 3px rule */ color: var(--area-fg-muted); }
+  .studio-md__table { max-inline-size: 100%; overflow-x: auto; }
+  .studio-md__code { min-inline-size: 0; }
+
+  /* The Testing screen: the Chat view in frames as wide as the Inspector can be, each its own panel. */
+  .studio-chat-frames { display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--area-space-24); }
+  .studio-chat-frame { display: grid; gap: var(--area-space-8); margin: 0; }
+  .studio-chat-frame__label { color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
+  .studio-chat-frame__panel {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr) auto;
+    block-size: calc(var(--area-space-96) * 6); /* pick: 576, about the Inspector's height beside a 39 Titlebar */
+    border: var(--area-border-width) solid var(--area-border-card);
+    background-color: var(--area-bg-page);
+    overflow: hidden;
+  }
+  /* The Panel's insets: 14 a side, the body's foot 14, the footer 14 all round (panel.css). */
+  .studio-chat-frame__body { overflow-y: auto; padding: var(--_studio-inset) var(--_studio-inset) 0; }
+  .studio-chat-frame__foot { padding: var(--_studio-inset); }
+}
