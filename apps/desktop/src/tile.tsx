@@ -3,18 +3,18 @@
  * being the main way to show designs"). Every specimen, a component, a swatch, a type role, an
  * icon or a setting, sits in the same Tile, which is Area's Asset card (docs/specs/asset-card.md;
  * owner, 2026-10-18: "rebuild the gallery tiles on Asset card so every tile's name and controls sit
- * under its frame, on every tab"): the frame holds the visual, and the name, a value and controls
- * sit in the caption under it.
+ * under its frame, on every tab"; 2026-10-19, a trial: "move the text back into the containers. the name should be at
+ * the top"): a square frame holds the name, a value and controls in its first row, then the visual.
  *
  * The visual is the frame itself, never a box inside one (owner, 2026-10-11): a colour tile's frame
  * is painted in its colour (`paint`), a setting's frame is that setting's own ground (`scope`), and a
  * stage only places its content: fit, centre or flow.
  *
  * Tiles come in three spans on one grid (src/studio.css, .studio-grid):
- *   unit  one base cell, 152 at the least, its frame 5:4: a swatch, an icon
- *   wide  2 units and the gap between them, its frame 5:4: a component, a setting's preset, a type specimen
- *   row   the full width, as tall as its content: an icon sheet, a type sample
- * A grid holds one span (TileGrid). Cards (`card`) are square.
+ *   unit  one base cell, 152 at the least: a swatch, an icon
+ *   wide  2 units and the gap between them: a component, a setting's preset, a type specimen
+ * Every frame is square (owner, 2026-10-19). A grid holds one span (TileGrid); `cards` lays square cards on columns
+ * of a least width (360 for components, Language's 280).
  *
  * The frame keeps the docs gallery's class names (gallery-tile, __view, __stage), so the shared fit
  * (src/gallery/fit.ts) still finds component specimens.
@@ -23,7 +23,7 @@ import type { CSSProperties, ReactNode } from "react";
 import { AssetCard, AssetGridItem, SectionHeading } from "@area/react";
 import { APP_SCALE } from "./app-scale.ts";
 
-export type TileSpan = "unit" | "wide" | "row";
+export type TileSpan = "unit" | "wide";
 /**
  * How the stage places its content:
  *   fit     centred in a wide margin and scaled to fit (components; fit.ts sizes it)
@@ -65,6 +65,9 @@ export interface TileProps {
   paint?: { background: string; color: string };
   /** The frame as a setting's own scope (data-area-* attributes): it takes the setting and paints its subtle ground. */
   scope?: Record<string, string>;
+  /** The stage alone as a setting's scope, the frame staying as it is (Language's ground and layers: the window inside
+      is the page, so the frame does not change with it). */
+  stageScope?: Record<string, string>;
   /** The stage is shown, not used: its content is inert. */
   inert?: boolean;
   /** A card (owner, 2026-10-14, after Compass's gallery): a square frame, the specimen in a wider margin. */
@@ -78,10 +81,10 @@ export interface TileProps {
 
 const CONTROLS = "a, button, input, textarea, select, label, [contenteditable], [role=button], [role=switch], [role=checkbox], [role=radio], [role=tab], [role=slider], [role=combobox]";
 
-export function Tile({ label, value, span, stage, selected, onSelect, onOpen, card, actions, openOnClick, option, id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, paint, scope, inert, children }: TileProps) {
+export function Tile({ label, value, span, stage, selected, onSelect, onOpen, card, actions, openOnClick, option, id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, paint, scope, stageScope, inert, children }: TileProps) {
   const view = stage === "none" ? null : stage === "fit"
-    ? <div className="gallery-tile__view"><div className="gallery-tile__stage">{children}</div></div>
-    : <div className="gallery-tile__view" inert={inert || undefined}>{children}</div>;
+    ? <div className="gallery-tile__view" {...stageScope}><div className="gallery-tile__stage">{children}</div></div>
+    : <div className="gallery-tile__view" inert={inert || undefined} {...stageScope}>{children}</div>;
   // The frame: the app's own class and modes on Asset card's frame. The ground it paints (bg-surface, or bg-subtle when
   // scoped) lets the specimen's control fills step from the frame, not the Canvas (styles layers.css).
   const frameProps = {
@@ -121,12 +124,14 @@ export function Tile({ label, value, span, stage, selected, onSelect, onOpen, ca
 }
 
 /**
- * A grid of one span: unit or wide tiles on the shared unit, or row tiles stacked. `hug`: rows as
- * tall as their tallest tile's content instead of 5:4 (colour cards). `cards`: square card tiles
- * on their own columns (280 at the least, with the zoom).
+ * A grid of one span: unit or wide tiles on the shared unit. `cards`: square tiles on their own columns, at least
+ * `min` wide (360 by default), growing and shrinking with the zoom.
  */
-export function TileGrid({ span, hug, cards, children }: { span: TileSpan; hug?: boolean; cards?: boolean; children: ReactNode }) {
-  return <div className={span === "row" ? "studio-stack" : `studio-grid studio-grid--${span}${hug ? " studio-grid--hug" : ""}${cards ? " studio-grid--cards" : ""}`}>{children}</div>;
+export function TileGrid({ span, cards, min, children }: { span: TileSpan; cards?: boolean; min?: number; children: ReactNode }) {
+  return (
+    <div className={`studio-grid studio-grid--${span}${cards ? " studio-grid--cards" : ""}`}
+      style={min ? ({ "--_card-min": `${min}px` } as CSSProperties) : undefined}>{children}</div>
+  );
 }
 
 /** A titled group on the Canvas: a family, a scale, a category, a setting. */

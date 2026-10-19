@@ -34,9 +34,11 @@ export interface AssetCardProps extends Omit<HTMLAttributes<HTMLDivElement>, "ch
    * press drops it, keyboard focus rings it, and `aria-pressed` or `aria-selected` shows as the selected edge.
    */
   interactive?: boolean;
+  /** Where the name, detail and controls sit: inside the frame at its top (the default), or below it. */
+  caption?: "inside" | "below";
   /** The frame's content as the host lays it out, in place of `media` or `group` (an app's specimen stage). */
   children?: ReactNode;
-  /** Attributes for the frame: a host's own class, scope or ground. Its shape is `--area-asset-card-ratio`. */
+  /** Attributes for the frame: a host's own class, scope or ground. The frame is always square. */
   frameProps?: PartProps;
   /** Attributes for the caption: a host's scale (the app's type and density) or class. */
   captionProps?: PartProps;
@@ -45,16 +47,26 @@ export interface AssetCardProps extends Omit<HTMLAttributes<HTMLDivElement>, "ch
 const image = (source: string, alt: string) => <img src={source} alt={alt} loading="lazy" decoding="async" draggable={false} />;
 
 export const AssetCard = /* @__PURE__ */ forwardRef<HTMLDivElement, AssetCardProps>(function AssetCard(
-  { name, meta, actions, media, mediaAlt = "", group, selected, interactive, children, frameProps, captionProps, className, ...rest }, ref,
+  { name, meta, actions, media, mediaAlt = "", group, selected, interactive, caption = "inside", children, frameProps, captionProps, className, ...rest }, ref,
 ) {
   const cells = group ? [0, 1, 2, 3].map(index => group[index]) : [];
   const { className: frameClass, ...frameRest } = frameProps ?? {};
   const { className: captionClass, ...captionRest } = captionProps ?? {};
   const join = (...names: Array<string | undefined>) => names.filter(Boolean).join(" ");
+  const captionNode = (
+    <div className={join(assetCardVariants.element("caption"), captionClass)} {...captionRest}>
+      <div className={assetCardVariants.element("text")}>
+        <span className={assetCardVariants.element("name")}>{name}</span>
+        {meta !== undefined ? <span className={assetCardVariants.element("meta")}>{meta}</span> : null}
+      </div>
+      {actions ? <div className={assetCardVariants.element("actions")}>{actions}</div> : null}
+    </div>
+  );
   return (
-    <div ref={ref} className={assetCardVariants({ layout: group ? "group" : "asset", interactive }, className)} data-selected={selected ? "" : undefined} {...rest}>
+    <div ref={ref} className={assetCardVariants({ layout: group ? "group" : "asset", caption, interactive }, className)} data-selected={selected ? "" : undefined} {...rest}>
       {/* The frame paints the raised ground, so a component inside steps its fills from it (layers.css). */}
       <div className={join(assetCardVariants.element("frame"), frameClass)} data-area-ground="raised" {...frameRest}>
+        {caption === "inside" ? captionNode : null}
         {children !== undefined && !group ? children : group ? (
           <div className={assetCardVariants.element("mosaic")} aria-hidden="true">
             {cells.map((cell, index) => (
@@ -67,13 +79,7 @@ export const AssetCard = /* @__PURE__ */ forwardRef<HTMLDivElement, AssetCardPro
           </div>
         )}
       </div>
-      <div className={join(assetCardVariants.element("caption"), captionClass)} {...captionRest}>
-        <div className={assetCardVariants.element("text")}>
-          <span className={assetCardVariants.element("name")}>{name}</span>
-          {meta !== undefined ? <span className={assetCardVariants.element("meta")}>{meta}</span> : null}
-        </div>
-        {actions ? <div className={assetCardVariants.element("actions")}>{actions}</div> : null}
-      </div>
+      {caption === "below" ? captionNode : null}
     </div>
   );
 });
@@ -106,14 +112,14 @@ export const AssetGrid = /* @__PURE__ */ forwardRef<HTMLDivElement, AssetGridPro
   );
 });
 
-export interface AssetGridItemProps extends Omit<ListBoxItemProps, "children" | "textValue">, Pick<AssetCardProps, "name" | "meta" | "actions" | "media" | "mediaAlt" | "group" | "children" | "frameProps" | "captionProps"> {
+export interface AssetGridItemProps extends Omit<ListBoxItemProps, "children" | "textValue">, Pick<AssetCardProps, "name" | "meta" | "actions" | "media" | "mediaAlt" | "group" | "caption" | "children" | "frameProps" | "captionProps"> {
   /** The text typeahead matches; the name when it is a string. */
   textValue?: string;
 }
 
 /** One card in an AssetGrid: an option whose content is an AssetCard. */
 export const AssetGridItem = /* @__PURE__ */ forwardRef<HTMLDivElement, AssetGridItemProps>(function AssetGridItem(
-  { name, meta, actions, media, mediaAlt, group, children, frameProps, captionProps, textValue, value, className, onDoubleClick, ...rest }, ref,
+  { name, meta, actions, media, mediaAlt, group, caption, children, frameProps, captionProps, textValue, value, className, onDoubleClick, ...rest }, ref,
 ) {
   const grid = useContext(GridContext);
   return (
@@ -125,7 +131,7 @@ export const AssetGridItem = /* @__PURE__ */ forwardRef<HTMLDivElement, AssetGri
       onDoubleClick={event => { onDoubleClick?.(event); if (!event.defaultPrevented && !rest.disabled) grid.open?.(value); }}
       {...rest}
     >
-      <AssetCard name={name} meta={meta} actions={actions} media={media} mediaAlt={mediaAlt} group={group} frameProps={frameProps} captionProps={captionProps}>{children}</AssetCard>
+      <AssetCard name={name} meta={meta} actions={actions} media={media} mediaAlt={mediaAlt} group={group} caption={caption} frameProps={frameProps} captionProps={captionProps}>{children}</AssetCard>
     </ListBoxItem>
   );
 });

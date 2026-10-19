@@ -203,8 +203,8 @@
    * One grid for every tab. The unit is 152 at the least, so a component tile (two units and the
    * gap) is 312 at the least (owner, 2026-10-12: "a bit larger" than the docs gallery's 280); the
    * column count is always even, so a wide tile sits on exactly two units and wide and unit grids
-   * share their edges down the Canvas. Every frame is 5:4 (owner, 2026-10-04); a row is as tall as
-   * its tallest tile, frame and caption (owner, 2026-10-18: names and controls under the frame).
+   * share their edges down the Canvas. Every frame is square (owner, 2026-10-19: "the containers ... should always be
+   * a square AR"; was 5:4), its name inside at the top (a trial, the same day).
    */
   .studio-grid {
     --_gap: var(--_canvas-gap);
@@ -219,7 +219,6 @@
      --_zoom is set where the zoom is chosen; Fit is 1. */
   .studio-grid { --_unit-min: calc(152px + 64px * (var(--_zoom, 1) - 1)); }
   .studio-grid--wide { grid-template-columns: repeat(var(--_pairs), minmax(0, 1fr)); }
-  .studio-stack { display: grid; gap: var(--_canvas-gap); }
   /*
    * The tile is Area's Asset card (asset-card.css: the 1 card edge, 12 inset, the lift, the selected edge, the caption
    * 8 under the frame). The app holds its corner at 12 whatever the Canvas's Radius previews (owner, 2026-10-13: "make
@@ -232,10 +231,7 @@
     --_tile-edge: var(--area-border-card); /* Card's edge */
     --_tile-inset: var(--area-space-12);
   }
-  /* Frames: 5:4 on the grid (owner, 2026-10-04), square as cards, as tall as their content in a row. */
-  .gallery-tile { --area-asset-card-ratio: 5 / 4; scroll-margin-block: var(--_canvas-margin); }
-  .gallery-tile[data-layout="card"] { --area-asset-card-ratio: 1; }
-  .gallery-tile[data-span="row"] { --area-asset-card-ratio: auto; }
+  .gallery-tile { scroll-margin-block: var(--_canvas-margin); }
   .gallery-asset { min-inline-size: 0; }
   /* Painted: the frame is the colour (Color). Its edge is Color swatch picker's palette hairline (color.css: 1px, black
      10% / white 10%, drawn inside; owner, 2026-10-12), so a colour card is outlined as Area's own swatches are, the
@@ -255,18 +251,19 @@
   .studio-canvas__body[data-area-elevation="0"] .gallery-asset:not([aria-selected="true"]):active .gallery-tile[data-painted] { outline-color: color-mix(in srgb, var(--_ink) 48%, transparent); } /* pick */
   /* Scoped: the frame is a setting's own ground (Language), Primer's tinted plate. */
   .gallery-tile[data-scoped] { background: var(--area-bg-subtle); color: var(--area-fg-default); }
-  /* The caption's name and value in the app's UI text (13 at its scale, owner, 2026-10-13). */
+  /* The caption's name and value in the app's UI text (13 at its scale, owner, 2026-10-13). A painted frame's caption
+     takes the colour's ink (Color's grade, studio-swatch__grade). */
   .gallery-tile__caption { font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
 
   /*
    * Cards (src/tile.tsx, `card`; owner, 2026-10-14, after Compass's gallery, measured at 1440: 331 x 336 cards 12
    * apart, the specimen 28 in). A square frame, the specimen 24 in (the frame's 12 and the stage's 12); the title and
-   * the Copy code button in the caption under it (owner, 2026-10-18).
+   * the Copy code button in the caption at its top (owner, 2026-10-19, a trial; under it the day before).
    */
   .studio-grid--cards {
     /* As many columns of at least 360 as fit (owner, 2026-10-18: 400, then 380, then "maybe make the minimum width of
        the component containers 360"; was 280), counted, so the Stage's strips span them as they span pairs of units. */
-    --_pairs: max(1, round(down, calc((100cqw + var(--_gap)) / (360px * var(--_zoom, 1) + var(--_gap))), 1));
+    --_pairs: max(1, round(down, calc((100cqw + var(--_gap)) / (var(--_card-min, 360px) * var(--_zoom, 1) + var(--_gap))), 1));
     grid-template-columns: repeat(var(--_pairs), minmax(0, 1fr));
   }
   .gallery-tile[data-layout="card"] > .gallery-tile__view { padding: var(--area-space-12); }
@@ -289,7 +286,8 @@
   .gallery-tile__label, .gallery-tile__value { text-box: trim-both cap alphabetic; }
   .gallery-tile__label { min-inline-size: 0; overflow: clip; overflow-clip-margin: var(--area-space-4); color: var(--area-fg-muted); text-overflow: ellipsis; white-space: nowrap; }
   .gallery-tile__value { flex: none; color: var(--area-fg-muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
-  .gallery-tile__view { display: grid; min-inline-size: 0; min-block-size: 0; }
+  /* The content stays in its own row, so it never covers the name above it (owner, 2026-10-19). */
+  .gallery-tile__view { display: grid; min-inline-size: 0; min-block-size: 0; overflow: clip; }
 
   /* Stages (src/tile.tsx, TileStage). fit: a wide margin round the specimen, which fit.ts scales;
      one track and unsafe centring, so a stage larger than the view overflows evenly and scales
@@ -309,7 +307,8 @@
     flex-shrink: 0;
   }
   [data-fit]:not([data-fitted]) .gallery-tile__stage { visibility: hidden; }
-  [data-stage="center"] > .gallery-tile__view { place-items: center; }
+  /* One track the view's own size, so a scaled drawing (laid out at 1x, larger than the view) still centres on it. */
+  [data-stage="center"] > .gallery-tile__view { grid-template: minmax(0, 1fr) / minmax(0, 1fr); place-items: center; }
   [data-stage="center"] > .gallery-tile__view svg { display: block; flex: none; }
   [data-stage="flow"] > .gallery-tile__view { align-content: start; }
   .studio-tile-error { margin: 0; color: var(--area-fg-danger); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); }
@@ -567,10 +566,12 @@
      level's cap is at the head. One blank line of the values' leading under the level (owner,
      2026-10-14): from the level's baseline to the hex's cap is a line's leading and the leading less
      the cap, as in untrimmed text with an empty line between. A long value wraps onto the next line. */
+  .studio-swatch__grade { color: var(--_ink); }
   .studio-swatch__values {
     display: block;
     text-box: trim-both cap alphabetic;
     align-self: start;
+    margin-block-start: calc(2lh - 1cap - var(--area-space-8)); /* the caption's 8 counted */
     min-inline-size: 0;
     font-size: var(--area-text-xs-size);
     line-height: var(--area-text-xs-leading);
@@ -584,23 +585,52 @@
   /* --- Language ------------------------------------------------------------ */
 
   /*
-   * Language illustrations (src/abstract.tsx): per setting, the two or three Area components that show it, with the
-   * Example copy, laid out at one reference width (--_lang-width, 224) and shown 1:1 (zoomed down only in a smaller
-   * tile). App classes only lay them out: a column and a row at the cluster gap (8, compact 6), and a menu floating
-   * over a card.
+   * Language illustrations (src/abstract.tsx): one real component per setting, real text, at its real size, centred
+   * (owner, 2026-10-19: "real components ... or at least real text ... simple, and easy to recognize"). App classes
+   * only place them: a row of two, a card's width, a page's ground under a card, and real text at the type roles.
    */
-  .lang-ui { inline-size: var(--_lang-width); flex: none; text-align: start; }
-  .lang-ui > .area-card { inline-size: 100%; }
-  .lang-col { display: grid; gap: var(--area-ui-cluster); justify-items: start; }
-  .lang-col > .area-segmented { justify-self: stretch; }
-  .lang-row { display: flex; align-items: center; justify-content: center; gap: var(--area-ui-cluster); }
-  .lang-row > .area-input { flex: 1 1 0; min-inline-size: 0; }
-  .lang-ui .area-card .lang-row { justify-content: flex-start; }
-  /* Depth: a menu floating down and to the end of a resting card, drawn as the Menu is, in place. */
-  .lang-stack { display: grid; }
-  .lang-stack > * { grid-area: 1 / 1; }
-  .lang-stack > .area-card { inline-size: 72%; align-self: start; }
-  .lang-float { position: relative; z-index: 1; inset: auto; justify-self: end; align-self: start; inline-size: 52%; margin-block-start: var(--area-space-64); }
+  /* The drawing at its own size; Fit (src/abstract.tsx) zooms it to its share of the tile. */
+  .lang-art { display: grid; place-items: center; inline-size: max-content; flex: none; text-align: start; transform-origin: center; }
+  .lang-row { display: flex; align-items: center; justify-content: center; gap: var(--area-space-8); }
+  .lang-row--start { justify-content: flex-start; }
+  .lang-col { --area-input-inline-size: 184px; display: grid; gap: var(--area-space-8); justify-items: start; } /* pick: Input's public width hook */
+  /* Type: the ramp, a role from each tier at the preset's size, its size in px at the end. */
+  .lang-ramp { display: grid; grid-template-columns: auto auto; align-items: baseline; column-gap: var(--area-space-24); row-gap: var(--area-space-4); color: var(--area-fg-default); }
+  .lang-ramp__row { display: contents; }
+  .lang-ramp__sample { font-weight: var(--area-weight-strong); white-space: nowrap; }
+  .lang-ramp__sample--display-sm { font-size: var(--area-display-sm-size); line-height: var(--area-display-sm-leading); letter-spacing: var(--area-display-sm-tracking); }
+  .lang-ramp__sample--title-md { font-size: var(--area-title-md-size); line-height: var(--area-title-md-leading); }
+  .lang-ramp__sample--title-xs { font-size: var(--area-title-xs-size); line-height: var(--area-title-xs-leading); }
+  .lang-ramp__sample--text-sm { font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); font-weight: var(--area-weight-regular); }
+  .lang-ramp__sample--text-xs { font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); font-weight: var(--area-weight-regular); color: var(--area-fg-muted); }
+  .lang-ramp__size { justify-self: end; color: var(--area-fg-muted); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); font-variant-numeric: tabular-nums; }
+  .lang-card { inline-size: 176px; } /* pick */
+  .lang-card--small { inline-size: 120px; } /* pick */
+  .lang-card .lang-row { margin-block-start: var(--area-space-4); }
+  .lang-nav { --area-nav-inline-size: 176px; } /* pick */
+  .lang-row { --area-input-inline-size: 128px; } /* pick: Input's public width hook */
+  /* Grounds and layers: a small window, its bar and the page's ground round a card. */
+  .lang-window { display: grid; inline-size: 208px; overflow: clip; border: var(--area-border-width) solid var(--area-border-card); border-radius: var(--area-radius-container); background: var(--area-bg-page); box-shadow: var(--area-shadow-edge), var(--area-shadow-resting); } /* pick */
+  .lang-window__bar { display: flex; gap: 4px; padding: var(--area-space-8) var(--area-space-10); border-block-end: var(--area-border-width) solid var(--area-border-decorative); background: var(--area-bg-surface); } /* a raised bar, so the page under it reads against white */
+  .lang-window__bar > i { inline-size: 6px; block-size: 6px; border-radius: var(--area-radius-full); background: var(--area-border); } /* pick */
+  .lang-window__page { display: grid; }
+  .lang-window__card { inline-size: 100%; }
+  /* Ground: the page alone, real text straight on it. */
+  .lang-page { display: grid; gap: var(--area-space-4); padding: var(--area-space-16); color: var(--area-fg-default); }
+  .lang-page__title { font-size: var(--area-title-sm-size); line-height: var(--area-title-sm-leading); font-weight: var(--area-weight-strong); }
+  .lang-page__body { font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); color: var(--area-fg-muted); }
+  /* Layers: the sidebar on the chrome's ground, the page, a card raised on it and a soft field inside. */
+  .lang-layers { display: grid; grid-template-columns: 72px minmax(0, 1fr); } /* pick */
+  .lang-layers__side { --area-chrome-fill: var(--area-bg-subtle); padding: var(--area-space-8) var(--area-space-6); border-inline-end: var(--area-border-width) solid var(--area-border-decorative); background: var(--area-chrome-bg); } /* the sidebar's ground, as the Testing screens draw it */
+  .lang-layers__nav { --area-nav-inline-size: 100%; }
+  .lang-layers__main { display: grid; padding: var(--area-space-12); }
+  /* Surface: two cards overlapping, the front one down and to the end. */
+  .lang-overlap { display: grid; inline-size: 200px; block-size: 132px; } /* pick */
+  .lang-overlap > * { grid-area: 1 / 1; inline-size: 136px; }
+  .lang-overlap__back { justify-self: start; align-self: start; }
+  .lang-overlap__front { justify-self: end; align-self: end; }
+  /* Elevation: a menu shown in place, at a menu's width. */
+  .lang-menu { position: relative; inset: auto; inline-size: 160px; } /* pick */
 }
 
 /* ---------------------------------------------------------------------------

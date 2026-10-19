@@ -1,24 +1,46 @@
-# Handoff — 2026-10-16
+# Handoff — 2026-10-19
 
 Each session starts from `main` in its own worktree (`claude/*` branch) and merges through a
 pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
-## App UI tweaks (2026-10-18, branch `claude/electron-ui-tweaks-ccf407`, uncommitted)
+## App UI tweaks (2026-10-18 to 19, branch `claude/electron-ui-tweaks-ccf407`, merged to main: PR_NUMBER)
 
-Owner rule for the session: feedback applies to the real components, never as an app-only override.
-- **Elevation `lift` role** (`axes/elevation.ts`): shadow8 at half the float's weight; the linked Card's hover and the
-  gallery tiles' hover take it (was the Menu's float shadow, "too drastic").
-- **Component page tabs** (`src/family-tabs.tsx`, `scripts/sources.mjs`): Overview / Documentation / API / Code / Spec,
-  tables wherever data has rows; Button's Documentation rows in `src/content/documentation.mjs`. The Stage's code is
-  its own Code block under the frame. Research: `docs/research/component-page-2026-10-18.md`.
-- **Asset card** (new, in review; `docs/specs/asset-card.md`): an asset in a container, name / detail / controls under
-  it; a group as a 2×2 mosaic; `AssetGrid` on ListBox's grid. Brand now shows groups and assets with it (owner: "Asset
-  + Group"). Image corners by size (DESIGN_SYSTEM.md): standalone 12 (`radius-container`), thumbnails 6.
-- **Gallery tiles are Asset cards** (`src/tile.tsx`): every tab's names, values and controls sit under the frame; the
-  Compact hairline contact sheet is gone; colour cards show the grade under the colour (was a Badge on it). The Stage
-  keeps its label in its head.
+Owner rule: design feedback applies to the real components and tokens, never as an app-only override. When the owner
+leaves feedback, say why the design is as it is and what changing it affects before changing it.
+
+**Built (all on main now):**
+- **Hover lift**: Elevation's `lift` role (shadow8 at half the float's weight) for the linked Card and gallery tiles.
+- **Component page tabs** (`apps/desktop/src/family-tabs.tsx`, `scripts/sources.mjs`): Overview / Documentation / API /
+  Code / Spec, tables wherever data has rows. Only Button has written Documentation rows
+  (`src/content/documentation.mjs`); other families show what their manifest and spec hold. Stage code is its own block.
+- **Asset card** (new component, In review, `docs/specs/asset-card.md`): square frame; caption `inside` (name at the
+  top, the owner's 2026-10-19 trial, the default) or `below`; `group` = 2×2 mosaic (16 gaps, 12 margin, no strokes);
+  `AssetGrid`. Brand shows groups and assets with it. **Every gallery tile is an Asset card** (`src/tile.tsx`).
+- **Image corners by size** (DESIGN_SYSTEM.md): standalone 12 (Figure, Asset card, viewer), thumbnails 6.
+- **Language** (`src/pages/language.tsx`, `src/abstract.tsx`): built from the Inspector's own controls list; one real
+  component per setting with real text; cards >= 200; drawings scaled (never above 0.8x), one scale per setting so
+  presets compare; card frames never change with the setting; Light / Dark preview switch; Ground and Layers named
+  without Light/Dark and drawn as windows; Type is a ramp with px sizes.
+- **Previews scale whole** (gallery `fit.ts`, Language): `scale`, not `zoom`, so parts keep proportions (MOTION.md,
+  Crispness). Switch's thumb now centres on its track (`switch.css`), so it holds at any scale or browser zoom.
+- **Type**: titles and display scale with the base size (whole px; 14 unchanged). Size and leading ramps gained rungs.
+- **Stroke width** (`data-area-surface`: 0 Flat / 0.5 / 1 / 1.5 / 2) and **Rest shadow** (`data-area-shadow-rest`,
+  0–8) in `packages/tokens/src/axes/surface.ts`: independent (line, shadow, both or flat); `shadow-edge` is the rest
+  shadow. Inspector → Effects.
+- **Ground / Layers audit** (docs/research/layers-2026-10-16/sweep/README.md, "Audit, 2026-10-19"): grounds 90–94 and
+  layers 7–8 add no findings beyond the default; the owner keeps every step.
+
+**Open / next:**
+- The other session (worktree `unmerged-running-sessions-cb0df1`, uncommitted "Edge and Depth", `axes/depth.ts`) also
+  writes `surface` (0 / 0.5 / 1 / 2) and `shadow-rest`. Main now has this branch's versions: rebase that work onto main
+  and reconcile (keep 1.5 and 0 = flat; Rest shadow as the divider shadow) before it merges.
+- Review with the owner: Asset card (In review), the inside-caption trial, Language visuals, the Shadow look in dark
+  and at Elevation 0.
+- Recorded, not changed: Command palette's selected row is faint at Layers 0 (0.027 step); Folder count and File page
+  label text are 2.1–3.3:1. The typography spec still describes fixed titles.
+- Documentation rows for families beyond Button.
 
 ## File explorer components and the Brand tab (2026-10-18, branch `claude/brand-folder-ui-component-e54b70`, uncommitted)
 

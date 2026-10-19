@@ -22,10 +22,10 @@ const GROUPS: ReadonlyArray<{ heading: string; axes: readonly Axis[] }> = [
   { heading: "Color", axes: ["neutral", "accent", "ground-light", "ground-dark", "layers-light", "layers-dark", "action", "selection", "contrast"] },
   { heading: "Size", axes: ["type", "density"] },
   { heading: "Shape", axes: ["radius", "pills"] },
-  { heading: "Effects", axes: ["surface", "elevation", "motion"] },
+  { heading: "Effects", axes: ["surface", "shadow-rest", "elevation", "motion"] },
 ];
 
-export function CanvasSettings({ material, axes = ["neutral", "accent", "ground-light", "ground-dark", "layers-light", "layers-dark", "action", "selection", "contrast", "type", "density", "radius", "surface", "elevation", "motion", "pills"], children }: { axes?: readonly Axis[]; material?: boolean; children?: ReactNode }) {
+export function CanvasSettings({ material, axes = ["neutral", "accent", "ground-light", "ground-dark", "layers-light", "layers-dark", "action", "selection", "contrast", "type", "density", "radius", "surface", "shadow-rest", "elevation", "motion", "pills"], children }: { axes?: readonly Axis[]; material?: boolean; children?: ReactNode }) {
   // Material shows with every setting: a tab that narrows its settings shows no surfaces a material paints.
   const showMaterial = material ?? axes.length === GALLERY_CONTROLS.length - 1;
   return (

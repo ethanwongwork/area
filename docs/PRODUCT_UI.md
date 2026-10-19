@@ -76,9 +76,15 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
       (owner, 2026-10-14; 2026-10-18).
     - Components' All shows one tile per family, its default specimen; a family's variants are its
       own Canvas. Specimens sit in square cards at least 360 wide (owner, 2026-10-18), after Compass's gallery: the specimen 24 in, the
-      title (the app's text, strong) and a Copy code button under the frame, cards 12 apart. Every tab's tiles are
-      Asset cards: the name, a value and controls under the frame, never inside it (owner, 2026-10-18; the Compact
-      hairline contact sheet went with it). A
+      title (the app's text, strong) and a Copy code button at the frame's top, cards 12 apart. Every tab's tiles are
+      Asset cards, always square, the name, a value and controls in the frame's first row (owner, 2026-10-19, a trial;
+      under the frame 2026-10-18, when the Compact hairline contact sheet went). Language lists the Inspector's own
+      settings (src/gallery/controls.ts), its cards at least 200 wide, each setting one real component with real text,
+      the one thing it changes (src/abstract.tsx; owner, 2026-10-19: "simple, and easy to recognize"), at its default
+      size, scaled down (never up, at most 0.8x) to a share of the card, one scale for every preset of a setting so they compare;
+      Type is the ramp of roles with their sizes; Ground and Layers are windows whose card frame stays put. The page previews
+      one theme, Light by default, with a Light / Dark switch in the Canvas bar; every setting follows it, and the
+      per-theme settings (ground, layers) show the previewed theme's own. A
       click on an All card opens its family's Stage (owner, 2026-10-14). A family's page is Area Tabs (owner,
       2026-10-18, `src/family-tabs.tsx`): Overview (the Stage, its code as a separate Code block under the frame, then
       the tiles), Documentation, API, Code and Spec. Information is tables wherever it can be (facts, props, classes,

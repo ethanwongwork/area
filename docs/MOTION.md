@@ -78,12 +78,17 @@ keyframe animations for state that can flip back mid-way).
 
 ## Crispness
 
-The gallery's old `scale` transform was the main "pixelated" cause and is gone (fit.ts uses
-`zoom`). Components keep these rules so they stay sharp at 1x and 2x:
+Previews shrink a component whole: the gallery's tiles (fit.ts) and Language's drawings are laid out at 1x and
+`scale`d (owner, 2026-10-19: "i want scaling of components to be seamless, if it could sit on half pixels would that
+work?"). From 2026-10-07 to then they used `zoom`, which lays the component out again smaller: sharper 1px edges, but
+edges snap to device pixels while offsets scale, so parts moved against each other (a Switch's thumb sat high). A
+scaled preview keeps exact proportions on half pixels and draws a 1px edge a little softer. The Stage still zooms for
+its exact 50–200% stops. Components keep these rules so they stay sharp at 1x and 2x, and so any part placed against
+an edge stays put at a fractional scale (browser zoom included):
 
 1. Rest on whole pixels. A resting element never carries a fractional `translate` or a `scale`
    other than 1; centre with layout (flex/grid, `inset` + `margin: auto`), not with
-   `translate(-50%, -50%)` on odd sizes. Round computed offsets (`round()` in CSS, `Math.round` in JS).
+   `translate(-50%, -50%)` on odd sizes; centre a part on its host (Switch's thumb, `inset: 0` + `margin: auto`, 2026-10-19) rather than offsetting it from one edge. Round computed offsets (`round()` in CSS, `Math.round` in JS).
 2. Animate `transform`/`opacity` only, and end at identity (`scale: 1`, `translate: 0`). Never leave
    `will-change` on a resting element; it freezes the layer at its first raster.
 3. Borders and rings: `border`/`outline` snap to device pixels, `box-shadow` does not. Draw a

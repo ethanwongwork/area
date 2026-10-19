@@ -14,6 +14,11 @@
  *   reading (text-md)       the base plus 2: 14 / 15 / 16 / 17 / 18
  *   surface title (title-xs) the reading size, so Card and Dialog titles stay peers while they
  *                           move with the type (was held at 16, audit H-7, 2026-09-30)
+ *   titles and display      in proportion to the base, whole pixels, each role's leading at its ratio at 14 (owner,
+ *                           2026-10-19: "should title and display also change?" → yes, so the hierarchy keeps one
+ *                           ratio from 12 to 16, as Apple's Dynamic Type scales every style; they were held at 20 / 24 /
+ *                           32 with display one rung down below 14): at 12 17 / 21 / 27 and 48 / 62, at 16 23 / 27 / 37
+ *                           and 64 / 82; 14 is unchanged
  *   tracking                small text loosens a hair (Geist is drawn for 0 at UI sizes and has no
  *                           optical-size axis): 10 +0.01em, 11 +0.0075, 12 +0.005, 13 +0.0025
  *   icon stroke             follows the text stem, 1.125px at 14
@@ -42,8 +47,14 @@ export function typeSizeTokens(base: TypeSize): Record<string, string> {
   const small = Math.max(10, base - 2);
   const reading = base + 2;
   const box = Math.max(14, LEADING[base]! - 4);
-  // Display holds its own ramp: one rung down below 14, as the compact preset had it.
-  const display = base <= 13 ? { sm: [48, 48], lg: [64, 64] } : { sm: [56, 56], lg: [72, 72] };
+  // Titles and display scale with the base: a role's size at 14 times base / 14, whole pixels; its leading keeps the
+  // role's ratio at 14 on the 2px leading ramp.
+  const scaled = (at14: number, leadingAt14: number) => {
+    const px = Math.round((at14 * base) / 14);
+    return [px, Math.round((px * leadingAt14) / at14 / 2) * 2] as const;
+  };
+  const titleSm = scaled(20, 28), titleMd = scaled(24, 32), titleLg = scaled(32, 40);
+  const display = { sm: scaled(56, 56), lg: scaled(72, 72) };
   return {
     ...GEIST_TOKENS,
     "weight-icon": `${Number((1.125 * base / 14).toFixed(3))}px`,
@@ -51,9 +62,9 @@ export function typeSizeTokens(base: TypeSize): Record<string, string> {
     "text-sm-size": size(base), "text-sm-leading": leading(base), "text-sm-tracking": tracking(base),
     "text-md-size": size(reading), "text-md-leading": leading(reading), "text-md-tracking": "0em",
     "title-xs-size": size(reading), "title-xs-leading": leading(reading), "title-xs-tracking": "0em",
-    "title-sm-size": size(20), "title-sm-leading": "var(--area-leading-28)", "title-sm-tracking": "-0.01em",
-    "title-md-size": size(24), "title-md-leading": "var(--area-leading-32)", "title-md-tracking": "-0.015em",
-    "title-lg-size": size(32), "title-lg-leading": "var(--area-leading-40)", "title-lg-tracking": "-0.02em",
+    "title-sm-size": size(titleSm[0]), "title-sm-leading": `var(--area-leading-${titleSm[1]})`, "title-sm-tracking": "-0.01em",
+    "title-md-size": size(titleMd[0]), "title-md-leading": `var(--area-leading-${titleMd[1]})`, "title-md-tracking": "-0.015em",
+    "title-lg-size": size(titleLg[0]), "title-lg-leading": `var(--area-leading-${titleLg[1]})`, "title-lg-tracking": "-0.02em",
     "display-sm-size": size(display.sm[0]!), "display-sm-leading": `var(--area-leading-${display.sm[1]})`, "display-sm-tracking": "-0.03em",
     "display-lg-size": size(display.lg[0]!), "display-lg-leading": `var(--area-leading-${display.lg[1]})`, "display-lg-tracking": "-0.03em",
     // The raw numbers emit/base.ts derives heights, marks and spacing from.

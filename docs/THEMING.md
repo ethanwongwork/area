@@ -50,8 +50,10 @@ The registry in `packages/tokens/src/axes/registry.ts` defines fourteen axes:
   pills (`""` makes every one follow the radius). Each sets `--area-pill-<id>` (0 / 1), which the
   component adds as `flag × radius-full`, so concentric parts follow. Instance props override it
   (`pill`, Avatar's `shape`).
-- `surface`: one number, the decorative frame's width in px: `1` (Default) or `0` (Borderless)
-  (`axes/surface.ts`, 2026-10-14; was `outlined` / `borderless`). Sets `frame-width`; components read
+- `surface`, **Stroke width** (2026-10-19): the line round cards, panels and floating surfaces, `0` (Flat) / `0.5` /
+  `1` (Default) / `1.5` / `2` px (`axes/surface.ts`, 2026-10-14; was `outlined` / `borderless`, then 0 or 1, where 0
+  drew the soft edge). `shadow-rest`, **Rest shadow** (2026-10-19): a subtle shadow round the same surfaces, `0` (None,
+  Default) to `8`, with the line or instead of it; it sets `shadow-edge`. Not their lift: that is `elevation`. Sets `frame-width`; components read
   `border-width`, derived as the frame or 1px under increased contrast (owner, 2026-10-15), so More or Medium
   contrast brings the frame back at 0. `shadow-edge`, derived from `border-width` beside it (2026-10-18), is
   transparent wherever a frame is drawn (at 1, and at 0 under a raised contrast), and otherwise ChatGPT's frameless-menu edge (a 1px-blur shadow at 62% black, plus a 1px-blur

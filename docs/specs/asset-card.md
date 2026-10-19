@@ -40,6 +40,7 @@ with its own text and actions inside (Card), a framed preview of a page or scree
 | media | image (contained, never cropped, 12 corner) · any node (centred) | File tile contains images; owner's corners | File tile, gallery tile |
 | state | hover (lift), pressed, selected (edge in the selection colour), focus (ring on the frame) | the gallery tile's states (owner, 2026-10-18) | gallery tile, linked Card |
 | interactive | off · on: the card is a control outside an asset grid (an app's gallery tile) | the app's tiles (owner, 2026-10-18) | gallery tile |
+| caption | inside (default): the frame's first row, name at the start, detail at the end · below: under the frame | owner 2026-10-19 (a trial: "the name should be at the top"); 2026-10-18 (below) | the old gallery tile head; Figma's file card |
 
 A group's cells crop their asset to the square (a thumbnail), with the 6 corner.
 
@@ -49,8 +50,8 @@ A group's cells crop their asset to the square (a thumbnail), with the 6 corner.
 area-asset-card            the asset: its frame, then its caption
   __frame                  the container: 1px card edge, 12 corner (radius-container), surface fill, square
     __media                the asset, centred in the frame's 12 inset (an image contained, 12 corner)
-    __mosaic               a group: 2 × 2 cells in the 12 inset, 8 apart
-      __cell               one asset, cropped to its square, 6 corner (radius-small), the swatch ring
+    __mosaic               a group: 2 × 2 cells in a 12 margin inside the frame's inset, 16 apart
+      __cell               one asset, cropped to its cell, 6 corner (radius-small), no stroke
   __caption                under the frame, 8 down: the text, then the controls
     __text
       __name               the app's UI text, strong; one line, then an ellipsis
@@ -71,7 +72,9 @@ Not captured (Open). Values reuse measured or owner-set peers:
 | frame · corner | `radius-container` (12 at the default Radius) | the gallery tile's 12 (owner, 2026-10-13); Card's container role |
 | frame · inset | 12 | the gallery tile's 12 (owner, 2026-10-13) |
 | frame · shape | square | the Components cards' square (owner, 2026-10-18) |
-| mosaic · gap | 8 | pick (Figma's reference reads close to two-thirds of its inset; not measured) |
+| mosaic · gap | 16 | owner 2026-10-19: "larger gaps" (pick; was 8) |
+| mosaic · margin | 12, inside the frame's 12 | owner 2026-10-19: "larger ... margins" (pick; was none) |
+| image · stroke | none | owner 2026-10-19: "dont put any strokes around them" (was the swatch ring) |
 | cell · corner | `radius-small` (6) | owner, 2026-10-18: thumbnails 6 |
 | media image · corner | `radius-container` (12) | owner, 2026-10-18: a standalone image 12 |
 | caption · gap from frame | 8 | the gallery tile's head-to-stage 8 |
@@ -117,3 +120,9 @@ keep them few and give each its own label. A standalone `AssetCard` is a plain e
   `captionProps`) and two public hooks, `--area-asset-card-ratio` (the app's 5:4 frames, auto for full-width rows) and
   `--area-asset-card-corner` (the app holds 12 whatever the Canvas's Radius). The Compact density's hairline contact
   sheet is gone: a caption sits between rows.
+- 2026-10-19 · owner: "the containers for assets and groups should always be a square AR ... move the text back into the
+  containers. the name should be at the top" (every tile, a trial) → the frame is always square (the ratio hook is
+  gone); a `caption` axis, `inside` by default (the frame's first row, cap-trimmed, 8 over the asset) or `below`.
+- 2026-10-19 · owner (Brand groups): "make the images smaller, larger gaps, and margins, also dont put any strokes around
+  them" → the mosaic sits in a 12 margin with 16 gaps; cells and standalone images lose the swatch ring. The caption's
+  name and detail clip with a 4 margin, so a cap-trimmed name keeps its descenders (they were cut: "Loaos").

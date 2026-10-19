@@ -1015,11 +1015,11 @@ export const fileGrid = {
 export const assetCard = {
   block: "area-asset-card",
   description: "Shows one asset, or a group of them as a 2×2 mosaic, in a container with its name and controls under it.",
-  variants: { layout: ["asset", "group"] },
+  variants: { layout: ["asset", "group"], caption: ["inside", "below"] },
   booleans: ["interactive"],
   states: ["selected"],
   elements: ["frame", "media", "mosaic", "cell", "caption", "text", "name", "meta", "actions"],
-  defaults: { layout: "asset" },
+  defaults: { layout: "asset", caption: "inside" },
 } as const satisfies ComponentManifest;
 
 export const assetGrid = {

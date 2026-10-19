@@ -12,10 +12,13 @@
  * wider again if its text would truncate there), then scaled to fit, so it shows its natural
  * layout rather than one squeezed to the tile.
  *
- * The shrink is CSS `zoom`, not a transform (motion and crispness pass, 2026-10-07): zoom lays the
- * specimen out again at the smaller size, so borders, rings and icon strokes snap to device pixels;
- * a `scale` of 0.736 painted every 1px edge between pixels, the gallery's "pixelated" look
- * (docs/research/motion-2026-10-07/crispness-and-current-state.md).
+ * The shrink is a `scale`: the specimen is laid out at 1x and shrunk whole, so every part keeps its exact proportions
+ * and lands on half pixels as it must (owner, 2026-10-19: "i want scaling of components to be seamless, if it could
+ * sit on half pixels would that work?"; "switch the Components gallery's specimen fitting to whole-image scaling too").
+ * It was CSS `zoom` from 2026-10-07 (motion and crispness pass, docs/research/motion-2026-10-07/): zoom lays the
+ * specimen out again smaller, so 1px edges snap to device pixels while offsets scale, and parts moved against each
+ * other (a Switch's thumb sat high in its track); a scale paints a 1px edge between pixels, a little softer, which the
+ * owner takes over parts that shift.
  *
  * Sizes are measured, not declared: a new specimen gets its scale from what it renders. Fluid
  * widths are decided once at the default UI scale; scale follows the specimen and the tile live.
@@ -106,7 +109,7 @@ function extent(stage: HTMLElement): Box {
     right = Math.max(right, rect.right); bottom = Math.max(bottom, rect.bottom);
   }
   if (!Number.isFinite(left)) return { w: 0, h: 0 };
-  const scale = Number(stage.style.zoom) || 1;
+  const scale = Number(stage.style.scale) || 1;
   return { w: (right - left) / scale, h: (bottom - top) / scale };
 }
 
@@ -137,7 +140,7 @@ function inkedWidth(stage: HTMLElement): number | undefined {
   }
   for (const node of stage.querySelectorAll<Element>("svg, img")) if (!node.parentElement?.closest("svg")) ink(node.getBoundingClientRect());
   if (!Number.isFinite(boxLeft) || !Number.isFinite(inkRight)) return undefined;
-  const scale = Number(stage.style.zoom) || 1;
+  const scale = Number(stage.style.scale) || 1;
   return (inkRight - boxLeft + Math.max(0, inkLeft - boxLeft)) / scale;
 }
 /* Text that truncates reports almost no max-content width (an Alert's title and body): the
@@ -199,7 +202,7 @@ export function fitTiles(canvas: HTMLElement): () => void {
    * one a tile. Interleaved, the first fit forced a layout of the whole canvas for each of ~90
    * tiles, several times over, and opening the Components tab froze for over half a second.
    */
-  for (const entry of tiles) { entry.stage.style.zoom = ""; entry.stage.style.inlineSize = `${PROBE}px`; }
+  for (const entry of tiles) { entry.stage.style.scale = ""; entry.stage.style.inlineSize = `${PROBE}px`; }
   const inked = new Map<Tile, number | undefined>();
   const heights = new Map<Tile, number>();
   for (const entry of tiles) {
@@ -271,10 +274,10 @@ export function fitTiles(canvas: HTMLElement): () => void {
     // Read every room, write fluid widths, then read every extent and write every scale: two
     // layouts, however many tiles changed.
     const rooms = batch.map(entry => roomOf(entry.view));
-    // A fluid specimen fills its tile at any zoom: laid out at the room over the zoom, then zoomed.
+    // A fluid specimen fills its tile at any zoom: laid out at the room over the zoom, then scaled.
     batch.forEach((entry, index) => { if (entry.fluid) entry.stage.style.inlineSize = `${Math.floor(layoutWidth(entry, rooms[index]!.w, exact ?? entry.group) * (exact ? 1 : entry.widen))}px`; });
     const scales = batch.map((entry, index) => exact ?? fit(rooms[index]!, extent(entry.stage), entry.group));
-    batch.forEach((entry, index) => { entry.stage.style.zoom = scales[index]!.toFixed(3); });
+    batch.forEach((entry, index) => { entry.stage.style.scale = scales[index]!.toFixed(3); });
   };
   rescale(tiles);
   canvas.setAttribute("data-fitted", "");

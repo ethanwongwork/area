@@ -198,9 +198,11 @@ own layers (the Board card's tone ring, the floating Toolbar's edge), and `none`
 nearest rung to Notion's 7% popover ring) and #4b4b4b in dark. Forced colours drop `box-shadow` entirely, and the
 border is what the browser repaints: `forced-colors.css` puts the frame back at 1px under Borderless and gives
 the floating Toolbar, whose edge is an inset shadow, an outline. Stroke is its own setting: the Surface axis, the
-frame's width, `1` (Default) or `0` (Borderless). Borderless never leaves a surface without an edge: every surface
-whose frame it removes lists `shadow-edge` first in its `box-shadow`, ChatGPT's frameless-menu edge (a 1px-blur
-shadow at 62% black, and in dark a 1px-blur 20% white line inside), transparent at 1. So a Card or Menu stays
+frame's width, Stroke width: `0` (Flat) to `2` in half pixels, `1` the default (owner, 2026-10-19). Beside it, Rest
+shadow (`shadow-rest`, 0 to 8, 0 the default) sets `shadow-edge`, which every framed surface lists first in its
+`box-shadow`: after ChatGPT's frameless-menu edge, half a pixel down with a 1.5px blur at 5% black a step, and in dark a
+1px white line inside at 2.5% a step. The two are independent: a line, a shadow, both, or neither (flat). Until
+2026-10-19 the frame was 0 or 1 and 0 always drew the soft edge. So a Card or Menu stays
 distinct at Elevation 0 and in dark, where no lift reads (2026-10-14; it replaced Card's dark-only ring,
 consistency pass O2). The edge is derived from `border-width` and drawn only while no frame is, so at Surface 0 a
 raised contrast level brings the 1px frame back and turns the soft edge off: never both (audit 2026-10-18). The Table frame is a required edge (`stroke-width`), so it stays under Borderless.

@@ -115,9 +115,8 @@ function ColorCard({ scale, item }: { scale: string; item: ScaleStep }) {
       aria-label={`${title(scale)} ${item.level}, ${item.hex.toUpperCase()}, ${ink === "#ffffff" ? "white" : "black"} text ${item.contrast.ratio.toFixed(2)} to 1, ${item.contrast.grade}`}
       paint={{ background: `var(--area-${scale}-${item.level})`, color: ink }}
       label={<span className="studio-swatch__level">{item.level}</span>}
-      // The contrast grade under the colour, in the caption (owner, 2026-10-18: names and controls under the frame); it was
-      // a Badge onColor on the step's own colour.
-      value={<span className="studio-tabular">{item.contrast.grade} · {item.contrast.ratio.toFixed(2)}</span>}>
+      // The contrast grade in the caption at the frame's top, in the colour's ink (it was a Badge onColor on the colour).
+      value={<span className="studio-tabular studio-swatch__grade">{item.contrast.grade} · {item.contrast.ratio.toFixed(2)}</span>}>
       <span className="studio-swatch__values">
         <span>{item.hex.toUpperCase()}</span>
         <span>RGB {r} {g} {b}</span>
@@ -227,7 +226,7 @@ export function ColorPage() {
                   // Grid: every step its own card, painted in its colour, in every view (owner,
                   // 2026-10-12: colours are their own containers; the joined ramp strip is gone).
                   // On the components' grid (owner, 2026-10-12): wide tiles, 280 at the least, 5:4.
-                  <TileGrid span="unit" hug>
+                  <TileGrid span="unit">
                     {steps.map(item => (
                       <ColorCard key={item.level} scale={entry.id} item={item} />
                     ))}

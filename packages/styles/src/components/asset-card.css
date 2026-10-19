@@ -12,10 +12,14 @@
  *   surface fill, 12 in from the outside with the border counted once (inset.css), square.
  * - Image corners (owner, 2026-10-18, "by size"): an image standing alone takes the container corner (12); a
  *   thumbnail, a group's cell, the small corner (6). Both follow the Radius setting.
- * - Caption: 8 under the frame; the name in the UI text at the strong weight, the detail line at the caption size,
- *   muted (File tile's detail line); controls at the end, centred on the name's line.
- * - Public hooks: `--area-asset-card-ratio` (the frame's shape, 1 by default; `auto` lets content set the height) and
- *   `--area-asset-card-corner` (the container corner by default), for hosts that lay cards on their own grid.
+ * - Frame: always square (owner, 2026-10-19: "the containers for assets and groups should always be a square AR").
+ * - Caption, inside (the default; owner, 2026-10-19, a trial: "move the text back into the containers. the name
+ *   should be at the top"): the frame's first row, the name at the start and the detail at the end on one line, cap
+ *   trimmed so the name's cap sits the inset under the edge (the old gallery tile's head), 8 over the asset.
+ *   Below: 8 under the frame, the name over the detail line (owner, 2026-10-18).
+ *   The name is the UI text at the strong weight, the detail the caption size, muted (File tile's detail line);
+ *   controls at the end, centred on the name's line.
+ * - Public hook: `--area-asset-card-corner` (the container corner by default), for hosts that hold their own corner.
  * - Interactive (outside an asset grid, such as an app's gallery): hover lifts, a press drops it, keyboard focus rings
  *   the frame, `aria-pressed` and `aria-selected` show as the selected edge.
  * ------------------------------------------------------------------------- */
@@ -34,6 +38,7 @@
   }
   .area-asset-card--asset {}
   .area-asset-card--group {}
+  .area-asset-card--below {}
   .area-asset-card--interactive { cursor: default; outline: none; }
 
   .area-asset-card__frame {
@@ -41,7 +46,7 @@
     display: grid;
     grid-template: minmax(0, 1fr) / minmax(0, 1fr);
     box-sizing: border-box;
-    aspect-ratio: var(--area-asset-card-ratio, 1); /* spec: the Components cards' square (owner, 2026-10-18) */
+    aspect-ratio: 1; /* spec: always square (owner, 2026-10-18; 2026-10-19) */
     min-block-size: 0; /* the square holds: a tall image cannot stretch the frame */
     padding: calc(var(--_inset) - var(--area-border-width));
     overflow: clip;
@@ -53,7 +58,7 @@
     transition: border-color var(--area-duration-fast) var(--area-ease-out), box-shadow var(--area-duration-base) var(--area-ease-in);
   }
 
-  /* The asset, centred; an image contained, never cropped, with the container corner and the swatch ring. */
+  /* The asset, centred; an image contained, never cropped, with the container corner and no stroke. */
   .area-asset-card__media {
     display: grid;
     grid-template: minmax(0, 1fr) / minmax(0, 1fr);
@@ -67,19 +72,21 @@
     max-block-size: 100%;
     inline-size: auto;
     block-size: auto;
-    border-radius: var(--area-radius-container); /* spec: owner 2026-10-18, a standalone image 12 */
-    box-shadow: 0 0 0 var(--area-stroke-width) var(--area-token-swatch-ring);
+    border-radius: var(--area-radius-container); /* spec: owner 2026-10-18, a standalone image 12; no stroke (2026-10-19) */
     object-fit: contain;
     background: var(--area-bg-subtle);
   }
 
-  /* A group: four cells, 8 apart; each asset cropped to its square, the small corner, the swatch ring drawn inside. */
+  /* A group: four cells 16 apart in a 12 margin, so each asset reads small and on its own (owner, 2026-10-19: "make the
+     images smaller, larger gaps, and margins, also dont put any strokes around them"; was 8 apart, no margin, a ring);
+     each asset cropped to its cell with the small corner. */
   .area-asset-card__mosaic {
     display: grid;
     grid-template: repeat(2, minmax(0, 1fr)) / repeat(2, minmax(0, 1fr));
-    gap: var(--area-space-8); /* spec: pick (Figma's reference, not measured) */
+    gap: var(--area-space-16); /* spec: owner 2026-10-19, larger gaps (pick) */
     min-inline-size: 0;
     min-block-size: 0;
+    padding: var(--area-space-12); /* spec: owner 2026-10-19, larger margins (pick) */
   }
   .area-asset-card__cell {
     display: grid;
@@ -89,13 +96,11 @@
     min-block-size: 0;
     overflow: hidden;
     border-radius: var(--area-radius-small); /* spec: owner 2026-10-18, a thumbnail 6 */
-    outline: var(--area-stroke-width) solid var(--area-token-swatch-ring);
-    outline-offset: calc(var(--area-stroke-width) * -1);
     background: var(--area-bg-subtle);
   }
   .area-asset-card__cell > img { display: block; inline-size: 100%; block-size: 100%; min-block-size: 0; object-fit: cover; }
   /* A cell with nothing in it (a group of fewer than four) is left empty. */
-  .area-asset-card__cell:empty { outline-color: transparent; background: transparent; }
+  .area-asset-card__cell:empty { background: transparent; }
 
   .area-asset-card__caption {
     display: flex;
@@ -106,13 +111,16 @@
   }
   .area-asset-card__text { display: flex; flex: 1 1 auto; flex-direction: column; min-inline-size: 0; }
   .area-asset-card__name {
-    overflow: hidden;
+    /* Clipped for the ellipsis, with room for descenders a cap-trimmed name paints below its box. */
+    overflow: clip;
+    overflow-clip-margin: var(--area-space-4);
     font-weight: var(--area-weight-strong); /* spec: the Components card title, the app's text, strong */
     text-overflow: ellipsis;
     white-space: nowrap;
   }
   .area-asset-card__meta {
-    overflow: hidden;
+    overflow: clip;
+    overflow-clip-margin: var(--area-space-4);
     color: var(--area-fg-muted);
     font-size: var(--area-text-xs-size); /* spec: File tile's detail line */
     line-height: var(--area-text-xs-leading);
@@ -128,6 +136,15 @@
     gap: var(--area-space-4);
     margin-block: calc((var(--area-ui-leading) - var(--area-control-sm)) / 2);
   }
+
+  /* Caption inside: the frame's first row, one line, cap-trimmed, 8 over the asset. */
+  .area-asset-card--inside > .area-asset-card__frame { grid-template: auto minmax(0, 1fr) / minmax(0, 1fr); row-gap: var(--area-space-8); }
+  .area-asset-card--inside .area-asset-card__caption { align-items: center; padding-block-start: 0; }
+  .area-asset-card--inside .area-asset-card__text { flex-direction: row; align-items: baseline; gap: var(--area-space-8); }
+  .area-asset-card--inside :is(.area-asset-card__name, .area-asset-card__meta) { text-box: trim-both cap alphabetic; }
+  .area-asset-card--inside .area-asset-card__name { flex: 0 1 auto; min-inline-size: 0; }
+  .area-asset-card--inside .area-asset-card__meta { flex: none; margin-inline-start: auto; }
+  .area-asset-card--inside .area-asset-card__actions { margin-block: calc((1cap - var(--area-control-sm)) / 2); }
 
   /* Selected: the frame's edge in the selection colour, one line (the gallery tile's). */
   .area-asset-card:is([data-selected], [aria-pressed="true"], [aria-selected="true"]) > .area-asset-card__frame { border-color: var(--area-stroke-selected); }
