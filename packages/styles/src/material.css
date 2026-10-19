@@ -76,7 +76,6 @@
     --_m-frost: var(--area-material-surfaces-frost);
     --_m-fill: var(--area-bg-surface);
     --_m-frame: var(--_card-edge);
-    --_m-own: var(--area-shadow-edge), var(--_card-shadow);
   }
   :where([data-area-material]) :is(.area-menu, .area-popover, .area-hover-card, .area-toggletip, .area-toast, .area-dialog, .area-drawer, .area-command-palette, .area-video-player__surface) {
     --_m-image: var(--area-material-overlays-image);
@@ -88,7 +87,6 @@
     --_m-frost: var(--area-material-overlays-frost);
     --_m-fill: var(--area-bg-surface);
     --_m-frame: var(--area-border-float);
-    --_m-own: var(--area-shadow-edge), var(--_elevation, var(--area-shadow-float));
   }
   :where([data-area-material]) :is(.area-titlebar:not(.area-titlebar--floating), .area-toolbar--surface, [data-area-chrome]) {
     --_m-image: var(--area-material-chrome-image);
@@ -104,8 +102,8 @@
   /* Each part's own fill, which the tone ring darkens, and its own shadow, kept after the material's. */
   :where([data-area-material]) .area-button { --_m-fill: var(--_bg); --_m-own: 0 0 0 0 transparent; }
   :where([data-area-material]) .area-button--solid { --_m-own: var(--area-material-glow-shadow); }
-  :where([data-area-material]) .area-segmented__item[data-selected] { --_m-fill: light-dark(var(--area-bg-surface), var(--area-bg-component-active)); --_m-own: var(--area-shadow-control); }
-  :where([data-area-material]) .area-switch__thumb { --_m-fill: var(--area-bg-surface); --_m-own: var(--area-shadow-control); }
+  :where([data-area-material]) .area-segmented__item[data-selected] { --_m-fill: light-dark(var(--area-bg-surface), var(--area-bg-component-active)); --_m-rest: var(--area-shadow-control); --_m-own: var(--_m-rest); }
+  :where([data-area-material]) .area-switch__thumb { --_m-fill: var(--area-bg-surface); --_m-rest: var(--area-shadow-control), inset 0 0 0 var(--area-stroke-width) var(--_thumb-ring); --_m-own: var(--_m-rest); }
   :where([data-area-material]) :is(.area-checkbox__control, .area-radio__control) { --_m-fill: var(--_fill); --_m-own: 0 0 0 0 transparent; }
   :where([data-area-material]) .area-badge--solid { --_m-fill: var(--_bg); --_m-own: 0 0 0 0 transparent; }
   :where([data-area-material]) :is(.area-input, .area-select, .area-custom-select__trigger, .area-textarea) { --_m-fill: var(--_bg); --_m-own: 0 0 0 0 transparent; }
@@ -175,7 +173,20 @@
   ) {
     background-color: light-dark(color-mix(in srgb, var(--_m-fill) calc(var(--_m-alpha-light) * 100%), transparent), color-mix(in srgb, var(--_m-fill) calc(var(--_m-alpha-dark) * 100%), transparent));
     background-image: var(--_m-image);
-    box-shadow: var(--_m-ring), var(--_m-shadow), var(--_m-own);
+  }
+  /* Surfaces and overlays list the material's layers first in their own box-shadow (`--_m-layers`: surface.css,
+     drawer.css, command-palette.css, video-player.css), so every state keeps its own role, ring or lift beside them:
+     the modal lift of a Drawer or Command palette, a selected Card's ring, a linked Card's hover lift, the Video player's
+     12% ring (Elevation and Stroke audit, 2026-10-18; this rule used to replace the whole box-shadow). */
+  :where([data-area-material]) :is(
+    .area-card, .area-menu, .area-popover, .area-hover-card, .area-toast, .area-dialog, .area-drawer,
+    .area-command-palette, .area-video-player__surface
+  ) {
+    --_m-layers: var(--_m-ring), var(--_m-shadow);
+  }
+  /* Chrome draws no shadow of its own: the material's layers are its box-shadow. */
+  [data-area-material] :is(.area-titlebar:not(.area-titlebar--floating), .area-toolbar--surface) {
+    box-shadow: var(--_m-ring), var(--_m-shadow);
   }
   [data-area-material] [data-area-chrome] {
     --area-chrome-bg: light-dark(color-mix(in srgb, var(--_m-fill) calc(var(--_m-alpha-light) * 100%), transparent), color-mix(in srgb, var(--_m-fill) calc(var(--_m-alpha-dark) * 100%), transparent));
@@ -214,13 +225,20 @@
     }
   }
 
-  /* Disabled parts drop the material. */
-  [data-area-material] :is(.area-button, .area-input, .area-select, .area-custom-select__trigger, .area-textarea, .area-segmented__item, .area-checkbox__control, .area-radio__control):is(:disabled, [data-disabled], [aria-disabled="true"]) {
+  /* Disabled parts drop the material and keep their own shadow (`--_m-rest`): the selected Segmented item's and the
+     Switch thumb's control lift (they lost it with the material, audit 2026-10-18). The list names every painted part
+     that can be disabled, the selected Menu and Nav rows too, which also lifts it over the plain parts' painter (its
+     Nav row gives that rule three classes' weight; with only one here, a disabled selected Segmented item and a
+     disabled ticked box kept the material). */
+  [data-area-material] :is(
+    .area-button, .area-input, .area-select, .area-custom-select__trigger, .area-textarea, .area-segmented__item, .area-checkbox__control,
+    .area-radio__control, .area-menu__item[data-selected], .area-nav__item[aria-current]:not([aria-current="false"])
+  ):is(:disabled, [data-disabled], [aria-disabled="true"]) {
     background-image: none;
-    box-shadow: none;
+    box-shadow: var(--_m-rest, none);
   }
-  [data-area-material] .area-switch__control:disabled ~ .area-switch__track,
-  [data-area-material] .area-switch__control:disabled ~ .area-switch__track .area-switch__thumb { background-image: none; box-shadow: none; }
+  [data-area-material] .area-switch__control:disabled ~ .area-switch__track { background-image: none; box-shadow: none; }
+  [data-area-material] .area-switch__control:disabled ~ .area-switch__track .area-switch__thumb { background-image: none; box-shadow: var(--_m-rest); }
 
   /* Forced colours: no material images or blur; the system paints fills and frames (D7). */
   @media (forced-colors: active) {

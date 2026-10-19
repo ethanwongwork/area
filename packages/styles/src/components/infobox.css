@@ -34,7 +34,7 @@
     background-color: var(--area-bg-surface);
     border: var(--area-border-width) solid var(--area-border-card);
     border-radius: var(--area-radius-container);
-    box-shadow: var(--area-shadow-resting);
+    box-shadow: var(--area-shadow-edge), var(--area-shadow-resting); /* the Surface axis's edge, as Card: soft at Borderless */
   }
 
   /* Proximity: the title pairs with its subtitle (2 apart) and sits further from the media (8); sections sit further

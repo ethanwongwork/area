@@ -12,6 +12,7 @@
  */
 import { PREFIX } from "../axes/schema.ts";
 import { MOTION_AXIS, duration } from "../axes/motion.ts";
+import { SOFT_EDGE, SOFT_EDGE_FILTER } from "../axes/surface.ts";
 import { contrastMix, layerCss, rawEdge } from "../color/layers.ts";
 import { SEMANTIC_ALIASES } from "../semantic/aliases.ts";
 
@@ -132,6 +133,10 @@ export function derivedTokens(): Record<string, string> {
     // Insets that count the frame follow it, so a surface keeps its outer size. docs/research/surface-2026-10-14.md.
     // Any raised contrast (Medium's 0.5 too) brings the whole pixel back.
     [`${PREFIX}border-width`]: `max(var(${PREFIX}frame-width), round(up, calc(var(${PREFIX}contrast-more) * 1px), 1px))`,
+    // The Surface axis's soft edge, drawn only where `border-width` is 0 (axes/surface.ts): at Surface 0 under a raised
+    // contrast the frame returns and the soft edge turns transparent, so the two never draw together.
+    [`${PREFIX}shadow-edge`]: SOFT_EDGE,
+    [`${PREFIX}shadow-edge-filter`]: SOFT_EDGE_FILTER,
     [`${PREFIX}edge-control-strong`]: contrastMix(rawEdge("hover"), `var(${PREFIX}stroke-control-hover)`),
     // The page, its layers, control fills on each ground, edges and inks: the Layers model (color/layers.ts), live over
     // the ground and layer-contrast settings and the Neutral cast. border-card (Card, Composer, Code block) is among
