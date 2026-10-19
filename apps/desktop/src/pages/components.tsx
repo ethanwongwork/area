@@ -4,8 +4,9 @@
  *
  *   All    one card per family, its default specimen (owner, 2026-10-14: "just 1 of each
  *          component"): the whole system at a glance (or a list of families); a click opens it
- *   Stage  one family: the tile on the Stage at its real size with its code attached, the family's
- *          tiles under it in their groups, then its props, anatomy and states (src/stage.tsx)
+ *   Stage  one family, in tabs (src/family-tabs.tsx; owner, 2026-10-18): Overview, the tile on the Stage at its
+ *          real size with its code under it and the family's tiles in their groups (src/stage.tsx); Documentation;
+ *          API; Code; Spec
  *
  * The two share tiles, labels, order, zoom and Canvas settings, so opening a family reads as
  * zooming into its section. A card opens its family's Stage with a click (owner, 2026-10-14:
@@ -22,7 +23,7 @@
  */
 import { Component, createElement, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import * as AreaReact from "@area/react";
-import { Badge, Button, Code, Count, EmptyState, Kbd, Link, Nav, NavGroup, NavItem, PanelSection, SectionHeading, Table, TableCell, TableLink, Tooltip, ZoomControl } from "@area/react";
+import { Badge, Button, Code, Count, EmptyState, Kbd, Link, Nav, NavGroup, NavItem, PanelSection, SectionHeading, Table, TableCell, TableLink, Tabs, Tooltip, ZoomControl } from "@area/react";
 import { ArrowLeftIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon, CopyIcon, OpenIcon, ResetIcon } from "@area/icons";
 import { MANIFESTS } from "@area/styles/manifest";
 import SNIPPETS from "virtual:demo-snippets";
@@ -39,12 +40,13 @@ import { DEMOS } from "../content/registry.tsx";
 import { PLAYGROUNDS, configCode, initialConfig, renderConfig, sameConfig, tileConfig, type Config, type Playground, type PropValue } from "../content/playgrounds.tsx";
 import { fitTiles } from "../gallery/fit.ts";
 import { CanvasSettings } from "../canvas-settings.tsx";
-import { Facts, PropsTable } from "../facts.tsx";
+import { Facts } from "../facts.tsx";
 import { SpecimenBox } from "../specimen-box.tsx";
 import { CodeWell, Selection } from "../inspector.tsx";
+import { ApiTab, CodeTab, DocumentationTab, FAMILY_TAB_IDS, FAMILY_TABS, SpecTab, type FamilyInfo, type FamilyManifest, type FamilyTab } from "../family-tabs.tsx";
 import { APP_SCALE } from "../app-scale.ts";
 import { CanvasSection, Tile, TileGrid } from "../tile.tsx";
-import { Anatomy, Properties, Stage, States, useStageKeys } from "../stage.tsx";
+import { Properties, Stage, useStageKeys } from "../stage.tsx";
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
 import { ChromeButton, SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
 import { matches } from "../search.ts";
@@ -199,17 +201,16 @@ function Overview({ groups, selected, onOpen, zoom }: { groups: Array<[string, F
 }
 
 /**
- * The Stage's page for one family: the Stage, the family's tiles in their groups (the same tiles as
- * on the grid, labelled by their value under the group's heading), then the reference.
+ * A family's Overview tab: the Stage, then the family's tiles in their groups (the same tiles as on the grid,
+ * labelled by their value under the group's heading). The reference is in the other tabs (src/family-tabs.tsx).
  */
-function FamilyStage({ family, tiles, tile, config, onSelectTile, onChange, zoom, replays }: {
+function FamilyOverview({ family, tiles, tile, config, onSelectTile, onChange, zoom, replays }: {
   family: Family; tiles: Tile[]; tile: Tile; config: Config | null; onSelectTile: (tile: Tile) => void; onChange: (prop: string, value: PropValue) => void; zoom: string; replays: number;
 }) {
   const playground = PLAYGROUNDS[family.slug];
   const strips = useRef<HTMLDivElement>(null);
   useFit(strips, `${family.slug}:${zoom}`);
   const onStage = config && playground ? matchingTile(playground, tiles, config) : tile;
-  const manifest = manifestOf(family);
   const groups = SPECIMEN_GROUPS.map((group: string) => [group, tiles.filter(entry => entry.group === group)] as const).filter(([, list]: readonly [string, Tile[]]) => list.length);
   return (
     <div className="studio-sections" {...zoomScope(zoom)}>
@@ -237,27 +238,38 @@ function FamilyStage({ family, tiles, tile, config, onSelectTile, onChange, zoom
           ))}
         </div>
       </div>
-      {/* The reference: documentation, not specimens, so it keeps the app's compact scale and default
-          radius whatever the Canvas previews (owner, 2026-10-11: props at full width, under the tiles). */}
-      {family.api?.length ? (
-        <section className="studio-section" aria-labelledby="family-props" {...APP_SCALE}>
-          <SectionHeading className="studio-section-heading" titleId="family-props" title="Props" />
-          <PropsTable api={family.api} />
-        </section>
-      ) : null}
-      {manifest ? (
-        <section className="studio-section" aria-labelledby="family-anatomy" {...APP_SCALE}>
-          <SectionHeading className="studio-section-heading" titleId="family-anatomy" title="Anatomy" />
-          <Anatomy manifest={manifest} />
-        </section>
-      ) : null}
-      {manifest?.states?.length ? (
-        <section className="studio-section" aria-labelledby="family-states" {...APP_SCALE}>
-          <SectionHeading className="studio-section-heading" titleId="family-states" title="States" />
-          <States manifest={manifest} />
-        </section>
-      ) : null}
     </div>
+  );
+}
+
+/**
+ * A family's page: its tabs (Area's Tabs at the app's scale, as the Canvas bar's controls), then the chosen tab. The
+ * reference keeps the app's compact scale and default radius whatever the Canvas previews (owner, 2026-10-11).
+ */
+function FamilyPage({ family, tab, onTab, overview, onOpenFamily }: {
+  family: Family; tab: FamilyTab; onTab: (tab: FamilyTab) => void; overview: ReactNode; onOpenFamily: (slug: string) => void;
+}) {
+  const status = statusOf(family);
+  const info: FamilyInfo = {
+    slug: family.slug, name: family.name, imports: importsOf(family), manifest: manifestOf(family) as FamilyManifest | undefined, api: family.api,
+    status: { label: STATUS_LABEL[status], tone: STATUS_TONE[status] },
+    demos: TILES.get(family.slug)!.map(entry => ({ label: entry.label, code: SNIPPETS[entry.demo] })),
+  };
+  const familyName = (slug: string) => FAMILIES.find(entry => entry.slug === slug)?.name;
+  // The tab list is app chrome at the app's scale; the Overview panel takes the Canvas's type and density back, so
+  // the Stage and tiles preview the Inspector's settings as they did before the tabs.
+  const canvas = useStudio().shown.canvas;
+  return (
+    <Tabs className="studio-family-tabs" size="sm" aria-label={`${family.name} views`} value={tab} onValueChange={next => onTab(next as FamilyTab)}
+      items={FAMILY_TABS.map(entry => ({ id: entry.id, label: entry.label }))} {...APP_SCALE}>
+      <div className="studio-family-tabs__panel" {...(tab === "overview" ? { "data-area-type": canvas.type, "data-area-density": canvas.density } : {})}>
+        {tab === "overview" ? overview
+          : tab === "documentation" ? <DocumentationTab family={info} onOpenFamily={onOpenFamily} familyName={familyName} />
+          : tab === "api" ? <ApiTab family={info} />
+          : tab === "code" ? <CodeTab family={info} />
+          : <SpecTab family={info} />}
+      </div>
+    </Tabs>
   );
 }
 
@@ -279,6 +291,9 @@ export function ComponentsPage() {
   // A new key again (2026-10-18): the old "fit" was today's Auto.
   const [zoom, setZoom] = useViewOption<Zoom>("components-zoom", "auto", ZOOMS);
   const [status, setStatus] = useViewOption<"all" | Status>("components-status", "all", ["all", "complete", "review", "unrefined"]);
+  // A family's tab (src/family-tabs.tsx), kept from family to family, so Next reads the next family's Documentation.
+  const [familyTab, setFamilyTab] = useViewOption<FamilyTab>("components-family-tab", "overview", FAMILY_TAB_IDS);
+  const onOverview = familyTab === "overview";
   // The grid's selection: the family whose Stage was last open, as "<family>/<tile id>", marked on its
   // card when the Stage closes. The Inspector describes it.
   const [selected, setSelected] = useState<string>();
@@ -373,7 +388,7 @@ export function ComponentsPage() {
   const previous = at > 0 ? sequence[at - 1] : undefined;
   const following = at >= 0 ? sequence[at + 1] : undefined;
 
-  // All fits section by section (FamilySection); the Stage fits its own tiles (FamilyStage).
+  // All fits section by section (FamilySection); the Stage fits its own tiles (FamilyOverview).
   const counts = { complete: 0, review: 0, unrefined: 0 };
   for (const entry of FAMILIES) counts[statusOf(entry)]++;
   const total = FAMILIES.reduce((sum, entry) => sum + TILES.get(entry.slug)!.length, 0);
@@ -408,8 +423,9 @@ export function ComponentsPage() {
       canvasTitle={family ? family.name : "All components"}
       canvasActions={family ? (
         <ViewControls>
-          <ChromeButton label="Replay" icon={<ResetIcon />} onClick={() => setReplays(count => count + 1)} />
-          {zoomControl}
+          {/* Replay and zoom view the Stage and tiles, on Overview only (a control that does not apply is left out). */}
+          {onOverview ? <ChromeButton label="Replay" icon={<ResetIcon />} onClick={() => setReplays(count => count + 1)} /> : null}
+          {onOverview ? zoomControl : null}
           <ChromeButton label={previous ? `Previous: ${previous.name}` : "Previous"} icon={<ChevronLeftIcon />} onClick={() => previous && select(previous.slug)} />
           <ChromeButton label={following ? `Next: ${following.name}` : "Next"} icon={<ChevronRightIcon />} onClick={() => following && select(following.slug)} />
         </ViewControls>
@@ -425,7 +441,8 @@ export function ComponentsPage() {
       canvasRef={canvas}
       canvas={family ? (
         stageTile
-          ? <FamilyStage family={family} tiles={tiles} tile={stageTile} config={config} onSelectTile={selectTile} onChange={change} zoom={zoom} replays={replays} />
+          ? <FamilyPage family={family} tab={familyTab} onTab={setFamilyTab} onOpenFamily={open}
+              overview={<FamilyOverview family={family} tiles={tiles} tile={stageTile} config={config} onSelectTile={selectTile} onChange={change} zoom={zoom} replays={replays} />} />
           : <EmptyState title="No tiles yet" description="This family has no gallery specimens." />
       ) : onCanvas.length ? mode === "list" ? (
         // List: one row per family, its status, tile count and import.
@@ -454,7 +471,8 @@ export function ComponentsPage() {
         // instance on the Stage in its place.
         design: (
           <>
-            {family && playground ? (
+            {/* Properties edit the Stage, so they show on the Overview tab only (main, 2026-10-19). */}
+            {family && playground && onOverview ? (
               <Properties playground={playground} config={config ?? initialConfig(playground)} changed={Boolean(config) && !sameConfig(config!, initialConfig(playground))} onChange={change} onReset={reset} />
             ) : null}
             {family ? (

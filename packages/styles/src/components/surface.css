@@ -438,7 +438,8 @@
    * more subtle with the shadow and … smooth, subtle, professional motion"). Notion's linked card (its tatami system,
    * measured 2026-10-18, docs/research/card-hover-2026-10-18.md) keeps its edge and fades a soft shadow in over 150ms
    * ease-out and out over 200ms ease-in; Fluent 2's interactive card steps its shadow up a level. Here the resting
-   * shadow steps to the hover role (the Menu's float shadow, set by Shadow; axes/depth.ts), so the lift follows Elevation, fading in on `fast` with ease-out and out on
+   * shadow steps to Elevation's lift role, Fluent's shadow8 at half the Menu's strength (owner, 2026-10-18: the float
+   * shadow it took first was "too drastic"; "very subtle elevation shadow"), so the lift follows Elevation, fading in on `fast` with ease-out and out on
    * `base` with ease-in (MOTION.md, "Lift"). The edge, fill and ink stay; at rest a linked card looks like any other.
    */
   .area-card:has(.area-card__link) {
@@ -446,7 +447,7 @@
   }
   @media (hover: hover) {
     .area-card:has(.area-card__link):hover {
-      --_card-lift: var(--area-shadow-hover);
+      --_card-lift: var(--area-shadow-lift);
       transition-duration: var(--area-duration-fast);
       transition-timing-function: var(--area-ease-out);
     }

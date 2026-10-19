@@ -150,6 +150,10 @@ role paints the same way in every family:
   fill and no shadow, as Figma's inspector fields do. Outline fields have no shadow either
   (outline pass; Select followed on 2026-09-29, audit B-2), as no product field has one. One
   surface uses one field style: a Panel's rows are all soft.
+- *Image corners* follow the image's size role (owner, 2026-10-18: "round the corners of images to something by
+  default"): an image that stands alone (Figure, an Asset card's image, a viewer) takes the container corner,
+  `radius-container` (12 at the default Radius); a thumbnail (File tile, Asset row, a group's mosaic cell, a list
+  row) takes `radius-small` (6). An image inside a framed preview keeps Preview frame's concentric corner.
 - *Keycaps* are filled, not drawn: `bg-component-active`, no visible edge, radius 6 in every
   host (owner 2026-09-28), muted ink at 500 in the keyboard face (Notion's shortcut hints).
   Inside any Button the keycap is `currentColor` at 14% with the Button's ink, so it survives
@@ -178,10 +182,10 @@ shadow. It names the role it plays, and the number scales every role:
 | `shadow-control` | Switch, Slider, Segmented thumbs; soft Toggle group selection; Badge modern | 0 0 2 + 0 1 2 (shadow2) | n% |
 | `shadow-resting` | Card, Panel, Board card, Composer | 0 0 2 + 0 2 4 (shadow4) | n/2 % |
 | `shadow-tooltip` | Tooltip, Toggletip | 0 0 2 + 0 4 8 (shadow8) | n/2 % |
+| `shadow-lift` | linked Card hover, the app's gallery tiles on hover | 0 0 2 + 0 4 8 (shadow8) | n/2 % |
 | `shadow-float` | Menu and all that open one, Popover and all built on it, Select picker, Toast, Calendar and ColorPicker surfaces, floating Toolbar, Board card actions, Scroll to latest | 0 0 2 + 0 8 16 (shadow16) | n% |
 | `shadow-modal` | Dialog, Confirm dialog, Drawer, Command palette | 0 0 8 + 0 14 28 (shadow28) | 2n % |
 | `shadow-field` | Outline fields (Input, Textarea, Select, Custom select, Number field, Date picker, Tag picker, OTP slots, Input group), outline and soft Buttons | as control | Field shadow % (0 by default) |
-| `shadow-hover` | A linked Card, a gallery tile under the pointer | as float | n% |
 
 The ambient layer is half the key, and dark doubles both. Anchors: 3 is Notion's lightest lift (2.7%), 5 its
 popover (5%) and 8 ChatGPT's menu (8%). By default in-flow controls (Button, fields, Chip, Tag) and content (Code
@@ -203,10 +207,11 @@ own layers (the Board card's tone ring, the floating Toolbar's edge), and `none`
 nearest rung to Notion's 7% popover ring) and #4b4b4b in dark. Forced colours drop `box-shadow` entirely, and the
 border is what the browser repaints: `forced-colors.css` puts the frame back at 1px under Borderless and gives
 the floating Toolbar, whose edge is an inset shadow, an outline. Stroke is its own setting: the Surface axis, the
-frame's width, `0` (Borderless), `0.5` (Hairline), `1` (Default) or `2` (Bold), with the Stroke control for how dark
-every stroke is. Borderless never leaves a surface without an edge: every surface
-whose frame it removes lists `shadow-edge` first in its `box-shadow`, ChatGPT's frameless-menu edge (a 1px-blur
-shadow at 62% black, and in dark a 1px-blur 20% white line inside), transparent at 1. So a Card or Menu stays
+frame's width, Stroke width: `0` (Flat) to `2` in half pixels, `1` the default (owner, 2026-10-19). Beside it, Rest
+shadow (`shadow-rest`, 0 to 8, 0 the default) sets `shadow-edge`, which every framed surface lists first in its
+`box-shadow`: after ChatGPT's frameless-menu edge, half a pixel down with a 1.5px blur at 5% black a step, and in dark a
+1px white line inside at 2.5% a step. The two are independent: a line, a shadow, both, or neither (flat). Until
+2026-10-19 the frame was 0 or 1 and 0 always drew the soft edge. So a Card or Menu stays
 distinct at Elevation 0 and in dark, where no lift reads (2026-10-14; it replaced Card's dark-only ring,
 consistency pass O2). The edge is derived from `border-width` and drawn only while no frame is, so at Surface 0 a
 raised contrast level brings the 1px frame back and turns the soft edge off: never both (audit 2026-10-18). The Table frame is a required edge (`stroke-width`), so it stays under Borderless.

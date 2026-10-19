@@ -11,7 +11,8 @@
  *   data-area-surface          Stroke width: the frame's width, 0 (Borderless), 0.5 (Hairline), 1, 2 (Bold)   surface.ts
  *   data-area-stroke           Stroke: every stroke's distance from its ground, 0 to 8 (4)                color/layers.ts
  *   data-area-elevation        Shadow: menus, popovers, tooltips, dialogs and the hover lift, 0 to 8 (3)   elevation.ts
- *   data-area-shadow-rest      Rest shadow: cards, panels and raised thumbs at rest, 0 to 8 (3)
+ *   data-area-shadow-resting   Resting lift: cards, panels and raised thumbs at rest, 0 to 8 (3); `shadow-rest` is the
+ *                              Rest shadow round surfaces (surface.ts, from main 2026-10-19)
  *   data-area-shadow-field     Field shadow: fields, select triggers, outline and soft buttons, 0 to 8 (0)
  *   data-area-shadow-size      how far every shadow reaches: offset and blur, 0 to 8 (4)
  *   data-area-shadow-softness  one crisp layer (0) to six eased layers held under the surface (8); 2 is today's pair
@@ -52,8 +53,8 @@ const numbered = (n: number, fallback: number, zero: string, write: (i: number) 
 export const STROKE_AXIS = control("stroke", "Stroke", "How dark every stroke is: its distance from its ground, 0 (none) to 8", "4", ["stroke-strength"],
   numbered(8, 4, "None", i => ({ "stroke-strength": i / 4 })));
 
-export const SHADOW_REST_AXIS = control("shadow-rest", "Rest shadow", "How much cards, panels and raised thumbs lift at rest, 0 (none) to 8, in % as Shadow", "3", ["shadow-rest-step"],
-  numbered(8, 3, "None", i => ({ "shadow-rest-step": i })));
+export const SHADOW_RESTING_AXIS = control("shadow-resting", "Resting lift", "How much cards, panels and raised thumbs lift at rest, 0 (none) to 8, in % as Shadow", "3", ["shadow-resting-step"],
+  numbered(8, 3, "None", i => ({ "shadow-resting-step": i })));
 
 export const SHADOW_FIELD_AXIS = control("shadow-field", "Field shadow", "How much fields, select triggers, outline and soft buttons lift, 0 (none) to 8, in % as Shadow", "0", ["shadow-field-step"],
   numbered(8, 0, "None", i => ({ "shadow-field-step": i })));
@@ -107,22 +108,24 @@ export const SHADOW_COLOR_AXIS = control("shadow-color", "Shadow colour", "The l
 
 /** The controls besides Stroke width (Surface) and Shadow (Elevation), in the Inspector's order. */
 export const DEPTH_AXES: readonly AxisDefinition[] = [
-  STROKE_AXIS, SHADOW_REST_AXIS, SHADOW_FIELD_AXIS, SHADOW_SIZE_AXIS, SHADOW_SOFTNESS_AXIS, SHADOW_LIGHT_AXIS, SHADOW_COLOR_AXIS,
+  STROKE_AXIS, SHADOW_RESTING_AXIS, SHADOW_FIELD_AXIS, SHADOW_SIZE_AXIS, SHADOW_SOFTNESS_AXIS, SHADOW_LIGHT_AXIS, SHADOW_COLOR_AXIS,
 ];
 
 // ---- The roles ---------------------------------------------------------------------------------------------------
 
 /**
  * [ambient blur, key offset, key blur] per role at Shadow size 4 (Fluent's shadow2 / 4 / 8 / 16 / 28, elevation.ts), the
- * weight its step is scaled by, and which control sets the step. `field` is the control geometry; `hover` the float one.
+ * weight its step is scaled by, and which control sets the step. `field` is the control geometry; `lift` the hovered card's.
  */
 const ROLES = {
-  control: { geometry: [2, 1, 2], weight: 1, step: "shadow-rest-step" },
+  control: { geometry: [2, 1, 2], weight: 1, step: "shadow-resting-step" },
   field: { geometry: [2, 1, 2], weight: 1, step: "shadow-field-step" },
-  resting: { geometry: [2, 2, 4], weight: 0.5, step: "shadow-rest-step" },
+  resting: { geometry: [2, 2, 4], weight: 0.5, step: "shadow-resting-step" },
   tooltip: { geometry: [2, 4, 8], weight: 0.5, step: "elevation" },
   float: { geometry: [2, 8, 16], weight: 1, step: "elevation" },
-  hover: { geometry: [2, 8, 16], weight: 1, step: "elevation" },
+  // A hovered card or tile: Fluent's shadow8 at half the Menu's strength (main, 2026-10-19: the float shadow it took
+  // first was "too drastic"; "very subtle elevation shadow"). Was `hover`, the float geometry at full weight.
+  lift: { geometry: [2, 4, 8], weight: 0.5, step: "elevation" },
   modal: { geometry: [8, 14, 28], weight: 2, step: "elevation" },
 } as const;
 export const SHADOW_ROLES = Object.keys(ROLES) as ReadonlyArray<keyof typeof ROLES>;

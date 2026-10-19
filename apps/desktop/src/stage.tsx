@@ -1,17 +1,18 @@
 /**
  * The Stage: one family's isolated view (owner, 2026-10-12; research in
  * docs/research/component-stage-2026-10-12.md). The gallery grid is the way through the whole
- * system; the Stage is one component at its real size, with its code attached under it, the
+ * system; the Stage is one component at its real size, with its code in a Code block under it, the
  * family's own tiles below, and the Inspector holding what the Stage renders.
  *
  * The Stage is the Canvas's container (product UI rule 11): the tile's edge, corner and head, made
- * large. Its right edge resizes it, so a component can be read at a narrow width (React Bits'
+ * large. Its code is a separate Code block under it, not a row of the frame (owner, 2026-10-18). Its right edge
+ * resizes it, so a component can be read at a narrow width (React Bits'
  * resizer: arrow keys step 10, Shift 50; Home is the narrowest, End or a double-click the full
  * width). The width shows in the head while it differs from the full width. How the Stage is viewed
  * (zoom, replay) is the Canvas bar's; what it renders is the Inspector's.
  */
 import { useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent, type PointerEvent, type ReactNode } from "react";
-import { Button, Code, CodeBlock, Field, Input, PanelSection, Segmented, Select, Switch, Table, TableCell } from "@area/react";
+import { Button, CodeBlock, Field, Input, PanelSection, Segmented, Select, Switch } from "@area/react";
 // @ts-expect-error — the highlighter is authored in JavaScript.
 import { highlight } from "./content/highlight.mjs";
 import type { Config, Playground, PlaygroundControl, PropValue } from "./content/playgrounds.tsx";
@@ -79,6 +80,9 @@ export function Stage({ label, code, zoom, replays, children }: StageProps) {
 
   const lines = code ? code.split("\n").length : 0;
   return (
+    // The code is its own Code block under the frame, a tile's gap apart (owner, 2026-10-18: "the code is separated
+    // from the bottom of the frame of the main component container"; it was the frame's last row, Primer's model).
+    <div className="studio-stage-group">
     <div ref={frame} className="studio-stage" data-area-ground="raised" style={narrowed ? { inlineSize: `${width}px` } : undefined}>
       <div className="studio-stage__head gallery-tile__head" {...APP_SCALE}>
         <span className="gallery-tile__label">{label}</span>
@@ -87,14 +91,15 @@ export function Stage({ label, code, zoom, replays, children }: StageProps) {
       <div className="studio-stage__view" data-zoom={zoom}>
         <div key={replays} className="studio-stage__content">{children}</div>
       </div>
-      {code ? (
-        // Keyed by the code, so a long snippet starts as its excerpt each time the Stage changes.
-        <CodeBlock key={code} className="studio-stage__code" flush lineNumbers={false} language="tsx"
-          html={highlight(code)} collapsible={lines > EXCERPT} defaultCollapsed={lines > EXCERPT} {...APP_SCALE} />
-      ) : null}
       <div className="studio-stage__handle" role="separator" aria-orientation="vertical" aria-label="Stage width"
         aria-valuemin={MIN_WIDTH} aria-valuemax={room} aria-valuenow={shown} aria-valuetext={`${shown} pixels`} tabIndex={0}
         onPointerDown={drag} onKeyDown={keys} onDoubleClick={() => setWidth(null)} />
+    </div>
+    {code ? (
+      // Keyed by the code, so a long snippet starts as its excerpt each time the Stage changes.
+      <CodeBlock key={code} lineNumbers={false} language="tsx"
+        html={highlight(code)} collapsible={lines > EXCERPT} defaultCollapsed={lines > EXCERPT} {...APP_SCALE} />
+    ) : null}
     </div>
   );
 }
@@ -145,45 +150,6 @@ function renderControl(control: PlaygroundControl, value: PropValue, change: (va
     <Select size="sm" variant="soft" fullWidth aria-label={control.label} value={String(value)} onChange={event => change(event.currentTarget.value)}>
       {options.map(option => <option key={option} value={option}>{optionLabel(control.prop, option)}</option>)}
     </Select>
-  );
-}
-
-/* --- Canvas: the reference under the tiles ---------------------------------- */
-
-interface ManifestLike { block: string; elements?: readonly string[]; states?: readonly string[]; stateAttributes?: Record<string, string> }
-
-/**
- * Anatomy: the component's parts and the class each one carries (Radix's and Base UI's parts list,
- * Mantine's Styles API), from the manifest, so it can never name a part the CSS does not have.
- */
-export function Anatomy({ manifest }: { manifest: ManifestLike }) {
-  return (
-    <Table size="md" flush aria-label="Anatomy">
-      <thead><tr><th scope="col">Part</th><th scope="col">Class</th></tr></thead>
-      <tbody>
-        <tr><TableCell fit>Root</TableCell><td><Code>{manifest.block}</Code></td></tr>
-        {(manifest.elements ?? []).map(part => (
-          <tr key={part}><TableCell fit>{part[0]!.toUpperCase() + part.slice(1).replaceAll("-", " ")}</TableCell><td><Code>{`${manifest.block}__${part}`}</Code></td></tr>
-        ))}
-      </tbody>
-    </Table>
-  );
-}
-
-/**
- * States: each runtime state and the attribute that paints it (HeroUI's state table): `data-<state>`
- * unless the manifest names a native or ARIA attribute instead.
- */
-export function States({ manifest }: { manifest: ManifestLike }) {
-  return (
-    <Table size="md" flush aria-label="States">
-      <thead><tr><th scope="col">State</th><th scope="col">Attribute</th></tr></thead>
-      <tbody>
-        {(manifest.states ?? []).map(state => (
-          <tr key={state}><TableCell fit>{state[0]!.toUpperCase() + state.slice(1).replaceAll("-", " ")}</TableCell><td><Code>{manifest.stateAttributes?.[state] ?? `data-${state}`}</Code></td></tr>
-        ))}
-      </tbody>
-    </Table>
   );
 }
 

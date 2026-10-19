@@ -51,7 +51,7 @@ test('every surface takes its depth from its elevation role', () => {
   // `none`, because a role also sits inside lists (Board card's ring, the floating Toolbar's edge) where `none`
   // invalidates the whole box-shadow and drops the ring with it.
   const layers = value => { let depth = 0, count = 1; for (const ch of value) { if (ch === '(') depth++; else if (ch === ')') depth--; else if (ch === ',' && depth === 0) count++; } return count; };
-  const roles = ['control', 'field', 'resting', 'tooltip', 'float', 'hover', 'modal'];
+  const roles = ['control', 'field', 'resting', 'tooltip', 'lift', 'float', 'modal']; // lift: main's hover role (2026-10-19), was 'hover'
   for (const role of roles) {
     const values = [...css.matchAll(new RegExp(`--area-shadow-${role}:\\s*([^;]+);`, 'g'))].map(match => match[1].trim());
     // Derived: on :root, and again wherever an axis is set and under the OS contrast preference.
@@ -70,8 +70,8 @@ test('every surface takes its depth from its elevation role', () => {
   // Shadow size 1 (×4/4), no tightness, lip or highlight, black, ×2 in dark, rest at 3 as Shadow, fields at 0.
   const root = css.slice(css.indexOf(':where(:root)'));
   const leaf = name => root.match(new RegExp(`--area-${name}:\\s*([^;]+);`))?.[1].trim();
-  assert.deepEqual([leaf('elevation'), leaf('shadow-size'), leaf('shadow-tightness'), leaf('shadow-lip'), leaf('shadow-highlight-light'), leaf('shadow-tint-l'), leaf('shadow-tint-c'), leaf('shadow-rest-step'), leaf('shadow-field-step'), leaf('stroke-strength')],
-    ['3', '1', '0', '0', '0', '0', '0', '3', '0', '1'], 'the Edge and Depth defaults moved');
+  assert.deepEqual([leaf('elevation'), leaf('shadow-size'), leaf('shadow-tightness'), leaf('shadow-lip'), leaf('shadow-highlight-light'), leaf('shadow-tint-l'), leaf('shadow-tint-c'), leaf('shadow-resting-step'), leaf('shadow-field-step'), leaf('stroke-strength'), leaf('shadow-rest-step')],
+    ['3', '1', '0', '0', '0', '0', '0', '3', '0', '1', '0'], 'the Edge and Depth defaults moved'); // resting lift 3; main's Rest shadow 0
   assert.deepEqual([1, 2, 3, 4, 5, 6].map(i => [leaf(`shadow-slot-${i}-t`), leaf(`shadow-slot-${i}-g`), leaf(`shadow-slot-${i}-a`)]),
     [['0', '1', '0.5'], ['1', '0', '1'], ['0', '0', '0'], ['0', '0', '0'], ['0', '0', '0'], ['0', '0', '0']], 'the default Layers are not the ambient + key pair');
   const float = root.match(/--area-shadow-float:\s*([^;]+);/)[1];
@@ -79,7 +79,7 @@ test('every surface takes its depth from its elevation role', () => {
   assert.match(float, /var\(--area-shadow-size\) \* 8px \* var\(--area-shadow-slot-2-t\)/, 'the float key lost its 8px offset');
   assert.match(float, /rgb\(0 0 0 \/ min\(0\.9, calc\(var\(--area-elevation\) \/ 100 \* 1 \* var\(--area-shadow-slot-2-a\) \* 2\)\)\)/, 'dark shadows are not twice the light alpha');
   const resting = root.match(/--area-shadow-resting:\s*([^;]+);/)[1];
-  assert.match(resting, /var\(--area-shadow-rest-step\) \/ 100 \* 0\.5 \* var\(--area-shadow-slot-2-a\)/, 'the resting role does not read Rest shadow at half weight');
+  assert.match(resting, /var\(--area-shadow-resting-step\) \/ 100 \* 0\.5 \* var\(--area-shadow-slot-2-a\)/, 'the resting role does not read Resting lift at half weight');
 
   // The shadow that paints is the last box-shadow on the block, in any rule: a later literal once overrode the
   // shared lift with a full-strength second layer and a looser test still passed.
@@ -138,21 +138,19 @@ test('every surface takes its depth from its elevation role', () => {
   }
   assert.match(ruleFor('.area-tooltip')?.body ?? '', /var\(--area-shadow-tooltip\)/, 'Tooltip does not take the tooltip role');
   assert.match(ruleFor('.area-card')?.body ?? '', /--_card-shadow:\s*var\(--area-shadow-resting\)/, 'Card does not take the resting role');
+  assert.match(css, /\.area-card:has\(\.area-card__link\):hover\s*\{[^}]*--_card-lift:\s*var\(--area-shadow-lift\)/, 'a linked Card\'s hover does not take the lift role');
 
-  // The Surface axis (axes/surface.ts, 2026-10-14): at 0 (Borderless) a framed surface's edge is a shadow, so every
-  // surface whose frame the setting removes lists `shadow-edge` first, or Borderless leaves it with no edge at
-  // Elevation 0 and in dark. Two layers at both steps, never none, as the roles.
-  // The edge is derived from `border-width` (emit/base.ts), drawn only while no frame is, so Surface 0 under Medium or
-  // More contrast draws the returned frame alone, not the frame and the soft edge (audit 2026-10-18).
-  const on = '(1 - sign(var(--area-border-width)))';
+  // The rest shadow (axes/surface.ts, 2026-10-19): every framed surface lists `shadow-edge` first, set by the Rest
+  // shadow setting alone (0 none, with the line or instead of it), two layers at every step, never none, as the roles.
+  const rest = 'var(--area-shadow-rest-step, 0)';
   const edges = [...css.matchAll(/--area-shadow-edge:\s*([^;]+);/g)].map(match => match[1].trim());
   assert.ok(edges.length > 0, '--area-shadow-edge is not emitted');
   for (const value of edges) {
     assert.equal(layers(value), 2, `--area-shadow-edge is not two layers: ${value}`);
-    assert.equal(value, `0 0 1px rgb(0 0 0 / calc(0.62 * ${on})), inset 0 0 0 1px light-dark(transparent, rgb(255 255 255 / calc(0.2 * ${on})))`, `--area-shadow-edge lost ChatGPT's frameless edge or its frame switch: ${value}`);
+    assert.equal(value, `0 0.5px 1.5px light-dark(rgb(0 0 0 / calc(0.05 * ${rest})), transparent), inset 0 0 0 1px light-dark(transparent, rgb(255 255 255 / calc(0.025 * ${rest})))`, `--area-shadow-edge is not the rest shadow: ${value}`);
   }
   for (const value of [...css.matchAll(/--area-shadow-edge-filter:\s*([^;]+);/g)].map(match => match[1].trim())) {
-    assert.ok(value.includes(`calc(0.62 * ${on})`) && value.includes(`calc(0.2 * ${on})`), `--area-shadow-edge-filter does not follow the frame: ${value}`);
+    assert.ok(value.includes(`calc(0.05 * ${rest})`) && value.includes(`calc(0.025 * ${rest})`), `--area-shadow-edge-filter does not follow the rest shadow: ${value}`);
   }
   // Surfaces a material paints lead with its slot, then the edge; the rest lead with the edge.
   for (const block of [...expect.float.slice(0, 4), ...expect.modal]) {

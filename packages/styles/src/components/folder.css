@@ -38,7 +38,13 @@
     /* One whole-pixel edge for the outline style at every size to 191, 2px from 192 (Fluent's hand-drawn 1–2px at
        48–96; owner, 2026-10-18: "these strokes are very inconsistent, thickness"); fractional widths anti-aliased
        unevenly. */
-    --_edge: max(1px, round(down, calc(var(--_size) / 96), 1px)); /* spec */
+    --_edge: max(var(--area-stroke-width), round(down, calc(var(--_size) / 96), 1px)); /* spec: Area's required line, 1px a 96 */
+    /* The outline's fill is the control fill, `bg-component`: equal to `bg-subtle` in light (0.976) and a step above the
+       surface in dark (0.20 on 0.18), where the recessed `bg-subtle` (0.15) read as a hole. Its quiet ink (the count, File
+       page's glyph and label): muted mixed 45% toward that fill, about 22 L under it (Finder's label on its page),
+       derived from the roles so it follows Contrast, Layers and dark. */
+    --_fill: var(--area-bg-component);
+    --_quiet: color-mix(in oklab, var(--area-fg-muted), var(--_fill) 45%); /* spec: Finder ~22 L under its fill */
     position: relative;
     display: inline-block;
     flex: none;
@@ -83,11 +89,12 @@
     filter: drop-shadow(0 calc(var(--_size) * 0.02) calc(var(--_size) * 0.045) rgb(0 0 0 / 0.12)); /* spec */
   }
   .area-folder__back {}
-  .area-folder__paper { fill: var(--_paper); transition: transform var(--area-duration-base) var(--area-ease-out); }
+  /* Opening is shape moving while visible: `base` ease-in-out in, one step faster (`fast`) out (MOTION.md, "Folder open"). */
+  .area-folder__paper { fill: var(--_paper); transition: transform var(--area-duration-fast) var(--area-ease-in-out); }
   /* Tucked: an outline folder's sheet, or a solid one that holds nothing, waits below the pocket's top (hidden by it). */
   .area-folder__paper[data-tucked] { transform: translateY(72px); }
   .area-folder--outline .area-folder__paper {
-    fill: var(--area-bg-surface);
+    fill: light-dark(var(--area-bg-surface), var(--area-bg-component-hover)); /* spec: paper, a step lighter than the folder's fill in both themes */
     stroke: var(--area-border);
     stroke-width: var(--_edge);
     vector-effect: non-scaling-stroke;
@@ -95,9 +102,9 @@
   .area-folder__front {
     stroke-width: 1px;
     vector-effect: non-scaling-stroke;
-    transition: d var(--area-duration-base) var(--area-ease-out);
+    transition: d var(--area-duration-fast) var(--area-ease-in-out);
   }
-  .area-folder__rim { transition: d var(--area-duration-base) var(--area-ease-out); }
+  .area-folder__rim { transition: d var(--area-duration-fast) var(--area-ease-in-out); }
 
   /* Outline: a simplified folder (owner, 2026-10-18: "a simplified grey folder with light grey stroke around it … as an
      alternative design"; their reference, AccessGrid's menu, draws a #f5f5f7 folder with a #d8d8dc edge and the item
@@ -106,7 +113,7 @@
   .area-folder--solid {}
   .area-folder--outline .area-folder__figure > svg { filter: none; }
   .area-folder__rim {}
-  .area-folder--outline :is(.area-folder__back, .area-folder__front) { fill: var(--area-bg-subtle); }
+  .area-folder--outline :is(.area-folder__back, .area-folder__front) { fill: var(--_fill); }
   .area-folder--outline :is(.area-folder__rim, .area-folder__front) {
     stroke: var(--area-border);
     stroke-width: var(--_edge);
@@ -131,7 +138,7 @@
     line-height: 1;
     text-box: trim-both cap alphabetic;
   }
-  .area-folder--outline .area-folder__count { color: light-dark(#b0b0b6, #6e6e74); } /* spec: about 22 L under its fill (Finder) */
+  .area-folder--outline .area-folder__count { color: var(--_quiet); }
 
   /* A badge sits at the pocket's foot, as the count's mirror: its marks 12.5% of the box (12 at 96; the owner's reference
      draws its app marks about 11% of the folder's width; owner: "the avatar badge looks quite large"), on the count's
@@ -160,6 +167,7 @@
     d: path("M0 212V56Q0 0 56 0H150C170 0 178 12 186 24C194 35 200 40 214 40H414Q470 40 470 96V212");
   }
   :is(.area-folder[data-open], [data-drop-target] .area-folder) .area-folder__paper { transform: translateY(-24px); } /* spec: pick */
+  :is(.area-folder[data-open], [data-drop-target] .area-folder) :is(.area-folder__front, .area-folder__rim, .area-folder__paper) { transition-duration: var(--area-duration-base); }
 
   @media (forced-colors: active) {
     .area-folder__figure > svg { filter: none; }

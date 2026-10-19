@@ -90,6 +90,9 @@ export const Folder = /* @__PURE__ */ forwardRef<HTMLSpanElement, FolderProps>(f
             {image ? <clipPath id={`${id}-sheet`}><rect {...SHEET} /></clipPath> : null}
           </defs>
           <path className="area-folder__back" d={BACK} fill={outline ? undefined : `url(#${id}-back)`} />
+          {/* The back's edge before the sheet: the sheet stands inside the folder, in front of the back, its own edge whole
+              where it rises past the back's top line (owner, 2026-10-19: the page "looks like its under the stroke"). */}
+          {outline ? <path className="area-folder__rim" d={RIM} /> : null}
           {/* The sheet: shown at rest by a solid folder that holds something; otherwise tucked below the pocket's top until
               the folder opens, so opening always lifts one out. */}
           {outline || holds || open ? (
@@ -98,7 +101,6 @@ export const Folder = /* @__PURE__ */ forwardRef<HTMLSpanElement, FolderProps>(f
               {image ? <image href={image} x={SHEET.x} y={SHEET.y} width={SHEET.width} height={SHEET.height} preserveAspectRatio="xMidYMin slice" clipPath={`url(#${id}-sheet)`} /> : null}
             </g>
           ) : null}
-          {outline ? <path className="area-folder__rim" d={RIM} /> : null}
           <path className="area-folder__front" d={FRONT} fill={outline ? undefined : `url(#${id}-front)`} stroke={outline ? undefined : `url(#${id}-lip)`} />
         </svg>
         {badge ? <span className="area-folder__badge">{badge}</span> : null}

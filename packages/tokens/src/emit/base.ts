@@ -30,11 +30,14 @@ export const SPACE_RAMP = [0, 2, 4, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 64, 80
  * size on the ramp instead of landing on 12.25px.
  */
 export const SIZE_RAMP = [
-  10, 11, 12, 13, 14, 15, 16, 17, 18, 20, 24, 28, 32, 40, 48, 56, 64, 72, 96, 128,
+  // 19 to 82 between the old rungs: titles and display scale with the type size (axes/type-size.ts, 2026-10-19).
+  10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 27, 28, 30, 32, 34, 37, 40, 48, 52, 56, 60, 62, 64, 67,
+  72, 77, 82, 96, 128,
 ] as const;
 
 export const LEADING_RAMP = [
-  12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 36, 40, 44, 48, 56, 64, 72, 80, 96, 112, 136,
+  12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 52, 56, 60, 62, 64, 68, 72, 78, 80, 82, 96,
+  112, 136,
 ] as const;
 
 /**
@@ -137,8 +140,8 @@ export function derivedTokens(): Record<string, string> {
     // Insets that count the frame follow it, so a surface keeps its outer size. docs/research/surface-2026-10-14.md.
     // Any raised contrast (Medium's 0.5 too) brings the whole pixel back.
     [`${PREFIX}border-width`]: `max(var(${PREFIX}frame-width), round(up, calc(var(${PREFIX}contrast-more) * 1px), 1px))`,
-    // The Surface axis's soft edge, drawn only where `border-width` is 0 (axes/surface.ts): at Surface 0 under a raised
-    // contrast the frame returns and the soft edge turns transparent, so the two never draw together.
+    // The Rest shadow setting's subtle shadow round surfaces (axes/surface.ts), with the frame or instead of it (owner,
+    // 2026-10-19): its own setting, no longer switched on by a 0 frame.
     [`${PREFIX}shadow-edge`]: SOFT_EDGE,
     [`${PREFIX}shadow-edge-filter`]: SOFT_EDGE_FILTER,
     [`${PREFIX}edge-control-strong`]: contrastMix(strokeEdge("hover"), `var(${PREFIX}stroke-control-hover)`),
@@ -419,6 +422,8 @@ export const REGISTERED_PROPERTIES = [
   { name: `${PREFIX}focus-offset`, syntax: "<length>", initial: "2px" },
   // The Surface leaf; `border-width` is derived from it and contrast, so it is not registered.
   { name: `${PREFIX}frame-width`, syntax: "<length>", initial: "1px" },
+  // The Rest shadow leaf; `shadow-edge` is derived from it, so it is not registered.
+  { name: `${PREFIX}shadow-rest-step`, syntax: "<number>", initial: "0" },
   // The motion axis's default step, so a missing or invalid duration falls back to the default.
   { name: `${PREFIX}duration-fast`, syntax: "<time>", initial: duration(Number(MOTION_AXIS.defaultPreset), 2) },
   { name: `${PREFIX}duration-base`, syntax: "<time>", initial: duration(Number(MOTION_AXIS.defaultPreset), 3) },

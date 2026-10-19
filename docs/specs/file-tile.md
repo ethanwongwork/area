@@ -65,6 +65,22 @@ unless `figureAlt` is given (the name is the accessible text).
 - Rename (F2 / Enter on macOS, VS Code's name-before-extension selection) on EditableText.
 - The card layout, FileRow, a file-type icon map.
 
+## Coherence pass, 2026-10-19
+
+| Area | Was | Now | Basis |
+|---|---|---|---|
+| Name | 12 (xs), strong, two lines | the app's UI text (`ui-size` / `ui-leading`), strong, two lines | Asset card's name, the other caption under a figure |
+| Detail line | inherited xs | xs, muted, tabular, one line | Asset card's detail line |
+| Figure → name | 6 (pick) | 8 | Asset card's caption, 8 under its frame |
+| Hover | lifted a solid folder's sheet 6 | the plate only | PRODUCT_UI rule 2: hover changes one thing; nothing moves |
+| Bare glyph line | the size curve (0.84 units) | `--area-stroke-width`, non-scaling | one weight with Folder and File page |
+| Paint | ListBox's grid plates | unchanged | PRODUCT_UI rule 11: a figure sits on the surface on row plates; Asset grid paints a frame because its asset is a composition in a container |
+| Keyboard | ListBox grid + Enter / double click opens | unchanged; same as Asset grid | PRODUCT_UI rule 5 |
+
+Not changed, and why: the plates do not hang into the margin inside the component (ListBox's grid does not either; a
+host hangs them, as the Icons tab does); an image keeps the swatch ring because it stands on the bare surface (Asset
+card's images sit inside a frame).
+
 ## Review note, 2026-10-18 (round 48)
 
 - **What changed:** New. One item of an icon view: a figure (a Folder, a file glyph or an image) over its name (12,

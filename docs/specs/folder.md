@@ -122,6 +122,21 @@ name. Forced colours drop the shadow and draw both panels as Canvas with a Canva
 - Owner: sm / lg sizes; whether the sheet should show more (Finder's own empty folder shows none).
 - Not measured: Finder's selection painting in icon view (label pill, icon backdrop).
 
+## Coherence pass, 2026-10-19
+
+Owner: "make sure everything goes through a deep coherence pass with current area components … gaps, padding,
+spacing, layout, density, radius, type styles, fills, fgs … interaction, hover states … accessible and intentional …
+in the end the version that we build is an area component." Checked against Asset card, ListBox's grid, PRODUCT_UI
+rules 1–3 and 11, MOTION.md and the tokens; in both themes; in a 2× capture.
+
+| Area | Was | Now | Basis |
+|---|---|---|---|
+| Outline fill | `bg-subtle` | `bg-component` | `bg-subtle` is the recessed step: equal in light (0.976) but 0.15 under a 0.18 card in dark, a hole; `bg-component` is 0.20 there |
+| Quiet ink (count, page glyph and label) | `light-dark(#b0b0b6, #6e6e74)` | muted mixed 45% toward the fill | derived from roles, so it follows Contrast, Layers and dark (`fg-placeholder` equals muted) |
+| Edge | `max(1px, …)` | `max(var(--area-stroke-width), …)` | Area's required line, never zeroed by the Surface axis |
+| Open motion | `base` ease-out both ways | `base` ease-in-out in, `fast` out | MOTION.md: shape moving while visible; exits a step faster |
+| Outline sheet | drawn under the back's edge; `bg-surface` | drawn over it; paper a step lighter than the fill in both themes | owner: the page "looks like its under the stroke" |
+
 ## Review note, 2026-10-18 (round 48)
 
 - **What changed:** New, redrawn after your notes: Finder's folder, measured from the live icon on this Mac, then made

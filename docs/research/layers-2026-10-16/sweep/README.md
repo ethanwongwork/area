@@ -183,3 +183,24 @@ at a time.
 - a Switch's input, whose visual is its track;
 - the current or selected item, validation fields (their tone edge holds), read-only fields and loading buttons.
 - One faint hover: Chip's accent selection at dark 24 + 8 (ΔE 0.015).
+
+## Audit, 2026-10-19: the far grounds and the strongest layers
+
+Owner: "im open to keeping those ground and layers, but i want to make sure the contrast for those style work, the
+backplates, etc. if necessary to use inverse text ... dont force it if thats not the issue." The question was whether
+light grounds 94 to 90 and layer contrast 7 and 8 should go.
+
+Run: `run.mjs` (this folder) on a static build of branch `claude/electron-ui-tweaks-ccf407`, every Complete and In
+review family (107), at light 100 + 4 (the default), 100 + 8, 96 + 8, 94 + 0 / 4 / 8, 92 + 4 / 7, 90 + 0 / 4 / 7 / 8,
+and dark 8 + 8, 24 + 7, 24 + 8. Findings were compared with the default's.
+
+- **Light 90 to 94 and contrast 7 and 8 add nothing.** Every text, plate, field and layer finding at those settings is
+  also found at 100 + 4 (the checker's own thresholds flag some designed states, such as Segmented's white thumb with a
+  shadow at a 0.024 step), in the same families and counts. Dark 24 + 7 and + 8 match dark 8 + 8. No inverse text or
+  darker plates are needed: the model already moves inks and fills with the ground. All steps stay.
+- **Contrast 0 (Flat), on any ground:** Command palette's selected row steps 0.027 from its ground (white + 0 too),
+  under the 0.035 plate bar. Other menus, lists, trees and tables pass. A Flat-only, Command-palette-only finding, not a
+  ground one; recorded, not changed.
+- **On every setting, not a ground finding:** Folder's count and File page's extension label are 2.1 to 3.3:1 (#b0b0b6
+  on white, #6e6e74 on dark grounds). They sit on the drawn folder or page, read as part of the glyph; recorded for the
+  file explorer set's next pass.

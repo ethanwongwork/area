@@ -26,13 +26,14 @@ const GROUPS: ReadonlyArray<{ heading: string; axes: readonly Axis[] }> = [
   // Edge and Depth (axes/depth.ts, owner 2026-10-18: "i want to be able to control the individual controls as much as
   // possible, but i think the previous system was too bloated"): nine controls, each on its own, no named looks, under
   // two headings (owner: "can you separate edge from depth … maybe edge can just be called stroke"). They share nothing:
-  // the soft edge Borderless draws is a shadow that stands in for the frame, so it moves with Width, under Stroke.
-  { heading: "Stroke", axes: ["surface", "stroke"] },
+  // Rest shadow (main, 2026-10-19: a subtle shadow round surfaces, "with the line or instead of it") sets surfaces
+  // apart as the line does, so it sits under Stroke with Width and Strength.
+  { heading: "Stroke", axes: ["surface", "stroke", "shadow-rest"] },
   { heading: "Shadow", axes: ["elevation", ...DEPTH_LEVER_AXES.filter(axis => axis !== "stroke")] },
   { heading: "Effects", axes: ["motion"] },
 ];
 
-export function CanvasSettings({ material, axes = ["neutral", "accent", "ground-light", "ground-dark", "layers-light", "layers-dark", "action", "selection", "contrast", "type", "density", "radius", "surface", "elevation", ...DEPTH_LEVER_AXES, "motion", "pills"], children }: { axes?: readonly Axis[]; material?: boolean; children?: ReactNode }) {
+export function CanvasSettings({ material, axes = ["neutral", "accent", "ground-light", "ground-dark", "layers-light", "layers-dark", "action", "selection", "contrast", "type", "density", "radius", "surface", "shadow-rest", "elevation", ...DEPTH_LEVER_AXES, "motion", "pills"], children }: { axes?: readonly Axis[]; material?: boolean; children?: ReactNode }) {
   // Material shows with every setting: a tab that narrows its settings shows no surfaces a material paints.
   const showMaterial = material ?? axes.length === GALLERY_CONTROLS.length - 1;
   return (

@@ -1,55 +1,68 @@
 /**
- * Surface: the decorative frame's width, as one number (owner, 2026-10-14: "continue working on the next
- * axis", after Elevation and Motion took the one-number form). Required edges (`stroke-width`: controls,
- * state, swatch rings, joined seams, divider rules) and focus are independent of it.
- * Research: docs/research/surface-2026-10-14.md.
+ * Stroke width and Rest shadow: how surfaces at rest are set apart from what is around them, by a line, a subtle
+ * shadow, both, or neither (owner, 2026-10-19: "the options are no strokes (flat), 0.5 strokes, 1 strokes, 1.5 strokes,
+ * 2 strokes, or you can use varying subtle shadows only, or potentially combine strokes with subtle shadows. this is all
+ * for rest as dividers, not shadows for elevation purposes"). Two independent settings, so every combination is one
+ * choice of each. Elevation (axes/elevation.ts) stays the lift of floating surfaces and hovers.
  *
- * 1 (the default) draws the 1px frames of cards, panels and floating surfaces. 0 (Borderless) removes them
- * for a shadow-led look (it was the Elevated preset). Every product measured frames at 1px (Notion's ring, ChatGPT's
- * composer, Cursor's widget border). Since 2026-10-18 (Edge and Depth, axes/depth.ts) two more widths: 0.5 (Hairline,
- * Apple's one device pixel and Polaris' 0.66; on a 1x screen Chromium draws it as one pixel and the insets that count
- * it sit half a pixel off) and 2 (Bold, the outer end of every surveyed width scale). Raised contrast makes a hairline
- * 1px (`border-width` below).
+ * Stroke width (`data-area-surface`, the Surface setting from 2026-10-14; research docs/research/surface-2026-10-14.md):
+ * the decorative frame of cards, panels and floating surfaces, 0 (Flat: no line, and nothing in its place), 0.5, 1 (the
+ * default; every product measured frames at 1px: Notion's ring, ChatGPT's composer, Cursor's widget border), 1.5 or 2.
+ * A half-pixel width is one device pixel on a 2x screen; on a 1x screen Chromium draws it as one pixel and the insets
+ * that count the frame sit half a pixel off. Required edges (`stroke-width`: controls, state, swatch rings, joined seams,
+ * divider rules) and focus are independent of it. The axis writes `frame-width`; components read `border-width`, derived
+ * in emit/base.ts as the frame or 1px under increased contrast (owner, 2026-10-15), so Medium or More contrast brings a
+ * line back at 0 and rounds a half pixel up, as macOS Increase Contrast adds borders.
  *
- * Borderless still keeps an edge, as ChatGPT's frameless menu does: `shadow-edge` is a 1px-blur shadow at
- * 62% black outside the surface and, in dark, a 1px-blur 20% white line inside it (captured 2026-10-13,
- * docs/research/elevation-2026-10-13.md), drawn crisp since 2026-10-17 so it holds at 1x. Every surface whose frame the setting removes lists it in its
- * box-shadow, so a surface never loses its edge: not at Elevation 0 (no lift to carry it), and not in dark
- * (where a lift barely reads). At 1 it is transparent. It is two layers at both steps, never `none`, so it
- * sits in a box-shadow list beside the Elevation roles. `shadow-edge-filter` is the same edge for a shape a
- * box-shadow cannot follow (the Popover arrow): a drop-shadow outside the shape, 62% black, or 20% white in dark.
- * Forced colours drop box-shadow; forced-colors.css puts the frame back there. The axis writes `frame-width`;
- * components read `border-width`, derived in emit/base.ts as the frame or 1px under increased contrast (owner,
- * 2026-10-15), so More contrast brings the frame back at 0 too, as macOS Increase Contrast adds borders.
+ * Rest shadow (`data-area-shadow-rest`): a subtle shadow round the same surfaces, 0 (None, the default) to 8, beside the
+ * line or in its place. It is `shadow-edge`, which every surface with a frame already lists first in its box-shadow:
+ * after ChatGPT's frameless-menu edge (a 1px-blur dark shadow; in dark, a crisp white line inside, captured 2026-10-13,
+ * docs/research/elevation-2026-10-13.md), now set by its own setting instead of switching on when the frame is 0. Light:
+ * a half-pixel-down, 1.5px-blur shadow at 5% black a step (40% at 8; ChatGPT's 62% read stronger than a 1px line).
+ * Dark: a 1px white line inside at 2.5% a step (20% at 8, ChatGPT's hairline, #4b4b4b over its #212121). Two layers at
+ * every step, never `none`, so it sits in a box-shadow list beside the Elevation roles; `shadow-edge-filter` is the same
+ * edge for a shape a box-shadow cannot follow (the Popover arrow). Contrast never strengthens it (no system surveyed
+ * does). Forced colours drop box-shadow; forced-colors.css puts the frame back there.
  *
- * The soft edge is derived beside it (emit/base.ts), drawn only while no frame is: at 1, and at 0 under any raised
- * contrast (Medium or More), it is transparent, so a surface never draws its frame and the soft edge at once (the
- * double edge in the Elevation and Stroke audit, 2026-10-18; it had stayed beside the returned frame). It reads
- * `border-width`, so it re-derives wherever Surface or Contrast is set.
+ * Until 2026-10-19 the frame was 0 or 1 and 0 always drew the soft edge (labelled "0 (Borderless)", then briefly Edge:
+ * Line / Shadow); a surface could not be flat, and a line could not take a shadow.
  */
 import { type AxisDefinition, tokens } from "./schema.ts";
 
-export const SURFACE_STEPS = ["0", "0.5", "1", "2"] as const;
+export const SURFACE_STEPS = ["0", "0.5", "1", "1.5", "2"] as const;
+export const REST_SHADOW_STEPS = [0, 1, 2, 3, 4, 5, 6, 7, 8] as const;
 
-// 1 while no frame is drawn, 0 once one is (`border-width` is the frame or contrast's 1px).
-const EDGE_ON = "(1 - sign(var(--area-border-width)))";
-// Dark draws its line crisp (no blur, 1px spread): blurred, it was barely visible at 1x on a near-black ground (owner,
-// 2026-10-17: "make it firmer"). 20% white is ChatGPT's hairline, #4b4b4b over its #212121 card.
-/** The soft edge, `--area-shadow-edge`: 62% black outside, 20% white inside in dark, transparent while a frame is drawn. */
-export const SOFT_EDGE = `0 0 1px rgb(0 0 0 / calc(0.62 * ${EDGE_ON})), inset 0 0 0 1px light-dark(transparent, rgb(255 255 255 / calc(0.2 * ${EDGE_ON})))`;
+const REST = "var(--area-shadow-rest-step, 0)";
+/** The rest shadow, `--area-shadow-edge`: light 5% black a step, half a pixel down, 1.5px blur; dark a 2.5%-a-step white line inside. */
+export const SOFT_EDGE = `0 0.5px 1.5px light-dark(rgb(0 0 0 / calc(0.05 * ${REST})), transparent), inset 0 0 0 1px light-dark(transparent, rgb(255 255 255 / calc(0.025 * ${REST})))`;
 /** The same edge as a drop-shadow, `--area-shadow-edge-filter`, for a shape a box-shadow cannot follow. */
-export const SOFT_EDGE_FILTER = `drop-shadow(0 0 1px light-dark(rgb(0 0 0 / calc(0.62 * ${EDGE_ON})), rgb(255 255 255 / calc(0.2 * ${EDGE_ON}))))`;
+export const SOFT_EDGE_FILTER = `drop-shadow(0 0.5px 1.5px light-dark(rgb(0 0 0 / calc(0.05 * ${REST})), rgb(255 255 255 / calc(0.025 * ${REST}))))`;
 
 export const SURFACE_AXIS: AxisDefinition = {
   id: "surface",
-  label: "Surface",
-  description: "The frame's width on cards, panels and floating surfaces: 0 (Borderless, a soft shadow edge), 0.5 (Hairline), 1 or 2 (Bold).",
+  label: "Stroke width",
+  description: "The line round cards, panels and floating surfaces, in px: 0 (flat, no line) to 2.",
   defaultPreset: "1",
   namespaces: ["--area-frame-width:"],
-  presets: [
-    { id: "0", label: "0 (Borderless)", description: "No frames: a soft shadow edge, ChatGPT's frameless menu. Control and state edges remain.", tokens: tokens({ "frame-width": "0px" }) },
-    { id: "0.5", label: "0.5 (Hairline)", description: "Half-pixel frames, one device pixel on a 2x screen (Apple's hairline); 1px under raised contrast.", tokens: tokens({ "frame-width": "0.5px" }) },
-    { id: "1", label: "1 (Default)", description: "1px frames on cards, panels and floating surfaces.", tokens: tokens({ "frame-width": "1px" }) },
-    { id: "2", label: "2 (Bold)", description: "2px frames: a printed, outlined look. Insets count the frame, so content stays put.", tokens: tokens({ "frame-width": "2px" }) },
-  ],
+  presets: SURFACE_STEPS.map(step => ({
+    id: step,
+    label: step === "0" ? "0 (Flat)" : step === "1" ? "1 (Default)" : step,
+    description: step === "0" ? "No line round surfaces; a Rest shadow can set them apart instead. Control and state edges remain."
+      : `A ${step}px line round cards, panels and floating surfaces.`,
+    tokens: tokens({ "frame-width": `${step}px` }),
+  })),
+};
+
+export const REST_SHADOW_AXIS: AxisDefinition = {
+  id: "shadow-rest",
+  label: "Rest shadow",
+  description: "A subtle shadow round cards, panels and floating surfaces at rest, 0 (none) to 8, with the line or instead of it.",
+  defaultPreset: "0",
+  namespaces: ["--area-shadow-rest-step:"],
+  presets: REST_SHADOW_STEPS.map(step => ({
+    id: String(step),
+    label: step === 0 ? "0 (None)" : String(step),
+    description: step === 0 ? "No rest shadow." : `A rest shadow at ${step * 5}% (light), ${step * 2.5}% (dark).`,
+    tokens: tokens({ "shadow-rest-step": String(step) }),
+  })),
 };

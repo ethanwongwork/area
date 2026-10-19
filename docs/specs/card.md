@@ -333,6 +333,9 @@ Header marks: a Badge or marker icon in `CardHeader`'s action slot centres on th
   fading in on `fast` ease-out and out on `base` ease-in; a press drops the lift; Elevation 0 keeps the edge step
   (`surface.css`; measured from Notion's and Fluent's cards, `docs/research/card-hover-2026-10-18.md`). Status unchanged;
   for the owner's review.
+- 2026-10-18 · owner: the hover shadow "too drastic … very subtle elevation shadow" → the lift is Elevation's new `lift`
+  role (shadow8 geometry at half the float's weight: 0 0 2 + 0 4 8, 0.75% / 1.5% at Elevation 3), not the Menu's float
+  shadow; resting → lift is Fluent 2's interactive card step. Gallery tiles take the same role. Status unchanged.
 
 ## Settings collisions fixed (2026-10-18)
 
@@ -346,6 +349,6 @@ unchanged. Checked in the app (light and dark, None, Glass and Tactile).
 ## Hover lift (2026-10-18)
 
 Edge and Depth (axes/depth.ts; owner: "go with your recommendations … finalize the material, surface, stroke, elevation axis
-theming"): a linked card's hover lift is `--area-shadow-hover`, the float shadow at Shadow (Elevation), so it is the lift it was.
+theming"): a linked card's hover lift is `--area-shadow-lift` (main, 2026-10-19: Fluent's shadow8 at half the float's strength; the float shadow it took first was "too drastic"), set by Floating (Elevation).
 At Elevation 0 the edge steps instead. The gallery tiles take the same role (apps/desktop/src/studio.css). The resting
 lift is `shadow-resting` at Rest shadow, its own number since the nine controls (3 by default, as before).

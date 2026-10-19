@@ -107,7 +107,12 @@
   .area-switch__thumb {
     position: absolute;
     box-sizing: border-box;
-    inset-block-start: calc(var(--_inset) - var(--area-stroke-width));
+    /* spec: centred on the track's height, not set down from its top edge, so it stays centred when the switch is drawn
+       at a fractional scale (browser zoom, a scaled preview), where the 1px edge snaps to device pixels and a fixed
+       offset does not (owner, 2026-10-19: "the circle is too high in the track"; 1.3 over and 1.9 under at 0.8x).
+       At 1x it is the same 2 from the outside as before. */
+    inset-block: 0;
+    margin-block: auto;
     inset-inline-start: calc(var(--_inset) - var(--area-stroke-width));
     inline-size: var(--_thumb-width);
     block-size: var(--_thumb);

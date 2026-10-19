@@ -1,0 +1,204 @@
+/* ---------------------------------------------------------------------------
+ * Asset card and asset grid
+ *
+ * One asset, anything that stands alone (an image, a component, a screen, an animation, an illustration, a logo, a
+ * type style), in a container, its name, detail line and controls under it; a group is the same container holding a
+ * 2 x 2 mosaic of its first four assets (owner, 2026-10-18, after Figma's file browser; docs/specs/asset-card.md).
+ * The asset grid is a ListBox grid of cards (one Tab stop, arrows in two dimensions, typeahead), plus open on Enter
+ * or a double click, as File grid. It paints the frame, not ListBox's row plates: selection is the frame's edge in the
+ * selection colour, hover the frame's lift, as the app's gallery tiles.
+ *
+ * - Frame: the gallery tile's container: a 1px card edge, the container corner (12 at the default radius), the
+ *   surface fill, 12 in from the outside with the border counted once (inset.css), square.
+ * - Image corners (owner, 2026-10-18, "by size"): an image standing alone takes the container corner (12); a
+ *   thumbnail, a group's cell, the small corner (6). Both follow the Radius setting.
+ * - Frame: always square (owner, 2026-10-19: "the containers for assets and groups should always be a square AR").
+ * - Caption, inside (the default; owner, 2026-10-19, a trial: "move the text back into the containers. the name
+ *   should be at the top"): the frame's first row, the name at the start and the detail at the end on one line, cap
+ *   trimmed so the name's cap sits the inset under the edge (the old gallery tile's head), 8 over the asset.
+ *   Below: 8 under the frame, the name over the detail line (owner, 2026-10-18).
+ *   The name is the UI text at the strong weight, the detail the caption size, muted (File tile's detail line);
+ *   controls at the end, centred on the name's line.
+ * - Public hook: `--area-asset-card-corner` (the container corner by default), for hosts that hold their own corner.
+ * - Interactive (outside an asset grid, such as an app's gallery): hover lifts, a press drops it, keyboard focus rings
+ *   the frame, `aria-pressed` and `aria-selected` show as the selected edge.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-asset-card {
+    --_inset: var(--area-space-12); /* spec: the gallery tile's 12 (owner, 2026-10-13) */
+    --_corner: var(--area-asset-card-corner, var(--area-radius-container)); /* spec: the gallery tile's 12, Card's container role */
+    --_lift: 0 0 0 0 transparent, 0 0 0 0 transparent;
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+    color: var(--area-fg-default);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+    text-align: start;
+  }
+  .area-asset-card--asset {}
+  .area-asset-card--group {}
+  .area-asset-card--below {}
+  .area-asset-card--interactive { cursor: default; outline: none; }
+
+  .area-asset-card__frame {
+    position: relative;
+    display: grid;
+    grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+    box-sizing: border-box;
+    aspect-ratio: 1; /* spec: always square (owner, 2026-10-18; 2026-10-19) */
+    min-block-size: 0; /* the square holds: a tall image cannot stretch the frame */
+    padding: calc(var(--_inset) - var(--area-border-width));
+    overflow: clip;
+    border: var(--area-border-width) solid var(--area-border-card); /* spec: the gallery tile's edge, Card's */
+    border-radius: var(--_corner);
+    background: var(--area-bg-surface);
+    box-shadow: var(--area-shadow-edge), var(--_lift);
+    /* The lift fades in on `fast` ease-out and out on `base` ease-in; the edge crossfades on `fast` (MOTION.md, Lift). */
+    transition: border-color var(--area-duration-fast) var(--area-ease-out), box-shadow var(--area-duration-base) var(--area-ease-in);
+  }
+
+  /* The asset, centred; an image contained, never cropped, with the container corner and no stroke. */
+  .area-asset-card__media {
+    display: grid;
+    grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+    place-items: center;
+    min-inline-size: 0;
+    min-block-size: 0;
+  }
+  .area-asset-card__media > img {
+    display: block;
+    max-inline-size: 100%;
+    max-block-size: 100%;
+    inline-size: auto;
+    block-size: auto;
+    border-radius: var(--area-radius-container); /* spec: owner 2026-10-18, a standalone image 12; no stroke (2026-10-19) */
+    object-fit: contain;
+    background: var(--area-bg-subtle);
+  }
+
+  /* A group: four cells 16 apart in a 12 margin, so each asset reads small and on its own (owner, 2026-10-19: "make the
+     images smaller, larger gaps, and margins, also dont put any strokes around them"; was 8 apart, no margin, a ring);
+     each asset cropped to its cell with the small corner. */
+  .area-asset-card__mosaic {
+    display: grid;
+    grid-template: repeat(2, minmax(0, 1fr)) / repeat(2, minmax(0, 1fr));
+    gap: var(--area-space-16); /* spec: owner 2026-10-19, larger gaps (pick) */
+    min-inline-size: 0;
+    min-block-size: 0;
+    padding: var(--area-space-12); /* spec: owner 2026-10-19, larger margins (pick) */
+  }
+  .area-asset-card__cell {
+    display: grid;
+    grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+    place-items: center;
+    min-inline-size: 0;
+    min-block-size: 0;
+    overflow: hidden;
+    border-radius: var(--area-radius-small); /* spec: owner 2026-10-18, a thumbnail 6 */
+    background: var(--area-bg-subtle);
+  }
+  .area-asset-card__cell > img { display: block; inline-size: 100%; block-size: 100%; min-block-size: 0; object-fit: cover; }
+  /* A cell with nothing in it (a group of fewer than four) is left empty. */
+  .area-asset-card__cell:empty { background: transparent; }
+
+  .area-asset-card__caption {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--area-space-8);
+    min-inline-size: 0;
+    padding-block-start: var(--area-space-8); /* spec: the gallery tile's head-to-stage 8 */
+  }
+  .area-asset-card__text { display: flex; flex: 1 1 auto; flex-direction: column; min-inline-size: 0; }
+  .area-asset-card__name {
+    /* Clipped for the ellipsis, with room for descenders a cap-trimmed name paints below its box. */
+    overflow: clip;
+    overflow-clip-margin: var(--area-space-4);
+    font-weight: var(--area-weight-strong); /* spec: the Components card title, the app's text, strong */
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .area-asset-card__meta {
+    overflow: clip;
+    overflow-clip-margin: var(--area-space-4);
+    color: var(--area-fg-muted);
+    font-size: var(--area-text-xs-size); /* spec: File tile's detail line */
+    line-height: var(--area-text-xs-leading);
+    font-variant-numeric: tabular-nums;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  /* Controls on the name's line: a small control centred on it, overhanging it evenly (a ghost control's rule). */
+  .area-asset-card__actions {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: var(--area-space-4);
+    margin-block: calc((var(--area-ui-leading) - var(--area-control-sm)) / 2);
+  }
+
+  /* Caption inside: the frame's first row, one line, cap-trimmed, 8 over the asset. */
+  .area-asset-card--inside > .area-asset-card__frame { grid-template: auto minmax(0, 1fr) / minmax(0, 1fr); row-gap: var(--area-space-8); }
+  .area-asset-card--inside .area-asset-card__caption { align-items: center; padding-block-start: 0; }
+  .area-asset-card--inside .area-asset-card__text { flex-direction: row; align-items: baseline; gap: var(--area-space-8); }
+  .area-asset-card--inside :is(.area-asset-card__name, .area-asset-card__meta) { text-box: trim-both cap alphabetic; }
+  .area-asset-card--inside .area-asset-card__name { flex: 0 1 auto; min-inline-size: 0; }
+  .area-asset-card--inside .area-asset-card__meta { flex: none; margin-inline-start: auto; }
+  .area-asset-card--inside .area-asset-card__actions { margin-block: calc((1cap - var(--area-control-sm)) / 2); }
+
+  /* Selected: the frame's edge in the selection colour, one line (the gallery tile's). */
+  .area-asset-card:is([data-selected], [aria-pressed="true"], [aria-selected="true"]) > .area-asset-card__frame { border-color: var(--area-stroke-selected); }
+
+  /* Interactive: the frame shows the card's states (the asset grid's, below, for a card that is not an option). */
+  .area-asset-card--interactive:focus-visible > .area-asset-card__frame {
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-offset);
+  }
+  @media (hover: hover) {
+    .area-asset-card--interactive:hover > .area-asset-card__frame {
+      --_lift: var(--area-shadow-lift);
+      transition-duration: var(--area-duration-fast);
+      transition-timing-function: var(--area-ease-out);
+    }
+    [data-area-elevation="0"] .area-asset-card--interactive:not([data-selected], [aria-pressed="true"], [aria-selected="true"]):hover > .area-asset-card__frame { border-color: var(--area-edge-control-hover); }
+  }
+  .area-asset-card--interactive:active > .area-asset-card__frame { --_lift: 0 0 0 0 transparent, 0 0 0 0 transparent; transition-duration: var(--area-duration-fast), 0s; }
+
+  /* --- The grid ------------------------------------------------------------- */
+  .area-asset-grid { --area-asset-card-size: 224px; } /* spec: pick, a column's least width */
+  .area-asset-grid.area-list-box--grid:has(> .area-list-box__item),
+  .area-asset-grid.area-list-box--grid .area-list-box__options {
+    grid-template-columns: repeat(auto-fill, minmax(var(--area-asset-card-size), 1fr));
+    gap: var(--area-space-16) var(--area-space-12); /* spec: cards 12 apart (PRODUCT_UI rule 11); rows 16, a caption between */
+  }
+  /* The option is the card: no row plate, no inset ring; the frame shows the states. */
+  .area-asset-grid.area-list-box--grid .area-list-box__item.area-asset-grid__item {
+    display: block;
+    place-items: stretch; /* the card takes the column (ListBox's grid centres an option's content) */
+    min-block-size: 0;
+    border-radius: 0;
+    background: transparent;
+    cursor: default;
+    outline: none;
+  }
+  .area-asset-grid__item[aria-selected="true"] .area-asset-card__frame { border-color: var(--area-stroke-selected); }
+  .area-asset-grid__item:focus-visible .area-asset-card__frame {
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-offset);
+  }
+  @media (hover: hover) {
+    .area-asset-grid__item:hover:not([data-disabled]) .area-asset-card__frame {
+      --_lift: var(--area-shadow-lift);
+      transition-duration: var(--area-duration-fast);
+      transition-timing-function: var(--area-ease-out);
+    }
+    /* Elevation 0 draws no shadow, so the edge steps instead. */
+    [data-area-elevation="0"] .area-asset-grid__item:not([aria-selected="true"], [data-disabled]):hover .area-asset-card__frame { border-color: var(--area-edge-control-hover); }
+  }
+  /* A press settles the card at once. */
+  .area-asset-grid__item:active .area-asset-card__frame { --_lift: 0 0 0 0 transparent, 0 0 0 0 transparent; transition-duration: var(--area-duration-fast), 0s; }
+
+  @media (forced-colors: active) {
+    .area-asset-grid__item[aria-selected="true"] .area-asset-card__frame { outline: calc(var(--area-stroke-width) * 2) solid Highlight; }
+  }
+}

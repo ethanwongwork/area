@@ -52,7 +52,7 @@ Easings:
 | Interaction | Enter | Leave | Properties | Notes |
 |---|---|---|---|---|
 | Hover plate / colour | instant | `fast` ease-out | colours only | `:hover { transition-duration: 0s }` under `@media (hover: hover)`: feedback appears at once and fades away (ChatGPT 0s, Notion 20ms, Linear 0s in / 150 out) |
-| Lift (linked Card, gallery tiles) | `fast` ease-out | `base` ease-in | `box-shadow` to the float shadow | the edge stays; a press drops the lift at once; Elevation 0 steps the edge instead (owner, 2026-10-18; Notion's linked card fades its shadow in 150 / out 200, `docs/research/card-hover-2026-10-18.md`). A selected gallery tile is one line, its own edge in the selection colour, crossfading on `fast` ease-out both ways and lifting like the rest (owner, 2026-10-18: the 2px stroke read thick and landed at once) |
+| Lift (linked Card, gallery tiles) | `fast` ease-out | `base` ease-in | `box-shadow` to the lift shadow (Elevation's `lift` role, shadow8 at half the float's weight; owner, 2026-10-18: the float shadow read "too drastic") | the edge stays; a press drops the lift at once; Elevation 0 steps the edge instead (owner, 2026-10-18; Notion's linked card fades its shadow in 150 / out 200, `docs/research/card-hover-2026-10-18.md`). A selected gallery tile is one line, its own edge in the selection colour, crossfading on `fast` ease-out both ways and lifting like the rest (owner, 2026-10-18: the 2px stroke read thick and landed at once) |
 | Press | instant | `fast` | colours | `:active { transition-duration: 0s }`. No press scale by default (no target product shrinks controls) |
 | Focus ring | instant | instant | outline / box-shadow | rings never fade in; a ring that animates lags the keyboard |
 | Selected / checked colour | instant | `fast` | colours | same rule as hover |
@@ -66,6 +66,7 @@ Easings:
 | Dialog, command palette, confirm dialog | `moderate` ease-out | `base` ease-out | `opacity` + `scale` 0.97 | scrim `opacity` on `moderate`; no translate |
 | Drawer / sheet | `slow` ease-drawer | `moderate` ease-drawer | `translate` 100% on the edge axis | scrim as Dialog |
 | Toast | `slow` ease-out | `base` ease-out | `opacity` + `translate` 8–16px from the toaster's edge | stack reflow on `base` ease-in-out |
+| Folder open (drop target, `open`) | `base` ease-in-out | `fast` ease-in-out | the pocket's `d` (it tips forward: top 88 → 152, flaring 16 past each side) and the sheet's `translate` | shape moving while visible, so ease-in-out; nothing in a File tile moves on hover (PRODUCT_UI rule 2); docs/specs/folder.md |
 | Accordion body | `slow` ease-in-out | `moderate` ease-in-out | `block-size` via `interpolate-size: allow-keywords` + `opacity` | progressive enhancement; without support it snaps |
 | Spinner | 0.6–1s per turn, linear | — | `rotate` | stops under reduced motion |
 | Skeleton shimmer, pulse | linear, long | — | `background-position` / `opacity` | stops under reduced motion |
@@ -78,12 +79,17 @@ keyframe animations for state that can flip back mid-way).
 
 ## Crispness
 
-The gallery's old `scale` transform was the main "pixelated" cause and is gone (fit.ts uses
-`zoom`). Components keep these rules so they stay sharp at 1x and 2x:
+Previews shrink a component whole: the gallery's tiles (fit.ts) and Language's drawings are laid out at 1x and
+`scale`d (owner, 2026-10-19: "i want scaling of components to be seamless, if it could sit on half pixels would that
+work?"). From 2026-10-07 to then they used `zoom`, which lays the component out again smaller: sharper 1px edges, but
+edges snap to device pixels while offsets scale, so parts moved against each other (a Switch's thumb sat high). A
+scaled preview keeps exact proportions on half pixels and draws a 1px edge a little softer. The Stage still zooms for
+its exact 50–200% stops. Components keep these rules so they stay sharp at 1x and 2x, and so any part placed against
+an edge stays put at a fractional scale (browser zoom included):
 
 1. Rest on whole pixels. A resting element never carries a fractional `translate` or a `scale`
    other than 1; centre with layout (flex/grid, `inset` + `margin: auto`), not with
-   `translate(-50%, -50%)` on odd sizes. Round computed offsets (`round()` in CSS, `Math.round` in JS).
+   `translate(-50%, -50%)` on odd sizes; centre a part on its host (Switch's thumb, `inset: 0` + `margin: auto`, 2026-10-19) rather than offsetting it from one edge. Round computed offsets (`round()` in CSS, `Math.round` in JS).
 2. Animate `transform`/`opacity` only, and end at identity (`scale: 1`, `translate: 0`). Never leave
    `will-change` on a resting element; it freezes the layer at its first raster.
 3. Borders and rings: `border`/`outline` snap to device pixels, `box-shadow` does not. Draw a

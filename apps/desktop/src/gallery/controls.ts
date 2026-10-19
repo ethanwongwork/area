@@ -7,11 +7,11 @@
  */
 import { AXIS_PRESETS, DEFAULT_AXES, DEFAULT_PILLS, DEPTH_LEVERS, PILL_SHAPES } from "@area/tokens/config";
 /** Edge and Depth's controls besides Stroke width (Surface) and Shadow (Elevation) (@area/tokens axes/depth.ts), each one `data-area-<axis>`. */
-export const DEPTH_LEVER_AXES = ["stroke", "shadow-rest", "shadow-field", "shadow-size", "shadow-softness", "shadow-light", "shadow-color"] as const;
+export const DEPTH_LEVER_AXES = ["stroke", "shadow-resting", "shadow-field", "shadow-size", "shadow-softness", "shadow-light", "shadow-color"] as const;
 export type DepthLever = (typeof DEPTH_LEVER_AXES)[number];
 
 export interface GalleryControl {
-  axis: "theme" | "neutral" | "accent" | "ground-light" | "ground-dark" | "layers-light" | "layers-dark" | "action" | "selection" | "contrast" | "type" | "density" | "radius" | "pills" | "surface" | "elevation" | "motion" | DepthLever;
+  axis: "theme" | "neutral" | "accent" | "ground-light" | "ground-dark" | "layers-light" | "layers-dark" | "action" | "selection" | "contrast" | "type" | "density" | "radius" | "pills" | "surface" | "shadow-rest" | "elevation" | "motion" | DepthLever;
   /**
    * Two or three options are a Segmented (Apple and Primer cap segments at 5-7); a longer list of
    * exact settings is a Select, each option naming what it sets (shadcn's radius picker is a menu).
@@ -43,7 +43,7 @@ function numbered(axis: "ground-light" | "ground-dark" | "layers-light" | "layer
 
 /** Edge and Depth's rows under their Stroke and Shadow headings (registry labels: Stroke, Rest shadow, Field shadow …). */
 const SHORT_LABEL: Record<DepthLever, string> = {
-  stroke: "Strength", "shadow-rest": "Resting", "shadow-field": "Fields", "shadow-size": "Size",
+  stroke: "Strength", "shadow-resting": "Resting", "shadow-field": "Fields", "shadow-size": "Size",
   "shadow-softness": "Softness", "shadow-light": "Light", "shadow-color": "Colour",
 };
 
@@ -92,10 +92,16 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = [
     value,
     label: value === "0" ? "0 (Sharp)" : value === "pill" ? "Pill" : value === "8" ? "8 (Default)" : value,
   })) },
-  // The frame's width (axes/surface.ts, 2026-10-14): one number, 1 (Default) or 0 (Borderless, a soft shadow edge), and
-  // since 2026-10-18 0.5 (Hairline) and 2 (Bold) (Edge and Depth, axes/depth.ts). Labelled Width under the Stroke heading,
-  // beside Strength (how dark it is). A Select: "0 (Borderless)" does not fit a segment beside a label.
-  { axis: "surface", kind: "select", label: "Width", hint: "The frame's width on cards, panels and floating surfaces in px; 0 draws a soft shadow edge instead (data-area-surface)", defaultValue: "1", items: depthItems("surface") },
+  // Stroke width and Rest shadow (axes/surface.ts, owner 2026-10-19): how surfaces at rest are set apart, by a line, a
+  // subtle shadow, both or neither, each its own setting. Selects, as Radius and Elevation: five and nine steps.
+  { axis: "surface", kind: "select", label: "Stroke width", hint: "The line round cards, panels and floating surfaces in px; 0 is flat", defaultValue: "1", items: ["0", "0.5", "1", "1.5", "2"].map(value => ({
+    value,
+    label: value === "0" ? "0 (Flat)" : value === "1" ? "1 (Default)" : value,
+  })) },
+  { axis: "shadow-rest", kind: "select", label: "Rest shadow", hint: "A subtle shadow round surfaces at rest, with the line or instead of it; not their lift (Elevation)", defaultValue: "0", items: ["0", "1", "2", "3", "4", "5", "6", "7", "8"].map(value => ({
+    value,
+    label: value === "0" ? "0 (None, Default)" : value,
+  })) },
   // How much surfaces lift (axes/elevation.ts, owner 2026-10-14): one number, the Menu's shadow strength in percent,
   // 0 (Flat) to 8, as Radius is the medium Button's corner. A Select, as Radius: nine steps. Labelled Floating under the
   // Shadow heading (owner, 2026-10-18): it sets menus, popovers, tooltips, dialogs and the hover lift; Resting has its own.

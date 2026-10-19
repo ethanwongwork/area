@@ -105,7 +105,7 @@ export const RECORDINGS: readonly Recording[] = [
       ...thinking(1200, "Look up the Card's hover rule and where its lift comes from."),
       ...tool("Read", { file_path: "packages/styles/src/components/surface.css" }, "surface.css (1,679 lines)", 420),
       ...tool("Read", { file_path: "docs/research/card-hover-2026-10-18.md" }, "card-hover-2026-10-18.md (21 lines)", 300),
-      ...text("A linked Card lifts instead of changing its edge because you asked for **no stroke change, a subtle shadow and smooth motion** on 2026-10-18.\n\n### How it works\n\n1. At rest it shows its resting lift, `shadow-resting`.\n2. Under the pointer the lift steps to `shadow-hover`, the Menu's float shadow at the Shadow setting.\n3. A press drops the lift at once.\n\n| Moment | Shadow | Timing |\n| --- | --- | --- |\n| In | `shadow-hover` | fast, ease-out |\n| Out | `shadow-resting` | base, ease-in |\n\nAt Shadow 0 there is no lift to show, so the edge steps instead. The measurements behind it are in `docs/research/card-hover-2026-10-18.md`."),
+      ...text("A linked Card lifts instead of changing its edge because you asked for **no stroke change, a subtle shadow and smooth motion** on 2026-10-18.\n\n### How it works\n\n1. At rest it shows its resting lift, `shadow-resting`.\n2. Under the pointer the lift steps to `shadow-lift`, Fluent's shadow8 at half the Menu's strength, set by Floating.\n3. A press drops the lift at once.\n\n| Moment | Shadow | Timing |\n| --- | --- | --- |\n| In | `shadow-lift` | fast, ease-out |\n| Out | `shadow-resting` | base, ease-in |\n\nAt Floating 0 there is no lift to show, so the edge steps instead. The measurements behind it are in `docs/research/card-hover-2026-10-18.md`."),
       done(5600),
     ],
   },

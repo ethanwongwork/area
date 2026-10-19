@@ -21,9 +21,9 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
    more than twice).
    - Rows (Nav, Menu, Tree view, interactive Table, List box, Pagination): `bg-component-hover` →
      `bg-component-active` selected / current → `bg-component-pressed` held.
-   - Tiles and cards: resting shadow → the float shadow fading in on `fast` (hover) → dropped at once (held) →
-     `stroke-selected` (2px); the edge (`neutral-100`, 750 in dark) stays, and steps `edge-control-hover` → `border-hover`
-     only at Elevation 0 (owner, 2026-10-18). A tile stands alone like a Card, so it is never
+   - Tiles and cards (Area's Asset card, `docs/specs/asset-card.md`): no shadow at rest → the lift shadow fading in on
+     `fast` (hover) → dropped at once (held) → the edge in `stroke-selected`, one line (selected); the edge
+     (`neutral-100`, 750 in dark) stays, and steps to `edge-control-hover` only at Elevation 0 (owner, 2026-10-18). A tile stands alone like a Card, so it is never
      on `border-decorative`, which is for rules inside a surface.
    - Painted (colour cards): their one outline, the swatch picker's 10% hairline, steps to the
      card's ink at 24% → 48% held → 2px solid selected. Never a second ring.
@@ -78,9 +78,21 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
       the percentages, from 100% when on Auto or Fit; the menu lists Auto, Fit and the percentages, nothing else
       (owner, 2026-10-14; 2026-10-18).
     - Components' All shows one tile per family, its default specimen; a family's variants are its
-      own Canvas. Specimens sit in square cards at least 360 wide (owner, 2026-10-18), after Compass's gallery: the specimen 28 in, the
-      title (the app's text, strong) and a Copy code button in the card's foot, cards 12 apart. A
-      click on an All card opens its family's Stage (owner, 2026-10-14). A control that does not apply to the current view
+      own Canvas. Specimens sit in square cards at least 360 wide (owner, 2026-10-18), after Compass's gallery: the specimen 24 in, the
+      title (the app's text, strong) and a Copy code button at the frame's top, cards 12 apart. Every tab's tiles are
+      Asset cards, always square, the name, a value and controls in the frame's first row (owner, 2026-10-19, a trial;
+      under the frame 2026-10-18, when the Compact hairline contact sheet went). Language lists the Inspector's own
+      settings (src/gallery/controls.ts), its cards at least 200 wide, each setting one real component with real text,
+      the one thing it changes (src/abstract.tsx; owner, 2026-10-19: "simple, and easy to recognize"), at its default
+      size, scaled down (never up, at most 0.8x) to a share of the card, one scale for every preset of a setting so they compare;
+      Type is the ramp of roles with their sizes; Ground and Layers are windows whose card frame stays put. The page previews
+      one theme, Light by default, with a Light / Dark switch in the Canvas bar; every setting follows it, and the
+      per-theme settings (ground, layers) show the previewed theme's own. A
+      click on an All card opens its family's Stage (owner, 2026-10-14). A family's page is Area Tabs (owner,
+      2026-10-18, `src/family-tabs.tsx`): Overview (the Stage, its code as a separate Code block under the frame, then
+      the tiles), Documentation, API, Code and Spec. Information is tables wherever it can be (facts, props, classes,
+      states, keys, ARIA, a spec's tables and its dated lists); prose stays prose only where it has no rows. Properties
+      stay in the Inspector, on Overview only. A control that does not apply to the current view
       is left out; the order of the rest never changes. Fields in the app's chrome and Inspector
       are `soft` (filled), a set is a multi-select Custom select, and dropdown windows hug their
       rows (`--area-menu-min-inline-size`).

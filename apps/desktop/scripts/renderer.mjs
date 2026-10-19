@@ -9,6 +9,7 @@ import { copyFileSync, cpSync, existsSync, mkdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { demoFiles, extractSnippets } from "./snippets.mjs";
+import { readSources, sourceFiles } from "./sources.mjs";
 
 export const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 export const repo = resolve(root, "..", "..");
@@ -50,6 +51,12 @@ export const options = ({ production }) => ({
         const files = demoFiles(join(root, "src/content/demos"));
         return { contents: JSON.stringify(extractSnippets(files)), loader: "json", watchFiles: files };
       });
+    } },
+    // `virtual:component-sources`: every component's spec, stylesheet, React source and prop docs (scripts/sources.mjs),
+    // for a family's API, Code and Spec tabs; rebuilt when any of them changes.
+    { name: "sources", setup(build) {
+      build.onResolve({ filter: /^virtual:component-sources$/ }, () => ({ path: "component-sources", namespace: "sources" }));
+      build.onLoad({ filter: /.*/, namespace: "sources" }, () => ({ contents: JSON.stringify(readSources(repo)), loader: "json", watchFiles: sourceFiles(repo) }));
     } },
   ],
 });

@@ -15,7 +15,7 @@ import { ACCENT_AXIS, NEUTRAL_AXIS, THEME_AXIS } from "./color.ts";
 import { ACTION_AXIS, SELECTION_AXIS } from "./emphasis.ts";
 import { MOTION_AXIS } from "./motion.ts";
 import { RADIUS_AXIS } from "./radius.ts";
-import { SURFACE_AXIS } from "./surface.ts";
+import { REST_SHADOW_AXIS, SURFACE_AXIS } from "./surface.ts";
 import { ELEVATION_AXIS } from "./elevation.ts";
 import { DEPTH_AXES } from "./depth.ts";
 import { DENSITY_AXIS } from "./density.ts";
@@ -36,6 +36,7 @@ export const AXES: AxisDefinition[] = [
   DENSITY_AXIS,
   RADIUS_AXIS,
   SURFACE_AXIS,
+  REST_SHADOW_AXIS,
   ELEVATION_AXIS,
   // Edge and Depth's other controls (2026-10-18): Stroke, Rest and Field shadow, Shadow size, Softness, Light, Shadow colour.
   ...DEPTH_AXES,

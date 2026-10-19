@@ -23,12 +23,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--area-space-6); /* spec: pick */
+    gap: var(--area-space-8); /* spec: Asset card's caption, 8 under its frame */
     min-inline-size: 0;
     padding: var(--area-space-8); /* spec: Fluent Card small 8 */
     color: var(--area-fg-default);
-    font-size: var(--area-text-xs-size); /* spec: Finder textSize 12 */
-    line-height: var(--area-text-xs-leading);
+    font-size: var(--area-ui-size); /* spec: Asset card's name, the app's UI text (Finder 12 at its 13 system text) */
+    line-height: var(--area-ui-leading);
     text-align: center;
   }
   .area-file-tile--sm { --_figure: 48px; } /* spec: Folder sm */
@@ -45,9 +45,10 @@
     inline-size: var(--_figure);
     block-size: var(--_figure);
   }
-  /* A bare glyph (use File page for a file's figure): half the square, its line on the icon size curve (1.67px at 32;
-     docs/specs/icons.md, "Sizes"). */
-  .area-file-tile__figure > svg { inline-size: 50%; block-size: 50%; color: var(--area-fg-muted); --area-weight-icon: 0.84px; } /* spec: the size curve's 1.67px at 32 */
+  /* A bare glyph (use File page for a file's figure): half the square, its line Area's required line as a non-scaling
+     stroke, the weight File page and Folder draw at. */
+  .area-file-tile__figure > svg { inline-size: 50%; block-size: 50%; color: var(--area-fg-muted); --area-weight-icon: var(--area-stroke-width); }
+  .area-file-tile__figure > svg :is(path, circle, ellipse, line, polyline, polygon, rect) { vector-effect: non-scaling-stroke; }
   /* An image is contained in the square, its own shape kept, with the swatch ring (Asset row's preview). */
   .area-file-tile__figure > img {
     display: block;
@@ -70,10 +71,13 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2; /* spec: ChatGPT Library card, up to 2 lines */
   }
+  /* The detail line in Asset card's: the xs size, muted, tabular, one line. */
   .area-file-tile__meta {
     max-inline-size: 100%;
     overflow: hidden;
     color: var(--area-fg-muted);
+    font-size: var(--area-text-xs-size); /* spec: Asset card's detail line */
+    line-height: var(--area-text-xs-leading);
     font-variant-numeric: tabular-nums;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -94,10 +98,7 @@
      grid centres its cells; this rule is as specific and comes with the block's own class to win). */
   .area-file-grid.area-list-box--grid .area-file-grid__item { place-items: start stretch; }
   .area-file-grid__item > .area-file-tile { inline-size: 100%; }
-  /* A drag over a folder's tile opens its Folder (folder.css draws the open state); hovering lifts a solid folder's
-     sheet a little. */
+  /* A drag over a folder's tile opens its Folder (folder.css draws the open state). Hover changes only the plate
+     (PRODUCT_UI rule 2): nothing in the figure moves. */
   .area-file-grid__item[data-drop-target] {}
-  @media (hover: hover) {
-    .area-file-grid__item:hover .area-folder--solid .area-folder__paper:not([data-tucked]) { transform: translateY(-6px); }
-  }
 }
