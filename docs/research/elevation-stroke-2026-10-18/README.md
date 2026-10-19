@@ -87,5 +87,22 @@ outer shadow and the frame; Material keeps fills and inner light; its contact le
 Lip, Highlight and Stroke (bundles set them, as they set the Layers); components list Material's layers beside the role
 instead of replacing the `box-shadow`.
 
+### Packaged controls (owner, 2026-10-18: "simplify and package some of these controls together so that there are still granular choices but its much easier and simpler to choose combinations that work")
+
+Three steps, as Material's bundle and levers: a **Look** sets five **choices**; each choice packages levers that work
+together, so any combination of the five holds up; **Fine-tune** (folded) keeps every lever, names the choice that set
+it, and offers Reset once moved; changing that choice takes the lever back. Contrast stays its own setting.
+
+| Choice | Options | Packages |
+|---|---|---|
+| Edge | Stroke · Stroke + shadow (Default) · Stroke + shadow, fields too · Hairline + shadow · Shadow · Bold stroke | stroke width / strength / ink, and the share of Depth that rest and field lift take (0, 1, 1 + fields, 1.34 + 0.67) |
+| Depth | 0 (Flat)–8, 3 | float and hover lift; rest and field = Depth × the Edge's share |
+| Softness | Crisp · Balanced (Default) · Soft · Smooth · Long | layers 1 / 2 / 4 / 6 / 4, distance 3 / 4 / 5 / 6 / 8, tightness 0 / 0 / 3 / 4 / 2 |
+| Light | Flat (Default) · Top-lit · Bright · Angled | lip 0 / 1 / 2 / 1, highlight 0 / 2 / 4 / 2, angle 0 / 0 / 0 / 30° |
+| Colour | Neutral (Default) · Warm ink · Cool · Deep dark | tint black / ink / cool / black, dark ×2 / ×2 / ×2 / ×4 |
+
+Looks: Area today (the defaults), Notion, shadcn, Primer, Geist, Radix, Linear, Borderless and the three references, each
+the five choices plus at most two fine-tuned levers.
+
 Open for the owner: which presets read right; which levers to keep, merge or drop; Field lift on by default; whether
 Stroke width reaches 2.
