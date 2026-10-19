@@ -28,7 +28,7 @@ body { background: var(--lab-bg); color: var(--lab-ink); font-family: var(--lab-
 .lab-head p { margin: 0; color: var(--lab-muted); }
 .lab-eyebrow { font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--lab-muted); }
 
-.lab-work { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 24px; align-items: start; }
+.lab-work { display: grid; grid-template-columns: 328px minmax(0, 1fr); gap: 24px; align-items: start; }
 @media (max-width: 900px) { .lab-work { grid-template-columns: minmax(0, 1fr); } }
 
 /* Levers */
@@ -45,7 +45,20 @@ body { background: var(--lab-bg); color: var(--lab-ink); font-family: var(--lab-
 .presets { display: flex; flex-wrap: wrap; gap: 6px; }
 .presets button { font: inherit; font-size: 12px; padding: 4px 8px; border-radius: 999px; border: 1px solid var(--lab-rule); background: var(--lab-panel); color: var(--lab-ink); cursor: pointer; }
 .presets button[aria-pressed="true"] { background: var(--lab-ink); color: var(--lab-panel); border-color: var(--lab-ink); }
-.presets button:focus-visible, .lever input:focus-visible, .lever select:focus-visible { outline: 2px solid var(--lab-accent); outline-offset: 2px; }
+.presets button:focus-visible, .lever input:focus-visible, .lever select:focus-visible, .lever-reset:focus-visible, .fine summary:focus-visible { outline: 2px solid var(--lab-accent); outline-offset: 2px; }
+/* A packaged choice: its control, then one line on what it sets. */
+.choice { display: grid; gap: 4px; }
+.choice .lever { grid-template-columns: 64px minmax(0, 1fr) 28px; }
+.choice .lever select { grid-column: 2 / 4; }
+/* Fine-tune: every lever, each naming the choice that set it, or Reset once moved. */
+.fine { border-top: 1px solid var(--lab-rule); padding-top: 12px; }
+.fine summary { cursor: pointer; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--lab-muted); font-weight: 500; list-style-position: outside; }
+.fine[open] summary { margin-bottom: 12px; }
+.fine-body { display: grid; gap: 16px; }
+.fine .lever { grid-template-columns: 104px minmax(0, 1fr) 28px; }
+.fine .lever-src { grid-column: 1 / -1; margin-top: -6px; font-size: 11px; line-height: 14px; color: var(--lab-muted); display: flex; gap: 6px; align-items: center; }
+.fine .lever-src[data-changed] { color: var(--lab-accent); }
+.lever-reset { font: inherit; font-size: 11px; padding: 0 6px; border-radius: 4px; border: 1px solid var(--lab-rule); background: transparent; color: var(--lab-ink); cursor: pointer; }
 
 /* Canvases: Area's own components at the default scale, one light, one dark. */
 .canvases { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
@@ -106,21 +119,27 @@ body { background: var(--lab-bg); color: var(--lab-ink); font-family: var(--lab-
   <header class="lab-head">
     <span class="lab-eyebrow">Area · Elevation and Stroke research · 2026-10-18</span>
     <h1>Edge and Depth Lab</h1>
-    <p>Every proposed lever for strokes and shadows, live on Area's own components in light and dark. Pick a preset to see a system or one of your three references rebuilt from these levers, then move any lever. The readout shows the exact <code style="font-family:var(--lab-mono)">box-shadow</code> each role gets.</p>
+    <p>Strokes and shadows for Area, live on its own components in light and dark. Start from a Look, change any of five choices (each sets several levers that work together), and open Fine-tune only to move one lever on its own. The readout shows the exact <code style="font-family:var(--lab-mono)">box-shadow</code> each role gets.</p>
   </header>
 
   <div class="lab-work">
     <aside class="levers" aria-label="Levers">
       <div class="lever-group">
-        <h2>Presets</h2>
+        <h2>Look</h2>
         <div class="presets" id="presets"></div>
         <p class="lever-note" id="preset-note"></p>
       </div>
-      <div class="lever-group" id="g-stroke"><h2>Stroke</h2></div>
-      <div class="lever-group" id="g-rest"><h2>Shadow at rest</h2></div>
-      <div class="lever-group" id="g-shape"><h2>Shadow shape</h2></div>
-      <div class="lever-group" id="g-light"><h2>Light and colour</h2></div>
-      <div class="lever-group" id="g-state"><h2>Hover and contrast</h2></div>
+      <div class="lever-group" id="choices"><h2>Choose</h2></div>
+      <div class="lever-group" id="g-access"><h2>Accessibility</h2></div>
+      <details class="fine" id="fine">
+        <summary id="fine-summary">Fine-tune</summary>
+        <div class="fine-body">
+          <div class="lever-group" id="g-stroke"><h2>Stroke</h2></div>
+          <div class="lever-group" id="g-rest"><h2>Lift</h2></div>
+          <div class="lever-group" id="g-shape"><h2>Shape</h2></div>
+          <div class="lever-group" id="g-light"><h2>Light and colour</h2></div>
+        </div>
+      </details>
     </aside>
 
     <div class="canvases" id="canvases"></div>
@@ -170,7 +189,23 @@ body { background: var(--lab-bg); color: var(--lab-ink); font-family: var(--lab-
 
     <section>
       <h2>Proposal</h2>
-      <p>Keep every current option. Turn Surface and Elevation into two groups of levers in the Inspector, each a number with named ends like the settings beside them, and give every role the same fixed list of slots so steps and hover crossfade layer by layer.</p>
+      <p>Keep every option, but choose them in three steps, as Material does with its bundles and levers. Every role keeps the same fixed list of slots, so steps and hover crossfade layer by layer.</p>
+      <ul>
+        <li><strong>Look</strong>: a starting point. It sets the five choices, plus a lever or two where a system differs.</li>
+        <li><strong>Five choices</strong>: each a package of levers that work together, so any combination of the five holds up.</li>
+        <li><strong>Fine-tune</strong>: every lever, folded away. Each names the choice it came from and offers Reset once moved; changing that choice takes the lever back.</li>
+      </ul>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Choice</th><th>Options</th><th>What it packages</th></tr></thead>
+        <tbody>
+          <tr><td>Edge</td><td>Stroke · Stroke + shadow (Default) · Stroke + shadow, fields too · Hairline + shadow · Shadow · Bold stroke</td><td>Stroke width, strength and ink, and which roles lift at rest: a stroke-only edge never grows a resting shadow, a shadow-only edge leans on it a third more</td></tr>
+          <tr><td>Depth</td><td>0 (Flat) to 8, 3 by default</td><td>Float and hover lift; rest and field lift as the Edge's share of it</td></tr>
+          <tr><td>Softness</td><td>Crisp · Balanced (Default) · Soft · Smooth · Long</td><td>Layers, distance and tightness</td></tr>
+          <tr><td>Light</td><td>Flat (Default) · Top-lit · Bright · Angled</td><td>Lip, highlight and light angle</td></tr>
+          <tr><td>Colour</td><td>Neutral (Default) · Warm ink · Cool · Deep dark</td><td>Shadow tint and dark strength</td></tr>
+        </tbody>
+      </table></div>
+      <p>Contrast stays its own setting beside them. The levers under Fine-tune:</p>
       <div class="table-wrap"><table>
         <thead><tr><th>Lever</th><th>Steps</th><th>What it moves</th><th>Basis</th></tr></thead>
         <tbody>
@@ -209,7 +244,7 @@ body { background: var(--lab-bg); color: var(--lab-ink); font-family: var(--lab-
     <section class="ask">
       <h2>Your call</h2>
       <ul>
-        <li>Which presets read right, and which levers you'd keep, merge or drop from the Inspector.</li>
+        <li>Whether the five choices and their options cover what you want, and which Looks read right.</li>
         <li>Whether fields and buttons should carry a resting shadow by default (Field lift above 0), as in your Poll reference.</li>
         <li>Whether Stroke width should reach 2 for decorative frames, or stop at Hairline and 1.</li>
       </ul>
@@ -255,43 +290,90 @@ body { background: var(--lab-bg); color: var(--lab-ink); font-family: var(--lab-
   sync(); matchMedia("(prefers-color-scheme: dark)").addEventListener("change", sync);
   new MutationObserver(sync).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
 
-  // ---- Levers ---------------------------------------------------------------------------------------------
+  // ---- Levers (Fine-tune) ---------------------------------------------------------------------------------
+  // `from` names the choice that sets each lever.
   const LEVERS = [
-    { id: "width", group: "g-stroke", label: "Stroke width", kind: "select", options: [["0", "0 (None)"], ["0.5", "0.5 (Hairline)"], ["1", "1 (Default)"], ["2", "2"]] },
-    { id: "strength", group: "g-stroke", label: "Stroke strength", kind: "range", min: 0, max: 8, note: "4 is today's strokes" },
-    { id: "ink", group: "g-stroke", label: "Stroke ink", kind: "select", options: [["opaque", "Opaque (today)"], ["translucent", "Translucent"]] },
-    { id: "rest", group: "g-rest", label: "Rest lift", kind: "range", min: 0, max: 8 },
-    { id: "field", group: "g-rest", label: "Field lift", kind: "range", min: 0, max: 8 },
-    { id: "float", group: "g-rest", label: "Float lift", kind: "range", min: 0, max: 8 },
-    { id: "distance", group: "g-shape", label: "Distance", kind: "range", min: 0, max: 8 },
-    { id: "layers", group: "g-shape", label: "Layers", kind: "select", options: [["1", "1 (Crisp)"], ["2", "2 (Default)"], ["4", "4 (Smooth)"], ["6", "6"]] },
-    { id: "tight", group: "g-shape", label: "Tightness", kind: "range", min: 0, max: 8 },
-    { id: "lip", group: "g-shape", label: "Lip", kind: "range", min: 0, max: 4 },
-    { id: "highlight", group: "g-light", label: "Highlight", kind: "range", min: 0, max: 4 },
-    { id: "angle", group: "g-light", label: "Light angle", kind: "select", options: [["0", "0° (Top)"], ["15", "15°"], ["30", "30°"], ["45", "45°"]] },
-    { id: "tint", group: "g-light", label: "Shadow tint", kind: "select", options: [["black", "Black"], ["ink", "Ink"], ["cool", "Cool"]] },
-    { id: "dark", group: "g-light", label: "Dark strength", kind: "select", options: [["2", "×2 (today)"], ["3", "×3"], ["4", "×4"]] },
-    { id: "hover", group: "g-state", label: "Hover lift", kind: "range", min: 0, max: 8 },
-    { id: "contrast", group: "g-state", label: "Contrast", kind: "select", options: [["standard", "Standard"], ["medium", "Medium"], ["more", "More"]] },
+    { id: "width", group: "g-stroke", from: "edge", label: "Width", kind: "select", options: [["0", "0 (None)"], ["0.5", "0.5 (Hairline)"], ["1", "1"], ["2", "2"]] },
+    { id: "strength", group: "g-stroke", from: "edge", label: "Strength", kind: "range", min: 0, max: 8 },
+    { id: "ink", group: "g-stroke", from: "edge", label: "Ink", kind: "select", options: [["opaque", "Opaque"], ["translucent", "Translucent"]] },
+    { id: "rest", group: "g-rest", from: "edge-depth", label: "Rest lift", kind: "range", min: 0, max: 8 },
+    { id: "field", group: "g-rest", from: "edge-depth", label: "Field lift", kind: "range", min: 0, max: 8 },
+    { id: "float", group: "g-rest", from: "depth", label: "Float lift", kind: "range", min: 0, max: 8 },
+    { id: "hover", group: "g-rest", from: "depth", label: "Hover lift", kind: "range", min: 0, max: 8 },
+    { id: "layers", group: "g-shape", from: "softness", label: "Layers", kind: "select", options: [["1", "1"], ["2", "2"], ["4", "4"], ["6", "6"]] },
+    { id: "distance", group: "g-shape", from: "softness", label: "Distance", kind: "range", min: 0, max: 8 },
+    { id: "tight", group: "g-shape", from: "softness", label: "Tightness", kind: "range", min: 0, max: 8 },
+    { id: "lip", group: "g-light", from: "light", label: "Lip", kind: "range", min: 0, max: 4 },
+    { id: "highlight", group: "g-light", from: "light", label: "Highlight", kind: "range", min: 0, max: 4 },
+    { id: "angle", group: "g-light", from: "light", label: "Angle", kind: "select", options: [["0", "0° (Top)"], ["15", "15°"], ["30", "30°"], ["45", "45°"]] },
+    { id: "tint", group: "g-light", from: "color", label: "Tint", kind: "select", options: [["black", "Black"], ["ink", "Ink"], ["cool", "Cool"]] },
+    { id: "dark", group: "g-light", from: "color", label: "Dark strength", kind: "select", options: [["2", "×2"], ["3", "×3"], ["4", "×4"]] },
   ];
 
-  const TODAY = { width: "1", strength: 4, ink: "opaque", rest: 3, field: 0, float: 3, distance: 4, layers: "2", tight: 0, lip: 0, highlight: 0, angle: "0", tint: "black", dark: "2", hover: 3, contrast: "standard" };
-  const PRESETS = [
-    { id: "today", label: "Area today", note: "What ships: 1px frames, Fluent's two layers at 3%, fields flat.", v: { ...TODAY } },
-    { id: "borderless", label: "Borderless", note: "Surface 0: no frames, a soft edge, a smoother lift.", v: { ...TODAY, width: "0", rest: 4, float: 4, layers: "4" } },
-    { id: "notion", label: "Notion", note: "Translucent rings, nothing at rest, a soft float.", v: { ...TODAY, ink: "translucent", strength: 3, rest: 0, float: 3 } },
-    { id: "shadcn", label: "shadcn", note: "Border + shadow-xs on fields and buttons (0 1px 2px 5%), shadow-sm on cards, shadow-md on menus.", v: { ...TODAY, strength: 4, field: 5, rest: 6, layers: "2", float: 6, tight: 2, distance: 3 } },
-    { id: "primer", label: "Primer", note: "A 4% lip under buttons, a two-layer resting shadow, a four-layer float.", v: { ...TODAY, lip: 1, field: 2, rest: 5, layers: "4", float: 4, tight: 4, distance: 5 } },
-    { id: "geist", label: "Geist", note: "Translucent 8% ring, tiny layers with negative spread.", v: { ...TODAY, ink: "translucent", strength: 4, field: 2, rest: 2, layers: "4", tight: 6, float: 4, distance: 5, dark: "4" } },
-    { id: "radix", label: "Radix classic", note: "Five-layer resting stack and a top highlight on controls.", v: { ...TODAY, rest: 5, field: 2, layers: "4", tight: 3, highlight: 2, float: 6, distance: 6, dark: "3" } },
-    { id: "smooth", label: "Smooth (Linear)", note: "Six eased layers, a long tight float.", v: { ...TODAY, layers: "6", distance: 6, tight: 3, rest: 3, float: 6 } },
-    { id: "bless", label: "Ref: Bless", note: "Your first reference: stroke, a short drop at rest, a white line inside the top, ink-tinted shadow.", v: { ...TODAY, strength: 5, rest: 5, field: 3, lip: 1, highlight: 4, tint: "ink", layers: "4", distance: 3 } },
-    { id: "poll", label: "Ref: Poll", note: "Your second reference: fields and the selected segment with a lip and a darker bottom.", v: { ...TODAY, strength: 5, field: 4, lip: 2, rest: 4, float: 5, highlight: 3, distance: 3 } },
-    { id: "access", label: "Ref: AccessGrid", note: "Your third reference: a hard dark lip, then a long cool float.", v: { ...TODAY, strength: 5, lip: 3, float: 8, distance: 7, layers: "4", tint: "cool", highlight: 2, rest: 4, field: 2 } },
+  // ---- The five choices: each a package of levers that work together -----------------------------------------
+  // Edge decides what separates things (strokes, shadows or both) and which roles lift at rest; Depth is one number for
+  // how much everything lifts; Softness, Light and Colour shape the shadow. Rest and field lift are Depth × the Edge's
+  // share, so a stroke-only edge never grows a resting shadow and a shadow-only edge leans on it more.
+  const CHOICES = {
+    edge: { label: "Edge", options: {
+      "stroke": { label: "Stroke", note: "1px lines. Only floating surfaces cast a shadow (Notion).", sets: { width: "1", strength: 4, ink: "opaque" }, rest: 0, field: 0 },
+      "stroke-shadow": { label: "Stroke + shadow (Default)", note: "1px lines and a light shadow under cards and thumbs; fields flat. What ships today.", sets: { width: "1", strength: 4, ink: "opaque" }, rest: 1, field: 0 },
+      "stroke-shadow-fields": { label: "Stroke + shadow, fields too", note: "Fields and outline buttons also sit on a small shadow (shadcn, Primer, your Poll reference).", sets: { width: "1", strength: 4, ink: "opaque" }, rest: 1, field: 1 },
+      "hairline": { label: "Hairline + shadow", note: "A translucent half-pixel line that takes the ground's tint; the shadow does more (Apple, Geist).", sets: { width: "0.5", strength: 3, ink: "translucent" }, rest: 1.34, field: 0.67 },
+      "shadow": { label: "Shadow", note: "No lines on surfaces: a soft edge and a lift. Controls keep their required 1px edge.", sets: { width: "0", strength: 4, ink: "opaque" }, rest: 1.34, field: 0.67 },
+      "bold": { label: "Bold stroke", note: "2px frames and no resting shadow; floating surfaces still lift.", sets: { width: "2", strength: 4, ink: "opaque" }, rest: 0, field: 0 },
+    } },
+    softness: { label: "Softness", options: {
+      "crisp": { label: "Crisp", note: "One short, tight layer (shadcn shadow-xs, Primer resting).", sets: { layers: "1", distance: 3, tight: 0 } },
+      "balanced": { label: "Balanced (Default)", note: "An ambient and a key layer: what ships (Fluent).", sets: { layers: "2", distance: 4, tight: 0 } },
+      "soft": { label: "Soft", note: "Four eased layers with a little negative spread (Geist, Radix).", sets: { layers: "4", distance: 5, tight: 3 } },
+      "smooth": { label: "Smooth", note: "Six eased layers, longer and tighter (Linear, Josh Comeau).", sets: { layers: "6", distance: 6, tight: 4 } },
+      "long": { label: "Long", note: "Four layers thrown far: a panel well off the page (your AccessGrid reference).", sets: { layers: "4", distance: 8, tight: 2 } },
+    } },
+    light: { label: "Light", options: {
+      "flat": { label: "Flat (Default)", note: "No lip or highlight: depth comes from the shadow alone.", sets: { lip: 0, highlight: 0, angle: "0" } },
+      "top": { label: "Top-lit", note: "A faint lip under each edge and a white line inside the top (Primer, Raycast).", sets: { lip: 1, highlight: 2, angle: "0" } },
+      "bright": { label: "Bright", note: "A firmer lip and a full highlight: bottom edges read clearly darker (your Bless and Poll references).", sets: { lip: 2, highlight: 4, angle: "0" } },
+      "angled": { label: "Angled", note: "Top-lit from 30°, so every shadow falls a little to the side.", sets: { lip: 1, highlight: 2, angle: "30" } },
+    } },
+    color: { label: "Colour", options: {
+      "neutral": { label: "Neutral (Default)", note: "Black shadows, twice as strong in dark (Fluent).", sets: { tint: "black", dark: "2" } },
+      "ink": { label: "Warm ink", note: "Shadows tinted with the ink's warmth instead of pure black (Josh Comeau).", sets: { tint: "ink", dark: "2" } },
+      "cool": { label: "Cool", note: "Blue-tinted shadows (Stripe, your AccessGrid reference).", sets: { tint: "cool", dark: "2" } },
+      "deep": { label: "Deep dark", note: "Black, four times as strong in dark, where a shadow barely reads (Geist).", sets: { tint: "black", dark: "4" } },
+    } },
+  };
+  const DEPTH_NOTE = d => d === 0 ? "0 (Flat): no shadows; edges alone separate surfaces." : `${d}${d === 3 ? " (Default)" : ""}: floating surfaces at ${d}%, resting ones by the Edge.`;
+
+  const DEFAULT_PICK = { edge: "stroke-shadow", depth: 3, softness: "balanced", light: "flat", color: "neutral", contrast: "standard" };
+  const LOOKS = [
+    { id: "today", label: "Area today", note: "What ships: 1px lines, a light two-layer shadow at rest, fields flat.", pick: {}, over: {} },
+    { id: "notion", label: "Notion", note: "Translucent lines, nothing at rest, a soft float.", pick: { edge: "stroke" }, over: { ink: "translucent", strength: 3 } },
+    { id: "shadcn", label: "shadcn", note: "Lines with shadow-xs on fields and buttons and shadow-sm on cards.", pick: { edge: "stroke-shadow-fields", depth: 5, softness: "crisp" }, over: {} },
+    { id: "primer", label: "Primer", note: "A lip under buttons, small resting shadows, a four-layer float.", pick: { edge: "stroke-shadow-fields", depth: 4, softness: "soft", light: "top" }, over: { highlight: 0 } },
+    { id: "geist", label: "Geist", note: "A translucent ring, tiny tight layers, much stronger in dark.", pick: { edge: "hairline", softness: "soft", color: "deep" }, over: { width: "1", tight: 6 } },
+    { id: "radix", label: "Radix", note: "A layered resting stack and a top highlight on controls.", pick: { depth: 5, softness: "soft", light: "top" }, over: {} },
+    { id: "linear", label: "Linear", note: "Six eased layers and a long, tight float.", pick: { depth: 4, softness: "smooth" }, over: {} },
+    { id: "borderless", label: "Borderless", note: "No lines on surfaces; the shadow carries the edge.", pick: { edge: "shadow", depth: 4, softness: "soft" }, over: {} },
+    { id: "bless", label: "Ref: Bless", note: "Your first reference: lines, short resting shadows, a full highlight, warm shadows.", pick: { edge: "stroke-shadow-fields", depth: 4, softness: "soft", light: "bright", color: "ink" }, over: { distance: 3 } },
+    { id: "poll", label: "Ref: Poll", note: "Your second reference: fields on a crisp shadow with a firm lip.", pick: { edge: "stroke-shadow-fields", depth: 4, softness: "crisp", light: "bright" }, over: { strength: 5 } },
+    { id: "access", label: "Ref: AccessGrid", note: "Your third reference: a hard lip, then a long, cool float.", pick: { depth: 6, softness: "long", light: "top", color: "cool" }, over: { lip: 3, strength: 5 } },
   ];
 
-  let state = { ...TODAY };
-  let current = "today";
+  let pick = { ...DEFAULT_PICK };
+  let over = {};
+  let look = "today";
+  let state = {};
+  // Every lever from the five choices, then any fine-tuned lever over it.
+  function resolve() {
+    const edge = CHOICES.edge.options[pick.edge];
+    const base = {
+      ...edge.sets, ...CHOICES.softness.options[pick.softness].sets, ...CHOICES.light.options[pick.light].sets, ...CHOICES.color.options[pick.color].sets,
+      rest: Math.round(pick.depth * edge.rest), field: Math.round(pick.depth * edge.field), float: pick.depth, hover: pick.depth,
+    };
+    state = { ...base, ...over, contrast: pick.contrast };
+    return base;
+  }
 
   // ---- Recipes ----------------------------------------------------------------------------------------------
   // Each role at Distance 4 is today's Fluent geometry: y, blur, ambient blur (elevation.ts ROLES).
@@ -388,38 +470,63 @@ body { background: var(--lab-bg); color: var(--lab-ink); font-family: var(--lab-
     return c;
   });
 
-  const inputs = {};
+  const row = (labelText, id, el, withOut) => {
+    const r = document.createElement("div"); r.className = "lever";
+    const label = document.createElement("label"); label.htmlFor = id; label.textContent = labelText;
+    r.append(label, el);
+    if (withOut) { const out = document.createElement("output"); out.htmlFor = id; out.id = `${id}-out`; r.appendChild(out); }
+    return r;
+  };
+  const select = (id, options) => { const el = document.createElement("select"); el.id = id; for (const [v, t] of options) el.append(new Option(t, v)); return el; };
+  const range = (id, min, max) => { const el = document.createElement("input"); Object.assign(el, { type: "range", min, max, step: 1, id }); return el; };
+
+  // The five choices.
+  const choiceBox = document.getElementById("choices");
+  const choiceEls = {};
+  const addChoice = (key, label, el, withOut) => {
+    const wrap = document.createElement("div"); wrap.className = "choice";
+    const note = document.createElement("p"); note.className = "lever-note"; note.id = `choice-${key}-note`;
+    wrap.append(row(label, el.id, el, withOut), note);
+    choiceBox.appendChild(wrap);
+    choiceEls[key] = el;
+  };
+  for (const key of ["edge"]) addChoice(key, CHOICES[key].label, select(`choice-${key}`, Object.entries(CHOICES[key].options).map(([v, o]) => [v, o.label])));
+  addChoice("depth", "Depth", range("choice-depth", 0, 8), true);
+  for (const key of ["softness", "light", "color"]) addChoice(key, CHOICES[key].label, select(`choice-${key}`, Object.entries(CHOICES[key].options).map(([v, o]) => [v, o.label])));
+  const setsOf = key => key === "depth" ? ["rest", "field", "float", "hover"] : key === "edge" ? [...Object.keys(CHOICES.edge.options[pick.edge].sets), "rest", "field"] : Object.keys(CHOICES[key].options[pick[key]].sets);
+  for (const [key, el] of Object.entries(choiceEls)) el.addEventListener("input", () => {
+    // A choice takes back the levers it sets, as a Material bundle does.
+    for (const k of setsOf(key)) delete over[k];
+    pick[key] = key === "depth" ? Number(el.value) : el.value;
+    for (const k of setsOf(key)) delete over[k];
+    look = null; render();
+  });
+
+  // Contrast, the accessibility preference, beside them.
+  const contrastEl = select("choice-contrast", [["standard", "Standard"], ["medium", "Medium"], ["more", "More"]]);
+  document.getElementById("g-access").append(row("Contrast", contrastEl.id, contrastEl), Object.assign(document.createElement("p"), { className: "lever-note", textContent: "Moves every stroke toward 3:1. Shadows stay; hairlines become 1px." }));
+  contrastEl.addEventListener("input", () => { pick.contrast = contrastEl.value; render(); });
+
+  // Fine-tune: every lever, naming the choice it comes from, with Reset once moved.
+  const FROM = { edge: "Edge", "edge-depth": "Edge and Depth", depth: "Depth", softness: "Softness", light: "Light", color: "Colour" };
+  const inputs = {}, sources = {};
   for (const lever of LEVERS) {
-    const row = document.createElement("div");
-    row.className = "lever";
     const id = `lever-${lever.id}`;
-    const label = document.createElement("label");
-    label.htmlFor = id; label.textContent = lever.label;
-    row.appendChild(label);
-    let el;
-    if (lever.kind === "range") {
-      el = document.createElement("input");
-      Object.assign(el, { type: "range", min: lever.min, max: lever.max, step: 1, id });
-      const out = document.createElement("output");
-      out.htmlFor = id; out.id = `${id}-out`;
-      row.append(el, out);
-    } else {
-      el = document.createElement("select");
-      el.id = id;
-      for (const [v, t] of lever.options) el.append(new Option(t, v));
-      row.appendChild(el);
-    }
-    el.addEventListener("input", () => { state[lever.id] = lever.kind === "range" ? Number(el.value) : el.value; current = null; render(); });
-    inputs[lever.id] = el;
-    document.getElementById(lever.group).appendChild(row);
-    if (lever.note) { const p = document.createElement("p"); p.className = "lever-note"; p.textContent = lever.note; document.getElementById(lever.group).appendChild(p); }
+    const el = lever.kind === "range" ? range(id, lever.min, lever.max) : select(id, lever.options);
+    const r = row(lever.label, id, el, lever.kind === "range");
+    if (lever.kind !== "range") el.style.gridColumn = "2 / 4";
+    const src = document.createElement("div"); src.className = "lever-src";
+    r.appendChild(src);
+    el.addEventListener("input", () => { over[lever.id] = lever.kind === "range" ? Number(el.value) : el.value; look = null; render(); });
+    inputs[lever.id] = el; sources[lever.id] = src;
+    document.getElementById(lever.group).appendChild(r);
   }
 
   const presetBox = document.getElementById("presets");
-  for (const p of PRESETS) {
+  for (const p of LOOKS) {
     const b = document.createElement("button");
     b.type = "button"; b.textContent = p.label; b.dataset.id = p.id;
-    b.addEventListener("click", () => { state = { ...p.v }; current = p.id; render(); });
+    b.addEventListener("click", () => { pick = { ...DEFAULT_PICK, ...p.pick, contrast: pick.contrast }; over = { ...p.over }; look = p.id; render(); });
     presetBox.appendChild(b);
   }
 
@@ -435,19 +542,43 @@ body { background: var(--lab-bg); color: var(--lab-ink); font-family: var(--lab-
   };
 
   function render() {
+    const base = resolve();
     const o = overrides();
     for (const c of made) {
       for (const [k, v] of Object.entries(o)) c.style.setProperty(k, v);
       c.setAttribute("data-area-contrast", state.contrast);
     }
+    for (const [key, el] of Object.entries(choiceEls)) {
+      el.value = String(pick[key]);
+      const note = document.getElementById(`choice-${key}-note`);
+      note.textContent = key === "depth" ? DEPTH_NOTE(pick.depth) : CHOICES[key].options[pick[key]].note;
+      const out = document.getElementById(`choice-${key}-out`); if (out) out.textContent = String(pick[key]);
+    }
+    contrastEl.value = pick.contrast;
+    let changed = 0;
     for (const lever of LEVERS) {
       inputs[lever.id].value = String(state[lever.id]);
       const out = document.getElementById(`lever-${lever.id}-out`);
       if (out) out.textContent = String(state[lever.id]);
+      const src = sources[lever.id];
+      const moved = lever.id in over && String(over[lever.id]) !== String(base[lever.id]);
+      changed += moved ? 1 : 0;
+      src.replaceChildren();
+      if (moved) {
+        src.dataset.changed = "";
+        const reset = Object.assign(document.createElement("button"), { type: "button", className: "lever-reset", textContent: "Reset" });
+        reset.setAttribute("aria-label", `Reset ${lever.label} to ${FROM[lever.from]}`);
+        reset.addEventListener("click", () => { delete over[lever.id]; look = null; render(); });
+        src.append(`Changed from ${base[lever.id]} (${FROM[lever.from]})`, reset);
+      } else {
+        delete src.dataset.changed;
+        src.textContent = `From ${FROM[lever.from]}`;
+      }
     }
-    for (const b of presetBox.children) b.setAttribute("aria-pressed", String(b.dataset.id === current));
-    const p = PRESETS.find(x => x.id === current);
-    document.getElementById("preset-note").textContent = p ? p.note : "Custom: a preset with levers moved.";
+    document.getElementById("fine-summary").textContent = changed ? `Fine-tune · ${changed} changed` : "Fine-tune";
+    for (const b of presetBox.children) b.setAttribute("aria-pressed", String(b.dataset.id === look));
+    const p = LOOKS.find(x => x.id === look);
+    document.getElementById("preset-note").textContent = p ? p.note : "Custom: your own choices.";
     lightOnly = true; const light = overrides(); lightOnly = false;
     const body = document.getElementById("readout");
     body.replaceChildren(...Object.entries(WHO).map(([k, [name, who]]) => {
@@ -457,17 +588,17 @@ body { background: var(--lab-bg); color: var(--lab-ink); font-family: var(--lab-
       tr.children[0].textContent = name; tr.children[1].textContent = who; tr.querySelector("code").textContent = value;
       return tr;
     }));
-    try { localStorage.setItem("edge-depth-lab", JSON.stringify({ state, current })); } catch {}
+    try { localStorage.setItem("edge-depth-lab-2", JSON.stringify({ pick, over, look })); } catch {}
   }
 
   document.getElementById("copy").addEventListener("click", async e => {
-    const text = JSON.stringify(state);
+    const text = JSON.stringify({ choices: pick, fineTuned: over, levers: state });
     try { await navigator.clipboard.writeText(text); e.target.textContent = "Copied"; }
     catch { e.target.textContent = text; }
     setTimeout(() => { e.target.textContent = "Copy settings"; }, 1600);
   });
 
-  try { const saved = JSON.parse(localStorage.getItem("edge-depth-lab") || "null"); if (saved?.state) { state = { ...TODAY, ...saved.state }; current = saved.current ?? null; } } catch {}
+  try { const saved = JSON.parse(localStorage.getItem("edge-depth-lab-2") || "null"); if (saved?.pick) { pick = { ...DEFAULT_PICK, ...saved.pick }; over = saved.over ?? {}; look = saved.look ?? null; } } catch {}
   render();
 })();
 </script>
