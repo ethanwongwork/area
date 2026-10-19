@@ -247,7 +247,10 @@ export function MaterialsPage() {
       canvas={view === "readings"
         ? <Readings bundle={bundle} variants={variants} themes={themes} />
         : <Board bundle={bundle} view={view} variants={variants} themes={themes} backdrop={backdrop} />}
-      inspector={<>
+      inspector={{
+        theme: <CanvasSettings material={false} />,
+        // The lab's levers are its design; snapshots and research sit with them.
+        design: <>
         <DraftControls bundle={bundle} draft={draft} ships={ships} onChange={next => put(bundle, next)}
           onReset={() => put(bundle, { ...ships, notes: draft.notes })}
           onSnapshot={() => {
@@ -257,9 +260,9 @@ export function MaterialsPage() {
           }} />
         <Snapshots bundle={bundle} snapshots={snapshots} onLoad={s => put(bundle, s.draft)}
           onDelete={s => { saveSnapshots(snapshots.filter(x => x.id !== s.id)); if (compare === s.id) changeCompare("shipped"); }} />
-        <CanvasSettings material={false} />
         <Research bundle={bundle} />
-      </>}
+      </>,
+      }}
     />
   );
 }

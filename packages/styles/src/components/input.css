@@ -44,8 +44,11 @@
     color: var(--area-input-text);
     font-size: var(--_text);
     line-height: var(--_leading);
-    /* spec (outline pass, docs/specs/number-field.md): controls at rest carry no shadow, as Button (ChatGPT, Notion, Figma fields). */
-    box-shadow: none;
+    /* spec (outline pass, docs/specs/number-field.md): controls at rest carry no shadow, as Button (ChatGPT, Notion, Figma
+       fields), by default: Field shadow (axes/depth.ts, 0 by default, a transparent role) lifts them when
+       chosen (shadcn's shadow-xs, Primer's). Soft fields stay flat. The focus halo lists after it, so the two crossfade. */
+    --_field-lift: var(--area-shadow-field);
+    box-shadow: var(--_field-lift);
     /* Motion (docs/MOTION.md, 2026-10-07): the edge, fill and ink (--_t-paint) and the focus halo
        (--_t-halo) fade out on fast; the states below set 0s, so hover, focus and a validation tone
        appear at once (a focus halo that fades in lags the keyboard). The halo keeps its fade into
@@ -62,7 +65,8 @@
 
   /* Soft fields are flat, as Figma's are: the fill is the edge, so no shadow. */
   .area-input--soft {
-    box-shadow: none;
+    --_field-lift: 0 0 0 0 transparent;
+    box-shadow: var(--_field-lift);
     --_bg: var(--area-input-bg-soft);
     --_border: var(--area-input-edge-soft); /* none, or the strong edge under increased contrast */
     --_border-hover: var(--area-input-edge);
@@ -81,7 +85,7 @@
     --_t-paint: 0s;
     --_t-halo: 0s;
     border-color: var(--_border-focus);
-    box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
+    box-shadow: var(--_field-lift), 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
     outline: var(--area-field-focus-outline-width) solid var(--_focus-outline);
     outline-offset: 0;
   }

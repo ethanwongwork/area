@@ -213,8 +213,69 @@ no transform or transition.
 - 2026-10-03 · roundness → 6 plus the shift, never below square, its whole-pixel height cap moving with the shift: 16px Kbd square, 2, 4, 6, 8, pill in 2px steps (`kbd.css:22-27`). `docs/research/radius-audit-2026-10-03.md`, "Roundness".
 - 2026-10-03 · one corner setting (owner: one radius setting, Sharp and Pill as ends; "every control is a pill") → a 24px box's corner, 6 at the default at every size, scaling with the setting; a pill at Pill (`kbd.css`). `docs/research/radius-audit-2026-10-03.md`, "One corner setting".
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → no change; Kbd has no motion and rests on whole-pixel heights at both densities.
+- 2026-10-19 · owner, round 51 (rethink): "what is the guidance for using kbd without a backplate? should all kbd instances use a backplate? should it be used for the esc in approval in this batch?" → round 52 (below).
+- 2026-10-19 · owner, round 52 (rethink): "can you also write a rule for how big the gap between text and the kbd should be? the backplate looks a bit too close currently." → round 53 (below).
 
 ## Spacing audit (2026-10-17)
 
 Key gap: `--area-keyboard-gap` is `round(nearest, 0.25ch, 1px)` (2), so keys after the first sit on whole pixels; `0.25ch` computed 1.94 (md) and 1.78 (sm). Measured in `docs/research/spacing-2026-10-17/` (Before / After: https://claude.ai/artifact/JtDZ9LNfutFyfdkGUvQzL2).
 - 2026-10-18 · radius audit (owner: "any other components that need a corner radius audit … the axis can be applied with no issues?") → the corner stops 2px short of a pill until Pill, as a Menu's rows (`kbd.css`): at Radius 14 a 16 compact key took 10, a capsule. Default unchanged (6); 6 at 14 / Compact, 8 at 14 / Comfortable, a capsule at Pill.
+
+## Review note, 2026-10-19 (round 51)
+
+- **What changed:** the keycap's grey is now see-through (the mark fill Badge and Count use), so it stays visible on a
+  hovered or pressed row instead of matching the row's grey.
+- **Why:** you asked whether keycaps would work on row backplates; the old opaque grey was the same grey as a pressed
+  row. On the page it looks nearly the same (6% of black over the page instead of a fixed grey); in dark it now takes
+  its tone from the surface under it, so the review page marks every filled keycap as changed.
+
+## When a key has a backplate (round 52, 2026-10-19)
+
+Owner: "what is the guidance for using kbd without a backplate? should all kbd instances use a backplate?" Not all.
+The rule, read from where Area already uses each and from the products in this spec's sources:
+
+| Variant | Use it for | Why | In Area |
+|---|---|---|---|
+| default (filled keycap) | a key presented as a key: named in prose or a hint ("Esc to cancel"), the keys of a shortcut list, a field's hint (⌘K), a Button's trailing shortcut | it stands apart from the words around it; Notion's shortcut hints are filled keycaps | Approval's hint, Shortcut list, Search field, Button templates |
+| quiet (no backplate) | a key in a list of rows that have their own plate: menu shortcuts, a palette's rows, numbered choices | the row's plate is the backplate; a keycap on a highlighted row is a plate on a plate, and down a list it becomes noise (Notion and Figma menus write shortcuts as text) | Menu, Command palette rows, Approval's numbers |
+| on-color | a key on a strong fill | adapts on its own in a Tooltip, a solid Button and a danger row | Tooltip, Video player |
+
+The filled keycap's grey is translucent (round 51), so where a keycap must sit on a plate (a Button's hover, a
+selected row) it still reads.
+
+One place breaks the rule today: Command palette's footer (↑ ↓ ↵ esc inside its footer buttons) uses quiet keys,
+where the rule says a Button's shortcut is a keycap. Left as is for the owner (open question below).
+
+## Open questions
+
+- Command palette's footer keys: keycaps, as the rule says for keys on a Button, or keep them quiet as a dense footer?
+
+## Review note, 2026-10-19 (round 52)
+
+- **What changed:** nothing new in the keycap itself; Kbd now has a written rule for when a key gets a backplate (a key
+  named on its own or in a sentence) and when it does not (a key in a list of rows), and the Approval's Esc follows it.
+- **Why:** you asked for the guidance; it is the rule Area's menus, shortcut list and search field already follow.
+
+## The gap between a keycap and its words (round 53, 2026-10-19)
+
+Owner: "can you also write a rule for how big the gap between text and the kbd should be? the backplate looks a bit
+too close currently." The rule: **a keycap sits one `ui-cluster` from the words beside it (8, compact 6), set by its
+container's gap, never by a typed space.** Basis: ChatGPT's tooltip puts its keycap 8 after the label (`gap-2`;
+`docs/research/captures/tooltip/chatgpt--shortcut--rest--light.json`: text ends 110.44, keycap starts 118.44), and
+Area's Tooltip already did (`gap: var(--area-ui-cluster)`). A typed space is about 4 at these sizes, which is what made
+the keycap read as touching its words.
+
+| Where | Before | Now |
+|---|---|---|
+| Tooltip with a shortcut | 8 (its gap) | unchanged |
+| Button with a trailing shortcut | 4 (a space inside the label) | 8: Button lifts a trailing Kbd out of its label; the button's gap plus the difference |
+| Approval's "Esc to cancel" | 4 | 8: the hint is a row with that gap |
+| Running prose ("Press ⌘K to search") | a space | a space: in a paragraph the keycap follows the line's word spacing |
+| Keys of one chord / a sequence | `--area-keyboard-gap` / KbdGroup | unchanged (keys to keys, not keys to words) |
+
+## Review note, 2026-10-19 (round 53)
+
+- **What changed:** a keycap now sits 8 from the words beside it (6 at Compact), in buttons and hints as in tooltips;
+  before, a button's keycap sat a space (4) from its label.
+- **Why:** you asked for a rule; 8 is ChatGPT's tooltip and Area's own tooltip gap, so every key beside words now
+  matches.

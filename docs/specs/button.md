@@ -384,3 +384,10 @@ Solid presses one step past hover in the same direction (`--_solid-active`: neut
   500; 169 visible text Buttons across Button group, Split button, Toolbar, Prompt suggestions and
   Model picker are all 500 with no label overflow and unchanged heights.
 - 2026-10-12 · owner, 2026-10-12: "go with your recommendations" (consistency pass) → neutral outline and ghost ink reads `fg-quiet` (O5: one role for a literal written in several families; same paint). (docs/research/consistency-audit-2026-10-12.md)
+- 2026-10-18 · owner: "go with your recommendations … finalize the material, surface, stroke, elevation axis theming" → Edge and Depth (axes/depth.ts; docs/research/elevation-stroke-2026-10-18): outline and soft Buttons rest on `--_shadow: var(--area-shadow-field)`, Field shadow, 0 by default (a transparent role, so nothing changes until it is raised; Primer's button lip and shadcn's shadow-xs when it is). Under a Material it rides in `--_m-own` beside the material's layers (material.css).
+
+## Review note, 2026-10-19 (round 53, from Kbd)
+
+- **What changed:** a trailing keycap (Save ⌘S) now sits 8 from the label instead of a space (4); Button lifts it out
+  of the label so its gap spaces it.
+- **Why:** Kbd's new rule for the gap between a key and its words (Tooltip's and ChatGPT's 8).

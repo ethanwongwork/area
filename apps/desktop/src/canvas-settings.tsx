@@ -3,7 +3,8 @@
  * own control list (src/gallery/controls.ts), grouped by what they shape under their own headings
  * (owner, 2026-10-14: "separated by larger titles"): Color (neutral, accent, the Layers' light and dark ground
  * and layer contrast, action, selection, contrast), Size (type size, density), Shape (the radius, and which components draw a pill
- * instead) and Effects (surface, elevation, motion). A tab shows only the settings that change its
+ * instead), Stroke (width, strength), Shadow (floating, resting, fields, size, softness, light, colour) and Effects
+ * (motion). A tab shows only the settings that change its
  * specimens, and its own display settings follow in a Display section (Typography's sample text).
  * They write data-area-* on the Canvas only, so the app's own chrome stays compact. Where every setting shows (Components,
  * Examples), Material follows: a bundle, then each lever, its switches shown while it is on (src/material.ts).
@@ -11,7 +12,7 @@
 import type { ReactNode } from "react";
 import { CustomSelect, Field, PanelSection, Segmented } from "@area/react";
 import { MATERIAL_BUNDLES, MATERIAL_LEVERS, MATERIAL_STROKE_STYLES, MATERIAL_SWITCHES } from "@area/tokens/config";
-import { GALLERY_CONTROLS } from "./gallery/controls.ts";
+import { DEPTH_LEVER_AXES, GALLERY_CONTROLS } from "./gallery/controls.ts";
 import { materialValue, type MaterialState } from "./material.ts";
 import { optionMark } from "./option-marks.tsx";
 import { useStudio, type CanvasAxes } from "./studio.tsx";
@@ -22,10 +23,17 @@ const GROUPS: ReadonlyArray<{ heading: string; axes: readonly Axis[] }> = [
   { heading: "Color", axes: ["neutral", "accent", "ground-light", "ground-dark", "layers-light", "layers-dark", "action", "selection", "contrast"] },
   { heading: "Size", axes: ["type", "density"] },
   { heading: "Shape", axes: ["radius", "pills"] },
-  { heading: "Effects", axes: ["surface", "shadow-rest", "elevation", "motion"] },
+  // Edge and Depth (axes/depth.ts, owner 2026-10-18: "i want to be able to control the individual controls as much as
+  // possible, but i think the previous system was too bloated"): nine controls, each on its own, no named looks, under
+  // two headings (owner: "can you separate edge from depth … maybe edge can just be called stroke"). They share nothing:
+  // Rest shadow (main, 2026-10-19: a subtle shadow round surfaces, "with the line or instead of it") sets surfaces
+  // apart as the line does, so it sits under Stroke with Width and Strength.
+  { heading: "Stroke", axes: ["surface", "stroke", "shadow-rest"] },
+  { heading: "Shadow", axes: ["elevation", ...DEPTH_LEVER_AXES.filter(axis => axis !== "stroke")] },
+  { heading: "Effects", axes: ["motion"] },
 ];
 
-export function CanvasSettings({ material, axes = ["neutral", "accent", "ground-light", "ground-dark", "layers-light", "layers-dark", "action", "selection", "contrast", "type", "density", "radius", "surface", "shadow-rest", "elevation", "motion", "pills"], children }: { axes?: readonly Axis[]; material?: boolean; children?: ReactNode }) {
+export function CanvasSettings({ material, axes = ["neutral", "accent", "ground-light", "ground-dark", "layers-light", "layers-dark", "action", "selection", "contrast", "type", "density", "radius", "surface", "shadow-rest", "elevation", ...DEPTH_LEVER_AXES, "motion", "pills"], children }: { axes?: readonly Axis[]; material?: boolean; children?: ReactNode }) {
   // Material shows with every setting: a tab that narrows its settings shows no surfaces a material paints.
   const showMaterial = material ?? axes.length === GALLERY_CONTROLS.length - 1;
   return (

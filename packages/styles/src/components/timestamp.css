@@ -1,0 +1,19 @@
+/* ---------------------------------------------------------------------------
+ * Timestamp
+ *
+ * When a turn was sent, as one centred muted line between turns, shown after a pause rather than on every message
+ * (Codex: a separator when a person's turn follows the last reply by over an hour). No product puts a time, model or
+ * read mark on each message (composer-additions.md, E). The conversation's gap spaces it; it owns no margin.
+ * (docs/specs/timestamp.md)
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-timestamp {
+    display: block;
+    margin: 0;
+    color: var(--area-fg-muted); /* spec: Codex text-tertiary */
+    font-size: var(--area-text-sm-size); /* spec: Codex 14/20 under a 13 chat: a step under the reply */
+    line-height: var(--area-text-sm-leading);
+    text-align: center;
+    user-select: none;
+  }
+}

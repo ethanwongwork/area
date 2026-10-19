@@ -13,9 +13,6 @@
  *            group selection, Badge modern
  *   resting  a surface that rests on the page: Card, Panel, Board card, Composer
  *   tooltip  a small annotation: Tooltip, Toggletip
- *   lift     a surface on the page answering the pointer: a linked Card's hover, the app's gallery tiles
- *            (owner, 2026-10-18: the float lift "too drastic", "very subtle elevation shadow"; a hovered card
- *            stays on the page, so it sits under the float, as Fluent 2's interactive card steps shadow4 to 8)
  *   float    a surface over the page: Menu (and everything that opens one: Context menu, Combobox, custom
  *            Select, Tag picker, Model picker, Split button, Zoom control), Popover (Hover card, Date
  *            picker), the Select picker, Toast, the Calendar and ColorPicker surfaces, the floating
@@ -23,12 +20,12 @@
  *            paint with no lift since review round 30, docs/specs/board.md)
  *   modal    the topmost surface, over a scrim: Dialog (Confirm dialog), Drawer, Command palette
  *
- * Geometry is Fluent 2's recipe, fixed per role (packages/tokens/src/utils/shadows.ts @93e324f72): an
+ * Geometry is Fluent 2's recipe per role at the default Distance (packages/tokens/src/utils/shadows.ts @93e324f72): an
  * ambient layer with no offset and a key layer whose offset is half its blur. control is shadow2, resting
- * shadow4, tooltip and lift shadow8, float shadow16, modal shadow28. Strength scales the alpha only:
+ * shadow4, tooltip shadow8, float shadow16, modal shadow28. Strength scales the alpha only:
  *
- *   key      n% x the role's weight: control 1, resting 0.5, tooltip 0.5, lift 0.5, float 1, modal 2 (picks:
- *            rest, annotation and hover sit under the float, a modal over it, as in every system surveyed)
+ *   key      n% x the role's weight: control 1, resting 0.5, tooltip 0.5, float 1, modal 2 (picks: rest and
+ *            annotation sit under the float, a modal over it, as in every system surveyed)
  *   ambient  half the key (Notion's popover: 2.7% under 5%; the floating lift Area carried until 2026-10-13)
  *   dark     twice the light alpha (Fluent's dark shadow colours are its light ones doubled: 24/28 over 12/14)
  *
@@ -47,62 +44,26 @@ import { type AxisDefinition, tokens } from "./schema.ts";
 export const ELEVATION_STEPS = [0, 1, 2, 3, 4, 5, 6, 7, 8] as const;
 export type ElevationStep = (typeof ELEVATION_STEPS)[number];
 
-const NO = "0 0 0 0 transparent";
-/** [ambient blur, key offset, key blur, weight] per role: Fluent's shadow2 / 4 / 8 / 8 / 16 / 28. */
-const ROLES = {
-  control: [2, 1, 2, 1],
-  resting: [2, 2, 4, 0.5],
-  tooltip: [2, 4, 8, 0.5],
-  lift: [2, 4, 8, 0.5],
-  float: [2, 8, 16, 1],
-  modal: [8, 14, 28, 2],
-} as const;
-
-/** An alpha as a short decimal: 1.5% is 0.015. */
-const alpha = (percent: number) => Number((percent / 100).toFixed(4));
-const layer = (geometry: string, percent: number) =>
-  percent === 0 ? NO : `${geometry} light-dark(rgb(0 0 0 / ${alpha(percent)}), rgb(0 0 0 / ${alpha(percent * 2)}))`;
-
-/** One role at a strength: ambient, then key. */
-export function roleShadow(role: keyof typeof ROLES, step: number): string {
-  const [ambientBlur, keyY, keyBlur, weight] = ROLES[role];
-  const key = step * weight;
-  return `${layer(`0 0 ${ambientBlur}px`, key / 2)}, ${layer(`0 ${keyY}px ${keyBlur}px`, key)}`;
-}
-
-function stepTokens(step: number) {
-  return tokens({
-    "shadow-control": roleShadow("control", step),
-    "shadow-resting": roleShadow("resting", step),
-    "shadow-tooltip": roleShadow("tooltip", step),
-    "shadow-lift": roleShadow("lift", step),
-    "shadow-float": roleShadow("float", step),
-    "shadow-modal": roleShadow("modal", step),
-    // The ladder: the roles in depth order, for apps.
-    "shadow-1": "var(--area-shadow-control)",
-    "shadow-2": "var(--area-shadow-resting)",
-    "shadow-3": "var(--area-shadow-float)",
-    "shadow-4": "var(--area-shadow-modal)",
-  });
-}
-
 const describe = (step: number) =>
   step === 0 ? "No shadows. Edges and the dialog scrim separate surfaces."
     : `The Menu's shadow at ${step}%; every role scales from it${step === 3 ? " (default: Notion's lightest lift)" : step === 5 ? " (Notion's popover)" : step === 8 ? " (ChatGPT's menu)" : ""}.`;
 
+/**
+ * Since 2026-10-18 (Edge and Depth, axes/depth.ts) the axis writes the number alone (`--area-elevation`), labelled
+ * Shadow in the app, and sets the floating roles (tooltip, float, modal) and the hover lift. The resting and control
+ * roles have their own number (Rest shadow), as fields do (Field shadow); Shadow size, Softness, Light and Shadow colour
+ * shape every role. At their defaults every role is the two-layer recipe above, exactly.
+ */
 export const ELEVATION_AXIS: AxisDefinition = {
   id: "elevation",
   label: "Elevation",
-  description: "How much surfaces lift, as the Menu's shadow strength from 0 (flat) to 8; every component takes its depth from its role.",
+  description: "How much menus, popovers, tooltips and dialogs lift, and a hovered card, as the Menu's shadow strength from 0 (flat) to 8.",
   defaultPreset: "3",
-  namespaces: [
-    "--area-shadow-1:", "--area-shadow-2:", "--area-shadow-3:", "--area-shadow-4:",
-    "--area-shadow-control:", "--area-shadow-resting:", "--area-shadow-tooltip:", "--area-shadow-lift:", "--area-shadow-float:", "--area-shadow-modal:",
-  ],
+  namespaces: ["--area-elevation:"],
   presets: ELEVATION_STEPS.map(step => ({
     id: String(step),
     label: step === 0 ? "0 (Flat)" : step === 3 ? "3 (Default)" : String(step),
     description: describe(step),
-    tokens: stepTokens(step),
+    tokens: tokens({ elevation: step }),
   })),
 };

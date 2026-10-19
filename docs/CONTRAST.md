@@ -41,7 +41,13 @@ owner 2026-10-18: More "seems very extreme"; Material 3's Standard / Medium / Hi
 strong endpoints. Every derivation mixes by the level, so Medium sits half way. It also brings Surface 0's frames back
 at 1px at any raised level (`border-width` = the Surface's `frame-width`, or 1px; owner, 2026-10-15), as macOS Increase
 Contrast adds borders and forced colours restore them. The soft edge (`shadow-edge`) is drawn only while no frame is,
-so the returned frame replaces it rather than doubling it (audit 2026-10-18).
+so the returned frame replaces it rather than doubling it (audit 2026-10-18). A Hairline frame (Surface 0.5) becomes 1px at any raised level, as
+no system surveyed thickens 1px to 2px for contrast (Edge and Depth research, finding 6).
+
+The Stroke control (Edge and Depth, `axes/depth.ts`, 2026-10-18) sets where every stroke starts: its distance from the
+ground is today's × n/4 (`color/layers.ts` `strokeEdge`). Contrast then moves it toward the strong stroke from there,
+by the same share, so More still reaches 3:1 at every Stroke; Stroke 0 leaves strokes to Contrast alone. Shadows never strengthen with Contrast. Rails and toggle fills read the unscaled edge
+(`rawEdge`), since they are fills.
 
 Every stroke moves with the level, by the same share (owner, 2026-10-18: "some components get an obviously darker
 stroke whereas some components dont visibly change at all"). Each mixes from its standard value by the level: every

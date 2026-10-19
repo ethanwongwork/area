@@ -1,0 +1,188 @@
+/* ---------------------------------------------------------------------------
+ * Edit summary and Diff
+ *
+ * What an agent changed in a turn: a card titled with the count, the turn's +N −N, and a row per file opening to its
+ * diff, with Keep and Undo for each and for all. The Diff draws a unified diff in Code block sm's metrics and diff
+ * paint. Measured from Cursor's EditToolCallView, DefaultDiff and transcript cards, and Codex's patch summary
+ * (docs/specs/edit-summary.md).
+ *
+ * The agent card (shared with Plan, plan.css; cleanup pass 2026-10-19, owner round 49):
+ *   frame   Code block's: the card edge at stroke-width (no shadow under it), the container corner, the surface fill.
+ *   type    one size, text-sm, as Cursor's cards sit a step under the reply (13 under 14); buttons are sm, the same size.
+ *   column  everything starts 12 in: the list's 4 (Menu's) plus the row inset 8, so the head's title and the rows' text
+ *           share one edge (Cursor's card header 0 12).
+ *   head    one row tall (ui-row); a trailing button sits as far from the end as from the top, (row − control) / 2, as
+ *           Code block's header copy does; a rule under it when rows follow.
+ *   rows    Menu rows: ui-row tall, the row inset, the row corner, the row plate.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-edit-summary {
+    --_card-list: var(--area-space-4); /* spec: Menu's list padding 4 */
+    --_card-column: calc(var(--_card-list) + var(--area-ui-row-inset)); /* 12: the rows' text */
+    /* A button's inset from the end and the top: what is left of the row around a small control, never under 4. */
+    --_card-end: max(var(--area-space-4), calc((var(--area-ui-row) - var(--area-control-sm)) / 2));
+    /* Concentric corners (round 52, owner: "make sure the inset button … is mathematically correct corner radius"): a
+       button set into a corner takes that corner less its inset; under Sharp (no concentric corners) it keeps its own. */
+    --_head-button-radius: max(var(--area-radius-min), calc(var(--area-radius-control-sm) + (var(--area-radius-container) - var(--area-stroke-width) - var(--_card-end) - var(--area-radius-control-sm)) * var(--area-radius-concentric)));
+    --_row-button-radius: max(var(--area-radius-min), calc(var(--area-radius-control-sm) + (var(--area-radius-row) - (var(--area-ui-row) - var(--area-control-sm)) / 2 - var(--area-radius-control-sm)) * var(--area-radius-concentric)));
+    min-inline-size: 0;
+    overflow: hidden;
+    border: var(--area-stroke-width) solid var(--area-border-card); /* no shadow under it: a required frame (DESIGN_SYSTEM.md, "Strokes") */
+    border-radius: var(--area-radius-container);
+    background-color: var(--area-bg-surface);
+    color: var(--area-fg-default);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
+  }
+  /* The head: title, the turn's counts, Undo all and Keep all. A narrow column (the Inspector) wraps the buttons to a
+     second line, still at the end. */
+  .area-edit-summary__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: var(--area-space-8);
+    min-inline-size: 0;
+    /* As tall as its buttons and their inset whether or not they are there, so Keep all does not shift the card (Code
+       block's header: "a stable height whether or not the block has actions"). */
+    min-block-size: calc(var(--area-control-sm) + 2 * var(--_card-end));
+    padding-block: var(--_card-end);
+    padding-inline: var(--_card-column) var(--_card-end);
+    border-block-end: var(--area-stroke-width) solid var(--area-border-divider);
+  }
+  .area-edit-summary__title { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  /* The counts read as one figure: 4 apart, a line's gap (Step). */
+  .area-edit-summary__counts { display: inline-flex; flex: none; gap: var(--area-space-4); font-variant-numeric: tabular-nums; }
+  .area-edit-summary__added { color: var(--area-fg-success); }
+  .area-edit-summary__removed { color: var(--area-fg-danger); }
+  /* Text buttons side by side with no gap: their own padding spaces the labels (Message actions). */
+  .area-edit-summary__actions { display: inline-flex; flex: none; align-items: center; margin-inline-start: auto; }
+  .area-edit-summary__head .area-button { --_shape: var(--_head-button-radius); }
+  .area-edit-summary__file .area-button { --_shape: var(--_row-button-radius); }
+
+  .area-edit-summary__files { display: grid; grid-template-columns: minmax(0, 1fr); padding: var(--_card-list); }
+  /* A file's row is a Menu row: its name, counts and chevron as one button, Undo and Keep at the end. */
+  .area-edit-summary__file {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-8);
+    min-inline-size: 0;
+    min-block-size: var(--area-ui-row);
+    padding-inline: var(--area-ui-row-inset);
+    border-radius: var(--area-radius-row);
+    /* The row plate (Menu's): hover and focus, and the pressed grey while the name is pressed. The actions' backing
+       reads the same value, so it matches the row in every state. */
+    --_row-plate: transparent;
+    background-color: var(--_row-plate);
+    transition: background-color var(--area-duration-fast) var(--area-ease-out);
+  }
+  @media (hover: hover) { .area-edit-summary__file:hover { --_row-plate: var(--area-bg-component-hover); transition-duration: 0s; } }
+  .area-edit-summary__file:focus-within { --_row-plate: var(--area-bg-component-hover); transition-duration: 0s; }
+  .area-edit-summary__file:has(> .area-edit-summary__name:active) { --_row-plate: var(--area-bg-component-active); transition-duration: 0s; }
+  /* Row actions change ink, not plate (Nav's and Board's rule, cohesion test): the row already shows the pointer, so
+     Undo and Keep are muted ghost buttons whose hover and press are the default ink. A plate of their own would be the
+     row's grey again, so their hover could not be seen. */
+  .area-edit-summary__file .area-button.area-button--ghost { --_fg: var(--area-fg-muted); --_bg-hover: transparent; --_bg-active: transparent; }
+  @media (hover: hover) { .area-edit-summary__file .area-button.area-button--ghost:hover { --_fg: var(--area-fg-default); } }
+  .area-edit-summary__file .area-button.area-button--ghost:active { --_fg: var(--area-fg-default); }
+  .area-edit-summary__name {
+    display: flex;
+    flex: 1;
+    align-self: stretch;
+    align-items: center;
+    gap: var(--area-space-4); /* a line's gap (Step) */
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: start;
+    cursor: pointer;
+  }
+  .area-edit-summary__name:focus-visible { outline: none; }
+  .area-edit-summary__file:has(> .area-edit-summary__name:focus-visible) { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(-1 * var(--area-focus-width)); }
+  .area-edit-summary__name > span:first-child { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .area-edit-summary__chevron { display: inline-flex; flex: none; color: var(--area-fg-muted); transform: rotate(-90deg); transition: transform var(--area-duration-fast) var(--area-ease-out); /* MOTION.md: every chevron turns on fast */ }
+  .area-edit-summary__file[data-open] .area-edit-summary__chevron { transform: none; }
+  .area-edit-summary__chevron > svg { inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); }
+  /* Undo and Keep show while the row is hovered or focused (Message's actions), always on touch. With a pointer they
+     cover the row's end on its own plate (the card's fill under the row plate), so the name has the row until then;
+     the last button ends as far from the row's end as from its top. */
+  .area-edit-summary__file > .area-edit-summary__actions { opacity: 0; transition: opacity var(--area-duration-fast) var(--area-ease-out); }
+  @media (hover: hover) {
+    .area-edit-summary__file > .area-edit-summary__actions {
+      position: absolute;
+      inset-block: 0;
+      inset-inline-end: 0;
+      padding-inline: var(--area-space-4) var(--_card-end);
+      border-radius: inherit;
+      background: linear-gradient(var(--_row-plate), var(--_row-plate)), var(--area-bg-surface);
+    }
+    .area-edit-summary__file:hover > .area-edit-summary__actions { opacity: 1; transition-duration: 0s; }
+  }
+  .area-edit-summary__file:focus-within > .area-edit-summary__actions { opacity: 1; transition-duration: 0s; }
+  @media (hover: none) {
+    .area-edit-summary__file > .area-edit-summary__actions { opacity: 1; margin-inline-end: calc(var(--_card-end) - var(--area-ui-row-inset)); }
+  }
+  /* Kept or undone: settled. The counts go quiet; an undone file's name is struck. */
+  .area-edit-summary__status { flex: none; color: var(--area-fg-muted); }
+  .area-edit-summary__file:is([data-kept], [data-undone]) .area-edit-summary__counts > * { color: var(--area-fg-muted); }
+  .area-edit-summary__file[data-undone] .area-edit-summary__name > span:first-child { text-decoration: line-through; color: var(--area-fg-muted); }
+  /* A file's diff under its row: 4 below it (a line's body gap, Step), as wide as the row's plate. */
+  .area-edit-summary__diff { min-inline-size: 0; padding-block: var(--area-space-4); }
+
+  /* ---- Diff ---- */
+  /* Code block sm's metrics and diff paint (code.css: the Inspector's code well), so Area draws one diff: its type and
+     leading, its insets, its number start, its + / − marker in the vivid inks and its tints. Numbers, marker and text
+     are columns of one grid (rows are subgrids), so every line's columns line up. Its corner is the row's, concentric
+     with the card's list (12 − 4 = 8). */
+  .area-diff {
+    --_diff-size: var(--area-text-xs-size); /* spec: Code block sm */
+    --_diff-leading: calc(var(--area-leading-18) - var(--area-space-2) * var(--area-ui-dense)); /* spec: Code block sm, 18; compact 16 */
+    --_diff-block: calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense)); /* spec: Code block sm block inset 8; compact 6 */
+    --_diff-inline: calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense)); /* spec: Code block sm line padding 8; compact 6 */
+    min-inline-size: 0;
+    margin: 0;
+    overflow-x: auto;
+    border: var(--area-stroke-width) solid var(--area-border-card); /* Code block's frame */
+    border-radius: var(--area-radius-row);
+    background-color: var(--area-bg-code);
+    color: var(--area-fg-default);
+    font-family: var(--area-font-mono);
+    font-size: var(--_diff-size);
+    line-height: var(--_diff-leading);
+  }
+  /* It scrolls sideways, so it takes focus (a keyboard can then scroll it) and shows the ring. */
+  .area-diff:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  .area-diff__lines {
+    display: grid;
+    grid-template-columns: auto auto var(--area-space-8) minmax(max-content, 1fr); /* spec: Code block's marker 8 */
+    column-gap: var(--area-space-4); /* spec: Code block gutter gap 4 */
+    inline-size: max-content;
+    min-inline-size: 100%;
+    padding-block: var(--_diff-block);
+  }
+  .area-diff__lines:not(:has(.area-diff__number)) { grid-template-columns: var(--area-space-8) minmax(max-content, 1fr); }
+  .area-diff__line { display: grid; grid-column: 1 / -1; grid-template-columns: subgrid; }
+  .area-diff__line > :first-child { padding-inline-start: var(--area-space-4); } /* spec: Code block sm number start 4 */
+  .area-diff__number { color: var(--area-fg-muted); text-align: end; font-variant-numeric: tabular-nums; user-select: none; }
+  .area-diff__marker { text-align: center; font-weight: var(--area-weight-strong); user-select: none; }
+  .area-diff__text { padding-inline-end: var(--_diff-inline); white-space: pre; }
+  .area-diff__line--added { background-color: var(--area-success-surface); }
+  .area-diff__line--removed { background-color: var(--area-danger-surface); }
+  .area-diff__line--added > .area-diff__marker { color: var(--area-fg-success-vivid); }
+  .area-diff__line--removed > .area-diff__marker { color: var(--area-fg-danger-vivid); }
+  /* A fold: the unchanged run between hunks, one line on the recessed fill, starting where the numbers do. */
+  .area-diff__fold {
+    grid-column: 1 / -1;
+    padding-inline: var(--area-space-4) var(--_diff-inline); /* spec: Code block sm number start 4 */
+    background-color: var(--area-bg-subtle);
+    color: var(--area-fg-muted);
+    font-family: var(--area-font-sans);
+  }
+  @media (forced-colors: active) {
+    .area-diff__line--added > .area-diff__marker, .area-diff__line--removed > .area-diff__marker { color: CanvasText; }
+  }
+}

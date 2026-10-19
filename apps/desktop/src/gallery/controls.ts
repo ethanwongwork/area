@@ -5,9 +5,13 @@
  * the Inspector's Canvas section and the saved Canvas (studio.tsx restoreCanvas, which keeps only
  * values listed here) both read this list.
  */
-import { AXIS_PRESETS, DEFAULT_AXES, DEFAULT_PILLS, PILL_SHAPES } from "@area/tokens/config";
+import { AXIS_PRESETS, DEFAULT_AXES, DEFAULT_PILLS, DEPTH_LEVERS, PILL_SHAPES } from "@area/tokens/config";
+/** Edge and Depth's controls besides Stroke width (Surface) and Shadow (Elevation) (@area/tokens axes/depth.ts), each one `data-area-<axis>`. */
+export const DEPTH_LEVER_AXES = ["stroke", "shadow-resting", "shadow-field", "shadow-size", "shadow-softness", "shadow-light", "shadow-color"] as const;
+export type DepthLever = (typeof DEPTH_LEVER_AXES)[number];
+
 export interface GalleryControl {
-  axis: "theme" | "neutral" | "accent" | "ground-light" | "ground-dark" | "layers-light" | "layers-dark" | "action" | "selection" | "contrast" | "type" | "density" | "radius" | "pills" | "surface" | "shadow-rest" | "elevation" | "motion";
+  axis: "theme" | "neutral" | "accent" | "ground-light" | "ground-dark" | "layers-light" | "layers-dark" | "action" | "selection" | "contrast" | "type" | "density" | "radius" | "pills" | "surface" | "shadow-rest" | "elevation" | "motion" | DepthLever;
   /**
    * Two or three options are a Segmented (Apple and Primer cap segments at 5-7); a longer list of
    * exact settings is a Select, each option naming what it sets (shadcn's radius picker is a menu).
@@ -35,6 +39,17 @@ function named(axis: "neutral" | "accent"): GalleryControl["items"] {
  * "(Default)" and the named ends as given. */
 function numbered(axis: "ground-light" | "ground-dark" | "layers-light" | "layers-dark", names: Record<string, string>): GalleryControl["items"] {
   return AXIS_PRESETS[axis].map(value => ({ value, label: names[value] ?? (value === DEFAULT_AXES[axis] ? `${value} (Default)` : value) }));
+}
+
+/** Edge and Depth's rows under their Stroke and Shadow headings (registry labels: Stroke, Rest shadow, Field shadow …). */
+const SHORT_LABEL: Record<DepthLever, string> = {
+  stroke: "Strength", "shadow-resting": "Resting", "shadow-field": "Fields", "shadow-size": "Size",
+  "shadow-softness": "Softness", "shadow-light": "Light", "shadow-color": "Colour",
+};
+
+/** An Edge and Depth lever's options, as the registry labels them ("1 (Default)", "0.5 (Hairline)", "×2 (Default)"). */
+function depthItems(axis: string): GalleryControl["items"] {
+  return DEPTH_LEVERS.find(entry => entry.axis === axis)!.options.map(option => ({ value: option.value, label: option.label }));
 }
 
 export const GALLERY_CONTROLS: readonly GalleryControl[] = [
@@ -88,11 +103,15 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = [
     label: value === "0" ? "0 (None, Default)" : value,
   })) },
   // How much surfaces lift (axes/elevation.ts, owner 2026-10-14): one number, the Menu's shadow strength in percent,
-  // 0 (Flat) to 8, as Radius is the medium Button's corner. A Select, as Radius: nine steps.
-  { axis: "elevation", kind: "select", label: "Elevation", hint: "The Menu's shadow in %; every component's lift scales from it", defaultValue: "3", items: ["0", "1", "2", "3", "4", "5", "6", "7", "8"].map(value => ({
-    value,
-    label: value === "0" ? "0 (Flat)" : value === "3" ? "3 (Default)" : value,
-  })) },
+  // 0 (Flat) to 8, as Radius is the medium Button's corner. A Select, as Radius: nine steps. Labelled Floating under the
+  // Shadow heading (owner, 2026-10-18): it sets menus, popovers, tooltips, dialogs and the hover lift; Resting has its own.
+  { axis: "elevation", kind: "select", label: "Floating", hint: "Menus, popovers, tooltips and dialogs, and a hovered card: the Menu's shadow in % (data-area-elevation)", defaultValue: "3", items: depthItems("elevation") },
+  // Edge and Depth's other controls (axes/depth.ts, 2026-10-18): options, defaults and hints are the registry's; the
+  // Inspector names each in a word, since its heading (Stroke or Shadow) says the rest.
+  ...DEPTH_LEVER_AXES.map(axis => {
+    const lever = DEPTH_LEVERS.find(entry => entry.axis === axis)!;
+    return { axis, kind: "select" as const, label: SHORT_LABEL[axis], hint: lever.hint, defaultValue: lever.defaultValue, items: depthItems(axis) };
+  }),
   // How long transitions take (axes/motion.ts, owner 2026-10-14): one number, the Menu's open in ms, 0 (None)
   // to 300 in steps of 30, 210 by default, as Elevation is the Menu's shadow. A Select, as Elevation: eleven steps.
   { axis: "motion", kind: "select", label: "Motion", hint: "The Menu's open in ms; every duration scales from it", defaultValue: "210", items: ["0", "30", "60", "90", "120", "150", "180", "210", "240", "270", "300"].map(value => ({

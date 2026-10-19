@@ -18,7 +18,7 @@ import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } fr
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { readStored, writeStored } from "../storage.ts";
 import { Facts } from "../facts.tsx";
-import { Preview, Selection } from "../inspector.tsx";
+import { CodeWell, Preview, Selection } from "../inspector.tsx";
 import { matches } from "../search.ts";
 import { SCALES, type ScaleStep } from "../tokens.ts";
 import { ArrangeMenu, sortBy, useArrangement } from "../organize.tsx";
@@ -237,41 +237,64 @@ export function ColorPage() {
           })}
         </Sheet>
       ) : <EmptyState title="No scales" description={`Nothing matches “${query}”.`} />}
-      inspector={
-        <>
-          {/* Neutral tints the neutral ramp (PRODUCT_UI rule 14: the settings that change this tab's specimens). */}
-          <CanvasSettings axes={["neutral", "type", "density"]} />
-          {picked ? <StepInspector scale={picked.scale.id} step={picked.step} token={token} description={picked.scale.description}
-              paintedAs={picked.scale.id === "neutral" && canvas.neutral !== "neutral" ? `${title(canvas.neutral)} ${picked.step.level} (Neutral is ${title(canvas.neutral)})` : undefined} />
-            : view ? (
-              <PanelSection heading="Scale">
-                <Facts label="Scale" items={[
-                  ["Tokens", <Code>--area-{view.id}-*</Code>],
-                  ["Steps", `${view.steps.length}, ${view.steps[0]!.level} to ${view.steps.at(-1)!.level}`],
-                  ["Roles", rolesOf(view.id).length ? rolesOf(view.id).map(item => `${roleLabel(item.role)}${item.when ? ` (when ${item.when})` : ""}`).join(", ") : "None by default"],
-                  view.description ? ["About", view.description] : null,
-                ]} />
-              </PanelSection>
-            ) : (
-              <PanelSection heading="Palette">
-                <Facts label="Palette" items={[
-                  ["Tokens", <Code>--area-&lt;scale&gt;-&lt;step&gt;</Code>],
-                  ["Scales", SCALES.length],
-                  ["Neutrals", SCALES.filter(entry => NEUTRALS.has(entry.id)).map(entry => title(entry.id)).join(", ")],
-                  ["Hues", SCALES.filter(entry => !NEUTRALS.has(entry.id)).length],
-                  ["Steps", `${SCALES[0]!.steps.length} a scale`],
-                  ["Defaults", `Neutral: ${title(defaultPreset("neutral"))} · Accent: ${title(defaultPreset("accent"))}`],
-                ]} />
-              </PanelSection>
-            )}
-        </>
-      }
+      inspector={{
+        // Neutral tints the neutral ramp (PRODUCT_UI rule 14: the settings that change this tab's specimens).
+        theme: <CanvasSettings axes={["neutral", "type", "density"]} />,
+        design: picked ? <StepDesign step={picked.step} token={token} description={picked.scale.description}
+            paintedAs={picked.scale.id === "neutral" && canvas.neutral !== "neutral" ? `${title(canvas.neutral)} ${picked.step.level} (Neutral is ${title(canvas.neutral)})` : undefined} />
+          : view ? (
+            <PanelSection heading="Scale">
+              <Facts label="Scale" items={[
+                ["Steps", `${view.steps.length}, ${view.steps[0]!.level} to ${view.steps.at(-1)!.level}`],
+                ["Roles", rolesOf(view.id).length ? rolesOf(view.id).map(item => `${roleLabel(item.role)}${item.when ? ` (when ${item.when})` : ""}`).join(", ") : "None by default"],
+                view.description ? ["About", view.description] : null,
+              ]} />
+            </PanelSection>
+          ) : (
+            <PanelSection heading="Palette">
+              <Facts label="Palette" items={[
+                ["Scales", SCALES.length],
+                ["Neutrals", SCALES.filter(entry => NEUTRALS.has(entry.id)).map(entry => title(entry.id)).join(", ")],
+                ["Hues", SCALES.filter(entry => !NEUTRALS.has(entry.id)).length],
+                ["Steps", `${SCALES[0]!.steps.length} a scale`],
+                ["Defaults", `Neutral: ${title(defaultPreset("neutral"))} · Accent: ${title(defaultPreset("accent"))}`],
+              ]} />
+            </PanelSection>
+          ),
+        code: picked ? <StepCode scale={picked.scale.id} step={picked.step} token={token} /> : (
+          <PanelSection heading="Tokens">
+            <Facts label="Tokens" items={[["Tokens", view ? <Code>--area-{view.id}-*</Code> : <Code>--area-&lt;scale&gt;-&lt;step&gt;</Code>]]} />
+          </PanelSection>
+        ),
+      }}
     />
   );
 }
 
 /** The Inspector for one step: the colour, its token and hex to copy, then its facts. */
-function StepInspector({ scale, step, token, description, paintedAs }: { scale: string; step: ScaleStep; token: string; description?: string; paintedAs?: string }) {
+/** Design, for one step: its colour, its values and its contrast. */
+function StepDesign({ step, token, description, paintedAs }: { step: ScaleStep; token: string; description?: string; paintedAs?: string }) {
+  return (
+    <>
+      <Selection preview={<Preview shape="wide" paint={`var(${token})`} label={token} />} />
+      <PanelSection heading="Step">
+        <Facts label="Step" items={[
+          paintedAs ? ["Paints", paintedAs] : null,
+          ["Hex", <Code>{step.hex}</Code>],
+          ["RGB", <Code>{rgbOf(step.hex).join(" ")}</Code>],
+          ["OKLCH", <Code>{step.oklch}</Code>],
+          ["Text", step.contrast.fg === "#ffffff" ? "White" : "Black"],
+          ["On white", <span className="studio-tabular">{contrastWith(step.hex, "#ffffff").toFixed(2)}:1 · {grade(contrastWith(step.hex, "#ffffff"))}</span>],
+          ["On black", <span className="studio-tabular">{contrastWith(step.hex, "#000000").toFixed(2)}:1 · {grade(contrastWith(step.hex, "#000000"))}</span>],
+          description ? ["Scale", description] : null,
+        ]} />
+      </PanelSection>
+    </>
+  );
+}
+
+/** Code, for one step: what to copy, its token in CSS, and the semantic tokens that use it. */
+function StepCode({ scale, step, token }: { scale: string; step: ScaleStep; token: string }) {
   const uses = usedBy(scale, step.level);
   const used: ReactNode = uses.length ? (
     <span className="studio-used-by">
@@ -280,22 +303,15 @@ function StepInspector({ scale, step, token, description, paintedAs }: { scale: 
   ) : <span className="studio-muted">No semantic token</span>;
   return (
     <>
-      <Selection preview={<Preview shape="wide" paint={`var(${token})`} label={token} />}>
+      <Selection>
         <CopyButton label="Copy token" icon={<CopyIcon />} fullWidth value={() => `var(${token})`} />
         <CopyButton label="Copy hex" icon={<CopyIcon />} fullWidth value={() => step.hex} />
       </Selection>
-      <PanelSection heading="Step">
-        <Facts label="Step" items={[
+      <PanelSection heading="CSS"><CodeWell language="css" code={`background-color: var(${token});`} /></PanelSection>
+      <PanelSection heading="Token">
+        <Facts label="Token" items={[
           ["Token", <Code>{token}</Code>],
-          paintedAs ? ["Paints", paintedAs] : null,
-          ["Hex", <Code>{step.hex}</Code>],
-          ["RGB", <Code>{rgbOf(step.hex).join(" ")}</Code>],
-          ["OKLCH", <Code>{step.oklch}</Code>],
-          ["Text", step.contrast.fg === "#ffffff" ? "White" : "Black"],
-          ["On white", <span className="studio-tabular">{contrastWith(step.hex, "#ffffff").toFixed(2)}:1 · {grade(contrastWith(step.hex, "#ffffff"))}</span>],
-          ["On black", <span className="studio-tabular">{contrastWith(step.hex, "#000000").toFixed(2)}:1 · {grade(contrastWith(step.hex, "#000000"))}</span>],
           ["Used by", used],
-          description ? ["Scale", description] : null,
         ]} />
       </PanelSection>
     </>

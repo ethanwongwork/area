@@ -8,6 +8,7 @@
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-date-picker {
+    --_field-lift: var(--area-shadow-field); /* Field shadow (axes/depth.ts), transparent by default */
     --_bg: var(--area-select-bg);
     --_bg-hover: var(--_bg);
     --_border: var(--area-select-edge);
@@ -29,12 +30,14 @@
   }
   .area-date-picker--outline { --_bg: var(--area-select-bg); }
   .area-date-picker--soft {
+    --_field-lift: 0 0 0 0 transparent;
     --_bg: var(--area-input-bg-soft);
     --_border: var(--area-input-edge-soft); /* none, or the strong edge under increased contrast */
     --_border-hover: var(--area-input-edge);
   }
   /* Notion's property value: no chrome until hovered, as wide as its text (Custom select ghost). */
   .area-date-picker--ghost {
+    --_field-lift: 0 0 0 0 transparent;
     --_bg: transparent;
     --_bg-hover: var(--area-bg-component-hover);
     --_border: transparent;
@@ -50,6 +53,7 @@
   /* The field: Select's chrome and corner; sides from the inset contract (inset.css). */
   .area-date-picker__trigger {
     appearance: none;
+    box-shadow: var(--_field-lift);
     box-sizing: border-box;
     display: inline-flex;
     align-items: center;
@@ -89,7 +93,7 @@
     border-color: var(--_border-focus);
   }
   .area-date-picker__trigger:focus-visible {
-    box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
+    box-shadow: var(--_field-lift), 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
     outline: var(--area-field-focus-outline-width) solid var(--_focus-outline);
     outline-offset: 0;
   }

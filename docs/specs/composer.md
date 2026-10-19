@@ -143,3 +143,19 @@ from a hover-out). Recommendation: keep; the outline carries the ring, and it is
 - 2026-10-12 · owner, 2026-10-12: "go with your recommendations" (consistency pass) → the edge reads `border-card` (O5: one role for a literal written in several families; same paint). (docs/research/consistency-audit-2026-10-12.md)
 - 2026-10-14 · owner: "go with your recs" (elevation audit) → Composer takes the Elevation axis's resting role at rest and under its focus halo (was no shadow, owner 2026-09-26): ChatGPT lifts its composer (0 2 8 at 4%, 0 4 80 8 at 2.4%, captured 2026-10-13); 1.5% at the default step, none at 0 (composer.css; docs/research/elevation-2026-10-14.md).
 - 2026-10-15 · owner: "merge it, then continue working" → boundary sweep under increased contrast (CONTRAST.md: required boundaries target 3:1): the frame is `composer-edge`, the card edge at standard contrast and the strong control stroke at more (it read 1.16:1 light, 1.33:1 dark; now 3.79:1 / 5.49:1), as its focus colour already switched.
+
+## Chat additions, 2026-10-19
+
+The Composer gains three things for an agent chat (evidence: docs/research/inspector-chat-2026-10-18/composer-additions.md):
+
+- `context`: a row inside the shell above the field for Chip `input` pills and Attachments, wrapping on the composer's
+  gap (Cursor's image grid and Codex's attachments sit at the composer's top; Claude Code's row above its field).
+- `menu`: a Composer menu drawn above the composer at its width (the root is now positioned).
+- `onQueue`: while `loading`, Enter hands the draft here and clears the field; the button stays Stop (Cursor's queue,
+  Claude Code's "Queue another message…").
+
+## Review note, 2026-10-19 (chat additions)
+
+- **What changed:** the composer can hold chips and images above its text, opens the @ and / menu above itself, and
+  can queue a message while a reply is still coming.
+- **Why:** the agent chat needs all three; each follows what Cursor, Claude Code and Codex do.

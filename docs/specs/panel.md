@@ -319,3 +319,15 @@ The section toggle is not selectable. See [interaction polish](../research/inter
 - **Why:** You said they should have a gap. Figma's Dev Mode lists its colours every 32; Area's token is about 23 tall,
   which leaves 8, the gap Token row's own examples use.
 
+
+## Bar with only an action (2026-10-18)
+
+- 2026-10-18 · owner: "a figma style panel … the tab controls at the top" (the app's Inspector: Theme, Design, Code as Nav pills in the bar) → a bar holding only an `action` no longer draws an empty title heading beside it (primitives.tsx); with a title nothing changes.
+- 2026-10-18 · owner: "these controls are not evenly inset, theres too much space horizontally" → a bar of controls
+  alone (no title) insets them evenly, (bar − rule − small control) / 2 from each side, the seam counted once, and
+  centres them above its rule (no top balance), so they share a centre with the Titlebar's and the Canvas header's; a
+  horizontal Nav in the bar takes the small control's height and corner, as in the Titlebar (panel.css, inset.css).
+- 2026-10-18 · owner: "start Phase 1: the Chat view on a recorded run" (docs/research/inspector-chat-2026-10-18) →
+  `viewportRef` reaches the body's scrolling element (Scroll area's viewport), so a conversation in the body can follow
+  its newest line and Scroll to latest can watch it; `bareFooter` drops the footer's top rule, for a footer that
+  continues the body (a chat's composer; Cursor, Claude Code and ChatGPT draw none). Manifest boolean `bare-footer`.

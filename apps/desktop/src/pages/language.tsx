@@ -170,9 +170,10 @@ export function LanguagePage() {
           ))}
         </div>
       )}
-      inspector={
-        <>
-        <CanvasSettings axes={["type", "density", "radius"]} />
+      inspector={{
+        // Theme: the settings that size the tiles; Design: the chosen setting or preset (the Inspector's views).
+        theme: <CanvasSettings axes={["type", "density", "radius"]} />,
+        design: <>
         {axis && preset ? (
           <Selection preview={<Preview shape="landscape" label={`${axis.label}: ${preset.label}`} scope={{ "data-area-theme": mode, ...scopeOf(axis, preset.id) }}><Abstract axis={axis.id} preset={preset.id} /></Preview>}>
             <CopyButton label="Copy attribute" icon={<CopyIcon />} fullWidth value={() => attributeOf(axis, preset.id)} />
@@ -202,8 +203,8 @@ export function LanguagePage() {
             ]} />
           </PanelSection>
         )}
-        </>
-      }
+        </>,
+      }}
     />
   );
 }

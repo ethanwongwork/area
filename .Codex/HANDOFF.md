@@ -5,6 +5,137 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Inspector chat merged with main (2026-10-19, branch `claude/unmerged-running-sessions-cb0df1`, PR)
+
+Round 54 approved Approval: the whole agent chat set and the chat additions are Complete. Merged main (PRs #137, #138)
+and reconciled #137's Stroke width and Rest shadow with this branch's Edge and Depth, as main's handoff asked: main's
+`surface` (0 flat / 0.5 / 1 / 1.5 / 2) and `shadow-rest` (Rest shadow, the divider shadow, `shadow-edge`) are kept;
+this branch's resting control is renamed `shadow-resting` (Resting lift); its `hover` shadow role became main's `lift`;
+the depth engine (axes/depth.ts) stays the one source of the shadow roles. Inspector: Stroke = Width, Strength, Rest
+shadow. Main's tabbed Components page and rebuilt Language page take this branch's Inspector views (Theme / Design /
+Code); Language previews cover the depth controls.
+
+## Round 53: Kbd gap rule (2026-10-19, same branch, uncommitted)
+
+Round 52 approved Attachment, Edit summary, Plan, Queue and Step. Round 53: a keycap sits one ui-cluster from its words
+(docs/specs/kbd.md; ChatGPT's tooltip 8, Area's Tooltip); Button.tsx lifts a trailing Kbd out of the label (inset.css
+selectors follow); Approval's hint is a row with that gap. Only Approval and Kbd remain in review (`components53`).
+
+## Round 52: corners, insets, Kbd rule (2026-10-19, same branch, uncommitted)
+
+Round 51: Approval and Queue approved; Plan and Kbd reopened. Round 52: a button set into a corner takes that corner
+less its inset (Edit summary head and rows, Queue rows, Attachment's close, Plan/Queue chevron plates); Plan/Queue
+heads' plate as far from the end as from the top; Edit summary's head a small control plus its inset, stable with or
+without buttons; Step's rail back; Approval's Esc a keycap; Kbd's backplate rule in docs/specs/kbd.md. Review page
+round 52 (`components52`), Before = round 51. Checks pass.
+
+## Coherence pass, round 51 (2026-10-19, same branch, uncommitted)
+
+Round 50: approved Composer, Composer menu, Plan, Queue, Timestamp, Turn notice (Complete). Round 51 fixes the four
+rethinks and the shared interaction gaps the pass found: Step's rail removed (Cursor draws none); Approval's numbers at
+the label's size, muted, unboxed (Claude Code .shortcutNum); Kbd's filled keycap now the translucent mark fill (it
+vanished on a pressed row); Attachment's close inset in Video player's glass with hover and press; Edit summary and
+Queue row actions ink-only (cohesion test extended), a pressed row plate, a focusable diff; every chevron turns on
+`fast`; Plan and Queue heads get Accordion's chevron hover plate. Review page round 51 (`components51`), Before = round
+50 (apps/docs/.cache/before-50). Checks all pass. Preview on 4421 (4420 belonged to another chat).
+
+## Chat additions (2026-10-19, same branch, uncommitted)
+
+After round 49 the owner asked for "chat components like composer improvements" (Astryx's set). Evidence from the
+installed bundles: docs/research/inspector-chat-2026-10-18/composer-additions.md. Built (In review, on round 50 of the
+review page): Attachment (an image in the composer: remove, uploading ring, failed), Composer menu (@ and / above the
+composer: Menu rows, muted path), Queue (messages written mid-run; Send now, Remove, sending, failed, paused after a
+stop), Timestamp (Codex's centred time after an hour's pause; no product puts time or model on every message, so no
+per-message metadata), and Composer's `context`, `menu` and `onQueue`. The Chat view uses all of them (paste or drop
+images, @ files, /new, queueing). Approval now ignores keys for 500ms after it appears (an Enter meant for the composer
+approved an edit in the browser check). Checks: React 500/500, contracts, typecheck, playgrounds, desktop 5/5. Not
+done: a labelled date divider (would change Separator; owner's call), Markdown as an Area component, the engine.
+
+## Agent chat cleanup, round 50 (2026-10-19, same branch, uncommitted)
+
+Round 49 came back with Step "needs changes" and the rest "rethink" (type, colour, spacing; Approval's backplates and
+keys; Plan's missing variants). One set of rules now covers all five (each spec's "Cleanup pass" section): lines in the
+reply's type; cards (Edit summary, Plan) at text-sm on Code block's frame with a one-row head and Menu rows on a 12
+column; the Diff on Code block sm's metrics with its +/− marker; Approval with quiet Kbd keys and "instead" as the last
+row (one backplate); Plan gains `cancelled`; everything a line opens sits on the 12 rail. Review page round 50
+(`components50`) with Before = round 49 (apps/docs/.cache/before-49). Generator fixes in apps/docs/scripts
+(component-review.mjs resolves --before; review-diff.mjs fresh Edge profile, surfaces Edge errors). Checks: React
+495/495, contracts, typecheck, playgrounds, desktop 5/5; seen in the browser preview. Next: chat additions.
+
+## Chat in the Inspector, Phase 2 (2026-10-19, same branch, uncommitted)
+
+Owner: "Keep it uncommitted for now and start Phase 2". Built five In-review families for the agent chat: Step (with
+StepGroup, Reasoning), Edit summary (with Diff), Approval, Plan, Turn notice: specs in `docs/specs/`, CSS, manifest,
+React, `agent-chat.test.mjs`, gallery tiles (`demos/agent-chat.tsx`), pages, status ("Agent chat" batch). The Chat view
+uses them; the recorded run now has a plan, an approval (pauses; 1–3, Esc) with a no branch, and an edit to Keep or
+Undo. Details: research README "Phase 2, built". Checks: React 495/495, contracts 14/14, tokens, typecheck (app, react,
+tokens, styles), parity, playgrounds, desktop 5/5. Browser preview (4420) only, no Electron. Not done: live captures for
+side-by-side, review page. Next: Phase 3 (Agent SDK engine).
+
+## Chat in the Inspector, Phase 1 (2026-10-18, same branch, uncommitted)
+
+Owner: "Go with your recommendations on all six decisions and start Phase 1: the Chat view on a recorded run." Built:
+the Inspector's fourth view, Chat, on every tab (`apps/desktop/src/chat/`: recording.ts SDK-shaped recorded runs,
+session.ts reducer + player, markdown-parse.ts + markdown.tsx, chat.tsx view, composer, Testing screen). ⌘L opens it,
+Esc stops. Panel gained `viewportRef` and `bareFooter`. Testing → "Chat in the Inspector" shows 256 / 360 / 500.
+Details and what changed from the plan: research README "Phase 1, built". Checks: React 486/486 (panel test passes the
+new flag), contracts 14/14, `npm run test:desktop` 5/5 (not in CI yet), typecheck (app, tokens, styles, react),
+manifest parity, playgrounds. Seen in the browser preview (4420) at 256 in light and dark; no Electron (owner: "no
+electron preview for now"). Next: Phase 2 components.
+
+## Chat in the Inspector: research and plan (2026-10-18, same branch, uncommitted)
+
+Owner: "look into cursors ui and build a chat interface in the inspector panel. for now, research, and plan". Research
+only, nothing built: `docs/research/inspector-chat-2026-10-18/` (README = comparison, recommendation, components,
+phases, six open decisions; cursor.md, claude-code.md, codex.md read from the installed bundles; area.md inventory).
+Recommended: a fourth Inspector view "Chat", the Claude Agent SDK in Electron's main process, Phase 1 against a
+recorded run. Waiting on the owner's answers. (A file named `claude.md` is read as CLAUDE.md on this filesystem; the
+notes are `claude-code.md`.)
+
+## Even control insets in the app's bars (2026-10-18, same branch, uncommitted)
+
+Owner: "these controls are not evenly inset, theres too much space horizontally … fix this throughout the electron ui".
+Every bar's controls now sit 7 from the side, 7 from the top and 7 above the rule, all 24 tall (measured: Titlebar,
+Canvas header incl. the Stage's, Inspector pills). Titlebar (app-shell.css) and Panel (panel.css, inset.css: bars of
+controls alone; Nav in a bar at the small control's height) changed as components, with spec notes; the Canvas header
+in studio.css. PRODUCT_UI rule 14 records it. Note: another session ("Electron browser UI tweaks",
+worktree electron-ui-tweaks-ccf407) was editing studio.css, components.tsx and PRODUCT_UI.md at the same time and holds
+port 4400; this session's `pkill` of Electron closed its window once. Expect conflicts when the two merge.
+
+## Inspector views: Theme, Design, Code (2026-10-18, same branch, uncommitted)
+
+Owner: "a figma style panel based on dev mode and the standard design panel … add the tab controls at the top …
+separate the current inspector to themes, design, and code. i like the use of containers/tables". Built:
+- `src/studio.tsx` InspectorPanel: Workspace's `inspector` takes `{ theme, design, code }`; Nav pills (the Titlebar's,
+  Figma's filled pills; Tabs keeps its underline per tabs.md) in the Panel's bar, on the Canvas header's line (both 39);
+  the chosen view is stored (`inspectorView`) and a view a tab lacks is left out. Panel no longer draws an empty heading
+  in a bar that holds only an action (primitives.tsx, panel.md log).
+- Every tab split by one rule: Design = what it is (preview, Properties, values, status, purpose, source); Code = how to
+  use it (copy actions, import and code in `CodeWell` = Code block `sm`, tokens, class and modifiers, attribute).
+- Components' Code on the Stage: `src/specimen-box.tsx` measures the specimen's root (Box model like Dev Mode's Layer
+  properties; Style table with type, ink, fill, edge as hex, shadow layers), re-measured on setting changes. It uses a
+  timer, not rAF: a hidden window runs no frames.
+- PRODUCT_UI rule 14 rewritten for the three views. Open: owner's look in Electron; Code for Brand / Materials (none).
+
+## Edge and Depth: nine controls (2026-10-18, branch `claude/unmerged-running-sessions-cb0df1`, uncommitted)
+
+Owner: "finalize the material, surface, stroke, elevation axis theming"; built first with packages and Looks, then (owner:
+"i dont want any prepackaged, named themes … the previous system was too bloated") cut to nine individual controls,
+the set the owner chose. Research README "Built" has the table.
+- **Tokens:** `axes/depth.ts`: seven new registry axes (Stroke, Rest shadow, Field shadow, Shadow size, Softness, Light,
+  Shadow colour) beside Surface (Stroke width, now 0 / 0.5 / 1 / 2) and Elevation (Shadow: floating roles and hover,
+  writes `--area-elevation` alone). Seven roles derived in base.ts (control, field, resting, tooltip, float, hover,
+  modal), each eight slots (lip, six soft layers, highlight last so lists crossfade). `strokeEdge` (color/layers.ts)
+  scales stroke offsets; rails and toggle fills keep `rawEdge`. Config exports `DEPTH_LEVERS`. Defaults compute exactly
+  as shipped.
+- **Styles:** outline fields and outline / soft Buttons rest on `shadow-field` (0 by default); soft fields stay flat; the
+  focus halo lists after it. Linked Card and gallery tiles hover on `shadow-hover`. Material keeps the field shadow.
+- **App:** the Inspector shows them under two headings, Stroke (Width, Strength) and Shadow (Floating, Resting, Fields,
+  Size, Softness, Light, Colour) (owner: "can you separate edge from depth … maybe edge can just be called stroke").
+  The Language tab has a row per control, under the registry's labels (Surface, Stroke, Elevation, Rest shadow …).
+- Open: owner's look in Electron; Material's stroke styles, contact and emboss still overlap Light and Stroke.
+- Checks: tokens, React 486/486, contracts, manifest parity, token refs, typecheck, playgrounds (see the end of the
+  session). Setup: this worktree has its own `node_modules` (APFS clone, plus `electron`).
 ## File explorer coherence pass (2026-10-19, branch `claude/brand-folder-ui-component-e54b70`, uncommitted)
 
 Owner: "a deep coherence pass with current area components". Folder / File page: outline fill `bg-component` (the

@@ -23,7 +23,7 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const repo = resolve(root, "../..");
 const arg = name => { const i = process.argv.indexOf(name); return i > 0 ? process.argv[i + 1] : undefined; };
 const dist = join(root, "dist");
-const beforeDist = arg("--before");
+const beforeDist = arg("--before") && resolve(arg("--before")); // absolute: it becomes a file:// URL
 const out = resolve(arg("--out") ?? join(root, ".cache/component-review"));
 
 const { COMPLETE_COMPONENTS, REVIEW_COMPONENTS } = await import(join(root, "../desktop/src/content/component-status.mjs"));
@@ -152,11 +152,14 @@ const families = [...now.values()].filter(f => !onlyOpen || status(f.slug) !== "
 
 // What each specimen looks like now against before, by rendering both (review-diff.mjs). Without --before every
 // specimen counts as new.
-const changes = beforeDist ? visualChanges({ dist, beforeDist, tiles: families.flatMap(f => f.tiles.map(t => ({ key: `${f.slug}/${t.id}`, now: t.html, before: t.before }))) }) : {};
-for (const f of families) for (const t of f.tiles) t.change = changes[`${f.slug}/${t.id}`] ?? { state: "new", modes: [] };
 // This round (the page's default filter): families in review, and any whose specimens render differently from Before.
-// --round <slug,slug> names them instead, when Before also differs in work already approved.
+// --round <slug,slug> names them instead, when Before also differs in work already approved; then only those families
+// are compared (every specimen in every mode outgrew the headless page's time budget, 2026-10-19), and the rest show
+// as not compared.
 const roundSlugs = arg("--round")?.split(",");
+const compared = roundSlugs ? families.filter(f => roundSlugs.includes(f.slug)) : families;
+const changes = beforeDist ? visualChanges({ dist, beforeDist, tiles: compared.flatMap(f => f.tiles.map(t => ({ key: `${f.slug}/${t.id}`, now: t.html, before: t.before }))) }) : {};
+for (const f of families) for (const t of f.tiles) t.change = changes[`${f.slug}/${t.id}`] ?? (beforeDist && t.before != null ? { state: "unknown", modes: [] } : { state: "new", modes: [] });
 for (const f of families) f.round = roundSlugs ? roundSlugs.includes(f.slug) : f.status === "review" || (Boolean(beforeDist) && f.tiles.some(t => t.change.state !== "unchanged"));
 
 rmSync(out, { recursive: true, force: true });

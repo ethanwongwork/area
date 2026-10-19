@@ -11,6 +11,7 @@ import { Facts } from "../facts.tsx";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { matches } from "../search.ts";
 import { AnalyticsDashboard } from "../content/examples/analytics.tsx";
+import { ChatScreen } from "../chat/chat.tsx";
 
 const EXAMPLES = [
   {
@@ -20,6 +21,14 @@ const EXAMPLES = [
     families: ["Titlebar", "Nav", "Breadcrumb", "Search field", "Button", "Tooltip", "Avatar", "Section heading", "Segmented", "Date range picker", "Select", "Menu", "Alert", "Card", "Badge", "Meter", "Tabs", "Table", "Pagination", "Timeline", "Dialog", "Field", "Input", "Switch", "Checkbox", "Toast"],
     gaps: ["Chart: Area has no chart component; the line chart is an SVG drawn in Area's tokens."],
     Screen: AnalyticsDashboard,
+  },
+  {
+    id: "chat",
+    label: "Chat in the Inspector",
+    description: "The Inspector's Chat view at its narrowest (256), a middle width (360) and its widest (500), each a finished recorded run.",
+    families: ["Message", "Composer", "Model picker", "Prompt suggestions", "Scroll to latest", "Chip", "Code block", "Code", "Copy button", "Table", "Link", "Empty state", "Tooltip"],
+    gaps: ["Steps and reasoning are plain lines until Phase 2's Step and Reasoning components; markdown is app-level until it is reviewed (docs/research/inspector-chat-2026-10-18)."],
+    Screen: ChatScreen,
   },
 ] as const;
 
@@ -57,23 +66,27 @@ export function ExamplesPage() {
           ))}
         </TileGrid>
       )}
-      inspector={
-        <>
-          <CanvasSettings />
+      inspector={{
+        theme: <CanvasSettings />,
+        design: (
           <PanelSection heading={example ? "Screen" : "Testing"}>
             <Facts label={example ? "Screen" : "Testing"} items={example ? [
               ["Screen", example.label],
               ["Shows", example.description],
               ["Families", `${example.families.length}: ${example.families.join(", ")}`],
               ["Not from Area", example.gaps.join(" ")],
-              ["Source", <Code>apps/desktop/src/content/examples/{example.id}.tsx</Code>],
             ] : [
               ["Screens", EXAMPLES.length],
               ["Purpose", "Whole screens built only from Area, to test the defaults and every setting the way a product would."],
             ]} />
           </PanelSection>
-        </>
-      }
+        ),
+        code: example ? (
+          <PanelSection heading="Source">
+            <Facts label="Source" items={[["File", <Code>apps/desktop/src/content/examples/{example.id}.tsx</Code>]]} />
+          </PanelSection>
+        ) : undefined,
+      }}
     />
   );
 }

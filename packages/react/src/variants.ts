@@ -152,6 +152,16 @@ export const calendarVariants = /* @__PURE__ */ createVariants(manifests.calenda
 export const indicatorVariants = /* @__PURE__ */ createVariants(manifests.indicator);
 export const countVariants = /* @__PURE__ */ createVariants(manifests.count);
 export const accordionItemVariants = /* @__PURE__ */ createVariants(manifests.accordionItem);
+export const stepVariants = /* @__PURE__ */ createVariants(manifests.step);
+export const editSummaryVariants = /* @__PURE__ */ createVariants(manifests.editSummary);
+export const diffVariants = /* @__PURE__ */ createVariants(manifests.diff);
+export const approvalVariants = /* @__PURE__ */ createVariants(manifests.approval);
+export const planVariants = /* @__PURE__ */ createVariants(manifests.plan);
+export const turnNoticeVariants = /* @__PURE__ */ createVariants(manifests.turnNotice);
+export const attachmentVariants = /* @__PURE__ */ createVariants(manifests.attachment);
+export const composerMenuVariants = /* @__PURE__ */ createVariants(manifests.composerMenu);
+export const queueVariants = /* @__PURE__ */ createVariants(manifests.queue);
+export const timestampVariants = /* @__PURE__ */ createVariants(manifests.timestamp);
 export const accordionVariants = /* @__PURE__ */ createVariants(manifests.accordion);
 
 export const presenceVariants = /* @__PURE__ */ createVariants(manifests.presence);

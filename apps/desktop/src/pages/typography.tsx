@@ -17,7 +17,7 @@ import { APP_SCALE, SidebarAll, SidebarList, useStudio, Workspace } from "../stu
 import { CanvasSection } from "../tile.tsx";
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
 import { Facts } from "../facts.tsx";
-import { Preview, Selection } from "../inspector.tsx";
+import { CodeWell, Preview, Selection } from "../inspector.tsx";
 import { ArrangeMenu, sortBy, useArrangement } from "../organize.tsx";
 import { CopyButton } from "../copy.tsx";
 import { matches } from "../search.ts";
@@ -230,47 +230,68 @@ export function TypographyPage() {
           }))}
         </Sheet>
       )}
-      inspector={
-        <>
-          <CanvasSettings axes={["type", "density"]}>
+      inspector={{
+        theme: <CanvasSettings axes={["type", "density"]} />,
+        design: (
+          <>
             {view ? (
-              <Field label="Sample" orientation="vertical">
-                <Textarea size="sm" rows={3} value={sample} onChange={event => changeSample(event.currentTarget.value)} />
-              </Field>
+              <PanelSection heading="Display">
+                <Field label="Sample" orientation="vertical">
+                  <Textarea size="sm" rows={3} value={sample} onChange={event => changeSample(event.currentTarget.value)} />
+                </Field>
+              </PanelSection>
             ) : null}
-          </CanvasSettings>
-          {role ? (
-            <>
-              <Selection preview={<Preview><span style={roleStyle(role, view ? weight : selectedWeight ?? weight)} aria-hidden="true">Aa</span></Preview>}>
-                <CopyButton label="Copy CSS" icon={<CopyIcon />} fullWidth value={() => roleCss(role)} />
-                <CopyButton label="Copy token" icon={<CopyIcon />} fullWidth value={() => `var(--area-${role.id}-size)`} />
-              </Selection>
-              <PanelSection heading="Role">
-                <Facts label="Role" items={[
-                  ["Token", <Code>--area-{role.id}</Code>],
-                  ["At type " + density, metrics(role, density)],
-                  ["Type 12 to 16", `${role.metrics["12"]!.size} to ${role.metrics["16"]!.size}`],
-                  ["Ratio", (role.metrics[density]!.leading / role.metrics[density]!.size).toFixed(2)],
-                  ["Weights", WEIGHTS.map(entry => entry.value).join(" · ")],
-                  ["Group", role.group === "text" ? "Copy" : "Heading"],
-                  ["Usage", USAGE[role.id]],
+            {role ? (
+              <>
+                <Selection preview={<Preview><span style={roleStyle(role, view ? weight : selectedWeight ?? weight)} aria-hidden="true">Aa</span></Preview>} />
+                <PanelSection heading="Role">
+                  <Facts label="Role" items={[
+                    ["At type " + density, metrics(role, density)],
+                    ["Type 12 to 16", `${role.metrics["12"]!.size} to ${role.metrics["16"]!.size}`],
+                    ["Ratio", (role.metrics[density]!.leading / role.metrics[density]!.size).toFixed(2)],
+                    ["Weights", WEIGHTS.map(entry => entry.value).join(" · ")],
+                    ["Group", role.group === "text" ? "Copy" : "Heading"],
+                    ["Usage", USAGE[role.id]],
+                  ]} />
+                </PanelSection>
+              </>
+            ) : (
+              <PanelSection heading="Type scale">
+                <Facts label="Type scale" items={[
+                  ["Roles", TYPE_ROLES.length],
+                  ["Headings", TYPE_ROLES.filter(entry => entry.group !== "text").length],
+                  ["Copy", TYPE_ROLES.filter(entry => entry.group === "text").length],
+                  ["Weights", WEIGHTS.map(entry => `${entry.id === "regular" ? "Regular" : "Strong"} ${entry.value}`).join(" · ")],
+                  ["Density", "Copy steps down a size in compact; headings hold."],
                 ]} />
               </PanelSection>
-            </>
-          ) : (
-            <PanelSection heading="Type scale">
-              <Facts label="Type scale" items={[
-                ["Font", <Code>--area-font-sans</Code>],
-                ["Roles", TYPE_ROLES.length],
-                ["Headings", TYPE_ROLES.filter(entry => entry.group !== "text").length],
-                ["Copy", TYPE_ROLES.filter(entry => entry.group === "text").length],
-                ["Weights", WEIGHTS.map(entry => `${entry.id === "regular" ? "Regular" : "Strong"} ${entry.value}`).join(" · ")],
-                ["Density", "Copy steps down a size in compact; headings hold."],
+            )}
+          </>
+        ),
+        code: role ? (
+          <>
+            <Selection>
+              <CopyButton label="Copy CSS" icon={<CopyIcon />} fullWidth value={() => roleCss(role)} />
+              <CopyButton label="Copy token" icon={<CopyIcon />} fullWidth value={() => `var(--area-${role.id}-size)`} />
+            </Selection>
+            <PanelSection heading="CSS"><CodeWell code={roleCss(role)} language="css" /></PanelSection>
+            <PanelSection heading="Tokens">
+              <Facts label="Tokens" items={[
+                ["Size", <Code>--area-{role.id}-size</Code>],
+                ["Leading", <Code>--area-{role.id}-leading</Code>],
+                ["Tracking", <Code>--area-{role.id}-tracking</Code>],
               ]} />
             </PanelSection>
-          )}
-        </>
-      }
+          </>
+        ) : (
+          <PanelSection heading="Tokens">
+            <Facts label="Tokens" items={[
+              ["Font", <Code>--area-font-sans</Code>],
+              ["Role", <Code>--area-&lt;role&gt;-size</Code>],
+            ]} />
+          </PanelSection>
+        ),
+      }}
     />
   );
 }

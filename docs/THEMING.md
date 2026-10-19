@@ -5,7 +5,8 @@ for specific roles. Components do not need separate light/dark variants.
 
 ## Shared settings
 
-The registry in `packages/tokens/src/axes/registry.ts` defines fourteen axes:
+The registry in `packages/tokens/src/axes/registry.ts` defines twenty-two axes (seven Edge and Depth controls beside
+Surface and Elevation since 2026-10-18):
 
 - `theme`: light or dark color polarity.
 - `neutral`: neutral, cool or warm neutral colors.
@@ -50,25 +51,46 @@ The registry in `packages/tokens/src/axes/registry.ts` defines fourteen axes:
   pills (`""` makes every one follow the radius). Each sets `--area-pill-<id>` (0 / 1), which the
   component adds as `flag × radius-full`, so concentric parts follow. Instance props override it
   (`pill`, Avatar's `shape`).
-- `surface`, **Stroke width** (2026-10-19): the line round cards, panels and floating surfaces, `0` (Flat) / `0.5` /
+- `surface`, **Stroke width** (main, 2026-10-19): the line round cards, panels and floating surfaces, `0` (Flat) / `0.5` /
   `1` (Default) / `1.5` / `2` px (`axes/surface.ts`, 2026-10-14; was `outlined` / `borderless`, then 0 or 1, where 0
-  drew the soft edge). `shadow-rest`, **Rest shadow** (2026-10-19): a subtle shadow round the same surfaces, `0` (None,
-  Default) to `8`, with the line or instead of it; it sets `shadow-edge`. Not their lift: that is `elevation`. Sets `frame-width`; components read
-  `border-width`, derived as the frame or 1px under increased contrast (owner, 2026-10-15), so More or Medium
-  contrast brings the frame back at 0. `shadow-edge`, derived from `border-width` beside it (2026-10-18), is
-  transparent wherever a frame is drawn (at 1, and at 0 under a raised contrast), and otherwise ChatGPT's frameless-menu edge (a 1px-blur shadow at 62% black, plus a 1px-blur
-  20% white line inside it in dark), which every framed surface lists first in its `box-shadow`, so no
-  surface loses its edge at Elevation 0 or in dark; `shadow-edge-filter` is the same edge as a drop-shadow, for the
-  Popover arrow. Required edges (`stroke-width`) and focus stay.
-- `elevation`: one number, `0` (Flat) to `8`, `3` by default: the Menu's shadow strength in percent,
-  as `radius` is the medium Button's corner (`axes/elevation.ts`, owner 2026-10-14;
-  [research](research/elevation-2026-10-14.md)). It scales six roles that components name:
-  `shadow-control` (raised thumbs and plates), `shadow-resting` (Card, Panel, Board card, Composer),
-  `shadow-tooltip`, `shadow-lift` (a linked Card's hover), `shadow-float` (everything over the page) and `shadow-modal` (Dialog, Drawer,
-  Command palette). Geometry is fixed per role (Fluent 2's tiers); the step sets the alpha (key
-  `n × weight` %, ambient half, dark doubled). The ladder `shadow-1`…`4` (control, resting, float,
-  modal) is for apps. Every role is two layers at every step; step 0 is `0 0 0 0 transparent`, never
-  `none`, so a role stays valid inside a component's own shadow list.
+  drew the soft edge). `shadow-rest`, **Rest shadow** (main, 2026-10-19): a subtle shadow round the same surfaces, `0`
+  (None, Default) to `8`, with the line or instead of it; it sets `shadow-edge`, which every framed surface lists first
+  in its `box-shadow`. Not their lift: that is Resting lift (below) and `elevation`. Sets `frame-width`; components read
+  `border-width`, derived as the frame or 1px under increased contrast (owner, 2026-10-15), so More or Medium contrast
+  brings the frame back at 0. `shadow-edge-filter` is the same edge as a drop-shadow, for the Popover arrow. Required
+  edges (`stroke-width`) and focus stay. A half pixel is one device pixel on a 2x screen; on a 1x screen Chromium draws
+  it as one pixel and the insets that count it sit half a pixel off.
+- `elevation` (Floating in the app): one number, `0` (Flat) to `8`, `3` by default: the Menu's shadow strength in
+  percent, as `radius` is the medium Button's corner (`axes/elevation.ts`, owner 2026-10-14;
+  [research](research/elevation-2026-10-14.md)). It writes the number alone (`--area-elevation`) and sets the floating
+  roles, `shadow-tooltip`, `shadow-float` (everything over the page), `shadow-modal` (Dialog, Drawer, Command palette)
+  and `shadow-lift` (a linked Card or a gallery tile under the pointer: Fluent's shadow8 at half the Menu's strength,
+  main 2026-10-19). `axes/depth.ts` derives every role; `shadow-control` (raised thumbs and plates) and `shadow-resting`
+  (Card, Panel, Board card, Composer) read Resting lift and `shadow-field` (fields, select triggers, outline and soft
+  buttons) Field shadow. At the defaults each is Fluent 2's two layers exactly (key `n × weight` %, ambient half, dark
+  doubled). The ladder `shadow-1`…`4` (control, resting, float, modal) is for apps. Every role is the same eight slots
+  at every setting (a lip, six soft layers, a highlight), transparent where unused, never `none`, so a role stays valid
+  inside a component's own shadow list and every change interpolates.
+- The other Edge and Depth controls (`axes/depth.ts`, owner 2026-10-18: "i dont want any prepackaged, named themes, i
+  want to be able to control the individual controls as much as possible, but i think the previous system was too
+  bloated"; [research](research/elevation-stroke-2026-10-18/README.md)). Each is one number or name with one effect, set
+  on its own; there are no named looks:
+  - `stroke`: how dark every stroke is, its distance from its ground, `0` (None) to `8`, `4` by default (today's);
+    `color/layers.ts` `strokeEdge` scales each edge's offset. Contrast moves strokes on toward 3:1 from there.
+  - `shadow-resting`, **Resting lift**: cards, panels and raised thumbs at rest, `0` to `8`, `3` by default, in % as
+    Floating (was `shadow-rest` until main's Rest shadow took the name, 2026-10-19).
+  - `shadow-field`: fields, select triggers, outline and soft buttons, `0` (Default) to `8`. Soft fields stay flat.
+  - `shadow-size`: how far every shadow reaches (offset and blur × n/4), `0` to `8`, `4` by default.
+  - `shadow-softness`: `0` (Crisp, one layer) to `8` (Smooth, six eased layers held under the surface by a negative
+    spread); `2` (Default) is Fluent's ambient + key pair.
+  - `shadow-light`: light from the top, `0` (Flat) to `4`: a `0 1px 0` lip under each lifted edge (3 / 5 / 8 / 14%) and
+    an `inset 0 1px 0` white highlight inside its top.
+  - `shadow-color`: `black` (Default), `warm` or `cool`, the light theme's shadow; dark stays black.
+
+  Fixed: light from the top, and dark shadows at twice the light alpha. `DEPTH_LEVERS` in `@area/tokens/config` lists the
+  ten controls in the Inspector's order. The app shows them under two headings (owner, 2026-10-18: "can you separate
+  edge from depth"): **Stroke** (Width = `surface`, Strength = `stroke`, Rest shadow = `shadow-rest`) and **Shadow**
+  (Floating = `elevation`, Resting, Fields, Size, Softness, Light, Colour).
 - `motion`: one number, `0` (None) to `300` in steps of 30, `210` by default: the Menu's open in
   milliseconds (`duration-base`), as `elevation` is the Menu's shadow (`axes/motion.ts`, owner
   2026-10-14). Every duration scales from it in thirds: `fast` 2/3, `base` 1, `moderate` 4/3,

@@ -18,6 +18,9 @@
  *   surface      two overlapping cards' lines (stroke width)
  *   shadow-rest  two cards side by side, set apart by the rest shadow
  *   elevation    a menu's lift
+ *   depth        (axes/depth.ts) Strength: the cards' lines, as surface; Resting lift: the side-by-side cards, as
+ *                shadow-rest; Field shadow: a field and an outline button; Size, Softness, Light and Shadow colour: the
+ *                menu, as elevation, since they shape every shadow
  *   motion       a switch flipping
  *   pills        the shape the tile names, as a pill
  *
@@ -238,6 +241,7 @@ function drawing(axis: string, preset?: string): [number, ReactNode] {
     case "radius":
       return [FILL.wide, <div className="lang-row"><Input aria-label="Label" placeholder="Placeholder" /><Button>Button</Button></div>];
     case "surface":
+    case "stroke":
       return [FILL.wide, (
         <div className="lang-overlap">
           <Note className="lang-overlap__back" />
@@ -245,13 +249,20 @@ function drawing(axis: string, preset?: string): [number, ReactNode] {
         </div>
       )];
     case "shadow-rest":
+    case "shadow-resting":
       return [FILL.wide, (
         <div className="lang-row">
           <Note className="lang-card lang-card--small" />
           <Note className="lang-card lang-card--small" />
         </div>
       )];
+    case "shadow-field":
+      return [FILL.wide, <div className="lang-row"><Input aria-label="Label" placeholder="Placeholder" /><Button variant="outline" tone="neutral">Button</Button></div>];
     case "elevation":
+    case "shadow-size":
+    case "shadow-softness":
+    case "shadow-light":
+    case "shadow-color":
       return [FILL.wide, (
         <div className="area-menu lang-menu" role="menu" aria-label="Menu">
           <MenuItem>Item one</MenuItem>

@@ -317,7 +317,7 @@ export const composer = {
   description: "Writes and submits a message with optional action slots.",
   variants: { layout: ["inline", "stacked"] },
   states: ["disabled"],
-  elements: ["entry", "input", "actions", "extras", "footer", "submit"],
+  elements: ["context", "entry", "input", "actions", "extras", "footer", "submit"],
   elementModifiers: { actions: ["leading", "trailing"] },
   defaults: { layout: "inline" },
 } as const satisfies ComponentManifest;
@@ -489,6 +489,84 @@ export const accordion = {
   defaults: {},
 } as const satisfies ComponentManifest;
 
+/* Agent chat (Phase 2 of docs/research/inspector-chat-2026-10-18): what an agent did, changed, asks and plans. */
+export const step = {
+  block: "area-step", description: "One thing an agent did, on one line: the verb (live, then past tense) and what it acted on; opens to its input and output.",
+  variants: {},
+  booleans: ["group", "reasoning"],
+  states: ["open", "running", "failed"],
+  elements: ["row", "icon", "verb", "detail", "meta", "chevron", "body", "items"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const editSummary = {
+  block: "area-edit-summary", description: "What an agent changed in a turn: files with their +N −N, each opening to its diff, with Keep and Undo.",
+  variants: {},
+  states: ["open", "kept", "undone"],
+  elements: ["head", "title", "counts", "added", "removed", "actions", "files", "file", "name", "chevron", "status", "diff"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const diff = {
+  block: "area-diff", description: "A unified diff in Code block sm's metrics: line numbers, a + or − marker and a tint on added and removed lines, folds between hunks.",
+  variants: {},
+  elements: ["lines", "line", "number", "marker", "text", "fold"],
+  elementModifiers: { line: ["added", "removed"] },
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const approval = {
+  block: "area-approval", description: "An agent asks before it acts: what and why, the thing itself, numbered choices with their scope, and a field to say what to do instead.",
+  variants: {},
+  elements: ["head", "title", "description", "detail", "options", "option", "key", "label", "instead", "field", "hint"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const plan = {
+  block: "area-plan", description: "An agent's plan for the run: what is done, what it is doing, what is next; folds to its head.",
+  variants: {},
+  states: ["open"],
+  elements: ["head", "title", "count", "chevron", "items", "item", "mark", "text"],
+  elementModifiers: { item: ["done", "current", "pending", "cancelled"] },
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const turnNotice = {
+  block: "area-turn-notice", description: "How a turn ended, on one quiet line: stopped, failed (with Retry) or compacted.",
+  variants: { kind: ["stopped", "error", "compacted"] },
+  elements: ["icon", "text", "action"],
+  defaults: { kind: "stopped" },
+} as const satisfies ComponentManifest;
+
+export const attachment = {
+  block: "area-attachment", description: "An image attached to a message before it is sent: its thumbnail, a remove control, and its upload's progress or failure.",
+  variants: { status: ["ready", "uploading", "error"] },
+  elements: ["image", "overlay", "remove"],
+  defaults: { status: "ready" },
+} as const satisfies ComponentManifest;
+
+export const composerMenu = {
+  block: "area-composer-menu", description: "The @ and / suggestions above the composer: Menu rows with an icon, a name and a muted path, in groups.",
+  variants: {},
+  elements: ["path", "empty"],
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const queue = {
+  block: "area-queue", description: "Messages sent while an agent works, waiting their turn above the composer: each can be sent now or removed.",
+  variants: {},
+  states: ["open"],
+  elements: ["head", "title", "chevron", "items", "item", "text", "status", "actions"],
+  elementModifiers: { item: ["sending", "failed"] },
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const timestamp = {
+  block: "area-timestamp", description: "When a turn was sent, centred between turns after a pause.",
+  variants: {},
+  defaults: {},
+} as const satisfies ComponentManifest;
+
 export const presence = {
   block: "area-presence", description: "Shows availability with Area-drawn status glyphs at the icon line weight.",
   variants: {status: ["available", "away", "busy", "do-not-disturb", "blocked", "offline", "out-of-office", "unknown"], size: ["sm", "md", "lg"]}, // xs dropped: audit C-19
@@ -575,7 +653,7 @@ export const panel = {
   block: "area-panel",
   description: "A titled surface of rows that act on something beside it.",
   variants: { size: ["sm", "md"] },
-  booleans: ["flush", "bare-bar", "action-column"],
+  booleans: ["flush", "bare-bar", "bare-footer", "action-column"],
   states: ["collapsed", "resizable", "resizing"],
   elements: ["resize", "bar", "title", "body", "section", "heading", "heading-text", "actions", "toggle", "toggle-text", "chevron", "summary", "rows", "row", "row-label", "row-controls", "row-action", "stack", "footer"],
   defaults: { size: "md" },
@@ -1282,6 +1360,16 @@ export const MANIFESTS = {
   indicator,
   count,
   accordionItem,
+  step,
+  editSummary,
+  diff,
+  approval,
+  plan,
+  turnNotice,
+  attachment,
+  composerMenu,
+  queue,
+  timestamp,
   accordion,
   badgeGroup,
   avatar,

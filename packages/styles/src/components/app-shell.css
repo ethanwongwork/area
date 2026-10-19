@@ -41,7 +41,18 @@
     app-region: drag;
   }
   .area-titlebar :is(a, button, input, select, textarea, [role="separator"], [tabindex]) { -webkit-app-region: no-drag; app-region: no-drag; }
-  .area-titlebar--macos { --_titlebar-start: 83px; --_titlebar-end: 13px; } /* spec: Cursor's traffic lights, 13 + 54 + 16, and 13 */
+  /*
+   * The bar's controls at its ends sit as far from the side as from the top and the rule, (height − rule − small control)
+   * / 2: 7 at the app's scale (owner, 2026-10-18: "these controls are not evenly inset, theres too much space
+   * horizontally"; was Panel's 14, and 13 at the end beside macOS's traffic lights). A bar that starts with its title
+   * keeps the title on Panel's 14 column; the traffic lights' clearance stays.
+   */
+  .area-titlebar:not(.area-titlebar--floating) {
+    --_titlebar-even: calc((var(--area-control-md) - var(--area-control-sm)) / 2 + var(--area-space-10) - var(--area-space-4) * var(--area-ui-dense));
+    --_titlebar-end: var(--_titlebar-even);
+  }
+  .area-titlebar:not(.area-titlebar--floating, .area-titlebar--macos):has(> :first-child:is(button, a, .area-button)) { --_titlebar-start: var(--_titlebar-even); }
+  .area-titlebar--macos { --_titlebar-start: 83px; } /* spec: Cursor's traffic lights, 13 + 54 + 16 */
   /*
    * Variants (owner, review round 28: "is there always just an underline? is there a floating title bar variant with
    * a backplate?"; picked both, 2026-10-16).

@@ -9,6 +9,7 @@
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-tag-picker {
+    --_field-lift: var(--area-shadow-field); /* Field shadow (axes/depth.ts), transparent by default */
     --_bg: var(--area-input-bg);
     --_border: var(--area-input-edge);
     --_border-hover: var(--area-input-edge-hover);
@@ -31,6 +32,7 @@
   /* Tags sit on the field's fill, so their dark labels take the fill lift (tag.css; Layers sweep 2026-10-16). */
   .area-tag-picker .area-tag { --_lift: var(--area-layer-dark-tint-lift-fill); }
   .area-tag-picker--soft {
+    --_field-lift: 0 0 0 0 transparent;
     --_bg: var(--area-input-bg-soft);
     --_border: var(--area-input-edge-soft); /* none, or the strong edge under increased contrast */
     --_border-hover: var(--area-input-edge);
@@ -47,6 +49,7 @@
    * gap 6). The input takes the rest of the last row.
    */
   .area-tag-picker__field {
+    box-shadow: var(--_field-lift);
     --_tag-inset: max(0px, calc((var(--_height) - var(--_tag)) / 2 - var(--area-stroke-width)));
     box-sizing: border-box;
     display: flex;
@@ -86,7 +89,7 @@
   }
   .area-tag-picker__field:focus-within {
     border-color: var(--_border-focus);
-    box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
+    box-shadow: var(--_field-lift), 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
     outline: var(--area-field-focus-outline-width) solid var(--_focus-outline);
   }
   /* Open: the field keeps its focused edge while the list shows (focus is in the input). */

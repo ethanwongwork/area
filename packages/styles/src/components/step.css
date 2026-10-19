@@ -1,0 +1,115 @@
+/* ---------------------------------------------------------------------------
+ * Step (Step, Step group, Reasoning)
+ *
+ * One thing an agent did, on one line: the verb, live while it runs and past tense when done, and what it acted on,
+ * muted and cut short; it opens to its input and output. A group folds a run of steps under one line; Reasoning is the
+ * agent's thinking as one closed line. Measured from Cursor's ToolCallLine, Codex's activity labels and Claude Code's
+ * tool header (docs/specs/step.md; docs/research/inspector-chat-2026-10-18).
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-step {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    min-inline-size: 0;
+    color: var(--area-fg-default);
+    /* The reply's own type: a step sits in a Message (peer). */
+    font-size: var(--area-text-md-size);
+    line-height: var(--area-text-md-leading);
+  }
+
+  /* The line. As a button it keeps the text's look: no plate, no edge; only the chevron answers the pointer (the
+     foreground stays fixed on hover). */
+  .area-step__row {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-4); /* spec: Cursor ToolCallLine gap 4; Codex a space */
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: var(--area-radius-small);
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: start;
+    white-space: nowrap;
+  }
+  button.area-step__row { cursor: pointer; }
+  .area-step__row:focus-visible {
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-offset);
+  }
+  .area-step__icon {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--area-icon-sm);
+    block-size: var(--area-icon-sm);
+    color: var(--area-fg-muted);
+  }
+  .area-step__verb { flex: none; }
+  .area-step__icon > svg { inline-size: 100%; block-size: 100%; }
+  /* Chevrons draw the Glyph's 12 cut in the xs icon slot. */
+  .area-step__chevron > svg { inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); }
+  .area-step__detail {
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--area-fg-muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .area-step__meta { flex: none; color: var(--area-fg-muted); font-variant-numeric: tabular-nums; }
+  /* The chevron waits until the line is hovered or focused, or the step is open (Cursor: hidden until hover / open,
+     rotated 90° open). It is the closed accordion chevron, pointing at the text it opens. */
+  .area-step__chevron {
+    display: inline-flex;
+    flex: none;
+    color: var(--area-fg-muted);
+    opacity: 0;
+    transform: rotate(-90deg);
+    /* MOTION.md: every chevron turns on fast ease-out. */
+    transition: opacity var(--area-duration-fast) var(--area-ease-out), transform var(--area-duration-fast) var(--area-ease-out);
+  }
+  .area-step__row:focus-visible > .area-step__chevron,
+  .area-step[data-open] > .area-step__row > .area-step__chevron { opacity: 1; transition-duration: 0s; }
+  .area-step[data-open] > .area-step__row > .area-step__chevron { transform: none; }
+  @media (hover: hover) { .area-step__row:hover > .area-step__chevron { opacity: 1; } }
+  @media (hover: none) { .area-step__chevron { opacity: 1; } }
+
+  /* The body: what went in and came out, 4 under the line (Cursor's content gap 4), on a rail: a 1px rule with the
+     content 12 in, the rule counted in the 12 (Claude Code's rail at 12). One rule for all three: a step's input and
+     output, a group's steps, the reasoning summary. The rail is what tells an opened line's content from the lines
+     after it: without it a group's steps read as more steps in the turn (round 52, owner: "if the line is
+     necessary/intentional then i would keep it"; round 51 removed it). */
+  .area-step__body {
+    min-inline-size: 0;
+    margin-block-start: var(--area-space-4); /* spec: Cursor content gap 4 */
+    padding-inline-start: calc(var(--area-space-12) - var(--area-stroke-width)); /* spec: Claude Code rail at 12 */
+    border-inline-start: var(--area-stroke-width) solid var(--area-border-divider);
+  }
+  .area-step__body[hidden] { display: none; }
+
+  /* Running: the verb shimmers, 60% of its ink to full and back (Cursor's TextShimmerContent). The loop factor stops it
+     at Motion 0 and under reduced motion (axes/motion.ts). */
+  .area-step[data-running] > .area-step__row > .area-step__verb {
+    background: linear-gradient(90deg, color-mix(in oklab, currentColor 60%, transparent) 0%, currentColor 50%, color-mix(in oklab, currentColor 60%, transparent) 100%) 0 0 / 200% 100%; /* spec: Cursor 60 → 100 → 60% */
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: area-step-shimmer calc(2s * var(--area-duration-loop)) linear infinite; /* spec */
+  }
+  @keyframes area-step-shimmer { to { background-position: -200% 0; } }
+  /* Failed: the verb in the danger ink (Codex ✘, Claude Code's failure dot). */
+  .area-step[data-failed] > .area-step__row > .area-step__verb { color: var(--area-fg-danger); }
+
+  /* A group's steps: 4 apart (Cursor's and Codex's grouped gap). */
+  .area-step--group .area-step__items { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-space-4); /* spec */ }
+
+  /* Reasoning: the summary in the muted ink, as written (Claude Code's secondary thinking text). */
+  .area-step--reasoning > .area-step__body { color: var(--area-fg-muted); white-space: pre-wrap; }
+
+  @media (forced-colors: active) {
+    .area-step[data-running] > .area-step__row > .area-step__verb { background: none; -webkit-text-fill-color: CanvasText; animation: none; }
+  }
+}

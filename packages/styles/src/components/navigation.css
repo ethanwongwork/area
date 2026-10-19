@@ -324,7 +324,8 @@
     text-overflow: ellipsis;
     /* spec (outline pass, docs/specs/number-field.md): controls at rest carry no shadow, as Input,
        Textarea, NumberField and InputGroup (audit B-2: Select was the one field that kept shadow-1). */
-    box-shadow: none;
+    --_field-lift: var(--area-shadow-field); /* Field shadow (axes/depth.ts), transparent by default */
+    box-shadow: var(--_field-lift);
     cursor: pointer;
     outline: none;
     /* Motion (docs/MOTION.md, 2026-10-07; as Input): edge, fill and ink (--_t-paint) and the focus
@@ -348,7 +349,8 @@
 
   /* Soft matches Input, Textarea and NumberField soft, so an inspector holds one field style. */
   .area-select--soft {
-    box-shadow: none;
+    --_field-lift: 0 0 0 0 transparent;
+    box-shadow: var(--_field-lift);
     --_bg: var(--area-input-bg-soft);
     --_border: var(--area-input-edge-soft); /* none, or the strong edge under increased contrast */
     --_border-hover: var(--area-input-edge);
@@ -361,7 +363,7 @@
     --_t-paint: 0s;
     --_t-halo: 0s;
     border-color: var(--_border-focus);
-    box-shadow: 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
+    box-shadow: var(--_field-lift), 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
     outline: var(--area-field-focus-outline-width) solid var(--_focus-outline);
     outline-offset: 0;
   }

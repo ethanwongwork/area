@@ -106,3 +106,33 @@ the five choices plus at most two fine-tuned levers.
 
 Open for the owner: which presets read right; which levers to keep, merge or drop; Field lift on by default; whether
 Stroke width reaches 2.
+
+## Built (2026-10-18)
+
+Owner, first: "go with your recommendations for whats next, id like to finalize the material, surface, stroke, elevation
+axis theming" (built with the packages and Looks above). Then, the same day: "i dont want any prepackaged, named themes,
+i want to be able to control the individual controls as much as possible, but i think the previous system was too
+bloated and complicated", choosing nine controls from three proposed sets (5, 7, 9). What shipped:
+
+| Control | Attribute | Steps (default) | Replaces |
+|---|---|---|---|
+| Stroke width | `data-area-surface` | 0 · 0.5 Hairline · 1 · 2 Bold (1) | Stroke width |
+| Stroke | `data-area-stroke` | 0–8 (4) | Stroke strength |
+| Shadow | `data-area-elevation` | 0–8 (3): floating roles and hover | Float lift, Hover lift |
+| Rest shadow | `data-area-shadow-rest` | 0–8 (3): cards, panels, thumbs | Rest lift |
+| Field shadow | `data-area-shadow-field` | 0–8 (0): fields, outline and soft buttons | Field lift |
+| Shadow size | `data-area-shadow-size` | 0–8 (4) | Distance |
+| Softness | `data-area-shadow-softness` | 0 Crisp … 8 Smooth (2) | Layers + Tightness |
+| Light | `data-area-shadow-light` | 0 Flat … 4 (0) | Lip + Highlight |
+| Shadow colour | `data-area-shadow-color` | Black · Warm · Cool (Black) | Shadow tint |
+
+Dropped: every Look and package, Stroke ink (translucent strokes), Light angle (light is from the top) and Dark strength
+(dark shadows are twice the light alpha). Rest and Field shadow are their own numbers in %, as Shadow is, not shares of
+it: each control does one thing. Softness walks the packages' progression as one dial: 0 one layer, 1 one tight layer,
+2 Fluent's pair (today), 3 the pair held in, 4–5 four eased layers (Geist, Radix), 6–8 six (Linear), tightening as it
+goes. Light steps the lip and highlight together (step 1: 3% lip, 40% highlight; 4: 14%, 100%).
+
+Kept from the first build: Hairline is 1px under raised contrast; Bold insets count the frame; fields and outline / soft
+buttons rest on `shadow-field` and keep it under a material; linked Cards and gallery tiles hover on `shadow-hover`.
+Material keeps its own stroke styles, contact and emboss (its overlap with Light and Stroke is left as tuned). At the
+defaults every computed shadow and stroke equals what shipped before.

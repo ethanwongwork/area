@@ -41,8 +41,9 @@ import { PLAYGROUNDS, configCode, initialConfig, renderConfig, sameConfig, tileC
 import { fitTiles } from "../gallery/fit.ts";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { Facts } from "../facts.tsx";
+import { SpecimenBox } from "../specimen-box.tsx";
+import { CodeWell, Selection } from "../inspector.tsx";
 import { ApiTab, CodeTab, DocumentationTab, FAMILY_TAB_IDS, FAMILY_TABS, SpecTab, type FamilyInfo, type FamilyManifest, type FamilyTab } from "../family-tabs.tsx";
-import { Selection } from "../inspector.tsx";
 import { APP_SCALE } from "../app-scale.ts";
 import { CanvasSection, Tile, TileGrid } from "../tile.tsx";
 import { Properties, Stage, useStageKeys } from "../stage.tsx";
@@ -464,49 +465,95 @@ export function ComponentsPage() {
             selected={selectedSlug} onOpen={open} zoom={zoom} />
         </PinMenu>
       ) : <EmptyState title="No components" description={`Nothing matches “${query}”.`} />}
-      inspector={
-        <>
-          <CanvasSettings />
-          {/* On a composition tile the Properties show the defaults; an edit puts a configured instance
-              on the Stage in its place. */}
-          {family && playground && onOverview ? (
-            <Properties playground={playground} config={config ?? initialConfig(playground)} changed={Boolean(config) && !sameConfig(config!, initialConfig(playground))} onChange={change} onReset={reset} />
-          ) : null}
-          {family ? (
-            <FamilyInspector family={family} pinned={pins.has(family.slug)} onPin={() => pins.toggle(family.slug)}
-              tile={config && playground ? matchingTile(playground, tiles, config) : stageTile}
-              code={config && playground ? configCode(playground, config) : stageTile ? SNIPPETS[stageTile.demo] : undefined} />
-          ) : selectedFamily ? (
-            <FamilyInspector family={selectedFamily} pinned={pins.has(selectedFamily.slug)} onPin={() => pins.toggle(selectedFamily.slug)}
-              tile={selectedTile} code={selectedTile ? SNIPPETS[selectedTile.demo] : undefined} onOpen={selected ? () => open(selected) : undefined} />
-          ) : (
-            <PanelSection heading="Library">
-              <Facts label="Library" items={[
-                ["Package", <Code>@area/react</Code>],
-                ["Families", FAMILIES.length],
-                ["Complete", counts.complete],
-                ["In review", counts.review],
-                counts.unrefined ? ["Unrefined", counts.unrefined] : null,
-                ["Tiles", total],
-              ]} />
-            </PanelSection>
-          )}
-        </>
-      }
+      inspector={{
+        theme: <CanvasSettings />,
+        // Design: what is chosen. On a composition tile the Properties show the defaults; an edit puts a configured
+        // instance on the Stage in its place.
+        design: (
+          <>
+            {/* Properties edit the Stage, so they show on the Overview tab only (main, 2026-10-19). */}
+            {family && playground && onOverview ? (
+              <Properties playground={playground} config={config ?? initialConfig(playground)} changed={Boolean(config) && !sameConfig(config!, initialConfig(playground))} onChange={change} onReset={reset} />
+            ) : null}
+            {family ? (
+              <FamilyDesign family={family} pinned={pins.has(family.slug)} onPin={() => pins.toggle(family.slug)}
+                tile={config && playground ? matchingTile(playground, tiles, config) : stageTile} />
+            ) : selectedFamily ? (
+              <FamilyDesign family={selectedFamily} pinned={pins.has(selectedFamily.slug)} onPin={() => pins.toggle(selectedFamily.slug)}
+                tile={selectedTile} onOpen={selected ? () => open(selected) : undefined} />
+            ) : (
+              <PanelSection heading="Library">
+                <Facts label="Library" items={[
+                  ["Families", FAMILIES.length],
+                  ["Complete", counts.complete],
+                  ["In review", counts.review],
+                  counts.unrefined ? ["Unrefined", counts.unrefined] : null,
+                  ["Tiles", total],
+                ]} />
+              </PanelSection>
+            )}
+          </>
+        ),
+        // Code: how to use it, and on the Stage the specimen measured, as Figma's Dev Mode.
+        code: family ? (
+          <FamilyCode family={family} measure={stageKey + JSON.stringify(config)}
+            code={config && playground ? configCode(playground, config) : stageTile ? SNIPPETS[stageTile.demo] : undefined} />
+        ) : selectedFamily ? (
+          <FamilyCode family={selectedFamily} code={selectedTile ? SNIPPETS[selectedTile.demo] : undefined} />
+        ) : (
+          <PanelSection heading="Package">
+            <CodeWell code={`npm install @area/react @area/styles\n\nimport "@area/styles";\nimport { Button } from "@area/react";`} />
+          </PanelSection>
+        ),
+      }}
     />
   );
 }
 
 /**
- * The Inspector for a family, or one of its tiles: what to copy, then its facts in the shared order.
- * On the grid a selected tile also opens on the Stage (⌘↓); on the Stage the code is what it shows.
+ * Design, for a family or one of its tiles: its facts in the shared order (what it is, its values, status, purpose,
+ * source). On the grid a selected tile also opens on the Stage (⌘↓).
  */
-function FamilyInspector({ family, tile, code, pinned, onPin, onOpen }: {
-  family: Family; tile?: Tile; code?: string; pinned: boolean; onPin: () => void; onOpen?: () => void;
+function FamilyDesign({ family, tile, pinned, onPin, onOpen }: {
+  family: Family; tile?: Tile; pinned: boolean; onPin: () => void; onOpen?: () => void;
 }) {
-  const names = importsOf(family);
   const manifest = manifestOf(family);
   const status = statusOf(family);
+  return (
+    <PanelSection heading={tile ? "Tile" : "Family"} actions={
+      <>
+        {onOpen ? (
+          <Tooltip side="bottom" describes={false} trigger={
+            <Button variant="ghost" tone="neutral" size="sm" icon={<OpenIcon />} aria-keyshortcuts="Meta+ArrowDown" onClick={onOpen}>Open</Button>
+          }>Open on the Stage <Kbd keys={["⌘", "↓"]} size="sm" /></Tooltip>
+        ) : null}
+        <PinButton name={family.name} pinned={pinned} onToggle={onPin} />
+      </>
+    }>
+      <Facts label={tile ? "Tile" : "Family"} items={tile ? [
+        ["Specimen", tile.label],
+        ["Family", family.name],
+        tile.note ? ["Note", tile.note] : null,
+        ["Status", <Badge size="sm" tone={STATUS_TONE[status]} variant="soft">{STATUS_LABEL[status]}</Badge>],
+      ] : [
+        manifest && Object.keys(manifest.variants).length ? ["Variants", Object.entries(manifest.variants).map(([axis, values]) => `${axis} ${values.length}`).join(" · ")] : null,
+        manifest && Object.keys(manifest.defaults).length ? ["Defaults", Object.values(manifest.defaults).join(", ")] : null,
+        ["Status", <Badge size="sm" tone={STATUS_TONE[status]} variant="soft">{STATUS_LABEL[status]}</Badge>],
+        ["Tiles", TILES.get(family.slug)!.length],
+        manifest ? ["Purpose", manifest.description] : null,
+        ["Spec", <Link href={specUrl(family)} target="_blank" rel="noreferrer">{family.slug}.md</Link>],
+      ]} />
+    </PanelSection>
+  );
+}
+
+/**
+ * Code, for a family or one of its tiles: what to copy, the import and the code in wells, the class and its modifiers,
+ * then (on the Stage, `measure` set) the specimen's measured box and paint (src/specimen-box.tsx).
+ */
+function FamilyCode({ family, code, measure }: { family: Family; code?: string; measure?: string }) {
+  const names = importsOf(family);
+  const manifest = manifestOf(family);
   return (
     <>
       {names || code ? (
@@ -515,32 +562,18 @@ function FamilyInspector({ family, tile, code, pinned, onPin, onOpen }: {
           {names ? <CopyButton label="Copy import" icon={<CopyIcon />} fullWidth value={() => importLine(names)} /> : null}
         </Selection>
       ) : null}
-      <PanelSection heading={tile ? "Tile" : "Family"} actions={
-        <>
-          {onOpen ? (
-            <Tooltip side="bottom" describes={false} trigger={
-              <Button variant="ghost" tone="neutral" size="sm" icon={<OpenIcon />} aria-keyshortcuts="Meta+ArrowDown" onClick={onOpen}>Open</Button>
-            }>Open on the Stage <Kbd keys={["⌘", "↓"]} size="sm" /></Tooltip>
-          ) : null}
-          <PinButton name={family.name} pinned={pinned} onToggle={onPin} />
-        </>
-      }>
-        <Facts label={tile ? "Tile" : "Family"} items={tile ? [
-          ["Specimen", tile.label],
-          ["Family", family.name],
-          ["Demo", <Code>{tile.demo}</Code>],
-          tile.note ? ["Note", tile.note] : null,
-        ] : [
-          names ? ["Import", <Code>{names}</Code>] : null,
-          manifest ? ["Class", <Code>.{manifest.block}</Code>] : null,
-          manifest && Object.keys(manifest.variants).length ? ["Variants", Object.entries(manifest.variants).map(([axis, values]) => `${axis} ${values.length}`).join(" · ")] : null,
-          manifest && Object.keys(manifest.defaults).length ? ["Defaults", Object.values(manifest.defaults).join(", ")] : null,
-          ["Status", <Badge size="sm" tone={STATUS_TONE[status]} variant="soft">{STATUS_LABEL[status]}</Badge>],
-          ["Tiles", TILES.get(family.slug)!.length],
-          manifest ? ["Purpose", manifest.description] : null,
-          ["Spec", <Link href={specUrl(family)} target="_blank" rel="noreferrer">{family.slug}.md</Link>],
-        ]} />
-      </PanelSection>
+      {names ? <PanelSection heading="Import"><CodeWell code={importLine(names)} wrap /></PanelSection> : null}
+      {code ? <PanelSection heading="Code"><CodeWell code={code} /></PanelSection> : null}
+      {manifest ? (
+        <PanelSection heading="Class">
+          <Facts label="Class" items={[
+            ["Block", <Code>.{manifest.block}</Code>],
+            ...Object.entries(manifest.variants).map(([axis, values]) => [axis[0]!.toUpperCase() + axis.slice(1), values.map(value => `--${value}`).join(" ")] as const),
+            manifest.defaults && Object.keys(manifest.defaults).length ? ["Defaults", Object.entries(manifest.defaults).map(([axis, value]) => `${axis} ${value}`).join(", ")] : null,
+          ]} />
+        </PanelSection>
+      ) : null}
+      {measure !== undefined ? <SpecimenBox watch={measure} /> : null}
     </>
   );
 }

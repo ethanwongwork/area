@@ -1,6 +1,6 @@
 import type { VariantProps } from "../variants.ts";
 import { MANIFESTS } from "../variants.ts";
-import { forwardRef, useState } from "react";
+import { Children, forwardRef, isValidElement, useState } from "react";
 import type { ButtonHTMLAttributes, MouseEvent, ReactNode } from "react";
 import { buttonVariants, cx } from "../variants.ts";
 
@@ -90,6 +90,13 @@ export const Button = /* @__PURE__ */ forwardRef<HTMLButtonElement, ButtonProps>
   };
   const leading = loading ? <span className="area-spinner area-spinner--md" aria-hidden="true" /> : icon;
 
+  // A trailing keycap leaves the label, so the button's gap spaces it from the text as a container's gap does
+  // everywhere (Kbd's rule, round 53: a keycap sits one ui-cluster from the words beside it; a typed space left 4).
+  const parts = Children.toArray(children);
+  const last = parts.at(-1);
+  const isKbd = isValidElement(last) && ((last.type as { render?: { name?: string } }).render?.name === "Kbd" || (typeof last.props === "object" && last.props !== null && "keys" in last.props));
+  const label = isKbd ? parts.slice(0, -1) : children;
+  const shortcut = isKbd ? last : null;
   return (
     <button
       ref={ref}
@@ -115,7 +122,10 @@ export const Button = /* @__PURE__ */ forwardRef<HTMLButtonElement, ButtonProps>
           {leading}
         </span>
       ) : null}
-      {children != null && !iconOnly ? <span className="area-button__label">{children}</span> : null}
+      {children != null && !iconOnly ? <>
+        <span className="area-button__label">{label}</span>
+        {shortcut}
+      </> : null}
       {/* Icon-only keeps its children as the accessible name, as SplitButton does (audit A-12). */}
       {children != null && iconOnly ? <span className="area-sr-only">{children}</span> : null}
       {trailingIcon ? (

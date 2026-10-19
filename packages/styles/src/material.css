@@ -105,6 +105,8 @@
   /* Each part's own fill, which the tone ring darkens, and its own shadow, kept after the material's. */
   :where([data-area-material]) .area-button { --_m-fill: var(--_bg); --_m-own: 0 0 0 0 transparent; --_m-layers: 0 0 0 0 transparent; }
   :where([data-area-material]) .area-button--solid { --_m-own: var(--area-material-glow-shadow); }
+  /* Outline and soft buttons keep their Field shadow (axes/depth.ts) beside the material, as fields do below. */
+  :where([data-area-material]) .area-button:is(.area-button--outline, .area-button--soft) { --_m-own: var(--_shadow); }
   :where([data-area-material]) .area-segmented__item[data-selected] { --_m-fill: light-dark(var(--area-bg-surface), var(--area-bg-component-active)); --_m-rest: var(--area-shadow-control); --_m-own: var(--_m-rest); }
   :where([data-area-material]) .area-switch__thumb { --_m-fill: var(--area-bg-surface); --_m-rest: var(--area-shadow-control), inset 0 0 0 var(--area-stroke-width) var(--_thumb-ring); --_m-own: var(--_m-rest); }
   :where([data-area-material]) :is(.area-checkbox__control, .area-radio__control) { --_m-fill: var(--_fill); --_m-own: 0 0 0 0 transparent; }
@@ -160,10 +162,10 @@
     background-image: var(--_m-image);
     box-shadow: var(--_m-ring), var(--_m-shadow), var(--_m-own);
   }
-  /* Fields: the well at rest and on hover; focused, the focus halo alone. */
+  /* Fields: the well at rest and on hover, beside Field shadow; focused, the field's own lift and halo. */
   [data-area-material] :is(.area-input, .area-select, .area-custom-select__trigger, .area-textarea):not(:focus-within, :focus-visible) {
     background-image: var(--_m-image);
-    box-shadow: var(--_m-ring), var(--_m-shadow);
+    box-shadow: var(--_m-ring), var(--_m-shadow), var(--_field-lift, 0 0 0 0 transparent);
   }
   /* The Slider's parts are pseudo-elements, which read their own group's tokens directly. The material lies over the
      Slider's own paint (slider.css: the thumb's dot, the track's fill to the value), never in place of it: an image

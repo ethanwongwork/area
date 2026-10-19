@@ -39,6 +39,36 @@
         "--no-electron"
       ],
       "port": 4420
+    },
+    {
+      "name": "component-review",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "4430",
+        "--bind",
+        "127.0.0.1",
+        "--directory",
+        "apps/docs/.cache/component-review-51"
+      ],
+      "port": 4430
+    },
+    {
+      "name": "desktop-browser-4421",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "preview",
+        "-w",
+        "@area/desktop",
+        "--",
+        "--no-electron"
+      ],
+      "port": 4421,
+      "env": {
+        "PORT": "4421"
+      }
     }
   ]
 }

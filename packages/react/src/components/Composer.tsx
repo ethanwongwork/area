@@ -23,6 +23,11 @@ export interface ComposerProps extends Omit<HTMLAttributes<HTMLDivElement>, "onC
   busy?: boolean;
   /** Called by the Stop button while `loading`. */
   onStop?: () => void;
+  /**
+   * While `loading`, Enter queues the draft instead of doing nothing: it is handed here and the field clears, and the
+   * button stays Stop (Cursor's queue, Claude Code's "Queue another message…").
+   */
+  onQueue?: (value: string) => void;
   /** Names the Stop button. */
   stopLabel?: string;
   maxLength?: number;
@@ -34,6 +39,13 @@ export interface ComposerProps extends Omit<HTMLAttributes<HTMLDivElement>, "onC
   submitPill?: boolean;
   /** Enter submits; Shift+Enter inserts a newline. Meta/Ctrl+Enter always submits. */
   submitOnEnter?: boolean;
+  /**
+   * What the message is about, inside the shell above the field: context chips (Chip `input`) and Attachments. They
+   * wrap, the composer's gap apart.
+   */
+  context?: ReactNode;
+  /** A ComposerMenu (the @ and / suggestions), drawn above the composer at its width. */
+  menu?: ReactNode;
   inputProps?: Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "value" | "defaultValue" | "onChange" | "onKeyDown" | "rows" | "disabled" | "placeholder" | "maxLength">;
   onInputKeyDown?: (event: KeyboardEvent<HTMLTextAreaElement>) => void;
 }
@@ -41,8 +53,8 @@ export interface ComposerProps extends Omit<HTMLAttributes<HTMLDivElement>, "onC
 /** Message entry with native multiline editing and separate action and mode slots. */
 export const Composer = forwardRef<HTMLTextAreaElement, ComposerProps>(function Composer(
   { layout = "inline", value, defaultValue = "", onValueChange, onSubmit,
-    placeholder = "Write a message…", label = "Message", disabled, loading: loadingProp, busy, onStop, stopLabel = "Stop", maxLength,
-    leadingActions, trailingActions, mode, submitLabel = "Send message", submitPill, submitOnEnter = true, inputProps, onInputKeyDown,
+    placeholder = "Write a message…", label = "Message", disabled, loading: loadingProp, busy, onStop, onQueue, stopLabel = "Stop", maxLength,
+    leadingActions, trailingActions, mode, submitLabel = "Send message", submitPill, submitOnEnter = true, context, menu, inputProps, onInputKeyDown,
     className, ...rest }, ref,
 ) {
   const loading = loadingProp ?? busy;
@@ -84,8 +96,9 @@ export const Composer = forwardRef<HTMLTextAreaElement, ComposerProps>(function 
   };
   // Leading blank lines and trailing whitespace go; a pasted block keeps its indentation (audit G-15).
   const submit = () => {
-    if (disabled || loading || !text.trim()) return;
-    onSubmit?.(text.replace(/^\s*\n/, "").trimEnd());
+    if (disabled || !text.trim()) return;
+    if (loading && !onQueue) return;
+    (loading ? onQueue : onSubmit)?.(text.replace(/^\s*\n/, "").trimEnd());
     if (value === undefined) setOwnValue("");
   };
   // A form reset clears an uncontrolled composer, as the native textarea would (audit G-15).
@@ -113,6 +126,8 @@ export const Composer = forwardRef<HTMLTextAreaElement, ComposerProps>(function 
     : <Button className="area-composer__submit" variant="solid" tone="neutral" size="md" iconOnly pill={submitPill}
       aria-label={submitLabel} disabled={disabled || loading || !text.trim()} onClick={submit} icon={<Glyph name="arrow-up" />} />;
   return <div {...rest} className={composerVariants({ layout }, className)} data-disabled={disabled ? "" : undefined} aria-busy={loading || undefined}>
+    {menu}
+    {context ? <div className="area-composer__context">{context}</div> : null}
     <div className="area-composer__entry">
       {/* A fieldset disables every nested action natively when the composer is disabled (audit G-14). */}
       {layout === "inline" && leadingActions && <fieldset disabled={disabled} className="area-composer__actions area-composer__actions--leading">{leadingActions}</fieldset>}

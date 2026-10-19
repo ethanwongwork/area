@@ -126,6 +126,10 @@
     text-overflow: ellipsis;
   }
 
+  /* A trailing keycap (Button.tsx lifts it out of the label) sits one ui-cluster from the text, Kbd's rule for a key
+     beside words (Tooltip's gap; ChatGPT's tooltip 8): the button's gap plus the difference. */
+  .area-button > .area-kbd { flex: none; margin-inline-start: calc(var(--area-ui-cluster) - var(--_gap)); }
+
   /* Outer-edge optical insets are shared in inset.css. */
   .area-button--icon-only {
     padding-inline: 0;
@@ -350,6 +354,7 @@
    * relationship constant and costs no new tokens.
    */
   .area-button--soft {
+    --_shadow: var(--area-shadow-field); /* Field shadow (axes/depth.ts), transparent by default */
     --_bg: var(--_surface);
     --_bg-hover: var(--_surface-hover);
     --_bg-active: var(--_surface-active);
@@ -377,6 +382,7 @@
 
   /* spec: hover one rung up (neutral 255 → 243), as ChatGPT's outline (241) and ghost washes (242). */
   .area-button--outline {
+    --_shadow: var(--area-shadow-field); /* Field shadow (axes/depth.ts), transparent by default */
     --_bg: var(--area-bg-surface);
     --_bg-hover: var(--_surface-hover);
     --_bg-active: var(--_surface-active);

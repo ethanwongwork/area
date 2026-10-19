@@ -292,6 +292,19 @@ export function rawEdge(k: keyof typeof EDGE_OFFSET.light): string {
   return color(edgeLight(EDGE_OFFSET.light[k]), edgeDark(EDGE_DARK_TODAY[k], EDGE_OFFSET.dark[k]));
 }
 
+/**
+ * A stroke at standard contrast, through the Stroke control (axes/depth.ts, 2026-10-18): its distance from the ground is
+ * rawEdge's × `stroke-strength` (1 at the default 4, so rawEdge exactly; 0 draws the ground). Fills drawn from an edge
+ * (the rails, the toggle fills) read rawEdge and stay.
+ */
+export function strokeEdge(k: keyof typeof EDGE_OFFSET.light): string {
+  const n = v("stroke-strength");
+  const light = `calc(${v("layer-light-page")} - ${num(EDGE_OFFSET.light[k])} * ${n})`;
+  const raised = v("layer-dark-raised");
+  const dark = `calc(${raised} + (max(${num(EDGE_DARK_TODAY[k])}, calc(${raised} + ${num(EDGE_OFFSET.dark[k])})) - ${raised}) * ${n})`;
+  return color(light, dark);
+}
+
 /** A colour at standard contrast taken `share` of the way to `strong` at the Contrast level (0, 0.5 Medium, 1 More). */
 export const contrastMix = (standard: string, strong: string, share = 1) =>
   `color-mix(in oklab, ${standard}, ${strong} calc(${v("contrast-more")} * ${num(share * 100)}%))`;
@@ -304,7 +317,7 @@ export function layerCss(): Record<string, string> {
   // Contrast moves every stroke together (owner, 2026-10-18: More "doesn't seem to apply to all components evenly"): each
   // edge goes the same share of the way to the strong stroke (CONTRAST_EDGE_SHARE). Standard is the edge as it was.
   const edge = (k: keyof typeof EDGE_OFFSET.light) =>
-    contrastMix(raw(k), v(HOVER_EDGES.has(k) ? "stroke-control-hover" : "stroke-control"), CONTRAST_EDGE_SHARE);
+    contrastMix(strokeEdge(k), v(HOVER_EDGES.has(k) ? "stroke-control-hover" : "stroke-control"), CONTRAST_EDGE_SHARE);
   const out: Record<string, string> = {
     ...Object.fromEntries(Object.entries(layerLightnessCss()).map(([k, x]) => [`${P}${k}`, x])),
     [`${P}bg-page`]: both("page"),

@@ -45,26 +45,41 @@ test('rows share one hover plate and one selection plate, and selection outranks
 });
 
 test('every surface takes its depth from its elevation role', () => {
-  // The Elevation axis (axes/elevation.ts, owner 2026-10-14): components name a role, the preset sets its depth.
-  // Every role is two layers, ambient then key, in every preset, so presets swap and transition layer by layer;
-  // "no lift" is a transparent shadow, never `none`, because a role also sits inside lists (Board card's ring,
-  // the floating Toolbar's edge) where `none` invalidates the whole box-shadow and drops the ring with it.
+  // The Elevation axis (axes/elevation.ts, owner 2026-10-14): components name a role; Shadow (Elevation), Rest and Field
+  // shadow and the Edge and Depth controls (axes/depth.ts, 2026-10-18) set its depth. Every role is one fixed slot list in every setting (the lip, six soft
+  // layers, the highlight), so settings swap and transition layer by layer; "no lift" is a transparent layer, never
+  // `none`, because a role also sits inside lists (Board card's ring, the floating Toolbar's edge) where `none`
+  // invalidates the whole box-shadow and drops the ring with it.
   const layers = value => { let depth = 0, count = 1; for (const ch of value) { if (ch === '(') depth++; else if (ch === ')') depth--; else if (ch === ',' && depth === 0) count++; } return count; };
-  const roles = ['control', 'resting', 'tooltip', 'float', 'modal'];
+  const roles = ['control', 'field', 'resting', 'tooltip', 'lift', 'float', 'modal']; // lift: main's hover role (2026-10-19), was 'hover'
   for (const role of roles) {
     const values = [...css.matchAll(new RegExp(`--area-shadow-${role}:\\s*([^;]+);`, 'g'))].map(match => match[1].trim());
-    // The default on :root, then one scope per step, 0 to 8.
-    assert.equal(values.length, 10, `--area-shadow-${role} should have the default and one value per step`);
+    // Derived: on :root, and again wherever an axis is set and under the OS contrast preference.
+    assert.ok(values.length >= 2, `--area-shadow-${role} is not derived`);
     for (const value of values) {
       assert.notEqual(value, 'none', `--area-shadow-${role} is none; use a transparent shadow`);
-      assert.equal(layers(value), 2, `--area-shadow-${role} is not two layers: ${value}`);
+      assert.equal(layers(value), 8, `--area-shadow-${role} is not the eight slots: ${value}`);
+      assert.match(value, /^0 1px 0 0 /, `--area-shadow-${role} does not start with the lip`);
+      assert.match(value, /, inset 0 1px 0 0 light-dark\(rgb\(255 255 255 \/ var\(--area-shadow-highlight-light\)\), rgb\(255 255 255 \/ var\(--area-shadow-highlight-dark\)\)\)$/, `--area-shadow-${role} does not end with the highlight`);
     }
   }
-  const float = [...css.matchAll(/--area-shadow-float:\s*([^;]+);/g)].map(match => match[1].trim());
-  // Step 3, the default: the Menu's shadow at 3% (Notion's lightest lift, 2.7%), ambient half, dark doubled.
-  assert.equal(float[0], '0 0 2px light-dark(rgb(0 0 0 / 0.015), rgb(0 0 0 / 0.03)), 0 8px 16px light-dark(rgb(0 0 0 / 0.03), rgb(0 0 0 / 0.06))', 'the default float lost its step-3 recipe');
-  assert.ok(float.includes('0 0 0 0 transparent, 0 0 0 0 transparent'), 'step 0 should drop the lift');
-  assert.ok(float.includes('0 0 2px light-dark(rgb(0 0 0 / 0.04), rgb(0 0 0 / 0.08)), 0 8px 16px light-dark(rgb(0 0 0 / 0.08), rgb(0 0 0 / 0.16))'), 'step 8 should be ChatGPT\'s menu strength, 8%');
+  // Each Elevation step writes its number alone; the roles read it.
+  for (let step = 0; step <= 8; step++) assert.match(css, new RegExp(`\\[data-area-elevation="${step}"\\] \\{\\s*--area-elevation: ${step};`), `Elevation ${step} does not write its number`);
+  // The defaults reproduce the step-3 two-layer recipe exactly (Fluent's ambient + key, ambient half, dark doubled):
+  // two slots (ambient: no offset, the ambient blur, half the key; key: full offset and blur), the rest transparent,
+  // Shadow size 1 (×4/4), no tightness, lip or highlight, black, ×2 in dark, rest at 3 as Shadow, fields at 0.
+  const root = css.slice(css.indexOf(':where(:root)'));
+  const leaf = name => root.match(new RegExp(`--area-${name}:\\s*([^;]+);`))?.[1].trim();
+  assert.deepEqual([leaf('elevation'), leaf('shadow-size'), leaf('shadow-tightness'), leaf('shadow-lip'), leaf('shadow-highlight-light'), leaf('shadow-tint-l'), leaf('shadow-tint-c'), leaf('shadow-resting-step'), leaf('shadow-field-step'), leaf('stroke-strength'), leaf('shadow-rest-step')],
+    ['3', '1', '0', '0', '0', '0', '0', '3', '0', '1', '0'], 'the Edge and Depth defaults moved'); // resting lift 3; main's Rest shadow 0
+  assert.deepEqual([1, 2, 3, 4, 5, 6].map(i => [leaf(`shadow-slot-${i}-t`), leaf(`shadow-slot-${i}-g`), leaf(`shadow-slot-${i}-a`)]),
+    [['0', '1', '0.5'], ['1', '0', '1'], ['0', '0', '0'], ['0', '0', '0'], ['0', '0', '0'], ['0', '0', '0']], 'the default Layers are not the ambient + key pair');
+  const float = root.match(/--area-shadow-float:\s*([^;]+);/)[1];
+  assert.match(float, /var\(--area-elevation\) \/ 100 \* 1 \* var\(--area-shadow-slot-2-a\)/, 'the float key is not the Menu\'s shadow at Depth %');
+  assert.match(float, /var\(--area-shadow-size\) \* 8px \* var\(--area-shadow-slot-2-t\)/, 'the float key lost its 8px offset');
+  assert.match(float, /rgb\(0 0 0 \/ min\(0\.9, calc\(var\(--area-elevation\) \/ 100 \* 1 \* var\(--area-shadow-slot-2-a\) \* 2\)\)\)/, 'dark shadows are not twice the light alpha');
+  const resting = root.match(/--area-shadow-resting:\s*([^;]+);/)[1];
+  assert.match(resting, /var\(--area-shadow-resting-step\) \/ 100 \* 0\.5 \* var\(--area-shadow-slot-2-a\)/, 'the resting role does not read Resting lift at half weight');
 
   // The shadow that paints is the last box-shadow on the block, in any rule: a later literal once overrode the
   // shared lift with a full-strength second layer and a looser test still passed.
@@ -174,12 +189,21 @@ test('text fields show disabled with field paint, not opacity', () => {
   assert.doesNotMatch(group.body, /opacity/);
 });
 
-test('fields rest without a shadow, and the Select picker floats with the shared lift (audit B-32)', () => {
+test('fields rest on Field shadow, transparent by default, and the Select picker floats with the shared lift (audit B-32)', () => {
+  // Fields carry no shadow by default (ChatGPT, Notion, Figma); Field shadow (axes/depth.ts, 2026-10-18) lifts them when
+  // chosen, as shadcn's and Primer's, and it is 0 by default, a transparent role. Soft fields stay flat.
   for (const selector of ['.area-input', '.area-number-field', '.area-select']) {
     const rule = rules.find(r => r.selector === selector && /box-shadow/.test(r.body));
     assert.ok(rule, `${selector} resting shadow rule missing`);
-    assert.match(rule.body, /box-shadow:\s*none/, `${selector} rests with a shadow`);
+    assert.match(rule.body, /--_field-lift:\s*var\(--area-shadow-field\)/, `${selector} does not rest on Field shadow`);
+    assert.match(rule.body, /box-shadow:\s*var\(--_field-lift\)/, `${selector} paints something other than its lift`);
   }
+  for (const selector of ['.area-input--soft', '.area-number-field--soft', '.area-select--soft']) {
+    const rule = rules.find(r => r.selector === selector && /--_field-lift/.test(r.body));
+    assert.match(rule?.body ?? '', /--_field-lift:\s*0 0 0 0 transparent/, `${selector} lifts; soft fields are flat`);
+  }
+  const lift = css.slice(css.indexOf(':where(:root)')).match(/--area-shadow-field-step:\s*([^;]+);/)?.[1].trim();
+  assert.equal(lift, '0', 'Field shadow is on by default');
   const picker = rules.find(r => r.selector === '.area-select::picker(select)' && /box-shadow/.test(r.body));
   assert.ok(picker, 'Select picker rule missing');
   assert.match(picker.body, /var\(--area-shadow-float\)/);
@@ -242,11 +266,11 @@ test('every floating surface draws the floating frame', () => {
   assert.match(ruleFor('.area-color-picker, .area-color-picker--surface')?.body ?? '', /--_picker-edge:\s*var\(--area-border-float\)/);
 });
 
-test('row actions change ink, not plate: Nav and Board cards', () => {
+test('row actions change ink, not plate: Nav, Board cards, Edit summary files and Queue rows', () => {
   // Nav's rule (owner, review rounds 27 and 29), and Board's card actions since round 30 ("cardactions need to be
   // fixed"): the row or card already shows the pointer, so its actions are ghost squares whose hover is ink only, and
   // Board's sit on the card's own paint rather than a floating plate.
-  for (const scope of ['.area-nav__actions', '.area-board-card__actions']) {
+  for (const scope of ['.area-nav__actions', '.area-board-card__actions', '.area-edit-summary__file', '.area-queue__item']) {
     const body = ruleFor(`${scope} .area-button.area-button--ghost`)?.body ?? '';
     assert.match(body, /--_bg-hover:\s*transparent/, `${scope}: a hover plate`);
     assert.match(body, /--_fg:\s*var\(--area-fg-muted\)/, `${scope}: not muted at rest`);

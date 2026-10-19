@@ -65,7 +65,10 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
     2026-10-12; 2026-10-14: no titles, as Framer and Figma, but a header, not a floating toolbar).
     - No title over the Canvas or the Inspector: the Sidebar's selected row names what the Canvas
       shows. The Canvas header's controls, the Sidebar's first row and the Inspector's first
-      heading share one line, every region 14 in on all sides.
+      heading share one line, every region 14 in on all sides. A bar's controls are evenly inset
+      instead (owner, 2026-10-18: "these controls are not evenly inset, theres too much space horizontally"): the
+      Titlebar's, the Canvas header's and the Inspector's view pills sit as far from the side as from the top and the
+      rule, 7 at the app's scale, 24 tall (Figma's panel tabs: 8 and 8).
     - The header, at its end, in this order: filters, Sort and group, how things are drawn (zoom,
       style, size), and the grid / list switch. Zoom is Zoom control's stepper (− Auto +, plates 2 apart): Auto, the default, shows
       specimens by size group, each group at most at one scale and never above 100% (by painted area: a control 90%,
@@ -93,13 +96,26 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
       is left out; the order of the rest never changes. Fields in the app's chrome and Inspector
       are `soft` (filled), a set is a multi-select Custom select, and dropdown windows hug their
       rows (`--area-menu-min-inline-size`).
-    - The Inspector, without a title: the Canvas settings under headings by what they shape (Size:
-      type, density; Shape: radius, pills; then Display, the tab's own settings, such as
-      Typography's sample text), only those that change this tab's specimens, then the chosen thing at its
-      narrowest: a Canvas item, else the Sidebar's row, else the tab's overview. A chosen thing
-      gets its preview, unless the Canvas already shows it at size, and its copy actions two to a
-      row (`src/inspector.tsx`), then one flush facts Table whose rows run: name and how to reach
-      it (name, token, import), values, status, purpose, source.
+    - The Inspector, without a title, in three views chosen by pills in its bar (owner, 2026-10-18: "a figma style
+      panel based on dev mode and the standard design panel … separate the current inspector to themes, design, and
+      code"; `src/studio.tsx`, InspectorPanel): **Theme**, **Design**, **Code**, the Titlebar's Nav pills (Figma's
+      Design | Prototype), the bar on the line the Canvas header shares. The chosen view holds across tabs and
+      launches; a tab with nothing for a view leaves its pill out (Brand and the Materials lab have no Code). A fourth,
+      **Chat**, is the app's rather than a tab's, so every tab offers it (`src/chat/chat.tsx`; owner, 2026-10-18): its
+      transcript is the Panel's body, followed to the newest line while the reader is at the end, and its composer the
+      Panel's footer with no rule above it; ⌘L opens it and focuses the composer, Esc stops a reply. Its head holds the
+      conversation's title and New chat (the bar has no room beside four pills at 256).
+      - Theme: the Canvas settings under headings by what they shape (Color; Size: type, density; Shape: radius,
+        pills; Stroke; Shadow; Effects; Material), only those that change this tab's specimens.
+      - Design: what is chosen, at its narrowest: a Canvas item, else the Sidebar's row, else the tab's overview. The
+        tab's own display settings first (Display: Typography's sample text), then a component's Properties, then the
+        chosen thing's preview (unless the Canvas already shows it at size) and its actions, then one flush facts Table:
+        what it is and its values, status, purpose, source.
+      - Code: how to use it, as Dev Mode: copy actions two to a row, then the import and the code in code wells (Code
+        block `sm`, lines scrolling sideways), then facts Tables for how to reach it (name, token, class and its
+        modifiers, attribute). A component on the Stage also gets its measured box (Box model, as Dev Mode's Layer
+        properties) and its computed paint (type, ink, fill, edge, shadow, colours as hex), re-measured when a setting
+        changes (`src/specimen-box.tsx`).
     - Nothing is chosen until the person chooses it: a tab opens on its overview, and the
       choice clears when the Sidebar's row changes.
 
