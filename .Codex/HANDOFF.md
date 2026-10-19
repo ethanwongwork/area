@@ -5,7 +5,7 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
-## App UI tweaks (2026-10-18 to 19, branch `claude/electron-ui-tweaks-ccf407`, merged to main: PR_NUMBER)
+## App UI tweaks (2026-10-18 to 19, branch `claude/electron-ui-tweaks-ccf407`, merged to main in PR #137)
 
 Owner rule: design feedback applies to the real components and tokens, never as an app-only override. When the owner
 leaves feedback, say why the design is as it is and what changing it affects before changing it.
