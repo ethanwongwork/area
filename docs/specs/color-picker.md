@@ -311,3 +311,8 @@ rules. The one deliberate difference is the palette cell, which uses the thumb's
 - 2026-10-12 · owner, review round 17: approved.
 - 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the area, track, contrast-pair and preview hairlines are the swatch ring token at `stroke-width` (were a literal 1px and colour), and the thumb's outer edge reads Slider's `edge-control-hover` (same #d4 as `border-subtle`; stronger under increased contrast) (color.css). (docs/research/consistency-audit-2026-10-12.md)
 - 2026-10-14 · owner: "continue working on the next axis" → Surface is one number, the frame's width: `1` (Default) or `0` (Borderless) (was `outlined` / `borderless`; axes/surface.ts). At 0 the surface picker lists the Surface axis's `shadow-edge` first in its box-shadow, ChatGPT's frameless-menu edge (`0 0 1px` black 62%, and in dark an inset `0 0 1px` white 20%; captured 2026-10-13), so it keeps an edge at Elevation 0 and in dark, where it had none. Owner approved ("go with your recs"), review https://claude.ai/artifact/L4TCF2W5zcjvBK7xZmaDBN (docs/research/surface-2026-10-14.md).
+
+## Review note, 2026-10-19 (round 56)
+
+- **What changed:** its swatches show the thin translucent ring again (black 10% in light, white 10% in dark), solid colours included.
+- **Why:** Color swatch's colour layer had been painting over its ring since a 2026-10-12 merge, so no swatch showed its outline; the fix is in Color swatch (docs/specs/color-swatch.md, round 56), and every family that draws one shows it.

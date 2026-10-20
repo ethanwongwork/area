@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 
 // DESIGN_SYSTEM.md, "Shared state paint" and "Elevation"; docs/research/cohesion-audit.md.
 // These read the built stylesheet, so they guard the rules across every family at once.
@@ -306,4 +306,70 @@ test('soft fields draw a boundary under increased contrast', () => {
   assert.match(css, /--area-input-edge-soft:\s*color-mix\(in srgb, transparent, var\(--area-edge-control\) calc\(var\(--area-contrast-more\) \* 100%\)\)/, 'input-edge-soft lost its contrast switch');
   // Composer is a field too: its card-edge frame turns to the strong control stroke under increased contrast.
   assert.match(ruleFor('.area-composer')?.body ?? '', /--_composer-edge:\s*var\(--area-composer-edge\)/, 'Composer has no strong edge under increased contrast');
+});
+
+// DESIGN_SYSTEM.md, "Layers": a component that paints a ground under anything with a control fill (a plate, a soft
+// field, a ghost button) declares that ground in layers.css, so its fills step from what is under them (owner, round
+// 61: "make sure other existing components and future components will be built properly and consistently"; Asset
+// card's plate had read 1.04:1 on its own fill). Reads the sources, so a new component that paints a ground fails here
+// until it is listed with its ground, or exempted below with the reason nothing on it paints a control fill.
+test('every painted ground is declared in layers.css', () => {
+  const src = new URL('../../styles/src/', import.meta.url);
+  const strip = text => text.replace(/\/\*[\s\S]*?\*\//g, '');
+  const layers = strip(readFileSync(new URL('layers.css', src), 'utf8'));
+  // Each ground's list: the :where(...) before `[data-area-ground="<ground>"]`, its selectors with a trailing :not() dropped.
+  const declared = { raised: new Set(), page: new Set(), recessed: new Set() };
+  for (const ground of Object.keys(declared)) {
+    const at = layers.indexOf(`[data-area-ground="${ground}"] {`);
+    assert.ok(at > 0, `layers.css has no ${ground} ground`);
+    const open = layers.lastIndexOf(':where(', at);
+    let depth = 0, end = open + ':where('.length - 1;
+    for (let i = end; i < layers.length; i++) { if (layers[i] === '(') depth++; else if (layers[i] === ')' && --depth === 0) { end = i; break; } }
+    const list = layers.slice(open + ':where('.length, end);
+    let part = '', level = 0;
+    for (const ch of list + ',') {
+      if (ch === ',' && level === 0) { declared[ground].add(part.trim().replace(/:not\(.*\)$/, '')); part = ''; continue; }
+      if (ch === '(') level++; else if (ch === ')') level--;
+      part += ch;
+    }
+  }
+  if (/\.area-select::picker\(select\)\s*\{[^}]*--area-bg-component:\s*var\(--area-bg-component-raised\)/.test(layers)) declared.raised.add('.area-select::picker(select)');
+  const GROUND = { 'bg-surface': 'raised', 'bg-code': 'raised', 'bg-subtle': 'recessed', 'bg-page': 'page' };
+  // Painted grounds that hold nothing with a control fill, each with its reason.
+  const EXEMPT = {
+    '.area-asset-card__cell': 'a group cell: an image or an inert thumbnail',
+    '.area-asset-row__preview': 'an image well',
+    '.area-attachment': 'its close button paints the video glass tints, not ground fills',
+    '.area-box-model': 'labels and values only',
+    '.area-box-model__border': 'labels and values only',
+    '.area-box-model__content': 'labels and values only',
+    '.area-radio--card': 'the card is the control: its own paint, not a ground under one',
+    '.area-checkbox--card': 'the card is the control: its own paint, not a ground under one',
+    '.area-color-picker__preview-new': 'a colour well',
+    '.area-file-upload__icon': 'an icon box',
+    '.area-color-swatch-picker__cell:has(input:checked)': "a selected cell's own paint",
+    '.area-color-picker__preview-original': 'a colour well',
+    '.area-diff__fold': 'a static fold row in a diff',
+    '.area-file-tile__figure > img': 'an image',
+    '.area-file-upload-item__icon': 'an icon box',
+    '.area-table th': 'header text only (the table wrapper is the raised ground)',
+    '.area-presence': 'a status dot',
+    '.area-presence[data-out-of-office]': 'a status dot',
+    '.area-switch__thumb': "the switch's own thumb",
+    '.area-code-block__toggle': "a code block's own toggle, on its raised ground",
+  };
+  const missing = [];
+  for (const file of readdirSync(new URL('components/', src))) {
+    if (!file.endsWith('.css')) continue;
+    const text = strip(readFileSync(new URL(`components/${file}`, src), 'utf8'));
+    for (const [, rawSelector, body] of text.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+      const paint = body.match(/background(?:-color)?\s*:\s*var\(--area-(bg-surface|bg-code|bg-subtle|bg-page)\)/);
+      if (!paint) continue;
+      for (const selector of rawSelector.split(',').map(part => part.trim().replace(/\s+/g, ' '))) {
+        if (EXEMPT[selector] || declared[GROUND[paint[1]]].has(selector)) continue;
+        missing.push(`${file}: ${selector} paints ${paint[1]} but is not a ${GROUND[paint[1]]} ground in layers.css`);
+      }
+    }
+  }
+  assert.deepEqual(missing, []);
 });

@@ -17,8 +17,11 @@ a page), not a Toast (transient).
 
 | Axis | Value | Justification | Where |
 |---|---|---|---|
-| kind | stopped, error, compacted | the three turn endings the products name | Codex "■ Conversation interrupted", "You stopped after {time}", "Stop and retry"; Cursor `.composer-error-title` + Retry / Resume; Claude Code compact row "Conversation was compacted to free up context.", interrupted turns in secondary italic |
+| status | stopped, error, compacted | the three turn endings the products name | Codex "■ Conversation interrupted", "You stopped after {time}", "Stop and retry"; Cursor `.composer-error-title` + Retry / Resume; Claude Code compact row "Conversation was compacted to free up context.", interrupted turns in secondary italic |
 | action | none, a Button (Retry) | — | Cursor, Codex |
+
+The axis is `status`, an outcome (Governance § 4: `kind` is an interaction role). `kind` stays as a deprecated alias
+for one release; `status` wins. The CSS modifiers keep their names (`area-turn-notice--error`).
 
 ## Decisions
 
@@ -26,8 +29,8 @@ a page), not a Toast (transient).
 |---|---|---|---|
 | type | text-md (Message's), muted | claude-code secondary; codex muted | no italic: Area does not set type in italic |
 | icon | 16 slot: stop, info (error, compacted) | codex ■ marker; Area glyphs | — |
-| error ink | the icon in fg-danger; text stays muted | cursor error title; Area keeps text readable | — |
-| gap | 8 | Area's icon-text gap (gap-md) | — |
+| error ink | the icon in fg-danger; the words in fg-default (stopped and compacted stay muted) | cursor error title; codex red ■ | the one notice that asks for something (round 50) |
+| gap | 4 between the line's parts | Step's line; Cursor ToolCallLine gap 4 | it sits among the steps (round 49) |
 | action | ghost sm Button after the text | cursor Retry | — |
 
 ## Behavior and accessibility
@@ -47,6 +50,9 @@ React tests (`packages/react/tests/agent-chat.test.mjs`, 9), the full React suit
 
 - 2026-10-18 · built for Phase 2 of the Inspector chat.
 - 2026-10-19 · browser check: icon sized to fill its slot (the Glyph had no size).
+- 2026-10-19 · audit: `kind` → `status` (an outcome; `kind` kept as a deprecated alias, manifest axis renamed, CSS
+  modifiers unchanged); Decisions corrected to the code (gap 4, an error's words in the default ink); the shared card
+  rows take Menu's `gap-row` and `ui-row-gap`, and the pressed fill.
 
 - 2026-10-19 · owner, round 49 (rethink): "make sure the text styles and colors, and gaps, padding, margins, overall spacing/layout are cleaned up, intentional, accurate, and consistent" → a cleanup pass: every text style, color, gap and inset traced to a reference value or an Area peer, written below.
 
@@ -65,8 +71,8 @@ The agent chat's shared rules (all five families):
 | Cards (Edit summary, Plan) | one size, text-sm; sm buttons | Cursor: cards 13 under a 14 reply |
 | Card frame | the card edge at stroke-width, container corner, surface fill | Code block |
 | Card column | text 12 in: Menu's list padding 4 + the row inset 8 | Menu; Cursor card header 0 12 |
-| Card head | one row tall, a rule under it when rows follow; a trailing button (row − control) / 2 from the end | Code block's header |
-| Card rows | Menu rows: row height, row inset, row corner, row plate, gap 8 | Menu |
+| Card head | one row tall, a rule under it when rows follow; a trailing button (row − control) / 2 from the end, never under 4 | Code block's header |
+| Card rows | Menu rows: row height, row inset, row corner, row plate (pressed: bg-component-pressed), Menu's row gap `gap-row` (12, compact 8) so a label after the icon slot lands on the list column, and `ui-row-gap` (2, compact 0) between rows | Menu (`--_menu-gap`, surface.css) |
 | What a line opens | 4 under the line, on a 1px rail with its content 12 in | Cursor content gap 4; Claude Code's rail at 12 |
 | Backplates | one: the row plate under the pointer or focus | Menu |
 

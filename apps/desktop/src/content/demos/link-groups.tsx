@@ -1,7 +1,7 @@
 /** Link groups gallery specimens. docs/specs/link-groups.md. */
 import { Link, LinkGroups, LinkGroup } from "@area/react";
 
-const links = (names: string[], hash: string) => names.map(name => <Link key={name} variant="standalone" ink="muted" href={hash}>{name}</Link>);
+const links = (names: string[], hash: string) => names.map(name => <Link key={name} variant="standalone" href={hash}>{name}</Link>);
 const width = { inlineSize: "calc(var(--area-space-96) * 6)", maxInlineSize: "100%" };
 
 export const GalleryLinkGroups = () => (

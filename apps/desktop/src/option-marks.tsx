@@ -8,7 +8,9 @@
  * Canvas's settings (an Action swatch takes the Canvas's accent; a ground, its neutral). Shapes and numbers are marks
  * in the option's icon slot, drawn from the same tokens under the option's scope where one exists (Surface's frame,
  * Elevation's shadow, Contrast's edge) and from the setting's own number where the value is a size (Density, Radius,
- * Motion). They fill the slot (Menu's and Custom select's icon box), so they follow the app's scale.
+ * Motion). They sit in the slot (Menu's and Custom select's icon box), so they follow the app's scale, and keep to the
+ * icons' keylines inside it, as a glyph does (owner, 2026-10-19: the swatch read very large beside the other marks):
+ * squares 12, wide marks 14 × 10 at most.
  */
 import type { CSSProperties, ReactNode } from "react";
 import { ColorSwatch } from "@area/react";
@@ -26,9 +28,16 @@ function curve(value: string) {
 
 type Axis = keyof CanvasAxes;
 
-/** A swatch of one token, painted under `scope`. */
-const swatch = (color: string, scope: Record<string, string | undefined>) =>
-  <ColorSwatch size="sm" color={color} aria-hidden="true" className="studio-mark__swatch" {...scope} />;
+/**
+ * A swatch of one token, painted under `scope`. The swatch is sized by the slot (Color swatch takes the icon keyline
+ * there, color.css). Its ring outlines it on the list's ground, so the ring is the Inspector's, read on the wrapper
+ * before the scope: a Dark ground swatch scoped dark drew dark's white ring in a light Inspector.
+ */
+const swatch = (color: string, scope: Record<string, string | undefined>) => (
+  <span className="studio-mark studio-mark--host" aria-hidden="true">
+    <ColorSwatch size="sm" color={color} aria-hidden="true" className="studio-mark__swatch" {...scope} />
+  </span>
+);
 
 /**
  * The mark for one option of one setting, or nothing where the label already is the value (Type's sizes) or the
@@ -49,24 +58,28 @@ export function optionMark(axis: Axis, value: string, canvas: CanvasAxes): React
     case "layers-dark": {
       const theme = axis === "layers-light" ? "light" : "dark";
       return (
-        <span className="studio-mark studio-mark--layers" aria-hidden="true" data-area-theme={theme} {...neutral}
-          {...{ [`data-area-ground-${theme}`]: canvas[`ground-${theme}` as const], [`data-area-${axis}`]: value }}>
-          <span className="studio-mark__recessed" />
-          <span className="studio-mark__raised" />
+        <span className="studio-mark studio-mark--host" aria-hidden="true">
+          <span className="studio-mark studio-mark--layers" data-area-theme={theme} {...neutral}
+            {...{ [`data-area-ground-${theme}`]: canvas[`ground-${theme}` as const], [`data-area-${axis}`]: value }}>
+            <span className="studio-mark__recessed" />
+            <span className="studio-mark__raised" />
+          </span>
         </span>
       );
     }
     // A field's edge: Contrast More strengthens it (edge-control → stroke-control). System writes nothing.
     case "contrast": return <span className="studio-mark studio-mark--edge" aria-hidden="true" data-area-contrast={value === "system" ? undefined : value} />;
-    // The medium Button's height at type 14, to scale: 36 fills the box.
+    // The medium Button's height at type 14, to scale: the tallest, 36, is 10, the horizontal keyline's height, so
+    // the mark keeps to Radius's 13 × 10 (was 36 → 14, a 32 drew a 13 × 12.4 near-square past the square keyline).
     case "density": {
-      const height = (Number(value) / 36) * 14;
+      const height = (Number(value) / 36) * 10;
       return <svg className="studio-mark" viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y={8 - height / 2} width="13" height={height} rx="2.5" /></svg>;
     }
-    // The medium Button's corner on a button-shaped mark 10 tall (the 32 Button at 10/32), Pill a stadium.
+    // The medium Button's corner on a button-shaped mark 10 tall (the 32 Button at 10/32), Pill a stadium. 13 wide, as
+    // Density's, so its ink (14.1 × 11.1) fills the icons' horizontal keyline (14 × 11) and no more (was 14.5: 15.6).
     case "radius": {
       const r = value === "pill" ? 5 : (Number(value) * 10) / 32;
-      return <svg className="studio-mark" viewBox="0 0 16 16" aria-hidden="true"><rect x="0.75" y="3" width="14.5" height="10" rx={r} /></svg>;
+      return <svg className="studio-mark" viewBox="0 0 16 16" aria-hidden="true"><rect x="1.5" y="3" width="13" height="10" rx={r} /></svg>;
     }
     // A card at the option's stroke width (0 flat) and at its rest shadow, each with the other at its default.
     case "surface": return <span className="studio-mark studio-mark--frame" aria-hidden="true" data-area-surface={value} />;

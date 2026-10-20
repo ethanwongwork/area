@@ -84,7 +84,8 @@ Area:
 ```
 root      div.area-custom-select[data-open]        owns: variant/size locals, layout
   trigger button.__trigger[role=combobox]          owns: height, edge, radius, fill, lift, focus, sides (inset.css)
-    icon     span.__icon      square --_icon (single selection, when the chosen option has one)
+    icon     span.__icon      square --_icon (single selection, when the chosen option has one); a Color swatch
+                              there takes the icon keyline, the box less 4 (color-swatch.md, 2026-10-19)
     value    span.__value     truncation; [data-placeholder] ink; with `multiple`, the chosen labels joined by ", "
     chevron  span.__chevron   square --_icon, input-chevron ink
   input[type=hidden] × 1, or one per value with `multiple`   form value
@@ -357,3 +358,6 @@ The trigger's label is not selectable. See [interaction polish](../research/inte
   `onHighlightChange` for hover and arrow-key preview (desktop Inspector), measured against shadcn Create's live
   preview (`docs/research/settings-pickers-2026-10-18`). No visual change; status unchanged.
 - 2026-10-18 · owner: "go with your recommendations … finalize the material, surface, stroke, elevation axis theming" → Edge and Depth (axes/depth.ts; docs/research/elevation-stroke-2026-10-18): the outline variant rests on `--_field-lift: var(--area-shadow-field)` and lists it before the focus halo, so the two crossfade; the soft variant's lift is transparent (flat, as Figma's). Field shadow is 0 by default, a transparent role: nothing changes until it is raised (Inspector → Edge and depth → Field shadow; owner, the same day: no named looks, nine individual controls). Under a Material the lift is listed beside the well (material.css).
+- 2026-10-19 · owner: the setting pickers' swatch reads very large beside the icons → a Color swatch in the trigger's
+  or a row's icon slot is the box less 4 (12 at 16), as a glyph's keyline (docs/specs/color-swatch.md). No change to
+  Custom select's own geometry.

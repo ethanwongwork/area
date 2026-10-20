@@ -89,3 +89,5 @@ new tile shows the link blue.
 - **Why:** You asked about the underline and a coloured version. A link in a sentence is underlined to stand out from
   the words around it; a row of links needs no underline, as GitHub's topics and site footers. Any of Link's colours
   works here.
+- 2026-10-19 · design-system audit → demo copy uses the placeholder vocabulary (Label, Value, 1) instead of a date, a
+  read time and a star count.

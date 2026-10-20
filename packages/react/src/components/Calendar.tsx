@@ -1,6 +1,7 @@
 import { forwardRef, useEffect, useId, useMemo, useRef, useState } from "react";
 import type { HTMLAttributes, KeyboardEvent, MouseEvent, ReactNode } from "react";
 import { Button } from "./Button.tsx";
+import { CustomSelect } from "./CustomSelect.tsx";
 import { Glyph } from "./Glyph.tsx";
 import { calendarVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 
@@ -40,6 +41,12 @@ export type CalendarProps = Omit<HTMLAttributes<HTMLDivElement>, "defaultValue" 
   days?: VariantProps<typeof MANIFESTS.calendar>["days"];
   /** A month grid, or a one-week strip. */
   layout?: VariantProps<typeof MANIFESTS.calendar>["layout"];
+  /**
+   * The month title: `label` (default) between the previous and next arrows, or `menus`, the month and the year as two
+   * quiet menus that jump straight to any month (for dates far from today, such as a birthday; shadcn's dropdown
+   * caption). The arrows stay either way.
+   */
+  caption?: VariantProps<typeof MANIFESTS.calendar>["caption"];
   /** Weekday names: one letter, two letters or the abbreviation. */
   weekdayStyle?: "narrow" | "short" | "abbreviated";
   /** Dots under days that carry something, such as events, by date. */
@@ -56,8 +63,8 @@ export type CalendarProps = Omit<HTMLAttributes<HTMLDivElement>, "defaultValue" 
   isDateUnavailable?: (date: string) => boolean;
   /** 0 is Sunday. */
   firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
-  /** Names for the navigation buttons, to localise them (audit H-27). */
-  labels?: { previousMonth?: string; nextMonth?: string; previousWeek?: string; nextWeek?: string };
+  /** Names for the navigation buttons and the caption menus, to localise them (audit H-27). */
+  labels?: { previousMonth?: string; nextMonth?: string; previousWeek?: string; nextWeek?: string; month?: string; year?: string };
   /** The month titles' heading level (audit F-22). */
   headingLevel?: 2 | 3 | 4 | 5 | 6;
   locale?: string;
@@ -73,7 +80,7 @@ export type CalendarProps = Omit<HTMLAttributes<HTMLDivElement>, "defaultValue" 
 
 /** Month grid for choosing a date, a range or several dates, with the WAI-ARIA grid keyboard. */
 export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calendar(props, ref) {
-  const { selectionMode = "single", value, defaultValue, onValueChange, variant, days, layout = "month", weekdayStyle = "short", markers, month, defaultMonth, onMonthChange,
+  const { selectionMode = "single", value, defaultValue, onValueChange, variant, days, layout = "month", caption = "label", weekdayStyle = "short", markers, month, defaultMonth, onMonthChange,
     visibleMonths = 1, min, max, isDateUnavailable, firstDayOfWeek = 0, headingLevel = 2, labels, locale = "en-US", showOutsideDays = true,
     fixedWeeks = false, today: todayProp, name, disabled, className, "aria-label": ariaLabel = "Calendar", ...rest } = props as CalendarProps & {
       selectionMode?: "single" | "range" | "multiple"; value?: unknown; defaultValue?: unknown; onValueChange?: (value: unknown, event: MouseEvent<HTMLButtonElement>) => void };
@@ -129,6 +136,12 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calen
     });
   }, [locale, firstDayOfWeek, weekdayStyle]);
   const formatShortMonth = useMemo(() => new Intl.DateTimeFormat(locale, { month: "short" }), [locale]);
+  /* The menus' months, in the locale's long form, and their years: from min to max when set, else a century back and a
+     decade ahead of today, always including the visible year (shadcn's default dropdown span). */
+  const monthNames = useMemo(() => {
+    const f = new Intl.DateTimeFormat(locale, { month: "long" });
+    return Array.from({ length: 12 }, (_, m) => f.format(new Date(2026, m, 1, 12)));
+  }, [locale]);
 
   useEffect(() => {
     if (!moveFocus.current) return;
@@ -246,6 +259,13 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calen
     </div>;
   };
 
+  const yearRange = (shown: Date) => {
+    // Today as the calendar reads it (after mount, or `today`), so server and client markup match; the shown year until then.
+    const now = (today ? fromIso(today) : null)?.getFullYear() ?? shown.getFullYear();
+    const from = Math.min(minDate?.getFullYear() ?? now - 100, shown.getFullYear());
+    const to = Math.max(maxDate?.getFullYear() ?? now + 10, shown.getFullYear());
+    return Array.from({ length: to - from + 1 }, (_, i) => from + i);
+  };
   const Heading = `h${headingLevel}` as "h2";
   const renderMonth = (first: Date, index: number) => {
     const offset = (first.getDay() - firstDayOfWeek + 7) % 7;
@@ -253,17 +273,34 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calen
     const daysInMonth = new Date(first.getFullYear(), first.getMonth() + 1, 0).getDate();
     const weeks = fixedWeeks ? 6 : Math.ceil((offset + daysInMonth) / 7);
     const labelId = `${id}-month-${index}`;
+    const menus = caption === "menus" && index === 0;
     return <div className="area-calendar__month" key={index}>
+      {/* Previous at the start, the title centred, next at the end (shadcn, React Aria, Atlassian; owner, round 62: "should
+          the month and year be centered?"). Each side is a slot the arrow's width, so the title centres on the grid. */}
       <div className="area-calendar__header">
-        {/* One announcement per change: only the first month title is live, so two months don't
-            read out twice; the level is configurable (audit F-22). */}
-        <Heading className="area-calendar__title" id={labelId} aria-live={index === 0 ? "polite" : undefined}>{formatMonth.format(first)}</Heading>
-        <div className="area-calendar__nav">
+        <span className="area-calendar__nav">
           {index === 0 && <Button variant="ghost" size="sm" iconOnly icon={<Glyph name="chevron-down" rotate={90} />} aria-label={labels?.previousMonth ?? "Previous month"}
             disabled={disabled || (minDate !== null && monthStart(minDate) >= first)} onClick={() => showMonth(addMonths(visible, -1))} />}
+        </span>
+        {/* One announcement per change: only the first month title is live, so two months don't read out twice; the level
+            is configurable (audit F-22). With menus the heading stays for the grid's name and the announcement, hidden. */}
+        <Heading className={menus ? "area-sr-only" : "area-calendar__title"} id={labelId} aria-live={index === 0 ? "polite" : undefined}>{formatMonth.format(first)}</Heading>
+        {menus ? <div className="area-calendar__title area-calendar__menus">
+          <CustomSelect variant="ghost" size="sm" aria-label={labels?.month ?? "Month"} disabled={disabled}
+            items={monthNames.map((label, m) => ({ value: String(m), label,
+              disabled: (minDate !== null && new Date(first.getFullYear(), m + 1, 0, 12) < minDate) || (maxDate !== null && new Date(first.getFullYear(), m, 1, 12) > maxDate) }))}
+            value={String(first.getMonth())} onValueChange={m => showMonth(new Date(first.getFullYear(), Number(m), 1, 12))} />
+          <CustomSelect variant="ghost" size="sm" aria-label={labels?.year ?? "Year"} disabled={disabled}
+            items={yearRange(first).map(y => ({ value: String(y), label: String(y) }))}
+            value={String(first.getFullYear())} onValueChange={y => {
+              const target = new Date(Number(y), first.getMonth(), 1, 12);
+              showMonth(minDate && target < monthStart(minDate) ? monthStart(minDate) : maxDate && target > maxDate ? monthStart(maxDate) : target);
+            }} />
+        </div> : null}
+        <span className="area-calendar__nav">
           {index === visibleMonths - 1 && <Button variant="ghost" size="sm" iconOnly icon={<Glyph name="chevron-down" rotate={270} />} aria-label={labels?.nextMonth ?? "Next month"}
             disabled={disabled || (maxDate !== null && monthStart(maxDate) <= first)} onClick={() => showMonth(addMonths(visible, 1))} />}
-        </div>
+        </span>
       </div>
       <table className="area-calendar__grid" role="grid" aria-labelledby={labelId} aria-multiselectable={selectionMode !== "single" || undefined}>
         <thead><tr>{weekdays.map(w => <th key={w.long} scope="col" abbr={w.long} className="area-calendar__weekday">{w.short}</th>)}</tr></thead>
@@ -277,7 +314,7 @@ export const Calendar = forwardRef<HTMLDivElement, CalendarProps>(function Calen
   };
 
   return <div {...rest} ref={node => { grid.current = node; if (typeof ref === "function") ref(node); else if (ref) ref.current = node; }}
-    role="group" aria-label={ariaLabel} aria-disabled={disabled || undefined} className={calendarVariants({ variant, days, layout }, className)}>
+    role="group" aria-label={ariaLabel} aria-disabled={disabled || undefined} className={calendarVariants({ variant, days, layout, caption }, className)}>
     {week ? renderWeek() : <div className="area-calendar__months">{Array.from({ length: visibleMonths }, (_, i) => renderMonth(addMonths(visible, i), i))}</div>}
     {name && selectionMode === "single" && <input type="hidden" name={name} value={single ?? ""} />}
     {name && selectionMode === "range" && <><input type="hidden" name={`${name}-start`} value={range?.start ?? ""} /><input type="hidden" name={`${name}-end`} value={range?.end ?? ""} /></>}

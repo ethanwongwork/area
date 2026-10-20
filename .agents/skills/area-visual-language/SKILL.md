@@ -73,6 +73,11 @@ for both sides, and repeat in light and dark.
   colour directly; floating surfaces name their elevation role (tooltip, float, modal) and
   share the floating frame. Check the dark theme too: a translucent tint that
   looks right in light can outshine selection in dark.
+- **Plates on the ground under them:** hover every control that sits on a ground the
+  component paints (a card, a head, a sidebar strip) and measure the painted plate against
+  that ground, not against white: it should be the same step as on the page (about 1.1:1
+  in light). A plate that nearly vanishes means the ground is not declared in `layers.css`
+  (DESIGN_SYSTEM.md, Layers); fix the declaration, never the plate colour.
 - **Across families, not just within one:** put the component beside every family that
   paints the same role (a hover row in Menu, Nav, Tree view, Table and Select; a floating
   surface in Menu, Popover, Dialog and Toast). Most drift is between families.

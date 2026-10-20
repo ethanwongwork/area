@@ -1,79 +1,98 @@
-/** Asset card gallery specimens: one variant per tile. docs/specs/asset-card.md. Example people are David Tee. */
-import { AssetCard, AssetGrid, AssetGridItem, Button } from "@area/react";
-import { CopyIcon } from "@area/icons";
+/** Asset card gallery specimens: one kind per tile. docs/specs/asset-card.md. Example people are David Tee. The card is
+ * square: a head with the name and a More button, then the frame with the asset, 4 in (round 55's designs). */
+import { AssetCard, AssetGrid, AssetGridItem, Button, Card, CardContent, CardDescription, CardTitle, CopyButton } from "@area/react";
+import { MoreHorizontalIcon, SearchIcon } from "@area/icons";
 
 const card = { inlineSize: 224 } as const;
-/* A type style as an asset: its sample, as the Typography tab shows a role. */
-const typeSample = <span style={{ fontSize: "var(--area-text-2xl-size)", lineHeight: "var(--area-text-2xl-leading)", fontWeight: "var(--area-weight-strong)" }}>Aa</span>;
+/* The head's end holds controls only (round 58): More for what is managed (an image, a group), Copy for what is used (a
+   component's code, a colour's value, a type role, an icon's name). */
+const more = (name: string) => <Button variant="ghost" tone="neutral" size="sm" iconOnly icon={<MoreHorizontalIcon />} aria-label={`More for ${name}`} />;
+const copy = (value: string, name: string) => <CopyButton value={value} label={`Copy ${name}`} />;
+/* A type role as an asset: its sample in the role's size and weight over its face, weight, size and leading, as Figma's
+   text styles show one ("Ag" over the face). */
+const typeSample = (
+  <span style={{ display: "grid", justifyItems: "center", gap: "var(--area-space-4)" }}>
+    <span style={{ fontSize: "var(--area-title-lg-size)", lineHeight: "var(--area-title-lg-leading)", fontWeight: "var(--area-weight-strong)" }}>Aa</span>
+    <span style={{ color: "var(--area-fg-muted)", fontSize: "var(--area-text-xs-size)", lineHeight: "var(--area-text-xs-leading)" }}>Geist · Medium · 24 / 32</span>
+  </span>
+);
+/* A setting's option as an asset: what it sets, drawn in the frame under the option's own scope, so the frame is that
+   option's ground (round 57: "the background can be changed for dark mode, it doesnt always have to be white"). */
+const darkPreview = <Card size="sm" style={{ inlineSize: 120 }}><CardContent><CardTitle>Title</CardTitle><CardDescription>Description</CardDescription></CardContent></Card>;
 
-/* An image: contained in the frame, never cropped, with the container corner. */
-export const GalleryAssetCard = () => <AssetCard style={card} media="images/david-tee.jpg" name="David Tee" meta="JPG · 1200 × 1200" />;
-/* A component: any element, centred. */
-export const GalleryAssetCardComponent = () => <AssetCard style={card} media={<Button>Button</Button>} name="Button" meta="Component" />;
-/* A type style. */
-export const GalleryAssetCardType = () => <AssetCard style={card} media={typeSample} name="Title" meta="Type · 24 / 32" />;
-/* A group: its first four assets as a 2 × 2 mosaic, each cropped to its cell with the small corner. */
+/* Image: the image covers the frame, cropped, inside the frame's edge (the image design). */
+export const GalleryAssetCard = () => <AssetCard style={card} media="images/david-tee.jpg" name="David Tee" actions={more("David Tee")} />;
+/* Group: its first four assets as a 2 × 2 mosaic, 4 apart, every cell at the frame's corner (the group design). A
+   component or design in a cell is a scaled-down image of it, not the live thing at full size. */
 export const GalleryAssetCardGroup = () => (
-  <AssetCard style={card} name="Brand" meta="4 assets"
-    group={["images/david-tee.jpg", "images/chip-filter.png", <Button size="sm">Button</Button>, typeSample]} />
+  <AssetCard style={card} name="Group one" actions={more("Group one")}
+    group={["images/david-tee.jpg", "images/chip-filter.png", <Button>Button</Button>, darkPreview]} />
 );
-/* A group of fewer than four leaves its other cells empty. */
-export const GalleryAssetCardGroupFew = () => <AssetCard style={card} name="Portraits" meta="2 assets" group={["images/david-tee.jpg", "images/chip-pixels.png"]} />;
-/* Controls under the frame, at the end of the name's line. */
-export const GalleryAssetCardActions = () => (
-  <AssetCard style={card} media={<Button>Button</Button>} name="Button" meta="Component"
-    actions={<Button variant="ghost" tone="neutral" size="sm" iconOnly icon={<CopyIcon />} aria-label="Copy Button code" />} />
-);
-/* Selected: the frame's edge in the selection colour. */
-export const GalleryAssetCardSelected = () => <AssetCard style={card} selected media="images/david-tee.jpg" name="David Tee" meta="JPG · 1200 × 1200" />;
-/* Interactive: a card that is its own control outside a grid (the app's gallery tiles): hover lifts the frame, Tab rings it. */
+/* A group of fewer than four leaves its other cells as the card's ground. */
+export const GalleryAssetCardGroupFew = () => <AssetCard style={card} name="Group two" actions={more("Group two")} group={["images/david-tee.jpg", "images/chip-pixels.png"]} />;
+/* Component: the component as it ships, centred on the frame's surface (the component design). */
+export const GalleryAssetCardComponent = () => <AssetCard style={card} media={<Button>Button</Button>} name="Button" actions={copy("<Button>Button</Button>", "Button code")} />;
+/* Colour: the colour paints the frame, outlined by the swatch ring; its token in the head, its value behind Copy. */
+export const GalleryAssetCardColor = () => <AssetCard style={card} color="#2563EB" name="blue/500" actions={copy("#2563EB", "#2563EB")} />;
+/* Type: a role's sample over its face, weight, size and leading. */
+export const GalleryAssetCardType = () => <AssetCard style={card} media={typeSample} name="Title" actions={copy("title-lg", "Title role")} />;
+/* Icon: the glyph at its native 24. */
+export const GalleryAssetCardIcon = () => <AssetCard style={card} media={<SearchIcon width={24} height={24} />} name="Search" actions={copy("SearchIcon", "SearchIcon")} />;
+/* A setting (the Language tab): the option drawn under its own scope; its name as the Inspector writes it. */
+export const GalleryAssetCardSetting = () => <AssetCard style={card} media={darkPreview} name="Dark (Default)" frameProps={{ "data-area-theme": "dark" }} />;
+/* Selected: the card's edge in the selection colour. */
+export const GalleryAssetCardSelected = () => <AssetCard style={card} selected media="images/david-tee.jpg" name="David Tee" actions={more("David Tee")} />;
+/* Interactive: a card that is its own control outside a grid (the app's gallery tiles): hover lifts it, Tab rings it. */
 export const GalleryAssetCardInteractive = () => (
-  <AssetCard style={card} interactive role="button" tabIndex={0} aria-pressed={false} media={typeSample} name="Title" meta="Type · 24 / 32" />
+  <AssetCard style={card} interactive role="button" tabIndex={0} aria-pressed={false} media={typeSample} name="Title" />
 );
-/* The grid: a ListBox grid of cards; arrows move, Space selects, Enter or a double click opens. */
+/* The grid: a ListBox grid of cards of every kind; arrows move, Space selects, Enter or a double click opens. */
 export const GalleryAssetGrid = () => (
-  <AssetGrid aria-label="Assets" defaultValue="portrait" style={{ inlineSize: 720, "--area-asset-card-size": "200px" } as never}>
-    <AssetGridItem value="brand" name="Brand" meta="4 assets" group={["images/david-tee.jpg", "images/chip-filter.png", <Button size="sm">Button</Button>, typeSample]} />
-    <AssetGridItem value="portrait" name="David Tee" meta="JPG · 1200 × 1200" media="images/david-tee.jpg" />
-    <AssetGridItem value="button" name="Button" meta="Component" media={<Button>Button</Button>} />
+  <AssetGrid aria-label="Assets" defaultValue="portrait" style={{ inlineSize: 720, maxInlineSize: "100%", "--area-asset-card-size": "160px" } as never}>
+    <AssetGridItem value="portrait" name="David Tee" media="images/david-tee.jpg" />
+    <AssetGridItem value="group" name="Group one" group={["images/david-tee.jpg", "images/chip-filter.png", <Button>Button</Button>, darkPreview]} />
+    <AssetGridItem value="button" name="Button" media={<Button>Button</Button>} />
+    <AssetGridItem value="blue" name="blue/500" color="#2563EB" />
+    <AssetGridItem value="title" name="Title" media={typeSample} />
+    <AssetGridItem value="search" name="Search" media={<SearchIcon width={24} height={24} />} />
   </AssetGrid>
 );
 /* Containerless: a component on the page's own ground, the frame's box kept and its edge clear until hover or selection. */
 export const GalleryAssetCardContainerless = () => (
-  <AssetCard style={card} container="containerless" interactive role="button" tabIndex={0} aria-pressed={false} media={<Button>Button</Button>} name="Button" meta="Component" />
+  <AssetCard style={card} container="containerless" interactive role="button" tabIndex={0} aria-pressed={false} media={<Button>Button</Button>} name="Button" />
 );
 /* A containerless image: the image is the surface, its name and detail under it. */
-export const GalleryAssetCardContainerlessImage = () => <AssetCard style={card} container="containerless" caption="below" media="images/david-tee.jpg" name="David Tee" meta="JPG · 1200 × 1200" />;
+export const GalleryAssetCardContainerlessImage = () => <AssetCard style={card} container="containerless" media="images/david-tee.jpg" name="David Tee" />;
 /* A containerless group: its four cells close together, so they read as one thing. */
 export const GalleryAssetCardGroupContainerless = () => (
-  <AssetCard style={card} container="containerless" caption="below" name="Brand" meta="4 assets"
+  <AssetCard style={card} container="containerless" name="Group one"
     group={["images/david-tee.jpg", "images/chip-filter.png", <Button size="sm">Button</Button>, typeSample]} />
 );
 /* Containerless and selected: a component's frame shows the selected edge. */
-export const GalleryAssetCardContainerlessSelected = () => <AssetCard style={card} container="containerless" selected media={<Button>Button</Button>} name="Button" meta="Component" />;
+export const GalleryAssetCardContainerlessSelected = () => <AssetCard style={card} container="containerless" selected media={<Button>Button</Button>} name="Button" />;
 /* A selected containerless image: a ring in the selection colour round the image. */
 export const GalleryAssetCardContainerlessImageSelected = () => (
-  <AssetCard style={card} container="containerless" caption="below" selected media="images/david-tee.jpg" name="David Tee" meta="JPG · 1200 × 1200" />
+  <AssetCard style={card} container="containerless" selected media="images/david-tee.jpg" name="David Tee" />
 );
 /* Hug: the frame as tall as its asset, here a component, instead of square. */
-export const GalleryAssetCardHug = () => <AssetCard style={card} aspect="hug" media={<Button>Button</Button>} name="Button" meta="Component" />;
+export const GalleryAssetCardHug = () => <AssetCard style={card} aspect="hug" media={<Button>Button</Button>} name="Button" />;
 /* A waterfall: each card hugs its asset and drops into the shortest column, in reading order. */
 export const GalleryAssetGridWaterfall = () => (
   <AssetGrid aria-label="Assets" layout="waterfall" defaultValue="portrait" style={{ inlineSize: 720, "--area-asset-card-size": "200px" } as never}>
-    <AssetGridItem value="portrait" name="David Tee" meta="JPG · 1200 × 1200" media="images/david-tee.jpg" mediaRatio={1} />
-    <AssetGridItem value="button" name="Button" meta="Component" media={<Button>Button</Button>} />
-    <AssetGridItem value="title" name="Title" meta="Type · 24 / 32" media={typeSample} />
-    <AssetGridItem value="filter" name="Filter" meta="PNG · 1254 × 1254" media="images/chip-filter.png" mediaRatio={1} />
-    <AssetGridItem value="brand" name="Brand" meta="4 assets" group={["images/david-tee.jpg", "images/chip-filter.png", "images/chip-pixels.png", typeSample]} />
+    <AssetGridItem value="portrait" name="David Tee" media="images/david-tee.jpg" mediaRatio={1} />
+    <AssetGridItem value="button" name="Button" media={<Button>Button</Button>} />
+    <AssetGridItem value="title" name="Title" media={typeSample} />
+    <AssetGridItem value="filter" name="Filter" media="images/chip-filter.png" mediaRatio={1} />
+    <AssetGridItem value="group" name="Group one" group={["images/david-tee.jpg", "images/chip-filter.png", "images/chip-pixels.png", typeSample]} />
   </AssetGrid>
 );
 /* A containerless waterfall: Brand's assets as Pinterest lays a board out. */
 export const GalleryAssetGridWaterfallContainerless = () => (
   <AssetGrid aria-label="Assets" layout="waterfall" container="containerless" defaultValue="portrait" style={{ inlineSize: 720, "--area-asset-card-size": "200px" } as never}>
-    <AssetGridItem caption="below" value="portrait" name="David Tee" meta="JPG · 1200 × 1200" media="images/david-tee.jpg" mediaRatio={1} />
-    <AssetGridItem caption="below" value="title" name="Title" meta="Type · 24 / 32" media={typeSample} />
-    <AssetGridItem caption="below" value="pixels" name="Pixels" meta="PNG · 1080 × 1080" media="images/chip-pixels.png" mediaRatio={1} />
-    <AssetGridItem caption="below" value="filter" name="Filter" meta="PNG · 1254 × 1254" media="images/chip-filter.png" mediaRatio={1} />
-    <AssetGridItem caption="below" value="brand" name="Brand" meta="4 assets" group={["images/david-tee.jpg", "images/chip-filter.png", "images/chip-pixels.png", typeSample]} />
+    <AssetGridItem value="portrait" name="David Tee" media="images/david-tee.jpg" mediaRatio={1} />
+    <AssetGridItem value="title" name="Title" media={typeSample} />
+    <AssetGridItem value="pixels" name="Pixels" media="images/chip-pixels.png" mediaRatio={1} />
+    <AssetGridItem value="filter" name="Filter" media="images/chip-filter.png" mediaRatio={1} />
+    <AssetGridItem value="group" name="Group one" group={["images/david-tee.jpg", "images/chip-filter.png", "images/chip-pixels.png", typeSample]} />
   </AssetGrid>
 );

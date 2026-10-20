@@ -10,8 +10,8 @@
  * - The page fills 72 × 88% of the square (Finder's 67 × 89%); corners 40 of 360 (FilePage.tsx), Folder's corner 1.4× it
  *   (owner, 2026-10-18: "clean up the document illustration so it matches the folder illustration"); a 120 fold,
  *   rounded at its crease.
- * - Paint as Folder's: lit from the top (white to a cool light grey at the foot), no edge lines, the fold a soft step
- *   darker, Folder's shadow. outline: Folder's outline, a flat page in the control fill with a whole-pixel edge.
+ * - One look, Folder's: a flat page in the control fill with a whole-pixel edge (owner, round 57: the lit solid page
+ *   is archived, docs/archive/solid-file-figures-2026-10-19.md).
  * - The glyph is an Area icon at 32% of the square, its lines at the outline's edge weight (one weight for every
  *   stroke in the figure); the label in caps at 13% of the square, both in the same quiet ink.
  * ------------------------------------------------------------------------- */
@@ -21,12 +21,7 @@
     /* Near flat (owner, 2026-10-18: "a bit strong/too dark on the dark end"): Finder's page moves 0.7 L top to foot,
        Fluent's none; Area's about 1 L. The flap 4–5 L under the page at its crease (Finder L92 on a L96.5 page), lighter
        toward its edge ("make the fold gradient darkest color much lighter"). */
-    --_page-top: #ffffff; /* spec: lit from the top, as Folder */
-    --_page: #f4f5f7; /* spec: about 3.5 L under the top (owner: "the actual page part can have a slightly more obvious gradient") */
-    --_fold: #f6f7f9; /* spec: the flap's back at its edge */
-    --_fold-crease: #f0f1f4; /* spec: about 2 L darker toward the crease (owner: "even more subtle"); 5 L under the page's top */
     --_edge: max(var(--area-stroke-width), round(down, calc(var(--_size) / 96), 1px)); /* spec: Folder's outline edge */
-    --_ink: #b4b4b8; /* spec: Finder glyph #b6b6b6 */
     position: relative;
     display: inline-block;
     flex: none;
@@ -55,7 +50,6 @@
     inline-size: 100%;
     block-size: 100%;
     overflow: visible;
-    filter: drop-shadow(0 calc(var(--_size) * 0.02) calc(var(--_size) * 0.045) rgb(0 0 0 / 0.12)); /* spec: Folder's */
   }
   .area-file-page__sheet {}
   .area-file-page__fold {}
@@ -63,14 +57,12 @@
   .area-file-page__crease {}
   .area-file-page__diagonal {}
 
-  /* Outline: Folder's outline, the page flat in the subtle fill with a thin light edge. The flap is filled the same and
-     only its two inner edges are drawn, so the diagonal is one line. */
-  .area-file-page--solid {}
-  /* Folder's quiet ink: muted mixed 45% toward the page's fill (about 22 L under it), so it follows Contrast, Layers and dark. */
-  .area-file-page--outline { --_fill: var(--area-bg-component); --_ink: color-mix(in oklab, var(--area-fg-muted), var(--_fill) 45%); } /* spec: Folder's fill and quiet ink */
-  .area-file-page--outline .area-file-page__figure > svg { filter: none; }
-  .area-file-page--outline :is(.area-file-page__sheet, .area-file-page__fold) { fill: var(--_fill); }
-  .area-file-page--outline :is(.area-file-page__edge, .area-file-page__crease, .area-file-page__diagonal) {
+  /* Folder's look: the page flat in the control fill with a thin light edge. The flap is filled the same and only its two
+     inner edges are drawn, so the diagonal is one line. Folder's quiet ink: muted mixed 45% toward the page's fill (about
+     22 L under it), so it follows Contrast, Layers and dark. */
+  .area-file-page { --_fill: var(--area-bg-component); --_ink: color-mix(in oklab, var(--area-fg-muted), var(--_fill) 45%); } /* spec: Folder's fill and quiet ink */
+  :is(.area-file-page__sheet, .area-file-page__fold) { fill: var(--_fill); }
+  :is(.area-file-page__edge, .area-file-page__crease, .area-file-page__diagonal) {
     fill: none;
     stroke: var(--area-border);
     stroke-width: var(--_edge);
@@ -89,8 +81,10 @@
     align-items: center;
     justify-content: center;
     gap: round(nearest, calc(var(--_size) * 0.06), 1px); /* spec: pick */
-    padding-block-start: round(nearest, calc(var(--_size) * 0.06), 1px); /* spec: pick, clears the fold */
   }
+  /* The glyph sits in the middle of the page below the fold (round 56: "center the icon more in the bottom of the
+     document"): the content box starts the fold's height down (114 of the drawing's 440), so it centres in what is left. */
+  .area-file-page__content { padding-block-start: calc(var(--_ph) * 114 / 440); /* spec: the fold ends at 114 of 440, FilePage.tsx FOLD */ }
   /* The glyph draws at the outline's edge weight, one weight for every stroke in the figure (owner, 2026-10-18: "i just
      want all the strokes to be the same weight"): its lines take --_edge as a non-scaling stroke, so they are that many
      pixels at any glyph size. */

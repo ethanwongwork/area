@@ -17,7 +17,7 @@ ticks (the agent sets the states).
 
 | Axis | Value | Justification | Where |
 |---|---|---|---|
-| item status | done, current, pending | — | Cursor `todo-list.js` (in progress, pending, done struck); Codex ✔ / □; Claude Code todos |
+| item status | done, current, pending, cancelled | cancelled: an item the agent dropped stays, struck, with a cross (round 49) | Cursor `todo-list.js` (in progress, pending, done struck; cancelled todos); Codex ✔ / □; Claude Code todos |
 | open | open, folded | the tray folds | Cursor tray, Claude Code todos |
 
 ## Sources
@@ -31,29 +31,34 @@ ticks (the agent sets the states).
 ## Anatomy
 
 ```
-area-plan                 recessed fill, Code block's container corner
-  area-plan__head         button (aria-expanded): title, count, chevron; ui-row tall, padding 0 12
-  area-plan__items        list, padding 0 12 8, 4 apart
-    area-plan__item       16 mark slot + text, gap 8; data-status
-      area-plan__mark     done: check glyph; current: Spinner; pending: a drawn ring
+area-plan                 the agent card: card edge at stroke-width, container corner, bg-surface; text-sm
+  area-plan__head         button (aria-expanded): title, count, chevron; ui-row tall, padding 0 12 (the card column);
+                          a rule under it while open; the chevron's hover plate as far from the end as from the top
+  area-plan__items        ol, padding 4 (Menu's list), ui-row-gap between rows
+    area-plan__item       a Menu row that may wrap: first line centred in a row, 16 mark slot + text, gap-row;
+                          area-plan__item--done | --current | --pending | --cancelled
+      area-plan__mark     done: check glyph; current: Spinner; pending: a drawn ring; cancelled: a cross
+      area-plan__text     the words, then the status for assistive tech
 ```
 
 ## Decisions
 
 | Slot · property | Area value | Basis | Reason |
 |---|---|---|---|
-| fill, corner | bg-subtle, radius-container | cursor (quaternary fill, a card corner) | Area's recessed fill; the card corner role |
-| head | ui-row tall (28 at Compact), padding 0 12 | cursor header 28, padding 0 12 | — |
-| items apart | 4 | claude-code (narrow panel) | Cursor's 10 is for a 14/22 line in a wide pane |
-| mark slot / gap | 16 square, gap 8 | claude-code item gap 8; Area's icon slot | — |
+| frame, fill, corner | border-card at stroke-width, bg-surface, radius-container | Code block (the agent card) | round 49: one card for Edit summary, Plan and Queue (was a recessed bg-subtle tray with no edge) |
+| head | ui-row tall (28 at Compact), padding 0 12; open, a row plus its rule at stroke-width | cursor header 28, padding 0 12 | round 52: the rule never eats into the row |
+| list, items | list padding 4; items are Menu rows (padding-block (ui-row − leading) / 2, row inset), ui-row-gap apart | Menu (peer) | round 49 (were 4 apart on a 22 line); audit 2026-10-19 added Menu's ui-row-gap |
+| mark slot / gap | 16 square, gap-row (12, compact 8) | Menu's row gap; Area's icon slot | the text lands on the list column at every density (audit 2026-10-19; was 8 everywhere, Claude Code's item gap) |
 | current | default ink, Spinner sm | cursor (in progress primary) | — |
 | pending | muted ink, a 1px ring on the control hover edge | cursor quaternary; codex □; peer: Checkbox's rest edge | the control edge vanished on the Plan's subtle fill (L 0.913 on 0.976, browser check 2026-10-19) |
 | done | muted ink, struck through, check glyph | cursor done struck; codex ✔ | — |
+| cancelled | muted ink, struck through, a cross | cursor cancelled todos | round 49 |
+| chevron | 12 glyph, closed points along the reading direction (−90°, +90° in RTL), down when open, turns on `fast` | Accordion, Tree view | audit 2026-10-19 added the RTL mirror |
 
 ## Behavior and accessibility
 
 The head is a button with `aria-expanded`; the list is an `ol` named by the title; each item states its status in
-visually hidden text ("Done", "In progress", "Not started"), not by mark alone. The Spinner follows Motion 0 and reduced
+visually hidden text ("Done", "In progress", "Not started", "Cancelled"), not by mark alone. The Spinner follows Motion 0 and reduced
 motion.
 
 ## Visual pass
@@ -71,6 +76,8 @@ React tests (`packages/react/tests/agent-chat.test.mjs`, 9), the full React suit
 
 - 2026-10-19 · owner, round 49 (rethink): "make sure the text styles and colors, and gaps, padding, margins, overall spacing/layout are cleaned up, intentional, accurate, and consistent. also are there any missing variants?" → a cleanup pass: every text style, color, gap and inset traced to a reference value or an Area peer, written below.
 - 2026-10-19 · owner, round 51 (needs changes): "looks like the inset padding isnt equal, looks like theres slightly more room on the right side than on top." → round 52 (below).
+- 2026-10-19 · audit: current-state sections rewritten to the code (the agent card, padding 4, Menu rows, modifier
+  classes, cancelled); items take Menu's gap-row and ui-row-gap; the closed chevron mirrors in RTL.
 
 ## Review note, 2026-10-19
 
@@ -87,8 +94,8 @@ The agent chat's shared rules (all five families):
 | Cards (Edit summary, Plan) | one size, text-sm; sm buttons | Cursor: cards 13 under a 14 reply |
 | Card frame | the card edge at stroke-width, container corner, surface fill | Code block |
 | Card column | text 12 in: Menu's list padding 4 + the row inset 8 | Menu; Cursor card header 0 12 |
-| Card head | one row tall, a rule under it when rows follow; a trailing button (row − control) / 2 from the end | Code block's header |
-| Card rows | Menu rows: row height, row inset, row corner, row plate, gap 8 | Menu |
+| Card head | one row tall, a rule under it when rows follow; a trailing button (row − control) / 2 from the end, never under 4 | Code block's header |
+| Card rows | Menu rows: row height, row inset, row corner, row plate (pressed: bg-component-pressed), Menu's row gap `gap-row` (12, compact 8) so a label after the icon slot lands on the list column, and `ui-row-gap` (2, compact 0) between rows | Menu (`--_menu-gap`, surface.css) |
 | What a line opens | 4 under the line, on a 1px rail with its content 12 in | Cursor content gap 4; Claude Code's rail at 12 |
 | Backplates | one: the row plate under the pointer or focus | Menu |
 
@@ -135,3 +142,22 @@ chevron moves out with it (its 12 column was the cause). Queue's head shares the
 - **What changed:** the arrow and its hover square sit as far from the right edge as from the top.
 - **Why:** you saw more room on the right; the square now uses one inset on both sides, and its corner follows the
   card's.
+
+## Review note, 2026-10-19 (round 55, design-system audit)
+
+- **What changed:** Items sit on Menu's list column (12 at Default, unchanged at Compact) with Menu's 2 between rows, and the closed chevron mirrors in right-to-left text.
+- **Why:** The rows used 8 where Menu uses its row gap, and the chevron didn't flip as Accordion's and Tree view's do.
+
+## Review note, 2026-10-19 (round 56)
+
+- **What changed:** The open head's seam takes `border-decorative`, as Edit summary's and Code block's (it was `border-divider`, darker than the frame).
+- **Why:** you asked on Edit summary whether the frame and the divider were meant to differ. They weren't: DESIGN_SYSTEM.md says a rule inside a container is never darker than the container's edge, and seams inside a card take the seam colour. The same seam was fixed wherever it appeared.
+
+## Review note, 2026-10-20 (round 62)
+
+- **What changed:** The plate behind its head's chevron now takes the plate made for its raised card. In light at the default settings nothing moves (there the raised plate equals the page's);
+  in dark and on a grey page its hover, selected and pressed plates are now the same step from this surface as every
+  Card's and Menu's (dark: #272727 on #121212, was #212121).
+- **Why:** you asked that hover colours come from rules, not one-off fixes. The rule is now written (DESIGN_SYSTEM.md,
+  Layers: a component that paints a ground declares it in layers.css) and enforced by a test; this family painted a
+  raised ground without declaring it.

@@ -32,8 +32,9 @@
      in the middle of the box, as Notion centres its markers, so swapping one for the other leaves the text in place.
      Wrapped lines hang under the text. */
   .area-reference-list__list {
+    --_marker-min: 0.8em; /* spec: the width of "1." */
     display: grid;
-    grid-template-columns: minmax(0.8em, max-content) minmax(0, 1fr);
+    grid-template-columns: minmax(var(--_marker-min), max-content) minmax(0, 1fr);
     column-gap: var(--area-space-6);
     margin: 0;
     padding: 0;

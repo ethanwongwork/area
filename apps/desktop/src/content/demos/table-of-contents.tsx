@@ -13,11 +13,11 @@ const sections = [
 ];
 const side: CSSProperties = { inlineSize: "calc(var(--area-space-96) * 2.5)" };
 
-export const GalleryTableOfContents = () => <TableOfContents style={side} items={sections} current="gallery-toc-career" />;
+export const GalleryTableOfContents = () => <TableOfContents style={side} items={sections} value="gallery-toc-career" />;
 /* Sections only, without their subsections. */
-export const GalleryTableOfContentsLevels = () => <TableOfContents style={side} items={sections} levels={1} current="gallery-toc-work" />;
+export const GalleryTableOfContentsLevels = () => <TableOfContents style={side} items={sections} levels={1} value="gallery-toc-work" />;
 /* A first row back to the top. */
-export const GalleryTableOfContentsTop = () => <TableOfContents style={side} items={sections} top={{ label: "Overview", id: "gallery-toc-top" }} current="gallery-toc-top" />;
+export const GalleryTableOfContentsTop = () => <TableOfContents style={side} items={sections} top={{ label: "Overview", id: "gallery-toc-top" }} value="gallery-toc-top" />;
 
 /* It follows the page: scroll the article and the section being read is marked. */
 const page = (id: string, title: string) => (

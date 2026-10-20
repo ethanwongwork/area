@@ -13,8 +13,10 @@
     position: absolute;
     inset-block-end: calc(100% + var(--area-space-8)); /* spec: Claude Code margin-bottom 8 */
     inset-inline: 0;
+    --_menu-max: 320px; /* spec: Codex --max-height-suggestion-menu 320 */
+    --_path-max: 60%; /* spec: a pick, so the name keeps the rest of the row (Cursor caps its trailing text at 180) */
     z-index: 2;
-    max-block-size: 320px; /* spec: Codex --max-height-suggestion-menu 320 */
+    max-block-size: var(--_menu-max);
     overflow-y: auto;
     overscroll-behavior: contain;
   }
@@ -25,7 +27,7 @@
   .area-composer-menu__path {
     flex: 0 1000 auto; /* the path gives way before the name does */
     min-inline-size: 0;
-    max-inline-size: 60%;
+    max-inline-size: var(--_path-max);
     overflow: hidden;
     color: var(--area-fg-muted);
     font-size: var(--area-text-xs-size);
@@ -36,13 +38,14 @@
     text-align: end;
   }
   .area-composer-menu__path > bdi { unicode-bidi: plaintext; }
-  /* Nothing matches: one muted row on the rows' text column. */
+  /* Nothing matches: one muted row at the text inset, as every list's empty row (Combobox, Command palette;
+     DESIGN_SYSTEM.md, List rows): the cap centred in the row's square (inset.css). */
   .area-composer-menu__empty {
     display: flex;
     align-items: center;
     min-block-size: var(--area-ui-row);
     margin: 0;
-    padding-inline: var(--area-ui-row-inset);
+    padding-inline: calc((var(--area-ui-row) - 1cap) / 2);
     color: var(--area-fg-muted);
   }
 }

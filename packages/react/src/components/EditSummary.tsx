@@ -15,7 +15,10 @@ function Counts({ added, removed }: { added: number; removed: number }) {
   );
 }
 
-export type EditFileState = "pending" | "kept" | "undone";
+/** Where a changed file stands: pending (Undo and Keep), kept or undone (settled). */
+export type EditFileStatus = "pending" | "kept" | "undone";
+/** The same values as `EditFileStatus`, under the name the `state` prop used. */
+export type EditFileState = EditFileStatus;
 
 export interface EditSummaryFileProps extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
   /** The file's name as the row shows it. */
@@ -23,26 +26,35 @@ export interface EditSummaryFileProps extends Omit<HTMLAttributes<HTMLDivElement
   added: number;
   removed: number;
   /** pending: Undo and Keep; kept / undone: settled, the actions leave. */
-  state?: EditFileState;
+  status?: EditFileStatus;
+  /** @deprecated Use `status` (an outcome is a status, Governance § 4). Kept for one release; `status` wins. */
+  state?: EditFileStatus;
   onKeep?: () => void;
   onUndo?: () => void;
   /** The file's Diff, shown under the row when its name is pressed. */
   diff?: ReactNode;
+  /** Whether the diff shows (controlled); pair with `onOpenChange`. */
+  open?: boolean;
+  /** Whether the diff shows at first (uncontrolled). */
   defaultOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
 /** One changed file: its name and +N −N (a button that opens its diff), and Undo and Keep. */
 export const EditSummaryFile = forwardRef<HTMLDivElement, EditSummaryFileProps>(function EditSummaryFile(
-  { name, added, removed, state = "pending", onKeep, onUndo, diff, defaultOpen = false, className, ...rest }, ref,
+  { name, added, removed, status: statusProp, state: stateProp, onKeep, onUndo, diff, open: openProp, defaultOpen = false, onOpenChange, className, ...rest }, ref,
 ) {
+  const state = statusProp ?? stateProp ?? "pending";
   const diffId = useId();
-  const [open, setOpen] = useState(defaultOpen);
+  const [own, setOwn] = useState(defaultOpen);
+  const open = openProp ?? own;
+  const toggle = () => { const next = !open; if (openProp === undefined) setOwn(next); onOpenChange?.(next); };
   return (
     <>
       <div ref={ref} className={["area-edit-summary__file", className].filter(Boolean).join(" ")} data-open={diff && open ? "" : undefined}
         data-kept={state === "kept" ? "" : undefined} data-undone={state === "undone" ? "" : undefined} {...rest}>
         <button type="button" className="area-edit-summary__name" aria-expanded={diff ? open : undefined} aria-controls={diff ? diffId : undefined}
-          onClick={() => diff && setOpen(!open)}>
+          onClick={() => { if (diff) toggle(); }}>
           <span>{name}</span>
           <Counts added={added} removed={removed} />
           {diff ? <span className="area-edit-summary__chevron" aria-hidden="true"><Glyph name="chevron-down" size={12} /></span> : null}
@@ -109,17 +121,20 @@ export interface DiffHunk {
 
 export interface DiffProps extends HTMLAttributes<HTMLElement> {
   hunks: DiffHunk[];
-  /** Names the diff (the file). */
+  /** Names the diff ("Changes to button.css"); "Changes" when unset. */
+  "aria-label"?: string;
+  /** @deprecated Use `aria-label` (it only names the element, DESIGN_SYSTEM.md "Names and collections"). Kept for one
+   *  release: the file's name, read as "Changes to {label}"; `aria-label` wins. */
   label?: string;
 }
 
 /** A unified diff in Code block sm's metrics and diff paint: old and new line numbers, a + or − marker and a tint on
  *  added and removed lines, folds between hunks. A diff
  *  whose lines carry no numbers (an agent's edit before the file is read) draws no number columns. */
-export const Diff = forwardRef<HTMLElement, DiffProps>(function Diff({ hunks, label, className, ...rest }, ref) {
+export const Diff = forwardRef<HTMLElement, DiffProps>(function Diff({ hunks, label, "aria-label": ariaLabel, className, ...rest }, ref) {
   const numbered = hunks.some(hunk => hunk.lines.some(line => line.old !== undefined || line.new !== undefined));
   return (
-    <figure ref={ref} className={diffVariants({}, className)} aria-label={label ? `Changes to ${label}` : "Changes"} tabIndex={0} {...rest}>
+    <figure ref={ref} className={diffVariants({}, className)} aria-label={ariaLabel ?? (label ? `Changes to ${label}` : "Changes")} tabIndex={0} {...rest}>
       <div className="area-diff__lines">
         {hunks.map((hunk, h) => [
           hunk.folded ? <div key={`fold-${h}`} className="area-diff__fold">{`${hunk.folded} unchanged line${hunk.folded === 1 ? "" : "s"}`}</div> : null,

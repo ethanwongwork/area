@@ -110,3 +110,16 @@ card's images sit inside a frame).
 - **Why:** The file explorer set you asked for starts here. To decide: Finder's open layout (as built) or a framed card
   like Figma's and ChatGPT's file cards as the default; and the selected paint (Area's row plate, as built, or Finder's
   label pill).
+- 2026-10-19 · design-system audit → the image's ring is an inset outline, inside the image as Asset row's and Color
+  swatch's (it was an outset box-shadow, painted outside the box). Demo copy uses the placeholder vocabulary (Item one,
+  Description).
+
+## Review note, 2026-10-19 (round 55, design-system audit)
+
+- **What changed:** An image's thin ring is drawn inside the image, as Asset row and Color swatch draw theirs (it was drawn just outside). Demo names use the placeholder words.
+- **Why:** The cited source draws it inside, and an outside ring adds a pixel past the image's box.
+
+## Review note, 2026-10-19 (round 56)
+
+- **What changed:** Files show File page's new glyph-only figure: one content mark per type, no extension text; the grid shows a document, a spreadsheet and an image.
+- **Why:** The same note as File page: one consistent mark per type (docs/research/file-figures-2026-10-19.md). An image figure for the family (a 4:3 frame beside Folder and File page) is proposed there and waits for your go-ahead.

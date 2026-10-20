@@ -1,7 +1,7 @@
 /** Real, compact specimens for the component gallery. Framing never rescales controls. */
 import { useEffect, useId, useRef, useState } from "react";
 import type { CSSProperties, ReactNode, MouseEvent } from "react";
-import { Alert, AlignmentPicker, AREA_COLOR_GRID, Avatar, AvatarGroup, Badge, BoxField, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, ButtonGroup, Calendar, Card, CardContent, CardMedia, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Code, CodeBlock, ColorField, ColorPicker, ColorSwatch, ColorSwatchPicker, Combobox, CommandPalette, Composer, ContextMenu, Count, Dialog, Field, HoverCard, Indicator, IndicatorAnchor, Input, InputAction, InputGroup, InputGroupText, Kbd, KbdGroup, Link, Menu, MenuItem, MenuLabel, MenuSeparator, MenuSub, Message, MessageActions, ModelPicker, Nav, NavGroup, NavItem, NumberField, Panel, PanelRow, PanelSection, PasswordField, Popover, PopoverBody, PopoverClose, PopoverDescription, PopoverFooter, PopoverHeader, PopoverMedia, PopoverTitle, Progress, PromptSuggestions, PropertyList, PropertyListItem, Radio, RadioGroup, ScrollToLatest, Segmented, Select, Separator, Skeleton, Slider, SliderRange, Spinner, SplitButton, Switch, Table, TableCell, TableHeaderCell, Tabs, Textarea, Toast, Toaster, Toolbar, ToolbarGroup, ToolbarItem, ToolbarOverflow, ToolbarSeparator, Tooltip, TreeView, type AlignmentPosition, type BoxValue, type ComboboxOption, type CommandItem, type TreeViewNode, useToaster } from "@area/react";
+import { Alert, AlignmentPicker, AREA_COLOR_GRID, Avatar, AvatarGroup, Badge, BoxField, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, ButtonGroup, Calendar, Card, CardContent, CardMedia, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Code, CodeBlock, ColorField, ColorPicker, ColorSwatch, ColorSwatchPicker, Combobox, CommandPalette, Composer, ContextMenu, Count, CustomSelect, Dialog, Field, HoverCard, Indicator, IndicatorAnchor, Input, InputAction, InputGroup, InputGroupText, Kbd, KbdGroup, Link, Menu, MenuItem, MenuLabel, MenuSeparator, MenuSub, Message, MessageActions, ModelPicker, Nav, NavGroup, NavItem, NumberField, Panel, PanelRow, PanelSection, PasswordField, Popover, PopoverBody, PopoverClose, PopoverDescription, PopoverFooter, PopoverHeader, PopoverMedia, PopoverTitle, Progress, PromptSuggestions, PropertyList, PropertyListItem, Radio, RadioGroup, ScrollToLatest, Segmented, Select, Separator, Skeleton, Slider, SliderRange, Spinner, SplitButton, Switch, Table, TableCell, TableHeaderCell, Tabs, Textarea, Toast, Toaster, Toolbar, ToolbarGroup, ToolbarItem, ToolbarOverflow, ToolbarSeparator, Tooltip, TreeView, type AlignmentPosition, type BoxValue, type ComboboxOption, type CommandItem, type TreeViewNode, useToaster } from "@area/react";
 import { AddIcon, AlignBottomIcon, AlignCenterIcon, AlignLeftIcon, AlignMiddleIcon, AlignRightIcon, AlignTopIcon, AngleIcon, ArrowDownIcon, ArrowUpIcon, AspectRatioIcon, AutoLayoutIcon, BoldIcon, CalendarIcon, ChatIcon, CheckIcon, ChevronDownIcon, ClockIcon, CodeIcon, CopyIcon, CornerIcon, CornersIcon, DismissIcon, DocumentIcon, DotsFourIcon, EyeIcon, EyeOffIcon, FlipIcon, FlipVerticalIcon, FlowFreeIcon, FlowIcon, FlowVerticalIcon, FlowWrapIcon, FolderFilledIcon, FolderIcon, FrameIcon, GlobeIcon, GridIcon, HistoryIcon, InfoIcon, ItalicIcon, KanbanIcon, LayersIcon, LinkIcon, ListIcon, MenuIcon, MoreHorizontalIcon, OpacityIcon, OpenIcon, PaintbrushIcon, PaletteIcon, PanelLeftIcon, PencilIcon, PenToolIcon, PeopleIcon, PersonIcon, PlayIcon, PointerIcon, RectangleIcon, RefreshIcon, RotateIcon, SearchIcon, SettingsIcon, SlidersIcon, StrikethroughIcon, SubtractIcon, SunIcon, TextAlignCenterIcon, TextAlignLeftIcon, TextAlignRightIcon, TextIcon, ThumbsDownIcon, ThumbsUpIcon, TokenIcon, TrashIcon, UnderlineIcon, VolumeIcon, WarningIcon } from "@area/icons";
 // @ts-expect-error — the docs' own highlighter is authored in JavaScript.
 import { highlight } from "../highlight.mjs";
@@ -397,6 +397,23 @@ export const GalleryColorSwatch = () => (
     <ColorSwatch color="#8D4DF3" />
     <ColorSwatch color="#8D4DF380" />
     <ColorSwatch color="#00000000" />
+  </div>
+);
+/* In an icon slot (a Custom select's trigger and its rows, a menu row): the swatch takes the glyphs' square keyline, 12 in
+   the 16 box, so it reads the size of the check and the add glyph beside it (owner, 2026-10-19: the Inspector's accent
+   picker). */
+const slotSwatch = (step: string) => <ColorSwatch size="sm" color={`var(--area-${step})`} aria-hidden="true" />;
+export const GalleryColorSwatchInSlot = () => (
+  <div style={{ display: "grid", gap: "var(--area-space-8)", inlineSize: 200 }}>
+    <CustomSelect size="sm" variant="soft" fullWidth aria-label="Accent" defaultValue="blue"
+      items={[{ value: "red", label: "Red", icon: slotSwatch("red-500") }, { value: "blue", label: "Blue", icon: slotSwatch("blue-500") }, { value: "green", label: "Green", icon: slotSwatch("green-600") }]} />
+    <Menu aria-label="Accent">
+      <MenuItem radio icon={slotSwatch("red-500")}>Red</MenuItem>
+      <MenuItem radio checked icon={slotSwatch("blue-500")}>Blue</MenuItem>
+      <MenuItem radio icon={slotSwatch("green-600")}>Green</MenuItem>
+      <MenuSeparator />
+      <MenuItem icon={<AddIcon />}>Add colour</MenuItem>
+    </Menu>
   </div>
 );
 export const GalleryColorSwatchSizes = () => (
@@ -2028,6 +2045,8 @@ export const GalleryColorPickerDisabled = () => <ColorPicker label="Locked fill"
 /* Calendar. A fixed "today" keeps the gallery deterministic. */
 const calendarToday = "2026-09-26";
 export const GalleryCalendar = () => <Calendar aria-label="Label" today={calendarToday} defaultValue="2026-09-15" />;
+/* Menus: the month and the year as two quiet menus in the title's place, for dates far from today (a birthday). */
+export const GalleryCalendarMenus = () => <Calendar aria-label="Label" caption="menus" today={calendarToday} defaultValue="2026-09-15" />;
 export const GalleryCalendarRange = () => <Calendar aria-label="Label" selectionMode="range" today={calendarToday} defaultValue={{ start: "2026-09-15", end: "2026-09-19" }} />;
 export const GalleryCalendarTwoMonths = () => <Calendar aria-label="Label" selectionMode="range" visibleMonths={2} today={calendarToday} defaultValue={{ start: "2026-09-24", end: "2026-10-06" }} />;
 export const GalleryCalendarMultiple = () => <Calendar aria-label="Label" selectionMode="multiple" today={calendarToday} defaultValue={["2026-09-08", "2026-09-10", "2026-09-15", "2026-09-17"]} />;
@@ -2042,9 +2061,10 @@ export const GalleryCalendarTile = () => <Calendar days="tile" weekdayStyle="abb
 export const GalleryCalendarMarkers = () => <Calendar firstDayOfWeek={1} aria-label="Label" today={calendarToday} defaultValue="2026-09-21" markers={{ "2026-09-04": "info", "2026-09-14": "info", "2026-09-29": "neutral", "2026-10-08": "neutral" }} />;
 export const GalleryCalendarWeek = () => <Calendar layout="week" firstDayOfWeek={1} aria-label="Label" today={calendarToday} defaultValue="2026-09-30" markers={{ "2026-10-01": "info" }} />;
 const scheduleTimes = ["8:00 AM", "8:30 AM", "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "12:00 PM", "1:00 PM"];
-/* Schedule: the calendar surface (Calendar variant="surface": 8 top, 12 sides, the floating lift)
-   split by a rule; the time list is a column of the grid's 36px cells holding 32px plates, 14 from
-   each side like the day plates, and scrolls within the calendar's height. docs/specs/calendar.md. */
+/* Schedule: the calendar surface (Calendar variant="surface", the floating lift) split by a rule. Every plate sits the
+   calendar's inset (`--_inset`, 12, compact 8) from an edge or a rule, as in the Calendar itself (round 63): the arrows
+   and days on the left, the time buttons on the right, the footer's buttons below; the time list scrolls within the
+   calendar's height. docs/specs/calendar.md. */
 export const GalleryCalendarSchedule = () => {
   const [date, setDate] = useState<string | null>("2026-09-28");
   const [time, setTime] = useState("10:00 AM");
@@ -2053,16 +2073,16 @@ export const GalleryCalendarSchedule = () => {
   const rule = "var(--area-border-width) solid var(--area-border-decorative)";
   return <div className="area-calendar area-calendar--surface" style={{ display: "grid", padding: 0 }}>
     <div style={{ display: "flex" }}>
-      <div style={{ padding: "calc(var(--area-space-8) - var(--area-border-width)) calc(var(--area-space-12) - var(--area-border-width)) var(--area-space-12)" }}>
+      <div style={{ padding: "calc(var(--_inset) - var(--area-border-width)) calc(var(--_inset) - var(--area-border-width) - var(--_day-inset)) calc(var(--_inset) - var(--area-border-width) - var(--_day-inset))" }}>
         <Calendar variant="plain" aria-label="Date" firstDayOfWeek={1} today={calendarToday} value={date} onValueChange={setDate} min={calendarToday} markers={{ "2026-10-04": "info", "2026-10-14": "info" }} />
       </div>
       <div style={{ position: "relative", inlineSize: "calc(var(--area-space-96) + var(--area-space-24))", borderInlineStart: rule }}>
-        <div role="group" aria-label="Time" style={{ position: "absolute", inset: 0, display: "grid", alignContent: "start", gap: "var(--area-space-4)", padding: "var(--area-space-8) calc(var(--area-space-12) - var(--area-border-width) + var(--area-space-2))", overflowY: "auto", scrollPaddingBlock: "var(--area-space-8)" }}>
+        <div role="group" aria-label="Time" style={{ position: "absolute", inset: 0, display: "grid", alignContent: "start", gap: "var(--area-space-4)", padding: "calc(var(--_inset) - var(--area-border-width))", overflowY: "auto", scrollPaddingBlock: "var(--_inset)" }}>
           {scheduleTimes.map(item => <Button key={item} variant="ghost" size="md" fullWidth selected={item === time} onClick={() => setTime(item)}>{item}</Button>)}
         </div>
       </div>
     </div>
-    <div style={{ display: "flex", alignItems: "center", gap: "var(--area-space-8)", padding: "var(--area-space-8) calc(var(--area-space-12) - var(--area-border-width))", borderBlockStart: rule }}>
+    <div style={{ display: "flex", alignItems: "center", gap: "var(--area-space-8)", padding: "var(--area-space-8) calc(var(--_inset) - var(--area-border-width))", borderBlockStart: rule }}>
       <Button variant="ghost" size="sm" onClick={() => setScheduled("")}>Cancel</Button>
       <span style={{ marginInlineStart: "auto", color: "var(--area-fg-muted)", fontSize: "var(--area-control-sm-text)", lineHeight: "var(--area-control-sm-leading)", fontVariantNumeric: "tabular-nums" }}>{label} · {time}</span>
       <Button variant="outline" size="sm" disabled={!date} onClick={() => setScheduled(`${label} ${time}`)}>Action</Button>

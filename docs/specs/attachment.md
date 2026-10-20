@@ -27,14 +27,15 @@ Cursor `PromptInputImageAnnotation.js`, `PromptInputAttachmentGrid.js`, `Overlay
 |---|---|---|---|
 | size | 64 × 64 | Cursor 64 (Claude Code 48 tall, Codex 122) | the IDE panel is the context; 122 is half the Inspector |
 | corner | the Composer's button corner (its corner less its inset) | Codex: composer radius − inset | concentric with the shell |
-| edge | 1px card edge, drawn inset over the picture | Cursor stroke 72%, Claude Code input border, Codex inset ring | — |
-| remove | a 16 disc in the inverse paint, 4 past the top-end corner, a 1px ring of the composer fill; a 24 target; on hover / focus, always on touch | Cursor 16 overlay badge, 1px ring; Codex inverted 16, 2px ring; Claude Code 16 | — |
+| edge | the card edge at stroke-width, an inset outline over the picture (as Color swatch's ring) | Cursor stroke 72%, Claude Code input border, Codex inset ring | an outline snaps to device pixels where an inset box-shadow does not (MOTION.md, Crispness 3) |
+| remove | a 20 square inside the top-end corner, 4 in, its corner the tile's less that inset (concentric); Video player's glass (the surface at 72% under blur(16px) saturate(150%), a white 12% hairline at border-width), the light ink; hover adds white 12%, press 20%; a control-sm target; on hover / focus, always on touch | Codex 20; Cursor and Claude Code 16; Video player's on-media controls | rounds 51 and 52: one treatment, inset, a button's shape (was a 16 disc in the inverse paint, 4 past the corner, with a 1px ring) |
 | uploading | the surface at 60% over the picture, a Spinner ring at the progress | Codex: media background 50% + blur, 24 spinner, percentage | no blur (a material question) |
-| error | danger edge and a danger mark; the reason as the tooltip and the mark's name | Codex toasts the failure | the tile itself says it failed |
+| error | the fields' invalid edge (`input-invalid-color`, as Input and File upload) and a danger mark; the reason as the tooltip and the mark's name | Codex toasts the failure | the tile itself says it failed; one invalid edge across Area |
 
 ## Behavior and accessibility
 
-A group named by the file; the remove button "Remove {name}"; uploading sets aria-busy and the ring says "Uploading
+A group named by the file; the remove button is named by `dismissLabel` ("Remove {name}" by default) and shows when
+`onDismiss` is passed (`onRemove` stays as a deprecated alias for one release; `onDismiss` wins); uploading sets aria-busy and the ring says "Uploading
 {name}, N%"; a failure is an image named by its reason. The Chat view takes images from paste and drop.
 
 ## Feedback log
@@ -42,6 +43,10 @@ A group named by the file; the remove button "Remove {name}"; uploading sets ari
 - 2026-10-19 · built (chat additions, after round 49).
 - 2026-10-19 · owner, round 50 (rethink): "fix the close button hover, is that the appropriate treatment or should the x be inset ontot the container" → round 51 coherence pass (below).
 - 2026-10-19 · owner, round 51 (needs changes): "should the button not be round, and actually follow the corner radius of buttons? i prefer just 1 treatment, either inset or on the corner. go with your rec" → round 52 (below).
+- 2026-10-19 · audit: Decisions rewritten to the code (the 20 square in glass, 4 inside the corner); the edge is an inset
+  outline at stroke-width (was an inset box-shadow); the error edge is `input-invalid-color` (was fg-danger);
+  `onRemove` → `onDismiss` + `dismissLabel` (deprecated alias kept); the veil and glass literals moved into
+  `/* spec */` properties; the demo's file names use the placeholder copy.
 
 ## Review note, 2026-10-19
 
@@ -78,3 +83,8 @@ concentric; at the default that is 4, Button's own corner at 20 (owner: "follow 
   corner; it stays inside the image.
 - **Why:** you asked for a button's corner and one placement; inside the corner is Area's place for controls over
   pictures.
+
+## Review note, 2026-10-19 (round 55, design-system audit)
+
+- **What changed:** The thumbnail's edge is a crisp inset outline instead of a shadow, and a failed upload's edge uses the fields' invalid red. Remove is now `onDismiss` with a `dismissLabel` (the old `onRemove` still works).
+- **Why:** MOTION.md asks for outlines, which snap to whole pixels; every other failed field uses `input-invalid-color`; GOVERNANCE names close actions `onDismiss`.

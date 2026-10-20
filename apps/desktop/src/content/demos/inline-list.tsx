@@ -6,7 +6,7 @@ const items = ["Item one", "Item two", "Item three", "Item four"];
 /* A byline: a muted row with a dot between items. */
 export const GalleryInlineList = () => (
   <div style={{ color: "var(--area-fg-muted)" }}>
-    <InlineList><Link ink="muted" variant="standalone" href="#gallery-inline-list">David Tee</Link><span>12 May 2026</span><span>6 min read</span></InlineList>
+    <InlineList><Link ink="muted" variant="standalone" href="#gallery-inline-list">David Tee</Link><span>Label</span><span>Value</span></InlineList>
   </div>
 );
 /* Links in a list are standalone (underlined on hover); their ink is Link's: here the link blue. */
@@ -16,8 +16,8 @@ export const GalleryInlineListRule = () => <InlineList separator="rule">{items.m
 export const GalleryInlineListNone = () => (
   <div style={{ color: "var(--area-fg-muted)" }}>
     <InlineList separator="none">
-      <span style={{ display: "inline-flex", alignItems: "center", gap: "var(--area-space-4)" }}><StarIcon width={16} height={16} aria-hidden />128</span>
-      <span style={{ display: "inline-flex", alignItems: "center", gap: "var(--area-space-4)" }}><ClockIcon width={16} height={16} aria-hidden />Updated 2 days ago</span>
+      <span style={{ display: "inline-flex", alignItems: "center", gap: "var(--area-space-4)" }}><StarIcon width={16} height={16} aria-hidden />1</span>
+      <span style={{ display: "inline-flex", alignItems: "center", gap: "var(--area-space-4)" }}><ClockIcon width={16} height={16} aria-hidden />Value</span>
       <span>Label</span>
     </InlineList>
   </div>

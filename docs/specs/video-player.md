@@ -57,7 +57,7 @@ Every button is an Area Button (ghost, neutral, md, icon-only) inside an Area To
 
 | Part | Area | Basis |
 |---|---|---|
-| frame | Figure's media corner (`radius-small`), black behind letterboxing; no corner in full screen | Figure; every source |
+| frame | the container corner (`radius-container`), as Figure's standalone image, black behind letterboxing; no corner in full screen | Figure (DESIGN_SYSTEM, Image corners; Figure moved to the container corner 2026-10-18); every source |
 | scheme | the controls and the round play take Area's dark scheme (`color-scheme: dark`) in every theme | round 45: Apple, QuickTime, Media Chrome, Video.js |
 | glass | `bg-surface` at 72% under blur(16px) saturate(150%), an inset white 12% hairline, `shadow-float`; a Material's layers first (overlays group) | round 45 (Apple 72%, Video.js 16); settings collisions fix 2026-10-18 |
 | buttons | Button ghost, neutral, md (`control-md`), icon-only, in every layout; plates hover white 12%, pressed 20%, selected 16% | rounds 44, 46, 47 |
@@ -320,3 +320,45 @@ Elevation and Stroke audit (docs/research/elevation-stroke-2026-10-18, "Audit: A
 whole `box-shadow`, and won over the round play's hover). Both now list the material's layers first
 (`var(--_m-layers, 0 0 0 0 transparent)`) beside their own ring and float lift, so a material adds to them rather
 than replacing them. Unchanged with no material. Checked in the app with None and Glass.
+- 2026-10-19 · design-system audit (owner: "audit them based on the new docs, skills, guidelines") → the frame takes
+  `radius-container` (Figure's standalone image moved there 2026-10-18; it was still Figure's old `radius-small`); the
+  volume slider's room opens at once and only its opacity animates (MOTION.md Crispness 2; was a width transition); the
+  round play's hover plate leaves on `fast`; the thumb's focus ring takes `focus-offset`; blur, panel and volume widths
+  are named `--_*` spec values. Demo caption "Caption".
+
+## Review note, 2026-10-19 (round 55, design-system audit)
+
+- **What changed:** The video's corner is 12, the container corner, the same as a Figure's image (it was 6). The volume slider's room opens at once and only the slider fades in; the round play's hover leaves on fast; the slider's focus ring uses the standard offset.
+- **Why:** Figure moved to the container corner on 2026-10-18 and the player still used the old thumbnail corner; MOTION.md animates only opacity and transform.
+
+## Round 56: the bar after YouTube's controls (2026-10-19)
+
+Owner, round 55: "can you also look at and consider youtubes video player controls? maybe thats more appropriate."
+YouTube's 2025 controls, measured (docs/research/video-player-youtube-2026-10-19.md): no fade; the track across the
+width 12 in from the sides; under it a row of plates (a round play, a volume pill that opens sideways, a time pill, and
+one pill for the rest at the end), 8 above the foot. `bar` is rebuilt on that model and becomes the default:
+
+| Part | Area | Basis |
+|---|---|---|
+| controls | a column 12 in from the sides (`--_edge`), 8 above the foot (`--_foot`); the track, then the row, 8 apart | YouTube 12 / 8 / 9 |
+| pills | Area's glass (the floating panel's surface: dark surface 72%, blur, white 12% hairline, float shadow), `control-md` tall, round; the buttons inside take the pill's corner | YouTube's black 30% plates, Area's material |
+| start | play alone; mute with its slider (opens sideways); the time, 12 in, the duration muted | YouTube |
+| end | captions, picture in picture, full screen in one pill | YouTube (autoplay, settings and theater have no Area counterpart) |
+| track | unchanged: the 4 rail in the text ink with a 12 thumb | round 46 |
+| narrow | under 400 the volume slider and the optional buttons drop; under 280 the duration | as before |
+
+The scrim (the bar's fade) is removed with its part. `floating` (QuickTime's panel, rounds 40–47) and `minimal` stay.
+
+## Review note, 2026-10-19 (round 56)
+
+- **What changed:** the default controls are now YouTube's: the track runs across the bottom, and the buttons sit
+  under it in small glass pills (play, volume, the time, and one pill for captions, picture in picture and full
+  screen). There is no dark fade. The QuickTime-style floating panel is still there as `layout="floating"`.
+- **Why:** you asked to consider YouTube's controls. Its controls leave the video clear between groups and keep the
+  track full width, which reads better than a centred panel over the picture; Area's glass and buttons keep it in the
+  system.
+
+## Review note, 2026-10-19 (round 57)
+
+- **What changed:** The round play button before the first play is round again, at its own size.
+- **Why:** You flagged the default tile's play button: the new bar's pill rule also caught the round play (it shares the glass), squashing it to a control's height. The pill rule now applies only inside the controls.

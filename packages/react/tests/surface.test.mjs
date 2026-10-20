@@ -59,7 +59,8 @@ test('a Surface holding Surfaces sets them at its media inset, as Card holds its
 test('the raised Surface points control fills at the raised ground, the soft one at the recessed ground', () => {
   const raised = layers.slice(0, layers.indexOf('[data-area-ground="raised"]'));
   assert.match(raised, /\.area-surface--surface/);
-  assert.match(layers, /:where\(\.area-surface--soft\),\s*\[data-area-ground="recessed"\]/);
+  // The soft Surface is in the recessed ground's list, whatever else shares it (an Asset card paints that ground too).
+  assert.match(layers, /:where\([^{]*\.area-surface--soft[^{]*\),\s*\[data-area-ground="recessed"\]/);
 });
 
 test('a Card inside a Surface reads the corner that Surface publishes, by the same depth parity', () => {

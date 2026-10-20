@@ -13,13 +13,11 @@ export interface ApprovalOption {
 /** How long keys are ignored after the approval appears. */
 const GUARD_MS = 500;
 
-export interface ApprovalProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
+interface ApprovalBaseProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
   /** What it wants to do: "Run this command?", "Edit button.css?". */
   title: ReactNode;
   /** Why, in a sentence. */
   description?: ReactNode;
-  /** Numbered choices, most permissive yes last before no (Claude Code, Codex). */
-  options: ApprovalOption[];
   onChoose: (value: string) => void;
   /** Adds the field to say what to do instead; Enter sends it. */
   onInstead?: (text: string) => void;
@@ -33,13 +31,27 @@ export interface ApprovalProps extends Omit<HTMLAttributes<HTMLElement>, "title"
   children?: ReactNode;
 }
 
+export type ApprovalProps = ApprovalBaseProps & (
+  | {
+    /** Numbered choices, most permissive yes last before no (Claude Code, Codex). */
+    items: ApprovalOption[];
+    options?: undefined;
+  }
+  | {
+    items?: undefined;
+    /** @deprecated Use `items` (a collection is `items`, Governance § 4). Kept for one release. */
+    options: ApprovalOption[];
+  }
+);
+
 /**
  * Takes the composer's place until answered: ArrowUp / ArrowDown move between the choices, 1–9 choose, Escape
  * dismisses, Enter in the field sends what to do instead. With `autoFocus` the first choice takes focus when it appears.
  */
 export const Approval = forwardRef<HTMLElement, ApprovalProps>(function Approval(
-  { title, description, options, onChoose, onInstead, insteadPlaceholder = "Tell it what to do instead", onDismiss, autoFocus = false, children, className, onKeyDown, ...rest }, ref,
+  { title, description, items: itemsProp, options: optionsProp, onChoose, onInstead, insteadPlaceholder = "Tell it what to do instead", onDismiss, autoFocus = false, children, className, onKeyDown, ...rest }, ref,
 ) {
+  const options = itemsProp ?? optionsProp ?? [];
   const titleId = useId();
   const list = useRef<HTMLDivElement>(null);
   // Keys pressed as it appears were meant for what it replaced (the composer): for a moment they answer nothing, so an
@@ -53,7 +65,7 @@ export const Approval = forwardRef<HTMLElement, ApprovalProps>(function Approval
     if (event.defaultPrevented) return;
     const inField = (event.target as HTMLElement).tagName === "INPUT";
     if (settling() && (event.key === "Enter" || event.key === " " || event.key === "Escape" || /^[1-9]$/.test(event.key))) { event.preventDefault(); return; }
-    if (event.key === "Escape") { event.preventDefault(); onDismiss ? onDismiss() : onChoose(options.at(-1)!.value); return; }
+    if (event.key === "Escape") { event.preventDefault(); const last = options.at(-1); if (onDismiss) onDismiss(); else if (last) onChoose(last.value); return; }
     if (inField) {
       if (event.key !== "ArrowDown" && event.key !== "ArrowUp") return;
     }

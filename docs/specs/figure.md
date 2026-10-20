@@ -128,3 +128,5 @@ and a cropped image is the app's to make. A video will be Area's own player insi
 ## Feedback log
 
 - 2026-10-18 · owner: "can you round the corners of images to something by default" → by size: a standalone image takes the container corner (12 at the default Radius; was the small corner, 6), a thumbnail keeps 6 → `figure.css`. Same rule in Asset card and the Brand viewer (asset-card.md).
+- 2026-10-19 · design-system audit → the caption reads `ui-size` / `ui-leading`, as its comment and its peers say (the
+  same values as `text-sm`; naming only, no visual change).

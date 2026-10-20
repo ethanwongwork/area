@@ -148,3 +148,5 @@ then what it covers after its publisher, as ChatGPT's sources use it (measured, 
 - **What changed:** The em dashes are back between a source's publisher, title and description.
 - **Why:** You prefer them, and it is a proper use: a spaced em dash sets off each part as an aside, as ChatGPT's
   sources do.
+- 2026-10-19 · design-system audit → a passed `aria-label` names the section even with a title (it was dropped), as
+  Infobox and Table of contents do. No visual change.

@@ -9,8 +9,9 @@
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-hatnote {
+    --_indent: 1.6em; /* spec: Wikipedia */
     margin: 0 0 var(--area-space-8);
-    padding-inline-start: 1.6em; /* spec: Wikipedia */
+    padding-inline-start: var(--_indent);
     color: var(--area-fg-muted);
   }
   .area-hatnote + .area-hatnote { margin-block-start: calc(var(--area-space-8) * -1 + var(--area-space-2)); }

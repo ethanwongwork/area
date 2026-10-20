@@ -3,7 +3,8 @@
  *
  * A video with Area's own controls over it (docs/specs/video-player.md; research docs/research/video-player-2026-10-17.md,
  * video-player-quicktime-2026-10-17.md and video-player-references-2026-10-18/). Three layouts, as AVKit's control
- * styles: `floating` (default; QuickTime Player's controller), `bar` (one row along the foot, on a fade) and `minimal`
+ * styles: `bar` (default; YouTube's: the track across the foot, buttons in glass pills under it), `floating` (QuickTime
+ * Player's controller) and `minimal`
  * (one round play / pause).
  *
  * One set of parts in every layout:
@@ -25,8 +26,9 @@
     inline-size: 100%;
     max-inline-size: 100%;
     container-type: inline-size;
-    /* spec: Figure's media corner; black behind letterboxing (every source). */
-    border-radius: var(--area-radius-small);
+    /* A standalone viewer takes the container corner, as Figure's image (DESIGN_SYSTEM, Image corners; Figure moved to it
+       2026-10-18; was radius-small); black behind letterboxing (every source). */
+    border-radius: var(--area-radius-container);
     background-color: #000; /* spec */
     user-select: none;
   }
@@ -46,9 +48,10 @@
   }
   .area-video-player__surface {
     --_inset: var(--area-ui-cluster); /* spec: the surface Toolbar's inset (8, compact 6) */
+    --_blur: 16px; /* spec: Video.js blur 16; Apple saturate 180, Glass 137.5 */
     background-color: color-mix(in srgb, var(--area-bg-surface) 72%, transparent); /* spec: Apple's 72% */
-    -webkit-backdrop-filter: blur(16px) saturate(150%); /* spec: Video.js blur 16; Apple saturate 180, Glass 137.5 */
-    backdrop-filter: blur(16px) saturate(150%);
+    -webkit-backdrop-filter: blur(var(--_blur)) saturate(150%); /* spec */
+    backdrop-filter: blur(var(--_blur)) saturate(150%);
     box-shadow: var(--_m-layers, 0 0 0 0 transparent), inset 0 0 0 var(--area-border-width) rgb(255 255 255 / 0.12), var(--area-shadow-float); /* spec: the transparent stroke; a material's layers first (material.css) */
   }
   /* Plates on the controls are tints of the glass (round 46): hover white 12% (the panel's stroke), press 20%
@@ -76,12 +79,13 @@
     border: 0;
     border-radius: var(--area-radius-full);
     cursor: pointer;
-    transition: opacity var(--area-duration-fast) var(--area-ease-out);
+    /* Hover in at once, out on fast (MOTION.md, Hover). */
+    transition: opacity var(--area-duration-fast) var(--area-ease-out), box-shadow var(--area-duration-fast) var(--area-ease-out);
   }
   .area-video-player__start > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
   .area-video-player__start:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   /* The glass a step lighter under the pointer, as the buttons' plates. */
-  @media (hover: hover) { .area-video-player__start:hover { box-shadow: var(--_m-layers, 0 0 0 0 transparent), inset 0 0 0 999px rgb(255 255 255 / 0.12), inset 0 0 0 var(--area-border-width) rgb(255 255 255 / 0.12), var(--area-shadow-float); /* spec */ } }
+  @media (hover: hover) { .area-video-player__start:hover { transition-duration: 0s; box-shadow: var(--_m-layers, 0 0 0 0 transparent), inset 0 0 0 999px rgb(255 255 255 / 0.12), inset 0 0 0 var(--area-border-width) rgb(255 255 255 / 0.12), var(--area-shadow-float); /* spec */ } }
 
   /* The time: Area's muted UI text, tabular (Apple's secondary time; the references' 400). */
   .area-video-player__clock {
@@ -144,32 +148,32 @@
     background: var(--_fill);
   }
   .area-video-player__range:focus-visible { outline: none; }
-  .area-video-player__range:focus-visible::-webkit-slider-thumb { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-space-2); }
-  .area-video-player__range:focus-visible::-moz-range-thumb { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-space-2); }
+  .area-video-player__range:focus-visible::-webkit-slider-thumb { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  .area-video-player__range:focus-visible::-moz-range-thumb { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
 
   /* Volume: mute, and a 64 slider that opens beside it on hover or focus (YouTube's reveal, Vidstack 0 → 72; Apple's 60
-     on the 4 grid). Muted keeps the level in view in the muted ink (QuickTime, macOS). */
-  .area-video-player__volume { display: flex; align-items: center; flex: none; }
+     on the 4 grid). Muted keeps the level in view in the muted ink (QuickTime, macOS). The room opens at once and only the
+     slider's opacity animates (MOTION.md, Crispness 2: transform and opacity only; was a 0 → 64 width transition). */
+  .area-video-player__volume { --_volume: 64px; /* spec */ display: flex; align-items: center; flex: none; }
   .area-video-player__volume > .area-video-player__range {
     flex: none;
     inline-size: 0;
     opacity: 0;
-    transition: inline-size var(--area-duration-fast) var(--area-ease-out), opacity var(--area-duration-fast) var(--area-ease-out);
+    transition: opacity var(--area-duration-fast) var(--area-ease-out);
   }
   .area-video-player__volume:is(:focus-within, [data-open]) > .area-video-player__range {
-    inline-size: 64px; /* spec */
+    inline-size: var(--_volume);
     margin-inline: var(--area-space-4) var(--area-space-8);
     opacity: 1;
   }
   .area-video-player__volume[data-muted] > .area-video-player__range { --_fill: var(--area-fg-muted); }
 
   /* Showing and hiding: in on fast, out on moderate, opacity only (MOTION.md; Media Chrome in faster than out). */
-  .area-video-player__controls,
-  .area-video-player__scrim { opacity: 1; transition: opacity var(--area-duration-fast) var(--area-ease-out); }
-  .area-video-player[data-idle] :is(.area-video-player__scrim, .area-video-player__controls) { opacity: 0; transition-duration: var(--area-duration-moderate); }
+  .area-video-player__controls { opacity: 1; transition: opacity var(--area-duration-fast) var(--area-ease-out); }
+  .area-video-player[data-idle] .area-video-player__controls { opacity: 0; transition-duration: var(--area-duration-moderate); }
   .area-video-player[data-idle] { cursor: none; }
   .area-video-player--auto {}
-  .area-video-player--always[data-idle] :is(.area-video-player__scrim, .area-video-player__controls) { opacity: 1; }
+  .area-video-player--always[data-idle] .area-video-player__controls { opacity: 1; }
   .area-video-player--always[data-idle] { cursor: auto; }
 
   /* --- floating: QuickTime Player's controller ----------------------------------------------------------------------
@@ -183,7 +187,8 @@
     display: flex;
     flex-direction: column;
     margin-inline: auto;
-    inline-size: min(400px, 100% - var(--area-space-24)); /* spec */
+    --_panel: 400px; /* spec: Safari's 468 at Area's rows */
+    inline-size: min(var(--_panel), 100% - var(--area-space-24));
     box-sizing: border-box;
     /* Even ink (measured on the glyphs, rounds 43–44): a 16 icon's drawing starts 2 inside its box at the side and 4 at the
        top, the digits sit 4 above the foot of their 16 row; so 2 less than the cluster inset above, 6 more below, and the
@@ -219,26 +224,32 @@
     .area-video-player--floating .area-video-player__clock--start { display: none; }
   }
 
-  /* --- bar: one row along the foot, on a fade ------------------------------------------------------------------------
-     Plyr, Vimeo, Video.js, YouTube: play, the track, the time, volume, then the rest, over a black 50% fade 64 tall
-     (Video.js 50%, Vidstack 60%; twice the row). The row sits the cluster inset from the video's edges, items 2 apart;
-     the track and the time stand off the buttons by 6. */
-  .area-video-player__scrim {
-    position: absolute;
-    inset: auto 0 0;
-    block-size: var(--area-space-64);
-    background: linear-gradient(to top, rgb(0 0 0 / 0.5), transparent); /* spec */
-    pointer-events: none;
-  }
+  /* --- bar (default): YouTube's controls -------------------------------------------------------------------------
+     Owner, round 55: "consider youtubes video player controls? maybe thats more appropriate"
+     (docs/research/video-player-youtube-2026-10-19.md, its 2025 controls measured): no fade; the track across the width
+     12 in from the sides; under it, 8 apart, the buttons in pills of Area's glass (the floating panel's material): play
+     alone, volume (it opens sideways), the time, and the rest at the end in one pill; the row 8 above the foot. A pill
+     is a control tall and round; the buttons inside take its corner, so their plates are concentric. */
   .area-video-player--bar .area-video-player__controls {
+    --_edge: var(--area-space-12); /* spec: YouTube's 12 from the sides */
+    --_foot: var(--area-space-8); /* spec: YouTube's 8 under the row */
     position: absolute;
-    inset: auto var(--area-ui-cluster) var(--area-ui-cluster);
+    inset: auto var(--_edge) var(--_foot);
     display: flex;
-    align-items: center;
-    gap: var(--area-space-2);
+    flex-direction: column;
+    gap: var(--area-space-8); /* spec: YouTube's 9 between the track and the row, on the 4 grid */
   }
-  .area-video-player--bar .area-video-player__controls > .area-video-player__range { margin-inline: var(--area-space-6); }
-  .area-video-player--bar .area-video-player__clock { margin-inline-end: var(--area-space-6); text-shadow: 0 1px 2px rgb(0 0 0 / 0.3); /* spec: Video.js media text shadow */ }
+  .area-video-player--bar .area-video-player__controls > .area-video-player__range { inline-size: 100%; }
+  .area-video-player--bar .area-video-player__transport { display: flex; align-items: center; justify-content: space-between; gap: var(--area-space-8); min-inline-size: 0; }
+  .area-video-player--bar .area-video-player__group--start { gap: var(--area-space-8); } /* spec: YouTube's 8–12 between pills */
+  .area-video-player--bar .area-video-player__group--end { gap: 0; }
+  /* Only the controls' pills: the round play before the first play shares the glass, not the pill (round 56: "fix the
+     play button on default", it was squashed to a control's height). */
+  .area-video-player--bar .area-video-player__controls .area-video-player__surface { display: flex; align-items: center; flex: none; block-size: var(--area-control-md); border-radius: var(--area-radius-full); }
+  .area-video-player--bar .area-video-player__controls .area-video-player__surface .area-button { border-radius: var(--area-radius-full); }
+  /* The time: the pill's text, as far in as the pill is round (YouTube 12 on its 40). */
+  .area-video-player--bar .area-video-player__clock.area-video-player__surface { padding-inline: var(--area-space-12); color: var(--area-fg-default); }
+  .area-video-player--bar .area-video-player__duration { color: var(--area-fg-muted); }
   @container (max-inline-size: 400px) {
     .area-video-player--bar .area-video-player__volume > .area-video-player__range,
     .area-video-player--bar .area-video-player__optional { display: none; }

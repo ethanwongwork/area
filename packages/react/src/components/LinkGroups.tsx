@@ -16,13 +16,14 @@ export interface LinkGroupsProps extends Omit<HTMLAttributes<HTMLElement>, "titl
 }
 
 export const LinkGroups = /* @__PURE__ */ forwardRef<HTMLElement, LinkGroupsProps>(function LinkGroups(
-  { title, level, divided, className, children, ...rest },
+  { title, level, divided, className, children, "aria-label": ariaLabel, ...rest },
   ref,
 ) {
   const id = useId();
   const Heading = `h${level ?? 2}` as "h2";
+  // aria-label wins over the title, as Infobox's and Table of contents' names (DESIGN_SYSTEM.md, Names).
   return (
-    <nav ref={ref} className={linkGroupsVariants({ divided }, className)} aria-labelledby={title ? `${id}-title` : undefined} {...rest}>
+    <nav ref={ref} className={linkGroupsVariants({ divided }, className)} aria-labelledby={title && !ariaLabel ? `${id}-title` : undefined} aria-label={ariaLabel} {...rest}>
       {title ? <Heading className={linkGroupsVariants.element("title")} id={`${id}-title`}>{title}</Heading> : null}
       <div className={linkGroupsVariants.element("groups")}>{children}</div>
     </nav>

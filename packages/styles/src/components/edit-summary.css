@@ -24,7 +24,8 @@
     /* Concentric corners (round 52, owner: "make sure the inset button … is mathematically correct corner radius"): a
        button set into a corner takes that corner less its inset; under Sharp (no concentric corners) it keeps its own. */
     --_head-button-radius: max(var(--area-radius-min), calc(var(--area-radius-control-sm) + (var(--area-radius-container) - var(--area-stroke-width) - var(--_card-end) - var(--area-radius-control-sm)) * var(--area-radius-concentric)));
-    --_row-button-radius: max(var(--area-radius-min), calc(var(--area-radius-control-sm) + (var(--area-radius-row) - (var(--area-ui-row) - var(--area-control-sm)) / 2 - var(--area-radius-control-sm)) * var(--area-radius-concentric)));
+    /* The row's buttons sit the same clamped inset from the row's end, so their corner is the row's less that inset. */
+    --_row-button-radius: max(var(--area-radius-min), calc(var(--area-radius-control-sm) + (var(--area-radius-row) - var(--_card-end) - var(--area-radius-control-sm)) * var(--area-radius-concentric)));
     min-inline-size: 0;
     overflow: hidden;
     border: var(--area-stroke-width) solid var(--area-border-card); /* no shadow under it: a required frame (DESIGN_SYSTEM.md, "Strokes") */
@@ -47,7 +48,7 @@
     min-block-size: calc(var(--area-control-sm) + 2 * var(--_card-end));
     padding-block: var(--_card-end);
     padding-inline: var(--_card-column) var(--_card-end);
-    border-block-end: var(--area-stroke-width) solid var(--area-border-divider);
+    border-block-end: var(--area-stroke-width) solid var(--area-border-decorative); /* a seam inside the card: Code block's header seam, never darker than the frame (DESIGN_SYSTEM.md, "A rule inside a container is never darker than the container's edge"; owner, round 55) */
   }
   .area-edit-summary__title { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   /* The counts read as one figure: 4 apart, a line's gap (Step). */
@@ -59,13 +60,15 @@
   .area-edit-summary__head .area-button { --_shape: var(--_head-button-radius); }
   .area-edit-summary__file .area-button { --_shape: var(--_row-button-radius); }
 
-  .area-edit-summary__files { display: grid; grid-template-columns: minmax(0, 1fr); padding: var(--_card-list); }
-  /* A file's row is a Menu row: its name, counts and chevron as one button, Undo and Keep at the end. */
+  /* Menu's list: its padding, and its break between rows (ui-row-gap: 2, compact 0) so adjacent plates stay distinct. */
+  .area-edit-summary__files { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-ui-row-gap); padding: var(--_card-list); }
+  /* A file's row is a Menu row: its name, counts and chevron as one button, Undo and Keep at the end, Menu's row gap
+     (gap-row) between them. */
   .area-edit-summary__file {
     position: relative;
     display: flex;
     align-items: center;
-    gap: var(--area-space-8);
+    gap: var(--area-gap-row); /* Menu's row gap (surface.css --_menu-gap): 12, compact 8 */
     min-inline-size: 0;
     min-block-size: var(--area-ui-row);
     padding-inline: var(--area-ui-row-inset);
@@ -78,7 +81,7 @@
   }
   @media (hover: hover) { .area-edit-summary__file:hover { --_row-plate: var(--area-bg-component-hover); transition-duration: 0s; } }
   .area-edit-summary__file:focus-within { --_row-plate: var(--area-bg-component-hover); transition-duration: 0s; }
-  .area-edit-summary__file:has(> .area-edit-summary__name:active) { --_row-plate: var(--area-bg-component-active); transition-duration: 0s; }
+  .area-edit-summary__file:has(> .area-edit-summary__name:active) { --_row-plate: var(--area-bg-component-pressed); transition-duration: 0s; } /* Menu's pressed fill (Shared state paint) */
   /* Row actions change ink, not plate (Nav's and Board's rule, cohesion test): the row already shows the pointer, so
      Undo and Keep are muted ghost buttons whose hover and press are the default ink. A plate of their own would be the
      row's grey again, so their hover could not be seen. */
@@ -105,6 +108,8 @@
   .area-edit-summary__file:has(> .area-edit-summary__name:focus-visible) { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(-1 * var(--area-focus-width)); }
   .area-edit-summary__name > span:first-child { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .area-edit-summary__chevron { display: inline-flex; flex: none; color: var(--area-fg-muted); transform: rotate(-90deg); transition: transform var(--area-duration-fast) var(--area-ease-out); /* MOTION.md: every chevron turns on fast */ }
+  /* Closed points along the reading direction, so it mirrors in right-to-left text (Accordion, Tree view). */
+  .area-edit-summary__chevron:dir(rtl) { transform: rotate(90deg); }
   .area-edit-summary__file[data-open] .area-edit-summary__chevron { transform: none; }
   .area-edit-summary__chevron > svg { inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); }
   /* Undo and Keep show while the row is hovered or focused (Message's actions), always on touch. With a pointer they
@@ -130,8 +135,9 @@
   .area-edit-summary__status { flex: none; color: var(--area-fg-muted); }
   .area-edit-summary__file:is([data-kept], [data-undone]) .area-edit-summary__counts > * { color: var(--area-fg-muted); }
   .area-edit-summary__file[data-undone] .area-edit-summary__name > span:first-child { text-decoration: line-through; color: var(--area-fg-muted); }
-  /* A file's diff under its row: 4 below it (a line's body gap, Step), as wide as the row's plate. */
-  .area-edit-summary__diff { min-inline-size: 0; padding-block: var(--area-space-4); }
+  /* A file's diff under its row: 4 below it (a line's body gap, Step), the list's row break included, as wide as the
+     row's plate. */
+  .area-edit-summary__diff { min-inline-size: 0; padding-block: calc(var(--area-space-4) - var(--area-ui-row-gap)); }
 
   /* ---- Diff ---- */
   /* Code block sm's metrics and diff paint (code.css: the Inspector's code well), so Area draws one diff: its type and

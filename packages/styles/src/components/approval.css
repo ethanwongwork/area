@@ -14,7 +14,12 @@
   .area-approval {
     /* The Composer's shell (composer.css), which this replaces until it is answered. */
     --_approval-inset: var(--area-ui-cluster); /* the Composer's inset: 8, compact 6 */
-    --_approval-radius: calc(min(var(--area-radius-control-md), max(var(--area-radius-min), round(down, calc(var(--area-control-md) * var(--area-radius-factor)), 2px))) + var(--_approval-inset) * var(--area-radius-concentric));
+    /* The Composer's corner, term for term (composer.css): its send button's corner plus the inset, concentric. Pill
+       buttons make a pill composer, so they make a pill approval; the inset joins the corner unless the setting is
+       Sharp, and a pill keeps it. */
+    --_approval-button-radius: calc(min(var(--area-radius-control-md), max(var(--area-radius-min), round(down, calc(var(--area-control-md) * var(--area-radius-factor)), 2px))) + var(--area-pill-button) * var(--area-radius-full));
+    --_approval-concentric: max(var(--area-radius-concentric), var(--area-pill-button));
+    --_approval-radius: calc(var(--_approval-button-radius) + var(--_approval-inset) * var(--_approval-concentric));
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: var(--area-ui-cluster);
@@ -46,12 +51,13 @@
   /* A key named in the hint's sentence is a keycap (Kbd's rule, round 52: a key named in prose is filled; a key that
      labels a row or a button is quiet). */
   .area-approval__detail { min-inline-size: 0; }
-  .area-approval__options { display: grid; grid-template-columns: minmax(0, 1fr); }
+  /* Menu's list: its break between rows (ui-row-gap: 2, compact 0) so adjacent plates stay distinct. */
+  .area-approval__options { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-ui-row-gap); }
   /* A choice is a Menu row: the row's height, inset, gap and corner; the row plate under the pointer and on focus. */
   .area-approval__option {
     display: flex;
     align-items: center;
-    gap: var(--area-space-8); /* spec: Menu row gap 8 */
+    gap: var(--area-gap-row); /* Menu's row gap (surface.css --_menu-gap): 12, compact 8, so the label lands on the list column */
     min-block-size: var(--area-ui-row);
     min-inline-size: 0;
     margin: 0;
@@ -72,7 +78,7 @@
     outline-offset: calc(-1 * var(--area-focus-width));
     transition-duration: 0s;
   }
-  button.area-approval__option:active { background-color: var(--area-bg-component-active); }
+  button.area-approval__option:active { background-color: var(--area-bg-component-pressed); } /* Menu's pressed fill (Shared state paint) */
   /* The number sits in the row's icon slot, centred, so every label starts on one column; it reads at the label's size
      in the muted ink, unboxed (round 51: Claude Code's shortcut number is the label's size at 60%; Codex writes "1." in
      the label's type). A quiet Kbd keeps the key's semantics. */

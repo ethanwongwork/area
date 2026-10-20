@@ -24,7 +24,14 @@ export interface TableOfContentsProps extends Omit<HTMLAttributes<HTMLElement>, 
   /** Space a sticky header covers at the top of the scroller, in px: a heading counts as reached below it. */
   offset?: number;
   /** The id of the section being read (controlled). Otherwise it follows the scroll. */
+  value?: string;
+  /** The section marked before the first scroll measure (uncontrolled); `top`'s id by default. */
+  defaultValue?: string;
+  /** Called when the section being read changes, by scrolling or a click. */
+  onValueChange?: (id: string | undefined) => void;
+  /** @deprecated Use `value` (DESIGN_SYSTEM.md, One API vocabulary). */
   current?: string;
+  /** @deprecated Use `onValueChange`. */
   onCurrentChange?: (id: string | undefined) => void;
 }
 
@@ -39,13 +46,18 @@ const scrollerOf = (node: Element) => {
 };
 
 export const TableOfContents = /* @__PURE__ */ forwardRef<HTMLElement, TableOfContentsProps>(function TableOfContents(
-  { items, title = "On this page", top, levels = 2, offset = 0, current: currentProp, onCurrentChange, className, "aria-label": ariaLabel, ...rest },
+  { items, title = "On this page", top, levels = 2, offset = 0, value, defaultValue, onValueChange, current: legacyCurrent, onCurrentChange,
+    className, "aria-label": ariaLabel, ...rest },
   ref,
 ) {
-  const [local, setLocal] = useState<string | undefined>(top?.id);
+  const currentProp = value ?? legacyCurrent;
+  const onChange = onValueChange ?? onCurrentChange;
+  const [local, setLocal] = useState<string | undefined>(defaultValue ?? top?.id);
   const current = currentProp ?? local;
-  const changed = useRef(onCurrentChange);
-  changed.current = onCurrentChange;
+  const changed = useRef(onChange);
+  changed.current = onChange;
+  // The last section reported, so a change is announced once, outside the state updater (StrictMode runs updaters twice).
+  const reported = useRef(local);
   const all = useMemo(() => flatten(items, levels), [items, levels]);
   const key = all.map(item => item.id).join(" ");
 
@@ -63,7 +75,8 @@ export const TableOfContents = /* @__PURE__ */ forwardRef<HTMLElement, TableOfCo
       let next: string | undefined = top?.id;
       for (const heading of headings) { if (heading.getBoundingClientRect().top <= line) next = heading.id; else break; }
       if (scroller.scrollTop > 0 && Math.ceil(scroller.scrollTop + scroller.clientHeight) >= scroller.scrollHeight - 1) next = headings.at(-1)!.id;
-      setLocal(previous => { if (previous !== next) changed.current?.(next); return next; });
+      setLocal(next);
+      if (reported.current !== next) { reported.current = next; changed.current?.(next); }
     };
     const request = () => { if (!frame) frame = requestAnimationFrame(measure); };
     document.addEventListener("scroll", request, true);
@@ -74,7 +87,7 @@ export const TableOfContents = /* @__PURE__ */ forwardRef<HTMLElement, TableOfCo
 
   const rows = (list: TableOfContentsItem[], depth = 1): ReactNode => list.map(item => (
     <Fragment key={item.id}>
-      <NavItem href={`#${item.id}`} aria-current={item.id === current ? "location" : undefined} onClick={() => { if (currentProp === undefined) setLocal(item.id); onCurrentChange?.(item.id); }}>
+      <NavItem href={`#${item.id}`} aria-current={item.id === current ? "location" : undefined} onClick={() => { if (currentProp === undefined) setLocal(item.id); reported.current = item.id; onChange?.(item.id); }}>
         {item.label}
       </NavItem>
       {item.children?.length && depth < levels ? <NavGroup nested>{rows(item.children, depth + 1)}</NavGroup> : null}
@@ -85,7 +98,7 @@ export const TableOfContents = /* @__PURE__ */ forwardRef<HTMLElement, TableOfCo
     <Nav ref={node => assignRef(ref, node)} selection="marker" className={cx(tableOfContentsVariants(), className)}
       aria-label={ariaLabel ?? (typeof title === "string" ? title : "On this page")} {...rest}>
       {title !== false ? <div className={tableOfContentsVariants.element("title")} aria-hidden="true">{title}</div> : null}
-      {top ? <NavItem href={`#${top.id}`} aria-current={current === top.id ? "location" : undefined} onClick={() => { if (currentProp === undefined) setLocal(top.id); onCurrentChange?.(top.id); }}>{top.label}</NavItem> : null}
+      {top ? <NavItem href={`#${top.id}`} aria-current={current === top.id ? "location" : undefined} onClick={() => { if (currentProp === undefined) setLocal(top.id); reported.current = top.id; onChange?.(top.id); }}>{top.label}</NavItem> : null}
       {rows(items)}
     </Nav>
   );

@@ -80,6 +80,7 @@ export const tokenRowVariants = /* @__PURE__ */ createVariants(manifests.tokenRo
 export const assetRowVariants = /* @__PURE__ */ createVariants(manifests.assetRow);
 export const folderVariants = /* @__PURE__ */ createVariants(manifests.folder);
 export const filePageVariants = /* @__PURE__ */ createVariants(manifests.filePage);
+export const fileImageVariants = /* @__PURE__ */ createVariants(manifests.fileImage);
 export const fileTileVariants = /* @__PURE__ */ createVariants(manifests.fileTile);
 export const fileGridVariants = /* @__PURE__ */ createVariants(manifests.fileGrid);
 export const assetCardVariants = /* @__PURE__ */ createVariants(manifests.assetCard);

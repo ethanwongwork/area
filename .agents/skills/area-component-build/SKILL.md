@@ -89,6 +89,11 @@ Follow `docs/ARCHITECTURE.md` › "Adding a component: the files" for where each
 - **Shared roles.** Paint them the shared way (`docs/DESIGN_SYSTEM.md`, "Shared state
   paint", "Elevation", "Strokes"): row plates, disabled, fixed foreground, emphasis roles,
   floating frame and shadow role.
+- **Grounds.** If the component paints its own ground (`bg-surface`, `bg-code`,
+  `bg-subtle`, `bg-page`) and anything on it has a control fill (a plate, a soft field, a
+  ghost button), list it with that ground in `layers.css` so those fills step from it
+  (DESIGN_SYSTEM.md, Layers). Never hand-pick a plate colour for one component; the
+  cohesion test "every painted ground is declared" fails an undeclared ground.
 - **API words.** Use the vocabulary in `docs/GOVERNANCE.md` § 4.
 - **React.** Native props and refs are forwarded, every prop has JSDoc, and keyboard
   behaviour and accessible names are complete or their gaps stated.

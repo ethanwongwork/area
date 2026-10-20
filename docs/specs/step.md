@@ -61,9 +61,10 @@ area-step                 grid; the line, then the body
     area-step__detail     muted, cut short with an ellipsis, tabular numbers
     area-step__meta       optional (a duration, +N −N), muted, tabular
     area-step__chevron    12 glyph, hidden until the row is hovered or focused, or the step is open
-  area-step__body         padding-top 4; hidden when closed
-area-step-group           a Step whose body is steps, 4 apart, on a 1px rule 12 in
-area-step--reasoning      a Step whose body is the summary in muted ink
+  area-step__body         margin-top 4, on a rail: a 1px border-inline-start (border-divider at stroke-width), content
+                          12 in with the rule counted; hidden when closed
+area-step--group          a Step whose body holds `area-step__items`: steps, 4 apart (same body and rail)
+area-step--reasoning      a Step whose body is the summary in muted ink, pre-wrap
 ```
 
 ## Measurements
@@ -88,7 +89,7 @@ From the stylesheets (not capture-compare tables; no live captures yet):
 | verb ink | fg-default, regular | cursor (verb over detail) | one label weight (DESIGN_SYSTEM); the default ink is the stronger of Area's two |
 | detail ink | fg-muted | cursor, codex | — |
 | gaps | 4 between parts and between steps | cursor + codex agree (4) | — |
-| chevron | 12 glyph `chevron-down`, rotated 270° closed, hidden until hover / focus / open | cursor | Area's chevron glyph (Accordion's) |
+| chevron | 12 glyph `chevron-down`, rotated 270° closed (90° in RTL, pointing along the reading direction), hidden until hover / focus / open; appears at once and fades out on `fast`, turns on `fast` | cursor | Area's chevron glyph (Accordion's); MOTION.md Hover and Chevron rotation |
 | running | verb shimmer, 60% → 100% → 60% of its ink over 2s × the motion loop | cursor `TextShimmerContent.js` | stops at Motion 0 and under reduced motion |
 | failed | verb in fg-danger | codex ✘, claude-code failure dot | — |
 | group children | 4 apart, a 1px divider rule, content 12 in | claude-code rail at 12 | the rule keeps a folded run legible at 256 |
@@ -135,6 +136,8 @@ React tests (`packages/react/tests/agent-chat.test.mjs`, 9), the full React suit
 - 2026-10-19 · owner, round 49 (needs changes): "make sure the text styles and colors, and gaps, padding, margins, overall spacing/layout are cleaned up, intentional, accurate, and consistent" → a cleanup pass: every text style, color, gap and inset traced to a reference value or an Area peer, written below.
 - 2026-10-19 · owner, round 50 (rethink): "is the line necessary?" → round 51 coherence pass (below).
 - 2026-10-19 · owner, round 51 (rethink): "if the line is necessary/intentional then i would keep it" → round 52 (below).
+- 2026-10-19 · audit: Anatomy corrected to the code (the body's margin and rail, `.area-step--group`); the chevron now
+  appears at once on hover (it faded in) while its turn keeps `fast`; the closed chevron mirrors in RTL.
 
 ## Review note, 2026-10-19
 
@@ -151,8 +154,8 @@ The agent chat's shared rules (all five families):
 | Cards (Edit summary, Plan) | one size, text-sm; sm buttons | Cursor: cards 13 under a 14 reply |
 | Card frame | the card edge at stroke-width, container corner, surface fill | Code block |
 | Card column | text 12 in: Menu's list padding 4 + the row inset 8 | Menu; Cursor card header 0 12 |
-| Card head | one row tall, a rule under it when rows follow; a trailing button (row − control) / 2 from the end | Code block's header |
-| Card rows | Menu rows: row height, row inset, row corner, row plate, gap 8 | Menu |
+| Card head | one row tall, a rule under it when rows follow; a trailing button (row − control) / 2 from the end, never under 4 | Code block's header |
+| Card rows | Menu rows: row height, row inset, row corner, row plate (pressed: bg-component-pressed), Menu's row gap `gap-row` (12, compact 8) so a label after the icon slot lands on the list column, and `ui-row-gap` (2, compact 0) between rows | Menu (`--_menu-gap`, surface.css) |
 | What a line opens | 4 under the line, on a 1px rail with its content 12 in | Cursor content gap 4; Claude Code's rail at 12 |
 | Backplates | one: the row plate under the pointer or focus | Menu |
 
@@ -192,3 +195,8 @@ same start; the rule says they belong to the line above. It stays one rule for e
 - **What changed:** the thin line beside opened content is back.
 - **Why:** it is what tells an opened group's steps apart from the steps that follow it; without it they read as one
   list.
+
+## Review note, 2026-10-19 (round 55, design-system audit)
+
+- **What changed:** The chevron appears at once under the pointer (it faded in) and still fades out; the closed chevron mirrors in right-to-left text.
+- **Why:** MOTION.md: hover enters instantly and leaves on fast, as Queue's and Edit summary's reveals do.

@@ -83,3 +83,16 @@ test('the week layout shows seven days from the week start with weekday and mont
   assert.match(html, /area-calendar__day-month">Oct</);
   assert.equal((html.match(/tabindex="0"/gi) || []).length, 1);
 });
+
+// Round 62 (docs/specs/calendar.md): the header is previous · title · next, the title centred between two arrow slots;
+// caption="menus" puts the month and the year in two menus, keeps the heading for the grid's name, and bounds them.
+test('the header is previous, title, next; menus replace the title but keep the heading for the grid', () => {
+  const label = render({ defaultValue: '2026-09-15' });
+  assert.match(label, /area-calendar__header"><span class="area-calendar__nav"><button[^>]*aria-label="Previous month"[\s\S]*?<h2 class="area-calendar__title"[^>]*>September 2026<\/h2><span class="area-calendar__nav"><button[^>]*aria-label="Next month"/);
+  const menus = render({ caption: 'menus', defaultValue: '2026-09-15', min: '2026-03-10', max: '2027-02-01' });
+  assert.match(menus, /area-calendar--menus/);
+  assert.match(menus, /<h2 class="area-sr-only" id="([^"]+)"[^>]*>September 2026<\/h2>[\s\S]*aria-labelledby="\1"/);
+  assert.match(menus, /aria-label="Month"/);
+  assert.match(menus, /aria-label="Year"/);
+  assert.match(menus, /area-calendar__menus/);
+});

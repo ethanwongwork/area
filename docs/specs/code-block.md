@@ -303,3 +303,12 @@ The collapse toggle is not selectable; line-number and toggle underlines take Li
 - 2026-10-16 · owner: "go with your recs, fix them in that order" (after the Layers sweep, docs/research/layers-2026-10-16/sweep/README.md) → inks on a marked line hold 4.5:1 on its plate. Syntax inks, line numbers and diff markers read a private `--_ink` through one rule that mixes it toward black by `--_ink-darken` (light) or white by `--_ink-lift` (dark). Highlighted and target lines: 0.075 darker (the 6.7% wash needs 0.063–0.073 on every light ground; syntax was 3.97:1 there at the defaults, 3.31:1 at 90), and in dark 4.5× however far the raised layer passes L 0.225 (the 19% white wash; 3.5:1 at 24 + 8 before, 0 at the defaults). Added and removed lines: 0.05 darker in light (their fixed tints left strings and markers at 4.19–4.32:1). The vivid inks themselves now follow the light page (tokens color/layers.ts VIVID_ROLES).
 
 Since 2026-10-17 the underline offset is Link's 0.08em, close under the text (link.md, "Close underline").
+
+## Review note, 2026-10-20 (round 62)
+
+- **What changed:** Its Copy and wrap buttons now take the plate made for its raised code ground. In light at the default settings nothing moves (there the raised plate equals the page's);
+  in dark and on a grey page its hover, selected and pressed plates are now the same step from this surface as every
+  Card's and Menu's (dark: #272727 on #121212, was #212121).
+- **Why:** you asked that hover colours come from rules, not one-off fixes. The rule is now written (DESIGN_SYSTEM.md,
+  Layers: a component that paints a ground declares it in layers.css) and enforced by a test; this family painted a
+  raised ground without declaring it.

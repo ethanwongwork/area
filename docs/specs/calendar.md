@@ -44,12 +44,13 @@ components; DatePicker waits on overlay behavior (anchoring, dismissal, focus re
 | display | `weekdayStyle` narrow, short (default), abbreviated | S / Su / Sun | Owner references; React Aria `weekdayStyle` |
 | composition | `markers` (date → tone) | Days with events | Owner reference (event dots, today dot) |
 | treatment | `surface` (default), `plain` | Standing alone vs embedded in a host that draws the surface (Popover, Panel); the bare `.area-calendar` draws the plate and `plain` resets it (audit F-21 A, owner 2026-09-30; manifest default `surface`, was `plain`) | Notion's calendar sits in a popover; shadcn's Calendar clears its background inside cards and popovers |
+| caption | `label` (default): the month title centred between the arrows · `menus`: the month and the year as two ghost Custom selects in the title's place, bounded by `min`/`max` (else a century back and a decade ahead of today), the arrows kept | Owner, round 62 ("is there a way to make the month and year drop downs as well? either as a variant or the main one"); shadcn `captionLayout="dropdown"` | shadcn (two native selects in the caption) |
 | constraint | `min`, `max`, `isDateUnavailable` | Bounds and booked days | React Aria, MUI, Mantine, Ant |
 | locale | `firstDayOfWeek`, `locale` | Weeks start on Monday in much of the world | React Aria, Mantine |
 | display | `showOutsideDays`, `fixedWeeks` | Notion shows outside days and always six weeks | Notion (6 rows for a 5-week September); rdp `fixedWeeks` |
 | state | `disabled` | — | Peers |
 
-Excluded for now: week numbers, month/year dropdowns and drill-down levels, presets (Notion's
+Excluded for now: week numbers, drill-down levels (a year grid), presets (Notion's
 Today / Last 7 days list is a Menu above the calendar, a composition), time entry.
 
 ## Sources
@@ -60,6 +61,9 @@ Today / Last 7 days list is a Menu above the calendar, a composition), time entr
 | shadcn | design system (source) | Calendar over react-day-picker | shadcn-ui/ui@c257f688, `apps/v4/registry/new-york-v4/ui/calendar.tsx` L36 (p-3, `--cell-size` 32), L50 (months gap-4), L113–L127 (range ends, today, outside), L211 (day states) | MIT | — |
 | react-aria | design system (docs) | Calendar, RangeCalendar grid, keyboard and unavailable-date semantics | react-aria.adobe.com/Calendar, /RangeCalendar, 2026-09-26 | Apache-2.0 | — |
 | wai | guidance | Date picker dialog grid keyboard | w3.org/WAI/ARIA/apg/patterns/dialog-modal/examples/datepicker-dialog/ | W3C | — |
+| shadcn-live | design system (rendered docs) | ui.shadcn.com/docs/components/calendar, 2026-10-20: default, `captionLayout="dropdown"`, two months, a hovered day | headless Edge + area-capture.js | MIT | `shadcn--{default,dropdown,range-two-months}--rest--light`, `shadcn--day--hover--light` |
+| react-aria-live | design system (rendered docs) | react-aria.adobe.com/Calendar, 2026-10-20 | headless Edge | Apache-2.0 | `react-aria--default--rest--light`, `react-aria--day--hover--light` |
+| atlassian | design system (rendered docs) | atlassian.design/components/calendar/examples, 2026-10-20 | headless Edge | Apache-2.0 | `atlassian--default--rest--light` |
 | area | this system | Gallery tiles | localhost | — | `area--{default,range,unavailable,plain}--rest--light` |
 
 Not searched in this pass: ChatGPT (scheduled tasks may carry a date control) and Figma
@@ -77,15 +81,26 @@ days     outside and disabled ink rgb(161,158,153); hover rgba(35,131,226,.15) w
          today: white text on a 24px rgb(229,100,88) circle; selected / range start rgb(39,131,222), white text;
          range middle: a continuous rgba(35,131,226,.21) band 28px tall, rounded 6 at its ends; range end rgba(35,131,226,.43)
 area
-shell    surface (default; the bare class draws it): padding 8 top (compact 6), `inset-surface-sm` elsewhere (12, compact 8; border counted), `border-float` edge, radius container, the Surface axis's edge then the floating lift (`--area-shadow-edge`, `--area-shadow-float`); plain: no box
-header   min control-sm (28), padding 4 start / the day inset (2) end; title 14/20 strong; nav Button ghost sm, Area chevron glyph
-grid     cells 36 (compact 32); weekday 12/16 fg-muted; day 32 (compact 28), radius-control-md (8), 12/16 tabular
+shell    surface (default; the bare class draws it): every visible plate `--_inset` (`inset-surface-sm`, 12, compact 8)
+         from the outer edge on all four sides, border counted once: padding top inset − border, sides and foot inset −
+         border − the day inset (the cells reach that far past the plates); `border-float` edge, radius container, the
+         Surface axis's edge then the floating lift; plain: no box
+header   grid of three: a control-sm slot, the title (or the menus) centred, a control-sm slot; min control-sm (28); padding the
+         day inset (2) both ends, so each arrow's side meets the outer day's; `--_head-gap` (the inset) below it; title
+         14/20 strong, cap-trimmed so its cap sits on the arrows' centre line; nav Button ghost sm
+menus    caption="menus": two ghost sm Custom selects (month, year), 2 apart, centred, strong; the h2 kept, visually hidden
+grid     cells 36 (compact 32); weekday row: the labels' 16 line + `--_week-gap` (`ui-cluster`, 8, compact 6) − the day inset,
+         labels at its top, fg-muted; day 32 (compact 28), radius-control-md (8), 12/16 tabular
 ```
 
-Inset equations: surface side inset = border 1 + padding 11 = 12 (Notion 4 + 8). Top =
-1 + 7 = 8 (Notion 4 + 4). Nav end = header padding 2 = (cell 36 − day 32) / 2, so the last
-button's edge lines up with the last day's edge. Range band insets = (36 − 32) / 2 = 2,
-the day inset (cells 36 and days 32 since 2026-09-27).
+Inset equations (round 63; measured in the app at type 13 Compact: 9 on every edge, 12 at Comfortable):
+
+- top: border 1 + padding (inset − 1) = the inset to the arrows' plates;
+- sides and foot: border 1 + padding (inset − 1 − day inset) + day inset 2 = the inset to the outer days' plates;
+- header → weekday labels: `--_head-gap` = the inset (arrows' foot to the labels' text);
+- weekday labels → first row: the labels' line + (`ui-cluster` − day inset) + day inset = `ui-cluster` to the plates;
+- nav ends = header padding 2 = (cell 36 − day 32) / 2, so each arrow's side meets the outer day's;
+- range band insets = (36 − 32) / 2 = 2, the day inset.
 
 ## Measurements
 
@@ -118,14 +133,18 @@ Day states: `notion--day--hover--light`, `notion--day-today--rest--light`,
 | weekday | 12/16 400, fg-muted | Notion 12/18 in a tertiary ink | Area small text; secondary ink is fg-muted |
 | month label | 14/20 **500** | Notion 500 | Surface title at body size (batch 7; audit S2) |
 | nav | Button ghost sm (28; 24 compact), Area chevron | Notion 24px, radius 3 | Area's control tier; Breadcrumb's chevron |
-| surface | padding 8 / 12, popover surface | Notion 4 + 4 / 4 + 8; shadcn p-3 (12) | — |
+| surface | **one inset on all four sides**, `inset-surface-sm` (12, compact 8) from the outer edge to every visible plate | Owner, round 63 ("make sure the inset margins are correct"); shadcn 9 all round (p-2 + edge), Atlassian 16 all round | Was 8 at the top against 14 at the sides and foot (the day inset added to 12) |
+| header gap | **the inset** (12, compact 8) from the arrows to the weekday labels | Owner, round 63 ("the header looks like it could use some more room"); shadcn 16 | Was 0: the labels sat in a row that started at the header's foot |
+| weekday → days | **`ui-cluster`** (8, compact 6) from the labels' text to the first row of plates | shadcn about 11; Area's cluster gap | — |
 | months gap | 16 | shadcn `gap-4` | Notion shows one month |
-| hover, press | bg-hover, press bg-pressed (circle days: bg-component-pressed) (neutral; calendar.css, `.area-calendar__day`) | The translucent wash for a ground the day cannot know (surface or plain) | Notion hovers in its selection blue; hover stays neutral in every theme. Menu and Nav rows now hover `bg-component-hover` |
+| hover, press | **`bg-component-hover`, press `bg-component-pressed`**, the shared plates (Menu, Nav, Tree view rows) | Owner, round 62 ("make sure the hover and selected treatments are correct"); DESIGN_SYSTEM Shared state paint; the calendar's ground is declared in layers.css (raised on its surface, the page when plain), so the plate steps from what is under it | Was the translucent wash, kept while the day could not know its ground. Notion hovers in its blue; shadcn's hover is its accent (#f5) |
+| header | **previous · title centred · next**, side slots `control-sm`, padding the day inset both ends | Owner, round 62 ("should the month and year be centered?"); shadcn, React Aria and Atlassian centre the title between the arrows (captures 2026-10-20) | Notion starts it with both arrows at the end; Area did too until round 62 |
+| weekday row | **24** (12/16 + 4 + 4) | Owner, round 62 (spacing); shadcn 22.4 at 28 cells | Was the 36 cell: a gap under the header the grid did not need |
 | selected | `selection-solid`, `fg-on-selection`; `selection-solid-hover` on hover (neutral by default; the accent when a theme sets selection to accent) | Owner (2026-09-26); shadcn `bg-primary` (near-black) | Notion paints its blue; that is the accent override |
 | range middle | `selection-band` (neutral: bg-component-hover), continuous, inset 2, rounded at the ends; `selection-band-hover` (bg-component-active) on hover. Accent theme: accent-surface | Owner; shadcn `bg-accent` (neutral-100) band; Notion's band geometry | — |
 | range end | the selected paint, like the start | shadcn (both ends primary) | Notion paints the end at 43% (an in-progress look); a committed range is symmetric |
 | range preview | band from the anchor to the hovered/focused day, end unpainted | Notion (after the first click) | — |
-| today | 1px stroke-control ring in the day's shape | Owner reference (outlined today tile) | Pass 2's soft circle would disappear among circle-style available days; a ring stays distinct from selection, the band, fills and outlines in every treatment |
+| today | 1px **`edge-control-hover`** ring (#d4, a checkbox's resting edge) in the day's shape | Owner reference (outlined today tile); owner, round 62 ("the strokes arent as light as the other components") | Was `stroke-control` (#83), the darkest line in the system. A ring stays distinct from selection, the band and the circle fills; one step above the tile edge |
 | outside days | **`fg-muted` ink** (calendar.css:78-79), clickable; choosing one selects it and brings its month into view (Calendar.tsx:189-198, :220); no selection paint on the outside copy | Notion ink rgb(161,158,153); audit F-10 A (owner 2026-09-30); react-day-picker, React Aria reveal the month | Was `fg-disabled` (reserved for disabled text) and a choice with no visible change. Two-month ranges repeated the range and end on outside days; only the owning month paints |
 | unavailable | fg-disabled, struck through | React Aria unavailable dates | Bounds (min/max) only dim, like Notion |
 | fixed weeks | **off** (`fixedWeeks` opt-in) | Owner (2026-09-27: busy); shadcn and rdp default | Notion draws six rows |
@@ -135,7 +154,7 @@ Third-pass additions:
 | Part | Area value | Basis | Reason |
 |---|---|---|---|
 | circle | radius full on days and band ends; choosable in-month days fill bg-component-hover; hover steps to bg-component-active (the translucent wash showed nothing on the #f3 rest, audit F-11) | Google (soft circles on available days) | Neutral per the tone rule |
-| tile | choosable in-month days: 1px `edge-control-hover` inset edge (#d4, `border-subtle` at standard contrast); unavailable in-month days: bg-component, no strike | Owner reference (outlined vs filled tiles) | The fill already says unavailable |
+| tile | choosable in-month days: 1px **`edge-control`** inset edge (#e2, a field's edge; round 62, was #d4); unavailable in-month days: bg-component, no strike | Owner reference (outlined vs filled tiles); owner round 62 (lighter strokes) | The fill already says unavailable; today's ring is one step above |
 | marker | 4px dot, 3px above the day's bottom (week strip: top end corner), fg-muted by default, tone per date, on-selected ink when selected; `aria-description` "Has events" | Owner references (dots under 4 and 14; today dot) | — |
 | week strip | ghost sm arrows either side of a one-row grid; each day a column: weekday and month in fg-muted 12/16, number 16/24; min width 44 | Owner reference (strip) | Up/Down move by week, Page Up/Down by month (Shift: a year), as in the month grid; the strip moves to the week that holds the focused date (Calendar.tsx, `onKeyDown`) |
 | schedule | gallery composition on the calendar surface (8 top, 12 sides, the floating lift); a rule; a time list of ghost **md** Buttons, full width, **4 apart** (the grid's 36px cells around 32px plates), **13 from the rule and from the edge** (12 surface inset + the day plates' 2 cell inset, border counted once), scrolling inside the calendar's height; the selected time is Button `selected` (`bg-component-active`, the shared row selection; ink and weight fixed); footer 8 / 12 with Cancel, a tabular summary and an outline Schedule | Owner reference (send later); owner (2026-09-28): "clean up the time backplate" | Was sm rows 2 apart with `align="start"`, whose optical pull put the plate 2.5px from the rule and 24 from the edge; the list was 288 tall whatever the calendar's height, and the shell used `shadow-2`. A real TimeField/ListBox is future work |
@@ -146,8 +165,8 @@ Third-pass additions:
 
 | State | Changes | Evidence |
 |---|---|---|
-| hover | bg-hover on the day; `selection-band-hover` inside a range; `selection-solid-hover` on a selected day | Notion hover captured (different paint, see Decisions) |
-| pressed | bg-pressed on the day (circle days: bg-component-pressed) | interaction polish 2026-10-16 |
+| hover | `bg-component-hover` on the day (the shared plate, from the calendar's declared ground); `selection-band-hover` inside a range; `selection-solid-hover` on a selected day | Notion, shadcn, React Aria hover captured |
+| pressed | `bg-component-pressed` on the day | interaction polish 2026-10-16; round 62 |
 | focus-visible | Area focus ring on the day | APG grid |
 | selected | `selection-solid` (neutral by default) | Notion selected captured; owner rule |
 | range start / middle / end | band + solid ends | Notion range captured |
@@ -174,7 +193,7 @@ Third-pass additions:
 | Peer | Shared role | Peer value | Calendar | Match / reason |
 |---|---|---|---|---|
 | Popover | surface | `border-float`, container radius, the Surface axis's `--area-shadow-edge` then the floating lift `--area-shadow-float` (cohesion audit, 2026-09-26; a Surface axis role since audit S10) | `surface` | match |
-| Menu / Nav | row hover | `bg-component-hover` | day hover `bg-hover` | differs: rows sit on a known surface; a day may sit on the plain page or the surface, so it keeps the translucent wash |
+| Menu / Nav | row hover | `bg-component-hover` | day hover `bg-component-hover` | match (round 62: the calendar's ground is declared in layers.css) |
 | Breadcrumb | chevron | Area chevron glyph | nav icons (rotated) | match |
 | Button | small icon action | ghost sm | nav | match |
 
@@ -277,3 +296,45 @@ Days press at `bg-pressed` (10%; they pressed with the 5% hover); circle days at
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → motion pass: day plates now appear at once and fade out on fast ease-out like every other plate (were snapped both ways); press and keyboard instant. "Motion and interaction, 2026-10-07".
 - 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the tile edge reads `edge-control-hover` (same #d4; stronger under increased contrast) (calendar.css). (docs/research/consistency-audit-2026-10-12.md)
 - 2026-10-14 · owner: "continue working on the next axis" → Surface is one number, the frame's width: `1` (Default) or `0` (Borderless) (was `outlined` / `borderless`; axes/surface.ts). At 0 the surface calendar lists the Surface axis's `shadow-edge` first in its box-shadow, ChatGPT's frameless-menu edge (`0 0 1px` black 62%, and in dark an inset `0 0 1px` white 20%; captured 2026-10-13), so it keeps an edge at Elevation 0 and in dark, where it had none. Owner approved ("go with your recs"), review https://claude.ai/artifact/L4TCF2W5zcjvBK7xZmaDBN (docs/research/surface-2026-10-14.md).
+
+## Review note, 2026-10-20 (round 62)
+
+- **What changed:** Its day plates now take the plate made for its raised surface by default (only `--surface` was declared, but the bare calendar paints the surface too). In light at the default settings nothing moves (there the raised plate equals the page's);
+  in dark and on a grey page its hover, selected and pressed plates are now the same step from this surface as every
+  Card's and Menu's (dark: #272727 on #121212, was #212121).
+- **Why:** you asked that hover colours come from rules, not one-off fixes. The rule is now written (DESIGN_SYSTEM.md,
+  Layers: a component that paints a ground declares it in layers.css) and enforced by a test; this family painted a
+  raised ground without declaring it.
+- 2026-10-20 · owner, round 62 (rethink: "research other calendar components … refine the padding, gaps, margins, and
+  alignment … hover and selected treatments … month and year drop downs … should the month and year be centered? …
+  colors … too dark, the strokes arent as light") → captured shadcn (default, dropdown, two months, hover), React Aria
+  (default, hover) and Atlassian on their live docs with area-capture.js; title centred between the arrows (3 of 4
+  references), weekday row 24, today ring `edge-control-hover` (was `stroke-control`), tile edges `edge-control`, hover
+  and press the shared plates, `caption="menus"` → gallery capture, light and dark; calendar tests extended.
+
+## Review note, 2026-10-20 (round 63)
+
+- **What changed:** the month and year sit centred between the arrows, each arrow lined up with the outer days. A new
+  option turns the month and year into two quiet menus that jump straight to any month (for dates far away, like a
+  birthday). Today's outline is much lighter, the outlined-day style uses a field's light edge, hover and press use the
+  same plates as menus and lists, and the weekday row is shorter, so the grid sits closer to its title.
+- **Why:** your rethink. shadcn, React Aria and Atlassian all centre the title between the arrows (Notion is the one that
+  doesn't); shadcn offers month and year dropdowns the same way. Today's ring was the darkest line in the system and the
+  tile outlines a step darker than other components' edges; the hover was a one-off wash that now follows the shared
+  rule, since the calendar declares its surface.
+- **Your question:** I kept the arrows-and-title header as the default and made the menus the variant: most dates people
+  pick are near today, where the arrows are quicker; the menus are there for far dates.
+- 2026-10-20 · owner, round 63 ("make sure the alignment, spacing, gaps, margins, padding are all correct. the header
+  looks like it could use some more room … make sure the inset margins are correct") → measured Area and the captured
+  references edge by edge: one inset on all four sides to the visible plates (was 8 top, 14 sides and foot), the inset
+  again under the header (was 0), the cluster gap from the weekday labels to the days, the title cap-centred on the
+  arrows; Schedule's composition on the same inset → in the app: 9 on every edge and under the header at type 13 Compact,
+  12 at Comfortable; title and arrows on one centre line.
+
+## Review note, 2026-10-20 (round 64)
+
+- **What changed:** the calendar has one margin all round: the arrows at the top and the outer days at the sides and
+  bottom all sit the same distance from the edge, and the header has that same room below it before the weekday names.
+  The title sits exactly on the arrows' centre line, and the weekday names sit a short, even gap above the first row.
+- **Why:** the margin was uneven (8 at the top, 14 at the sides and bottom) and the header sat directly on the weekday
+  row. Every gap now comes from the system's spacing tokens, so it holds at every density.

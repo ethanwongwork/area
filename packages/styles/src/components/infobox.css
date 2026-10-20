@@ -16,6 +16,7 @@
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-infobox {
+    --_label-column: 120px; /* spec: Wikipedia's 123 of 296; Radix and Chakra's label minimum */
     display: flex;
     flex-direction: column;
     /* spec: 12 between the header and each section (GitHub's About: sections 16 apart at 14 with a rule; Area's
@@ -64,11 +65,14 @@
     padding-block-start: var(--area-space-12);
     border-block-start: var(--area-stroke-width) solid var(--area-border-divider); /* a divider: a required line (DESIGN_SYSTEM.md, "Strokes") */
   }
+  /* Framed, the rules are seams inside the card, so they take the seam colour, never darker than the frame (DESIGN_SYSTEM.md;
+     round 55 sweep after Edit summary's note). Unframed they stand on their own and stay dividers. */
+  .area-infobox--framed .area-infobox__section + .area-infobox__section { border-block-start-color: var(--area-border-decorative); }
   .area-infobox__heading { margin: 0; font-size: inherit; line-height: inherit; font-weight: var(--area-weight-strong); }
   /* spec: Wikipedia's rows: the label column 123 of 296 (Area 120, Radix and Chakra's label minimum), the value 4 after
      it (3 spacing + 1 padding), rows 4 apart (3 + 2 × 1), both top-aligned. */
   .area-infobox__rows { display: flex; flex-direction: column; gap: var(--area-space-4); margin: 0; }
-  .area-infobox__row { display: grid; grid-template-columns: 120px minmax(0, 1fr); column-gap: var(--area-space-8); align-items: start; }
+  .area-infobox__row { display: grid; grid-template-columns: var(--_label-column) minmax(0, 1fr); column-gap: var(--area-space-8); align-items: start; }
   .area-infobox__label { margin: 0; color: var(--area-fg-muted); overflow-wrap: anywhere; }
   .area-infobox--columns {}
   /* Stacked: the label above its value, for a narrow column (the App Store's Information: label muted, 4 above the

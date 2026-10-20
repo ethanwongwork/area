@@ -56,6 +56,7 @@ export { Titlebar, SectionHeading, type TitlebarProps, type SectionHeadingProps 
 export { AssetRow, type AssetRowProps } from "./components/AssetRow.tsx";
 export { Folder, type FolderProps } from "./components/Folder.tsx";
 export { FilePage, type FilePageProps } from "./components/FilePage.tsx";
+export { FileImage, type FileImageProps } from "./components/FileImage.tsx";
 export { FileTile, FileGrid, FileGridItem, type FileTileProps, type FileGridProps, type FileGridItemProps } from "./components/FileTile.tsx";
 export { AssetCard, AssetGrid, AssetGridItem, type AssetCardProps, type AssetGridProps, type AssetGridItemProps } from "./components/AssetCard.tsx";
 export { Surface, type SurfaceProps } from "./components/Surface.tsx";
@@ -99,10 +100,10 @@ export { Indicator, IndicatorAnchor, type IndicatorProps, type IndicatorAnchorPr
 export { Count, type CountProps } from "./components/Count.tsx";
 export { AccordionItem, Accordion, type AccordionItemProps, type AccordionProps } from "./components/Accordion.tsx";
 export { Step, StepGroup, Reasoning, type StepProps, type StepGroupProps, type ReasoningProps, type StepRunStatus } from "./components/Step.tsx";
-export { EditSummary, EditSummaryFile, Diff, type EditSummaryProps, type EditSummaryFileProps, type EditFileState, type DiffProps, type DiffHunk, type DiffLine } from "./components/EditSummary.tsx";
+export { EditSummary, EditSummaryFile, Diff, type EditSummaryProps, type EditSummaryFileProps, type EditFileState, type EditFileStatus, type DiffProps, type DiffHunk, type DiffLine } from "./components/EditSummary.tsx";
 export { Approval, type ApprovalProps, type ApprovalOption } from "./components/Approval.tsx";
 export { Plan, type PlanProps, type PlanItem } from "./components/Plan.tsx";
-export { TurnNotice, type TurnNoticeProps } from "./components/TurnNotice.tsx";
+export { TurnNotice, type TurnNoticeProps, type TurnNoticeStatus } from "./components/TurnNotice.tsx";
 export { Attachment, ComposerMenu, Queue, Timestamp, formatTimestamp, TIMESTAMP_GAP, type AttachmentProps, type ComposerMenuProps, type ComposerMenuItem, type ComposerMenuGroup, type QueueProps, type QueueItem, type TimestampProps } from "./components/ComposerParts.tsx";
 
 export { ColorPicker, hexToHsv, hsvToHex, type ColorPickerProps, type ColorModel, type ColorView } from "./components/ColorPicker.tsx";

@@ -100,3 +100,6 @@ footers' hierarchy (strong heading, dimmer links) and the surface title for the 
 Owner: "Link groups" (recommended: no other system calls this a navbox; site footers and docs call it link groups or a
 sitemap). The family is `link-groups`: `LinkGroups` and `LinkGroup` in React, `.area-link-groups` in CSS, `linkGroups`
 in the manifest. The design approved in round 35 is unchanged.
+- 2026-10-19 · design-system audit → the list sets the muted ink itself (`__list` color `fg-muted`), so standalone Links
+  inherit it as the Documentation entry says; the demo no longer passes `ink="muted"` per link. `aria-label` now wins
+  over the title's `aria-labelledby`. No visual change in the gallery.

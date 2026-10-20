@@ -10,8 +10,23 @@
        (2026-09-27) set default density, where days sit beside 32px Buttons. */
     --_day-inset: calc((var(--_cell) - var(--_day)) / 2);
     --_day-radius: min(var(--area-radius-control-md), max(var(--area-radius-min), round(down, calc(var(--_day) * var(--area-radius-factor)), 2px))); /* 32px days take the md radius (audit S4, F-12) */
-    /* Today is a date marker, not a selection or availability: a 1px ring in the day's shape. */
-    --_today-edge: var(--area-stroke-control);
+    /* Today is a date marker, not a selection or availability: a 1px ring in the day's shape, at a checkbox's resting edge
+       (#d4), one step above the tiles' field edge (owner, round 62: "the strokes arent as light as the other components";
+       was stroke-control, #83, the darkest line in the system). Both strengthen under increased contrast. */
+    --_today-edge: var(--area-edge-control-hover);
+    /* The rhythm (owner, rounds 62–63: "make sure the alignment, spacing, gaps, margins, padding are all correct. the
+       header looks like it could use some more room"), every value a spacing token, measured from what is seen (the
+       plates, the labels' text), not from the boxes around them:
+         edge → arrows, edge → outer days, last days → edge   --_inset   12 (compact 8), the sm surface inset, all four
+         header → weekday labels                             --_head-gap 12 (compact 8)
+         weekday labels → first row of days                  --_week-gap  8 (compact 6), the cluster gap
+       Days sit `--_day-inset` inside their cells, so the cell grid reaches that much past the plates on every side; the
+       surface's padding gives it back. shadcn: 9 all round, header → labels 16, labels → days about 11; Atlassian 16. */
+    --_inset: var(--area-inset-surface-sm);
+    --_head-gap: var(--area-inset-surface-sm);
+    --_week-gap: var(--area-ui-cluster);
+    /* The weekday row: the labels' line, then the gap to the first row less the days' own inset. */
+    --_weekday: calc(var(--area-text-xs-leading) + var(--_week-gap) - var(--_day-inset));
     display: inline-block;
     color: var(--area-fg-default);
     font-size: var(--area-control-md-text);
@@ -26,14 +41,14 @@
     --_band: var(--area-selection-band);
     --_band-hover: var(--area-selection-band-hover);
   }
-  /* The surface is the popover's: Notion's calendar sits 8px from its top and 12px from the
-     other edges, border included. It is the default (audit F-21 A, owner 2026-09-30), so the
-     bare class draws it and `--surface` restates it for manifest parity. */
+  /* The surface is the popover's. It is the default (audit F-21 A, owner 2026-09-30), so the bare class draws it and
+     `--surface` restates it for manifest parity. Every visible plate sits the inset from its outer edge, border counted
+     once (inset.css): the arrows at the top, the outer days at the sides and the foot, whose cells reach `--_day-inset`
+     past them (round 63; was 8 at the top against 14 at the sides and foot). */
   .area-calendar,
   .area-calendar--surface {
-    /* Sides on the sm surface inset (12, compact 8); the top one rung less (8, compact 6). */
-    padding: calc(var(--area-inset-surface-sm) - var(--area-border-width));
-    padding-block-start: calc(8px /* spec */ - 2px * var(--area-ui-dense) - var(--area-border-width));
+    padding: calc(var(--_inset) - var(--area-border-width) - var(--_day-inset));
+    padding-block-start: calc(var(--_inset) - var(--area-border-width));
     border: var(--area-border-width) solid var(--area-border-float);
     border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
@@ -41,23 +56,36 @@
     box-shadow: var(--area-shadow-edge), var(--area-shadow-float);
   }
   /* The 8px top inset seats the month header; a week strip has none, so it takes 12 all round. */
-  .area-calendar--week { padding-block-start: calc(var(--area-inset-surface-sm) - var(--area-border-width)); }
+  .area-calendar--week { padding: calc(var(--_inset) - var(--area-border-width)); } /* the strip has no cell overhang: the inset on every side */
   /* Plain sits inside a host that already draws the surface (a Popover, a Panel). */
   .area-calendar--plain { padding: 0; border: 0; border-radius: 0; background-color: transparent; box-shadow: none; }
   .area-calendar__months { display: flex; flex-wrap: wrap; gap: var(--area-inset-surface-md); }
   .area-calendar__month { display: grid; align-content: start; }
+  /* The header: previous at the start, the title centred, next at the end (shadcn, React Aria and Atlassian centre it
+     between the arrows; owner, round 62: "should the month and year be centered?"). The side slots are the arrow's width,
+     so the title centres on the grid, and they sit the day inset in, so each arrow's side meets the outer day's. */
   .area-calendar__header {
-    display: flex; align-items: center; justify-content: space-between; gap: var(--area-space-4);
+    display: grid; grid-template-columns: var(--area-control-sm) minmax(0, 1fr) var(--area-control-sm);
+    align-items: center; gap: var(--area-space-4);
     min-block-size: var(--area-control-sm);
-    padding-inline: var(--area-space-4) var(--_day-inset);
+    padding-inline: var(--_day-inset);
+    margin-block-end: var(--_head-gap);
   }
   /* spec (batch 7): the month label is a surface title, strong as every surface title is (Notion
      "Sep 2026" 500, shadcn caption 500; typography.md role table). */
-  .area-calendar__title { margin: 0; font-size: inherit; line-height: inherit; font-weight: var(--area-weight-strong); }
-  .area-calendar__nav { display: flex; margin-inline-start: auto; }
+  /* The title's cap sits on the arrows' centre line (inset.css: one cap-to-baseline reference for all text). */
+  .area-calendar__title { margin: 0; font-size: inherit; line-height: inherit; font-weight: var(--area-weight-strong); text-align: center; white-space: nowrap; }
+  .area-calendar__title:not(.area-calendar__menus) { text-box: trim-both cap alphabetic; }
+  .area-calendar__nav { display: flex; }
+  .area-calendar__nav:last-child { justify-content: flex-end; }
+  /* Menus: the month and the year as two ghost Custom selects, side by side in the title's place, so they read as the
+     title until the pointer is on them (shadcn's dropdown caption). */
+  .area-calendar__menus { display: flex; justify-content: center; gap: var(--area-space-2); min-inline-size: 0; }
+  .area-calendar--label {}
+  .area-calendar--menus .area-calendar__menus .area-custom-select__trigger { font-weight: var(--area-weight-strong); }
   .area-calendar__grid { border-collapse: collapse; border-spacing: 0; table-layout: fixed; }
   .area-calendar__weekday {
-    inline-size: var(--_cell); block-size: var(--_cell); padding: 0;
+    inline-size: var(--_cell); block-size: var(--_weekday); padding: 0; vertical-align: top;
     color: var(--area-fg-muted); font-weight: var(--area-weight-regular);
     /* The caption role, not the small control's text: small controls moved to 14/20, which had
        carried the weekdays and numbers from 12 to 14 with them. */
@@ -87,9 +115,13 @@
   .area-calendar__day:is(:active, :focus-visible) { transition-duration: 0s; }
   /* A neighbouring month's day is quieter but live: muted, not disabled ink (audit F-10). */
   .area-calendar__day[data-outside] { color: var(--area-fg-muted); }
-  @media (hover: hover) { .area-calendar__day:hover:not(:disabled, [aria-disabled="true"], [data-selected]) { background: var(--area-bg-hover); } }
-  /* Pressed, a step past hover (layers.css, "Pressed"); a day pressed with the hover paint. */
-  .area-calendar__day:active:not(:disabled, [aria-disabled="true"], [data-selected]) { background: var(--area-bg-pressed); }
+  /* The shared plates, as every row and ghost control (DESIGN_SYSTEM.md, Shared state paint): the calendar declares its
+     ground in layers.css (raised on its surface, the page when plain), so the plate steps from what is under it (owner,
+     round 62: "make sure the hover and selected treatments are correct"; was the translucent wash, kept when the day
+     could not know its ground). */
+  @media (hover: hover) { .area-calendar__day:hover:not(:disabled, [aria-disabled="true"], [data-selected]) { background: var(--area-bg-component-hover); } }
+  /* Pressed, a step past selected (layers.css, "Pressed"). */
+  .area-calendar__day:active:not(:disabled, [aria-disabled="true"], [data-selected]) { background: var(--area-bg-component-pressed); }
   .area-calendar__day:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); z-index: 1; }
   .area-calendar__day[data-today]:not([data-selected]) { box-shadow: inset 0 0 0 var(--area-stroke-width) var(--_today-edge); }
   .area-calendar__day[data-selected] { background: var(--_selected); color: var(--_on-selected); box-shadow: none; }
@@ -133,7 +165,7 @@
      pair #f3 → #ee); the translucent wash composited to the same #f3 and showed nothing (audit F-11). */
   @media (hover: hover) { .area-calendar--circle .area-calendar__day:hover:not(:disabled, [aria-disabled="true"], [data-outside], [data-selected]) { background: var(--area-bg-component-active); } }
   .area-calendar--circle .area-calendar__day:active:not(:disabled, [aria-disabled="true"], [data-outside], [data-selected]) { background: var(--area-bg-component-pressed); }
-  .area-calendar--tile .area-calendar__day:not(:disabled, [aria-disabled="true"], [data-outside]) { --_day-edge: inset 0 0 0 var(--area-stroke-width) var(--area-edge-control-hover); } /* #d4, the choice glyphs' edge role (audit S5), stronger under increased contrast */
+  .area-calendar--tile .area-calendar__day:not(:disabled, [aria-disabled="true"], [data-outside]) { --_day-edge: inset 0 0 0 var(--area-stroke-width) var(--area-edge-control); } /* #e2, a field's edge (round 62: lighter; was #d4), stronger under increased contrast; today's ring is one step above */
   .area-calendar--tile .area-calendar__day:is(:disabled, [aria-disabled="true"]):not([data-outside]) { --_day-fill: var(--area-bg-component); text-decoration: none; }
 
   /* Week strip: one row of days between the week arrows, each day with its weekday above and

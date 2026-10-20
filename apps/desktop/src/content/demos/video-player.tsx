@@ -11,13 +11,13 @@ export const GalleryVideoPlayer = () => (
       <track kind="captions" src="images/sample-captions.vtt" srcLang="en" label="English" />
     </VideoPlayer></div>
 );
-/* Playing: QuickTime Player's floating controller. */
+/* Floating: QuickTime Player's controller, a frosted panel over the video. */
 export const GalleryVideoPlayerFloating = () => (
-  <div style={width}><VideoPlayer label="Sample video" src="images/sample-video.webm" poster="images/david-tee.jpg" autoPlay muted loop controls="always">
+  <div style={width}><VideoPlayer label="Sample video" layout="floating" src="images/sample-video.webm" poster="images/david-tee.jpg" autoPlay muted loop controls="always">
       <track kind="captions" src="images/sample-captions.vtt" srcLang="en" label="English" />
     </VideoPlayer></div>
 );
-/* One row along the foot, on a fade. */
+/* Playing, the default bar: YouTube's controls, the track across the foot and glass pills under it. */
 export const GalleryVideoPlayerBar = () => (
   <div style={width}><VideoPlayer label="Sample video" layout="bar" src="images/sample-video.webm" poster="images/david-tee.jpg" autoPlay muted loop controls="always">
       <track kind="captions" src="images/sample-captions.vtt" srcLang="en" label="English" />
@@ -32,14 +32,14 @@ export const GalleryVideoPlayerMinimal = () => (
 /* In a Figure, with its caption; the Figure takes the width. */
 export const GalleryVideoPlayerFigure = () => (
   <div style={width}>
-    <Figure style={{ inlineSize: "100%" }} caption="Caption describing the video.">
+    <Figure style={{ inlineSize: "100%" }} caption="Caption">
       <VideoPlayer label="Sample video" src="images/sample-video.webm" poster="images/david-tee.jpg" autoPlay muted loop controls="always">
       <track kind="captions" src="images/sample-captions.vtt" srcLang="en" label="English" />
     </VideoPlayer>
     </Figure>
   </div>
 );
-/* A narrow player folds the floating controller into one pill. */
+/* A narrow player keeps play, the track, the time and full screen. */
 export const GalleryVideoPlayerNarrow = () => (
   <div style={{ inlineSize: "calc(var(--area-space-96) * 3.5)" }}><VideoPlayer label="Sample video" src="images/sample-video.webm" poster="images/david-tee.jpg" autoPlay muted loop controls="always">
       <track kind="captions" src="images/sample-captions.vtt" srcLang="en" label="English" />

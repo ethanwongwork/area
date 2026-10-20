@@ -115,7 +115,7 @@ function ToolStep({ part }: { part: ToolPart }) {
     const edit = editOf(part);
     return <Step verb={part.status === "running" ? live : past} detail={edit.name} status={status}
       meta={part.status === "done" ? `+${edit.added} −${edit.removed}` : undefined}>
-      {part.status === "done" ? <Diff label={edit.name} hunks={edit.hunks} /> : null}
+      {part.status === "done" ? <Diff aria-label={`Changes to ${edit.name}`} hunks={edit.hunks} /> : null}
     </Step>;
   }
   return <Step verb={part.status === "running" ? live : past} detail={detailOf(part.input)} status={status}>
@@ -171,9 +171,9 @@ function TurnEdits({ turn }: { turn: Extract<Turn, { author: "assistant" }> }) {
       onKeepAll={pending.length ? () => session.setEdits(pending, "kept") : undefined}
       onUndoAll={pending.length ? () => session.setEdits(pending, "undone") : undefined}>
       {files.map(file => (
-        <EditSummaryFile key={file.id} name={file.name} added={file.added} removed={file.removed} state={file.state}
+        <EditSummaryFile key={file.id} name={file.name} added={file.added} removed={file.removed} status={file.state}
           onKeep={() => session.setEdits([file.id], "kept")} onUndo={() => session.setEdits([file.id], "undone")}
-          diff={<Diff label={file.name} hunks={file.hunks} />} />
+          diff={<Diff aria-label={`Changes to ${file.name}`} hunks={file.hunks} />} />
       ))}
     </EditSummary>
   );
@@ -191,7 +191,7 @@ function TurnView({ turn }: { turn: Turn }) {
       ) : undefined}>
       <AssistantParts parts={turn.parts} />
       {turn.done ? <TurnEdits turn={turn} /> : null}
-      {turn.stopped ? <TurnNotice kind="stopped">You stopped this reply{turn.seconds ? ` after ${turn.seconds}s` : ""}.</TurnNotice> : null}
+      {turn.stopped ? <TurnNotice status="stopped">You stopped this reply{turn.seconds ? ` after ${turn.seconds}s` : ""}.</TurnNotice> : null}
     </Message>
   );
 }
@@ -322,7 +322,7 @@ export function ChatComposer({ scroller }: { scroller: RefObject<HTMLElement | n
     {context ? <Chip kind="input" size="sm" onDismiss={() => setDismissed(selection)}>{context}</Chip> : null}
     {files.map(file => <Chip key={file.id} kind="input" size="sm" icon={<DocumentIcon />} title={file.path}
       onDismiss={() => setFiles(list => list.filter(entry => entry.id !== file.id))}>{file.name}</Chip>)}
-    {images.map(image => <Attachment key={image.id} src={image.src} name={image.name} onRemove={() => remove(image.id)} />)}
+    {images.map(image => <Attachment key={image.id} src={image.src} name={image.name} onDismiss={() => remove(image.id)} />)}
   </> : undefined;
   return (
     <div className="studio-chat__composer">
@@ -330,7 +330,7 @@ export function ChatComposer({ scroller }: { scroller: RefObject<HTMLElement | n
       {/* Messages written while it works wait above the composer, in order (Cursor's queue tray, Codex's rail). */}
       {session.queue.length ? (
         <Queue items={session.queue} title={session.queuePaused ? `${session.queue.length} queued, paused` : undefined}
-          onSendNow={session.sendNow} onRemove={session.unqueue} />
+          onSendNow={session.sendNow} onDismiss={session.unqueue} />
       ) : null}
       {/* The run's plan rides above the composer while it runs (Cursor's tray). */}
       {running && session.plan ? <Plan items={session.plan} /> : null}
@@ -338,11 +338,11 @@ export function ChatComposer({ scroller }: { scroller: RefObject<HTMLElement | n
         // The question takes the composer's place until it is answered (Claude Code, Codex). "For this session" plays as
         // a yes in a recorded run; the engine remembers it (Phase 3).
         <Approval autoFocus title={session.approval.title} description={session.approval.description}
-          options={[{ value: "yes", label: "Yes" }, { value: "session", label: "Yes, for this session" }, { value: "no", label: "No" }]}
+          items={[{ value: "yes", label: "Yes" }, { value: "session", label: "Yes, for this session" }, { value: "no", label: "No" }]}
           onChoose={value => session.answer(value !== "no")}
           // What to do instead goes to the agent with the no (Phase 3); a recorded run plays its no.
           onInstead={() => session.answer(false)} insteadPlaceholder="Tell Claude what to do instead">
-          {session.approval.tool_name === "Edit" ? <Diff label={String(session.approval.input.file_path ?? "").split("/").at(-1)}
+          {session.approval.tool_name === "Edit" ? <Diff aria-label={`Changes to ${String(session.approval.input.file_path ?? "").split("/").at(-1)}`}
             hunks={editOf({ kind: "tool", id: session.approval.tool_use_id, name: "Edit", input: session.approval.input, status: "running" }).hunks} /> : null}
         </Approval>
       ) : (
@@ -350,7 +350,7 @@ export function ChatComposer({ scroller }: { scroller: RefObject<HTMLElement | n
           placeholder={session.running ? "Queue another message…" : "Ask about Area, or a change to make"}
           loading={session.running} onStop={session.stop}
           context={chips}
-          menu={open ? <ComposerMenu id={menuId} label={trigger?.char === "@" ? "Files" : "Commands"} groups={groups}
+          menu={open ? <ComposerMenu id={menuId} aria-label={trigger?.char === "@" ? "Files" : "Commands"} items={groups}
             activeId={activeItem?.id} onActiveChange={id => setActive(items.findIndex(item => item.id === id))} onPick={pick}
             emptyLabel={trigger?.char === "@" ? "No files found" : "No matching commands"} /> : undefined}
           inputProps={{

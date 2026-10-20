@@ -98,6 +98,7 @@ export default {
       ["Do", "Pass it as the Composer's menu, open while an @ or / is being completed, and filter its rows by what follows."],
       ["Do", "Keep focus in the field and drive the menu from onInputKeyDown: Up and Down move activeId, Enter or Tab picks, Escape closes."],
       ["Do", "Make the field a combobox: aria-controls pointing at the menu's id and aria-activedescendant at the active row (`${id}-${item.id}`)."],
+      ["Do", "Name the list with aria-label (\"Files\", \"Commands\"). label and groups still work for one release; use aria-label and items."],
       ["Do", "Give file rows their folder as path, and group rows with a label when a list mixes kinds."],
       ["Do", "Set emptyLabel to say what found nothing (\"No files found\", \"No matching commands\")."],
       ["Don't", "Move focus into the list: a pointer press on a row is kept from taking focus, so typing continues."],
@@ -107,10 +108,10 @@ export default {
     parts: {
       root: "A listbox above the composer at its width, on Menu's surface and rows; it scrolls past its maximum height.",
       path: "A file's folder at the row's end in the shortcut ink, cut from its start; it gives way before the name does.",
-      empty: "One muted row shown when no group has items.",
+      empty: "One muted row a row tall at the text inset, as every list's empty row, shown when no group has items.",
     },
     aria: [
-      ["role=\"listbox\", aria-label", "On the root, named by label (\"Files\", \"Commands\")."],
+      ["role=\"listbox\", aria-label", "On the root, from aria-label (\"Files\", \"Commands\"); the deprecated label is the fallback."],
       ["role=\"option\", aria-selected", "On each row; aria-selected is true on the row matching activeId."],
       ["role=\"group\", aria-labelledby", "On each group with a label, named by its section label."],
     ],
@@ -129,12 +130,13 @@ export default {
       ["Do", "Set status=\"uploading\" with progress while it uploads; leave progress out while it is unknown and the ring turns."],
       ["Do", "Set status=\"error\" with error saying why it failed; it is the tile's tooltip and its spoken name."],
       ["Do", "Give every tile name, the file's name: it names the tile, its remove control and its upload."],
+      ["Do", "Pass onDismiss to show the remove control, and dismissLabel to name it in your language (\"Remove <name>\" by default). onRemove still works for one release."],
       ["Don't", "Use it for documents or other files; they are Chip input pills."],
       ["Don't", "Use it outside the Composer's context row; how a sent message shows images belongs to Message."],
     ],
     // Spec: Decisions, Round 52; manifest elements.
     parts: {
-      root: "A square tile on the Composer's button corner with a 1px card edge drawn over the picture; a failed tile takes the danger edge.",
+      root: "A square tile on the Composer's button corner with a 1px card edge drawn over the picture; a failed tile takes the fields' invalid edge.",
       image: "The thumbnail, filling the tile; it has no alt text of its own, the tile is named by the file.",
       overlay: "Over the picture: a progress ring while uploading, or a danger mark when it failed.",
       remove: "A small square button inside the top-end corner, on the on-media paint; shown on hover and focus, always on touch.",
@@ -147,7 +149,7 @@ export default {
     aria: [
       ["role=\"group\", aria-label", "Always: the tile is a group named by the file's name."],
       ["aria-busy", "While uploading; the ring is named \"Uploading <name>\", with the percentage once progress is known."],
-      ["aria-label", "On the remove control, \"Remove <name>\"; on the failed mark (role=\"img\"), the reason."],
+      ["aria-label", "On the remove control, from dismissLabel (\"Remove <name>\" by default); on the failed mark (role=\"img\"), the reason."],
       ["title", "While status is error: the reason, as the tile's tooltip."],
     ],
   },
@@ -161,7 +163,7 @@ export default {
     // Spec: Job and boundaries, Decisions; source: ComposerParts.tsx; app wiring in chat.tsx.
     practices: [
       ["Do", "Show it above the composer only while messages wait, fed by the Composer's onQueue, and send them in order when the run finishes."],
-      ["Do", "Pass onSendNow to stop the run and send that message at once, and onRemove so a message can be dropped."],
+      ["Do", "Pass onSendNow to stop the run and send that message at once, and onDismiss so a message can be dropped (onRemove still works for one release)."],
       ["Do", "Mark a message sending while it goes, and failed with onRetry when it could not be sent."],
       ["Do", "Set title to say the queue is paused (\"2 queued, paused\") after the person stops a run, until the next send."],
       ["Don't", "Offer reordering or sending without stopping: neither is built."],
@@ -173,7 +175,7 @@ export default {
       head: "A button a row tall that folds the list; a rule under it while open.",
       title: "\"N queued\" by default, in the muted ink; cut short on one line.",
       chevron: "Points down while open, turns when folded; Accordion's hover plate behind it.",
-      items: "The ordered list of waiting messages; hidden while folded.",
+      items: "The ordered list (ol) of waiting messages, in the order they will send; hidden while folded.",
       item: "One message as a Menu row. Sending: dimmed, with a spinner. Failed: a mark, and Retry in place of Send now.",
       text: "The message on one line, cut short with an ellipsis.",
       status: "The spinner on a sending row, or the failed mark.",
@@ -411,9 +413,10 @@ export default {
     // Spec: Job and boundaries, Decisions, Behavior and accessibility; source: EditSummary.tsx JSDoc.
     practices: [
       ["Do", "Show one Edit summary at the end of a turn that changed files, with the turn's totals and an EditSummaryFile per file."],
-      ["Do", "Give each file a Diff so its name opens to the change; pass label so the diff is named by its file."],
+      ["Do", "Give each file a Diff so its name opens to the change; name the diff by its file with aria-label (\"Changes to button.css\"). Diff's label still works for one release."],
       ["Do", "Pass onKeepAll and onUndoAll while any file is pending, and leave them out once every file is settled."],
-      ["Do", "Set a file's state to kept or undone once the person acts: its actions leave and the row says Kept or Undone."],
+      ["Do", "Set a file's status to kept or undone once the person acts: its actions leave and the row says Kept or Undone. state still works for one release."],
+      ["Do", "Control a file's diff with open and onOpenChange when the app must open it (a review that walks the files); defaultOpen otherwise."],
       ["Do", "Set title to the count (\"Edited 2 files\"); without it the head says \"Edited files\"."],
       ["Don't", "Use it as a review tool for staging or commits; it keeps or undoes one turn's edits."],
       ["Don't", "Signal a change by colour alone: keep the +N −N and the diff's + and − markers."],
@@ -429,7 +432,7 @@ export default {
       actions: "Ghost sm Buttons, Undo and Keep; on a file row they show over its end on hover and focus, always on touch.",
       files: "The list of file rows.",
       file: "One file as a Menu row: its name button, then its actions or its status.",
-      name: "A button with the file's name and counts that opens its diff; it presses like a Menu row.",
+      name: "A button with the file's name and counts that opens its diff; it presses like a Menu row, with the pressed fill.",
       chevron: "Shown when the file has a diff; it turns as the diff opens.",
       status: "\"Kept\" or \"Undone\" once the file is settled, in place of the actions.",
       diff: "The file's Diff, 4 under its row and as wide as the row plate; a wide one scrolls sideways.",
@@ -448,7 +451,7 @@ export default {
     aria: [
       ["aria-labelledby", "On the section, from the title, unless you pass aria-label."],
       ["aria-expanded, aria-controls", "On a file's name, when it has a diff."],
-      ["aria-label", "On a file's Undo and Keep (\"Undo <name>\"); on the Diff, \"Changes to <label>\"."],
+      ["aria-label", "On a file's Undo and Keep (\"Undo <name>\"); on the Diff, from aria-label (\"Changes\" by default; the deprecated label reads \"Changes to <label>\")."],
       ["tabindex", "The Diff is a Tab stop, so a wide diff can be scrolled from the keyboard."],
     ],
   },
@@ -463,12 +466,12 @@ export default {
     // Spec: Variants, Behavior and accessibility, Keys pressed as it appears; source: Approval.tsx JSDoc.
     practices: [
       ["Do", "Show it in the composer's place until it is answered, and set autoFocus there so the keys answer at once."],
-      ["Do", "Give 2 to 4 options: yes, yes with a wider scope (for this session, always), then no."],
+      ["Do", "Give 2 to 4 items: yes, yes with a wider scope (for this session, always), then no. options still works for one release."],
       ["Do", "Put the thing itself in children: the command in a Code block sm, or the edit as a Diff."],
       ["Do", "Pass onInstead so the person can say what to do instead; it becomes the last numbered choice."],
       ["Do", "Pass onDismiss when Escape should do something other than choose the last option."],
       ["Don't", "Set autoFocus where several approvals share a page; it is off by default so a page doesn't move focus."],
-      ["Don't", "Give more than nine options: only 1 to 9 have keys."],
+      ["Don't", "Give more than nine items: only 1 to 9 have keys."],
     ],
     // Spec: Anatomy, Cleanup pass, Rounds 51–54; manifest elements.
     parts: {
@@ -477,8 +480,8 @@ export default {
       title: "What it wants to do, in the strong weight.",
       description: "Why, in the small muted type.",
       detail: "The thing itself: a command in a Code block sm, or a Diff.",
-      options: "The choices, a named group of rows with no gap.",
-      option: "One choice as a Menu row: its number, then its label; the row plate on hover and focus.",
+      options: "The choices, a named group of rows with Menu's break between them.",
+      option: "One choice as a Menu row: its number, then its label; the row plate on hover and focus, the pressed fill while pressed.",
       key: "The choice's number in the icon slot, unboxed and muted at the label's size.",
       label: "The choice's words; it is the button's whole name.",
       instead: "The last numbered row, holding the field.",
@@ -490,7 +493,7 @@ export default {
       ["Up or Down", "Moves between the choices and the field, wrapping."],
       ["1 or 2 or 3", "Chooses that numbered option (up to 9); the number after the last focuses the field."],
       ["Enter or Space", "Chooses the focused option. In the field, Enter sends what to do instead."],
-      ["Escape", "Calls onDismiss, or chooses the last option when there is none."],
+      ["Escape", "Calls onDismiss, or chooses the last item when there is none."],
       ["Tab", "Moves between the choices and the field."],
     ],
     aria: [
@@ -553,11 +556,11 @@ export default {
     ],
     // Spec: Variants, Decisions, Cleanup pass; source: TurnNotice.tsx JSDoc.
     practices: [
-      ["Do", "Use stopped when the person stopped the turn, error when it failed, compacted when earlier context was summarised."],
+      ["Do", "Set status to stopped when the person stopped the turn, error when it failed, compacted when earlier context was summarised."],
       ["Do", "Pass a ghost sm Retry Button as action on an error, so the person can try again from the line."],
       ["Do", "Place it at the end of the turn it describes, in the turn's column."],
       ["Don't", "Use it for a turn that finished normally: it marks endings other than finishing."],
-      ["Don't", "Add your own icon or colour to the text: kind sets the glyph and the error ink."],
+      ["Don't", "Add your own icon or colour to the text: status sets the glyph and the error ink. kind still works for one release."],
     ],
     // Spec: Decisions, Cleanup pass; manifest elements.
     parts: {

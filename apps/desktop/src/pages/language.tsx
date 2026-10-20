@@ -153,7 +153,9 @@ export function LanguagePage() {
       2026-10-19: "the containers should [not] change with each axis it shows either"; Medium and More contrast drew
       darker card edges, and Mode's dark card was black). */
   const tile = (entry: Setting, preset: { id: string; label: string }, label: string, value?: string) => (
-    <Tile key={`${entry.id}-${preset.id}`} span="wide" stage="center" inert label={label} value={value}
+    // The detail joins the name, as the Inspector writes an option ("Light (Default)"): an Asset card's head holds the
+    // name and controls only (owner, round 58), so a tile's value would not show.
+    <Tile key={`${entry.id}-${preset.id}`} span="wide" stage="center" inert label={value ? `${label} (${value})` : label}
       selected={selected === `${entry.id}:${preset.id}`} onSelect={() => setSelected(`${entry.id}:${preset.id}`)}
       scope={{}} stageScope={scopeOf(entry, preset.id)}>
       <Abstract axis={entry.id} preset={preset.id} />

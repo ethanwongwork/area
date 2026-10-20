@@ -19,9 +19,12 @@ block the app), not a Menu (it is a decision, not a list of commands).
 
 | Axis | Value | Justification | Where |
 |---|---|---|---|
-| options | 2 to 4, numbered | yes / scope / no | Claude Code ("Yes", "Yes, allow all edits this session", "Yes, and don't ask again", "No"); Codex (y / p / esc) |
+| items | 2 to 4, numbered | yes / scope / no | Claude Code ("Yes", "Yes, allow all edits this session", "Yes, and don't ask again", "No"); Codex (y / p / esc) |
 | instead | on, off | "tell Claude what to do instead" | Claude Code last option; Codex "No, and tell Codex what to do differently" |
 | detail | none, any (a command in Code block sm, a Diff) | — | Claude Code editable command; Codex "$ cmd" |
+
+The choices are `items` (a collection is `items`, Governance § 4); `options` stays as a deprecated alias for one
+release.
 
 ## Sources
 
@@ -39,9 +42,9 @@ area-approval                 the Composer's shell: its edge, corner, field fill
     area-approval__title      strong
     area-approval__description  text-sm muted
   area-approval__detail       slot (Code block sm, Diff)
-  area-approval__options      rows, 0 apart
-    area-approval__option     button: `area-approval__key` (quiet Kbd number, icon slot) + `area-approval__label`;
-                              the row plate on hover and focus
+  area-approval__options      rows, ui-row-gap apart (Menu's: 2, compact 0)
+    area-approval__option     button: `area-approval__key` (quiet Kbd number, icon slot) + `area-approval__label`,
+                              gap-row apart; the row plate on hover and focus, the pressed fill while pressed
     area-approval__instead    the last option row (a label), its field `area-approval__field` the row's text
   area-approval__hint         the last row, text-sm muted: filled Kbd Esc + "to cancel"
 ```
@@ -50,12 +53,12 @@ area-approval                 the Composer's shell: its edge, corner, field fill
 
 | Slot · property | Area value | Basis | Reason |
 |---|---|---|---|
-| shell | Composer's edge, corner, fill and inset | peer: Composer | it takes the composer's place; Claude Code's card radius 8 is its own composer's |
+| shell | Composer's edge, corner, fill and inset; the corner is Composer's expression term for term: the send button's corner (pill buttons add `radius-full`) plus the inset × max(concentric, pill) | peer: Composer (composer.css) | it takes the composer's place; Claude Code's card radius 8 is its own composer's. Audit 2026-10-19: the copy had dropped the pill terms, so pill buttons gave a pill Composer but not a pill Approval |
 | gap | 6 (ui-cluster at Compact) | Composer's gap | — |
 | head | on the row inset; first line in a row: (ui-row − text-md leading) / 2 above the title | inset.css first-line alignment | round 54: the top had half a row less room than the foot |
 | title | text-md strong | claude-code bold title | Area's one strong weight |
 | description | text-sm muted | claude-code .9em secondary | — |
-| options | Menu-row geometry: ui-row tall, row inset, row corner, plate on hover / focus | peer: Menu | Claude Code's ringed buttons read as a list of commands at 256; rows keep them one column |
+| options | Menu-row geometry: ui-row tall, row inset, row corner, Menu's row gap (gap-row: 12, compact 8) and ui-row-gap between rows; plate on hover / focus, bg-component-pressed while pressed | peer: Menu | Claude Code's ringed buttons read as a list of commands at 256; rows keep them one column |
 | number | quiet Kbd sm in the icon slot (icon-sm wide, centred), the label's size, muted, unboxed | claude-code `shortcutNum` (label size, .6); Codex "1." | round 51 |
 | instead | the last numbered row, its field unfilled | Claude Code (last option is free text) | a filled field added a third grey (cleanup pass 2026-10-19) |
 | hint | the card's last row: ui-row tall, centred, text-sm muted; Esc a filled Kbd sm, ui-cluster from the words | claude-code "Esc to cancel"; Kbd's rule (a key named in a sentence is filled) | rounds 52 and 53 |
@@ -88,6 +91,9 @@ React tests (`packages/react/tests/agent-chat.test.mjs`, 9), the full React suit
 - 2026-10-19 · owner, round 50 (rethink): "open to using the backplate kbd. should the numbers still be small? what does the research say, what do other products say? im open to the backplates for numbers too just want to make sure they work with backplates on hover, maybe the badges might need a color change on hover too? see if there are other components that would benefit from this, like badges or kbd in menu rows" → round 51 coherence pass (below).
 - 2026-10-19 · owner, round 52 (rethink): "the spacing on the bottom doesnt look correct, the esc to cancel looks way too close to the bottom of the container" → round 53 (below).
 - 2026-10-19 · owner, round 53 (rethink): "is the padding/margin at the top correct?" → round 54 (below).
+- 2026-10-19 · audit: the corner is Composer's exactly (the pill terms were missing); choices press with
+  bg-component-pressed (was the selected fill); rows take Menu's gap-row and ui-row-gap; `options` → `items`
+  (deprecated alias kept); Escape with no choices and no `onDismiss` does nothing instead of throwing.
 
 ## Review note, 2026-10-19
 
@@ -104,8 +110,8 @@ The agent chat's shared rules (all five families):
 | Cards (Edit summary, Plan) | one size, text-sm; sm buttons | Cursor: cards 13 under a 14 reply |
 | Card frame | the card edge at stroke-width, container corner, surface fill | Code block |
 | Card column | text 12 in: Menu's list padding 4 + the row inset 8 | Menu; Cursor card header 0 12 |
-| Card head | one row tall, a rule under it when rows follow; a trailing button (row − control) / 2 from the end | Code block's header |
-| Card rows | Menu rows: row height, row inset, row corner, row plate, gap 8 | Menu |
+| Card head | one row tall, a rule under it when rows follow; a trailing button (row − control) / 2 from the end, never under 4 | Code block's header |
+| Card rows | Menu rows: row height, row inset, row corner, row plate (pressed: bg-component-pressed), Menu's row gap `gap-row` (12, compact 8) so a label after the icon slot lands on the list column, and `ui-row-gap` (2, compact 0) between rows | Menu (`--_menu-gap`, surface.css) |
 | What a line opens | 4 under the line, on a 1px rail with its content 12 in | Cursor content gap 4; Claude Code's rail at 12 |
 | Backplates | one: the row plate under the pointer or focus | Menu |
 
@@ -184,3 +190,8 @@ the foot the keycap ends 16 and the hint's baseline 20 from it, so top and foot 
 
 - **What changed:** a little more room above the title, so the top of the card matches the bottom.
 - **Why:** the choices and the hint sit in rows; the title did not, so the top was tighter than the foot.
+
+## Review note, 2026-10-19 (round 55, design-system audit)
+
+- **What changed:** Its choices sit on Menu's list column at every density: 12 between the number and the label at Default (8 at the app's Compact, unchanged there), with Menu's 2 between rows. A pressed choice takes Menu's pressed fill, one step darker than before. Its corner is now Composer's exactly, so with pill buttons it becomes a pill like the Composer it replaces. `options` is now `items` (the old name still works).
+- **Why:** The audit against the new docs found the rows used 8 where Menu uses its row gap, the pressed fill was the selected step, and the corner formula had drifted from Composer's.
