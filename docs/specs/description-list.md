@@ -1,6 +1,5 @@
 # Description list spec
 
-**Status:** in review · 2026-10-12 (show more); was: complete · 2026-10-10 (approved, review round 5)
 **Captures:** `docs/research/captures/description-list/`
 **Peers:** Table (frame, row rules), PropertyList (Figma's inspector rows; a different job), Card, Menu rows (icon to text), Badge, Avatar and Link (values)
 

@@ -1,9 +1,8 @@
 # Dialog spec
 
-**Status:** accepted · 2026-09-26 (was: in review · 2026-09-26 (pass 2: 16/24 strong title, concentric 16px corner))
 **Captures:** `docs/research/captures/dialog/` (pass-0 in `before/`)
-**Peers:** Popover (same header rule and lift), Menu (lift), Button (the close), AlertDialog
-(backlog)
+**Peers:** Popover (same header rule), Menu (lift), Button (the close), Confirm dialog (shares the modal),
+Drawer (edge-anchored modal)
 
 ## Owner decisions
 
@@ -22,8 +21,9 @@
 ## Job and boundaries
 
 Interrupts with content that needs a response and blocks the page until it is dismissed.
-Not Popover (non-modal, anchored to its trigger), not Toast (no response needed), not a
-Sheet or Drawer (edge-anchored; backlog).
+Not Popover (non-modal, anchored to its trigger), not Toast (no response needed), not Drawer
+(edge-anchored; drawer.md), not Confirm dialog (a confirmation with no close and focus on the
+safe action, built on this modal; confirm-dialog.md).
 
 ## Variants
 
@@ -89,20 +89,20 @@ footer action in the opposite corner by the same rule (12/12).
 
 | Slot · property | Area value | Basis | Reason when it differs |
 |---|---|---|---|
-| surface · inset, gap | 16 (border included), 16 between sections (unchanged) | shadcn 16/16; Primer 16 | ChatGPT 24 |
-| surface · compact | inset **16** (border included, held), corner **16** (concentric with the close, at the 2 × container cap), section gap 12 (`inset-surface-md`) | Figma Share dialog (`compact/figma--share-dialog--open--light`): header title 16 in, field row 16 in, corner 13; VS Code save dialog 13 / 9, corner 8 | Owner 2026-10-02 (cursor-desktop.md): Figma holds 16 in its dense UI; R8's compact 12 rested on VS Code alone |
-| surface · width | 480 preferred (unchanged) | Between shadcn 384 and ChatGPT 600 / Primer 640 | — |
-| surface · border | 1px decorative (unchanged) | All use a 1px ring | — |
-| surface · shadow | **`--area-shadow-modal`**, the Elevation axis's modal role: `0 0 8` + `0 14 28` at twice the Elevation step in % (6% key at the default 3), the ambient half, dark doubled; transparent at step 0 (axes/elevation.ts) | The topmost surface, over Popover and Menu's float (elevation-2026-10-14) | Was `shadow-2` (1–2px). A Surface axis role since audit S10. References lift less (ChatGPT 4/8, Primer 6/18), but one lift for every floating surface |
-| scrim | **`rgb(0 0 0 / 0.133)`** in light, no blur; dark keeps `bg-overlay` | ChatGPT 13.3%; shadcn 10% | Was 65% with a 2px blur. Dark value not measured |
-| close · control | **32px ghost neutral Button** (md), Area `dismiss` glyph (`primitives.tsx:1341`) | ChatGPT 32, Primer 32; shadcn 28 | Was a bespoke 28px button whose foreground changed on hover (against the fixed-foreground rule). The written exception to the rectangular-surface close (ghost sm, 28), which Popover, Toast and Alert use (audit S9, owner) |
+| surface · inset, gap | 16 (border included), `inset-surface-md` between sections (16, compact 12) | shadcn 16/16; Primer 16 | ChatGPT 24 |
+| surface · compact | inset **16** (border included, held), corner **16** (the surface corner plus 4, below), section gap 12 (`inset-surface-md`) | Figma Share dialog (`compact/figma--share-dialog--open--light`): header title 16 in, field row 16 in, corner 13; VS Code save dialog 13 / 9, corner 8 | Owner 2026-10-02 (cursor-desktop.md): Figma holds 16 in its dense UI; R8's compact 12 rested on VS Code alone |
+| surface · width | 480 preferred, at most the viewport less 32 (surface.css:922) | Between shadcn 384 and ChatGPT 600 / Primer 640 | — |
+| surface · border | `border-width` `border-float`, the floating-surface edge (surface.css:928) | All use a 1px ring | Was decorative |
+| surface · shadow | **`--area-shadow-modal`**, the Elevation axis's modal role: `0 0 8` + `0 14 28` at twice the Elevation step in % (6% key at the default 3), the ambient half, dark doubled; transparent at step 0 (axes/elevation.ts); the Surface axis's `shadow-edge` is listed first (surface.css:935) | The topmost surface, over Popover and Menu's float (elevation-2026-10-14); Surface axis (owner, 2026-10-14) | Was `shadow-2` (1–2px). A Surface axis role since audit S10. References lift less (ChatGPT 4/8, Primer 6/18), but one lift for every floating surface |
+| scrim | **`scrim`**: #00000022 (13.3%) in light, #00000080 in dark, no blur (aliases.ts:155) | ChatGPT 13.3%; shadcn 10% | Was 65% with a 2px blur. Dark value not measured |
+| close · control | **32px ghost neutral Button** (md), Area `dismiss` glyph (`primitives.tsx:1699`) | ChatGPT 32, Primer 32; shadcn 28 | Was a bespoke 28px button whose foreground changed on hover (against the fixed-foreground rule). The written exception to the rectangular-surface close (ghost sm, 28), which Popover, Toast and Alert use (audit S9, owner) |
 | close · position | **8 from the top and 8 from the side**; icon on the 16 inset both ways | shadcn 8/8, Primer 8/8 (half the inset); ChatGPT 12/12 | Was 16/16 (box on the inset, icon at 22) |
 | title · alignment | line centred on the close (centres 24 and 24; cap 16.8) | Popover rule: header top = (icon − title leading) / 2 | Was trimmed to its cap on the inset, so the close's centre sat 7 below the title's |
 | title · without close | cap on the 16 inset (`text-box: trim-start`) | Popover | — |
 | title · type | **16/24 strong** (pass 2) | ChatGPT 16/24 (600), shadcn 16 (500); typography rule: standalone-surface title, as Card | Owner (pass 2): 20/28 regular looked too big, 1.4× the description. Area never exceeds 500 |
 | title → description | 4 gap, description keeps its line box; title baseline to cap **15.6**, as Card | Card (same 16/14 pair); Popover 15.1; shadcn 15.5 | Pass 0: 8 (both trimmed); pass 1: 15 with a trimmed description |
-| surface · radius | **16** = close radius + close offset (8 + 8), capped at 2× the container radius | Concentric with the corner close; ChatGPT 16 | Pass 1: 12, not concentric (12 − 8 = 4 ≠ 8). Presets: Subtle 12 (4 + 8), Sharp 0 |
-| footer | actions end-aligned on the 16 inset (unchanged) | shadcn 16, Primer 16 | ChatGPT 12/12 corner |
+| surface · radius | **16** at the default and compact: the surface corner plus 4 (`radius-container` + 4, never more than twice the surface corner, so square with a square surface; Pill 28) (surface.css:917) | Concentric with the corner close at the default (8 + 8); ChatGPT 16; owner 2026-10-03 (one corner setting) | Pass 1: 12, not concentric (12 − 8 = 4 ≠ 8). Away from the default the close keeps the control step and is no longer concentric |
+| footer | actions end-aligned on the 16 inset, `ui-cluster` apart, wrapping; under 480px wide they stretch (surface.css:1001-1011) | shadcn 16, Primer 16 | ChatGPT 12/12 corner |
 | title element | `h2` | Popover, shadcn `DialogTitle` | Was a `div` |
 
 Inset equations: close top = inset + header offset + close margin = 16 + (16 − 28)/2 +
@@ -138,7 +138,9 @@ confirmation). Escape, the close control and the backdrop report `false` through
 `onOpenChange`. The platform supplies the focus trap, Escape and focus return; a click
 on the scrim closes it. The close button calls `onDismiss`, then closes the enclosing native
 dialog; `dismissLabel` names it (default "Close dialog"). `onClose` remains as a deprecated
-alias (`primitives.tsx:1289-1294`, `:1341-1344`). Verified in the
+alias (`primitives.tsx:1625-1636`, `:1699-1701`). A `role` prop (`alertdialog`, for Confirm dialog) lands on
+the element that carries the dialog role: the native `<dialog>`, or the surface inline. While a modal is open
+the page behind it does not scroll, and the modal fits the visible height (`100dvh`) (audit E-20). Verified in the
 gallery with a real pointer: opens modal with the 13% scrim, focus on the close, Escape
 closes and refocuses the trigger, a scrim click closes, a click inside does not.
 
@@ -147,7 +149,7 @@ the modal fades and scales from 0.97, entering over `--area-duration-moderate` (
 over `--area-duration-base` (210), `--area-ease-out`, and the scrim fades alongside; the entry runs from `@starting-style`, the exit keeps the top layer with
 `overlay` and `display` transitions (`allow-discrete`). Motion 0 sets
 the duration to 0, so it is instant, and `prefers-reduced-motion` drops the scale as well
-(`surface.css:767-797`). Was instant.
+(`surface.css:870-905`). Was instant.
 
 ## Visual pass
 
@@ -181,7 +183,8 @@ change.
 
 ## Open questions
 
-- AlertDialog (confirmation without a close, focus on the safe action) is a backlog item.
+- ~~AlertDialog (confirmation without a close, focus on the safe action) is a backlog item.~~ Built: Confirm dialog
+  (`role="alertdialog"` on this modal; confirm-dialog.md). Drawer is built too (drawer.md).
 
 ## Motion and interaction, 2026-10-07
 

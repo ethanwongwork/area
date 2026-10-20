@@ -1,6 +1,5 @@
 # Tree view spec
 
-**Status:** accepted · 2026-09-26 (was: in review · 2026-09-25 (pass 3: even spacing on shared columns, marker removed, variant pass))
 **Captures:** `docs/research/captures/tree-view/`
 **Peers:** Nav (navigation rows, Complete), Menu (row hover), Checkbox (filter mode),
 Breadcrumb (shared chevron glyph)

@@ -1,6 +1,5 @@
 # Inspector spec (PanelRow, section actions)
 
-**Status:** accepted · 2026-09-26 (was: in review · 2026-09-26 (pass 2: collapsible sections))
 **Captures:** `docs/research/captures/inspector/`
 **Peers:** Panel (container, sections), NumberField, ButtonGroup, Segmented, ColorField,
 Checkbox

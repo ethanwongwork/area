@@ -1,6 +1,5 @@
 # Menu spec
 
-**Status:** accepted · 2026-10-11 (review round 7, components7)
 **Captures:** `docs/research/captures/menu/` (pass-0 in `before/`)
 **Peers:** SplitButton (hosts a Menu in a popover), Toolbar overflow, Nav (row insets),
 Tree view (row wash), Kbd (shortcuts), Popover (surface family)

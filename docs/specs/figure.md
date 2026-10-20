@@ -1,6 +1,5 @@
 # Figure spec
 
-**Status:** built, in review · 2026-10-17
 **Captures:** computed-style readouts below (Wikipedia, en.wikipedia.org/wiki/Lisa_Su)
 **Peers:** Card, Infobox, Avatar
 
@@ -11,7 +10,7 @@
 
 ## Job and boundaries
 
-Shows an image or other media with its caption, the caption wrapped to the media's width; optionally framed, optionally floated beside text. Not a gallery or lightbox.
+Shows an image or other media in its own shape, with an optional caption under it wrapped to the media's width. One form: no frame, no float, no alignment or ratio options (rounds 34–38). Not a gallery, lightbox or video player.
 
 ## Sources
 
@@ -37,10 +36,9 @@ Wikipedia, computed:
 
 | Slot · property | Area value | Basis | Reason when it differs |
 |---|---|---|---|
-| layout | a column as wide as its media; the caption adds no width (`contain: inline-size`) | Wikipedia (a table) | the same result without table layout, so the frame and its shadow wrap the caption too |
-| caption | small text (14 / 20), muted, 8 under the media | Wikipedia 0.884em | muted: the media leads (plain) |
-| framed | Card's paint: surface, `border-card`, container corner, resting shadow; media 4 in at the concentric corner; caption in the body ink, 6 / 4 / 2 | Wikipedia's thumbnail | Area's card paint for a framed surface |
-| align | `end` / `start`: floated, 24 from the text, 16 above what follows | Wikipedia 1.4em / 1.3em | Area's spacing |
+| layout | a column as wide as its media (`fit-content`, max 100%); the caption adds no width (`contain: inline-size`) | Wikipedia (a table) | the same result without table layout |
+| media | any element in its own shape; an `img`, `video`, `svg`, `picture` or `canvas` takes the container corner (`radius-container`, 12 at the default Radius) | owner, 2026-10-18 ("round the corners of images") | was the small corner (6) through round 38 |
+| caption | optional; UI text (`text-sm`), regular, `fg-muted`, 8 under the media, start-aligned, wraps to the media's width | Notion's caption (UI text, secondary ink); Carbon 8; round 35 | muted: the media leads |
 
 ## Verification
 

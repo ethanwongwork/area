@@ -1,6 +1,5 @@
 # Token row spec
 
-**Status:** complete · 2026-10-12 (approved, review round 15)
 **Captures:** `docs/research/captures/inspector-rows/`
 **Peers:** Code with a swatch (the inline token), ColorSwatch (the swatch), Property list (Figma's editable fill rows),
 Box model and Code block sm (the inspector's other read-only parts), Panel (the container)
@@ -12,7 +11,8 @@ Box model and Code block sm (the inspector's other read-only parts), Panel (the 
 - 2026-10-12: "brought the figma window forward, keep working" → Token row, measured from Dev Mode's Colors rows.
 - 2026-10-12, review round 13 (rethink): "looks long, how does this fit in to the existing token component?" → the row is
   now the existing token (Code with its swatch) hugging the name, with the value muted at the end; no outlined box of its
-  own, no separate swatch or icon slot (a non-colour token is the plain token).
+  own, no separate swatch or icon slot (a non-colour token is the plain token). — superseded 2026-10-12: round 14's one
+  plate, the token's own classes widened to the row (next line).
 - 2026-10-12, review round 14 (rethink): "the token row can still be 1 cohesive backplate, just styled like the existing
   token component? changing the colors to outline only as a style is acceptable." → the row is one plate drawn by the
   token's own classes (`area-code area-code--swatch`): its ground, edge, corner, 22 height (at 12px) and mono type,
@@ -32,6 +32,7 @@ with reorder), not a Description list row (a labelled value).
 |---|---|---|---|
 | swatch | a CSS colour, or none | Code's own swatch; other tokens are the plain token | Dev Mode Colors |
 | value | shown at the end, or omitted | The resolved value is what a developer copies | Dev Mode (name only behind the paywall; values on hover in the real product, not captured) |
+| outline | boolean | the token's edge without its fill (owner, round 14: "outline only as a style is acceptable") | — |
 | copyable | boolean | Dev Mode copies a row's value on click | Dev Mode |
 
 Excluded: a detach or "go to variable" action (Figma's editing UI), alias chains (a token pointing at a token).
@@ -56,16 +57,21 @@ row      div.regularRowWithButton   287 × 32 in a 319 panel, 16 from its start;
 group    Colors heading 32, rows every 36 (32 + 4)
 ```
 
-Area (round 14):
+Area (round 15):
 
 ```
-div|button  .area-token-row[--copyable]   a 32 row (control-md, compact 28), no box; 12/16
-  code        .area-code[--swatch]           the existing token: hugs its name, swatch and edge from token.css
-  span        __value                        12/16 tabular, muted, at the end
+div|button  .area-code[--swatch].area-token-row[--outline][--copyable]
+                                     the token's own plate widened to the row: full width, round(1em + 10) tall
+                                     (22 at 12px), Code's ground, edge, corner and mono type; gap 4
+  span        .area-code__swatch     the token's swatch (token.css), when `swatch` is set
+  span        .area-code__label      the name; fills the row, ellipsis
+  span        __value                muted, tabular, 8 after the name, at most half the row, ellipsis
 ```
 
-The token sizes itself from the row's 12px: max(12, 0.875em) = 12, its box 12 + 10 = 22, centred in the 32 row.
-Round 13 (replaced): a full-width 24 ringed box with a ColorSwatch sm and an icon slot.
+The plate sizes itself as Code does: max(12, 0.875em) of its context, so 12 at 12–13px, its box 12 + 10 = 22. Its
+inline padding is (height − 1cap) / 2 less the edge, so the swatch sits as far from the edge as from the top.
+Round 14 (replaced): a 32 row with the token hugging its name and the value at the row's end. Round 13 (replaced): a
+full-width 24 ringed box with a ColorSwatch sm and an icon slot.
 
 ## Measurements
 
@@ -83,24 +89,25 @@ Generated with `node scripts/capture-compare.mjs docs/research/captures/inspecto
 
 | Slot · property | Reference | Area | Basis | Reason when it differs |
 |---|---|---|---|---|
-| row | 32 tall, the pill fills it less 8 | `control-md` (32, compact 28), full width, no box | Figma's row | — |
-| token | a 24 ringed pill filling the row, 16 swatch | the existing Code token, hugging its name (22 tall at 12px, its swatch, edge and ground) | owner, round 13 ("how does this fit in to the existing token component?") | Dev Mode's pill stretches; Area's token is one component wherever a token is named |
-| value | not shown (paywalled) | 12/16 tabular, `fg-muted`, at the end, at least 8 from the token | Dev Mode's hex values (owner's reference image) | — |
-| group spacing | rows every 36 | rows every 32 (stacked rows) | Figma's 32 rows | Dev Mode's extra 4 sits between its sections |
-| copyable | click copies | a `button`: hover `bg-component-hover`, ink fixed; focus ring; "Copied" said once | Shared state paint; Code block's copy | — |
+| row and plate | 32 row, a 24 ringed pill filling it less 8, 16 swatch | one plate: Code's token classes (`area-code area-code--swatch`) widened to the row, full width, round(1em + 10) tall (22 at 12px), its ground, edge, corner and type; no row box around it | owner, round 14 ("1 cohesive backplate, just styled like the existing token component") | Area's token is one component wherever a token is named |
+| value | not shown (paywalled) | the plate's type, tabular, `fg-muted`, 8 after the name, at most 50% of the row | Dev Mode's hex values (owner's reference image) | — |
+| outline | — | no ground; the edge steps up to `border-divider` at `stroke-width` | owner, round 14 | the edge is all that draws it, so it is required |
+| group spacing | rows every 36 | no outer margin; the container spaces stacked rows | Area: components own no outer margin | — |
+| copyable | click copies | a `button`: ground `bg-component-hover` on hover, `bg-component-pressed` on press, ink fixed; focus ring; "Copied" said once | Shared state paint; Copy button's `useCopy` | — |
 
 ## States
 
 | State | Change | Evidence |
 |---|---|---|
-| hover (copyable) | plate `bg-component-hover` | shared rule; Dev Mode hover not captured (paywalled) |
-| focus-visible (copyable) | 2px focus ring | shared rule |
-| copied | `data-copy-state="copied"`, polite "Copied" | Code block's copy pattern |
+| hover (copyable) | the plate's ground `bg-component-hover` | shared rule; Dev Mode hover not captured (paywalled) |
+| pressed (copyable) | the plate's ground `bg-component-pressed` | interaction polish 2026-10-16 |
+| focus-visible (copyable) | focus ring at the focus offset | shared rule |
+| copied | `data-copy-state="copied"` for 2000 ms, polite "Copied" | Copy button's `useCopy` / `CopyStatus` (copy-button.md) |
 
 ## Behavior and accessibility
 
 A plain row is a `div` whose text is read as is (the swatch is decorative; the name carries the token). With `copyable`
-it is a `button` named "Copy <name>" whose result is announced once through a polite live region; `copyText` overrides
+it is a `button` named "Copy <name>, <value>" ("Copy <name>" without a value; `aria-label` overrides it) whose result is announced once through a polite live region; `copyText` overrides
 what is copied (default: the value, else the name). Native props and the ref reach the root.
 
 ## Peers and consistency

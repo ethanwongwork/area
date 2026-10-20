@@ -1,6 +1,5 @@
 # Combobox spec
 
-**Status:** accepted · 2026-09-28 (batch 13; was: in review · 2026-09-26)
 **Captures:** `docs/research/captures/combobox/`
 **Peers:** Input (the field), Menu (the list's surface and rows), Select (no typing),
 Popover (anchoring)
@@ -25,11 +24,16 @@ no field). Font picker, tag picker and people picker are recipes on Combobox.
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| size | sm, md, lg | Input's sizes | Figma 24 (compact), ChatGPT/Notion 32 |
-| variant | outline, soft | Input's variants | Figma's fields are soft |
-| mode | pick (reverts unmatched text), custom value, create | Figma font size keeps any number; Notion select creates | Figma, Notion |
-| composition | icon, description, groups, disabled option | Figma font picker groups; Notion person rows | Figma, Notion |
-| state | open, highlighted, selected, empty, disabled, invalid | WAI | — |
+| size | sm, md (default), lg: Input's axis, a typed `size` prop handed to the Input | Input's sizes | Figma 24 (compact), ChatGPT/Notion 32 |
+| variant | outline (default), soft: a typed Combobox prop passed to its Input, which draws the modifier; the Combobox block has none (written exception, DESIGN_SYSTEM; owner, 2026-10-19) | Input's variants | Figma's fields are soft |
+| layout | `fullWidth` (the manifest's one boolean; root and Input) | Layout | — |
+| mode | pick (reverts unmatched text), custom value (`allowsCustomValue`), create (`onCreate`) | Figma font size keeps any number; Notion select creates | Figma, Notion |
+| composition | option icon, description (muted, at the row's end), groups, disabled option | Figma font picker groups; Notion person rows | Figma, Notion |
+| state | open (the manifest's one state, `data-open` on the root), highlighted, selected, empty; disabled, read-only and invalid are Input's | WAI | — |
+
+The `combobox` manifest declares no variant axes (`manifest.ts:730-738`): the field's size and
+variant classes are Input's (`area-input--*`), set by the Input that Combobox renders
+(`Combobox.tsx:24, 250-253`).
 
 ## Sources
 
@@ -47,27 +51,33 @@ list itself was measured only from its offscreen measurement nodes (24 rows, 26 
 
 | Slot · property | Area value | Basis | Reason when it differs |
 |---|---|---|---|
-| field | Input (outline default, sizes 28/32/40), `role="combobox"`, `aria-autocomplete="list"` | Figma input combobox; WAI | Area's field |
+| field | Input (outline default, sizes 28/32/40; Input's chrome, states and props), `role="combobox"`, `aria-autocomplete="list"`, `autocomplete="off"` | Figma input combobox; WAI | Area's field |
 | toggle | InputAction chevron at the end, `tabindex=-1`, "Show suggestions"; shows every option. The field's end padding moves the action in so its glyph ends at the field chevron inset (8 from the edge at sm/md, 12 at lg; compact 8), as Select's; glyph in `input-chevron` ink (`stroke-control`) | WAI (the button is not a tab stop); owner 2026-10-08 (custom-select.md Q4–Q5) | Was 6 / 8 / 12 from the end in `input-icon` ink |
 | list surface | Menu: 12 radius, 4 inset, border, floating lift (`--area-shadow-float`) | menu.md | Figma's lists are dark; Area's menus are light (ChatGPT, Notion) |
 | rows | Menu rows (32, radius 8, 5% wash on hover and highlight); an icon takes Menu's `--area-gap-row` gap (12), so labels sit at 36 | menu.md | Figma 24/28 rows belong to compact density |
 | selected | the trailing check in a reserved column (`aria-selected`), no plate; the hover plate when highlighted | Notion and ChatGPT value lists (custom-select.md, 2026-10-07 audit); owner 2026-10-08 | Was the active plate plus check (audit S13 C, `data-selected`), 2026-09-30 to 2026-10-08. Area puts the check at the end (ChatGPT's model picker) |
 | position | top layer (native popover), placed by the shared JS engine (`useAnchoredPosition`: side bottom, align start, offset 4 = `MENU_OFFSET`, viewport padding 8), so it works without CSS anchor positioning; flips and shifts; min width max(field width, 224) | overlay.md (menu gap 4, audit S16 owner 2026-09-30); Figma list ≥ field | Was CSS anchor positioning |
 | height | min(324, the room beside the field), then scrolls; 50vh only before the engine reports the room | Figma (324, its font list viewport) | Was min(324, 50vh) |
-| empty | "No results", muted, a row tall, not an option | — | — |
-| create | "Create “text”" row with the add glyph when nothing matches exactly | Notion select | — |
+| empty | "No results" (`emptyText`), muted, a row tall, not an option; announced through a status region outside the listbox | — | — |
+| create | "Create “text”" row with the add glyph when typed text matches no label exactly (not while the toggle shows every option) | Notion select | — |
+| list scroll | a Scroll area (owner 2026-10-09) | scroll-area.md, "Adoption" | Was the platform's scrollbar |
 | groups | Menu labels (muted, row tall) over `role=group` | Figma font picker sections | — |
 
 ## Behavior and accessibility
 
 Typing opens and filters (case-insensitive contains; `filter` replaces it) and highlights
-the first match; ↓/↑ move the highlight (skipping disabled options, wrapping), Alt+↓ opens
-without highlighting, Enter picks, Tab picks the highlighted option and moves on, Escape
-closes, and Escape on a closed field clears it. Focus stays in the field
-(`aria-activedescendant`). Leaving the field: an exact label match is picked; otherwise the
-text reverts to the selection (or is kept with `allowsCustomValue`). A created option is
-selected once the host adds it. The toggle's tooltip hides while the list is open. Ref and
-native props go to the input; `className` and `style` to the root (`Combobox.tsx:235`).
+the first match; the toggle opens on every option. Closed, ↓ opens on the selected option (Alt+↓
+without highlighting) and ↑ on the last. Open, ↓/↑ move the highlight (skipping disabled options,
+wrapping), Enter picks (with nothing highlighted it settles the text as on blur), Alt+↑ picks the
+highlighted option and closes, Tab picks the highlighted option and moves on, Escape closes, and
+Escape on a closed field clears the text and the selection. Enter during IME composition is left
+to the composition. Focus stays in the field (`aria-activedescendant`). Leaving the field: an exact
+label match is picked; empty text clears the selection; otherwise the text reverts to the
+selection (or is kept with `allowsCustomValue`, which clears the selection). A created option is
+selected once the host adds it. `name` submits the option's value through a hidden input (the typed
+text only with `allowsCustomValue`). The toggle is an InputAction (`tabindex=-1`, named by
+`toggleLabel`, "Show suggestions"); its tooltip hides while the list is open (`combobox.css:49`). Ref and Input props
+(including `variant`) go to the Input; `className` and `style` to the root (`Combobox.tsx:250-253`).
 
 ## Visual pass
 

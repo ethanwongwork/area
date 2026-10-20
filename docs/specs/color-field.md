@@ -1,6 +1,5 @@
 # ColorField spec
 
-**Status:** accepted · 2026-09-28 (owner, batch 9)
 **Captures:** `docs/research/captures/color-field/`
 **Peers:** Input (the hex field), InputGroup and NumberField (split opacity), ColorSwatch
 (preview), ColorPicker (value row), Field
@@ -21,7 +20,8 @@
     retained only in the explicitly labeled split-field reference example. The palette
     source itself is unchanged.
   - ColorField `alpha` joins hex and a 0–100% opacity editor in one InputGroup shell; `name`
-    submits one canonical hex value. `opacityLabel` names the separate control.
+    submits one canonical hex value. `opacityLabel` names the separate control, and `groupLabel` ("Color and
+    opacity" by default; 2026-10-19) names the group that holds both.
 - 2026-09-26, second pass ("decide all open items"): soft fields are flat, so a soft
   ColorField (Input soft) loses its shadow; the alpha shell (InputGroup soft) already had
   none. The gallery gained a sizes tile.

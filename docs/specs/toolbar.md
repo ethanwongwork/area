@@ -1,6 +1,5 @@
 # Toolbar spec
 
-**Status:** accepted · 2026-09-27 (batches 1-3; was: in review · 2026-09-27 (redesign from Figma's toolbelt, validated side by side in Claude in Chrome; was Complete))
 **Captures:** `docs/research/captures/toolbar/` (Area tiles light and dark; Figma toolbelt: `figma--bottom-toolbar`, `figma--tool--rest`, `figma--tool-group--{selected,hover,chevron-hover}`, `figma--mode-switch--{rest,hover}`)
 **Peers:** Button (the commands), Button group, Segmented (a mode switch inside a toolbar), Menu (the overflow; floating lift), SplitButton (the same trigger-and-menu model), Separator, Panel (host surface)
 

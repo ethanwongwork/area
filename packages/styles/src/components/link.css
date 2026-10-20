@@ -5,7 +5,7 @@
  * control: it takes the type it sits in and adds only an underline (docs/specs/link.md).
  *
  * ChatGPT and Notion agree that a link keeps the ink of the text around it and is always
- * underlined in prose, about 2px below the text. The line is the link's own ink, as ChatGPT draws it
+ * underlined in prose, close under the text (0.08em since 2026-10-17). The line is the link's own ink, as ChatGPT draws it
  * (owner, review round 2, 2026-10-09: "should the underline be the same color as the foreground?";
  * it was Notion's 40%). A UI link can be blue (`ink="blue"`), as ChatGPT's and Figma's are.
  * ------------------------------------------------------------------------- */

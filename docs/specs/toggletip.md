@@ -1,6 +1,5 @@
 # Toggletip spec
 
-**Status:** in review · 2026-10-09
 **Captures:** `docs/research/captures/toggletip/`
 **Peers:** Tooltip (the note's surface, timing and offset), Field (the label it sits beside), Button ghost (the hover and pressed plates), Input (the chevron's quiet ink), Link (a link inside the note), Hover card (a hover preview of a link, not a control)
 

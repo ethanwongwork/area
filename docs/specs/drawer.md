@@ -1,6 +1,5 @@
 # Drawer spec
 
-**Status:** complete · 2026-10-08 (owner approved on the component review page; recommendations accepted)
 **Captures:** `docs/research/captures/drawer/`: `shadcn--sheet-right--open--light`,
 `shadcn--sheet-overlay--open--light` (Claude in Chrome, 2026-10-06, viewport 1504 × 719),
 `area--drawer-sm--open--light`, `area--drawer-stacked--rest--light`.
@@ -14,9 +13,10 @@ surface, not modal), Popover
 
 ## Job and boundaries
 
-A panel that slides in from an edge of the screen over a scrim, for a task beside the page (edit a
-record, settings, filters). Modal. Not Dialog (centred, short), not Panel (docked in the layout,
-not modal), not Notion's side peek as such (a non-modal page view; see Open questions).
+A panel that slides in from an edge of the screen, for a task beside the page (edit a record,
+settings, filters). Modal over a scrim by default; `modal={false}` is a non-modal side panel over a
+page that stays usable, as Notion's side peek (Settled questions 1). Not Dialog (centred, short), not
+Panel (docked in the layout, doesn't slide over it).
 
 ## Variants
 
@@ -42,7 +42,7 @@ not modal), not Notion's side peek as such (a non-modal page view; see Open ques
 | surface | x 710, 384 × 798 (full height, flush right), white, 1px left border #e5, shadow 0 10 15 −3 / 0 4 6 −4 at 10% | the same box at the same viewport (verified live), Area surface fill, 1px `border-float` on the inner edge, float lift |
 | header | padding 16, title 16/24 500, description 14/20 muted, 2 apart | Dialog's: 16 inset, 16/24 strong, 14/20 muted, 4 apart |
 | body | 16 sides, fields 24 apart | Dialog's body (scrolls), 16 inset |
-| footer | padding 16, buttons stacked full width, 8 apart | Dialog's footer: end-aligned row |
+| footer | padding 16, buttons stacked full width, 8 apart | Dialog's footer: end-aligned row, or `actions="stacked"`: full width, 8 apart |
 | close | 28 ghost at 12 / 12, radius 8, 16 icon | Dialog's close: md ghost at 8 / 8 (icon on the 16 inset) |
 | overlay | 10% black, 4px blur, 150ms fade; panel 200ms | Dialog's scrim (13%), `duration-base` slide and fade |
 
@@ -57,18 +57,28 @@ Area's lift is the Elevation axis's modal role, as Dialog (`--area-shadow-modal`
 
 | Slot · property | Area value | Basis | Reason when it differs |
 |---|---|---|---|
-| width | 384 sm / 480 md | shadcn; Dialog | — |
+| width | 384 sm / 480 md, at most the viewport less 48 (drawer.css:60, 78-79); bottom: full width, at most the viewport less 48 tall | shadcn; Dialog | — |
 | edge | inner-edge 1px `border-float`, no radius against the screen edge; bottom: top corners `radius-container` | shadcn (flush, 1px edge) | — |
-| anatomy, insets, type, close | Dialog's | Peer: Dialog (accepted) | shadcn close at 12 and stacked footer |
-| scrim | Dialog's | Peer: Dialog | shadcn 10% + blur |
+| insets | 16 on every side, `16 − border` only on the bordered (inner) side (drawer.css:63-64, 85, 97-98) | Dialog's 16, border counted once (audit 2026-10-07) | — |
+| anatomy, type, close | Dialog's: title 16/24 strong (cap-trimmed without a close), description muted 4 below, md ghost close 8 / 8, section gap `inset-surface-md` | Peer: Dialog (accepted) | shadcn close at 12 |
+| body | a Scroll area; the focus-ring bleed inside the scroller (drawer.css:142-153) | Scroll area adoption (owner, 2026-10-09) | — |
+| footer | `actions="row"` (default): end-aligned, `ui-cluster` apart, wrapping; `"stacked"`: full width, 8 apart, primary first (drawer.css:154-159) | Dialog; shadcn's Sheet (owner 2026-10-06) | — |
+| lift | `--area-shadow-modal` after a material's layers and the Surface axis's `shadow-edge` (drawer.css:70-71) | Dialog; Elevation and Stroke audit 2026-10-18 (the modal lift under every material) | shadcn 0 10 15 −3 / 0 4 6 −4 at 10% |
+| scrim | Dialog's (`scrim`); none when non-modal | Peer: Dialog | shadcn 10% + blur |
+| non-modal | `modal={false}`: a manual popover in the top layer spanning the viewport, pointer passing through everywhere but the surface (drawer.css:166-167) | Owner 2026-10-06; Notion's side peek | `dialog.show()` painted under the gallery's rail |
 | motion | `translate` 100% from the edge, in on `duration-slow` (250), out on `duration-moderate` (200), `ease-drawer` both ways; scrim fade `moderate` ease-out; instant under reduced motion (2026-10-07, below) | docs/MOTION.md, "Drawer / sheet"; Vaul's curve | shadcn 200ms ease-in-out; was `duration-base` ease-out |
 
 ## Behavior and accessibility
 
-Native modal `<dialog>` (focus trapped, Escape closes, focus returns to the trigger, page behind
-inert and unscrollable), named by the title and described by the description; a press that starts
-and ends on the scrim closes it. `start`/`end` follow the writing direction. `inline` renders the
-surface in place for documentation.
+Modal (default): a native modal `<dialog>` (focus trapped, Escape closes, focus returns to the
+trigger, page behind inert and unscrollable), named by the title and described by the description
+(or `aria-label` / `aria-labelledby` / `aria-describedby`); a press that starts and ends on the scrim
+closes it. Non-modal (`modal={false}`): the same `<dialog>` as a manual popover; the page stays usable,
+focus moves to its first focusable control on open, Escape and the close control close it, and focus
+returns to where it was if it was inside. `trigger` gets `aria-haspopup="dialog"` and `aria-controls`;
+`open` / `defaultOpen` / `onOpenChange` control it (shared `useOpenState`). The close is named by
+`dismissLabel` ("Close" by default). `start`/`end` follow the writing direction. `inline` renders the
+surface in place with `role="dialog"` for documentation.
 
 ## Verification
 

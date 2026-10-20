@@ -1,6 +1,5 @@
 # Edit summary spec (with Diff)
 
-**Status:** built · in review · 2026-10-18
 **Captures:** none yet; evidence from the products' stylesheets in `docs/research/inspector-chat-2026-10-18/`.
 **Peers:** Code block (diff marks, card shape), Step, Button (ghost), Table
 
@@ -10,9 +9,9 @@
 
 ## Job and boundaries
 
-**Edit summary** is what an agent changed in one turn: a card titled with the count ("Edited 2 files"), the turn's
-total +N −N, and a row per file with its own counts, each opening to its diff, with Keep and Undo for each file and
-for all. **Diff** draws a unified diff in Code block sm's metrics: line numbers, a + / − marker and a tint on added and removed lines, and a fold for
+**Edit summary** is what an agent changed in one turn: a card with a title, the turn's total +N −N, and a row per file with its own counts, each opening to its diff, with Keep and Undo for each file and
+for all. The caller words the title with the count ("Edited 2 files", as the Inspector chat passes it); without a
+`title` the card reads "Edited files" (`EditSummary.tsx`, the title's fallback). **Diff** draws a unified diff in Code block sm's metrics: line numbers, a + / − marker and a tint on added and removed lines, and a fold for
 the unchanged runs between hunks. Not Code block's `marks` (one-sided, no numbers pairs or folds); not a review tool
 (staging, commits, split view are Codex's side panel and out of scope).
 
@@ -44,40 +43,51 @@ codex   "• Edited 2 files (+6 -1)", per file "└ path (+1 -1)", numbered +/- 
 Area:
 
 ```
-area-edit-summary            card: 1px card edge, Code block's container corner, the raised fill
-  area-edit-summary__head    flex, gap 6, padding 6 8 and a divider: title, counts, Undo all, Keep all
+area-edit-summary            card: card edge at stroke-width, container corner, surface fill; text-sm throughout
+  area-edit-summary__head    flex, wraps, gap 8; a small control plus its inset above and below; title 12 in; a divider:
+                             title, counts, Undo all, Keep all (buttons at the end, wrapping under the title when narrow)
   area-edit-summary__files   padding 4
-    area-edit-summary__file  row: button (name, counts, chevron) + actions (Undo, Keep); 4/6, row corner, row plate
-      area-diff              under its row when open
-area-diff                    mono, Code block sm's type; horizontal scroll
-  area-diff__line            subgrid row: old number, new number, + / − marker, text; added / removed tint
-  area-diff__fold            "12 unchanged lines" on the recessed fill
+    area-edit-summary__file  Menu row (ui-row, row inset, row corner, row plate, gap 8): button (name, counts,
+                             chevron) + actions (Undo, Keep) or the settled status ("Kept" / "Undone")
+    area-edit-summary__diff  under its row when open, 4 above and below
+      area-diff
+area-diff                    mono, Code block sm's type; card edge, row corner, code fill; horizontal scroll, focusable
+  area-diff__lines           one grid: old number, new number, marker 8, text; gap 4
+  area-diff__line            subgrid row; added / removed tint
+  area-diff__fold            "12 unchanged lines", sans, muted on the recessed fill, from where the numbers start
 ```
 
 ## Decisions
 
 | Slot · property | Area value | Basis | Reason |
 |---|---|---|---|
-| card edge, fill | border-card, bg-surface | cursor (one card shape) + Code block (raised fill) | — |
+| card edge, fill | border-card at stroke-width, no shadow; bg-surface | cursor (one card shape) + Code block | a required frame (round 49) |
+| type | text-sm across the card; sm buttons | Cursor cards 13 under a 14 reply | round 49: the card mixed four sizes |
 | card corner | radius-container | Code block md (peer) | Cursor's 12 is its card radius; Area's card corner role |
-| head padding / gap | 6 × 8, gap 6 | cursor header 8, gap 6 | 6 block so the head is a row tall at Compact |
-| row padding / corner | 4 × 6, radius-row | cursor rows 4/6, radius 6 | Area's row corner role |
-| row hover | bg-component-hover plate | DESIGN_SYSTEM row plates | — |
-| counts | +N fg-success, −N fg-danger, tabular | cursor git added / removed, codex green / red | — |
-| diff type | text-xs on 18 (compact 16), mono | Code block sm (peer) | the Inspector's code well |
+| head | min height control-sm + 2 × inset, inset (row − control-sm) / 2, never under 4; title 12 in (list 4 + row inset 8); gap 8; divider at stroke-width | Code block's header (stable height with or without actions); Cursor card header 0 12 | rounds 49 and 52 |
+| list / row | list padding 4; Menu rows: ui-row tall, row inset, radius-row, gap 8 | Menu (peer); cursor rows radius 6 | round 49 |
+| row plate | bg-component-hover on hover / focus, bg-component-active while the name is pressed | Menu rows | round 51 |
+| row actions | muted ghost buttons, default ink on hover and press, no plate of their own; over the row's end on the row's plate (pointer), in flow on touch | Nav's and Board's row-action rule | round 51 |
+| button corners | concentric: head buttons take the card's corner less the border and their inset; row buttons the row's corner less theirs; own corner under Sharp | owner round 51 | round 52 |
+| counts | +N fg-success, −N fg-danger, tabular, 4 apart | cursor git added / removed, codex green / red | — |
+| diff type | text-xs on 18 (compact 16), mono; insets 8 (compact 6), number start 4, gap 4 | Code block sm (peer) | the Inspector's code well |
+| diff frame | border-card, radius-row (concentric with the list: 12 − 4), bg-code | Code block (peer) | round 49 |
 | diff tint, marker | success-surface / danger-surface; marker 8 wide in fg-success-vivid / fg-danger-vivid, strong | Code block's diff (peer) | one diff paint across Area (cleanup pass 2026-10-19; was Cursor's 3px strip) |
-| fold | text-xs muted on bg-subtle, padding 2 × 8 | cursor collapsed regions 12px on bg-tertiary | — |
+| fold | the diff's size, sans, muted on bg-subtle; from the number start 4 to the diff's end inset | cursor collapsed regions 12px on bg-tertiary | round 49 |
 | kept / undone | counts muted; undone name struck through; the row says "Kept" / "Undone" | cursor Keep / Undo | — |
 
 ## States
 
-Row hover / focus: plate; actions show (always on touch). Open: chevron down, diff below. Kept / undone: final, the
-actions leave.
+Row hover / focus: plate; actions show (always on touch). Name pressed: the pressed plate. Open: chevron turns down
+(`fast`), diff below. Kept / undone: final, the actions leave for "Kept" / "Undone"; counts muted; an undone name is
+struck through.
 
 ## Behavior and accessibility
 
 The file name is a button (`aria-expanded`) that opens its diff; Undo and Keep are separate Buttons labelled with the
-file ("Undo button.css"). The diff is a `figure` named by its file; added and removed lines carry visually hidden "Added"
+file ("Undo button.css"); Undo all and Keep all show only when the caller passes their handlers. The card is a
+`section` named by its title. The diff is a focusable `figure` named "Changes to <file>" (a sideways scroll needs the
+keyboard); added and removed lines carry visually hidden "Added"
 / "Removed" so the change is not colour alone. Long lines scroll sideways; the card never widens its column.
 
 ## Peers and consistency

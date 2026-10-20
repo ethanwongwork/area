@@ -1,6 +1,5 @@
 # Zoom control spec
 
-**Status:** accepted · 2026-10-11 (review round 7, components7)
 **Captures:** `docs/research/captures/zoom-control/`
 **Peers:** Button (ghost sm, trailing chevron), Menu (rows, shortcuts, checks, separator), Input (the typed zoom),
 Toolbar and Panel (where it sits)

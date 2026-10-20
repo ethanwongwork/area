@@ -1,7 +1,5 @@
 # Slider spec
 
-**Status:** accepted (Complete in `component-status.mjs`) · 2026-09-26: the second pass changed
-the lg thumb; the owner has not re-reviewed it
 **Captures:** `docs/research/captures/slider/`; rail evidence in
 `progress/figma--usage-bar--rest--light`
 **Peers:** Progress and Switch (share the off-track grey, audit S5), Switch (thumb), Checkbox and Radio (glyph ladder),

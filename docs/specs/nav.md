@@ -1,6 +1,5 @@
 # Nav spec
 
-**Status:** accepted · 2026-09-27 (batches 1-3; was: in review · 2026-09-26 (cohesion audit, second pass))
 **Captures:** `docs/research/captures/nav/`, `docs/research/captures/baseline/`
 **Peers:** Menu (rows, plates, labels), Tree view (navigation rows), Tabs (neutral current
 marker), Breadcrumb (hover plate), Button ghost (row actions)
@@ -25,7 +24,7 @@ marker), Breadcrumb (hover plate), Button ghost (row actions)
   trailing annotations and independent action slots. Nav uses filled rows for destinations,
   with a compact horizontal run for top level routes and a separate vertical selection
   marker option.
-- 2026-09-26: Neutral by default, accent by override ([design system](../DESIGN_SYSTEM.md#color-and-focus)).
+- 2026-09-26: Neutral by default, accent by override ([design system](../DESIGN_SYSTEM.md#colour)).
   The current plate and the marker rail are neutral; `tone="accent"` carries the accent.
   *Superseded 2026-09-29 (owner, D1): the marker rail is the Selection role (`fg-selection`,
   nav.css:167), accent by theme; the current plate stays neutral in every theme; `tone` was

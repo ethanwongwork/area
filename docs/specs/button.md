@@ -1,6 +1,5 @@
 # Button spec
 
-**Status:** accepted · 2026-09-26 (was: in review · 2026-09-25 (first pass under the capture workflow))
 **Captures:** `docs/research/captures/button/` (Area pass-0 build in `before/`)
 **Peers:** ButtonGroup and Toolbar (host Button), Composer actions, InputAction, Chip
 (pill shape, selectable), Segmented (mode choice), Kbd (shortcut inside a label), Tree view

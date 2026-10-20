@@ -1,6 +1,5 @@
 # Spinner spec
 
-**Status:** accepted · 2026-10-13 (owner, review round 26; first accepted 2026-09-28, batch 6)
 **Captures:** `docs/research/captures/spinner/`
 **Peers:** Progress (known or unknown duration on a rail), Skeleton (content placeholder),
 Button, Input, Badge and Switch (host a Spinner when loading)

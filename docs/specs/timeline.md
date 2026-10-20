@@ -1,6 +1,5 @@
 # Timeline spec
 
-**Status:** complete · 2026-10-12 (approved, review round 9)
 **Captures:** `docs/research/captures/timeline/`
 **Peers:** Accordion (24 chevron column, content after it), Avatar (marker media), Indicator (dot size), Separator
 (line ink), Description list and Shortcut list (muted secondary text), Message (details in a body)
@@ -32,7 +31,7 @@ them. A clickable event puts a Link in its title.
 | Axis | Value | Justification | Where it appears (source / product) |
 |---|---|---|---|
 | marker | dot (default) | A small dot on the line for an event with no icon | Ant `Timeline` dot; Mantine bullet; Figma's autosave rows (line only) |
-| marker | icon | A 16 icon in a 24 circle | Figma's group and current-version markers; Primer `TimelineBadge` |
+| marker | icon | A bare 16 icon (`icon-sm`) centred in the 24 marker, no plate | Linear's issue activity, the activity feed (owner, round 8); Figma's group and current-version markers |
 | marker | media | An element that fills the 24 marker: an Avatar | Notion's page updates (24 avatar); Primer `TimelineItemAvatar` |
 | current | boolean | The current or latest event: its mark paints the Selection role (neutral or the accent, by theme) | Figma's current version (filled blue circle, white check); Mantine `active`; Primer `variant` |
 | content | title, time, meta, body | What happened, when, who or where, and details | Figma (date as title, author under it); Notion (title, time · page, property changes) |
@@ -75,15 +74,19 @@ article  entry                 padding 12 0
 Area:
 
 ```
-ol     .area-timeline                       role="list"; 14/20; --_marker 24, --_gap 12, --_spacing 16
-  li     .area-timeline-item[--tone]           grid: marker column | content; 16 below all but the last
-    ::before                                    the line: 1px divider ink, marker centre to the next marker's centre
+ol     .area-timeline                       role="list"; text-sm (14/20); --_marker 24, --_gap 12, --_spacing 16
+  li     .area-timeline-item[--current]        grid: marker column | content; 16 below all but the last; aria-current
+    ::before                                    the line: 1px divider ink at x 11.5, from 4 below this mark to 4 above
+                                                the next (the mark's own height: dot 6, icon 16, media 24)
     span   __marker                             24 square (aria-hidden unless it holds media)
-      span   __dot | __icon | __media             6 dot | 24 circle with a 16 icon | 24 Avatar
+      span   __dot | __icon | __media             6 dot | bare 16 icon | 24 Avatar; dot and icon in fg-muted
+                                                  (selection-solid when current)
     div    __content                            padding-top (24 − 20) / 2: the first line centres on the marker
-      div    __title                              14/20 500
-      div    __meta                               12/16 muted, 4 below the title: time · meta
-      div    __body                               8 below the meta
+      div    __line                               one line, wraps anywhere
+        span   __title                              14/20 400
+        span   __meta                               14/20 fg-muted, each after a __sep "·" (aria-hidden, 4 either
+                                                    side): meta, then time
+      div    __body                               8 below the line (0 when it is first)
 ```
 
 Inset equations: content start = marker 24 + gap 12 = 36 (Figma 16 + 24 + 4 + 8 = 52 from its row edge, 36 from the
@@ -107,6 +110,9 @@ Generated with `node scripts/capture-compare.mjs` (rows abbreviated to the slots
 | title → meta | 4 | 4 | 4 (margin) | 4 | 4 |
 | row to row (text) | 16 (8 + 8) | 16 | 24 (12 + 12) + 8 | 16 | 16 |
 
+Area's columns (500 titles, meta 12/16 under the title, the `tone-accent` tile) are the first build, superseded by
+review round 8 and the 2026-10-12 `current` change; Decisions holds the current values.
+
 ## Decisions
 
 | Slot · property | References | Area | Basis | Reason when it differs |
@@ -125,15 +131,17 @@ Generated with `node scripts/capture-compare.mjs` (rows abbreviated to the slots
 
 ## States
 
-Static: no hover, press or selection. Accent marks the current event. Forced colors: the line and dots paint
-CanvasText; icon circles get a 1px CanvasText ring.
+Static: no hover, press or selection. The current event's mark paints the Selection role (`selection-solid`: neutral in
+the default theme, the accent in an accent theme) and the item is `aria-current`. Forced colors: the line and dots paint
+CanvasText; icons follow the text colour.
 
 ## Behavior and accessibility
 
 An `ol` with `role="list"` (Primer: Safari drops list semantics with `list-style: none`). Each event is an `li`. The
 marker is `aria-hidden` (its meaning is in the title) unless it holds media, which can carry its own name (an Avatar
 with `alt`; pass `alt=""` when the title already names the person). `time` with `dateTime` renders a `<time>`. Native
-props and refs reach the `ol` and each `li`.
+props and refs reach the `ol` and each `li`. A `current` item carries `aria-current="true"`. The separators are
+`aria-hidden`, so the line reads as title, meta, time.
 
 ## Peers and consistency
 
@@ -142,7 +150,7 @@ props and refs reach the `ol` and each `li`.
 | Accordion | leading 24 column, content after it | 24 chevron, 6 gap | 24 marker, 12 gap | differs on purpose: both products set events 12 from the marker |
 | Indicator | dot | 6 | 6 | same |
 | Avatar | person | sm 28 | 24 inside the marker | Notion's 24 |
-| Description list | muted secondary text | 14/20 muted terms | 12/16 muted meta | meta is a caption, one step down |
+| Description list | muted secondary text | 14/20 muted terms | 14/20 muted meta, on the title's line | same size (owner, round 8) |
 
 ## Visual pass
 

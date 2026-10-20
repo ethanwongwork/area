@@ -1,6 +1,5 @@
 # Video player spec
 
-**Status:** Complete · approved 2026-10-18 (round 47)
 **Research:** `docs/research/video-player-2026-10-17.md` (Plyr, Video.js v10, Vidstack, Media Chrome and Kibo pinned to
 commits; YouTube, Vimeo and apple.com computed; Notion, Loom, Slack not measured)
 **Peers:** Figure (holds it, with a caption), Button (ghost icon-only, here on media), Slider (the range), Tooltip, Spinner
@@ -11,58 +10,87 @@ commits; YouTube, Vimeo and apple.com computed; Notion, Loom, Slack not measured
   i want this to be an actual video right?"; then "work on the next work: whether to build a Video player next".
 - Decided from the survey, open for review: the played part of the track is white, not the accent (monochrome, as
   Video.js, Vidstack and Media Chrome; suits ChatGPT and Notion); full screen uses Area's `maximize` / `minimize` arrows;
-  the on-media buttons are the player's own (white ink, white plates), so Button is unchanged.
+  the on-media buttons are the player's own (white ink, white plates), so Button is unchanged. — superseded 2026-10-18
+  (rounds 44–47): every layout uses Area's ghost Buttons in the dark scheme, plates tinted white over the glass.
+- 2026-10-19 (review page, docs pass): skips are 10 seconds everywhere: the Back and Forward buttons now seek 10, the same as J and L (settles round 40's open question).
 
 ## Job and boundaries
 
-Plays a video with controls drawn in Area's language. Not a Figure (which frames any media with a caption and can hold
-this player), not an audio player, not a playlist.
+Plays a video with controls drawn in Area's language, in three layouts (AVKit's control styles). Not a Figure (which
+frames any media with a caption and can hold this player), not an audio player, not a playlist. Picture in picture is a
+button, not a layout: the browser draws its own window (round 40).
+
+## Variants
+
+| Axis | Value | Justification | Where |
+|---|---|---|---|
+| layout | floating (default): QuickTime Player's controller, a two-row glass panel inset over the video | owner round 40; AVKit `floating` | QuickTime, Safari's macOS full screen, Video.js's pill |
+| layout | bar: one row along the foot, on a fade | round 39; AVKit inline | Safari inline, Plyr, Vimeo, YouTube |
+| layout | minimal: one round play / pause, no track | AVKit minimal | Video.js background, apple.com |
+| controls | auto (default): hide when idle · always: stay | round 39 | Kibo's always-visible bar |
+
+Narrow widths are container queries, not variants.
 
 ## Anatomy
 
 ```
-div.area-video-player (role=group, aria-label, tabindex 0; data-started, data-idle)
+div.area-video-player (role=group, aria-label, tabindex 0; data-started, data-idle; --floating|--bar|--minimal, --auto|--always)
   video.area-video-player__media   (native; <track> children)
-  button.area-video-player__start  (before the first play: 48 round, black 50%, play 20)
-  div.area-video-player__scrim     (black 50% → clear, 64 tall)
-  div.area-video-player__controls  (after the first play; 4 from the sides and foot, items 2 apart)
-    button (play / pause) · input[range] seek · span.time (current / span.duration) ·
-    div.volume (button mute + input[range] volume, revealed 56 on hover / focus) ·
-    button captions (with tracks) · button picture in picture (where supported) · button full screen
+  button.area-video-player__start.area-video-player__surface
+                                   (round play: before the first play in every layout; minimal's only control)
+  div.area-video-player__scrim     (bar only: black 50% → clear, 64 tall)
+  div.area-video-player__controls  (after the first play; not in minimal)
+    floating (also __surface):
+      div.__transport              (three columns: start · centre · end)
+        div.__group--start         div.__volume (mute + range, opens 64 on hover / focus)
+        div.__group--center        back 15 (.__skip) · play / pause · forward 15 (.__skip)
+        div.__group--end           captions (.__optional) · picture in picture (.__optional, where supported) · full screen
+      div.__timeline               span.__clock--start (current) · input.__range (seek) · span.__clock (−remaining)
+    bar:
+      play / pause · input.__range (seek) · span.__clock (current, span.__duration " / total") · div.__volume ·
+      captions (.__optional) · picture in picture (.__optional) · full screen
 ```
+
+Every button is an Area Button (ghost, neutral, md, icon-only) inside an Area Tooltip that names it and shows its key.
 
 ## Decisions
 
 | Part | Area | Basis |
 |---|---|---|
-| frame | Figure's media corner, black behind letterboxing | Figure; every source |
-| row | 32: 24 buttons (`control-sm` at 13), 4 from the media, 2 apart | Vimeo 32, Plyr 32; Vimeo 24 buttons |
-| icons | 16; play and pause solid | Vimeo 20 at 24; Area's 16 cut |
-| ink | white in every state, a 0 1 2 30% black shadow | Video.js, Plyr |
-| button plate | hover white 20%, pressed 30%, captions on 20% | Vidstack hover 20%; shared state paint (ink fixed) |
-| scrim | black 50% to clear, 64 | Video.js 50%, Vidstack 60%; 2 × the row |
-| track | 4, 6 on hover / drag / focus; rail white 20%, loaded 40%, played white | YouTube 4 → 6; Vimeo, Video.js, Media Chrome 4 and 20% |
-| thumb | 12 white, Video.js's shadow, shown on hover / drag / focus | YouTube, Video.js 12 |
-| time | small text, 500, tabular, `m:ss / m:ss` (`h:mm:ss` past an hour) | YouTube 500; Vidstack |
-| volume | mute, and a 56 slider revealed on hover or focus | YouTube's reveal; Vidstack ≤ 72 |
-| start | 48 round, black 50%, play 20; one step darker on hover | Plyr 48 |
-| idle | hide after 2000 ms while playing; never while paused or with focus inside; cursor hides too | Plyr, Video.js, Vidstack, Media Chrome |
-| motion | in on `fast`, out on `moderate`, opacity only; track growth on `fast`, none with reduced motion | Media Chrome in faster than out; MOTION.md |
-| narrow | under 400: no volume slider, no picture in picture; under 280: no duration | Video.js media-max-lg, Vidstack's small layout |
+| frame | Figure's media corner (`radius-small`), black behind letterboxing; no corner in full screen | Figure; every source |
+| scheme | the controls and the round play take Area's dark scheme (`color-scheme: dark`) in every theme | round 45: Apple, QuickTime, Media Chrome, Video.js |
+| glass | `bg-surface` at 72% under blur(16px) saturate(150%), an inset white 12% hairline, `shadow-float`; a Material's layers first (overlays group) | round 45 (Apple 72%, Video.js 16); settings collisions fix 2026-10-18 |
+| buttons | Button ghost, neutral, md (`control-md`), icon-only, in every layout; plates hover white 12%, pressed 20%, selected 16% | rounds 44, 46, 47 |
+| icons | Area's filled cuts (play, pause, skip, volume, captions, picture in picture); full screen `maximize` / `minimize` lines; play the same size as the rest | rounds 45, 47 |
+| floating panel | at most 400 wide (100% − 24 below that), 12 above the foot, centred; padding inset − 2 top, inset sides, inset + 6 under (inset = `ui-cluster`); rows 8 apart; corner `radius-control-md` + inset × `radius-concentric` | rounds 40, 43, 44, 47 (glyphs 18 from every edge at type 14, 16 at 13) |
+| floating rows | transport: groups 2 apart, play and the skips `gap-md` apart; timeline 16 tall, 8 apart, inset (button − icon) / 2 + 2 | rounds 43, 47; WebKit time-control |
+| bar | the row `ui-cluster` from the video's edges, items 2 apart; track and time stand off 6 | round 47 (glyphs 18.4–19 from the edges at 14) |
+| scrim | bar only: black 50% to clear, 64 | Video.js 50%, Vidstack 60%; 2 × the row |
+| track | the player's own range: 4 rail, `fg-default` played and a plain 12 thumb (always shown, no ring), loaded 35%, rest 20%; no growth on hover | round 46 (Cursor's slider); round 41 (thumb always shown) |
+| time | `fg-muted` UI text, regular, tabular; floating: current, then `−remaining` on the right; bar: `m:ss / m:ss` with a 0 1 2 30% black text shadow; `h:mm:ss` past an hour | rounds 42, 44; Video.js, Plyr |
+| volume | mute at rest; a 64 range opens beside it (4 before, 8 after) on mouse hover or focus; muted keeps the level in `fg-muted` | round 42; Apple's 60 on the 4 grid; round 41 |
+| captions | disabled ("No captions") without a track; `selected` while showing | rounds 42, 47 |
+| start | `control-lg` round, the glass, play / pause at `icon-md`; hover adds a white 12% tint | round 44; settings collisions fix |
+| idle | hide after 2000 ms while playing; never while paused or with focus inside; cursor hides too; minimal fades its round play | Plyr, Video.js, Vidstack, Media Chrome |
+| motion | controls and scrim in on `fast` ease-out, out on `moderate`, opacity only; the volume range opens on `fast` | Media Chrome in faster than out; MOTION.md |
+| narrow | floating under 400: one row, play · track · −remaining · full screen, inset all round, the same corner; bar under 400: no volume range, no captions or picture in picture; under 280: no duration | round 40; round 47 (not a pill); Video.js, Vidstack small |
 | `controls` | `auto` (hide when idle) or `always` | Kibo's always-visible bar |
 
 ## Behavior and accessibility
 
 Keys (on the player or a control): Space / K play, ← → 5 s, J / L 10 s, ↑ ↓ volume 5%, M mute, F full screen, C captions,
-I picture in picture, 0–9 a tenth of the way, Home / End; a focused range keeps its own arrows. Click the video to play
-or pause, double-click for full screen. The seek range reads "1 minute 12 seconds of 4 minutes 3 seconds"; volume reads
-"60% volume". Buttons name their action (Play / Pause, Mute / Unmute, Full screen / Exit full screen, Captions with
-`aria-pressed`). Controls are not rendered before the first play, so the round play is the only stop.
+I picture in picture, 0–9 a tenth of the way, Home / End; a focused range keeps its own arrows and a focused button its
+Space. Click the video to play or pause, double-click for full screen (not in minimal). The seek range reads "1 minute 12
+seconds of 4 minutes 3 seconds"; the remaining time reads "… remaining"; volume reads "60% volume" ("Muted, 60% volume"
+while muted). Buttons name their action (Play / Pause, Back / Forward 10 seconds (the same 10 as J and L; owner, 2026-10-19), Mute / Unmute, Captions with
+`aria-pressed`, Picture in picture / Exit picture in picture, Full screen / Exit full screen); each has a Tooltip with its
+name and key (`describes={false}`: the label already names it). The root group is itself a Tab stop (`tabIndex` 0) so its
+keys work before any control has focus; before the first play the round play is the only other stop.
 
 ## Not built yet
 
-Settings (speed, caption track) in a Menu; Area Tooltips on the buttons and the hover time over the scrubber; buffering
-Spinner; ended / replay state; captures of Notion's video block and Loom.
+Settings (speed, caption track) in a Menu; the hover time over the scrubber; buffering Spinner; ended / replay state;
+captures of Notion's video block and Loom.
 
 ## Review note, 2026-10-17 (round 39)
 

@@ -1,6 +1,5 @@
 # Turn notice spec
 
-**Status:** built · in review · 2026-10-18
 **Captures:** none yet; evidence in `docs/research/inspector-chat-2026-10-18/`.
 **Peers:** Alert (a page's message; heavier), Message, Step
 

@@ -1,6 +1,5 @@
 # Tag spec
 
-**Status:** approved · 2026-10-08 (owner, component review) (was: in review · 2026-10-06, built; Review page batch "New components, batch 1")
 **Captures:** `docs/research/captures/tag/`: `notion--tag-removable--{rest,dismiss-hover}--light`
 (Claude in Chrome, owner's "tasks" Status editor, hover only), `area--tag-removable--{rest,dismiss-hover}--light`;
 Notion's palette from `badge/notion--tag-*`, `badge/notion--select-*`, `badge-group/notion--multi-select-many`.

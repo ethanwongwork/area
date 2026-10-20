@@ -1,6 +1,5 @@
 # Table of contents spec
 
-**Status:** built, in review · 2026-10-17
 **Captures:** computed-style readouts below (Wikipedia, en.wikipedia.org/wiki/Lisa_Su)
 **Peers:** Nav (marker), Tree view, Section heading
 
@@ -11,7 +10,7 @@
 
 ## Job and boundaries
 
-Lists a page's sections and marks the one being read, following the scroll. The rows are Nav's marker rows; the component adds the title, nesting from data, the scroll-following and collapse. Not site navigation (Nav) and not a file tree (Tree view).
+Lists a page's sections and marks the one being read, following the scroll. The rows are Nav's marker rows; the component adds the "On this page" label, nesting from data (one or two levels, never folded) and the scroll-following. Not site navigation (Nav) and not a file tree (Tree view).
 
 ## Sources
 
@@ -25,7 +24,7 @@ caption) were not measured this round.
 
 ## Measurements
 
-Wikipedia, computed:
+Wikipedia, computed (evidence only; Area's current values are in Decisions):
 
 | Part | Value |
 |---|---|
@@ -39,11 +38,11 @@ Wikipedia, computed:
 | Slot · property | Area value | Basis | Reason when it differs |
 |---|---|---|---|
 | rows | Nav marker rows (Area's row, 28 at compact) | Wikipedia 28 at 14 | — |
-| current | body ink and the selection rail; the rest muted | Nav marker (Area's outline) | Wikipedia bolds the current row and colours the rest blue; Area keeps one weight and neutral rows, as its other outlines |
-| nesting | NavGroup `nested` (one Tree view level) | Area | Wikipedia 12 a level |
-| title | UI text, strong, 16 in (the rows' text) | Wikipedia "Contents" 14 bold | — |
-| following | the last heading at or above the scroller's top + `offset` + 24 is current; the last when scrolled to the end | Wikipedia's behaviour | measured once a frame |
-| collapse | `collapse`: only the section being read shows its subsections | Wikipedia | no manual toggle yet |
+| current | default ink and the selection rail (`fg-selection`); the rest `fg-muted`, regular | Nav marker (Area's outline); Notion, VitePress (round 35) | Wikipedia bolds the current row and colours the rest blue; Area keeps one weight and neutral rows, as its other outlines |
+| nesting | NavGroup `nested` (Nav's nested indent); `levels` 2 (default) or 1; subsections always shown | round 34 (VitePress, Starlight, Primer, Nextra, Docusaurus, MDN) | Wikipedia 12 a level and folds subsections; `collapse` dropped in round 34 |
+| title | "On this page" by default, `false` for none; UI text, strong, default ink, a row tall (`ui-row`), its text 16 in with the rows; hidden from the accessibility tree, the `nav`'s name instead | VitePress title 600 in text-1 (round 35) | Wikipedia "Contents" 14 bold |
+| top | optional first row back to the top (`top`: label and id) | Area | — |
+| following | the last heading at or above the scroller's top + `offset` + 24 is current; the last when scrolled to the end; `current` makes it controlled | Wikipedia's behaviour; VitePress `outline.ts` | measured once a frame |
 | `aria-current` | `location` | ARIA | — |
 
 ## Verification

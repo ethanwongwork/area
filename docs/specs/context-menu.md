@@ -1,18 +1,20 @@
 # Context menu spec
 
-**Status:** accepted · 2026-09-28 (batch 18; was: in review · 2026-09-26)
 **Captures:** `docs/research/captures/context-menu/`
 **Peers:** Menu (the surface and rows, unchanged), Popover (top layer)
 
 ## Owner decisions
 
 - 2026-09-26: "do each of them subsequently" — third in the product-specific inventory.
+- 2026-10-19 (review page, docs pass): `menuLabel` names the menu ("Context menu" by default), per audit D-18's rule that `<part>Label` names a sub-part, as SplitButton's and Toolbar overflow's; `label` is its deprecated alias.
 
 ## Job and boundaries
 
 Opens a Menu where you right-click an area (a page in a list, a layer, a canvas object), or
-under the focused element from the keyboard. Only placement and opening are new; the menu is
-Menu. Not a dropdown Menu (opened from a button), not a Popover (content, not actions).
+under the focused element from the keyboard. With `itemSelector`, one context menu serves a whole
+list: it opens only on a matching row and its rows can depend on that row. Only placement and
+opening are new; the menu is Menu. Not a dropdown Menu (opened from a button), not a Popover
+(content, not actions).
 
 ## Variants
 
@@ -20,6 +22,7 @@ Menu. Not a dropdown Menu (opened from a button), not a Popover (content, not ac
 |---|---|---|---|
 | trigger | pointer (right-click), keyboard (Shift+F10, Menu key) | WAI; every product | Notion, Figma, ChatGPT |
 | rows | Menu's: icon, shortcut, separator, danger, disabled, submenu (`MenuSub`) | menu.md | Notion page menu |
+| target | the whole area (default), or one item per row (`itemSelector`; `menu` a function of the item) | Owner, 2026-10-15 (PRODUCT_UI.md gap; approved round 27) | the app's PinMenu; Finder, Notion |
 
 ## Sources
 
@@ -37,13 +40,16 @@ Menu. Not a dropdown Menu (opened from a button), not a Popover (content, not ac
 
 | Slot · property | Area value | Basis |
 |---|---|---|
-| name | `aria-label` names the menu (`label` is a deprecated alias) | Audit S17 |
+| name | `menuLabel` names the menu ("Context menu" by default; `label` is a deprecated alias); the menu is a sub-part, as SplitButton's `menuLabel`, so an `aria-label` lands on the area (ContextMenu.tsx:17-20, 142) | Audit D-18 (was `aria-label`, audit S17) |
 | open state | uncontrolled for opening (no `open` / `defaultOpen`); `onOpenChange` reports it. The position comes from the pointer or the focused element, so it cannot be opened from state: a documented exception to the overlay contract (overlay.md) | Audit S17 |
 | position | the menu's top-left at the pointer; flipped across the pointer when it would leave the viewport (8 margin); keyboard: under the focused element, at its start | Notion; WAI |
 | surface, rows | Menu, unchanged | menu.md (same Notion lift) |
 | layer | native `popover="auto"` (top layer; Escape and click outside close it) | Popover |
 | focus | pointer: the menu takes focus, nothing highlighted; keyboard: the first row | WAI menu |
-| close | choosing an action or a radio choice (a checkbox row or a `MenuSub` row keeps it open, as the anchored Menu; audit D-11, ContextMenu.tsx:93-94), Escape, Tab, click outside; focus returns to where it was | WAI menu |
+| close | choosing an action or a radio choice (a checkbox row or a `data-keep-open` row such as `MenuSub`'s keeps it open, as the anchored Menu; audit D-11, ContextMenu.tsx:145-149), Escape, Tab, click outside; Escape, Tab and a choice return focus to where it was, a click outside leaves it where the click put it | WAI menu |
+| item target | with `itemSelector`, the matching element under the pointer (or the focused one for Shift+F10 and the Menu key) is passed to `menu` and carries `data-context-target` while the menu is open (a hook; nothing painted). Outside an item nothing opens and the browser's own menu shows | Owner, 2026-10-15 |
+| disabled | `disabled` lets the browser's menu show | — |
+| motion | `duration-fast` ease-out in and out, opacity + scale from 0.97 at the pointer; rows stay mounted through the exit ("Motion and interaction, 2026-10-07") | docs/MOTION.md |
 
 ## Visual pass
 
@@ -101,7 +107,7 @@ Open question: none new.
 
 ## Feedback log
 
-- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `aria-label` names the menu (`label` deprecated alias); opening stays uncontrolled, a documented exception (its position comes from the pointer or focused element).
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → `aria-label` names the menu (`label` deprecated alias; superseded by audit D-18, recorded 2026-10-19: `menuLabel`); opening stays uncontrolled, a documented exception (its position comes from the pointer or focused element).
 - 2026-10-03 · radius audit D1 (owner) → the container role is 12 at compact too (was 8; Figma 13, Cursor 12-14), so this family's surface is 12 at both densities; rows concentric with a floating surface follow (compact 24 rows r8). `docs/research/radius-audit-2026-10-03.md`.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → fast enter and exit (100) from the pointer: origin written after the flip, coordinates rounded (B10), flip measured on the layout size, rows kept through the exit. context-menu.css, ContextMenu.tsx.
 - 2026-10-15 · PRODUCT_UI.md open gap ("A per-item context-menu target: the gallery's PinMenu reads data-key from the event"), owner: "merge it, then continue working" → `itemSelector`: the menu opens only on a matching element inside the area (from the pointer, or the focused element for Shift+F10 and the Menu key), `menu` may be a function of that element, and the element carries `data-context-target` while the menu is open (a hook; nothing is painted). Outside an item nothing opens and the browser's own menu shows. The app's PinMenu uses it (`[data-key]`). Gallery: Behavior / one menu per row.

@@ -1,6 +1,5 @@
 # Input spec
 
-**Status:** accepted · 2026-09-28 (batch 12; was: in review · 2026-09-26 (cohesion audit; second pass with Notion and Figma))
 **Captures:** `docs/research/captures/input/`
 **Peers:** Textarea, Select, NumberField, InputGroup (field chrome), Field (label and
 validation), Tooltip (InputAction hint), Button ghost (action plate)

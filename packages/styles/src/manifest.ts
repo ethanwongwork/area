@@ -402,7 +402,7 @@ export const switchControl = {
 
 export const sliderRange = {
   block: "area-slider-range",
-  description: "Picks a range with two handles on one rail, with optional number fields (audit C-12).",
+  description: "Picks a range with two handles on one rail, with optional number fields.",
   variants: { size: ["sm", "md", "lg"] },
   states: ["overlap", "disabled"],
   elements: ["track", "input", "end"],
@@ -739,7 +739,7 @@ export const combobox = {
 
 export const customSelect = {
   block: "area-custom-select",
-  description: "Picks one value from a short list whose options carry icons, descriptions and groups.",
+  description: "Picks a value (or several, with multiple) from a short list whose options carry icons, descriptions and groups.",
   variants: { variant: ["outline", "soft", "ghost"], size: ["sm", "md", "lg"] },
   booleans: ["full-width"],
   states: ["open", "disabled", "invalid"],
@@ -867,7 +867,7 @@ export const tooltip = {
 
 export const toaster = {
   block: "area-toaster",
-  description: "Hosts toasts: live regions first, pause on hover and focus, a hotkey, stacking (audit E-11).",
+  description: "Hosts toasts: live regions first, pause on hover and focus, a hotkey, stacking.",
   variants: {},
   elements: ["list"],
   defaults: {},
@@ -1092,7 +1092,7 @@ export const fileGrid = {
 
 export const assetCard = {
   block: "area-asset-card",
-  description: "Shows one asset, or a group of them as a 2×2 mosaic, in a container with its name and controls under it.",
+  description: "Shows one asset, or a group of them as a 2×2 mosaic, in a square container with its name and controls in the frame (or under it).",
   variants: { layout: ["asset", "group"], caption: ["inside", "below"] },
   booleans: ["interactive"],
   states: ["selected"],

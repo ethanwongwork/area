@@ -1,6 +1,5 @@
 # Preview frame spec
 
-**Status:** complete · 2026-10-13 (approved, review round 23)
 **Captures:** `docs/research/captures/preview-frame/`
 **Peers:** Box model (the inspector's other well: the same ground, line and corner), Asset row (the same well at 40 in a
 row), Color swatch (the checker and the swatch ring), Card's media well (a recessed surface in a card), Panel (the

@@ -1,6 +1,5 @@
 # Inline list spec
 
-**Status:** built, in review · 2026-10-17
 **Captures:** computed-style readouts below (Wikipedia, en.wikipedia.org/wiki/Lisa_Su)
 **Peers:** Breadcrumb, Badge group, Link
 
@@ -25,7 +24,7 @@ caption) were not measured this round.
 
 ## Measurements
 
-Wikipedia, computed:
+Wikipedia, computed (evidence only; Area's current values are in Decisions):
 
 | Part | Value |
 |---|---|
@@ -35,9 +34,10 @@ Wikipedia, computed:
 
 | Slot · property | Area value | Basis | Reason when it differs |
 |---|---|---|---|
-| separator | `dot` " · " (default), `bar` " \| ", `comma` ", " | Wikipedia's hlist | — |
-| ink | the separator in the muted ink, strong (dot) | Wikipedia bold, base ink | muted, so the items lead |
-| wrapping | a no-break space before the separator, so a line never starts with one | Wikipedia | — |
+| separator | `dot` (default): "·", regular, `fg-muted`, 8 either side; `rule`: a `stroke-width` (1px) line, 1em tall, `border-divider`, 8 either side; `none`: 16 between items | round 34: Docusaurus 8; shadcn, Radix, MUI, Apple; GitHub 16 | Wikipedia's bold dot, `bar` and `comma` dropped in round 34 |
+| layout | a flex row that wraps; `dot` on the baseline, `rule` and `none` centred on the line | round 34 | a rule or an icon has no baseline |
+| wrapping | the mark is the previous item's `::after`, so a wrapped line never starts with one | round 34 | — |
+| items | the context's type and ink; a link is Link's `standalone` (underlined on hover only), in any of its inks | round 35 | — |
 | semantics | `ul role="list"` | Safari drops list semantics without markers | — |
 
 ## Verification

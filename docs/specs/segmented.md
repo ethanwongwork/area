@@ -1,6 +1,5 @@
 # Segmented spec
 
-**Status:** accepted · 2026-09-27 (batches 1-3; was: in review · 2026-09-26 (cohesion audit; second pass the same day))
 **Captures:** `docs/research/captures/segmented/` (Area tiles, `figma--panel-tabs`, `figma--view-toggle`), `baseline/chatgpt--segmented--*`, `toolbar/figma--bottom-toolbar` (mode switch), `tabs/figma--*` and `tabs/notion--view-tab*` (comparisons)
 **Peers:** Tabs (views, underline; same ink pair), Chip (long sets), Button (labels on fills), AlignmentPicker (track with translucent hover), Toolbar / Button group
 
@@ -25,10 +24,10 @@ commands are Toolbar or Button group.
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| size | sm 28, md 32 (default), lg 40; in a Toolbar with no `size`, the toolbar's (`ToolbarSize` context) | Outer height is the control tier (`segmented.css:17-22`) | ChatGPT 36; Figma 32 (toolbar mode switch), 24 (view toggle) |
+| size | sm 28, md 32 (default), lg 40; in a Toolbar with no `size`, the toolbar's (`ToolbarSize` context) | Outer height is the control tier (`segmented.css:18-23, 160-162`) | ChatGPT 36; Figma 32 (toolbar mode switch), 24 (view toggle) |
 | layout | `fullWidth` | Align with a field's edge on a panel row | ChatGPT options share the width equally (112 + 112) |
-| composition | text, icon + text, `iconOnly` | Inspector alignment choices | Figma view toggle and toolbar mode switch (icon only) |
-| state | selected, disabled option | — | Gallery `disabled` |
+| composition | text, icon + text, `iconOnly` (each option in a Tooltip, owner 2026-10-12) | Inspector alignment choices | Figma view toggle and toolbar mode switch (icon only) |
+| state | selected, disabled option; group `disabled` | — | Gallery `disabled` |
 
 ## Sources
 
@@ -55,7 +54,7 @@ figma    fieldset 48×24 (view toggle): track rgb(245), radius 5, no inset
   option span 24×24, radius 5; selected white + inset 1px rgb(230); glyph 12px, unselected 50% black
 figma    fieldset 122×32 (toolbar mode): rgb(245), radius 5, 2px padding, 2px gap
   option div 28×28, radius 3; selected white, 0 0 0.5px 30% + 0 1px 3px 15%
-area     div.area-segmented[role=radiogroup]  owns: tier height, 2px inset, track fill, inset 1px ring, radius
+area     div.area-segmented[role=radiogroup]  owns: tier height, 2px inset, track fill, 1px inset outline ring, radius
   item   button.area-segmented__item[role=radio]  owns: item height (tier − 4), 1px border, radius, fill, lift
     icon  span 16px square
     label span (area-sr-only when iconOnly)
@@ -63,10 +62,11 @@ area     div.area-segmented[role=radiogroup]  owns: tier height, 2px inset, trac
 
 Inset equation: item 28 = 32 − 2 × 2 inset; item padding (28 − 9.94 cap) / 2 − 1 border =
 8.03 (`inset.css:43`); label starts 2 + 1 + 8.03 = 11.03 from the track edge (captured
-11.02). Track radius `--_track-radius` = min(`radius-control-md` 8, 32 × 0.4) = 8, per tier
-6 sm, 8 md, 10 lg (`segmented.css:50`, `:142-144`); item radius = track radius − 2 inset = 6
-at md (4 sm, 8 lg; `segmented.css:66`). Figma's mode switch is the same construction at radius
-5 / 3.
+11.02). Track radius `--_track-radius` = min(the tier's control radius, height × radius
+factor), 8 at md; per tier 6 sm, 8 md, 10 lg (`segmented.css:50`, `:160-162`); a pill when
+`data-area-pills` lists `segmented` (`--area-pill-segmented`). Item radius = track radius − 2
+inset, never under `radius-floor` 4: 6 at md (4 sm, 8 lg; `segmented.css:71`). Figma's mode
+switch is the same construction at radius 5 / 3.
 
 ## Measurements
 
@@ -95,38 +95,44 @@ tab keeps its 50% ink and gains an rgb(245) plate (`tabs/figma--panel-tab--hover
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| item · weight | 500 for every option (`segmented.css:76-77, 95`) | ChatGPT and Notion view tabs keep one 500 weight; weight policy (labels on fills) | Figma switches 450 → 550 and reserves the bold width; one weight needs no reserve |
-| item · unselected ink | **`fg-muted` rgb(102)** (`segmented.css:70-72`) | Target-product agreement: ChatGPT rgb(93), Figma 50% black, Notion view tabs rgb(125, 122, 117) | Was `fg-default` (second pass, decision 2) |
-| item · selected ink | `fg-default` rgb(40) (`segmented.css:97`) | Two-ink rule: selected default, unselected muted (DESIGN_SYSTEM.md, Shared state paint) | — |
+| item · weight | 500 for every option (`segmented.css:80-82, 111-113`) | ChatGPT and Notion view tabs keep one 500 weight; weight policy (labels on fills) | Figma switches 450 → 550 and reserves the bold width; one weight needs no reserve |
+| item · unselected ink | **`fg-muted` rgb(102)** (`segmented.css:74-76`) | Target-product agreement: ChatGPT rgb(93), Figma 50% black, Notion view tabs rgb(125, 122, 117) | Was `fg-default` (second pass, decision 2) |
+| item · selected ink | `fg-default` rgb(40) (`segmented.css:115`) | Two-ink rule: selected default, unselected muted (DESIGN_SYSTEM.md, Shared state paint) | — |
 | item · hover ink | fixed | Area rule: foreground fixed on hover; Figma panel tab keeps its ink | ChatGPT darkens 93 → 13 (decision 16) |
-| item · hover fill | `bg-hover` light-dark(#1414140d, #fcfcfc24) (`segmented.css:84-86`) | Audit rule: translucent hover on a track | Dark value was 20% white; now 14%, solved against the dark page rung (decision 1) |
+| item · hover fill | `bg-hover` light-dark(#1414140d, #fcfcfc24) (`segmented.css:93-98`) | Audit rule: translucent hover on a track | Dark value was 20% white; now 14%, solved against the dark page rung (decision 1) |
+| item · pressed fill | `light-dark(#00000013, #fcfcfc2a)`: 7.5% black, 16.5% white (`segmented.css:99-102`) | Interaction polish 2026-10-16: a step past hover, as far as the muted label holds 4.5:1 | Pressed with the hover paint before |
 | track · height | tier 28 / 32 / 40 | Control tier; decision 18 | ChatGPT 36; Figma 32 / 24 |
-| track · inset / gap | 2 / 2 (`segmented.css:31, 42`) | Figma toolbar mode switch 2 / 2 | ChatGPT's thumb fills the track; Figma's view toggle has no inset |
-| track · radius | per-tier control radius as Button: 6 sm, 8 md, 10 lg (`segmented.css:50`, `:142-144`) | Audit S4 (owner): the track is the control | Was item radius + inset (10 at md). ChatGPT is a pill; Area keeps the pill for Chip |
-| item · radius | concentric inside the track: track radius − 2 inset, 4 sm, 6 md, 8 lg (`segmented.css:66`) | Radius rule; Figma 5 / 3 is concentric too | Was `radius-control` 8 at md |
-| track · paint | `bg-component` #f7f7f7 (the control fill, stepping from its ground; was `bg-subtle` until 2026-10-16) + inset 1px `border-decorative` #f3 (`segmented.css`) | ChatGPT 3% ink (about rgb 248); Figma rgb(245) | The ring adds definition on white |
-| selected · paint | `light-dark(bg-surface, bg-component-active)` + 1px `edge-selected` (#e2 standard) + `shadow-1` (`segmented.css:94-100`): white in light; in dark a #3f thumb on the #28 groove (measured live) | Figma view toggle: white + 1px rgb(230) ring; ChatGPT and Figma mode switch: white + soft shadow | Area carries both the hairline and a light shadow. In dark the surface rung (#1d) sat below the groove and read sunken, so the thumb takes the active fill (audit S15a) |
-| icon → label gap | 6 at sm, md and lg, the density tokens (`segmented.css:36, :60, :142-144`); compact sm 4 | Peer: Button (audit S14) | Was 4 / 8 / 8 |
-| icon-only item | square, item height (`segmented.css:29, 126-129`) | Owner (prior decision); Figma square cells (24 and 28) | — |
+| track · inset / gap | 2 / 2 (`segmented.css:32, 42`) | Figma toolbar mode switch 2 / 2 | ChatGPT's thumb fills the track; Figma's view toggle has no inset |
+| track · radius | per-tier control radius as Button: 6 sm, 8 md, 10 lg (`segmented.css:50`, `:160-162`); a pill when `data-area-pills` lists `segmented` (owner 2026-10-04) | Audit S4 (owner): the track is the control | Was item radius + inset (10 at md). ChatGPT is a pill; Area keeps the pill for Chip by default |
+| item · radius | concentric inside the track: track radius − 2 inset, floored at `radius-floor` 4: 4 sm, 6 md, 8 lg (`segmented.css:71`; owner 2026-10-03) | Radius rule; Figma 5 / 3 is concentric too | Was `radius-control` 8 at md |
+| track · paint | `bg-component` #f7f7f7 (the control fill, stepping from its ground; was `bg-subtle` until 2026-10-16) + a 1px `border-decorative` #f3 inset outline (`segmented.css:55-57`) | ChatGPT 3% ink (about rgb 248); Figma rgb(245) | The ring adds definition on white |
+| selected · paint | `light-dark(bg-surface, bg-component-active)` + 1px `edge-selected` (#e2 standard) + `shadow-control` (`segmented.css:111-118`): white in light; in dark a #3f thumb on the #28 groove (measured live) | Figma view toggle: white + 1px rgb(230) ring; ChatGPT and Figma mode switch: white + soft shadow | Area carries both the hairline and a light shadow. In dark the surface rung (#1d) sat below the groove and read sunken, so the thumb takes the active fill (audit S15a) |
+| icon → label gap | 6 at sm, md and lg, the density tokens (`segmented.css:36, :64, :160-162`); compact sm 4 | Peer: Button (audit S14) | Was 4 / 8 / 8 |
+| icon-only item | square, item height (`segmented.css:30, 144-147`) | Owner (prior decision); Figma square cells (24 and 28) | — |
 
 ## States
 
 | State | Slot · property changes | Evidence |
 |---|---|---|
 | hover (unselected) | `bg-hover` plate; ink fixed | not captured for Area; `tabs/figma--panel-tab--hover` |
-| selected | surface (active fill in dark), edge, `shadow-1`, default ink; weight unchanged | all `area--*` (light); dark measured live 2026-09-30 |
-| focus-visible | 2px focus ring, 2px offset (`segmented.css:102-105`); forced colours Highlight | not captured |
-| disabled option | 50% (`segmented.css:107-110`) | `area--disabled` item opacity 0.5, muted ink |
+| pressed (unselected) | 7.5% black / 16.5% white plate (`segmented.css:102`) | not captured |
+| selected | surface (active fill in dark), edge, `shadow-control`, default ink; weight unchanged | all `area--*` (light); dark measured live 2026-09-30 |
+| focus-visible | 2px focus ring, 2px offset (`segmented.css:120-123`); forced colours Highlight | not captured |
+| disabled option | `opacity-disabled` (50%) (`segmented.css:125-128`) | `area--disabled` item opacity 0.5, muted ink |
 
 ## Behavior and accessibility
 
-`role="radiogroup"` named by `label`; options are `button role="radio"` with `aria-checked`
-and a roving tab stop (`Segmented` in `primitives.tsx`). Arrow keys (RTL-aware), Home and End move
-and select, skipping disabled options. `onValueChange(value, event)` reports the click or key
+`role="radiogroup"` named by `aria-label`; `label` remains a deprecated alias (audit D-18,
+A-17; `primitives.tsx:1754-1755, 1807`). Options come from `items` (`options` is a deprecated
+alias) and are `button role="radio"` with `aria-checked` and a roving tab stop (`Segmented` in
+`primitives.tsx:1774-1852`). Arrow keys (RTL-aware), Home and End move
+and select, skipping disabled options. Inside a Toolbar the options leave the Tab order and join
+the toolbar's arrows; Space or Enter chooses. `onValueChange(value, event)` reports the click or key
 event (`onSelect` is a deprecated alias). `name` / `form` submit the value through a hidden
-input; a form reset restores the first value when uncontrolled. Group `disabled` disables every
-option and sets `aria-disabled` on the radiogroup. No `required`: a Segmented always has a value. Icon-only labels stay in `area-sr-only`. Forced
-colours paint the selected item Highlight (`forced-colors.css:21-26`). Figma's view toggle
+input; a form reset restores the initial value when uncontrolled. Group `disabled` disables every
+option and sets `aria-disabled` on the radiogroup. No `required`: a Segmented always has a value. Icon-only labels stay in `area-sr-only`, and each icon-only option shows its label in an
+Area Tooltip below it (`describes={false}`; PRODUCT_UI.md rule 4). Forced
+colours paint the selected item Highlight (`forced-colors.css:49-54`). Figma's view toggle
 and mode switch are native radios in a `fieldset` with a hidden legend: the same semantics.
 
 ## Peers and consistency

@@ -1,6 +1,5 @@
 # Copy button spec
 
-**Status:** in review · 2026-10-15
 **Captures:** none of its own: the geometry is Button's (`docs/specs/button.md`); product reads below.
 **Peers:** Button (plate, sizes, focus), Code block (its copy), Token row (copies from the whole row), Input group
 

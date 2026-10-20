@@ -1,6 +1,5 @@
 # Select spec
 
-**Status:** accepted (owner; Complete in `component-status.mjs`; was: in review · 2026-09-26 (cohesion audit; second pass with Notion and Figma))
 **Captures:** `docs/research/captures/select/`
 **Peers:** Input, Textarea, NumberField (field chrome), Menu (picker rows and lift), Popover
 (floating surface), InputGroup (mode picker), ColorPicker (model select)

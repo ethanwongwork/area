@@ -1,6 +1,5 @@
 # PropertyList spec
 
-**Status:** accepted · 2026-09-26; batch 9 tiles refined 2026-09-28
 **Captures:** `docs/research/captures/inspector/figma--design-panel-frame--rest--light.json`
 (the fill row inside the Design panel capture)
 **Peers:** Panel (PanelSection actions, PanelRow's action column), ColorField, Button
@@ -30,14 +29,14 @@ everywhere in Area. Not TreeView (hierarchy), not Menu (commands), not PanelRow 
 
 | Slot | Area value | Basis |
 |---|---|---|
-| row | value, then the row's buttons: value ends one field gap before the first button (`--_panel-gap`: 8 in a small panel, 12 at md; 8 outside a panel), buttons 4 apart, the last on the content edge (property-list.css:22, 27) | Figma: field to 172, eye 180, remove 208 (8, then 4) |
-| rows | the panel's row gap (sm 8, md 12; 8 outside a panel; property-list.css:12) | Panel row gap; Figma rows pitch 32 around 24px controls |
-| handle | fills the panel's side inset, glyph (16 slot, new `grip`: two 5px bars) centred; shown on hover, focus or drag; always shown on touch; only when `onReorder` is set and there are two or more items | Figma: reorder handle in the margin, only with more than one item |
-| drag | pointer capture on the handle; the moving row stays in place at 40%; a 2px neutral-ink line (`fg-default`) marks the landing gap (was the focus colour; neutral per the cohesion audit, 2026-09-27); no line beside the row's own position; Escape cancels | Common sortable-list pattern (Figma, Framer layer rows) |
-| keyboard | the handle is a button: ArrowUp/Down move one place, Home/End to the ends; focus stays on the moved row's handle; the move is announced ("00A797 fill moved to position 1 of 3") | WAI live-region announcement; keyboard parity with the pointer |
+| row | value, then the row's buttons: value ends one field gap before the first button (`--_panel-gap`: 8 in a small panel, 12 at md; outside a panel 8, compact 6), buttons 4 apart, the last on the content edge (property-list.css, `__item` and `__actions`) | Figma: field to 172, eye 180, remove 208 (8, then 4) |
+| rows | the panel's row gap (`--_panel-row-gap`: sm 8, md 12; outside a panel 8, compact 6; property-list.css, `.area-property-list`) | Panel row gap; Figma rows pitch 32 around 24px controls |
+| handle | fills the panel's side inset (`--_panel-inset`, 12 outside a panel), glyph (16 slot, `grip`: two 5px bars) centred, `input-icon` ink, corner radius-control-xs, not selectable; shown on hover, focus or drag; always shown on touch; only when `onReorder` is set and there are two or more items | Figma: reorder handle in the margin, only with more than one item |
+| drag | pointer capture on the handle; the moving row stays in place at 40% (its handle at full strength); a line twice `stroke-width` (2) in neutral ink (`fg-default`), fully rounded, on whole pixels, marks the landing gap (was the focus colour; neutral per the cohesion audit, 2026-09-27); no line beside the row's own position; Escape cancels | Common sortable-list pattern (Figma, Framer layer rows) |
+| keyboard | the handle is a button: ArrowUp/Down move one place, Home/End to the ends; focus stays on the moved row's handle; the move is announced in a polite live region ("00A797 fill moved to position 1 of 3"), and the list is described by "Use the arrow keys on a handle to move <label>." | WAI live-region announcement; keyboard parity with the pointer |
 | inactive | `inactive` dims the value to 50%; the buttons stay full strength so the row can be turned back on | Figma dims hidden fills |
-| names | each item's `label` names its handle ("Reorder 00A797 fill, position 2 of 3") | Labels should name content, not index, since index changes on move |
-| list name | a consumer's `aria-label` names the list, else `PropertyList` `label` (PropertyList.tsx:131) | Audit S17: the consumer's attribute wins, as in every Area group |
+| names | each item's `label` names its handle; the component adds the position ("Reorder 00A797 fill, position 2 of 3") | Labels should name content, not index, since index changes on move (the gallery passes "<hex> fill", "Drop shadow effect") |
+| list name | a consumer's `aria-label` names the list, else `PropertyList` `label` (PropertyList.tsx, the `ul`) | Audit S17: the consumer's attribute wins, as in every Area group |
 
 ## Visual pass
 

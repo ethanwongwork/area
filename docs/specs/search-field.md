@@ -1,6 +1,5 @@
 # Search field spec
 
-**Status:** complete · 2026-10-11 (approved, review round 8)
 **Captures:** `docs/research/captures/search-field/`
 **Peers:** Input (the shell, sizes, variants, focus, InputAction), Kbd (the shortcut hint), Combobox (a field with
 suggestions), Command palette (search in a dialog), Empty state (no results)

@@ -1,6 +1,5 @@
 # Toggle group spec
 
-**Status:** complete · 2026-10-10 (approved, review round 6)
 **Captures:** `docs/research/captures/toggle-group/`
 **Peers:** Button (the toggle and its selected fill), ButtonGroup (the joined look), Toolbar (its groups, gap and roving focus), Segmented (a choice that always has one answer), Chip (filter toggles)
 

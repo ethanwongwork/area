@@ -5,10 +5,10 @@
  * the individual controls as much as possible, but i think the previous system was too bloated and complicated", and
  * chose nine controls). Research, every external value and the review page: docs/research/elevation-stroke-2026-10-18.
  *
- * Nine controls, each a registry axis (one data attribute, scoped to a subtree and re-derived there), each one number or
+ * Ten controls (nine chosen, plus Rest shadow from main), each a registry axis (one data attribute, scoped to a subtree and re-derived there), each one number or
  * name with one effect:
  *
- *   data-area-surface          Stroke width: the frame's width, 0 (Borderless), 0.5 (Hairline), 1, 2 (Bold)   surface.ts
+ *   data-area-surface          Stroke width: the frame's width, 0 (Flat), 0.5, 1 (Default), 1.5, 2      surface.ts
  *   data-area-stroke           Stroke: every stroke's distance from its ground, 0 to 8 (4)                color/layers.ts
  *   data-area-elevation        Shadow: menus, popovers, tooltips, dialogs and the hover lift, 0 to 8 (3)   elevation.ts
  *   data-area-shadow-resting   Resting lift: cards, panels and raised thumbs at rest, 0 to 8 (3); `shadow-rest` is the

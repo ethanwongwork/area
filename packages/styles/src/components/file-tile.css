@@ -9,10 +9,12 @@
  *
  * - Figure: `--area-file-tile-figure`, 64 by default (Finder iconSize 64); sm 48 and lg 96 match Folder's sizes; a
  *   caller may set any length (a zoom slider). An image preview is contained, never cropped, with the swatch ring.
- * - Text: 12 (Finder textSize = 12; Figma's card 11, ChatGPT's 14) on the xs leading, the name at the strong weight
+ * - Text: the app's UI size for the name (Asset card's caption; Finder 12 at its 13 system text), the detail line at
+ *   xs, the name at the strong weight
  *   (Figma 550, ChatGPT and Notion 500), up to two lines; the detail line muted (Figma black at 50%, ChatGPT rgb(93),
  *   Notion rgb(125)), one line.
- * - Spacing: 8 around (Fluent Card small 8), 6 from figure to name (pick), the grid's cells 2 apart as ListBox's;
+ * - Spacing: 8 around (Fluent Card small 8), 8 from figure to name (Asset card's caption gap), the grid's cells 2
+ *   apart as ListBox's;
  *   a column is the figure plus 24 each side so a two-line name has room (pick; Finder's gridSpacing 54 is a
  *   different measure, unverified).
  * ------------------------------------------------------------------------- */

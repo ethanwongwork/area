@@ -1,6 +1,5 @@
 # Board spec
 
-**Status:** complete · 2026-10-12 (approved, review round 9)
 **Captures:** `docs/research/captures/board/`
 **Peers:** Tag (the column's value and tone), Count (the header's number), Card (a surface; the board card is lighter),
 Description list (properties), Button (header and card actions), Avatar (people)
@@ -13,17 +12,18 @@ Description list (properties), Button (header and card actions), Avatar (people)
 
 ## Job and boundaries
 
-A board lays items out in columns by one value (status, owner): each column a header with the value as a Tag and how
-many items it holds, over a tinted list of cards; a card shows the item's title, icon and a few properties, and opens the
-item. Not Table (rows and columns of fields), not Card (a standalone surface with media and actions), not a drag-and-drop
+A board lays items out in columns by one value (status, owner): each column a header with the group's name in plain
+text, a count Badge and buttons at the end, over a tinted list of cards and an optional "Add new" row; a card shows the
+item's title, icon and a few properties, and opens the item. Not Table (rows and columns of fields), not Card (a standalone surface with media and actions), not a drag-and-drop
 engine (dragging cards between columns is the app's; the board draws the result).
 
 ## Variants
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| column tone | Tag's ten tones; the tint and the cards' edge follow | Notion colours each group with its option's colour | Notion board view |
-| column title | a Tag, or plain text for a group without a value | Notion's "No Status" column | Notion |
+| column `color` | neutral (default), gray, brown, orange, yellow, green, blue, purple, pink, red: each Tag's ink of that colour; the tint, count, add row and the cards' ring follow | owner round 7: "custom colors rather than semantic. the default should just be neutral" | Notion colours each group with its option's colour |
+| column title | plain text, the UI type at the strong weight | owner round 7: "doesnt need a badge title" | Notion's "No Status" column |
+| column content | count (a soft Badge); header `actions`; an "Add new" row (`onAdd`, `addLabel`) or a custom `footer` | owner round 7 | Notion's count and "+ New page" |
 | card content | icon; properties; hover actions | Notion's page icon, property row, edit and more buttons | Notion |
 
 ## Sources
@@ -47,12 +47,18 @@ notion  column 276 wide, 12 apart (288 pitch)
           green rgba(3,87,31,.035)
 
 area    div.area-board (flex, 12 gap, scrolls sideways)
-          section.area-board-column.--{tone} (276, the tone's ink mixed at Notion's alpha, radius container)
-            div.__header (40, 11 sides): Tag (tone) or span.__title · Count · div.__actions
-            ul.__cards (0 8 8, 8 gap) > li.area-board-card (8 10, surface, radius container, Notion's lift + the tone's 8% ring)
-              div.__heading: span.__icon (20 square, 16 glyph) · a.__title (UI 500; its ::after covers the card)
-              div.__properties · div.__actions (top 8 end 8, on hover or focus)
-            div.__footer (0 8 8)
+          section.area-board-column.--{color} (276, aria-labelledby its title; the colour's ink mixed at Notion's alpha;
+                                               corner radius-row + 8 × radius-concentric, 16 at the default)
+            div.__header (min 40; padding 18 start (8 + the card's 10), 8 end; 6 gap): span.__title (UI, strong) ·
+                         Badge.__count (soft, sm) · div.__actions (at the end, 2 apart)
+            ul.__cards (0 8 8, 8 gap) > li.area-board-card (8 10, 4 gap, bg-surface, radius-row (8, 6 compact),
+                                                             shadow-edge + shadow-resting + the colour's 8% ring)
+              div.__heading (gap-md): span.__icon (one UI line square, icon-md glyph, muted) · a.__title (UI, strong;
+                                      its ::after covers the card)
+              div.__properties (wrap, 4 gap, muted)
+              div.__actions (24 squares = ui-row − 8, centred on the title's first line, as far from the end as from
+                             the top; on the card's paint with a 24 fade before them; on hover, focus or an open menu)
+            div.__footer (0 8 8) > button.__add (full width, min ui-leading + 16, 8 10, radius-row): span.__add-icon · label
 ```
 
 ## Decisions
@@ -61,19 +67,36 @@ area    div.area-board (flex, 12 gap, scrolls sideways)
 |---|---|---|---|
 | column | 276 wide, 12 apart | Notion | — |
 | tint | the tone's ink mixed with transparent at Notion's alpha (3 / 4.7 / 6.3 / 3.5%); unmeasured tones 3.5% | Notion's five measured groups | Area's tone inks rather than Notion's hues, so a column matches its Tag |
-| header | 40, the Tag 11 from the edge, Count after it | Notion | Area's Count in its plain style; Notion tints the count to the tone |
-| card | 8 10 padding, surface, radius row (8 at the default), the resting lift and the tone's 1px ring at 8% (Contrast takes it to the card frame, or the colour's ink) | Notion | Notion's is 10; Area's row plate is 8 |
-| title | UI type 500 (14/20) | Notion 15/22.5 500 | Area's ramp has no 15 |
-| icon | 16 glyph in a 20 square | Notion's 18 icon in a 24 button | Area's UI icon in a box one title line tall |
+| header | 40, the title 18 from the column's edge (on the cards' text), the count 6 after it, actions at the end | Notion; owner round 7 | — |
+| title | plain text, UI type, `weight-strong` | owner round 7 ("just regular text") | was a Tag in the column's tone |
+| count | a soft Badge sm; in a colour its plate the colour at 12% and its ink the colour's ink, which follows the ground (darker on a light gray page, lighter on the lightest dark grounds); neutral: muted, darkened the same way on a light page | owner round 7 ("make the counter a badge"); Layers sweep 2026-10-16 | — |
+| add row | "Add new": full width, start-aligned, a card's size (8 10, min 36 at type 14), `radius-row`, the add glyph; neutral: muted, hover `bg-hover`, pressed 7.5% black (light) / `bg-pressed` (dark); in a colour: the colour's ink, hover 6%, pressed 12% | owner round 7; 2026-10-12; interaction polish 2026-10-16; 2026-10-18 (corner) | Notion's "+ New page" |
+| card | 8 10 padding, `bg-surface`, `radius-row` (8 at the default, 6 compact), `shadow-edge` + `shadow-resting` (Elevation's resting role) and the colour's 1px ring at 8% (Contrast takes it to the card frame, or the colour's ink) | Notion; owner 2026-10-18 (corner) | Notion's corner is 10; Area's row plate is 8 |
+| card title | UI type, `weight-strong` | Notion 15/22.5 500 | Area's ramp has no 15 |
+| icon | `icon-md` glyph in a square one UI line tall, `fg-muted` | Notion's 18 icon in a 24 button | Area's UI icon in a box one title line tall |
 | card link | the title is the link; its ::after covers the card | Notion's whole card is a link | Lets actions be separate controls (no button inside a link) |
 | actions | Nav's row actions: 24 squares (`ui-row` − 8) centred on the title's first line, ink-only hover, on the card's paint with a 24 fade, shown on hover, focus or an open menu | Nav (owner rounds 27, 29); ChatGPT's sidebar fade | Was Notion's white plate with a lift and the floating frame until round 30 |
 | hover | neutral: the card darkens to `bg-component-hover`; in a colour, the colour at **6%** in the surface; ink fixed | Notion, measured 2026-10-12: the column's tint laid over the column (purple L 0.960, chroma 0.015) | 6% caps every colour at Notion's chroma (Area's Tag inks are more saturated: 8% gave purple 0.020) and puts the gray column on the neutral #f3 |
 | corners | column = card corner + 8 × `radius-concentric` (**16** at the default, Card's, Dialog's and Composer's outer corner), card and add row `radius-row` (**8**, 6 compact: a row in its column, as a Menu's rows), actions plate `radius-floor` (4) and its buttons the card's corner less their inset, floored | Area's concentric rule (DESIGN_SYSTEM.md "Size and shape") | Notion draws 10 and 10, not concentric |
 
+## States
+
+| State | Change | Evidence |
+|---|---|---|
+| card hover | neutral: `bg-component-hover`; in a colour: the colour at 6% in the surface; ink fixed; actions show | owner round 8, 2026-10-12 |
+| card pressed | neutral: `bg-component-active`; in a colour: 9% (7% in dark); not while its own actions are pressed | interaction polish 2026-10-16 |
+| card focus | the focus ring round the card (from the title link's `:focus-visible`); actions show | — |
+| card actions | ghost, muted ink, no plate; hover and pressed raise the ink to `fg-default`; stay shown while their menu is open | owner round 30 |
+| add hover / pressed | see Decisions › add row; focus ring on the button | interaction polish 2026-10-16 |
+
+Cards and the add row are not selectable.
+
 ## Behavior and accessibility
 
-Each column is a `section` named by its title; the cards are a list. A card's title is its link; focus shows Area's ring
-around the card and reveals the actions, which are their own buttons. Dragging is not built in.
+Each column is a `section` labelled by its title (`aria-labelledby`); the cards are a list (`ul` / `li`). A card's title
+is its link and its `::after` covers the card; focus shows Area's ring around the card and reveals the actions, which are
+their own buttons. The card's icon and the add row's glyph are `aria-hidden`. The add row is a `button`. Dragging is not
+built in.
 
 ## Visual pass
 
@@ -92,6 +115,7 @@ end; a card with a Tag, a date and David Tee's avatar wraps its properties under
 Resolved 2026-10-12 (owner, review round 21: "go with your recs"):
 
 1. Card radius: Area's container corner (12), so cards match Card and Panel; the column is now concentric with it (20).
+   — superseded 2026-10-18: cards and the add row take `radius-row` (8), the column 16.
 2. Count in the tone's ink: superseded in round 8, when the count became a soft Badge that takes the column's colour.
 
 ## Review note, 2026-10-10

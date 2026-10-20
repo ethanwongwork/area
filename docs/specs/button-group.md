@@ -1,6 +1,5 @@
 # Button group spec
 
-**Status:** accepted · 2026-09-26 (was: in review · 2026-09-26 (first pass under the capture workflow))
 **Captures:** `docs/research/captures/button-group/` (pass-0 in `before/`); split references in
 `../split-button/`
 **Peers:** Button (every child), SplitButton (same joined edges and divider), Toolbar

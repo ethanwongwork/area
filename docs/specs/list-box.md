@@ -1,6 +1,5 @@
 # List box spec
 
-**Status:** in review · 2026-10-15
 **Captures:** none of its own: every painted value is an existing shared role (below).
 **Peers:** Menu (rows, label, check), Custom select (the value picker's options), the app's Icons sheet (grid cells)
 
@@ -61,9 +60,9 @@ div.area-list-box.area-list-box--{list|grid}[role=listbox]   owns: keys, the Tab
 | Home / End, typing | ends; a one-second prefix, as Menu's (`TYPEAHEAD_RESET`) | APG; Menu |
 | Enter / Space | choose the focused option | APG |
 | list option | Menu's row (`area-menu__item`), selected = `data-selected` active plate with the check | DESIGN_SYSTEM.md "Selected rows": value pickers show their value with the active plate and the check |
-| grid option | cell `--area-list-box-item` (control-xl, 48), 2 apart, radius-row; hover `bg-component-hover`, press and selected `bg-component-active`, focus an inset ring | the app's icon cell (48 at 16), DESIGN_SYSTEM.md "Shared state paint" |
+| grid option | cell `--area-list-box-item` (control-xl, 48), 2 apart, radius-row; hover `bg-component-hover`, selected `bg-component-active`, press `bg-component-pressed` (a step past selected), focus an inset ring; text not selectable | the app's icon cell (48 at 16), DESIGN_SYSTEM.md "Shared state paint"; interaction polish 2026-10-16 |
 | section heading | Menu's label | Menu |
-| disabled | option: `aria-disabled`, skipped by the keys, 50%; set: every option disabled | DESIGN_SYSTEM.md "Disabled" |
+| disabled | option: `aria-disabled`, skipped by the keys, 50%; set (`disabled`): `aria-disabled` on the listbox, every option disabled, the set dims once at 50% | DESIGN_SYSTEM.md "Disabled" |
 
 ## Behavior and accessibility
 

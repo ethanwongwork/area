@@ -1,6 +1,5 @@
 # Custom select spec
 
-**Status:** complete · 2026-10-08 (owner approved on the component review page; recommendations accepted)
 **Captures:** `docs/research/captures/custom-select/` (13 Notion, 10 ChatGPT, 14 Area)
 **Peers:** Select (native single choice; same field chrome), Combobox (same listbox rows), Menu
 (rows, labels, separators, lift), ModelPicker (a trigger over rich rows), Button ghost (the ghost
@@ -23,9 +22,9 @@ trigger's paint), Popover (anchoring)
 
 ## Job and boundaries
 
-Pick one value from a short, fixed list whose options need more than text: a leading icon, a
-line of description under the label, a check on the chosen row, groups. The trigger is a button
-showing the current value; the popup is a listbox. Not Select (a native `<select>`: plain text
+Pick one value (or, with `multiple`, several) from a short, fixed list whose options need more
+than text: a leading icon, a line of description under the label, a check on the chosen row,
+groups. The trigger is a button showing the current value; the popup is a listbox. Not Select (a native `<select>`: plain text
 options, platform picker where `base-select` is missing), not Combobox (typing filters the
 list), not Menu (commands, no value), not ModelPicker (a composer recipe that could sit on this).
 
@@ -38,11 +37,13 @@ list), not Menu (commands, no value), not ModelPicker (a composer recipe that co
 | size | sm, md (default), lg | Control tiers, as Select | Notion 28 (sm), Area fields 32 |
 | content | option icon (also shown in the trigger), description | The reason this exists beside Select | Notion general access (icons), member access (descriptions) |
 | composition | groups (label, ruled apart) | Notion's access menu: "Current access" / "User access", 1px rules | `notion--member-access-menu--open--light` |
+| selection | single (default); `multiple` (React prop, owner 2026-10-14): rows toggle, the list stays open, the trigger lists the chosen labels | Owner: "pill can be a dropdown too with multi select"; Notion multi-select, Figma toggled lists | desktop Inspector; no gallery tile |
 | state | open, placeholder, disabled, disabled option, invalid | WAI; Select's states | — |
 | boolean | fullWidth | Layout | — |
 
 Excluded: an open-on-load tile (the list lives in the top layer and would float over the
-gallery; the Review page opens it on click); multiple selection (Tag picker, next in the batch).
+gallery; the Review page opens it on click). A growing list of coloured values with typing and
+create is Tag picker.
 
 ## Sources
 
@@ -82,16 +83,17 @@ Area:
 
 ```
 root      div.area-custom-select[data-open]        owns: variant/size locals, layout
-  trigger button.__trigger[role=combobox]          owns: height, edge, radius, fill, focus, sides (inset.css)
-    icon     span.__icon      square --_icon (only when the chosen option has one)
-    value    span.__value     truncation; [data-placeholder] ink
+  trigger button.__trigger[role=combobox]          owns: height, edge, radius, fill, lift, focus, sides (inset.css)
+    icon     span.__icon      square --_icon (single selection, when the chosen option has one)
+    value    span.__value     truncation; [data-placeholder] ink; with `multiple`, the chosen labels joined by ", "
     chevron  span.__chevron   square --_icon, input-chevron ink
-  input[type=hidden]          form value
-  listbox  div.area-menu.__listbox[popover]        Menu's surface; overlay engine places it
+  input[type=hidden] × 1, or one per value with `multiple`   form value
+  listbox  ScrollArea.area-menu.__listbox[popover=manual][role=listbox][aria-multiselectable]
+                                                   Menu's surface; overlay engine places it
     group  div.__group[role=group] > div.area-menu__label
     rule   div.area-menu__separator.__separator    between groups
-    option div.area-menu__item.__option[role=option]  Menu's row; data-selected plate
-      icon / text or lines(text + description) / check
+    option div.area-menu__item.__option[role=option][aria-selected]  Menu's row; data-highlighted plate
+      icon / text or lines(text + description) / check (hidden unless chosen)
 ```
 
 Inset equations (md 32, border 1): value start = round((32 − 1cap) / 2 − 1) = 10 (cap 9.94);
@@ -150,7 +152,7 @@ these captures predates the 2026-10-08 decision (check only now; Decisions).
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| trigger chrome (outline, soft) | Select's: `select-bg`, `select-edge`, control tiers 28 / 32 / 40, per-tier radius, field focus ring (`custom-select.css`, trigger block) | Peer: Select (owner-approved) | — |
+| trigger chrome (outline, soft) | Select's: `select-bg`, `select-edge`, control tiers 28 / 32 / 40, per-tier radius, field focus ring; resting lift the Field shadow role (`--area-shadow-field`, 0 by default; 2026-10-18); soft flat with `input-edge-soft` (2026-10-15) (`custom-select.css:11-38`, trigger block) | Peer: Select (owner-approved) | — |
 | trigger sides | inset contract: cap-centred start (icon square with an icon); the end is the field chevron inset, max(row inset 8, the chevron centred in its square) less the border: the glyph sits 8 from the edge at sm/md (default and compact), 12 at default lg (`inset.css`, field chevron rule) | References: Notion 8–8.55 at 28, ChatGPT 9 at 28, shadcn 9 at 32 (2026-10-07 audit); owner 2026-10-08 (Q4) | Was the centred square: 6 at 28, 8 at 32 (4 at compact 24) |
 | ghost trigger | no fill or edge; `bg-component-hover` under the pointer; `bg-component-active` while open; width of its value | Notion inline select (28, r6, no chrome) for shape; Button neutral ghost for paint | Notion's open trigger shows its focus ring (blue halo); Area keeps one open treatment for menu triggers (button.css, audit G-12) |
 | text → chevron gap | `gap` tier (6 md) | Peer: Select | Notion 4 |
@@ -160,11 +162,11 @@ these captures predates the 2026-10-08 decision (check only now; Decisions).
 | list surface | Menu: radius-list 12, 4 padding, 1px decorative edge, float shadow | Peer: Menu (owner-approved, measured from Notion) | Notion 10 radius, no padding; menu.md records the step |
 | rows | Menu rows: 32, 8 sides, r8, 12 icon gap, 14/20 | Peer: Menu / Combobox | Notion 28, r6, 8 gap |
 | description rows | Menu's two-line row: 6 above and below, 12/16 muted | Peer: Menu (ChatGPT model list) | Notion 4 above and below, 2 between lines |
-| chosen row | 16 check at the end, no plate; the hover plate when highlighted | Notion (theme, card size, share menus), ChatGPT (theme, language, model picker): check only; owner 2026-10-08 (Q3) | — (was `bg-component-active` plate + check, audit S13 C) |
+| chosen row | 16 check at the end, no plate; the hover plate when highlighted; the same with `multiple` | Notion (theme, card size, share menus), ChatGPT (theme, language, model picker): check only; owner 2026-10-08 (Q3) | — (was `bg-component-active` plate + check, audit S13 C) |
 | check on two-line rows | centred in the row | Peer: Menu's description row | Notion aligns it with the title; see Open questions |
 | group label | Menu label: 12/16 muted, row pitch | Peer: Menu (one label pattern) | Notion 12/14.4 500 |
 | group rule | Menu separator, between groups only | Notion (rule between sections) | Combobox groups have no rule |
-| list placement | overlay engine: 4 below, flips, ≥ trigger width and 224, ≤ 324 tall | Peer: Combobox | — |
+| list placement | overlay engine: 4 below, flips, ≥ trigger width and 224, ≤ 324 tall; the list scrolls in a Scroll area (owner 2026-10-09) | Peer: Combobox | — |
 
 ## States
 
@@ -175,7 +177,7 @@ these captures predates the 2026-10-08 decision (check only now; Decisions).
 | open | `data-open` on the root; field holds the hover edge (focus edge + ring when keyboard-focused), ghost pressed plate | Notion / ChatGPT settings selects (2026-10-07); button.css |
 | highlighted row | `bg-component-hover` (pointer or keyboard) | Menu |
 | selected row | trailing check (`aria-selected="true"`); no plate (owner 2026-10-08, Q3) | Notion, ChatGPT lists |
-| placeholder | `input-placeholder` ink | Select (audit B-19) |
+| placeholder | `input-placeholder` ink; "Select…" by default; with `multiple`, while none is chosen | Select (audit B-19) |
 | disabled | Select's disabled paint; ghost: no plate, disabled ink | Select |
 | disabled option | Menu's 50% row, skipped by arrows and typeahead | Menu, Combobox |
 | invalid | `select-invalid-color` edge and ring | Select |
@@ -190,8 +192,14 @@ chosen); Home / End open on the first / last; a letter opens on the next label s
 Open: ↑/↓ move (clamped, disabled rows skipped), Home / End, Page Up / Down by 10, Enter and Space
 choose and close, Tab chooses and moves on, Alt+↑ chooses and closes, Escape closes; typing within
 half a second searches as one string, a repeated letter cycles. Clicking a row chooses it and
-returns focus to the trigger; blur closes. `name` submits the value through a hidden input; an
+returns focus to the trigger; blur closes. `onOpenChange(open)` reports opening and closing;
+`required` sets `aria-required` on the trigger. `name` submits the value through a hidden input; an
 uncontrolled select restores `defaultValue` on form reset. Forced colours: Menu's rules.
+With `multiple` (`CustomSelect.tsx:54-63`): the value is `values` / `defaultValues` /
+`onValuesChange` (`value` and `onValueChange` are ignored); the listbox is `aria-multiselectable`;
+Enter, Space and a click toggle the row and the list stays open; Escape, Tab and Alt+↑ close without
+choosing; the chosen set keeps the list's order; `name` submits one hidden input per value, and
+form reset restores `defaultValues`.
 `onHighlightChange(value | null)` reports the row the pointer or the arrows are on while the list is open, once per
 change, and `null` when it closes, so a host can preview an option before it is chosen (shadcn's builder repaints its
 canvas on hover; Base UI's `onItemHighlighted`; `docs/research/settings-pickers-2026-10-18`). It never chooses.

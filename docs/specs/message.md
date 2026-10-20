@@ -1,6 +1,5 @@
 # Message spec
 
-**Status:** accepted · 2026-09-28 (batch 19; was: in review · 2026-09-26)
 **Captures:** `docs/research/captures/message/`
 **Peers:** Composer (the bubble's corner), Button (ghost icon actions), Prompt suggestions
 

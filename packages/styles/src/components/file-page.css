@@ -7,13 +7,13 @@
  * a gray (#b6b6b6) type glyph in the middle and the extension under it. Area's, as its Folder (owner, 2026-10-18:
  * "more round … more large … more soft … brighter"; the glyphs "look way too thick"):
  *
- * - The page fills 72 × 88% of the square (Finder's 67 × 89%); corners 54 of 360, the same size on screen as Folder's
+ * - The page fills 72 × 88% of the square (Finder's 67 × 89%); corners 40 of 360 (FilePage.tsx), Folder's corner 1.4× it
  *   (owner, 2026-10-18: "clean up the document illustration so it matches the folder illustration"); a 120 fold,
  *   rounded at its crease.
  * - Paint as Folder's: lit from the top (white to a cool light grey at the foot), no edge lines, the fold a soft step
- *   darker, Folder's shadow. outline: Folder's outline, a flat grey page with a light edge.
- * - The glyph is an Area icon at 32% of the square, its line thinned to about 1.25px at md (1.1 at sm, 1.5 at lg) rather
- *   than the 24px drawing scaled whole (2.5px at 40); the label in caps at 11% of the square, both in the same gray.
+ *   darker, Folder's shadow. outline: Folder's outline, a flat page in the control fill with a whole-pixel edge.
+ * - The glyph is an Area icon at 32% of the square, its lines at the outline's edge weight (one weight for every
+ *   stroke in the figure); the label in caps at 13% of the square, both in the same quiet ink.
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-file-page {

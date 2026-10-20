@@ -1,6 +1,5 @@
 # Date range picker spec
 
-**Status:** accepted · 2026-10-11 (review round 7, components7)
 **Captures:** `docs/research/captures/calendar/notion--search-date-filter-popover--rest--light.json` (presets, panel),
 `calendar/notion--range*` (the band), Date picker's and Calendar's Area captures
 **Peers:** Date picker (the field, the panel, the Clear footer), Calendar (range selection, two months), Menu (preset

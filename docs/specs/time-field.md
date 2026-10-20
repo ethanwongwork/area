@@ -1,6 +1,5 @@
 # Time field spec
 
-**Status:** accepted · 2026-10-13 (owner, after review round 26)
 **Captures:** `docs/research/captures/time-field/`
 **Research:** [design-system sources](../research/compass-components-2026-10-13/time-field.md) (pinned commits, cited lines)
 **Peers:** Input (the shell, sizes, focus), Date picker and Date range picker (dates; a later DateField shares the

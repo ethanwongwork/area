@@ -1,6 +1,5 @@
 # Step spec
 
-**Status:** built · in review · 2026-10-18
 **Captures:** none yet: the evidence is the agent products' shipped stylesheets, cited by file and selector in
 `docs/research/inspector-chat-2026-10-18/` (cursor.md, claude-code.md, codex.md). ChatGPT's reasoning disclosure is
 not captured (needs the owner's session).

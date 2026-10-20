@@ -1,6 +1,5 @@
 # Scroll area spec
 
-**Status:** in review · 2026-10-09
 **Captures:** `docs/research/captures/scroll-area/`
 **Peers:** every Area surface that scrolls (Menu, Context menu, Command palette, Combobox and Custom select lists, Tag picker, Drawer body, Panel body, Dialog), Scroll to latest (a control over a scroller), Slider (a thumb on a track)
 

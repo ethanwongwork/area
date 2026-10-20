@@ -1,6 +1,5 @@
 # Meter spec
 
-**Status:** accepted · 2026-10-11 (review round 7, components7)
 **Captures:** `docs/research/captures/meter/`
 **Peers:** Progress (the bar: rail, sizes, fill), Description list and settings rows (where meters sit), Badge tones (status fills)
 

@@ -158,7 +158,7 @@
 
   /* Open (owner, 2026-10-18: "refine the open state so it looks more obvious that its open"): the pocket tips toward the
      viewer, its top dropping from 88 to 152 and flaring 16 past each side, and a sheet rises out of the folder to 30 below
-     the tab's top, on `base` ease-out. A drag over the folder (File grid's drop target) opens it the same way. The back's
+     the tab's top, on `base` ease-in-out (closing one step faster, on `fast`). A drag over the folder (File grid's drop target) opens it the same way. The back's
      edge follows the pocket down, under its flared corners, so no edge is left open or drawn twice. */
   :is(.area-folder[data-open], [data-drop-target] .area-folder) .area-folder__front {
     d: path("M-16 210Q-12 152 44 152L426 152Q482 152 486 210L470 364Q470 420 414 420L56 420Q0 420 0 364Z"); /* spec: pick */
