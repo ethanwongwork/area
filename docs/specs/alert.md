@@ -1,6 +1,5 @@
 # Alert spec
 
-**Status:** accepted · 2026-09-28 (owner, batch 4; banner layout added)
 **Captures:** `docs/research/captures/alert/`
 **Peers:** Toast (shared inset rule), Button sm ghost and Dialog close (the dismiss control),
 Chip remove (a tinted 12% plate), Card and Panel (container radius)

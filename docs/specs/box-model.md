@@ -1,6 +1,5 @@
 # Box model spec
 
-**Status:** complete · 2026-10-12 (approved, review round 13)
 **Captures:** `docs/research/captures/box-model/`
 **Peers:** Box field (edits padding and radius; this only shows them), Panel (the inspector it sits in), Count and
 Badge (small value chips), Code block (the inspector's other read-only block)
@@ -19,6 +18,8 @@ Badge (small value chips), Code block (the inspector's other read-only block)
   every container level just the colors can be different. i do like the margin in a box with lines actually, maybe the
   corner radius can be rounder and the layer shapes bigger overall?" → the margin box keeps its dashed lines and gets
   Figma's grey ground back; every box has a 1px stroke in its own colour; rings 24 → 32; corners 16 / 12 / 8 / 6.
+  — superseded in part 2026-10-12 (round 12): the margin's stroke is solid, not dashed, and its corner is the
+  container family's 12 (corners 12 / 12 / 8 / 6).
 - 2026-10-12, review round 10 (rethink): "any ways to make it look more like area, more of an original design so its
   not just copying figma, also can you make sure the corner radius numbers sit inset equally in the corners?", with "go
   with your recommendations". Redrawn in Area's language: the margin as a dashed outline at the container corner (space,
@@ -28,7 +29,8 @@ Badge (small value chips), Code block (the inspector's other read-only block)
   strong value. Corner radii are placed by their cap box (`text-box: trim-both cap`) at (ring − 1cap) / 2 from both
   edges, so each sits on its corner's diagonal (measured: 7.7 from both edges in every corner). The round-10
   recommendations (32 margin rows, Area's corner over the element's) were superseded by the square rings and kept,
-  respectively.
+  respectively. — superseded in part 2026-10-12 (round 11): the margin is a grey box with a stroke again, every box has
+  its own stroke, rings are `control-md` (32) and the corners rounder; the cap-box corner placement and plain values stay.
 
 ## Job and boundaries
 
@@ -40,8 +42,8 @@ field (an editor), not a Table of values (Description list does that), not a rul
 
 | Axis | Value | Justification | Where it appears (source / product) |
 |---|---|---|---|
-| tone | info (default) | Spacing in the measuring blue: margin chips and lines, the padding box tinted | the owner's Dev Mode reference (blue margin chips, blue padding box) |
-| tone | neutral | Greyscale: grey chips and lines, a grey padding box | Figma's Dev Mode drawing as captured (`box_model--paddingBoxGrayscale`, `unrealGap`) |
+| tone | info (default) | Spacing in the measuring blue: spacing values in `fg-info`, the padding box in `info-surface` with an `info-border-strong` stroke, the content stroke `info-border` | the owner's Dev Mode reference (blue margin chips, blue padding box) |
+| tone | neutral | Greyscale: spacing values in `fg-muted`, the padding box in `bg-active` with a `border-subtle` stroke, the content stroke `edge-control` | Figma's Dev Mode drawing as captured (`box_model--paddingBoxGrayscale`, `unrealGap`) |
 | content | per side, per corner, caption | Different values per side (CSS order), radii per corner, a note such as "border-box" | the owner's reference (corner radii, "border-box") |
 
 ## Sources
@@ -72,23 +74,24 @@ well     div.gapBox         287 × 190, grid 32 | 223 | 32 × 35 | 120 | 35, rad
 Area:
 
 ```
-div    .area-box-model[--tone]        role="img", aria-label "Margin 24, border 1, padding 16, radius 8, size 608 × 184"
-  span   __label                          "Margin"
-  div    __side--top|right|bottom|left    margin values, the tone's ink (the root is a dashed outline)
-  div    __border                         surface, 1px divider ring, radius-small
-    span   __label                          "Border"
-    div    __corner--top-left…              radius values (with `radius`)
-    div    __side--…                        border widths
-    div    __padding                        tone fill, radius-min
-      span   __label                          "Padding"
-      div    __side--…                        padding values
-      div    __content                        surface, "W × H" in the strong weight
-  span   __caption                        "border-box"
+div    .area-box-model[--tone]        role="img", aria-label "Margin 24, border 1, padding 16, radius 8, size 608 × 184";
+                                        the margin: bg-subtle in a solid 1px border-subtle line, radius-container
+  span   __label                          "Margin", muted
+  div    __side--top|right|bottom|left    margin values (`__value`), the tone's ink
+  div    __border                         surface, 1px inset edge-control stroke, radius-container
+    span   __label                          "Border", muted; clears the top-left corner value when radii show
+    div    __corner--top-left…              radius values (with `radius`), muted
+    div    __side--…                        border widths, default ink
+    div    __padding                        the tone's fill and stroke, radius-control-md
+      span   __label                          "Padding", muted
+      div    __side--…                        padding values, the tone's ink
+      div    __content                        surface, 1px stroke in the tone's content line, radius-small; "W × H" strong
+  span   __caption                        "border-box", muted, at the bottom ring's end, 8 in
 ```
 
-Insets: every ring is a square of `control-xs` (24, compact 20), the margin ring included (round 11; Figma: 32
-columns, 24 rows, a 35 margin row). Labels 8 in from their ring, 4 down (Figma). Corner radii: cap box at
-(ring − 1cap) / 2 from both edges.
+Insets: every ring is a square of `control-md` (32, compact 28), the margin ring included (round 11: "bigger"; Figma:
+32 columns, 24 rows, a 35 margin row). Labels 8 in from their ring and centred in its row ((ring − 16) / 2, 8 at 32;
+Figma's 4 at 24). Corner radii: cap box at (ring − 1cap) / 2 from both edges.
 
 ## Measurements
 
@@ -114,12 +117,13 @@ Generated with `node scripts/capture-compare.mjs` (rows abbreviated).
 | content | Figma: white, 1px dashed rgb(230), radius 2 | surface, 1px stroke in the tone's border (`info-border`; neutral `edge-control`), `radius-small` (6), at least one ring tall | Figma; round 11 strokes and corners | solid: the dashes belong to the margin |
 | values | Figma 11/16 450 | 12/16 tabular; spacing values in the tone's ink, border widths default, the size `weight-strong` | Area's smallest UI text | — |
 | corner radii | Figma: none drawn (the owner's reference: centred in 32 × 24 cells) | cap box (ring − 1cap) / 2 from both edges | owner ("sit inset equally in the corners"), inset.css cap reference | — |
-| labels | Figma 4 8 padding, Border and Padding | 4 8, Margin, Border and Padding | Figma | — |
-| tone | owner's reference blue | info: `fg-info` ink (the text role; `info-solid` is a fill and read 4.35:1 in light, 3.16:1 in dark, found 2026-10-14), `info-surface` fill; neutral: `fg-muted`, `bg-subtle` | Area's info role | Area's accent is neutral by default |
+| labels | Figma 4 8 padding, Border and Padding | 8 in, centred in the ring's row (8 down at 32); Margin, Border and Padding, muted | Figma | the rings grew to 32 |
+| tone | owner's reference blue | info: `fg-info` ink (the text role; `info-solid` is a fill and read 4.35:1 in light, 3.16:1 in dark, found 2026-10-14), `info-surface` fill; neutral: `fg-muted` ink, `bg-active` fill | Area's info role | Area's accent is neutral by default |
+| inks on their grounds | — | info's spacing values darken just enough to hold 4.6:1 as the margin's recessed ground deepens; in dark the neutral padding's inks take Code block's marked-line lift (private `--_ink`) | Layers sweep 2026-10-16 (owner: "go with your recs") | defaults unchanged |
 
 ## States
 
-Static. Forced colors: CanvasText rings and lines, chips outlined.
+Static. Forced colors: the border, padding and content boxes take a CanvasText border in place of their inset strokes.
 
 ## Behavior and accessibility
 
@@ -131,7 +135,7 @@ Native props and refs reach the root.
 | Peer | Shared role | Peer value | Box model | Note |
 |---|---|---|---|---|
 | Box field | padding and radius | edits them, linked or per side | shows them | an editor and its readout |
-| Count | small number on a plate | 16, 12px tabular, pill | 16, 12px tabular, radius 2 | Figma squares the chip |
+| Count | small number on a plate | 16, 12px tabular, pill | 12px tabular, no plate (plain values since round 11) | Figma's chips are not drawn |
 
 ## Visual pass
 

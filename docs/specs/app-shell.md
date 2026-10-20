@@ -1,6 +1,5 @@
 # App shell spec: Titlebar and Section heading
 
-**Status:** in review · 2026-10-15
 **Captures:** none of their own: every value is the desktop app's, owner-reviewed (apps/desktop/src/studio.css,
 2026-10-12), which traced them to Cursor's bundle and to Panel.
 **Peers:** Panel (its bar), Nav (tabs in the bar), Search field, Button (ghost icon)
@@ -8,16 +7,19 @@
 ## Owner decisions
 
 - 2026-10-12: the app's Titlebar is 41 (Cursor's agents window bar) at Panel's bar formula; a 52 trial was put back for
-  Cursor's. The traffic lights sit flush, as Cursor's: Electron `trafficLightPosition { x: 13, y: 12 }`.
+  Cursor's. The traffic lights sit flush, as Cursor's: Electron `trafficLightPosition { x: 13, y: 12 }`. — The 41 is superseded 2026-10-19 (the traffic lights stand): the height is derived from the control height and insets (39 at the app's type 13 Compact), as every bar follows Density.
 - 2026-10-15: "merge it, then continue working" → PRODUCT_UI.md's last open gap, "App-shell parts: Titlebar (drag
   region, traffic-light inset) and a section heading", as components.
+- 2026-10-19 (review page, docs pass): the Titlebar's height follows the derived formula; the fixed 41 is superseded.
 
 ## Job and boundaries
 
-- **Titlebar:** a window's top bar. A start (children) and an `end` group, 12 apart. In a frameless window the bar
-  is the drag region (`app-region: drag`) and its links, buttons, fields and focusable parts stay pressable.
-  `windowControls="macos"` leaves room for the system's traffic lights. Not a Toolbar (no roving focus, no overflow)
-  and not a Panel bar (no title of its own).
+- **Titlebar:** a window's top bar. A start (children) and an `end` group; every control the small control's
+  height, one cluster space apart (8, compact 6). `variant`: `ruled` (default, a rule under the bar), `plain` (no
+  rule) or `floating` (a raised plate held off the window's edges). In a frameless window the bar is the drag region
+  (`app-region: drag`) and its links, buttons, fields and focusable parts stay pressable. `windowControls="macos"`
+  leaves room for the system's traffic lights. Not a Toolbar (no roving focus, no overflow) and not a Panel bar (no
+  title of its own).
 - **Section heading:** a titled group on a page, its title and an optional lede. Not a Panel section heading
   (collapsible, in an Inspector) and not a document heading ramp (Typography's title roles).
 
@@ -25,10 +27,12 @@
 
 | Slot · property | Value | Basis |
 |---|---|---|
-| Titlebar height | Panel's bar: `control-md + (10 − 4 × ui-dense) × 2 + border-width` (39 at type 13 / density 28; 41 at 14 / 32) | panel.css `--_bar`; the app's bar, Cursor's agents window bar |
-| Titlebar inset | 14 each side; macOS 83 start (13 + 54 + 16), 13 end | Panel's 14; Cursor main.js traffic lights `x = s + 1`, 14 buttons on a 20 pitch from 13 |
-| Titlebar gap / end gap | 12 | the app's bar (everything drawn 12 apart) |
-| Titlebar rule, ground | `border-width` `border-decorative`; `bg-page` | the app's bar |
+| Titlebar height | Panel's bar: `control-md + (10 − 4 × ui-dense) × 2 + rule` (39 at the app's 13 Compact; 47 at 13 Default; 53 at 14 Default); `plain` drops the rule's 1 | panel.css `--_bar`; log 2026-10-16 (round 28) |
+| Titlebar controls | every control `control-sm` (24 at the app's scale), Nav's items included at Button sm's corner; centred, 7 above and below at the app's scale | log 2026-10-16 (round 27); Cursor, ChatGPT, Notion |
+| Titlebar inset (ruled, plain) | the end, and the start when the bar starts with a button or link: as far from the side as from the top and the rule, `(control-md − control-sm) / 2 + 10 − 4 × ui-dense`, 7 at the app's scale; a bar that starts with its title keeps Panel's 14; macOS 83 start (13 + 54 + 16) | Even control insets, 2026-10-18 (PRODUCT_UI.md, "The app's layout"; Figma's panel tabs 8 and 8); Cursor main.js traffic lights |
+| Titlebar gap / end gap | the cluster space, `ui-cluster` (8, compact 6), box to box; a Nav keeps its own 4 | log 2026-10-16 (round 27); Cursor's 8 between groups, ChatGPT's 8 |
+| Titlebar rule, ground | `ruled`: the Surface width (`border-width`, none at Borderless) in `border-decorative`; `bg-page` | the app's bar; log 2026-10-16 (round 28) |
+| Titlebar `floating` | Toolbar surface's paint (`bg-surface`, `shadow-edge`, `border-float` inset edge, `shadow-float`); controls one cluster space in on every side; the plate one cluster space off the window's top and sides; corner `radius-control-sm` + that inset, concentric; macOS: starts one cluster space after the lights (67) | log 2026-10-16 (round 28); Toolbar surface |
 | Section title | `text-sm` at `weight-strong`, trimmed cap / alphabetic | the app's section titles |
 | Section lede | `text-sm`, `fg-muted`, 64ch, trimmed; 8 under the title | the app |
 

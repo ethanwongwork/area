@@ -1,6 +1,5 @@
 # Asset card spec
 
-**Status:** built · 2026-10-18 (in review)
 **Captures:** none yet. Figma's file browser (the owner's reference) is not captured: the values below come from Area's
 own gallery container and File tile, and the mosaic's gap is a pick (Open).
 **Peers:** the app's gallery tile (`apps/desktop/src/tile.tsx`), File tile (label under the figure, ListBox grid),
@@ -16,7 +15,8 @@ Asset row (an asset in a list), Card (the linked card's lift), Preview frame (an
   "Edited 5 minutes ago" under it.
 - 2026-10-18: the names are **Asset** and **Group** (offered Collection, since Button group, Nav group and the app's
   Group by already use the word; the owner chose Group).
-- 2026-10-18: names and controls sit **under** the container, "for even assets ... for consistency".
+- 2026-10-18: names and controls sit **under** the container, "for even assets ... for consistency". — superseded
+  2026-10-19: the caption sits inside the frame's first row by default (a trial); `below` keeps this placement.
 - 2026-10-19: "a view setting that changes how containers are shown strictly for assets and groups. i want to look at
   containerless containers, and potentially a waterfall view that hugs the size of assets." Built as two separate axes:
   `container` (framed · containerless) on the card, and `layout` (grid · waterfall) on the grid, whose cards hug.
@@ -30,8 +30,8 @@ Asset row (an asset in a list), Card (the linked card's lift), Preview frame (an
 ## Job and boundaries
 
 An Asset card shows one asset, anything that can stand alone (an image, a component, a screen, an animation, an
-illustration, a logo, a type style), in a container, with its name, a detail line and its controls under it. A
-**group** is the same card holding a 2×2 mosaic of its first four assets. `AssetGrid` lays cards out as a ListBox
+illustration, a logo, a type style), in a square container, with its name, a detail line and its controls in the
+container's first row (`caption="inside"`, the default) or under it (`below`). A **group** is the same card holding a 2×2 mosaic of its first four assets. `AssetGrid` lays cards out as a ListBox
 grid (one Tab stop, arrows in two dimensions, typeahead, Space selects, Enter or a double click opens), as FileGrid
 does for File tiles.
 
@@ -57,16 +57,19 @@ A group's cells crop their asset to the square (a thumbnail), with the 6 corner.
 ## Anatomy
 
 ```
-area-asset-card            the asset: its frame, then its caption
-  __frame                  the container: 1px card edge, 12 corner (radius-container), surface fill, square
-    __media                the asset, centred in the frame's 12 inset (an image contained, 12 corner)
+area-asset-card            the asset: its frame (caption inside, the default) or its frame, then its caption (below)
+  __frame                  the container: 1px card edge, 12 corner (radius-container), surface fill, square,
+                           raised ground (data-area-ground="raised"); inside: rows caption, then asset, 8 apart
+    __caption              inside: the frame's first row, one line, centred; the text, then the controls
+    __media                the asset, centred in the frame's 12 inset (an image contained, 12 corner, no stroke)
     __mosaic               a group: 2 × 2 cells in a 12 margin inside the frame's inset, 16 apart
       __cell               one asset, cropped to its cell, 6 corner (radius-small), no stroke
-  __caption                under the frame, 8 down: the text, then the controls
-    __text
-      __name               the app's UI text, strong; one line, then an ellipsis
-      __meta               the caption size, muted; one line
-    __actions              controls at the end, on the name's line
+  __caption                below: under the frame, 8 down; the text, then the controls
+    __text                 inside: name and detail on one baseline, 8 apart; below: name over detail
+      __name               the app's UI text, strong; one line, then an ellipsis (4 clip margin for descenders);
+                           inside: cap-trimmed
+      __meta               the caption size (text-xs), muted, tabular figures; one line; inside: cap-trimmed, at the end
+    __actions              controls at the end, centred on the name's line (inside: on its cap height)
 ```
 
 Containerless: the frame draws no edge, fill or shadow and sets no raised ground, so a component inside steps its
@@ -96,7 +99,7 @@ Not captured (Open). Values reuse measured or owner-set peers:
 | containerless · mosaic gap | 4 | pick: close enough that a group reads as one thing beside cards 12 apart |
 | containerless · selected ring | 2 (twice the stroke), `stroke-selected`, on the image or mosaic | pick: an image has no edge for one line to recolour; Finder and Photos ring a selected thumbnail |
 | waterfall · gaps | 12 between columns, 16 between cards | the grid's gaps |
-| caption · gap from frame | 8 | the gallery tile's head-to-stage 8 |
+| caption · gap | 8: over the asset (inside), under the frame (below) | the gallery tile's head-to-stage 8; inside per owner 2026-10-19 |
 | name | UI text, strong | the Components card title ("the app's text, strong", PRODUCT_UI rule 11) |
 | meta | caption (text-xs), muted | File tile's detail line (Figma black 50%, ChatGPT rgb(93)) |
 | hover | `shadow-lift`, fade in `fast` ease-out, out `base` ease-in | the gallery tile and linked Card (owner, 2026-10-18) |
@@ -110,7 +113,7 @@ Not captured (Open). Values reuse measured or owner-set peers:
 | hover, containerless | a component's frame shows the hovered edge (`edge-control-hover`), no lift; an image or group lifts itself |
 | selected | the frame's edge is the selection colour (one line, as the gallery tile). Containerless: a component's frame the same; an image or group a 2 ring round it |
 | focus-visible | the focus ring round the frame, at once |
-| disabled | the whole card at the disabled opacity |
+| disabled | not a card state (the manifest declares `selected` only). A disabled `AssetGridItem` is a disabled ListBox option: ListBox's disabled opacity, no lift or edge step on hover, Enter and double click do not open |
 
 ## Behavior and accessibility
 
@@ -123,8 +126,10 @@ hover lift from the frame to the asset.
 
 In an `AssetGrid` each card is a ListBox option (`role="option"`, `aria-selected`) whose accessible name is its name
 (`textValue`). Enter or a double click opens (`onOpen`); Space selects. Controls in `actions` sit inside the option:
-keep them few and give each its own label. A standalone `AssetCard` is a plain element; images take `mediaAlt`
-(empty by default, since the name says what it is).
+keep them few and give each its own label. A standalone `AssetCard` is a plain element; with `interactive` the host
+supplies its role, `tabIndex` and `aria-pressed` or `aria-selected`, and the frame shows hover, press, focus and the
+selected edge. Images take `mediaAlt` (empty by default, since the name says what it is); a group's mosaic is
+`aria-hidden`. Forced colors: a selected grid card draws a `Highlight` outline.
 
 ## Open
 

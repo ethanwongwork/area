@@ -2,7 +2,8 @@
  * Asset card and asset grid
  *
  * One asset, anything that stands alone (an image, a component, a screen, an animation, an illustration, a logo, a
- * type style), in a container, its name, detail line and controls under it; a group is the same container holding a
+ * type style), in a square container, its name, detail line and controls in the frame's first row by default
+ * (`caption="below"` puts them under it; owner, 2026-10-19); a group is the same container holding a
  * 2 x 2 mosaic of its first four assets (owner, 2026-10-18, after Figma's file browser; docs/specs/asset-card.md).
  * The asset grid is a ListBox grid of cards (one Tab stop, arrows in two dimensions, typeahead), plus open on Enter
  * or a double click, as File grid. It paints the frame, not ListBox's row plates: selection is the frame's edge in the

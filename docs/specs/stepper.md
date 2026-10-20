@@ -1,6 +1,5 @@
 # Stepper spec
 
-**Status:** accepted · 2026-10-13 (owner, review round 25)
 **Captures:** `docs/research/captures/stepper/`
 **Research:** [design-system sources](../research/compass-components-2026-10-13/stepper.md) (pinned commits, cited lines)
 **Peers:** Timeline (the vertical column, marker and line), Progress (how far, without steps), Tabs (switching views,
@@ -107,6 +106,7 @@ choice controls' paint.
 - Status reaches assistive tech as words ("Members, current step"); markers are hidden. `statusLabels` changes the
   words.
 - Done steps are real buttons (Enter and Space). The current step isn't one.
+- The current step keeps `aria-current="step"` whatever its status, an `invalid` one included (2026-10-19).
 - Not verified: very long titles in horizontal steps (they wrap within the step's share), right-to-left.
 
 ## Visual pass

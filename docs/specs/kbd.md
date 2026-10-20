@@ -1,6 +1,5 @@
 # Kbd spec
 
-**Status:** Complete · owner approved batch 11, 2026-09-28 (6px corner everywhere, filled with no stroke, plain text in menus, ⎋ glyph for Escape; Escape written "Esc" since audit S12b, 2026-09-30)
 **Captures:** `docs/research/captures/kbd/` (Area tiles, `notion--shortcut-hint`, `chatgpt--shortcut-chip`, `figma--shortcut-panel-*`), `menu/notion--item-shortcut`, `menu/figma--item`, `tooltip/*--shortcut*`
 **Peers:** Tooltip (adapted on-color shortcut), Button (trailing shortcut), Menu and Nav (quiet trailing shortcut), Code (inline technical label), Badge (small chrome)
 

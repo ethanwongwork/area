@@ -1,6 +1,5 @@
 # Abbreviation spec
 
-**Status:** built, in review · 2026-10-17
 **Captures:** computed-style readouts below (Wikipedia, en.wikipedia.org/wiki/Lisa_Su)
 **Peers:** Tooltip, Link
 

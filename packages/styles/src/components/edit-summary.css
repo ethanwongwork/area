@@ -1,7 +1,7 @@
 /* ---------------------------------------------------------------------------
  * Edit summary and Diff
  *
- * What an agent changed in a turn: a card titled with the count, the turn's +N −N, and a row per file opening to its
+ * What an agent changed in a turn: a card under a title (the caller's, such as "Edited 2 files"), the turn's +N −N, and a row per file opening to its
  * diff, with Keep and Undo for each and for all. The Diff draws a unified diff in Code block sm's metrics and diff
  * paint. Measured from Cursor's EditToolCallView, DefaultDiff and transcript cards, and Codex's patch summary
  * (docs/specs/edit-summary.md).

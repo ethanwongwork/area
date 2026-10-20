@@ -1,6 +1,5 @@
 # Command palette spec
 
-**Status:** accepted · 2026-09-28 (batch 18; was: in review · 2026-09-26)
 **Captures:** `docs/research/captures/command-palette/`
 **Peers:** Combobox (the field–list contract), Menu (rows), Dialog (scrim, lift, corner), Kbd
 

@@ -2,7 +2,7 @@
  * Queue
  *
  * Messages sent while an agent works wait their turn above the composer. Each row is the message on one line; on
- * hover or focus it offers Send now (which steers the run without stopping it) and Remove. A row being sent dims with
+ * hover or focus it offers Send now (which stops the run and sends this message now) and Remove. A row being sent dims with
  * a spinner; one that failed shows a mark and Retry. Measured from Cursor's queue tray and Codex's queued-message rail
  * (docs/specs/queue.md; composer-additions.md, D).
  *

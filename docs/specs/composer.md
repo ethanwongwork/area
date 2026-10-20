@@ -1,6 +1,5 @@
 # Composer spec
 
-**Status:** accepted · 2026-09-26 (was: in review · 2026-09-25 (first pass under the capture workflow))
 **Captures:** `docs/research/captures/composer/`
 **Peers:** Input and Textarea (field text and placeholder), Button (actions), Toolbar
 

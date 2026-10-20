@@ -1,6 +1,5 @@
 # Breadcrumb spec
 
-**Status:** accepted · 2026-09-25 (first pass under the capture workflow)
 **Captures:** `docs/research/captures/breadcrumb/`
 **Peers:** Nav and TreeView (navigation rows), Menu (hover plate), Link, Tabs
 

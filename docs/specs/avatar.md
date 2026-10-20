@@ -1,6 +1,5 @@
 # Avatar spec
 
-**Status:** accepted · 2026-09-28 (owner, batch 5; initials scale and Irene photo approved the same day)
 **Captures:** `docs/research/captures/avatar/` (Area, `figma--avatar-initial`, `notion--avatar-person-initial`, `notion--avatar-workspace-square`), `docs/research/captures/baseline/chatgpt--avatar-initials--rest--light.json`, `…/chatgpt--account-row--rest--light.json`
 **Peers:** Indicator and IndicatorAnchor (status and count on an avatar), Chip and Badge
 avatars (initials at 12px), Nav and Tree view markers (neutral selection), Button (focus ring)
@@ -31,7 +30,7 @@ remainder as one more Avatar.
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
 | size | sm 28, md 32 (default), lg 40 | Control tiers, so an avatar sits in a row of controls | Untitled 24–64; ChatGPT 20 and 24; Figma 24 |
-| shape | circle (default), square | Square for workspaces and bots | Untitled, ChatGPT and Figma circle |
+| shape | unset (default: a circle while `data-area-pills` lists `avatar`, else a rounded square), circle, square | People circle; teams, workspaces and bots square, set per instance (owner, 2026-10-04) | Untitled, ChatGPT and Figma circle |
 | tone | neutral (default), inverse (accent removed 2026-09-29, D1) | Fallback ground; neutral by default | Untitled neutral only; Figma a per-user hue |
 | active | boolean | Current or speaking participant | Area's own; no product capture |
 | content | image, initials, icon | Fallback chain image → icon → initials | Untitled image and initials |
@@ -60,13 +59,14 @@ lists people, but no avatar node was captured.
 chatgpt  span 20×20 > img rounded-full, object-cover (no fill, no ring)
 figma    span 24×24 flex, radius 100%, fill rgb(102, 119, 153), initials 12/24 400 white, no ring
 uui      div size-*, rounded-full, neutral-100 fill, 0.5px black-16% hairline; initials 600
-area     div.area-avatar  owns size, radius, fill, ink, rings (box-shadow)
+area     span.area-avatar  owns size, radius, fill, ink, rings (box-shadow); a span so it is phrasing
+           content inside a Chip's button or a Badge (audit C-22, primitives.tsx:96)
   image  img.area-avatar__image 100%, object-fit cover
-  icon   span.area-avatar__icon 16 / 20 / 24 square viewport (display.css:38-44, 74-80)
-  text   span (initials), cap-trimmed (inset.css:155)
+  icon   span.area-avatar__icon 16 / 20 / 24 square viewport (display.css:42-50, 73-79)
+  text   span (initials), cap-trimmed (inset.css:225)
 ```
 
-Rings are two stacked box-shadows on the shell (`display.css:25`): the group ring (1px
+Rings are two stacked box-shadows on the shell (`display.css:28`): the group ring (1px
 surface) and the active ring (2px surface gap, then 2px ring), so neither changes layout.
 
 ## Measurements
@@ -90,18 +90,18 @@ icon content: 20px viewport at md, ink 14 × 16 (`area--content-icon`). Group: i
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| shell · size | `control-sm/md/lg` 28 / 32 / 40 (`display.css:74-80`) | Peer: control tiers | Untitled 24–64; ChatGPT 20 / 24; Figma 24. Area's sm is larger than every product; kept for compact density (third pass) |
-| shell · radius | `radius-full`; square `radius-control` 8 (`display.css:22, 49`) | ChatGPT, Figma and Untitled round | — |
+| shell · size | `control-sm/md/lg` 28 / 32 / 40 (`display.css:73-79`) | Peer: control tiers | Untitled 24–64; ChatGPT 20 / 24; Figma 24. Area's sm is larger than every product; kept for compact density (third pass) |
+| shell · radius | circle `radius-full`; square its own corner, the corner setting × size ÷ 32 (24 → 6, 32 → 8, 40 → 10 at the default), at least `radius-min`, capped at 7/16 of the side (`display.css:22-25, 52-53`) | ChatGPT, Figma and Untitled round; owner, one corner setting (2026-10-03) and pill shapes (2026-10-04) | — |
 | fill · neutral | `bg-component-active` #eeeeee (dark #3f3f3f) | Untitled neutral-100 #f5f5f5 | One step darker, so the disc reads on `bg-component` rows. Figma paints a per-user hue, rgb(102, 119, 153); neutral kept (third pass) |
-| tone · treatment | tone also switches treatment: `neutral` is a soft plate (`bg-component-active`, `fg-muted` ink); `inverse` is solid (`bg-inverse`, `fg-on-inverse`) (`display.css:52-61`) | Owner, audit C-21 A (2026-09-30) | Badge's soft accent differs; kept and documented. The hued `accent` tone that was also solid was removed 2026-09-29 (D1) |
+| tone · treatment | tone also switches treatment: `neutral` is a soft plate (`bg-component-active`, `fg-muted` ink); `inverse` is solid (`bg-inverse`, `fg-on-inverse`) (`display.css:55-64`) | Owner, audit C-21 A (2026-09-30) | Badge's soft accent differs; kept and documented. The hued `accent` tone that was also solid was removed 2026-09-29 (D1) |
 | initials · ink | `fg-muted` #666666 | Untitled neutral-500 #737373 | Area's muted role; Figma white on its hue |
 | initials · size | **12 / 14 / 16 at sm / md / lg** (`--_text`, `display.css`) | Notion 14 on its 32 Share-list avatar (`notion--share-person-avatar`, initials layer 14px/32px); Untitled 12 / 14 / 16 by size; owner (2026-09-28) | Was 12 at sm and md, 14 at lg: two initials read small on the 32 disc (37% of the side against Notion's 44% and Figma's 50%) |
-| initials · weight | 500 | Type ramp (500 for labels on fills, DESIGN_SYSTEM "Color and focus") | Notion 400 (person), 500 (workspace); Figma 400; Untitled 600; one label weight (third pass) |
+| initials · weight | 500 (`weight-strong`) | Type ramp (500 for labels on fills, DESIGN_SYSTEM "Color and focus") | Notion 400 (person), 500 (workspace); Figma 400; Untitled 600; one label weight (third pass) |
 | icon · size | 16 / 20 / 24 at sm / md / lg | Native Fluent cuts at their size | — |
 | edge | none | ChatGPT and Figma (none) | Untitled draws a 0.5px black-16% hairline |
-| active ring | **2px `bg-surface` gap + 2px `selection-solid`**, neutral by default #282828 (dark #f3f3f3) (`display.css:63-67`) | Owner (2026-09-26) | Was `accent-solid` #5c5dfe on every avatar |
-| active ring · accent theme | the Selection role's accent; `--_ring` overrides it (`display.css:67`) | Emphasis roles (D1); was `tone="accent"` | — |
-| group · overlap / ring | −8px, 1px `bg-surface` (`display.css:94-102`) | Area's own | Not in Untitled's recorded source |
+| active ring | **2px `bg-surface` gap + 2px `selection-solid`**, neutral by default #282828 (dark #f3f3f3) (`display.css:66-71`) | Owner (2026-09-26) | Was `accent-solid` #5c5dfe on every avatar |
+| active ring · accent theme | the Selection role's accent; `--_ring` overrides it (`display.css:70`) | Emphasis roles (D1); was `tone="accent"` | — |
+| group · overlap / ring | −8px, `stroke-width` `bg-surface` cutout (`display.css:93-102`) | Area's own; consistency pass 2026-10-12 (was `border-width`, lost under Elevated) | Not in Untitled's recorded source |
 
 Settled in the third pass ([cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open)); all kept:
 
@@ -118,24 +118,27 @@ Settled in the third pass ([cohesion audit](../research/cohesion-audit.md#third-
 |---|---|---|
 | rest | as above | `area--default` |
 | active | 2px surface gap + 2px neutral ring | `area--state-active` |
-| image failed | falls back to icon or initials | `area--behavior-image-fallback`; `primitives.tsx:64-71` |
+| image failed | falls back to icon or initials | `area--behavior-image-fallback`; `primitives.tsx:82-90, 111` |
 
 Avatar is not interactive: no hover, focus or disabled paint.
 
 ## Behavior and accessibility
 
-The wrapper gets `role="img"` and the `aria-label` (or `alt`) when it has no image; with an
-image, the `img` keeps its native `alt` (`avatar.test.mjs:7, 14`). Initials and icons are
+The `span` wrapper gets `role="img"` and the `aria-label` (or `alt`) when it has no image; with an
+image, the `img` keeps its native `alt`, unless the wrapper has its own `aria-label`, which names it and
+leaves the `img` `alt=""` (`avatar.test.mjs:7, 14`). Initials and icons are
 `aria-hidden`. AvatarGroup is `role="group"`; its overflow Avatar is named by
-`overflowLabel` ("N more avatars"). A cached image failure is detected after hydration.
+`overflowLabel` ("N more avatars"). A cached image failure is detected after hydration. An Avatar with `src` must
+be described (2026-10-19, as Badge's unnamed forms): `alt` (`alt=""` beside a visible name), `aria-label`,
+`aria-labelledby` or `aria-hidden`, or it throws.
 
 ## Peers and consistency
 
 | Peer | Shared role | Peer value | Avatar | Match |
 |---|---|---|---|---|
 | Nav marker, Tree view rail, Code block linked line | current / selection marker | Selection role | `selection-solid` ring | match |
-| Chip avatar | initials size | 12px in the Chip's 20px avatar (chip.css:169-171) | 14px at md (`text-sm`, display.css:76), 12 at sm | differs by box size: the Chip avatar is smaller than Avatar sm |
-| Focus ring | ring geometry | 2px `focus-color`, 2px offset | 2px ring, 2px gap, `neutral-solid` | same geometry, told apart by colour |
+| Chip avatar | initials size | `control-xs-text` (12 at default, 11 compact) in the Chip's 20px avatar (chip.css:198-205) | 14px at md (`text-sm`, display.css:74), 12 at sm | differs by box size: the Chip avatar is smaller than Avatar sm |
+| Focus ring | ring geometry | 2px `focus-color`, 2px offset | 2px ring, 2px gap, `selection-solid` | same geometry, told apart by colour |
 | Indicator | status on avatar | inside the owner's box (`overlap="circular"`) | anchor, no own slot | match |
 | Badge | label on a fill | 500 | 500 | match |
 

@@ -1,6 +1,5 @@
 # Panel spec
 
-**Status:** accepted · 2026-09-28 (owner, batch 8)
 **Captures:** `docs/research/captures/panel/`
 **Peers:** Card (in-flow surface), Popover, Menu and Dialog (floating surfaces), Field
 (inline rows), NumberField (numeric rows), Separator (divider role), Toolbar (inspector chrome)

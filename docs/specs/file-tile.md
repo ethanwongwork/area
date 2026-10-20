@@ -1,6 +1,5 @@
 # File tile spec
 
-**Status:** accepted · 2026-10-19 (round 48)
 **Captures:** `docs/research/captures/card/` (Figma file card, ChatGPT Library cards, Notion recent card); Finder read
 from this machine (`docs/research/file-explorer-2026-10-18/README.md` §2, §7).
 **Peers:** Folder, ListBox (grid layout: the keyboard and the plates), Asset row (preview ring), Card.
@@ -21,22 +20,39 @@ built); trees on TreeView; the path on Breadcrumb.
 | Axis | Value | Justification | Where |
 |---|---|---|---|
 | size | sm 48 · md 64 · lg 96 figure; or any `--area-file-tile-figure` | Finder iconSize 64; Folder's sizes; a zoom sets any length (the Brand tab's Small / Medium / Large: 96 / 144 / 208) | Finder, Drive, Figma |
-| figure | Folder · File page · glyph (half the square, line thinned) · image (contained) | Finder draws folders and document pages; Finder contains image previews; Asset row's swatch ring | Finder |
-| state | selected (`aria-selected`), focus, hover, pressed, drop target (`data-drop-target`), disabled | ListBox grid's plates (list-box.css); a drop target tips its Folder open | ListBox, Mantine, Finder |
+| figure | Folder · File page (drawn at the figure's size through `--area-folder-size`) · bare glyph (50% of the square, `fg-muted`, its line `stroke-width` as a non-scaling stroke) · image (contained, `radius-small`, the swatch ring) | Finder draws folders and document pages; Finder contains image previews; Asset row's swatch ring; coherence pass 2026-10-19 (glyph line) | Finder |
+| state | selected (`aria-selected`), focus, hover (the plate only; nothing in the figure moves), pressed, drop target (`dropTarget` → `data-drop-target` on the grid item), disabled | ListBox grid's plates (list-box.css); a drop target tips its Folder open; PRODUCT_UI rule 2 | ListBox, Mantine, Finder |
 
 Excluded for now: the framed "card" layout (Figma, ChatGPT: edge, radius 13–16, footer), multi-select, rename.
 
 ## Anatomy
 
 ```
-.area-file-grid (ListBox grid)       columns: figure + 2 × 24, filling the row; cells 2 apart
-  .area-list-box__item.area-file-grid__item   role=option, the plates: hover, selected, pressed, focus inset
-    .area-file-tile                  padding 8, column, centred, gap 6
-      __figure                       square --_figure, one fixed grid cell
+.area-file-grid[--sm|--md|--lg] (ListBox grid)   sets --area-file-tile-figure (64 default); columns: figure + 2 × 24,
+                                                 filling the row; cells 2 apart
+  .area-list-box__item.area-file-grid__item   role=option, the plates: hover, selected, pressed, focus inset; tiles
+                                              start at the top of their row; data-drop-target
+    .area-file-tile                  padding 8, column, centred, gap 8; UI text (ui-size / ui-leading)
+      __figure                       square --_figure, one fixed grid cell (aria-hidden unless an image with figureAlt)
       __text
-        __name                       12 / xs leading, strong, two lines then ellipsis
-        __meta                       12, muted, one line
+        __name                       UI text, strong, two lines then ellipsis
+        __meta                       xs (text-xs size and leading), muted, tabular, one line
 ```
+
+## Decisions
+
+| Slot · property | Area value | Basis |
+|---|---|---|
+| figure | 64 (sm 48, lg 96, or any `--area-file-tile-figure`) | Finder iconSize 64; Folder's sizes |
+| name | the app's UI text (`ui-size` / `ui-leading`), `weight-strong`, two lines | coherence pass 2026-10-19 (Asset card's name); Figma 550, ChatGPT 500; ChatGPT `line-clamp-2` |
+| meta | `text-xs`, `fg-muted`, tabular, one line | coherence pass 2026-10-19 (Asset card's detail line) |
+| padding | 8 | Fluent Card small 8 |
+| figure → name | 8 | coherence pass 2026-10-19 (Asset card's caption, 8 under its frame) |
+| column | figure + 48 | pick |
+| bare glyph | 50% of the square, `fg-muted`, line `stroke-width` (non-scaling) | owner ("way too thick"); coherence pass 2026-10-19 (one weight with Folder and File page) |
+| image | contained, `radius-small`, the swatch ring, on `bg-subtle` | Asset row's preview; coherence pass (kept: it stands on the bare surface) |
+| paint | ListBox's grid plates; hover changes the plate only | PRODUCT_UI rules 2 and 11 |
+| row alignment | tiles start at the top of their row | owner: "arent correctly positioned" |
 
 ## Measurements
 
@@ -53,11 +69,14 @@ Excluded for now: the framed "card" layout (Figma, ChatGPT: edge, radius 13–16
 | glyph figure | 50%, line ≈ 1.5px | was 62.5% at the 24px drawing's scaled line (2.5px): owner, "way too thick"; use File page for files |
 | row alignment | tiles start at the top of their row | owner: "arent correctly positioned" (ListBox's grid centred them, so a one-line name sat lower) |
 
+The label, figure → name and glyph line rows are superseded by the coherence pass (2026-10-19); Decisions holds the
+current values.
+
 ## Keyboard and ARIA
 
 ListBox's (React Aria / APG listbox): Tab enters at the selected tile, arrows move by visual position, Home / End,
-typeahead on the name, Space selects; FileGrid adds Enter → `onOpen`, double click → `onOpen`. Images are decorative
-unless `figureAlt` is given (the name is the accessible text).
+typeahead on the name, Space selects; FileGrid adds Enter → `onOpen`, double click → `onOpen` (neither on a disabled
+tile). The figure is `aria-hidden` unless it is an image with `figureAlt` (the name is the accessible text).
 
 ## Open
 

@@ -1,6 +1,5 @@
 # Link spec
 
-**Status:** in review · 2026-10-08
 **Captures:** `docs/research/captures/link/`
 **Peers:** Alert link, Card action, Chip `link`, Code block line numbers (Area's existing underlines), Breadcrumb link (a hover plate, not an underline), Button (an action, not a destination), HoverCard (previews a link)
 
@@ -29,9 +28,12 @@ Breadcrumb link (a trail with a hover plate), not a Chip `link` (a labelled pill
 | ink | `inherit` (default) | The surrounding text's ink, at its size | ChatGPT (muted note), Notion (body ink) |
 | ink | `muted` | Secondary links (metadata, footers) | Primer `muted` |
 | ink | `action` | The Action role: neutral unless a theme makes actions the accent | Primer and GitHub's accent links, reached through Area's role rather than an accent tone (DESIGN_SYSTEM.md, "Emphasis roles") |
+| ink | `blue` | The link blue of product UI (`fg-info`); owner, review round 2 (2026-10-09) | ChatGPT settings links rgb(44, 103, 197), Figma's file browser rgb(0, 123, 229) |
+| ink | `purple`, `pink`, `green`, `red`, `orange`, `brown` | The readable text ink of each hue, the one Tag and Badge use; owner, 2026-10-17 ("Hued inks") | Wikipedia's visited #6a60b0 and missing-page #bf3c2c links |
 | composition | `external` | New tab, the external mark, announced | Primer's link-external icon convention; GitHub docs |
 
-Excluded: an accent `tone` (Area never offers one; `action` follows the theme), visited styling (no target
+Excluded: an accent `tone` (Area never offers one; `action` follows the theme, and a hue names a colour, not a
+status), visited styling (no target
 product shows one), a disabled link (a destination that can't be reached is text, not a link), a size axis
 (a link takes the text's size; Breadcrumb keeps none either), Notion's 70% text opacity (below).
 
@@ -64,7 +66,7 @@ Target products searched without an equivalent: **Figma** not searched (Open).
 ```
 chatgpt  span (12/16, muted)  > a  underline in the text's ink, offset 2
 notion   a.notion-link-token  > span  underline 0.05em at 40% warm grey, offset 10%, the span at 70% opacity
-area     a.area-link (inline)  underline: 1 stroke, offset 2, currentColor at 40%; hover/focus: currentColor
+area     a.area-link (inline)  underline: 1 stroke, offset 0.08em, currentColor (rest, hover and focus)
            span.area-link__icon (external)  12 square, `open` glyph, 4 after the text, centred on 1cap
 ```
 
@@ -98,7 +100,7 @@ Area's underline (computed): 1px, offset 2px, `oklab(0.277 0 0 / 0.4)` on rgb(40
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
 | link · type | inherited | ChatGPT, Notion | — |
-| link · ink | inherited (`inherit`), or `fg-muted`, or `fg-action` | ChatGPT and Notion inherit; Primer muted; Emphasis roles | — |
+| link · ink | inherited (`inherit`), or `fg-muted`, `fg-action`, `fg-info` (`blue`), or a hue's text ink (`fg-discovery`, `fg-pink`, `fg-success`, `fg-danger`, `fg-warning`, `fg-brown`) | ChatGPT and Notion inherit; Primer muted; Emphasis roles; owner 2026-10-09 (blue) and 2026-10-17 (hues) | — |
 | link · underline (inline) | always | ChatGPT, Notion agree | — |
 | underline · colour | `currentColor` (the link's own ink) | ChatGPT; owner, review round 2 (2026-10-09) | Notion 40% (Area's value until round 2) |
 | underline · thickness | 1 stroke (`stroke-width`) | Area's other underlines; ChatGPT auto ≈ 1px | Notion 0.05em (0.8 at 16) |
@@ -128,7 +130,7 @@ the browser's LinkText applies; nothing is painted that would hide it.
 
 | Peer | Shared role | Area value in peer | This component | Match / reason |
 |---|---|---|---|---|
-| Alert link, Card action, Chip `link`, Code block line link | underline | currentColor, 1 stroke, offset 2 | the same line at 40% at rest | Thickness and offset match; the colour follows Notion (open question 1) |
+| Alert link, Card action, Chip `link` and `link-icon`, Code block line numbers and toggle, Description list "Show more", Abbreviation | underline | currentColor, 1 stroke, offset 0.08em | the same line | Match ("Close underline, 2026-10-17") |
 | Breadcrumb link | link hover | hover plate | underline | Breadcrumb is a trail of controls; a link in text has no plate |
 | Button | — | an action | a destination | — |
 

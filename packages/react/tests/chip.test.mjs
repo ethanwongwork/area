@@ -64,3 +64,9 @@ test("keeps selection, disabled state, and the compact size family in the public
   assert.ok(MANIFESTS.chip.booleans.includes("link"));
   assert.ok(MANIFESTS.chip.booleans.includes("link-icon"));
 });
+
+test("ChipLink follows the pill setting like Chip: pill forces a pill, pill={false} the radius corner", () => {
+  assert.match(renderToString(h(ChipLink, { href: "#a", pill: false }, "A")), /area-chip--rounded/);
+  assert.match(renderToString(h(ChipLink, { href: "#a", pill: true }, "A")), /area-chip--pill/);
+  assert.doesNotMatch(renderToString(h(ChipLink, { href: "#a" }, "A")), /area-chip--(pill|rounded)/);
+});

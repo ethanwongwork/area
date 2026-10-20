@@ -2,7 +2,8 @@
 
 How Area moves, and how it stays crisp while it does. Motion in Area is quiet: it confirms what
 the person did and shows where something came from, then gets out of the way. Nothing bounces,
-nothing waits for an animation to finish, and every resting state lands on whole pixels.
+nothing waits for an animation to finish, and every resting state lands on whole pixels
+(scaled previews of a component are the one exception, under Crispness).
 
 Evidence: `docs/research/motion-2026-10-07/` (packages and practitioners; industry design systems
 and the target products; crispness and Area's state before this pass). Every value below cites
@@ -53,7 +54,7 @@ duration 0, so the curve no longer applies there.
 | `--area-ease-out` | `cubic-bezier(0.16, 1, 0.3, 1)` | almost everything: colour, enters, exits of anchored surfaces, marks (ChatGPT, Radix Themes) |
 | `--area-ease-in-out` | `cubic-bezier(0.65, 0, 0.35, 1)` | something moving across the screen while visible: switch thumb, tabs and segmented indicator, accordion height (Figma, Primer) |
 | `--area-ease-drawer` | `cubic-bezier(0.32, 0.72, 0, 1)` | surfaces sliding from a screen edge, both ways (Vaul) |
-| `--area-ease-in` | `cubic-bezier(0.4, 0, 1, 1)` | rarely: a full-screen surface leaving for good |
+| `--area-ease-in` | `cubic-bezier(0.4, 0, 1, 1)` | rarely: a full-screen surface leaving for good, and a lift fading out |
 | `--area-ease-linear` | `linear` | spinners, progress, shimmer |
 | `--area-ease-spring` | deprecated | never; an overshoot reads as play, not as Area |
 
@@ -81,7 +82,7 @@ duration 0, so the curve no longer applies there.
 | Toast | `slow` ease-out | `base` ease-out | `opacity` + `translate` 8–16px from the toaster's edge | stack reflow on `base` ease-in-out |
 | Folder open (drop target, `open`) | `base` ease-in-out | `fast` ease-in-out | the pocket's `d` (it tips forward: top 88 → 152, flaring 16 past each side) and the sheet's `translate` | shape moving while visible, so ease-in-out; nothing in a File tile moves on hover (PRODUCT_UI rule 2); docs/specs/folder.md |
 | Accordion body | `slow` ease-in-out | `moderate` ease-in-out | `block-size` via `interpolate-size: allow-keywords` + `opacity` | progressive enhancement; without support it snaps |
-| Spinner | 0.6–1s per turn, linear | — | `rotate` | stops under reduced motion |
+| Spinner | 1s per turn, linear | — | `rotate` | stops at Motion 0 and under reduced motion |
 | Skeleton shimmer, pulse | linear, long | — | `background-position` / `opacity` | stops under reduced motion |
 | Theme / density change | instant | instant | — | never animate a theme switch: the app sets `data-area-switching` (base.css) on the scope it repaints for one frame, so token-built colour transitions jump (the desktop app does it for Light / Dark and every Canvas setting, hover previews included) |
 
@@ -107,7 +108,7 @@ an edge stays put at a fractional scale (browser zoom included):
    `will-change` on a resting element; it freezes the layer at its first raster.
 3. Borders and rings: `border`/`outline` snap to device pixels, `box-shadow` does not. Draw a
    1px edge with `border` or `outline`, and halos (focus) with `box-shadow` only when they are soft.
-4. Icons: draw at their native size (`Glyph size={12|16|20|24}`, Fluent cuts at their size); never
+4. Icons: draw at their native size (`Glyph size={12|16|20|24}`, with its 12px and 10px cuts); never
    shrink a 16 drawing to 12 with CSS.
 5. Geometry that halves an odd number (a 5px dot in a 16 box) lands on half pixels: choose even/odd
    pairs that centre exactly.

@@ -1,6 +1,5 @@
 # Link groups spec (was Navbox)
 
-**Status:** built, in review · 2026-10-17
 **Captures:** computed-style readouts below (Wikipedia, en.wikipedia.org/wiki/Lisa_Su)
 **Peers:** Card, Inline list, Table, Accordion
 
@@ -11,7 +10,7 @@
 
 ## Job and boundaries
 
-Groups links to related pages under one title at the foot of an article, collapsible. Not site navigation (Nav) and not a data Table.
+Groups related links under small headings, in columns, at the foot of a page, with an optional title over the groups. Unframed and always open (fold a long block with Accordion if needed). Not site navigation (Nav) and not a data Table.
 
 ## Sources
 
@@ -25,7 +24,7 @@ caption) were not measured this round.
 
 ## Measurements
 
-Wikipedia, computed:
+Wikipedia, computed (evidence only; Area's current values are in Decisions):
 
 | Part | Value |
 |---|---|
@@ -37,11 +36,12 @@ Wikipedia, computed:
 
 | Slot · property | Area value | Basis | Reason when it differs |
 |---|---|---|---|
-| box | Card's paint (surface, `border-card`, container corner, resting shadow); small text | Wikipedia's box | Card's paint |
-| title band | the control fill, title strong and centred, Button ghost sm "Hide" / "Show" at the end (`aria-expanded`) | Wikipedia | neutral paint |
-| groups | name strong, end-aligned, on the control fill, 6 / 12; lists 6 / 12; rows divided by `border-divider` at stroke width | Wikipedia | dividers instead of 2px white gaps |
-| stripes | every other list on `bg-stripe` | Wikipedia | — |
-| collapsed | the body `hidden` | Wikipedia's mw-collapsible | — |
+| block | a `nav`, unframed, UI text (`ui-size` / `ui-leading`); title, headings and links share one start edge | round 34–35 (Vercel, Linear, Apple, MDN, Docusaurus) | Wikipedia's frame, title band, label column, stripes and Hide / Show dropped in round 34 |
+| title | optional; surface title (`title-xs`), strong, default ink, an `h2` (`level` 2–6), 12 above the groups; names the `nav` | Card, Dialog, Infobox title (round 35) | — |
+| groups | an auto grid, columns at least 10em, 24 apart both ways | Vercel gap-6 (round 34) | — |
+| group heading | UI text, strong, default ink, 8 above its links; labels its list | Linear 13 / 510, Vercel 14 / 500 (round 35) | — |
+| links | one per row, 4 apart; Link `standalone`, muted (underlined on hover) | Linear tertiary, Vercel gray-900 (round 35) | — |
+| `divided` | a `stroke-width` rule in `border-divider` above, 16 over the content | MDN, GOV.UK (round 34) | — |
 
 ## Verification
 

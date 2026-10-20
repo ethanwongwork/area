@@ -1,6 +1,5 @@
 # Type ramp spec (proposal)
 
-**Status:** applied · 2026-09-25 (owner-approved). Tokens in `typography.ts` and `density.ts`.
 **Owner direction:** lighter weights, with no semibold or heavier titles in UI. Use as few
 sizes, weights and foreground colors as possible, and let a single variable carry each
 distinction.

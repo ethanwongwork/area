@@ -1,6 +1,5 @@
 # Password field spec
 
-**Status:** accepted · 2026-10-13 (owner, review round 24)
 **Captures:** `docs/research/captures/password-field/`
 **Research:** [design-system sources](../research/compass-components-2026-10-13/password-field.md) (pinned commits, cited lines)
 **Peers:** Input (the shell, sizes, variants, focus, InputAction), Search field (the other Input wrapper with an end

@@ -1,6 +1,5 @@
 # Code spec
 
-**Status:** complete · 2026-10-12 (approved, round 16); was: in review · 2026-10-12 (swatch ring); was: accepted · 2026-09-26 (spec written in the cohesion audit; accepted earlier; subtle-ground fix since)
 **Captures:** `docs/research/captures/code/`
 **Peers:** Kbd (keycap in the same table cell), Token (deprecated: use `<Code swatch>`, audit H-25),
 Code block (block form), Badge (compact label on a fill)

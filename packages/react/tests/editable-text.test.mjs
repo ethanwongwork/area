@@ -35,3 +35,9 @@ test("a hint tooltip says how to edit and describes the text; disabled text has 
   assert.match(render(h(EditableText, { label: "Page title", defaultValue: "Plan", hint: "Double-click to edit the title" })), />Double-click to edit the title</);
   assert.doesNotMatch(render(h(EditableText, { label: "Layer name", defaultValue: "Header", disabled: true })), /role="tooltip"/);
 });
+
+test("the text, a role=button, opens on Space as well as Enter and F2", async () => {
+  const { readFileSync } = await import("node:fs");
+  const source = readFileSync(new URL("../src/components/EditableText.tsx", import.meta.url), "utf8");
+  assert.match(source, /event\.key === "Enter" \|\| event\.key === " " \|\| event\.key === "F2"/);
+});

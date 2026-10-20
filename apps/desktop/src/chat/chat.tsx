@@ -42,6 +42,16 @@ export const useChat = () => {
 };
 
 /** The app's one conversation, above every tab (src/studio.tsx). */
+/** When the turn before `index` ended: a person's message at its time; a reply at its prompt's time plus how long it
+ * ran (replies carry no clock of their own). Undefined for the first turn. */
+function lastActivity(turns: Turn[], index: number): number | undefined {
+  const previous = turns[index - 1];
+  if (!previous) return undefined;
+  if (previous.author === "user") return previous.at;
+  const prompt = turns.slice(0, index - 1).reverse().find(entry => entry.author === "user");
+  return prompt && prompt.author === "user" ? prompt.at + (previous.seconds ?? 0) * 1000 : undefined;
+}
+
 export function ChatProvider({ selection, children }: { selection?: string; children: ReactNode }) {
   const session = useChatSession();
   const [model, setModel] = useState(CHAT_MODELS[0]!.value);
@@ -226,10 +236,10 @@ export function ChatTranscript({ scroller }: { scroller: RefObject<HTMLElement |
       </div>
       <div className="studio-chat__transcript" aria-live="polite" aria-busy={session.running || undefined}>
         {session.turns.map((turn, index) => {
-          // Codex's rule: a time before a message that comes over an hour after the one before it, or before the first if
-          // it is over an hour old (not on every message: no product puts one there).
-          const previous = session.turns.slice(0, index).reverse().find(entry => entry.author === "user");
-          const stamp = turn.author === "user" && (previous?.author === "user" ? turn.at - previous.at > TIMESTAMP_GAP.user : Date.now() - turn.at > TIMESTAMP_GAP.user);
+          // A time before a person's message that comes over an hour after the conversation's last turn, either side's, or
+          // before the first message if it is over an hour old (TIMESTAMP_GAP; never on a reply, never on every message).
+          const before = lastActivity(session.turns, index);
+          const stamp = turn.author === "user" && (before === undefined ? Date.now() - turn.at > TIMESTAMP_GAP : turn.at - before > TIMESTAMP_GAP);
           return <Fragment key={turn.id}>
             {stamp && turn.author === "user" ? <Timestamp dateTime={new Date(turn.at)}>{formatTimestamp(new Date(turn.at))}</Timestamp> : null}
             <TurnView turn={turn} />

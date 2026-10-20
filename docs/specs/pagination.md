@@ -1,6 +1,5 @@
 # Pagination spec
 
-**Status:** in review · 2026-10-08
 **Captures:** `docs/research/captures/pagination/`
 **Peers:** Button (ghost, the steps), Segmented and Tabs (an option set: muted ink, selected ink and plate), Breadcrumb (page navigation, the ellipsis), Count (tabular numbers), Calendar (day buttons and the month steps)
 
@@ -151,10 +150,11 @@ pointer, ink fixed at rgb(102); the current page stays rgb(238).
 | page · type | 14/20 **500**, tabular numerals | Untitled 500, shadcn 500; Segmented one weight; Calendar and Count tabular | Primer 400 |
 | page · ink | `fg-muted`; current `fg-default` | Shared state paint, options in a set (Segmented, Tabs); Untitled quaternary / secondary | shadcn one ink |
 | page · hover | `bg-component-hover`, ink fixed, lands at once, fades out on fast | Shared state paint; MOTION.md hover plate | Untitled also darkens the ink; Area keeps it fixed |
+| page · pressed | `bg-component-pressed`, one step past selected (pagination.css:93) | Interaction polish 2026-10-16 (Notion 10%, ChatGPT 12%) | — |
 | page · current | `bg-component-active`, stays under the pointer; `aria-current="page"` | Shared state paint (current = active plate); Untitled (current = a plate) | shadcn outline, Primer accent fill |
 | list · gap | **2** | Untitled 2, shadcn 2 | Primer 4 |
 | step | ghost neutral Button at the tier, chevron in the icon slot, 6 gap, label "Previous" / "Next" | shadcn (ghost, 16 chevron 6 from the label, 14/20 500); peer Button | Untitled link-style steps at 600; Primer accent links |
-| step · end | `aria-disabled` + `data-disabled` (Button's 50%), stays focusable, no `href` | Button's loading pattern (audit S18) keeps focus | shadcn and Untitled drop to native disabled; focus would fall to the page body when Next reaches the last page |
+| step · end | `aria-disabled` + `data-disabled` (Button's 50%); a click does nothing. As a button it stays focusable; as a link (`getHref`) it loses its `href` and so leaves the tab order (Pagination.tsx:89-109) | Button's loading pattern (audit S18) keeps focus | shadcn and Untitled drop to native disabled; focus would fall to the page body when Next reaches the last page |
 | ellipsis | square, `more` glyph at the tier's icon size, `fg-muted`, hidden from assistive tech | shadcn (16px icon in the 32 square); Breadcrumb's muted ellipsis | Untitled and Primer draw "…" text, which sits on the baseline |
 | range | 1 boundary, 1 sibling, 7 items always (a one-page run shows the page) | Untitled and shadcn's examples show 7; Material UI's documented range | — |
 | compact · status | "Page 2 of 10", muted text, numbers `fg-default` 500, Button label inset | Untitled UI "Page 1 of 10" with medium numbers | — |
@@ -168,18 +168,19 @@ systems and Area's peers decide.
 | State | Slot · property changes | Evidence |
 |---|---|---|
 | page hover | plate `bg-component-hover` (rgb 243), ink fixed | `area--default--hover--light` |
-| page pressed | plate `bg-component-active` | shared state paint |
+| page pressed | plate `bg-component-pressed`, one step past selected | interaction polish 2026-10-16; pagination.css:93 |
 | current | plate `bg-component-active` (rgb 238), ink `fg-default` (rgb 40), no hover change | `area--default--rest--light` |
 | focus-visible | 2px `focus-color` outline at `focus-offset` (2), as Button | read on the harness with Tab |
-| step at an end | Button's disabled 50% via `data-disabled`; focus stays | `area--state-first--rest--light`; gallery: six Next presses end on 10 with focus on Next |
+| step at an end | Button's disabled 50% via `data-disabled`, `aria-disabled`. Buttons: focus stays on the step. Links (`getHref`): no `href`, so the step is not focusable | `area--state-first--rest--light`; gallery: six Next presses end on 10 with focus on Next (buttons); Pagination.tsx:107-109 |
 | forced colors | current page Highlight / HighlightText | as Calendar's selected day |
 
 ## Behavior and accessibility
 
-`nav` named "Pagination" (`labels.nav`), a list of items. Pages are `<button type="button">` named
+`nav` named "Pagination" (`aria-label`, else `labels.nav`), a list of items. Pages are `<button type="button">` named
 "Page n" (`labels.page`) with the number as text, or `<a href>` with `getHref`. The current page has
 `aria-current="page"`. Steps keep their label as text (or `area-sr-only` when chevrons only); with
-`getHref` they are links with `rel="prev"` / `rel="next"`. Tab order follows the row; no arrow-key
+`getHref` they are links with `rel="prev"` / `rel="next"`, and a step at an end is an `<a>` without
+`href`, out of the tab order, while a button step at an end keeps focus. Tab order follows the row; no arrow-key
 roving (none of the references has it). The compact status is `aria-live="polite"`, since focus stays
 on a step while the page changes. Chevrons mirror in RTL (`:dir(rtl)`). Controlled (`page`) or
 uncontrolled (`defaultPage`); a page outside 1…`pageCount` is clamped. `paginationRange` is exported

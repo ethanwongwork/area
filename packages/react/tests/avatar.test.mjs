@@ -51,3 +51,11 @@ test("AvatarGroup limits visible children and summarizes the remainder", () => {
   assert.match(html, /aria-label="2 more avatars"/);
   assert.match(html, />\+2</);
 });
+
+test("an image avatar must be described: alt, aria-label, aria-labelledby or aria-hidden", () => {
+  assert.throws(() => renderToString(h(Avatar, { src: "a.png" })), /Avatar: an image avatar needs alt/);
+  for (const props of [{ alt: "David Tee" }, { alt: "" }, { "aria-label": "David Tee" }, { "aria-labelledby": "name" }, { "aria-hidden": true }]) {
+    assert.doesNotThrow(() => renderToString(h(Avatar, { src: "a.png", ...props })));
+  }
+  assert.doesNotThrow(() => renderToString(h(Avatar, { fallback: "D" })));
+});

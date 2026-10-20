@@ -9,7 +9,7 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
 ## Rules
 
 1. **States land at once and leave on `fast`.** Hover, press, selection and focus appear
-   instantly; only the leave fades (`--area-transition`, 100ms ease-out). No scale on press, no
+   instantly; only the leave fades (`--area-transition`: `duration-fast`, 140ms at the default Motion, ease-out). No scale on press, no
    movement on hover, no animated theme or density change.
 2. **Hover and press change one thing: the plate, the edge or the lift.** Ink, size and position never
    move. Rows change their plate; cards and tiles lift (owner, 2026-10-18: no edge change, a soft shadow that fades in,
@@ -62,68 +62,104 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
 13. **App CSS styles only app classes.** When a product needs a component to do something it
     cannot, fix the component (with a spec note) or record a gap; never override `.area-*`.
 14. **The Canvas's header sets how things are shown; the Inspector, what is chosen** (owner,
-    2026-10-12; 2026-10-14: no titles, as Framer and Figma, but a header, not a floating toolbar).
-    - No title over the Canvas or the Inspector: the Sidebar's selected row names what the Canvas
-      shows. The Canvas header's controls, the Sidebar's first row and the Inspector's first
-      heading share one line, every region 14 in on all sides. A bar's controls are evenly inset
-      instead (owner, 2026-10-18: "these controls are not evenly inset, theres too much space horizontally"): the
-      Titlebar's, the Canvas header's and the Inspector's view pills sit as far from the side as from the top and the
-      rule, 7 at the app's scale, 24 tall (Figma's panel tabs: 8 and 8).
-    - The header, at its end, in this order: filters, Sort and group, how things are drawn (zoom,
-      style, size), and the grid / list switch. Zoom is Zoom control's stepper (− Auto +, plates 2 apart): Auto, the default, shows
-      specimens by size group, each group at most at one scale and never above 100% (by painted area: a control 90%,
-      a field or small list 85%, a few rows or a dialog 80%, the largest, Code block, Board, Color picker, Command
-      palette, Panel, 75%), shrunk further only to fit; Fit shows each specimen as large as its card allows, up to 200%;
-      then 50, 75, 80, 90, 100, 110, 125, 150, 175 and 200% exactly, tiles growing with the zoom. − and + step through
-      the percentages, from 100% when on Auto or Fit; the menu lists Auto, Fit and the percentages, nothing else
-      (owner, 2026-10-14; 2026-10-18).
-    - Components' All shows one tile per family, its default specimen; a family's variants are its
-      own Canvas. Specimens sit in square cards at least 360 wide (owner, 2026-10-18), after Compass's gallery: the specimen 24 in, the
-      title (the app's text, strong) and a Copy code button at the frame's top, cards 12 apart. Every tab's tiles are
-      Asset cards, always square, the name, a value and controls in the frame's first row (owner, 2026-10-19, a trial;
-      under the frame 2026-10-18, when the Compact hairline contact sheet went). Language lists the Inspector's own
-      settings (src/gallery/controls.ts), its cards at least 200 wide, each setting one real component with real text,
-      the one thing it changes (src/abstract.tsx; owner, 2026-10-19: "simple, and easy to recognize"), at its default
-      size, scaled down (never up, at most 0.8x) to a share of the card, one scale for every preset of a setting so they compare;
-      Type is the ramp of roles with their sizes; Ground and Layers are windows whose card frame stays put. The page previews
-      one theme, Light by default, with a Light / Dark switch in the Canvas bar; every setting follows it, and the
-      per-theme settings (ground, layers) show the previewed theme's own. A
-      click on an All card opens its family's Stage (owner, 2026-10-14). A family's page is Area Tabs (owner,
-      2026-10-18, `src/family-tabs.tsx`): Overview (the Stage, its code as a separate Code block under the frame, then
-      the tiles), Documentation, API, Code and Spec. Information is tables wherever it can be (facts, props, classes,
-      states, keys, ARIA, a spec's tables and its dated lists); prose stays prose only where it has no rows. Properties
-      stay in the Inspector, on Overview only. A control that does not apply to the current view
-      is left out; the order of the rest never changes. Fields in the app's chrome and Inspector
-      are `soft` (filled), a set is a multi-select Custom select, and dropdown windows hug their
-      rows (`--area-menu-min-inline-size`).
-    - The Inspector, without a title, in three views chosen by pills in its bar (owner, 2026-10-18: "a figma style
-      panel based on dev mode and the standard design panel … separate the current inspector to themes, design, and
-      code"; `src/studio.tsx`, InspectorPanel): **Language** (Theme until 2026-10-19: the tab and the Inspector use one
-      word), **Design**, **Code**, the Titlebar's Nav pills (Figma's
-      Design | Prototype), the bar on the line the Canvas header shares. The chosen view holds across tabs and
-      launches; a tab with nothing for a view leaves its pill out (Brand and the Materials lab have no Code). A fourth,
-      **Chat**, is the app's rather than a tab's, so every tab offers it (`src/chat/chat.tsx`; owner, 2026-10-18): its
-      transcript is the Panel's body, followed to the newest line while the reader is at the end, and its composer the
-      Panel's footer with no rule above it; ⌘L opens it and focuses the composer, Esc stops a reply. Its head holds the
-      conversation's title and New chat (the bar has no room beside four pills at 256).
-      - Language: the Canvas settings under the registry's headings (`SETTING_GROUPS`: Color; Size: type, density;
-        Shape: radius, pills; Stroke; Shadow; Effects; then Material), only those that change this tab's specimens.
-      - Design: what is chosen, at its narrowest: a Canvas item, else the Sidebar's row, else the tab's overview. The
-        tab's own display settings first (Display: Typography's sample text), then a component's Properties, then the
-        chosen thing's preview (unless the Canvas already shows it at size) and its actions, then one flush facts Table:
-        what it is and its values, status, purpose, source.
-      - Code: how to use it, as Dev Mode: copy actions two to a row, then the import and the code in code wells (Code
-        block `sm`, lines scrolling sideways), then facts Tables for how to reach it (name, token, class and its
-        modifiers, attribute). A component on the Stage also gets its measured box (Box model, as Dev Mode's Layer
-        properties) and its computed paint (type, ink, fill, edge, shadow, colours as hex), re-measured when a setting
-        changes (`src/specimen-box.tsx`).
-    - Nothing is chosen until the person chooses it: a tab opens on its overview, and the
-      choice clears when the Sidebar's row changes.
+    2026-10-12 and 2026-10-14). The layout that follows from it is below.
+15. **Nothing is chosen until the person chooses it.** A tab opens on its overview, and the
+    choice clears when the Sidebar's row changes.
+16. **A control that does not apply to the current view is left out**; the order of the rest
+    never changes. Fields in the app's chrome and Inspector are `soft`, a set is a
+    multi-select Custom select, and dropdowns hug their rows (`--area-menu-min-inline-size`).
+17. **Information is tables wherever it can be**: facts, props, classes, states, keys, ARIA
+    and a spec's tables and dated lists. Prose stays prose only where it has no rows.
+
+## The app's layout
+
+How rules 11–17 lay out the app's regions (`apps/desktop/src`). Values are at the app's
+scale (type 13, Compact).
+
+**Shared line and insets.**
+
+- There is no title over the Canvas or the Inspector; the Sidebar's selected row names what
+  the Canvas shows.
+- The Canvas header's controls, the Sidebar's first row and the Inspector's first heading
+  share one line. Every region is 14 in on all sides.
+- A bar's controls sit as far from the side as from the top and the rule: 7, 24 tall
+  (owner, 2026-10-18; Figma's panel tabs: 8 and 8).
+
+**Canvas header**, at its end, in this order:
+
+1. filters;
+2. Sort and group (rule 7);
+3. how things are drawn (zoom, style, size);
+4. the grid / list switch.
+
+Zoom is Zoom control's stepper (− Auto +):
+
+- **Auto** (the default) shows specimens by size group, each group at one scale and never
+  above 100%. By painted area: a control 90%, a field or small list 85%, a few rows or a
+  dialog 80%, the largest 75%. A group is shrunk further only to fit.
+- **Fit** shows each specimen as large as its card allows, up to 200%.
+- **Exact steps** are 50, 75, 80, 90, 100, 110, 125, 150, 175 and 200%. − and + step through
+  them, starting from 100% on Auto or Fit. The menu lists Auto, Fit and these, nothing else.
+
+**Components tab.**
+
+- All shows one card per family, its default specimen; a click opens the family.
+- Specimens sit in square cards at least 360 wide, 12 apart, the specimen 24 in. The title
+  and a Copy code button sit at the frame's top.
+- Every tab's tiles are Asset cards, always square, with the name, a value and controls in
+  the frame's first row (owner, 2026-10-19, a trial).
+- A family's page is Area Tabs (`src/family-tabs.tsx`):
+  - **Overview**: the Stage, its code, then the tiles;
+  - **Documentation**: usage, from `content/documentation/` and the spec;
+  - **API**: props from JSDoc, classes, parts, states and CSS properties;
+  - **Code**: React source, stylesheet, manifest and every demo;
+  - **Spec**: the family's spec.
+
+  Properties stay in the Inspector, on Overview only.
+
+**Language tab.**
+
+- It lists the Inspector's own settings (`src/gallery/controls.ts`) in cards at least 200
+  wide.
+- Each card shows one real component with real text, showing the one thing the setting
+  changes (`src/abstract.tsx`; owner, 2026-10-19: "simple, and easy to recognize").
+- Previews are at default size, scaled down (never up, at most 0.8×), with one scale for
+  every preset of a setting so they compare.
+- Type is the ramp of roles with their sizes. Ground and Layers are windows whose card frame
+  stays put.
+- The page previews one theme, Light by default, with a Light / Dark switch in the Canvas
+  bar. Per-theme settings show the previewed theme's own value.
+
+**Inspector.** Views are chosen by pills in its bar (`src/studio.tsx`, InspectorPanel). The
+chosen view holds across tabs and launches. A tab with nothing for a view leaves that pill
+out.
+
+- **Language** (Theme until 2026-10-19, so the tab and the Inspector use one word): the
+  Canvas settings under the registry's headings (`SETTING_GROUPS`: Color, Size, Shape,
+  Stroke, Shadow, Effects, then Material), only those that change this tab's specimens.
+- **Design**: what is chosen, at its narrowest: a Canvas item, else the Sidebar's row, else
+  the tab's overview. It shows, in order:
+  1. the tab's display settings;
+  2. a component's Properties;
+  3. the preview, unless the Canvas already shows it at size;
+  4. actions;
+  5. one flush facts Table.
+- **Code**: how to use it, as Figma's Dev Mode shows it. It holds:
+  - copy actions;
+  - the import and the code in Code block `sm` wells;
+  - facts tables (name, token, class, modifiers, attribute);
+  - for a component on the Stage, its measured box (Box model) and computed paint,
+    re-measured when a setting changes (`src/specimen-box.tsx`).
+- **Chat** belongs to the app rather than a tab, so every tab offers it (`src/chat/`).
+  - The transcript is the Panel's body, followed to the newest line while the reader is at
+    the end.
+  - The composer is the Panel's footer.
+  - ⌘L opens Chat and focuses the composer; Esc stops a reply.
 
 ## Open component gaps
 
-Recorded, not yet built (each needs its own component pass). From the app audit of 2026-10-12:
+Recorded, not yet built; each needs its own component pass ([Governance](GOVERNANCE.md#1-decide-what-kind-of-change-it-is)).
 
-None open: all built 2026-10-15 (Copy button, List box, Hover card `openOnFocus`, Table cells, Badge `onColor`,
+None open: the 2026-10-12 audit's gaps were all built on 2026-10-15 (Copy button, List box, Hover card `openOnFocus`, Table cells, Badge `onColor`,
 Nav `revealActions`, Context menu `itemSelector`, Card selected, Titlebar and Section heading). Record new ones here.
 

@@ -1,6 +1,5 @@
 # Plan spec
 
-**Status:** built · in review · 2026-10-18
 **Captures:** none yet; evidence in `docs/research/inspector-chat-2026-10-18/`.
 **Peers:** Stepper (a process the person moves through), Spinner, Checkbox (the drawn box), Step
 

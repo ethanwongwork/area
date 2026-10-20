@@ -1,6 +1,5 @@
 # Overlay behavior spec
 
-**Status:** accepted (owner; Popover, Tooltip and Hover card Complete in `component-status.mjs`; was: in review · 2026-09-27)
 **Captures:** `docs/research/captures/overlay/`
 **Peers:** Popover, Menu and Tooltip (the surfaces this behavior drives; their specs own the
 paint), BadgeGroup overflow (the first native popover), Select (native picker), Dialog

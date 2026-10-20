@@ -1,7 +1,5 @@
 # Tabs spec
 
-**Status:** accepted · 2026-09-26 (spec written in the cohesion audit; accepted earlier;
-second-pass evidence added)
 **Captures:** `docs/research/captures/tabs/`
 **Peers:** Segmented (picks a value; filled), Nav (current marker, horizontal routes), Code
 block language tabs, Badge (counts)
@@ -14,7 +12,7 @@ block language tabs, Badge (counts)
   divider. Tab gallery tiles show icons, counts and disabled state independently. Vertical
   orientation remains useful for settings views and uses the corresponding vertical
   keyboard navigation. Reference: [WAI-ARIA Tabs](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/).
-- 2026-09-26: Neutral by default, accent by override ([design system](../DESIGN_SYSTEM.md#color-and-focus)).
+- 2026-09-26: Neutral by default, accent by override ([design system](../DESIGN_SYSTEM.md#colour)).
   Tabs already followed it: the indicator is `fg-default`; there is no accent option.
   *Since 2026-09-29 (owner, D1) the indicator is the Selection role, `fg-selection`
   (navigation.css:91-101): `fg-default` by default, the accent when a theme sets selection to

@@ -1,6 +1,5 @@
 # Queue spec
 
-**Status:** built · in review · 2026-10-19
 **Captures:** none live. Evidence: `docs/research/inspector-chat-2026-10-18/composer-additions.md`, section D.
 **Peers:** Plan and Edit summary (the agent card), Menu (rows), Composer (`onQueue`)
 
@@ -23,8 +22,8 @@ and reordering by drag need the engine (Phase 3) and are not built.
 |---|---|---|
 | card | the agent card: Code block's frame, text-sm, one-row head with a rule when open, Menu rows | Plan, Edit summary (peers); Cursor tray rows 13/18, radius 6 |
 | head | "N queued" in the muted ink, a chevron; folds | Cursor "N Queued", tone muted |
-| actions | Send now (ghost sm) and Remove (icon), over the row's end on hover; always on a failed row and on touch | Cursor hover actions; Codex Steer + Delete |
-| paused | after the person stops a run the queue waits ("N queued, paused") until the next send | Codex "Queue paused because you interrupted" |
+| actions | Send now (ghost sm) and Remove (icon), over the row's end on hover or focus; always on a failed row (Retry in place of Send now) and on touch | Cursor hover actions; Codex Steer + Delete |
+| paused | not a prop or state of Queue: the app passes `title` ("N queued, paused") after the person stops a run, until the next send (`apps/desktop/src/chat/chat.tsx`, `session.queuePaused`) | Codex "Queue paused because you interrupted" |
 
 ## Feedback log
 

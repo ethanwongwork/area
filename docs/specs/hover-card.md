@@ -1,6 +1,5 @@
 # Hover card spec
 
-**Status:** accepted · 2026-09-28 (batch 17; was: in review · 2026-09-26)
 **Captures:** timing measured live (below); no capture file (GitHub is a design-system reference, not a target product)
 **Peers:** Popover (surface, anchoring, slots), Tooltip (a label, not a preview), Avatar
 

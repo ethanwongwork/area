@@ -1,153 +1,125 @@
 # Theming
 
-Customize the whole library through shared settings, then use semantic/component tokens
-for specific roles. Components do not need separate light/dark variants.
+Customize the whole library through shared settings, then semantic and component tokens
+for specific roles. Components have no light, dark, compact or brand variants: a setting
+on any ancestor changes every component inside it. The rules every setting follows are in
+[Design system › Settings](DESIGN_SYSTEM.md#settings); how the build emits them is in
+[Architecture](ARCHITECTURE.md#tokens-packagestokens).
 
-## Shared settings
+## Settings
 
-Names and headings (owner, 2026-10-19: "i want the axises to be the source of truth"): `SETTING_GROUPS` in
-`axes/registry.ts` places every axis and the two scoped settings (Contrast, Pills) under one heading (Color, Size, Shape,
-Stroke, Shadow, Effects) in order; each axis's `label` is its whole name (Mode, Type size, Stroke width, Stroke strength,
-Floating shadow, Resting shadow, Field shadow, Shadow size, Shadow softness, Shadow light, Shadow colour), and under its
-heading the heading's word is dropped (`settingLabel`: Width, Strength, Floating …). The app's Inspector and its
-Language tab both read them from `@area/tokens/config`.
+Each is `data-area-<id>` on any element (in React, a `Theme` value). Missing settings
+inherit; an explicit setting starts a local scope. The registry
+(`packages/tokens/src/axes/registry.ts`) defines 24 axes. Most are one number named after
+what it measures.
 
-The registry in `packages/tokens/src/axes/registry.ts` defines twenty-four axes (seven Edge and Depth controls beside
-Surface and Elevation since 2026-10-18):
+The registry is also the source of every setting's name and place (owner, 2026-10-19: "i want the axises to be the
+source of truth"). `SETTING_GROUPS` puts each axis and the two scoped settings (Contrast, Pills) under one heading
+(Color, Size, Shape, Stroke, Shadow, Effects) in order; each axis's `label` is its whole name (Mode, Stroke width,
+Floating shadow …), and `settingLabel` drops the heading's word under its heading (Width, Floating …). The app's
+Inspector and Language tab both read them from `@area/tokens/config`.
 
-- `theme`: light or dark color polarity.
-- `neutral`: neutral, cool or warm neutral colors.
-- `accent`: configurable chromatic accent; blue is the default (owner, 2026-09-29; was indigo). The focus ring follows it.
-- `ground-light`, `ground-dark`, `layers-light` and `layers-dark` (the Layers, `axes/layers.ts` and `color/layers.ts`, owner 2026-10-16;
-  [research](research/layers-2026-10-16/README.md)):
-  - `ground-light` is the light page's OKLCH lightness: `100` (White, default) to `90`, in 1% steps.
-  - `ground-dark` is the dark page's: `0` (Black), `8` (Default, #020202), then `12` to `24` in 2% steps.
-  - `layers-light` and `layers-dark` are layer contrast in each theme, `0` (Flat) to `8`, `4` by default. They set how
-    far raised layers (cards, menus, dialogs) and recessed ones (sidebars, wells) sit from the page, and how far a
-    control's fill sits from its ground. One `layers` setting covered both until 2026-10-17 (owner: "the most possible
-    customization"); the app restores a saved one as both.
+**Colour**
 
-  `emit/base.ts` derives, live and tinted by the Neutral setting's own hue and chroma:
-  - `bg-page`, `bg-surface`, `bg-subtle`, `bg-stripe` and `bg-code`;
-  - the control fills on each ground: `bg-component*`, `-raised*` and `-recessed*`, and the Selection role on the
-    raised and recessed grounds;
-  - the edges: `border-*`, `border-card`;
-  - the inks: `fg-default`, `fg-muted`, `fg-placeholder`, `stroke-control*`.
+| Setting | Values (default) | What it sets |
+|---|---|---|
+| `theme` | `light` (default), `dark` | Colour polarity and `color-scheme`, including native controls |
+| `neutral` | `neutral` (default), `cool`, `warm` | The grey cast of every neutral role |
+| `accent` | 11 hues, `blue` (default) | The chosen colour. The focus ring and `stroke-selected` follow it |
+| `action` | `neutral` (default), `accent` | Whether committing actions (solid Buttons) paint the accent |
+| `selection` | `neutral` (default), `accent` | Whether state marks (checked, on, selected, current, filled) paint the accent |
+| `ground-light` | `100` (White, default) … `90` | The light page's OKLCH lightness, in 1% steps |
+| `ground-dark` | `0` (Black), `8` (default, #020202), `12` … `24` | The dark page's lightness |
+| `layers-light`, `layers-dark` | `0` (Flat) … `8`, `4` (default) | How far raised layers (cards, menus) and recessed ones (sidebars, wells) sit from the page, and control fills from their ground |
 
-  Muted text and control edges keep today's colour wherever it passes, and darken (or lighten) just enough to hold
-  4.5:1 and 3:1. Surfaces that paint a raised layer point the control tokens at their own ground (styles
-  `layers.css`); a product marks its own regions with `data-area-ground="raised" | "recessed"`. Light 100 + 4 is the
-  light theme as it was; dark 8 + 4 keeps the near-black page with closer layers (cards #121212, sidebars #0b0b0b).
-- `action`: neutral or accent, the colour of committing actions (solid Buttons). Neutral is the default.
-- `selection`: neutral or accent, the colour of state (checked, on, selected, current, filled). Neutral is the default.
-- `type`: the base interface text size, `12` to `16` (default `14`; [research](research/ui-size-scale-2026-10-12.md), owner 2026-10-12). One number sets every type role: UI text at the base, small text two under it (never under 10), reading text and surface titles two over it, small-text tracking, the icon stroke, the check box and toggle (4 inside the UI line; a toggle 4 taller) and icons (the 20 cut at 16). It also bounds density: Compact up to 14, Comfortable from 13.
-- `density`: `28` (Compact), `32` (default) or `36` (Comfortable), the room around text, named by the medium Button's height at type 14 (one number since 2026-10-14, [research](research/density-2026-10-14.md); was `compact` / `default` / `comfortable`). `emit/base.ts` derives every control height (`control-*`: the tier's text line plus 2 x its room, never under 24; Default at type 14 gives 24 / 28 / 32 / 40 / 48), rows (`ui-row`), icon gaps (`gap-*`, `gap-row`), layout steps (`ui-stack`, `ui-cluster`), surface insets (`inset-surface-sm/md`) and the text-label marks (`mark-label-*`) from the level and the type size. Spacing keeps each level's ratio of space to type as a step in halves, published as `ui-dense` (1 at Compact 12, 0 at Default 14, negative above), which component insets are written against. Static marks `mark-sm/md/lg` (16 / 20 / 24: Presence, ColorSwatch, the Indicator count) hold. Control side padding has no token: inset.css derives it from the height (owner 2026-10-02). Surface corners cap at 1.5 x the surface inset, so compact surfaces stay shallow at the roundest radius settings.
-- `ui` (shorthand, not an axis): `compact` is type 12 with density 28, `default` type 14 with 32; an explicit `type` or `density` wins. Corners stay a cross-axis derivation: the radius axis publishes a corner per pixel of height, the type and density the heights, and `emit/base.ts` derives `radius-control-*`, `radius-small` and `radius-row` from them ([compact pass](research/compact-pass-2026-10-01.md)).
-- `radius`: one corner setting, `0` (Sharp), `2`, `4`, `6`, `8` (default), `10`, `12`, `14` or
-  `pill`: one number, the medium Button's corner, that everything scales off (owner, 2026-10-03; replaces the named families and
-  the roundness offset). Owns `radius-factor` (corner per pixel of height: setting ÷ 32, 0.5 at
-  Pill), `radius-min` (2, 0 at Sharp), `radius-surface` (0, 2, 4, 8, 12, 16, 20, 24, 24) and
-  `radius-concentric` (0 at Sharp). `emit/base.ts` derives `radius-control-*` from the control
-  heights, `radius-row`, `radius-small`, `radius-container`, `radius-step`, `radius-floor`
-  (min(4, setting)), and `radius-list-row` / `radius-list` for floating lists (rows no rounder
-  than a medium Button and a pill only at Pill; the list is rows + 4). See `docs/research/radius-audit-2026-10-03.md` and `roundness.html`.
-- `data-area-pills` (not an axis: a set, `axes/pills.ts`): the components that draw a pill instead
-  of the radius corner, as a space-separated list on any element (`Theme pills={[...]}` in React).
-  Shapes: `button`, `field`, `segmented`, `chip`, `badge`, `count`, `switch`, `avatar`. No attribute:
-  chip, badge, count, switch and avatar are pills. A scope with the attribute lists exactly its
-  pills (`""` makes every one follow the radius). Each sets `--area-pill-<id>` (0 / 1), which the
-  component adds as `flag × radius-full`, so concentric parts follow. Instance props override it
-  (`pill`, Avatar's `shape`).
-- `surface`, **Stroke width** (main, 2026-10-19): the line round cards, panels and floating surfaces, `0` (Flat) / `0.5` /
-  `1` (Default) / `1.5` / `2` px (`axes/surface.ts`, 2026-10-14; was `outlined` / `borderless`, then 0 or 1, where 0
-  drew the soft edge). `shadow-rest`, **Rest shadow** (main, 2026-10-19): a subtle shadow round the same surfaces, `0`
-  (None, Default) to `8`, with the line or instead of it; it sets `shadow-edge`, which every framed surface lists first
-  in its `box-shadow`. Not their lift: that is Resting lift (below) and `elevation`. Sets `frame-width`; components read
-  `border-width`, derived as the frame or 1px under increased contrast (owner, 2026-10-15), so More or Medium contrast
-  brings the frame back at 0. `shadow-edge-filter` is the same edge as a drop-shadow, for the Popover arrow. Required
-  edges (`stroke-width`) and focus stay. A half pixel is one device pixel on a 2x screen; on a 1x screen Chromium draws
-  it as one pixel and the insets that count it sit half a pixel off.
-- `elevation` (**Floating shadow**; Floating under Shadow): one number, `0` (Flat) to `8`, `3` by default: the Menu's shadow strength in
-  percent, as `radius` is the medium Button's corner (`axes/elevation.ts`, owner 2026-10-14;
-  [research](research/elevation-2026-10-14.md)). It writes the number alone (`--area-elevation`) and sets the floating
-  roles, `shadow-tooltip`, `shadow-float` (everything over the page), `shadow-modal` (Dialog, Drawer, Command palette)
-  and `shadow-lift` (a linked Card or a gallery tile under the pointer: Fluent's shadow8 at half the Menu's strength,
-  main 2026-10-19). `axes/depth.ts` derives every role; `shadow-control` (raised thumbs and plates) and `shadow-resting`
-  (Card, Panel, Board card, Composer) read Resting lift and `shadow-field` (fields, select triggers, outline and soft
-  buttons) Field shadow. At the defaults each is Fluent 2's two layers exactly (key `n × weight` %, ambient half, dark
-  doubled). The ladder `shadow-1`…`4` (control, resting, float, modal) is for apps. Every role is the same nine slots
-  at every setting (a lip, the dark rim, six soft layers, a highlight), transparent where unused, never `none`, so a role stays valid
-  inside a component's own shadow list and every change interpolates.
-- The other Edge and Depth controls (`axes/depth.ts`, owner 2026-10-18: "i dont want any prepackaged, named themes, i
-  want to be able to control the individual controls as much as possible, but i think the previous system was too
-  bloated"; [research](research/elevation-stroke-2026-10-18/README.md)). Each is one number or name with one effect, set
-  on its own; there are no named looks:
-  - `stroke`: how dark every stroke is, its distance from its ground, `0` (None) to `8`, `4` by default (today's);
-    `color/layers.ts` `strokeEdge` scales each edge's offset. Contrast moves strokes on toward 3:1 from there.
-  - `shadow-resting`, **Resting shadow** (Resting lift until 2026-10-19): cards, panels and raised thumbs at rest, `0` to `8`, `3` by default, in % as
-    Floating (was `shadow-rest` until main's Rest shadow took the name, 2026-10-19).
-  - `shadow-field`: fields, select triggers, outline and soft buttons, `0` (Default) to `8`. Soft fields stay flat.
-  - `shadow-size`: how far every shadow reaches (offset and blur × n/4), `0` to `8`, `4` by default.
-  - `shadow-softness`: `0` (Crisp, one layer) to `8` (Smooth, six eased layers held under the surface by a negative
-    spread); `2` (Default) is Fluent's ambient + key pair.
-  - `shadow-light`: light from the top, `0` (Flat) to `4`: a `0 1px 0` lip under each lifted edge (3 / 5 / 8 / 14%) and
-    an `inset 0 1px 0` white highlight inside its top.
-  - `shadow-color`: `black` (Default), `warm` or `cool`, the light theme's shadow; dark stays black.
+The action and selection settings combine:
 
-  Fixed: light from the top, and dark shadows at twice the light alpha. `DEPTH_LEVERS` in `@area/tokens/config` lists the
-  ten controls in the Inspector's order. The app shows them under two headings (owner, 2026-10-18: "can you separate
-  edge from depth"): **Stroke** (Width = `surface`, Strength = `stroke`, Rest shadow = `shadow-rest`) and **Shadow**
-  (Floating = `elevation`, Resting, Fields, Size, Softness, Light, Colour).
-- `motion`: one number, `0` (None) to `300` in steps of 30, `210` by default: the Menu's open in
-  milliseconds (`duration-base`), as `elevation` is the Menu's shadow (`axes/motion.ts`, owner
-  2026-10-14). Every duration scales from it in thirds: `fast` 2/3, `base` 1, `moderate` 4/3,
-  `slow` 5/3, so 210 gives 140 / 210 / 280 / 350 (ChatGPT's popover opens in 220), 150 gives
-  100 / 150 / 200 / 250 (the old Subtle) and 240 gives 160 / 240 / 320 /
-  400 (the old Expressive within 10ms). `instant` stays 0. `0` and
-  `prefers-reduced-motion` make every duration 0. Replaces the None, Subtle and Expressive presets.
-- `easing` (owner, 2026-10-19): the shape of every transition, beside Motion's length: `standard` (default, today's
-  curves), `snappy`, `gentle`, `spring` (`axes/easing.ts`). It owns `--area-ease-*` (Motion owned them until now) and
-  sets out, in-out, in and drawer from measured products; Spring overshoots on enters and moves, never on exits.
-  Curves and sources: `docs/MOTION.md`.
-
-Keep the name `accent`: it is the system-selected chromatic role and may represent a
-product brand. Components never ask for it with a variant. They paint one of two emphasis
-roles, and `action` and `selection` decide whether each role is neutral or the accent
-(owner, 2026-09-29):
-
-| `action` | `selection` | Result |
+| action | selection | Result |
 |---|---|---|
 | neutral | neutral | Everything neutral (default) |
 | accent | accent | Everything in the accent |
-| accent | neutral | Accent leads: coloured actions, calm controls |
-| neutral | accent | Neutral leads: neutral actions, coloured state |
+| accent | neutral | Coloured actions, calm controls |
+| neutral | accent | Neutral actions, coloured state |
 
-System tokens outside the axes (audit S21b, owner 2026-09-30): `opacity-disabled` (0.5, a
-whole disabled control; fields use their own disabled paint) and `scrim` (the modal backdrop:
-13% black light, `bg-overlay` dark; derived, so a themed subtree re-derives it).
+Semantic tones (info, success, warning, caution, danger, discovery) keep their colour in
+every combination. `custom` (Switch's `--area-switch-color`) is a per-instance colour
+outside both roles.
 
-Parked tokens (audit S21b): defined but read by no component, kept until the token phase
-decides, because several are public seams or come from `palette.json`. Not a promise of use.
+**Size and shape**
 
-- Alpha ramps `accent-a*`, `cool-a*`, `warm-a*` and their `-contrast`; `accent-border-strong`.
-- Tone extras: `fg-*-strong`, `*-border-subtle`, `fg-caution-vivid`, `fg-action`,
-  `fill-toggle` / `-hover`.
-- Type: `display-sm/lg-*`, `title-sm/md-*`, `text-xs-tracking`.
-- Tiers no component uses: `control-xl`, `gap-` `xs` / `xl`, `icon-xl`,
-  `radius-control-xl`; `radius-nested` (components compute their concentric radius).
-- Motion: `ease-in` and the deprecated `ease-spring`. Elevation's ladder `shadow-1`…`4` is for apps; components name roles.
-- Seams: `badge-bg`, `badge-fg`, `badge-tracking-wide`.
-- The `z-*` layer scale (0–80). Component stacking is local (−2…2 inside a component) and
-  every floating surface is in the top layer, so no component reads it; it stays for apps.
+| Setting | Values (default) | What it sets |
+|---|---|---|
+| `type` | `12` … `16`, `14` (default) | The base UI text size. Every type role follows: small text is 2 under (never under 10), reading text and titles 2 over. Also the icon stroke, the check box and toggle size, and which densities are allowed (Compact up to 14, Comfortable from 13). |
+| `density` | `28` (Compact), `32` (default), `36` (Comfortable) | The room around text, named by the medium Button's height at type 14. It sets control heights (the text line plus twice the room, never under 24), rows, gaps, layout steps and surface insets. |
+| `radius` | `0` (Sharp), `2`, `4`, `6`, `8` (default), `10`, `12`, `14`, `pill` | The medium Button's corner. Every corner derives from it ([Size and shape](DESIGN_SYSTEM.md#size-and-shape)) |
 
-`custom` (Switch) means a per-instance colour outside both roles. Semantic tones (info,
-success, warning, caution, danger, discovery) carry meaning and keep their colour in
-every combination. See DESIGN_SYSTEM.md, "Emphasis roles", for what each role paints.
+- `data-area-ui` is shorthand, not an axis: `compact` is type 12 with density 28,
+  `default` is type 14 with 32. An explicit `type` or `density` on the same element wins.
+- `ui-dense` is the spacing step that each density level keeps against the type size: 1 at
+  Compact 12, 0 at Default 14, negative above. Component insets are written against it.
+- Control side padding has no token: `inset.css` derives it from the height.
+- `data-area-pills` is a set, not an axis (`axes/pills.ts`). It is a space-separated list of
+  the shapes that draw a pill: `button`, `field`, `segmented`, `chip`, `badge`, `count`,
+  `switch`, `avatar`.
+  - With no attribute, chip, badge, count, switch and avatar are pills.
+  - `""` makes every one of them follow the radius.
+  - Instance props override it (`pill`, Avatar's `shape`).
 
-Use `data-area-<axis>` on any ancestor. Missing settings inherit; explicit settings form
-a local boundary. `data-area-contrast="more"` is a separate accessibility preference;
-`standard` resets it locally. Without a root override, contrast follows the OS preference. The app's Inspector
-offers it on the Canvas as Contrast: System (no attribute), Standard, More.
+**Edge and depth** (`axes/surface.ts`, `axes/elevation.ts`, `axes/depth.ts`)
+
+Ten controls, each with one effect and no named looks. `DEPTH_LEVERS` in
+`@area/tokens/config` lists them in the Inspector's order. The app shows them under two
+headings, **Stroke** and **Shadow**:
+
+| Setting | Inspector label | Values (default) | What it sets |
+|---|---|---|---|
+| `surface` | Stroke › Width | `0` (Flat), `0.5`, `1` (default), `1.5`, `2` px | The frame of cards, panels and floating surfaces (`frame-width`, read as `border-width`) |
+| `stroke` | Stroke › Strength | `0` (None) … `8`, `4` (default) | How dark every stroke is, its distance from its ground |
+| `shadow-rest` | Stroke › Rest shadow | `0` (None, default) … `8` | `shadow-edge`, a subtle edge round the same surfaces, with the line or instead of it |
+| `elevation` | Shadow › Floating | `0` (Flat) … `8`, `3` (default) | The Menu's shadow strength in percent: tooltip, float, modal and lift roles |
+| `shadow-resting` | Shadow › Resting | `0` … `8`, `3` (default) | Cards, panels and raised thumbs at rest |
+| `shadow-field` | Shadow › Fields | `0` (default) … `8` | Outline fields, select triggers, outline and soft Buttons. Soft fields stay flat |
+| `shadow-size` | Shadow › Size | `0` … `8`, `4` (default) | How far every shadow reaches (offset and blur × n/4) |
+| `shadow-softness` | Shadow › Softness | `0` (Crisp) … `8` (Smooth), `2` (default) | The number of layers and how tightly they sit |
+| `shadow-light` | Shadow › Light | `0` (Flat, default) … `4` | A lip under each lifted edge and a highlight inside its top |
+| `shadow-color` | Shadow › Colour | `black` (default), `warm`, `cool` | The light theme's shadow tint. Dark stays black |
+
+- Light always comes from the top, and dark shadows are twice the light alpha.
+- Every role is the same nine slots at every setting (a lip, the dark rim, six soft layers, a highlight), transparent
+  where unused, never `none`. The dark rim (owner, 2026-10-19: "make the shadow settings visible in dark mode") is
+  `0 0 0 1px` white at the role's own strength × 2, at most 16%, transparent in light, so shadows read on the
+  near-black page.
+- Under any raised contrast level, `border-width` is at least 1px, so Flat brings its frame
+  back. The soft edge is drawn only while no frame is.
+- The ladder `shadow-1` … `4` is for apps. Components name roles.
+
+**Motion**
+
+| Setting | Values (default) | What it sets |
+|---|---|---|
+| `motion` | `0` (None) … `300` in steps of 30, `210` (default) | The Menu's open in milliseconds. Every duration is a third-multiple of it ([Motion](MOTION.md)) |
+| `easing` | `standard` (default), `snappy`, `gentle`, `spring` | The shape of every transition (`--area-ease-*`, owned by Easing since 2026-10-19). Spring overshoots on enters and moves, never on exits ([Motion](MOTION.md)) |
+
+`0` and `prefers-reduced-motion` make every duration 0 and stop every loop.
+
+**Not axes**
+
+- `data-area-contrast`: `standard`, `medium` or `more` (`--area-contrast-more` 0, 0.5, 1).
+  With no attribute it follows the OS `prefers-contrast`. The Inspector offers System
+  (default), Standard, Medium and More ([Contrast](CONTRAST.md)).
+- `data-area-material` (`axes/material.ts`, `styles/material.css`):
+  - a bundle (`none`, `glass`, `tactile`, `jelly`, `soft`, `aero`, `glow`);
+  - per-lever overrides `data-area-material-<lever>` (light angle, gradient, sheen,
+    transparency, frost, stroke, inner shadow, softness, catch-light, emboss, contact, glow,
+    grain, page glow);
+  - switches and stroke styles.
+
+  Materials paint only inside an element that has the attribute. They paint over a part's
+  Layers fill, never change size, type or ink, and add no outer lift beyond a contact shadow.
+  The bundles are named presets; the owner's "no named looks" rule makes their future an
+  open question.
+- `data-area-ground="raised" | "recessed" | "page"`: marks a product's own region, so the
+  control fills inside it step from that ground (`styles/layers.css`).
 
 ```html
 <section data-area-theme="dark" data-area-accent="teal" data-area-type="13" data-area-density="28">
@@ -157,31 +129,26 @@ offers it on the Canvas as Contrast: System (no attribute), Standard, More.
 
 ## CSS inheritance
 
-Every axis owns disjoint custom-property namespaces. Changing light/dark preserves the
-inherited accent and neutral. Attribute order must not change the result; removing a
-selection restores inheritance. Invalid CSS attribute values select no preset.
-
-Semantic colors preserve their light/dark pair until consumed by a real CSS color
-property. `color-scheme` chooses the polarity at that element, including native controls.
-Do not register those pairs with `@property`, which could resolve and freeze them early.
-A computed custom property can contain `light-dark(...)`; measure painted `color`,
-`background-color`, border or shadow when checking actual color.
-
-Switching `data-area-theme` at runtime: because a pair's text is identical in both themes,
-Chromium can keep a cached painted colour on some descendants after `color-scheme` flips
-(seen 2026-10-01: Nav, Menu and Tabs labels kept the light ink until the next restyle).
-Force one synchronous restyle after the switch, as the docs Customize panel does:
-`root.style.display = "none"; void root.offsetHeight; root.style.display = "";`. Nothing
-paints in between, so there is no flash. Setting the theme before first paint needs nothing.
-
-Geometric derivations are re-emitted on scope-bearing elements. A derived property that
-is resolved only at the root can freeze the wrong density/radius inputs for descendants.
-A theme scope selects tokens, not layout or component behavior. Custom HTML must consume
-the appropriate foreground/background/type roles itself.
+- **Independence.** Every axis owns disjoint custom-property namespaces. Switching light and
+  dark keeps the inherited accent and neutral. Attribute order never changes the result,
+  removing a setting restores inheritance, and an invalid value selects no preset.
+- **Colour pairs.** Semantic colours stay as their light/dark pair until a real CSS colour
+  property consumes them; `color-scheme` picks the polarity at that element. A computed
+  custom property can contain `light-dark(…)`, so to check a colour, measure the painted
+  `color`, `background-color`, border or shadow.
+- **Switching theme at runtime.** Chromium can keep a cached colour on some descendants after
+  `color-scheme` flips. Force one synchronous restyle after the switch:
+  `root.style.display = "none"; void root.offsetHeight; root.style.display = "";`. Nothing
+  paints in between. The app also sets `data-area-switching` for one frame so nothing
+  animates. Setting the theme before first paint needs neither.
+- **Re-emission.** Derived values are re-emitted on every element that carries a setting.
+  A derivation resolved only at the root would freeze the wrong inputs for descendants.
+- **Tokens, not layout.** A scope selects tokens, not layout or component behaviour. Custom
+  HTML must consume the right foreground, background and type roles itself.
 
 ## React scopes
 
-`Theme`, `useTheme` and `AxisSelection` are public exports from `@area/react`.
+`Theme`, `useTheme` and `AxisSelection` are exported from `@area/react`.
 
 ```tsx
 <Theme value={{ theme: "dark", accent: "teal", action: "accent" }}>
@@ -189,39 +156,57 @@ the appropriate foreground/background/type roles itself.
 </Theme>
 ```
 
-`Theme.value` is partial; omitted values inherit from the nearest React Theme, with
-registry defaults at the root. Unknown axes/presets are rejected. Theme renders a div,
-forwards its ref and ordinary attributes, and emits the complete effective selection.
-Use `value` rather than raw axis attributes to configure that component.
+- `Theme.value` is partial. Omitted values inherit from the nearest Theme, with the
+  registry defaults at the root. Unknown axes or values throw.
+- Theme renders a div, forwards its ref and attributes, and writes every effective
+  `data-area-*`. It does not set contrast or material attributes.
+- `useTheme()` returns the effective selection.
+- Context crosses React portals, but CSS inheritance does not. Wrap portal content in
+  another Theme to recreate the scope where it mounts.
+- Theme does not manage overlay focus, positioning or dismissal.
+- When mounting into a host themed by CSS alone, pass that host's selection to the root
+  Theme explicitly.
+- `@area/tokens/config` exports `AXIS_PRESETS`, `DEFAULT_AXES`, `mergeAxes` and
+  `themeAttributes` without React or browser globals, for validated configuration
+  anywhere.
 
-`useTheme()` returns the effective React selection. Context crosses React portals; CSS
-inheritance does not. Wrap portal content in another Theme to recreate the scope at its
-new DOM location. Theme does not manage overlay focus, positioning or dismissal.
+## Custom values
 
-React context does not infer arbitrary host DOM attributes. When mounting into a CSS-only
-themed host, pass that host's selection into the root Theme explicitly.
+- **Use the public layers.** Override stable semantic properties for role changes, and
+  documented component roles for local changes. Never depend on private `--_*` slots.
+- **Verify your own overrides.** Consumers check contrast and geometry for them; the preset
+  checks cannot certify arbitrary custom themes.
+- **Share reusable roles.** A reusable role belongs in the token package, not duplicated as
+  literals across components ([Governance](GOVERNANCE.md#5-keep-it-lean)).
 
-## Custom values and configuration
+## System tokens outside the axes
 
-Use stable semantic CSS custom properties for role changes, and documented component
-roles for local customization. Do not depend on private `--_*` slots. Consumers must
-verify contrast and geometry for their overrides; preset checks cannot certify arbitrary
-custom themes. Add reusable roles to the token package rather than duplicating literals
-across components. See [Design system](DESIGN_SYSTEM.md).
+- `opacity-disabled`: 0.5, a whole disabled control. Fields use their own disabled paint.
+- `scrim`: the modal backdrop, 13% black in light and `bg-overlay` in dark. It is derived,
+  so a themed subtree re-derives it.
 
-`@area/tokens/config` exports registry-derived `AXIS_PRESETS`, `DEFAULT_AXES`, `mergeAxes`
-and `themeAttributes` without importing React, browser globals or palette math. Use these
-helpers when consumers need validated configuration and a complete attribute map.
-Build the packages before importing them from a fresh checkout.
+### Parked tokens
 
-## Compatibility and verification
+Defined but read by no component, kept until the token phase decides. Several are public
+seams or come from `palette.json`. A parked token is not a promise of use.
 
-Saved docs preferences migrate older `brand` to `accent` and old type/density choices
-to the current UI scale. Legacy axis names are not new public API. Historical migration
-notes are in Git history (the `archive/` folder, removed after commit `2f90f2d`); the current
-registry and public types are authoritative.
+- Alpha ramps: `accent-a*`, `cool-a*`, `warm-a*` and their `-contrast`; `accent-border-strong`.
+- Tone extras: `fg-*-strong`, `*-border-subtle`, `fg-caution-vivid`, `fg-action`, `fill-toggle` / `-hover`.
+- Type: `display-sm/lg-*`, `title-sm/md-*`, `text-xs-tracking`.
+- Tiers no component uses: `control-xl`, `gap-xs` / `-xl`, `icon-xl`, `radius-control-xl`,
+  `radius-nested`.
+- Motion: `ease-in` and the deprecated `ease-spring`.
+- Seams: `badge-bg`, `badge-fg`, `badge-tracking-wide`.
+- The `z-*` layer scale (0–80), for apps. Components stack locally, and floating surfaces
+  use the top layer.
 
-The color scope model requires CSS `light-dark()` and `color-scheme`; there is no legacy
-color-injection fallback. Scope fixtures exercise nested resets and portals. A passing
-scope matrix does not prove component behavior, forced colors, screen-reader support or
-all browsers. Use `scopes.html` and the relevant checks in [Development](DEVELOPMENT.md).
+## Limits
+
+- **Required browser features.** The colour scope model requires CSS `light-dark()` and
+  `color-scheme`; there is no fallback.
+- **Saved settings migrate.** The app restores older saved Canvas settings: the `ui`
+  shorthand as type and density, density saved by name as its number, one Layers value as
+  both themes. Values that are no longer an option are dropped (`restoreCanvas` in
+  `studio.tsx`). Legacy names are not public API.
+- **What the checks don't prove.** A passing scope check does not prove component behaviour,
+  forced colours, screen-reader support or every browser.

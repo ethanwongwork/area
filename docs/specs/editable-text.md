@@ -1,6 +1,5 @@
 # Editable text spec
 
-**Status:** complete · 2026-10-12 (approved, review round 9)
 **Captures:** `docs/research/captures/editable-text/`
 **Peers:** Input (field focus colour), Tree view and Panel rows (where a layer name sits), Accordion and Timeline titles
 (text it renames), Search field (Escape behaviour)
@@ -111,7 +110,7 @@ not focusable. Focus-visible on the text: Area's focus ring.
 ## Behavior and accessibility
 
 The text is `role="button"`, focusable, named "label: value". Double-click, click or focus (by `activation`) opens the
-field, and so do Enter and F2 on the focused text, so every mode works from the keyboard. In the field, Enter commits
+field, and so do Enter, Space (the button key; 2026-10-19) and F2 on the focused text, so every mode works from the keyboard. In the field, Enter commits
 and Escape cancels; both return focus to the text. Enter that confirms an IME composition does not commit. Leaving the field commits. `onValueChange` runs once per committed
 change, not per key. The field is named by `label`. Verified in the browser: open selects 0–6 of "Header", the field
 grows with the draft (69 → 153), Escape restores the value and focus, Enter commits "Footer".

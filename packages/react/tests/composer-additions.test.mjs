@@ -60,3 +60,16 @@ test("a Timestamp is a time element, worded as Codex words it", () => {
   assert.match(formatTimestamp(new Date(2026, 6, 4, 9, 5), now, "en-US"), /^Sat, Jul 4 9:05\sAM$/);
   assert.match(formatTimestamp(new Date(2024, 6, 4, 9, 5), now, "en-US"), /^Jul 4, 2024 9:05\sAM$/);
 });
+
+test("an uploading attachment's ring is named whether or not its progress is known", () => {
+  for (const progress of [undefined, 40]) {
+    const html = renderToString(h(Attachment, { src: "a.png", name: "Photo", status: "uploading", progress }));
+    assert.match(html, /Uploading Photo/);
+  }
+  assert.match(renderToString(h(Attachment, { src: "a.png", name: "Photo", status: "uploading", progress: 40 })), /role="progressbar"[^>]*aria-label="Uploading Photo"/);
+});
+
+test("TIMESTAMP_GAP is one pause, an hour; replies get no timestamp of their own", async () => {
+  const { TIMESTAMP_GAP } = await import("../dist/modules/index.js");
+  assert.equal(TIMESTAMP_GAP, 3_600_000);
+});

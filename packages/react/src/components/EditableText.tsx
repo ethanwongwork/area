@@ -76,7 +76,7 @@ export const EditableText = forwardRef<HTMLSpanElement, EditableTextProps>(funct
   }, [editing]);
 
   const onPreviewKey = (event: KeyboardEvent) => {
-    if (event.key === "Enter" || event.key === "F2") { event.preventDefault(); start(); }
+    if (event.key === "Enter" || event.key === " " || event.key === "F2") { event.preventDefault(); start(); }
   };
   const onInputKey = (event: KeyboardEvent<HTMLInputElement>) => {
     inputProps?.onKeyDown?.(event);

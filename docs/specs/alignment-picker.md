@@ -1,6 +1,5 @@
 # Alignment picker spec
 
-**Status:** accepted (owner; Complete in `component-status.mjs`; was: in review · 2026-09-26 (cohesion audit; second pass the same day, no change))
 **Captures:** `docs/research/captures/alignment-picker/`, `button-group/figma--align-group`, `number-field/figma--number-field`
 **Peers:** Segmented (a choice on its own track), Radio (exclusive choice), Checkbox / Chip (neutral selection), Input (soft field fill), ColorSwatchPicker (grid of cells), NumberField (inspector row neighbour)
 

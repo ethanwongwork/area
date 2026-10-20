@@ -101,8 +101,8 @@ Respect motion preferences without removing the meaning of loading/progress stat
 
 Run `npm test` and `node packages/tokens/src/contrast/report.ts` for token/color/focus/state
 changes. The report exits nonzero for failures. `npm run build` does not run this gate.
-Use `contrast.html` for rendered paint and keyboard-triggered focus checks, plus the
-component's real interactions. Validate the actual foreground/background/edge combinations
+Check rendered paint and keyboard-triggered focus in the app (Inspector › Theme › Contrast at
+Standard, Medium and More), plus the component's real interactions. Validate the actual foreground/background/edge combinations
 introduced by a change, including nested themes and relevant contrast preferences.
 
 Cross-browser, OS preference, forced-colors and screen-reader coverage must be reported

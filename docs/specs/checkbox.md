@@ -1,6 +1,5 @@
 # Checkbox spec
 
-**Status:** accepted · 2026-09-28 (batch 14: cards, sm removed; was: in review · 2026-09-26 (cohesion audit, second pass))
 **Captures:** `docs/research/captures/checkbox/` (Area, Notion, Figma)
 **Peers:** Radio (same glyph ladder and paint), Switch (on/off setting), Chip (selectable
 filter), Field and CheckboxGroup (label and validation), Table (row selection)

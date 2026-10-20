@@ -71,7 +71,7 @@ test("a video player is a named group: the video, and only the round play before
   assert.match(html, /<button type="button" class="area-video-player__start area-video-player__surface" aria-label="Play"><svg[^>]*data-area-glyph="play-filled"/);
   assert.doesNotMatch(html, /area-video-player__controls/);
   const floating = render(h(VideoPlayer, { label: "S", src: "x.mp4", autoPlay: true, controls: "always" }));
-  assert.match(floating, /area-video-player--always" data-started="">.*area-video-player__transport.*aria-label="Volume".*aria-label="Back 15 seconds".*aria-label="Play".*aria-label="Forward 15 seconds".*area-video-player__timeline.*aria-label="Seek"/);
+  assert.match(floating, /area-video-player--always" data-started="">.*area-video-player__transport.*aria-label="Volume".*aria-label="Back 10 seconds".*aria-label="Play".*aria-label="Forward 10 seconds".*area-video-player__timeline.*aria-label="Seek"/);
   assert.match(floating, /class="area-video-player__controls area-video-player__surface"/);
   assert.match(floating, /class="area-button[^"]*area-button--ghost[^"]*"[^>]*aria-label="Play"/, "the floating controller's buttons are Area's ghost Buttons");
   assert.match(render(h(VideoPlayer, { label: "S", src: "x.mp4", autoPlay: true, layout: "bar" })), /area-video-player__scrim.*aria-label="Seek".*aria-label="Volume"/);

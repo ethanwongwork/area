@@ -1,6 +1,5 @@
 # Split button spec
 
-**Status:** accepted · 2026-09-26 (was: in review · 2026-09-26 (first build under the capture workflow))
 **Captures:** `docs/research/captures/split-button/`
 **Peers:** Button (both parts are Buttons), ButtonGroup (joined edges, divider), Menu (the
 menu surface), Popover (native top layer), Toolbar overflow (another menu trigger)

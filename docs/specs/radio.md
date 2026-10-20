@@ -1,6 +1,5 @@
 # Radio spec
 
-**Status:** accepted · 2026-09-28 (batch 14: cards, sm removed; was: in review · 2026-09-26 (cohesion audit, second pass))
 **Captures:** `docs/research/captures/radio/`; glyph-edge evidence in
 `checkbox/notion--checkbox--rest--light`, `checkbox/figma--checkbox-checked--rest--light`
 **Peers:** Checkbox (shared stylesheet, glyph ladder and paint), Segmented (short exclusive
@@ -26,10 +25,12 @@ Checkbox.
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| size | md (default), lg (sm removed 2026-09-28) | Label type follows the tier | Untitled sm 16 / md 20 |
+| size | md (default), lg (sm removed 2026-09-28); the box follows the type size (2026-10-14) | Label type follows the tier | Untitled sm 16 / md 20 |
+| variant | `card`: a contained, full-width option with the control at the end, as Checkbox's card (owner 2026-09-28) | Owner references (plan and registration pickers); shadcn Choice Card | gallery `card`, `card-tile` |
+| layout (card) | row (default): visual, text and control on one line; tile: visual above the label, control in the top-end corner. Read only with `variant="card"` (forms.tsx:318) | Owner reference 1 | gallery `card`, `card-tile` |
 | state | checked, disabled; group invalid | Native states; RadioGroup `error` | Untitled: checked, disabled |
-| layout (group) | vertical (default), horizontal | Settings stacks vs inline choices | Untitled group gap 16 |
-| composition | description | Option caption | Untitled label + hint |
+| orientation (group) | vertical (default), horizontal | Settings stacks vs inline choices | Untitled group gap 16 |
+| composition | description (`caption` is an alias), `leadingVisual` | Option caption; decorative context beside the text | Untitled label + hint |
 
 ## Sources
 
@@ -50,12 +51,16 @@ exclusive choice there is a select, a segmented control or a menu, not a radio.
 Shared with Checkbox (choice.css). Differences:
 
 ```
-control  input.area-radio__control  radius-full (choice.css:108-110)
-  ::after  dot, --_dot (6 / 8) centred on the border box, radius-full (choice.css; 2026-10-07)
+control  input.area-radio__control  radius-full (choice.css:161-163)
+  ::after  dot, --_dot (6 / 8) centred on the border box, radius-full (choice.css:206-211, 455, 461)
+visual   span.area-radio__visual  `leadingVisual`, aria-hidden, fg-muted (20px, fg-default in a tile)
+card     label.area-radio--card  1px edge-control, radius-container, bg-surface, inset 12 (compact 8)
+         to the content, border counted once; control moved to the end (choice.css:104-159)
 ```
 
-The label's first line centres on the glyph through inset.css:185-195, which overrides
-choice.css:113 (`align-items: center`) wherever `text-box` is supported.
+The label's first line centres on the glyph through inset.css:264-265, which overrides
+choice.css:166 (`align-items: center`) wherever `text-box` is supported; a card aligns to the
+first line (choice.css:117-119).
 
 ## Measurements
 
@@ -79,32 +84,37 @@ Captures: `area--size-small`, `-medium`, `-large`, `area--selected`, `area--tone
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| control · size | **16 / 16 / 20** (choice.css:315-330) | Untitled 16 / 20; audit rule "one glyph ladder"; the products' glyphs are 16 | Was 12 / 16 / 20 |
-| rest edge | **`edge-control-hover` #d4d4d4** (choice.css:48) | Notion's glyph edge ≈ #d4; Untitled #d4d4d4 (second pass) | Was `edge-control` #e2e2e2 |
-| dot | **6 at 16, 8 at 20** (`--_dot`, 2026-10-07) | Untitled 6 / 8 | Was a 30% inset (5.6 / 7.2), which put the dot's edge on fractional pixels; an even dot in an even box centres exactly |
-| checked | `selection-solid` (neutral by default), dot `fg-on-selection` (choice.css:20-22) | Owner 2026-09-26; emphasis roles 2026-09-29 | Untitled brand-600 |
+| control · size | md **`--area-mark-box`** (14 at type 12–13, 16 at 14, 18 at 15, 20 at 16), lg four larger: **16 / 20 at type 14** (choice.css:465-476) | Untitled 16 / 20; audit rule "one glyph ladder"; the products' glyphs are 16 | Was 12 / 16 / 20; was a fixed 16 / 20 at every type size until 2026-10-12 / 10-14 |
+| rest edge | **`edge-control-hover` #d4d4d4** (choice.css:48-53) | Notion's glyph edge ≈ #d4; Untitled #d4d4d4 (second pass) | Was `edge-control` #e2e2e2 |
+| dot | **6 at md, 8 at lg**, at every type size (`--_dot`, choice.css:455, 461; 2026-10-07, 2026-10-14) | Untitled 6 / 8 | Was a 30% inset (5.6 / 7.2), which put the dot's edge on fractional pixels; an even dot in an even box centres exactly |
+| checked | `selection-solid` (neutral by default), dot `fg-on-selection` (choice.css:19-31, 213-225) | Owner 2026-09-26; emphasis roles 2026-09-29 | Untitled brand-600 |
 | shadow, focus, hover | as Checkbox | Peer consistency | — |
-| label gap | 6 at md and lg, as Checkbox (choice.css:9, :404, :410) | Peer: Checkbox, Button (audit S14) | Was 8 |
-| group spacing | options `space-12` below the legend, `space-8` between rows, horizontal `space-16` columns (choice.css:243-256) | Untitled horizontal gap 16 | Vertical rows keep Checkbox's 8 |
-| disabled | 50% on the label; group `:disabled` the same (choice.css:37-41, 259) | Audit rule; Untitled 50% | Same element, so not doubled |
+| label gap | 6 at md and lg, the density tokens, as Checkbox (choice.css:12, :469, :475) | Peer: Checkbox, Button (audit S14) | Was 8 |
+| group spacing | options `ui-stack` (6, compact 4) below the legend, `ui-cluster` (8, compact 6) between rows, horizontal columns 16 (compact 12); description and validation `ui-stack` from what is above (choice.css:323-342, 420) | Untitled horizontal gap 16; Field's gaps (audit C-27 A; spacing audit 2026-10-17) | Options were 12 below the legend; validation was 12 |
+| card | 1px `edge-control`, hover `edge-control-hover`, chosen edge the checked colour (1px, darker not thicker); `radius-container`; inset 12, compact 8; cards in a group 8 apart, tiles in equal columns at least 144 wide (choice.css:99-159, 384-398) | Owner references 2026-09-28; shadcn Choice Card | — |
+| disabled | `opacity-disabled` (50%) on the label; a disabled group dims once as a whole, legend included, and its options do not dim again (choice.css:33-37, 344-346) | Audit rule; Untitled 50%; audit C-27 A | Not doubled |
 
 ## States
 
 | State | Changes | Evidence |
 |---|---|---|
-| hover, unchecked | edge → `border-hover` #b4b4b4 (choice.css:190-193) | not captured |
-| hover, checked | fill → `selection-solid-hover` | not captured |
-| focus-visible | 2px focus outline, 2px offset (choice.css:200-204) | not captured |
+| hover, unchecked | edge → `edge-control-strong` #b4b4b4 (choice.css:273-274) | not captured |
+| hover, checked | fill → `selection-solid-hover` (choice.css:261-262) | not captured |
+| hover, card | card edge → `edge-control-hover` (choice.css:124-125) | not captured |
+| focus-visible | 2px focus outline, 2px offset (choice.css:284-287); on a card the ring moves to the card (choice.css:130-135, 289-290) | not captured |
 | checked | fill `selection-solid` at once; dot `scale` 0.6 → 1 + `opacity`, `fast` ease-out (Motion, 2026-10-07) | `area--selected` |
 | group invalid | unchecked edges `fg-danger-vivid`; the checked option `danger-solid` with `fg-on-danger` dot; message in danger ink | `area--invalid` |
-| disabled | 50% | `area--disabled` |
+| disabled | `opacity-disabled` (50%) | `area--disabled` |
 
 ## Behavior and accessibility
 
-Native `input type="radio"`; RadioGroup shares `name`, controlled/uncontrolled `value` and
-`disabled` through context (forms.tsx:232-266); arrow keys are the browser's. Group
-description and error are wired through `aria-describedby`; `aria-invalid` on the fieldset.
-Forced colours: forced-colors.css:47-63 (Canvas control, CanvasText edge, Highlight when checked, HighlightText dot); not verified in a forced-colours browser.
+Native `input type="radio"`; RadioGroup shares `name` (generated when omitted, so the options
+always form one native group), controlled/uncontrolled `value` and `disabled` through context
+(forms.tsx:225-299); `onValueChange(value, event)`; a form reset returns an uncontrolled group to
+its `defaultValue`. Arrow keys are the browser's. A card keeps the native label as its click target
+and DOM order, so keyboard order and the accessible name are unchanged; `leadingVisual` is
+`aria-hidden`. Group description and error are wired through `aria-describedby`; `aria-invalid` on the fieldset.
+Forced colours: forced-colors.css:43, 55-73 (Canvas control, CanvasText edge, Highlight when checked, HighlightText dot; a chosen card's edge Highlight); not verified in a forced-colours browser.
 
 ## Peers and consistency
 

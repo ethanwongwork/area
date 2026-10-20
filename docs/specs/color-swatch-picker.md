@@ -1,6 +1,5 @@
 # ColorSwatchPicker spec
 
-**Status:** complete · 2026-10-12 (approved, round 20); was: accepted (owner; Complete in `component-status.mjs`; was: in review · 2026-09-26 (cohesion audit; second pass with Notion and Figma))
 **Captures:** `docs/research/captures/color-swatch-picker/`
 **Peers:** ColorSwatch (cell content), ColorPicker (saved colours, grid view, thumb ring),
 Radio (single choice), AlignmentPicker and Segmented (selection marks), Chip swatch
@@ -63,7 +62,9 @@ area   div.area-color-swatch-picker[role=radiogroup]  inline-grid, repeat(column
   cell   label.area-color-swatch-picker__cell  cell square, radius = swatch radius + 4 (concentric); owns hover, ring, focus
     input  input[type=radio]  covers the cell, opacity 0
     swatch span.area-color-swatch  cell − 8, aria-hidden
-palette  grid of minmax(0, 1fr) columns, gap 0, radius-control-sm 6, 1px 10% hairline outline, clip
+palette  grid of minmax(0, 1fr) columns, full width, gap 0, radius-control-sm, clip; the swatch ring
+         (`token-swatch-ring` at stroke-width) drawn inside round the whole grid
+  cell     square (aspect-ratio 1), radius 0; its swatch fills it, square, no ring of its own
 ```
 
 Inset: swatch (cell − 8) centred, 4px on every side; the 2px ring leaves 2px between ring
@@ -89,31 +90,32 @@ Cells were 7px (md) before the second pass.
 | cell | `control-xs/sm/md` 24 / 28 / 32 (`color.css:30-32`) | Figma 24 cells | md default follows the control tier |
 | swatch | cell − 8 (16 / 20 / 24) | Figma 16 chit in 24 | — |
 | gap | 4 (grid, row); 0 (palette) | Figma contiguous | The ring needs room between separate cells; palette follows Figma / iOS |
-| cell radius | swatch radius (20% of the side) + the 4 inset: 7.2 / 8 / 8.8 (`color.css:95-97`) | Nested-radius rule (DESIGN_SYSTEM "Size and shape"); second pass item 12 | Was `min(radius-small + 2, cell / 4)`: 6 / 7 / 8, not concentric |
+| cell radius | the swatch's even 20% corner + the 4 inset, × `radius-concentric`: 8 / 8 / 8 at the default (`.area-color-swatch-picker__cell`) | Nested-radius rule (DESIGN_SYSTEM "Size and shape"); second pass item 12; radius audit 2026-10-03 (all even) | Was `min(radius-small + 2, cell / 4)`: 6 / 7 / 8, not concentric; then 7.2 / 8 / 8.8 |
 | hover | `bg-hover` (translucent) | Audit: translucent hover only on unknown grounds | Swatch cells sit on any surface |
-| checked | `bg-surface` fill + 2px inset `fg-default` ring (`color.css:57-60`) | Owner: neutral by default; React Aria legible ring | Figma's selected chit not captured |
-| palette · checked | thumb ring: inset 2px white, 1px 20% outside, 3px 20% inside, radius `radius-control-xs` 4 (`color.css:92-95`) | [color-picker.md](color-picker.md):129, the area thumb | Cells touch, so the ring is drawn inside the swatch rather than as a cell plate |
-| palette · hover | inset 1px white 60% (`color.css:88-90`) | ColorPicker pass | Reason not recorded in color-picker.md |
-| disabled | 50% on the cell (`color.css:66`) | Audit "Disabled": controls and pickers dim to 50% | — |
+| checked | `bg-surface` fill + 2px inset `fg-selection` ring (the Selection role, accent by theme) | Owner D1 2026-09-29 (was `fg-default`, neutral by default); React Aria legible ring | Figma's selected chit not captured |
+| palette · checked | a white outline straddling the cell edge, 1px outside + 1px inside (`0 0 0 1px #fff, inset 0 0 0 1px #fff`), a fixed black 15% line inside it (`inset 0 0 0 2px`), corner `radius-min`, the colour unchanged, raised over its neighbours | Owner rounds 18–20 with the iOS colour grid (ring ≈ 10% of a cell, measured) | Cells touch, so there is no cell plate; the 15% line ignores the theme, as the palette's colours do |
+| palette · hover | the same, lighter and inside only: inset 1px white 70% + inset 2px black 15% | Owner round 20 | — |
+| disabled | 50% on a disabled cell; a disabled picker dims once as a whole (`aria-disabled`) | Audit "Disabled": controls and pickers dim to 50%; audit F-14 | — |
 
 ## States
 
 | State | Slot · property changes | Evidence |
 |---|---|---|
-| hover | cell `bg-hover`; palette: 1px white inset on the swatch | `color.css:56, 88-90` |
-| checked | ring as above | `area--row` node 7 |
-| focus-visible | 2px focus ring at 2px offset on the cell (palette: inset) | `color.css:61-65, 96` |
-| disabled | cell 50% opacity, not-allowed | `color.css:66` |
-| forced colours | `Highlight` outline for checked and focus | `color.css:67-70` |
+| hover | cell `bg-hover`; palette: 1px white 70% + the 15% line inside the swatch | `color.css`, palette hover (round 20) |
+| checked | `fg-selection` ring as above; palette: the white outline, raised | `color.css`, `:has(input:checked)` |
+| focus-visible | focus ring at the focus offset on the cell (palette: inset by its width, raised over the selection) | `color.css`, `:has(input:focus-visible)` |
+| disabled | cell 50% opacity, not-allowed; a disabled picker dims as a whole | `color.css` (audit F-14) |
+| forced colours | `Highlight` outline for checked (stroke-width) and focus (focus-width) | `color.css`, `forced-colors` |
 
 ## Behavior and accessibility
 
-Native radios named by each option's `label`; the group is named by `label` or `aria-label`.
-Arrow keys move and select (Up/Down by column in grid and palette, with RTL for Left/Right);
-Home/End reach the first and last enabled option (`ColorSwatchPicker.tsx:52-94`). `name`
+Native radios named by each option's `label`; the group is named by `aria-label`, else `label`.
+Arrow keys move and select, wrapping and skipping disabled options (Up/Down by column in grid and palette, to the
+nearest enabled column; Left/Right reversed in RTL); Home/End reach the first and last enabled option
+(`ColorSwatchPicker.tsx`, `move`). `name`
 and `required` are native. Nothing is preselected: with neither `value` nor `defaultValue`
 no colour is chosen, so `required` can fail and "no colour" is representable; a form reset
-returns to `defaultValue` or nothing (`ColorSwatchPicker.tsx:40-52`). Group `disabled` sets
+returns to `defaultValue` or nothing (`ColorSwatchPicker.tsx`, the form `reset` listener). Group `disabled` sets
 `aria-disabled`.
 
 ## Peers and consistency

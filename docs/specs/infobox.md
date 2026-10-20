@@ -1,6 +1,5 @@
 # Infobox spec
 
-**Status:** built, in review · 2026-10-17
 **Captures:** computed-style readouts below (Wikipedia, en.wikipedia.org/wiki/Lisa_Su)
 **Peers:** Card, Description list, Figure
 
@@ -8,10 +7,11 @@
 
 - 2026-10-17: "build whatever you recommend in the order you recommend", after the Wikipedia survey (docs/COMPONENTS.md,
   "From Wikipedia"). Order: Reference list, Table of contents, Figure, Infobox, Inline list, Abbreviation, Hatnote, Navbox.
+- 2026-10-19 (review page, docs pass): the lead image takes the container corner (`radius-container`), the standalone-image rule Figure and Asset card follow.
 
 ## Job and boundaries
 
-Summarises a subject beside an article: a title, an image with its caption, and labelled facts, in titled sections. Not a property editor (Property list) and not a form.
+Summarises a subject beside or above the content: a start-aligned header (optional media, a title, an optional subtitle, an optional action), then labelled facts in sections. Fills its column; unframed by default, `framed` puts it in Card's frame. A caption belongs to a Figure. Not a property editor (Property list) and not a form.
 
 ## Sources
 
@@ -25,7 +25,7 @@ caption) were not measured this round.
 
 ## Measurements
 
-Wikipedia, computed:
+Wikipedia, computed (evidence only; Area's current values are in Decisions):
 
 | Part | Value |
 |---|---|
@@ -39,12 +39,20 @@ Wikipedia, computed:
 
 | Slot · property | Area value | Basis | Reason when it differs |
 |---|---|---|---|
-| box | 22em; Card's paint (surface, `border-card`, container corner, resting shadow); 12 in, parts 8 apart | Wikipedia 22em | Card's paint |
-| type | small text (14 / 20) | Wikipedia 0.88 | type scale |
-| title | body size, strong, centred | Wikipedia 1.25em bold | Area's heading weight |
-| section band | the control fill, small corner, strong, centred | Wikipedia's tinted band | neutral paint |
-| rows | label 2fr : value 3fr (40%), 12 apart, top-aligned; label in Description list's muted term ink, regular | Wikipedia's 40% | Description list's role for labelled values (Wikipedia bolds labels) |
-| align | as Figure | Wikipedia floats right | — |
+| box | fills its column; header and sections 12 apart; unframed | GitHub's About, Figma's inspector (round 34) | Wikipedia's 22em float dropped in round 34 |
+| framed | Card's paint: `bg-surface`, `border-card`, container corner, `shadow-edge` then `shadow-resting`; 12 in, the border counted once | Card; spacing audit 2026-10-17; settings collisions 2026-10-18 | — |
+| type | UI text (`ui-size` / `ui-leading`) | round 35 | one Area role per level |
+| header | media 8 above the title row; title and subtitle 2 apart | round 35 (proximity) | — |
+| media | `img`, `video`, `svg`, `picture` at the container corner (`radius-container`), a standalone image as Figure | DESIGN_SYSTEM "Image corners"; owner, 2026-10-19 | was `radius-small` |
+| title | surface title (`title-xs`), strong, start-aligned | Card's and Dialog's title (round 35) | Wikipedia 1.25em bold, centred |
+| subtitle | UI text, `fg-muted` | Card's description (round 35) | — |
+| action | one control at the end of the title row, centred on the title's first line | Ant Descriptions' extra, GitHub's About gear (round 36) | — |
+| section | 12 apart, a 1px `border-divider` rule (`stroke-width`) between; heading 6 above its rows | GitHub's About, Figma (round 34–35) | Wikipedia's tinted band dropped |
+| heading | UI text, strong, default ink | Section heading's title (round 35) | — |
+| rows (`columns`, default) | label in a 120 column, value 8 after it, rows 4 apart, top-aligned | Wikipedia's 123 of 296; Radix and Chakra's label minimum (round 35) | Area's 4 grid |
+| rows (`stacked`) | label 4 above its value, pairs 8 apart | App Store's Information; Radix, Chakra `vertical` (round 36) | — |
+| label | UI text, regular, `fg-muted` | Description list's term ink | Wikipedia bolds labels |
+| value | UI text, regular, default ink | round 35 | — |
 
 ## Verification
 

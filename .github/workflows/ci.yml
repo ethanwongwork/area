@@ -52,10 +52,11 @@ jobs:
       - name: React tests
         run: node --test packages/react/tests/*.test.mjs
 
-      - name: Desktop app build and playground mapping
+      - name: Desktop app build, playground mapping and documentation entries
         run: |
           npm run build -w @area/desktop
           npm run check:playgrounds -w @area/desktop
+          npm run check:docs -w @area/desktop
 
       - name: Consumer install
         run: npm run test:consumer

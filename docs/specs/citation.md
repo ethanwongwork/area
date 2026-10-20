@@ -1,6 +1,5 @@
 # Citation spec
 
-**Status:** complete · 2026-10-11 (approved, review round 8)
 **Captures:** `docs/research/captures/citation/`
 **Peers:** Message (the prose it sits in), Hover card (the preview), Link (inline links), Count and Kbd (the tiny-chrome
 type role), Chip (a pill that is a control, not a source)
@@ -9,24 +8,29 @@ type role), Chip (a pill that is a control, not a source)
 
 - 2026-10-10: "go with your recommendations then keep working" → Citation, from the inventory's conversation list
   ("SourceChip / citation pill"); ChatGPT's answer citations are the reference.
-- 2026-10-10: "go with your recommendations" → 11px type; the ink stays on hover (the plate shows it).
+- 2026-10-10: "go with your recommendations" → 11px type; the ink stays on hover (the plate shows it). — superseded
+  2026-10-11: 12px type on a 20 pill (round 8); the fixed ink stands.
 
 ## Job and boundaries
 
-A citation links a source from the sentence it supports, as a small pill after the sentence: the site's icon and short
-name, and "+N" when more sources stand behind it. It opens the source; a Hover card can preview it. Not Link (a link in
-running text, styled as text), not Chip (a control or a filter), not Badge (a label, not a link), not a footnote marker
-(Hover card's Source demo uses a superscript number).
+A citation links a source from the sentence it supports. The pill (default) sits after the sentence: the site's icon
+and short name, and "+N" when more sources stand behind it; it opens the source in a new tab. The footnote is a raised
+number in brackets right after the word, [13], as Wikipedia marks its references; it goes to its note on the page
+(owner, 2026-10-17). A Hover card can preview either. Not Link (a link in running text, styled as text), not Chip (a
+control or a filter), not Badge (a label, not a link).
 
 ## Variants
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| content | favicon or none; label; "+N" more sources | ChatGPT shows the favicon, the site's name, "+1" | ChatGPT answers with web results |
-| behavior | link; with a Hover card preview | ChatGPT previews the sources on hover | ChatGPT |
+| variant | `pill` (default) | The source's name in a small pill | ChatGPT answers with web results |
+| variant | `footnote` | A raised number in brackets; owner, 2026-10-17 ("Footnote variant") | Wikipedia's [13] |
+| ink (footnote) | `blue` (the footnote's default), `inherit`, `muted`, `action`, `purple`, `pink`, `green`, `red`, `orange`, `brown` | Link's inks; the pill keeps `fg-muted` | Wikipedia's link blue #36c |
+| content (pill) | favicon or none; label; "+N" more sources | ChatGPT shows the favicon, the site's name, "+1" | ChatGPT answers with web results |
+| behavior | link; with a Hover card preview | ChatGPT previews the sources on hover; Wikipedia previews references | ChatGPT, Wikipedia |
 
-Excluded: a numbered footnote form (Hover card's Source demo covers it), a sources panel (a list of all sources is a
-Drawer or Panel with rows).
+Excluded: a sources panel (a list of all sources is a Drawer or Panel with rows, or Reference list), an underline on
+the footnote at rest or on hover (owner, 2026-10-17).
 
 ## Sources
 
@@ -50,8 +54,12 @@ chatgpt  span.ms-1.inline-flex (top −1.5, translate +2)
              span: span (gap 4): span 12 round favicon > img · span name (max 15ch, ellipsis)
              span "+1" (0 4 padding, negative margin)
 
-area     a.area-citation (18, 0 8 0 4 — 0 8 0 8 without an icon — gap 4, radius full, 11/11 500, inline-flex on the baseline)
-           span.__icon 12 round (img or element) · span.__label (max 15ch, ellipsis) · span.__count "+N" (aria-hidden)
+area     a.area-citation--pill (`mark-label-md`: 20 at the default, 14 at Compact; sides (h − icon) / 2 and (h − 4) / 2,
+           4 / 8 at 20, both (h − 4) / 2 without an icon; gap 4, radius full, 12/16 500, inline-flex on the baseline)
+           span.__icon 12 round, at most h − 4 (img or element) · span.__label (max 15ch, ellipsis, cap-trimmed)
+           · span.__count "+N" (aria-hidden)
+area     a.area-citation--footnote (inline, 0.704em, line-height 1, super, 0 1px padding, radius-min, no plate)
+           span.__bracket "[" (aria-hidden) · number · span.__bracket "]" (aria-hidden)
 ```
 
 ## Measurements
@@ -72,20 +80,26 @@ area     a.area-citation (18, 0 8 0 4 — 0 8 0 8 without an icon — gap 4, rad
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| pill | 20 tall (`mark-label-md`; 16 compact), round, 4 / 8 padding (8 / 8 without an icon), 4 gap | prompt-kit h-5 with ChatGPT's and prompt-kit's 4 / 8 | ChatGPT 18 at 9px text; AI Elements about 22 |
+| pill | 20 tall (`mark-label-md`; 14 at Compact), round; sides from the height, icon side (h − icon) / 2 and text side (h − 4) / 2 (4 / 8 at 20, 1 / 5 at 14; the text side at both ends without an icon), 4 gap (citation.css:18-36) | prompt-kit h-5 with ChatGPT's and prompt-kit's 4 / 8; spacing audit 2026-10-17 (Badge's rule) | ChatGPT 18 at 9px text; AI Elements about 22 |
 | fill / ink | `bg-component-hover` (#f3) / `fg-muted` | ChatGPT #f3 / rgb(93) | Area's muted role |
-| hover / pressed | `bg-component-active`; the ink stays | ChatGPT darkens the plate | ChatGPT also darkens the ink; Area keeps the foreground fixed (DESIGN_SYSTEM.md) |
+| hover / pressed | hover `bg-component-active`, pressed `bg-component-pressed`; the ink stays (citation.css:60-61) | ChatGPT darkens the plate; interaction polish 2026-10-16 | ChatGPT also darkens the ink; Area keeps the foreground fixed (DESIGN_SYSTEM.md) |
 | type | 12 / 16 500 (`text-xs`) | AI Elements (text-xs medium) and prompt-kit (text-xs); owner, round 7: "maybe even 12" | ChatGPT 9px; was 11 in round 7 |
 | name | cut at 15 characters with an ellipsis | ChatGPT `max-w-[15ch]` | — |
-| favicon | 12 round | ChatGPT `size-3` round | — |
+| favicon | 12 round, at most the plate less 4 (10 at Compact's 14, the 10px cut) | ChatGPT `size-3` round; owner 2026-10-17 ("go with 10px icons") | — |
 | place | 4 after the sentence, on its baseline | ChatGPT `ms-1` | ChatGPT nudges the pill −1.5 then +2; the baseline puts its middle on the text's x-height without a nudge |
-| link | new tab, `noopener noreferrer`; named "Name: title, N more sources" | ChatGPT's aria-label lists the title, URL and additional sources | — |
+| link | pill: new tab, `noopener noreferrer`; named "Name: title, N more sources" | ChatGPT's aria-label lists the title, URL and additional sources | — |
+| footnote · type | 0.704em of the text it sits in, line-height 1, `vertical-align: super`, weight inherited, tabular numbers (citation.css:85-100) | Wikipedia, computed (2026-10-17) | — |
+| footnote · ink | `ink`, `blue` (`fg-info`) by default (Citation.tsx) | Wikipedia #36c; Link's inks | — |
+| footnote · underline, plate | none at rest, hover or press | Owner, 2026-10-17 (no hover-only underline); a plate behind a hued number was 3.97:1 at dark 24 + 8 | Wikipedia underlines on hover |
+| footnote · link | no `target` (goes to its note on the page); named "Note 13: title"; brackets `aria-hidden` | Wikipedia's in-page `#cite_note-13` | — |
 
 ## Behavior and accessibility
 
-An `a` opening in a new tab. Its accessible name is the source's name, its title and how many more sources; the visible
-"+N" is hidden from assistive tech. Focus shows Area's focus ring. In a Hover card it previews on hover and keyboard focus
-(Hover card's timing).
+An `a` with every anchor prop and a ref. The pill opens in a new tab (`target` and `rel` unless given); its accessible
+name is the source's name, its title and how many more sources, and the visible "+N" is hidden from assistive tech. The
+footnote sets no `target`; its name is "Note N" plus the title, and the brackets are hidden from assistive tech. An
+`aria-label` passed in replaces either name. Focus shows Area's focus ring. In a Hover card it previews on hover and
+keyboard focus (Hover card's timing).
 
 ## Visual pass
 

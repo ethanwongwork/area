@@ -1,15 +1,16 @@
 # Area
 
-A customizable component library built on shared design tokens. The goal is broad
-component coverage, useful variants, and consistent visual and interaction quality.
+A design system whose core is a broad, customizable component library: every component and
+variant measured from real products (ChatGPT, Notion, Figma), refined into one consistent
+visual language, and correct under every combination of settings.
 
-The stack stays small: **tokens → framework-free CSS → React → live documentation**.
-Components share theme, color, type size, density, radius, surface and motion settings instead
-of carrying separate light/dark implementations.
+The stack stays small: **tokens → framework-free CSS → React → the app**. Components share
+theme, colour, type size, density, radius, stroke, depth and motion settings instead of
+carrying their own light, dark or compact versions.
 
 ## Run locally
 
-Use Node 22.18+, 24.x, or 26+ (see `package.json`) and npm workspaces.
+Use Node 22.18+, 24.x or 26+ and npm workspaces.
 
 ```sh
 npm ci
@@ -17,21 +18,23 @@ npm run build   # the packages the app imports
 npm run dev     # the desktop app (Electron), reloading on change
 ```
 
-`npm run preview` serves the same app to a browser at http://localhost:4400.
+`npm run preview` also serves the app to a browser at http://localhost:4400.
 
-The app (`apps/desktop`) is Area's gallery: every component, icon, type style and colour. Its
-regions are the **Titlebar** (Language, Components, Typography, Icons and Color tabs, search,
-layout toggles, light / dark), the **Sidebar** (the tab's list), the **Canvas** (the selection at
-full size) and the **Inspector** (canvas settings and facts about the selection). It runs at type
-13 and Compact density and is built from Area's own components; the Canvas carries its own type
-size, density, radius and pills from the Inspector.
+## The app is the source of truth
 
-**The app is the source of truth** (owner, 2026-10-12). Area consumes itself: the app is built only
-from Area, and it is the one place components, icons, type, colour and their states are shown and
-judged. The documentation site (`apps/docs`, `npm run dev:docs`) is archived and is not a source of
-truth. Component content and status, specimens and every demo now live in the app
-(`apps/desktop/src/content`); Area's icons, their sources, generator and tools are in `packages/icons`.
-Edit sources where they are and judge the result in the app. Reviews of icons and components are published as artifacts.
+`apps/desktop` is the app: every component, icon, type style and colour, and the one place
+they are judged (owner, 2026-10-12). It is built only from Area's own components, at type 13
+and Compact density. Its regions:
+
+- **Titlebar:** the tabs Language, Components, Typography, Icons, Color, Testing, Brand and
+  Materials; search; panel toggles; light / dark.
+- **Sidebar:** the tab's list.
+- **Canvas:** the selection, at the settings chosen in the Inspector.
+- **Inspector:** Theme (the Canvas settings), Design (the selection), Code (how to use it)
+  and Chat.
+
+Each component family's page shows Overview, Documentation, API, Code and Spec. The
+documentation site (`apps/docs`) is archived and is not a source of truth.
 
 ## Use the library
 
@@ -43,42 +46,48 @@ import "@area/styles/area.css";
 
 export function Example() {
   return (
-    <Theme value={{ theme: "dark", accent: "teal", ui: "compact" }}>
-      <Button variant="soft" tone="accent">Save changes</Button>
+    <Theme value={{ theme: "dark", accent: "teal", density: "28" }}>
+      <Button variant="soft">Save changes</Button>
     </Theme>
   );
 }
 ```
 
-Plain HTML uses the same stylesheet and `data-area-*` attributes. Stable semantic CSS
-custom properties provide customization beyond the presets. The packages are local,
-unpublished ESM workspaces; publishing them is separate work.
+Plain HTML uses the same stylesheet with the `area-*` classes and `data-area-*` settings.
+The packages are local, unpublished ESM workspaces.
 
-## Where to work
+## Where things are
 
-- `packages/tokens/`: palette, scales, semantic roles, theme resolution and token tests.
-- `packages/styles/`: component CSS and the shared variant manifest.
-- `packages/react/`: components, native behavior, composition and typed helpers.
-- `apps/desktop/`: the app (Electron): Titlebar, Sidebar, Canvas, Inspector.
-- `packages/icons/`: Area's icons: the drawings (`sources/`), the generator and icon tools (`scripts/`), and the
-  `@area/icons` package built from them.
-- `apps/docs/`: archived site, not a source of truth; deleted once the app no longer imports from it.
-- `tests/` and `scripts/`: consumer checks, retained fixtures and package build helpers.
+| Path | Holds |
+|---|---|
+| `packages/tokens` | Palette, settings (axes), semantic roles, derivations, the contrast gate |
+| `packages/styles` | Component CSS and the manifest (variants, parts, states) |
+| `packages/react` | Components, behaviour and typed variant helpers |
+| `packages/icons` | Area's icons: drawings, generator, tools, the `@area/icons` package |
+| `apps/desktop` | The app; `src/content` holds families, demos, tiles, documentation and status |
+| `docs/` | The guides below; `docs/specs` one spec per family; `docs/research` evidence |
+| `apps/docs` | Archived site, still the renderer for review pages and the capture script |
 
-## Essential documentation
+## Documentation
 
-- [Building a component](docs/COMPONENT_ADAPTATION.md): measured evidence, spec sheets, slot ownership, visual pass and review.
-- [Design references](docs/DESIGN_REFERENCES.md): target products, design systems and where to measure each.
-- [Component specs](docs/specs/README.md) and the [reference baseline](docs/research/BASELINE.md): per-component evidence and shared cross-product values.
-- [Components](docs/COMPONENTS.md): scope, completion status, backlog and variant conventions.
-- [Design system](docs/DESIGN_SYSTEM.md): tokens, naming, geometry and component conventions.
-- [Theming](docs/THEMING.md): customization, inheritance and React scopes.
-- [Contrast](docs/CONTRAST.md): color, focus and accessibility constraints.
-- [Development](docs/DEVELOPMENT.md): architecture, commands, testing and generated files.
+Start with the first three; the rest are references.
 
-The gallery's [completion registry](apps/desktop/src/content/component-status.mjs) is authoritative.
-New and refined families stay In review until the owner accepts them.
+| Doc | Read it for |
+|---|---|
+| [Brief](docs/BRIEF.md) | The product scope (2026-09-27, with a status note): what Area is becoming |
+| [Principles](docs/PRINCIPLES.md) | What Area is, the principles every component reflects, the design language |
+| [Governance](docs/GOVERNANCE.md) | How the library grows: new component vs variant vs setting, vocabulary, lifecycle, where each fact lives |
+| [Architecture](docs/ARCHITECTURE.md) | How it is built in code, and the files a new component touches |
+| [Building a component](docs/COMPONENT_ADAPTATION.md) | The evidence process: captures, spec, build, visual pass, review |
+| [Design system](docs/DESIGN_SYSTEM.md) | The rules: tokens, colour, state paint, elevation, strokes, size and shape, insets, API |
+| [Theming](docs/THEMING.md) | Every setting, its values and scopes |
+| [Contrast](docs/CONTRAST.md) · [Motion](docs/MOTION.md) | Colour, focus and accessibility constraints; durations, recipes, crispness |
+| [Product UI](docs/PRODUCT_UI.md) | Rules for building a product with Area, as the app does |
+| [Components](docs/COMPONENTS.md) | The library by group, look-alike boundaries, candidates |
+| [Design references](docs/DESIGN_REFERENCES.md) · [Baseline](docs/research/BASELINE.md) | Where to measure; shared cross-product values |
+| [Specs](docs/specs/README.md) | One per family: evidence, decisions, feedback |
+| [Development](docs/DEVELOPMENT.md) | Commands, checks, CI, verifying in the app |
 
-Session notes live in [the handoff](.Codex/HANDOFF.md); history lives in the journal
-and Git. Earlier audits and research were removed from the tree after commit `2f90f2d`
-and remain in Git history.
+Agents start from [AGENTS.md](AGENTS.md) and the skills in `.agents/skills/`. Completion is
+owner-confirmed in [`component-status.mjs`](apps/desktop/src/content/component-status.mjs).
+Session notes are in [the handoff](.Codex/HANDOFF.md); history is in Git.

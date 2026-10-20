@@ -1,6 +1,5 @@
 # Table spec
 
-**Status:** accepted (owner; Complete in `component-status.mjs`; was: in review · 2026-09-26 (cohesion audit, second pass))
 **Captures:** `docs/research/captures/table/`
 **Peers:** Menu, Nav, Tree view and Select (row plates), Card and Panel (container edge),
 Checkbox (row selection), Badge and Skeleton (cell content), Separator (dividers)
@@ -14,7 +13,7 @@ Checkbox (row selection), Badge and Skeleton (cell content), Separator (dividers
   the middle. Sorting and selection are composed with native headers, buttons and Checkbox
   in the live gallery, rather than a data-grid API.
   Reference: [Carbon Table](https://carbondesignsystem.com/components/data-table/usage/).
-- 2026-09-26: Neutral by default, accent by override ([design system](../DESIGN_SYSTEM.md#color-and-focus)).
+- 2026-09-26: Neutral by default, accent by override ([design system](../DESIGN_SYSTEM.md#colour)).
   Selected rows use the neutral selection fill.
 - 2026-09-26: Decide every open item with the most calculated option consistent with the
   system ([second pass](../research/cohesion-audit.md#second-pass-notion-figma-and-the-open-decisions)).

@@ -1,6 +1,5 @@
 # Confirm dialog spec
 
-**Status:** complete · 2026-10-08 (owner approved on the component review page after the requested changes)
 **Captures:** `docs/research/captures/confirm-dialog/area--confirm-dialog-danger--rest--light` (predates the
 2026-10-07 footer fix: 145.86 tall; now 141.9). ChatGPT's
 confirm was measured live (values below) but its file isn't saved: the first export was blocked

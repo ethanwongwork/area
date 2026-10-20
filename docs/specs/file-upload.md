@@ -1,6 +1,5 @@
 # File upload spec
 
-**Status:** in review · 2026-10-09
 **Captures:** `docs/research/captures/file-upload/`
 **Peers:** Input (the field edge and its invalid paint), Link (the action), Progress (the bar), Button ghost sm (remove, retry), Tag picker (a field that takes several values), Card (a framed surface)
 
