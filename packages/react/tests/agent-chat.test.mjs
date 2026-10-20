@@ -56,15 +56,27 @@ test("an Edit summary names itself, totals its files and speaks its counts", () 
 });
 
 test("a kept or undone file settles: its actions leave and it says what happened", () => {
-  const kept = renderToString(h(EditSummaryFile, { name: "a.css", added: 1, removed: 0, state: "kept" }));
+  const kept = renderToString(h(EditSummaryFile, { name: "a.css", added: 1, removed: 0, status: "kept" }));
   assert.match(kept, /data-kept=""/);
   assert.match(kept, /<span class="area-edit-summary__status">Kept<\/span>/);
   assert.doesNotMatch(kept, /Undo a\.css/);
-  assert.match(renderToString(h(EditSummaryFile, { name: "a.css", added: 1, removed: 0, state: "undone" })), /data-undone=""[^]*>Undone</);
+  assert.match(renderToString(h(EditSummaryFile, { name: "a.css", added: 1, removed: 0, status: "undone" })), /data-undone=""[^]*>Undone</);
+  // The deprecated `state` still works for a release; `status` wins.
+  assert.match(renderToString(h(EditSummaryFile, { name: "a.css", added: 1, removed: 0, state: "kept" })), /data-kept=""/);
+  assert.match(renderToString(h(EditSummaryFile, { name: "a.css", added: 1, removed: 0, status: "undone", state: "kept" })), /data-undone=""/);
+});
+
+test("a file's diff opens from defaultOpen, or from a controlled open", () => {
+  const diff = h(Diff, { hunks: [] });
+  assert.match(renderToString(h(EditSummaryFile, { name: "a.css", added: 1, removed: 0, diff, defaultOpen: true })), /aria-expanded="true"[^]*area-edit-summary__diff/);
+  const controlled = renderToString(h(EditSummaryFile, { name: "a.css", added: 1, removed: 0, diff, open: true, defaultOpen: false, onOpenChange: () => {} }));
+  assert.match(controlled, /data-open=""/);
+  assert.match(controlled, /aria-expanded="true"/);
+  assert.doesNotMatch(renderToString(h(EditSummaryFile, { name: "a.css", added: 1, removed: 0, diff, open: false, defaultOpen: true })), /area-edit-summary__diff/);
 });
 
 test("a Diff draws numbers, markers and folds, says which lines changed, and takes focus", () => {
-  const html = renderToString(h(Diff, { label: "a.css", hunks: [
+  const html = renderToString(h(Diff, { "aria-label": "Changes to a.css", hunks: [
     { lines: [{ kind: "context", text: "a", old: 1, new: 1 }, { kind: "removed", text: "b", old: 2 }, { kind: "added", text: "c", new: 2 }] },
     { folded: 12, lines: [{ kind: "context", text: "d", old: 15, new: 15 }] },
   ] }));
@@ -77,12 +89,18 @@ test("a Diff draws numbers, markers and folds, says which lines changed, and tak
   assert.match(html, /<div class="area-diff__fold">12 unchanged lines<\/div>/);
   const bare = renderToString(h(Diff, { hunks: [{ lines: [{ kind: "added", text: "c" }] }] }));
   assert.doesNotMatch(bare, /area-diff__number/);
+  assert.match(bare, /aria-label="Changes"/);
+  // The deprecated `label` still names it by its file; `aria-label` wins.
+  assert.match(renderToString(h(Diff, { label: "a.css", hunks: [] })), /aria-label="Changes to a\.css"/);
+  assert.match(renderToString(h(Diff, { label: "a.css", "aria-label": "Edit", hunks: [] })), /aria-label="Edit"/);
 });
 
 test("an Approval numbers its choices, focuses the first only when asked and offers what to do instead", () => {
-  const plain = renderToString(h(Approval, { title: "T", options: [{ value: "yes", label: "Yes" }], onChoose: () => {} }));
+  const plain = renderToString(h(Approval, { title: "T", items: [{ value: "yes", label: "Yes" }], onChoose: () => {} }));
   assert.doesNotMatch(plain, /autofocus/i);
-  const html = renderToString(h(Approval, { autoFocus: true, title: "Edit a.css?", description: "Why", options: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], onChoose: () => {}, onInstead: () => {} }, "detail"));
+  // The deprecated `options` still works for a release.
+  assert.equal((renderToString(h(Approval, { title: "T", options: [{ value: "yes", label: "Yes" }], onChoose: () => {} })).match(/class="area-approval__option"/g) ?? []).length, 1);
+  const html = renderToString(h(Approval, { autoFocus: true, title: "Edit a.css?", description: "Why", items: [{ value: "yes", label: "Yes" }, { value: "no", label: "No" }], onChoose: () => {}, onInstead: () => {} }, "detail"));
   const id = html.match(/<section class="area-approval" aria-labelledby="([^"]+)"/)[1];
   assert.match(html, new RegExp(`<p id="${id}" class="area-approval__title">Edit a\\.css\\?</p>`));
   assert.match(html, new RegExp(`class="area-approval__options" role="group" aria-labelledby="${id}"`));
@@ -112,8 +130,12 @@ test("a Plan counts what is done and says each item's state", () => {
 });
 
 test("a Turn notice is a status, or an alert when the turn failed", () => {
-  assert.match(renderToString(h(TurnNotice, { kind: "stopped" }, "Stopped")), /^<div role="status" class="area-turn-notice area-turn-notice--stopped"/);
+  assert.match(renderToString(h(TurnNotice, {}, "Stopped")), /^<div role="status" class="area-turn-notice area-turn-notice--stopped"/);
+  assert.match(renderToString(h(TurnNotice, { status: "compacted" }, "Compacted")), /^<div role="status" class="area-turn-notice area-turn-notice--compacted"/);
+  assert.match(renderToString(h(TurnNotice, { status: "error" }, "Failed")), /^<div role="alert" class="area-turn-notice area-turn-notice--error"/);
+  // The deprecated `kind` still works for a release; `status` wins.
   assert.match(renderToString(h(TurnNotice, { kind: "error" }, "Failed")), /^<div role="alert" class="area-turn-notice area-turn-notice--error"/);
+  assert.match(renderToString(h(TurnNotice, { status: "stopped", kind: "error" }, "Stopped")), /^<div role="status"/);
 });
 
 test("Kbd's gap rule: a Button lifts its trailing keycap out of the label, so the button's gap spaces it", async () => {

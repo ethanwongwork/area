@@ -69,8 +69,9 @@ From the capture nodes (node 0):
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
 | size | 16 / 20 / 24 (`mark-sm/md/lg`) | Figma 14 and 16 | sm fills Input's 16px icon slot |
+| size in a menu row's or Custom select's icon slot | **the icon box less 2** (14 in a 16, 18 in a 20; round 56, Figma's 14 chit; round 55: less 4, 12), whatever `size` says, with the sm swatch's corner (4 at the default; round 55: "can it be 2px rounder?") (color.css, `:is(.area-menu__icon, .area-custom-select__icon) .area-color-swatch`) | Owner (2026-10-19: "the swatch seems very large" beside the other marks in the setting pickers); Area's square icon keyline, ink 12.1–13 (`area-icon-construction`, Keylines); Figma's 14 chit in a fill row | There it stands in for a glyph, so it reads the size of the glyphs and marks beside it; a solid counts heavier than a line, so it takes the keyline's 12, under Figma's 14. Color field's preview and the picker's cells are the value itself and keep their size |
 | radius | **20% of the side, rounded to even pixels** (4 at sm, md and lg at the default; 12 → 2), times the corner setting ÷ 8 elsewhere, square at Sharp | Owner (2026-09-28: "make it more consistent"); radius audit 2026-10-03 (D6, all even, one corner setting); Figma 20% (`figma--swatches`, the edge layer) | Was `min(radius-small, size / 4)`: 25% to 24px, then capped at 6; then 3.2 / 4 / 4.8 |
-| edge | **a 1px translucent ring over the colour**: an `outline` at `stroke-width`, offset inward by it (a required edge, audit F-5), `--area-token-swatch-ring` (black 10% light, white 10% dark); the layers fill the shape (`--_edge: 0`) | Owner (2026-10-12: "yes apply the swatch fix"); Figma's swatch edge, black 10% | Was (2026-09-28) a solid `bg-component` band around the colour: it merged with light grounds on straight edges and showed only as fringe at the corners. Before that, `fg-default` 22% (too dark) |
+| edge | **a 1px translucent ring over the colour**: an `outline` at `stroke-width`, offset inward by it, painted over the layers (they sit at z-index −1 in the swatch's isolated stack; as positioned layers above it they hid the ring until round 55) (a required edge, audit F-5), `--area-token-swatch-ring` (black 10% light, white 10% dark); the layers fill the shape (`--_edge: 0`) | Owner (2026-10-12: "yes apply the swatch fix"); Figma's swatch edge, black 10% | Was (2026-09-28) a solid `bg-component` band around the colour: it merged with light grounds on straight edges and showed only as fringe at the corners. Before that, `fg-default` 22% (too dark) |
 | checker | **a 2 × 2 pixel tile used as a mask, 5 cells across at every size** (ink cells in all four corners), `fg-default` 16% over `bg-surface` (color.css:3-15) | Owner (2026-09-28: a pixel image that meets the edges exactly and scales) | Figma 10.67px #fff/#e1e1e1; Area's follows the theme while the colour does not (owner). Was 8px conic-gradient tiles |
 | colour | consumer value, unchanged by theme | Owner (above) | — |
 
@@ -132,6 +133,15 @@ kept as the owner's choice.
 - **What changed:** the swatch's outline is a thin translucent line over the colour (black 10%, white 10% in dark) instead of a solid very light band around it.
 - **Why:** you asked why the swatch's outline only showed at its corners, then said to apply the fix: the outline is now
   a light translucent line drawn over the colour, so it shows evenly all the way round on every colour.
+
+## Review note, 2026-10-19 (round 55, swatch in an icon slot)
+
+- **What changed:** a swatch in a list row's or a Custom select's icon slot is 12 in the 16 box instead of filling it,
+  with its corner at 2.
+- **Why:** you said the swatch looked very large beside the other options' marks. It filled the whole icon box, while
+  glyphs draw inside a 12–13 keyline and the setting marks beside it were 12; now it is the size of what sits beside
+  it. The Inspector's ground swatches also draw the Inspector's ring now, so a dark swatch in a light Inspector has the
+  same light-theme hairline as the others.
 
 ## Feedback log
 
@@ -197,3 +207,38 @@ kept as the owner's choice.
   merge keeps main's outline and drops this branch's duplicate `box-shadow`, so the ring is painted once.
 - 2026-10-12 · owner, review round 16: approved.
 - 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the ring reads the `token-swatch-ring` token and `stroke-width` (the merge with main had brought back a literal colour at `border-width`, regressing audit F-5: a white swatch vanished under Elevated) (color.css). (docs/research/consistency-audit-2026-10-12.md)
+- 2026-10-19 · owner: the setting pickers' swatch reads very large beside the icons and marks, and should show the
+  translucent ring → in a menu row's or Custom select's icon slot the swatch is the icon box less 4 (12 at 16);
+  the app's option marks keep to the icon keylines (squares 12, wide marks 14 × 10), and a mark painted under another
+  theme's scope reads the ring from the Inspector → measured in the app: 12 × 12 at (2, 2), corner 2, ring black 10%
+  in light and white 10% in dark for every ground swatch.
+- 2026-10-19 · owner, round 55 ("are the gaps … too large? … even solid swatches got the transparent outline overlay?
+  … can it be 2px rounder?") → the layers move under the ring (z-index −1 in the isolated swatch), the icon-slot corner
+  is the sm swatch's (4), the gap is kept with its reason → headless Edge at 6×, light and dark: ring on blue, red,
+  green, yellow, white, near-black and purple; corner 4.
+
+## Review note, 2026-10-19 (round 56)
+
+- **What changed:** the thin translucent ring now shows on every swatch, solid colours included, in light and dark;
+  a swatch in a list's icon slot has a corner 2px rounder (4).
+- **Why:** you asked whether solid swatches still had the transparent outline: they had lost it. The ring was there,
+  but the colour layer painted over it, so not even a white swatch on white showed an edge. The colour now sits under
+  the ring. The 12 swatch took 20% of its side for its corner (2), which read sharp; it now keeps the 16 swatch's 4,
+  and still follows the Radius setting (square at Sharp).
+- **The gap you asked about:** the text starts one tier gap after the 16 icon box (4 at the app's Compact, 6 at
+  Default), and the 12 swatch sits 2 inside the box, so it reads 6 (8). A glyph's ink also starts about 2 inside its
+  box, so swatch rows and glyph rows share one text column; Figma's colour row reads 5. Narrowing it only for swatches
+  would put their labels off the column of the rows around them.
+
+## Review note, 2026-10-19 (round 57)
+
+- **What changed:** a swatch in a list's icon slot is 14 (it was 12), still 2px rounder at the corner (4). The tier gap
+  to the text is unchanged everywhere.
+- **Why:** you were open to a slightly larger swatch and asked whether the gap was too big for every design. The
+  measured products put a glyph 4 (ChatGPT) to 6 (Notion) from its label, and Figma's 14 chit 5 from its text; Area's
+  gap is 6, and 4 at the app's Compact, inside that range, so it stays. At 14 the swatch sits 1 inside its box, so it
+  reads 5 from its text at Compact, as Figma's does.
+- **The outline:** it was dropped by accident. A merge on 2026-10-12 removed what looked like a duplicate ring (a
+  shadow on the colour layer) and kept the outline, which the colour layer then covered, so nothing showed it. No
+  outline is not better: a white or near-ground swatch disappears on its ground (a white swatch on white had no edge at
+  all), and Figma draws the same 10% inner edge on every chit. On saturated colours it is barely visible, by design.

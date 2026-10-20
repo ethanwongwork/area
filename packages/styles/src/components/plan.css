@@ -38,11 +38,13 @@
   }
   /* Open, the head is a row plus its rule, so the rule never eats into the row (round 52: it centred the chevron's
      plate half a pixel high). */
-  .area-plan[data-open] > .area-plan__head { min-block-size: calc(var(--area-ui-row) + var(--area-stroke-width)); border-block-end: var(--area-stroke-width) solid var(--area-border-divider); }
+  .area-plan[data-open] > .area-plan__head { min-block-size: calc(var(--area-ui-row) + var(--area-stroke-width)); border-block-end: var(--area-stroke-width) solid var(--area-border-decorative); } /* a seam inside the card: Code block's header seam, never darker than the frame (DESIGN_SYSTEM.md, "A rule inside a container is never darker than the container's edge"; owner, round 55) */
   .area-plan__head:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(-1 * var(--area-focus-width)); border-radius: inherit; }
   .area-plan__title { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .area-plan__count { flex: none; color: var(--area-fg-muted); font-variant-numeric: tabular-nums; }
   .area-plan__chevron { display: inline-flex; flex: none; margin-inline-start: auto; color: var(--area-fg-muted); transform: rotate(-90deg); transition: transform var(--area-duration-fast) var(--area-ease-out); /* MOTION.md: every chevron turns on fast */ }
+  /* Closed points along the reading direction, so it mirrors in right-to-left text (Accordion, Tree view). */
+  .area-plan__chevron:dir(rtl) { transform: rotate(90deg); }
   .area-plan[data-open] .area-plan__chevron { transform: none; }
   .area-plan__chevron > svg { inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); }
   /* The head answers the pointer as Accordion's does: a plate behind the chevron on hover and press (a square the
@@ -61,17 +63,18 @@
   .area-plan__items {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
+    gap: var(--area-ui-row-gap); /* Menu's break between rows: 2, compact 0 */
     margin: 0;
     padding: var(--_card-list);
     list-style: none;
   }
   .area-plan__items[hidden] { display: none; }
   /* An item is a Menu row that may wrap: at least a row tall, its first line centred in it (inset.css: first-line
-     alignment), the mark in the row's icon slot, 8 to the text (Menu's gap). */
+     alignment), the mark in the row's icon slot, Menu's row gap to the text (gap-row: 12, compact 8). */
   .area-plan__item {
     display: flex;
     align-items: flex-start;
-    gap: var(--area-space-8); /* spec: Menu row gap 8; Claude Code item gap 8 */
+    gap: var(--area-gap-row); /* Menu's row gap (surface.css --_menu-gap), so the text lands on the list column */
     min-inline-size: 0;
     padding-block: calc((var(--area-ui-row) - var(--area-text-sm-leading)) / 2);
     padding-inline: var(--area-ui-row-inset);

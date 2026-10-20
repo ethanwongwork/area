@@ -59,7 +59,11 @@
     inline-size: auto;
     block-size: auto;
     border-radius: var(--area-radius-small);
-    box-shadow: 0 0 0 var(--area-stroke-width) var(--area-token-swatch-ring);
+    /* The image ring inside the image, as Asset row's well and Color swatch: an inset outline, which paints over the
+       picture (an img takes no ::after, and an inset box-shadow paints under it) and snaps to device pixels (MOTION.md,
+       Crispness 3). Was an outset ring, drawn outside the box. */
+    outline: var(--area-stroke-width) solid var(--area-token-swatch-ring);
+    outline-offset: calc(-1 * var(--area-stroke-width));
     object-fit: contain;
     background: var(--area-bg-subtle);
   }

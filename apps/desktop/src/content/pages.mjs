@@ -40,16 +40,16 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "edit-summary", name: "Edit summary", manifest: "editSummary", imports: "EditSummary, EditSummaryFile, Diff",
-    api: [["EditSummary: title, added, removed", "the count and the turn's +N −N", "\"Edited files\""], ["onKeepAll / onUndoAll", "Keep all and Undo all, while any file is pending", "—"], ["EditSummaryFile: name, added, removed", "one changed file", "—"], ["state", "pending | kept | undone", "pending"], ["onKeep / onUndo / diff / defaultOpen", "the file's actions and its Diff, shown when its name is pressed", "—"], ["Diff: hunks, label", "lines (added, removed, context, with old / new numbers) and folds between hunks", "—"]],
+    api: [["EditSummary: title, added, removed", "the count and the turn's +N −N", "\"Edited files\""], ["onKeepAll / onUndoAll", "Keep all and Undo all, while any file is pending", "—"], ["EditSummaryFile: name, added, removed", "one changed file", "—"], ["status", "pending | kept | undone (state: deprecated alias)", "pending"], ["onKeep / onUndo / diff", "the file's actions and its Diff, shown when its name is pressed", "—"], ["open / defaultOpen / onOpenChange", "whether the file's diff shows", "— / false / —"], ["Diff: hunks, aria-label", "lines (added, removed, context, with old / new numbers) and folds between hunks; aria-label names it (label: deprecated alias)", "\"Changes\""]],
     examples: [
       {id: "default", title: "Default", demo: "GalleryEditSummary", note: "What changed in a turn: files with +N −N, Undo and Keep for each and for all (Cursor's review, Codex's patch summary)."},
-      {id: "open", title: "Open", demo: "GalleryEditSummaryOpen", note: "A file's name opens its diff: Code block sm's type and its added / removed paint, a 3px strip, folds between hunks."},
+      {id: "open", title: "Open", demo: "GalleryEditSummaryOpen", note: "A file's name opens its diff: Code block sm's type and its added / removed paint with a + / − marker in the vivid inks, folds between hunks."},
       {id: "diff", title: "Diff", demo: "GalleryDiff"},
     ],
   },
   {
     slug: "approval", name: "Approval", manifest: "approval", imports: "Approval",
-    api: [["title / description", "what it wants to do, and why", "—"], ["options / onChoose", "numbered choices; 1–9 choose, arrows move", "—"], ["children", "the thing itself: a command, a Diff", "—"], ["onInstead / insteadPlaceholder", "a field to say what to do instead; Enter sends", "— / \"Tell it what to do instead\""], ["onDismiss", "Escape; the last option by default", "—"], ["autoFocus", "focus the first choice when it appears (where it takes the composer's place)", "false"]],
+    api: [["title / description", "what it wants to do, and why", "—"], ["items / onChoose", "numbered choices; 1–9 choose, arrows move (options: deprecated alias)", "—"], ["children", "the thing itself: a command, a Diff", "—"], ["onInstead / insteadPlaceholder", "a field to say what to do instead; Enter sends", "— / \"Tell it what to do instead\""], ["onDismiss", "Escape; the last item by default", "—"], ["autoFocus", "focus the first choice when it appears (where it takes the composer's place)", "false"]],
     examples: [
       {id: "default", title: "Default", demo: "GalleryApproval", note: "It takes the composer's place, in the Composer's shell; choices are Menu rows with a number (Claude Code's prompt, Codex's approvals)."},
       {id: "detail", title: "Detail", demo: "GalleryApprovalDetail"},
@@ -67,7 +67,7 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "turn-notice", name: "Turn notice", manifest: "turnNotice", imports: "TurnNotice",
-    api: [["kind", "stopped | error | compacted", "stopped"], ["action", "a Button after the text (Retry)", "—"], ["children", "what happened", "—"]],
+    api: [["status", "stopped | error | compacted (kind: deprecated alias)", "stopped"], ["action", "a Button after the text (Retry)", "—"], ["children", "what happened", "—"]],
     examples: [
       {id: "stopped", title: "Stopped", demo: "GalleryTurnNotice", note: "How a turn ended, on one quiet line (Codex, Cursor, Claude Code)."},
       {id: "error", title: "Error", demo: "GalleryTurnNoticeError"},
@@ -76,7 +76,7 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "attachment", name: "Attachment", manifest: "attachment", imports: "Attachment",
-    api: [["src / name", "the image, and the file's name (names the tile, its remove and its upload)", "—"], ["status", "ready | uploading | error", "ready"], ["progress", "0–100 while uploading; leave out while unknown", "—"], ["error", "why it failed", "\"<name> could not be uploaded\""], ["onRemove", "shows the remove control", "—"]],
+    api: [["src / name", "the image, and the file's name (names the tile, its remove and its upload)", "—"], ["status", "ready | uploading | error", "ready"], ["progress", "0–100 while uploading; leave out while unknown", "—"], ["error", "why it failed", "\"<name> could not be uploaded\""], ["onDismiss / dismissLabel", "shows the remove control and names it (onRemove: deprecated alias)", "— / \"Remove <name>\""]],
     examples: [
       {id: "default", title: "Default", demo: "GalleryAttachment", note: "An image in the composer before it is sent (Cursor's 64 tile; Codex's upload ring)."},
       {id: "uploading", title: "Uploading", demo: "GalleryAttachmentUploading"},
@@ -86,7 +86,7 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "composer-menu", name: "Composer menu", manifest: "composerMenu", imports: "ComposerMenu",
-    api: [["label", "names the listbox", "—"], ["groups", "{ label?, items: { id, label, icon?, path? }[] }[]", "—"], ["activeId / onActiveChange", "the highlighted row; the field names it with aria-activedescendant (`${id}-${item.id}`)", "—"], ["onPick", "a row was chosen", "—"], ["emptyLabel", "shown when nothing matches", "\"No matches\""]],
+    api: [["aria-label", "names the listbox (label: deprecated alias)", "—"], ["items", "{ label?, items: { id, label, icon?, path? }[] }[] (groups: deprecated alias)", "—"], ["activeId / onActiveChange", "the highlighted row; the field names it with aria-activedescendant (`${id}-${item.id}`)", "—"], ["onPick", "a row was chosen", "—"], ["emptyLabel", "shown when nothing matches", "\"No matches\""]],
     examples: [
       {id: "default", title: "Files", demo: "GalleryComposerMenu", note: "Opens above the composer at its width after @ or / (all three products); the field keeps focus."},
       {id: "commands", title: "Commands", demo: "GalleryComposerMenuCommands"},
@@ -95,7 +95,7 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "queue", name: "Queue", manifest: "queue", imports: "Queue",
-    api: [["items", "{ id, text, status?: queued | sending | failed }", "—"], ["onSendNow / onRemove / onRetry", "row actions", "—"], ["title", "the head", "\"<n> queued\""], ["open / defaultOpen / onOpenChange", "folds to its head", "— / true / —"]],
+    api: [["items", "{ id, text, status?: queued | sending | failed }", "—"], ["onSendNow / onDismiss / onRetry", "row actions (onRemove: deprecated alias)", "—"], ["title", "the head", "\"<n> queued\""], ["open / defaultOpen / onOpenChange", "folds to its head", "— / true / —"]],
     examples: [
       {id: "default", title: "Default", demo: "GalleryQueue", note: "Messages sent while the agent works wait here (Cursor's queue tray, Codex's rail)."},
       {id: "sending", title: "Sending", demo: "GalleryQueueSending"},
@@ -199,7 +199,7 @@ export const COMPONENT_PAGES = [
   },
   {
     slug: "calendar", name: "Calendar", exportName: "Calendar", manifest: "calendar",
-    api: [["selectionMode", '"single" | "range" | "multiple"', '"single"'], ["value / defaultValue", "ISO date, { start, end } or ISO dates", "null"], ["onValueChange", "(value) => void", "—"], ["month / defaultMonth / onMonthChange", '"YYYY-MM"', "selected or current month"], ["visibleMonths", "1 | 2", "1"], ["min / max / isDateUnavailable", "ISO bounds and a predicate", "—"], ["firstDayOfWeek / locale", "0-6, BCP 47 tag", '0, "en-US"'], ["showOutsideDays / fixedWeeks", "boolean", "true, false"], ["variant", '"surface" | "plain" (plain inside a Popover or Panel that draws the surface)', '"surface"'], ["days", '"square" | "circle" | "tile"', '"square"'], ["layout", '"month" | "week"', '"month"'], ["weekdayStyle", '"narrow" | "short" | "abbreviated"', '"short"'], ["markers", "Record<ISO date, tone> dots under days", "—"], ["today / name / disabled", "ISO date, form name, state", "—"]],
+    api: [["selectionMode", '"single" | "range" | "multiple"', '"single"'], ["value / defaultValue", "ISO date, { start, end } or ISO dates", "null"], ["onValueChange", "(value) => void", "—"], ["month / defaultMonth / onMonthChange", '"YYYY-MM"', "selected or current month"], ["visibleMonths", "1 | 2", "1"], ["min / max / isDateUnavailable", "ISO bounds and a predicate", "—"], ["firstDayOfWeek / locale", "0-6, BCP 47 tag", '0, "en-US"'], ["showOutsideDays / fixedWeeks", "boolean", "true, false"], ["variant", '"surface" | "plain" (plain inside a Popover or Panel that draws the surface)', '"surface"'], ["days", '"square" | "circle" | "tile"', '"square"'], ["layout", '"month" | "week"', '"month"'], ["caption", '"label" | "menus" (the month and the year as two menus; the arrows stay)', '"label"'], ["labels", "names for the arrows and the caption menus: previousMonth, nextMonth, previousWeek, nextWeek, month, year", "English"], ["weekdayStyle", '"narrow" | "short" | "abbreviated"', '"short"'], ["markers", "Record<ISO date, tone> dots under days", "—"], ["today / name / disabled", "ISO date, form name, state", "—"]],
     examples: [
       { id: "default", title: "Date", note: "Arrow keys move by day and week, Home and End to the week's edges, Page Up and Page Down by month (with Shift, by year). Enter or Space selects.", demo: "GalleryCalendar" },
       { id: "range", title: "Range", note: "The first choice anchors the range; hovering or moving focus previews it until the second choice. Escape cancels.", demo: "GalleryCalendarRange" },
@@ -439,7 +439,7 @@ export const COMPONENT_PAGES = [
       ["title / top", "ReactNode | false / { label, id }", "\"On this page\" / —"],
       ["levels", "1 | 2", "2"],
       ["offset", "number (a sticky header's height)", "0"],
-      ["current / onCurrentChange", "string (controlled) / (id) => void", "follows the scroll"],
+      ["value / defaultValue / onValueChange", "string (controlled) / string / (id) => void (current / onCurrentChange are deprecated aliases)", "follows the scroll"],
     ],
     examples: [
       { id: "default", title: "Default", note: "Nav's marker rows: the section being read in the body ink with the rail.", demo: "GalleryTableOfContents" },
@@ -492,7 +492,7 @@ export const COMPONENT_PAGES = [
     imports: "Hatnote, Link",
     api: [["div props", "a note (role=note)", "—"]],
     examples: [
-      { id: "default", title: "Default", note: "Italic, muted, 1.6em in, at the top of an article.", demo: "GalleryHatnote" },
+      { id: "default", title: "Default", note: "Muted (Area's type has no italic), 1.6em in, at the top of an article.", demo: "GalleryHatnote" },
     ],
   },
   {
@@ -500,13 +500,13 @@ export const COMPONENT_PAGES = [
     imports: "VideoPlayer, Figure",
     api: [
       ["label", "string (the video's title, names the player)", "—"],
-      ["layout", "floating | bar | minimal", "floating"],
+      ["layout", "bar | floating | minimal", "bar"],
       ["controls", "auto | always", "auto"],
       ["video props", "src, poster, preload, autoPlay, muted, loop…; children are <track> elements", "—"],
       ["keys", "Space / K play · ← → 5 s · J / L 10 s · ↑ ↓ volume · M mute · F full screen · C captions · I picture in picture · 0–9", "—"],
     ],
     examples: [
-      { id: "default", title: "Default", note: "QuickTime Player's floating controller: a frosted panel with the transport over the time and track.", demo: "GalleryVideoPlayer" },
+      { id: "default", title: "Default", note: "Before the first play: the poster and the round play. Playing, the bar: YouTube's controls, the track across the foot and the buttons below it in pills of Area's glass.", demo: "GalleryVideoPlayer" },
     ],
   },
   {
@@ -656,19 +656,14 @@ export const COMPONENT_PAGES = [
     imports: "Folder",
     api: [
       ["size", "sm (48) | md (64, Finder's icon view) | lg (96); unset follows --area-folder-size", "—"],
-      ["tone", "solid only: blue (Finder) | neutral | cyan | green | yellow | orange | red | pink | purple | brown", "blue"],
-      ["variant", "outline (back and pocket in grey with a thin light edge) | solid (Finder's lit folder)", "outline"],
-      ["contents", "solid only: anything inside draws one straight sheet over the pocket; image URLs put the first on it", "—"],
       ["count", "a number at the pocket's foot, at the end", "—"],
       ["badge", "small marks at the pocket's foot: who or what it is shared with", "—"],
       ["open", "the pocket tips forward and a sheet rises out of it (a drag over it)", "false"],
-      ["label", "the figure's name; without one it is decorative", "—"],
+      ["aria-label", "the figure's name; without one it is decorative (label is a deprecated alias)", "—"],
+      ["variant / tone / contents", "deprecated and ignored: the solid folder, its tones and its sheet are archived (round 57)", "—"],
     ],
     examples: [
-      { id: "default", title: "Default", note: "The outline folder by default: the back with its tab and the pocket, flat in the control fill (bg-component) with one thin whole-pixel edge, in a square icon box at Finder's 64. variant=\"solid\" is Finder's lit blue folder.", demo: "GalleryFolder" },
-      { id: "contents", title: "What it holds", note: "The difference from Finder: anything inside draws one straight white sheet above the pocket; an image fills it.", demo: "GalleryFolderContents" },
-      { id: "tones", title: "Tones", note: "Finder's blue, neutral, and the palette's hues at Finder's lightness and chroma.", demo: "GalleryFolderTones" },
-      { id: "solid", title: "Solid", note: "The alternate: Finder's folder measured from the live icon, made rounder and brighter, holding one straight white sheet.", demo: "GalleryFolderSolid" },
+      { id: "default", title: "Default", note: "The back with its tab and the pocket, flat in the control fill (bg-component) with one thin whole-pixel edge, a sheet tucked inside, in a square icon box at Finder's 64.", demo: "GalleryFolder" },
       { id: "open", title: "Open", note: "Under a drag the pocket tips toward you, its top dropping and flaring past the sides, and a sheet rises out of the folder, on base.", demo: "GalleryFolderOpen" },
     ],
   },
@@ -677,15 +672,29 @@ export const COMPONENT_PAGES = [
     imports: "FilePage",
     api: [
       ["size", "sm (48) | md (64) | lg (96); unset follows --area-folder-size", "—"],
-      ["icon", "the type glyph, drawn thin in the middle: an @area/icons icon", "—"],
-      ["label", "the extension under the glyph: PDF, DOCX", "—"],
-      ["variant", "outline | solid, as Folder", "outline"],
+      ["icon", "the content mark, drawn thin on the page's centre: one @area/icons glyph per type (lines, table, slides, image, play, code, archive), never a file-* page icon", "—"],
+      ["label", "deprecated: the extension under the glyph (the figure is glyph-only; the tile's name shows the extension)", "—"],
+      ["variant", "deprecated and ignored: the lit solid page is archived (round 57)", "—"],
       ["preview", "an image of the file to fill the page instead", "—"],
-      ["name", "the figure's name; without one it is decorative", "—"],
+      ["aria-label", "the figure's name; without one it is decorative (name is a deprecated alias)", "—"],
     ],
     examples: [
-      { id: "default", title: "Default", note: "Finder's document page made as round and soft as Area's Folder: a folded corner, the type glyph thin at about 1.25px, the extension under it.", demo: "GalleryFilePage" },
-      { id: "folder", title: "Beside a folder", note: "The same box, shadow and corner family as Folder, so files and folders line up in one grid.", demo: "GalleryFilePageWithFolder" },
+      { id: "default", title: "Default", note: "Finder's document page made as round and soft as Area's Folder: a folded corner, one content mark per type drawn at the outline's whole-pixel edge (1px at 64), no extension text.", demo: "GalleryFilePage" },
+      { id: "folder", title: "The family", note: "Folder, File page and File image share a box, a shadow and a corner family, so folders, files and images line up in one grid.", demo: "GalleryFilePageWithFolder" },
+    ],
+  },
+  {
+    slug: "file-image", name: "File image", exportName: "FileImage", manifest: "fileImage",
+    imports: "FileImage",
+    api: [
+      ["size", "sm (48) | md (64) | lg (96); unset follows --area-folder-size", "—"],
+      ["variant", "deprecated and ignored: the lit solid look is archived (round 57)", "—"],
+      ["src", "the picture: it covers the frame, cropped; without it a landscape is drawn", "—"],
+      ["aria-label", "the figure's name; without one it is decorative", "—"],
+    ],
+    examples: [
+      { id: "default", title: "Default", note: "A landscape frame, 4:3, 92% of the square, the page's corner: two hills and a sun drawn at the outline's edge weight, so the frame reads as a picture with no glyph laid on it.", demo: "GalleryFileImage" },
+      { id: "picture", title: "A picture", note: "With src the picture covers the frame, cropped, the image ring over its edge.", demo: "GalleryFileImagePicture" },
     ],
   },
   {
@@ -702,7 +711,7 @@ export const COMPONENT_PAGES = [
     ],
     examples: [
       { id: "default", title: "Default", note: "Finder's icon view: the figure over its name and item count, centred, in the app's UI text with the name strong and the count muted.", demo: "GalleryFileTile" },
-      { id: "file", title: "A file", note: "A file's type glyph at half the square, as ChatGPT's Library card.", demo: "GalleryFileTileFile" },
+      { id: "file", title: "A file", note: "A file's figure is a File page, its type glyph on the page, in the folder's box, so files and folders line up.", demo: "GalleryFileTileFile" },
       { id: "grid", title: "Grid", note: "A ListBox grid of tiles: one Tab stop, arrows in two dimensions, typeahead, the row plates' paint; Enter or a double click opens.", demo: "GalleryFileGrid" },
     ],
   },
@@ -710,25 +719,27 @@ export const COMPONENT_PAGES = [
     slug: "asset-card", name: "Asset card", exportName: "AssetCard", manifest: "assetCard",
     imports: "AssetCard, AssetGrid, AssetGridItem",
     api: [
-      ["name / meta", "the asset's name, one line / a detail line under it", "—"],
-      ["media / mediaAlt", "an image URL (contained, 12 corner) or any element, centred / the image's text alternative", "— / \"\""],
-      ["group", "a group's assets (image URLs or elements): the first four as a 2 × 2 mosaic, cropped, 6 corner", "—"],
-      ["actions", "controls at the end of the caption, on the name's line", "—"],
-      ["selected", "the frame's edge in the selection colour (an AssetGrid sets it)", "false"],
+      ["name", "the asset's name in the head, one line", "—"],
+      ["actions", "controls at the head's end, nothing else there: Copy for what is used (a component, a colour, a type style, an icon), More for what is managed (an image, a group); their side and corner on the frame's", "—"],
+      ["meta", "deprecated and ignored: a detail goes in the asset itself or behind Copy", "—"],
+      ["media / mediaAlt", "an image URL (it covers the frame, cropped) or any element, centred on the frame's surface / the image's text alternative", "— / \"\""],
+      ["color", "a colour as the asset: it paints the frame, outlined by the swatch ring", "—"],
+      ["group", "a group's assets (image URLs or elements): the first four as a 2 × 2 mosaic, 4 apart, each at the frame's corner", "—"],
+      ["selected", "the card's edge in the selection colour (an AssetGrid sets it)", "false"],
       ["interactive", "the card is a control outside an AssetGrid: hover lifts, focus rings, aria-pressed / aria-selected show as selected", "false"],
-      ["children / frameProps / captionProps", "the frame's own content in place of media / attributes for the frame / for the caption", "— / — / —"],
+      ["children / frameProps / headProps", "the frame's own content in place of media / attributes for the frame / for the head (captionProps is a deprecated alias; caption is deprecated and ignored)", "— / — / —"],
       ["AssetGrid: value / onValueChange / onOpen", "the selected card; Enter or a double click opens", "— / — / —"],
     ],
     examples: [
-      { id: "default", title: "Default", note: "An image asset: contained in the frame, the container corner, its name and detail line under it.", demo: "GalleryAssetCard" },
-      { id: "content-component", title: "A component", note: "Any element as the asset, centred in the frame.", demo: "GalleryAssetCardComponent" },
-      { id: "content-type", title: "A type style", note: "A type role's sample as the asset.", demo: "GalleryAssetCardType" },
-      { id: "content-actions", title: "With a control", note: "Controls under the frame, at the end of the name's line.", demo: "GalleryAssetCardActions" },
-      { id: "layout-group", title: "Group", note: "A group: its first four assets as a 2 × 2 mosaic, each cropped to its cell with the small corner.", demo: "GalleryAssetCardGroup" },
-      { id: "layout-group-few", title: "Group of two", note: "Fewer than four leave the other cells empty.", demo: "GalleryAssetCardGroupFew" },
-      { id: "state-selected", title: "Selected", note: "The frame's edge in the selection colour.", demo: "GalleryAssetCardSelected" },
-      { id: "behavior-interactive", title: "Interactive", note: "A card that is its own control outside a grid, as the app's gallery tiles: hover lifts the frame, Tab rings it.", demo: "GalleryAssetCardInteractive" },
-      { id: "behavior-grid", title: "Grid", note: "A ListBox grid of cards: one Tab stop, arrows in two dimensions; Enter or a double click opens. Hover lifts the frame.", demo: "GalleryAssetGrid" },
+      { id: "default", title: "Image", note: "A square card: the name in a head, a More button at its end, the image covering a frame 4 in, the frame's corner concentric with the card's (16 − 1 − 4 = 11).", demo: "GalleryAssetCard" },
+      { id: "layout-group", title: "Group", note: "Its first four assets as a 2 × 2 mosaic, 4 apart, every cell at the frame's corner, no frame around them.", demo: "GalleryAssetCardGroup" },
+      { id: "content-component", title: "Component", note: "Any element, at its own size, centred on the frame's surface.", demo: "GalleryAssetCardComponent" },
+      { id: "content-color", title: "Colour", note: "The colour paints the frame, outlined by the swatch ring; the token names it and Copy copies its value.", demo: "GalleryAssetCardColor" },
+      { id: "content-type", title: "Type style", note: "A role's sample over its face, weight, size and leading; Copy copies the role.", demo: "GalleryAssetCardType" },
+      { id: "content-icon", title: "Icon", note: "A glyph at its native size.", demo: "GalleryAssetCardIcon" },
+      { id: "content-setting", title: "Setting", note: "A setting's option drawn under its own scope, so the frame is that option's ground, as the Language tab previews it.", demo: "GalleryAssetCardSetting" },
+      { id: "state-selected", title: "Selected", note: "The card's edge in the selection colour.", demo: "GalleryAssetCardSelected" },
+      { id: "behavior-grid", title: "Grid", note: "A ListBox grid of cards: one Tab stop, arrows in two dimensions; Enter or a double click opens. Hover lifts the card.", demo: "GalleryAssetGrid" },
     ],
   },
   {

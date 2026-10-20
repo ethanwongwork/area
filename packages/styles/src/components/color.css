@@ -58,6 +58,12 @@
     border-radius: var(--_inner-radius);
     pointer-events: none;
   }
+  /* The swatch's two layers sit under its own paint, inside its isolated stack: positioned children paint after their
+     parent's outline, so as plain absolute layers the colour covered the ring (owner, round 55: "i thought even solid
+     swatches got the transparent outline overlay?"; a white swatch on white showed no edge at all). At z-index −1 they
+     paint over the swatch's ground and under its outline. The picker's previews keep their own order. */
+  .area-color-swatch::before,
+  .area-color-swatch::after { z-index: -1; }
   .area-color-swatch::before,
   :is(.area-color-picker__preview-new, .area-color-picker__preview-original)::before {
     background: var(--_checker-ink);
@@ -78,6 +84,21 @@
   .area-color-swatch--sm { --_size: var(--area-mark-sm); }
   .area-color-swatch--md { --_size: var(--area-mark-md); }
   .area-color-swatch--lg { --_size: var(--area-mark-lg); }
+  /* spec (owner, 2026-10-19: "the swatch seems very large" beside the icons in the setting pickers): in a menu row's
+     or a Custom select's icon slot the swatch stands in for a glyph, so it takes the glyphs' square keyline, the box
+     less 4 (12 in a 16, 16 in a 20; icon-construction: square ink 12.1–13, a solid counts heavier than a line), not
+     the whole box a 16 swatch filled. Its corner follows (12 → 2). A swatch that is the value itself (Color field's
+     preview, the picker's cells) keeps its size. */
+  /* Its corner stays the sm swatch's, 4 at the default (owner, round 55: "the swatch corner seems a bit too sharp … can it
+     be 2px rounder?"; 20% of 12 rounded to even was 2), and moves with the Radius setting as every swatch does: square
+     at Sharp. */
+  :is(.area-menu__icon, .area-custom-select__icon) .area-color-swatch {
+    /* 14 in a 16 (round 56: "if the swatch needs to be increased in size very slightly, id be open to it"): Figma's
+       colour-row chit, so it reads 1 inside the box and its text starts one tier gap + 1 away (5 at the app's Compact,
+       Figma's 5); was the glyph keyline's 12. */
+    --_size: calc(var(--area-icon-md) - var(--area-space-2));
+    --_radius: max(var(--area-radius-min), round(nearest, calc(var(--area-mark-sm) * var(--_shape) * 4 * var(--area-radius-factor)), 2px));
+  }
 
   .area-color-swatch-picker {
     --_cell: var(--area-control-sm);

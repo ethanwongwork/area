@@ -50,3 +50,5 @@ Wikipedia, computed:
 
 - **What it is:** A small indented note at the top of an article pointing to other pages.
 - **Based on:** Wikipedia's hatnote; muted instead of italic, since Area's typeface has no italic.
+- 2026-10-19 · design-system audit → the indent is a named `--_indent` spec value; the API page no longer calls it
+  italic. No visual change.

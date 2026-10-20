@@ -1,0 +1,75 @@
+/* ---------------------------------------------------------------------------
+ * File image
+ *
+ * The figure a file browser draws for an image or a photo, the third of Folder's family beside File page (owner, round
+ * 56: "can you create an image version of these larger illustrations?"; docs/research/file-figures-2026-10-19.md:
+ * every surveyed product shows an image as itself, and Fluent gives photos their own frame instead of a page).
+ *
+ * - A landscape frame, 4:3, 92% of the square wide (Folder's figure width; 88 × 66 at 96, 58 × 44 at 64, 44 × 34 at 48),
+ *   rounded to even pixels and centred, so its edges land on whole pixels; its corner the page's on screen (File page's
+ *   40 of 360 at 72% of the box: 8% of the box, 8 at 96).
+ * - With a picture (`src`), the picture covers the frame, cropped, the image ring over its edge (DESIGN_SYSTEM, image
+ *   rings). Without one, a landscape drawn in the frame: two hills and a sun, its lines at the outline's edge weight in
+ *   File page's quiet ink, so the frame reads as a picture with no glyph laid on it.
+ * - Paint as File page's: the control fill with a whole-pixel edge (the lit solid look is archived, owner round 57:
+ *   docs/archive/solid-file-figures-2026-10-19.md).
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  .area-file-image {
+    --_size: var(--area-folder-size, 64px); /* spec: Finder iconSize 64, as Folder and File page */
+    --_edge: max(var(--area-stroke-width), round(down, calc(var(--_size) / 96), 1px)); /* spec: Folder's outline edge */
+    position: relative;
+    display: inline-block;
+    flex: none;
+    inline-size: var(--_size);
+    block-size: var(--_size);
+    vertical-align: middle;
+  }
+  .area-file-image--sm { --_size: 48px; } /* spec: Folder sm */
+  .area-file-image--md { --_size: 64px; } /* spec: Finder iconSize 64 */
+  .area-file-image--lg { --_size: 96px; } /* spec: Folder lg */
+
+  .area-file-image__figure {
+    --_fw: round(nearest, calc(var(--_size) * 0.92), 2px); /* spec: Folder's figure width */
+    --_fh: round(nearest, calc(var(--_fw) * 0.75), 2px); /* spec: 4:3, Fluent's photo frame */
+    position: absolute;
+    inset-block-start: calc((var(--_size) - var(--_fh)) / 2);
+    inset-inline-start: calc((var(--_size) - var(--_fw)) / 2);
+    inline-size: var(--_fw);
+    block-size: var(--_fh);
+    box-sizing: border-box;
+    overflow: hidden;
+    border-radius: round(nearest, calc(var(--_size) * 0.08), 1px); /* spec: the page's corner on screen (40 / 360 × 72%) */
+    /* File page's look: the control fill, a thin light edge, its quiet ink for the drawn landscape. */
+    --_fill: var(--area-bg-component);
+    --_ink: color-mix(in oklab, var(--area-fg-muted), var(--_fill) 45%); /* spec: File page's quiet ink */
+    background: var(--_fill);
+    box-shadow: inset 0 0 0 var(--_edge) var(--area-border);
+  }
+  .area-file-image__figure > svg { display: block; inline-size: 100%; block-size: 100%; overflow: visible; }
+  .area-file-image__scene {
+    fill: none;
+    stroke: var(--_ink);
+    stroke-width: var(--_edge);
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    vector-effect: non-scaling-stroke;
+  }
+  .area-file-image__picture { display: block; inline-size: 100%; block-size: 100%; object-fit: cover; }
+
+  /* A picture takes the image ring over its edge, drawn above the picture. */
+  .area-file-image__figure:has(> .area-file-image__picture) { box-shadow: none; }
+  .area-file-image__figure:has(> .area-file-image__picture)::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-token-swatch-ring);
+    pointer-events: none;
+  }
+
+  @media (forced-colors: active) {
+    .area-file-image__figure { background: Canvas; box-shadow: inset 0 0 0 1px CanvasText; }
+    .area-file-image__scene { stroke: CanvasText; }
+  }
+}

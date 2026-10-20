@@ -81,7 +81,7 @@ files:
 | File | Job |
 |---|---|
 | `reset.css`, `fonts.css`, `base.css` | Reset, Geist (pinned), body type, `::selection`, Glyph stroke widths, `data-area-switching` (no transitions while a setting changes), `.area-sr-only` |
-| `layers.css` | Raised and recessed surfaces point the control-fill tokens at their own ground, so a field on a Card fills from the Card |
+| `layers.css` | Every component that paints a ground (raised, recessed or page) points the control-fill tokens at it, so a field on a Card fills from the Card and a button on a recessed head plates from the head; `cohesion.test.mjs` fails an undeclared ground |
 | `inset.css` | The shared inset contract: `--_inset-start/end` from box height, border and cap height for Button, Input, Menu item, Badge and others |
 | `material.css` | Material paints, active only under `[data-area-material]`. They fill `--_m-layers` and never replace a component's shadow. |
 | `forced-colors.css` | System colours for required edges, selection and focus under `forced-colors: active` |
@@ -270,8 +270,10 @@ manifest's camelCase key (`count`); `<Name>` the React export (`Count`).
 2. **CSS**:
    - `packages/styles/src/components/<slug>.css` in `@layer area.components`;
    - import it in `src/index.css`;
-   - if it is a raised surface, an inset participant, a material part or needs a
-     forced-colours repair, add it to `layers.css`, `inset.css`, `material.css` or
+   - if it paints a ground (`bg-surface`, `bg-code`, `bg-subtle`, `bg-page`) under
+     controls, list it with that ground in `layers.css` (enforced by `cohesion.test.mjs`,
+     "every painted ground is declared"); if it is an inset participant, a material part
+     or needs a forced-colours repair, add it to `inset.css`, `material.css` or
      `forced-colors.css`.
 3. **Manifest**: `export const <name> = {…} as const satisfies ComponentManifest` in
    `manifest.ts`, and add it to `MANIFESTS`.

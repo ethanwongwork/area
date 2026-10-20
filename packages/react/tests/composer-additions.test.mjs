@@ -14,11 +14,14 @@ test("the Composer draws its context row inside the shell, above the field, and 
 });
 
 test("an Attachment names itself, its remove control and its upload", () => {
-  const ready = renderToString(h(Attachment, { src: "a.png", name: "a.png", onRemove: () => {} }));
+  const ready = renderToString(h(Attachment, { src: "a.png", name: "a.png", onDismiss: () => {} }));
   assert.match(ready, /<div role="group" aria-label="a\.png" class="area-attachment area-attachment--ready"/);
   assert.match(ready, /<img class="area-attachment__image" src="a\.png" alt=""\/>/);
   assert.match(ready, /<button type="button" class="area-attachment__remove" aria-label="Remove a\.png">/);
   assert.doesNotMatch(renderToString(h(Attachment, { src: "a.png", name: "a.png" })), /area-attachment__remove/);
+  assert.match(renderToString(h(Attachment, { src: "a.png", name: "a.png", onDismiss: () => {}, dismissLabel: "Supprimer a.png" })), /class="area-attachment__remove" aria-label="Supprimer a\.png"/);
+  // The deprecated `onRemove` still shows the control for a release.
+  assert.match(renderToString(h(Attachment, { src: "a.png", name: "a.png", onRemove: () => {} })), /aria-label="Remove a\.png"/);
   const uploading = renderToString(h(Attachment, { src: "a.png", name: "a.png", status: "uploading", progress: 40 }));
   assert.match(uploading, /aria-busy="true"/);
   assert.match(uploading, /area-attachment__overlay[^]*Uploading a\.png, 40%/);
@@ -28,7 +31,7 @@ test("an Attachment names itself, its remove control and its upload", () => {
 });
 
 test("a ComposerMenu is a listbox of Menu rows the field points at, grouped, with a muted path", () => {
-  const html = renderToString(h(ComposerMenu, { id: "m", label: "Files", activeId: "b", onPick: () => {}, groups: [
+  const html = renderToString(h(ComposerMenu, { id: "m", "aria-label": "Files", activeId: "b", onPick: () => {}, items: [
     { label: "Files", items: [{ id: "a", label: "a.css", path: "src/styles" }, { id: "b", label: "b.css" }] },
   ] }));
   assert.match(html, /^<div id="m" role="listbox" aria-label="Files" class="area-composer-menu area-menu">/);
@@ -36,11 +39,16 @@ test("a ComposerMenu is a listbox of Menu rows the field points at, grouped, wit
   assert.match(html, /<div id="m-a" role="option" aria-selected="false" class="area-menu__item">/);
   assert.match(html, /<div id="m-b" role="option" aria-selected="true" class="area-menu__item" data-highlighted="">/);
   assert.match(html, /<span class="area-composer-menu__path"><bdi>src\/styles<\/bdi><\/span>/);
-  assert.match(renderToString(h(ComposerMenu, { label: "Files", groups: [{ items: [] }], onPick: () => {} })), /area-composer-menu__empty[^>]*>No matches</);
+  assert.match(renderToString(h(ComposerMenu, { "aria-label": "Files", items: [{ items: [] }], onPick: () => {} })), /area-composer-menu__empty[^>]*>No matches</);
+  // The deprecated `label` and `groups` still work for a release; `aria-label` wins.
+  const old = renderToString(h(ComposerMenu, { label: "Files", groups: [{ items: [{ id: "a", label: "a.css" }] }], onPick: () => {} }));
+  assert.match(old, /role="listbox" aria-label="Files"/);
+  assert.match(old, /role="option"/);
+  assert.match(renderToString(h(ComposerMenu, { label: "Files", "aria-label": "Commands", items: [], onPick: () => {} })), /aria-label="Commands"/);
 });
 
 test("a Queue counts its messages; each row offers Send now and Remove, a failed one Retry", () => {
-  const html = renderToString(h(Queue, { onSendNow: () => {}, onRemove: () => {}, onRetry: () => {}, items: [
+  const html = renderToString(h(Queue, { onSendNow: () => {}, onDismiss: () => {}, onRetry: () => {}, items: [
     { id: "1", text: "Also check dark" }, { id: "2", text: "Run the tests", status: "sending" }, { id: "3", text: "Commit", status: "failed" },
   ] }));
   assert.match(html, /class="area-queue__title">3 queued</);
@@ -48,6 +56,10 @@ test("a Queue counts its messages; each row offers Send now and Remove, a failed
   assert.match(html, /<li class="area-queue__item">[^]*Also check dark[^]*>Send now<[^]*aria-label="Remove “Also check dark”"/);
   assert.match(html, /area-queue__item--sending[^]*Sending[^]*Run the tests<\/span><\/li>/);
   assert.match(html, /area-queue__item--failed[^]*aria-label="Not sent"[^]*>Retry</);
+  // Messages send in order, so the list is ordered.
+  assert.match(html, /<ol id="[^"]+" class="area-queue__items"/);
+  // The deprecated `onRemove` still shows Remove for a release.
+  assert.match(renderToString(h(Queue, { onRemove: () => {}, items: [{ id: "1", text: "One" }] })), /aria-label="Remove “One”"/);
 });
 
 test("a Timestamp is a time element, worded as Codex words it", () => {

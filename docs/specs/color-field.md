@@ -176,3 +176,8 @@ No change in the Color field rules of `color.css`.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → the hex field and group take Input's and Input group's in-at-once, out-on-fast motion. See "Motion and interaction, 2026-10-07".
 - 2026-10-12 · owner, review round 16: approved.
 - 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the opacity seam is at `stroke-width`, as every Input group seam (was `border-width`, which Elevated sets to 0) (color.css). (docs/research/consistency-audit-2026-10-12.md)
+
+## Review note, 2026-10-19 (round 56)
+
+- **What changed:** its swatches show the thin translucent ring again (black 10% in light, white 10% in dark), solid colours included.
+- **Why:** Color swatch's colour layer had been painting over its ring since a 2026-10-12 merge, so no swatch showed its outline; the fix is in Color swatch (docs/specs/color-swatch.md, round 56), and every family that draws one shows it.

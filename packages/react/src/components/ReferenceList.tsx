@@ -26,7 +26,7 @@ export const ReferenceList = /* @__PURE__ */ forwardRef<HTMLElement, ReferenceLi
   const id = useId();
   const List = (marker ?? "number") === "number" ? "ol" : "ul";
   return (
-    <section ref={ref} className={referenceListVariants({ marker }, className)} aria-labelledby={title ? `${id}-title` : undefined} aria-label={title ? undefined : ariaLabel} {...rest}>
+    <section ref={ref} className={referenceListVariants({ marker }, className)} aria-labelledby={title && !ariaLabel ? `${id}-title` : undefined} aria-label={ariaLabel} {...rest}>
       {title ? <div className={referenceListVariants.element("title")} id={`${id}-title`} role="heading" aria-level={3}>{title}</div> : null}
       <List className={referenceListVariants.element("list")} start={List === "ol" ? start : undefined}
         style={List === "ol" && start != null ? { ["--_start" as string]: start - 1 } : undefined}>{children}</List>

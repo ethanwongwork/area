@@ -35,7 +35,7 @@ const MEASURE = `
 const BOX = ["background-color", "background-image", "border-top-width", "border-right-width", "border-bottom-width", "border-left-width",
   "border-top-color", "border-right-color", "border-bottom-color", "border-left-color", "border-top-left-radius", "border-top-right-radius",
   "border-bottom-right-radius", "border-bottom-left-radius", "box-shadow", "outline-style", "outline-width", "outline-color", "outline-offset",
-  "fill", "stroke", "stroke-width", "transform", "filter", "mix-blend-mode", "backdrop-filter"];
+  "fill", "stroke", "stroke-width", "transform", "filter", "mix-blend-mode", "backdrop-filter", "z-index"]; // z-index: paint order (a ring under a layer, round 56)
 const TEXT = ["color", "font-family", "font-size", "font-weight", "font-style", "letter-spacing", "text-decoration-line", "text-decoration-color",
   "text-decoration-thickness", "text-underline-offset", "-webkit-text-fill-color"];
 const REPLACED = new Set(["img", "video", "canvas", "input", "textarea", "select", "iframe", "hr"]);
@@ -70,7 +70,7 @@ function print(root) {
     if (paints) lines.push(["box", el.localName, at(box), a.toFixed(2), ...BOX.map(p => norm(s.getPropertyValue(p))), el.getAttribute("d") || "", el.value ?? ""].join("|"));
     for (const p of ["::before", "::after"]) {
       const q = getComputedStyle(el, p);
-      if (q.content !== "none" && q.content !== "normal") lines.push(["pseudo", p, at(box), q.content, q.width, q.height, q.inset, norm(q.backgroundColor), q.borderTopWidth, norm(q.borderTopColor), q.borderRadius, norm(q.boxShadow), q.transform, q.opacity].join("|"));
+      if (q.content !== "none" && q.content !== "normal") lines.push(["pseudo", p, at(box), q.content, q.width, q.height, q.inset, norm(q.backgroundColor), q.borderTopWidth, norm(q.borderTopColor), q.borderRadius, norm(q.boxShadow), q.transform, q.opacity, q.zIndex].join("|"));
     }
     // An underline is drawn by the box that declares it (a link around a span), and is not inherited in computed
     // style: each text run carries the decorations of its ancestors too.

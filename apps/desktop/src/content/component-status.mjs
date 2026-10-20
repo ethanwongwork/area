@@ -7,14 +7,25 @@
 // command-palette, combobox, tooltip, dialog, code-block, panel, color-picker, checkbox, radio,
 // chip, badge-group, box-field and tabs keep Complete (docs/research/compact-evidence-2026-10-02/).
 export const COMPLETE_COMPONENTS = new Set([
+  // Round 61, 2026-10-20 (owner approved, components61).
+  'asset-card',
+  // Round 62, 2026-10-20 (owner approved, components62): every painted ground declared in layers.css.
+  'code-block', 'edit-summary', 'plan', 'queue', 'infobox', 'menu', 'select',
+  // Round 64, 2026-10-20 (owner approved, components64): the Calendar rethink (rounds 63–64).
+  'calendar',
+  // Round 57, 2026-10-19 (owner approved, components57); the solid file figures archived on its note (Folder keeps
+  // Complete: its outline look is unchanged).
+  'color-swatch', 'file-image', 'file-page', 'video-player',
+  // Round 56, 2026-10-19 (owner approved, components56).
+  'color-field', 'color-picker', 'color-swatch-picker', 'file-tile',   // Round 55, 2026-10-19 (owner approved on the review page, components55): the design-system audit's changes.
+  'approval', 'attachment', 'composer-menu', 'folder', 'step', // plan, queue: reopened in round 56 (head seam).
   // Round 50, 2026-10-19 (owner approved on the review page): the chat additions and three agent chat families.
-  'composer-menu', 'queue', 'timestamp', 'turn-notice',
+  'timestamp', 'turn-notice', // composer-menu, queue: reopened 2026-10-19 (design-system audit).
   // Round 52, 2026-10-19 (owner approved): the rest of the agent chat set.
-  'attachment', 'edit-summary', 'plan', 'step',
+  // attachment, edit-summary, plan, step: reopened 2026-10-19 (design-system audit).
   // Round 53, 2026-10-19 (owner approved): Kbd (backplate and gap rules), Button (its keycap gap).
   'kbd',
-  // Round 54, 2026-10-19 (owner approved).
-  'approval',
+  // Round 54, 2026-10-19 (owner approved). approval: reopened 2026-10-19 (design-system audit).
   // Approved 2026-09-27 after all phases (batches 1-3).
   'toolbar', 'split-button', 'toast', // segmented: reopened 2026-10-16 (Layers sweep, round 30).
   // Approved 2026-09-28 (batch 4).
@@ -24,8 +35,7 @@ export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-09-28 (batch 6; progress was already approved).
   'skeleton',
   // Approved 2026-09-28 (batch 7; popover was already approved).
-  'calendar',
-  // Approved 2026-09-28 (batch 8; number-field and box-field were already approved).
+    // Approved 2026-09-28 (batch 8; number-field and box-field were already approved).
   // Approved 2026-09-28 (batch 11: 6px keycap everywhere, no stroke, plain menu shortcuts).
     // Approved 2026-09-28 (batch 12; input-group was already approved).
   'input', 'textarea',
@@ -72,15 +82,15 @@ export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-10-12 on the review page, round 15 (components15).
   'token-row',
   // Approved 2026-10-12 on the review page, round 16 (components16): Asset row and the swatch ring's families.
-  'asset-row', 'code', 'color-field', 'color-swatch', 'panel', 'property-list',
+  'asset-row', 'code', 'panel', 'property-list', // color-swatch: reopened 2026-10-19 (icon-slot size); color-field: round 56 (ring).
   // Approved 2026-10-12 on the review page, round 17 (components17).
-  'color-picker',
+  // color-picker: reopened round 56 (the swatch ring).
   // Approved 2026-10-12 on the review page, round 20 (components20): the palette's iOS-style outline.
-  'color-swatch-picker',
+  // color-swatch-picker: reopened round 56 (the swatch ring).
   // Approved 2026-10-12 on the review page, round 21 (components21): the consistency pass (badge's dismiss ring at 0 is the
   // owner's own pick, O1), Board's hover and corners, Description list's show more; open questions on the recommendations.
   // board: reopened 2026-10-16 (Layers sweep, round 30).
-  'chip', 'description-list', 'empty-state', 'select', 'tree-view',
+  'chip', 'description-list', 'empty-state', 'tree-view',
   // Approved 2026-10-13 on the review page, round 23 (components23), after the round-22 approval and the tile surface.
   'preview-frame',
   // Approved 2026-10-13 on the review page, round 24 (components24).
@@ -98,21 +108,20 @@ export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-10-16 on the review page, round 29 (components29).
   'nav', 'titlebar',
   // Approved 2026-10-17 on the review page, round 30 (components30), after the Layers sweep; board needs changes.
-  'segmented', 'toggle-group', 'code-block', 'box-model', 'tag', 'tag-picker',
+  'segmented', 'toggle-group', 'box-model', 'tag', 'tag-picker',
   // Approved 2026-10-17 on the review page, round 31 (components31); hover-card: "rethink the content/source".
-  'board', 'menu',
-  // Approved 2026-10-17 on the review page, round 33 (components33); the other Articles families: rethink.
+  'board',   // Approved 2026-10-17 on the review page, round 33 (components33); the other Articles families: rethink.
   'hover-card', 'abbreviation', 'hatnote',
   // Approved 2026-10-17 on the review page, round 35 (components35); panel's token rows 8 apart (Panel stays Complete).
   'inline-list', 'link-groups', 'table-of-contents',
   // Approved 2026-10-17 on the review page, round 36 (components36).
-  'infobox',
+  // infobox: reopened 2026-10-19, round 56 (framed section seams).
   // Approved 2026-10-17 on the review page, round 38 (components38): every Articles family is Complete.
   'figure', 'reference-list',
   // Approved 2026-10-18 on the review page, round 47 (components47).
-  'video-player',
+  // video-player: reopened 2026-10-19 (design-system audit).
   // Approved 2026-10-19 on the review page, round 48 (components48): the file explorer set.
-  'folder', 'file-page', 'file-tile', ]);
+  ]); // folder, file-tile: reopened 2026-10-19 (design-system audit); file-page: reopened round 56 (glyph-only).
 
 /** Built/refined and awaiting owner approval; not completion. */
 // Articles (2026-10-17, from Wikipedia's page): round 33 asked to rethink six (three approved in round 35) so they don't read as only
@@ -120,7 +129,19 @@ export const COMPLETE_COMPONENTS = new Set([
 // Video player (2026-10-17): owner, round 36: "should there be a real video component with its own design player controls?".
 // Asset card (2026-10-18, main): the Brand tab's containers, assets and groups (owner, after Figma's file browser).
 // The agent chat set (rounds 49–54) is Complete above.
-export const REVIEW_COMPONENTS = new Set(['asset-card']);
+// Design-system audit (2026-10-19, owner: "audit them based on the new docs, skills, guidelines … more cohesive"): the
+// families whose look changed. Color swatch: 12 in a menu or Custom select icon slot (owner: "the swatch seems very
+// large"). Chat cards: Menu's row gap and pressed fill, RTL chevrons, Step's instant hover, Approval's Composer corner,
+// Attachment's outline edge, Composer menu's empty-row inset. Video player: the container corner. Folder: one tile per
+// tone. File tile: the image ring inside the image. API renames with deprecated aliases kept the other families Complete.
+// Round 55 (components55): approved Approval, Attachment, Composer menu, Folder, Plan, Queue, Step; Color swatch and
+// Edit summary need changes; Asset card, File tile and Video player: rethink.
+// Round 56: Plan, Queue and Infobox reopened for the seam rule Edit summary's note found.
+// Color swatch's ring showed nowhere (its colour layer painted over it); fixed in round 56, so the families that draw swatches reopen.
+// Round 56 approved Color field, Color picker, Color swatch picker, Edit summary, File tile, Infobox, Plan, Queue. Round 57:
+// Asset card rebuilt to the owner's designs; Color swatch 14; File page blank; File image (new); Video player's play.
+// Round 64 approved Calendar; nothing is in review.
+export const REVIEW_COMPONENTS = new Set([]);
 export const componentStatus = slug => COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
 export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined' })[status];
 
@@ -185,7 +206,7 @@ export const APPROVAL_BATCHES = [
   { name: 'Times', families: ['time-field'] },
   { name: 'Steps', families: ['stepper'] },
   { name: 'Copying', families: ['copy-button'] },
-  { name: 'File explorer', families: ['folder', 'file-page', 'file-tile'] },
+  { name: 'File explorer', families: ['folder', 'file-page', 'file-image', 'file-tile'] },
   { name: 'Assets', families: ['asset-card'] },
   { name: 'Choosing from a set', families: ['list-box'] },
   { name: 'App shell', families: ['titlebar', 'section-heading'] },
@@ -206,4 +227,4 @@ export const batchOf = slug => APPROVAL_BATCHES.findIndex(batch => batch.familie
 export const REVIEW_BATCHES = [];
 
 // Most recently designed first. Move a family to the front when its design is worked on.
-export const RECENT_COMPONENTS = ['asset-card', 'attachment', 'composer-menu', 'queue', 'timestamp', 'step', 'edit-summary', 'approval', 'plan', 'turn-notice', 'folder', 'file-page', 'file-tile', 'video-player', 'reference-list', 'table-of-contents', 'figure', 'infobox', 'inline-list', 'abbreviation', 'hatnote', 'link-groups', 'titlebar', 'section-heading', 'card', 'context-menu', 'nav', 'badge', 'list-box', 'copy-button', 'time-field', 'stepper', 'spinner', 'password-field', 'otp-field', 'preview-frame', 'asset-row', 'token-row', 'code-block', 'box-model', 'editable-text', 'timeline', 'board', 'menu', 'zoom-control', 'citation', 'date-range-picker', 'shortcut-list', 'search-field', 'meter', 'description-list', 'toggle-group', 'empty-state', 'panel', 'link', 'file-upload', 'command-palette', 'toggletip', 'scroll-area', 'pagination', 'tag', 'drawer', 'confirm-dialog', 'date-picker', 'tag-picker', 'custom-select', 'accordion', 'badge-group', 'checkbox', 'radio', 'dialog', 'count', 'alert', 'toolbar', 'switch', 'chip', 'table', 'model-picker', 'scroll-to-latest', 'message', 'prompt-suggestions', 'hover-card', 'combobox', 'composer', 'box-field', 'property-list', 'number-field', 'toast', 'popover', 'split-button', 'button-group', 'button', 'tree-view', 'breadcrumb', 'tooltip', 'indicator', 'icon-pilot', 'color-picker', 'color-swatch-picker', 'color-field', 'color-swatch', 'alignment-picker', 'input-group', 'avatar', 'input', 'progress', 'segmented', 'select', 'skeleton', 'calendar'];
+export const RECENT_COMPONENTS = ['file-image', 'asset-card', 'attachment', 'composer-menu', 'queue', 'timestamp', 'step', 'edit-summary', 'approval', 'plan', 'turn-notice', 'folder', 'file-page', 'file-tile', 'video-player', 'reference-list', 'table-of-contents', 'figure', 'infobox', 'inline-list', 'abbreviation', 'hatnote', 'link-groups', 'titlebar', 'section-heading', 'card', 'context-menu', 'nav', 'badge', 'list-box', 'copy-button', 'time-field', 'stepper', 'spinner', 'password-field', 'otp-field', 'preview-frame', 'asset-row', 'token-row', 'code-block', 'box-model', 'editable-text', 'timeline', 'board', 'menu', 'zoom-control', 'citation', 'date-range-picker', 'shortcut-list', 'search-field', 'meter', 'description-list', 'toggle-group', 'empty-state', 'panel', 'link', 'file-upload', 'command-palette', 'toggletip', 'scroll-area', 'pagination', 'tag', 'drawer', 'confirm-dialog', 'date-picker', 'tag-picker', 'custom-select', 'accordion', 'badge-group', 'checkbox', 'radio', 'dialog', 'count', 'alert', 'toolbar', 'switch', 'chip', 'table', 'model-picker', 'scroll-to-latest', 'message', 'prompt-suggestions', 'hover-card', 'combobox', 'composer', 'box-field', 'property-list', 'number-field', 'toast', 'popover', 'split-button', 'button-group', 'button', 'tree-view', 'breadcrumb', 'tooltip', 'indicator', 'icon-pilot', 'color-picker', 'color-swatch-picker', 'color-field', 'color-swatch', 'alignment-picker', 'input-group', 'avatar', 'input', 'progress', 'segmented', 'select', 'skeleton', 'calendar'];

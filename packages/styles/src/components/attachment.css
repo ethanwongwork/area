@@ -23,19 +23,23 @@
     color: var(--area-fg-default);
   }
   /* The edge is drawn over the picture (an inset line), so a white image still has a bound: Cursor's stroke at 72%,
-     Claude Code's input border, Codex's inset ring all agree on one hairline. */
+     Claude Code's input border, Codex's inset ring all agree on one hairline. An inset outline at stroke-width, as
+     Color swatch draws its ring: an outline snaps to device pixels, an inset box-shadow does not (MOTION.md,
+     Crispness 3), and an image ring keeps its width under every Stroke width (DESIGN_SYSTEM.md, Strokes). */
   .area-attachment::after {
     content: "";
     position: absolute;
     inset: 0;
     border-radius: inherit;
-    box-shadow: inset 0 0 0 var(--area-stroke-width) var(--_attachment-edge);
+    outline: var(--area-stroke-width) solid var(--_attachment-edge);
+    outline-offset: calc(-1 * var(--area-stroke-width));
     pointer-events: none;
   }
-  /* The status sets the edge: the card edge while it is fine or on its way, the danger ink when it failed. */
+  /* The status sets the edge: the card edge while it is fine or on its way, the fields' invalid edge when it failed
+     (Input, File upload). */
   .area-attachment--ready,
   .area-attachment--uploading { --_attachment-edge: var(--area-border-card); }
-  .area-attachment--error { --_attachment-edge: var(--area-fg-danger); }
+  .area-attachment--error { --_attachment-edge: var(--area-input-invalid-color); }
   .area-attachment__image { display: block; inline-size: 100%; block-size: 100%; border-radius: inherit; object-fit: cover; }
 
   /* Uploading or failed: the picture dims under a veil (Codex: the media background at 50%, blurred), with a ring
@@ -46,7 +50,8 @@
     display: grid;
     place-items: center;
     border-radius: inherit;
-    background-color: color-mix(in oklab, var(--area-bg-surface) 60%, transparent); /* spec: Codex media background 50% + blur; 60 keeps the ring's contrast without the blur */
+    --_veil: 60%; /* spec: Codex media background 50% + blur; 60 keeps the ring's contrast without the blur */
+    background-color: color-mix(in oklab, var(--area-bg-surface) var(--_veil), transparent);
     color: var(--area-fg-default);
   }
   .area-attachment--error .area-attachment__overlay { color: var(--area-fg-danger); }
@@ -64,6 +69,11 @@
     --_remove-in: var(--area-space-4);
     --_remove-radius: max(var(--area-radius-min), calc(var(--_attachment-radius) - var(--_remove-in) * var(--area-radius-concentric)));
     --_remove-tint: transparent;
+    --_glass: 72%; /* spec: Video player's glass, Apple's 72% */
+    --_glass-blur: blur(16px) saturate(150%); /* spec: Video player */
+    --_glass-edge: rgb(255 255 255 / 0.12); /* spec: Video player's hairline */
+    --_glass-hover: rgb(255 255 255 / 0.12); /* spec: Video player hover */
+    --_glass-press: rgb(255 255 255 / 0.2); /* spec: Video player press */
     position: absolute;
     inset-block-start: calc(var(--_remove-in) - (var(--area-control-sm) - var(--_remove-size)) / 2);
     inset-inline-end: calc(var(--_remove-in) - (var(--area-control-sm) - var(--_remove-size)) / 2);
@@ -86,14 +96,14 @@
     position: absolute;
     inset: calc((var(--area-control-sm) - var(--_remove-size)) / 2);
     border-radius: var(--_remove-radius);
-    background: linear-gradient(var(--_remove-tint), var(--_remove-tint)), color-mix(in srgb, var(--area-bg-surface) 72%, transparent); /* spec: Video player's glass, Apple's 72% */
-    -webkit-backdrop-filter: blur(16px) saturate(150%); /* spec: Video player */
-    backdrop-filter: blur(16px) saturate(150%);
-    box-shadow: inset 0 0 0 var(--area-border-width) rgb(255 255 255 / 0.12); /* spec: Video player's hairline */
+    background: linear-gradient(var(--_remove-tint), var(--_remove-tint)), color-mix(in srgb, var(--area-bg-surface) var(--_glass), transparent);
+    -webkit-backdrop-filter: var(--_glass-blur);
+    backdrop-filter: var(--_glass-blur);
+    box-shadow: inset 0 0 0 var(--area-border-width) var(--_glass-edge);
     transition: background var(--area-duration-fast) var(--area-ease-out);
   }
-  @media (hover: hover) { .area-attachment__remove:hover { --_remove-tint: rgb(255 255 255 / 0.12); } .area-attachment__remove:hover::before { transition-duration: 0s; } } /* spec: Video player hover */
-  .area-attachment__remove:active { --_remove-tint: rgb(255 255 255 / 0.2); } /* spec: Video player press */
+  @media (hover: hover) { .area-attachment__remove:hover { --_remove-tint: var(--_glass-hover); } .area-attachment__remove:hover::before { transition-duration: 0s; } }
+  .area-attachment__remove:active { --_remove-tint: var(--_glass-press); }
   .area-attachment__remove > svg { position: relative; inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); }
   @media (hover: hover) { .area-attachment:hover > .area-attachment__remove { opacity: 1; transition-duration: 0s; } }
   .area-attachment:focus-within > .area-attachment__remove { opacity: 1; transition-duration: 0s; }

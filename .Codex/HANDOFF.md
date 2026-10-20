@@ -2,36 +2,26 @@
 
 ## Current state (2026-10-19)
 
-- **Status.** `main` is at PR #139. Asset card is the only family in review; the other 115 are
-  Complete (`apps/desktop/src/content/component-status.mjs`).
+- **Status.** `main` is at PR #140. Branch `claude/swatch-combobox-audit-b5f2cd` (uncommitted): 117 families, 1 In
+  review (Calendar), 116 Complete. Review page round 64 (`components64`, https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG):
+  the Calendar rethink (centred title, `caption="menus"`, lighter today ring and tile edges, shared plates). Every
+  painted ground is declared in `layers.css` (cohesion test). Solid file figures archived.
+- **This branch (2026-10-19).**
+  - The owner said the setting pickers' swatch was very large. A Color swatch in a menu or Custom select icon slot is
+    now the box less 4 (12 in 16). The Inspector's option marks keep to the icon keylines, and ground swatches draw
+    the Inspector's ring (`studio.css`, registered `--_host-ring`).
+  - A design-system audit of the 22 recent families against PR #140's docs. All the clear rule fixes are applied, with
+    API renames keeping deprecated aliases. Open owner picks are listed in the session's report: Folder and File page
+    tiny label text, Infobox framed vs Card, heading levels, Folder tone on outline, VideoPlayer ref, failure words,
+    disclosure hover, Composer menu placement, English string props.
 - **Sessions.** One session at a time. Each starts from `origin/main` in its own worktree
   (`claude/*`) and merges through a PR. Check open PRs first.
 - **Running the app.** `npm run dev` runs Electron and `npm run preview` adds
   http://localhost:4400 (check who holds the port first). Icons are in the app's Icons tab.
-- **Docs.** Restructured on branch `claude/design-system-docs-da9a6a`:
-  - new `docs/PRINCIPLES.md`, `GOVERNANCE.md` and `ARCHITECTURE.md`;
-  - `DESIGN_SYSTEM.md`, `THEMING.md`, `COMPONENTS.md` and `DEVELOPMENT.md` rewritten;
-  - every family has a Documentation entry (`apps/desktop/src/content/documentation/`,
-    checked by `npm run check:docs -w @area/desktop`, also in CI);
-  - new skills `area-component-intake`, `area-component-docs` and
-    `area-foundation-change`;
-  - the icon skill split into references.
-  - About 50 specs' current-state sections are reconciled with the code, and spec Status
-    lines are removed (status lives only in the registry). Stale `pages.mjs` notes and code
-    comments are fixed.
-- **Applied.** The owner's verdicts from the review page (https://claude.ai/artifact/Kbw21Vq97U6PRMtSniHWkv) are applied:
-  - all 9 recommendations, recorded as 2026-10-19 decisions in the specs:
-    - menus open on their checked row;
-    - video skips are 10 s;
-    - a timestamp only before a person's message, an hour after any turn;
-    - Infobox image at the container corner;
-    - Titlebar 41 superseded;
-    - Progress `label` kept;
-    - Context menu `menuLabel` recorded;
-    - ChipLink follows Pills;
-    - Combobox `variant` typed, a written exception.
-  - 8 accessibility fixes kept.
-  - The astra-6 worktree's leftovers discarded; a patch is kept in `.git-stray-refs-backup-2026-10-14/`.
+- **Docs (PR #140).** `docs/PRINCIPLES.md`, `GOVERNANCE.md` and `ARCHITECTURE.md`; every family has a Documentation
+  entry (`apps/desktop/src/content/documentation/`, `npm run check:docs -w @area/desktop`, in CI); skills
+  `area-component-intake`, `area-component-docs`, `area-foundation-change`. The owner's 2026-10-19 review verdicts
+  (https://claude.ai/artifact/Kbw21Vq97U6PRMtSniHWkv) are applied and recorded in the specs.
 - **Open.**
   - Agent chat Phase 3 (the engine) is not started.
   - Material bundles are named presets, which conflicts with "no named looks"; ask before

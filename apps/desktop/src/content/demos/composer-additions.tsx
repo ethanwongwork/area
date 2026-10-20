@@ -18,19 +18,19 @@ export const GalleryComposerContext = () => (
   </div>
 );
 export const GalleryComposerAttachments = () => {
-  const [items, setItems] = useState(["one.png", "two.png"]);
+  const [items, setItems] = useState(["Item one", "Item two"]);
   return (
     <div style={frame}>
       <Composer layout="stacked" placeholder="Placeholder"
-        context={items.length ? items.map(name => <Attachment key={name} src={image} name={name} onRemove={() => setItems(list => list.filter(item => item !== name))} />) : undefined} />
+        context={items.length ? items.map(name => <Attachment key={name} src={image} name={name} onDismiss={() => setItems(list => list.filter(item => item !== name))} />) : undefined} />
     </div>
   );
 };
 
 // ---- Attachment ----
-export const GalleryAttachment = () => <Attachment src={image} name="Item one" onRemove={() => {}} />;
-export const GalleryAttachmentUploading = () => <Attachment src={image} name="Item one" status="uploading" progress={40} onRemove={() => {}} />;
-export const GalleryAttachmentError = () => <Attachment src={image} name="Item one" status="error" error="Error message" onRemove={() => {}} />;
+export const GalleryAttachment = () => <Attachment src={image} name="Item one" onDismiss={() => {}} />;
+export const GalleryAttachmentUploading = () => <Attachment src={image} name="Item one" status="uploading" progress={40} onDismiss={() => {}} />;
+export const GalleryAttachmentError = () => <Attachment src={image} name="Item one" status="error" error="Error message" onDismiss={() => {}} />;
 
 // ---- Composer menu ----
 const files: ComposerMenuGroup[] = [{ label: "Label", items: [
@@ -48,7 +48,7 @@ function MenuDemo({ groups, empty }: { groups: ComposerMenuGroup[]; empty?: bool
   return (
     <div style={{ ...frame, paddingBlockStart: empty ? 56 : 152 }}>
       <Composer layout="stacked" placeholder="Placeholder" defaultValue={empty ? "@xyz" : "@"}
-        menu={<ComposerMenu label="Label" groups={empty ? [{ items: [] }] : groups} activeId={active} onActiveChange={setActive} onPick={() => {}} />} />
+        menu={<ComposerMenu aria-label="Label" items={empty ? [{ items: [] }] : groups} activeId={active} onActiveChange={setActive} onPick={() => {}} />} />
     </div>
   );
 }
@@ -62,7 +62,7 @@ function QueueDemo({ items, open = true }: { items: QueueItem[]; open?: boolean 
   return (
     <div style={frame}>
       <Queue items={list} defaultOpen={open} onSendNow={id => setList(current => current.map(item => item.id === id ? { ...item, status: "sending" } : item))}
-        onRemove={id => setList(current => current.filter(item => item.id !== id))} onRetry={id => setList(current => current.map(item => item.id === id ? { ...item, status: "sending" } : item))} />
+        onDismiss={id => setList(current => current.filter(item => item.id !== id))} onRetry={id => setList(current => current.map(item => item.id === id ? { ...item, status: "sending" } : item))} />
     </div>
   );
 }

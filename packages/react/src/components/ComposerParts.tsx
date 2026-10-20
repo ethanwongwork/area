@@ -20,14 +20,20 @@ export interface AttachmentProps extends Omit<HTMLAttributes<HTMLDivElement>, "c
   progress?: number;
   /** Why it failed, spoken and shown as the tile's tooltip. */
   error?: string;
-  /** Shows the remove control. */
+  /** Shows the remove control; called when it is pressed. */
+  onDismiss?: () => void;
+  /** Names the remove control; "Remove {name}" by default. */
+  dismissLabel?: string;
+  /** @deprecated Use `onDismiss` (a close is `onDismiss` / `dismissLabel`, Governance § 4). Kept for one release;
+   *  `onDismiss` wins. */
   onRemove?: () => void;
 }
 
 /** An image attached to a message before it is sent: its thumbnail, a remove control, and its upload. */
 export const Attachment = forwardRef<HTMLDivElement, AttachmentProps>(function Attachment(
-  { src, name, status = "ready", progress, error, onRemove, className, title, ...rest }, ref,
+  { src, name, status = "ready", progress, error, onDismiss: onDismissProp, dismissLabel, onRemove, className, title, ...rest }, ref,
 ) {
+  const onDismiss = onDismissProp ?? onRemove;
   const failed = error ?? `${name} could not be uploaded`;
   return (
     <div ref={ref} role="group" aria-label={name} className={attachmentVariants({ status }, className)}
@@ -41,8 +47,8 @@ export const Attachment = forwardRef<HTMLDivElement, AttachmentProps>(function A
       ) : status === "error" ? (
         <span className="area-attachment__overlay" role="img" aria-label={failed}><Glyph name="dismiss-circle" /></span>
       ) : null}
-      {onRemove ? (
-        <button type="button" className="area-attachment__remove" aria-label={`Remove ${name}`} onClick={onRemove}>
+      {onDismiss ? (
+        <button type="button" className="area-attachment__remove" aria-label={dismissLabel ?? `Remove ${name}`} onClick={onDismiss}>
           <Glyph name="dismiss" size={12} />
         </button>
       ) : null}
@@ -62,10 +68,7 @@ export interface ComposerMenuItem {
 }
 export interface ComposerMenuGroup { label?: string; items: ComposerMenuItem[] }
 
-export interface ComposerMenuProps extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
-  /** Names the list ("Files and folders", "Commands"); the field points at it with aria-controls. */
-  label: string;
-  groups: ComposerMenuGroup[];
+interface ComposerMenuBaseProps extends Omit<HTMLAttributes<HTMLDivElement>, "children" | "aria-label"> {
   /** The highlighted row, which the field names with aria-activedescendant (`${id}-${item.id}`). */
   activeId?: string;
   onPick: (item: ComposerMenuItem) => void;
@@ -75,15 +78,43 @@ export interface ComposerMenuProps extends Omit<HTMLAttributes<HTMLDivElement>, 
   emptyLabel?: string;
 }
 
+type ComposerMenuName =
+  | {
+    /** Names the list ("Files and folders", "Commands"); the field points at it with aria-controls. */
+    "aria-label": string;
+    label?: undefined;
+  }
+  | {
+    "aria-label"?: string;
+    /** @deprecated Use `aria-label` (it only names the element, DESIGN_SYSTEM.md "Names and collections"). Kept for
+     *  one release; `aria-label` wins. */
+    label: string;
+  };
+
+type ComposerMenuCollection =
+  | {
+    /** The rows, in groups; a group's `label` is its visible heading. */
+    items: ComposerMenuGroup[];
+    groups?: undefined;
+  }
+  | {
+    items?: undefined;
+    /** @deprecated Use `items` (a collection is `items`, Governance § 4). Kept for one release. */
+    groups: ComposerMenuGroup[];
+  };
+
+export type ComposerMenuProps = ComposerMenuBaseProps & ComposerMenuName & ComposerMenuCollection;
+
 /** The @ and / suggestions above the Composer. The field keeps focus; the arrows, Enter, Tab and Esc are the field's. */
 export const ComposerMenu = forwardRef<HTMLDivElement, ComposerMenuProps>(function ComposerMenu(
-  { label, groups, activeId, onPick, onActiveChange, emptyLabel = "No matches", id: idProp, className, ...rest }, ref,
+  { "aria-label": ariaLabel, label, items, groups: groupsProp, activeId, onPick, onActiveChange, emptyLabel = "No matches", id: idProp, className, ...rest }, ref,
 ) {
+  const groups = items ?? groupsProp ?? [];
   const own = useId();
   const id = idProp ?? own;
   const empty = groups.every(group => group.items.length === 0);
   return (
-    <div ref={ref} id={id} role="listbox" aria-label={label} className={composerMenuVariants({}, ["area-menu", className].filter(Boolean).join(" "))} {...rest}>
+    <div ref={ref} id={id} role="listbox" aria-label={ariaLabel ?? label} className={composerMenuVariants({}, ["area-menu", className].filter(Boolean).join(" "))} {...rest}>
       {empty ? <p className="area-composer-menu__empty" role="presentation">{emptyLabel}</p> : null}
       {groups.filter(group => group.items.length).map((group, g) => {
         const rows = group.items.map(item => (
@@ -120,6 +151,10 @@ export interface QueueProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
   /** "2 queued" by default. */
   title?: ReactNode;
   onSendNow?: (id: string) => void;
+  /** Removes a message from the queue: shows each row's remove control. */
+  onDismiss?: (id: string) => void;
+  /** @deprecated Use `onDismiss` (a close is `onDismiss` / `dismissLabel`, Governance § 4). Kept for one release;
+   *  `onDismiss` wins. */
   onRemove?: (id: string) => void;
   onRetry?: (id: string) => void;
   open?: boolean;
@@ -129,8 +164,9 @@ export interface QueueProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
 
 /** Messages waiting their turn above the composer; each can be sent now (stopping the run, Cursor's Send Now) or removed. */
 export const Queue = forwardRef<HTMLElement, QueueProps>(function Queue(
-  { items, title, onSendNow, onRemove, onRetry, open: openProp, defaultOpen = true, onOpenChange, className, ...rest }, ref,
+  { items, title, onSendNow, onDismiss: onDismissProp, onRemove, onRetry, open: openProp, defaultOpen = true, onOpenChange, className, ...rest }, ref,
 ) {
+  const onDismiss = onDismissProp ?? onRemove;
   const listId = useId();
   const titleId = useId();
   const [own, setOwn] = useState(defaultOpen);
@@ -142,7 +178,7 @@ export const Queue = forwardRef<HTMLElement, QueueProps>(function Queue(
         <span id={titleId} className="area-queue__title">{title ?? `${items.length} queued`}</span>
         <span className="area-queue__chevron" aria-hidden="true"><Glyph name="chevron-down" size={12} /></span>
       </button>
-      <ul id={listId} className="area-queue__items" hidden={!open} aria-labelledby={titleId}>
+      <ol id={listId} className="area-queue__items" hidden={!open} aria-labelledby={titleId}>
         {items.map(item => {
           const status = item.status ?? "queued";
           return (
@@ -155,13 +191,13 @@ export const Queue = forwardRef<HTMLElement, QueueProps>(function Queue(
                   {status === "failed"
                     ? (onRetry ? <Button variant="ghost" tone="neutral" size="sm" onClick={() => onRetry(item.id)}>Retry</Button> : null)
                     : (onSendNow ? <Button variant="ghost" tone="neutral" size="sm" title="Stops the run and sends this now" onClick={() => onSendNow(item.id)}>Send now</Button> : null)}
-                  {onRemove ? <Button variant="ghost" tone="neutral" size="sm" iconOnly icon={<Glyph name="dismiss" />} aria-label={`Remove “${item.text}”`} onClick={() => onRemove(item.id)} /> : null}
+                  {onDismiss ? <Button variant="ghost" tone="neutral" size="sm" iconOnly icon={<Glyph name="dismiss" />} aria-label={`Remove “${item.text}”`} onClick={() => onDismiss(item.id)} /> : null}
                 </span>
               )}
             </li>
           );
         })}
-      </ul>
+      </ol>
     </section>
   );
 });

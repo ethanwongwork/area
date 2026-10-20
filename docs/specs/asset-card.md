@@ -1,113 +1,138 @@
 # Asset card spec
 
-**Captures:** none yet. Figma's file browser (the owner's reference) is not captured: the values below come from Area's
-own gallery container and File tile, and the mosaic's gap is a pick (Open).
-**Peers:** the app's gallery tile (`apps/desktop/src/tile.tsx`), File tile (label under the figure, ListBox grid),
-Asset row (an asset in a list), Card (the linked card's lift), Preview frame (an image's corner inside a frame).
+**Captures:** the owner's three designs (round 55, 2026-10-19: "Image container", "Group container", "Component
+container", 300 × 300 PNGs), measured pixel by pixel in headless Edge (canvas `getImageData`, the session's scratchpad):
+values below are read from pixels, not estimated. Figma's file browser (the 2026-10-18 reference) is still not captured.
+**Peers:** Card (the corner), the app's gallery tile (`apps/desktop/src/tile.tsx`: a head over a stage), Color swatch
+(the colour kind's ring), File tile (a ListBox grid of figures), Asset row (an asset in a list).
 
 ## Owner decisions
 
-- 2026-10-18: "make the brand folders switch to another container based design. keep folders and docs and the file
-  thing, but i want the gallery for brand to just be a bunch of containers ... anything, a component, an image, a
-  screen, an animation, an illustration, a logo, a type ramp style, can belong standalone in a container ... they are
-  essentially all assets, then you can group assets together in a group ... maybe just a 2x2 grid with each asset
-  scaled down." Reference: Figma's file browser, a folder as one container of four file thumbnails, its name and
-  "Edited 5 minutes ago" under it.
-- 2026-10-18: the names are **Asset** and **Group** (offered Collection, since Button group, Nav group and the app's
-  Group by already use the word; the owner chose Group).
-- 2026-10-18: names and controls sit **under** the container, "for even assets ... for consistency". — superseded
-  2026-10-19: the caption sits inside the frame's first row by default (a trial); `below` keeps this placement.
-- 2026-10-18: images are rounded by size: **12** (the container corner) where an image stands alone, **6** (the small
-  corner) for thumbnails. Both follow the Radius setting.
+- 2026-10-18: "make the brand folders switch to another container based design ... anything, a component, an image, a
+  screen, an animation, an illustration, a logo, a type ramp style, can belong standalone in a container ... then you
+  can group assets together in a group ... maybe just a 2x2 grid with each asset scaled down."
+- 2026-10-18: the names are **Asset** and **Group**.
+- 2026-10-19, round 55 (rethink): "the text and the images should align, the inset radius should be mathematically
+  correct, any components or real designs should be screenshotted and scaled down. the padding, gaps, margins, can all
+  be improved", then the three designs: the name in a head with a More button, the asset in a frame 4 in.
+- 2026-10-19: "expand the scope ... see if color, language, typography, etc can have their own versions of these
+  containers ... i want the overall design balance of this to be well organized and simple." → one card, four kinds
+  of frame content (an element, an image, a colour, a group); a type style, an icon and a setting's option are
+  elements. Supersedes the 2026-10-18 caption below the container and the 2026-10-19 caption inside the frame.
 
 ## Job and boundaries
 
-An Asset card shows one asset, anything that can stand alone (an image, a component, a screen, an animation, an
-illustration, a logo, a type style), in a square container, with its name, a detail line and its controls in the
-container's first row (`caption="inside"`, the default) or under it (`below`). A **group** is the same card holding a 2×2 mosaic of its first four assets. `AssetGrid` lays cards out as a ListBox
-grid (one Tab stop, arrows in two dimensions, typeahead, Space selects, Enter or a double click opens), as FileGrid
-does for File tiles.
+An Asset card shows one asset in a square card: its name (a short detail, a few controls) in a head, the asset in a
+frame under it. What the frame holds says what kind of asset it is: any element (a component, a type style, an icon,
+a setting's option) centred on the surface, an image covering it, a colour painting it, or a group's first four
+assets as a 2×2 mosaic. `AssetGrid` lays cards out as a ListBox grid (one Tab stop, arrows in two dimensions,
+typeahead, Space selects, Enter or a double click opens), as FileGrid does for File tiles.
 
-Not this: a file in a file browser (File tile, Finder's icon view), an asset in a list (Asset row), a content card
-with its own text and actions inside (Card), a framed preview of a page or screen (Preview frame).
+Not this: a file in a file browser (File tile), an asset in a list (Asset row), a content card with its own text and
+actions (Card), a framed preview of a page at its own size (Preview frame).
 
 ## Variants
 
-| Axis | Value | Justification | Where |
+| Axis | Value | Set by | Design |
 |---|---|---|---|
-| layout | asset (default): the asset in the frame | Owner: "can belong standalone in a container" | the app's gallery tiles; Figma's file card |
-| layout | group: a 2×2 mosaic of the first four assets | Owner: "a 2x2 grid with each asset scaled down" | Figma's folder card (owner's reference) |
-| media | image (contained, never cropped, 12 corner) · any node (centred) | File tile contains images; owner's corners | File tile, gallery tile |
-| state | hover (lift), pressed, selected (edge in the selection colour), focus (ring on the frame) | the gallery tile's states (owner, 2026-10-18) | gallery tile, linked Card |
-| interactive | off · on: the card is a control outside an asset grid (an app's gallery tile) | the app's tiles (owner, 2026-10-18) | gallery tile |
-| caption | inside (default): the frame's first row, name at the start, detail at the end · below: under the frame | owner 2026-10-19 (a trial: "the name should be at the top"); 2026-10-18 (below) | the old gallery tile head; Figma's file card |
+| layout | asset (default): any element, centred on the frame's surface, 12 of room around it | `media` as an element, or `children` | Component container |
+| layout | image: the image covers the frame, cropped | `media` as a URL | Image container |
+| layout | color: the colour paints the frame, the swatch ring over its edge | `color` | (extension, owner 2026-10-19) |
+| layout | group: a 2×2 mosaic of the first four assets, 4 apart, no frame | `group` | Group container |
+| interactive | off · on: the card is a control outside an asset grid | `interactive` | the app's gallery tiles |
+| state | hover (lift), pressed, selected (edge), focus (ring on the card) | — | gallery tile |
 
-A group's cells crop their asset to the square (a thumbnail), with the 6 corner.
+`layout` is derived from the content, never passed. The extended kinds are elements, so they need no axis: a type
+style (its sample, size and leading as `meta`), an icon (the glyph at a native size), a setting's option (drawn
+under its own scope, as the Language tab previews, `Default` as `meta`).
 
 ## Anatomy
 
 ```
-area-asset-card            the asset: its frame (caption inside, the default) or its frame, then its caption (below)
-  __frame                  the container: 1px card edge, 12 corner (radius-container), surface fill, square,
-                           raised ground (data-area-ground="raised"); inside: rows caption, then asset, 8 apart
-    __caption              inside: the frame's first row, one line, centred; the text, then the controls
-    __media                the asset, centred in the frame's 12 inset (an image contained, 12 corner, no stroke)
-    __mosaic               a group: 2 × 2 cells in a 12 margin inside the frame's inset, 16 apart
-      __cell               one asset, cropped to its cell, 6 corner (radius-small), no stroke
-  __caption                below: under the frame, 8 down; the text, then the controls
-    __text                 inside: name and detail on one baseline, 8 apart; below: name over detail
-      __name               the app's UI text, strong; one line, then an ellipsis (4 clip margin for descenders);
-                           inside: cap-trimmed
-      __meta               the caption size (text-xs), muted, tabular figures; one line; inside: cap-trimmed, at the end
-    __actions              controls at the end, centred on the name's line (inside: on its cap height)
+area-asset-card          the card: square, Card's corner, card edge, recessed fill, padding 0 4 4
+  __head                 control-sm + 2 × 4 tall; the name, then the controls, nothing else (round 58)
+    __name               UI text, regular, default ink; cap-trimmed; one line, then an ellipsis
+    __actions            small ghost controls, ending 4 in (on the frame's side), centred on the head
+  __frame                the rest: 4 in on three sides; corner card − edge − 4; surface + card edge; raised ground
+    __media              asset: centred, 12 of room · image: covers the frame (object-fit cover)
+    __mosaic             group: 2 × 2, 4 apart, the frame's place (the frame paints nothing)
+      __cell             one asset cropped to its cell, the frame's corner
 ```
 
-Inset equation: frame inset = border 1 + padding 11 = 12 from the outside to the media, the gallery tile's 12 (owner,
-2026-10-13: "the margin/padding can be smaller"; was 16), the border counted once.
+Inset equations (the designs at 300, edge 1; Area at the default):
+
+- frame side = edge + inset = 1 + 4 = 5 from the outside on three sides (design: frame at x 5, 294 and y 294);
+- head = control-sm + 2 × inset (design: 33 inside the edge; Area 24 + 8 = 32 at the app's type 13);
+- name start = edge + (head − 1cap) / 2 (design: 1 + (33 − 11) / 2 = 12, its text box at x 12);
+- control end = edge + inset, centred: (head − control-sm) / 2 = 4, so a button's side meets the frame's side
+  (design: the "…" glyph's centre at x 280.5 of 300);
+- frame corner = card corner − (edge + inset) × concentric = 16 − 5 = 11 (design: straight edges from 11 in).
 
 ## Measurements
 
-Not captured (Open). Values reuse measured or owner-set peers:
-
-| Slot · property | Value | Basis |
-|---|---|---|
-| frame · edge | 1px `border-card` | the gallery tile's edge (Card's edge, owner 2026-10-12) |
-| frame · corner | `radius-container` (12 at the default Radius) | the gallery tile's 12 (owner, 2026-10-13); Card's container role |
-| frame · inset | 12 | the gallery tile's 12 (owner, 2026-10-13) |
-| frame · shape | square | the Components cards' square (owner, 2026-10-18) |
-| mosaic · gap | 16 | owner 2026-10-19: "larger gaps" (pick; was 8) |
-| mosaic · margin | 12, inside the frame's 12 | owner 2026-10-19: "larger ... margins" (pick; was none) |
-| image · stroke | none | owner 2026-10-19: "dont put any strokes around them" (was the swatch ring) |
-| cell · corner | `radius-small` (6) | owner, 2026-10-18: thumbnails 6 |
-| media image · corner | `radius-container` (12) | owner, 2026-10-18: a standalone image 12 |
-| caption · gap | 8: over the asset (inside), under the frame (below) | the gallery tile's head-to-stage 8; inside per owner 2026-10-19 |
-| name | UI text, strong | the Components card title ("the app's text, strong", PRODUCT_UI rule 11) |
-| meta | caption (text-xs), muted | File tile's detail line (Figma black 50%, ChatGPT rgb(93)) |
-| hover | `shadow-lift`, fade in `fast` ease-out, out `base` ease-in | the gallery tile and linked Card (owner, 2026-10-18) |
+| Slot · property | Design (300 PNG) | Area | Basis |
+|---|---|---|---|
+| card · size | 300 × 300 | square (`aspect-ratio: 1`), the host's width | design |
+| card · corner | 16 (straight edges from 15–16) | Card's: `radius-container` + inset × concentric (16 at the default); `--area-asset-card-corner` overrides | design = Card |
+| card · edge | 1px #f0f0f0 | `border-card` at `border-width` (Card's), `shadow-edge` under Borderless; state edges at least `stroke-width` | design; DESIGN_SYSTEM Strokes |
+| card · fill | #fafafa (neutral/25) | `bg-subtle` (neutral/50, #f7f7f7 at the default settings; Table's header fill) | design; round 58 tried a mix to #fafafa, outside the roles; round 59 reverted (no role lands on neutral/25; a new role would be a foundation change) |
+| head · height | 33 inside the edge | `control-sm` + 2 × 4 | design |
+| name | 16 regular, near black, x 12, cap 11–22 | `ui-size`, regular, `fg-default`, cap-centred, (H − 1cap) / 2 in | design (scaled to the app's UI text) |
+| more | 3 dots 276–285, y 16–18 | a small ghost icon-only Button (`more-horizontal`); its corner the frame's (11): set into the card's corner as deep as the frame, so concentric with the card (round 52's rule) | design; owner round 57 ("the button nesting") |
+| controls · plates | — | the card is a recessed ground (layers.css), the frame a raised one: a button's hover plate steps from the card's fill (light #ebebeb on #f7f7f7, 1.11:1; it was the page's #f3f3f3, 1.04:1); the glyph 6.85:1 (light) and 12.6:1 (dark) on the fill, 6.2:1 and 10.3:1 on its plate; the focus ring 7.4:1 and 13.7:1 | owner round 60: "make sure the backplate on the button is accessible"; layers.css |
+| frame · inset | 4 inside the edge, none above (under the head) | `space-4` | design |
+| frame · corner | 11 | card − (edge + inset) × concentric | design, exact concentric (owner: "mathematically correct") |
+| frame · edge, fill | 1px #eee–#f0f0f0; component: white | `border-card`; `bg-surface` | design |
+| image | covers the frame (cropped) | `object-fit: cover` | Image container |
+| specimen room | — (centred) | 12 (pick) | — |
+| group · cells | 143 × 128, 4 apart, corner 11, no edge | 2 × 2, gap = inset (4) = margin to the card's edge (the frame gives up its edge's width), corner = frame corner | Group container; owner round 59 |
+| group · element cell | — | a thumbnail: laid out at twice the cell (about its own card's frame), scaled to half, inert | owner round 57: "image versions that are scaled down when that image is a thumbnail in a group" |
+| setting · frame | — | the option's own scope on the frame (`frameProps`, e.g. `data-area-theme="dark"`), so the frame paints that option's ground | owner round 57: "it doesnt always have to be white" |
+| head · end | — | controls only: Copy for what is used (component code, colour value, type role, icon name), More for what is managed (image, group); `meta` deprecated and ignored | owner round 58: "it should always be controls, maybe a copy button?" |
+| colour · value | — | behind Copy (copies `#2563EB`) | Figma's colour styles carry the value |
+| type · detail | — | in the sample: "Aa" over "Geist · Medium · 24 / 32" | Figma's text styles: "Ag" over the face |
+| colour | — | the frame's fill; the swatch ring (`token-swatch-ring`, inset outline at `stroke-width`) | Color swatch |
+| grid · gap | — | 12 both ways (the name is in the card) | PRODUCT_UI rule 11 |
+| hover | — | `shadow-lift`, in `fast` ease-out, out `base` ease-in | the gallery tile, Card |
 
 ## States
 
 | State | Change |
 |---|---|
-| hover | the frame lifts (`shadow-lift`); edge, fill and caption stay. Elevation 0: the edge steps to `edge-control-hover` |
+| hover | the card lifts (`shadow-lift`). Elevation 0: its edge steps to `edge-control-hover`, at least `stroke-width` |
 | pressed | the lift drops at once |
-| selected | the frame's edge is the selection colour (one line, as the gallery tile) |
-| focus-visible | the focus ring round the frame, at once |
-| disabled | not a card state (the manifest declares `selected` only). A disabled `AssetGridItem` is a disabled ListBox option: ListBox's disabled opacity, no lift or edge step on hover, Enter and double click do not open |
+| selected | the card's edge is the selection colour, at least `stroke-width` wide |
+| focus-visible | the focus ring round the card, at once |
+| disabled | a disabled `AssetGridItem` is a disabled ListBox option: dimmed, no lift, Enter and double click do not open |
 
 ## Behavior and accessibility
 
-In an `AssetGrid` each card is a ListBox option (`role="option"`, `aria-selected`) whose accessible name is its name
-(`textValue`). Enter or a double click opens (`onOpen`); Space selects. Controls in `actions` sit inside the option:
-keep them few and give each its own label. A standalone `AssetCard` is a plain element; with `interactive` the host
-supplies its role, `tabIndex` and `aria-pressed` or `aria-selected`, and the frame shows hover, press, focus and the
-selected edge. Images take `mediaAlt` (empty by default, since the name says what it is); a group's mosaic is
-`aria-hidden`. Forced colors: a selected grid card draws a `Highlight` outline.
+In an `AssetGrid` each card is a ListBox option (`role="option"`, `aria-selected`) named by its name (`textValue`).
+Enter or a double click opens (`onOpen`); Space selects. Controls in `actions` sit inside the option: keep them few
+and label each. A standalone card is a plain element; with `interactive` the host supplies its role, `tabIndex` and
+`aria-pressed` or `aria-selected`. Images take `mediaAlt` (empty by default); element media and a group's mosaic are
+`aria-hidden`; a colour is named by the card's name. Forced colours: a selected grid card draws a `Highlight` outline,
+and a colour keeps its own paint.
+
+## Fit with the other containers
+
+One language across Area's framed surfaces: a quiet band names the thing, a white body holds it.
+
+| Container | Head | Body | Edge | Why it differs |
+|---|---|---|---|---|
+| Table | the header row on `bg-subtle` | rows on `bg-surface`, flush | `border-divider` at `stroke-width` (rows inside, so the frame is never lighter than its rules) | data: rows run to the frame |
+| Asset card | the head on `bg-subtle` (the card's ground) | the asset on `bg-surface`, 4 in, concentric | `border-card` (frame of a standalone surface) | an asset is visual, so it gets its own frame and corner inside the card |
+| Card | title in the body | content on `bg-surface` | `border-card`, Card's corner | content, not an asset; Asset card takes Card's corner |
+| Code block / Edit summary | a header with a `border-decorative` seam | code on `bg-surface` | `border-card` at `stroke-width` | a seam instead of an inset frame: text needs no frame of its own |
+
+The Asset card's corner is Card's, its head's fill is Table's header fill, and its inner frame follows the concentric
+rule every nested surface uses (Popover, Code block's buttons, Edit summary's head buttons).
 
 ## Open
 
-- Capture Figma's file browser (folder card, file card, hover, selected) and replace the mosaic gap pick.
-- Mixed assets in a group (a component, a type style) need the Brand library to reference app content.
+- A group of colours or type styles (a palette, a ramp) as cells: today a cell takes an image URL or an element.
+- Adopting the card in the app's own tabs (Color's swatch cards, Typography's role cards, Icons, Language previews,
+  Brand): each tab draws its own cards today.
 
 ## Review note, 2026-10-18
 
@@ -131,3 +156,62 @@ selected edge. Images take `mediaAlt` (empty by default, since the name says wha
 - 2026-10-19 · owner (Brand groups): "make the images smaller, larger gaps, and margins, also dont put any strokes around
   them" → the mosaic sits in a 12 margin with 16 gaps; cells and standalone images lose the swatch ring. The caption's
   name and detail clip with a 4 margin, so a cap-trimmed name keeps its descenders (they were cut: "Loaos").
+- 2026-10-19 · audit: the selected edge and Elevation 0's hover edge use at least `stroke-width` (they rode
+  `border-width`, which Stroke width 0 removes); the resting frame stays on Card's `border-width`; the grid's 224
+  column moved into a `/* spec */` property.
+
+## Review note, 2026-10-19 (round 55, design-system audit)
+
+- **What changed:** The selected edge and Elevation 0's hover edge never disappear when Stroke width is 0. A new tile shows `caption="below"`, and the API page lists `caption`.
+- **Why:** CONTRAST.md: removing a frame must not erase an indicator; GOVERNANCE: one tile per value.
+- 2026-10-19 · owner, round 55: rethink with three designs → rebuilt: square card, head (control-sm + 2 × 4, name
+  regular at (H − 1cap) / 2, More at the end on the frame's side), frame 4 in with the concentric corner (16 − 5 = 11),
+  image covers, group 2 × 2 at 4 with every cell at 11, component centred on white; new `color` kind; type, icon and
+  setting examples; `caption` deprecated (ignored), `captionProps` → `headProps`; states move from the frame to the card
+  → headless Edge captures, light and dark: every kind, selected and the grid.
+
+## Review note, 2026-10-19 (round 57)
+
+- **What changed:** the card is your design: a square card with the name in a head and a More button at its end, and
+  the asset in a frame 4 in, its corner exactly concentric (16 outside, 11 inside). Images fill the frame; a group is
+  four cells 4 apart; a component sits centred on white. New kinds: a colour paints the frame, and a type style, an
+  icon or a setting's option sit centred like a component, with a short detail (a size, Default) beside the name.
+- **Why:** you sent the three designs and asked for colour, typography and language versions, organised and simple.
+  One card with four kinds of frame content covers them all, and each value comes from the designs' pixels.
+
+## Review note, 2026-10-19 (round 58)
+
+- **What changed:** the More button's corner is the frame's (11), so it sits concentric in the card's corner like the
+  frame does. In a group, a component or design is a scaled-down image of itself, not the live thing at full size. A
+  setting's frame takes the option's own theme, so the Dark option's frame is dark. Colour shows its value beside the
+  name; a type style shows its size and leading beside the name and its face and weight under the sample.
+- **Why:** your notes on nesting, thumbnails, the setting background and more information. The spec's new "Fit with
+  the other containers" section answers how the card relates to Table and Card: Table's header fill for the head, Card's
+  corner, the shared concentric rule for the frame.
+
+## Review note, 2026-10-19 (round 59)
+
+- **What changed:** the head's end holds controls only: Copy on a component, a colour, a type style and an icon
+  (copying its code, value, role or name), More on an image and a group. The type style's size and leading moved into
+  its sample's line. The card's fill is lighter, the designs' #fafafa (it was the recessed grey, about #f7f7f7).
+- **Why:** you said the top right should always be controls, perhaps a copy button, and asked whether the fill could be
+  lighter. It was the recessed role (2.4% under white at the default Layers); it now sits 60% of the way to white, so it
+  still follows the Layers setting, and in dark it keeps its step under the raised frame.
+
+## Review note, 2026-10-19 (round 60)
+
+- **What changed:** in a group the images sit 4 from the card's edge, the same as the 4 between them (they were 5 in:
+  the frame kept an invisible 1px edge). A selected card in the grid no longer shows a square plate behind its rounded
+  corners. The card's fill is the recessed role again (#f7f7f7 at the defaults), as agreed.
+- **Why:** your notes on the group's margin and the grid's selected corners; the fill was a one-off mix outside the
+  roles, so it went back to `bg-subtle`, which follows the Neutral, Ground and Layers settings.
+
+## Review note, 2026-10-19 (round 61)
+
+- **What changed:** the More and Copy buttons' hover and press plates now show on the card: the hover plate is a clear
+  step darker than the card's fill (#ebebeb on #f7f7f7) instead of almost the same grey (#f3f3f3).
+- **Why:** you asked to make sure the backplate is accessible. The card paints the recessed grey under its head but
+  never said so, so its buttons used the plate meant for a white page, 1.04:1 against the card. Declared recessed (as a
+  sidebar is), the plate steps from the card's own fill, 1.11:1, the same step every hover plate in Area takes from its
+  ground. The parts that must pass WCAG already did and still do: the icon 6.85:1 in light and 12.6:1 in dark (6.2:1
+  and 10.3:1 on its plate), the focus ring 7.4:1 and 13.7:1.

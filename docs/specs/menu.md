@@ -268,3 +268,12 @@ var(--_elevation)`, as Menu's, and the inner Menu is clear (`background-color: t
 surface's fill or glass shows through it. With no Material the inner Menu's surface fill was the search surface's own,
 so the look is unchanged. Checked in the app (light and dark, None, Glass and Glow): under a Material the search surface
 computes the same fill, image, frost, stroke and box-shadow as a plain Menu.
+
+## Review note, 2026-10-20 (round 62)
+
+- **What changed:** The search field above a searchable menu now takes the fill made for its raised surface. In light at the default settings nothing moves (there the raised plate equals the page's);
+  in dark and on a grey page its hover, selected and pressed plates are now the same step from this surface as every
+  Card's and Menu's (dark: #272727 on #121212, was #212121).
+- **Why:** you asked that hover colours come from rules, not one-off fixes. The rule is now written (DESIGN_SYSTEM.md,
+  Layers: a component that paints a ground declares it in layers.css) and enforced by a test; this family painted a
+  raised ground without declaring it.

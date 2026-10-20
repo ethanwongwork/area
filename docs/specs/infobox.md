@@ -47,7 +47,7 @@ Wikipedia, computed (evidence only; Area's current values are in Decisions):
 | title | surface title (`title-xs`), strong, start-aligned | Card's and Dialog's title (round 35) | Wikipedia 1.25em bold, centred |
 | subtitle | UI text, `fg-muted` | Card's description (round 35) | — |
 | action | one control at the end of the title row, centred on the title's first line | Ant Descriptions' extra, GitHub's About gear (round 36) | — |
-| section | 12 apart, a 1px `border-divider` rule (`stroke-width`) between; heading 6 above its rows | GitHub's About, Figma (round 34–35) | Wikipedia's tinted band dropped |
+| section | 12 apart, a 1px `border-divider` rule (`stroke-width`) between, `border-decorative` when framed (a seam inside the card; round 56); heading 6 above its rows | GitHub's About, Figma (round 34–35) | Wikipedia's tinted band dropped |
 | heading | UI text, strong, default ink | Section heading's title (round 35) | — |
 | rows (`columns`, default) | label in a 120 column, value 8 after it, rows 4 apart, top-aligned | Wikipedia's 123 of 296; Radix and Chakra's label minimum (round 35) | Area's 4 grid |
 | rows (`stacked`) | label 4 above its value, pairs 8 apart | App Store's Information; Radix, Chakra `vertical` (round 36) | — |
@@ -133,3 +133,18 @@ Inset (framed, after the round-34 rethink): 12 to the content with the border co
 
 Elevation and Stroke audit (docs/research/elevation-stroke-2026-10-18, "Audit: Area today"): the framed Infobox had no edge at Surface 0 (Borderless). It now lists `--area-shadow-edge` before its resting
 lift, as Card does: the soft edge at 0, transparent while a frame is drawn. Checked in the app, light and dark.
+- 2026-10-19 · design-system audit → the label column is a named `--_label-column` spec value. No visual change.
+
+## Review note, 2026-10-19 (round 56)
+
+- **What changed:** Framed, the section rules take `border-decorative`: seams inside the card are never darker than its edge (unframed, they stay `border-divider`).
+- **Why:** you asked on Edit summary whether the frame and the divider were meant to differ. They weren't: DESIGN_SYSTEM.md says a rule inside a container is never darker than the container's edge, and seams inside a card take the seam colour. The same seam was fixed wherever it appeared.
+
+## Review note, 2026-10-20 (round 62)
+
+- **What changed:** Framed, its action button now takes the plate made for its raised card. In light at the default settings nothing moves (there the raised plate equals the page's);
+  in dark and on a grey page its hover, selected and pressed plates are now the same step from this surface as every
+  Card's and Menu's (dark: #272727 on #121212, was #212121).
+- **Why:** you asked that hover colours come from rules, not one-off fixes. The rule is now written (DESIGN_SYSTEM.md,
+  Layers: a component that paints a ground declares it in layers.css) and enforced by a test; this family painted a
+  raised ground without declaring it.

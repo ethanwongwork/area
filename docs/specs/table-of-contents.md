@@ -42,7 +42,7 @@ Wikipedia, computed (evidence only; Area's current values are in Decisions):
 | nesting | NavGroup `nested` (Nav's nested indent); `levels` 2 (default) or 1; subsections always shown | round 34 (VitePress, Starlight, Primer, Nextra, Docusaurus, MDN) | Wikipedia 12 a level and folds subsections; `collapse` dropped in round 34 |
 | title | "On this page" by default, `false` for none; UI text, strong, default ink, a row tall (`ui-row`), its text 16 in with the rows; hidden from the accessibility tree, the `nav`'s name instead | VitePress title 600 in text-1 (round 35) | Wikipedia "Contents" 14 bold |
 | top | optional first row back to the top (`top`: label and id) | Area | — |
-| following | the last heading at or above the scroller's top + `offset` + 24 is current; the last when scrolled to the end; `current` makes it controlled | Wikipedia's behaviour; VitePress `outline.ts` | measured once a frame |
+| following | the last heading at or above the scroller's top + `offset` + 24 is current; the last when scrolled to the end; `value` makes it controlled (`defaultValue`, `onValueChange`; `current` / `onCurrentChange` are deprecated aliases) | Wikipedia's behaviour; VitePress `outline.ts` | measured once a frame |
 | `aria-current` | `location` | ARIA | — |
 
 ## Verification
@@ -90,3 +90,6 @@ the default ink.
   section names. The section you're reading stays in the full colour with its marker.
 - **Why:** You asked to re-check the type and colours. The label was grey like the rows, so only its weight told it
   apart; docs outlines (VitePress) and Notion keep the heading strong and the rows grey.
+- 2026-10-19 · design-system audit → the API takes the shared vocabulary, `value` / `defaultValue` / `onValueChange`
+  (DESIGN_SYSTEM.md, One API vocabulary), with `current` / `onCurrentChange` kept as deprecated aliases; the change
+  callback fires outside the state updater, so StrictMode no longer calls it twice. No visual change.

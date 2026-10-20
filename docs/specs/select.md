@@ -256,3 +256,12 @@ select and Figma's filter, size, zoom and format selects. Build and test results
 
 Gap: Select sets `gap: var(--_gap)`, its size's tier (6 at md; 4 at Compact 13). Without it the browser's customizable-select default (0.5em) applied: 7 at type 14, 6.5 at 13. Measured in `docs/research/spacing-2026-10-17/` (Before / After: https://claude.ai/artifact/JtDZ9LNfutFyfdkGUvQzL2).
 - 2026-10-18 · owner: "go with your recommendations … finalize the material, surface, stroke, elevation axis theming" → Edge and Depth (axes/depth.ts; docs/research/elevation-stroke-2026-10-18): the outline variant rests on `--_field-lift: var(--area-shadow-field)` and lists it before the focus halo, so the two crossfade; the soft variant's lift is transparent (flat, as Figma's). Field shadow is 0 by default, a transparent role: nothing changes until it is raised (Inspector → Edge and depth → Field shadow; owner, the same day: no named looks, nine individual controls). Under a Material the lift is listed beside the well (material.css).
+
+## Review note, 2026-10-20 (round 62)
+
+- **What changed:** The native picker's option plates now take the plate made for its raised surface. In light at the default settings nothing moves (there the raised plate equals the page's);
+  in dark and on a grey page its hover, selected and pressed plates are now the same step from this surface as every
+  Card's and Menu's (dark: #272727 on #121212, was #212121).
+- **Why:** you asked that hover colours come from rules, not one-off fixes. The rule is now written (DESIGN_SYSTEM.md,
+  Layers: a component that paints a ground declares it in layers.css) and enforced by a test; this family painted a
+  raised ground without declaring it.

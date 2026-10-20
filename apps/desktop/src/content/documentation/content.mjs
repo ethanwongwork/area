@@ -265,30 +265,35 @@ export default {
     ],
     // Spec: Variants, Behavior and accessibility, Feedback log; source: AssetCard.tsx JSDoc.
     practices: [
-      ["Do", "Use one card per asset, anything that stands alone: an image, a component, a screen, a logo or a type style."],
-      ["Do", "Pass group to show a group as a mosaic of its first four assets, and say how many it holds in meta."],
+      ["Do", "Use one card per asset, anything that stands alone: an image, a component, a colour, a type style, an icon, a setting's option or a group of them."],
+      ["Do", "Pick the kind by what you pass: an image URL covers the frame; color paints it; group fills a 2×2 mosaic; any other element sits centred on the frame's surface at its own size."],
+      ["Do", "Keep the head to the name and its controls: Copy for what is used (a component's code, a colour's value, a type role, an icon), More for what is managed (an image, a group)."],
+      ["Do", "Give a setting's option its own scope through frameProps (data-area-theme=\"dark\"), so the frame paints that option's ground."],
+      ["Do", "Pass components and designs to a group as elements: each cell shows a scaled-down image of it, inert."],
+      ["Do", "Put a small ghost More or Copy button in actions; it ends on the frame's side. Give each its own label."],
       ["Do", "Lay cards out in an AssetGrid to browse, choose and open them, and pass onOpen for Enter and double click."],
-      ["Do", "Keep actions few and give each its own label; in a grid they sit inside the option."],
       ["Do", "Set mediaAlt only when the image says more than the name; it is empty by default."],
+      ["Don't", "Put text at the head's end: a detail goes in the asset itself (a type sample's line) or behind Copy."],
+      ["Don't", "Pad or frame the asset yourself: the frame already sits 4 in with a corner concentric with the card's."],
       ["Don't", "Set interactive on a card inside an AssetGrid: the grid already makes each card an option."],
       ["Don't", "Set interactive without making the card a control: give it a role, a tab stop and aria-pressed or aria-selected yourself."],
+      ["Don't", "Put actions on an interactive card: a button inside a button. Use an AssetGrid, or leave the card plain."],
     ],
-    // Spec: Anatomy, Feedback log 2026-10-19; source: AssetCard.tsx.
+    // Spec: Anatomy, Measurements (round 55's designs); source: AssetCard.tsx.
     parts: {
-      root: "One asset: its square frame and its caption, inside the frame's top by default or below it with caption=\"below\".",
-      frame: "The square container: the card edge, the container corner and a 12 inset; it lifts on hover when the card is interactive or in a grid.",
-      media: "The asset, centred in the frame: an image contained, never cropped, at the container corner, or any element.",
-      mosaic: "A group's 2×2 grid of its first four assets, inside a margin in the frame; hidden from assistive tech.",
-      cell: "One asset in the mosaic, cropped to its square with the small corner; fewer than four assets leave cells empty.",
-      caption: "The name, detail line and controls in one row.",
-      text: "The name over its detail line.",
-      name: "The asset's name in the app's strong UI text; one line, then an ellipsis.",
-      meta: "A muted detail line, such as a format and size, an asset count or when it was edited; one line.",
-      actions: "Controls at the caption's end, on the name's line, such as Copy or More.",
+      root: "The square card: Card's corner (16 at the default), the card edge, the recessed fill; it lifts on hover when interactive or in a grid, and its edge shows selection.",
+      head: "The top row, a small control plus 4 above and below: the name at the start, the controls at the end, nothing else.",
+      name: "The asset's name in the UI text, regular; one line, then an ellipsis. Its cap sits centred, as far in as the head is tall less its cap.",
+      actions: "Controls at the head's end, centred on it, their side on the frame's side and their corner the frame's, concentric with the card.",
+      frame: "The asset's place, 4 in on three sides, its corner the card's less the edge and the inset (11 at the default); the surface with the card edge, or the colour itself with the swatch ring.",
+      media: "The asset: an image covering the frame, cropped, or any element centred at its own size.",
+      mosaic: "A group's 2×2 grid of its first four assets, 4 apart, filling the frame's place; hidden from assistive tech.",
+      cell: "One asset in the mosaic, cropped to its cell at the frame's corner; fewer than four leave cells as the card's ground.",
+      thumb: "An element in a cell, laid out at about its own card's frame and scaled to the cell: a thumbnail, inert.",
     },
     // Spec: States; source: AssetCardProps.selected.
     states: {
-      selected: "The frame's edge turns the selection colour; an AssetGrid sets it from its value.",
+      selected: "The card's edge turns the selection colour; an AssetGrid sets it from its value.",
     },
     // Source: AssetGrid key handler and ListBox grid.
     keyboard: [
@@ -315,22 +320,20 @@ export default {
     ],
     // Spec: Variants, Owner decisions, Accessibility; source: Folder.tsx JSDoc.
     practices: [
-      ["Do", "Use the outline folder by default, and solid where you want Finder's lit, coloured folder."],
-      ["Do", "Pass contents to a solid folder that holds something: one straight sheet shows over the pocket, and an image fills it."],
       ["Do", "Use count for how many items a folder holds, and badge for the apps or people it is shared with."],
       ["Do", "Set open while something is dragged over the folder, so it reads as a drop target."],
-      ["Do", "Leave it decorative inside a tile whose name says what it is; pass label only when the figure stands alone."],
+      ["Do", "Leave it decorative inside a tile whose name says what it is; pass aria-label only when the figure stands alone (label is a deprecated alias)."],
       ["Don't", "Use Folder as a control: it has no focus, selection or click of its own."],
-      ["Don't", "Set tone or contents on the outline folder; they paint only the solid one."],
+      ["Don't", "Pass variant, tone or contents: the solid folder, its tones and its sheet are archived, and they are ignored."],
     ],
     // Spec: Anatomy; source: Folder.tsx.
     parts: {
       root: "The square icon box, sm 48, md 64 or lg 96, or the host's --area-folder-size when unset.",
-      figure: "The folder's drawing inside the box, with its soft shadow on the solid folder.",
+      figure: "The folder's drawing inside the box, flat in the control fill with one thin whole-pixel edge.",
       back: "The back panel with its tab, behind everything else.",
       rim: "The outline folder's back edge, drawn only where the back shows above the pocket, so no line doubles.",
-      paper: "The one straight sheet: shown when a solid folder holds something, tucked behind the pocket until the folder opens.",
-      front: "The front pocket over the sheet; the solid one has a light lip along its top and a shade along its foot.",
+      paper: "The one straight sheet, tucked behind the pocket until the folder opens.",
+      front: "The front pocket over the sheet, its edge drawn once where it meets the back.",
       badge: "Small marks at the pocket's foot, at the start.",
       count: "A number at the pocket's foot, at the end, in the same type as File page's label.",
     },
@@ -340,7 +343,7 @@ export default {
     },
     aria: [
       ["aria-hidden", "By default: the figure is decorative and the tile's name says what it is."],
-      ["role=\"img\", aria-label", "When you pass label."],
+      ["role=\"img\", aria-label", "When you pass aria-label (or the deprecated label)."],
     ],
   },
 
@@ -354,29 +357,56 @@ export default {
     ],
     // Spec: Variants, Owner decisions; source: FilePage.tsx JSDoc.
     practices: [
-      ["Do", "Use outline by default, beside an outline Folder, and solid beside a solid one."],
-      ["Do", "Give it the file type's glyph from Area's icons and the extension as label, such as PDF or DOCX."],
+      ["Do", "Leave the page blank for documents (the tile's name says which); add a content mark only where the page alone would not say what the file is: a table, slides, audio, code or an archive."],
+      ["Do", "Use File image for an image or a photo, not a page with an image glyph."],
       ["Do", "Pass preview to fill the page with a thumbnail of the file instead of the glyph."],
-      ["Do", "Keep it decorative inside a tile; pass name only when the figure stands alone."],
+      ["Do", "Keep it decorative inside a tile; pass aria-label only when the figure stands alone (name is a deprecated alias)."],
       ["Don't", "Scale a 16 file glyph up in its place: its line grows too thick and it sits off the grid."],
-      ["Don't", "Write more than the extension in label; the name belongs to the tile."],
+      ["Don't", "Pass a file-* icon (a page with letters) or the extension as label: it draws a page inside the page, or text the tile's name already shows. label is deprecated."],
     ],
     // Spec: Measurements; source: FilePage.tsx.
     parts: {
       root: "The square icon box, sm 48, md 64 or lg 96, or the host's --area-folder-size when unset; Folder's sizes.",
-      figure: "The page's drawing inside the box, with Folder's shadow when solid.",
-      sheet: "The page with its top corner cut by the fold: near flat white when solid, the component fill when outline.",
+      figure: "The page's drawing inside the box, flat as Folder's.",
+      sheet: "The page with its top corner cut by the fold, in the component fill.",
       edge: "The outline page's edge, open at the fold, one whole-pixel weight.",
       fold: "The folded flap in the top corner, sharing the page's one diagonal.",
       crease: "The flap's two inner edges, drawn on the outline page only.",
       diagonal: "The fold's diagonal, drawn after the flap at the edge's weight on the outline page.",
       content: "The glyph and the label in one centred column, a little below the fold; hidden when a preview fills the page.",
-      icon: "The type glyph, its line at the outline's edge weight at every size.",
-      label: "The extension under the glyph, in the same type as Folder's count.",
+      icon: "The content mark, 32% of the box on the page's centre, its line at the outline's edge weight at every size.",
+      label: "Deprecated: the extension under the glyph, in Folder's count type; the figure is glyph-only.",
     },
     aria: [
       ["aria-hidden", "By default: the figure is decorative and the tile's name says what it is."],
-      ["role=\"img\", aria-label", "When you pass name."],
+      ["role=\"img\", aria-label", "When you pass aria-label (or the deprecated name)."],
+    ],
+  },
+
+  "file-image": {
+    // Spec: Job and boundaries.
+    instead: [
+      ["A document, a spreadsheet or any other file", ["file-page"], "File page draws a page; File image is for pictures."],
+      ["A container of files", ["folder"], "Folder draws the container."],
+      ["A real image framed with its name, at its own shape", ["asset-card"], "Asset card frames any asset in a card with its name."],
+      ["An image file in a row or a menu", ["tree-view", "menu", "list-box"], "Use the 16 image glyph there; File image is for icon views at 48 and up."],
+    ],
+    // Spec: Variants; source: FileImage.tsx JSDoc.
+    practices: [
+      ["Do", "Pass src with a thumbnail when you have one: the picture covers the frame."],
+      ["Do", "Keep it decorative inside a tile; pass aria-label only when the figure stands alone."],
+      ["Don't", "Lay an image glyph over the frame: without a picture the frame draws its own landscape."],
+    ],
+    // Spec: Measurements; source: FileImage.tsx.
+    parts: {
+      root: "The square icon box, sm 48, md 64 or lg 96, or the host's --area-folder-size when unset; Folder's sizes.",
+      figure: "The landscape frame, 4:3 and 92% of the box, at the page's corner, in the control fill with a whole-pixel edge.",
+      scene: "The drawn landscape when there is no picture: two hills and a sun at the outline's edge weight, in File page's quiet ink.",
+      picture: "The thumbnail covering the frame, cropped, the image ring over its edge.",
+    },
+    aria: [
+      ["aria-hidden", "By default: the figure is decorative and the tile's name says what it is."],
+      ["role=\"img\", aria-label", "When you pass aria-label."],
     ],
   },
 
@@ -431,7 +461,7 @@ export default {
     // Spec: Round 40 (layouts), Round 42 and 47, Behavior and accessibility; source: VideoPlayer.tsx JSDoc.
     practices: [
       ["Do", "Give every player a label, the video's title: it names the player's group."],
-      ["Do", "Use floating by default, bar for a plain row along the foot, and minimal for an ambient loop with one round play button."],
+      ["Do", "Use bar by default (the track across the foot, buttons in glass pills under it), floating for QuickTime's centred panel, and minimal for an ambient loop with one round play button."],
       ["Do", "Pass caption tracks as track children; without one the captions button shows disabled."],
       ["Do", "Set a poster so the frame shows a picture before the first play."],
       ["Do", "Give a Figure around the player a width: each sizes to the other, so neither can set it alone."],
@@ -440,13 +470,12 @@ export default {
     ],
     // Spec: Round 40 to 47; source: VideoPlayer.tsx, video-player.css.
     parts: {
-      root: "The group holding the video and its controls, and a tab stop of its own; layout picks floating, bar or minimal.",
+      root: "The group holding the video and its controls, and a tab stop of its own; layout picks bar, floating or minimal.",
       media: "The native video, letterboxed on black; a click plays or pauses, a double click toggles full screen except in minimal.",
       start: "The round play button shown before the first play; in minimal it stays as the only control.",
-      scrim: "The dark fade along the foot behind the bar layout's row.",
-      controls: "The controls, shown after the first play: the floating panel's two rows, or the bar's single row.",
-      transport: "The floating panel's top row: sound at the start, back, play and forward in the middle, the rest at the end.",
-      group: "One of the transport's three clusters: start, center or end.",
+      controls: "The controls, shown after the first play: the bar's track over its row of pills, or the floating panel's two rows.",
+      transport: "A row of buttons: the bar's pills (play, volume and the time at the start, the rest at the end), or the floating panel's top row (sound, back · play · forward, the rest).",
+      group: "One of the transport's clusters: start and end in the bar, start, center and end in the floating panel.",
       timeline: "The floating panel's second row: the elapsed time, the track and the time remaining.",
       clock: "The time in muted tabular figures: elapsed at the start, remaining at the end.",
       range: "A track: seek or volume, a thin rail filled to a solid round thumb.",
@@ -454,7 +483,7 @@ export default {
       volume: "Mute with its volume slider, which slides out on hover or focus.",
       skip: "The back 10 and forward 10 seconds buttons, the same 10 seconds as J and L; the narrow floating panel drops them.",
       optional: "Captions and picture in picture, dropped when the player is narrow.",
-      surface: "The dark glass under the floating controls and the round play, dark in every theme so white glyphs read on any frame.",
+      surface: "The dark glass under the controls: each of the bar's pills, the floating panel and the round play, dark in every theme so white glyphs read on any frame.",
     },
     // Source: VideoPlayer.tsx onKeyDown (a focused range keeps its own arrows; Space on a button presses it).
     keyboard: [
@@ -714,7 +743,7 @@ export default {
       ["Do", "Show two levels, sections and their subsections; pass levels={1} for a short page."],
       ["Do", "Pass offset when a sticky header covers the top of the scroller, so a heading counts as reached below it."],
       ["Do", "Add top for a first row that goes back to the start of the page."],
-      ["Don't", "Control current unless your app tracks the reading position itself; by default it follows the scroll."],
+      ["Don't", "Control value unless your app tracks the reading position itself; by default it follows the scroll."],
       ["Don't", "List more than two levels: the outline shows sections and subsections only."],
     ],
     // Spec: Round 35; source: TableOfContents.tsx.

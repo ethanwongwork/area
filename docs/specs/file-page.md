@@ -46,8 +46,8 @@ empty `.txt`, `.pdf`, `.docx`, `.png`, `.zip` and an unknown extension; no web c
 
 ## Job and boundaries
 
-Draws a file as a figure for icon views at 48 and up: a page with its top corner folded, the file's type glyph and its
-extension, or an image of the file filling the page. Decorative unless named. The 16px glyphs stay the icons for rows
+Draws a file as a figure for icon views at 48 and up: a page with its top corner folded and one content mark for the
+file's type (round 56: no extension text), or an image of the file filling the page. Decorative unless named. The 16px glyphs stay the icons for rows
 and menus.
 
 ## Variants
@@ -55,8 +55,8 @@ and menus.
 | Axis | Value | Justification |
 |---|---|---|
 | size | sm 48 · md 64 · lg 96, unset follows `--area-folder-size` | Folder's sizes (Finder iconSize 64) |
-| icon | any `@area/icons` glyph | Finder draws the type's glyph in the middle (text lines, picture, zip) |
-| label | the extension | Finder prints it under the glyph (PDF, DOCX, PNG, ZIP) |
+| icon | one content mark per type (`text-align-left` for text and PDF, `table`, `presentation`, `image`, `play`, `code`, `archive`), never a `file-*` page icon; none for an unknown type | Finder's glyph; Drive, Fluent, Atlassian, ChatGPT: one mark per type (docs/research/file-figures-2026-10-19.md) |
+| label | deprecated (round 56): the extension, still drawn if passed | Finder alone prints it; the tile's name shows it |
 | preview | an image URL, clipped to the page, in place of the glyph and label | Finder's previews fill the page; the Brand tab shows real images as plain tiles instead |
 | variant | outline (default): the page and flap flat in `bg-component`, one whole-pixel `border` edge (page edge, crease and diagonal drawn after the flap), no shadow · solid: the lit page with the shaded flap and Folder's shadow, no edge | owner 2026-10-18 ("make the outline appearance the default"); Folder's variants |
 
@@ -75,7 +75,7 @@ and menus.
 
 ## Behavior and accessibility
 
-Decorative by default (`aria-hidden`): the tile's name says what it is. With `name` it is `role="img"` with that name.
+Decorative by default (`aria-hidden`): the tile's name says what it is. With `aria-label` (or the deprecated `name`) it is `role="img"` with that name.
 Forced colours drop the shadow, paint the page and flap Canvas with CanvasText lines, and the glyph and label CanvasText.
 
 ## Measurements
@@ -113,3 +113,21 @@ Finder's does in dark. Corners are part of the drawing (in proportion to the box
   the same type as Folder's count.
 - **Why:** The file glyphs were 16px icons scaled up (a 2.5px line) and sat lower than their neighbours. Finder draws a
   document as a page, so Area does too.
+- 2026-10-19 · design-system audit → `aria-label` names the figure (and a passed `aria-label` is no longer hidden by
+  `aria-hidden`); `name` stays as a deprecated alias, since File tile's `name` is visible text.
+
+## Review note, 2026-10-19 (round 56)
+
+- **What changed:** The page shows one content mark per type and no extension text: lines for documents and PDF, a table for a spreadsheet, an image, and so on, centred on the page. `label` is deprecated. The demos no longer put a page icon inside the page.
+- **Why:** You asked why the PDF had its letters inside the glyph and no text while the document had a glyph and text, and preferred just icons. The demos passed two kinds of glyph (a `file-*` page with letters, and a plain page plus a label). Every product surveyed except Finder draws one mark per type with no extension text (docs/research/file-figures-2026-10-19.md); the tile's name already shows the extension.
+
+## Review note, 2026-10-19 (round 57)
+
+- **What changed:** The page is blank by default; a content mark appears only where the page alone would not say what the file is (a spreadsheet in the gallery), and it sits in the middle of the page below the fold, not the middle of the whole page. Images now use the new File image.
+- **Why:** You asked for the icon centred more in the lower part of the document and no icons when they aren't necessary. The tile's name already says a file is a PDF or a document; the fold takes the top 26% of the page, so the mark now centres in the 74% under it.
+
+## Review note, 2026-10-19 (round 58)
+
+- **What changed:** the lit solid page is archived; every page is the outline one. The old props are accepted and ignored.
+- **Why:** you asked to remove the solid variant from every file figure and archive it
+  (docs/archive/solid-file-figures-2026-10-19.md).

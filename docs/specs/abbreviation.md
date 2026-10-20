@@ -56,4 +56,5 @@ The gallery logged a React hydration error: Tooltip's surface is a `div`, which 
 abbreviation lives in. Abbreviation now draws the same surface (`.area-tooltip`, role, id, popover, description link)
 as a `span`; open, the popover is in the top layer and laid out as a block, so nothing visible changes. Tooltip itself
 is unchanged. Test: articles.test.mjs, "an abbreviation's tooltip is phrasing content".
-
+- 2026-10-19 · design-system audit → the underline offset is a named `--_offset` spec value (Link's 0.08em). No visual
+  change.

@@ -55,8 +55,8 @@ const hunks: DiffHunk[] = [
   ] },
 ];
 
-function Summary({ open, state = "pending" }: { open?: boolean; state?: EditFileState }) {
-  const [states, setStates] = useState<EditFileState[]>([state, state]);
+function Summary({ open, status = "pending" }: { open?: boolean; status?: EditFileState }) {
+  const [states, setStates] = useState<EditFileState[]>([status, status]);
   const set = (index: number, next: EditFileState) => setStates(current => current.map((value, i) => i === index ? next : value));
   const pending = states.some(value => value === "pending");
   return (
@@ -64,19 +64,19 @@ function Summary({ open, state = "pending" }: { open?: boolean; state?: EditFile
       <EditSummary title="Title" added={3} removed={1}
         onKeepAll={pending ? () => setStates(current => current.map(value => value === "pending" ? "kept" : value)) : undefined}
         onUndoAll={pending ? () => setStates(current => current.map(value => value === "pending" ? "undone" : value)) : undefined}>
-        <EditSummaryFile name="Item one" added={2} removed={1} state={states[0]} onKeep={() => set(0, "kept")} onUndo={() => set(0, "undone")}
-          diff={<Diff label="Item one" hunks={hunks} />} defaultOpen={open} />
-        <EditSummaryFile name="Item two" added={1} removed={0} state={states[1]} onKeep={() => set(1, "kept")} onUndo={() => set(1, "undone")}
-          diff={<Diff label="Item two" hunks={[hunks[1]!]} />} />
+        <EditSummaryFile name="Item one" added={2} removed={1} status={states[0]} onKeep={() => set(0, "kept")} onUndo={() => set(0, "undone")}
+          diff={<Diff aria-label="Changes to Item one" hunks={hunks} />} defaultOpen={open} />
+        <EditSummaryFile name="Item two" added={1} removed={0} status={states[1]} onKeep={() => set(1, "kept")} onUndo={() => set(1, "undone")}
+          diff={<Diff aria-label="Changes to Item two" hunks={[hunks[1]!]} />} />
       </EditSummary>
     </div>
   );
 }
 export const GalleryEditSummary = () => <Summary />;
 export const GalleryEditSummaryOpen = () => <Summary open />;
-export const GalleryEditSummaryKept = () => <Summary state="kept" />;
-export const GalleryEditSummaryUndone = () => <Summary state="undone" />;
-export const GalleryDiff = () => <div style={frame}><Diff label="Item one" hunks={hunks} /></div>;
+export const GalleryEditSummaryKept = () => <Summary status="kept" />;
+export const GalleryEditSummaryUndone = () => <Summary status="undone" />;
+export const GalleryDiff = () => <div style={frame}><Diff aria-label="Changes to Item one" hunks={hunks} /></div>;
 
 // ---- Approval ----
 const options = [
@@ -85,17 +85,17 @@ const options = [
   { value: "three", label: "Option three" },
 ];
 export const GalleryApproval = () => (
-  <div style={frame}><Approval title="Title" description="Description" options={options} onChoose={() => {}} /></div>
+  <div style={frame}><Approval title="Title" description="Description" items={options} onChoose={() => {}} /></div>
 );
 export const GalleryApprovalDetail = () => (
   <div style={frame}>
-    <Approval title="Title" description="Description" options={options} onChoose={() => {}}>
+    <Approval title="Title" description="Description" items={options} onChoose={() => {}}>
       <CodeBlock size="sm" lineNumbers={false} code="Value" />
     </Approval>
   </div>
 );
 export const GalleryApprovalInstead = () => (
-  <div style={frame}><Approval title="Title" description="Description" options={options} onChoose={() => {}} onInstead={() => {}} insteadPlaceholder="Placeholder" /></div>
+  <div style={frame}><Approval title="Title" description="Description" items={options} onChoose={() => {}} onInstead={() => {}} insteadPlaceholder="Placeholder" /></div>
 );
 
 // ---- Plan ----
@@ -114,8 +114,8 @@ export const GalleryPlanCancelled = () => (
 );
 
 // ---- Turn notice ----
-export const GalleryTurnNotice = () => <div style={frame}><TurnNotice kind="stopped">Body text</TurnNotice></div>;
+export const GalleryTurnNotice = () => <div style={frame}><TurnNotice status="stopped">Body text</TurnNotice></div>;
 export const GalleryTurnNoticeError = () => (
-  <div style={frame}><TurnNotice kind="error" action={<Button variant="ghost" tone="neutral" size="sm">Action</Button>}>Error message</TurnNotice></div>
+  <div style={frame}><TurnNotice status="error" action={<Button variant="ghost" tone="neutral" size="sm">Action</Button>}>Error message</TurnNotice></div>
 );
-export const GalleryTurnNoticeCompacted = () => <div style={frame}><TurnNotice kind="compacted">Body text</TurnNotice></div>;
+export const GalleryTurnNoticeCompacted = () => <div style={frame}><TurnNotice status="compacted">Body text</TurnNotice></div>;

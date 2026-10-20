@@ -97,7 +97,10 @@ selection marker.
     Badge, soft Count, Kbd, Indicator counts and Avatar initials.
 - A label's weight never changes with state: a selected segment is 500 because every
   segment is.
-- Foreground never changes on hover.
+- Foreground never changes on hover. One written exception: an action inside a row or card
+  that already shows the pointer (Nav, Board cards, Edit summary files, Queue rows) is a
+  muted ghost square whose hover is its ink, muted to default, with no plate of its own
+  (owner, review rounds 27, 29 and 30; `cohesion.test.mjs`, "row actions change ink").
 
 ## Shared state paint
 
@@ -316,6 +319,9 @@ and `emit/base.ts`; never copy a table into a component
   small text line.
 - **Fixed marks** (Presence, the Indicator count, Color swatch) use `mark-sm/md/lg`
   (16 / 20 / 24), which hold under every density. Dense products shrink controls, not marks.
+- **A mark in an icon slot stands in for a glyph** and keeps to the icon keylines: a Color
+  swatch in a menu row's or Custom select's icon box is the box less 2 (14 in 16, Figma's
+  colour-row chit), and any other mark drawn there is a 12 square or at most 14 × 10 wide.
 - **Checkbox and Radio** share one glyph ladder (`mark-box`). Slider's thumb follows it.
 - **Switch** has its own track: track = height + 12, so the thumb travels 12 at every size.
 - **Sizes a family exposes.**
@@ -373,6 +379,15 @@ Button's corner ([audit](research/radius-audit-2026-10-03.md)).
 - Every ground, control fill, edge and ink derives from the light ground, the dark ground
   and the layer contrast.
 - Control fills step from the ground they sit on, and in dark never fall under L 0.20.
+- **A component that paints a ground declares it.** When a component's own CSS paints
+  `bg-surface` or `bg-code` (raised), `bg-subtle` (recessed) or `bg-page` under anything
+  with a control fill (a hover or selected plate, a soft field, a ghost button), it is
+  listed with that ground in `packages/styles/src/layers.css`. Its controls then take the
+  plate made for that ground, so a hover reads the same step on a card, a sidebar or the
+  page. Undeclared, they use the page's plate: on Asset card's recessed head that was
+  1.04:1 instead of 1.11:1 (round 60). `cohesion.test.mjs` ("every painted ground is
+  declared") fails an undeclared ground; a ground with nothing on it that paints a control
+  fill (an image well, a dot, a control's own card) is exempted there with its reason.
 - Dark mode is near-black by default: the page is #020202, cards #121212 and sidebars
   #0b0b0b.
 

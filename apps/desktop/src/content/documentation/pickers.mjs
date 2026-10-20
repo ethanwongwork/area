@@ -10,6 +10,7 @@ export default {
     // Spec: Variants, Owner decisions, Behavior and accessibility; source: ColorSwatch.tsx.
     practices: [
       ["Do", "Use sm in a field's leading icon slot, and md or lg where the swatch stands alone."],
+      ["Do", "Put it in a menu row's or Custom select's icon slot to show what an option paints: there it is 14 in the 16 box (Figma's colour-row chit), so it reads the size of the glyphs beside it."],
       ["Do", "Pass any CSS colour string; a translucent colour shows over the checker, so its alpha is visible."],
       ["Do", "Give it a contextual aria-label (\"Brand primary\") when the default \"Color <value>\" says less than its context."],
       ["Do", "Set aria-hidden when a neighbouring label already names the colour, as Color field and Color swatch picker do."],
@@ -18,7 +19,7 @@ export default {
     ],
     // Spec: Anatomy and Decisions (edge, checker, radius).
     parts: {
-      root: "The swatch: owns its size (sm, md, lg), the corner at a fifth of its side, the checker under the colour and the translucent ring over it.",
+      root: "The swatch: owns its size (sm, md, lg; the icon box less 2 in a menu or Custom select icon slot), the corner at a fifth of its side, the checker under the colour and the translucent ring over it.",
     },
     // Spec: Behavior and accessibility; source: ColorSwatch.tsx.
     aria: [
@@ -148,6 +149,7 @@ export default {
     practices: [
       ["Do", "Pick selectionMode for the job: single for one date, range for a span, multiple for several separate dates."],
       ["Do", "Show two months (visibleMonths 2) when ranges often cross a month boundary."],
+      ["Do", "Use caption=\"menus\" when the date is likely far from today, such as a birthday: the month and the year become menus that jump straight there; the arrows stay."],
       ["Do", "Set min, max and isDateUnavailable for bounds and booked days: they can't be chosen, and unavailable days are struck through."],
       ["Do", "Use plain inside a Popover, Panel or card that already draws a surface."],
       ["Do", "Set firstDayOfWeek and locale for the reader's region, and translate the navigation buttons' names with labels."],
@@ -160,9 +162,10 @@ export default {
       root: "The group: the floating surface by default, or plain; holds one or two months, or the week strip.",
       months: "The months side by side, when visibleMonths is 2.",
       month: "One month: its header and its grid.",
-      header: "The month's title row, with the navigation buttons at its end.",
-      title: "The month and year, a heading (h2 by default); the first month's is a polite live region.",
-      nav: "Previous and next month: ghost small Buttons, on the first and last month only.",
+      header: "The month's title row: previous at the start, the title centred, next at the end, each arrow's side on the outer day's.",
+      title: "The month and year, a heading (h2 by default); the first month's is a polite live region. With menus the heading stays, hidden, to name the grid.",
+      nav: "A slot the width of a small Button at each end of the header: previous on the first month, next on the last.",
+      menus: "With caption=\"menus\", the month and the year as two ghost Custom selects in the title's place, bounded by min and max.",
       grid: "The month's table, role grid, labelled by its title.",
       weekday: "A weekday column header in the muted ink, with the full name as its abbr.",
       cell: "A day's grid cell: carries the selection for assistive technology and draws the range band.",

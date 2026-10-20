@@ -30,26 +30,34 @@ type FilePageVariants = VariantProps<typeof MANIFESTS.filePage>;
 export interface FilePageProps extends Omit<HTMLAttributes<HTMLSpanElement>, "children"> {
   /** sm 48, md 64 (Finder's icon view), lg 96, as Folder. Unset, it follows `--area-folder-size` (a File tile's figure). */
   size?: FilePageVariants["size"];
-  /** The file's type glyph, drawn thin in the page's middle: an `@area/icons` icon (FilePdfIcon, ImageIcon …). */
+  /** The file's content mark, drawn thin in the page's middle: one `@area/icons` glyph per type (TextAlignLeftIcon for
+   *  text documents and PDF, TableIcon, PresentationIcon, ImageIcon, PlayIcon, CodeIcon, ArchiveIcon); never a `file-*`
+   *  page icon, which would draw a page inside the page. None for an unknown type: the blank page. */
   icon?: ReactNode;
-  /** The file's extension under the glyph, as Finder prints it: "PDF", "DOCX". */
+  /** @deprecated The figure is glyph-only (owner, round 55: "no need for text and icons, preferably just icons"; every
+   *  surveyed product but Finder uses one mark per type, docs/research/file-figures-2026-10-19.md). The tile's name shows
+   *  the extension. Still drawn under the glyph when passed. */
   label?: string;
   /** An image of the file (a thumbnail) to fill the page instead of the glyph. */
   preview?: string;
   /** The figure's accessible name. Without one the figure is decorative (a tile's name says what it is). */
+  "aria-label"?: string;
+  /** @deprecated Use `aria-label` (DESIGN_SYSTEM.md, Names: `aria-label` names the component's own element; File
+   *  tile's `name` is visible text). */
   name?: string;
-  /** outline (default): a flat grey page with a thin light edge, as Folder's outline. solid: the lit page, as Folder's solid. */
-  variant?: FilePageVariants["variant"];
+  /** @deprecated The lit solid page is archived (owner, round 57); every page is the outline one. Ignored. */
+  variant?: "outline" | "solid";
 }
 
 export const FilePage = /* @__PURE__ */ forwardRef<HTMLSpanElement, FilePageProps>(function FilePage(
-  { size, icon, label, preview, name, variant, className, ...rest }, ref,
+  { size, icon, label, preview, "aria-label": ariaLabel, name: legacyName, variant: _variant, className, ...rest }, ref,
 ) {
+  const name = ariaLabel ?? legacyName;
   const id = useId().replace(/[^A-Za-z0-9_-]/g, "");
   return (
     <span
       ref={ref}
-      className={filePageVariants({ size, variant }, className)}
+      className={filePageVariants({ size }, className)}
       role={name ? "img" : undefined}
       aria-label={name}
       aria-hidden={name ? undefined : "true"}
@@ -57,26 +65,13 @@ export const FilePage = /* @__PURE__ */ forwardRef<HTMLSpanElement, FilePageProp
     >
       <span className="area-file-page__figure">
         <svg viewBox="0 0 360 440" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-          <defs>
-            <linearGradient id={`${id}-page`} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="440">
-              <stop offset="0" style={{ stopColor: "var(--_page-top)" }} />
-              <stop offset="1" style={{ stopColor: "var(--_page)" }} />
-            </linearGradient>
-            {/* The flap's back catches the light at its edge and shades toward its crease. */}
-            <linearGradient id={`${id}-fold`} gradientUnits="userSpaceOnUse" x1="246" y1="114" x2="300" y2="60">
-              <stop offset="0" style={{ stopColor: "var(--_fold-crease)" }} />
-              <stop offset="1" style={{ stopColor: "var(--_fold)" }} />
-            </linearGradient>
-            {preview ? <clipPath id={`${id}-preview`}><path d={PAGE} /></clipPath> : null}
-          </defs>
-          <path className="area-file-page__sheet" d={PAGE} fill={variant !== "solid" ? undefined : `url(#${id}-page)`} />
+          {preview ? <defs><clipPath id={`${id}-preview`}><path d={PAGE} /></clipPath></defs> : null}
+          <path className="area-file-page__sheet" d={PAGE} />
           {preview ? <image href={preview} x="0" y="0" width="360" height="440" preserveAspectRatio="xMidYMid slice" clipPath={`url(#${id}-preview)`} /> : null}
-          <path className="area-file-page__fold" d={FOLD} fill={variant !== "solid" ? undefined : `url(#${id}-fold)`} />
-          {variant !== "solid" ? <>
-            <path className="area-file-page__edge" d={EDGE} />
-            <path className="area-file-page__crease" d={FOLD_EDGE} />
-            <path className="area-file-page__diagonal" d={DIAGONAL} />
-          </> : null}
+          <path className="area-file-page__fold" d={FOLD} />
+          <path className="area-file-page__edge" d={EDGE} />
+          <path className="area-file-page__crease" d={FOLD_EDGE} />
+          <path className="area-file-page__diagonal" d={DIAGONAL} />
         </svg>
         {/* The glyph and the extension, centred together on the page (owner: "more centered together"). */}
         {!preview && (icon || label) ? (

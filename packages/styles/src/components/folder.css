@@ -11,30 +11,16 @@
  * - Box: the figure is 470 × 378 of the 512 cell, 21 in from each side and 67 from top and foot; the tab rises 33 above
  *   the back and eases down between x 136 and 190; the pocket starts 68 down (18%); corners 28. Area's: 470 × 420 filling
  *   92 × 84% of the cell (a fuller, less realistic folder), tab 40, pocket 88 down (21%), corners 56.
- * - Paint, top-lit: the back #82d0f2 at the tab to #3aa7dc at the pocket; the pocket #7dd2f7 at its top to #44acdc at
- *   its foot; a shadow under it, black at 36% fading over 24 of 512. The pocket is the lighter panel. Area's: each stop
- *   brighter (lightness +0.04 to +0.08) with half Finder's top-to-foot step, and a wider, fainter shadow.
- * - The difference from Finder (owner): with anything inside, one straight white sheet stands in it, 15 in from the
- *   sides and 49 down (the owner's reference), showing above the pocket. An image fills the sheet.
+ * - One look (owner, round 57, 2026-10-19: "remove the solid variant from everything, folders, image, document, just
+ *   archive it for now"): the outline folder, back and pocket flat in the control fill with a thin whole-pixel edge and
+ *   a sheet tucked inside. Finder's lit, coloured folder, its tones and the sheet it showed when holding something are
+ *   archived (docs/archive/solid-file-figures-2026-10-19.md).
  * - Size: Finder's icon view defaults to 64 (`defaults read com.apple.finder StandardViewSettings`, iconSize = 64);
- *   sm 48 and lg 96 are picks pending the owner (Fluent's file-type icon sizes include 48, 64 and 96).
- * - Tones: Finder's blue by default; the other hues keep its lightness and chroma per stop at their own hue (OKLCH),
- *   neutral at no chroma. Light and dark alike, as Finder's folder is.
+ *   sm 48 and lg 96 (Fluent's file-type icon sizes include 48, 64 and 96).
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-folder {
     --_size: var(--area-folder-size, 64px); /* spec: Finder iconSize 64 */
-    /* Finder's stops in OKLCH (back top 0.819 0.091 227.7, back 0.690 0.124 234.1, pocket top 0.823 0.097 227.9, pocket
-       foot 0.704 0.117 232.0), brightened and softened; a tone moves the hue (--_h, Finder's 230) and scales the
-       chroma (--_k). */
-    --_h: 230; --_k: 1;
-    --_back-top: oklch(0.85 calc(0.1 * var(--_k)) calc(var(--_h) - 2.3)); /* spec: Finder 0.819, brighter */
-    --_back: oklch(0.77 calc(0.125 * var(--_k)) calc(var(--_h) + 4.1)); /* spec: Finder 0.690, brighter, half the step */
-    --_front-top: oklch(0.88 calc(0.095 * var(--_k)) calc(var(--_h) - 2.1)); /* spec: Finder 0.823, brighter */
-    --_front: oklch(0.8 calc(0.12 * var(--_k)) calc(var(--_h) + 2)); /* spec: Finder 0.704, brighter, half the step */
-    --_paper: #ffffff; /* spec: the owner's reference */
-    --_lip-top: rgb(255 255 255 / 0.6); /* spec: Finder's 1px top lip, +7 L */
-    --_lip-foot: rgb(0 0 0 / 0.08); /* spec: Finder's bottom lip, a shade */
     /* One whole-pixel edge for the outline style at every size to 191, 2px from 192 (Fluent's hand-drawn 1–2px at
        48–96; owner, 2026-10-18: "these strokes are very inconsistent, thickness"); fractional widths anti-aliased
        unevenly. */
@@ -57,17 +43,6 @@
   .area-folder--md { --_size: 64px; } /* spec: Finder iconSize 64 */
   .area-folder--lg { --_size: 96px; } /* spec: pick, Fluent 96 */
 
-  .area-folder--blue {} /* Finder's own */
-  .area-folder--neutral { --_k: 0; }
-  .area-folder--cyan { --_h: 205; } /* spec */
-  .area-folder--green { --_h: 150; } /* spec */
-  .area-folder--yellow { --_h: 95; --_k: 0.9; } /* spec */
-  .area-folder--orange { --_h: 60; } /* spec */
-  .area-folder--red { --_h: 25; } /* spec */
-  .area-folder--pink { --_h: 355; } /* spec */
-  .area-folder--purple { --_h: 300; } /* spec */
-  .area-folder--brown { --_h: 60; --_k: 0.35; } /* spec */
-
   /* The figure: 92% of the cell wide (Finder's 92%), its height from the drawing's 470 × 420, both rounded to even pixels
      and centred, so its outer edges land on whole pixels (owner, 2026-10-18: "make sure the size of everything is correct
      and consistent and accurate"). 88 × 78 at 96, 58 × 52 at 64, 44 × 40 at 48. */
@@ -85,52 +60,43 @@
     inline-size: 100%;
     block-size: 100%;
     overflow: visible;
-    /* Finder's shadow (black at 36% fading over ~5% of the cell), softened: wider and fainter. */
-    filter: drop-shadow(0 calc(var(--_size) * 0.02) calc(var(--_size) * 0.045) rgb(0 0 0 / 0.12)); /* spec */
   }
   .area-folder__back {}
   /* Opening is shape moving while visible: `base` ease-in-out in, one step faster (`fast`) out (MOTION.md, "Folder open"). */
-  .area-folder__paper { fill: var(--_paper); transition: transform var(--area-duration-fast) var(--area-ease-in-out); }
-  /* Tucked: an outline folder's sheet, or a solid one that holds nothing, waits below the pocket's top (hidden by it). */
-  .area-folder__paper[data-tucked] { transform: translateY(72px); }
-  .area-folder--outline .area-folder__paper {
+  /* The sheet waits below the pocket's top (hidden by it) until the folder opens. */
+  .area-folder__paper {
+    transition: transform var(--area-duration-fast) var(--area-ease-in-out);
+    transform: translateY(72px);
     fill: light-dark(var(--area-bg-surface), var(--area-bg-component-hover)); /* spec: paper, a step lighter than the folder's fill in both themes */
     stroke: var(--area-border);
     stroke-width: var(--_edge);
     vector-effect: non-scaling-stroke;
   }
-  .area-folder__front {
-    stroke-width: 1px;
-    vector-effect: non-scaling-stroke;
-    transition: d var(--area-duration-fast) var(--area-ease-in-out);
-  }
+  .area-folder__front { transition: d var(--area-duration-fast) var(--area-ease-in-out); }
   .area-folder__rim { transition: d var(--area-duration-fast) var(--area-ease-in-out); }
 
-  /* Outline: a simplified folder (owner, 2026-10-18: "a simplified grey folder with light grey stroke around it … as an
-     alternative design"; their reference, AccessGrid's menu, draws a #f5f5f7 folder with a #d8d8dc edge and the item
-     count at the foot's end; then "i also still want 2 layers of the folder, also i want the strokes to be thinner").
-     The back and the pocket flat in the subtle fill, each with a thin light edge; no sheet or shadow. */
-  .area-folder--solid {}
-  .area-folder--outline .area-folder__figure > svg { filter: none; }
-  .area-folder__rim {}
-  .area-folder--outline :is(.area-folder__back, .area-folder__front) { fill: var(--_fill); }
-  .area-folder--outline :is(.area-folder__rim, .area-folder__front) {
+  /* The folder (owner, 2026-10-18: "a simplified grey folder with light grey stroke around it"; their reference,
+     AccessGrid's menu, draws a #f5f5f7 folder with a #d8d8dc edge and the item count at the foot's end; then "i also
+     still want 2 layers of the folder, also i want the strokes to be thinner"): the back and the pocket flat in the
+     control fill, each with a thin light edge, no shadow. */
+  :is(.area-folder__back, .area-folder__front) { fill: var(--_fill); }
+  :is(.area-folder__rim, .area-folder__front) {
     stroke: var(--area-border);
     stroke-width: var(--_edge);
     stroke-linejoin: round;
     stroke-linecap: round;
     vector-effect: non-scaling-stroke;
   }
-  .area-folder--outline .area-folder__rim { fill: none; }
+  .area-folder__rim { fill: none; }
 
   /* The count at the pocket's foot, at the end (the reference's "5"), in the type File page's label uses (owner: "the
      text size of the number and PNG should be more consistent"): cap height 9% of the box, regular, its baseline 7% of
-     the box above the folder's foot (Finder's label: cap 8–9% of the icon, regular, 7% up). White 90% on the lit folder. */
+     the box above the folder's foot (Finder's label: cap 8–9% of the icon, regular, 7% up), in the quiet ink. */
   .area-folder__count {
     position: absolute;
     inset-inline-end: round(nearest, calc(var(--_fw) * 0.09), 1px); /* spec: pick, clear of the 56/470 corner */
     inset-block-end: round(nearest, calc(var(--_size) * 0.07), 1px); /* spec: Finder's label 7% up */
-    color: rgb(255 255 255 / 0.9); /* spec */
+    color: var(--_quiet);
     font-family: var(--area-font-sans);
     font-size: round(nearest, calc(var(--_size) * 0.13), 1px); /* spec: cap ≈ 9% of the box; 12 at 96, 8 at 64 */
     font-weight: var(--area-weight-regular);
@@ -138,7 +104,6 @@
     line-height: 1;
     text-box: trim-both cap alphabetic;
   }
-  .area-folder--outline .area-folder__count { color: var(--_quiet); }
 
   /* A badge sits at the pocket's foot, as the count's mirror: its marks 12.5% of the box (12 at 96; the owner's reference
      draws its app marks about 11% of the folder's width; owner: "the avatar badge looks quite large"), on the count's

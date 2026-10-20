@@ -111,9 +111,9 @@ export const colorPicker = {
 export const calendar = {
   block: "area-calendar",
   description: "Shows a month grid for choosing a date, a range or several dates.",
-  variants: { variant: ["plain", "surface"], days: ["square", "circle", "tile"], layout: ["month", "week"] },
-  elements: ["months", "month", "header", "title", "nav", "grid", "weekday", "cell", "day", "day-number", "day-weekday", "day-month", "marker", "week"],
-  defaults: { variant: "surface", days: "square", layout: "month" },
+  variants: { variant: ["plain", "surface"], days: ["square", "circle", "tile"], layout: ["month", "week"], caption: ["label", "menus"] },
+  elements: ["months", "month", "header", "title", "nav", "menus", "grid", "weekday", "cell", "day", "day-number", "day-weekday", "day-month", "marker", "week"],
+  defaults: { variant: "surface", days: "square", layout: "month", caption: "label" },
 } as const satisfies ComponentManifest;
 
 export const colorSwatch = {
@@ -533,9 +533,9 @@ export const plan = {
 
 export const turnNotice = {
   block: "area-turn-notice", description: "How a turn ended, on one quiet line: stopped, failed (with Retry) or compacted.",
-  variants: { kind: ["stopped", "error", "compacted"] },
+  variants: { status: ["stopped", "error", "compacted"] }, // an outcome, so `status` (Governance § 4); was `kind` until 2026-10-19
   elements: ["icon", "text", "action"],
-  defaults: { kind: "stopped" },
+  defaults: { status: "stopped" },
 } as const satisfies ComponentManifest;
 
 export const attachment = {
@@ -1054,23 +1054,29 @@ export const sectionHeading = {
 
 export const folder = {
   block: "area-folder",
-  description: "Draws a folder as Finder does: a back panel with its tab, one sheet when it holds something, a front pocket and an optional badge.",
+  description: "Draws a folder as Finder does: a back panel with its tab, a sheet tucked inside, a front pocket, a count and an optional badge.",
   variants: {
     size: ["sm", "md", "lg"],
-    tone: ["blue", "neutral", "cyan", "green", "yellow", "orange", "red", "pink", "purple", "brown"],
-    variant: ["outline", "solid"],
   },
   states: ["open"],
   elements: ["figure", "back", "rim", "front", "paper", "badge", "count"],
-  defaults: { tone: "blue", variant: "outline" },
+  defaults: {},
 } as const satisfies ComponentManifest;
 
 export const filePage = {
   block: "area-file-page",
-  description: "Draws a file as Finder does: a page with its corner folded, its type glyph and its extension.",
-  variants: { size: ["sm", "md", "lg"], variant: ["outline", "solid"] },
+  description: "Draws a file as Finder does: a page with its corner folded, blank or with a content mark for its type.",
+  variants: { size: ["sm", "md", "lg"] },
   elements: ["figure", "sheet", "edge", "fold", "crease", "diagonal", "content", "icon", "label"],
-  defaults: { variant: "outline" },
+  defaults: {},
+} as const satisfies ComponentManifest;
+
+export const fileImage = {
+  block: "area-file-image",
+  description: "Draws an image file as a landscape frame, Folder's and File page's sibling: the picture, or a drawn landscape.",
+  variants: { size: ["sm", "md", "lg"] },
+  elements: ["figure", "scene", "picture"],
+  defaults: {},
 } as const satisfies ComponentManifest;
 
 export const fileTile = {
@@ -1092,12 +1098,12 @@ export const fileGrid = {
 
 export const assetCard = {
   block: "area-asset-card",
-  description: "Shows one asset, or a group of them as a 2×2 mosaic, in a square container with its name and controls in the frame (or under it).",
-  variants: { layout: ["asset", "group"], caption: ["inside", "below"] },
+  description: "Shows one asset in a square card: its name and controls in a head, the asset in a frame under it (an element, an image, a colour, or a group as a 2×2 mosaic).",
+  variants: { layout: ["asset", "image", "color", "group"] },
   booleans: ["interactive"],
   states: ["selected"],
-  elements: ["frame", "media", "mosaic", "cell", "caption", "text", "name", "meta", "actions"],
-  defaults: { layout: "asset", caption: "inside" },
+  elements: ["head", "name", "actions", "frame", "media", "mosaic", "cell", "thumb"],
+  defaults: { layout: "asset" },
 } as const satisfies ComponentManifest;
 
 export const assetGrid = {
@@ -1278,9 +1284,9 @@ export const videoPlayer = {
   block: "area-video-player",
   description: "Plays a video with Area's own controls over it.",
   variants: { layout: ["floating", "bar", "minimal"], controls: ["auto", "always"] },
-  elements: ["media", "start", "scrim", "controls", "transport", "group", "timeline", "clock", "range", "duration", "volume", "skip", "optional", "surface"],
+  elements: ["media", "start", "controls", "transport", "group", "timeline", "clock", "range", "duration", "volume", "skip", "optional", "surface"],
   elementModifiers: { group: ["start", "center", "end"], clock: ["start"] },
-  defaults: { layout: "floating", controls: "auto" },
+  defaults: { layout: "bar", controls: "auto" },
 } as const satisfies ComponentManifest;
 
 export const MANIFESTS = {
@@ -1326,6 +1332,7 @@ export const MANIFESTS = {
   fileGrid,
   assetCard,
   assetGrid,
+  fileImage,
   listBox,
   titlebar,
   sectionHeading,

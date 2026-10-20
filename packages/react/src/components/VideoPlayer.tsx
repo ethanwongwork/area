@@ -15,8 +15,8 @@ type VideoPlayerVariants = VariantProps<typeof MANIFESTS.videoPlayer>;
 export interface VideoPlayerProps extends Omit<VideoHTMLAttributes<HTMLVideoElement>, "controls"> {
   /** Names the player for assistive tech: the video's title. */
   label: string;
-  /** `floating` (default): QuickTime Player's controller, a frosted panel over the video. `bar`: one row along the foot.
-   * `minimal`: one round play / pause, for ambient loops. (AVKit's control styles.) */
+  /** `bar` (default): YouTube's controls, the track across the foot and the buttons below it in glass pills. `floating`:
+   * QuickTime Player's controller, a frosted panel over the video. `minimal`: one round play / pause, for ambient loops. */
   layout?: VideoPlayerVariants["layout"];
   /** `auto` (default): the controls hide while the video plays and nothing moves. `always`: they stay. */
   controls?: VideoPlayerVariants["controls"];
@@ -167,7 +167,7 @@ export const VideoPlayer = /* @__PURE__ */ forwardRef<HTMLVideoElement, VideoPla
 
   const played = duration ? (time / duration) * 100 : 0;
   const rangeStyle = (fill: number, buffer = 0) => ({ "--_played": `${fill}%`, "--_loaded": `${buffer * 100}%` }) as CSSProperties;
-  const shape = layout ?? "floating";
+  const shape = layout ?? "bar";
   const part = videoPlayerVariants.element;
   // Each button names its action in an Area Tooltip with its key (Loom, YouTube); the label is its accessible name, so
   // the tooltip does not describe it again.
@@ -213,7 +213,8 @@ export const VideoPlayer = /* @__PURE__ */ forwardRef<HTMLVideoElement, VideoPla
   const pipButton = pipSupported ? button("pip", pip ? "Exit picture in picture" : "Picture in picture", togglePip, <Glyph name={filled ? "picture-in-picture-filled" : "picture-in-picture"} />, { control: "pip", role: "optional" }, "I") : null;
   const fullscreenButton = button("fullscreen", fullscreen ? "Exit full screen" : "Full screen", toggleFullscreen, <Glyph name={fullscreen ? "minimize" : "maximize"} />, {}, "F");
 
-  // floating: QuickTime's two rows (transport; time, track, time). bar: one row along the foot. minimal: no row.
+  // bar: YouTube's (round 56): the track across the width, then pills of glass: play; volume; the time; the rest at the
+  // end in one pill. floating: QuickTime's two rows (transport; time, track, time). minimal: no row.
   const controlsRow = shape === "minimal" ? null : shape === "floating" ? (
     <div className={`${part("controls")} ${part("surface")}`}>
       <div className={part("transport")}>
@@ -237,11 +238,15 @@ export const VideoPlayer = /* @__PURE__ */ forwardRef<HTMLVideoElement, VideoPla
     </div>
   ) : (
     <div className={part("controls")}>
-      {play()}
       {seekRange}
-      <span className={part("clock")}>{clock(time)}<span className={part("duration")}> / {clock(duration)}</span></span>
-      {volumeGroup}
-      {captionsButton}{pipButton}{fullscreenButton}
+      <div className={part("transport")}>
+        <div className={`${part("group")} ${part("group")}--start`}>
+          <span className={part("surface")}>{play()}</span>
+          <span className={part("surface")}>{volumeGroup}</span>
+          <span className={`${part("clock")} ${part("surface")}`}>{clock(time)}<span className={part("duration")}> / {clock(duration)}</span></span>
+        </div>
+        <div className={`${part("group")} ${part("group")}--end ${part("surface")}`}>{captionsButton}{pipButton}{fullscreenButton}</div>
+      </div>
     </div>
   );
 
@@ -260,7 +265,6 @@ export const VideoPlayer = /* @__PURE__ */ forwardRef<HTMLVideoElement, VideoPla
           <Glyph name={playing ? "pause-filled" : "play-filled"} />
         </button>
       ) : null}
-      {shape === "bar" ? <div className={part("scrim")} aria-hidden="true" /> : null}
       {started ? controlsRow : null}
     </div>
   );

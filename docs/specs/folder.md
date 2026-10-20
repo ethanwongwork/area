@@ -52,11 +52,9 @@ views at 48 and up.
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
 | size | sm 48 · md 64 · lg 96, unset follows `--area-folder-size` | Finder's icon view defaults to 64 (`defaults read com.apple.finder StandardViewSettings`, iconSize = 64); 48 and 96 are in Fluent's file-type icon sizes (`getFileTypeIconProps.ts:40`). sm / lg are picks pending the owner. | Finder icon view, Fluent file icons |
-| tone (solid) | blue (default, Finder's) · neutral · cyan · green · yellow · orange · red · pink · purple · brown | The owner: "styled exactly like apples finder folders". Finder's folders take tag colours (macOS Tahoe "Customize Folder"); Figma folders take colours (Aug 2026). Each hue keeps Finder's lightness and chroma per stop (OKLCH), neutral at no chroma. No `accent` tone (tone.test.mjs: accent reaches components only through roles). | Finder, Figma |
-| contents | none · a number · image URLs | Finder's empty folder shows none; on a solid folder, with anything inside, one straight white sheet stands above the pocket (the owner's difference from Finder); an image fills the sheet. The outline's sheet stays tucked behind the pocket until the folder opens. | owner's reference |
 | badge | any small marks at the pocket's foot, at the start: 12.5% of the box (12 at 96), on the count's inset; an Avatar takes that size | the knowledge-base reference's app marks (~11% of the folder); Dropbox's shared / team badges; owner 2026-10-19 ("the avatar badge looks quite large") | reference 2, Dropbox |
-| variant | outline (default) · solid | outline: the owner's simplified grey folder, back and pocket in `bg-component` with one whole-pixel `border` edge (`stroke-width`, 1px to 191, 2px from 192), the back's edge only above the pocket (`__rim`), no shadow; its sheet (`bg-surface` light, `bg-component-hover` dark, the same edge) waits tucked. solid: Finder's lit folder in `tone`, with the pocket's 1px lips and the shadow | owner, AccessGrid; 2026-10-18 (default); coherence pass 2026-10-19 |
-| count | any number | the reference's item count at the foot's end: 13% of the box (cap ≈ 9%; 12 at 96, 8 at 64), regular, tabular, cap-trimmed, 7% of the box up and 9% of the figure in; white 90% on solid, the quiet ink (muted mixed 45% toward the fill) on outline | AccessGrid; File page's label type (owner 2026-10-18); coherence pass |
+| look | outline only (solid, `tone` and `contents` archived, round 57: docs/archive/solid-file-figures-2026-10-19.md) | the owner's simplified grey folder, back and pocket in `bg-component` with one whole-pixel `border` edge (`stroke-width`, 1px to 191, 2px from 192), the back's edge only above the pocket (`__rim`), no shadow; its sheet (`bg-surface` light, `bg-component-hover` dark, the same edge) waits tucked until the folder opens | owner, AccessGrid; 2026-10-18; round 57 |
+| count | any number | the reference's item count at the foot's end: 13% of the box (cap ≈ 9%; 12 at 96, 8 at 64), regular, tabular, cap-trimmed, 7% of the box up and 9% of the figure in, in the quiet ink (muted mixed 45% toward the fill) | AccessGrid; File page's label type (owner 2026-10-18); coherence pass |
 | state | open (`open` → `data-open`, or inside a `[data-drop-target]`): the pocket tips forward (top 88 → 152, flaring 16 past each side), the sheet rises to 30; `base` ease-in-out in, `fast` out | a drag over a folder; Mantine's "inside" drop target, Finder's spring-loaded folders; owner 2026-10-19; coherence pass | Finder, Mantine |
 
 Excluded: several or angled sheets (owner), an emoji or symbol on the pocket (Tahoe's customisation: later, if asked).
@@ -87,13 +85,12 @@ Area:
 .area-folder              square box, --_size (size, else --area-folder-size, 64); tone sets --_h / --_k
   __figure                92% of the box wide, height 420/470 of that, both rounded to even pixels, centred
                           (88 × 78 at 96, 58 × 52 at 64, 44 × 40 at 48)
-    svg 470 × 420         solid: drop-shadow 0 2% 4.5% black 12%; outline: none
-      __back              tab 40 high to x 150, easing down to 214; corners 56; solid: --_back-top → --_back over 0–88;
+    svg 470 × 420         no shadow
+      __back              tab 40 high to x 150, easing down to 214; corners 56;
                           outline: --_fill (bg-component), no stroke
-      __rim               outline only: the back's edge from the pocket's straight sides (y 144) up round the tab
-      __paper             one rect 22,54 426 × 220, rx 34 (concentric), white (an image fills it); tucked 72 down
-                          (behind the pocket) on an outline or empty folder; open: 24 up
-      __front             path y 88 (21%), rx 56; solid: --_front-top → --_front over 88–420, 1px lips;
+      __rim               the back's edge from the pocket's straight sides (y 144) up round the tab
+      __paper             one rect 22,54 426 × 220, rx 34 (concentric); tucked 72 down (behind the pocket); open: 24 up
+      __front             path y 88 (21%), rx 56;
                           outline: --_fill with the edge
     __badge               start, 9% of the figure in, 7% of the box up; marks 12.5% of the box
     __count               end, 9% of the figure in, 7% of the box up
@@ -105,9 +102,7 @@ Area:
 |---|---|---|
 | figure | 470 × 420 drawing, 92% of the box wide, rounded to even pixels | owner 2026-10-18 ("more large"); 2026-10-19 (whole pixels) |
 | tab · pocket · corners | tab 40, pocket 88 down (21%), corners 56 (twice Finder's 28) | owner 2026-10-18 ("more round") |
-| solid paint | back oklch(0.85 0.10) → (0.77 0.125), pocket (0.88 0.095) → (0.80 0.12) at Finder's hue 230; tones move the hue, neutral at no chroma; 1px lips (white 60% top, black 8% foot) | Finder, brightened (owner 2026-10-18) |
-| shadow | solid: 0 2% 4.5% black 12% of the size; outline: none | Finder, softened (owner 2026-10-18) |
-| sheet | 22,54 426 × 220, rx 34 (56 − 22, concentric); white on solid; outline: `bg-surface` light, `bg-component-hover` dark, with the edge, drawn over the back's edge | owner 2026-10-18; coherence pass 2026-10-19 |
+| sheet | 22,54 426 × 220, rx 34 (56 − 22, concentric); `bg-surface` light, `bg-component-hover` dark, with the edge, drawn over the back's edge | owner 2026-10-18; coherence pass 2026-10-19 |
 | outline fill | `bg-component` | coherence pass 2026-10-19 (was `bg-subtle`) |
 | outline edge | `border`, max(`stroke-width`, size / 96 rounded down to a whole pixel) | owner 2026-10-18 ("strokes are very inconsistent"); coherence pass |
 | quiet ink | `fg-muted` mixed 45% toward the fill | coherence pass 2026-10-19 (was #b0b0b6 / #6e6e74) |
@@ -139,7 +134,7 @@ stops back oklch(0.85 0.10) → (0.77 0.125), pocket (0.88 0.095) → (0.80 0.12
 
 ## Accessibility
 
-Decorative by default (`aria-hidden`): the tile's name says what it is. With `label` it is `role="img"` with that
+Decorative by default (`aria-hidden`): the tile's name says what it is. With `aria-label` (or the deprecated `label`) it is `role="img"` with that
 name. Forced colours drop the shadow and draw both panels as Canvas with a CanvasText edge.
 
 ## Open
@@ -174,3 +169,18 @@ rules 1–3 and 11, MOTION.md and the tokens; in both themes; in a 2× capture.
   state for a drag.
 - **Why:** You asked for very simple shapes styled exactly like Finder's folders, with one straight sheet instead of
   angled ones. To decide: whether 48 / 96 are the right small and large sizes, and whether the sheet should show more.
+- 2026-10-19 · design-system audit → `aria-label` names the figure (and a passed `aria-label` is no longer hidden by
+  `aria-hidden`); `label` stays as a deprecated alias. One gallery tile per tone (was one tile of every hue). The pocket's
+  lip is a named `--_lip` spec value. Demo copy uses the placeholder vocabulary.
+
+## Review note, 2026-10-19 (round 55, design-system audit)
+
+- **What changed:** Each tone has its own gallery tile (it was one tile with all ten folders). The figure's name is `aria-label` now (the old `label` still works), and a passed `aria-label` is no longer hidden from screen readers.
+- **Why:** AGENTS.md: one variant per tile; DESIGN_SYSTEM.md: `aria-label` names the component's own element.
+
+## Review note, 2026-10-19 (round 58)
+
+- **What changed:** the solid folder, its tones and the sheet it showed when holding something are archived; every
+  folder is the outline one, with its sheet tucked inside until it opens. The old props are accepted and ignored.
+- **Why:** you asked to remove the solid variant from every file figure and archive it
+  (docs/archive/solid-file-figures-2026-10-19.md).

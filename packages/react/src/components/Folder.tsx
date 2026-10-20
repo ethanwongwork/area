@@ -1,8 +1,9 @@
-// Folder: the figure a file browser draws for a container, styled as macOS Finder's folder (the live icon,
-// NSWorkspace icon(forFile:), macOS 27.2): a back panel with its tab, one straight sheet peeking out when it holds
-// something, a front pocket, soft top-lit gradients and a shadow under it; an optional badge at the pocket's foot.
+// Folder: the figure a file browser draws for a container, after macOS Finder's folder (the live icon, NSWorkspace
+// icon(forFile:), macOS 27.2), in one outline look: a back panel with its tab, a sheet tucked inside, a front pocket, flat
+// in the control fill with a thin edge; a count and an optional badge at the pocket's foot. The lit solid folder and its
+// tones are archived (owner, round 57; docs/archive/solid-file-figures-2026-10-19.md).
 // Spec: docs/specs/folder.md.
-import { forwardRef, useId } from "react";
+import { forwardRef } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { folderVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 
@@ -28,40 +29,34 @@ type FolderVariants = VariantProps<typeof MANIFESTS.folder>;
 export interface FolderProps extends Omit<HTMLAttributes<HTMLSpanElement>, "children"> {
   /** sm 48, md 64 (Finder's icon view), lg 96. Unset, it follows `--area-folder-size` (a File tile's figure). */
   size?: FolderVariants["size"];
-  /** The solid folder's colour: Finder's blue (default), neutral, or one of the palette's hues at Finder's lightness. */
-  tone?: FolderVariants["tone"];
-  /**
-   * outline (default; owner, 2026-10-18: "make the outline appearance the default"): the back and the pocket flat in
-   * control fill (`bg-component`) with a thin whole-pixel edge and a sheet tucked inside, no shadow. solid: Finder's lit folder, back, sheet and pocket, in `tone`.
-   */
-  variant?: FolderVariants["variant"];
   /** A number at the pocket's foot, at the end: how many items it holds. */
   count?: ReactNode;
-  /**
-   * What the solid folder holds: with anything in it one straight sheet peeks out over the pocket. A number (how many
-   * items) draws a plain sheet; image URLs draw the first one on the sheet. Nothing by default, as Finder's empty folder.
-   */
-  contents?: number | readonly string[];
   /** Small marks at the pocket's foot: the apps or people a folder is shared with. */
   badge?: ReactNode;
   /** Open: the pocket tips forward (its top drops and flares) and a sheet rises out of it; a drag is over the folder, or a
    *  caller opens it. */
   open?: boolean;
   /** The figure's accessible name. Without one the figure is decorative (a tile's name says what it is). */
+  "aria-label"?: string;
+  /** @deprecated Use `aria-label` (DESIGN_SYSTEM.md, Names: `aria-label` names the component's own element). */
   label?: string;
+  /** @deprecated The solid folder is archived (owner, round 57); every folder is the outline one. Ignored. */
+  variant?: "outline" | "solid";
+  /** @deprecated Tones painted only the archived solid folder. Ignored. */
+  tone?: string;
+  /** @deprecated The sheet a solid folder showed when holding something is archived; the outline folder keeps its sheet
+   *  tucked until it opens. Ignored. */
+  contents?: number | readonly string[];
 }
 
 export const Folder = /* @__PURE__ */ forwardRef<HTMLSpanElement, FolderProps>(function Folder(
-  { size, tone, variant, contents, badge, count, open = false, label, className, ...rest }, ref,
+  { size, badge, count, open = false, "aria-label": ariaLabel, label: legacyLabel, variant: _variant, tone: _tone, contents: _contents, className, ...rest }, ref,
 ) {
-  const outline = variant !== "solid";
-  const id = useId().replace(/[^A-Za-z0-9_-]/g, "");
-  const image = typeof contents === "number" ? undefined : contents?.[0];
-  const holds = typeof contents === "number" ? contents > 0 : Boolean(contents?.length);
+  const label = ariaLabel ?? legacyLabel;
   return (
     <span
       ref={ref}
-      className={folderVariants({ size, tone, variant }, className)}
+      className={folderVariants({ size }, className)}
       data-open={open ? "" : undefined}
       role={label ? "img" : undefined}
       aria-label={label}
@@ -70,38 +65,13 @@ export const Folder = /* @__PURE__ */ forwardRef<HTMLSpanElement, FolderProps>(f
     >
       <span className="area-folder__figure">
         <svg viewBox="0 0 470 420" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-          <defs>
-            {/* Lit from the top: the back from its tab to the pocket, the pocket from its top to its foot. */}
-            <linearGradient id={`${id}-back`} gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="88">
-              <stop offset="0" style={{ stopColor: "var(--_back-top)" }} />
-              <stop offset="1" style={{ stopColor: "var(--_back)" }} />
-            </linearGradient>
-            <linearGradient id={`${id}-front`} gradientUnits="userSpaceOnUse" x1="0" y1="88" x2="0" y2="420">
-              <stop offset="0" style={{ stopColor: "var(--_front-top)" }} />
-              <stop offset="1" style={{ stopColor: "var(--_front)" }} />
-            </linearGradient>
-            {/* The pocket's lips, 1px at every size: light along its top, a shade along its foot (Finder and Fluent). */}
-            <linearGradient id={`${id}-lip`} gradientUnits="userSpaceOnUse" x1="0" y1="88" x2="0" y2="420">
-              <stop offset="0" style={{ stopColor: "var(--_lip-top)" }} />
-              <stop offset="0.12" style={{ stopColor: "var(--_lip-top)", stopOpacity: 0 }} />
-              <stop offset="0.88" style={{ stopColor: "var(--_lip-foot)", stopOpacity: 0 }} />
-              <stop offset="1" style={{ stopColor: "var(--_lip-foot)" }} />
-            </linearGradient>
-            {image ? <clipPath id={`${id}-sheet`}><rect {...SHEET} /></clipPath> : null}
-          </defs>
-          <path className="area-folder__back" d={BACK} fill={outline ? undefined : `url(#${id}-back)`} />
+          <path className="area-folder__back" d={BACK} />
           {/* The back's edge before the sheet: the sheet stands inside the folder, in front of the back, its own edge whole
               where it rises past the back's top line (owner, 2026-10-19: the page "looks like its under the stroke"). */}
-          {outline ? <path className="area-folder__rim" d={RIM} /> : null}
-          {/* The sheet: shown at rest by a solid folder that holds something; otherwise tucked below the pocket's top until
-              the folder opens, so opening always lifts one out. */}
-          {outline || holds || open ? (
-            <g className="area-folder__paper" data-tucked={outline || !holds ? "" : undefined}>
-              <rect {...SHEET} />
-              {image ? <image href={image} x={SHEET.x} y={SHEET.y} width={SHEET.width} height={SHEET.height} preserveAspectRatio="xMidYMin slice" clipPath={`url(#${id}-sheet)`} /> : null}
-            </g>
-          ) : null}
-          <path className="area-folder__front" d={FRONT} fill={outline ? undefined : `url(#${id}-front)`} stroke={outline ? undefined : `url(#${id}-lip)`} />
+          <path className="area-folder__rim" d={RIM} />
+          {/* The sheet: tucked below the pocket's top until the folder opens, so opening always lifts one out. */}
+          <g className="area-folder__paper"><rect {...SHEET} /></g>
+          <path className="area-folder__front" d={FRONT} />
         </svg>
         {badge ? <span className="area-folder__badge">{badge}</span> : null}
         {count !== undefined && count !== null ? <span className="area-folder__count">{count}</span> : null}
