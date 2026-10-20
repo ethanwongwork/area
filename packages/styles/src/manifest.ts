@@ -804,6 +804,21 @@ export const boxField = {
   defaults: { size: "md" },
 } as const satisfies ComponentManifest;
 
+export const surface = {
+  block: "area-surface",
+  description: "A plain layer to compose a screen from, whose corner, layer and edge follow from the surface it sits in.",
+  variants: { variant: ["surface", "soft", "plain"], size: ["sm", "md", "lg"] },
+  defaults: { variant: "surface", size: "md" },
+} as const satisfies ComponentManifest;
+
+export const stack = {
+  block: "area-stack",
+  description: "Lays its children out in one row or column, with a gap chosen by role that follows Density.",
+  variants: { orientation: ["vertical", "horizontal"], gap: ["related", "group", "section"], align: ["start", "center", "end", "stretch", "baseline"] },
+  booleans: ["spread", "wrap"],
+  defaults: { orientation: "vertical", gap: "group" },
+} as const satisfies ComponentManifest;
+
 export const card = {
   block: "area-card",
   description: "Groups related media, content and actions on one surface.",
@@ -1098,20 +1113,20 @@ export const fileGrid = {
 
 export const assetCard = {
   block: "area-asset-card",
-  description: "Shows one asset in a square card: its name and controls in a head, the asset in a frame under it (an element, an image, a colour, or a group as a 2×2 mosaic).",
-  variants: { layout: ["asset", "image", "color", "group"] },
+  description: "Shows one asset in a square card: its name and controls in a head, the asset in a frame under it (an element, an image, a colour, or a group as a 2×2 mosaic); framed or containerless, square or hugging its asset.",
+  variants: { layout: ["asset", "image", "color", "group"], container: ["framed", "containerless"], aspect: ["square", "hug"] },
   booleans: ["interactive"],
   states: ["selected"],
   elements: ["head", "name", "actions", "frame", "media", "mosaic", "cell", "thumb"],
-  defaults: { layout: "asset" },
+  defaults: { layout: "asset", container: "framed", aspect: "square" },
 } as const satisfies ComponentManifest;
 
 export const assetGrid = {
   block: "area-asset-grid",
-  description: "Lays asset cards out as a grid to browse, choose from and open, with one Tab stop.",
-  variants: {},
+  description: "Lays asset cards out as a grid or a waterfall to browse, choose from and open, with one Tab stop.",
+  variants: { layout: ["grid", "waterfall"] },
   elements: ["item"],
-  defaults: {},
+  defaults: { layout: "grid" },
 } as const satisfies ComponentManifest;
 
 export const assetRow = {
@@ -1403,6 +1418,8 @@ export const MANIFESTS = {
   scrollToLatest,
   modelPicker,
   card,
+  surface,
+  stack,
   alert,
   dialog,
   popover,

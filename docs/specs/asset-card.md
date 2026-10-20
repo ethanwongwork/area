@@ -19,6 +19,11 @@ values below are read from pixels, not estimated. Figma's file browser (the 2026
   containers ... i want the overall design balance of this to be well organized and simple." → one card, four kinds
   of frame content (an element, an image, a colour, a group); a type style, an icon and a setting's option are
   elements. Supersedes the 2026-10-18 caption below the container and the 2026-10-19 caption inside the frame.
+- 2026-10-19 (main, PR #141): "a view setting that changes how containers are shown strictly for assets and groups. i
+  want to look at containerless containers, and potentially a waterfall view that hugs the size of assets." Built as
+  two axes: `container` (framed · containerless) on the card, `layout` (grid · waterfall) on the grid, whose cards hug.
+  Then: "i want the containerless design to be tested on components first" (Container in the Components tab's header).
+  Carried onto the round-61 card in the merge (2026-10-20).
 
 ## Job and boundaries
 
@@ -41,6 +46,9 @@ actions (Card), a framed preview of a page at its own size (Preview frame).
 | layout | group: a 2×2 mosaic of the first four assets, 4 apart, no frame | `group` | Group container |
 | interactive | off · on: the card is a control outside an asset grid | `interactive` | the app's gallery tiles |
 | state | hover (lift), pressed, selected (edge), focus (ring on the card) | — | gallery tile |
+| container | framed (default): the card · containerless: no card at rest (no fill, edge or shadow), the head and the frame in the same places; a component's frame shows the hovered edge on hover and the selected edge when selected; an image or group is its own surface and selection rings it (2, `stroke-selected`) | Owner 2026-10-19 (main): containerless views | Pinterest, Cosmos |
+| aspect | square (default) · hug: the card as tall as its head and its asset at its width (an image at `mediaRatio`, a group and a colour square) | Owner 2026-10-19 (main): "a waterfall view that hugs the size of assets" | Pinterest's board |
+| grid layout | grid (default): square cards in rows · waterfall: hugging cards in columns of the least width, each into the shortest column in reading order | Owner 2026-10-19 (main) | Pinterest's board, Cosmos, Savee |
 
 `layout` is derived from the content, never passed. The extended kinds are elements, so they need no axis: a type
 style (its sample, size and leading as `meta`), an icon (the glyph at a native size), a setting's option (drawn
@@ -94,6 +102,9 @@ Inset equations (the designs at 300, edge 1; Area at the default):
 | colour | — | the frame's fill; the swatch ring (`token-swatch-ring`, inset outline at `stroke-width`) | Color swatch |
 | grid · gap | — | 12 both ways (the name is in the card) | PRODUCT_UI rule 11 |
 | hover | — | `shadow-lift`, in `fast` ease-out, out `base` ease-in | the gallery tile, Card |
+Containerless: the card draws no fill, edge or shadow and declares no recessed ground (its head's buttons step from the
+page); the frame sets no raised ground. A component's frame keeps its clear edge, so the hovered and selected edges
+appear without moving anything; an image's or a group's frame drops its edge (border 0) and is the surface.
 
 ## States
 
@@ -215,3 +226,14 @@ rule every nested surface uses (Popover, Code block's buttons, Edit summary's he
   sidebar is), the plate steps from the card's own fill, 1.11:1, the same step every hover plate in Area takes from its
   ground. The parts that must pass WCAG already did and still do: the icon 6.85:1 in light and 12.6:1 in dark (6.2:1
   and 10.3:1 on its plate), the focus ring 7.4:1 and 13.7:1.
+| containerless | hover: a component's frame shows the hovered edge, an image or group a hairline ring; no lift. Selected: a component's frame takes the selected edge, an image or group a 2 ring; the card stays clear. Focus rings the frame |
+
+## Review note, 2026-10-20 (round 65, merged with main)
+
+- **What changed:** the containerless and waterfall views from the other session (Brand's waterfall, the Components
+  tab's Container option) now sit on your redesigned card. Containerless drops the card's fill and edge but keeps the
+  head and the frame in the same places, so nothing jumps; a component's frame shows its edge on hover and selection,
+  and an image or group gets a ring. Hug lets a card be as tall as its asset, which the waterfall uses.
+- **Why:** both sessions changed Asset card at once; the merge keeps your approved design as the structure and carries
+  the view options onto it. The Language tab's tiles now carry "(Default)" in their names, since the card's head no
+  longer shows a detail line.

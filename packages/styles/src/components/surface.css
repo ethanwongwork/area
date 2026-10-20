@@ -1678,3 +1678,102 @@
     :is(.area-popover, .area-menu, .area-tooltip)[popover] { --_overlay-scale: 1; }
   }
 }
+
+/*
+ * Surface: a plain layer to compose a screen from (docs/specs/surface.md). Card's corner and inset at each size, with
+ * none of Card's parts. Its corner is concentric with the Surface it sits in, its layer steps from its parent, and it
+ * draws one edge per boundary: the outermost raised Surface takes Card's edge and resting shadow, a nested one its line
+ * alone, a soft well its fill alone.
+ */
+@layer area.components {
+  .area-surface {
+    /* spec: Card's insets (surface.css .area-card): the media inset per size and the 8 step to the text column, each
+       less its Compact difference times ui-dense. md: 8 + 8 = 16, Compact 6 + 6 = 12. */
+    --_sf-media: calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense)); /* spec */
+    --_sf-step: calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense)); /* spec */
+    --_sf-text: calc(var(--_sf-media) + var(--_sf-step));
+    --_sf-inset: var(--_sf-text);
+    /* The padding: the inset less the border, counted once. */
+    --_sf-border: var(--area-border-width);
+    --_sf-pad: calc(var(--_sf-inset) - var(--_sf-border));
+    /* Card's corner: the surface corner plus the media inset less the default Button's corner, never more than the
+       surface corner (square at Sharp), then never deeper than 1.5 x the text inset. md 16, Compact 12. */
+    --_sf-term: calc((var(--_sf-media) - var(--area-space-4) - var(--area-space-2) * var(--area-ui-dense)) * var(--area-radius-concentric));
+    --_sf-radius: max(var(--area-radius-floor), calc(var(--area-radius-container) + min(var(--_sf-term), var(--area-radius-container))));
+    --_sf-corner: min(var(--_sf-radius), max(var(--area-radius-floor), round(down, calc(var(--_sf-text) * 1.5), 2px)));
+    /* What a Surface inside this one takes as its corner: this corner less this inset, floored, as Card's media takes
+       Card's corner less its inset (16 - 8 = 8; DESIGN_SYSTEM.md, Size and shape: nested radius is concentric). Depth alternates between --_sf-a and --_sf-b below,
+       because a custom property cannot read its parent's value of a name the element also sets. */
+    --_sf-a: max(var(--area-radius-floor), calc(var(--_sf-corner) - var(--_sf-inset)));
+    /* Read by Stack: a gap inside this Surface never exceeds its inset. */
+    --_surface-room: var(--_sf-inset);
+    --_sf-fill: var(--area-bg-surface);
+    --_sf-edge: var(--area-border-card);
+    --_sf-shade: var(--area-shadow-edge);
+    --_sf-lift: var(--area-shadow-resting);
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    gap: min(var(--area-gap-row), var(--_sf-inset));
+    box-sizing: border-box;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    padding: var(--_sf-pad);
+    border: var(--_sf-border) solid var(--_sf-edge);
+    border-radius: var(--_sf-corner);
+    background: var(--_sf-fill);
+    color: var(--area-fg-default);
+    box-shadow: var(--_sf-shade), var(--_sf-lift);
+  }
+
+  /* Size: Card's media inset (sm 6, lg 12; Compact 4, 8), so the text inset and corner follow: 14 / 16 / 20. */
+  .area-surface--sm { --_sf-media: calc(var(--area-space-6) - var(--area-space-2) * var(--area-ui-dense)); /* spec */ }
+  .area-surface--md { --_sf-media: calc(var(--area-space-8) - var(--area-space-2) * var(--area-ui-dense)); /* spec */ }
+  .area-surface--lg { --_sf-media: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)); /* spec */ }
+
+  /* A Surface that holds Surfaces sets them at its media inset, as Card holds its media; each nested Surface keeps its
+     own text inset. */
+  .area-surface:has(> :is(.area-surface, .area-card), > .area-stack > :is(.area-surface, .area-card), > .area-stack > .area-stack > :is(.area-surface, .area-card)) { --_sf-inset: var(--_sf-media); }
+
+  /* Treatment. The border keeps its width in every variant, so the inset is the same whatever the paint. */
+  .area-surface--soft {
+    --_sf-fill: var(--area-bg-subtle);
+    --_sf-edge: transparent;
+    --_sf-shade: 0 0 0 0 transparent;
+    --_sf-lift: 0 0 0 0 transparent;
+  }
+  .area-surface--plain {
+    --_sf-fill: transparent;
+    --_sf-edge: transparent;
+    --_sf-shade: 0 0 0 0 transparent;
+    --_sf-lift: 0 0 0 0 transparent;
+  }
+
+  /* Nesting, to four levels (the three-layer rule plus one). Each level reads its parent's published corner through
+     `inherit` and publishes its own under the other name. A nested Surface sits on a fill it shares or steps from,
+     so it draws no lift: its line or its fill is its edge. */
+  .area-surface .area-surface {
+    --_sf-a: inherit;
+    --_sf-corner: var(--_sf-a);
+    --_sf-b: max(var(--area-radius-floor), calc(var(--_sf-corner) - var(--_sf-inset)));
+    --_sf-lift: 0 0 0 0 transparent;
+  }
+  .area-surface .area-surface .area-surface {
+    --_sf-b: inherit;
+    --_sf-corner: var(--_sf-b);
+    --_sf-a: max(var(--area-radius-floor), calc(var(--_sf-corner) - var(--_sf-inset)));
+  }
+  .area-surface .area-surface .area-surface .area-surface {
+    --_sf-a: inherit;
+    --_sf-corner: var(--_sf-a);
+    --_sf-b: max(var(--area-radius-floor), calc(var(--_sf-corner) - var(--_sf-inset)));
+  }
+
+  /* A Card inside a Surface is concentric with it too: it reads the corner the nearest Surface publishes (by the same
+     depth parity) in place of its own surface corner. Its size, insets and parts are unchanged, and a Card outside a
+     Surface is untouched. */
+  .area-surface .area-card { --_card-radius: var(--_sf-a); }
+  .area-surface .area-surface .area-card { --_card-radius: var(--_sf-b); }
+  .area-surface .area-surface .area-surface .area-card { --_card-radius: var(--_sf-a); }
+  .area-surface .area-surface .area-surface .area-surface .area-card { --_card-radius: var(--_sf-b); }
+}

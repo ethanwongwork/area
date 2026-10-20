@@ -5,7 +5,7 @@
  */
 import { useState, type ReactNode } from "react";
 import { Segmented, Select } from "@area/react";
-import { GridIcon, ListIcon } from "@area/icons";
+import { GridIcon, LayoutDashboardIcon, ListIcon } from "@area/icons";
 import { readStored, writeStored } from "./storage.ts";
 import { APP_SCALE } from "./app-scale.ts";
 
@@ -21,10 +21,18 @@ export function useViewOption<T extends string>(key: string, initial: T, allowed
   return [value, change] as const;
 }
 
-export function ViewSwitch({ value, onChange }: { value: ViewMode; onChange: (mode: ViewMode) => void }) {
+/**
+ * The grid / list switch. With `waterfall` (Brand's assets, owner 2026-10-19) a third segment between them lays the
+ * cards out as a waterfall, each hugging its asset.
+ */
+export function ViewSwitch<M extends string = ViewMode>({ value, onChange, waterfall }: { value: M; onChange: (mode: M) => void; waterfall?: boolean }) {
   return (
-    <Segmented size="sm" iconOnly aria-label="View" value={value} onValueChange={next => onChange(next as ViewMode)}
-      items={[{ value: "grid", label: "Grid", icon: <GridIcon /> }, { value: "list", label: "List", icon: <ListIcon /> }]} />
+    <Segmented size="sm" iconOnly aria-label="View" value={value} onValueChange={next => onChange(next as M)}
+      items={[
+        { value: "grid", label: "Grid", icon: <GridIcon /> },
+        ...(waterfall ? [{ value: "waterfall", label: "Waterfall", icon: <LayoutDashboardIcon /> }] : []),
+        { value: "list", label: "List", icon: <ListIcon /> },
+      ]} />
   );
 }
 

@@ -57,3 +57,42 @@ export const GalleryAssetGrid = () => (
     <AssetGridItem value="search" name="Search" media={<SearchIcon width={24} height={24} />} />
   </AssetGrid>
 );
+/* Containerless: a component on the page's own ground, the frame's box kept and its edge clear until hover or selection. */
+export const GalleryAssetCardContainerless = () => (
+  <AssetCard style={card} container="containerless" interactive role="button" tabIndex={0} aria-pressed={false} media={<Button>Button</Button>} name="Button" />
+);
+/* A containerless image: the image is the surface, its name and detail under it. */
+export const GalleryAssetCardContainerlessImage = () => <AssetCard style={card} container="containerless" media="images/david-tee.jpg" name="David Tee" />;
+/* A containerless group: its four cells close together, so they read as one thing. */
+export const GalleryAssetCardGroupContainerless = () => (
+  <AssetCard style={card} container="containerless" name="Group one"
+    group={["images/david-tee.jpg", "images/chip-filter.png", <Button size="sm">Button</Button>, typeSample]} />
+);
+/* Containerless and selected: a component's frame shows the selected edge. */
+export const GalleryAssetCardContainerlessSelected = () => <AssetCard style={card} container="containerless" selected media={<Button>Button</Button>} name="Button" />;
+/* A selected containerless image: a ring in the selection colour round the image. */
+export const GalleryAssetCardContainerlessImageSelected = () => (
+  <AssetCard style={card} container="containerless" selected media="images/david-tee.jpg" name="David Tee" />
+);
+/* Hug: the frame as tall as its asset, here a component, instead of square. */
+export const GalleryAssetCardHug = () => <AssetCard style={card} aspect="hug" media={<Button>Button</Button>} name="Button" />;
+/* A waterfall: each card hugs its asset and drops into the shortest column, in reading order. */
+export const GalleryAssetGridWaterfall = () => (
+  <AssetGrid aria-label="Assets" layout="waterfall" defaultValue="portrait" style={{ inlineSize: 720, "--area-asset-card-size": "200px" } as never}>
+    <AssetGridItem value="portrait" name="David Tee" media="images/david-tee.jpg" mediaRatio={1} />
+    <AssetGridItem value="button" name="Button" media={<Button>Button</Button>} />
+    <AssetGridItem value="title" name="Title" media={typeSample} />
+    <AssetGridItem value="filter" name="Filter" media="images/chip-filter.png" mediaRatio={1} />
+    <AssetGridItem value="group" name="Group one" group={["images/david-tee.jpg", "images/chip-filter.png", "images/chip-pixels.png", typeSample]} />
+  </AssetGrid>
+);
+/* A containerless waterfall: Brand's assets as Pinterest lays a board out. */
+export const GalleryAssetGridWaterfallContainerless = () => (
+  <AssetGrid aria-label="Assets" layout="waterfall" container="containerless" defaultValue="portrait" style={{ inlineSize: 720, "--area-asset-card-size": "200px" } as never}>
+    <AssetGridItem value="portrait" name="David Tee" media="images/david-tee.jpg" mediaRatio={1} />
+    <AssetGridItem value="title" name="Title" media={typeSample} />
+    <AssetGridItem value="pixels" name="Pixels" media="images/chip-pixels.png" mediaRatio={1} />
+    <AssetGridItem value="filter" name="Filter" media="images/chip-filter.png" mediaRatio={1} />
+    <AssetGridItem value="group" name="Group one" group={["images/david-tee.jpg", "images/chip-filter.png", "images/chip-pixels.png", typeSample]} />
+  </AssetGrid>
+);

@@ -50,10 +50,10 @@ function control(id: string, label: string, description: string, defaultPreset: 
 const numbered = (n: number, fallback: number, zero: string, write: (i: number) => Record<string, string | number>) =>
   range(n).map(i => ({ id: String(i), label: i === 0 ? `0 (${zero})` : i === fallback ? `${i} (Default)` : String(i), tokens: write(i) }));
 
-export const STROKE_AXIS = control("stroke", "Stroke", "How dark every stroke is: its distance from its ground, 0 (none) to 8", "4", ["stroke-strength"],
+export const STROKE_AXIS = control("stroke", "Stroke strength", "How dark every stroke is: its distance from its ground, 0 (none) to 8", "4", ["stroke-strength"],
   numbered(8, 4, "None", i => ({ "stroke-strength": i / 4 })));
 
-export const SHADOW_RESTING_AXIS = control("shadow-resting", "Resting lift", "How much cards, panels and raised thumbs lift at rest, 0 (none) to 8, in % as Shadow", "3", ["shadow-resting-step"],
+export const SHADOW_RESTING_AXIS = control("shadow-resting", "Resting shadow", "How much cards, panels and raised thumbs lift at rest, 0 (none) to 8, in % as Shadow", "3", ["shadow-resting-step"],
   numbered(8, 3, "None", i => ({ "shadow-resting-step": i })));
 
 export const SHADOW_FIELD_AXIS = control("shadow-field", "Field shadow", "How much fields, select triggers, outline and soft buttons lift, 0 (none) to 8, in % as Shadow", "0", ["shadow-field-step"],
@@ -86,7 +86,7 @@ function slots(n: number): Record<string, number> {
   }
   return out;
 }
-export const SHADOW_SOFTNESS_AXIS = control("shadow-softness", "Softness", "How each shadow is drawn: one crisp layer (0) to six eased layers held under the surface (8)", "2", ["shadow-slot-", "shadow-tightness"],
+export const SHADOW_SOFTNESS_AXIS = control("shadow-softness", "Shadow softness", "How each shadow is drawn: one crisp layer (0) to six eased layers held under the surface (8)", "2", ["shadow-slot-", "shadow-tightness"],
   SOFTNESS.map(([layers, tight], i) => ({
     id: String(i),
     label: i === 0 ? "0 (Crisp)" : i === 2 ? "2 (Default)" : i === 8 ? "8 (Smooth)" : String(i),
@@ -96,7 +96,7 @@ export const SHADOW_SOFTNESS_AXIS = control("shadow-softness", "Softness", "How 
 /** Light: the lip (`0 1px 0` at 3 / 5 / 8 / 14%; Primer's 4% button lip) and the highlight (`inset 0 1px 0` white, light / dark), one step each. */
 const LIP = [0, 0.03, 0.05, 0.08, 0.14];
 const HIGHLIGHT = [[0, 0], [0.4, 0.03], [0.6, 0.05], [0.8, 0.08], [1, 0.12]] as const;
-export const SHADOW_LIGHT_AXIS = control("shadow-light", "Light", "Light from the top: a line under each lifted edge and a highlight inside its top, 0 (flat) to 4", "0", ["shadow-lip", "shadow-highlight-light", "shadow-highlight-dark"],
+export const SHADOW_LIGHT_AXIS = control("shadow-light", "Shadow light", "Light from the top: a line under each lifted edge and a highlight inside its top, 0 (flat) to 4", "0", ["shadow-lip", "shadow-highlight-light", "shadow-highlight-dark"],
   numbered(4, 0, "Flat", i => ({ "shadow-lip": LIP[i]!, "shadow-highlight-light": HIGHLIGHT[i]![0], "shadow-highlight-dark": HIGHLIGHT[i]![1] })));
 
 /** Shadow colour: the light theme's shadow as OKLCH (Comeau's warm ink, Stripe's cool blue); dark stays black. */
@@ -137,7 +137,18 @@ const tint = (alpha: string, dark = DARK) =>
   `light-dark(oklch(${v("shadow-tint-l")} ${v("shadow-tint-c")} ${v("shadow-tint-h")} / calc(${alpha})), rgb(0 0 0 / min(0.9, calc(${alpha} * ${num(dark)}))))`;
 
 /**
- * One role: the lip, the six soft layers, then the highlight, every slot always present (a transparent layer where a
+ * The dark rim (owner, 2026-10-19: "make the shadow settings visible in dark mode on the near-black page"): on a page at
+ * #020202 a black shadow has nothing to darken, so in dark a role also draws a light edge, as the systems surveyed do
+ * (docs/research/elevation-stroke-2026-10-18: Radix's ring "turns into a light edge" at white 17%; Fluent's 9.4% white top;
+ * Raycast's outer light ring; finding 7, dark strokes are translucent white 7–17%). Its strength is the role's own step,
+ * twice the light alpha as dark shadows are, to 16% (Radix's 17%): Floating 3 draws 6%, Resting 3 at half weight 3%,
+ * Field 0 nothing. Transparent in light, so light is unchanged.
+ */
+const RIM_MAX = 0.16;
+const rim = (alpha: string) => `0 0 0 1px light-dark(transparent, rgb(255 255 255 / min(${num(RIM_MAX)}, calc(${alpha} * ${num(DARK)}))))`;
+
+/**
+ * One role: the lip, the dark rim, the six soft layers, then the highlight, every slot always present (a transparent layer where a
  * control is off, never `none`, which voids the list a role sits in beside a component's own layers). The highlight is
  * last: a list interpolates layer by layer only where both sides are outer or both inset, and a shorter list pads at its
  * end, so an element fading from outer-only layers (a tile's transparent pair) still crossfades.
@@ -146,7 +157,7 @@ export function roleShadow(role: keyof typeof ROLES): string {
   const { geometry: [ga, gy, gb], weight, step } = ROLES[role];
   const alpha = `${v(step)} / 100 * ${num(weight)}`;
   const d = v("shadow-size");
-  const layers = [`0 1px 0 0 ${tint(v("shadow-lip"), 1.6)}`];
+  const layers = [`0 1px 0 0 ${tint(v("shadow-lip"), 1.6)}`, rim(alpha)];
   for (let i = 1; i <= SHADOW_SLOTS; i++) {
     const t = v(`shadow-slot-${i}-t`), g = v(`shadow-slot-${i}-g`);
     const y = `${d} * ${num(gy)}px * ${t}`;

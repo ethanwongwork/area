@@ -727,8 +727,11 @@ export const COMPONENT_PAGES = [
       ["group", "a group's assets (image URLs or elements): the first four as a 2 × 2 mosaic, 4 apart, each at the frame's corner", "—"],
       ["selected", "the card's edge in the selection colour (an AssetGrid sets it)", "false"],
       ["interactive", "the card is a control outside an AssetGrid: hover lifts, focus rings, aria-pressed / aria-selected show as selected", "false"],
+      ["container", "framed: the card · containerless: no card at rest, the head and asset in the same places; a component's frame shows its edge on hover and selection, an image or group is its own surface and the states ring it", "\"framed\""],
+      ["aspect / mediaRatio", "square, or hug: the card as tall as its head and asset / an image's width over height, so it holds its shape before it loads", "\"square\" / —"],
       ["children / frameProps / headProps", "the frame's own content in place of media / attributes for the frame / for the head (captionProps is a deprecated alias; caption is deprecated and ignored)", "— / — / —"],
       ["AssetGrid: value / onValueChange / onOpen", "the selected card; Enter or a double click opens", "— / — / —"],
+      ["AssetGrid: layout / container", "grid: square cards in rows · waterfall: cards hug their assets in columns, each into the shortest / every card's container", "\"grid\" / \"framed\""],
     ],
     examples: [
       { id: "default", title: "Image", note: "A square card: the name in a head, a More button at its end, the image covering a frame 4 in, the frame's corner concentric with the card's (16 − 1 − 4 = 11).", demo: "GalleryAssetCard" },
@@ -740,6 +743,14 @@ export const COMPONENT_PAGES = [
       { id: "content-setting", title: "Setting", note: "A setting's option drawn under its own scope, so the frame is that option's ground, as the Language tab previews it.", demo: "GalleryAssetCardSetting" },
       { id: "state-selected", title: "Selected", note: "The card's edge in the selection colour.", demo: "GalleryAssetCardSelected" },
       { id: "behavior-grid", title: "Grid", note: "A ListBox grid of cards: one Tab stop, arrows in two dimensions; Enter or a double click opens. Hover lifts the card.", demo: "GalleryAssetGrid" },
+      { id: "container-containerless", title: "Containerless", note: "A component on the page's ground: the frame's box kept, its edge clear until hover or selection.", demo: "GalleryAssetCardContainerless" },
+      { id: "container-containerless-image", title: "Containerless image", note: "No card: the head above, the image is the surface; selection rings the image.", demo: "GalleryAssetCardContainerlessImage" },
+      { id: "container-containerless-group", title: "Containerless group", note: "A group's four cells 4 apart with no frame, so they read as one thing.", demo: "GalleryAssetCardGroupContainerless" },
+      { id: "state-containerless-selected", title: "Containerless, selected", note: "A component's frame shows the selected edge.", demo: "GalleryAssetCardContainerlessSelected" },
+      { id: "state-containerless-image-selected", title: "Containerless image, selected", note: "A ring in the selection colour round the image.", demo: "GalleryAssetCardContainerlessImageSelected" },
+      { id: "aspect-hug", title: "Hug", note: "The card as tall as its head and its asset instead of square.", demo: "GalleryAssetCardHug" },
+      { id: "behavior-waterfall", title: "Waterfall", note: "Cards hug their assets in columns, each into the shortest, in reading order: Left and Right step in order, Up and Down find the nearest card.", demo: "GalleryAssetGridWaterfall" },
+      { id: "behavior-waterfall-containerless", title: "Containerless waterfall", note: "Brand's assets with no frames, as Pinterest lays out a board.", demo: "GalleryAssetGridWaterfallContainerless" },
     ],
   },
   {
@@ -1982,6 +1993,26 @@ export const COMPONENT_PAGES = [
         note: "One panel, one tier and one field style. Select, segmented, chip, slider and input all sit on the medium control height with soft fields, so any one of them rendering at a different height shows up as a ragged edge rather than as a number in a table.",
         demo: "PanelEverything",
       },
+    ],
+  },
+  {
+    slug: "surface", name: "Surface", manifest: "surface", imports: "Surface, Stack",
+    api: [["variant", "surface (raised, Card's fill and edge) | soft (a recessed well) | plain (structure only)", "surface"], ["size", "sm | md | lg: Card's corner and inset", "md"]],
+    examples: [
+      { id: "default", title: "Default", demo: "GallerySurface", note: "A raised region: Card's fill, edge and resting shadow, with no parts. Compose its content with Stack." },
+      { id: "nested", title: "Nested", demo: "GallerySurfaceNested", note: "Each corner is the one around it less that Surface's inset, floored at 4; a Surface holding Surfaces sets them at its smaller media inset." },
+      { id: "soft", title: "Soft", demo: "GallerySurfaceSoft", note: "A recessed well: one fill step down, no line or shadow." },
+      { id: "form", title: "Form", demo: "GallerySurfaceForm", note: "Controls inside step from the Surface's ground, as in a Card." },
+    ],
+  },
+  {
+    slug: "stack", name: "Stack", manifest: "stack", imports: "Stack, Surface",
+    api: [["orientation", "vertical | horizontal", "vertical"], ["gap", "related | group | section, by role; follows Density and never exceeds a Surface's inset", "group"], ["align", "start | center | end | stretch | baseline (unset: a column stretches, a row centres)", "—"], ["spread", "boolean: ends pushed apart", "false"], ["wrap", "boolean: a row wraps", "false"]],
+    examples: [
+      { id: "default", title: "Default", demo: "GalleryStack", note: "A column of group members, 12 apart at the default Density." },
+      { id: "horizontal", title: "Horizontal", demo: "GalleryStackHorizontal" },
+      { id: "spread", title: "Spread", demo: "GalleryStackSpread", note: "A title and its action at the two ends of a row." },
+      { id: "in-surface", title: "In a surface", demo: "GalleryStackInSurface", note: "Inside a Surface the gap stops at the Surface's inset, so children are never farther apart than they are from its edge." },
     ],
   },
   {

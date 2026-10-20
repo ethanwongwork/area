@@ -63,6 +63,7 @@
 @import "./components/display.css";
 @import "./components/badge.css";
 @import "./components/surface.css";
+@import "./components/stack.css";
 @import "./components/panel.css";
 @import "./components/property-list.css";
 @import "./components/box-field.css";

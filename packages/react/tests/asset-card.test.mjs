@@ -8,7 +8,7 @@ import { AssetCard, AssetGrid, AssetGridItem } from '../dist/modules/index.js';
 // frame's kind follows its content.
 test('the head comes before the frame, with the name and the controls only', () => {
   const html = render(h(AssetCard, { name: 'Title', meta: '24 / 32', actions: h('button', { 'aria-label': 'Copy' }), media: h('span', null, 'Aa') }));
-  assert.match(html, /^<div class="area-asset-card area-asset-card--asset">/);
+  assert.match(html, /^<div class="area-asset-card area-asset-card--asset[^"]*">/);
   assert.match(html, /area-asset-card__head"><span class="area-asset-card__name">Title<\/span><div class="area-asset-card__actions">/);
   assert.doesNotMatch(html, /24 \/ 32|area-asset-card__meta/, 'meta is deprecated and ignored (round 58)');
   assert.ok(html.indexOf('__head') < html.indexOf('__frame'), 'head first');

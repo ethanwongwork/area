@@ -59,6 +59,8 @@ export { FilePage, type FilePageProps } from "./components/FilePage.tsx";
 export { FileImage, type FileImageProps } from "./components/FileImage.tsx";
 export { FileTile, FileGrid, FileGridItem, type FileTileProps, type FileGridProps, type FileGridItemProps } from "./components/FileTile.tsx";
 export { AssetCard, AssetGrid, AssetGridItem, type AssetCardProps, type AssetGridProps, type AssetGridItemProps } from "./components/AssetCard.tsx";
+export { Surface, type SurfaceProps } from "./components/Surface.tsx";
+export { Stack, type StackProps } from "./components/Stack.tsx";
 export { PreviewFrame, type PreviewFrameProps } from "./components/PreviewFrame.tsx";
 export { PasswordField, type PasswordFieldProps } from "./components/PasswordField.tsx";
 export { OTPField, type OTPFieldProps } from "./components/OTPField.tsx";

@@ -3,8 +3,9 @@
 // sets the kind: any element centred on the surface (a component, a type sample, an icon, a setting's preview), an image
 // covering the frame, a colour painting it, or a group's first four assets as a 2 x 2 mosaic. The grid is a ListBox grid
 // of cards (one Tab stop, arrows in two dimensions, typeahead) that also opens the focused card on Enter or a double
-// click, as FileGrid. Spec: docs/specs/asset-card.md.
-import { createContext, forwardRef, useContext } from "react";
+// click, as FileGrid; as a waterfall its cards hug their assets in columns, each dropped into the shortest. Spec:
+// docs/specs/asset-card.md.
+import { createContext, forwardRef, useContext, useLayoutEffect, useRef } from "react";
 import type { CSSProperties, HTMLAttributes, KeyboardEvent, ReactNode } from "react";
 import { assetCardVariants, assetGridVariants } from "../variants.ts";
 import { ListBox, ListBoxItem, type ListBoxProps, type ListBoxItemProps } from "./ListBox.tsx";
@@ -42,6 +43,16 @@ export interface AssetCardProps extends Omit<HTMLAttributes<HTMLDivElement>, "ch
    * it, keyboard focus rings it, and `aria-pressed` or `aria-selected` shows as the selected edge.
    */
   interactive?: boolean;
+  /**
+   * framed (the default): the card. containerless: no card at rest (no fill, edge or shadow), the head and the asset on
+   * the page's own ground, in the same places. A component's frame shows its edge on hover and selection; an image or a
+   * group is its own surface and the states paint it.
+   */
+  container?: "framed" | "containerless";
+  /** square (the default): the card is square. hug: the card is as tall as its head and its asset at the card's width. */
+  aspect?: "square" | "hug";
+  /** An image's width over its height, so it holds its shape before it loads (a waterfall's cards). */
+  mediaRatio?: number;
   /** The frame's content as the host lays it out, in place of `media` (an app's specimen stage). */
   children?: ReactNode;
   /** Attributes for the frame: a host's own class, scope or ground. */
@@ -54,26 +65,29 @@ export interface AssetCardProps extends Omit<HTMLAttributes<HTMLDivElement>, "ch
   caption?: "inside" | "below";
 }
 
-const image = (source: string, alt: string) => <img src={source} alt={alt} loading="lazy" decoding="async" draggable={false} />;
+const image = (source: string, alt: string, ratio?: number) => (
+  <img src={source} alt={alt} loading="lazy" decoding="async" draggable={false} style={ratio ? { aspectRatio: ratio } : undefined} />
+);
 const join = (...names: Array<string | undefined>) => names.filter(Boolean).join(" ");
 
 export const AssetCard = /* @__PURE__ */ forwardRef<HTMLDivElement, AssetCardProps>(function AssetCard(
-  { name, meta: _meta, actions, media, mediaAlt = "", color, group, selected, interactive, caption: _caption, children, frameProps, headProps, captionProps,
-    className, style, ...rest }, ref,
+  { name, meta: _meta, actions, media, mediaAlt = "", color, group, selected, interactive, caption: _caption, container = "framed", aspect = "square",
+    mediaRatio, children, frameProps, headProps, captionProps, className, style, ...rest }, ref,
 ) {
   const layout = group ? "group" : color !== undefined && children === undefined ? "color" : typeof media === "string" && children === undefined ? "image" : "asset";
   const cells = group ? [0, 1, 2, 3].map(index => group[index]) : [];
   const { className: frameClass, ...frameRest } = frameProps ?? {};
   const { className: headClass, ...headRest } = headProps ?? captionProps ?? {};
   return (
-    <div ref={ref} className={assetCardVariants({ layout, interactive }, className)} data-selected={selected ? "" : undefined}
+    <div ref={ref} className={assetCardVariants({ layout, container, aspect, interactive }, className)} data-selected={selected ? "" : undefined}
       style={layout === "color" ? { ...style, "--_asset-color": color } as CSSProperties : style} {...rest}>
       <div className={join(assetCardVariants.element("head"), headClass)} {...headRest}>
         <span className={assetCardVariants.element("name")}>{name}</span>
         {actions ? <div className={assetCardVariants.element("actions")}>{actions}</div> : null}
       </div>
-      {/* The frame paints the raised ground, so a component inside steps its fills from it (layers.css). */}
-      <div className={join(assetCardVariants.element("frame"), frameClass)} data-area-ground="raised" {...frameRest}>
+      {/* A frame paints the raised ground, so a component inside steps its fills from it (layers.css); a containerless
+          one paints none, so the component steps from the page's ground. */}
+      <div className={join(assetCardVariants.element("frame"), frameClass)} data-area-ground={container === "containerless" ? undefined : "raised"} {...frameRest}>
         {layout === "group" ? (
           <div className={assetCardVariants.element("mosaic")} aria-hidden="true">
             {cells.map((cell, index) => (
@@ -84,7 +98,7 @@ export const AssetCard = /* @__PURE__ */ forwardRef<HTMLDivElement, AssetCardPro
           </div>
         ) : children !== undefined ? children : layout === "color" ? null : (
           <div className={assetCardVariants.element("media")} aria-hidden={typeof media === "string" && mediaAlt ? undefined : "true"}>
-            {typeof media === "string" ? image(media, mediaAlt) : media}
+            {typeof media === "string" ? image(media, mediaAlt, mediaRatio) : media}
           </div>
         )}
       </div>
@@ -92,17 +106,81 @@ export const AssetCard = /* @__PURE__ */ forwardRef<HTMLDivElement, AssetCardPro
   );
 });
 
-interface AssetGridContext { open?: (value: string) => void }
+interface AssetGridContext { open?: (value: string) => void; layout?: "grid" | "waterfall"; container?: AssetCardProps["container"] }
 const GridContext = createContext<AssetGridContext>({});
 
 export interface AssetGridProps extends Omit<ListBoxProps, "layout"> {
   /** Opens a card: Enter on the focused card, or a double click. */
   onOpen?: (value: string) => void;
+  /**
+   * grid (the default): square cards in rows. waterfall: cards hug their assets in columns of the grid's least width,
+   * each dropped into the shortest column in reading order.
+   */
+  layout?: "grid" | "waterfall";
+  /** Every card's container: framed (the default) or containerless. A card's own `container` wins. */
+  container?: AssetCardProps["container"];
+}
+
+/**
+ * Places a waterfall's cards: as many columns of the least width (--area-asset-card-size) as fit, each card into the
+ * shortest column in order, again whenever the grid's width or a card's height changes. Positions are logical, so a
+ * right-to-left grid fills from the right.
+ */
+function useWaterfall(box: { current: HTMLDivElement | null }, on: boolean) {
+  useLayoutEffect(() => {
+    const grid = box.current;
+    if (!grid || !on) return;
+    const cards = () => [...grid.children].filter((node): node is HTMLElement => node instanceof HTMLElement && node.getAttribute("role") === "option");
+    let frame = 0;
+    const place = () => {
+      frame = 0;
+      const style = getComputedStyle(grid);
+      const least = parseFloat(style.getPropertyValue("--area-asset-card-size")) || 224;
+      const columnGap = parseFloat(style.columnGap) || 0;
+      const rowGap = parseFloat(style.rowGap) || 0;
+      const start = parseFloat(style.paddingInlineStart) || 0;
+      const top = parseFloat(style.paddingBlockStart) || 0;
+      const width = grid.clientWidth - start - (parseFloat(style.paddingInlineEnd) || 0);
+      const count = Math.max(1, Math.floor((width + columnGap) / (least + columnGap)));
+      const column = (width - columnGap * (count - 1)) / count;
+      const items = cards();
+      grid.dataset.placed = "";
+      for (const item of items) item.style.inlineSize = `${column}px`;
+      // Measured heights are drawn sizes: a grid inside a scaled stage (a gallery tile's fit) divides the scale out.
+      const scale = grid.offsetWidth ? grid.getBoundingClientRect().width / grid.offsetWidth || 1 : 1;
+      const heights = items.map(item => item.getBoundingClientRect().height / scale);
+      const ends = new Array<number>(count).fill(0);
+      items.forEach((item, index) => {
+        const shortest = ends.indexOf(Math.min(...ends));
+        item.style.insetInlineStart = `${start + shortest * (column + columnGap)}px`;
+        item.style.insetBlockStart = `${top + ends[shortest]!}px`;
+        ends[shortest] = ends[shortest]! + heights[index]! + rowGap;
+      });
+      grid.style.blockSize = `${Math.max(0, Math.max(...ends) - rowGap) + top + (parseFloat(style.paddingBlockEnd) || 0)}px`;
+    };
+    const later = () => { if (!frame) frame = requestAnimationFrame(place); };
+    const sizes = new ResizeObserver(later);
+    const watch = () => { sizes.disconnect(); sizes.observe(grid); cards().forEach(item => sizes.observe(item)); };
+    const added = new MutationObserver(() => { watch(); later(); });
+    place();
+    watch();
+    added.observe(grid, { childList: true });
+    return () => {
+      cancelAnimationFrame(frame);
+      sizes.disconnect();
+      added.disconnect();
+      delete grid.dataset.placed;
+      grid.style.blockSize = "";
+      for (const item of cards()) { item.style.inlineSize = ""; item.style.insetInlineStart = ""; item.style.insetBlockStart = ""; }
+    };
+  }, [box, on]);
 }
 
 export const AssetGrid = /* @__PURE__ */ forwardRef<HTMLDivElement, AssetGridProps>(function AssetGrid(
-  { onOpen, onKeyDown, className, children, ...rest }, ref,
+  { onOpen, layout = "grid", container, onKeyDown, className, children, ...rest }, ref,
 ) {
+  const box = useRef<HTMLDivElement | null>(null);
+  useWaterfall(box, layout === "waterfall");
   const keyDown = (event: KeyboardEvent<HTMLDivElement>) => {
     onKeyDown?.(event);
     if (event.defaultPrevented || !onOpen || event.key !== "Enter") return;
@@ -112,22 +190,24 @@ export const AssetGrid = /* @__PURE__ */ forwardRef<HTMLDivElement, AssetGridPro
     onOpen(option.dataset.value);
   };
   return (
-    <GridContext.Provider value={{ open: onOpen }}>
-      <ListBox ref={ref} layout="grid" className={assetGridVariants({}, className)} onKeyDown={keyDown} {...rest}>
+    <GridContext.Provider value={{ open: onOpen, layout, container }}>
+      <ListBox ref={node => { box.current = node; if (typeof ref === "function") ref(node); else if (ref) ref.current = node; }}
+        layout="grid" className={assetGridVariants({ layout }, className)} onKeyDown={keyDown} {...rest}>
         {children}
       </ListBox>
     </GridContext.Provider>
   );
 });
 
-export interface AssetGridItemProps extends Omit<ListBoxItemProps, "children" | "textValue" | "color">, Pick<AssetCardProps, "name" | "meta" | "actions" | "media" | "mediaAlt" | "color" | "group" | "caption" | "children" | "frameProps" | "headProps" | "captionProps"> {
+export interface AssetGridItemProps extends Omit<ListBoxItemProps, "children" | "textValue" | "color">, Pick<AssetCardProps, "name" | "meta" | "actions" | "media" | "mediaAlt" | "mediaRatio" | "color" | "group" | "caption" | "container" | "aspect" | "children" | "frameProps" | "headProps" | "captionProps"> {
   /** The text typeahead matches; the name when it is a string. */
   textValue?: string;
 }
 
-/** One card in an AssetGrid: an option whose content is an AssetCard. */
+/** One card in an AssetGrid: an option whose content is an AssetCard. A waterfall's cards hug; the grid's container is
+    every card's unless a card sets its own. */
 export const AssetGridItem = /* @__PURE__ */ forwardRef<HTMLDivElement, AssetGridItemProps>(function AssetGridItem(
-  { name, meta, actions, media, mediaAlt, color, group, caption, children, frameProps, headProps, captionProps, textValue, value, className, onDoubleClick, ...rest }, ref,
+  { name, meta, actions, media, mediaAlt, mediaRatio, color, group, caption, container, aspect, children, frameProps, headProps, captionProps, textValue, value, className, onDoubleClick, ...rest }, ref,
 ) {
   const grid = useContext(GridContext);
   return (
@@ -139,7 +219,9 @@ export const AssetGridItem = /* @__PURE__ */ forwardRef<HTMLDivElement, AssetGri
       onDoubleClick={event => { onDoubleClick?.(event); if (!event.defaultPrevented && !rest.disabled) grid.open?.(value); }}
       {...rest}
     >
-      <AssetCard name={name} meta={meta} actions={actions} media={media} mediaAlt={mediaAlt} color={color} group={group} caption={caption} frameProps={frameProps} headProps={headProps ?? captionProps}>{children}</AssetCard>
+      <AssetCard name={name} meta={meta} actions={actions} media={media} mediaAlt={mediaAlt} mediaRatio={mediaRatio} color={color} group={group} caption={caption}
+        container={container ?? grid.container} aspect={aspect ?? (grid.layout === "waterfall" ? "hug" : "square")}
+        frameProps={frameProps} headProps={headProps ?? captionProps}>{children}</AssetCard>
     </ListBoxItem>
   );
 });

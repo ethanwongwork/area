@@ -51,6 +51,8 @@ import * as boxModels from "./demos/box-model.tsx";
 import * as tokenRows from "./demos/token-row.tsx";
 import * as assetRows from "./demos/asset-row.tsx";
 import * as assetCards from "./demos/asset-card.tsx";
+import * as surfaces from "./demos/surface.tsx";
+import * as stacks from "./demos/stack.tsx";
 import * as previewFrames from "./demos/preview-frame.tsx";
 import * as passwordFields from "./demos/password-field.tsx";
 import * as copyButtons from "./demos/copy-button.tsx";
@@ -73,7 +75,7 @@ import * as linkGroups from "./demos/link-groups.tsx";
 import * as videoPlayers from "./demos/video-player.tsx";
 
 const { BADGE_GALLERY_DEMOS, ...badgeDemos } = badge;
-const DEMO_MODULES: Record<string, object> = { BADGE_GALLERY_DEMOS, badge: badgeDemos, switches, button, form, display, nav, theme, gallery, cards, variants, overlays, counts, accordions, agentChat, composerAdditions, customSelects, tags, tagPickers, datePickers, drawers, paginations, links, scrollAreas, fileUploads, toggletips, emptyStates, toggleGroups, descriptionLists, meters, searchFields, shortcutLists, dateRangePickers, citations, zoomControls, boards, timelines, editableTexts, boxModels, tokenRows, assetRows, previewFrames, passwordFields, copyButtons, fileExplorer, listBoxes, appShell, otpFields, timeFields, spinnerValues, steppers, inspectorRecipes, referenceLists, tablesOfContents, figures, infoboxes, inlineLists, abbreviations, hatnotes, linkGroups, videoPlayers, assetCards };
+const DEMO_MODULES: Record<string, object> = { BADGE_GALLERY_DEMOS, badge: badgeDemos, switches, button, form, display, nav, theme, gallery, cards, variants, overlays, counts, accordions, agentChat, composerAdditions, customSelects, tags, tagPickers, datePickers, drawers, paginations, links, scrollAreas, fileUploads, toggletips, emptyStates, toggleGroups, descriptionLists, meters, searchFields, shortcutLists, dateRangePickers, citations, zoomControls, boards, timelines, editableTexts, boxModels, tokenRows, assetRows, previewFrames, passwordFields, copyButtons, fileExplorer, listBoxes, appShell, otpFields, timeFields, spinnerValues, steppers, inspectorRecipes, referenceLists, tablesOfContents, figures, infoboxes, inlineLists, abbreviations, hatnotes, linkGroups, videoPlayers, assetCards, surfaces, stacks };
 // One name, one demo. The server renders from this merged map, while hydration clients import a
 // module directly, so a name exported twice renders one demo and hydrates the other (a mismatch).
 const demoOwner = new Map<string, string>();
@@ -125,6 +127,8 @@ export const SOURCES = {
   tokenRows: "demos/token-row.tsx",
   assetRows: "demos/asset-row.tsx",
   assetCards: "demos/asset-card.tsx",
+  surfaces: "demos/surface.tsx",
+  stacks: "demos/stack.tsx",
   previewFrames: "demos/preview-frame.tsx",
   passwordFields: "demos/password-field.tsx",
   copyButtons: "demos/copy-button.tsx",

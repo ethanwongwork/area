@@ -4,7 +4,8 @@
  * easy to recognize"; "every axis should" have its own visual). Each pick shows the one thing its setting moves:
  *
  *   mode         a card, its ground, ink and action
- *   neutral      a segmented track's greys
+ *   neutral      a window's greys (sidebar, card, field) with the layers at 8: the tint moves each channel ~5 of 255,
+ *                so it shows only on large grey areas (a segmented track's greys measured 3 of 255 apart in light)
  *   accent       a button at its default size (action set to accent in these tiles)
  *   action       a dialog's Cancel and Save
  *   selection    a ticked box
@@ -15,13 +16,21 @@
  *                heading) and what holds (titles, the display jump at 14) is plain
  *   density      a list's rows
  *   radius       a field's and a button's corners
- *   surface      two overlapping cards' lines (stroke width)
- *   shadow-rest  two cards side by side, set apart by the rest shadow
- *   elevation    a menu's lift
- *   depth        (axes/depth.ts) Strength: the cards' lines, as surface; Resting lift: the side-by-side cards, as
- *                shadow-rest; Field shadow: a field and an outline button; Size, Softness, Light and Shadow colour: the
- *                menu, as elevation, since they shape every shadow
+ *   Stroke and Shadow (owner, 2026-10-19: "fix the visuals for stroke and shadow to be more custom tailored to each
+ *   axis/variable that is changed and make sure its visible"; then "i dont want it to be too zoomed in, and i also still
+ *   want to use real components"): each the whole real component the setting draws on, with its own text, centred on
+ *   the page's ground (CloseUp) and shown a little over its size instead of shrunk as the other drawings are, so a
+ *   half-pixel line or a 5% shadow still shows; the Inspector shows it at size. Each tile turns off the strokes and
+ *   shadows that are not its own (the Language tab's ALSO):
+ *     surface         Width: a card, 1.5x
+ *     stroke          Strength: a card and the field inside it, 1.5x
+ *     shadow-rest     Rest shadow: a card with no line, 1.25x
+ *     shadow-resting  Resting: the same card, 1.25x
+ *     shadow-field    Field: a field and an outline button, 1.25x
+ *     elevation       Floating: a menu, 1.25x
+ *     shadow-size, -softness, -light, -color: the menu at Floating 8, 1.25x
  *   motion       a switch flipping
+ *   easing       the same switch flipping at Motion 300, so the curve has time to show
  *   pills        the shape the tile names, as a pill
  *
  * Scale (owner, 2026-10-19: "the scale of all the visuals ... should look relatively balanced"): each drawing is
@@ -31,7 +40,7 @@
  * drawing is laid out at 1x and shrunk whole, so its parts keep their proportions (half pixels included). Every drawing is shown, not used: its tile is inert, and the
  * drawing is hidden from assistive tech.
  */
-import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import {
   Avatar, Badge, Button, Card, CardContent, CardDescription, CardTitle, Checkbox, Chip, Count, Input, MenuItem, Nav,
   NavItem, Segmented, Switch,
@@ -178,19 +187,76 @@ function Pill({ shape }: { shape: string }) {
   }
 }
 
-/** The illustration for one setting; `preset` reaches the drawings that print a value (the type ramp, a pill). */
-export function Abstract({ axis, preset }: { axis: string; preset?: string }) {
-  const [fill, drawn] = drawing(axis, preset);
-  // Pills draws a different shape per tile, so each is sized alone; every other setting shares one zoom.
-  return <Fit fill={fill} group={axis === "pills" ? `pills-${preset}` : axis}>{drawn}</Fit>;
+/*
+ * The close-ups: what a Stroke or Shadow setting draws on, and how far it is magnified. Each subject is one surface at
+ * its real size; CloseUp sets its end corner a little past the centre of a page-ground window and magnifies it from
+ * there, so the corner's edge, its inside and the shadow beyond it all show.
+ */
+const CardSurface = () => <Note className="lang-card lang-zoom-card" />;
+const CardWithField = () => (
+  <Card size="sm" className="lang-card lang-zoom-card"><CardContent>
+    <CardTitle>Title</CardTitle>
+    <Input size="sm" fullWidth aria-label="Label" placeholder="Field" />
+  </CardContent></Card>
+);
+const FieldSurface = () => (
+  <div className="lang-col lang-zoom-field">
+    <Input aria-label="Label" placeholder="Placeholder" />
+    <Button variant="outline" tone="neutral">Button</Button>
+  </div>
+);
+const MenuSurface = () => (
+  <div className="area-menu lang-zoom-menu" role="menu" aria-label="Menu">
+    <MenuItem>Item one</MenuItem>
+    <MenuItem>Item two</MenuItem>
+    <MenuItem>Item three</MenuItem>
+  </div>
+);
+/** How much over its size each setting's component is shown. */
+const CLOSE_UPS: Record<string, { scale: number; subject: () => ReactNode }> = {
+  surface: { scale: 1.5, subject: CardSurface },
+  stroke: { scale: 1.5, subject: CardWithField },
+  "shadow-rest": { scale: 1.25, subject: CardSurface },
+  "shadow-resting": { scale: 1.25, subject: CardSurface },
+  "shadow-field": { scale: 1.25, subject: FieldSurface },
+  elevation: { scale: 1.25, subject: MenuSurface },
+  "shadow-size": { scale: 1.25, subject: MenuSurface },
+  "shadow-softness": { scale: 1.25, subject: MenuSurface },
+  "shadow-light": { scale: 1.25, subject: MenuSurface },
+  "shadow-color": { scale: 1.25, subject: MenuSurface },
+};
+
+/** The whole component, centred in a window on the page's ground, a little over its size. */
+function CloseUp({ scale, children }: { scale: number; children: ReactNode }) {
+  return (
+    <div className="lang-closeup" aria-hidden="true" style={{ "--_scale": scale } as CSSProperties}>
+      <div className="lang-closeup__subject">{children}</div>
+    </div>
+  );
+}
+
+/**
+ * The illustration for one setting; `preset` reaches the drawings that print a value (the type ramp, a pill). A Stroke
+ * or Shadow setting draws a close-up unless `whole` (the Inspector's preview), which draws its surface at size.
+ */
+export function Abstract({ axis, preset, whole }: { axis: string; preset?: string; whole?: boolean }) {
+  const closeUp = CLOSE_UPS[axis];
+  const art = closeUp && !whole ? <CloseUp scale={closeUp.scale}><closeUp.subject /></CloseUp>
+    : closeUp ? <Fit fill={FILL.wide} group={`${axis}-whole`}><div className="lang-zoom-whole"><closeUp.subject /></div></Fit>
+    : (() => {
+      const [fill, drawn] = drawing(axis, preset);
+      // Pills draws a different shape per tile, so each is sized alone; every other setting shares one zoom.
+      return <Fit fill={fill} group={axis === "pills" ? `pills-${preset}` : axis}>{drawn}</Fit>;
+    })();
+  // Only the drawing: the tile carries no readout (owner, 2026-10-19: "i dont want to see any information visible on each
+  // card container, just the isolated visual"); what a value writes is in the Inspector.
+  return art;
 }
 
 function drawing(axis: string, preset?: string): [number, ReactNode] {
   switch (axis) {
     case "theme":
       return [FILL.wide, <Note><div className="lang-row lang-row--start"><Button size="sm">Button</Button></div></Note>];
-    case "neutral":
-      return [FILL.wide, <Segmented aria-label="Label" defaultValue="one" items={three} />];
     case "accent":
       return [FILL.control, <Button>Button</Button>];
     case "action":
@@ -207,6 +273,7 @@ function drawing(axis: string, preset?: string): [number, ReactNode] {
           </div>
         </Window>
       )];
+    case "neutral":
     case "layers-light":
     case "layers-dark":
       return [FILL.window, (
@@ -240,37 +307,8 @@ function drawing(axis: string, preset?: string): [number, ReactNode] {
       return [FILL.wide, <Rows />];
     case "radius":
       return [FILL.wide, <div className="lang-row"><Input aria-label="Label" placeholder="Placeholder" /><Button>Button</Button></div>];
-    case "surface":
-    case "stroke":
-      return [FILL.wide, (
-        <div className="lang-overlap">
-          <Note className="lang-overlap__back" />
-          <Note className="lang-overlap__front" />
-        </div>
-      )];
-    case "shadow-rest":
-    case "shadow-resting":
-      return [FILL.wide, (
-        <div className="lang-row">
-          <Note className="lang-card lang-card--small" />
-          <Note className="lang-card lang-card--small" />
-        </div>
-      )];
-    case "shadow-field":
-      return [FILL.wide, <div className="lang-row"><Input aria-label="Label" placeholder="Placeholder" /><Button variant="outline" tone="neutral">Button</Button></div>];
-    case "elevation":
-    case "shadow-size":
-    case "shadow-softness":
-    case "shadow-light":
-    case "shadow-color":
-      return [FILL.wide, (
-        <div className="area-menu lang-menu" role="menu" aria-label="Menu">
-          <MenuItem>Item one</MenuItem>
-          <MenuItem>Item two</MenuItem>
-          <MenuItem>Item three</MenuItem>
-        </div>
-      )];
     case "motion":
+    case "easing":
       return [FILL.control, <LoopingSwitch />];
     case "pills":
       // A field and a segmented track are wide controls; the rest are single small ones.

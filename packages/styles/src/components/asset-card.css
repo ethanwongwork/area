@@ -22,6 +22,14 @@
  *
  * The asset grid is a ListBox grid of cards (one Tab stop, arrows in two dimensions, typeahead), plus open on Enter or a
  * double click, as File grid. The card shows the states: selection its edge in the selection colour, hover its lift.
+ * View options (owner, 2026-10-19, the Brand tab: "a view setting that changes how containers are shown strictly for
+ * assets and groups ... containerless containers, and potentially a waterfall view that hugs the size of assets"):
+ *   container  framed (the default), the card; containerless, no card at rest (no fill, edge or shadow), the head and
+ *              the asset in the same places, so nothing moves: a component's frame shows its edge on hover and
+ *              selection; an image or a group is its own surface, and selection and focus ring it
+ *   aspect     square (the default); hug, the card as tall as its head and its asset at the card's width (an image at
+ *              its own ratio from `mediaRatio`, so a lazy image holds its height; a group and a colour square)
+ *   waterfall  (AssetGrid) columns of the least width, each card hugging, dropped into the shortest column
  * Public hooks: `--area-asset-card-size` (the grid's column), `--area-asset-card-corner` (the card's corner).
  * ------------------------------------------------------------------------- */
 @layer area.components {
@@ -191,11 +199,57 @@
   }
   .area-asset-card--interactive:active { --_lift: 0 0 0 0 transparent, 0 0 0 0 transparent; transition-duration: var(--area-duration-fast), 0s; }
 
+  /* --- Aspect and container --------------------------------------------------- */
+  .area-asset-card--square {}
+  .area-asset-card--framed {}
+  /* Hug: the card follows its content's height at its width; an image keeps its own ratio, a group and a colour stay
+     square, a component takes its own height and the room around it. */
+  .area-asset-card--hug { aspect-ratio: auto; }
+  .area-asset-card--hug > .area-asset-card__frame { flex: none; }
+  .area-asset-card--hug.area-asset-card--image .area-asset-card__media > img { block-size: auto; }
+  .area-asset-card--hug :is(.area-asset-card__mosaic, .area-asset-card--color > .area-asset-card__frame) { aspect-ratio: 1; }
+  .area-asset-card--hug.area-asset-card--color > .area-asset-card__frame { aspect-ratio: 1; }
+
+  /* Containerless: no card at rest. A component's frame keeps its box, its edge clear until hover (the hovered edge) or
+     selection (the selected edge); an image or a group is its own surface: no frame edge, the states ring it. */
+  .area-asset-card--containerless { background-color: transparent; border-color: transparent; box-shadow: none; }
+  .area-asset-card--containerless > .area-asset-card__frame { border-color: transparent; }
+  .area-asset-card--containerless:is(.area-asset-card--image, .area-asset-card--group) > .area-asset-card__frame { border-width: 0; }
+  .area-asset-card--containerless > .area-asset-card__frame { box-shadow: var(--_ring, 0 0 0 0 transparent); transition: border-color var(--area-duration-fast) var(--area-ease-out), box-shadow var(--area-duration-fast) var(--area-ease-out); }
+  /* Selected: the asset carries it, the card stays clear; two lines where the asset has no edge to recolour (pick). */
+  .area-asset-card--containerless:is([data-selected], [aria-pressed="true"], [aria-selected="true"]),
+  .area-asset-grid__item[aria-selected="true"] .area-asset-card--containerless { border-color: transparent; }
+  .area-asset-card--containerless:is([data-selected], [aria-pressed="true"], [aria-selected="true"]) > .area-asset-card__frame,
+  .area-asset-grid__item[aria-selected="true"] .area-asset-card--containerless > .area-asset-card__frame { border-color: var(--area-stroke-selected); }
+  .area-asset-card--containerless:is(.area-asset-card--image, .area-asset-card--group):is([data-selected], [aria-pressed="true"], [aria-selected="true"]) > .area-asset-card__frame,
+  .area-asset-grid__item[aria-selected="true"] .area-asset-card--containerless:is(.area-asset-card--image, .area-asset-card--group) > .area-asset-card__frame {
+    --_ring: 0 0 0 calc(var(--area-stroke-width) * 2) var(--area-stroke-selected); /* spec: pick */
+  }
+  /* Focus rings the asset, not the clear card. */
+  :is(.area-asset-card--interactive:focus-visible, .area-asset-grid__item:focus-visible .area-asset-card).area-asset-card--containerless { outline: none; }
+  :is(.area-asset-card--interactive:focus-visible, .area-asset-grid__item:focus-visible .area-asset-card).area-asset-card--containerless > .area-asset-card__frame {
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-offset);
+  }
+  /* Hover: a component's frame shows the hovered edge; an image or a group, a hairline in it. No lift: a shadow round a
+     clear card would draw a box the page never shows. */
+  @media (hover: hover) {
+    :is(.area-asset-card--interactive:hover, .area-asset-grid__item:hover:not([aria-selected="true"]) .area-asset-card).area-asset-card--containerless:not([data-selected], [aria-pressed="true"], [aria-selected="true"]) > .area-asset-card__frame { border-color: var(--area-edge-control-hover); }
+    :is(.area-asset-card--interactive:hover, .area-asset-grid__item:hover:not([aria-selected="true"]) .area-asset-card).area-asset-card--containerless:is(.area-asset-card--image, .area-asset-card--group):not([data-selected], [aria-pressed="true"], [aria-selected="true"]) > .area-asset-card__frame { --_ring: 0 0 0 var(--area-stroke-width) var(--area-edge-control-hover); }
+    :is(.area-asset-card--interactive:hover, .area-asset-grid__item:hover .area-asset-card).area-asset-card--containerless { --_lift: 0 0 0 0 transparent, 0 0 0 0 transparent; box-shadow: none; }
+  }
+
   /* --- The grid ------------------------------------------------------------- */
   .area-asset-grid {
     --_card-size: 224px; /* spec: pick, a column's least width */
     --area-asset-card-size: var(--_card-size);
   }
+  .area-asset-grid--grid {}
+  /* Waterfall: columns of the grid's least width, each card hugging its asset and dropped into the shortest column in
+     reading order (Pinterest's board), so Left and Right still step in order and Up and Down find the nearest card.
+     The grid places the cards once it has measured them (data-placed); before that they keep the grid's flow. */
+  .area-asset-grid--waterfall[data-placed] { display: block; position: relative; }
+  .area-asset-grid--waterfall[data-placed] > .area-asset-grid__item { position: absolute; box-sizing: border-box; }
   .area-asset-grid.area-list-box--grid:has(> .area-list-box__item),
   .area-asset-grid.area-list-box--grid .area-list-box__options {
     grid-template-columns: repeat(auto-fill, minmax(var(--area-asset-card-size), 1fr));

@@ -46,8 +46,8 @@ test('rows share one hover plate and one selection plate, and selection outranks
 
 test('every surface takes its depth from its elevation role', () => {
   // The Elevation axis (axes/elevation.ts, owner 2026-10-14): components name a role; Shadow (Elevation), Rest and Field
-  // shadow and the Edge and Depth controls (axes/depth.ts, 2026-10-18) set its depth. Every role is one fixed slot list in every setting (the lip, six soft
-  // layers, the highlight), so settings swap and transition layer by layer; "no lift" is a transparent layer, never
+  // shadow and the Edge and Depth controls (axes/depth.ts, 2026-10-18) set its depth. Every role is one fixed slot list in every setting (the lip, the dark
+  // rim, six soft layers, the highlight), so settings swap and transition layer by layer; "no lift" is a transparent layer, never
   // `none`, because a role also sits inside lists (Board card's ring, the floating Toolbar's edge) where `none`
   // invalidates the whole box-shadow and drops the ring with it.
   const layers = value => { let depth = 0, count = 1; for (const ch of value) { if (ch === '(') depth++; else if (ch === ')') depth--; else if (ch === ',' && depth === 0) count++; } return count; };
@@ -58,7 +58,10 @@ test('every surface takes its depth from its elevation role', () => {
     assert.ok(values.length >= 2, `--area-shadow-${role} is not derived`);
     for (const value of values) {
       assert.notEqual(value, 'none', `--area-shadow-${role} is none; use a transparent shadow`);
-      assert.equal(layers(value), 8, `--area-shadow-${role} is not the eight slots: ${value}`);
+      assert.equal(layers(value), 9, `--area-shadow-${role} is not the nine slots: ${value}`);
+      // The dark rim (2026-10-19): second, transparent in light, white in dark at the role's own step, capped.
+      const second = (() => { let depth = 0, start = -1; for (let i = 0; i < value.length; i++) { const ch = value[i]; if (ch === '(') depth++; else if (ch === ')') depth--; else if (ch === ',' && depth === 0) { if (start < 0) start = i + 1; else return value.slice(start, i).trim(); } } return ''; })();
+      assert.match(second, /^0 0 0 1px light-dark\(transparent, rgb\(255 255 255 \/ min\(0\.16, calc\(var\(--area-(elevation|shadow-resting-step|shadow-field-step)\) \/ 100 \* [\d.]+ \* 2\)\)\)\)$/, `--area-shadow-${role} has no dark rim at its step: ${second}`);
       assert.match(value, /^0 1px 0 0 /, `--area-shadow-${role} does not start with the lip`);
       assert.match(value, /, inset 0 1px 0 0 light-dark\(rgb\(255 255 255 \/ var\(--area-shadow-highlight-light\)\), rgb\(255 255 255 \/ var\(--area-shadow-highlight-dark\)\)\)$/, `--area-shadow-${role} does not end with the highlight`);
     }

@@ -175,3 +175,5 @@ export const abbreviationVariants = /* @__PURE__ */ createVariants(manifests.abb
 export const hatnoteVariants = /* @__PURE__ */ createVariants(manifests.hatnote);
 export const linkGroupsVariants = /* @__PURE__ */ createVariants(manifests.linkGroups);
 export const videoPlayerVariants = /* @__PURE__ */ createVariants(manifests.videoPlayer);
+export const surfaceVariants = /* @__PURE__ */ createVariants(manifests.surface);
+export const stackVariants = /* @__PURE__ */ createVariants(manifests.stack);
