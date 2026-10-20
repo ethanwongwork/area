@@ -1,169 +1,175 @@
 # Development
 
-Use Node 22.18+, 24.x, or 26+ and npm workspaces. Install with `npm ci`.
+Commands, checks and how to verify work. How the code is organized is in
+[Architecture](ARCHITECTURE.md).
 
-## Architecture
-
-The dependency order is tokens → styles → React → docs. Keep these four boundaries;
-a smaller folder count would not justify coupling CSS to React or docs to token internals.
-
-- `packages/tokens/src/`: palette math, semantic resolution, axis registry and emitters.
-  The build validates namespace ownership and emits CSS, JSON, config helpers and types.
-- `packages/styles/src/`: framework-free component CSS plus `manifest.ts`. Build bundles
-  the stylesheet, checks selector/manifest parity, and checks that every `var(--area-*)`
-  names a defined token or carries a fallback (`scripts/check-token-refs.mjs`).
-- `packages/react/src/`: markup, native behavior, composition and typed variant helpers.
-  `scripts/build-modules.mjs` emits ESM and declarations without bundling away boundaries.
-- `apps/desktop/`: the app and the source of truth. `src/content/` holds the component content
-  (`pages.mjs`), owner-confirmed status (`component-status.mjs`), specimens and their names, the demo
-  registry and every demo; `src/gallery/` the tile fit and the Canvas controls.
-- `apps/docs/`: the archived site, not a source of truth. Its build (`render.mjs`, `build.mjs`) still
-  reads the app's content and demos. Area's icon pipeline is in `packages/icons`; the old Fluent map
-  (`scripts/gen-icons.mjs` and its outputs) is still here.
-
-The site has no application backend, database or required secrets. Geist fonts currently
-load from a pinned external URL; custom consumers may supply their own font tokens.
+Use Node 22.18+, 24.x or 26+ and npm workspaces. Each worktree needs its own install:
+`npm ci`.
 
 ## Daily commands
 
 ```sh
-npm run dev            # the desktop app (Electron), reloading on change
+npm run build          # tokens → styles (parity, token refs) → react → icons
+npm run dev            # the desktop app in Electron, reloading on change
 npm run preview        # the same, plus the app in a browser at http://localhost:4400
-npm run dev:docs       # the archived docs site at http://localhost:4321
-npm run build          # tokens, styles/manifest, React JS + declarations
-npm run build:docs     # package build, static site, docs audit
-npm run typecheck      # packages, demos and browser lab
-npm test               # token math, axes and contrast
+npm run typecheck      # every workspace
+npm test               # token math, axes and the contrast gate
 ```
 
-`build` does not run tests. Build before typechecking a fresh checkout because docs
-resolve the compiled React declarations. Do not run competing full builds against the
-watcher: it may replace declarations during typecheck. Stop the dev process first when
-running the full verification sequence, then restart it for preview.
-
-The desktop app (`apps/desktop`) bundles `src/main.tsx` with esbuild into `apps/desktop/dist` and
-copies `area.css` beside it. The Electron window always shows the checkout that started it:
-starting `dev` or `preview` closes any other Area dev window (another worktree's included), a
-renderer rebuild reloads the window and the browser page, a change under `apps/desktop/electron`
-restarts the window, and a change under `packages/<name>/src` rebuilds that package and the ones
-after it (tokens → styles → react). Icons are not watched; run `npm run build -w @area/icons`
-after regenerating them. `preview -- --no-electron` serves the browser alone.
-
-The archived docs site's development server watches source changes, builds into an ignored staging directory
-and swaps in a successful immutable snapshot. A failed build retains the prior preview.
-Restart after editing server/watcher code. `PORT=4322 npm run dev:docs` chooses another port.
-`npm run build:docs` writes `apps/docs/dist`; the static server must restart to read a new
-snapshot. Completion status is source data under `apps/desktop/src/content`.
-
-## Continuous integration
-
-`.github/workflows/ci.yml` runs on every pull request and on `main` (Ubuntu, Node 24): `npm ci`,
-`build` (which lints every icon), `typecheck`, `npm test`, `test:contracts`, `test:icons`, the React
-suites, the desktop build with `check:playgrounds`, `test:consumer`, and a check that the build left
-tracked files unchanged. About ten minutes, most of it the icon build. It skips the Electron binary and
-checks nothing in a browser: preview, contrast in the rendered app, forced colours and a 1x display
-still need a session. If a lockfile change is needed, run `npm install` and commit `package-lock.json`;
-`npm ci` refuses a lockfile that disagrees with a workspace's `package.json`.
+- **What `dev` and `preview` do.**
+  - They bundle `apps/desktop/src/main.tsx` into `apps/desktop/dist`.
+  - Starting either closes every other Area dev window, including another worktree's.
+  - A renderer change reloads the window and the browser page.
+  - A change under `apps/desktop/electron` restarts the window.
+  - A change under `packages/<name>/src` rebuilds that package and the ones after it.
+- **Browser only.** `npm run preview -w @area/desktop -- --no-electron` serves the browser
+  without a window. Pass `PORT=4421` to use another port.
+- **Icons are not watched.** After regenerating icons, run `npm run build -w @area/icons`.
+- **`build` runs no tests.** Build before typechecking a fresh checkout: the app and tests
+  read the compiled packages.
+- **One full build at a time.** Don't run a full build against the running watcher, which
+  may replace declarations mid-typecheck. Stop `dev` first and restart it after.
 
 ## Checks by change
 
-- **Docs/content/gallery:** docs build/audit, typecheck when TSX changes, inspect the pages.
-- **CSS/manifest/React:** docs build (includes parity), typecheck, relevant component tests,
-  and browser behavior/geometry checks for affected cases.
-- **Tokens/color/focus/state painting:** also run `npm test` and
-  `node packages/tokens/src/contrast/report.ts`; never lower floors to obtain a pass.
-- **Packaging/exports:** also run `npm run test:consumer` after build.
-- **Preview/server:** run `npm run test:preview` and restart/inspect the live preview.
+| Change | Run |
+|---|---|
+| Any | `git diff --check`; look at the result in the app |
+| Docs and skills only | Read every link you touched; nothing else |
+| Documentation entries (`content/documentation/`) | `npm run check:docs -w @area/desktop` |
+| App content, demos, tiles | `npm run build -w @area/desktop`, `npm run check:playgrounds -w @area/desktop`, `npm run typecheck` |
+| Component CSS, manifest, React | `npm run build` (parity and token refs run in the styles build), `npm run typecheck`, `node --test packages/react/tests/<family>.test.mjs` and `cohesion.test.mjs`, `npm run check:docs -w @area/desktop`, then the app |
+| Tokens, colour, focus, state paint | `npm test` and `node packages/tokens/src/contrast/report.ts` (exits non-zero on a failure). Never lower a floor or add a waiver to pass |
+| Package exports | `npm run test:consumer` after a build |
+| Icons | The `area-icon-construction` skill's gate; `npm run test:icons` |
+| App chat code | `npm run test:desktop` |
 
-Targeted checks:
+**Full sweep before a pull request:** `npm run build && npm run typecheck && npm test && npm run test:contracts && node --test packages/react/tests/*.test.mjs && npm run check:playgrounds -w @area/desktop && npm run check:docs -w @area/desktop`.
+
+## Continuous integration
+
+`.github/workflows/ci.yml` runs on every pull request and on `main` (Ubuntu, Node 24,
+about ten minutes, most of it the icon build). It runs:
+
+1. `npm ci`;
+2. `build`, which lints every icon;
+3. `typecheck`;
+4. `npm test`;
+5. `test:contracts`;
+6. `test:icons`;
+7. the React suites;
+8. the desktop build with `check:playgrounds` and `check:docs`;
+9. `test:consumer`;
+10. a check that the build left tracked files unchanged.
+
+It skips the Electron binary and checks nothing in a browser. Preview, rendered contrast,
+forced colours and a 1x display still need a session. `npm ci` refuses a lockfile that
+disagrees with a workspace's `package.json`; run `npm install` and commit the lockfile.
+
+## Verifying in the app
+
+The app is the source of truth, so every visible change is judged there.
+
+- **Run the app from the worktree you changed.**
+  - Before starting, check who owns the port: `lsof -iTCP:4400 -sTCP:LISTEN`, and the
+    process's working directory.
+  - Another session's server may hold it. Then use `PORT=<free> npm run preview -w
+    @area/desktop -- --no-electron`, or a static build: `npm run build -w @area/desktop`
+    and serve `apps/desktop/dist` (the `desktop-dist` launch config, port 4410).
+- **When the work is done, leave one window.**
+  - Quit every Area Electron and relaunch it from the finished worktree, so the owner never
+    judges a stale window.
+  - A `dev.mjs` left running by an earlier session respawns its window, so stop it too.
+- **Check light and dark at the app's scale**, then the extremes of every setting the
+  change touches (Inspector › Theme).
+- **A hidden browser pane stops painting.** Transitions don't advance, and focus and
+  `requestAnimationFrame` don't run.
+  - Read values with `transition: none` injected.
+  - Or measure in headless Edge over the DevTools protocol: inject the capture script,
+    set each tile's stage to `scale: 1`, and capture in the same task.
+- **Capture script.** The app does not load `apps/docs/public/area-capture.js`, and its
+  CSP (`script-src 'self'`) blocks `eval` and injected `<script>` tags. Pass the script's
+  full text as the browser tool's JavaScript instead: that runs through DevTools, outside
+  the page's CSP. Fetching it from the dev server returns the app's page, not the script.
+
+## Icons
+
+Area's icons have their own tools in `packages/icons/scripts`; the process is the
+`area-icon-construction` skill.
 
 ```sh
-npm run lint:manifest   # manifest parity and token references
-npm run audit
-npm run test:badge
-npm run test:switch
-npm run test:contracts
-npm run test:consumer
-npm run test:preview
-git diff --check
-```
-
-Browser fixtures include `lab.html` (interaction), `scopes.html` (theme inheritance),
-`contrast.html` (rendered paint), `inset.html` (optical geometry), and `switch-audit.html`
-(Switch checks). Use the relevant fixture rather than all of them for every copy edit.
-The frozen inset comparison stylesheet is `tests/fixtures/inset-before.css`; historical
-reports are not build dependencies. See the gallery at desktop/narrow widths and both
-UI scales/themes when visual changes warrant it.
-
-## Files to keep and regenerate
-
-Keep the manifest, package tests, consumer fixture, lockfile, browser checks and useful
-build scripts. They enforce the library's quality rather than documenting a process.
-
-Keep `apps/docs/assets/area-icons/` and `area-icons-filled/` as vendored inputs, and the
-checked-in generated sprites, `src/icons.tsx`, `scripts/icons.generated.mjs` and
-`scripts/icons.catalog.mjs` as build inputs. Regenerate with:
-
-```sh
-node apps/docs/scripts/gen-icons.mjs
-```
-
-Area's own icons (`packages/icons/sources/`) have their own tools in `packages/icons/scripts/`; the
-process is the `area-icon-construction` skill's quick path.
-
-```sh
-npm run icons:find -- brain "paper plane"          # does Area have it already?
-npm run icons:geometry                             # fillets, cuts, lobes, gaps (prints usage)
+npm run icons:find -- brain "paper plane"             # does Area have it already?
+npm run icons:geometry                                # fillets, cuts, lobes, gaps (prints usage)
 node packages/icons/scripts/generate.mjs --only a,b   # lint just these icons in a second
-npm run icons:batch -- batch.json                  # record a batch everywhere it belongs
-npm run icons:sheet -- compare out.png batch-43    # Area beside Fluent, outline and filled
-npm run icons:pilot                                # full lint (about 3 minutes) and generate
-npm run icons:refs -- fetch                        # Lucide, Phosphor, Hugeicons, Material metadata into .cache
-npm run icons:keywords                             # rebuild sources/keywords.json (after a generate)
+npm run icons:batch -- batch.json                     # record a batch everywhere it belongs
+npm run icons:sheet -- compare out.png batch-43       # Area beside Fluent, outline and filled
+npm run icons:pilot                                   # full lint (a few minutes) and generate
+npm run icons:refs -- fetch                           # Lucide, Phosphor, Hugeicons metadata into .cache
+npm run icons:keywords                                # rebuild sources/keywords.json (after a generate)
 ```
 
-Do not commit `dist/`, `.cache/`, `node_modules/`, test output or logs. Source checkouts
-cloned for research go in the ignored `.cache/sources/<system>@<sha>/`.
+The old Fluent map (`apps/docs/scripts/gen-icons.mjs` and its outputs) still feeds the
+archived docs and the Iconography demo. Keep its vendored inputs; never hand-edit generated
+assets.
 
 ## Research captures
 
-`apps/docs/public/area-capture.js` measures an element's layer tree (geometry, insets from
-parent and shell, computed styles, text cap/baseline, SVG viewBox and ink, pseudo-elements
-and readable declared rules). The gallery loads it; on other pages, run its full text in
-the browser. Captures are saved under `docs/research/captures/<slug>/` and compared with:
+`apps/docs/public/area-capture.js` measures an element's layer tree: geometry, insets from
+parent and shell, computed styles, text cap and baseline, SVG viewBox and ink,
+pseudo-elements and readable declared rules. Captures go in
+`docs/research/captures/<slug>/` and are compared with:
 
 ```sh
 npm run capture:compare -- docs/research/captures/indicator/*.json
-node scripts/validate-badge.mjs   # every Badge gallery capture against docs/specs/badge.md
 ```
 
 The workflow is in [Building a component](COMPONENT_ADAPTATION.md#capture-protocol).
-Read each capture before committing it: redaction is on by default off localhost, but
+Redaction is on by default off localhost, but read each capture before committing it:
 committed captures must not contain personal content.
 
-## Package contract and remaining release work
+## Files to keep and not commit
 
-Only `dist` is packed. Public imports use compiled ESM and `.js` relative references.
-CSS is imported separately. Token root/config exports are DOM-free; style manifest and
-React variants are explicit entry points. Source paths are private.
+- **Keep** the manifest, package tests, consumer fixture, lockfile, checks and build
+  scripts. They enforce quality rather than describe a process.
+- **Don't commit** `dist/`, `.cache/`, `node_modules/`, test output, logs, or captures that
+  hold personal content. Research checkouts go in the ignored `.cache/sources/<system>@<sha>/`.
 
-The consumer check packs local tarballs, tests export targets and strict NodeNext types,
-renders without a DOM, and bundles browser JS/CSS with tree-shaking. It does not publish
-or test an external registry installation. React peer-version and RSC framework coverage
-still need explicit verification; do not infer either from a passing Node render.
+## The archived docs site
 
-Existing limitations include incomplete composite-widget behavior and motion-0
-coverage. Native Windows forced colors, assistive technology, touch behavior and
-cross-engine execution remain release validation work.
-The standard soft-border presentation has documented contrast shortfalls; see
-[Contrast](CONTRAST.md). Completion means owner acceptance of a family, not universal
-accessibility certification or permission to publish a package.
+`apps/docs` is archived and is not a source of truth. Don't extend it or check work there.
+Some of the system still runs through it until the move finishes ([Architecture › Loose
+ends](ARCHITECTURE.md#loose-ends)):
+
+- the capture script;
+- the component review page generator (`apps/docs/scripts/component-review.mjs`);
+- the Fluent icon map;
+- `axis-preferences.test.mjs` in `test:contracts`;
+- its own typecheck.
+
+`npm run dev:docs`, `build:docs`, `audit` and `test:preview` still exist for that code.
+
+## Release boundary
+
+- **The packages are unpublished.** They are local ESM workspaces. Only `dist` is packed,
+  public imports use compiled ESM, CSS is imported separately, and source paths are private.
+- **What the consumer check covers.** It packs local tarballs, tests export targets and
+  strict NodeNext types, renders without a DOM, and bundles browser JS and CSS. It does not
+  test a registry install, React peer versions or RSC frameworks.
+- **Still to verify before a release:**
+  - native Windows forced colours;
+  - assistive technology;
+  - touch;
+  - cross-engine behaviour;
+  - the soft-border contrast shortfalls ([Contrast](CONTRAST.md)).
+- **Completion is not certification.** It means the owner accepted a family, not that the
+  library is accessible everywhere or ready to publish.
 
 ## Keeping documentation small
 
-The active docs are the guides linked from the root README. Keep current contracts in
-them, exact APIs in source/live pages, each component's evidence and decisions in its
-spec, and history in Git and the journal. Do not create a new plan, report or skill for
-routine component work. Update `.Codex/HANDOFF.md` after
-substantial work; append concise decisions to the journal when useful. Neither a report
-nor a session summary can overrule the completion registry or the owner's latest request.
+Where each fact lives is in [Governance › Where each fact lives](GOVERNANCE.md#7-where-each-fact-lives).
+
+- Don't create a new plan, report or skill for routine component work.
+- Update `.Codex/HANDOFF.md` after substantial work. Its "Current state" stays short, and
+  history goes below it.
+- A report or session summary never overrules the status registry or the owner's latest
+  request.

@@ -1,9 +1,43 @@
-# Handoff — 2026-10-19
+# Handoff
 
-Each session starts from `main` in its own worktree (`claude/*` branch) and merges through a
-pull request; icons and components run as separate sessions.
-System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
-session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
+## Current state (2026-10-19)
+
+- **Status.** `main` is at PR #139. Asset card is the only family in review; the other 115 are
+  Complete (`apps/desktop/src/content/component-status.mjs`).
+- **Sessions.** One session at a time. Each starts from `origin/main` in its own worktree
+  (`claude/*`) and merges through a PR. Check open PRs first.
+- **Running the app.** `npm run dev` runs Electron and `npm run preview` adds
+  http://localhost:4400 (check who holds the port first). Icons are in the app's Icons tab.
+- **Docs.** Restructured on branch `claude/design-system-docs-da9a6a`:
+  - new `docs/PRINCIPLES.md`, `GOVERNANCE.md` and `ARCHITECTURE.md`;
+  - `DESIGN_SYSTEM.md`, `THEMING.md`, `COMPONENTS.md` and `DEVELOPMENT.md` rewritten;
+  - every family has a Documentation entry (`apps/desktop/src/content/documentation/`,
+    checked by `npm run check:docs -w @area/desktop`, also in CI);
+  - new skills `area-component-intake`, `area-component-docs` and
+    `area-foundation-change`;
+  - the icon skill split into references.
+  - About 50 specs' current-state sections are reconciled with the code, and spec Status
+    lines are removed (status lives only in the registry). Stale `pages.mjs` notes and code
+    comments are fixed.
+- **Applied.** The owner's verdicts from the review page (https://claude.ai/artifact/Kbw21Vq97U6PRMtSniHWkv) are applied:
+  - all 9 recommendations, recorded as 2026-10-19 decisions in the specs:
+    - menus open on their checked row;
+    - video skips are 10 s;
+    - a timestamp only before a person's message, an hour after any turn;
+    - Infobox image at the container corner;
+    - Titlebar 41 superseded;
+    - Progress `label` kept;
+    - Context menu `menuLabel` recorded;
+    - ChipLink follows Pills;
+    - Combobox `variant` typed, a written exception.
+  - 8 accessibility fixes kept.
+  - The astra-6 worktree's leftovers discarded; a patch is kept in `.git-stray-refs-backup-2026-10-14/`.
+- **Open.**
+  - Agent chat Phase 3 (the engine) is not started.
+  - Material bundles are named presets, which conflicts with "no named looks"; ask before
+    changing them.
+- **Rule for this file.** This section stays under 40 lines and is rewritten, not appended.
+  Entries below are history, newest first.
 
 ## Inspector chat merged with main (2026-10-19, branch `claude/unmerged-running-sessions-cb0df1`, PR)
 
