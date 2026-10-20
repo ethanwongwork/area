@@ -12,6 +12,7 @@ import { CanvasSettings } from "../canvas-settings.tsx";
 import { matches } from "../search.ts";
 import { AnalyticsDashboard } from "../content/examples/analytics.tsx";
 import { ChatScreen } from "../chat/chat.tsx";
+import { ABSTRACT_BOARD, AbstractBoard } from "../content/examples/abstract-board.tsx";
 
 const EXAMPLES = [
   {
@@ -29,6 +30,14 @@ const EXAMPLES = [
     families: ["Message", "Composer", "Model picker", "Prompt suggestions", "Scroll to latest", "Chip", "Code block", "Code", "Copy button", "Table", "Link", "Empty state", "Tooltip"],
     gaps: ["Steps and reasoning are plain lines until Phase 2's Step and Reasoning components; markdown is app-level until it is reviewed (docs/research/inspector-chat-2026-10-18)."],
     Screen: ChatScreen,
+  },
+  {
+    id: "abstract-board",
+    label: "Abstract board",
+    description: "The owner's Pinterest board oval / abstract (26 interface pieces), each rebuilt from Area's components alone, at Area's defaults.",
+    families: ["Panel", "Number field", "Select", "Segmented", "Toggle group", "Nav", "Search field", "Alignment picker", "Box field", "Box model", "Card", "Badge", "Folder", "Avatar", "Count", "Checkbox", "Radio", "Switch", "Date picker", "Pagination", "Dialog", "Menu", "Toolbar", "Titlebar", "Composer", "Kbd", "Custom select", "Table", "Split button", "Button", "Skeleton"],
+    gaps: ABSTRACT_BOARD.flatMap(piece => piece.gaps.map(gap => `${piece.id} ${piece.title}: ${gap}`)),
+    Screen: AbstractBoard,
   },
 ] as const;
 

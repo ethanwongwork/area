@@ -106,7 +106,7 @@ const NEUTRAL_ALIAS = "neutral";
 
 export const THEME_AXIS: AxisDefinition = {
   id: "theme",
-  label: "Theme",
+  label: "Mode",
   description: "Light or dark.",
   defaultPreset: "light",
   namespaces: [

@@ -13,6 +13,16 @@
 import type { CSSProperties, ReactNode } from "react";
 import { ColorSwatch } from "@area/react";
 import type { CanvasAxes } from "./studio.tsx";
+import { AXES } from "./tokens.ts";
+
+/** An Easing value's move curve (`--area-ease-in-out`, the registry's), as a path across the mark's box. */
+function curve(value: string) {
+  const preset = AXES.find(axis => axis.id === "easing")?.presets.find(entry => entry.id === value);
+  const [x1, y1, x2, y2] = (preset?.tokens["--area-ease-in-out"]?.match(/-?[\d.]+/g) ?? ["0", "0", "1", "1"]).map(Number);
+  // A 16 box with a 2 margin; y grows upward, and an overshoot rises past the top, as it does on the Canvas.
+  const at = (x: number, y: number) => `${2 + x! * 12} ${14 - y! * 12}`;
+  return <svg className="studio-mark studio-mark--curve" viewBox="0 0 16 16" aria-hidden="true"><path d={`M${at(0, 0)} C${at(x1!, y1!)} ${at(x2!, y2!)} ${at(1, 1)}`} /></svg>;
+}
 
 type Axis = keyof CanvasAxes;
 
@@ -71,6 +81,8 @@ export function optionMark(axis: Axis, value: string, canvas: CanvasAxes): React
     case "shadow-field": return <span className="studio-mark studio-mark--lift" aria-hidden="true" style={{ "--_lift": value } as CSSProperties} />;
     // The Menu's open as a share of the longest, 300 ms; 0 (None) is an empty ring.
     case "motion": return <span className="studio-mark studio-mark--duration" aria-hidden="true" style={{ "--_share": `${(Number(value) / 300) * 100}%` } as CSSProperties} />;
+    // The move curve each Easing draws.
+    case "easing": return curve(value);
     default: return null;
   }
 }

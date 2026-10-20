@@ -134,8 +134,9 @@ Zoom is Zoom control's stepper (− Auto +):
 chosen view holds across tabs and launches. A tab with nothing for a view leaves that pill
 out.
 
-- **Theme**: the Canvas settings under headings by what they shape (Color, Size, Shape,
-  Stroke, Shadow, Effects, Material), only those that change this tab's specimens.
+- **Language** (Theme until 2026-10-19, so the tab and the Inspector use one word): the
+  Canvas settings under the registry's headings (`SETTING_GROUPS`: Color, Size, Shape,
+  Stroke, Shadow, Effects, then Material), only those that change this tab's specimens.
 - **Design**: what is chosen, at its narrowest: a Canvas item, else the Sidebar's row, else
   the tab's overview. It shows, in order:
   1. the tab's display settings;

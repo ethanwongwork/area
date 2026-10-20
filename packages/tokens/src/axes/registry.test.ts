@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { AXES, attributeFor, checkAxisIntegrity, defaultPresetOf } from "./registry.ts";
+import { AXES, SCOPED_SETTINGS, SETTING_GROUPS, attributeFor, checkAxisIntegrity, defaultPresetOf, settingLabel } from "./registry.ts";
 import type { AxisDefinition } from "./schema.ts";
 
 describe("axis registry", () => {
@@ -18,8 +18,23 @@ describe("axis registry", () => {
 
   it("ships the axes the system promises", () => {
     expect(AXES.map((a) => a.id).sort()).toEqual(
-      ["accent", "action", "density", "elevation", "ground-dark", "ground-light", "layers-dark", "layers-light", "motion", "neutral", "radius", "selection", "shadow-color", "shadow-field", "shadow-light", "shadow-rest", "shadow-resting", "shadow-size", "shadow-softness", "stroke", "surface", "theme", "type"].sort(),
+      ["accent", "action", "density", "easing", "elevation", "ground-dark", "ground-light", "layers-dark", "layers-light", "motion", "neutral", "radius", "selection", "shadow-color", "shadow-field", "shadow-light", "shadow-rest", "shadow-resting", "shadow-size", "shadow-softness", "stroke", "surface", "theme", "type"].sort(),
     );
+  });
+});
+
+describe("setting groups", () => {
+  it("place every axis and scoped setting under exactly one heading", () => {
+    const placed = SETTING_GROUPS.flatMap((group) => group.settings);
+    expect(new Set(placed).size).toBe(placed.length);
+    expect([...placed].sort()).toEqual([...AXES.map((a) => a.id), ...SCOPED_SETTINGS.map((s) => s.id)].sort());
+  });
+
+  it("names a setting under its heading without repeating the heading", () => {
+    expect(settingLabel("Stroke width", "Stroke")).toBe("Width");
+    expect(settingLabel("Floating shadow", "Shadow")).toBe("Floating");
+    expect(settingLabel("Type size", "Size")).toBe("Type");
+    expect(settingLabel("Rest shadow", "Stroke")).toBe("Rest shadow");
   });
 });
 

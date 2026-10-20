@@ -10,8 +10,14 @@ on any ancestor changes every component inside it. The rules every setting follo
 
 Each is `data-area-<id>` on any element (in React, a `Theme` value). Missing settings
 inherit; an explicit setting starts a local scope. The registry
-(`packages/tokens/src/axes/registry.ts`) defines 23 axes. Most are one number named after
+(`packages/tokens/src/axes/registry.ts`) defines 24 axes. Most are one number named after
 what it measures.
+
+The registry is also the source of every setting's name and place (owner, 2026-10-19: "i want the axises to be the
+source of truth"). `SETTING_GROUPS` puts each axis and the two scoped settings (Contrast, Pills) under one heading
+(Color, Size, Shape, Stroke, Shadow, Effects) in order; each axis's `label` is its whole name (Mode, Stroke width,
+Floating shadow …), and `settingLabel` drops the heading's word under its heading (Width, Floating …). The app's
+Inspector and Language tab both read them from `@area/tokens/config`.
 
 **Colour**
 
@@ -79,6 +85,10 @@ headings, **Stroke** and **Shadow**:
 | `shadow-color` | Shadow › Colour | `black` (default), `warm`, `cool` | The light theme's shadow tint. Dark stays black |
 
 - Light always comes from the top, and dark shadows are twice the light alpha.
+- Every role is the same nine slots at every setting (a lip, the dark rim, six soft layers, a highlight), transparent
+  where unused, never `none`. The dark rim (owner, 2026-10-19: "make the shadow settings visible in dark mode") is
+  `0 0 0 1px` white at the role's own strength × 2, at most 16%, transparent in light, so shadows read on the
+  near-black page.
 - Under any raised contrast level, `border-width` is at least 1px, so Flat brings its frame
   back. The soft edge is drawn only while no frame is.
 - The ladder `shadow-1` … `4` is for apps. Components name roles.
@@ -88,6 +98,7 @@ headings, **Stroke** and **Shadow**:
 | Setting | Values (default) | What it sets |
 |---|---|---|
 | `motion` | `0` (None) … `300` in steps of 30, `210` (default) | The Menu's open in milliseconds. Every duration is a third-multiple of it ([Motion](MOTION.md)) |
+| `easing` | `standard` (default), `snappy`, `gentle`, `spring` | The shape of every transition (`--area-ease-*`, owned by Easing since 2026-10-19). Spring overshoots on enters and moves, never on exits ([Motion](MOTION.md)) |
 
 `0` and `prefers-reduced-motion` make every duration 0 and stop every loop.
 

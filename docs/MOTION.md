@@ -28,15 +28,28 @@ of it; `0` and `prefers-reduced-motion` make every one 0.
 150 is the old Subtle default. The thirds are the old Subtle's ratios; the old Expressive (150 / 250 / 320 / 400) sat within 10ms
 of 240. Anchors in the research: 150 Radix Themes and Tailwind, 210 Geist's popover (200) and
 ChatGPT's (220), 240 Figma's dropdown (250), 300 Primer's medium, where `slow` reaches 500, Primer's
-ceiling for UI motion. The number moves time only; easings are fixed. Loops do not follow it:
+ceiling for UI motion. The number moves time only; the curves are the Easing setting (below). Loops do not follow it:
 Spinner (1s a turn), Skeleton shimmer (3s), indeterminate Progress (1.8s), the Indicator pulse and
 Message cursor (1s) and the OTP field's caret blink (1s) run their measured periods and stop at `0` and under reduced motion.
 They stop through one token, `duration-loop` (1, or 0 at step 0), which multiplies each period and fades the Skeleton
 band and Progress stripe, so the nearest motion scope decides: a non-zero scope inside a `0` scope runs its loops.
 
-Easings:
+Easings: one setting, `data-area-easing` (`axes/easing.ts`, owner 2026-10-19: "an easing setting (Standard, Snappy,
+Gentle, Spring) beside the duration"). Each value sets the same roles, so components read the tokens below and never
+branch on it. Standard is the default and the values in this table. Every curve is a product's own
+(`docs/research/motion-2026-10-07/design-systems.md`):
 
-| Token | Value | Use |
+| Easing | `ease-out` | `ease-in-out` | `ease-in` | `ease-drawer` | From |
+|---|---|---|---|---|---|
+| Standard (default) | `(0.16, 1, 0.3, 1)` | `(0.65, 0, 0.35, 1)` | `(0.4, 0, 1, 1)` | `(0.32, 0.72, 0, 1)` | ChatGPT, Radix; Figma; Material, Tailwind; Vaul |
+| Snappy | `(0.19, 1, 0.22, 1)` | `(0.6, 0, 0.2, 1)` | `(0.6, 0, 0.8, 0.6)` | `(0.19, 1, 0.22, 1)` | Linear's expo-out; Primer; Atlassian in-practical |
+| Gentle | `(0.33, 1, 0.68, 1)` | `(0.33, 0, 0.67, 1)` | `(0.5, 0, 1, 1)` | `(0.33, 1, 0.68, 1)` | Primer overlay and side sheet; Fluent EasyEase; Spectrum |
+| Spring | `(0.175, 0.885, 0.32, 1.1)` | `(0.175, 0.885, 0.32, 1.275)` | `(0.4, 0, 1, 1)` | `(0.175, 0.885, 0.32, 1.1)` | Geist's swift; Material's switch handle; exits never overshoot |
+
+`ease-linear` is linear at every value, and the deprecated `ease-spring` keeps its value. Reduced motion makes every
+duration 0, so the curve no longer applies there.
+
+| Token | Value (Standard) | Use |
 |---|---|---|
 | `--area-ease-out` | `cubic-bezier(0.16, 1, 0.3, 1)` | almost everything: colour, enters, exits of anchored surfaces, marks (ChatGPT, Radix Themes) |
 | `--area-ease-in-out` | `cubic-bezier(0.65, 0, 0.35, 1)` | something moving across the screen while visible: switch thumb, tabs and segmented indicator, accordion height (Figma, Primer) |

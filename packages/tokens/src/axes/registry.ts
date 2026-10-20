@@ -14,6 +14,7 @@ import type { AxisDefinition, TokenMap } from "./schema.ts";
 import { ACCENT_AXIS, NEUTRAL_AXIS, THEME_AXIS } from "./color.ts";
 import { ACTION_AXIS, SELECTION_AXIS } from "./emphasis.ts";
 import { MOTION_AXIS } from "./motion.ts";
+import { EASING_AXIS } from "./easing.ts";
 import { RADIUS_AXIS } from "./radius.ts";
 import { REST_SHADOW_AXIS, SURFACE_AXIS } from "./surface.ts";
 import { ELEVATION_AXIS } from "./elevation.ts";
@@ -41,7 +42,35 @@ export const AXES: AxisDefinition[] = [
   // Edge and Depth's other controls (2026-10-18): Stroke, Rest and Field shadow, Shadow size, Softness, Light, Shadow colour.
   ...DEPTH_AXES,
   MOTION_AXIS,
+  EASING_AXIS,
 ];
+
+/**
+ * The settings as people meet them (owner, 2026-10-19: "i want the axises to be the source of truth"): every axis, plus
+ * the two scoped settings outside the registry (Contrast, Pills), under the headings the Inspector and the Language tab
+ * both show, in their order. A setting's name is its axis label; under its heading the heading's word is dropped
+ * (`settingLabel`): Stroke width reads Width under Stroke, Shadow size Size under Shadow.
+ */
+export const SETTING_GROUPS: ReadonlyArray<{ heading: string; settings: readonly string[] }> = [
+  { heading: "Color", settings: ["theme", "neutral", "accent", "ground-light", "ground-dark", "layers-light", "layers-dark", "action", "selection", "contrast"] },
+  { heading: "Size", settings: ["type", "density"] },
+  { heading: "Shape", settings: ["radius", "pills"] },
+  { heading: "Stroke", settings: ["surface", "stroke", "shadow-rest"] },
+  { heading: "Shadow", settings: ["elevation", "shadow-resting", "shadow-field", "shadow-size", "shadow-softness", "shadow-light", "shadow-color"] },
+  { heading: "Effects", settings: ["motion", "easing"] },
+];
+
+/** The scoped settings that are not axes: `data-area-contrast` (styles, docs/CONTRAST.md) and `data-area-pills` (pills.ts). */
+export const SCOPED_SETTINGS: ReadonlyArray<{ id: string; label: string; description: string }> = [
+  { id: "contrast", label: "Contrast", description: "How strong edges, focus and state are: System follows the OS; Medium and More strengthen them, More to 3:1." },
+  { id: "pills", label: "Pills", description: "Which components draw a pill instead of the Radius corner." },
+];
+
+/** A setting's name under its heading: the heading's word dropped ("Stroke width" under Stroke reads "Width"). */
+export function settingLabel(label: string, heading: string): string {
+  const short = label.replace(new RegExp(`\\b${heading}\\b`, "i"), "").replace(/\s+/g, " ").trim();
+  return short ? short[0]!.toUpperCase() + short.slice(1) : label;
+}
 
 /** `data-area-<id>` for each axis. */
 export function attributeFor(axis: AxisDefinition): string {

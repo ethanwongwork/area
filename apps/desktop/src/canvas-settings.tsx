@@ -11,35 +11,26 @@
  */
 import type { ReactNode } from "react";
 import { CustomSelect, Field, PanelSection, Segmented } from "@area/react";
-import { MATERIAL_BUNDLES, MATERIAL_LEVERS, MATERIAL_STROKE_STYLES, MATERIAL_SWITCHES } from "@area/tokens/config";
+import { MATERIAL_BUNDLES, MATERIAL_LEVERS, MATERIAL_STROKE_STYLES, MATERIAL_SWITCHES, SETTING_GROUPS } from "@area/tokens/config";
 import { DEPTH_LEVER_AXES, GALLERY_CONTROLS } from "./gallery/controls.ts";
 import { materialValue, type MaterialState } from "./material.ts";
 import { optionMark } from "./option-marks.tsx";
 import { useStudio, type CanvasAxes } from "./studio.tsx";
 
 type Axis = keyof CanvasAxes;
-// Headings never repeat a row's label (a Radius heading over a Radius row read twice).
-const GROUPS: ReadonlyArray<{ heading: string; axes: readonly Axis[] }> = [
-  { heading: "Color", axes: ["neutral", "accent", "ground-light", "ground-dark", "layers-light", "layers-dark", "action", "selection", "contrast"] },
-  { heading: "Size", axes: ["type", "density"] },
-  { heading: "Shape", axes: ["radius", "pills"] },
-  // Edge and Depth (axes/depth.ts, owner 2026-10-18: "i want to be able to control the individual controls as much as
-  // possible, but i think the previous system was too bloated"): nine controls, each on its own, no named looks, under
-  // two headings (owner: "can you separate edge from depth … maybe edge can just be called stroke"). They share nothing:
-  // Rest shadow (main, 2026-10-19: a subtle shadow round surfaces, "with the line or instead of it") sets surfaces
-  // apart as the line does, so it sits under Stroke with Width and Strength.
-  { heading: "Stroke", axes: ["surface", "stroke", "shadow-rest"] },
-  { heading: "Shadow", axes: ["elevation", ...DEPTH_LEVER_AXES.filter(axis => axis !== "stroke")] },
-  { heading: "Effects", axes: ["motion"] },
-];
+// Headings and their settings are the registry's (@area/tokens axes/registry.ts SETTING_GROUPS; owner, 2026-10-19: "i
+// want the axises to be the source of truth"), shared with the Language tab. Headings never repeat a row's label: a
+// setting under its heading drops the heading's word (src/gallery/controls.ts). Edge and Depth's controls (axes/depth.ts)
+// sit under Stroke (Width, Strength, Rest shadow) and Shadow (Floating, Resting, Field, Size, Softness, Light, Colour).
+const GROUPS = SETTING_GROUPS;
 
-export function CanvasSettings({ material, axes = ["neutral", "accent", "ground-light", "ground-dark", "layers-light", "layers-dark", "action", "selection", "contrast", "type", "density", "radius", "surface", "shadow-rest", "elevation", ...DEPTH_LEVER_AXES, "motion", "pills"], children }: { axes?: readonly Axis[]; material?: boolean; children?: ReactNode }) {
+export function CanvasSettings({ material, axes = ["neutral", "accent", "ground-light", "ground-dark", "layers-light", "layers-dark", "action", "selection", "contrast", "type", "density", "radius", "surface", "shadow-rest", "elevation", ...DEPTH_LEVER_AXES, "motion", "easing", "pills"], children }: { axes?: readonly Axis[]; material?: boolean; children?: ReactNode }) {
   // Material shows with every setting: a tab that narrows its settings shows no surfaces a material paints.
   const showMaterial = material ?? axes.length === GALLERY_CONTROLS.length - 1;
   return (
     <>
       {GROUPS.map(group => {
-        const shown = group.axes.filter(axis => axes.includes(axis));
+        const shown = (group.settings as readonly Axis[]).filter(axis => axes.includes(axis));
         return shown.length ? (
           <PanelSection key={group.heading} heading={group.heading}>
             {shown.map(axis => <Setting key={axis} axis={axis} />)}

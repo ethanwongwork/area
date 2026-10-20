@@ -31,6 +31,8 @@ import { bundleValue, materialAttributes, restoreMaterial, type MaterialState } 
 
 /* Text-only tabs (owner, 2026-10-11: no icons in the Titlebar's tabs). */
 export const TABS = [
+  /* Language: the system's settings, the registry's axes (owner, 2026-10-19: "i prefer language"; briefly Theme the
+     same day, dropped since theming reads as them-ing). */
   { id: "language", label: "Language" },
   { id: "components", label: "Components" },
   { id: "typography", label: "Typography" },
@@ -137,7 +139,7 @@ interface StudioState {
   select: (item: string, options?: { replace?: boolean }) => void;
   sidebar: boolean;
   inspector: boolean;
-  /** The Inspector's view (Theme, Design or Code), kept across tabs and launches. */
+  /** The Inspector's view (Language, Design or Code), kept across tabs and launches. */
   inspectorView: InspectorView;
   setInspectorView: (view: InspectorView) => void;
   /** Shows the Inspector if it is hidden (the Chat view's ⌘L). */
@@ -415,7 +417,7 @@ export function Workspace({ sidebar, canvasLead, canvasTitle, canvasActions, can
 /**
  * The Inspector's views (owner, 2026-10-18: "a figma style panel based on dev mode and the standard design panel … the
  * tab controls at the top … separate the current inspector to themes, design, and code"), as Figma's Design | Prototype
- * and Dev Mode: Theme holds the Canvas settings (src/canvas-settings.tsx); Design what is chosen, what it is (its
+ * and Dev Mode: Language (Theme until 2026-10-19) holds the Canvas settings (src/canvas-settings.tsx); Design what is chosen, what it is (its
  * preview, properties, values, status, purpose); Code how to use it (copy actions, import, class, tokens, code, the
  * measured box). One view at a time, chosen by Nav pills in the Panel's bar (the Titlebar's tabs, Figma's filled pills;
  * Tabs keeps the underline, docs/specs/tabs.md), the bar on the line the Canvas header and the Sidebar's first row share.
@@ -424,7 +426,9 @@ export type InspectorView = "theme" | "design" | "code" | "chat";
 export type InspectorViews = Partial<Record<Exclude<InspectorView, "chat">, ReactNode>>;
 /** Chat is the app's, not a tab's: every tab offers it, last (src/chat/chat.tsx; owner, 2026-10-18). */
 const INSPECTOR_VIEWS: ReadonlyArray<{ id: InspectorView; label: string }> = [
-  { id: "theme", label: "Theme" },
+  // Language (owner, 2026-10-19: the tab and the Inspector use one word; was Theme). The id stays "theme", so the
+  // saved choice holds.
+  { id: "theme", label: "Language" },
   { id: "design", label: "Design" },
   { id: "code", label: "Code" },
   { id: "chat", label: "Chat" },

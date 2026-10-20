@@ -56,7 +56,7 @@ const describe = (step: number) =>
  */
 export const ELEVATION_AXIS: AxisDefinition = {
   id: "elevation",
-  label: "Elevation",
+  label: "Floating shadow",
   description: "How much menus, popovers, tooltips and dialogs lift, and a hovered card, as the Menu's shadow strength from 0 (flat) to 8.",
   defaultPreset: "3",
   namespaces: ["--area-elevation:"],

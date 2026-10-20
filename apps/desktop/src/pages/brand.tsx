@@ -6,7 +6,9 @@
  * Assets and groups (owner, 2026-10-18: "the gallery for brand to just be a bunch of containers ... they are
  * essentially all assets, then you can group assets together in a group ... a 2x2 grid with each asset scaled down",
  * after Figma's file browser): every image is an asset in an Asset card, its name and detail line under the container;
- * a group (the library's folders) is an Asset card holding a 2 x 2 mosaic of its first four. The groups in the
+ * a group (the library's folders) is an Asset card holding a 2 x 2 mosaic of its first four. A group's assets show as a
+ * grid, a waterfall that hugs each asset (owner, 2026-10-19: "potentially a waterfall view that hugs the size of
+ * assets") or a list. Containerless is tried on Components first (owner, 2026-10-19), not here. The groups in the
  * Sidebar; on the Canvas an AssetGrid of groups, a group's assets, or one asset at full size; the chosen one in the
  * Inspector. Folder, File page and File tile stay in the library for file browsers.
  *
@@ -41,6 +43,7 @@ const kindLabel = (item: BrandItem) => item.kind === "jpeg" ? "JPG" : item.kind.
 /* Card sizes: a column's least width (the Asset grid's --area-asset-card-size). Medium is the default. */
 const SIZES = { small: 160, medium: 224, large: 320 } as const; /* pick */
 type Size = keyof typeof SIZES;
+type Mode = "grid" | "waterfall" | "list";
 
 function useLibrary() {
   const [state, setState] = useState<{ library?: Library; error?: string }>({});
@@ -60,7 +63,7 @@ export function BrandPage() {
   const { item, select, query } = useStudio();
   const [folderId, openedId] = (item ?? "").split("/");
   const [size, setSize] = useViewOption<Size>("brand:size", "medium", ["small", "medium", "large"]);
-  const [mode, setMode] = useViewOption<"grid" | "list">("brand:mode", "grid", ["grid", "list"]);
+  const [mode, setMode] = useViewOption<Mode>("brand:mode", "grid", ["grid", "waterfall", "list"]);
   const [chosen, setChosen] = useState<string | null>(null);
   const canvas = useRef<HTMLDivElement>(null);
 
@@ -137,9 +140,11 @@ export function BrandPage() {
     </Table>
   ) : (
     <AssetGrid aria-label={label} value={chosen} onValueChange={setChosen} onOpen={id => { const entry = entries.find(e => e.id === id); if (entry) openImage(entry); }}
+      layout={mode === "waterfall" ? "waterfall" : "grid"}
       style={{ "--area-asset-card-size": `${SIZES[size]}px` } as CSSProperties}>
       {entries.map(entry => (
-        <AssetGridItem key={entry.id} value={entry.id} name={nameOf(entry)} meta={`${kindLabel(entry)} · ${entry.width} × ${entry.height}`} media={url(entry.thumb)} textValue={nameOf(entry)} />
+        <AssetGridItem key={entry.id} value={entry.id} name={nameOf(entry)} meta={`${kindLabel(entry)} · ${entry.width} × ${entry.height}`} media={url(entry.thumb)}
+          mediaRatio={entry.width && entry.height ? entry.width / entry.height : undefined} textValue={nameOf(entry)} />
       ))}
     </AssetGrid>
   );
@@ -205,7 +210,7 @@ export function BrandPage() {
               <option value="medium">Medium</option>
               <option value="large">Large</option>
             </Select>
-            {folder || searching ? <ViewSwitch value={mode} onChange={setMode} /> : null}
+            {folder || searching ? <ViewSwitch waterfall value={mode} onChange={setMode} /> : null}
           </>}
         </ViewControls>
       }

@@ -120,7 +120,7 @@ export const COMPLETE_COMPONENTS = new Set([
 // Video player (2026-10-17): owner, round 36: "should there be a real video component with its own design player controls?".
 // Asset card (2026-10-18, main): the Brand tab's containers, assets and groups (owner, after Figma's file browser).
 // The agent chat set (rounds 49–54) is Complete above.
-export const REVIEW_COMPONENTS = new Set(['asset-card']);
+export const REVIEW_COMPONENTS = new Set(['asset-card', 'surface', 'stack']);
 export const componentStatus = slug => COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
 export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined' })[status];
 
@@ -159,6 +159,7 @@ export const APPROVAL_BATCHES = [
   { name: 'Choice controls', families: ['checkbox', 'radio', 'switch'] },
   { name: 'Values and tags', families: ['slider', 'chip', 'badge-group'] },
   { name: 'Content surfaces', families: ['card', 'table'] },
+  { name: 'Layout', families: ['surface', 'stack'] },
   { name: 'Overlays', families: ['dialog', 'confirm-dialog', 'drawer', 'tooltip', 'hover-card'] },
   { name: 'Command surfaces', families: ['context-menu', 'command-palette'] },
   { name: 'Conversation', families: ['message', 'composer', 'prompt-suggestions'] },
