@@ -29,3 +29,10 @@ test("a step with a problem, vertical layout, and custom status words", () => {
   assert.match(html, /area-stepper-step--invalid"><span class="area-stepper-step__body"><span class="area-stepper-step__marker" aria-hidden="true">!<\/span>/);
   assert.match(html, /, needs attention/);
 });
+
+test("the current step keeps aria-current=step when it is marked invalid", () => {
+  const html = render(h(Stepper, { current: 1, "aria-label": "Setup" },
+    h(StepperStep, { title: "Details" }), h(StepperStep, { title: "Members", status: "invalid" }), h(StepperStep, { title: "Review" })));
+  assert.equal((html.match(/aria-current="step"/g) ?? []).length, 1);
+  assert.match(html, /area-stepper-step--invalid" aria-current="step"/);
+});

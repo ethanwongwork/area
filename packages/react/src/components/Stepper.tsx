@@ -32,7 +32,7 @@ export interface StepperStepProps extends Omit<LiHTMLAttributes<HTMLLIElement>, 
 
 const STATUS_LABELS: Record<StepStatus, string> = { complete: "completed", current: "current step", upcoming: "not started", invalid: "has a problem" };
 
-type Injected = { index?: number; placed?: StepStatus; select?: (() => void) | undefined; statusLabel?: string };
+type Injected = { index?: number; placed?: StepStatus; current?: boolean; select?: (() => void) | undefined; statusLabel?: string };
 
 /**
  * An ordered list of steps (`ol`, named by `aria-label`), the current one `aria-current="step"` (ARIA 1.2's token
@@ -56,6 +56,7 @@ export const Stepper = /* @__PURE__ */ forwardRef<HTMLOListElement, StepperProps
           key: step.key ?? index,
           index,
           placed: status,
+          current: index === current,
           statusLabel: labels[status],
           select: reachable ? () => onStepSelect(index) : undefined,
         });
@@ -65,7 +66,7 @@ export const Stepper = /* @__PURE__ */ forwardRef<HTMLOListElement, StepperProps
 });
 
 export const StepperStep = /* @__PURE__ */ forwardRef<HTMLLIElement, StepperStepProps>(function StepperStep(props, ref) {
-  const { title, description, status: _status, disabled, index = 0, placed = "upcoming", select, statusLabel, className, ...rest } = props as StepperStepProps & Injected;
+  const { title, description, status: _status, disabled, index = 0, placed = "upcoming", current = placed === "current", select, statusLabel, className, ...rest } = props as StepperStepProps & Injected;
   const marker = (
     <span className="area-stepper-step__marker" aria-hidden="true">
       {placed === "complete" ? <Glyph name="check" size={12} /> : placed === "invalid" ? "!" : index + 1}
@@ -84,7 +85,8 @@ export const StepperStep = /* @__PURE__ */ forwardRef<HTMLLIElement, StepperStep
     <li
       ref={ref}
       className={stepperStepVariants({ status: placed }, className)}
-      aria-current={placed === "current" ? "step" : undefined}
+      // The step the person is on keeps aria-current="step" even when its status is invalid.
+      aria-current={current ? "step" : undefined}
       {...(disabled ? { "data-disabled": "" } : {})}
       {...rest}
     >

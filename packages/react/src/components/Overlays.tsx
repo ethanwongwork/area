@@ -116,7 +116,9 @@ export function AnchoredMenu({ trigger, open: openProp, defaultOpen, onOpenChang
   const [open, setOpen] = useOpenState(openProp, defaultOpen, onOpenChange);
   const [triggerNode, triggerRef] = useTriggerRef(trigger);
   const surfaceNode = useRef<HTMLDivElement | null>(null);
-  // Where focus lands when the menu opens: the surface (pointer), the first or the last item (keys).
+  // Where focus lands when the menu opens: the surface (pointer), the first or the last item (keys). A menu that holds
+  // a choice (a checked radio row: Model picker, zoom presets, sort) opens from the keyboard on that row instead, as a
+  // picker shows its current value (owner, 2026-10-19; ChatGPT's model menu, macOS pop-up buttons, Radix Select).
   const entry = useRef<"surface" | "first" | "last">("surface");
   const typed = useRef({ text: "", at: 0 });
   useNativePopover(surfaceNode, triggerNode, open, setOpen);
@@ -125,7 +127,8 @@ export function AnchoredMenu({ trigger, open: openProp, defaultOpen, onOpenChang
   useEffect(() => {
     if (!open || !surfaceNode.current) return;
     const items = enabledItems(surfaceNode.current);
-    const target = entry.current === "first" ? items[0] : entry.current === "last" ? items.at(-1) : surfaceNode.current;
+    const chosen = items.find(item => item.matches("[role='menuitemradio'][aria-checked='true']"));
+    const target = entry.current === "surface" ? surfaceNode.current : chosen ?? (entry.current === "first" ? items[0] : items.at(-1));
     (target ?? surfaceNode.current).focus({ preventScroll: true });
   }, [open]);
 

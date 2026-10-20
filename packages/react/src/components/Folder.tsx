@@ -32,7 +32,7 @@ export interface FolderProps extends Omit<HTMLAttributes<HTMLSpanElement>, "chil
   tone?: FolderVariants["tone"];
   /**
    * outline (default; owner, 2026-10-18: "make the outline appearance the default"): the back and the pocket flat in
-   * grey with a thin light edge, no sheet or shadow. solid: Finder's lit folder, back, sheet and pocket, in `tone`.
+   * control fill (`bg-component`) with a thin whole-pixel edge and a sheet tucked inside, no shadow. solid: Finder's lit folder, back, sheet and pocket, in `tone`.
    */
   variant?: FolderVariants["variant"];
   /** A number at the pocket's foot, at the end: how many items it holds. */
