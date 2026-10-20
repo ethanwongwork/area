@@ -1093,19 +1093,19 @@ export const fileGrid = {
 export const assetCard = {
   block: "area-asset-card",
   description: "Shows one asset, or a group of them as a 2×2 mosaic, in a container with its name and controls under it.",
-  variants: { layout: ["asset", "group"], caption: ["inside", "below"] },
+  variants: { layout: ["asset", "group"], caption: ["inside", "below"], container: ["framed", "containerless"], aspect: ["square", "hug"] },
   booleans: ["interactive"],
   states: ["selected"],
   elements: ["frame", "media", "mosaic", "cell", "caption", "text", "name", "meta", "actions"],
-  defaults: { layout: "asset", caption: "inside" },
+  defaults: { layout: "asset", caption: "inside", container: "framed", aspect: "square" },
 } as const satisfies ComponentManifest;
 
 export const assetGrid = {
   block: "area-asset-grid",
-  description: "Lays asset cards out as a grid to browse, choose from and open, with one Tab stop.",
-  variants: {},
+  description: "Lays asset cards out as a grid or a waterfall to browse, choose from and open, with one Tab stop.",
+  variants: { layout: ["grid", "waterfall"] },
   elements: ["item"],
-  defaults: {},
+  defaults: { layout: "grid" },
 } as const satisfies ComponentManifest;
 
 export const assetRow = {

@@ -5,6 +5,79 @@ pull request; icons and components run as separate sessions.
 System-wide files (icon generator, base styles, handoff) change in one session at a time. The dev server is `npm run dev` (4321 by default; port 3000 in the latest
 session). Open `/gallery-icons.html` for icons. Completion is owner-set in `apps/desktop/src/content/component-status.mjs` (Indicator and Tooltip are Complete).
 
+## Language tab from the axes (2026-10-19, same branch, uncommitted)
+
+Owner: align the Language tab with the theming axes, a cohesive name, axes as the source of truth, and Stroke and
+Shadow visuals tailored to each variable. The tab stays **Language** (owner: "i prefer language"; Theme tried and dropped).
+`SETTING_GROUPS`, `SCOPED_SETTINGS` and `settingLabel` in `packages/tokens/src/axes/registry.ts` (emitted in config) own
+every setting's heading, order and name; axis labels renamed (Mode, Stroke strength, Floating shadow, Resting shadow,
+Shadow softness, Shadow light). The Inspector (canvas-settings.tsx, gallery/controls.ts) and the Language tab read them;
+the Language tab's Sidebar has the Inspector's headings, its Inspector shows the tokens a preset writes and what a preview holds
+fixed. Stroke and Shadow tiles show the whole real component (card, card + field, field + button, menu) centred at 1.25–1.5x
+on the page ground (abstract.tsx CloseUp), other strokes and shadows off, the shared shadow controls on Floating 8;
+Neutral draws on the window with layers 8. A pixel audit (scratchpad audit3.mjs) found: every shadow invisible in dark
+(black on a near-black page), Neutral's tint at most 5/255 in light, Resting faint even at 8 (a 4% shadow). Fixed: Shadow
+light hid in Dark (matched the per-theme pattern). Open: Shadow colour's Warm and Cool stay subtle (their tint is small
+by design); Resting and Rest shadow are faint because they are. Checks: tokens 24272, React 501, desktop 5, contracts,
+typecheck, manifest; headless Edge captures. The Inspector's Theme view is now **Language** too (id `theme`
+kept), so the tab and the Inspector use one word.
+
+## Abstract board rebuild (2026-10-19, same branch, uncommitted)
+
+Owner: recreate the Pinterest board oval / abstract (27 pins; #22 a blank video thumbnail, skipped), then: "treat these
+images as images ... reconstruct the layout and composition as close as possible", no unnecessary variants. Testing →
+Abstract board (`apps/desktop/src/content/examples/abstract-board.tsx`) now renders 26 scenes
+(`examples/abstract/scenes-a|b|c.tsx`, `scene.tsx`): each is the reference's exact frame at the zoom where its controls
+land on Area's sizes (`box(zoom)` places measured reference px; Scene sets `--z` so `.sc-*` CSS in studio.css writes
+`calc(Npx / var(--z))`), built from Area components under scoped settings (ground, type, density, accent, pills,
+Material, nested grounds), with pictures drawn (map traced from the shot, photos as sampled bands marked spec). Each was
+compared ref | Area | overlay in headless Edge (scratchpad pieces.mjs, compare.py) and refined. 17 spans two board columns.
+Review: https://claude.ai/artifact/AmNsfSyEZWy8w9Wy8SoR1G (version 2, wipe slider per piece): 5 match, 36 gaps in four
+themes (drawn for want of a component, missing slot/option, colour and material, type). References live in the
+session scratchpad only, never the repo.
+
+## Dark shadows visible; Language readouts removed (2026-10-19, same branch, uncommitted)
+
+Owner: "make the shadow settings visible in dark mode on the near-black page". Every shadow role gains a dark rim
+(axes/depth.ts `rim`, slot 2 of now nine): `0 0 0 1px` white at the role's own step × 2, to 16%, transparent in light
+(Radix's dark light edge 17%, Fluent's 9.4% top, Raycast's ring; research elevation-stroke-2026-10-18 finding 7).
+Dark Floating / Resting / Field now measure 20–41/255 first-to-last (were 0–3); Shadow size still invisible in dark (a
+rim shows strength, not reach). cohesion.test.mjs: nine slots and a rim assertion. Light unchanged by construction.
+Then the owner: "i dont want to see any information visible on each card container, just the isolated visual" → the
+Language readouts are removed (the tile's name stays; ask whether it should go too).
+
+## Easing setting (2026-10-19, same branch, uncommitted)
+
+Owner: "add an easing setting (Standard, Snappy, Gentle, Spring) beside the duration, following the foundation-change
+process". New axis `easing` (`packages/tokens/src/axes/easing.ts`, `data-area-easing`) owns `--area-ease-*` (moved from
+Motion, which now moves time only); Standard is the default and emits today's curves exactly. Curves from
+docs/research/motion-2026-10-07 (table in docs/MOTION.md; row in docs/THEMING.md). Effects = Motion, Easing in
+SETTING_GROUPS; Inspector Select with a curve mark per option (option-marks.tsx); Language tiles flip the switch at
+Motion 300 with a curve readout. Checks: tokens 24272, React 501, desktop 5, typecheck, manifest, contrast report.
+Not swept: every family's transitions at Spring (overshoot on enters and moves, e.g. accordion height, toast).
+
+## Language readouts and terms (2026-10-19, same branch, uncommitted)
+
+Owner: "very simple, understandable visuals that show the details being considered for that axis"; asked for the
+terminology. Every Language tile now has a readout (abstract.tsx Readout) measured live from its drawing: Corner px,
+Row px, Line px, edge contrast ratios, page/sidebar/fill hex, shadow y · blur · %, Softness layer count, Light's
+highlight/lip %, Motion's duration ladder (fast · base · moderate · slow, with bars). Terms on the page: Language →
+Category → Setting → Value (code keeps axis and preset). Open for the owner: Motion has one number today (durations
+scale, curves fixed); candidate additions (easing, travel distance, reduced-motion) not built. Width 0.5/1.5 read
+1px on 1x screens (Chromium snaps borders).
+
+## Container views: containerless on Components, waterfall on Brand (2026-10-19, branch `claude/electron-ui-container-views-e74195`, uncommitted)
+
+Owner: a view setting for how asset/group containers show (containerless, a waterfall that hugs assets); then
+"test containerless on components first, not the brand assets and groups". Asset card gains `container` (framed ·
+containerless), `aspect` (square · hug), `mediaRatio`; AssetGrid gains `layout` (grid · waterfall, JS shortest-column
+placement, `data-placed`) and `container`. Containerless: a component keeps the frame's box with a clear edge (hovered
+edge on hover, selected edge when selected, no lift, no raised ground); an image or group drops the inset and is the
+surface. Components header: Container select after the zoom (All grid and a family's tiles; the Stage stays framed).
+Brand: Waterfall between Grid and List, no Container. Fixed: ListBox plates painted behind asset grid cards; Asset card
+now lists its gallery specimens. Picks in the spec's Open. Checks: React 501/501, desktop 5/5, typecheck, manifest;
+headless Edge captures. Electron runs from this worktree (the design-system-docs session's dev server was stopped).
+
 ## Inspector chat merged with main (2026-10-19, branch `claude/unmerged-running-sessions-cb0df1`, PR)
 
 Round 54 approved Approval: the whole agent chat set and the chat additions are Complete. Merged main (PRs #137, #138)

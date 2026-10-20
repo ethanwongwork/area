@@ -98,15 +98,16 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
       rows (`--area-menu-min-inline-size`).
     - The Inspector, without a title, in three views chosen by pills in its bar (owner, 2026-10-18: "a figma style
       panel based on dev mode and the standard design panel … separate the current inspector to themes, design, and
-      code"; `src/studio.tsx`, InspectorPanel): **Theme**, **Design**, **Code**, the Titlebar's Nav pills (Figma's
+      code"; `src/studio.tsx`, InspectorPanel): **Language** (Theme until 2026-10-19: the tab and the Inspector use one
+      word), **Design**, **Code**, the Titlebar's Nav pills (Figma's
       Design | Prototype), the bar on the line the Canvas header shares. The chosen view holds across tabs and
       launches; a tab with nothing for a view leaves its pill out (Brand and the Materials lab have no Code). A fourth,
       **Chat**, is the app's rather than a tab's, so every tab offers it (`src/chat/chat.tsx`; owner, 2026-10-18): its
       transcript is the Panel's body, followed to the newest line while the reader is at the end, and its composer the
       Panel's footer with no rule above it; ⌘L opens it and focuses the composer, Esc stops a reply. Its head holds the
       conversation's title and New chat (the bar has no room beside four pills at 256).
-      - Theme: the Canvas settings under headings by what they shape (Color; Size: type, density; Shape: radius,
-        pills; Stroke; Shadow; Effects; Material), only those that change this tab's specimens.
+      - Language: the Canvas settings under the registry's headings (`SETTING_GROUPS`: Color; Size: type, density;
+        Shape: radius, pills; Stroke; Shadow; Effects; then Material), only those that change this tab's specimens.
       - Design: what is chosen, at its narrowest: a Canvas item, else the Sidebar's row, else the tab's overview. The
         tab's own display settings first (Display: Typography's sample text), then a component's Properties, then the
         chosen thing's preview (unless the Canvas already shows it at size) and its actions, then one flush facts Table:

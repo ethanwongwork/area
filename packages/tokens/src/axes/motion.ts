@@ -20,7 +20,7 @@
  * ChatGPT's (220), 240 Figma's dropdown (250), 300 Primer's medium (dropdown, modal); the top step
  * stops where `slow` reaches 500, Primer's ceiling for any UI motion.
  *
- * `instant` is 0 at every step and the easings are fixed: the number moves time, never the curve.
+ * `instant` is 0 at every step. The number moves time, never the curve: the curve is Easing (easing.ts, 2026-10-19).
  * Every step keeps the same token names, so a component never branches on motion; 0 sets every
  * duration to 0 rather than removing transitions, which is what lets it double as the target for
  * `prefers-reduced-motion` (emit/css.ts).
@@ -40,21 +40,9 @@ export type MotionStep = (typeof MOTION_STEPS)[number];
 export const MOTION_NONE = "0";
 
 /*
- * Easings (docs/MOTION.md; research in docs/research/motion-2026-10-07/). ease-out is what ChatGPT
- * and Radix Themes ship; ease-in-out is Figma's and Primer's; ease-drawer is Vaul's edge-sheet curve.
- * ease-in was expo-in (0.7, 0, 0.84, 0), so slow to start that a 100ms exit read as a pause; it is
- * now the standard accelerate (Material, Polaris). ease-spring overshoots ~10% and is kept only for
- * compatibility: no component uses it (an overshoot reads as play, not as Area).
+ * The curves are their own setting since 2026-10-19 (easing.ts, owner: "add an easing setting ... beside the
+ * duration"): this axis moves time only.
  */
-const EASINGS = {
-  "ease-linear": "linear",
-  "ease-out": "cubic-bezier(0.16, 1, 0.3, 1)",
-  "ease-in": "cubic-bezier(0.4, 0, 1, 1)",
-  "ease-in-out": "cubic-bezier(0.65, 0, 0.35, 1)",
-  "ease-drawer": "cubic-bezier(0.32, 0.72, 0, 1)",
-  /** Deprecated: slight overshoot; no component uses it. */
-  "ease-spring": "cubic-bezier(0.34, 1.56, 0.64, 1)",
-};
 
 /** One duration at a step: the step's thirds. */
 export const duration = (step: number, thirds: number) => `${(step / 3) * thirds}ms`;
@@ -67,7 +55,6 @@ function stepTokens(step: number) {
     "duration-moderate": duration(step, 4),
     "duration-slow": duration(step, 5),
     "duration-loop": step === 0 ? "0" : "1",
-    ...EASINGS,
   });
 }
 
@@ -80,7 +67,7 @@ export const MOTION_AXIS: AxisDefinition = {
   label: "Motion",
   description: "How long transitions take, as the Menu's open in ms from 0 (none) to 300, 210 by default; every duration scales from it.",
   defaultPreset: "210",
-  namespaces: ["--area-duration-", "--area-ease-"],
+  namespaces: ["--area-duration-"],
   presets: MOTION_STEPS.map(step => ({
     id: String(step),
     label: step === 0 ? "0 (None)" : step === 210 ? "210 (Default)" : String(step),

@@ -5,7 +5,14 @@ for specific roles. Components do not need separate light/dark variants.
 
 ## Shared settings
 
-The registry in `packages/tokens/src/axes/registry.ts` defines twenty-two axes (seven Edge and Depth controls beside
+Names and headings (owner, 2026-10-19: "i want the axises to be the source of truth"): `SETTING_GROUPS` in
+`axes/registry.ts` places every axis and the two scoped settings (Contrast, Pills) under one heading (Color, Size, Shape,
+Stroke, Shadow, Effects) in order; each axis's `label` is its whole name (Mode, Type size, Stroke width, Stroke strength,
+Floating shadow, Resting shadow, Field shadow, Shadow size, Shadow softness, Shadow light, Shadow colour), and under its
+heading the heading's word is dropped (`settingLabel`: Width, Strength, Floating …). The app's Inspector and its
+Language tab both read them from `@area/tokens/config`.
+
+The registry in `packages/tokens/src/axes/registry.ts` defines twenty-four axes (seven Edge and Depth controls beside
 Surface and Elevation since 2026-10-18):
 
 - `theme`: light or dark color polarity.
@@ -60,7 +67,7 @@ Surface and Elevation since 2026-10-18):
   brings the frame back at 0. `shadow-edge-filter` is the same edge as a drop-shadow, for the Popover arrow. Required
   edges (`stroke-width`) and focus stay. A half pixel is one device pixel on a 2x screen; on a 1x screen Chromium draws
   it as one pixel and the insets that count it sit half a pixel off.
-- `elevation` (Floating in the app): one number, `0` (Flat) to `8`, `3` by default: the Menu's shadow strength in
+- `elevation` (**Floating shadow**; Floating under Shadow): one number, `0` (Flat) to `8`, `3` by default: the Menu's shadow strength in
   percent, as `radius` is the medium Button's corner (`axes/elevation.ts`, owner 2026-10-14;
   [research](research/elevation-2026-10-14.md)). It writes the number alone (`--area-elevation`) and sets the floating
   roles, `shadow-tooltip`, `shadow-float` (everything over the page), `shadow-modal` (Dialog, Drawer, Command palette)
@@ -68,8 +75,8 @@ Surface and Elevation since 2026-10-18):
   main 2026-10-19). `axes/depth.ts` derives every role; `shadow-control` (raised thumbs and plates) and `shadow-resting`
   (Card, Panel, Board card, Composer) read Resting lift and `shadow-field` (fields, select triggers, outline and soft
   buttons) Field shadow. At the defaults each is Fluent 2's two layers exactly (key `n × weight` %, ambient half, dark
-  doubled). The ladder `shadow-1`…`4` (control, resting, float, modal) is for apps. Every role is the same eight slots
-  at every setting (a lip, six soft layers, a highlight), transparent where unused, never `none`, so a role stays valid
+  doubled). The ladder `shadow-1`…`4` (control, resting, float, modal) is for apps. Every role is the same nine slots
+  at every setting (a lip, the dark rim, six soft layers, a highlight), transparent where unused, never `none`, so a role stays valid
   inside a component's own shadow list and every change interpolates.
 - The other Edge and Depth controls (`axes/depth.ts`, owner 2026-10-18: "i dont want any prepackaged, named themes, i
   want to be able to control the individual controls as much as possible, but i think the previous system was too
@@ -77,7 +84,7 @@ Surface and Elevation since 2026-10-18):
   on its own; there are no named looks:
   - `stroke`: how dark every stroke is, its distance from its ground, `0` (None) to `8`, `4` by default (today's);
     `color/layers.ts` `strokeEdge` scales each edge's offset. Contrast moves strokes on toward 3:1 from there.
-  - `shadow-resting`, **Resting lift**: cards, panels and raised thumbs at rest, `0` to `8`, `3` by default, in % as
+  - `shadow-resting`, **Resting shadow** (Resting lift until 2026-10-19): cards, panels and raised thumbs at rest, `0` to `8`, `3` by default, in % as
     Floating (was `shadow-rest` until main's Rest shadow took the name, 2026-10-19).
   - `shadow-field`: fields, select triggers, outline and soft buttons, `0` (Default) to `8`. Soft fields stay flat.
   - `shadow-size`: how far every shadow reaches (offset and blur × n/4), `0` to `8`, `4` by default.
@@ -96,8 +103,12 @@ Surface and Elevation since 2026-10-18):
   2026-10-14). Every duration scales from it in thirds: `fast` 2/3, `base` 1, `moderate` 4/3,
   `slow` 5/3, so 210 gives 140 / 210 / 280 / 350 (ChatGPT's popover opens in 220), 150 gives
   100 / 150 / 200 / 250 (the old Subtle) and 240 gives 160 / 240 / 320 /
-  400 (the old Expressive within 10ms). `instant` stays 0 and the easings are fixed. `0` and
+  400 (the old Expressive within 10ms). `instant` stays 0. `0` and
   `prefers-reduced-motion` make every duration 0. Replaces the None, Subtle and Expressive presets.
+- `easing` (owner, 2026-10-19): the shape of every transition, beside Motion's length: `standard` (default, today's
+  curves), `snappy`, `gentle`, `spring` (`axes/easing.ts`). It owns `--area-ease-*` (Motion owned them until now) and
+  sets out, in-out, in and drawer from measured products; Spring overshoots on enters and moves, never on exits.
+  Curves and sources: `docs/MOTION.md`.
 
 Keep the name `accent`: it is the system-selected chromatic role and may represent a
 product brand. Components never ask for it with a variant. They paint one of two emphasis

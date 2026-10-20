@@ -19,6 +19,15 @@
  *   Below: 8 under the frame, the name over the detail line (owner, 2026-10-18).
  *   The name is the UI text at the strong weight, the detail the caption size, muted (File tile's detail line);
  *   controls at the end, centred on the name's line.
+ * - Container (owner, 2026-10-19: "a view setting that changes how containers are shown strictly for assets and
+ *   groups ... containerless containers, and potentially a waterfall view that hugs the size of assets"):
+ *   framed (the default) draws the frame above; containerless draws none at rest, the asset on the page's own ground
+ *   (owner, 2026-10-19: "i want the containerless design to be tested on components first"). A component keeps the
+ *   frame's box and inset, its edge clear until hover (the hovered edge) or selection (the selected edge), so nothing
+ *   moves. An image or a group is its own surface instead: no inset, an image keeps its 12 corner, a group's four
+ *   cells close to 4 apart so they read as one thing, and the states paint the asset itself.
+ * - Aspect: square (the default) or hug, the frame as tall as its asset at the column's width (a waterfall's cards).
+ *   An image's ratio comes from the host (`mediaRatio`), so a lazy image holds its height before it loads.
  * - Public hook: `--area-asset-card-corner` (the container corner by default), for hosts that hold their own corner.
  * - Interactive (outside an asset grid, such as an app's gallery): hover lifts, a press drops it, keyboard focus rings
  *   the frame, `aria-pressed` and `aria-selected` show as the selected edge.
@@ -39,6 +48,8 @@
   .area-asset-card--asset {}
   .area-asset-card--group {}
   .area-asset-card--below {}
+  .area-asset-card--framed {}
+  .area-asset-card--square {}
   .area-asset-card--interactive { cursor: default; outline: none; }
 
   .area-asset-card__frame {
@@ -146,6 +157,39 @@
   .area-asset-card--inside .area-asset-card__meta { flex: none; margin-inline-start: auto; }
   .area-asset-card--inside .area-asset-card__actions { margin-block: calc((1cap - var(--area-control-sm)) / 2); }
 
+  /* Hug: the frame as tall as its content at the card's width; an image fills the width at its own ratio, a group's
+     mosaic stays square. */
+  .area-asset-card--hug > .area-asset-card__frame { aspect-ratio: auto; grid-template-rows: auto; }
+  .area-asset-card--hug.area-asset-card--inside > .area-asset-card__frame { grid-template-rows: auto auto; }
+  .area-asset-card--hug .area-asset-card__media > img { inline-size: 100%; max-block-size: none; }
+  .area-asset-card--hug .area-asset-card__mosaic { aspect-ratio: 1; }
+
+  /* Containerless: no edge, fill or shadow on the frame at rest. A component keeps the box, its edge clear; an image or
+     a group drops the inset too and is the surface. In a square an image sits on the square's floor, so a caption
+     below is always 8 under it (Finder's icon view sets icons on their labels). */
+  .area-asset-card--containerless > .area-asset-card__frame {
+    border-color: transparent;
+    background: transparent;
+    box-shadow: none;
+  }
+  .area-asset-card--containerless > .area-asset-card__frame:has(> .area-asset-card__media > img, > .area-asset-card__mosaic) {
+    padding: 0;
+    overflow: visible;
+    border-width: 0;
+  }
+  .area-asset-card--containerless.area-asset-card--square .area-asset-card__media { place-items: end center; }
+  .area-asset-card--containerless .area-asset-card__mosaic {
+    gap: var(--area-space-4); /* spec: pick, the four close enough to read as one group */
+    padding: 0;
+    border-radius: var(--area-radius-small);
+  }
+  .area-asset-card--containerless :is(.area-asset-card__media > img, .area-asset-card__mosaic) {
+    --_ring: 0 0 0 0 transparent;
+    box-shadow: var(--_ring), var(--_lift);
+    transition: box-shadow var(--area-duration-base) var(--area-ease-in);
+  }
+  .area-asset-card--containerless.area-asset-card--below .area-asset-card__caption { padding-block-start: var(--area-space-8); }
+
   /* Selected: the frame's edge in the selection colour, one line (the gallery tile's). */
   .area-asset-card:is([data-selected], [aria-pressed="true"], [aria-selected="true"]) > .area-asset-card__frame { border-color: var(--area-stroke-selected); }
 
@@ -164,6 +208,34 @@
   }
   .area-asset-card--interactive:active > .area-asset-card__frame { --_lift: 0 0 0 0 transparent, 0 0 0 0 transparent; transition-duration: var(--area-duration-fast), 0s; }
 
+  /* Containerless states paint the asset: selected is a ring in the selection colour, two lines (an image has no edge
+     for one line to recolour; pick), focus rings the asset, hover lifts it (the lift inherits from the frame). */
+  .area-asset-card--containerless:is([data-selected], [aria-pressed="true"], [aria-selected="true"]) :is(.area-asset-card__media > img, .area-asset-card__mosaic),
+  .area-asset-grid__item[aria-selected="true"] .area-asset-card--containerless :is(.area-asset-card__media > img, .area-asset-card__mosaic) {
+    --_ring: 0 0 0 calc(var(--area-stroke-width) * 2) var(--area-stroke-selected); /* spec: pick */
+  }
+  :is(.area-asset-card--interactive:focus-visible, .area-asset-grid__item:focus-visible .area-asset-card).area-asset-card--containerless > .area-asset-card__frame:has(> .area-asset-card__media > img, > .area-asset-card__mosaic) { outline: none; }
+  :is(.area-asset-card--interactive:focus-visible, .area-asset-grid__item:focus-visible .area-asset-card).area-asset-card--containerless :is(.area-asset-card__media > img, .area-asset-card__mosaic) {
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-offset);
+  }
+  /* A containerless component's frame shows its edge on hover, in the hovered edge colour, and no lift (a shadow
+     round a clear frame would draw a box the page never shows); selected, the selected edge above applies. */
+  @media (hover: hover) {
+    :is(.area-asset-card--interactive:hover, .area-asset-grid__item:hover .area-asset-card).area-asset-card--containerless:not([data-selected], [aria-pressed="true"], [aria-selected="true"]) > .area-asset-card__frame {
+      border-color: var(--area-edge-control-hover);
+    }
+    .area-asset-grid__item:not([aria-selected="true"]):hover .area-asset-card--containerless > .area-asset-card__frame { border-color: var(--area-edge-control-hover); }
+    :is(.area-asset-card--interactive:hover, .area-asset-grid__item:hover .area-asset-card).area-asset-card--containerless > .area-asset-card__frame { --_lift: 0 0 0 0 transparent, 0 0 0 0 transparent; }
+    /* Elevation 0 draws no lift, and there is no edge to step: a hairline in the hovered edge colour instead. */
+    [data-area-elevation="0"] :is(.area-asset-card--interactive:hover, .area-asset-grid__item:hover .area-asset-card).area-asset-card--containerless:not([data-selected], [aria-pressed="true"], [aria-selected="true"]) :is(.area-asset-card__media > img, .area-asset-card__mosaic) {
+      --_ring: 0 0 0 var(--area-stroke-width) var(--area-edge-control-hover);
+    }
+    [data-area-elevation="0"] .area-asset-grid__item[aria-selected="true"]:hover .area-asset-card--containerless :is(.area-asset-card__media > img, .area-asset-card__mosaic) {
+      --_ring: 0 0 0 calc(var(--area-stroke-width) * 2) var(--area-stroke-selected);
+    }
+  }
+
   /* --- The grid ------------------------------------------------------------- */
   .area-asset-grid { --area-asset-card-size: 224px; } /* spec: pick, a column's least width */
   .area-asset-grid.area-list-box--grid:has(> .area-list-box__item),
@@ -171,8 +243,15 @@
     grid-template-columns: repeat(auto-fill, minmax(var(--area-asset-card-size), 1fr));
     gap: var(--area-space-16) var(--area-space-12); /* spec: cards 12 apart (PRODUCT_UI rule 11); rows 16, a caption between */
   }
-  /* The option is the card: no row plate, no inset ring; the frame shows the states. */
-  .area-asset-grid.area-list-box--grid .area-list-box__item.area-asset-grid__item {
+  .area-asset-grid--grid {}
+  /* Waterfall: columns of the grid's least width, each card hugging its asset and dropped into the shortest column in
+     reading order (Pinterest's board), so Left and Right still step in order and Up and Down find the nearest card.
+     The grid places the cards once it has measured them (data-placed); before that they keep the grid's flow. */
+  .area-asset-grid--waterfall[data-placed] { display: block; position: relative; }
+  .area-asset-grid--waterfall[data-placed] > .area-asset-grid__item { position: absolute; box-sizing: border-box; }
+  /* The option is the card: no row plate, no inset ring; the frame shows the states. The role outranks ListBox's
+     selected, hover and pressed plates, which a containerless card would otherwise show round it. */
+  .area-asset-grid.area-list-box--grid .area-list-box__item.area-asset-grid__item[role="option"] {
     display: block;
     place-items: stretch; /* the card takes the column (ListBox's grid centres an option's content) */
     min-block-size: 0;

@@ -70,6 +70,9 @@ export interface TileProps {
   stageScope?: Record<string, string>;
   /** The stage is shown, not used: its content is inert. */
   inert?: boolean;
+  /** No container at rest: the specimen on the Canvas's ground, the frame's edge shown on hover and selection
+      (Asset card's `containerless`; owner, 2026-10-19, a trial on Components). */
+  containerless?: boolean;
   /** A card (owner, 2026-10-14, after Compass's gallery): a square frame, the specimen in a wider margin. */
   card?: boolean;
   /** Controls in the caption, at the end of the name's line (a Copy code button). */
@@ -81,7 +84,7 @@ export interface TileProps {
 
 const CONTROLS = "a, button, input, textarea, select, label, [contenteditable], [role=button], [role=switch], [role=checkbox], [role=radio], [role=tab], [role=slider], [role=combobox]";
 
-export function Tile({ label, value, span, stage, selected, onSelect, onOpen, card, actions, openOnClick, option, id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, paint, scope, stageScope, inert, children }: TileProps) {
+export function Tile({ label, value, span, stage, selected, onSelect, onOpen, card, containerless, actions, openOnClick, option, id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, paint, scope, stageScope, inert, children }: TileProps) {
   const view = stage === "none" ? null : stage === "fit"
     ? <div className="gallery-tile__view" {...stageScope}><div className="gallery-tile__stage">{children}</div></div>
     : <div className="gallery-tile__view" inert={inert || undefined} {...stageScope}>{children}</div>;
@@ -94,13 +97,14 @@ export function Tile({ label, value, span, stage, selected, onSelect, onOpen, ca
     "data-layout": card ? "card" : undefined,
     "data-painted": paint ? "" : undefined,
     "data-scoped": scope ? "" : undefined,
-    "data-area-ground": paint ? undefined : scope ? "recessed" : "raised",
+    "data-area-ground": paint || containerless ? undefined : scope ? "recessed" : "raised",
     style: paint ? ({ "--_paint": paint.background, "--_ink": paint.color } as CSSProperties) : undefined,
     ...scope,
   } as Record<string, string | undefined> & { className: string; style?: CSSProperties };
   // The caption is the app's chrome, at the app's scale whatever the Canvas previews.
   const captionProps = { className: "gallery-tile__caption", ...APP_SCALE };
-  const shared = { id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, name: label, meta: value, actions, frameProps, captionProps };
+  const shared = { id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, name: label, meta: value, actions, frameProps, captionProps,
+    container: containerless ? "containerless" as const : undefined };
   if (option !== undefined) {
     return <AssetGridItem value={option} className="gallery-asset" textValue={typeof label === "string" ? label : undefined} {...shared}>{view}</AssetGridItem>;
   }
