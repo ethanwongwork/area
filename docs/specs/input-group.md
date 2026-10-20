@@ -1,6 +1,5 @@
 # InputGroup spec
 
-**Status:** accepted (owner; Complete in `component-status.mjs`; was: in review · 2026-09-26 (cohesion audit; second pass with Notion and Figma))
 **Captures:** `docs/research/captures/input-group/`
 **Peers:** Input, NumberField, Select, Button ghost (children), ColorField (hex + opacity),
 ColorPicker (value row), Panel (inspector rows)

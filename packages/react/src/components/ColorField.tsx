@@ -18,6 +18,8 @@ export interface ColorFieldProps extends Omit<InputProps, "value" | "defaultValu
   /** Edit opacity separately while keeping one canonical hex value. */
   alpha?: boolean;
   opacityLabel?: string;
+  /** With `alpha`, names the group that holds the colour and its opacity. */
+  groupLabel?: string;
   value?: string;
   defaultValue?: string;
   /** Called only when a valid hex value is committed by blur or Enter. */
@@ -29,7 +31,7 @@ export interface ColorFieldProps extends Omit<InputProps, "value" | "defaultValu
 
 /** A hex editor. Partial drafts stay visible; blur/Enter commit and Escape restores. */
 export const ColorField = forwardRef<HTMLInputElement, ColorFieldProps>(function ColorField(
-  { alpha, opacityLabel = "Opacity", value, defaultValue = "#8D4DF3", onValueChange, size, variant, fullWidth, className, onChange, onBlur, onKeyDown, invalid, required, name, readOnly, disabled, ...rest }, ref,
+  { alpha, opacityLabel = "Opacity", groupLabel = "Color and opacity", value, defaultValue = "#8D4DF3", onValueChange, size, variant, fullWidth, className, onChange, onBlur, onKeyDown, invalid, required, name, readOnly, disabled, ...rest }, ref,
 ) {
   const initial = normalizeHexColor(defaultValue) ?? "#8D4DF3";
   const [localValue, setLocalValue] = useState(initial);
@@ -79,7 +81,7 @@ export const ColorField = forwardRef<HTMLInputElement, ColorFieldProps>(function
     onChange={(event: ChangeEvent<HTMLInputElement>) => { setDraft(event.target.value); onChange?.(event); }}
     onBlur={event => { onBlur?.(event); commit(event); }} onKeyDown={handleKeyDown} />;
   if (!alpha) return hexInput;
-  return <InputGroup size={size} variant={variant} fullWidth={fullWidth}
+  return <InputGroup size={size} variant={variant} fullWidth={fullWidth} aria-label={groupLabel}
     className={cx(colorFieldVariants({ size, fullWidth, alpha }), className)}>
     {hexInput}
     <NumberField className="area-color-field__opacity" aria-label={opacityLabel}

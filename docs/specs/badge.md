@@ -1,7 +1,5 @@
 # Badge spec
 
-**Status:** complete · 2026-10-12 (approved, review round 9)
-uppercase removal built and validated)
 **Captures:** `docs/research/captures/badge/`
 **Peers:** Indicator (dot, count numerals, tone paint), Chip (pill shape, interactive
 choice), Button (label weight, icon slot), Kbd and Code (small inline chrome), Table and

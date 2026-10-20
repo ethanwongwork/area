@@ -41,7 +41,9 @@
      still (12), so the groups read before the type does. */
   .area-infobox__header { display: flex; flex-direction: column; gap: var(--area-space-8); min-inline-size: 0; }
   .area-infobox__media { display: block; }
-  .area-infobox__media > :is(img, video, svg, picture) { display: block; max-inline-size: 100%; block-size: auto; border-radius: var(--area-radius-small); }
+  /* The lead image stands alone, so it takes the container corner, as Figure's (DESIGN_SYSTEM, "Image corners";
+     owner, 2026-10-19). */
+  .area-infobox__media > :is(img, video, svg, picture) { display: block; max-inline-size: 100%; block-size: auto; border-radius: var(--area-radius-container); }
   /* The title row: the title and subtitle, then one action ending on the content edge (Ant Descriptions' extra,
      GitHub's About gear), its top on the title's first line. */
   .area-infobox__title-row { display: flex; align-items: start; gap: var(--area-space-8); min-inline-size: 0; }

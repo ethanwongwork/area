@@ -4,8 +4,8 @@
  * Notion's board view, made Area's (docs/specs/board.md; captures/board/notion--*): columns side by
  * side, each a header (the group's name in plain text, a count Badge, buttons at the end) over a
  * tinted body of cards and an "Add new" row. A column takes a custom colour (Tag's inks); its tint,
- * count, add row and its cards' edge follow it, mixed thin. Cards are white, the container corner
- * (12; the column is concentric with them, 20), with Notion's soft lift; the title is a link stretched over the card, and actions show
+ * count, add row and its cards' edge follow it, mixed thin. Cards are white, the row corner
+ * (`radius-row`; the column is concentric with them, 16 at the default), with Notion's soft lift; the title is a link stretched over the card, and actions show
  * on hover or focus.
  * ------------------------------------------------------------------------- */
 @layer area.components {
@@ -119,7 +119,7 @@
   .area-board-column:not(.area-board-column--neutral) { --_ring-strong: var(--_ink); }
   .area-board-column:not(.area-board-column--neutral) .area-board-column__add {
     --_add-ink: var(--_ink);
-    /* The card's hover strength, 6% (pressed 9%, the same 1.5 step as bg-hover to bg-active). */
+    /* The card's hover strength, 6%; pressed at twice it, 12%. */
     --_add-plate: color-mix(in oklab, var(--_color) 6%, transparent);
     --_add-plate-active: color-mix(in oklab, var(--_color) 12%, transparent); /* spec: twice the hover, as Notion 5% → 10% */
   }

@@ -1,6 +1,5 @@
 # Approval spec
 
-**Status:** built · in review · 2026-10-18
 **Captures:** none yet; evidence from the products' stylesheets and the Codex TUI snapshots,
 `docs/research/inspector-chat-2026-10-18/`.
 **Peers:** Composer (the slot it takes), Menu (rows and shortcut keys), Kbd (quiet), Code block (sm), Diff
@@ -35,15 +34,16 @@ block the app), not a Menu (it is a decision, not a list of commands).
 ## Anatomy
 
 ```
-area-approval              the Composer's shell: its edge, corner, field fill and inset
-  area-approval__title     strong
-  area-approval__description  muted
-  area-approval__detail    slot (Code block sm, Diff)
-  area-approval__options   rows, 0 apart
-    area-approval__option  button: quiet Kbd number in the icon slot + label; the row plate on hover and focus
-  area-approval__head      the title and description, one block
-  area-approval__instead   the last option row (a label), its field `area-approval__field` the row's text
-  area-approval__hint      muted: Esc to cancel
+area-approval                 the Composer's shell: its edge, corner, field fill and inset; text-md; gap ui-cluster
+  area-approval__head         the title and description, one block on the row inset; its first line sits in a row
+    area-approval__title      strong
+    area-approval__description  text-sm muted
+  area-approval__detail       slot (Code block sm, Diff)
+  area-approval__options      rows, 0 apart
+    area-approval__option     button: `area-approval__key` (quiet Kbd number, icon slot) + `area-approval__label`;
+                              the row plate on hover and focus
+    area-approval__instead    the last option row (a label), its field `area-approval__field` the row's text
+  area-approval__hint         the last row, text-sm muted: filled Kbd Esc + "to cancel"
 ```
 
 ## Decisions
@@ -52,17 +52,21 @@ area-approval              the Composer's shell: its edge, corner, field fill an
 |---|---|---|---|
 | shell | Composer's edge, corner, fill and inset | peer: Composer | it takes the composer's place; Claude Code's card radius 8 is its own composer's |
 | gap | 6 (ui-cluster at Compact) | Composer's gap | — |
+| head | on the row inset; first line in a row: (ui-row − text-md leading) / 2 above the title | inset.css first-line alignment | round 54: the top had half a row less room than the foot |
 | title | text-md strong | claude-code bold title | Area's one strong weight |
 | description | text-sm muted | claude-code .9em secondary | — |
 | options | Menu-row geometry: ui-row tall, row inset, row corner, plate on hover / focus | peer: Menu | Claude Code's ringed buttons read as a list of commands at 256; rows keep them one column |
-| number | Kbd sm before the label | claude-code `shortcutNum` | — |
+| number | quiet Kbd sm in the icon slot (icon-sm wide, centred), the label's size, muted, unboxed | claude-code `shortcutNum` (label size, .6); Codex "1." | round 51 |
 | instead | the last numbered row, its field unfilled | Claude Code (last option is free text) | a filled field added a third grey (cleanup pass 2026-10-19) |
-| hint | text-sm muted, Kbd Esc | claude-code "Esc to cancel" | — |
+| hint | the card's last row: ui-row tall, centred, text-sm muted; Esc a filled Kbd sm, ui-cluster from the words | claude-code "Esc to cancel"; Kbd's rule (a key named in a sentence is filled) | rounds 52 and 53 |
 
 ## Behavior and accessibility
 
-A `section` named by its title (`role="group"` via `aria-labelledby`). Options are buttons; ArrowUp / ArrowDown move
-focus among them, digits 1–9 choose, Escape calls `onDismiss`, Enter in the field sends it. With `autoFocus` the first option takes
+A `section` named by its title through `aria-labelledby` (a named region); the options sit in a `role="group"` also
+labelled by the title (`Approval.tsx`, the options `div`). Options are buttons; ArrowUp / ArrowDown move focus among
+them and the field, wrapping; digits 1–9 choose; the digit after the last option focuses the field; Escape calls
+`onDismiss`, or chooses the last option when there is none; Enter in the field sends it. For 500 ms after it appears,
+Enter, Space, Escape and the digits answer nothing and a keyboard click on a choice is ignored (pointer clicks are not). With `autoFocus` the first option takes
 focus when the card appears, so the keyboard answers at once; the Chat view sets it where the card takes the composer's
 place. It is off by default, so a page of approvals (the gallery) does not move focus. Each option exposes its digit as
 `aria-keyshortcuts`, and the Kbd is hidden from its name ("Yes", not "1Yes").

@@ -1,6 +1,5 @@
 # Reference list spec
 
-**Status:** built, in review · 2026-10-17
 **Captures:** computed-style readouts below (Wikipedia, en.wikipedia.org/wiki/Lisa_Su)
 **Peers:** Citation (footnote), Link, Nav marker
 
@@ -11,7 +10,7 @@
 
 ## Job and boundaries
 
-Lists the notes a footnote (Citation `variant="footnote"`) points at: numbered, each led by links back to where it is cited. Not a bibliography layout (the note's text is the caller's) and not a Description list (no labels).
+Lists a text's sources, as ChatGPT's "Sources": each a publisher, a linked title and what it covers, under an optional heading. Numbered by default so footnotes (Citation `variant="footnote"`) can point at the notes; each note can end with links back to where it is cited. Not a bibliography layout (free-form note text is the caller's) and not a Description list (no labels).
 
 ## Sources
 
@@ -25,7 +24,7 @@ caption) were not measured this round.
 
 ## Measurements
 
-Wikipedia, computed:
+Wikipedia, computed (evidence only; Area's current values are in Decisions):
 
 | Part | Value |
 |---|---|
@@ -38,12 +37,13 @@ Wikipedia, computed:
 
 | Slot · property | Area value | Basis | Reason when it differs |
 |---|---|---|---|
-| type | Area's small text (14 / 20) | Wikipedia 0.9 of the body | the type scale, not a ratio |
-| markers | 3.2em in, muted ink, tabular figures | Wikipedia 3.2em | muted so the notes lead |
-| item gap | 2 | Wikipedia 0.1em (1.44) | — |
-| columns | `columns`: 27em, gap 32 | Wikipedia 27em | — |
-| backlinks | ↑ for one; ↑ then raised a b c for several; `ink` as Link's, blue by default | Wikipedia | letters strong, upright: Area's type has no italic (Geist upright only, `font-synthesis: none`) |
-| highlighted | `:target` or `highlighted`: Nav marker's selection rail at the list's start edge | Area's current-location mark (Nav marker, TOC) | Wikipedia tints the note (#e8eeff); a filled plate left the blue backlinks at 3.16:1 at dark 24 + 8 |
+| type | UI text (`ui-size` / `ui-leading`), default ink | ChatGPT's sources at the answer's size and ink (round 35) | Wikipedia's 0.9 and round 34's muted small text replaced |
+| title | optional; UI text, strong, default ink, `role="heading"` level 3, 8 over the list | ChatGPT's h3 (round 35) | — |
+| markers | `number` (default; an `ol`, period, `fg-muted`, tabular, `start` continues a count) or `bullet` (a `ul`, "•" centred in the box) | owner, round 35 ("i actually prefer numbers"); Notion (round 37) | — |
+| marker column | one box shared by every row, at least 0.8em and as wide as the widest number, starting on the edge of the text above; text 6 after it; wrapped lines hang under the text; items back to back | Notion, Substack (rounds 36–37) | no hanging indent (Wikipedia 3.2em, ChatGPT 2em) |
+| item | publisher — title — description, spaced em dashes in the item's ink; the title a Link `external` | ChatGPT (round 35); owner, round 37 | Area's Link in place of ChatGPT's dotted line |
+| backlinks | at the end of the note, 4 after the text: Area's `return` glyph at 12 (`icon-xs`), `fg-muted`; the second and later add their count in `text-xs`; foreground fixed on hover | GitHub ↩, remark ↩² (round 34) | Wikipedia's ↑ and a b c dropped in round 34 |
+| target | `:target` or `highlighted` (hook `data-target`): Nav marker's selection rail (`fg-selection`), 6 outside the marker column | Nav marker (rounds 34, 36) | Wikipedia tints the note; a filled plate failed contrast |
 
 ## Verification
 

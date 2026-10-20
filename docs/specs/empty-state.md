@@ -1,6 +1,5 @@
 # Empty state spec
 
-**Status:** complete · 2026-10-10 (approved, review round 5)
 **Captures:** `docs/research/captures/empty-state/`
 **Peers:** File upload (the icon tile), the list "no matches" row (Combobox, Command palette), Card and Panel (the regions it sits in), Button (actions), Dialog and Drawer (title type)
 

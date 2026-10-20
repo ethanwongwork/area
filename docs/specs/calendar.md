@@ -1,6 +1,5 @@
 # Calendar spec
 
-**Status:** accepted · 2026-09-28 (owner, batch 7)
 **Captures:** `docs/research/captures/calendar/`
 **Peers:** Popover (surface, Complete), Button (navigation, Complete), Menu and Nav (hover
 fill, Complete), Breadcrumb (chevron glyph, Complete), Badge/Indicator (today marker)
@@ -78,9 +77,9 @@ days     outside and disabled ink rgb(161,158,153); hover rgba(35,131,226,.15) w
          today: white text on a 24px rgb(229,100,88) circle; selected / range start rgb(39,131,222), white text;
          range middle: a continuous rgba(35,131,226,.21) band 28px tall, rounded 6 at its ends; range end rgba(35,131,226,.43)
 area
-shell    surface (default; the bare class draws it): padding 8 top, 12 elsewhere (border counted), border-decorative, radius container, the floating lift (`--area-shadow-float`, calendar.css:37); plain: no box
-header   min control-sm (28), padding 4 start / 2 end; title 14/20 500; nav Button ghost sm, Area chevron glyph
-grid     cells 36; weekday 12/16 fg-muted; day 32, radius-control-md (8), 12/16 tabular
+shell    surface (default; the bare class draws it): padding 8 top (compact 6), `inset-surface-sm` elsewhere (12, compact 8; border counted), `border-float` edge, radius container, the Surface axis's edge then the floating lift (`--area-shadow-edge`, `--area-shadow-float`); plain: no box
+header   min control-sm (28), padding 4 start / the day inset (2) end; title 14/20 strong; nav Button ghost sm, Area chevron glyph
+grid     cells 36 (compact 32); weekday 12/16 fg-muted; day 32 (compact 28), radius-control-md (8), 12/16 tabular
 ```
 
 Inset equations: surface side inset = border 1 + padding 11 = 12 (Notion 4 + 8). Top =
@@ -113,7 +112,7 @@ Day states: `notion--day--hover--light`, `notion--day-today--rest--light`,
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| cell, day | **36, 32** | Owner (2026-09-27: too compact) | Notion 32 / 28; shadcn `--cell-size` 32 |
+| cell, day | **36, 32**; compact 32, 28 | Owner (2026-09-27: too compact); compact pass 2026-10-01 (Notion's geometry) | Notion 32 / 28; shadcn `--cell-size` 32 |
 | day · radius | radius-control-md (8), capped at 0.4 × the day (`calendar.css:10`) | Button md beside it (32, radius 8); audit S4 and F-12 (owner) | Notion 6 at 28px days. Was radius-control-sm (6) |
 | day · type | **12/16** 400, tabular (`--_day-text`), the caption role, not the small control text | Owner (third pass): numbers too large | Notion 14; the month title keeps 14/20 |
 | weekday | 12/16 400, fg-muted | Notion 12/18 in a tertiary ink | Area small text; secondary ink is fg-muted |
@@ -121,7 +120,7 @@ Day states: `notion--day--hover--light`, `notion--day-today--rest--light`,
 | nav | Button ghost sm (28; 24 compact), Area chevron | Notion 24px, radius 3 | Area's control tier; Breadcrumb's chevron |
 | surface | padding 8 / 12, popover surface | Notion 4 + 4 / 4 + 8; shadcn p-3 (12) | — |
 | months gap | 16 | shadcn `gap-4` | Notion shows one month |
-| hover | bg-hover (neutral; calendar.css:77) | The translucent wash for a ground the day cannot know (surface or plain) | Notion hovers in its selection blue; hover stays neutral in every theme. Menu and Nav rows now hover `bg-component-hover` |
+| hover, press | bg-hover, press bg-pressed (circle days: bg-component-pressed) (neutral; calendar.css, `.area-calendar__day`) | The translucent wash for a ground the day cannot know (surface or plain) | Notion hovers in its selection blue; hover stays neutral in every theme. Menu and Nav rows now hover `bg-component-hover` |
 | selected | `selection-solid`, `fg-on-selection`; `selection-solid-hover` on hover (neutral by default; the accent when a theme sets selection to accent) | Owner (2026-09-26); shadcn `bg-primary` (near-black) | Notion paints its blue; that is the accent override |
 | range middle | `selection-band` (neutral: bg-component-hover), continuous, inset 2, rounded at the ends; `selection-band-hover` (bg-component-active) on hover. Accent theme: accent-surface | Owner; shadcn `bg-accent` (neutral-100) band; Notion's band geometry | — |
 | range end | the selected paint, like the start | shadcn (both ends primary) | Notion paints the end at 43% (an in-progress look); a committed range is symmetric |
@@ -138,7 +137,7 @@ Third-pass additions:
 | circle | radius full on days and band ends; choosable in-month days fill bg-component-hover; hover steps to bg-component-active (the translucent wash showed nothing on the #f3 rest, audit F-11) | Google (soft circles on available days) | Neutral per the tone rule |
 | tile | choosable in-month days: 1px `edge-control-hover` inset edge (#d4, `border-subtle` at standard contrast); unavailable in-month days: bg-component, no strike | Owner reference (outlined vs filled tiles) | The fill already says unavailable |
 | marker | 4px dot, 3px above the day's bottom (week strip: top end corner), fg-muted by default, tone per date, on-selected ink when selected; `aria-description` "Has events" | Owner references (dots under 4 and 14; today dot) | — |
-| week strip | ghost sm arrows either side of a one-row grid; each day a column: weekday and month in fg-muted 12/16, number 16/24; min width 44 | Owner reference (strip) | Up/Down and Page keys move by week |
+| week strip | ghost sm arrows either side of a one-row grid; each day a column: weekday and month in fg-muted 12/16, number 16/24; min width 44 | Owner reference (strip) | Up/Down move by week, Page Up/Down by month (Shift: a year), as in the month grid; the strip moves to the week that holds the focused date (Calendar.tsx, `onKeyDown`) |
 | schedule | gallery composition on the calendar surface (8 top, 12 sides, the floating lift); a rule; a time list of ghost **md** Buttons, full width, **4 apart** (the grid's 36px cells around 32px plates), **13 from the rule and from the edge** (12 surface inset + the day plates' 2 cell inset, border counted once), scrolling inside the calendar's height; the selected time is Button `selected` (`bg-component-active`, the shared row selection; ink and weight fixed); footer 8 / 12 with Cancel, a tabular summary and an outline Schedule | Owner reference (send later); owner (2026-09-28): "clean up the time backplate" | Was sm rows 2 apart with `align="start"`, whose optical pull put the plate 2.5px from the rule and 24 from the edge; the list was 288 tall whatever the calendar's height, and the shell used `shadow-2`. A real TimeField/ListBox is future work |
 | week strip · inset | 12 all round on the surface | Surface inset | The 8px top inset seats the month header; the strip has none (was 8 top / 12 bottom) |
 | two months · gallery | a full-width `4x2` tile | — | A 2-column tile (537px inside) is narrower than two months side by side (546), so they stacked inside a surface that kept its two-month width |
@@ -148,6 +147,7 @@ Third-pass additions:
 | State | Changes | Evidence |
 |---|---|---|
 | hover | bg-hover on the day; `selection-band-hover` inside a range; `selection-solid-hover` on a selected day | Notion hover captured (different paint, see Decisions) |
+| pressed | bg-pressed on the day (circle days: bg-component-pressed) | interaction polish 2026-10-16 |
 | focus-visible | Area focus ring on the day | APG grid |
 | selected | `selection-solid` (neutral by default) | Notion selected captured; owner rule |
 | range start / middle / end | band + solid ends | Notion range captured |
@@ -163,7 +163,8 @@ Third-pass additions:
   today, `aria-selected` on the cell, `aria-multiselectable` for range and multiple.
 - One tab stop (roving tabindex). Arrows move by day and week (mirrored in RTL), Home/End to
   the week's edges, Page Up/Down by month, Shift+Page by year; focus crosses months and
-  clamps to min/max. Enter/Space selects; in range mode Escape cancels a pending anchor.
+  clamps to min/max. The week strip takes the same keys and moves to the week that holds the focused date.
+  Enter/Space selects; in range mode Escape cancels a pending anchor.
 - Dates are ISO strings (no time zone). `name` submits the date, `name-start`/`name-end`
   for a range, or one field per date for multiple.
 - Today is read after mount (or from `today`), so server and client markup match.
@@ -172,7 +173,7 @@ Third-pass additions:
 
 | Peer | Shared role | Peer value | Calendar | Match / reason |
 |---|---|---|---|---|
-| Popover | surface | border-decorative, container radius, the floating lift `--area-shadow-float` (cohesion audit, 2026-09-26; a Surface axis role since audit S10) | `surface` | match |
+| Popover | surface | `border-float`, container radius, the Surface axis's `--area-shadow-edge` then the floating lift `--area-shadow-float` (cohesion audit, 2026-09-26; a Surface axis role since audit S10) | `surface` | match |
 | Menu / Nav | row hover | `bg-component-hover` | day hover `bg-hover` | differs: rows sit on a known surface; a day may sit on the plain page or the surface, so it keeps the translucent wash |
 | Breadcrumb | chevron | Area chevron glyph | nav icons (rotated) | match |
 | Button | small icon action | ghost sm | nav | match |

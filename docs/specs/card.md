@@ -1,6 +1,5 @@
 # Card spec
 
-**Status:** accepted · 2026-09-28 (batch 16, 16 text column; was: in review · 2026-09-28 (16 text column, carousel and well; was: accepted · 2026-09-28, batch 16))
 **Captures:** `docs/research/captures/card/`, `docs/research/captures/baseline/chatgpt--settings-card--rest--light.json`
 **Peers:** Panel (inspector surface), Dialog and Popover (floating surfaces), Alert and Code
 block (container radius), Badge and Button (slots), Slider (templates)

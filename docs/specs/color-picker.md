@@ -1,6 +1,5 @@
 # Color picker spec
 
-**Status:** complete · 2026-10-12 (approved, round 17); was: accepted (owner; Complete in `component-status.mjs`; was: in review · 2026-09-26 (second pass: views, OKLCH, contrast, preview))
 **Captures:** `docs/research/captures/color-picker/`
 **Peers:** Popover (surface, Complete), Slider (thumb focus, Complete), Select (model menu,
 Complete), InputGroup and NumberField (value row, Complete), ColorField, ColorSwatch and
@@ -83,10 +82,13 @@ values      40px row, padding 0 16, gap 8: model select 57 × 24 (1px rgb(230), 
             fields 144 × 24: hex 89 (fill rgb(245), padding 0 8), 1px surface gap, opacity 54 (8px start, % in a 14px box, ink 50%)
 swatches    1px rgb(230) top rule, padding-top 11; source select 208 × 24; grid of 24px cells from 12px, 16px chits (radius 20%)
 area (this pass)
-shell       10 rows wide (240 compact, 280 default), 1px border-decorative, radius container, the floating lift (`--area-shadow-float`)
-header      optional, min 40, padding 16 start / 8 end (border counted), border-faint rule
-body        padding 16 (border counted), gap 12: area → controls → values
-swatches    border-faint rule, padding 12 16, heading row (label + Add), ColorSwatchPicker sm, contiguous 24px cells from 12px
+shell       10 rows wide (240 compact, 280 default), 1px `border-float`, radius container, the Surface axis's edge then
+            the floating lift (`--area-shadow-edge`, `--area-shadow-float`); `plain`: none of the three
+header      optional, min 40, padding 16 start / 8 end (border counted), `border-decorative` rule
+body        padding 16 at both densities (border counted), gap 12 (compact 8): views → contrast → area or grid → controls
+            (eyedropper, tracks, preview) → values → note
+swatches    `border-decorative` rule, padding 12 16 (compact 8 16), heading row (label + save), ColorSwatchPicker sm,
+            contiguous cells pulled outward by (inset − rhythm)
 ```
 
 Inset equations: outer inset = border 1 + padding 15 = 16 (Figma 16, no border). Header end
@@ -142,20 +144,21 @@ foreground/background popover (the background is a prop).
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
 | shell · width | `control-sm × 10` (240 / 280) | Figma 240 = 10 × its 24px rows | The inset contract gives 28px fields an 8.74px text inset; at a fixed 240 three RGB digits clipped. Tying width to the row keeps Figma's proportions at both scales |
-| shell · surface | border-decorative, radius container (12), the Elevation axis's float role `--area-shadow-float` (0 0 2 + 0 8 16, 3% key at the default step; transparent at 0); `plain` sets all three to transparent / none (color.css:225) | Peer: Popover | Figma 13px radius, no border; Area popovers are one surface family, and since the 2026-09-26 cohesion audit that family uses Notion's deep lift, close to Figma's 0 10px 16px |
-| shell · inset | 16 (border counted) | Figma 16 | — |
-| vertical rhythm | 12 | Figma: area→tracks 12, track gap 12, tracks→values 12 | — |
-| header | min 40, 16 start / 8 end, border-faint rule | Figma 40, divider rgb(230) | Figma's tab text sits at 16 (8 + tab padding); a plain title uses the same column. border-faint (226) is the role nearest rgb(230) |
+| shell · surface | `border-float`, radius container (12), the Surface axis's `--area-shadow-edge` (an edge at Surface 0) then the Elevation axis's float role `--area-shadow-float` (0 0 2 + 0 8 16, 3% key at the default step; transparent at 0); `plain` sets background, edge and lift to transparent / none (color.css, `.area-color-picker--plain`) | Peer: Popover | Figma 13px radius, no border; Area popovers are one surface family, and since the 2026-09-26 cohesion audit that family uses Notion's deep lift, close to Figma's 0 10px 16px |
+| shell · inset | 16 at both densities (border counted) | Figma 16; compact evidence audit 2026-10-02 | — |
+| vertical rhythm | 12, compact 8 | Figma: area→tracks 12, track gap 12, tracks→values 12 | — |
+| header | min 40, 16 start / 8 end, `border-decorative` rule | Figma 40, divider rgb(230) | Figma's tab text sits at 16 (8 + tab padding); a plain title uses the same column. A rule inside a container is never darker than its edge (audit F-6; was border-faint) |
 | area · size, radius | square, full width; radius-control-sm (6) | Figma 208 square, radius 5 = its control radius | Area's control radius for the sm tier |
-| area / track · hairline | inset 1px `light-dark(rgb(0 0 0 / .1), rgb(255 255 255 / .1))` spec | Figma rgba(0,0,0,.1) | Dark value not captured |
-| thumbs | 16px, 4px #fff ring, current-color fill, an opaque 1px `border-subtle` outer edge, the swatch ring (black 10%) inside, lift | Figma; owner round 16 | Figma's outer edge is black 20% (translucent): it changed colour around the circle where the thumb meets the track. Lift uses −2px spread to draw Figma's 12px shadow disc on one element |
+| area / track · hairline | inset `token-swatch-ring` (black 10%, white 10% in dark) at `stroke-width`; also the contrast pair and the preview | Figma rgba(0,0,0,.1); consistency pass 2026-10-12 | Dark value not captured |
+| thumbs | 16px, 4px #fff ring, current-color fill, an opaque 1px `edge-control-hover` outer edge (#d4, Slider's thumb edge), the swatch ring (black 10%) inside, a fixed lift the Elevation setting does not move | Figma; owner round 16 | Figma's outer edge is black 20% (translucent): it changed colour around the circle where the thumb meets the track. Lift uses −2px spread to draw Figma's 12px shadow disc on one element |
 | thumb · focus | Area focus ring (2px at 2px offset) | Peer: Slider, CONTRAST.md | Figma's 1px outline is below Area's focus width |
 | tracks | 16px pills, stops half a thumb in | Figma | — |
-| opacity checker | ColorSwatch's themed checker (8px tile) | Peer: ColorSwatch | Figma 10.67px #fff/#e1e1e1 |
+| opacity checker | the alpha track: ColorSwatch's checker ink as a gradient, three rows (cells 2/3 of the track); preview chips: ColorSwatch's pixel mask, 5 across | Peer: ColorSwatch; batch 10 (Figma's ~5px track cells) | Figma 10.67px #fff/#e1e1e1 |
 | eyedropper | Button ghost sm, Fluent `eyedropper_16_regular` | Figma 24px button left of the tracks | Shown only where `window.EyeDropper` exists (Chromium); Figma samples its own canvas |
 | values · model | Select sm, content width | Figma 57 × 24 (content width) | — |
 | values · fields | InputGroup soft sm; 1px surface divider; opacity 54 with % in a 14px box; value text runs to the field end | Figma | Hex fill is bg-component (247; Figma 245) |
-| swatches | ColorSwatchPicker sm, contiguous 24px cells pulled 4px outward, border-faint rule, padding 12 16, heading row | Figma: rule, padding-top 11 + 1, 24px cells from 12, 16px chits | Heading is a label with Add instead of Figma's source select (no libraries) |
+| swatches | ColorSwatchPicker sm, contiguous 24px cells pulled 4px outward, `border-decorative` rule (audit F-6), padding 12 16, heading row (muted 12/16 label, the save button) | Figma: rule, padding-top 11 + 1, 24px cells from 12, 16px chits | Heading is a label with a save button instead of Figma's source select (no libraries) |
+| grid view · selected cell | ColorSwatchPicker `palette`'s: a white outline straddling the cell edge with a 15% line inside (color-swatch-picker.md, round 20) | owner rounds 18–20 | — |
 | type | control-sm 12/16 400 | Type ramp (small controls 12/16) | Figma 11/16 450 |
 
 ## States
@@ -172,8 +175,9 @@ foreground/background popover (the background is a prop).
 - `role="group"` named by a consumer's `aria-label`, else `label`; the same name prefixes
   every inner control ("Fill colour hue", "Fill colour hex"). The area is one tab stop: a hidden range input with
   `aria-roledescription="2D slider"` and `aria-valuetext` naming saturation and brightness;
-  Left/Right change saturation, Up/Down brightness, Shift ×10, Page Up/Down brightness ±10,
-  mirrored in RTL. Pointer drag uses pointer capture.
+  Left/Right change saturation, Up/Down brightness, Shift ×10, Page Up/Down brightness ±10.
+  The area and the tracks stay left-to-right in every script (`dir="ltr"`, ColorPicker.tsx `areaKey`; colour geometry
+  is physical, audit F-16). Pointer drag uses pointer capture.
 - Hue and opacity are native range inputs. Channel fields are NumberFields (commit on
   Enter/blur, bounds, arithmetic); hex and CSS fields keep a draft while typing and commit on
   Enter/blur, Escape restores. CSS accepts hex, `rgb()`/`rgba()` and `hsl()`/`hsla()`.
@@ -185,7 +189,7 @@ foreground/background popover (the background is a prop).
 
 | Peer | Shared role | Peer value | Picker | Match / reason |
 |---|---|---|---|---|
-| Popover | floating surface | border-decorative, container radius, `--area-shadow-float` | same (`surface`); none (`plain`, inside a Popover) | match |
+| Popover | floating surface | `border-float`, container radius, `--area-shadow-edge` + `--area-shadow-float` | same (`surface`); none (`plain`, inside a Popover) | match |
 | Slider | thumb focus | focus-width at focus-offset | same | match |
 | Slider | track and thumb | 4px rail, 16 / 16 / 20 thumb with a 1px #d4 edge and a fill dot (slider.css:22-36) | 16px pill tracks with a gradient, 16px thumbs with a 4px white ring and current-colour fill | differs by design (audit F-32 A, owner 2026-09-30): a colour track shows data (hue, opacity, a channel), as Figma's; Slider's rail shows a value |
 | ColorField | hex + opacity | soft InputGroup, decorative divider | soft InputGroup, surface divider | Figma's divider is a surface gap; ColorField keeps its own until it gets a pass |

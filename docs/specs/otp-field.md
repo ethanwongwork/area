@@ -1,6 +1,5 @@
 # OTP field spec
 
-**Status:** accepted · 2026-10-13 (owner, review round 24)
 **Captures:** `docs/research/captures/otp-field/`
 **Research:** [design-system sources](../research/compass-components-2026-10-13/otp-input.md) (pinned commits, cited lines)
 **Peers:** Input (the slot is its shell; focus, invalid, disabled), Password field (masked entry), Field (label, description,
@@ -55,7 +54,7 @@ area  div.area-otp-field[translate=no]           row: inline-flex, gap 8; owns s
           span.area-otp-field__slot[data-active][data-filled]   Input's shell, square: --_height, edge, fill, corner
             (the character, or • when masked)
             span.area-otp-field__caret           1 × the line, in the slot the code continues in
-        span.area-otp-field__separator           16 box, the subtract glyph, muted (between groups)
+        span.area-otp-field__separator[aria-hidden]  `icon-sm` box (16 measured), the subtract glyph, muted (between groups)
         input.area-otp-field__control            absolute over the whole row, transparent, owns value and caret
 ```
 
@@ -78,15 +77,15 @@ sm 208 × 28; lg 280 × 40; groups [3, 3] 256 (the separator 16 plus 8 either si
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
 | structure | one real input over drawn slots | input-otp (shadcn, Untitled UI), GOV.UK, the products' single field | Per-slot inputs (Mantine, Ant, Zag, Base UI, Radix) lose single-field autofill and need their own paste, focus and undo |
-| slot | Input's shell, square at the tier's height: edge, fill, corner, type | peer Input | Systems size slots 36-40 at their default; Area's fields are 32 (28 compact), and a code sits beside them |
+| slot | Input's shell, square at the tier's height: edge, fill, corner (pill under `--area-pill-field`), type, Field shadow role (0 by default; soft flat) (`otp-field.css:13, 40-59`) | peer Input | Systems size slots 36-40 at their default; Area's fields are 32 (28 compact), and a code sits beside them |
 | gap | 8 between slots and around the dash | Mantine, Ant, Untitled UI, shadcn's `gap-2` | — |
 | active slot | Input's focus edge, halo and outline, raised | shadcn, Ant, Untitled UI: the active slot takes the focus ring | — |
 | caret | drawn: 1 wide, the line's height, blinking at 1s; still under reduced motion and motion none | shadcn's `animate-caret-blink` | — |
-| caret position | a collapsed caret before a typed character selects it, so typing replaces that slot; Left and Right move one slot | input-otp's selection mirroring | — |
-| paste | spaces, dashes and other characters dropped, then capped to `length`, at the selection | every system strips separators | `maxLength` alone would cut "123 456" at the space |
-| input | `inputmode=numeric` (digits), `pattern`, `autocomplete=one-time-code`, `maxlength`, `spellcheck=false`, `translate=no` | input-otp, Base UI, Radix, GOV.UK | — |
+| caret position | a collapsed caret before a typed character selects it, so typing replaces that slot; Left and Right move one slot, RTL-aware (`OTPField.tsx:60-88`). Focusing the field or pressing anywhere on the row puts the caret at the end of the code, not on the pressed slot (`OTPField.tsx:127-136, 189, 195`) | input-otp's selection mirroring | input-otp maps a press to its slot; Area's slots are drawn, so a press only continues the code |
+| paste | spaces, dashes and other characters dropped, then capped to `length`, at the selection; ignored when read-only or disabled (`OTPField.tsx:109-125`) | every system strips separators | `maxLength` alone would cut "123 456" at the space |
+| input | `inputmode=numeric` (digits), `pattern`, `autocomplete=one-time-code`, `maxlength`, `spellcheck=false`, `autocapitalize=off`, `autocorrect=off`; `translate=no` on the row (`OTPField.tsx:169-183`) | input-otp, Base UI, Radix, GOV.UK | — |
 | mask | dots in the slots, the input `type=password` | Base UI, Radix | — |
-| invalid / disabled | Input's paint on every slot; `aria-invalid` from a Field | peer Input | — |
+| invalid / disabled | Input's paint on every slot (`otp-field.css:118-127`); `invalid` or `aria-invalid` (from a Field) sets both `data-invalid` on the row and `aria-invalid` on the input | peer Input | — |
 | name | the one input's: `aria-label` or a Field label | input-otp (one control, one name) | Per-slot systems add "Character N of M"; one input needs none |
 
 ## States
@@ -95,17 +94,20 @@ sm 208 × 28; lg 280 × 40; groups [3, 3] 256 (the separator 16 plus 8 either si
 |---|---|---|
 | empty, focused | the first slot active with the caret | shadcn |
 | partly typed | the next slot active with the caret | shadcn |
-| a slot selected (arrows, a press) | that slot active, no caret | input-otp |
+| a slot selected (arrows, select-all) | that slot, or every slot in the selection, active, no caret | input-otp |
+| a press on the row | the caret moves to the end of the code; the slot it continues in is active (`OTPField.tsx:195`) | — |
 | filled | the last slot active while focused; `onComplete` fired once | all |
-| hover | the slots' edge takes Input's hover edge | peer Input |
-| invalid / disabled / read-only | Input's paint | peer Input |
+| hover | every slot but the active one takes Input's hover edge; none when disabled or read-only (`otp-field.css:61-63`) | peer Input |
+| invalid / disabled | Input's paint (`otp-field.css:118-127`) | peer Input |
+| read-only | rest paint, default cursor; the active slot still shows while focused; paste ignored | peer Input |
 
 ## Behavior and accessibility
 
 - One input, so a screen reader hears one field, its name and its value; arrows, Backspace, select-all, undo and paste
   are the platform's. `onComplete` runs when the code reaches `length` from below.
-- The slots and the separator are hidden from assistive tech; the input is transparent but fully opaque to the browser,
-  so iOS still offers paste on it.
+- The separator and the groups of drawn slots are `aria-hidden` (2026-10-19, docs pass): the slots repeat the input's
+  value, so a screen reader reads the code once, from the input (`otp-field.test.mjs`). The input is transparent but fully
+  opaque to the browser, so iOS still offers paste on it.
 - Not verified: SMS autofill on iOS and Android, password-manager inline badges (input-otp widens its input for them),
   IME composition.
 

@@ -76,3 +76,8 @@ test("CodeBlock supports trusted pre-highlighted lines and plain excerpts withou
   assert.match(highlighted, /area-code-block__text"><i>next<\/i><\/span>/);
   assert.doesNotMatch(highlighted, /area-code-block__header|area-code-block__actions/);
 });
+
+test("with language tabs and linked lines, the tab panel stays in the Tab order so a keyboard can scroll the code", () => {
+  const html = renderToString(h(CodeBlock, { code: "one", languages: ["ts", "js"], languageTabs: true, linkLines: true }));
+  assert.match(html, /role="tabpanel"[^>]*tabindex="0"/);
+});

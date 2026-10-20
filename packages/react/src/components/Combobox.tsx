@@ -44,6 +44,8 @@ export interface ComboboxProps extends Omit<InputProps, "value" | "defaultValue"
   /** Shown when nothing matches (and nothing can be created). */
   emptyText?: ReactNode;
   size?: VariantProps<typeof MANIFESTS.input>["size"];
+  /** The field's treatment, passed to its Input: the Combobox block draws no modifier of its own (owner, 2026-10-19). */
+  variant?: InputProps["variant"];
   /** Name of the list toggle button. */
   toggleLabel?: string;
 }

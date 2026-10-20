@@ -1,6 +1,5 @@
 # Box field spec
 
-**Status:** accepted · 2026-09-26; batch 8 side by side 2026-09-28, no change
 **Captures:** `docs/research/captures/inspector/` (Figma Design panel, padding row, opacity / radius row)
 **Peers:** NumberField (each field), PanelRow (the grid), Button (the toggle), Popover (Figma's
 corner panel in the recipe)

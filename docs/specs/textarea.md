@@ -1,7 +1,5 @@
 # Textarea spec
 
-**Status:** accepted · 2026-09-26 (spec written in the cohesion audit; accepted earlier;
-second pass with Notion and Figma)
 **Captures:** `docs/research/captures/textarea/`
 **Peers:** Input, Select, NumberField (field chrome), Field (label, count, validation),
 Composer (conversation entry)
@@ -27,7 +25,7 @@ Composer.
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
 | variant | outline (default), soft | Same pair as Input | UUI and Notion search outline; Notion menu and Figma fields fill-only |
-| size | sm, md (default), lg | Changes type and inline inset, not a control height | UUI sm/md |
+| size | sm, md (default); lg removed 2026-10-01 (audit B-24 A: it differed from md by 4px of inset; `manifest.ts:330`) | Changes type and inline inset, not a control height | UUI sm/md |
 | resize | vertical (default), horizontal, both, none | Native resize policy | Native |
 | state | read-only, disabled, invalid, success, warning | Native and validation states | UUI (invalid, disabled) |
 | boolean | fullWidth | Layout | — |
@@ -50,15 +48,16 @@ fill rgb(245) with no border or shadow. ChatGPT's multiline entry is the Compose
 ## Anatomy
 
 ```
-area   textarea.area-textarea  owns: size (rows / min-block), border, radius, fill, padding, focus (no shadow since the outline pass; textarea.css:42-43)
+area   textarea.area-textarea  owns: size (rows / min-block), border, radius, fill, padding, focus; resting
+       shadow is the Field shadow role (`--_field-lift`, 0 by default), none on soft (textarea.css:44-48, 69)
 ```
 
-Insets (`textarea.css:17-23, 31-32`; owner 2026-09-28): inline = (tier height − 1cap) / 2,
+Insets (`textarea.css:17-25, 33-34`; owner 2026-09-28): inline = (tier height − 1cap) / 2,
 the equal-inset rule a same-size Input uses (inset.css), so the text starts where the Input's
-does: sm 9, md 11, lg 15; the CSS padding subtracts the 1px border. Block = max(2, inline − 4),
+does: sm 9, md 11; the CSS padding subtracts the 1px border. Block = max(2, inline − 4),
 rounded to whole pixels, minus the border. (Before 2026-09-28: inline = gutter − border, md 11,
 sm 7, lg as md.) Default height without rows: 4 × leading + 2 × block gutter + 2 × border
-(`textarea.css:53-55`). Minimum: 2 × tier height (`textarea.css:30`).
+(`textarea.css:61-63`). Minimum: 2 × tier height (`textarea.css:32`).
 
 ## Measurements
 
@@ -85,34 +84,35 @@ The size tiles set `rows={3}` (`apps/desktop/src/content/demos/gallery.tsx:957-9
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| inline inset | **Input's equal inset at each size: 9 sm, 11 md, 15 lg** ((height − 1cap) / 2, border counted once; `textarea.css`) | Owner 2026-09-28 ("do whatever makes the most sense"): text starts where a same-size Input's does, and each size is distinct | Was 8 sm / 12 md / 12 lg (lg matched md); ChatGPT 10–12, UUI md 14 |
-| block inset | inline − 4, rounded to a whole pixel: 5 sm, 7 md, 11 lg | Owner (leading supplies vertical room); whole-pixel box | Was 4 sm / 8 md / 8 lg |
+| inline inset | **Input's equal inset at each size: 9 sm, 11 md** ((height − 1cap) / 2, border counted once; `textarea.css:23, 34`) | Owner 2026-09-28 ("do whatever makes the most sense"): text starts where a same-size Input's does, and each size is distinct | Was 8 sm / 12 md / 12 lg (lg matched md); ChatGPT 10–12, UUI md 14 |
+| block inset | inline − 4, rounded to a whole pixel, at least 2: 5 sm, 7 md (`textarea.css:25, 33`) | Owner (leading supplies vertical room); whole-pixel box | Was 4 sm / 8 md / 8 lg |
 | type | 14/20 400 at every size (sm was 12/16 until small controls moved to 14/20) | Notion fields 14/20 400; peer Input | UUI md 16/24; Figma 11/16 |
-| radius, border, fill, shadow | as Input: per-tier radius 6 sm, 8 md, 10 lg (`textarea.css:36`, `:131-133`), `input-edge` #e2e2e2, `bg-surface`, no resting shadow; soft #f7 | Peer: [Input](input.md); second pass: soft fields are flat (Figma) | Products draw no field shadow; kept with Input ([input.md](input.md#settled-questions) 2) |
-| default rows | four lines | Existing Area default (`textarea.css:4-6`) | — |
+| radius, border, fill, shadow | as Input: per-tier radius 6 sm, 8 md (`textarea.css:38`, `:147-148`), `textarea-edge` (= `input-edge`, #e2e2e2), `bg-surface`; resting shadow `--area-shadow-field`, 0 by default (Inspector → Edge and depth → Field shadow; 2026-10-18); soft #f7, flat, edge `textarea-edge-soft` (none, the strong edge under increased contrast; 2026-10-15) (`textarea.css:66-74`) | Peer: [Input](input.md); second pass: soft fields are flat (Figma) | Products draw no field shadow; kept with Input ([input.md](input.md#settled-questions) 2) |
+| default rows | four lines when `rows` is omitted | Existing Area default (`textarea.css:61-63`) | — |
 | resize | vertical | Native; conservative default | — |
 
 ## States
 
 | State | Slot · property changes | Evidence |
 |---|---|---|
-| hover | border → `border-subtle` #d4d4d4; ink fixed | `textarea.css:67-69` |
-| focus | border `field-focus-color` (focus colour) + 2px `field-focus-halo-color` halo | `textarea.css:71-76`; audit S1, as [input.md](input.md) |
-| read-only | the variant's rest paint (no soft fill), no hover edge, default cursor (`textarea.css:78, :116`) | Audit B-9 B (owner), as Input; `area--readonly` predates it |
-| disabled | field paint: fill #f7, `border-faint` (a soft field stays edgeless, `textarea.css:128`), `fg-disabled` ink, resize none; no opacity | `area--disabled`; audit "Disabled" rule (confirmed, no change) |
-| invalid / success / warning | border and halo in the validation colour | `area--error` rgb(207, 3, 60); `area--success`, `area--warning` |
+| hover | border → `textarea-edge-hover` (#d4d4d4; soft: `textarea-edge`); ink fixed | `textarea.css:86-91` |
+| focus | border `field-focus-color` (focus colour) + `field-focus-halo-color` halo after the field lift, and the field focus outline at 0 offset | `textarea.css:93-100`; audit S1, as [input.md](input.md) |
+| read-only | the variant's rest paint (no soft fill), no hover edge, default cursor (`textarea.css:87, :131`) | Audit B-9 B (owner), as Input; `area--readonly` predates it |
+| disabled | field paint: `textarea-bg-disabled` #f7, `border-faint` (a soft field stays edgeless, `textarea.css:143`), `fg-disabled` ink, resize none; no opacity (`textarea.css:133-143`) | `area--disabled`; audit "Disabled" rule (confirmed, no change) |
+| invalid / success / warning | border and halo in the validation colour (`textarea.css:105-128`) | `area--error` rgb(207, 3, 60); `area--success`, `area--warning` |
 
 ## Behavior and accessibility
 
-Native `<textarea>`, ref forwarded (`forms.tsx:64-93`). `invalid`, `validationStatus` and
-`aria-invalid` agree; Field supplies the label, description and error relationships. Read-only
+Native `<textarea>`, ref forwarded (`forms.tsx:65-108`). `invalid`, `validationStatus="error"` and
+`aria-invalid` agree (any one sets `aria-invalid` and `data-invalid`); `success` / `warning` set
+`data-success` / `data-warning`; Field supplies the label, description and error relationships. Read-only
 values stay focusable and are submitted; disabled values are not.
 
 ## Peers and consistency
 
 | Peer | Shared role | Area value in peer | This component | Match / reason |
 |---|---|---|---|---|
-| Input, Select, NumberField | field chrome | `input-edge`, radius 6 / 8 / 10 per tier, no shadow (outline or soft) | same (`textarea-*` aliases of `input-*`) | match |
+| Input, Select, NumberField | field chrome | `input-edge`, radius 6 / 8 / 10 per tier, Field shadow role (0 by default; soft flat) | same at sm and md (`textarea-*` aliases of `input-*`; no lg) | match |
 | Input, Select, NumberField | disabled | field paint, no opacity | same | match |
 | Input | inline inset | cap-centred (11 at md) | the same equal-inset rule: (height − 1cap) / 2 | match since 2026-09-28 (was 11 = gutter − border, 1px off) |
 | Field | description / count | 12/16 `fg-muted` | beneath | match |

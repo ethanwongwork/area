@@ -1,12 +1,12 @@
 # Model picker spec
 
-**Status:** accepted · 2026-09-28 (batch 20; was: in review · 2026-09-26)
 **Captures:** `docs/research/captures/model-picker/`
 **Peers:** Menu (rows, surface; gains an optional note line), Button (ghost trigger), Composer (`mode` slot)
 
 ## Owner decisions
 
 - 2026-09-26: "do each of them subsequently" — ChatGPT conversation group.
+- 2026-10-19 (review page, docs pass): the menu opens on the current model from the keyboard. Every menu holding a choice (a checked radio row) does the same; menus of commands still start on their first row.
 
 ## Job and boundaries
 
@@ -43,6 +43,12 @@ rows      36 tall (46 with a note), radius 12, padding 6 10, label 14/20, note 1
 
 Menu gained `MenuItem.description` (`.area-menu__lines`, `.area-menu__description`) for this;
 two-line rows keep full line boxes (the one-line cap trim is off inside them).
+
+## Behavior and accessibility
+
+Focus on open (Menu's path, `Overlays.tsx` `AnchoredMenu`): Enter, Space, ArrowDown or ArrowUp on the trigger focus the
+current model, the checked radio row (owner, 2026-10-19); a menu with no checked row starts on its first row (ArrowUp:
+the last). A mouse click focuses the menu surface.
 
 ## Visual pass
 

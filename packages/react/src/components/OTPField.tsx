@@ -155,7 +155,8 @@ export const OTPField = /* @__PURE__ */ forwardRef<HTMLInputElement, OTPFieldPro
         </span>,
       );
     }
-    slots.push(<span key={`group-${group}`} className="area-otp-field__group">{cells}</span>);
+    // The drawn slots repeat the real input's value, so assistive tech reads only the input (no double reading).
+    slots.push(<span key={`group-${group}`} className="area-otp-field__group" aria-hidden="true">{cells}</span>);
   });
 
   const isInvalid = invalid || ariaInvalid === true || ariaInvalid === "true";

@@ -17,10 +17,14 @@ marker (see [Build](#5-build)). Mapping them to shared tokens is a later, separa
    peers, visual-pass notes, verification and the owner feedback log.
 2. **Capture files:** `docs/research/captures/<slug>/*.json`. Raw measurements from every
    reference and from Area itself, produced by one script so they compare directly.
-3. **The implementation:** CSS, `manifest.ts`, React, source-shared demos, one variant per
-   gallery tile, and the docs page, all agreeing.
+3. **The implementation:** CSS, `manifest.ts`, React, source-shared demos with one variant per
+   gallery tile, and the family's Documentation entry, all agreeing. The files are listed in
+   [Architecture › Adding a component](ARCHITECTURE.md#adding-a-component-the-files).
 4. **Owner acceptance,** recorded in `apps/desktop/src/content/component-status.mjs`. Until then the
    component is In review, however complete the evidence looks.
+
+Before any of this, decide whether the request needs a new component at all:
+[Governance](GOVERNANCE.md#1-decide-what-kind-of-change-it-is) and the `area-component-intake` skill.
 
 ## Evidence
 
@@ -70,7 +74,7 @@ products change. Each baseline value cites its captures, like a spec.
 - Inventory variants in every reference: each design system's variants, with links, and
   where each target product uses the component. Keep a variant when a target product
   uses it or a source shows a real use case. Write one justification line for each.
-- Name variant axes as in [Components](COMPONENTS.md#useful-variants). Record owner
+- Name variant axes as in [Governance › One vocabulary](GOVERNANCE.md#4-one-vocabulary). Record owner
   decisions at the top of the spec; they override sources.
 
 ## 2. Capture evidence
@@ -86,9 +90,9 @@ For each variant and state, capture every reference that has it. At minimum:
 
 1. **Set up.** 100% browser zoom, window at least 1280px wide, the product's default
    density. Captures record device pixel ratio, zoom and viewport automatically.
-2. **Load the script.** In the gallery it is already loaded (`/area-capture.js`). On any
-   other page, run the full text of `apps/docs/public/area-capture.js` with the browser
-   JavaScript tool; it defines `areaCapture`.
+2. **Load the script.** Run the full text of `apps/docs/public/area-capture.js` with the
+   browser JavaScript tool; it defines `areaCapture`. This works in the app too: the tool
+   runs outside the page's CSP, which blocks `eval` and injected scripts.
 3. **Find the element.** Use a selector, or `await areaCapture.pick()` and click it.
    Shift+Up/Down moves the highlight to the parent/child, Enter selects, Escape cancels.
    Pick the component's outermost box, not the whole row it sits in.
@@ -178,9 +182,11 @@ Choose in this order:
 
 No value is invented, and every Area cell has a basis.
 
-**Icons.** Use the Fluent cut whose native size matches the measured icon slot. Record
-the reference's icon size, stroke weight and ink box for the visual pass. Never scale a
-cut to another size or nudge a glyph.
+**Icons.** Use Area's glyph (`Glyph`) at the size that matches the measured icon slot
+(12, 16, 20, 24, with 12px and 10px cuts). If Area has no icon for the concept, draw one
+(the `area-icon-construction` skill) rather than borrowing a library's. Record the
+reference's icon size, stroke weight and ink box for the visual pass. Never scale a drawing
+to another size or nudge a glyph.
 
 **Translate relative to the owning slot.** When the reference's slot differs in size from
 Area's (Figma's 24px icon against Area's 16px), record the position relative to that slot
@@ -228,17 +234,17 @@ nudges.
   documented `data-*` hooks. Keep size, tone, emphasis, state, layout and composition
   independent.
 - **Integrate together.** Update CSS, `manifest.ts`, React (native props, refs, keyboard
-  behavior, accessible names), source-shared demos, gallery tiles (one variant per tile),
-  docs and exports.
+  behavior, accessible names), exports, source-shared demos, gallery tiles (one variant per
+  tile) and the Documentation entry (the `area-component-docs` skill).
 
 ## 6. Verify the structure
 
-- Capture every Area variant with the same script: the gallery loads it, so call
-  `areaCapture.capture` on the specimen with `source: 'area'`. To capture a whole family,
-  loop over `#gallery-section-<slug> article.docs-visual-gallery__tile`, take the first
-  `.area-*` element in each tile's preview as the shell, and name the file after the tile id
-  (`area--<tile>--rest--light.json`).
-- Check the shared state paint in [the design system guide](DESIGN_SYSTEM.md#color-and-focus):
+- Capture every Area variant with the same script, in the app (Components → the family):
+  call `areaCapture.capture` on the specimen with `source: 'area'`. To capture a whole
+  family, loop over `.gallery-tile`. In each, set `.gallery-tile__stage` to `scale: 1` in the
+  same task (the fit scales previews), take the first `.area-*` element as the shell, and
+  name the file after the tile (`area--<tile>--rest--light.json`).
+- Check the shared state paint in [the design system guide](DESIGN_SYSTEM.md#shared-state-paint):
   row plates, disabled, fixed foreground on hover, neutral markers, one label weight, the
   floating lift. A component that paints one of these roles differently needs a reason in
   its spec.
@@ -279,33 +285,34 @@ acceptance stands until a change reopens it. To audit one:
 
 ## 8. Owner review and feedback
 
-Show the result in the component gallery (`index.html`). Every variant the manifest exposes
-has a tile, ordered by the gallery's groups (Default, Variants, Tones, Sizes, Layout, Content,
-States, Behavior; see `specimenGroup` in `apps/desktop/src/content/specimen-names.mjs`), labelled
-`Group / value` and named by its category so it lands in the right group: `size-sm`,
-`tone-accent`, `state-disabled`, `layout-vertical`. Tile size is measured, not declared
-(`apps/desktop/src/gallery/fit.ts`): a specimen that fits its 4:3 tile shows at 1:1, a larger one
-scales to fit, and one that would fall below half size takes a 2 x 2 tile.
-The gallery's Mode and Density controls change only the canvas. Then give the owner:
+Show the result in the app (Components → the family). Every variant the manifest exposes
+has a tile, named by its category so it lands in the right group: `size-sm`, `tone-accent`,
+`state-disabled`, `layout-vertical` (`specimenGroup` in
+`apps/desktop/src/content/specimen-names.mjs`). Groups run Default, Variants, Tones, Sizes,
+Layout, Content, States, Behavior. Tiles size themselves from what the specimen renders
+(`apps/desktop/src/gallery/fit.ts`), scaled down to fit and never up.
 
-- the component review page (`apps/docs/scripts/component-review.mjs`, republished to the same
-  Artifact). Each family leads with its spec's latest `## Review note, <date>` section: **What
-  changed** and **Why**, in a sentence each, in plain words. The page renders every specimen in the
-  Before build and the current one and labels each variant Changed (with the modes it changed in),
-  New or Unchanged; changed variants show Before and After side by side, with a 2× zoom, and
-  unchanged ones fold away (owner, 2026-10-09);
-- the gallery link for each variant,
-- the spec's comparison table with the Area column,
-- the side-by-side observations,
-- open questions, and anything unverified.
+Then give the owner a review page:
 
-The review gallery (`gallery-components.html`, with each family's Pass review and the approval
-batches) was retired on 2026-10-02 (owner); its URL redirects to the component gallery. Evidence
-for a pass stays in the spec: the audit, the Visual pass section and the captures.
-`apps/docs/src/pass-status.mjs` still records side-by-side validation in Claude in Chrome, but no
-page reads it now.
+1. **Write the spec's review note**, a `## Review note, <date>` section with two plain
+   bullets:
+   - **What changed:** the menu's section titles now start where the row text starts.
+   - **Why:** you asked for them to line up; Notion and Figma align them too.
+
+   A new component's note says what it is for and what it is based on.
+2. **Build the page.**
+   - Build the docs: `npm run build:docs`. The archived site is still the review page's
+     renderer.
+   - Generate the page: `node apps/docs/scripts/component-review.mjs --before <dist of the
+     build the owner last saw> --before-label "main at <sha> (<date>)" --round <slugs>`.
+   - The page renders every specimen in both builds. It marks each variant Changed, New or
+     Unchanged and shows changed ones Before / After side by side.
+   - Publish it to the same artifact as the last round.
+3. **Report.** Give the owner the page, the comparison table with the Area column, the
+   side-by-side observations, the open questions and anything unverified.
 
 Record feedback in the spec's feedback log (observation → change → evidence) before
-changing code. When a lesson applies beyond one component, add it to this guide or the
-skill, and remove any instruction it replaces. Status stays In review until the owner
-accepts the component in `component-status.mjs`.
+changing code, and update the spec's current-state sections in the same change
+([Governance](GOVERNANCE.md#7-where-each-fact-lives)). When a lesson applies beyond one
+component, add it to this guide or the skill, and remove any instruction it replaces.
+Status stays In review until the owner accepts the family in `component-status.mjs`.

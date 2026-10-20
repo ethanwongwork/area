@@ -362,7 +362,7 @@ export function DocumentationTab({ family, onOpenFamily, familyName }: {
       {doc.keyboard?.length ? (
         <Section id="doc-keyboard" title="Keyboard">
           <DataTable label="Keyboard" head={["Keys", "What happens"]} fit={[0]}
-            rows={doc.keyboard.map(([keys, action]) => [<span className="studio-doc__links studio-doc__links--row">{keys.split(" or ").map(key => <Kbd key={key} keys={[key]} size="sm" />)}</span>, action])} />
+            rows={doc.keyboard.map(([keys, action]) => [<span className="studio-doc__links studio-doc__links--row">{keys.split(" or ").map(key => <Kbd key={key} keys={key.split("+")} size="sm" />)}</span>, action])} />
         </Section>
       ) : null}
       {doc.aria?.length || behaviour ? (

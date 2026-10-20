@@ -1,7 +1,5 @@
 # Field spec
 
-**Status:** accepted · 2026-09-26 (spec written in the cohesion audit; accepted earlier;
-second pass with Notion and Figma)
 **Captures:** `docs/research/captures/field/`
 **Peers:** Input, Textarea, Select, NumberField, ColorField (child controls), CheckboxGroup
 (group label and validation), Panel (inspector rows)

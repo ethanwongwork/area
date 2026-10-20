@@ -11,7 +11,7 @@ export interface PropertyListProps extends HTMLAttributes<HTMLUListElement> {
 }
 
 export interface PropertyListItemProps extends Omit<HTMLAttributes<HTMLLIElement>, "hidden"> {
-  /** Names the item ("Fill 2") for its handle and the move announcement. */
+  /** Names the item by its content ("Drop shadow", "#0D99FF"), never its position: the handle adds "position N of M". */
   label: string;
   /** A property that is off (a hidden fill): its value dims; its actions stay full strength. */
   inactive?: boolean;

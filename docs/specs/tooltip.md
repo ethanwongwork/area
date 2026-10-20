@@ -1,6 +1,5 @@
 # Tooltip spec
 
-**Status:** accepted · 2026-09-25 (first pass under the capture workflow)
 **Captures:** `docs/research/captures/tooltip/`
 **Peers:** Kbd (shortcut inside), Popover (interactive overlay), Button (trigger), Toast
 (inverse vs surface annotation)

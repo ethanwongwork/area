@@ -32,3 +32,8 @@ test("invalid and disabled reach the row and the input; letters and digits widen
   assert.match(html, /inputMode="text" pattern="\[0-9A-Za-z\]\*"/);
   assert.match(html, /disabled="" aria-invalid="true"/);
 });
+
+test("the drawn slots are hidden from assistive tech, so only the real input's value is read", () => {
+  const html = render(h(OTPField, { length: 6, groups: [3, 3], defaultValue: "123", "aria-label": "Code" }));
+  assert.equal((html.match(/class="area-otp-field__group" aria-hidden="true"/g) ?? []).length, 2);
+});

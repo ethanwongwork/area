@@ -21,3 +21,8 @@ test("ColorField keeps a native named input and tokenized preview", () => {
   assert.deepEqual(MANIFESTS.colorSwatch.variants.size, ["sm", "md", "lg"]);
   assert.match(renderToString(h(ColorSwatch, { color: "#00000000" })), /role="img" aria-label="Color #00000000"/);
 });
+
+test("with alpha, the colour and opacity group is named", () => {
+  assert.match(renderToString(h(ColorField, { alpha: true, "aria-label": "Fill" })), /role="group"[^>]*aria-label="Color and opacity"|aria-label="Color and opacity"[^>]*role="group"/);
+  assert.match(renderToString(h(ColorField, { alpha: true, groupLabel: "Fill", "aria-label": "Fill hex" })), /aria-label="Fill"/);
+});

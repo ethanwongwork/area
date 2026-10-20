@@ -1,6 +1,5 @@
 # Indicator spec
 
-**Status:** accepted · 2026-09-28 (owner, batch 5)
 **Captures:** `docs/research/captures/indicator/`
 **Peers:** Badge (dot, count-like numerals, tone paint), Avatar (presence attachment),
 Tabs and Nav (attached counts), Button (attached dot/count)

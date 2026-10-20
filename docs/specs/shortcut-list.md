@@ -1,6 +1,5 @@
 # Shortcut list spec
 
-**Status:** accepted · 2026-10-11 (review round 7, components7)
 **Captures:** `docs/research/captures/shortcut-list/`, `kbd/figma--shortcut-panel-*`
 **Peers:** Kbd (the keys), Description list justified (a name at the start, a value at the end), Dialog, Popover and
 Panel (the surfaces it sits in), Menu (string shortcuts in rows)

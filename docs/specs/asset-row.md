@@ -1,6 +1,5 @@
 # Asset row spec
 
-**Status:** complete · 2026-10-12 (approved, round 16); was: in review · 2026-10-12 (round 16, after round-15 changes)
 **Captures:** `docs/research/captures/inspector-rows/`
 **Peers:** Token row and Box model (the inspector's other parts), File upload item (a file with name and meta; an
 upload card, not a list row), Menu rows (list row rhythm), Box model's margin ground (the preview well), Button ghost sm
@@ -53,9 +52,10 @@ Area:
 
 ```
 div   .area-asset-row
-  span  __preview     40 square well, 8 in: bg-subtle, radius-small, 4 inside; an image contained, or an icon at icon-md
-  span  __text        column: __name 12/16 strong, __meta 12/16 muted; 12 from the preview
-  span  __actions     trailing, inside the row's 8 padding
+  span  __preview     40 square well, 8 in: bg-subtle, radius-small, the swatch ring over it (::after); an image
+                      covering it edge to edge, or an icon at icon-md (16) centred, 4 inside
+  span  __text        column: __name 12/16 strong, __meta 12/16 muted, tabular; 12 from the preview; each line ellipsis
+  span  __actions     trailing, 2 apart, inside the row's 8 padding
 ```
 
 Inset equations: preview 8 from every edge of the 56 row (8 + 40 + 8), so stacked wells sit 16 apart; text 8 + 40 + 12
@@ -67,8 +67,9 @@ Inset equations: preview 8 from every edge of the 56 row (8 + 40 + 8), so stacke
 |---|---|---|---|---|
 | row height | 56 | 56: 8 + 40 + 8 | Figma; shadcn Attachment (8 around 40) | — |
 | preview | 56 flush at the panel edge, radius 2 | 40, inset 8, `bg-subtle` (#f7, Box model's ground), `radius-small` (6), a 1px swatch ring over it; an image fills it (`cover`), an icon sits 4 inside | survey: 40 in shadcn, Penpot, Polaris, Untitled UI; every reference but Figma insets; Penpot 6 | Figma is the outlier (flush, 56, radius 2) |
-| preview content | a 16 placeholder mark | an image `object-fit: contain` with 8 inside, or an icon at `icon-xl` (24) | Figma's centred mark | — |
-| text | 16 in, two lines | 12 gap; name 12/16 strong, meta 12/16 muted, no gap (32) | survey: 12 in Untitled UI, Fluent, Polaris; name 500 / 600 in shadcn, Untitled UI, Fluent | Figma's 16; Area's inspector type |
+| preview content | a 16 placeholder mark | an image fills the well (`object-fit: cover`, no padding); an icon or vector at `icon-md` (16) centred, 4 inside | owner, round 15 ("should the image be full container?"); Figma's centred 16 mark | — |
+| ring | — | `token-swatch-ring` at `stroke-width`, inset, over the well and its content; forced colours: a CanvasText border | owner, round 15 ("should there be a light stroke too?"); Polaris 1px 8% | — |
+| text | 16 in, two lines | 12 gap; name 12/16 strong, meta 12/16 muted and tabular, no gap (32) | survey: 12 in Untitled UI, Fluent, Polaris; name 500 / 600 in shadcn, Untitled UI, Fluent | Figma's 16; Area's inspector type |
 | action | not captured | trailing slot inside the 8 padding, visible at rest | survey: file and attachment rows keep it visible (shadcn, Untitled UI, Fluent, Zeplin) | list patterns hide it until hover; Area keeps it, so it is never hover-only |
 
 ## States
@@ -78,7 +79,7 @@ Static. A trailing action keeps its own states (Button).
 ## Behavior and accessibility
 
 A plain `div`; the name and meta are read as text; an image preview takes `previewAlt` (default empty: the name already
-says what it is). Native props and the ref reach the root.
+says what it is); an icon preview is `aria-hidden`. Native props and the ref reach the root.
 
 ## Verification
 

@@ -153,7 +153,7 @@ export const COMPONENT_PAGES = [
 
   {
     slug: "color-picker", name: "Color picker", exportName: "ColorPicker", manifest: "colorPicker",
-    api: [["variant", '"surface" | "plain" (plain drops the floating plate inside a Popover or Panel)', '"surface"'], ["value / defaultValue", "hex color (#RRGGBB or #RRGGBBAA)", '"#8D4DF3"'], ["onValueChange", "(hex) => void", "—"], ["alpha", "boolean: opacity track and percentage", "true"], ["model / defaultModel / onModelChange", '"hex" | "rgb" | "css" | "hsl" | "hsb"', '"hex"'], ["eyedropper", "boolean; shown where the EyeDropper API exists", "true"], ["header", "ReactNode row above the editor", "—"], ["swatches / swatchesLabel / onAddSwatch", "ColorSwatchOption[], string, (hex) => void", '[], "Saved colors"'], ["label / name / disabled", "group name (fallback when no aria-label; an aria-label names the group and every inner control) and form state", '"Color" / — / false']],
+    api: [["variant", '"surface" | "plain" (plain drops the floating plate inside a Popover or Panel)', '"surface"'], ["value / defaultValue", "hex color (#RRGGBB or #RRGGBBAA)", '"#8D4DF3"'], ["onValueChange", "(hex) => void", "—"], ["alpha", "boolean: opacity track and percentage", "true"], ["model / defaultModel / onModelChange", '"hex" | "rgb" | "css" | "hsl" | "hsb" | "oklch"', '"hex"'], ["eyedropper", "boolean; shown where the EyeDropper API exists", "true"], ["header", "ReactNode row above the editor", "—"], ["swatches / swatchesLabel / onAddSwatch", "ColorSwatchOption[], string, (hex) => void", '[], "Saved colors"'], ["label / name / disabled", "group name (fallback when no aria-label; an aria-label names the group and every inner control) and form state", '"Color" / — / false']],
     examples: [
       {id: "default", title: "Fill", note: "Figma's fill picker: drag the area or focus it and use the arrows (Left/Right saturation, Up/Down brightness, Shift for 10). Hue, opacity, the value row and saved colors stay synchronized. Swatches use Area family 500 values; user colors do not change with the theme.", demo: "GalleryColorPicker"},
       {id: "header", title: "Header", note: "A header row holds a title, tabs or a close action, divided from the editor as in Figma.", demo: "GalleryColorPickerHeader"},
@@ -212,7 +212,7 @@ export const COMPONENT_PAGES = [
       { id: "days-circle", title: "Circle", note: "Round days; days that can be chosen carry a soft fill, as in booking calendars. Unavailable days are struck through.", demo: "GalleryCalendarCircle" },
       { id: "days-tile", title: "Tile", note: "Days that can be chosen are outlined tiles; days that cannot are filled and quiet.", demo: "GalleryCalendarTile" },
       { id: "markers", title: "Markers", note: "Dots under days that carry events, in a tone per date. They are announced as a description.", demo: "GalleryCalendarMarkers" },
-      { id: "layout-week", title: "Week", note: "One week between arrows, each day with its weekday and month. Arrows move by day; Up, Down, Page Up and Page Down by week.", demo: "GalleryCalendarWeek" },
+      { id: "layout-week", title: "Week", note: "One week between arrows, each day with its weekday and month. Arrows move by day; Up and Down by week; Page Up and Page Down by month.", demo: "GalleryCalendarWeek" },
       { id: "composition-schedule", title: "Schedule", note: "A composition: a calendar, a time list and a footer summary with Cancel and an action.", demo: "GalleryCalendarSchedule" },
       { id: "disabled", title: "Disabled", demo: "GalleryCalendarDisabled" },
     ],
@@ -235,7 +235,7 @@ export const COMPONENT_PAGES = [
     imports: "Toolbar, ToolbarGroup, ToolbarItem, ToolbarSeparator, ToolbarOverflow, Button, MenuItem",
     api: [["variant", '"plain" | "surface"', '"plain"'], ["size", '"sm" | "md" | "lg"', '"md"'], ["orientation", '"horizontal" | "vertical"', '"horizontal"'], ["fullWidth", "boolean", "false"], ["ToolbarItem", "one focusable child", "—"], ["ToolbarOverflow", "menuLabel (label deprecated), optional icon, MenuItem children (a ghost icon Button that opens a Menu)", '"More actions"'], ["Button selected", "a pressed toggle rises as a plate", "false"]],
     examples: [
-      { id: "default", title: "Tools", note: "Figma's toolbelt: tools 8 apart on a floating bar, the chosen tool raised, a divider, and the mode switch as a track. Tab enters once; arrow keys and Home/End move among enabled commands without activating them.", demo: "GalleryToolbar" },
+      { id: "default", title: "Tools", note: "Figma's toolbelt: tools 8 apart on a floating bar, the chosen tool on Button's selected fill, and a divider. Tab enters once; arrow keys and Home/End move among enabled commands without activating them.", demo: "GalleryToolbar" },
       { id: "formatting", title: "Text formatting", note: "Soft fields for font and size, pressed style toggles, and alignment as a track.", demo: "GalleryToolbarFormatting" },
       { id: "plain", title: "Plain", note: "Use a light command row within an existing surface.", demo: "GalleryToolbarPlain" },
       { id: "vertical", title: "Vertical", note: "Up and Down move focus through a vertical group.", demo: "GalleryToolbarVertical" },
@@ -560,12 +560,12 @@ export const COMPONENT_PAGES = [
     api: [
       ["margin / border / padding", "a value for every side, [top, right, bottom, left], or { top, right, bottom, left }", "—"],
       ["radius", "a value for every corner, or [top-left, top-right, bottom-right, bottom-left]", "—"],
-      ["width / height", "the content's size, shown in the dashed box", "—"],
+      ["width / height", "the content's size, shown in the content box", "—"],
       ["caption / labels", "a note such as \"border-box\" / the border and padding labels", "— / Border, Padding"],
       ["tone", "\"info\" (the measuring blue) | \"neutral\" (greyscale)", "info"],
     ],
     examples: [
-      { id: "default", title: "Default", note: "Figma Dev Mode's layer properties: margin on a well, the border box with its corner radii, the padding box, and the size in a dashed box. One image to assistive technology, named by its values.", demo: "GalleryBoxModel" },
+      { id: "default", title: "Default", note: "Figma Dev Mode's layer properties: margin on a well, the border box with its corner radii, the padding box, and the size in the content box, all on solid lines. One image to assistive technology, named by its values.", demo: "GalleryBoxModel" },
       { id: "sides", title: "Per side", note: "Values in CSS order: top, right, bottom, left.", demo: "GalleryBoxModelSides" },
     ],
   },
@@ -665,7 +665,7 @@ export const COMPONENT_PAGES = [
       ["label", "the figure's name; without one it is decorative", "—"],
     ],
     examples: [
-      { id: "default", title: "Default", note: "The outline folder by default: the back with its tab and the pocket, flat in the subtle grey with one thin whole-pixel edge, in a square icon box at Finder's 64. variant=\"solid\" is Finder's lit blue folder.", demo: "GalleryFolder" },
+      { id: "default", title: "Default", note: "The outline folder by default: the back with its tab and the pocket, flat in the control fill (bg-component) with one thin whole-pixel edge, in a square icon box at Finder's 64. variant=\"solid\" is Finder's lit blue folder.", demo: "GalleryFolder" },
       { id: "contents", title: "What it holds", note: "The difference from Finder: anything inside draws one straight white sheet above the pocket; an image fills it.", demo: "GalleryFolderContents" },
       { id: "tones", title: "Tones", note: "Finder's blue, neutral, and the palette's hues at Finder's lightness and chroma.", demo: "GalleryFolderTones" },
       { id: "solid", title: "Solid", note: "The alternate: Finder's folder measured from the live icon, made rounder and brighter, holding one straight white sheet.", demo: "GalleryFolderSolid" },
@@ -701,8 +701,8 @@ export const COMPONENT_PAGES = [
       ["FileGridItem: dropTarget", "a drag is over this item: its Folder tips open", "false"],
     ],
     examples: [
-      { id: "default", title: "Default", note: "Finder's icon view: the figure over its name and item count, centred, 12 text with the name strong and the count muted.", demo: "GalleryFileTile" },
-      { id: "file", title: "A file", note: "A file's type glyph at 40 of the 64 square, as ChatGPT's Library card.", demo: "GalleryFileTileFile" },
+      { id: "default", title: "Default", note: "Finder's icon view: the figure over its name and item count, centred, in the app's UI text with the name strong and the count muted.", demo: "GalleryFileTile" },
+      { id: "file", title: "A file", note: "A file's type glyph at half the square, as ChatGPT's Library card.", demo: "GalleryFileTileFile" },
       { id: "grid", title: "Grid", note: "A ListBox grid of tiles: one Tab stop, arrows in two dimensions, typeahead, the row plates' paint; Enter or a double click opens.", demo: "GalleryFileGrid" },
     ],
   },
@@ -740,7 +740,7 @@ export const COMPONENT_PAGES = [
       ["actions", "trailing actions, such as a download button", "—"],
     ],
     examples: [
-      { id: "default", title: "Default", note: "Figma Dev Mode's Assets: a 56px preview well, the asset's name and its format and size.", demo: "GalleryAssetRow" },
+      { id: "default", title: "Default", note: "Figma Dev Mode's Assets: a 40px preview well in a 56px row, the asset's name and its format and size.", demo: "GalleryAssetRow" },
       { id: "action", title: "With an action", note: "A trailing download or export button.", demo: "GalleryAssetRowAction" },
     ],
   },
@@ -881,13 +881,13 @@ export const COMPONENT_PAGES = [
     imports: "Link, linkVariants",
     api: [
       ["variant", '"inline" (always underlined) | "standalone" (underlined on hover and focus)', '"inline"'],
-      ["ink", '"inherit" | "muted" | "action" (the Action role: neutral until a theme makes actions the accent) | "blue" (the link blue of product UI)', '"inherit"'],
+      ["ink", '"inherit" | "muted" | "action" (the Action role: neutral until a theme makes actions the accent) | "blue" (the link blue of product UI) | "purple" | "pink" | "green" | "red" | "orange" | "brown" (hued inks for articles)', '"inherit"'],
       ["external", "boolean (new tab, rel noopener noreferrer, the external mark, announced)", "false"],
       ["newTabLabel", "string", '"(opens in a new tab)"'],
       ["linkVariants", "({ variant, ink }) => class names, for a router's own anchor", "—"],
     ],
     examples: [
-      { id: "default", title: "Default", note: "In running text a link keeps the text's size and ink and is underlined, the line at 40% of the ink (Notion), one stroke 2px below the text (ChatGPT). Hover and focus draw the line at full ink; the ink itself never changes.", demo: "GalleryLink" },
+      { id: "default", title: "Default", note: "In running text a link keeps the text's size and ink and is underlined, the line at 40% of the ink (Notion), close under the text (0.08em). Hover and focus draw the line at full ink; the ink itself never changes.", demo: "GalleryLink" },
       { id: "standalone", title: "Standalone", note: "Outside a sentence (Learn more, View all) the underline appears on hover and focus.", demo: "GalleryLinkStandalone" },
       { id: "caption", title: "In a caption", note: "Nothing to set: the link inherits the caption's 12px and muted ink, as ChatGPT's composer note does.", demo: "GalleryLinkCaption" },
       { id: "external", title: "External", note: "Opens in a new tab with the external mark, centred on the cap height, and says so to assistive tech.", demo: "GalleryLinkExternal" },
@@ -1062,6 +1062,7 @@ export const COMPONENT_PAGES = [
     api: [
       ["variant", '"soft" | "outline"', '"soft"'],
       ["size", '"sm" | "md" | "lg"', '"md"'],
+      ["fullWidth", "boolean: the group fills its container and its Buttons share the width", "false"],
       ["children", "Button[]", "—"],
       ["native div props / ref", "HTMLAttributes / HTMLDivElement", "forwarded"],
     ],
@@ -1373,7 +1374,7 @@ export const COMPONENT_PAGES = [
         note: "Use soft on an existing surface when a quieter neutral boundary is appropriate.",
         demo: "TextareaSoft",
       },
-      { id: "sizes", title: "Sizes", note: "The three tiers change editing type and padding without pretending multiline height is a control tier.", demo: "TextareaSizes" },
+      { id: "sizes", title: "Sizes", note: "The two tiers (sm, md) change editing type and padding without pretending multiline height is a control tier.", demo: "TextareaSizes" },
       { id: "invalid", title: "Invalid", note: "Pair invalid paint with a concise Field validation message in forms.", demo: "TextareaInvalid" },
       { id: "success", title: "Success", note: "Use success only when nearby text explains what was accepted.", demo: "TextareaSuccess" },
       { id: "warning", title: "Warning", note: "Use warning for attention without blocking entry.", demo: "TextareaWarning" },
@@ -1409,7 +1410,7 @@ export const COMPONENT_PAGES = [
     manifest: "checkbox",
     api: [
       ["variant", '"card"', "—"],
-      ["size", '"sm" | "md" | "lg"', '"md"'],
+      ["size", '"md" | "lg"', '"md"'],
       ["label", "ReactNode", "—"],
       ["caption / description", "ReactNode", "—"],
       ["leadingVisual", "ReactNode", "—"],
@@ -1440,7 +1441,7 @@ export const COMPONENT_PAGES = [
     imports: "Radio, RadioGroup",
     manifest: "radio",
     api: [
-      ["size", '"sm" | "md" | "lg"', '"md"'],
+      ["size", '"md" | "lg"', '"md"'],
       ["label", "ReactNode", "—"],
       ["name", "string", "—"],
       ["description", "ReactNode", "—"],
@@ -1476,7 +1477,7 @@ export const COMPONENT_PAGES = [
     examples: [
       { id: "default", title: "Default", demo: "SwitchDefault" },
       { id: "rounded", title: "Rounded", demo: "SwitchRounded", note: "pill={false}: the corner follows the radius setting instead of a pill, square at Sharp." },
-      { id: "sizes", title: "Sizes", note: "Switch uses a three-step track: 28×16, 36×20 and 44×24px (a long track is wider). Medium is the default.", demo: "SwitchSizes" },
+      { id: "sizes", title: "Sizes", note: "The track follows the size and the type setting, and the thumb travels 12 at every size (a long track is wider). Medium is the default.", demo: "SwitchSizes" },
       { id: "description", title: "Description", demo: "SwitchDescription" },
       { id: "row", title: "Settings row", demo: "SwitchSettingsRow" },
       { id: "list", title: "Settings list", demo: "SwitchList" },
@@ -1572,7 +1573,7 @@ export const COMPONENT_PAGES = [
       ["onColor", "on a coloured ground: the ground's own ink for the text and a 20% line of it, no plate; overrides variant and tone", "false"],
       ["size", '"sm" | "md" | "lg"', '"md"'],
       ["pill", "boolean; unset follows the theme's pills list (a pill by default), true forces a pill, false the radius corner", "unset"],
-      ["dot / dotOnly / iconOnly / truncate / uppercase", "boolean", "false"],
+      ["dot / dotOnly / iconOnly / truncate", "boolean", "false"],
       ["avatar / flag", "decorative ReactNode", "—"],
       ["onDismiss / dismissLabel", "callback and required accessible action name", "—"],
       ["icon / trailingIcon", "ReactNode", "—"],
@@ -1630,7 +1631,7 @@ export const COMPONENT_PAGES = [
       { id: "active", title: "Active ring", demo: "AvatarActive" },
       { id: "availability", title: "Availability badge", demo: "AvatarAvailability" },
       { id: "notification", title: "Notification badge", demo: "AvatarNotification" },
-      { id: "tones", title: "Accent and inverse", demo: "AvatarTones" },
+      { id: "tones", title: "Neutral and inverse", demo: "AvatarTones" },
       { id: "shapes", title: "Shapes", demo: "AvatarShapes" },
       { id: "sizes", title: "Sizes", demo: "AvatarSizes" },
     ],
@@ -1789,7 +1790,7 @@ export const COMPONENT_PAGES = [
       ["aria-label / aria-labelledby", "names the trigger and the list", "—"],
     ],
     examples: [
-      { id: "default", title: "Default", note: "Notion's access levels: a description under each label, the chosen row plated and checked. Enter, Space or ↓ opens; ↑/↓, Home/End and Page keys move; typing jumps to a label; Enter or Tab picks; Escape closes. Focus stays on the trigger.", demo: "GalleryCustomSelect" },
+      { id: "default", title: "Default", note: "Notion's access levels: a description under each label, the chosen row checked. Enter, Space or ↓ opens; ↑/↓, Home/End and Page keys move; typing jumps to a label; Enter or Tab picks; Escape closes. Focus stays on the trigger.", demo: "GalleryCustomSelect" },
       { id: "icons", title: "Icons", note: "The chosen option's icon shows in the trigger too.", demo: "GalleryCustomSelectIcons" },
       { id: "groups", title: "Groups", note: "Options sharing a group are listed under its label, groups ruled apart (Notion's access menu).", demo: "GalleryCustomSelectGroups" },
       { id: "ghost", title: "Ghost", note: "Notion's inline select: no chrome at rest, as wide as its value.", demo: "GalleryCustomSelectGhost" },
@@ -1980,7 +1981,7 @@ export const COMPONENT_PAGES = [
     api: [
       ["size", '"sm" | "md" | "lg" (corner and inset; type is the same at every size)', '"md"'],
       ["layout", '"vertical" | "horizontal" | "thumbnail" | "immersive"', '"vertical"'],
-      ["selected", "boolean: the chosen card of a set, the selection stroke 2 wide inside its edge (also aria-selected / aria-pressed on the card)", "false"],
+      ["selected", "boolean: the chosen card of a set, the selection stroke 2 wide inside its edge. Sets data-selected only; aria-selected or aria-pressed belong to the element that owns the choice", "false"],
       ["CardLink", "Anchor attributes. Inside CardTitle it makes the whole card one link", "—"],
       ["CardHeader action", "ReactNode: a Badge or icon Button on the title's first line", "—"],
       ["CardMedia bleed / well", "boolean: flush with the card's edge / a recessed surface for a composition", "false"],
@@ -2195,7 +2196,6 @@ export const COMPONENT_PAGES = [
       ["keys", "string[]", "—"],
       ["size", '"sm" | "md" ("small" / "normal" are deprecated aliases)', '"md"'],
       ["variant", '"default" | "quiet" | "on-color" (appearance and on-emphasis are deprecated aliases)', '"default"'],
-      ["quiet", "boolean (deprecated)", "false"],
     ],
     practices: [
       "Pass <code class='area-code'>keys</code> as names, not glyphs. <code class='area-code'>cmd</code>, <code class='area-code'>shift</code>, <code class='area-code'>alt</code>, <code class='area-code'>ctrl</code>, <code class='area-code'>enter</code>/<code class='area-code'>return</code> and the arrows render as native key symbols automatically.",

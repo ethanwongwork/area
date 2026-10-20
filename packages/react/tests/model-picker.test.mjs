@@ -35,3 +35,11 @@ test("ModelPicker forwards every supported trigger size", () => {
     assert.ok(html.match(/<button[^>]*>/)[0].includes(`area-button--${size}`));
   }
 });
+
+// No DOM here: the focus rule is read from the anchored menu's source (Overlays.tsx, AnchoredMenu).
+test("a keyboard-opened menu lands on its checked radio row, so the picker opens on the current model", async () => {
+  const { readFileSync } = await import("node:fs");
+  const source = readFileSync(new URL("../src/components/Overlays.tsx", import.meta.url), "utf8");
+  assert.match(source, /\[role='menuitemradio'\]\[aria-checked='true'\]/);
+  assert.match(source, /entry\.current === "surface" \? surfaceNode\.current : chosen \?\?/);
+});

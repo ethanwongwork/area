@@ -35,7 +35,7 @@ export const Attachment = forwardRef<HTMLDivElement, AttachmentProps>(function A
       <img className="area-attachment__image" src={src} alt="" />
       {status === "uploading" ? (
         <span className="area-attachment__overlay">
-          <Spinner size="md" value={progress} label={progress === undefined ? `Uploading ${name}` : undefined}
+          <Spinner size="md" value={progress} label={`Uploading ${name}`}
             valueText={progress === undefined ? undefined : `Uploading ${name}, ${Math.round(progress)}%`} />
         </span>
       ) : status === "error" ? (
@@ -196,5 +196,9 @@ export function formatTimestamp(date: Date, now: Date = new Date(), locale?: str
   return `${when} ${time}`;
 }
 
-/** Codex shows a timestamp before a person's turn that comes over an hour after the last one (10 minutes for a reply). */
-export const TIMESTAMP_GAP = { user: 3_600_000, assistant: 600_000 } as const;
+/**
+ * A timestamp goes before a person's message that comes over an hour after the conversation's last turn, either
+ * person's or agent's (Codex's pause rule). Replies never get one: a reply follows the message it answers
+ * (owner, 2026-10-19). Milliseconds.
+ */
+export const TIMESTAMP_GAP = 3_600_000;

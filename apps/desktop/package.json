@@ -11,7 +11,8 @@
     "start": "node scripts/build.mjs && electron .",
     "preview": "node scripts/dev.mjs --browser",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "check:playgrounds": "node scripts/check-playgrounds.mjs"
+    "check:playgrounds": "node scripts/check-playgrounds.mjs",
+    "check:docs": "node scripts/check-docs.mjs"
   },
   "dependencies": {
     "@area/icons": "*",

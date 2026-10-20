@@ -1,6 +1,5 @@
 # Toast spec
 
-**Status:** accepted · 2026-09-26 (was: in review · 2026-09-26 (pass 1: Popover's inset and corner, 40 tall, shared lift))
 **Captures:** `docs/research/captures/toast/` (pass-0 in `before/`)
 **Peers:** Popover (same inset, corner and close rule), Alert (inline counterpart), Dialog,
 Menu (lift)
@@ -14,7 +13,9 @@ Menu (lift)
   with centered icons and text. Multiline icons align to the first text line, and multiline
   is demonstrated separately from tone. Consumers own placement, lifetime and dismissal
   focus restoration. Reference: [Spectrum Toast](https://react-spectrum.adobe.com/v3/Toast.html).
-  (Insets and height superseded by pass 1; the rest stands.)
+  (Insets and height superseded by pass 1; the rest stands.) — superseded 2026-09-30 (audit E-11 A, built
+  2026-10-01): `Toaster` / `useToaster` host toasts with a queue, placement and timers; Toast itself stays the
+  surface, and focus return stays with the consumer.
 - 2026-09-26: "do the next component" after the type and radius pass. Every surface title is
   strong (typography.md); corner controls sit evenly in the corner (Popover pass 3).
 - 2026-09-26: accepted. Owner: "consider every component that you have built to be approved. if i havent given any feedback to change anything consider them approved."
@@ -22,16 +23,18 @@ Menu (lift)
 ## Job and boundaries
 
 Reports the outcome of an action without interrupting, and leaves on its own or when
-dismissed. Not Alert (inline and persistent), not Dialog (blocks), not Popover (anchored,
-interactive content).
+dismissed. Toast is the surface; `Toaster` hosts toasts for an app: `useToaster().show()` queues one
+at the viewport's end corner, announces it, and removes it after its timer or on dismiss. Not Alert
+(inline and persistent), not Dialog (blocks), not Popover (anchored, interactive content).
 
 ## Variants
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| tone | info, success, warning, danger (icon color) | Outcome | Sonner types (success, info, warning, error); Notion (warning icon) |
+| tone | neutral (default, muted icon), info, success, warning, danger (icon color) | Outcome | Sonner types (success, info, warning, error); Notion (warning icon) |
 | composition | icon, title + description, action, dismiss | Undo, follow-up | Sonner (title, description, Undo, close); Notion (text action) |
 | layout | single line, multiline | Long messages | Sonner, Notion |
+| composition | standalone Toast; Toaster (`show`, `dismiss`, timers, stacking) | Hosting | Sonner's Toaster; Radix Toast (F8, 5000) |
 
 Excluded: an inverse (dark) surface. Notion's toast is dark (`rgb(44, 44, 43)`); Sonner's is
 the popover surface. Area keeps the surface theme like its other floating layers; see Open
@@ -75,13 +78,15 @@ Notion's shadow is the 20/24 + 5/8 lift Area uses for Popover, Menu and Dialog, 
 
 | Slot · property | Area value | Basis | Reason when it differs |
 |---|---|---|---|
-| surface · inset | **12** (border included), icon **12** from the top and side | Popover (the compact floating surface) | Was 10 (icon 11 from both). Notion 16, shadcn 16: Area keeps its compact-surface inset |
-| surface · height | **40** for one line, with or without controls | Notion 43; Popover's numbers (20 line + 2 × 10) | Was 38. Controls no longer change the height |
-| surface · radius | 12 (unchanged) | Container radius; concentric with the controls (12 − 6 = 6) | Notion 8, shadcn 18 |
-| surface · shadow | **`--area-shadow-float`**, the Elevation axis's float role: `0 0 2` + `0 8 16` at the Elevation step in % (3% key at the default 3), the ambient half, dark doubled; transparent at step 0 (axes/elevation.ts) | Notion (same lift); Popover, Menu, Dialog | Was a 2/4 shadow. A role since audit S10 |
-| icon · gap | 8 | Notion 8 | — |
-| controls | 28px box, negative block margins; the last sits **6 from the top and side** (6 from the bottom on one line) | Popover close rule; concentric with the corner | Was 5 top / 11 side; the dismiss was a bespoke-toned ghost button, now neutral with the dismiss glyph |
-| title | 14/20 strong | Typography: compact surface title; shadcn 500 | Was regular |
+| surface · inset | **`inset-surface-sm`** at the sides (12, compact 8; border included); above and below so the 16 icon sits as far from the top as from the side (10 + 2, compact 8) (surface.css:1554-1563) | Popover (the compact floating surface); compact pass 2026-10-01 | Was 10 (icon 11 from both). Notion 16, shadcn 16: Area keeps its compact-surface inset |
+| surface · width | 360, `--area-toast-inline-size` overrides; at most 100% | Not captured (shadcn 384) | — |
+| surface · height | **40** for one line, with or without controls (compact 32) | Notion 43; Popover's numbers (20 line + 2 × 10) | Was 38. Controls no longer change the height |
+| surface · radius | one line: `radius-control-lg`, capped (40 → 10, compact 32 → 8); titled: `radius-container` 12 (surface.css:1565, 1578) | Radius audit D2 (owner, 2026-10-03): a one-line toast is a bar, as Alert; concentric with the controls | Was 12 / 8. Notion 8, shadcn 18 |
+| surface · edge | `border-width` `border-float` | Floating surfaces | — |
+| surface · shadow | **`--area-shadow-float`**, the Elevation axis's float role, after the Surface axis's `shadow-edge` (and a material's layers) (surface.css:1570) | Notion (same lift); Popover, Menu, Dialog; Surface axis (owner, 2026-10-14) | Was a 2/4 shadow. A role since audit S10 |
+| icon · gap | `ui-cluster` (8, compact 6) | Notion 8 | — |
+| controls | 28px box (compact 24), negative block margins; the last sits **6 from the top and side** (compact 4), concentric with the corner (surface.css:1593-1602) | Popover close rule | Was 5 top / 11 side; the dismiss was a bespoke-toned ghost button, now neutral with the dismiss glyph |
+| title | UI type (14/20), strong; 5 above the description (surface.css:1589-1590) | Typography: compact surface title; shadcn 500; Popover's title rule (audit E-13) | Was regular |
 | body under a title | **muted** (`area-toast__description`) | Sonner (muted description); every surface description | Was default |
 | danger and warning icons | the alert glyph | — | Danger used an ×, which reads as dismiss |
 
@@ -91,17 +96,20 @@ Inset equations: text top = 1 + 9 = 10; icon = 10 + (20 − 16)/2 = 12; last con
 ## Behavior and accessibility
 
 A standalone Toast's content announces itself: `role="status"` with `aria-atomic`, or
-`role="alert"` for danger, as Alert does; `live={false}` turns this off (primitives.tsx:1411-1427).
+`role="alert"` for danger, as Alert does; `live={false}` turns this off (primitives.tsx:1514-1544).
 `Toaster` and `useToaster()` host toasts (audit E-11 A, owner 2026-09-30; Toaster.tsx): polite and
 assertive live regions exist before any toast, so the first message is announced (danger goes to the
 assertive one), and its toasts render with `live={false}`; `show(options)` returns an id and
-`dismiss(id)` removes one. Timers (default `duration` 5000) pause while the pointer or focus is in the
-region (WCAG 2.2.1); a toast with an action stays until dismissed. F8 (`hotkey`) focuses the region,
-named "Notifications (F8)". Toasts stack newest last at the viewport's end corner, 16 in, 8 apart
-(`surface.css:1319-1333`; the 16 and 8 are the system's surface inset and row gap, not captured).
+`dismiss(id)` removes one. What is announced is the plain-text title and message, or `announcement`.
+Timers (the Toaster's `duration`, 5000 by default, or the toast's own) pause while the pointer or focus is
+in the region (WCAG 2.2.1); a toast with an action stays until dismissed. F8 (`hotkey`) focuses the region,
+named "Notifications (F8)" (`label`); the region is hidden while empty. Toasts stack newest last at the
+viewport's end corner, 16 in, 8 apart, on the `z-toast` layer (`surface.css:1519-1529`; the 16 and 8 are the
+system's surface inset and row gap, not captured). A toast enters from the edge and leaves through
+`data-leaving` (see "Motion and interaction, 2026-10-07").
 Focus return stays with the consumer. The dismiss is a ghost small Button
 (28, radius 6) with the Area `dismiss` glyph, shown by `onDismiss` and named by `dismissLabel`
-("Dismiss notification" by default; `primitives.tsx:1187-1188`, `:1204`). It is the close
+("Dismiss notification" by default; `primitives.tsx:1519-1520`, `:1541`). It is the close
 recipe for rectangular surfaces, shared with Popover and Alert (audit S9).
 
 ## Visual pass

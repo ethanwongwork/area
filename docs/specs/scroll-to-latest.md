@@ -1,6 +1,5 @@
 # Scroll to latest spec
 
-**Status:** accepted · 2026-09-28 (batch 20; was: in review · 2026-09-26)
 **Captures:** `docs/research/captures/scroll-to-latest/`
 **Peers:** Button (outline, icon-only, pill), Composer, Message
 

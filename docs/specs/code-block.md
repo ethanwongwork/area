@@ -1,6 +1,5 @@
 # Code block spec
 
-**Status:** complete · 2026-10-12 (size sm approved, review round 12; was: accepted · 2026-09-28, batch 22)
 **Captures:** `docs/research/captures/code-block/`
 **Peers:** Code (inline form, shared ground), Tabs (language tabs), Select (language picker),
 Button sm ghost (copy), Nav and Tree view (neutral current marker), Card and Panel (container)
@@ -60,21 +59,23 @@ editor inspector (Dev Mode, where code is shown, was not opened).
 ## Anatomy
 
 ```
-area   div.area-code-block  1px Card's edge (#ee), Card md's corner (24), bg-code (white), overflow hidden
-  header   min 32 (37 with the 28 copy Button), padding 4/12, gap 8, bottom rule (border-decorative); 14/20
+area   div.area-code-block  `stroke-width` `border-card` edge, `radius-container` corner (12; sm 10, compact 9),
+                            bg-code (white), overflow hidden
+  header   min 32 (37 with the 28 copy), padding 4/12 (compact 4/8), gap `ui-cluster` (8, compact 6),
+           bottom rule (border-decorative); UI type
     title     Geist Mono 400, fg-default;  language  14/20 fg-muted
-    tab       28 tall, 6px sides, radius-small, mono 14/20; selected: 1px underline, 6px in
-    actions   margin-inline-start auto, gap 4; copy = Button ghost neutral sm 28
-  body > pre   padding 12 block, 14/20 mono;  code > line (grid: 32px gutter | text)
-    gutter    padding 6 / 12, tabular numbers, fg-muted, user-select none
-    text      16px end inset; unnumbered: 12px start inset
-  toggle   32 tall (64 with the fade when collapsed), top rule (border-decorative), 400
+    tabs      Tabs sm (`area-tabs area-tabs--sm`, audit G-6 A): Tabs' indicator, hover and inset focus
+    actions   margin-inline-start auto, gap 4, ends 4 from the edge; copy = CopyButton (Button ghost neutral sm 28)
+  body > pre   padding 12 block (compact 8), 14/20 mono;  code > line (grid: 32px gutter | text)
+    gutter    padding 6 / 12 (compact 6 / 8), tabular numbers, fg-muted, user-select none
+    text      16px end inset (compact 12); unnumbered: 12px start inset (compact 8)
+  toggle   32 tall (64 with the fade when collapsed), top rule (border-decorative), 400, not selectable
 ```
 
 Inset equations: header 4 + 28 copy + 4 + 1 rule = 37 (measured 37). Without a header the
-copy floats on line 1: top = 12 + (20 − 28) / 2 = 8, plus 1 border = 9 (`code.css:212-214`),
+copy floats on line 1: top = 12 + (20 − 28) / 2 = 8, plus 1 border = 9 (`code.css:177-178, 239-244`),
 so its midline (23) meets the first line's (13 + 10). Collapsed pre: 8 × 20 + 2 × 12 = 184
-(`code.css:426`); shell 1 + 37 + 184 + 1 = 223 (measured).
+(`code.css:482-485`); shell 1 + 37 + 184 + 1 = 223 (measured).
 
 ## Measurements
 
@@ -97,25 +98,25 @@ ground; batch 22 moved syntax to the 500 rungs, see Decisions). Tabs (`area--lan
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| type | 14/20 mono throughout (`code.css:235-236`) | Owner (prior) | Geist 13/20 |
-| block inset | 12 (`code.css:227`) | Owner (prior: Area tokens, not Geist's 16) | — |
-| gutter | 32 (`code.css:226`) | Owner (prior) | — |
-| unnumbered · text inset | **12 start** (`code.css:264-267`) | Third pass: code starts where the header's filename and the numbers do | Was 0: hidden numbers left the code at the block's edge. Diff lines keep their marker column (`code.css:269-273`) |
-| shell radius / edge / ground | `radius-container`, 12 / compact 8 (`code.css:156`): concentric with the header's copy action (radius 6, 5 in = 11). References put the corner on their inner controls: GitHub Docs (Primer) 6 with no header, Vercel Geist 8 around a 28 / radius 6 copy button, shadcn docs 18 around 28 / radius 8 buttons 8 in, ChatGPT 24 around 36 round buttons 7 in (measured 2026-10-02, computed style). Was Card md's 24 (audit G-27 A), which only fits ChatGPT's larger header; Card's edge `light-dark(neutral-100, neutral-750)` #ee (`code.css:188`), `bg-code`: the page white in light (dark: neutral 800) | Peers: Card media, Panel, Alert; owner 2026-09-28 (lighter ground, more vibrant syntax); audit S7a (owner 2026-09-30): a block standing alone takes Card's edge | Ground was #fafafa (neutral 25); edge was `border-decorative` #f3 |
-| header | min `control-md` 32, padding 4/12 (`code.css:36-38`) | Toolbar rhythm | — |
+| type | 14/20 mono throughout (`code.css:161-162, 252-260`) | Owner (prior) | Geist 13/20 |
+| block inset | 12, compact 8 (`code.css:163`) | Owner (prior: Area tokens, not Geist's 16) | — |
+| gutter | 32 (`code.css:166`) | Owner (prior) | — |
+| unnumbered · text inset | **12 start**, compact 8 (`code.css:288-291`) | Third pass: code starts where the header's filename and the numbers do | Was 0: hidden numbers left the code at the block's edge. Diff lines keep their marker column (`code.css:293-297`) |
+| shell radius / edge / ground | `radius-container`, 12 at both densities since radius audit D1 (2026-10-03) (`code.css:178, 213-217`): concentric with the header's copy action (radius 6, 5 in = 11). References put the corner on their inner controls: GitHub Docs (Primer) 6 with no header, Vercel Geist 8 around a 28 / radius 6 copy button, shadcn docs 18 around 28 / radius 8 buttons 8 in, ChatGPT 24 around 36 round buttons 7 in (measured 2026-10-02, computed style). Was Card md's 24 (audit G-27 A), which only fits ChatGPT's larger header; Card's edge, `border-card` (O5, 2026-10-12; was `light-dark(neutral-100, neutral-750)` #ee) (`code.css:210`), `bg-code`: the page white in light (dark: neutral 800) | Peers: Card media, Panel, Alert; owner 2026-09-28 (lighter ground, more vibrant syntax); audit S7a (owner 2026-09-30): a block standing alone takes Card's edge | Ground was #fafafa (neutral 25); edge was `border-decorative` #f3 |
+| header | min `control-md` 32, padding 4/12, compact 4/8 (`code.css:31-42`); the trailing action ends 4 from the edge (`code.css:46-48`) | Toolbar rhythm; equal insets (owner 2026-10-01) | — |
 | shell · stroke width | **`stroke-width`** (since the 2026-10-12 consistency pass): a standalone block with no shadow keeps its frame under Elevated, as Table and Composer; the small size's corner counts the same width | Strokes (DESIGN_SYSTEM.md) | Was `border-width` |
-| rules (header, flush top, toggle) | **`border-decorative`**, the block's own edge (owner, 2026-09-27: a divider is never darker than its container); was `border-divider` #e2e2e2 (`code.css:39, 203, 456`); since audit S7a they sit one step lighter than the #ee edge | Second pass: rules take the divider role; Figma #e6, ChatGPT #e6; Notion's rules are lighter, 7% (#f0) (`card/figma--file-card` footer rule) | Was `border-decorative` #f3f3f3; the shell edge stays decorative (a container seam) |
-| code · face | `font-family: inherit` (`code.css:250`) | Owner (prior): one monospace | `<code>` reset to the browser's monospace |
-| tab · hover | **plate `bg-component-hover`, ink fixed** (`code.css:101-103`) | Shared rules: foreground fixed; opaque plate on a known ground | Was muted → default ink on `bg-hover` |
-| line number · hover | **underline, ink fixed** (`code.css:294-298`) | Shared rule; a link marks itself with an underline | Was muted → default ink |
-| toggle · hover | **underline, ink fixed** (`code.css:456-460`) | Shared rule | Was muted → default ink |
-| linked line (`:target`) | `bg-active` + **2px `fg-selection` rail on the inline-start edge** (neutral: `fg-default`; `code.css:341-347`) | Owner (2026-09-26); emphasis roles (D1); peer Nav marker | Was `accent-solid`, and a physical left rail in RTL |
-| highlighted line | `bg-active` #00000011 (`code.css:345-347`) | Translucent over any ground | — |
-| diff lines | success / danger surface, vivid markers (`code.css:349-363`) | Semantic tones | — |
+| rules (header, flush top, toggle) | **`border-decorative`**, the block's own edge (owner, 2026-09-27: a divider is never darker than its container); was `border-divider` #e2e2e2 (`code.css:39, 230, 499`); since audit S7a they sit one step lighter than the #ee edge | Second pass: rules take the divider role; Figma #e6, ChatGPT #e6; Notion's rules are lighter, 7% (#f0) (`card/figma--file-card` footer rule) | Was `border-decorative` #f3f3f3; the shell edge stays decorative (a container seam) |
+| code · face | `font-family: inherit` (`code.css:273`) | Owner (prior): one monospace | `<code>` reset to the browser's monospace |
+| tabs | **Tabs sm**: its indicator, hover, inset focus and forced-colours rule (primitives.tsx:2008-2012) | Audit G-6 A (owner 2026-09-30): one tab language | Was a Code block tab: 28 tall, radius-small, mono, hover plate `bg-component-hover` |
+| line number · hover | **underline, ink fixed**: 1 stroke at Link's 0.08em offset (`code.css:324-330`) | Shared rule; a link marks itself with an underline | Was muted → default ink |
+| toggle · hover | **underline, ink fixed**, as line numbers (`code.css:523-529`) | Shared rule | Was muted → default ink |
+| linked line (`:target`) | `bg-active` + **2px `fg-selection` rail on the inline-start edge** (neutral: `fg-default`; `code.css:419-425`) | Owner (2026-09-26); emphasis roles (D1); peer Nav marker | Was `accent-solid`, and a physical left rail in RTL |
+| highlighted line | `bg-active` #00000011 (`code.css:383-385`); its inks (syntax, numbers, markers) 0.075 darker in light, lifted in dark past raised L 0.225 (`code.css:394-397`) | Translucent over any ground; owner 2026-10-16 (4.5:1 on the plate) | — |
+| diff lines | success / danger surface, vivid markers (`code.css:400-416`); inks 0.05 darker in light (`code.css:398`) | Semantic tones; owner 2026-10-16 | — |
 | diff gutter | 48 when the block has diff lines; marker at the gutter's start, number at its end | Fit: 6 + 8 marker + 4 + two digits + 12 | The 32px gutter could not hold a marker and a number, so the marker overflowed to the block's edge |
-| syntax | danger, discovery, info, accent vivid; punctuation and comments muted | Owner (prior); the vivid rung is each family's most saturated rung that clears 4.6:1 on the block's ground | On the white ground every family lands one rung lighter (500): keyword #e80945 4.61, tag #8d4df3 4.68, attr #006df5 4.66, string #5c5dfe 4.72 (was 550 on #fafafa, 5.4-5.5) |
-| toggle · label | UI 14/20, `fg-muted`, **400** (`code.css:447-450`) | Type ramp: 500 is for labels on fills; the toggle is transparent | Was 500 |
-| collapsed | 8 lines; toggle floats with a `bg-code` fade (`code.css:425-481`) | Area's own | — |
+| syntax | danger, discovery, info, accent vivid; punctuation and comments muted | Owner (prior); the vivid rung is each family's most saturated rung that clears 4.6:1 on the block's ground | On the white ground every family lands one rung lighter (500): keyword #e80945 4.61, tag #8d4df3 4.68, attr #006df5 4.66, string #5c5dfe 4.72 (was 550 on #fafafa, 5.4-5.5). Since 2026-10-16 the vivid inks follow the light page (tokens color/layers.ts VIVID_ROLES) |
+| toggle · label | UI type, `fg-muted`, **400** (`code.css:497-503`) | Type ramp: 500 is for labels on fills; the toggle is transparent | Was 500 |
+| collapsed | 8 lines; toggle floats with a `bg-code` fade (`code.css:482-485, 555-570`) | Area's own | — |
 
 ## Size sm (2026-10-12)
 
@@ -149,36 +150,37 @@ floating copy 4 from the outer top and end (1 + 3), the titled header 33 (2 + 28
 
 | State | Slot · property changes | Evidence |
 |---|---|---|
-| tab hover | `bg-component-hover` plate | CSS; not captured |
-| tab selected | `fg-default` ink, 1px `currentColor` underline 6px in | `area--language-tabs` |
+| tab hover, selected | Tabs sm's (tabs.md) | `area--language-tabs` (before G-6 A) |
 | line number / toggle hover | underline | CSS; not captured |
-| focus-visible (tab, number, toggle, copy) | 2px `focus-color`; toggle offset inward | CSS (`__tab:focus-visible`, `__linenumber:focus-visible`, `__toggle:focus-visible`) |
+| focus-visible (tab, number, toggle, copy) | 2px `focus-color`; tab and toggle inset by `focus-width` | CSS (Tabs' `__tab:focus-visible`, `__linenumber:focus-visible`, `__toggle:focus-visible`) |
 | linked line | `bg-active` + neutral rail | CSS; `:target` not captured |
 
 ## Behavior and accessibility
 
 Language tabs are a `tablist` named by `languageLabel` ("Language" by default) with Arrow,
-Home and End keys (mirrored in RTL); the body is the `tabpanel`. The picker alternative is the
+Home and End keys (mirrored in RTL); only the selected tab is in the tab order. The body is the
+`tabpanel`, always focusable, so a keyboard can scroll the code (2026-10-19: with `linkLines` it had dropped out of
+the Tab order, and the line links are not in it). The picker alternative is the
 shared Select, named by the same `languageLabel`. Without tabs, the scrolling `pre` takes focus
 (named by a string `title`, else "Code") so a keyboard can scroll it. Line numbers are
 `user-select: none`; with `linkLines` each is a link named "Line n" to its own `#<id>-L<n>`
 fragment, out of the tab order (`tabIndex=-1`), so a long block isn't a tab stop per line. The
-copy button keeps one fixed name, `copyLabel` ("Copy code" by default); the result is said once
-through a polite live region ("Copied to clipboard" or "Copy failed") and shown by the glyph,
-with `data-copy-state="copied" | "failed"` as a paint hook (audit G-21; primitives.tsx:1823-1853,
-:1962-1973, :2042-2043). `onValueChange(language)` reports the chosen language
+copy button is CopyButton (copy-button.md) with one fixed name, `copyLabel` ("Copy code" by default); the
+result is said once through its polite live region and shown by the glyph, with
+`data-copy-state="copied" | "failed"` as a paint hook (audit G-21; primitives.tsx:2060-2069). It reads `code`, or
+the rendered text cells for `html`, so the gutter stays out of the clipboard. `onValueChange(language)` reports the chosen language
 (`onLanguageChange` is a deprecated alias). The show / hide toggle is a button whose visible
 label ("Show code" / "Hide code") carries the state, with `aria-controls` and no `aria-expanded`
-(audit G-21: the two said it twice).
+(audit G-21: the two said it twice) (primitives.tsx:2124-2133).
 
 ## Peers and consistency
 
 | Peer | Shared role | Peer value | Code block | Match |
 |---|---|---|---|---|
 | Nav | current marker | `fg-selection` | `fg-selection` rail | match (Selection role); Tree view has no rail |
-| Tabs | selected indicator, fixed ink | underline, ink fixed | 1px underline, ink fixed | match; Tabs previews its underline on hover, Code block shows a plate |
+| Tabs | language tabs | Tabs sm | Tabs sm | match: the same component (audit G-6 A) |
 | Button sm ghost | copy action | 28, radius 6 | 28, radius 6 | match |
-| Code | ground | `bg-stripe` #fafafa (code.css:97) | `bg-code`, the page white | differs since batch 22: the block's ground lightened; inline code keeps the 25 rung |
+| Code | ground | `bg-stripe` #fafafa (code.css:103) | `bg-code`, the page white | differs since batch 22: the block's ground lightened; inline code keeps the 25 rung |
 | Menu, Nav rows | hover plate | opaque `bg-component-hover` | `bg-component-hover` on tabs | match |
 | Panel, Menu separator, Toolbar separator | rule | `border-decorative` | header, flush and toggle rules | match (a rule is never darker than its container); Separator stands alone on `border-divider` |
 

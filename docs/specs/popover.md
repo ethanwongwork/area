@@ -1,6 +1,5 @@
 # Popover spec
 
-**Status:** accepted · 2026-09-26 (was: in review · 2026-09-26 (pass 3: close in an even corner, title centred on it, strong title))
 **Captures:** `docs/research/captures/popover/` (pass-0 in `before/`)
 **Peers:** Menu (same surface family and lift), SplitButton (native popover + anchor),
 Tooltip (non-interactive annotation), Dialog (modal), BadgeGroup (overflow popover)

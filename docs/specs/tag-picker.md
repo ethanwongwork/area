@@ -1,6 +1,5 @@
 # Tag picker spec
 
-**Status:** complete · 2026-10-08 (owner approved on the component review page after the requested changes)
 **Captures:** `docs/research/captures/tag-picker/` (Notion select property editor, open and hover) and Area (`area--*`, 2026-10-06: every tile at rest plus the open list / panel)
 **Peers:** Combobox (typing filters a listbox; create row), Custom select (rows with a check),
 Tag (the tag: Notion's palette, remove ×), Chip (`kind="input"`, a removable value), Input (field chrome),
@@ -17,7 +16,8 @@ Menu (rows, label, lift)
   recs for open questions" → keep the check on chosen rows; keep the opacity-only fade for a new
   tag (Settled questions below). No Tag picker CSS or React change.
 - Inherited: the chosen value shows a check (audit S13 C); Badge is a pill unless the theme's Pills
-  setting drops it (`data-area-pills`, owner 2026-10-04); Menu's rows.
+  setting drops it (`data-area-pills`, owner 2026-10-04); Menu's rows. — superseded 2026-10-06: the
+  tags are Tag (radius 4, not a pill), not Badge (Feedback log; `tag.md`).
 
 ## Job and boundaries
 
@@ -31,10 +31,10 @@ once, toggled in place).
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
 | variant | outline (default), soft | Input's field chrome | Notion's editor field is soft (rgba(242,241,238,.6)) |
-| size | sm, md (default), lg | Control tiers; tags Badge sm (20) up to md, Badge md at lg | Notion tags 20 |
-| content | tag tone per option | Notion's tag colours | `notion--select-property-editor--open--light` nodes 36, 53, 70, 87 |
+| size | sm, md (default), lg | Control tiers; tags are Tag sm (20) up to md, Tag md (24) at lg (`TagPicker.tsx:183`; `tag-picker.css:24, 42`) | Notion tags 20 |
+| content | Tag tone per option (neutral when unset) | Notion's tag colours | `notion--select-property-editor--open--light` nodes 36, 53, 70, 87 |
 | behavior | create (`onCreate`) | Notion "Select an option or create one" | same capture, node 22 |
-| state | open, placeholder, disabled, invalid | Input's states | — |
+| state | open, placeholder, disabled, invalid; read-only (React prop; not a manifest state) | Input's states | — |
 | boolean | fullWidth | Layout | — |
 
 Excluded: Notion's drag handles and per-option "…" menu (reorder and edit the option set, a
@@ -67,13 +67,15 @@ Area:
 ```
 root    div.area-tag-picker[data-open]            owns: variant/size locals
   field div.__field[aria-invalid][data-disabled]   owns: edge, fill, radius, focus ring, wrap, insets
-    Badge (soft, tone, dismiss) × n                 the tags
+    Tag (sm, or md at lg; tone; remove ×) × n       the tags
     input.__input[role=combobox]                    the text
-  input[type=hidden] × n                            form values
-  listbox div.area-menu.__listbox[popover][aria-multiselectable]
+  input[type=hidden] × n                            form values (with `name`)
+  span.area-sr-only[role=status]                    announcements
+  listbox ScrollArea.area-menu.__listbox[popover=manual][role=listbox][aria-multiselectable]
     hint  div.area-menu__label.__hint
-    option div.area-menu__item.__option[role=option]: Badge + check
-    create div.area-menu__item.__create: "Create" + Badge
+    empty div.__empty                               "No tags" (`emptyText`) when nothing matches
+    option div.area-menu__item.__option[role=option]: Tag + check
+    create div.area-menu__item.__create[role=option]: "Create" + Tag
 ```
 
 Inset equation (md 32, tag 20, border 1): tag inset = (32 − 20) / 2 − 1 = 5 on every side, so the
@@ -87,23 +89,25 @@ more.
 |---|---|---|---|
 | field chrome | Input's: outline (white, `input-edge`) or soft; per-tier radius; field focus ring | Peer: Input | Notion's field is soft and square-cornered inside its popup |
 | field height | control tier (32 md), grows by a row of tags | Input tiers | Notion 38 |
-| tag | Badge soft, size sm (20), tone per option, dismiss × | Notion tags 20 (Badge spec measured Notion's tags) | Badge is a pill by the theme's Pills setting; Notion's are radius 4 (set `data-area-pills` without badge to get corners) |
+| tag | Tag sm (20; Tag md 24 in the lg field), tone per option, Tag's remove × (`TagPicker.tsx:183, 193-196`) | Notion tags 20 (owner 2026-10-06: Tag replaced Badge) | Radius 4, as Notion's (Settled 1; `tag.md`) |
 | tag gap | 6 | Notion (node 9: gap 6) | — |
 | tag inset | (height − tag) / 2 − border | Equal insets (owner 2026-10-01) | Notion 4 + 5.25 / 8 |
-| list | Menu surface and rows; Combobox placement | Peer: Combobox | Notion opens the editor over the cell |
-| hint | Menu label, "Select a tag or create one" | Notion (node 22) | Notion 500 weight; Menu labels are regular |
-| option row | Badge + check at the end | Peer: Custom select (S13 C) | Notion has no check (the chosen tags are in the field); drag and "…" excluded |
-| create row | "Create" + the tag it would make | Notion; Combobox's create row | — |
-| removal | Backspace in an empty field; the tag's × | Notion; Badge dismiss | — |
+| list | Menu surface and rows in a Scroll area (owner 2026-10-09); Combobox placement, 4 below, at least the field's width, at most 324 tall (`tag-picker.css:135-140`) | Peer: Combobox | Notion opens the editor over the cell |
+| hint | Menu label: "Select a tag or create one" with `onCreate`, else "Select tags"; `hint={null}` hides it (`TagPicker.tsx:185`) | Notion (node 22) | Notion 500 weight; Menu labels are regular |
+| option row | Tag + check at the end, check hidden on unchosen rows (`tag-picker.css:146`) | Peer: Custom select (S13 C) | Notion has no check (the chosen tags are in the field); drag and "…" excluded |
+| create row | "Create" + the neutral Tag it would make, 6 apart | Notion; Combobox's create row | — |
+| removal | Backspace in an empty field; the Tag's × | Notion; Tag remove | — |
 
 ## States
 
 | State | Change | Evidence |
 |---|---|---|
-| focus / open | field focus ring and edge; `data-open` | Input |
+| hover | field edge `input-edge-hover`, not while focused or disabled | Input |
+| focus / open | field focus edge, halo and outline; `data-open` keeps the focus edge | Input |
 | highlighted row | `bg-component-hover` | Menu; Notion hover capture (row plate) |
 | chosen row | check | Custom select |
-| disabled | Input's disabled fill; tags dimmed, no ×; list never opens | Input, Badge |
+| disabled | Input's disabled fill and `border-faint` edge (none on soft); Tags disabled, no ×; list never opens | Input, Tag |
+| read-only | rest paint; Tags without ×; list never opens; Backspace removes nothing | Input |
 | invalid | `input-invalid-color` edge and ring | Input |
 
 ## Behavior and accessibility
@@ -114,7 +118,10 @@ contains) and highlights the first row; ↑/↓ move (wrapping, disabled rows sk
 removes the highlighted tag and keeps the list open, clearing a search; Backspace in an empty
 field removes the last tag; Escape closes; blur closes and clears the text. Each change is
 announced in a status region ("work added", "Ideas removed"). Each tag's × is a button named
-"Remove <tag>". `name` submits one hidden input per value; form reset restores `defaultValue`.
+"Remove <tag>". A pointer press on the field's empty space focuses the input and opens the list.
+The input's `aria-label` also names the listbox. Choosing the create row calls `onCreate(text)`; the
+new tag is chosen once the host adds it to `items` (`TagPicker.tsx:101-116`). `name` submits one
+hidden input per value; form reset restores `defaultValue`.
 
 ## Visual pass
 

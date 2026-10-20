@@ -1,6 +1,5 @@
 # Skeleton spec
 
-**Status:** accepted · 2026-09-28 (owner, batch 6)
 **Captures:** `docs/research/captures/skeleton/`
 **Peers:** Spinner and Progress (loading motion), Card (composition), Avatar (circle
 placeholder), Typography (text-line heights)

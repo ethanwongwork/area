@@ -1,6 +1,5 @@
 # Chip spec
 
-**Status:** accepted · 2026-09-28 (batch 15; was: in review · 2026-09-26)
 **Captures:** `docs/research/captures/chip/` (Area tiles, `notion--board-tag`, `notion--select-tag`)
 **Peers:** Badge (display counterpart), Segmented (one-track choice), Button (control tier and inset), Avatar (initials), Alert / Badge dismiss (remove plate), Checkbox / Radio (neutral selection)
 
@@ -11,7 +10,7 @@
   "Checkbox, Radio and Chip moved the same way (neutral-solid checked face; neutral tonal
   chip selection); all four await owner review." Selected chips use a neutral tonal fill;
   `tone="accent"` restores the accent fill. *Superseded 2026-09-29 (owner, D1): the selected
-  paint is the Selection role (`selection-surface`, `-edge`, `fg-selection`; chip.css:107-111),
+  paint is the Selection role (`selection-surface`, `-edge`, `fg-selection`; chip.css:127-142),
   accent by theme; the `tone` axis was removed. All four families are approved.*
 - 2026-09-26: audit every family accepted under the earlier process (cohesion audit).
 - 2026-09-26 (second pass): decide every open item with the most calculated option
@@ -19,6 +18,7 @@
 
 No Chip section existed in [prior decisions](PRIOR_DECISIONS.md).
 - 2026-09-27: "the backplate of the hover state of the close button on chip does not look correct."
+- 2026-10-19 (review page, docs pass): ChipLink follows the Pills setting and the `pill` prop like Chip (`pill={false}` draws the radius corner).
 
 ## Job and boundaries
 
@@ -31,10 +31,10 @@ Badge states a value and cannot be pressed (DESIGN_SYSTEM.md, Icons and technica
 
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
-| kind | filter (default), assist, input, suggestion | Interaction role (`chip.css:67-79`); assist, suggestion and filter look identical at rest, so the gallery groups the kind tiles under Behavior, not as visual variants (audit C-32 A, owner 2026-09-30) | Untitled Tags (input with close, checkbox selection) |
+| kind | filter (default), assist, input, suggestion | Interaction role (`chip.css:91-107`); assist, suggestion and filter look identical at rest, so the gallery groups the kind tiles under Behavior, not as visual variants (audit C-32 A, owner 2026-09-30) | Untitled Tags (input with close, checkbox selection) |
 | size | sm 28, md 32 (default), lg 40 | Control tiers | Untitled sm 24 / md 24 / lg 28; Notion value tags 20 |
-| booleans | `pill`, `swatchOnly`, `link`, `linkIcon` | Colour choices; navigation | Gallery `swatch`, Composition / swatch only, `link-*` |
-| composition | swatch, icon, avatar, image, remove, custom remove | Visual leading item; removable values | Untitled close button; Gallery tiles |
+| booleans | `swatchOnly`, `link`, `linkIcon`; `pill` / `rounded` (React `pill` three-way: unset follows `data-area-pills`, which lists `chip` by default; `pill={false}` is `--rounded`, the radius setting's corner) | Colour choices; navigation; one corner setting (2026-10-03, 2026-10-04) | Gallery `swatch`, Composition / swatch only, `link-*` |
+| composition | swatch, icon, avatar, image, remove, custom remove; ChipLink adds a trailing icon (`treatment="icon"`) | Visual leading item; removable values | Untitled close button; Gallery tiles |
 | state | selected, disabled, invalid | — | Gallery `group`, `disabled`, `invalid` |
 
 ## Sources
@@ -63,7 +63,8 @@ area     button.area-chip (or span wrapper when removable)  owns: tier height, 1
   visual span __swatch / __avatar / __image  20px (icon 16 + 4) · __icon 16px, fg-muted
   label  span __label
   action button __action  (removable + clickable)
-  remove button __remove  circle 20 / 24 / 32 (`--_remove`), radius full, fg-muted, Area dismiss glyph 16
+  remove button __remove  circle 20 / 24 / 32 (`--_remove`), concentric radius, fg-muted, Area dismiss glyph 16
+  trailing span __trailing-icon  ChipLink with `treatment="icon"`, 16px, fg-muted
 ```
 
 Inset equation (`inset.css:7-19, 42, 85-105`): text (32 − 9.94) / 2 − 1 = 10.03; icon
@@ -103,47 +104,52 @@ rgb(238, 238, 238) (`area--avatar-initials`); disabled opacity 0.5.
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| base tier | **md** 32 / gutter 12 / 14/20 (`chip.css:20-26`) | Manifest default `size: "md"` (`manifest.ts:288`) | Was sm (28) in CSS while React defaulted to md |
+| base tier | **md** 32 / gutter 12 / 14/20 (`chip.css:23-33`) | Manifest default `size: "md"` (`manifest.ts:432`) | Was sm (28) in CSS while React defaulted to md |
 | height | 28 / 32 / 40 | Peer: Button tiers; audit decision 18 | Untitled 24 / 24 / 28; Notion's value tags 20; kept (third pass): Notion's tags are Badges in Area |
-| radius | pill (`radius-full`, `chip.css:42`) | Area: Chip is the pill control | Untitled 6, Notion 4 |
+| radius | pill by default (`data-area-pills` lists `chip`); `pill={false}` takes the radius setting's corner for its height, swatch and remove concentric; avatars and images stay round (`chip.css:20-22, 51, 189, 302-303`) | Area: Chip is the pill control; one corner setting (owner 2026-10-03) | Untitled 6, Notion 4 |
 | label weight | 400 | Weight policy (a choice, not a label on a fill); one weight per state; Notion select tag 400 | Untitled 500; Notion board tag 500 |
 | rest paint | `bg-surface` + 1px `edge-control` #e2e2e2 | Untitled white + neutral-300 ring | Lighter edge than Untitled's #d4d4d4 |
-| hover | `bg-component-hover` #f3, edge `edge-control-hover` #d4 (`chip.css:56-59`) | Audit row/control hover | — |
-| selected | Selection role, neutral by default: `selection-surface` = `bg-component-active` #eeeeee, `selection-edge` = #d4, `fg-selection` = default ink; hover edge `border-hover` #b4b4b4 (`chip.css:107-118`) | Owner rule; audit: selection one step above hover; emphasis roles (D1) | Untitled shows selection only in an embedded checkbox |
+| hover | `bg-component-hover` #f3, edge `edge-control-hover` #d4 (`chip.css:72-78`) | Audit row/control hover | — |
+| pressed | `bg-component-pressed`, one step past hover; input 15.4% (24% white in dark); invalid `danger-surface-active`; selected keeps its hover plate; pressing remove does not press the chip (`chip.css:80-83, 104, 112, 138`) | Interaction polish 2026-10-16 | — |
+| selected | Selection role, neutral by default: `selection-surface` = `bg-component-active` #eeeeee, `selection-edge` = #d4, `fg-selection` = default ink; hover edge `edge-control-strong` (mixed toward `edge-accent` by the selection accent; `chip.css:127-142`; owner 2026-10-12, O5) | Owner rule; audit: selection one step above hover; emphasis roles (D1) | Untitled shows selection only in an embedded checkbox |
 | selected, accent theme | `accent-surface`, `edge-accent`, `fg-accent` through the same role tokens | Theme's Selection accent (was `tone="accent"` until 2026-09-29) | — |
-| input kind · paint | **Count's translucent plate `light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.1))`**, hover 0.107 / 0.226, transparent border, hover edge `edge-control-hover` (`chip.css:78-84`) | Area input-chip rule; audit S6a (owner 2026-09-30), shared with Badge neutral soft and Count soft | Was `bg-component` #f7 (`area--input`), a lighter hole on a hovered #f3 row. Notion's values are tone-tinted; Area chips carry no tone by value (Badge does) |
+| input kind · paint | **Count's translucent plate, `bg-mark`** (6% black / 10% white), hover `bg-mark-hover` (10.7% / 22.6%), transparent border, hover edge `edge-control-hover` (`chip.css:98-107`; tokens since owner 2026-10-12, O5) | Area input-chip rule; audit S6a (owner 2026-09-30), shared with Badge neutral soft and Count soft | Was `bg-component` #f7 (`area--input`), a lighter hole on a hovered #f3 row. Notion's values are tone-tinted; Area chips carry no tone by value (Badge does) |
 | remove · target | **a circle 4 inside the pill: 20 / 24 / 32** (`--_remove`, chip height − 8), concentric with the pill's end; the chip's end inset is that 4 | Material 24 circle in a 32 chip (`_trailing-icon.scss L18-22`); Primer, Carbon, Spectrum 2 make it the chip's height; chip trailing padding 0 (Primer, Polaris, Carbon, Spectrum 2) | Was the 16px glyph box, so the hover plate hugged the glyph (owner: "does not look correct") |
-| remove · glyph | 16, the Area `dismiss` Glyph, at every size (`primitives.tsx:893`) | Primer 12 in 16/20, 16 in 24/32 (`_RemoveTokenButton.tsx L39,58`) | Was a Fluent `dismiss_16` path until audit S9 |
-| remove · hover | **plate `currentColor` 12%** on the circle; ink fixed `fg-muted` (`chip.css:225`) | Audit: foreground fixed; peer Alert dismiss; systems use a subtle neutral fill on the button alone | ChatGPT washes the whole pill instead; Area keeps the remove a separate target beside the chip's own action |
+| remove · glyph | 16, the Area `dismiss` Glyph, at every size (`primitives.tsx:1014`) | Primer 12 in 16/20, 16 in 24/32 (`_RemoveTokenButton.tsx L39,58`) | Was a Fluent `dismiss_16` path until audit S9 |
+| remove · hover | **plate `currentColor` 12%** on the circle, pressed 20%; ink fixed `fg-muted` (`chip.css:265-268`) | Audit: foreground fixed; peer Alert dismiss; systems use a subtle neutral fill on the button alone | ChatGPT washes the whole pill instead; Area keeps the remove a separate target beside the chip's own action |
 | avatar initials | **12px** (`--area-control-xs-text`: 12 default, 11 compact), as Badge's avatar | Type ramp floor 12; Figma 12 and Notion 11 on a 24 avatar | Was 10px, off the ramp; then 14 when `control-sm-text` moved to 14/20 for small controls (2026-09-26), which overflowed the 20 plate (fixed 2026-09-28) |
 | visual box | 20px (icon 16 + 4) | Inset contract | — |
-| icon → label gap | 6 at sm, md and lg, the density tokens `--area-gap-sm/md/lg` (`chip.css:22, :244-246`); compact sm 4 | Peer: Button (audit S14) | Was 4 / 8 / 8 |
-| group gap | 8, wrapping (`chip.css:259-262`) | Material's chip set 8 / 8 (audit C-27 A, owner 2026-09-30) | Was 4 |
+| icon → label gap | 6 at sm, md and lg, the density tokens `--area-gap-sm/md/lg` (`chip.css:25, :287-289`); compact sm 4 | Peer: Button (audit S14) | Was 4 / 8 / 8 |
+| group gap | `ui-cluster`: 8, compact 6, wrapping (`chip.css:297-301`) | Material's chip set 8 / 8 (audit C-27 A, owner 2026-09-30); compact pass round 9 | Was 4 |
 
 ## States
 
 | State | Slot · property changes | Evidence |
 |---|---|---|
 | hover | fill #f3, edge #d4; ink fixed | not captured |
-| focus-visible | border and 2px outline `focus-color` (`chip.css:61-65`); forced colours Highlight | not captured |
+| focus-visible | the 2px `focus-color` ring alone, at `focus-offset` (`chip.css:86-89`, audit C-13); nested action and remove ring at 0 (`chip.css:269-274`); forced colours Highlight | not captured |
 | selected | as Decisions; `aria-pressed` on filter chips | `area--group`, `area--tone-accent` |
-| invalid | danger surface, border, ink; remove in `fg-danger` (`chip.css:81-87, 224`) | `area--invalid` |
-| disabled | 50% (`chip.css:121-124`) | `area--disabled` |
+| pressed | as Decisions (`chip.css:80-83`) | not captured |
+| invalid | danger surface, border, ink; remove in `fg-danger` (`chip.css:109-116, 262`) | `area--invalid` |
+| disabled | `opacity-disabled` (50%) (`chip.css:144-147`) | `area--disabled` |
 
 ## Behavior and accessibility
 
 Filter chips are `button` with `aria-pressed`, controlled or uncontrolled
-(`primitives.tsx:853`); `onSelectedChange(selected, event)` passes the click event. A removable chip is a `span` holding an optional action button
+(`primitives.tsx:944-973`); `onSelectedChange(selected, event)` passes the click event. A removable chip is a `span` holding an optional action button
 and a separate remove button, so both are focusable peers. `ref` and native props land on the
 primary control (the action, or the remove button when it is the only control); `className`
 and `style` on the chip span (audit C-24). The API is Area's one dismiss API:
 `onDismiss` shows the remove button, `dismissLabel` names it (default "Remove <text>" for a
 text label, else "Remove chip"; audit C-6) and `dismissIcon` replaces the glyph. Backspace or
 Delete on a focused chip removes it; focus then moves to the next chip, or the previous one
-(`primitives.tsx:886-915`). ChipGroup is `role="group"`, named by its `label` prop (audit C-23);
-it adds no roving focus, each chip keeps its own Tab stop. `onRemove`, `removeLabel` and `removeIcon` remain as
-deprecated aliases (`primitives.tsx:833-845`, `:883-893`). ChipLink is
-an `a`. Forced colours paint selected chips Highlight (`forced-colors.css:21-26`).
+(`primitives.tsx:981-999`). ChipGroup is `role="group"`, named by `aria-label` (audit C-23,
+D-18); `label` remains a deprecated alias (`primitives.tsx:1066-1076`). It adds no roving focus,
+each chip keeps its own Tab stop. `onRemove`, `removeLabel` and `removeIcon` remain as
+deprecated aliases (`primitives.tsx:926-937, 975, 980`). ChipLink is an `a` with the
+`suggestion` kind; it takes no shape override (its `pill` prop is deprecated and ignored,
+`primitives.tsx:1038-1039`), so it follows `data-area-pills`. Forced colours paint selected chips
+Highlight (`forced-colors.css:49-54`).
 
 ## Peers and consistency
 
@@ -153,7 +159,7 @@ an `a`. Forced colours paint selected chips Highlight (`forced-colors.css:21-26`
 | Menu / Nav / Table rows | hover / selected plates | `bg-component-hover` / `-active` | same pair | match |
 | Alert dismiss | dismiss hover | ink 12% plate on tinted alerts; `bg-component-hover` on neutral (a ghost sm Button, audit S9) | ink 12% plate | match on tones; Alert is a rectangle and closes with a Button |
 | Badge dismiss | dismiss hover | ink 12% (`badge.css:194`, audit S9) | ink 12% | match |
-| Badge neutral soft, Count soft | soft plate | `light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.1))` (badge.css:58, count.css:68) | input kind, chip.css:80 | match (audit S6a) |
+| Badge neutral soft, Count soft | soft plate | `light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.1))`, `bg-mark` | input kind, chip.css:100 | match (audit S6a) |
 | Badge | a value shown as a tag | 16 / 20 / 24 (badge.css:178-181; badge.md) | 28 / 32 / 40 pill | different job: Badge displays, Chip is pressed |
 | Avatar | initials | 500, ramp sizes | 12px 500 | match |
 | Checkbox / Radio / AlignmentPicker | selection paint | Selection role, neutral by default | same | match |

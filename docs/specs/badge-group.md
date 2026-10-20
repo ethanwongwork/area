@@ -1,6 +1,5 @@
 # Badge group spec
 
-**Status:** accepted · 2026-09-28 (batch 15, group gap 6 / 8; first accepted 2026-09-25)
 **Captures:** `docs/research/captures/badge-group/`
 **Peers:** Badge (items and the overflow), AvatarGroup (overflow as a member of the
 group), Popover (overflow surface), Table and Card (host compositions)

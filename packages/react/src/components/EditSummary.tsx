@@ -60,7 +60,7 @@ export const EditSummaryFile = forwardRef<HTMLDivElement, EditSummaryFileProps>(
 });
 
 export interface EditSummaryProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
-  /** "Edited 2 files"; by default from the number of files. */
+  /** The head's title, such as "Edited 2 files" (the caller writes the count); "Edited files" when unset. */
   title?: ReactNode;
   /** The turn's totals. */
   added: number;

@@ -1,7 +1,5 @@
 # Separator spec
 
-**Status:** accepted (Complete in `component-status.mjs`; re-reviewed in batch 22, 2026-09-28) ·
-2026-09-26: the second pass moved the rule to `border-divider`
 **Captures:** `docs/research/captures/separator/`; product rules in
 `menu/notion--page-menu--open--light`, `popover/notion--share-popover--open--light`,
 `card/figma--file-card--rest--light`, `baseline/chatgpt--menu--rest--light`,

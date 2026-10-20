@@ -219,9 +219,9 @@ export const VideoPlayer = /* @__PURE__ */ forwardRef<HTMLVideoElement, VideoPla
       <div className={part("transport")}>
         <div className={`${part("group")} ${part("group")}--start`}>{volumeGroup}</div>
         <div className={`${part("group")} ${part("group")}--center`}>
-          {button("back", "Back 15 seconds", () => { const v = el(); if (v) seek(v.currentTime - 15); }, <Glyph name={filled ? "fast-forward-filled" : "fast-forward"} rotate={180} />, { role: "skip" }, "J")}
+          {button("back", "Back 10 seconds", () => { const v = el(); if (v) seek(v.currentTime - 10); }, <Glyph name={filled ? "fast-forward-filled" : "fast-forward"} rotate={180} />, { role: "skip" }, "J")}
           {play()}
-          {button("forward", "Forward 15 seconds", () => { const v = el(); if (v) seek(v.currentTime + 15); }, <Glyph name={filled ? "fast-forward-filled" : "fast-forward"} />, { role: "skip" }, "L")}
+          {button("forward", "Forward 10 seconds", () => { const v = el(); if (v) seek(v.currentTime + 10); }, <Glyph name={filled ? "fast-forward-filled" : "fast-forward"} />, { role: "skip" }, "L")}
         </div>
         <div className={`${part("group")} ${part("group")}--end`}>{captionsButton}{pipButton}{fullscreenButton}</div>
       </div>
@@ -229,7 +229,10 @@ export const VideoPlayer = /* @__PURE__ */ forwardRef<HTMLVideoElement, VideoPla
         <span className={`${part("clock")} ${part("clock")}--start`}>{clock(time)}</span>
         {seekRange}
         {/* Remaining time on the right (Video.js, Plyr; round 42). */}
-        <span className={part("clock")} aria-label={`${spoken(Math.max(0, duration - time))} remaining`}>−{clock(Math.max(0, duration - time))}</span>
+        <span className={part("clock")}>
+          <span aria-hidden="true">−{clock(Math.max(0, duration - time))}</span>
+          <span className="area-sr-only">{`${spoken(Math.max(0, duration - time))} remaining`}</span>
+        </span>
       </div>
     </div>
   ) : (

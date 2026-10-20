@@ -1,6 +1,5 @@
 # ColorSwatch spec
 
-**Status:** complete · 2026-10-12 (approved, round 16); was: in review · 2026-10-12 (translucent ring edge); was: accepted · 2026-09-28 (owner, batch 9)
 **Captures:** `docs/research/captures/color-swatch/`
 **Peers:** ColorSwatchPicker (cells), ColorField (leading preview), ColorPicker (preview and
 checker), Chip swatch, Avatar (small identity box)
@@ -45,14 +44,15 @@ Notion and ChatGPT: no colour preview among their captures (searched every `noti
 ## Anatomy
 
 ```
-area   span.area-color-swatch  owns: size, 20% corner, a solid 1px edge (its own fill)
+area   span.area-color-swatch  owns: size, 20% corner, the `bg-component` ground (the checker's light cells), and the
+                               swatch ring: a 1px `token-swatch-ring` outline inside the shape, over the colour
   ::before  the checker: `fg-default` 16% through a 2 × 2 pixel mask, 5 cells across
-  ::after   the colour, inside the edge on its inner curve
+  ::after   the colour, filling the shape (`--_edge: 0`)
 ```
 
-(color.css:9-71; was one element with a `repeating-conic-gradient` checker of 8px tiles and a
-22% inset hairline.) The colour layer sits over the checker, so transparency needs no child
-(`color.css:9-13`).
+(color.css, `.area-color-swatch`; was one element with a `repeating-conic-gradient` checker of 8px tiles and a
+22% inset hairline, then a solid 1px edge around the colour, 2026-09-28 to 2026-10-12.) The colour layer sits over the
+checker, so transparency needs no child.
 
 ## Measurements
 
@@ -68,9 +68,9 @@ From the capture nodes (node 0):
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| size | 16 / 20 / 24 (`space-16/20/24`) | Figma 14 and 16 | sm fills Input's 16px icon slot |
-| radius | **20% of the side at every size** (`--_radius: size / 5`; 3.2 / 4 / 4.8 at sm / md / lg); layers inside the edge are concentric, `radius - edge` (`--_inner-radius`) | Owner (2026-09-28: "make it more consistent"); Figma 20% (`figma--swatches`, the edge layer) | Was `min(radius-small, size / 4)`: 25% to 24px, then capped at 6 |
-| edge | **a 1px translucent ring over the colour** at `stroke-width` (a required edge, audit F-5), `--area-token-swatch-ring` (black 10% light, white 10% dark); the layers fill the shape (`--_edge: 0`) | Owner (2026-10-12: "yes apply the swatch fix"); Figma's swatch edge, black 10% | Was (2026-09-28) a solid `bg-component` band around the colour: it merged with light grounds on straight edges and showed only as fringe at the corners. Before that, `fg-default` 22% (too dark) |
+| size | 16 / 20 / 24 (`mark-sm/md/lg`) | Figma 14 and 16 | sm fills Input's 16px icon slot |
+| radius | **20% of the side, rounded to even pixels** (4 at sm, md and lg at the default; 12 → 2), times the corner setting ÷ 8 elsewhere, square at Sharp | Owner (2026-09-28: "make it more consistent"); radius audit 2026-10-03 (D6, all even, one corner setting); Figma 20% (`figma--swatches`, the edge layer) | Was `min(radius-small, size / 4)`: 25% to 24px, then capped at 6; then 3.2 / 4 / 4.8 |
+| edge | **a 1px translucent ring over the colour**: an `outline` at `stroke-width`, offset inward by it (a required edge, audit F-5), `--area-token-swatch-ring` (black 10% light, white 10% dark); the layers fill the shape (`--_edge: 0`) | Owner (2026-10-12: "yes apply the swatch fix"); Figma's swatch edge, black 10% | Was (2026-09-28) a solid `bg-component` band around the colour: it merged with light grounds on straight edges and showed only as fringe at the corners. Before that, `fg-default` 22% (too dark) |
 | checker | **a 2 × 2 pixel tile used as a mask, 5 cells across at every size** (ink cells in all four corners), `fg-default` 16% over `bg-surface` (color.css:3-15) | Owner (2026-09-28: a pixel image that meets the edges exactly and scales) | Figma 10.67px #fff/#e1e1e1; Area's follows the theme while the colour does not (owner). Was 8px conic-gradient tiles |
 | colour | consumer value, unchanged by theme | Owner (above) | — |
 
@@ -82,7 +82,7 @@ None: the swatch is passive. Selection and focus belong to ColorSwatchPicker.
 
 `role="img"` with `aria-label` defaulting to "Color <value>" (`ColorSwatch.tsx:14`); pass
 `aria-hidden` when a neighbour already names the colour (ColorField, ColorSwatchPicker
-do). Forced colours remove box-shadows, so the edge is lost there; not checked in a browser.
+do). The ring is an `outline`, which forced colours keep in a system colour; not checked in a browser.
 
 ## Peers and consistency
 
@@ -110,7 +110,8 @@ theme, forced colours.
    edge (`figma--color-row` node 6, `figma--swatches` nodes 15, 22, 29). Area keeps one
    stroke width, and 22% keeps a white swatch visible on white ([cohesion audit](../research/cohesion-audit.md#third-pass-the-questions-the-evidence-left-open)).
    *Superseded 2026-09-28 (owner): the edge is a solid `light-dark(neutral-50, neutral-800)`, so
-   neither the colour nor the checker shows through it (Decisions, edge).*
+   neither the colour nor the checker shows through it.* — superseded 2026-10-12: a translucent ring over the colour,
+   `token-swatch-ring` (Decisions, edge).
 
 ## Verification
 

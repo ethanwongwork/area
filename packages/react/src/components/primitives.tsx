@@ -67,7 +67,10 @@ export interface AvatarProps extends Omit<HTMLAttributes<HTMLSpanElement>, "chil
   /** Draws the current-person or active-participant ring around the Avatar. */
   active?: boolean;
   src?: string;
-  /** Describes the person or entity. Required when `src` is set. */
+  /**
+   * Describes the person or entity. Required when `src` is set: pass `alt=""` when a visible name beside the
+   * Avatar already says who it is, or name the Avatar with `aria-label` / `aria-labelledby`, or hide it.
+   */
   alt?: string;
   /** Shown when there is no image. Usually one or two initials. */
   fallback?: ReactNode;
@@ -79,6 +82,11 @@ export const Avatar = /* @__PURE__ */ forwardRef<HTMLSpanElement, AvatarProps>(f
   { size, shape, tone, active, src, alt, fallback, icon, className, role, "aria-label": ariaLabel, ...rest },
   ref,
 ) {
+  // As Badge does for its unnamed forms: an image with no description fails loudly in development rather than
+  // silently reaching assistive tech as an unnamed picture.
+  if (src && alt === undefined && !ariaLabel && !rest["aria-labelledby"] && !rest["aria-hidden"]) {
+    throw new Error("Avatar: an image avatar needs alt (alt=\"\" beside a visible name), aria-label, aria-labelledby or aria-hidden.");
+  }
   const [imageFailed, setImageFailed] = useState(false);
   const imageRef = useRef<HTMLImageElement>(null);
   useEffect(() => setImageFailed(false), [src]);
@@ -1035,7 +1043,7 @@ export const Chip = /* @__PURE__ */ forwardRef<HTMLButtonElement, ChipProps>(fun
 
 export interface ChipLinkProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "children"> {
   size?: VariantProps<typeof MANIFESTS.chip>["size"];
-  /** @deprecated Chips are pill-only; this changes nothing (audit C-18). */
+  /** Unset: a pill while the theme's `pills` list names `chip` (the default); `true` forces a pill, `false` the radius setting's corner, as on Chip (owner, 2026-10-19). */
   pill?: boolean;
   icon?: ReactNode;
   trailingIcon?: ReactNode;
@@ -1049,11 +1057,11 @@ export interface ChipLinkProps extends Omit<AnchorHTMLAttributes<HTMLAnchorEleme
 
 /** A navigational chip. Selection and removal remain the responsibility of `Chip`. */
 export const ChipLink = /* @__PURE__ */ forwardRef<HTMLAnchorElement, ChipLinkProps>(function ChipLink(
-  { size, pill: _pill, icon, trailingIcon, treatment = "underline", avatar, image, imageAlt, className, children, ...rest },
+  { size, pill, icon, trailingIcon, treatment = "underline", avatar, image, imageAlt, className, children, ...rest },
   ref,
 ) {
   return (
-    <a ref={ref} className={chipVariants({ kind: "suggestion", size, link: treatment === "underline", linkIcon: treatment === "icon" }, className)} {...rest}>
+    <a ref={ref} className={chipVariants({ kind: "suggestion", size, link: treatment === "underline", linkIcon: treatment === "icon", pill: pill === true, rounded: pill === false }, className)} {...rest}>
       {avatar ? <span className="area-chip__avatar" aria-hidden="true">{avatar}</span> : null}
       {image ? <span className="area-chip__image"><img src={image} alt={imageAlt ?? ""} /></span> : null}
       {icon ? <span className="area-chip__icon" aria-hidden="true">{icon}</span> : null}
@@ -2078,7 +2086,7 @@ export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLDivElement, CodeBlockPro
   ) : tools;
 
   const panel = languageTabs && languages?.length
-    ? { role: "tabpanel", id: `${id}-panel`, "aria-labelledby": `${id}-tab-${languages.indexOf(activeLanguage ?? "")}`, tabIndex: linkLines ? undefined : 0 }
+    ? { role: "tabpanel", id: `${id}-panel`, "aria-labelledby": `${id}-tab-${languages.indexOf(activeLanguage ?? "")}`, tabIndex: 0 }
     : {};
 
   return (

@@ -1,6 +1,5 @@
 # Count spec
 
-**Status:** accepted · 2026-09-28 (owner, batch 4)
 **Captures:** `docs/research/captures/count/`, `docs/research/captures/indicator/notion--board-group-*`
 **Peers:** Badge (inline scale 16 / 20, label on a fill), Indicator count (formatting, attached
 form), Nav trailing slot, Tabs trailing slot

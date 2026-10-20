@@ -1,6 +1,5 @@
 # Attachment spec
 
-**Status:** built · in review · 2026-10-19
 **Captures:** none live (the owner declined test uploads to ChatGPT; BASELINE.md). Evidence: `docs/research/inspector-chat-2026-10-18/composer-additions.md`, section B.
 **Peers:** Composer (its context row and corner), Chip `input` (non-image files), Spinner (`value`), Code block's frame edge
 

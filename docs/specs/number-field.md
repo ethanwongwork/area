@@ -1,6 +1,5 @@
 # NumberField spec
 
-**Status:** accepted · 2026-09-26; batch 8 side by side 2026-09-28, no change
 **Captures:** `docs/research/captures/number-field/` (pass-0 in `before/`)
 **Peers:** Input (shared chrome), InputGroup (letter compartments), Panel (inspector), Slider
 

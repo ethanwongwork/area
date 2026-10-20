@@ -1,6 +1,5 @@
 # Composer menu spec
 
-**Status:** built · in review · 2026-10-19
 **Captures:** none live. Evidence: `docs/research/inspector-chat-2026-10-18/composer-additions.md`, section C.
 **Peers:** Menu (surface, padding, rows, plate, section labels: reused as is), Combobox (the listbox pattern), Composer
 

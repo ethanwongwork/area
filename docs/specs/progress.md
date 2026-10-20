@@ -1,6 +1,5 @@
 # Progress spec
 
-**Status:** accepted · 2026-09-28 (owner, batch 6)
 **Captures:** `docs/research/captures/progress/` (Area, Figma)
 **Peers:** Slider (shares the rail), Spinner (unknown duration, small spaces), Skeleton
 (content placeholder), Field (label and value above)
@@ -14,6 +13,7 @@
 
 No Progress section existed in prior decisions. The second pass (owner: decide every open
 item) changed nothing here.
+- 2026-10-19 (review page, docs pass): keep `label` (not deprecated): it names what is spoken, as on Spinner (DESIGN_SYSTEM, "Names and collections").
 
 ## Job and boundaries
 
@@ -48,10 +48,12 @@ figma  div.progressBar 224×4, radius 4, fill #e6e6e6 (rail)
   div.progressPartial 147.84×4 (66%), radius 4, rgb(13, 153, 255)
 area   div.area-progress[role=progressbar]  block, full width, block --_progress-size, radius-full,
                                             rail colour, overflow hidden
-  bar  div.area-progress__bar  block 100%, inline-size = value %, radius inherit, --_progress-fill
+  bar  div.area-progress__bar  block 100%, full width, translate round((value − 100)%, 1px) from
+                                --_progress-value (React writes it), radius inherit, --_progress-fill
 ```
 
-Both round the bar's end as well as the rail's.
+Both round the bar's end as well as the rail's. Area's rail clips the bar's start; the bar's own pill
+draws its end.
 
 ## Measurements
 
@@ -71,11 +73,11 @@ Read from the nodes of `area--size-small`, `-medium`, `-large`, `area--accent`,
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| rail · colour | **`edge-control` #e2e2e2** (display.css:265) | Audit S5 (owner 2026-09-30): one off-track grey with Switch and Slider (slider.css:29, switch.css:20) | Figma #e6 and Untitled #e5. Was `fill-toggle` mixed 20% toward `bg-surface` ≈ #dd, and before that `bg-component-active` #eee |
-| rail · thickness | 4 / 6 / 8 (display.css:242-244) | Figma 4 = sm; Untitled 8 = lg | Default md sits between |
+| rail · colour | **`fill-track`** (display.css:311), the Layers ground's faint edge (layers.ts:227); #e2e2e2 when S5 set it; `--_progress-track` overrides | Audit S5 (owner 2026-09-30): one off-track grey with Switch and Slider (slider.css:32, switch.css:27) | Figma #e6 and Untitled #e5. Was `fill-toggle` mixed 20% toward `bg-surface` ≈ #dd, and before that `bg-component-active` #eee |
+| rail · thickness | 4 / 6 / 8 (display.css:334-336) | Figma 4 = sm; Untitled 8 = lg | Default md sits between |
 | radius | `radius-full` | Figma and Untitled both round a thin bar to a pill | — |
-| fill | `selection-solid` (display.css:261), neutral by default | Owner; emphasis roles (D1) | Figma and Untitled use brand blue: a theme's Selection accent |
-| indeterminate | 35% segment travelling −100% → 340% of its width, 1.8s linear (display.css:252-260); mirrored in RTL (262-266) | Distinguishable from a full bar | — |
+| fill | `selection-solid` (display.css:306), neutral by default | Owner; emphasis roles (D1) | Figma and Untitled use brand blue: a theme's Selection accent |
+| indeterminate | 35% segment travelling −100% → 340% of its width, 1.8s `ease-linear` × `duration-loop` (display.css:342-356); mirrored in RTL (358-361); at loop 0 a full-width still stripe (display.css:343-349) | Distinguishable from a full bar; a stopped 35% segment would read as 35% done (audit E-9) | — |
 | label composition | 14/20 row, 8px above the bar (gallery `labeled`) | Untitled 8px below / 12px beside, 14/20 500 | Weight 400 (Area label rule); consumer layout, not the component |
 
 **Settled by audit S5 (owner 2026-09-30):** rail colour. Figma's rail is #e6 (`figma--usage-bar`)
@@ -87,23 +89,24 @@ Figma.
 
 | State | Changes | Evidence |
 |---|---|---|
-| determinate | the bar's offset (`translate`) transitions on `duration-slow` ease-out; width while React still writes `inline-size` | `area--default` |
-| indeterminate | travelling segment; stops under `data-area-motion="0"` and reduced motion (display.css:271, 274-281) | `area--indeterminate` |
+| determinate | the bar's offset (`translate`, rounded to 1px) transitions on `duration-slow` ease-out | `area--default` |
+| indeterminate | travelling segment; at Motion 0 or reduced motion (`duration-loop` 0, nearest motion scope) a full still stripe (display.css:342-349, 364-369) | `area--indeterminate` |
 
 No hover, focus or disabled: Progress is not interactive.
 
 ## Behavior and accessibility
 
-`role="progressbar"` with `aria-valuemin`, `aria-valuemax`, `aria-valuenow` (omitted when
-indeterminate) and `aria-label`, set directly (`label` is a deprecated alias;
-primitives.tsx:405-435). The value is clamped to 0–100%.
+`role="progressbar"` with `aria-valuemin` 0, `aria-valuemax` (`max`, default 100), `aria-valuenow` (omitted
+when indeterminate) and `aria-label`. The `label` prop is written to `aria-label`; an `aria-label` passed
+directly wins, since the rest props spread after it (primitives.tsx:468-499). The drawn fill and the announced
+value are both clamped to the range (audit E-21). Indeterminate sets `data-indeterminate`.
 No forced-colors rule in display.css (unverified).
 
 ## Peers and consistency
 
 | Peer | Shared role | Area value in peer | Progress | Match / reason |
 |---|---|---|---|---|
-| Slider, Switch | rail / off track | `edge-control` #e2 | same | match (audit S5) |
+| Slider, Switch | rail / off track | `fill-track` | same | match (audit S5) |
 | Slider | rail thickness | 4 | sm 4 | match at sm |
 | Slider, Switch, Spinner | fill | `selection-solid` | same | match |
 | Spinner | track | ink at 25% ≈ #c9 | #e2 | differs (audit E-22 open) |
@@ -172,7 +175,7 @@ progress", which describes the indeterminate loop; a value change is a state cha
 - 2026-09-28 · batch 6 Claude in Chrome (Figma usage meter) → no change; lighter track raised as an open question.
 - 2026-09-28 · owner: approved (batch 6).
 - 2026-09-30 · audit S5 (owner) → rail fallback `edge-control` #e2 (was ≈ #dd), the one off-track grey of Switch and Slider; the open Figma #e6 against #dd question is settled → display.css:265.
-- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → Progress is named with `aria-label` (`label` deprecated alias).
+- 2026-09-30 · audit S17 (owner: normalise the API vocabulary) → Progress is named with `aria-label` (`label` deprecated alias). — superseded 2026-10-19: `label` stays, not deprecated; it is spoken content, as Spinner's `label`, and becomes the bar's `aria-label`.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → value moves by `translate` (rounded) instead of `inline-size` once React writes `--_progress-value`; reduced motion shows the still stripe (was a slowed 5.4s segment); loop easing on the linear token → display.css Progress. See "Motion and interaction, 2026-10-07".
 - 2026-10-14 · owner: Motion is one number, default 210 → the indeterminate loop runs a fixed 1.8s (was `base × 12`, which would have become 2.52s); the still stripe at motion 0 is unchanged → display.css Progress. docs/MOTION.md.
 - 2026-10-14 · owner: "merge it, then continue working" (the all-axis audit's open item) → the loop stops through the Motion axis's `duration-loop` token (1, or 0 at step 0 and under reduced motion): the indeterminate period is `calc(1.8s * duration-loop)`, its width `100% - 65% × duration-loop` and its stripe gaps the fill mixed by it, so at 0 it is the full still stripe and running it is the solid 35% segment. The nearest motion scope now decides, so a non-zero scope nested in a 0 scope runs it; it was a `[data-area-motion="0"]` descendant rule plus a reduced-motion media rule (cohesion test pins it).

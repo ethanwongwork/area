@@ -1,6 +1,5 @@
 # File page spec
 
-**Status:** accepted · 2026-10-19 (round 48)
 **Captures:** Finder's live document icons drawn at 512 with `NSWorkspace.shared.icon(forFile:)` (macOS 27.2) for
 empty `.txt`, `.pdf`, `.docx`, `.png`, `.zip` and an unknown extension; no web captures.
 **Peers:** Folder (same box, shadow and corner family), File tile (its host), the `@area/icons` file glyphs.
@@ -18,7 +17,7 @@ empty `.txt`, `.pdf`, `.docx`, `.png`, `.zip` and an unknown extension; no web c
   thinner. the fold for the nonoutline version seems a bit off." The flap now shares the page's one diagonal (246,6 →
   354,114, rounded at both ends) and creases round at 32; the outline strokes only the page and the flap's two inner
   edges; edges are clamp(0.75px, 0.85% of the size, 2px); the solid flap shades from its lit edge (#fbfbfc) to its
-  crease (#d9dde3).
+  crease (#d9dde3). — superseded the same day (next entries): whole-pixel edges; flap #f0f1f4 → #f6f7f9.
 - 2026-10-18, later: "the gradient on the normal document is a bit strong/too dark on the dark end … make the fold
   gradient darkest color much lighter … strokes are very inconsistent … the text size of the number and PNG should be
   more consistent". From the survey: the page near flat (#ffffff → #fbfbfc, about 1 L; Finder 0.7), the flap 4–5 L
@@ -58,7 +57,26 @@ and menus.
 | size | sm 48 · md 64 · lg 96, unset follows `--area-folder-size` | Folder's sizes (Finder iconSize 64) |
 | icon | any `@area/icons` glyph | Finder draws the type's glyph in the middle (text lines, picture, zip) |
 | label | the extension | Finder prints it under the glyph (PDF, DOCX, PNG, ZIP) |
-| preview | an image URL | Finder's previews fill the page; the Brand tab shows real images as plain tiles instead |
+| preview | an image URL, clipped to the page, in place of the glyph and label | Finder's previews fill the page; the Brand tab shows real images as plain tiles instead |
+| variant | outline (default): the page and flap flat in `bg-component`, one whole-pixel `border` edge (page edge, crease and diagonal drawn after the flap), no shadow · solid: the lit page with the shaded flap and Folder's shadow, no edge | owner 2026-10-18 ("make the outline appearance the default"); Folder's variants |
+
+## Decisions
+
+| Slot · property | Area value | Basis |
+|---|---|---|
+| page | a 360 × 440 drawing, 72% of the box wide, height 440/360 of that, both rounded to even pixels, centred (70 × 86 at 96, 46 × 56 at 64, 34 × 42 at 48) | Finder 344 × 454 of 512, made fuller |
+| corners · fold | corners 40 of 360; the fold 108 along one diagonal (246,6 → 354,114), creasing round at 32 | owner 2026-10-18 |
+| solid paint | page #ffffff → #f4f5f7; flap #f0f1f4 at the crease → #f6f7f9; Folder's shadow (0 2% 4.5% black 12%); fixed paint in both themes | owner 2026-10-18; coherence pass 2026-10-19 |
+| outline | page and flap `bg-component`; edge `border`; glyph and label ink `fg-muted` mixed 45% toward the fill; no shadow | coherence pass 2026-10-19 (was `bg-subtle`, #b0b0b6) |
+| edge | max(`stroke-width`, size / 96 rounded down to a whole pixel) | Folder's edge; coherence pass (was `max(1px, …)`) |
+| glyph | 32% of the box (even pixels), its line the edge width as a non-scaling stroke, in both variants; solid ink #b4b4b8 | Finder's #b6b6b6, 26%; owner: one weight for every stroke |
+| label | the extension in caps, 13% of the box (cap ≈ 9%), regular, line 1, cap-trimmed, no tracking: Folder's count type | owner 2026-10-18 |
+| content | glyph over label, one centred column, gap 6% of the box, padded 6% down to clear the fold | owner 2026-10-18 ("more centered together") |
+
+## Behavior and accessibility
+
+Decorative by default (`aria-hidden`): the tile's name says what it is. With `name` it is `role="img"` with that name.
+Forced colours drop the shadow, paint the page and flap Canvas with CanvasText lines, and the glyph and label CanvasText.
 
 ## Measurements
 
@@ -73,6 +91,8 @@ and menus.
 | glyph | 32% of the square, its line the outline's edge (1px to 191, non-scaling) | Finder's glyph 132 of 512 (26%), #b6b6b6; owner: one weight for every stroke |
 | label | 13% of the box (cap ≈ 9%), regular, no tracking, under the glyph in one centred column (gap 6%); identical to Folder's count | Finder: cap 8–9% of the icon, regular, 7% up, ~22 L under the page |
 | outline edge | max(1px, 1px per 96 of the size, whole pixels) | Fluent 1px at 48, 2px at 64–96 |
+
+The outline and outline edge rows are superseded by the coherence pass (2026-10-19); Decisions holds the current values.
 
 ## Open
 

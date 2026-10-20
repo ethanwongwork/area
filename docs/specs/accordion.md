@@ -1,6 +1,5 @@
 # Accordion spec
 
-**Status:** complete · 2026-10-08 (owner approved on the component review page; recommendations accepted)
 **Captures:** `docs/research/captures/accordion/` (filed as `disclosure/` until 2026-10-07); Figma's collapsible section from
 `docs/research/captures/panel/figma--section-header--rest--light`
 **Peers:** Tree view (chevron slot and plate), Panel collapsible section (Figma's inspector
