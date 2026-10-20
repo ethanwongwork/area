@@ -52,3 +52,8 @@ Wikipedia, computed:
 - **Based on:** Wikipedia's hatnote; muted instead of italic, since Area's typeface has no italic.
 - 2026-10-19 · design-system audit → the indent is a named `--_indent` spec value; the API page no longer calls it
   italic. No visual change.
+
+## Review note, 2026-10-20
+
+- **What changed:** the hatnote's sentence and its link take the body size of the canvas (16 at Type 14, was 13).
+- **Why:** a section of the screen with its own Type setting (the canvas, a Theme) now starts its text at Area's body size, so text that inherits its size follows that setting; it kept the app's 13 before.

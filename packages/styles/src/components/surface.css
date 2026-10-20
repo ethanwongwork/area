@@ -1723,6 +1723,11 @@
     border-radius: var(--_sf-corner);
     background: var(--_sf-fill);
     color: var(--area-fg-default);
+    /* Card's body role, so text set straight in a Surface follows the Type setting of its scope instead of the page's
+       (the body role is stated only on body; a scope with its own Type restates tokens, not the inherited size). */
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
+    letter-spacing: var(--area-text-sm-tracking);
     box-shadow: var(--_sf-shade), var(--_sf-lift);
   }
 
@@ -1749,31 +1754,47 @@
     --_sf-lift: 0 0 0 0 transparent;
   }
 
-  /* Nesting, to four levels (the three-layer rule plus one). Each level reads its parent's published corner through
-     `inherit` and publishes its own under the other name. A nested Surface sits on a fill it shares or steps from,
-     so it draws no lift: its line or its fill is its edge. */
-  .area-surface .area-surface {
+  /* Nesting, to four levels (the three-layer rule plus one). Surface, Card and Panel each publish the corner a Surface
+     inside them takes: their own corner less their inset, floored (Card's is its media corner, 16 - 8 = 8; Panel's 12 - 14,
+     the floor). Each level reads its parent's published corner through `inherit` and publishes its own under the other
+     name, so depth counts every container of the three. A nested Surface sits on a fill it shares or steps from, so it
+     draws no lift: its line or its fill is its edge. */
+  .area-card { --_sf-a: var(--_card-media-radius); }
+  .area-panel { --_sf-a: max(var(--area-radius-floor), calc(var(--_panel-corner) - var(--_inset))); }
+
+  :where(.area-surface, .area-card, .area-panel) .area-surface {
     --_sf-a: inherit;
     --_sf-corner: var(--_sf-a);
     --_sf-b: max(var(--area-radius-floor), calc(var(--_sf-corner) - var(--_sf-inset)));
     --_sf-lift: 0 0 0 0 transparent;
   }
-  .area-surface .area-surface .area-surface {
+  :where(.area-surface, .area-card, .area-panel) .area-card { --_sf-a: inherit; --_sf-b: var(--_card-media-radius); }
+  :where(.area-surface, .area-card, .area-panel) .area-panel { --_sf-a: inherit; --_sf-b: max(var(--area-radius-floor), calc(var(--_panel-corner) - var(--_inset))); }
+
+  :where(.area-surface, .area-card, .area-panel) :where(.area-surface, .area-card, .area-panel) .area-surface {
     --_sf-b: inherit;
     --_sf-corner: var(--_sf-b);
     --_sf-a: max(var(--area-radius-floor), calc(var(--_sf-corner) - var(--_sf-inset)));
   }
-  .area-surface .area-surface .area-surface .area-surface {
+  :where(.area-surface, .area-card, .area-panel) :where(.area-surface, .area-card, .area-panel) .area-card { --_sf-b: inherit; --_sf-a: var(--_card-media-radius); }
+  :where(.area-surface, .area-card, .area-panel) :where(.area-surface, .area-card, .area-panel) .area-panel { --_sf-b: inherit; --_sf-a: max(var(--area-radius-floor), calc(var(--_panel-corner) - var(--_inset))); }
+
+  :where(.area-surface, .area-card, .area-panel) :where(.area-surface, .area-card, .area-panel) :where(.area-surface, .area-card, .area-panel) .area-surface {
     --_sf-a: inherit;
     --_sf-corner: var(--_sf-a);
     --_sf-b: max(var(--area-radius-floor), calc(var(--_sf-corner) - var(--_sf-inset)));
   }
+  :where(.area-surface, .area-card, .area-panel) :where(.area-surface, .area-card, .area-panel) :where(.area-surface, .area-card, .area-panel) .area-card { --_sf-a: inherit; --_sf-b: var(--_card-media-radius); }
+  :where(.area-surface, .area-card, .area-panel) :where(.area-surface, .area-card, .area-panel) :where(.area-surface, .area-card, .area-panel) .area-panel { --_sf-a: inherit; --_sf-b: max(var(--area-radius-floor), calc(var(--_panel-corner) - var(--_inset))); }
 
-  /* A Card inside a Surface is concentric with it too: it reads the corner the nearest Surface publishes (by the same
-     depth parity) in place of its own surface corner. Its size, insets and parts are unchanged, and a Card outside a
-     Surface is untouched. */
-  .area-surface .area-card { --_card-radius: var(--_sf-a); }
-  .area-surface .area-surface .area-card { --_card-radius: var(--_sf-b); }
-  .area-surface .area-surface .area-surface .area-card { --_card-radius: var(--_sf-a); }
-  .area-surface .area-surface .area-surface .area-surface .area-card { --_card-radius: var(--_sf-b); }
+  :where(.area-surface, .area-card, .area-panel) :where(.area-surface, .area-card, .area-panel) :where(.area-surface, .area-card, .area-panel) :where(.area-surface, .area-card, .area-panel) .area-card { --_sf-b: inherit; --_sf-a: var(--_card-media-radius); }
+
+  /* A Card inside a Surface is concentric with it too: it reads the corner its parent publishes (by the same depth
+     parity) in place of its own surface corner. Its size, insets and parts are unchanged. Only a Card with a Surface
+     around it reads the chain, so a Card in a Card or a Panel with no Surface keeps its corner, and a card in a media
+     well keeps the well's (that rule is weightier). */
+  :where(.area-surface, .area-card, .area-panel) .area-card:where(.area-surface *) { --_card-radius: var(--_sf-a); }
+  :where(.area-surface, .area-card, .area-panel) :where(.area-surface, .area-card, .area-panel) .area-card:where(.area-surface *) { --_card-radius: var(--_sf-b); }
+  :where(.area-surface, .area-card, .area-panel) :where(.area-surface, .area-card, .area-panel) :where(.area-surface, .area-card, .area-panel) .area-card:where(.area-surface *) { --_card-radius: var(--_sf-a); }
+  :where(.area-surface, .area-card, .area-panel) :where(.area-surface, .area-card, .area-panel) :where(.area-surface, .area-card, .area-panel) :where(.area-surface, .area-card, .area-panel) .area-card:where(.area-surface *) { --_card-radius: var(--_sf-b); }
 }

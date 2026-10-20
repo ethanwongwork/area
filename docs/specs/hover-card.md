@@ -131,3 +131,8 @@ once) for lists of mentions. Recommendation: not yet; no reference product does 
 - 2026-10-15 · PRODUCT_UI.md open gap ("Hover card that opens on pointer only, not on every arrow-key focus in a sheet"), owner: "merge it, then continue working" → `openOnFocus` (default `true`, so the E-18 rule stands): off, keyboard focus no longer opens the card and the pointer still does. The app's icon cells turn it off: the List box's arrows sweep 808 icons, each focus opened a card at once, and the Inspector shows the same name and actions for the focused icon. Radix opens on focus after its 700 ms (`@radix-ui/react-hover-card@1.1.14` index.mjs:44-47, 91); Area keeps at once.
 - 2026-10-17 · owner: "go with your recs" (after round 30), the hover and pressed sweep → the gallery examples' triggers are `Link` (the body ink, underlined) instead of raw `<a>`, which showed the browser's blue and, while pressed, its red (4:1 on white, 2.97:1 at light 90). The component is unchanged.
 - 2026-10-17 · owner, round 31: "rethink the content/source" → the examples' content follows each reference's preview (section Content); the Source tile is a web link (title, snippet, site), not a citation of an Area file. gallery.tsx personCard, GalleryHoverCardPage, GalleryHoverCardSource; specimens.mjs title.
+
+## Review note, 2026-10-20
+
+- **What changed:** the trigger sentence and its link take the body size of the canvas (16 at Type 14, was 13); the card itself is unchanged.
+- **Why:** a section of the screen with its own Type setting (the canvas, a Theme) now starts its text at Area's body size, so text that inherits its size follows that setting; it kept the app's 13 before.

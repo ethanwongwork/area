@@ -91,3 +91,8 @@ new tile shows the link blue.
   works here.
 - 2026-10-19 · design-system audit → demo copy uses the placeholder vocabulary (Label, Value, 1) instead of a date, a
   read time and a star count.
+
+## Review note, 2026-10-20
+
+- **What changed:** the list's items take the body size of the canvas (16 at Type 14, was 13), as in an article's byline.
+- **Why:** a section of the screen with its own Type setting (the canvas, a Theme) now starts its text at Area's body size, so text that inherits its size follows that setting; it kept the app's 13 before.

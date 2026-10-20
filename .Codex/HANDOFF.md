@@ -1,33 +1,40 @@
 # Handoff
 
-## Current state (2026-10-19)
+## Current state (2026-10-20)
 
-- **Status.** `main` includes PR #141 (Surface, Stack, container views) and this branch's PR (rounds 55–64: swatch,
-  audit, Asset card and Calendar rebuilds, the painted-ground rule). 119 families: 116 Complete; Asset card, Surface and
-  Stack in review (Asset card for main's containerless, hug and waterfall views, ported onto the round-61 card).
-  Review page: https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG.
-- **This branch (2026-10-19).**
-  - The owner said the setting pickers' swatch was very large. A Color swatch in a menu or Custom select icon slot is
-    now the box less 4 (12 in 16). The Inspector's option marks keep to the icon keylines, and ground swatches draw
-    the Inspector's ring (`studio.css`, registered `--_host-ring`).
-  - A design-system audit of the 22 recent families against PR #140's docs. All the clear rule fixes are applied, with
-    API renames keeping deprecated aliases. Open owner picks are listed in the session's report: Folder and File page
-    tiny label text, Infobox framed vs Card, heading levels, Folder tone on outline, VideoPlayer ref, failure words,
-    disclosure hover, Composer menu placement, English string props.
-- **Sessions.** One session at a time. Each starts from `origin/main` in its own worktree
-  (`claude/*`) and merges through a PR. Check open PRs first.
-- **Running the app.** `npm run dev` runs Electron and `npm run preview` adds
-  http://localhost:4400 (check who holds the port first). Icons are in the app's Icons tab.
-- **Docs (PR #140).** `docs/PRINCIPLES.md`, `GOVERNANCE.md` and `ARCHITECTURE.md`; every family has a Documentation
-  entry (`apps/desktop/src/content/documentation/`, `npm run check:docs -w @area/desktop`, in CI); skills
-  `area-component-intake`, `area-component-docs`, `area-foundation-change`. The owner's 2026-10-19 review verdicts
-  (https://claude.ai/artifact/Kbw21Vq97U6PRMtSniHWkv) are applied and recorded in the specs.
+- **Status.** `main` is at PR #142. 119 families: 118 Complete; Asset card in review. Surface and Stack approved in
+  layout review round 2 (https://claude.ai/artifact/4hvnnZ3eLvEPvjXk63u2pd, `layout2`). Components review page:
+  https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG.
+- **This branch (`claude/cool-payne-49761d`, PR open, on main at f56085f).**
+  - Card and Panel publish their corner, so a Surface inside them nests (Card: its media corner; Panel: corner less
+    inset, the floor). A Card reads the chain only inside a Surface; other Cards keep their corner.
+  - Owner round 1 (rethink, "what is this for, show examples"): answered with
+    https://claude.ai/artifact/JuR35Vuea3xgFFfK4Rts3S and docs/research/layout-primitives-2026-10-20.md; owner went
+    with the recommendations (Surface beside Card, keep `soft`, no Stack divider yet, no soft-in-soft step).
+  - Surface states Card's body text role; demo titles are Section heading.
+  - Foundation: an element below the root with its own Type restarts text at the body role (`base.css`, THEMING.md,
+    DESIGN_SYSTEM.md, cohesion test). Swept all families: only inheriting prose changes (Link, Abbreviation, Hatnote,
+    Inline list, Code, Token row, demo text); app chrome unchanged. Avatar initials take `line-height: 1`.
+- **Sessions.** One session at a time. Each starts from `origin/main` in its own worktree (`claude/*`) and merges
+  through a PR. Check open PRs first.
+- **Running the app.** `npm run dev` runs Electron and `npm run preview` adds http://localhost:4400 (check who holds
+  the port first). Static build: `npm run build -w @area/desktop`, launch config `desktop-dist` (4410).
 - **Open.**
-  - Agent chat Phase 3 (the engine) is not started.
-  - Material bundles are named presets, which conflicts with "no named looks"; ask before
-    changing them.
+  - The review generator renders outside any Type scope, so it cannot show the Type-scope change; check it in the app.
+  - Owner picks from the 2026-10-19 audit (listed in PR #142's report); Agent chat Phase 3 not started; Material
+    bundles are named presets (ask before changing).
 - **Rule for this file.** This section stays under 40 lines and is rewritten, not appended.
   Entries below are history, newest first.
+
+## Surface and Stack follow-up (2026-10-20, branch claude/cool-payne-49761d)
+
+After PR #141: Card and Panel join Surface's corner chain (`surface.css`, `--_panel-corner`); tiles "in a card", "in a
+panel". Layout review round 1 (`layout1`): both rethink with questions → examples page (Linear's settings, board pins
+03 and 11 vs Area, 13 systems) → owner "go with your recs". Correctness sweep at density 28/32/36 × radius 0/8/14/pill,
+light and dark: corners, insets, gaps and Layers fills all follow the rules. Found and fixed: text in a Surface kept the
+page's size (Surface now `text-sm`), demo titles at weight 700 (now Section heading), and the system gap behind it (Type
+scopes restart at the body role). Round 2 (`layout2`, Before = round 1 dist). Checks: build, tokens 24272, React 534,
+contracts, desktop, typecheck, check:docs 119/119, playgrounds.
 
 ## Language tab from the axes (2026-10-19, same branch, uncommitted)
 

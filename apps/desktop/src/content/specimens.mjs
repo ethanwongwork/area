@@ -1115,6 +1115,8 @@ function gallerySpecimenTable() {
       { id: "size-md", title: "Size / md", demo: "GallerySurfaceSizeMd" },
       { id: "size-lg", title: "Size / lg", demo: "GallerySurfaceSizeLg" },
       { id: "nested", title: "Composition / nested", demo: "GallerySurfaceNested" },
+      { id: "in-card", title: "Composition / in a card", demo: "GallerySurfaceInCard" },
+      { id: "in-panel", title: "Composition / in a panel", demo: "GallerySurfaceInPanel" },
       { id: "form", title: "Composition / form", demo: "GallerySurfaceForm" },
     ],
     stack: [

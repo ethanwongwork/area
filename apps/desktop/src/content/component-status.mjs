@@ -7,6 +7,8 @@
 // command-palette, combobox, tooltip, dialog, code-block, panel, color-picker, checkbox, radio,
 // chip, badge-group, box-field and tabs keep Complete (docs/research/compact-evidence-2026-10-02/).
 export const COMPLETE_COMPONENTS = new Set([
+  // Layout review round 2, 2026-10-20 (owner approved, layout2).
+  'surface', 'stack',
   // Round 61, 2026-10-20 (owner approved, components61): asset-card, back in review after the merge with main.
   // Round 62, 2026-10-20 (owner approved, components62): every painted ground declared in layers.css.
   'code-block', 'edit-summary', 'plan', 'queue', 'infobox', 'menu', 'select',
@@ -141,7 +143,7 @@ export const COMPLETE_COMPONENTS = new Set([
 // Asset card rebuilt to the owner's designs; Color swatch 14; File page blank; File image (new); Video player's play.
 // Round 64 approved Calendar. Merged with main's PR #141: Surface and Stack (new, in review), and Asset card's
 // containerless, hug and waterfall views, ported onto the round-61 card (in review for those views).
-export const REVIEW_COMPONENTS = new Set(['asset-card', 'surface', 'stack']);
+export const REVIEW_COMPONENTS = new Set(['asset-card']);
 export const componentStatus = slug => COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
 export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined' })[status];
 

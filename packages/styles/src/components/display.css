@@ -28,6 +28,8 @@
     box-shadow: var(--_group-ring), var(--_active-ring);
     /* Initials step with the disc: 12 / 14 / 16 at 28 / 32 / 40 (Notion 14 at 32, docs/specs/avatar.md). */
     font-size: var(--_text, var(--area-text-sm-size));
+    /* The initials' line box is the glyph, not the surrounding text's leading (as Folder's avatar badge). */
+    line-height: 1;
     font-weight: var(--area-weight-strong);
     overflow: hidden;
     user-select: none;

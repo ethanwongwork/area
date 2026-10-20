@@ -10,7 +10,9 @@ export default {
     // Spec: Variants, Decisions, Behavior and accessibility; Surface.tsx JSDoc.
     practices: [
       ["Do", "Use surface for a raised region on the page, soft for a well inside one, and plain to group children without paint."],
+      ["Do", "Read soft as what other systems call subtle, sunken or a well, and Surface as their Paper, Box or View."],
       ["Do", "Nest Surfaces rather than drawing your own boxes, so each corner stays concentric with the one around it."],
+      ["Do", "Put a Surface straight inside a Card or Panel when it needs a region of its own; it takes their corner less their inset."],
       ["Do", "Lay out a Surface's content with Stack, choosing the gap by role."],
       ["Do", "Give a Surface a role and a name when it is a region a reader navigates to."],
       ["Don't", "Nest more than three layers; a fourth level is a floating surface such as a Menu or Dialog."],

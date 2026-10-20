@@ -58,3 +58,8 @@ as a `span`; open, the popover is in the top layer and laid out as a block, so n
 is unchanged. Test: articles.test.mjs, "an abbreviation's tooltip is phrasing content".
 - 2026-10-19 · design-system audit → the underline offset is a named `--_offset` spec value (Link's 0.08em). No visual
   change.
+
+## Review note, 2026-10-20
+
+- **What changed:** the abbreviation and its sentence take the body size of the canvas (16 at Type 14, was 13), as in a product's body text.
+- **Why:** a section of the screen with its own Type setting (the canvas, a Theme) now starts its text at Area's body size, so text that inherits its size follows that setting; it kept the app's 13 before.
