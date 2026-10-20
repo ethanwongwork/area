@@ -1,0 +1,33 @@
+/*
+ * Stack: one row or column with a gap chosen by role (docs/specs/stack.md). Related, group and section follow Density
+ * through Area's layout tokens; inside a Surface the gap never exceeds the Surface's inset (`--_surface-room`, set by
+ * Surface), so children are never farther apart than they are from the edge.
+ */
+@layer area.components {
+  .area-stack {
+    --_stack-gap: var(--area-gap-row);
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: min(var(--_stack-gap), var(--_surface-room, var(--_stack-gap)));
+    box-sizing: border-box;
+    min-inline-size: 0;
+  }
+  /* A column's children wrap their text inside the column instead of widening it. */
+  .area-stack--vertical > * { min-inline-size: 0; }
+  .area-stack--horizontal { flex-direction: row; align-items: center; }
+
+  .area-stack--related { --_stack-gap: var(--area-ui-cluster); }
+  .area-stack--group { --_stack-gap: var(--area-gap-row); }
+  /* spec: twice the group gap (24, Compact 16); Area has no section token and this keeps the rhythm without one. */
+  .area-stack--section { --_stack-gap: calc(var(--area-gap-row) * 2); }
+
+  .area-stack--start { align-items: flex-start; }
+  .area-stack--center { align-items: center; }
+  .area-stack--end { align-items: flex-end; }
+  .area-stack--stretch { align-items: stretch; }
+  .area-stack--baseline { align-items: baseline; }
+
+  .area-stack--spread { justify-content: space-between; }
+  .area-stack--wrap { flex-wrap: wrap; }
+}

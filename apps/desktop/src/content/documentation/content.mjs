@@ -1,5 +1,50 @@
 /** Documentation entries: surfaces, content, files, articles and media. Format and rules: ../documentation.mjs and the area-component-docs skill. */
 export default {
+  surface: {
+    // Spec: Job and boundaries.
+    instead: [
+      ["One piece of content with media, a title, a description or a link", ["card"], "Card has those parts; Surface is the plain region that holds cards and controls."],
+      ["Settings for the current selection, with a bar and sections", ["panel"], "Panel is the inspector region; Surface has no bar."],
+      ["Floating content tied to a trigger", ["popover", "menu"], "Floating surfaces have their own shadow and dismissal; Surface sits in the layout."],
+    ],
+    // Spec: Variants, Decisions, Behavior and accessibility; Surface.tsx JSDoc.
+    practices: [
+      ["Do", "Use surface for a raised region on the page, soft for a well inside one, and plain to group children without paint."],
+      ["Do", "Nest Surfaces rather than drawing your own boxes, so each corner stays concentric with the one around it."],
+      ["Do", "Lay out a Surface's content with Stack, choosing the gap by role."],
+      ["Do", "Give a Surface a role and a name when it is a region a reader navigates to."],
+      ["Don't", "Nest more than three layers; a fourth level is a floating surface such as a Menu or Dialog."],
+      ["Don't", "Add your own border or shadow to a nested Surface: it already draws its one edge."],
+    ],
+    // Manifest: no elements.
+    parts: {
+      root: "The layer: owns its corner, inset, fill, edge and shadow, and the ground its controls step from.",
+    },
+    aria: [],
+  },
+
+  stack: {
+    // Spec: Job and boundaries.
+    instead: [
+      ["Buttons that act as one control with shared edges", ["button-group"], "Button group joins the buttons; Stack only spaces them."],
+      ["A bar of tools with arrow-key movement between them", ["toolbar"], "Toolbar owns the keyboard; Stack changes layout only."],
+    ],
+    // Spec: Variants, Decisions, Behavior and accessibility; Stack.tsx JSDoc.
+    practices: [
+      ["Do", "Choose the gap by role: related for parts of one thing, group for members of a set, section for parts of a page."],
+      ["Do", "Use spread for a row with a title at one end and its action at the other."],
+      ["Do", "Use wrap for rows of chips or badges that may run past the width."],
+      ["Do", "Give a Stack a role such as list when its children form one."],
+      ["Don't", "Add margins to a Stack's children; the gap is the spacing."],
+      ["Don't", "Use a section gap inside a small Surface; it stops at the Surface's inset."],
+    ],
+    // Manifest: no elements.
+    parts: {
+      root: "The row or column: owns its direction, gap, cross-axis alignment and wrapping.",
+    },
+    aria: [],
+  },
+
   card: {
     // Spec: Job and boundaries.
     instead: [

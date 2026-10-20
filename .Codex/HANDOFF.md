@@ -56,6 +56,24 @@ by design); Resting and Rest shadow are faint because they are. Checks: tokens 2
 typecheck, manifest; headless Edge captures. The Inspector's Theme view is now **Language** too (id `theme`
 kept), so the tab and the Inspector use one word.
 
+## Surface and Stack (2026-10-19, same branch, uncommitted; main merged at 00ba7606)
+
+Owner, after the abstract board: build layout primitives "so nested corners, layers and gaps come out right without
+hand-set values", without bloating the system (no XL badge or new type, icon or Language sizes: read at true scale,
+the board's text, icons and badges all land on existing sizes; lessons page https://claude.ai/artifact/XJg47r98ykX5Ysn77o6VVo).
+Two new families, In review (`docs/specs/surface.md`, `stack.md`):
+- **Surface** (`surface.css` section, `Surface.tsx`): variant surface / soft / plain, size sm / md / lg = Card's corner
+  and inset. Nested corner = parent corner − parent inset, floored (16 → 8 → 4; Compact 12 → 6 → 4), through two
+  private properties alternating by depth with `inherit` (a custom property cannot read its parent's value of a name it
+  sets), four levels. A Surface holding Surfaces or Cards uses its media inset. Outermost raised lifts; nested draws its
+  line only; soft is a fill step only. `layers.css` lists surface as raised, soft as recessed. A Card inside a Surface
+  reads the Surface's corner (Card unchanged elsewhere).
+- **Stack** (`stack.css`, `Stack.tsx`): orientation, gap related / group / section (ui-cluster, gap-row, 2 × gap-row),
+  align, spread, wrap; gap capped at the nearest Surface's inset (`--_surface-room`).
+Board scenes 03, 04 (Card in a Surface bezel) and 11 rebuilt on them. Checks: build, typecheck, tokens 24272, React
+521, contracts, desktop, check:docs 118/118, playgrounds. Not done: Card / Panel publishing their own corner to a
+Surface inside them; the review page for the two families.
+
 ## Abstract board rebuild (2026-10-19, same branch, uncommitted)
 
 Owner: recreate the Pinterest board oval / abstract (27 pins; #22 a blank video thumbnail, skipped), then: "treat these

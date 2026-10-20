@@ -4,7 +4,7 @@
  * icons, a 3D calendar) are drawn here in Area's colours and strokes rather than made into components.
  */
 import type { CSSProperties, ReactNode } from "react";
-import { Badge, Button, Checkbox, NumberField, Switch } from "@area/react";
+import { Badge, Button, Checkbox, NumberField, Stack, Surface, Switch } from "@area/react";
 import {
   CalendarClockIcon, CalendarIcon, CornerBottomLeftIcon, CornerBottomRightIcon, CornerIcon, CornerTopRightIcon,
   CornersIcon, DismissIcon, FolderIcon, TableIcon, InboxIcon, LockFilledIcon, MaximizeIcon, MinusIcon, MoreHorizontalIcon,
@@ -49,22 +49,26 @@ export const S11 = () => {
   const corner = (label: string, value: number, icon: ReactNode) => <NumberField variant="soft" fullWidth aria-label={label} defaultValue={value} scrub={icon} />;
   return (
     <Scene view={[1400, 1400]} zoom={2.44} scope={{ "data-area-ground-light": "97", "data-area-type": "14", "data-area-selection": "accent" }} bg="var(--area-bg-page)">
-      <div className="sc-card sc-corners" data-area-ground="raised" style={b(287, 341, 826, 716)}>
-        <div className="sc-grid sc-2">
-          <NumberField variant="soft" fullWidth aria-label="Opacity" defaultValue={100} unit="%" scrub={<OpacityIcon />} />
-          <div className="sc-field" role="button" aria-label="Corner radius: Mixed"><span className="sc-iconbox"><CornersIcon /></span>Mixed</div>
-        </div>
-        <hr className="sc-rule" />
-        <div className="sc-grid sc-2">{corner("Top left", 20, <CornerIcon />)}{corner("Top right", 40, <CornerTopRightIcon />)}</div>
-        <div className="sc-cornerwell">
-          <div className="sc-cornershape" style={b(88, 88, 615, 198)}>
-            <span className="sc-disc sc-disc--tl">20</span><span className="sc-disc sc-disc--bl">20</span>
-            <span className="sc-disc sc-disc--tr">40</span><span className="sc-disc sc-disc--br" aria-hidden="true" />
+      {/* A Surface holding the preview well, so it sets it at its media inset (8, the shot's 7); the well is a soft Surface
+          whose corner is the card's less that inset; the rows are a Stack at the related gap. */}
+      <Surface style={b(287, 341, 826)}>
+        <Stack gap="related">
+          <div className="sc-grid sc-2">
+            <NumberField variant="soft" fullWidth aria-label="Opacity" defaultValue={100} unit="%" scrub={<OpacityIcon />} />
+            <div className="sc-field" role="button" aria-label="Corner radius: Mixed"><span className="sc-iconbox"><CornersIcon /></span>Mixed</div>
           </div>
-          <Button size="sm" variant="outline" tone="neutral" iconOnly aria-label="Corner settings" icon={<SlidersIcon />} className="sc-cornerbtn" />
-        </div>
-        <div className="sc-grid sc-2">{corner("Bottom left", 20, <CornerBottomLeftIcon />)}{corner("Bottom right", 20, <CornerBottomRightIcon />)}</div>
-      </div>
+          <hr className="sc-rule" />
+          <div className="sc-grid sc-2">{corner("Top left", 20, <CornerIcon />)}{corner("Top right", 40, <CornerTopRightIcon />)}</div>
+          <Surface variant="soft" className="sc-cornerwell" aria-label="Corner preview">
+            <div className="sc-cornershape" style={b(88 - 17, 88 - 17, 615, 198)}>
+              <span className="sc-disc sc-disc--tl">20</span><span className="sc-disc sc-disc--bl">20</span>
+              <span className="sc-disc sc-disc--tr">40</span><span className="sc-disc sc-disc--br" aria-hidden="true" />
+            </div>
+            <Button size="sm" variant="outline" tone="neutral" iconOnly aria-label="Corner settings" icon={<SlidersIcon />} className="sc-cornerbtn" />
+          </Surface>
+          <div className="sc-grid sc-2">{corner("Bottom left", 20, <CornerBottomLeftIcon />)}{corner("Bottom right", 20, <CornerBottomRightIcon />)}</div>
+        </Stack>
+      </Surface>
     </Scene>
   );
 };

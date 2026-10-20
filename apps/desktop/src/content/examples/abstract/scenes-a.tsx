@@ -4,8 +4,9 @@
  */
 import type { ReactNode } from "react";
 import {
-  Avatar, AvatarGroup, Badge, Button, ButtonGroup, Checkbox, ColorSwatch, CustomSelect, DatePicker, Field, Folder, Input,
-  InputGroup, InputGroupText, Nav, NavGroup, NavItem, NumberField, Radio, SearchField, Segmented, Select, Switch,
+  Avatar, AvatarGroup, Badge, Button, ButtonGroup, Card, CardContent, CardDescription, CardFooter, CardMedia, CardOverlay,
+  CardTitle, Checkbox, ColorSwatch, CustomSelect, DatePicker, Field, Folder, Input, InputGroup, InputGroupText, Nav, NavGroup,
+  NavItem, NumberField, Radio, SearchField, Segmented, Select, Stack, Surface, Switch,
 } from "@area/react";
 import {
   AddIcon, ArrowLeftIcon, ArrowLeftRightIcon, ArrowRightIcon, ArrowUpDownIcon, AsteriskIcon, BinocularsIcon, BookIcon,
@@ -97,33 +98,41 @@ export const S03 = () => {
   const side = (label: string, value: number) => <NumberField size="sm" variant="soft" fullWidth aria-label={label} defaultValue={value} scrub={<PaddingSideIcon />} />;
   return (
     <Scene view={[1400, 1400]} zoom={2.8} scope={{ "data-area-ground-light": "97", "data-area-selection": "accent", "data-area-pills": "segmented switch" }} bg="var(--area-bg-page)">
-      <div className="sc-card sc-tight" data-area-ground="raised" style={b(287, 297, 825, 807)}>
-        <Segmented size="sm" iconOnly fullWidth aria-label="Flow" defaultValue="grid" items={[
-          { value: "free", label: "Freeform", icon: <FlowFreeIcon /> }, { value: "grid", label: "Grid", icon: <FlowWrapIcon /> },
-          { value: "vertical", label: "Vertical", icon: <FlowVerticalIcon /> }, { value: "horizontal", label: "Horizontal", icon: <FlowIcon /> },
-        ]} />
-        <div className="sc-grid" style={{ gridTemplateColumns: "minmax(0, 1fr) 28px minmax(0, 1fr)" }}>
-          <InputGroup size="sm" variant="soft" aria-label="Width"><InputGroupText aria-hidden="true">W</InputGroupText><Input aria-label="Width" defaultValue="360" /><InputGroupText aria-hidden="true">Fill</InputGroupText></InputGroup>
-          <Button size="sm" variant="soft" tone="neutral" iconOnly selected aria-label="Clip content" icon={<CornersIcon />} />
-          <InputGroup size="sm" variant="soft" aria-label="Height"><InputGroupText aria-hidden="true">H</InputGroupText><Input aria-label="Height" defaultValue="48" /><InputGroupText aria-hidden="true">Hug</InputGroupText></InputGroup>
-        </div>
-        <hr className="sc-rule" />
-        <div className="sc-grid" style={{ gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)" }}>
-          <div className="sc-well sc-align" aria-label="Alignment">
-            {[0, 1, 2, 3, 4, 5, 6, 7, 8].map(cell => <i key={cell} data-on={cell === 4 ? "" : undefined} data-bar={[1, 7].includes(cell) ? "h" : [3, 5].includes(cell) ? "v" : undefined} />)}
+      {/* Surface and Stack (owner, 2026-10-19): the panel holds two wells, so it sets them at its media inset (6 at sm, the
+          shot's 6); each well's corner is the panel's less that inset; the gaps are the related role. */}
+      <Surface size="sm" style={b(287, 297, 825)}>
+        <Stack gap="related">
+          <Segmented size="sm" iconOnly fullWidth aria-label="Flow" defaultValue="grid" items={[
+            { value: "free", label: "Freeform", icon: <FlowFreeIcon /> }, { value: "grid", label: "Grid", icon: <FlowWrapIcon /> },
+            { value: "vertical", label: "Vertical", icon: <FlowVerticalIcon /> }, { value: "horizontal", label: "Horizontal", icon: <FlowIcon /> },
+          ]} />
+          <div className="sc-grid" style={{ gridTemplateColumns: "minmax(0, 1fr) 28px minmax(0, 1fr)" }}>
+            <InputGroup size="sm" variant="soft" aria-label="Width"><InputGroupText aria-hidden="true">W</InputGroupText><Input aria-label="Width" defaultValue="360" /><InputGroupText aria-hidden="true">Fill</InputGroupText></InputGroup>
+            <Button size="sm" variant="soft" tone="neutral" iconOnly selected aria-label="Clip content" icon={<CornersIcon />} />
+            <InputGroup size="sm" variant="soft" aria-label="Height"><InputGroupText aria-hidden="true">H</InputGroupText><Input aria-label="Height" defaultValue="48" /><InputGroupText aria-hidden="true">Hug</InputGroupText></InputGroup>
           </div>
-          <div className="sc-col">
-            <CustomSelect size="sm" variant="soft" fullWidth aria-label="Vertical gap" defaultValue="auto" items={[{ value: "auto", label: "Auto", icon: <DistributeVerticalIcon /> }]} />
-            <CustomSelect size="sm" variant="soft" fullWidth aria-label="Horizontal gap" defaultValue="auto" items={[{ value: "auto", label: "Auto", icon: <DistributeHorizontalIcon /> }]} />
-          </div>
-          <div className="sc-well sc-pad" aria-label="Padding">
-            <div className="sc-pad__box"><div className="sc-pad__content"><AddIcon /></div></div>
-            <Badge variant="solid" tone="info" className="sc-pad__t">24</Badge><Badge variant="solid" tone="info" className="sc-pad__b">24</Badge>
-            <Badge variant="solid" tone="info" className="sc-pad__l">24</Badge><Badge variant="solid" tone="info" className="sc-pad__r">8</Badge>
-          </div>
-          <div className="sc-col">{side("Top", 24)}{side("Bottom", 24)}{side("Left", 24)}{side("Right", 8)}</div>
-        </div>
-      </div>
+          <hr className="sc-rule" />
+          <Stack orientation="horizontal" gap="related" align="start">
+            <Surface variant="soft" size="sm" className="sc-half" aria-label="Alignment">
+              <div className="sc-align">{[0, 1, 2, 3, 4, 5, 6, 7, 8].map(cell => <i key={cell} data-on={cell === 4 ? "" : undefined} data-bar={[1, 7].includes(cell) ? "h" : [3, 5].includes(cell) ? "v" : undefined} />)}</div>
+            </Surface>
+            <Stack gap="related" className="sc-half">
+              <CustomSelect size="sm" variant="soft" fullWidth aria-label="Vertical gap" defaultValue="auto" items={[{ value: "auto", label: "Auto", icon: <DistributeVerticalIcon /> }]} />
+              <CustomSelect size="sm" variant="soft" fullWidth aria-label="Horizontal gap" defaultValue="auto" items={[{ value: "auto", label: "Auto", icon: <DistributeHorizontalIcon /> }]} />
+            </Stack>
+          </Stack>
+          <Stack orientation="horizontal" gap="related" align="start">
+            <Surface variant="soft" size="sm" className="sc-half" aria-label="Padding">
+              <div className="sc-pad">
+                <div className="sc-pad__box"><div className="sc-pad__content"><AddIcon /></div></div>
+                <Badge variant="solid" tone="info" className="sc-pad__t">24</Badge><Badge variant="solid" tone="info" className="sc-pad__b">24</Badge>
+                <Badge variant="solid" tone="info" className="sc-pad__l">24</Badge><Badge variant="solid" tone="info" className="sc-pad__r">8</Badge>
+              </div>
+            </Surface>
+            <Stack gap="related" className="sc-half">{side("Top", 24)}{side("Bottom", 24)}{side("Left", 24)}{side("Right", 8)}</Stack>
+          </Stack>
+        </Stack>
+      </Surface>
     </Scene>
   );
 };
@@ -135,23 +144,26 @@ export const S04 = () => {
   const b = box(2.4);
   return (
     <Scene view={[1400, 1400]} zoom={2.4} scope={{ "data-area-ground-light": "93", "data-area-accent": "lime", "data-area-type": "13" }} bg="var(--area-bg-page)">
-      {/* The bezel and card are white on the grey page: their own Light ground, 100. */}
-      <div className="sc-bezel" data-area-ground-light="100" style={b(208, 165, 984, 1078)}>
-        <div className="sc-delivery">
-          <div className="sc-delivery__media">
+      {/* The bezel is a Surface (white on the grey page: its own Light ground, 100) holding Area's Card, so the card sits
+          at the bezel's media inset with the bezel's corner less that inset (Surface and Stack, owner 2026-10-19). */}
+      <Surface size="md" data-area-ground-light="100" style={b(208, 165, 984)}>
+        <Card>
+          <CardMedia bleed className="sc-delivery__media" aria-hidden="true">
             <Conveyor />
-            <Button variant="solid" tone="neutral" iconOnly aria-label="History" icon={<ClockIcon />} className="sc-corner" />
-          </div>
-          <div className="sc-delivery__body">
-            <h3 className="sc-h3">Track Your Delivery</h3>
-            <p className="sc-p">Monitor your shipment status in real-time. Stay informed about your delivery's progress every step of the way.</p>
-          </div>
-          <div className="sc-delivery__foot">
-            <Button size="lg" variant="outline" tone="neutral">View Status</Button>
-            <span className="sc-note"><CalendarIcon /> Your delivery is on its way!</span>
-          </div>
-        </div>
-      </div>
+            <CardOverlay placement="top-end"><Button variant="solid" tone="neutral" iconOnly aria-label="History" icon={<ClockIcon />} /></CardOverlay>
+          </CardMedia>
+          <CardContent>
+            <CardTitle>Track Your Delivery</CardTitle>
+            <CardDescription>Monitor your shipment status in real-time. Stay informed about your delivery's progress every step of the way.</CardDescription>
+          </CardContent>
+          <CardFooter>
+            <Stack orientation="horizontal" spread className="sc-grow">
+              <Button size="lg" variant="outline" tone="neutral">View Status</Button>
+              <span className="sc-note"><CalendarIcon /> Your delivery is on its way!</span>
+            </Stack>
+          </CardFooter>
+        </Card>
+      </Surface>
     </Scene>
   );
 };

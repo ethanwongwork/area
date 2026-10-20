@@ -804,6 +804,21 @@ export const boxField = {
   defaults: { size: "md" },
 } as const satisfies ComponentManifest;
 
+export const surface = {
+  block: "area-surface",
+  description: "A plain layer to compose a screen from, whose corner, layer and edge follow from the surface it sits in.",
+  variants: { variant: ["surface", "soft", "plain"], size: ["sm", "md", "lg"] },
+  defaults: { variant: "surface", size: "md" },
+} as const satisfies ComponentManifest;
+
+export const stack = {
+  block: "area-stack",
+  description: "Lays its children out in one row or column, with a gap chosen by role that follows Density.",
+  variants: { orientation: ["vertical", "horizontal"], gap: ["related", "group", "section"], align: ["start", "center", "end", "stretch", "baseline"] },
+  booleans: ["spread", "wrap"],
+  defaults: { orientation: "vertical", gap: "group" },
+} as const satisfies ComponentManifest;
+
 export const card = {
   block: "area-card",
   description: "Groups related media, content and actions on one surface.",
@@ -1396,6 +1411,8 @@ export const MANIFESTS = {
   scrollToLatest,
   modelPicker,
   card,
+  surface,
+  stack,
   alert,
   dialog,
   popover,

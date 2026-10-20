@@ -1986,6 +1986,26 @@ export const COMPONENT_PAGES = [
     ],
   },
   {
+    slug: "surface", name: "Surface", manifest: "surface", imports: "Surface, Stack",
+    api: [["variant", "surface (raised, Card's fill and edge) | soft (a recessed well) | plain (structure only)", "surface"], ["size", "sm | md | lg: Card's corner and inset", "md"]],
+    examples: [
+      { id: "default", title: "Default", demo: "GallerySurface", note: "A raised region: Card's fill, edge and resting shadow, with no parts. Compose its content with Stack." },
+      { id: "nested", title: "Nested", demo: "GallerySurfaceNested", note: "Each corner is the one around it less that Surface's inset, floored at 4; a Surface holding Surfaces sets them at its smaller media inset." },
+      { id: "soft", title: "Soft", demo: "GallerySurfaceSoft", note: "A recessed well: one fill step down, no line or shadow." },
+      { id: "form", title: "Form", demo: "GallerySurfaceForm", note: "Controls inside step from the Surface's ground, as in a Card." },
+    ],
+  },
+  {
+    slug: "stack", name: "Stack", manifest: "stack", imports: "Stack, Surface",
+    api: [["orientation", "vertical | horizontal", "vertical"], ["gap", "related | group | section, by role; follows Density and never exceeds a Surface's inset", "group"], ["align", "start | center | end | stretch | baseline (unset: a column stretches, a row centres)", "—"], ["spread", "boolean: ends pushed apart", "false"], ["wrap", "boolean: a row wraps", "false"]],
+    examples: [
+      { id: "default", title: "Default", demo: "GalleryStack", note: "A column of group members, 12 apart at the default Density." },
+      { id: "horizontal", title: "Horizontal", demo: "GalleryStackHorizontal" },
+      { id: "spread", title: "Spread", demo: "GalleryStackSpread", note: "A title and its action at the two ends of a row." },
+      { id: "in-surface", title: "In a surface", demo: "GalleryStackInSurface", note: "Inside a Surface the gap stops at the Surface's inset, so children are never farther apart than they are from its edge." },
+    ],
+  },
+  {
     slug: "card",
     name: "Card",
     manifest: "card",

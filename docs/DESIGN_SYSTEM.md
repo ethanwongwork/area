@@ -350,6 +350,11 @@ Button's corner ([audit](research/radius-audit-2026-10-03.md)).
 - **Nested radius** is `max(min(radius-floor, own corner), outer − inset)`, where
   `radius-floor` is min(4, setting). Only Sharp is square anywhere. Insets are the padding;
   a surface's 1px border is left out.
+  Composed screens get it from **Surface**: each Surface's corner is the parent Surface's
+  corner less that Surface's inset, floored, as Card's media takes Card's corner less its inset; its layer steps from its parent (`surface`
+  raised, `soft` recessed), with one edge per boundary. **Stack** spaces children by role
+  (related, group, section) and never wider than the inset of the Surface it sits in
+  ([Surface](specs/surface.md), [Stack](specs/stack.md)).
 - **Rows in floating lists** (Menu, Combobox, Command palette, Select picker) use
   `radius-list-row`: the surface less its inset, no rounder than a medium Button, and a pill
   only at Pill. The list uses `radius-list` (rows + inset). Standalone rows (Nav, Tree view)

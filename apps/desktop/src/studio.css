@@ -893,18 +893,18 @@ svg.studio-mark * { vector-effect: non-scaling-stroke }
 .sc-card { display: grid; grid-template-columns: minmax(0, 1fr); align-content: start; gap: var(--area-space-8); border-radius: var(--area-radius-container); background: var(--area-bg-surface); box-shadow: var(--area-shadow-resting); }
 .sc-tight { padding: 6px; }
 .sc-well { border-radius: var(--area-radius-control-md); background: var(--area-bg-component); }
-.sc-align { display: grid; grid-template: repeat(3, 1fr) / repeat(3, 1fr); place-items: center; block-size: 62px; }
+.sc-align { display: grid; grid-template: repeat(3, 1fr) / repeat(3, 1fr); place-items: center; block-size: 34px; } /* the well's 62 less the soft Surface's 14 inset each side */
 .sc-align i { inline-size: 2px; block-size: 2px; border-radius: 1px; background: var(--area-fg-muted); }
 .sc-align i[data-bar="h"] { inline-size: 8px; background: var(--area-accent-solid); }
 .sc-align i[data-bar="v"] { block-size: 8px; background: var(--area-accent-solid); }
 .sc-align i[data-on] { inline-size: 6px; block-size: 6px; background: var(--area-accent-solid); }
-.sc-pad { position: relative; block-size: 131px; }
-.sc-pad__box { position: absolute; inset: 29px 33px; display: grid; padding: 18px 18px 18px 18px; border: var(--area-border-width) solid var(--area-edge-control); border-radius: var(--area-radius-container); background: var(--area-bg-surface); }
+.sc-pad { position: relative; block-size: 103px; } /* the well's 131 less the soft Surface's 14 inset each side; offsets below likewise */
+.sc-pad__box { position: absolute; inset: 15px 19px; display: grid; padding: 18px 18px 18px 18px; border: var(--area-border-width) solid var(--area-edge-control); border-radius: var(--area-radius-container); background: var(--area-bg-surface); }
 .sc-pad__content { display: grid; place-items: center; border: 1px dashed var(--area-accent-solid); border-radius: var(--area-radius-small); background: color-mix(in oklab, var(--area-accent-solid) 10%, transparent); color: var(--area-accent-solid); }
 .sc-pad__content svg { inline-size: 10px; block-size: 10px; }
 .sc-pad > .area-badge { position: absolute; }
-.sc-pad__t { top: 12px; left: 50%; translate: -50% 0; } .sc-pad__b { bottom: 12px; left: 50%; translate: -50% 0; }
-.sc-pad__l { left: 10px; top: 50%; translate: 0 -50%; } .sc-pad__r { right: 10px; top: 50%; translate: 0 -50%; }
+.sc-pad__t { top: -2px; left: 50%; translate: -50% 0; } .sc-pad__b { bottom: -2px; left: 50%; translate: -50% 0; }
+.sc-pad__l { left: -4px; top: 50%; translate: 0 -50%; } .sc-pad__r { right: -4px; top: 50%; translate: 0 -50%; }
 /* 04 */
 .sc-bezel { padding: 10px; border-radius: 28px; background: var(--area-bg-surface); box-shadow: var(--area-shadow-resting); }
 .sc-delivery { display: grid; grid-template-rows: 206px 1fr auto; block-size: 100%; overflow: hidden; border: var(--area-border-width) solid var(--area-border-card); border-radius: 18px; background: var(--area-bg-surface); }
@@ -962,7 +962,8 @@ svg.studio-mark * { vector-effect: non-scaling-stroke }
 .sc-corners { padding: calc(17px / var(--z)); gap: calc(18px / var(--z)); }
 .sc-iconbox { display: grid; place-items: center; inline-size: calc(52px / var(--z)); block-size: calc(52px / var(--z)); margin-inline-start: calc(-1px / var(--z)); margin-inline-end: calc(6px / var(--z)); border-radius: var(--area-radius-small); background: color-mix(in oklab, var(--area-accent-solid) 18%, transparent); color: var(--area-fg-accent); }
 .sc-iconbox svg { inline-size: 16px; block-size: 16px; }
-.sc-cornerwell { position: relative; block-size: calc(374px / var(--z)); border-radius: calc(24px / var(--z)); background: var(--area-bg-component); }
+.sc-cornerwell { position: relative; block-size: calc(374px / var(--z)); }
+.sc-half { flex: 1 1 0; min-inline-size: 0; }
 .sc-cornershape { position: absolute; overflow: hidden; border: calc(2px / var(--z)) solid var(--area-accent-solid); border-radius: calc(44px / var(--z)) calc(100px / var(--z)) calc(46px / var(--z)) calc(44px / var(--z)); background: var(--area-bg-surface); }
 .sc-disc { position: absolute; display: grid; place-items: center; translate: -50% -50%; inline-size: calc(88px / var(--z)); block-size: calc(88px / var(--z)); border-radius: 50%; background: color-mix(in oklab, var(--area-accent-solid) 11%, transparent); color: var(--area-fg-accent); font-size: var(--area-control-sm-text); font-variant-numeric: tabular-nums; }
 .sc-disc--tl { top: calc(43px / var(--z)); left: calc(45px / var(--z)); } .sc-disc--bl { top: calc(154px / var(--z)); left: calc(45px / var(--z)); }
