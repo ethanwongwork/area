@@ -254,3 +254,7 @@ close to the text in this style".
 Peers that draw Link's line take the same offset: Abbreviation, Chip `link` and `link-icon`, Card action, Alert link,
 Code block line numbers and toggle, Description list's "Show more", and the app's section links.
 
+## Review note, 2026-10-20
+
+- **What changed:** the inline link in the specimen now takes the body size of the canvas (16 at Type 14, was 13), as a Link in a product's body text does.
+- **Why:** a section of the screen with its own Type setting (the canvas, a Theme) now starts its text at Area's body size, so text that inherits its size follows that setting; it kept the app's 13 before.

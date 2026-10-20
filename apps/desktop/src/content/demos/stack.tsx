@@ -1,5 +1,5 @@
 /** Stack gallery specimens: one option per tile. docs/specs/stack.md. */
-import { Badge, Button, Stack, Surface } from "@area/react";
+import { Badge, Button, SectionHeading, Stack, Surface } from "@area/react";
 
 const Rows = () => <><Button variant="outline" tone="neutral">Item one</Button><Button variant="outline" tone="neutral">Item two</Button><Button variant="outline" tone="neutral">Item three</Button></>;
 
@@ -13,10 +13,10 @@ export const GalleryStackAlignCenter = () => <Stack align="center" style={{ inli
 export const GalleryStackAlignEnd = () => <Stack align="end" style={{ inlineSize: 200 }}><Rows /></Stack>;
 export const GalleryStackAlignStretch = () => <Stack align="stretch" style={{ inlineSize: 200 }}><Rows /></Stack>;
 export const GalleryStackAlignBaseline = () => (
-  <Stack orientation="horizontal" align="baseline"><strong>Title</strong><span>Description</span></Stack>
+  <Stack orientation="horizontal" align="baseline"><Button size="sm" variant="outline" tone="neutral">Item one</Button><Badge>Label</Badge></Stack>
 );
 export const GalleryStackSpread = () => (
-  <Stack orientation="horizontal" spread style={{ inlineSize: 280 }}><strong>Title</strong><Button size="sm" variant="ghost" tone="neutral">Action</Button></Stack>
+  <Stack orientation="horizontal" spread style={{ inlineSize: 280 }}><SectionHeading level={3} title="Title" /><Button size="sm" variant="ghost" tone="neutral">Action</Button></Stack>
 );
 export const GalleryStackWrap = () => (
   <Stack orientation="horizontal" gap="related" wrap style={{ inlineSize: 200 }}>

@@ -145,6 +145,10 @@ headings, **Stroke** and **Shadow**:
   A derivation resolved only at the root would freeze the wrong inputs for descendants.
 - **Tokens, not layout.** A scope selects tokens, not layout or component behaviour. Custom
   HTML must consume the right foreground, background and type roles itself.
+- **Text restarts at a Type scope.** An element below the page root that carries `data-area-type` sets its text to
+  the body role (`text-md` size, leading and tracking) of its own Type (`base.css`), so text set straight in it follows
+  that scope instead of keeping the size inherited from above. Components keep their own roles; a product whose page
+  uses another body role sets it again on its own scopes.
 
 ## React scopes
 

@@ -8,6 +8,10 @@ rebuild (`apps/desktop/src/content/examples/abstract/`), where every gap was a m
 
 - 2026-10-19: "Start with the Surface, Stack and Inset layout primitives so nested corners, layers and gaps come out
   right without hand-set values"; "be careful about overbloating the system if its not necessary."
+- 2026-10-20, after the examples page (docs/research/layout-primitives-2026-10-20.md): "go with your recs". One Stack
+  with an orientation (Polaris merged its BlockStack and InlineStack the same way); gaps stay named by role; no
+  divider option for now (MUI, Chakra and Atlassian have one; it is a candidate in docs/COMPONENTS.md, and lists and
+  settings groups draw their own seams).
 
 ## Job and boundaries
 
@@ -71,7 +75,20 @@ the writing direction (flex). Pass a role (`list`, `group`) and name when the ch
 | tokens | Area tokens | `ui-cluster`, `gap-row` | `packages/tokens/src/emit/base.ts` | MIT (Area) | n/a |
 | board | evidence | the spacing misses | `apps/desktop/src/content/examples/abstract/` | n/a | scratchpad overlays |
 
+## Feedback log
+
+- 2026-10-20 · owner, layout review round 1 (`layout1`): rethink, "can you show me other examples from other design systems or products of this component?" → no change yet; an examples page answers it (docs/research/layout-primitives-2026-10-20.md) (the equivalents in other design systems and product screens laid out with it).
+
+- 2026-10-20 · owner, layout review round 2 (`layout2`): approved.
+
 ## Review note, 2026-10-19
 
 - **What it is:** a row or column whose gaps are chosen by role and follow Density.
 - **Why:** the board's gaps were all typed numbers; Stack gives them one rhythm and keeps them inside a Surface's inset.
+
+## Review note, 2026-10-20 (round 2)
+
+- **What changed:** the spread and baseline tiles are built from Area parts (a Section heading and a Button; a Button
+  and a Badge) instead of bold text off Area's weights. Gaps, alignment and the cap inside a Surface are unchanged and
+  measured correct at every Density and Radius.
+- **Why:** you said to go with the recommendations (one Stack, gaps by role, no divider yet) and make sure it is correct.

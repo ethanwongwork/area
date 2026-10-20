@@ -71,6 +71,7 @@ before it is built.
 | Notion parts | Emoji / icon picker, Callout, Toggle block, People picker, Reactions, Comment thread, Floating format bar, Property value | Mixed: several are compositions | Captures per part |
 | Figma parts | Gradient editor, Angle dial, Easing curve editor, Shortcut recorder, Layer row badges, Constraints picker, Unit field, Font picker, Variable chip | Mixed: Unit field is a Number field option; Font picker a Combobox | Captures per part |
 | Chat, next | Voice input; a labelled date divider (would change Separator); Markdown as an Area component | Mixed | Owner's call on each |
+| Stack divider | A rule between a Stack's children (MUI `divider`, Chakra `separator`, Atlassian Inline `separator`) | A Stack option, or Separator in a Stack | A screen that needs it; lists and settings groups draw their own seams ([research](research/layout-primitives-2026-10-20.md)) |
 | Content tools | Carousel, rich text, code editor, gradient and easing editors | Adapters to mature engines, not reimplementations | Owner's go-ahead |
 
 Built since the 2026-09-26 [gap audit](research/component-gap-audit.md) of 13 catalogues:

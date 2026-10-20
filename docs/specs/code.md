@@ -196,3 +196,8 @@ owner's pick, so it waits for a yes.
 - 2026-10-14 · owner: "merge it, then continue working" → all-axis sweep of Surface 0 at Elevation 0 (90 families, light and dark): the edge reads `--_code-border`: the Surface width on filled chips, `stroke-width` on the subtle variant (Code and Token), which has no fill, so at Surface 0 it no longer turns into plain text; every inset that counts the edge (Code, swatch Token, Token row) reads it too.
 - 2026-10-15 · owner: "merge it, then continue working" → all-axis contrast sweep: on-color Code on the accent solid (its gallery tile) read 4.12:1 with white ink, under AA. White sits at 4.61–4.75:1 on the white-ink accent solids, and the 8% wash of the ink itself lifted the ground toward it (4.06–4.37:1 across 8 of 11 accents). The plate is now 8% of the ink's opposite, `oklch(from currentcolor calc(1 - l) 0 0 / 0.08)`, darker under white ink and lighter under black: 5.30–14.20:1 on every accent. The 20% edge is unchanged; where relative colour is unsupported the fill drops and the edge carries the chip.
 - 2026-10-18 · radius audit → the swatch (`token.css`, shared with Token) stops 2px short of round until Pill: at Radius 14 / Comfortable it took 8 on a 12 swatch, a circle. Default unchanged (4).
+
+## Review note, 2026-10-20
+
+- **What changed:** inline code is a set fraction of the text around it, so it follows the canvas's body size (14 at Type 14, was 12).
+- **Why:** a section of the screen with its own Type setting (the canvas, a Theme) now starts its text at Area's body size, so text that inherits its size follows that setting; it kept the app's 13 before.

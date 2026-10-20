@@ -192,3 +192,8 @@ Resolved 2026-10-09 (owner: "go with your recommendations"):
 - 2026-10-09 · owner: "go with your recommendations" → open questions resolved as recommended; adoption in the
   scrolling families follows in separate commits.
 - 2026-10-14 · owner: "merge it, then continue working" → all-axis sweep of Surface 0 at Elevation 0 (90 families, light and dark): the demo's frame (standing alone, no shadow) is a required edge, `stroke-width`, so it stays at Surface 0.
+
+## Review note, 2026-10-20
+
+- **What changed:** the demo's list items take the body size of the canvas (16 at Type 14, was 13); the scroll area is unchanged.
+- **Why:** a section of the screen with its own Type setting (the canvas, a Theme) now starts its text at Area's body size, so text that inherits its size follows that setting; it kept the app's 13 before.

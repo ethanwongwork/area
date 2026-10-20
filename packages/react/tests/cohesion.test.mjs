@@ -373,3 +373,15 @@ test('every painted ground is declared in layers.css', () => {
   }
   assert.deepEqual(missing, []);
 });
+
+test('a Type scope restarts text at the body role, and containers of free text state their own role', () => {
+  // THEMING.md, CSS inheritance: below the page root, an element with its own Type sets the body role, so text set
+  // straight in it follows that scope instead of the size inherited from above (2026-10-20: a canvas at Type 14 kept
+  // the app's 13). Zero specificity, so components keep their own roles.
+  const scope = ruleFor(':where([data-area-type]:not(:root))')?.body ?? '';
+  assert.match(scope, /font-size:\s*var\(--area-text-md-size\)/, 'the Type scope does not restate the body size');
+  assert.match(scope, /line-height:\s*var\(--area-text-md-leading\)/, 'the Type scope does not restate the body leading');
+  // Containers whose children are free text, not controls, carry a role of their own.
+  assert.match(ruleFor('.area-surface')?.body ?? '', /font-size:\s*var\(--area-text-sm-size\)/, 'Surface has no text role');
+  assert.match(css, /\.area-card \{[^}]*font-size:\s*var\(--_card-title-size\)/, 'Card has no text role');
+});
