@@ -328,7 +328,7 @@ export default {
     ],
     // Spec: Anatomy, Measurements (round 55's designs); source: AssetCard.tsx.
     parts: {
-      root: "The square card: Card's corner (16 at the default), the card edge, the recessed fill; it lifts on hover when interactive or in a grid, and its edge shows selection.",
+      root: "The card: its head over a square frame (an image in its own ratio), Card's corner (16 at the default), the card edge, the recessed fill; it lifts on hover when interactive or in a grid, and its edge shows selection.",
       head: "The top row, a small control plus 4 above and below: the name at the start, the controls at the end, nothing else.",
       name: "The asset's name in the UI text, regular; one line, then an ellipsis. Its cap sits centred, as far in as the head is tall less its cap.",
       actions: "Controls at the head's end, centred on it, their side on the frame's side and their corner the frame's, concentric with the card.",

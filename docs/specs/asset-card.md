@@ -57,11 +57,11 @@ under its own scope, as the Language tab previews, `Default` as `meta`).
 ## Anatomy
 
 ```
-area-asset-card          the card: square, Card's corner, card edge, recessed fill, padding 0 4 4
+area-asset-card          the card: as tall as its head and its frame, Card's corner, card edge, recessed fill, padding 0 4 4
   __head                 control-sm + 2 × 4 tall; the name, then the controls, nothing else (round 58)
     __name               UI text, regular, default ink; cap-trimmed; one line, then an ellipsis
     __actions            small ghost controls, ending 4 in (on the frame's side), centred on the head
-  __frame                the rest: 4 in on three sides; corner card − edge − 4; surface + card edge; raised ground
+  __frame                1:1 (an image: the image's ratio), 4 in on three sides; corner card − edge − 4; surface + card edge; raised ground
     __media              asset: centred, 12 of room · image: covers the frame (object-fit cover)
     __mosaic             group: 2 × 2, 4 apart, the frame's place (the frame paints nothing)
       __cell             one asset cropped to its cell, the frame's corner
@@ -80,7 +80,8 @@ Inset equations (the designs at 300, edge 1; Area at the default):
 
 | Slot · property | Design (300 PNG) | Area | Basis |
 |---|---|---|---|
-| card · size | 300 × 300 | square (`aspect-ratio: 1`), the host's width | design |
+| card · size | 300 × 300 | the host's width; as tall as the head plus the frame (a 224 card is 224 × 252) | owner, round 65: the frame decides, not the card |
+| frame · size | 291 × 262 (the card's rest) | 1:1 for a component, group, colour, type, icon or setting; an image's own ratio (`mediaRatio`, or its natural size once loaded; square until then) | owner, round 65: "for components can you make the top layer frame a 1:1 AR always. for images, it can vary based on the image height" |
 | card · corner | 16 (straight edges from 15–16) | Card's: `radius-container` + inset × concentric (16 at the default); `--area-asset-card-corner` overrides | design = Card |
 | card · edge | 1px #f0f0f0 | `border-card` at `border-width` (Card's), `shadow-edge` under Borderless; state edges at least `stroke-width` | design; DESIGN_SYSTEM Strokes |
 | card · fill | #fafafa (neutral/25) | `bg-subtle` (neutral/50, #f7f7f7 at the default settings; Table's header fill) | design; round 58 tried a mix to #fafafa, outside the roles; round 59 reverted (no role lands on neutral/25; a new role would be a foundation change) |
@@ -154,6 +155,7 @@ rule every nested surface uses (Popover, Code block's buttons, Edit summary's he
 
 ## Feedback log
 
+- 2026-10-21 · owner, round 65 (`components65`), needs changes: "what is the size or AR of the frame, for components can you make the top layer frame a 1:1 AR always. for images, it can vary based on the image height. not sure how i feel about the selected state border." → the frame is 1:1 for every kind but an image, which takes its own ratio; the card grows by its head (was a square card with a 1.15:1 frame). The selected border is part of the system-wide selection audit (docs/research/states-2026-10-21/), awaiting the owner's pick.
 - 2026-10-18 · owner: Brand as containers, assets and groups, names under, rounded images → built (this spec).
 - 2026-10-18 · owner: "rebuild the gallery tiles on Asset card so every tile's name and controls sit under its frame,
   on every tab" → the app's Tile is an Asset card (`apps/desktop/src/tile.tsx`). The card gained `interactive` (hover,

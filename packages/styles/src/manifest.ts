@@ -1113,7 +1113,7 @@ export const fileGrid = {
 
 export const assetCard = {
   block: "area-asset-card",
-  description: "Shows one asset in a square card: its name and controls in a head, the asset in a frame under it (an element, an image, a colour, or a group as a 2×2 mosaic); framed or containerless, square or hugging its asset.",
+  description: "Shows one asset in a card: its name and controls in a head, the asset in a square frame under it (an image in its own ratio; an element, a colour, or a group as a 2×2 mosaic); framed or containerless, square or hugging its asset.",
   variants: { layout: ["asset", "image", "color", "group"], container: ["framed", "containerless"], aspect: ["square", "hug"] },
   booleans: ["interactive"],
   states: ["selected"],

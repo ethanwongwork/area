@@ -27,8 +27,9 @@
  *   container  framed (the default), the card; containerless, no card at rest (no fill, edge or shadow), the head and
  *              the asset in the same places, so nothing moves: a component's frame shows its edge on hover and
  *              selection; an image or a group is its own surface, and selection and focus ring it
- *   aspect     square (the default); hug, the card as tall as its head and its asset at the card's width (an image at
- *              its own ratio from `mediaRatio`, so a lazy image holds its height; a group and a colour square)
+ *   aspect     square (the default): the frame is 1:1 for every kind but an image, whose frame takes the image's own
+ *              ratio (owner, round 65: "for components can you make the top layer frame a 1:1 AR always. for images,
+ *              it can vary based on the image height"); hug, a component's frame takes its own height instead
  *   waterfall  (AssetGrid) columns of the least width, each card hugging, dropped into the shortest column
  * Public hooks: `--area-asset-card-size` (the grid's column), `--area-asset-card-corner` (the card's corner).
  * ------------------------------------------------------------------------- */
@@ -48,7 +49,8 @@
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
-    aspect-ratio: 1; /* spec: a square card (the designs' 300 × 300; owner, 2026-10-19: square containers) */
+    /* The frame sets the card's height (square, or an image's ratio) and the head adds to it: the card is no longer
+       square (owner, round 65; was a square card, the designs' 300 × 300, which left the frame wider than tall). */
     min-inline-size: 0;
     padding: 0 var(--_inset) var(--_inset);
     overflow: clip;
@@ -103,8 +105,9 @@
     position: relative;
     display: grid;
     grid-template: minmax(0, 1fr) / minmax(0, 1fr);
-    flex: 1 1 auto;
+    flex: none;
     box-sizing: border-box;
+    aspect-ratio: 1; /* spec: owner, round 65: the frame 1:1 for components */
     min-block-size: 0;
     overflow: clip;
     border: var(--area-border-width) solid var(--area-border-card); /* spec: the designs' frame edge, the card's */
@@ -126,10 +129,13 @@
   .area-asset-card--image .area-asset-card__media > img {
     display: block;
     inline-size: 100%;
-    block-size: 100%;
+    block-size: auto;
     min-block-size: 0;
+    /* The image's own ratio once it loads (or `mediaRatio`, set inline), square until then (owner, round 65). */
+    aspect-ratio: auto 1;
     object-fit: cover;
   }
+  .area-asset-card--image > .area-asset-card__frame { aspect-ratio: auto; }
   /* A colour paints the frame; its edge is the swatch ring over it (Color swatch's), so a white or a near-ground colour
      keeps its outline and a saturated one keeps its reach. */
   .area-asset-card--color .area-asset-card__frame {
@@ -204,11 +210,7 @@
   .area-asset-card--framed {}
   /* Hug: the card follows its content's height at its width; an image keeps its own ratio, a group and a colour stay
      square, a component takes its own height and the room around it. */
-  .area-asset-card--hug { aspect-ratio: auto; }
-  .area-asset-card--hug > .area-asset-card__frame { flex: none; }
-  .area-asset-card--hug.area-asset-card--image .area-asset-card__media > img { block-size: auto; }
-  .area-asset-card--hug :is(.area-asset-card__mosaic, .area-asset-card--color > .area-asset-card__frame) { aspect-ratio: 1; }
-  .area-asset-card--hug.area-asset-card--color > .area-asset-card__frame { aspect-ratio: 1; }
+  .area-asset-card--hug.area-asset-card--asset > .area-asset-card__frame { aspect-ratio: auto; }
 
   /* Containerless: no card at rest. A component's frame keeps its box, its edge clear until hover (the hovered edge) or
      selection (the selected edge); an image or a group is its own surface: no frame edge, the states ring it. */
