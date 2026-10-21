@@ -49,7 +49,7 @@ export interface AssetCardProps extends Omit<HTMLAttributes<HTMLDivElement>, "ch
    * group is its own surface and the states paint it.
    */
   container?: "framed" | "containerless";
-  /** square (the default): the card is square. hug: the card is as tall as its head and its asset at the card's width. */
+  /** square (the default): the frame is 1:1, or an image's own ratio, and the card adds its head. hug: a component's frame takes its own height. */
   aspect?: "square" | "hug";
   /** An image's width over its height, so it holds its shape before it loads (a waterfall's cards). */
   mediaRatio?: number;

@@ -59,7 +59,7 @@
   .area-property-list__handle:focus-visible, .area-property-list__item[data-dragging] > .area-property-list__handle { opacity: 1; transition-duration: 0s; }
   @media (hover: hover) { .area-property-list__item:hover > .area-property-list__handle { opacity: 1; transition-duration: 0s; } }
   @media (hover: none) { .area-property-list__handle { opacity: 1; } }
-  .area-property-list__handle:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: 0; }
+  .area-property-list__handle:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   .area-property-list[data-dragging] { cursor: grabbing; }
   .area-property-list[data-dragging] .area-property-list__handle { cursor: grabbing; }
   /* spec: the row being moved stays in place, faded, while a line marks where it will land. */

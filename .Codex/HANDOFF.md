@@ -1,23 +1,23 @@
 # Handoff
 
-## Current state (2026-10-20)
+## Current state (2026-10-21)
 
-- **Status.** `main` is at PR #144. 119 families: 118 Complete; Asset card in review, round 65 (`components65`) open on
-  https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG: its containerless, hug and waterfall views (8 new tiles) against
-  round 61 (Before rebuilt from round 64's published files). Surface and Stack Complete (layout round 2).
-- **Review page (PR #144, `claude/cool-payne-review-asset-card`).** Review specimens render at Type 14
-  (`component-review.html`, `review-diff.mjs`), so text that inherits its size shows as in the app. Read `components65`
-  with ArtifactData before acting on Asset card.
-- **Branch `claude/electron-components-theme-config-9a0bf2` (PR #145, open).**
-  - No option label says "(Default)" (owner: "i dont like seeing (default)"): registry labels in `packages/tokens/src/axes`,
-    the Inspector's own in `gallery/controls.ts`; range ends keep their names; only the Theme tab marks the default;
-    `registry.test.ts` enforces it.
-  - The Language tab is **Theme** again (`#language` still opens it), and the Inspector's view too.
-  - Theme → **Setup** (default) / Browse. Setup asks one question per setting (26 steps), every option a card in an
-    Asset grid, drawn as Abstract, Components, Bento or Example (`pages/theme-setup.tsx`, `theme-views.tsx`,
-    `theme-settings.ts`); a pick sets the Canvas setting. Not yet reviewed by the owner.
-  - The owner's saved Canvas differs from Area's defaults on Layers 1/0, Selection Accent, Stroke width 0.5, Stroke
-    strength 3, Rest shadow 3; whether to make those the defaults is still open.
+- **Status.** `main` is at PR #146 (this branch). 119 families: 118 Complete; Asset card in review, round 66
+  (`components66`) on https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG: the state settings' Before / After for Card,
+  Asset card, Radio, Checkbox, Board, Composer, Infobox, Panel (answers round 65's "selected state border" note).
+- **Interaction states as settings (PR #146).** Owner's picks (collection `state-picks` on
+  https://claude.ai/artifact/3uKMHRhpWnPqNA6pK4WfD9) are the defaults: `axes/states.ts` (Focus ring, Hover stroke,
+  Selected stroke, Selected tint, Hover / Selected / Pressed fill), Hover shadow in `axes/depth.ts`, the accent's
+  indicator rung for `focus-color` and `stroke-selected` (`semantic/aliases.ts`), resting and lift one tight layer.
+  THEMING.md "Interaction states"; docs/research/states-2026-10-21. Inspector rows under Stroke, Shadow and Fill; a
+  Theme tile and a Setup question for each.
+- **Open for the owner.** Pressed in light at default Layers is capped by muted text 4.6:1 (about 9%, not 12%), so its
+  four steps are 0.006 apart there; the indicator blue is #0160d9 / #79aeff, not ChatGPT's #3a83f7 (fails 3:1 on
+  fills and APCA on the dark page); Rest shadow applies to cards and panels, not outline buttons.
+- **Theme tab (PR #145, merged).** No option label says "(Default)" (`registry.test.ts` enforces it); Language is
+  **Theme** again; Theme → Setup (default) / Browse, one question per setting, not yet reviewed by the owner. The
+  owner's saved Canvas differs from Area's defaults on Layers 1/0, Selection Accent, Stroke width 0.5, Stroke strength
+  3, Rest shadow 3; whether to make those the defaults is still open.
 - **Sessions.** One session at a time. Each starts from `origin/main` in its own worktree (`claude/*`) and merges
   through a PR. Check open PRs first.
 - **Running the app.** `npm run dev` runs Electron and `npm run preview` adds http://localhost:4400 (check who holds

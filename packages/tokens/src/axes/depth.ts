@@ -5,14 +5,15 @@
  * the individual controls as much as possible, but i think the previous system was too bloated and complicated", and
  * chose nine controls). Research, every external value and the review page: docs/research/elevation-stroke-2026-10-18.
  *
- * Ten controls (nine chosen, plus Rest shadow from main), each a registry axis (one data attribute, scoped to a subtree and re-derived there), each one number or
+ * Eleven controls (nine chosen, Rest shadow from main, Hover shadow 2026-10-21), each a registry axis (one data attribute, scoped to a subtree and re-derived there), each one number or
  * name with one effect:
  *
  *   data-area-surface          Stroke width: the frame's width, 0 (Flat) to 2 in halves (1)        surface.ts
  *   data-area-stroke           Stroke: every stroke's distance from its ground, 0 to 8 (4)                color/layers.ts
- *   data-area-elevation        Shadow: menus, popovers, tooltips, dialogs and the hover lift, 0 to 8 (3)   elevation.ts
+ *   data-area-elevation        Shadow: menus, popovers, tooltips and dialogs, 0 to 8 (3)                 elevation.ts
  *   data-area-shadow-resting   Resting lift: cards, panels and raised thumbs at rest, 0 to 8 (3); `shadow-rest` is the
  *                              Rest shadow round surfaces (surface.ts, from main 2026-10-19)
+ *   data-area-shadow-hover     Hover shadow: a hovered card or tile's lift, 0 to 8 (3)
  *   data-area-shadow-field     Field shadow: fields, select triggers, outline and soft buttons, 0 to 8 (0)
  *   data-area-shadow-size      how far every shadow reaches: offset and blur, 0 to 8 (4)
  *   data-area-shadow-softness  one crisp layer (0) to six eased layers held under the surface (8); 2 is today's pair
@@ -53,8 +54,13 @@ const numbered = (n: number, zero: string, write: (i: number) => Record<string, 
 export const STROKE_AXIS = control("stroke", "Stroke strength", "How dark every stroke is: its distance from its ground, 0 (none) to 8", "4", ["stroke-strength"],
   numbered(8, "None", i => ({ "stroke-strength": i / 4 })));
 
-export const SHADOW_RESTING_AXIS = control("shadow-resting", "Resting shadow", "How much cards, panels and raised thumbs lift at rest, 0 (none) to 8, in % as Shadow", "3", ["shadow-resting-step"],
+export const SHADOW_RESTING_AXIS = control("shadow-resting", "Resting shadow", "How much cards, panels and raised thumbs lift at rest, 0 (none) to 8: one tight layer, 3 is 8% (ChatGPT's sm)", "3", ["shadow-resting-step"],
   numbered(8, "None", i => ({ "shadow-resting-step": i })));
+
+/** Hover shadow (owner, 2026-10-21): how much a hovered card or tile lifts, its own scale (it rode Floating shadow before),
+ * one tight layer like the rest shadow, 3 the owner's pick (ChatGPT's md, `0 2px 4px -1px` at 8%). */
+export const SHADOW_HOVER_AXIS = control("shadow-hover", "Hover shadow", "How much a hovered card or tile lifts, 0 (none) to 8: one tight layer, 3 is 8% (ChatGPT's md)", "3", ["shadow-hover-step"],
+  numbered(8, "None", i => ({ "shadow-hover-step": i })));
 
 export const SHADOW_FIELD_AXIS = control("shadow-field", "Field shadow", "How much fields, select triggers, outline and soft buttons lift, 0 (none) to 8, in % as Shadow", "0", ["shadow-field-step"],
   numbered(8, "None", i => ({ "shadow-field-step": i })));
@@ -108,7 +114,7 @@ export const SHADOW_COLOR_AXIS = control("shadow-color", "Shadow colour", "The l
 
 /** The controls besides Stroke width (Surface) and Shadow (Elevation), in the Inspector's order. */
 export const DEPTH_AXES: readonly AxisDefinition[] = [
-  STROKE_AXIS, SHADOW_RESTING_AXIS, SHADOW_FIELD_AXIS, SHADOW_SIZE_AXIS, SHADOW_SOFTNESS_AXIS, SHADOW_LIGHT_AXIS, SHADOW_COLOR_AXIS,
+  STROKE_AXIS, SHADOW_RESTING_AXIS, SHADOW_HOVER_AXIS, SHADOW_FIELD_AXIS, SHADOW_SIZE_AXIS, SHADOW_SOFTNESS_AXIS, SHADOW_LIGHT_AXIS, SHADOW_COLOR_AXIS,
 ];
 
 // ---- The roles ---------------------------------------------------------------------------------------------------
@@ -120,15 +126,23 @@ export const DEPTH_AXES: readonly AxisDefinition[] = [
 const ROLES = {
   control: { geometry: [2, 1, 2], weight: 1, step: "shadow-resting-step" },
   field: { geometry: [2, 1, 2], weight: 1, step: "shadow-field-step" },
-  resting: { geometry: [2, 2, 4], weight: 0.5, step: "shadow-resting-step" },
   tooltip: { geometry: [2, 4, 8], weight: 0.5, step: "elevation" },
   float: { geometry: [2, 8, 16], weight: 1, step: "elevation" },
-  // A hovered card or tile: Fluent's shadow8 at half the Menu's strength (main, 2026-10-19: the float shadow it took
-  // first was "too drastic"; "very subtle elevation shadow"). Was `hover`, the float geometry at full weight.
-  lift: { geometry: [2, 4, 8], weight: 0.5, step: "elevation" },
   modal: { geometry: [8, 14, 28], weight: 2, step: "elevation" },
 } as const;
-export const SHADOW_ROLES = Object.keys(ROLES) as ReadonlyArray<keyof typeof ROLES>;
+/**
+ * The tight roles (owner, 2026-10-21: "faint, low spread shadows"; picks on the state page): one layer whose spread is
+ * pulled in under its edge, so it reads as a soft edge rather than a haze. [y, blur, spread] at Shadow size 4, and the
+ * strength per step (3 is 8%, ChatGPT's sm and md). Softness shapes the floating roles only; these stay one layer.
+ *   resting  a card, panel or raised thumb at rest: ChatGPT's sm, `0 1px 2px -1px` (was 0 0 2 + 0 2 4 at 1.5%)
+ *   lift     a hovered card or tile: ChatGPT's md, `0 2px 4px -1px`, by the Hover shadow setting (was Floating's)
+ * `rimWeight` keeps the dark rim where it was (Floating's and Resting's old weights), so dark edges stay as quiet.
+ */
+const TIGHT = {
+  resting: { geometry: [1, 2, -1], weight: 8 / 3, rimWeight: 0.5, step: "shadow-resting-step" },
+  lift: { geometry: [2, 4, -1], weight: 8 / 3, rimWeight: 0.5, step: "shadow-hover-step" },
+} as const;
+export const SHADOW_ROLES = [...Object.keys(ROLES), ...Object.keys(TIGHT)] as ReadonlyArray<keyof typeof ROLES | keyof typeof TIGHT>;
 
 /** Dark shadows are twice the light alpha (Fluent), to 90%. */
 const DARK = 2;
@@ -153,8 +167,9 @@ const rim = (alpha: string) => `0 0 0 1px light-dark(transparent, rgb(255 255 25
  * last: a list interpolates layer by layer only where both sides are outer or both inset, and a shorter list pads at its
  * end, so an element fading from outer-only layers (a tile's transparent pair) still crossfades.
  */
-export function roleShadow(role: keyof typeof ROLES): string {
-  const { geometry: [ga, gy, gb], weight, step } = ROLES[role];
+export function roleShadow(role: keyof typeof ROLES | keyof typeof TIGHT): string {
+  if (role in TIGHT) return tightShadow(role as keyof typeof TIGHT);
+  const { geometry: [ga, gy, gb], weight, step } = ROLES[role as keyof typeof ROLES];
   const alpha = `${v(step)} / 100 * ${num(weight)}`;
   const d = v("shadow-size");
   const layers = [`0 1px 0 0 ${tint(v("shadow-lip"), 1.6)}`, rim(alpha)];
@@ -165,6 +180,18 @@ export function roleShadow(role: keyof typeof ROLES): string {
     const blur = `max(${d} * ${num(gb)}px * ${t}, 0.5px) * (1 - ${g}) + max(${d}, 0.5) * ${num(ga)}px * ${g}`;
     layers.push(`0 calc(${y}) calc(${blur}) calc(-1 * ${v("shadow-tightness")} * ${y}) ${tint(`${alpha} * ${v(`shadow-slot-${i}-a`)}`)}`);
   }
+  layers.push(`inset 0 1px 0 0 light-dark(rgb(255 255 255 / ${v("shadow-highlight-light")}), rgb(255 255 255 / ${v("shadow-highlight-dark")}))`);
+  return layers.join(", ");
+}
+
+/** A tight role: the lip, the dark rim, one layer pulled in under the edge, five transparent slots (so every role has the
+ * same length and crossfades layer by layer), then the highlight. */
+function tightShadow(role: keyof typeof TIGHT): string {
+  const { geometry: [gy, gb, gs], weight, rimWeight, step } = TIGHT[role];
+  const d = v("shadow-size");
+  const layers = [`0 1px 0 0 ${tint(v("shadow-lip"), 1.6)}`, rim(`${v(step)} / 100 * ${num(rimWeight)}`)];
+  layers.push(`0 calc(${d} * ${num(gy)}px) calc(${d} * ${num(gb)}px) calc(${d} * ${num(gs)}px) ${tint(`${v(step)} / 100 * ${num(weight)}`)}`);
+  for (let i = 2; i <= SHADOW_SLOTS; i++) layers.push("0 0 0 0 transparent");
   layers.push(`inset 0 1px 0 0 light-dark(rgb(255 255 255 / ${v("shadow-highlight-light")}), rgb(255 255 255 / ${v("shadow-highlight-dark")}))`);
   return layers.join(", ");
 }

@@ -219,7 +219,7 @@
   .area-table tbody tr:has(.area-table__link) :is(a, button, input, select, textarea, [tabindex]):not(.area-table__link) { position: relative; z-index: 1; }
   .area-table tbody tr:has(.area-table__link:focus-visible) { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(-1 * var(--area-focus-width)); }
   /* The scrolling wrapper takes focus only while it overflows. */
-  .area-table-wrapper:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  .area-table-wrapper:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-gap); }
 
   /* A Button in a header cell (a sort control) keeps the row at its text height and its label on
      the column's text edge: it overhangs the cell's block padding (audit F-24), and the demos pull
@@ -291,7 +291,7 @@
     --_bg: var(--area-select-bg);
     --_border: var(--area-select-edge);
     --_border-hover: var(--area-select-edge-hover);
-    --_border-focus: var(--area-field-focus-color);
+    --_border-focus: color-mix(in srgb, var(--_border), var(--area-field-focus-color) calc(var(--area-field-focus-recolor) * 100%)); /* the ring's colour only under Focus ring Halo (axes/states.ts) */
     --_focus-outline: var(--area-field-focus-color);
     --_focus-halo: var(--area-field-focus-halo-color);
     --_height: var(--area-control-md);
@@ -365,7 +365,7 @@
     border-color: var(--_border-focus);
     box-shadow: var(--_field-lift), 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
     outline: var(--area-field-focus-outline-width) solid var(--_focus-outline);
-    outline-offset: 0;
+    outline-offset: var(--area-focus-offset);
   }
 
   .area-select[data-invalid],

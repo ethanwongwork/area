@@ -161,7 +161,7 @@
     line-height: var(--_diff-leading);
   }
   /* It scrolls sideways, so it takes focus (a keyboard can then scroll it) and shows the ring. */
-  .area-diff:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  .area-diff:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-gap); }
   .area-diff__lines {
     display: grid;
     grid-template-columns: auto auto var(--area-space-8) minmax(max-content, 1fr); /* spec: Code block's marker 8 */

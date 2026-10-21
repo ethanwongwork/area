@@ -60,7 +60,7 @@
   }
   .area-toggletip[aria-expanded="true"] { background-color: var(--area-bg-component-active); transition-duration: 0s; }
   .area-toggletip:active { background-color: var(--area-bg-component-pressed); transition-duration: 0s; }
-  .area-toggletip:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: 0; }
+  .area-toggletip:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
 
   /* An invisible 24px target (44 on coarse pointers) centred on the box (WCAG 2.5.8), as Tag's remove. */
   .area-toggletip::after { content: ""; position: absolute; inset: 50% auto auto 50%; translate: -50% -50%; inline-size: var(--area-space-24); block-size: var(--area-space-24); }

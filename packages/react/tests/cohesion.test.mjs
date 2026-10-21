@@ -61,7 +61,7 @@ test('every surface takes its depth from its elevation role', () => {
       assert.equal(layers(value), 9, `--area-shadow-${role} is not the nine slots: ${value}`);
       // The dark rim (2026-10-19): second, transparent in light, white in dark at the role's own step, capped.
       const second = (() => { let depth = 0, start = -1; for (let i = 0; i < value.length; i++) { const ch = value[i]; if (ch === '(') depth++; else if (ch === ')') depth--; else if (ch === ',' && depth === 0) { if (start < 0) start = i + 1; else return value.slice(start, i).trim(); } } return ''; })();
-      assert.match(second, /^0 0 0 1px light-dark\(transparent, rgb\(255 255 255 \/ min\(0\.16, calc\(var\(--area-(elevation|shadow-resting-step|shadow-field-step)\) \/ 100 \* [\d.]+ \* 2\)\)\)\)$/, `--area-shadow-${role} has no dark rim at its step: ${second}`);
+      assert.match(second, /^0 0 0 1px light-dark\(transparent, rgb\(255 255 255 \/ min\(0\.16, calc\(var\(--area-(elevation|shadow-resting-step|shadow-hover-step|shadow-field-step)\) \/ 100 \* [\d.]+ \* 2\)\)\)\)$/, `--area-shadow-${role} has no dark rim at its step: ${second}`);
       assert.match(value, /^0 1px 0 0 /, `--area-shadow-${role} does not start with the lip`);
       assert.match(value, /, inset 0 1px 0 0 light-dark\(rgb\(255 255 255 \/ var\(--area-shadow-highlight-light\)\), rgb\(255 255 255 \/ var\(--area-shadow-highlight-dark\)\)\)$/, `--area-shadow-${role} does not end with the highlight`);
     }
@@ -81,8 +81,12 @@ test('every surface takes its depth from its elevation role', () => {
   assert.match(float, /var\(--area-elevation\) \/ 100 \* 1 \* var\(--area-shadow-slot-2-a\)/, 'the float key is not the Menu\'s shadow at Depth %');
   assert.match(float, /var\(--area-shadow-size\) \* 8px \* var\(--area-shadow-slot-2-t\)/, 'the float key lost its 8px offset');
   assert.match(float, /rgb\(0 0 0 \/ min\(0\.9, calc\(var\(--area-elevation\) \/ 100 \* 1 \* var\(--area-shadow-slot-2-a\) \* 2\)\)\)/, 'dark shadows are not twice the light alpha');
+  // Resting and lift are one tight layer each (axes/depth.ts TIGHT, owner 2026-10-21): ChatGPT's sm and md, 8% at step 3.
   const resting = root.match(/--area-shadow-resting:\s*([^;]+);/)[1];
-  assert.match(resting, /var\(--area-shadow-resting-step\) \/ 100 \* 0\.5 \* var\(--area-shadow-slot-2-a\)/, 'the resting role does not read Resting lift at half weight');
+  assert.match(resting, /0 calc\(var\(--area-shadow-size\) \* 1px\) calc\(var\(--area-shadow-size\) \* 2px\) calc\(var\(--area-shadow-size\) \* -1px\) light-dark\(oklch\(.*?\/ calc\(var\(--area-shadow-resting-step\) \/ 100 \* 2\.6667\)\)/, 'the resting role is not 0 1px 2px -1px at Resting shadow');
+  const lift = root.match(/--area-shadow-lift:\s*([^;]+);/)[1];
+  assert.match(lift, /0 calc\(var\(--area-shadow-size\) \* 2px\) calc\(var\(--area-shadow-size\) \* 4px\) calc\(var\(--area-shadow-size\) \* -1px\) light-dark\(oklch\(.*?\/ calc\(var\(--area-shadow-hover-step\) \/ 100 \* 2\.6667\)\)/, 'the lift role is not 0 2px 4px -1px at Hover shadow');
+  assert.equal(leaf('shadow-hover-step'), '3', 'Hover shadow is not 3 by default');
 
   // The shadow that paints is the last box-shadow on the block, in any rule: a later literal once overrode the
   // shared lift with a full-strength second layer and a looser test still passed.
@@ -229,7 +233,9 @@ test('required lines never ride the Surface axis', () => {
   const required = /--area-(border-divider|token-swatch-ring|edge-control|edge-control-hover|edge-selected|edge-accent|input-edge|input-edge-hover|selection-edge|stroke-control|stroke-selected|focus-color|field-focus-color)\b/;
   for (const { selector, body } of rules) {
     for (const [, prop, value] of body.matchAll(lineProp)) {
-      if (!/var\(--area-border-width\)/.test(value)) continue;
+      // A selected edge drawn inside a frame tops its frame's own line up to Selected stroke (axes/states.ts), so it
+      // subtracts that line, whatever it is; the edge itself is selected-width.
+      if (!/var\(--area-border-width\)/.test(value.replace(/var\(--area-selected-width\) - var\(--area-border-width\)/g, ''))) continue;
       assert.doesNotMatch(value, required, `${selector} draws a required line (${prop}) at border-width`);
     }
   }
@@ -384,4 +390,22 @@ test('a Type scope restarts text at the body role, and containers of free text s
   // Containers whose children are free text, not controls, carry a role of their own.
   assert.match(ruleFor('.area-surface')?.body ?? '', /font-size:\s*var\(--area-text-sm-size\)/, 'Surface has no text role');
   assert.match(css, /\.area-card \{[^}]*font-size:\s*var\(--_card-title-size\)/, 'Card has no text role');
+});
+
+test('state indicators follow the state settings: focus offsets and selected strokes are never literal', () => {
+  // axes/states.ts (owner, 2026-10-21): Focus ring places every keyboard ring, `focus-offset` on controls and `focus-gap`
+  // off containers and text; Selected stroke sets every selected container's edge. A literal offset or width would keep
+  // one family out of the setting. Inset rings (rows, tabs, cells) sit inside by their own width, a negative calc.
+  for (const { selector, body } of rules) {
+    if (!/outline:[^;]*--area-(field-)?focus-color/.test(body)) continue;
+    const offset = body.match(/outline-offset:\s*([^;]+)/)?.[1].trim();
+    if (offset === undefined) continue;
+    assert.ok(/var\(--area-focus-(offset|gap)\)|^calc\(\s*(-1 \* var\(--area-[\w-]+\)|var\(--area-[\w-]+\) \* -1)\s*\)$/.test(offset),
+      `${selector} sets its focus ring off by ${offset}; use var(--area-focus-offset) on a control, var(--area-focus-gap) off a container or text`);
+  }
+  for (const { selector, body } of rules) {
+    for (const [, width] of body.matchAll(/0 0 0 ((?:[^,()]|\([^()]*(?:\([^()]*\))*[^()]*\))+?) var\(--area-stroke-selected\)/g)) {
+      assert.match(width, /--area-selected-width/, `${selector} draws its selected edge ${width.trim()} wide; use var(--area-selected-width)`);
+    }
+  }
 });

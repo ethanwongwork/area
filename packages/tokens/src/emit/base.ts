@@ -13,7 +13,7 @@
 import { PREFIX } from "../axes/schema.ts";
 import { MOTION_AXIS, duration } from "../axes/motion.ts";
 import { SOFT_EDGE, SOFT_EDGE_FILTER } from "../axes/surface.ts";
-import { contrastMix, layerCss, rawEdge, strokeEdge } from "../color/layers.ts";
+import { contrastMix, layerCss, rawEdge, strokeEdge, strokeEdgeHover } from "../color/layers.ts";
 import { depthDerived } from "../axes/depth.ts";
 import { SEMANTIC_ALIASES } from "../semantic/aliases.ts";
 
@@ -62,7 +62,8 @@ export const Z_LAYERS = {
 } as const;
 
 export function baseTokens(): Record<string, string> {
-  const out: Record<string, string> = { "--area-contrast-more": "0", "--area-focus-width": "2px", "--area-focus-offset": "2px", "--area-stroke-width": "1px", "--area-input-inline-size": "16rem" };
+  // The focus ring's width and offsets belong to the Focus ring setting (axes/states.ts).
+  const out: Record<string, string> = { "--area-contrast-more": "0", "--area-stroke-width": "1px", "--area-input-inline-size": "16rem" };
   // Keyboard legends use the same native UI face for letters and modifier symbols.
   // Keep this separate from the creative typography axis: a custom text font may lack
   // keyboard glyphs, causing individual characters to fall back at different metrics.
@@ -128,7 +129,8 @@ export function derivedTokens(): Record<string, string> {
     // The hover edge a step past rest: border-subtle in light (#d4 after #e2). In dark border-subtle is the rest edge's own
     // value (both #333, today and in the Layers model), so a field's hover drew nothing; it takes `border` (#4b4b4b),
     // the dark step the model's edges use (hover and pressed sweep 2026-10-17: Custom select, Input, Select, Textarea).
-    [`${PREFIX}edge-control-hover`]: contrastMix(`light-dark(${strokeEdge("subtle")}, ${strokeEdge("border")})`, `var(${PREFIX}stroke-control-hover)`),
+    // The step itself is the Hover stroke setting (axes/states.ts; 2 is the step above, light subtle and dark border).
+    [`${PREFIX}edge-control-hover`]: contrastMix(strokeEdgeHover(), `var(${PREFIX}stroke-control-hover)`),
     [`${PREFIX}edge-selected`]: contrastMix(strokeEdge("faint"), `var(${PREFIX}stroke-control)`),
     [`${PREFIX}edge-accent`]: `color-mix(in srgb, var(${PREFIX}accent-border), var(${PREFIX}stroke-selected) calc(var(${PREFIX}contrast-more) * 100%))`,
     [`${PREFIX}fill-toggle`]: contrastMix(rawEdge("subtle"), `var(${PREFIX}stroke-control)`),
@@ -173,10 +175,20 @@ export function derivedTokens(): Record<string, string> {
       contrastMix(strokeEdge("card"), `var(${PREFIX}stroke-control)`),
     [`${PREFIX}composer-focus-color`]:
       contrastMix(rawEdge("subtle"), `var(${PREFIX}focus-color)`),
+    // A field's focus, by the Focus ring setting (axes/states.ts): the ring when the setting draws one (and always under
+    // increased contrast), the soft halo when it does not; the field's edge takes the ring's colour only in Halo.
     [`${PREFIX}field-focus-outline-width`]:
-      `calc(var(${PREFIX}focus-width) * var(${PREFIX}contrast-more))`,
+      `calc(var(${PREFIX}focus-width) * max(var(${PREFIX}field-focus-ring), var(${PREFIX}contrast-more)))`,
     [`${PREFIX}field-focus-halo-width`]:
-      `calc(var(${PREFIX}space-2) + var(${PREFIX}focus-width) * var(${PREFIX}contrast-more))`,
+      `calc((var(${PREFIX}space-2) + var(${PREFIX}focus-width) * var(${PREFIX}contrast-more)) * var(${PREFIX}field-focus-halo))`,
+    // The translucent plates, for a plate over a ground a component cannot know (a segmented track, a swatch cell, a
+    // control on a row): the state fills' steps as washes (axes/states.ts). At the defaults they are what they were,
+    // hover #141414 at 5% and selected black at 7% (dark white 14% / 19%); pressed adds 1.375% a step past selected,
+    // 5.5% at the default 4 (12.5% black, about ChatGPT's 12%), and dark 0.425% a step. Dark washes stop at 21% and 22%: a translucent plate cannot be bounded by
+    // its ink, and 24% left muted text at 4.43:1 at dark 24 + 8 (2026-10-16).
+    [`${PREFIX}bg-hover`]: `light-dark(rgb(20 20 20 / calc(0.05 * max(1.25, 1.5 + 0.375 * (var(${PREFIX}fill-hover-step) - 2)) / 1.5)), rgb(255 255 255 / min(0.21, calc(0.14 * (0.5 * var(${PREFIX}fill-hover-step))))))`,
+    [`${PREFIX}bg-active`]: `light-dark(rgb(0 0 0 / calc(0.07 * (max(1.25, 1.5 + 0.375 * (var(${PREFIX}fill-hover-step) - 2)) + 0.625 * var(${PREFIX}fill-selected-step)) / 2.125)), rgb(250 250 250 / min(0.21, calc(0.14 * (0.5 * var(${PREFIX}fill-hover-step)) + 0.05 * var(${PREFIX}fill-selected-step)))))`,
+    [`${PREFIX}bg-pressed`]: `light-dark(rgb(0 0 0 / calc(0.07 * (max(1.25, 1.5 + 0.375 * (var(${PREFIX}fill-hover-step) - 2)) + 0.625 * var(${PREFIX}fill-selected-step)) / 2.125 + 0.01375 * var(${PREFIX}fill-pressed-step))), rgb(252 252 252 / min(0.22, calc(0.14 * (0.5 * var(${PREFIX}fill-hover-step)) + 0.05 * var(${PREFIX}fill-selected-step) + 0.00425 * var(${PREFIX}fill-pressed-step)))))`,
     // Emphasis roles (axes/emphasis.ts). Each role is its neutral endpoint mixed toward the
     // accent by the role's 0/1 switch, so the default renders exactly the neutral paint and
     // a subtree that changes theme, neutral or accent re-derives the role here.
@@ -419,7 +431,7 @@ export const REGISTERED_PROPERTIES = [
   { name: `${PREFIX}radius-min`, syntax: "<length>", initial: "2px" },
   { name: `${PREFIX}radius-factor`, syntax: "<number>", initial: "0.25" },
   { name: `${PREFIX}focus-width`, syntax: "<length>", initial: "2px" },
-  { name: `${PREFIX}focus-offset`, syntax: "<length>", initial: "2px" },
+  { name: `${PREFIX}focus-offset`, syntax: "<length>", initial: "0px" },
   // The Surface leaf; `border-width` is derived from it and contrast, so it is not registered.
   { name: `${PREFIX}frame-width`, syntax: "<length>", initial: "1px" },
   // The Rest shadow leaf; `shadow-edge` is derived from it, so it is not registered.

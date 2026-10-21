@@ -268,9 +268,10 @@
   .area-chip__remove:active { background: var(--_remove-active, color-mix(in srgb, currentColor 20%, transparent)); }
   .area-chip__remove:focus-visible,
   .area-chip__action:focus-visible {
-    /* Nested in the chip: the ring at 0, as Tag's remove and a field's actions (owner, 2026-10-12: consistency pass O1). */
+    /* Nested in the chip: the control's ring (Focus ring's offset, 0 at Hug), as Tag's remove and a field's actions
+       (owner, 2026-10-12: consistency pass O1). */
     outline: var(--area-focus-width) solid var(--area-focus-color);
-    outline-offset: 0;
+    outline-offset: var(--area-focus-offset);
   }
   .area-chip__remove > svg { inline-size: var(--_dot); block-size: var(--_dot); }
 

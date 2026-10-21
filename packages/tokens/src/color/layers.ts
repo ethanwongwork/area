@@ -46,9 +46,33 @@ export const LAYER_PER_STEP = { light: { recessed: 0.006, raised: 0.009 }, dark:
 /** A control's step from its ground: 0.018 (light) or 0.04 (dark) at Flat, 0.0015 more a step; 4 is today's 0.024 /
  * 0.046 (light 50 / 75 / 100 on white; dark 800 / 750 / 700 on 850). */
 export const CONTROL_STEP = { light: { base: 0.018, perStep: 0.0015 }, dark: { base: 0.04, perStep: 0.0015 } } as const;
+/**
+ * The state fills as three settings (axes/states.ts, owner 2026-10-21: "darkness scales for hover selected and pressed"),
+ * each a whole number, each built on the one before so the order always holds: hover, then selected one step past it
+ * (so a selected row shows under the pointer), then pressed past that. In multiples of the Layers step `s`:
+ *
+ *   hover     1 to 4 (2: today's 1.5 s, #f3f3f3 on white). Light 1.25, 1.5, 1.875, 2.25 s: always past a soft field's
+ *             rest fill (s), so a hovered field never lightens; dark s / 2 a step over the rest fill
+ *   selected  past hover by 0.625 s a step (light) or s (dark), 0 to 4 (1: today's #eeeeee; 0 paints hover's plate, as
+ *             Notion and ChatGPT do)
+ *   pressed   a quarter of the way a step from the selected fill to the firmest press, 1 to 4 (4, the owner's pick): the
+ *             selected fill moved 12% toward the ink in light (ChatGPT's), 14% in dark, stopped where muted text keeps
+ *             4.6:1 (styles/layers.css), so each step is its own plate on every ground
+ *
+ * Every step moves at least 0.012 L in light, so neighbours read apart; inks are solved against the selected fill, so a
+ * firmer one darkens them as far as it needs. `FILL_MULTIPLE` is the defaults, the numbers the contrast gate checks.
+ */
+export const FILL_STEPS = { hover: { min: 1, max: 4, default: 2 }, selected: { min: 0, max: 4, default: 1 }, pressed: { min: 1, max: 4, default: 4 } } as const;
+export interface FillSelection { hover: number; selected: number }
+export const DEFAULT_FILL: FillSelection = { hover: FILL_STEPS.hover.default, selected: FILL_STEPS.selected.default };
+/** The rest, hover and selected multiples of the step for a fill selection. */
+export function fillMultiples(f: FillSelection = DEFAULT_FILL): { light: [number, number, number]; dark: [number, number, number] } {
+  const lh = Math.max(1.25, 1.5 + 0.375 * (f.hover - 2)), dh = 0.5 * f.hover;
+  return { light: [1, lh, lh + 0.625 * f.selected], dark: [0, dh, dh + f.selected] };
+}
 /** Light fills: rest s, hover 1.5 s, pressed / selected 2.125 s darker (today's 50 / 75 / 100 on white). Dark: hover
- * + s, pressed / selected + 2 s over the rest fill. */
-export const FILL_MULTIPLE = { light: [1, 1.5, 2.125], dark: [0, 1, 2] } as const;
+ * + s, pressed / selected + 2 s over the rest fill. The defaults of `fillMultiples`. */
+export const FILL_MULTIPLE = fillMultiples();
 /** Near black a small step doesn't show on a screen: a dark control fill never sits under L 0.20 (ChatGPT's controls
  * are #303030 on #000), and on a ground darker than L 0.12 the layers start at 0.12 (Spectrum Darkest's first layer
  * is #0e0e0e, L 0.164). */
@@ -143,27 +167,28 @@ const inkOn = (theme: "light" | "dark", bg: number, ratio: number) => theme === 
   ? Math.cbrt(Math.max(0, (bg ** 3 + 0.05) / ratio - 0.05))
   : Math.cbrt(Math.min(1, ratio * (bg ** 3 + 0.05) - 0.05));
 
-export function layerLightness(theme: "light" | "dark", groundStep: number, n: number): LayerLightness {
+export function layerLightness(theme: "light" | "dark", groundStep: number, n: number, fillSel: FillSelection = DEFAULT_FILL): LayerLightness {
   const g = groundLightness(theme, groundStep);
+  const FM = fillMultiples(fillSel);
   const s = CONTROL_STEP[theme].base + CONTROL_STEP[theme].perStep * n;
   if (theme === "light") {
     const page = g, raised = Math.min(1, g + Math.min(1 - g, LAYER_PER_STEP.light.raised * n)), recessed = g - LAYER_PER_STEP.light.recessed * n;
-    const fills = (x: number) => FILL_MULTIPLE.light.map(m => x - m * s) as [number, number, number];
+    const fills = (x: number) => FM.light.map(m => x - m * s) as [number, number, number];
     const fill = { page: fills(page), raised: fills(raised), recessed: fills(recessed) };
     const edge = Object.fromEntries(Object.entries(EDGE_OFFSET.light).map(([k, d]) => [k, page - d])) as LayerLightness["edge"];
     // The deepest surface text sits on is the recessed layer's hovered fill; a selected one holds body text only.
     const edgeInk = Math.min(INK_TODAY.light.edge, inkOn("light", recessed - s, INK_TARGET.edge));
     const ink = {
-      body: Math.min(INK_TODAY.light.body, inkOn("light", recessed - FILL_MULTIPLE.light[2] * s, INK_TARGET.text)),
+      body: Math.min(INK_TODAY.light.body, inkOn("light", recessed - FM.light[2] * s, INK_TARGET.text)),
       // Muted sits on hovered and selected rows (a count in a selected sidebar row) and on the soft-mark plate.
-      muted: Math.min(INK_TODAY.light.muted, inkOn("light", recessed - FILL_MULTIPLE.light[2] * s, INK_TARGET.text), inkOn("light", MARK_SHADE * recessed, INK_TARGET.text), inkOn("light", washedLightness(page, MARK_HOVER_KEEP), markHoverTarget(page))),
+      muted: Math.min(INK_TODAY.light.muted, inkOn("light", recessed - FM.light[2] * s, INK_TARGET.text), inkOn("light", MARK_SHADE * recessed, INK_TARGET.text), inkOn("light", washedLightness(page, MARK_HOVER_KEEP), markHoverTarget(page))),
       edge: edgeInk, edgeHover: edgeInk + INK_TODAY.light.edgeHover,
     };
     return { page, raised, recessed, stripe: page - 0.6 * s, step: s, fill, edge, ink, vividDarken: darkenFor(page, VIVID_Y), tonalDarken: darkenFor(page, TONAL_Y), tintLift: 0, tintLiftFill: 0 };
   }
   const lift = n > 0 && g < DARK_LAYER_FLOOR ? DARK_LAYER_FLOOR - g : 0;
   const page = g, raised = g + lift + LAYER_PER_STEP.dark.raised * n, recessed = g + lift + LAYER_PER_STEP.dark.recessed * n;
-  const fills = (x: number) => { const rest = Math.max(x + s, DARK_FILL_FLOOR); return FILL_MULTIPLE.dark.map(m => rest + m * s) as [number, number, number]; };
+  const fills = (x: number) => { const rest = Math.max(x + s, DARK_FILL_FLOOR); return FM.dark.map(m => rest + m * s) as [number, number, number]; };
   const fill = { page: fills(page), raised: fills(raised), recessed: fills(recessed) };
   const edge = Object.fromEntries(Object.entries(EDGE_OFFSET.dark).map(([k, d]) => [k, Math.max(EDGE_DARK_TODAY[k as keyof typeof EDGE_DARK_TODAY], raised + d)])) as LayerLightness["edge"];
   // The lightest surface text sits on is the raised layer's selected fill (raised is the lightest layer in dark); muted
@@ -240,8 +265,12 @@ const num = (x: number) => String(Number(x.toFixed(6)));
 export function layerLightnessCss(): Record<string, string> {
   const gl = v("ground-light"), gd = v("ground-dark"), nl = v("layers-light"), nd = v("layers-dark");
   const sl = v("layer-light-step"), sd = v("layer-dark-step");
-  const lf = (x: string, m: number) => `calc(${x} - ${num(m)} * ${sl})`;
-  const df = (x: string, m: number) => `calc(max(${x} + ${sd}, ${num(DARK_FILL_FLOOR)}) + ${num(m)} * ${sd})`;
+  const lf = (x: string, m: string) => `calc(${x} - ${m} * ${sl})`;
+  const df = (x: string, m: string) => `calc(max(${x} + ${sd}, ${num(DARK_FILL_FLOOR)}) + ${m} * ${sd})`;
+  // The fill settings' multiples (fillMultiples, as CSS): rest, hover, selected.
+  const h = v("fill-hover-step"), a = v("fill-selected-step");
+  const lh = `max(1.25, 1.5 + 0.375 * (${h} - 2))`, dh = `(0.5 * ${h})`;
+  const lm = ["1", lh, `(${lh} + 0.625 * ${a})`], dm = ["0", dh, `(${dh} + ${a})`];
   const out: Record<string, string> = {
     "layer-light-step": `calc(${num(CONTROL_STEP.light.base)} + ${num(CONTROL_STEP.light.perStep)} * ${nl})`,
     "layer-dark-step": `calc(${num(CONTROL_STEP.dark.base)} + ${num(CONTROL_STEP.dark.perStep)} * ${nd})`,
@@ -253,9 +282,9 @@ export function layerLightnessCss(): Record<string, string> {
     "layer-dark-raised": `calc(${gd} + ${v("layer-dark-lift")} + ${num(LAYER_PER_STEP.dark.raised)} * ${nd})`,
     "layer-dark-recessed": `calc(${gd} + ${v("layer-dark-lift")} + ${num(LAYER_PER_STEP.dark.recessed)} * ${nd})`,
   };
-  for (const ground of ["page", "raised", "recessed"]) FILL_MULTIPLE.light.forEach((m, i) => {
+  for (const ground of ["page", "raised", "recessed"]) lm.forEach((m, i) => {
     out[`layer-light-${ground}-fill-${i}`] = lf(v(`layer-light-${ground}`), m);
-    out[`layer-dark-${ground}-fill-${i}`] = df(v(`layer-dark-${ground}`), FILL_MULTIPLE.dark[i]!);
+    out[`layer-dark-${ground}-fill-${i}`] = df(v(`layer-dark-${ground}`), dm[i]!);
   });
   const cube = (x: string) => `pow(${x}, 3)`;
   const root3 = (x: string) => `pow(${x}, ${num(1 / 3)})`;
@@ -302,6 +331,21 @@ export function strokeEdge(k: keyof typeof EDGE_OFFSET.light): string {
   const light = `calc(${v("layer-light-page")} - ${num(EDGE_OFFSET.light[k])} * ${n})`;
   const raised = v("layer-dark-raised");
   const dark = `calc(${raised} + (max(${num(EDGE_DARK_TODAY[k])}, calc(${raised} + ${num(EDGE_OFFSET.dark[k])})) - ${raised}) * ${n})`;
+  return color(light, dark);
+}
+
+/**
+ * A control's edge under the pointer, through the Hover stroke setting (axes/states.ts): `stroke-hover-step` from 0 (the
+ * rest edge, no change) to 4, 2 being the step Area always took (light faint → subtle, dark faint → border). Each step
+ * moves the edge half that distance again, straight in lightness, so the steps are even (light 0.021, dark 0.046 L) and
+ * Stroke strength still scales the whole edge.
+ */
+export function strokeEdgeHover(): string {
+  const n = v("stroke-strength"), k = `(${v("stroke-hover-step")} / 2)`;
+  const lo = EDGE_OFFSET.light, d = EDGE_OFFSET.dark, t = EDGE_DARK_TODAY;
+  const light = `calc(${v("layer-light-page")} - (${num(lo.faint)} + ${num(lo.subtle - lo.faint)} * ${k}) * ${n})`;
+  const raised = v("layer-dark-raised");
+  const dark = `calc(${raised} + (max(calc(${num(t.faint)} + ${num(t.border - t.faint)} * ${k}), calc(${raised} + ${num(d.faint)} + ${num(d.border - d.faint)} * ${k})) - ${raised}) * ${n})`;
   return color(light, dark);
 }
 

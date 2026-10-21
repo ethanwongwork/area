@@ -20,7 +20,8 @@
  *   Nothing here is a raw colour. The one exception is `fg-on-*`, which resolves to the
  *   black or white each scale measured against its own solid fill.
  */
-import { type Level, type Position, type Slot, INVERSION } from "../color/curves.ts";
+import { type Level, type Position, type Slot, INVERSION, LEVELS } from "../color/curves.ts";
+import { apcaMagnitude, wcagContrastHex } from "../color/contrast.ts";
 import type { Theme } from "../color/scale.ts";
 import { tonalStroke } from "./stroke.ts";
 
@@ -54,6 +55,8 @@ export type Alias =
   | { kind: "strokeHover"; role: Role }
   /** The family's most saturated readable rung -- computed per scale, not chosen here. */
   | { kind: "vivid"; role: Role }
+  /** The family's most vivid rung that still marks a state at 3:1 (focus, selected). */
+  | { kind: "indicator"; role: Role }
   | { kind: "contrast"; role: Role }
   /** A fixed value, or one per theme where the two were measured apart (the scrim). */
   | { kind: "literal"; value: string | Record<Theme, string>; role?: Role };
@@ -67,6 +70,7 @@ const tonalForeground = (role: Role): Alias => ({ kind: "tonalForeground", role 
 const stroke = (role: Role): Alias => ({ kind: "stroke", role });
 const strokeHover = (role: Role): Alias => ({ kind: "strokeHover", role });
 const vivid = (role: Role): Alias => ({ kind: "vivid", role });
+const indicator = (role: Role): Alias => ({ kind: "indicator", role });
 const contrast = (role: Role): Alias => ({ kind: "contrast", role });
 const literal = (value: string | Record<Theme, string>, role?: Role): Alias => ({ kind: "literal", value, role });
 
@@ -140,8 +144,6 @@ export const SEMANTIC_ALIASES: Record<string, Alias> = {
   "neutral-solid-hover": at("neutral", "inverseFillHover"),
   "fg-on-neutral": at("neutral", "inverseText"),
   /** Translucent tints, for hover on an unknown background. */
-  "bg-hover": alphaAt("neutral", "componentHover"),
-  "bg-active": alphaAt("neutral", "componentActive"),
   /**
    * The scrim behind a modal: black at 65% in both themes. A scrim darkens whatever is behind
    * it; solved as a tint of the page rung it came out nearly transparent in dark mode.
@@ -196,16 +198,16 @@ export const SEMANTIC_ALIASES: Record<string, Alias> = {
    * The focus ring -- the one stroke WCAG 1.4.11 unambiguously requires at 3:1, so it is
    * held to the full threshold (see `contrast/assertions.ts`).
    *
-   * Drawn from the accent's text level, not its solid. The solid is tuned to contrast with
-   * its own label, which says nothing about contrast with the page: a lime or amber solid
-   * is very light, and a ring made from it measures 1.2:1 on white -- effectively invisible.
-   * A text level is tuned against the page by definition and flips with the theme
-   * automatically, so one rule stays conformant for every accent hue in both themes.
+   * Drawn from the accent's indicator rung (scale.ts chooseIndicator), not its solid: the solid is tuned to contrast
+   * with its own label, and a lime or amber solid measures 1.2:1 on white. The indicator is the most vivid rung that
+   * clears 3:1 and APCA 45 on every ground, per family and theme, so one rule stays conformant for every accent while
+   * reading vivid (owner, 2026-10-21: ChatGPT's vibrant blue). It was the text level (textTonal), which read as navy.
+   * The selected stroke takes the same rung: selected and focus share a colour and differ by placement (DESIGN_SYSTEM.md).
    */
   "stroke-control": at("neutral", "strokeControl"),
   "stroke-control-hover": at("neutral", "strokeControlHover"),
-  "stroke-selected": at("accent", "textTonal"),
-  "focus-color": at("accent", "textTonal"),
+  "stroke-selected": indicator("accent"),
+  "focus-color": indicator("accent"),
 
   // --- Tonal blocks -------------------------------------------------------------
   ...tonalBlock("accent", "accent"),
@@ -325,11 +327,36 @@ export function resolveAlias(aliasValue: Alias, scales: ScaleLookup, theme: Them
       return tonalStroke(scales[aliasValue.role].byLevel[INVERSION.textTonal[theme]]!, theme, true);
     case "vivid":
       return scales[aliasValue.role].byLevel[scales[aliasValue.role].vivid[theme]]!;
+    case "indicator":
+      return scales[aliasValue.role].byLevel[indicatorLevel(aliasValue.role, scales, theme)]!;
     case "contrast":
       return scales[aliasValue.role].contrast.hex;
     case "literal":
       return typeof aliasValue.value === "string" ? aliasValue.value : aliasValue.value[theme];
   }
+}
+
+/**
+ * The indicator rung: the most vivid rung of a family that still marks a state wherever a focus ring or a selected edge
+ * can sit (owner, 2026-10-21: "i like the thick 2px selected state stroke FROM CHATGPT. i particularly like the vibrant
+ * blue that it uses"; ChatGPT's ring is #3a83f7). It walks from the 500 rung, the family's vivid middle, toward the ink
+ * (darker in light, lighter in dark) to the first rung that clears 3:1 (WCAG 1.4.11) on the page, the surfaces and a
+ * control's fills, APCA 45 on those (contrast/assertions.ts STROKE.focus), and 3:1 on every family's tint, since a ring
+ * sits on a tinted plate too. Blue lands on 550 in light (#0160d9; 500 is 2.66:1 on discovery's pressed tint) and 250 in
+ * dark. It was the text level, textTonal (#004cb0), which read as navy. Resolved here, where every family is known.
+ */
+function indicatorLevel(role: Role, scales: ScaleLookup, theme: Theme): Level {
+  const view = scales[role], neutral = scales.neutral;
+  const grounds = [INVERSION.page, INVERSION.surface, INVERSION.subtle, INVERSION.component, INVERSION.componentHover, INVERSION.componentActive]
+    .map(slot => neutral.byLevel[slot[theme]]!);
+  const tints = Object.values(scales).flatMap(s => [s.tonal.surface, s.tonal.surfaceHover, s.tonal.surfaceActive].map(level => s.byLevel[level[theme]]!));
+  const start = LEVELS.indexOf(500 as Level), direction = theme === "light" ? 1 : -1;
+  for (let i = start; i >= 0 && i < LEVELS.length; i += direction) {
+    const hex = view.byLevel[LEVELS[i]!];
+    if (!hex) continue;
+    if (grounds.every(g => wcagContrastHex(hex, g) >= 3 && apcaMagnitude(hex, g) >= 45) && tints.every(g => wcagContrastHex(hex, g) >= 3)) return LEVELS[i]!;
+  }
+  return INVERSION.textTonal[theme] as Level;
 }
 
 /** The level an alias resolves to in a theme, for documentation and for the gate's messages. */
@@ -354,6 +381,8 @@ export function aliasLevel(aliasValue: Alias, scales: ScaleLookup, theme: Theme)
       return null;
     case "vivid":
       return scales[aliasValue.role].vivid[theme];
+    case "indicator":
+      return indicatorLevel(aliasValue.role, scales, theme);
     default:
       return null;
   }

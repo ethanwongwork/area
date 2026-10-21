@@ -89,13 +89,16 @@
    * warm black, with the selected row at the hover's 5%; ChatGPT's ghosts hover 5% and press 12%
    * (measured 2026-10-16, docs/PRODUCT_UI.md rule 3).
    *
-   * spec: the selected fill moved toward the ink, 3% in light (L 0.949 → 0.929 at the defaults, Notion's
-   * pressed #e9) and 7% in dark (one more of the dark model's equal fill steps), so it follows every
-   * ground, layer contrast and neutral cast; but never past the lightness at which the muted ink keeps
-   * 4.6:1 (the model's text target), the bound the model already solves its inks to on the selected fill.
-   * At the defaults the bound is far away; at dark 24 + 8 the press stops there (body ink on the uncapped
-   * press came out 4.27:1). Restated on every ground that restates the fills above, since a property that
-   * reads another resolves where it is declared.
+   * spec: the firmest press is the selected fill moved toward the ink by 12% in light (ChatGPT's ghost
+   * press) and 14% in dark, so it follows every ground, layer contrast and neutral cast; but never past the
+   * lightness at which the muted ink keeps 4.6:1 (the model's text target), the bound the model already
+   * solves its inks to on the selected fill (at dark 24 + 8 an unbounded press left body ink at 4.27:1).
+   * Pressed fill (axes/states.ts, owner 2026-10-21) takes a quarter of the way there a step, 1 to 4, so
+   * every step is its own plate on every ground: a cap applied per step made 2 to 4 one colour wherever the
+   * bound was near (light at the defaults: L 0.949 selected, 0.925 bound). At the default, 4, the press is
+   * the firmest the muted ink allows (L 0.925 on white, about 9% black); with room, 3% a step as before.
+   * Restated on every ground that restates the fills above, since a property that reads another resolves
+   * where it is declared.
    */
   :root,
   :where(
@@ -107,15 +110,14 @@
   ),
   [data-area-ground] {
     --area-bg-component-pressed: light-dark(
-      oklch(from color-mix(in oklab, var(--area-bg-component-active), var(--area-fg-default) 3%)
-        max(l, pow(calc(4.6 * (pow(var(--area-layer-light-muted), 3) + 0.05) - 0.05), 0.333333)) c h),
-      oklch(from color-mix(in oklab, var(--area-bg-component-active), var(--area-fg-default) 7%)
-        min(l, pow(max(0, calc((pow(var(--area-layer-dark-muted), 3) + 0.05) / 4.6 - 0.05)), 0.333333)) c h)); /* spec */
+      color-mix(in oklab, var(--area-bg-component-active),
+        oklch(from color-mix(in oklab, var(--area-bg-component-active), var(--area-fg-default) 12%)
+          max(l, pow(calc(4.6 * (pow(var(--area-layer-light-muted), 3) + 0.05) - 0.05), 0.333333)) c h)
+        calc(25% * var(--area-fill-pressed-step))),
+      color-mix(in oklab, var(--area-bg-component-active),
+        oklch(from color-mix(in oklab, var(--area-bg-component-active), var(--area-fg-default) 14%)
+          min(l, pow(max(0, calc((pow(var(--area-layer-dark-muted), 3) + 0.05) / 4.6 - 0.05)), 0.333333)) c h)
+        calc(25% * var(--area-fill-pressed-step)))); /* spec */
   }
-  :root {
-    /* spec: the translucent twin, for a plate over an unknown fill: hover 5%, selected 6.7%, pressed 10% black
-       (Notion's 10%). In dark 19% white, the selected wash, a step past the 14% hover: a translucent plate cannot be
-       bounded by its ink like the opaque one, and 24% left muted day numbers at 4.43:1 at dark 24 + 8. */
-    --area-bg-pressed: light-dark(#0000001a, #fcfcfc31);
-  }
+  /* The translucent pressed plate is derived with its twins in tokens (emit/base.ts), from the Pressed fill setting. */
 }

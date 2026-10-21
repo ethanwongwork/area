@@ -134,6 +134,6 @@
       text-underline-offset: 0.08em; /* spec: Link's offset, close under the text (link.md, 2026-10-17) */
     }
   }
-  .area-description-list__more:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  .area-description-list__more:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-gap); }
   .area-description-list__item[hidden] { display: none; }
 }

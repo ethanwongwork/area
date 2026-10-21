@@ -15,7 +15,7 @@
     --_bg-open: var(--_bg);
     --_border: var(--area-select-edge);
     --_border-hover: var(--area-select-edge-hover);
-    --_border-focus: var(--area-field-focus-color);
+    --_border-focus: color-mix(in srgb, var(--_border), var(--area-field-focus-color) calc(var(--area-field-focus-recolor) * 100%)); /* the ring's colour only under Focus ring Halo (axes/states.ts) */
     --_focus-outline: var(--area-field-focus-color);
     --_focus-halo: var(--area-field-focus-halo-color);
     --_trigger-width: var(--area-select-inline-size);
@@ -103,7 +103,7 @@
     border-color: var(--_border-focus);
     box-shadow: var(--_field-lift), 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
     outline: var(--area-field-focus-outline-width) solid var(--_focus-outline);
-    outline-offset: 0;
+    outline-offset: var(--area-focus-offset);
   }
   /* Open: the trigger holds its hover paint while its list shows (the hover edge on a field, the
      pressed plate on a ghost); the focus ring stays a keyboard signal (:focus-visible above), as

@@ -41,7 +41,7 @@
     text-decoration-color: var(--_line-hover);
     transition-duration: 0s;
     outline: var(--area-focus-width) solid var(--area-focus-color);
-    outline-offset: var(--area-focus-offset);
+    outline-offset: var(--area-focus-gap);
   }
 
   /* Variant: inline links are always underlined; a standalone link is underlined on hover and

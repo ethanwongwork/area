@@ -75,12 +75,18 @@ Never lower a floor or add a waiver to hide a failure.
 
 ## Focus
 
-Use `focus-color`, `focus-width` and `focus-offset` for ordinary control focus. Required
-focus geometry is independent of elevation. Editable fields use `field-focus-*` roles
-(audit S1, owner 2026-09-30): the 1px edge takes `focus-color` and a 2px halo of the same
-colour at 14% (`field-focus-halo-color`, the tone halos' alpha; ChatGPT's 1px blue focus
-edge), in light and dark. Increased contrast adds the 2px outline and widens the halo.
+Use `focus-color`, `focus-width` and `focus-offset` for control focus and `focus-gap` off containers and text; the
+Focus ring setting sets all three (`axes/states.ts`, 2026-10-21). Required focus geometry is independent of elevation.
+Editable fields use `field-focus-*` roles: at Hug (the default, ChatGPT's) a 2px ring on the field's edge; at Halo
+(audit S1, owner 2026-09-30) the 1px edge takes `focus-color` and a 2px halo of the same colour at 14%
+(`field-focus-halo-color`). Increased contrast always adds the 2px outline and widens the halo.
 Composer keeps the quiet neutral edge (`composer-focus-color`). Invalid inputs retain their danger edge/context.
+
+**The indicator rung** (owner, 2026-10-21: "the vibrant blue"). `focus-color` and `stroke-selected` are the accent's
+lightest step from 500 that keeps WCAG 3:1 and APCA 45 on every neutral ground and fill (page to pressed) and 3:1 on
+every tone's tinted surfaces, solved at alias time (`semantic/aliases.ts` `indicatorLevel`). For blue that is 550,
+#0160d9, in light (500, #006df5, is 2.66:1 on the info tint's pressed fill) and #79aeff in dark (APCA on the near-black
+page). ChatGPT's #3a83f7 is 3.64:1 on white but 2.94:1 on the light pressed fill (#e7e7e7), and APCA 38 on the dark page.
 
 Measure the actual painted opaque edge/outline against its ground. Measuring only the
 source color of a translucent halo is insufficient. Preserve focus and selected/invalid

@@ -438,8 +438,8 @@
    * more subtle with the shadow and … smooth, subtle, professional motion"). Notion's linked card (its tatami system,
    * measured 2026-10-18, docs/research/card-hover-2026-10-18.md) keeps its edge and fades a soft shadow in over 150ms
    * ease-out and out over 200ms ease-in; Fluent 2's interactive card steps its shadow up a level. Here the resting
-   * shadow steps to Elevation's lift role, Fluent's shadow8 at half the Menu's strength (owner, 2026-10-18: the float
-   * shadow it took first was "too drastic"; "very subtle elevation shadow"), so the lift follows Elevation, fading in on `fast` with ease-out and out on
+   * shadow steps to the lift role, Fluent's shadow8 at half the Menu's strength (owner, 2026-10-18: the float
+   * shadow it took first was "too drastic"; "very subtle elevation shadow"), so the lift follows Hover shadow (axes/depth.ts; it followed Elevation until 2026-10-21), fading in on `fast` with ease-out and out on
    * `base` with ease-in (MOTION.md, "Lift"). The edge, fill and ink stay; at rest a linked card looks like any other.
    */
   .area-card:has(.area-card__link) {
@@ -451,12 +451,12 @@
       transition-duration: var(--area-duration-fast);
       transition-timing-function: var(--area-ease-out);
     }
-    /* Elevation 0 draws no shadow, so a flat card keeps the edge step as its hover. */
-    [data-area-elevation="0"] .area-card:has(.area-card__link):hover { border-color: var(--area-edge-control-hover); }
+    /* Hover shadow 0 draws no lift, so a flat card keeps the edge step as its hover. */
+    [data-area-shadow-hover="0"] .area-card:has(.area-card__link):hover { border-color: var(--area-edge-control-hover); }
   }
   /* A press settles the card: the lift drops at once (the press is the one instant step, product UI rule 3). */
   .area-card:has(.area-card__link):active { --_card-lift: var(--_card-shadow); transition-duration: 0s; }
-  [data-area-elevation="0"] .area-card:has(.area-card__link):active { border-color: var(--area-border-hover); }
+  [data-area-shadow-hover="0"] .area-card:has(.area-card__link):active { border-color: var(--area-border-hover); }
   /*
    * Selected (product UI rule 3, docs/PRODUCT_UI.md; the app's gallery tiles, studio.css, owner 2026-10-12;
    * docs/specs/card.md 2026-10-15): selected draws the selection stroke 2 wide inside the
@@ -466,7 +466,8 @@
    */
   .area-card:is([data-selected], [aria-pressed="true"], [aria-selected="true"]) {
     border-color: var(--area-stroke-selected);
-    --_card-ring: inset 0 0 0 calc(var(--area-stroke-width) * 2 - var(--_card-border)) var(--area-stroke-selected);
+    /* The Selected stroke setting's width, inside: the card's own edge plus a ring (axes/states.ts). */
+    --_card-ring: inset 0 0 0 max(0px, calc(var(--area-selected-width) - var(--_card-border))) var(--area-stroke-selected), inset 0 0 0 100vmax var(--area-selected-tint);
     transition-duration: 0s;
   }
   @media (hover: hover) { .area-card:is([data-selected], [aria-pressed="true"], [aria-selected="true"]):hover { border-color: var(--area-stroke-selected); } }
@@ -497,7 +498,7 @@
   .area-card:has(.area-card__link) .area-card__overlay { z-index: 2; }
   .area-card:has(.area-card__link:focus-visible) {
     outline: var(--area-focus-width) solid var(--area-focus-color);
-    outline-offset: var(--area-focus-offset);
+    outline-offset: var(--area-focus-gap);
   }
   /* An overlay that appears with the pointer or keyboard focus, as Notion's and ChatGPT's
      card actions do; always shown where there is no hover. */
@@ -577,7 +578,7 @@
   }
   .area-card__carousel:focus-visible {
     outline: var(--area-focus-width) solid var(--area-focus-color);
-    outline-offset: var(--area-focus-offset);
+    outline-offset: var(--area-focus-gap);
   }
   /* Link's underline (docs/specs/link.md): the link's own ink, one stroke 2 below; the ink never changes (40% at
      rest until review round 2, 2026-10-09). */
@@ -750,7 +751,7 @@
      rule here had the same specificity and came later, so it held the rest underline under the pointer. */
   .area-alert--banner > .area-alert__link a:focus-visible {
     outline: var(--area-focus-width) solid var(--area-focus-color);
-    outline-offset: var(--area-focus-offset);
+    outline-offset: var(--area-focus-gap);
   }
 
   /* Flush: square and without side or top edges, for a banner that meets its container's
@@ -989,7 +990,7 @@
    * The scroll box clips, so it reaches a focus ring beyond the content edge (padding in,
    * the same margin out): a full-width field's halo is no longer cut at the sides. */
   .area-dialog__body {
-    --_dialog-bleed: calc(var(--area-focus-width) + var(--area-focus-offset));
+    --_dialog-bleed: calc(var(--area-focus-width) + var(--area-focus-gap));
     flex: 1 1 auto;
     min-block-size: 0;
     min-inline-size: 0;
@@ -1525,7 +1526,7 @@
     outline: none;
   }
   .area-toaster[hidden] { display: none; }
-  .area-toaster:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); border-radius: var(--area-radius-container); }
+  .area-toaster:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-gap); border-radius: var(--area-radius-container); }
   .area-toaster__list { display: flex; flex-direction: column; gap: var(--area-space-8); margin: 0; padding: 0; list-style: none; }
   /*
    * Motion (docs/MOTION.md, "Toast"; motion pass 2026-10-07). A toast enters from the toaster's

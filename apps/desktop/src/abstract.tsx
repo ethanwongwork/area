@@ -29,6 +29,14 @@
  *     shadow-field    Field: a field and an outline button, 1.25x
  *     elevation       Floating: a menu, 1.25x
  *     shadow-size, -softness, -light, -color: the menu at Floating 8, 1.25x
+ *   The interaction states (axes/states.ts, owner 2026-10-21), each drawn in the state it sets. A tile cannot hover or
+ *   focus, so the state is painted from the same tokens the component reads (studio.css, "Language: states"):
+ *     stroke-hover    Hover: a field at rest beside the same field hovered, 1.25x
+ *     selected-stroke Selected: a selected card, 1.25x
+ *     selected-tint   Selected tint: the same card
+ *     focus-ring      Focus ring: a field, a button and a card each focused, 1.25x
+ *     shadow-hover    Hover shadow: a hovered card, 1.25x
+ *     fill-hover, -selected, -pressed: a menu's rows hovered, selected and pressed, 1.25x
  *   motion       a switch flipping
  *   easing       the same switch flipping at Motion 300, so the curve has time to show
  *   pills        the shape the tile names, as a pill
@@ -212,6 +220,44 @@ const MenuSurface = () => (
     <MenuItem>Item three</MenuItem>
   </div>
 );
+/** A field at rest and hovered. */
+const HoverEdge = () => (
+  <div className="lang-col lang-zoom-field">
+    <Input aria-label="Label" placeholder="Rest" />
+    <Input aria-label="Label" placeholder="Hover" className="lang-state-hover" />
+  </div>
+);
+/** A selected card (Card `selected`, real). */
+const SelectedCard = () => (
+  <Card size="sm" selected className="lang-card lang-zoom-card"><CardContent>
+    <CardTitle>Title</CardTitle>
+    <CardDescription>Selected</CardDescription>
+  </CardContent></Card>
+);
+/** A field, a button and a card focused: the ring on controls (`focus-offset`) and off containers (`focus-gap`). */
+const Focused = () => (
+  <div className="lang-col lang-zoom-field">
+    <Input aria-label="Label" placeholder="Placeholder" className="lang-state-focus-field" />
+    <div className="lang-row"><Button variant="outline" tone="neutral" className="lang-state-focus">Button</Button></div>
+    <Note className="lang-card lang-zoom-card lang-state-focus-gap" />
+  </div>
+);
+/** A hovered card. */
+const LiftedCard = () => (
+  <Card size="sm" className="lang-card lang-zoom-card lang-state-lift"><CardContent>
+    <CardTitle>Title</CardTitle>
+    <CardDescription>Hover</CardDescription>
+  </CardContent></Card>
+);
+/** A menu's rows at rest, hovered (keyboard-highlighted, real), selected (real) and pressed. */
+const StateMenu = () => (
+  <div className="area-menu lang-zoom-menu" role="menu" aria-label="Menu">
+    <MenuItem>Rest</MenuItem>
+    <MenuItem data-highlighted="">Hover</MenuItem>
+    <MenuItem data-selected="">Selected</MenuItem>
+    <MenuItem className="lang-state-pressed">Pressed</MenuItem>
+  </div>
+);
 /** How much over its size each setting's component is shown. */
 const CLOSE_UPS: Record<string, { scale: number; subject: () => ReactNode }> = {
   surface: { scale: 1.5, subject: CardSurface },
@@ -224,6 +270,14 @@ const CLOSE_UPS: Record<string, { scale: number; subject: () => ReactNode }> = {
   "shadow-softness": { scale: 1.25, subject: MenuSurface },
   "shadow-light": { scale: 1.25, subject: MenuSurface },
   "shadow-color": { scale: 1.25, subject: MenuSurface },
+  "stroke-hover": { scale: 1.25, subject: HoverEdge },
+  "selected-stroke": { scale: 1.25, subject: SelectedCard },
+  "selected-tint": { scale: 1.25, subject: SelectedCard },
+  "focus-ring": { scale: 1.25, subject: Focused },
+  "shadow-hover": { scale: 1.25, subject: LiftedCard },
+  "fill-hover": { scale: 1.25, subject: StateMenu },
+  "fill-selected": { scale: 1.25, subject: StateMenu },
+  "fill-pressed": { scale: 1.25, subject: StateMenu },
 };
 
 /** The whole component, centred in a window on the page's ground, a little over its size. */

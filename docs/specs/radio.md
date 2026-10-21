@@ -91,7 +91,7 @@ Captures: `area--size-small`, `-medium`, `-large`, `area--selected`, `area--tone
 | shadow, focus, hover | as Checkbox | Peer consistency | — |
 | label gap | 6 at md and lg, the density tokens, as Checkbox (choice.css:12, :469, :475) | Peer: Checkbox, Button (audit S14) | Was 8 |
 | group spacing | options `ui-stack` (6, compact 4) below the legend, `ui-cluster` (8, compact 6) between rows, horizontal columns 16 (compact 12); description and validation `ui-stack` from what is above (choice.css:323-342, 420) | Untitled horizontal gap 16; Field's gaps (audit C-27 A; spacing audit 2026-10-17) | Options were 12 below the legend; validation was 12 |
-| card | 1px `edge-control`, hover `edge-control-hover`, chosen edge the checked colour (1px, darker not thicker); `radius-container`; inset 12, compact 8; cards in a group 8 apart, tiles in equal columns at least 144 wide (choice.css:99-159, 384-398) | Owner references 2026-09-28; shadcn Choice Card | — |
+| card | 1px `edge-control`, hover `edge-control-hover`, chosen edge `stroke-selected` at `selected-width` (Selected stroke, 2; was 1px, darker not thicker), drawn inside, over `selected-tint`; `radius-container`; inset 12, compact 8; cards in a group 8 apart, tiles in equal columns at least 144 wide (choice.css:99-159, 384-398) | Owner references 2026-09-28; shadcn Choice Card | — |
 | disabled | `opacity-disabled` (50%) on the label; a disabled group dims once as a whole, legend included, and its options do not dim again (choice.css:33-37, 344-346) | Audit rule; Untitled 50%; audit C-27 A | Not doubled |
 
 ## States
@@ -169,6 +169,11 @@ selection with a real keyboard.
 
 **Open questions.** None beyond Checkbox's.
 
+## Review note, 2026-10-21
+
+- **What changed:** a chosen card's edge is 2px vibrant blue, drawn inside (was 1px, darkened to the checked colour); the control keeps its checked colour.
+- **Why:** your picks on the state page (2026-10-21), now the defaults of the new state settings (Inspector: Stroke, Shadow, Fill): ChatGPT's 2px selected tile. This replaces 2026-09-28's "darker, not thicker".
+
 ## Feedback log
 
 - 2026-09-28 · owner approved batch 14 → Complete.
@@ -201,6 +206,7 @@ selection with a real keyboard.
 - 2026-10-12 · owner, 2026-10-12: "go with your recommendations" (consistency pass) → the unchecked hover edge reads `edge-control-strong` (O5: one role for a literal written in several families; same paint). (docs/research/consistency-audit-2026-10-12.md)
 - 2026-10-12 · type size and density split (owner) → the radio shares Checkbox's box, `--area-mark-box` (14 / 14 / 16 / 18 / 20 for type 12–16; `choice.css`). `docs/research/ui-size-scale-2026-10-12.md`.
 - 2026-10-14 · all-axis audit → the box now follows the type size (`.area-radio--md` set a fixed 16, overriding the 2026-10-12 base rule); lg is four larger; the dot stays 6 / 8, centred on whole pixels → choice.css.
+- 2026-10-21 · owner's picks on the state page (https://claude.ai/artifact/3uKMHRhpWnPqNA6pK4WfD9) and "capture some of these options as options for the design system customization … keep my current selections as the default" → a chosen card's edge is Selected stroke's width (2) in the indicator rung, its 1px edge topped up by an inset ring, so nothing moves; this supersedes 2026-09-28's "darker, not thicker" (the owner picked ChatGPT's 2px tile). choice.css.
 
 ## Spacing audit (2026-10-17)
 

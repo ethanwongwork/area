@@ -82,6 +82,6 @@
     user-select: none;
   }
   .area-reference-list__backlink > svg { inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); }
-  .area-reference-list__backlink:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  .area-reference-list__backlink:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-gap); }
   .area-reference-list__count { font-size: var(--area-text-xs-size); line-height: 1; font-variant-numeric: tabular-nums; }
 }

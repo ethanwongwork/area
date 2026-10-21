@@ -19,6 +19,7 @@ import { RADIUS_AXIS } from "./radius.ts";
 import { REST_SHADOW_AXIS, SURFACE_AXIS } from "./surface.ts";
 import { ELEVATION_AXIS } from "./elevation.ts";
 import { DEPTH_AXES } from "./depth.ts";
+import { STATE_AXES } from "./states.ts";
 import { DENSITY_AXIS } from "./density.ts";
 import { TYPE_AXIS } from "./type-size.ts";
 import { GROUND_DARK_AXIS, GROUND_LIGHT_AXIS, LAYERS_DARK_AXIS, LAYERS_LIGHT_AXIS } from "./layers.ts";
@@ -41,6 +42,8 @@ export const AXES: AxisDefinition[] = [
   ELEVATION_AXIS,
   // Edge and Depth's other controls (2026-10-18): Stroke, Rest and Field shadow, Shadow size, Softness, Light, Shadow colour.
   ...DEPTH_AXES,
+  // Interaction states (2026-10-21): the focus ring, and the stroke, shadow and fill scales for hover, selected and pressed.
+  ...STATE_AXES,
   MOTION_AXIS,
   EASING_AXIS,
 ];
@@ -55,8 +58,9 @@ export const SETTING_GROUPS: ReadonlyArray<{ heading: string; settings: readonly
   { heading: "Color", settings: ["theme", "neutral", "accent", "ground-light", "ground-dark", "layers-light", "layers-dark", "action", "selection", "contrast"] },
   { heading: "Size", settings: ["type", "density"] },
   { heading: "Shape", settings: ["radius", "pills"] },
-  { heading: "Stroke", settings: ["surface", "stroke", "shadow-rest"] },
-  { heading: "Shadow", settings: ["elevation", "shadow-resting", "shadow-field", "shadow-size", "shadow-softness", "shadow-light", "shadow-color"] },
+  { heading: "Stroke", settings: ["surface", "stroke", "stroke-hover", "selected-stroke", "focus-ring", "shadow-rest"] },
+  { heading: "Shadow", settings: ["elevation", "shadow-resting", "shadow-hover", "shadow-field", "shadow-size", "shadow-softness", "shadow-light", "shadow-color"] },
+  { heading: "Fill", settings: ["fill-hover", "fill-selected", "fill-pressed", "selected-tint"] },
   { heading: "Effects", settings: ["motion", "easing"] },
 ];
 

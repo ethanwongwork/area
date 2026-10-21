@@ -152,7 +152,7 @@ no change in any of 30 nodes (hidden window).
 | linked DOM | link in the title, stretched `::after`; nested controls z 2 | Heydon Pickering, Adrian Roselli; Carbon, Radix use real `<a>` | A wrapping `<a>` would read the whole card as the link name and forbid nested buttons |
 | linked hover | edge: the card edge → `edge-control-hover` (#ee → #d4); no fill, lift or ink change; at rest a linked card looks like any other | Fluent outline (stroke step), Radix surface (ring step); ChatGPT and Figma keep paint | Notion swaps the fill; Area's card has media, where a fill change reads as a grey patch |
 | linked transition | in at once, out over `--area-transition` (100ms ease-out) (motion pass 2026-10-07) | Notion 0.1s; Radix 120ms; Carbon 150ms; MOTION.md hover plate | — |
-| linked focus | 2px focus outline on the card, `focus-offset` outside | Every system rings the card edge; Area's shared focus offset | Fluent and Carbon inset it (−2px) |
+| linked focus | `focus-width` outline on the card, `focus-gap` outside (2px at every Focus ring but Bold) | Every system rings the card edge; Area's shared focus offset | Fluent and Carbon inset it (−2px) |
 | pressed | none | Not every system has one; none of the products | — |
 | reveal | opacity 0 → 1 over `duration-fast` (100; audit F-38, was 200) on hover or focus-within; always on with no hover | Notion 0.2s; ChatGPT reveals actions | — |
 | nested actions | allowed, few | Apple widgets, Notion, ChatGPT; block-link pattern | Fluent, Carbon and M3 say a clickable card holds no actions; documented as a trade-off |
@@ -171,7 +171,7 @@ no change in any of 30 nodes (hidden window).
 ## States
 
 Rest; linked hover (edge); linked focus-visible (card outline); reveal (overlay opacity).
-No pressed, selected or disabled state. Text in a linked card can't be drag-selected (the
+Selected (`selected`, `aria-selected`, `aria-pressed`): the edge in `stroke-selected` at Selected stroke (2), drawn inside, over Selected tint (none). No disabled state. Text in a linked card can't be drag-selected (the
 stretched link covers it), a known cost of the pattern (Roselli).
 
 ## Behavior and accessibility
@@ -246,6 +246,11 @@ Open questions:
 ## Interaction polish, 2026-10-16
 
 The action's underline takes Link's offset, 0.25em, clear of descenders (link.md). See [interaction polish](../research/interaction-polish-2026-10-16.md).
+
+## Review note, 2026-10-21
+
+- **What changed:** a selected card's edge is the vibrant blue (#0160d9; was the dark #004cb0), 2px, drawn inside; its resting shadow is one tight layer, `0 1px 2px -1px` at 8% (ChatGPT's sm), instead of a soft two-layer haze at 1.5%; hovering a linked card lifts it by `0 2px 4px -1px` at 8%; keyboard focus sits 2px off the card.
+- **Why:** your picks on the state page (2026-10-21), now the defaults of the new state settings (Inspector: Stroke, Shadow, Fill). Selected stroke, Selected tint, Resting and Hover shadow, and Focus ring now set these for every family.
 
 ## Feedback log
 
@@ -323,6 +328,7 @@ The action's underline takes Link's offset, 0.25em, clear of descenders (link.md
 - 2026-10-16 · owner, review round 28 (components28) → approved (pressed, selected) → Complete again in `component-status.mjs`.
 
 Since 2026-10-17 the underline offset is Link's 0.08em, close under the text (link.md, "Close underline").
+- 2026-10-21 · owner's picks on the state page (https://claude.ai/artifact/3uKMHRhpWnPqNA6pK4WfD9) and "capture some of these options as options for the design system customization … keep my current selections as the default" → selected draws `selected-width` (Selected stroke, 2 by default) in the accent's indicator rung (#0160d9 light, #79aeff dark; was `stroke-selected` at the accent's text shade #004cb0) over `selected-tint`; linked focus sits at `focus-gap`; the hover lift is Hover shadow's tight `0 2px 4px -1px` 8% and Hover shadow 0 steps the edge (was Elevation's). surface.css; docs/research/states-2026-10-21.
 
 ## Spacing audit (2026-10-17)
 

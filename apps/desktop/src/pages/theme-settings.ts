@@ -28,6 +28,8 @@ export const ALSO: Record<string, Record<string, string>> = {
   "shadow-softness": SHARED_SHADOW,
   "shadow-light": SHARED_SHADOW,
   "shadow-color": SHARED_SHADOW,
+  // Hover shadow: the lift alone on its card.
+  "shadow-hover": { ...NO_SHADOW, "data-area-surface": "0" },
   easing: { "data-area-motion": "300" },
 };
 /** What a preview is set to besides its own setting, said in the Inspector so a tile is never mistaken for the default. */
@@ -39,6 +41,7 @@ export const HELD: Record<string, string> = {
   "shadow-rest": "Stroke width 0 and the other shadows off, so only this shadow shows.",
   "shadow-resting": "Stroke width 0 and the other shadows off, so only this shadow shows.",
   "shadow-field": "The surface's own shadows off, so only the field's shows.",
+  "shadow-hover": "Stroke width 0 and the other shadows off, so only the lift shows.",
   "shadow-size": "Drawn on the Floating shadow at 8, where the change is large enough to see.",
   "shadow-softness": "Drawn on the Floating shadow at 8, where the change is large enough to see.",
   "shadow-light": "Drawn on the Floating shadow at 8, where the change is large enough to see.",

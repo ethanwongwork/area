@@ -313,24 +313,27 @@
    * A referenced line number is a link to the line itself, so the target paints from
    * `:target` with no script -- and the URL carries the reference the reader can share.
    */
+  /* A link announces itself with an underline, not a colour change (foreground stays fixed). The line is Link's: drawn
+     at rest in a transparent colour, so it lands at once on hover and fades on fast (MOTION.md; it switched on and off). */
+  .area-code-block__linenumber,
+  .area-code-block__toggle {
+    text-decoration-line: underline;
+    text-decoration-color: transparent;
+    text-decoration-thickness: var(--area-stroke-width);
+    text-underline-offset: 0.08em; /* spec: Link's offset, close under the text (link.md, 2026-10-17) */
+  }
   .area-code-block__linenumber {
     color: inherit;
-    text-decoration: none;
     border-radius: var(--area-radius-small);
+    transition: text-decoration-color var(--area-duration-fast) var(--area-ease-out);
   }
-
-  /* A link announces itself with an underline, not a colour change (foreground stays fixed). */
   @media (hover: hover) {
-    .area-code-block__linenumber:hover {
-      text-decoration: underline;
-      text-decoration-thickness: var(--area-stroke-width);
-      text-underline-offset: 0.08em; /* spec: Link's offset, close under the text (link.md, 2026-10-17) */
-    }
+    .area-code-block__linenumber:hover { text-decoration-color: currentColor; transition-duration: 0s; }
   }
 
   .area-code-block__linenumber:focus-visible {
     outline: var(--area-focus-width) solid var(--area-focus-color);
-    outline-offset: var(--area-focus-offset);
+    outline-offset: var(--area-focus-gap);
   }
 
   /* A block with diff lines widens every gutter by the marker and its gap (8 + 4) plus room for
@@ -503,17 +506,13 @@
     /* A label on a transparent control takes 400; 500 is for labels on fills. */
     font-weight: var(--area-weight-regular);
     cursor: pointer;
-    transition: var(--area-transition);
+    transition: var(--area-transition), text-decoration-color var(--area-duration-fast) var(--area-ease-out);
     user-select: none;
   }
 
   /* The label keeps its ink under the pointer and takes an underline, as line links do. */
   @media (hover: hover) {
-    .area-code-block__toggle:hover {
-      text-decoration: underline;
-      text-decoration-thickness: var(--area-stroke-width);
-      text-underline-offset: 0.08em; /* spec: Link's offset, close under the text (link.md, 2026-10-17) */
-    }
+    .area-code-block__toggle:hover { text-decoration-color: currentColor; transition-duration: 0s; }
   }
 
   /*

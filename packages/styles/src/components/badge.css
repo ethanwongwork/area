@@ -239,7 +239,7 @@
   .area-badge__dismiss:active { background: color-mix(in srgb, currentColor 20%, transparent); transition-duration: 0s; }
   /* A control nested in its host rings at 0, as Tag's remove and a field's actions (owner, 2026-10-12: O1 of the consistency
      pass); at the focus offset the ring sat outside the badge. */
-  .area-badge__dismiss:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: 0; }
+  .area-badge__dismiss:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   /* spec: Notion's multi-select cell, 6 between lines and 8 between tags
      (notion--multi-select-wrap; was Primer's 4 both ways). */
   .area-badge-group { --_group-gap: calc(var(--area-space-6) - var(--area-space-2) * var(--area-ui-dense)) var(--area-ui-cluster); /* 6 × 8, compact 4 × 6 */ display: flex; align-items: center; flex-wrap: wrap; gap: var(--_group-gap); min-inline-size: 0; max-inline-size: 100%; }

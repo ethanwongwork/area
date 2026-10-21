@@ -26,7 +26,7 @@ token (Chip). CheckboxGroup owns the legend, group description and group validat
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
 | size | md (default), lg (sm removed 2026-09-28) | Label type follows the control tier; lg is the 20px glyph | Untitled sm 16 / md 20; Notion and Figma one size, 16 |
-| variant | card | A contained option: visual, text, control at the end; the chosen card's 1px edge darkens to the checked colour | Owner references (2026-09-28); shadcn Choice Card (`shadcn--choice-card-radio-*`) |
+| variant | card | A contained option: visual, text, control at the end; the chosen card's edge takes `stroke-selected` at `selected-width` (Selected stroke, 2), drawn inside | Owner references (2026-09-28); shadcn Choice Card (`shadcn--choice-card-radio-*`) |
 | layout (card) | row (default), tile | Row: one line; tile: a 20px visual above the label, control in the corner, cards in a grid | Owner reference 1 (tile grid); references 2, 3 and shadcn (rows) |
 | state | checked, indeterminate, invalid, disabled | Native states plus `aria-invalid` | Untitled: checked, indeterminate, disabled; no invalid |
 | composition | caption, leading visual, group (vertical, horizontal; invalid, success) | — | Untitled label + hint; Figma label beside the box; gallery Layout / horizontal group |
@@ -203,6 +203,11 @@ Chromium snaps box edges and masks to device pixels, so the marks stay on the gr
 2. The check reads a little heavier than before (1.15 → 1.5 at md). Recommendation: keep
    Figma's 1.5; if it reads heavy beside 14px labels, 1px is the whole-pixel step down.
 
+## Review note, 2026-10-21
+
+- **What changed:** as Radio: a chosen card's edge is 2px vibrant blue, drawn inside (was 1px, darkened).
+- **Why:** your picks on the state page (2026-10-21), now the defaults of the new state settings (Inspector: Stroke, Shadow, Fill).
+
 ## Feedback log
 
 - 2026-09-28 · owner approved batch 14 → Complete.
@@ -253,6 +258,7 @@ Chromium snaps box edges and masks to device pixels, so the marks stay on the gr
 - 2026-10-12 · owner, 2026-10-12: "go with your recommendations" (consistency pass) → the unchecked hover edge reads `edge-control-strong` (O5: one role for a literal written in several families; same paint). (docs/research/consistency-audit-2026-10-12.md)
 - 2026-10-12 · owner: type size and density as separate settings; every component sized from the text → the box reads `--area-mark-box`, 4 inside the UI line: 14 at type 12–13, 16 at 14, 18 at 15, 20 at 16 (`choice.css`; was 16 at every size). `docs/research/ui-size-scale-2026-10-12.md`.
 - 2026-10-14 · all-axis audit → the box now follows the type size: `.area-checkbox--md` set a fixed 16 and overrode the 2026-10-12 base rule, so it stayed 16 at every type. md reads `--area-mark-box`, lg four larger (20 at type 14, as before); the check and dash drawings are no longer scaled with the box but drawn 1:1 and centred (`--_grid` 16 / 20), whole pixels in every even box → choice.css.
+- 2026-10-21 · owner's picks on the state page (https://claude.ai/artifact/3uKMHRhpWnPqNA6pK4WfD9) and "capture some of these options as options for the design system customization … keep my current selections as the default" → as Radio: a chosen card's edge is `selected-width` (2) in the indicator rung, superseding 2026-09-28's "darker, not thicker". choice.css.
 
 ## Spacing audit (2026-10-17)
 

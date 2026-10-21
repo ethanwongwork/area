@@ -187,7 +187,7 @@
   }
   /* The title's link covers the card, so the whole card opens it and the actions stay separate controls. */
   .area-board-card__title::after { content: ""; position: absolute; inset: 0; border-radius: inherit; }
-  .area-board-card:has(.area-board-card__title:focus-visible) { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  .area-board-card:has(.area-board-card__title:focus-visible) { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-gap); }
 
   .area-board-card__properties { display: flex; flex-wrap: wrap; align-items: center; gap: var(--area-space-4); min-inline-size: 0; color: var(--area-fg-muted); }
 

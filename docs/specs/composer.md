@@ -119,6 +119,11 @@ border-colour transitions (100ms).
 Open question: the edge fades out on blur while the outline leaves at once (CSS cannot tell a blur
 from a hover-out). Recommendation: keep; the outline carries the ring, and it is instant both ways.
 
+## Review note, 2026-10-21
+
+- **What changed:** Its resting shadow is one tight layer, `0 1px 2px -1px` at 8% (ChatGPT's sm), instead of a soft two-layer haze at 1.5%.
+- **Why:** your picks on the state page (2026-10-21), now the defaults of the new state settings (Inspector: Stroke, Shadow, Fill) (Rest shadow d). Nothing else on it changed.
+
 ## Feedback log
 
 - 2026-09-25 · owner: "do the next component, I'll review all changes later" → Composer

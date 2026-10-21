@@ -5,7 +5,7 @@
  */
 import { describe, expect, it } from "vitest";
 import {
-  DARK_FILL_FLOOR, GROUND_DARK_STEPS, GROUND_LIGHT_STEPS, HUED_INKS, LAYER_STEPS, VIVID_ROLES, castOf, groundLightness, layerHex, layerLightness, layerLightnessCss, layerTokens,
+  DARK_FILL_FLOOR, GROUND_DARK_STEPS, GROUND_LIGHT_STEPS, HUED_INKS, LAYER_STEPS, VIVID_ROLES, castOf, DEFAULT_FILL, FILL_STEPS, type FillSelection, groundLightness, layerHex, layerLightness, layerLightnessCss, layerTokens,
 } from "./layers.ts";
 import { wcagContrastHex } from "./contrast.ts";
 import { type Rgb, SRGB, clampRgb, oklabToRgb, parseHex, rgbToOklab, toHex } from "./oklab.ts";
@@ -70,17 +70,21 @@ function evaluate(expr: string, vars: Record<string, number>): number {
     .replace(/\bclamp\(/g, "((a,x,b)=>Math.min(b,Math.max(a,x)))(");
   return Function(`"use strict"; return (${js});`)() as number;
 }
-function cssLightness(theme: "light" | "dark", g: number, n: number) {
-  const css = layerLightnessCss(), vars: Record<string, number> = { "ground-light": theme === "light" ? groundLightness("light", g) : 1, "ground-dark": theme === "dark" ? groundLightness("dark", g) : 0, "layers-light": theme === "light" ? n : 8 - n, "layers-dark": theme === "dark" ? n : 8 - n };
+function cssLightness(theme: "light" | "dark", g: number, n: number, f: FillSelection = DEFAULT_FILL) {
+  const css = layerLightnessCss(), vars: Record<string, number> = { "ground-light": theme === "light" ? groundLightness("light", g) : 1, "ground-dark": theme === "dark" ? groundLightness("dark", g) : 0, "layers-light": theme === "light" ? n : 8 - n, "layers-dark": theme === "dark" ? n : 8 - n, "fill-hover-step": f.hover, "fill-selected-step": f.selected };
   // Resolve in dependency order: keep going until every helper is known.
   for (let pass = 0; pass < 6; pass++) for (const [k, e] of Object.entries(css)) if (!(k in vars)) { try { vars[k] = evaluate(e, vars); } catch { /* a later pass */ } }
   return vars;
 }
 
+// Every fill setting combination (axes/states.ts): hover 1–5 × selected 0–4, on every ground and Layers step.
+const FILL_COMBOS: FillSelection[] = [];
+for (let hover = FILL_STEPS.hover.min; hover <= FILL_STEPS.hover.max; hover++) for (let selected = FILL_STEPS.selected.min; selected <= FILL_STEPS.selected.max; selected++) FILL_COMBOS.push({ hover, selected });
+
 describe("layers: the shipped CSS computes what the model does", () => {
   for (const theme of THEMES) it(theme, () => {
-    for (const g of groundsOf(theme)) for (const n of LAYER_STEPS) {
-      const m = layerLightness(theme, g, n), c = cssLightness(theme, g, n), p = `layer-${theme}-`;
+    for (const f of FILL_COMBOS) for (const g of groundsOf(theme)) for (const n of LAYER_STEPS) {
+      const m = layerLightness(theme, g, n, f), c = cssLightness(theme, g, n, f), p = `layer-${theme}-`;
       const pairs: Array<[string, number]> = [
         ["page", m.page], ["raised", m.raised], ["recessed", m.recessed], ["step", m.step],
         ["page-fill-0", m.fill.page[0]], ["page-fill-1", m.fill.page[1]], ["page-fill-2", m.fill.page[2]],
@@ -88,7 +92,7 @@ describe("layers: the shipped CSS computes what the model does", () => {
         ["body", m.ink.body], ["muted", m.ink.muted], ["edge", m.ink.edge],
         ...(theme === "light" ? [["vivid-darken", m.vividDarken], ["tonal-darken", m.tonalDarken]] as Array<[string, number]> : [["tint-lift", m.tintLift], ["tint-lift-fill", m.tintLiftFill]] as Array<[string, number]>),
       ];
-      for (const [k, x] of pairs) expect(c[p + k], `${theme} ${g}/${n} ${k}`).toBeCloseTo(x, 6);
+      for (const [k, x] of pairs) expect(c[p + k], `${theme} ${g}/${n} fill ${f.hover}/${f.selected} ${k}`).toBeCloseTo(x, 6);
     }
   });
 });
@@ -139,5 +143,22 @@ describe("layers: the defaults are Area as it was", () => {
   it("dark 8 + 4 keeps the near-black page and today's inks", () => {
     const t = layerTokens("dark", { groundLight: 100, groundDark: 8, layersLight: 4, layersDark: 4 }, { chroma: 0, hue: 0 });
     expect(t).toMatchObject({ "bg-page": "#020202", "fg-default": "#eeeeee", "fg-muted": "#c5c5c5", "stroke-control": "#939393", "stroke-control-hover": "#a4a4a4", "border-decorative": "#282828", "border-card": "#333333", "border-float": "#4b4b4b" });
+  });
+});
+
+describe("layers: the state fills keep their order and read apart at every setting", () => {
+  for (const theme of THEMES) it(theme, () => {
+    const problems: string[] = [];
+    for (const f of FILL_COMBOS) for (const g of groundsOf(theme)) for (const n of LAYER_STEPS) {
+      const m = layerLightness(theme, g, n, f);
+      for (const ground of ["page", "raised", "recessed"] as const) {
+        const [rest, hover, selected] = m.fill[ground], sign = theme === "light" ? -1 : 1;
+        // hover moves away from rest, selected never back past hover (equal only at Selected fill 0)
+        if (sign * (hover - rest) < -1e-9) problems.push(`${theme} ${g}/${n} ${f.hover}/${f.selected} ${ground}: hover behind rest`);
+        if (sign * (selected - hover) < -1e-9) problems.push(`${theme} ${g}/${n} ${f.hover}/${f.selected} ${ground}: selected behind hover`);
+        if (f.selected > 0 && Math.abs(selected - hover) < 0.008) problems.push(`${theme} ${g}/${n} ${f.hover}/${f.selected} ${ground}: selected reads as hover (${(selected - hover).toFixed(4)})`);
+      }
+    }
+    expect(problems).toEqual([]);
   });
 });

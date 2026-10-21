@@ -50,15 +50,23 @@ const QUESTIONS: Record<string, string> = {
   surface: "How thick should the line round surfaces be?",
   stroke: "How strong should strokes be?",
   "shadow-rest": "Should surfaces at rest have a subtle shadow?",
+  "stroke-hover": "How much should a control's edge darken under the pointer?",
+  "selected-stroke": "How thick should a selected card's edge be?",
+  "focus-ring": "Where should the keyboard focus ring sit?",
   elevation: "How much should menus and dialogs lift?",
   "shadow-resting": "How much should cards and panels lift at rest?",
   "shadow-field": "Should fields and outline buttons lift?",
+  "shadow-hover": "How much should a hovered card lift?",
   "shadow-size": "How far should shadows reach?",
   "shadow-softness": "How soft should shadows be?",
   "shadow-light": "Should light come from the top?",
   "shadow-color": "What colour should shadows be in light?",
   motion: "How fast should things move?",
   easing: "How should motion ease?",
+  "fill-hover": "How dark should the hover plate be?",
+  "fill-selected": "How much firmer should a selected row be than hover?",
+  "fill-pressed": "How firm should a press be?",
+  "selected-tint": "Should a selected card also fill?",
 };
 
 /** The OS's contrast, which System writes nothing for: a System card shows it, not the Canvas's own pick. */

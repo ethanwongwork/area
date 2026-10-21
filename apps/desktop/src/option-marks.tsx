@@ -86,11 +86,25 @@ export function optionMark(axis: Axis, value: string, canvas: CanvasAxes): React
     // The same frame under the option's Stroke (axes/depth.ts).
     case "stroke": return <span className="studio-mark studio-mark--frame" aria-hidden="true" data-area-surface={canvas.surface} data-area-stroke={value} />;
     case "shadow-rest": return <span className="studio-mark studio-mark--frame" aria-hidden="true" data-area-surface="0" data-area-shadow-rest={value} />;
+    // The interaction states (axes/states.ts, owner 2026-10-21), each drawn from its own token under the option's scope.
+    // A field's edge under the pointer at the option's Hover stroke.
+    case "stroke-hover": return <span className="studio-mark studio-mark--edge studio-mark--edge-hover" aria-hidden="true" data-area-stroke-hover={value} />;
+    // A selected card: its edge at the option's Selected stroke, over the Canvas's Selected tint, and the other way round.
+    case "selected-stroke": return <span className="studio-mark studio-mark--frame studio-mark--selected" aria-hidden="true" data-area-accent={canvas.accent} data-area-selected-stroke={value} data-area-selected-tint={canvas["selected-tint"]} />;
+    case "selected-tint": return <span className="studio-mark studio-mark--frame studio-mark--selected" aria-hidden="true" data-area-accent={canvas.accent} data-area-selected-stroke={canvas["selected-stroke"]} data-area-selected-tint={value} />;
+    // A field focused by the keyboard: the ring at the option's width and offset, its recolour and halo, at half scale
+    // (a 2px ring 2px off a 12 mark would leave the slot).
+    case "focus-ring": return <span className="studio-mark studio-mark--edge studio-mark--focus" aria-hidden="true" data-area-accent={canvas.accent} data-area-focus-ring={value} />;
+    // A row's plate at the option's step, the others at the Canvas's, so each list reads its own step.
+    case "fill-hover": return <span className="studio-mark studio-mark--plate" aria-hidden="true" data-area-fill-hover={value} data-area-fill-selected={canvas["fill-selected"]} data-area-fill-pressed={canvas["fill-pressed"]} style={{ "--_plate": "var(--area-bg-hover)" } as CSSProperties} />;
+    case "fill-selected": return <span className="studio-mark studio-mark--plate" aria-hidden="true" data-area-fill-hover={canvas["fill-hover"]} data-area-fill-selected={value} data-area-fill-pressed={canvas["fill-pressed"]} style={{ "--_plate": "var(--area-bg-active)" } as CSSProperties} />;
+    case "fill-pressed": return <span className="studio-mark studio-mark--plate" aria-hidden="true" data-area-fill-hover={canvas["fill-hover"]} data-area-fill-selected={canvas["fill-selected"]} data-area-fill-pressed={value} style={{ "--_plate": "var(--area-bg-pressed)" } as CSSProperties} />;
     // A plate lifted in proportion to the option (the Menu's shadow strength, 0 to 8): the real float shadow is too faint
     // to read on a 12 plate, so the mark's shadow grows with the number instead; 0 is flat.
-    // Resting lift and Field shadow are the same number in %, so they draw the same plate (axes/depth.ts).
+    // Resting, Hover and Field shadow are each one number, so they draw the same plate (axes/depth.ts).
     case "elevation":
     case "shadow-resting":
+    case "shadow-hover":
     case "shadow-field": return <span className="studio-mark studio-mark--lift" aria-hidden="true" style={{ "--_lift": value } as CSSProperties} />;
     // The Menu's open as a share of the longest, 300 ms; 0 (None) is an empty ring.
     case "motion": return <span className="studio-mark studio-mark--duration" aria-hidden="true" style={{ "--_share": `${(Number(value) / 300) * 100}%` } as CSSProperties} />;

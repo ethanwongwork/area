@@ -27,8 +27,9 @@
  *   container  framed (the default), the card; containerless, no card at rest (no fill, edge or shadow), the head and
  *              the asset in the same places, so nothing moves: a component's frame shows its edge on hover and
  *              selection; an image or a group is its own surface, and selection and focus ring it
- *   aspect     square (the default); hug, the card as tall as its head and its asset at the card's width (an image at
- *              its own ratio from `mediaRatio`, so a lazy image holds its height; a group and a colour square)
+ *   aspect     square (the default): the frame is 1:1 for every kind but an image, whose frame takes the image's own
+ *              ratio (owner, round 65: "for components can you make the top layer frame a 1:1 AR always. for images,
+ *              it can vary based on the image height"); hug, a component's frame takes its own height instead
  *   waterfall  (AssetGrid) columns of the least width, each card hugging, dropped into the shortest column
  * Public hooks: `--area-asset-card-size` (the grid's column), `--area-asset-card-corner` (the card's corner).
  * ------------------------------------------------------------------------- */
@@ -48,7 +49,8 @@
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
-    aspect-ratio: 1; /* spec: a square card (the designs' 300 × 300; owner, 2026-10-19: square containers) */
+    /* The frame sets the card's height (square, or an image's ratio) and the head adds to it: the card is no longer
+       square (owner, round 65; was a square card, the designs' 300 × 300, which left the frame wider than tall). */
     min-inline-size: 0;
     padding: 0 var(--_inset) var(--_inset);
     overflow: clip;
@@ -57,7 +59,7 @@
     /* The recessed role (neutral/50 at the default settings, Table's header fill), so it follows Neutral, Ground, Layers
        and dark (owner, round 59: the round-58 mix to #fafafa was a one-off value outside the roles; reverted). */
     background-color: var(--area-bg-subtle);
-    box-shadow: var(--area-shadow-edge), var(--_lift);
+    box-shadow: var(--_sel-ring, inset 0 0 0 0 transparent), var(--area-shadow-edge), var(--_lift);
     color: var(--area-fg-default);
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
@@ -103,8 +105,9 @@
     position: relative;
     display: grid;
     grid-template: minmax(0, 1fr) / minmax(0, 1fr);
-    flex: 1 1 auto;
+    flex: none;
     box-sizing: border-box;
+    aspect-ratio: 1; /* spec: owner, round 65: the frame 1:1 for components */
     min-block-size: 0;
     overflow: clip;
     border: var(--area-border-width) solid var(--area-border-card); /* spec: the designs' frame edge, the card's */
@@ -126,10 +129,13 @@
   .area-asset-card--image .area-asset-card__media > img {
     display: block;
     inline-size: 100%;
-    block-size: 100%;
+    block-size: auto;
     min-block-size: 0;
+    /* The image's own ratio once it loads (or `mediaRatio`, set inline), square until then (owner, round 65). */
+    aspect-ratio: auto 1;
     object-fit: cover;
   }
+  .area-asset-card--image > .area-asset-card__frame { aspect-ratio: auto; }
   /* A colour paints the frame; its edge is the swatch ring over it (Color swatch's), so a white or a near-ground colour
      keeps its outline and a saturated one keeps its reach. */
   .area-asset-card--color .area-asset-card__frame {
@@ -185,17 +191,18 @@
   .area-asset-card__cell:empty { background-color: transparent; }
 
   /* Selected: the card's edge in the selection colour, at least stroke-width. */
-  .area-asset-card:is([data-selected], [aria-pressed="true"], [aria-selected="true"]) { --_edge: var(--_edge-state); border-color: var(--area-stroke-selected); }
+  /* The Selected stroke setting's width, inside (the edge plus a ring), and the Selected tint setting's layer. */
+  .area-asset-card:is([data-selected], [aria-pressed="true"], [aria-selected="true"]):not(.area-asset-card--containerless) { --_edge: var(--_edge-state); border-color: var(--area-stroke-selected); --_sel-ring: inset 0 0 0 max(0px, calc(var(--area-selected-width) - var(--_edge))) var(--area-stroke-selected), inset 0 0 0 100vmax var(--area-selected-tint); }
 
   /* Interactive: the card shows its states (the asset grid's, below, for a card that is not an option). */
-  .area-asset-card--interactive:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  .area-asset-card--interactive:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-gap); }
   @media (hover: hover) {
     .area-asset-card--interactive:hover {
       --_lift: var(--area-shadow-lift);
       transition-duration: var(--area-duration-fast);
       transition-timing-function: var(--area-ease-out);
     }
-    [data-area-elevation="0"] .area-asset-card--interactive:not([data-selected], [aria-pressed="true"], [aria-selected="true"]):hover { --_edge: var(--_edge-state); border-color: var(--area-edge-control-hover); }
+    [data-area-shadow-hover="0"] .area-asset-card--interactive:not([data-selected], [aria-pressed="true"], [aria-selected="true"]):hover { --_edge: var(--_edge-state); border-color: var(--area-edge-control-hover); }
   }
   .area-asset-card--interactive:active { --_lift: 0 0 0 0 transparent, 0 0 0 0 transparent; transition-duration: var(--area-duration-fast), 0s; }
 
@@ -204,11 +211,7 @@
   .area-asset-card--framed {}
   /* Hug: the card follows its content's height at its width; an image keeps its own ratio, a group and a colour stay
      square, a component takes its own height and the room around it. */
-  .area-asset-card--hug { aspect-ratio: auto; }
-  .area-asset-card--hug > .area-asset-card__frame { flex: none; }
-  .area-asset-card--hug.area-asset-card--image .area-asset-card__media > img { block-size: auto; }
-  .area-asset-card--hug :is(.area-asset-card__mosaic, .area-asset-card--color > .area-asset-card__frame) { aspect-ratio: 1; }
-  .area-asset-card--hug.area-asset-card--color > .area-asset-card__frame { aspect-ratio: 1; }
+  .area-asset-card--hug.area-asset-card--asset > .area-asset-card__frame { aspect-ratio: auto; }
 
   /* Containerless: no card at rest. A component's frame keeps its box, its edge clear until hover (the hovered edge) or
      selection (the selected edge); an image or a group is its own surface: no frame edge, the states ring it. */
@@ -220,16 +223,16 @@
   .area-asset-card--containerless:is([data-selected], [aria-pressed="true"], [aria-selected="true"]),
   .area-asset-grid__item[aria-selected="true"] .area-asset-card--containerless { border-color: transparent; }
   .area-asset-card--containerless:is([data-selected], [aria-pressed="true"], [aria-selected="true"]) > .area-asset-card__frame,
-  .area-asset-grid__item[aria-selected="true"] .area-asset-card--containerless > .area-asset-card__frame { border-color: var(--area-stroke-selected); }
+  .area-asset-grid__item[aria-selected="true"] .area-asset-card--containerless > .area-asset-card__frame { border-color: var(--area-stroke-selected); --_ring: inset 0 0 0 max(0px, calc(var(--area-selected-width) - var(--area-border-width))) var(--area-stroke-selected), inset 0 0 0 100vmax var(--area-selected-tint); }
   .area-asset-card--containerless:is(.area-asset-card--image, .area-asset-card--group):is([data-selected], [aria-pressed="true"], [aria-selected="true"]) > .area-asset-card__frame,
   .area-asset-grid__item[aria-selected="true"] .area-asset-card--containerless:is(.area-asset-card--image, .area-asset-card--group) > .area-asset-card__frame {
-    --_ring: 0 0 0 calc(var(--area-stroke-width) * 2) var(--area-stroke-selected); /* spec: pick */
+    --_ring: 0 0 0 var(--area-selected-width) var(--area-stroke-selected); /* the Selected stroke setting's width, round an edgeless image or group */
   }
   /* Focus rings the asset, not the clear card. */
   :is(.area-asset-card--interactive:focus-visible, .area-asset-grid__item:focus-visible .area-asset-card).area-asset-card--containerless { outline: none; }
   :is(.area-asset-card--interactive:focus-visible, .area-asset-grid__item:focus-visible .area-asset-card).area-asset-card--containerless > .area-asset-card__frame {
     outline: var(--area-focus-width) solid var(--area-focus-color);
-    outline-offset: var(--area-focus-offset);
+    outline-offset: var(--area-focus-gap);
   }
   /* Hover: a component's frame shows the hovered edge; an image or a group, a hairline in it. No lift: a shadow round a
      clear card would draw a box the page never shows. */
@@ -269,8 +272,8 @@
     cursor: default;
     outline: none;
   }
-  .area-asset-grid__item[aria-selected="true"] .area-asset-card { --_edge: var(--_edge-state); border-color: var(--area-stroke-selected); }
-  .area-asset-grid__item:focus-visible .area-asset-card { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  .area-asset-grid__item[aria-selected="true"] .area-asset-card:not(.area-asset-card--containerless) { --_edge: var(--_edge-state); border-color: var(--area-stroke-selected); --_sel-ring: inset 0 0 0 max(0px, calc(var(--area-selected-width) - var(--_edge))) var(--area-stroke-selected), inset 0 0 0 100vmax var(--area-selected-tint); }
+  .area-asset-grid__item:focus-visible .area-asset-card { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-gap); }
   @media (hover: hover) {
     .area-asset-grid__item:hover:not([data-disabled]) .area-asset-card {
       --_lift: var(--area-shadow-lift);
@@ -278,7 +281,7 @@
       transition-timing-function: var(--area-ease-out);
     }
     /* Elevation 0 draws no shadow, so the edge steps instead. */
-    [data-area-elevation="0"] .area-asset-grid__item:not([aria-selected="true"], [data-disabled]):hover .area-asset-card { --_edge: var(--_edge-state); border-color: var(--area-edge-control-hover); }
+    [data-area-shadow-hover="0"] .area-asset-grid__item:not([aria-selected="true"], [data-disabled]):hover .area-asset-card { --_edge: var(--_edge-state); border-color: var(--area-edge-control-hover); }
   }
   /* A press settles the card at once. */
   .area-asset-grid__item:active .area-asset-card { --_lift: 0 0 0 0 transparent, 0 0 0 0 transparent; transition-duration: var(--area-duration-fast), 0s; }

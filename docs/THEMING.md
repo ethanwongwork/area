@@ -69,8 +69,8 @@ outside both roles.
 
 **Edge and depth** (`axes/surface.ts`, `axes/elevation.ts`, `axes/depth.ts`)
 
-Ten controls, each with one effect and no named looks. `DEPTH_LEVERS` in
-`@area/tokens/config` lists them in the Inspector's order. The app shows them under two
+Eleven controls, each with one effect and no named looks. `DEPTH_LEVERS` in
+`@area/tokens/config` lists them in the Inspector's order, with the state settings below. The app shows them under two
 headings, **Stroke** and **Shadow**:
 
 | Setting | Inspector label | Values (default) | What it sets |
@@ -78,8 +78,9 @@ headings, **Stroke** and **Shadow**:
 | `surface` | Stroke › Width | `0` (Flat), `0.5`, `1` (default), `1.5`, `2` px | The frame of cards, panels and floating surfaces (`frame-width`, read as `border-width`) |
 | `stroke` | Stroke › Strength | `0` (None) … `8`, `4` (default) | How dark every stroke is, its distance from its ground |
 | `shadow-rest` | Stroke › Rest shadow | `0` (None, default) … `8` | `shadow-edge`, a subtle edge round the same surfaces, with the line or instead of it |
-| `elevation` | Shadow › Floating | `0` (Flat) … `8`, `3` (default) | The Menu's shadow strength in percent: tooltip, float, modal and lift roles |
-| `shadow-resting` | Shadow › Resting | `0` … `8`, `3` (default) | Cards, panels and raised thumbs at rest |
+| `elevation` | Shadow › Floating | `0` (Flat) … `8`, `3` (default) | The Menu's shadow strength in percent: tooltip, float and modal roles |
+| `shadow-resting` | Shadow › Resting | `0` … `8`, `3` (default) | Cards, panels and raised thumbs at rest: one tight layer, `0 1px 2px -1px`, 8% at 3 (ChatGPT's sm) |
+| `shadow-hover` | Shadow › Hover | `0` … `8`, `3` (default) | A hovered card or tile's lift (`shadow-lift`): `0 2px 4px -1px`, 8% at 3 (ChatGPT's md). At 0 the hover steps the edge instead |
 | `shadow-field` | Shadow › Fields | `0` (default) … `8` | Outline fields, select triggers, outline and soft Buttons. Soft fields stay flat |
 | `shadow-size` | Shadow › Size | `0` … `8`, `4` (default) | How far every shadow reaches (offset and blur × n/4) |
 | `shadow-softness` | Shadow › Softness | `0` (Crisp) … `8` (Smooth), `2` (default) | The number of layers and how tightly they sit |
@@ -87,6 +88,8 @@ headings, **Stroke** and **Shadow**:
 | `shadow-color` | Shadow › Colour | `black` (default), `warm`, `cool` | The light theme's shadow tint. Dark stays black |
 
 - Light always comes from the top, and dark shadows are twice the light alpha.
+- Resting and lift are one tight layer each (negative spread, owner 2026-10-21: "faint, low spread shadows"); Softness
+  shapes the floating roles only.
 - Every role is the same nine slots at every setting (a lip, the dark rim, six soft layers, a highlight), transparent
   where unused, never `none`. The dark rim (owner, 2026-10-19: "make the shadow settings visible in dark mode") is
   `0 0 0 1px` white at the role's own strength × 2, at most 16%, transparent in light, so shadows read on the
@@ -94,6 +97,27 @@ headings, **Stroke** and **Shadow**:
 - Under any raised contrast level, `border-width` is at least 1px, so Flat brings its frame
   back. The soft edge is drawn only while no frame is.
 - The ladder `shadow-1` … `4` is for apps. Components name roles.
+
+**Interaction states** (`axes/states.ts`, `axes/depth.ts`; owner, 2026-10-21)
+
+The owner's picks on the state page are the defaults; every other option branches from them. Selected and focus share
+one colour, the accent's indicator rung (`stroke-selected`, `focus-color`: the lightest step of the accent that keeps
+3:1 on every ground, fill and tinted surface, #0160d9 light, #79aeff dark for blue), and differ by placement: the
+selected edge is drawn inside, the focus ring on or outside.
+
+| Setting | Inspector label | Values (default) | What it sets |
+|---|---|---|---|
+| `stroke-hover` | Stroke › Hover | `0` (None) … `4`, `2` (default) | How far a control's edge darkens under the pointer (`edge-control-hover`), equal steps |
+| `selected-stroke` | Stroke › Selected | `1`, `2` (default), `3` px | A selected card's, tile's or choice card's edge, drawn inside (`selected-width`) |
+| `focus-ring` | Stroke › Focus ring | `hug` (default), `gap`, `halo`, `inset`, `bold` | Where the keyboard ring sits: `focus-width`, `focus-offset` (controls), `focus-gap` (containers and text) and the fields' ring, recolour and halo switches |
+| `fill-hover` | Fill › Hover | `1` … `4`, `2` (default) | The hover plate under rows and ghost controls, opaque and translucent (`bg-component-hover`, `bg-hover`) |
+| `fill-selected` | Fill › Selected | `0` (Same as hover) … `4`, `1` (default) | How far past hover the selected plate sits (`bg-component-active`, `bg-active`) |
+| `fill-pressed` | Fill › Pressed | `1` … `4`, `4` (default) | Quarters of the way from selected to the firmest press: 12% toward the ink in light (ChatGPT's), 14% in dark, stopped where muted text keeps 4.6:1 |
+| `selected-tint` | Fill › Selected tint | `none` (default), `tint`, `neutral` | A selected container's fill under its stroke: nothing, the accent's faint surface (half strength in dark), or the row's selected wash (`selected-tint`) |
+
+- Hover, selected and pressed are built on each other, so their order holds at every combination (`color/layers.ts`
+  `FILL_STEPS`, checked against the CSS in `layers.test.ts`). Inks are solved against the selected fill.
+- Contrast More still lifts the hover edge to its 3:1 stroke, and a field's ring always draws under it.
 
 **Motion**
 
