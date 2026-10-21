@@ -118,7 +118,7 @@ function fingerprints(dist, tiles, browser) {
 <style>body{margin:0;position:relative}.c{position:absolute;inset-inline-start:0;inline-size:720px;padding:32px 24px;box-sizing:border-box;display:grid;place-items:center;transition:none!important}.c *,.c *::before,.c *::after{transition:none!important;animation:none!important}</style></head><body>
 ${/* Each specimen in its own whole-pixel slot: in a stacked page a tile added or removed above shifts the rest by
      a fraction of a pixel, and pixel snapping then reads as a change. */ ""}
-${tiles.map((t, i) => `<div class="c area-scope" style="inset-block-start:${i * 3000}px" data-key="${t.key}" data-area-theme="light">${t.html}</div>`).join("\n")}
+${tiles.map((t, i) => `<div class="c area-scope" style="inset-block-start:${i * 3000}px" data-key="${t.key}" data-area-theme="light" data-area-type="14">${t.html}</div>`).join("\n")}
 <pre id="out"></pre><script>${MEASURE}</script></body></html>`);
   try {
     // A profile of its own: on the default one a headless Edge can hand the page to an Edge already running and print

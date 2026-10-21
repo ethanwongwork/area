@@ -237,3 +237,6 @@ rule every nested surface uses (Popover, Code block's buttons, Edit summary's he
 - **Why:** both sessions changed Asset card at once; the merge keeps your approved design as the structure and carries
   the view options onto it. The Language tab's tiles now carry "(Default)" in their names, since the card's head no
   longer shows a detail line.
+- **Compared with round 61 (what you approved):** 8 tiles are new, the containerless, hug and waterfall views. Group,
+  setting and grid read as changed only because the Cards drawn inside them now carry the dark-mode rim every shadow
+  gained in PR #141 (transparent in light, a faint light edge in dark); Asset card itself is the same as round 61.
