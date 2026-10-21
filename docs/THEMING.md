@@ -17,7 +17,9 @@ The registry is also the source of every setting's name and place (owner, 2026-1
 source of truth"). `SETTING_GROUPS` puts each axis and the two scoped settings (Contrast, Pills) under one heading
 (Color, Size, Shape, Stroke, Shadow, Effects) in order; each axis's `label` is its whole name (Mode, Stroke width,
 Floating shadow …), and `settingLabel` drops the heading's word under its heading (Width, Floating …). The app's
-Inspector and Language tab both read them from `@area/tokens/config`.
+Inspector and Theme tab both read them from `@area/tokens/config`. A preset's `label` is its value, with a range's
+named end in brackets ("0 (Flat)", "100 (White)", "8 (Smooth)"); no label carries "(Default)" (owner, 2026-10-20).
+`defaultPreset` alone says which is the default, and the Theme tab marks it.
 
 **Colour**
 

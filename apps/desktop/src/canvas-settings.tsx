@@ -19,7 +19,7 @@ import { useStudio, type CanvasAxes } from "./studio.tsx";
 
 type Axis = keyof CanvasAxes;
 // Headings and their settings are the registry's (@area/tokens axes/registry.ts SETTING_GROUPS; owner, 2026-10-19: "i
-// want the axises to be the source of truth"), shared with the Language tab. Headings never repeat a row's label: a
+// want the axises to be the source of truth"), shared with the Theme tab. Headings never repeat a row's label: a
 // setting under its heading drops the heading's word (src/gallery/controls.ts). Edge and Depth's controls (axes/depth.ts)
 // sit under Stroke (Width, Strength, Rest shadow) and Shadow (Floating, Resting, Field, Size, Softness, Light, Colour).
 const GROUPS = SETTING_GROUPS;
@@ -79,7 +79,7 @@ function Setting({ axis }: { axis: Axis }) {
 
 /**
  * Material (@area/tokens axes/material.ts): load a bundle, then move any lever from it. Each lever is a number, 0 (Off)
- * to 8, as Elevation; the bundle's own value carries its name, as a setting's default carries "(Default)". A lever's
+ * to 8, as Elevation; the bundle's own value carries its name ("3 (Glass)"); None, the default, carries no mark (owner, 2026-10-20). A lever's
  * switches show while it is on, so None is one row and a bundle shows only what it uses.
  */
 function MaterialSettings() {
@@ -100,7 +100,7 @@ function MaterialSettings() {
     <PanelSection heading="Material">
       <Field label="Material" orientation="horizontal">
         <CustomSelect size="sm" variant="soft" fullWidth aria-label="Material" value={material.bundle}
-          items={Object.entries(MATERIAL_BUNDLES).map(([id, entry]) => ({ value: id, label: id === "none" ? "None (Default)" : entry.label }))}
+          items={Object.entries(MATERIAL_BUNDLES).map(([id, entry]) => ({ value: id, label: entry.label }))}
           onValueChange={setMaterialBundle} onHighlightChange={previewBundle} />
       </Field>
       {MATERIAL_LEVERS.map(lever => {

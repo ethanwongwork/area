@@ -1,6 +1,6 @@
 ---
 name: area-foundation-change
-description: Adds or changes an Area setting (an axis such as radius, density, elevation, stroke or motion, or one of its values), a semantic token or role, a derivation in emit/base.ts, or a system-wide rule (shared state paint, strokes, corners, insets) and carries it through every component, the Inspector, the Language tab and the docs. Use when a change affects more than one component family at once, when the user asks for a new customization option or a different default, or when a fix belongs in the tokens rather than in one component.
+description: Adds or changes an Area setting (an axis such as radius, density, elevation, stroke or motion, or one of its values), a semantic token or role, a derivation in emit/base.ts, or a system-wide rule (shared state paint, strokes, corners, insets) and carries it through every component, the Inspector, the Theme tab and the docs. Use when a change affects more than one component family at once, when the user asks for a new customization option or a different default, or when a fix belongs in the tokens rather than in one component.
 ---
 
 # Area foundation change
@@ -45,7 +45,7 @@ Then carry it through:
    - Two or three options are a Segmented; more are a Select.
    - Label the default "N (Default)" and named ends "0 (Flat)".
    - If saved values change meaning, migrate them in `restoreCanvas` (`studio.tsx`).
-2. **The Language tab.** Add a drawing in `apps/desktop/src/abstract.tsx`: one real component
+2. **The Theme tab.** Add a drawing in `apps/desktop/src/abstract.tsx`: one real component
    with real text, showing only what the setting changes, at one scale for every value.
 3. **React.** `Theme` picks up registry axes automatically. Anything outside the registry
    (like Pills or Material) needs its own attribute handling.

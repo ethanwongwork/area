@@ -9,7 +9,7 @@ components and accurate specs matter more than speed.
 
 - **The app is the source of truth** (owner, 2026-10-12). `apps/desktop` (Electron) is
   built only from Area and judged only in the app. Its regions are:
-  - **Titlebar:** the tabs Language, Components, Typography, Icons, Color, Testing, Brand
+  - **Titlebar:** the tabs Theme, Components, Typography, Icons, Color, Testing, Brand
     and Materials; search; toggles; light / dark.
   - **Sidebar, Canvas** and **Inspector** (Theme, Design, Code, Chat).
   - The app runs at type 13, Compact. Its UI follows `docs/PRODUCT_UI.md`.

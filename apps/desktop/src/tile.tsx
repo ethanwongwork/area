@@ -14,7 +14,7 @@
  *   unit  one base cell, 152 at the least: a swatch, an icon
  *   wide  2 units and the gap between them: a component, a setting's preset, a type specimen
  * Every frame is square (owner, 2026-10-19). A grid holds one span (TileGrid); `cards` lays square cards on columns
- * of a least width (360 for components, Language's 280).
+ * of a least width (360 for components, Theme's 280).
  *
  * The frame keeps the docs gallery's class names (gallery-tile, __view, __stage), so the shared fit
  * (src/gallery/fit.ts) still finds component specimens.
@@ -65,7 +65,7 @@ export interface TileProps {
   paint?: { background: string; color: string };
   /** The frame as a setting's own scope (data-area-* attributes): it takes the setting and paints its subtle ground. */
   scope?: Record<string, string>;
-  /** The stage alone as a setting's scope, the frame staying as it is (Language's ground and layers: the window inside
+  /** The stage alone as a setting's scope, the frame staying as it is (the Theme tab's ground and layers: the window inside
       is the page, so the frame does not change with it). */
   stageScope?: Record<string, string>;
   /** The stage is shown, not used: its content is inert. */
