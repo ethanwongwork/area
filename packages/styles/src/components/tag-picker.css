@@ -13,7 +13,7 @@
     --_bg: var(--area-input-bg);
     --_border: var(--area-input-edge);
     --_border-hover: var(--area-input-edge-hover);
-    --_border-focus: var(--area-field-focus-color);
+    --_border-focus: color-mix(in srgb, var(--_border), var(--area-field-focus-color) calc(var(--area-field-focus-recolor) * 100%)); /* the ring's colour only under Focus ring Halo (axes/states.ts) */
     --_focus-outline: var(--area-field-focus-color);
     --_focus-halo: var(--area-field-focus-halo-color);
     --_height: var(--area-control-md);

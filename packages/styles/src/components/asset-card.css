@@ -59,7 +59,7 @@
     /* The recessed role (neutral/50 at the default settings, Table's header fill), so it follows Neutral, Ground, Layers
        and dark (owner, round 59: the round-58 mix to #fafafa was a one-off value outside the roles; reverted). */
     background-color: var(--area-bg-subtle);
-    box-shadow: var(--area-shadow-edge), var(--_lift);
+    box-shadow: var(--_sel-ring, inset 0 0 0 0 transparent), var(--area-shadow-edge), var(--_lift);
     color: var(--area-fg-default);
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
@@ -191,17 +191,18 @@
   .area-asset-card__cell:empty { background-color: transparent; }
 
   /* Selected: the card's edge in the selection colour, at least stroke-width. */
-  .area-asset-card:is([data-selected], [aria-pressed="true"], [aria-selected="true"]) { --_edge: var(--_edge-state); border-color: var(--area-stroke-selected); }
+  /* The Selected stroke setting's width, inside (the edge plus a ring), and the Selected tint setting's layer. */
+  .area-asset-card:is([data-selected], [aria-pressed="true"], [aria-selected="true"]):not(.area-asset-card--containerless) { --_edge: var(--_edge-state); border-color: var(--area-stroke-selected); --_sel-ring: inset 0 0 0 max(0px, calc(var(--area-selected-width) - var(--_edge))) var(--area-stroke-selected), inset 0 0 0 100vmax var(--area-selected-tint); }
 
   /* Interactive: the card shows its states (the asset grid's, below, for a card that is not an option). */
-  .area-asset-card--interactive:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  .area-asset-card--interactive:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-gap); }
   @media (hover: hover) {
     .area-asset-card--interactive:hover {
       --_lift: var(--area-shadow-lift);
       transition-duration: var(--area-duration-fast);
       transition-timing-function: var(--area-ease-out);
     }
-    [data-area-elevation="0"] .area-asset-card--interactive:not([data-selected], [aria-pressed="true"], [aria-selected="true"]):hover { --_edge: var(--_edge-state); border-color: var(--area-edge-control-hover); }
+    [data-area-shadow-hover="0"] .area-asset-card--interactive:not([data-selected], [aria-pressed="true"], [aria-selected="true"]):hover { --_edge: var(--_edge-state); border-color: var(--area-edge-control-hover); }
   }
   .area-asset-card--interactive:active { --_lift: 0 0 0 0 transparent, 0 0 0 0 transparent; transition-duration: var(--area-duration-fast), 0s; }
 
@@ -222,16 +223,16 @@
   .area-asset-card--containerless:is([data-selected], [aria-pressed="true"], [aria-selected="true"]),
   .area-asset-grid__item[aria-selected="true"] .area-asset-card--containerless { border-color: transparent; }
   .area-asset-card--containerless:is([data-selected], [aria-pressed="true"], [aria-selected="true"]) > .area-asset-card__frame,
-  .area-asset-grid__item[aria-selected="true"] .area-asset-card--containerless > .area-asset-card__frame { border-color: var(--area-stroke-selected); }
+  .area-asset-grid__item[aria-selected="true"] .area-asset-card--containerless > .area-asset-card__frame { border-color: var(--area-stroke-selected); --_ring: inset 0 0 0 max(0px, calc(var(--area-selected-width) - var(--area-border-width))) var(--area-stroke-selected), inset 0 0 0 100vmax var(--area-selected-tint); }
   .area-asset-card--containerless:is(.area-asset-card--image, .area-asset-card--group):is([data-selected], [aria-pressed="true"], [aria-selected="true"]) > .area-asset-card__frame,
   .area-asset-grid__item[aria-selected="true"] .area-asset-card--containerless:is(.area-asset-card--image, .area-asset-card--group) > .area-asset-card__frame {
-    --_ring: 0 0 0 calc(var(--area-stroke-width) * 2) var(--area-stroke-selected); /* spec: pick */
+    --_ring: 0 0 0 var(--area-selected-width) var(--area-stroke-selected); /* the Selected stroke setting's width, round an edgeless image or group */
   }
   /* Focus rings the asset, not the clear card. */
   :is(.area-asset-card--interactive:focus-visible, .area-asset-grid__item:focus-visible .area-asset-card).area-asset-card--containerless { outline: none; }
   :is(.area-asset-card--interactive:focus-visible, .area-asset-grid__item:focus-visible .area-asset-card).area-asset-card--containerless > .area-asset-card__frame {
     outline: var(--area-focus-width) solid var(--area-focus-color);
-    outline-offset: var(--area-focus-offset);
+    outline-offset: var(--area-focus-gap);
   }
   /* Hover: a component's frame shows the hovered edge; an image or a group, a hairline in it. No lift: a shadow round a
      clear card would draw a box the page never shows. */
@@ -271,8 +272,8 @@
     cursor: default;
     outline: none;
   }
-  .area-asset-grid__item[aria-selected="true"] .area-asset-card { --_edge: var(--_edge-state); border-color: var(--area-stroke-selected); }
-  .area-asset-grid__item:focus-visible .area-asset-card { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  .area-asset-grid__item[aria-selected="true"] .area-asset-card:not(.area-asset-card--containerless) { --_edge: var(--_edge-state); border-color: var(--area-stroke-selected); --_sel-ring: inset 0 0 0 max(0px, calc(var(--area-selected-width) - var(--_edge))) var(--area-stroke-selected), inset 0 0 0 100vmax var(--area-selected-tint); }
+  .area-asset-grid__item:focus-visible .area-asset-card { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-gap); }
   @media (hover: hover) {
     .area-asset-grid__item:hover:not([data-disabled]) .area-asset-card {
       --_lift: var(--area-shadow-lift);
@@ -280,7 +281,7 @@
       transition-timing-function: var(--area-ease-out);
     }
     /* Elevation 0 draws no shadow, so the edge steps instead. */
-    [data-area-elevation="0"] .area-asset-grid__item:not([aria-selected="true"], [data-disabled]):hover .area-asset-card { --_edge: var(--_edge-state); border-color: var(--area-edge-control-hover); }
+    [data-area-shadow-hover="0"] .area-asset-grid__item:not([aria-selected="true"], [data-disabled]):hover .area-asset-card { --_edge: var(--_edge-state); border-color: var(--area-edge-control-hover); }
   }
   /* A press settles the card at once. */
   .area-asset-grid__item:active .area-asset-card { --_lift: 0 0 0 0 transparent, 0 0 0 0 transparent; transition-duration: var(--area-duration-fast), 0s; }

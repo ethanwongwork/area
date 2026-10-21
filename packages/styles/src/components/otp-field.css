@@ -18,7 +18,7 @@
     --_slot-gap: var(--area-space-8); /* spec: 8 between slots (Mantine, Ant, Untitled UI xxs+, shadcn gap-2) */
     --_border: var(--area-input-edge);
     --_border-hover: var(--area-input-edge-hover);
-    --_border-focus: var(--area-field-focus-color);
+    --_border-focus: color-mix(in srgb, var(--_border), var(--area-field-focus-color) calc(var(--area-field-focus-recolor) * 100%)); /* the ring's colour only under Focus ring Halo (axes/states.ts) */
     --_focus-outline: var(--area-field-focus-color);
     --_focus-halo: var(--area-field-focus-halo-color);
     --_bg: var(--area-input-bg);
@@ -69,7 +69,7 @@
     border-color: var(--_border-focus);
     box-shadow: var(--_field-lift), 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
     outline: var(--area-field-focus-outline-width) solid var(--_focus-outline);
-    outline-offset: 0;
+    outline-offset: var(--area-focus-offset);
     transition-duration: 0s;
   }
 

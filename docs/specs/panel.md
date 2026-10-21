@@ -248,6 +248,11 @@ The section toggle is not selectable. See [interaction polish](../research/inter
 - **Why:** It follows Link, which you asked to underline "very natural and close to the text" (link.md, "Close
   underline").
 
+## Review note, 2026-10-21
+
+- **What changed:** Its resting shadow is one tight layer, `0 1px 2px -1px` at 8% (ChatGPT's sm), instead of a soft two-layer haze at 1.5%.
+- **Why:** your picks on the state page (2026-10-21), now the defaults of the new state settings (Inspector: Stroke, Shadow, Fill) (Rest shadow d). Nothing else on it changed.
+
 ## Feedback log
 
 - 2026-09-26 · cohesion audit → no change; `shadow-2` confirmed as an in-flow region, outside

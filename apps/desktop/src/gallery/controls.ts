@@ -6,8 +6,11 @@
  * values listed here) both read this list.
  */
 import { AXIS_PRESETS, DEFAULT_AXES, DEFAULT_PILLS, DEPTH_LEVERS, PILL_SHAPES, SETTING_GROUPS, SETTINGS, settingLabel } from "@area/tokens/config";
-/** Edge and Depth's controls besides Stroke width (Surface) and Shadow (Elevation) (@area/tokens axes/depth.ts), each one `data-area-<axis>`. */
-export const DEPTH_LEVER_AXES = ["stroke", "shadow-resting", "shadow-field", "shadow-size", "shadow-softness", "shadow-light", "shadow-color"] as const;
+/** Edge and Depth's controls besides Stroke width (Surface) and Shadow (Elevation) (@area/tokens axes/depth.ts), and the
+ * interaction states (axes/states.ts), each one `data-area-<axis>`. */
+export const DEPTH_LEVER_AXES = ["stroke", "shadow-resting", "shadow-field", "shadow-size", "shadow-softness", "shadow-light", "shadow-color",
+  // The interaction states (axes/states.ts, depth.ts; owner 2026-10-21), read from the registry the same way.
+  "stroke-hover", "selected-stroke", "focus-ring", "shadow-hover", "fill-hover", "fill-selected", "fill-pressed", "selected-tint"] as const;
 export type DepthLever = (typeof DEPTH_LEVER_AXES)[number];
 
 export interface GalleryControl {
@@ -106,8 +109,8 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = [
   })) },
   // How much surfaces lift (axes/elevation.ts, owner 2026-10-14): one number, the Menu's shadow strength in percent,
   // 0 (Flat) to 8, as Radius is the medium Button's corner. A Select, as Radius: nine steps. Labelled Floating under the
-  // Shadow heading (owner, 2026-10-18): it sets menus, popovers, tooltips, dialogs and the hover lift; Resting has its own.
-  { axis: "elevation", kind: "select", label: label("elevation"), hint: "Menus, popovers, tooltips and dialogs, and a hovered card: the Menu's shadow in % (data-area-elevation)", defaultValue: "3", items: depthItems("elevation") },
+  // Shadow heading (owner, 2026-10-18): it sets menus, popovers, tooltips and dialogs; Resting and Hover have their own.
+  { axis: "elevation", kind: "select", label: label("elevation"), hint: "Menus, popovers, tooltips and dialogs: the Menu's shadow in % (data-area-elevation)", defaultValue: "3", items: depthItems("elevation") },
   // Edge and Depth's other controls (axes/depth.ts, 2026-10-18): options, defaults and hints are the registry's; the
   // Inspector names each in a word, since its heading (Stroke or Shadow) says the rest.
   ...DEPTH_LEVER_AXES.map(axis => {

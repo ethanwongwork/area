@@ -29,7 +29,7 @@
   .area-breadcrumb__link:active::before { background: var(--area-bg-component-pressed); transition-duration: 0s; }
   /* The ring follows the plate, not the text box (audit S11b). */
   .area-breadcrumb__link:focus-visible { outline: none; }
-  .area-breadcrumb__link:focus-visible::before { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: 0; }
+  .area-breadcrumb__link:focus-visible::before { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   /* spec: the current page is carried by colour, at the type ramp's 400 (Notion 400). `--area-fg` did not exist, so it had fallen back to the muted link colour. */
   .area-breadcrumb__page { display: inline-flex; align-items: center; gap: var(--area-gap-md); color: var(--area-fg-default); font-weight: var(--area-weight-regular); }
   .area-breadcrumb__separator { display: inline-grid; place-items: center; inline-size: var(--area-icon-md); block-size: var(--area-icon-md); flex: none; color: var(--area-stroke-control); /* spec: a 1px stroke one step lighter than the links (131 vs 102); owner: lighter, not too light */ }
@@ -50,6 +50,6 @@
   button.area-breadcrumb__ellipsis:active::before { background: var(--area-bg-component-pressed); transition-duration: 0s; }
   button.area-breadcrumb__ellipsis[aria-expanded="true"]::before { background: var(--area-bg-component-hover); transition-duration: 0s; }
   button.area-breadcrumb__ellipsis:focus-visible { outline: none; }
-  button.area-breadcrumb__ellipsis:focus-visible::before { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: 0; }
+  button.area-breadcrumb__ellipsis:focus-visible::before { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   a.area-menu__item { text-decoration: none; }
 }

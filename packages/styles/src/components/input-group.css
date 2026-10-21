@@ -46,9 +46,10 @@
   .area-input-group:focus-within {
     --_t-paint: 0s;
     --_t-halo: 0s;
-    border-color: var(--area-field-focus-color);
+    border-color: color-mix(in srgb, var(--area-input-edge), var(--area-field-focus-color) calc(var(--area-field-focus-recolor) * 100%));
     box-shadow: var(--_field-lift), 0 0 0 var(--area-field-focus-halo-width) var(--area-field-focus-halo-color);
     outline: var(--area-field-focus-outline-width) solid var(--area-field-focus-color);
+    outline-offset: var(--area-focus-offset);
   }
   /* A validation tone holds through focus, as it does on Input and Select. */
   .area-input-group:has([data-success]):focus-within { border-color: var(--area-input-success-color); outline-color: var(--area-input-success-color); box-shadow: var(--_field-lift), 0 0 0 var(--area-field-focus-halo-width) var(--area-input-success-halo-color); }

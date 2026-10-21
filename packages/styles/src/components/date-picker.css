@@ -13,7 +13,7 @@
     --_bg-hover: var(--_bg);
     --_border: var(--area-select-edge);
     --_border-hover: var(--area-select-edge-hover);
-    --_border-focus: var(--area-field-focus-color);
+    --_border-focus: color-mix(in srgb, var(--_border), var(--area-field-focus-color) calc(var(--area-field-focus-recolor) * 100%)); /* the ring's colour only under Focus ring Halo (axes/states.ts) */
     --_focus-outline: var(--area-field-focus-color);
     --_focus-halo: var(--area-field-focus-halo-color);
     --_trigger-width: var(--area-select-inline-size);
@@ -95,7 +95,7 @@
   .area-date-picker__trigger:focus-visible {
     box-shadow: var(--_field-lift), 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
     outline: var(--area-field-focus-outline-width) solid var(--_focus-outline);
-    outline-offset: 0;
+    outline-offset: var(--area-focus-offset);
   }
   .area-date-picker--ghost[data-open] > .area-date-picker__trigger { border-color: transparent; background-color: var(--area-bg-component-active); }
   .area-date-picker__trigger[aria-invalid="true"] {

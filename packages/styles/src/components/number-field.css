@@ -11,7 +11,7 @@
     --_step: calc(var(--_height) - var(--area-space-8));
     --_border: var(--area-input-edge);
     --_border-hover: var(--area-input-edge-hover);
-    --_border-focus: var(--area-field-focus-color);
+    --_border-focus: color-mix(in srgb, var(--_border), var(--area-field-focus-color) calc(var(--area-field-focus-recolor) * 100%)); /* the ring's colour only under Focus ring Halo (axes/states.ts) */
     --_bg: var(--area-input-bg);
     display: inline-flex;
     align-items: center;
@@ -51,7 +51,7 @@
     border-color: var(--_border-focus);
     box-shadow: var(--_field-lift), 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo, var(--area-field-focus-halo-color));
     outline: var(--area-field-focus-outline-width) solid var(--_focus-outline, var(--area-field-focus-color));
-    outline-offset: 0;
+    outline-offset: var(--area-focus-offset);
   }
   /* A tone or disabled paint lands at once (motion, 2026-10-07); clearing it fades on fast. */
   .area-number-field:is([data-invalid], [aria-invalid="true"], [data-success], [data-warning], [data-disabled]) { --_t-paint: 0s; }
@@ -149,6 +149,6 @@
   /* On a soft field the plate is the translucent pair (audit B-7 C). */
   @media (hover: hover) { .area-number-field--soft .area-number-field__step:hover:not(:disabled) { background-color: var(--area-bg-hover); } }
   .area-number-field--soft .area-number-field__step:active:not(:disabled) { background-color: var(--area-bg-pressed); }
-  .area-number-field__step:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: 0; }
+  .area-number-field__step:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   .area-number-field__step:disabled { color: var(--area-fg-disabled); cursor: not-allowed; }
 }

@@ -10,7 +10,7 @@
     --_height: var(--area-control-md);
     --_border: var(--area-textarea-edge);
     --_border-hover: var(--area-textarea-edge-hover);
-    --_border-focus: var(--area-field-focus-color);
+    --_border-focus: color-mix(in srgb, var(--_border), var(--area-field-focus-color) calc(var(--area-field-focus-recolor) * 100%)); /* the ring's colour only under Focus ring Halo (axes/states.ts) */
     --_focus-outline: var(--area-field-focus-color);
     --_focus-halo: var(--area-field-focus-halo-color);
     --_bg: var(--area-textarea-bg);
@@ -96,7 +96,7 @@
     border-color: var(--_border-focus);
     box-shadow: var(--_field-lift), 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
     outline: var(--area-field-focus-outline-width) solid var(--_focus-outline);
-    outline-offset: 0;
+    outline-offset: var(--area-focus-offset);
   }
 
   /* A tone or disabled paint lands at once (motion, 2026-10-07); clearing it fades on fast. */

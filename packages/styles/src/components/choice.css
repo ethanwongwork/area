@@ -123,16 +123,20 @@
   .area-radio--card > .area-radio__control { order: 1; }
   @media (hover: hover) { .area-checkbox--card:hover:not([data-disabled]),
   .area-radio--card:hover:not([data-disabled]) { border-color: var(--_card-edge-hover); } }
+  /* A chosen card takes the selected stroke, as every selected container (axes/states.ts; owner 2026-10-21, ChatGPT's
+     2px tile; was the 1px edge darkened to the checked colour, 2026-09-28): the indicator colour at the Selected stroke
+     setting's width, inside, and the Selected tint setting's layer. The control keeps the checked colour. */
   .area-checkbox--card:has(> .area-checkbox__control:checked),
   .area-radio--card:has(> .area-radio__control:checked) {
-    border-color: var(--_checked);
+    border-color: var(--area-stroke-selected);
+    box-shadow: inset 0 0 0 max(0px, calc(var(--area-selected-width) - var(--area-stroke-width))) var(--area-stroke-selected), inset 0 0 0 100vmax var(--area-selected-tint);
   }
   /* The card is the focus target the eye follows: one ring, on the card (audit C-13; the glyph
      drew a second). */
   .area-checkbox--card:has(> .area-checkbox__control:focus-visible),
   .area-radio--card:has(> .area-radio__control:focus-visible) {
     outline: var(--area-focus-width) solid var(--area-focus-color);
-    outline-offset: var(--area-focus-offset);
+    outline-offset: var(--area-focus-gap);
   }
 
   /* Layout: row (default) keeps visual, text and control on one line; tile stacks a larger

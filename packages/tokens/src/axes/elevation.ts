@@ -50,14 +50,14 @@ const describe = (step: number) =>
 
 /**
  * Since 2026-10-18 (Edge and Depth, axes/depth.ts) the axis writes the number alone (`--area-elevation`), labelled
- * Shadow in the app, and sets the floating roles (tooltip, float, modal) and the hover lift. The resting and control
+ * Shadow in the app, and sets the floating roles (tooltip, float, modal); the hover lift is Hover shadow's (depth.ts, 2026-10-21). The resting and control
  * roles have their own number (Rest shadow), as fields do (Field shadow); Shadow size, Softness, Light and Shadow colour
- * shape every role. At their defaults every role is the two-layer recipe above, exactly.
+ * shape every role. At their defaults every floating role is the two-layer recipe above, exactly; resting and lift are one tight layer since 2026-10-21 (depth.ts TIGHT).
  */
 export const ELEVATION_AXIS: AxisDefinition = {
   id: "elevation",
   label: "Floating shadow",
-  description: "How much menus, popovers, tooltips and dialogs lift, and a hovered card, as the Menu's shadow strength from 0 (flat) to 8.",
+  description: "How much menus, popovers, tooltips and dialogs lift, as the Menu's shadow strength from 0 (flat) to 8.",
   defaultPreset: "3",
   namespaces: ["--area-elevation:"],
   presets: ELEVATION_STEPS.map(step => ({

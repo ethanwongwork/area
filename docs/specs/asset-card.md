@@ -111,10 +111,10 @@ appear without moving anything; an image's or a group's frame drops its edge (bo
 
 | State | Change |
 |---|---|
-| hover | the card lifts (`shadow-lift`). Elevation 0: its edge steps to `edge-control-hover`, at least `stroke-width` |
+| hover | the card lifts (`shadow-lift`, Hover shadow). Hover shadow 0: its edge steps to `edge-control-hover`, at least `stroke-width` |
 | pressed | the lift drops at once |
-| selected | the card's edge is the selection colour, at least `stroke-width` wide |
-| focus-visible | the focus ring round the card, at once |
+| selected | the card's edge is `stroke-selected` at `selected-width` (Selected stroke, 2), drawn inside, over `selected-tint` |
+| focus-visible | the focus ring round the card at `focus-gap`, at once |
 | disabled | a disabled `AssetGridItem` is a disabled ListBox option: dimmed, no lift, Enter and double click do not open |
 
 ## Behavior and accessibility
@@ -153,6 +153,11 @@ rule every nested surface uses (Popover, Code block's buttons, Edit summary's he
 - **Based on:** your Figma file-browser reference, Area's gallery container (edge, corner, inset, lift) and File
   tile's label and grid behaviour.
 
+## Review note, 2026-10-21
+
+- **What changed:** every selected edge (framed card, a component's frame, an image or group ring) is the same 2px vibrant blue drawn inside (the framed card was 1px dark blue); hover lifts by `0 2px 4px -1px` at 8%; focus sits 2px off.
+- **Why:** your round 65 note on the selected border, answered by your picks on the state page (2026-10-21), now the defaults of the new state settings (Inspector: Stroke, Shadow, Fill).
+
 ## Feedback log
 
 - 2026-10-21 · owner, round 65 (`components65`), needs changes: "what is the size or AR of the frame, for components can you make the top layer frame a 1:1 AR always. for images, it can vary based on the image height. not sure how i feel about the selected state border." → the frame is 1:1 for every kind but an image, which takes its own ratio; the card grows by its head (was a square card with a 1.15:1 frame). The selected border is part of the system-wide selection audit (docs/research/states-2026-10-21/), awaiting the owner's pick.
@@ -172,6 +177,7 @@ rule every nested surface uses (Popover, Code block's buttons, Edit summary's he
 - 2026-10-19 · audit: the selected edge and Elevation 0's hover edge use at least `stroke-width` (they rode
   `border-width`, which Stroke width 0 removes); the resting frame stays on Card's `border-width`; the grid's 224
   column moved into a `/* spec */` property.
+- 2026-10-21 · owner's picks on the state page (https://claude.ai/artifact/3uKMHRhpWnPqNA6pK4WfD9) and "capture some of these options as options for the design system customization … keep my current selections as the default" → round 65's open "not sure how i feel about the selected state border": every selected edge (framed card, a component's frame, an image or group ring, a grid item) is `selected-width` (2) in the indicator rung, the vibrant blue (was 1px framed, 2px containerless, #004cb0), over `selected-tint`; focus at `focus-gap`; the hover edge at Hover shadow 0 (was Elevation 0). asset-card.css; docs/research/states-2026-10-21.
 
 ## Review note, 2026-10-19 (round 55, design-system audit)
 
@@ -228,7 +234,7 @@ rule every nested surface uses (Popover, Code block's buttons, Edit summary's he
   sidebar is), the plate steps from the card's own fill, 1.11:1, the same step every hover plate in Area takes from its
   ground. The parts that must pass WCAG already did and still do: the icon 6.85:1 in light and 12.6:1 in dark (6.2:1
   and 10.3:1 on its plate), the focus ring 7.4:1 and 13.7:1.
-| containerless | hover: a component's frame shows the hovered edge, an image or group a hairline ring; no lift. Selected: a component's frame takes the selected edge, an image or group a 2 ring; the card stays clear. Focus rings the frame |
+| containerless | hover: a component's frame shows the hovered edge, an image or group a hairline ring; no lift. Selected: a component's frame takes the selected edge, an image or group a `selected-width` ring; the card stays clear. Focus rings the frame |
 
 ## Review note, 2026-10-20 (round 65, merged with main)
 

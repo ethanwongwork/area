@@ -119,7 +119,22 @@ neutral ghost Buttons):
 
 Use the translucent twins on grounds a component cannot know (a segmented track, a swatch
 cell) and for controls nested on a row. The pressed fill follows every ground and Layers
-setting (`packages/styles/src/layers.css`).
+setting (`packages/styles/src/layers.css`). How dark each plate is comes from the Fill settings (Hover, Selected,
+Pressed; [Theming](THEMING.md#settings), interaction states), each built on the one before so the order always holds.
+
+**Selected containers and focus** (owner, 2026-10-21; `axes/states.ts`):
+
+- **Selected and focus are two states with one colour**, the accent's indicator rung (`stroke-selected`,
+  `focus-color`). They differ by placement, as the ARIA Authoring Practices require: selection is an edge drawn inside
+  the container, focus a ring on or outside it.
+- **A selected container** (Card, Asset card, a choice card, a containerless image) draws its edge inside at
+  `selected-width` (Selected stroke, 2px by default, ChatGPT's tile): its own line in `stroke-selected`, topped up by
+  an inset ring of `selected-width` minus that line, so selecting never moves anything. Under it, `selected-tint`
+  (Selected tint, none by default). This supersedes choice cards' "darker, not thicker" rule (2026-09-28).
+- **The focus ring** is `focus-width` in `focus-color`. Controls (a button, a chip, a field, a thumb) sit it at
+  `focus-offset`; containers and text (a card, a tile, a toolbar, a link, a code line) at `focus-gap`, since a ring on
+  their edge or their glyphs reads cramped. Rows, tabs and cells draw it inside, by their own width. Fields read the
+  Focus ring setting's switches for their ring, edge recolour and halo. No component writes a literal offset or width.
 
 - **Solid fills** step one way: hover is further from the page, pressed one more
   (`--_solid-active` in `button.css`).

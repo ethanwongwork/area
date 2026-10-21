@@ -1,20 +1,25 @@
 # Handoff
 
-## Current state (2026-10-20)
+## Current state (2026-10-21)
 
-- **Status.** `main` is at PR #143. 119 families: 118 Complete; Asset card in review, round 65 (`components65`) open on
-  https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG: its containerless, hug and waterfall views (8 new tiles) against
-  round 61 (Before rebuilt from round 64's published files). Surface and Stack Complete (layout round 2).
-- **This branch (`claude/cool-payne-review-asset-card`).** Review specimens render at Type 14
-  (`component-review.html`, `review-diff.mjs`), so text that inherits its size shows as in the app. Read `components65`
-  with ArtifactData before acting on Asset card.
+- **Status.** `main` is at PR #143. 119 families: 118 Complete; Asset card in review, round 65 (`components65`) on
+  https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG, its "selected state border" note answered by the state work below.
+- **This branch (`claude/cool-payne-review-asset-card`, PR #144).** Review specimens at Type 14; Asset card frame 1:1;
+  state audit and motion strays. Then the interaction states as settings (owner's picks, collection `state-picks` on
+  https://claude.ai/artifact/3uKMHRhpWnPqNA6pK4WfD9): `axes/states.ts` (Focus ring, Hover stroke, Selected stroke,
+  Selected tint, Hover / Selected / Pressed fill), Hover shadow in `axes/depth.ts`, the accent's indicator rung for
+  `focus-color` and `stroke-selected` (`semantic/aliases.ts`), resting and lift as one tight layer. THEMING.md
+  "Interaction states"; docs/research/states-2026-10-21. Inspector rows under Stroke, Shadow and a new Fill heading;
+  Language tiles for each.
+- **Open for the owner.** Pressed in light at default Layers is capped by muted text 4.6:1 (L 0.925, about 9%, not
+  12%), so its four steps are 0.006 apart there; the indicator blue is #0160d9 / #79aeff, not ChatGPT's #3a83f7 (fails
+  3:1 on fills and APCA on the dark page); Rest shadow applies to cards and panels, not outline buttons (Field shadow 0).
 - **Sessions.** One session at a time. Each starts from `origin/main` in its own worktree (`claude/*`) and merges
   through a PR. Check open PRs first.
 - **Running the app.** `npm run dev` runs Electron and `npm run preview` adds http://localhost:4400 (check who holds
   the port first). Static build: `npm run build -w @area/desktop`, launch config `desktop-dist` (4410).
-- **Open.**
-  - Owner picks from the 2026-10-19 audit (listed in PR #142's report); Agent chat Phase 3 not started; Material
-    bundles are named presets (ask before changing).
+- **Open.** Owner picks from the 2026-10-19 audit (PR #142's report); Agent chat Phase 3 not started; Material bundles
+  are named presets (ask before changing).
 - **Rule for this file.** This section stays under 40 lines and is rewritten, not appended.
   Entries below are history, newest first.
 

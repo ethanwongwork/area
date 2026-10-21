@@ -333,7 +333,7 @@
 
   .area-code-block__linenumber:focus-visible {
     outline: var(--area-focus-width) solid var(--area-focus-color);
-    outline-offset: var(--area-focus-offset);
+    outline-offset: var(--area-focus-gap);
   }
 
   /* A block with diff lines widens every gutter by the marker and its gap (8 + 4) plus room for

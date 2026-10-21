@@ -50,7 +50,7 @@
   @media (hover: hover) {
     .area-editable-text:not([data-editing], [data-disabled]) .area-editable-text__preview:hover { background-color: var(--area-bg-hover); transition-duration: 0s; }
   }
-  .area-editable-text__preview:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  .area-editable-text__preview:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-gap); }
   /* While editing the preview keeps the draft's width under the field, so the field grows as you type. */
   .area-editable-text[data-editing] .area-editable-text__preview { visibility: hidden; }
 
