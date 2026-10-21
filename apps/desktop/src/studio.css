@@ -833,7 +833,7 @@ svg.studio-mark * { vector-effect: non-scaling-stroke }
 .studio-brand__viewer > figcaption { font-size: var(--area-text-xs-size); font-variant-numeric: tabular-nums; }
 .studio-brand__preview { inline-size: 100%; block-size: 100%; object-fit: contain; }
 .studio-brand__row-thumb { display: block; inline-size: 32px; block-size: 32px; object-fit: cover; border-radius: var(--area-radius-small); }
-/* Theme (src/pages/language.tsx): the custom properties a preset writes, one Code each, wrapping. */
+/* Theme (src/pages/theme.tsx): the custom properties a preset writes, one Code each, wrapping. */
 .studio-writes { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--area-space-4); }
 .studio-brand__colour { display: inline-flex; align-items: center; gap: var(--area-space-6); }
 
