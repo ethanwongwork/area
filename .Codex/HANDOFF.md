@@ -2,10 +2,13 @@
 
 ## Current state (2026-10-20)
 
-- **Status.** `main` is at PR #143. 119 families: 118 Complete; Asset card in review. Surface and Stack approved in
-  layout review round 2 (https://claude.ai/artifact/4hvnnZ3eLvEPvjXk63u2pd). Components review page:
-  https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG.
-- **This branch (`claude/electron-components-theme-config-9a0bf2`, PR open).**
+- **Status.** `main` is at PR #144. 119 families: 118 Complete; Asset card in review, round 65 (`components65`) open on
+  https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG: its containerless, hug and waterfall views (8 new tiles) against
+  round 61 (Before rebuilt from round 64's published files). Surface and Stack Complete (layout round 2).
+- **Review page (PR #144, `claude/cool-payne-review-asset-card`).** Review specimens render at Type 14
+  (`component-review.html`, `review-diff.mjs`), so text that inherits its size shows as in the app. Read `components65`
+  with ArtifactData before acting on Asset card.
+- **Branch `claude/electron-components-theme-config-9a0bf2` (PR #145, open).**
   - No option label says "(Default)" (owner: "i dont like seeing (default)"): registry labels in `packages/tokens/src/axes`,
     the Inspector's own in `gallery/controls.ts`; range ends keep their names; only the Theme tab marks the default;
     `registry.test.ts` enforces it.
@@ -23,7 +26,6 @@
   entry (`npm run check:docs -w @area/desktop`, in CI); skills `area-component-intake`, `area-component-docs`,
   `area-foundation-change`.
 - **Open.**
-  - The review generator renders outside any Type scope, so it cannot show the Type-scope change; check it in the app.
   - Owner picks from the 2026-10-19 audit (listed in PR #142's report); Agent chat Phase 3 not started; Material
     bundles are named presets (ask before changing).
 - **Rule for this file.** This section stays under 40 lines and is rewritten, not appended.
