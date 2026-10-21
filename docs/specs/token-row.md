@@ -167,3 +167,8 @@ The copyable row presses at `bg-component-pressed`, one step past selected (Noti
   100%`); the gallery demos' column was a fixed 288, so the desktop gallery could not lay the row out at its content's
   width. The demos' column is now up to 288 (`max-inline-size`), so the row narrows with its container.
 - 2026-10-15 · Copy button built → a copyable row uses its `useCopy` and `CopyStatus`: the copied state holds 2000 ms (was 1600). docs/specs/copy-button.md.
+
+## Review note, 2026-10-20
+
+- **What changed:** the token and its value are inline code, so they follow the text around them (14 at Type 14, was 12).
+- **Why:** a section of the screen with its own Type setting (the canvas, a Theme) now starts its text at Area's body size, so text that inherits its size follows that setting; it kept the app's 13 before.

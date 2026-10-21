@@ -2001,6 +2001,7 @@ export const COMPONENT_PAGES = [
     examples: [
       { id: "default", title: "Default", demo: "GallerySurface", note: "A raised region: Card's fill, edge and resting shadow, with no parts. Compose its content with Stack." },
       { id: "nested", title: "Nested", demo: "GallerySurfaceNested", note: "Each corner is the one around it less that Surface's inset, floored at 4; a Surface holding Surfaces sets them at its smaller media inset." },
+      { id: "in-card", title: "In a card", demo: "GallerySurfaceInCard", note: "A Card publishes its media corner, so a Surface at its media inset nests as its media does (16 less 8 = 8). A Panel publishes its corner less its inset, here the floor." },
       { id: "soft", title: "Soft", demo: "GallerySurfaceSoft", note: "A recessed well: one fill step down, no line or shadow." },
       { id: "form", title: "Form", demo: "GallerySurfaceForm", note: "Controls inside step from the Surface's ground, as in a Card." },
     ],

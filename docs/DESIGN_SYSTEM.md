@@ -309,6 +309,9 @@ and `emit/base.ts`; never copy a table into a component
 - **The type ramp** is six sizes with one leading each on the 4px grid: 12/16, 14/20,
   16/24, then titles 20/28, 24/32, 32/40 at type 14 ([type spec](specs/typography.md)).
   Small text is the base minus 2, and never under 10.
+- **Every scope restarts at the body role.** Below the page root, an element with its own Type sets `text-md` for
+  text set straight in it (THEMING.md, CSS inheritance). A component that holds free text states its own role
+  (Card and Surface use `text-sm`); inline parts (Link, Code, Abbreviation) inherit the text they sit in.
 - **Shared controls use the same tier's icon, text and gap tokens.**
 - **Icon-to-label gap:**
   - 6 at sm, md and lg; 4 at xs and compact;

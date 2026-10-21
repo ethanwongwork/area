@@ -2,9 +2,10 @@
 
 ## Current state (2026-10-20)
 
-- **Status.** `main` is at PR #142 (rounds 55–64). 119 families: 116 Complete; Asset card, Surface and Stack in review.
-  Review page: https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG.
-- **Branch `claude/electron-components-theme-config-9a0bf2` (uncommitted).**
+- **Status.** `main` is at PR #143. 119 families: 118 Complete; Asset card in review. Surface and Stack approved in
+  layout review round 2 (https://claude.ai/artifact/4hvnnZ3eLvEPvjXk63u2pd). Components review page:
+  https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG.
+- **This branch (`claude/electron-components-theme-config-9a0bf2`, PR open).**
   - No option label says "(Default)" (owner: "i dont like seeing (default)"): registry labels in `packages/tokens/src/axes`,
     the Inspector's own in `gallery/controls.ts`; range ends keep their names; only the Theme tab marks the default;
     `registry.test.ts` enforces it.
@@ -14,20 +15,29 @@
     `theme-settings.ts`); a pick sets the Canvas setting. Not yet reviewed by the owner.
   - The owner's saved Canvas differs from Area's defaults on Layers 1/0, Selection Accent, Stroke width 0.5, Stroke
     strength 3, Rest shadow 3; whether to make those the defaults is still open.
-- **Sessions.** One session at a time. Each starts from `origin/main` in its own worktree
-  (`claude/*`) and merges through a PR. Check open PRs first.
-- **Running the app.** `npm run dev` runs Electron and `npm run preview` adds
-  http://localhost:4400 (check who holds the port first). Icons are in the app's Icons tab.
+- **Sessions.** One session at a time. Each starts from `origin/main` in its own worktree (`claude/*`) and merges
+  through a PR. Check open PRs first.
+- **Running the app.** `npm run dev` runs Electron and `npm run preview` adds http://localhost:4400 (check who holds
+  the port first). Static build: `npm run build -w @area/desktop`, launch config `desktop-dist` (4410).
 - **Docs (PR #140).** `docs/PRINCIPLES.md`, `GOVERNANCE.md` and `ARCHITECTURE.md`; every family has a Documentation
-  entry (`apps/desktop/src/content/documentation/`, `npm run check:docs -w @area/desktop`, in CI); skills
-  `area-component-intake`, `area-component-docs`, `area-foundation-change`. The owner's 2026-10-19 review verdicts
-  (https://claude.ai/artifact/Kbw21Vq97U6PRMtSniHWkv) are applied and recorded in the specs.
+  entry (`npm run check:docs -w @area/desktop`, in CI); skills `area-component-intake`, `area-component-docs`,
+  `area-foundation-change`.
 - **Open.**
-  - Agent chat Phase 3 (the engine) is not started.
-  - Material bundles are named presets, which conflicts with "no named looks"; ask before
-    changing them.
+  - The review generator renders outside any Type scope, so it cannot show the Type-scope change; check it in the app.
+  - Owner picks from the 2026-10-19 audit (listed in PR #142's report); Agent chat Phase 3 not started; Material
+    bundles are named presets (ask before changing).
 - **Rule for this file.** This section stays under 40 lines and is rewritten, not appended.
   Entries below are history, newest first.
+
+## Surface and Stack follow-up (2026-10-20, branch claude/cool-payne-49761d)
+
+After PR #141: Card and Panel join Surface's corner chain (`surface.css`, `--_panel-corner`); tiles "in a card", "in a
+panel". Layout review round 1 (`layout1`): both rethink with questions → examples page (Linear's settings, board pins
+03 and 11 vs Area, 13 systems) → owner "go with your recs". Correctness sweep at density 28/32/36 × radius 0/8/14/pill,
+light and dark: corners, insets, gaps and Layers fills all follow the rules. Found and fixed: text in a Surface kept the
+page's size (Surface now `text-sm`), demo titles at weight 700 (now Section heading), and the system gap behind it (Type
+scopes restart at the body role). Round 2 (`layout2`, Before = round 1 dist). Checks: build, tokens 24272, React 534,
+contracts, desktop, typecheck, check:docs 119/119, playgrounds.
 
 ## Language tab from the axes (2026-10-19, same branch, uncommitted)
 

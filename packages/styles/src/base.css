@@ -13,6 +13,16 @@
     font-synthesis: none;
   }
 
+  /* A scope with its own Type starts its text again at the body role (owner, 2026-10-20). The tokens a Type setting
+     selects are restated on its element, but a size already inherited from above stays the page's: text set straight
+     in a canvas at Type 14 kept the app's 13. The page root is left to body, so rem and the page's own role are
+     untouched; zero specificity, so every component's own role wins. */
+  :where([data-area-type]:not(:root)) {
+    font-size: var(--area-text-md-size);
+    line-height: var(--area-text-md-leading);
+    letter-spacing: var(--area-text-md-tracking);
+  }
+
   ::selection {
     background-color: var(--area-accent-surface-active);
     color: var(--area-fg-default);

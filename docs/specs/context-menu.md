@@ -112,3 +112,8 @@ Open question: none new.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → fast enter and exit (100) from the pointer: origin written after the flip, coordinates rounded (B10), flip measured on the layout size, rows kept through the exit. context-menu.css, ContextMenu.tsx.
 - 2026-10-15 · PRODUCT_UI.md open gap ("A per-item context-menu target: the gallery's PinMenu reads data-key from the event"), owner: "merge it, then continue working" → `itemSelector`: the menu opens only on a matching element inside the area (from the pointer, or the focused element for Shift+F10 and the Menu key), `menu` may be a function of that element, and the element carries `data-context-target` while the menu is open (a hook; nothing is painted). Outside an item nothing opens and the browser's own menu shows. The app's PinMenu uses it (`[data-key]`). Gallery: Behavior / one menu per row.
 - 2026-10-16 · owner, review round 27 (components27) → approved (`itemSelector`) → Complete again in `component-status.mjs`.
+
+## Review note, 2026-10-20
+
+- **What changed:** the demo's right-click area text takes the body size of the canvas (16 at Type 14, was 13); the menu is unchanged.
+- **Why:** a section of the screen with its own Type setting (the canvas, a Theme) now starts its text at Area's body size, so text that inherits its size follows that setting; it kept the app's 13 before.

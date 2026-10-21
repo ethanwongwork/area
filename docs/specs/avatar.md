@@ -226,3 +226,8 @@ ChatGPT and Notion show the disc colour, then the image, with no fade.
 - 2026-10-04 · example person (owner) → the demos' person is David Tee (initials D / DT), and the photo is the owner's drawing (`apps/docs/public/images/david-tee.jpg`: the full width of the original, a square from its top, 512px; replaces irene-yamaguchi.jpg). AGENTS.md updated.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → no motion in Avatar; rings checked for whole-pixel rest; no change.
 - 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the group's cutout ring is at `stroke-width` (was `border-width`, so overlapping avatars lost their gap under Elevated) (display.css). (docs/research/consistency-audit-2026-10-12.md)
+
+## Review note, 2026-10-20
+
+- **What changed:** the initials' line box is now the glyph itself (line height 1), so it no longer depends on the text around the avatar. Nothing moves: the initials stay centred.
+- **Why:** the scope fix (THEMING.md, Text restarts at a Type scope) would otherwise have changed its line box with the surrounding text.

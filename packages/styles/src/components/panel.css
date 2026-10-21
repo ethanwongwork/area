@@ -36,6 +36,8 @@
     /* Published under the panel prefix for nested parts (PropertyList), so a Popover's or a
        ColorPicker's own --_inset can't leak into them (audit F-27). */
     --_panel-inset: var(--_side);
+    /* The drawn corner, published so a Surface inside the panel nests concentrically with it (surface.css). */
+    --_panel-corner: var(--area-radius-container);
     /* spec (owner, 2026-09-28: "shouldn't there be differences in text size and gaps between medium and
        small?"): the panel's own text and gaps step with the tier; controls keep their tier's text (14/20
        at sm and md, the control scale). Published as --_panel-* so BoxField and PropertyList rows inside
@@ -71,7 +73,7 @@
     flex-shrink: 0;
 
     border: var(--area-border-width) solid var(--area-border-decorative);
-    border-radius: var(--area-radius-container);
+    border-radius: var(--_panel-corner);
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);
     /* A docked surface rests on the page: the Elevation axis's resting role, 1.5% at the default step and
@@ -87,8 +89,9 @@
    */
   .area-panel--flush {
     --_edge: 0px;
+    --_panel-corner: 0px;
     border: 0;
-    border-radius: 0;
+    border-radius: var(--_panel-corner);
     background-color: var(--area-bg-page);
     box-shadow: none;
   }
