@@ -108,7 +108,7 @@
 
   /* The Inspector's selection (src/inspector.tsx): Area's PreviewFrame, then the copy actions two
      to a row, 8 apart (the icon hover window's spacing). */
-  /* The Inspector's views (src/studio.tsx, InspectorPanel): Language, Design and Code as the Titlebar's Nav pills, in the
+  /* The Inspector's views (src/studio.tsx, InspectorPanel): Theme, Design and Code as the Titlebar's Nav pills, in the
      Panel's bar, so they share the line the Canvas header and the Sidebar's first row sit on (rule 14). */
   .studio-inspector__views { flex: 0 1 auto; min-inline-size: 0; }
   /* A colour value in a facts row: its swatch, then its value (Code view, src/specimen-box.tsx). */
@@ -260,7 +260,7 @@
     .studio-canvas__body[data-area-elevation="0"] .gallery-asset:not([aria-selected="true"]):hover .gallery-tile[data-painted] { outline-color: color-mix(in srgb, var(--_ink) 24%, transparent); } /* pick */
   }
   .studio-canvas__body[data-area-elevation="0"] .gallery-asset:not([aria-selected="true"]):active .gallery-tile[data-painted] { outline-color: color-mix(in srgb, var(--_ink) 48%, transparent); } /* pick */
-  /* Scoped: the frame is a setting's own ground (Language), Primer's tinted plate. */
+  /* Scoped: the frame is a setting's own ground (Theme), Primer's tinted plate. */
   .gallery-tile[data-scoped] { background: var(--area-bg-subtle); color: var(--area-fg-default); }
   /* The caption's name and value in the app's UI text (13 at its scale, owner, 2026-10-13). A painted frame's caption
      takes the colour's ink (Color's grade, studio-swatch__grade). */
@@ -593,10 +593,10 @@
   /* A list row's step: a colour chip beside its level. */
   .studio-step { display: inline-flex; align-items: center; gap: var(--area-space-8); font-variant-numeric: tabular-nums; }
 
-  /* --- Language ------------------------------------------------------------ */
+  /* --- Theme ---------------------------------------------------------------- */
 
   /*
-   * Language illustrations (src/abstract.tsx): one real component per setting, real text, at its real size, centred
+   * Theme illustrations (src/abstract.tsx): one real component per setting, real text, at its real size, centred
    * (owner, 2026-10-19: "real components ... or at least real text ... simple, and easy to recognize"). App classes
    * only place them: a row of two, a card's width, a page's ground under a card, and real text at the type roles.
    */
@@ -652,6 +652,37 @@
   .lang-zoom-menu { inline-size: 128px; } /* pick */
   .lang-zoom-whole { padding: var(--area-space-24); background: var(--area-bg-page); border-radius: var(--area-radius-small); }
   /* Elevation: a menu shown in place, at a menu's width. */
+
+  /* --- Theme · Setup (pages/theme-setup.tsx) ----------------------------------- */
+  /* One step: the categories, the question, every option, then Back and Continue, in one readable column. */
+  .setup { display: grid; gap: var(--area-space-24); align-content: start; padding: var(--area-space-24) var(--area-space-16) var(--area-space-32); }
+  .setup--start { max-inline-size: 720px; } /* pick */
+  .setup__stepper { max-inline-size: 720px; } /* pick */
+  .setup__nav { display: flex; align-items: center; justify-content: space-between; gap: var(--area-space-8); }
+  .setup__nav--start { justify-content: flex-start; }
+  .setup__link { color: inherit; text-decoration: none; }
+  .setup__link:hover { text-decoration: underline; }
+  .setup__value { max-inline-size: 96px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } /* pick */
+  /* The views (pages/theme-views.tsx), laid out at their own size; Scaled fits each to its card. */
+  .setup-row { display: flex; align-items: center; gap: var(--area-space-8); }
+  .setup-row--start { justify-content: flex-start; }
+  .setup-row--end { justify-content: flex-end; }
+  .setup-strong { font-weight: var(--area-weight-strong); color: var(--area-fg-default); }
+  .setup-menu { inline-size: 144px; } /* pick */
+  .setup-card { inline-size: 168px; } /* pick */
+  .setup-nav { --area-nav-inline-size: 100%; }
+  /* Components: two columns of controls on the page's ground. */
+  .setup-sheet { --area-input-inline-size: 184px; display: grid; grid-template-columns: auto auto; gap: var(--area-space-16); align-items: start; padding: var(--area-space-16); border-radius: var(--area-radius-container); background: var(--area-bg-page); } /* pick: Input's public width hook */
+  .setup-sheet__col { display: grid; gap: var(--area-space-12); justify-items: start; }
+  /* Bento: three columns of cards on the page's ground, a tall one and two wide ones. */
+  .setup-bento { display: grid; grid-template-columns: repeat(3, 168px); grid-auto-rows: auto; gap: var(--area-space-12); padding: var(--area-space-16); border-radius: var(--area-radius-container); background: var(--area-bg-page); } /* pick */
+  .setup-bento__cell { min-inline-size: 0; }
+  .setup-bento__cell .area-card__content { display: grid; gap: var(--area-space-8); }
+  .setup-bento__cell--tall { grid-row: span 2; }
+  .setup-bento__cell--wide { grid-column: span 2; }
+  .setup-bento__cell--bare { display: grid; place-items: center; }
+  /* Example: the Testing tab's screen at its own width. */
+  .setup-example { inline-size: 1200px; pointer-events: none; } /* pick: the Testing thumbnails' width */
 }
 
 /* ---------------------------------------------------------------------------

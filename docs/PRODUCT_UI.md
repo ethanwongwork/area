@@ -117,9 +117,17 @@ Zoom is Zoom control's stepper (− Auto +):
 
   Properties stay in the Inspector, on Overview only.
 
-**Language tab.**
+**Theme tab** (Language 2026-10-19 to 20; owner, 2026-10-20: "i want to change language back to theme"). The Canvas
+header's first control chooses Setup or Browse (`src/pages/theme.tsx`).
 
-- It lists the Inspector's own settings (`src/gallery/controls.ts`) in cards at least 200
+- **Setup** (the default; `src/pages/theme-setup.tsx`, owner 2026-10-20): one step per setting in the registry's order,
+  both themes' grounds and layers included. A step asks one question, shows every option as a card, and a pick sets the
+  Canvas setting the Inspector holds (Mode sets the page's preview). The cards are an Asset grid (Pills, a set, toggles
+  each shape). The header's second control draws every card as Abstract (the setting alone, below), Components (one
+  sheet of the common controls), Bento (small product cards) or Example (the Testing tab's dashboard), each under its
+  option over the picks so far (`src/pages/theme-views.tsx`). The Sidebar lists the steps with what each is set to; All
+  is the start and the summary of picks, with Copy picks. Back and Continue end each step.
+- **Browse** lists the Inspector's own settings (`src/gallery/controls.ts`) in cards at least 200
   wide.
 - Each card shows one real component with real text, showing the one thing the setting
   changes (`src/abstract.tsx`; owner, 2026-10-19: "simple, and easy to recognize").
@@ -134,9 +142,11 @@ Zoom is Zoom control's stepper (− Auto +):
 chosen view holds across tabs and launches. A tab with nothing for a view leaves that pill
 out.
 
-- **Language** (Theme until 2026-10-19, so the tab and the Inspector use one word): the
+- **Theme** (Language 2026-10-19 to 20; the tab and the Inspector use one word): the
   Canvas settings under the registry's headings (`SETTING_GROUPS`: Color, Size, Shape,
-  Stroke, Shadow, Effects, then Material), only those that change this tab's specimens.
+  Stroke, Shadow, Effects, then Material), only those that change this tab's specimens. An option names its value
+  and, at a range's end, what that end is ("0 (Flat)", "100 (White)"); none says "(Default)" (owner, 2026-10-20:
+  "i dont like seeing (default)"). The Theme tab is where the default is marked.
 - **Design**: what is chosen, at its narrowest: a Canvas item, else the Sidebar's row, else
   the tab's overview. It shows, in order:
   1. the tab's display settings;

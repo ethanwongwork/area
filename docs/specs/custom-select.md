@@ -361,3 +361,8 @@ The trigger's label is not selectable. See [interaction polish](../research/inte
 - 2026-10-19 · owner: the setting pickers' swatch reads very large beside the icons → a Color swatch in the trigger's
   or a row's icon slot is the box less 4 (12 at 16), as a glyph's keyline (docs/specs/color-swatch.md). No change to
   Custom select's own geometry.
+- 2026-10-20 · owner: "i dont like seeing (default)" (the Inspector's setting pickers) → no option label carries
+  "(Default)": the registry's preset labels (packages/tokens/src/axes) and the Inspector's own
+  (apps/desktop/src/gallery/controls.ts, Material) name the value and a range's named end only ("0 (Flat)",
+  "100 (White)"); the Language tab alone marks the default. Reverses the 2026-10-14 labels. Enforced by
+  registry.test.ts. No change to Custom select's own geometry.

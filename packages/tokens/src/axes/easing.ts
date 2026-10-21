@@ -36,7 +36,7 @@ const CURVES = {
 export type EasingId = keyof typeof CURVES;
 
 const LABELS: Record<EasingId, [string, string]> = {
-  standard: ["Standard (Default)", "Today's curves: a quick start that settles (ChatGPT, Figma)."],
+  standard: ["Standard", "Today's curves: a quick start that settles (ChatGPT, Figma)."],
   snappy: ["Snappy", "Gets there sooner and stops harder (Linear, Primer)."],
   gentle: ["Gentle", "Eases in and out evenly (Primer, Fluent)."],
   spring: ["Spring", "Passes its mark a little and settles back (Geist, Material); exits never overshoot."],

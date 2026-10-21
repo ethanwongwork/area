@@ -46,7 +46,7 @@ export const SURFACE_AXIS: AxisDefinition = {
   namespaces: ["--area-frame-width:"],
   presets: SURFACE_STEPS.map(step => ({
     id: step,
-    label: step === "0" ? "0 (Flat)" : step === "1" ? "1 (Default)" : step,
+    label: step === "0" ? "0 (Flat)" : step,
     description: step === "0" ? "No line round surfaces; a Rest shadow can set them apart instead. Control and state edges remain."
       : `A ${step}px line round cards, panels and floating surfaces.`,
     tokens: tokens({ "frame-width": `${step}px` }),

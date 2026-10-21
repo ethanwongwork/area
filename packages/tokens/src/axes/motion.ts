@@ -70,7 +70,7 @@ export const MOTION_AXIS: AxisDefinition = {
   namespaces: ["--area-duration-"],
   presets: MOTION_STEPS.map(step => ({
     id: String(step),
-    label: step === 0 ? "0 (None)" : step === 210 ? "210 (Default)" : String(step),
+    label: step === 0 ? "0 (None)" : String(step),
     description: describe(step),
     tokens: stepTokens(step),
   })),

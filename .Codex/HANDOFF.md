@@ -1,19 +1,19 @@
 # Handoff
 
-## Current state (2026-10-19)
+## Current state (2026-10-20)
 
-- **Status.** `main` includes PR #141 (Surface, Stack, container views) and this branch's PR (rounds 55–64: swatch,
-  audit, Asset card and Calendar rebuilds, the painted-ground rule). 119 families: 116 Complete; Asset card, Surface and
-  Stack in review (Asset card for main's containerless, hug and waterfall views, ported onto the round-61 card).
+- **Status.** `main` is at PR #142 (rounds 55–64). 119 families: 116 Complete; Asset card, Surface and Stack in review.
   Review page: https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG.
-- **This branch (2026-10-19).**
-  - The owner said the setting pickers' swatch was very large. A Color swatch in a menu or Custom select icon slot is
-    now the box less 4 (12 in 16). The Inspector's option marks keep to the icon keylines, and ground swatches draw
-    the Inspector's ring (`studio.css`, registered `--_host-ring`).
-  - A design-system audit of the 22 recent families against PR #140's docs. All the clear rule fixes are applied, with
-    API renames keeping deprecated aliases. Open owner picks are listed in the session's report: Folder and File page
-    tiny label text, Infobox framed vs Card, heading levels, Folder tone on outline, VideoPlayer ref, failure words,
-    disclosure hover, Composer menu placement, English string props.
+- **Branch `claude/electron-components-theme-config-9a0bf2` (uncommitted).**
+  - No option label says "(Default)" (owner: "i dont like seeing (default)"): registry labels in `packages/tokens/src/axes`,
+    the Inspector's own in `gallery/controls.ts`; range ends keep their names; only the Theme tab marks the default;
+    `registry.test.ts` enforces it.
+  - The Language tab is **Theme** again (`#language` still opens it), and the Inspector's view too.
+  - Theme → **Setup** (default) / Browse. Setup asks one question per setting (26 steps), every option a card in an
+    Asset grid, drawn as Abstract, Components, Bento or Example (`pages/theme-setup.tsx`, `theme-views.tsx`,
+    `theme-settings.ts`); a pick sets the Canvas setting. Not yet reviewed by the owner.
+  - The owner's saved Canvas differs from Area's defaults on Layers 1/0, Selection Accent, Stroke width 0.5, Stroke
+    strength 3, Rest shadow 3; whether to make those the defaults is still open.
 - **Sessions.** One session at a time. Each starts from `origin/main` in its own worktree
   (`claude/*`) and merges through a PR. Check open PRs first.
 - **Running the app.** `npm run dev` runs Electron and `npm run preview` adds

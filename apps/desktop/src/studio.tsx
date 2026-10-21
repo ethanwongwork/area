@@ -20,7 +20,7 @@ import { ComponentsPage } from "./pages/components.tsx";
 import { TypographyPage } from "./pages/typography.tsx";
 import { IconsPage } from "./pages/icons.tsx";
 import { ColorPage } from "./pages/color.tsx";
-import { LanguagePage } from "./pages/language.tsx";
+import { ThemePage } from "./pages/theme.tsx";
 import { ExamplesPage } from "./pages/examples.tsx";
 import { MaterialsPage } from "./pages/materials.tsx";
 import { BrandPage } from "./pages/brand.tsx";
@@ -31,9 +31,9 @@ import { bundleValue, materialAttributes, restoreMaterial, type MaterialState } 
 
 /* Text-only tabs (owner, 2026-10-11: no icons in the Titlebar's tabs). */
 export const TABS = [
-  /* Language: the system's settings, the registry's axes (owner, 2026-10-19: "i prefer language"; briefly Theme the
-     same day, dropped since theming reads as them-ing). */
-  { id: "language", label: "Language" },
+  /* Theme: the system's settings, the registry's axes, and the Setup flow through them (owner, 2026-10-20: "i want to
+     change language back to theme"; Language 2026-10-19 to 20, #language links still open it). */
+  { id: "theme", label: "Theme" },
   { id: "components", label: "Components" },
   { id: "typography", label: "Typography" },
   { id: "icons", label: "Icons" },
@@ -108,8 +108,8 @@ const isMac = () => typeof document !== "undefined" && document.documentElement.
  */
 function readLocation(): { tab: TabId; item?: string } {
   const [hash, ...item] = decodeURIComponent(location.hash.slice(1)).split("/");
-  // Testing was the Examples tab until 2026-10-17: an old link or saved tab opens it.
-  const renamed = (id?: string) => id === "examples" ? "testing" : id;
+  // Testing was the Examples tab until 2026-10-17, Theme the Language tab 2026-10-19 to 20: an old link or saved tab opens it.
+  const renamed = (id?: string) => id === "examples" ? "testing" : id === "language" ? "theme" : id;
   const known = TABS.find(entry => entry.id === renamed(hash));
   const stored = TABS.find(entry => entry.id === renamed(readStored<string>("tab", "components")));
   return known ? { tab: known.id, item: item.join("/") || undefined } : { tab: stored?.id ?? "components" };
@@ -139,7 +139,7 @@ interface StudioState {
   select: (item: string, options?: { replace?: boolean }) => void;
   sidebar: boolean;
   inspector: boolean;
-  /** The Inspector's view (Language, Design or Code), kept across tabs and launches. */
+  /** The Inspector's view (Theme, Design or Code), kept across tabs and launches. */
   inspectorView: InspectorView;
   setInspectorView: (view: InspectorView) => void;
   /** Shows the Inspector if it is hidden (the Chat view's ⌘L). */
@@ -293,7 +293,7 @@ export function Studio() {
             ))}
           </Nav>
         </Titlebar>
-        {tab === "language" ? <LanguagePage /> :
+        {tab === "theme" ? <ThemePage /> :
           tab === "components" ? <ComponentsPage /> :
           tab === "typography" ? <TypographyPage /> :
           tab === "icons" ? <IconsPage /> :
@@ -366,7 +366,7 @@ export interface WorkspaceProps {
   inspector: ReactNode | InspectorViews;
   /** The Canvas's scrolling body (fitting tiles, scrolling a selection into view). */
   canvasRef?: Ref<HTMLDivElement>;
-  /** Attributes the Canvas's body takes beyond the Inspector's settings: a tab's own preview (Language's theme). */
+  /** Attributes the Canvas's body takes beyond the Inspector's settings: a tab's own preview (the Theme tab's mode). */
   canvasScope?: Record<string, string>;
 }
 
@@ -417,7 +417,7 @@ export function Workspace({ sidebar, canvasLead, canvasTitle, canvasActions, can
 /**
  * The Inspector's views (owner, 2026-10-18: "a figma style panel based on dev mode and the standard design panel … the
  * tab controls at the top … separate the current inspector to themes, design, and code"), as Figma's Design | Prototype
- * and Dev Mode: Language (Theme until 2026-10-19) holds the Canvas settings (src/canvas-settings.tsx); Design what is chosen, what it is (its
+ * and Dev Mode: Theme holds the Canvas settings (src/canvas-settings.tsx); Design what is chosen, what it is (its
  * preview, properties, values, status, purpose); Code how to use it (copy actions, import, class, tokens, code, the
  * measured box). One view at a time, chosen by Nav pills in the Panel's bar (the Titlebar's tabs, Figma's filled pills;
  * Tabs keeps the underline, docs/specs/tabs.md), the bar on the line the Canvas header and the Sidebar's first row share.
@@ -426,9 +426,8 @@ export type InspectorView = "theme" | "design" | "code" | "chat";
 export type InspectorViews = Partial<Record<Exclude<InspectorView, "chat">, ReactNode>>;
 /** Chat is the app's, not a tab's: every tab offers it, last (src/chat/chat.tsx; owner, 2026-10-18). */
 const INSPECTOR_VIEWS: ReadonlyArray<{ id: InspectorView; label: string }> = [
-  // Language (owner, 2026-10-19: the tab and the Inspector use one word; was Theme). The id stays "theme", so the
-  // saved choice holds.
-  { id: "theme", label: "Language" },
+  // Theme, as the tab (owner, 2026-10-20; Language 2026-10-19 to 20): the tab and the Inspector use one word.
+  { id: "theme", label: "Theme" },
   { id: "design", label: "Design" },
   { id: "code", label: "Code" },
   { id: "chat", label: "Chat" },

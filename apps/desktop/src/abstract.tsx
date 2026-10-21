@@ -1,5 +1,5 @@
 /**
- * Language illustrations: per setting, one real Area component (or a small group of them) with real text, so what
+ * Theme illustrations: per setting, one real Area component (or a small group of them) with real text, so what
  * the setting does is plain at a glance (owner, 2026-10-19: "real components ... or at least real text ... simple, and
  * easy to recognize"; "every axis should" have its own visual). Each pick shows the one thing its setting moves:
  *
@@ -21,7 +21,7 @@
  *   want to use real components"): each the whole real component the setting draws on, with its own text, centred on
  *   the page's ground (CloseUp) and shown a little over its size instead of shrunk as the other drawings are, so a
  *   half-pixel line or a 5% shadow still shows; the Inspector shows it at size. Each tile turns off the strokes and
- *   shadows that are not its own (the Language tab's ALSO):
+ *   shadows that are not its own (the Theme tab's ALSO):
  *     surface         Width: a card, 1.5x
  *     stroke          Strength: a card and the field inside it, 1.5x
  *     shadow-rest     Rest shadow: a card with no line, 1.25x
@@ -317,3 +317,6 @@ function drawing(axis: string, preset?: string): [number, ReactNode] {
       return [FILL.control, <Button>Button</Button>];
   }
 }
+
+/** The same fit for the Theme tab's Setup views (theme-setup.tsx): one zoom per group, by its largest drawing. */
+export { Fit as Scaled, FILL, LoopingSwitch };
