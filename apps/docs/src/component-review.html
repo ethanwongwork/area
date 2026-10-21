@@ -185,13 +185,15 @@ details.panel > summary { cursor: pointer; font-size: 12px; font-weight: 500; co
 
 <script src="data.js"></script>
 <script>
+/* Specimens render at Area's default Type (14), as on the app's canvas, so text that inherits its size shows the body
+   role there (THEMING.md, Text restarts at a Type scope) instead of this page's own 14px chrome text. */
 /* Builds every family's specimens into the page before the demo bundles load, so each bundle finds
    and hydrates its specimens (they look for data-*-demo elements once, on load). */
 const FAMILIES = window.FAMILIES || [];
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 // One collection per review round, so a family reopened after approval starts undecided (round 6: 2026-10-10).
-const ROUND = "components64", KEY = "area-component-review-64";
+const ROUND = "components65", KEY = "area-component-review-65";
 const pref = (k, d) => { try { return localStorage.getItem("area-cr-" + k) || d; } catch { return d; } };
 const setPref = (k, v) => { try { localStorage.setItem("area-cr-" + k, v); } catch {} };
 // Side by side by default (owner 2026-10-09: "be more explicit about the before and after"); only changed
@@ -218,7 +220,7 @@ const RANK = { changed: 0, new: 1, unknown: 2, unchanged: 3 };
 const tileHtml = t => `
   <article class="tile${state(t) === "changed" ? " is-changed" : ""}" data-tile="${t.id}">
     <header><span class="t">${esc(t.label)}</span>${badge(t)}<button class="flag" data-flag="${t.id}" aria-pressed="false">Flag</button></header>
-    <div class="views"><div class="view after"><div class="cap">After</div><div class="canvas area-scope" data-area-theme="light">${t.html}</div></div></div>
+    <div class="views"><div class="view after"><div class="cap">After</div><div class="canvas area-scope" data-area-theme="light" data-area-type="14">${t.html}</div></div></div>
   </article>`;
 $("families").innerHTML = FAMILIES.map(f => {
   const tiles = [...f.tiles].sort((a, b) => RANK[state(a)] - RANK[state(b)]);
@@ -253,7 +255,7 @@ async function paintBefore(section) {
     if (!t.before) { b.insertAdjacentHTML("beforeend", '<p class="none">New in this pass: nothing to compare.</p>'); return; }
     const frame = document.createElement("iframe");
     frame.title = t.label + " before";
-    frame.srcdoc = `<!doctype html><html><head><meta charset="utf-8"><base href="${esc(location.href)}"><style>${css}</style><style>html,body{margin:0;background:transparent}body{display:grid;place-items:center;min-height:120px}.c{padding:32px 24px;display:grid;place-items:center;width:100%;box-sizing:border-box;background:var(--area-bg-surface)}.c[data-zoom="2"]>*{zoom:2}</style></head><body><div class="c" data-zoom="${zoom}" data-area-theme="${theme}"${layerAttrs()}>${t.before}</div></body></html>`;
+    frame.srcdoc = `<!doctype html><html><head><meta charset="utf-8"><base href="${esc(location.href)}"><style>${css}</style><style>html,body{margin:0;background:transparent}body{display:grid;place-items:center;min-height:120px}.c{padding:32px 24px;display:grid;place-items:center;width:100%;box-sizing:border-box;background:var(--area-bg-surface)}.c[data-zoom="2"]>*{zoom:2}</style></head><body><div class="c" data-zoom="${zoom}" data-area-theme="${theme}" data-area-type="14"${layerAttrs()}>${t.before}</div></body></html>`;
     frame.onload = () => { try { frame.style.height = frame.contentDocument.documentElement.scrollHeight + "px"; } catch {} };
     b.append(frame);
   });

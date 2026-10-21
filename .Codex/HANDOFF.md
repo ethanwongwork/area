@@ -2,25 +2,17 @@
 
 ## Current state (2026-10-20)
 
-- **Status.** `main` is at PR #142. 119 families: 118 Complete; Asset card in review. Surface and Stack approved in
-  layout review round 2 (https://claude.ai/artifact/4hvnnZ3eLvEPvjXk63u2pd, `layout2`). Components review page:
-  https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG.
-- **This branch (`claude/cool-payne-49761d`, PR open, on main at f56085f).**
-  - Card and Panel publish their corner, so a Surface inside them nests (Card: its media corner; Panel: corner less
-    inset, the floor). A Card reads the chain only inside a Surface; other Cards keep their corner.
-  - Owner round 1 (rethink, "what is this for, show examples"): answered with
-    https://claude.ai/artifact/JuR35Vuea3xgFFfK4Rts3S and docs/research/layout-primitives-2026-10-20.md; owner went
-    with the recommendations (Surface beside Card, keep `soft`, no Stack divider yet, no soft-in-soft step).
-  - Surface states Card's body text role; demo titles are Section heading.
-  - Foundation: an element below the root with its own Type restarts text at the body role (`base.css`, THEMING.md,
-    DESIGN_SYSTEM.md, cohesion test). Swept all families: only inheriting prose changes (Link, Abbreviation, Hatnote,
-    Inline list, Code, Token row, demo text); app chrome unchanged. Avatar initials take `line-height: 1`.
+- **Status.** `main` is at PR #143. 119 families: 118 Complete; Asset card in review, round 65 (`components65`) open on
+  https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG: its containerless, hug and waterfall views (8 new tiles) against
+  round 61 (Before rebuilt from round 64's published files). Surface and Stack Complete (layout round 2).
+- **This branch (`claude/cool-payne-review-asset-card`).** Review specimens render at Type 14
+  (`component-review.html`, `review-diff.mjs`), so text that inherits its size shows as in the app. Read `components65`
+  with ArtifactData before acting on Asset card.
 - **Sessions.** One session at a time. Each starts from `origin/main` in its own worktree (`claude/*`) and merges
   through a PR. Check open PRs first.
 - **Running the app.** `npm run dev` runs Electron and `npm run preview` adds http://localhost:4400 (check who holds
   the port first). Static build: `npm run build -w @area/desktop`, launch config `desktop-dist` (4410).
 - **Open.**
-  - The review generator renders outside any Type scope, so it cannot show the Type-scope change; check it in the app.
   - Owner picks from the 2026-10-19 audit (listed in PR #142's report); Agent chat Phase 3 not started; Material
     bundles are named presets (ask before changing).
 - **Rule for this file.** This section stays under 40 lines and is rewritten, not appended.
