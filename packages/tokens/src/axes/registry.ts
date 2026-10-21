@@ -50,7 +50,7 @@ export const AXES: AxisDefinition[] = [
 
 /**
  * The settings as people meet them (owner, 2026-10-19: "i want the axises to be the source of truth"): every axis, plus
- * the two scoped settings outside the registry (Contrast, Pills), under the headings the Inspector and the Language tab
+ * the two scoped settings outside the registry (Contrast, Pills), under the headings the Inspector and the Theme tab
  * both show, in their order. A setting's name is its axis label; under its heading the heading's word is dropped
  * (`settingLabel`): Stroke width reads Width under Stroke, Shadow size Size under Shadow.
  */

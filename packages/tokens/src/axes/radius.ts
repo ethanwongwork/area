@@ -54,8 +54,8 @@ export const RADIUS_AXIS: AxisDefinition = {
   ],
   presets: STEPS.map(([id, button, surface]) => ({
     id,
-    // Named as the other number settings and the Inspector name them: "0 (Sharp)", "8 (Default)".
-    label: id === "pill" ? "Pill" : id === "0" ? "0 (Sharp)" : id === "8" ? "8 (Default)" : id,
+    // Named as the other number settings and the Inspector name them: "0 (Sharp)"; the default carries no mark (owner, 2026-10-20).
+    label: id === "pill" ? "Pill" : id === "0" ? "0 (Sharp)" : id,
     description: describe(id, button, surface),
     tokens: tokens({
       // The corner per pixel of height: the Button's corner over its 32px.

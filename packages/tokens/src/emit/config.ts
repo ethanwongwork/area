@@ -79,7 +79,7 @@ export function materialGrainImage(step) {
 /** Edge and Depth (axes/depth.ts, surface.ts) and the interaction states (axes/states.ts): each an axis (data-area-<axis>), in the Inspector's order. */
 export const DEPTH_LEVERS = Object.freeze(${JSON.stringify(depthLevers)});
 
-/** The settings under their headings (axes/registry.ts), as the Inspector and the Language tab show them. */
+/** The settings under their headings (axes/registry.ts), as the Inspector and the Theme tab show them. */
 export const SETTING_GROUPS = Object.freeze(${JSON.stringify(SETTING_GROUPS)});
 /** Every setting's name and sentence: the axes' (registry labels) and the scoped settings' (Contrast, Pills). */
 export const SETTINGS = Object.freeze(${JSON.stringify(settings)});

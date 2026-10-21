@@ -41,7 +41,7 @@ export const GROUND_DARK_AXIS: AxisDefinition = {
   namespaces: ["--area-ground-dark:"],
   presets: GROUND_DARK_STEPS.map(step => ({
     id: String(step),
-    label: step === 0 ? "0 (Black)" : step === DEFAULT_GROUND_DARK ? `${step} (Default)` : String(step),
+    label: step === 0 ? "0 (Black)" : String(step),
     description: step === 0 ? "Pure black, for OLED and the darkest room." : step === DEFAULT_GROUND_DARK ? "Area's near-black, #020202." : `A ${step}% dark gray page.`,
     tokens: tokens({ "ground-dark": String(groundLightness("dark", step)) }),
   })),
@@ -55,7 +55,7 @@ const layersAxis = (theme: "light" | "dark"): AxisDefinition => ({
   namespaces: [`--area-layers-${theme}:`],
   presets: LAYER_STEPS.map(step => ({
     id: String(step),
-    label: step === 0 ? "0 (Flat)" : step === DEFAULT_LAYERS ? `${step} (Default)` : String(step),
+    label: step === 0 ? "0 (Flat)" : String(step),
     description: step === 0 ? "One tone: frames alone set layers apart; controls still step from their ground." : step === DEFAULT_LAYERS ? "Area's layer contrast." : `Layer contrast ${step} of 8.`,
     tokens: tokens({ [`layers-${theme}`]: String(step) }),
   })),

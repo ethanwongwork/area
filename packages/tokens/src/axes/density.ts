@@ -37,7 +37,7 @@ export const DENSITY_AXIS: AxisDefinition = {
   namespaces: ["--area-density-"],
   presets: [
     { id: "28", label: "28 (Compact)", description: "Tight rooms and rows for dense tools. Up to type 14.", tokens: tokens({ "density-level": DENSITY_LEVELS["28"] }) },
-    { id: "32", label: "32 (Default)", description: "The everyday room: 32px medium controls at type 14.", tokens: tokens({ "density-level": DENSITY_LEVELS["32"] }) },
+    { id: "32", label: "32", description: "The everyday room: 32px medium controls at type 14.", tokens: tokens({ "density-level": DENSITY_LEVELS["32"] }) },
     { id: "36", label: "36 (Comfortable)", description: "More room, for reading and touch. From type 13.", tokens: tokens({ "density-level": DENSITY_LEVELS["36"] }) },
   ],
 };

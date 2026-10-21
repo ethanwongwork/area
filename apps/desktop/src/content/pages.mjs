@@ -740,7 +740,7 @@ export const COMPONENT_PAGES = [
       { id: "content-color", title: "Colour", note: "The colour paints the frame, outlined by the swatch ring; the token names it and Copy copies its value.", demo: "GalleryAssetCardColor" },
       { id: "content-type", title: "Type style", note: "A role's sample over its face, weight, size and leading; Copy copies the role.", demo: "GalleryAssetCardType" },
       { id: "content-icon", title: "Icon", note: "A glyph at its native size.", demo: "GalleryAssetCardIcon" },
-      { id: "content-setting", title: "Setting", note: "A setting's option drawn under its own scope, so the frame is that option's ground, as the Language tab previews it.", demo: "GalleryAssetCardSetting" },
+      { id: "content-setting", title: "Setting", note: "A setting's option drawn under its own scope, so the frame is that option's ground, as the Theme tab previews it.", demo: "GalleryAssetCardSetting" },
       { id: "state-selected", title: "Selected", note: "The card's edge in the selection colour.", demo: "GalleryAssetCardSelected" },
       { id: "behavior-grid", title: "Grid", note: "A ListBox grid of cards: one Tab stop, arrows in two dimensions; Enter or a double click opens. Hover lifts the card.", demo: "GalleryAssetGrid" },
       { id: "container-containerless", title: "Containerless", note: "A component on the page's ground: the frame's box kept, its edge clear until hover or selection.", demo: "GalleryAssetCardContainerless" },

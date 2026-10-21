@@ -8,7 +8,7 @@
  * Eleven controls (nine chosen, Rest shadow from main, Hover shadow 2026-10-21), each a registry axis (one data attribute, scoped to a subtree and re-derived there), each one number or
  * name with one effect:
  *
- *   data-area-surface          Stroke width: the frame's width, 0 (Flat), 0.5, 1 (Default), 1.5, 2      surface.ts
+ *   data-area-surface          Stroke width: the frame's width, 0 (Flat) to 2 in halves (1)        surface.ts
  *   data-area-stroke           Stroke: every stroke's distance from its ground, 0 to 8 (4)                color/layers.ts
  *   data-area-elevation        Shadow: menus, popovers, tooltips and dialogs, 0 to 8 (3)                 elevation.ts
  *   data-area-shadow-resting   Resting lift: cards, panels and raised thumbs at rest, 0 to 8 (3); `shadow-rest` is the
@@ -41,32 +41,32 @@ function control(id: string, label: string, description: string, defaultPreset: 
     namespaces: namespaces.map(name => name.endsWith("-") ? `${PREFIX}${name}` : `${PREFIX}${name}:`),
     presets: steps.map(step => ({
       id: step.id,
-      label: step.label ?? (step.id === defaultPreset ? `${step.id} (Default)` : step.id),
+      label: step.label ?? step.id,
       description,
       tokens: tokens(step.tokens),
     })),
   };
 }
-/** A 0-to-n number control: `0 (name)` at 0, `(Default)` at its default. */
-const numbered = (n: number, fallback: number, zero: string, write: (i: number) => Record<string, string | number>) =>
-  range(n).map(i => ({ id: String(i), label: i === 0 ? `0 (${zero})` : i === fallback ? `${i} (Default)` : String(i), tokens: write(i) }));
+/** A 0-to-n number control: `0 (name)` at 0, the other steps their number. */
+const numbered = (n: number, zero: string, write: (i: number) => Record<string, string | number>) =>
+  range(n).map(i => ({ id: String(i), label: i === 0 ? `0 (${zero})` : String(i), tokens: write(i) }));
 
 export const STROKE_AXIS = control("stroke", "Stroke strength", "How dark every stroke is: its distance from its ground, 0 (none) to 8", "4", ["stroke-strength"],
-  numbered(8, 4, "None", i => ({ "stroke-strength": i / 4 })));
+  numbered(8, "None", i => ({ "stroke-strength": i / 4 })));
 
 export const SHADOW_RESTING_AXIS = control("shadow-resting", "Resting shadow", "How much cards, panels and raised thumbs lift at rest, 0 (none) to 8: one tight layer, 3 is 8% (ChatGPT's sm)", "3", ["shadow-resting-step"],
-  numbered(8, 3, "None", i => ({ "shadow-resting-step": i })));
+  numbered(8, "None", i => ({ "shadow-resting-step": i })));
 
 /** Hover shadow (owner, 2026-10-21): how much a hovered card or tile lifts, its own scale (it rode Floating shadow before),
  * one tight layer like the rest shadow, 3 the owner's pick (ChatGPT's md, `0 2px 4px -1px` at 8%). */
 export const SHADOW_HOVER_AXIS = control("shadow-hover", "Hover shadow", "How much a hovered card or tile lifts, 0 (none) to 8: one tight layer, 3 is 8% (ChatGPT's md)", "3", ["shadow-hover-step"],
-  numbered(8, 3, "None", i => ({ "shadow-hover-step": i })));
+  numbered(8, "None", i => ({ "shadow-hover-step": i })));
 
 export const SHADOW_FIELD_AXIS = control("shadow-field", "Field shadow", "How much fields, select triggers, outline and soft buttons lift, 0 (none) to 8, in % as Shadow", "0", ["shadow-field-step"],
-  numbered(8, 0, "None", i => ({ "shadow-field-step": i })));
+  numbered(8, "None", i => ({ "shadow-field-step": i })));
 
 export const SHADOW_SIZE_AXIS = control("shadow-size", "Shadow size", "How far every shadow reaches, its offset and blur, 0 (touching) to 8", "4", ["shadow-size"],
-  numbered(8, 4, "Touching", i => ({ "shadow-size": i / 4 })));
+  numbered(8, "Touching", i => ({ "shadow-size": i / 4 })));
 
 /**
  * Softness: how each shadow is drawn, as one dial over two things that move together in the systems surveyed (README
@@ -95,7 +95,7 @@ function slots(n: number): Record<string, number> {
 export const SHADOW_SOFTNESS_AXIS = control("shadow-softness", "Shadow softness", "How each shadow is drawn: one crisp layer (0) to six eased layers held under the surface (8)", "2", ["shadow-slot-", "shadow-tightness"],
   SOFTNESS.map(([layers, tight], i) => ({
     id: String(i),
-    label: i === 0 ? "0 (Crisp)" : i === 2 ? "2 (Default)" : i === 8 ? "8 (Smooth)" : String(i),
+    label: i === 0 ? "0 (Crisp)" : i === 8 ? "8 (Smooth)" : String(i),
     tokens: { ...slots(layers), "shadow-tightness": tight / 16 },
   })));
 
@@ -103,11 +103,11 @@ export const SHADOW_SOFTNESS_AXIS = control("shadow-softness", "Shadow softness"
 const LIP = [0, 0.03, 0.05, 0.08, 0.14];
 const HIGHLIGHT = [[0, 0], [0.4, 0.03], [0.6, 0.05], [0.8, 0.08], [1, 0.12]] as const;
 export const SHADOW_LIGHT_AXIS = control("shadow-light", "Shadow light", "Light from the top: a line under each lifted edge and a highlight inside its top, 0 (flat) to 4", "0", ["shadow-lip", "shadow-highlight-light", "shadow-highlight-dark"],
-  numbered(4, 0, "Flat", i => ({ "shadow-lip": LIP[i]!, "shadow-highlight-light": HIGHLIGHT[i]![0], "shadow-highlight-dark": HIGHLIGHT[i]![1] })));
+  numbered(4, "Flat", i => ({ "shadow-lip": LIP[i]!, "shadow-highlight-light": HIGHLIGHT[i]![0], "shadow-highlight-dark": HIGHLIGHT[i]![1] })));
 
 /** Shadow colour: the light theme's shadow as OKLCH (Comeau's warm ink, Stripe's cool blue); dark stays black. */
 export const SHADOW_COLOR_AXIS = control("shadow-color", "Shadow colour", "The light theme's shadow colour; dark shadows stay black", "black", ["shadow-tint-"], [
-  { id: "black", label: "Black (Default)", tokens: { "shadow-tint-l": 0, "shadow-tint-c": 0, "shadow-tint-h": 0 } },
+  { id: "black", label: "Black", tokens: { "shadow-tint-l": 0, "shadow-tint-c": 0, "shadow-tint-h": 0 } },
   { id: "warm", label: "Warm", tokens: { "shadow-tint-l": 0.25, "shadow-tint-c": 0.02, "shadow-tint-h": 60 } },
   { id: "cool", label: "Cool", tokens: { "shadow-tint-l": 0.3, "shadow-tint-c": 0.08, "shadow-tint-h": 255 } },
 ]);

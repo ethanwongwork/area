@@ -44,7 +44,7 @@ test("Select maps validation to native ARIA and data hooks", () => {
 // packages/react/src/components/CustomSelect.tsx: onHighlightChange is a callback, never a DOM attribute, and a closed
 // list reports nothing (the effect runs only in a browser).
 test("CustomSelect keeps onHighlightChange off the trigger", () => {
-  const html = renderToString(h(CustomSelect, { "aria-label": "Radius", items: [{ value: "8", label: "8 (Default)" }], value: "8", onHighlightChange: () => {} }));
+  const html = renderToString(h(CustomSelect, { "aria-label": "Radius", items: [{ value: "8", label: "8" }], value: "8", onHighlightChange: () => {} }));
   assert.doesNotMatch(html, /onhighlightchange/i);
   assert.match(html, /role="combobox"/);
 });

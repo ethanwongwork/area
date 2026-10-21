@@ -253,7 +253,7 @@ provides two virtual modules:
 
 **Regions.**
 
-- `src/studio.tsx` holds the Titlebar tabs: Language, Components, Typography, Icons, Color,
+- `src/studio.tsx` holds the Titlebar tabs: Theme, Components, Typography, Icons, Color,
   Testing, Brand, Materials.
 - `src/pages/*.tsx` fill the Sidebar, Canvas and Inspector for each tab.
 - The Inspector's Theme view writes `data-area-*` from `src/gallery/controls.ts` onto the

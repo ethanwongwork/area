@@ -30,18 +30,17 @@ export interface GalleryControl {
   defaultValue: string;
 }
 
-/** A named axis's presets as options, the default marked as the number settings mark theirs. */
+/**
+ * A named axis's presets as options. No option is marked "(Default)" (owner, 2026-10-20: "i dont like seeing (default)");
+ * the Theme tab marks the default.
+ */
 function named(axis: "neutral" | "accent"): GalleryControl["items"] {
-  return AXIS_PRESETS[axis].map(value => {
-    const name = value[0]!.toUpperCase() + value.slice(1);
-    return { value, label: value === DEFAULT_AXES[axis] ? `${name} (Default)` : name };
-  });
+  return AXIS_PRESETS[axis].map(value => ({ value, label: value[0]!.toUpperCase() + value.slice(1) }));
 }
 
-/** A number axis's presets as options, in the registry's order (light ground from white down), the default marked
- * "(Default)" and the named ends as given. */
+/** A number axis's presets as options, in the registry's order (light ground from white down), the named ends as given. */
 function numbered(axis: "ground-light" | "ground-dark" | "layers-light" | "layers-dark", names: Record<string, string>): GalleryControl["items"] {
-  return AXIS_PRESETS[axis].map(value => ({ value, label: names[value] ?? (value === DEFAULT_AXES[axis] ? `${value} (Default)` : value) }));
+  return AXIS_PRESETS[axis].map(value => ({ value, label: names[value] ?? value }));
 }
 
 /** The heading a setting sits under (the registry's SETTING_GROUPS). */
@@ -52,7 +51,7 @@ export const headingOf = (axis: string) => SETTING_GROUPS.find(group => group.se
  */
 const label = (axis: string) => settingLabel(SETTINGS[axis]?.label ?? axis, headingOf(axis));
 
-/** An Edge and Depth lever's options, as the registry labels them ("1 (Default)", "0.5 (Hairline)", "×2 (Default)"). */
+/** An Edge and Depth lever's options, as the registry labels them ("0 (None)", "0 (Flat)", "8 (Smooth)"). */
 function depthItems(axis: string): GalleryControl["items"] {
   return DEPTH_LEVERS.find(entry => entry.axis === axis)!.options.map(option => ({ value: option.value, label: option.label }));
 }
@@ -60,8 +59,7 @@ function depthItems(axis: string): GalleryControl["items"] {
 export const GALLERY_CONTROLS: readonly GalleryControl[] = [
   { axis: "theme", kind: "segmented", label: label("theme"), defaultValue: "light", items: [{ value: "light", label: "Light" }, { value: "dark", label: "Dark" }] },
   // The colour settings (axes/color.ts, axes/emphasis.ts), in the registry's order, their options and defaults read
-  // from it. Neutral and Accent name a scale, a Select each (eleven accents); the default carries "(Default)" as the
-  // number settings do. Action and Selection are two words each, a Segmented, as Mode. An accent shows on a component
+  // from it. Neutral and Accent name a scale, a Select each (eleven accents). Action and Selection are two words each, a Segmented, as Mode. An accent shows on a component
   // only where Action or Selection is Accent (and in focus rings and links), which Accent's hint says.
   { axis: "neutral", kind: "select", label: label("neutral"), hint: "The grey every surface, edge and text is drawn in", defaultValue: DEFAULT_AXES.neutral, items: named("neutral") },
   { axis: "accent", kind: "select", label: label("accent"), hint: "Shows where Action or Selection is Accent, and in focus rings and links", defaultValue: DEFAULT_AXES.accent, items: named("accent") },
@@ -76,10 +74,10 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = [
   { axis: "selection", kind: "segmented", label: label("selection"), hint: "The colour of checked, selected and current states", defaultValue: DEFAULT_AXES.selection, items: [{ value: "neutral", label: "Neutral" }, { value: "accent", label: "Accent" }] },
   // Increased contrast (docs/CONTRAST.md): not a registry axis but the same kind of scoped setting,
   // data-area-contrast="standard", "medium" or "more". System writes no attribute, so the OS preference decides (Standard,
-  // or More under Increase contrast), as it does for the app; it is the default and says so, as the number settings do.
+  // or More under Increase contrast), as it does for the app; it is the default.
   // Medium goes half way (owner, 2026-10-18: More "seems very extreme"; Material 3's Standard / Medium / High).
   // A Select, as Density: "Standard" needs 56 of text in a 32 segment beside the label.
-  { axis: "contrast", kind: "select", label: label("contrast"), hint: "System follows the OS preference; Medium and More strengthen every edge, focus and state, More to 3:1", defaultValue: "system", items: [{ value: "system", label: "System (Default)" }, { value: "standard", label: "Standard" }, { value: "medium", label: "Medium" }, { value: "more", label: "More" }] },
+  { axis: "contrast", kind: "select", label: label("contrast"), hint: "System follows the OS preference; Medium and More strengthen every edge, focus and state, More to 3:1", defaultValue: "system", items: [{ value: "system", label: "System" }, { value: "standard", label: "Standard" }, { value: "medium", label: "Medium" }, { value: "more", label: "More" }] },
   // Type size and density, separate (owner, 2026-10-12; axes/type-size.ts, axes/density.ts). Five
   // two-digit sizes fit a Segmented. Density is one number since 2026-10-14 (axes/density.ts), the medium
   // Button's height at type 14, 28 / 32 / 36; a Select, as Radius is, since "36 (Comfortable)" does not fit a
@@ -88,24 +86,24 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = [
   { axis: "type", kind: "segmented", label: label("type"), defaultValue: "14", items: ["12", "13", "14", "15", "16"].map(value => ({ value, label: value })) },
   { axis: "density", kind: "select", label: label("density"), hint: "The medium Button's height at type 14; 28 up to type 14, 36 from type 13", defaultValue: "32", items: [
     { value: "28", label: "28 (Compact)" },
-    { value: "32", label: "32 (Default)" },
+    { value: "32", label: "32" },
     { value: "36", label: "36 (Comfortable)" },
   ] },
   // The one corner setting (axes/radius.ts): a single number, the medium Button's corner, from 0
   // (Sharp) to Pill; everything else scales off it (owner, 2026-10-04).
   { axis: "radius", kind: "select", label: label("radius"), hint: "The medium Button's corner; everything scales from it", defaultValue: "8", items: ["0", "2", "4", "6", "8", "10", "12", "14", "pill"].map(value => ({
     value,
-    label: value === "0" ? "0 (Sharp)" : value === "pill" ? "Pill" : value === "8" ? "8 (Default)" : value,
+    label: value === "0" ? "0 (Sharp)" : value === "pill" ? "Pill" : value,
   })) },
   // Stroke width and Rest shadow (axes/surface.ts, owner 2026-10-19): how surfaces at rest are set apart, by a line, a
   // subtle shadow, both or neither, each its own setting. Selects, as Radius and Elevation: five and nine steps.
   { axis: "surface", kind: "select", label: label("surface"), hint: "The line round cards, panels and floating surfaces in px; 0 is flat", defaultValue: "1", items: ["0", "0.5", "1", "1.5", "2"].map(value => ({
     value,
-    label: value === "0" ? "0 (Flat)" : value === "1" ? "1 (Default)" : value,
+    label: value === "0" ? "0 (Flat)" : value,
   })) },
   { axis: "shadow-rest", kind: "select", label: label("shadow-rest"), hint: "A subtle shadow round surfaces at rest, with the line or instead of it; not their lift (Elevation)", defaultValue: "0", items: ["0", "1", "2", "3", "4", "5", "6", "7", "8"].map(value => ({
     value,
-    label: value === "0" ? "0 (None, Default)" : value,
+    label: value === "0" ? "0 (None)" : value,
   })) },
   // How much surfaces lift (axes/elevation.ts, owner 2026-10-14): one number, the Menu's shadow strength in percent,
   // 0 (Flat) to 8, as Radius is the medium Button's corner. A Select, as Radius: nine steps. Labelled Floating under the
@@ -121,13 +119,13 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = [
   // to 300 in steps of 30, 210 by default, as Elevation is the Menu's shadow. A Select, as Elevation: eleven steps.
   { axis: "motion", kind: "select", label: label("motion"), hint: "The Menu's open in ms; every duration scales from it", defaultValue: "210", items: ["0", "30", "60", "90", "120", "150", "180", "210", "240", "270", "300"].map(value => ({
     value,
-    label: value === "0" ? "0 (None)" : value === "210" ? "210 (Default)" : value,
+    label: value === "0" ? "0 (None)" : value,
   })) },
   // The shape of every transition (axes/easing.ts, owner 2026-10-19: "an easing setting (Standard, Snappy, Gentle,
   // Spring) beside the duration"): four names, a Select (four words do not fit a Segmented beside its label at 256).
   { axis: "easing", kind: "select", label: label("easing"), hint: "The shape of every transition; Motion sets how long", defaultValue: DEFAULT_AXES.easing, items: AXIS_PRESETS.easing.map(value => ({
     value,
-    label: value[0]!.toUpperCase() + value.slice(1) + (value === DEFAULT_AXES.easing ? " (Default)" : ""),
+    label: value[0]!.toUpperCase() + value.slice(1),
   })) },
   // Which components draw a pill instead of the radius corner (axes/pills.ts), as data-area-pills.
   { axis: "pills", kind: "chips", label: label("pills"), hint: "On: a pill. Off: follows Radius.", defaultValue: DEFAULT_PILLS.join(" "), items: PILL_SHAPES.map(value => ({ value, label: value === "field" ? "Fields" : value[0]!.toUpperCase() + value.slice(1) })) },

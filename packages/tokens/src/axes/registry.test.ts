@@ -11,6 +11,11 @@ describe("axis registry", () => {
     for (const axis of AXES) expect(defaultPresetOf(axis).id).toBe(axis.defaultPreset);
   });
 
+  // Owner, 2026-10-20: "i dont like seeing (default)". A label names its value; defaultPreset says which is the default.
+  it("never writes \"Default\" into a preset's label", () => {
+    for (const axis of AXES) for (const preset of axis.presets) expect(preset.label, `${axis.id}/${preset.id}`).not.toMatch(/default/i);
+  });
+
   it("names each axis attribute distinctly", () => {
     const attributes = AXES.map(attributeFor);
     expect(new Set(attributes).size).toBe(attributes.length);

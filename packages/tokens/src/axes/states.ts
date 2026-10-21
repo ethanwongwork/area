@@ -25,7 +25,7 @@ import { FILL_STEPS } from "../color/layers.ts";
  * colour (`field-focus-recolor`) and whether the soft halo shows (`field-focus-halo`); base.ts derives their widths.
  */
 const FOCUS_RING = {
-  hug: { label: "Hug (Default)", description: "Hugs controls and sits 2px off cards and text, as ChatGPT.", width: "2px", offset: "0px", gap: "2px", ring: 1, recolor: 0, halo: 0 },
+  hug: { label: "Hug", description: "Hugs controls and sits 2px off cards and text, as ChatGPT.", width: "2px", offset: "0px", gap: "2px", ring: 1, recolor: 0, halo: 0 },
   gap: { label: "Gap", description: "Sits 2px off everything, controls included (Atlassian, Polaris).", width: "2px", offset: "2px", gap: "2px", ring: 1, recolor: 0, halo: 0 },
   halo: { label: "Halo", description: "Fields take the ring's colour on their edge and a soft halo; other controls as Hug.", width: "2px", offset: "0px", gap: "2px", ring: 0, recolor: 1, halo: 1 },
   inset: { label: "Inset", description: "Drawn inside each control's edge, so nothing outside it changes (Primer, Radix).", width: "2px", offset: "-2px", gap: "2px", ring: 1, recolor: 0, halo: 0 },
@@ -62,7 +62,7 @@ export const SELECTED_STROKE_AXIS: AxisDefinition = {
   namespaces: [`${PREFIX}selected-width:`],
   presets: [
     { id: "1", label: "1", description: "A 1px edge in the selection colour.", tokens: tokens({ "selected-width": "1px" }) },
-    { id: "2", label: "2 (Default)", description: "A 2px edge in the selection colour, as ChatGPT's selected tiles.", tokens: tokens({ "selected-width": "2px" }) },
+    { id: "2", label: "2", description: "A 2px edge in the selection colour, as ChatGPT's selected tiles.", tokens: tokens({ "selected-width": "2px" }) },
     { id: "3", label: "3", description: "A 3px edge, for selection that has to read at a glance.", tokens: tokens({ "selected-width": "3px" }) },
   ],
 };
@@ -81,7 +81,7 @@ export const SELECTED_TINT_AXIS: AxisDefinition = {
   defaultPreset: "none",
   namespaces: [`${PREFIX}selected-tint:`],
   presets: [
-    { id: "none", label: "None (Default)", description: "The stroke alone marks selection.", tokens: tokens({ "selected-tint": "transparent" }) },
+    { id: "none", label: "None", description: "The stroke alone marks selection.", tokens: tokens({ "selected-tint": "transparent" }) },
     { id: "tint", label: "Tint", description: "The accent's faint tint under the stroke.", tokens: tokens({ "selected-tint": `light-dark(var(${PREFIX}accent-surface), color-mix(in srgb, var(${PREFIX}accent-surface) 50%, transparent))` }) },
     { id: "neutral", label: "Neutral", description: "The row's selected wash under the stroke.", tokens: tokens({ "selected-tint": `var(${PREFIX}bg-active)` }) },
   ],
@@ -100,7 +100,7 @@ export const HOVER_STROKE_AXIS: AxisDefinition = {
   namespaces: [`${PREFIX}stroke-hover-step:`],
   presets: [0, 1, 2, 3, 4].map(i => ({
     id: String(i),
-    label: i === 0 ? "0 (None)" : i === 2 ? "2 (Default)" : String(i),
+    label: i === 0 ? "0 (None)" : String(i),
     description: i === 0 ? "The edge stays as it rests; the fill carries hover." : `The edge darkens ${i} step${i === 1 ? "" : "s"}.`,
     tokens: tokens({ "stroke-hover-step": i }),
   })),
@@ -120,7 +120,7 @@ const fillAxis = (id: string, label: string, description: string, key: keyof typ
     namespaces: [`${PREFIX}${id}-step:`],
     presets: Array.from({ length: max - min + 1 }, (_, k) => min + k).map(i => ({
       id: String(i),
-      label: i === fallback ? `${i} (Default)` : i === 0 && zero ? `0 (${zero})` : String(i),
+      label: i === 0 && zero ? `0 (${zero})` : String(i),
       description: say(i),
       tokens: tokens({ [`${id}-step`]: i }),
     })),

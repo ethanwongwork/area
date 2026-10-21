@@ -2,24 +2,32 @@
 
 ## Current state (2026-10-21)
 
-- **Status.** `main` is at PR #143. 119 families: 118 Complete; Asset card in review, round 65 (`components65`) on
-  https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG, its "selected state border" note answered by the state work below.
-- **This branch (`claude/cool-payne-review-asset-card`, PR #144).** Review specimens at Type 14; Asset card frame 1:1;
-  state audit and motion strays. Then the interaction states as settings (owner's picks, collection `state-picks` on
-  https://claude.ai/artifact/3uKMHRhpWnPqNA6pK4WfD9): `axes/states.ts` (Focus ring, Hover stroke, Selected stroke,
-  Selected tint, Hover / Selected / Pressed fill), Hover shadow in `axes/depth.ts`, the accent's indicator rung for
-  `focus-color` and `stroke-selected` (`semantic/aliases.ts`), resting and lift as one tight layer. THEMING.md
-  "Interaction states"; docs/research/states-2026-10-21. Inspector rows under Stroke, Shadow and a new Fill heading;
-  Language tiles for each.
-- **Open for the owner.** Pressed in light at default Layers is capped by muted text 4.6:1 (L 0.925, about 9%, not
-  12%), so its four steps are 0.006 apart there; the indicator blue is #0160d9 / #79aeff, not ChatGPT's #3a83f7 (fails
-  3:1 on fills and APCA on the dark page); Rest shadow applies to cards and panels, not outline buttons (Field shadow 0).
+- **Status.** `main` is at PR #146 (this branch). 119 families: 118 Complete; Asset card in review, round 66
+  (`components66`) on https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG: the state settings' Before / After for Card,
+  Asset card, Radio, Checkbox, Board, Composer, Infobox, Panel (answers round 65's "selected state border" note).
+- **Interaction states as settings (PR #146).** Owner's picks (collection `state-picks` on
+  https://claude.ai/artifact/3uKMHRhpWnPqNA6pK4WfD9) are the defaults: `axes/states.ts` (Focus ring, Hover stroke,
+  Selected stroke, Selected tint, Hover / Selected / Pressed fill), Hover shadow in `axes/depth.ts`, the accent's
+  indicator rung for `focus-color` and `stroke-selected` (`semantic/aliases.ts`), resting and lift one tight layer.
+  THEMING.md "Interaction states"; docs/research/states-2026-10-21. Inspector rows under Stroke, Shadow and Fill; a
+  Theme tile and a Setup question for each.
+- **Open for the owner.** Pressed in light at default Layers is capped by muted text 4.6:1 (about 9%, not 12%), so its
+  four steps are 0.006 apart there; the indicator blue is #0160d9 / #79aeff, not ChatGPT's #3a83f7 (fails 3:1 on
+  fills and APCA on the dark page); Rest shadow applies to cards and panels, not outline buttons.
+- **Theme tab (PR #145, merged).** No option label says "(Default)" (`registry.test.ts` enforces it); Language is
+  **Theme** again; Theme → Setup (default) / Browse, one question per setting, not yet reviewed by the owner. The
+  owner's saved Canvas differs from Area's defaults on Layers 1/0, Selection Accent, Stroke width 0.5, Stroke strength
+  3, Rest shadow 3; whether to make those the defaults is still open.
 - **Sessions.** One session at a time. Each starts from `origin/main` in its own worktree (`claude/*`) and merges
   through a PR. Check open PRs first.
 - **Running the app.** `npm run dev` runs Electron and `npm run preview` adds http://localhost:4400 (check who holds
   the port first). Static build: `npm run build -w @area/desktop`, launch config `desktop-dist` (4410).
-- **Open.** Owner picks from the 2026-10-19 audit (PR #142's report); Agent chat Phase 3 not started; Material bundles
-  are named presets (ask before changing).
+- **Docs (PR #140).** `docs/PRINCIPLES.md`, `GOVERNANCE.md` and `ARCHITECTURE.md`; every family has a Documentation
+  entry (`npm run check:docs -w @area/desktop`, in CI); skills `area-component-intake`, `area-component-docs`,
+  `area-foundation-change`.
+- **Open.**
+  - Owner picks from the 2026-10-19 audit (listed in PR #142's report); Agent chat Phase 3 not started; Material
+    bundles are named presets (ask before changing).
 - **Rule for this file.** This section stays under 40 lines and is rewritten, not appended.
   Entries below are history, newest first.
 
