@@ -53,7 +53,7 @@ type Theme = "light" | "dark";
  * contrast), contrast, type size, density, radius, surface, elevation,
  * motion, pills. */
 export type CanvasAxes = Record<Exclude<GalleryControl["axis"], "theme">, string>;
-const CANVAS_DEFAULTS = Object.fromEntries(
+export const CANVAS_DEFAULTS = Object.fromEntries(
   GALLERY_CONTROLS.filter(control => control.axis !== "theme").map(control => [control.axis, control.defaultValue]),
 ) as CanvasAxes;
 /**
@@ -368,6 +368,18 @@ export interface WorkspaceProps {
   canvasRef?: Ref<HTMLDivElement>;
   /** Attributes the Canvas's body takes beyond the Inspector's settings: a tab's own preview (the Theme tab's mode). */
   canvasScope?: Record<string, string>;
+  /**
+   * Whether the Canvas's body carries the Inspector's settings (true by default). A tab that sets them (the Theme tab)
+   * passes false, so its own questions, buttons and cards stay at the app's defaults while a person chooses, and scopes
+   * its previews with `canvasAttributes` itself (owner, 2026-10-21: "the theming experience does not change its own ui
+   * as you make choices").
+   */
+  canvasPicks?: boolean;
+}
+
+/** The Inspector's settings and the Material as the attributes a scope takes (the Canvas's body, or a preview's). */
+export function canvasAttributes(shown: CanvasAxes, material: Parameters<typeof materialAttributes>[0]): Record<string, string | undefined> {
+  return { "data-area-neutral": shown.neutral, "data-area-accent": shown.accent, "data-area-ground-light": shown["ground-light"], "data-area-ground-dark": shown["ground-dark"], "data-area-layers-light": shown["layers-light"], "data-area-layers-dark": shown["layers-dark"], "data-area-action": shown.action, "data-area-selection": shown.selection, "data-area-contrast": shown.contrast === "system" ? undefined : shown.contrast, "data-area-type": shown.type, "data-area-density": shown.density, "data-area-radius": shown.radius, "data-area-surface": shown.surface, "data-area-shadow-rest": shown["shadow-rest"], "data-area-elevation": shown.elevation, ...Object.fromEntries(DEPTH_LEVER_AXES.map(axis => [`data-area-${axis}`, shown[axis]])), "data-area-motion": shown.motion, "data-area-pills": shown.pills, ...materialAttributes(material) };
 }
 
 /*
@@ -376,14 +388,13 @@ export interface WorkspaceProps {
  * Inspector's first heading sit on one line. Every region insets its content by Panel's 14
  * (src/studio.css).
  */
-export function Workspace({ sidebar, canvasLead, canvasTitle, canvasActions, canvas, inspector, canvasRef, canvasScope }: WorkspaceProps) {
+export function Workspace({ sidebar, canvasLead, canvasTitle, canvasActions, canvas, inspector, canvasRef, canvasScope, canvasPicks = true }: WorkspaceProps) {
   const studio = useStudio();
   const sidebarWidth = usePanelWidth("sidebar");
   const inspectorWidth = usePanelWidth("inspector");
   // The Canvas body carries the Inspector's settings on every tab (and the Material, src/material.ts): the colour settings, density (which also lays tiles out
   // as a hairline contact sheet in compact), radius, surface, elevation and the Edge and Depth levers, motion and pills.
-  const shown = studio.shown.canvas;
-  const axes = { ...canvasScope, "data-area-neutral": shown.neutral, "data-area-accent": shown.accent, "data-area-ground-light": shown["ground-light"], "data-area-ground-dark": shown["ground-dark"], "data-area-layers-light": shown["layers-light"], "data-area-layers-dark": shown["layers-dark"], "data-area-action": shown.action, "data-area-selection": shown.selection, "data-area-contrast": shown.contrast === "system" ? undefined : shown.contrast, "data-area-type": shown.type, "data-area-density": shown.density, "data-area-radius": shown.radius, "data-area-surface": shown.surface, "data-area-shadow-rest": shown["shadow-rest"], "data-area-elevation": shown.elevation, ...Object.fromEntries(DEPTH_LEVER_AXES.map(axis => [`data-area-${axis}`, shown[axis]])), "data-area-motion": shown.motion, "data-area-pills": shown.pills, ...materialAttributes(studio.shown.material) };
+  const axes = canvasPicks ? { ...canvasScope, ...canvasAttributes(studio.shown.canvas, studio.shown.material) } : { ...canvasScope };
   // A setting (or a hover preview of one) repaints the Canvas at once rather than fading every tile's colours.
   const main = useRef<HTMLElement>(null);
   const signature = JSON.stringify(axes);

@@ -19,8 +19,16 @@ export interface NumberFieldProps extends Omit<InputHTMLAttributes<HTMLInputElem
   fullWidth?: boolean;
   /** Trailing, non-editable unit text. */
   unit?: string;
-  /** Show stacked increment and decrement buttons. */
-  steppers?: boolean;
+  /**
+   * Decrease and increase buttons. `true` puts both after the value; `"split"` puts minus before it and plus after,
+   * with the value centred, for a count or a quantity.
+   */
+  steppers?: boolean | "split";
+  /**
+   * A control after the value, such as a ghost Custom select for a sizing mode (Figma's "360 Fill"). It sits in a
+   * nested square at the field's end; a Custom select in it takes that height.
+   */
+  trailing?: ReactNode;
   /**
    * A leading drag handle; pointer movement changes the value by one step per 8px. Pass the
    * field's letter or icon (Figma's X, W or rotation glyph) to make it the handle; `true`
@@ -45,7 +53,7 @@ export interface NumberFieldProps extends Omit<InputHTMLAttributes<HTMLInputElem
 /** Text-entry spinbutton with deliberate commit/cancel and bounded arithmetic entry. */
 export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(function NumberField(
   { value, defaultValue = null, onValueChange, onValueCommit, min, max, step = 1,
-    size, variant, fullWidth, unit, steppers, scrub, scrubLabel = "Drag to adjust",
+    size, variant, fullWidth, unit, steppers, trailing, scrub, scrubLabel = "Drag to adjust",
     mixed, locale, grouping = true, fractionDigits, validationStatus: validationStatusProp, invalid, "data-validation-status": fieldValidationStatus,
     disabled: disabledProp, readOnly, required, name, id,
     className, style, onKeyDown, onBlur, onFocus, onPointerDown, onPointerMove, onPointerUp,
@@ -186,7 +194,24 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
   useEffect(() => stopRepeat, []);
 
   // className and style land on the same box, the shell (audit S17, B-20).
-  return <span className={numberFieldVariants({ size, variant, fullWidth }, className)} style={style}
+  const split = steppers === "split";
+  const stepButton = (kind: "decrease" | "increase") => {
+    const delta = kind === "increase" ? 1 : -1;
+    const atBound = kind === "increase" ? max !== undefined && numeric != null && numeric >= max : min !== undefined && numeric != null && numeric <= min;
+    const verb = kind === "increase" ? "Increase" : "Decrease";
+    return <button key={kind} type="button" className="area-number-field__step" tabIndex={-1}
+      aria-label={ariaLabelledBy ? undefined : `${verb} ${ariaLabel ?? "value"}`}
+      aria-labelledby={ariaLabelledBy ? `${inputId}-${kind} ${ariaLabelledBy}` : undefined}
+      disabled={disabledState || atBound}
+      onPointerDown={event => { if (event.button !== 0) return; event.preventDefault(); inputRef.current?.focus(); startRepeat(delta, event); }}
+      onPointerUp={stopRepeat} onPointerLeave={stopRepeat} onPointerCancel={stopRepeat}
+      onClick={event => { if (event.detail === 0) stepBy(delta, event); }}>
+      <span id={`${inputId}-${kind}`} className="area-sr-only">{verb}</span><Glyph name={kind === "increase" ? "add" : "subtract"} />
+    </button>;
+  };
+  const showSteppers = steppers && !readOnly;
+
+  return <span className={numberFieldVariants({ size, variant, fullWidth, steppers: split ? "split" : undefined }, className)} style={style}
     data-disabled={disabled ? "" : undefined} data-read-only={readOnly ? "" : undefined}
     data-invalid={invalidState ? "" : undefined}
     data-success={resolvedValidation === "success" ? "" : undefined}
@@ -199,6 +224,7 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
       onPointerDown={startScrub} onPointerMove={moveScrub} onPointerUp={endScrub} onPointerCancel={cancelScrub}>
       {scrub === true ? <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M5 3v10M8 3v10M11 3v10" stroke="currentColor" strokeLinecap="round" /></svg> : scrub}
     </span> : null}
+    {split && showSteppers ? <span className="area-number-field__steppers">{stepButton("decrease")}</span> : null}
     <input {...rest} ref={node => { inputRef.current = node; if (typeof ref === "function") ref(node); else if (ref) ref.current = node; }} id={inputId} type="text" inputMode="decimal"
       role="spinbutton" className="area-number-field__control" value={display}
       aria-label={ariaLabel} aria-labelledby={ariaLabelledBy} aria-describedby={[ariaDescribedBy, error ? `${inputId}-parse-error` : undefined].filter(Boolean).join(" ") || undefined}
@@ -213,20 +239,8 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
     {name && <input type="hidden" name={name} value={mixed || numeric == null ? "" : String(numeric)} disabled={disabled} />}
     {/* No unit beside "Mixed" or an empty value: it would read as part of the placeholder. */}
     {unit && display !== "" && <span className="area-number-field__unit" aria-hidden="true">{unit}</span>}
+    {trailing != null && trailing !== false ? <span className="area-number-field__trailing">{trailing}</span> : null}
     {/* Read-only shows the value, not dead controls: no steppers, as read-only Switch keeps full paint (audit B-30). */}
-    {steppers && !readOnly && <span className="area-number-field__steppers">
-      {([["decrease", -1, "subtract", min !== undefined && numeric != null && numeric <= min], ["increase", 1, "add", max !== undefined && numeric != null && numeric >= max]] as const).map(([kind, delta, glyph, atBound]) => {
-        const verb = kind === "increase" ? "Increase" : "Decrease";
-        return <button key={kind} type="button" className="area-number-field__step" tabIndex={-1}
-          aria-label={ariaLabelledBy ? undefined : `${verb} ${ariaLabel ?? "value"}`}
-          aria-labelledby={ariaLabelledBy ? `${inputId}-${kind} ${ariaLabelledBy}` : undefined}
-          disabled={disabledState || atBound}
-          onPointerDown={event => { if (event.button !== 0) return; event.preventDefault(); inputRef.current?.focus(); startRepeat(delta, event); }}
-          onPointerUp={stopRepeat} onPointerLeave={stopRepeat} onPointerCancel={stopRepeat}
-          onClick={event => { if (event.detail === 0) stepBy(delta, event); }}>
-          <span id={`${inputId}-${kind}`} className="area-sr-only">{verb}</span><Glyph name={glyph} />
-        </button>;
-      })}
-    </span>}
+    {showSteppers && <span className="area-number-field__steppers">{split ? stepButton("increase") : [stepButton("decrease"), stepButton("increase")]}</span>}
   </span>;
 });

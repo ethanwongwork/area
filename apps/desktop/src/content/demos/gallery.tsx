@@ -1,4 +1,5 @@
 /** Real, compact specimens for the component gallery. Framing never rescales controls. */
+import { MiniUI } from "../../choice-visuals.tsx";
 import { useEffect, useId, useRef, useState } from "react";
 import type { CSSProperties, ReactNode, MouseEvent } from "react";
 import { Alert, AlignmentPicker, AREA_COLOR_GRID, Avatar, AvatarGroup, Badge, BoxField, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, ButtonGroup, Calendar, Card, CardContent, CardMedia, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Code, CodeBlock, ColorField, ColorPicker, ColorSwatch, ColorSwatchPicker, Combobox, CommandPalette, Composer, ContextMenu, Count, CustomSelect, Dialog, Field, HoverCard, Indicator, IndicatorAnchor, Input, InputAction, InputGroup, InputGroupText, Kbd, KbdGroup, Link, Menu, MenuItem, MenuLabel, MenuSeparator, MenuSub, Message, MessageActions, ModelPicker, Nav, NavGroup, NavItem, NumberField, Panel, PanelRow, PanelSection, PasswordField, Popover, PopoverBody, PopoverClose, PopoverDescription, PopoverFooter, PopoverHeader, PopoverMedia, PopoverTitle, Progress, PromptSuggestions, PropertyList, PropertyListItem, Radio, RadioGroup, ScrollToLatest, Segmented, Select, Separator, Skeleton, Slider, SliderRange, Spinner, SplitButton, Switch, Table, TableCell, TableHeaderCell, Tabs, Textarea, Toast, Toaster, Toolbar, ToolbarGroup, ToolbarItem, ToolbarOverflow, ToolbarSeparator, Tooltip, TreeView, type AlignmentPosition, type BoxValue, type ComboboxOption, type CommandItem, type TreeViewNode, useToaster } from "@area/react";
@@ -512,6 +513,14 @@ export const GalleryCheckboxCard = () => (
   <CheckboxGroup label="Label" style={{ inlineSize: "320px" }}>
     <Checkbox variant="card" label="Item one" caption="Description" leadingVisual={<PersonIcon size={20} />} defaultChecked />
     <Checkbox variant="card" label="Item two" caption="Description" leadingVisual={<DocumentIcon />} />
+  </CheckboxGroup>
+);
+/* Text choices: no picture, the label centred and set as itself. */
+export const GalleryCheckboxCardPreview = () => (
+  <CheckboxGroup label="Label" style={{ inlineSize: "420px" }}>
+    <Checkbox variant="card" layout="preview" label="Option one" defaultChecked />
+    <Checkbox variant="card" layout="preview" label="Option two" />
+    <Checkbox variant="card" layout="preview" label="Option three" />
   </CheckboxGroup>
 );
 export const GalleryCheckboxCardTile = () => (
@@ -1641,6 +1650,14 @@ export const GalleryRadioCardTile = () => (
     <Radio variant="card" layout="tile" value="board" label="Board" leadingVisual={<KanbanIcon size={20} />} />
   </RadioGroup>
 );
+/* Each option shown as what it does: a small window in its own theme, the label centred, the card the indicator. */
+export const GalleryRadioCardPreview = () => (
+  <RadioGroup label="Label" name="gallery-radio-card-preview" defaultValue="light" style={{ inlineSize: "420px" }}>
+    <Radio variant="card" layout="preview" value="light" label="Light" leadingVisual={<span className="demo-preview" data-area-theme="light"><MiniUI /></span>} />
+    <Radio variant="card" layout="preview" value="dark" label="Dark" leadingVisual={<span className="demo-preview" data-area-theme="dark"><MiniUI /></span>} />
+    <Radio variant="card" layout="preview" value="system" label="System" leadingVisual={<span className="demo-preview demo-preview--split"><span data-area-theme="light"><MiniUI /></span><span data-area-theme="dark"><MiniUI /></span></span>} />
+  </RadioGroup>
+);
 export const GalleryRadio = () => (
   <RadioGroup label="Label" name="gallery-plan" defaultValue="one">
     <Radio value="one" label="Option one" />
@@ -1765,6 +1782,11 @@ export const GallerySlider = () => <Slider aria-label="Label" min={0} max={100} 
 export const GallerySliderSmall = () => <Slider aria-label="Label" size="sm" defaultValue={40} readout={value => `${value}%`} />;
 export const GallerySliderMedium = () => <Slider aria-label="Label" size="md" defaultValue={60} readout={value => `${value}%`} />;
 export const GallerySliderLarge = () => <Slider aria-label="Label" size="lg" defaultValue={80} readout={value => `${value}%`} />;
+export const GallerySliderTrack = () => <Slider variant="track" aria-label="Label" defaultValue={60} readout={value => `${value}%`} />;
+export const GallerySliderBar = () => <Slider variant="bar" aria-label="Label" defaultValue={60} readout={value => `${value}%`} />;
+export const GallerySliderRangeTrack = () => <SliderRange variant="track" defaultValue={[42, 75]} inputs={false} minLabel="Label start" maxLabel="Label end" style={{ inlineSize: "calc(var(--area-space-96) * 3)" }} />;
+export const GallerySliderRangeBar = () => <SliderRange variant="bar" defaultValue={[42, 75]} inputs={false} minLabel="Label start" maxLabel="Label end" style={{ inlineSize: "calc(var(--area-space-96) * 3)" }} />;
+export const GallerySliderBuffered = () => <Slider aria-label="Position" defaultValue={40} buffered={65} />;
 export const GallerySliderAccent = () => <SelectionAccent><Slider aria-label="Label" defaultValue={65} readout={value => `${value}%`} /></SelectionAccent>;
 export const GallerySliderWithLabel = () => <Slider label="Label" labelPosition="top" defaultValue={50} readout={value => `${value}%`} />;
 export const GallerySliderLabelOnly = () => <Slider label="Label" labelPosition="top" defaultValue={50} />;
@@ -1776,6 +1798,7 @@ export const GallerySliderControlled = () => {
   return <Slider label="Label" labelPosition="top" value={value} onValueChange={setValue} readout={value => `${value}%`} />;
 };
 export const GallerySliderRangeWithInputs = () => <SliderRange defaultValue={[42, 75]} />;
+export const GallerySliderRangeRail = () => <SliderRange defaultValue={[42, 75]} inputs={false} minLabel="Label start" maxLabel="Label end" style={{ inlineSize: "calc(var(--area-space-96) * 3)" }} />;
 export const GallerySliderDisabled = () => <Slider aria-label="Label" defaultValue={60} readout={value => `${value}%`} disabled />;
 export const GallerySliderBare = () => <Slider aria-label="Label" defaultValue={40} />;
 
@@ -1838,7 +1861,7 @@ export const GalleryTextareaSmall = () => <Textarea size="sm" rows={3} aria-labe
 export const GalleryTextareaMedium = () => <Textarea size="md" rows={3} aria-label="Label" placeholder="Medium" />;
 export const GalleryTextareaCount = () => {
   const [value, setValue] = useState("");
-  return <Field label="Label" description={`${value.length} / 160 characters`}><Textarea fullWidth rows={3} maxLength={160} value={value} onChange={event => setValue(event.target.value)} placeholder="Placeholder" /></Field>;
+  return <Field label="Label" characterCount><Textarea fullWidth rows={3} maxLength={160} value={value} onChange={event => setValue(event.target.value)} placeholder="Placeholder" /></Field>;
 };
 
 export const GalleryToast = () => <Toast tone="success" icon={<CheckIcon />}>Body text</Toast>;

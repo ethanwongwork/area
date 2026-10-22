@@ -746,6 +746,12 @@ export const PanelStack = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(functi
  */
 export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "type"> {
   size?: VariantProps<typeof MANIFESTS.slider>["size"];
+  /**
+   * The track's treatment. `rail` (default): a thin rail and a round knob. `track`: a pill as tall as the knob,
+   * the fill running under it (Figma's adjustment slider). `bar`: the track is the control's full height and
+   * corner, its fill ending in a grip.
+   */
+  variant?: "rail" | "track" | "bar";
   /** Visible label for the range. */
   label?: ReactNode;
   /** Places the label and readout above opposite ends of the track. */
@@ -754,6 +760,14 @@ export interface SliderProps extends Omit<InputHTMLAttributes<HTMLInputElement>,
   orientation?: "horizontal" | "vertical";
   /** Draws a marker at each interior step of a discrete track. */
   stepMarks?: boolean;
+  /** Names the track's two ends under it, such as "Low" and "High"; decorative, the value is announced. Horizontal only. */
+  startLabel?: ReactNode;
+  endLabel?: ReactNode;
+  /**
+   * How far a media source has loaded, in the slider's own units (between `min` and `max`): painted as a second,
+   * lighter stretch after the fill. Decorative; it is not announced.
+   */
+  buffered?: number;
   /**
    * Rendered after the track. `true` shows the normalized numeric value; a function can
    * format that live value. A React node remains supported for fully custom content.
@@ -797,10 +811,14 @@ function normalizeSliderValue(
 export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(function Slider(
   {
     size,
+    variant = "rail",
     label,
     labelPosition = "inline",
     orientation = "horizontal",
     stepMarks,
+    startLabel,
+    endLabel,
+    buffered,
     readout,
     onValueChange,
     onInput,
@@ -826,6 +844,9 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
   const lower = finiteNumber(min, 0);
   const upper = Math.max(lower, finiteNumber(max, 100));
   const pct = upper > lower ? ((current - lower) / (upper - lower)) * 100 : 0;
+  const bufferedRatio = buffered === undefined || upper <= lower
+    ? undefined
+    : Math.min(1, Math.max(0, (finiteNumber(buffered, lower) - lower) / (upper - lower)));
   const interval = step === "any" ? 0 : finiteNumber(step, 1);
   const markCount = stepMarks && interval > 0
     ? Math.min(24, Math.max(0, Math.round((upper - lower) / interval) - 1))
@@ -858,10 +879,17 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
     <label
       className={sliderVariants({
         size,
+        variant: variant === "rail" ? undefined : variant,
         labelPosition: labelPosition === "top" ? "top" : undefined,
         orientation: orientation === "vertical" ? "vertical" : undefined,
       }, className)}
-      style={{ ["--_pct" as string]: `${pct}%`, ...style }}
+      // `--_ratio` lets the CSS end the fill at the thumb's centre, which sits inset by half the thumb.
+      style={{
+        ["--_pct" as string]: `${pct}%`,
+        ["--_ratio" as string]: pct / 100,
+        ...(bufferedRatio === undefined ? {} : { ["--_buffered" as string]: bufferedRatio }),
+        ...style,
+      }}
       {...(disabled ? { "data-disabled": "" } : {})}
     >
       {label ? <span className="area-slider__label">{label}</span> : null}
@@ -903,6 +931,12 @@ export const Slider = /* @__PURE__ */ forwardRef<HTMLInputElement, SliderProps>(
       {readout === false || readout === undefined ? null : (
         <span className="area-slider__value" aria-hidden="true">{renderedReadout}</span>
       )}
+      {startLabel != null || endLabel != null ? (
+        <span className="area-slider__ends" aria-hidden="true">
+          <span className="area-slider__end">{startLabel}</span>
+          <span className="area-slider__end">{endLabel}</span>
+        </span>
+      ) : null}
     </label>
   );
 });
@@ -1616,7 +1650,8 @@ export const Tabs = /* @__PURE__ */ forwardRef<HTMLDivElement, TabsProps>(functi
             {...(tab.disabled ? { "data-disabled": "" } : {})}
           >
             {tab.icon ? <span className="area-tabs__icon" aria-hidden="true">{tab.icon}</span> : null}
-            <span className="area-tabs__label">{tab.label}</span>
+            {/* The hidden strong copy reserves the selected width, so selecting a tab never moves the row. */}
+            <span className="area-tabs__label">{tab.label}<span className="area-tabs__reserve" aria-hidden="true">{tab.label}</span></span>
             {tab.trailing}
           </button>
         ))}
@@ -2045,7 +2080,7 @@ export const CodeBlock = /* @__PURE__ */ forwardRef<HTMLDivElement, CodeBlockPro
               }}
               onClick={() => selectLanguage(item)}
             >
-              <span className="area-tabs__label">{item}</span>
+              <span className="area-tabs__label">{item}<span className="area-tabs__reserve" aria-hidden="true">{item}</span></span>
             </button>
           );
         })}

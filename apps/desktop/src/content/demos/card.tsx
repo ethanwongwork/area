@@ -274,7 +274,7 @@ export const CardTemplateMusic = () => (
         <CardTitle>Title</CardTitle>
         <CardDescription>Description</CardDescription>
       </CardHeader>
-      <Slider size="sm" aria-label="Position" defaultValue={40} />
+      <Slider size="sm" aria-label="Position" defaultValue={40} buffered={65} />
       <CardFooter>
         <Toolbar aria-label="Playback">
           <ToolbarItem><Button variant="ghost" iconOnly aria-label="Previous" icon={<SkipBackFilledIcon />} /></ToolbarItem>

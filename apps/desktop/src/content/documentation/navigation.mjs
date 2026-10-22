@@ -65,15 +65,15 @@ export default {
     // Spec: Anatomy, Decisions.
     parts: {
       root: "Holds the tab list and the panels: a column, or a row when vertical.",
-      list: "The tablist: the row (or column) of tabs, with the optional track divider under it.",
+      list: "The tablist: the row (or column) of tabs, with the optional track divider under it; the indicator lies on the track.",
       tab: "A button with no inline padding, so its label sits on the panel's edge; its indicator spans the whole tab, icon and count included.",
       panel: "The tabpanel for the selected tab; the others are hidden. It is focusable, so Tab reaches a panel with no controls.",
-      label: "The tab's text, in the muted ink until selected.",
+      label: "The tab's text: muted at 400 until selected, then default ink at 500. A hidden strong copy holds the selected width, so the row never moves.",
       icon: "An optional leading icon, hidden from assistive tech.",
     },
     // Spec: States.
     states: {
-      selected: "The default ink and the indicator in the Selection role. The selected tab is the list's only Tab stop.",
+      selected: "The default ink at 500 and the indicator in the Selection role. The selected tab is the list's only Tab stop.",
       disabled: "Dims, ignores input and is skipped by the arrow keys; native disabled.",
     },
     // Source: primitives.tsx Tabs onKeyDown.
@@ -193,6 +193,7 @@ export default {
       ["Do", "Pass onStepSelect so people can go back to done steps. Add nonLinear only when steps can be done in any order."],
       ["Do", "Set status=\"invalid\" on a step with a problem; it is read as \"has a problem\" after its title."],
       ["Do", "Use vertical in a side column, where the steps stack with the line through their markers."],
+      ["Do", "Put the open step's sub-steps or settings in its children, under its title; leave the other steps closed."],
       ["Don't", "Use Stepper for a checklist of independent tasks: it says the steps come in order."],
       ["Don't", "Make upcoming steps clickable in a flow that must be done in order; leave nonLinear off."],
     ],

@@ -63,7 +63,7 @@
   .area-plan__items {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--area-ui-row-gap); /* Menu's break between rows: 2, compact 0 */
+    gap: var(--area-ui-row-gap); /* Menu's break between rows: 1 at every density */
     margin: 0;
     padding: var(--_card-list);
     list-style: none;

@@ -51,7 +51,7 @@
   /* A key named in the hint's sentence is a keycap (Kbd's rule, round 52: a key named in prose is filled; a key that
      labels a row or a button is quiet). */
   .area-approval__detail { min-inline-size: 0; }
-  /* Menu's list: its break between rows (ui-row-gap: 2, compact 0) so adjacent plates stay distinct. */
+  /* Menu's list: its break between rows (ui-row-gap: 1) so adjacent plates stay distinct. */
   .area-approval__options { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-ui-row-gap); }
   /* A choice is a Menu row: the row's height, inset, gap and corner; the row plate under the pointer and on focus. */
   .area-approval__option {

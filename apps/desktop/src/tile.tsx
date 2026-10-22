@@ -20,7 +20,7 @@
  * (src/gallery/fit.ts) still finds component specimens.
  */
 import type { CSSProperties, ReactNode } from "react";
-import { AssetCard, AssetGridItem, SectionHeading } from "@area/react";
+import { AssetCard, AssetGridItem, ListBoxItem, SectionHeading } from "@area/react";
 import { APP_SCALE } from "./app-scale.ts";
 
 export type TileSpan = "unit" | "wide";
@@ -79,12 +79,80 @@ export interface TileProps {
   actions?: ReactNode;
   /** A click on the tile, outside the controls in its specimen and caption, opens it (`onOpen`). */
   openOnClick?: boolean;
+  /**
+   * The container: `plain` (the default), a very light neutral box with a light gray line, the name in its first row;
+   * `asset`, Area's Asset card, on the Components tab only (owner, 2026-10-21: "the asset card doesnt need to be used
+   * everywhere, for now, just restrict it to be used only on the component page. everywhere else can just use standard
+   * very light neutral containers with a light gray stroke").
+   */
+  container?: "plain" | "asset";
   children?: ReactNode;
 }
 
 const CONTROLS = "a, button, input, textarea, select, label, [contenteditable], [role=button], [role=switch], [role=checkbox], [role=radio], [role=tab], [role=slider], [role=combobox]";
 
-export function Tile({ label, value, span, stage, selected, onSelect, onOpen, card, containerless, actions, openOnClick, option, id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, paint, scope, stageScope, inert, children }: TileProps) {
+export function Tile(props: TileProps) {
+  return props.container === "asset" ? <AssetTile {...props} /> : <PlainTile {...props} />;
+}
+
+/**
+ * The plain container: a box with the name in its first row and the visual under it (studio.css, "Plain tiles"). The
+ * box sits in a wrapper that is the control (a List box option, a button, or an article), so a grid's keyboard and
+ * selection stay the List box's and the box draws the states: the edge steps on hover, the selected edge, the ring.
+ */
+function PlainTile({ label, value, span, stage, selected, onSelect, onOpen, card, actions, openOnClick, option, id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, paint, scope, stageScope, inert, children }: TileProps) {
+  const view = stage === "none" ? null : stage === "fit"
+    ? <div className="gallery-tile__view" {...stageScope}><div className="gallery-tile__stage">{children}</div></div>
+    : <div className="gallery-tile__view" inert={inert || undefined} {...stageScope}>{children}</div>;
+  const box = (
+    <div className="gallery-tile gallery-tile--plain" data-span={span} data-stage={stage} data-layout={card ? "card" : undefined}
+      data-painted={paint ? "" : undefined} data-scoped={scope ? "" : undefined}
+      // The ground the box paints, so a specimen's control fills step from it (styles layers.css).
+      data-area-ground={paint ? undefined : "raised"}
+      style={paint ? ({ "--_paint": paint.background, "--_ink": paint.color } as CSSProperties) : undefined} {...scope}>
+      {/* The name is the app's chrome, at the app's scale whatever the Canvas previews. */}
+      <div className="gallery-tile__head" {...APP_SCALE}>
+        <span className="gallery-tile__label">{label}</span>
+        {value != null ? <span className="gallery-tile__value">{value}</span> : null}
+        {actions}
+      </div>
+      {view}
+    </div>
+  );
+  const shared = { id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, className: "gallery-plain" };
+  if (option !== undefined) {
+    return <ListBoxItem value={option} textValue={typeof label === "string" ? label : undefined} {...shared}>{box}</ListBoxItem>;
+  }
+  // A tile whose stage is inert has nothing inside to focus, so the tile itself is the control: a Tab stop that Enter
+  // or Space selects, its state as aria-pressed (product UI rule 5).
+  if (inert && onSelect) {
+    return (
+      <article {...shared} role="button" tabIndex={0} aria-pressed={selected ?? false} onClick={onSelect}
+        onKeyDown={event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onSelect(); } }}>
+        {box}
+      </article>
+    );
+  }
+  // A tile that opens on a click is a button to the keyboard too (Testing's screens).
+  if (onOpen && openOnClick) {
+    return (
+      <article {...shared} role="button" tabIndex={0} data-selected={selected ? "" : undefined}
+        onClick={event => { if (!(event.target as Element).closest(CONTROLS)) onOpen(); }}
+        onKeyDown={event => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onOpen(); } }}>
+        {box}
+      </article>
+    );
+  }
+  return (
+    <article {...shared} data-selected={selected ? "" : undefined} onPointerDown={onSelect} onFocusCapture={onSelect}
+      onDoubleClick={onOpen ? event => { if (!(event.target as Element).closest("input, textarea, select, [contenteditable]")) onOpen(); } : undefined}>
+      {box}
+    </article>
+  );
+}
+
+/** Area's Asset card (Components). */
+function AssetTile({ label, value, span, stage, selected, onSelect, onOpen, card, containerless, actions, openOnClick, option, id, "aria-label": ariaLabel, "data-key": dataKey, "data-name": dataName, paint, scope, stageScope, inert, children }: TileProps) {
   const view = stage === "none" ? null : stage === "fit"
     ? <div className="gallery-tile__view" {...stageScope}><div className="gallery-tile__stage">{children}</div></div>
     : <div className="gallery-tile__view" inert={inert || undefined} {...stageScope}>{children}</div>;

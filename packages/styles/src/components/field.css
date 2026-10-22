@@ -38,6 +38,26 @@
     color: var(--area-fg-muted);
   }
 
+  /*
+   * The character count (owner 2026-10-21): "12 / 320" in the description's text and ink, at the end of the line under
+   * the control (Polaris showCharacterCount, Carbon, MUI helper text; ChatGPT's custom instructions). A description
+   * shares its line; the count holds the end. At the limit it takes the default ink, never an error colour: the
+   * control stops taking input there (maxLength), so nothing is wrong.
+   */
+  .area-field__count {
+    align-self: flex-end;
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+    font-variant-numeric: tabular-nums;
+    color: var(--area-fg-muted);
+    white-space: nowrap;
+  }
+  .area-field__count[data-full] { color: var(--area-fg-default); }
+  /* The count ends where the control ends: a Field holding a contained control (not full width) hugs it. */
+  .area-field:not(.area-field--horizontal, .area-field--inline):has(> .area-field__count):not(:has(> [class*="--full-width"])) { inline-size: fit-content; max-inline-size: 100%; }
+  .area-field:not(.area-field--horizontal, .area-field--inline):has(> .area-field__description + .area-field__count) > .area-field__count { margin-block-start: calc(-1 * (var(--area-text-xs-leading) + var(--area-ui-stack))); }
+  .area-field:not(.area-field--horizontal, .area-field--inline):has(> .area-field__description + .area-field__count) > .area-field__description { padding-inline-end: calc(9ch + var(--area-space-8)); }
+
   .area-field__validation,
   .area-field__error {
     display: flex;
@@ -102,6 +122,8 @@
   .area-field--inline > .area-field__error {
     grid-column: 2;
   }
+  .area-field--horizontal > .area-field__count,
+  .area-field--inline > .area-field__count { grid-column: 2; justify-self: end; }
 
   /* An inspector switch is the right edge of a row, like a trailing control in a settings panel. */
   .area-panel .area-field--horizontal > .area-switch,

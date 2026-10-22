@@ -1,6 +1,6 @@
 /** Stepper gallery specimens: one variant per tile. docs/specs/stepper.md. */
 import { useState } from "react";
-import { Button, Stepper, StepperStep } from "@area/react";
+import { Button, Nav, NavItem, Stepper, StepperStep } from "@area/react";
 
 const wide = { inlineSize: "calc(var(--area-space-96) * 4)", maxInlineSize: "100%" };
 
@@ -36,6 +36,20 @@ export const GalleryStepperVertical = () => (
   <Stepper current={1} orientation="vertical" aria-label="Label">
     <StepperStep title="Step one" description="Description" />
     <StepperStep title="Step two" description="Description" />
+    <StepperStep title="Step three" />
+  </Stepper>
+);
+/* The open step holds what it is made of: its sub-steps, under its title, the line running on beside them. */
+export const GalleryStepperContent = () => (
+  <Stepper current={1} orientation="vertical" aria-label="Label" style={{ inlineSize: "calc(var(--area-space-96) * 3)" }}>
+    <StepperStep title="Step one" />
+    <StepperStep title="Step two">
+      <Nav aria-label="Step two">
+        <NavItem href="#one" current>Item one</NavItem>
+        <NavItem href="#two">Item two</NavItem>
+        <NavItem href="#three">Item three</NavItem>
+      </Nav>
+    </StepperStep>
     <StepperStep title="Step three" />
   </Stepper>
 );

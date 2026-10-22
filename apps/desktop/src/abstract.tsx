@@ -11,11 +11,11 @@
  *   selection    a ticked box
  *   ground       a window that is all page under a white bar
  *   layers       a window's sidebar, page, card and field
- *   contrast     the edges a stronger contrast draws: a field, a box, an outline button
+ *   contrast     the edges a stronger contrast draws: a field, a box, an outline button (a close-up, 1.25x)
  *   type         the type ramp, each role at the preset's size, so what follows the base (body, captions, the small
  *                heading) and what holds (titles, the display jump at 14) is plain
- *   density      a list's rows
- *   radius       a field's and a button's corners
+ *   density      a list's rows (a close-up, 1.25x)
+ *   radius       a field's and a button's corners (a close-up, 1.25x)
  *   Stroke and Shadow (owner, 2026-10-19: "fix the visuals for stroke and shadow to be more custom tailored to each
  *   axis/variable that is changed and make sure its visible"; then "i dont want it to be too zoomed in, and i also still
  *   want to use real components"): each the whole real component the setting draws on, with its own text, centred on
@@ -37,9 +37,9 @@
  *     focus-ring      Focus ring: a field, a button and a card each focused, 1.25x
  *     shadow-hover    Hover shadow: a hovered card, 1.25x
  *     fill-hover, -selected, -pressed: a menu's rows hovered, selected and pressed, 1.25x
- *   motion       a switch flipping
- *   easing       the same switch flipping at Motion 300, so the curve has time to show
- *   pills        the shape the tile names, as a pill
+ *   motion       a switch flipping (a close-up, 1.5x)
+ *   easing       the same switch flipping at Motion 300, so the curve has time to show (a close-up, 1.5x)
+ *   pills        the shape the tile names, as a pill (a close-up, 1.5x; a field and a segmented track at 1x)
  *
  * Scale (owner, 2026-10-19: "the scale of all the visuals ... should look relatively balanced"): each drawing is
  * measured at its natural size and zoomed to fill a share of its tile, the same share for every drawing of a kind
@@ -82,8 +82,11 @@ function largest(group: string) {
   return { w, h };
 }
 
-/** Zooms its drawing to fill its share of the tile (or preview), by the largest drawing of its setting. */
-function Fit({ children, fill, group }: { children: ReactNode; fill: number; group: string }) {
+/**
+ * Zooms its drawing to fill its share of the tile (or preview), by the largest drawing of its setting, never past `max`
+ * (0.8 for a tile's preview; the Setup's stage passes 1, true scale, since it shows the setting's effect at its size).
+ */
+function Fit({ children, fill, group, max = MAX_ZOOM }: { children: ReactNode; fill: number; group: string; max?: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const zoomRef = useRef(1);
   const [zoom, setZoom] = useState(1);
@@ -96,7 +99,7 @@ function Fit({ children, fill, group }: { children: ReactNode; fill: number; gro
       const { width, height } = host.getBoundingClientRect();
       const { w, h } = largest(group);
       if (!width || !height || !w || !h) return;
-      const next = Math.round(Math.min((width * fill) / w, (height * fill) / h, MAX_ZOOM) * 20) / 20;
+      const next = Math.round(Math.min((width * fill) / w, (height * fill) / h, max) * 20) / 20;
       if (next === zoomRef.current) return;
       zoomRef.current = next;
       setZoom(next);
@@ -115,7 +118,7 @@ function Fit({ children, fill, group }: { children: ReactNode; fill: number; gro
     const observer = new ResizeObserver(measure);
     observer.observe(host);
     return () => { observer.disconnect(); watching.delete(apply); report(group, key, null); };
-  }, [fill, group]);
+  }, [fill, group, max]);
   // Scale, not zoom (owner, 2026-10-19: "i want scaling of components to be seamless, if it could sit on half pixels
   // would that work?"): the drawing is laid out at 1x and shrunk whole, so every part keeps its exact proportions and
   // lands on half pixels as it must; zoom laid it out again smaller, snapping 1px edges to device pixels while the
@@ -258,8 +261,31 @@ const StateMenu = () => (
     <MenuItem className="lang-state-pressed">Pressed</MenuItem>
   </div>
 );
-/** How much over its size each setting's component is shown. */
+/** A field over a button: their corners (Radius); a field, a box and an outline button: their edges (Contrast). Each one
+    a column narrow enough that the close-up shows every corner whole inside a choice. */
+const Corners = () => (
+  <div className="lang-col lang-zoom-narrow">
+    <Input aria-label="Label" placeholder="Field" />
+    <div className="lang-row"><Button>Button</Button></div>
+  </div>
+);
+const Edges = () => (
+  <div className="lang-col lang-zoom-narrow">
+    <Input aria-label="Label" placeholder="Field" />
+    <div className="lang-row"><Checkbox aria-label="Option" /><Button variant="outline" tone="neutral">Button</Button></div>
+  </div>
+);
+/** A list's rows, at their height (Density). */
+const RowsSurface = () => <div className="lang-zoom-menu"><Rows /></div>;
+/** How much over its size each setting's component is shown. Radius, Contrast, Density and the motion settings joined
+    the close-ups on 2026-10-21 (owner: "make each visual choice more clear"): shrunk to fit a choice, a 2px corner step,
+    a firmer edge, a row's height and a switch's travel could not be told apart. */
 const CLOSE_UPS: Record<string, { scale: number; subject: () => ReactNode }> = {
+  radius: { scale: 1.25, subject: Corners },
+  contrast: { scale: 1.25, subject: Edges },
+  density: { scale: 1.25, subject: RowsSurface },
+  motion: { scale: 1.5, subject: LoopingSwitch },
+  easing: { scale: 1.5, subject: LoopingSwitch },
   surface: { scale: 1.5, subject: CardSurface },
   stroke: { scale: 1.5, subject: CardWithField },
   "shadow-rest": { scale: 1.25, subject: CardSurface },
@@ -280,6 +306,9 @@ const CLOSE_UPS: Record<string, { scale: number; subject: () => ReactNode }> = {
   "fill-pressed": { scale: 1.25, subject: StateMenu },
 };
 
+/** Whether a setting draws a close-up (its component cropped a little over its size) rather than a fitted drawing. */
+export const hasCloseUp = (axis: string) => axis in CLOSE_UPS;
+
 /** The whole component, centred in a window on the page's ground, a little over its size. */
 function CloseUp({ scale, children }: { scale: number; children: ReactNode }) {
   return (
@@ -295,6 +324,12 @@ function CloseUp({ scale, children }: { scale: number; children: ReactNode }) {
  */
 export function Abstract({ axis, preset, whole }: { axis: string; preset?: string; whole?: boolean }) {
   const closeUp = CLOSE_UPS[axis];
+  // Pills: the shape the choice names, a close-up of its own (a count or a badge shrunk to fit read as a dot).
+  // A field and a segmented track are wide controls: at their size, the field narrow, so each shows both ends.
+  if (axis === "pills" && !whole) {
+    const wide = preset === "field" || preset === "segmented";
+    return <CloseUp scale={wide ? 1 : 1.5}><div className={wide ? "lang-row lang-zoom-narrow" : "lang-row"}><Pill shape={preset ?? "button"} /></div></CloseUp>;
+  }
   const art = closeUp && !whole ? <CloseUp scale={closeUp.scale}><closeUp.subject /></CloseUp>
     : closeUp ? <Fit fill={FILL.wide} group={`${axis}-whole`}><div className="lang-zoom-whole"><closeUp.subject /></div></Fit>
     : (() => {
@@ -370,6 +405,16 @@ function drawing(axis: string, preset?: string): [number, ReactNode] {
     default:
       return [FILL.control, <Button>Button</Button>];
   }
+}
+
+/**
+ * The settings whose change shows only in a state (hover, selection, focus, press): no view draws that state, so the
+ * Setup's stage draws the state itself, the close-up's component at true scale (theme-setup.tsx).
+ */
+export const STATE_SETTINGS = new Set(["stroke-hover", "selected-stroke", "selected-tint", "focus-ring", "shadow-hover", "fill-hover", "fill-selected", "fill-pressed"]);
+export function StateDrawing({ axis }: { axis: string }) {
+  const Subject = CLOSE_UPS[axis]?.subject;
+  return Subject ? <Fit fill={FILL.window} max={1} group={`stage-${axis}`}><div className="lang-zoom-whole"><Subject /></div></Fit> : null;
 }
 
 /** The same fit for the Theme tab's Setup views (theme-setup.tsx): one zoom per group, by its largest drawing. */

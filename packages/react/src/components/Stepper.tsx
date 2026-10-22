@@ -25,6 +25,12 @@ export interface StepperStepProps extends Omit<LiHTMLAttributes<HTMLLIElement>, 
   title: ReactNode;
   /** A muted line under the title. */
   description?: ReactNode;
+  /**
+   * What the step holds, under its text and in line with its title, the line running on beside it: the open step's
+   * sub-steps or settings (Base Web's ProgressSteps and GOV.UK's step-by-step open a step in place). Keep it to the
+   * step that is open; a person reads the others by their titles.
+   */
+  children?: ReactNode;
   /** Overrides the status the step's place gives it, for a step with a problem (`invalid`). */
   status?: StepStatus;
   disabled?: boolean;
@@ -66,7 +72,7 @@ export const Stepper = /* @__PURE__ */ forwardRef<HTMLOListElement, StepperProps
 });
 
 export const StepperStep = /* @__PURE__ */ forwardRef<HTMLLIElement, StepperStepProps>(function StepperStep(props, ref) {
-  const { title, description, status: _status, disabled, index = 0, placed = "upcoming", current = placed === "current", select, statusLabel, className, ...rest } = props as StepperStepProps & Injected;
+  const { title, description, status: _status, disabled, index = 0, placed = "upcoming", current = placed === "current", select, statusLabel, className, children, ...rest } = props as StepperStepProps & Injected;
   const marker = (
     <span className="area-stepper-step__marker" aria-hidden="true">
       {placed === "complete" ? <Glyph name="check" size={12} /> : placed === "invalid" ? "!" : index + 1}
@@ -95,6 +101,7 @@ export const StepperStep = /* @__PURE__ */ forwardRef<HTMLLIElement, StepperStep
       ) : (
         <span className="area-stepper-step__body">{marker}{text}</span>
       )}
+      {children != null && children !== false ? <div className="area-stepper-step__content">{children}</div> : null}
     </li>
   );
 });

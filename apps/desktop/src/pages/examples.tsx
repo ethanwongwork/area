@@ -4,6 +4,7 @@
  * settings, so every Inspector setting (colour, Layers, type, density, radius, surface, elevation, motion) reaches it;
  * All shows each example as a tile. The Inspector holds every Canvas setting, then the example's facts.
  */
+import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { Code, Count, EmptyState, Nav, NavGroup, NavItem, PanelSection } from "@area/react";
 import { SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
 import { Tile, TileGrid } from "../tile.tsx";
@@ -13,6 +14,8 @@ import { matches } from "../search.ts";
 import { AnalyticsDashboard } from "../content/examples/analytics.tsx";
 import { ChatScreen } from "../chat/chat.tsx";
 import { ABSTRACT_BOARD, AbstractBoard } from "../content/examples/abstract-board.tsx";
+import { MobileScreen } from "../content/examples/mobile.tsx";
+import { SettingsScreen } from "../content/examples/settings.tsx";
 
 const EXAMPLES = [
   {
@@ -38,6 +41,22 @@ const EXAMPLES = [
     families: ["Panel", "Number field", "Select", "Segmented", "Toggle group", "Nav", "Search field", "Alignment picker", "Box field", "Box model", "Card", "Badge", "Folder", "Avatar", "Count", "Checkbox", "Radio", "Switch", "Date picker", "Pagination", "Dialog", "Menu", "Toolbar", "Titlebar", "Composer", "Kbd", "Custom select", "Table", "Split button", "Button", "Skeleton"],
     gaps: ABSTRACT_BOARD.flatMap(piece => piece.gaps.map(gap => `${piece.id} ${piece.title}: ${gap}`)),
     Screen: AbstractBoard,
+  },
+  {
+    id: "settings",
+    label: "Appearance settings",
+    description: "A settings page after Untitled UI's Appearance: a label and its description beside each control, theme thumbnails, swatches, a switch, a select, then Cancel and Save (2026-10-21).",
+    families: ["Nav", "Avatar", "Section heading", "Separator", "Color swatch picker", "Radio", "Switch", "Select", "Button"],
+    gaps: [],
+    Screen: SettingsScreen,
+  },
+  {
+    id: "mobile",
+    label: "Mobile Today",
+    description: "A phone's Today at 390, after a journal app: times down a dashed line, a note, tasks with chips, a card, a composer at the foot (2026-10-21).",
+    families: ["Button", "Segmented", "Checkbox", "Chip", "Card", "Avatar", "Badge", "Composer"],
+    gaps: ["The dashed time line and the time pills are app CSS: Timeline has no dashed line or pill markers."],
+    Screen: MobileScreen,
   },
 ] as const;
 
@@ -70,7 +89,7 @@ export function ExamplesPage() {
         <TileGrid span="wide">
           {shown.map(entry => (
             <Tile key={entry.id} span="wide" stage="center" inert card label={entry.label} openOnClick onOpen={() => select(entry.id)}>
-              <div className="ex-thumb" aria-hidden="true"><entry.Screen /></div>
+              <WidthZoom><div className="ex-thumb" aria-hidden="true"><entry.Screen /></div></WidthZoom>
             </Tile>
           ))}
         </TileGrid>
@@ -98,4 +117,25 @@ export function ExamplesPage() {
       }}
     />
   );
+}
+
+/**
+ * A screen's thumbnail: laid out at its own width (1200) and zoomed to the tile's, so its top reads as the screen does
+ * and the rest crops at the tile's foot (it was a fixed 0.42, wider than a plain tile's view).
+ */
+function WidthZoom({ children }: { children: ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [zoom, setZoom] = useState(0.4);
+  useLayoutEffect(() => {
+    const host = ref.current?.parentElement;
+    if (!host) return;
+    const observer = new ResizeObserver(() => {
+      const style = getComputedStyle(host);
+      const width = host.clientWidth - parseFloat(style.paddingInlineStart) - parseFloat(style.paddingInlineEnd);
+      if (width > 0) setZoom(Math.floor((width / 1200) * 1000) / 1000);
+    });
+    observer.observe(host);
+    return () => observer.disconnect();
+  }, []);
+  return <div ref={ref} className="ex-thumb-zoom" style={{ zoom }}>{children}</div>;
 }

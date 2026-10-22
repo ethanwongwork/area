@@ -64,8 +64,8 @@
   .area-queue__chevron::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: max(var(--area-radius-min), calc(var(--area-radius-small) + (var(--area-radius-container) - var(--area-stroke-width) - var(--_plate-in) - var(--area-radius-small)) * var(--area-radius-concentric))); transition: var(--area-transition); }
   @media (hover: hover) { .area-queue__head:hover .area-queue__chevron::before { background: var(--area-bg-hover); transition-duration: 0s; } }
   .area-queue__head:active .area-queue__chevron::before { background: var(--area-bg-pressed); transition-duration: 0s; }
-  /* An ordered list (messages send in order), with Menu's list padding and its break between rows (ui-row-gap: 2,
-     compact 0) so adjacent plates stay distinct. */
+  /* An ordered list (messages send in order), with Menu's list padding and its break between rows (ui-row-gap: 1)
+     so adjacent plates stay distinct. */
   .area-queue__items { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-ui-row-gap); margin: 0; padding: var(--_card-list); list-style: none; }
   .area-queue__items[hidden] { display: none; }
   /* A row: the message on one line (Cursor's label 13/18 ellipsis), the row plate under the pointer or focus. */

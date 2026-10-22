@@ -57,9 +57,9 @@ export const COMPLETE_COMPONENTS = new Set([
   // code and color-swatch reopened 2026-10-12 for the translucent swatch ring (owner: "yes apply the swatch fix").
   'composer',
   // color-field, color-picker, color-swatch-picker, panel and property-list reopened 2026-10-12: their swatches take the ring.
-  'dialog', 'field', 'input-group',
-  'popover', 'progress', 'separator', 'slider',
-  'table', 'tabs', 'tooltip',
+  'dialog', 'input-group',
+  'popover', 'progress', 'separator',
+  'table', 'tooltip',
   // Approved 2026-10-08 on the component review page (recommendations for open questions accepted).
   'accordion', 'alignment-picker', // tag: reopened 2026-10-16 (Layers sweep, round 30).
   // Approved 2026-10-08 after their requested changes.
@@ -67,7 +67,7 @@ export const COMPLETE_COMPONENTS = new Set([
   // Approved 2026-10-09 on the review page, round 2 (components2).
   'pagination', 'scroll-area', 'toggletip', 'combobox', 'custom-select', 'drawer', // tag-picker: reopened 2026-10-16 (round 30).
   // Approved 2026-10-09 on the review page, round 3 (components3), after the round-2 feedback.
-  'link', 'file-upload', 'command-palette', 'alert', 'number-field', // kbd: reopened in round 51
+  'link', 'file-upload', 'command-palette', 'alert', // kbd: reopened in round 51
   // Approved 2026-10-10 on the review page, round 5 (components5).
   // description-list: reopened 2026-10-12 for show more (visibleCount).
 
@@ -96,8 +96,8 @@ export const COMPLETE_COMPONENTS = new Set([
   'preview-frame',
   // Approved 2026-10-13 on the review page, round 24 (components24).
   'password-field', 'otp-field',
-  // Approved 2026-10-13 on the review page, round 25 (components25).
-  'stepper',
+  // Approved 2026-10-13 on the review page, round 25 (components25). stepper: back in review 2026-10-21, an open
+  // step's content (children) for the Theme setup's Sidebar rail.
   // Approved 2026-10-13 on the review page, round 26 (components26): the value ring and its linear motion.
   'spinner',
   // Approved 2026-10-13 in chat after round 26 (owner: "okay agree": the colon stays tight, "9:30").
@@ -143,7 +143,7 @@ export const COMPLETE_COMPONENTS = new Set([
 // Asset card rebuilt to the owner's designs; Color swatch 14; File page blank; File image (new); Video player's play.
 // Round 64 approved Calendar. Merged with main's PR #141: Surface and Stack (new, in review), and Asset card's
 // containerless, hug and waterfall views, ported onto the round-61 card (in review for those views).
-export const REVIEW_COMPONENTS = new Set(['asset-card']);
+export const REVIEW_COMPONENTS = new Set(['asset-card', 'stepper', 'slider', 'tabs', 'number-field', 'field']); // slider: knob, ticks, track and bar variants; tabs: strong selected label, indicator on the track; number-field: split steppers, trailing; field: character count (2026-10-21)
 export const componentStatus = slug => COMPLETE_COMPONENTS.has(slug) ? 'complete' : REVIEW_COMPONENTS.has(slug) ? 'review' : 'unrefined';
 export const statusLabel = status => ({ complete: 'Complete', review: 'In review', unrefined: 'Unrefined' })[status];
 

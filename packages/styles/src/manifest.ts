@@ -146,7 +146,7 @@ export const field = {
   variants: { orientation: ["vertical", "horizontal"] },
   booleans: ["inline"],
   states: ["disabled"],
-  elements: ["label", "required", "description", "validation", "error"],
+  elements: ["label", "required", "description", "count", "validation", "error"],
   defaults: { orientation: "vertical" },
 } as const satisfies ComponentManifest;
 
@@ -196,10 +196,10 @@ export const timeField = {
 export const numberField = {
   block: "area-number-field",
   description: "Edits a number with optional units, stepping and scrubbing.",
-  variants: { variant: ["outline", "soft"], size: ["sm", "md", "lg"] },
+  variants: { variant: ["outline", "soft"], size: ["sm", "md", "lg"], steppers: ["split"] },
   booleans: ["full-width"],
   states: ["disabled", "read-only", "invalid", "success", "warning", "scrubbing"],
-  elements: ["control", "unit", "scrub", "steppers", "step"],
+  elements: ["control", "unit", "scrub", "steppers", "step", "trailing"],
   defaults: { variant: "outline", size: "md" },
 } as const satisfies ComponentManifest;
 
@@ -351,7 +351,7 @@ export const select = {
 export const checkbox = {
   block: "area-checkbox",
   description: "Toggles a single independent option.",
-  variants: { variant: ["card"], layout: ["row", "tile"], size: ["md", "lg"] },
+  variants: { variant: ["card"], layout: ["row", "tile", "preview"], size: ["md", "lg"] },
   states: ["checked", "indeterminate", "disabled", "invalid"],
   elements: ["control", "visual"],
   defaults: { size: "md" },
@@ -369,7 +369,7 @@ export const checkboxGroup = {
 export const radio = {
   block: "area-radio",
   description: "Picks one option from a mutually exclusive set.",
-  variants: { variant: ["card"], layout: ["row", "tile"], size: ["md", "lg"] },
+  variants: { variant: ["card"], layout: ["row", "tile", "preview"], size: ["md", "lg"] },
   states: ["disabled"],
   elements: ["control", "visual"],
   defaults: { size: "md" },
@@ -403,7 +403,7 @@ export const switchControl = {
 export const sliderRange = {
   block: "area-slider-range",
   description: "Picks a range with two handles on one rail, with optional number fields.",
-  variants: { size: ["sm", "md", "lg"] },
+  variants: { size: ["sm", "md", "lg"], variant: ["track", "bar"] },
   states: ["overlap", "disabled"],
   elements: ["track", "input", "end"],
   defaults: { size: "md" },
@@ -414,11 +414,12 @@ export const slider = {
   description: "Picks a value from an ordered range.",
   variants: {
     size: ["sm", "md", "lg"],
+    variant: ["track", "bar"],
     labelPosition: ["top"],
     orientation: ["vertical"],
   },
   states: ["disabled", "hover", "focus-visible"],
-  elements: ["label", "control", "value", "marks"],
+  elements: ["label", "control", "value", "marks", "ends", "end"],
   defaults: { size: "md" },
 } as const satisfies ComponentManifest;
 
@@ -902,7 +903,7 @@ export const tabs = {
   variants: { size: ["sm", "md", "lg"], orientation: ["vertical"] },
   booleans: ["track"],
   states: ["selected", "disabled"],
-  elements: ["list", "tab", "panel", "label", "icon"],
+  elements: ["list", "tab", "panel", "label", "reserve", "icon"],
   defaults: { size: "md" },
 } as const satisfies ComponentManifest;
 
@@ -1165,10 +1166,10 @@ export const stepper = {
 
 export const stepperStep = {
   block: "area-stepper-step",
-  description: "One step of a stepper: its marker, title and an optional description.",
+  description: "One step of a stepper: its marker, title, an optional description and what an open step holds.",
   variants: { status: ["complete", "current", "upcoming", "invalid"] },
   states: ["disabled"],
-  elements: ["button", "body", "marker", "text", "title", "description"],
+  elements: ["button", "body", "marker", "text", "title", "description", "content"],
   defaults: { status: "upcoming" },
 } as const satisfies ComponentManifest;
 

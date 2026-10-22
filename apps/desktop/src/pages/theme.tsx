@@ -26,7 +26,7 @@ import { CanvasSettings } from "../canvas-settings.tsx";
 import { matches } from "../search.ts";
 import { SETTING_GROUPS } from "@area/tokens/config";
 import {
-  attributeOf, defaultLabel, HELD, inMode, isDefault, MIN, pairOf, SETTINGS, scopeOf, tileLabel, writes, type Mode, type Setting,
+  attributeOf, defaultLabel, HELD, inMode, isDefault, MIN, pairOf, SETTINGS, scopeOf, themeOf, tileLabel, writes, type Mode, type Setting,
 } from "./theme-settings.ts";
 import { ThemeSetup } from "./theme-setup.tsx";
 
@@ -72,7 +72,7 @@ function ThemeBrowse({ mode, setMode, flowSwitch }: { mode: Mode; setMode: (mode
     // name and controls only (owner, round 58), so a tile's value would not show.
     <Tile key={`${entry.id}-${preset.id}`} span="wide" stage="center" inert label={tileLabel(label, value)}
       selected={selected === `${entry.id}:${preset.id}`} onSelect={() => setSelected(`${entry.id}:${preset.id}`)}
-      scope={{}} stageScope={scopeOf(entry, preset.id)}>
+      scope={{}} stageScope={{ "data-area-theme": themeOf(entry.id, mode), ...scopeOf(entry, preset.id) }}>
       <Abstract axis={entry.id} preset={preset.id} />
     </Tile>
   );
@@ -98,7 +98,8 @@ function ThemeBrowse({ mode, setMode, flowSwitch }: { mode: Mode; setMode: (mode
         </Nav>
       }</SidebarList>}
       canvasTitle={view ? view.title : "All settings"}
-      canvasScope={{ "data-area-theme": mode }}
+      // The page's own cards and words stay at the app's defaults; each drawing takes its preset in the previewed theme.
+      canvasPicks={false}
       canvasActions={
         <ViewControls>
           {flowSwitch}

@@ -129,8 +129,22 @@
     background: var(--area-border-divider); /* spec: Timeline's line */
   }
 
-  /* Vertical: Timeline's column. The line runs from 4 below this marker to 4 above the next. */
-  .area-stepper--vertical > .area-stepper-step { padding-block-end: var(--_spacing); }
+  /* An open step's content: under the text, in line with the title (the marker and the text gap in), 8 below it, the
+     line running on beside it (Base Web's ProgressSteps, GOV.UK's step-by-step open a step in place). */
+  .area-stepper-step__content {
+    box-sizing: border-box;
+    min-inline-size: 0;
+    padding-block-start: var(--area-space-8); /* spec: the gap from a title to what it heads (Card, Section heading) */
+    padding-inline-start: calc(var(--_marker) + var(--_gap));
+  }
+  /* Horizontal: the content takes a row of its own under the step's marker, text and line. */
+  .area-stepper--horizontal > .area-stepper-step:has(> .area-stepper-step__content) { flex-wrap: wrap; }
+  .area-stepper--horizontal > .area-stepper-step > .area-stepper-step__content { order: 1; flex: 1 0 100%; }
+
+  /* Vertical: Timeline's column. The line runs from 4 below this marker to 4 above the next. A step stacks its
+     marker and text over its content; the button keeps its own width, so its plate never runs the column's width. */
+  .area-stepper--vertical > .area-stepper-step { flex-direction: column; align-items: flex-start; padding-block-end: var(--_spacing); }
+  .area-stepper--vertical > .area-stepper-step > .area-stepper-step__content { align-self: stretch; }
   .area-stepper--vertical > .area-stepper-step:last-child { padding-block-end: 0; }
   .area-stepper--vertical > .area-stepper-step:not(:last-child)::after {
     content: "";

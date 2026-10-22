@@ -341,7 +341,10 @@ function sizeDerivations(): Record<string, string> {
     [`${PREFIX}ui-leading`]: v("text-sm-leading"),
     [`${PREFIX}ui-row`]: `calc(${v("type-leading")} + (6px + 2px * ${level}) * 2)`,
     [`${PREFIX}ui-row-inset`]: "8px",
-    [`${PREFIX}ui-row-gap`]: `max(0px, calc(2px - 2px * ${step}))`,
+    // The break between stacked row plates (Nav, Menu, List box, Tree view…): a separation, not spacing, so it holds
+    // at every type and density (owner 2026-10-21; ChatGPT's 35 and Notion's 30 rows sit 1 apart). Was 2 − 2 × step:
+    // flush at Compact (evidence audit R7, VS Code and Figma menus), up to 5 at Comfortable.
+    [`${PREFIX}ui-row-gap`]: "1px",
     [`${PREFIX}ui-stack`]: `calc(6px - 2px * ${step})`,
     [`${PREFIX}ui-cluster`]: `calc(8px - 2px * ${step})`,
     [`${PREFIX}gap-row`]: `calc(12px - 4px * ${step})`,

@@ -13,6 +13,7 @@ export default {
       ["Do", "Pass validationStatus=\"success\" or \"warning\" for a message that isn't an error; without a status, validation is an error."],
       ["Do", "Use horizontal for a settings or inspector row, with the label beside its control."],
       ["Do", "Hide the label with visuallyHiddenLabel only when nearby visible text already names the control; it stays the accessible name."],
+      ["Do", "Turn on characterCount with a maxLength on the control where a limit matters, such as a bio or instructions."],
       ["Don't", "Look for a size on Field: it has none, and the child control sets the tier."],
       ["Don't", "Put help text in validation: an error message sets aria-invalid on the control."],
       ["Don't", "Wrap a group of checkboxes or radios; their group components carry the shared label and message."],
@@ -23,6 +24,7 @@ export default {
       label: "The native label, bound to the control by for and aria-labelledby; muted when horizontal, disabled or inside a Panel.",
       required: "The asterisk after the label, hidden from assistive tech; the control carries the native required.",
       description: "Lasting guidance under the control, one step smaller and muted; joined to the control's aria-describedby.",
+      count: "With characterCount, the character count at the end of the line under the control, \"12 / 320\" against its maxLength, in the description's text; it shares the description's line and is read with it.",
       validation: "The message under the control and description, in the danger, success or warning ink of its status.",
       error: "The older class name for the validation message, painted the same; React renders validation.",
     },
@@ -33,7 +35,7 @@ export default {
     // Source: Field.tsx cloneElement.
     aria: [
       ["id, aria-labelledby", "Set on the child: the generated or htmlFor id, and the label's id when there is a label."],
-      ["aria-describedby", "Joins the description and validation ids with any the child already has."],
+      ["aria-describedby", "Joins the description, validation and character count ids with any the child already has."],
       ["aria-invalid, aria-errormessage", "Set on the child while the validation status is error, which is the default."],
       ["required, disabled", "Passed from the Field to the child."],
       ["data-validation-status", "Set on the child, so it paints its error, success or warning edge."],
@@ -141,6 +143,8 @@ export default {
       ["Do", "Set min, max and step: keys, steppers, scrubbing and typed arithmetic all stay inside the range."],
       ["Do", "Pass a letter or icon to scrub in inspectors, such as X, W or rotation; true shows a grip."],
       ["Do", "Show steppers in forms where people don't drag; the arrow keys step with or without them."],
+      ["Do", "Use steppers=\"split\" for a count or a quantity, minus before the value and plus after it."],
+      ["Do", "Put a sizing or unit mode in trailing as a ghost Custom select, as Figma's width and height fields."],
       ["Do", "Set mixed when a multi-selection holds different values; the next step starts at zero or the nearest bound."],
       ["Don't", "Type the unit into the value; set unit, which follows the number and is read in its value text."],
       ["Don't", "Expect steppers on a read-only field: it shows the value only."],
@@ -151,7 +155,8 @@ export default {
       control: "The text input with role spinbutton: shows the formatted number and takes typed numbers and arithmetic.",
       unit: "Static text right after the number, such as % or °; hidden while the field is empty or mixed.",
       scrub: "The leading handle, a square as wide as the field is tall: drag it to change the value one step per 8px. Hidden from assistive tech.",
-      steppers: "The minus and plus pair after the value; hidden when read-only.",
+      steppers: "The minus and plus pair after the value, or with split, minus before it and plus after; hidden when read-only.",
+      trailing: "A control after the value, in a nested square at the field's end; a Custom select in it takes that height.",
       step: "One stepper: out of the Tab order, press and hold repeats, and it disables at its bound. A press moves focus to the value.",
     },
     // Spec: States (Input's), Behavior; source: data-* attributes.

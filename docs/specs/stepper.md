@@ -9,6 +9,8 @@ not progress), Pagination (Cursor's "1 of 3" pager), Button
 
 - 2026-10-13: the Compass review → the backlog's "Stepper" ("Navigation and commands"), with Password field, OTP field,
   Time field and Progress circle.
+- 2026-10-21: the Theme setup's steps as "the Sidebar rail": a vertical Stepper of the categories, the open one listing
+  its settings ([research](../research/onboarding-setup-2026-10-21.md)) → an open step's content (`children`).
 
 ## Job and boundaries
 
@@ -23,7 +25,7 @@ with arrows, which is Cursor's "stepper"), not Timeline (events that happened), 
 |---|---|---|---|
 | orientation | horizontal (default), vertical | near-universal (Atlassian horizontal only, GOV.UK vertical only) | — |
 | status (per step) | complete, current, upcoming, invalid | complete / current / upcoming everywhere; error in Carbon, Ant, MUI | — |
-| content | title; optional description | all; MUI optional, Ant description | — |
+| content | title; optional description; what an open step holds (`children`) | all; MUI optional, Ant description; Base Web ProgressSteps and GOV.UK step-by-step open a step in place | the Theme setup's Sidebar |
 | behavior | static; done steps as buttons (`onStepSelect`); every step (`nonLinear`) | WAI, Atlassian, Spectrum, MUI linear; MUI `nonLinear`, Mantine, Ant | — |
 
 Excluded: sizes (none in Carbon, MUI, Atlassian, Untitled UI; Area keeps Timeline's one marker), labels under the
@@ -53,6 +55,7 @@ area  ol.area-stepper.area-stepper--horizontal|vertical[aria-label]       flex; 
             span.area-stepper-step__text                  first line centred on the marker
               span.area-stepper-step__title (+ span.area-sr-only ", completed")
               span.area-stepper-step__description         muted
+          div.area-stepper-step__content                  children: under the text, in line with the title, 8 below it
 ```
 
 ## Measurements
@@ -91,6 +94,7 @@ choice controls' paint.
 | line | Timeline's: 1px `border-divider`, one paint in every state | peer Timeline (owner, round 25) | Round 24 painted it Selection after done steps (Carbon, Mantine, Ant), a black line no other Area line draws |
 | horizontal | steps take their content's width and share what is left; the line runs 12 after the text and stops 4 before the next marker, level with the marker's centre; a step never shrinks below its content, so the line can't run into a title | Timeline's gaps | Round 24 let steps shrink, and the line overlapped titles |
 | vertical | Timeline's column: the line through the marker's centre, 4 clear of each marker, 16 between steps | peer Timeline | — |
+| open step | `children` sit under the text, in line with the title (marker + 12), 8 below it; vertical: the line runs on beside them, since the step grows; horizontal: a row of its own under the step | Base Web ProgressSteps, GOV.UK step-by-step (intake: a slot, rung 4; a description is muted text and an `ol` holds only steps) | — |
 | going back | done steps are buttons; the row plate (hover, pressed) and the focus ring lie 4 outside, behind, taking no room | WAI, Atlassian, Spectrum, MUI linear; PRODUCT_UI rules 2-3 | Round 24's −4 margin made the button narrower than it drew, one cause of the overlap |
 
 ## States
@@ -107,7 +111,9 @@ choice controls' paint.
   words.
 - Done steps are real buttons (Enter and Space). The current step isn't one.
 - The current step keeps `aria-current="step"` whatever its status, an `invalid` one included (2026-10-19).
-- Not verified: very long titles in horizontal steps (they wrap within the step's share), right-to-left.
+- An open step's content is ordinary content after the step's body, inside its `li`: its own controls keep their own
+  roles and Tab stops (the Theme setup puts a Nav there).
+- Not verified: content in a horizontal step beyond one look; very long titles in horizontal steps (they wrap within the step's share), right-to-left.
 
 ## Visual pass
 
@@ -145,3 +151,13 @@ Step buttons press at `bg-component-pressed`, one step past selected (Notion pre
   `line-complete`); re-shot at 3×.
 - 2026-10-13 · owner, review round 25: approved (no notes). Open question 1 stays on the recommendation (done steps keep
   the ring).
+- 2026-10-21 · owner: "maybe a vertical timeline would be better?" → picked the Sidebar rail → `StepperStep` `children`
+  (`area-stepper-step__content`), stepper.css, Stepper.tsx, manifest, a gallery tile (Content / an open step), the test.
+
+## Review note, 2026-10-21
+
+- **What changed:** a step can hold content under its title: in the Theme tab's setup, the Sidebar is now a vertical
+  Stepper of the seven categories, and the open one lists its settings with their values. Markers, line and paint are as
+  you approved them in round 25.
+- **Why:** you picked the Sidebar rail. Base Web and GOV.UK open the current step in place the same way, and only a
+  vertical stepper nests sub-steps.

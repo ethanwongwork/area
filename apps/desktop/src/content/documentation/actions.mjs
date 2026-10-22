@@ -332,6 +332,7 @@ export default {
       ["Do", "Put every Radio in a RadioGroup: it renders the legend and shares the name, value and disabled state."],
       ["Do", "Give the group a visible label; it becomes the fieldset's legend."],
       ["Do", "Use vertical for settings stacks and horizontal for a short inline choice."],
+      ["Do", "Use card layout=\"preview\" when each option is best shown as itself (a theme, a layout, a typeface): pass its picture as leadingVisual; the label stays the name."],
       ["Do", "Report a problem with the choice through the group's error, which marks every option."],
       ["Don't", "Use a single Radio on its own; once chosen it can't be cleared. Use a Checkbox."],
       ["Don't", "Give a Radio its own name inside a RadioGroup; it overrides the group's shared name and splits the set."],
@@ -421,23 +422,28 @@ export default {
       ["Do", "Give it a visible label, and a readout when the exact value matters."],
       ["Do", "Format the readout as the value reads (60%, 1.25x) with a function or string; a string readout is also what a screen reader says."],
       ["Do", "Turn on stepMarks for a short discrete range so each stop is visible."],
+      ["Do", "Pass buffered for media playback, in the same units as the value, so the loaded stretch shows ahead of the playhead."],
+      ["Do", "Keep the rail in dense panels and inspectors. Use track where the slider is a main control, as Figma's image adjustments, and bar where it is the one control in its row and pairs with a Button or field of the same height."],
       ["Do", "Use SliderRange for a start and an end, with optional number fields either side."],
       ["Don't", "Use a Slider for named options that have no order; use Segmented or Chip."],
       ["Don't", "Build a range from two Sliders; SliderRange keeps both handles on one rail and the start never above the end."],
+      ["Don't", "Mix rail, track and bar in one group of sliders; pick one treatment per panel."],
     ],
     // Spec: Anatomy.
     parts: {
       root: "The label: lays out the label, rail and readout in a row the control tier tall, or with label and readout above at labelPosition top.",
       label: "The visible name of the range.",
-      control: "The native range input, the full row tall for a large hit area; draws the rail, its fill and the thumb.",
+      control: "The native range input, the full row tall for a large hit area; draws the rail, its fill and the thumb (a round knob, or on the bar the fill's end with a grip).",
       value: "The readout after the rail, in muted tabular figures; hidden from assistive tech, which reads the input.",
-      marks: "A marker at each interior step, shown with stepMarks; decorative.",
+      marks: "A tick under the rail at each interior step, shown with stepMarks; decorative.",
+      ends: "With startLabel and endLabel, the range's two ends named under the track, such as Low and High; decorative, horizontal only.",
+      end: "One end's name, under its end of the track.",
     },
     // Spec: States.
     states: {
       disabled: "The whole slider dims to half and ignores input.",
-      hover: "The fill and the thumb's dot darken one step; the rail stays the same.",
-      "focus-visible": "The thumb's border turns the focus colour and a focus ring wraps it.",
+      hover: "The fill darkens one step (with the bar's thumb, which is the fill's end); the rail and the knob stay the same.",
+      "focus-visible": "A focus ring wraps the knob; on the bar it wraps the whole bar, as on a field.",
     },
     // Native range keys; source: Slider onKeyDown (Shift+arrow).
     keyboard: [

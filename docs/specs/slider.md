@@ -21,6 +21,12 @@ NumberField and Input (range with inputs), ColorPicker channel sliders, Segmente
   glyph ladder, 16 / 16 / 20 ([cohesion audit](../research/cohesion-audit.md#second-pass-notion-figma-and-the-open-decisions),
   item 8).
 - 2026-09-27: audit Slider again, with a before-and-after at enlarged scale.
+- 2026-10-21 (owner: "the slider/track options for our current component are not great"; picked "B fix + C track", then
+  asked for the "Rate your driver" bar as well, "1 circle style and 1 of this style"): the knob is plain (the fill
+  dot is gone), step ticks sit under the rail, the top layout spans the row; new `variant` `track` (Figma's
+  adjustment slider) and `bar` (the reference), on Slider and SliderRange.
+
+- 2026-10-21 (owner: "build proposals 1–4"): `startLabel` / `endLabel` name the track's ends under it in the description's text and ink, aria-hidden; the slider becomes a grid so they sit under the control's column, and the ticks keep to the control's grid area (a bar's tick lane sits between it and the labels). Hidden when vertical.
 
 ## Job and boundaries
 
@@ -33,10 +39,13 @@ sliders.
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
 | size | sm, md (default), lg | Row height follows the control tier | Untitled one size |
+| variant | rail (default), track, bar | Track: a pill as tall as the knob, the fill under it. Bar: the track is the control's full height and corner, its thumb the fill's end with a grip (owner 2026-10-21) | Track: Figma's image adjustment sliders (`figma--adjustment-slider`). Bar: the owner's "Rate your driver" reference; Material 3 Expressive's tall track (unverified) |
 | labelPosition | inline (default), top | Label and readout above the rail | Area composition (owner-confirmed) |
 | orientation | horizontal (default), vertical | Vertical tool panels | Area composition (owner-confirmed) |
 | composition | readout, step marks | Owner-confirmed (above) | Area compositions |
-| SliderRange | two handles on one rail, optional number fields; sm, md, lg | Audit C-12 A (owner): the range with inputs, promoted to a component | Figma's and Notion's range filters (below) |
+| content | end labels (startLabel, endLabel) under the track; horizontal only | Owner 2026-10-21 ("Low" … "High") | The owner's Intensity reference; macOS and iOS settings sliders |
+| content | buffered (0 to the value's units) | Owner 2026-10-21: media rows (music card) show how far the source has loaded | YouTube, Spotify, Apple Music; Video player's loaded part |
+| SliderRange | two handles on one rail, optional number fields; sm, md, lg; variant rail, track, bar | Audit C-12 A (owner): the range with inputs, promoted to a component | Figma's and Notion's range filters (below) |
 
 ## Sources
 
@@ -61,8 +70,17 @@ figma   div 172×16 channel track (radius-full, 8px end padding)
   thumb 16×16, 4px white border, 1px 20% black ring; focus 20×20 with a 1px blue outline
 area    label.area-slider  flex, align center, block --_height (tier), gap --_gap
   control input[type=range]  full tier height (hit area)
-    ::track  --_track 4px, radius-full, gradient: --_fill to --_pct, then --_track-fill
-    ::thumb  --_thumb, 1px --_thumb-border, surface with a centred --_fill dot, shadow-1
+    ::track  --_track 4px, radius-full, gradient (--_rail): --_fill to the thumb's centre, then --_track-fill
+    ::thumb  --_thumb, 1px --_thumb-border, --_knob (surface; component-active in dark), shadow-control
+  buffered  a second stretch after the fill, to the same thumb-inset position (--_buffered): fill-toggle-hover
+            on the rail, fill-track on the track and bar troughs
+  marks  1 × 4 ticks, 2px under the rail, edge-control-strong
+track   ::track  16 / 16 / 20 (the thumb), bg-component; ::thumb as above, sitting inside the track
+bar     ::track  the tier height, radius-control-sm/md/lg, bg-component
+        ::thumb  16 / 16 / 20 wide × tier tall, the fill colour, corner min(bar radius, 8 / 8 / 10);
+                 grip 4 × 16 / 16 / 20 pill, fg-on-selection; focus ring on the whole bar
+figma adjustment  track 120×16 #f5 radius-full, 8 end padding; fill #0d99ff 16 tall from the origin;
+                  thumb 16 white, 1px 20% black ring + 3-layer lift; origin dot 4×4; hit 24
   value  span 14/20 muted (12/16 at sm), tabular, min 4ch (aria-hidden)
 ```
 
@@ -90,10 +108,14 @@ Disabled shell opacity 0.5 (`area--disabled`); vertical shell 32 wide (`area--ve
 | rail · colour | **`edge-control` #e2e2e2** (slider.css:29; range rail slider.css:94) | Audit S5 (owner 2026-09-30): one off-track grey for Switch, Slider and Progress | Figma's rail #e6 and Untitled's #e5; was `fill-toggle` mixed 20% toward `bg-surface` ≈ #dd |
 | fill | **`selection-solid`** (slider.css:25; range slider.css:95): `neutral-solid` by default, the accent when a scope turns the Selection role on | Owner; Selection emphasis role (`emit/base.ts:140-142`) | Untitled brand; Figma's usage fill is its blue |
 | thumb · size | **16 / 16 / 20** (`icon-sm`, `icon-md`, `space-20`; slider.css:299-301) | Second pass: the choice glyph ladder (Checkbox, Radio); Figma 16 | Was the icon ramp, 16 at every tier. Untitled 24 |
-| thumb · construction | surface ring, 1px `edge-control-hover` #d4 (the Checkbox and Radio glyph edge, audit S5; was `border-hover` mixed 35% to surface ≈ #ce), fill dot to 42% of the radius (slider.css:34, 216, 227) | Owner-confirmed; Figma's 4px white ring around the value colour | Untitled: white thumb with a 2px brand ring |
+| thumb · construction | **plain knob**: `light-dark(bg-surface, bg-component-active)`, 1px `edge-control-hover` #d4 (the Checkbox and Radio glyph edge, audit S5) | Owner 2026-10-21 ("B"); Figma's adjustment thumb (white, 1px ring); dark paint is Segmented's raised thumb | Was a fill-colour dot to 42% of the radius, which read as a selected Radio on the rail; in dark the surface knob read as a hole in the fill |
+| fill · end | the thumb's centre: `thumb/2 + (100% − thumb) × --_ratio` (slider.css `--_stop`), `--_pct` when no ratio is given | Figma's fill runs under its knob | Was `--_pct` of the whole rail, up to half a thumb off; hidden by a 4px rail, visible on a full-height track |
+| track variant | track = thumb 16 / 16 / 20, `bg-component` | `figma--adjustment-slider`: 16 track, 16 thumb, #f5 (`bg-component` #f7 is the nearest role; Segmented's trough) | — |
+| buffered | `fill-toggle-hover` on the rail (#d0 light, #4e dark), `fill-track` on the track and bar troughs; ends at the thumb-inset position of `buffered`, hidden behind the fill | Owner 2026-10-21; one step over each trough in both themes (probed in headless Edge) | Video player paints its loaded part as ink at 35% because it sits on footage |
+| bar variant | track = tier height, `radius-control-*`; thumb the fill's end, one glyph wide; grip 4 × glyph, `fg-on-selection` | Owner's reference (bar with an inner grip, beside a same-height button); peers Button and Input for height and corner | Grip length and thumb width are the glyph ladder, not read off the reference |
 | thumb · shadow | `shadow-1` | In-flow control; Radix classic and shadcn shadow the thumb | Untitled `shadow-md`; Figma a 3-layer lift |
-| hover | **fill and thumb dot darken; the rail keeps its colour** | Fluent: colour on the thumb and fill only (`useSliderStyles.styles.ts L76-83`); Radix, Base UI: no hover change | Was the rail darkening too. Correction (2026-09-27 survey): antd does darken its rail on hover (`slider/style/index.ts:489-492`); Radix, Fluent and Base UI do not, so the choice stands on the majority |
-| step marks | 1 × 10 ticks behind the rail (3 show above and below) | Kept; Fluent cuts notches into the rail, Material draws 2px dots, Base UI 1 × 8 below | Open: notches would need the marks drawn into the rail itself |
+| hover | **the fill darkens (and the bar's thumb, the fill's end); the rail and knob keep their colour** | Fluent: colour on the thumb and fill only (`useSliderStyles.styles.ts L76-83`); Radix, Base UI: no hover change | Was the rail darkening too. Correction (2026-09-27 survey): antd does darken its rail on hover (`slider/style/index.ts:489-492`); Radix, Fluent and Base UI do not, so the choice stands on the majority |
+| step marks | **1 × 4 ticks, 2px under the rail**, `edge-control-strong` (slider.css `.area-slider__marks i`); the bar adds an 8px lane under itself | Owner 2026-10-21 ("B"); Base UI 1 × 8 below | Were 1 × 10 behind the rail, 3px showing above and below, hidden under the fill and thumb. The reference puts its ticks above; below keeps clear of a top label |
 | readout | 14/20 `fg-muted`, tabular, 4ch | Area value text role | — |
 | label gap | control to readout 6 at sm, md and lg, the density tokens (slider.css:22, :41, :299-301); compact sm 4. SliderRange's row keeps 8 (slider.css:98) | Peer: Button (audit S14) | Was 4 / 8 / 8; the range row had read `gap-md` and was pinned to 8 so it did not move |
 | disabled | 50% on the label (slider.css:158-160) | Audit rule | Untitled has no disabled style |
@@ -102,14 +124,14 @@ Disabled shell opacity 0.5 (`area--disabled`); vertical shell 32 wide (`area--ve
 
 | State | Changes | Evidence |
 |---|---|---|
-| hover | fill and thumb dot `selection-solid-hover`; the rail keeps `edge-control` (slider.css:32, 233-256); ink fixed | not captured (pseudo-elements) |
-| focus-visible | thumb border and 2px outline in `focus-color` (slider.css:263-274) | not captured |
+| hover | `--_fill` becomes `selection-solid-hover` on the control, so the fill (and the bar's thumb) darkens; the rail and knob keep their paint; ink fixed | not captured (pseudo-elements) |
+| focus-visible | focus outline on the knob; on the bar, on the whole bar at its corner | not captured |
 | disabled | 50% | `area--disabled` |
 
 ## Behavior and accessibility
 
 Native `input type="range"`: keyboard, value and announcements are the browser's. The fill is
-`--_pct` set by React from the normalized value, kept in sync on input and form reset
+`--_pct` and `--_ratio` (0 to 1) set by React from the normalized value, kept in sync on input and form reset
 (primitives.tsx:713); `onValueChange(value, event)` passes the input event. Shift+arrow moves
 ten steps (Carbon, MUI; audit C-31 A, owner 2026-09-30), following the reading direction in
 RTL; the native control takes the value and fires its own input event (primitives.tsx:813-820). The readout is `aria-hidden` (the input announces the value).
@@ -209,6 +231,20 @@ eye (background tab).
 
 ## Feedback log
 
+- 2026-10-21 · owner: "what about a separate track component for videos, music?" → intake: not yet a component; Slider
+  gains `buffered` (all three variants), the music card shows it, and Media scrubber is a candidate in COMPONENTS.md
+  (slider.css `--_buffer-fill`, `--_buffered`; primitives.tsx; card.tsx).
+
+- 2026-10-21 · owner: "the slider/track options for our current component are not great. i want to fix the current
+  slider visual and also add a track variant" → mock sheet (A current, B fix, C Figma track, D line handle); owner
+  picked B + C, then sent the "Rate your driver" bar ("1 circle style and 1 of this style") → plain knob, ticks under
+  the rail, top layout full width, fill ends at the thumb's centre (`--_ratio`), hover through `--_fill`; `variant`
+  `track` and `bar` on Slider and SliderRange (slider.css, primitives.tsx, SliderRange.tsx, manifest.ts, material.css)
+  → `figma--adjustment-slider--rest--light`; headless Edge sheets light and dark.
+
+- 2026-10-21 · found in the Theme setup's bento: a `SliderRange` with `inputs={false}` collapsed to its two thumbs (its
+  rail sat in the grid's first, content-sized column) → the rail spans the row when it is the only child (slider.css).
+
 - 2026-09-26 · cohesion audit → no change; rail confirmed as the shared rail (Progress moved
   onto it) → `progress/area--default` rail ≈ rgb(221).
 - 2026-09-26 · cohesion audit, spec pass → the RTL mirror and collapsed-range thumb rules
@@ -233,3 +269,13 @@ eye (background tab).
 - 2026-10-01 · audit C-31 (owner pick A) → Shift+arrow moves ten steps; the thumb stays 16 at md → primitives.tsx:813-820.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → step ticks start on rounded whole pixels with no translate (was −0.5px, a 2px smear at 1x); the mark strip and SliderRange rails centre by layout instead of `translateY(-50%)`; native drag and keyboard steps stay instant (`slider.css`; "Motion and interaction, 2026-10-07").
 - 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → step marks are `stroke-width` wide (were a literal 1px) (slider.css). (docs/research/consistency-audit-2026-10-12.md)
+
+## Review note, 2026-10-21
+
+- **What changed:** the knob is a plain circle, step ticks sit under the rail, and a label above spans the row. There
+  are two new looks: track (a pill as tall as the knob, like Figma's image adjustments) and bar (the whole control is
+  the track, its fill ending in a grip, from your reference). Both work on single sliders and ranges. A slider can also
+  show how far media has loaded (`buffered`), a lighter stretch ahead of the played part, as on the music card.
+- **Why:** you said the slider options weren't great. The dot made the knob read as a selected radio button, and the
+  ticks hid under the fill.
+

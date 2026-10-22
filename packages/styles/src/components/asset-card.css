@@ -54,7 +54,9 @@
     min-inline-size: 0;
     padding: 0 var(--_inset) var(--_inset);
     overflow: clip;
-    border: var(--_edge) solid var(--area-border-card);
+    /* The card's edge and the frame's are one stroke (owner, 2026-10-21: "i think they should be the same"): the divider
+       role, #e2 light, #333 dark. Was Card's `border-card` (#ee light), lighter than the frame it holds. */
+    border: var(--_edge) solid var(--area-border-divider);
     border-radius: var(--_corner);
     /* The recessed role (neutral/50 at the default settings, Table's header fill), so it follows Neutral, Ground, Layers
        and dark (owner, round 59: the round-58 mix to #fafafa was a one-off value outside the roles; reverted). */
@@ -110,7 +112,10 @@
     aspect-ratio: 1; /* spec: owner, round 65: the frame 1:1 for components */
     min-block-size: 0;
     overflow: clip;
-    border: var(--area-border-width) solid var(--area-border-card); /* spec: the designs' frame edge, the card's */
+    /* A frame with no shadow to carry it (DESIGN_SYSTEM.md, Strokes: Table's frame): `stroke-width` in `border-divider`.
+       It was the card's own edge (`border-card` at `border-width`, the designs' #eee), 1.08:1 on the card's recessed
+       ground in light, so it read too thin (owner, 2026-10-21); now 1.21:1, and dark is unchanged (both roles #333). */
+    border: var(--area-stroke-width) solid var(--area-border-divider);
     border-radius: var(--_frame-corner);
     background-color: var(--area-bg-surface); /* spec: the component design's white */
   }
@@ -223,7 +228,7 @@
   .area-asset-card--containerless:is([data-selected], [aria-pressed="true"], [aria-selected="true"]),
   .area-asset-grid__item[aria-selected="true"] .area-asset-card--containerless { border-color: transparent; }
   .area-asset-card--containerless:is([data-selected], [aria-pressed="true"], [aria-selected="true"]) > .area-asset-card__frame,
-  .area-asset-grid__item[aria-selected="true"] .area-asset-card--containerless > .area-asset-card__frame { border-color: var(--area-stroke-selected); --_ring: inset 0 0 0 max(0px, calc(var(--area-selected-width) - var(--area-border-width))) var(--area-stroke-selected), inset 0 0 0 100vmax var(--area-selected-tint); }
+  .area-asset-grid__item[aria-selected="true"] .area-asset-card--containerless > .area-asset-card__frame { border-color: var(--area-stroke-selected); --_ring: inset 0 0 0 max(0px, calc(var(--area-selected-width) - var(--area-stroke-width))) var(--area-stroke-selected), inset 0 0 0 100vmax var(--area-selected-tint); }
   .area-asset-card--containerless:is(.area-asset-card--image, .area-asset-card--group):is([data-selected], [aria-pressed="true"], [aria-selected="true"]) > .area-asset-card__frame,
   .area-asset-grid__item[aria-selected="true"] .area-asset-card--containerless:is(.area-asset-card--image, .area-asset-card--group) > .area-asset-card__frame {
     --_ring: 0 0 0 var(--area-selected-width) var(--area-stroke-selected); /* the Selected stroke setting's width, round an edgeless image or group */

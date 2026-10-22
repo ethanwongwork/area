@@ -89,6 +89,8 @@ the Figma dialog and sectioned popover in the owner's Chrome next session.
 | R5 | Color picker body inset | 16 → 12 | Figma color picker 16 | **hold 16** | High |
 | R6 | `control-xl` / `gutter-xl` | 48 / 16 → 36 / 14 | none; off the ladder and the 4px grid | **40 / 12** (one rung: compact xl = default lg). Token ladder only: no component reads the xl height today (Calendar's week numbers read its text, unchanged) | High |
 | R7 | Menu row gap | 2 → 2 | VS Code 0, Figma 0 | **0 at compact**: new role `ui-row-gap` (2 / 0) in Menu, Nav, Tree view, Command palette, Combobox; separator keeps 4 / 1 / 4 | Medium |
+
+R7 superseded 2026-10-21 (owner): `ui-row-gap` is a constant 1px at every density; adjacent plates never touch.
 | R8 | Dialog inset · corner (superseded 2026-10-02: 16 · 16, `cursor-desktop.md`) | 16 · 16 → 16 · 16 | VS Code save dialog: content 13 / 21, actions 9, corner 8; antd 24 → 16; Material holds 24 | **inset 12, corner 12** (the compact close sits 6 in at radius 6: 12 concentric; VS Code 8) | Medium |
 | R9 | Popover inset (superseded 2026-10-02: 12 held, `cursor-desktop.md`) | 12 → 8 | VS Code editor hover 8 + 1 sides; antd and Spectrum hold; Figma color picker 16 | **keep 8** (VS Code hover is the closest surface) | Medium |
 | R10 | Menu separator (superseded 2026-10-02: 6 / 1 / 6, compact 5 / 1 / 5, `cursor-desktop.md`) | 4 / 1 / 4 | VS Code 5 / 1 / 5, Figma 7 / 1 / 7 | **keep** (both products are larger than Area at default too; a default change, not a compact one) | Low |

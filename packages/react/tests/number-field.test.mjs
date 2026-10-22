@@ -41,3 +41,23 @@ test("NumberField forwards a named spinbutton and serializes a canonical form va
   assert.deepEqual(MANIFESTS.numberField.variants.size, ["sm", "md", "lg"]);
   assert.throws(() => numberFieldVariants({ size: "xxl" }), RangeError);
 });
+
+test("split steppers put minus before the value and plus after it (owner 2026-10-21)", () => {
+  const html = renderToString(h(NumberField, { "aria-label": "Columns", defaultValue: 0, min: 0, steppers: "split" }));
+  assert.match(html, /area-number-field--split/);
+  const minus = html.indexOf("Decrease Columns"), input = html.indexOf('role="spinbutton"'), plus = html.indexOf("Increase Columns");
+  assert.ok(minus > -1 && minus < input && input < plus, "minus, value, plus");
+  assert.match(html, /aria-label="Decrease Columns" disabled=""/, "minus disables at min");
+  assert.deepEqual(MANIFESTS.numberField.variants.steppers, ["split"]);
+  // Stacked steppers keep both buttons after the value.
+  const end = renderToString(h(NumberField, { "aria-label": "Columns", defaultValue: 2, steppers: true }));
+  assert.ok(end.indexOf('role="spinbutton"') < end.indexOf("Decrease Columns"));
+  assert.doesNotMatch(end, /area-number-field--split/);
+});
+
+test("trailing renders a control at the field's end, after the unit and before the steppers", () => {
+  const html = renderToString(h(NumberField, { "aria-label": "Width", defaultValue: 360, unit: "px", steppers: true, trailing: h("button", { type: "button" }, "Fill") }));
+  const unit = html.indexOf("area-number-field__unit"), trailing = html.indexOf("area-number-field__trailing"), steppers = html.indexOf("area-number-field__steppers");
+  assert.ok(unit < trailing && trailing < steppers);
+  assert.doesNotMatch(renderToString(h(NumberField, { "aria-label": "Width" })), /area-number-field__trailing/);
+});

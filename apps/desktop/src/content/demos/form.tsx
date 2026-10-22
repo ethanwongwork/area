@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Avatar, SliderRange, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Field, Input, InputAction, NumberField, Panel, PanelSection, Radio, RadioGroup, Select, Slider, Textarea } from "@area/react";
+import { Avatar, SliderRange, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, CustomSelect, Field, Input, InputAction, NumberField, Panel, PanelSection, Radio, RadioGroup, Select, Slider, Textarea } from "@area/react";
 import { CheckIcon, CornerIcon, DismissIcon, OpacityIcon, OpenIcon, RotateIcon, SearchIcon, TrashIcon } from "@area/icons";
 
 export const InputDefault = () => <Input aria-label="Label" placeholder="Placeholder" />;
@@ -56,6 +56,16 @@ export const InputRtl = () => (
 );
 
 export const NumberFieldDefault = () => <Field label="Label"><NumberField defaultValue={240} unit="px" /></Field>;
+export const NumberFieldSplit = () => <Field label="Label"><NumberField defaultValue={0} min={0} steppers="split" style={{ inlineSize: "calc(var(--area-space-96) + var(--area-space-16))" }} /></Field>;
+
+export const NumberFieldTrailing = () => (
+  <NumberField aria-label="Width" scrub="W" defaultValue={360} min={0} grouping={false}
+    trailing={<CustomSelect variant="ghost" size="sm" aria-label="Width sizing" defaultValue="fill"
+      items={[{ value: "fixed", label: "Fixed" }, { value: "hug", label: "Hug" }, { value: "fill", label: "Fill" }]} />} />
+);
+
+export const FieldCharacterCount = () => <Field label="Label" description="Description" characterCount><Input maxLength={32} placeholder="Placeholder" /></Field>;
+
 export const NumberFieldSteppers = () => <Field label="Label"><NumberField defaultValue={80} min={0} max={100} step={1} unit="%" steppers /></Field>;
 export const NumberFieldScrub = () => <NumberField aria-label="Rotation" defaultValue={15} min={-360} max={360} unit="°" scrub={<RotateIcon />} />;
 export const NumberFieldDecimal = () => <Field label="Label"><NumberField defaultValue={1.25} min={0} step={0.05} fractionDigits={2} /></Field>;
@@ -346,6 +356,35 @@ export const SliderSizes = () => (
     <Slider aria-label="Label" size="md" min={0} max={100} defaultValue={50} readout={value => `${value}%`} />
     <Slider aria-label="Label" size="lg" min={0} max={100} defaultValue={75} readout={value => `${value}%`} />
   </>
+);
+
+export const SliderVariants = () => (
+  <div style={{ display: "grid", gap: "var(--area-space-12)", inlineSize: "100%" }}>
+    <Slider aria-label="Label" defaultValue={40} readout={value => `${value}%`} />
+    <Slider variant="track" aria-label="Label" defaultValue={55} readout={value => `${value}%`} />
+    <Slider variant="bar" aria-label="Label" defaultValue={70} readout={value => `${value}%`} />
+  </div>
+);
+
+export const SliderRangeVariants = () => (
+  <div style={{ display: "grid", gap: "var(--area-space-12)", inlineSize: "100%" }}>
+    <SliderRange variant="track" defaultValue={[30, 70]} inputs={false} minLabel="Label start" maxLabel="Label end" />
+    <SliderRange variant="bar" defaultValue={[30, 70]} inputs={false} minLabel="Label start" maxLabel="Label end" />
+  </div>
+);
+
+export const SliderEndLabels = () => <Slider aria-label="Label" defaultValue={50} startLabel="Low" endLabel="High" readout={value => `${value}%`} />;
+
+export const SliderEndLabelsBar = () => (
+  <Slider label="Label" labelPosition="top" variant="bar" min={0} max={20} step={1} defaultValue={8} stepMarks startLabel="Low" endLabel="High" />
+);
+
+export const SliderBuffered = () => (
+  <div style={{ display: "grid", gap: "var(--area-space-12)", inlineSize: "100%" }}>
+    <Slider aria-label="Position" defaultValue={40} buffered={65} />
+    <Slider variant="track" aria-label="Position" defaultValue={40} buffered={65} />
+    <Slider variant="bar" aria-label="Position" defaultValue={40} buffered={65} />
+  </div>
 );
 
 export const SliderTones = () => (

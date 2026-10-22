@@ -118,7 +118,8 @@ interface ChoiceProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"
 export interface CheckboxProps extends ChoiceProps {
   /** A contained, full-width option with its control at the end. It preserves native Checkbox behavior. */
   variant?: VariantProps<typeof MANIFESTS.checkbox>["variant"];
-  /** Card layout: `row` (visual, text, control on one line) or `tile` (visual above the label, control in the corner). */
+  /** Card layout: `row` (visual, text, control on one line), `tile` (visual above the label, control in the corner) or
+   * `preview` (the visual centred as the choice's own picture, the label centred under it, no control drawn). */
   layout?: VariantProps<typeof MANIFESTS.checkbox>["layout"];
   /** Decorative context beside the mark. The visible label must still name the option. */
   leadingVisual?: ReactNode;
@@ -344,7 +345,7 @@ export { Switch, type SwitchProps } from "./Switch.tsx";
 export type RadioProps = Omit<ChoiceProps, "size"> & {
   /** A contained, full-width option with its control at the end. */
   variant?: VariantProps<typeof MANIFESTS.radio>["variant"];
-  /** Card layout: `row` or `tile`, as Checkbox. */
+  /** Card layout: `row`, `tile` or `preview`, as Checkbox. */
   layout?: VariantProps<typeof MANIFESTS.radio>["layout"];
   /** Decorative context beside the text. The visible label must still name the option. */
   leadingVisual?: ReactNode;

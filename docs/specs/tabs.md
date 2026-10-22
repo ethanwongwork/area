@@ -22,6 +22,10 @@ block language tabs, Badge (counts)
   Unselected options in a set take the muted ink with one weight (Tabs already did); the
   track is a rule, so it uses the new `border-divider` role.
 
+- 2026-10-21 (owner: "maybe the text needs to be strong for selected?"; picked C from a mock of A current, B every label
+  500, C selected 500): the selected label is 500 over 400 at rest, each tab's width reserved at 500, a written
+  exception to the one-weight rule (DESIGN_SYSTEM.md, "Ink and weight"); the indicator lies on the track.
+
 ## Job and boundaries
 
 Tabs switch between views of one page with a transparent tab row and an underline (or a
@@ -51,6 +55,7 @@ Gallery groups (`apps/docs/scripts/build.mjs:784-793`): Default; States (disable
 | figma | target product | File-browser tabs rest, hover, selected; editor panel tabs rest, hover | figma.com file browser and editor inspector, 2026-09-26 (second pass) | evidence only | `tabs/figma--tab--{rest,hover}--light`, `tabs/figma--tab-selected--rest--light`, `tabs/figma--panel-tab--{rest,hover}--light` |
 | uui | design system (source) | Underline and button tabs | [reference](../research/untitled-ui-reference.md), `tabs.tsx:21-208` @ `4702dc0` | MIT | — |
 | area | this system | 8 gallery tiles after the second pass | localhost gallery | — | `tabs/area--*` (8) |
+| systems | design systems (source), 2026-10-21 | Underline tabs: weight per state and width reservation, indicator, hover, track, motion | Radix Themes `1faff10` base-tab-list.css:32-52, 109-125; Fluent v9 `335c5de` useTabStyles.styles.ts:108-177, 568-595; Primer `3a71047` UnderlineTabbedInterface.module.css:55-71, 105-113; Material Web `d797a00` primary-navigation-tab.scss:85-99; Carbon `7ccd615` _tabs.scss:495-503, 580-586; React Spectrum `e36b8c2` s2 Tabs.tsx:409-417; shadcn `ba1503c` new-york-v4 tabs.tsx:66-69; Ant `e7bb7c2` tabs/style/index.ts:745-826; Atlassian @atlaskit/tabs 21.3.0 tab.js:52-55 | MIT / Apache-2.0 | — |
 
 ChatGPT's settings navigation was captured as a Nav row (`baseline/chatgpt--settings-nav-current--rest`),
 not as tabs. Light theme only. The `figma--tab--hover` capture shows no plate (white); the
@@ -68,9 +73,11 @@ notion view tab  32 tall, padding 6/12, radius 20, 20px icon, 14/16.8 500;
 figma    button 24 tall, padding 0/8, radius 5, 11/16 450; rest 50% black;
          selected 550, 90% black on #f5; a hidden 550 copy reserves the bold width (tab-selected node 1)
 area  div.area-tabs (column; row when vertical, gap 16)
-  list  div.area-tabs__list[role=tablist] flex, gap 20 (md); 1px border-divider when track
+  list  div.area-tabs__list[role=tablist] flex, gap 20 (md); with track, a 1px border-divider painted at the
+        bottom of its content box, under the tabs, so the indicator lies on it
     tab   button.area-tabs__tab[role=tab] 32px, padding 0, gap 6, fg-muted, 14/20 400
-      icon  .area-tabs__icon 16px;  label .area-tabs__label (trimmed text)
+      icon  .area-tabs__icon 16px;  label .area-tabs__label (trimmed text; a column holding the text
+            and .area-tabs__reserve, an aria-hidden 500 copy at no height that reserves the selected width)
       ::after indicator 2px, radius-full, full tab width, at the tab's bottom edge
   panel div.area-tabs__panel[role=tabpanel] padding-top 16 (6 vertical)
 ```
@@ -104,12 +111,12 @@ Area (node trees): md 32px tall, 20px apart, selected ink rgb(40, 40, 40), rest 
 | tab · height | 28 / 32 / 40 (`control-sm/md/lg`) | Owner (three sizes); control tier | Notion 28 in a 40 row, Figma 24, Untitled 32 / 36 |
 | tab · inline padding | 0, content-aligned | Manifest contract ("labels align with panel content"); `inset.css:65` | Notion pads 8 each side; kept (third pass): padding would carry the underline past the content |
 | tab · gap | 16 / 20 / 24 (`space-*`) | not found (searched PRIOR_DECISIONS.md, navigation.css comments); unsourced, kept in the third pass | Notion 16 label to label (8 + 8, no gap); Untitled 12 |
-| text | 14/20 at every size (`control-sm/md/lg-text`; sm was 12/16 until small controls moved to 14/20); 400 in every state | Control tier; one weight per label | Notion 500 in both states; Figma 450 → 550 with the width reserved; Untitled 600. Area keeps 500 for labels on fills |
+| text | 14/20 at every size (`control-sm/md/lg-text`; sm was 12/16 until small controls moved to 14/20); **400 at rest, 500 selected**, each tab's width reserved at 500 | Owner 2026-10-21 (C); Figma 450 → 550 with a hidden copy; Radix 400 → 500 with a hidden copy; Fluent and Primer 400 → 600, reserved | A written exception to one weight per label (DESIGN_SYSTEM.md): tabs carry no fill, so weight marks the selected view. Notion, Material 3, shadcn and Atlassian keep 500; Spectrum 2 and Ant keep 400 |
 | rest / selected ink | `fg-muted` #666666 / `fg-default` #282828 | Second pass: unselected options muted (Figma 50% black, Notion tertiary) | Untitled selected brand-700 |
 | indicator | 2px, `radius-full`, `fg-selection` (neutral: `fg-default`), whole tab | Owner (rounded underline spanning icon and count); Notion 2px in primary ink | Untitled 2px square-ended brand-600 |
 | hover | pending indicator `border-hover` #b4b4b4 / #585858; ink fixed | Foreground fixed on hover; Figma panel tab keeps 50% ink on hover | Figma paints a #f5 plate; Untitled hovers to the selected paint |
 | pressed | indicator `fg-muted` | Earlier Area value | — |
-| track | 1px **`border-divider`** #e2e2e2 / #333333 below the list, at `stroke-width` (since the 2026-10-12 consistency pass) | Second pass divider role; Untitled 1px baseline; Notion's hairline | Was `border-decorative`; Area's indicator sits above the divider |
+| track | 1px **`border-divider`** #e2e2e2 / #333333 at `stroke-width`, painted at the bottom of the list's content box; **the indicator lies on it** | Second pass divider role; Radix and Primer inset 1px, Material and Ant under the indicator; owner 2026-10-21 | Was a border under the list, outside the scrolling list's clip, so the indicator stacked above it as a second line |
 | focus | 2px `focus-color` inset (offset −2), radius min(8, 0.4 × height) | Untitled 2px inset focus | — |
 | disabled | 50% | Audit disabled rule; Untitled 50% | — |
 | icon, gap | icon tier per size; icon-to-label gap 6 at sm, md and lg (`--_tab-item-gap`, navigation.css:16, :38, :79-81); compact sm 4 | Area icon and gap tiers; peer Button (audit S14) | Was 4 (sm) / 8 (md, lg) |
@@ -130,7 +137,7 @@ Settled in the third pass (kept; [cohesion audit](../research/cohesion-audit.md#
 | hover | indicator `border-hover`; ink fixed | `navigation.css:66-69`; `figma--panel-tab--hover` (ink fixed) |
 | pressed | indicator `fg-muted` | `navigation.css:70-73` |
 | focus-visible | 2px inset outline | `navigation.css:102-107` |
-| selected (`data-selected`, `aria-selected`) | `fg-default`, indicator `fg-selection` | `area--default` tab 1; `notion--tabs-underline` node 3 |
+| selected (`data-selected`, `aria-selected`) | `fg-default` at 500, indicator `fg-selection`; the width does not change | `area--default` tab 1; `notion--tabs-underline` node 3; headless Edge 2026-10-21: tab widths 56.89 / 57.69 / 67.14 whichever is selected, label box 2.5 + 27 unchanged |
 | disabled | opacity 0.5, `not-allowed`; skipped by arrow keys | `area--disabled` |
 
 ## Behavior and accessibility
@@ -194,6 +201,12 @@ Tab labels are not selectable. See [interaction polish](../research/interaction-
 
 ## Feedback log
 
+- 2026-10-21 · owner: "i also want to improve the tab component ui ... maybe the text needs to be strong for selected?"
+  → research (Notion, Figma captures; 10 design systems from source, Sources) and a mock of three weights; owner picked
+  C → selected 500 over 400 with the width reserved by a hidden copy (`__reserve`, aria-hidden; Code block's language
+  tabs too), and the track painted inside the list so the indicator lies on it (navigation.css, primitives.tsx,
+  manifest.ts, DESIGN_SYSTEM.md). Open: a sliding indicator (Fluent, Material, Spectrum 2, Ant, Base UI slide 150–300ms).
+
 - 2026-09-26 · cohesion audit → no change (neutral underline, fixed ink confirmed) → 7 Area captures.
 - 2026-09-26 · second pass (Notion, Figma; owner: decide all open items) → track
   `border-decorative` → `border-divider`; lg tile added; open question on tab padding and
@@ -206,3 +219,11 @@ Tab labels are not selectable. See [interaction polish](../research/interaction-
 - 2026-10-02 · compact pass round 9 → sm tab gap 16 → 12 and the panel's top inset reads `inset-surface-md` (16 / 12) at compact. docs/research/compact-pass-2026-10-01.md (round 9).
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → hover, press and selection land at once and fade out on fast; sliding indicator left as an open question.
 - 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the track is at `stroke-width`, a standalone divider (was `border-width`) (navigation.css). (docs/research/consistency-audit-2026-10-12.md)
+
+## Review note, 2026-10-21
+
+- **What changed:** the selected tab's label is now medium weight while the others stay regular, and switching tabs
+  never shifts the row. With the track on, the underline now sits on the divider instead of above it.
+- **Why:** you asked for stronger selected text; Figma and Radix do the same, reserving the bold width. The
+  underline stacked above the divider read as two lines.
+
