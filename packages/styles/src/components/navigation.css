@@ -86,11 +86,28 @@
   }
   .area-tabs__tab:is(:active, [data-selected]),
   .area-tabs__tab:is(:active, [data-selected])::after { transition-duration: 0s; }
-  .area-tabs__label { display: inline-flex; align-items: center; white-space: nowrap; }
-  .area-tabs--track .area-tabs__list { border-block-end: var(--area-stroke-width) solid var(--area-border-divider); }
+  /*
+   * The selected label is strong (owner 2026-10-21, a written exception to "a label's weight never changes with state",
+   * DESIGN_SYSTEM.md): rest 400, selected 500, as Figma (450 → 550) and Radix (400 → 500). Each label reserves its
+   * strong width with a hidden strong copy under it (`__reserve`, aria-hidden), so selecting a tab never moves the row
+   * (Radix's hidden copy; Primer's ::before). The column stacks the copy at no height.
+   */
+  .area-tabs__label { display: inline-flex; flex-direction: column; align-items: stretch; white-space: nowrap; }
+  .area-tabs__reserve { block-size: 0; overflow: hidden; visibility: hidden; font-weight: var(--area-weight-strong); }
+  .area-tabs__tab[data-selected] .area-tabs__label { font-weight: var(--area-weight-strong); }
+  /*
+   * The track is painted inside the list, under the tabs, so the indicator lies on it rather than stacking above it as
+   * a second line (owner 2026-10-21; Radix and Primer draw it inset, Material and Ant under the indicator). A border
+   * sat outside the scrolling list's padding box, where the indicator could not reach. The content box keeps it under
+   * the tabs when an attachment pads the list.
+   */
+  .area-tabs--track .area-tabs__list {
+    background: linear-gradient(var(--area-border-divider), var(--area-border-divider)) left bottom / 100% var(--area-stroke-width) no-repeat content-box;
+  }
   /* The vertical track sits on the indicator's side, the start, as horizontal tabs put both at the
      bottom (audit D-21; was the end, opposite the rail). */
-  .area-tabs--track.area-tabs--vertical .area-tabs__list { border-block-end: 0; border-inline-start: var(--area-stroke-width) solid var(--area-border-divider); }
+  .area-tabs--track.area-tabs--vertical .area-tabs__list { background-position: left top; background-size: var(--area-stroke-width) 100%; }
+  .area-tabs--track.area-tabs--vertical .area-tabs__list:dir(rtl) { background-position: right top; }
   .area-tabs__icon { display: inline-flex; flex-shrink: 0; inline-size: var(--_tab-icon); block-size: var(--_tab-icon); }
   .area-tabs__icon > svg { inline-size: 100%; block-size: 100%; }
   .area-tabs--sm { --_tab-height: var(--area-control-sm); --_tab-text: var(--area-control-sm-text); --_tab-leading: var(--area-control-sm-leading); --_tab-gap: calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-dense)); --_tab-icon: var(--area-icon-sm); --_tab-item-gap: var(--area-gap-sm); }

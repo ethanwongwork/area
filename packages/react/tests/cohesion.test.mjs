@@ -253,6 +253,7 @@ test('required lines never ride the Surface axis', () => {
     ['.area-description-list--framed', 'border'],
     ['.area-code-block', 'border'],
     ['.area-file-upload', 'border'],
+    ['.area-asset-card__frame', 'border'],
   ]) {
     const rule = rules.find(r => r.selector === selector && new RegExp(`(^|[;\\s])${prop.replace(/[-]/g, '\\-')}\\s*:`).test(r.body));
     assert.ok(rule, `${selector} ${prop} missing`);
@@ -407,5 +408,15 @@ test('state indicators follow the state settings: focus offsets and selected str
     for (const [, width] of body.matchAll(/0 0 0 ((?:[^,()]|\([^()]*(?:\([^()]*\))*[^()]*\))+?) var\(--area-stroke-selected\)/g)) {
       assert.match(width, /--area-selected-width/, `${selector} draws its selected edge ${width.trim()} wide; use var(--area-selected-width)`);
     }
+  }
+});
+
+test('stacked row plates sit one fixed break apart at every density (owner 2026-10-21)', () => {
+  // A hovered row must never run into the current one, so the break between plates is a constant, not density spacing.
+  const tokens = readFileSync(new URL('../../tokens/src/emit/base.ts', import.meta.url), 'utf8');
+  assert.match(tokens, /\[`\$\{PREFIX\}ui-row-gap`\]: "1px"/);
+  for (const family of ['area-nav', 'area-nav__group', 'area-tree-view', 'area-list-box__options', 'area-command-palette__group', 'area-combobox__group', 'area-custom-select__group']) {
+    const rule = rules.find(r => r.selector.split(',').some(s => s.trim() === `.${family}`) && /gap:\s*var\(--area-ui-row-gap\)/.test(r.body));
+    assert.ok(rule, `.${family} stacks its rows ui-row-gap apart`);
   }
 });

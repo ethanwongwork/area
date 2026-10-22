@@ -4,9 +4,11 @@ import {
   forwardRef,
   isValidElement,
   useId,
+  useState,
 } from "react";
 import type {
   AriaAttributes,
+  FormEvent,
   HTMLAttributes,
   LabelHTMLAttributes,
   ReactElement,
@@ -23,6 +25,10 @@ interface FieldControlProps extends AriaAttributes {
   disabled?: boolean;
   required?: boolean;
   "data-validation-status"?: "error" | "success" | "warning";
+  value?: unknown;
+  defaultValue?: unknown;
+  maxLength?: number;
+  onInput?: (event: FormEvent<HTMLElement>) => void;
 }
 
 export interface FieldProps extends Div {
@@ -43,6 +49,11 @@ export interface FieldProps extends Div {
   orientation?: FieldOrientation;
   /** Visually hides the label while keeping it as the control's accessible name. */
   visuallyHiddenLabel?: boolean;
+  /**
+   * Shows how many characters the control holds, "12 / 320" against its `maxLength`, at the end of the line under
+   * it. A function formats the count. It is read with the control's description, never announced on each key.
+   */
+  characterCount?: boolean | ((length: number, maxLength?: number) => ReactNode);
   /** @deprecated Use orientation="horizontal". */
   inline?: boolean;
 }
@@ -73,6 +84,7 @@ export const Field = /* @__PURE__ */ forwardRef<HTMLDivElement, FieldProps>(func
     htmlFor,
     orientation,
     visuallyHiddenLabel,
+    characterCount,
     inline,
     className,
     children,
@@ -95,6 +107,13 @@ export const Field = /* @__PURE__ */ forwardRef<HTMLDivElement, FieldProps>(func
   const resolvedValidationStatus = hasContent(error) ? "error" : validationStatus ?? (hasContent(validation) ? "error" : undefined);
   const hasValidation = hasContent(resolvedValidation);
   const hasError = hasValidation && resolvedValidationStatus === "error";
+  const countId = `${controlId}-count`;
+  const lengthOf = (value: unknown) => (value === undefined || value === null ? 0 : String(value).length);
+  const [typed, setTyped] = useState<number | null>(null);
+  // A controlled value is the truth; otherwise the count follows what is typed, from the default.
+  const length = control?.props.value !== undefined ? lengthOf(control.props.value) : typed ?? lengthOf(control?.props.defaultValue);
+  const maxLength = control?.props.maxLength;
+  const hasCount = Boolean(characterCount) && control !== undefined;
 
   if (control) {
     childArray[controlIndex] = cloneElement(control, {
@@ -106,12 +125,19 @@ export const Field = /* @__PURE__ */ forwardRef<HTMLDivElement, FieldProps>(func
         control.props["aria-describedby"],
         hasDescription ? descriptionId : undefined,
         hasValidation ? validationId : undefined,
+        hasCount ? countId : undefined,
       ),
       "aria-errormessage": hasError ? validationId : control.props["aria-errormessage"],
       "aria-invalid": hasError ? true : control.props["aria-invalid"],
       "data-validation-status": resolvedValidationStatus,
       required: required || control.props.required || undefined,
       disabled: disabled || control.props.disabled || undefined,
+      ...(characterCount ? {
+        onInput: (event: FormEvent<HTMLElement>) => {
+          control.props.onInput?.(event);
+          setTyped(lengthOf((event.target as HTMLInputElement).value));
+        },
+      } : {}),
     });
   }
 
@@ -142,6 +168,11 @@ export const Field = /* @__PURE__ */ forwardRef<HTMLDivElement, FieldProps>(func
       {hasDescription ? (
         <span id={descriptionId} className="area-field__description">
           {description}
+        </span>
+      ) : null}
+      {hasCount ? (
+        <span id={countId} className="area-field__count" data-full={maxLength !== undefined && length >= maxLength ? "" : undefined}>
+          {typeof characterCount === "function" ? characterCount(length, maxLength) : maxLength !== undefined ? `${length} / ${maxLength}` : length}
         </span>
       ) : null}
       {hasValidation ? (

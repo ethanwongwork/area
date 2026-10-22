@@ -13,6 +13,8 @@
   (Figma, IDEs); Figma's 24px fields are that density's target, not the default's.
 - 2026-09-26: accepted. Owner: "consider every component that you have built to be approved. if i havent given any feedback to change anything consider them approved."
 
+- 2026-10-21 (owner: "build proposals 1–4"): `steppers="split"` puts minus before the value and plus after it; `trailing` holds a control (a ghost Custom select) after the value, in the steppers' nested square, 4 in from the end.
+
 ## Job and boundaries
 
 Edits one number with keyboard, pointer scrubbing, arithmetic and optional steppers. Not
@@ -27,7 +29,8 @@ values in one shell; it reuses NumberField).
 | size | sm, md, lg | Control tiers | System |
 | scrub | letter, icon, or grip (`true`) | The field's name as the drag handle | Figma X/Y/W/H letters, rotation and opacity glyphs; Base UI ScrubArea is the label |
 | unit | text after the number | %, °, px | Figma "100%", "0°" |
-| steppers | on/off | Forms without a pointer-drag habit | Base UI (− and +), Area |
+| steppers | off, on (both after the value), split (minus before, plus after, the value centred) | Forms without a pointer-drag habit; split for a count or quantity (owner 2026-10-21) | Base UI (− and + around the value), Spectrum and Carbon counters, Google Docs' font size, the owner's Insert panel "Columns − 0 +" |
+| trailing | a control after the value (a ghost Custom select), in a nested square at the end | A sizing or unit mode beside the value (owner 2026-10-21) | Figma's W and H fields with their resizing mode; the owner's auto-layout panel "360 Fill" |
 | mixed, read-only, disabled, validation (`validationStatus`, `invalid`) | states | Multi-selection, locking | Figma ("Mixed") |
 
 ## Sources
@@ -205,3 +208,10 @@ Steppers press at `bg-component-pressed`, one step past selected (Notion presses
 - 2026-10-04 · pill shapes and list rows (owner) → `--area-pill-field` makes the field a pill, steppers concentric (`number-field.css`). `docs/research/radius-audit-2026-10-03.md`, "Pill shapes and list rows".
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → motion pass: hover and focus edge and the focus halo appear at once and fade out on `fast`; tones land at once; the stepper plates gain the same in-at-once, out-on-fast fade (`number-field.css`). See "Motion and interaction, 2026-10-07".
 - 2026-10-15 · owner: "merge it, then continue working" → boundary sweep under increased contrast (CONTRAST.md: required boundaries target 3:1): the soft variant's resting edge is `input-edge-soft` (none at standard, the strong control edge at more), as Input's.
+
+## Review note, 2026-10-21
+
+- **What changed:** two additions. Split steppers put minus before the number and plus after it, for counts. A trailing
+  slot holds a small picker after the number, such as Figma's "360 Fill".
+- **Why:** your Insert and auto-layout panel references; Spectrum, Carbon and Google Docs set counts this way, and
+  Figma's width and height fields carry their sizing mode inside the field.

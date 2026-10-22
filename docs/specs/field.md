@@ -13,6 +13,8 @@
   the default ink over muted field labels, and every field label inside a Panel is muted,
   stacked or beside its control (`panel.css:147`).
 
+- 2026-10-21 (owner: "build proposals 1–4"): `characterCount` shows "12 / 320" against the control's maxLength at the end of the line under it, in the description's text and ink; it shares the description's line, default ink at the limit (never an error colour), joined to aria-describedby. A Field with a contained control hugs it so the count ends where the control ends.
+
 ## Job and boundaries
 
 Field labels and describes exactly one direct form control and carries its validation
@@ -26,7 +28,7 @@ RadioGroup; several values in one shell use InputGroup.
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
 | orientation | vertical (default), horizontal | Stacked form; label beside the control in a settings or inspector row | UUI (stacked); Figma inspector rows (label beside) |
-| composition | description, validation (error, success, warning), required mark, visually hidden label | Guidance, correction, required fact | UUI label + hint |
+| composition | description, validation (error, success, warning), required mark, visually hidden label, character count | Guidance, correction, required fact; a limit (owner 2026-10-21) | UUI label + hint; count: Polaris showCharacterCount, Carbon, MUI, ChatGPT's custom instructions, the owner's text-field reference "0 / 320" |
 | state | disabled | Keeps guidance readable | UUI |
 
 ## Sources
@@ -164,3 +166,9 @@ Textarea is already `round()`ed; no transforms. Open question: none.
 - 2026-10-01 · audit B-14 → a Field around an InputGroup disables and invalidates the controls inside it: the group takes `disabled` and validation and passes them on through `InputGroupContext` → InputGroup.tsx, input-group-context.ts.
 - 2026-10-01 · compact pass round 5 → the label-to-control gap reads `ui-stack` (6, compact 4) and a horizontal Field's gap `ui-cluster` (8, compact 6). Default unchanged. docs/research/compact-pass-2026-10-01.md.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → Field has no motion of its own; its controls carry it (no change to `field.css`). See "Motion and interaction, 2026-10-07".
+
+## Review note, 2026-10-21
+
+- **What changed:** a Field can show a character count, "12 / 320", at the end of the line under its control.
+- **Why:** your text-field reference; Polaris, Carbon and ChatGPT's custom instructions show it the same way. It
+  replaces the Textarea tile's hand-made count.

@@ -123,7 +123,7 @@
   .area-command-palette__list {
     display: flex;
     flex-direction: column;
-    gap: var(--area-ui-row-gap); /* 2, compact 0 */
+    gap: var(--area-ui-row-gap); /* 1 at every density */
     flex: 1;
     min-block-size: 0;
     overflow-y: auto;

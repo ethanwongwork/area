@@ -60,7 +60,7 @@
   .area-edit-summary__head .area-button { --_shape: var(--_head-button-radius); }
   .area-edit-summary__file .area-button { --_shape: var(--_row-button-radius); }
 
-  /* Menu's list: its padding, and its break between rows (ui-row-gap: 2, compact 0) so adjacent plates stay distinct. */
+  /* Menu's list: its padding, and its break between rows (ui-row-gap: 1) so adjacent plates stay distinct. */
   .area-edit-summary__files { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-ui-row-gap); padding: var(--_card-list); }
   /* A file's row is a Menu row: its name, counts and chevron as one button, Undo and Keep at the end, Menu's row gap
      (gap-row) between them. */

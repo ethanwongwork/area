@@ -27,7 +27,7 @@ token (Chip). CheckboxGroup owns the legend, group description and group validat
 |---|---|---|---|
 | size | md (default), lg (sm removed 2026-09-28) | Label type follows the control tier; lg is the 20px glyph | Untitled sm 16 / md 20; Notion and Figma one size, 16 |
 | variant | card | A contained option: visual, text, control at the end; the chosen card's edge takes `stroke-selected` at `selected-width` (Selected stroke, 2), drawn inside | Owner references (2026-09-28); shadcn Choice Card (`shadcn--choice-card-radio-*`) |
-| layout (card) | row (default), tile | Row: one line; tile: a 20px visual above the label, control in the corner, cards in a grid | Owner reference 1 (tile grid); references 2, 3 and shadcn (rows) |
+| layout (card) | row (default), tile, preview | Row: one line; tile: a 20px visual above the label, control in the corner, cards in a grid; preview: the visual centred as the option's picture, the label centred, no box drawn (2026-10-21) | Owner reference 1 (tile grid); references 2, 3 and shadcn (rows); the owner's Appearance picker, Radix CheckboxCards (preview) |
 | state | checked, indeterminate, invalid, disabled | Native states plus `aria-invalid` | Untitled: checked, indeterminate, disabled; no invalid |
 | composition | caption, leading visual, group (vertical, horizontal; invalid, success) | — | Untitled label + hint; Figma label beside the box; gallery Layout / horizontal group |
 
@@ -209,6 +209,14 @@ Chromium snaps box edges and masks to device pixels, so the marks stay on the gr
 - **Why:** your picks on the state page (2026-10-21), now the defaults of the new state settings (Inspector: Stroke, Shadow, Fill).
 
 ## Feedback log
+
+- 2026-10-21 · owner, the Theme setup's choices: "i want to separate the choices from the visual ... they should be
+  consistent, cohesive, simple visuals that convey the choice well ... research and look into choice card ui, maybe the
+  cards can have centered text" and an Appearance picker reference (soft grey cards, a centred window, the label under
+  it, the chosen card ringed) → `layout="preview"` (Radix RadioCards, macOS Appearance, Untitled UI's theme cards): the
+  card a soft `bg-subtle` ground with no edge at rest, the visual a frame at `--area-choice-ratio` (4 / 3), the label
+  centred, the control hidden (the card is the indicator; keyboard and name stay native), the chosen card's selected
+  stroke; a group lays previews in equal columns of `--area-choice-min` (104). choice.css, manifest, a gallery tile.
 
 - 2026-09-28 · owner approved batch 14 → Complete.
 

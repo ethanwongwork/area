@@ -57,11 +57,11 @@ under its own scope, as the Language tab previews, `Default` as `meta`).
 ## Anatomy
 
 ```
-area-asset-card          the card: as tall as its head and its frame, Card's corner, card edge, recessed fill, padding 0 4 4
+area-asset-card          the card: as tall as its head and its frame, Card's corner, the divider edge (the frame's), recessed fill, padding 0 4 4
   __head                 control-sm + 2 × 4 tall; the name, then the controls, nothing else (round 58)
     __name               UI text, regular, default ink; cap-trimmed; one line, then an ellipsis
     __actions            small ghost controls, ending 4 in (on the frame's side), centred on the head
-  __frame                1:1 (an image: the image's ratio), 4 in on three sides; corner card − edge − 4; surface + card edge; raised ground
+  __frame                1:1 (an image: the image's ratio), 4 in on three sides; corner card − edge − 4; surface + divider edge at stroke-width; raised ground
     __media              asset: centred, 12 of room · image: covers the frame (object-fit cover)
     __mosaic             group: 2 × 2, 4 apart, the frame's place (the frame paints nothing)
       __cell             one asset cropped to its cell, the frame's corner
@@ -91,12 +91,12 @@ Inset equations (the designs at 300, edge 1; Area at the default):
 | controls · plates | — | the card is a recessed ground (layers.css), the frame a raised one: a button's hover plate steps from the card's fill (light #ebebeb on #f7f7f7, 1.11:1; it was the page's #f3f3f3, 1.04:1); the glyph 6.85:1 (light) and 12.6:1 (dark) on the fill, 6.2:1 and 10.3:1 on its plate; the focus ring 7.4:1 and 13.7:1 | owner round 60: "make sure the backplate on the button is accessible"; layers.css |
 | frame · inset | 4 inside the edge, none above (under the head) | `space-4` | design |
 | frame · corner | 11 | card − (edge + inset) × concentric | design, exact concentric (owner: "mathematically correct") |
-| frame · edge, fill | 1px #eee–#f0f0f0; component: white | `border-card`; `bg-surface` | design |
+| frame · edge, fill | 1px #eee–#f0f0f0; component: white | `border-divider` at `stroke-width` (light #e2e2e2, 1.21:1 on the card's #f7f7f7, 1.30:1 on the frame's white; dark #333, 1.56:1, as before); `bg-surface` | DESIGN_SYSTEM Strokes: a frame with no shadow, as Table's; owner 2026-10-21 ("too thin": the design's #eee was 1.08:1 on Area's recessed card, which is darker than the design's #fafafa) |
 | image | covers the frame (cropped) | `object-fit: cover` | Image container |
 | specimen room | — (centred) | 12 (pick) | — |
 | group · cells | 143 × 128, 4 apart, corner 11, no edge | 2 × 2, gap = inset (4) = margin to the card's edge (the frame gives up its edge's width), corner = frame corner | Group container; owner round 59 |
 | group · element cell | — | a thumbnail: laid out at twice the cell (about its own card's frame), scaled to half, inert | owner round 57: "image versions that are scaled down when that image is a thumbnail in a group" |
-| setting · frame | — | the option's own scope on the frame (`frameProps`, e.g. `data-area-theme="dark"`), so the frame paints that option's ground | owner round 57: "it doesnt always have to be white" |
+| setting · scope | — | the option's own scope on the whole card (e.g. `data-area-theme="dark"`), so the card and its frame paint that option's grounds together: the frame always the raised step of the card's recessed fill (light: white on #f7f7f7; dark: #121212 on #0b0b0b) | owner round 57: "it doesnt always have to be white"; 2026-10-21: "the frame color and card color dont seem to always update together" (the frame alone was scoped, a dark frame on a light card) |
 | head · end | — | controls only: Copy for what is used (component code, colour value, type role, icon name), More for what is managed (image, group); `meta` deprecated and ignored | owner round 58: "it should always be controls, maybe a copy button?" |
 | colour · value | — | behind Copy (copies `#2563EB`) | Figma's colour styles carry the value |
 | type · detail | — | in the sample: "Aa" over "Geist · Medium · 24 / 32" | Figma's text styles: "Ag" over the face |
@@ -133,7 +133,7 @@ One language across Area's framed surfaces: a quiet band names the thing, a whit
 | Container | Head | Body | Edge | Why it differs |
 |---|---|---|---|---|
 | Table | the header row on `bg-subtle` | rows on `bg-surface`, flush | `border-divider` at `stroke-width` (rows inside, so the frame is never lighter than its rules) | data: rows run to the frame |
-| Asset card | the head on `bg-subtle` (the card's ground) | the asset on `bg-surface`, 4 in, concentric | `border-card` (frame of a standalone surface) | an asset is visual, so it gets its own frame and corner inside the card |
+| Asset card | the head on `bg-subtle` (the card's ground) | the asset on `bg-surface`, 4 in, concentric | the card: `border-card` (a standalone surface); the frame: `border-divider` at `stroke-width` (no shadow carries it, as Table's) | an asset is visual, so it gets its own frame and corner inside the card |
 | Card | title in the body | content on `bg-surface` | `border-card`, Card's corner | content, not an asset; Asset card takes Card's corner |
 | Code block / Edit summary | a header with a `border-decorative` seam | code on `bg-surface` | `border-card` at `stroke-width` | a seam instead of an inset frame: text needs no frame of its own |
 
@@ -158,8 +158,51 @@ rule every nested surface uses (Popover, Code block's buttons, Edit summary's he
 - **What changed:** every selected edge (framed card, a component's frame, an image or group ring) is the same 2px vibrant blue drawn inside (the framed card was 1px dark blue); hover lifts by `0 2px 4px -1px` at 8%; focus sits 2px off.
 - **Why:** your round 65 note on the selected border, answered by your picks on the state page (2026-10-21), now the defaults of the new state settings (Inspector: Stroke, Shadow, Fill).
 
+## Review note, 2026-10-21 (frame edge)
+
+- **What changed:** the frame inside the card has a firmer edge: #e2e2e2 instead of #eeeeee in light, still 1px. Dark
+  is unchanged. It stays when Stroke width is 0, as Table's frame does.
+- **Why:** you said the inner frame's strokes look too thin. They were the card's own edge colour, made for a card on a
+  white page. Inside the card, they sit on its grey ground (#f7f7f7), where #eee is only 1.08:1, so the line almost
+  disappears. Area's rule for a frame with no shadow (Table, Code block) is the divider colour at the required stroke
+  width, which gives 1.21:1 on the ground and 1.30:1 against the white inside. In dark the two colours were already the
+  same (#333, 1.56:1), so only light changes. Every app tile uses this card, so every tile's frame changes too.
+
+## Visual pass
+
+- 2026-10-21 · in the app, headless Edge 3× (light, dark) and a measured matrix: the card fill (`bg-subtle`, recessed)
+  against the frame fill (`bg-surface`, raised) at light ground 100/95/90 and dark ground 0/8/16/24, each at Layers 0, 4
+  and 8. They move together everywhere the Canvas sets them: the frame is the lighter step at every Layers above 0
+  (1.07:1 at the light default, 1.05:1 at the dark default, up to 1.46:1 at ground 90, Layers 8), and at Layers 0 card,
+  frame and page are one tone, which is that setting's design ("frames alone set layers apart"). Contrast More, Selected
+  tint, Stroke width 0 and a Material leave the pair as it is. The one break was the setting demo: its option's scope
+  (`data-area-theme="dark"`) sat on the frame alone, a dark frame on a light card. The scope now goes on the whole card.
+  Figma's file browser and Notion's galleries need a sign-in in the browser pane, so the product comparison was not
+  run. Against the owner's designs (round 55) and the peers Card and File tile, nothing else measured off.
+
+- 2026-10-21 · in the app (not against a live product), light and dark, headless Edge at 3× and the pane: the frame
+  edge was `border-card` (#eee) at `border-width` on the card's `bg-subtle` (#f7f7f7), 1.08:1 in light against 1.56:1
+  in dark, so light read as a hairline that faded out (owner: "too thin"). The width was 1px, the same as the card's
+  edge; the contrast was the defect. Compared with peers that frame content without a shadow: Table's frame and Code
+  block (`stroke-width`), Table's colour `border-divider`. Changed to `border-divider` at `stroke-width`; cohesion test
+  lists the frame among the required lines.
+
 ## Feedback log
 
+- 2026-10-21 · owner: "is the stroke on the inside frame and outside container the same? i think they should be the same
+  or more consistent" → they were not: the card took Card's `border-card` (#ee light, 1.16:1 on the page) and the frame
+  `border-divider` (#e2, 1.21:1 on the card's recessed fill); dark both #333. The card edge now takes `border-divider`
+  too, so both are one stroke (light #e2, dark #333, 1px). The frame could not go back to #ee (the owner's "too thin").
+
+- 2026-10-21 · owner: "the frame color and card color dont seem to always update together. the default is a white bg
+  frame on a light gray card" and "restrict it to be used only on the component page" → measured the pair (Visual
+  pass); the setting demo's scope moved from the frame to the card (demos/asset-card.tsx, the Documentation entry); the
+  app's tiles outside the Components tab are plain containers (src/tile.tsx, PlainTile).
+
+- 2026-10-21 · owner: "the asset card strokes on the inner frame look too thin, can you make sure the asset card is
+  correctly designed and implemented?" → the frame's edge moved from the card's role (`border-card` at `border-width`,
+  1.08:1 on the card in light) to the rule for a frame with no shadow (`border-divider` at `stroke-width`, 1.21:1);
+  dark unchanged; the containerless selected ring now tops up from that edge. asset-card.css, cohesion.test.mjs.
 - 2026-10-21 · owner, round 65 (`components65`), needs changes: "what is the size or AR of the frame, for components can you make the top layer frame a 1:1 AR always. for images, it can vary based on the image height. not sure how i feel about the selected state border." → the frame is 1:1 for every kind but an image, which takes its own ratio; the card grows by its head (was a square card with a 1.15:1 frame). The selected border is part of the system-wide selection audit (docs/research/states-2026-10-21/), awaiting the owner's pick.
 - 2026-10-18 · owner: Brand as containers, assets and groups, names under, rounded images → built (this spec).
 - 2026-10-18 · owner: "rebuild the gallery tiles on Asset card so every tile's name and controls sit under its frame,

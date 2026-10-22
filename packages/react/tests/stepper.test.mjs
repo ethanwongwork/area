@@ -30,6 +30,13 @@ test("a step with a problem, vertical layout, and custom status words", () => {
   assert.match(html, /, needs attention/);
 });
 
+test("an open step holds content after its body, inside the step; a step without children renders none", () => {
+  const html = render(h(Stepper, { current: 1, orientation: "vertical", "aria-label": "Setup" },
+    h(StepperStep, { title: "Details" }), h(StepperStep, { title: "Members" }, h("p", null, "Teams")), h(StepperStep, { title: "Review" })));
+  assert.match(html, /Members<span class="area-sr-only">, current step<\/span><\/span><\/span><\/span><div class="area-stepper-step__content"><p>Teams<\/p><\/div><\/li>/);
+  assert.equal((html.match(/area-stepper-step__content/g) ?? []).length, 1);
+});
+
 test("the current step keeps aria-current=step when it is marked invalid", () => {
   const html = render(h(Stepper, { current: 1, "aria-label": "Setup" },
     h(StepperStep, { title: "Details" }), h(StepperStep, { title: "Members", status: "invalid" }), h(StepperStep, { title: "Review" })));

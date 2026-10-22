@@ -254,6 +254,8 @@ The action's underline takes Link's offset, 0.25em, clear of descenders (link.md
 
 ## Feedback log
 
+- 2026-10-21 · owner: Slider `buffered` for media → the music template's position slider shows a loaded stretch (`buffered={65}`, card.tsx); see docs/specs/slider.md.
+
 - 2026-09-28 · owner: text and buttons offset, less offset from images, corner from the button,
   centre the music controls → `--_card-step` 4 (content pad, was (32 − 1cap) / 2 ≈ 11); corner
   `radius-control-md + inset + step`; footer no longer pulled out to the inset; a header action's

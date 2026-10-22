@@ -120,19 +120,31 @@ Zoom is Zoom control's stepper (− Auto +):
 **Theme tab** (Language 2026-10-19 to 20; owner, 2026-10-20: "i want to change language back to theme"). The Canvas
 header's first control chooses Setup or Browse (`src/pages/theme.tsx`).
 
-- **Setup** (the default; `src/pages/theme-setup.tsx`, owner 2026-10-20): one step per setting in the registry's order,
-  both themes' grounds and layers included. A step asks one question, shows every option as a card, and a pick sets the
-  Canvas setting the Inspector holds (Mode sets the page's preview). The cards are an Asset grid (Pills, a set, toggles
-  each shape). The header's second control draws every card as Abstract (the setting alone, below), Components (one
-  sheet of the common controls), Bento (small product cards) or Example (the Testing tab's dashboard), each under its
-  option over the picks so far (`src/pages/theme-views.tsx`). The Sidebar lists the steps with what each is set to; All
-  is the start and the summary of picks, with Copy picks. Back and Continue end each step.
+- **Setup** (the default; `src/pages/theme-setup.tsx`, owner 2026-10-20, rebuilt 2026-10-21 after a product finder's
+  flow, Tesla's design page and an Appearance picker, [research](research/onboarding-setup-2026-10-21.md)):
+  - **The setup's own UI never changes as picks are made**: the Canvas body carries no picks
+    (`Workspace canvasPicks={false}`); only the drawings take them (`canvasAttributes`). The same holds for Browse.
+  - **The visual** fills the left: the header's view, Bento (product cards after the owner's references), Desktop (the
+    analytics dashboard) or Mobile (a phone's Today), at true scale where it fits, over the picks so far, showing the
+    choice under the pointer or keyboard focus; a state setting's choice draws its state.
+  - **The panel** at the right holds the open category's settings, one section each (its name and question, then its
+    choices), with Back, Use defaults and Continue between categories at its foot. A pick applies at once.
+  - **The choices** are kept apart from the visual (owner: "separate the choices from the visual"): choice cards (Radio
+    and Checkbox `variant="card" layout="preview"`) each showing the option as a mini UI (colour, grounds, layers,
+    emphasis, contrast, density) or one simple mark at true size on a page plate (corners, lines, lifts, plates, rings,
+    "Aa", a pill, motion), and the accent as a row of its own colours (Color swatch picker); `src/choice-visuals.tsx`.
+  - **The Sidebar** is a vertical Stepper of the categories: the open one lists its settings with what each is set to,
+    the others how many of theirs changed; All is the start and the summary of picks, with Copy picks.
 - **Browse** lists the Inspector's own settings (`src/gallery/controls.ts`) in cards at least 200
   wide.
+- **Containers.** Asset card is the Components tab's container only; every other tab's tiles are the plain container
+  (`src/tile.tsx`, PlainTile): the stripe fill, Card's light edge at stroke-width, no shadow, the name in the first row,
+  the edge stepping on hover, the selected edge and the focus ring from the state settings (owner, 2026-10-21).
 - Each card shows one real component with real text, showing the one thing the setting
   changes (`src/abstract.tsx`; owner, 2026-10-19: "simple, and easy to recognize").
 - Previews are at default size, scaled down (never up, at most 0.8×), with one scale for
-  every preset of a setting so they compare.
+  every preset of a setting so they compare. Settings whose change is a line, a corner, a shadow, a state, a row's
+  height or a motion are close-ups instead: the real component a little over its size, cropped by the card.
 - Type is the ramp of roles with their sizes. Ground and Layers are windows whose card frame
   stays put.
 - The page previews one theme, Light by default, with a Light / Dark switch in the Canvas
@@ -144,7 +156,7 @@ out.
 
 - **Theme** (Language 2026-10-19 to 20; the tab and the Inspector use one word): the
   Canvas settings under the registry's headings (`SETTING_GROUPS`: Color, Size, Shape,
-  Stroke, Shadow, Effects, then Material), only those that change this tab's specimens. An option names its value
+  Stroke, Shadow, Fill, Effects, then Material), only those that change this tab's specimens. An option names its value
   and, at a range's end, what that end is ("0 (Flat)", "100 (White)"); none says "(Default)" (owner, 2026-10-20:
   "i dont like seeing (default)"). The Theme tab is where the default is marked.
 - **Design**: what is chosen, at its narrowest: a Canvas item, else the Sidebar's row, else

@@ -2,7 +2,8 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createElement as h } from "react";
 import { renderToString } from "react-dom/server";
-import { MANIFESTS, Slider, sliderVariants } from "../dist/modules/index.js";
+import { MANIFESTS, Slider, SliderRange, sliderVariants } from "../dist/modules/index.js";
+import { readFileSync } from "node:fs";
 
 const render = props => renderToString(h(Slider, props));
 
@@ -48,4 +49,42 @@ test("renders interior marks only for an explicit discrete range", () => {
   const html = render({ min: 0, max: 5, step: 1, defaultValue: 1, stepMarks: true });
   assert.match(html, /area-slider__marks/);
   assert.equal((html.match(/--_mark/g) ?? []).length, 4);
+});
+
+test("rail is the default; track and bar are variants on Slider and SliderRange", () => {
+  assert.deepEqual(MANIFESTS.slider.variants.variant, ["track", "bar"]);
+  assert.deepEqual(MANIFESTS.sliderRange.variants.variant, ["track", "bar"]);
+  const rail = render({ "aria-label": "Volume", variant: "rail" });
+  assert.doesNotMatch(rail, /area-slider--(rail|track|bar)/);
+  assert.match(render({ "aria-label": "Volume", variant: "track" }), /area-slider--track/);
+  assert.match(render({ "aria-label": "Volume", variant: "bar" }), /area-slider--bar/);
+  const range = renderToString(h(SliderRange, { variant: "bar", defaultValue: [20, 60], inputs: false }));
+  assert.match(range, /area-slider-range--bar/);
+  assert.equal((range.match(/area-slider--bar/g) ?? []).length, 2, "both handles take the variant");
+  assert.match(range, /--_range-start-ratio:0\.2;--_range-end-ratio:0\.6/);
+});
+
+test("hands the CSS the value as a ratio so a full-height fill ends at the thumb's centre", () => {
+  assert.match(render({ "aria-label": "Volume", defaultValue: 25 }), /--_pct:25%;--_ratio:0\.25/);
+});
+
+test("the knob is plain: no fill-colour dot, and hover paints the fill only (owner 2026-10-21)", () => {
+  const css = readFileSync(new URL("../../styles/src/components/slider.css", import.meta.url), "utf8");
+  assert.doesNotMatch(css, /radial-gradient\(circle, var\(--_fill\)/);
+  assert.match(css, /--_knob: light-dark\(var\(--area-bg-surface\), var\(--area-bg-component-active\)\)/);
+  assert.match(css, /:hover:not\(:disabled\) \{ --_fill: var\(--_fill-hover\)/);
+});
+
+test("buffered is a ratio in the slider's own units, clamped, and absent unless given", () => {
+  assert.doesNotMatch(render({ "aria-label": "Position", defaultValue: 30 }), /--_buffered/);
+  assert.match(render({ "aria-label": "Position", min: 0, max: 200, defaultValue: 30, buffered: 150 }), /--_buffered:0\.75/);
+  assert.match(render({ "aria-label": "Position", defaultValue: 30, buffered: 400 }), /--_buffered:1/);
+  const css = readFileSync(new URL("../../styles/src/components/slider.css", import.meta.url), "utf8");
+  assert.match(css, /var\(--_buffer-fill\) 0 var\(--_buffer-stop, 0%\)/);
+});
+
+test("startLabel and endLabel name the ends under the track, hidden from assistive tech", () => {
+  const html = render({ "aria-label": "Intensity", defaultValue: 4, startLabel: "Low", endLabel: "High" });
+  assert.match(html, /<span class="area-slider__ends" aria-hidden="true"><span class="area-slider__end">Low<\/span><span class="area-slider__end">High<\/span><\/span>/);
+  assert.doesNotMatch(render({ "aria-label": "Intensity" }), /area-slider__ends/);
 });

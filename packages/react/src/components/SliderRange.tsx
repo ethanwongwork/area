@@ -15,6 +15,8 @@ export interface SliderRangeProps extends Omit<HTMLAttributes<HTMLDivElement>, "
   max?: number;
   step?: number;
   size?: VariantProps<typeof MANIFESTS.sliderRange>["size"];
+  /** The rail's treatment, as Slider's: `rail` (default), `track` (a pill under round knobs) or `bar` (full height, grips). */
+  variant?: "rail" | "track" | "bar";
   /** Number fields either side of the rail (Figma's and Notion's range filters). On by default. */
   inputs?: boolean;
   /** Names the two ends: the sliders take these, the number fields add "value" (audit C-12). */
@@ -35,7 +37,7 @@ const clamp = (value: number, lower: number, upper: number) => Math.min(upper, M
  * capture every drag. Promoted from the docs composition (audit C-12, owner 2026-09-30).
  */
 export const SliderRange = forwardRef<HTMLDivElement, SliderRangeProps>(function SliderRange(
-  { value, defaultValue, onValueChange, min = 0, max = 100, step = 1, size, inputs = true,
+  { value, defaultValue, onValueChange, min = 0, max = 100, step = 1, size, variant = "rail", inputs = true,
     minLabel = "Minimum", maxLabel = "Maximum", name, form, disabled, className, style, ...rest }, ref,
 ) {
   const [own, setOwn] = useState<SliderRangeValue>(defaultValue ?? [min, max]);
@@ -83,15 +85,17 @@ export const SliderRange = forwardRef<HTMLDivElement, SliderRangeProps>(function
     move(event.clientX, handle);
   };
 
-  const pct = (n: number) => `${max === min ? 0 : ((n - min) / (max - min)) * 100}%`;
+  const ratio = (n: number) => max === min ? 0 : (n - min) / (max - min);
+  const pct = (n: number) => `${ratio(n) * 100}%`;
   const field = (label: string, current: number, lower: number, upper: number, set: (n: number) => void) => inputs
     ? <Input className="area-slider-range__input" size={size} aria-label={`${label} value`} type="number" min={lower} max={upper} step={step}
       value={current} disabled={disabled} onChange={event => set(event.currentTarget.valueAsNumber)} />
     : null;
 
-  return <div ref={ref} {...rest} className={sliderRangeVariants({ size }, className)}
+  return <div ref={ref} {...rest} className={sliderRangeVariants({ size, variant: variant === "rail" ? undefined : variant }, className)}
     data-overlap={range[0] === range[1] ? "" : undefined} data-disabled={disabled ? "" : undefined}
-    style={{ ...style, "--_range-start": pct(range[0]), "--_range-end": pct(range[1]) } as CSSProperties}>
+    style={{ ...style, "--_range-start": pct(range[0]), "--_range-end": pct(range[1]),
+      "--_range-start-ratio": ratio(range[0]), "--_range-end-ratio": ratio(range[1]) } as CSSProperties}>
     {field(minLabel, range[0], min, range[1], setStart)}
     <div ref={track} className="area-slider-range__track"
       onPointerDown={begin}
@@ -100,9 +104,9 @@ export const SliderRange = forwardRef<HTMLDivElement, SliderRangeProps>(function
       onPointerMove={event => move(event.clientX)}
       onPointerUp={() => { active.current = null; }}
       onPointerCancel={() => { active.current = null; }}>
-      <Slider ref={startInput} size={size} aria-label={minLabel} min={min} max={max} step={step} value={range[0]} name={name} form={form}
+      <Slider ref={startInput} size={size} variant={variant} aria-label={minLabel} min={min} max={max} step={step} value={range[0]} name={name} form={form}
         disabled={disabled} onValueChange={setStart} className="area-slider-range__start" />
-      <Slider ref={endInput} size={size} aria-label={maxLabel} min={min} max={max} step={step} value={range[1]} name={name} form={form}
+      <Slider ref={endInput} size={size} variant={variant} aria-label={maxLabel} min={min} max={max} step={step} value={range[1]} name={name} form={form}
         disabled={disabled} onValueChange={setEnd} className="area-slider-range__end" />
     </div>
     {field(maxLabel, range[1], range[0], max, setEnd)}

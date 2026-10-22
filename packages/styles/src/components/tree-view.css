@@ -2,7 +2,7 @@
   .area-tree-view {
     display: flex;
     flex-direction: column;
-    gap: var(--area-ui-row-gap); /* 2, compact 0 */
+    gap: var(--area-ui-row-gap); /* 1 at every density */
     min-inline-size: 0;
     inline-size: min(100%, calc(var(--area-space-96) * 3 + var(--area-control-md)));
     max-inline-size: 100%;

@@ -68,8 +68,9 @@
   /* An Asset card paints the recessed ground (bg-subtle) under its head, so its More and Copy buttons step their plates
      from it (owner, round 60: "make sure the backplate on the button is accessible": on the page's plate the hover read
      #f3 on the card's #f7, 1.04:1; from the recessed ground #eb, 1.11:1, the step every plate takes from its ground). A
-     soft Surface paints the recessed ground too. */
-  :where(.area-asset-card:not(.area-asset-card--containerless), .area-surface--soft),
+     soft Surface paints the recessed ground too, and so does a preview choice card (Radio and Checkbox
+     `layout="preview"`), the soft ground its picture sits on. */
+  :where(.area-asset-card:not(.area-asset-card--containerless), .area-surface--soft, .area-radio--card.area-radio--preview, .area-checkbox--card.area-checkbox--preview),
   [data-area-ground="recessed"] {
     --area-bg-component: var(--area-bg-component-recessed);
     --area-bg-component-hover: var(--area-bg-component-recessed-hover);

@@ -27,7 +27,7 @@ Checkbox.
 |---|---|---|---|
 | size | md (default), lg (sm removed 2026-09-28); the box follows the type size (2026-10-14) | Label type follows the tier | Untitled sm 16 / md 20 |
 | variant | `card`: a contained, full-width option with the control at the end, as Checkbox's card (owner 2026-09-28) | Owner references (plan and registration pickers); shadcn Choice Card | gallery `card`, `card-tile` |
-| layout (card) | row (default): visual, text and control on one line; tile: visual above the label, control in the top-end corner. Read only with `variant="card"` (forms.tsx:318) | Owner reference 1 | gallery `card`, `card-tile` |
+| layout (card) | row (default): visual, text and control on one line; tile: visual above the label, control in the top-end corner; preview: the visual centred as the option's own picture, the label centred under it, no control drawn, the card a soft ground (2026-10-21). Read only with `variant="card"` (forms.tsx:318) | Owner reference 1; the owner's Appearance picker; Radix RadioCards | gallery `card`, `card-tile`, `card-preview` |
 | state | checked, disabled; group invalid | Native states; RadioGroup `error` | Untitled: checked, disabled |
 | orientation (group) | vertical (default), horizontal | Settings stacks vs inline choices | Untitled group gap 16 |
 | composition | description (`caption` is an alias), `leadingVisual` | Option caption; decorative context beside the text | Untitled label + hint |
@@ -175,6 +175,14 @@ selection with a real keyboard.
 - **Why:** your picks on the state page (2026-10-21), now the defaults of the new state settings (Inspector: Stroke, Shadow, Fill): ChatGPT's 2px selected tile. This replaces 2026-09-28's "darker, not thicker".
 
 ## Feedback log
+
+- 2026-10-21 · owner, the Theme setup's choices: "i want to separate the choices from the visual ... they should be
+  consistent, cohesive, simple visuals that convey the choice well ... research and look into choice card ui, maybe the
+  cards can have centered text" and an Appearance picker reference (soft grey cards, a centred window, the label under
+  it, the chosen card ringed) → `layout="preview"` (Radix RadioCards, macOS Appearance, Untitled UI's theme cards): the
+  card a soft `bg-subtle` ground with no edge at rest, the visual a frame at `--area-choice-ratio` (4 / 3), the label
+  centred, the control hidden (the card is the indicator; keyboard and name stay native), the chosen card's selected
+  stroke; a group lays previews in equal columns of `--area-choice-min` (104). choice.css, manifest, a gallery tile.
 
 - 2026-09-28 · owner approved batch 14 → Complete.
 

@@ -1149,8 +1149,8 @@
     --_menu-gap: var(--area-gap-row); /* the list label column, 36 (audit S11a) */
     display: flex;
     flex-direction: column;
-    /* A small break lets adjacent hover plates remain distinct without turning the
-     * panel into a loose stack; compact stacks rows flush, as VS Code and Figma (ui-row-gap). */
+    /* A 1px break keeps adjacent plates distinct at every density without loosening the stack (ui-row-gap;
+     * owner 2026-10-21, ChatGPT and Notion; was flush at compact, as VS Code and Figma). */
     gap: var(--area-ui-row-gap);
     /* The floor every dropdown window shares (Menu, Select's picker, Custom select, Combobox, Tag
        picker): 224, or the public --area-menu-min-inline-size, for a product whose lists hug their

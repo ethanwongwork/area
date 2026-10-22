@@ -151,4 +151,20 @@
   .area-number-field--soft .area-number-field__step:active:not(:disabled) { background-color: var(--area-bg-pressed); }
   .area-number-field__step:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   .area-number-field__step:disabled { color: var(--area-fg-disabled); cursor: not-allowed; }
+
+  /*
+   * Split steppers (owner 2026-10-21): minus before the value and plus after it, the value centred between, as a
+   * quantity or a count is set (Base UI's - and + around the value, Spectrum and Carbon's counters, Google Docs' font
+   * size; the owner's Insert panel "Columns − 0 +"). The same nested squares, 4 in from each edge.
+   */
+  .area-number-field--split > .area-number-field__control { text-align: center; }
+  .area-number-field--split:has(> .area-number-field__unit) > .area-number-field__control { margin-inline-start: auto; }
+
+  /*
+   * The trailing slot (owner 2026-10-21): a control after the value, Figma's W and H fields with their resizing mode
+   * ("360 Fill ▾"). It is a nested square's height, 4 in from the end, as the steppers, and a Custom select in it takes
+   * that height, so a ghost "Fill" picker sits inside the field rather than beside it.
+   */
+  .area-number-field__trailing { display: inline-flex; align-items: center; flex-shrink: 0; block-size: var(--_step); }
+  .area-number-field__trailing > .area-custom-select { --_height: var(--_step); }
 }

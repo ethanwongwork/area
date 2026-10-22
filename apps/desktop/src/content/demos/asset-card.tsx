@@ -39,7 +39,9 @@ export const GalleryAssetCardType = () => <AssetCard style={card} media={typeSam
 /* Icon: the glyph at its native 24. */
 export const GalleryAssetCardIcon = () => <AssetCard style={card} media={<SearchIcon width={24} height={24} />} name="Search" actions={copy("SearchIcon", "SearchIcon")} />;
 /* A setting (the Theme tab): the option drawn under its own scope; its name as the Inspector writes it. */
-export const GalleryAssetCardSetting = () => <AssetCard style={card} media={darkPreview} name="Dark (Default)" frameProps={{ "data-area-theme": "dark" }} />;
+// The option's scope on the whole card, so the card and its frame change together (owner, 2026-10-21: "the frame color
+// and card color dont seem to always update together. the default is a white bg frame on a light gray card").
+export const GalleryAssetCardSetting = () => <AssetCard style={card} media={darkPreview} name="Dark (Default)" data-area-theme="dark" />;
 /* Selected: the card's edge in the selection colour. */
 export const GalleryAssetCardSelected = () => <AssetCard style={card} selected media="images/david-tee.jpg" name="David Tee" actions={more("David Tee")} />;
 /* Interactive: a card that is its own control outside a grid (the app's gallery tiles): hover lifts it, Tab rings it. */

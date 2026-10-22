@@ -82,3 +82,17 @@ test("Field propagates disabled and preserves an explicit control id", () => {
   assert.match(html, /id="workspace-name"/);
   assert.match(html, / disabled=""/);
 });
+
+test("characterCount shows the length against maxLength and joins the description", async () => {
+  const { Field, Input, Textarea } = await import("../dist/modules/index.js");
+  const { createElement: el } = await import("react");
+  const { renderToString: render } = await import("react-dom/server");
+  const html = render(el(Field, { label: "Bio", characterCount: true, htmlFor: "bio" }, el(Textarea, { maxLength: 160, defaultValue: "Hello" })));
+  assert.match(html, /<span id="bio-count" class="area-field__count">5 \/ 160<\/span>/);
+  assert.match(html, /aria-describedby="bio-count"/);
+  const full = render(el(Field, { label: "Code", characterCount: true, htmlFor: "c" }, el(Input, { maxLength: 4, value: "ABCD", onChange() {} })));
+  assert.match(full, /class="area-field__count" data-full="">4 \/ 4</);
+  const custom = render(el(Field, { label: "Note", characterCount: (n, m) => `${m - n} left`, htmlFor: "n" }, el(Input, { maxLength: 10, defaultValue: "abc" })));
+  assert.match(custom, />7 left</);
+  assert.doesNotMatch(render(el(Field, { label: "Plain" }, el(Input, {}))), /area-field__count/);
+});

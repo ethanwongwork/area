@@ -11,9 +11,10 @@
   .area-description-list {
     /* spec: Notion's 160 property-name column; set --area-description-list-term to change it. */
     --_term: var(--area-description-list-term, 160px);
-    /* spec: Notion's 34 rows (the 32 UI row + 2; 26 in compact), 4 apart (2 × the row gap; 0 in compact). */
+    /* spec: Notion's 34 rows (the 32 UI row + 2; 26 in compact), 4 apart (0 in compact). Spacing that follows density,
+       so it keeps its own step: it read 2 × ui-row-gap until the row gap became a constant 1 (2026-10-21). */
     --_row: calc(var(--area-ui-row) + 2px);
-    --_row-gap: calc(var(--area-ui-row-gap) * 2);
+    --_row-gap: max(0px, calc(4px - 4px * var(--area-ui-dense)));
     /* spec: Notion insets the term and the value 6 inside their cells. */
     --_inset: var(--area-space-6);
     --_pad-block: 0px;
@@ -111,7 +112,7 @@
     align-items: center;
     gap: var(--area-space-6); /* spec: the term's icon gap */
     min-block-size: calc(var(--area-ui-row) + 2px); /* spec: a list row (34, compact 26) */
-    margin-block-start: calc(var(--area-ui-row-gap) * 2); /* spec: the list's row gap, as if a row */
+    margin-block-start: max(0px, calc(4px - 4px * var(--area-ui-dense))); /* spec: the list's row gap, as if a row (4, compact 0) */
     padding: 0 var(--_term-inset);
     border: 0;
     border-radius: var(--area-radius-small);

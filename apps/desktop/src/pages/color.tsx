@@ -9,7 +9,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import TOKENS from "@area/tokens/tokens.json";
 import { ROLE_SCALES } from "../../../../packages/tokens/src/color/presets.ts";
-import { AssetGrid, Code, ColorSwatch, EmptyState, Nav, NavGroup, NavItem, PanelSection, Table, TableLink } from "@area/react";
+import { Code, ColorSwatch, ListBox, EmptyState, Nav, NavGroup, NavItem, PanelSection, Table, TableLink } from "@area/react";
 import { CopyIcon } from "@area/icons";
 import { CopyButton } from "../copy.tsx";
 import { SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
@@ -103,7 +103,7 @@ function oklchShort(value: string) {
  */
 function Sheet({ grid, value, onChoose, children }: { grid: boolean; value: string | null; onChoose: (value: string) => void; children: ReactNode }) {
   return grid
-    ? <AssetGrid aria-label="Colour steps" value={value} onValueChange={onChoose} selectionFollowsFocus className="studio-sections">{children}</AssetGrid>
+    ? <ListBox layout="grid" aria-label="Colour steps" value={value} onValueChange={onChoose} selectionFollowsFocus className="studio-sections">{children}</ListBox>
     : <div className="studio-sections">{children}</div>;
 }
 

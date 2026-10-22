@@ -190,6 +190,9 @@
     --_inset-end: max(0px, calc(var(--_chevron-inset) - (var(--_action) - var(--_icon)) / 2));
   }
   .area-number-field:has(> .area-number-field__steppers:last-child) { --_box-end: var(--_step); }
+  /* Split steppers and the trailing slot are nested squares too: minus at the start, plus or a picker at the end. */
+  .area-number-field:has(> .area-number-field__steppers:first-child) { --_box-start: var(--_step); }
+  .area-number-field:has(> .area-number-field__trailing:last-child) { --_box-end: var(--_step); }
   /* A shortcut in an Input's suffix is a nested backplate, placed like a Button's: the space
    * after it equals the space above and below it (Notion's search field ⌘K). */
   .area-input:has(> .area-input__affix:last-child > .area-kbd) { --_box-end: var(--area-mark-label-md); }

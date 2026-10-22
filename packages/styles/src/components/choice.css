@@ -162,6 +162,57 @@
   .area-checkbox--tile > .area-choice-label,
   .area-radio--tile > .area-choice-label { grid-row: 2; grid-column: 1 / -1; }
 
+  /*
+   * Preview: a choice shown as what it does (owner, 2026-10-21, an Appearance picker's cards: a small window, a typeface,
+   * a layout; Radix's RadioCards, macOS Appearance, Untitled UI's theme cards). The card is the soft ground the preview
+   * sits on: the visual centred in its top, any size, its frame's ratio set by `--area-choice-ratio` (4 / 3 by default),
+   * the label centred under it, and no radio or box drawn: the card is the indicator, its selected stroke the choice
+   * (the native input stays, so the keyboard and the accessible name are the control's). A card with no visual is a
+   * text choice: its label centred, as tall as a control (a typeface set in itself, a size).
+   */
+  .area-checkbox--card.area-checkbox--preview,
+  .area-radio--card.area-radio--preview {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    row-gap: var(--area-space-8); /* spec: Radix RadioCards' space-2; the label 8 under its preview */
+    min-block-size: var(--area-control-lg);
+    --_card-edge: transparent; /* spec: the reference's soft card: a fill, no edge at rest */
+    background-color: var(--area-bg-subtle);
+    text-align: center;
+  }
+  .area-checkbox--preview > .area-checkbox__visual,
+  .area-radio--preview > .area-radio__visual {
+    display: grid;
+    grid-template: minmax(0, 1fr) / minmax(0, 1fr); /* one track the frame's size, so a picture can fill it */
+    place-items: center;
+    inline-size: 100%;
+    block-size: auto;
+    aspect-ratio: var(--area-choice-ratio, 4 / 3); /* public hook: a preview's frame (a wide thumbnail 16 / 9, a swatch 1) */
+    overflow: hidden;
+    color: var(--area-fg-default);
+  }
+  .area-checkbox--preview > .area-choice-label,
+  .area-radio--preview > .area-choice-label { justify-items: center; }
+  /* The card shows the choice; the input stays for the keyboard and assistive tech, out of sight. */
+  .area-checkbox--preview > .area-checkbox__control,
+  .area-radio--preview > .area-radio__control {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    opacity: 0;
+    pointer-events: none;
+  }
+  /* A group of previews lays them on equal columns of at least `--area-choice-min` (104 by default). */
+  .area-radio-group__options:has(> .area-radio--preview),
+  .area-checkbox-group__options:has(> .area-checkbox--preview) {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(var(--area-choice-min, 104px), 1fr)); /* public hook */
+    align-items: stretch;
+    gap: var(--area-space-8); /* spec: Radix's root gap 4 (16px at Radix's scale halves to Area's 8 for small cards) */
+  }
+
   .area-radio__control {
     border-radius: var(--area-radius-full);
   }

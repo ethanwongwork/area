@@ -185,7 +185,7 @@ function Overview({ groups, selected, onOpen, zoom, containerless }: { groups: A
             {list.map(entry => {
               const first = TILES.get(entry.slug)![0];
               return (
-                <Tile key={entry.slug} id={`family-${entry.slug}`} span="wide" stage="fit" card containerless={containerless} openOnClick aria-label={entry.name} data-key={entry.slug} data-name={entry.name}
+                <Tile key={entry.slug} container="asset" id={`family-${entry.slug}`} span="wide" stage="fit" card containerless={containerless} openOnClick aria-label={entry.name} data-key={entry.slug} data-name={entry.name}
                   label={<a href={`#components/${entry.slug}`} className="studio-section__link" onClick={event => { event.preventDefault(); onOpen(entry.slug); }}>{entry.name}</a>}
                   selected={entry.slug === selected} onOpen={() => onOpen(entry.slug)}
                   actions={<CopyCode code={first ? SNIPPETS[first.demo] : undefined} name={entry.name} />}>
@@ -228,7 +228,7 @@ function FamilyOverview({ family, tiles, tile, config, onSelectTile, onChange, z
               <SectionHeading className="studio-section-heading" titleId={`group-${group}`} {...APP_SCALE}
                 title={<>{group} <span className="studio-muted studio-tabular">{list.length}</span></>} />
               {list.map(entry => (
-                <Tile key={entry.id} span="wide" stage="fit" card containerless={containerless} label={group === "Default" ? entry.label : entry.value} aria-label={`${family.name}: ${entry.label}`}
+                <Tile key={entry.id} container="asset" span="wide" stage="fit" card containerless={containerless} label={group === "Default" ? entry.label : entry.value} aria-label={`${family.name}: ${entry.label}`}
                   selected={entry.id === onStage?.id} onSelect={() => onSelectTile(entry)}
                   actions={<CopyCode code={SNIPPETS[entry.demo]} name={`${family.name} ${entry.label}`} />}>
                   <TileBoundary><Demo name={entry.demo} /></TileBoundary>

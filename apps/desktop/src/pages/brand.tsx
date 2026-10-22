@@ -16,10 +16,11 @@
  * (scripts/dev.mjs). Location: #brand/<folder>, #brand/<folder>/<image> for the viewer.
  */
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
-import { AssetGrid, AssetGridItem, Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, Code, ColorSwatch, EmptyState, Nav, NavGroup, NavItem, PanelSection, Select, Spinner, Table, TableCell } from "@area/react";
+import { AssetGrid, ListBoxItem, Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, Code, ColorSwatch, EmptyState, Nav, NavGroup, NavItem, PanelSection, Select, Spinner, Table, TableCell } from "@area/react";
 import { ArrowLeftIcon, ChevronLeftIcon, ChevronRightIcon, GridIcon, OpenIcon } from "@area/icons";
 import { SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
 import { CanvasSection } from "../tile.tsx";
+import { APP_SCALE } from "../app-scale.ts";
 import { useViewOption, ViewControls, ViewSwitch } from "../view-controls.tsx";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { Facts } from "../facts.tsx";
@@ -143,8 +144,8 @@ export function BrandPage() {
       layout={mode === "waterfall" ? "waterfall" : "grid"}
       style={{ "--area-asset-card-size": `${SIZES[size]}px` } as CSSProperties}>
       {entries.map(entry => (
-        <AssetGridItem key={entry.id} value={entry.id} name={nameOf(entry)} meta={`${kindLabel(entry)} · ${entry.width} × ${entry.height}`} media={url(entry.thumb)}
-          mediaRatio={entry.width && entry.height ? entry.width / entry.height : undefined} textValue={nameOf(entry)} />
+        <BrandItem key={entry.id} value={entry.id} name={nameOf(entry)} images={[url(entry.thumb)]}
+          ratio={mode === "waterfall" && entry.width && entry.height ? entry.width / entry.height : undefined} />
       ))}
     </AssetGrid>
   );
@@ -168,8 +169,8 @@ export function BrandPage() {
         {folders.map(entry => {
           const inside = byFolder.get(entry.id) ?? [];
           return (
-            <AssetGridItem key={entry.id} value={entry.id} name={entry.name} meta={`${inside.length} assets`}
-              group={inside.slice(0, 4).map(asset => url(asset.thumb))} />
+            <BrandItem key={entry.id} value={entry.id} name={entry.name} value2={`${inside.length}`}
+              images={inside.slice(0, 4).map(asset => url(asset.thumb))} group />
           );
         })}
       </AssetGrid>
@@ -257,5 +258,33 @@ export function BrandPage() {
         </>,
       }}
     />
+  );
+}
+
+/**
+ * An image or a group in Brand's grid: the plain container the Canvas uses outside the Components tab (owner,
+ * 2026-10-21), its name in the first row, then the image (its own ratio in the waterfall, else square, cropped) or the
+ * group's first four as a 2 x 2 mosaic. The Asset grid around it keeps the keyboard, the waterfall and Enter to open.
+ */
+function BrandItem({ value, name, value2, images, ratio, group }: { value: string; name: string; value2?: string; images: string[]; ratio?: number; group?: boolean }) {
+  return (
+    <ListBoxItem value={value} textValue={name} className="gallery-plain area-asset-grid__item">
+      <div className="gallery-tile gallery-tile--plain studio-brand__item" data-stage="none" data-area-ground="raised">
+        <div className="gallery-tile__head" {...APP_SCALE}>
+          <span className="gallery-tile__label">{name}</span>
+          {value2 ? <span className="gallery-tile__value">{value2}</span> : null}
+        </div>
+        {group ? (
+          <div className="studio-brand__mosaic" aria-hidden="true">
+            {[0, 1, 2, 3].map(index => images[index]
+              ? <img key={index} src={images[index]} alt="" loading="lazy" decoding="async" draggable={false} />
+              : <span key={index} />)}
+          </div>
+        ) : (
+          <img className="studio-brand__image" src={images[0]} alt="" loading="lazy" decoding="async" draggable={false}
+            style={{ aspectRatio: ratio ? String(ratio) : "1" }} />
+        )}
+      </div>
+    </ListBoxItem>
   );
 }

@@ -96,7 +96,9 @@ selection marker.
   - labels on solid fills, tracks and static marks: solid Buttons, Segmented options, every
     Badge, soft Count, Kbd, Indicator counts and Avatar initials.
 - A label's weight never changes with state: a selected segment is 500 because every
-  segment is.
+  segment is. One written exception: a selected Tab is 500 over 400 at rest, with each tab's width
+  reserved at 500 by a hidden copy, so the row never moves (owner 2026-10-21; Figma, Radix, Fluent,
+  Primer). Tabs carry no fill, so the weight is what makes the selected view read first.
 - Foreground never changes on hover. One written exception: an action inside a row or card
   that already shows the pointer (Nav, Board cards, Edit summary files, Queue rows) is a
   muted ghost square whose hover is its ink, muted to default, with no plate of its own
@@ -121,6 +123,11 @@ Use the translucent twins on grounds a component cannot know (a segmented track,
 cell) and for controls nested on a row. The pressed fill follows every ground and Layers
 setting (`packages/styles/src/layers.css`). How dark each plate is comes from the Fill settings (Hover, Selected,
 Pressed; [Theming](THEMING.md#settings), interaction states), each built on the one before so the order always holds.
+
+Stacked plates sit `ui-row-gap` apart: **1px at every type and density**, so a hovered row never runs into the current
+one (owner 2026-10-21; ChatGPT's and Notion's sidebar rows are 1 apart). It is a separation, not spacing: density
+changes the row's height, never this break. Spacing that should follow density uses `ui-stack`, `ui-cluster` or its
+own step.
 
 **Selected containers and focus** (owner, 2026-10-21; `axes/states.ts`):
 
@@ -277,8 +284,8 @@ line ([audit](research/consistency-audit-2026-10-12.md)).
   - seams inside joined controls (Button group, Split button, Input group, Color field);
   - standalone dividers (Separator, Nav separators, the Tabs track, Table rows, Description
     list, Accordion, Shortcut list);
-  - frames with no shadow to carry them (Table, Description list, Code block, File upload),
-    and Composer's frame.
+  - frames with no shadow to carry them (Table, Description list, Code block, File upload,
+    Asset card's inner frame), and Composer's frame.
 - `border-width` follows Stroke width, and is 1px again under increased contrast. It draws:
   - the frames of surfaces that carry a shadow (floating surfaces, Panel, Card);
   - the seams inside them;
@@ -291,7 +298,7 @@ line ([audit](research/consistency-audit-2026-10-12.md)).
 | `border-decorative` | #f3 | Seams inside a container (Panel, Code block, Command palette and Color picker rules, Menu and Toolbar separators); edges of filled shapes |
 | `border-float` | #ee (dark #4b) | Every floating frame |
 | `border-card` | #ee | Standalone surfaces: Card, Composer, Code block |
-| `border-divider`, `edge-control` | #e2 | Standalone rules; control and field edges; off tracks; the Table frame |
+| `border-divider`, `edge-control` | #e2 | Standalone rules; control and field edges; off tracks; the Table frame and Asset card's inner frame |
 | `edge-control-hover` | #d4 | Control edges on hover. At rest: Checkbox and Radio, Tree view's check, Slider and Color picker thumbs, Calendar tiles |
 | `edge-control-strong` | #b4 | A Checkbox, Radio or selected Chip under the pointer |
 | `stroke-control` | #83 | Calendar's today ring, Breadcrumb separators |
