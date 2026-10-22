@@ -1,0 +1,504 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Area Narrowing Setup</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: a question panel beside a live stage; the stage is the system being built, the panel asks one thing at a time. */
+:root {
+  --bg: #f6f6f5; --panel: #ffffff; --fg: #18181a; --muted: #6b6b70; --line: rgba(0,0,0,.09);
+  --card: #f1f1f0; --card-hover: #ebebea; --sel: #006df5; --sel-tint: rgba(0,109,245,.07);
+  --chip: #ececeb; --primary: #18181a; --primary-fg: #ffffff;
+  --pic-ground: #f4f4f3; --pic-surface: #ffffff; --pic-edge: rgba(0,0,0,.12); --pic-ink: #111111; --pic-on: #ffffff; --pic-muted: #666;
+  --ui: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", system-ui, sans-serif;
+  --mono: ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0b0b0c; --panel: #151517; --fg: #ececee; --muted: #9a9aa1; --line: rgba(255,255,255,.09);
+  --card: #1d1d20; --card-hover: #242428; --sel: #3d8bff; --sel-tint: rgba(61,139,255,.12);
+  --chip: #232326; --primary: #ececee; --primary-fg: #0b0b0c; --pic-ground: #0e0e0f; --pic-surface: #1b1b1d; --pic-edge: rgba(255,255,255,.14); --pic-ink: #f0f0f0; --pic-on: #0d0d0d; --pic-muted: #9a9a9a; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0b0b0c; --panel: #151517; --fg: #ececee; --muted: #9a9aa1; --line: rgba(255,255,255,.09);
+  --card: #1d1d20; --card-hover: #242428; --sel: #3d8bff; --sel-tint: rgba(61,139,255,.12);
+  --chip: #232326; --primary: #ececee; --primary-fg: #0b0b0c; --pic-ground: #0e0e0f; --pic-surface: #1b1b1d; --pic-edge: rgba(255,255,255,.14); --pic-ink: #f0f0f0; --pic-on: #0d0d0d; --pic-muted: #9a9a9a; color-scheme: dark }
+
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font: 13px/1.45 var(--ui); }
+.wrap { max-width: 1240px; margin: 0 auto; padding-block: 20px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* top: name + where you are */
+.top { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 24px; margin-bottom: 14px }
+.top h1 { font-size: 15px; font-weight: 600; margin: 0 }
+.top p { margin: 0; color: var(--muted) }
+.rail { display: flex; gap: 4px; flex-wrap: wrap }
+.rail button { all: unset; cursor: pointer; display: flex; align-items: center; gap: 6px; padding: 4px 9px 4px 7px; border-radius: 999px; color: var(--muted); font-size: 12px }
+.rail button:focus-visible { outline: 2px solid var(--sel); outline-offset: 1px }
+.rail .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--line); box-shadow: inset 0 0 0 1px var(--muted) }
+.rail .done .dot { background: var(--fg); box-shadow: none }
+.rail .now { color: var(--fg); background: var(--chip) }
+.rail .now .dot { background: var(--sel); box-shadow: none }
+
+.grid { display: grid; grid-template-columns: minmax(0, 1fr) 400px; gap: 16px; align-items: start }
+@media (max-width: 900px) { .grid { grid-template-columns: minmax(0, 1fr) } }
+
+/* stage */
+.stagebox { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; min-width: 0 }
+.stagebar { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 10px 8px 14px; border-bottom: 1px solid var(--line) }
+.stagebar .what { color: var(--muted); font-size: 12px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.stagebar .what b { color: var(--fg); font-weight: 500 }
+.seg { display: inline-flex; background: var(--chip); border-radius: 7px; padding: 2px; gap: 2px; flex: none }
+.seg button { all: unset; cursor: pointer; padding: 3px 9px; border-radius: 5px; font-size: 12px; color: var(--muted) }
+.seg button[aria-pressed="true"] { background: var(--panel); color: var(--fg); box-shadow: 0 1px 2px rgba(0,0,0,.1) }
+.seg button:focus-visible { outline: 2px solid var(--sel) }
+
+.ledger { display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 14px 14px; border-top: 1px solid var(--line) }
+.ledger .lbl { width: 100%; font-size: 11px; color: var(--muted); letter-spacing: .02em }
+.pill { all: unset; cursor: pointer; display: inline-flex; gap: 6px; align-items: center; padding: 3px 9px; border-radius: 999px; background: var(--chip); font-size: 12px; white-space: nowrap }
+.pill i { font-style: normal; color: var(--muted) }
+.pill.todo { background: transparent; box-shadow: inset 0 0 0 1px var(--line); color: var(--muted); cursor: default }
+.pill.new { animation: land .5s ease-out }
+.pill:not(.todo):hover { background: var(--card-hover) }
+.pill:focus-visible { outline: 2px solid var(--sel) }
+@keyframes land { from { transform: translateY(4px) scale(.96); opacity: .2; background: var(--sel-tint) } }
+
+/* the system being built: everything reads the --s-* properties the picks write */
+.stage {
+  --s-page: #f7f7f6; --s-surface: #ffffff; --s-ink: #0d0d0d; --s-muted: #6e6e6e; --s-edge: rgba(0,0,0,.1);
+  --s-fill: rgba(0,0,0,.05); --s-onaccent: #fff; --s-sel: #006df5;
+  background: var(--s-page); color: var(--s-ink); font-size: var(--fs); padding: 28px; min-height: 440px;
+  display: grid; place-items: center; position: relative; overflow: hidden;
+}
+.stage[data-mode="dark"] { --s-page: #0a0a0a; --s-surface: #161616; --s-ink: #f0f0f0; --s-muted: #9b9b9b; --s-edge: rgba(255,255,255,.12); --s-fill: rgba(255,255,255,.07); --s-sel: #3d8bff }
+.stage.anim, .stage.anim * { transition: border-radius .25s, box-shadow .25s, font-size .25s, height .25s, padding .25s, background-color .25s, color .25s }
+@media (prefers-reduced-motion: reduce) { .stage.anim, .stage.anim * { transition: none } .pill.new { animation: none } }
+.scene { position: relative; width: min(100%, 470px) }
+.win { background: var(--s-surface); border-radius: var(--r-surface); box-shadow: var(--sh-rest); padding: calc(var(--h) * .6); display: grid; gap: calc(var(--h) * .42) }
+.who { display: flex; align-items: center; gap: 10px }
+.av { width: calc(var(--h) + 4px); height: calc(var(--h) + 4px); border-radius: 50%; background: linear-gradient(135deg, #c9c9c9, #8f8f8f); color: #fff; display: grid; place-items: center; font-size: .8em; font-weight: 600; flex: none }
+.who .t { font-weight: 600; font-size: 1.14em; line-height: 1.25 }
+.who .d { color: var(--s-muted); font-size: .93em }
+.badge { margin-left: auto; height: 20px; padding: 0 7px; display: inline-flex; align-items: center; font-size: 11px; border-radius: var(--r-badge); background: var(--s-fill); color: var(--s-muted) }
+.field { display: grid; gap: 5px }
+.field label { font-weight: 500; font-size: .93em }
+.input { height: var(--h); border-radius: var(--r-ctl); box-shadow: inset 0 0 0 1px var(--s-edge); padding: 0 calc(var(--h) * .32); display: flex; align-items: center; color: var(--s-muted) }
+.tabs { display: flex; gap: 2px; padding: 2px; background: var(--s-fill); border-radius: var(--r-ctl); height: var(--h) }
+.tabs span { flex: 1; display: grid; place-items: center; border-radius: var(--r-inner); color: var(--s-muted) }
+.tabs span.on { background: var(--s-surface); color: var(--s-ink); box-shadow: 0 1px 2px rgba(0,0,0,.08), 0 0 0 .5px var(--s-edge) }
+.row { display: flex; align-items: center; gap: 8px; min-height: calc(var(--h) - 6px) }
+.box { width: 16px; height: 16px; border-radius: var(--r-box); background: var(--sel-paint); display: grid; place-items: center; flex: none }
+.box::after { content: ""; width: 8px; height: 4px; border: solid var(--sel-on); border-width: 0 0 1.6px 1.6px; transform: translateY(-1px) rotate(-45deg) }
+.sw { margin-left: auto; width: 30px; height: 18px; border-radius: 9px; background: var(--sel-paint); position: relative; flex: none }
+.sw::after { content: ""; position: absolute; top: 2px; right: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff }
+.chips { display: flex; gap: 6px; flex-wrap: wrap }
+.chip { height: calc(var(--h) - 8px); padding: 0 calc(var(--h) * .3); display: inline-flex; align-items: center; border-radius: var(--r-chip); box-shadow: inset 0 0 0 1px var(--s-edge); font-size: .93em }
+.chip.on { background: var(--s-fill); box-shadow: none }
+.acts { display: flex; justify-content: flex-end; gap: 8px; margin-top: 2px }
+.btn { height: var(--h); padding: 0 calc(var(--h) * .38); display: inline-flex; align-items: center; border-radius: var(--r-btn); font-weight: 500; box-shadow: inset 0 0 0 1px var(--s-edge); white-space: nowrap }
+.btn.pri { background: var(--act); color: var(--act-on); box-shadow: none }
+.link { color: var(--link); text-decoration: underline; text-underline-offset: 2px }
+.menu { position: absolute; right: -14px; top: 54%; width: 172px; background: var(--s-surface); border-radius: var(--r-menu); box-shadow: var(--sh-float); padding: 5px; display: grid; gap: 1px }
+.menu span { height: calc(var(--h) - 2px); display: flex; align-items: center; padding: 0 calc(var(--h) * .28); border-radius: var(--r-item) }
+.menu span.hov { background: var(--s-fill) }
+@media (max-width: 560px) { .stage { padding: 18px 16px 28px; min-height: 0 } .menu { position: relative; right: auto; top: auto; margin: 12px 0 0 auto } }
+
+/* question panel */
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px; display: grid; gap: 14px; position: sticky; top: 12px; min-width: 0 }
+@media (max-width: 900px) { .panel { position: static } }
+.eyebrow { display: flex; justify-content: space-between; gap: 8px; color: var(--muted); font-size: 12px }
+.stagekind { display: inline-flex; gap: 3px }
+.stagekind span { width: 18px; height: 3px; border-radius: 2px; background: var(--line) }
+.stagekind span.on { background: var(--sel) }
+.q h2 { font-size: 17px; line-height: 1.3; font-weight: 600; margin: 0 0 4px; text-wrap: balance }
+.q p { margin: 0; color: var(--muted); text-wrap: pretty }
+.opts { display: grid; grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr)); gap: 8px }
+@media (max-width: 420px) { .opts { --cols: 2 !important } }
+.opt { all: unset; cursor: pointer; background: var(--card); border-radius: 10px; padding: 8px 8px 10px; display: grid; gap: 7px; align-content: start; box-shadow: inset 0 0 0 1px transparent; position: relative; min-width: 0 }
+.opt:hover { background: var(--card-hover) }
+.opt:focus-visible { outline: 2px solid var(--sel); outline-offset: 2px }
+.opt[aria-checked="true"] { box-shadow: inset 0 0 0 2px var(--sel); background: var(--sel-tint) }
+.opt[aria-disabled="true"] { opacity: .45; cursor: not-allowed }
+.opt .pic { height: 74px; border-radius: 6px; background: var(--panel); display: grid; place-items: center; overflow: hidden; position: relative }
+.opt .name { font-weight: 600; text-align: center; font-size: 12.5px }
+.opt .sub { color: var(--muted); text-align: center; font-size: 11.5px; line-height: 1.35 }
+.opt .tag { position: absolute; top: 6px; left: 6px; font-size: 10px; padding: 1px 6px; border-radius: 999px; background: var(--chip); color: var(--muted); z-index: 1 }
+.opt .tag.you { background: var(--sel); color: #fff }
+.exact { display: flex; flex-wrap: wrap; align-items: center; gap: 2px; padding-top: 10px; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted) }
+.exact span { width: 100%; margin-bottom: 2px }
+.exact button { all: unset; cursor: pointer; min-width: 22px; text-align: center; padding: 2px 5px; border-radius: 5px; color: var(--fg); font-variant-numeric: tabular-nums }
+.exact button:hover { background: var(--chip) }
+.exact button[aria-pressed="true"] { background: var(--sel-tint); color: var(--sel); font-weight: 600 }
+.exact button:focus-visible { outline: 2px solid var(--sel) }
+.why { font-size: 12px; color: var(--muted); background: var(--card); border-radius: 8px; padding: 8px 10px }
+.why b { color: var(--fg); font-weight: 500 }
+.nav { display: flex; gap: 8px; align-items: center }
+.nav .sp { flex: 1 }
+.b { all: unset; cursor: pointer; height: 32px; padding: 0 14px; border-radius: 8px; display: inline-flex; align-items: center; font-weight: 500; white-space: nowrap }
+.b:focus-visible { outline: 2px solid var(--sel); outline-offset: 2px }
+.b.ghost { color: var(--muted) }
+.b.ghost:hover { background: var(--chip); color: var(--fg) }
+.b.pri { background: var(--primary); color: var(--primary-fg) }
+.b[disabled] { opacity: .4; cursor: default }
+
+/* option pictures, each the setting alone at true scale on the stage's ground */
+.pic .p-stage { width: 100%; height: 100%; display: grid; place-items: center; background: var(--pic-ground); color: var(--pic-ink) }
+.p-corner { position: absolute; left: 16px; top: 16px; width: 120px; height: 90px; background: var(--pic-surface); box-shadow: inset 0 0 0 1px var(--pic-edge) }
+.p-btn { position: relative; height: 32px; padding: 0 12px; display: inline-flex; align-items: center; background: var(--pic-ink); color: var(--pic-on); font-size: 12px; font-weight: 500 }
+.p-aa { line-height: 1.1; text-align: center }
+.p-aa small { display: block; color: var(--pic-muted); font-size: 10px; margin-top: 2px }
+.p-rows { display: grid; gap: 0; width: 76% }
+.p-rows span { display: flex; align-items: center; padding: 0 8px; border-bottom: 1px solid var(--pic-edge); font-size: 11px; color: var(--pic-ink) }
+.p-lift { width: 58%; height: 40px; border-radius: 6px; background: var(--pic-surface) }
+.p-swatches { display: flex; gap: 5px }
+.p-swatches i { width: 16px; height: 16px; border-radius: 50%; display: block }
+.p-hue { display: grid; gap: 6px; justify-items: center }
+.p-hue i { width: 26px; height: 26px; border-radius: 50%; display: block }
+
+.review { display: grid; gap: 6px }
+.review button.r { all: unset; cursor: pointer; display: flex; justify-content: space-between; gap: 8px; padding: 6px 8px; border-radius: 6px }
+.review button.r:hover { background: var(--card) }
+.review button.r:focus-visible { outline: 2px solid var(--sel) }
+.review .r i { font-style: normal; color: var(--muted) }
+.code { font: 11.5px/1.5 var(--mono); background: var(--card); border-radius: 8px; padding: 10px; overflow-x: auto; white-space: pre; margin: 0 }
+
+/* notes under the prototype */
+.notes { margin-top: 28px; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px 28px }
+.notes h3 { font-size: 13px; margin: 0 0 4px; font-weight: 600 }
+.notes p { margin: 0; color: var(--muted); max-width: 62ch }
+.notes .h { grid-column: 1 / -1; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); border-top: 1px solid var(--line); padding-top: 18px }
+</style>
+
+<div class="wrap">
+  <div class="top">
+    <div>
+      <h1>Narrowing setup</h1>
+      <p>A prototype: one choice at a time, coarse to fine, then a check against what you passed over.</p>
+    </div>
+    <nav class="rail" id="rail" aria-label="Sections"></nav>
+  </div>
+
+  <div class="grid">
+    <section class="stagebox" aria-label="Your system">
+      <div class="stagebar">
+        <span class="what" id="what"></span>
+        <span class="seg" role="group" aria-label="Stage theme">
+          <button id="m-light" aria-pressed="true">Light</button><button id="m-dark" aria-pressed="false">Dark</button>
+        </span>
+      </div>
+      <div class="stage" id="stage" data-mode="light">
+        <div class="scene">
+          <div class="win">
+            <div class="who"><span class="av">DT</span><span><span class="t">David Tee</span><br><span class="d">Description</span></span><span class="badge">Badge</span></div>
+            <div class="field"><label>Label</label><div class="input">Placeholder</div></div>
+            <div class="tabs"><span class="on">One</span><span>Two</span><span>Three</span></div>
+            <div class="row"><span class="box"></span>Option one<span class="sw"></span></div>
+            <div class="chips"><span class="chip on">Chip</span><span class="chip">Chip</span><span class="chip">Chip</span></div>
+            <div class="row" style="color:var(--s-muted)"><span>Body text with a <span class="link">link</span>.</span></div>
+            <div class="acts"><span class="btn">Secondary</span><span class="btn pri">Action</span></div>
+          </div>
+          <div class="menu"><span>Item one</span><span class="hov">Item two</span><span>Item three</span></div>
+        </div>
+      </div>
+      <div class="ledger" id="ledger" aria-label="Decisions so far"></div>
+    </section>
+
+    <section class="panel" id="panel" aria-live="polite"></section>
+  </div>
+
+  <div class="notes" id="notes">
+    <div class="h">How the prototype narrows</div>
+    <div><h3>Three, then three</h3><p>A nine-step setting is two short decisions: a direction (Sharp 0–2, Regular 4–8, Round 10–Pill), then the values inside it. The default's direction is marked.</p></div>
+    <div><h3>Check what you passed over</h3><p>After the fine pick you see it beside the directions you rejected and the next step past the range you were shown. Switching there re-centres the check, like an eye test's "one or two".</p></div>
+    <div><h3>Earlier picks shape later questions</h3><p>Every picture is drawn over the picks so far. Type limits density (Compact needs type 14 or smaller, Comfortable 13 or larger). Flat skips shadow softness. With ink actions, the accent is still asked and drawn on links and the focus ring.</p></div>
+    <div><h3>The system builds as you go</h3><p>Picking applies at once; hovering a card previews it on the stage. Each decision lands in the row under the stage, and any of them reopens its question.</p></div>
+    <div><h3>Ways out</h3><p>"They look alike" is a real answer: it keeps the value nearest the default, as an eye test stops when two lenses look equal. Anyone who knows the number can pick it from the exact row.</p></div>
+    <div><h3>What's approximate</h3><p>The stage is a stand-in for Area's components. Corners use Area's formula (setting × height ÷ 32, even, at least 2) and its surface ladder. Shadows and colours only approximate the tokens.</p></div>
+  </div>
+</div>
+
+<script>
+(() => {
+  /* ---------- Area's values (packages/tokens/src/axes) ---------- */
+  const RADIUS = [0, 2, 4, 6, 8, 10, 12, 14, "pill"];
+  const SURFACE = { 0: 0, 2: 2, 4: 4, 6: 8, 8: 12, 10: 16, 12: 20, 14: 24, pill: 24 };
+  const ACCENTS = { red: "#e80945", orange: "#ea7401", yellow: "#bf8c02", lime: "#73a200", green: "#01aa4e", teal: "#00a797",
+    cyan: "#03a0c8", blue: "#006df5", indigo: "#5c5dfe", purple: "#8d4df3", pink: "#df127d" };
+  const FAMILIES = {
+    cool: { name: "Cool", sub: "Blues and violets", hues: ["cyan", "blue", "indigo", "purple"] },
+    warm: { name: "Warm", sub: "Reds to yellows", hues: ["red", "orange", "yellow", "pink"] },
+    natural: { name: "Natural", sub: "Greens", hues: ["lime", "green", "teal"] },
+  };
+  const DEFAULTS = { radius: 8, type: 14, density: 32, elevation: 3, softness: 2, action: "neutral", family: "cool", accent: "blue" };
+  const cap = s => s[0].toUpperCase() + s.slice(1);
+
+  /* A numeric setting asked coarse → fine → check. Coarse picks are indices; the middle one is the default. */
+  const SCALES = {
+    radius: { values: RADIUS, label: v => v === "pill" ? "Pill" : v === 0 ? "0" : String(v), unit: v => v === "pill" ? "Pill" : v + "px",
+      coarse: [{ i: 0, name: "Sharp", sub: "Square, exact edges" }, { i: 4, name: "Regular", sub: "Softened corners" }, { i: 6, name: "Round", sub: "Soft, up to pills" }],
+      // The perceptual cut (plan.md §2): steps read about geometrically, and every measured product sits in 4–8.
+      groups: [[0, 1], [2, 3, 4], [5, 6, 7, 8]],
+      noun: "corners", more: "rounder", less: "sharper" },
+    type: { values: [12, 13, 14, 15, 16], label: String, unit: v => v + "px",
+      coarse: [{ i: 0, name: "Small", sub: "Dense tools" }, { i: 2, name: "Medium", sub: "Everyday reading" }, { i: 4, name: "Large", sub: "Easy reading" }],
+      noun: "text", more: "larger", less: "smaller" },
+    elevation: { values: [0, 1, 2, 3, 4, 5, 6, 7, 8], label: String, unit: v => v === 0 ? "0 (Flat)" : String(v),
+      coarse: [{ i: 0, name: "Flat", sub: "Lines, no shadow" }, { i: 3, name: "Soft", sub: "A gentle lift" }, { i: 6, name: "Lifted", sub: "Clear depth" }],
+      groups: [[0], [1, 2, 3, 4], [5, 6, 7, 8]],
+      noun: "lift", more: "higher", less: "flatter" },
+  };
+  const groupOf = (key, idx) => SCALES[key].groups?.find(g => g.includes(idx));
+  const tierOf = (key, idx) => { const c = SCALES[key].coarse, g = groupOf(key, idx); if (g) return c.find(t => g.includes(t.i)); return c.reduce((best, t) => Math.abs(t.i - idx) < Math.abs(best.i - idx) ? t : best, c[0]); };
+  const fineRange = (key, rep) => { if (SCALES[key].groups) return groupOf(key, rep); const n = SCALES[key].values.length; const s = Math.max(0, Math.min(rep - 1, n - 3)); return [s, s + 1, s + 2]; };
+  const idxOf = (key, v) => SCALES[key].values.indexOf(v);
+
+  /* ---------- state ---------- */
+  const picks = { ...DEFAULTS };
+  const tiers = { radius: 4, type: 2, elevation: 3 };     // the coarse rep chosen per scale
+  const decided = new Set();
+  let fresh = null, preview = null, at = 0, mode = "light";
+
+  /* ---------- the stage: picks → properties ---------- */
+  const corner = (r, h) => r === "pill" ? h / 2 : r === 0 ? 0 : Math.max(2, Math.floor(r * h / 32 / 2) * 2);
+  const shadow = (e, soft) => {
+    if (e === 0) return "0 0 0 1px var(--s-edge)";
+    const k = .45 + soft / 8 * 1.1;
+    return `0 0 0 .5px rgba(0,0,0,.08), 0 ${Math.round(e * .9 + 1)}px ${Math.round((e * 3 + 2) * k)}px rgba(0,0,0,${(.05 + e * .012).toFixed(3)}), 0 ${Math.ceil(e / 3)}px ${Math.round((e + 1) * k)}px rgba(0,0,0,.05)`;
+  };
+  function paint(el, p) {
+    const h = p.density, r = p.radius, s = SURFACE[r];
+    const set = (k, v) => el.style.setProperty(k, v);
+    set("--fs", p.type + "px"); set("--h", h + "px");
+    set("--r-btn", corner(r, h) + "px"); set("--r-ctl", corner(r === "pill" ? 14 : r, h) + "px");
+    set("--r-inner", Math.max(r === 0 ? 0 : Math.min(4, r === "pill" ? 4 : r), corner(r === "pill" ? 14 : r, h) - 2) + "px");
+    set("--r-chip", corner(r, h - 8) + "px"); set("--r-badge", corner(r, 20) + "px");
+    set("--r-box", (r === 0 ? 0 : r === "pill" ? 5 : Math.max(2, Math.min(5, Math.floor(r / 2)))) + "px");
+    set("--r-surface", s + "px"); set("--r-menu", Math.min(s, 16) + "px");
+    set("--r-item", Math.max(r === 0 ? 0 : Math.min(4, r === "pill" ? 4 : r), Math.min(s, 16) - 5) + "px");
+    set("--sh-float", shadow(Math.max(p.elevation, 0), p.softness));
+    set("--sh-rest", p.elevation === 0 ? "0 0 0 1px var(--s-edge)" : `0 0 0 1px var(--s-edge), 0 1px ${2 + p.elevation}px rgba(0,0,0,${(.02 + p.elevation * .006).toFixed(3)})`);
+    const acc = ACCENTS[p.accent];
+    const dark = el.dataset.mode === "dark";
+    set("--act", p.action === "accent" ? acc : (dark ? "#f0f0f0" : "#0d0d0d"));
+    set("--act-on", p.action === "accent" ? "#fff" : (dark ? "#0d0d0d" : "#fff"));
+    set("--sel-paint", p.action === "accent" ? acc : (dark ? "#f0f0f0" : "#0d0d0d"));
+    set("--sel-on", p.action === "accent" ? "#fff" : (dark ? "#0d0d0d" : "#fff"));
+    set("--link", acc);
+  }
+  const stage = document.getElementById("stage");
+  /* A landed pick animates; a hover preview or a compare flips instantly, since a fade hides small differences. */
+  const render = (anim = false) => { stage.classList.toggle("anim", anim); paint(stage, preview ? { ...picks, ...preview } : picks); };
+
+  /* ---------- option pictures: the one setting, at true scale ---------- */
+  const pics = {
+    radius: v => `<div class="p-stage"><div class="p-corner" style="border-top-left-radius:${SURFACE[v]}px"></div><span class="p-btn" style="border-radius:${corner(v, 32)}px">Button</span></div>`,
+    type: v => `<div class="p-stage"><div class="p-aa"><span style="font-size:${v * 1.7}px;font-weight:600">Aa</span><small style="font-size:${v}px">Body text</small></div></div>`,
+    density: v => `<div class="p-stage"><div class="p-rows">${[1, 2].map(n => `<span style="height:${v * .62}px">Item ${n === 1 ? "one" : "two"}</span>`).join("")}</div></div>`,
+    elevation: v => `<div class="p-stage"><div class="p-lift" style="box-shadow:${shadow(v, picks.softness).replace("var(--s-edge)", "var(--pic-edge)")}"></div></div>`,
+    softness: v => `<div class="p-stage"><div class="p-lift" style="box-shadow:${shadow(Math.max(picks.elevation, 5), v)}"></div></div>`,
+    action: v => `<div class="p-stage"><span class="p-btn" style="border-radius:${corner(picks.radius, 32)}px;background:${v === "accent" ? ACCENTS[picks.accent] : "var(--pic-ink)"};color:${v === "accent" ? "#fff" : "var(--pic-on)"}">Action</span></div>`,
+    family: v => `<div class="p-stage"><div class="p-swatches">${FAMILIES[v].hues.map(h => `<i style="background:${ACCENTS[h]}"></i>`).join("")}</div></div>`,
+    accent: v => picks.action === "accent"
+      ? `<div class="p-stage"><div class="p-hue"><span class="p-btn" style="border-radius:${corner(picks.radius, 32)}px;background:${ACCENTS[v]};color:#fff">Action</span></div></div>`
+      : `<div class="p-stage"><div class="p-hue"><span style="color:${ACCENTS[v]};text-decoration:underline;text-underline-offset:2px;font-size:13px">Link</span><span class="p-btn" style="border-radius:${corner(picks.radius, 32)}px;background:var(--pic-surface);color:var(--pic-ink);box-shadow:inset 0 0 0 1px var(--pic-edge),0 0 0 2px var(--pic-ground),0 0 0 4px ${ACCENTS[v]}">Focus</span></div></div>`,
+  };
+
+  /* ---------- the questions ---------- */
+  const coarseQ = (key, section, title, why) => ({ key, section, step: 1, steps: 3, title, why,
+    options: () => SCALES[key].coarse.map(t => ({ id: t.i, name: t.name, sub: t.sub + " · " + (disjoint(key) ? rangeText(key, fineRange(key, t.i)) : SCALES[key].unit(SCALES[key].values[t.i])), value: SCALES[key].values[t.i], def: SCALES[key].values[t.i] === DEFAULTS[key] })),
+    selected: () => tiers[key],
+    choose: o => { tiers[key] = o.id; picks[key] = o.value; },
+    hover: o => ({ [key]: o.value }) });
+  const disjoint = key => { const r = SCALES[key].coarse.map(t => fineRange(key, t.i)); return r.every((x, n) => !r[n + 1] || x[x.length - 1] < r[n + 1][0]); };
+  const rangeText = (key, r) => { const v = SCALES[key].values; return r.length === 1 ? SCALES[key].label(v[r[0]]) : `${SCALES[key].label(v[r[0]])}–${SCALES[key].label(v[r[r.length - 1]])}`; };
+  // Refine is skipped when the direction has one member (a 0 that means off).
+  const fineQ = (key, section, title, why) => ({ key, section, step: 2, steps: 3, title, why, exact: true, when: () => fineRange(key, tiers[key]).length > 1,
+    options: () => fineRange(key, tiers[key]).map(i => ({ id: i, name: SCALES[key].unit(SCALES[key].values[i]), value: SCALES[key].values[i], def: SCALES[key].values[i] === DEFAULTS[key] })),
+    selected: () => idxOf(key, picks[key]),
+    choose: o => { picks[key] = o.value; },
+    hover: o => ({ [key]: o.value }) });
+  const checkQ = (key, section) => ({ key, section, step: 3, steps: 3, check: true, exact: true,
+    title: () => `Still ${SCALES[key].unit(picks[key])}?`,
+    why: () => `Your pick beside what you passed over. Hover a card to put it on your system; pick one to switch.`,
+    options: () => {
+      const sc = SCALES[key], p = idxOf(key, picks[key]), seen = fineRange(key, tiers[key]);
+      const out = [{ id: p, name: sc.unit(sc.values[p]), sub: "Your pick", you: true, value: sc.values[p] }];
+      // One step toward the default, always: the closest re-check, and what "They look alike" settles between.
+      const d = idxOf(key, DEFAULTS[key]), toward = p > d ? p - 1 : p < d ? p + 1 : -1;
+      if (toward >= 0) out.push({ id: toward, name: sc.unit(sc.values[toward]), sub: "One step " + (toward < p ? sc.less : sc.more), value: sc.values[toward] });
+      if (p - 1 >= 0 && p - 1 !== toward && !seen.includes(p - 1)) out.push({ id: p - 1, name: sc.unit(sc.values[p - 1]), sub: "One step " + sc.less, value: sc.values[p - 1] });
+      if (p + 1 < sc.values.length && p + 1 !== toward && !seen.includes(p + 1)) out.push({ id: p + 1, name: sc.unit(sc.values[p + 1]), sub: "One step " + sc.more, value: sc.values[p + 1] });
+      for (const t of sc.coarse) if (t.i !== tierOf(key, p).i && !out.some(o => o.id === t.i)) out.push({ id: t.i, name: sc.unit(sc.values[t.i]), sub: t.name, value: sc.values[t.i] });
+      return out.slice(0, 4).map(o => ({ ...o, def: o.value === DEFAULTS[key] }));
+    },
+    selected: () => idxOf(key, picks[key]),
+    choose: o => { picks[key] = o.value; tiers[key] = tierOf(key, o.id).i; },
+    hover: o => ({ [key]: o.value }),
+    next: () => `Keep ${SCALES[key].unit(picks[key])}` });
+
+  const Q = [
+    coarseQ("radius", "Shape", "How should corners feel?", "Start with a direction. You'll pick the exact corner next."),
+    fineQ("radius", "Shape", () => `Which ${tierOf("radius", tiers.radius).name.toLowerCase()} corner?`, () => `The three corners inside ${tierOf("radius", tiers.radius).name}. Buttons take this corner; cards and menus follow on a larger ladder.`),
+    checkQ("radius", "Shape"),
+    coarseQ("type", "Size", "How big should text be?", () => `Drawn with your ${SCALES.radius.unit(picks.radius)} corners.`),
+    fineQ("type", "Size", () => `Which ${tierOf("type", tiers.type).name.toLowerCase()} size?`, "Body text size. Titles and labels scale from it."),
+    checkQ("type", "Size"),
+    { key: "density", section: "Size", step: 1, steps: 1, title: "How much room should controls have?",
+      why: () => picks.type >= 15 ? `<b>Compact is off</b> at type ${picks.type}: it fits type 14 and smaller.` : picks.type <= 12 ? `<b>Comfortable is off</b> at type 12: it starts at type 13.` : `All three fit type ${picks.type}.`,
+      options: () => [[28, "Compact", "Tight rows"], [32, "Default", "Everyday"], [36, "Comfortable", "Reading, touch"]].map(([v, name, sub]) => ({ id: v, name, sub: `${sub} · ${v}px`, value: v, def: v === 32,
+        disabled: (v === 28 && picks.type > 14) || (v === 36 && picks.type < 13) })),
+      selected: () => picks.density, choose: o => { picks.density = o.value; }, hover: o => ({ density: o.value }) },
+    coarseQ("elevation", "Depth", "How much should menus and cards lift off the page?", "Look at the menu. Flat draws a line instead of a shadow."),
+    fineQ("elevation", "Depth", () => `Which step inside ${tierOf("elevation", tiers.elevation).name}?`, "Steps of the menu's shadow."),
+    checkQ("elevation", "Depth"),
+    { key: "softness", section: "Depth", step: 1, steps: 1, when: () => picks.elevation > 0, skipNote: "Shadow softness skipped: Flat has no shadow to soften.",
+      title: "How soft should shadows be?", why: "Same lift, different edge. Asked only because your surfaces have a shadow.",
+      options: () => [[0, "Crisp", "Tight edge"], [2, "Default", "Balanced"], [7, "Smooth", "Wide blur"]].map(([v, name, sub]) => ({ id: v, name, sub, value: v, def: v === 2 })),
+      selected: () => picks.softness, choose: o => { picks.softness = o.value; }, hover: o => ({ softness: o.value }) },
+    { key: "action", section: "Colour", step: 1, steps: 3, title: "Should actions be ink or colour?",
+      why: "Primary buttons, checked boxes and switches. Links use the accent either way.",
+      options: () => [["neutral", "Ink", "Black or white"], ["accent", "Colour", "Your accent"]].map(([v, name, sub]) => ({ id: v, name, sub, value: v, def: v === "neutral" })),
+      selected: () => picks.action, choose: o => { picks.action = o.value; }, hover: o => ({ action: o.value }), cols: 2 },
+    { key: "family", section: "Colour", step: 2, steps: 3,
+      title: "Which family of colour?", why: () => picks.action === "accent" ? "A direction first, then the exact colour." : "Actions stay ink. Links and the focus ring use the accent.",
+      options: () => Object.entries(FAMILIES).map(([id, f]) => ({ id, name: f.name, sub: f.sub, value: id, def: id === "cool" })),
+      selected: () => picks.family, choose: o => { picks.family = o.value; if (!FAMILIES[o.value].hues.includes(picks.accent)) picks.accent = FAMILIES[o.value].hues[0]; },
+      hover: o => ({ accent: FAMILIES[o.value].hues.includes(picks.accent) ? picks.accent : FAMILIES[o.value].hues[0] }) },
+    { key: "accent", section: "Colour", step: 3, steps: 3,
+      title: () => `Which ${FAMILIES[picks.family].name.toLowerCase()} colour?`, why: () => picks.action === "accent" ? "On your buttons, checkbox, switch and link." : "On your links and the focus ring.",
+      options: () => FAMILIES[picks.family].hues.map(h => ({ id: h, name: cap(h), value: h, def: h === "blue" })),
+      selected: () => picks.accent, choose: o => { picks.accent = o.value; }, hover: o => ({ accent: o.value }), cols: () => FAMILIES[picks.family].hues.length > 3 ? 2 : 3 },
+    { key: "review", section: "Review", review: true },
+  ];
+  const SECTIONS = ["Shape", "Size", "Depth", "Colour", "Review"];
+  const live = i => !Q[i].when || Q[i].when();
+  const val = (q, f) => typeof f === "function" ? f() : f;
+
+  /* ---------- ledger: one row per decided setting ---------- */
+  const LEDGER = [
+    ["radius", "Corners", () => SCALES.radius.unit(picks.radius) + "", 0],
+    ["type", "Text", () => picks.type + "px", 3],
+    ["density", "Room", () => ({ 28: "Compact", 32: "Default", 36: "Comfortable" })[picks.density], 6],
+    ["elevation", "Lift", () => SCALES.elevation.unit(picks.elevation), 7],
+    ["softness", "Softness", () => picks.elevation === 0 ? "n/a" : ({ 0: "Crisp", 2: "Default", 7: "Smooth" })[picks.softness], 10],
+    ["action", "Colour", () => `${picks.action === "accent" ? "Actions" : "Links"} · ${cap(picks.accent)}`, 11],
+  ];
+  function drawLedger() {
+    const el = document.getElementById("ledger");
+    el.innerHTML = `<span class="lbl">Your system</span>` + LEDGER.map(([k, name, v, q]) => decided.has(k)
+      ? `<button class="pill${fresh === k ? " new" : ""}" data-go="${q}">${name} <i>${v()}</i></button>`
+      : `<span class="pill todo">${name}</span>`).join("");
+    el.querySelectorAll("[data-go]").forEach(b => b.onclick = () => go(+b.dataset.go));
+    fresh = null;
+  }
+  function drawRail() {
+    const cur = Q[at].section;
+    const el = document.getElementById("rail");
+    el.innerHTML = SECTIONS.map(s => {
+      const first = Q.findIndex(q => q.section === s);
+      const done = SECTIONS.indexOf(s) < SECTIONS.indexOf(cur);
+      return `<button class="${s === cur ? "now" : done ? "done" : ""}" data-go="${first}"${s === cur ? ' aria-current="step"' : ""}><span class="dot"></span>${s}</button>`;
+    }).join("");
+    el.querySelectorAll("[data-go]").forEach(b => b.onclick = () => go(+b.dataset.go));
+  }
+
+  /* ---------- the panel ---------- */
+  const panel = document.getElementById("panel");
+  function draw() {
+    const q = Q[at];
+    drawRail(); drawLedger(); render(true);
+    document.getElementById("what").innerHTML = q.review ? "<b>Your system</b> · every pick applied" : `Showing <b>${q.section.toLowerCase()}</b> over your picks so far`;
+    if (q.review) return drawReview();
+    const opts = q.options(), sel = q.selected();
+    const cols = val(q, q.cols) || (opts.length === 4 ? 2 : opts.length);
+    const skipped = Q.slice(0, at).filter((x, i) => !live(i) && x.skipNote).map(x => x.skipNote);
+    const note = skipped.length && Q[at - 1] && !live(at - 1) ? `<div class="why">${skipped[skipped.length - 1]}</div>` : "";
+    panel.innerHTML = `
+      <div class="eyebrow"><span>${q.section}${q.steps > 1 ? ` · ${["Direction", "Refine", "Check"][q.step - 1]}` : ""}</span>
+        ${q.steps > 1 ? `<span class="stagekind" aria-label="Step ${q.step} of ${q.steps}">${Array.from({ length: q.steps }, (_, i) => `<span class="${i < q.step ? "on" : ""}"></span>`).join("")}</span>` : ""}</div>
+      ${note}
+      <div class="q"><h2>${val(q, q.title)}</h2><p>${val(q, q.why)}</p></div>
+      <div class="opts" role="radiogroup" aria-label="${val(q, q.title)}" style="--cols:${cols}">
+        ${opts.map((o, n) => `<button class="opt" role="radio" data-n="${n}" aria-checked="${o.id === sel}"${o.disabled ? ' aria-disabled="true"' : ""} tabindex="${o.id === sel ? 0 : -1}">
+          ${o.you ? `<span class="tag you">Your pick</span>` : o.def && o.name !== "Default" ? `<span class="tag">Default</span>` : ""}
+          <span class="pic">${pics[q.key](o.value)}</span><span class="name">${o.name}</span>${o.sub && !o.you ? `<span class="sub">${o.sub}</span>` : ""}</button>`).join("")}
+      </div>
+      <div class="nav"><button class="b ghost" id="back"${prev() < 0 ? " disabled" : ""}>Back</button><span class="sp"></span>
+        ${q.check ? `<button class="b ghost" id="alike">They look alike</button>` : ""}
+        <button class="b pri" id="next">${q.check ? q.next() : "Continue"}</button></div>
+      ${q.exact ? `<div class="exact"><span>Know the number?</span>${SCALES[q.key].values.map(v => `<button data-v="${v}" aria-pressed="${v === picks[q.key]}">${SCALES[q.key].label(v)}</button>`).join("")}</div>` : ""}`;
+    const cards = [...panel.querySelectorAll(".opt")];
+    cards.forEach((c, n) => {
+      const o = opts[n];
+      c.onclick = () => { if (o.disabled) return; q.choose(o); decided.add(ledgerKey(q.key)); fresh = ledgerKey(q.key); preview = null; draw(); panel.querySelector(`.opt[aria-checked="true"]`)?.focus({ preventScroll: true }); };
+      c.onpointerenter = () => { if (!o.disabled) { preview = q.hover(o); render(); } };
+      c.onpointerleave = () => { preview = null; render(); };
+      c.onkeydown = e => {
+        const d = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+        if (!d) return; e.preventDefault();
+        let m = n; do { m = (m + d + cards.length) % cards.length; } while (opts[m].disabled && m !== n);
+        cards[m].click();
+      };
+    });
+    document.getElementById("back").onclick = () => { const p = prev(); if (p >= 0) go(p); };
+    panel.querySelectorAll(".exact [data-v]").forEach(b => {
+      const v = SCALES[q.key].values.find(x => String(x) === b.dataset.v);
+      b.onclick = () => { picks[q.key] = v; tiers[q.key] = tierOf(q.key, idxOf(q.key, v)).i; decided.add(q.key); fresh = q.key; draw(); };
+      b.onpointerenter = () => { preview = { [q.key]: v }; render(); };
+      b.onpointerleave = () => { preview = null; render(); };
+    });
+    // Alike: when the eye can't separate them, keep the one nearest the default (the refraction endpoint rule).
+    const alike = document.getElementById("alike");
+    if (alike) alike.onclick = () => {
+      const near = opts.filter(o => Math.abs(idxOf(q.key, o.value) - idxOf(q.key, picks[q.key])) <= 1)
+        .sort((a, b) => Math.abs(idxOf(q.key, a.value) - idxOf(q.key, DEFAULTS[q.key])) - Math.abs(idxOf(q.key, b.value) - idxOf(q.key, DEFAULTS[q.key])))[0];
+      if (near) q.choose(near);
+      decided.add(q.key); fresh = q.key; go(next());
+    };
+    document.getElementById("next").onclick = () => { decided.add(ledgerKey(q.key)); fresh = fresh || ledgerKey(q.key); go(next()); };
+  }
+  const ledgerKey = k => k === "family" || k === "accent" ? "action" : k;
+  const next = () => { let i = at + 1; while (i < Q.length && !live(i)) i++; return Math.min(i, Q.length - 1); };
+  const prev = () => { let i = at - 1; while (i >= 0 && !live(i)) i--; return i; };
+  function go(i) {
+    // Density follows type: an option the new type rules out moves to Default.
+    if ((picks.density === 28 && picks.type > 14) || (picks.density === 36 && picks.type < 13)) picks.density = 32;
+    while (i < Q.length - 1 && !live(i)) i++;
+    at = i; preview = null; draw();
+  }
+
+  function drawReview() {
+    const attrs = [["radius", picks.radius], ["type", picks.type], ["density", picks.density], ["elevation", picks.elevation],
+      ...(picks.elevation > 0 ? [["shadow-softness", picks.softness]] : []), ["action", picks.action], ["selection", picks.action], ["accent", picks.accent]]
+      .map(([k, v]) => `data-area-${k}="${v}"`).join("\n");
+    const changed = Object.keys(DEFAULTS).filter(k => picks[k] !== DEFAULTS[k] && !(k === "family")).length;
+    panel.innerHTML = `
+      <div class="eyebrow"><span>Review</span></div>
+      <div class="q"><h2>Your system</h2><p>${changed ? `${changed} setting${changed > 1 ? "s" : ""} differ from Area's defaults.` : "Everything is at Area's defaults."} Hold the button to see where you started.</p></div>
+      <button class="b ghost" id="hold" style="justify-self:start;box-shadow:inset 0 0 0 1px var(--line)">Hold to compare with default</button>
+      <div class="review">${LEDGER.map(([k, name, v, q]) => `<button class="r" data-go="${q}"><span>${name}</span><i>${v()}${picks[k] === DEFAULTS[k] ? " · default" : ""}</i></button>`).join("")}</div>
+      <pre class="code" aria-label="Settings as attributes">${attrs}</pre>
+      <div class="nav"><button class="b ghost" id="back">Back</button><span class="sp"></span><button class="b ghost" id="copy">Copy</button><button class="b pri" id="use">Use this system</button></div>`;
+    panel.querySelectorAll("[data-go]").forEach(b => b.onclick = () => go(+b.dataset.go));
+    const hold = panel.querySelector("#hold");
+    const on = () => { preview = { ...DEFAULTS }; render(); hold.textContent = "Showing Area's defaults"; };
+    const off = () => { preview = null; render(); hold.textContent = "Hold to compare with default"; };
+    hold.onpointerdown = on; hold.onpointerup = off; hold.onpointerleave = off;
+    hold.onkeydown = e => { if (e.key === " " || e.key === "Enter") { e.preventDefault(); on(); } };
+    hold.onkeyup = off;
+    panel.querySelector("#back").onclick = () => go(prev());
+    panel.querySelector("#use").onclick = e => { e.currentTarget.textContent = "Applied to the Canvas"; e.currentTarget.disabled = true; };
+    panel.querySelector("#copy").onclick = e => {
+      const b = e.currentTarget;
+      navigator.clipboard?.writeText(attrs).then(() => { b.textContent = "Copied"; }, () => { b.textContent = "Select the text"; });
+    };
+  }
+
+  /* ---------- stage theme ---------- */
+  const setMode = m => { mode = m; stage.dataset.mode = m; document.getElementById("m-light").setAttribute("aria-pressed", m === "light"); document.getElementById("m-dark").setAttribute("aria-pressed", m === "dark"); render(); };
+  document.getElementById("m-light").onclick = () => setMode("light");
+  document.getElementById("m-dark").onclick = () => setMode("dark");
+  try { if (matchMedia("(prefers-color-scheme: dark)").matches && document.documentElement.dataset.theme !== "light") setMode("dark"); } catch (e) {}
+
+  draw();
+})();
+</script>
