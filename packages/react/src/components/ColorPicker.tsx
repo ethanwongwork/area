@@ -374,7 +374,7 @@ export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(function
       <div className="area-color-picker__heading"><span>{swatchesLabel}</span>
         {onAddSwatch && <Button variant="ghost" size="sm" iconOnly icon={<AddGlyph />} aria-label={`Save ${color} to ${swatchesLabel.toLowerCase()}`}
           disabled={disabled || swatches.some(item => normalizeHexColor(item.value) === color)} onClick={() => onAddSwatch(color)} />}</div>
-      {swatches.length > 0 && <ColorSwatchPicker label={`${groupName} ${swatchesLabel.toLowerCase()}`} size="sm" columns={9} items={swatches} value={color} disabled={disabled}
+      {swatches.length > 0 && <ColorSwatchPicker label={`${groupName} ${swatchesLabel.toLowerCase()}`} size="md" columns={9} items={swatches} value={color} disabled={disabled}
         onValueChange={(next, event) => { const picked = normalizeHexColor(next); if (picked) emit(hexToHsv(picked), false, event); }} />}
     </div>}
     {name && <input type="hidden" name={name} value={color} disabled={disabled} />}

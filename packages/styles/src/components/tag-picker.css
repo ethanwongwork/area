@@ -31,6 +31,18 @@
   .area-tag-picker--outline { --_bg: var(--area-input-bg); }
   /* Tags sit on the field's fill, so their dark labels take the fill lift (tag.css; Layers sweep 2026-10-16). */
   .area-tag-picker .area-tag { --_lift: var(--area-layer-dark-tint-lift-fill); }
+  /* A tag nests in the field's corner (DESIGN_SYSTEM.md, Nested radius): the field's corner less the tag's inset (the
+     padding, the field's edge left out), floored at min(radius-floor, the tag's own). 4 at every size by default; at lg
+     the tag's own 6 sat in the field's 10 at 7 in, rounder than the field's curve (spacing audit 2026-10-17, open until
+     2026-10-23). A pill field nests pill tags. The field's corner and the inset are read on the picker, where
+     `--_height` is the field's. */
+  .area-tag-picker {
+    --_field-corner: calc(min(var(--_radius), max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px))) + var(--area-pill-field) * var(--area-radius-full));
+    --_tag-inset: calc((var(--_height) - var(--_tag)) / 2 - var(--area-border-width));
+  }
+  .area-tag-picker .area-tag {
+    --_corner: max(min(var(--area-radius-floor), max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px))), round(down, calc(var(--_field-corner) - var(--_tag-inset)), 2px)); /* even, as every corner */
+  }
   .area-tag-picker--soft {
     --_field-lift: 0 0 0 0 transparent;
     --_bg: var(--area-input-bg-soft);

@@ -92,6 +92,8 @@
   .cv-plate--hover { background: var(--area-bg-component-hover); }
   .cv-plate--selected { background: var(--area-bg-component-active); }
   .cv-plate--pressed { background: var(--area-bg-component-pressed); }
+  /* Danger hover: the row's plate, turned red at Tint (axes/states.ts), as the Menu paints it. */
+  .cv-plate--danger { background: color-mix(in oklab, var(--area-bg-component-hover), light-dark(var(--area-danger-surface-hover), color-mix(in srgb, var(--area-danger-solid) 22%, transparent)) calc(var(--area-row-danger-tint) * 100%)); }
   .cv-track { position: relative; inline-size: 64px; block-size: 4px; border-radius: 2px; background: var(--area-fill-track); } /* pick */
   .cv-track > i { position: absolute; inset-block-start: -6px; inline-size: 16px; block-size: 16px; border-radius: var(--area-radius-full); background: var(--area-fg-default); animation: cv-travel calc(var(--area-duration-base) * 4) var(--area-ease-in-out) infinite alternate; } /* pick */
   @keyframes cv-travel { from { inset-inline-start: 0; } to { inset-inline-start: calc(100% - 16px); } }

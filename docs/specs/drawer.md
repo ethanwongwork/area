@@ -58,7 +58,7 @@ Area's lift is the Elevation axis's modal role, as Dialog (`--area-shadow-modal`
 | Slot · property | Area value | Basis | Reason when it differs |
 |---|---|---|---|
 | width | 384 sm / 480 md, at most the viewport less 48 (drawer.css:60, 78-79); bottom: full width, at most the viewport less 48 tall | shadcn; Dialog | — |
-| edge | inner-edge 1px `border-float`, no radius against the screen edge; bottom: top corners `radius-container` | shadcn (flush, 1px edge) | — |
+| edge | inner-edge 1px `border-float`, no radius against the screen edge; bottom: top corners Dialog's (container + 4, 16) | shadcn (flush, 1px edge); Dialog | Was `radius-container` (12), which left Dialog's close (8, at 8 / 8) rounder than its corner; corner audit 2026-10-23 |
 | insets | 16 on every side, `16 − border` only on the bordered (inner) side (drawer.css:63-64, 85, 97-98) | Dialog's 16, border counted once (audit 2026-10-07) | — |
 | anatomy, type, close | Dialog's: title 16/24 strong (cap-trimmed without a close), description muted 4 below, md ghost close 8 / 8, section gap `inset-surface-md` | Peer: Dialog (accepted) | shadcn close at 12 |
 | body | a Scroll area; the focus-ring bleed inside the scroller (drawer.css:142-153) | Scroll area adoption (owner, 2026-10-09) | — |
@@ -166,6 +166,8 @@ Open questions: under reduced motion the panel appears at once. A short opacity 
 - 2026-10-09 · owner went with Scroll area's recommendation to adopt it in the scrolling families (docs/specs/scroll-area.md, "Adoption") → the scroll container is a Scroll area: Figma's overlay bar instead of the platform's, its inset moved into the scroller so rows keep their place → back in review.
 - 2026-10-14 · owner: "continue working on the next axis" → Surface is one number, the frame's width: `1` (Default) or `0` (Borderless) (was `outlined` / `borderless`; axes/surface.ts). At 0 the drawer lists the Surface axis's `shadow-edge` first in its box-shadow, ChatGPT's frameless-menu edge (`0 0 1px` black 62%, and in dark an inset `0 0 1px` white 20%; captured 2026-10-13), so it keeps an edge at Elevation 0 and in dark, where it had none. Owner approved ("go with your recs"), review https://claude.ai/artifact/L4TCF2W5zcjvBK7xZmaDBN (docs/research/surface-2026-10-14.md).
 - 2026-10-18 · Elevation and Stroke audit (docs/research/elevation-stroke-2026-10-18, "Audit: Area today") → under any Material the drawer fell back to the float shadow (material.css re-added `var(--_elevation, float)` and the drawer set no `--_elevation`). It now names `--_elevation: var(--area-shadow-modal)` and lists the material's layers first (`--_m-layers`), so it keeps the modal lift under every material; unchanged with none (drawer.css). Checked in the app, light and dark, None, Glass and Tactile.
+- 2026-10-23 · owner: "make sure all inset corner radius pairings are not broken" → corner audit: the bottom drawer's top corners take Dialog's corner (16; was the container's 12), so the close (8 at 8 / 8) is concentric with it (drawer.css).
+
 
 ## Review note, 2026-10-22 (round 68)
 

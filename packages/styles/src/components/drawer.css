@@ -98,8 +98,12 @@
     padding-block-start: var(--_drawer-inset);
     border-inline-start-width: 0;
     border-block-start-width: var(--area-border-width);
-    border-start-start-radius: var(--area-radius-container);
-    border-start-end-radius: var(--area-radius-container);
+    /* Dialog's corner (surface.css, --_dialog-radius: the container plus 4, 16 at the default), as the comment above
+       says: Dialog's close sits 8 / 8 from it, so its 8 corner is concentric (16 − 8). The container's 12 left the close
+       rounder than the corner it sits in (corner audit 2026-10-23). */
+    --_drawer-radius: calc(var(--area-radius-container) + min(var(--area-space-4) * var(--area-radius-concentric), var(--area-radius-container)));
+    border-start-start-radius: var(--_drawer-radius);
+    border-start-end-radius: var(--_drawer-radius);
   }
   /* Enter and exit: the surface slides from its edge (a whole panel's length, so it rests at
      translate none on whole pixels) while the scrim fades. */

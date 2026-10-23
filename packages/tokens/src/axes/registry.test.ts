@@ -29,7 +29,9 @@ describe("axis registry", () => {
         // Tint, 2026-10-22 (axes/tint.ts).
         "tint-hue", "tint-light", "tint-dark", "ink-tint",
         // Card tone, 2026-10-22 (axes/card-tone.ts).
-        "card-tone-light", "card-tone-dark"].sort(),
+        "card-tone-light", "card-tone-dark",
+        // Danger hover, 2026-10-23 (axes/states.ts).
+        "danger-hover"].sort(),
     );
   });
 });

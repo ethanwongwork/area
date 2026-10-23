@@ -70,7 +70,7 @@ export const SETTING_GROUPS: ReadonlyArray<{ heading: string; settings: readonly
   { heading: "Shape", settings: ["radius", "pills"] },
   { heading: "Stroke", settings: ["surface", "stroke", "stroke-hover", "selected-stroke", "focus-ring", "shadow-rest"] },
   { heading: "Shadow", settings: ["elevation", "shadow-resting", "shadow-hover", "shadow-field", "shadow-size", "shadow-softness", "shadow-light", "shadow-color"] },
-  { heading: "Fill", settings: ["fill-hover", "fill-selected", "fill-pressed", "selected-tint"] },
+  { heading: "Fill", settings: ["fill-hover", "fill-selected", "fill-pressed", "selected-tint", "danger-hover"] },
   { heading: "Effects", settings: ["motion", "easing"] },
 ];
 
