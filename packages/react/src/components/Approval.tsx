@@ -95,13 +95,13 @@ export const Approval = forwardRef<HTMLElement, ApprovalProps>(function Approval
         {options.map((option, index) => (
           <button key={option.value} type="button" className="area-approval__option" autoFocus={autoFocus && index === 0} onClick={event => { if (event.detail === 0 && settling()) return; onChoose(option.value); }}
             aria-keyshortcuts={index < 9 ? String(index + 1) : undefined}>
-            <span className="area-approval__key" aria-hidden="true">{index < 9 ? <Kbd keys={[String(index + 1)]} size="sm" variant="quiet" /> : null}</span>
+            <span className="area-approval__key" aria-hidden="true">{index < 9 ? <Kbd keys={[String(index + 1)]} size="sm" /> : null}</span>
             <span className="area-approval__label">{option.label}</span>
           </button>
         ))}
         {onInstead ? (
           <label className="area-approval__option area-approval__instead">
-            <span className="area-approval__key" aria-hidden="true">{insteadKey ? <Kbd keys={[insteadKey]} size="sm" variant="quiet" /> : null}</span>
+            <span className="area-approval__key" aria-hidden="true">{insteadKey ? <Kbd keys={[insteadKey]} size="sm" /> : null}</span>
             <input className="area-approval__field" type="text" aria-label={insteadPlaceholder} placeholder={insteadPlaceholder} value={instead}
               aria-keyshortcuts={insteadKey}
               onChange={event => setInstead(event.currentTarget.value)}

@@ -227,3 +227,11 @@ Tab labels are not selectable. See [interaction polish](../research/interaction-
 - **Why:** you asked for stronger selected text; Figma and Radix do the same, reserving the bold width. The
   underline stacked above the divider read as two lines.
 
+## Review note, 2026-10-22 (round 69)
+
+- **What changed:** Selection now defaults to the accent, so this family's checked, on, selected, current and filled
+  parts are the accent blue instead of near-black (#282828). Nothing else changed. A theme set to Selection Neutral
+  looks exactly as before; the "Selection / neutral" tile shows it.
+- **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
+  inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
+  blue already; buttons follow Action, which stays neutral.

@@ -111,7 +111,7 @@ rgb(238, 238, 238) (`area--avatar-initials`); disabled opacity 0.5.
 | rest paint | `bg-surface` + 1px `edge-control` #e2e2e2 | Untitled white + neutral-300 ring | Lighter edge than Untitled's #d4d4d4 |
 | hover | `bg-component-hover` #f3, edge `edge-control-hover` #d4 (`chip.css:72-78`) | Audit row/control hover | — |
 | pressed | `bg-component-pressed`, one step past hover; input 15.4% (24% white in dark); invalid `danger-surface-active`; selected keeps its hover plate; pressing remove does not press the chip (`chip.css:80-83, 104, 112, 138`) | Interaction polish 2026-10-16 | — |
-| selected | Selection role, neutral by default: `selection-surface` = `bg-component-active` #eeeeee, `selection-edge` = #d4, `fg-selection` = default ink; hover edge `edge-control-strong` (mixed toward `edge-accent` by the selection accent; `chip.css:127-142`; owner 2026-10-12, O5) | Owner rule; audit: selection one step above hover; emphasis roles (D1) | Untitled shows selection only in an embedded checkbox |
+| selected | Selection role, the accent by default (neutral before 2026-10-22): `selection-surface` = `bg-component-active` #eeeeee, `selection-edge` = #d4, `fg-selection` = default ink; hover edge `edge-control-strong` (mixed toward `edge-accent` by the selection accent; `chip.css:127-142`; owner 2026-10-12, O5) | Owner rule; audit: selection one step above hover; emphasis roles (D1) | Untitled shows selection only in an embedded checkbox |
 | selected, accent theme | `accent-surface`, `edge-accent`, `fg-accent` through the same role tokens | Theme's Selection accent (was `tone="accent"` until 2026-09-29) | — |
 | input kind · paint | **Count's translucent plate, `bg-mark`** (6% black / 10% white), hover `bg-mark-hover` (10.7% / 22.6%), transparent border, hover edge `edge-control-hover` (`chip.css:98-107`; tokens since owner 2026-10-12, O5) | Area input-chip rule; audit S6a (owner 2026-09-30), shared with Badge neutral soft and Count soft | Was `bg-component` #f7 (`area--input`), a lighter hole on a hovered #f3 row. Notion's values are tone-tinted; Area chips carry no tone by value (Badge does) |
 | remove · target | **a circle 4 inside the pill: 20 / 24 / 32** (`--_remove`, chip height − 8), concentric with the pill's end; the chip's end inset is that 4 | Material 24 circle in a 32 chip (`_trailing-icon.scss L18-22`); Primer, Carbon, Spectrum 2 make it the chip's height; chip trailing padding 0 (Primer, Polaris, Carbon, Spectrum 2) | Was the 16px glyph box, so the hover plate hugged the glyph (owner: "does not look correct") |
@@ -162,7 +162,7 @@ Highlight (`forced-colors.css:49-54`).
 | Badge neutral soft, Count soft | soft plate | `light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.1))`, `bg-mark` | input kind, chip.css:100 | match (audit S6a) |
 | Badge | a value shown as a tag | 16 / 20 / 24 (badge.css:178-181; badge.md) | 28 / 32 / 40 pill | different job: Badge displays, Chip is pressed |
 | Avatar | initials | 500, ramp sizes | 12px 500 | match |
-| Checkbox / Radio / AlignmentPicker | selection paint | Selection role, neutral by default | same | match |
+| Checkbox / Radio / AlignmentPicker | selection paint | Selection role, the accent by default (neutral before 2026-10-22) | same | match |
 
 ## Visual pass
 
@@ -277,3 +277,12 @@ Chips press one step past hover: `bg-component-pressed` (filter, assist, suggest
 - 2026-10-12 · owner, review round 21 (components21): approved → Complete in `component-status.mjs`.
 
 Since 2026-10-17 the underline offset is Link's 0.08em, close under the text (link.md, "Close underline").
+
+## Review note, 2026-10-22 (round 69)
+
+- **What changed:** Selection now defaults to the accent, so this family's checked, on, selected, current and filled
+  parts are the accent blue instead of near-black (#282828). Nothing else changed. A theme set to Selection Neutral
+  looks exactly as before; the "Selection / neutral" tile shows it.
+- **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
+  inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
+  blue already; buttons follow Action, which stays neutral.

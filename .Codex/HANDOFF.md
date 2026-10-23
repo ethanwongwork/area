@@ -1,10 +1,20 @@
 # Handoff
 
-## Current state (2026-10-21)
+## Current state (2026-10-22)
 
-- **Status.** `main` is at PR #146 (this branch). 119 families: 118 Complete; Asset card in review, round 66
-  (`components66`) on https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG: the state settings' Before / After for Card,
-  Asset card, Radio, Checkbox, Board, Composer, Infobox, Panel (answers round 65's "selected state border" note).
+- **Status.** `main` is at PR #148; branch `claude/component-motion-review-1ac5f3`, uncommitted. 119 of 119 families
+  Complete: rounds 67–70 approved (round 69's last 27 in chat, "same Selection change"). This branch holds: motion
+  sweep fixes, text-pair rule, every Kbd a keycap, Selection defaults to the accent with `stroke-selected` and
+  `focus-color` as Selection roles (both Neutral = entirely neutral), Stepper Kbd-plate markers, static palette hints,
+  `PopoverStep`. Review page https://claude.ai/artifact/KSG5sYR4ERxq9rb4cqoqSG, last round `components70`.
+- **Text and gaps (docs/research/text-gaps-2026-10-22).** DESIGN_SYSTEM.md "Text pairs": a line joins its title
+  (baseline to cap 12 / 10 / 10.5), label → control ui-stack, label beside value = fitted column + 12; text that introduces a set sits one ladder step further than the set's items
+  (choice groups 12 over options 8 apart). Open for the
+  owner: Description list's fixed 160 column, agent card head weights, small group label weights, the selected edge vs
+  check colour (Selected stroke is always the accent; Selection is Neutral by default), Stepper and Queue options.
+- **Motion sweep (2026-10-22, docs/research/motion-2026-10-22).** Easing never reached the Canvas (`canvasAttributes`
+  lacked it; fixed, `canvas-scope.test.ts`); Tree view row controls' hover plate now fades out; a cohesion test bans
+  literal curves and durations. Everything else follows MOTION.md in all 119 families.
 - **Interaction states as settings (PR #146).** Owner's picks (collection `state-picks` on
   https://claude.ai/artifact/3uKMHRhpWnPqNA6pK4WfD9) are the defaults: `axes/states.ts` (Focus ring, Hover stroke,
   Selected stroke, Selected tint, Hover / Selected / Pressed fill), Hover shadow in `axes/depth.ts`, the accent's

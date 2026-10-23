@@ -245,3 +245,12 @@ pointer press.
   down a fixed 1 from the track's padding edge; at a fractional scale the 1px edge snaps to device pixels and the
   offset does not, so it sat 1.3 under the top and 1.9 over the bottom at 0.8x (2 / 2 at 1x). It is now centred on the
   track's height (`inset-block: 0; margin-block: auto`): the same 2 at 1x, equal gaps at any scale or browser zoom.
+
+## Review note, 2026-10-22 (round 69)
+
+- **What changed:** Selection now defaults to the accent, so this family's checked, on, selected, current and filled
+  parts are the accent blue instead of near-black (#282828). Nothing else changed. A theme set to Selection Neutral
+  looks exactly as before; the "Selection / neutral" tile shows it.
+- **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
+  inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
+  blue already; buttons follow Action, which stays neutral.

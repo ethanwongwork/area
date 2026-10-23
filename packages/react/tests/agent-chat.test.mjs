@@ -109,8 +109,9 @@ test("an Approval numbers its choices, focuses the first only when asked and off
   // What to do instead is the last row: numbered after the choices, a field with no fill of its own.
   assert.match(html, /<label class="area-approval__option area-approval__instead">/);
   assert.match(html, /<input class="area-approval__field" type="text" aria-label="Tell it what to do instead"[^>]*aria-keyshortcuts="3"/);
-  // Kbd's rule: the numbers label rows, so they are quiet; Esc is named in the hint's sentence, so it is a keycap.
-  assert.equal((html.match(/area-approval__key[^]*?area-kbd--quiet/g) ?? []).length >= 2, true);
+  // Every key is a keycap (owner 2026-10-22): the row numbers are small keycaps, never quiet text.
+  assert.equal((html.match(/area-approval__key[^]*?area-kbd area-kbd--sm area-kbd--default/g) ?? []).length >= 2, true);
+  assert.doesNotMatch(html, /area-kbd--quiet/);
   assert.match(html, /<p class="area-approval__hint"><span class="area-kbd area-kbd--sm area-kbd--default"/);
   assert.match(html, /area-approval__hint/);
 });

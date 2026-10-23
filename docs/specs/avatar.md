@@ -231,3 +231,12 @@ ChatGPT and Notion show the disc colour, then the image, with no fade.
 
 - **What changed:** the initials' line box is now the glyph itself (line height 1), so it no longer depends on the text around the avatar. Nothing moves: the initials stay centred.
 - **Why:** the scope fix (THEMING.md, Text restarts at a Type scope) would otherwise have changed its line box with the surrounding text.
+
+## Review note, 2026-10-22 (round 69)
+
+- **What changed:** Selection now defaults to the accent, so this family's checked, on, selected, current and filled
+  parts are the accent blue instead of near-black (#282828). Nothing else changed. A theme set to Selection Neutral
+  looks exactly as before; the "Selection / neutral" tile shows it.
+- **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
+  inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
+  blue already; buttons follow Action, which stays neutral.

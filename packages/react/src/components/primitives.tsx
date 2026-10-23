@@ -1304,6 +1304,17 @@ export const PopoverClose = /* @__PURE__ */ forwardRef<HTMLButtonElement, Omit<B
 export const PopoverDescription = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function PopoverDescription({ className, ...rest }, ref) { return <div ref={ref} className={cx("area-popover__description", className)} {...rest} />; });
 export const PopoverBody = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function PopoverBody({ className, ...rest }, ref) { return <div ref={ref} className={cx("area-popover__body", className)} {...rest} />; });
 export const PopoverFooter = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function PopoverFooter({ className, ...rest }, ref) { return <div ref={ref} className={cx("area-popover__footer", className)} {...rest} />; });
+export interface PopoverStepProps extends HTMLAttributes<HTMLSpanElement> {
+  /** This step, from 1. */
+  current: number;
+  /** How many steps the tour has. */
+  total: number;
+}
+/** A teaching tour's progress at the start of the footer, "1 of 3", muted (owner, round 68: a bare "1" didn't say what
+ * it counted; Atlassian's spotlight and Notion's tours write the step and the total). */
+export const PopoverStep = /* @__PURE__ */ forwardRef<HTMLSpanElement, PopoverStepProps>(function PopoverStep({ current, total, className, ...rest }, ref) {
+  return <span ref={ref} className={cx("area-popover__step", className)} {...rest}>{current} of {total}</span>;
+});
 export const PopoverMedia = /* @__PURE__ */ forwardRef<HTMLDivElement, Div>(function PopoverMedia({ className, ...rest }, ref) { return <div ref={ref} className={cx("area-popover__media", className)} {...rest} />; });
 
 export interface MenuProps extends Div {
@@ -1538,7 +1549,10 @@ export const MenuItem = /* @__PURE__ */ forwardRef<HTMLButtonElement, MenuItemPr
       {icon ? <span className="area-menu__icon" aria-hidden="true">{icon}</span> : null}
       {description ? <span className="area-menu__lines"><span className="area-menu__text">{children}</span><span className="area-menu__description">{description}</span></span>
         : icon || typeof children === "string" || typeof children === "number" ? <span className="area-menu__text">{children}</span> : children}
-      {shortcut ? <span className="area-menu__shortcut">{shortcut}</span> : null}
+      {/* Every key is a keycap (owner, 2026-10-22): a string shortcut ("⌘L") is set verbatim in the small keycap, as a
+          Kbd passed in. The row hides a Kbd's spoken chord anyway; the item carries aria-keyshortcuts. */}
+      {shortcut ? <span className="area-menu__shortcut">{typeof shortcut === "string"
+        ? <span className="area-kbd area-kbd--sm area-kbd--default"><kbd className="area-kbd__key">{shortcut}</kbd></span> : shortcut}</span> : null}
       {checkable && indicator === "switch" ? (
         <span className="area-switch area-switch--sm area-menu__toggle" aria-hidden="true">
           <span className="area-switch__track" data-checked={checked ? "" : undefined}><span className="area-switch__thumb" /></span>
@@ -2230,9 +2244,9 @@ export interface KbdProps extends HTMLAttributes<HTMLElement> {
   /** md (20px) suits standalone hints; sm (16px) fits compact control chrome. `"small"` and
    * `"normal"` are deprecated aliases (audit S17). */
   size?: VariantProps<typeof MANIFESTS.kbd>["size"] | "small" | "normal";
-  /** Surface treatment for standalone, compact chrome, or coloured backgrounds. `"on-emphasis"`
-   * is a deprecated alias of `"on-color"` (audit A-15); a Tooltip, a solid Button and a menu row
-   * adapt the keycap on their own. */
+  /** `"default"`, the keycap everywhere, or `"on-color"` on a coloured background. `"quiet"` is deprecated and renders
+   * the keycap (owner 2026-10-22: every key has its backplate); `"on-emphasis"` is a deprecated alias of `"on-color"`
+   * (audit A-15). A Tooltip, a Button and a destructive menu row adapt the keycap on their own. */
   variant?: VariantProps<typeof MANIFESTS.kbd>["variant"] | "on-emphasis";
   /** @deprecated Use `variant` (audit S17). */
   appearance?: VariantProps<typeof MANIFESTS.kbd>["variant"] | "on-emphasis";
@@ -2252,7 +2266,7 @@ export const Kbd = /* @__PURE__ */ forwardRef<HTMLElement, KbdProps>(function Kb
   const rendered = keys.map((key) => KEY_GLYPHS[key.toLowerCase()] ?? key.toUpperCase());
   const spoken = rendered.map((glyph) => KEY_LABELS[glyph] ?? glyph).join(" plus ");
   const chosen = variant ?? appearance ?? "default";
-  const resolvedAppearance = chosen === "on-emphasis" ? "on-color" : chosen;
+  const resolvedAppearance = chosen === "on-emphasis" ? "on-color" : chosen === "quiet" ? "default" : chosen;
 
   return (
     <span

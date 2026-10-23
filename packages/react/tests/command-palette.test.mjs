@@ -50,13 +50,11 @@ test("CommandPalette supports named modal, query, empty and custom footer usages
 });
 
 // packages/react/src/components/CommandPalette.tsx:181-195; docs/specs/command-palette.md:64: hidden key hints stay out of tab order and disable on empty results.
-test("CommandPalette default footer exposes only decorative non-tab-stop hints", () => {
+test("CommandPalette default footer is static, decorative hints: keycaps and words, no controls (round 68)", () => {
   const html = renderToString(h(CommandPalette, { items: [], inline: true }));
   assert.match(html, /area-command-palette__footer" aria-hidden="true"/);
-  const hints = html.match(/<button[^>]*>/g);
-  assert.equal(hints.length, 3);
-  for (const hint of hints) {
-    assert.match(hint, /tabindex="-1"/);
-    assert.match(hint, /disabled=""/);
-  }
+  const footer = html.slice(html.indexOf("area-command-palette__footer"));
+  assert.doesNotMatch(footer, /<button/);
+  assert.equal(footer.match(/class="area-command-palette__hint"/g)?.length, 2); // Move, Open; Close only when modal
+  assert.match(footer, /area-command-palette__keys"><span class="area-kbd area-kbd--sm area-kbd--default">/);
 });

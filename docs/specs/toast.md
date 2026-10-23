@@ -183,3 +183,8 @@ Open questions:
 - 2026-10-03 · radius audit D2 (owner) → a one-line toast takes `radius-control-lg` capped (40 → 10, compact 32 → 8), a titled toast the container 12 (`.area-toast:has(.area-toast__title)`). Was 12 / 8. `docs/research/radius-audit-2026-10-03.md`.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → enter from the toaster's edge (16, `slow` ease-out), exit faster (`data-leaving`, 8, `base`), stack reflow by FLIP on `base` ease-in-out (`surface.css`, `Toaster.tsx`).
 - 2026-10-14 · owner: "continue working on the next axis" → Surface is one number, the frame's width: `1` (Default) or `0` (Borderless) (was `outlined` / `borderless`; axes/surface.ts). At 0 the toast lists the Surface axis's `shadow-edge` first in its box-shadow, ChatGPT's frameless-menu edge (`0 0 1px` black 62%, and in dark an inset `0 0 1px` white 20%; captured 2026-10-13), so it keeps an edge at Elevation 0 and in dark, where it had none. Owner approved ("go with your recs"), review https://claude.ai/artifact/L4TCF2W5zcjvBK7xZmaDBN (docs/research/surface-2026-10-14.md).
+
+## Review note, 2026-10-22 (round 68)
+
+- **What changed:** the description sits directly under the title: 10 from the title's baseline to the description's cap, was 15.
+- **Why:** the gap and text pass across every family (your note: one intentional logic for the gaps between labels, titles and their copy). A title and the line under it now join with no gap everywhere, the rule you set on Card (Figma and Notion 11.5). Before, the same pair sat 10.5 to 20 apart depending on the family. DESIGN_SYSTEM.md, "Text pairs".

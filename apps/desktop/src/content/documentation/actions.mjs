@@ -600,12 +600,12 @@ export default {
     // Spec: When a key has a backplate, The gap between a keycap and its words, Behavior and accessibility; source: Kbd JSDoc.
     practices: [
       ["Do", "Pass keys as names (cmd, shift, enter, up); they become the platform's glyphs and a spoken chord."],
-      ["Do", "Use the default keycap for a key named on its own: in a hint, in prose, in a shortcut list or after a Button's label."],
-      ["Do", "Use quiet for keys in rows that have their own plate, such as menu and palette shortcuts."],
+      ["Do", "Use the keycap everywhere a key shows: hints, prose, shortcut lists, Buttons, menu and palette rows; menu rows take the small one."],
       ["Do", "Use on-color on a strong fill; Tooltip, a solid Button and a menu row switch to it on their own."],
       ["Do", "Put the action's shortcut in aria-keyshortcuts on the action; inside a button, link or menu row the spoken chord is hidden."],
       ["Do", "Use KbdGroup for a sequence pressed one chord after another."],
       ["Don't", "Separate a keycap from its words with a typed space; let the container's gap set it (prose is the exception)."],
+      ["Don't", "Set keys as plain text; quiet is deprecated and renders the keycap, so every key looks the same."],
       ["Don't", "Treat Kbd as the binding; it only shows the keys, and your page handles them."],
     ],
     // Spec: Anatomy.

@@ -186,3 +186,8 @@ Resolved 2026-10-10 (owner: "go with your recommendations"):
 - 2026-10-12 · owner, 2026-10-12: "go with your recommendations" (consistency pass) → the md title takes `title-xs` 16/24 (O3; was ChatGPT's 18/24, off the ramp) (empty-state.css). (docs/research/consistency-audit-2026-10-12.md)
 - 2026-10-12 · owner, review round 21 (components21): approved → Complete in `component-status.mjs`.
 - 2026-10-12 · spacing step extrapolated past Default (type size and density split) → glyph size and stroke take only the compact step (`clamp(0, ui-dense, 1)`): icons and strokes follow the type size on their own (`empty-state.css`). `docs/research/ui-size-scale-2026-10-12.md`.
+
+## Review note, 2026-10-22 (round 68)
+
+- **What changed:** the description sits directly under the title at both sizes: 12 at md (was 20, an 8 gap after ChatGPT's empty state), 10 at sm (was 12, a 2 gap).
+- **Why:** the gap and text pass across every family (your note: one intentional logic for the gaps between labels, titles and their copy). A title and the line under it now join with no gap everywhere, the rule you set on Card (Figma and Notion 11.5). Before, the same pair sat 10.5 to 20 apart depending on the family. DESIGN_SYSTEM.md, "Text pairs". ChatGPT's empty state keeps 8; one rule across the system won over that single reference, so say if Empty state should be the exception.

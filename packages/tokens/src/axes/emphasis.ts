@@ -8,8 +8,9 @@
  * - Action: what you press to commit, the solid Button and everything built on it.
  * - Selection: what shows state, checked, on, selected, current, and a filled value.
  *
- * Four combinations follow: both neutral (the default), both accent, accent leading
- * (actions in colour, controls calm) and neutral leading (neutral actions, coloured state).
+ * Four combinations follow: both neutral, both accent, accent leading (actions in colour, controls calm) and neutral
+ * leading (neutral actions, coloured state), the default since 2026-10-22 (owner, option B: Selection defaults to the
+ * accent, and a selected container's edge follows Selection, so everything selected is one colour).
  *
  * Each axis writes one unitless switch, 0 or 1. The role colours themselves are cross-axis
  * derivations in `emit/base.ts` (a color-mix between the neutral and accent endpoints), so
@@ -17,12 +18,12 @@
  */
 import { type AxisDefinition, tokens } from "./schema.ts";
 
-function roleAxis(id: "action" | "selection", label: string, description: string, neutral: string, accent: string): AxisDefinition {
+function roleAxis(id: "action" | "selection", label: string, description: string, neutral: string, accent: string, defaultPreset: "neutral" | "accent" = "neutral"): AxisDefinition {
   return {
     id,
     label,
     description,
-    defaultPreset: "neutral",
+    defaultPreset,
     namespaces: [`--area-${id}-accent:`],
     presets: [
       { id: "neutral", label: "Neutral", description: neutral, tokens: tokens({ [`${id}-accent`]: 0 }) },
@@ -42,7 +43,8 @@ export const ACTION_AXIS = roleAxis(
 export const SELECTION_AXIS = roleAxis(
   "selection",
   "Selection",
-  "The colour of state: checked, on, selected, current and filled values.",
-  "State marks in the neutral ink.",
-  "State marks in the accent.",
+  "The colour of state: checked, on, selected, current and filled values, selected edges and the focus ring.",
+  "State, selected edges and focus in the neutral ink.",
+  "State, selected edges and focus in the accent.",
+  "accent",
 );

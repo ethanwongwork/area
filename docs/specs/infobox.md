@@ -49,7 +49,7 @@ Wikipedia, computed (evidence only; Area's current values are in Decisions):
 | action | one control at the end of the title row, centred on the title's first line | Ant Descriptions' extra, GitHub's About gear (round 36) | — |
 | section | 12 apart, a 1px `border-divider` rule (`stroke-width`) between, `border-decorative` when framed (a seam inside the card; round 56); heading 6 above its rows | GitHub's About, Figma (round 34–35) | Wikipedia's tinted band dropped |
 | heading | UI text, strong, default ink | Section heading's title (round 35) | — |
-| rows (`columns`, default) | label in a 120 column, value 8 after it, rows 4 apart, top-aligned | Wikipedia's 123 of 296; Radix and Chakra's label minimum (round 35) | Area's 4 grid |
+| rows (`columns`, default) | label column as wide as the section's longest label (`fit-content(40%)`, shared through subgrid), value 12 (`gap-row`) after it, rows 4 apart, top-aligned | Wikipedia's column is sized by its labels (MediaWiki gives `.infobox` no width); Ant Descriptions and Radix DataList size it to the labels; label → value Radix 12–16, Notion 14, Chakra 16 | round 35: a fixed 120, value 8 after it; the owner (round 67): "the gaps between the columns is huge" |
 | rows (`stacked`) | label 4 above its value, pairs 8 apart | App Store's Information; Radix, Chakra `vertical` (round 36) | — |
 | label | UI text, regular, `fg-muted` | Description list's term ink | Wikipedia bolds labels |
 | value | UI text, regular, default ink | round 35 | — |
@@ -99,7 +99,7 @@ rows; one Area role per level. Measurements: `docs/research/articles-rethink-202
 | media | — | — | 8 above the title | proximity: the title pairs with its subtitle first |
 | section | — | — | 12 apart, a 1px divider between | GitHub's About, Figma's inspector |
 | heading | UI text, strong | default | 6 above its rows | Section heading's title (GitHub's About headings, Figma's section titles in body ink) |
-| label | UI text, regular | `fg-muted` | a 120 column | Description list's term ink; Wikipedia's label column 123 of 296 |
+| label | UI text, regular | `fg-muted` | the shared label column | Description list's term ink |
 | value | UI text, regular | default | 8 after the label column; rows 4 apart | Wikipedia: value 4 after the label, rows 5 apart (3 spacing + 2 × 1 padding); Area's 4 grid |
 
 ## Review note, 2026-10-17 (round 35)
@@ -153,3 +153,16 @@ lift, as Card does: the soft edge at 0, transparent while a frame is drawn. Chec
 
 - **What changed:** Its resting shadow is one tight layer, `0 1px 2px -1px` at 8% (ChatGPT's sm), instead of a soft two-layer haze at 1.5%.
 - **Why:** your picks on the state page (2026-10-21), now the defaults of the new state settings (Inspector: Stroke, Shadow, Fill) (Rest shadow d). Nothing else on it changed.
+
+## Review note, 2026-10-22 (round 68)
+
+- **What changed:** the label column is now as wide as the longest label in the section (up to 40% of the box, then
+  the label wraps), and the value starts 12 after it. Before, every label sat in a fixed 120 column with the value 8
+  after it, so a short label left about 96px of empty space. The subtitle now sits directly under the title (it was
+  2 below).
+- **Why:** your round 67 note, "the gaps between the columns is huge". Wikipedia's own column is sized by its labels,
+  as Ant's Descriptions and Radix's DataList are; the fixed 120 copied one article's width. The type was already one
+  role per level (title-xs title, muted UI-text labels, default values), so it stays.
+- **Your other questions** (is it necessary, what other systems do) are answered in
+  `docs/research/text-gaps-2026-10-22/infobox.md`: design systems ship only the rows, not a titled box, so Infobox
+  could become Description list in a Card. That would change the approved Description list, so it waits for you.

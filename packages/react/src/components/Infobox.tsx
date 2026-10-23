@@ -15,7 +15,7 @@ export interface InfoboxProps extends Omit<HTMLAttributes<HTMLElement>, "title">
   media?: ReactNode;
   /** One control at the end of the title row: an icon Button (`size="sm"`, ghost). */
   action?: ReactNode;
-  /** `columns` (default): a 120 label column. `stacked`: each label above its value, for a narrow column. */
+  /** `columns` (default): a label column as wide as the longest label (up to 40%), the value 12 after it. `stacked`: each label above its value, for a narrow column. */
   layout?: InfoboxVariants["layout"];
   /** In Card's frame. Unframed by default, as GitHub's and Notion's. */
   framed?: boolean;

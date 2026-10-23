@@ -125,7 +125,7 @@
     margin-block: calc((var(--area-leading-24) - var(--_height)) / 2);
     margin-inline-end: calc((var(--_icon) - var(--_height)) / 2);
   }
-  .area-drawer__heading { min-inline-size: 0; display: grid; gap: var(--area-space-4); }
+  .area-drawer__heading { min-inline-size: 0; display: grid; gap: 0; } /* (DESIGN_SYSTEM.md, "Text pairs": a line directly under its title joins it, owner 2026-09-28 on Card and 2026-10-22; was 4, baseline to cap 16) */
   .area-drawer__header:has(> .area-drawer__close) .area-drawer__title { text-box: none; }
   .area-drawer__title {
     margin: 0;

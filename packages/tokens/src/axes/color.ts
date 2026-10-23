@@ -208,7 +208,7 @@ export const ACCENT_AXIS: AxisDefinition = {
   label: "Accent",
   description: "The accent hue. Drives fills, links, and the focus ring.",
   defaultPreset: DEFAULT_SELECTION.accent,
-  namespaces: ["--area-accent-", "--area-fg-accent", "--area-fg-on-accent", "--area-focus-color:", "--area-stroke-selected:"],
+  namespaces: ["--area-accent-", "--area-fg-accent", "--area-fg-on-accent"],
   presets: CHROMATIC_SCALES.map((spec) => ({
     id: spec.id,
     label: spec.id[0]!.toUpperCase() + spec.id.slice(1),

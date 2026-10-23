@@ -4,14 +4,18 @@
  * Where a person is in a flow of steps (docs/specs/stepper.md). It is Timeline's geometry with numbered steps
  * (owner, review round 24: "should these be the same as timeline?"): a 24 marker column (compact 20), the title 12
  * beyond it (36 from the column's start), 400 type, 16 between steps vertically, and Timeline's 1px divider line
- * stopping 4 short of each marker. The line has one paint in every state, as Timeline's does; the markers carry the
- * state in the choice controls' vocabulary: a step still to come is an unchecked ring (Checkbox's rest edge, the
- * muted number), the current step is the checked fill (the Selection role and its ink, the one strong mark, as
- * Timeline's current event), and a done step keeps the Selection ink as a ring with a check.
+ * stopping 4 short of each marker. The line has one paint in every state, as Timeline's does.
+ *
+ * The marker is a soft plate, not a ring (owner, round 68: "i dont like the circles ... softer fills, like the 1 2 3
+ * for approval ... rounder backplates and not outline"): Kbd's keycap, the mark that numbers Approval's choices, at its
+ * md size (20, compact 16) with its corner, a number in its 12 / 500 type. The fill carries the state, lighter to
+ * darker (round 67: "a lighter fill and then a darker fill when selected"; Ant's default steps): a step to come is the
+ * faint mark fill with a muted number, a done step the Selection tint with a check, the current step the Selection
+ * solid (the one strong mark, as Timeline's current event), an invalid step the danger tint with "!".
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-stepper {
-    --_marker: var(--area-control-xs); /* spec: Timeline's marker, 24 (compact 20); MUI, Untitled UI, Chakra xs 24 */
+    --_marker: var(--area-mark-label-md); /* spec: Kbd's md keycap, 20 (compact 16); was Timeline's 24 circle */
     --_gap: var(--area-space-12); /* spec: Timeline's content gap, the title 36 from the column's start */
     --_line: var(--area-stroke-width); /* spec: Timeline's 1px line (Ant, MUI, GOV.UK 1px) */
     --_line-gap: var(--area-space-4); /* spec: Timeline's gap around each marker */
@@ -30,8 +34,7 @@
   .area-stepper--vertical { flex-direction: column; }
 
   .area-stepper-step {
-    --_ring: var(--area-edge-control-hover); /* spec: Checkbox and Radio's rest edge, the firmer edge for small marks */
-    --_disc: transparent;
+    --_disc: var(--area-bg-mark); /* spec: Kbd's translucent mark fill (6% at rest), so it holds on any ground */
     --_number: var(--area-fg-muted);
     --_title: var(--area-fg-muted);
     position: relative;
@@ -39,11 +42,11 @@
     min-inline-size: 0;
   }
   .area-stepper-step--upcoming {}
-  /* The checked fill: the Selection role and its ink (Checkbox, Radio, Switch on). */
-  .area-stepper-step--current { --_ring: var(--area-selection-solid); --_disc: var(--area-selection-solid); --_number: var(--area-fg-on-selection); --_title: var(--area-fg-default); }
-  /* Done keeps the Selection ink, as a ring with a check, so only the current step is solid. */
-  .area-stepper-step--complete { --_ring: var(--area-selection-solid); --_number: var(--area-selection-solid); --_title: var(--area-fg-default); }
-  .area-stepper-step--invalid { --_ring: var(--area-danger-solid); --_number: var(--area-danger-solid); --_title: var(--area-fg-default); }
+  /* The current step: the Selection solid and its ink (Checkbox, Radio, Switch on), the darkest fill. */
+  .area-stepper-step--current { --_disc: var(--area-selection-solid); --_number: var(--area-fg-on-selection); --_title: var(--area-fg-default); }
+  /* Done: the Selection tint (Chip's selected plate) with the check in the Selection ink, lighter than current. */
+  .area-stepper-step--complete { --_disc: var(--area-selection-surface); --_number: var(--area-fg-selection); --_title: var(--area-fg-default); }
+  .area-stepper-step--invalid { --_disc: var(--area-danger-surface); --_number: var(--area-fg-danger); --_title: var(--area-fg-default); }
 
   .area-stepper-step__body,
   .area-stepper-step__button {
@@ -89,16 +92,25 @@
     box-sizing: border-box;
     inline-size: var(--_marker);
     block-size: var(--_marker);
-    border: var(--area-stroke-width) solid var(--_ring);
-    border-radius: var(--area-radius-full);
+    /* Kbd's keycap corner: 6 at the default radius, following the Radius setting, never quite a pill. */
+    border-radius: max(var(--area-radius-min), min(round(down, calc(24px * var(--area-radius-factor)), 2px), calc(var(--_marker) / 2 - min(2px, (0.5 - var(--area-radius-factor)) * 1000px))));
     background: var(--_disc);
     color: var(--_number);
-    font-size: var(--area-text-xs-size); /* spec: 12 (MUI 12, Untitled UI 12-14, Ant 12 at 24) */
+    font-size: var(--area-text-xs-size); /* spec: Kbd's 12 */
+    font-weight: var(--area-weight-strong); /* spec: Kbd's 500, a label on a fill */
     line-height: 1;
     font-variant-numeric: tabular-nums;
   }
-  /* spec: a 12 check in the 24 marker (Untitled UI 12 in 24; Glyph's 12 cut). */
-  .area-stepper-step__marker svg { inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); }
+  /* The check matches the digits (owner, round 68: "better sizing of the icons compared to the numbers"): the 12 check's
+     ink was 5.5 tall beside a 12 / 500 digit's 8.6 cap, so it read small and light. In the 20 plate it is the 16
+     drawing (ink 8 tall, as the digit), in the 16 compact plate Glyph's own 12 cut; each at its native size, 2 inside
+     the plate. --_glyph-cut switches the drawing (base.css): 0 at the default density, 1 at compact. */
+  .area-stepper-step__marker svg {
+    --_glyph-cut: min(1, max(0, calc(-1 * var(--area-ui-level))));
+    /* the drawing's own box, so neither is ever scaled: 16 or 12 */
+    inline-size: calc(16px - 4px * var(--_glyph-cut)); /* spec */
+    block-size: calc(16px - 4px * var(--_glyph-cut)); /* spec */
+  }
 
   /* The title's first line centres on the marker (inset.css: first-line alignment). */
   .area-stepper-step__text {
@@ -111,8 +123,11 @@
   .area-stepper-step__description { color: var(--area-fg-muted); }
   .area-stepper-step[data-disabled] { opacity: var(--area-opacity-disabled); }
 
-  /* Horizontal: each step but the last takes the room left, and Timeline's line runs through it from 12 after the
-     text (the content gap) to 4 before the next marker (the line gap), level with the marker's centre. */
+  /* Horizontal: each step but the last takes the room left, and Timeline's line runs through it level with the
+     marker's centre, 12 (the marker-to-title gap) clear of what it meets at both ends: the text before it and the
+     next marker (owner, round 67: "make sure the spacing/gaps for the horizontal version are correct"; it stopped 4
+     short of the marker, so the line hugged the next step and stood off the last one; MUI 8, Chakra 12, Mantine 16,
+     the same at both ends). */
   /* Steps share the room left over after their own content, and never shrink below it (their longest word and a 16
      line), so the line can't run into a title; a stepper wider than its container overflows rather than overlaps. */
   .area-stepper--horizontal > .area-stepper-step { min-inline-size: auto; }
@@ -125,7 +140,7 @@
     min-inline-size: var(--area-space-16);
     block-size: var(--_line);
     margin-block-start: calc((var(--_marker) - var(--_line)) / 2);
-    margin-inline: var(--_gap) var(--_line-gap);
+    margin-inline: var(--_gap);
     background: var(--area-border-divider); /* spec: Timeline's line */
   }
 
@@ -156,7 +171,7 @@
   }
 
   @media (forced-colors: active) {
-    .area-stepper-step__marker { border-color: CanvasText; }
+    .area-stepper-step__marker { border: 1px solid CanvasText; } /* the fills vanish in forced colours; the plate keeps an edge */
     .area-stepper-step--current .area-stepper-step__marker { background: Highlight; color: HighlightText; forced-color-adjust: none; }
     .area-stepper-step::after { background: CanvasText; }
   }

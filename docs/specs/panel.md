@@ -335,3 +335,17 @@ The section toggle is not selectable. See [interaction polish](../research/inter
   `viewportRef` reaches the body's scrolling element (Scroll area's viewport), so a conversation in the body can follow
   its newest line and Scroll to latest can watch it; `bareFooter` drops the footer's top rule, for a footer that
   continues the body (a chat's composer; Cursor, Claude Code and ChatGPT draw none). Manifest boolean `bare-footer`.
+
+## Review note, 2026-10-22 (round 67)
+
+- **What changed:** Its resting shadow is one tight layer, `0 1px 2px -1px` at 8% (ChatGPT's sm), instead of a soft two-layer haze at 1.5%.
+- **Why:** your picks on the state page (2026-10-21), now the defaults of the new state settings (Inspector: Stroke, Shadow, Fill) (Rest shadow d). Keyboard focus is the brighter indicator blue (#0160d9, was #004cb0), as everywhere since the state settings.
+
+## Review note, 2026-10-22 (round 69)
+
+- **What changed:** Selection now defaults to the accent, so this family's checked, on, selected, current and filled
+  parts are the accent blue instead of near-black (#282828). Nothing else changed. A theme set to Selection Neutral
+  looks exactly as before; the "Selection / neutral" tile shows it.
+- **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
+  inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
+  blue already; buttons follow Action, which stays neutral.

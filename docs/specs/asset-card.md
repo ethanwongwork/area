@@ -291,3 +291,13 @@ rule every nested surface uses (Popover, Code block's buttons, Edit summary's he
 - **Compared with round 61 (what you approved):** 8 tiles are new, the containerless, hug and waterfall views. Group,
   setting and grid read as changed only because the Cards drawn inside them now carry the dark-mode rim every shadow
   gained in PR #141 (transparent in light, a faint light edge in dark); Asset card itself is the same as round 61.
+
+## Review note, 2026-10-22 (round 67)
+
+- **What changed:** every selected edge (the framed card, a component's frame, an image or group ring) is the same
+  2px vibrant blue drawn inside (the framed card was 1px dark blue); hovering lifts the card by `0 2px 4px -1px` at 8%;
+  focus sits 2px off. The frame inside the card has a firmer edge in light, #e2e2e2 instead of #eeeeee, still 1px,
+  and the card's own edge now matches it.
+- **Why:** your round 65 note on the selected border, answered by your picks on the state page (2026-10-21), now the
+  defaults of the state settings. The frame's line was the card's edge colour, which almost disappears on the card's
+  grey ground (1.08:1); a frame with no shadow takes the divider colour, as Table's does.

@@ -100,7 +100,7 @@
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    animation: area-step-shimmer calc(2s * var(--area-duration-loop)) linear infinite; /* spec */
+    animation: area-step-shimmer calc(2s * var(--area-duration-loop)) var(--area-ease-linear) infinite; /* spec */
   }
   @keyframes area-step-shimmer { to { background-position: -200% 0; } }
   /* Failed: the verb in the danger ink (Codex ✘, Claude Code's failure dot). */

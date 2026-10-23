@@ -218,3 +218,22 @@ Rows press at `bg-component-pressed`, one step past selected (Notion presses at 
 - 2026-10-12 · owner adopted the product UI rules (docs/PRODUCT_UI.md, rule 3: rest → hover → press → selected, each a step firmer) → a held row (not selected or current) takes `bg-component-active`, landing at once; replaces the hover-plate-only press → `tree-view.css`; desktop gallery.
 - 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the check box's resting edge is Checkbox's `edge-control-hover` (audit S5; was `edge-control`) (tree-view.css). (docs/research/consistency-audit-2026-10-12.md)
 - 2026-10-12 · owner, review round 21 (components21): approved → Complete in `component-status.mjs`.
+- 2026-10-22 · motion sweep (owner: "make sure all the motion interaction ... is implemented correctly into all the components"; `docs/research/motion-2026-10-22`) → a row control's hover plate fades out on fast as every Button's: the reveal's opacity-only transition had replaced the control's colour transition, and the reveal now zeroes only its own clock (`--_reveal`) → tree-view.css.
+
+## Review note, 2026-10-22 (round 67)
+
+- **What changed:** rows sit 1px apart (were 2px at the default size). A row's lock and visibility buttons now fade
+  their hover plate out like every other button; before, the plate disappeared at once when the pointer moved back
+  to the row. Keyboard focus is the brighter indicator blue (#0160d9, was #004cb0).
+- **Why:** the 1px gap is your Nav note, applied to every family that stacks rows. The fade came from the motion sweep
+  across all 119 families: the row's reveal rule replaced the buttons' own colour transition. The fade only shows
+  while moving the pointer, so the Before and After here look the same at rest.
+
+## Review note, 2026-10-22 (round 69)
+
+- **What changed:** Selection now defaults to the accent, so this family's checked, on, selected, current and filled
+  parts are the accent blue instead of near-black (#282828). Nothing else changed. A theme set to Selection Neutral
+  looks exactly as before; the "Selection / neutral" tile shows it.
+- **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
+  inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
+  blue already; buttons follow Action, which stays neutral.

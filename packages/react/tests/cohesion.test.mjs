@@ -302,6 +302,50 @@ test('every loop stops through the motion axis\'s loop factor', () => {
   assert.deepEqual([...new Set(factors)].sort(), ['0', '1'], 'the loop factor should be 1, or 0 at step 0');
 });
 
+test('every transition and animation takes its curve and length from the motion tokens', () => {
+  // axes/easing.ts and motion.ts: Easing moves the curve and Motion the length, so a literal curve or duration ignores
+  // both settings (motion sweep 2026-10-22, docs/research/motion-2026-10-22). Allowed literals: `linear` and `0s` on a
+  // discrete property (visibility, display, overlay), `steps()` for a caret's blink, and a loop's measured period
+  // (checked above). An autofill hold (`9999s`) is a browser workaround, not motion.
+  const declarations = [...css.matchAll(/(?<![-\w])(transition|animation)(-timing-function|-duration)?\s*:\s*([^;{}]+)/g)].map(match => ({ prop: match[1] + (match[2] ?? ''), value: match[3].trim() }));
+  assert.ok(declarations.length > 100, `expected the component transitions, found ${declarations.length}`);
+  for (const { prop, value } of declarations) {
+    const items = value.split(/,(?![^()]*\))/).map(item => item.trim()).filter(item => !/^(visibility|display|overlay)\b/.test(item) && !/\b9999s\b/.test(item));
+    for (const item of items) {
+      const bare = item.replace(/var\([^()]*\)|calc\([^()]*(\([^()]*\))?[^()]*\)|steps\([^()]*\)/g, '');
+      assert.doesNotMatch(bare, /cubic-bezier|\bease(-in|-out|-in-out)?\b|\blinear\b/, `${prop} uses a literal curve: ${item}`);
+      if (prop !== 'transition-timing-function' && prop !== 'animation-timing-function') assert.doesNotMatch(bare, /(^|\s)(?!0m?s\b)[\d.]+m?s\b/, `${prop} uses a literal duration: ${item}`);
+    }
+  }
+});
+
+test('a line under its title joins it, and a label column fits its labels (DESIGN_SYSTEM.md, "Text pairs")', () => {
+  // Owner 2026-09-28 (Card) and 2026-10-22 (every family): the same pair sat 10.5 to 20 apart across families.
+  const titleGaps = [...css.matchAll(/--_title-gap:\s*([^;]+);/g)].map(match => match[1].trim());
+  assert.ok(titleGaps.length >= 5, `expected the title-gap slots, found ${titleGaps.length}`);
+  for (const gap of titleGaps) assert.equal(gap, '0px', `a title and its line sit apart again: --_title-gap ${gap}`);
+  for (const heading of ['.area-dialog__heading', '.area-drawer__heading', '.area-infobox__heading-group']) {
+    assert.match(ruleFor(heading)?.body ?? '', /(^|[;\s])gap:\s*0\s*;/, `${heading} should join its title and description`);
+  }
+  const groups = rules.find(rule => rule.selector.includes('.area-checkbox-group__description') && /margin-block-start/.test(rule.body));
+  assert.match(groups?.body ?? '', /margin-block-start:\s*var\(--area-space-2\)/, 'a group description should sit under its legend as a choice description does');
+  assert.match(ruleFor('.area-choice-label')?.body ?? '', /gap:\s*var\(--area-space-2\)/, 'a choice title and its 12/16 description: 2 apart');
+  for (const set of ['.area-checkbox-group__options', '.area-radio-group__options']) {
+    const body = ruleFor(set)?.body ?? '';
+    assert.match(body, /gap:\s*var\(--area-ui-cluster\)/, `${set}: options 8 apart`);
+    assert.match(body, /margin-block-start:\s*var\(--area-gap-row\)/, `${set}: the legend one step further (12) than the options are apart`);
+  }
+  assert.match(ruleFor('.area-infobox')?.body ?? '', /--_label-column:\s*fit-content\(/, 'Infobox\'s label column should fit its labels');
+});
+
+test('every Kbd is a keycap: nothing unboxes it (owner 2026-10-22)', () => {
+  // "i prefer having kbd with backplate everywhere it shows up in all components". Menus, the Command palette, Approval,
+  // Shortcut list and a Search trigger used to strip the plate (`--quiet`, `.area-menu__item .area-kbd`).
+  for (const rule of rules.filter(r => /\.area-kbd(?!__key)/.test(r.selector))) {
+    assert.doesNotMatch(rule.body, /background(-color)?:\s*transparent|padding:\s*0\s*;|border-width:\s*0/, `${rule.selector} unboxes a key`);
+  }
+});
+
 test('soft fields draw a boundary under increased contrast', () => {
   // CONTRAST.md: under increased contrast a required boundary targets 3:1. A soft field's fill alone read 1.07:1,
   // so its resting edge is `input-edge-soft`: none at standard contrast, the strong control edge at more (2026-10-15).

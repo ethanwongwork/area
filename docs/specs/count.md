@@ -164,3 +164,12 @@ Linear and GitHub swap the digits in place.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → static, no change.
 - 2026-10-12 · owner, 2026-10-12: "go with your recommendations" (consistency pass) → the soft plate reads `bg-mark` (O5: one role for a literal written in several families; same paint). (docs/research/consistency-audit-2026-10-12.md)
 - 2026-10-12 · type size and density split (owner) → `mark-label-*` follow the small-text line plus the density's room (`emit/base.ts`). `docs/research/ui-size-scale-2026-10-12.md`.
+
+## Review note, 2026-10-22 (round 69)
+
+- **What changed:** Selection now defaults to the accent, so this family's checked, on, selected, current and filled
+  parts are the accent blue instead of near-black (#282828). Nothing else changed. A theme set to Selection Neutral
+  looks exactly as before; the "Selection / neutral" tile shows it.
+- **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
+  inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
+  blue already; buttons follow Action, which stays neutral.
