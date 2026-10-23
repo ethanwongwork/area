@@ -138,7 +138,7 @@ function ThemeBrowse({ mode, setMode, flowSwitch }: { mode: Mode; setMode: (mode
       ) : (
         <div className="studio-sections">
           {onCanvas.map(entry => (
-            <CanvasSection key={entry.id} id={`axis-${entry.id}`} title={entry.title} lede={entry.description}>
+            <CanvasSection key={entry.id} id={`axis-${entry.id}`} title={entry.title} count={presetsOf(entry).length} lede={entry.description}>
               {/* Every preset a wide tile of one size, holding the same sample, so only the setting
                   differs (Polaris, Geist). The tile is the setting's scope, painting its own ground;
                   the sample is inert, since tabbing through dozens of them would not help. */}

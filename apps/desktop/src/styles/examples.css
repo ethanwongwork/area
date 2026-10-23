@@ -1,0 +1,67 @@
+/* ---------------------------------------------------------------------------
+ * Examples (pages/examples.tsx): whole screens built from Area. App classes only (product UI rule 13): these lay the
+ * screen out; every control, surface and colour is an Area component or token.
+ * ------------------------------------------------------------------------- */
+.ex-canvas { min-inline-size: 960px; border: var(--area-border-width) solid var(--area-border-card); border-radius: var(--area-radius-container, 12px); overflow: hidden; background: var(--area-bg-page) }
+.ex-thumb { inline-size: 1200px; pointer-events: none }
+/* Settings (content/examples/settings.tsx): Untitled UI's Appearance page, a label and its description beside each control. */
+.ex-app--settings { min-block-size: 760px; } /* pick */
+.ex-set { max-inline-size: 880px; gap: var(--area-space-20); } /* pick */
+.ex-set-row { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: var(--area-space-24); align-items: start; } /* pick */
+.ex-set-row__label { display: grid; gap: var(--area-space-2); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
+.ex-set-row__label > strong { font-weight: var(--area-weight-strong); color: var(--area-fg-default); }
+.ex-set-row__label > span { color: var(--area-fg-muted); }
+.ex-set-row__control { display: flex; flex-wrap: wrap; align-items: center; gap: var(--area-space-12); min-inline-size: 0; }
+.ex-set-row__control .area-fieldset__legend, .ex-set-row__control legend { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); }
+.ex-set-foot { display: flex; justify-content: flex-end; gap: var(--area-space-8); }
+.ex-theme-option { display: grid; gap: var(--area-space-8); justify-items: start; }
+/* A theme thumbnail: a tiny window drawn in that theme's own ground, its sidebar and rows as bars. */
+.ex-thumbui-pair { display: flex; inline-size: 128px; block-size: 80px; overflow: hidden; border-radius: var(--area-radius-small); border: var(--area-stroke-width) solid var(--area-border-card); } /* pick */
+.ex-thumbui { display: grid; grid-template-columns: 30% 1fr; flex: 1; min-inline-size: 0; background: var(--area-bg-page); }
+.ex-thumbui__side { display: grid; align-content: start; gap: 4px; padding: 8px 6px; background: var(--area-bg-subtle); } /* pick */
+.ex-thumbui__main { display: grid; align-content: start; gap: 5px; padding: 8px; } /* pick */
+.ex-thumbui i, .ex-thumbui b { display: block; block-size: 4px; border-radius: 2px; background: var(--area-border-divider); } /* pick */
+.ex-thumbui b { inline-size: 60%; block-size: 6px; background: var(--area-fg-muted); }
+/* Mobile (content/examples/mobile.tsx): a phone's Today at 390, times down a dashed line, a composer at the foot. */
+.ex-phone { display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto; gap: var(--area-space-16); inline-size: 390px; block-size: 780px; box-sizing: border-box; padding: var(--area-space-20) var(--area-space-16) var(--area-space-16); border: var(--area-border-width) solid var(--area-border-card); border-radius: 36px; background: var(--area-bg-page); color: var(--area-fg-default); font-family: var(--area-font-sans); font-size: var(--area-text-md-size); line-height: var(--area-text-md-leading); overflow: hidden; } /* pick: a phone's width and corner */
+.ex-phone__head { display: flex; align-items: center; justify-content: space-between; }
+.ex-phone__date { display: grid; gap: var(--area-space-2); }
+.ex-phone__date > span { color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
+.ex-phone__date > strong { font-size: var(--area-title-md-size); line-height: var(--area-title-md-leading); font-weight: var(--area-weight-strong); }
+.ex-phone__day { display: grid; align-content: start; gap: var(--area-space-20); margin: 0; padding: 0 0 0 var(--area-space-16); list-style: none; border-inline-start: var(--area-stroke-width) dashed var(--area-border-divider); }
+.ex-phone__slot { display: grid; gap: var(--area-space-8); }
+.ex-phone__slot > p { margin: 0; }
+.ex-phone__time { justify-self: start; margin-inline-start: calc(var(--area-space-16) * -1 - 24px); padding: 2px 8px; border: var(--area-stroke-width) dashed var(--area-border-divider); border-radius: var(--area-radius-full); background: var(--area-bg-page); color: var(--area-fg-muted); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); } /* pick */
+.ex-phone__tasks { display: grid; gap: var(--area-space-12); }
+.ex-phone__task { display: flex; align-items: center; justify-content: space-between; gap: var(--area-space-8); }
+.ex-phone__card-head { display: flex; align-items: center; gap: var(--area-space-8); }
+.ex-phone__composer { margin-inline: calc(var(--area-space-4) * -1); }
+/* The thumbnail starts at the view's top (WidthZoom zooms it to the view's width); the rest crops at the foot. */
+.gallery-tile__view:has(> .ex-thumb-zoom) { place-items: start; }
+/* The page takes the Material's page levers (grain, page glow) over its ground; the sidebar is chrome (styles material.css). */
+.ex-app { display: grid; grid-template-columns: 220px minmax(0, 1fr); min-block-size: 900px; background: var(--area-material-page), var(--area-bg-page); color: var(--area-fg-default); font-family: var(--area-font-sans); font-size: var(--area-text-md-size); line-height: var(--area-text-md-leading) }
+.ex-side { display: flex; flex-direction: column; gap: var(--area-space-12); padding: var(--area-space-12) var(--area-space-8); --area-chrome-fill: var(--area-bg-subtle); background: var(--area-chrome-bg); border-inline-end: var(--area-border-width) solid var(--area-border-decorative) }
+.ex-brand { display: flex; align-items: center; gap: var(--area-space-8); padding: var(--area-space-4) var(--area-space-8); font-weight: var(--area-weight-strong, 600) }
+.ex-side__foot { margin-block-start: auto; display: grid; gap: var(--area-space-12); padding-inline: var(--area-space-8) }
+.ex-side__foot .area-nav { margin-inline: calc(-1 * var(--area-space-8)) }
+.ex-body { display: flex; flex-direction: column; min-inline-size: 0 }
+.ex-main { display: grid; gap: var(--area-space-16); padding: var(--area-space-20, 20px) var(--area-space-24); align-content: start }
+.ex-head { display: flex; align-items: end; justify-content: space-between; gap: var(--area-space-16); flex-wrap: wrap }
+.ex-head__actions, .ex-filters { display: flex; align-items: center; gap: var(--area-space-8); flex-wrap: wrap }
+.ex-kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--area-space-12) }
+.ex-split { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: var(--area-space-12); align-items: start }
+.ex-kpis > *, .ex-split > * { inline-size: 100%; min-inline-size: 0 }
+.ex-meters { display: grid; gap: var(--area-space-16) }
+.ex-pager { display: flex; justify-content: flex-end }
+.ex-form { display: grid; gap: var(--area-space-12) }
+.ex-chart { display: block; inline-size: 100%; block-size: auto }
+.ex-chart__grid { stroke: var(--area-border-decorative); stroke-width: 1 }
+.ex-chart__label { fill: var(--area-fg-muted); font-size: 11px; font-family: var(--area-font-sans) }
+.ex-chart__area { fill: color-mix(in oklab, var(--area-accent-solid) 12%, transparent) }
+.ex-chart__line { fill: none; stroke: var(--area-accent-solid); stroke-width: 2; stroke-linejoin: round; stroke-linecap: round }
+.ex-chart__prior { fill: none; stroke: var(--area-border); stroke-width: 1.5; stroke-dasharray: 4 4 }
+.ex-chart__dot { fill: var(--area-accent-solid); stroke: var(--area-bg-surface); stroke-width: 2 }
+.ex-legend { display: flex; gap: var(--area-space-16); color: var(--area-fg-muted); font-size: var(--area-text-sm-size) }
+.ex-legend > span { display: inline-flex; align-items: center; gap: var(--area-space-6, 6px) }
+.ex-legend > span::before { content: ""; inline-size: 14px; block-size: 2px; border-radius: 1px; background: var(--area-accent-solid) }
+.ex-legend__prior::before { background: var(--area-border) !important }

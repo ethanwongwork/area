@@ -2,6 +2,15 @@
 
 ## Current state (2026-10-22)
 
+- **PR #150, `claude/electron-canvas-feed-layout-8b2924`.** The Canvas as a documentation feed (32 margin, 12 / 40
+  rhythm measured to ink, title + count + subtitle per section), Code block md corner concentric with its copy (11),
+  flush Table trims its outer rows, and the Cursor audit's validated items: Menu-family group labels take Nav's (rows'
+  size, 500), `check:app-css` (21 known rules, gaps in PRODUCT_UI.md), `studio.css` split into `src/styles/` (pixel
+  identical), layout values in one block. Owner reviewing on https://claude.ai/artifact/KFRgrD8c6v2BtS8hcyGPWa
+  (collection `verdicts`, one doc per item 1–13). Owner decided 2026-10-23: rows 28 at Compact, unruled Canvas and
+  Inspector bars with the Sidebar on the chrome ground, Pin in the count's place (rule 2 exception) all applied.
+  Audit and verdict table: `docs/research/cursor-audit-2026-10-22.md`.
+
 - **Status.** `main` is at PR #148; branch `claude/component-motion-review-1ac5f3`, uncommitted. 119 of 119 families
   Complete: rounds 67–70 approved (round 69's last 27 in chat, "same Selection change"). This branch holds: motion
   sweep fixes, text-pair rule, every Kbd a keycap, Selection defaults to the accent with `stroke-selected` and

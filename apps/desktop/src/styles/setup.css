@@ -1,0 +1,144 @@
+  /* --- Theme · Setup (pages/theme-setup.tsx) ----------------------------------- */
+  /* One step (owner, 2026-10-21, after a product finder's flow): the stage, then the question with where it sits, the
+     choices, what the shown choice does, and Back, Use default and Continue, in one readable column. */
+  .setup { display: grid; gap: var(--area-space-24); align-content: start; max-inline-size: 960px; } /* pick; the Canvas's 32 margin is its inset (was 24 / 16 / 32 inside the 14 margin) */
+  .setup--start { max-inline-size: 720px; } /* pick */
+  /* The stage: the chosen view at a fixed share of the window, so the question and the choices stay in sight under it. */
+  /* One track the view's own size, so a view laid out at 1x and larger than the stage centres on it as it scales. */
+  .setup__stage-view { display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); place-items: unsafe center; inline-size: 100%; block-size: clamp(200px, 36vh, 420px); min-block-size: 0; overflow: clip; } /* pick */
+
+  /* Side panel (Tesla's design page, the owner's Appearance picker): the visual fills the left and the window's height;
+     the open category's settings in a 400 column that scrolls on its own, the way between categories fixed at its foot. */
+  .setup--side { grid-template-columns: minmax(0, 1fr) 400px; max-inline-size: none; block-size: 100%; box-sizing: border-box; padding: 0; gap: var(--area-space-16); } /* pick */
+  .setup--side .setup__stage { min-block-size: 0; }
+  .setup--side .setup__stage-view { block-size: auto; min-block-size: 0; }
+  /* One setting's section: its name and question, then its choice cards or swatches, sections 24 apart. */
+  .setup__panel-body { gap: var(--area-space-24); }
+  .setup-choice { display: grid; gap: var(--area-space-8); }
+  /* One track the frame's size, so a mini UI laid out at 1x centres on it as it scales (as the visual's view does). */
+  .setup-choice__picture { display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); place-items: unsafe center; inline-size: 100%; block-size: 100%; min-block-size: 0; overflow: hidden; }
+  /* The swatches' legend and question set as a Radio group's (choice.css: the legend in the control text, the question
+     in the description's), so every section reads alike. */
+  .setup-choice__swatches { display: grid; justify-items: start; }
+  .setup-choice__swatches > .area-color-swatch-picker { margin-block: var(--area-ui-stack) var(--area-space-4); }
+  .setup-choice__legend { color: var(--area-fg-default); font-size: var(--area-control-md-text); line-height: var(--area-control-md-leading); }
+  .setup-choice__question { margin-block-start: var(--area-ui-stack); color: var(--area-fg-muted); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); }
+  .setup-choice__value { font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); }
+  .setup__panel { display: grid; grid-template-rows: minmax(0, 1fr) auto; min-block-size: 0; border: var(--area-stroke-width) solid var(--area-border-card); border-radius: var(--_tile-radius); background: var(--area-bg-page); overflow: hidden; }
+  .setup__panel-body { display: grid; align-content: start; gap: var(--area-space-16); padding: var(--area-space-16); overflow: auto; }
+  .setup__panel-foot { padding: var(--area-space-12) var(--area-space-16); border-block-start: var(--area-stroke-width) solid var(--area-border-decorative); }
+  .setup__panel .setup__nav { flex-wrap: wrap; }
+
+
+  .setup__nav { display: flex; align-items: center; justify-content: space-between; gap: var(--area-space-8); }
+  .setup__nav-end { display: flex; align-items: center; gap: var(--area-space-8); }
+  .setup__nav--start { justify-content: flex-start; }
+  /* The Sidebar's rail starts where the rows' text does, so its markers line up under All. */
+  .setup-rail { padding: var(--area-space-8) var(--area-ui-row-inset) 0 calc(var(--area-ui-row-inset) * 2); }
+  .setup__link { color: inherit; text-decoration: none; }
+  .setup__link:hover { text-decoration: underline; }
+  .setup__value { max-inline-size: 96px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; } /* pick */
+  /*
+   * Choice glyphs (src/choice-visuals.tsx): one mark per setting, drawn only from the option's tokens at true size, on the
+   * page's ground, so the property is the whole picture (Radix's theme panel; Untitled UI's swatches).
+   */
+  .cv-glyph { display: grid; place-items: center; align-self: stretch; justify-self: stretch; border-radius: var(--area-radius-small); background: var(--area-bg-page); color: var(--area-fg-default); }
+  .cv-swatch { inline-size: 32px; block-size: 32px; border-radius: var(--area-radius-full); background: var(--area-accent-solid); box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-token-swatch-ring); } /* pick */
+  .cv-bar { inline-size: 56px; block-size: var(--area-control-sm); border-radius: var(--area-radius-control-sm); } /* pick */
+  .cv-bar--action { background: var(--area-action-solid, var(--area-fg-default)); }
+  .cv-bar--pill { border-radius: var(--area-radius-full); background: var(--area-fg-default); }
+  .cv-check { display: grid; place-items: center; inline-size: 28px; block-size: 28px; border-radius: var(--area-radius-control-xs); background: var(--area-selection-solid); } /* pick */
+  .cv-check::after { content: ""; inline-size: 10px; block-size: 5px; border-inline-start: 2px solid var(--area-fg-on-selection); border-block-end: 2px solid var(--area-fg-on-selection); translate: 0 -1px; rotate: -45deg; } /* pick: the check, as Checkbox draws it */
+  .cv-steps { display: flex; gap: 6px; } /* pick */
+  .cv-steps > i { inline-size: 28px; block-size: 28px; border-radius: var(--area-radius-full); box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-token-swatch-ring); } /* pick */
+  .cv-step--page { background: var(--area-bg-page); }
+  .cv-step--subtle { background: var(--area-bg-subtle); }
+  .cv-step--edge { background: var(--area-border-divider); }
+  .cv-step--muted { background: var(--area-fg-muted); }
+  .cv-ground { display: grid; place-items: center; inline-size: 88px; block-size: 64px; border-radius: var(--area-radius-small); background: var(--area-bg-page); box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-token-swatch-ring); } /* pick */
+  .cv-ground > i { inline-size: 48px; block-size: 6px; border-radius: 3px; background: var(--area-fg-default); } /* pick */
+  .cv-layers { display: grid; place-items: center; inline-size: 88px; block-size: 64px; border-radius: var(--area-radius-small); background: var(--area-bg-page); box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-token-swatch-ring); } /* pick */
+  .cv-layers > i { display: grid; place-items: center; inline-size: 64px; block-size: 44px; border-radius: var(--area-radius-small); background: var(--area-bg-subtle); } /* pick */
+  .cv-layers > i > b { inline-size: 40px; block-size: 24px; border-radius: var(--area-radius-min); background: var(--area-bg-surface); box-shadow: 0 0 0 var(--area-border-width) var(--area-border-card); } /* pick */
+  .cv-lines { display: grid; gap: 7px; inline-size: 64px; } /* pick */
+  .cv-lines > i { block-size: 0; border-block-start: var(--area-stroke-width) solid var(--_line, currentColor); }
+  .cv-lines > .cv-line--card { --_line: var(--area-border-card); }
+  .cv-lines > .cv-line--divider { --_line: var(--area-border-divider); }
+  .cv-lines > .cv-line--control { --_line: var(--area-edge-control); }
+  .cv-type { font-size: var(--area-title-md-size); line-height: var(--area-title-md-leading); font-weight: var(--area-weight-regular); }
+  .cv-rows { display: grid; inline-size: 96px; } /* pick */
+  .cv-rows > i { display: block; block-size: var(--area-control-sm); border-block-end: var(--area-stroke-width) solid var(--area-border-decorative); }
+  .cv-rows > i::before { content: ""; display: block; inline-size: 56px; block-size: 4px; margin-block-start: calc(var(--area-control-sm) / 2 - 2px); border-radius: 2px; background: var(--area-fg-muted); } /* pick */
+  .cv-corner { inline-size: 36px; block-size: 36px; border-start-start-radius: var(--area-radius-control-lg); border-block-start: 2px solid var(--area-fg-default); border-inline-start: 2px solid var(--area-fg-default); } /* pick: Radix's radius glyph, one corner at the setting's large control radius */
+  .cv-square { inline-size: 32px; block-size: 32px; box-sizing: border-box; border-radius: var(--area-radius-small); background: var(--area-bg-surface); } /* pick */
+  .cv-square--edge { border: var(--area-border-width) solid var(--area-border-card); }
+  .cv-square--control { border: var(--area-stroke-width) solid var(--area-edge-control); }
+  .cv-square--hover { border: var(--area-stroke-width) solid var(--area-edge-control-hover); }
+  .cv-square--selected { border: var(--area-stroke-width) solid var(--area-stroke-selected); box-shadow: inset 0 0 0 max(0px, calc(var(--area-selected-width) - var(--area-stroke-width))) var(--area-stroke-selected); }
+  .cv-square--tint { background: linear-gradient(var(--area-selected-tint), var(--area-selected-tint)), var(--area-bg-surface); }
+  .cv-square--focus { border: var(--area-stroke-width) solid var(--area-edge-control); outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-gap); }
+  .cv-square--lift { border: var(--area-border-width) solid var(--area-border-card); }
+  .cv-pair { display: flex; gap: 8px; } /* pick */
+  .cv-plates { display: grid; gap: 3px; inline-size: 72px; } /* pick */
+  .cv-plates > i { display: block; block-size: 9px; border-radius: var(--area-radius-row); } /* pick: a row's plate, small */
+  .cv-plate--rest { box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-border-decorative); }
+  .cv-plate--hover { background: var(--area-bg-component-hover); }
+  .cv-plate--selected { background: var(--area-bg-component-active); }
+  .cv-plate--pressed { background: var(--area-bg-component-pressed); }
+  .cv-track { position: relative; inline-size: 64px; block-size: 4px; border-radius: 2px; background: var(--area-fill-track); } /* pick */
+  .cv-track > i { position: absolute; inset-block-start: -6px; inline-size: 16px; block-size: 16px; border-radius: var(--area-radius-full); background: var(--area-fg-default); animation: cv-travel calc(var(--area-duration-base) * 4) var(--area-ease-in-out) infinite alternate; } /* pick */
+  @keyframes cv-travel { from { inset-inline-start: 0; } to { inset-inline-start: calc(100% - 16px); } }
+  .cv-card { inline-size: 200px; } /* pick */
+  /* The mini UI: a tiny window from real tokens (Untitled UI's thumbnails), at its own size, scaled into the choice. */
+  .cv-mini { display: grid; grid-template-columns: 64px 176px; inline-size: 240px; block-size: 160px; overflow: hidden; border-radius: var(--area-radius-surface); background: var(--area-bg-page); box-shadow: inset 0 0 0 var(--area-border-width) var(--area-border-card), 0 2px 8px -2px rgb(0 0 0 / 0.12); } /* pick: the reference's soft lift under the window */
+  .cv-mini__line { display: flex; align-items: center; gap: 6px; } /* pick */
+  .cv-mini__line > .cv-mini__field { flex: 1 1 auto; }
+  .cv-mini__check { inline-size: var(--area-control-xs); max-inline-size: 16px; block-size: 16px; flex: none; border-radius: var(--area-radius-control-xs); background: var(--area-selection-solid); } /* pick: a checked box in the Selection paint */
+  /* A mark: one simple example at true size on a small page-ground plate, the mini UI's white window and soft lift,
+     so a shadow, a plate or a line reads against the page it is measured on, not the card's grey. */
+  .cv-mark { display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); place-items: unsafe center; overflow: hidden; inline-size: 84%; block-size: 78%; border-radius: var(--area-radius-small); background: var(--area-bg-page); box-shadow: inset 0 0 0 var(--area-border-width) var(--area-border-card), 0 2px 8px -2px rgb(0 0 0 / 0.12); color: var(--area-fg-default); } /* pick */
+  .cv-mini__side { display: grid; align-content: start; gap: 2px; padding: 10px 6px; background: var(--area-bg-subtle); border-inline-end: var(--area-border-width) solid var(--area-border-decorative); } /* pick */
+  .cv-mini__row { display: block; block-size: var(--area-control-xs); border-radius: var(--area-radius-row); }
+  .cv-mini__row--current { background: var(--area-bg-component-active); }
+  .cv-mini__main { display: grid; align-content: start; gap: 8px; padding: 10px; } /* pick */
+  .cv-mini__head { display: flex; align-items: center; justify-content: space-between; }
+  .cv-mini__head > b { inline-size: 56px; block-size: 6px; border-radius: 3px; background: var(--area-fg-default); } /* pick */
+  .cv-mini__action { inline-size: 40px; block-size: var(--area-control-xs); border-radius: var(--area-radius-control-xs); background: var(--area-action-solid, var(--area-fg-default)); } /* pick */
+  .cv-mini__card { display: grid; gap: 6px; padding: 8px; border-radius: var(--area-radius-small); background: var(--area-bg-surface); border: var(--area-border-width) solid var(--area-border-card); box-shadow: var(--area-shadow-resting); } /* pick */
+  .cv-mini__card > b { inline-size: 48px; block-size: 5px; border-radius: 3px; background: var(--area-fg-default); } /* pick */
+  .cv-mini__card > i { inline-size: 88px; block-size: 4px; border-radius: 2px; background: var(--area-fg-muted); } /* pick */
+  .cv-mini__field { display: block; block-size: var(--area-control-xs); border-radius: var(--area-radius-control-xs); border: var(--area-stroke-width) solid var(--area-edge-control); background: var(--area-input-bg, var(--area-bg-surface)); }
+  .cv-mini__menu { display: grid; gap: 2px; inline-size: 96px; padding: 4px; border-radius: var(--area-radius-small); background: var(--area-bg-surface); border: var(--area-border-width) solid var(--area-border-float); box-shadow: var(--area-shadow-float); } /* pick */
+  .cv-mini__menu > i { display: block; block-size: 10px; border-radius: var(--area-radius-row); } /* pick */
+  /* Choice previews (Radio and Checkbox `layout="preview"`): a mini UI at a fixed size, scaled to its card's frame. */
+  .demo-preview { display: grid; place-items: center; inline-size: 100%; block-size: 100%; }
+  .demo-preview > .cv-mini, .demo-preview > span > .cv-mini { zoom: 0.42; } /* pick */
+  .demo-preview--split { grid-template-columns: 1fr 1fr; overflow: hidden; }
+  .demo-preview--split > span { display: grid; place-items: center; overflow: hidden; }
+
+  /* The views (pages/theme-views.tsx), laid out at their own size; Scaled fits each to its card. */
+  .setup-row { display: flex; align-items: center; gap: var(--area-space-8); }
+  .setup-row--start { justify-content: flex-start; }
+  .setup-row--end { justify-content: flex-end; }
+  .setup-strong { font-weight: var(--area-weight-strong); color: var(--area-fg-default); }
+  .setup-menu { inline-size: 176px; } /* pick */
+  .setup-card { inline-size: 200px; } /* pick */
+  .setup-nav { --area-nav-inline-size: 100%; }
+  /* Components: three columns of controls on the page's ground: actions and fields, choices, marks and surfaces. */
+  .setup-sheet { --area-input-inline-size: 216px; --area-select-inline-size: 216px; display: grid; grid-template-columns: repeat(3, auto); gap: var(--area-space-24); align-items: start; padding: var(--area-space-24); border-radius: var(--area-radius-container); background: var(--area-bg-page); } /* pick: Input's and Select's public width hooks */
+  .setup-sheet__radios legend, .setup-bento__radios legend { position: absolute; inline-size: 1px; block-size: 1px; overflow: hidden; clip-path: inset(50%); }
+  .setup-sheet .area-slider, .setup-sheet .area-progress { inline-size: 216px; } /* pick */
+  .setup-sheet__col { display: grid; gap: var(--area-space-12); justify-items: start; }
+  /* Bento: three columns of product cards on the page's ground, wide and tall ones among them, packed densely. */
+  .setup-bento { display: grid; grid-template-columns: repeat(3, 224px); grid-auto-rows: auto; grid-auto-flow: dense; gap: var(--area-space-12); padding: var(--area-space-16); border-radius: var(--area-radius-container); background: var(--area-bg-page); } /* pick */
+  .setup-bento .area-slider-range { inline-size: 100%; }
+  .setup-bento__cell { --area-input-inline-size: 100%; } /* fields take their card's width (Input's public hook) */
+  .setup-bento__cell .area-segmented { inline-size: 100%; }
+  .setup-bento__radios .area-radio { inline-size: 100%; }
+  .setup-bento__cell { min-inline-size: 0; }
+  .setup-bento__cell .area-card__content { display: grid; gap: var(--area-space-8); }
+  .setup-bento__cell--tall { grid-row: span 2; }
+  .setup-bento__cell--wide { grid-column: span 2; }
+  .setup-bento__cell--bare { display: grid; place-items: center; }
+  /* Example: the Testing tab's screen at its own width. */
+  .setup-example { inline-size: 1200px; pointer-events: none; } /* pick: the Testing thumbnails' width */

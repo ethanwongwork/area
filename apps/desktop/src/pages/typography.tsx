@@ -181,7 +181,7 @@ export function TypographyPage() {
             if (!list.length) return null;
             const styleName = (entry: TypeRole) => `${entry.name}${w.suffix}`;
             return (
-              <CanvasSection key={`${group.id}-${w.id}`} role={mode === "grid" ? "group" : undefined} id={`type-${group.id}-${w.id}`} title={`${group.label}${w.suffix}`}
+              <CanvasSection key={`${group.id}-${w.id}`} role={mode === "grid" ? "group" : undefined} id={`type-${group.id}-${w.id}`} title={`${group.label}${w.suffix}`} count={list.length}
                 lede={w.id === "regular" ? group.lede : `The same ramp at the strong weight (${w.value}), for emphasis and titles that need it.`}>
                 {mode === "grid" ? (
                   // Grid: every style a cell on the surface, its "Aa" set in the style over its name and

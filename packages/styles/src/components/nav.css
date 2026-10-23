@@ -321,6 +321,24 @@
     .area-nav__row--reveal:not(:hover, :focus-within, :has([aria-expanded="true"][aria-haspopup])) > .area-nav__actions { pointer-events: none; }
     .area-nav__row--reveal:is(:hover, :focus-within, :has([aria-expanded="true"][aria-haspopup])) > .area-nav__actions { opacity: 1; transition-duration: 0s; }
   }
+  /*
+   * Over a trailing annotation (a count), revealed actions take its place instead of keeping a slot beside it (owner,
+   * 2026-10-22, review of docs/research/cursor-audit-2026-10-22.md item 9: "build it"; product UI rule 2's exception):
+   * Notion's sidebar row keeps a 0-wide slot at rest and shows its "…" and "+" at the row's end on hover
+   * (tree-view/notion--sidebar-row); ChatGPT's recents cover the row's end with their actions
+   * (baseline/chatgpt--sidebar-recent--hover); Figma's file browser holds a 24 action at the end (baseline/figma--sidebar-row).
+   * So the count keeps the column every row's count shares, the All row's included, and gives way as the actions land,
+   * at once on hover and back on `fast`. Without hover the actions always show and the count stays hidden.
+   */
+  .area-nav__row--reveal:has(> .area-nav__item > .area-nav__trailing) { position: relative; padding-inline-end: 0; }
+  .area-nav__row--reveal > .area-nav__item > .area-nav__trailing { transition: opacity var(--area-duration-fast) var(--area-ease-out); }
+  .area-nav__row--reveal:has(> .area-nav__item > .area-nav__trailing) > .area-nav__actions { position: absolute; inset-block: 0; inset-inline-end: var(--_nav-action-inset); }
+  @media (hover: hover) {
+    .area-nav__row--reveal:is(:hover, :focus-within, :has([aria-expanded="true"][aria-haspopup])) > .area-nav__item > .area-nav__trailing { opacity: 0; transition-duration: 0s; }
+  }
+  @media not (hover: hover) {
+    .area-nav__row--reveal > .area-nav__item > .area-nav__trailing { visibility: hidden; }
+  }
 
   .area-nav--horizontal .area-nav__separator {
     inline-size: var(--area-stroke-width);

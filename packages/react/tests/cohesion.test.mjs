@@ -15,6 +15,9 @@ test('hover changes a plate, edge or underline, never the ink', () => {
     // a section chevron, a drag handle): it appears, and no ink changes. A tooltip may fade.
     // An inherited colour follows its owner.
     if (/tooltip/.test(selector)) continue;
+    // Product UI rule 2's one exception (owner, 2026-10-22): a row's trailing annotation (Nav's count) gives way to the
+    // actions revealed in its place (nav.css, revealActions over a trailing annotation).
+    if (/\.area-nav__row--reveal\b.*> \.area-nav__trailing$/.test(selector.trim())) continue;
     for (const [, prop, value] of body.matchAll(/(?:^|[;\s])(color|opacity)\s*:\s*([^;]+)/g)) {
       if (prop === 'opacity' && value.trim() === '1') continue;
       assert.ok(prop === 'color' && /^(inherit|HighlightText|LinkText|CanvasText)$/.test(value.trim()), `${selector} sets ${prop}: ${value.trim()} on hover`);

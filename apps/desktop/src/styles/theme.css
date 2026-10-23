@@ -1,0 +1,81 @@
+  /* --- Theme ---------------------------------------------------------------- */
+
+  /*
+   * Theme illustrations (src/abstract.tsx): one real component per setting, real text, at its real size, centred
+   * (owner, 2026-10-19: "real components ... or at least real text ... simple, and easy to recognize"). App classes
+   * only place them: a row of two, a card's width, a page's ground under a card, and real text at the type roles.
+   */
+  /* The drawing at its own size; Fit (src/abstract.tsx) zooms it to its share of the tile. */
+  .lang-art { display: grid; place-items: center; inline-size: max-content; flex: none; text-align: start; transform-origin: center; }
+  .lang-row { display: flex; align-items: center; justify-content: center; gap: var(--area-space-8); }
+  .lang-row--start { justify-content: flex-start; }
+  .lang-col { --area-input-inline-size: 184px; display: grid; gap: var(--area-space-8); justify-items: start; } /* pick: Input's public width hook */
+  /* Type: the ramp, a role from each tier at the preset's size, its size in px at the end. */
+  .lang-ramp { display: grid; grid-template-columns: auto auto; align-items: baseline; column-gap: var(--area-space-24); row-gap: var(--area-space-4); color: var(--area-fg-default); }
+  .lang-ramp__row { display: contents; }
+  .lang-ramp__sample { font-weight: var(--area-weight-strong); white-space: nowrap; }
+  .lang-ramp__sample--display-sm { font-size: var(--area-display-sm-size); line-height: var(--area-display-sm-leading); letter-spacing: var(--area-display-sm-tracking); }
+  .lang-ramp__sample--title-md { font-size: var(--area-title-md-size); line-height: var(--area-title-md-leading); }
+  .lang-ramp__sample--title-xs { font-size: var(--area-title-xs-size); line-height: var(--area-title-xs-leading); }
+  .lang-ramp__sample--text-sm { font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); font-weight: var(--area-weight-regular); }
+  .lang-ramp__sample--text-xs { font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); font-weight: var(--area-weight-regular); color: var(--area-fg-muted); }
+  .lang-ramp__size { justify-self: end; color: var(--area-fg-muted); font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); font-variant-numeric: tabular-nums; }
+  .lang-card { inline-size: 176px; } /* pick */
+  .lang-card .lang-row { margin-block-start: var(--area-space-4); }
+  .lang-nav { --area-nav-inline-size: 176px; } /* pick */
+  .lang-row { --area-input-inline-size: 128px; } /* pick: Input's public width hook */
+  /* Grounds and layers: a small window, its bar and the page's ground round a card. */
+  .lang-window { display: grid; inline-size: 208px; overflow: clip; border: var(--area-border-width) solid var(--area-border-card); border-radius: var(--area-radius-container); background: var(--area-bg-page); box-shadow: var(--area-shadow-edge), var(--area-shadow-resting); } /* pick */
+  .lang-window__bar { display: flex; gap: 4px; padding: var(--area-space-8) var(--area-space-10); border-block-end: var(--area-border-width) solid var(--area-border-decorative); background: var(--area-bg-surface); } /* a raised bar, so the page under it reads against white */
+  .lang-window__bar > i { inline-size: 6px; block-size: 6px; border-radius: var(--area-radius-full); background: var(--area-border); } /* pick */
+  .lang-window__page { display: grid; }
+  .lang-window__card { inline-size: 100%; }
+  /* Ground: the page alone, real text straight on it. */
+  .lang-page { display: grid; gap: var(--area-space-4); padding: var(--area-space-16); color: var(--area-fg-default); }
+  .lang-page__title { font-size: var(--area-title-sm-size); line-height: var(--area-title-sm-leading); font-weight: var(--area-weight-strong); }
+  .lang-page__body { font-size: var(--area-text-xs-size); line-height: var(--area-text-xs-leading); color: var(--area-fg-muted); }
+  /* Layers: the sidebar on the chrome's ground, the page, a card raised on it and a soft field inside. */
+  .lang-layers { display: grid; grid-template-columns: 72px minmax(0, 1fr); } /* pick */
+  .lang-layers__side { --area-chrome-fill: var(--area-bg-subtle); padding: var(--area-space-8) var(--area-space-6); border-inline-end: var(--area-border-width) solid var(--area-border-decorative); background: var(--area-chrome-bg); } /* the sidebar's ground, as the Testing screens draw it */
+  .lang-layers__nav { --area-nav-inline-size: 100%; }
+  .lang-layers__main { display: grid; padding: var(--area-space-12); }
+  /* Surface: two cards overlapping, the front one down and to the end. */
+  /* Close-ups (src/abstract.tsx, CloseUp): a window on the page's ground filling the stage, the whole component centred
+     in it a little over its size, so a half-pixel line or a faint shadow shows and the component reads as itself. */
+  .lang-closeup {
+    display: grid;
+    place-items: center;
+    align-self: stretch;
+    justify-self: stretch;
+    overflow: clip;
+    border-radius: var(--area-radius-small);
+    background: var(--area-bg-page);
+  }
+  .lang-closeup__subject { scale: var(--_scale); }
+  .lang-zoom-card { inline-size: 112px; } /* pick */
+  .lang-zoom-field { --area-input-inline-size: 128px; align-items: start; } /* pick: Input's public width hook */
+  .lang-zoom-menu { inline-size: 128px; } /* pick */
+  .lang-zoom-narrow { --area-input-inline-size: 96px; align-items: start; } /* pick: Input's public width hook; the narrowest close-up */
+  .lang-zoom-whole { padding: var(--area-space-24); background: var(--area-bg-page); border-radius: var(--area-radius-small); }
+  /* Elevation: a menu shown in place, at a menu's width. */
+  /* Theme: states (src/abstract.tsx). A tile cannot hover or take focus, so these paint the state from the tokens
+     the components read in it: the field's hover edge (input.css), its focus (input.css :focus-within), a control's and
+     a container's ring (each family's :focus-visible), the card's hover lift (surface.css) and the row's press
+     (surface.css .area-menu__item:active). Selected and the hover row are the components' own (Card `selected`,
+     MenuItem data-highlighted / data-selected). */
+  .lang-state-hover.area-input { border-color: var(--area-edge-control-hover); }
+  .lang-state-focus-field.area-input {
+    border-color: var(--_border-focus);
+    box-shadow: var(--_field-lift), 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
+    outline: var(--area-field-focus-outline-width) solid var(--_focus-outline);
+    outline-offset: var(--area-focus-offset);
+  }
+  .lang-state-focus { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  .lang-state-focus-gap { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-gap); }
+  .lang-state-lift.area-card { --_card-lift: var(--area-shadow-lift); }
+  .area-menu__item.lang-state-pressed { background-color: var(--area-bg-component-pressed); }
+
+
+/* Theme (src/pages/theme.tsx): the custom properties a preset writes, one Code each, wrapping. */
+.studio-writes { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--area-space-4); }
+.studio-brand__colour { display: inline-flex; align-items: center; gap: var(--area-space-6); }

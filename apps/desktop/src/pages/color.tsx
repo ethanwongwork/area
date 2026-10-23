@@ -200,7 +200,7 @@ export function ColorPage() {
             const steps = entry.steps.map(step => paints(entry.id, step)).filter(passes);
             const pick = (level: number) => choose(`${entry.id}-${level}`);
             return (
-              <CanvasSection key={entry.id} role={mode === "list" ? undefined : "group"} id={`scale-${entry.id}`} title={view ? undefined : title(entry.id)}>
+              <CanvasSection key={entry.id} role={mode === "list" ? undefined : "group"} id={`scale-${entry.id}`} title={view ? undefined : title(entry.id)} count={steps.length}>
                 {mode === "list" ? (
                   // List: one row per step, its token and values.
                     <Table size="md" interactive flush aria-label={`${title(entry.id)} steps`}>

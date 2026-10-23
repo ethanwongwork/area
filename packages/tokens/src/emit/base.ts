@@ -325,7 +325,7 @@ export function derivedTokens(): Record<string, string> {
  * level   the density level (−1, 0, 1) clamped by the type size's bounds: Compact stops at 14,
  *         Comfortable starts at 13, so those pairings resolve to Default.
  * height  the tier's text line plus 2 × its room, never under 24 (xs: 20). Rooms at Default are
- *         xs 4, sm 4, md 6, lg 10, xl 12 and rows 6; each level moves them 2.
+ *         xs 4, sm 4, md 6, lg 10, xl 12 and rows 6; each level moves them 2 (rows never under 5).
  * step    spacing keeps each level's ratio of space to type (Compact 12 at 12, Default 16 at 14,
  *         Comfortable 20 at 14), rounded to halves: round((16 − ratio × base) / 4, 0.5). It is
  *         `ui-dense`, the factor component insets are written against (`x − y × ui-dense`, every
@@ -346,7 +346,11 @@ function sizeDerivations(): Record<string, string> {
     [`${PREFIX}ui-dense`]: `round(nearest, calc((16 - (8 / 7 + ${up} * 2 / 7 + ${down} / 7) * ${v("type-base")}) / 4), 0.5)`,
     [`${PREFIX}ui-size`]: v("text-sm-size"),
     [`${PREFIX}ui-leading`]: v("text-sm-leading"),
-    [`${PREFIX}ui-row`]: `calc(${v("type-leading")} + (6px + 2px * ${level}) * 2)`,
+    // Rows keep at least 5 above and below their text (owner, 2026-10-22, review of docs/research/cursor-audit-2026-10-22.md
+    // item 2: "use the option"): 28 at the app's type 13 Compact, where the level's 4 made 26. Cursor's Agents rows 28
+    // (12/16 + 6), Figma's file-browser rows 28 (11/16), ChatGPT 35 (14/20); Notion's 30 (14/21) kept Area's 1.44
+    // proportion. Default and Comfortable (6, 8) are unchanged; rows no longer equal md controls at Compact (26).
+    [`${PREFIX}ui-row`]: `calc(${v("type-leading")} + max(5px, 6px + 2px * ${level}) * 2)`,
     [`${PREFIX}ui-row-inset`]: "8px",
     // The break between stacked row plates (Nav, Menu, List box, Tree view…): a separation, not spacing, so it holds
     // at every type and density (owner 2026-10-21; ChatGPT's 35 and Notion's 30 rows sit 1 apart). Was 2 − 2 × step:

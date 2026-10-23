@@ -175,7 +175,10 @@
     --_code-copy-top: calc(var(--area-space-12) + (var(--area-text-sm-leading) - var(--area-control-sm)) / 2);
     --_code-copy-end: var(--area-space-8);
     --_code-copy-clear: var(--area-space-48);
-    --_code-radius: var(--area-radius-container);
+    /* spec (owner, 2026-10-22: "the corner inset here is incorrect"): concentric with the header's copy, as sm is
+       (round 11): the copy's corner plus its inset and the border, 6 + 4 + 1 = 11, and square at Sharp
+       (radius-concentric 0). Was radius-container 12, which left the copy's 6 corner 5 in under a 12 one. */
+    --_code-radius: calc(var(--area-radius-control-sm) + (var(--_code-header-block) + var(--area-stroke-width)) * var(--area-radius-concentric));
   }
 
   .area-code-block--sm {
@@ -209,9 +212,8 @@
     /* spec (audit S7a): Card's edge for a block standing alone; was border-decorative #f3. It has no shadow to carry
        it, so the frame is `stroke-width`, as Table's and Composer's (consistency pass 2026-10-12). */
     border: var(--area-stroke-width) solid var(--area-border-card);
-    /* spec: the container corner, 12 at both densities, as Panel. Concentric with the header's copy
-       action (radius 6, 5 in = 11); ChatGPT's 24 wraps a 48 header with 36 round buttons 7 in,
-       which Area doesn't have (owner, 2026-10-02; reverses audit G-27 A). Code stays 14/20. */
+    /* spec: concentric with the header's copy action at both sizes (md 11, sm 10; owner, 2026-10-22 and round 11);
+       ChatGPT's 24 wraps a 48 header with 36 round buttons 7 in, which Area doesn't have. Code stays 14/20. */
     border-radius: var(--_code-radius);
     background-color: var(--area-bg-code);
     overflow: hidden;

@@ -50,6 +50,8 @@ Raised with the owner (each was approved as is, so not changed):
   while Accordion's trigger, the other collapsible head, is 500.
 - Small group labels: Menu, List box and Command palette group labels are 12/16 400 muted; Badge, Count and Table's
   small labels are 12/16 500.
+  Superseded 2026-10-23: the owner kept the change in `docs/research/cursor-audit-2026-10-22.md` item 1, so Menu,
+  List box, Combobox, Command palette, Custom select and Context menu labels take Nav's (the rows' size, 500, muted).
 - Box model's numbers sit on an 8.5 line (tight by design inside the diagram).
 
 ## Other research from round 67

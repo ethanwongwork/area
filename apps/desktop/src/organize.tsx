@@ -127,8 +127,10 @@ export function usePins(key: string) {
  * The Inspector's pin, at the end of a section heading (PanelSection's actions): a ghost icon
  * Button drawn filled while pinned, as the Titlebar's panel toggles draw a shown panel.
  */
-export function PinButton({ pinned, onToggle, name }: { pinned: boolean; onToggle: () => void; name: string }) {
-  return <ChromeButton label={`Pin ${name}`} pressed={pinned} icon={pinned ? <PushpinFilledIcon /> : <PushpinIcon />} onClick={onToggle} />;
+export function PinButton({ pinned, onToggle, name, row }: { pinned: boolean; onToggle: () => void; name: string; row?: boolean }) {
+  // On a Sidebar row (`row`) it is the pointer's shortcut and stays out of the Tab order: one Tab stop a row, and the
+  // keyboard pins from the row's context menu (Shift+F10) or the Inspector heading (product UI rule 8).
+  return <ChromeButton label={`Pin ${name}`} pressed={pinned} icon={pinned ? <PushpinFilledIcon /> : <PushpinIcon />} onClick={onToggle} tabIndex={row ? -1 : undefined} />;
 }
 
 /**

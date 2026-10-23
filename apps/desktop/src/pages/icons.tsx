@@ -254,7 +254,7 @@ export function IconsPage() {
         <PinMenu pins={pins} label="Icon">
         <Sheet grid={mode !== "list"} value={icon?.name ?? null} onChoose={choose} size={size}>
           {onCanvas.map(section => (
-            <CanvasSection key={section.slug} role={mode === "list" ? undefined : "group"} id={`icons-${section.slug}`} title={view || onCanvas.length === 1 ? undefined : <>{section.name} <span className="studio-muted">{section.shown.length}</span></>}>
+            <CanvasSection key={section.slug} role={mode === "list" ? undefined : "group"} id={`icons-${section.slug}`} title={view || onCanvas.length === 1 ? undefined : section.name} count={section.shown.length}>
               {mode === "list" ? (
                 // List: one row per icon on the Canvas's surface (a flush Table), drawn at the
                 // chosen size, with its facts.

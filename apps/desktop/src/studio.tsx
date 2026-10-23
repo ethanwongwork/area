@@ -310,12 +310,12 @@ export function Studio() {
  * An icon Button in the app's chrome (Titlebar, Inspector headings): ghost, neutral, small, named
  * by its label, which an Area Tooltip shows below it with the shortcut, if any.
  */
-export function ChromeButton({ label, icon, keys, shortcut, onClick, pressed }: { label: string; icon: ReactNode; keys?: string[]; shortcut?: string; onClick: () => void; pressed?: boolean }) {
+export function ChromeButton({ label, icon, keys, shortcut, onClick, pressed, tabIndex }: { label: string; icon: ReactNode; keys?: string[]; shortcut?: string; onClick: () => void; pressed?: boolean; tabIndex?: number }) {
   // The tooltip repeats the name, so it only shows; the shortcut reaches assistive tech as
   // aria-keyshortcuts ("Meta+B").
   return (
     <Tooltip side="bottom" describes={false} trigger={
-      <Button variant="ghost" tone="neutral" size="sm" iconOnly className="studio-bar-icon" icon={icon} aria-label={label} aria-pressed={pressed} aria-keyshortcuts={shortcut} onClick={onClick} />
+      <Button variant="ghost" tone="neutral" size="sm" iconOnly className="studio-bar-icon" icon={icon} aria-label={label} aria-pressed={pressed} aria-keyshortcuts={shortcut} tabIndex={tabIndex} onClick={onClick} />
     }>
       {label}{keys ? <> <Kbd keys={keys} size="sm" /></> : null}
     </Tooltip>
@@ -406,9 +406,12 @@ export function Workspace({ sidebar, canvasLead, canvasTitle, canvasActions, can
   }, [signature]);
   return (
     <div className="studio-workspace" data-sidebar={studio.sidebar ? "" : undefined} data-inspector={studio.inspector ? "" : undefined}>
+      {/* The Sidebar is chrome on a recessed ground (owner, 2026-10-22; cursor-audit-2026-10-22.md item 4), as the
+          Testing screens' sidebars: the Panel is a chrome region painting the fill styles/app.css names (panel.css) and
+          declares the recessed ground, so its row plates step from what is under them (layers.css). */}
       {studio.sidebar ? (
         <div className="studio-sidebar">
-          <Panel flush resizable="end" aria-label="Sidebar" {...sidebarWidth}>{sidebar}</Panel>
+          <Panel flush resizable="end" aria-label="Sidebar" data-area-chrome="" data-area-ground="recessed" {...sidebarWidth}>{sidebar}</Panel>
         </div>
       ) : null}
       <main ref={main} className="studio-canvas" aria-label={canvasTitle}>
@@ -418,7 +421,7 @@ export function Workspace({ sidebar, canvasLead, canvasTitle, canvasActions, can
       {studio.inspector ? (
         <div className="studio-inspector">
           {isViews(inspector) ? <InspectorPanel views={inspector} width={inspectorWidth} />
-            : <Panel flush resizable="start" aria-label="Inspector" {...inspectorWidth}>{inspector}</Panel>}
+            : <Panel flush bareBar resizable="start" aria-label="Inspector" {...inspectorWidth}>{inspector}</Panel>}
         </div>
       ) : null}
     </div>
@@ -455,7 +458,8 @@ function InspectorPanel({ views, width }: { views: InspectorViews; width: Return
   // The Chat view's transcript scrolls in the Panel's own body, which it follows to the newest line.
   const scroller = useRef<HTMLDivElement | null>(null);
   return (
-    <Panel flush resizable="start" aria-label="Inspector" {...width} viewportRef={scroller}
+    // A bare bar: no rule under the views (owner, 2026-10-22; cursor-audit-2026-10-22.md item 4), as the Canvas header.
+    <Panel flush bareBar resizable="start" aria-label="Inspector" {...width} viewportRef={scroller}
       bareFooter={chat} footer={chat ? <ChatComposer scroller={scroller} /> : undefined} action={<>
         <Nav orientation="horizontal" aria-label="Inspector views" className="studio-inspector__views">
           {offered.map(entry => (

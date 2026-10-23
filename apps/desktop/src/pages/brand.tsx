@@ -163,7 +163,7 @@ export function BrandPage() {
     <CanvasSection id="brand-images" title={searching ? <>{folder ? `${folder.name}: ` : ""}{shown.length} results</> : undefined}>{imageGrid(shown, folder?.name ?? "Results")}</CanvasSection>
   ) : <EmptyState title="Nothing found" description={`Nothing matches “${query}”.`} />;
   else body = (
-    <CanvasSection id="brand-groups" title={<>Groups <span className="studio-muted">{folders.length}</span></>}>
+    <CanvasSection id="brand-groups" title="Groups" count={folders.length}>
       <AssetGrid aria-label="Groups" value={chosen} onValueChange={setChosen} onOpen={openFolder}
         style={{ "--area-asset-card-size": `${SIZES[size]}px` } as CSSProperties}>
         {folders.map(entry => {

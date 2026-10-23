@@ -268,7 +268,7 @@ export function Markdown({ text, idPrefix }: { text: string; idPrefix: string })
  */
 function DataTable({ label, head, rows, fit = [] }: { label: string; head: ReactNode[]; rows: ReactNode[][]; fit?: number[] }) {
   return (
-    <ScrollArea type="hover">
+    <ScrollArea type="hover" className="studio-table-scroll" viewportProps={{ className: "studio-table-scroll__viewport" }}>
     <Table size="md" flush aria-label={label}>
       <thead><tr>{head.map((cell, index) => <th key={index} scope="col">{cell}</th>)}</tr></thead>
       <tbody>
@@ -294,11 +294,16 @@ function FactTable({ label, rows }: { label: string; rows: Array<[ReactNode, Rea
   );
 }
 
-/** A titled section of a tab, at the app's own scale (documentation, not specimens). */
-function Section({ id, title, count, children }: { id: string; title: string; count?: number; children: ReactNode }) {
+/**
+ * A titled section of a tab, at the app's own scale (documentation, not specimens). One rule for every section of the
+ * feed (owner, 2026-10-22: "make the copy, titles, and subtitles to be more consistent and intentional"): a title; its
+ * count when the block is a collection (a table's rows, a grid's cards), never on facts, code or prose; and a subtitle,
+ * one sentence saying what the block holds.
+ */
+function Section({ id, title, count, lede, children }: { id: string; title: string; count?: number; lede?: ReactNode; children: ReactNode }) {
   return (
-    <section className="studio-section" aria-labelledby={id} {...APP_SCALE}>
-      <SectionHeading className="studio-section-heading" titleId={id}
+    <section className="studio-section" id={id} aria-labelledby={`${id}-title`} {...APP_SCALE}>
+      <SectionHeading className="studio-section-heading" titleId={`${id}-title`} lede={lede}
         title={count === undefined ? title : <>{title} <span className="studio-muted studio-tabular">{count}</span></>} />
       {children}
     </section>
@@ -323,7 +328,7 @@ export function DocumentationTab({ family, onOpenFamily, familyName }: {
   const states = manifest?.states ?? [];
   return (
     <div className="studio-sections">
-      <Section id="doc-overview" title="Overview">
+      <Section id="doc-overview" title="Overview" lede="What it is for, how to import it and where its spec lives.">
         <FactTable label="Overview" rows={[
           manifest ? ["Purpose", manifest.description] : null,
           job ? ["Job", <Inline text={job.split("\n\n")[0]!.replace(/\n/g, " ")} />] : null,
@@ -334,19 +339,19 @@ export function DocumentationTab({ family, onOpenFamily, familyName }: {
         ]} />
       </Section>
       {doc.instead?.length ? (
-        <Section id="doc-instead" title="Use something else">
+        <Section id="doc-instead" title="Use something else" count={doc.instead.length} lede="Components that fit better for nearby jobs.">
           <DataTable label="Use something else" head={["When", "Use", "Why"]} fit={[1]}
             rows={doc.instead.map(([when, slugs, why]) => [when, <span className="studio-doc__links studio-doc__links--row">{slugs.map(familyLink)}</span>, why])} />
         </Section>
       ) : null}
       {doc.practices?.length ? (
-        <Section id="doc-practices" title="Best practices" count={doc.practices.length}>
+        <Section id="doc-practices" title="Best practices" count={doc.practices.length} lede="What to do and what to avoid.">
           <DataTable label="Best practices" head={["", "Guidance"]} fit={[0]}
             rows={doc.practices.map(([kind, text]) => [<Badge size="sm" variant="soft" tone={kind === "Do" ? "success" : "danger"}>{kind}</Badge>, <Inline text={text} />])} />
         </Section>
       ) : null}
       {manifest ? (
-        <Section id="doc-anatomy" title="Anatomy" count={1 + (manifest.elements?.length ?? 0)}>
+        <Section id="doc-anatomy" title="Anatomy" count={1 + (manifest.elements?.length ?? 0)} lede="Its parts and the class that styles each.">
           <DataTable label="Anatomy" head={["Part", "Class", "What it is"]} fit={[0, 1]}
             rows={[["root", manifest.block], ...(manifest.elements ?? []).map(part => [part, `${manifest.block}__${part}`])].map(([part, name]) => [
               part === "root" ? "Root" : words(part!), <Code>{`.${name}`}</Code>, doc.parts?.[part!] ?? <span className="studio-muted">—</span>,
@@ -354,19 +359,19 @@ export function DocumentationTab({ family, onOpenFamily, familyName }: {
         </Section>
       ) : null}
       {states.length ? (
-        <Section id="doc-states" title="States" count={states.length}>
+        <Section id="doc-states" title="States" count={states.length} lede="Each state, the attribute that sets it and what changes.">
           <DataTable label="States" head={["State", "Attribute", "What changes"]} fit={[0, 1]}
             rows={states.map(state => [words(state), <Code>{manifest?.stateAttributes?.[state] ?? `data-${state}`}</Code>, doc.states?.[state] ?? <span className="studio-muted">—</span>])} />
         </Section>
       ) : null}
       {doc.keyboard?.length ? (
-        <Section id="doc-keyboard" title="Keyboard">
+        <Section id="doc-keyboard" title="Keyboard" count={doc.keyboard.length} lede="The keys it answers to while focused.">
           <DataTable label="Keyboard" head={["Keys", "What happens"]} fit={[0]}
             rows={doc.keyboard.map(([keys, action]) => [<span className="studio-doc__links studio-doc__links--row">{keys.split(" or ").map(key => <Kbd key={key} keys={key.split("+")} size="sm" />)}</span>, action])} />
         </Section>
       ) : null}
       {doc.aria?.length || behaviour ? (
-        <Section id="doc-accessibility" title="Accessibility">
+        <Section id="doc-accessibility" title="Accessibility" count={doc.aria?.length || undefined} lede="The roles, names and ARIA attributes it sets.">
           <div className="studio-doc">
             {doc.aria?.length ? (
               <DataTable label="ARIA" head={["Attribute", "When"]} fit={[0]}
@@ -403,7 +408,7 @@ export function ApiTab({ family }: { family: FamilyInfo }) {
   const describe = (prop: string) => prop.split(/ \/ /).map(name => docs[name.trim()]).filter(Boolean).join(" ");
   return (
     <div className="studio-sections">
-      <Section id="api-import" title="Import">
+      <Section id="api-import" title="Import" lede="The package, its exports, the root class and the stylesheet.">
         <FactTable label="Import" rows={[
           ["Package", <Code>@area/react</Code>],
           exportsOf(family).length ? ["Exports", <span className="studio-doc__links">{exportsOf(family).map(name => <Code key={name}>{name}</Code>)}</span>] : null,
@@ -412,7 +417,7 @@ export function ApiTab({ family }: { family: FamilyInfo }) {
         ]} />
       </Section>
       {family.api?.length ? (
-        <Section id="api-props" title="Props" count={family.api.length}>
+        <Section id="api-props" title="Props" count={family.api.length} lede="From the React source and its descriptions.">
           <DataTable label="Props" head={["Prop", "Type", "Default", "Description"]} fit={[0, 2]}
             rows={family.api.map(([prop = "", type = "", fallback]) => [
               <span className="studio-doc__stack">{prop.split(/ \/ /).map(name => <Code key={name} className="studio-prop">{name}</Code>)}</span>,
@@ -423,7 +428,7 @@ export function ApiTab({ family }: { family: FamilyInfo }) {
         </Section>
       ) : null}
       {manifest && (Object.keys(manifest.variants).length || manifest.booleans?.length) ? (
-        <Section id="api-classes" title="Variant classes">
+        <Section id="api-classes" title="Variant classes" count={Object.keys(manifest.variants).length + (manifest.booleans?.length ?? 0)} lede="Each axis, its values and the class a value sets.">
           <DataTable label="Variant classes" head={["Axis", "Values", "Default", "Class"]} fit={[0, 2, 3]}
             rows={[
               ...Object.entries(manifest.variants).map(([axis, values]) => [
@@ -436,19 +441,19 @@ export function ApiTab({ family }: { family: FamilyInfo }) {
         </Section>
       ) : null}
       {manifest?.states?.length ? (
-        <Section id="api-states" title="State attributes" count={manifest.states.length}>
+        <Section id="api-states" title="State attributes" count={manifest.states.length} lede="The attribute that styles each state.">
           <DataTable label="State attributes" head={["State", "Attribute"]} fit={[0]}
             rows={manifest.states.map(state => [words(state), <Code>{manifest.stateAttributes?.[state] ?? `data-${state}`}</Code>])} />
         </Section>
       ) : null}
       {css?.declared.length ? (
-        <Section id="api-private" title="Private properties" count={css.declared.length}>
+        <Section id="api-private" title="Private properties" count={css.declared.length} lede="The local properties its stylesheet declares, with their first value.">
           <DataTable label="Private properties" head={["Property", "First value"]} fit={[0]}
             rows={css.declared.map(([name, value]) => [<Code>{name}</Code>, <Code>{value}</Code>])} />
         </Section>
       ) : null}
       {css?.read.length ? (
-        <Section id="api-tokens" title="Tokens read" count={css.read.length}>
+        <Section id="api-tokens" title="Tokens read" count={css.read.length} lede="The Area tokens its stylesheet reads, most used first.">
           <DataTable label="Tokens read" head={["Token", "Uses"]} fit={[1]}
             rows={css.read.map(([name, count]) => [<Code>{name}</Code>, <span className="studio-tabular">{count}</span>])} />
         </Section>
@@ -472,7 +477,7 @@ export function CodeTab({ family }: { family: FamilyInfo }) {
   ].filter((file): file is NonNullable<typeof file> => Boolean(file));
   return (
     <div className="studio-sections">
-      <Section id="code-files" title="Files" count={files.length}>
+      <Section id="code-files" title="Files" count={files.length} lede="Every file that makes it, with its length.">
         <DataTable label="Files" head={["File", "What", "Lines", "Path"]} fit={[0, 2]}
           rows={files.map(file => [
             <TableLink href={`#${file.id}`} onClick={event => { event.preventDefault(); document.getElementById(file.id)?.scrollIntoView({ block: "start" }); }}>{file.title}</TableLink>,
@@ -480,7 +485,7 @@ export function CodeTab({ family }: { family: FamilyInfo }) {
           ])} />
       </Section>
       {files.map(file => (
-        <Section key={file.id} id={file.id} title={file.title}>
+        <Section key={file.id} id={file.id} title={file.title} lede={`${file.what}.`}>
           <CodeBlock title={file.path} language={file.language} {...(file.html ? { html: highlight(file.code) } : { code: file.code })}
             collapsible defaultCollapsed {...APP_SCALE} />
         </Section>
@@ -498,7 +503,7 @@ export function SpecTab({ family }: { family: FamilyInfo }) {
   const facts = specFacts(preamble);
   return (
     <div className="studio-sections">
-      <Section id="spec-summary" title="Summary">
+      <Section id="spec-summary" title="Summary" lede="The spec's file, status, captures and sections.">
         <FactTable label="Spec summary" rows={[
           ["File", <Link href={`${REPO}docs/specs/${family.slug}.md`} target="_blank" rel="noreferrer">docs/specs/{family.slug}.md</Link>],
           ...facts.map(([key, value]) => [key, <Inline text={value} />] as [ReactNode, ReactNode]),

@@ -1317,15 +1317,18 @@
        caption size is the text's (owner 2026-10-09: section titles line up with the row text). */
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
-    font-weight: var(--area-weight-regular);
+    /* spec (owner, 2026-10-22: "more intentional, consistent and professional"; cursor-audit-2026-10-22.md item 1): one
+       group label for every run of rows, Nav's (owner, 2026-09-27: "get the nav titles from ChatGPT"): the rows' size at
+       weight 500 in the muted ink, a row tall. Menu, Combobox, Command palette, Custom select and List box kept the
+       earlier 12/16 at 400 when Nav moved. ChatGPT's sidebar labels 14/18 500 over 14 rows and Figma's panel headings
+       550 at the rows' 11 keep the rows' size; Notion (12/16 500 over 14) and Cursor (11/14 over 12) step down. */
+    font-weight: var(--area-weight-strong);
   }
   .area-menu__label-text {
     min-inline-size: 0;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: var(--area-text-xs-size);
-    line-height: var(--area-text-xs-leading);
   }
 
   .area-menu__separator {

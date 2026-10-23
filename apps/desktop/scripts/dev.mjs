@@ -63,7 +63,7 @@ for (const [index, name] of PACKAGES.entries()) {
   });
 }
 // The page, stylesheet and theme script are copied, not bundled.
-watch(join(root, "src"), (_, file) => { if (file && /\.(html|css)$|^theme\.js$/.test(file)) copyStatic(); });
+watch(join(root, "src"), { recursive: true }, (_, file) => { if (file && /\.(html|css)$|^theme\.js$/.test(file)) copyStatic(); });
 
 if (browser) {
   const TYPES = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".json": "application/json", ".svg": "image/svg+xml", ".png": "image/png", ".jpg": "image/jpeg", ".gif": "image/gif", ".webp": "image/webp" };

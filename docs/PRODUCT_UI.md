@@ -12,7 +12,8 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
    instantly; only the leave fades (`--area-transition`: `duration-fast`, 140ms at the default Motion, ease-out). No scale on press, no
    movement on hover, no animated theme or density change.
 2. **Hover and press change one thing: the plate, the edge or the lift.** Ink, size and position never
-   move. Rows change their plate; cards and tiles lift (owner, 2026-10-18: no edge change, a soft shadow that fades in,
+   move. One exception (owner, 2026-10-22): a revealed control may take a trailing annotation's place, such as a
+   row's count, while the row is hovered or focused (Nav `revealActions`), as Notion's and ChatGPT's sidebar rows do. Rows change their plate; cards and tiles lift (owner, 2026-10-18: no edge change, a soft shadow that fades in,
    `docs/research/card-hover-2026-10-18.md`), and step their edge only at Elevation 0, where there is no shadow;
    painted things (swatches, ramp steps) change a ring in their own ink.
 3. **Each state is one step firmer than the last**: rest → hover → selected → press, and
@@ -42,7 +43,7 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
    choice persists across launches, and Reset appears only once something changed. The Sidebar
    and the Canvas use the same order. Menus of commands close on a choice.
 8. **Pinning is personal and additive.** Pinned items appear in a Pinned group first and stay
-   in their own group too; pin from the Inspector heading (a toggle, rule 6) or a context menu.
+   in their own group too; pin from the Inspector heading (a toggle, rule 6), a context menu, or the row's own pin, which takes the count's place while the row is hovered or focused (rule 2's exception; out of the Tab order, so a list keeps one Tab stop a row).
    Only long lists pin (Components 85, Icons 808); a Sidebar of a dozen rows (settings, roles,
    scales) needs no shortcut (owner, 2026-10-12).
 9. **Counts:** a count beside a title is muted tabular text; a count at the end of a row is
@@ -81,7 +82,24 @@ scale (type 13, Compact).
 - There is no title over the Canvas or the Inspector; the Sidebar's selected row names what
   the Canvas shows.
 - The Canvas header's controls, the Sidebar's first row and the Inspector's first heading
-  share one line. Every region is 14 in on all sides.
+  share one line. The Sidebar and Inspector are 14 in on all sides.
+- **Lines and grounds** (owner, 2026-10-22; `docs/research/cursor-audit-2026-10-22.md` item 4): the Titlebar keeps its
+  rule; the Canvas header and the Inspector's bar carry none (Notion's and ChatGPT's top bars), and the Sidebar sits on
+  the chrome's recessed ground (`data-area-chrome`, the subtle step, as Notion's sidebar), its seam the Panel's edge.
+- **Rows are 28** at the app's type 13 Compact (owner, 2026-10-22, item 2: rows keep at least 5 above and below their
+  text; Cursor's and Figma's 28).
+- **The Canvas is a feed** (owner, 2026-10-22: "margins larger than the gaps … a consistent feed style … documentation
+  style that is simple, repeatable, consistent"). One column of sections, at most 1120 wide and centred; each section
+  is a heading (and a muted lede) over one block: a grid of cards, the Stage, plain text, a Table or a Code block.
+  Spacings grow outward: cards 12 apart, a heading 12 over its block, sections 40 apart, the Canvas margin 32, each
+  measured to what is drawn: a frame's edge, a text's cap or baseline (titles, ledes and prose are trimmed; a flush
+  table that is read trims its first and last rows, `docs/specs/table.md`).
+- **One voice for the feed's text** (owner, 2026-10-22: "make the copy, titles, and subtitles to be more consistent and
+  intentional"), all at the app's 13/18: a section's **title** (medium) carries a muted **count** when its block is a
+  collection (cards, rows, swatches, icons), never on facts, code or prose; where the page explains (a family's tabs,
+  Theme, Typography) a **subtitle** (muted, one sentence ending in a full stop) says what the block holds; **copy**
+  (prose, table text) is regular. A family's purpose opens its page as a subtitle. `CanvasSection` (`src/tile.tsx`) and
+  the family tabs' `Section` take `count` and `lede`.
 - A bar's controls sit as far from the side as from the top and the rule: 7, 24 tall
   (owner, 2026-10-18; Figma's panel tabs: 8 and 8).
 
@@ -108,8 +126,10 @@ Zoom is Zoom control's stepper (− Auto +):
   and a Copy code button sit at the frame's top.
 - Every tab's tiles are Asset cards, always square, with the name, a value and controls in
   the frame's first row (owner, 2026-10-19, a trial).
-- A family's page is Area Tabs (`src/family-tabs.tsx`):
-  - **Overview**: the Stage, its code, then the tiles;
+- A family's page opens with its purpose in plain text (the manifest's description), 24 over its tabs, as a
+  documentation page opens; the tab bar stands 24 off its panel. It is Area Tabs (`src/family-tabs.tsx`):
+  - **Overview**: the Stage, its code, then the tiles, one section per group (Default, Variants, Sizes …), each its
+    heading over its own row of cards;
   - **Documentation**: usage, from `content/documentation/` and the spec;
   - **API**: props from JSDoc, classes, parts, states and CSS properties;
   - **Code**: React source, stylesheet, manifest and every demo;
@@ -182,6 +202,18 @@ out.
 
 Recorded, not yet built; each needs its own component pass ([Governance](GOVERNANCE.md#1-decide-what-kind-of-change-it-is)).
 
-None open: the 2026-10-12 audit's gaps were all built on 2026-10-15 (Copy button, List box, Hover card `openOnFocus`, Table cells, Badge `onColor`,
+From the app CSS audit (2026-10-22, `docs/research/cursor-audit-2026-10-22.md` item 10; `npm run check:app-css -w
+@area/desktop` lists every rule that still restyles a component, with its gap):
+
+- **Forced state for specimens**: a documented hook that shows hover, focus, lift or pressed at rest, so the Theme
+  previews stop painting Input, Card and Menu item from app CSS.
+- **Width hooks**: Slider, Slider range, Progress and Radio need a public inline-size hook or a full-width option, as
+  Input's `--area-input-inline-size`.
+- **Fieldset**: a visually hidden legend option.
+- **List box**: a grid option whose content draws its own frame (no plate), for the app's plain tiles.
+- **Button**: a text-size hook and a coloured shadow for the Abstract board's reference pieces, or the pieces move their
+  paint to tokens on the scene's scope.
+
+Earlier: the 2026-10-12 audit's gaps were all built on 2026-10-15 (Copy button, List box, Hover card `openOnFocus`, Table cells, Badge `onColor`,
 Nav `revealActions`, Context menu `itemSelector`, Card selected, Titlebar and Section heading). Record new ones here.
 

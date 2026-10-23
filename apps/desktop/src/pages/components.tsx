@@ -85,6 +85,21 @@ function tilesOf(family: Family): Tile[] {
   }).sort((a, b) => a.order - b.order).map(entry => entry.tile);
 }
 
+/* What each group of a family's tiles holds: its subtitle on Overview (owner, 2026-10-22: "make the copy, titles, and
+   subtitles to be more consistent and intentional"). One sentence each, in SPECIMEN_GROUPS order. */
+const GROUP_LEDES: Record<string, string> = {
+  Default: "The component as it ships.",
+  Variants: "Its visual treatments and shapes.",
+  Tones: "The same component in each semantic colour.",
+  Sizes: "Each size, smallest first.",
+  Layout: "Arrangements of its parts.",
+  Content: "What it holds: text, icons and media.",
+  States: "Interactive and runtime states.",
+  Behavior: "How it responds as it is used.",
+  Templates: "It composed into ready-made patterns.",
+  "Variant × tone": "Every treatment in every tone.",
+};
+
 /** One demo failing to render shows on its tile instead of taking the Canvas down. */
 class TileBoundary extends Component<{ children: ReactNode }, { error?: Error }> {
   override state: { error?: Error } = {};
@@ -180,7 +195,7 @@ function Overview({ groups, selected, onOpen, zoom, containerless }: { groups: A
   return (
     <div ref={ref} className="studio-sections" data-fit="" {...zoomScope(zoom)}>
       {shown.map(([label, list]) => (
-        <CanvasSection key={label} id={`group-${label.toLowerCase().replace(/\W+/g, "-")}`} title={titled ? label : undefined}>
+        <CanvasSection key={label} id={`group-${label.toLowerCase().replace(/\W+/g, "-")}`} title={titled ? label : undefined} count={list.length}>
           <TileGrid span="wide" cards>
             {list.map(entry => {
               const first = TILES.get(entry.slug)![0];
@@ -214,19 +229,19 @@ function FamilyOverview({ family, tiles, tile, config, onSelectTile, onChange, z
   const groups = SPECIMEN_GROUPS.map((group: string) => [group, tiles.filter(entry => entry.group === group)] as const).filter(([, list]: readonly [string, Tile[]]) => list.length);
   return (
     <div className="studio-sections" {...zoomScope(zoom)}>
-      <Stage zoom={zoom} replays={replays}
-        label={config && playground ? onStage?.label ?? "Custom" : tile.label}
-        code={config && playground ? configCode(playground, config) : SNIPPETS[tile.demo]}>
-        <TileBoundary>{config && playground ? renderConfig(playground, config, onChange) : <Demo name={tile.demo} />}</TileBoundary>
-      </Stage>
-      {/* The family's tiles: one grid, each group a run of it under its heading, so small groups share
-          a row instead of each starting its own (src/studio.css, .studio-strips). */}
-      <div ref={strips} data-fit="" {...zoomScope(zoom)}>
-        <div className="studio-grid studio-grid--wide studio-grid--cards studio-strips">
-          {groups.map(([group, list]: readonly [string, Tile[]]) => (
-            <section key={group} className="studio-strip" style={{ "--_count": list.length } as CSSProperties} aria-labelledby={`group-${group}`}>
-              <SectionHeading className="studio-section-heading" titleId={`group-${group}`} {...APP_SCALE}
-                title={<>{group} <span className="studio-muted studio-tabular">{list.length}</span></>} />
+      <CanvasSection id="family-preview" title="Preview" lede="At its real size, with its code. The Inspector sets its properties.">
+        <Stage zoom={zoom} replays={replays}
+          label={config && playground ? onStage?.label ?? "Custom" : tile.label}
+          code={config && playground ? configCode(playground, config) : SNIPPETS[tile.demo]}>
+          <TileBoundary>{config && playground ? renderConfig(playground, config, onChange) : <Demo name={tile.demo} />}</TileBoundary>
+        </Stage>
+      </CanvasSection>
+      {/* The family's tiles: one section per group, its heading over its own grid of cards, so the page reads as a
+          feed of repeated blocks (owner, 2026-10-22; groups shared rows before, src/studio.css). */}
+      <div ref={strips} className="studio-sections" data-fit="" {...zoomScope(zoom)}>
+        {groups.map(([group, list]: readonly [string, Tile[]]) => (
+          <CanvasSection key={group} id={`group-${group.toLowerCase().replace(/\W+/g, "-")}`} lede={GROUP_LEDES[group]} title={group} count={list.length}>
+            <TileGrid span="wide" cards>
               {list.map(entry => (
                 <Tile key={entry.id} container="asset" span="wide" stage="fit" card containerless={containerless} label={group === "Default" ? entry.label : entry.value} aria-label={`${family.name}: ${entry.label}`}
                   selected={entry.id === onStage?.id} onSelect={() => onSelectTile(entry)}
@@ -234,9 +249,9 @@ function FamilyOverview({ family, tiles, tile, config, onSelectTile, onChange, z
                   <TileBoundary><Demo name={entry.demo} /></TileBoundary>
                 </Tile>
               ))}
-            </section>
-          ))}
-        </div>
+            </TileGrid>
+          </CanvasSection>
+        ))}
       </div>
     </div>
   );
@@ -259,7 +274,12 @@ function FamilyPage({ family, tab, onTab, overview, onOpenFamily }: {
   // The tab list is app chrome at the app's scale; the Overview panel takes the Canvas's type and density back, so
   // the Stage and tiles preview the Inspector's settings as they did before the tabs.
   const canvas = useStudio().shown.canvas;
+  // The page opens as a documentation page does: what the family is for, in plain text from its manifest, over the
+  // tabs, so every tab reads under it (owner, 2026-10-22, after a component docs page and Primer's).
+  const purpose = manifestOf(family)?.description;
   return (
+    <>
+    {purpose ? <p className="studio-lede" {...APP_SCALE}>{purpose}</p> : null}
     <Tabs className="studio-family-tabs" size="sm" aria-label={`${family.name} views`} value={tab} onValueChange={next => onTab(next as FamilyTab)}
       items={FAMILY_TABS.map(entry => ({ id: entry.id, label: entry.label }))} {...APP_SCALE}>
       <div className="studio-family-tabs__panel" {...(tab === "overview" ? { "data-area-type": canvas.type, "data-area-density": canvas.density } : {})}>
@@ -270,6 +290,7 @@ function FamilyPage({ family, tab, onTab, overview, onOpenFamily }: {
           : <SpecTab family={info} />}
       </div>
     </Tabs>
+    </>
   );
 }
 
@@ -331,7 +352,10 @@ export function ComponentsPage() {
   const navItem = (entry: Family) => (
     <NavItem key={entry.slug} href={`#components/${entry.slug}`} current={entry.slug === family?.slug} data-key={entry.slug} data-name={entry.name}
       onClick={event => { event.preventDefault(); select(entry.slug); }}
-      trailing={<Count count={TILES.get(entry.slug)!.length} />}>
+      trailing={<Count count={TILES.get(entry.slug)!.length} />}
+      // Pin on the row itself, in its count's place while the row is hovered or focused (Nav revealActions; product UI
+      // rules 2 and 8, owner 2026-10-22). The context menu and the Inspector heading pin too.
+      actions={<PinButton row pinned={pins.has(entry.slug)} onToggle={() => pins.toggle(entry.slug)} name={entry.name} />} revealActions>
       {entry.name}
     </NavItem>
   );

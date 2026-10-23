@@ -165,7 +165,7 @@ these captures predates the 2026-10-08 decision (check only now; Decisions).
 | description rows | Menu's two-line row: 6 above and below, 12/16 muted | Peer: Menu (ChatGPT model list) | Notion 4 above and below, 2 between lines |
 | chosen row | 16 check at the end, no plate; the hover plate when highlighted; the same with `multiple` | Notion (theme, card size, share menus), ChatGPT (theme, language, model picker): check only; owner 2026-10-08 (Q3) | — (was `bg-component-active` plate + check, audit S13 C) |
 | check on two-line rows | centred in the row | Peer: Menu's description row | Notion aligns it with the title; see Open questions |
-| group label | Menu label: 12/16 muted, row pitch | Peer: Menu (one label pattern) | Notion 12/14.4 500 |
+| group label | Menu label: the rows' size at 500, muted, row pitch (Nav's, 2026-10-22) | Peer: Menu (one label pattern) | Notion 12/14.4 500 |
 | group rule | Menu separator, between groups only | Notion (rule between sections) | Combobox groups have no rule |
 | list placement | overlay engine: 4 below, flips, ≥ trigger width and 224, ≤ 324 tall; the list scrolls in a Scroll area (owner 2026-10-09) | Peer: Combobox | — |
 

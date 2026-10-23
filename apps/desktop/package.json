@@ -12,7 +12,8 @@
     "preview": "node scripts/dev.mjs --browser",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "check:playgrounds": "node scripts/check-playgrounds.mjs",
-    "check:docs": "node scripts/check-docs.mjs"
+    "check:docs": "node scripts/check-docs.mjs",
+    "check:app-css": "node scripts/check-app-css.mjs"
   },
   "dependencies": {
     "@area/icons": "*",
