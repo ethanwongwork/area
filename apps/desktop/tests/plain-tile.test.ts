@@ -1,11 +1,13 @@
-// The plain container (src/tile.tsx, PlainTile; studio.css, "Plain tiles"): every tab but Components uses it, so its
+// The plain container (src/tile.tsx, PlainTile; styles/canvas.css, "Plain tiles"): every tab but Components uses it, so its
 // states must read the shared state settings, never literal colours or widths (PRODUCT_UI rules 1-3), and Asset card
 // stays on the Components tab only (owner, 2026-10-21).
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 
-const css = readFileSync(new URL("../src/studio.css", import.meta.url), "utf8");
+// The app's stylesheet is src/studio.css importing src/styles/*.css (2026-10-22); read every part.
+const styles = new URL("../src/styles/", import.meta.url);
+const css = readdirSync(styles).filter(name => name.endsWith(".css")).map(name => readFileSync(new URL(name, styles), "utf8")).join("\n");
 const rule = (selector: string) => {
   const at = css.indexOf(selector);
   assert.ok(at >= 0, `${selector} missing`);
