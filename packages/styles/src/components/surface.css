@@ -779,7 +779,7 @@
     align-items: flex-start;
     flex-direction: column;
     /* Popover's title-to-description rule, baseline to cap 15 (audit E-13; was 4, about 14.1). */
-    --_title-gap: 5px; /* spec */
+    --_title-gap: 0px; /* (DESIGN_SYSTEM.md, "Text pairs": a line directly under its title joins it, owner 2026-09-28 on Card and 2026-10-22; was 5, baseline to cap 15) */
     gap: var(--_title-gap);
   }
 
@@ -949,7 +949,7 @@
   }
   /* spec (type pass): the same title group as Card, 16/24 over 14/20, 4 apart (title baseline to
    * description cap 15.6). The description keeps its line box, as in Card and Popover. */
-  .area-dialog__heading { min-inline-size: 0; display: grid; gap: var(--area-space-4); }
+  .area-dialog__heading { min-inline-size: 0; display: grid; gap: 0; } /* (DESIGN_SYSTEM.md, "Text pairs": a line directly under its title joins it, owner 2026-09-28 on Card and 2026-10-22; was 4, baseline to cap 16) */
   /*
    * spec (docs/specs/dialog.md): the close sits evenly in the corner, 8 from the top and the
    * side (shadcn 8/8, Primer 8/8, ChatGPT 12/12: half the content inset), which puts its
@@ -1110,7 +1110,7 @@
     column-gap: var(--area-ui-cluster);
     /* spec: title baseline to description cap 15 with the 20px description line; one slot that
        Alert and Toast share (audit E-13, E-28). */
-    --_title-gap: 5px; /* spec */
+    --_title-gap: 0px; /* (DESIGN_SYSTEM.md, "Text pairs": a line directly under its title joins it, owner 2026-09-28 on Card and 2026-10-22; was 5, baseline to cap 15) */
     row-gap: var(--_title-gap);
   }
   .area-popover__header > :is(.area-popover__title, .area-popover__description) { grid-column: 1; }
@@ -1142,6 +1142,8 @@
   .area-popover__body { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-ui-cluster); }
   .area-popover__footer { justify-content: flex-end; flex-wrap: wrap; }
   .area-popover__footer > :first-child { margin-inline-end: auto; }
+  /* A tour's progress, "1 of 3": UI text in the muted ink, figures of one width so the footer doesn't shift per step. */
+  .area-popover__step { color: var(--area-fg-muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
   .area-popover__media { inline-size: 100%; aspect-ratio: 5 / 2; overflow: hidden; border-radius: max(var(--area-radius-floor), calc(var(--_popover-radius) - var(--_inset) - var(--area-border-width))); background: var(--area-bg-component); }
   .area-popover__media > :is(img, video) { display: block; inline-size: 100%; block-size: 100%; object-fit: cover; }
   .area-menu {
@@ -1587,7 +1589,7 @@
   }
   .area-toast__icon > svg { inline-size: 100%; block-size: 100%; }
   /* Popover's title-to-description rule, baseline to cap 15 (audit E-13; was 4). */
-  .area-toast__content { --_title-gap: 5px; /* spec */ flex: 1; min-inline-size: 0; overflow-wrap: anywhere; display: grid; gap: var(--_title-gap); }
+  .area-toast__content { --_title-gap: 0px; /* (DESIGN_SYSTEM.md, "Text pairs": a line directly under its title joins it, owner 2026-09-28 on Card and 2026-10-22; was 5) */ flex: 1; min-inline-size: 0; overflow-wrap: anywhere; display: grid; gap: var(--_title-gap); }
   .area-toast__title { font-weight: var(--area-weight-strong); } /* spec (type pass): surface title */
   /* spec: with a title, the body is the description (muted), as in every surface and Sonner. */
   .area-toast__description { color: var(--area-fg-muted); }

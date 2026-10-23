@@ -79,11 +79,9 @@
     transition-duration: 0s;
   }
   button.area-approval__option:active { background-color: var(--area-bg-component-pressed); } /* Menu's pressed fill (Shared state paint) */
-  /* The number sits in the row's icon slot, centred, so every label starts on one column; it reads at the label's size
-     in the muted ink, unboxed (round 51: Claude Code's shortcut number is the label's size at 60%; Codex writes "1." in
-     the label's type). A quiet Kbd keeps the key's semantics. */
+  /* The number sits in the row's icon slot, centred, so every label starts on one column, as the small keycap (16):
+     every key has its backplate (owner, 2026-10-22; round 51 had unboxed it at the label's size, as Claude Code). */
   .area-approval__key { display: inline-flex; flex: none; justify-content: center; inline-size: var(--area-icon-sm); color: var(--area-fg-muted); font-variant-numeric: tabular-nums; }
-  .area-approval__key > .area-kbd { font-size: inherit; line-height: inherit; }
   .area-approval__label { min-inline-size: 0; overflow-wrap: anywhere; }
   /* What to do instead: the field is the row's text, with no fill, edge or ring of its own. */
   .area-approval__instead { cursor: text; }

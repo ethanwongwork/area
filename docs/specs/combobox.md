@@ -142,3 +142,10 @@ commit with a filtered list (rows held while closing).
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → motion pass: the list keeps its rows while it fades out (a commit no longer re-lists every option mid-exit); field and list motion stay Input's and Menu's. "Motion and interaction, 2026-10-07".
 - 2026-10-08 · owner: recommendations accepted (custom-select.md Q3–Q7) → `data-selected` no longer set on options (Combobox.tsx), so the chosen row is the check alone and highlight is the only plate; the field's end padding is the chevron inset less half the action's free space (`inset.css`: sm 3 → 5, glyph 6 → 8 from the edge; md and lg unchanged; compact sm 24 → 7, glyph 8); toggle glyph `input-chevron` (combobox.css; rgb(131) / dark rgb(147)). Verified in the gallery (computed rects, light/dark, default/compact; chosen Geist row transparent when not highlighted). Note: in dark, the soft field's pressed toggle plate (`bg-active` over #28) puts the chevron at about 2.6:1 for the press only; rest, hover and every opaque field fill are ≥ 3:1.
 - 2026-10-09 · owner went with Scroll area's recommendation to adopt it in the scrolling families (docs/specs/scroll-area.md, "Adoption") → the scroll container is a Scroll area: Figma's overlay bar instead of the platform's, its inset moved into the scroller so rows keep their place → back in review.
+
+## Review note, 2026-10-22 (round 67)
+
+- **What changed:** at rest, only keyboard focus: the ring is the brighter indicator blue (#0160d9, was #004cb0) and
+  hugs the field. In the open list, rows sit 1px apart (were 2px at the default size).
+- **Why:** your picks on the state page (2026-10-21), now the defaults of the state settings, and your note that the
+  gap between rows should hold at every density (ChatGPT and Notion put rows 1px apart).

@@ -140,3 +140,8 @@ Resolved 2026-10-10 (owner: "go with your recommendations"); kept for the record
 - 2026-10-10 · owner: "go with your recommendations" → open questions 1–2 resolved as recommended; no change.
 - 2026-10-11 · owner, review round 7: approved.
 - 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the row rules are at `stroke-width`, as Table's (were `border-width`) (shortcut-list.css). (docs/research/consistency-audit-2026-10-12.md)
+
+## Review note, 2026-10-22 (round 68, keys)
+
+- **What changed:** the `quiet` option no longer sets keys as text: every list shows keycaps, and the quiet tile is gone.
+- **Why:** your note that every Kbd should have its backplate, for one look everywhere (docs/specs/kbd.md, "When a key has a backplate").

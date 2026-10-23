@@ -88,26 +88,19 @@
     color: var(--area-fg-muted);
   }
 
-  /* Inside a menu item, keys are chrome: unboxed and pushed to the trailing edge. A quiet
-     Kbd renders exactly like a string shortcut (audit S12a, owner 2026-09-30): the UI font at
-     12/16 and 400 in muted ink, on the text slot's inset. 500 and the keyboard face belong to
-     the filled keycap only. Was system-ui 500 at 12, or 11 when small. */
-  .area-menu__item .area-kbd,
-  .area-kbd--quiet {
-    min-inline-size: 0;
-    block-size: auto;
-    padding: 0;
-    background-color: transparent;
-    border-width: 0;
-    box-shadow: none;
-    color: var(--area-fg-muted);
-    font-family: var(--area-font-sans);
-    font-size: var(--area-text-xs-size);
-    line-height: var(--area-text-xs-leading);
-    font-weight: var(--area-weight-regular);
+  /* One look everywhere: every key is a keycap with its backplate (owner, 2026-10-22: "i prefer having kbd with
+     backplate everywhere it shows up in all components ... the look and consistency of always having the
+     backplate"). Menus, Command palette rows and its footer, Approval's option keys, Shortcut list and a Search
+     trigger used to unbox their keys as muted text (audit S12a, round 51); `--quiet` is now a deprecated alias of the
+     default keycap, kept so existing markup still renders. In a menu row the keycap is the small one (16), so it
+     fits the 28 row at every density. */
+  .area-kbd--quiet {}
+  .area-menu__item .area-kbd {
+    --_min: var(--area-mark-label-sm);
+    --_font: var(--area-size-11);
   }
-  /* A destructive row's shortcut takes the row's ink, string or Kbd alike. */
-  .area-menu__item--danger .area-kbd { color: inherit; }
+  /* A destructive row's shortcut takes the row's ink on a translucent plate of it, as in a Button. */
+  .area-menu__item--danger .area-kbd { background-color: color-mix(in srgb, currentColor 14%, transparent); color: inherit; }
 
   /* On a strong fill, the keycap is a translucent plate rather than a nested outlined control. */
   /* A Tooltip is a strong fill too, so a keycap in one adapts on its own, as in a solid Button

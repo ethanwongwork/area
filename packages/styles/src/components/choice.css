@@ -24,10 +24,9 @@
     --_checked: var(--area-selection-solid);
     --_checked-hover: var(--area-selection-solid-hover);
     --_on-checked: var(--area-fg-on-selection);
-    /* Increased contrast strengthens the checked edge toward this color. The neutral fill is
-       already the strongest ink, so it is its own edge; an accent fill reaches for the
-       selected stroke. */
-    --_checked-edge: color-mix(in srgb, var(--area-neutral-solid), var(--area-stroke-selected) calc(var(--area-selection-accent) * 100%));
+    /* Increased contrast strengthens the checked edge toward the selected stroke, which already follows Selection
+       (emit/base.ts): the neutral solid at Neutral, the accent's indicator at Accent. */
+    --_checked-edge: var(--area-stroke-selected);
   }
 
   .area-checkbox[data-disabled],
@@ -376,7 +375,7 @@
   }
 
   .area-radio-group__description,
-  .area-checkbox-group__description { margin-block-start: var(--area-ui-stack); /* Field's label-to-description gap, 6, compact 4 (audit B-22 B; was 4; spacing audit 2026-10-17: was a fixed 6) */ }
+  .area-checkbox-group__description { margin-block-start: var(--area-space-2); /* the legend's line, 2 as a choice's own title and description (a 12/16 line has 2 less leading than 14/20, so its cap sits 10.5 below the baseline, as a joined 14/20 line's 10.1): (DESIGN_SYSTEM.md, "Text pairs": a line directly under its title joins it, owner 2026-09-28 on Card and 2026-10-22; was ui-stack, 6, as a choice's own title and description already join) */ }
   .area-radio-group__description { color: var(--area-fg-muted); }
   .area-radio-group__validation { color: var(--area-fg-danger-vivid); }
 
@@ -385,7 +384,11 @@
     flex-direction: column;
     align-items: flex-start;
     gap: var(--area-ui-cluster);
-    margin-block-start: var(--area-ui-stack); /* Field label to control, 6 / compact 4 (audit C-27 A; was 12) */
+    /* A legend (and its description) introduces a set of options, so it stands one step further from them than they
+       stand from each other: options 8 apart (`ui-cluster`), the text group 12 above them (`gap-row`, Stack's group;
+       8 at Compact). DESIGN_SYSTEM.md, "Text pairs" (owner, round 68: "the gap between description and content might
+       need a bit more space"); it was Field's label-to-control 6 (audit C-27 A), closer than the options to each other. */
+    margin-block-start: var(--area-gap-row);
   }
 
   .area-radio-group--vertical .area-radio-group__options { flex-direction: column; }
@@ -423,7 +426,11 @@
     flex-direction: column;
     align-items: flex-start;
     gap: var(--area-ui-cluster);
-    margin-block-start: var(--area-ui-stack); /* Field label to control, 6 / compact 4 (audit C-27 A; was 12) */
+    /* A legend (and its description) introduces a set of options, so it stands one step further from them than they
+       stand from each other: options 8 apart (`ui-cluster`), the text group 12 above them (`gap-row`, Stack's group;
+       8 at Compact). DESIGN_SYSTEM.md, "Text pairs" (owner, round 68: "the gap between description and content might
+       need a bit more space"); it was Field's label-to-control 6 (audit C-27 A), closer than the options to each other. */
+    margin-block-start: var(--area-gap-row);
   }
 
   .area-checkbox-group--vertical .area-checkbox-group__options { flex-direction: column; }

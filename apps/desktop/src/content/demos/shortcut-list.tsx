@@ -10,14 +10,6 @@ export const GalleryShortcutList = () => (
     <ShortcutListItem label="Item three" keys={["cmd", "\\"]} />
   </ShortcutList>
 );
-/* ChatGPT's sheet: the keys as text in the muted ink. */
-export const GalleryShortcutListQuiet = () => (
-  <ShortcutList style={sheet} title="Title" quiet>
-    <ShortcutListItem label="Item one" keys={["cmd", "K"]} />
-    <ShortcutListItem label="Item two" keys={["cmd", "N"]} />
-    <ShortcutListItem label="Item three" keys={["cmd", "\\"]} />
-  </ShortcutList>
-);
 /* No title: a list inside a Popover or a Panel that names it already. */
 export const GalleryShortcutListUntitled = () => (
   <ShortcutList style={sheet} aria-label="Label">

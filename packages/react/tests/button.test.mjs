@@ -39,10 +39,10 @@ test("Button forwards its ref to the native button", () => {
 
 test("Kbd renders one key element per key, a spoken chord name, and the sm/md + variant axes", () => {
   const html = renderToString(h(Kbd, { keys: ["cmd", "K"], size: "sm", variant: "quiet" }));
-  assert.match(html, /class="area-kbd area-kbd--sm area-kbd--quiet"/);
+  assert.match(html, /class="area-kbd area-kbd--sm area-kbd--default"/); // quiet is deprecated: the keycap
   assert.equal((html.match(/<kbd/g) ?? []).length, 2);
   assert.match(html, /<span class="area-sr-only">Command plus K<\/span>/);
-  assert.match(renderToString(h(Kbd, { keys: ["K"], size: "small", appearance: "quiet" })), /area-kbd--sm area-kbd--quiet/);
+  assert.match(renderToString(h(Kbd, { keys: ["K"], size: "small", appearance: "quiet" })), /area-kbd--sm area-kbd--default/);
 });
 
 test("a toggle can be uncontrolled with defaultSelected (audit A-17)", () => {

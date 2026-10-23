@@ -132,7 +132,7 @@ export function derivedTokens(): Record<string, string> {
     // The step itself is the Hover stroke setting (axes/states.ts; 2 is the step above, light subtle and dark border).
     [`${PREFIX}edge-control-hover`]: contrastMix(strokeEdgeHover(), `var(${PREFIX}stroke-control-hover)`),
     [`${PREFIX}edge-selected`]: contrastMix(strokeEdge("faint"), `var(${PREFIX}stroke-control)`),
-    [`${PREFIX}edge-accent`]: `color-mix(in srgb, var(${PREFIX}accent-border), var(${PREFIX}stroke-selected) calc(var(${PREFIX}contrast-more) * 100%))`,
+    [`${PREFIX}edge-accent`]: `color-mix(in srgb, var(${PREFIX}accent-border), var(${PREFIX}accent-indicator) calc(var(${PREFIX}contrast-more) * 100%))`,
     [`${PREFIX}fill-toggle`]: contrastMix(rawEdge("subtle"), `var(${PREFIX}stroke-control)`),
     [`${PREFIX}fill-toggle-hover`]: contrastMix(rawEdge("border"), `var(${PREFIX}stroke-control-hover)`),
     // The strong hover edge, a step past edge-control-hover: an unchecked Checkbox or Radio and a selected Chip under
@@ -208,6 +208,13 @@ export function derivedTokens(): Record<string, string> {
       "selection-band": ["bg-component-hover", "accent-surface"],
       "selection-band-hover": ["bg-component-active", "accent-surface-hover"],
       "selection-edge": ["edge-control-hover", "edge-accent"],
+      // A selected container's edge (Card, Asset card, choice cards): the same colour family as the marks inside it, so a
+      // selected radio card never draws a blue ring round a dark dot (owner, 2026-10-22, option B). At Accent it is the
+      // accent's indicator rung, which clears 3:1 on every ground for every accent; at Neutral, the neutral solid.
+      "stroke-selected": ["neutral-solid", "accent-indicator"],
+      // The keyboard ring follows Selection too (owner, 2026-10-22), so Selection Neutral is an entirely neutral look and
+      // Accent keeps the blue ring. It still reads apart from a selected edge by placement: on or outside, never inside.
+      "focus-color": ["neutral-solid", "accent-indicator"],
     }),
     // Badge's public width hook. (badge-bg, badge-fg and badge-tracking-wide were pruned in
     // audit S21b: Badge paints from its tone slots and never read them.)

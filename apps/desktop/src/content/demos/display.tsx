@@ -117,12 +117,12 @@ export const TooltipDefault = () => <Tooltip>Description</Tooltip>;
 
 export const MenuDefault = () => (
   <Menu>
-    <MenuItem shortcut={<Kbd keys={["cmd", "K"]} variant="quiet" />} icon={<SearchIcon />}>Item one</MenuItem>
-    <MenuItem shortcut={<Kbd keys={["cmd", "N"]} variant="quiet" />} icon={<AddIcon />}>Item two</MenuItem>
+    <MenuItem shortcut={<Kbd keys={["cmd", "K"]} size="sm" />} icon={<SearchIcon />}>Item one</MenuItem>
+    <MenuItem shortcut={<Kbd keys={["cmd", "N"]} size="sm" />} icon={<AddIcon />}>Item two</MenuItem>
     <div className="area-menu__separator" />
     <MenuItem icon={<TokenIcon />}>Item three</MenuItem>
     <MenuItem shortcut={<ArrowRightIcon />} icon={<DotsFourIcon />}>Item four</MenuItem>
-    <MenuItem tone="danger" shortcut={<Kbd keys={["cmd", "backspace"]} variant="quiet" />} icon={<DismissIcon />}>Item five</MenuItem>
+    <MenuItem tone="danger" shortcut={<Kbd keys={["cmd", "backspace"]} size="sm" />} icon={<DismissIcon />}>Item five</MenuItem>
   </Menu>
 );
 
@@ -236,10 +236,10 @@ export const KbdKeyMap = () => (
 
 export const MenuWithShortcuts = () => (
   <Menu>
-    <MenuItem shortcut={<Kbd keys={["cmd", "K"]} variant="quiet" />} icon={<SearchIcon />}>Item one</MenuItem>
-    <MenuItem shortcut={<Kbd keys={["cmd", "N"]} variant="quiet" />} icon={<AddIcon />}>Item two</MenuItem>
+    <MenuItem shortcut={<Kbd keys={["cmd", "K"]} size="sm" />} icon={<SearchIcon />}>Item one</MenuItem>
+    <MenuItem shortcut={<Kbd keys={["cmd", "N"]} size="sm" />} icon={<AddIcon />}>Item two</MenuItem>
     <div className="area-menu__separator" />
-    <MenuItem tone="danger" shortcut={<Kbd keys={["cmd", "backspace"]} variant="quiet" />} icon={<DismissIcon />}>Item three</MenuItem>
+    <MenuItem tone="danger" shortcut={<Kbd keys={["cmd", "backspace"]} size="sm" />} icon={<DismissIcon />}>Item three</MenuItem>
   </Menu>
 );
 

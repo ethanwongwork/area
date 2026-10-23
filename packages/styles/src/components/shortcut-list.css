@@ -68,5 +68,5 @@
   }
 
   /* Quiet keys: ChatGPT sets the combination as text in its secondary ink, no keycaps. */
-  .area-shortcut-list--quiet {}
+  .area-shortcut-list--quiet {} /* deprecated: keys are keycaps everywhere (owner 2026-10-22) */
 }

@@ -390,7 +390,7 @@ export const SliderBuffered = () => (
 export const SliderTones = () => (
   <>
     <Slider aria-label="Label" defaultValue={40} readout={value => `${value}%`} />
-    <div data-area-selection="accent" style={{ display: "contents" }}><Slider aria-label="Label" defaultValue={70} readout={value => `${value}%`} /></div>
+    <div data-area-selection="neutral" style={{ display: "contents" }}><Slider aria-label="Label" defaultValue={70} readout={value => `${value}%`} /></div>
   </>
 );
 

@@ -191,3 +191,12 @@ Resolved 2026-10-10 (owner: "proceed with your suggestions"); kept for the recor
   so no change; the picker triggers differ by design (keyboard-only ring). Clear glyph → `dismiss-circle` (icon branch
   merged in PR 60; Glyph.tsx's knockout mask).
 - 2026-10-11 · owner, review round 8: approved → Complete in `component-status.mjs`.
+
+## Review note, 2026-10-22 (round 69)
+
+- **What changed:** Selection now defaults to the accent, so this family's checked, on, selected, current and filled
+  parts are the accent blue instead of near-black (#282828). Nothing else changed. A theme set to Selection Neutral
+  looks exactly as before; the "Selection / neutral" tile shows it.
+- **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
+  inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
+  blue already; buttons follow Action, which stays neutral.

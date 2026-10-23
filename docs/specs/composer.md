@@ -163,3 +163,8 @@ The Composer gains three things for an agent chat (evidence: docs/research/inspe
 - **What changed:** the composer can hold chips and images above its text, opens the @ and / menu above itself, and
   can queue a message while a reply is still coming.
 - **Why:** the agent chat needs all three; each follows what Cursor, Claude Code and Codex do.
+
+## Review note, 2026-10-22 (round 67)
+
+- **What changed:** Its resting shadow is one tight layer, `0 1px 2px -1px` at 8% (ChatGPT's sm), instead of a soft two-layer haze at 1.5%.
+- **Why:** your picks on the state page (2026-10-21), now the defaults of the new state settings (Inspector: Stroke, Shadow, Fill) (Rest shadow d). Keyboard focus is the brighter indicator blue (#0160d9, was #004cb0), as everywhere since the state settings.

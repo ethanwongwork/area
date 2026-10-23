@@ -122,7 +122,7 @@ returns to `defaultValue` or nothing (`ColorSwatchPicker.tsx`, the form `reset` 
 
 | Peer | Shared role | Area value in peer | This component | Match / reason |
 |---|---|---|---|---|
-| Checkbox, Radio, AlignmentPicker | selection mark | Selection role, neutral by default | `fg-selection` ring | match |
+| Checkbox, Radio, AlignmentPicker | selection mark | Selection role, the accent by default (neutral before 2026-10-22) | `fg-selection` ring | match |
 | Segmented | hover on an unknown ground | `bg-hover` | same | match |
 | Controls | disabled | 50% | same | match |
 | ColorSwatch in the cell | nested radius | concentric = cell radius − 4 | cell 8, swatch 4 at md | match (was 9 / 5 before the swatch's 20% corner, 7 / 5 before that) |
@@ -238,3 +238,12 @@ changes instant)? Recommendation: keep the 100ms fade; it is short enough not to
 
 - **What changed:** its swatches show the thin translucent ring again (black 10% in light, white 10% in dark), solid colours included.
 - **Why:** Color swatch's colour layer had been painting over its ring since a 2026-10-12 merge, so no swatch showed its outline; the fix is in Color swatch (docs/specs/color-swatch.md, round 56), and every family that draws one shows it.
+
+## Review note, 2026-10-22 (round 69)
+
+- **What changed:** Selection now defaults to the accent, so this family's checked, on, selected, current and filled
+  parts are the accent blue instead of near-black (#282828). Nothing else changed. A theme set to Selection Neutral
+  looks exactly as before; the "Selection / neutral" tile shows it.
+- **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
+  inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
+  blue already; buttons follow Action, which stays neutral.

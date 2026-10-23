@@ -172,3 +172,10 @@ The copyable row presses at `bg-component-pressed`, one step past selected (Noti
 
 - **What changed:** the token and its value are inline code, so they follow the text around them (14 at Type 14, was 12).
 - **Why:** a section of the screen with its own Type setting (the canvas, a Theme) now starts its text at Area's body size, so text that inherits its size follows that setting; it kept the app's 13 before.
+
+## Review note, 2026-10-22 (round 68)
+
+- **What changed:** the token name and value are set at Area's small text size, 12/16, instead of 12.25/16.5.
+  The row is still 22 tall.
+- **Why:** the text pass across every family. Token row reused inline Code's size, which is 0.875 of the text around
+  it, so in a 14 panel it landed between two steps of the type ramp. A row stands on its own and takes a ramp size.

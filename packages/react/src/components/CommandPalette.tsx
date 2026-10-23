@@ -154,8 +154,6 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
     }
   };
 
-  const keepFocus = (event: { preventDefault(): void }) => event.preventDefault();
-
   let index = -1;
   const renderRow = (item: CommandItem) => {
     index += 1;
@@ -168,7 +166,7 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
       {item.icon ? <span className="area-menu__icon" aria-hidden="true">{item.icon}</span> : null}
       <span className="area-menu__text area-command-palette__text">{item.label}</span>
       {item.description ? <span className="area-command-palette__description">{item.description}</span> : null}
-      {item.shortcut ? <span className="area-menu__shortcut"><Kbd keys={item.shortcut} size="sm" variant="quiet" /></span> : null}
+      {item.shortcut ? <span className="area-menu__shortcut"><Kbd keys={item.shortcut} size="sm" /></span> : null}
     </div>;
   };
   const groups: Array<[string | undefined, CommandItem[]]> = [];
@@ -200,19 +198,14 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
     </ScrollArea>
     {footer === false ? null : <div className="area-command-palette__footer" aria-hidden={footer ? undefined : true}>
       {footer ?? <>
-        {/* The hints also work by pointer. They stay out of the tab order and keep focus in the
-            field; keyboard users press the keys themselves, so assistive tech skips the row. */}
+        {/* Static hints (owner, round 68): what the keys do, not controls. A pointer clicks the row itself; keyboard
+            users press the keys, so assistive tech skips the row. */}
         <span className="area-command-palette__hint">
-          <button type="button" tabIndex={-1} className="area-command-palette__hint-button" onPointerDown={keepFocus}
-            onClick={() => setActive(step(current < 0 ? 0 : current, -1))} disabled={current < 0}><Kbd keys={["up"]} size="sm" variant="quiet" /></button>
-          <button type="button" tabIndex={-1} className="area-command-palette__hint-button" onPointerDown={keepFocus}
-            onClick={() => setActive(step(current, 1))} disabled={current < 0}><Kbd keys={["down"]} size="sm" variant="quiet" /></button>
+          <span className="area-command-palette__keys"><Kbd keys={["up"]} size="sm" /><Kbd keys={["down"]} size="sm" /></span>
           Move
         </span>
-        <button type="button" tabIndex={-1} className="area-command-palette__hint area-command-palette__hint-button" onPointerDown={keepFocus}
-          onClick={() => run(rows[current])} disabled={current < 0}><Kbd keys={["enter"]} size="sm" variant="quiet" />Open</button>
-        {inline ? null : <button type="button" tabIndex={-1} className="area-command-palette__hint area-command-palette__hint-button" onPointerDown={keepFocus}
-          onClick={() => setOpen(false)}><Kbd keys={["esc"]} size="sm" variant="quiet" />Close</button>}
+        <span className="area-command-palette__hint"><Kbd keys={["enter"]} size="sm" />Open</span>
+        {inline ? null : <span className="area-command-palette__hint"><Kbd keys={["esc"]} size="sm" />Close</span>}
       </>}
     </div>}
   </div>;

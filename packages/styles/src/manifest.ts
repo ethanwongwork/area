@@ -724,7 +724,7 @@ export const commandPalette = {
   description: "Searches actions and places from a shortcut, and runs the one you pick.",
   variants: {},
   booleans: ["inline"],
-  elements: ["modal", "search", "search-icon", "input", "list", "group", "item", "text", "description", "empty", "footer", "hint", "hint-button"],
+  elements: ["modal", "search", "search-icon", "input", "list", "group", "item", "text", "description", "empty", "footer", "hint", "keys"],
   defaults: {},
 } as const satisfies ComponentManifest;
 
@@ -855,7 +855,7 @@ export const popover = {
   description: "Floats rich, interactive content next to the element that opened it.",
   variants: { side: ["top", "right", "bottom", "left"] },
   booleans: ["arrow"],
-  elements: ["header", "title", "description", "body", "footer", "media", "arrow", "arrow-edge"],
+  elements: ["header", "title", "description", "body", "footer", "step", "media", "arrow", "arrow-edge"],
   defaults: { side: "bottom" },
 } as const satisfies ComponentManifest;
 
@@ -986,6 +986,7 @@ export const kbd = {
   variants: {
     size: ["sm", "md"],
     // on-emphasis merged into on-color: one rule, one name (audit A-15).
+    // quiet is deprecated (owner 2026-10-22: every key has its backplate) and renders the default keycap.
     variant: ["default", "quiet", "on-color"],
   },
   elements: ["key"],
@@ -1219,7 +1220,7 @@ export const shortcutList = {
   block: "area-shortcut-list",
   description: "Lists keyboard shortcuts: what each does, and its keys at the end.",
   variants: {},
-  booleans: ["quiet"],
+  booleans: ["quiet"], // deprecated and ignored (owner 2026-10-22: every key is a keycap)
   elements: ["title", "items", "item", "label", "keys"],
   defaults: {},
 } as const satisfies ComponentManifest;

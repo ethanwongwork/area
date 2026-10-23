@@ -30,10 +30,11 @@ test('component paint reads the roles, never the accent directly', () => {
   }
 });
 
-test('action and selection default to neutral and derive from neutral and accent', () => {
+test('action defaults to neutral, selection to the accent (2026-10-22), and both derive from neutral and accent', () => {
   assert.match(tokens, /--area-action-accent: 0;/);
-  assert.match(tokens, /--area-selection-accent: 0;/);
-  for (const [role, neutral, accent] of [['action-solid', 'neutral-solid', 'accent-solid'], ['selection-solid', 'neutral-solid', 'accent-solid'], ['fg-selection', 'fg-default', 'fg-accent']]) {
+  assert.match(tokens, /--area-selection-accent: 1;/);
+  // The selected edge is a Selection role too, so a selected card and the mark inside it are one colour (option B).
+  for (const [role, neutral, accent] of [['action-solid', 'neutral-solid', 'accent-solid'], ['selection-solid', 'neutral-solid', 'accent-solid'], ['fg-selection', 'fg-default', 'fg-accent'], ['stroke-selected', 'neutral-solid', 'accent-indicator'], ['focus-color', 'neutral-solid', 'accent-indicator']]) {
     assert.match(tokens, new RegExp(`--area-${role}: color-mix\\(in srgb, var\\(--area-${neutral}\\), var\\(--area-${accent}\\) calc\\(var\\(--area-(action|selection)-accent\\) \\* 100%\\)\\);`));
   }
 });

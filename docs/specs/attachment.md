@@ -88,3 +88,12 @@ concentric; at the default that is 4, Button's own corner at 20 (owner: "follow 
 
 - **What changed:** The thumbnail's edge is a crisp inset outline instead of a shadow, and a failed upload's edge uses the fields' invalid red. Remove is now `onDismiss` with a `dismissLabel` (the old `onRemove` still works).
 - **Why:** MOTION.md asks for outlines, which snap to whole pixels; every other failed field uses `input-invalid-color`; GOVERNANCE names close actions `onDismiss`.
+
+## Review note, 2026-10-22 (round 69)
+
+- **What changed:** Selection now defaults to the accent, so this family's checked, on, selected, current and filled
+  parts are the accent blue instead of near-black (#282828). Nothing else changed. A theme set to Selection Neutral
+  looks exactly as before; the "Selection / neutral" tile shows it.
+- **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
+  inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
+  blue already; buttons follow Action, which stays neutral.

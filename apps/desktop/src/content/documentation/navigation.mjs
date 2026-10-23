@@ -289,7 +289,7 @@ export default {
       label: "A non-interactive group heading in small muted type.",
       "label-text": "The heading's text: on the rows' text column, or on the icon column over rows with icons.",
       separator: "A rule between groups.",
-      shortcut: "A quiet trailing key hint; in a menu with check rows, every shortcut sits in one column.",
+      shortcut: "A trailing small keycap (a string becomes one); in a menu with check rows, every shortcut sits in one column.",
       check: "The trailing check of a checkable row; it keeps its column when unchecked, so labels don't move.",
       toggle: "A small switch at the row's end, for a checkable row with indicator=\"switch\".",
       "search-surface": "Deprecated: a floating search field over a menu. Use Combobox or Command palette.",
@@ -376,7 +376,7 @@ export default {
       ["Do", "Set keepOpen on an item that should leave the palette open after it runs."],
       ["Do", "Use inline for a search embedded in a page or sidebar; it renders in place, as a search landmark."],
       ["Don't", "Use it to pick a value for a form field; that is Combobox."],
-      ["Don't", "Put controls in a custom footer that need Tab to reach. Focus stays in the field; the default hints are pointer shortcuts for keys."],
+      ["Don't", "Put controls in a custom footer that need Tab to reach. Focus stays in the field; the default hints are static text that names the keys."],
     ],
     // Spec: Anatomy, List pass, Footer inset; command-palette.css.
     parts: {
@@ -392,8 +392,8 @@ export default {
       description: "Muted text after the label, such as a page's parent; it truncates first.",
       empty: "Shown when nothing matches: emptyText, \"No results\" by default.",
       footer: "Key hints under the list, or your own footer; footer={false} removes it.",
-      hint: "One hint: a key and what it does (Move, Open, Close).",
-      "hint-button": "Makes a hint work by pointer. It is outside the Tab order, so focus stays in the field.",
+      hint: "One static hint: a key and what it does (Move, Open, Close); not a control.",
+      keys: "The keycaps of one hint, 2 apart (↑ ↓).",
     },
     // Source: CommandPalette.tsx handleKeyDown, hotkey effect and onCancel.
     keyboard: [
@@ -439,6 +439,7 @@ export default {
       description: "Muted text under the title.",
       body: "The main content: fields, choices, text.",
       footer: "Actions or a step count at the bottom.",
+      step: "A tour's progress at the start of the footer, \"1 of 3\", muted, with figures of one width.",
       media: "An image at the top, its corners following the surface's.",
       arrow: "The optional curved pointer toward the trigger, on whichever side the Popover lands; hidden from assistive tech.",
       "arrow-edge": "The arrow's outline, which joins the surface's border.",

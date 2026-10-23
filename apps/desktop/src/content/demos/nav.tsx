@@ -49,8 +49,8 @@ export const NavHorizontal = () => (
 
 export const NavSeparated = () => <Nav orientation="horizontal" aria-label="Label"><NavItem href="#" current>Item one</NavItem><NavSeparator /><NavItem href="#">Item two</NavItem></Nav>;
 
-export const NavAccent = () => (
-  <div data-area-selection="accent" style={{ display: "contents" }}>
+export const NavNeutral = () => (
+  <div data-area-selection="neutral" style={{ display: "contents" }}>
     <Nav selection="marker" aria-label="Label">
       <NavItem href="#" current>
         Item one

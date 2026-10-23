@@ -316,3 +316,12 @@ rules. The one deliberate difference is the palette cell, which uses the thumb's
 
 - **What changed:** its swatches show the thin translucent ring again (black 10% in light, white 10% in dark), solid colours included.
 - **Why:** Color swatch's colour layer had been painting over its ring since a 2026-10-12 merge, so no swatch showed its outline; the fix is in Color swatch (docs/specs/color-swatch.md, round 56), and every family that draws one shows it.
+
+## Review note, 2026-10-22 (round 69)
+
+- **What changed:** Selection now defaults to the accent, so this family's checked, on, selected, current and filled
+  parts are the accent blue instead of near-black (#282828). Nothing else changed. A theme set to Selection Neutral
+  looks exactly as before; the "Selection / neutral" tile shows it.
+- **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
+  inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
+  blue already; buttons follow Action, which stays neutral.

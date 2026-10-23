@@ -2,14 +2,15 @@
 import { MiniUI } from "../../choice-visuals.tsx";
 import { useEffect, useId, useRef, useState } from "react";
 import type { CSSProperties, ReactNode, MouseEvent } from "react";
-import { Alert, AlignmentPicker, AREA_COLOR_GRID, Avatar, AvatarGroup, Badge, BoxField, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, ButtonGroup, Calendar, Card, CardContent, CardMedia, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Code, CodeBlock, ColorField, ColorPicker, ColorSwatch, ColorSwatchPicker, Combobox, CommandPalette, Composer, ContextMenu, Count, CustomSelect, Dialog, Field, HoverCard, Indicator, IndicatorAnchor, Input, InputAction, InputGroup, InputGroupText, Kbd, KbdGroup, Link, Menu, MenuItem, MenuLabel, MenuSeparator, MenuSub, Message, MessageActions, ModelPicker, Nav, NavGroup, NavItem, NumberField, Panel, PanelRow, PanelSection, PasswordField, Popover, PopoverBody, PopoverClose, PopoverDescription, PopoverFooter, PopoverHeader, PopoverMedia, PopoverTitle, Progress, PromptSuggestions, PropertyList, PropertyListItem, Radio, RadioGroup, ScrollToLatest, Segmented, Select, Separator, Skeleton, Slider, SliderRange, Spinner, SplitButton, Switch, Table, TableCell, TableHeaderCell, Tabs, Textarea, Toast, Toaster, Toolbar, ToolbarGroup, ToolbarItem, ToolbarOverflow, ToolbarSeparator, Tooltip, TreeView, type AlignmentPosition, type BoxValue, type ComboboxOption, type CommandItem, type TreeViewNode, useToaster } from "@area/react";
+import { Alert, AlignmentPicker, AREA_COLOR_GRID, Avatar, AvatarGroup, Badge, BoxField, Breadcrumb, BreadcrumbEllipsis, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator, Button, ButtonGroup, Calendar, Card, CardContent, CardMedia, Checkbox, CheckboxGroup, Chip, ChipGroup, ChipLink, Code, CodeBlock, ColorField, ColorPicker, ColorSwatch, ColorSwatchPicker, Combobox, CommandPalette, Composer, ContextMenu, Count, CustomSelect, Dialog, Field, HoverCard, Indicator, IndicatorAnchor, Input, InputAction, InputGroup, InputGroupText, Kbd, KbdGroup, Link, Menu, MenuItem, MenuLabel, MenuSeparator, MenuSub, Message, MessageActions, ModelPicker, Nav, NavGroup, NavItem, NumberField, Panel, PanelRow, PanelSection, PasswordField, Popover, PopoverBody, PopoverClose, PopoverDescription, PopoverFooter, PopoverHeader, PopoverMedia, PopoverStep, PopoverTitle, Progress, PromptSuggestions, PropertyList, PropertyListItem, Radio, RadioGroup, ScrollToLatest, Segmented, Select, Separator, Skeleton, Slider, SliderRange, Spinner, SplitButton, Switch, Table, TableCell, TableHeaderCell, Tabs, Textarea, Toast, Toaster, Toolbar, ToolbarGroup, ToolbarItem, ToolbarOverflow, ToolbarSeparator, Tooltip, TreeView, type AlignmentPosition, type BoxValue, type ComboboxOption, type CommandItem, type TreeViewNode, useToaster } from "@area/react";
 import { AddIcon, AlignBottomIcon, AlignCenterIcon, AlignLeftIcon, AlignMiddleIcon, AlignRightIcon, AlignTopIcon, AngleIcon, ArrowDownIcon, ArrowUpIcon, AspectRatioIcon, AutoLayoutIcon, BoldIcon, CalendarIcon, ChatIcon, CheckIcon, ChevronDownIcon, ClockIcon, CodeIcon, CopyIcon, CornerIcon, CornersIcon, DismissIcon, DocumentIcon, DotsFourIcon, EyeIcon, EyeOffIcon, FlipIcon, FlipVerticalIcon, FlowFreeIcon, FlowIcon, FlowVerticalIcon, FlowWrapIcon, FolderFilledIcon, FolderIcon, FrameIcon, GlobeIcon, GridIcon, HistoryIcon, InfoIcon, ItalicIcon, KanbanIcon, LayersIcon, LinkIcon, ListIcon, MenuIcon, MoreHorizontalIcon, OpacityIcon, OpenIcon, PaintbrushIcon, PaletteIcon, PanelLeftIcon, PencilIcon, PenToolIcon, PeopleIcon, PersonIcon, PlayIcon, PointerIcon, RectangleIcon, RefreshIcon, RotateIcon, SearchIcon, SettingsIcon, SlidersIcon, StrikethroughIcon, SubtractIcon, SunIcon, TextAlignCenterIcon, TextAlignLeftIcon, TextAlignRightIcon, TextIcon, ThumbsDownIcon, ThumbsUpIcon, TokenIcon, TrashIcon, UnderlineIcon, VolumeIcon, WarningIcon } from "@area/icons";
 // @ts-expect-error — the docs' own highlighter is authored in JavaScript.
 import { highlight } from "../highlight.mjs";
 
 /* Emphasis roles (DESIGN_SYSTEM.md): a tile shows the accent by scoping the role, not by a tone. */
 const ActionAccent = ({ children }: { children: ReactNode }) => <div data-area-action="accent" style={{ display: "contents" }}>{children}</div>;
-const SelectionAccent = ({ children }: { children: ReactNode }) => <div data-area-selection="accent" style={{ display: "contents" }}>{children}</div>;
+/* Selection defaults to the accent (2026-10-22, option B); these tiles show the other value, Neutral. */
+const SelectionNeutral = ({ children }: { children: ReactNode }) => <div data-area-selection="neutral" style={{ display: "contents" }}>{children}</div>;
 
 export const GalleryBreadcrumb = () => (
   <Breadcrumb><BreadcrumbList>
@@ -533,11 +534,11 @@ export const GalleryCheckboxCardTile = () => (
     <Checkbox variant="card" layout="tile" label="Theming" leadingVisual={<SunIcon size={20} />} />
   </CheckboxGroup>
 );
-export const GalleryCheckboxCardAccent = () => (
-  <SelectionAccent><CheckboxGroup label="Label" style={{ inlineSize: "320px" }}>
+export const GalleryCheckboxCardNeutral = () => (
+  <SelectionNeutral><CheckboxGroup label="Label" style={{ inlineSize: "320px" }}>
     <Checkbox variant="card" label="Item one" caption="Description" leadingVisual={<PersonIcon size={20} />} defaultChecked />
     <Checkbox variant="card" label="Item two" caption="Description" leadingVisual={<DocumentIcon />} />
-  </CheckboxGroup></SelectionAccent>
+  </CheckboxGroup></SelectionNeutral>
 );
 export const GalleryCheckboxInvalid = () => <Checkbox label="Label" invalid />;
 export const GalleryCheckboxInvalidChecked = () => <Checkbox label="Label" defaultChecked invalid />;
@@ -1017,7 +1018,7 @@ export const GalleryCommandPalette = () => <CommandPalette inline items={palette
 export const GalleryCommandPaletteModal = () => {
   const [open, setOpen] = useState(false);
   return <>
-    <Button variant="outline" icon={<SearchIcon />} onClick={() => setOpen(true)}>Search<Kbd keys={["cmd", "k"]} size="sm" variant="quiet" /></Button>
+    <Button variant="outline" icon={<SearchIcon />} onClick={() => setOpen(true)}>Search<Kbd keys={["cmd", "k"]} size="sm" /></Button>
     <CommandPalette open={open} onOpenChange={setOpen} hotkey="mod+k" items={paletteItems} placeholder="Search" />
   </>;
 };
@@ -1030,7 +1031,7 @@ export const GalleryCommandPaletteNoFooter = () => <CommandPalette inline footer
  */
 const contextArea: CSSProperties = { display: "grid", placeItems: "center", inlineSize: "calc(var(--area-space-96) * 2 + var(--area-space-48))", minBlockSize: "var(--area-space-96)", border: "var(--area-border-width) dashed var(--area-border-default)", borderRadius: "var(--area-radius-container)", color: "var(--area-fg-muted)" };
 const pageActions = <>
-  <MenuItem shortcut={<Kbd keys={["cmd", "l"]} size="sm" variant="quiet" />} icon={<LinkIcon />}>Copy link</MenuItem>
+  <MenuItem shortcut={<Kbd keys={["cmd", "l"]} size="sm" />} icon={<LinkIcon />}>Copy link</MenuItem>
   <MenuItem icon={<DocumentIcon />}>Duplicate</MenuItem>
   <MenuItem icon={<OpenIcon />}>Open in new tab</MenuItem>
   <MenuSeparator />
@@ -1267,7 +1268,6 @@ export const GalleryKbd = () => (
   <Kbd keys={["cmd", "K"]} />
 );
 export const GalleryKbdSmall = () => <Kbd keys={["cmd", "K"]} size="sm" />;
-export const GalleryKbdQuiet = () => <Kbd keys={["cmd", "K"]} variant="quiet" />;
 export const GalleryKbdChord = () => <Kbd keys={["cmd", "shift", "P"]} />;
 export const GalleryKbdSequence = () => (
   <KbdGroup><Kbd keys={["cmd", "K"]} /><Kbd keys={["P"]} /></KbdGroup>
@@ -1335,15 +1335,15 @@ export const GalleryMenu = () => (
     <MenuItem><span className="area-menu__text">Item three</span></MenuItem>
   </Menu>
 );
-export const GalleryMenuShortcuts = () => <Menu aria-label="Label"><MenuItem shortcut={<Kbd keys={["cmd", "K"]} variant="quiet" />}><span className="area-menu__text">Item one</span></MenuItem><MenuItem shortcut={<Kbd keys={["cmd", "N"]} variant="quiet" />}><span className="area-menu__text">Item two</span></MenuItem></Menu>;
+export const GalleryMenuShortcuts = () => <Menu aria-label="Label"><MenuItem shortcut={<Kbd keys={["cmd", "K"]} size="sm" />}><span className="area-menu__text">Item one</span></MenuItem><MenuItem shortcut={<Kbd keys={["cmd", "N"]} size="sm" />}><span className="area-menu__text">Item two</span></MenuItem></Menu>;
 /* Plain rows and check rows with shortcuts: the plain rows keep the check's column, so the shortcuts line up. */
 export const GalleryMenuMixedRows = () => (
   <Menu aria-label="View">
-    <MenuItem shortcut={<Kbd keys={["cmd", "+"]} variant="quiet" />}><span className="area-menu__text">Zoom in</span></MenuItem>
-    <MenuItem shortcut={<Kbd keys={["cmd", "-"]} variant="quiet" />}><span className="area-menu__text">Zoom out</span></MenuItem>
+    <MenuItem shortcut={<Kbd keys={["cmd", "+"]} size="sm" />}><span className="area-menu__text">Zoom in</span></MenuItem>
+    <MenuItem shortcut={<Kbd keys={["cmd", "-"]} size="sm" />}><span className="area-menu__text">Zoom out</span></MenuItem>
     <MenuSeparator />
-    <MenuItem checked shortcut={<Kbd keys={["shift", "R"]} variant="quiet" />}><span className="area-menu__text">Rulers</span></MenuItem>
-    <MenuItem checked={false} shortcut={<Kbd keys={["shift", "G"]} variant="quiet" />}><span className="area-menu__text">Layout guides</span></MenuItem>
+    <MenuItem checked shortcut={<Kbd keys={["shift", "R"]} size="sm" />}><span className="area-menu__text">Rulers</span></MenuItem>
+    <MenuItem checked={false} shortcut={<Kbd keys={["shift", "G"]} size="sm" />}><span className="area-menu__text">Layout guides</span></MenuItem>
   </Menu>
 );
 
@@ -1591,7 +1591,7 @@ export const GalleryPopoverTrigger = () => {
 export const GalleryPopover = () => (
   <Popover role="dialog">
     <PopoverHeader><PopoverTitle>Title</PopoverTitle><PopoverDescription>Description</PopoverDescription><PopoverClose /></PopoverHeader>
-    <PopoverFooter><span style={{ color: "var(--area-fg-muted)" }}>1</span><Button size="sm" variant="outline">Secondary</Button><Button size="sm">Action</Button></PopoverFooter>
+    <PopoverFooter><PopoverStep current={1} total={3} /><Button size="sm" variant="outline">Secondary</Button><Button size="sm">Action</Button></PopoverFooter>
   </Popover>
 );
 
@@ -1631,7 +1631,7 @@ export const GalleryProgressLabeled = () => (
   </div>
 );
 export const GalleryProgressIndeterminate = () => <Progress label="Label" />;
-export const GalleryProgressAccent = () => <SelectionAccent><Progress value={45} label="Label, 45 percent" /></SelectionAccent>;
+export const GalleryProgressNeutral = () => <SelectionNeutral><Progress value={45} label="Label, 45 percent" /></SelectionNeutral>;
 export const GalleryProgressSmall = () => <Progress value={62} label="Small progress" size="sm" />;
 export const GalleryProgressMedium = () => <Progress value={62} label="Medium progress" size="md" />;
 export const GalleryProgressLarge = () => <Progress value={62} label="Large progress" size="lg" />;
@@ -1670,11 +1670,11 @@ export const GalleryRadioLarge = () => <Radio size="lg" name="gallery-radio-larg
 export const GalleryRadioSelected = () => <Radio name="gallery-radio-selected" value="selected" label="Label" defaultChecked />;
 export const GalleryRadioDisabled = () => <Radio name="gallery-radio-disabled" value="disabled" label="Label" disabled />;
 export const GalleryRadioDisabledSelected = () => <Radio name="gallery-radio-disabled-selected" value="disabled" label="Label" disabled defaultChecked />;
-export const GalleryRadioCardAccent = () => (
-  <SelectionAccent><RadioGroup label="Label" name="gallery-radio-card-accent" defaultValue="one" style={{ inlineSize: "320px" }}>
+export const GalleryRadioCardNeutral = () => (
+  <SelectionNeutral><RadioGroup label="Label" name="gallery-radio-card-neutral" defaultValue="one" style={{ inlineSize: "320px" }}>
     <Radio variant="card" value="one" label="Option one" caption="Description" leadingVisual={<PersonIcon size={20} />} />
     <Radio variant="card" value="two" label="Option two" caption="Description" leadingVisual={<FolderIcon />} />
-  </RadioGroup></SelectionAccent>
+  </RadioGroup></SelectionNeutral>
 );
 
 export const GallerySegmented = () => (
@@ -1787,7 +1787,7 @@ export const GallerySliderBar = () => <Slider variant="bar" aria-label="Label" d
 export const GallerySliderRangeTrack = () => <SliderRange variant="track" defaultValue={[42, 75]} inputs={false} minLabel="Label start" maxLabel="Label end" style={{ inlineSize: "calc(var(--area-space-96) * 3)" }} />;
 export const GallerySliderRangeBar = () => <SliderRange variant="bar" defaultValue={[42, 75]} inputs={false} minLabel="Label start" maxLabel="Label end" style={{ inlineSize: "calc(var(--area-space-96) * 3)" }} />;
 export const GallerySliderBuffered = () => <Slider aria-label="Position" defaultValue={40} buffered={65} />;
-export const GallerySliderAccent = () => <SelectionAccent><Slider aria-label="Label" defaultValue={65} readout={value => `${value}%`} /></SelectionAccent>;
+export const GallerySliderNeutral = () => <SelectionNeutral><Slider aria-label="Label" defaultValue={65} readout={value => `${value}%`} /></SelectionNeutral>;
 export const GallerySliderWithLabel = () => <Slider label="Label" labelPosition="top" defaultValue={50} readout={value => `${value}%`} />;
 export const GallerySliderLabelOnly = () => <Slider label="Label" labelPosition="top" defaultValue={50} />;
 export const GallerySliderSteps = () => <Slider aria-label="Label" min={0.5} max={2} step={0.25} defaultValue={1} readout={value => `${value}×`} />;
@@ -1809,7 +1809,7 @@ export const GallerySpinner = () => (
 export const GallerySpinnerSmall = () => <Spinner size="sm" />;
 export const GallerySpinnerMedium = () => <Spinner size="md" />;
 export const GallerySpinnerLarge = () => <Spinner size="lg" />;
-export const GallerySpinnerAccent = () => <SelectionAccent><Spinner /></SelectionAccent>;
+export const GallerySpinnerNeutral = () => <SelectionNeutral><Spinner /></SelectionNeutral>;
 export const GallerySpinnerButton = () => <Button loading>Button</Button>;
 export const GallerySpinnerBadge = () => <Badge icon={<Spinner />} tone="neutral">Badge</Badge>;
 export const GallerySpinnerInput = () => <Input aria-label="Label" placeholder="Placeholder" loading loaderPosition="trailing" />;
@@ -2076,7 +2076,7 @@ export const GalleryCalendarMultiple = () => <Calendar aria-label="Label" select
 export const GalleryCalendarUnavailable = () => <Calendar aria-label="Label" today={calendarToday} defaultMonth="2026-09" min="2026-09-03" max="2026-10-10" isDateUnavailable={date => ["2026-09-12", "2026-09-13", "2026-09-22"].includes(date)} />;
 export const GalleryCalendarMonday = () => <Calendar aria-label="Label" firstDayOfWeek={1} locale="en-GB" today={calendarToday} defaultValue="2026-09-28" />;
 export const GalleryCalendarPlain = () => <Calendar variant="plain" aria-label="Label" today={calendarToday} defaultValue="2026-09-30" />;
-export const GalleryCalendarAccent = () => <SelectionAccent><Calendar aria-label="Label" selectionMode="range" today={calendarToday} defaultValue={{ start: "2026-09-15", end: "2026-09-19" }} /></SelectionAccent>;
+export const GalleryCalendarNeutral = () => <SelectionNeutral><Calendar aria-label="Label" selectionMode="range" today={calendarToday} defaultValue={{ start: "2026-09-15", end: "2026-09-19" }} /></SelectionNeutral>;
 /* Calendar day treatments (docs/specs/calendar.md). */
 const weekend = (date: string) => [0, 6].includes(new Date(`${date}T12:00`).getDay());
 export const GalleryCalendarCircle = () => <Calendar days="circle" weekdayStyle="narrow" aria-label="Label" today={calendarToday} defaultValue="2026-09-08" min="2026-09-08" max="2026-10-10" isDateUnavailable={weekend} />;
@@ -2115,9 +2115,9 @@ export const GalleryCalendarSchedule = () => {
 };
 export const GalleryCalendarDisabled = () => <Calendar aria-label="Label" today={calendarToday} defaultValue="2026-09-15" disabled />;
 
-/* The Selection role in the accent (DESIGN_SYSTEM.md, "Emphasis roles"): scoped with
-   data-area-selection="accent", as a theme would set it. */
-export const GalleryCheckboxAccent = () => <SelectionAccent><Checkbox label="Label" defaultChecked /></SelectionAccent>;
-export const GalleryRadioAccent = () => <SelectionAccent><Radio name="gallery-radio-accent" value="accent" label="Label" defaultChecked /></SelectionAccent>;
-export const GalleryChipAccent = () => <SelectionAccent><ChipGroup aria-label="Filters"><Chip defaultSelected>Selected</Chip><Chip>Item</Chip></ChipGroup></SelectionAccent>;
-export const GalleryAlignmentPickerAccent = () => <SelectionAccent><AlignmentFrame><AlignmentPicker label="Object alignment" defaultValue="top-left" /></AlignmentFrame></SelectionAccent>;
+/* The Selection role in the neutral ink (DESIGN_SYSTEM.md, "Emphasis roles"): scoped with
+   data-area-selection="neutral", as a theme would set it; the accent is the default. */
+export const GalleryCheckboxNeutral = () => <SelectionNeutral><Checkbox label="Label" defaultChecked /></SelectionNeutral>;
+export const GalleryRadioNeutral = () => <SelectionNeutral><Radio name="gallery-radio-neutral" value="neutral" label="Label" defaultChecked /></SelectionNeutral>;
+export const GalleryChipNeutral = () => <SelectionNeutral><ChipGroup aria-label="Filters"><Chip defaultSelected>Selected</Chip><Chip>Item</Chip></ChipGroup></SelectionNeutral>;
+export const GalleryAlignmentPickerNeutral = () => <SelectionNeutral><AlignmentFrame><AlignmentPicker label="Object alignment" defaultValue="top-left" /></AlignmentFrame></SelectionNeutral>;

@@ -143,3 +143,12 @@ the value now ends the label's row.
 - 2026-10-11 · owner, review round 7: "go with your recs for the open questions" → approved; open questions resolved as recommended (shared rail; circular meter waits).
 - 2026-10-12 · owner, 2026-10-12: "go with your recommendations" (consistency pass) → the label keeps 500 as the meter's title at body size, now named in DESIGN_SYSTEM.md's weight rule (O4); no visual change. (docs/research/consistency-audit-2026-10-12.md)
 - 2026-10-13 · Compass review → the circular meter (open question 2) found its product use in Cursor's context ring; it is Spinner's `value` with `role="meter"` (docs/specs/spinner.md, "Value"), not a Meter shape → no Meter change.
+
+## Review note, 2026-10-22 (round 69)
+
+- **What changed:** Selection now defaults to the accent, so this family's checked, on, selected, current and filled
+  parts are the accent blue instead of near-black (#282828). Nothing else changed. A theme set to Selection Neutral
+  looks exactly as before; the "Selection / neutral" tile shows it.
+- **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
+  inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
+  blue already; buttons follow Action, which stays neutral.

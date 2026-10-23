@@ -16,7 +16,7 @@ test("Menu composes labeled groups, separator, item descriptions and native disa
   // MenuLabel wraps its text in a label-text slot.
   assert.match(html, /<div class="area-menu__label" id="edit-label"><span class="area-menu__label-text">Edit<\/span><\/div><div role="group" aria-labelledby="edit-label">/);
   assert.match(html, /area-menu__lines"><span class="area-menu__text">Delete<\/span><span class="area-menu__description">Cannot undo/);
-  assert.match(html, /area-menu__shortcut">Del/);
+  assert.match(html, /area-menu__shortcut"><span class="area-kbd area-kbd--sm area-kbd--default"><kbd class="area-kbd__key">Del<\/kbd>/); // every key a keycap (2026-10-22)
   assert.match(html, /role="separator" class="area-menu__separator"/);
 });
 

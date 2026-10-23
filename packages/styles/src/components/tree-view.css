@@ -115,8 +115,8 @@
   .area-tree-view__actions > * { opacity: 0; }
   /* Revealed controls appear at once and fade out on fast, as the row's own plate (MOTION.md). */
   .area-tree-view__actions > [data-pinned],
-  .area-tree-view [role="treeitem"]:is(:focus-visible, [aria-selected="true"]) .area-tree-view__actions > * { opacity: 1; transition-duration: 0s; }
-  @media (hover: hover) { .area-tree-view [role="treeitem"]:hover .area-tree-view__actions > * { opacity: 1; transition-duration: 0s; } }
+  .area-tree-view [role="treeitem"]:is(:focus-visible, [aria-selected="true"]) .area-tree-view__actions > * { opacity: 1; --_reveal: 0s; }
+  @media (hover: hover) { .area-tree-view [role="treeitem"]:hover .area-tree-view__actions > * { opacity: 1; --_reveal: 0s; } }
   /* Without hover (touch) the row actions always show, as Message and Card reveals do (audit H-17). */
   @media (hover: none) { .area-tree-view__actions > * { opacity: 1; } }
   .area-tree-view__check { display: grid; place-items: center; flex: 0 0 var(--area-icon-md); inline-size: var(--area-icon-md); block-size: var(--area-icon-md); border: var(--area-stroke-width) solid var(--area-edge-control-hover); transition: var(--area-transition); border-radius: min(max(var(--area-radius-min), round(down, calc(var(--area-icon-md) * var(--area-radius-factor)), 2px)), round(down, calc(var(--area-icon-md) * 7 / 16), 2px)); font-size: var(--area-control-sm-text); line-height: 1; }
@@ -138,6 +138,8 @@
     transition: scale var(--area-duration-fast) var(--area-ease-out), opacity var(--area-duration-fast) var(--area-ease-out);
   }
   .area-tree-view [aria-checked="true"] .area-tree-view__check svg { opacity: 1; scale: 1; }
-  /* Reveal-on-hover fades on the one shared timing (audit F-38). */
-  .area-tree-view__actions > * { transition: opacity var(--area-duration-fast) var(--area-ease-out); }
+  /* Reveal-on-hover fades on the one shared timing (audit F-38). The control keeps its own colour transition beside it
+     (motion sweep 2026-10-22: the opacity-only list dropped the ghost button's hover plate at once), and the reveal
+     zeroes only the opacity's clock, so a plate leaving the button still fades while the row stays hovered. */
+  .area-tree-view__actions > * { --_reveal: var(--area-duration-fast); transition: var(--area-transition), opacity var(--_reveal) var(--area-ease-out); }
 }

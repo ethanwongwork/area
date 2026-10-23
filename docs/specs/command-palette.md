@@ -63,7 +63,7 @@ highlight  5% warm black (rgba 33,27,23 / 0.05)
 | description | muted, after the label | Notion (a page's parent) | — |
 | empty state | one quiet row, 32 tall, muted, at the text-only inset (32 − 1cap) / 2 — the Combobox row (command-palette.css:97-105) | audit D-24 A (owner 2026-09-30): one empty-state row everywhere | Was a centred 96 block |
 | shortcut | Kbd small, quiet, at the end; renders like Menu's string shortcut (UI font 12/16 400, muted, unboxed; kbd.css:89-102) | Kbd; Menu | Was the keyboard face at 500 until audit S12a |
-| footer | key hints (↑ ↓ Move, ⏎ Open, Esc Close), each also a button: ↑ and ↓ move the highlight, Open runs it, Close closes; 24 plates (Button xs height and radius) with the keycap on their 4 inset, the `bg-hover` wash, ink fixed; disabled (50%) with no results; out of the tab order and focus kept in the field; `aria-hidden` (the keys are announced by the field); quiet keys (unboxed UI font 12/16, as the row shortcuts), 12/16 muted labels; plates 8 from the rule, the side and the bottom (concentric with the corner: 4 + 8 = 12; 40 tall + the rule), keycaps starting on the icon column, 16 between hints | Notion's hint row; owner: "the controls … still don't do anything" (2026-09-27) | Notion's hints are text only |
+| footer | key hints (↑ ↓ Move, ⏎ Open, Esc Close) as static text: small keycaps one ui-cluster from their words, ↑ and ↓ 2 apart, 16 between hints (compact 12), the keycaps on the rows' icon column, the footer padded by that column (12) all round | Raycast, Linear, VS Code quick open, Spotlight | owner round 68: static, not buttons (they were buttons from 2026-09-28) |
 
 ## Visual pass
 
@@ -155,7 +155,7 @@ Contract: `docs/MOTION.md`, "Dialog, command palette, confirm dialog". Verified 
 | interrupted (reopen mid-exit) | — | reverses from where it is; the live surface replaces the frozen one (verified) |
 | reduced motion | — | durations are tokens (0); the scale is dropped as well |
 | rows | Menu rows, `data-highlighted` | unchanged (Menu's rule, sibling) |
-| footer hint plates | `background-color` 100 ease-out both ways | hover and press appear at once (`transition-duration: 0s` on `:hover`, `:active`), fade out on `duration-fast` |
+| footer hints | none: static text, nothing transitions | (the hint plates' hover and press were removed in round 70) |
 
 Crispness: resting palette `scale: 1`, top at 77, 600 × 403. Its x was 244.5 in a 1089-wide window:
 layout centring (`margin: auto`), which snaps at paint (`docs/MOTION.md`, Crispness 1); no
@@ -172,7 +172,7 @@ recipe for every modal.
 
 ## Interaction polish, 2026-10-16
 
-Hint buttons press at `bg-component-pressed`, one step past selected (Notion presses at 10%, ChatGPT 12%; it shared selected's fill, 1.5% below hover) (they pressed with the hover). Not selectable. See [interaction polish](../research/interaction-polish-2026-10-16.md).
+Hint buttons press at `bg-component-pressed`, one step past selected (Notion presses at 10%, ChatGPT 12%; it shared selected's fill, 1.5% below hover) (they pressed with the hover). Not selectable. See [interaction polish](../research/interaction-polish-2026-10-16.md). *Superseded in round 70: the hints are static text with no states.*
 
 ## Feedback log
 
@@ -196,3 +196,26 @@ Hint buttons press at `bg-component-pressed`, one step past selected (Notion pre
   hint buttons now centre their content → command-palette.css.
 - 2026-10-14 · owner: "continue working on the next axis" → Surface is one number, the frame's width: `1` (Default) or `0` (Borderless) (was `outlined` / `borderless`; axes/surface.ts). At 0 the palette (the inline one too, which has no lift) lists the Surface axis's `shadow-edge` first in its box-shadow, ChatGPT's frameless-menu edge (`0 0 1px` black 62%, and in dark an inset `0 0 1px` white 20%; captured 2026-10-13), so it keeps an edge at Elevation 0 and in dark, where it had none. Owner approved ("go with your recs"), review https://claude.ai/artifact/L4TCF2W5zcjvBK7xZmaDBN (docs/research/surface-2026-10-14.md).
 - 2026-10-18 · Elevation and Stroke audit (docs/research/elevation-stroke-2026-10-18, "Audit: Area today") → under any Material the palette fell back to the float shadow; it now names `--_elevation: var(--area-shadow-modal)` (the inline palette `0 0 0 0 transparent`, no lift) and lists the material's layers first (`--_m-layers`), so a material never changes its lift (command-palette.css). Unchanged with no material. Checked in the app, light and dark.
+
+## Review note, 2026-10-22 (round 67)
+
+- **What changed:** stacked rows sit 1px apart (were 2px at the default size, and touching at Compact). Keyboard focus is the brighter indicator blue (#0160d9, was #004cb0), as everywhere since the state settings.
+- **Why:** you asked for the gap between nav items to stay the same and not disappear at Compact. ChatGPT's and
+  Notion's sidebars put their rows 1px apart, so `ui-row-gap` is now 1px at every type size and density, for every
+  family that stacks rows. The focus colour is your pick on the state page (2026-10-21).
+
+## Review note, 2026-10-22 (round 68)
+
+- **What changed:** every key is a keycap: the Search trigger's ⌘K has a proper keycap (padding and corner, a plate of the button's ink) instead of a grey patch clinging to the glyphs, and the rows' shortcuts and the footer's ↑ ↓ ↵ are small keycaps instead of muted text.
+- **Why:** your round 67 note, "content modal kbd component looks wrong": the trigger asked for a quiet key, but Button's keycap plate outranked it, so a plate with none of a keycap's padding clung to the glyphs. Then your note that every key should have its backplate: quiet is retired, so all keys share the keycap.
+
+## Review note, 2026-10-22 (round 70)
+
+- **What changed:** the footer's ↑ ↓ Move, ↵ Open and Esc Close are static hints: small keycaps and their words, no
+  buttons and no hover plates. The footer keeps its height and its 16 between hints; the keycaps start on the rows'
+  icon column.
+- **Why:** your round 68 question, "do the move and open kbd shortcuts also need to be buttons?". No: Raycast, Linear,
+  VS Code's quick open and Spotlight show them as hints. A pointer already clicks a row to open it and clicks outside
+  (or the field's clear) to close, so clickable arrows only duplicated the list; as hints they read as one quiet line
+  of help, which is what they are. In 2026-09 you had said the hints "still don't do anything", which made them
+  buttons; without a plate or hover they no longer look like controls, so that expectation doesn't arise.
