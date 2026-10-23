@@ -8,6 +8,11 @@
   included. Color picker: default is the editor alone, Saved colors its own tile, chips md (20 in 28, nine across) on the
   area's edge; sliders-view tracks one rhythm apart; header rule inset. Lists opened from a field (Select, Custom select,
   Combobox, Tag picker) take the field's corner (sm 10/6, md 12/8, lg 14/10); Menus keep 12/8.
+  Corner audit (all 119 families, default settings; every nested rounded pair against outer − inset): fixed the pill
+  Composer's other actions (now pills), Tag picker's tags (nested corner, 4 at every size; was 6 at lg), the bottom
+  Drawer (Dialog's 16, was 12). Left by decision: keycaps keep 6 in Buttons (owner 2026-09-28), Asset card counts its
+  edge (rounds 52/57), Composer context Chips stay pills (Pills set). Merged main with a sparse checkout that leaves out
+  `.claude/skills/area-ui-*` (the app's merge refused: unconfirmed pinned origin); they are in the commit, not on disk.
 
 - **Branch `claude/eager-maxwell-0a929b`, committed, not pushed.** PR #151's three open proposals. Press room (`PRESS_ROOM`,
   color/layers.ts): inks solved on the deepest selected fill pressed 0.012 L (dark 0.04), so a press shows on every
