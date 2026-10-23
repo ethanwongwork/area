@@ -52,7 +52,7 @@ outside both roles.
 | Setting | Values (default) | What it sets |
 |---|---|---|
 | `type` | `12` … `16`, `14` (default) | The base UI text size. Every type role follows: small text is 2 under (never under 10), reading text and titles 2 over. Also the icon stroke, the check box and toggle size, and which densities are allowed (Compact up to 14, Comfortable from 13). |
-| `density` | `28` (Compact), `32` (default), `36` (Comfortable) | The room around text, named by the medium Button's height at type 14. It sets control heights (the text line plus twice the room, never under 24), rows, gaps, layout steps and surface insets. |
+| `density` | `28` (Compact), `32` (default), `36` (Comfortable) | The room around text, named by the medium Button's height at type 14. It sets control heights (the text line plus twice the room, never under 24), rows (the text line plus twice the room, never under 5 a side: 28 at type 13 Compact, owner 2026-10-22), gaps, layout steps and surface insets. |
 | `radius` | `0` (Sharp), `2`, `4`, `6`, `8` (default), `10`, `12`, `14`, `pill` | The medium Button's corner. Every corner derives from it ([Size and shape](DESIGN_SYSTEM.md#size-and-shape)) |
 
 - `data-area-ui` is shorthand, not an axis: `compact` is type 12 with density 28,

@@ -206,14 +206,20 @@ export function TileGrid({ span, cards, min, children }: { span: TileSpan; cards
   );
 }
 
-/** A titled group on the Canvas: a family, a scale, a category, a setting. */
-/** `role="group"` when the section is a ListBox's group of options (a region may not sit inside a listbox). */
-export function CanvasSection({ id, title, lede, role, children }: { id: string; title?: ReactNode; lede?: ReactNode; role?: "group"; children: ReactNode }) {
+/**
+ * A titled group on the Canvas: a family, a scale, a category, a setting. Every section of the feed reads one way
+ * (owner, 2026-10-22: "make the copy, titles, and subtitles to be more consistent and intentional"): its title, then
+ * `count`, muted, when its block is a collection (cards, rows, swatches, icons); and `lede`, one sentence saying what it
+ * holds, where the page explains (a family's tabs, Theme, Typography). `role="group"` when the section is a ListBox's
+ * group of options (a region may not sit inside a listbox).
+ */
+export function CanvasSection({ id, title, count, lede, role, children }: { id: string; title?: ReactNode; count?: number; lede?: ReactNode; role?: "group"; children: ReactNode }) {
   // Untitled when the Sidebar's selected row already names it (one scale, one setting).
   return (
     <section className="studio-section" id={id} role={role} aria-labelledby={title ? `${id}-title` : undefined}>
       {/* Area's SectionHeading (app-shell.css): the strong title trimmed to its cap, the muted lede 8 under it. */}
-      {title ? <SectionHeading className="studio-section-heading" titleId={`${id}-title`} title={title} lede={lede} {...APP_SCALE} /> : null}
+      {title ? <SectionHeading className="studio-section-heading" titleId={`${id}-title`} lede={lede} {...APP_SCALE}
+        title={count === undefined ? title : <>{title} <span className="studio-muted studio-tabular">{count}</span></>} /> : null}
       {children}
     </section>
   );

@@ -95,6 +95,11 @@
     background-color: var(--area-bg-page);
     box-shadow: none;
   }
+  /* A docked panel that is a product's chrome region (data-area-chrome; material.css) paints the chrome ground: the fill
+     its region names (`--area-chrome-fill`, the page by default), which a Material makes see-through. Owner, 2026-10-22:
+     the desktop Sidebar on the subtle step beside a white Canvas (cursor-audit-2026-10-22.md item 4; Notion's sidebar,
+     rgb(249,248,247) on white). It declares its ground with data-area-ground (layers.css) so its plates step from it. */
+  .area-panel--flush[data-area-chrome] { background-color: var(--area-chrome-bg); }
 
   /*
    * The bar uses a small, fixed vertical inset independent of the body's inset tier.

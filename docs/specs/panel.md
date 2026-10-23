@@ -332,6 +332,7 @@ The section toggle is not selectable. See [interaction polish](../research/inter
   centres them above its rule (no top balance), so they share a centre with the Titlebar's and the Canvas header's; a
   horizontal Nav in the bar takes the small control's height and corner, as in the Titlebar (panel.css, inset.css).
 - 2026-10-18 · owner: "start Phase 1: the Chat view on a recorded run" (docs/research/inspector-chat-2026-10-18) →
+- 2026-10-22 · owner, review of docs/research/cursor-audit-2026-10-22.md item 4 ("use the option": the desktop Sidebar on a ground step, no rules under the Canvas and Inspector bars) → a flush Panel marked `data-area-chrome` paints the chrome ground (`--area-chrome-bg`: its region's `--area-chrome-fill`, the page by default; see-through under a Material), as Titlebar and the product's own chrome regions do; it declares its ground with `data-area-ground`. The Inspector's bar uses the existing `bareBar`. Notion's sidebar: rgb(249,248,247) on a white page with a 1px inset edge (`resizable/notion--sidebar-edge`) → panel.css.
   `viewportRef` reaches the body's scrolling element (Scroll area's viewport), so a conversation in the body can follow
   its newest line and Scroll to latest can watch it; `bareFooter` drops the footer's top rule, for a footer that
   continues the body (a chat's composer; Cursor, Claude Code and ChatGPT draw none). Manifest boolean `bare-footer`.

@@ -1,0 +1,166 @@
+/*
+ * The app's layout: Titlebar over Sidebar | Canvas | Inspector. The Titlebar is ruled; the Sidebar sits on the chrome's
+ * recessed ground beside the Canvas, and the Canvas header and the Inspector's bar carry no rule (owner, 2026-10-22).
+ *
+ * One inset and one stroke throughout. Every region insets its content by Panel's 14 (its spec: 14
+ * at both densities), on every side, measured to what is drawn: a control's box, a text's cap or
+ * baseline (text-box trim), a row plate's edge. So the Titlebar's first tab, the Sidebar's rows, the
+ * Canvas's sections and the Inspector's headings start 14 from their region's edge, and the first
+ * text in each region sits on one line under the Titlebar (owner, 2026-10-14: "the inset padding on
+ * the left and right and top and bottom is equal for all headers, panels"). Only the Titlebar is a
+ * bar; the Canvas and Inspector carry no titles (owner, 2026-10-14, after Framer and Figma). The
+ * Canvas's body is a feed with its own wider margin, 32 (owner, 2026-10-22; see .studio-canvas).
+ * Every divider is the same stroke: --area-border-width in --area-border-decorative, the colour
+ * Panel draws its section rules and seams in.
+ * Only the app's own classes are styled here; Area components keep their own CSS. Values are
+ * Area tokens at the app's scale, type 13 and density 28, Compact (data-area-type and data-area-density on <html>);
+ * the Canvas carries its own density, radius and pills from the Inspector.
+ */
+  html, body, #studio { block-size: 100%; margin: 0; }
+  body {
+    overflow: hidden;
+    background: var(--area-bg-page);
+    color: var(--area-fg-default);
+    font-family: var(--area-font-sans);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+    /* Dropdown windows hug their rows (owner, 2026-10-14: "they seem too wide"): Menu's public
+       floor, 128 instead of 224, so a short list is as wide as its longest row and a list under a
+       field as wide as the field. Set here, as menus and pickers float in the top layer. */
+    --area-menu-min-inline-size: calc(var(--area-space-96) + var(--area-space-32)); /* pick: 128, the filters' width */
+  }
+
+  /*
+   * The layout values: every length the app's regions are laid out by, in one place (cursor-audit-2026-10-22.md item
+   * 12), so a density or spacing pass changes them here. Only constants live here; a value that reads a setting the
+   * Canvas previews (an edge colour, a control height) is read where it is used, under that setting. The panels' widths
+   * are the Workspace's (src/studio.tsx, usePanelWidth): Sidebar 240 (200 to 360), Inspector 256 (256 to 500).
+   */
+  .studio {
+    /* Chrome: one inset for every region (Panel's 14), one rule, one bar height. */
+    --_studio-inset: calc(var(--area-space-16) - var(--area-space-2)); /* spec: Panel's 14 */
+    --_studio-rule: var(--area-border-width) solid var(--area-border-decorative);
+    /* The Titlebar's height is Panel's bar (panel.css --_bar: a md row, the panel gap above and
+       below, and the rule), so it matches a Panel's bar at either density. */
+    --_studio-bar: calc(var(--area-control-md) + (var(--area-space-10) - var(--area-space-4) * var(--area-ui-dense)) * 2 + var(--area-border-width));
+    /* The Canvas is a feed (owner, 2026-10-22: "margins larger than the gaps ... a consistent feed style ...
+       documentation style that is simple, repeatable, consistent"; after a component docs page and Primer's
+       UnderlineNav page). One column of sections, each a heading (and lede) over one block: a grid of cards, a Stage,
+       plain text, a Table or a Code block. Four spacings, each clearly larger than the one inside it:
+         gap      12  between cards (Compass's 12, measured; owner, 2026-10-14)
+         heading  12  from a section's heading to its block, so a title reads with what it names
+         section  40  between sections
+         margin   32  round the feed, nearly three gaps, so the cards read as a set inside the page (was 14, the
+                      panels' inset, which the 12 gap nearly equalled)
+       The feed is at most 1120 wide and centred, a reading measure for tables and prose when the panels are hidden;
+       the grid's columns are counted from that width (cqw is the body's content box). */
+    --_canvas-margin: var(--area-space-32);
+    --_canvas-gap: var(--area-space-12);
+    --_canvas-heading: var(--area-space-12);
+    --_canvas-section: var(--area-space-40);
+    --_canvas-measure: 1120px; /* pick */
+    /* Tiles: the Asset card's corner held at 12 whatever the Canvas's Radius previews (owner, 2026-10-13: "make the
+       corner radius sharper"), and its inset; the Stage (src/stage.tsx) is the tile made large, with the same. */
+    --_tile-radius: 12px; /* pick */
+    --_tile-inset: var(--area-space-12);
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+    block-size: 100vh;
+    overflow: hidden;
+    background: var(--area-bg-page);
+  }
+
+  /* --- Titlebar ------------------------------------------------------------ */
+
+  /*
+   * One row: the Sidebar's toggle and the tabs at the start, search, the Inspector's toggle and
+   * light / dark at the end; each panel's toggle sits at its own side (owner, 2026-10-12, after
+   * Cursor's icon tool). A 24 control (sm) with 8 above and below and the divider under it: 41,
+   * the height of Panel's bar and of Cursor's agents window bar, the
+   * border counted once (inset.css). Inside the bar everything
+   * drawn is 12 apart: an icon, a field's edge, a tab's plate (the tabs' own plates stay Nav's 4
+   * apart). The ends are measured to the buttons' boxes, which their hover plates fill, so no
+   * plate reaches into the margin (owner, 2026-10-12: placing the end icons on the inset left the
+   * plates 12 from the traffic lights and 10 from the window's edge). In Electron on macOS the
+   * window has no title bar of its own; the bar is the drag region, and its start clears the
+   * traffic lights.
+   */
+  /* The bar itself is Area's Titlebar (app-shell.css, 2026-10-15): Panel's bar height (41 at the app's scale, Cursor's
+     agents window bar; a 52 trial, owner 2026-10-12, was put back for Cursor's), Panel's 14 inset, the rule, the drag
+     region, and with windowControls="macos" the traffic lights' clearance, 83 and 13. */
+  /* macOS traffic lights (electron/main.cjs): 14px buttons on a 20 pitch from x 13, as Cursor
+     places them in this 39 bar, so they end at 67. The Sidebar toggle's box starts 16 after them, its icon 20
+     (Cursor's agents window: about 21 to the icon), and the last button ends as far from the other
+     edge as the lights start from theirs, 13 (owner, 2026-10-12: lights flush, as Cursor's). */
+  .studio-titlebar__tabs { flex: 0 1 auto; min-inline-size: 0; }
+  /* Search: wide enough for "Search components" and the ⌘K hint (Cursor's command centre
+     reads as a field, not a button). */
+  .studio-titlebar__search { inline-size: calc(var(--area-space-96) * 2 + var(--area-space-48)); /* pick: 240 */ }
+  /* The Canvas header's ghost icon buttons are placed by their icon, as Popover's header close is (surface.css): each
+     gives back its plate's padding on both sides, so the header's gaps measure what is drawn. The Titlebar spaces its
+     controls itself, box to box (app-shell.css, review round 27). */
+  .studio-canvas__actions > .studio-bar-icon { margin-inline: calc((var(--area-icon-sm) - var(--area-control-sm)) / 2); }
+  /* At the header's end a control's plate, not its icon, takes the even inset (below), as the Titlebar's last does
+     (the last control, not the last child: a Tooltip's bubble may follow it). */
+  .studio-canvas__actions > .studio-bar-icon:not(:has(~ :is(.area-button, .area-segmented, .area-zoom-control, .area-select, .area-custom-select))) { margin-inline-end: 0; }
+
+  /* --- Workspace ----------------------------------------------------------- */
+
+  .studio-workspace {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    min-block-size: 0;
+  }
+  .studio-workspace:not([data-sidebar]) { grid-template-columns: minmax(0, 1fr) auto; }
+  .studio-workspace:not([data-inspector]) { grid-template-columns: auto minmax(0, 1fr); }
+  .studio-workspace:not([data-sidebar]):not([data-inspector]) { grid-template-columns: minmax(0, 1fr); }
+  /* The Sidebar's ground: the chrome fill its Panel paints (panel.css, a flush Panel marked data-area-chrome), Area's
+     subtle step (owner, 2026-10-22: "use the option"; cursor-audit-2026-10-22.md item 4, after Notion's sidebar,
+     rgb(249,248,247) on a white page with a hairline at its edge). A Material makes it see-through (material.css). */
+  .studio-sidebar { --area-chrome-fill: var(--area-bg-subtle); }
+  .studio-sidebar,
+  .studio-inspector {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr);
+    min-block-size: 0;
+  }
+  /* The dividers: one hairline on each panel's inner edge. */
+  /* The dividers between the panels are the Panels' own seams (a flush, resizable Panel keeps the
+     edge it is resized from), so nothing here adds a second line beside them. */
+  /* The Sidebar has no bar. Its rows hang their plates into the inset by the row's own inset
+     (panel.css), 6 from the sides. The first row centres on the line the Canvas header's controls and
+     the Inspector's first heading share: half of what the bar leaves around a row, 5 at the app's 28
+     rows (6 at the 26 rows before 2026-10-22), whatever the row's height (studio.tsx, SidebarList).
+     The Panel body's 14 at the foot gives back the 8. */
+  .studio-sidebar__list {
+    padding-block-start: calc((var(--_studio-bar) - var(--area-border-width) - var(--area-ui-row)) / 2);
+    margin-block-end: calc(var(--area-ui-row-inset) * -1);
+  }
+
+
+  /* The Inspector's selection (src/inspector.tsx): Area's PreviewFrame, then the copy actions two
+     to a row, 8 apart (the icon hover window's spacing). */
+  /* The Inspector's views (src/studio.tsx, InspectorPanel): Theme, Design and Code as the Titlebar's Nav pills, in the
+     Panel's bar, so they share the line the Canvas header and the Sidebar's first row sit on (rule 14). */
+  .studio-inspector__views { flex: 0 1 auto; min-inline-size: 0; }
+  /* A colour value in a facts row: its swatch, then its value (Code view, src/specimen-box.tsx). */
+  .studio-inspector-color { display: inline-flex; align-items: center; gap: var(--area-space-6); min-inline-size: 0; }
+  .studio-inspector-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--area-space-8); }
+  .studio-inspector-actions > :last-child:nth-child(odd) { grid-column: 1 / -1; }
+
+  /* A step's semantic tokens (src/pages/color.tsx), one to a line. */
+  .studio-used-by { display: grid; gap: var(--area-space-2); }
+
+  .studio-inspector-note {
+    margin: 0;
+    color: var(--area-fg-muted);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
+  }
+  .studio-muted { color: var(--area-fg-muted); font-weight: var(--area-weight-regular); }
+  /* A page's opening sentence (a family's purpose): a subtitle, as a section's (the feed's one size, 13/18, muted), at a
+     reading measure, trimmed to cap and baseline so
+     the Canvas's margin and the 24 to the tabs measure to its ink. */
+  .studio-lede { margin: 0 0 var(--area-space-24); max-inline-size: 80ch; /* pick: the docs' measure */ color: var(--area-fg-muted); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); text-box: trim-both cap alphabetic; }
+  .studio-tabular { font-variant-numeric: tabular-nums; }
+  .studio-prop { display: block; }

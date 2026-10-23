@@ -4,7 +4,7 @@
  * Options to choose one from (docs/specs/list-box.md), one Tab stop for the set. Nothing here is a new value:
  *
  * - list: each option is Menu's row (area-menu__item, the value picker's selected plate and check, as Custom
- *   select's options), and a section's heading is Menu's label.
+ *   select's options), and a section's heading is Menu's label (Nav's: the rows' size at 500, muted).
  * - grid: options flow in rows of square cells, `--area-list-box-item` on a side (48 by default: control-xl, the app's
  *   icon cell at 16), 2 apart (the app's icon sheet). An option is the row plates' pair (DESIGN_SYSTEM.md, "Shared
  *   state paint"): hover, then press and selected a step firmer, corner radius-row, focus an inset ring, in at once
@@ -20,7 +20,7 @@
   }
   /* list is the default: Menu's rows stacked. The hook is for a caller's layout. */
   .area-list-box--list {}
-  /* A section's heading is Menu's label (area-menu__label): muted, small text, in the rows' inset. */
+  /* A section's heading is Menu's label (area-menu__label): Nav's group label, the rows' size at 500, muted, in the rows' inset. */
   .area-list-box__heading {}
   .area-list-box__section { display: flex; flex-direction: column; gap: var(--area-ui-row-gap); min-inline-size: 0; }
   .area-list-box__options { display: flex; flex-direction: column; gap: var(--area-ui-row-gap); }

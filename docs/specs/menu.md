@@ -137,9 +137,9 @@ SplitButton's menu uses the same handler.
 dismissed) beside the gallery's Content / icons tile: same anatomy (leading icons on one column,
 muted shortcuts at the end, inset rules between groups, the floating lift). Notion's rows are
 denser (about 28 against Area's 32 tier) and it keeps "Move to Trash" in the default ink where
-Area colours the danger row, as ChatGPT does. Group labels now follow Nav's: 12/16 in the muted
-ink (Notion's menu and palette labels are 12px), one pattern across Menu, Combobox, Command
-palette and Context menu.
+Area colours the danger row, as ChatGPT does. Group labels follow Nav's (since 2026-10-22): the rows' size at weight 500 in the muted ink, a
+row tall, one pattern across Nav, Menu, Combobox, Command palette, Custom select, Context menu and
+List box. Notion's menu and palette labels are 12/14.4 500; ChatGPT's sidebar labels keep the rows' 14 at 500.
 
 ## Verification
 
@@ -256,6 +256,7 @@ Rows press at `bg-component-pressed`, one step past selected (Notion presses at 
   on Menu, Select's picker, Custom select, Combobox and Tag picker; the default is unchanged, and a
   list anchored to a field stays at least the field's width. The desktop app sets 128.
 - 2026-10-17 · owner: "go with your recs" (after round 30), the hover and pressed sweep (docs/research/layers-2026-10-16/sweep/states.mjs) → a danger item's red is solved for the row's pressed fill, the deepest it sits on: in light it darkens beyond the page's own darken by what the raised pressed fill needs (`--_danger-darken`, from `layer-light-raised-fill-2` and the vivid bound, 0.063 at the defaults), in dark it lifts past a raised pressed fill of L 0.396, 6.1× the excess (`--_danger-lift`, fitted over every accent and neutral; 0 up to the defaults). The same red at rest, so the ink stays fixed across states. Was 4.15:1 hovered and 3.97:1 pressed at the defaults, 3.2:1 pressed at dark 24 + 8.
+- 2026-10-22 · owner: "work through each of these items ... more intentional, consistent and overall professional" (docs/research/cursor-audit-2026-10-22.md item 1) → group labels take Nav's label, the owner's ChatGPT pick of 2026-09-27: the rows' size at 500, muted (was 12/16 at 400 since 2026-09-27's batch 2, left behind when Nav moved). One label for every run of rows. Evidence: ChatGPT sidebar 14/18 500 over 14 rows, Figma panel headings 550 at the rows' 11 (same size); Notion 12/16 500 over 14 and Cursor 11/14 over 12 (a step down) → surface.css (.area-menu__label).
 
 ## Settings collisions fixed (2026-10-18)
 

@@ -25,6 +25,8 @@ export const packagesBuilt = () => [areaCss, join(repo, "packages/react/dist/mod
 export function copyStatic() {
   mkdirSync(dist, { recursive: true });
   for (const file of STATIC) copyFileSync(join(root, "src", file), join(dist, file));
+  // studio.css imports its parts from src/styles (cursor-audit-2026-10-22.md item 11).
+  cpSync(join(root, "src/styles"), join(dist, "styles"), { recursive: true });
   copyFileSync(areaCss, join(dist, "area.css"));
   cpSync(images, join(dist, "images"), { recursive: true });
 }

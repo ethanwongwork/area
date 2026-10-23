@@ -1,0 +1,28 @@
+  /* --- Color --------------------------------------------------------------- */
+
+  /*
+   * A step's card (src/pages/color.tsx, ColorCard): the painted tile, its level and a contrast
+   * badge in the header, then one blank line, then hex, RGB and OKLCH in tabular figures. All its
+   * text is the one ink that reads on the colour (owner, 2026-10-14: no thinned field names); only
+   * the badge's plate is that ink thinned (12%, a pick).
+   */
+  .studio-swatch__level { font-weight: var(--area-weight-regular); font-variant-numeric: tabular-nums; } /* regular weight: no bold on the cards (owner, 2026-10-12) */
+  /* Block lines, so the last value's baseline is trimmed onto the tile's inset at the foot, as the
+     level's cap is at the head. One blank line of the values' leading under the level (owner,
+     2026-10-14): from the level's baseline to the hex's cap is a line's leading and the leading less
+     the cap, as in untrimmed text with an empty line between. A long value wraps onto the next line. */
+  .studio-swatch__grade { color: var(--_ink); }
+  .studio-swatch__values {
+    display: block;
+    text-box: trim-both cap alphabetic;
+    align-self: start;
+    margin-block-start: calc(2lh - 1cap - var(--area-space-8)); /* the caption's 8 counted */
+    min-inline-size: 0;
+    font-size: var(--area-text-xs-size);
+    line-height: var(--area-text-xs-leading);
+    font-variant-numeric: tabular-nums;
+  }
+  .studio-swatch__values > * { display: block; overflow-wrap: anywhere; }
+
+  /* A list row's step: a colour chip beside its level. */
+  .studio-step { display: inline-flex; align-items: center; gap: var(--area-space-8); font-variant-numeric: tabular-nums; }

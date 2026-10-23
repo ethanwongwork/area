@@ -57,6 +57,7 @@ jobs:
           npm run build -w @area/desktop
           npm run check:playgrounds -w @area/desktop
           npm run check:docs -w @area/desktop
+          npm run check:app-css -w @area/desktop
 
       - name: Consumer install
         run: npm run test:consumer

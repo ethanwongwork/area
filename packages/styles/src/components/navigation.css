@@ -277,6 +277,17 @@
   .area-table--flush {
     --_flush-side: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense)); /* the cells' side inset */
   }
+  /* A flush table meets what is above and below as a card or a paragraph does (owner, 2026-10-22: "make sure the gaps
+     vertically are correct and consistent"). Read, not chosen: its first row drops the cell inset above it and its last
+     row the inset below, and their text is trimmed to cap and baseline, as Area trims titles; a cell holding a framed
+     inline (Code, Badge, Kbd) keeps its line box, whose edge the frame reaches. Interactive: the cells keep their inset
+     for the row plates, and the table hangs it into the margin above and below, as the plates hang past each side, so
+     its text, not its padding, meets the content edges. */
+  .area-table--flush.area-table--interactive { margin-block: calc(var(--_cell-inset) * -1); }
+  .area-table--flush:not(.area-table--interactive) > :first-child > tr:first-child > :is(th, td) { padding-block-start: 0; }
+  .area-table--flush:not(.area-table--interactive) > :last-child > tr:last-child > :is(th, td) { padding-block-end: 0; }
+  .area-table--flush:not(.area-table--interactive) > :first-child > tr:first-child > :is(th, td):not(:has(.area-code, .area-badge, .area-kbd)) { text-box-trim: trim-start; text-box-edge: cap alphabetic; }
+  .area-table--flush:not(.area-table--interactive) > :last-child > tr:last-child > :is(th, td):not(:has(.area-code, .area-badge, .area-kbd)) { text-box-trim: trim-end; text-box-edge: cap alphabetic; }
   .area-table--flush th { background-color: transparent; }
   .area-table--flush :is(th, td):first-child { padding-inline-start: 0; }
   .area-table--flush :is(th, td):last-child { padding-inline-end: 0; }
