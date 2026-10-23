@@ -51,12 +51,19 @@ const MAX = 1;
  *   largest   anything bigger (Code block, Board, Color picker, Command palette, Panel, Calendar)         75%
  * A specimen that stretches is measured at its content's width (a Code block's longest line, a fifth more), or, if it
  * fills (a field, a slider), at Area's contained field width (16rem, --area-input-inline-size), never the probe's.
+ *
+ * Since 2026-10-22 every group shows at one scale (owner: "adjust the scale of all the components inside, since some
+ * components read very large compared to others that are scaled down alot"), so specimens keep their real proportions
+ * to each other and only one too large for its card shrinks further. 70% is the largest scale at which the largest
+ * group still fits a 277 card (the three-across card in a 1440 window): Calendar 0.71, Composer menu 0.72, Asset card
+ * and Preview frame 0.73, Code block 0.75 when measured. The groups stay, read by data-fit-group, to retune by.
  */
+const AUTO_SCALE = 0.7;
 const GROUPS = [
-  { name: "small", area: 6000, scale: 0.9 },
-  { name: "medium", area: 24000, scale: 0.85 },
-  { name: "large", area: 56000, scale: 0.8 },
-  { name: "largest", area: Infinity, scale: 0.75 },
+  { name: "small", area: 6000, scale: AUTO_SCALE },
+  { name: "medium", area: 24000, scale: AUTO_SCALE },
+  { name: "large", area: 56000, scale: AUTO_SCALE },
+  { name: "largest", area: Infinity, scale: AUTO_SCALE },
 ] as const;
 const FLUID_WIDTH = 256;
 const groupOf = (size: Box) => GROUPS.find(group => size.w * size.h <= group.area)!;

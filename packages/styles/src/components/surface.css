@@ -102,7 +102,7 @@
        cards an 8% ring; the owner took it a rung lighter, with the shadow above. */
     border: var(--_card-border) solid var(--_card-edge);
     border-radius: var(--_card-corner);
-    background: var(--area-bg-surface);
+    background: var(--area-bg-card); /* Card tone (Auto: the raised layer, bg-surface) */
     color: var(--area-fg-default);
     font-size: var(--_card-title-size);
     line-height: var(--_card-title-leading);
@@ -176,7 +176,7 @@
   .area-card--immersive > .area-card__media { aspect-ratio: auto; z-index: -2; }
   .area-card--immersive::before {
     content: "";
-    background: linear-gradient(180deg, transparent 25%, var(--area-bg-surface) 70%);
+    background: linear-gradient(180deg, transparent 25%, var(--area-bg-card) 70%);
     z-index: -1;
   }
   /* Over a picture the text keeps the overlay controls' line, two insets from the card's edge

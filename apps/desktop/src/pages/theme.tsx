@@ -114,7 +114,7 @@ function ThemeBrowse({ mode, setMode, flowSwitch }: { mode: Mode; setMode: (mode
         <EmptyState title="No settings" description={`Nothing matches “${query}”.`} />
       ) : layout === "list" ? (
         // List: one row per preset, its attribute and whether it is the default.
-          <Table size="md" interactive flush aria-label="Settings">
+          <Table size="md" interactive aria-label="Settings">
             <thead><tr><th scope="col">Setting</th><th scope="col">Value</th><th scope="col">Attribute</th><th scope="col">Default</th></tr></thead>
             <tbody>
               {onCanvas.flatMap(entry => presetsOf(entry).map(preset => (

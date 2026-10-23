@@ -25,9 +25,10 @@ import { ExamplesPage } from "./pages/examples.tsx";
 import { MaterialsPage } from "./pages/materials.tsx";
 import { BrandPage } from "./pages/brand.tsx";
 import { readStored, writeStored } from "./storage.ts";
+import { AppScaleContext, SETUP_SCALE, type AppScale } from "./app-scale.ts";
 import { ChatComposer, ChatProvider, ChatTranscript, selectionLabel, useChat } from "./chat/chat.tsx";
 import { MATERIAL_BUNDLES } from "@area/tokens/config";
-import { bundleValue, materialAttributes, restoreMaterial, type MaterialState } from "./material.ts";
+import { bundleValue, MATERIAL_DEFAULT, materialAttributes, restoreMaterial, type MaterialState } from "./material.ts";
 
 /* Text-only tabs (owner, 2026-10-11: no icons in the Titlebar's tabs). */
 export const TABS = [
@@ -62,7 +63,7 @@ export const CANVAS_DEFAULTS = Object.fromEntries(
  * otherwise leave its Select blank and match no preset. Keys no control reads are dropped. A Canvas
  * from before the type / density split (`ui`: compact or default) restores as its two settings, and
  * a density saved by name (compact, default, comfortable) as its number. One Layers contrast saved before it
- * split by theme (2026-10-17) restores as both.
+ * split by theme (2026-10-17) restores as both, and an odd Layers step from before the five steps rounds up.
  */
 function restoreCanvas(saved: Partial<CanvasAxes> & { ui?: string; layers?: string }): CanvasAxes {
   const { ui, layers, ...rest } = saved;
@@ -73,6 +74,14 @@ function restoreCanvas(saved: Partial<CanvasAxes> & { ui?: string; layers?: stri
   const merged: Record<string, unknown> = { ...legacy, ...rest };
   const named: Record<string, string> = { compact: "28", default: "32", comfortable: "36" };
   if (typeof merged.density === "string" && merged.density in named) merged.density = named[merged.density];
+  // Contrast has nine levels since 2026-10-22: Standard, Medium and More restore as 0, 4 and 8.
+  const contrastNamed: Record<string, string> = { standard: "0", medium: "4", more: "8" };
+  if (typeof merged.contrast === "string" && merged.contrast in contrastNamed) merged.contrast = contrastNamed[merged.contrast];
+  // Layers has five steps since 2026-10-22 (0, 2, 4, 6, 8): a saved odd step rounds up to the next one, not the default.
+  for (const axis of ["layers-light", "layers-dark"]) {
+    const step = Number(merged[axis]);
+    if (typeof merged[axis] === "string" && Number.isInteger(step) && step % 2 === 1) merged[axis] = String(Math.min(8, step + 1));
+  }
   const canvas = { ...CANVAS_DEFAULTS };
   for (const control of GALLERY_CONTROLS) {
     if (control.axis === "theme") continue;
@@ -86,7 +95,16 @@ function restoreCanvas(saved: Partial<CanvasAxes> & { ui?: string; layers?: stri
   return canvas;
 }
 
-export { APP_SCALE } from "./app-scale.ts";
+
+/** A computed colour (rgb(), color(srgb …), oklab …) as #rrggbb, read from one painted pixel. */
+function paintedHex(color: string): string {
+  const context = document.createElement("canvas").getContext("2d");
+  if (!context) return "";
+  context.fillStyle = color;
+  context.fillRect(0, 0, 1, 1);
+  const [r, g, b] = context.getImageData(0, 0, 1, 1).data;
+  return `#${[r, g, b].map(channel => channel!.toString(16).padStart(2, "0")).join("")}`;
+}
 
 /**
  * A theme or setting change lands at once (MOTION.md, "Theme / density change"): `data-area-switching` (base.css) stops
@@ -117,6 +135,8 @@ function readLocation(): { tab: TabId; item?: string } {
 
 interface StudioState {
   query: string;
+  /** The app's mode (the Titlebar's switch): which theme's Ground and Layers the Inspector sets. */
+  theme: Theme;
   canvas: CanvasAxes;
   setCanvas: (axis: keyof CanvasAxes, value: string) => void;
   /** The Canvas's Material (src/material.ts): a bundle and the levers moved away from it. */
@@ -189,6 +209,24 @@ export function Studio() {
     window.areaDesktop?.setTheme(theme);
   }, [theme]);
 
+  // The app is drawn in the choices it offers (owner, 2026-10-22: "make sure the electron ui is a reflection of the
+  // actual choices"): the Titlebar, Sidebar and Inspector take every Inspector setting and the Material on <html>, type and
+  // density included (owner, same day). Only committed choices: a hover preview repaints the Canvas alone.
+  const appliedPicks = useRef<string[]>([]);
+  useLayoutEffect(() => {
+    const root = document.documentElement;
+    const picks = canvasAttributes(canvas, material);
+    switchInstantly(root);
+    for (const name of appliedPicks.current) if (!(name in picks) || picks[name as keyof typeof picks] === undefined) root.removeAttribute(name);
+    for (const [name, value] of Object.entries(picks)) if (value !== undefined) root.setAttribute(name, value);
+    appliedPicks.current = Object.keys(picks);
+    // The window's own ground (seen while it resizes) is the page's, as the chosen ground paints it.
+    window.areaDesktop?.setGround?.(paintedHex(getComputedStyle(document.body).backgroundColor));
+    // The traffic lights stay centred on the Titlebar, which grows with type and density (39 at 13 Compact, 53 at 14/32).
+    const bar = document.querySelector(".studio-titlebar")?.getBoundingClientRect().height;
+    if (bar) window.areaDesktop?.setTitlebar?.(bar);
+  }, [canvas, material, theme]);
+
   // Shortcuts, as the Tooltips name them: ⌘K focuses search; ⌘B and ⌥⌘B show and hide the Sidebar
   // and the Inspector (Cursor's and VS Code's primary and secondary side bars); ⌘[ and ⌘] go back
   // and forward through what the Canvas showed (Finder, Safari, Cursor).
@@ -216,8 +254,11 @@ export function Studio() {
     return next;
   });
 
+  // The app's chrome inside the Canvas (tile heads, section titles) at the committed type and density (src/app-scale.ts).
+  const scale = useMemo<AppScale>(() => ({ "data-area-type": canvas.type, "data-area-density": canvas.density }), [canvas.type, canvas.density]);
   const state = useMemo<StudioState>(() => ({
     query,
+    theme,
     canvas,
     setCanvas: (axis, value) => setCanvasState(current => {
       const next = { ...current, [axis]: value };
@@ -260,11 +301,12 @@ export function Studio() {
       writeStored("panels", next);
       return next;
     }),
-  }), [query, canvas, material, previewAxes, previewedMaterial, item, tab, go, panels, inspectorView]);
+  }), [query, theme, canvas, material, previewAxes, previewedMaterial, item, tab, go, panels, inspectorView]);
 
   const current = TABS.find(entry => entry.id === tab)!;
   return (
     <StudioContext.Provider value={state}>
+    <AppScaleContext.Provider value={scale}>
       {/* The conversation outlives tabs and views; the Canvas's selection rides along as its context chip. */}
       <ChatProvider selection={selectionLabel(item)}>
       <ChatShortcut />
@@ -302,6 +344,7 @@ export function Studio() {
           tab === "brand" ? <BrandPage /> : <ColorPage />}
       </div>
       </ChatProvider>
+    </AppScaleContext.Provider>
     </StudioContext.Provider>
   );
 }
@@ -326,26 +369,39 @@ export function ChromeButton({ label, icon, keys, shortcut, onClick, pressed, ta
 
 /*
  * Panel widths, resizable from the inner edge and kept across tabs and launches. Sidebar: Panel's
- * own 240 (a pick), 200 to 360. Inspector: 256, measured as the narrowest at which its one-row
- * controls show their whole labels (at 240 a label-beside Segmented clips "Compact" by 4), up to
- * Panel's 500.
+ * own 240 (a pick), 200 to 360, at type 13, scaled by type / 13 and kept in type-13 pixels (its long names end in an
+ * ellipsis by design). Inspector: up to Panel's 500, never narrower than its one-row controls need to show their
+ * whole labels (at 240 a label-beside Segmented clipped "Compact" by 4). The app takes the chosen type and density
+ * (PRODUCT_UI.md rule 18), so that floor is measured per pair: the narrowest width at which no label's text exceeds
+ * its box, rounded up to the 4 grid (2026-10-22: 255 → 256 at 13/28, 366 → 368 at 16/36).
  */
 const WIDTHS = {
   sidebar: { initial: 240, min: 200, max: 360 },
   inspector: { initial: 256, min: 256, max: 500 },
 } as const;
+const INSPECTOR_FLOOR: Record<string, number> = {
+  "12/28": 260, "12/32": 260, "12/36": 260,
+  "13/28": 256, "13/32": 272, "13/36": 304,
+  "14/28": 272, "14/32": 296, "14/36": 332,
+  "15/28": 324, "15/32": 324, "15/36": 360,
+  "16/28": 332, "16/32": 332, "16/36": 368,
+};
 
-function usePanelWidth(panel: keyof typeof WIDTHS) {
+function usePanelWidth(panel: keyof typeof WIDTHS, type: string, density: string) {
   const limits = WIDTHS[panel];
-  const [width, setWidth] = useState(() => {
+  const scale = panel === "sidebar" ? (Number(type) || 13) / 13 : 1;
+  const min = panel === "inspector" ? INSPECTOR_FLOOR[`${type}/${density}`] ?? limits.min : Math.round(limits.min * scale);
+  const max = Math.max(min, Math.round(limits.max * scale));
+  const [base, setBase] = useState(() => {
     const saved = Number(readStored<Record<string, number>>("widths", {})[panel]);
     return saved >= limits.min && saved <= limits.max ? saved : limits.initial;
   });
   const onWidthChange = (next: number) => {
-    setWidth(next);
-    writeStored("widths", { ...readStored<Record<string, number>>("widths", {}), [panel]: next });
+    const kept = Math.min(limits.max, Math.max(limits.min, Math.round(next / scale)));
+    setBase(kept);
+    writeStored("widths", { ...readStored<Record<string, number>>("widths", {}), [panel]: kept });
   };
-  return { width, onWidthChange, minWidth: limits.min, maxWidth: limits.max };
+  return { width: Math.min(max, Math.max(min, Math.round(base * scale))), onWidthChange, minWidth: min, maxWidth: max };
 }
 
 export interface WorkspaceProps {
@@ -379,7 +435,7 @@ export interface WorkspaceProps {
 
 /** The Inspector's settings and the Material as the attributes a scope takes (the Canvas's body, or a preview's). */
 export function canvasAttributes(shown: CanvasAxes, material: Parameters<typeof materialAttributes>[0]): Record<string, string | undefined> {
-  return { "data-area-neutral": shown.neutral, "data-area-accent": shown.accent, "data-area-ground-light": shown["ground-light"], "data-area-ground-dark": shown["ground-dark"], "data-area-layers-light": shown["layers-light"], "data-area-layers-dark": shown["layers-dark"], "data-area-action": shown.action, "data-area-selection": shown.selection, "data-area-contrast": shown.contrast === "system" ? undefined : shown.contrast, "data-area-type": shown.type, "data-area-density": shown.density, "data-area-radius": shown.radius, "data-area-surface": shown.surface, "data-area-shadow-rest": shown["shadow-rest"], "data-area-elevation": shown.elevation, ...Object.fromEntries(DEPTH_LEVER_AXES.map(axis => [`data-area-${axis}`, shown[axis]])), "data-area-motion": shown.motion, "data-area-easing": shown.easing, "data-area-pills": shown.pills, ...materialAttributes(material) };
+  return { "data-area-neutral": shown.neutral, "data-area-tint-hue": shown["tint-hue"], "data-area-tint-light": shown["tint-light"], "data-area-tint-dark": shown["tint-dark"], "data-area-ink-tint": shown["ink-tint"], "data-area-accent": shown.accent, "data-area-ground-light": shown["ground-light"], "data-area-ground-dark": shown["ground-dark"], "data-area-layers-light": shown["layers-light"], "data-area-layers-dark": shown["layers-dark"], "data-area-card-tone-light": shown["card-tone-light"], "data-area-card-tone-dark": shown["card-tone-dark"], "data-area-action": shown.action, "data-area-selection": shown.selection, "data-area-contrast": shown.contrast === "system" ? undefined : shown.contrast, "data-area-type": shown.type, "data-area-density": shown.density, "data-area-radius": shown.radius, "data-area-surface": shown.surface, "data-area-shadow-rest": shown["shadow-rest"], "data-area-elevation": shown.elevation, ...Object.fromEntries(DEPTH_LEVER_AXES.map(axis => [`data-area-${axis}`, shown[axis]])), "data-area-motion": shown.motion, "data-area-easing": shown.easing, "data-area-pills": shown.pills, ...materialAttributes(material) };
 }
 
 /*
@@ -390,11 +446,12 @@ export function canvasAttributes(shown: CanvasAxes, material: Parameters<typeof 
  */
 export function Workspace({ sidebar, canvasLead, canvasTitle, canvasActions, canvas, inspector, canvasRef, canvasScope, canvasPicks = true }: WorkspaceProps) {
   const studio = useStudio();
-  const sidebarWidth = usePanelWidth("sidebar");
-  const inspectorWidth = usePanelWidth("inspector");
+  const sidebarWidth = usePanelWidth("sidebar", studio.canvas.type, studio.canvas.density);
+  const inspectorWidth = usePanelWidth("inspector", studio.canvas.type, studio.canvas.density);
   // The Canvas body carries the Inspector's settings on every tab (and the Material, src/material.ts): the colour settings, density (which also lays tiles out
   // as a hairline contact sheet in compact), radius, surface, elevation and the Edge and Depth levers, motion and pills.
-  const axes = canvasPicks ? { ...canvasScope, ...canvasAttributes(studio.shown.canvas, studio.shown.material) } : { ...canvasScope };
+  // A tab that keeps its own UI at the defaults restates them, since <html> now carries the choices.
+  const axes = canvasPicks ? { ...canvasScope, ...canvasAttributes(studio.shown.canvas, studio.shown.material) } : { ...canvasAttributes(CANVAS_DEFAULTS, MATERIAL_DEFAULT), ...SETUP_SCALE, ...canvasScope };
   // A setting (or a hover preview of one) repaints the Canvas at once rather than fading every tile's colours.
   const main = useRef<HTMLElement>(null);
   const signature = JSON.stringify(axes);

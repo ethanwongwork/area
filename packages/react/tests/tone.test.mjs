@@ -25,7 +25,7 @@ test('selection families have no tone axis left to set', () => {
 test('component paint reads the roles, never the accent directly', () => {
   for (const rule of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
     const [, selector, body] = rule;
-    if (!/\.area-/.test(selector) || /area-syntax|area-code-block__pre/.test(selector)) continue;
+    if (!/\.area-|::selection/.test(selector) || /area-syntax|area-code-block__pre/.test(selector)) continue;
     assert.doesNotMatch(body, /var\(--area-(accent-solid|accent-surface|fg-accent|fg-on-accent)\b/, `${selector.trim()} paints the accent outside a role`);
   }
 });
@@ -34,7 +34,7 @@ test('action defaults to neutral, selection to the accent (2026-10-22), and both
   assert.match(tokens, /--area-action-accent: 0;/);
   assert.match(tokens, /--area-selection-accent: 1;/);
   // The selected edge is a Selection role too, so a selected card and the mark inside it are one colour (option B).
-  for (const [role, neutral, accent] of [['action-solid', 'neutral-solid', 'accent-solid'], ['selection-solid', 'neutral-solid', 'accent-solid'], ['fg-selection', 'fg-default', 'fg-accent'], ['stroke-selected', 'neutral-solid', 'accent-indicator'], ['focus-color', 'neutral-solid', 'accent-indicator']]) {
+  for (const [role, neutral, accent] of [['action-solid', 'neutral-solid', 'accent-solid'], ['selection-solid', 'neutral-solid', 'accent-solid'], ['fg-selection', 'fg-default', 'fg-accent'], ['stroke-selected', 'neutral-solid', 'accent-indicator'], ['focus-color', 'neutral-solid', 'accent-indicator'], ['selection-highlight', 'bg-pressed', 'accent-surface-active']]) {
     assert.match(tokens, new RegExp(`--area-${role}: color-mix\\(in srgb, var\\(--area-${neutral}\\), var\\(--area-${accent}\\) calc\\(var\\(--area-(action|selection)-accent\\) \\* 100%\\)\\);`));
   }
 });

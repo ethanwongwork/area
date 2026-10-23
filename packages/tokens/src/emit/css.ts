@@ -174,6 +174,9 @@ export function emitAxes(): string {
   // OS preference by default; an explicit scoped value can opt in or restore standard.
   // A level, not a switch (owner, 2026-10-18: More "seems very extreme"): Medium goes half way, as Material 3's
   // Standard / Medium / High. Every derivation mixes by it, so any value between 0 and 1 reads.
+  // Nine levels since 2026-10-22 (owner: "i want more granularity in those options"), 0 (Standard) to 8 (More), each an
+  // eighth of the way; the names Standard, Medium and More stay as aliases of 0, 4 and 8.
+  for (let level = 0; level <= 8; level++) out.push(rule(`[data-area-contrast="${level}"]`, { "--area-contrast-more": String(level / 8) }));
   out.push(rule('[data-area-contrast="more"]', { "--area-contrast-more": "1" }));
   out.push(rule('[data-area-contrast="medium"]', { "--area-contrast-more": "0.5" }));
   out.push(rule('[data-area-contrast="standard"]', { "--area-contrast-more": "0" }));

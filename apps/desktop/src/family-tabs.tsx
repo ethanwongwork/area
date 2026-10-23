@@ -20,7 +20,7 @@ import SOURCES from "virtual:component-sources";
 import { DOCUMENTATION } from "./content/documentation.mjs";
 // @ts-expect-error — the highlighter is authored in JavaScript.
 import { highlight } from "./content/highlight.mjs";
-import { APP_SCALE } from "./app-scale.ts";
+import { appScale } from "./app-scale.ts";
 
 export const FAMILY_TABS = [
   { id: "overview", label: "Overview" },
@@ -232,7 +232,7 @@ export function Markdown({ text, idPrefix }: { text: string; idPrefix: string })
             return <SectionHeading key={index} className="studio-doc__heading" level={Math.min(Math.max(block.level, 2), 6) as 2}
               titleId={`${idPrefix}-${anchor(block.text)}`} title={<Inline text={block.text} />} />;
           case "code":
-            return <CodeBlock key={index} code={block.text} language={block.language || undefined} lineNumbers={false} {...APP_SCALE} />;
+            return <CodeBlock key={index} code={block.text} language={block.language || undefined} lineNumbers={false} {...appScale()} />;
           case "table": {
             const [head = [], ...body] = block.rows;
             return <DataTable key={index} label="Spec table" head={head.map(cell => <Inline text={cell} />)}
@@ -262,14 +262,13 @@ export function Markdown({ text, idPrefix }: { text: string; idPrefix: string })
 /* --- Tables ------------------------------------------------------------------- */
 
 /**
- * One Area Table: a header row and body rows; `fit` columns shrink to their longest entry. A flush Table draws past its
- * box (navigation.css, its row plates), so a table wider than the Canvas (a spec's evidence table) scrolls in Area's
- * Scroll area rather than widening the page.
+ * One Area Table: a header row and body rows; `fit` columns shrink to their longest entry. A table wider than the Canvas
+ * (a spec's evidence table) scrolls in Area's Scroll area rather than widening the page.
  */
 function DataTable({ label, head, rows, fit = [] }: { label: string; head: ReactNode[]; rows: ReactNode[][]; fit?: number[] }) {
   return (
     <ScrollArea type="hover" className="studio-table-scroll" viewportProps={{ className: "studio-table-scroll__viewport" }}>
-    <Table size="md" flush aria-label={label}>
+    <Table size="md" aria-label={label}>
       <thead><tr>{head.map((cell, index) => <th key={index} scope="col">{cell}</th>)}</tr></thead>
       <tbody>
         {rows.map((row, index) => (
@@ -284,7 +283,7 @@ function DataTable({ label, head, rows, fit = [] }: { label: string; head: React
 /** Term / value rows (the Inspector's facts, on the Canvas). */
 function FactTable({ label, rows }: { label: string; rows: Array<[ReactNode, ReactNode] | null | false | undefined> }) {
   return (
-    <Table size="md" flush aria-label={label}>
+    <Table size="md" aria-label={label}>
       <tbody>
         {rows.filter((row): row is [ReactNode, ReactNode] => Boolean(row)).map(([term, value], index) => (
           <tr key={index}><TableCell fit><span className="studio-muted">{term}</span></TableCell><td>{value}</td></tr>
@@ -302,7 +301,7 @@ function FactTable({ label, rows }: { label: string; rows: Array<[ReactNode, Rea
  */
 function Section({ id, title, count, lede, children }: { id: string; title: string; count?: number; lede?: ReactNode; children: ReactNode }) {
   return (
-    <section className="studio-section" id={id} aria-labelledby={`${id}-title`} {...APP_SCALE}>
+    <section className="studio-section" id={id} aria-labelledby={`${id}-title`} {...appScale()}>
       <SectionHeading className="studio-section-heading" titleId={`${id}-title`} lede={lede}
         title={count === undefined ? title : <>{title} <span className="studio-muted studio-tabular">{count}</span></>} />
       {children}
@@ -487,7 +486,7 @@ export function CodeTab({ family }: { family: FamilyInfo }) {
       {files.map(file => (
         <Section key={file.id} id={file.id} title={file.title} lede={`${file.what}.`}>
           <CodeBlock title={file.path} language={file.language} {...(file.html ? { html: highlight(file.code) } : { code: file.code })}
-            collapsible defaultCollapsed {...APP_SCALE} />
+            collapsible defaultCollapsed {...appScale()} />
         </Section>
       ))}
     </div>

@@ -1115,12 +1115,12 @@ export const fileGrid = {
 
 export const assetCard = {
   block: "area-asset-card",
-  description: "Shows one asset in a card: its name and controls in a head, the asset in a square frame under it (an image in its own ratio; an element, a colour, or a group as a 2×2 mosaic); framed or containerless, square or hugging its asset.",
-  variants: { layout: ["asset", "image", "color", "group"], container: ["framed", "containerless"], aspect: ["square", "hug"] },
-  booleans: ["interactive"],
+  description: "Shows one asset in a card: its name and controls in a head, the asset in a square frame under it (an image in its own ratio; an element, a colour, or a group as a 2×2 mosaic); framed, basic or containerless, its name above or below, recessed or raised, square, landscape or hugging its asset.",
+  variants: { layout: ["asset", "image", "color", "group"], container: ["framed", "basic", "containerless"], caption: ["above", "below"], fill: ["recessed", "raised"], aspect: ["square", "landscape", "hug"] },
+  booleans: ["interactive", "borderless"],
   states: ["selected"],
   elements: ["head", "name", "actions", "frame", "media", "mosaic", "cell", "thumb"],
-  defaults: { layout: "asset", container: "framed", aspect: "square" },
+  defaults: { layout: "asset", container: "framed", caption: "above", fill: "recessed", aspect: "square" },
 } as const satisfies ComponentManifest;
 
 export const assetGrid = {

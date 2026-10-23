@@ -1,0 +1,265 @@
+{
+ "hues": [
+  0,
+  15,
+  30,
+  45,
+  60,
+  75,
+  90,
+  105,
+  120,
+  135,
+  150,
+  165,
+  180,
+  195,
+  210,
+  225,
+  240,
+  255,
+  270,
+  285,
+  300,
+  315,
+  330,
+  345
+ ],
+ "chromas": [
+  0,
+  0.005,
+  0.01,
+  0.015,
+  0.02,
+  0.025,
+  0.03,
+  0.04,
+  0.05,
+  0.06,
+  0.08
+ ],
+ "result": {
+  "light": {
+   "0": {
+    "max": 0.025,
+    "firstFailure": "0.03: 100/8 muted on recessed (+14)",
+    "worstAtMax": 4.53
+   },
+   "15": {
+    "max": 0.02,
+    "firstFailure": "0.025: 98/0 muted on a hovered mark on page (+7)",
+    "worstAtMax": 4.53
+   },
+   "30": {
+    "max": 0.02,
+    "firstFailure": "0.025: 97/0 muted on a hovered mark on page (+3)",
+    "worstAtMax": 4.54
+   },
+   "45": {
+    "max": 0.025,
+    "firstFailure": "0.03: 98/0 muted on a hovered mark on page (+7)",
+    "worstAtMax": 4.52
+   },
+   "60": {
+    "max": 0.03,
+    "firstFailure": "0.04: 99/0 muted on a hovered mark on page (+11)",
+    "worstAtMax": 4.53
+   },
+   "75": {
+    "max": 0.04,
+    "firstFailure": "0.05: 98/0 muted on a hovered mark on page (+7)",
+    "worstAtMax": 4.55
+   },
+   "90": {
+    "max": 0.08,
+    "worstAtMax": 4.55
+   },
+   "105": {
+    "max": 0.08,
+    "worstAtMax": 4.59
+   },
+   "120": {
+    "max": 0.08,
+    "worstAtMax": 4.63
+   },
+   "135": {
+    "max": 0.08,
+    "worstAtMax": 4.67
+   },
+   "150": {
+    "max": 0.08,
+    "worstAtMax": 4.69
+   },
+   "165": {
+    "max": 0.06,
+    "firstFailure": "0.08: 98/0 muted on a hovered mark on page (+7)",
+    "worstAtMax": 4.66
+   },
+   "180": {
+    "max": 0.06,
+    "firstFailure": "0.08: 98/0 muted on a hovered mark on page (+7)",
+    "worstAtMax": 4.67
+   },
+   "195": {
+    "max": 0.06,
+    "firstFailure": "0.08: 100/4 muted on a mark on recessed (+8)",
+    "worstAtMax": 4.66
+   },
+   "210": {
+    "max": 0.06,
+    "firstFailure": "0.08: 98/0 muted on a hovered mark on page (+7)",
+    "worstAtMax": 4.64
+   },
+   "225": {
+    "max": 0.06,
+    "firstFailure": "0.08: 98/0 muted on a hovered mark on page (+3)",
+    "worstAtMax": 4.62
+   },
+   "240": {
+    "max": 0.08,
+    "worstAtMax": 4.56
+   },
+   "255": {
+    "max": 0.06,
+    "firstFailure": "0.08: 98/0 muted on a hovered mark on page (+22)",
+    "worstAtMax": 4.56
+   },
+   "270": {
+    "max": 0.05,
+    "firstFailure": "0.06: 98/0 muted on a hovered mark on page (+7)",
+    "worstAtMax": 4.54
+   },
+   "285": {
+    "max": 0.04,
+    "firstFailure": "0.05: 97/0 muted on a hovered mark on page (+3)",
+    "worstAtMax": 4.54
+   },
+   "300": {
+    "max": 0.04,
+    "firstFailure": "0.05: 100/8 muted on recessed (+11)",
+    "worstAtMax": 4.53
+   },
+   "315": {
+    "max": 0.03,
+    "firstFailure": "0.04: 98/0 muted on a hovered mark on page (+7)",
+    "worstAtMax": 4.54
+   },
+   "330": {
+    "max": 0.025,
+    "firstFailure": "0.03: 91/6 muted on recessed (+0)",
+    "worstAtMax": 4.54
+   },
+   "345": {
+    "max": 0.025,
+    "firstFailure": "0.03: 98/0 muted on a hovered mark on page (+3)",
+    "worstAtMax": 4.52
+   }
+  },
+  "dark": {
+   "0": {
+    "max": 0.08,
+    "worstAtMax": 4.79
+   },
+   "15": {
+    "max": 0.08,
+    "worstAtMax": 4.76
+   },
+   "30": {
+    "max": 0.08,
+    "worstAtMax": 4.75
+   },
+   "45": {
+    "max": 0.08,
+    "worstAtMax": 4.71
+   },
+   "60": {
+    "max": 0.08,
+    "worstAtMax": 4.67
+   },
+   "75": {
+    "max": 0.08,
+    "worstAtMax": 4.63
+   },
+   "90": {
+    "max": 0.08,
+    "worstAtMax": 4.57
+   },
+   "105": {
+    "max": 0.08,
+    "worstAtMax": 4.51
+   },
+   "120": {
+    "max": 0.04,
+    "firstFailure": "0.05: 16/8 muted on raised (+1)",
+    "worstAtMax": 4.51
+   },
+   "135": {
+    "max": 0.03,
+    "firstFailure": "0.04: 16/8 muted on raised (+0)",
+    "worstAtMax": 4.53
+   },
+   "150": {
+    "max": 0.02,
+    "firstFailure": "0.025: 16/8 muted on raised (+0)",
+    "worstAtMax": 4.51
+   },
+   "165": {
+    "max": 0.025,
+    "firstFailure": "0.03: 22/6 muted on raised (+1)",
+    "worstAtMax": 4.51
+   },
+   "180": {
+    "max": 0.025,
+    "firstFailure": "0.03: 24/4 muted on raised (+0)",
+    "worstAtMax": 4.51
+   },
+   "195": {
+    "max": 0.025,
+    "firstFailure": "0.03: 22/6 muted on raised (+0)",
+    "worstAtMax": 4.5
+   },
+   "210": {
+    "max": 0.03,
+    "firstFailure": "0.04: 16/8 muted on raised (+2)",
+    "worstAtMax": 4.51
+   },
+   "225": {
+    "max": 0.06,
+    "firstFailure": "0.08: 16/8 muted on raised (+7)",
+    "worstAtMax": 4.5
+   },
+   "240": {
+    "max": 0.08,
+    "worstAtMax": 4.5
+   },
+   "255": {
+    "max": 0.08,
+    "worstAtMax": 4.56
+   },
+   "270": {
+    "max": 0.08,
+    "worstAtMax": 4.61
+   },
+   "285": {
+    "max": 0.08,
+    "worstAtMax": 4.69
+   },
+   "300": {
+    "max": 0.08,
+    "worstAtMax": 4.71
+   },
+   "315": {
+    "max": 0.08,
+    "worstAtMax": 4.74
+   },
+   "330": {
+    "max": 0.08,
+    "worstAtMax": 4.77
+   },
+   "345": {
+    "max": 0.08,
+    "worstAtMax": 4.79
+   }
+  }
+ }
+}

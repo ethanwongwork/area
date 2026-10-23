@@ -215,6 +215,10 @@ export function derivedTokens(): Record<string, string> {
       // The keyboard ring follows Selection too (owner, 2026-10-22), so Selection Neutral is an entirely neutral look and
       // Accent keeps the blue ring. It still reads apart from a selected edge by placement: on or outside, never inside.
       "focus-color": ["neutral-solid", "accent-indicator"],
+      // Selected text (`::selection`, base.css) follows Selection too, so Neutral leaves nothing in the accent. At Neutral
+      // it is the pressed wash, the strongest neutral state step: translucent, so it reads a step past any ground it sits
+      // on (page, surface, a filled field, a hovered row), where an opaque grey could match the ground (2026-10-22).
+      "selection-highlight": ["bg-pressed", "accent-surface-active"],
     }),
     // Badge's public width hook. (badge-bg, badge-fg and badge-tracking-wide were pruned in
     // audit S21b: Badge paints from its tone slots and never read them.)

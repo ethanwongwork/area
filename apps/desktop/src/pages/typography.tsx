@@ -13,7 +13,8 @@ import { useState, type ReactNode } from "react";
 import { Code, CopyButton as AreaCopyButton, EmptyState, Field, ListBox, ListBoxItem, Nav, NavGroup, NavItem, PanelSection, Table, TableLink, Textarea, Tooltip } from "@area/react";
 import { CheckIcon, CopyIcon } from "@area/icons";
 import { CanvasSettings } from "../canvas-settings.tsx";
-import { APP_SCALE, SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
+import { SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
+import { appScale } from "../app-scale.ts";
 import { CanvasSection } from "../tile.tsx";
 import { useViewOption, ViewControls, ViewFilter, ViewSwitch, type ViewMode } from "../view-controls.tsx";
 import { Facts } from "../facts.tsx";
@@ -161,7 +162,7 @@ export function TypographyPage() {
             ...TYPE_SIZES.map(type => [weight, type, `Type ${type}`] as const),
           ] as ReadonlyArray<readonly ["regular" | "strong", string | undefined, string]>).filter(([w, type]) => type || weights === "all" || weights === w).map(([w, type, label]) => (
             <section key={label} className="studio-type-row" aria-label={label}>
-              <div className="studio-type-row__head" {...APP_SCALE}>
+              <div className="studio-type-row__head" {...appScale()}>
                 <span>{label}</span>
                 <span className="studio-tabular">{metrics(view, type ?? density)}</span>
               </div>
@@ -191,7 +192,7 @@ export function TypographyPage() {
                       <ListBoxItem key={entry.id} value={`${w.id}:${entry.id}`} textValue={styleName(entry)} className="studio-type-cell"
                         aria-label={`${styleName(entry)}, ${metrics(entry, density)}`}>
                         <span className="studio-type-cell__sample" style={roleStyle(entry, w.id)} aria-hidden="true">Aa</span>
-                        <span className="studio-type-cell__label" {...APP_SCALE} aria-hidden="true">
+                        <span className="studio-type-cell__label" {...appScale()} aria-hidden="true">
                           <span>{styleName(entry)}</span>
                           <span className="studio-muted studio-tabular">{metrics(entry, density)}</span>
                         </span>
@@ -200,9 +201,9 @@ export function TypographyPage() {
                   </div>
                 ) : (
                   // List: Geist's table, each example its own name set in its own style.
-                  // On the surface (a flush Table), every cell on its first baseline, so a 72 example
+                  // In the framed Table, every cell on its first baseline, so a 72 example
                   // and its 14 token share a line.
-                  <Table size="lg" interactive flush baseline aria-label={`${group.label}${w.suffix}`}>
+                  <Table size="lg" interactive baseline aria-label={`${group.label}${w.suffix}`}>
                       {/* One set of column widths for every table, so the columns line up down the Canvas. */}
                       <colgroup><col style={{ inlineSize: "40%" }} /><col style={{ inlineSize: "26%" }} /><col style={{ inlineSize: "10%" }} /><col /></colgroup>
                       <thead>

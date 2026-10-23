@@ -18,8 +18,8 @@ import type { ReactNode } from "react";
 import { Abstract, Scaled } from "./abstract.tsx";
 
 export type ChoiceKind = "mini" | "swatch" | "mark";
-const MINI = new Set(["theme", "neutral", "ground-light", "ground-dark", "layers-light", "layers-dark", "action", "selection", "contrast", "density"]);
-export const kindOf = (axis: string): ChoiceKind => axis === "accent" ? "swatch" : MINI.has(axis) ? "mini" : "mark";
+const MINI = new Set(["theme", "neutral", "tint-light", "tint-dark", "ink-tint", "ground-light", "ground-dark", "layers-light", "layers-dark", "card-tone-light", "card-tone-dark", "action", "selection", "contrast", "density"]);
+export const kindOf = (axis: string): ChoiceKind => axis === "accent" || axis === "tint-hue" ? "swatch" : MINI.has(axis) ? "mini" : "mark";
 /** A preview frame's ratio by kind: a window is landscape; a mark sits in a shorter frame, a text-like mark shorter still. */
 export const ratioOf = (axis: string) => kindOf(axis) === "mini" ? "4 / 3" : axis === "type" || axis === "motion" || axis === "easing" ? "2 / 1" : "3 / 2";
 

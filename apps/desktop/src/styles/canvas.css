@@ -178,9 +178,12 @@
    * the Copy code button in the caption at its top (owner, 2026-10-19, a trial; under it the day before).
    */
   .studio-grid--cards {
-    /* As many columns of at least 360 as fit (owner, 2026-10-18: 400, then 380, then "maybe make the minimum width of
-       the component containers 360"; was 280), counted, so the Stage's strips span them as they span pairs of units. */
-    --_pairs: max(1, round(down, calc((100cqw + var(--_gap)) / (var(--_card-min, 360px) * var(--_zoom, 1) + var(--_gap))), 1));
+    /* As many columns of at least 260 as fit, never more than four (owner, 2026-10-22: "the default card size should be
+       … like 280 to 300 px width. i just need 4 columns across not more"; was 200 the same day, then 360, 400, 380 and
+       280 before), counted, so the Stage's strips span them as they span pairs of units. 260 puts three cards of 277
+       (type 14) to 296 (13 Compact) across a 1440 window with both panels, where 280 left two of 421; four 300 cards and
+       their gaps are the feed's measure (app.css), so four across never pass 300. */
+    --_pairs: clamp(1, round(down, calc((100cqw + var(--_gap)) / (var(--_card-min, 260px) * var(--_zoom, 1) + var(--_gap))), 1), 4);
     grid-template-columns: repeat(var(--_pairs), minmax(0, 1fr));
   }
   .gallery-tile[data-layout="card"] > .gallery-tile__view { padding: var(--area-space-12); }
@@ -249,11 +252,6 @@
   /* Several names in one cell (exports, values, families, keys) wrap as a row; a prop's names stack. Inline boxes 8
      apart on the cell's lines, so a trimmed last row (table.md, flush) trims at the cell's last baseline; a flex row's
      baseline is its first line's. */
-  /* A wide table scrolls sideways in a ScrollArea, which clips. Its flush Table trims its first and last rows to cap and
-     baseline (table.md), so ascenders and descenders reach past the table: the scroller gets 8 of room inside and gives
-     it back outside, so nothing clips and the feed's 12 and 40 still measure to the text. */
-  .studio-table-scroll { margin-block: calc(var(--area-space-8) * -1); }
-  .studio-table-scroll__viewport { padding-block: var(--area-space-8); }
   .studio-doc__links { display: inline; }
   .studio-doc__links > :not(:last-child) { margin-inline-end: var(--area-space-8); }
   .studio-doc__links--row { white-space: nowrap; }

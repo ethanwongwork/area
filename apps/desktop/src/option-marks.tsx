@@ -48,6 +48,21 @@ export function optionMark(axis: Axis, value: string, canvas: CanvasAxes): React
   switch (axis) {
     case "neutral": return swatch("var(--area-neutral-500)", { "data-area-neutral": value });
     case "accent": return swatch("var(--area-accent-solid)", { "data-area-accent": value });
+    // Tint: the hue itself (Auto, Neutral's own, as the Neutral swatch); a strength, the mode's page at it, on the hue
+    // chosen; Text tint, muted text's own colour at the share.
+    case "tint-hue": return value === "auto" ? swatch("var(--area-neutral-500)", neutral) : swatch(`oklch(0.72 0.12 ${value})`, {});
+    case "tint-light":
+    case "tint-dark": {
+      const theme = axis === "tint-light" ? "light" : "dark";
+      return swatch("var(--area-bg-subtle)", { ...neutral, "data-area-theme": theme, "data-area-tint-hue": canvas["tint-hue"], [`data-area-ground-${theme}`]: canvas[`ground-${theme}` as const], [`data-area-${axis}`]: value });
+    }
+    // Card tone: a card on the mode's page at the step (Auto, the Card's own raised tone).
+    case "card-tone-light":
+    case "card-tone-dark": {
+      const theme = axis === "card-tone-light" ? "light" : "dark";
+      return swatch("var(--area-bg-card)", { ...neutral, "data-area-theme": theme, [`data-area-ground-${theme}`]: canvas[`ground-${theme}` as const], [`data-area-layers-${theme}`]: canvas[`layers-${theme}` as const], [`data-area-${axis}`]: value });
+    }
+    case "ink-tint": return swatch("var(--area-fg-muted)", { ...neutral, "data-area-tint-hue": canvas["tint-hue"], "data-area-tint-light": canvas["tint-light"], "data-area-ink-tint": value });
     case "action": return swatch("var(--area-action-solid)", { ...neutral, "data-area-accent": canvas.accent, "data-area-action": value });
     case "selection": return swatch("var(--area-selection-solid)", { ...neutral, "data-area-accent": canvas.accent, "data-area-selection": value });
     case "ground-light": return swatch("var(--area-bg-page)", { ...neutral, "data-area-theme": "light", "data-area-ground-light": value });

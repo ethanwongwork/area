@@ -51,8 +51,10 @@ function control(id: string, label: string, description: string, defaultPreset: 
 const numbered = (n: number, zero: string, write: (i: number) => Record<string, string | number>) =>
   range(n).map(i => ({ id: String(i), label: i === 0 ? `0 (${zero})` : String(i), tokens: write(i) }));
 
-export const STROKE_AXIS = control("stroke", "Stroke strength", "How dark every stroke is: its distance from its ground, 0 (none) to 8", "4", ["stroke-strength"],
-  numbered(8, "None", i => ({ "stroke-strength": i / 4 })));
+/** Stroke strength in half steps since 2026-10-22 (owner: "can the stroke strength options be more granular?"), 0 to 8: each
+ * whole step keeps its value, so a saved 3 is the same 3. */
+export const STROKE_AXIS = control("stroke", "Stroke strength", "How dark every stroke is: its distance from its ground, 0 (none) to 8 in half steps", "4", ["stroke-strength"],
+  range(16).map(i => { const n = i / 2; return { id: String(n), label: n === 0 ? "0 (None)" : String(n), tokens: { "stroke-strength": n / 4 } }; }));
 
 export const SHADOW_RESTING_AXIS = control("shadow-resting", "Resting shadow", "How much cards, panels and raised thumbs lift at rest, 0 (none) to 8: one tight layer, 3 is 8% (ChatGPT's sm)", "3", ["shadow-resting-step"],
   numbered(8, "None", i => ({ "shadow-resting-step": i })));

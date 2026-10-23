@@ -16,7 +16,7 @@ import { Button, CodeBlock, Field, Input, PanelSection, Segmented, Select, Switc
 // @ts-expect-error — the highlighter is authored in JavaScript.
 import { highlight } from "./content/highlight.mjs";
 import type { Config, Playground, PlaygroundControl, PropValue } from "./content/playgrounds.tsx";
-import { APP_SCALE } from "./app-scale.ts";
+import { appScale } from "./app-scale.ts";
 
 /** The narrowest the Stage is dragged to: a phone's 320 less the Canvas's margins. */
 const MIN_WIDTH = 288; /* pick */
@@ -84,7 +84,7 @@ export function Stage({ label, code, zoom, replays, children }: StageProps) {
     // from the bottom of the frame of the main component container"; it was the frame's last row, Primer's model).
     <div className="studio-stage-group">
     <div ref={frame} className="studio-stage" data-area-ground="raised" style={narrowed ? { inlineSize: `${width}px` } : undefined}>
-      <div className="studio-stage__head gallery-tile__head" {...APP_SCALE}>
+      <div className="studio-stage__head gallery-tile__head" {...appScale()}>
         <span className="gallery-tile__label">{label}</span>
         {narrowed ? <span className="gallery-tile__value">{shown} px</span> : null}
       </div>
@@ -98,7 +98,7 @@ export function Stage({ label, code, zoom, replays, children }: StageProps) {
     {code ? (
       // Keyed by the code, so a long snippet starts as its excerpt each time the Stage changes.
       <CodeBlock key={code} lineNumbers={false} language="tsx"
-        html={highlight(code)} collapsible={lines > EXCERPT} defaultCollapsed={lines > EXCERPT} {...APP_SCALE} />
+        html={highlight(code)} collapsible={lines > EXCERPT} defaultCollapsed={lines > EXCERPT} {...appScale()} />
     ) : null}
     </div>
   );

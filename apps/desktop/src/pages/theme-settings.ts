@@ -18,6 +18,11 @@ const SHARED_SHADOW = { "data-area-elevation": "8" };
 export const ALSO: Record<string, Record<string, string>> = {
   accent: { "data-area-action": "accent", "data-area-selection": "accent" },
   neutral: { "data-area-layers-light": "8", "data-area-layers-dark": "8" },
+  // Tint: a hue shows at a strength, a strength on a hue, and Text tint on both at their strongest (axes/tint.ts).
+  "tint-hue": { "data-area-tint-light": "6", "data-area-tint-dark": "6" },
+  "tint-light": { "data-area-tint-hue": "70" },
+  "tint-dark": { "data-area-tint-hue": "70" },
+  "ink-tint": { "data-area-tint-hue": "70", "data-area-tint-light": "8", "data-area-tint-dark": "8" },
   surface: NO_SHADOW,
   stroke: NO_SHADOW,
   // A preset's own attribute is written last (scopeOf), so it wins over NO_SHADOW's 0.
@@ -36,6 +41,10 @@ export const ALSO: Record<string, Record<string, string>> = {
 export const HELD: Record<string, string> = {
   easing: "Motion at 300, so the curve has time to show.",
   neutral: "Layers at 8, so the greys are large enough for the tint to show.",
+  "tint-hue": "Tint strength at 6, so each hue shows.",
+  "tint-light": "Tint hue at 70°, so each strength shows.",
+  "tint-dark": "Tint hue at 70°, so each strength shows.",
+  "ink-tint": "Tint hue at 70° and strength 8, so the text's share shows.",
   surface: "Shadows off, so only the line shows.",
   stroke: "Shadows off, so only the strokes show.",
   "shadow-rest": "Stroke width 0 and the other shadows off, so only this shadow shows.",
@@ -58,8 +67,8 @@ export const HELD: Record<string, string> = {
 export type Mode = "light" | "dark";
 /** A preset's least card width (owner, 2026-10-19: "the minimum size of the containers can be smaller"; was 280). */
 export const MIN = 200; /* pick */
-// Ground and Layers exist once per theme; Shadow light's "-light" is not a theme (it hid in Dark until 2026-10-19).
-export const PER_THEME = /^(ground|layers)-(light|dark)$/;
+// Ground, Layers, Tint strength and Card tone exist once per theme; Shadow light's "-light" is not a theme (it hid in Dark until 2026-10-19).
+export const PER_THEME = /^(ground|layers|tint|card-tone)-(light|dark)$/;
 export const inMode = (id: string, mode: Mode) => !PER_THEME.test(id) || id.endsWith(`-${mode}`);
 /** The same setting in the other theme ("ground-dark" for "ground-light"). */
 export const pairOf = (id: string, mode: Mode) => PER_THEME.test(id) ? id.replace(/-(light|dark)$/, `-${mode}`) : id;

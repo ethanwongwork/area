@@ -2,6 +2,18 @@
 
 ## Current state (2026-10-22)
 
+- **PR (this branch), `claude/neutral-accent-theme-ca527b`.** Every detail is a choice (PRINCIPLES.md 7, GOVERNANCE.md
+  option gates; owner 2026-10-22). New settings: Tint hue / Light tint / Dark tint / Text tint (`axes/tint.ts`, custom
+  neutral, Auto follows Neutral; text moves 0.25 × strength, `INK_MARGIN`), Light / Dark card tone (`axes/card-tone.ts`,
+  Auto or −4…+4 around the page; Card paints `bg-card`, Asset card `bg-tile`), Layers 0/2/4/6/8, Contrast 0…8 (old names
+  alias), Stroke strength in half steps. The app's chrome takes every committed setting incl. type/density
+  (PRODUCT_UI.md rule 18); Theme tab body stays at defaults. Gallery: ≥260 cards, ≤4 columns, Auto zoom one 70% scale,
+  Asset card `aspect="landscape"`, `caption`, `fill`, `borderless`, `container="basic"`, frame = page tone. Pressed fill
+  re-derives on every scope (cohesion test). Setup: separate Dark mode step, layer map stage, page colour picker.
+  Research: docs/research/custom-neutral-2026-10-22; artifacts Layer Map https://claude.ai/artifact/2AtkSCcTm3GqwAveDbdqXY,
+  Neutral Tint https://claude.ai/artifact/8Czr8Wcu9rTwdW97SzFLzQ. Open proposals: recessed press cap, per-tone edges;
+  the setup's stage is narrow in a 1024 window.
+
 - **PR #150, `claude/electron-canvas-feed-layout-8b2924`.** The Canvas as a documentation feed (32 margin, 12 / 40
   rhythm measured to ink, title + count + subtitle per section), Code block md corner concentric with its copy (11),
   flush Table trims its outer rows, and the Cursor audit's validated items: Menu-family group labels take Nav's (rows'

@@ -20,7 +20,7 @@ import { AssetGrid, ListBoxItem, Breadcrumb, BreadcrumbItem, BreadcrumbLink, Bre
 import { ArrowLeftIcon, ChevronLeftIcon, ChevronRightIcon, GridIcon, OpenIcon } from "@area/icons";
 import { SidebarAll, SidebarList, useStudio, Workspace } from "../studio.tsx";
 import { CanvasSection } from "../tile.tsx";
-import { APP_SCALE } from "../app-scale.ts";
+import { appScale } from "../app-scale.ts";
 import { useViewOption, ViewControls, ViewSwitch } from "../view-controls.tsx";
 import { CanvasSettings } from "../canvas-settings.tsx";
 import { Facts } from "../facts.tsx";
@@ -126,7 +126,7 @@ export function BrandPage() {
   );
 
   const imageGrid = (entries: BrandItem[], label: string) => mode === "list" ? (
-    <Table size="md" interactive flush aria-label={label}>
+    <Table size="md" interactive aria-label={label}>
       <thead><tr><th scope="col">Image</th><th scope="col">Name</th><th scope="col">Source</th><th scope="col">Size</th></tr></thead>
       <tbody>
         {entries.map(entry => (
@@ -270,7 +270,7 @@ function BrandItem({ value, name, value2, images, ratio, group }: { value: strin
   return (
     <ListBoxItem value={value} textValue={name} className="gallery-plain area-asset-grid__item">
       <div className="gallery-tile gallery-tile--plain studio-brand__item" data-stage="none" data-area-ground="raised">
-        <div className="gallery-tile__head" {...APP_SCALE}>
+        <div className="gallery-tile__head" {...appScale()}>
           <span className="gallery-tile__label">{name}</span>
           {value2 ? <span className="gallery-tile__value">{value2}</span> : null}
         </div>

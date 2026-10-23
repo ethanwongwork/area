@@ -50,15 +50,16 @@
          gap      12  between cards (Compass's 12, measured; owner, 2026-10-14)
          heading  12  from a section's heading to its block, so a title reads with what it names
          section  40  between sections
-         margin   32  round the feed, nearly three gaps, so the cards read as a set inside the page (was 14, the
-                      panels' inset, which the 12 gap nearly equalled)
-       The feed is at most 1120 wide and centred, a reading measure for tables and prose when the panels are hidden;
+         margin   16  round the feed, a step past the gap, so a gallery of cards fills the Canvas as a set (owner,
+                      2026-10-22, "more full width of the canvas for more room"; the references' margin equals their
+                      gap, about 4.5% of a card; was 32, before that 14, the panels' inset)
+       The feed is at most 1236 wide and centred (four 300 cards) when the panels are hidden;
        the grid's columns are counted from that width (cqw is the body's content box). */
-    --_canvas-margin: var(--area-space-32);
+    --_canvas-margin: var(--area-space-16);
     --_canvas-gap: var(--area-space-12);
     --_canvas-heading: var(--area-space-12);
     --_canvas-section: var(--area-space-40);
-    --_canvas-measure: 1120px; /* pick */
+    --_canvas-measure: calc(300px * 4 + var(--area-space-12) * 3); /* spec: four 300 cards and their gaps, 1236 (owner, 2026-10-22; was 1120, a pick) */
     /* Tiles: the Asset card's corner held at 12 whatever the Canvas's Radius previews (owner, 2026-10-13: "make the
        corner radius sharper"), and its inset; the Stage (src/stage.tsx) is the tile made large, with the same. */
     --_tile-radius: 12px; /* pick */

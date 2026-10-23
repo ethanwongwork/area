@@ -56,8 +56,8 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
     (an icon, a line of type) sits straight on the surface, where a frame would only add a second
     edge (owner, 2026-10-12, after Cursor's icon gallery). On the surface, sheets of cells use the
     row plates (rule 3) and hang them into the margin so the figure, not its plate, sets the
-    column; lists are flush Tables (`Table flush`), and rows mixing text sizes align on their
-    first baseline (`Table baseline`). Details open in a hover window (Hover card) or the Inspector.
+    column; lists are the default framed Table (owner, 2026-10-22: "i want to use this table", replacing
+    `Table flush`), and rows mixing text sizes align on their first baseline (`Table baseline`). Details open in a hover window (Hover card) or the Inspector.
 12. **Each panel's toggle sits at its own side** of the Titlebar: the Sidebar's first, after the
     window controls; the Inspector's at the end.
 13. **App CSS styles only app classes.** When a product needs a component to do something it
@@ -71,11 +71,17 @@ values are [MOTION.md](MOTION.md)'s; state colours are [DESIGN_SYSTEM.md](DESIGN
     multi-select Custom select, and dropdowns hug their rows (`--area-menu-min-inline-size`).
 17. **Information is tables wherever it can be**: facts, props, classes, states, keys, ARIA
     and a spec's tables and dated lists. Prose stays prose only where it has no rows.
+18. **The app is drawn in the choices it offers** (owner, 2026-10-22: "make sure the electron ui is a reflection of
+    the actual choices"). `<html>` carries every committed Inspector setting and the Material, type and density
+    included (owner, same day: "when i change from compact to default the ui in the electron doesnt change"), so the
+    Titlebar, Sidebar, Inspector, the app's chrome inside the Canvas (`appScale()`, `src/app-scale.ts`), the window's
+    ground and its traffic lights (centred on the Titlebar) follow them (`src/studio.tsx`). A hover preview repaints the
+    Canvas alone. The Theme tab's own body is the one exception (Setup, below).
 
 ## The app's layout
 
-How rules 11–17 lay out the app's regions (`apps/desktop/src`). Values are at the app's
-scale (type 13, Compact).
+How rules 11–17 lay out the app's regions (`apps/desktop/src`). Values are at type 13, Compact,
+the scale the layout was measured at; the app now takes the chosen type and density (rule 18).
 
 **Shared line and insets.**
 
@@ -86,14 +92,15 @@ scale (type 13, Compact).
 - **Lines and grounds** (owner, 2026-10-22; `docs/research/cursor-audit-2026-10-22.md` item 4): the Titlebar keeps its
   rule; the Canvas header and the Inspector's bar carry none (Notion's and ChatGPT's top bars), and the Sidebar sits on
   the chrome's recessed ground (`data-area-chrome`, the subtle step, as Notion's sidebar), its seam the Panel's edge.
-- **Rows are 28** at the app's type 13 Compact (owner, 2026-10-22, item 2: rows keep at least 5 above and below their
+- **Rows are 28** at type 13 Compact (owner, 2026-10-22, item 2: rows keep at least 5 above and below their
   text; Cursor's and Figma's 28).
 - **The Canvas is a feed** (owner, 2026-10-22: "margins larger than the gaps … a consistent feed style … documentation
-  style that is simple, repeatable, consistent"). One column of sections, at most 1120 wide and centred; each section
+  style that is simple, repeatable, consistent"). One column of sections, at most 1236 wide (four 300 cards) and centred; each section
   is a heading (and a muted lede) over one block: a grid of cards, the Stage, plain text, a Table or a Code block.
-  Spacings grow outward: cards 12 apart, a heading 12 over its block, sections 40 apart, the Canvas margin 32, each
-  measured to what is drawn: a frame's edge, a text's cap or baseline (titles, ledes and prose are trimmed; a flush
-  table that is read trims its first and last rows, `docs/specs/table.md`).
+  Spacings grow outward: cards 12 apart, at least 260 wide (277 to 300 in a 1440 window), at most four across (owner, 2026-10-22: "more like a gallery", "280 to 300 px
+  width … 4 columns across not more"), a heading 12 over its block, sections 40 apart, the Canvas margin 16, each
+  measured to what is drawn: a frame's edge, a text's cap or baseline (titles, ledes and prose are trimmed; a Table
+  measures to its frame, as a card does).
 - **One voice for the feed's text** (owner, 2026-10-22: "make the copy, titles, and subtitles to be more consistent and
   intentional"), all at the app's 13/18: a section's **title** (medium) carries a muted **count** when its block is a
   collection (cards, rows, swatches, icons), never on facts, code or prose; where the page explains (a family's tabs,
@@ -107,14 +114,16 @@ scale (type 13, Compact).
 
 1. filters;
 2. Sort and group (rule 7);
-3. how things are drawn (zoom, style, size);
+3. how things are drawn (zoom, style, size). On Components the style is the Container menu: Asset card's container,
+   caption, fill and edge in eight looks (Framed, the default; Name below; Basic; Basic, name below; Basic, white; Basic,
+   no stroke; Containerless; Containerless, name below; owner, 2026-10-22);
 4. the grid / list switch.
 
 Zoom is Zoom control's stepper (− Auto +):
 
-- **Auto** (the default) shows specimens by size group, each group at one scale and never
-  above 100%. By painted area: a control 90%, a field or small list 85%, a few rows or a
-  dialog 80%, the largest 75%. A group is shrunk further only to fit.
+- **Auto** (the default) shows every specimen at one scale, 70%, so components keep their real
+  proportions to each other (owner, 2026-10-22; was 90% for a control down to 75% for the largest).
+  70% is the largest at which the largest group fits a 277 card. A specimen is shrunk further only to fit.
 - **Fit** shows each specimen as large as its card allows, up to 200%.
 - **Exact steps** are 50, 75, 80, 90, 100, 110, 125, 150, 175 and 200%. − and + step through
   them, starting from 100% on Auto or Fit. The menu lists Auto, Fit and these, nothing else.
@@ -142,11 +151,23 @@ header's first control chooses Setup or Browse (`src/pages/theme.tsx`).
 
 - **Setup** (the default; `src/pages/theme-setup.tsx`, owner 2026-10-20, rebuilt 2026-10-21 after a product finder's
   flow, Tesla's design page and an Appearance picker, [research](research/onboarding-setup-2026-10-21.md)):
-  - **The setup's own UI never changes as picks are made**: the Canvas body carries no picks
-    (`Workspace canvasPicks={false}`); only the drawings take them (`canvasAttributes`). The same holds for Browse.
+  - **The setup's own UI never changes as picks are made**: the Canvas body restates the defaults over the app's
+    picks (`Workspace canvasPicks={false}`); only the drawings take them (`canvasAttributes`). The same holds for
+    Browse. The chrome around it follows the picks (rule 18); the body stays at the defaults (owner, reconfirmed
+    2026-10-22).
   - **The visual** fills the left: the header's view, Bento (product cards after the owner's references), Desktop (the
     analytics dashboard) or Mobile (a phone's Today), at true scale where it fits, over the picks so far, showing the
-    choice under the pointer or keyboard focus; a state setting's choice draws its state.
+    choice under the pointer or keyboard focus; a state setting's choice draws its state. Ground and Layers draw the
+    **layer map** instead (`src/layer-map.tsx`; owner, 2026-10-22: "make those combinations extremely clear"): a window
+    drawn from the layer roles, each region tagged with its name, its layer and the colour it paints (window bar,
+    header, page and inspector take the page; the side panel is recessed; cards and menus are raised; a field or nav row
+    is a fill a step from its layer), and the tones in order under it.
+  - **Light and dark are separate steps** (owner, 2026-10-22: "i shouldnt be choosing both at the same time"): Color
+    asks light's Tint, Ground, Layers and Card tone; Dark mode, the step after it, asks dark's, drawn in dark. Tint hue and Text tint
+    are shared and asked in Color.
+  - **Page colour** opens Color and Dark mode (`src/page-colour.ts`; owner, 2026-10-22: "they pick the exact shade they
+    want"): one colour sets that mode's Ground, Tint strength and Tint hue, snapped to their steps, and says what it
+    snapped to. It is a shortcut to the settings, never a setting of its own.
   - **The panel** at the right holds the open category's settings, one section each (its name and question, then its
     choices), with Back, Use defaults and Continue between categories at its foot. A pick applies at once.
   - **The choices** are kept apart from the visual (owner: "separate the choices from the visual"): choice cards (Radio
@@ -176,7 +197,9 @@ out.
 
 - **Theme** (Language 2026-10-19 to 20; the tab and the Inspector use one word): the
   Canvas settings under the registry's headings (`SETTING_GROUPS`: Color, Size, Shape,
-  Stroke, Shadow, Fill, Effects, then Material), only those that change this tab's specimens. An option names its value
+  Stroke, Shadow, Fill, Effects, then Material), only those that change this tab's specimens. Ground and Layers show
+  the app's mode's own pair (Light ground and Light layers in light, the dark pair in dark; owner, 2026-10-22), the
+  Titlebar's switch choosing which. An option names its value
   and, at a range's end, what that end is ("0 (Flat)", "100 (White)"); none says "(Default)" (owner, 2026-10-20:
   "i dont like seeing (default)"). The Theme tab is where the default is marked.
 - **Design**: what is chosen, at its narrowest: a Canvas item, else the Sidebar's row, else
@@ -185,7 +208,7 @@ out.
   2. a component's Properties;
   3. the preview, unless the Canvas already shows it at size;
   4. actions;
-  5. one flush facts Table.
+  5. one facts Table.
 - **Code**: how to use it, as Figma's Dev Mode shows it. It holds:
   - copy actions;
   - the import and the code in Code block `sm` wells;
