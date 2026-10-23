@@ -29,7 +29,7 @@ Every value cites its source in its own file. No product code, styles or assets 
 3. **Panels have a default, a floor and a ceiling.** Nav 240–340 (min 214–240, max 443–520); inspectors 240 (241–500);
    detail panels 320–600 with the content keeping about 350 beside them.
 4. **Bars carry no rule at rest** (ChatGPT, Notion); a rule or a 16 fade appears once content scrolls under them.
-5. **One reading measure, about 700–770** (Notion 708, ChatGPT 768), and one structured measure, 1120–1296.
+5. **One reading measure, about 700–770** (Notion 708, ChatGPT 768), and one structured measure, 1120–1296 (Area's Canvas 1236).
 6. **Grids from a minimum width**, counted on the container: auto-fill `minmax`, or JS from a min and max (YouTube).
 7. **Media keeps a few ratios per context:** 16:9 for video and files, 1:1 for music, products and specimens, 4:3 for
    listings; the frame carries the corner; a 1px ring drawn as a shadow keeps the image's size (Figma).

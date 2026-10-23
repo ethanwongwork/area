@@ -22,7 +22,7 @@ What fills the content region, and the rules for each pattern. Evidence: `docs/r
 |---|---|---|
 | Reading, 660–770 | prose, a thread, settings, forms | Notion text 708 (720 container); ChatGPT thread 768 + 16 a side, settings 768 (plain pages 672); Polaris 662, Primer 768, Radix 688 |
 | Wide reading, 800–960 | an article with media, a center peek | Notion help article 804; Notion center peek ≤ 960 |
-| Structured, 1120–1296 | feeds, grids, dashboards | Area's Canvas 1120; Figma Community 1216; Untitled, Primer 1280; Atlassian 1296 |
+| Structured, 1120–1296 | feeds, grids, dashboards | Area's Canvas 1236 (four 300 cards); Figma Community 1216; Untitled, Primer 1280; Atlassian 1296 |
 | Fluid | boards, tables, canvases | Atlassian fluid; Notion databases span the frame |
 
 - **Centre the measure** in the region; on a narrow window the region's margin takes over (24 on a phone: Notion,
@@ -34,9 +34,10 @@ What fills the content region, and the rules for each pattern. Evidence: `docs/r
 
 ## Feed of sections
 
-Area's Canvas is the reference implementation (`PRODUCT_UI.md`, "The Canvas is a feed"): one column, at most 1120 and
+Area's Canvas is the reference implementation (`PRODUCT_UI.md`, "The Canvas is a feed"): one column, at most 1236 and
 centred; each section a heading (title, muted count on collections, an optional one-sentence lede) over **one** block;
-cards 12 apart, heading 12 over its block, sections 40 apart, margin 32, each measured to what is drawn.
+cards 12 apart (at least 260 wide, at most four across), heading 12 over its block, sections 40 apart, margin 16, each
+measured to what is drawn.
 
 - One block per section. Two blocks under one heading make the heading ambiguous; give the second its own heading.
 - A section's actions ("Show all", "Browse N", add) sit at its title row's end (Notion's template feed, Figma
@@ -55,7 +56,7 @@ cards 12 apart, heading 12 over its block, sections 40 apart, margin 32, each me
   |---|---|---|
   | Suggestion, small tile | 160 | ChatGPT `minmax(10rem, 1fr)`; Notion small gallery 162–192 |
   | Media card, gallery | 280–380 | Notion large gallery 280–377; Figma Community 3 × 384 |
-  | Specimen card (Area's app) | 360, square | PRODUCT_UI.md, Components tab |
+  | Gallery card (Area's app) | 260 (277–300 in a 1440 window), at most four across | PRODUCT_UI.md, The Canvas is a feed |
   | List card (icon + text + action) | 2 columns of about 590 | Figma Community Skills |
   | Video card | about 330 (max 700) | YouTube: 3 a row at 1440, 2 at 1024 |
   | Listing card with a photo | about 300–440, fixed counts per width | Airbnb 2 / 2 / 1 / 1 at 1920 / 1440 / 1024 / 390 beside a map |
@@ -137,7 +138,8 @@ card sits at the card's media inset (`Card`, `Figure`); never scale media on hov
 
 - **Table:** rows of the `ui-row` height, header in muted ink with no fill, rules between rows only where the table is
   read across (Notion 36 rows, 1px warm rules, header muted). A table in a reading column may bleed to the region with
-  its first column on the text edge (Notion). Area's `Table flush` on surfaces; facts go in tables (rule 17).
+  its first column on the text edge (Notion). Area's lists on a surface are the default framed `Table` (PRODUCT_UI.md
+  rule 11, owner 2026-10-22, replacing `Table flush`); facts go in tables (rule 17).
 - **Board:** fixed-width columns that scroll sideways rather than shrink (Notion 276 wide, 12 apart, cards 260; still 276
   on a phone). `Board`.
 - **Docs page:** nav 280 | article 804 | contents 200, gaps 62 and 32; both side columns sticky; the contents mark the

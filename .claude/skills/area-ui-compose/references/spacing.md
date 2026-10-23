@@ -19,7 +19,7 @@ Values are Default / Compact (the app runs Compact). Tokens are in `packages/tok
 | Section | sections of a page or panel | `Stack gap="section"` 24 / 16 | inside a Surface or panel |
 | Surface inset | a container's edge to its content | `inset-surface-sm` 12 / 8, `inset-surface-md` 16 / 12; Surface's text inset sm / md / lg 14 / 16 / 20 (Compact 10 / 12 / 14) | `Surface`, `Card` (set by size, never by prop) |
 | Region inset | a panel's edge to its rows | the app's 14 | `Panel` |
-| Feed | a documentation or gallery feed | cards 12, heading 12, sections 40, margin 32, measure 1120 | the app's Canvas (`app.css` `--_canvas-*`) |
+| Feed | a documentation or gallery feed | cards 12 (at least 260 wide, at most four across), heading 12, sections 40, margin 16, measure 1236 | the app's Canvas (`app.css` `--_canvas-*`) |
 
 The spacing ramp is fixed: 0, 2, 4, 6, 8, 10, 12, 16, 20, 24, 32, 40, 48, 64, 80, 96 (`--area-space-*`). Region
 margins and section gaps a screen sets itself come from this ramp.
@@ -28,10 +28,12 @@ margins and section gaps a screen sets itself come from this ramp.
 
 1. **Gap ≤ inset.** Inside a container, children are never farther apart than they are from its edge (Stack caps its
    gap at the Surface's inset). Measured to what is drawn, a gap that beats the inset makes one container read as two.
-2. **Each ring is larger than the one inside it:** inside < related < group < heading-to-block < section < margin. A
-   heading sits closer to its own block than to the block before it.
-3. **Margins beat gaps by a clear step.** The app's Canvas margin is 32 against 12 between cards ("margins larger than
-   the gaps", owner 2026-10-22); a 14 margin against a 12 gap read as one grid with the page.
+2. **Each ring is larger than the one inside it:** inside < related < group < heading-to-block < section. A heading
+   sits closer to its own block than to the block before it.
+3. **A margin is at least one ramp step past the gap it frames.** How far past depends on the region: a gallery that
+   should fill its region takes one step (the app's Canvas: 16 round cards 12 apart, owner 2026-10-22, "more full
+   width of the canvas"; it was 32, and 14 read as one grid with the page); a reading page or a site takes more (24–32
+   on a phone, 32–96 a side on a desktop). The margin need not exceed the section gap.
 4. **Measure to ink.** Text from its cap or baseline, frames from their edge, icons from their square box. Area's
    heading-to-block 12 is cap/baseline to the frame, not line box to line box.
 5. **Space before rules.** Separate groups by space; add a rule only when space alone can't (a dense list, a table, a
