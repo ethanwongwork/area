@@ -2,6 +2,11 @@
 
 ## Current state (2026-10-22)
 
+- **UI composition skills, `claude/ui-patterns-research-b87a2f`, uncommitted.** Research on how ChatGPT desktop, Cursor,
+  Figma, Notion, Spotify, Airbnb, Nike, YouTube, Apple and 13 design systems lay out whole UIs
+  (`docs/research/ui-patterns-2026-10-22/`, README first); skills `area-ui-compose` (shell, spacing, content, copy,
+  components, screen recipes) and `area-ui-review` (`scripts/layout-audit.js`, tested on the app's Canvas); three
+  layout candidates in COMPONENTS.md (App-shell layout with a layered option, Grid, Shelf). Not reviewed by the owner.
 - **PR #150, `claude/electron-canvas-feed-layout-8b2924`.** The Canvas as a documentation feed (32 margin, 12 / 40
   rhythm measured to ink, title + count + subtitle per section), Code block md corner concentric with its copy (11),
   flush Table trims its outer rows, and the Cursor audit's validated items: Menu-family group labels take Nav's (rows'
