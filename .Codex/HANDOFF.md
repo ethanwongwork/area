@@ -21,6 +21,12 @@
   Neutral Tint https://claude.ai/artifact/8Czr8Wcu9rTwdW97SzFLzQ. Its open proposals (recessed press cap, per-tone edges,
   the setup's narrow stage at 1024) are built on `claude/eager-maxwell-0a929b`, above.
 
+- **UI composition skills (`claude/ui-patterns-research-b87a2f`, merged by its PR).** Research on how ChatGPT desktop,
+  Cursor, Figma, Notion, Spotify, Airbnb, Nike, YouTube, Apple and 13 design systems lay out whole UIs, and how shells
+  separate regions and treat navigation (`docs/research/ui-patterns-2026-10-22/`, README first); skills
+  `area-ui-compose` (shell, treatments, spacing, content, copy, components, screen recipes) and `area-ui-review`
+  (`scripts/layout-audit.js`); three layout candidates in COMPONENTS.md (App-shell layout, Grid, Shelf). Not yet
+  reviewed by the owner. Open: region treatment as a setting (recommended, undecided; `region-treatments.md` › In Area).
 - **PR #150, `claude/electron-canvas-feed-layout-8b2924`.** The Canvas as a documentation feed (32 margin, 12 / 40
   rhythm measured to ink, title + count + subtitle per section), Code block md corner concentric with its copy (11),
   flush Table trims its outer rows, and the Cursor audit's validated items: Menu-family group labels take Nav's (rows'
